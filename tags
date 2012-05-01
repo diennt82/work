@@ -1,0 +1,1173 @@
+				  address6:convertForSendHost:port:intoAddress4:address6:637,19442
+				  withData:doCFSocketCallback:forSocket:withAddress:withData:2303,65169
+				  withData:doCFSocketCallback:forSocket:withAddress:withData:4188,120126
+				 address6:convertForBindHost:port:intoAddress4:address6:534,15908
+				error:connectToHost:onPort:withTimeout:error:1469,43758
+			   dataout:EncodeBlock:offset:length:dataout:126,3112
+		 withDelegate:initWithNibName:bundle:withDelegate:31,883
+		 withDelegate:initWithNibName:bundle:withDelegate:36,790
+		 withDelegate:initWithNibName:bundle:withDelegate:37,829
+	AsyncSocketCFSocketError = kCFSocketError,22,480
+	AsyncSocketCFSocketError 22,480
+	AsyncSocketCanceledError,24,597
+	AsyncSocketConnectTimeoutError,25,665
+	AsyncSocketNoError 23,552
+	AsyncSocketReadMaxedOutError,26,698
+	AsyncSocketReadTimeoutError,27,787
+	AsyncSocketWriteTimeoutError28,817
+	AsyncUdpSocketBadParameter,23,597
+	AsyncUdpSocketCFSocketError = kCFSocketError,21,476
+	AsyncUdpSocketCFSocketError 21,476
+	AsyncUdpSocketIPv4Unavailable,24,709
+	AsyncUdpSocketIPv6Unavailable,25,802
+	AsyncUdpSocketNoError 22,550
+	AsyncUdpSocketReceiveTimeoutError27,940
+	AsyncUdpSocketSendTimeoutError,26,907
+	kCloseAfterReceives 49,1903
+	kCloseAfterSends 48,1811
+	kClosingWithError 56,2454
+	kDequeueReadScheduled 57,2546
+	kDequeueReceiveScheduled 52,2207
+	kDequeueSendScheduled 51,2107
+	kDequeueWriteScheduled 58,2645
+	kDidBind 41,1123
+	kDidClose 50,1998
+	kDidCompleteOpenForRead 49,1806
+	kDidCompleteOpenForWrite 50,1901
+	kDidConnect 42,1194
+	kDidStartDelegate 48,1718
+	kDisconnectAfterReads 54,2271
+	kDisconnectAfterWrites 55,2362
+	kEnablePreBuffering 47,1644
+	kFlipFlop 53,2310
+	kForbidReadsWrites 53,2187
+	kForbidSendReceive 47,1702
+	kSock4CanAcceptBytes 43,1268
+	kSock4HasBytesAvailable 45,1482
+	kSock6CanAcceptBytes 44,1375
+	kSock6HasBytesAvailable 46,1592
+	kSocketCanAcceptBytes 59,2745
+	kSocketHasBytesAvailable 60,2851
+	kStartingReadTLS 51,1997
+	kStartingWriteTLS 52,2092
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                        tag:readDataWithTimeout:buffer:bufferOffset:maxLength:tag:3332,95319
+                        tag:readDataWithTimeout:buffer:bufferOffset:tag:3323,94987
+                     tag:readDataToLength:withTimeout:buffer:bufferOffset:tag:3363,96462
+                   error:connectToAddress:viaInterfaceAddress:withTimeout:error:1532,46226
+                   tag:readDataToData:withTimeout:buffer:bufferOffset:maxLength:tag:3410,98197
+                   tag:readDataToData:withTimeout:buffer:bufferOffset:tag:3395,97618
+               tag:initWithData:startOffset:maxLength:timeout:readLength:terminator:tag:220,9079
+ - (void)viewDidLoad 30,892
+#define ADV_BUTTON_TAG 18,387
+#define AIBALL_GET_REQUEST 18,340
+#define AIBALL_GET_STREAM_ONLY_REQUEST 15,234
+#define AIBALL_QUERY_REQUEST_STRING 43,949
+#define ASPECT_RATIO_43_BUTTON_TAG 23,558
+#define ASPECT_RATIO_AUTO_BUTTON_TAG 24,597
+#define AUTHENTICATION_ERROR 28,579
+#define BASIC_AUTH_DEFAULT_PASS 15,248
+#define BASIC_AUTH_DEFAULT_USER 14,204
+#define BOUNDARY_STRING 27,531
+#define BRIGHTNESS_1_BUTTON_TAG 19,414
+#define BRIGHTNESS_2_BUTTON_TAG 20,450
+#define BRIGHTNESS_3_BUTTON_TAG 21,486
+#define BRIGHTNESS_4_BUTTON_TAG 22,522
+#define BUFFER_EMPTY 36,765
+#define BUFFER_FULL 38,816
+#define BUFFER_PROCESSING 37,788
+#define CMD_SENDING_INTERVAL 1855,41030
+#define CONFIGURE_BUTTON_TAG 15,283
+#define CONFIGURE_STATUS_ASSIGNED 15,257
+#define CONFIGURE_STATUS_AWAITING_FOR_ASSIGNMENT 14,202
+#define CONFIGURE_STATUS_NOT_ASSIGNED 13,158
+#define CURRENT_VIEW_MODE_MULTI 50,990
+#define CURRENT_VIEW_MODE_SINGLE 51,1027
+#define DATA_BARKER 30,602
+#define DBG_AUDIO 103,2396
+#define DEBUG_SIMULATE_DIRECTION_HTTP_REQ 87,1999
+#define DEBUG_THREAD_SAFETY 36,1304
+#define DEFAULT_AIBALL_SERVER 24,416
+#define DEFAULT_BRIGHTNESS_LVL 52,1232
+#define DEFAULT_CONTRAST_LVL 51,1198
+#define DEFAULT_MAX_RECEIVE_BUFFER_SIZE 28,657
+#define DEFAULT_MAX_RECORD_SIZE 40,839
+#define DEFAULT_PREBUFFERING 24,526
+#define DEFAULT_TIME_OUT 12,173
+#define DESIGN_2 100,2305
+#define DIRECTION_BACKWARD_STR 30,525
+#define DIRECTION_FB_STOP_STR 35,664
+#define DIRECTION_FORWARD_STR 29,479
+#define DIRECTION_H_LF 46,901
+#define DIRECTION_H_MASK 48,959
+#define DIRECTION_H_NON 45,872
+#define DIRECTION_H_RT 47,930
+#define DIRECTION_LEFT_STR 31,573
+#define DIRECTION_LR_STOP_STR 36,706
+#define DIRECTION_RIGHT_STR 32,617
+#define DIRECTION_V_DN 42,811
+#define DIRECTION_V_MASK 43,841
+#define DIRECTION_V_NON 40,751
+#define DIRECTION_V_UP 41,781
+#define DONT_UPDATE_BATTERY_VALUE 126,2891
+#define GET_VERSION 19,346
+#define HTTP_COMMAND_PART 17,291
+#define IBALL_AUDIO_SUPPORT 17,310
+#define IRABOT_AUDIO_RECORDING_PORT 72,1620
+#define IRABOT_AUDIO_RECORDING_SUPPORT 69,1541
+#define IRABOT_DIRECTIONAL_CHANGE_DELAY 82,1841
+#define IRABOT_DUTYCYCLE_LR_MAX 57,1336
+#define IRABOT_DUTYCYCLE_MAX 56,1303
+#define IRABOT_HTTP_REQ_TIMEOUT 61,1412
+#define MAXADDRS	10,135
+#define MAX_2(120,2968
+#define MAX_AUDIO_BUF_LEN 34,733
+#define MAX_AUDIO_BUF_NUMBER 33,702
+#define MAX_IMAGE_BUF_LEN 31,669
+#define MAX_IMAGE_BUF_NUMBER 30,638
+#define MENU_BACK_TAG 20,394
+#define MENU_INFO_TAG 21,420
+#define MENU_LED_TAG 18,340
+#define MENU_MELODY_TAG 14,224
+#define MENU_PAIRING_TAG 19,365
+#define MENU_PLAYLIST_TAG 13,194
+#define MENU_SETUP_BACK_KEY_TAG 17,349
+#define MENU_SETUP_TAG 12,164
+#define MENU_TEMPERATURE_TAG 15,252
+#define MENU_VOX_TAG 17,315
+#define MENU_VQUALITY_TAG 16,285
+#define MIN_2(121,3000
+#define MIRROR_VIDEO_IMAGE 122,2825
+#define MULTICAM_CHANNEL_1_TAG 17,275
+#define MULTICAM_CHANNEL_2_TAG 18,310
+#define MULTICAM_CHANNEL_3_TAG 19,345
+#define MULTICAM_CHANNEL_4_TAG 20,380
+#define PLAYLIST_BACK_BUTTON 13,220
+#define PUBLICDEFINE_H_10,150
+#define RA_DATA_BARKER 27,513
+#define RA_MENU_BACK_BTN_TAG 13,179
+#define RA_MENU_CAM1_PRT_TAG 15,245
+#define RA_MENU_CAM1_URL_TAG 14,212
+#define RA_MENU_CAM2_PRT_TAG 18,312
+#define RA_MENU_CAM2_URL_TAG 17,279
+#define RA_MENU_CAM3_PRT_TAG 20,378
+#define RA_MENU_CAM3_URL_TAG 19,345
+#define RA_MENU_CAM4_PRT_TAG 22,444
+#define RA_MENU_CAM4_URL_TAG 21,411
+#define RA_MENU_SAVE_BTN_TAG 24,478
+#define READALL_CHUNKSIZE	28,733
+#define READQUEUE_CAPACITY	26,614
+#define RECEIVEQUEUE_CAPACITY 26,602
+#define RESTART_HTTP_CMD 47,1118
+#define REVERT_UP_DOWN_DIRECTION 95,2200
+#define SCAN_BUTTON_TAG 16,316
+#define SCAN_MENU_BACK_BTN_TAG 14,200
+#define SCAN_MENU_CAM1_VIEW_TAG 22,420
+#define SCAN_MENU_CAM2_VIEW_TAG 23,456
+#define SCAN_MENU_CAM3_VIEW_TAG 24,492
+#define SCAN_MENU_CAM4_VIEW_TAG 25,528
+#define SCAN_MENU_CHANN1_BTN_TAG 16,270
+#define SCAN_MENU_CHANN2_BTN_TAG 17,307
+#define SCAN_MENU_CHANN3_BTN_TAG 18,344
+#define SCAN_MENU_CHANN4_BTN_TAG 19,381
+#define SCAN_MENU_SAVE_BTN_TAG 27,565
+#define SCAN_MENU_SCAN_BTN_TAG 15,235
+#define SENDING_SOCKET_TAG 74,1663
+#define SENDQUEUE_CAPACITY	25,549
+#define SETUP_ADDR_MODE_CHANGE_TAG 27,474
+#define SETUP_ADDR_MODE_CHANGE_TAG 27,474
+#define SETUP_ADDR_MODE_IMG_TAG 21,355
+#define SETUP_ADDR_MODE_IMG_TAG 21,355
+#define SETUP_BACK_KEY_TAG 28,513
+#define SETUP_BACK_KEY_TAG 28,513
+#define SETUP_HTTP_CMD 46,1040
+#define SETUP_KEY_IDX_CHANGE_TAG 26,434
+#define SETUP_KEY_IDX_CHANGE_TAG 26,434
+#define SETUP_KEY_IDX_IMG_TAG 20,319
+#define SETUP_KEY_IDX_IMG_TAG 20,319
+#define SETUP_KEY_TXT_TAG 31,584
+#define SETUP_KEY_TXT_TAG 33,586
+#define SETUP_PSSWD_TXT_TAG 33,649
+#define SETUP_PSSWD_TXT_TAG 35,651
+#define SETUP_SAVE_CONFIGURATION_TAG 37,685
+#define SETUP_SAVE_CONFIGURATION_TAG 39,687
+#define SETUP_SEC_TYPE_CHANGE_TAG 25,394
+#define SETUP_SEC_TYPE_CHANGE_TAG 25,394
+#define SETUP_SEC_TYPE_IMG_TAG 19,283
+#define SETUP_SEC_TYPE_IMG_TAG 19,283
+#define SETUP_SEND_CONFIGURATION_TAG 38,726
+#define SETUP_SEND_CONFIGURATION_TAG 40,728
+#define SETUP_SSID_TXT_TAG 30,553
+#define SETUP_SSID_TXT_TAG 32,555
+#define SETUP_USRNAME_TXT_TAG 32,615
+#define SETUP_USRNAME_TXT_TAG 34,617
+#define SETUP_WEP_TYPE_CHANGE_TAG 42,770
+#define SIDEBUTTON_MAINMENU_TAG 14,236
+#define SIDEBUTTON_MULTICAM_TAG 12,164
+#define SIDEBUTTON_RECORD_TAG 15,272
+#define SIDEBUTTON_SNAPSHOT_TAG 13,200
+#define SOCKET_ID_LISTEN 453,9472
+#define SOCKET_ID_SEND 454,9502
+#define VIEW_DIRECTIONIND_TAG 66,1436
+#define VIEW_DIRECTIONPAD_TAG 65,1402
+#define WIFI_AND_BATTERY_IN_VIDEO_DATA 107,2510
+#define WIFI_AND_BATTERY_POLLING_PERIOD 115,2597
+#define WIFI_AND_BATTERY_POLLING_PERIOD 117,2663
+#define WRITEQUEUE_CAPACITY 27,673
+#define WRITE_CHUNKSIZE 29,810
+#define kInputBus 18,355
+#define kOutputBus 17,334
++ (BOOL) validateIP:412,10198
++ (NSData *)CRData4328,124306
++ (NSData *)CRLFData4323,124228
++ (NSData *)LFData4333,124378
++ (NSData *)ZeroData4338,124450
++ (NSDictionary *) readDeviceConfiguration 399,9920
++ (NSString * ) getCPFileName350,8849
++ (NSString * ) getDataFileName344,8719
++ (NSString *) base64StringFromData: (NSData *)data length:base64StringFromData:length:20,596
++ (NSString *) getMelodyStopURL330,8420
++ (NSString *) getMelodyURL:317,8168
++ (NSString *) getMelodyValueURL336,8567
++ (NSString* )fetchBSSIDInfo18,313
++ (NSString*) getBatteryLevelURL302,7836
++ (NSString*) getBrightnessMinusURL214,5443
++ (NSString*) getBrightnessPlusURL209,5291
++ (NSString*) getBrightnessValueURL225,5748
++ (NSString*) getContrastMinusURL204,5141
++ (NSString*) getContrastPlusURL199,4993
++ (NSString*) getContrastValueURL220,5598
++ (NSString*) getCredentials460,11455
++ (NSString*) getDFCredentials467,11732
++ (NSString*) getDebugFileName92,1937
++ (NSString*) getDefaultURL127,3213
++ (NSString*) getEarLedURL:287,7455
++ (NSString*) getIPFromURL:155,3957
++ (NSString*) getMotorControlURL:(NSString*)direction wDutyCycle:getMotorControlURL:wDutyCycle:231,5942
++ (NSString*) getPassword149,3806
++ (NSString*) getRecordDirectory72,1232
++ (NSString*) getRecordFileName80,1449
++ (NSString*) getSnapshotFileName104,2424
++ (NSString*) getSnapshotURL194,4870
++ (NSString*) getUsername143,3655
++ (NSString*) getWalkieTalkieURL:294,7626
++ (NSString*) getWifiLevelURL309,8021
++ (UITabBarController*) getTabBarController450,11296
++ (int) getMaxRecordSize116,2915
++ (int) getPortFromURL:161,4128
++ (int) getSocketFlag 18,303
++ (int)offsetOfBytes:(Byte*)buffer bufferLength:(int)blen searchPattern:(const Byte*)searchPattern patternLength:offsetOfBytes:bufferLength:searchPattern:patternLength:36,657
++ (int)offsetOfBytes:(NSData*)buffer searchPattern:offsetOfBytes:searchPattern:27,409
++ (void) IntToByteArray_LSB:(int)val des:IntToByteArray_LSB:des:433,10855
++ (void) ShortToByteArray_LSB:(short)word0 des:ShortToByteArray_LSB:des:444,11143
++ (void) setDefaultURL:167,4306
++ (void) setSocketFlag:22,350
++ (void) setTabBarController:455,11371
++ (void) writeDeviceConfigurationData:390,9690
++ (void)Decode:(NSData*)adpcm outData:Decode:outData:100,2421
++ (void)DecodeBlock:(NSData*)adpcm offset:(int)offset data:DecodeBlock:offset:data:39,982
++ (void)Encode:(NSData*)pcmData outData:Encode:outData:265,6475
++(BOOL) saveCameraPassword:50,1076
++(CamChannel *) restoreFromData:153,2632
++(NSString *) getVideoModeURL:357,8983
++(int) loadPasswordFromStore:93,1985
++(int) savePasswordToStore:(NSMutableArray * )camera_array nextSlot:savePasswordToStore:nextSlot:80,1662
++(void) setHttpPass:185,4701
++(void) setHttpUsr:178,4537
+- (BOOL) connect_to_cameras_and_record_images462,10596
+- (BOOL) isDataReadyForStoring 46,687
+- (BOOL) restoreConfigData2205,47047
+- (BOOL) restoreDataIfPossible109,2948
+- (BOOL) restoreDataIfPossible78,2013
+- (BOOL) setCamProfile:27,415
+- (BOOL) setConfigure54,823
+- (BOOL) toggle_walkie_talkie1402,31517
+- (BOOL)acceptOnInterface:(NSString *)interface port:(UInt16)port error:acceptOnInterface:port:error:1260,36846
+- (BOOL)acceptOnPort:(UInt16)port error:acceptOnPort:error:1250,36507
+- (BOOL)addRunLoopMode:1148,33021
+- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:application:didFinishLaunchingWithOptions:21,343
+- (BOOL)areStreamsConnected3167,90535
+- (BOOL)attachSocketsToRunLoop:(NSRunLoop *)runLoop error:attachSocketsToRunLoop:error:1711,51975
+- (BOOL)attachStreamsToRunLoop:(NSRunLoop *)runLoop error:attachStreamsToRunLoop:error:1935,59689
+- (BOOL)bindSocketToAddress:(NSData *)interfaceAddr error:bindSocketToAddress:error:1673,50878
+- (BOOL)bindToAddress:(NSString *)host port:(UInt16)port error:bindToAddress:port:error:774,23862
+- (BOOL)bindToPort:(UInt16)port error:bindToPort:error:759,23316
+- (BOOL)canAcceptBytes:1765,51233
+- (BOOL)canAcceptBytes3967,113582
+- (BOOL)canSafelySetDelegate818,23425
+- (BOOL)configureSocketAndReturnError:1737,52759
+- (BOOL)configureStreamsAndReturnError:1999,61845
+- (BOOL)connectSocketToAddress:(NSData *)remoteAddr error:connectSocketToAddress:error:1751,53086
+- (BOOL)connectToAddress:(NSData *)remoteAddr error:connectToAddress:error:1501,44674
+- (BOOL)connectToAddress:(NSData *)remoteAddr error:connectToAddress:error:980,29688
+- (BOOL)connectToAddress:(NSData *)remoteAddr withTimeout:(NSTimeInterval)timeout error:connectToAddress:withTimeout:error:1520,45696
+- (BOOL)connectToHost:(NSString *)host onPort:(UInt16)port error:connectToHost:onPort:error:880,26708
+- (BOOL)connectToHost:(NSString*)hostname onPort:(UInt16)port error:connectToHost:onPort:error:1454,43102
+- (BOOL)createSocketForAddress:(NSData *)remoteAddr error:createSocketForAddress:error:1622,48986
+- (BOOL)createStreamsFromNative:(CFSocketNativeHandle)native error:createStreamsFromNative:error:1893,58107
+- (BOOL)createStreamsToHost:(NSString *)hostname onPort:(UInt16)port error:createStreamsToHost:onPort:error:1918,59030
+- (BOOL)enableBroadcast:(BOOL)flag error:enableBroadcast:error:1206,36544
+- (BOOL)hasBytesAvailable:1991,56792
+- (BOOL)hasBytesAvailable3512,101207
+- (BOOL)isClosed1645,48159
+- (BOOL)isConnectedToHost:(NSString *)host port:isConnectedToHost:port:1640,48006
+- (BOOL)isConnected1635,47905
+- (BOOL)isConnected2616,78467
+- (BOOL)isDisconnected2598,78161
+- (BOOL)isIPv41650,48224
+- (BOOL)isIPv43149,90261
+- (BOOL)isIPv61655,48274
+- (BOOL)isIPv63158,90398
+- (BOOL)joinMulticastGroup:(NSString *)group error:joinMulticastGroup:error:1062,31727
+- (BOOL)joinMulticastGroup:(NSString *)group withAddress:(NSString *)address error:joinMulticastGroup:withAddress:error:1067,31872
+- (BOOL)maybeCompleteCurrentReceive2241,63217
+- (BOOL)moveToRunLoop:1016,28836
+- (BOOL)moveToRunLoop:416,11782
+- (BOOL)onUdpSocket:(AsyncUdpSocket *)sock didReceiveData:(NSData *)data withTag:(long)tag fromHost:(NSString *)host port:onUdpSocket:didReceiveData:withTag:fromHost:port:1194,26899
+- (BOOL)onUdpSocket:(AsyncUdpSocket *)sock didReceiveData:(NSData *)data withTag:(long)tag fromHost:(NSString *)host port:onUdpSocket:didReceiveData:withTag:fromHost:port:702,16678
+- (BOOL)openStreamsAndReturnError:2013,62173
+- (BOOL)removeRunLoopMode:1189,34503
+- (BOOL)sendData:(NSData *)data toAddress:(NSData *)remoteAddr withTimeout:(NSTimeInterval)timeout tag:sendData:toAddress:withTimeout:tag:1741,50504
+- (BOOL)sendData:(NSData *)data toHost:(NSString *)host port:(UInt16)port withTimeout:(NSTimeInterval)timeout tag:sendData:toHost:port:withTimeout:tag:1713,49613
+- (BOOL)sendData:(NSData *)data withTimeout:(NSTimeInterval)timeout tag:sendData:withTimeout:tag:1695,49096
+- (BOOL)setRunLoopModes:1081,30799
+- (BOOL)setRunLoopModes:467,13488
+- (BOOL)setSocketFromStreamsAndReturnError:2069,63503
+- (BOOL)shouldAutorotateToInterfaceOrientation:118,3133
+- (BOOL)shouldAutorotateToInterfaceOrientation:178,3758
+- (BOOL)shouldAutorotateToInterfaceOrientation:181,4670
+- (BOOL)shouldAutorotateToInterfaceOrientation:251,5389
+- (BOOL)shouldAutorotateToInterfaceOrientation:48,1318
+- (BOOL)shouldAutorotateToInterfaceOrientation:53,1294
+- (BOOL)shouldAutorotateToInterfaceOrientation:69,1728
+- (BOOL)textFieldShouldReturn:125,2600
+- (BOOL)textFieldShouldReturn:298,7982
+- (BOOL)textFieldShouldReturn:405,10759
+- (CFIndex)readIntoBuffer:(void *)buffer maxLength:readIntoBuffer:maxLength:3528,101531
+- (CFReadStreamRef)getCFReadStream839,23799
+- (CFSocketRef)getCFSocket827,23640
+- (CFSocketRef)newAcceptSocketForAddress:(NSData *)addr error:newAcceptSocketForAddress:error:1601,48232
+- (CFSocketRef)socketForPacket:1795,51813
+- (CFWriteStreamRef)getCFWriteStream848,23925
+- (IBAction) _handleButtonPressed:283,6123
+- (IBAction) handleButtonPressed:121,2813
+- (IBAction) handleButtonPressed:160,4029
+- (IBAction) handleButtonPressed:242,5950
+- (IBAction) handleButtonPressed:97,2211
+- (IBAction) handleLongPress:244,4991
+- (IBAction) handlePinchGesture:217,4580
+- (IBAction) mainMenuButtonClicked:255,5151
+- (IBAction) sideMenuButtonClicked:327,6762
+- (IBAction) stopPlayback:94,2362
+- (NSArray *)runLoopModes1237,36099
+- (NSArray *)runLoopModes516,15163
+- (NSData *)connectedAddress3039,88127
+- (NSData *)localAddress3094,89198
+- (NSData *)unreadData2385,71364
+- (NSError *)errorFromCFStreamError:2551,76549
+- (NSError *)getAbortError2484,74092
+- (NSError *)getConnectTimeoutError2498,74576
+- (NSError *)getErrnoError1370,40595
+- (NSError *)getErrnoError2440,72831
+- (NSError *)getIPv4UnavailableError1390,41304
+- (NSError *)getIPv6UnavailableError1398,41643
+- (NSError *)getReadMaxedOutError2512,75092
+- (NSError *)getReadTimeoutError2526,75610
+- (NSError *)getReceiveTimeoutError1413,42317
+- (NSError *)getSendTimeoutError1406,42019
+- (NSError *)getSocketError1382,41015
+- (NSError *)getSocketError2452,73251
+- (NSError *)getStreamError2463,73674
+- (NSError *)getWriteTimeoutError2540,76109
+- (NSInteger)searchForTermAfterPreBuffering:554,16736
+- (NSMutableData *) getBytes186,3746
+- (NSMutableData *) getBytes89,1396
+- (NSMutableDictionary *) getWritableConfiguration 62,882
+- (NSString * ) requestURLSync:(NSString*)url withTimeOut:requestURLSync:withTimeOut:1789,39483
+- (NSString * ) requestURLSync:(NSString*)url withTimeOut:requestURLSync:withTimeOut:248,5626
+- (NSString * ) requestURLSync:(NSString*)url withTimeOut:requestURLSync:withTimeOut:61,1533
+- (NSString *) getDeviceConfString99,2060
+- (NSString *)addressHost4:712,21800
+- (NSString *)addressHost6:724,22165
+- (NSString *)addressHost:736,22534
+- (NSString *)connectedHost42701,80287
+- (NSString *)connectedHost62711,80498
+- (NSString *)connectedHost:1550,45739
+- (NSString *)connectedHostFromCFSocket4:2805,82532
+- (NSString *)connectedHostFromCFSocket6:2821,82882
+- (NSString *)connectedHostFromNativeSocket4:2781,81903
+- (NSString *)connectedHostFromNativeSocket6:2793,82217
+- (NSString *)connectedHost1445,43241
+- (NSString *)connectedHost2625,78591
+- (NSString *)description3190,91030
+- (NSString *)hostFromAddress4:3005,87147
+- (NSString *)hostFromAddress6:3017,87532
+- (NSString *)localHost42741,81119
+- (NSString *)localHost62751,81318
+- (NSString *)localHost:1465,43629
+- (NSString *)localHostFromCFSocket4:2917,85168
+- (NSString *)localHostFromCFSocket6:2933,85512
+- (NSString *)localHostFromNativeSocket4:2893,84547
+- (NSString *)localHostFromNativeSocket6:2905,84857
+- (NSString *)localHost1425,42893
+- (NSString *)localHost2663,79459
+- (NSUInteger)prebufferReadLengthForTerm513,15711
+- (NSUInteger)readLengthForNonTerm257,9811
+- (NSUInteger)readLengthForTermWithPreBuffer:(NSData *)preBuffer found:readLengthForTermWithPreBuffer:found:391,12823
+- (NSUInteger)readLengthForTerm309,11009
+- (UIImage*)imageWithImage:(UIImage*)image scaledToRect:imageWithImage:scaledToRect:1834,40576
+- (UInt16)connectedPort42721,80709
+- (UInt16)connectedPort62731,80914
+- (UInt16)connectedPort:1593,46854
+- (UInt16)connectedPortFromCFSocket4:2861,83853
+- (UInt16)connectedPortFromCFSocket6:2877,84199
+- (UInt16)connectedPortFromNativeSocket4:2837,83236
+- (UInt16)connectedPortFromNativeSocket6:2849,83544
+- (UInt16)connectedPort1455,43435
+- (UInt16)connectedPort2644,79028
+- (UInt16)localPort42761,81517
+- (UInt16)localPort62771,81710
+- (UInt16)localPort:1508,44714
+- (UInt16)localPortFromCFSocket4:2973,86467
+- (UInt16)localPortFromCFSocket6:2989,86806
+- (UInt16)localPortFromNativeSocket4:2949,85858
+- (UInt16)localPortFromNativeSocket6:2961,86162
+- (UInt16)localPort1435,43067
+- (UInt16)localPort2682,79876
+- (UInt16)portFromAddress4:3029,87921
+- (UInt16)portFromAddress6:3034,88023
+- (UInt32)maxReceiveBufferSize403,11568
+- (float)progressOfReadReturningTag:(long *)tag bytesDone:(NSUInteger *)done total:progressOfReadReturningTag:bytesDone:total:861,24319
+- (float)progressOfWriteReturningTag:(long *)tag bytesDone:(NSUInteger *)done total:progressOfWriteReturningTag:bytesDone:total:895,25375
+- (id) initWithChannelIndex:18,246
+- (id) initWithIp:(NSString *) ip andPort:initWithIp:andPort:18,321
+- (id) initWithMac:(NSString*) mac User:(NSString *) user Pass:initWithMac:User:Pass:174,3546
+- (id) initWithMacAddr:36,783
+- (id) init15,245
+- (id) init18,233
+- (id) init19,337
+- (id) init22,421
+- (id)delegate335,9715
+- (id)delegate800,23195
+- (id)init 14,234
+- (id)initIPv4308,8883
+- (id)initIPv6313,8980
+- (id)initWithData:(NSData *)d address:(NSData *)a timeout:(NSTimeInterval)t tag:initWithData:address:timeout:tag:135,4716
+- (id)initWithData:(NSData *)d timeout:(NSTimeInterval)t tag:@interface:@public:timeout:tag:@end:timeout:tag:619,18369
+- (id)initWithData:@interface:@public:614,18259
+- (id)initWithData:@interface:@public:timeout:tag:@end:619,18369
+- (id)initWithDelegate:(id)delegate userData:(long)userData enableIPv4:(BOOL)enableIPv4 enableIPv6:@implementation:userData:enableIPv4:enableIPv6:206,6147
+- (id)initWithDelegate:(id)delegate userData:@interface:@public:@end:if:return:userData:691,19916
+- (id)initWithDelegate:(id)delegate userData:initWithDelegate:userData:303,8728
+- (id)initWithDelegate:298,8604
+- (id)initWithDelegate:@implementation:206,6147
+- (id)initWithDelegate:@interface:@public:@end:if:685,19795
+- (id)initWithDelegate:@interface:@public:@end:if:return:691,19916
+- (id)initWithFrame:16,230
+- (id)initWithFrame:16,278
+- (id)initWithFrame:17,283
+- (id)initWithFrame:18,358
+- (id)initWithFrame:18,389
+- (id)initWithFrame:20,334
+- (id)initWithNibName:(NSString *)nibName bundle:initWithNibName:bundle:20,347
+- (id)initWithTLSSettings:@interface:@public:652,19145
+- (id)initWithTLSSettings:@interface:@public:@end:657,19239
+- (id)initWithTimeout:(NSTimeInterval)t tag:@interface:@public:tag:@end:tag:177,5601
+- (id)initWithTimeout:@interface:@public:172,5506
+- (id)initWithTimeout:@interface:@public:tag:@end:177,5601
+- (id)init293,8510
+- (int)  setVideoBrightness:116,2799
+- (int)  setVideoContrast:103,2582
+- (int) readBytesPCM: (NSMutableData* ) out_buffer withLength:readBytesPCM:withLength:125,2256
+- (long)userData345,9819
+- (long)userData782,22961
+- (unsigned int)maximumTransmissionUnit1660,48324
+- (void ) requestURLSync_bg:1772,39122
+- (void ) requestURLSync_bg:231,5263
+- (void ) requestURLSync_bg:44,1172
+- (void) PlayPCM:1386,31153
+- (void) Play25,284
+- (void) Stop56,1042
+- (void) WritePCM:(unsigned char*)pcm length:WritePCM:length:61,1077
+- (void) _touchesbegan:255,5758
+- (void) _touchesended:280,6487
+- (void) _touchesmoved:275,6356
+- (void) askForUserPass48,764
+- (void) bindChanneltoCamera:193,4240
+- (void) bm_authenticate683,15065
+- (void) connectDefaultRabot 699,15237
+- (void) connectToAudioSocket 1083,24673
+- (void) dealloc211,4382
+- (void) dealloc28,472
+- (void) dealloc318,9077
+- (void) dealloc32,483
+- (void) dealloc32,532
+- (void) dealloc51,970
+- (void) dealloc83,1764
+- (void) disconnectAllChannels146,3264
+- (void) disconnectFromAudioSocket1103,25091
+- (void) disconnectFromCamera:509,11820
+- (void) disconnectRabot736,15953
+- (void) flush184,3499
+- (void) get_current_melody:  (UIButton*)sender updateIcons:get_current_melody:updateIcons:1615,35931
+- (void) h_directional_change_callback:2062,44118
+- (void) hideSingleCameraButtons:32,566
+- (void) initialize 52,1093
+- (void) initializedWithViewController:34,694
+- (void) initializedWithViewController:36,672
+- (void) onFrame:117,2886
+- (void) onMelody:1511,33660
+- (void) onPCM:106,2652
+- (void) receiveData48,1041
+- (void) reset75,1227
+- (void) restoreConfigurationData:84,1467
+- (void) restoreData333,6903
+- (void) saveData173,3513
+- (void) saveData332,7505
+- (void) scan_for_devices381,8574
+- (void) scan_for_devices458,9535
+- (void) sendAudioPacket:1145,25781
+- (void) sendCommand:108,2067
+- (void) sendCommand_block:135,2700
+- (void) send_LR_dir_to_rabot:2133,45384
+- (void) send_UD_dir_to_rabot:2081,44395
+- (void) setBrightness_bg 186,4106
+- (void) setContrast_bg130,3027
+- (void) setUnConfigure41,597
+- (void) setVideoView:26,505
+- (void) set_Melody_bg:1543,34345
+- (void) set_Walkie_Talkie_bg:1446,32449
+- (void) set_current_melody_status:  (UIImageView*)sender updateIcons:set_current_melody_status:updateIcons:1564,34731
+- (void) setupButtons33,637
+- (void) setupStreamingWithChannelArray:196,4438
+- (void) showAvailableCameras 162,3652
+- (void) startReceivingVideoAudio:497,11378
+- (void) startReceivingVideoAudio755,16228
+- (void) startRecording1724,38389
+- (void) startRecord32,509
+- (void) startStreaming30,577
+- (void) stopRecording1752,38895
+- (void) stopRecord46,756
+- (void) stopStreaming60,1438
+- (void) storePCMFrames_byte : (void *) frame_buffers withLen:storePCMFrames_byte:withLen:104,1807
+- (void) switchChannel:37,766
+- (void) takeSnapShot:1667,37180
+- (void) touchEventAt:(CGPoint) location phase:touchEventAt:phase:236,5406
+- (void) touchesBegan:(NSSet *)touches withEvent:touchesBegan:withEvent:257,5968
+- (void) touchesBegan:(NSSet *)touches withEvent:touchesBegan:withEvent:70,1539
+- (void) touchesBegan:(NSSet *)touches withEvent:touchesBegan:withEvent:71,1379
+- (void) touchesEnded:(NSSet *)touches withEvent:touchesEnded:withEvent:81,1523
+- (void) touchesEnded:(NSSet *)touches withEvent:touchesEnded:withEvent:98,2146
+- (void) touchesMoved:(NSSet *)touches withEvent:touchesMoved:withEvent:123,2737
+- (void) touchesMoved:(NSSet *)touches withEvent:touchesMoved:withEvent:75,1450
+- (void) updateHorizontalDirection:(int)dir inStep: (uint) step withAnimation:updateHorizontalDirection:inStep:withAnimation:2029,43637
+- (void) updateHorizontalDirection_begin:(int)dir inStep:updateHorizontalDirection_begin:inStep:1975,42951
+- (void) updateHorizontalDirection_end:(int)dir inStep:updateHorizontalDirection_end:inStep:2018,43465
+- (void) updateVerticalDirection:(int)dir inStep: (uint) step withAnimation:updateVerticalDirection:inStep:withAnimation:1906,41943
+- (void) updateVerticalDirection_begin:(int)dir inStep:updateVerticalDirection_begin:inStep:1858,41100
+- (void) updateVerticalDirection_end:(int)dir inStep:updateVerticalDirection_end:inStep:1894,41723
+- (void) update_battery_and_wifi:1466,32839
+- (void) v_directional_change_callback:1944,42461
+- (void) validatePoint: (CGPoint)location andTranslateV:(UIView*) view began:validatePoint:andTranslateV:began:154,3334
+- (void)Start:46,690
+- (void)Stop34,530
+- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:actionSheet:clickedButtonAtIndex:250,6744
+- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:actionSheet:clickedButtonAtIndex:345,9106
+- (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:alertView:didDismissWithButtonIndex:66,1238
+- (void)applicationDidBecomeActive:69,2257
+- (void)applicationDidEnterBackground:54,1596
+- (void)applicationDidReceiveMemoryWarning:87,2763
+- (void)applicationWillEnterForeground:62,2019
+- (void)applicationWillResignActive:46,1080
+- (void)applicationWillTerminate:76,2531
+- (void)checkForThreadSafety754,21721
+- (void)closeAfterReceiving1311,39224
+- (void)closeAfterSendingAndReceiving1319,39378
+- (void)closeAfterSending1303,39075
+- (void)closeSocket41251,38116
+- (void)closeSocket61267,38371
+- (void)closeWithError:2144,65502
+- (void)close1283,38626
+- (void)close2203,67185
+- (void)completeCurrentRead3776,108258
+- (void)completeCurrentSend1926,54866
+- (void)completeCurrentWrite4049,115574
+- (void)connection:(NSURLConnection *)connection didFailWithError:connection:didFailWithError:248,5278
+- (void)connection:(NSURLConnection *)connection didReceiveAuthenticationChallenge:connection:didReceiveAuthenticationChallenge:171,3570
+- (void)connection:(NSURLConnection *)connection didReceiveData:connection:didReceiveData:231,4789
+- (void)connectionDidFinishLoading:236,4910
+- (void)dealloc 123,3003
+- (void)dealloc 142,3778
+- (void)dealloc 202,4363
+- (void)dealloc 205,5315
+- (void)dealloc 25,335
+- (void)dealloc 26,405
+- (void)dealloc 276,6035
+- (void)dealloc 33,724
+- (void)dealloc 39,622
+- (void)dealloc 46,842
+- (void)dealloc 48,1011
+- (void)dealloc 48,1025
+- (void)dealloc 53,1205
+- (void)dealloc 669,29618
+- (void)dealloc 68,1199
+- (void)dealloc 78,1940
+- (void)dealloc 94,2374
+- (void)dealloc 94,2980
+- (void)dealloc147,4930
+- (void)dealloc191,5776
+- (void)dealloc590,17709
+- (void)dealloc631,18556
+- (void)dealloc739,21230
+- (void)didReceiveMemoryWarning 128,3435
+- (void)didReceiveMemoryWarning 189,4062
+- (void)didReceiveMemoryWarning 191,4972
+- (void)didReceiveMemoryWarning 262,5692
+- (void)didReceiveMemoryWarning 58,1620
+- (void)didReceiveMemoryWarning 64,1597
+- (void)didReceiveMemoryWarning 80,2031
+- (void)disconnectAfterReadingAndWriting2330,70105
+- (void)disconnectAfterReading2302,69580
+- (void)disconnectAfterWriting2316,69837
+- (void)disconnect2290,69416
+- (void)doAcceptFromSocket:(CFSocketRef)parentSocket withNewNativeSocket:doAcceptFromSocket:withNewNativeSocket:1781,53838
+- (void)doBytesAvailable3555,102367
+- (void)doCFReadStreamCallback:(CFStreamEventType)type forStream:doCFReadStreamCallback:forStream:4212,120816
+- (void)doCFWriteStreamCallback:(CFStreamEventType)type forStream:doCFWriteStreamCallback:forStream:4244,121659
+- (void)doConnectTimeout:1584,47623
+- (void)doReadTimeout:3835,109846
+- (void)doReceive42095,59089
+- (void)doReceive62100,59158
+- (void)doReceive:2105,59227
+- (void)doReceiveTimeout:2286,64537
+- (void)doSend:1869,53550
+- (void)doSendBytes3979,113735
+- (void)doSendTimeout:1964,55971
+- (void)doSocketOpen:(CFSocketRef)sock withCFSocketError:doSocketOpen:withCFSocketError:1824,55324
+- (void)doStreamOpen2041,62749
+- (void)doWriteTimeout:4073,116209
+- (void)emptyQueues1236,37623
+- (void)emptyQueues2185,66613
+- (void)enablePreBuffering1004,28637
+- (void)endConnectTimeout1578,47537
+- (void)endCurrentRead3824,109626
+- (void)endCurrentReceive2275,64292
+- (void)endCurrentSend1953,55750
+- (void)endCurrentWrite4062,115976
+- (void)failCurrentReceive:2263,63845
+- (void)failCurrentSend:1938,55243
+- (void)imageSavedToPhotosAlbum:(UIImage *)image didFinishSavingWithError:(NSError *)error contextInfo:imageSavedToPhotosAlbum:didFinishSavingWithError:contextInfo:1689,37636
+- (void)maybeDequeueRead3452,99619
+- (void)maybeDequeueReceive2036,57727
+- (void)maybeDequeueSend1821,52422
+- (void)maybeDequeueWrite3907,112027
+- (void)maybeScheduleClose1327,39561
+- (void)maybeScheduleDisconnect2346,70551
+- (void)maybeStartTLS4137,118421
+- (void)onSocket:(AsyncSocket *)listenSocket didReadData:(NSData *)data withTag:onSocket:didReadData:withTag:532,12166
+- (void)onSocket:(AsyncSocket *)sock didConnectToHost:(NSString *)host port:onSocket:didConnectToHost:port:1021,23397
+- (void)onSocket:(AsyncSocket *)sock didConnectToHost:(NSString *)host port:onSocket:didConnectToHost:port:212,4985
+- (void)onSocket:(AsyncSocket *)sock didConnectToHost:(NSString *)host port:onSocket:didConnectToHost:port:650,15417
+- (void)onSocket:(AsyncSocket *)sock didReadData:(NSData *)data withTag:onSocket:didReadData:withTag:779,16727
+- (void)onSocket:(AsyncSocket *)sock didReadData:(NSData *)data withTag:onSocket:didReadData:withTag:97,1945
+- (void)onSocket:(AsyncSocket *)sock didWriteDataWithTag:onSocket:didWriteDataWithTag:1135,25524
+- (void)onSocket:(AsyncSocket *)sock willDisconnectWithError:onSocket:willDisconnectWithError:202,4784
+- (void)onSocket:(AsyncSocket *)sock willDisconnectWithError:onSocket:willDisconnectWithError:644,15334
+- (void)onSocket:(AsyncSocket *)sock willDisconnectWithError:onSocket:willDisconnectWithError:985,22620
+- (void)onSocketDidDisconnect:1058,24255
+- (void)onSocketDidDisconnect:219,5159
+- (void)onSocketDidDisconnect:658,15596
+- (void)onTLSHandshakeSuccessful4161,119315
+- (void)onUdpSocket:(AsyncUdpSocket *)sock didNotReceiveDataWithTag:(long)tag dueToError:onUdpSocket:didNotReceiveDataWithTag:dueToError:1253,28118
+- (void)onUdpSocket:(AsyncUdpSocket *)sock didNotReceiveDataWithTag:(long)tag dueToError:onUdpSocket:didNotReceiveDataWithTag:dueToError:768,18167
+- (void)onUdpSocket:(AsyncUdpSocket *)sock didSendDataWithTag:onUdpSocket:didSendDataWithTag:1166,26188
+- (void)onUdpSocket:(AsyncUdpSocket *)sock didSendDataWithTag:onUdpSocket:didSendDataWithTag:679,15972
+- (void)onUdpSocketDidClose:1274,28555
+- (void)onUdpSocketDidClose:814,19251
+- (void)onVideoEnd81,2092
+- (void)readDataToData:(NSData *)data withTimeout:(NSTimeInterval)timeout maxLength:(NSUInteger)length tag:readDataToData:withTimeout:maxLength:tag:3400,97759
+- (void)readDataToData:(NSData *)data withTimeout:(NSTimeInterval)timeout tag:readDataToData:withTimeout:tag:3386,97256
+- (void)readDataToLength:(NSUInteger)length withTimeout:(NSTimeInterval)timeout tag:readDataToLength:withTimeout:tag:3354,96090
+- (void)readDataWithTimeout:(NSTimeInterval)timeout tag:readDataWithTimeout:tag:3315,94682
+- (void)receiveWithTimeout:(NSTimeInterval)timeout tag:receiveWithTimeout:tag:1978,56459
+- (void)recoverUnreadData2163,65968
+- (void)refreshFileList78,1688
+- (void)runLoopAddSource:(CFRunLoopSourceRef)source mode:runLoopAddSource:mode:942,26763
+- (void)runLoopAddSource:359,10192
+- (void)runLoopAddSource:926,26399
+- (void)runLoopAddTimer:(NSTimer *)timer mode:runLoopAddTimer:mode:968,27453
+- (void)runLoopAddTimer:379,10738
+- (void)runLoopAddTimer:952,27075
+- (void)runLoopRemoveSource:(CFRunLoopSourceRef)source mode:runLoopRemoveSource:mode:947,26916
+- (void)runLoopRemoveSource:369,10462
+- (void)runLoopRemoveSource:934,26578
+- (void)runLoopRemoveTimer:(NSTimer *)timer mode:runLoopRemoveTimer:mode:973,27612
+- (void)runLoopRemoveTimer:389,11014
+- (void)runLoopRemoveTimer:960,27260
+- (void)runLoopUnscheduleReadStream978,27777
+- (void)runLoopUnscheduleWriteStream987,28033
+- (void)scheduleDequeueRead3438,99211
+- (void)scheduleDequeueReceive2024,57436
+- (void)scheduleDequeueSend1808,52097
+- (void)scheduleDequeueWrite3889,111556
+- (void)sendConfiguration:2181,46262
+- (void)setDelegate:340,9756
+- (void)setDelegate:809,23299
+- (void)setMaxReceiveBufferSize:408,11634
+- (void)setUserData:350,9862
+- (void)setUserData:791,23067
+- (void)startConnectTimeout:1565,47213
+- (void)startTLS:4107,117488
+- (void)viewDidLoad 28,763
+- (void)viewDidLoad 43,860
+- (void)viewDidLoad 47,1165
+- (void)viewDidLoad 50,1110
+- (void)viewDidLoad 51,1149
+- (void)viewDidLoad 82,1688
+- (void)viewDidUnload 135,3635
+- (void)viewDidUnload 196,4253
+- (void)viewDidUnload 198,5172
+- (void)viewDidUnload 269,5892
+- (void)viewDidUnload 65,1820
+- (void)viewDidUnload 71,1797
+- (void)viewDidUnload 87,2231
+- (void)viewWillAppear:33,858
+- (void)viewWillAppear:47,910
+- (void)viewWillDisappear:73,1943
+- (void)wakeup_display_main_cam:98,1963
+- (void)writeData:(NSData *)data withTimeout:(NSTimeInterval)timeout tag:writeData:withTimeout:tag:3872,111125
+- ParseAviHeader 162,3129
+-(NSString*)getAddress 1281,28680
+-(NSString*)getAddress 822,19377
+-(NSString*)getBroadcastAddress 1310,29591
+-(NSString*)getBroadcastAddress 852,20272
+-(OSStatus)start{start31,627
+-(OSStatus)stop{stop37,718
+-(UInt32)getNextPacket{getNextPacket45,667
+-(id) init18,301
+-(int) ReadFrame:152,2929
+-(int) ReadFrameType 128,2572
+-(int) ReadInt 213,4023
+-(int) length35,466
+-(int)DistanceFrame:(int)aBegin aEnd:DistanceFrame:aEnd:44,753
+-(int)GetCurrentRecordSize589,27597
+-(int)GetRecordFlag103,1980
+-(void) Run62,1098
+-(void) dealloc251,4351
+-(void) initWithResponse:(NSString*) response andHost:initWithResponse:andHost:18,333
+-(void) releaseAlert95,1971
+-(void) startConnect521,11002
+-(void) switchToSingleCameraMode:611,13206
+-(void) writePCM:(unsigned char*)pcm length:writePCM:length:92,1602
+-(void)cleanUp{cleanUp42,805
+-(void)intialiseAudio{intialiseAudio190,5949
+-(void)reset{reset31,429
+-AviCloseAviClose437,21348
+-AviOpenAviOpen113,2089
+-AviWriteAudio:(NSData*)audioData length:AviWriteAudio:length:546,25818
+-AviWriteVideo:(NSData*)videoData length:AviWriteVideo:length:501,24047
+-CloseClose663,29489
+-GetAudio:(NSData*)audioData resetAudioBufferCount:GetAudio:resetAudioBufferCount:59,983
+-GetImage:(NSData*)imgData imgIndex:GetImage:imgIndex:84,1592
+-Init:Init:629,28593
+-InitWithFilename:(NSString*)filename video_width:(int) w video_height:InitWithFilename:video_width:video_height:595,27649
+-ReceiveAudio:ReceiveAudio:14,204
+-ReceiveImage:ReceiveImage:73,1370
+-ResetCounter ResetCounter55,939
+-SetRecordFlag:SetRecordFlag:108,2026
+/Users/mighty/Pumpkin App/MBP_ios/Classes/ADPCMDecoder.h,32
+/Users/mighty/Pumpkin App/MBP_ios/Classes/ADPCMDecoder.m,608
+/Users/mighty/Pumpkin App/MBP_ios/Classes/AiBallAviPlayer.h,35
+/Users/mighty/Pumpkin App/MBP_ios/Classes/AiBallAviPlayer.m,426
+/Users/mighty/Pumpkin App/MBP_ios/Classes/AiBallBase64Encoding.h,75
+/Users/mighty/Pumpkin App/MBP_ios/Classes/AiBallBase64Encoding.m,208
+/Users/mighty/Pumpkin App/MBP_ios/Classes/AiBallPlayViewController.h,44
+/Users/mighty/Pumpkin App/MBP_ios/Classes/AiBallPlayViewController.m,421
+/Users/mighty/Pumpkin App/MBP_ios/Classes/AiBallVideoListViewController.h,86
+/Users/mighty/Pumpkin App/MBP_ios/Classes/AiBallVideoListViewController.m,172
+/Users/mighty/Pumpkin App/MBP_ios/Classes/AiBallVideoSink.h,33
+/Users/mighty/Pumpkin App/MBP_ios/Classes/AsyncSocket.h,543
+/Users/mighty/Pumpkin App/MBP_ios/Classes/AsyncSocket.m,10236
+/Users/mighty/Pumpkin App/MBP_ios/Classes/AsyncUdpSocket.h,554
+/Users/mighty/Pumpkin App/MBP_ios/Classes/AsyncUdpSocket.m,5336
+/Users/mighty/Pumpkin App/MBP_ios/Classes/AudioRecorder.h,33
+/Users/mighty/Pumpkin App/MBP_ios/Classes/AudioRecorder.m,163
+/Users/mighty/Pumpkin App/MBP_ios/Classes/AviRecord.h,437
+/Users/mighty/Pumpkin App/MBP_ios/Classes/AviRecord.m,835
+/Users/mighty/Pumpkin App/MBP_ios/Classes/CamChannel.h,201
+/Users/mighty/Pumpkin App/MBP_ios/Classes/CamChannel.m,327
+/Users/mighty/Pumpkin App/MBP_ios/Classes/CamProfile.h,56
+/Users/mighty/Pumpkin App/MBP_ios/Classes/CamProfile.m,577
+/Users/mighty/Pumpkin App/MBP_ios/Classes/CameraPassword.h,34
+/Users/mighty/Pumpkin App/MBP_ios/Classes/CameraPassword.m,515
+/Users/mighty/Pumpkin App/MBP_ios/Classes/DeviceConfiguration.h,39
+/Users/mighty/Pumpkin App/MBP_ios/Classes/DeviceConfiguration.m,522
+/Users/mighty/Pumpkin App/MBP_ios/Classes/HttpCommunication.h,212
+/Users/mighty/Pumpkin App/MBP_ios/Classes/HttpCommunication.m,908
+/Users/mighty/Pumpkin App/MBP_ios/Classes/InMemoryAudioFile.h,37
+/Users/mighty/Pumpkin App/MBP_ios/Classes/InMemoryAudioFile.m,428
+/Users/mighty/Pumpkin App/MBP_ios/Classes/IpAddress.h,25
+/Users/mighty/Pumpkin App/MBP_ios/Classes/MBP_CamView.h,199
+/Users/mighty/Pumpkin App/MBP_ios/Classes/MBP_CamView.m,237
+/Users/mighty/Pumpkin App/MBP_ios/Classes/MBP_DeviceConfigureViewController.h,641
+/Users/mighty/Pumpkin App/MBP_ios/Classes/MBP_DeviceConfigureViewController.m,897
+/Users/mighty/Pumpkin App/MBP_ios/Classes/MBP_DeviceScanViewController.h,543
+/Users/mighty/Pumpkin App/MBP_ios/Classes/MBP_DeviceScanViewController.m,2070
+/Users/mighty/Pumpkin App/MBP_ios/Classes/MBP_MainCameraView.h,75
+/Users/mighty/Pumpkin App/MBP_ios/Classes/MBP_MainCameraView.m,907
+/Users/mighty/Pumpkin App/MBP_ios/Classes/MBP_MainMenuView.h,355
+/Users/mighty/Pumpkin App/MBP_ios/Classes/MBP_MainMenuView.m,126
+/Users/mighty/Pumpkin App/MBP_ios/Classes/MBP_MainSetupViewController.h,435
+/Users/mighty/Pumpkin App/MBP_ios/Classes/MBP_MainSetupViewController.m,537
+/Users/mighty/Pumpkin App/MBP_ios/Classes/MBP_MulitCamView.h,257
+/Users/mighty/Pumpkin App/MBP_ios/Classes/MBP_MulitCamView.m,753
+/Users/mighty/Pumpkin App/MBP_ios/Classes/MBP_RemoteAccessViewController.h,451
+/Users/mighty/Pumpkin App/MBP_ios/Classes/MBP_RemoteAccessViewController.m,846
+/Users/mighty/Pumpkin App/MBP_ios/Classes/MBP_SideMenuView.h,194
+/Users/mighty/Pumpkin App/MBP_ios/Classes/MBP_SideMenuView.m,319
+/Users/mighty/Pumpkin App/MBP_ios/Classes/MBP_StatusBarView.h,37
+/Users/mighty/Pumpkin App/MBP_ios/Classes/MBP_StatusBarView.m,531
+/Users/mighty/Pumpkin App/MBP_ios/Classes/MBP_Streamer.h,32
+/Users/mighty/Pumpkin App/MBP_ios/Classes/MBP_Streamer.m,932
+/Users/mighty/Pumpkin App/MBP_ios/Classes/MBP_iosAppDelegate.h,75
+/Users/mighty/Pumpkin App/MBP_ios/Classes/MBP_iosAppDelegate.m,495
+/Users/mighty/Pumpkin App/MBP_ios/Classes/MBP_iosViewController.h,736
+/Users/mighty/Pumpkin App/MBP_ios/Classes/MBP_iosViewController.m,4250
+/Users/mighty/Pumpkin App/MBP_ios/Classes/PCMPlayer.h,58
+/Users/mighty/Pumpkin App/MBP_ios/Classes/PCMPlayer.m,214
+/Users/mighty/Pumpkin App/MBP_ios/Classes/PublicDefine.h,1393
+/Users/mighty/Pumpkin App/MBP_ios/Classes/RemoteIOPlayer.h,34
+/Users/mighty/Pumpkin App/MBP_ios/Classes/RemoteIOPlayer.m,569
+/Users/mighty/Pumpkin App/MBP_ios/Classes/SetupHttpDelegate.h,35
+/Users/mighty/Pumpkin App/MBP_ios/Classes/Util.h,24
+/Users/mighty/Pumpkin App/MBP_ios/Classes/Util.m,2148
+/Users/mighty/Pumpkin App/MBP_ios/Classes/backup/MBP_DeviceConfigureViewController.h,599
+/Users/mighty/Pumpkin App/MBP_ios/Classes/backup/MBP_DeviceConfigureViewController.m,818
+/Users/mighty/Pumpkin App/MBP_ios/main.m,17
+@class AiBallVideoListViewController;53,1066
+@class AsyncReadPacket;14,313
+@class AsyncReceivePacket;14,322
+@class AsyncSendPacket;13,298
+@class AsyncSocket;13,293
+@class AsyncWritePacket;15,337
+@class AudioRecorder;15,252
+@class CamChannel;11,156
+@class CamProfile;17,298
+@class CamProfile;32,634
+@class CamProfile;56,1149
+@class DeviceConfiguration;13,234
+@class DeviceConfiguration;13,234
+@class MBP_CamView;54,1104
+@class MBP_MainCameraView;20,395
+@class MBP_MainMenuView;55,1124
+@class MBP_MulitCamView;21,422
+@class MBP_SideMenuView;19,370
+@class MBP_StatusBarView;17,314
+@class MBP_Streamer;13,222
+@class MBP_iosViewController;11,165
+@class MBP_iosViewController;12,199
+@class MBP_iosViewController;14,243
+@class MBP_iosViewController;18,340
+@implementation NSString (NSStringAdditions)18,550
+@interface ADPCMDecoder 12,176
+@interface AiBallAviPlayer 12,206
+@interface AiBallPlayViewController 13,227
+@interface AiBallVideoListViewController 15,254
+@interface AsyncReadPacket 182,8059
+@interface AsyncSendPacket 122,4466
+@interface AsyncSocket (Private)AsyncSocket(Private)63,2964
+@interface AsyncSocket 154,6681
+@interface AsyncUdpSocket (Private)AsyncUdpSocket(Private)56,2404
+@interface AsyncUdpSocket 31,1033
+@interface AudioRecorder 15,291
+@interface AviRecord 314,6530
+@interface CamChannel 18,317
+@interface CamProfile 13,176
+@interface CameraPassword 12,211
+@interface DeviceConfiguration 12,144
+@interface HttpCommunication 23,384
+@interface InMemoryAudioFile 16,312
+@interface MBP_CamView 24,449
+@interface MBP_DeviceConfigureViewController 43,771
+@interface MBP_DeviceConfigureViewController 45,810
+@interface MBP_DeviceScanViewController 35,655
+@interface MBP_MainCameraView 14,230
+@interface MBP_MainMenuView 23,447
+@interface MBP_MainSetupViewController 26,639
+@interface MBP_MulitCamView 22,416
+@interface MBP_RemoteAccessViewController 30,549
+@interface MBP_SideMenuView 18,310
+@interface MBP_StatusBarView 12,165
+@interface MBP_Streamer 12,160
+@interface MBP_iosAppDelegate 13,196
+@interface MBP_iosViewController 59,1170
+@interface NSString (NSStringAdditions)NSString(NSStringAdditions)12,183
+@interface PCMPlayer 17,275
+@interface RemoteIOPlayer 13,233
+@interface Util 12,168
+@protocol AiBallVideoSink12,169
+@protocol AsyncSocketDelegate32,899
+@protocol AsyncUdpSocketDelegate320,11999
+@protocol SetupHttpDelegate13,197
+@synthesize  walkie_talkie_status_icon, video_rec_status_icon, channel_status_icon, led_status_icon;14,206
+@synthesize  walkie_talkie_status_icon, video_rec_status_icon, channel_status_icon,14,206
+@synthesize  walkie_talkie_status_icon, video_rec_status_icon,14,206
+@synthesize  walkie_talkie_status_icon,14,206
+@synthesize addressingModeImg;20,364
+@synthesize addressingModeImg;20,364
+@synthesize bc_addr,own_addr;27,541
+@synthesize bc_addr,27,541
+@synthesize cam1_url, cam1_port, cam2_url, cam2_port, cam3_url,cam3_port, cam4_url, cam4_port;16,307
+@synthesize cam1_url, cam1_port, cam2_url, cam2_port, cam3_url,cam3_port, cam4_url,16,307
+@synthesize cam1_url, cam1_port, cam2_url, cam2_port, cam3_url,cam3_port,16,307
+@synthesize cam1_url, cam1_port, cam2_url, cam2_port, cam3_url,16,307
+@synthesize cam1_url, cam1_port, cam2_url, cam2_port,16,307
+@synthesize cam1_url, cam1_port, cam2_url,16,307
+@synthesize cam1_url, cam1_port,16,307
+@synthesize cam1_url,16,307
+@synthesize camView, mainMenuView;24,414
+@synthesize camView,24,414
+@synthesize camera1_view;23,437
+@synthesize camera2_view;24,463
+@synthesize camera3_view;25,489
+@synthesize camera4_view;26,515
+@synthesize cameraUser, cameraPassword, cameraMacId;16,259
+@synthesize cameraUser, cameraPassword,16,259
+@synthesize cameraUser,16,259
+@synthesize channel1, channel2,channel3,channel4;32,624
+@synthesize channel1, channel2,channel3,32,624
+@synthesize channel1, channel2,32,624
+@synthesize channel1,32,624
+@synthesize channel1_btn;18,332
+@synthesize channel1_video, channel2_video, channel3_video, channel4_video;15,242
+@synthesize channel1_video, channel2_video, channel3_video,15,242
+@synthesize channel1_video, channel2_video,15,242
+@synthesize channel1_video,15,242
+@synthesize channel2_btn;19,358
+@synthesize channel3_btn;20,384
+@synthesize channel4_btn;21,410
+@synthesize channel_configure_status;15,206
+@synthesize comm;31,603
+@synthesize currentZoomLevel;29,572
+@synthesize deviceConf;16,285
+@synthesize deviceConf;16,285
+@synthesize device_ip, device_port;14,220
+@synthesize device_ip,14,220
+@synthesize directionPad, directionIndicator;15,232
+@synthesize directionPad,15,232
+@synthesize filename;14,233
+@synthesize imageView;15,255
+@synthesize inMemoryAudioFile;13,194
+@synthesize inMemoryAudioFile;22,408
+@synthesize keyIndexButton;21,395
+@synthesize keyIndexButton;22,434
+@synthesize keyIndexImg;18,310
+@synthesize keyIndexImg;18,310
+@synthesize melodyButton;14,203
+@synthesize multiModeButton, snapShotButton, mainMenuButton,recordButton;14,203
+@synthesize multiModeButton, snapShotButton, mainMenuButton,14,203
+@synthesize multiModeButton, snapShotButton,14,203
+@synthesize multiModeButton,14,203
+@synthesize passWdField;28,505
+@synthesize passWdField;29,544
+@synthesize player;13,188
+@synthesize player;14,225
+@synthesize profile;14,185
+@synthesize profileImage, channel,isSelected,isRemoteAccess;15,241
+@synthesize profileImage, channel,isSelected,15,241
+@synthesize profileImage, channel,15,241
+@synthesize profileImage,15,241
+@synthesize profileImageData;16,302
+@synthesize progressView;17,306
+@synthesize recordedAudioFile;23,439
+@synthesize recorder;15,209
+@synthesize recording_now, play_now;25,471
+@synthesize recording_now,25,471
+@synthesize responseData, credential;17,298
+@synthesize responseData, listenSocket;16,280
+@synthesize responseData,16,280
+@synthesize responseData,17,298
+@synthesize scan_done_view;29,569
+@synthesize scan_progress;28,542
+@synthesize scan_response,mac_address, ip_address,port;14,185
+@synthesize scan_response,mac_address, ip_address,14,185
+@synthesize scan_response,mac_address,14,185
+@synthesize scan_response,14,185
+@synthesize scan_results, next_profile_index;25,449
+@synthesize scan_results,25,449
+@synthesize scan_results;31,598
+@synthesize scrollView;15,261
+@synthesize scrollView;15,261
+@synthesize securityKeyField;25,448
+@synthesize securityKeyField;26,487
+@synthesize securityTypeImg;19,335
+@synthesize securityTypeImg;19,335
+@synthesize ssid , securityMode,14,212
+@synthesize ssid 14,212
+@synthesize ssidField;24,425
+@synthesize ssidField;25,464
+@synthesize statusBar,sideMenu, oneCamView, multiCamView;14,223
+@synthesize statusBar,sideMenu, oneCamView,14,223
+@synthesize statusBar,sideMenu,14,223
+@synthesize statusBar,14,223
+@synthesize temperature_label;16,357
+@synthesize toTakeSnapShot,recordInProgress 26,495
+@synthesize toTakeSnapShot,26,495
+@synthesize url_connection,has_result;15,257
+@synthesize url_connection,15,257
+@synthesize usrNameField;27,479
+@synthesize usrNameField;28,518
+@synthesize videoImage, device_ip, device_port;15,232
+@synthesize videoImage, device_ip,15,232
+@synthesize videoImage,15,232
+@synthesize videoSink;14,230
+@synthesize videoView;14,209
+@synthesize viewController,connecting;16,318
+@synthesize viewController,16,318
+@synthesize viewController;15,262
+@synthesize viewController;16,278
+@synthesize wepTypeImg, wepTypeButton;21,395
+@synthesize wepTypeImg,21,395
+@synthesize wifi_status_icon, melody_status_icon;15,307
+@synthesize wifi_status_icon,15,307
+@synthesize window;14,242
+AudioComponentInstance audioUnit;27,509
+AudioStreamBasicDescription audioFormat;28,543
+AudioStreamBasicDescription audioFormatR;29,584
+IntToByteArray_LSB	/Users/mighty/Pumpkin App/MBP_ios/Classes/Util.m	/^+ (void) IntToByteArray_LSB:(int)val des:(unsigned/
+Mmain	/Users/mighty/Pumpkin App/MBP_ios/main.m	/^int main(int argc, char *argv[]) {$/
+NSString *const AsyncSocketErrorDomain 42,1550
+NSString *const AsyncSocketException 41,1486
+NSString *const AsyncUdpSocketErrorDomain 31,773
+NSString *const AsyncUdpSocketException 30,703
+ShortToByteArray_LSB	/Users/mighty/Pumpkin App/MBP_ios/Classes/Util.m	/^+ (void) ShortToByteArray_LSB:(short)word0 des:(un/
+enum AsyncSocketError20,456
+enum AsyncSocketFlags45,1620
+enum AsyncUdpSocketError19,449
+enum AsyncUdpSocketFlags39,1096
+getEarLedURL	/Users/mighty/Pumpkin App/MBP_ios/Classes/Util.m	/^+ (NSString*) getEarLedURL:(int)led_status $/
+getIPFromURL	/Users/mighty/Pumpkin App/MBP_ios/Classes/Util.m	/^+ (NSString*) getIPFromURL:(NSString*)url$/
+getMelodyURL	/Users/mighty/Pumpkin App/MBP_ios/Classes/Util.m	/^+ (NSString *) getMelodyURL:(NSString *) status$/
+getMotorControlURL	/Users/mighty/Pumpkin App/MBP_ios/Classes/Util.m	/^+ (NSString*) getMotorControlURL:(NSString*)direct/
+getPortFromURL	/Users/mighty/Pumpkin App/MBP_ios/Classes/Util.m	/^+ (int) getPortFromURL:(NSString*)url$/
+getVideoModeURL	/Users/mighty/Pumpkin App/MBP_ios/Classes/Util.m	/^+(NSString *) getVideoModeURL:(int) mode $/
+getWalkieTalkieURL	/Users/mighty/Pumpkin App/MBP_ios/Classes/Util.m	/^+ (NSString*) getWalkieTalkieURL:(NSString *) stat/
+int main(11,151
+keyIndex ,key, addressMode, usrName, passWd, wepType;15,245
+keyIndex ,key, addressMode, usrName, passWd,15,245
+keyIndex ,key, addressMode, usrName,15,245
+keyIndex ,key, addressMode,15,245
+keyIndex ,key,15,245
+keyIndex 15,245
+offsetOfBytes	/Users/mighty/Pumpkin App/MBP_ios/Classes/Util.h	/^+ (int)offsetOfBytes:(Byte*)buffer bufferLength:(i/
+offsetOfBytes	/Users/mighty/Pumpkin App/MBP_ios/Classes/Util.m	/^+ (int)offsetOfBytes:(NSData*)buffer searchPattern/
+setDefaultURL	/Users/mighty/Pumpkin App/MBP_ios/Classes/Util.m	/^+ (void) setDefaultURL:(NSString*)ip$/
+setHttpPass	/Users/mighty/Pumpkin App/MBP_ios/Classes/Util.m	/^+(void) setHttpPass:(NSString *) pass$/
+setHttpUsr	/Users/mighty/Pumpkin App/MBP_ios/Classes/Util.m	/^+(void) setHttpUsr:(NSString *) usr$/
+setSocketFlag	/Users/mighty/Pumpkin App/MBP_ios/Classes/Util.m	/^+ (void) setSocketFlag:(int)flag {$/
+setTabBarController	/Users/mighty/Pumpkin App/MBP_ios/Classes/Util.m	/^+ (void) setTabBarController:(UITabBarController*)/
+static NSString *getaddrinfoLock getaddrinfoLock36,1044
+static OSStatus playbackCallback(68,2037
+static OSStatus recordingCallback(121,3818
+static UITabBarController* tabBarController;13,208
+static char base64EncodingTable[base64EncodingTable11,183
+static const int BLOCKBYTES 37,938
+static const int BLOCKSAMPLES 33,863
+static const int EError 20,391
+static const int EFrameDelay 19,357
+static const int EInitialized 18,322
+static const int EStopped 16,254
+static const int EUninitialized 17,285
+static const int SAMPLERATE 35,901
+static const int STEPINCREMENT[STEPINCREMENT14,197
+static const int STEPINCREMENT_MAGNITUDE[STEPINCREMENT_MAGNITUDE17,280
+static const int STEPSIZE[STEPSIZE21,353
+static int socketFlag 14,253
+static void MyCFReadStreamCallback 4294,123159
+static void MyCFSocketCallback 4280,122635
+static void MyCFSocketCallback(2333,65917
+static void MyCFWriteStreamCallback 4308,123614
+struct AVI_AUDIO_STREAM_FORMAT 55,867
+struct AVI_FILE_HEADER 82,1527
+struct AVI_INDEX_ENTRY125,2789
+struct AVI_INFO 293,6127
+struct AVI_STREAM_FORMAT44,729
+struct AVI_STREAM_HEADER 27,451
+struct BITMAPINFOHEADER149,3119
+struct BITMAPINFO164,3376
+struct MAIN_AVI_HEADER 13,198
+struct MOVI_HEADER134,2899
+struct MP4PARA170,3463
+struct MP4257,5394
+struct RGBQUAD141,2998
+struct SMP4Info185,3735
+typedef enum AsyncSocketError AsyncSocketError;30,850
+typedef enum AsyncUdpSocketError AsyncUdpSocketError;29,978
