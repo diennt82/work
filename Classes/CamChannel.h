@@ -24,7 +24,7 @@
 }
 
 @property (nonatomic, retain) CamProfile * profile;
-@property (nonatomic) int channel_configure_status;
+@property (nonatomic) int channel_configure_status, channel_index;
 
 
 +(CamChannel *) restoreFromData: (NSData *) data;

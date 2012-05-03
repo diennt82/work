@@ -84,22 +84,47 @@
 	ip = self.ip_address;
 	myport = self.port;
 	
-	NSLog(@"append mac: %@", temp );
 	//mac
 	temp_len= [temp length];
 	
 	[data appendBytes:&temp_len length:1];
 	[data appendBytes:[temp UTF8String] length:[temp length]];		
 	
-	NSLog(@"append ip %@", ip);
+	
 	//ip
+	if (ip == nil)
+	{
+		ip = @"nil";
+	}
 	temp_len = [ip length];
 	[data appendBytes:&temp_len length:1];
 	[data appendBytes:[ip UTF8String] length:[ip length]];
 	
-	NSLog(@"append port");
 	//port
 	[data appendBytes:&myport length:sizeof(int)];
+	
+
+	
+	//name
+	temp = self.name; 
+	if (self.name = nil)
+	{
+		temp =@"nil";
+	}
+	temp_len = [temp length];
+	[data appendBytes:&temp_len length:1];
+	[data appendBytes:[temp UTF8String] length:[temp length]];
+	
+	//lastComm
+	temp = self.last_comm; 
+	if (self.last_comm = nil)
+	{
+		temp = @"none";
+	}
+	temp_len = [temp length];
+	[data appendBytes:&temp_len length:1];
+	[data appendBytes:[temp UTF8String] length:[temp length]];
+	
 	
 	return data;
 	
@@ -138,55 +163,94 @@
 		this = nil;
 	}
 	else {
+		this =[[CamProfile alloc] initWithMacAddr:mac];
+				
+		/* assume */
+		if ( [mac isEqualToString:@"NOTSET"])
+		{
+			this.isRemoteAccess = YES;
+		}
+		
+		
 		/* skip over 1byte-mac_len + len bytes-mac */
 		NSRange ip_len_range = {1+len,1};
 		[data getBytes:&len range:ip_len_range];
-		
-		
 		
 		char * _ip = malloc(len+1);
 		_ip[len] = '\0';
 		
 		NSRange ip_range = {ip_len_range.location +1, len};
 		[data getBytes:_ip range:ip_range];
-		
-		
-		
+				
 		NSString * ip = [NSString stringWithUTF8String:_ip];
 		
 		
 		
 		if ( [ip isEqualToString:@"nil"])
 		{
-			this = nil;
+			this.ip_address = nil;
 		}
 		else
-		{
-			
-			int mport = 0;
-			NSRange port_range = {ip_range.location + len,4};
-			
-			[data getBytes:&mport range:port_range];
-			
-			
-			this =[[CamProfile alloc] initWithMacAddr:mac];
+		{			
 			this.ip_address = ip; 
-			this.port = mport;
-			
-			/* assume */
-			if ( [mac isEqualToString:@"NOTSET"])
-			{
-				this.isRemoteAccess = YES;
-			}
-			
 		}
 		free(_ip);
+		
+		int mport = 0;
+		NSRange port_range = {ip_range.location + len,4};
+		
+		[data getBytes:&mport range:port_range];
+		
+		if (this.ip_address == nil)
+		{
+			this.port = 0;	
+		}
+		else {
+			this.port = mport; 
+		}
+
+
+		
+		
+		
+		//name
+		NSRange name_len_range = {port_range.location + 4,1};
+		[data getBytes:&len range:name_len_range];
+		char * _name = malloc(len+1);
+		_name[len] = '\0';
+		
+		NSRange name_range = {name_len_range.location +1, len};
+		
+		[data getBytes:_name range:name_range];
+		
+		NSString * myName = [NSString stringWithUTF8String:_name];
+		this.name = myName; 
+		free(_name);		
+		
+		
+		//LastComm
+		NSRange lastComm_len_range = {name_range.location + len,1};
+		[data getBytes:&len range:lastComm_len_range];
+		char * _lastComm = malloc(len+1);
+		_lastComm[len] = '\0';
+		NSRange lastComm_range = {lastComm_len_range.location +1, len};
+		
+		[data getBytes:_lastComm range:lastComm_range];
+		
+		NSString * myLastComm = [NSString stringWithUTF8String:_lastComm];
+		this.last_comm  = myLastComm;
+		free(_lastComm);
+		
+		
+		
+		
 	}
 	
 	free(mac_str);
 	
 	
-	NSLog(@"restored: mac:%@, ip:%@,prt:%d",this.mac_address, this.ip_address, this.port);
+	NSLog(@"restored: name:%@ mac:%@, ip:%@,prt:%d lastCom:%@",this.name, 
+		  this.mac_address, this.ip_address, this.port, this.last_comm);
 	
 	return this;
 }

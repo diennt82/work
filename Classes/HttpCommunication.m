@@ -23,7 +23,7 @@
 	device_port = 80; 
 	
 	//url_connection = [[NSURLConnection alloc]init]; 
-	self.credential = nil; 
+	credential = nil; 
 	return self; 
 }
 
@@ -31,17 +31,22 @@
 
 - (void) dealloc
 {
-	[super	dealloc];
+	
 	[device_ip release];
 	
 	if (url_connection != nil)
 		[url_connection release];
-	if(self.credential!= nil)
+	
+	if(credential == nil)
 	{
-		[self.credential release]; 
-		self.credential = nil; 
+	}
+	else
+	{
+		[credential release]; 
+		credential = nil; 
 	}
 	[self releaseAlert];
+	[super	dealloc];
 }
 
 
@@ -107,7 +112,10 @@
 
 -(void) releaseAlert
 {
-	if (myAlert != nil)
+	if (myAlert == nil)
+	{
+	}
+	else
 	{
 		NSLog(@"dismiss old alert");
 	
@@ -339,6 +347,54 @@
 {
 	NSLog(@"failed with error: %@", error); 
 
+}
+
+
+- (NSString *) sendCommandAndBlock:(NSString *)command
+{
+	//NSLog(@"send request: %@", url);
+	NSURLResponse* response;
+	NSError* error = nil;
+	NSData *dataReply = nil;
+	NSString * stringReply = nil;
+	
+	NSTimeInterval timeout = DEFAULT_TIME_OUT ; 
+	
+	NSString * http_cmd = [NSString stringWithFormat:@"http://%@:%d/%@%@",
+						   device_ip, device_port,
+						   HTTP_COMMAND_PART,command]; 
+	
+	NSLog(@"http: %@", http_cmd);
+	@synchronized(self)
+	{
+		
+		// Create the request.
+		NSMutableURLRequest *theRequest=[NSMutableURLRequest requestWithURL:[NSURL URLWithString:http_cmd]
+																cachePolicy:NSURLRequestUseProtocolCachePolicy
+															timeoutInterval:timeout];
+		//TODO: add authentication
+//		NSString *authHeader = [@"Basic " stringByAppendingFormat:@"%@", [Util getCredentials]];  
+//		[theRequest addValue:authHeader forHTTPHeaderField:@"Authorization"];
+
+		
+		dataReply = [NSURLConnection sendSynchronousRequest:theRequest returningResponse:&response error:&error];
+		
+		
+		if (error != nil)
+		{
+			//NSLog(@"error: %@\n", error);
+		}
+		else {
+			
+			// Interpret the response
+			stringReply = (NSString *)[[NSString alloc] initWithData:dataReply encoding:NSUTF8StringEncoding];
+			[stringReply autorelease];
+		}
+		
+		
+	}
+
+	return stringReply ;
 }
 
 

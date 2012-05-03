@@ -18,6 +18,9 @@
 
 #define GET_VERSION @"get_version"
 
+#define SET_RESOLUTION_VGA @"VGA640_480"
+#define SET_RESOLUTION_QVGA @"QVGA320_240"
+#define SET_RESOLUTION_QQVGA @"QQVGA160_120"
 
 
 @interface HttpCommunication : NSObject {
@@ -41,7 +44,9 @@
 @property (nonatomic,retain) NSString * device_ip; 
 @property (nonatomic) int device_port; 
 @property (nonatomic) BOOL authInProgress; 
+
 - (void) sendCommand:(NSString *) command;
+- (NSString *) sendCommandAndBlock:(NSString *)command;
 - (BOOL) tryAuthenticate;
 - (void) babymonitorAuthentication;
 

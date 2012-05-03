@@ -76,6 +76,12 @@
 		977D9A11143DA29100ABA946 /* MBP_RemoteAccessViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 977D9A0F143DA29100ABA946 /* MBP_RemoteAccessViewController.m */; };
 		977D9A12143DA29100ABA946 /* MBP_RemoteAccessViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 977D9A10143DA29100ABA946 /* MBP_RemoteAccessViewController.xib */; };
 		977D9A95143DBE5100ABA946 /* advanced button_ON.png in Resources */ = {isa = PBXBuildFile; fileRef = 977D9A94143DBE5100ABA946 /* advanced button_ON.png */; };
+		978E97531550C84800B59E90 /* photo_item.png in Resources */ = {isa = PBXBuildFile; fileRef = 978E97521550C84800B59E90 /* photo_item.png */; };
+		978E975F1550C9B500B59E90 /* large_icon1_1_d.png in Resources */ = {isa = PBXBuildFile; fileRef = 978E975E1550C9B500B59E90 /* large_icon1_1_d.png */; };
+		978E9A811551313000B59E90 /* MBP_AddCamController.m in Sources */ = {isa = PBXBuildFile; fileRef = 978E9A7F1551313000B59E90 /* MBP_AddCamController.m */; };
+		978E9A821551313000B59E90 /* MBP_AddCamController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 978E9A801551313000B59E90 /* MBP_AddCamController.xib */; };
+		978E9A851551318600B59E90 /* add_camera_select_Camera.png in Resources */ = {isa = PBXBuildFile; fileRef = 978E9A841551318600B59E90 /* add_camera_select_Camera.png */; };
+		978E9A871551318D00B59E90 /* add_camera_select_home_network.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 978E9A861551318D00B59E90 /* add_camera_select_home_network.jpg */; };
 		97987CAD154681C80066C49B /* MBP_FirstPage.xib in Resources */ = {isa = PBXBuildFile; fileRef = 97987CAC154681C80066C49B /* MBP_FirstPage.xib */; };
 		97987CC9154683940066C49B /* router_mode.png in Resources */ = {isa = PBXBuildFile; fileRef = 97987CC8154683940066C49B /* router_mode.png */; };
 		97987CCB154683AD0066C49B /* direct_mode.png in Resources */ = {isa = PBXBuildFile; fileRef = 97987CCA154683AD0066C49B /* direct_mode.png */; };
@@ -254,6 +260,13 @@
 		977D9A0F143DA29100ABA946 /* MBP_RemoteAccessViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MBP_RemoteAccessViewController.m; sourceTree = "<group>"; };
 		977D9A10143DA29100ABA946 /* MBP_RemoteAccessViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MBP_RemoteAccessViewController.xib; sourceTree = "<group>"; };
 		977D9A94143DBE5100ABA946 /* advanced button_ON.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "advanced button_ON.png"; sourceTree = "<group>"; };
+		978E97521550C84800B59E90 /* photo_item.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = photo_item.png; sourceTree = "<group>"; };
+		978E975E1550C9B500B59E90 /* large_icon1_1_d.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = large_icon1_1_d.png; sourceTree = "<group>"; };
+		978E9A7E1551313000B59E90 /* MBP_AddCamController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MBP_AddCamController.h; sourceTree = "<group>"; };
+		978E9A7F1551313000B59E90 /* MBP_AddCamController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MBP_AddCamController.m; sourceTree = "<group>"; };
+		978E9A801551313000B59E90 /* MBP_AddCamController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MBP_AddCamController.xib; sourceTree = "<group>"; };
+		978E9A841551318600B59E90 /* add_camera_select_Camera.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = add_camera_select_Camera.png; sourceTree = "<group>"; };
+		978E9A861551318D00B59E90 /* add_camera_select_home_network.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = add_camera_select_home_network.jpg; sourceTree = "<group>"; };
 		97987CAC154681C80066C49B /* MBP_FirstPage.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MBP_FirstPage.xib; sourceTree = "<group>"; };
 		97987CC8154683940066C49B /* router_mode.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = router_mode.png; sourceTree = "<group>"; };
 		97987CCA154683AD0066C49B /* direct_mode.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = direct_mode.png; sourceTree = "<group>"; };
@@ -421,8 +434,6 @@
 				9770CC301430533B009E69EF /* MBP_MulitCamView.m */,
 				9770CC0A1430402C009E69EF /* MBP_MainCameraView.h */,
 				9770CC0B1430402C009E69EF /* MBP_MainCameraView.m */,
-				28D7ACF60DDB3853001CB0EB /* MBP_iosViewController.h */,
-				28D7ACF70DDB3853001CB0EB /* MBP_iosViewController.m */,
 				97C061CC143AEDA30016286D /* MBP_MainSetupViewController.xib */,
 				97B8F804143ADCC700924E84 /* MBP_MainSetupViewController.h */,
 				97B8F805143ADCC700924E84 /* MBP_MainSetupViewController.m */,
@@ -445,6 +456,8 @@
 				97534533143325EE0037DDAC /* AiBallAviPlayer.h */,
 				97534534143325EE0037DDAC /* AiBallAviPlayer.m */,
 				97534538143326080037DDAC /* AiBallVideoSink.h */,
+				28D7ACF60DDB3853001CB0EB /* MBP_iosViewController.h */,
+				28D7ACF70DDB3853001CB0EB /* MBP_iosViewController.m */,
 				97A3BD6D1545094F000C3546 /* HttpCommunication.h */,
 				97A3BD6E1545094F000C3546 /* HttpCommunication.m */,
 				97A3BF0B15453A39000C3546 /* CameraPassword.h */,
@@ -467,6 +480,9 @@
 				97C49B331547B410008B7D03 /* MBP_CamListView.xib */,
 				97C49B801547BD52008B7D03 /* MBP_CamListView.h */,
 				97C49B811547BD52008B7D03 /* MBP_CamListView.m */,
+				978E9A7E1551313000B59E90 /* MBP_AddCamController.h */,
+				978E9A7F1551313000B59E90 /* MBP_AddCamController.m */,
+				978E9A801551313000B59E90 /* MBP_AddCamController.xib */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -618,6 +634,10 @@
 		97987CC1154683700066C49B /* images12 */ = {
 			isa = PBXGroup;
 			children = (
+				978E9A861551318D00B59E90 /* add_camera_select_home_network.jpg */,
+				978E9A841551318600B59E90 /* add_camera_select_Camera.png */,
+				978E975E1550C9B500B59E90 /* large_icon1_1_d.png */,
+				978E97521550C84800B59E90 /* photo_item.png */,
 				97C49E2C1548138A008B7D03 /* camera_online.png */,
 				97C49E2D1548138A008B7D03 /* camera_offline.png */,
 				97C49E2E1548138A008B7D03 /* camera_remote.png */,
@@ -780,6 +800,11 @@
 				97C49E2F1548138A008B7D03 /* camera_online.png in Resources */,
 				97C49E301548138A008B7D03 /* camera_offline.png in Resources */,
 				97C49E311548138A008B7D03 /* camera_remote.png in Resources */,
+				978E97531550C84800B59E90 /* photo_item.png in Resources */,
+				978E975F1550C9B500B59E90 /* large_icon1_1_d.png in Resources */,
+				978E9A821551313000B59E90 /* MBP_AddCamController.xib in Resources */,
+				978E9A851551318600B59E90 /* add_camera_select_Camera.png in Resources */,
+				978E9A871551318D00B59E90 /* add_camera_select_home_network.jpg in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -830,6 +855,7 @@
 				97C49AB0154784F4008B7D03 /* SetupData.m in Sources */,
 				97C49B551547B6F7008B7D03 /* CamListItemView.m in Sources */,
 				97C49B821547BD52008B7D03 /* MBP_CamListView.m in Sources */,
+				978E9A811551313000B59E90 /* MBP_AddCamController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

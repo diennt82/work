@@ -25,7 +25,8 @@
 #import "ConnectionMethodDelegate.h"
 #import "MBP_LoginOrRegistration.h"
 #import "MBP_CamListView.h"
-
+#import "MBP_Streamer.h"
+#import "MBP_AddCamController.h"
 
 #define DIRECTION_FORWARD_STR @"move_forward"
 #define DIRECTION_BACKWARD_STR @"move_backward"
@@ -62,6 +63,7 @@
 	IBOutlet MBP_CamView * camView;
 	IBOutlet MBP_MainMenuView * mainMenuView;
 	IBOutlet MBP_CamListView * camListView; 
+	IBOutlet UIView * progressView; 
 	
 	AsyncSocket * listenSocket;
 	
@@ -92,7 +94,7 @@
 	BOOL walkie_talkie_enabled;
 	NSTimer * voice_data_timer;
 	
-	CGFloat currentZoomLevel ;
+
 	
 	/* Direction */
 	NSTimer * send_UD_dir_req_timer; 
@@ -115,9 +117,11 @@
 	NSMutableArray * restored_profiles ; 
 	
 	HttpCommunication * comm; 
+	MBP_Streamer * streamer; 
+	CamChannel * selected_channel; 
 	
 }
-
+@property (nonatomic, retain) IBOutlet UIView * progressView;
 @property (nonatomic,retain) 	IBOutlet MBP_CamListView * camListView; 
 @property (nonatomic,retain) IBOutlet MBP_CamView * camView; 
 @property (nonatomic,retain) IBOutlet MBP_MainMenuView * mainMenuView;
@@ -126,9 +130,14 @@
 
 @property (nonatomic,retain) NSMutableArray * scan_results ;
 @property (nonatomic) int next_profile_index;
-@property (nonatomic) CGFloat currentZoomLevel;
+
 @property (nonatomic) BOOL toTakeSnapShot, recordInProgress;
 @property (nonatomic, retain) NSString * bc_addr, *own_addr;
+
+@property (nonatomic, retain) NSArray * channel_array; 
+@property (nonatomic, retain) NSMutableArray * restored_profiles ;
+@property (nonatomic, retain) MBP_Streamer * streamer; 
+
 
 - (void) initialize ;
 
@@ -209,6 +218,12 @@
 
 
 -(void) startShowingCameraList;
+
+
+- (void) channelSelect: (UIGestureRecognizer *) sender;
+-(void) setupInfraCamera:(CamChannel *) ch;
+
+- (IBAction) cameraListButtonClicked:(id) sender;
 
 //delegate
 - (void)sendConfiguration:(DeviceConfiguration *) conf;

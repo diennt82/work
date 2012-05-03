@@ -26,10 +26,18 @@
 @synthesize toTakeSnapShot,recordInProgress ;
 @synthesize bc_addr,own_addr;
 
-@synthesize currentZoomLevel;
+
 
 @synthesize comm; 
 @synthesize camListView;
+
+@synthesize channel_array; 
+@synthesize restored_profiles ; 
+
+@synthesize streamer; 
+
+@synthesize progressView;
+
 /*
 // The designated initializer. Override to perform setup that is required before the view is loaded.
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
@@ -74,12 +82,12 @@
 	
 	walkie_talkie_enabled = NO;
 	
-	self.currentZoomLevel = 5;
+
 	current_view_mode = CURRENT_VIEW_MODE_MULTI;
 	deviceScanInProgress = NO;
 	
 	self.comm = [[HttpCommunication alloc]init]; 
-	
+
 }
 
 /**/
@@ -104,8 +112,6 @@
 
 - (void)wakeup_display_main_cam:(NSTimer*) timer_exp
 {
-#if 1
-	
 	
 	MBP_FirstPage * firstPage;
 	firstPage = [[MBP_FirstPage alloc] initWithNibName:@"MBP_FirstPage"
@@ -113,76 +119,7 @@
 									  withConnDelegate:self];
 	
 	[self presentModalViewController:firstPage animated:YES];
-#else
-	
-	[[NSBundle mainBundle] loadNibNamed:@"MBP_CamView" 
-								  owner:self 
-								options:nil];
-	
 
-	[self.view addSubview:camView];
-	
-	[camView.oneCamView initializedWithViewController:self];
-	[camView.multiCamView initializedWithViewController:self];
-	
-	
-	
-	
-	/* Setup for 1 cam */
-	UILongPressGestureRecognizer * longpressGesture = 
-	[[UILongPressGestureRecognizer alloc] initWithTarget:self
-												  action:@selector(handleLongPress:)];
-	
-	longpressGesture.minimumPressDuration = 2;
-	
-	[camView.oneCamView.videoView addGestureRecognizer:longpressGesture];
-	[longpressGesture release];
-	
-	
-	UIPinchGestureRecognizer * pinchGesture = 
-	[[UIPinchGestureRecognizer alloc] initWithTarget:self
-											  action:@selector(handlePinchGesture:)];
-	[camView.oneCamView.videoView addGestureRecognizer:pinchGesture];
-	[pinchGesture release];
-	
-	/* Kick off the two timer for direction sensing */
-	currentDirUD = DIRECTION_V_NON;
-	lastDirUD    = DIRECTION_V_NON;
-	delay_update_lastDir_count = 1;
-	
-	
-	
-	send_UD_dir_req_timer = 
-	[NSTimer scheduledTimerWithTimeInterval:0.1
-									 target:self
-								   selector:@selector(v_directional_change_callback:)
-								   userInfo:nil
-									repeats:YES];
-	
-	currentDirLR = DIRECTION_H_NON;
-	lastDirLR    = DIRECTION_H_NON;
-	delay_update_lastDirLR_count = 1;
-	
-	
-	
-	send_LR_dir_req_timer = 
-	[NSTimer scheduledTimerWithTimeInterval:0.2
-									 target:self
-								   selector:@selector(h_directional_change_callback:)
-								   userInfo:nil
-									repeats:YES];
-
-	
-	//setup for 4 camera 
-	
-	
-	[self.view addSubview:camView];
-
-	
-	
-	if ( deviceScanInProgress == NO)
-		[self scan_for_devices];
-#endif
 }
 
 
@@ -249,7 +186,7 @@
 									repeats:YES];
 	
 	
-
+	
 	
 	
 	[self.view addSubview:camView];
@@ -284,44 +221,174 @@
 
 -(void) startShowingCameraList
 {
-	[[NSBundle mainBundle] loadNibNamed:@"MBP_CamListView" 
-								  owner:self 
-								options:nil];
+	if (camListView == nil)
+	{
+		
+		[[NSBundle mainBundle] loadNibNamed:@"MBP_CamListView" 
+									  owner:self 
+									options:nil];
+		
+		[camListView initViews];
+		[self.view addSubview:camListView];
+		
+	}
 	
-	
-	[self.view addSubview:camListView];
-	
+	camListView.hidden = NO;
 	
 	/* setup for one by one channel */
 	CamProfile * cp ; 
 	CamChannel * ch;
-
-	ch = [channel_array  objectAtIndex:0];
-	cp = ch.profile;
-	if (cp == nil)
-	{
-		camListView.channel1.hidden = YES;
-	}
-	else
-	{
-		if (cp.isInLocal ==TRUE)
-		{
-			[camListView.channel1.cameraLocationIndicator setImage:[UIImage imageNamed:@"camera_online.png"]];
-		}
-		else {
-			[camListView.channel1.cameraLocationIndicator setImage:[UIImage imageNamed:@"camera_offline.png"]];
-				
-		}
-
-	}
+	CamListItemView * itemView; 
 
 	
-	ch = [channel_array  objectAtIndex:1];
-	cp = ch.profile;
-	if (cp == nil)
+	NSLog(@"channelViews count: %d ", [camListView.channelViews count]);
+	
+	for (int i =0 ; i< [camListView.channelViews count]; i++)
 	{
-		camListView.channel1.hidden = YES;
+		itemView = [camListView.channelViews objectAtIndex:i];
+		
+		
+		ch = [channel_array  objectAtIndex:i];
+		cp = ch.profile;
+
+		NSLog(@"camera: %@ ", cp.mac_address);
+		if (cp == nil)
+		{
+			itemView.hidden = YES;
+		}
+		else
+		{
+			if (cp.isInLocal ==TRUE)
+			{
+				
+				[itemView.cameraLocationIndicator setImage:[UIImage imageNamed:@"camera_online.png"]];
+			}
+			else 
+			{
+				
+				[itemView.cameraLocationIndicator setImage:[UIImage imageNamed:@"camera_offline.png"]];
+					
+			}
+			
+			
+			//TODO: setup melody image
+			
+			
+			//Set camera name
+			[itemView.cameraName setText:cp.name];
+			
+			//set camera info
+			if (cp.isInLocal == TRUE)
+			{
+				NSLog(@"online lastComm %@", cp.last_comm); 
+				[itemView.cameraLastComm setText:[NSString stringWithFormat:@"last seen %@", cp.last_comm]]; 
+			}
+			else
+			{
+				NSLog(@"offline lastComm %@", cp.last_comm); 
+				[itemView.cameraLastComm setText:[NSString stringWithFormat:@"last seen %@", cp.last_comm]];
+			}
+
+			
+			
+			//set camera image
+			if (cp.profileImage != nil)
+			{
+				[itemView.cameraSnapshot setImage:cp.profileImage];
+			}
+			else 
+			{
+				[itemView.cameraSnapshot setImage:[UIImage imageNamed:@"photo_item.png"]];
+			}
+
+			//set Setting button functionality -
+			//TODO: 
+			
+			
+			//Set onclick for this item
+			itemView.userInteractionEnabled = YES;
+			
+			
+			UITapGestureRecognizer *singleFingerTap = 
+			[[UITapGestureRecognizer alloc] initWithTarget:self 
+													action:@selector(channelSelect:)];
+			[itemView addGestureRecognizer:singleFingerTap];
+			[singleFingerTap autorelease];
+
+			
+		}
+		
+		
+	}//end for 
+		
+		
+		
+		
+	/**** setup the video screen */
+	if (camView == nil)
+	{
+		[[NSBundle mainBundle] loadNibNamed:@"MBP_CamView" 
+									  owner:self 
+									options:nil];
+		
+		
+		[self.view addSubview:camView];
+		
+		
+		[camView.oneCamView initializedWithViewController:self];
+		
+		/* Setup for 1 cam */
+		UILongPressGestureRecognizer * longpressGesture = 
+		[[UILongPressGestureRecognizer alloc] initWithTarget:self
+													  action:@selector(handleLongPress:)];
+		
+		longpressGesture.minimumPressDuration = 2;
+		
+		[camView.oneCamView.videoView addGestureRecognizer:longpressGesture];
+		[longpressGesture release];
+		
+		
+		UIPinchGestureRecognizer * pinchGesture = 
+		[[UIPinchGestureRecognizer alloc] initWithTarget:self
+												  action:@selector(handlePinchGesture:)];
+		[camView.oneCamView.videoView addGestureRecognizer:pinchGesture];
+		[pinchGesture release];
+		
+		/* Kick off the two timer for direction sensing */
+		currentDirUD = DIRECTION_V_NON;
+		lastDirUD    = DIRECTION_V_NON;
+		delay_update_lastDir_count = 1;
+		
+		
+		
+		send_UD_dir_req_timer = 
+		[NSTimer scheduledTimerWithTimeInterval:0.1
+										 target:self
+									   selector:@selector(v_directional_change_callback:)
+									   userInfo:nil
+										repeats:YES];
+		
+		currentDirLR = DIRECTION_H_NON;
+		lastDirLR    = DIRECTION_H_NON;
+		delay_update_lastDirLR_count = 1;
+		
+		
+		
+		send_LR_dir_req_timer = 
+		[NSTimer scheduledTimerWithTimeInterval:0.2
+										 target:self
+									   selector:@selector(h_directional_change_callback:)
+									   userInfo:nil
+										repeats:YES];
+		
+		[self.view addSubview:camView];
+		self.camView.hidden = YES; 
+		
+		NSLog(@"finish setup the video view ");
+		
+		
 	}
+	
 	
 	
 }
@@ -362,11 +429,69 @@
 	[bc_addr release];
 	[own_addr release];
 	[comm release];
+	[channel_array release]; 
+	[restored_profiles release];
     [super dealloc];
 }
 
 #pragma mark -
 #pragma mark Button Handlers
+
+
+
+- (void) channelSelect: (UIGestureRecognizer *) sender 
+{
+	
+	NSLog(@"get Touchupinside from tag: %d", sender.view.tag);
+	int senderTag = sender.view.tag;
+	
+	if (self.channel_array == nil)
+	{
+		NSLog(@"error: channel array is null !!!");
+		return;
+	}
+	
+
+	
+	switch (senderTag) {
+		case CHANNEL_1_TAG:
+			selected_channel = [self.channel_array objectAtIndex:0]; 
+			break;
+		case CHANNEL_2_TAG:
+			selected_channel = [self.channel_array objectAtIndex:1]; 
+			break;
+		case CHANNEL_3_TAG:
+			selected_channel = [self.channel_array objectAtIndex:2]; 
+			break;
+		case CHANNEL_4_TAG:
+			selected_channel = [self.channel_array objectAtIndex:3]; 
+			
+
+			
+			break;
+		default:
+			break;
+	}
+	
+	if (selected_channel == nil )
+	{
+		NSLog(@"channel is nil");
+		return; 
+	}
+
+	if (selected_channel.profile == nil )
+	{
+		NSLog(@"channel profile is nil");
+		return; 
+	}
+	
+	
+	NSLog(@"channel is %d with cam name: %@", selected_channel.channel_index, selected_channel.profile.name);
+	
+	
+	[self setupInfraCamera:selected_channel];
+	
+}
 
 
 
@@ -376,23 +501,23 @@
 	if (factor > 1) 
 	{
 		// zoom in
-		self.currentZoomLevel-=0.05;
+		self.streamer.currentZoomLevel-=0.05;
 									
 	}
 	else
 	{
 		// zoom out 
-		self.currentZoomLevel +=0.05;
+		self.streamer.currentZoomLevel +=0.05;
 	}
 	
-	if (self.currentZoomLevel >5.0)
+	if (self.streamer.currentZoomLevel >5.0)
 	{
-		self.currentZoomLevel = 5.0;
+		self.streamer.currentZoomLevel = 5.0;
 	}
 	
-	if (currentZoomLevel < 1.0)
+	if (self.streamer.currentZoomLevel < 1.0)
 	{
-		self.currentZoomLevel =1.0 ;
+		self.streamer.currentZoomLevel =1.0 ;
 	}
 	
 }
@@ -445,6 +570,7 @@
 				mainMenuView.hidden = YES;
 				
 				
+#if 0
 				if ( current_view_mode == CURRENT_VIEW_MODE_MULTI)
 				{
 					if ( deviceScanInProgress == NO)
@@ -456,8 +582,21 @@
 				else {
 					[self switchToSingleCameraMode: -1];
 				}
-
+#endif 
 			}
+			
+			if (selected_channel != nil)
+			{
+				[self setupInfraCamera:selected_channel];
+			}
+			else 
+			{
+				//start by scanning for cameras 
+				[self scan_for_devices];
+			}
+
+			
+			
 			break;
 		case MENU_INFO_TAG:
 		{
@@ -480,6 +619,7 @@
 }
 
 
+
 - (IBAction) sideMenuButtonClicked:(id) sender
 {
 	
@@ -487,6 +627,14 @@
 	
 	switch (sender_tag) {
 		case SIDEBUTTON_MULTICAM_TAG:
+			
+						
+			self.camView.hidden = YES;
+			[self.streamer stopStreaming]; 
+			
+			[self startShowingCameraList];
+			
+#if 0 //TO BE REMOVED
 			/* Disconnect now */ 
 			[self disconnectRabot];
 			
@@ -504,17 +652,21 @@
 				/* Reconnect */
 				[self scan_for_devices];
 			}
+#endif 
 			
 			break;
 		case SIDEBUTTON_SNAPSHOT_TAG:
 			/* Dont take snapshot while recording */
 			if (self.recordInProgress == NO)
 			{	
-				self.toTakeSnapShot = YES;
+				self.streamer.takeSnapshot = YES;
 			}
 			break;
 		case SIDEBUTTON_MAINMENU_TAG:
 		{
+			
+			[self.streamer stopStreaming];
+			
 			if ( mainMenuView == nil)
 			{
 			
@@ -535,7 +687,8 @@
 				mainMenuView.hidden = NO;
 			}
 
-			
+#if 0 // to be removed 
+	
 			if ( current_view_mode == CURRENT_VIEW_MODE_SINGLE)
 			{
 				/* Disconnect now */ 
@@ -567,6 +720,7 @@
 				
 				[self get_current_melody: mainMenuView.melodyButton updateIcons:img_array];
 				[img_array release];
+
 			}
 			else 
 			{
@@ -574,15 +728,18 @@
 
 				
 			}
-
+#endif 
 			
 			break;
 		}
 		case SIDEBUTTON_RECORD_TAG:
+			[self.streamer toggleRecording ]; 
+			
+#if 0 //to be removed
 			//NSLog(@"get Record btn");
 			if (self.recordInProgress == YES)
 			{
-				[self stopRecording];
+				[self.streamer stopRecording];
 				self.recordInProgress = NO;
 				
 			}
@@ -590,9 +747,9 @@
 			{
 				NSLog(@"start recording");
 				self.recordInProgress = YES;
-				[self startRecording];
+				[self.streamer startRecording];
 			}
-
+#endif
 			camView.statusBar.video_rec_status_icon.hidden = (!self.recordInProgress) ;
 			
 			break;
@@ -601,6 +758,40 @@
 	}
 }
 
+
+- (IBAction) cameraListButtonClicked:(id) sender
+{
+	int sender_tag = ((UIButton*)sender).tag; 
+	
+	switch (sender_tag) {
+		case SEARCH_CAM_BTN:
+			self.progressView.hidden = NO;
+			[self.view bringSubviewToFront:self.progressView];
+
+			[self scan_for_devices];
+			break;
+		case ADD_CAM_BTN:
+		{
+			MBP_AddCamController * addCamCtrl;
+			addCamCtrl = [[MBP_AddCamController alloc] initWithNibName:@"MBP_AddCamController"
+																   bundle:nil
+														 withConnDelegate:self];
+			
+			[self presentModalViewController:addCamCtrl animated:NO];
+			
+			
+			break;
+		}
+		case SCAN_CAM_BTN:
+			break;
+		case LOGOUT_CAM_BTN:
+			break;
+		default:
+			break;
+	}
+	
+	
+}
 
 #pragma mark -
 #pragma mark Connectivity
@@ -668,7 +859,8 @@
 	//[udpSSock sendData:bytes toHost:@"192.168.1.102" port:10000 withTimeout:1 tag:1];
 	
 	
-	
+	self.progressView.hidden = NO;
+	[self.view bringSubviewToFront:self.progressView];
 }
 
 
@@ -680,11 +872,13 @@
 	restore_successful = [self restoreConfigData];
 	CamProfile * cp = nil;
 
+	//Hide it, since we're done
+	self.progressView.hidden = YES;
 	
 	
 	if ( restore_successful == TRUE)
 	{
-		NSLog(@"next_profile_index %d", next_profile_index);
+		
 
 		if (scan_results != nil &&
 			restored_profiles != nil &&
@@ -702,14 +896,19 @@
 				for (int j = 0; j < next_profile_index; j++)
 				{
 					CamProfile * cp1 = (CamProfile *) [scan_results objectAtIndex:j];
+				
 					
 					if ( [cp.mac_address isEqualToString:cp1.mac_address])
 					{
+						
+						
 						cp.ip_address = cp1.ip_address;
 						cp.profileImage = cp1.profileImage;
 						cp.isInLocal = TRUE; 
+						cp.port = 80;//localport is always 80
 						//cp setMelodyStatus- TODO
 						//cp setVersionString- TODO
+						
 						
 					}
 					
@@ -732,11 +931,13 @@
 					for (int j = 0; j < [restored_profiles count]; j++)
 					{
 						CamProfile * cp = (CamProfile *) [restored_profiles objectAtIndex:j];
-						if ( !cp.isSelected &&  
-							[cp.mac_address isEqualToString:ch.profile.mac_address])
+						if ( !cp.isSelected //&&  
+							//[cp.mac_address isEqualToString:ch.profile.mac_address]
+							)
 						{
 							//Re-bind camera - channel
-							NSLog(@"re binding ");
+							NSLog(@"binding cam: %@(%@) to channel:%d",
+								  cp.name, cp.mac_address, ch.channel_index);
 							[ch setCamProfile:cp]; 
 							cp.isSelected = TRUE;
 							[cp setChannel:ch];
@@ -749,7 +950,7 @@
 				}
 				else {
 					
-					
+					//NSLog(@"channel profile = nil");
 				}
 				
 				
@@ -785,6 +986,115 @@
 	
 }
 
+
+-(void) setupInfraCamera:(CamChannel *) ch
+{
+	int channel_number = ch.channel_index;
+	
+	current_view_mode = CURRENT_VIEW_MODE_SINGLE;
+	
+	self.camListView.hidden = YES;
+	self.camView.hidden = NO;
+	self.camView.oneCamView.hidden = NO;
+	
+	self.camView.statusBar.melody_status_icon.hidden = NO;
+	self.camView.statusBar.temperature_label.hidden = NO;
+	self.camView.sideMenu.snapShotButton.enabled = YES;
+	self.camView.sideMenu.recordButton.enabled = YES;
+	
+	//ch.profile should not be NULL here --
+	
+	if ( channel_number >0)
+	{
+		[self.camView.statusBar switchChannel:channel_number];
+	}
+	
+	//self.camView.oneCamView.progressView.hidden = NO;
+	//[self.camView.oneCamView.progressView startAnimating];
+		
+	NSArray * img_array; 
+	img_array = [[NSArray alloc] initWithObjects:@"melody_muted_icon.png",@"melody_1_icon.png",
+				 @"melody_2_icon.png",@"melody_3_icon.png",nil];
+	[self set_current_melody_status:self.camView.statusBar.melody_status_icon updateIcons:img_array];
+	self.camView.statusBar.melody_status_icon.hidden = NO;
+	[img_array release];
+	
+	self.camView.statusBar.temperature_label.hidden = NO;
+
+	
+		
+	//NSLog(@"saved_url: %@", [Util getDefaultURL]);	
+
+	
+	NSString* ip = ch.profile.ip_address;
+	int port = ch.profile.port;
+
+	NSLog(@"connect to cam %@: %@:%d",ch.profile.name, ip, port);
+	
+	
+	if (comm != nil)
+	{
+		[comm release];
+		comm = nil; 
+	}
+	
+	comm = [[HttpCommunication alloc]init];
+	comm.device_ip = ip;
+	comm.device_port = port; 
+
+	//send first command now.. non-blocking call - ignore result
+	[comm sendCommand:SET_RESOLUTION_QVGA];
+	
+
+	
+	
+	
+	if (streamer != nil)
+	{
+		[streamer stopStreaming];
+		[streamer release];
+	}
+	
+	
+	streamer = [[MBP_Streamer alloc]initWithIp:ip andPort:port];
+	[streamer setVideoImage:self.camView.oneCamView.videoView];
+	[streamer setTemperatureLabel:self.camView.statusBar.temperature_label];
+
+	[streamer startStreaming];
+	
+#if 0 // to be removed 
+	
+	
+	if ( pcmPlayer == nil)
+	{
+		/* Start the player to playback & record */
+		pcmPlayer = [[PCMPlayer alloc] init];
+		[[pcmPlayer player] setPlay_now:FALSE];
+		[pcmPlayer Play];
+		
+	}
+	else {
+		[[pcmPlayer player] setPlay_now:FALSE];
+		
+	}
+	
+	
+	if (initialFlag == 1)
+	{
+		[self disconnectRabot];
+	}
+	
+	initialFlag = 1;
+	
+	listenSocket = [[AsyncSocket alloc] initWithDelegate:self];	
+	[listenSocket setUserData:SOCKET_ID_LISTEN];
+	
+	
+	//Non-blocking connect
+    [listenSocket connectToHost:ip onPort:port withTimeout:3 error:nil];
+#endif 
+	
+}
 
 -(void) switchToSingleCameraMode:(int) channel_number
 {
@@ -1095,6 +1405,7 @@
 					
 					UIImage *image = [UIImage imageWithData:imageData];
 					
+#if 0
 					if (currentZoomLevel < 5.0f)
 					{
 						//CGRect frame = camView.oneCamView.videoView.frame;
@@ -1117,6 +1428,7 @@
 						
 						
 					}
+#endif 
 					camView.oneCamView.videoView.image = image;
 					
 					
@@ -1825,7 +2137,7 @@
 
 
 #pragma mark -
-#pragma mark SnapShot
+#pragma mark SnapShot- NOT USED -- to be removed soon 
 
 - (void) takeSnapShot:(UIImage *) image 
 {
@@ -1880,7 +2192,7 @@
 }
 
 #pragma mark -
-#pragma mark Video Recording
+#pragma mark Video Recording - not used -- to be removed soon
 
 
 
@@ -1992,7 +2304,7 @@
 }
 
 #pragma mark -
-#pragma mark Image scaling 
+#pragma mark Image scaling -- not used 
 
 - (UIImage*)imageWithImage:(UIImage*)image scaledToRect:(CGRect)newRect
 {
@@ -2386,10 +2698,13 @@
 			
 			break;
 		case 3:
-			NSLog(@"login sucess, display camera list now ");
+			
 			[self dismissModalViewControllerAnimated:NO];
 			
-			//[self startShowingCameraList ];
+			
+			NSLog(@" show waiting dialog ");
+			self.progressView.hidden = NO;
+			
 			[self scan_for_devices];
 			break; 
 		default:
@@ -2422,9 +2737,11 @@
 	SetupData * savedData = [[SetupData alloc]init];
 	if ([savedData restore_session_data] ==TRUE)
 	{
-		NSLog(@"restored data done");
-		channel_array = savedData.channels;
-		restored_profiles = savedData.configured_cams;
+		//NSLog(@"restored data done");
+		self.channel_array = savedData.channels;
+		
+		
+		self.restored_profiles = savedData.configured_cams;
 	}
 	
 	return TRUE;

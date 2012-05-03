@@ -7,6 +7,7 @@
 //
 
 #import "BMS_Communication.h"
+#import "Util.h"
 
 #define BMS_DEFAULT_TIME_OUT 5000
 #define BMS_PHONESERVICE @"https://monitoreverywhere.com/BMS/phoneservice?"
@@ -23,6 +24,14 @@
 
 #define GET_CAM_LIST_CMD @"camera_list"
 #define GET_CAM_LIST_PARAM_1 @"&email="
+
+#define ADD_CAM_CMD @"add_cam"
+#define ADD_CAM_PARAM_1 @"&email="
+#define ADD_CAM_PARAM_2 @"&pass="
+#define ADD_CAM_PARAM_3 @"&macaddress="
+#define ADD_CAM_PARAM_4 @"&cam_name="
+#define ADD_CAM_PARAM_5 @"&pass_len="
+
 
 
 @interface BMS_Communication : NSObject {
@@ -44,6 +53,9 @@
 
 
 - (BOOL)BMS_loginWithUser:(NSString*) user_email AndPass:(NSString*) user_pass;
-- (BOOL)BMS_getCameraListWithUser:(NSString *) user_email AndPass:(NSString*) user_pass;;
+- (BOOL)BMS_getCameraListWithUser:(NSString *) user_email AndPass:(NSString*) user_pass;
+
+- (BOOL)BMS_addCamWithUser:(NSString*) user_email AndPass:(NSString*) user_pass macAddr:(NSString *) mac camName:(NSString*) name;
+
 
 @end

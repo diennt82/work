@@ -243,7 +243,7 @@
 					ch = [channels objectAtIndex:j];
 					if (ch.channel_configure_status == CONFIGURE_STATUS_NOT_ASSIGNED)
 					{
-						[ch setProfile:cp];
+						[ch setCamProfile:cp];
 						[cp setChannel:ch];
 						break;
 						
@@ -270,7 +270,7 @@
 			if (i<[offline_profiles count] && [offline_profiles objectAtIndex:i] != nil)
 			{
 				cp = [offline_profiles objectAtIndex:i];
-				[ch setProfile:cp];
+				[ch setCamProfile:cp];
 				[cp setChannel:ch];
 			}
 			

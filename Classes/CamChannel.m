@@ -12,7 +12,7 @@
 @implementation CamChannel
 
 @synthesize profile;
-@synthesize channel_configure_status;
+@synthesize channel_configure_status, channel_index;
 
 
 - (id) initWithChannelIndex:(int) index
@@ -109,20 +109,20 @@
 		ip = self.profile.ip_address;
 		port = self.profile.port;
 		
-		NSLog(@"append mac: %@", temp );
+
 		//mac
 		temp_len= [temp length];
 		
 		[data appendBytes:&temp_len length:1];
 		[data appendBytes:[temp UTF8String] length:[temp length]];		
 
-				NSLog(@"append ip %@", ip);
+
 		//ip
 		temp_len = [ip length];
 		[data appendBytes:&temp_len length:1];
 		[data appendBytes:[ip UTF8String] length:[ip length]];
 		
-				NSLog(@"append port");
+
 		//port
 		[data appendBytes:&port length:sizeof(int)];
 		
