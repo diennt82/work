@@ -117,7 +117,7 @@
 	http_cmd = [http_cmd stringByAppendingFormat:@"%@%@", ADD_CAM_PARAM_2, user_pass];
 	http_cmd = [http_cmd stringByAppendingFormat:@"%@%@", ADD_CAM_PARAM_3, mac_];
 	http_cmd = [http_cmd stringByAppendingFormat:@"%@%@", ADD_CAM_PARAM_4, name];
-	http_cmd = [http_cmd stringByAppendingFormat:@"%@%d", ADD_CAM_PARAM_3,[user_pass length]];
+	http_cmd = [http_cmd stringByAppendingFormat:@"%@%d", ADD_CAM_PARAM_5,[user_pass length]];
 	
 	NSLog(@"addCam query:%@", http_cmd);
 	

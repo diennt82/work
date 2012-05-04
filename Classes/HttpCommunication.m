@@ -232,6 +232,97 @@
 
 }
 
+
+
+- (void)sendConfiguration:(DeviceConfiguration *) conf
+{
+	//get configuration string from conf and send over HTTP with default IP 
+	NSString * device_configuration = [conf getDeviceConfString];
+	
+	NSString * setup_cmd = [NSString stringWithFormat:@"%@%@", 
+							 SETUP_HTTP_CMD,device_configuration];
+
+	NSLog(@"before send: %@", setup_cmd);
+	
+	NSString * response = [self sendCommandAndBlock:setup_cmd ];
+	//TODO: check responses ..?
+	response = [self sendCommandAndBlock:RESTART_HTTP_CMD ];
+	
+}
+
+
+
+
+- (NSString *) sendCommandAndBlock:(NSString *)command
+{
+	//NSLog(@"send request: %@", url);
+	NSURLResponse* response;
+	NSError* error = nil;
+	NSData *dataReply = nil;
+	NSString * stringReply = nil;
+	
+	NSTimeInterval timeout = DEFAULT_TIME_OUT ; 
+	
+	NSString * http_cmd = [NSString stringWithFormat:@"http://%@:%d/%@%@",
+						   device_ip, device_port,
+						   HTTP_COMMAND_PART,command]; 
+	
+	NSLog(@"http: %@", http_cmd);
+	
+	NSString *authHeader = [@"Basic " stringByAppendingFormat:@"%@", [Util getDFCredentials]];  
+	
+	NSString * macc = [CameraPassword fetchBSSIDInfo];
+	if (macc != nil)
+	{
+		NSString * cam_pass = [CameraPassword getPasswordForCam:macc];
+		NSLog(@"cam_pass:%@ for %@",cam_pass, macc);
+		if (cam_pass == nil)
+		{
+			//no password 
+			NSLog(@"failed NO password: use defautl;"); 
+			cam_pass =@"000000";
+		}
+
+		NSString* plain = [NSString stringWithFormat:@"%@:%@",
+						   BASIC_AUTH_DEFAULT_USER, cam_pass];
+		NSData* plainData = [plain dataUsingEncoding:NSUTF8StringEncoding];
+		NSString * newCred = [NSString base64StringFromData:plainData length:[plainData length]];
+		
+		authHeader = [@"Basic " stringByAppendingFormat:@"%@", newCred];  
+		
+	}
+	
+	@synchronized(self)
+	{
+		
+		// Create the request.
+		NSMutableURLRequest *theRequest=[NSMutableURLRequest requestWithURL:[NSURL URLWithString:http_cmd]
+																cachePolicy:NSURLRequestUseProtocolCachePolicy
+															timeoutInterval:timeout];
+
+		[theRequest addValue:authHeader forHTTPHeaderField:@"Authorization"];
+		
+		
+		dataReply = [NSURLConnection sendSynchronousRequest:theRequest returningResponse:&response error:&error];
+		
+		
+		if (error != nil)
+		{
+			//NSLog(@"error: %@\n", error);
+		}
+		else {
+			
+			// Interpret the response
+			stringReply = (NSString *)[[NSString alloc] initWithData:dataReply encoding:NSUTF8StringEncoding];
+			[stringReply autorelease];
+		}
+		
+		
+	}
+	
+	return stringReply ;
+}
+
 - (void) sendCommand:(NSString *) command
 {
 	
@@ -349,53 +440,6 @@
 
 }
 
-
-- (NSString *) sendCommandAndBlock:(NSString *)command
-{
-	//NSLog(@"send request: %@", url);
-	NSURLResponse* response;
-	NSError* error = nil;
-	NSData *dataReply = nil;
-	NSString * stringReply = nil;
-	
-	NSTimeInterval timeout = DEFAULT_TIME_OUT ; 
-	
-	NSString * http_cmd = [NSString stringWithFormat:@"http://%@:%d/%@%@",
-						   device_ip, device_port,
-						   HTTP_COMMAND_PART,command]; 
-	
-	NSLog(@"http: %@", http_cmd);
-	@synchronized(self)
-	{
-		
-		// Create the request.
-		NSMutableURLRequest *theRequest=[NSMutableURLRequest requestWithURL:[NSURL URLWithString:http_cmd]
-																cachePolicy:NSURLRequestUseProtocolCachePolicy
-															timeoutInterval:timeout];
-		//TODO: add authentication
-//		NSString *authHeader = [@"Basic " stringByAppendingFormat:@"%@", [Util getCredentials]];  
-//		[theRequest addValue:authHeader forHTTPHeaderField:@"Authorization"];
-
-		
-		dataReply = [NSURLConnection sendSynchronousRequest:theRequest returningResponse:&response error:&error];
-		
-		
-		if (error != nil)
-		{
-			//NSLog(@"error: %@\n", error);
-		}
-		else {
-			
-			// Interpret the response
-			stringReply = (NSString *)[[NSString alloc] initWithData:dataReply encoding:NSUTF8StringEncoding];
-			[stringReply autorelease];
-		}
-		
-		
-	}
-
-	return stringReply ;
-}
 
 
 

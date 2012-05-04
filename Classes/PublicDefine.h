@@ -18,6 +18,8 @@
 #define AIBALL_GET_REQUEST @"GET /?action=appletvastream HTTP/1.1\r\n"
 
 
+#define DEFAULT_SSID_PREFIX @"Moto-Cam-"
+#define DEFAULT_IP_PREFIX @"192.168.2."
 
 
 
@@ -44,8 +46,6 @@
 #define AIBALL_QUERY_REQUEST_STRING   @"Mot-Cam QUERY   *               "
 
 
-#define SETUP_HTTP_CMD @"/?action=command&command=setup_wireless_save&setup="
-#define RESTART_HTTP_CMD @"/?action=command&command=restart_system"
 
 // ADDED 
 

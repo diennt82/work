@@ -8,6 +8,8 @@
 
 #import <Foundation/Foundation.h>
 #import "CameraPassword.h"
+#import "DeviceConfiguration.h"
+#import "PublicDefine.h"
 
 #define DEFAULT_TIME_OUT 5000
 
@@ -21,6 +23,12 @@
 #define SET_RESOLUTION_VGA @"VGA640_480"
 #define SET_RESOLUTION_QVGA @"QVGA320_240"
 #define SET_RESOLUTION_QQVGA @"QQVGA160_120"
+
+
+#define SETUP_HTTP_CMD @"setup_wireless_save&setup="
+#define RESTART_HTTP_CMD @"restart_system"
+
+#define SET_MASTER_KEY @"set_master_key&setup="
 
 
 @interface HttpCommunication : NSObject {
@@ -49,6 +57,8 @@
 - (NSString *) sendCommandAndBlock:(NSString *)command;
 - (BOOL) tryAuthenticate;
 - (void) babymonitorAuthentication;
+-(void) releaseAlert;
+- (void)sendConfiguration:(DeviceConfiguration *) conf;
 
 #pragma mark NSURLConnection Delegate functions
 /****** NSURLConnection Delegate functions ******/

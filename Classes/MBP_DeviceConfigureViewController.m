@@ -17,7 +17,7 @@
 
 @synthesize keyIndexImg;
 @synthesize securityTypeImg;
-@synthesize addressingModeImg;
+
 @synthesize wepTypeImg, wepTypeButton;
 @synthesize keyIndexButton;
 
@@ -25,21 +25,22 @@
 @synthesize ssidField;
 @synthesize securityKeyField;
 
-@synthesize usrNameField;
-@synthesize passWdField;
-
+@synthesize wepTypeLbl;
+@synthesize wepKeyIndexLbl, activityInd;
 
 
 /*
  // The designated initializer.  Override if you create the controller programmatically and want to perform customization that is not appropriate for viewDidLoad.*/
 - (id)initWithNibName:(NSString *)nibNameOrNil 
-			   bundle:(NSBundle *)nibBundleOrNil 
-		 withDelegate:(id<SetupHttpDelegate>) delegate
+			   bundle:(NSBundle *)nibBundleOrNil
+		   withCaller: (id<ConnectionMethodDelegate>) c
 {
     if ((self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil])) {
         // Custom initialization
 		
-		httpDelegate = delegate;
+		//init with default ip /port : 192.168.2.1:80 
+		deviceComm = [[HttpCommunication alloc]init]; 
+		caller = c;
     }
     return self;
 }
@@ -52,7 +53,44 @@
 	
 	[super viewDidLoad];
 	
+	self.activityInd.hidden = NO;
+	
+	//Authenticate first
+	[deviceComm babymonitorAuthentication];
+	
+	
+	[NSTimer scheduledTimerWithTimeInterval: 0.125//0.04 
+									 target:self
+								   selector:@selector(isAuthenticationDone:)
+								   userInfo:nil
+									repeats:NO];
+}
+
+
+- (void) isAuthenticationDone:(NSTimer *) expired
+{
+	if (deviceComm.authInProgress == FALSE)
+	{
+		NSLog(@"bm auth passed!");
+		[self initLayout];
 		
+	}
+	else {
+		[NSTimer scheduledTimerWithTimeInterval:1//0.04 
+										 target:self
+									   selector:@selector(_connectDefaultRabot:)
+									   userInfo:nil
+										repeats:NO];
+	}
+	
+}
+
+
+
+-(void) initLayout
+{
+		
+	self.activityInd.hidden = YES;
 	[self.scrollView setContentSize:CGSizeMake(480.0, 540.0)];
 	
 	/* Preprare dataSource those picker here */
@@ -63,8 +101,8 @@
 	keyIndexData = [[NSArray alloc] initWithObjects:@"1",@"2", @"3",@"4",nil];
 	keyIndexIcons = [[NSArray alloc] initWithObjects:@"buttons11_1.png", @"buttons12_1.png",@"buttons13_1.png", @"buttons14_1.png", nil];
 	
-	addressingModeData = [[NSArray alloc] initWithObjects:@"DHCP",@"Static",nil];
-	addressingModeIcons= [[NSArray alloc] initWithObjects:@"DHCP_on.png", @"static_on.png", nil];
+//	addressingModeData = [[NSArray alloc] initWithObjects:@"DHCP",@"Static",nil];
+//	addressingModeIcons= [[NSArray alloc] initWithObjects:@"DHCP_on.png", @"static_on.png", nil];
 
 
 	wepTypeData = [[NSArray alloc] initWithObjects:@"OPEN",@"SHARED",nil];
@@ -74,11 +112,23 @@
 	self.keyIndexButton.hidden = YES;
 	self.wepTypeImg.hidden = YES;
 	self.wepTypeButton.hidden  = YES;
+	self.wepTypeLbl.hidden = YES;
+	self.wepKeyIndexLbl.hidden = YES;
 	
 	/* initialize transient object here */
 	self.deviceConf = [[DeviceConfiguration alloc] init];
 	
-	[self restoreDataIfPossible];
+	if (![self restoreDataIfPossible] )
+	{
+		//Try to read the ssid from preference: 
+
+		NSString * ssid = [Util getHomeSSID];
+		if (ssid != nil)
+		{
+			self.ssidField.text = ssid; 
+			self.deviceConf.ssid = ssid; 
+		}
+	}
 	
 	
 	if ( [self.deviceConf.securityMode isEqualToString:@"WEP"])
@@ -87,7 +137,8 @@
 		self.keyIndexButton.hidden = NO;
 		self.wepTypeImg.hidden = NO;
 		self.wepTypeButton.hidden  = NO;
-		
+		self.wepTypeLbl.hidden = NO;
+		self.wepKeyIndexLbl.hidden = NO;
 		
 		int img_idx = [keyIndexData indexOfObject:self.deviceConf.keyIndex];
 		if (img_idx != NSNotFound)
@@ -162,10 +213,10 @@
 		{
 			//TODO
 		}
-		[self.addressingModeImg setImage:[UIImage imageNamed:[addressingModeIcons objectAtIndex:idx]]];
+		//[self.addressingModeImg setImage:[UIImage imageNamed:[addressingModeIcons objectAtIndex:idx]]];
 		
-		self.usrNameField.text = self.deviceConf.usrName;
-		self.passWdField.text = self.deviceConf.passWd;
+		//self.usrNameField.text = self.deviceConf.usrName;
+		//self.passWdField.text = self.deviceConf.passWd;
 		
 		
 		return TRUE;
@@ -219,18 +270,26 @@
 	
 	[ssidField release];
 	[securityKeyField release];
-	[usrNameField release];
-	[passWdField release];
+	[wepTypeLbl	release];
+	[wepKeyIndexLbl release];
 	
 	[scrollView release];	
 	[keyIndexImg  release];
 	[securityTypeImg release];
-	[addressingModeImg release];
+
 	[keyIndexButton release];
 	[wepTypeImg release];
 	[wepTypeButton release];
 	
 	[deviceConf release];
+	
+	if (deviceComm == nil)
+	{
+	}
+	else {
+		[deviceComm release];
+	}
+
     [super dealloc];
 }
 
@@ -293,7 +352,7 @@
 			[actionSheet release];
 			break;
 			
-		case SETUP_SAVE_CONFIGURATION_TAG:
+		case SETUP_SAVE_CONFIGURATION_TAG: ///NOT USED
 			/* save to non-volatile memory */
 			
 			if ( [deviceConf isDataReadyForStoring])
@@ -317,13 +376,42 @@
 			break;
 		case SETUP_SEND_CONFIGURATION_TAG:
 		{
+			//Save and send 
+			if ( [deviceConf isDataReadyForStoring])
+			{
+				NSLog(@"ok to save ");
+				[Util writeDeviceConfigurationData:[deviceConf getWritableConfiguration]];
+			}
+			else 
+			{
+				UIAlertView * alert =
+				[[UIAlertView alloc] initWithTitle:@"Error: Could not send data" 
+										   message:@"Please check the following fields: SSID or Key"
+										  delegate:self
+								 cancelButtonTitle:@"OK"
+								 otherButtonTitles:nil];
+				[alert show];
+				[alert release];
+				
+			}
+			
+			
 			DeviceConfiguration * sent_conf = [[DeviceConfiguration alloc] init];
+					
+			
+			
 			[sent_conf restoreConfigurationData:[Util readDeviceConfiguration]];
 			
 			//create a http delegate, send the data thru delegate
-			[httpDelegate sendConfiguration:sent_conf];
+			[deviceComm sendConfiguration:sent_conf];
 			
-			NSLog(@"Send done!");
+			NSLog(@"Send done, go back now");
+			[caller sendStatus:SEND_CONF_SUCCESS];
+			
+			
+			
+			[self dismissModalViewControllerAnimated:NO];
+			
 			
 			break;
 		}
@@ -369,6 +457,8 @@
 				self.wepTypeImg.hidden = NO;
 				self.wepTypeButton.hidden  = NO;
 				
+				self.wepTypeLbl.hidden = NO;
+				self.wepKeyIndexLbl.hidden = NO;
 			}
 			else
 			{
@@ -377,6 +467,8 @@
 				self.keyIndexButton.hidden = YES;
 				self.wepTypeImg.hidden = YES;
 				self.wepTypeButton.hidden  = YES;
+				self.wepTypeLbl.hidden = YES;
+				self.wepKeyIndexLbl.hidden = YES;
 			}
 
 			
@@ -387,7 +479,6 @@
 			break;
 		case SETUP_ADDR_MODE_CHANGE_TAG:
 			self.deviceConf.addressMode = [addressingModeData objectAtIndex:buttonIndex];
-			[self.addressingModeImg setImage:[UIImage imageNamed:[addressingModeIcons objectAtIndex:buttonIndex]]]; 
 			break;
 		default:
 			break;

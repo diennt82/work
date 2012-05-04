@@ -502,7 +502,7 @@ static int socketFlag = 0;
 {
 	NSString * res;
 	NSArray * cam_toks; 
-	cam_toks = [cam	componentsSeparatedByString:":"];
+	cam_toks = [cam	componentsSeparatedByString:@":"];
 	
 	res = @"";
 	for(int i =0; i< [cam_toks count]; i++)
@@ -511,4 +511,23 @@ static int socketFlag = 0;
 	}
 	return res; 
 }
+
++(void) setHomeSSID:(NSString *) ssid
+{
+	
+	NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+	[userDefaults setObject:ssid forKey:@"homeSSID"];
+	
+}
+
+
++(NSString *) getHomeSSID
+{
+	
+	NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+	NSString * ssid = (NSString*) [userDefaults objectForKey:@"homeSSID"];
+	return ssid;
+	
+}
+
 @end

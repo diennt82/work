@@ -161,18 +161,7 @@
 								   WithListener: delegate];
 	[account query_camera_list];
 
-#if 0
-	
-	NSLog(@"loading .. camlist view");
-	
-	//TESTing load the camlist view
-	[[NSBundle mainBundle] loadNibNamed:@"MBP_CamListView" 
-								  owner:self 
-								options:nil];
-	camlistView.hidden = NO;
 
-	[self.view addSubview:camlistView];
-#endif 
 }
 
 - (void) loginFailedWithError:(NSHTTPURLResponse*) error_response

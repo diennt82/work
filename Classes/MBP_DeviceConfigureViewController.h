@@ -7,9 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "SetupHttpDelegate.h"
-//#import "DeviceConfiguration.h"
 
+#import "HttpCommunication.h"
+#import "ConnectionMethodDelegate.h"
+#import "MBP_AddCamController.h"
 @class DeviceConfiguration;
 
 
@@ -44,13 +45,13 @@
 
 @interface MBP_DeviceConfigureViewController : UIViewController <UIActionSheetDelegate>
 {
-	id <SetupHttpDelegate> httpDelegate;
+	
 
 	IBOutlet UIScrollView * scrollView;
 
 	IBOutlet UIImageView * securityTypeImg;
 	IBOutlet UIImageView * keyIndexImg;
-	IBOutlet UIImageView * addressingModeImg;
+
 	IBOutlet UIImageView * wepTypeImg;
 	IBOutlet UIButton * wepTypeButton;
 	
@@ -58,8 +59,9 @@
 	IBOutlet UITextField * ssidField;
 	IBOutlet UITextField * securityKeyField;
 
-	IBOutlet UITextField * usrNameField;
-	IBOutlet UITextField * passWdField;
+	IBOutlet UITextView * wepTypeLbl;
+	IBOutlet UITextView * wepKeyIndexLbl;
+	IBOutlet UIView * activityInd; 
 	
 	
 	/* DataSources */
@@ -76,26 +78,34 @@
 	/* Storage object */
 	DeviceConfiguration * deviceConf;
 	
+	HttpCommunication * deviceComm; 
+	
+	id <ConnectionMethodDelegate> caller;
 }
 
+@property (nonatomic,retain) IBOutlet UIView * activityInd; 
+@property (nonatomic,retain) IBOutlet UITextView * wepTypeLbl;
+@property (nonatomic,retain) IBOutlet UITextView * wepKeyIndexLbl;
 @property (nonatomic,retain) IBOutlet UIImageView * wepTypeImg;
 @property (nonatomic,retain) IBOutlet UIButton * wepTypeButton;
+
 @property (nonatomic,retain) IBOutlet UIButton * keyIndexButton;
 @property (nonatomic,retain) IBOutlet UIImageView * securityTypeImg;
 @property (nonatomic,retain) IBOutlet UIImageView * keyIndexImg;
-@property (nonatomic,retain) IBOutlet UIImageView * addressingModeImg;
+
 @property (nonatomic,retain) IBOutlet UIScrollView * scrollView;
 @property (nonatomic,retain) DeviceConfiguration * deviceConf;
 
 @property (nonatomic,retain) IBOutlet UITextField * ssidField;
 @property (nonatomic,retain) IBOutlet UITextField * securityKeyField;
-@property (nonatomic,retain) IBOutlet UITextField * usrNameField;
-@property (nonatomic,retain) IBOutlet UITextField * passWdField;
+
 
 
 - (id)initWithNibName:(NSString *)nibNameOrNil 
-			   bundle:(NSBundle *)nibBundleOrNil 
-		 withDelegate:(id<SetupHttpDelegate>) delegate;
+			   bundle:(NSBundle *)nibBundleOrNil
+		   withCaller: (id<ConnectionMethodDelegate>) c;
+
+-(void) initLayout;
 - (BOOL) restoreDataIfPossible;
 
 - (IBAction) handleButtonPressed:(id)sender;

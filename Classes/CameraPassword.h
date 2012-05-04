@@ -20,7 +20,7 @@
 
 
 + (NSString* )fetchBSSIDInfo;
-
++ (NSString* )fetchSSIDInfo;
 
 + (NSString*) getPasswordForCam:(NSString*) mac_address; 
 //+ (bool) removePasswordForCam:(NSString*) mac_address;

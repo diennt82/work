@@ -156,7 +156,7 @@
 - (void)onSocket:(AsyncSocket *)sock willDisconnectWithError:(NSError *)err;
 - (void)onSocket:(AsyncSocket *)sock didConnectToHost:(NSString *)host port:(UInt16)port;
 - (void)onSocketDidDisconnect:(AsyncSocket *)sock;
--(void)getBroadcastAddress:(NSString **) bcast AndOwnIp:(NSString**) ownip;
++ (void)getBroadcastAddress:(NSString **) bcast AndOwnIp:(NSString**) ownip;
 
 
 #ifdef IRABOT_AUDIO_RECORDING_SUPPORT

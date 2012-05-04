@@ -31,6 +31,8 @@
 
 #define BUFFERSIZE	4000
 
+
+
 char *if_names[MAXADDRS];
 char *ip_names[MAXADDRS];
 char *broadcast_addrs[MAXADDRS];
@@ -45,7 +47,7 @@ void InitAddresses()
 	for (i=0; i<MAXADDRS; ++i)
 	{
 		if_names[i] = ip_names[i] = hw_addrs[i] = NULL;
-		ip_addrs[i] = 0;
+		ip_addrs[i] = INVALID_IP;
 	}
 }
 
@@ -57,12 +59,13 @@ void FreeAddresses()
 		if (if_names[i] != 0) free(if_names[i]);
 		if (ip_names[i] != 0) free(ip_names[i]);
 		if (hw_addrs[i] != 0) free(hw_addrs[i]);
-		ip_addrs[i] = 0;
+		ip_addrs[i] = INVALID_IP;
 	}
+	nextAddr = 0; //reinit 
 	InitAddresses();
 }
 
-void GetIPAddresses()
+int GetIPAddresses()
 {
 	int                 i, len, flags;
 	char                buffer[BUFFERSIZE], *ptr, lastname[IFNAMSIZ], *cptr;
@@ -77,14 +80,14 @@ void GetIPAddresses()
 	for (i=0; i<MAXADDRS; ++i)
 	{
 		if_names[i] = ip_names[i] = NULL;
-		ip_addrs[i] = 0;
+		ip_addrs[i] = INVALID_IP;
 	}
 	
 	sockfd = socket(AF_INET, SOCK_DGRAM, 0);
 	if (sockfd < 0)
 	{
 		perror("socket failed");
-		return;
+		return -1;
 	}
 	
 	ifc.ifc_len = BUFFERSIZE;
@@ -93,7 +96,7 @@ void GetIPAddresses()
 	if (ioctl(sockfd, SIOCGIFCONF, &ifc) < 0)
 	{
 		perror("ioctl error");
-		return;
+		return -2;
 	}
 	
 	lastname[0] = 0;
@@ -132,7 +135,7 @@ void GetIPAddresses()
 		if_names[nextAddr] = (char *)malloc(strlen(ifr->ifr_name)+1);
 		if (if_names[nextAddr] == NULL)
 		{
-			return;
+			return -3;
 		}
 		strcpy(if_names[nextAddr], ifr->ifr_name);
 		
@@ -143,7 +146,7 @@ void GetIPAddresses()
 		ip_names[nextAddr] = (char *)malloc(strlen(temp)+1);
 		if (ip_names[nextAddr] == NULL)
 		{
-			return;
+			return -4;
 		}
 		strcpy(ip_names[nextAddr], temp);
 		
@@ -160,7 +163,7 @@ void GetIPAddresses()
 		broadcast_addrs[nextAddr] = (char *) malloc(strlen(temp) +1);
 		if (broadcast_addrs[nextAddr] == NULL)
 		{
-			return;
+			return -5;
 		}
 		strcpy(broadcast_addrs[nextAddr], temp);
 		
@@ -169,6 +172,7 @@ void GetIPAddresses()
 	}
 	
 	close(sockfd);
+	return 0; 
 }
 
 void GetHWAddresses()

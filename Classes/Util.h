@@ -65,4 +65,6 @@
 
 + (NSString *) strip_colon_fr_mac:(NSString *) cam;
 + (NSString *) add_colon_to_mac:(NSString *) cam;
++(void) setHomeSSID:(NSString *) ssid;
++(NSString *) getHomeSSID;
 @end

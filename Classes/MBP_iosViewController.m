@@ -73,12 +73,7 @@
 	self.next_profile_index = 0;
 
 	
-	NSString * bc = @"";
-	NSString * own = @"";
-	[self getBroadcastAddress:&bc AndOwnIp:&own];
-	self.bc_addr = [NSString stringWithString:bc];
-	self.own_addr = [NSString stringWithString:own];
-
+	
 	
 	walkie_talkie_enabled = NO;
 	
@@ -804,6 +799,15 @@
 
 - (void) scan_for_devices
 {
+	
+	///GET IP here 
+	NSString * bc = @"";
+	NSString * own = @"";
+	[MBP_iosViewController getBroadcastAddress:&bc AndOwnIp:&own];
+	self.bc_addr = [NSString stringWithString:bc];
+	self.own_addr = [NSString stringWithString:own];
+	
+	
 	NSString *str =  AIBALL_QUERY_REQUEST_STRING;
 	NSString * my_ip_str = self.own_addr;
 	NSString * blank_str = @" ";
@@ -1775,17 +1779,21 @@
 #import <netinet/in.h>
 #import  "IpAddress.h"
 
--(void)getBroadcastAddress:(NSString **) bcast AndOwnIp:(NSString**) ownip
++ (void)getBroadcastAddress:(NSString **) bcast AndOwnIp:(NSString**) ownip
 {
 	
-	InitAddresses();
-	GetIPAddresses();
+	int ret; 
+	//Free & re-init Addresses 
+	FreeAddresses();
+
+	ret = GetIPAddresses();
 	GetHWAddresses();
 	NSString *deviceBroadcastIP = nil;
 	NSString *deviceIP = nil ;
 	
 	NSString * log = @"";
 	
+
 	int i;
 	
 	for (i=0; i<MAXADDRS; ++i)
@@ -1795,7 +1803,12 @@
 		
 		theAddr = ip_addrs[i];
 		
-		if (theAddr == 0) break;
+		if (theAddr == INVALID_IP)
+		{
+
+			break;
+		}
+
 		if (theAddr == localHost) continue;
 		
 		if (strncmp(if_names[i], "en", strlen("en")) == 0)
@@ -1806,8 +1819,8 @@
 		
 		
 		
-		NSLog(@"%d %s %s %s %s\n", i, if_names[i], hw_addrs[i], ip_names[i], 
-			  broadcast_addrs[i]);
+		//NSLog(@"%d %s %s %s %s\n", i, if_names[i], hw_addrs[i], ip_names[i], 
+		// broadcast_addrs[i]);
 		
 		log = [log stringByAppendingFormat:@"%d %s %s %s %s\n", i, if_names[i], hw_addrs[i], ip_names[i], 
 		 broadcast_addrs[i]];
@@ -1820,9 +1833,15 @@
 	
 	NSLog(@"broadcast iP: %d %@",i, deviceBroadcastIP);
 	NSLog(@"own iP: %d %@",i, deviceIP);
+	if (deviceIP != nil)
+	{
+		*ownip = [NSString stringWithString:deviceIP];
+	}
 	
-	*ownip = [NSString stringWithString:deviceIP];
-	*bcast = [NSString stringWithString:deviceBroadcastIP];
+	if (deviceBroadcastIP != nil)
+	{
+		*bcast = [NSString stringWithString:deviceBroadcastIP];
+	}
 	
 #if 0	
 	UIAlertView *alert = [[UIAlertView alloc]
@@ -1834,7 +1853,7 @@
 	[alert show];
 	[alert release];
 	
-#endif
+
 	
 	if (deviceBroadcastIP == nil)
 	{
@@ -1850,7 +1869,7 @@
 	}
  
 	
-	
+#endif	
 	return ;
 }
 
@@ -2685,10 +2704,8 @@
 			[self startDirectConnect];
 			break;
 		case 2: 
-			//GOTO ROUTER mode 
-			NSLog(@"GO to router mode");
-			
-			//go Back to main menu
+			//GOTO ROUTER mode
+		{
 			[NSTimer scheduledTimerWithTimeInterval:0.01
 											 target:self
 										   selector:@selector(show_login_or_reg:)
@@ -2697,15 +2714,21 @@
 			
 			
 			break;
+		}
 		case 3:
 			
 			[self dismissModalViewControllerAnimated:NO];
-			
-			
-			NSLog(@" show waiting dialog ");
 			self.progressView.hidden = NO;
-			
 			[self scan_for_devices];
+			break; 
+		case 4:
+			NSLog(@" back from adding cam. relogin -- to get the new cam data"); 
+			[NSTimer scheduledTimerWithTimeInterval:0.01
+											 target:self
+										   selector:@selector(show_login_or_reg:)
+										   userInfo:nil
+											repeats:NO];
+
 			break; 
 		default:
 			break;
@@ -2715,12 +2738,25 @@
 
 -(void) show_login_or_reg:(NSTimer*) exp
 {
+#if 1 
 	MBP_LoginOrRegistration * loginOrReg;
 	loginOrReg = [[MBP_LoginOrRegistration alloc] initWithNibName:@"MBP_LoginOrRegistration"
 														   bundle:nil
 												 withConnDelegate:self];
 	
 	[self presentModalViewController:loginOrReg animated:NO];
+#endif 
+	
+	NSLog(@"DBG DBG DBG DBG  ");
+	////20120503---- DBG only
+	
+	MBP_AddCamController * addCamCtrl;
+	addCamCtrl = [[MBP_AddCamController alloc] initWithNibName:@"MBP_AddCamController"
+														bundle:nil
+											  withConnDelegate:self];
+	
+	[self presentModalViewController:addCamCtrl animated:NO];
+	
 	
 }
 

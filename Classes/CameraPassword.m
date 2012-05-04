@@ -19,7 +19,7 @@
 {
 
 #if TARGET_IPHONE_SIMULATOR == 1
-	return @"00:0c:0a:46:02:26";
+	return @"00:0C:0A:46:02:26";
 #else 
 	
 	
@@ -86,11 +86,48 @@
 
             NSLog(@"after: %@", res);
         }
-
+		
+		
+		res = [res uppercaseString];
     }
 
 
 
+    return res;
+#endif 
+}
+
++ (NSString* )fetchSSIDInfo
+{
+	
+#if TARGET_IPHONE_SIMULATOR == 1
+	return @"Moto-Cam-4601fc";
+#else 
+	
+	
+    NSArray *ifs = (id)CNCopySupportedInterfaces();
+	
+    CFDictionaryRef info = nil;
+    NSString * res= nil; 
+    for (NSString *ifnam in ifs) {
+        info = CNCopyCurrentNetworkInfo((CFStringRef)ifnam);
+		
+		
+        if (CFDictionaryContainsKey(info,kCNNetworkInfoKeySSID) == true)
+        {
+            res = [NSString stringWithFormat:@"%@", CFDictionaryGetValue(info, kCNNetworkInfoKeySSID)];
+			
+        }
+		
+        if (info && [info count]) {
+            break;
+        }
+        [info release];
+    }
+    [ifs release];
+    [info autorelease];
+	
+	
     return res;
 #endif 
 }
