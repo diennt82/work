@@ -22,7 +22,8 @@
 #define DEFAULT_IP_PREFIX @"192.168.2."
 
 
-
+#define DEFAULT_BM_IP @"192.168.2.1"
+#define DEFAULT_BM_PORT 80
 #define DEFAULT_AIBALL_SERVER @"http://192.168.2.1:80"
 //#define DEFAULT_AIBALL_SERVER @"http://192.168.1.107:80"
 

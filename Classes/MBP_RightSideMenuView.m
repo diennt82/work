@@ -6,12 +6,12 @@
 //  Copyright 2011 __MyCompanyName__. All rights reserved.
 //
 
-#import "MBP_SideMenuView.h"
+#import "MBP_RightSideMenuView.h"
 
 
-@implementation MBP_SideMenuView
+@implementation MBP_RightSideMenuView
 
-@synthesize multiModeButton, snapShotButton, mainMenuButton,recordButton;
+@synthesize multiModeButton, pushTTButton, mainMenuButton;
 
 - (id)initWithFrame:(CGRect)frame {
     if ((self = [super initWithFrame:frame])) {
@@ -32,26 +32,22 @@
 
 - (void) setupButtons
 {
-	
-	//[lang autorelease];
-//	[lang addTarget:self action:@selector(btnPressed:) forControlEvents:UIControlEventTouchUpInside];
-}
+	}
 
 - (void) disableAllButtons:(BOOL) shouldDisable;
 {
 	multiModeButton.enabled = !shouldDisable;
-	snapShotButton.enabled = !shouldDisable;
+	pushTTButton.enabled = !shouldDisable;
 	mainMenuButton.enabled = !shouldDisable;
-	recordButton.enabled = !shouldDisable;
+
 }
 
 - (void)dealloc {
 	[multiModeButton release];
-	[snapShotButton release];
+	[pushTTButton release];
 	[mainMenuButton release];
-	[recordButton release];
+
     [super dealloc];
 }
-
 
 @end

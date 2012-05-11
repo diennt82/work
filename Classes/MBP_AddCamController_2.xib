@@ -12,7 +12,7 @@
 		</object>
 		<object class="NSMutableArray" key="IBDocument.EditedObjectIDs">
 			<bool key="EncodedWithXMLCoder">YES</bool>
-			<integer value="1"/>
+			<integer value="42"/>
 		</object>
 		<object class="NSArray" key="IBDocument.PluginDependencies">
 			<bool key="EncodedWithXMLCoder">YES</bool>
@@ -120,8 +120,10 @@
 									<bytes key="NSRGB">MSAxIDEAA</bytes>
 								</object>
 								<bool key="IBUIClipsSubviews">YES</bool>
-								<bool key="IBUIMultipleTouchEnabled">YES</bool>
+								<bool key="IBUIUserInteractionEnabled">NO</bool>
 								<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
+								<bool key="IBUIScrollEnabled">NO</bool>
+								<bool key="IBUIEditable">NO</bool>
 								<string type="base64-UTF8" key="IBUIText">Tm93LCBzd2l0Y2ggeW91ciBpT1MgZGV2aWNlIFdpLUZpIG5ldHdvcmsgdG8geW91ciBob21lIG5ldHdv
 cmssIHRoZW4gcmV0dXJuIHRvIGFwcCBhbmQgd2FpdCB1bnRpbCB0aGUgIk5leHQiIGJ1dHRvbiBpcyBl
 bmFibGVkLiAKSWYgdGhlICJOZXh0IiBidXR0b24gaXMgbm90IGVuYWJsZCBmb3IgbW9yZSB0aGFuIGFw
@@ -145,8 +147,11 @@ Z3VpZGUgb24gaG93IHRvIGRvIHRoaXMsIHBsZWFzZSBzY3JvbGwgZG93bi4</string>
 								<reference key="NSSuperview" ref="329561709"/>
 								<reference key="IBUIBackgroundColor" ref="885168328"/>
 								<bool key="IBUIClipsSubviews">YES</bool>
-								<bool key="IBUIMultipleTouchEnabled">YES</bool>
+								<bool key="IBUIUserInteractionEnabled">NO</bool>
 								<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
+								<bool key="IBUIBounces">NO</bool>
+								<bool key="IBUIScrollEnabled">NO</bool>
+								<bool key="IBUIEditable">NO</bool>
 								<string key="IBUIText">First, press the Home button to leave the app, Open "Settings" (Look for the icon below)</string>
 								<object class="IBUITextInputTraits" key="IBUITextInputTraits">
 									<int key="IBUIAutocapitalizationType">2</int>
@@ -184,8 +189,11 @@ Z3VpZGUgb24gaG93IHRvIGRvIHRoaXMsIHBsZWFzZSBzY3JvbGwgZG93bi4</string>
 								<reference key="NSSuperview" ref="329561709"/>
 								<reference key="IBUIBackgroundColor" ref="885168328"/>
 								<bool key="IBUIClipsSubviews">YES</bool>
-								<bool key="IBUIMultipleTouchEnabled">YES</bool>
+								<bool key="IBUIUserInteractionEnabled">NO</bool>
 								<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
+								<bool key="IBUIBounces">NO</bool>
+								<bool key="IBUIScrollEnabled">NO</bool>
+								<bool key="IBUIEditable">NO</bool>
 								<string key="IBUIText">Next, tap "Wi-Fi" as shown below</string>
 								<object class="IBUITextInputTraits" key="IBUITextInputTraits">
 									<int key="IBUIAutocapitalizationType">2</int>
@@ -199,8 +207,11 @@ Z3VpZGUgb24gaG93IHRvIGRvIHRoaXMsIHBsZWFzZSBzY3JvbGwgZG93bi4</string>
 								<reference key="NSSuperview" ref="329561709"/>
 								<reference key="IBUIBackgroundColor" ref="885168328"/>
 								<bool key="IBUIClipsSubviews">YES</bool>
-								<bool key="IBUIMultipleTouchEnabled">YES</bool>
+								<bool key="IBUIUserInteractionEnabled">NO</bool>
 								<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
+								<bool key="IBUIBounces">NO</bool>
+								<bool key="IBUIScrollEnabled">NO</bool>
+								<bool key="IBUIEditable">NO</bool>
 								<string key="IBUIText">Then, select the Wi-Fi network called "Moto-Cam-xxxxxx"  as shown below</string>
 								<object class="IBUITextInputTraits" key="IBUITextInputTraits">
 									<int key="IBUIAutocapitalizationType">2</int>
@@ -226,8 +237,11 @@ Z3VpZGUgb24gaG93IHRvIGRvIHRoaXMsIHBsZWFzZSBzY3JvbGwgZG93bi4</string>
 								<reference key="NSSuperview" ref="329561709"/>
 								<reference key="IBUIBackgroundColor" ref="885168328"/>
 								<bool key="IBUIClipsSubviews">YES</bool>
-								<bool key="IBUIMultipleTouchEnabled">YES</bool>
+								<bool key="IBUIUserInteractionEnabled">NO</bool>
 								<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
+								<bool key="IBUIBounces">NO</bool>
+								<bool key="IBUIScrollEnabled">NO</bool>
+								<bool key="IBUIEditable">NO</bool>
 								<string key="IBUIText">Now return to the app and wait for the "Next" button.</string>
 								<object class="IBUITextInputTraits" key="IBUITextInputTraits">
 									<int key="IBUIAutocapitalizationType">2</int>

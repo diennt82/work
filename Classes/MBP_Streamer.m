@@ -225,7 +225,7 @@
 					(actualDataPtr[13]<<8 )|   actualDataPtr[14];
 					
 					//Update temperature 
-					self.temperatureLabel= [NSString stringWithFormat:@"%d \u2103", temperature];
+					[self.temperatureLabel setText:[NSString stringWithFormat:@"%d \u2103", temperature]];
 					
 					int avdata_offset = 10 + 4 + 1 ; //old data + temperature + 1 
 					

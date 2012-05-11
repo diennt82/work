@@ -9,7 +9,8 @@
 #import <UIKit/UIKit.h>
 #import "MBP_StatusBarView.h"
 #import "MBP_iosViewController.h"
-#import "MBP_SideMenuView.h"
+#import "MBP_LeftSideMenuView.h"
+#import "MBP_RightSideMenuView.h"
 #import "MBP_MainCameraView.h"
 
 #import "MBP_CamListView.h"
@@ -23,17 +24,19 @@
 
 @interface MBP_CamView : UIView {
 	IBOutlet MBP_StatusBarView * statusBar;
-	IBOutlet MBP_SideMenuView * sideMenu;
+	IBOutlet MBP_LeftSideMenuView * leftSideMenu;
+	IBOutlet MBP_RightSideMenuView * rightSideMenu;
 	IBOutlet MBP_MainCameraView * oneCamView;
 
-//	IBOutlet MBP_CamListView * camListView; 
+
 	
 }
 
 @property (nonatomic,retain) IBOutlet MBP_StatusBarView * statusBar;
-@property (nonatomic,retain) IBOutlet MBP_SideMenuView * sideMenu;
+@property (nonatomic,retain) IBOutlet MBP_LeftSideMenuView * leftSideMenu;
+@property (nonatomic,retain) IBOutlet MBP_RightSideMenuView * rightSideMenu;
 @property (nonatomic,retain) IBOutlet MBP_MainCameraView * oneCamView;
-//@property (nonatomic,retain) IBOutlet  MBP_CamListView * camListView;
+
 
 
 

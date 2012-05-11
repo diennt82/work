@@ -11,9 +11,9 @@
 
 @implementation MBP_StatusBarView
 
-@synthesize  walkie_talkie_status_icon, video_rec_status_icon, channel_status_icon, led_status_icon;
-@synthesize wifi_status_icon, melody_status_icon;
-@synthesize temperature_label;
+@synthesize   video_rec_status_icon, channel_status_icon;
+@synthesize wifi_status_icon;
+@synthesize temperature_label, camName_label,batt_status_icon;
 
 - (id)initWithFrame:(CGRect)frame {
     if ((self = [super initWithFrame:frame])) {

@@ -12,6 +12,7 @@
 		</object>
 		<object class="NSMutableArray" key="IBDocument.EditedObjectIDs">
 			<bool key="EncodedWithXMLCoder">YES</bool>
+			<integer value="42"/>
 		</object>
 		<object class="NSArray" key="IBDocument.PluginDependencies">
 			<bool key="EncodedWithXMLCoder">YES</bool>
@@ -37,7 +38,7 @@
 				<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
 			</object>
 			<object class="IBUIView" id="191373211">
-				<nil key="NSNextResponder"/>
+				<reference key="NSNextResponder"/>
 				<int key="NSvFlags">274</int>
 				<object class="NSMutableArray" key="NSSubviews">
 					<bool key="EncodedWithXMLCoder">YES</bool>
@@ -119,8 +120,10 @@
 									<bytes key="NSRGB">MSAxIDEAA</bytes>
 								</object>
 								<bool key="IBUIClipsSubviews">YES</bool>
-								<bool key="IBUIMultipleTouchEnabled">YES</bool>
+								<bool key="IBUIUserInteractionEnabled">NO</bool>
 								<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
+								<bool key="IBUIScrollEnabled">NO</bool>
+								<bool key="IBUIEditable">NO</bool>
 								<string type="base64-UTF8" key="IBUIText">Rmlyc3Qgd2Ugd2lsbCBjb25uZWN0IHlvdXIgaU9TIGRldmljZSB0byBsb29rIGZvciB5b3VyIG93biBj
 YW1lcmEncyBXaXJlbGVzcyBzaWduYWwgY2FsbGVkICJNb3RvLWNhbS14eHh4eHgiLiBUaGVuIHdlIHdp
 bGwgaGF2ZSB5b3VyIGNhbWVyYSBqb2luaW5nIHlvdXIgaG9tZSB3aXJlbGVzcyBuZXR3b3JrIGluIHRo
@@ -148,8 +151,10 @@ cm9sbCBkb3duIGZvciBtb3JlIGluc3RydWN0aW9ucy4gA</string>
 								<reference key="NSSuperview" ref="329561709"/>
 								<reference key="IBUIBackgroundColor" ref="885168328"/>
 								<bool key="IBUIClipsSubviews">YES</bool>
-								<bool key="IBUIMultipleTouchEnabled">YES</bool>
+								<bool key="IBUIUserInteractionEnabled">NO</bool>
 								<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
+								<bool key="IBUIScrollEnabled">NO</bool>
+								<bool key="IBUIEditable">NO</bool>
 								<string key="IBUIText">First, press the Home button to leave the app, Open "Settings" (Look for the icon below)</string>
 								<object class="IBUITextInputTraits" key="IBUITextInputTraits">
 									<int key="IBUIAutocapitalizationType">2</int>
@@ -187,8 +192,10 @@ cm9sbCBkb3duIGZvciBtb3JlIGluc3RydWN0aW9ucy4gA</string>
 								<reference key="NSSuperview" ref="329561709"/>
 								<reference key="IBUIBackgroundColor" ref="885168328"/>
 								<bool key="IBUIClipsSubviews">YES</bool>
-								<bool key="IBUIMultipleTouchEnabled">YES</bool>
+								<bool key="IBUIUserInteractionEnabled">NO</bool>
 								<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
+								<bool key="IBUIScrollEnabled">NO</bool>
+								<bool key="IBUIEditable">NO</bool>
 								<string key="IBUIText">Next, tap "Wi-Fi" as shown below</string>
 								<object class="IBUITextInputTraits" key="IBUITextInputTraits">
 									<int key="IBUIAutocapitalizationType">2</int>
@@ -202,8 +209,10 @@ cm9sbCBkb3duIGZvciBtb3JlIGluc3RydWN0aW9ucy4gA</string>
 								<reference key="NSSuperview" ref="329561709"/>
 								<reference key="IBUIBackgroundColor" ref="885168328"/>
 								<bool key="IBUIClipsSubviews">YES</bool>
-								<bool key="IBUIMultipleTouchEnabled">YES</bool>
+								<bool key="IBUIUserInteractionEnabled">NO</bool>
 								<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
+								<bool key="IBUIScrollEnabled">NO</bool>
+								<bool key="IBUIEditable">NO</bool>
 								<string key="IBUIText">Then, select the Wi-Fi network called "Moto-Cam-xxxxxx"  as shown below</string>
 								<object class="IBUITextInputTraits" key="IBUITextInputTraits">
 									<int key="IBUIAutocapitalizationType">2</int>
@@ -229,8 +238,10 @@ cm9sbCBkb3duIGZvciBtb3JlIGluc3RydWN0aW9ucy4gA</string>
 								<reference key="NSSuperview" ref="329561709"/>
 								<reference key="IBUIBackgroundColor" ref="885168328"/>
 								<bool key="IBUIClipsSubviews">YES</bool>
-								<bool key="IBUIMultipleTouchEnabled">YES</bool>
+								<bool key="IBUIUserInteractionEnabled">NO</bool>
 								<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
+								<bool key="IBUIScrollEnabled">NO</bool>
+								<bool key="IBUIEditable">NO</bool>
 								<string type="base64-UTF8" key="IBUIText">SWYgeW91IGRvIG5vdCBmaW5kICJNb3RvLUNhbS14eHh4eHgiIGluIHlvdXIgV2ktRmkgbmV0d29yayBs
 aXN0LiBQbGVhc2UgdHJ5IHRoZSBmb2xsb3dpbmdzOiAKMS4gUGxlYXNlIHdhaXQgZm9yIDMwIHNlY29u
 ZHMgZm8geW91ciBpT1MgZGV2aWNlIHRvIHJlZnJlc2ggdGhlIG5ldHdvcmsgbGlzdC4KMi4gSWYgeW91
@@ -267,6 +278,7 @@ dHdvcmsgbGlzdCwgcGxlYXNlIGNvbnRhY3QgdXMgZm9yIGFkZGl0aW9uYWwgYXNzaXN0YW5jZS4gA</s
 					</object>
 				</object>
 				<string key="NSFrameSize">{480, 320}</string>
+				<reference key="NSSuperview"/>
 				<object class="NSColor" key="IBUIBackgroundColor">
 					<int key="NSColorSpace">3</int>
 					<bytes key="NSWhite">MQA</bytes>
@@ -481,7 +493,7 @@ dHdvcmsgbGlzdCwgcGxlYXNlIGNvbnRhY3QgdXMgZm9yIGFkZGl0aW9uYWwgYXNzaXN0YW5jZS4gA</s
 					<bool key="EncodedWithXMLCoder">YES</bool>
 					<string>MBP_AddCamController</string>
 					<string>UIResponder</string>
-					<string>{{476, 392}, {480, 320}}</string>
+					<string>{{99, 369}, {480, 320}}</string>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 					<string>{{375, 100}, {480, 656}}</string>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
@@ -579,14 +591,20 @@ dHdvcmsgbGlzdCwgcGxlYXNlIGNvbnRhY3QgdXMgZm9yIGFkZGl0aW9uYWwgYXNzaXN0YW5jZS4gA</s
 							<bool key="EncodedWithXMLCoder">YES</bool>
 							<string>connect</string>
 							<string>delegate</string>
+							<string>finishView</string>
 							<string>progress</string>
+							<string>progressView</string>
 							<string>step_1View</string>
+							<string>step_2View</string>
 						</object>
 						<object class="NSMutableArray" key="dict.values">
 							<bool key="EncodedWithXMLCoder">YES</bool>
 							<string>UIButton</string>
 							<string>id</string>
+							<string>UIView</string>
 							<string>UIActivityIndicatorView</string>
+							<string>UIView</string>
+							<string>UIScrollView</string>
 							<string>UIScrollView</string>
 						</object>
 					</object>
@@ -596,8 +614,11 @@ dHdvcmsgbGlzdCwgcGxlYXNlIGNvbnRhY3QgdXMgZm9yIGFkZGl0aW9uYWwgYXNzaXN0YW5jZS4gA</s
 							<bool key="EncodedWithXMLCoder">YES</bool>
 							<string>connect</string>
 							<string>delegate</string>
+							<string>finishView</string>
 							<string>progress</string>
+							<string>progressView</string>
 							<string>step_1View</string>
+							<string>step_2View</string>
 						</object>
 						<object class="NSMutableArray" key="dict.values">
 							<bool key="EncodedWithXMLCoder">YES</bool>
@@ -610,11 +631,23 @@ dHdvcmsgbGlzdCwgcGxlYXNlIGNvbnRhY3QgdXMgZm9yIGFkZGl0aW9uYWwgYXNzaXN0YW5jZS4gA</s
 								<string key="candidateClassName">id</string>
 							</object>
 							<object class="IBToOneOutletInfo">
+								<string key="name">finishView</string>
+								<string key="candidateClassName">UIView</string>
+							</object>
+							<object class="IBToOneOutletInfo">
 								<string key="name">progress</string>
 								<string key="candidateClassName">UIActivityIndicatorView</string>
 							</object>
 							<object class="IBToOneOutletInfo">
+								<string key="name">progressView</string>
+								<string key="candidateClassName">UIView</string>
+							</object>
+							<object class="IBToOneOutletInfo">
 								<string key="name">step_1View</string>
+								<string key="candidateClassName">UIScrollView</string>
+							</object>
+							<object class="IBToOneOutletInfo">
+								<string key="name">step_2View</string>
 								<string key="candidateClassName">UIScrollView</string>
 							</object>
 						</object>

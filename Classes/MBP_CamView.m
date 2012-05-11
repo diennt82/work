@@ -11,7 +11,7 @@
 
 @implementation MBP_CamView
 
-@synthesize statusBar,sideMenu, oneCamView;
+@synthesize statusBar,leftSideMenu, rightSideMenu, oneCamView;
 
 
 - (id)initWithFrame:(CGRect)frame {

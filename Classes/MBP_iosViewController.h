@@ -27,6 +27,8 @@
 #import "MBP_CamListView.h"
 #import "MBP_Streamer.h"
 #import "MBP_AddCamController.h"
+#import "AudioOutStreamer.h"
+#import "MBP_MenuViewController.h"
 
 #define DIRECTION_FORWARD_STR @"move_forward"
 #define DIRECTION_BACKWARD_STR @"move_backward"
@@ -58,7 +60,7 @@
 @class CamProfile;
 
 
-@interface MBP_iosViewController : UIViewController <SetupHttpDelegate, ConnectionMethodDelegate> {
+@interface MBP_iosViewController : UIViewController <SetupHttpDelegate, ConnectionMethodDelegate,UIActionSheetDelegate> {
 
 	IBOutlet MBP_CamView * camView;
 	IBOutlet MBP_MainMenuView * mainMenuView;
@@ -67,10 +69,16 @@
 	
 	AsyncSocket * listenSocket;
 	
-#ifdef IRABOT_AUDIO_RECORDING_SUPPORT
+#if 0 // defined(IRABOT_AUDIO_RECORDING_SUPPORT)
 	AsyncSocket * sendingSocket;
 	NSMutableData * pcm_data;
+	
+	
+	NSTimer * voice_data_timer;
 #endif
+	BOOL walkie_talkie_enabled;
+	AudioOutStreamer * audioOut; 
+	
 	int initialFlag;
 	NSMutableData *responseData;
 	
@@ -91,8 +99,8 @@
 	NSString * bc_addr;
 	NSString * own_addr;
 	
-	BOOL walkie_talkie_enabled;
-	NSTimer * voice_data_timer;
+	
+	
 	
 
 	
@@ -119,6 +127,7 @@
 	HttpCommunication * comm; 
 	MBP_Streamer * streamer; 
 	CamChannel * selected_channel; 
+	NSTimer * fullScreenTimer; 
 	
 }
 @property (nonatomic, retain) IBOutlet UIView * progressView;
@@ -138,6 +147,8 @@
 @property (nonatomic, retain) NSMutableArray * restored_profiles ;
 @property (nonatomic, retain) MBP_Streamer * streamer; 
 
+@property (nonatomic, retain) NSTimer * fullScreenTimer; 
+
 
 - (void) initialize ;
 
@@ -146,11 +157,10 @@
 
 -(void) startConnect;
 - (void) scan_for_devices;
-//- (void) connectRabotWithIp:(NSString *) ip andPort:(int)port;
-//-(void) switchToSingleCameraMode: (NSString *) ip andPort:(int)port;
--(void) switchToSingleCameraMode:(int) channel_number;
 
-- (void) connectDefaultRabot; 
+//-(void) switchToSingleCameraMode:(int) channel_number;
+
+- (void) setupDirectModeCamera; 
 - (void) disconnectRabot;
 - (void)onSocket:(AsyncSocket *)sock didReadData:(NSData *)data withTag:(long)tag;
 - (void)onSocket:(AsyncSocket *)sock willDisconnectWithError:(NSError *)err;
@@ -159,13 +169,6 @@
 + (void)getBroadcastAddress:(NSString **) bcast AndOwnIp:(NSString**) ownip;
 
 
-#ifdef IRABOT_AUDIO_RECORDING_SUPPORT
-- (void)onSocket:(AsyncSocket *)sock didWriteDataWithTag:(long)tag;
-- (void) sendAudioPacket:(NSTimer *) timer_exp;
-- (void) connectToAudioSocket;
-- (void) disconnectFromAudioSocket;
-
-#endif 
 
 - (NSString * ) requestURLSync:(NSString*)url withTimeOut:(NSTimeInterval) timeout;
 - (void ) requestURLSync_bg:(NSString*)url;
@@ -224,7 +227,12 @@
 -(void) setupInfraCamera:(CamChannel *) ch;
 
 - (IBAction) cameraListButtonClicked:(id) sender;
-
+-(void) tryToShowFullScreen;
+- (void) showFullScreenNow: (NSTimer*) exp;
+- (void) showSideMenusAndStatus;
+- (void) showJoysticksOnly;
+- (IBAction) sideMenuButtonPressed:(id) sender;
+- (void) updateBatteryIcon;
 //delegate
 - (void)sendConfiguration:(DeviceConfiguration *) conf;
 - (void)sendStatus:(int) status;

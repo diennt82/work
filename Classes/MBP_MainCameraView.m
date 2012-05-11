@@ -42,9 +42,10 @@
 	translation_up_limit = - translation_down_limit;
 	translation_left_limit = translation_up_limit;
 	
+	NSLog(@"initializedWithViewController ");
 	self.viewController = viewctlr;
 	
-	//NSLog(@"tranx ud: %f, lr:%f", translation_up_limit, translation_right_limit);
+	
 }
 
 
@@ -76,6 +77,8 @@
 	[super touchesBegan:touches withEvent:event];
 	
 	//NSLog(@"began Touches count: %d", [allTouches count]);
+	[self.viewController showSideMenusAndStatus];
+	
 	int i =0;
 	
 	for (i =0 ; i < [allTouches count]; i++)
@@ -88,6 +91,7 @@
 		if (touch.view.tag == VIEW_DIRECTIONPAD_TAG)
 		{
 			//NSLog(@"touched view: loc: %f %f", location.x, location.y);
+			[self.viewController showJoysticksOnly];
 			[self touchEventAt:location phase:touch.phase];
 		}
 			
@@ -103,6 +107,8 @@
 	[super touchesEnded:touches withEvent:event];
 	///NSLog(@"Ended Touches count: %d", [allTouches count]);
 	int i =0;
+
+	[self.viewController tryToShowFullScreen];
 	
 	for (i =0 ; i < [allTouches count]; i++)
 	{
@@ -126,6 +132,7 @@
 	CGPoint location ;	
 	NSSet *allTouches = [event allTouches];
 
+
 	[super touchesMoved:touches withEvent:event];
 	//NSLog(@" MOVED Touches count: %d", [allTouches count]);
 	int i =0;
@@ -138,6 +145,8 @@
 		
 		if (touch.view.tag == VIEW_DIRECTIONPAD_TAG)
 		{
+			
+
 			
 			[self touchEventAt:location phase:touch.phase];
 		}

@@ -30,6 +30,37 @@
 
 #define SET_MASTER_KEY @"set_master_key&setup="
 
+#define SET_MELODY_OFF @"melodystop"
+#define SET_MELODY @"melody"
+
+#define SET_PTT @"audio_out"
+
+#define VOX_STATUS @"vox_get_status"
+#define VOX_ENABLE @"vox_enable"
+#define VOX_DISABLE @"vox_disable"
+#define VOX_GET_THRESHOLD @"vox_get_threshold"
+#define VOX_SET_THRESHOLD @"vox_set_threshold"
+#define VOX_SET_THRESHOLD_VALUE @"&setup="
+
+#define SET_VOLUME @"spk_volume"
+#define GET_VOLUME @"get_spk_volume"
+#define SET_VOLUME_PARAM @"&setup="
+
+#define FLIP_IMAGE @"flipup"
+
+#define GET_BRIGHTNESS_VALUE @"value_brightness"
+#define GET_BRIGHTNESS_PLUS @"brightness_plus"
+#define GET_BRIGHTNESS_MINUS @"brightness_minus"
+
+
+#define BASIC_AUTH_USR_PWD_CHANGE @"save_http_usr_passwd"
+#define BASIC_AUTH_USR_PWD_CHANGE_PARAM @"&setup="
+
+#define SWITCH_TO_DIRECT_MODE @"switch_to_uap"
+
+
+
+
 
 @interface HttpCommunication : NSObject {
 	NSString * device_ip; 

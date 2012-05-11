@@ -9,6 +9,8 @@
 #import <UIKit/UIKit.h>
 #import "MBP_iosViewController.h"
 
+#define VIEW_DIRECTIONPAD_TAG 500
+
 @class MBP_iosViewController;
 
 @interface MBP_MainCameraView : UIView {

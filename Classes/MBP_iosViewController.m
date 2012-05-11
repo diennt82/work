@@ -38,6 +38,7 @@
 
 @synthesize progressView;
 
+@synthesize fullScreenTimer;
 /*
 // The designated initializer. Override to perform setup that is required before the view is loaded.
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
@@ -81,7 +82,18 @@
 	current_view_mode = CURRENT_VIEW_MODE_MULTI;
 	deviceScanInProgress = NO;
 	
+	
 	self.comm = [[HttpCommunication alloc]init]; 
+	
+	fullScreenTimer = nil;
+	
+	
+	[UIDevice currentDevice].batteryMonitoringEnabled = YES;
+	
+	// Register for battery level and state change notifications.
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(batteryLevelDidChange:)
+                                                 name:UIDeviceBatteryLevelDidChangeNotification object:nil];
 
 }
 
@@ -137,14 +149,6 @@
 	
 	
 	/* Setup for 1 cam */
-	UILongPressGestureRecognizer * longpressGesture = 
-	[[UILongPressGestureRecognizer alloc] initWithTarget:self
-												  action:@selector(handleLongPress:)];
-	
-	longpressGesture.minimumPressDuration = 2;
-	
-	[camView.oneCamView.videoView addGestureRecognizer:longpressGesture];
-	[longpressGesture release];
 	
 	
 	UIPinchGestureRecognizer * pinchGesture = 
@@ -192,7 +196,6 @@
 	self.camView.oneCamView.hidden = NO;
 
 	self.camView.oneCamView.progressView.hidden = NO;
-	self.camView.statusBar.melody_status_icon.hidden = NO;
 	self.camView.statusBar.temperature_label.hidden = NO;
 	[self.camView.oneCamView.progressView startAnimating];
 	current_view_mode = CURRENT_VIEW_MODE_SINGLE;
@@ -333,15 +336,6 @@
 		[camView.oneCamView initializedWithViewController:self];
 		
 		/* Setup for 1 cam */
-		UILongPressGestureRecognizer * longpressGesture = 
-		[[UILongPressGestureRecognizer alloc] initWithTarget:self
-													  action:@selector(handleLongPress:)];
-		
-		longpressGesture.minimumPressDuration = 2;
-		
-		[camView.oneCamView.videoView addGestureRecognizer:longpressGesture];
-		[longpressGesture release];
-		
 		
 		UIPinchGestureRecognizer * pinchGesture = 
 		[[UIPinchGestureRecognizer alloc] initWithTarget:self
@@ -426,7 +420,126 @@
 	[comm release];
 	[channel_array release]; 
 	[restored_profiles release];
+	[fullScreenTimer release];
     [super dealloc];
+}
+
+
+- (void) showSideMenusAndStatus
+{
+	
+	if ( fullScreenTimer != nil )
+	{
+		//invalidate the timer .. 
+		[fullScreenTimer invalidate];
+		fullScreenTimer = nil;
+	}
+		NSLog(@"show menus");
+	if (self.camView != nil)
+	{
+		self.camView.oneCamView.directionPad.hidden = NO;
+		self.camView.oneCamView.directionIndicator.hidden = NO;
+		
+		
+		self.camView.statusBar.hidden = NO;
+		self.camView.leftSideMenu.hidden = NO;
+		self.camView.rightSideMenu.hidden = NO;
+		
+	}
+}
+- (void) showJoysticksOnly
+{
+	NSLog(@"show joystick");
+	if (self.camView != nil)
+	{
+		self.camView.oneCamView.directionPad.hidden = NO;
+		self.camView.oneCamView.directionIndicator.hidden = NO;
+		
+		
+		self.camView.statusBar.hidden = YES;
+		self.camView.leftSideMenu.hidden = YES;
+		self.camView.rightSideMenu.hidden = YES;
+		
+	}
+}
+- (void) showFullScreenNow: (NSTimer*) exp
+{
+	
+	
+	fullScreenTimer = nil;
+	
+	//Make status bar, left, right menus disappear
+	if (self.camView != nil)
+	{
+		self.camView.oneCamView.directionPad.hidden = YES;
+		self.camView.oneCamView.directionIndicator.hidden = YES;
+		
+		
+		self.camView.statusBar.hidden = YES;
+		self.camView.leftSideMenu.hidden = YES;
+		self.camView.rightSideMenu.hidden = YES;
+		
+	}
+}
+
+
+- (void) tryToShowFullScreen
+{
+	
+	if ( (fullScreenTimer != nil))
+	{
+		//invalidate the timer .. 
+		[fullScreenTimer invalidate];
+		fullScreenTimer = nil;
+	}
+	
+
+	NSLog(@"start fullscreen timer .");
+	fullScreenTimer = [NSTimer scheduledTimerWithTimeInterval:10.0 
+											  target:self 
+											selector:@selector(showFullScreenNow:) 
+											userInfo:nil
+											 repeats:NO];
+	
+}
+
+
+#pragma mark - Battery notifications
+
+- (void)batteryLevelDidChange:(NSNotification *)notification
+{
+	[self  updateBatteryIcon];
+}
+
+
+- (void) updateBatteryIcon
+{
+	/* 0.0  (0%) - 1.0 (100%)*/
+	float lvl = [UIDevice currentDevice].batteryLevel;
+	if (lvl == -1.0)
+	{
+		//invalide battery state .. could be simulator 
+		return; 
+	}
+	int index = (int)(lvl / 0.2);
+	
+	if (lvl == 1.0)
+	{
+		index  = 4;
+	}
+	
+	NSLog(@"batt lvl:%f, index:%d", lvl, index);
+	
+	
+	NSArray * batteryLvl; 
+	batteryLvl = [[NSArray alloc] initWithObjects:@"status_icon1_5.png",@"status_icon1_1.png",
+				@"status_icon1_2.png", @"status_icon1_3.png", @"status_icon1_4.png"
+				,nil];
+	
+	UIImage * img = [UIImage imageNamed:(NSString*)[batteryLvl objectAtIndex:index]];
+	
+	[self.camView.statusBar.batt_status_icon setImage:img];
+	
 }
 
 #pragma mark -
@@ -517,20 +630,44 @@
 	
 }
 
+
 - (IBAction) handleLongPress: (UIGestureRecognizer *) sender
 {
-
+	
 	if (sender.state == UIGestureRecognizerStateBegan)
 	{
-	
+		NSLog(@" PTT Enaged");
+		[self toggle_walkie_talkie];
+		
+		
+		UIButton * bttn = (UIButton *) sender.view; 
+		
+		[bttn setImage:[UIImage imageNamed:@"mic_d.png"]
+								  forState:UIControlStateNormal];
+
+	}
+	else if (sender.state == UIGestureRecognizerStateEnded)
+	{
+		
+		NSLog(@" PTT disengaged");
+		UIButton * bttn = (UIButton *) sender.view; 
+		[bttn setImage:[UIImage imageNamed:@"mic.png"]
+								  forState:UIControlStateNormal];
+
 		[self toggle_walkie_talkie];
 	}
+
 	
 }
 
 - (IBAction) mainMenuButtonClicked:(id) sender
 {
 	int sender_tag = ((UIButton*)sender).tag;
+	
+	 
+	
+	
+	
 	switch (sender_tag) {
 		case MENU_SETUP_TAG:
 
@@ -615,10 +752,23 @@
 
 
 
+- (IBAction) sideMenuButtonPressed:(id) sender
+{
+	
+	[self showSideMenusAndStatus];
+}
+
+
+
 - (IBAction) sideMenuButtonClicked:(id) sender
 {
 	
 	int sender_tag = ((UIButton*)sender).tag; 
+	UIActionSheet * actionSheet = nil;
+
+	
+	[self tryToShowFullScreen];
+	
 	
 	switch (sender_tag) {
 		case SIDEBUTTON_MULTICAM_TAG:
@@ -628,26 +778,6 @@
 			[self.streamer stopStreaming]; 
 			
 			[self startShowingCameraList];
-			
-#if 0 //TO BE REMOVED
-			/* Disconnect now */ 
-			[self disconnectRabot];
-			
-			/* kill the audio player */
-			[[pcmPlayer player] setPlay_now:FALSE];
-			[pcmPlayer Stop];
-			[pcmPlayer release];
-			pcmPlayer = nil;
-			
-			self.camView.oneCamView.hidden = YES;
-
-			
-			if ( deviceScanInProgress == NO)
-			{
-				/* Reconnect */
-				[self scan_for_devices];
-			}
-#endif 
 			
 			break;
 		case SIDEBUTTON_SNAPSHOT_TAG:
@@ -661,7 +791,7 @@
 		{
 			
 			[self.streamer stopStreaming];
-			
+#if 0 //old menu -- to be removed 
 			if ( mainMenuView == nil)
 			{
 			
@@ -681,71 +811,76 @@
 			else {
 				mainMenuView.hidden = NO;
 			}
-
-#if 0 // to be removed 
-	
-			if ( current_view_mode == CURRENT_VIEW_MODE_SINGLE)
-			{
-				/* Disconnect now */ 
-				[self disconnectRabot];
+#endif
+			
+			
+			MBP_MenuViewController * menuViewCtrl;
+			
 				
-				/* kill the audio player */
-				if ( pcmPlayer != nil)
-				{
-					[[pcmPlayer player] setPlay_now:FALSE];
-					[pcmPlayer Stop];
-					[pcmPlayer release];
-					pcmPlayer = nil;
-				}
-				
-				[mainMenuView hideSingleCameraButtons:NO];
-				
-				
-				/* disable talk if enabled */
-				if ( walkie_talkie_enabled == YES)
-					[self toggle_walkie_talkie];
-				
-				self.camView.statusBar.melody_status_icon.hidden = YES;
-				self.camView.statusBar.temperature_label.hidden = YES;
-				
-				
-				NSArray * img_array ;
-				img_array = [[NSArray alloc] initWithObjects:@"large_icon3_5.png",@"large_icon3_1.png",
-							 @"large_icon3_2.png",@"large_icon3_3.png",nil];
-				
-				[self get_current_melody: mainMenuView.melodyButton updateIcons:img_array];
-				[img_array release];
-
-			}
-			else 
-			{
-				[mainMenuView hideSingleCameraButtons:YES];
-
-				
-			}
-#endif 
+			
+			menuViewCtrl = [[MBP_MenuViewController alloc] initWithNibName:@"MBP_MenuViewController"
+																bundle:nil
+													  withConnDelegate:self
+																modeDirect:FALSE];
+			
+			[self presentModalViewController:menuViewCtrl animated:NO];
+			
+			
+			
 			
 			break;
 		}
 		case SIDEBUTTON_RECORD_TAG:
 			[self.streamer toggleRecording ]; 
 			
-#if 0 //to be removed
-			//NSLog(@"get Record btn");
-			if (self.recordInProgress == YES)
+			if (self.streamer.recordInProgress == YES)
 			{
-				[self.streamer stopRecording];
-				self.recordInProgress = NO;
+				[self.camView.leftSideMenu.recordButton setImage:[UIImage imageNamed:@"smallicon4_2.png"]
+														forState:UIControlStateNormal];
 				
 			}
 			else
 			{
-				NSLog(@"start recording");
-				self.recordInProgress = YES;
-				[self.streamer startRecording];
+
+				[self.camView.leftSideMenu.recordButton setImage:[UIImage imageNamed:@"smallicon4_1.png"]
+														forState:UIControlStateNormal];
+
 			}
-#endif
-			camView.statusBar.video_rec_status_icon.hidden = (!self.recordInProgress) ;
+
+			
+			camView.statusBar.video_rec_status_icon.hidden = (!self.streamer.recordInProgress) ;
+			
+			break;
+		case SIDEBUTTON_MELODY_TAG:
+		{
+			NSArray * melodies; 
+			
+			//TODO: change to picker view & internationalize..
+			melodies = [[NSArray alloc] initWithObjects:@"Mute",@"Rock a Bye Baby",
+						@"Lullaby and Goodnight", @"Lavender Blue", @"Twinkle Twinkle Little Start",
+						@"Hush Little Baby",nil];
+			
+			actionSheet = [[UIActionSheet alloc] initWithTitle:@"Pick a melody"
+													  delegate:self
+											 cancelButtonTitle:nil
+										destructiveButtonTitle:nil
+											 otherButtonTitles:[melodies objectAtIndex:0], 
+						   [melodies objectAtIndex:1],
+						   [melodies objectAtIndex:2],
+						   [melodies objectAtIndex:3],
+						   [melodies objectAtIndex:4],
+						   [melodies objectAtIndex:5],
+						   nil];
+			
+			actionSheet.tag = MELODY_SELECTION_TAG;
+			
+			[actionSheet showInView:self.camView];
+			[actionSheet release];
+			
+			
+			break;
+		}
+		case SIDEBUTTON_PTT_TAG:
 			
 			break;
 		default:
@@ -787,6 +922,61 @@
 	
 	
 }
+
+
+#pragma mark -
+#pragma mark ActionSheet delegate
+
+
+- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+	
+	int action_tag = actionSheet.tag;
+	
+	switch (action_tag) {
+		case MELODY_SELECTION_TAG:
+
+			if (comm != nil)
+			{
+				NSString * command = nil;
+				if (buttonIndex == 0 ) //mute
+				{
+					command = SET_MELODY_OFF;
+				}
+				else 
+				{
+					command = [NSString stringWithFormat:@"%@%d",SET_MELODY,buttonIndex];
+				}
+				
+				if (command != nil)
+				{
+					[comm sendCommandAndBlock:command];
+				}
+				
+			}
+			
+			
+
+			if (buttonIndex == 0 ) //mute
+			{
+				[self.camView.leftSideMenu.melodyButton setImage:[UIImage imageNamed:@"smallicon5_2.png"]
+																			forState:UIControlStateNormal];
+			}
+			else 
+			{
+				[self.camView.leftSideMenu.melodyButton setImage:[UIImage imageNamed:@"smallicon5_1.png"]
+																		   forState:UIControlStateNormal];
+
+			}
+			
+			break;
+		default:
+			break;
+	}
+	
+	
+}
+
 
 #pragma mark -
 #pragma mark Connectivity
@@ -1001,10 +1191,8 @@
 	self.camView.hidden = NO;
 	self.camView.oneCamView.hidden = NO;
 	
-	self.camView.statusBar.melody_status_icon.hidden = NO;
-	self.camView.statusBar.temperature_label.hidden = NO;
-	self.camView.sideMenu.snapShotButton.enabled = YES;
-	self.camView.sideMenu.recordButton.enabled = YES;
+	self.camView.leftSideMenu.snapShotButton.enabled = YES;
+	self.camView.leftSideMenu.recordButton.enabled = YES;
 	
 	//ch.profile should not be NULL here --
 	
@@ -1015,21 +1203,24 @@
 	
 	//self.camView.oneCamView.progressView.hidden = NO;
 	//[self.camView.oneCamView.progressView startAnimating];
-		
-	NSArray * img_array; 
-	img_array = [[NSArray alloc] initWithObjects:@"melody_muted_icon.png",@"melody_1_icon.png",
-				 @"melody_2_icon.png",@"melody_3_icon.png",nil];
-	[self set_current_melody_status:self.camView.statusBar.melody_status_icon updateIcons:img_array];
-	self.camView.statusBar.melody_status_icon.hidden = NO;
-	[img_array release];
+	
+	/* setup talk back*/
+	
+	UILongPressGestureRecognizer *lpgr = [[UILongPressGestureRecognizer alloc] 
+										  initWithTarget:self action:@selector(handleLongPress:)];
+	lpgr.minimumPressDuration = 2; //user needs to press for 2 seconds
+	[self.camView.rightSideMenu.pushTTButton addGestureRecognizer:lpgr];
+	[lpgr release];
+	
+	//read battery level
+	[self  updateBatteryIcon];
+	
 	
 	self.camView.statusBar.temperature_label.hidden = NO;
 
-	
+	//Set camera name
+	[self.camView.statusBar.camName_label setText:ch.profile.name];
 		
-	//NSLog(@"saved_url: %@", [Util getDefaultURL]);	
-
-	
 	NSString* ip = ch.profile.ip_address;
 	int port = ch.profile.port;
 
@@ -1050,6 +1241,9 @@
 	[comm sendCommand:SET_RESOLUTION_QVGA];
 	
 
+	//start fullscreen timer here.. 
+	[self tryToShowFullScreen];
+	
 	
 	
 	
@@ -1066,40 +1260,31 @@
 
 	[streamer startStreaming];
 	
-#if 0 // to be removed 
 	
 	
-	if ( pcmPlayer == nil)
-	{
-		/* Start the player to playback & record */
-		pcmPlayer = [[PCMPlayer alloc] init];
-		[[pcmPlayer player] setPlay_now:FALSE];
-		[pcmPlayer Play];
-		
-	}
-	else {
-		[[pcmPlayer player] setPlay_now:FALSE];
-		
-	}
+	
+	//Store some of the info for used in menu  -- 
+	
+	NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+	[userDefaults setBool:TRUE forKey:_is_Loggedin];
 	
 	
-	if (initialFlag == 1)
-	{
-		[self disconnectRabot];
-	}
+	NSString * old_usr = (NSString *) [userDefaults objectForKey:@"PortalUsername"];
+	NSString * old_pass = (NSString *) [userDefaults objectForKey:@"PortalPassword"];
+
 	
-	initialFlag = 1;
-	
-	listenSocket = [[AsyncSocket alloc] initWithDelegate:self];	
-	[listenSocket setUserData:SOCKET_ID_LISTEN];
-	
-	
-	//Non-blocking connect
-    [listenSocket connectToHost:ip onPort:port withTimeout:3 error:nil];
-#endif 
-	
+	[userDefaults setObject:old_usr forKey:_UserName];	
+	[userDefaults setObject:old_pass forKey:_UserPass];	
+
+	[userDefaults setInteger:port forKey:_DevicePort];
+	[userDefaults setObject:ip forKey:_DeviceIp];
+	[userDefaults setObject:ch.profile.mac_address forKey:_DeviceMac];
+	[userDefaults setObject:ch.profile.name forKey:_DeviceName];	
+
 }
 
+
+#if 0
 -(void) switchToSingleCameraMode:(int) channel_number
 {
 	
@@ -1109,8 +1294,8 @@
 
 	self.camView.statusBar.melody_status_icon.hidden = NO;
 	self.camView.statusBar.temperature_label.hidden = NO;
-	self.camView.sideMenu.snapShotButton.enabled = YES;
-	self.camView.sideMenu.recordButton.enabled = YES;
+	self.camView.leftSideMenu.snapShotButton.enabled = YES;
+	self.camView.leftSideMenu.recordButton.enabled = YES;
 
 	
 	if ( channel_number >0)
@@ -1171,13 +1356,13 @@
     [listenSocket connectToHost:ip onPort:port withTimeout:3 error:nil];
 	
 }
-
+#endif 
 
 - (void) _connectDefaultRabot:(NSTimer *) expired
 {
 	if (comm.authInProgress == FALSE)
 	{
-		[self connectDefaultRabot];
+		[self setupDirectModeCamera];
 		
 	}
 	else {
@@ -1190,9 +1375,63 @@
 
 }
 
-- (void) connectDefaultRabot 
+- (void) setupDirectModeCamera 
 {
 	
+	NSString * defaultName = [CameraPassword fetchSSIDInfo];
+	NSString* ip = DEFAULT_BM_IP;
+	int port = DEFAULT_BM_PORT;
+	
+	NSLog(@"connect to cam %@:%d", ip, port);
+	
+	//read battery level
+	[self  updateBatteryIcon];
+
+	if (comm != nil)
+	{
+		[comm release];
+		comm = nil; 
+	}
+	
+	comm = [[HttpCommunication alloc]init];
+	comm.device_ip = ip;
+	comm.device_port = port; 
+	
+	//send first command now.. non-blocking call - ignore result
+	[comm sendCommand:SET_RESOLUTION_QVGA];
+	
+	
+	/* setup talk back*/
+	UILongPressGestureRecognizer *lpgr = [[UILongPressGestureRecognizer alloc] 
+										  initWithTarget:self action:@selector(handleLongPress:)];
+	lpgr.minimumPressDuration = 2; //user needs to press for 2 seconds
+	[self.camView.rightSideMenu.pushTTButton addGestureRecognizer:lpgr];
+	[lpgr release];
+	
+	/* set camera name */
+	[self.camView.statusBar.camName_label setText:defaultName];
+	
+	/* disable the multi button */
+	[self.camView.rightSideMenu.multiModeButton setUserInteractionEnabled:FALSE];
+	
+	
+	if (streamer != nil)
+	{
+		[streamer stopStreaming];
+		[streamer release];
+	}
+	
+	
+	streamer = [[MBP_Streamer alloc]initWithIp:ip andPort:port];
+	[streamer setVideoImage:self.camView.oneCamView.videoView];
+	[streamer setTemperatureLabel:self.camView.statusBar.temperature_label];
+	
+	[streamer startStreaming];
+	
+	
+	
+	
+#if 0
 	initialFlag = 1;
 	
 	if ( pcmPlayer == nil)
@@ -1222,7 +1461,7 @@
 	NSLog(@"ip: %@: port: %d", ip, port);
 	//Non-blocking connect
     [listenSocket connectToHost:ip onPort:port withTimeout:3 error:nil];
-	
+#endif 
 	
 }
 
@@ -1520,20 +1759,6 @@
 
 - (void)onSocket:(AsyncSocket *)sock didConnectToHost:(NSString *)host port:(UInt16)port
 {
-#ifdef IRABOT_AUDIO_RECORDING_SUPPORT
-	
-	if(port == IRABOT_AUDIO_RECORDING_PORT)
-	{
-		//NSLog(@"Sending sock Connected");
-		//Start sending the first 2Kb of data per 0.128 sec
-		voice_data_timer = [NSTimer scheduledTimerWithTimeInterval: 0.125//0.04 
-															target:self
-														  selector:@selector(sendAudioPacket:)
-														  userInfo:nil
-														   repeats:YES];
-	}
-	else
-#endif
 	{ // port should be 80 here
 		
 		[self startReceivingVideoAudio ];
@@ -1567,95 +1792,8 @@
 		
 	}
 	
-#ifdef IRABOT_AUDIO_RECORDING_SUPPORT
-	if ( sendingSocket != nil && [sendingSocket isConnected] == NO)
-	{
-		[self disconnectFromAudioSocket];
-	}
-#endif 
+
 }
-
-
-#ifdef IRABOT_AUDIO_RECORDING_SUPPORT
-
-
-/* Connect to the audio streaming socket to stream recorded data TO device */
-- (void) connectToAudioSocket 
-{
-	
-	sendingSocket = [[AsyncSocket alloc] initWithDelegate:self];
-	[sendingSocket setUserData:SOCKET_ID_SEND];
-	
-	NSString* ip = [Util getIPFromURL:[Util getDefaultURL]];
-	
-	NSLog(@"ip: %@", ip);
-	
-	int port = IRABOT_AUDIO_RECORDING_PORT;
-	
-	//Non-blocking connect
-	[sendingSocket connectToHost:ip onPort:port withTimeout:2 error:nil];
-	pcm_data = [[NSMutableData alloc] init];
-	
-	
-	
-}
-
-- (void) disconnectFromAudioSocket
-{
-	//disconnect 
-	
-	if (voice_data_timer != nil)
-	{
-		[voice_data_timer invalidate];
-		voice_data_timer = nil;
-	}
-	
-	
-	if (sendingSocket != nil) 
-	{
-		if ([sendingSocket isConnected] == YES) 
-		{
-			[sendingSocket setDelegate:nil];
-			[sendingSocket disconnect];
-		}
-		[sendingSocket release];
-		sendingSocket = nil;
-	}
-	
-	
-	if(pcm_data != nil) {
-		[pcm_data release];
-		pcm_data = nil;
-	}
-	
-	
-}
-
-
-- (void)onSocket:(AsyncSocket *)sock didWriteDataWithTag:(long)tag
-{
-	//Finish Loading 1 packet, write another one
-	// Since this is realtime streaming, we don't care about the acknowledgement
-	//[self sendAudioPacket];
-	
-	// dont do it here too fast..
-}
-
-
-- (void) sendAudioPacket:(NSTimer *) timer_exp
-{
-	
-	/* read 2kb everytime */
-	[pcmPlayer.recorder.inMemoryAudioFile readBytesPCM:pcm_data 
-											withLength:2*1024]; //2*1024
-	[sendingSocket writeData:pcm_data withTimeout:2 tag:SENDING_SOCKET_TAG];
-	
-}
-
-
-
-
-#endif /* IRABOT_AUDIO_RECORDING_SUPPORT*/
 
 
 
@@ -1896,42 +2034,39 @@
 - (BOOL) toggle_walkie_talkie
 {
 	NSLog(@"talk: %d", walkie_talkie_enabled);
-		
-	if ( walkie_talkie_enabled == YES)
+	@synchronized (self)
 	{
-		walkie_talkie_enabled = NO;
-		
-		
-		[self performSelectorInBackground:@selector(set_Walkie_Talkie_bg:) 
-							   withObject:[NSString stringWithFormat:@"%d",walkie_talkie_enabled]];
-		
-#ifdef IRABOT_AUDIO_RECORDING_SUPPORT
-		
-		[self disconnectFromAudioSocket];
-		
-		[pcmPlayer.recorder stopRecord];
-#endif
-		
+		if ( walkie_talkie_enabled == YES)
+		{
+			walkie_talkie_enabled = NO;
+			
+			
+			[self performSelectorInBackground:@selector(set_Walkie_Talkie_bg:) 
+								   withObject:[NSString stringWithFormat:@"%d",walkie_talkie_enabled]];
+					
+			
+			if (audioOut != nil)
+			{
+				[audioOut disconnectFromAudioSocket];
+				[audioOut release];
+			}
+			
+			
+		}
+		else 
+		{
+			walkie_talkie_enabled = YES;
+			
+			[self performSelectorInBackground:@selector(set_Walkie_Talkie_bg:) 
+								   withObject:[NSString stringWithFormat:@"%d",walkie_talkie_enabled]];
+
+			audioOut = [[AudioOutStreamer alloc] initWithDeviceIp:comm.device_ip 
+													   andPTTport:IRABOT_AUDIO_RECORDING_PORT];
+			[audioOut connectToAudioSocket];
+
+		}
 		
 	}
-	else 
-	{
-		walkie_talkie_enabled = YES;
-		
-		[self performSelectorInBackground:@selector(set_Walkie_Talkie_bg:) 
-							   withObject:[NSString stringWithFormat:@"%d",walkie_talkie_enabled]];
-#ifdef IRABOT_AUDIO_RECORDING_SUPPORT
-		[pcmPlayer.recorder startRecord];
-		
-		/* connect to audio socket and start streaming now */
-		[self connectToAudioSocket];
-#endif
-		
-		
-	}
-	
-	camView.statusBar.walkie_talkie_status_icon.hidden = (!walkie_talkie_enabled);
-	
 	return walkie_talkie_enabled ;
 	
 }
@@ -1940,13 +2075,13 @@
 - (void) set_Walkie_Talkie_bg: (NSString *) status
 {
 	NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
-	@synchronized(self)
-	{
-		[self requestURLSync:[Util getWalkieTalkieURL:status]
-				 withTimeOut:1.0];
 		
-	}
+	NSString * command = [NSString stringWithFormat:@"%@%@",SET_PTT,status];
 	
+	if(comm != nil)
+	{
+		[comm sendCommandAndBlock:command];
+	}
 	
 	[pool release];
 }
