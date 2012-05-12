@@ -522,8 +522,6 @@
 				97987DF11546A1630066C49B /* MBP_LoginOrRegistration.xib */,
 				97987E401546AF2C0066C49B /* UserAccount.h */,
 				97987E411546AF2C0066C49B /* UserAccount.m */,
-				97987E441546B04C0066C49B /* BMS_Communication.h */,
-				97987E451546B04C0066C49B /* BMS_Communication.m */,
 				97C49AAE154784F4008B7D03 /* SetupData.h */,
 				97C49AAF154784F4008B7D03 /* SetupData.m */,
 				97C49B371547B5AC008B7D03 /* CamListItemView.xib */,
@@ -547,6 +545,8 @@
 				9719EC59155C9F30005419FC /* MBP_MenuViewController.h */,
 				9719EC5A155C9F30005419FC /* MBP_MenuViewController.m */,
 				9719EC5B155C9F30005419FC /* MBP_MenuViewController.xib */,
+				97987E441546B04C0066C49B /* BMS_Communication.h */,
+				97987E451546B04C0066C49B /* BMS_Communication.m */,
 			);
 			path = Classes;
 			sourceTree = "<group>";

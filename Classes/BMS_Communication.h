@@ -32,6 +32,10 @@
 #define ADD_CAM_PARAM_4 @"&cam_name="
 #define ADD_CAM_PARAM_5 @"&pass_len="
 
+#define UPDATE_CAM_CMD @"update_user_cam"
+#define UPDATE_CAM_PARAM_1 @"&email="
+#define UPDATE_CAM_PARAM_2 @"&macaddress="
+#define UPDATE_CAM_PARAM_3 @"&cam_name="
 
 
 @interface BMS_Communication : NSObject {
@@ -57,5 +61,7 @@
 
 - (BOOL)BMS_addCamWithUser:(NSString*) user_email AndPass:(NSString*) user_pass macAddr:(NSString *) mac camName:(NSString*) name;
 
+
+- (BOOL)BMS_camNameWithUser:(NSString*) user_email AndPass:(NSString*) user_pass macAddr:(NSString *) mac camName:(NSString*) name;
 
 @end

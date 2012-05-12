@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "ConnectionMethodDelegate.h"
 #import "HttpCommunication.h"
+#import "BMS_Communication.h"
 #import "CameraPassword.h"
 
 #define MAIN_MENU_TAG 1001
@@ -35,18 +36,33 @@
 #define _VIDEO_DICT_KEY @"Video Quality:" 
 
 
+#define ALERT_CHANGE_NAME 1
+#define ALERT_CHANGE_ANGLE 4
+
+#define DIALOG_IS_NOT_REACHABLE 1
+#define DIALOG_CANT_RENAME 2
+#define ALERT_NAME_CANT_BE_EMPTY 3
+
+
+#define VOL_LEVEL_PICKER 100
+#define BRIGHTNESS_LEVEL_PICKER 101
+#define VOX_LEVEL_PICKER 102
+#define TEMP_UNIT_PICKER 103
+#define VQ_PICKER        104
 
 @interface MBP_MenuViewController : UIViewController <UITableViewDelegate, UITableViewDataSource>{
 
 	NSArray * mainMenuItems; 
 	IBOutlet UITableView * mainMenu;
 	IBOutlet UITableView * cameraMenu;
+	IBOutlet UIPickerView * mPickerView;
 	
 	NSArray *cameraMenuItems;
 	NSMutableDictionary * cameraMenuItemValues;
 	
 	id <ConnectionMethodDelegate> delegate;
 	
+	BOOL isDirectMode; 
 	
 	BOOL isLoggedIn ; 
 	NSString * userName; 
@@ -58,8 +74,21 @@
 	NSString * httpUserName, * httpUserPass; 
 
 	HttpCommunication * dev_comm; 
+	
+	
+	NSArray * levels;
+	NSArray * voxlevels;
+	NSArray * temperature;
+	NSArray * videoQuality;
+	
+	int volLevel; 
+	int brightLevel; 
+	int voxLevel;
+	int tempunit; 
+	int videoQ;
+	
 }
-
+@property (nonatomic, retain) IBOutlet UIPickerView * mPickerView;
 @property (nonatomic,retain) IBOutlet UITableView * mainMenu;
 @property (nonatomic,retain) IBOutlet UITableView * cameraMenu;
 
@@ -80,4 +109,32 @@
 - (void) updateTemperatureConversion;
 - (void) updateVolumeLvl;
 - (void) updateVQ;
+
+
+-(void) onSetVolumeLevel:(int) level;
+-(void) onSetBrightnessLevel:(int) level;
+-(void) onSetVoxLevel:(int) level;
+-(void) onSetTempUnit:(int) unit;
+-(void) onSetVideoQuality:(int) vq;
+
+-(void) onViewAngle;
+- (void) viewAnglePopup ;
+-(void)onName;
+-(void)onInformation;
+-(void)onVol;
+-(void) onBright;
+-(void) onVox;
+-(void) onTemp;
+-(void) onVQ;
+
+- (void) showDialog:(int) dialogType;
+
+- (void) askForNewName;
+- (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex;
+- (void) onCameraNameChanged:(NSString*) newName;
+
+-(void) changeNameSuccessWithResponse:(NSData *) responsedata;
+-(void) changeNameFailedWithError:(NSHTTPURLResponse*) error_response;
+-(void) changeNameFailedServerUnreachable;
+
 @end

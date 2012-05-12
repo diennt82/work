@@ -75,6 +75,7 @@
 	
 
 	BOOL authInProgress;
+	
 }
 
 @property (nonatomic,retain) NSURLCredential *credential; 
