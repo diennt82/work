@@ -53,6 +53,8 @@
 #define ALERT_UPNP_OK     9
 #define ALERT_UPNP_NOT_OK 10
 #define ALERT_UPNP_RUNNING 11
+#define ALERT_EMPTY_PORTS 12
+#define ALERT_INVALID_PORTS 13
 
 
 #define VOL_LEVEL_PICKER 100
@@ -67,6 +69,15 @@
 	IBOutlet UITableView * mainMenu;
 	IBOutlet UITableView * cameraMenu;
 	IBOutlet UIPickerView * mPickerView;
+	
+	IBOutlet UIView * manualFWDView; 
+	IBOutlet UIView * manualFWDSubView; 
+	IBOutlet UIButton * manualFWDCancel; 
+	IBOutlet UIButton * manualFWDChange; 
+	IBOutlet UITextField * manualFWDprt80;
+	IBOutlet UITextField * manualFWDprt51108; 
+	IBOutlet UISegmentedControl * manualOrAuto; 
+	
 	
 	NSArray *cameraMenuItems;
 	NSMutableDictionary * cameraMenuItemValues;
@@ -109,6 +120,13 @@
 @property (nonatomic, retain) NSMutableDictionary *cameraMenuItemValues;
 
 
+@property (nonatomic, retain) IBOutlet UIView * manualFWDView, *manualFWDSubView; 
+@property (nonatomic, retain) IBOutlet UIButton * manualFWDCancel; 
+@property (nonatomic, retain) IBOutlet UIButton * manualFWDChange; 
+@property (nonatomic, retain) IBOutlet UITextField * manualFWDprt80;
+@property (nonatomic, retain) IBOutlet UITextField * manualFWDprt51108; 
+@property (nonatomic, retain) IBOutlet UISegmentedControl * manualOrAuto; 
+
 - (id)initWithNibName:(NSString *)nibNameOrNil 
 				bundle:(NSBundle *)nibBundleOrNil 
 	  withConnDelegate:(id<ConnectionMethodDelegate>) d 
@@ -142,7 +160,7 @@
 - (void) showDialog:(int) dialogType;
 -(void) onRemoveCamera;
 -(void) onCheckUPnpStatus;
-
+-(void) onManualPortFwd;
 
 -(void) onCameraRemoveRemote;
 -(void) onCameraRemoveLocal;
@@ -158,5 +176,8 @@
 -(void) removeCamSuccessWithResponse:(NSData *) responsedata;
 -(void) removeCamFailedWithError:(NSHTTPURLResponse*) error_response;
 -(void) removeCamFailedServerUnreachable;
+
+-(IBAction) handleButtonPress:(id)sender;
+
 
 @end

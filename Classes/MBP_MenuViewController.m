@@ -15,6 +15,9 @@
 @synthesize mainMenu, cameraMenu, mPickerView;
 
 @synthesize cameraMenuItems, cameraMenuItemValues;
+
+@synthesize manualFWDView, manualFWDCancel,manualFWDChange, manualFWDprt80,manualFWDprt51108, manualOrAuto; 
+@synthesize manualFWDSubView;
 /*
  // The designated initializer.  Override if you create the controller programmatically and want to perform customization that is not appropriate for viewDidLoad.
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
@@ -589,6 +592,7 @@
 					[self onRemoveCamera];
 					break;
 				case 8 ://port fwd
+					[self onManualPortFwd];
 					break;
 				case 9 ://chk upnp
 					[self onCheckUPnpStatus];
@@ -765,6 +769,34 @@
 			[alert release];
 			break;
 		}
+		case ALERT_EMPTY_PORTS:
+		{
+			NSString * msg =@"Ports can't be empty, please enter a valid port";
+			UIAlertView *alert = [[UIAlertView alloc]
+								  initWithTitle:@""
+								  message:msg 
+								  delegate:nil
+								  cancelButtonTitle:@"OK"
+								  otherButtonTitles:nil];
+			[alert show];
+			[alert release];
+			break;
+		}	
+
+		case ALERT_INVALID_PORTS:
+		{
+			NSString * msg =@"Port has to be in the range (1024-65535)";
+			UIAlertView *alert = [[UIAlertView alloc]
+								  initWithTitle:@""
+								  message:msg 
+								  delegate:nil
+								  cancelButtonTitle:@"OK"
+								  otherButtonTitles:nil];
+			[alert show];
+			[alert release];
+			break;
+		}	
+			
 		default:
 			break;
 	}
@@ -1037,6 +1069,147 @@
 		
 	
 	
+}
+
+-(void) onManualPortFwd
+{
+	if (deviceIp == nil)
+	{
+		[self showDialog: DIALOG_IS_NOT_REACHABLE];
+		return; 
+	}
+	
+	
+	//may need to do in background..
+	
+	BOOL camera_upnp_status_auto;
+	NSString * command , *response ; 
+	command = GET_UPNP_PORT; 
+	response = [dev_comm sendCommandAndBlock:command];
+	int upnp_port = -1; 
+
+	int camera_fwd_port_AV, camera_fwd_port_PTT; 
+	
+	if ( (response != nil)  && [response hasPrefix:GET_UPNP_PORT])
+	{
+		NSString * upnp_port_str; 
+		upnp_port_str = [response substringFromIndex:([GET_UPNP_PORT length] + 2)];
+		
+		upnp_port = [upnp_port_str intValue];
+	
+		
+		if (upnp_port == 0) 
+		{
+			camera_upnp_status_auto = TRUE;
+		}
+		else if (upnp_port >0)
+		{
+			camera_upnp_status_auto = FALSE;
+			camera_fwd_port_AV = (upnp_port>>16) & 0xFFFF;
+			camera_fwd_port_PTT = upnp_port & 0xFFFF;
+			
+		}
+	}
+	
+	[self.view addSubview:self.manualFWDView];
+	
+	if (camera_upnp_status_auto == TRUE)
+	{
+		self.manualOrAuto.selectedSegmentIndex = 0; 
+		self.manualFWDSubView.hidden = YES;
+	}
+	else 
+	{
+		self.manualOrAuto.selectedSegmentIndex = 1; 
+		self.manualFWDSubView.hidden = NO;
+		
+		[self.manualFWDprt80 becomeFirstResponder];
+		[self.manualFWDprt51108 becomeFirstResponder];
+		
+		[self.manualFWDprt80 setText:[NSString stringWithFormat:@"%d",camera_fwd_port_AV]];
+		[self.manualFWDprt51108 setText:[NSString stringWithFormat:@"%d",camera_fwd_port_PTT]];
+		
+	}
+
+}
+
+
+- (BOOL)textFieldShouldReturn:(UITextField *)textField {
+    [textField resignFirstResponder];
+    return YES;
+}
+
+
+
+-(IBAction) handleButtonPress:(id)sender
+{
+	int tag = ((UIView *) sender).tag; 
+	
+	switch (tag ) {
+		case 100:
+			if (self.manualOrAuto.selectedSegmentIndex == 0)
+			{
+				self.manualFWDSubView.hidden = YES;
+			}
+			else {
+				self.manualFWDSubView.hidden = NO; 
+			}
+
+
+			
+			
+			break;
+		case 101: //cancel;
+			[self.manualFWDView removeFromSuperview];
+			break;
+		case 102: //change
+		{
+			NSString *  param_1;
+			if ([self.manualOrAuto isEnabledForSegmentAtIndex:0] )
+			{
+				//automatic
+				param_1 =@"0";
+			}
+			else 
+			{
+				//manual
+				
+				if ( [self.manualFWDprt80.text length] == 0 ||
+					 [self.manualFWDprt51108.text length] == 0)
+				{
+					[self showDialog:ALERT_EMPTY_PORTS];
+				}
+				
+				int port80 = [self.manualFWDprt80.text intValue];
+				int port51108 = [self.manualFWDprt51108.text intValue];
+				
+				if (  (port80 < 1024 && port80 >65535 ) ||
+					(port51108 < 1024 && port51108 >65535 ))
+				{
+					[self showDialog:ALERT_INVALID_PORTS];
+				}					
+				
+				
+				param_1 =[NSString stringWithFormat:@"%x%x", port80, port51108];
+			}
+			
+			
+			NSString * command = SET_UPNP_PORT;
+			command = [command stringByAppendingFormat:@"%@%@", 
+					   SET_UPNP_PORT_PARAM_1, param_1];
+			
+			NSString * response ; 
+			response = [dev_comm sendCommandAndBlock:command];
+			NSLog(@"res: %@", response);
+			
+			
+			
+			[self.manualFWDView removeFromSuperview];			
+			break;
+		}
+		default:
+			break;
+	}
 }
 
 #pragma mark -
