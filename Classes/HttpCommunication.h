@@ -58,8 +58,29 @@
 
 #define SWITCH_TO_DIRECT_MODE @"switch_to_uap"
 
+#define LR_STOP @"lr_stop"
+#define FB_STOP @"fb_stop"
+#define MOVE_RIGHT @"move_right"//add speed
+#define MOVE_LEFT @"move_left"
 
 
+#if REVERT_UP_DOWN_DIRECTION
+
+#define MOVE_UP   @"move_backward"
+#define MOVE_DOWN @"move_forward"
+
+#else
+#define MOVE_UP   @"move_forward"
+#define MOVE_DOWN @"move_backward"
+#endif
+
+
+#define GET_UPNP_PORT @"get_upnp_port"
+#define SET_UPNP_PORT @"set_upnp_port"
+#define SET_UPNP_PORT_PARAM_1 @"&setup="
+
+#define CHECK_UPNP @"check_upnp"
+#define RESET_UPNP @"reset_upnp"
 
 
 @interface HttpCommunication : NSObject {

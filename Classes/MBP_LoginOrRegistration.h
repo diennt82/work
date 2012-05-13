@@ -20,11 +20,19 @@
 #define BACK_BUTTON_TAG 205
 
 
+
+#define _AutoLogin @"shouldAutoLoginIfPossible"
+
+
+
 @interface MBP_LoginOrRegistration : UIViewController {
 
 	IBOutlet UITextField * userName; 
 	IBOutlet UITextField * password; 
 	IBOutlet UISwitch * remember_pass_sw; 
+	IBOutlet UIView * progressView; 
+	IBOutlet UILabel * progressLabel; 
+	
 	
 	NSString * tmp_user_str; 
 	NSString * tmp_pass_str; 
@@ -36,6 +44,9 @@
 @property (nonatomic,retain) IBOutlet UITextField * userName; 
 @property (nonatomic,retain) IBOutlet UITextField * password; 
 @property (nonatomic,retain) IBOutlet UISwitch * remember_pass_sw; 
+
+@property (nonatomic,retain) IBOutlet UIView * progressView; 
+@property (nonatomic,retain) IBOutlet UILabel * progressLabel; 
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil withConnDelegate:(id<ConnectionMethodDelegate>) delegate;
 

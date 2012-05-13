@@ -12,7 +12,7 @@
 @implementation MBP_LoginOrRegistration
 
 @synthesize userName, password, remember_pass_sw;
-
+@synthesize progressLabel, progressView;
 
 // The designated initializer.  Override if you create the controller programmatically and want to perform customization that is not appropriate for viewDidLoad.
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil withConnDelegate:(id<ConnectionMethodDelegate>) d;
@@ -47,6 +47,29 @@
 			[self.password setText:old_pass];
 		}
 	}
+	
+	BOOL shouldAutoLogin = [userDefaults boolForKey:_AutoLogin];
+	if (shouldAutoLogin == TRUE	)
+	{
+		if ((old_usr != nil) && (old_pass != nil))
+		{
+			tmp_user_str = old_usr;
+			tmp_pass_str = old_pass;
+			BMS_Communication * bms_comm; 
+			bms_comm = [[BMS_Communication alloc] initWithObject:self
+														Selector:@selector(loginSuccessWithResponse:) 
+													FailSelector:@selector(loginFailedWithError:) 
+													   ServerErr:@selector(loginFailedServerUnreachable)];
+			
+			[bms_comm BMS_loginWithUser:tmp_user_str AndPass:tmp_pass_str];
+			
+			
+			self.progressView.hidden = NO;
+			[self.progressLabel setText:@"Connecting to BMS..." ];
+			
+		}
+	}
+	
 
 }
 
@@ -123,6 +146,8 @@
 			
 			[bms_comm BMS_loginWithUser:tmp_user_str AndPass:tmp_pass_str];
 			
+			self.progressView.hidden = NO;
+			[self.progressLabel setText:@"Connecting to BMS..." ];
 			
 			break;
 		}
@@ -168,6 +193,8 @@
 {
 	NSLog(@"Loging failed with error code:%d", [error_response statusCode]);
 	
+	self.progressView.hidden = YES;
+	
 	//ERROR condition
 	UIAlertView *alert = [[UIAlertView alloc]
 						  initWithTitle:@"Login Error"
@@ -183,7 +210,7 @@
 - (void) loginFailedServerUnreachable
 {
 	NSLog(@"Loging failed : server unreachable");
-	
+	self.progressView.hidden = YES;
 	//ERROR condition
 	UIAlertView *alert = [[UIAlertView alloc]
 						  initWithTitle:@"Login Error"

@@ -23,6 +23,7 @@
 #define _DevicePort @"int_devicePort"
 #define _DeviceMac @"str_deviceMac"
 #define _DeviceName @"str_deviceName"
+#define _DeviceInLocal @"bool_devInLocal"
 #define _DeviceMac_out @"str_deviceMac_out"
 #define _DeviceName_out @"str_deviceName_out"
 #define _tempUnit @"int_tempUnit"
@@ -42,6 +43,16 @@
 #define DIALOG_IS_NOT_REACHABLE 1
 #define DIALOG_CANT_RENAME 2
 #define ALERT_NAME_CANT_BE_EMPTY 3
+
+#define ALERT_REMOVE_CAM 5
+
+#define ALERT_REMOVE_CAM_LOCAL 6
+#define ALERT_REMOVE_CAM_REMOTE 7
+
+#define ALERT_MANUAL_FWD_MODE  8
+#define ALERT_UPNP_OK     9
+#define ALERT_UPNP_NOT_OK 10
+#define ALERT_UPNP_RUNNING 11
 
 
 #define VOL_LEVEL_PICKER 100
@@ -71,6 +82,7 @@
 	int devicePort; 
 	NSString * deviceMac;
 	NSString * deivceName; 
+	BOOL deviceInLocal; 
 	NSString * httpUserName, * httpUserPass; 
 
 	HttpCommunication * dev_comm; 
@@ -128,6 +140,12 @@
 -(void) onVQ;
 
 - (void) showDialog:(int) dialogType;
+-(void) onRemoveCamera;
+-(void) onCheckUPnpStatus;
+
+
+-(void) onCameraRemoveRemote;
+-(void) onCameraRemoveLocal;
 
 - (void) askForNewName;
 - (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex;
@@ -136,5 +154,9 @@
 -(void) changeNameSuccessWithResponse:(NSData *) responsedata;
 -(void) changeNameFailedWithError:(NSHTTPURLResponse*) error_response;
 -(void) changeNameFailedServerUnreachable;
+
+-(void) removeCamSuccessWithResponse:(NSData *) responsedata;
+-(void) removeCamFailedWithError:(NSHTTPURLResponse*) error_response;
+-(void) removeCamFailedServerUnreachable;
 
 @end

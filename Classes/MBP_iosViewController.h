@@ -30,16 +30,6 @@
 #import "AudioOutStreamer.h"
 #import "MBP_MenuViewController.h"
 
-#define DIRECTION_FORWARD_STR @"move_forward"
-#define DIRECTION_BACKWARD_STR @"move_backward"
-#define DIRECTION_LEFT_STR     @"move_left"
-#define DIRECTION_RIGHT_STR    @"move_right"
-
-
-#define DIRECTION_FB_STOP_STR  @"fb_stop"
-#define DIRECTION_LR_STOP_STR  @"lr_stop"
-
-
 
 #define DIRECTION_V_NON  0x01
 #define DIRECTION_V_UP   0x02

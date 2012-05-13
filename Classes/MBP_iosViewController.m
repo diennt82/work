@@ -371,12 +371,14 @@
 										repeats:YES];
 		
 		[self.view addSubview:camView];
-		self.camView.hidden = YES; 
+		 
 		
 		NSLog(@"finish setup the video view ");
 		
 		
 	}
+	
+	self.camView.hidden = YES;
 	
 	
 	
@@ -1276,6 +1278,7 @@
 	[userDefaults setObject:old_usr forKey:_UserName];	
 	[userDefaults setObject:old_pass forKey:_UserPass];	
 
+	[userDefaults setBool:ch.profile.isInLocal forKey:_DeviceInLocal];
 	[userDefaults setInteger:port forKey:_DevicePort];
 	[userDefaults setObject:ip forKey:_DeviceIp];
 	[userDefaults setObject:ch.profile.mac_address forKey:_DeviceMac];
@@ -2716,21 +2719,22 @@
 	switch (direction) {
 		case DIRECTION_V_NON:
 			
-			dir_str= DIRECTION_FB_STOP_STR;
+			dir_str= FB_STOP;
 			break;
 
 		case DIRECTION_V_DN	:
 
 
 			duty_cycle = IRABOT_DUTYCYCLE_MAX +0.1;
-			dir_str= DIRECTION_BACKWARD_STR;
+			dir_str= MOVE_DOWN;
+			dir_str = [NSString stringWithFormat:@"%@%.1f", dir_str, duty_cycle];
 			
 			break;
 		case DIRECTION_V_UP	:
 
 			duty_cycle = IRABOT_DUTYCYCLE_MAX ;
-			dir_str= DIRECTION_FORWARD_STR;
-			
+			dir_str= MOVE_UP;
+			dir_str = [NSString stringWithFormat:@"%@%.1f", dir_str, duty_cycle];	
 			break;
 		default:
 			break;
@@ -2741,18 +2745,16 @@
 	if (dir_str != nil)
 	{
 		// - Send direction update to device 
-#if DEBUG_SIMULATE_DIRECTION_HTTP_REQ
-		//simulate 2 button pressed by sending another request for LR now
-		[self performSelectorInBackground:@selector(requestURLSync_bg:) 
-							   withObject:[Util getBrightnessPlusURL]];
+	//NSLog(@"send :%@ %f", dir_str, duty_cycle);
+		//[self performSelectorInBackground:@selector(requestURLSync_bg:) 
+		//					   withObject:[Util getMotorControlURL:dir_str 
+		//												wDutyCycle:duty_cycle]];
+
+		//Non block send-
+		[comm sendCommand:dir_str];
 		
 		
-#else	
-		//NSLog(@"send :%@ %f", dir_str, duty_cycle);
-		[self performSelectorInBackground:@selector(requestURLSync_bg:) 
-							   withObject:[Util getMotorControlURL:dir_str 
-														wDutyCycle:duty_cycle]];
-#endif		
+
 	}
 }
 
@@ -2767,16 +2769,18 @@
 	switch (direction) {
 		case DIRECTION_H_NON:
 			
-			dir_str= DIRECTION_LR_STOP_STR;
+			dir_str= LR_STOP;
 			break;
 		case DIRECTION_H_LF	:
 
-			dir_str= DIRECTION_LEFT_STR;
+			dir_str= MOVE_LEFT;
+			dir_str= [NSString stringWithFormat:@"%@%.1f", dir_str, IRABOT_DUTYCYCLE_LR_MAX];
 			
 			break;
 		case DIRECTION_H_RT	:
 
-			dir_str= DIRECTION_RIGHT_STR;
+			dir_str= MOVE_RIGHT;
+			dir_str= [NSString stringWithFormat:@"%@%.1f", dir_str, IRABOT_DUTYCYCLE_LR_MAX];
 			
 			break;
 		default:
@@ -2786,17 +2790,12 @@
 	if (dir_str != nil)
 	{
 		
-#if DEBUG_SIMULATE_DIRECTION_HTTP_REQ
-		//simulate 2 button pressed by sending another request for LR now
-		
-		[self performSelectorInBackground:@selector(requestURLSync_bg:) 
-							   withObject:[Util getBrightnessMinusURL]];
-#else	
+		[comm sendCommand:dir_str];
 		//NSLog(@"send: %@", dir_str);
-		[self performSelectorInBackground:@selector(requestURLSync_bg:) 
-							   withObject:[Util getMotorControlURL:dir_str 
-														wDutyCycle:IRABOT_DUTYCYCLE_LR_MAX]];
-#endif
+		//[self performSelectorInBackground:@selector(requestURLSync_bg:) 
+//							   withObject:[Util getMotorControlURL:dir_str 
+//														wDutyCycle:IRABOT_DUTYCYCLE_LR_MAX]];
+
 	}
 	
 }
@@ -2831,7 +2830,7 @@
 /**** Main program entry point is here *****/ 
 - (void)sendStatus:(int) method
 {
-	
+	//TODO: #define all this constants
 	switch (method) {
 		case 1:
 			//GOTO Direct mode
@@ -2841,14 +2840,16 @@
 		case 2: 
 			//GOTO ROUTER mode
 		{
+			NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+			[userDefaults setBool:TRUE forKey:_AutoLogin];
+			
+			
 			[NSTimer scheduledTimerWithTimeInterval:0.01
 											 target:self
 										   selector:@selector(show_login_or_reg:)
 										   userInfo:nil
 											repeats:NO];
-			
-			
-			break;
+						break;
 		}
 		case 3:
 			
@@ -2865,6 +2866,22 @@
 											repeats:NO];
 
 			break; 
+		case 5: //Just remove camera, currently in CameraMenu page 
+		{
+			NSLog(@"remove cam done");
+			[self dismissModalViewControllerAnimated:NO];
+			
+			NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+			[userDefaults setBool:TRUE forKey:_AutoLogin];
+
+			[NSTimer scheduledTimerWithTimeInterval:0.01
+											 target:self
+										   selector:@selector(show_login_or_reg:)
+										   userInfo:nil
+											repeats:NO];
+			
+			break;
+		}
 		default:
 			break;
 	}
@@ -2873,26 +2890,13 @@
 
 -(void) show_login_or_reg:(NSTimer*) exp
 {
-#if 1 
+
 	MBP_LoginOrRegistration * loginOrReg;
 	loginOrReg = [[MBP_LoginOrRegistration alloc] initWithNibName:@"MBP_LoginOrRegistration"
 														   bundle:nil
 												 withConnDelegate:self];
 	
 	[self presentModalViewController:loginOrReg animated:NO];
-#endif 
-	
-	NSLog(@"DBG DBG DBG DBG  ");
-	////20120503---- DBG only
-	
-	MBP_AddCamController * addCamCtrl;
-	addCamCtrl = [[MBP_AddCamController alloc] initWithNibName:@"MBP_AddCamController"
-														bundle:nil
-											  withConnDelegate:self];
-	
-	[self presentModalViewController:addCamCtrl animated:NO];
-	
-	
 }
 
 

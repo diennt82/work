@@ -38,6 +38,11 @@
 #define UPDATE_CAM_PARAM_3 @"&cam_name="
 
 
+#define DEL_CAM_CMD  @"delete_cam"
+#define DEL_CAM_PARAM_1 @"&email="
+#define DEL_CAM_PARAM_2 @"&macaddress="
+
+
 @interface BMS_Communication : NSObject {
 
 	id obj;
@@ -61,6 +66,7 @@
 
 - (BOOL)BMS_addCamWithUser:(NSString*) user_email AndPass:(NSString*) user_pass macAddr:(NSString *) mac camName:(NSString*) name;
 
+- (BOOL)BMS_delCamWithUser:(NSString*) user_email AndPass:(NSString*) user_pass macAddr:(NSString *) mac;
 
 - (BOOL)BMS_camNameWithUser:(NSString*) user_email AndPass:(NSString*) user_pass macAddr:(NSString *) mac camName:(NSString*) name;
 

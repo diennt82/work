@@ -107,6 +107,7 @@
 	userName = [userDefaults stringForKey:_UserName];
 	userPass = [userDefaults stringForKey:_UserPass];
 	
+	deviceInLocal = [userDefaults boolForKey:_DeviceInLocal];
 	devicePort = [userDefaults integerForKey:_DevicePort];
 	deviceIp = [userDefaults stringForKey:_DeviceIp];
 	deviceMac = [userDefaults stringForKey:_DeviceMac];
@@ -584,11 +585,13 @@
 				case 6 :// view angle
 					[self onViewAngle];
 					break;
-				case 7 ://remote this camera
+				case 7 ://remove this camera
+					[self onRemoveCamera];
 					break;
 				case 8 ://port fwd
 					break;
 				case 9 ://chk upnp
+					[self onCheckUPnpStatus];
 					break;
 				case 10 ://information
 					[self onInformation];
@@ -652,6 +655,116 @@
 			[alert release];
 			break;
 		}
+		case ALERT_REMOVE_CAM:
+		{
+			// isLoggedIn - true  deviceInLocale - false -- remove online
+			// isLoggedIn - fase - need to login 
+			// isLoggedIn - true   deviceInLocal - true -- remove camera(on/offline)
+			
+			if (isLoggedIn == FALSE)
+			{ 
+				//cant' remove 
+				NSString * msg =@"Camera name can't be removed, please log-in";
+				UIAlertView *alert = [[UIAlertView alloc]
+									  initWithTitle:@""
+									  message:msg 
+									  delegate:nil
+									  cancelButtonTitle:@"OK"
+									  otherButtonTitles:nil];
+				[alert show];
+				[alert release];
+				
+			}
+			else {
+				
+				if (deviceInLocal)
+				{
+					
+					NSString * msg =@"Please confirm that you want to remove this camera from your account. This action will also switch your camera to direct mode.";
+					UIAlertView *alert = [[UIAlertView alloc]
+										  initWithTitle:@""
+										  message:msg 
+										  delegate:self
+										  cancelButtonTitle:@"Cancel"
+										  otherButtonTitles:@"OK",nil];
+					alert.tag = ALERT_REMOVE_CAM_LOCAL; 
+					[alert show];
+					[alert release];
+
+				}
+				else
+				{
+					NSString * msg =@"Please confirm that you want to remove this camera from your account. The camera is not accessible right now, it will not be switched to direct mode. Please refer to FAQ to reset it manually.";
+					UIAlertView *alert = [[UIAlertView alloc]
+										  initWithTitle:@""
+										  message:msg 
+										  delegate:self
+										  cancelButtonTitle:@"Cancel"
+										  otherButtonTitles:@"OK",nil];
+
+					alert.tag = ALERT_REMOVE_CAM_REMOTE; 
+					[alert show];
+					[alert release];
+				}
+				
+			}
+
+			break;
+		}
+
+		case ALERT_MANUAL_FWD_MODE:
+		{
+			NSString * msg =@"Camera is in manual port forwarding mode, please check \"Router Port Forwarding Settings\" for more info";
+			UIAlertView *alert = [[UIAlertView alloc]
+								  initWithTitle:@""
+								  message:msg 
+								  delegate:nil
+								  cancelButtonTitle:@"OK"
+								  otherButtonTitles:nil];
+			[alert show];
+			[alert release];
+			
+			break;
+		}
+		case ALERT_UPNP_OK:
+		{
+			NSString * msg =@"Camera has successfully opened ports on router";
+			UIAlertView *alert = [[UIAlertView alloc]
+								  initWithTitle:@""
+								  message:msg 
+								  delegate:nil
+								  cancelButtonTitle:@"OK"
+								  otherButtonTitles:nil];
+			[alert show];
+			[alert release];
+			break;
+		}
+		case ALERT_UPNP_NOT_OK:
+		{
+			NSString * msg =@"UPNP is not enabled (or not supported) by router. Please enable UPNP on router.";
+			UIAlertView *alert = [[UIAlertView alloc]
+								  initWithTitle:@""
+								  message:msg 
+								  delegate:nil
+								  cancelButtonTitle:@"OK"
+								  otherButtonTitles:nil];
+			[alert show];
+			[alert release];
+			break;
+		}
+		case ALERT_UPNP_RUNNING:
+		{
+			NSString * msg =@"Camera is still in the process of running UPNP, please check again later";
+			UIAlertView *alert = [[UIAlertView alloc]
+								  initWithTitle:@""
+								  message:msg 
+								  delegate:nil
+								  cancelButtonTitle:@"OK"
+								  otherButtonTitles:nil];
+			[alert show];
+			[alert release];
+			break;
+		}
 		default:
 			break;
 	}
@@ -671,34 +784,6 @@
 
 
 
-
-//callback frm alert
-- (void) onCameraNameChanged:(NSString*) newName
-{
-	//Update BMS server with the new name;;
-	
-	BMS_Communication * bms_comm; 
-	bms_comm = [[BMS_Communication alloc] initWithObject:self
-												Selector:@selector(changeNameSuccessWithResponse:) 
-											FailSelector:@selector(changeNameFailedWithError:) 
-											   ServerErr:@selector(changeNameFailedServerUnreachable)];
-	
-	[bms_comm BMS_camNameWithUser:userName AndPass:userPass macAddr:deviceMac camName:newName];
-}
-
-
--(void) changeNameSuccessWithResponse:(NSData *) responsedata
-{
-	NSLog(@"changeName success");
-}
--(void) changeNameFailedWithError:(NSHTTPURLResponse*) error_response
-{
-		NSLog(@"changeNamed failed errorcode: %d");
-}
--(void) changeNameFailedServerUnreachable
-{
-	NSLog(@"server unreachable");
-}
 
 
 - (void) askForNewName 
@@ -868,6 +953,92 @@
 	[self.mPickerView selectRow:videoQ inComponent:0 animated:NO];
 }
 
+
+-(void) onRemoveCamera
+{
+	if (deviceIp == nil)
+	{
+		[self showDialog: DIALOG_IS_NOT_REACHABLE];
+		return; 
+	}
+	
+	[self showDialog:ALERT_REMOVE_CAM];
+}
+
+
+-(void) onCheckUPnpStatus
+{
+	if (deviceIp == nil)
+	{
+		[self showDialog: DIALOG_IS_NOT_REACHABLE];
+		return; 
+	}
+	
+	
+	//may need to do in background..
+	
+	
+	NSString * command , *response ; 
+	command = GET_UPNP_PORT; 
+	response = [dev_comm sendCommandAndBlock:command];
+	int upnp_port = -1; 
+	int upnp_status;
+	
+	if ( (response != nil)  && [response hasPrefix:GET_UPNP_PORT])
+	{
+		NSString * upnp_port_str; 
+		upnp_port_str = [response substringFromIndex:([GET_UPNP_PORT length] + 2)];
+		
+		upnp_port = [upnp_port_str intValue];
+		
+	}
+	
+	if (upnp_port != -1 && upnp_port != 0 )
+	{
+		///upnp_status = MSG_MANUAL_FWD;
+		[self showDialog:ALERT_MANUAL_FWD_MODE];
+	}
+	else
+	{
+		
+		command = CHECK_UPNP;
+		response = [dev_comm sendCommandAndBlock:command];
+		
+		if ( (response != nil)  && [response hasPrefix:CHECK_UPNP])
+		{
+			NSString * upnp_status_str; 
+			upnp_status_str = [response substringFromIndex:([CHECK_UPNP length] + 2)];
+			
+			upnp_status = [upnp_status_str intValue];
+			
+		}
+		
+
+	
+		switch (upnp_status) {
+			case 1:
+				[self showDialog:ALERT_UPNP_OK];
+				break;
+
+			case 0:
+				[self showDialog:ALERT_UPNP_NOT_OK];
+				break;
+			case 2:
+				[self showDialog:ALERT_UPNP_RUNNING];
+				break;
+				
+			default:
+				break;
+		}
+		
+
+		
+	}
+		
+	
+	
+}
+
 #pragma mark -
 #pragma mark Alertview delegate
 
@@ -920,6 +1091,23 @@
 				
 		}
 	}
+	else if (tag == ALERT_REMOVE_CAM_LOCAL)
+	{
+		if (buttonIndex == 1)
+		{
+			[self onCameraRemoveLocal];
+		}
+	}
+	else if (tag == ALERT_REMOVE_CAM_REMOTE)
+	{
+		
+		if (buttonIndex == 1)
+		{
+			[self onCameraRemoveRemote];
+		}
+		
+	}
+	
 }
 
 
@@ -1025,6 +1213,57 @@
 #pragma mark -
 #pragma mark Callbacks 
 
+
+
+-(void) onCameraRemoveLocal
+{
+	NSString * command , *response; 
+	
+	command = SWITCH_TO_DIRECT_MODE; 
+	response = [dev_comm sendCommandAndBlock:command];
+	
+	NSLog(@"swithToDirect res: %@", response);
+	
+	command = RESTART_HTTP_CMD;
+	response = [dev_comm sendCommandAndBlock:command];
+	NSLog(@"restart res: %@", response);
+	
+	BMS_Communication * bms_comm; 
+	bms_comm = [[BMS_Communication alloc] initWithObject:self
+												Selector:@selector(removeCamSuccessWithResponse:) 
+											FailSelector:@selector(removeCamFailedWithError:) 
+											   ServerErr:@selector(removeCamFailedServerUnreachable)];
+	
+	[bms_comm BMS_delCamWithUser:userName AndPass:userPass macAddr:deviceMac];
+	
+}
+
+
+-(void) onCameraRemoveRemote
+{
+	BMS_Communication * bms_comm; 
+	bms_comm = [[BMS_Communication alloc] initWithObject:self
+												Selector:@selector(removeCamSuccessWithResponse:) 
+											FailSelector:@selector(removeCamFailedWithError:) 
+											   ServerErr:@selector(removeCamFailedServerUnreachable)];
+	
+	[bms_comm BMS_delCamWithUser:userName AndPass:userPass macAddr:deviceMac];
+}
+
+
+//callback frm alert
+- (void) onCameraNameChanged:(NSString*) newName
+{
+	//Update BMS server with the new name;;
+	
+	BMS_Communication * bms_comm; 
+	bms_comm = [[BMS_Communication alloc] initWithObject:self
+												Selector:@selector(changeNameSuccessWithResponse:) 
+											FailSelector:@selector(changeNameFailedWithError:) 
+											   ServerErr:@selector(changeNameFailedServerUnreachable)];
+	
+	[bms_comm BMS_camNameWithUser:userName AndPass:userPass macAddr:deviceMac camName:newName];
+}
 
 -(void) onSetVideoQuality:(int) vq
 {
@@ -1172,5 +1411,41 @@
 	
 	
 }
+
+#pragma mark -
+#pragma mark BMS_Communication callbacks 
+
+-(void) removeCamSuccessWithResponse:(NSData *) responsedata
+{
+	NSLog(@"removeCam success");
+
+	[delegate sendStatus:5 ];
+	
+}
+-(void) removeCamFailedWithError:(NSHTTPURLResponse*) error_response
+{
+	NSLog(@"removeCam failed errorcode: %d");
+}
+-(void) removeCamFailedServerUnreachable
+{
+	NSLog(@"server unreachable");
+}
+
+
+
+-(void) changeNameSuccessWithResponse:(NSData *) responsedata
+{
+	NSLog(@"changeName success");
+}
+-(void) changeNameFailedWithError:(NSHTTPURLResponse*) error_response
+{
+	NSLog(@"changeNamed failed errorcode: %d");
+}
+-(void) changeNameFailedServerUnreachable
+{
+	NSLog(@"server unreachable");
+}
+
+
 
 @end
