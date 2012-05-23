@@ -115,6 +115,7 @@
 	deviceIp = [userDefaults stringForKey:_DeviceIp];
 	deviceMac = [userDefaults stringForKey:_DeviceMac];
 	deivceName = [userDefaults stringForKey:_DeviceName];
+	
 	[self.cameraMenuItemValues setObject:deivceName forKey:_NAME_DICT_KEY];
 	
 	httpUserName = BASIC_AUTH_DEFAULT_USER;
@@ -206,12 +207,25 @@
 	[self updateTemperatureConversion];
 	[self updateVolumeLvl];
 	[self updateVQ];
+	if (isDirectMode == TRUE)
+	{
+		[self updateCamPass];
+	}
 	
 	//reload table 
 	[self.cameraMenu reloadData];
 	
 }
 
+-(void) updateCamPass
+{
+	NSString * camPass = [CameraPassword getPasswordForCam:deviceMac]; 
+	if (camPass == nil)
+	{
+		camPass = @"000000";
+	}
+	[self.cameraMenuItemValues setValue:camPass forKey:_CAMPASS_DICT_KEY];
+}
 
 
 - (void) updateVoxStatus
@@ -562,7 +576,41 @@
 	{
 		if (isDirectMode)
 		{
-		
+			switch (indexPath.row) {
+				case 0 : //name
+					[self showDialog:ALERT_NEED_LOGIN];
+					break;
+				case 1 : //vol
+					[self onVol];
+					break;
+				case 2 ://brightness
+					[self onBright];
+					break;
+				case 3 ://vox
+					[self onVox];
+					break;
+				case 4 :// temp
+					[self onTemp];
+					break;
+				case 5 ://video Quality
+					[self onVQ];
+					break;
+				
+				case 6 :// change password
+					[self onChangePassword];
+					break;
+				case 7 ://view angle
+					[self onViewAngle];
+					break;
+				case 8 ://port fwd
+					[self onInformation];
+					break;
+					
+				default:
+					break;
+			}
+			
+			
 		}
 		else //router mode
 		{
@@ -796,7 +844,49 @@
 			[alert release];
 			break;
 		}	
+		case ALERT_NEED_LOGIN:
+		{
+			NSString * msg =@"You need to login to carry out this operation";
+			UIAlertView *alert = [[UIAlertView alloc]
+								  initWithTitle:@""
+								  message:msg 
+								  delegate:nil
+								  cancelButtonTitle:@"OK"
+								  otherButtonTitles:nil];
+			[alert show];
+			[alert release];
+			break;
+		}	
+		case ALERT_PASS_CANT_BE_EMPTY_NOR_DEFAULT:
+		{
+			NSString * msg =@"Password can't be empty or the same as default password.Please try again";
+			UIAlertView *alert = [[UIAlertView alloc]
+								  initWithTitle:@""
+								  message:msg 
+								  delegate:self
+								  cancelButtonTitle:@"OK"
+								  otherButtonTitles:nil];
+			alert.tag = ALERT_PASS_CANT_BE_EMPTY_NOR_DEFAULT;
+			[alert show];
+			[alert release];
+			break;
+		}		
 			
+
+		case ALERT_CHANGE_PASS_FAILED:
+		{
+			NSString * msg =@"Password changed failed. Please try again later";
+			UIAlertView *alert = [[UIAlertView alloc]
+								  initWithTitle:@""
+								  message:msg 
+								  delegate:nil
+								  cancelButtonTitle:@"OK"
+								  otherButtonTitles:nil];
+			[alert show];
+			[alert release];
+			break;
+		}		
+
 		default:
 			break;
 	}
@@ -843,9 +933,9 @@
 
 -(void) onViewAngle
 {
-	if (userName == nil || userPass == nil)
+	if (deviceIp == nil )
 	{
-		[self showDialog:DIALOG_CANT_RENAME];
+		[self showDialog:DIALOG_IS_NOT_REACHABLE];
 		return;
 	}
 	
@@ -1133,6 +1223,43 @@
 
 }
 
+-(void) onChangePassword
+{
+	if (deviceIp == nil)
+	{
+		[self showDialog: DIALOG_IS_NOT_REACHABLE];
+		return; 
+	}
+
+	
+	[self askForNewPassword];
+	
+}
+
+
+
+- (void) askForNewPassword 
+{
+	
+	UIAlertView * _myAlert = nil;
+	
+	_myAlert = [[UIAlertView alloc] initWithTitle:@"Change Camera Password" 
+										  message:@"Please enter new password for this camera.\nPassword has to be 6 characters.∫" 
+										 delegate:self 
+								cancelButtonTitle:@"Cancel"
+								otherButtonTitles:@"Ok", 
+				nil];
+	_myAlert.tag = ALERT_CHANGE_CAMPASS; //used for tracking later 
+	[_myAlert addTextFieldWithValue:@"" label:@"camera password"];
+	[[_myAlert textField] setTextAlignment:UITextAlignmentCenter];
+	[[_myAlert textField] becomeFirstResponder]; 
+	
+	[[_myAlert textField] setDelegate:self];
+	[_myAlert show];
+	[_myAlert release];
+	
+	
+}
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField {
     [textField resignFirstResponder];
@@ -1140,6 +1267,10 @@
 }
 
 
+
+
+#pragma mark -
+#pragma mark Handle Button 
 
 -(IBAction) handleButtonPress:(id)sender
 {
@@ -1199,14 +1330,17 @@
 					   SET_UPNP_PORT_PARAM_1, param_1];
 			
 			NSString * response ; 
-			response = [dev_comm sendCommandAndBlock:command];
-			NSLog(@"res: %@", response);
-			
-			
+			//Dont block here because set_upnp_port&setup=0 will not response -- crap
+			[dev_comm sendCommand:command];
 			
 			[self.manualFWDView removeFromSuperview];			
 			break;
 		}
+		case 110: //BacK
+		{
+			[delegate sendStatus:6 ];
+			break;
+		}	
 		default:
 			break;
 	}
@@ -1279,6 +1413,29 @@
 			[self onCameraRemoveRemote];
 		}
 		
+	}
+	else if (tag == ALERT_CHANGE_CAMPASS)
+	{
+		if (buttonIndex == 1) 
+		{
+			NSString * newPass = [[alertView textField] text];
+			if( (newPass == nil) || 
+			   ([newPass length] !=6) ||
+			   [newPass isEqualToString:BASIC_AUTH_DEFAULT_PASS])
+			{
+				
+				[self showDialog:ALERT_PASS_CANT_BE_EMPTY_NOR_DEFAULT];
+			}
+			else {
+				[self onCameraPassChanged:newPass];
+			}
+
+		}
+
+	}
+	else if (tag == ALERT_PASS_CANT_BE_EMPTY_NOR_DEFAULT)
+	{
+		[self askForNewPassword];
 	}
 	
 }
@@ -1387,6 +1544,43 @@
 #pragma mark Callbacks 
 
 
+-(void)onCameraPassChanged: (NSString *) newpass
+{
+	
+	NSString *command, *response; 
+	
+	
+	command = [NSString stringWithFormat:@"%@%@%@:%@",
+			   BASIC_AUTH_USR_PWD_CHANGE, 
+			   BASIC_AUTH_USR_PWD_CHANGE_PARAM,
+			   BASIC_AUTH_DEFAULT_USER,
+			   newpass];
+	response = [dev_comm sendCommandAndBlock:command];
+	
+	NSLog(@"changepass res: %@", response);
+
+	if ( (response != nil)  && [response hasPrefix:BASIC_AUTH_USR_PWD_CHANGE])
+	{
+	
+		NSString * str_value = [response substringFromIndex:([BASIC_AUTH_USR_PWD_CHANGE length] + 2)];
+		
+		if ( [str_value isEqualToString:@"0"])
+		{
+			//save camera password now 
+
+			CameraPassword * cp = [[CameraPassword alloc] initWithMac:deviceMac 
+																 User:BASIC_AUTH_DEFAULT_USER 
+																 Pass:newpass];
+		    [CameraPassword saveCameraPassword:cp];
+		}
+		else {
+			[self showDialog:ALERT_CHANGE_PASS_FAILED];
+		}
+
+		
+		
+	}
+}
 
 -(void) onCameraRemoveLocal
 {
@@ -1395,11 +1589,11 @@
 	command = SWITCH_TO_DIRECT_MODE; 
 	response = [dev_comm sendCommandAndBlock:command];
 	
-	NSLog(@"swithToDirect res: %@", response);
+	//NSLog(@"swithToDirect res: %@", response);
 	
 	command = RESTART_HTTP_CMD;
 	response = [dev_comm sendCommandAndBlock:command];
-	NSLog(@"restart res: %@", response);
+	//NSLog(@"restart res: %@", response);
 	
 	BMS_Communication * bms_comm; 
 	bms_comm = [[BMS_Communication alloc] initWithObject:self

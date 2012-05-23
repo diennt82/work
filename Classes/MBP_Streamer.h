@@ -10,6 +10,7 @@
 #import "AsyncSocket.h"
 #import "ADPCMDecoder.h"
 #import "AviRecord.h"
+#import "CameraPassword.h"
 
 @interface MBP_Streamer : NSObject {
 

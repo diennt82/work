@@ -147,7 +147,7 @@
 		dataReply = [NSURLConnection sendSynchronousRequest:theRequest returningResponse:&response error:&error];
 		
 		
-		if (error != nil)
+		if ( (dataReply == nil)||  (error != nil))
 		{
 			//NSLog(@"error: %@\n", error);
 			//First Time error means non-default user/pass
@@ -200,6 +200,11 @@
 		}
 		else 
 		{
+						
+			NSString * response = [NSString stringWithUTF8String:[dataReply bytes]];
+			NSLog(@"pass with default. - dataReply: %@", response); 
+
+			
 			return TRUE;
 		}
 
@@ -362,7 +367,7 @@
 	NSLog(@"did recv auth challenge: %@", challenge);
 	
     	
-	
+#if 0
 	if ([challenge previousFailureCount] <=  1) {
 		
 		if(self.credential != nil)
@@ -399,7 +404,7 @@
 		
 		[self askForUserPass]; 
 	}
-	
+#endif
 	
 	
 }

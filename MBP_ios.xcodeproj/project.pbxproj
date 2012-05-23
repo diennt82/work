@@ -1026,7 +1026,7 @@
 				GCC_PREFIX_HEADER = MBP_ios_Prefix.pch;
 				INFOPLIST_FILE = "MBP_ios-Info.plist";
 				PRODUCT_NAME = msc3;
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "9A0A8B89-A375-4C5F-8FB8-FDB188359610";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "C31C2716-492E-4F93-B7E1-17A26EA29EC9";
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Distribute;

@@ -35,7 +35,7 @@
 #define _BR_DICT_KEY @"Camera Brightness:"
 #define _TEMP_DICT_KEY @"Temperature Unit:"
 #define _VIDEO_DICT_KEY @"Video Quality:" 
-
+#define _CAMPASS_DICT_KEY @"Camera Password:"
 
 #define ALERT_CHANGE_NAME 1
 #define ALERT_CHANGE_ANGLE 4
@@ -55,6 +55,11 @@
 #define ALERT_UPNP_RUNNING 11
 #define ALERT_EMPTY_PORTS 12
 #define ALERT_INVALID_PORTS 13
+#define ALERT_NEED_LOGIN 14
+#define ALERT_CHANGE_CAMPASS 15
+
+#define ALERT_PASS_CANT_BE_EMPTY_NOR_DEFAULT 16
+#define ALERT_CHANGE_PASS_FAILED 17
 
 
 #define VOL_LEVEL_PICKER 100
@@ -62,6 +67,8 @@
 #define VOX_LEVEL_PICKER 102
 #define TEMP_UNIT_PICKER 103
 #define VQ_PICKER        104
+
+
 
 @interface MBP_MenuViewController : UIViewController <UITableViewDelegate, UITableViewDataSource>{
 
@@ -139,7 +146,7 @@
 - (void) updateTemperatureConversion;
 - (void) updateVolumeLvl;
 - (void) updateVQ;
-
+- (void)updateCamPass;
 
 -(void) onSetVolumeLevel:(int) level;
 -(void) onSetBrightnessLevel:(int) level;
@@ -161,6 +168,7 @@
 -(void) onRemoveCamera;
 -(void) onCheckUPnpStatus;
 -(void) onManualPortFwd;
+-(void) onChangePassword;
 
 -(void) onCameraRemoveRemote;
 -(void) onCameraRemoveLocal;
@@ -179,5 +187,7 @@
 
 -(IBAction) handleButtonPress:(id)sender;
 
+- (void) askForNewPassword;
+-(void)onCameraPassChanged: (NSString *) newpass;
 
 @end

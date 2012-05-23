@@ -7,7 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-
+#import "CameraPassword.h"
 
 @interface Util : NSObject {
 
@@ -67,4 +67,5 @@
 + (NSString *) add_colon_to_mac:(NSString *) cam;
 +(void) setHomeSSID:(NSString *) ssid;
 +(NSString *) getHomeSSID;
++ (NSString*) getCameraCredentials: (NSString *) camMac;
 @end

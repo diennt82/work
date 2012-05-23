@@ -27,6 +27,8 @@
 	return self;
 	
 }
+
+
 - (void) setVideoView:(UIImageView *) view
 {
 	self.videoImage = view;
@@ -62,8 +64,10 @@
 - (void) receiveData
 {
 
+	NSString * camMac = [CameraPassword fetchBSSIDInfo];
+	
 	NSString *getReq = [NSString stringWithFormat:@"%@Authorization: Basic %@\r\n\r\n",
-						AIBALL_GET_REQUEST, [Util getCredentials]];
+						AIBALL_GET_REQUEST, [Util getCameraCredentials:camMac]];
 	NSData *getReqData = [getReq dataUsingEncoding:NSUTF8StringEncoding];
 	
 	[listenSocket writeData:getReqData withTimeout:2 tag:1];
@@ -86,6 +90,11 @@
 
 - (void) stopStreaming
 {
+	if (self.videoImage != nil)
+	{
+		[self.videoImage setImage:[UIImage imageNamed:@"homepage.png"]];
+	}
+	
 	//NSLog(@"stop streaming : %p", listenSocket);
 	if(listenSocket != nil) {
 		[listenSocket disconnect];
@@ -103,16 +112,21 @@
 	initialFlag = 0;
 	
 
-	/* kill the audio player */
-	[[pcmPlayer player] setPlay_now:FALSE];
-	[pcmPlayer Stop];
-	[pcmPlayer release];
-	pcmPlayer = nil;
+	if (pcmPlayer != nil)
+	{
+		/* kill the audio player */
+		[[pcmPlayer player] setPlay_now:FALSE];
+		[pcmPlayer Stop];
+		[pcmPlayer release];
+		pcmPlayer = nil;
+	}
 	
 }
 
 - (void) dealloc
 {
+	[self stopStreaming];
+	
 	[listenSocket release];
 	[responseData release];
 	[device_ip release];
@@ -120,6 +134,7 @@
 	[pcmPlayer release];
 	[super dealloc];
 }
+
 
 #pragma mark -
 #pragma mark Audio Playback
@@ -344,7 +359,8 @@
 
 - (void)onSocket:(AsyncSocket *)sock willDisconnectWithError:(NSError *)err
 {
-	NSLog(@"Mini Streamer- connection failed");
+	NSLog(@"Streamer- connection failed with error:%d:%@" , 
+		  [err code], err);
 
 	[self.videoImage setImage:[UIImage imageNamed:@"video_error.png"]];
 	

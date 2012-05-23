@@ -49,6 +49,8 @@
 @class MBP_MainMenuView;
 @class CamProfile;
 
+#define DIRECT_MODE_NEXT_BTN 311
+
 
 @interface MBP_iosViewController : UIViewController <SetupHttpDelegate, ConnectionMethodDelegate,UIActionSheetDelegate> {
 
@@ -56,6 +58,9 @@
 	IBOutlet MBP_MainMenuView * mainMenuView;
 	IBOutlet MBP_CamListView * camListView; 
 	IBOutlet UIView * progressView; 
+	IBOutlet UIView * direcModeWaitView; 
+	IBOutlet UIButton * direcModeWaitConnect;
+	IBOutlet UIActivityIndicatorView * direcModeWaitProgress;
 	
 	AsyncSocket * listenSocket;
 	
@@ -119,8 +124,13 @@
 	CamChannel * selected_channel; 
 	NSTimer * fullScreenTimer; 
 	
+	BOOL shouldReloadWhenEnterBG;
+	
+	
 }
-@property (nonatomic, retain) IBOutlet UIView * progressView;
+@property (nonatomic, retain) IBOutlet UIButton *direcModeWaitConnect; 
+@property (nonatomic, retain) IBOutlet UIView * progressView, * direcModeWaitView; 
+@property (nonatomic, retain) IBOutlet UIActivityIndicatorView * direcModeWaitProgress;
 @property (nonatomic,retain) 	IBOutlet MBP_CamListView * camListView; 
 @property (nonatomic,retain) IBOutlet MBP_CamView * camView; 
 @property (nonatomic,retain) IBOutlet MBP_MainMenuView * mainMenuView;
@@ -130,7 +140,7 @@
 @property (nonatomic,retain) NSMutableArray * scan_results ;
 @property (nonatomic) int next_profile_index;
 
-@property (nonatomic) BOOL toTakeSnapShot, recordInProgress;
+@property (nonatomic) BOOL toTakeSnapShot, recordInProgress, shouldReloadWhenEnterBG;
 @property (nonatomic, retain) NSString * bc_addr, *own_addr;
 
 @property (nonatomic, retain) NSArray * channel_array; 
@@ -138,6 +148,7 @@
 @property (nonatomic, retain) MBP_Streamer * streamer; 
 
 @property (nonatomic, retain) NSTimer * fullScreenTimer; 
+
 
 
 - (void) initialize ;
@@ -226,5 +237,7 @@
 //delegate
 - (void)sendConfiguration:(DeviceConfiguration *) conf;
 - (void)sendStatus:(int) status;
+-(void) waitForDirectCamera:(NSTimer *) exp;
+
 @end
 

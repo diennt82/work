@@ -158,6 +158,8 @@
 		}
 		case BACK_BUTTON_TAG:
 		{
+			
+			[delegate sendStatus:7];
 			break;
 		}
 		default:

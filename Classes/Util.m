@@ -471,6 +471,20 @@ static int socketFlag = 0;
 	return [NSString base64StringFromData:plainData length:[plainData length]];
 }
 
++ (NSString*) getCameraCredentials: (NSString *) camMac
+{
+	NSString * camPass = [CameraPassword getPasswordForCam:camMac];
+	
+	if (camPass == nil)
+	{
+		camPass = @"000000"; //set to default; 
+	}
+	
+	NSString* plain = [NSString stringWithFormat:@"%@:%@", @"moto-cam", camPass];
+	NSData* plainData = [plain dataUsingEncoding:NSUTF8StringEncoding];
+	return [NSString base64StringFromData:plainData length:[plainData length]];
+}
+
 + (NSString *) add_colon_to_mac:(NSString *) cam
 {
 	NSString * res;

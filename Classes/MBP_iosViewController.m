@@ -39,6 +39,10 @@
 @synthesize progressView;
 
 @synthesize fullScreenTimer;
+
+@synthesize direcModeWaitView,direcModeWaitConnect, direcModeWaitProgress; 
+
+@synthesize shouldReloadWhenEnterBG;
 /*
 // The designated initializer. Override to perform setup that is required before the view is loaded.
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
@@ -66,11 +70,13 @@
 	
 	
 
+	shouldReloadWhenEnterBG = TRUE;
 	
 	self.toTakeSnapShot = NO;
 	self.recordInProgress = NO;
 
-	self.scan_results = [NSMutableArray arrayWithCapacity:4]; 
+//	self.scan_results = [NSMutableArray arrayWithCapacity:64]; 
+	self.scan_results = [[NSMutableArray alloc]init]; 
 	self.next_profile_index = 0;
 
 	
@@ -107,7 +113,7 @@
 	[self initialize];
 		
 	//go Back to main menu
-	[NSTimer scheduledTimerWithTimeInterval:2.0
+	[NSTimer scheduledTimerWithTimeInterval:0.1
 									 target:self
 								   selector:@selector(wakeup_display_main_cam:)
 								   userInfo:nil
@@ -129,12 +135,55 @@
 
 }
 
+-(void) waitForDirectCamera:(NSTimer *) exp
+{
+	//Load a view that wait for the camera to be connected 
+	NSString * currentSSID = [CameraPassword fetchSSIDInfo];
+	
+	
+	if ([currentSSID hasPrefix:DEFAULT_SSID_PREFIX])
+	{
+		//yeah we're connected ... check for ip??
+		
+		NSString * bc = @"";
+		NSString * own = @"";
+		[MBP_iosViewController getBroadcastAddress:&bc AndOwnIp:&own];
+		
+		if ([own hasPrefix:DEFAULT_IP_PREFIX])
+		{
+			
+			//We got the ip too.. proceed to enable the "next" btn
+			[self.direcModeWaitProgress stopAnimating]; 
+			self.direcModeWaitConnect.hidden = NO; 
+			self.direcModeWaitConnect.tag = DIRECT_MODE_NEXT_BTN;
+			
+			NSLog(@"camera ip:%@",  own );
+			
+			//dont reschedule another wake up 
+			return; 
+		}
+		
+	}
+	
+	//check back later.. 
+	[NSTimer scheduledTimerWithTimeInterval: 3.0// 
+									 target:self
+								   selector:@selector(waitForDirectCamera:)
+								   userInfo:nil
+									repeats:NO];	
+	
+}
+
 
 /* Simply try to authenticate and connect to the camera 
  at default address 192.168.2.1 
  */
 -(void) startDirectConnect
 {
+	
+	self.shouldReloadWhenEnterBG = TRUE;
+	[self.direcModeWaitView removeFromSuperview];
+	
 	[[NSBundle mainBundle] loadNibNamed:@"MBP_CamView" 
 								  owner:self 
 								options:nil];
@@ -745,6 +794,12 @@
 		}	
 			break;
 			
+			//////// DONT REMOVE THIS //////////
+		case  DIRECT_MODE_NEXT_BTN: //NEXT from direct mode
+			
+			[self startDirectConnect];
+			break;
+	
 		default:
 			break;
 	}
@@ -818,12 +873,21 @@
 			
 			MBP_MenuViewController * menuViewCtrl;
 			
-				
+			BOOL isDirectMode = FALSE;
+			
+			if (comm != nil)
+			{
+				if ( [comm.device_ip isEqualToString:@"192.168.2.1"] &&
+					 (comm.device_port == 80) )
+				{
+					isDirectMode = TRUE;
+				}
+			}
 			
 			menuViewCtrl = [[MBP_MenuViewController alloc] initWithNibName:@"MBP_MenuViewController"
 																bundle:nil
 													  withConnDelegate:self
-																modeDirect:FALSE];
+																modeDirect:isDirectMode];
 			
 			[self presentModalViewController:menuViewCtrl animated:NO];
 			
@@ -904,7 +968,10 @@
 			break;
 		case ADD_CAM_BTN:
 		{
+			self.shouldReloadWhenEnterBG = FALSE;
 			MBP_AddCamController * addCamCtrl;
+		
+			
 			addCamCtrl = [[MBP_AddCamController alloc] initWithNibName:@"MBP_AddCamController"
 																   bundle:nil
 														 withConnDelegate:self];
@@ -1382,6 +1449,7 @@
 {
 	
 	NSString * defaultName = [CameraPassword fetchSSIDInfo];
+	NSString * mac = [CameraPassword fetchBSSIDInfo];
 	NSString* ip = DEFAULT_BM_IP;
 	int port = DEFAULT_BM_PORT;
 	
@@ -1420,7 +1488,7 @@
 	
 	if (streamer != nil)
 	{
-		[streamer stopStreaming];
+		//[streamer stopStreaming];
 		[streamer release];
 	}
 	
@@ -1431,40 +1499,17 @@
 	
 	[streamer startStreaming];
 	
+	NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+	[userDefaults setBool:FALSE forKey:_is_Loggedin];
+	[userDefaults setObject:nil forKey:_UserName];	
+	[userDefaults setObject:nil forKey:_UserPass];	
 	
+	[userDefaults setBool:TRUE forKey:_DeviceInLocal];
+	[userDefaults setInteger:port forKey:_DevicePort];
+	[userDefaults setObject:ip forKey:_DeviceIp];
+	[userDefaults setObject:mac forKey:_DeviceMac];
+	[userDefaults setObject:defaultName forKey:_DeviceName];	
 	
-	
-#if 0
-	initialFlag = 1;
-	
-	if ( pcmPlayer == nil)
-	{
-		/* Start the player to playback & record */
-		pcmPlayer = [[PCMPlayer alloc] init];
-		[[pcmPlayer player] setPlay_now:FALSE];
-		[pcmPlayer Play];
-		
-	}
-	else {
-		[[pcmPlayer player] setPlay_now:FALSE];
-		
-	}
-	
-
-	
-
-	
-	listenSocket = [[AsyncSocket alloc] initWithDelegate:self];	
-	[listenSocket setUserData:SOCKET_ID_LISTEN];
-	
-	
-	NSString* ip = @"192.168.2.1";//[Util getIPFromURL:[Util getDefaultURL]];
-	int port = 80;//[Util getPortFromURL:[Util getDefaultURL]];
-	
-	NSLog(@"ip: %@: port: %d", ip, port);
-	//Non-blocking connect
-    [listenSocket connectToHost:ip onPort:port withTimeout:3 error:nil];
-#endif 
 	
 }
 
@@ -1867,8 +1912,9 @@
 		if (isFound == NO)
 		{
 			
-
-			[self.scan_results insertObject:newProfile atIndex:self.next_profile_index];
+			NSLog(@"add cam:%@",newProfile );
+			[self.scan_results  addObject:newProfile ];
+			//[self.scan_results insertObject:newProfile atIndex:self.next_profile_index];
 			self.next_profile_index++;
 		}
 		else {
@@ -1879,7 +1925,7 @@
 
 	}
 	
-	if (self.next_profile_index <5)
+	if (self.next_profile_index <64)
 	{
 		/* try again until we failed */
 		[sock receiveWithTimeout:2 tag:1];
@@ -1904,7 +1950,7 @@
 	{
 		deviceScanInProgress = NO;
 	}
-	
+	NSLog(@"scanning done");
 	
 	[self startConnect];
 }
@@ -2833,10 +2879,23 @@
 	//TODO: #define all this constants
 	switch (method) {
 		case 1:
+		{
 			//GOTO Direct mode
 			NSLog(@"GO to direct mode");
-			[self startDirectConnect];
+			
+			self.shouldReloadWhenEnterBG = FALSE;
+			[self.view addSubview:self.direcModeWaitView];
+			[self.direcModeWaitProgress startAnimating]; 
+			self.direcModeWaitConnect.hidden = YES;
+
+			[NSTimer scheduledTimerWithTimeInterval:3.0
+											 target:self
+										   selector:@selector(waitForDirectCamera:)
+										   userInfo:nil
+											repeats:NO];
+			//[self startDirectConnect];
 			break;
+		}
 		case 2: 
 			//GOTO ROUTER mode
 		{
@@ -2858,7 +2917,8 @@
 			[self scan_for_devices];
 			break; 
 		case 4:
-			NSLog(@" back from adding cam. relogin -- to get the new cam data"); 
+			NSLog(@" back from adding cam. relogin -- to get the new cam data");
+			self.shouldReloadWhenEnterBG = TRUE;
 			[NSTimer scheduledTimerWithTimeInterval:0.01
 											 target:self
 										   selector:@selector(show_login_or_reg:)
@@ -2880,6 +2940,29 @@
 										   userInfo:nil
 											repeats:NO];
 			
+			break;
+		}
+		case  6:
+		{
+			NSLog(@"Back from menu");
+			[self dismissModalViewControllerAnimated:NO];
+			[self.streamer startStreaming];
+			
+			
+			break;
+		}
+		case  7:
+		{
+			NSLog(@"Back from login - display first page ");
+			[self dismissModalViewControllerAnimated:NO];
+			
+			
+			//go Back to main menu
+			[NSTimer scheduledTimerWithTimeInterval:0.01
+											 target:self
+										   selector:@selector(wakeup_display_main_cam:)
+										   userInfo:nil
+											repeats:NO];
 			break;
 		}
 		default:
