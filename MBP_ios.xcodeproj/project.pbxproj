@@ -15,6 +15,7 @@
 		2899E5220DE3E06400AC0155 /* MBP_iosViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2899E5210DE3E06400AC0155 /* MBP_iosViewController.xib */; };
 		28AD733F0D9D9553002E5188 /* MainWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 28AD733E0D9D9553002E5188 /* MainWindow.xib */; };
 		28D7ACF80DDB3853001CB0EB /* MBP_iosViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 28D7ACF70DDB3853001CB0EB /* MBP_iosViewController.m */; };
+		97176B16156CFAE000F2A76E /* homepage.png in Resources */ = {isa = PBXBuildFile; fileRef = 97176B15156CFAE000F2A76E /* homepage.png */; };
 		971904F514429428005B1B31 /* melody_1_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 971904F014429428005B1B31 /* melody_1_icon.png */; };
 		971904F614429428005B1B31 /* melody_2_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 971904F114429428005B1B31 /* melody_2_icon.png */; };
 		971904F714429428005B1B31 /* melody_3_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 971904F214429428005B1B31 /* melody_3_icon.png */; };
@@ -65,7 +66,6 @@
 		97534535143325EE0037DDAC /* AiBallAviPlayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 97534534143325EE0037DDAC /* AiBallAviPlayer.m */; };
 		97534A9314356A3B0037DDAC /* recording_status.png in Resources */ = {isa = PBXBuildFile; fileRef = 97534A9214356A3B0037DDAC /* recording_status.png */; };
 		97534AAE143575180037DDAC /* circle_buttons1_2.png in Resources */ = {isa = PBXBuildFile; fileRef = 97534AAC143575180037DDAC /* circle_buttons1_2.png */; };
-		97534C1E1435CB550037DDAC /* homepage.png in Resources */ = {isa = PBXBuildFile; fileRef = 97534C1D1435CB550037DDAC /* homepage.png */; };
 		97534C251435CBA40037DDAC /* smallicon2_1.png in Resources */ = {isa = PBXBuildFile; fileRef = 97534C211435CBA30037DDAC /* smallicon2_1.png */; };
 		97534C261435CBA40037DDAC /* smallicon1_1.png in Resources */ = {isa = PBXBuildFile; fileRef = 97534C221435CBA40037DDAC /* smallicon1_1.png */; };
 		97534C401435CCC00037DDAC /* large_icon3_3.png in Resources */ = {isa = PBXBuildFile; fileRef = 97534C3B1435CCC00037DDAC /* large_icon3_3.png */; };
@@ -200,6 +200,7 @@
 		32CA4F630368D1EE00C91783 /* MBP_ios_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MBP_ios_Prefix.pch; sourceTree = "<group>"; };
 		8D1107310486CEB800E47090 /* MBP_ios-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "MBP_ios-Info.plist"; plistStructureDefinitionIdentifier = "com.apple.xcode.plist.structure-definition.iphone.info-plist"; sourceTree = "<group>"; };
 		9704F37E14B76202000B4AA5 /* Entitlements.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Entitlements.plist; sourceTree = "<group>"; };
+		97176B15156CFAE000F2A76E /* homepage.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = homepage.png; sourceTree = "<group>"; };
 		971904F014429428005B1B31 /* melody_1_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = melody_1_icon.png; sourceTree = "<group>"; };
 		971904F114429428005B1B31 /* melody_2_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = melody_2_icon.png; sourceTree = "<group>"; };
 		971904F214429428005B1B31 /* melody_3_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = melody_3_icon.png; sourceTree = "<group>"; };
@@ -261,7 +262,6 @@
 		97534538143326080037DDAC /* AiBallVideoSink.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AiBallVideoSink.h; sourceTree = "<group>"; };
 		97534A9214356A3B0037DDAC /* recording_status.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = recording_status.png; sourceTree = "<group>"; };
 		97534AAC143575180037DDAC /* circle_buttons1_2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = circle_buttons1_2.png; sourceTree = "<group>"; };
-		97534C1D1435CB550037DDAC /* homepage.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = homepage.png; sourceTree = "<group>"; };
 		97534C211435CBA30037DDAC /* smallicon2_1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = smallicon2_1.png; sourceTree = "<group>"; };
 		97534C221435CBA40037DDAC /* smallicon1_1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = smallicon1_1.png; sourceTree = "<group>"; };
 		97534C3B1435CCC00037DDAC /* large_icon3_3.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = large_icon3_3.png; sourceTree = "<group>"; };
@@ -406,7 +406,7 @@
 		97DC555714BAB1E400AA4911 /* large_icon3_1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = large_icon3_1.png; sourceTree = "<group>"; };
 		97DC555814BAB1E400AA4911 /* large_icon5_1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = large_icon5_1.png; sourceTree = "<group>"; };
 		97DC555914BAB1E400AA4911 /* large_icon6_1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = large_icon6_1.png; sourceTree = "<group>"; };
-		97DC55BF14BAFAAD00AA4911 /* msc3.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = msc3.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		97DC55BF14BAFAAD00AA4911 /* monitor.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = monitor.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		97DEEA4014308B71008212FF /* AsyncUdpSocket.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AsyncUdpSocket.m; sourceTree = "<group>"; };
 		97DEEA4114308B71008212FF /* AsyncUdpSocket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AsyncUdpSocket.h; sourceTree = "<group>"; };
 		97E3AAD5147E257400A0922A /* iTunesArtWork */ = {isa = PBXFileReference; lastKnownFileType = file; path = iTunesArtWork; sourceTree = "<group>"; };
@@ -554,7 +554,7 @@
 		19C28FACFE9D520D11CA2CBB /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				97DC55BF14BAFAAD00AA4911 /* msc3.app */,
+				97DC55BF14BAFAAD00AA4911 /* monitor.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -673,7 +673,6 @@
 				97B8F3B1143952AC00924E84 /* status_icon4_2.png */,
 				97B8F3B2143952AC00924E84 /* status_icon4_3.png */,
 				97B8F3B3143952AC00924E84 /* status_icon4_4.png */,
-				97534C1D1435CB550037DDAC /* homepage.png */,
 				97B8F4E21439855700924E84 /* dev_config_word.png */,
 				97B8F821143AE03000924E84 /* words5.png */,
 				97B8F81B143ADF9100924E84 /* words4.png */,
@@ -688,6 +687,7 @@
 		97987CC1154683700066C49B /* images12 */ = {
 			isa = PBXGroup;
 			children = (
+				97176B15156CFAE000F2A76E /* homepage.png */,
 				9719EC7F155CA481005419FC /* main_menu_cam_settings.png */,
 				9719EC80155CA481005419FC /* main_menu_direct_mode.png */,
 				9719EC81155CA481005419FC /* main_menu_exit.png */,
@@ -746,7 +746,7 @@
 			);
 			name = MSC3;
 			productName = MBP_ios;
-			productReference = 97DC55BF14BAFAAD00AA4911 /* msc3.app */;
+			productReference = 97DC55BF14BAFAAD00AA4911 /* monitor.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -793,7 +793,6 @@
 				9753452C143325C30037DDAC /* AiBallPlayViewController.xib in Resources */,
 				97534A9314356A3B0037DDAC /* recording_status.png in Resources */,
 				97534AAE143575180037DDAC /* circle_buttons1_2.png in Resources */,
-				97534C1E1435CB550037DDAC /* homepage.png in Resources */,
 				97534C251435CBA40037DDAC /* smallicon2_1.png in Resources */,
 				97534C261435CBA40037DDAC /* smallicon1_1.png in Resources */,
 				97534C401435CCC00037DDAC /* large_icon3_3.png in Resources */,
@@ -905,6 +904,7 @@
 				9719EC8A155CA481005419FC /* main_menu_router_mode.png in Resources */,
 				9719ED9A155CDC61005419FC /* cameraMenuDirect.plist in Resources */,
 				9719EDA2155CDF4C005419FC /* cameraMenuRouter.plist in Resources */,
+				97176B16156CFAE000F2A76E /* homepage.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1025,7 +1025,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = MBP_ios_Prefix.pch;
 				INFOPLIST_FILE = "MBP_ios-Info.plist";
-				PRODUCT_NAME = msc3;
+				PRODUCT_NAME = monitor;
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "C31C2716-492E-4F93-B7E1-17A26EA29EC9";
 				VALIDATE_PRODUCT = YES;
 			};

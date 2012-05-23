@@ -34,7 +34,7 @@
 		uiCtxt = {
 			sepNavIntBoundsRect = "{{0, 0}, {859, 45705}}";
 			sepNavSelRange = "{31947, 0}";
-			sepNavVisRange = "{31599, 1092}";
+			sepNavVisRange = "{31599, 1090}";
 			sepNavWindowFrame = "{{294, 112}, {918, 659}}";
 		};
 	};
@@ -148,6 +148,10 @@
 			97176B0F156CF9E000F2A76E /* PlistBookmark */ = 97176B0F156CF9E000F2A76E /* PlistBookmark */;
 			97176B10156CF9E000F2A76E /* PlistBookmark */ = 97176B10156CF9E000F2A76E /* PlistBookmark */;
 			97176B13156CF9E000F2A76E /* PBXTextBookmark */ = 97176B13156CF9E000F2A76E /* PBXTextBookmark */;
+			97176B2B156CFB4D00F2A76E /* PBXBookmark */ = 97176B2B156CFB4D00F2A76E /* PBXBookmark */;
+			97176B2C156CFB4D00F2A76E /* PlistBookmark */ = 97176B2C156CFB4D00F2A76E /* PlistBookmark */;
+			97176B2D156CFB4D00F2A76E /* PlistBookmark */ = 97176B2D156CFB4D00F2A76E /* PlistBookmark */;
+			97176B2E156CFB4D00F2A76E /* PBXTextBookmark */ = 97176B2E156CFB4D00F2A76E /* PBXTextBookmark */;
 			9719EC77155CA453005419FC = 9719EC77155CA453005419FC /* PBXTextBookmark */;
 			9719ECBE155CBF5D005419FC = 9719ECBE155CBF5D005419FC /* PBXTextBookmark */;
 			9719ED8F155CDB71005419FC = 9719ED8F155CDB71005419FC /* PBXBookmark */;
@@ -440,6 +444,44 @@
 		rLoc = 31947;
 		rType = 0;
 		vrLen = 1092;
+		vrLoc = 31599;
+	};
+	97176B2B156CFB4D00F2A76E /* PBXBookmark */ = {
+		isa = PBXBookmark;
+		fRef = 97176B15156CFAE000F2A76E /* homepage.png */;
+	};
+	97176B2C156CFB4D00F2A76E /* PlistBookmark */ = {
+		isa = PlistBookmark;
+		fRef = 8D1107310486CEB800E47090 /* MBP_ios-Info.plist */;
+		fallbackIsa = PBXBookmark;
+		isK = 0;
+		kPath = (
+			CFBundleIdentifier,
+		);
+		name = "/Users/mighty/Pumpkin App/MBP_ios/MBP_ios-Info.plist";
+		rLen = 0;
+		rLoc = 9223372036854775807;
+	};
+	97176B2D156CFB4D00F2A76E /* PlistBookmark */ = {
+		isa = PlistBookmark;
+		fRef = 8D1107310486CEB800E47090 /* MBP_ios-Info.plist */;
+		fallbackIsa = PBXBookmark;
+		isK = 0;
+		kPath = (
+			CFBundleIdentifier,
+		);
+		name = "/Users/mighty/Pumpkin App/MBP_ios/MBP_ios-Info.plist";
+		rLen = 0;
+		rLoc = 9223372036854775807;
+	};
+	97176B2E156CFB4D00F2A76E /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 28D7ACF70DDB3853001CB0EB /* MBP_iosViewController.m */;
+		name = "MBP_iosViewController.m: 1492";
+		rLen = 0;
+		rLoc = 31947;
+		rType = 0;
+		vrLen = 1090;
 		vrLoc = 31599;
 	};
 	9719EC59155C9F30005419FC /* MBP_MenuViewController.h */ = {
@@ -1589,6 +1631,11 @@
 		vrLoc = 2134;
 	};
 	97534C1D1435CB550037DDAC /* homepage.png */ = {
+		isa = PBXFileReference;
+		lastKnownFileType = image.png;
+		name = homepage.png;
+		path = "/Users/mighty/Pumpkin App/MBP_ios/homepage.png";
+		sourceTree = "<absolute>";
 		uiCtxt = {
 			sepNavWindowFrame = "{{61, 113}, {825, 618}}";
 		};
