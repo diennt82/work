@@ -113,7 +113,7 @@
 	[self initialize];
 		
 	//go Back to main menu
-	[NSTimer scheduledTimerWithTimeInterval:0.1
+	[NSTimer scheduledTimerWithTimeInterval:2
 									 target:self
 								   selector:@selector(wakeup_display_main_cam:)
 								   userInfo:nil
