@@ -2903,7 +2903,7 @@
 			[userDefaults setBool:TRUE forKey:_AutoLogin];
 			
 			
-			[NSTimer scheduledTimerWithTimeInterval:0.01
+			[NSTimer scheduledTimerWithTimeInterval:0.10
 											 target:self
 										   selector:@selector(show_login_or_reg:)
 										   userInfo:nil

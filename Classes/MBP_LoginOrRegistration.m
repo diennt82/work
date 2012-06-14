@@ -31,6 +31,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
  
+	NSLog(@"Login Or register viewdidload");
 	//load user/pass  
 	NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
 

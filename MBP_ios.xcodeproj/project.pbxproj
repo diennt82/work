@@ -1026,7 +1026,7 @@
 				GCC_PREFIX_HEADER = MBP_ios_Prefix.pch;
 				INFOPLIST_FILE = "MBP_ios-Info.plist";
 				PRODUCT_NAME = monitor;
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "C31C2716-492E-4F93-B7E1-17A26EA29EC9";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "B422708C-31C3-47F0-B542-76B465F9BFFB";
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Distribute;
