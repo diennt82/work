@@ -278,7 +278,14 @@
 		[camListView initViews];
 		[self.view addSubview:camListView];
 		
+		
 	}
+	else {
+		[camListView removeFromSuperview];
+		[camListView initViews];
+		[self.view addSubview:camListView];
+	}
+
 	
 	camListView.hidden = NO;
 	
@@ -305,6 +312,7 @@
 		}
 		else
 		{
+			itemView.hidden = NO;
 			if (cp.isInLocal ==TRUE)
 			{
 				
@@ -984,7 +992,43 @@
 		case SCAN_CAM_BTN:
 			break;
 		case LOGOUT_CAM_BTN:
+		{
+			NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+			[userDefaults setBool:FALSE forKey:_AutoLogin];
+			
+			
+			[NSTimer scheduledTimerWithTimeInterval:0.10
+											 target:self
+										   selector:@selector(show_login_or_reg:)
+										   userInfo:nil
+											repeats:NO];
+
+			if (self.camListView != nil)
+			{
+				[self.camListView removeFromSuperview];
+
+			}
+			
+			
 			break;
+		}
+		case CAMLIST_BACK_BTN:
+		{
+			
+			if (self.camListView != nil)
+			{
+				[self.camListView removeFromSuperview];
+				
+			}
+			//go Back to main menu
+			[NSTimer scheduledTimerWithTimeInterval:0.01
+											 target:self
+										   selector:@selector(wakeup_display_main_cam:)
+										   userInfo:nil
+											repeats:NO];
+			
+			break;
+		}
 		default:
 			break;
 	}
@@ -1225,25 +1269,6 @@
 		
 		/* show the camera list page now */
 		[self startShowingCameraList];
-		
-#if 0
-		
-		/* hide the channel icon */
-        [self.camView.statusBar switchChannel:10];
-		
-
-		
-		
-		/* Setup and start streaming */
-
-		
-		self.camView.oneCamView.hidden = YES;
-		self.camView.statusBar.melody_status_icon.hidden = YES;
-        self.camView.statusBar.temperature_label.hidden = YES;
-
-		self.camView.sideMenu.snapShotButton.enabled = NO;
-		self.camView.sideMenu.recordButton.enabled = NO;
-#endif
 	
 	}
 	
@@ -1488,7 +1513,7 @@
 	
 	if (streamer != nil)
 	{
-		//[streamer stopStreaming];
+		[streamer stopStreaming];
 		[streamer release];
 	}
 	
@@ -2911,7 +2936,7 @@
 						break;
 		}
 		case 3:
-			
+			//Back from login- login success 
 			[self dismissModalViewControllerAnimated:NO];
 			self.progressView.hidden = NO;
 			[self scan_for_devices];
@@ -2919,6 +2944,9 @@
 		case 4:
 			NSLog(@" back from adding cam. relogin -- to get the new cam data");
 			self.shouldReloadWhenEnterBG = TRUE;
+			NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+			[userDefaults setBool:TRUE forKey:_AutoLogin];
+			
 			[NSTimer scheduledTimerWithTimeInterval:0.01
 											 target:self
 										   selector:@selector(show_login_or_reg:)

@@ -12,7 +12,7 @@
 		</object>
 		<object class="NSMutableArray" key="IBDocument.EditedObjectIDs">
 			<bool key="EncodedWithXMLCoder">YES</bool>
-			<integer value="42"/>
+			<integer value="47"/>
 		</object>
 		<object class="NSArray" key="IBDocument.PluginDependencies">
 			<bool key="EncodedWithXMLCoder">YES</bool>
@@ -72,7 +72,7 @@
 									<int key="NSColorSpace">1</int>
 									<bytes key="NSRGB">MC4xOTYwNzg0MzQ2IDAuMzA5ODAzOTMyOSAwLjUyMTU2ODY1NgA</bytes>
 								</object>
-								<object class="NSColor" key="IBUINormalTitleShadowColor">
+								<object class="NSColor" key="IBUINormalTitleShadowColor" id="11890354">
 									<int key="NSColorSpace">3</int>
 									<bytes key="NSWhite">MC41AA</bytes>
 								</object>
@@ -100,6 +100,30 @@
 										<reference key="IBUIHighlightedColor" ref="632464431"/>
 										<int key="IBUIBaselineAdjustment">1</int>
 										<float key="IBUIMinimumFontSize">10</float>
+									</object>
+									<object class="IBUIButton" id="565868534">
+										<reference key="NSNextResponder" ref="1066129097"/>
+										<int key="NSvFlags">292</int>
+										<string key="NSFrame">{{406, 0}, {65, 27}}</string>
+										<reference key="NSSuperview" ref="1066129097"/>
+										<bool key="IBUIOpaque">NO</bool>
+										<int key="IBUITag">105</int>
+										<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
+										<int key="IBUIContentHorizontalAlignment">0</int>
+										<int key="IBUIContentVerticalAlignment">0</int>
+										<object class="NSFont" key="IBUIFont">
+											<string key="NSName">Helvetica</string>
+											<double key="NSSize">13</double>
+											<int key="NSfFlags">16</int>
+										</object>
+										<int key="IBUIButtonType">1</int>
+										<string key="IBUINormalTitle">Cancel</string>
+										<reference key="IBUIHighlightedTitleColor" ref="632464431"/>
+										<object class="NSColor" key="IBUINormalTitleColor">
+											<int key="NSColorSpace">3</int>
+											<bytes key="NSWhite">MAA</bytes>
+										</object>
+										<reference key="IBUINormalTitleShadowColor" ref="11890354"/>
 									</object>
 								</object>
 								<string key="NSFrameSize">{480, 27}</string>
@@ -212,7 +236,7 @@ Z3VpZGUgb24gaG93IHRvIGRvIHRoaXMsIHBsZWFzZSBzY3JvbGwgZG93bi4</string>
 								<bool key="IBUIBounces">NO</bool>
 								<bool key="IBUIScrollEnabled">NO</bool>
 								<bool key="IBUIEditable">NO</bool>
-								<string key="IBUIText">Then, select the Wi-Fi network called "Moto-Cam-xxxxxx"  as shown below</string>
+								<string key="IBUIText">Then, select your home Wi-Fi network  as shown below</string>
 								<object class="IBUITextInputTraits" key="IBUITextInputTraits">
 									<int key="IBUIAutocapitalizationType">2</int>
 									<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
@@ -392,6 +416,15 @@ Z3VpZGUgb24gaG93IHRvIGRvIHRoaXMsIHBsZWFzZSBzY3JvbGwgZG93bi4</string>
 					</object>
 					<int key="connectionID">73</int>
 				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBCocoaTouchEventConnection" key="connection">
+						<string key="label">handleButtonPressed:</string>
+						<reference key="source" ref="565868534"/>
+						<reference key="destination" ref="372490531"/>
+						<int key="IBEventType">7</int>
+					</object>
+					<int key="connectionID">77</int>
+				</object>
 			</object>
 			<object class="IBMutableOrderedSet" key="objectRecords">
 				<object class="NSArray" key="orderedObjects">
@@ -469,6 +502,7 @@ Z3VpZGUgb24gaG93IHRvIGRvIHRoaXMsIHBsZWFzZSBzY3JvbGwgZG93bi4</string>
 						<object class="NSMutableArray" key="children">
 							<bool key="EncodedWithXMLCoder">YES</bool>
 							<reference ref="310301830"/>
+							<reference ref="565868534"/>
 						</object>
 						<reference key="parent" ref="329561709"/>
 						<string key="objectName">status bar</string>
@@ -538,6 +572,12 @@ Z3VpZGUgb24gaG93IHRvIGRvIHRoaXMsIHBsZWFzZSBzY3JvbGwgZG93bi4</string>
 						<reference key="object" ref="724524061"/>
 						<reference key="parent" ref="245893400"/>
 					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">76</int>
+						<reference key="object" ref="565868534"/>
+						<reference key="parent" ref="1066129097"/>
+						<string key="objectName">back btn</string>
+					</object>
 				</object>
 			</object>
 			<object class="NSMutableDictionary" key="flattenedProperties">
@@ -582,12 +622,14 @@ Z3VpZGUgb24gaG93IHRvIGRvIHRoaXMsIHBsZWFzZSBzY3JvbGwgZG93bi4</string>
 					<string>71.IBViewBoundsToFrameTransform</string>
 					<string>72.IBPluginDependency</string>
 					<string>72.IBViewBoundsToFrameTransform</string>
+					<string>76.IBPluginDependency</string>
+					<string>76.IBViewBoundsToFrameTransform</string>
 				</object>
 				<object class="NSMutableArray" key="dict.values">
 					<bool key="EncodedWithXMLCoder">YES</bool>
 					<string>MBP_AddCamController</string>
 					<string>UIResponder</string>
-					<string>{{307, 116}, {480, 320}}</string>
+					<string>{{349, 146}, {480, 320}}</string>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 					<string>{{375, 100}, {480, 656}}</string>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
@@ -655,6 +697,10 @@ Z3VpZGUgb24gaG93IHRvIGRvIHRoaXMsIHBsZWFzZSBzY3JvbGwgZG93bi4</string>
 					<object class="NSAffineTransform">
 						<bytes key="NSTransformStruct">P4AAAL+AAABCngAAwtgAAA</bytes>
 					</object>
+					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
+					<object class="NSAffineTransform">
+						<bytes key="NSTransformStruct">P4AAAL+AAABAoAAAwfAAAA</bytes>
+					</object>
 				</object>
 			</object>
 			<object class="NSMutableDictionary" key="unlocalizedProperties">
@@ -673,7 +719,7 @@ Z3VpZGUgb24gaG93IHRvIGRvIHRoaXMsIHBsZWFzZSBzY3JvbGwgZG93bi4</string>
 				</object>
 			</object>
 			<nil key="sourceID"/>
-			<int key="maxID">73</int>
+			<int key="maxID">77</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<object class="NSMutableArray" key="referencedPartialClassDescriptions">

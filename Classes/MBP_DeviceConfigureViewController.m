@@ -75,10 +75,11 @@
 		[self initLayout];
 		
 	}
-	else {
+	else 
+	{
 		[NSTimer scheduledTimerWithTimeInterval:1//0.04 
 										 target:self
-									   selector:@selector(_connectDefaultRabot:)
+									   selector:@selector(isAuthenticationDone:)
 									   userInfo:nil
 										repeats:NO];
 	}

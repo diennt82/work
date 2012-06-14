@@ -30,15 +30,14 @@
 // Implement viewDidLoad to do additional setup after loading the view, typically from a nib.
 - (void)viewDidLoad {
     [super viewDidLoad];
- 
+	
 	NSLog(@"Login Or register viewdidload");
 	//load user/pass  
 	NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-
-
-	NSString * old_usr = (NSString *) [userDefaults objectForKey:@"PortalUsername"];
-	NSString * old_pass = (NSString *) [userDefaults objectForKey:@"PortalPassword"];
-
+	
+	
+	NSString * old_usr = (NSString *) [userDefaults objectForKey:@"PortalUsername"];		NSString * old_pass = (NSString *) [userDefaults objectForKey:@"PortalPassword"];
+	
 	if (old_usr != nil)
 	{
 		[self.userName setText:old_usr];
@@ -217,7 +216,7 @@
 	//ERROR condition
 	UIAlertView *alert = [[UIAlertView alloc]
 						  initWithTitle:@"Login Error"
-						  message:@"Server unreachable"
+						  message:@"BMS Server is unreachable. Please goto WIFI setting to ensure iOS device is connected to router/3G network"
 						  delegate:self
 						  cancelButtonTitle:@"OK"
 						  otherButtonTitles:nil];

@@ -125,12 +125,14 @@
 
 - (void) dealloc
 {
+	NSLog(@"Streamer released called");
 	[self stopStreaming];
-	
+	//[super dealloc];
 	[listenSocket release];
 	[responseData release];
 	[device_ip release];
-	[videoImage release];
+// cant release as this is passed from outside	[videoImage release];
+
 	[pcmPlayer release];
 	[super dealloc];
 }

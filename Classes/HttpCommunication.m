@@ -222,10 +222,6 @@
 	if ([self tryAuthenticate ] == FALSE)
 	{
 		
-		if(self.credential != nil)
-		{		
-			self.credential = nil; 
-		}
 		
 		[self askForUserPass]; 
 		
@@ -365,47 +361,6 @@
 - (void)connection:(NSURLConnection *)connection didReceiveAuthenticationChallenge:(NSURLAuthenticationChallenge *)challenge
 {
 	NSLog(@"did recv auth challenge: %@", challenge);
-	
-    	
-#if 0
-	if ([challenge previousFailureCount] <=  1) {
-		
-		if(self.credential != nil)
-		{
-			NSLog(@"credential != nil");
-			[[challenge sender] useCredential:self.credential
-				   forAuthenticationChallenge:challenge];
-			
-		}
-		else {
-			
-			NSURLCredential * default_credential; 
-			default_credential = [NSURLCredential credentialWithUser:BASIC_AUTH_DEFAULT_USER
-															password:BASIC_AUTH_DEFAULT_PASS 
-														 persistence:NSURLCredentialPersistenceNone];
-			[[challenge sender] useCredential:default_credential
-				   forAuthenticationChallenge:challenge];
-		}
-		
-		
-    }
-	else 
-	{
-		if(self.credential != nil)
-		{
-			 
-			self.credential = nil; 
-		}
-		
-		NSLog(@"failed count:%d", [challenge previousFailureCount]);
-		
-		//Store the ref to use later 
-		current_challenge = challenge; 
-		
-		[self askForUserPass]; 
-	}
-#endif
-	
 	
 }
 

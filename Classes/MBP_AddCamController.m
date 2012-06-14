@@ -50,6 +50,10 @@
 	self.progress.hidden = NO; 
 	[self.progress startAnimating];
 	
+	step_1View.frame = CGRectMake(0, 0, 480, 320);
+	step_1View.contentSize = CGSizeMake(480, 1194);
+	
+	task_cancelled = NO;
 	
 	[NSTimer scheduledTimerWithTimeInterval: 2 // 
 									 target:self
@@ -108,6 +112,23 @@
 {
 	self.progressView.hidden = YES;
 	
+	
+	NSLog(@"Setup has failed - remove cam on server"); 
+	// send a command to remove camera 
+	NSString * mac = [Util strip_colon_fr_mac:self.cameraMac];
+	
+	NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+	NSString * user_email = (NSString *) [userDefaults objectForKey:@"PortalUsername"];
+	NSString * user_pass = (NSString *) [userDefaults objectForKey:@"PortalPassword"];
+	
+	BMS_Communication * bms_comm; 
+	bms_comm = [[BMS_Communication alloc] initWithObject:self
+												Selector:@selector(removeCamSuccessWithResponse:) 
+											FailSelector:@selector(removeCamFailedWithError:) 
+											   ServerErr:@selector(removeCamFailedServerUnreachable)];
+	
+	[bms_comm BMS_delCamWithUser:user_email AndPass:user_pass macAddr:mac];
+	
 	[[NSBundle mainBundle] loadNibNamed:@"MBP_AddCamController_4" 
 								  owner:self 
 								options:nil];
@@ -153,6 +174,28 @@
 
 - (void) connectedToHomeWifi:(NSTimer *) expired
 {
+	
+#if TARGET_IPHONE_SIMULATOR != 1
+	NSString * bc1 = @"";
+	NSString * own1 = @"";
+	[MBP_iosViewController getBroadcastAddress:&bc1 AndOwnIp:&own1];
+	//check for ip available before check for SSID to avoid crashing .. 
+	if ([own1 isEqualToString:@""])
+	{
+		NSLog(@"IP is not available.. comeback later..");
+		//check back later.. 
+		[NSTimer scheduledTimerWithTimeInterval: 3// 
+										 target:self
+									   selector:@selector(connectedToHomeWifi:)
+									   userInfo:nil
+										repeats:NO];	
+		return; 
+	}
+#endif
+	
+	
+	
+	
 	
 #if TARGET_IPHONE_SIMULATOR == 1
 	NSString * currentSSID = @"NX-BROADBAND";
@@ -206,18 +249,46 @@
 		
 	}
 	
-	//check back later.. 
-	[NSTimer scheduledTimerWithTimeInterval: 3// 
-									 target:self
-								   selector:@selector(connectedToHomeWifi:)
-								   userInfo:nil
+	if (task_cancelled == YES)
+	{
+		//skip 
+	}
+	else
+	{
+		//check back later.. 
+		[NSTimer scheduledTimerWithTimeInterval: 3// 
+										 target:self
+									   selector:@selector(connectedToHomeWifi:)
+									   userInfo:nil
 									repeats:NO];	
+	}
 }
+
 
 
 
 - (void) connectedToRabot:(NSTimer *) expired
 {
+	
+	
+#if TARGET_IPHONE_SIMULATOR != 1
+	NSString * bc1 = @"";
+	NSString * own1 = @"";
+	[MBP_iosViewController getBroadcastAddress:&bc1 AndOwnIp:&own1];
+	//check for ip available before check for SSID to avoid crashing .. 
+	if ([own1 isEqualToString:@""])
+	{
+		NSLog(@"IP is not available.. comeback later..");
+		//check back later.. 
+		[NSTimer scheduledTimerWithTimeInterval: 3// 
+										 target:self
+									   selector:@selector(connectedToRabot:)
+									   userInfo:nil
+										repeats:NO];	
+		return; 
+	}
+#endif
+	
 	NSString * currentSSID = [CameraPassword fetchSSIDInfo];
 	
 	
@@ -249,12 +320,21 @@
 		
 	}
 	
-	//check back later.. 
-	[NSTimer scheduledTimerWithTimeInterval: 3// 
-									 target:self
-								   selector:@selector(connectedToRabot:)
-								   userInfo:nil
-									repeats:NO];	
+	
+	if (task_cancelled == YES)
+	{
+		//Don't do any thing here
+		
+	}
+	else {
+	
+		//check back later.. 
+		[NSTimer scheduledTimerWithTimeInterval: 3// 
+										 target:self
+									   selector:@selector(connectedToRabot:)
+									   userInfo:nil
+										repeats:NO];	
+	}
 }
 
 
@@ -324,7 +404,7 @@
 					//sleep for sometime and retry 
 					[NSThread sleepForTimeInterval:2];
 					
-				}while (retries -- >0);
+				} while (retries -- >0);
 				
 				
 				
@@ -436,6 +516,22 @@
 			[self dismissModalViewControllerAnimated:NO];
 			[delegate sendStatus: 4];
 			break; 
+		case STEP_1_BACK_BTN:
+			//cancel
+			task_cancelled = YES;
+			
+			[self dismissModalViewControllerAnimated:NO];
+			[delegate sendStatus: 4];
+			
+			break;
+		case STEP_2_BACK_BTN:
+			//cancel-- step 2 
+			task_cancelled = YES;
+			
+			[self dismissModalViewControllerAnimated:NO];
+			[delegate sendStatus: 4];
+			
+			break;
 		default:
 			break;
 	}
@@ -472,6 +568,8 @@
 	
 }
 
+
+
 #pragma mark -
 #pragma mark  Callbacks
 - (void) addCamSuccessWithResponse:(NSData*) responseData
@@ -482,7 +580,7 @@
 	
 	[self extractMasterKey:raw_data];
 	
-	num_scan_time = 1; //can be changed later
+	num_scan_time = 3; //can be changed later
 	
 	// 2 of 3. wait for the camera to reboot completely
 	
@@ -528,6 +626,26 @@
 }
 
 
+-(void) removeCamSuccessWithResponse:(NSData *) responsedata
+{
+	NSLog(@"removeCam success");
+	
+	//[delegate sendStatus:5 ];
+	
+}
+-(void) removeCamFailedWithError:(NSHTTPURLResponse*) error_response
+{
+	NSLog(@"removeCam failed errorcode: %d");
+}
+-(void) removeCamFailedServerUnreachable
+{
+	NSLog(@"server unreachable");
+}
+
+
+
+
+
 - (void)sendStatus:(int) status
 {
 	switch (status) {
@@ -537,9 +655,11 @@
 										  owner:self 
 										options:nil];
 			
+			
 			[self.view addSubview:step_2View];
 			
-			
+			step_2View.frame = CGRectMake(0, 0, 480, 320);
+			step_2View.contentSize = CGSizeMake(480, 1194);
 			// enable the progress indicator 
 			self.progress.hidden = NO; 
 			[self.progress startAnimating];

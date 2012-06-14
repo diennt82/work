@@ -17,6 +17,7 @@
 @synthesize channel3; 
 @synthesize channel4; 
 @synthesize channelViews; 
+@synthesize usrEmail; 
 
 - (id)initWithFrame:(CGRect)frame {
 
@@ -45,6 +46,14 @@
 {
 	/* populate the array here*/
 	self.channelViews = [NSArray arrayWithObjects:channel1, channel2, channel3, channel4, nil];
+	
+	//show the User email
+	NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+	NSString * userEmail = (NSString *) [userDefaults objectForKey:@"PortalUsername"];
+	if (userEmail != nil)
+	{
+		[self.usrEmail setText:userEmail];
+	}
 }
 
 
@@ -63,6 +72,7 @@
 	[channel3 release];
 	[channel4 release];
 	[channelViews release];
+	[usrEmail release]; 
 }
 
 

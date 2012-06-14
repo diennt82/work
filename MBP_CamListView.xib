@@ -12,7 +12,7 @@
 		</object>
 		<object class="NSMutableArray" key="IBDocument.EditedObjectIDs">
 			<bool key="EncodedWithXMLCoder">YES</bool>
-			<integer value="1"/>
+			<integer value="3"/>
 		</object>
 		<object class="NSArray" key="IBDocument.PluginDependencies">
 			<bool key="EncodedWithXMLCoder">YES</bool>
@@ -94,7 +94,7 @@
 								<string key="NSFrame">{{421, 0}, {57, 27}}</string>
 								<reference key="NSSuperview" ref="73896514"/>
 								<bool key="IBUIOpaque">NO</bool>
-								<int key="IBUITag">102</int>
+								<int key="IBUITag">504</int>
 								<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
 								<int key="IBUIContentHorizontalAlignment">0</int>
 								<int key="IBUIContentVerticalAlignment">0</int>
@@ -854,6 +854,23 @@
 					</object>
 					<int key="connectionID">82</int>
 				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBCocoaTouchOutletConnection" key="connection">
+						<string key="label">usrEmail</string>
+						<reference key="source" ref="191373211"/>
+						<reference key="destination" ref="601973352"/>
+					</object>
+					<int key="connectionID">83</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBCocoaTouchEventConnection" key="connection">
+						<string key="label">cameraListButtonClicked:</string>
+						<reference key="source" ref="759700819"/>
+						<reference key="destination" ref="372490531"/>
+						<int key="IBEventType">7</int>
+					</object>
+					<int key="connectionID">84</int>
+				</object>
 			</object>
 			<object class="IBMutableOrderedSet" key="objectRecords">
 				<object class="NSArray" key="orderedObjects">
@@ -908,7 +925,7 @@
 						<int key="objectID">4</int>
 						<reference key="object" ref="759700819"/>
 						<reference key="parent" ref="73896514"/>
-						<string key="objectName">exit btn</string>
+						<string key="objectName">back btn</string>
 					</object>
 					<object class="IBObjectRecord">
 						<int key="objectID">5</int>
@@ -1377,7 +1394,7 @@
 				</object>
 			</object>
 			<nil key="sourceID"/>
-			<int key="maxID">82</int>
+			<int key="maxID">84</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<object class="NSMutableArray" key="referencedPartialClassDescriptions">
@@ -1461,6 +1478,7 @@
 							<string>channel2</string>
 							<string>channel3</string>
 							<string>channel4</string>
+							<string>usrEmail</string>
 						</object>
 						<object class="NSMutableArray" key="dict.values">
 							<bool key="EncodedWithXMLCoder">YES</bool>
@@ -1468,6 +1486,7 @@
 							<string>CamListItemView</string>
 							<string>CamListItemView</string>
 							<string>CamListItemView</string>
+							<string>UILabel</string>
 						</object>
 					</object>
 					<object class="NSMutableDictionary" key="toOneOutletInfosByName">
@@ -1478,6 +1497,7 @@
 							<string>channel2</string>
 							<string>channel3</string>
 							<string>channel4</string>
+							<string>usrEmail</string>
 						</object>
 						<object class="NSMutableArray" key="dict.values">
 							<bool key="EncodedWithXMLCoder">YES</bool>
@@ -1497,6 +1517,10 @@
 								<string key="name">channel4</string>
 								<string key="candidateClassName">CamListItemView</string>
 							</object>
+							<object class="IBToOneOutletInfo">
+								<string key="name">usrEmail</string>
+								<string key="candidateClassName">UILabel</string>
+							</object>
 						</object>
 					</object>
 					<object class="IBClassDescriptionSource" key="sourceIdentifier">
@@ -1511,14 +1535,16 @@
 						<bool key="EncodedWithXMLCoder">YES</bool>
 						<object class="NSArray" key="dict.sortedKeys">
 							<bool key="EncodedWithXMLCoder">YES</bool>
+							<string>leftSideMenu</string>
 							<string>oneCamView</string>
-							<string>sideMenu</string>
+							<string>rightSideMenu</string>
 							<string>statusBar</string>
 						</object>
 						<object class="NSMutableArray" key="dict.values">
 							<bool key="EncodedWithXMLCoder">YES</bool>
+							<string>MBP_LeftSideMenuView</string>
 							<string>MBP_MainCameraView</string>
-							<string>MBP_SideMenuView</string>
+							<string>MBP_RightSideMenuView</string>
 							<string>MBP_StatusBarView</string>
 						</object>
 					</object>
@@ -1526,19 +1552,24 @@
 						<bool key="EncodedWithXMLCoder">YES</bool>
 						<object class="NSArray" key="dict.sortedKeys">
 							<bool key="EncodedWithXMLCoder">YES</bool>
+							<string>leftSideMenu</string>
 							<string>oneCamView</string>
-							<string>sideMenu</string>
+							<string>rightSideMenu</string>
 							<string>statusBar</string>
 						</object>
 						<object class="NSMutableArray" key="dict.values">
 							<bool key="EncodedWithXMLCoder">YES</bool>
 							<object class="IBToOneOutletInfo">
+								<string key="name">leftSideMenu</string>
+								<string key="candidateClassName">MBP_LeftSideMenuView</string>
+							</object>
+							<object class="IBToOneOutletInfo">
 								<string key="name">oneCamView</string>
 								<string key="candidateClassName">MBP_MainCameraView</string>
 							</object>
 							<object class="IBToOneOutletInfo">
-								<string key="name">sideMenu</string>
-								<string key="candidateClassName">MBP_SideMenuView</string>
+								<string key="name">rightSideMenu</string>
+								<string key="candidateClassName">MBP_RightSideMenuView</string>
 							</object>
 							<object class="IBToOneOutletInfo">
 								<string key="name">statusBar</string>
@@ -1549,6 +1580,53 @@
 					<object class="IBClassDescriptionSource" key="sourceIdentifier">
 						<string key="majorKey">IBProjectSource</string>
 						<string key="minorKey">Classes/MBP_CamView.h</string>
+					</object>
+				</object>
+				<object class="IBPartialClassDescription">
+					<string key="className">MBP_LeftSideMenuView</string>
+					<string key="superclassName">UIView</string>
+					<object class="NSMutableDictionary" key="outlets">
+						<bool key="EncodedWithXMLCoder">YES</bool>
+						<object class="NSArray" key="dict.sortedKeys">
+							<bool key="EncodedWithXMLCoder">YES</bool>
+							<string>melodyButton</string>
+							<string>recordButton</string>
+							<string>snapShotButton</string>
+						</object>
+						<object class="NSMutableArray" key="dict.values">
+							<bool key="EncodedWithXMLCoder">YES</bool>
+							<string>UIButton</string>
+							<string>UIButton</string>
+							<string>UIButton</string>
+						</object>
+					</object>
+					<object class="NSMutableDictionary" key="toOneOutletInfosByName">
+						<bool key="EncodedWithXMLCoder">YES</bool>
+						<object class="NSArray" key="dict.sortedKeys">
+							<bool key="EncodedWithXMLCoder">YES</bool>
+							<string>melodyButton</string>
+							<string>recordButton</string>
+							<string>snapShotButton</string>
+						</object>
+						<object class="NSMutableArray" key="dict.values">
+							<bool key="EncodedWithXMLCoder">YES</bool>
+							<object class="IBToOneOutletInfo">
+								<string key="name">melodyButton</string>
+								<string key="candidateClassName">UIButton</string>
+							</object>
+							<object class="IBToOneOutletInfo">
+								<string key="name">recordButton</string>
+								<string key="candidateClassName">UIButton</string>
+							</object>
+							<object class="IBToOneOutletInfo">
+								<string key="name">snapShotButton</string>
+								<string key="candidateClassName">UIButton</string>
+							</object>
+						</object>
+					</object>
+					<object class="IBClassDescriptionSource" key="sourceIdentifier">
+						<string key="majorKey">IBProjectSource</string>
+						<string key="minorKey">Classes/MBP_LeftSideMenuView.h</string>
 					</object>
 				</object>
 				<object class="IBPartialClassDescription">
@@ -1688,7 +1766,7 @@
 					</object>
 				</object>
 				<object class="IBPartialClassDescription">
-					<string key="className">MBP_SideMenuView</string>
+					<string key="className">MBP_RightSideMenuView</string>
 					<string key="superclassName">UIView</string>
 					<object class="NSMutableDictionary" key="outlets">
 						<bool key="EncodedWithXMLCoder">YES</bool>
@@ -1696,12 +1774,10 @@
 							<bool key="EncodedWithXMLCoder">YES</bool>
 							<string>mainMenuButton</string>
 							<string>multiModeButton</string>
-							<string>recordButton</string>
-							<string>snapShotButton</string>
+							<string>pushTTButton</string>
 						</object>
 						<object class="NSMutableArray" key="dict.values">
 							<bool key="EncodedWithXMLCoder">YES</bool>
-							<string>UIButton</string>
 							<string>UIButton</string>
 							<string>UIButton</string>
 							<string>UIButton</string>
@@ -1713,8 +1789,7 @@
 							<bool key="EncodedWithXMLCoder">YES</bool>
 							<string>mainMenuButton</string>
 							<string>multiModeButton</string>
-							<string>recordButton</string>
-							<string>snapShotButton</string>
+							<string>pushTTButton</string>
 						</object>
 						<object class="NSMutableArray" key="dict.values">
 							<bool key="EncodedWithXMLCoder">YES</bool>
@@ -1727,18 +1802,14 @@
 								<string key="candidateClassName">UIButton</string>
 							</object>
 							<object class="IBToOneOutletInfo">
-								<string key="name">recordButton</string>
-								<string key="candidateClassName">UIButton</string>
-							</object>
-							<object class="IBToOneOutletInfo">
-								<string key="name">snapShotButton</string>
+								<string key="name">pushTTButton</string>
 								<string key="candidateClassName">UIButton</string>
 							</object>
 						</object>
 					</object>
 					<object class="IBClassDescriptionSource" key="sourceIdentifier">
 						<string key="majorKey">IBProjectSource</string>
-						<string key="minorKey">Classes/MBP_SideMenuView.h</string>
+						<string key="minorKey">Classes/MBP_RightSideMenuView.h</string>
 					</object>
 				</object>
 				<object class="IBPartialClassDescription">
@@ -1748,21 +1819,19 @@
 						<bool key="EncodedWithXMLCoder">YES</bool>
 						<object class="NSArray" key="dict.sortedKeys">
 							<bool key="EncodedWithXMLCoder">YES</bool>
+							<string>batt_status_icon</string>
+							<string>camName_label</string>
 							<string>channel_status_icon</string>
-							<string>led_status_icon</string>
-							<string>melody_status_icon</string>
 							<string>temperature_label</string>
 							<string>video_rec_status_icon</string>
-							<string>walkie_talkie_status_icon</string>
 							<string>wifi_status_icon</string>
 						</object>
 						<object class="NSMutableArray" key="dict.values">
 							<bool key="EncodedWithXMLCoder">YES</bool>
 							<string>UIImageView</string>
-							<string>UIImageView</string>
-							<string>UIImageView</string>
 							<string>UILabel</string>
 							<string>UIImageView</string>
+							<string>UILabel</string>
 							<string>UIImageView</string>
 							<string>UIImageView</string>
 						</object>
@@ -1771,26 +1840,25 @@
 						<bool key="EncodedWithXMLCoder">YES</bool>
 						<object class="NSArray" key="dict.sortedKeys">
 							<bool key="EncodedWithXMLCoder">YES</bool>
+							<string>batt_status_icon</string>
+							<string>camName_label</string>
 							<string>channel_status_icon</string>
-							<string>led_status_icon</string>
-							<string>melody_status_icon</string>
 							<string>temperature_label</string>
 							<string>video_rec_status_icon</string>
-							<string>walkie_talkie_status_icon</string>
 							<string>wifi_status_icon</string>
 						</object>
 						<object class="NSMutableArray" key="dict.values">
 							<bool key="EncodedWithXMLCoder">YES</bool>
 							<object class="IBToOneOutletInfo">
+								<string key="name">batt_status_icon</string>
+								<string key="candidateClassName">UIImageView</string>
+							</object>
+							<object class="IBToOneOutletInfo">
+								<string key="name">camName_label</string>
+								<string key="candidateClassName">UILabel</string>
+							</object>
+							<object class="IBToOneOutletInfo">
 								<string key="name">channel_status_icon</string>
-								<string key="candidateClassName">UIImageView</string>
-							</object>
-							<object class="IBToOneOutletInfo">
-								<string key="name">led_status_icon</string>
-								<string key="candidateClassName">UIImageView</string>
-							</object>
-							<object class="IBToOneOutletInfo">
-								<string key="name">melody_status_icon</string>
 								<string key="candidateClassName">UIImageView</string>
 							</object>
 							<object class="IBToOneOutletInfo">
@@ -1799,10 +1867,6 @@
 							</object>
 							<object class="IBToOneOutletInfo">
 								<string key="name">video_rec_status_icon</string>
-								<string key="candidateClassName">UIImageView</string>
-							</object>
-							<object class="IBToOneOutletInfo">
-								<string key="name">walkie_talkie_status_icon</string>
 								<string key="candidateClassName">UIImageView</string>
 							</object>
 							<object class="IBToOneOutletInfo">
@@ -1831,6 +1895,7 @@
 							<string>onMelody:</string>
 							<string>set_current_melody_status:updateIcons:</string>
 							<string>sideMenuButtonClicked:</string>
+							<string>sideMenuButtonPressed:</string>
 						</object>
 						<object class="NSMutableArray" key="dict.values">
 							<bool key="EncodedWithXMLCoder">YES</bool>
@@ -1841,6 +1906,7 @@
 							<string>id</string>
 							<string>UIButton</string>
 							<string>UIImageView</string>
+							<string>id</string>
 							<string>id</string>
 						</object>
 					</object>
@@ -1856,6 +1922,7 @@
 							<string>onMelody:</string>
 							<string>set_current_melody_status:updateIcons:</string>
 							<string>sideMenuButtonClicked:</string>
+							<string>sideMenuButtonPressed:</string>
 						</object>
 						<object class="NSMutableArray" key="dict.values">
 							<bool key="EncodedWithXMLCoder">YES</bool>
@@ -1891,6 +1958,10 @@
 								<string key="name">sideMenuButtonClicked:</string>
 								<string key="candidateClassName">id</string>
 							</object>
+							<object class="IBActionInfo">
+								<string key="name">sideMenuButtonPressed:</string>
+								<string key="candidateClassName">id</string>
+							</object>
 						</object>
 					</object>
 					<object class="NSMutableDictionary" key="outlets">
@@ -1899,6 +1970,9 @@
 							<bool key="EncodedWithXMLCoder">YES</bool>
 							<string>camListView</string>
 							<string>camView</string>
+							<string>direcModeWaitConnect</string>
+							<string>direcModeWaitProgress</string>
+							<string>direcModeWaitView</string>
 							<string>mainMenuView</string>
 							<string>progressView</string>
 						</object>
@@ -1906,6 +1980,9 @@
 							<bool key="EncodedWithXMLCoder">YES</bool>
 							<string>MBP_CamListView</string>
 							<string>MBP_CamView</string>
+							<string>UIButton</string>
+							<string>UIActivityIndicatorView</string>
+							<string>UIView</string>
 							<string>MBP_MainMenuView</string>
 							<string>UIView</string>
 						</object>
@@ -1916,6 +1993,9 @@
 							<bool key="EncodedWithXMLCoder">YES</bool>
 							<string>camListView</string>
 							<string>camView</string>
+							<string>direcModeWaitConnect</string>
+							<string>direcModeWaitProgress</string>
+							<string>direcModeWaitView</string>
 							<string>mainMenuView</string>
 							<string>progressView</string>
 						</object>
@@ -1928,6 +2008,18 @@
 							<object class="IBToOneOutletInfo">
 								<string key="name">camView</string>
 								<string key="candidateClassName">MBP_CamView</string>
+							</object>
+							<object class="IBToOneOutletInfo">
+								<string key="name">direcModeWaitConnect</string>
+								<string key="candidateClassName">UIButton</string>
+							</object>
+							<object class="IBToOneOutletInfo">
+								<string key="name">direcModeWaitProgress</string>
+								<string key="candidateClassName">UIActivityIndicatorView</string>
+							</object>
+							<object class="IBToOneOutletInfo">
+								<string key="name">direcModeWaitView</string>
+								<string key="candidateClassName">UIView</string>
 							</object>
 							<object class="IBToOneOutletInfo">
 								<string key="name">mainMenuView</string>

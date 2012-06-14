@@ -58,6 +58,15 @@
      */
 	
 	NSLog(@"Enter background"); 
+	if (viewController.streamer != nil)
+	{
+		[viewController.streamer stopStreaming];
+		//[viewController.streamer release];
+		viewController.streamer = nil;
+	}
+
+	
+	
 	if (viewController.shouldReloadWhenEnterBG == TRUE	)
 	{
 		[viewController dismissModalViewControllerAnimated:NO];
@@ -78,16 +87,18 @@
 		
 	
 		
+		NSLog(@"reload view--"); 
+		//if (viewController.shouldReloadWhenEnterBG == TRUE	)
+		{
+			//Go back to first page 
+			[viewController viewDidLoad];
+		}
+		
 		
 			
 	}
 	
-	if (viewController.streamer != nil)
-	{
-		[viewController.streamer release];
-		viewController.streamer = nil;
-	}
-	
+		
 }
 
 
@@ -96,13 +107,10 @@
      Called as part of  transition from the background to the inactive state: here you can undo many of the changes made on entering the background.
      */
 	
-	NSLog(@"Enter foreground "); 
+	NSLog(@"Enter foreground - do nothing.. "); 
 	
 			
-	//Go back to first page 
-	[viewController viewDidLoad];
-
-	
+		
 }
 
 

@@ -26,6 +26,7 @@
 #define ADD_CAM_BTN 501
 #define SCAN_CAM_BTN 502
 #define LOGOUT_CAM_BTN 503
+#define CAMLIST_BACK_BTN 504
 
 
 @interface MBP_CamListView : UIView {
@@ -38,6 +39,8 @@
 	//an array of channels 1-4 -for easy processing 
 	NSArray * channelViews; 
 	
+	
+	IBOutlet UILabel * usrEmail; 
 }
 
 @property (nonatomic,retain) IBOutlet CamListItemView * channel1; 
@@ -45,6 +48,7 @@
 @property (nonatomic,retain)IBOutlet CamListItemView * channel3; 
 @property (nonatomic,retain)IBOutlet CamListItemView * channel4;
 @property (nonatomic, retain) NSArray * channelViews;
+@property (nonatomic, retain) IBOutlet UILabel * usrEmail; 
 
 - (void) initViews;
 

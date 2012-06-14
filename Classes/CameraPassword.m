@@ -25,9 +25,20 @@
 	
     NSArray *ifs = (id)CNCopySupportedInterfaces();
 
+	
+	if (ifs == nil)
+	{
+		return nil;
+	}
+	
     CFDictionaryRef info = nil;
     NSString * res= nil; 
     for (NSString *ifnam in ifs) {
+		if (ifnam == nil)
+		{
+			NSLog(@"getBSSID: ifnam = nil");
+			continue;
+		}
         info = CNCopyCurrentNetworkInfo((CFStringRef)ifnam);
 
 
@@ -104,30 +115,36 @@
 	return @"Moto-Cam-4601fc";
 #else 
 	
-	
+	CFDictionaryRef info = nil;
+	NSString * res= nil; 
     NSArray *ifs = (id)CNCopySupportedInterfaces();
-	
-    CFDictionaryRef info = nil;
-    NSString * res= nil; 
-    for (NSString *ifnam in ifs) {
-        info = CNCopyCurrentNetworkInfo((CFStringRef)ifnam);
+	if (ifs != nil)
+	{
 		
-		
-        if (CFDictionaryContainsKey(info,kCNNetworkInfoKeySSID) == true)
-        {
-            res = [NSString stringWithFormat:@"%@", CFDictionaryGetValue(info, kCNNetworkInfoKeySSID)];
+		for (NSString *ifnam in ifs) {
+			if (ifnam == nil)
+			{
+				NSLog(@"getSSID: ifnam = nil");
+				continue;
+			}
+			info = CNCopyCurrentNetworkInfo((CFStringRef)ifnam);
 			
-        }
+			
+			if (CFDictionaryContainsKey(info,kCNNetworkInfoKeySSID) == true)
+			{
+				res = [NSString stringWithFormat:@"%@", CFDictionaryGetValue(info, kCNNetworkInfoKeySSID)];
+				
+			}
+			
+			if (info && [info count]) {
+				break;
+			}
+			[info release];
+		}
+		[ifs release];
+		[info autorelease];
 		
-        if (info && [info count]) {
-            break;
-        }
-        [info release];
-    }
-    [ifs release];
-    [info autorelease];
-	
-	
+	}
     return res;
 #endif 
 }

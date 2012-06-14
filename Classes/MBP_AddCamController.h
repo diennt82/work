@@ -20,6 +20,10 @@
 #define STEP_2_NEXT_BTN 101
 #define FINISH_BTN      103
 
+#define	STEP_1_BACK_BTN 104
+#define	STEP_2_BACK_BTN 105
+
+
 #define SEND_CONF_SUCCESS 1
 #define SEND_CONF_ERROR 2
 
@@ -47,6 +51,7 @@
 	ScanForCamera * scanner; 
 	
 	int num_scan_time; 
+	BOOL task_cancelled ; 
 }
 
 @property (nonatomic, retain) IBOutlet UIScrollView * step_1View, * step_2View; 

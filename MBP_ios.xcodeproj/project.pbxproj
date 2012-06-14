@@ -406,7 +406,7 @@
 		97DC555714BAB1E400AA4911 /* large_icon3_1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = large_icon3_1.png; sourceTree = "<group>"; };
 		97DC555814BAB1E400AA4911 /* large_icon5_1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = large_icon5_1.png; sourceTree = "<group>"; };
 		97DC555914BAB1E400AA4911 /* large_icon6_1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = large_icon6_1.png; sourceTree = "<group>"; };
-		97DC55BF14BAFAAD00AA4911 /* MBP_ios.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MBP_ios.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		97DC55BF14BAFAAD00AA4911 /* msc3.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = msc3.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		97DEEA4014308B71008212FF /* AsyncUdpSocket.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AsyncUdpSocket.m; sourceTree = "<group>"; };
 		97DEEA4114308B71008212FF /* AsyncUdpSocket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AsyncUdpSocket.h; sourceTree = "<group>"; };
 		97E3AAD5147E257400A0922A /* iTunesArtWork */ = {isa = PBXFileReference; lastKnownFileType = file; path = iTunesArtWork; sourceTree = "<group>"; };
@@ -554,7 +554,7 @@
 		19C28FACFE9D520D11CA2CBB /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				97DC55BF14BAFAAD00AA4911 /* MBP_ios.app */,
+				97DC55BF14BAFAAD00AA4911 /* msc3.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -746,7 +746,7 @@
 			);
 			name = MSC3;
 			productName = MBP_ios;
-			productReference = 97DC55BF14BAFAAD00AA4911 /* MBP_ios.app */;
+			productReference = 97DC55BF14BAFAAD00AA4911 /* msc3.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
