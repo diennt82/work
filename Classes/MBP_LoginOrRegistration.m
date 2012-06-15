@@ -14,6 +14,11 @@
 @synthesize userName, password, remember_pass_sw;
 @synthesize progressLabel, progressView;
 
+@synthesize regUserName;
+@synthesize regUserPass;
+@synthesize regUserEmail; 
+@synthesize regProgress, regComplete, registraionView; 
+
 // The designated initializer.  Override if you create the controller programmatically and want to perform customization that is not appropriate for viewDidLoad.
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil withConnDelegate:(id<ConnectionMethodDelegate>) d;
 {
@@ -36,7 +41,8 @@
 	NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
 	
 	
-	NSString * old_usr = (NSString *) [userDefaults objectForKey:@"PortalUsername"];		NSString * old_pass = (NSString *) [userDefaults objectForKey:@"PortalPassword"];
+	NSString * old_usr = (NSString *) [userDefaults objectForKey:@"PortalUsername"];	
+	NSString * old_pass = (NSString *) [userDefaults objectForKey:@"PortalPassword"];
 	
 	if (old_usr != nil)
 	{
@@ -100,7 +106,15 @@
 	[userName release];
 	[password release];
 	[remember_pass_sw release];
-	
+
+	[progressView release];
+	[progressLabel release];
+	[regUserName release];
+	[regUserPass release];
+	[regUserEmail release]; 
+	[regProgress release];
+	[regComplete release];
+	[registraionView release];
 }
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField
@@ -153,13 +167,81 @@
 		}
 		case CREATE_NEW_BUTTON_TAG:
 		{ 
-
+			[[NSBundle mainBundle] loadNibNamed:@"MBP_LoginOrRegistration_1" 
+										  owner:self 
+										options:nil];
+			[self.view addSubview:registraionView];
+			/*[self.view addSubview:regUserName];
+			[self.view addSubview:regUserPass];
+			[self.view addSubview:regUserEmail];
+			[self.view addSubview:regProgress];
+			[self.view addSubview:regComplete];
+			*/
 			break; 
 		}
 		case BACK_BUTTON_TAG:
 		{
-			
 			[delegate sendStatus:7];
+			break;
+		}
+		case REG_CANCEL_BUTTON_TAG:
+		{
+			//Back to login screen
+			[self.registraionView removeFromSuperview]; 
+			break;
+		}
+		case REG_CREATE_BUTTON_TAG:
+		{
+			
+			NSString * tmp_user_id ; 
+			
+			
+			
+			tmp_user_id = self.regUserName.text;
+			tmp_pass_str = self.regUserPass.text; 
+			tmp_user_str = self.regUserEmail.text;
+			
+			NSRange validRange = [tmp_user_str rangeOfString:@"@"];
+			
+			
+			if ([tmp_user_id length] == 0 || [tmp_pass_str length] <3)
+			{
+				//ERROR condition
+				UIAlertView *alert = [[UIAlertView alloc]
+									  initWithTitle:@"Error"
+									  message:@"Username can't be empty and password has to be at lease 3 characters" 
+									  delegate:self
+									  cancelButtonTitle:@"OK"
+									  otherButtonTitles:nil];
+				[alert show];
+				[alert release];
+				return;
+			}
+			else if ( validRange.location == NSNotFound)
+			{
+				UIAlertView *alert = [[UIAlertView alloc]
+									  initWithTitle:@"Error"
+									  message:@"Email entered is not valid. A valid email format is of the form: someone@somedomain.com" 
+									  delegate:self
+									  cancelButtonTitle:@"OK"
+									  otherButtonTitles:nil];
+				[alert show];
+				[alert release];
+				return;
+			}
+			
+			
+			NSLog(@"Start registration"); 
+			
+			BMS_Communication * bms_comm; 
+			bms_comm = [[BMS_Communication alloc] initWithObject:self
+														Selector:@selector(regSuccessWithResponse:) 
+													FailSelector:@selector(regFailedWithError:) 
+													   ServerErr:@selector(regFailedServerUnreachable)];
+			
+			[bms_comm BMS_registerWithUserId:tmp_user_id AndPass:tmp_pass_str AndEmail:tmp_user_str];
+			
+			self.regProgress.hidden = NO;
 			break;
 		}
 		default:
@@ -171,8 +253,44 @@
 #pragma mark Login Callbacks
 - (void) loginSuccessWithResponse:(NSData*) responseData
 {
+	
+	
+	NSString *response = [[[NSString alloc] initWithData:responseData encoding: NSASCIIStringEncoding] autorelease];
 
-	NSLog(@"login success response: %@",tmp_user_str );
+	
+	NSLog(@"login success response: %@",response );
+	
+	NSRange isEmail = [tmp_user_str rangeOfString:@"@"];
+	if (isEmail.location != NSNotFound)
+	{
+		//Dont need to extract from response data 
+		
+	}
+	else if ( [response hasPrefix:@"Email="])
+	{
+		tmp_user_str = [response substringFromIndex:[@"Email=" length]]; 
+		tmp_user_str = [tmp_user_str stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+		NSLog(@"extracted usr : %@", tmp_user_str);
+	}
+	else 
+	{
+		//ERROR condition
+		self.progressView.hidden = YES;
+		
+		UIAlertView *alert = [[UIAlertView alloc]
+							  initWithTitle:@"Login Error"
+							  message:@"Server response invalid, please try again!"
+							  delegate:self
+							  cancelButtonTitle:@"OK"
+							  otherButtonTitles:nil];
+		[alert show];
+		[alert release];
+		return;
+		
+	}
+
+	
+	NSLog(@"before saving usr : %@", tmp_user_str);
 	
 	//Store user/pass for later use
 	NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
@@ -224,5 +342,67 @@
 	[alert release];
 	
 }
+
+
+
+
+
+- (void) regSuccessWithResponse:(NSData*) responseData
+{
+	
+	NSString * response = [NSString stringWithCharacters:[responseData bytes] length:[responseData length]]; 
+	
+	NSLog(@"register success : %@", response );
+	
+	//Store user/pass for later use
+	NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+	[userDefaults setObject:tmp_user_str forKey:@"PortalUsername"];
+	[userDefaults setObject:tmp_pass_str forKey:@"PortalPassword"];
+	
+	
+	//Try to LOGIN - go back to ioController and re-login--  
+	[delegate sendStatus:2];
+	
+}
+
+- (void) regFailedWithError:(NSHTTPURLResponse*) error_response
+{
+	NSLog(@"register failed with error code:%d", [error_response statusCode]);
+	
+	self.regProgress.hidden = YES;
+	
+	//ERROR condition
+	UIAlertView *alert = [[UIAlertView alloc]
+						  initWithTitle:@"Registration Error"
+						  message:[NSString stringWithFormat:@"Server error code: %d", [error_response statusCode]] 
+						  delegate:self
+						  cancelButtonTitle:@"OK"
+						  otherButtonTitles:nil];
+	[alert show];
+	[alert release];
+	return;
+	
+}
+- (void) regFailedServerUnreachable
+{
+	NSLog(@"register failed : server unreachable");
+	
+	self.regProgress.hidden = YES;
+	//ERROR condition
+	UIAlertView *alert = [[UIAlertView alloc]
+						  initWithTitle:@"Registration Error"
+						  message:@"BMS Server is unreachable. Please goto WIFI setting to ensure iOS device is connected to router/3G network"
+						  delegate:self
+						  cancelButtonTitle:@"OK"
+						  otherButtonTitles:nil];
+	[alert show];
+	[alert release];
+	
+}
+
+
+
+
+
 
 @end

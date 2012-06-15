@@ -74,13 +74,13 @@
 			
 			[delegate sendStatus:1];
 
-			[self dismissModalViewControllerAnimated:NO	];
+			//[self dismissModalViewControllerAnimated:NO	];
 			break;
 		}
 		case ROUTER_MODE_BTN_TAG:
 		{ 
 			[delegate sendStatus:2];
-			[self dismissModalViewControllerAnimated:NO];
+			//[self dismissModalViewControllerAnimated:NO];
 			break; 
 		}
 		case STOP_AND_EXIT_BTN_TAG:

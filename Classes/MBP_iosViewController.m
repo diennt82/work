@@ -2903,11 +2903,11 @@
 {
 	//TODO: #define all this constants
 	switch (method) {
-		case 1:
+		case 1://GOTO Direct mode
 		{
-			//GOTO Direct mode
-			NSLog(@"GO to direct mode");
 			
+			NSLog(@"GO to direct mode");
+			[self dismissModalViewControllerAnimated:NO	];
 			self.shouldReloadWhenEnterBG = FALSE;
 			[self.view addSubview:self.direcModeWaitView];
 			[self.direcModeWaitProgress startAnimating]; 
@@ -2921,9 +2921,9 @@
 			//[self startDirectConnect];
 			break;
 		}
-		case 2: 
-			//GOTO ROUTER mode
+		case 2: //GOTO ROUTER mode
 		{
+			[self dismissModalViewControllerAnimated:NO	];
 			NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
 			[userDefaults setBool:TRUE forKey:_AutoLogin];
 			
@@ -2933,7 +2933,7 @@
 										   selector:@selector(show_login_or_reg:)
 										   userInfo:nil
 											repeats:NO];
-						break;
+			break;
 		}
 		case 3:
 			//Back from login- login success 
@@ -2989,6 +2989,20 @@
 			[NSTimer scheduledTimerWithTimeInterval:0.01
 											 target:self
 										   selector:@selector(wakeup_display_main_cam:)
+										   userInfo:nil
+											repeats:NO];
+			break;
+		}
+		case 8 : //back from login -failed
+		{
+			[self dismissModalViewControllerAnimated:NO	];
+			NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+			[userDefaults setBool:FALSE forKey:_AutoLogin];
+			
+			
+			[NSTimer scheduledTimerWithTimeInterval:0.10
+											 target:self
+										   selector:@selector(show_login_or_reg:)
 										   userInfo:nil
 											repeats:NO];
 			break;

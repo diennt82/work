@@ -184,6 +184,7 @@
 		97F0F04C143C0CA00076B749 /* CamChannel.m in Sources */ = {isa = PBXBuildFile; fileRef = 97F0F04B143C0CA00076B749 /* CamChannel.m */; };
 		97F0F168143C45FA0076B749 /* MBP_Streamer.m in Sources */ = {isa = PBXBuildFile; fileRef = 97F0F167143C45FA0076B749 /* MBP_Streamer.m */; };
 		97F6FFD714C6ACF100317249 /* large_icon_info.png in Resources */ = {isa = PBXBuildFile; fileRef = 97F6FFD614C6ACF100317249 /* large_icon_info.png */; };
+		97FCE505158AC7DC00B453A6 /* MBP_LoginOrRegistration_1.xib in Resources */ = {isa = PBXBuildFile; fileRef = 97FCE504158AC7DC00B453A6 /* MBP_LoginOrRegistration_1.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -416,6 +417,7 @@
 		97F0F166143C45FA0076B749 /* MBP_Streamer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MBP_Streamer.h; sourceTree = "<group>"; };
 		97F0F167143C45FA0076B749 /* MBP_Streamer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MBP_Streamer.m; sourceTree = "<group>"; };
 		97F6FFD614C6ACF100317249 /* large_icon_info.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = large_icon_info.png; sourceTree = "<group>"; };
+		97FCE504158AC7DC00B453A6 /* MBP_LoginOrRegistration_1.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MBP_LoginOrRegistration_1.xib; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -517,9 +519,6 @@
 				97987CD515468C2E0066C49B /* MBP_FirstPage.h */,
 				97987CD615468C2E0066C49B /* MBP_FirstPage.m */,
 				97987CAC154681C80066C49B /* MBP_FirstPage.xib */,
-				97987DEF1546A1630066C49B /* MBP_LoginOrRegistration.h */,
-				97987DF01546A1630066C49B /* MBP_LoginOrRegistration.m */,
-				97987DF11546A1630066C49B /* MBP_LoginOrRegistration.xib */,
 				97987E401546AF2C0066C49B /* UserAccount.h */,
 				97987E411546AF2C0066C49B /* UserAccount.m */,
 				97C49AAE154784F4008B7D03 /* SetupData.h */,
@@ -547,6 +546,10 @@
 				9719EC5B155C9F30005419FC /* MBP_MenuViewController.xib */,
 				97987E441546B04C0066C49B /* BMS_Communication.h */,
 				97987E451546B04C0066C49B /* BMS_Communication.m */,
+				97987DEF1546A1630066C49B /* MBP_LoginOrRegistration.h */,
+				97987DF01546A1630066C49B /* MBP_LoginOrRegistration.m */,
+				97987DF11546A1630066C49B /* MBP_LoginOrRegistration.xib */,
+				97FCE504158AC7DC00B453A6 /* MBP_LoginOrRegistration_1.xib */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -905,6 +908,7 @@
 				9719ED9A155CDC61005419FC /* cameraMenuDirect.plist in Resources */,
 				9719EDA2155CDF4C005419FC /* cameraMenuRouter.plist in Resources */,
 				97176B16156CFAE000F2A76E /* homepage.png in Resources */,
+				97FCE505158AC7DC00B453A6 /* MBP_LoginOrRegistration_1.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

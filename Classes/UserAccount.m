@@ -67,6 +67,8 @@
 						  otherButtonTitles:nil];
 	[alert show];
 	[alert release];
+	
+	[delegate sendStatus:8];
 	return;
 }	
 - (void)getCamListServerUnreachable
@@ -82,6 +84,8 @@
 						  otherButtonTitles:nil];
 	[alert show];
 	[alert release];
+	
+	[delegate sendStatus:8];
 }
 
 #define CAM_LIST_ENTRY_NUM_TOKEN 4

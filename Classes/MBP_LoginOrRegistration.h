@@ -20,6 +20,11 @@
 #define BACK_BUTTON_TAG 205
 
 
+#define REG_USER_NAME_TAG 206
+#define REG_USER_PASS_TAG 207
+#define REG_USER_EMAIL_TAG 208
+#define REG_CANCEL_BUTTON_TAG 209
+#define REG_CREATE_BUTTON_TAG 210
 
 #define _AutoLogin @"shouldAutoLoginIfPossible"
 
@@ -34,6 +39,17 @@
 	IBOutlet UILabel * progressLabel; 
 	
 	
+	IBOutlet UIView * registraionView; 
+	IBOutlet UITextField * regUserName;
+	IBOutlet UITextField * regUserPass;
+	IBOutlet UITextField * regUserEmail; 
+	IBOutlet UIView * regProgress; 
+	IBOutlet UIView * regComplete; 
+	
+	
+	
+	
+	
 	NSString * tmp_user_str; 
 	NSString * tmp_pass_str; 
 	
@@ -41,12 +57,19 @@
 
 	
 }
+
 @property (nonatomic,retain) IBOutlet UITextField * userName; 
 @property (nonatomic,retain) IBOutlet UITextField * password; 
 @property (nonatomic,retain) IBOutlet UISwitch * remember_pass_sw; 
 
 @property (nonatomic,retain) IBOutlet UIView * progressView; 
 @property (nonatomic,retain) IBOutlet UILabel * progressLabel; 
+
+
+@property (nonatomic,retain) IBOutlet UITextField * regUserName;
+@property (nonatomic,retain) IBOutlet UITextField * regUserPass;
+@property (nonatomic,retain) IBOutlet UITextField * regUserEmail; 
+@property (nonatomic,retain) IBOutlet UIView * regProgress, *regComplete, *registraionView; 
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil withConnDelegate:(id<ConnectionMethodDelegate>) delegate;
 

@@ -61,7 +61,40 @@
 	
 }
 
+- (BOOL)BMS_registerWithUserId:(NSString*) user_id AndPass:(NSString*) user_pass AndEmail:(NSString *) user_email
+{
+	NSString * http_cmd = [NSString stringWithFormat:@"%@%@",BMS_PHONESERVICE, BMS_CMD_PART];
+	http_cmd = [http_cmd stringByAppendingFormat:@"%@", USR_REG_CMD];
+	http_cmd = [http_cmd stringByAppendingFormat:@"%@%@", USR_REG_PARAM_1, user_email];
+	http_cmd = [http_cmd stringByAppendingFormat:@"%@%@", USR_REG_PARAM_2, user_pass];
+	http_cmd = [http_cmd stringByAppendingFormat:@"%@%@", USR_REG_PARAM_3, user_id];
 
+	
+	NSLog(@"reg query:%@", http_cmd);
+	
+	
+	if (selIfSuccess == nil ||selIfFailure == nil|| selIfServerFail ==nil)
+	{
+		NSLog(@"ERR: selector is not set");
+		return FALSE;
+	}
+	
+	@synchronized(self)
+	{
+		
+		NSMutableURLRequest *theRequest=[NSMutableURLRequest requestWithURL:[NSURL URLWithString:http_cmd]
+																cachePolicy:NSURLRequestUseProtocolCachePolicy
+															timeoutInterval:BMS_DEFAULT_TIME_OUT];
+		
+		url_connection = [[NSURLConnection alloc] initWithRequest:theRequest 
+														 delegate:self
+												 startImmediately:TRUE];
+		
+		
+	}
+	
+	return TRUE;
+}
 
 - (BOOL)BMS_getCameraListWithUser:(NSString *) user_email AndPass:(NSString*) user_pass;
 {
@@ -306,7 +339,7 @@
 	if (responseData != nil)
 	{
 		//NSString *txt = [[[NSString alloc] initWithData:responseData encoding: NSASCIIStringEncoding] autorelease];
-//		
+
 		
 		
 		[obj performSelector:selIfSuccess withObject:responseData];

@@ -22,6 +22,12 @@
 #define USR_LOGIN_PARAM_5 @"&pass_len="
 
 
+#define USR_REG_CMD @"user_registration"
+#define USR_REG_PARAM_1 @"&email="
+#define USR_REG_PARAM_2 @"&pass="
+#define USR_REG_PARAM_3 @"&username="
+
+
 #define GET_CAM_LIST_CMD @"camera_list"
 #define GET_CAM_LIST_PARAM_1 @"&email="
 
@@ -62,6 +68,8 @@
 
 
 - (BOOL)BMS_loginWithUser:(NSString*) user_email AndPass:(NSString*) user_pass;
+- (BOOL)BMS_registerWithUserId:(NSString*) user_id AndPass:(NSString*) user_pass AndEmail:(NSString *) usr_email;
+
 - (BOOL)BMS_getCameraListWithUser:(NSString *) user_email AndPass:(NSString*) user_pass;
 
 - (BOOL)BMS_addCamWithUser:(NSString*) user_email AndPass:(NSString*) user_pass macAddr:(NSString *) mac camName:(NSString*) name;
