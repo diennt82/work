@@ -40,7 +40,7 @@
 	//load user/pass  
 	NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
 	
-	
+	//can be user email or user name here --  
 	NSString * old_usr = (NSString *) [userDefaults objectForKey:@"PortalUsername"];	
 	NSString * old_pass = (NSString *) [userDefaults objectForKey:@"PortalPassword"];
 	
@@ -193,18 +193,14 @@
 		case REG_CREATE_BUTTON_TAG:
 		{
 			
-			NSString * tmp_user_id ; 
-			
-			
-			
-			tmp_user_id = self.regUserName.text;
+			tmp_user_str  = self.regUserName.text;
 			tmp_pass_str = self.regUserPass.text; 
-			tmp_user_str = self.regUserEmail.text;
+			tmp_user_email= self.regUserEmail.text;
 			
-			NSRange validRange = [tmp_user_str rangeOfString:@"@"];
+			NSRange validRange = [tmp_user_email rangeOfString:@"@"];
 			
 			
-			if ([tmp_user_id length] == 0 || [tmp_pass_str length] <3)
+			if ([tmp_user_str length] == 0 || [tmp_pass_str length] <3)
 			{
 				//ERROR condition
 				UIAlertView *alert = [[UIAlertView alloc]
@@ -239,7 +235,7 @@
 													FailSelector:@selector(regFailedWithError:) 
 													   ServerErr:@selector(regFailedServerUnreachable)];
 			
-			[bms_comm BMS_registerWithUserId:tmp_user_id AndPass:tmp_pass_str AndEmail:tmp_user_str];
+			[bms_comm BMS_registerWithUserId:tmp_user_str AndPass:tmp_pass_str AndEmail:tmp_user_email];
 			
 			self.regProgress.hidden = NO;
 			break;
@@ -256,7 +252,8 @@
 	
 	
 	NSString *response = [[[NSString alloc] initWithData:responseData encoding: NSASCIIStringEncoding] autorelease];
-
+	
+	
 	
 	NSLog(@"login success response: %@",response );
 	
@@ -264,13 +261,14 @@
 	if (isEmail.location != NSNotFound)
 	{
 		//Dont need to extract from response data 
+		tmp_user_email = tmp_user_str;
 		
 	}
 	else if ( [response hasPrefix:@"Email="])
 	{
-		tmp_user_str = [response substringFromIndex:[@"Email=" length]]; 
-		tmp_user_str = [tmp_user_str stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
-		NSLog(@"extracted usr : %@", tmp_user_str);
+		tmp_user_email = [response substringFromIndex:[@"Email=" length]]; 
+		tmp_user_email = [tmp_user_email stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+		NSLog(@"extracted email  : %@", tmp_user_email);
 	}
 	else 
 	{
@@ -290,18 +288,19 @@
 	}
 
 	
-	NSLog(@"before saving usr : %@", tmp_user_str);
+	NSLog(@"before saving usr : %@ , %@", tmp_user_str, tmp_user_email);
 	
 	//Store user/pass for later use
 	NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+	[userDefaults setObject:tmp_user_email forKey:@"PortalUseremail"];
 	[userDefaults setObject:tmp_user_str forKey:@"PortalUsername"];
 	[userDefaults setObject:tmp_pass_str forKey:@"PortalPassword"];
-	
+	[userDefaults synchronize];
 	
 	//MOVE on now .. 
 
 	UserAccount * account ; 
-	account = [[UserAccount alloc] initWithUser:tmp_user_str
+	account = [[UserAccount alloc] initWithUser:tmp_user_email
 										AndPass:tmp_pass_str
 								   WithListener: delegate];
 	[account query_camera_list];
@@ -334,7 +333,7 @@
 	//ERROR condition
 	UIAlertView *alert = [[UIAlertView alloc]
 						  initWithTitle:@"Login Error"
-						  message:@"BMS Server is unreachable. Please goto WIFI setting to ensure iOS device is connected to router/3G network"
+						  message:@"BMS Server is unreachable. Please go to WIFI setting to ensure iOS device is connected to WiFi network or turn on 3G data network"
 						  delegate:self
 						  cancelButtonTitle:@"OK"
 						  otherButtonTitles:nil];
@@ -356,9 +355,12 @@
 	
 	//Store user/pass for later use
 	NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+
+	[userDefaults setObject:tmp_user_email forKey:@"PortalUseremail"];
 	[userDefaults setObject:tmp_user_str forKey:@"PortalUsername"];
 	[userDefaults setObject:tmp_pass_str forKey:@"PortalPassword"];
 	
+	[userDefaults synchronize];
 	
 	//Try to LOGIN - go back to ioController and re-login--  
 	[delegate sendStatus:2];

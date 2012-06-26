@@ -1636,7 +1636,8 @@
 {
 	NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
 	[userDefaults setInteger:vq forKey:@"int_VideoQuality"];
-
+	[userDefaults synchronize];
+	
 	[self updateVQ];
 	[self.cameraMenu reloadData];
 	
@@ -1646,7 +1647,8 @@
 	
 	NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
 	[userDefaults setInteger:unit forKey:_tempUnit];
-
+	[userDefaults synchronize];
+	
 	[self updateTemperatureConversion];
 	[self.cameraMenu reloadData];
 	

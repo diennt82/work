@@ -66,6 +66,8 @@
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil withConnDelegate:(id<ConnectionMethodDelegate>) delegate;
 
 - (IBAction) handleButtonPressed:(id) sender;
+-(void) setupCompleted;
+- (void)  setupFailed;
 
 - (void) addCamSuccessWithResponse:(NSData*) responseData;
 - (void) addCamFailedWithError:(NSHTTPURLResponse*) error_response;
@@ -73,9 +75,11 @@
 -(void) sendStatus:(int) status;
 -(void ) extractMasterKey:(NSString*) raw;
 
+
+
+
 - (void) checkScanResult: (NSTimer * )expired;
 - (void) wait_for_camera_to_reboot:(NSTimer *)exp;
--(void) setupCompleted;
-- (void)  setupFailed;
+- (void) goToReLogin: (NSTimer *) expired;
 
 @end

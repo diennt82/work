@@ -52,6 +52,7 @@
 	
 	NSString * tmp_user_str; 
 	NSString * tmp_pass_str; 
+	NSString * tmp_user_email  ; 
 	
 	id <ConnectionMethodDelegate> delegate; 
 

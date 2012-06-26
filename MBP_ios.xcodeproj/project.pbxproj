@@ -493,9 +493,6 @@
 				97C061CC143AEDA30016286D /* MBP_MainSetupViewController.xib */,
 				97B8F804143ADCC700924E84 /* MBP_MainSetupViewController.h */,
 				97B8F805143ADCC700924E84 /* MBP_MainSetupViewController.m */,
-				97C0624F143AF5C80016286D /* MBP_DeviceConfigureViewController.xib */,
-				97C06250143AF5C80016286D /* MBP_DeviceConfigureViewController.h */,
-				97C06251143AF5C80016286D /* MBP_DeviceConfigureViewController.m */,
 				97987D2C154698100066C49B /* ConnectionMethodDelegate.h */,
 				97C06267143AF6AC0016286D /* MBP_DeviceScanViewController.h */,
 				97C06268143AF6AC0016286D /* MBP_DeviceScanViewController.m */,
@@ -529,16 +526,8 @@
 				97C49B331547B410008B7D03 /* MBP_CamListView.xib */,
 				97C49B801547BD52008B7D03 /* MBP_CamListView.h */,
 				97C49B811547BD52008B7D03 /* MBP_CamListView.m */,
-				978E9A7E1551313000B59E90 /* MBP_AddCamController.h */,
-				978E9A7F1551313000B59E90 /* MBP_AddCamController.m */,
-				9745CDA71553891C00800CA6 /* MBP_AddCamController_2.xib */,
-				978E9A801551313000B59E90 /* MBP_AddCamController.xib */,
-				9745CF611553FD5F00800CA6 /* MBP_AddCamController_4.xib */,
-				9745CF151553F01500800CA6 /* MBP_AddCamController_3.xib */,
 				9745CE5B1553CF9200800CA6 /* ScanForCamera.h */,
 				9745CE5C1553CF9200800CA6 /* ScanForCamera.m */,
-				28D7ACF60DDB3853001CB0EB /* MBP_iosViewController.h */,
-				28D7ACF70DDB3853001CB0EB /* MBP_iosViewController.m */,
 				97423427155BA503007DCBCD /* AudioOutStreamer.h */,
 				97423428155BA503007DCBCD /* AudioOutStreamer.m */,
 				9719EC59155C9F30005419FC /* MBP_MenuViewController.h */,
@@ -550,6 +539,17 @@
 				97987DF01546A1630066C49B /* MBP_LoginOrRegistration.m */,
 				97987DF11546A1630066C49B /* MBP_LoginOrRegistration.xib */,
 				97FCE504158AC7DC00B453A6 /* MBP_LoginOrRegistration_1.xib */,
+				28D7ACF60DDB3853001CB0EB /* MBP_iosViewController.h */,
+				28D7ACF70DDB3853001CB0EB /* MBP_iosViewController.m */,
+				97C0624F143AF5C80016286D /* MBP_DeviceConfigureViewController.xib */,
+				97C06250143AF5C80016286D /* MBP_DeviceConfigureViewController.h */,
+				97C06251143AF5C80016286D /* MBP_DeviceConfigureViewController.m */,
+				978E9A7E1551313000B59E90 /* MBP_AddCamController.h */,
+				978E9A7F1551313000B59E90 /* MBP_AddCamController.m */,
+				9745CDA71553891C00800CA6 /* MBP_AddCamController_2.xib */,
+				978E9A801551313000B59E90 /* MBP_AddCamController.xib */,
+				9745CF611553FD5F00800CA6 /* MBP_AddCamController_4.xib */,
+				9745CF151553F01500800CA6 /* MBP_AddCamController_3.xib */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -1030,7 +1030,7 @@
 				GCC_PREFIX_HEADER = MBP_ios_Prefix.pch;
 				INFOPLIST_FILE = "MBP_ios-Info.plist";
 				PRODUCT_NAME = msc3;
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "B422708C-31C3-47F0-B542-76B465F9BFFB";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "747F8C0F-1092-4619-8548-2B88987BDA08";
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Distribute;

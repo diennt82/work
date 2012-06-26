@@ -105,6 +105,14 @@
 								options:nil];
 	
 	[self.view addSubview:finishView];
+	
+	
+	// wait for about 2 secs then move on 
+	[NSTimer scheduledTimerWithTimeInterval: 2 // 
+									 target:self
+								   selector:@selector(goToReLogin:)
+								   userInfo:nil
+									repeats:NO];
 }
 
 
@@ -118,7 +126,7 @@
 	NSString * mac = [Util strip_colon_fr_mac:self.cameraMac];
 	
 	NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-	NSString * user_email = (NSString *) [userDefaults objectForKey:@"PortalUsername"];
+	NSString * user_email = (NSString *) [userDefaults objectForKey:@"PortalUseremail"];
 	NSString * user_pass = (NSString *) [userDefaults objectForKey:@"PortalPassword"];
 	
 	BMS_Communication * bms_comm; 
@@ -452,6 +460,13 @@
 	}
 }
 
+- (void) goToReLogin: (NSTimer *) expired
+{
+	
+	[self dismissModalViewControllerAnimated:NO];
+	[delegate sendStatus: 4];
+	
+}
 #pragma mark Handle button press
 
 - (IBAction) handleButtonPressed:(id) sender
@@ -494,7 +509,7 @@
 													   ServerErr:@selector(addCamFailedServerUnreachable)];
 			
 			NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-			NSString * user_email = (NSString *) [userDefaults objectForKey:@"PortalUsername"];
+			NSString * user_email = (NSString *) [userDefaults objectForKey:@"PortalUseremail"];
 			NSString * user_pass = (NSString *) [userDefaults objectForKey:@"PortalPassword"];
 			
 			
@@ -510,7 +525,7 @@
 			
 			break;
 		}
-		case FINISH_BTN:
+		case FINISH_BTN: ///// 20120618: not used -- 
 			//Go back 
 			
 			[self dismissModalViewControllerAnimated:NO];

@@ -47,12 +47,12 @@
 	/* populate the array here*/
 	self.channelViews = [NSArray arrayWithObjects:channel1, channel2, channel3, channel4, nil];
 	
-	//show the User email
+	//show the User id on status bar
 	NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-	NSString * userEmail = (NSString *) [userDefaults objectForKey:@"PortalUsername"];
-	if (userEmail != nil)
+	NSString * userName = (NSString *) [userDefaults objectForKey:@"PortalUsername"];
+	if (userName != nil)
 	{
-		[self.usrEmail setText:userEmail];
+		[self.usrEmail setText:userName];
 	}
 }
 

@@ -125,15 +125,32 @@
 
 - (void)wakeup_display_main_cam:(NSTimer*) timer_exp
 {
-	
+
+#if 0 //// Dont' show this page any more - go directly to login 
 	MBP_FirstPage * firstPage;
 	firstPage = [[MBP_FirstPage alloc] initWithNibName:@"MBP_FirstPage"
 												bundle:nil
 									  withConnDelegate:self];
 	
 	[self presentModalViewController:firstPage animated:YES];
-
+#endif 
+	
+	NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+	[userDefaults setBool:TRUE forKey:_AutoLogin];
+	
+	[userDefaults synchronize];
+	
+	[NSTimer scheduledTimerWithTimeInterval:0.10
+									 target:self
+								   selector:@selector(show_login_or_reg:)
+								   userInfo:nil
+									repeats:NO];
+	
+	
 }
+
+
+
 
 -(void) waitForDirectCamera:(NSTimer *) exp
 {
@@ -601,6 +618,130 @@
 	
 }
 
+
+#pragma mark -
+#pragma mark ConnectionMethodDelegate - Handle navigation 
+
+/**** Main program switching point is here *****/ 
+- (void)sendStatus:(int) method
+{
+	//TODO: #define all this constants
+	switch (method) {
+		case 1://GOTO Direct mode
+		{
+			
+			NSLog(@"GO to direct mode");
+			[self dismissModalViewControllerAnimated:NO	];
+			self.shouldReloadWhenEnterBG = FALSE;
+			[self.view addSubview:self.direcModeWaitView];
+			[self.direcModeWaitProgress startAnimating]; 
+			self.direcModeWaitConnect.hidden = YES;
+			
+			[NSTimer scheduledTimerWithTimeInterval:3.0
+											 target:self
+										   selector:@selector(waitForDirectCamera:)
+										   userInfo:nil
+											repeats:NO];
+			//[self startDirectConnect];
+			break;
+		}
+		case 2: //GOTO ROUTER mode
+		{
+			[self dismissModalViewControllerAnimated:NO	];
+			NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+			[userDefaults setBool:TRUE forKey:_AutoLogin];
+			[userDefaults synchronize];
+			
+			[NSTimer scheduledTimerWithTimeInterval:0.10
+											 target:self
+										   selector:@selector(show_login_or_reg:)
+										   userInfo:nil
+											repeats:NO];
+			break;
+		}
+		case 3:
+			//Back from login- login success 
+			[self dismissModalViewControllerAnimated:NO];
+			self.progressView.hidden = NO;
+			[self scan_for_devices];
+			break; 
+		case 4:
+			NSLog(@" back from adding cam. relogin -- to get the new cam data");
+			self.shouldReloadWhenEnterBG = TRUE;
+			NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+			[userDefaults setBool:TRUE forKey:_AutoLogin];
+			[userDefaults synchronize];
+			
+			[NSTimer scheduledTimerWithTimeInterval:0.01
+											 target:self
+										   selector:@selector(show_login_or_reg:)
+										   userInfo:nil
+											repeats:NO];
+			
+			break; 
+		case 5: //Just remove camera, currently in CameraMenu page 
+		{
+			NSLog(@"remove cam done");
+			[self dismissModalViewControllerAnimated:NO];
+			
+			NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+			[userDefaults setBool:TRUE forKey:_AutoLogin];
+			[userDefaults synchronize];
+			[NSTimer scheduledTimerWithTimeInterval:0.01
+											 target:self
+										   selector:@selector(show_login_or_reg:)
+										   userInfo:nil
+											repeats:NO];
+			
+			break;
+		}
+		case  6:
+		{
+			NSLog(@"Back from menu");
+			[self dismissModalViewControllerAnimated:NO];
+			[self.streamer startStreaming];
+			
+			
+			break;
+		}
+		case  7:
+		{
+			NSLog(@"Back from login - display first page ");
+			[self dismissModalViewControllerAnimated:NO];
+			
+			
+			//go Back to main menu
+			[NSTimer scheduledTimerWithTimeInterval:0.01
+											 target:self
+										   selector:@selector(wakeup_display_main_cam:)
+										   userInfo:nil
+											repeats:NO];
+			break;
+		}
+		case 8 : //back from login -failed
+		{
+			[self dismissModalViewControllerAnimated:NO	];
+			NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+			[userDefaults setBool:FALSE forKey:_AutoLogin];
+			[userDefaults synchronize];
+			
+			[NSTimer scheduledTimerWithTimeInterval:0.10
+											 target:self
+										   selector:@selector(show_login_or_reg:)
+										   userInfo:nil
+											repeats:NO];
+			break;
+		}
+		default:
+			break;
+	}
+	
+}
+
+
+
+
+
 #pragma mark -
 #pragma mark Button Handlers
 
@@ -995,7 +1136,7 @@
 		{
 			NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
 			[userDefaults setBool:FALSE forKey:_AutoLogin];
-			
+			[userDefaults synchronize];
 			
 			[NSTimer scheduledTimerWithTimeInterval:0.10
 											 target:self
@@ -1363,11 +1504,11 @@
 	[userDefaults setBool:TRUE forKey:_is_Loggedin];
 	
 	
-	NSString * old_usr = (NSString *) [userDefaults objectForKey:@"PortalUsername"];
+	NSString * old_usr_email = (NSString *) [userDefaults objectForKey:@"PortalUseremail"];
 	NSString * old_pass = (NSString *) [userDefaults objectForKey:@"PortalPassword"];
 
 	
-	[userDefaults setObject:old_usr forKey:_UserName];	
+	[userDefaults setObject:old_usr_email forKey:_UserName];	
 	[userDefaults setObject:old_pass forKey:_UserPass];	
 
 	[userDefaults setBool:ch.profile.isInLocal forKey:_DeviceInLocal];
@@ -1375,6 +1516,7 @@
 	[userDefaults setObject:ip forKey:_DeviceIp];
 	[userDefaults setObject:ch.profile.mac_address forKey:_DeviceMac];
 	[userDefaults setObject:ch.profile.name forKey:_DeviceName];	
+	[userDefaults synchronize]; 
 
 }
 
@@ -1535,7 +1677,7 @@
 	[userDefaults setObject:mac forKey:_DeviceMac];
 	[userDefaults setObject:defaultName forKey:_DeviceName];	
 	
-	
+	[userDefaults synchronize];
 }
 
 
@@ -2895,123 +3037,6 @@
 	
 }
 
-#pragma mark -
-#pragma mark ConnectionMethodDelegate
-
-/**** Main program entry point is here *****/ 
-- (void)sendStatus:(int) method
-{
-	//TODO: #define all this constants
-	switch (method) {
-		case 1://GOTO Direct mode
-		{
-			
-			NSLog(@"GO to direct mode");
-			[self dismissModalViewControllerAnimated:NO	];
-			self.shouldReloadWhenEnterBG = FALSE;
-			[self.view addSubview:self.direcModeWaitView];
-			[self.direcModeWaitProgress startAnimating]; 
-			self.direcModeWaitConnect.hidden = YES;
-
-			[NSTimer scheduledTimerWithTimeInterval:3.0
-											 target:self
-										   selector:@selector(waitForDirectCamera:)
-										   userInfo:nil
-											repeats:NO];
-			//[self startDirectConnect];
-			break;
-		}
-		case 2: //GOTO ROUTER mode
-		{
-			[self dismissModalViewControllerAnimated:NO	];
-			NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-			[userDefaults setBool:TRUE forKey:_AutoLogin];
-			
-			
-			[NSTimer scheduledTimerWithTimeInterval:0.10
-											 target:self
-										   selector:@selector(show_login_or_reg:)
-										   userInfo:nil
-											repeats:NO];
-			break;
-		}
-		case 3:
-			//Back from login- login success 
-			[self dismissModalViewControllerAnimated:NO];
-			self.progressView.hidden = NO;
-			[self scan_for_devices];
-			break; 
-		case 4:
-			NSLog(@" back from adding cam. relogin -- to get the new cam data");
-			self.shouldReloadWhenEnterBG = TRUE;
-			NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-			[userDefaults setBool:TRUE forKey:_AutoLogin];
-			
-			[NSTimer scheduledTimerWithTimeInterval:0.01
-											 target:self
-										   selector:@selector(show_login_or_reg:)
-										   userInfo:nil
-											repeats:NO];
-
-			break; 
-		case 5: //Just remove camera, currently in CameraMenu page 
-		{
-			NSLog(@"remove cam done");
-			[self dismissModalViewControllerAnimated:NO];
-			
-			NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-			[userDefaults setBool:TRUE forKey:_AutoLogin];
-
-			[NSTimer scheduledTimerWithTimeInterval:0.01
-											 target:self
-										   selector:@selector(show_login_or_reg:)
-										   userInfo:nil
-											repeats:NO];
-			
-			break;
-		}
-		case  6:
-		{
-			NSLog(@"Back from menu");
-			[self dismissModalViewControllerAnimated:NO];
-			[self.streamer startStreaming];
-			
-			
-			break;
-		}
-		case  7:
-		{
-			NSLog(@"Back from login - display first page ");
-			[self dismissModalViewControllerAnimated:NO];
-			
-			
-			//go Back to main menu
-			[NSTimer scheduledTimerWithTimeInterval:0.01
-											 target:self
-										   selector:@selector(wakeup_display_main_cam:)
-										   userInfo:nil
-											repeats:NO];
-			break;
-		}
-		case 8 : //back from login -failed
-		{
-			[self dismissModalViewControllerAnimated:NO	];
-			NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-			[userDefaults setBool:FALSE forKey:_AutoLogin];
-			
-			
-			[NSTimer scheduledTimerWithTimeInterval:0.10
-											 target:self
-										   selector:@selector(show_login_or_reg:)
-										   userInfo:nil
-											repeats:NO];
-			break;
-		}
-		default:
-			break;
-	}
-
-}
 
 -(void) show_login_or_reg:(NSTimer*) exp
 {
