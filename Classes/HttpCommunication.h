@@ -16,6 +16,11 @@
 #define BASIC_AUTH_DEFAULT_USER @"moto-cam"
 #define BASIC_AUTH_DEFAULT_PASS @"000000"
 
+#define AVSTREAM_REQUEST @"GET /?action=appletvastream"
+#define AVSTREAM_PARAM_1 @"&remote_session="
+#define AVSTREAM_PARAM_2 @" HTTP/1.1\r\n"
+
+
 #define HTTP_COMMAND_PART @"?action=command&command="
 
 #define GET_VERSION @"get_version"

@@ -794,13 +794,42 @@
 	}
 	
 	
-	NSLog(@"channel is %d with cam name: %@", selected_channel.channel_index, selected_channel.profile.name);
+	if (selected_channel.profile.isInLocal == YES)
+	{
+		NSLog(@"channel is %d with cam name: %@", selected_channel.channel_index, selected_channel.profile.name);
+		[self setupInfraCamera:selected_channel];
+	}
+	else
+	{
+		//setup remote camera via upnp 
+		
+		
+		RemoteConnection * cameraConn;
 	
-	
-	[self setupInfraCamera:selected_channel];
-	
+		
+		cameraConn = [[RemoteConnection alloc]init]; 
+		if ([cameraConn connectToRemoteCamera:selected_channel
+									 callback:self
+									 Selector:@selector(remoteConnectionSucceeded:)
+								 FailSelector:@selector(remoteConnectionFailed:)])
+		{
+			//the process started successfuly
+		}
+		else 
+		{
+			NSLog(@"Start remote connection Failed!!!"); 
+			//ERROR condition
+			UIAlertView *alert = [[UIAlertView alloc]
+								  initWithTitle:@"Remote View Error"
+								  message:@"Initializing remote connection failed, please retry" 
+								  delegate:self
+								  cancelButtonTitle:@"OK"
+								  otherButtonTitles:nil];
+			[alert show];
+			[alert release];
+		}		
+	}
 }
-
 
 
 - (IBAction) handlePinchGesture: (UIGestureRecognizer *) sender
@@ -1178,6 +1207,39 @@
 }
 
 
+
+#pragma mark Remote Connection Callbacks
+
+
+-(void) remoteConnectionSucceeded:(CamChannel *) camChannel
+{
+	
+	//Start to display this channel
+	selected_channel = camChannel;
+	
+	NSLog(@"Remote camera-channel is %d with cam name: %@", selected_channel.channel_index, selected_channel.profile.name);
+	[self setupInfraCamera:selected_channel];
+}
+
+-(void) remoteConnectionFailed:(CamChannel *) camChannel
+{
+	//camChannel = nil 
+	
+	NSLog(@"Remote connection Failed!!!");
+#if 0
+	UIAlertView *alert = [[UIAlertView alloc]
+						  initWithTitle:@"RemoteView Error"
+						  message:@"ERROR"  
+						  delegate:self
+						  cancelButtonTitle:@"OK"
+						  otherButtonTitles:nil];
+	[alert show];
+	[alert release];
+#endif 
+	
+}
+
+
 #pragma mark -
 #pragma mark ActionSheet delegate
 
@@ -1489,7 +1551,24 @@
 	}
 	
 	
+	
+	
 	streamer = [[MBP_Streamer alloc]initWithIp:ip andPort:port];
+	
+	//Support remote UPNP video as well
+	if (ch.profile.isInLocal != TRUE && 
+		ch.remoteViewKey != nil )
+	{
+		NSLog(@"created a remote streamer");
+		streamer.remoteView = TRUE;
+		streamer.remoteViewKey = ch.remoteViewKey; 
+	}
+	else {
+		NSLog(@"created a local streamer");
+	}
+
+	
+	
 	[streamer setVideoImage:self.camView.oneCamView.videoView];
 	[streamer setTemperatureLabel:self.camView.statusBar.temperature_label];
 

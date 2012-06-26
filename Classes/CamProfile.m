@@ -11,7 +11,7 @@
 
 @implementation CamProfile
 
-@synthesize scan_response,mac_address, ip_address,port;
+@synthesize scan_response,mac_address, ip_address,port, ptt_port;
 @synthesize profileImage, channel,isSelected,isRemoteAccess;
 @synthesize profileImageData;
 

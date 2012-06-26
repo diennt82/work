@@ -12,7 +12,7 @@
 @implementation CamChannel
 
 @synthesize profile;
-@synthesize channel_configure_status, channel_index;
+@synthesize channel_configure_status, channel_index, remoteViewKey;
 
 
 - (id) initWithChannelIndex:(int) index
@@ -254,6 +254,7 @@
 		[profile release];
 	
 	[channel_view release];
+	[remoteViewKey release]; 
 	[super dealloc];
 }
 

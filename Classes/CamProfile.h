@@ -16,6 +16,7 @@
 	NSString * ip_address;
 	NSString * mac_address;
 	int port;
+	int ptt_port; 
 	
 	UIImage * profileImage;
 	
@@ -35,7 +36,7 @@
 }
 
 @property (nonatomic,retain) NSString* scan_response, *ip_address, * mac_address;
-@property (nonatomic) int port, minuteSinceLastComm;
+@property (nonatomic) int port, minuteSinceLastComm, ptt_port;
 @property (nonatomic) BOOL isSelected, isRemoteAccess,isInLocal;
 @property (nonatomic,retain) UIImage * profileImage;
 @property (nonatomic,retain) CamChannel * channel;

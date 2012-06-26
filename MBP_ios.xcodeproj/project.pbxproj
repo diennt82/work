@@ -185,6 +185,7 @@
 		97F0F168143C45FA0076B749 /* MBP_Streamer.m in Sources */ = {isa = PBXBuildFile; fileRef = 97F0F167143C45FA0076B749 /* MBP_Streamer.m */; };
 		97F6FFD714C6ACF100317249 /* large_icon_info.png in Resources */ = {isa = PBXBuildFile; fileRef = 97F6FFD614C6ACF100317249 /* large_icon_info.png */; };
 		97FCE505158AC7DC00B453A6 /* MBP_LoginOrRegistration_1.xib in Resources */ = {isa = PBXBuildFile; fileRef = 97FCE504158AC7DC00B453A6 /* MBP_LoginOrRegistration_1.xib */; };
+		97FE7D1015998C0B000826F0 /* RemoteConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = 97FE7D0F15998C0B000826F0 /* RemoteConnection.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -418,6 +419,8 @@
 		97F0F167143C45FA0076B749 /* MBP_Streamer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MBP_Streamer.m; sourceTree = "<group>"; };
 		97F6FFD614C6ACF100317249 /* large_icon_info.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = large_icon_info.png; sourceTree = "<group>"; };
 		97FCE504158AC7DC00B453A6 /* MBP_LoginOrRegistration_1.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MBP_LoginOrRegistration_1.xib; sourceTree = "<group>"; };
+		97FE7D0E15998C0B000826F0 /* RemoteConnection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RemoteConnection.h; sourceTree = "<group>"; };
+		97FE7D0F15998C0B000826F0 /* RemoteConnection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RemoteConnection.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -466,12 +469,6 @@
 				9770CDBA1430764B009E69EF /* AudioRecorder.m */,
 				975343ED1432F88D0037DDAC /* AviRecord.h */,
 				975343EE1432F88D0037DDAC /* AviRecord.m */,
-				9753425F1432B8180037DDAC /* CamProfile.h */,
-				975342601432B8180037DDAC /* CamProfile.m */,
-				97F0F04A143C0CA00076B749 /* CamChannel.h */,
-				97F0F04B143C0CA00076B749 /* CamChannel.m */,
-				97F0F166143C45FA0076B749 /* MBP_Streamer.h */,
-				97F0F167143C45FA0076B749 /* MBP_Streamer.m */,
 				97B8F6651439B58000924E84 /* DeviceConfiguration.h */,
 				97B8F6661439B58000924E84 /* DeviceConfiguration.m */,
 				9753448B14330FBB0037DDAC /* MBP_MainMenuView.h */,
@@ -533,14 +530,10 @@
 				9719EC59155C9F30005419FC /* MBP_MenuViewController.h */,
 				9719EC5A155C9F30005419FC /* MBP_MenuViewController.m */,
 				9719EC5B155C9F30005419FC /* MBP_MenuViewController.xib */,
-				97987E441546B04C0066C49B /* BMS_Communication.h */,
-				97987E451546B04C0066C49B /* BMS_Communication.m */,
 				97987DEF1546A1630066C49B /* MBP_LoginOrRegistration.h */,
 				97987DF01546A1630066C49B /* MBP_LoginOrRegistration.m */,
 				97987DF11546A1630066C49B /* MBP_LoginOrRegistration.xib */,
 				97FCE504158AC7DC00B453A6 /* MBP_LoginOrRegistration_1.xib */,
-				28D7ACF60DDB3853001CB0EB /* MBP_iosViewController.h */,
-				28D7ACF70DDB3853001CB0EB /* MBP_iosViewController.m */,
 				97C0624F143AF5C80016286D /* MBP_DeviceConfigureViewController.xib */,
 				97C06250143AF5C80016286D /* MBP_DeviceConfigureViewController.h */,
 				97C06251143AF5C80016286D /* MBP_DeviceConfigureViewController.m */,
@@ -550,6 +543,18 @@
 				978E9A801551313000B59E90 /* MBP_AddCamController.xib */,
 				9745CF611553FD5F00800CA6 /* MBP_AddCamController_4.xib */,
 				9745CF151553F01500800CA6 /* MBP_AddCamController_3.xib */,
+				97987E441546B04C0066C49B /* BMS_Communication.h */,
+				97987E451546B04C0066C49B /* BMS_Communication.m */,
+				9753425F1432B8180037DDAC /* CamProfile.h */,
+				975342601432B8180037DDAC /* CamProfile.m */,
+				97F0F04A143C0CA00076B749 /* CamChannel.h */,
+				97F0F04B143C0CA00076B749 /* CamChannel.m */,
+				97FE7D0E15998C0B000826F0 /* RemoteConnection.h */,
+				97FE7D0F15998C0B000826F0 /* RemoteConnection.m */,
+				97F0F166143C45FA0076B749 /* MBP_Streamer.h */,
+				97F0F167143C45FA0076B749 /* MBP_Streamer.m */,
+				28D7ACF60DDB3853001CB0EB /* MBP_iosViewController.h */,
+				28D7ACF70DDB3853001CB0EB /* MBP_iosViewController.m */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -964,6 +969,7 @@
 				978E1FB0155A7C4200743DE4 /* MBP_RightSideMenuView.m in Sources */,
 				97423429155BA503007DCBCD /* AudioOutStreamer.m in Sources */,
 				9719EC5C155C9F30005419FC /* MBP_MenuViewController.m in Sources */,
+				97FE7D1015998C0B000826F0 /* RemoteConnection.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

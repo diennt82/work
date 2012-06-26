@@ -29,7 +29,7 @@
 #import "MBP_AddCamController.h"
 #import "AudioOutStreamer.h"
 #import "MBP_MenuViewController.h"
-
+#import "RemoteConnection.h"
 
 #define DIRECTION_V_NON  0x01
 #define DIRECTION_V_UP   0x02
@@ -163,10 +163,12 @@
 
 - (void) setupDirectModeCamera; 
 - (void) disconnectRabot;
+
 - (void)onSocket:(AsyncSocket *)sock didReadData:(NSData *)data withTag:(long)tag;
 - (void)onSocket:(AsyncSocket *)sock willDisconnectWithError:(NSError *)err;
 - (void)onSocket:(AsyncSocket *)sock didConnectToHost:(NSString *)host port:(UInt16)port;
 - (void)onSocketDidDisconnect:(AsyncSocket *)sock;
+
 + (void)getBroadcastAddress:(NSString **) bcast AndOwnIp:(NSString**) ownip;
 
 
@@ -238,6 +240,10 @@
 - (void)sendConfiguration:(DeviceConfiguration *) conf;
 - (void)sendStatus:(int) status;
 -(void) waitForDirectCamera:(NSTimer *) exp;
+-(void) remoteConnectionFailed:(CamChannel *) camChannel;
+-(void) remoteConnectionSucceeded:(CamChannel *) camChannel;
+
+
 
 @end
 

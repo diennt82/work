@@ -11,6 +11,7 @@
 #import "ADPCMDecoder.h"
 #import "AviRecord.h"
 #import "CameraPassword.h"
+#import "HttpCommunication.h"
 
 @interface MBP_Streamer : NSObject {
 
@@ -33,16 +34,19 @@
 	BOOL recordInProgress;
 	
 	CGFloat currentZoomLevel ;
+	
+	BOOL remoteView; 
+	NSString * remoteViewKey; 
 }
 @property (nonatomic) int device_port;
-@property (nonatomic,retain) NSString * device_ip;
+@property (nonatomic,retain) NSString * device_ip, *remoteViewKey;
 @property (nonatomic,retain) UIImageView * videoImage;
 @property (nonatomic, retain) AsyncSocket * listenSocket;
 @property (nonatomic, retain) NSMutableData * responseData;
 @property (nonatomic, retain) PCMPlayer * pcmPlayer; 
 @property (nonatomic, retain) UILabel * temperatureLabel; 
 
-@property (nonatomic) BOOL takeSnapshot, recordInProgress;
+@property (nonatomic) BOOL takeSnapshot, recordInProgress, remoteView;
 @property (nonatomic) CGFloat currentZoomLevel;
 
 - (id) initWithIp:(NSString *) ip andPort:(int) port;

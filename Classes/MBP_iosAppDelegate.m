@@ -60,9 +60,11 @@
 	NSLog(@"Enter background"); 
 	if (viewController.streamer != nil)
 	{
+		
 		[viewController.streamer stopStreaming];
 		//[viewController.streamer release];
 		viewController.streamer = nil;
+		NSLog(@"stopped streamming "); 
 	}
 
 	

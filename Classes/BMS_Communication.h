@@ -48,6 +48,19 @@
 #define DEL_CAM_PARAM_1 @"&email="
 #define DEL_CAM_PARAM_2 @"&macaddress="
 
+#define GET_STREAM_MODE_CMD @"get_stream_mode"
+#define GET_STREAM_MODE_PARAM_1 @"&mac="
+
+
+
+#define GET_PORT_CMD @"get_port_info"
+#define GET_PORT_PARAM_1 @"&macaddress="
+
+#define VIEW_CAM_CMD @"view_cam"
+#define VIEW_CAM_PARAM_1 @"&email="
+#define VIEW_CAM_PARAM_2 @"&macaddress="
+
+
 
 @interface BMS_Communication : NSObject {
 
@@ -77,5 +90,12 @@
 - (BOOL)BMS_delCamWithUser:(NSString*) user_email AndPass:(NSString*) user_pass macAddr:(NSString *) mac;
 
 - (BOOL)BMS_camNameWithUser:(NSString*) user_email AndPass:(NSString*) user_pass macAddr:(NSString *) mac camName:(NSString*) name;
+
+
+- (BOOL)BMS_getStreamModeWithUser:(NSString*) user_email AndPass:(NSString*) user_pass macAddr:(NSString *) mac ;
+
+- (BOOL)BMS_getHTTPRmtPortWithUser:(NSString*) user_email AndPass:(NSString*) user_pass macAddr:(NSString *) mac ;
+
+- (BOOL)BMS_viewRmtCamWithUser:(NSString*) user_email AndPass:(NSString*) user_pass macAddr:(NSString *) mac ;
 
 @end

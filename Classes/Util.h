@@ -68,4 +68,5 @@
 +(void) setHomeSSID:(NSString *) ssid;
 +(NSString *) getHomeSSID;
 + (NSString*) getCameraCredentials: (NSString *) camMac;
++(NSString *)  get_error_description:(int) bms_error_code;
 @end

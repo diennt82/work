@@ -21,10 +21,13 @@
 	UIImageView * channel_view;
 	CamProfile * profile;
 	int channel_configure_status;
+	
+	NSString * remoteViewKey; 
 }
 
 @property (nonatomic, retain) CamProfile * profile;
 @property (nonatomic) int channel_configure_status, channel_index;
+@property (nonatomic, retain) NSString * remoteViewKey; 
 
 
 +(CamChannel *) restoreFromData: (NSData *) data;

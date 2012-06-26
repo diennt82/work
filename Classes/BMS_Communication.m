@@ -290,6 +290,147 @@
 	
 }
 
+- (BOOL)BMS_getStreamModeWithUser:(NSString*) user_email AndPass:(NSString*) user_pass macAddr:(NSString *) mac 
+{
+	
+	NSString * mac_ = [Util strip_colon_fr_mac:mac];
+	
+	NSString * http_cmd = [NSString stringWithFormat:@"%@%@",BMS_PHONESERVICE, BMS_CMD_PART];
+	http_cmd = [http_cmd stringByAppendingFormat:@"%@", GET_STREAM_MODE_CMD];
+	http_cmd = [http_cmd stringByAppendingFormat:@"%@%@", GET_STREAM_MODE_PARAM_1, mac_];
+	
+	
+	NSLog(@"getStreamMode query:%@", http_cmd);
+	
+	
+	if (selIfSuccess == nil ||selIfFailure == nil|| selIfServerFail ==nil)
+	{
+		NSLog(@"ERR: selector is not set");
+		return FALSE;
+	}
+	
+	NSString* plain = [NSString stringWithFormat:@"%@:%@",
+					   user_email, user_pass];
+	NSData* plainData = [plain dataUsingEncoding:NSUTF8StringEncoding];
+	NSString * portalCred = [NSString base64StringFromData:plainData length:[plainData length]];
+	
+	
+	
+	@synchronized(self)
+	{
+		
+		NSMutableURLRequest *theRequest=[NSMutableURLRequest requestWithURL:[NSURL URLWithString:http_cmd]
+																cachePolicy:NSURLRequestUseProtocolCachePolicy
+															timeoutInterval:BMS_DEFAULT_TIME_OUT];
+		
+		NSString *authHeader = [@"Basic " stringByAppendingFormat:@"%@",portalCred];  
+		[theRequest addValue:authHeader forHTTPHeaderField:@"Authorization"];
+		
+		url_connection = [[NSURLConnection alloc] initWithRequest:theRequest 
+														 delegate:self
+												 startImmediately:TRUE];
+		
+		
+	}
+	
+	return TRUE;
+}
+
+
+- (BOOL)BMS_getHTTPRmtPortWithUser:(NSString*) user_email AndPass:(NSString*) user_pass macAddr:(NSString *) mac 
+{
+	NSString * mac_ = [Util strip_colon_fr_mac:mac];
+	
+	NSString * http_cmd = [NSString stringWithFormat:@"%@%@",BMS_PHONESERVICE, BMS_CMD_PART];
+	http_cmd = [http_cmd stringByAppendingFormat:@"%@", GET_PORT_CMD];
+	http_cmd = [http_cmd stringByAppendingFormat:@"%@%@", GET_PORT_PARAM_1, mac_];
+	
+	
+	NSLog(@"getPort query:%@", http_cmd);
+	
+	
+	if (selIfSuccess == nil ||selIfFailure == nil|| selIfServerFail ==nil)
+	{
+		NSLog(@"ERR: selector is not set");
+		return FALSE;
+	}
+	
+	NSString* plain = [NSString stringWithFormat:@"%@:%@",
+					   user_email, user_pass];
+	NSData* plainData = [plain dataUsingEncoding:NSUTF8StringEncoding];
+	NSString * portalCred = [NSString base64StringFromData:plainData length:[plainData length]];
+	
+	
+	
+	@synchronized(self)
+	{
+		
+		NSMutableURLRequest *theRequest=[NSMutableURLRequest requestWithURL:[NSURL URLWithString:http_cmd]
+																cachePolicy:NSURLRequestUseProtocolCachePolicy
+															timeoutInterval:BMS_DEFAULT_TIME_OUT];
+		
+		NSString *authHeader = [@"Basic " stringByAppendingFormat:@"%@",portalCred];  
+		[theRequest addValue:authHeader forHTTPHeaderField:@"Authorization"];
+		
+		url_connection = [[NSURLConnection alloc] initWithRequest:theRequest 
+														 delegate:self
+												 startImmediately:TRUE];
+		
+		
+	}
+	
+	return TRUE;
+}
+
+
+
+- (BOOL)BMS_viewRmtCamWithUser:(NSString*) user_email AndPass:(NSString*) user_pass macAddr:(NSString *) mac 
+{
+	
+	NSString * mac_ = [Util strip_colon_fr_mac:mac];
+	
+	NSString * http_cmd = [NSString stringWithFormat:@"%@%@",BMS_PHONESERVICE, BMS_CMD_PART];
+	http_cmd = [http_cmd stringByAppendingFormat:@"%@", VIEW_CAM_CMD];
+	http_cmd = [http_cmd stringByAppendingFormat:@"%@%@", VIEW_CAM_PARAM_1, user_email];
+	http_cmd = [http_cmd stringByAppendingFormat:@"%@%@", VIEW_CAM_PARAM_2, mac_];
+	
+	
+	NSLog(@"viewRmt query:%@", http_cmd);
+	
+	
+	if (selIfSuccess == nil ||selIfFailure == nil|| selIfServerFail ==nil)
+	{
+		NSLog(@"ERR: selector is not set");
+		return FALSE;
+	}
+	
+	NSString* plain = [NSString stringWithFormat:@"%@:%@",
+					   user_email, user_pass];
+	NSData* plainData = [plain dataUsingEncoding:NSUTF8StringEncoding];
+	NSString * portalCred = [NSString base64StringFromData:plainData length:[plainData length]];
+	
+	
+	
+	@synchronized(self)
+	{
+		
+		NSMutableURLRequest *theRequest=[NSMutableURLRequest requestWithURL:[NSURL URLWithString:http_cmd]
+																cachePolicy:NSURLRequestUseProtocolCachePolicy
+															timeoutInterval:BMS_DEFAULT_TIME_OUT];
+		
+		NSString *authHeader = [@"Basic " stringByAppendingFormat:@"%@",portalCred];  
+		[theRequest addValue:authHeader forHTTPHeaderField:@"Authorization"];
+		
+		url_connection = [[NSURLConnection alloc] initWithRequest:theRequest 
+														 delegate:self
+												 startImmediately:TRUE];
+		
+		
+	}
+	
+	return TRUE;
+	
+}
 #pragma mark NSURLConnection Delegate functions
 /****** NSURLConnection Delegate functions ******/
 

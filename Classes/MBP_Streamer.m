@@ -12,7 +12,7 @@
 
 @implementation MBP_Streamer
 
-@synthesize videoImage, device_ip, device_port;
+@synthesize videoImage, device_ip, device_port, remoteViewKey, remoteView;
 @synthesize responseData, listenSocket;
 @synthesize pcmPlayer;
 @synthesize temperatureLabel; 
@@ -24,6 +24,8 @@
 	self.device_ip = ip;
 	self.device_port = port; 
 	NSLog(@"init with %@:%d", self.device_ip, self.device_port);
+	self.remoteView = FALSE; 
+	self.remoteViewKey = nil; 
 	return self;
 	
 }
@@ -64,10 +66,24 @@
 - (void) receiveData
 {
 
-	NSString * camMac = [CameraPassword fetchBSSIDInfo];
+	//NSString * camMac = [CameraPassword fetchBSSIDInfo];
 	
-	NSString *getReq = [NSString stringWithFormat:@"%@Authorization: Basic %@\r\n\r\n",
-						AIBALL_GET_REQUEST, [Util getCameraCredentials:camMac]];
+	
+	//NSString *getReq = [NSString stringWithFormat:@"%@Authorization: Basic %@\r\n\r\n",
+	//					AIBALL_GET_REQUEST, [Util getCameraCredentials:camMac]];
+	
+	NSString *getReq = [NSString stringWithFormat:@"%@%@\r\n\r\n",
+								 AVSTREAM_REQUEST, 
+								 AVSTREAM_PARAM_2 ];	
+	if (self.remoteView == TRUE && self.remoteViewKey != nil)
+	{
+		getReq = [NSString stringWithFormat:@"%@%@%@%@\r\n\r\n",
+				  AVSTREAM_REQUEST, AVSTREAM_PARAM_1,self.remoteViewKey,
+				 AVSTREAM_PARAM_2 ];
+	}
+	
+	NSLog(@"getReq: %@", getReq); 
+	
 	NSData *getReqData = [getReq dataUsingEncoding:NSUTF8StringEncoding];
 	
 	[listenSocket writeData:getReqData withTimeout:2 tag:1];
@@ -127,6 +143,7 @@
 {
 	NSLog(@"Streamer released called");
 	[self stopStreaming];
+	
 	//[super dealloc];
 	[listenSocket release];
 	[responseData release];

@@ -80,6 +80,7 @@
 
 - (void) touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
 {	
+#if 0 //-- NOT USED
 	UITouch *touch;
 	CGPoint location ;	
 	NSString * saved_url = nil;
@@ -133,6 +134,8 @@
 		}
 		
 	}
+#endif 
+	
 }
 
 
