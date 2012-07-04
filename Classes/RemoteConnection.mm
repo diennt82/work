@@ -1,0 +1,399 @@
+//
+//  RemoteConnection.m
+//  MBP_ios
+//
+//  Created by NxComm on 6/26/12.
+//  Copyright 2012 Smart Panda Ltd. All rights reserved.
+//
+
+#import "RemoteConnection.h"
+#import "STUN_Communication.h"
+
+@implementation RemoteConnection
+
+@synthesize mChannel; 
+
+
+#define STREAMING_MODE @"Streaming_mode="
+#define STREAM_MODE_UNKNOWN 0
+#define STREAM_MODE_MANUAL_PRT_FWD 1
+#define STREAM_MODE_UPNP 2
+#define STREAM_MODE_STUN 3
+
+#define TOTAL_PORTS @"total_ports="
+#define BR_TAG      @"<br>"
+#define PTT_PRT @"audio_port="
+
+
+
+- (void) dealloc
+{
+	if (mChannel != nil)
+	{
+		[mChannel release];
+	}
+	[super dealloc]; 
+}
+
+/* Caller & success & faillure is fixed from now. 
+ Any error along the way can be reported wth fail-function 
+ otherwise success() will be called at the end with the updated channel 
+ */
+-(BOOL) connectToRemoteCamera: (CamChannel *) ch 
+					 callback: (id) caller 
+					 Selector: (SEL) success 
+				 FailSelector: (SEL) fail
+{
+	
+	if (ch.profile.mac_address == nil)
+	{
+		return FALSE; 
+	}
+	
+	mChannel = ch; 
+	[mChannel retain]; 
+	
+	_caller = caller ;
+	_Success_SEL = success; 
+	_Failure_SEL = fail; 
+	
+	// Kick off by quering the stream mode
+	//
+	BMS_Communication * bms_comm; 
+	
+	NSString * mac = [Util strip_colon_fr_mac:ch.profile.mac_address];
+
+	bms_comm = [[BMS_Communication alloc] initWithObject:self
+												Selector:@selector(getStreamSuccessWithResponse:) 
+											FailSelector:@selector(getStreamFailedWithError:) 
+											   ServerErr:@selector(getStreamFailedServerUnreachable)];
+	
+	NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+	NSString * user_email = (NSString *) [userDefaults objectForKey:@"PortalUseremail"];
+	NSString * user_pass = (NSString *) [userDefaults objectForKey:@"PortalPassword"];
+	
+	
+	[bms_comm BMS_getStreamModeWithUser:user_email 
+						 AndPass:user_pass 
+						 macAddr:mac ];
+	
+	return TRUE; 
+}
+
+
+
+
+
+- (void) getStreamSuccessWithResponse:(NSData*) responseData
+{
+	NSString * raw_data = [[[NSString alloc] initWithData:responseData encoding: NSASCIIStringEncoding] autorelease];
+	
+	NSLog(@"getStream response: %@", raw_data);
+	
+	//Move on -- dont signal caller 
+	if ( raw_data != nil && [raw_data hasPrefix:STREAMING_MODE])
+	{
+		NSRange m_range = {[STREAMING_MODE length], 1};
+		int streamMode = [[raw_data substringWithRange:m_range] intValue];
+		
+		switch (streamMode) {
+			case STREAM_MODE_UPNP:
+			case STREAM_MODE_MANUAL_PRT_FWD:
+			{
+				BMS_Communication * bms_comm; 
+				
+				NSString * mac = [Util strip_colon_fr_mac:mChannel.profile.mac_address];
+				
+				bms_comm = [[BMS_Communication alloc] initWithObject:self
+															Selector:@selector(getPortSuccessWithResponse:) 
+														FailSelector:@selector(getPortFailedWithError:) 
+														   ServerErr:@selector(getPortFailedServerUnreachable)];
+				
+				NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+				NSString * user_email = (NSString *) [userDefaults objectForKey:@"PortalUseremail"];
+				NSString * user_pass = (NSString *) [userDefaults objectForKey:@"PortalPassword"];
+				
+				
+				[bms_comm BMS_getHTTPRmtPortWithUser:user_email 
+											AndPass:user_pass 
+											macAddr:mac ];
+			
+				break;
+			}
+			case STREAM_MODE_STUN:
+			{
+				NSLog(@"GOing to STUN"); 
+				STUN_Communication * stunConn;
+				
+				
+				stunConn = [[STUN_Communication alloc]init]; 
+				if ([stunConn connectToRemoteCamera:mChannel
+											 callback:_caller
+											 Selector:_Success_SEL
+										 FailSelector:_Failure_SEL])
+				{
+					//the process started successfuly
+				}
+				else 
+				{
+					NSLog(@"Start remote connection Failed!!!"); 
+					//ERROR condition
+					UIAlertView *_alert = [[UIAlertView alloc]
+										   initWithTitle:@"Remote View Error"
+										   message:@"Initializing remote connection failed, please retry" 
+										   delegate:self
+										   cancelButtonTitle:@"OK"
+										   otherButtonTitles:nil];
+					[_alert show];
+					[_alert release];
+					
+					[_caller performSelector:_Failure_SEL withObject:nil ];
+				}		
+				
+				
+				
+				break; 
+			}
+			default:
+				break;
+		}
+		
+	}
+	
+	
+	
+	
+	
+}
+- (void) getStreamFailedWithError:(NSHTTPURLResponse*) error_response
+{
+	
+	NSLog(@" failed with error code:%d", [error_response statusCode]);
+	
+	//ERROR condition
+	UIAlertView *alert = [[UIAlertView alloc]
+						  initWithTitle:@"Get Stream Mode Error"
+						  message:[NSString stringWithFormat:@"Server error code: %@", [Util get_error_description:[error_response statusCode]]] 
+						  delegate:self
+						  cancelButtonTitle:@"OK"
+						  otherButtonTitles:nil];
+	[alert show];
+	[alert release];
+	
+    //Pass some info back to caller
+	[_caller performSelector:_Failure_SEL withObject:nil ];
+	return;
+}
+- (void) getStreamFailedServerUnreachable
+{
+
+	NSLog(@" failed : server unreachable");
+	
+	//ERROR condition
+	UIAlertView *alert = [[UIAlertView alloc]
+						  initWithTitle:@"Get Stream Mode Error"
+						  message:@"Server unreachable"
+						  delegate:self
+						  cancelButtonTitle:@"OK"
+						  otherButtonTitles:nil];
+	[alert show];
+	[alert release];
+	
+	[_caller performSelector:_Failure_SEL withObject:nil ];
+	return;
+}
+
+
+
+
+- (void) getPortFailedWithError:(NSHTTPURLResponse*) error_response
+{
+
+	NSLog(@"failed with error code:%d", [error_response statusCode]);
+	
+	//ERROR condition
+	UIAlertView *alert = [[UIAlertView alloc]
+						  initWithTitle:@"Get Upnp/manual Ports Error"
+						  message:[NSString stringWithFormat:@"Server error code: %@", [Util get_error_description:[error_response statusCode]]]
+						  delegate:self
+						  cancelButtonTitle:@"OK"
+						  otherButtonTitles:nil];
+	[alert show];
+	[alert release];
+	
+    //Pass some info back to caller
+	[_caller performSelector:_Failure_SEL withObject:nil ];
+	return;
+	
+}
+- (void) getPortFailedServerUnreachable
+{
+	NSLog(@" failed : server unreachable");
+	
+	//ERROR condition
+	UIAlertView *alert = [[UIAlertView alloc]
+						  initWithTitle:@"Get Upnp/manual Ports Error"
+						  message:@"Server unreachable"
+						  delegate:self
+						  cancelButtonTitle:@"OK"
+						  otherButtonTitles:nil];
+	[alert show];
+	[alert release];
+	
+	[_caller performSelector:_Failure_SEL withObject:nil ];
+	return;
+	
+}
+
+
+
+-(void) getPortSuccessWithResponse:(NSData*) responseData
+{
+	NSString * raw_data = [[[NSString alloc] initWithData:responseData encoding: NSASCIIStringEncoding] autorelease];
+	
+	NSLog(@"getPort response: %@", raw_data);
+
+	if (raw_data != nil && [raw_data hasPrefix:TOTAL_PORTS])
+	{
+		NSArray * tokens = [raw_data componentsSeparatedByString:BR_TAG];
+		
+		
+		
+		//get the PTT port only 
+		NSString * ptt_str = [tokens objectAtIndex:2]; 
+		int ptt_port = -1; 
+		if ([ptt_str hasPrefix:PTT_PRT])
+		{
+			ptt_port = [[ptt_str substringFromIndex:[PTT_PRT  length]] intValue]; 
+			
+		}
+		
+		NSLog(@"getPort set PTT port to: %d", ptt_port);
+		//set the PTT port
+		mChannel.profile.ptt_port = ptt_port;
+		
+	}
+	else {
+		
+		NSLog(@"getPort Failed to set PTT port");
+		
+	}
+
+	//Next: viewCam Request
+	
+	BMS_Communication * bms_comm; 
+	
+	NSString * mac = [Util strip_colon_fr_mac:mChannel.profile.mac_address];
+	
+	bms_comm = [[BMS_Communication alloc] initWithObject:self
+												Selector:@selector(viewRmtSuccessWithResponse:) 
+											FailSelector:@selector(viewRmtFailedWithError:) 
+											   ServerErr:@selector(viewRmtFailedServerUnreachable)];
+	
+	NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+	NSString * user_email = (NSString *) [userDefaults objectForKey:@"PortalUseremail"];
+	NSString * user_pass = (NSString *) [userDefaults objectForKey:@"PortalPassword"];
+	
+	
+	[bms_comm BMS_viewRmtCamWithUser:user_email 
+								 AndPass:user_pass 
+								 macAddr:mac ];
+	
+	
+}
+
+
+- (void) viewRmtFailedWithError:(NSHTTPURLResponse*) error_response
+{
+	
+	NSLog(@"failed with error code:%d", [error_response statusCode]);
+	
+	//ERROR condition
+	UIAlertView *alert = [[UIAlertView alloc]
+						  initWithTitle:@"View Remote Error"
+						  message:[NSString stringWithFormat:@"Server error code: %@", [Util get_error_description:[error_response statusCode]]] 
+						  delegate:self
+						  cancelButtonTitle:@"OK"
+						  otherButtonTitles:nil];
+	[alert show];
+	[alert release];
+	
+    //Pass some info back to caller
+	[_caller performSelector:_Failure_SEL withObject:nil ];
+	return;
+	
+}
+
+- (void) viewRmtFailedServerUnreachable
+{
+	NSLog(@" failed : server unreachable");
+	
+	//ERROR condition
+	UIAlertView *alert = [[UIAlertView alloc]
+						  initWithTitle:@"View Remote Error"
+						  message:@"Server unreachable"
+						  delegate:self
+						  cancelButtonTitle:@"OK"
+						  otherButtonTitles:nil];
+	[alert show];
+	[alert release];
+	
+	[_caller performSelector:_Failure_SEL withObject:nil ];
+	return;
+}
+
+
+
+#define CAM_IP @"Camera_IP="
+#define CAM_PORT @"Camera_Port="
+#define SS_KEY @"SessionAutenticationKey="
+
+
+-(void) viewRmtSuccessWithResponse:(NSData*) responseData
+{
+	NSString * raw_data = [[[NSString alloc] initWithData:responseData encoding: NSASCIIStringEncoding] autorelease];
+	
+	NSLog(@"viewRmt response: %@", raw_data);
+	
+	if (raw_data != nil && [raw_data hasPrefix:CAM_IP])
+	{
+		NSArray * tokens = [raw_data componentsSeparatedByString:BR_TAG];
+		
+		//tmp_user_email stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]]
+		//extract the  ip 
+		NSString * ip_str = [[tokens objectAtIndex:0] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]] ; 
+		
+		ip_str = [ip_str substringFromIndex:[CAM_IP length]]; 
+		
+		//extract the port 
+		int port = -1; 
+		NSString * port_str = [[tokens objectAtIndex:1] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]] ; 
+		port_str = [port_str substringFromIndex:[CAM_PORT length]]; 
+		port = [port_str intValue];
+		
+		//extract the ss key
+		NSString * sskey = nil; 
+		sskey =[[tokens objectAtIndex:2] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+		sskey = [sskey substringFromIndex:[SS_KEY length]]; 
+		
+		NSLog(@"sskey len : %d", [sskey length]); 
+		//Bit different from android app -- set the sskey to channel, ip, port to profile 
+		
+		mChannel.remoteViewKey = [NSString stringWithString:sskey];
+		mChannel.profile.ip_address = ip_str;
+		mChannel.profile.port = port; 
+		
+		//Ready to setup the camera channel
+		[_caller performSelector:_Success_SEL withObject:mChannel ];
+		
+	}
+	else
+	{
+		
+		[_caller performSelector:_Failure_SEL withObject:nil ];
+
+	}
+	
+}
+
+@end

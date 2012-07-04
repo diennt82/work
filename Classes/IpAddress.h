@@ -7,8 +7,12 @@
  *
  */
 
+
+
 #define MAXADDRS	32
 #define INVALID_IP  0xdeadbeef
+
+
 
 extern char *if_names[MAXADDRS];
 extern char *ip_names[MAXADDRS];
@@ -17,8 +21,15 @@ extern char *hw_addrs[MAXADDRS];
 extern unsigned long ip_addrs[MAXADDRS];
 
 // Function prototypes
+#ifdef __cplusplus
+extern "C"
+{
+#endif
 
 void InitAddresses();
 void FreeAddresses();
 int  GetIPAddresses();
 void GetHWAddresses();
+#ifdef __cplusplus
+}
+#endif

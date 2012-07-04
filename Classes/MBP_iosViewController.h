@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <AVFoundation/AVFoundation.h>
 #import "MBP_CamView.h"
 #import "MBP_MainMenuView.h"
 #import "AiBallVideoListViewController.h"
@@ -31,6 +32,9 @@
 #import "MBP_MenuViewController.h"
 #import "RemoteConnection.h"
 
+
+
+
 #define DIRECTION_V_NON  0x01
 #define DIRECTION_V_UP   0x02
 #define DIRECTION_V_DN   0x04
@@ -52,7 +56,10 @@
 #define DIRECT_MODE_NEXT_BTN 311
 
 
-@interface MBP_iosViewController : UIViewController <SetupHttpDelegate, ConnectionMethodDelegate,UIActionSheetDelegate> {
+#define _streamingSSID @"string_Streaming_SSID"
+
+
+@interface MBP_iosViewController : UIViewController <SetupHttpDelegate, ConnectionMethodDelegate,UIActionSheetDelegate, StreamerEventHandler	> {
 
 	IBOutlet MBP_CamView * camView;
 	IBOutlet MBP_MainMenuView * mainMenuView;
@@ -93,7 +100,7 @@
 	
 	NSString * bc_addr;
 	NSString * own_addr;
-	
+
 	
 	
 	
@@ -127,6 +134,10 @@
 	BOOL shouldReloadWhenEnterBG;
 	
 	
+	UIAlertView * alert;
+	NSTimer * alertTimer; 
+	
+	
 }
 @property (nonatomic, retain) IBOutlet UIButton *direcModeWaitConnect; 
 @property (nonatomic, retain) IBOutlet UIView * progressView, * direcModeWaitView; 
@@ -147,7 +158,7 @@
 @property (nonatomic, retain) NSMutableArray * restored_profiles ;
 @property (nonatomic, retain) MBP_Streamer * streamer; 
 
-@property (nonatomic, retain) NSTimer * fullScreenTimer; 
+@property (nonatomic, retain) NSTimer * fullScreenTimer, *alertTimer; 
 
 
 
@@ -242,8 +253,9 @@
 -(void) waitForDirectCamera:(NSTimer *) exp;
 -(void) remoteConnectionFailed:(CamChannel *) camChannel;
 -(void) remoteConnectionSucceeded:(CamChannel *) camChannel;
+-(void) prepareToViewRemotely:(CamChannel *) ch;
+-(void) periodicPopup:(NSTimer *) exp;
 
-
-
+-(void) stopPeriodicPopup;
 @end
 

@@ -19,6 +19,12 @@
 #import "MBP_DeviceScanViewController.h"
 #import "CameraPassword.h"
 
+
+#import <sys/socket.h>
+#import <netinet/in.h>
+#import  "IpAddress.h"
+
+
 @implementation MBP_iosViewController
 
 @synthesize camView, mainMenuView;
@@ -38,7 +44,7 @@
 
 @synthesize progressView;
 
-@synthesize fullScreenTimer;
+@synthesize fullScreenTimer, alertTimer;
 
 @synthesize direcModeWaitView,direcModeWaitConnect, direcModeWaitProgress; 
 
@@ -119,6 +125,8 @@
 								   userInfo:nil
 									repeats:NO];
 		
+	
+	
 }
 
 
@@ -338,7 +346,7 @@
 			else 
 			{
 				
-				[itemView.cameraLocationIndicator setImage:[UIImage imageNamed:@"camera_offline.png"]];
+				[itemView.cameraLocationIndicator setImage:[UIImage imageNamed:@"camera_remote.png"]];
 					
 			}
 			
@@ -666,6 +674,7 @@
 			[self scan_for_devices];
 			break; 
 		case 4:
+		{
 			NSLog(@" back from adding cam. relogin -- to get the new cam data");
 			self.shouldReloadWhenEnterBG = TRUE;
 			NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
@@ -679,6 +688,7 @@
 											repeats:NO];
 			
 			break; 
+		}
 		case 5: //Just remove camera, currently in CameraMenu page 
 		{
 			NSLog(@"remove cam done");
@@ -738,6 +748,35 @@
 	
 }
 
+-(void) prepareToViewRemotely:(CamChannel *) ch
+{
+	//setup remote camera via upnp 
+	
+	RemoteConnection * cameraConn;
+	
+	
+	cameraConn = [[RemoteConnection alloc]init]; 
+	if ([cameraConn connectToRemoteCamera:ch
+								 callback:self
+								 Selector:@selector(remoteConnectionSucceeded:)
+							 FailSelector:@selector(remoteConnectionFailed:)])
+	{
+		//the process started successfuly
+	}
+	else 
+	{
+		NSLog(@"Start remote connection Failed!!!"); 
+		//ERROR condition
+		UIAlertView *_alert = [[UIAlertView alloc]
+							   initWithTitle:@"Remote View Error"
+							   message:@"Initializing remote connection failed, please retry" 
+							   delegate:self
+							   cancelButtonTitle:@"OK"
+							   otherButtonTitles:nil];
+		[_alert show];
+		[_alert release];
+	}		
+}
 
 
 
@@ -801,33 +840,7 @@
 	}
 	else
 	{
-		//setup remote camera via upnp 
-		
-		
-		RemoteConnection * cameraConn;
-	
-		
-		cameraConn = [[RemoteConnection alloc]init]; 
-		if ([cameraConn connectToRemoteCamera:selected_channel
-									 callback:self
-									 Selector:@selector(remoteConnectionSucceeded:)
-								 FailSelector:@selector(remoteConnectionFailed:)])
-		{
-			//the process started successfuly
-		}
-		else 
-		{
-			NSLog(@"Start remote connection Failed!!!"); 
-			//ERROR condition
-			UIAlertView *alert = [[UIAlertView alloc]
-								  initWithTitle:@"Remote View Error"
-								  message:@"Initializing remote connection failed, please retry" 
-								  delegate:self
-								  cancelButtonTitle:@"OK"
-								  otherButtonTitles:nil];
-			[alert show];
-			[alert release];
-		}		
+		[self prepareToViewRemotely:selected_channel];
 	}
 }
 
@@ -961,14 +974,14 @@
 			break;
 		case MENU_INFO_TAG:
 		{
-			UIAlertView *alert = [[UIAlertView alloc]
+			UIAlertView *_alert = [[UIAlertView alloc]
 								  initWithTitle:@"INFORMATION"
 								  message:@"V1.0" 
 								  delegate:self
 								  cancelButtonTitle:@"OK"
 								  otherButtonTitles:nil];
-			[alert show];
-			[alert release];
+			[_alert show];
+			[_alert release];
 		}	
 			break;
 			
@@ -1293,6 +1306,248 @@
 	
 }
 
+#pragma mark -
+#pragma mark Alertview delegate
+
+#define REMOTE_VIDEO_TIMEOUT 0x1000
+#define LOCAL_VIDEO_STOPPED_UNEXPECTEDLY 0x1001
+#define REMOTE_VIDEO_STOPPED_UNEXPECTEDLY 0x1002
+- (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex {
+	
+	int tag = alertView.tag;
+	
+	if (tag == REMOTE_VIDEO_TIMEOUT)
+	{
+		switch(buttonIndex) {
+			case 0:
+				NSLog(@"Stop remote view -- go back to camera list-");
+				self.camView.hidden = YES;
+				[self.streamer stopStreaming]; 
+				
+				[self startShowingCameraList];
+				
+				break;
+			case 1:
+			{
+				//video is still playing now-- no need to stop 
+				NSLog(@"start a 2nd round"); 
+				//just refresh the timer.. 
+				if (selected_channel != nil)
+				{
+					[selected_channel startViewTimer:self
+											  select:@selector(remoteViewTimeOut:)];
+				}
+			}
+				break;
+			default:
+				break;
+		}
+	}
+	else if (tag == LOCAL_VIDEO_STOPPED_UNEXPECTEDLY)
+	{
+		switch(buttonIndex) {
+			case 0: //Stop monitoring 
+				NSLog(@"Stop monitoring  -- go back to camera list-");
+				[self stopPeriodicPopup]; 
+
+				self.camView.hidden = YES;
+				[self.streamer stopStreaming]; 
+				
+				[self startShowingCameraList];
+				
+				break;
+			case 1: //continue -- streamer is connecting so we dont do anything here.
+				break;
+			default:
+				break;
+		}
+		[alert release];
+		alert = nil; 
+	}
+	else if (tag == REMOTE_VIDEO_STOPPED_UNEXPECTEDLY)
+	{
+		switch(buttonIndex) {
+			case 0: //Stop monitoring 
+				NSLog(@"Stop monitoring  -- go back to camera list-");
+				[self stopPeriodicPopup]; 
+
+				self.camView.hidden = YES;
+				[self.streamer stopStreaming]; 
+				
+				[self startShowingCameraList];
+				
+				break;
+			case 1: //continue -- streamer is connecting so we dont do anything here.
+				break;
+			default:
+				break;
+		}
+		
+		[alert release];
+		alert = nil; 
+	}
+}
+
+#pragma mark -
+#pragma mark StreamerEventHandler
+
+-(void) periodicPopup:(NSTimer *) exp
+{
+	NSString * msg = (NSString *) [exp userInfo]; 
+	if ( alert != nil)
+	{
+		if ([alert isVisible]) 
+		{
+			[alert setMessage:msg];
+			
+			return; 
+		}
+		
+		[alert release]; 
+		alert = nil; 
+		
+	}
+	
+	
+	alert = [[UIAlertView alloc]
+			 initWithTitle:@"Streamer Stopped"
+			 message:msg
+			 delegate:self
+			 cancelButtonTitle:@"Stop Monitoring"
+			 otherButtonTitles:@"Continue",nil];
+	
+	alert.tag = LOCAL_VIDEO_STOPPED_UNEXPECTEDLY;
+	[alert show];
+	
+	[alert retain]; 
+	
+	
+	
+	
+}
+
+-(void) stopPeriodicPopup
+{
+	if (self.alertTimer != nil)
+	{
+		if ([self.alertTimer isValid])
+		{
+			[self.alertTimer invalidate];
+		}
+		
+	}
+	if ( alert != nil)
+	{
+		if ([alert isVisible]) 
+		{
+			[alert dismissWithClickedButtonIndex:1 animated:NO ];
+		}
+		
+		[alert release]; 
+		alert = nil; 
+		
+	}
+}
+
+-(void) statusReport:(int) status andObj:(NSObject*) obj
+{
+	
+	
+	switch (status) {
+		case STREAM_STARTED:
+		{
+			[self stopPeriodicPopup]; 
+			
+			break;
+		}
+		case STREAM_STOPPED:
+			break;
+		case STREAM_STOPPED_UNEXPECTEDLY:
+		{
+			//Perform connectivity check - wifi? 
+			NSString * currSSID = [CameraPassword fetchSSIDInfo]; 
+			NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+			NSString * streamSSID =  (NSString *) [userDefaults objectForKey:_streamingSSID];
+			NSString * msg = @"Network lost link. Please check the Phone, Camera and Wifi router or move closer to the Router" ;
+			
+			if (currSSID != nil && streamSSID != nil)
+			{
+				if ([currSSID compare:streamSSID] == NSOrderedSame)
+				{
+					//Still on the same wifi 
+					msg =@"Connection to camera has been lost. Please check the camera"; 
+				}
+				else // hooked up to a different wifi already
+				{
+					msg = @"Network lost link. Please mover closer to the Router or connect your phone back to Wifi: " ; 
+					msg = [msg stringByAppendingString:streamSSID];
+				}
+
+			}
+			else
+			{
+				//either one of them is nil we skip this check 
+				NSLog(@"current %@, storedSSID: %@", currSSID, streamSSID); 
+			}
+
+			
+			//popup ?
+			
+			if (self.alertTimer != nil)
+			{
+				//some periodic is running dont care
+				
+			}
+			else
+			{
+		
+				self.alertTimer = [NSTimer scheduledTimerWithTimeInterval:5.0
+																   target:self 
+																 selector:@selector(periodicPopup:) 
+																 userInfo:msg 
+																  repeats:YES];
+				[self.alertTimer fire] ;//fire once now
+			
+			}
+			
+			
+			break;
+		}
+		case REMOTE_STREAM_STOPPED_UNEXPECTEDLY:
+		{
+			NSString * msg = @"Network lost link. Please check the Phone, Camera and Wifi router or move closer to the Router" ;
+			
+			// signal streamer to stop 
+			self.streamer.hasStoppedByCaller = TRUE; 
+			
+			//For remote stream, we restart by quering the BMS again 
+			[self prepareToViewRemotely:selected_channel];
+			
+			if (self.alertTimer != nil)
+			{
+				//some periodic is running dont care
+				
+			}
+			else
+			{
+				
+				self.alertTimer = [NSTimer scheduledTimerWithTimeInterval:5.0
+																   target:self 
+																 selector:@selector(periodicPopup:) 
+																 userInfo:msg 
+																  repeats:YES];
+				[self.alertTimer fire] ;//fire once now
+				
+			}
+			
+			break;
+		}
+		case STREAM_RESTARTED:
+			break; 
+		default:
+			break;
+	}
+}
 
 #pragma mark -
 #pragma mark Connectivity
@@ -1553,7 +1808,9 @@
 	
 	
 	
-	streamer = [[MBP_Streamer alloc]initWithIp:ip andPort:port];
+	streamer = [[MBP_Streamer alloc]initWithIp:ip 
+									   andPort:port 
+									   handler:self ];
 	
 	//Support remote UPNP video as well
 	if (ch.profile.isInLocal != TRUE && 
@@ -1562,6 +1819,9 @@
 		NSLog(@"created a remote streamer");
 		streamer.remoteView = TRUE;
 		streamer.remoteViewKey = ch.remoteViewKey; 
+
+		//use timer only if it is remote view 
+		[ch startViewTimer:self select:@selector(remoteViewTimeout:)];
 	}
 	else {
 		NSLog(@"created a local streamer");
@@ -1574,14 +1834,26 @@
 
 	[streamer startStreaming];
 	
+	 
+
+	//Store current SSID - to check later
+	NSString * streamingSSID = [CameraPassword fetchSSIDInfo];
+	if (streamingSSID == nil)
+	{
+		NSLog(@"error: streamingSSID is nil before streaming");
+	}
 	
+	NSLog(@"current SSID is: %@", streamingSSID); 
+
+	
+
 	
 	
 	//Store some of the info for used in menu  -- 
 	
 	NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
 	[userDefaults setBool:TRUE forKey:_is_Loggedin];
-	
+	[userDefaults setObject:streamingSSID forKey:_streamingSSID]; 
 	
 	NSString * old_usr_email = (NSString *) [userDefaults objectForKey:@"PortalUseremail"];
 	NSString * old_pass = (NSString *) [userDefaults objectForKey:@"PortalPassword"];
@@ -1600,79 +1872,24 @@
 }
 
 
-#if 0
--(void) switchToSingleCameraMode:(int) channel_number
+-(void) remoteViewTimeout:(NSTimer *) expired
 {
+	//View time as expired --- popup now. 
 	
-	current_view_mode = CURRENT_VIEW_MODE_SINGLE;
-	
-	self.camView.oneCamView.hidden = NO;
-
-	self.camView.statusBar.melody_status_icon.hidden = NO;
-	self.camView.statusBar.temperature_label.hidden = NO;
-	self.camView.leftSideMenu.snapShotButton.enabled = YES;
-	self.camView.leftSideMenu.recordButton.enabled = YES;
-
-	
-	if ( channel_number >0)
-	{
-		[self.camView.statusBar switchChannel:channel_number];
-	}
-	
-	
-	
-	
-	self.camView.oneCamView.progressView.hidden = NO;
-	[self.camView.oneCamView.progressView startAnimating];
-	
-	if ( pcmPlayer == nil)
-	{
-		/* Start the player to playback & record */
-		pcmPlayer = [[PCMPlayer alloc] init];
-		[[pcmPlayer player] setPlay_now:FALSE];
-		[pcmPlayer Play];
-
-	}
-	else {
-		[[pcmPlayer player] setPlay_now:FALSE];
-
-	}
-
-	
-	NSArray * img_array; 
-	img_array = [[NSArray alloc] initWithObjects:@"melody_muted_icon.png",@"melody_1_icon.png",
-				 @"melody_2_icon.png",@"melody_3_icon.png",nil];
-	[self set_current_melody_status:self.camView.statusBar.melody_status_icon updateIcons:img_array];
-	self.camView.statusBar.melody_status_icon.hidden = NO;
-	[img_array release];
-    self.camView.statusBar.temperature_label.hidden = NO;
-	
-	
-	/* adjust resolution :QVGA*/
-	[self performSelectorInBackground:@selector(requestURLSync_bg:) 
-						   withObject:[Util getVideoModeURL:1]];
-	
-	
-	//NSLog(@"saved_url: %@", [Util getDefaultURL]);		
-	NSString* ip = [Util getIPFromURL:[Util getDefaultURL]];
-	int port = [Util getPortFromURL:[Util getDefaultURL]];
-	
-	if (initialFlag == 1)
-	{
-		[self disconnectRabot];
-	}
-	
-	initialFlag = 1;
-	
-	listenSocket = [[AsyncSocket alloc] initWithDelegate:self];	
-	[listenSocket setUserData:SOCKET_ID_LISTEN];
-	
-	
-	//Non-blocking connect
-    [listenSocket connectToHost:ip onPort:port withTimeout:3 error:nil];
-	
+ 
+	UIAlertView *_alert = [[UIAlertView alloc]
+						  initWithTitle:@"Time out"
+						  message:@"The video has been viewed for about 5 minutes. Do you want to continue?"
+						  delegate:self
+						  cancelButtonTitle:@"No"
+						  otherButtonTitles:@"Yes",nil];
+	_alert.tag = REMOTE_VIDEO_TIMEOUT; 
+	[_alert show];
+	[_alert release];
 }
-#endif 
+
+
+ 
 
 - (void) _connectDefaultRabot:(NSTimer *) expired
 {
@@ -1739,7 +1956,9 @@
 	}
 	
 	
-	streamer = [[MBP_Streamer alloc]initWithIp:ip andPort:port];
+	streamer = [[MBP_Streamer alloc]initWithIp:ip 
+									   andPort:port 
+									   handler:self];
 	[streamer setVideoImage:self.camView.oneCamView.videoView];
 	[streamer setTemperatureLabel:self.camView.statusBar.temperature_label];
 	
@@ -2038,14 +2257,14 @@
 			break;
 	}
 	
-	UIAlertView *alert = [[UIAlertView alloc]
+	UIAlertView *_alert = [[UIAlertView alloc]
 						  initWithTitle:@"Connection Error"
 						  message:[err localizedDescription] 
 						  delegate:self
 						  cancelButtonTitle:@"OK"
 						  otherButtonTitles:nil];
-	[alert show];
-	[alert release];
+	[_alert show];
+	[_alert release];
 
 	[self.camView.oneCamView.progressView stopAnimating];
 }
@@ -2128,7 +2347,7 @@
 	
 	NSString * data_str ; 
 	
-	data_str = [NSString stringWithUTF8String:[data bytes]];
+	data_str = [NSString stringWithUTF8String:(const char*)[data bytes]];
 
 	//NSLog(@"000 rcv fr: %@ : msg: %@", host, data_str);
 
@@ -2208,9 +2427,7 @@
 - (void)onUdpSocketDidClose:(AsyncUdpSocket *)sock
 {
 }
-#import <sys/socket.h>
-#import <netinet/in.h>
-#import  "IpAddress.h"
+
 
 + (void)getBroadcastAddress:(NSString **) bcast AndOwnIp:(NSString**) ownip
 {
@@ -2629,14 +2846,14 @@
         NSLog(@"Error code %d", [error code]);
 		
 	}
-	UIAlertView *alert = [[UIAlertView alloc]
+	UIAlertView *_alert = [[UIAlertView alloc]
 						  initWithTitle:title
 						  message:message 
 						  delegate:self
 						  cancelButtonTitle:@"OK"
 						  otherButtonTitles:nil];
-	[alert show];
-	[alert release];
+	[_alert show];
+	[_alert release];
 	
 }
 

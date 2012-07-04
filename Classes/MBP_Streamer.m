@@ -17,18 +17,25 @@
 @synthesize pcmPlayer;
 @synthesize temperatureLabel; 
 @synthesize takeSnapshot,recordInProgress;
-@synthesize currentZoomLevel;
+@synthesize currentZoomLevel, hasStoppedByCaller;
 
-- (id) initWithIp:(NSString *) ip andPort:(int) port
+
+- (id) initWithIp:(NSString *) ip andPort:(int) port handler:(id<StreamerEventHandler>) handler
 {
 	self.device_ip = ip;
 	self.device_port = port; 
 	NSLog(@"init with %@:%d", self.device_ip, self.device_port);
 	self.remoteView = FALSE; 
 	self.remoteViewKey = nil; 
+	
+	mHandler = handler; 
+	hasStoppedByCaller = FALSE; 
+	
 	return self;
 	
 }
+
+
 
 
 - (void) setVideoView:(UIImageView *) view
@@ -40,6 +47,9 @@
 	NSLog(@"connect to %@:%d", self.device_ip, self.device_port);
 	
 	/**** REset some variables */
+
+	reconnectLimits = 3; 
+	
 	takeSnapshot = NO;
 	recordInProgress = NO;
 	[self stopRecording];
@@ -56,22 +66,41 @@
 	//Non-blocking connect
     [listenSocket connectToHost:self.device_ip 
 						 onPort:self.device_port
-					withTimeout:3
+					withTimeout:5
 						  error:nil];
 	
+	
+	
+}
+//same as startStreaming for now, however may change later.. keep it separate.
+-(void) reConnect
+{
+	
+	//stop streaming first
+	[self stopStreaming]; 
+	
+	NSLog(@"reConnect .. to camera: %@:%d",self.device_ip, self.device_port );
+	/**** REset some variables */
+	takeSnapshot = NO;
+	recordInProgress = NO;
+	[self stopRecording];
+	currentZoomLevel = 5.0;
+
+	
+	initialFlag = 1;
+	
+	listenSocket = [[AsyncSocket alloc] initWithDelegate:self];
+	//Non-blocking connect
+    [listenSocket connectToHost:self.device_ip 
+						 onPort:self.device_port
+					withTimeout:3
+						  error:nil];
 	
 	
 }
 
 - (void) receiveData
 {
-
-	//NSString * camMac = [CameraPassword fetchBSSIDInfo];
-	
-	
-	//NSString *getReq = [NSString stringWithFormat:@"%@Authorization: Basic %@\r\n\r\n",
-	//					AIBALL_GET_REQUEST, [Util getCameraCredentials:camMac]];
-	
 	NSString *getReq = [NSString stringWithFormat:@"%@%@\r\n\r\n",
 								 AVSTREAM_REQUEST, 
 								 AVSTREAM_PARAM_2 ];	
@@ -127,6 +156,8 @@
 	
 	initialFlag = 0;
 	
+	
+	
 
 	if (pcmPlayer != nil)
 	{
@@ -174,6 +205,9 @@
 
 - (void)onSocket:(AsyncSocket *)sock didReadData:(NSData *)data withTag:(long)tag
 {
+	
+	[mHandler statusReport:STREAM_STARTED andObj:nil];
+	
 	//NSLog(@"stream only get data");
 	[listenSocket readDataWithTimeout:3 tag:tag];
 	
@@ -381,15 +415,45 @@
 	NSLog(@"Streamer- connection failed with error:%d:%@" , 
 		  [err code], err);
 
-	[self.videoImage setImage:[UIImage imageNamed:@"video_error.png"]];
+	[self.videoImage setImage:[UIImage imageNamed:@"homepage.png"]];
 	
+	if (hasStoppedByCaller == TRUE)
+	{
+		//simply return 
+		return; 
+	}
+		
+	NSLog(@"Streamer- AsyncSocketReadTimeoutError");
+	reconnectLimits --; 
+	if (reconnectLimits  > 0)
+	{
+		[self reConnect];
+	}
+
 	
+	if (reconnectLimits <=1)
+	{
+		reconnectLimits = 3; //keep retrying ... 
+		
+		
+		if (self.remoteView == TRUE)
+		{
+			NSLog(@"Streamer-REMOTE send message : STREAM_STOPPED_UNEXPECTEDLY");
+			[mHandler statusReport:REMOTE_STREAM_STOPPED_UNEXPECTEDLY andObj:nil];
+		}
+		else
+		{
+			NSLog(@"Streamer- send message : STREAM_STOPPED_UNEXPECTEDLY");
+			[mHandler statusReport:STREAM_STOPPED_UNEXPECTEDLY andObj:nil];
+		}
+
+	}
 }
 
 
 - (void)onSocket:(AsyncSocket *)sock didConnectToHost:(NSString *)host port:(UInt16)port
 {
-	//NSLog(@"Mini Streamer- connected to host: %@", host);
+	NSLog(@"Streamer- connected to host: %@", host);
 	[self receiveData];
 	
 }
@@ -590,6 +654,12 @@
 	
 	return newImage;
 }
+
+
+
+
+
+
 
 
 @end

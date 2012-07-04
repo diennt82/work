@@ -60,7 +60,12 @@
 #define VIEW_CAM_PARAM_1 @"&email="
 #define VIEW_CAM_PARAM_2 @"&macaddress="
 
+#define IS_CAM_AVAIL @"is_cam_available"
+#define IS_CAM_AVAIL_PARAM_1 @"&macaddress="
 
+#define GET_SECURITY_INFO @"get_security_info"
+#define GET_SECURITY_INFO_PARAM_1 @"&email="
+#define GET_SECURITY_INFO_PARAM_2 @"&pass="
 
 @interface BMS_Communication : NSObject {
 
@@ -97,5 +102,8 @@
 - (BOOL)BMS_getHTTPRmtPortWithUser:(NSString*) user_email AndPass:(NSString*) user_pass macAddr:(NSString *) mac ;
 
 - (BOOL)BMS_viewRmtCamWithUser:(NSString*) user_email AndPass:(NSString*) user_pass macAddr:(NSString *) mac ;
+
+- (BOOL)BMS_isCamAvailableWithUser:(NSString*) user_email AndPass:(NSString*) user_pass macAddr:(NSString *) mac ;
+- (BOOL)BMS_getSecInfoWithUser:(NSString*) user_email AndPass:(NSString*) user_pass ;
 
 @end

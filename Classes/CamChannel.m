@@ -7,12 +7,15 @@
 //
 
 #import "CamChannel.h"
+#import "SymmetricCipher.h"
 
 
 @implementation CamChannel
 
 @synthesize profile;
 @synthesize channel_configure_status, channel_index, remoteViewKey;
+@synthesize remoteViewTimer; 
+@synthesize channID, secretKey;
 
 
 - (id) initWithChannelIndex:(int) index
@@ -248,6 +251,25 @@
 	
 }
 
+-(void) startViewTimer:(id) caller select:(SEL) sel
+{
+	
+	//clear the current timer if exits
+	if (self.remoteViewTimer != nil && 
+		[self.remoteViewTimer isValid])
+	{
+		[self.remoteViewTimer invalidate]; 
+	}
+	
+	
+	self.remoteViewTimer = [NSTimer scheduledTimerWithTimeInterval:5*60 //5min 
+															target:caller 
+														  selector:sel 
+														  userInfo:nil 
+															repeats:NO ];
+	
+}
+
 -(void) dealloc
 {
 	if ( self.profile != nil)
@@ -255,7 +277,54 @@
 	
 	[channel_view release];
 	[remoteViewKey release]; 
+	[remoteViewTimer release];
+	[channID release];
+	[secretKey release];
 	[super dealloc];
 }
+
+
+
+
+-(NSData *) getEncChannId
+{
+	NSData * input = [self.channID  dataUsingEncoding: NSUTF8StringEncoding];
+
+	NSString * chann = @"";
+	for (int i =0; i< [ input length]; i ++)
+	{
+		chann = [NSString  stringWithFormat:@"%@ %02x", chann, 
+				   ((uint8_t *)[input bytes]) [i] ];
+	}
+	
+	NSLog(@"Input chan: %@", chann);
+	 
+	NSData * output =[SymmetricCipher _AESEncryptWithKey:self.secretKey data:input];
+
+	
+#if 0 //Test decrypt what i encrypted -
+	NSData * _output = [SymmetricCipher _AESDecryptWithKey:self.secretKey data:output];
+
+	chann = @"";
+	for (int i =0; i< [ _output length]; i ++)
+	{
+		chann = [NSString  stringWithFormat:@"%@ %02x", chann, 
+				 ((uint8_t *)[_output bytes]) [i] ];
+	}
+	
+	NSLog(@"Enc channID Test decrypt: %@ ",chann );
+#endif 
+	return output;
+}
+
+-(NSData *) getEncMac
+{
+	NSData * input = [[Util strip_colon_fr_mac:self.profile.mac_address]  dataUsingEncoding: NSUTF8StringEncoding];
+
+	return [SymmetricCipher _AESEncryptWithKey:self.secretKey data:input];
+
+}
+
+
 
 @end

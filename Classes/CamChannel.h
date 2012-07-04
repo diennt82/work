@@ -7,6 +7,7 @@
 //
 
 #import "CamProfile.h"
+#import "Util.h"
 
 
 
@@ -22,12 +23,22 @@
 	CamProfile * profile;
 	int channel_configure_status;
 	
+	//remote HTTP stuff
 	NSString * remoteViewKey; 
+	NSTimer *  remoteViewTimer; 
+	
+	//remote STUN Stuff
+	NSString * channID;
+	NSString * secretKey; 
+	
+	
 }
 
 @property (nonatomic, retain) CamProfile * profile;
 @property (nonatomic) int channel_configure_status, channel_index;
 @property (nonatomic, retain) NSString * remoteViewKey; 
+@property (nonatomic, retain) NSTimer * remoteViewTimer;
+@property (nonatomic, retain) NSString * channID, *secretKey;
 
 
 +(CamChannel *) restoreFromData: (NSData *) data;
@@ -40,5 +51,8 @@
 - (void) reset;
 
 - (NSMutableData *) getBytes;
+-(void) startViewTimer:(id) caller select:(SEL) sel;
 
+-(NSData *) getEncChannId;
+-(NSData *) getEncMac;
 @end

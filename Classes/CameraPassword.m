@@ -112,7 +112,7 @@
 {
 	
 #if TARGET_IPHONE_SIMULATOR == 1
-	return @"Moto-Cam-4601fc";
+	return @"NX-BROADBAND";
 #else 
 	
 	CFDictionaryRef info = nil;

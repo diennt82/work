@@ -13,6 +13,20 @@
 #import "CameraPassword.h"
 #import "HttpCommunication.h"
 
+@protocol StreamerEventHandler
+
+
+#define STREAM_STARTED              1
+#define STREAM_STOPPED_UNEXPECTEDLY 2
+#define STREAM_RESTARTED            3
+#define STREAM_STOPPED              4
+#define REMOTE_STREAM_STOPPED_UNEXPECTEDLY 5
+
+-(void) statusReport:(int) status andObj:(NSObject*) obj; 
+
+@end
+
+
 @interface MBP_Streamer : NSObject {
 
 	UIImageView * videoImage;
@@ -37,6 +51,13 @@
 	
 	BOOL remoteView; 
 	NSString * remoteViewKey; 
+	
+	int reconnectLimits; 
+	
+	id<StreamerEventHandler> mHandler; 
+	
+	BOOL hasStoppedByCaller; 
+	
 }
 @property (nonatomic) int device_port;
 @property (nonatomic,retain) NSString * device_ip, *remoteViewKey;
@@ -46,10 +67,12 @@
 @property (nonatomic, retain) PCMPlayer * pcmPlayer; 
 @property (nonatomic, retain) UILabel * temperatureLabel; 
 
-@property (nonatomic) BOOL takeSnapshot, recordInProgress, remoteView;
+@property (nonatomic) BOOL takeSnapshot, recordInProgress, remoteView, hasStoppedByCaller;
 @property (nonatomic) CGFloat currentZoomLevel;
 
-- (id) initWithIp:(NSString *) ip andPort:(int) port;
+- (id) initWithIp:(NSString *) ip andPort:(int) port handler:(id<StreamerEventHandler>) handler;
+ 
+
 - (void) setVideoView:(UIImageView *) view;
 - (void) startStreaming;
 - (void) stopStreaming;
