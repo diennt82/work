@@ -224,7 +224,7 @@
 	
 	NSString * data_str ; 
 	
-	data_str = [NSString stringWithUTF8String:[data bytes]];
+	data_str = [NSString stringWithUTF8String:(char*)[data bytes]];
 	
 	//NSLog(@"000 rcv fr: %@ : msg: %@", host, data_str);
 	

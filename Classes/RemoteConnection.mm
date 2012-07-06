@@ -102,6 +102,8 @@
 			{
 				BMS_Communication * bms_comm; 
 				
+				self.mChannel.communication_mode = COMM_MODE_UPNP;
+				
 				NSString * mac = [Util strip_colon_fr_mac:mChannel.profile.mac_address];
 				
 				bms_comm = [[BMS_Communication alloc] initWithObject:self
@@ -123,6 +125,7 @@
 			case STREAM_MODE_STUN:
 			{
 				NSLog(@"GOing to STUN"); 
+				self.mChannel.communication_mode = COMM_MODE_STUN;
 				STUN_Communication * stunConn;
 				
 				

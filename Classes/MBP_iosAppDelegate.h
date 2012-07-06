@@ -7,8 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "MBP_iosViewController.h"
 
-@class MBP_iosViewController;
 
 @interface MBP_iosAppDelegate : NSObject <UIApplicationDelegate> {
     UIWindow *window;

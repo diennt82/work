@@ -15,6 +15,11 @@
 #define CONFIGURE_STATUS_AWAITING_FOR_ASSIGNMENT 0x101
 #define CONFIGURE_STATUS_ASSIGNED 0x102
 
+
+#define COMM_MODE_LOCAL 1
+#define COMM_MODE_UPNP 2
+#define COMM_MODE_STUN 3
+
 @class CamProfile;
 @interface CamChannel : NSObject {
 
@@ -23,13 +28,16 @@
 	CamProfile * profile;
 	int channel_configure_status;
 	
-	//remote HTTP stuff
+	//session Key : for both HTTP & STUN 
 	NSString * remoteViewKey; 
+	int communication_mode; 
+	//remote HTTP stuff
 	NSTimer *  remoteViewTimer; 
 	
 	//remote STUN Stuff
 	NSString * channID;
 	NSString * secretKey; 
+	int localUdtPort; 
 	
 	
 }
@@ -39,8 +47,10 @@
 @property (nonatomic, retain) NSString * remoteViewKey; 
 @property (nonatomic, retain) NSTimer * remoteViewTimer;
 @property (nonatomic, retain) NSString * channID, *secretKey;
+@property (nonatomic) int localUdtPort, communication_mode; 
 
 
++(NSString*) convertIntToIpStr:(uint ) ip;
 +(CamChannel *) restoreFromData: (NSData *) data;
 
 - (id) initWithChannelIndex:(int) index;
@@ -55,4 +65,5 @@
 
 -(NSData *) getEncChannId;
 -(NSData *) getEncMac;
+-(NSData *) decryptServerMessage:(NSData *) encrypted_data; 
 @end

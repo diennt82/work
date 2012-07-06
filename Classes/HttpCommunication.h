@@ -17,6 +17,7 @@
 #define BASIC_AUTH_DEFAULT_PASS @"000000"
 
 #define AVSTREAM_REQUEST @"GET /?action=appletvastream"
+#define AVSTREAM_UDT_REQ @"action=appletvastream"
 #define AVSTREAM_PARAM_1 @"&remote_session="
 #define AVSTREAM_PARAM_2 @" HTTP/1.1\r\n"
 

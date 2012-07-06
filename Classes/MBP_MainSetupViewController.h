@@ -27,7 +27,8 @@
 
 	id <SetupHttpDelegate> httpDelegate;
 	
-	
+	int brightness;
+	int contrast;
 }
 
 - (NSString * ) requestURLSync:(NSString*)url withTimeOut:(NSTimeInterval) timeout;
@@ -41,8 +42,7 @@
 			   bundle:(NSBundle *)nibBundleOrNil 
 		 withDelegate:(id<SetupHttpDelegate>) delegate;
 
-int brightness;
-int contrast;
+
 
 - (int)  setVideoContrast:(int) newValue;
 - (int)  setVideoBrightness:(int) newValue;

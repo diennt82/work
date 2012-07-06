@@ -30,6 +30,7 @@ void InitAddresses();
 void FreeAddresses();
 int  GetIPAddresses();
 void GetHWAddresses();
+	
 #ifdef __cplusplus
 }
 #endif

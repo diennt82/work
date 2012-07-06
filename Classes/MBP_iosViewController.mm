@@ -1777,64 +1777,83 @@
 	int port = ch.profile.port;
 
 	NSLog(@"connect to cam %@: %@:%d",ch.profile.name, ip, port);
-	
-	
-	if (comm != nil)
-	{
-		[comm release];
-		comm = nil; 
-	}
-	
-	comm = [[HttpCommunication alloc]init];
-	comm.device_ip = ip;
-	comm.device_port = port; 
-
-	//send first command now.. non-blocking call - ignore result
-	[comm sendCommand:SET_RESOLUTION_QVGA];
-	
 
 	//start fullscreen timer here.. 
 	[self tryToShowFullScreen];
 	
-	
-	
-	
-	if (streamer != nil)
+	if (ch.communication_mode == COMM_MODE_STUN)
 	{
-		[streamer stopStreaming];
-		[streamer release];
-	}
-	
-	
-	
-	
-	streamer = [[MBP_Streamer alloc]initWithIp:ip 
-									   andPort:port 
-									   handler:self ];
-	
-	//Support remote UPNP video as well
-	if (ch.profile.isInLocal != TRUE && 
-		ch.remoteViewKey != nil )
-	{
-		NSLog(@"created a remote streamer");
+		
+		//special treatment
+		NSLog(@"created a STUN streamer");
+		
+		streamer = [[MBP_Streamer alloc]initWithIp:ip 
+										   andPort:port 
+										   handler:self ];
 		streamer.remoteView = TRUE;
 		streamer.remoteViewKey = ch.remoteViewKey; 
-
+		streamer.communication_mode = COMM_MODE_STUN;
+		streamer.local_port = ch.localUdtPort; 
+		
 		//use timer only if it is remote view 
 		[ch startViewTimer:self select:@selector(remoteViewTimeout:)];
+		
+		[streamer startUdtStream]; 
+		
 	}
-	else {
-		NSLog(@"created a local streamer");
+	else
+	{
+		
+		if (comm != nil)
+		{
+			[comm release];
+			comm = nil; 
+		}
+		
+		comm = [[HttpCommunication alloc]init];
+		comm.device_ip = ip;
+		comm.device_port = port; 
+		[comm sendCommand:SET_RESOLUTION_QVGA];
+				
+		
+		if (streamer != nil)
+		{
+			[streamer stopStreaming];
+			[streamer release];
+		}
+		
+		
+		
+		
+		streamer = [[MBP_Streamer alloc]initWithIp:ip 
+										   andPort:port 
+										   handler:self ];
+
+		//Support remote UPNP video as well
+		if (ch.profile.isInLocal != TRUE && 
+			ch.remoteViewKey != nil )
+		{
+			NSLog(@"created a remote streamer");
+			streamer.remoteView = TRUE;
+			streamer.remoteViewKey = ch.remoteViewKey; 
+			streamer.communication_mode = COMM_MODE_UPNP;			
+			//use timer only if it is remote view 
+			[ch startViewTimer:self select:@selector(remoteViewTimeout:)];
+		}
+		else 
+		{
+			NSLog(@"created a local streamer");
+			streamer.communication_mode = COMM_MODE_LOCAL;
+		}
+		
+		
+		
+		[streamer setVideoImage:self.camView.oneCamView.videoView];
+		[streamer setTemperatureLabel:self.camView.statusBar.temperature_label];
+		
+		[streamer startStreaming];
+		
 	}
-
-	
-	
-	[streamer setVideoImage:self.camView.oneCamView.videoView];
-	[streamer setTemperatureLabel:self.camView.statusBar.temperature_label];
-
-	[streamer startStreaming];
-	
-	 
 
 	//Store current SSID - to check later
 	NSString * streamingSSID = [CameraPassword fetchSSIDInfo];
@@ -1845,10 +1864,7 @@
 	
 	NSLog(@"current SSID is: %@", streamingSSID); 
 
-	
-
-	
-	
+		
 	//Store some of the info for used in menu  -- 
 	
 	NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];

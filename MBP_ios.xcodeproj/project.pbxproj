@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		1D3623260D0F684500981E51 /* MBP_iosAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D3623250D0F684500981E51 /* MBP_iosAppDelegate.m */; };
+		1D3623260D0F684500981E51 /* MBP_iosAppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 1D3623250D0F684500981E51 /* MBP_iosAppDelegate.mm */; };
 		1D60589B0D05DD56006BFB54 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.m */; };
 		1D60589F0D05DD5A006BFB54 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D30AB110D05D00D00671497 /* Foundation.framework */; };
 		1DF5F4E00D08C38300B7A737 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DF5F4DF0D08C38300B7A737 /* UIKit.framework */; };
@@ -32,8 +32,6 @@
 		972E290E15A3F77600E60A96 /* STUN_Communication.mm in Sources */ = {isa = PBXBuildFile; fileRef = 972E290D15A3F77600E60A96 /* STUN_Communication.mm */; };
 		972E295115A405D400E60A96 /* SymmetricCipher.m in Sources */ = {isa = PBXBuildFile; fileRef = 972E295015A405D400E60A96 /* SymmetricCipher.m */; };
 		972E2B8715A4234300E60A96 /* NSData+Base64.m in Sources */ = {isa = PBXBuildFile; fileRef = 972E2B8515A4234300E60A96 /* NSData+Base64.m */; };
-		972E2C4215A4438900E60A96 /* libcrypto.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 972E2C4015A4438900E60A96 /* libcrypto.a */; };
-		972E2C4315A4438900E60A96 /* libssl.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 972E2C4115A4438900E60A96 /* libssl.a */; };
 		97423218155B5888007DCBCD /* smallicon3_1.png in Resources */ = {isa = PBXBuildFile; fileRef = 97423217155B5888007DCBCD /* smallicon3_1.png */; };
 		9742321C155B58C4007DCBCD /* smallicon4_1.png in Resources */ = {isa = PBXBuildFile; fileRef = 9742321A155B58C4007DCBCD /* smallicon4_1.png */; };
 		9742321D155B58C4007DCBCD /* smallicon4_2.png in Resources */ = {isa = PBXBuildFile; fileRef = 9742321B155B58C4007DCBCD /* smallicon4_2.png */; };
@@ -54,9 +52,10 @@
 		97423429155BA503007DCBCD /* AudioOutStreamer.m in Sources */ = {isa = PBXBuildFile; fileRef = 97423428155BA503007DCBCD /* AudioOutStreamer.m */; };
 		9745CDA81553891C00800CA6 /* MBP_AddCamController_2.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9745CDA71553891C00800CA6 /* MBP_AddCamController_2.xib */; };
 		9745CDCB15538B5100800CA6 /* select_wifi_3.png in Resources */ = {isa = PBXBuildFile; fileRef = 9745CDCA15538B5100800CA6 /* select_wifi_3.png */; };
-		9745CE5D1553CF9200800CA6 /* ScanForCamera.m in Sources */ = {isa = PBXBuildFile; fileRef = 9745CE5C1553CF9200800CA6 /* ScanForCamera.m */; };
+		9745CE5D1553CF9200800CA6 /* ScanForCamera.mm in Sources */ = {isa = PBXBuildFile; fileRef = 9745CE5C1553CF9200800CA6 /* ScanForCamera.mm */; };
 		9745CF161553F01500800CA6 /* MBP_AddCamController_3.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9745CF151553F01500800CA6 /* MBP_AddCamController_3.xib */; };
 		9745CF621553FD5F00800CA6 /* MBP_AddCamController_4.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9745CF611553FD5F00800CA6 /* MBP_AddCamController_4.xib */; };
+		974D9DBA15A52F280032D631 /* libcrypto.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 974D9DB915A52F280032D631 /* libcrypto.a */; };
 		974EF72C1552241C008D6B77 /* ios_Settings.png in Resources */ = {isa = PBXBuildFile; fileRef = 974EF72B1552241C008D6B77 /* ios_Settings.png */; };
 		974EF72F15522512008D6B77 /* select_wifi.png in Resources */ = {isa = PBXBuildFile; fileRef = 974EF72E15522512008D6B77 /* select_wifi.png */; };
 		974EF733155226FE008D6B77 /* select_wifi_2.png in Resources */ = {isa = PBXBuildFile; fileRef = 974EF732155226FE008D6B77 /* select_wifi_2.png */; };
@@ -80,15 +79,15 @@
 		97534C4E1435CD110037DDAC /* large_icon8_1.png in Resources */ = {isa = PBXBuildFile; fileRef = 97534C4B1435CD110037DDAC /* large_icon8_1.png */; };
 		97534C4F1435CD110037DDAC /* large_icon7_1.png in Resources */ = {isa = PBXBuildFile; fileRef = 97534C4C1435CD110037DDAC /* large_icon7_1.png */; };
 		97534C521435CD500037DDAC /* arrowleft.png in Resources */ = {isa = PBXBuildFile; fileRef = 97534C511435CD500037DDAC /* arrowleft.png */; };
-		9770CB7E143030A9009E69EF /* MBP_CamView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9770CB7D143030A9009E69EF /* MBP_CamView.m */; };
+		9770CB7E143030A9009E69EF /* MBP_CamView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 9770CB7D143030A9009E69EF /* MBP_CamView.mm */; };
 		9770CBEC14303E3E009E69EF /* MBP_StatusBarView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9770CBEB14303E3E009E69EF /* MBP_StatusBarView.m */; };
 		9770CC0914304011009E69EF /* MBP_LeftSideMenuView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9770CC0814304011009E69EF /* MBP_LeftSideMenuView.m */; };
-		9770CC0C1430402C009E69EF /* MBP_MainCameraView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9770CC0B1430402C009E69EF /* MBP_MainCameraView.m */; };
+		9770CC0C1430402C009E69EF /* MBP_MainCameraView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 9770CC0B1430402C009E69EF /* MBP_MainCameraView.mm */; };
 		9770CC0E143040FA009E69EF /* statusbar.png in Resources */ = {isa = PBXBuildFile; fileRef = 9770CC0D143040FA009E69EF /* statusbar.png */; };
 		9770CC151430418E009E69EF /* status_icon3_1.png in Resources */ = {isa = PBXBuildFile; fileRef = 9770CC131430418E009E69EF /* status_icon3_1.png */; };
 		9770CC161430418E009E69EF /* status_icon2_1.png in Resources */ = {isa = PBXBuildFile; fileRef = 9770CC141430418E009E69EF /* status_icon2_1.png */; };
 		9770CC1814304C14009E69EF /* sidebar2.png in Resources */ = {isa = PBXBuildFile; fileRef = 9770CC1714304C14009E69EF /* sidebar2.png */; };
-		9770CC311430533B009E69EF /* MBP_MulitCamView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9770CC301430533B009E69EF /* MBP_MulitCamView.m */; };
+		9770CC311430533B009E69EF /* MBP_MulitCamView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 9770CC301430533B009E69EF /* MBP_MulitCamView.mm */; };
 		9770CD1514306B56009E69EF /* MBP_CamView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9770CD1414306B56009E69EF /* MBP_CamView.xib */; };
 		9770CD8D143073AE009E69EF /* ADPCMDecoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 9770CD86143073AE009E69EF /* ADPCMDecoder.m */; };
 		9770CD8E143073AE009E69EF /* AiBallBase64Encoding.m in Sources */ = {isa = PBXBuildFile; fileRef = 9770CD88143073AE009E69EF /* AiBallBase64Encoding.m */; };
@@ -108,7 +107,7 @@
 		978E1FB0155A7C4200743DE4 /* MBP_RightSideMenuView.m in Sources */ = {isa = PBXBuildFile; fileRef = 978E1FAE155A7C4200743DE4 /* MBP_RightSideMenuView.m */; };
 		978E97531550C84800B59E90 /* photo_item.png in Resources */ = {isa = PBXBuildFile; fileRef = 978E97521550C84800B59E90 /* photo_item.png */; };
 		978E975F1550C9B500B59E90 /* large_icon1_1_d.png in Resources */ = {isa = PBXBuildFile; fileRef = 978E975E1550C9B500B59E90 /* large_icon1_1_d.png */; };
-		978E9A811551313000B59E90 /* MBP_AddCamController.m in Sources */ = {isa = PBXBuildFile; fileRef = 978E9A7F1551313000B59E90 /* MBP_AddCamController.m */; };
+		978E9A811551313000B59E90 /* MBP_AddCamController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 978E9A7F1551313000B59E90 /* MBP_AddCamController.mm */; };
 		978E9A821551313000B59E90 /* MBP_AddCamController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 978E9A801551313000B59E90 /* MBP_AddCamController.xib */; };
 		978E9A851551318600B59E90 /* add_camera_select_Camera.png in Resources */ = {isa = PBXBuildFile; fileRef = 978E9A841551318600B59E90 /* add_camera_select_Camera.png */; };
 		978E9A871551318D00B59E90 /* add_camera_select_home_network.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 978E9A861551318D00B59E90 /* add_camera_select_home_network.jpg */; };
@@ -122,6 +121,7 @@
 		97987DF31546A1630066C49B /* MBP_LoginOrRegistration.xib in Resources */ = {isa = PBXBuildFile; fileRef = 97987DF11546A1630066C49B /* MBP_LoginOrRegistration.xib */; };
 		97987E421546AF2C0066C49B /* UserAccount.m in Sources */ = {isa = PBXBuildFile; fileRef = 97987E411546AF2C0066C49B /* UserAccount.m */; };
 		97987E461546B04C0066C49B /* BMS_Communication.m in Sources */ = {isa = PBXBuildFile; fileRef = 97987E451546B04C0066C49B /* BMS_Communication.m */; };
+		97A2121F15A57C5400B3A406 /* UdtSocketWrapper.mm in Sources */ = {isa = PBXBuildFile; fileRef = 97A2121E15A57C5400B3A406 /* UdtSocketWrapper.mm */; };
 		97A3BD6F1545094F000C3546 /* HttpCommunication.m in Sources */ = {isa = PBXBuildFile; fileRef = 97A3BD6E1545094F000C3546 /* HttpCommunication.m */; };
 		97A3BF0D15453A39000C3546 /* CameraPassword.m in Sources */ = {isa = PBXBuildFile; fileRef = 97A3BF0C15453A39000C3546 /* CameraPassword.m */; };
 		97A3BF4715453F69000C3546 /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 97A3BF4615453F69000C3546 /* CoreFoundation.framework */; };
@@ -146,7 +146,7 @@
 		97B8F69D1439B96700924E84 /* buttons11_1.png in Resources */ = {isa = PBXBuildFile; fileRef = 97B8F69C1439B96700924E84 /* buttons11_1.png */; };
 		97B8F69F1439BA2800924E84 /* buttons10_2.png in Resources */ = {isa = PBXBuildFile; fileRef = 97B8F69E1439BA2800924E84 /* buttons10_2.png */; };
 		97B8F6A11439BA3400924E84 /* buttons8_1.png in Resources */ = {isa = PBXBuildFile; fileRef = 97B8F6A01439BA3400924E84 /* buttons8_1.png */; };
-		97B8F807143ADCC700924E84 /* MBP_MainSetupViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 97B8F805143ADCC700924E84 /* MBP_MainSetupViewController.m */; };
+		97B8F807143ADCC700924E84 /* MBP_MainSetupViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 97B8F805143ADCC700924E84 /* MBP_MainSetupViewController.mm */; };
 		97B8F816143ADDD600924E84 /* words1.png in Resources */ = {isa = PBXBuildFile; fileRef = 97B8F815143ADDD600924E84 /* words1.png */; };
 		97B8F818143ADE2200924E84 /* words3.png in Resources */ = {isa = PBXBuildFile; fileRef = 97B8F817143ADE2200924E84 /* words3.png */; };
 		97B8F81A143ADED800924E84 /* buttons1_1.png in Resources */ = {isa = PBXBuildFile; fileRef = 97B8F819143ADED800924E84 /* buttons1_1.png */; };
@@ -160,7 +160,7 @@
 		97B8F83F143AE07400924E84 /* buttons11_2.png in Resources */ = {isa = PBXBuildFile; fileRef = 97B8F83B143AE07400924E84 /* buttons11_2.png */; };
 		97C061CD143AEDA30016286D /* MBP_MainSetupViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 97C061CC143AEDA30016286D /* MBP_MainSetupViewController.xib */; };
 		97C06252143AF5C80016286D /* MBP_DeviceConfigureViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 97C0624F143AF5C80016286D /* MBP_DeviceConfigureViewController.xib */; };
-		97C06253143AF5C80016286D /* MBP_DeviceConfigureViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 97C06251143AF5C80016286D /* MBP_DeviceConfigureViewController.m */; };
+		97C06253143AF5C80016286D /* MBP_DeviceConfigureViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 97C06251143AF5C80016286D /* MBP_DeviceConfigureViewController.mm */; };
 		97C0626A143AF6AC0016286D /* MBP_DeviceScanViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 97C06268143AF6AC0016286D /* MBP_DeviceScanViewController.m */; };
 		97C0626B143AF6AC0016286D /* MBP_DeviceScanViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 97C06269143AF6AC0016286D /* MBP_DeviceScanViewController.xib */; };
 		97C0626E143AF7EA0016286D /* cam logo5.png in Resources */ = {isa = PBXBuildFile; fileRef = 97C0626D143AF7EA0016286D /* cam logo5.png */; };
@@ -194,7 +194,7 @@
 		97E3CC77159D89EE00481854 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 97E3CC76159D89EE00481854 /* AVFoundation.framework */; };
 		97E3CC9B159D8E3100481854 /* beep.wav in Resources */ = {isa = PBXBuildFile; fileRef = 97E3CC9A159D8E3100481854 /* beep.wav */; };
 		97F0F04C143C0CA00076B749 /* CamChannel.m in Sources */ = {isa = PBXBuildFile; fileRef = 97F0F04B143C0CA00076B749 /* CamChannel.m */; };
-		97F0F168143C45FA0076B749 /* MBP_Streamer.m in Sources */ = {isa = PBXBuildFile; fileRef = 97F0F167143C45FA0076B749 /* MBP_Streamer.m */; };
+		97F0F168143C45FA0076B749 /* MBP_Streamer.mm in Sources */ = {isa = PBXBuildFile; fileRef = 97F0F167143C45FA0076B749 /* MBP_Streamer.mm */; };
 		97F6FFD714C6ACF100317249 /* large_icon_info.png in Resources */ = {isa = PBXBuildFile; fileRef = 97F6FFD614C6ACF100317249 /* large_icon_info.png */; };
 		97FCE505158AC7DC00B453A6 /* MBP_LoginOrRegistration_1.xib in Resources */ = {isa = PBXBuildFile; fileRef = 97FCE504158AC7DC00B453A6 /* MBP_LoginOrRegistration_1.xib */; };
 		97FE7D1015998C0B000826F0 /* RemoteConnection.mm in Sources */ = {isa = PBXBuildFile; fileRef = 97FE7D0F15998C0B000826F0 /* RemoteConnection.mm */; };
@@ -203,7 +203,7 @@
 /* Begin PBXFileReference section */
 		1D30AB110D05D00D00671497 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		1D3623240D0F684500981E51 /* MBP_iosAppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MBP_iosAppDelegate.h; sourceTree = "<group>"; };
-		1D3623250D0F684500981E51 /* MBP_iosAppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MBP_iosAppDelegate.m; sourceTree = "<group>"; };
+		1D3623250D0F684500981E51 /* MBP_iosAppDelegate.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = MBP_iosAppDelegate.mm; sourceTree = "<group>"; };
 		1DF5F4DF0D08C38300B7A737 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		288765A40DF7441C002DB57D /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		2899E5210DE3E06400AC0155 /* MBP_iosViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MBP_iosViewController.xib; sourceTree = "<group>"; };
@@ -228,15 +228,13 @@
 		9719EC84155CA481005419FC /* main_menu_router_mode.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = main_menu_router_mode.png; sourceTree = "<group>"; };
 		9719ED99155CDC61005419FC /* cameraMenuDirect.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = cameraMenuDirect.plist; sourceTree = "<group>"; };
 		9719EDA1155CDF4C005419FC /* cameraMenuRouter.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = cameraMenuRouter.plist; sourceTree = "<group>"; };
-		972E28B315A2FD4B00E60A96 /* libUdtLib.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libUdtLib.a; path = "../UdtLib/build/Debug-iphoneos/libUdtLib.a"; sourceTree = SOURCE_ROOT; };
+		972E28B315A2FD4B00E60A96 /* libUdtLib.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libUdtLib.a; path = "../UdtLib/build/Debug-iphonesimulator/libUdtLib.a"; sourceTree = SOURCE_ROOT; };
 		972E290C15A3F77600E60A96 /* STUN_Communication.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STUN_Communication.h; sourceTree = "<group>"; };
 		972E290D15A3F77600E60A96 /* STUN_Communication.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = STUN_Communication.mm; sourceTree = "<group>"; };
 		972E294F15A405D400E60A96 /* SymmetricCipher.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SymmetricCipher.h; sourceTree = "<group>"; };
 		972E295015A405D400E60A96 /* SymmetricCipher.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SymmetricCipher.m; sourceTree = "<group>"; };
 		972E2B8515A4234300E60A96 /* NSData+Base64.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSData+Base64.m"; sourceTree = "<group>"; };
 		972E2B8615A4234300E60A96 /* NSData+Base64.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSData+Base64.h"; sourceTree = "<group>"; };
-		972E2C4015A4438900E60A96 /* libcrypto.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libcrypto.a; path = "../../Downloads/openssl_lib/iPhoneSimulator-i386/lib/libcrypto.a"; sourceTree = SOURCE_ROOT; };
-		972E2C4115A4438900E60A96 /* libssl.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libssl.a; path = "../../Downloads/openssl_lib/iPhoneSimulator-i386/lib/libssl.a"; sourceTree = SOURCE_ROOT; };
 		97423217155B5888007DCBCD /* smallicon3_1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = smallicon3_1.png; sourceTree = "<group>"; };
 		9742321A155B58C4007DCBCD /* smallicon4_1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = smallicon4_1.png; sourceTree = "<group>"; };
 		9742321B155B58C4007DCBCD /* smallicon4_2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = smallicon4_2.png; sourceTree = "<group>"; };
@@ -259,9 +257,10 @@
 		9745CDA71553891C00800CA6 /* MBP_AddCamController_2.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MBP_AddCamController_2.xib; sourceTree = "<group>"; };
 		9745CDCA15538B5100800CA6 /* select_wifi_3.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = select_wifi_3.png; sourceTree = "<group>"; };
 		9745CE5B1553CF9200800CA6 /* ScanForCamera.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ScanForCamera.h; sourceTree = "<group>"; };
-		9745CE5C1553CF9200800CA6 /* ScanForCamera.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ScanForCamera.m; sourceTree = "<group>"; };
+		9745CE5C1553CF9200800CA6 /* ScanForCamera.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = ScanForCamera.mm; sourceTree = "<group>"; };
 		9745CF151553F01500800CA6 /* MBP_AddCamController_3.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MBP_AddCamController_3.xib; sourceTree = "<group>"; };
 		9745CF611553FD5F00800CA6 /* MBP_AddCamController_4.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MBP_AddCamController_4.xib; sourceTree = "<group>"; };
+		974D9DB915A52F280032D631 /* libcrypto.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libcrypto.a; path = ../openssl_lib/iPhoneOS/lib/libcrypto.a; sourceTree = SOURCE_ROOT; };
 		974EF72B1552241C008D6B77 /* ios_Settings.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ios_Settings.png; sourceTree = "<group>"; };
 		974EF72E15522512008D6B77 /* select_wifi.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = select_wifi.png; sourceTree = "<group>"; };
 		974EF732155226FE008D6B77 /* select_wifi_2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = select_wifi_2.png; sourceTree = "<group>"; };
@@ -294,19 +293,19 @@
 		97534C4C1435CD110037DDAC /* large_icon7_1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = large_icon7_1.png; sourceTree = "<group>"; };
 		97534C511435CD500037DDAC /* arrowleft.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = arrowleft.png; sourceTree = "<group>"; };
 		9770CB7C143030A9009E69EF /* MBP_CamView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MBP_CamView.h; sourceTree = "<group>"; };
-		9770CB7D143030A9009E69EF /* MBP_CamView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MBP_CamView.m; sourceTree = "<group>"; };
+		9770CB7D143030A9009E69EF /* MBP_CamView.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = MBP_CamView.mm; sourceTree = "<group>"; };
 		9770CBEA14303E3E009E69EF /* MBP_StatusBarView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MBP_StatusBarView.h; sourceTree = "<group>"; };
 		9770CBEB14303E3E009E69EF /* MBP_StatusBarView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MBP_StatusBarView.m; sourceTree = "<group>"; };
 		9770CC0714304011009E69EF /* MBP_LeftSideMenuView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MBP_LeftSideMenuView.h; sourceTree = "<group>"; };
 		9770CC0814304011009E69EF /* MBP_LeftSideMenuView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MBP_LeftSideMenuView.m; sourceTree = "<group>"; };
 		9770CC0A1430402C009E69EF /* MBP_MainCameraView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MBP_MainCameraView.h; sourceTree = "<group>"; };
-		9770CC0B1430402C009E69EF /* MBP_MainCameraView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MBP_MainCameraView.m; sourceTree = "<group>"; };
+		9770CC0B1430402C009E69EF /* MBP_MainCameraView.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = MBP_MainCameraView.mm; sourceTree = "<group>"; };
 		9770CC0D143040FA009E69EF /* statusbar.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = statusbar.png; sourceTree = "<group>"; };
 		9770CC131430418E009E69EF /* status_icon3_1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = status_icon3_1.png; sourceTree = "<group>"; };
 		9770CC141430418E009E69EF /* status_icon2_1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = status_icon2_1.png; sourceTree = "<group>"; };
 		9770CC1714304C14009E69EF /* sidebar2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = sidebar2.png; sourceTree = "<group>"; };
 		9770CC2F1430533B009E69EF /* MBP_MulitCamView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MBP_MulitCamView.h; sourceTree = "<group>"; };
-		9770CC301430533B009E69EF /* MBP_MulitCamView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MBP_MulitCamView.m; sourceTree = "<group>"; };
+		9770CC301430533B009E69EF /* MBP_MulitCamView.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = MBP_MulitCamView.mm; sourceTree = "<group>"; };
 		9770CD1414306B56009E69EF /* MBP_CamView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MBP_CamView.xib; sourceTree = "<group>"; };
 		9770CD67143071DA009E69EF /* PublicDefine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PublicDefine.h; sourceTree = "<group>"; };
 		9770CD85143073AE009E69EF /* ADPCMDecoder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ADPCMDecoder.h; sourceTree = "<group>"; };
@@ -338,7 +337,7 @@
 		978E97521550C84800B59E90 /* photo_item.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = photo_item.png; sourceTree = "<group>"; };
 		978E975E1550C9B500B59E90 /* large_icon1_1_d.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = large_icon1_1_d.png; sourceTree = "<group>"; };
 		978E9A7E1551313000B59E90 /* MBP_AddCamController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MBP_AddCamController.h; sourceTree = "<group>"; };
-		978E9A7F1551313000B59E90 /* MBP_AddCamController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MBP_AddCamController.m; sourceTree = "<group>"; };
+		978E9A7F1551313000B59E90 /* MBP_AddCamController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = MBP_AddCamController.mm; sourceTree = "<group>"; };
 		978E9A801551313000B59E90 /* MBP_AddCamController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MBP_AddCamController.xib; sourceTree = "<group>"; };
 		978E9A841551318600B59E90 /* add_camera_select_Camera.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = add_camera_select_Camera.png; sourceTree = "<group>"; };
 		978E9A861551318D00B59E90 /* add_camera_select_home_network.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = add_camera_select_home_network.jpg; sourceTree = "<group>"; };
@@ -358,6 +357,8 @@
 		97987E411546AF2C0066C49B /* UserAccount.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UserAccount.m; sourceTree = "<group>"; };
 		97987E441546B04C0066C49B /* BMS_Communication.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BMS_Communication.h; sourceTree = "<group>"; };
 		97987E451546B04C0066C49B /* BMS_Communication.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BMS_Communication.m; sourceTree = "<group>"; };
+		97A2121D15A57C5400B3A406 /* UdtSocketWrapper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UdtSocketWrapper.h; sourceTree = "<group>"; };
+		97A2121E15A57C5400B3A406 /* UdtSocketWrapper.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = UdtSocketWrapper.mm; sourceTree = "<group>"; };
 		97A3BD6D1545094F000C3546 /* HttpCommunication.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HttpCommunication.h; sourceTree = "<group>"; };
 		97A3BD6E1545094F000C3546 /* HttpCommunication.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HttpCommunication.m; sourceTree = "<group>"; };
 		97A3BF0B15453A39000C3546 /* CameraPassword.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CameraPassword.h; sourceTree = "<group>"; };
@@ -386,7 +387,7 @@
 		97B8F69E1439BA2800924E84 /* buttons10_2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = buttons10_2.png; sourceTree = "<group>"; };
 		97B8F6A01439BA3400924E84 /* buttons8_1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = buttons8_1.png; sourceTree = "<group>"; };
 		97B8F804143ADCC700924E84 /* MBP_MainSetupViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MBP_MainSetupViewController.h; sourceTree = "<group>"; };
-		97B8F805143ADCC700924E84 /* MBP_MainSetupViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MBP_MainSetupViewController.m; sourceTree = "<group>"; };
+		97B8F805143ADCC700924E84 /* MBP_MainSetupViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = MBP_MainSetupViewController.mm; sourceTree = "<group>"; };
 		97B8F815143ADDD600924E84 /* words1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = words1.png; sourceTree = "<group>"; };
 		97B8F817143ADE2200924E84 /* words3.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = words3.png; sourceTree = "<group>"; };
 		97B8F819143ADED800924E84 /* buttons1_1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = buttons1_1.png; sourceTree = "<group>"; };
@@ -401,7 +402,7 @@
 		97C061CC143AEDA30016286D /* MBP_MainSetupViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MBP_MainSetupViewController.xib; sourceTree = "<group>"; };
 		97C0624F143AF5C80016286D /* MBP_DeviceConfigureViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MBP_DeviceConfigureViewController.xib; sourceTree = "<group>"; };
 		97C06250143AF5C80016286D /* MBP_DeviceConfigureViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MBP_DeviceConfigureViewController.h; sourceTree = "<group>"; };
-		97C06251143AF5C80016286D /* MBP_DeviceConfigureViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MBP_DeviceConfigureViewController.m; sourceTree = "<group>"; };
+		97C06251143AF5C80016286D /* MBP_DeviceConfigureViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = MBP_DeviceConfigureViewController.mm; sourceTree = "<group>"; };
 		97C06267143AF6AC0016286D /* MBP_DeviceScanViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MBP_DeviceScanViewController.h; sourceTree = "<group>"; };
 		97C06268143AF6AC0016286D /* MBP_DeviceScanViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MBP_DeviceScanViewController.m; sourceTree = "<group>"; };
 		97C06269143AF6AC0016286D /* MBP_DeviceScanViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MBP_DeviceScanViewController.xib; sourceTree = "<group>"; };
@@ -445,7 +446,7 @@
 		97F0F04A143C0CA00076B749 /* CamChannel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CamChannel.h; sourceTree = "<group>"; };
 		97F0F04B143C0CA00076B749 /* CamChannel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CamChannel.m; sourceTree = "<group>"; };
 		97F0F166143C45FA0076B749 /* MBP_Streamer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MBP_Streamer.h; sourceTree = "<group>"; };
-		97F0F167143C45FA0076B749 /* MBP_Streamer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MBP_Streamer.m; sourceTree = "<group>"; };
+		97F0F167143C45FA0076B749 /* MBP_Streamer.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = MBP_Streamer.mm; sourceTree = "<group>"; };
 		97F6FFD614C6ACF100317249 /* large_icon_info.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = large_icon_info.png; sourceTree = "<group>"; };
 		97FCE504158AC7DC00B453A6 /* MBP_LoginOrRegistration_1.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MBP_LoginOrRegistration_1.xib; sourceTree = "<group>"; };
 		97FE7D0E15998C0B000826F0 /* RemoteConnection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RemoteConnection.h; sourceTree = "<group>"; };
@@ -467,8 +468,7 @@
 				97A3C00515455054000C3546 /* SystemConfiguration.framework in Frameworks */,
 				97E3CC77159D89EE00481854 /* AVFoundation.framework in Frameworks */,
 				972E28B415A2FD4B00E60A96 /* libUdtLib.a in Frameworks */,
-				972E2C4215A4438900E60A96 /* libcrypto.a in Frameworks */,
-				972E2C4315A4438900E60A96 /* libssl.a in Frameworks */,
+				974D9DBA15A52F280032D631 /* libcrypto.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -513,16 +513,16 @@
 				978E1FAE155A7C4200743DE4 /* MBP_RightSideMenuView.m */,
 				978E1FAF155A7C4200743DE4 /* MBP_RightSideMenuView.h */,
 				1D3623240D0F684500981E51 /* MBP_iosAppDelegate.h */,
-				1D3623250D0F684500981E51 /* MBP_iosAppDelegate.m */,
+				1D3623250D0F684500981E51 /* MBP_iosAppDelegate.mm */,
 				9770CB7C143030A9009E69EF /* MBP_CamView.h */,
-				9770CB7D143030A9009E69EF /* MBP_CamView.m */,
+				9770CB7D143030A9009E69EF /* MBP_CamView.mm */,
 				9770CC2F1430533B009E69EF /* MBP_MulitCamView.h */,
-				9770CC301430533B009E69EF /* MBP_MulitCamView.m */,
+				9770CC301430533B009E69EF /* MBP_MulitCamView.mm */,
 				9770CC0A1430402C009E69EF /* MBP_MainCameraView.h */,
-				9770CC0B1430402C009E69EF /* MBP_MainCameraView.m */,
+				9770CC0B1430402C009E69EF /* MBP_MainCameraView.mm */,
 				97C061CC143AEDA30016286D /* MBP_MainSetupViewController.xib */,
 				97B8F804143ADCC700924E84 /* MBP_MainSetupViewController.h */,
-				97B8F805143ADCC700924E84 /* MBP_MainSetupViewController.m */,
+				97B8F805143ADCC700924E84 /* MBP_MainSetupViewController.mm */,
 				97987D2C154698100066C49B /* ConnectionMethodDelegate.h */,
 				97C06267143AF6AC0016286D /* MBP_DeviceScanViewController.h */,
 				97C06268143AF6AC0016286D /* MBP_DeviceScanViewController.m */,
@@ -555,7 +555,7 @@
 				97C49B801547BD52008B7D03 /* MBP_CamListView.h */,
 				97C49B811547BD52008B7D03 /* MBP_CamListView.m */,
 				9745CE5B1553CF9200800CA6 /* ScanForCamera.h */,
-				9745CE5C1553CF9200800CA6 /* ScanForCamera.m */,
+				9745CE5C1553CF9200800CA6 /* ScanForCamera.mm */,
 				97423427155BA503007DCBCD /* AudioOutStreamer.h */,
 				97423428155BA503007DCBCD /* AudioOutStreamer.m */,
 				9719EC59155C9F30005419FC /* MBP_MenuViewController.h */,
@@ -567,37 +567,39 @@
 				97FCE504158AC7DC00B453A6 /* MBP_LoginOrRegistration_1.xib */,
 				97C0624F143AF5C80016286D /* MBP_DeviceConfigureViewController.xib */,
 				97C06250143AF5C80016286D /* MBP_DeviceConfigureViewController.h */,
-				97C06251143AF5C80016286D /* MBP_DeviceConfigureViewController.m */,
+				97C06251143AF5C80016286D /* MBP_DeviceConfigureViewController.mm */,
 				978E9A7E1551313000B59E90 /* MBP_AddCamController.h */,
-				978E9A7F1551313000B59E90 /* MBP_AddCamController.m */,
+				978E9A7F1551313000B59E90 /* MBP_AddCamController.mm */,
 				9745CDA71553891C00800CA6 /* MBP_AddCamController_2.xib */,
 				978E9A801551313000B59E90 /* MBP_AddCamController.xib */,
 				9745CF611553FD5F00800CA6 /* MBP_AddCamController_4.xib */,
 				9745CF151553F01500800CA6 /* MBP_AddCamController_3.xib */,
 				97A3BF0B15453A39000C3546 /* CameraPassword.h */,
 				97A3BF0C15453A39000C3546 /* CameraPassword.m */,
-				97F0F166143C45FA0076B749 /* MBP_Streamer.h */,
-				97F0F167143C45FA0076B749 /* MBP_Streamer.m */,
 				97D00810159D9FF500B1D92F /* WifiEntry.h */,
 				97D00811159D9FF500B1D92F /* WifiEntry.m */,
 				97D0081A159DA24400B1D92F /* WifiListParser.h */,
 				97D0081B159DA24400B1D92F /* WifiListParser.m */,
-				28D7ACF60DDB3853001CB0EB /* MBP_iosViewController.h */,
-				28D7ACF70DDB3853001CB0EB /* MBP_iosViewController.mm */,
 				9753425F1432B8180037DDAC /* CamProfile.h */,
 				975342601432B8180037DDAC /* CamProfile.m */,
 				97987E441546B04C0066C49B /* BMS_Communication.h */,
 				97987E451546B04C0066C49B /* BMS_Communication.m */,
 				972E294F15A405D400E60A96 /* SymmetricCipher.h */,
 				972E295015A405D400E60A96 /* SymmetricCipher.m */,
-				97F0F04A143C0CA00076B749 /* CamChannel.h */,
-				97F0F04B143C0CA00076B749 /* CamChannel.m */,
-				97FE7D0E15998C0B000826F0 /* RemoteConnection.h */,
-				97FE7D0F15998C0B000826F0 /* RemoteConnection.mm */,
 				972E2B8515A4234300E60A96 /* NSData+Base64.m */,
 				972E2B8615A4234300E60A96 /* NSData+Base64.h */,
+				97FE7D0E15998C0B000826F0 /* RemoteConnection.h */,
+				97FE7D0F15998C0B000826F0 /* RemoteConnection.mm */,
 				972E290C15A3F77600E60A96 /* STUN_Communication.h */,
 				972E290D15A3F77600E60A96 /* STUN_Communication.mm */,
+				97F0F04A143C0CA00076B749 /* CamChannel.h */,
+				97F0F04B143C0CA00076B749 /* CamChannel.m */,
+				97A2121D15A57C5400B3A406 /* UdtSocketWrapper.h */,
+				97A2121E15A57C5400B3A406 /* UdtSocketWrapper.mm */,
+				28D7ACF60DDB3853001CB0EB /* MBP_iosViewController.h */,
+				28D7ACF70DDB3853001CB0EB /* MBP_iosViewController.mm */,
+				97F0F166143C45FA0076B749 /* MBP_Streamer.h */,
+				97F0F167143C45FA0076B749 /* MBP_Streamer.mm */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -655,8 +657,7 @@
 		29B97323FDCFA39411CA2CEA /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				972E2C4015A4438900E60A96 /* libcrypto.a */,
-				972E2C4115A4438900E60A96 /* libssl.a */,
+				974D9DB915A52F280032D631 /* libcrypto.a */,
 				972E28B315A2FD4B00E60A96 /* libUdtLib.a */,
 				1DF5F4DF0D08C38300B7A737 /* UIKit.framework */,
 				1D30AB110D05D00D00671497 /* Foundation.framework */,
@@ -978,13 +979,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				1D60589B0D05DD56006BFB54 /* main.m in Sources */,
-				1D3623260D0F684500981E51 /* MBP_iosAppDelegate.m in Sources */,
+				1D3623260D0F684500981E51 /* MBP_iosAppDelegate.mm in Sources */,
 				28D7ACF80DDB3853001CB0EB /* MBP_iosViewController.mm in Sources */,
-				9770CB7E143030A9009E69EF /* MBP_CamView.m in Sources */,
+				9770CB7E143030A9009E69EF /* MBP_CamView.mm in Sources */,
 				9770CBEC14303E3E009E69EF /* MBP_StatusBarView.m in Sources */,
 				9770CC0914304011009E69EF /* MBP_LeftSideMenuView.m in Sources */,
-				9770CC0C1430402C009E69EF /* MBP_MainCameraView.m in Sources */,
-				9770CC311430533B009E69EF /* MBP_MulitCamView.m in Sources */,
+				9770CC0C1430402C009E69EF /* MBP_MainCameraView.mm in Sources */,
+				9770CC311430533B009E69EF /* MBP_MulitCamView.mm in Sources */,
 				9770CD8D143073AE009E69EF /* ADPCMDecoder.m in Sources */,
 				9770CD8E143073AE009E69EF /* AiBallBase64Encoding.m in Sources */,
 				9770CD8F143073AE009E69EF /* AsyncSocket.m in Sources */,
@@ -1002,11 +1003,11 @@
 				9753452B143325C30037DDAC /* AiBallPlayViewController.m in Sources */,
 				97534535143325EE0037DDAC /* AiBallAviPlayer.m in Sources */,
 				97B8F6671439B58000924E84 /* DeviceConfiguration.m in Sources */,
-				97B8F807143ADCC700924E84 /* MBP_MainSetupViewController.m in Sources */,
-				97C06253143AF5C80016286D /* MBP_DeviceConfigureViewController.m in Sources */,
+				97B8F807143ADCC700924E84 /* MBP_MainSetupViewController.mm in Sources */,
+				97C06253143AF5C80016286D /* MBP_DeviceConfigureViewController.mm in Sources */,
 				97C0626A143AF6AC0016286D /* MBP_DeviceScanViewController.m in Sources */,
 				97F0F04C143C0CA00076B749 /* CamChannel.m in Sources */,
-				97F0F168143C45FA0076B749 /* MBP_Streamer.m in Sources */,
+				97F0F168143C45FA0076B749 /* MBP_Streamer.mm in Sources */,
 				977D9A11143DA29100ABA946 /* MBP_RemoteAccessViewController.m in Sources */,
 				97A3BD6F1545094F000C3546 /* HttpCommunication.m in Sources */,
 				97A3BF0D15453A39000C3546 /* CameraPassword.m in Sources */,
@@ -1017,8 +1018,8 @@
 				97C49AB0154784F4008B7D03 /* SetupData.m in Sources */,
 				97C49B551547B6F7008B7D03 /* CamListItemView.m in Sources */,
 				97C49B821547BD52008B7D03 /* MBP_CamListView.m in Sources */,
-				978E9A811551313000B59E90 /* MBP_AddCamController.m in Sources */,
-				9745CE5D1553CF9200800CA6 /* ScanForCamera.m in Sources */,
+				978E9A811551313000B59E90 /* MBP_AddCamController.mm in Sources */,
+				9745CE5D1553CF9200800CA6 /* ScanForCamera.mm in Sources */,
 				978E1FB0155A7C4200743DE4 /* MBP_RightSideMenuView.m in Sources */,
 				97423429155BA503007DCBCD /* AudioOutStreamer.m in Sources */,
 				9719EC5C155C9F30005419FC /* MBP_MenuViewController.m in Sources */,
@@ -1028,6 +1029,7 @@
 				972E290E15A3F77600E60A96 /* STUN_Communication.mm in Sources */,
 				972E295115A405D400E60A96 /* SymmetricCipher.m in Sources */,
 				972E2B8715A4234300E60A96 /* NSData+Base64.m in Sources */,
+				97A2121F15A57C5400B3A406 /* UdtSocketWrapper.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1046,13 +1048,14 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = MBP_ios_Prefix.pch;
 				HEADER_SEARCH_PATHS = (
-					"/Users/mighty/Downloads/openssl_lib/iPhoneSimulator-i386/include/**",
-					"/Users/mighty/\"Pumpkin App\"/UdtLib/",
+					"\"$(SRCROOT)/../openssl_lib/iPhoneOS/include\"/**",
+					"\"$(SRCROOT)/../UdtLib/\"",
 				);
 				INFOPLIST_FILE = "MBP_ios-Info.plist";
 				LIBRARY_SEARCH_PATHS = (
 					"\"$(SRCROOT)/../UdtLib/build/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"",
-					"\"$(SRCROOT)/../../Downloads/openssl_lib/iPhoneSimulator-i386/lib\"",
+					"\"$(SRCROOT)/../openssl_lib/iPhoneSimulator-i386/lib\"",
+					"\"$(SRCROOT)/../openssl_lib/iPhoneOS/lib\"",
 				);
 				PRODUCT_NAME = MBP_ios;
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "13D2B7CC-92A8-4E40-980F-CFAC216CDF59";
@@ -1069,13 +1072,14 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = MBP_ios_Prefix.pch;
 				HEADER_SEARCH_PATHS = (
-					"/Users/mighty/Downloads/openssl_lib/iPhoneSimulator-i386/include/**",
-					"/Users/mighty/\"Pumpkin App\"/UdtLib/",
+					"\"$(SRCROOT)/../openssl_lib/iPhoneOS/include\"/**",
+					"\"$(SRCROOT)/../UdtLib/\"",
 				);
 				INFOPLIST_FILE = "MBP_ios-Info.plist";
 				LIBRARY_SEARCH_PATHS = (
 					"\"$(SRCROOT)/../UdtLib/build/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"",
-					"\"$(SRCROOT)/../../Downloads/openssl_lib/iPhoneSimulator-i386/lib\"",
+					"\"$(SRCROOT)/../openssl_lib/iPhoneSimulator-i386/lib\"",
+					"\"$(SRCROOT)/../openssl_lib/iPhoneOS/lib\"",
 				);
 				PRODUCT_NAME = MBP_ios;
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "13D2B7CC-92A8-4E40-980F-CFAC216CDF59";
@@ -1109,13 +1113,14 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = MBP_ios_Prefix.pch;
 				HEADER_SEARCH_PATHS = (
-					"/Users/mighty/Downloads/openssl_lib/iPhoneSimulator-i386/include/**",
-					"/Users/mighty/\"Pumpkin App\"/UdtLib/",
+					"\"$(SRCROOT)/../openssl_lib/iPhoneOS/include\"/**",
+					"\"$(SRCROOT)/../UdtLib/\"",
 				);
 				INFOPLIST_FILE = "MBP_ios-Info.plist";
 				LIBRARY_SEARCH_PATHS = (
 					"\"$(SRCROOT)/../UdtLib/build/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"",
-					"\"$(SRCROOT)/../../Downloads/openssl_lib/iPhoneSimulator-i386/lib\"",
+					"\"$(SRCROOT)/../openssl_lib/iPhoneSimulator-i386/lib\"",
+					"\"$(SRCROOT)/../openssl_lib/iPhoneOS/lib\"",
 				);
 				PRODUCT_NAME = msc3;
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "747F8C0F-1092-4619-8548-2B88987BDA08";

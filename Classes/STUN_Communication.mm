@@ -9,6 +9,7 @@
 #import "STUN_Communication.h"
 
 
+
 @implementation STUN_Communication
 @synthesize mChannel;
 
@@ -216,11 +217,14 @@
 			mChannel.secretKey  = secret_key; 
 			mChannel.channID = chann_id; 
 			
-			//TODO: encryption stuff
+			// encryption stuff
 			NSLog(@"channID: %@", chann_id);
 			
-			NSString * encChan =@"";
+
 			NSData * _encChan = [mChannel getEncChannId];
+
+#if 0 // DEBG 
+			NSString * encChan =@"";
 			for (int i =0; i< [ _encChan length]; i ++)
 			{
 				encChan = [NSString  stringWithFormat:@"%@ %02x", encChan, 
@@ -228,10 +232,108 @@
 			}
 				
 			NSLog(@"Enc chan: %@", encChan);
+#endif 
 						   
+			NSData * _encMac = [mChannel getEncMac];
+			NSMutableData * messageToStun, * response_data ; 
+			
+			messageToStun = [[NSMutableData alloc] initWithData:_encMac];
+			[messageToStun appendData:_encChan]; 
 			
 			
-			//TODO: start STUN communication process..
+			// start STUN communication process..
+			UdtSocketWrapper * udt_wrapper = [[ UdtSocketWrapper alloc] init];
+			int localPort, response_len = 80 ; 
+			[udt_wrapper createUdtStreamSocket];
+			 
+
+			struct in_addr * server_ip = [UdtSocketWrapper getIpfromHostName:STUN_SERVER_IP];
+			
+
+			NSLog(@"sock created: %d serverip: %d",socket , 
+				  server_ip->s_addr);
+			localPort = [udt_wrapper connectViaUdtSock:server_ip
+							   port:STUN_SERVER_PORT];
+			NSLog(@"sock connected at port: %d",localPort );
+			
+			[udt_wrapper sendDataViaUdt:(NSData *) messageToStun]; 
+			
+			
+			response_data = [[NSMutableData alloc] initWithLength:response_len]; 
+			response_len = [udt_wrapper recvDataViaUdt:response_data 
+										dataLen:response_len];
+			
+			//try decrypt 
+			if (response_len == 80) // rcv enough data
+			{
+				NSData * plain_response; 
+				plain_response = [self.mChannel decryptServerMessage:(NSData*) response_data];
+				
+				NSRange errRange = {0, 4};
+				NSData * errCode  = [plain_response subdataWithRange:errRange];
+				
+				NSRange camIpRange = {4,8}; 
+				NSData * camIp = [plain_response subdataWithRange:camIpRange];
+				
+				NSRange camPortRange = {12, 4}; 
+				NSData *camPort = [plain_response subdataWithRange:camPortRange];
+				
+				NSRange skRange = {16,64};
+				NSData * sskey = [plain_response subdataWithRange:skRange]; 
+				
+				
+				NSString * _errCode = [[NSString alloc] initWithData:errCode encoding:NSUTF8StringEncoding];
+				NSScanner  * hexVal = [NSScanner scannerWithString:_errCode]; 
+				uint error_code =  -1; 
+				[hexVal scanHexInt:&error_code];
+#if 0 //Debug	
+				NSLog(@"errCode: %@ --Int --> %d",_errCode, error_code ); 
+#endif
+				
+				
+				if (error_code != 200)
+				{
+					//TODO: process if error code is not 200 
+					//ERROR out
+					[_caller performSelector:_Failure_SEL withObject:nil ];
+				}
+				NSString * str = [[NSString alloc] initWithData:camIp encoding:NSUTF8StringEncoding];
+				hexVal = [NSScanner scannerWithString:str]; 
+				uint cam_ip = -1 ;
+				[hexVal scanHexInt:&cam_ip];
+				
+				mChannel.profile.ip_address = [CamChannel convertIntToIpStr:cam_ip]; 
+
+				
+				
+				str = [[NSString alloc] initWithData:camPort encoding:NSUTF8StringEncoding];
+				hexVal = [NSScanner scannerWithString:str]; 
+				uint cam_prt = -1 ;
+				[hexVal scanHexInt:&cam_prt];
+				mChannel.profile.port = cam_prt;
+				
+#if 0
+				NSLog(@"ip string is: %@:%d", mChannel.profile.ip_address,cam_prt );
+#endif 
+				
+				str = [[NSString alloc] initWithData:sskey encoding:NSUTF8StringEncoding];
+#if 0
+				NSLog(@"sskey: %@", str);
+#endif 
+				self.mChannel.remoteViewKey = str; 
+				self.mChannel.localUdtPort = localPort; //store this port # for use later
+				
+				
+				[_caller performSelector:_Success_SEL withObject:self.mChannel ];
+				
+			}
+			else
+			{
+				NSLog(@"ERROR can't rcv enough data to decrypt"); 
+				[_caller performSelector:_Failure_SEL withObject:nil ];
+			}
+
+			
 			
 		}
 		else
@@ -274,5 +376,8 @@
 	
 	[_caller performSelector:_Failure_SEL withObject:nil ];
 }
+
+
+
 
 @end

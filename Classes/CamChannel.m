@@ -17,12 +17,15 @@
 @synthesize remoteViewTimer; 
 @synthesize channID, secretKey;
 
+@synthesize localUdtPort, communication_mode; 
 
 - (id) initWithChannelIndex:(int) index
 {
 	channel_index = index;
 	self.profile = nil;
 	self.channel_configure_status = CONFIGURE_STATUS_NOT_ASSIGNED;
+	self.communication_mode = COMM_MODE_LOCAL;
+	
 	return self;
 }
 
@@ -84,6 +87,7 @@
 
 	}
 	self.profile = nil;
+	self.communication_mode = COMM_MODE_LOCAL;
 	
 	
 }
@@ -325,6 +329,28 @@
 
 }
 
+-(NSData *) decryptServerMessage:(NSData *) encrypted_data
+{
+	return [SymmetricCipher _AESDecryptWithKey:self.secretKey data:encrypted_data];
+}
 
+
++(NSString*) convertIntToIpStr:(uint ) ip
+{
+	NSString * res = @""; 
+	uint8_t ipv4[4];
+	
+	ipv4[0] = (uint8_t) ip ;
+	ipv4[1] = (uint8_t)( ip >> 8 );
+	ipv4[2] = (uint8_t)( ip >> 16 );
+	ipv4[3] = (uint8_t)( ip >> 24);
+	
+	res = [NSString stringWithFormat:@"%d.%d.%d.%d", ipv4[0], ipv4[1], 
+		   ipv4[2], ipv4[3]]; 
+	
+	return res; 
+	
+	
+}
 
 @end

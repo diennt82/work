@@ -13,6 +13,8 @@
 #import "CameraPassword.h"
 #import "HttpCommunication.h"
 
+#import "UdtSocketWrapper.h"
+
 @protocol StreamerEventHandler
 
 
@@ -50,6 +52,8 @@
 	CGFloat currentZoomLevel ;
 	
 	BOOL remoteView; 
+	int communication_mode; 
+	
 	NSString * remoteViewKey; 
 	
 	int reconnectLimits; 
@@ -58,8 +62,13 @@
 	
 	BOOL hasStoppedByCaller; 
 	
+	UdtSocketWrapper * udtSocket; 
+	int local_port; 
+	
+	NSThread * udtStreamerThd; 
+	
 }
-@property (nonatomic) int device_port;
+@property (nonatomic) int device_port,communication_mode, local_port;
 @property (nonatomic,retain) NSString * device_ip, *remoteViewKey;
 @property (nonatomic,retain) UIImageView * videoImage;
 @property (nonatomic, retain) AsyncSocket * listenSocket;
@@ -69,6 +78,7 @@
 
 @property (nonatomic) BOOL takeSnapshot, recordInProgress, remoteView, hasStoppedByCaller;
 @property (nonatomic) CGFloat currentZoomLevel;
+@property (nonatomic, retain) UdtSocketWrapper * udtSocket;
 
 - (id) initWithIp:(NSString *) ip andPort:(int) port handler:(id<StreamerEventHandler>) handler;
  
@@ -76,7 +86,9 @@
 - (void) setVideoView:(UIImageView *) view;
 - (void) startStreaming;
 - (void) stopStreaming;
+-(void) startUdtStream;
 
+- (void) PlayPCM:(NSData*)pcm ;
 
 - (NSString * ) requestURLSync:(NSString*)url withTimeOut:(NSTimeInterval) timeout;
 - (void ) requestURLSync_bg:(NSString*)url;

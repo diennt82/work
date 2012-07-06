@@ -42,9 +42,6 @@ static const uint8_t iv[16] = {0x0a, 0x01, 0x02, 0x03, 0x04, 0x0b, 0x0c, 0x0d,
 		0x0a, 0x01, 0x02, 0x03, 0x04, 0x0b, 0x0c, 0x0d };
 	
 	AES_ctr128_encrypt((uint8_t *)[input bytes], buffer, dataLength, &aes_key, _iv, ecount, &num);
-	
-
-	NSLog(@"Encrypt  done "); 
 		
 	return [NSData dataWithBytesNoCopy:buffer length:dataLength];
 }
@@ -81,14 +78,14 @@ static const uint8_t iv[16] = {0x0a, 0x01, 0x02, 0x03, 0x04, 0x0b, 0x0c, 0x0d,
 	AES_ctr128_encrypt((uint8_t *)[input bytes], buffer, dataLength, &aes_key, _iv, ecount, &num);
 
 	
-	NSLog(@"decrypt  done "); 
+
 	
 	return [NSData dataWithBytesNoCopy:buffer length:dataLength];
 }
 
 
 
-
+////// NOT USED
 + (NSData *)AESEncryptWithKey:(NSString *)base64key data:(NSData*) input 
 {
 	
@@ -146,6 +143,7 @@ static const uint8_t iv[16] = {0x0a, 0x01, 0x02, 0x03, 0x04, 0x0b, 0x0c, 0x0d,
 	return nil;
 }
 
+//// NOT USED
 + (NSData *)AESDecryptWithKey:(NSString *)base64key data:(NSData*)input
 {
 	NSData *keyData =  [NSData dataFromBase64String:base64key ];
