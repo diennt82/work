@@ -1058,7 +1058,7 @@
 					"\"$(SRCROOT)/../openssl_lib/iPhoneOS/lib\"",
 				);
 				PRODUCT_NAME = MBP_ios;
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "13D2B7CC-92A8-4E40-980F-CFAC216CDF59";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "747F8C0F-1092-4619-8548-2B88987BDA08";
 			};
 			name = Debug;
 		};
@@ -1082,7 +1082,7 @@
 					"\"$(SRCROOT)/../openssl_lib/iPhoneOS/lib\"",
 				);
 				PRODUCT_NAME = MBP_ios;
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "13D2B7CC-92A8-4E40-980F-CFAC216CDF59";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "747F8C0F-1092-4619-8548-2B88987BDA08";
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;
