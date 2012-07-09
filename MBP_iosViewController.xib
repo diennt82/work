@@ -12,8 +12,7 @@
 		</object>
 		<object class="NSMutableArray" key="IBDocument.EditedObjectIDs">
 			<bool key="EncodedWithXMLCoder">YES</bool>
-			<integer value="6"/>
-			<integer value="94"/>
+			<integer value="64"/>
 		</object>
 		<object class="NSArray" key="IBDocument.PluginDependencies">
 			<bool key="EncodedWithXMLCoder">YES</bool>
@@ -66,6 +65,10 @@
 								<int key="NSvFlags">292</int>
 								<string key="NSFrame">{{223, 95}, {37, 37}}</string>
 								<reference key="NSSuperview" ref="364241862"/>
+								<object class="NSColor" key="IBUIBackgroundColor" id="707881125">
+									<int key="NSColorSpace">3</int>
+									<bytes key="NSWhite">MAA</bytes>
+								</object>
 								<bool key="IBUIOpaque">NO</bool>
 								<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
 								<bool key="IBUIHidesWhenStopped">NO</bool>
@@ -75,11 +78,8 @@
 						</object>
 						<string key="NSFrameSize">{480, 320}</string>
 						<reference key="NSSuperview" ref="774585933"/>
-						<object class="NSColor" key="IBUIBackgroundColor">
-							<int key="NSColorSpace">3</int>
-							<bytes key="NSWhite">MAA</bytes>
-						</object>
-						<float key="IBUIAlpha">0.20422534644603729</float>
+						<reference key="IBUIBackgroundColor" ref="707881125"/>
+						<float key="IBUIAlpha">0.62676054239273071</float>
 						<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
 					</object>
 				</object>
@@ -99,7 +99,7 @@
 				<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
 			</object>
 			<object class="IBUIView" id="706095658">
-				<reference key="NSNextResponder"/>
+				<nil key="NSNextResponder"/>
 				<int key="NSvFlags">292</int>
 				<object class="NSMutableArray" key="NSSubviews">
 					<bool key="EncodedWithXMLCoder">YES</bool>
@@ -342,7 +342,6 @@ dHdvcmsgbGlzdCwgcGxlYXNlIGNvbnRhY3QgdXMgZm9yIGFkZGl0aW9uYWwgYXNzaXN0YW5jZS4gA</s
 					</object>
 				</object>
 				<string key="NSFrameSize">{460, 320}</string>
-				<reference key="NSSuperview"/>
 				<object class="NSColor" key="IBUIBackgroundColor">
 					<int key="NSColorSpace">3</int>
 					<bytes key="NSWhite">MQA</bytes>
@@ -770,6 +769,7 @@ dHdvcmsgbGlzdCwgcGxlYXNlIGNvbnRhY3QgdXMgZm9yIGFkZGl0aW9uYWwgYXNzaXN0YW5jZS4gA</s
 							<string>channel2</string>
 							<string>channel3</string>
 							<string>channel4</string>
+							<string>usrEmail</string>
 						</object>
 						<object class="NSMutableArray" key="dict.values">
 							<bool key="EncodedWithXMLCoder">YES</bool>
@@ -777,6 +777,7 @@ dHdvcmsgbGlzdCwgcGxlYXNlIGNvbnRhY3QgdXMgZm9yIGFkZGl0aW9uYWwgYXNzaXN0YW5jZS4gA</s
 							<string>CamListItemView</string>
 							<string>CamListItemView</string>
 							<string>CamListItemView</string>
+							<string>UILabel</string>
 						</object>
 					</object>
 					<object class="NSMutableDictionary" key="toOneOutletInfosByName">
@@ -787,6 +788,7 @@ dHdvcmsgbGlzdCwgcGxlYXNlIGNvbnRhY3QgdXMgZm9yIGFkZGl0aW9uYWwgYXNzaXN0YW5jZS4gA</s
 							<string>channel2</string>
 							<string>channel3</string>
 							<string>channel4</string>
+							<string>usrEmail</string>
 						</object>
 						<object class="NSMutableArray" key="dict.values">
 							<bool key="EncodedWithXMLCoder">YES</bool>
@@ -805,6 +807,10 @@ dHdvcmsgbGlzdCwgcGxlYXNlIGNvbnRhY3QgdXMgZm9yIGFkZGl0aW9uYWwgYXNzaXN0YW5jZS4gA</s
 							<object class="IBToOneOutletInfo">
 								<string key="name">channel4</string>
 								<string key="candidateClassName">CamListItemView</string>
+							</object>
+							<object class="IBToOneOutletInfo">
+								<string key="name">usrEmail</string>
+								<string key="candidateClassName">UILabel</string>
 							</object>
 						</object>
 					</object>

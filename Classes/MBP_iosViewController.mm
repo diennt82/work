@@ -831,7 +831,8 @@
 		NSLog(@"channel profile is nil");
 		return; 
 	}
-	
+	self.progressView.hidden = NO; 
+	[self.view bringSubviewToFront:self.progressView];
 	
 	if (selected_channel.profile.isInLocal == YES)
 	{
@@ -1023,6 +1024,16 @@
 			
 						
 			self.camView.hidden = YES;
+			
+			if (self.alertTimer != nil)
+			{
+				if ([self.alertTimer isValid])
+				{
+					[self.alertTimer invalidate];
+				}
+				
+			}
+			
 			[self.streamer stopStreaming]; 
 			
 			[self startShowingCameraList];
@@ -1239,17 +1250,11 @@
 	//camChannel = nil 
 	
 	NSLog(@"Remote connection Failed!!!");
-#if 0
-	UIAlertView *alert = [[UIAlertView alloc]
-						  initWithTitle:@"RemoteView Error"
-						  message:@"ERROR"  
-						  delegate:self
-						  cancelButtonTitle:@"OK"
-						  otherButtonTitles:nil];
-	[alert show];
-	[alert release];
-#endif 
+
 	
+	self.progressView.hidden = YES;
+	
+
 }
 
 
@@ -1456,6 +1461,8 @@
 	switch (status) {
 		case STREAM_STARTED:
 		{
+			self.progressView.hidden = YES;
+			
 			[self stopPeriodicPopup]; 
 			
 			break;
@@ -1753,9 +1760,6 @@
 		[self.camView.statusBar switchChannel:channel_number];
 	}
 	
-	//self.camView.oneCamView.progressView.hidden = NO;
-	//[self.camView.oneCamView.progressView startAnimating];
-	
 	/* setup talk back*/
 	
 	UILongPressGestureRecognizer *lpgr = [[UILongPressGestureRecognizer alloc] 
@@ -1781,6 +1785,7 @@
 	//start fullscreen timer here.. 
 	[self tryToShowFullScreen];
 	
+		
 	if (ch.communication_mode == COMM_MODE_STUN)
 	{
 		
@@ -1798,6 +1803,10 @@
 		//use timer only if it is remote view 
 		[ch startViewTimer:self select:@selector(remoteViewTimeout:)];
 		
+		
+		
+		[streamer setVideoImage:self.camView.oneCamView.videoView];
+		[streamer setTemperatureLabel:self.camView.statusBar.temperature_label];
 		[streamer startUdtStream]; 
 		
 	}
@@ -1884,6 +1893,11 @@
 	[userDefaults setObject:ch.profile.mac_address forKey:_DeviceMac];
 	[userDefaults setObject:ch.profile.name forKey:_DeviceName];	
 	[userDefaults synchronize]; 
+
+
+	NSLog(@"show watiing"); 
+	
+	
 
 }
 

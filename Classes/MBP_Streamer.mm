@@ -276,13 +276,23 @@
 	
 }
 
+-(void) sendStatusStartedReportOnMainThread:(NSObject *) obj
+{
+	[mHandler statusReport:STREAM_STARTED andObj:obj];
+	
+}
+-(void) sendStatusStoppedReportOnMainThread:(NSObject *) obj
+{
+	[mHandler statusReport:STREAM_STOPPED andObj:obj];
+}
+
 #define READ_16K_DATA 16*1024
 
 -(void) readVideoDataFromSocket:(MBP_Streamer *) streamer 
 {
 	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
 	
-	NSLog(@"UDT: start reading data"); 
+
 	UdtSocketWrapper * socket = streamer.udtSocket;//grap the opened socket 
 	
 	NSString *strBoundary = BOUNDARY_STRING;
@@ -297,6 +307,12 @@
 	//TODO:..responseData
 	data = [[NSMutableData alloc]initWithLength:READ_16K_DATA]; //16k
 								
+
+	[self performSelectorOnMainThread:@selector(sendStatusStartedReportOnMainThread:) 
+											withObject:nil
+							waitUntilDone:YES];
+	
+	
 	//int i = 2; 
 	//while (i -- >=0)
 	while (![[NSThread currentThread] isCancelled])
@@ -368,7 +384,7 @@
 					NSData* data = [ptr subdataWithRange:range1];
 					int dl = [data length];
 					//Byte* p1 = (Byte*)[data bytes];
-					NSLog(@"dl :%d", dl);
+
 					
 					index = endPos + [boundaryString length];
 					totalOffset += index;
@@ -394,7 +410,12 @@
 						(actualDataPtr[13]<<8 )|   actualDataPtr[14];
 						
 						//Update temperature 
-						[self.temperatureLabel setText:[NSString stringWithFormat:@"%d \u2103", temperature]];
+						[self.temperatureLabel performSelectorOnMainThread:@selector(setText:) 
+																withObject:[NSString stringWithFormat:@"%d \u2103", temperature]
+															 waitUntilDone:YES];
+						 
+						 
+						
 						
 						int avdata_offset = 10 + 4 + 1 ; //old data + temperature + 1 
 						
@@ -418,7 +439,7 @@
 							{
 								[iRecorder GetAudio:decodedPCM resetAudioBufferCount:resetAudioBufferCount];
 							}
-							NSLog(@"cal mainthread decoded audio len: %d", [decodedPCM length]);
+
 							
 							[self performSelectorOnMainThread:@selector(PlayPCM:)
 												   withObject:decodedPCM
@@ -439,7 +460,7 @@
 						NSData* imageData = [actualData subdataWithRange:range4];
 						UIImage *image = [UIImage imageWithData:imageData];
 						
-						NSLog(@"audio: %d, image:%d", audioLength, range4.length);
+
 						
 						
 						if (currentZoomLevel < 5.0f)
@@ -465,10 +486,12 @@
 
 						//update graphics on main thread 
 						[self.videoImage performSelectorOnMainThread:@selector(setImage:) 
-													  withObject:[UIImage imageWithData:imageData]
+													  withObject:image
 												   waitUntilDone:YES];
 						
-						//[self.videoImage setImage:[UIImage imageWithData:imageData]];
+						
+												
+						//[streamer.videoImage setImage:[UIImage imageWithData:imageData]];
 						
 						
 						if (self.takeSnapshot == YES)
@@ -522,17 +545,20 @@
 		
 		
 	} //While (thread is running)
+		
 	
 	
-	 
-
+	[self performSelectorOnMainThread:@selector(sendStatusStoppedReportOnMainThread:) 
+							   withObject:nil
+							waitUntilDone:YES];
 	
-	NSLog(@"streamerThrd is exiting"); 
 	
 	[pool drain];
 	//arrive here -- means exit
 	[NSThread exit];
 }
+
+
 
 #pragma mark -
 #pragma mark Audio Playback

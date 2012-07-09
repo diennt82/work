@@ -28,7 +28,6 @@
 		9719EC8A155CA481005419FC /* main_menu_router_mode.png in Resources */ = {isa = PBXBuildFile; fileRef = 9719EC84155CA481005419FC /* main_menu_router_mode.png */; };
 		9719ED9A155CDC61005419FC /* cameraMenuDirect.plist in Resources */ = {isa = PBXBuildFile; fileRef = 9719ED99155CDC61005419FC /* cameraMenuDirect.plist */; };
 		9719EDA2155CDF4C005419FC /* cameraMenuRouter.plist in Resources */ = {isa = PBXBuildFile; fileRef = 9719EDA1155CDF4C005419FC /* cameraMenuRouter.plist */; };
-		972E28B415A2FD4B00E60A96 /* libUdtLib.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 972E28B315A2FD4B00E60A96 /* libUdtLib.a */; };
 		972E290E15A3F77600E60A96 /* STUN_Communication.mm in Sources */ = {isa = PBXBuildFile; fileRef = 972E290D15A3F77600E60A96 /* STUN_Communication.mm */; };
 		972E295115A405D400E60A96 /* SymmetricCipher.m in Sources */ = {isa = PBXBuildFile; fileRef = 972E295015A405D400E60A96 /* SymmetricCipher.m */; };
 		972E2B8715A4234300E60A96 /* NSData+Base64.m in Sources */ = {isa = PBXBuildFile; fileRef = 972E2B8515A4234300E60A96 /* NSData+Base64.m */; };
@@ -55,7 +54,6 @@
 		9745CE5D1553CF9200800CA6 /* ScanForCamera.mm in Sources */ = {isa = PBXBuildFile; fileRef = 9745CE5C1553CF9200800CA6 /* ScanForCamera.mm */; };
 		9745CF161553F01500800CA6 /* MBP_AddCamController_3.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9745CF151553F01500800CA6 /* MBP_AddCamController_3.xib */; };
 		9745CF621553FD5F00800CA6 /* MBP_AddCamController_4.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9745CF611553FD5F00800CA6 /* MBP_AddCamController_4.xib */; };
-		974D9DBA15A52F280032D631 /* libcrypto.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 974D9DB915A52F280032D631 /* libcrypto.a */; };
 		974EF72C1552241C008D6B77 /* ios_Settings.png in Resources */ = {isa = PBXBuildFile; fileRef = 974EF72B1552241C008D6B77 /* ios_Settings.png */; };
 		974EF72F15522512008D6B77 /* select_wifi.png in Resources */ = {isa = PBXBuildFile; fileRef = 974EF72E15522512008D6B77 /* select_wifi.png */; };
 		974EF733155226FE008D6B77 /* select_wifi_2.png in Resources */ = {isa = PBXBuildFile; fileRef = 974EF732155226FE008D6B77 /* select_wifi_2.png */; };
@@ -158,6 +156,8 @@
 		97B8F83D143AE07400924E84 /* buttons13_2.png in Resources */ = {isa = PBXBuildFile; fileRef = 97B8F839143AE07400924E84 /* buttons13_2.png */; };
 		97B8F83E143AE07400924E84 /* buttons12_2.png in Resources */ = {isa = PBXBuildFile; fileRef = 97B8F83A143AE07400924E84 /* buttons12_2.png */; };
 		97B8F83F143AE07400924E84 /* buttons11_2.png in Resources */ = {isa = PBXBuildFile; fileRef = 97B8F83B143AE07400924E84 /* buttons11_2.png */; };
+		97B9A70115AA7D7A00141EC3 /* libcrypto.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 97B9A70015AA7D7A00141EC3 /* libcrypto.a */; };
+		97B9A72615AA87BA00141EC3 /* libUdtLib.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 97B9A72515AA87BA00141EC3 /* libUdtLib.a */; };
 		97C061CD143AEDA30016286D /* MBP_MainSetupViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 97C061CC143AEDA30016286D /* MBP_MainSetupViewController.xib */; };
 		97C06252143AF5C80016286D /* MBP_DeviceConfigureViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 97C0624F143AF5C80016286D /* MBP_DeviceConfigureViewController.xib */; };
 		97C06253143AF5C80016286D /* MBP_DeviceConfigureViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 97C06251143AF5C80016286D /* MBP_DeviceConfigureViewController.mm */; };
@@ -228,7 +228,6 @@
 		9719EC84155CA481005419FC /* main_menu_router_mode.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = main_menu_router_mode.png; sourceTree = "<group>"; };
 		9719ED99155CDC61005419FC /* cameraMenuDirect.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = cameraMenuDirect.plist; sourceTree = "<group>"; };
 		9719EDA1155CDF4C005419FC /* cameraMenuRouter.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = cameraMenuRouter.plist; sourceTree = "<group>"; };
-		972E28B315A2FD4B00E60A96 /* libUdtLib.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libUdtLib.a; path = "../UdtLib/build/Debug-iphonesimulator/libUdtLib.a"; sourceTree = SOURCE_ROOT; };
 		972E290C15A3F77600E60A96 /* STUN_Communication.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STUN_Communication.h; sourceTree = "<group>"; };
 		972E290D15A3F77600E60A96 /* STUN_Communication.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = STUN_Communication.mm; sourceTree = "<group>"; };
 		972E294F15A405D400E60A96 /* SymmetricCipher.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SymmetricCipher.h; sourceTree = "<group>"; };
@@ -260,7 +259,6 @@
 		9745CE5C1553CF9200800CA6 /* ScanForCamera.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = ScanForCamera.mm; sourceTree = "<group>"; };
 		9745CF151553F01500800CA6 /* MBP_AddCamController_3.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MBP_AddCamController_3.xib; sourceTree = "<group>"; };
 		9745CF611553FD5F00800CA6 /* MBP_AddCamController_4.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MBP_AddCamController_4.xib; sourceTree = "<group>"; };
-		974D9DB915A52F280032D631 /* libcrypto.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libcrypto.a; path = ../openssl_lib/iPhoneOS/lib/libcrypto.a; sourceTree = SOURCE_ROOT; };
 		974EF72B1552241C008D6B77 /* ios_Settings.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ios_Settings.png; sourceTree = "<group>"; };
 		974EF72E15522512008D6B77 /* select_wifi.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = select_wifi.png; sourceTree = "<group>"; };
 		974EF732155226FE008D6B77 /* select_wifi_2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = select_wifi_2.png; sourceTree = "<group>"; };
@@ -399,6 +397,8 @@
 		97B8F839143AE07400924E84 /* buttons13_2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = buttons13_2.png; sourceTree = "<group>"; };
 		97B8F83A143AE07400924E84 /* buttons12_2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = buttons12_2.png; sourceTree = "<group>"; };
 		97B8F83B143AE07400924E84 /* buttons11_2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = buttons11_2.png; sourceTree = "<group>"; };
+		97B9A70015AA7D7A00141EC3 /* libcrypto.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libcrypto.a; sourceTree = "<group>"; };
+		97B9A72515AA87BA00141EC3 /* libUdtLib.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libUdtLib.a; sourceTree = "<group>"; };
 		97C061CC143AEDA30016286D /* MBP_MainSetupViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MBP_MainSetupViewController.xib; sourceTree = "<group>"; };
 		97C0624F143AF5C80016286D /* MBP_DeviceConfigureViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MBP_DeviceConfigureViewController.xib; sourceTree = "<group>"; };
 		97C06250143AF5C80016286D /* MBP_DeviceConfigureViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MBP_DeviceConfigureViewController.h; sourceTree = "<group>"; };
@@ -436,7 +436,7 @@
 		97DC555714BAB1E400AA4911 /* large_icon3_1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = large_icon3_1.png; sourceTree = "<group>"; };
 		97DC555814BAB1E400AA4911 /* large_icon5_1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = large_icon5_1.png; sourceTree = "<group>"; };
 		97DC555914BAB1E400AA4911 /* large_icon6_1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = large_icon6_1.png; sourceTree = "<group>"; };
-		97DC55BF14BAFAAD00AA4911 /* MBP_ios.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MBP_ios.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		97DC55BF14BAFAAD00AA4911 /* msc3.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = msc3.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		97DEEA4014308B71008212FF /* AsyncUdpSocket.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AsyncUdpSocket.m; sourceTree = "<group>"; };
 		97DEEA4114308B71008212FF /* AsyncUdpSocket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AsyncUdpSocket.h; sourceTree = "<group>"; };
 		97E3AAD5147E257400A0922A /* iTunesArtWork */ = {isa = PBXFileReference; lastKnownFileType = file; path = iTunesArtWork; sourceTree = "<group>"; };
@@ -467,8 +467,8 @@
 				97A3BF4715453F69000C3546 /* CoreFoundation.framework in Frameworks */,
 				97A3C00515455054000C3546 /* SystemConfiguration.framework in Frameworks */,
 				97E3CC77159D89EE00481854 /* AVFoundation.framework in Frameworks */,
-				972E28B415A2FD4B00E60A96 /* libUdtLib.a in Frameworks */,
-				974D9DBA15A52F280032D631 /* libcrypto.a in Frameworks */,
+				97B9A70115AA7D7A00141EC3 /* libcrypto.a in Frameworks */,
+				97B9A72615AA87BA00141EC3 /* libUdtLib.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -607,7 +607,7 @@
 		19C28FACFE9D520D11CA2CBB /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				97DC55BF14BAFAAD00AA4911 /* MBP_ios.app */,
+				97DC55BF14BAFAAD00AA4911 /* msc3.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -657,8 +657,8 @@
 		29B97323FDCFA39411CA2CEA /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				974D9DB915A52F280032D631 /* libcrypto.a */,
-				972E28B315A2FD4B00E60A96 /* libUdtLib.a */,
+				97B9A72515AA87BA00141EC3 /* libUdtLib.a */,
+				97B9A70015AA7D7A00141EC3 /* libcrypto.a */,
 				1DF5F4DF0D08C38300B7A737 /* UIKit.framework */,
 				1D30AB110D05D00D00671497 /* Foundation.framework */,
 				288765A40DF7441C002DB57D /* CoreGraphics.framework */,
@@ -805,7 +805,7 @@
 			);
 			name = MSC3;
 			productName = MBP_ios;
-			productReference = 97DC55BF14BAFAAD00AA4911 /* MBP_ios.app */;
+			productReference = 97DC55BF14BAFAAD00AA4911 /* msc3.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -1047,15 +1047,14 @@
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = MBP_ios_Prefix.pch;
-				HEADER_SEARCH_PATHS = (
-					"\"$(SRCROOT)/../openssl_lib/iPhoneOS/include\"/**",
-					"\"$(SRCROOT)/../UdtLib/\"",
-				);
+				HEADER_SEARCH_PATHS = "$(SRCROOT)/external_include/**";
 				INFOPLIST_FILE = "MBP_ios-Info.plist";
 				LIBRARY_SEARCH_PATHS = (
 					"\"$(SRCROOT)/../UdtLib/build/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"",
 					"\"$(SRCROOT)/../openssl_lib/iPhoneSimulator-i386/lib\"",
 					"\"$(SRCROOT)/../openssl_lib/iPhoneOS/lib\"",
+					"\"$(SRCROOT)\"",
+					"\"$(SRCROOT)/../openssl_lib/iPhoneOS-armv6/lib\"",
 				);
 				PRODUCT_NAME = MBP_ios;
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "747F8C0F-1092-4619-8548-2B88987BDA08";
@@ -1071,15 +1070,14 @@
 				COPY_PHASE_STRIP = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = MBP_ios_Prefix.pch;
-				HEADER_SEARCH_PATHS = (
-					"\"$(SRCROOT)/../openssl_lib/iPhoneOS/include\"/**",
-					"\"$(SRCROOT)/../UdtLib/\"",
-				);
+				HEADER_SEARCH_PATHS = "$(SRCROOT)/external_include/**";
 				INFOPLIST_FILE = "MBP_ios-Info.plist";
 				LIBRARY_SEARCH_PATHS = (
 					"\"$(SRCROOT)/../UdtLib/build/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"",
 					"\"$(SRCROOT)/../openssl_lib/iPhoneSimulator-i386/lib\"",
 					"\"$(SRCROOT)/../openssl_lib/iPhoneOS/lib\"",
+					"\"$(SRCROOT)\"",
+					"\"$(SRCROOT)/../openssl_lib/iPhoneOS-armv6/lib\"",
 				);
 				PRODUCT_NAME = MBP_ios;
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "747F8C0F-1092-4619-8548-2B88987BDA08";
@@ -1112,16 +1110,9 @@
 				COPY_PHASE_STRIP = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = MBP_ios_Prefix.pch;
-				HEADER_SEARCH_PATHS = (
-					"\"$(SRCROOT)/../openssl_lib/iPhoneOS/include\"/**",
-					"\"$(SRCROOT)/../UdtLib/\"",
-				);
+				HEADER_SEARCH_PATHS = "\"$(SRCROOT)/external_include\"/**";
 				INFOPLIST_FILE = "MBP_ios-Info.plist";
-				LIBRARY_SEARCH_PATHS = (
-					"\"$(SRCROOT)/../UdtLib/build/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"",
-					"\"$(SRCROOT)/../openssl_lib/iPhoneSimulator-i386/lib\"",
-					"\"$(SRCROOT)/../openssl_lib/iPhoneOS/lib\"",
-				);
+				LIBRARY_SEARCH_PATHS = "\"$(SRCROOT)\"";
 				PRODUCT_NAME = msc3;
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "747F8C0F-1092-4619-8548-2B88987BDA08";
 				VALIDATE_PRODUCT = YES;
