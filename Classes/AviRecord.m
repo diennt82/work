@@ -91,7 +91,7 @@
 
 		for(int i = 0; i < missFrame;i++)
 		{
-			NSLog(@"Detected missed frame!");
+			//NSLog(@"Detected missed frame!");
 			[self ReceiveImage:imgData];
 		}
 	}

@@ -1,0 +1,494 @@
+//
+//  Step_06_ViewController.m
+//  MBP_ios
+//
+//  Created by NxComm on 7/26/12.
+//  Copyright (c) 2012 Smart Panda Ltd. All rights reserved.
+//
+
+#import "Step_06_ViewController.h"
+
+@interface Step_06_ViewController ()
+
+@end
+
+@implementation Step_06_ViewController
+
+
+
+@synthesize securityCell, ssidCell, passwordCell, confPasswordCell;
+@synthesize ssid,  security, password; 
+@synthesize deviceConf;
+@synthesize  isOtherNetwork;
+
+- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
+{
+    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
+    if (self) {
+        // Custom initialization
+    }
+    return self;
+}
+-(void) dealloc
+{
+
+    [ssid release];
+    [security release];
+    [password release];
+    [deviceConf release];
+    [super dealloc];
+}
+- (void)viewDidLoad
+{
+    [super viewDidLoad];
+	// Do any additional setup after loading the view.
+    
+    self.navigationItem.title = @"Enter Network Information";
+    
+    self.navigationItem.backBarButtonItem =
+    [[[UIBarButtonItem alloc] initWithTitle:@"Back"
+                                      style:UIBarButtonItemStyleBordered
+                                     target:nil
+                                     action:nil] autorelease];
+    
+    
+    
+    
+    if (self.ssid == nil)
+    {
+        NSLog(@"empty SSID ");
+    }
+    if (self.security == nil)
+    {
+        NSLog(@"empty security ");
+    }
+    
+    UITextField * _ssid = (UITextField *) [self.ssidCell viewWithTag:1];
+    if (_ssid != nil && (self.isOtherNetwork == FALSE))
+    {
+        _ssid.text = self.ssid; 
+    }
+    
+    UITextField * _sec = (UITextField *) [self.securityCell viewWithTag:1];
+    if (_sec != nil)
+    {
+        _sec.text = self.security; 
+    }
+    
+    
+    UIBarButtonItem *nextButton = 
+    [[UIBarButtonItem alloc] initWithTitle:@"Next" 
+                                     style:UIBarButtonItemStylePlain 
+                                    target:self 
+                                    action:@selector(handleNextButton:)];          
+    self.navigationItem.rightBarButtonItem = nextButton;
+    [nextButton release];
+        
+    /* initialize transient object here */
+	self.deviceConf = [[DeviceConfiguration alloc] init];
+	
+	
+    if (![self restoreDataIfPossible] )
+	{
+		//Try to read the ssid from preference: 
+        self.deviceConf.ssid = ssid; 
+    }
+    
+}
+
+- (void)viewDidUnload
+{
+    [super viewDidUnload];
+    // Release any retained subviews of the main view.
+}
+
+-(void) viewWillAppear:(BOOL)animated
+{
+    NSLog(@"update security type");
+    UITextField * _sec = (UITextField *) [self.securityCell viewWithTag:1];
+    if (_sec != nil)
+    {
+        _sec.text = self.security; 
+    }
+
+}
+
+- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
+{
+    return (interfaceOrientation == UIInterfaceOrientationPortrait);
+}
+
+#pragma  mark -
+#pragma mark Table View delegate & datasource
+
+#define SSID_SECTION 0
+#define SEC_SECTION 1
+
+#define SSID_INDEX 0
+
+#define SEC_INDEX 0
+#define PASSWORD_INDEX 1
+#define CONFPASSWORD_INDEX 2
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    
+    int tag = tableView.tag;
+    
+    if (tag == 13)
+    {
+        if (indexPath.section == SSID_SECTION) 
+        {
+        //only one cell in this section 
+            if (self.isOtherNetwork == TRUE)
+            {
+                UITextField * _ssid  = (UITextField*) [ssidCell viewWithTag:1];
+                
+                
+                [_ssid setUserInteractionEnabled:TRUE];
+            }
+            return ssidCell;
+        }
+        else if (indexPath.section == SEC_SECTION)
+        {
+
+        if (indexPath.row == SEC_INDEX) {
+            return securityCell;
+        }
+        if (indexPath.row == PASSWORD_INDEX)
+        {
+            return passwordCell;
+        }
+        if (indexPath.row == CONFPASSWORD_INDEX)
+        {
+            return confPasswordCell;
+        }
+
+        }
+
+    }
+        
+    return nil;
+   
+}
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+{
+    int tag = tableView.tag;
+    
+    if (tag == 13)
+    { 
+        if (section == SSID_SECTION)
+            return 1;
+        if (section == SEC_SECTION)
+        {
+            if ([self.security isEqualToString:@"open"] ||
+                [self.security isEqualToString:@"none"])
+            {
+                return 1; 
+            }
+            else 
+            {
+                return 3; 
+            }
+        }
+    }
+   
+   
+    return 1;
+}
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
+{
+    int tag = tableView.tag;
+    
+    if (tag == 13)
+    { 
+        return 2; 
+    }
+   
+    return 0; 
+}
+
+
+
+- (void)tableView: (UITableView *)tableView didSelectRowAtIndexPath: (NSIndexPath *)indexPath 
+{
+    
+    [tableView deselectRowAtIndexPath:[tableView indexPathForSelectedRow] 
+                             animated:NO];
+    
+    if ([self.ssid isEqualToString:@"Other Network"])
+    {
+    
+        if (indexPath.section == SEC_SECTION)
+        {
+            if (indexPath.row == SEC_INDEX) 
+            {
+                [self changeSecurityType];
+                
+            }
+        }
+    }
+    
+}
+
+#pragma  mark -
+
+
+-(void) changeSecurityType
+{
+       
+    //load step 07
+    NSLog(@"Load step 7"); 
+    //Load the next xib
+    Step_07_ViewController *step07ViewController = [[Step_07_ViewController alloc]
+                                                    initWithNibName:@"Step_07_ViewController" bundle:nil];
+    
+    step07ViewController.step06 = self;
+    [self.navigationController pushViewController:step07ViewController animated:NO];
+    
+    [step07ViewController release];
+    
+}
+
+
+
+-(void) handleNextButton:(id) sender
+{
+    //check if password is ok?
+    UITextField  * pass = (UITextField*)[self.passwordCell viewWithTag:200];
+    UITextField  * confpass = (UITextField*)[self.confPasswordCell viewWithTag:201];
+    NSLog(@"pass : %@ vs %@", pass.text, confpass.text);
+
+    
+    if ([self.security isEqualToString:@"open"])
+    {
+        //cont
+        [self sendWifiInfoToCamera ];
+    }
+    else 
+    {
+        
+        if ( ([pass.text length] == 0 ) ||
+            ( [confpass.text length] ==0 ) ||
+            (![pass.text isEqualToString:confpass.text]))
+        {
+            //error
+            //ERROR condition
+            UIAlertView *_alert = [[UIAlertView alloc]
+                                   initWithTitle:@"Confirm Password Failed"
+                                   message:@"Password does not match, please try again" 
+                                   delegate:self
+                                   cancelButtonTitle:@"OK"
+                                   otherButtonTitles:nil];
+            [_alert show];
+            [_alert release];
+        }
+        else
+        {
+            //cont
+            self.password = [NSString stringWithString:[pass text]];
+            NSLog(@"password is : %@", self.password);
+            [self sendWifiInfoToCamera ];
+            
+        }
+    }
+}
+
+
+
+- (void)textFieldDidBeginEditing:(UITextField *)textField
+{
+    [self animateTextField: textField up: YES];
+}
+
+
+- (void)textFieldDidEndEditing:(UITextField *)textField
+{
+    [self animateTextField: textField up: NO];
+}
+
+- (void) animateTextField: (UITextField*) textField up: (BOOL) up
+{
+    const int movementDistance = 80; // tweak as needed
+    const float movementDuration = 0.3f; // tweak as needed
+    
+    int movement = (up ? -movementDistance : movementDistance);
+    
+    [UIView beginAnimations: @"anim" context: nil];
+    [UIView setAnimationBeginsFromCurrentState: YES];
+    [UIView setAnimationDuration: movementDuration];
+    self.view.frame = CGRectOffset(self.view.frame, 0, movement);
+    [UIView commitAnimations];
+}
+
+- (BOOL)textFieldShouldReturn:(UITextField *)textField {
+	    
+    if (textField.tag == 200) //password
+    {
+        self.password = textField.text;
+        [textField resignFirstResponder];
+        return NO;
+    }
+    else if (textField.tag ==201) //conf password
+    {
+#if 0
+        NSString * confpass = textField.text; 
+        if (![confpass isEqualToString:self.password])
+        {
+         
+            NSLog(@"pass not match: %@ vs %@", confpass, self.password);
+
+            
+            //ERROR condition
+            UIAlertView *_alert = [[UIAlertView alloc]
+                                   initWithTitle:@"Confirm Password Failed"
+                                   message:@"Password does not match, please try again" 
+                                   delegate:self
+                                   cancelButtonTitle:@"OK"
+                                   otherButtonTitles:nil];
+            [_alert show];
+            [_alert release];
+        }
+#endif 
+        [textField resignFirstResponder];
+        
+        return NO;
+        
+    }
+    
+    return YES;
+}
+
+-(void) prepareWifiInfo
+{
+    //NOTE: we can do this because we are connecting to camera now 
+    NSString * camera_mac = [CameraPassword fetchBSSIDInfo];
+    //camera_mac = [Util strip_colon_fr_mac:camera_mac]; 
+    
+    //save mac address for used later
+
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    [userDefaults setObject:camera_mac forKey:@"CameraMacWithQuote"];
+    [userDefaults synchronize]; 
+    
+
+    self.deviceConf.addressMode = @"DHCP"; 
+    
+    if ([self.security isEqualToString:@"wep"])
+    {
+        //@"Open",@"WEP", @"WPA-PSK/WPA2-PSK"
+        self.deviceConf.securityMode = @"WEP";
+        self.deviceConf.wepType = @"OPEN"; //default
+        self.deviceConf.keyIndex = @"1"; //default; 
+    }
+    else if( [self.security isEqualToString:@"wpa"])
+    {
+        self.deviceConf.securityMode = @"WPA-PSK/WPA2-PSK";
+        
+    }
+    else {
+        self.deviceConf.securityMode= @"OPEN";
+    }
+   
+    
+    self.deviceConf.key = self.password; 
+    
+    self.deviceConf.usrName = BASIC_AUTH_DEFAULT_USER;
+    NSLog(@"02 cam password is : %@", [CameraPassword getPasswordForCam:camera_mac]);
+    NSString* camPass = [CameraPassword getPasswordForCam:camera_mac]; 
+    
+    if (camPass == nil ) //// default pass
+    {
+        camPass = @"000000";
+        NSLog(@"02 cam password is default: %@", camPass);
+    }
+    
+    
+    self.deviceConf.passWd = camPass;
+    
+}
+
+-(void)sendWifiInfoToCamera
+{
+    [self prepareWifiInfo]; 
+    
+    //Save and send 
+    if ( [deviceConf isDataReadyForStoring])
+    {
+        NSLog(@"ok to save ");
+        [Util writeDeviceConfigurationData:[deviceConf getWritableConfiguration]];
+    }
+
+    
+    DeviceConfiguration * sent_conf = [[DeviceConfiguration alloc] init];
+    
+    [sent_conf restoreConfigurationData:[Util readDeviceConfiguration]];
+    
+    //create a http delegate, send the data thru delegate
+    HttpCommunication  * deviceComm; 
+    deviceComm = [[HttpCommunication alloc]init];
+    [deviceComm sendConfiguration:sent_conf];
+    
+    NSLog(@"Send & reset done");
+    
+    
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    BOOL isFirstTimeSetup = [userDefaults boolForKey:FIRST_TIME_SETUP];
+  
+    
+    if (isFirstTimeSetup   == TRUE)
+    {
+    
+        
+            //load step 08
+        NSLog(@"Load step 8"); 
+        //Load the next xib
+        Step_08_ViewController *step08ViewController = [[Step_08_ViewController alloc]
+                                                        initWithNibName:@"Step_08_ViewController" bundle:nil];
+       
+        step08ViewController.ssid = sent_conf.ssid;
+        [self.navigationController pushViewController:step08ViewController animated:NO];
+        
+        [step08ViewController release];
+        
+    }
+    else
+    {
+        //load step 10
+        NSLog(@"Add cam... "); 
+        NSLog(@"Load Step 10"); 
+        //Load the next xib
+        Step_10_ViewController *step10ViewController = [[Step_10_ViewController alloc]
+                                                        initWithNibName:@"Step_10_ViewController" bundle:nil];
+        
+        step10ViewController.homeSSID.text = sent_conf.ssid;
+        
+        [self.navigationController pushViewController:step10ViewController animated:NO];    
+        [step10ViewController release];
+        
+        
+    }
+    
+    
+}
+
+
+- (BOOL) restoreDataIfPossible
+{
+	
+	
+	NSDictionary * saved_data = [Util readDeviceConfiguration];
+	
+	if ( saved_data != nil) 
+	{
+		[self.deviceConf restoreConfigurationData:saved_data];
+		//populate the fields with stored data 		
+		return TRUE;
+	}
+    
+	return FALSE;
+}
+
+
+
+@end

@@ -11,6 +11,7 @@
 #import "CamProfile.h"
 #import "AsyncUDPSocket.h"
 
+#import "ScanForCameraProtocol.h"
 
 
 
@@ -22,7 +23,9 @@
 	int next_profile_index; 
 	NSMutableArray * scan_results; 
 	BOOL deviceScanInProgress; 
+    id<ScanForCameraNotifier> notifier;
 }
+
 
 
 @property (nonatomic,retain) NSString * bc_addr; 
@@ -32,11 +35,15 @@
 @property (nonatomic) BOOL deviceScanInProgress; 
 @property (nonatomic,retain) NSMutableArray * scan_results; 
 
+@property (nonatomic, assign) id<ScanForCameraNotifier> notifier;
+
+-(id) initWithNotifier:(id<ScanForCameraNotifier>) caller;
 
 - (void) scan_for_devices;
 - (BOOL) getResults:(NSArray **) out_Array;
 
 - (void) scan_for_device:(NSString*) mac; 
 
+-(void) scan_done_notify;
 
 @end

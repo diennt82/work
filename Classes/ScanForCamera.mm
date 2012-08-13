@@ -14,7 +14,7 @@
 @synthesize  bc_addr, own_addr, deviceScanInProgress; 
 @synthesize next_profile_index; 
 @synthesize scan_results; 
-
+@synthesize notifier;
 
 - (id) init
 {
@@ -23,8 +23,21 @@
 	bc_addr = @"";
 	own_addr = @"";
 	self.scan_results = [[NSMutableArray alloc]init];
+    self.notifier = nil; 
 	return self;
 }
+
+-(id) initWithNotifier:(id<ScanForCameraNotifier>) caller
+{
+    [super init];
+	next_profile_index = 0; 
+	bc_addr = @"";
+	own_addr = @"";
+	self.scan_results = [[NSMutableArray alloc]init];
+    self.notifier = caller; 
+	return self;
+}
+
 
 - (void) dealloc
 {
@@ -168,6 +181,59 @@
 	
 }
 
+- (void) scan_for_devices_done
+{
+    
+    HttpCommunication * dev_com = [[HttpCommunication alloc] init]; 
+    CamProfile * cp;
+    NSData * snap_data;
+    // scan for snap shot locally
+    for (int i =0; i< [scan_results count]; i++)
+    {
+        cp = (CamProfile *) [scan_results objectAtIndex:i]; 
+        dev_com.device_ip = cp.ip_address; 
+        
+        snap_data = [dev_com getSnapshot];
+        
+        if (snap_data != nil)
+        {
+            cp.profileImage = [UIImage imageWithData:snap_data];
+        }
+        else {
+            NSLog(@"NO local image"); 
+        }
+    }
+    
+    NSLog(@"Scan locally done"); 
+    
+	@synchronized (self)
+	{
+		deviceScanInProgress = NO;
+	}
+    
+    [self scan_done_notify];
+}
+
+-(void) scan_done_notify
+{
+    NSArray * outArray; 
+    if (self.notifier != nil)
+    {
+        if (scan_results == nil)
+        {
+            outArray =[[NSArray alloc]init];
+        }
+        else {	
+            outArray = [[NSArray alloc]initWithArray:scan_results
+                                           copyItems:NO];
+        }
+        
+        [self.notifier scan_done:outArray];
+     }
+    else {
+        NSLog(@"Scan Done without notifier"); 
+    }
+}
 
 - (BOOL) getResults:(NSArray **) out_Array
 {
@@ -206,7 +272,7 @@
  **/
 - (void)onUdpSocket:(AsyncUdpSocket *)sock didNotSendDataWithTag:(long)tag dueToError:(NSError *)error;
 {
-	NSLog(@"UDP Socket error: %d  localhost:%@", error, [sock localHost]);
+	NSLog(@"UDP Socket error: %d  localhost:%@", error.code, [sock localHost]);
 	
 }
 
@@ -266,7 +332,7 @@
 		
 	}
 	
-	if (self.next_profile_index <5)
+	if (self.next_profile_index <64)
 	{
 		/* try again until we failed */
 		[sock receiveWithTimeout:2 tag:1];
@@ -287,10 +353,8 @@
 	[sock close];
 	
 	
-	@synchronized (self)
-	{
-		deviceScanInProgress = NO;
-	}
+    [self scan_for_devices_done]; 
+   
 }
 
 /**

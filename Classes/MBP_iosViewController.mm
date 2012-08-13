@@ -28,7 +28,7 @@
 @implementation MBP_iosViewController
 
 @synthesize camView, mainMenuView;
-@synthesize scan_results, next_profile_index;
+//@synthesize scan_results, next_profile_index;
 @synthesize toTakeSnapShot,recordInProgress ;
 @synthesize bc_addr,own_addr;
 
@@ -40,7 +40,7 @@
 @synthesize channel_array; 
 @synthesize restored_profiles ; 
 
-@synthesize streamer; 
+//@synthesize streamer; 
 
 @synthesize progressView;
 
@@ -49,6 +49,8 @@
 @synthesize direcModeWaitView,direcModeWaitConnect, direcModeWaitProgress; 
 
 @synthesize shouldReloadWhenEnterBG;
+@synthesize scomm; 
+
 /*
 // The designated initializer. Override to perform setup that is required before the view is loaded.
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
@@ -82,8 +84,8 @@
 	self.recordInProgress = NO;
 
 //	self.scan_results = [NSMutableArray arrayWithCapacity:64]; 
-	self.scan_results = [[NSMutableArray alloc]init]; 
-	self.next_profile_index = 0;
+//	self.scan_results = [[NSMutableArray alloc]init]; 
+//	self.next_profile_index = 0;
 
 	
 	
@@ -92,7 +94,7 @@
 	
 
 	current_view_mode = CURRENT_VIEW_MODE_MULTI;
-	deviceScanInProgress = NO;
+//	deviceScanInProgress = NO;
 	
 	
 	self.comm = [[HttpCommunication alloc]init]; 
@@ -121,7 +123,7 @@
 	//go Back to main menu
 	[NSTimer scheduledTimerWithTimeInterval:2
 									 target:self
-								   selector:@selector(wakeup_display_main_cam:)
+								   selector:@selector(wakeup_display_login:)
 								   userInfo:nil
 									repeats:NO];
 		
@@ -131,10 +133,14 @@
 
 
 
-- (void)wakeup_display_main_cam:(NSTimer*) timer_exp
+- (void)wakeup_display_login:(NSTimer*) timer_exp
 {
 
-#if 0 //// Dont' show this page any more - go directly to login 
+    //hide splash screen page
+    [self.view addSubview:backgroundView];
+    
+    
+#if 1 // show Login Page
 	MBP_FirstPage * firstPage;
 	firstPage = [[MBP_FirstPage alloc] initWithNibName:@"MBP_FirstPage"
 												bundle:nil
@@ -143,18 +149,20 @@
 	[self presentModalViewController:firstPage animated:YES];
 #endif 
 	
-	NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-	[userDefaults setBool:TRUE forKey:_AutoLogin];
-	
-	[userDefaults synchronize];
-	
-	[NSTimer scheduledTimerWithTimeInterval:0.10
-									 target:self
-								   selector:@selector(show_login_or_reg:)
-								   userInfo:nil
-									repeats:NO];
-	
-	
+    
+#if 0
+    //Goto Login if Not first time
+
+    [userDefaults setBool:TRUE forKey:_AutoLogin];
+    [userDefaults synchronize];
+
+    [NSTimer scheduledTimerWithTimeInterval:0.10
+                                 target:self
+                               selector:@selector(show_login_or_reg:)
+                               userInfo:nil
+                                repeats:NO];
+#endif
+    
 }
 
 
@@ -205,7 +213,7 @@
  */
 -(void) startDirectConnect
 {
-	
+#if 0
 	self.shouldReloadWhenEnterBG = TRUE;
 	[self.direcModeWaitView removeFromSuperview];
 	
@@ -285,13 +293,38 @@
 									repeats:NO];
 	
 	
-	
+#endif 
 	
 	
 }
-
-
 -(void) startShowingCameraList
+{
+    
+    
+	DashBoard_ViewController * dashBoard;
+	dashBoard = [[DashBoard_ViewController alloc] initWithNibName:@"DashBoard_ViewController"
+														   bundle:nil
+												 withConnDelegate:self];
+    
+    
+    NSLog(@"camListView.channelViews : %d",[channel_array count]);
+    
+    NSMutableArray * validChannels = [[NSMutableArray alloc]init ];
+    
+    for (int i =0 ; i< [channel_array count]; i++)
+    {
+        CamChannel * ch = [channel_array objectAtIndex:i]; 
+        if (ch.profile != nil)
+            [validChannels addObject:[channel_array objectAtIndex:i]]; 
+        
+    }
+    dashBoard.listOfChannel = validChannels;
+    
+    [dashBoard presentModallyOn:self];
+
+}
+
+-(void) startShowingCameraList_old
 {
 	if (camListView == nil)
 	{
@@ -350,9 +383,7 @@
 					
 			}
 			
-			
-			//TODO: setup melody image
-			
+						
 			
 			//Set camera name
 			[itemView.cameraName setText:cp.name];
@@ -363,7 +394,7 @@
 				NSLog(@"online lastComm %@", cp.last_comm); 
 				[itemView.cameraLastComm setText:[NSString stringWithFormat:@"last seen %@", cp.last_comm]]; 
 			}
-			else
+			else 
 			{
 				NSLog(@"offline lastComm %@", cp.last_comm); 
 				[itemView.cameraLastComm setText:[NSString stringWithFormat:@"last seen %@", cp.last_comm]];
@@ -381,8 +412,7 @@
 				[itemView.cameraSnapshot setImage:[UIImage imageNamed:@"photo_item.png"]];
 			}
 
-			//set Setting button functionality -
-			//TODO: 
+        
 			
 			
 			//Set onclick for this item
@@ -470,16 +500,17 @@
 
 /*
  // Override to allow orientations other than the default portrait orientation.
- */
+  */
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
 	
     // Return YES for supported orientations
 		
-    return ((interfaceOrientation == UIInterfaceOrientationLandscapeLeft) || 
-	        (interfaceOrientation == UIInterfaceOrientationLandscapeRight));
-	
+    //return ((interfaceOrientation == UIInterfaceOrientationLandscapeLeft) || 
+	  //      (interfaceOrientation == UIInterfaceOrientationLandscapeRight));
+	return YES;
 	
 }
+
 
 
 - (void)didReceiveMemoryWarning {
@@ -498,13 +529,14 @@
 - (void)dealloc {
 	[camView release];
 	[mainMenuView release];
-	[scan_results release];
+//	[scan_results release];
 	[bc_addr release];
 	[own_addr release];
 	[comm release];
 	[channel_array release]; 
 	[restored_profiles release];
 	[fullScreenTimer release];
+	[scomm release] ;
     [super dealloc];
 }
 
@@ -635,43 +667,67 @@
 {
 	//TODO: #define all this constants
 	switch (method) {
-		case 1://GOTO Direct mode
+		case 1: 
 		{
 			
-			NSLog(@"GO to direct mode");
+			NSLog(@"GO to initial BM setup");
 			[self dismissModalViewControllerAnimated:NO	];
 			self.shouldReloadWhenEnterBG = FALSE;
-			[self.view addSubview:self.direcModeWaitView];
-			[self.direcModeWaitProgress startAnimating]; 
-			self.direcModeWaitConnect.hidden = YES;
-			
-			[NSTimer scheduledTimerWithTimeInterval:3.0
-											 target:self
-										   selector:@selector(waitForDirectCamera:)
-										   userInfo:nil
-											repeats:NO];
-			//[self startDirectConnect];
+            
+            
+            
+            
+            //Load the next xib
+            MBP_InitialSetupViewController *initSeupViewController = [[MBP_InitialSetupViewController alloc]
+                                                            initWithNibName:@"MBP_InitialSetupViewController" bundle:nil];
+            
+            
+            initSeupViewController.delegate = self; 
+            //indirectl call - [self presentModalViewController:initSeupViewController animated:NO];            
+            [initSeupViewController presentModallyOn:self]; 
+            
+            
 			break;
 		}
-		case 2: //GOTO ROUTER mode
+		case 2: //GOTO ROUTER mode - Login 
 		{
+            NSLog(@" go to Login "); 
+
 			[self dismissModalViewControllerAnimated:NO	];
-			NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-			[userDefaults setBool:TRUE forKey:_AutoLogin];
-			[userDefaults synchronize];
-			
-			[NSTimer scheduledTimerWithTimeInterval:0.10
-											 target:self
-										   selector:@selector(show_login_or_reg:)
-										   userInfo:nil
-											repeats:NO];
+						
+             NSLog(@" go to Login 02");
+//			[NSTimer scheduledTimerWithTimeInterval:0.10
+//											 target:self
+//										   selector:@selector(show_login_or_reg:)
+//										   userInfo:nil
+//											repeats:NO];
+            
+            NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+            
+            [userDefaults setBool:TRUE forKey:_AutoLogin];
+            [userDefaults synchronize];
+            NSLog(@"show_login... 1"); 
+            
+            MBP_LoginOrRegistration * loginOrReg;
+            loginOrReg = [[MBP_LoginOrRegistration alloc] initWithNibName:@"MBP_LoginOrRegistration"
+                                                                   bundle:nil
+                                                         withConnDelegate:self];
+            
+            NSLog(@"show_login... 2"); 
+            //Use navigation controller 
+            [loginOrReg presentModallyOn:self];
+            
 			break;
 		}
 		case 3:
+            //may be offline mode
+            NSLog(@" back from Login - login success"); 
+            [self scan_for_devices];
+            
 			//Back from login- login success 
 			[self dismissModalViewControllerAnimated:NO];
 			self.progressView.hidden = NO;
-			[self scan_for_devices];
+			
 			break; 
 		case 4:
 		{
@@ -680,6 +736,8 @@
 			NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
 			[userDefaults setBool:TRUE forKey:_AutoLogin];
 			[userDefaults synchronize];
+            
+            
 			
 			[NSTimer scheduledTimerWithTimeInterval:0.01
 											 target:self
@@ -709,7 +767,7 @@
 		{
 			NSLog(@"Back from menu");
 			[self dismissModalViewControllerAnimated:NO];
-			[self.streamer startStreaming];
+			//[self.streamer startStreaming];
 			
 			
 			break;
@@ -723,12 +781,12 @@
 			//go Back to main menu
 			[NSTimer scheduledTimerWithTimeInterval:0.01
 											 target:self
-										   selector:@selector(wakeup_display_main_cam:)
+										   selector:@selector(wakeup_display_login:)
 										   userInfo:nil
 											repeats:NO];
 			break;
 		}
-		case 8 : //back from login -failed
+		case 8 : //back from login -failed Or logout
 		{
 			[self dismissModalViewControllerAnimated:NO	];
 			NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
@@ -848,6 +906,7 @@
 
 - (IBAction) handlePinchGesture: (UIGestureRecognizer *) sender
 {
+#if 0
 	CGFloat factor = [(UIPinchGestureRecognizer *) sender scale];
 	if (factor > 1) 
 	{
@@ -870,13 +929,15 @@
 	{
 		self.streamer.currentZoomLevel =1.0 ;
 	}
+#endif
 	
 }
 
 
-- (IBAction) handleLongPress: (UIGestureRecognizer *) sender
+- (IBAction) handleLongPress: (id) _sender
 {
-	
+	UIGestureRecognizer * sender = (UIGestureRecognizer *) _sender;
+
 	if (sender.state == UIGestureRecognizerStateBegan)
 	{
 		NSLog(@" PTT Enaged");
@@ -943,21 +1004,7 @@
 			if ( mainMenuView != nil)
 			{
 				mainMenuView.hidden = YES;
-				
-				
-#if 0
-				if ( current_view_mode == CURRENT_VIEW_MODE_MULTI)
-				{
-					if ( deviceScanInProgress == NO)
-					{
-						/* Reconnect */	
-						[self scan_for_devices];
-					}
-				}
-				else {
-					[self switchToSingleCameraMode: -1];
-				}
-#endif 
+
 			}
 			
 			if (selected_channel != nil)
@@ -1011,7 +1058,7 @@
 
 - (IBAction) sideMenuButtonClicked:(id) sender
 {
-	
+#if 0 ///NOT USED
 	int sender_tag = ((UIButton*)sender).tag; 
 	UIActionSheet * actionSheet = nil;
 
@@ -1050,27 +1097,7 @@
 		{
 			
 			[self.streamer stopStreaming];
-#if 0 //old menu -- to be removed 
-			if ( mainMenuView == nil)
-			{
-			
-				[[NSBundle mainBundle] loadNibNamed:@"MBP_MainMenuView" 
-											  owner:self 
-											options:nil];
-				/* after  loading mainMenuView should be not nil*/
-				/* adjust the location of the menuview */
-				CGRect menuFrame = [mainMenuView frame];
-				menuFrame.origin.y += 20;
-				mainMenuView.frame = menuFrame;
-				
-				
-				
-				[self.view  addSubview:mainMenuView]; 
-			}
-			else {
-				mainMenuView.hidden = NO;
-			}
-#endif
+
 			
 			
 			MBP_MenuViewController * menuViewCtrl;
@@ -1154,6 +1181,8 @@
 		default:
 			break;
 	}
+    
+#endif 
 }
 
 
@@ -1217,7 +1246,7 @@
 			//go Back to main menu
 			[NSTimer scheduledTimerWithTimeInterval:0.01
 											 target:self
-										   selector:@selector(wakeup_display_main_cam:)
+										   selector:@selector(wakeup_display_login:)
 										   userInfo:nil
 											repeats:NO];
 			
@@ -1282,9 +1311,23 @@
 					command = [NSString stringWithFormat:@"%@%d",SET_MELODY,buttonIndex];
 				}
 				
-				if (command != nil)
+				if (selected_channel.communication_mode == COMM_MODE_STUN)
 				{
-					[comm sendCommandAndBlock:command];
+					if (self.scomm != nil)
+					{
+						NSLog(@"sending melody");
+						[self.scomm sendCommand:command	];
+					}
+				}
+				else 
+				{
+					
+					
+
+					if (comm != nil)
+					{
+						[comm sendCommandAndBlock:command];
+					}
 				}
 				
 			}
@@ -1327,7 +1370,7 @@
 			case 0:
 				NSLog(@"Stop remote view -- go back to camera list-");
 				self.camView.hidden = YES;
-				[self.streamer stopStreaming]; 
+				//[self.streamer stopStreaming]; 
 				
 				[self startShowingCameraList];
 				
@@ -1356,7 +1399,7 @@
 				[self stopPeriodicPopup]; 
 
 				self.camView.hidden = YES;
-				[self.streamer stopStreaming]; 
+				//[self.streamer stopStreaming]; 
 				
 				[self startShowingCameraList];
 				
@@ -1377,7 +1420,7 @@
 				[self stopPeriodicPopup]; 
 
 				self.camView.hidden = YES;
-				[self.streamer stopStreaming]; 
+				//[self.streamer stopStreaming]; 
 				
 				[self startShowingCameraList];
 				
@@ -1457,13 +1500,20 @@
 -(void) statusReport:(int) status andObj:(NSObject*) obj
 {
 	
-	
+#if 0
 	switch (status) {
 		case STREAM_STARTED:
 		{
 			self.progressView.hidden = YES;
 			
 			[self stopPeriodicPopup]; 
+			
+			if (selected_channel.communication_mode == COMM_MODE_STUN)
+			{
+				 
+				[self.scomm sendCommand:SET_RESOLUTION_QVGA];
+				
+			}
 			
 			break;
 		}
@@ -1554,6 +1604,7 @@
 		default:
 			break;
 	}
+#endif 
 }
 
 #pragma mark -
@@ -1563,9 +1614,122 @@
 #define SOCKET_ID_LISTEN  100
 #define SOCKET_ID_SEND    200
 
-
-
 - (void) scan_for_devices
+{
+    ScanForCamera * scanner; 
+    scanner = [[ScanForCamera alloc] initWithNotifier:self];
+    [scanner scan_for_devices];
+}
+- (void)scan_done:(NSArray *) _scan_results
+{
+    //Sync
+    
+    BOOL restore_successful = FALSE;
+	CamChannel * ch = nil;
+	restore_successful = [self restoreConfigData];
+	CamProfile * cp = nil;
+    
+	//Hide it, since we're done
+	self.progressView.hidden = YES;
+	
+	
+	if ( restore_successful == TRUE)
+	{
+		
+        
+		if (_scan_results != nil &&
+			restored_profiles != nil &&
+			[restored_profiles count] >0)
+		{
+			
+			for (int i=0; i<[restored_profiles count]; i++)
+			{
+				if ( [restored_profiles objectAtIndex:i] == nil)
+				{
+					continue;
+				}
+				cp = [restored_profiles objectAtIndex:i]; 
+				cp.isInLocal = FALSE;
+				for (int j = 0; j < [_scan_results count]; j++)
+				{
+					CamProfile * cp1 = (CamProfile *) [_scan_results objectAtIndex:j];
+                    
+					
+					if ( [cp.mac_address isEqualToString:cp1.mac_address])
+					{
+						
+						
+						cp.ip_address = cp1.ip_address;
+						
+                        if (cp1.profileImage != nil)
+                        {
+                            cp.profileImage = cp1.profileImage;
+                        }
+						
+                        cp.isInLocal = TRUE; 
+						cp.port = 80;//localport is always 80
+						//cp setMelodyStatus- TODO
+						//cp setVersionString- TODO
+						
+						
+					}
+					
+				}
+				
+			}
+			
+			
+			/* Rebinding local cameras to restored channel
+			 In the case of remote access, the mac address is set to an 
+			 invalid value "NOTSET" which will not match any MAC address gathered thru 
+			 scanning.
+			 */
+			for (int i = 0; i< [channel_array count]; i++)
+			{
+				ch = (CamChannel*) [channel_array objectAtIndex:i];
+				
+				if ( ch.profile != nil)
+				{
+					for (int j = 0; j < [restored_profiles count]; j++)
+					{
+						CamProfile * cp = (CamProfile *) [restored_profiles objectAtIndex:j];
+						if ( !cp.isSelected //&&  
+							//[cp.mac_address isEqualToString:ch.profile.mac_address]
+							)
+						{
+							//Re-bind camera - channel
+							NSLog(@"binding cam: %@(%@) to channel:%d",
+								  cp.name, cp.mac_address, ch.channel_index);
+							[ch setCamProfile:cp]; 
+							cp.isSelected = TRUE;
+							[cp setChannel:ch];
+							break;
+							
+						}
+						
+						
+					}
+				}
+				else {
+					
+					//NSLog(@"channel profile = nil");
+				}
+				
+				
+			}
+			
+		}
+		
+		
+		
+		/* show the camera list page now */
+		[self startShowingCameraList];
+        
+	}
+
+}
+#if 0
+- (void) scan_for_devices_old
 {
 	
 	///GET IP here 
@@ -1634,115 +1798,16 @@
 	self.progressView.hidden = NO;
 	[self.view bringSubviewToFront:self.progressView];
 }
+#endif
 
+#pragma mark - 
 
--(void) startConnect
-{
-
-	BOOL restore_successful = FALSE;
-	CamChannel * ch = nil;
-	restore_successful = [self restoreConfigData];
-	CamProfile * cp = nil;
-
-	//Hide it, since we're done
-	self.progressView.hidden = YES;
-	
-	
-	if ( restore_successful == TRUE)
-	{
-		
-
-		if (scan_results != nil &&
-			restored_profiles != nil &&
-			[restored_profiles count] >0)
-		{
-			
-			for (int i=0; i<[restored_profiles count]; i++)
-			{
-				if ( [restored_profiles objectAtIndex:i] == nil)
-				{
-					continue;
-				}
-				cp = [restored_profiles objectAtIndex:i]; 
-				cp.isInLocal = FALSE;
-				for (int j = 0; j < next_profile_index; j++)
-				{
-					CamProfile * cp1 = (CamProfile *) [scan_results objectAtIndex:j];
-				
-					
-					if ( [cp.mac_address isEqualToString:cp1.mac_address])
-					{
-						
-						
-						cp.ip_address = cp1.ip_address;
-						cp.profileImage = cp1.profileImage;
-						cp.isInLocal = TRUE; 
-						cp.port = 80;//localport is always 80
-						//cp setMelodyStatus- TODO
-						//cp setVersionString- TODO
-						
-						
-					}
-					
-				}
-				
-			}
-			
-			
-			/* Rebinding local cameras to restored channel
-			 In the case of remote access, the mac address is set to an 
-			 invalid value "NOTSET" which will not match any MAC address gathered thru 
-			 scanning.
-			 */
-			for (int i = 0; i< [channel_array count]; i++)
-			{
-				ch = (CamChannel*) [channel_array objectAtIndex:i];
-				
-				if ( ch.profile != nil)
-				{
-					for (int j = 0; j < [restored_profiles count]; j++)
-					{
-						CamProfile * cp = (CamProfile *) [restored_profiles objectAtIndex:j];
-						if ( !cp.isSelected //&&  
-							//[cp.mac_address isEqualToString:ch.profile.mac_address]
-							)
-						{
-							//Re-bind camera - channel
-							NSLog(@"binding cam: %@(%@) to channel:%d",
-								  cp.name, cp.mac_address, ch.channel_index);
-							[ch setCamProfile:cp]; 
-							cp.isSelected = TRUE;
-							[cp setChannel:ch];
-							break;
-							
-						}
-						
-						
-					}
-				}
-				else {
-					
-					//NSLog(@"channel profile = nil");
-				}
-				
-				
-			}
-			
-		}
-		
-		
-		
-		/* show the camera list page now */
-		[self startShowingCameraList];
-	
-	}
-	
-}
 
 
 -(void) setupInfraCamera:(CamChannel *) ch
 {
-	int channel_number = ch.channel_index;
+#if 0
+    int channel_number = ch.channel_index;
 	
 	current_view_mode = CURRENT_VIEW_MODE_SINGLE;
 	
@@ -1809,6 +1874,16 @@
 		[streamer setTemperatureLabel:self.camView.statusBar.temperature_label];
 		[streamer startUdtStream]; 
 		
+		
+		if (scomm != nil)
+		{
+			[scomm release]; 
+			scomm = nil;
+		}
+		
+		scomm = [[StunCommunication alloc] initWithIp:ip port:port lPort:ch.localUdtPort]; 
+		
+		
 	}
 	else
 	{
@@ -1857,7 +1932,7 @@
 		
 		
 		
-		[streamer setVideoImage:self.camView.oneCamView.videoView];
+        [streamer setVideoImage:self.camView.oneCamView.videoView];
 		[streamer setTemperatureLabel:self.camView.statusBar.temperature_label];
 		
 		[streamer startStreaming];
@@ -1891,13 +1966,14 @@
 	[userDefaults setInteger:port forKey:_DevicePort];
 	[userDefaults setObject:ip forKey:_DeviceIp];
 	[userDefaults setObject:ch.profile.mac_address forKey:_DeviceMac];
-	[userDefaults setObject:ch.profile.name forKey:_DeviceName];	
+	[userDefaults setObject:ch.profile.name forKey:_DeviceName];
+	[userDefaults setInteger:ch.communication_mode forKey:_CommMode];
 	[userDefaults synchronize]; 
 
 
 	NSLog(@"show watiing"); 
 	
-	
+#endif
 
 }
 
@@ -1940,7 +2016,7 @@
 
 - (void) setupDirectModeCamera 
 {
-	
+#if 0	
 	NSString * defaultName = [CameraPassword fetchSSIDInfo];
 	NSString * mac = [CameraPassword fetchBSSIDInfo];
 	NSString* ip = DEFAULT_BM_IP;
@@ -2006,6 +2082,7 @@
 	[userDefaults setObject:defaultName forKey:_DeviceName];	
 	
 	[userDefaults synchronize];
+#endif 
 }
 
 
@@ -2375,6 +2452,7 @@
 - (BOOL)onUdpSocket:(AsyncUdpSocket *)sock didReceiveData:(NSData *)data withTag:(long)tag fromHost:(NSString *)host port:(UInt16)port
 {
 	
+#if 0
 	NSString * data_str ; 
 	
 	data_str = [NSString stringWithUTF8String:(const char*)[data bytes]];
@@ -2426,6 +2504,8 @@
 		[sock receiveWithTimeout:2 tag:1];
 	}
 	
+#endif
+    
 	return YES;
 }
 
@@ -2439,15 +2519,15 @@
 	
 	/* close socket */
 	[sock close];
-	
+#if 0
 	
 	@synchronized (self)
 	{
 		deviceScanInProgress = NO;
 	}
 	NSLog(@"scanning done");
-	
-	[self startConnect];
+#endif
+
 }
 
 /**
@@ -2973,7 +3053,7 @@
 		
 		// Create the request.
 		NSMutableURLRequest *theRequest=[NSMutableURLRequest requestWithURL:[NSURL URLWithString:url]
-																cachePolicy:NSURLRequestUseProtocolCachePolicy
+																cachePolicy: NSURLRequestReloadIgnoringLocalCacheData
 															timeoutInterval:timeout];
 		NSString *authHeader = [@"Basic " stringByAppendingFormat:@"%@", [Util getCredentials]];  
 		[theRequest addValue:authHeader forHTTPHeaderField:@"Authorization"];
@@ -3367,12 +3447,20 @@
 -(void) show_login_or_reg:(NSTimer*) exp
 {
 
+    NSLog(@"show_login..."); 
+
+   
+    
 	MBP_LoginOrRegistration * loginOrReg;
 	loginOrReg = [[MBP_LoginOrRegistration alloc] initWithNibName:@"MBP_LoginOrRegistration"
 														   bundle:nil
 												 withConnDelegate:self];
-	
-	[self presentModalViewController:loginOrReg animated:NO];
+    
+
+	//Use navigation controller 
+    [loginOrReg presentModallyOn:self]; 
+    
+	//[self presentModalViewController:loginOrReg animated:NO];
 }
 
 

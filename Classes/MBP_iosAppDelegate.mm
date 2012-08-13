@@ -58,6 +58,7 @@
      */
 	
 	NSLog(@"Enter background"); 
+#if 0
 	if (viewController.streamer != nil)
 	{
 		
@@ -66,7 +67,7 @@
 		viewController.streamer = nil;
 		NSLog(@"stopped streamming "); 
 	}
-
+#endif
 	
 	
 	if (viewController.shouldReloadWhenEnterBG == TRUE	)

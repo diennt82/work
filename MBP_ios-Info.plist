@@ -11,28 +11,28 @@
 	<key>CFBundleIconFile</key>
 	<string>mbp_icon57x57.png</string>
 	<key>CFBundleIdentifier</key>
-	<string>com.nxcomm.mbp2000</string>
+	<string>com.binatonetelecom.msc3</string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>
 	<string>${PRODUCT_NAME}</string>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
+	<key>CFBundleShortVersionString</key>
+	<string>1.05</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
-	<key>CFBundleShortVersionString</key>
-	<string>1.03</string>
+	<key>CFBundleVersion</key>
+	<string>2</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSMainNibFile</key>
 	<string>MainWindow</string>
-	<key>UIStatusBarHidden</key>
-	<true/>
+	<key>UIApplicationExitsOnSuspend</key>
+	<false/>
 	<key>UIPrerenderedIcon</key>
 	<true/>
-	<key>CFBundleVersion</key>
-	<string>2</string>
-	<key>UIApplicationExitsOnSuspend</key>
+	<key>UIStatusBarHidden</key>
 	<false/>
 </dict>
 </plist>

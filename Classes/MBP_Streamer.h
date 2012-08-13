@@ -29,10 +29,23 @@
 @end
 
 
+@protocol StreamerTemperatureUpdater 
+
+-(void) updateTemperature:(int) temp;
+
+@end
+
+@protocol StreamerFrameRateUpdater 
+
+-(void) updateFrameRate:(int) frameRate;
+
+@end
+
 @interface MBP_Streamer : NSObject {
 
 	UIImageView * videoImage;
-	UILabel * temperatureLabel; 
+
+    UILabel * recTimeLabel; 
 	
 	AsyncSocket * listenSocket;
 	NSMutableData * responseData;
@@ -59,6 +72,7 @@
 	int reconnectLimits; 
 	
 	id<StreamerEventHandler> mHandler; 
+    
 	
 	BOOL hasStoppedByCaller; 
 	
@@ -66,6 +80,12 @@
 	int local_port; 
 	
 	NSThread * udtStreamerThd; 
+    BOOL disableAudio; 
+    NSTimer * recTimer; 
+    
+    id<StreamerFrameRateUpdater> mFrameUpdater;
+    id<StreamerTemperatureUpdater> mTempUpdater; 
+    
 	
 }
 @property (nonatomic) int device_port,communication_mode, local_port;
@@ -74,11 +94,20 @@
 @property (nonatomic, retain) AsyncSocket * listenSocket;
 @property (nonatomic, retain) NSMutableData * responseData;
 @property (nonatomic, retain) PCMPlayer * pcmPlayer; 
-@property (nonatomic, retain) UILabel * temperatureLabel; 
+@property (nonatomic, retain) UILabel  *recTimeLabel; 
 
 @property (nonatomic) BOOL takeSnapshot, recordInProgress, remoteView, hasStoppedByCaller;
 @property (nonatomic) CGFloat currentZoomLevel;
 @property (nonatomic, retain) UdtSocketWrapper * udtSocket;
+
+@property (nonatomic, retain) NSTimer * recTimer;
+
+@property (nonatomic) BOOL disableAudio; 
+@property (nonatomic, assign) id<StreamerFrameRateUpdater> mFrameUpdater;
+@property (nonatomic, assign) id<StreamerTemperatureUpdater> mTempUpdater; 
+
+
+
 
 - (id) initWithIp:(NSString *) ip andPort:(int) port handler:(id<StreamerEventHandler>) handler;
  

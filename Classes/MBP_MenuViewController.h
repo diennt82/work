@@ -11,6 +11,12 @@
 #import "HttpCommunication.h"
 #import "BMS_Communication.h"
 #import "CameraPassword.h"
+#import "CamChannel.h"
+#import "StunCommunication.h"
+#import "RemoteConnection.h"
+#import "MBP_Streamer.h"
+#import "DashBoard_ViewController.h"
+
 
 #define MAIN_MENU_TAG 1001
 #define CAM_MENU_TAG  1002
@@ -27,7 +33,7 @@
 #define _DeviceMac_out @"str_deviceMac_out"
 #define _DeviceName_out @"str_deviceName_out"
 #define _tempUnit @"int_tempUnit"
-
+#define _CommMode @"int_commMode"
 
 #define _VOX_DICT_KEY @"Sound Sensitivity Settings:" // need to match plist string- 
 #define _NAME_DICT_KEY @"Camera Name:"
@@ -70,12 +76,13 @@
 
 
 
-@interface MBP_MenuViewController : UIViewController <UITableViewDelegate, UITableViewDataSource>{
+@interface MBP_MenuViewController : UIViewController <UITableViewDelegate, UITableViewDataSource,StreamerEventHandler, UITextFieldDelegate>{
 
-	NSArray * mainMenuItems; 
-	IBOutlet UITableView * mainMenu;
+	//NSArray * mainMenuItems; 
+	//IBOutlet UITableView * mainMenu;
 	IBOutlet UITableView * cameraMenu;
 	IBOutlet UIPickerView * mPickerView;
+    IBOutlet UIImageView * background;
 	
 	IBOutlet UIView * manualFWDView; 
 	IBOutlet UIView * manualFWDSubView; 
@@ -104,6 +111,7 @@
 	NSString * httpUserName, * httpUserPass; 
 
 	HttpCommunication * dev_comm; 
+	StunCommunication * dev_s_comm;
 	
 	
 	NSArray * levels;
@@ -116,13 +124,15 @@
 	int voxLevel;
 	int tempunit; 
 	int videoQ;
+	int commMode;
+	CamChannel * camChan;
+	MBP_Streamer * dummy_streamer; 
 	
 }
 @property (nonatomic, retain) IBOutlet UIPickerView * mPickerView;
-@property (nonatomic,retain) IBOutlet UITableView * mainMenu;
 @property (nonatomic,retain) IBOutlet UITableView * cameraMenu;
 
-@property (nonatomic,retain) NSArray * mainMenuItems; 
+ 
 @property (nonatomic, retain) NSArray *cameraMenuItems;
 @property (nonatomic, retain) NSMutableDictionary *cameraMenuItemValues;
 
@@ -133,6 +143,8 @@
 @property (nonatomic, retain) IBOutlet UITextField * manualFWDprt80;
 @property (nonatomic, retain) IBOutlet UITextField * manualFWDprt51108; 
 @property (nonatomic, retain) IBOutlet UISegmentedControl * manualOrAuto; 
+
+@property (nonatomic, retain) CamChannel *  camChan; 
 
 - (id)initWithNibName:(NSString *)nibNameOrNil 
 				bundle:(NSBundle *)nibBundleOrNil 
@@ -189,5 +201,8 @@
 
 - (void) askForNewPassword;
 -(void)onCameraPassChanged: (NSString *) newpass;
+
+
+-(void) setupStunConnectionToMac:(NSString *) mac ;
 
 @end

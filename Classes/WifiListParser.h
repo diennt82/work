@@ -7,14 +7,25 @@
 //
 
 #import <Foundation/Foundation.h>
-
+#import "WifiEntry.h"
 
 @interface WifiListParser : NSObject <NSXMLParserDelegate>{
 
 	NSXMLParser *xmlParser;
 	NSMutableArray * wifiLists; 
+    
+    SEL _callback;
+    id  caller;
+    
+    NSMutableString * currentStringValue; 
+    NSString * list_version; 
+    WifiEntry * currentEntry; 
 }
 
 @property (nonatomic, retain) NSMutableArray * wifiLists; 
+
+
+- (void)parseData:(NSData *) xmlWifiList whenDoneCall:(SEL) _parserCallback target:(id) obj;
+
 
 @end

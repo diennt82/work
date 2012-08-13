@@ -11,30 +11,116 @@
 
 @implementation UserAccount
 
+@synthesize   userName,  userPass;
+@synthesize delegate; 
+@synthesize  bms_comm;
 
 -(id) initWithUser:(NSString*)user AndPass:(NSString*) pass WithListener:(id <ConnectionMethodDelegate>) d; 
 {
 	[super init];
-	userName = user;
-	userPass = pass;
-	delegate = d; 
+	self.userName = user;
+	self.userPass = pass;
+	self.delegate = d; 
+
 	return self; 
 }
 
+
+-(void) dealloc
+{
+    [userName release];
+    [userPass release];
+    [bms_comm release];
+    [super dealloc];
+    
+}
+
+-(void) query_camera_list_blocked
+{ 
+    //NSLog(@"UserAccount: query_camera_list_blocked");
+    self.bms_comm = [[BMS_Communication alloc] initWithObject:self
+                                                     Selector:@selector(getCamListSuccess:) 
+                                                 FailSelector:@selector(getCamListFailure:) 
+                                                    ServerErr:@selector(getCamListServerUnreachable)];
+    NSData  * responseData = [self.bms_comm BMS_getCameraListBlockedWithUser:userName AndPass:self.userPass];
+    
+    
+    [self getCamListSuccess:responseData]; 
+    
+    //NSLog(@"UserAccount: query_camera_list_blocked END");
+}
+
+-(void) query_snapshot_from_server:(NSArray *) cam_profiles
+{
+    NSLog(@"UserAccount: query_camera_snap"); 
+    
+    
+    ////set dummy selectors here -- these will not be called since we r using BLOCKED functions
+	self.bms_comm = [[BMS_Communication alloc] initWithObject:self
+                                                     Selector:@selector(getCamListSuccess:) 
+                                                 FailSelector:@selector(getCamListFailure:) 
+                                                    ServerErr:@selector(getCamListServerUnreachable)];
+    CamProfile *cp =nil;
+    NSData * snapShotData = nil; 
+    UIImage * snapShotImg = nil; 
+    for (int i =0; i<[cam_profiles count]; i++)
+    {
+        cp = (CamProfile *)[cam_profiles objectAtIndex:i];
+        
+        if (cp == nil)
+        {
+            continue;
+        }
+        //call get camlist query here 
+        snapShotData = [self.bms_comm BMS_getCameraSnapshotBlockedWithUser:self.userName 
+                                                    AndPass:self.userPass
+                                                    macAddr:cp.mac_address];
+        if (snapShotData != nil)
+        {
+            //NSLog(@"UserAccount: rcv pic for cam: %@", cp.name); 
+            snapShotImg = [UIImage imageWithData:snapShotData];
+            cp.profileImage = snapShotImg;
+        }
+        else 
+        {
+            //failed to get snapshot for this camera
+        }
+        
+        // reset
+        snapShotData = nil; 
+    }
+    
+	
+	
+    
+    
+    NSLog(@"UserAccount: query_camera_snap END "); 
+
+    
+    
+}
+
+
 -(void) query_camera_list
 {
-	BMS_Communication * bms_comm; 
-	bms_comm = [[BMS_Communication alloc] initWithObject:self
+	
+   
+    
+	self.bms_comm = [[BMS_Communication alloc] initWithObject:self
 												Selector:@selector(getCamListSuccess:) 
 											FailSelector:@selector(getCamListFailure:) 
 											   ServerErr:@selector(getCamListServerUnreachable)];
 	
-	//TODO call get camlist query here 
-	[bms_comm BMS_getCameraListWithUser:userName AndPass:userPass];
+	//call get camlist query here 
+	[self.bms_comm BMS_getCameraListWithUser:self.userName AndPass:self.userPass];
+    
+    
+    
 }
 
 -(void) getCamListSuccess:(NSData*) responseData
 {
+    NSLog(@"getCamListSuccess 01 "); 
 	
 	NSString * raw_data = [[[NSString alloc] initWithData:responseData encoding: NSASCIIStringEncoding] autorelease];
 
@@ -45,7 +131,8 @@
 	NSLog(@"after parsing total cam: %d", [cam_profiles count]);
 	
 	
-	/*TODO: query snapshot from online */
+	/* query snapshot from online */
+    [self query_snapshot_from_server:cam_profiles];
 	
 	/* sync_online_and_offline_data*/
 	[self sync_online_and_offline_data:cam_profiles];
@@ -88,12 +175,13 @@
 	[delegate sendStatus:8];
 }
 
-#define CAM_LIST_ENTRY_NUM_TOKEN 4
+#define CAM_LIST_ENTRY_NUM_TOKEN 5
 #define TOTAL_CAM @"Total_Cameras="
 #define CAM_NAME @" Cam = "
 #define MAC      @" Mac = "
 #define LAST_COMM @"last_comm_from_cam = "
 #define TIME_DIFF @" time_up_to_request = "
+#define LOCAL_IP @" local_ip = "
 
 -(NSMutableArray *) parse_camera_list:(NSString*) raw
 {
@@ -163,11 +251,29 @@
 			NSString * time_diff = [cam_entry_tokens objectAtIndex:3];
 			time_diff =[time_diff substringFromIndex:[TIME_DIFF length]];
 			int time_diff_ = [time_diff  intValue];
+            
+            NSString * local_ip = [cam_entry_tokens  objectAtIndex:4];
+              
+            local_ip = [local_ip substringFromIndex:[LOCAL_IP length]]; 
 			
-			cp = [[CamProfile alloc]initWithMacAddr:cam_mac];
-			cp.last_comm = last_comm;
-			cp.minuteSinceLastComm = time_diff_; 
-			cp.name = cam_name;
+            cp = [[CamProfile alloc]initWithMacAddr:cam_mac];
+            cp.last_comm = last_comm;
+            cp.minuteSinceLastComm = time_diff_; 
+            cp.name = cam_name;
+           
+            
+            if ( (local_ip == nil) ||
+                ([local_ip length] == 0) ||
+                ([local_ip isEqualToString:@"null"] ) )
+            {
+                //garbage ip 
+            }
+            else
+            {
+                cp.ip_address = local_ip ;
+            }
+            
+			  NSLog(@"cp.ip_address: %@ time_diff:%d", cp.ip_address,time_diff_);
 			
 			[cam_list addObject:cp];
 		}

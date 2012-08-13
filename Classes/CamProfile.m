@@ -31,7 +31,7 @@
 	self.mac_address = [response substringWithRange:mac_range];
 	self.mac_address = [self.mac_address uppercaseString];
 
-
+    self.profileImage = nil;
 	
 	self.isRemoteAccess = NO;
 }
@@ -51,6 +51,7 @@
 	self.name = nil;
 	self.last_comm = nil;
 	self.minuteSinceLastComm = 100*24*60;//100 days
+    self.profileImage = nil;
 	
 	return self;
 }
@@ -67,6 +68,9 @@
 	[super	dealloc];
 }
 
+
+#define END_OF_RECORD 0xdeadbeef
+
 - (NSMutableData *) getBytes
 {
 	NSMutableData * data = [[NSMutableData alloc] init];
@@ -74,10 +78,10 @@
 	
 	NSString * temp = @"nil";
 	NSString * ip ;
-	int myport;
+	int myport,minute ; 
 	char temp_len ;
 	
-	
+
 
 	temp = self.mac_address;
 	
@@ -96,6 +100,8 @@
 	{
 		ip = @"nil";
 	}
+     
+    
 	temp_len = [ip length];
 	[data appendBytes:&temp_len length:1];
 	[data appendBytes:[ip UTF8String] length:[ip length]];
@@ -124,8 +130,31 @@
 	temp_len = [temp length];
 	[data appendBytes:&temp_len length:1];
 	[data appendBytes:[temp UTF8String] length:[temp length]];
-	
-	
+
+    //self.minuteSinceLastComm
+    minute= self.minuteSinceLastComm;
+    [data appendBytes:&minute length:sizeof(int)];
+	//NSLog(@"ip minute: %d", minute);
+    
+    
+    if ( self.profileImage != nil)
+    {
+       
+        NSData * imageData = UIImageJPEGRepresentation(self.profileImage , 1.0);
+        int img_len; 
+        img_len = [imageData length];
+        [data appendBytes:&img_len length:sizeof(int)];
+        [data appendBytes:[imageData bytes] length:[imageData length]];
+        
+         NSLog(@">>>>>>>>>stored snapshot, len:%d",img_len );
+    }
+    
+    int endOfRec = END_OF_RECORD; 
+    [data appendBytes:&endOfRec length:sizeof(int)];
+    
+    
+    NSLog(@">>getBytes : profile len: %d", [data length]);
+    
 	return data;
 	
 }
@@ -195,7 +224,8 @@
 			this.ip_address = ip; 
 		}
 		free(_ip);
-		
+
+		//Port
 		int mport = 0;
 		NSRange port_range = {ip_range.location + len,4};
 		
@@ -242,15 +272,85 @@
 		free(_lastComm);
 		
 		
+        
+        
+        //self.minuteSinceLastComm
+        int minute= 0;
+        NSRange min_range = {lastComm_len_range.location + len+1,4};
 		
+		[data getBytes:&minute range:min_range];
+		 
+		this.minuteSinceLastComm = minute; 
+		
+		
+        
+        //Check if this is the end of record
+        int endOfRec= 0;
+        NSRange e_range = {min_range.location+4,4};
+        [data getBytes:&endOfRec range:e_range]; 
+        if (endOfRec != END_OF_RECORD)
+        {
+            NSLog(@"restored:111 May be some image"); 
+            
+            int img_len = 0; 
+            NSRange img_len_range = {min_range.location+4,4};
+            [data getBytes:&img_len range:img_len_range];
+            NSLog(@"restored: ImageLen: %d", img_len); 
+            
+#if 0
+            char * _img_data = malloc(len);
+                      
+            NSRange img_range = {img_len_range.location +4, img_len};
+            
+            [data getBytes:_img_data range:img_range];
+            
+            NSMutableData * img_data = [[NSMutableData alloc]initWithBytes:_img_data
+                                                                    length:img_len];
+            
+            [NSData dataWithBytes:_img_data length:img_len];
+            
+            this.profileImage = [UIImage imageWithData:img_data]; 
+            //this.profileImage = [[UIImage alloc]initWithData:img_data];
+            
+            
+           
+            NSLog(@"restored: restored image done"); 
+            
+            free(_img_data);	
+#else
+            
+            
+            
+            NSRange img_range = {img_len_range.location +4, img_len};
+            
+            NSData *  img_data =[data subdataWithRange:img_range];
+            
+            this.profileImage = [UIImage imageWithData:img_data]; 
+            //this.profileImage = [[UIImage alloc]initWithData:img_data];
+            
+            
+            
+            NSLog(@"restored: restored image done 112"); 
+
+            
+#endif
+            
+            
+        }
+        else
+        {
+            NSLog(@"restored: No image - End of record");
+        }
+        
+        
 		
 	}
 	
 	free(mac_str);
 	
 	
-	NSLog(@"restored: name:%@ mac:%@, ip:%@,prt:%d lastCom:%@",this.name, 
-		  this.mac_address, this.ip_address, this.port, this.last_comm);
+	NSLog(@"restored: name:%@ mac:%@, ip:%@,prt:%d lastCom:%@ min:%d",this.name, 
+		  this.mac_address, this.ip_address, this.port, this.last_comm, this.minuteSinceLastComm);
 	
 	return this;
 }

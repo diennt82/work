@@ -372,7 +372,7 @@
 				cp = [result objectAtIndex:i];
 				if ([cp.mac_address isEqualToString:[self.cameraMac uppercaseString]])
 				{
-					NSLog(@"camera %@ is up in home network with ip:%@", cp.ip_address); 
+					NSLog(@"camera %@ is up in home network with ip:%@",cp.mac_address, cp.ip_address); 
 					
 					found = TRUE;
 					break; 

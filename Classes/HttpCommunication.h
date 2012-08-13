@@ -21,6 +21,9 @@
 #define AVSTREAM_PARAM_1 @"&remote_session="
 #define AVSTREAM_PARAM_2 @" HTTP/1.1\r\n"
 
+#define SNAPSHOT_REQUEST @"?action=snapshot"
+
+
 
 #define HTTP_COMMAND_PART @"?action=command&command="
 
@@ -88,18 +91,21 @@
 #define CHECK_UPNP @"check_upnp"
 #define RESET_UPNP @"reset_upnp"
 
+#define GET_ROUTER_LIST @"get_routers_list"
 
-@interface HttpCommunication : NSObject {
+
+#define ALERT_ASK_FOR_PASSWD 1
+#define ALERT_ASK_FOR_NEW_PASSWD 2
+
+
+@interface HttpCommunication : NSObject <UITextFieldDelegate> {
 	NSString * device_ip; 
 	int device_port;
 	NSURLConnection * url_connection; 
 	NSMutableData *responseData;
 	
-	UIAlertView * myAlert; 
-	
 	NSURLCredential * credential; 
 	NSURLAuthenticationChallenge * current_challenge;
-	
 
 	BOOL authInProgress;
 	
@@ -114,10 +120,18 @@
 
 - (void) sendCommand:(NSString *) command;
 - (NSString *) sendCommandAndBlock:(NSString *)command;
-- (BOOL) tryAuthenticate;
+- (int) tryAuthenticate;
 - (void) babymonitorAuthentication;
--(void) releaseAlert;
+
 - (void)sendConfiguration:(DeviceConfiguration *) conf;
+- (NSData *) sendCommandAndBlock_raw:(NSString *)command;
+
+-(NSData * ) getSnapshot;
+- (void) askForUserPass;
+- (void) askForNewUserPass;
+
+
+
 
 #pragma mark NSURLConnection Delegate functions
 /****** NSURLConnection Delegate functions ******/

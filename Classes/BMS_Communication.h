@@ -9,7 +9,7 @@
 #import "BMS_Communication.h"
 #import "Util.h"
 
-#define BMS_DEFAULT_TIME_OUT 5000
+#define BMS_DEFAULT_TIME_OUT 20
 #define BMS_PHONESERVICE @"https://monitoreverywhere.com/BMS/phoneservice?"
 #define BMS_CMD_PART     @"action=command&command="
 
@@ -67,6 +67,13 @@
 #define GET_SECURITY_INFO_PARAM_1 @"&email="
 #define GET_SECURITY_INFO_PARAM_2 @"&pass="
 
+#define GET_IMG_CMD @"get_image"
+#define GET_IMG_PARAM_1 @"&macaddress="
+
+#define RESET_USER_PASSWORD_CMD @"reset_password"
+#define RESET_USER_PASSWORD_PARAM_1 @"&email="
+
+
 @interface BMS_Communication : NSObject {
 
 	id obj;
@@ -90,6 +97,8 @@
 
 - (BOOL)BMS_getCameraListWithUser:(NSString *) user_email AndPass:(NSString*) user_pass;
 
+- (NSData *)BMS_getCameraListBlockedWithUser:(NSString *) user_email AndPass:(NSString*) user_pass;
+
 - (BOOL)BMS_addCamWithUser:(NSString*) user_email AndPass:(NSString*) user_pass macAddr:(NSString *) mac camName:(NSString*) name;
 
 - (BOOL)BMS_delCamWithUser:(NSString*) user_email AndPass:(NSString*) user_pass macAddr:(NSString *) mac;
@@ -105,5 +114,9 @@
 
 - (BOOL)BMS_isCamAvailableWithUser:(NSString*) user_email AndPass:(NSString*) user_pass macAddr:(NSString *) mac ;
 - (BOOL)BMS_getSecInfoWithUser:(NSString*) user_email AndPass:(NSString*) user_pass ;
+
+
+- (NSData *)BMS_getCameraSnapshotBlockedWithUser:(NSString *) user_email AndPass:(NSString*) user_pass macAddr:(NSString *) mac ;
+- (BOOL)BMS_resetUserPassword:(NSString*) user_email;
 
 @end

@@ -599,7 +599,7 @@ static int socketFlag = 0;
             result =@"Unhandled exception occured, please contact administrator.";
             break;
         default:
-            result = @"Unknown error - " + bms_error_code;
+            result = [NSString stringWithFormat:@"%@%d",@"Unknown error - ", bms_error_code];
             break;
 
     }   

@@ -19,7 +19,8 @@
 {
 
 #if TARGET_IPHONE_SIMULATOR == 1
-	return @"00:0C:0A:46:02:26";
+	//return @"00:0C:0A:46:02:26";
+    return @"00:0C:0A:46:01:FC";
 #else 
 	
 	
@@ -112,7 +113,8 @@
 {
 	
 #if TARGET_IPHONE_SIMULATOR == 1
-	return @"NX-BROADBAND";
+	//return @"NX-BROADBAND";
+    return @"Moto-Cam-123456";
 #else 
 	
 	CFDictionaryRef info = nil;
@@ -184,7 +186,7 @@
     {
 
         next_slot = [CameraPassword loadPasswordFromStore:&camera_array];
-		NSLog(@"next_slot: %d");
+		//NSLog(@"next_slot: %d");
 
 		if ( next_slot >8 || next_slot <0)
 		{
@@ -258,7 +260,7 @@
     NSString * filename = [Util getCPFileName];
     CameraPassword * cpass ; 
 	NSMutableArray * camera_array = *camera_array_;
-	NSLog(@"loadPasswordFromStore enter");
+	
 	
     //Try to open passwrd file : file must exist "r" 
     FILE * fd = fopen([filename UTF8String], "rb");
@@ -281,13 +283,13 @@
     int totalLen = -1; //in bytes
     fread(&totalLen, sizeof(int),1,fd);
 
-	NSLog(@"loadPasswordFromStore len: %d",totalLen);
+	//NSLog(@"loadPasswordFromStore len: %d",totalLen);
 	
 	
     int nextSlotIndex = -1;
     fread(&nextSlotIndex, sizeof(int), 1, fd);
 
-	NSLog(@"loadPasswordFromStore nextSlotIndex: %d",nextSlotIndex);
+	//NSLog(@"loadPasswordFromStore nextSlotIndex: %d",nextSlotIndex);
 
     if (nextSlotIndex == -1)
     {
@@ -315,18 +317,18 @@
         byte_read += fread(temp, 1, temp_len, fd);
 		temp[temp_len] = '\0';
         cpass.cameraMacId = [NSString stringWithUTF8String:temp]; 
-		NSLog(@"loadPasswordFromStore cameraMacIdlen: %@",cpass.cameraMacId);
+		//NSLog(@"loadPasswordFromStore cameraMacIdlen: %@",cpass.cameraMacId);
 		
 		
         byte_read += fread(&temp_len, 1, 1, fd);
-		NSLog(@"loadPasswordFromStore cameraUserlen: %d",temp_len);
+		//NSLog(@"loadPasswordFromStore cameraUserlen: %d",temp_len);
         temp = malloc(temp_len+1); 
         byte_read += fread(temp, 1, temp_len, fd);
 		temp[temp_len] = '\0';
         cpass.cameraUser = [NSString stringWithUTF8String:temp]; 
 
         byte_read += fread(&temp_len, 1, 1, fd);
-		NSLog(@"loadPasswordFromStore cameraPasswordlen: %d",temp_len);
+		//NSLog(@"loadPasswordFromStore cameraPasswordlen: %d",temp_len);
         temp = malloc(temp_len+1); 
         temp[temp_len] = '\0';
         byte_read += fread(temp, 1, temp_len, fd);
@@ -338,7 +340,7 @@
 
 	
 	fclose(fd);
-    NSLog(@"after restore - entries: %d", [camera_array count]);
+    //NSLog(@"after restore - entries: %d", [camera_array count]);
     return nextSlotIndex; 
 }
 

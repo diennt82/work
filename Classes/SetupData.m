@@ -59,7 +59,7 @@
 	fwrite(&numberOfChannel, sizeof(int), 1, fd);
 	
 	NSMutableData * chann= nil;
-	char data_len; 
+	int data_len; 
 	
 	for (int i =0; i< [self.channels count]; i++)
 	{
@@ -79,7 +79,8 @@
 	{
 		cp = [[self.configured_cams objectAtIndex:i] getBytes];
 		data_len = [cp length];
-		fwrite(&data_len,sizeof(char), 1,fd);
+        NSLog(@"setup: profile len %d ", data_len);
+		fwrite(&data_len,sizeof(int), 1,fd);
 		fwrite([cp bytes], 1, [cp length], fd);
 	}
 	
@@ -87,7 +88,7 @@
 	fflush(fd);
 	fclose(fd);
 	
-	NSLog(@"write to file %@ done", filename);
+	
 	
 	return TRUE;
 	
@@ -114,9 +115,9 @@
 	/* read barker */
 	fread(&barker, sizeof(int), 1, fd);
 	
-	//NSLog(@"barker = %x", barker);
+	NSLog(@"barker = %x", barker);
 	
-	//if (barker == DATA_BARKER)
+	if (barker == DATA_BARKER)
 	{
 		
 		int numberOfChannel = -1;
@@ -192,17 +193,18 @@
 		fread(&numOfProfile, sizeof(int), 1, fd);
 		self.configured_cams = [[NSMutableArray alloc] initWithCapacity:numOfProfile];
 		int cp_count = 0; 
-
+        int profile_len = -1 ; 
 		while (cp_count < numOfProfile)
 		{
 		
 			//Read cam profile entry len 
-			fread(&len, sizeof(char), 1, fd);
-			buff = malloc(len);
+			fread(&profile_len, sizeof(int), 1, fd);
+            NSLog(@"setup:restore profile len %d ", profile_len);
+			buff = malloc(profile_len);
 			//Read cam profile entry data
-			fread(buff, sizeof (char), len,fd);
+			fread(buff, sizeof (char), profile_len,fd);
 			//re-use @channel_data buffer  
-			[channel_data appendBytes:buff length:len];
+			[channel_data appendBytes:buff length:profile_len];
 			cp = [CamProfile restoreFromData:channel_data];
 			
 			[self.configured_cams addObject:cp];
@@ -221,6 +223,12 @@
 		
 		
 	}
+    else
+    {
+        NSLog(@"Wrong data barker, delete the file "); 
+        fclose(fd);
+        unlink([file UTF8String]);
+    }
 	
 	return TRUE;
 }

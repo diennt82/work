@@ -13,7 +13,7 @@
 #import "AiBallVideoListViewController.h"
 
 #import "MBP_MainSetupViewController.h"
-
+#import "MBP_InitialSetupViewController.h"
 #import "AsyncSocket.h"
 #import "AviRecord.h"
 
@@ -31,8 +31,9 @@
 #import "AudioOutStreamer.h"
 #import "MBP_MenuViewController.h"
 #import "RemoteConnection.h"
-
-
+#import "StunCommunication.h"
+#import "ScanForCameraProtocol.h"
+#import "DashBoard_ViewController.h"
 
 
 #define DIRECTION_V_NON  0x01
@@ -50,7 +51,7 @@
 
 @class AiBallVideoListViewController;
 @class MBP_CamView;
-@class MBP_MainMenuView;
+//@class MBP_MainMenuView;
 @class CamProfile;
 
 #define DIRECT_MODE_NEXT_BTN 311
@@ -59,18 +60,22 @@
 #define _streamingSSID @"string_Streaming_SSID"
 
 
-@interface MBP_iosViewController : UIViewController <SetupHttpDelegate, ConnectionMethodDelegate,UIActionSheetDelegate, StreamerEventHandler	> {
+@interface MBP_iosViewController : UIViewController <SetupHttpDelegate, ConnectionMethodDelegate,UIActionSheetDelegate, StreamerEventHandler, ScanForCameraNotifier	> {
 
-	IBOutlet MBP_CamView * camView;
-	IBOutlet MBP_MainMenuView * mainMenuView;
-	IBOutlet MBP_CamListView * camListView; 
-	IBOutlet UIView * progressView; 
-	IBOutlet UIView * direcModeWaitView; 
+	
+	
+    //NOT USED - TO BE REMOVED
+    IBOutlet MBP_CamView * camView;
+    	IBOutlet MBP_CamListView * camListView; 
+    IBOutlet UIView * direcModeWaitView; 
 	IBOutlet UIButton * direcModeWaitConnect;
 	IBOutlet UIActivityIndicatorView * direcModeWaitProgress;
+
+    AsyncSocket * listenSocket;
 	
-	AsyncSocket * listenSocket;
-	
+	int initialFlag;
+	NSMutableData *responseData;
+    
 #if 0 // defined(IRABOT_AUDIO_RECORDING_SUPPORT)
 	AsyncSocket * sendingSocket;
 	NSMutableData * pcm_data;
@@ -78,34 +83,13 @@
 	
 	NSTimer * voice_data_timer;
 #endif
+    PCMPlayer * pcmPlayer;
+    //NSMutableArray * scan_results ;
+	//int next_profile_index;
+	//BOOL deviceScanInProgress;
+    
 	BOOL walkie_talkie_enabled;
 	AudioOutStreamer * audioOut; 
-	
-	int initialFlag;
-	NSMutableData *responseData;
-	
-	AviRecord* iRecorder;
-	PCMPlayer * pcmPlayer;
-	
-	NSMutableArray * scan_results ;
-	int next_profile_index;
-	BOOL deviceScanInProgress;
-	
-	
-	BOOL toTakeSnapShot ;
-	BOOL recordInProgress;
-	
-	int iMaxRecordSize;
-	NSString * iFileName;
-	
-	NSString * bc_addr;
-	NSString * own_addr;
-
-	
-	
-	
-
-	
 	/* Direction */
 	NSTimer * send_UD_dir_req_timer; 
 	NSTimer * send_LR_dir_req_timer;
@@ -117,26 +101,49 @@
 	int currentDirLR,lastDirLR;
 	int delay_update_lastDirLR_count;
 	
-	
 	int melody_index;
-	
-	
+
 	int current_view_mode; 
 	
-	NSArray * channel_array; 
-	NSMutableArray * restored_profiles ; 
-	
 	HttpCommunication * comm; 
-	MBP_Streamer * streamer; 
+	//MBP_Streamer * streamer; 
 	CamChannel * selected_channel; 
 	NSTimer * fullScreenTimer; 
-	
-	BOOL shouldReloadWhenEnterBG;
-	
+
 	
 	UIAlertView * alert;
 	NSTimer * alertTimer; 
 	
+	
+	StunCommunication * scomm; 
+    
+    ///IN USED
+    IBOutlet MBP_MainMenuView * mainMenuView;
+	IBOutlet UIView * progressView; 
+	
+	AviRecord* iRecorder;
+    
+	BOOL toTakeSnapShot ;
+	BOOL recordInProgress;
+	
+	int iMaxRecordSize;
+	NSString * iFileName;
+	
+	NSString * bc_addr;
+	NSString * own_addr;
+
+    
+    BOOL shouldReloadWhenEnterBG;
+    NSArray * channel_array; 
+	NSMutableArray * restored_profiles ; 
+
+    
+    IBOutlet UIView * backgroundView; 
+    IBOutlet UIView * statusDialogView;
+    IBOutlet UILabel * statusDialogLabel;
+    IBOutlet UITextView * statusDialogText;
+    
+
 	
 }
 @property (nonatomic, retain) IBOutlet UIButton *direcModeWaitConnect; 
@@ -148,18 +155,18 @@
 
 @property (nonatomic,retain) HttpCommunication *comm;
 
-@property (nonatomic,retain) NSMutableArray * scan_results ;
-@property (nonatomic) int next_profile_index;
+//@property (nonatomic,retain) NSMutableArray * scan_results ;
+//@property (nonatomic) int next_profile_index;
 
 @property (nonatomic) BOOL toTakeSnapShot, recordInProgress, shouldReloadWhenEnterBG;
 @property (nonatomic, retain) NSString * bc_addr, *own_addr;
 
 @property (nonatomic, retain) NSArray * channel_array; 
 @property (nonatomic, retain) NSMutableArray * restored_profiles ;
-@property (nonatomic, retain) MBP_Streamer * streamer; 
+//@property (nonatomic, retain) MBP_Streamer * streamer; 
 
 @property (nonatomic, retain) NSTimer * fullScreenTimer, *alertTimer; 
-
+@property (nonatomic, retain) StunCommunication * scomm; 
 
 
 - (void) initialize ;
@@ -169,6 +176,7 @@
 
 -(void) startConnect;
 - (void) scan_for_devices;
+-(void) scan_for_devices_done:(NSMutableArray *) scan_results ;
 
 //-(void) switchToSingleCameraMode:(int) channel_number;
 
@@ -250,7 +258,9 @@
 //delegate
 - (void)sendConfiguration:(DeviceConfiguration *) conf;
 - (void)sendStatus:(int) status;
+
 -(void) waitForDirectCamera:(NSTimer *) exp;
+
 -(void) remoteConnectionFailed:(CamChannel *) camChannel;
 -(void) remoteConnectionSucceeded:(CamChannel *) camChannel;
 -(void) prepareToViewRemotely:(CamChannel *) ch;

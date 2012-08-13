@@ -46,7 +46,7 @@ keyIndex ,key, addressMode, usrName, passWd, wepType;
 - (BOOL) isDataReadyForStoring 
 {
 	if ( [ssid isEqualToString:@""] ||
-		 ( ![securityMode isEqualToString:@"Open"] && [key isEqualToString:@""])
+		 ( ![securityMode isEqualToString:@"OPEN"] && [key isEqualToString:@""])
 		 )
 	
 	{

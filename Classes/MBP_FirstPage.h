@@ -9,9 +9,11 @@
 #import <UIKit/UIKit.h>
 #import "ConnectionMethodDelegate.h"
 
-#define DIRECT_MODE_BTN_TAG 100
-#define ROUTER_MODE_BTN_TAG 101
-#define STOP_AND_EXIT_BTN_TAG 102
+#define ACTION_SETUP_BM 100
+#define ACTION_LOGIN 101
+
+
+#define FIRST_TIME_SETUP @"_first_time_setup"
 
 @interface MBP_FirstPage : UIViewController {
 

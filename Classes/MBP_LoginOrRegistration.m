@@ -19,6 +19,16 @@
 @synthesize regUserEmail; 
 @synthesize regProgress, regComplete, registraionView; 
 
+
+@synthesize userPassCell, userNameCell, forgotPassCell;
+
+@synthesize temp_user_str; 
+@synthesize temp_pass_str; 
+@synthesize temp_user_email  ;
+
+@synthesize  account; 
+
+
 // The designated initializer.  Override if you create the controller programmatically and want to perform customization that is not appropriate for viewDidLoad.
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil withConnDelegate:(id<ConnectionMethodDelegate>) d;
 {
@@ -36,14 +46,34 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
 	
-	NSLog(@"Login Or register viewdidload");
+	    
+    NSLog(@"Login Or register viewdidload");
+
+    
+    self.navigationItem.title = @"Login"; 
+    NSLog(@"Login Or register viewdidload 001 ");
+
+    //Back key
+    self.navigationItem.backBarButtonItem =
+    [[[UIBarButtonItem alloc] initWithTitle:@"Back"
+                                      style:UIBarButtonItemStyleBordered
+                                     target:nil
+                                     action:nil] autorelease];
+    
+    [self.view addSubview:self.progressView];
+    
+     self.temp_user_email  = @"";
+    self.temp_pass_str =@"";
+    self.temp_pass_str =@"";
+    
 	//load user/pass  
 	NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
 	
 	//can be user email or user name here --  
 	NSString * old_usr = (NSString *) [userDefaults objectForKey:@"PortalUsername"];	
 	NSString * old_pass = (NSString *) [userDefaults objectForKey:@"PortalPassword"];
-	
+	 self.temp_user_email  = (NSString*) [userDefaults objectForKey:@"PortalUseremail"];
+    
 	if (old_usr != nil)
 	{
 		[self.userName setText:old_usr];
@@ -54,38 +84,51 @@
 		}
 	}
 	
-	BOOL shouldAutoLogin = [userDefaults boolForKey:_AutoLogin];
-	if (shouldAutoLogin == TRUE	)
-	{
-		if ((old_usr != nil) && (old_pass != nil))
-		{
-			tmp_user_str = old_usr;
-			tmp_pass_str = old_pass;
-			BMS_Communication * bms_comm; 
-			bms_comm = [[BMS_Communication alloc] initWithObject:self
-														Selector:@selector(loginSuccessWithResponse:) 
-													FailSelector:@selector(loginFailedWithError:) 
-													   ServerErr:@selector(loginFailedServerUnreachable)];
-			
-			[bms_comm BMS_loginWithUser:tmp_user_str AndPass:tmp_pass_str];
-			
-			
-			self.progressView.hidden = NO;
-			[self.progressLabel setText:@"Connecting to BMS..." ];
-			
-		}
+    if ((old_usr != nil) && (old_pass != nil))
+    {
+        self.temp_user_str = [NSString stringWithString:old_usr];
+        self.temp_pass_str = [NSString stringWithString:old_pass];
+        
+    
+        self.progressView.hidden = NO;         
+        
+        
+        BOOL shouldAutoLogin = [userDefaults boolForKey:_AutoLogin];
+       
+        if (shouldAutoLogin == TRUE	)
+        {
+            
+            BMS_Communication * bms_comm; 
+            bms_comm = [[BMS_Communication alloc] initWithObject:self
+                                                        Selector:@selector(loginSuccessWithResponse:) 
+                                                    FailSelector:@selector(loginFailedWithError:) 
+                                                       ServerErr:@selector(loginFailedServerUnreachable)];
+            
+            [bms_comm BMS_loginWithUser:self.temp_user_str AndPass:self.temp_pass_str];
+            
+            
+            self.progressView.hidden = NO;
+            [self.progressLabel setText:@"Connecting to BMS..." ];
+            self.navigationItem.leftBarButtonItem.enabled = NO ;
+            self.navigationItem.rightBarButtonItem.enabled = NO;  
+            
+        }
+        else {
+            
+            self.progressView.hidden = YES;  
+            NSLog(@" NO LOGIN"); 
+        }
 	}
-	
 
 }
 
 
-
+/*
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
     return ((interfaceOrientation == UIInterfaceOrientationLandscapeLeft) || 
 	        (interfaceOrientation == UIInterfaceOrientationLandscapeRight));
 }
-
+*/
 
 - (void)didReceiveMemoryWarning {
     // Releases the view if it doesn't have a superview.
@@ -102,7 +145,8 @@
 
 
 - (void)dealloc {
-    [super dealloc];
+   
+    NSLog(@"Login dealloc...");
 	[userName release];
 	[password release];
 	[remember_pass_sw release];
@@ -115,6 +159,12 @@
 	[regProgress release];
 	[regComplete release];
 	[registraionView release];
+    
+    [temp_pass_str release];
+    [temp_user_email release];
+    [temp_user_str release];
+    [account release];
+     [super dealloc];
 }
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField
@@ -123,15 +173,172 @@
 	return NO;
 }
 
+- (void)presentModallyOn:(UIViewController *)parent
+{
+    UINavigationController *    navController;
+    
+    //setup nav controller 
+    navController= [[[UINavigationController alloc]initWithRootViewController:self] autorelease];
+    
+    // Create a navigation controller with us as its root.
+    assert(navController != nil);
+    
+    navController.navigationBar.barStyle = UIBarStyleBlackOpaque;
+
+    // Set up the Cancel button on the left of the navigation bar.
+    self.navigationItem.leftBarButtonItem  = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(cancelAction:)] autorelease];
+    assert(self.navigationItem.leftBarButtonItem != nil);
+    self.navigationItem.rightBarButtonItem = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone   target:self action:@selector(doneAction:)] autorelease];
+    assert(self.navigationItem.rightBarButtonItem != nil);
+
+    // Present the navigation controller on the specified parent 
+    // view controller.
+
+    [parent presentModalViewController:navController animated:YES];
+}
+
+#pragma mark -
+#pragma mark Alertview delegate
+- (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex {
+	
+	int tag = alertView.tag;
+	if (tag == 112) //OFFLINE mode ?? 
+    {
+        switch (buttonIndex) {
+            case 0:
+                
+                break;
+            case 1://Yes - go offline mode
+            {
+                NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+                [userDefaults setBool:YES forKey:_OfflineMode];
+                [userDefaults synchronize];
+                
+                //signal iosViewController
+                [delegate sendStatus:3];
+                break;
+            }
+            default:
+                break;
+        }
+    }
+	
+}
+
+
+#pragma mark -
+#pragma mark TableView delegate
+
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+
+    if (section ==0 ) return 2; 
+    
+    return 1; 
+}
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
+{
+
+    return 2; 
+}
+
+
+#define USERNAME_INDEX 0
+#define USERPASS_INDEX 1
+
+#define FORGOTPASS_INDEX 0 
+
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    
+   
+    
+    
+    if (indexPath.section == 0 && indexPath.row == USERNAME_INDEX) 
+    {
+
+        return userNameCell;
+    }
+    if (indexPath.section == 0 && indexPath.row == USERPASS_INDEX)
+    {
+        return userPassCell;
+    }
+    if (indexPath.section == 1 &&  indexPath.row == FORGOTPASS_INDEX)
+    {
+        return forgotPassCell;
+    }
+    
+
+    return nil;
+    
+}
+
+
+- (void)tableView: (UITableView *)tableView didSelectRowAtIndexPath: (NSIndexPath *)indexPath 
+{
+    [tableView deselectRowAtIndexPath:[tableView indexPathForSelectedRow] 
+                             animated:NO];
+    
+    int idx=indexPath.section;
+    
+    if (idx == 1)
+    {
+        
+        NSLog(@"Load fpwd"); 
+        //Load the next xib
+        ForgotPwdViewController *forgotPwdController = [[ForgotPwdViewController alloc]
+                                                        initWithNibName:@"ForgotPwdViewController" bundle:nil];
+        [self.navigationController pushViewController:forgotPwdController animated:NO];    
+        [forgotPwdController release];
+        
+    }
+}
+
+
+
+
 
 #pragma mark -
 #pragma mark Button Handling 
+
+-(void) cancelAction:(id) sender
+{
+    
+}
+
+-(void) doneAction:(id) sender
+{
+    
+    temp_user_str = userName.text;
+    temp_pass_str = password.text;
+    
+    
+    
+    BMS_Communication * bms_comm; 
+    bms_comm = [[BMS_Communication alloc] initWithObject:self
+                                                Selector:@selector(loginSuccessWithResponse:) 
+                                            FailSelector:@selector(loginFailedWithError:) 
+                                               ServerErr:@selector(loginFailedServerUnreachable)];
+    
+    [bms_comm BMS_loginWithUser:temp_user_str AndPass:temp_pass_str];
+    
+    
+    self.progressView.hidden = NO;
+    [self.progressLabel setText:@"Connecting to Server..." ];
+    [self.view bringSubviewToFront:self.progressView];
+    
+    self.navigationItem.leftBarButtonItem.enabled = NO ;
+    self.navigationItem.rightBarButtonItem.enabled = NO;
+
+}
+
 
 
 - (IBAction) handleButtonPressed:(id) sender
 {
 	int sender_tag = ((UIButton *) sender).tag;
-	
+	NSLog(@"THIS IS NOT USED ... Sender tag:%d", sender_tag);
+#if 0
 	switch (sender_tag) {
 		case LOGIN_BUTTON_TAG:
 		{
@@ -243,6 +450,7 @@
 		default:
 			break;
 	}
+#endif
 }
 
 #pragma mark -
@@ -250,6 +458,11 @@
 - (void) loginSuccessWithResponse:(NSData*) responseData
 {
 	
+    self.navigationItem.leftBarButtonItem.enabled = YES ;
+    self.navigationItem.rightBarButtonItem.enabled = YES;
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    [userDefaults setBool:NO forKey:_OfflineMode];
+    [userDefaults synchronize];
 	
 	NSString *response = [[[NSString alloc] initWithData:responseData encoding: NSASCIIStringEncoding] autorelease];
 	
@@ -257,18 +470,29 @@
 	
 	NSLog(@"login success response: %@",response );
 	
-	NSRange isEmail = [tmp_user_str rangeOfString:@"@"];
+	NSRange isEmail = [temp_user_str rangeOfString:@"@"];
 	if (isEmail.location != NSNotFound)
 	{
 		//Dont need to extract from response data 
-		tmp_user_email = tmp_user_str;
+		self.temp_user_email = temp_user_str;
 		
 	}
 	else if ( [response hasPrefix:@"Email="])
 	{
-		tmp_user_email = [response substringFromIndex:[@"Email=" length]]; 
-		tmp_user_email = [tmp_user_email stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
-		NSLog(@"extracted email  : %@", tmp_user_email);
+        
+        NSArray * substrings = [response componentsSeparatedByString:@"&"];
+        NSString * email_ = [substrings objectAtIndex:0]; 
+        NSString * id_ = [substrings objectAtIndex:1];
+        
+		self.temp_user_email = [email_ substringFromIndex:[@"Email=" length]]; 
+		self.temp_user_email = [self.temp_user_email stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+        
+        self.temp_user_str =  [id_ substringFromIndex:[@"Id=" length]];
+        self.temp_user_str = [self.temp_user_str stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+        
+       
+        
+		NSLog(@"extracted email  : %@  id: %@", self.temp_user_email,self.temp_user_str );
 	}
 	else 
 	{
@@ -288,28 +512,34 @@
 	}
 
 	
-	NSLog(@"before saving usr : %@ , %@", tmp_user_str, tmp_user_email);
+	NSLog(@"aaaa before saving usr : %@ , %@", temp_user_str, self.temp_user_email);
 	
 	//Store user/pass for later use
-	NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-	[userDefaults setObject:tmp_user_email forKey:@"PortalUseremail"];
-	[userDefaults setObject:tmp_user_str forKey:@"PortalUsername"];
-	[userDefaults setObject:tmp_pass_str forKey:@"PortalPassword"];
+	
+	[userDefaults setObject:self.temp_user_email forKey:@"PortalUseremail"];
+	[userDefaults setObject:self.temp_user_str forKey:@"PortalUsername"];
+	[userDefaults setObject:self.temp_pass_str forKey:@"PortalPassword"];
 	[userDefaults synchronize];
 	
 	//MOVE on now .. 
 
-	UserAccount * account ; 
-	account = [[UserAccount alloc] initWithUser:tmp_user_email
-										AndPass:tmp_pass_str
+	
+	account = [[UserAccount alloc] initWithUser:self.temp_user_email
+										AndPass:self.temp_pass_str
 								   WithListener: delegate];
-	[account query_camera_list];
+	//[account query_camera_list];
+    
+    //BLOCKED method
+    [account query_camera_list_blocked];
 
 
 }
 
 - (void) loginFailedWithError:(NSHTTPURLResponse*) error_response
 {
+    self.navigationItem.leftBarButtonItem.enabled = YES ;
+    self.navigationItem.rightBarButtonItem.enabled = YES;
+    
 	NSLog(@"Loging failed with error code:%d", [error_response statusCode]);
 	
 	self.progressView.hidden = YES;
@@ -328,15 +558,20 @@
 }
 - (void) loginFailedServerUnreachable
 {
+    
+    self.navigationItem.leftBarButtonItem.enabled = YES ;
+    self.navigationItem.rightBarButtonItem.enabled = YES;
+    
 	NSLog(@"Loging failed : server unreachable");
 	self.progressView.hidden = YES;
 	//ERROR condition
 	UIAlertView *alert = [[UIAlertView alloc]
 						  initWithTitle:@"Login Error"
-						  message:@"BMS Server is unreachable. Please go to WIFI setting to ensure iOS device is connected to WiFi network or turn on 3G data network"
+						  message:@"Server is unreachable. Do you want to access your cameras offline?"
 						  delegate:self
-						  cancelButtonTitle:@"OK"
-						  otherButtonTitles:nil];
+						  cancelButtonTitle:@"No"
+						  otherButtonTitles:@"Yes", nil];
+    alert.tag = 112; 
 	[alert show];
 	[alert release];
 	
@@ -356,9 +591,9 @@
 	//Store user/pass for later use
 	NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
 
-	[userDefaults setObject:tmp_user_email forKey:@"PortalUseremail"];
-	[userDefaults setObject:tmp_user_str forKey:@"PortalUsername"];
-	[userDefaults setObject:tmp_pass_str forKey:@"PortalPassword"];
+	[userDefaults setObject:temp_user_email forKey:@"PortalUseremail"];
+	[userDefaults setObject:temp_user_str forKey:@"PortalUsername"];
+	[userDefaults setObject:temp_pass_str forKey:@"PortalPassword"];
 	
 	[userDefaults synchronize];
 	

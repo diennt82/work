@@ -17,12 +17,17 @@
 
 	NSString * userName;
 	NSString * userPass; 
+    BMS_Communication * bms_comm; 
 	
 	id <ConnectionMethodDelegate> delegate; 	
 }
+@property (nonatomic,assign) id <ConnectionMethodDelegate> delegate; 	
+@property (nonatomic, retain) NSString * userName, * userPass;
+@property (nonatomic,retain)BMS_Communication * bms_comm;
+
 
 -(id) initWithUser:(NSString*)user AndPass:(NSString*) pass WithListener:(id <ConnectionMethodDelegate>) d;
-
+-(void) query_camera_list_blocked;
 -(void) query_camera_list;
 //Get cam list callbacks
 -(void) getCamListSuccess:(NSData*) raw_data;
@@ -32,5 +37,7 @@
 -(NSMutableArray *) parse_camera_list:(NSString*) raw;
 
 -(void) sync_online_and_offline_data:(NSMutableArray *) online_list;
+
+-(void) query_snapshot_from_server:(NSArray *) cam_profiles;
 
 @end

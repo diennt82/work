@@ -16,12 +16,17 @@
 @synthesize videoImage, device_ip, device_port, remoteViewKey, remoteView;
 @synthesize responseData, listenSocket;
 @synthesize pcmPlayer;
-@synthesize temperatureLabel; 
+
 @synthesize takeSnapshot,recordInProgress;
 @synthesize currentZoomLevel, hasStoppedByCaller, communication_mode;
 @synthesize local_port; 
 
 @synthesize udtSocket; 
+@synthesize  disableAudio;
+
+@synthesize  recTimeLabel, recTimer; 
+
+@synthesize mFrameUpdater,mTempUpdater;
 
 
 - (id) initWithIp:(NSString *) ip andPort:(int) port handler:(id<StreamerEventHandler>) handler
@@ -34,7 +39,7 @@
 	self.local_port = 0; 
 	mHandler = handler; 
 	hasStoppedByCaller = FALSE; 
-	
+	disableAudio = NO;
 	return self;
 	
 }
@@ -54,6 +59,8 @@
 	
 	[udtSocket release];
 	[pcmPlayer release];
+    [recTimer release];
+    
 	[super dealloc];
 }
 
@@ -77,8 +84,12 @@
 	reconnectLimits = 3; 
 	
 	takeSnapshot = NO;
+    if (recordInProgress == YES)
+    {
+        [self stopRecording];
+    }
 	recordInProgress = NO;
-	[self stopRecording];
+    
 	currentZoomLevel = 5.0;
 	
 
@@ -104,8 +115,12 @@
 	NSLog(@"reConnect .. to camera: %@:%d",self.device_ip, self.device_port );
 	/**** REset some variables */
 	takeSnapshot = NO;
+    if (recordInProgress == YES)
+    {
+        [self stopRecording];
+    }
 	recordInProgress = NO;
-	[self stopRecording];
+
 	currentZoomLevel = 5.0;
 
 	
@@ -207,6 +222,8 @@
 		NSData * msg_ = [[NSData alloc] initWithBytes:[msg UTF8String] length:[msg length]]; 
 		NSLog(@"send close session.. & close sock"); 
 		[udtSocket sendDataViaUdt:msg_];
+		
+		
 		[udtSocket close];
 	}
 	
@@ -218,15 +235,18 @@
 
 - (void) startUdtStream
 {
-	NSLog(@"connect to %@:%d from localport: %d", self.device_ip, self.device_port , self.local_port);
+	
 	
 	/**** REset some variables */
 	
 	reconnectLimits = 3; 
 	
 	takeSnapshot = NO;
-	recordInProgress = NO;
-	[self stopRecording];
+	if (recordInProgress == YES)
+    {
+        [self stopRecording];
+    }
+    recordInProgress = NO;
 	currentZoomLevel = 5.0;
 	
 	initialFlag = 1;
@@ -235,6 +255,9 @@
 	[udtSocket createUdtStreamSocket]; 
 	
 	struct in_addr * server_ip = [UdtSocketWrapper getIpfromHostName:self.device_ip];
+	
+	NSLog(@"connect to %@:%d from localport: %d server_ip:%d", self.device_ip, self.device_port , 
+		  self.local_port, server_ip->s_addr);
 	
 	int localPort = [udtSocket connectViaUdtSock:server_ip
 										  port:self.device_port];
@@ -320,6 +343,10 @@
 		
 		//read 
 		bytesRead = [socket recvDataViaUdt:data dataLen:READ_16K_DATA];
+		if (bytesRead < 0 || bytesRead > READ_16K_DATA)
+		{
+			continue;
+		}
 		[data setLength:bytesRead];
 		
 		//NSLog(@"bytesRead:%d initialFlag: %d, res_len: %d",bytesRead, initialFlag, [responseData length]); 
@@ -410,9 +437,12 @@
 						(actualDataPtr[13]<<8 )|   actualDataPtr[14];
 						
 						//Update temperature 
-						[self.temperatureLabel performSelectorOnMainThread:@selector(setText:) 
-																withObject:[NSString stringWithFormat:@"%d \u2103", temperature]
-															 waitUntilDone:YES];
+                        if (self.mTempUpdater != nil)
+                        {
+                            [self.mTempUpdater updateTemperature:temperature];																
+                        }
+                        
+						
 						 
 						 
 						
@@ -422,7 +452,7 @@
 						 
 						
 #ifdef IBALL_AUDIO_SUPPORT	
-						if( audioLength > 0 )
+						if( (disableAudio == NO) &&  audioLength > 0 )
 						{
 							NSRange range3 = {avdata_offset, audioLength};
 							NSData* audioData = [actualData subdataWithRange:range3];
@@ -669,14 +699,18 @@
 					(actualDataPtr[13]<<8 )|   actualDataPtr[14];
 					
 					//Update temperature 
-					[self.temperatureLabel setText:[NSString stringWithFormat:@"%d \u2103", temperature]];
+                    if (self.mTempUpdater != nil)
+                    {
+                        [self.mTempUpdater updateTemperature:temperature];																
+                    }
+
 					
 					int avdata_offset = 10 + 4 + 1 ; //old data + temperature + 1 
 					
 					
 					
 #ifdef IBALL_AUDIO_SUPPORT	
-					if( audioLength > 0 )
+					if( (disableAudio == NO) && audioLength > 0 )
 					{
 						NSRange range3 = {avdata_offset, audioLength};
 						NSData* audioData = [actualData subdataWithRange:range3];
@@ -879,7 +913,7 @@
 		
 		// Create the request.
 		NSMutableURLRequest *theRequest=[NSMutableURLRequest requestWithURL:[NSURL URLWithString:url]
-																cachePolicy:NSURLRequestUseProtocolCachePolicy
+																cachePolicy: NSURLRequestReloadIgnoringLocalCacheData
 															timeoutInterval:timeout];
 		NSString *authHeader = [@"Basic " stringByAppendingFormat:@"%@", [Util getCredentials]];  
 		[theRequest addValue:authHeader forHTTPHeaderField:@"Authorization"];
@@ -974,6 +1008,8 @@
 {
 	if (self.recordInProgress == YES)
 	{
+        NSLog(@"Stop recording");
+
 		[self stopRecording];
 		self.recordInProgress = NO;
 		
@@ -986,9 +1022,32 @@
 	}
 }
 
+- (void) showClock:(NSTimer *) exp {
+    
+    NSDate * startDate = (NSDate *) exp.userInfo;
+  
+
+    
+    NSTimeInterval ellapseSec = abs([startDate timeIntervalSinceNow]);
+    
+    //NSLog(@"showClock ellapseSec:%0.2f",ellapseSec);
+    
+    NSInteger hours = ellapseSec / 3600;
+    NSInteger remainder = ((NSInteger)ellapseSec)% 3600;
+    NSInteger minutes = remainder / 60;
+    NSInteger seconds = remainder % 60;
+    
+    //recTimeLabel.text = [NSString stringWithFormat:@"%02d:%02d:%02d", hours, minutes, seconds];
+    
+    [self.recTimeLabel performSelectorOnMainThread:@selector(setText:)
+                                   withObject: [NSString stringWithFormat:@"%02d:%02d:%02d", hours, minutes, seconds] waitUntilDone:YES];
+    
+    //NSLog(@" recTimeLabel.text: %@", [NSString stringWithFormat:@"%02d:%02d:%02d", hours, minutes, seconds]); 
+}
 
 - (void) startRecording
 {
+
 	
 	iMaxRecordSize = [Util getMaxRecordSize] * 1024 * 1024;
 	
@@ -1003,17 +1062,46 @@
 	
 	[iRecorder InitWithFilename:iFileName video_width:320 video_height:240];
 	
-	
+    
+    NSDate * now = [NSDate date];
+	self.recTimer = [NSTimer scheduledTimerWithTimeInterval:1.0
+                                     target:self 
+                                   selector:@selector(showClock:) 
+                                   userInfo:now 
+                                    repeats:YES];
+    
+    [iFileName retain];
 }
 
 - (void) stopRecording
 {
+    if (self.recTimer != nil && 
+        [self.recTimer isValid])
+    {
+        [self.recTimer invalidate]; 
+        
+    }
 
 	
 	[iRecorder Close];
-	
-	
-	
+    
+    if (iFileName != nil)
+    {
+        NSString *title = @"Video Recording";
+        NSString * message = [NSString stringWithFormat:@"saved at %@", iFileName];
+        
+        UIAlertView *alert = [[UIAlertView alloc]
+                              initWithTitle:title
+                              message:message 
+                              delegate:self
+                              cancelButtonTitle:@"OK"
+                              otherButtonTitles:nil];
+        [alert show];
+        [alert release];
+        
+        
+        [iFileName release];
+	}
 }
 
 

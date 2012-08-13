@@ -32,11 +32,11 @@
 }
 */
 
-
-- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
-    return ((interfaceOrientation == UIInterfaceOrientationLandscapeLeft) || 
-	        (interfaceOrientation == UIInterfaceOrientationLandscapeRight));
-}
+//
+//- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
+//    return ((interfaceOrientation == UIInterfaceOrientationLandscapeLeft) || 
+//	        (interfaceOrientation == UIInterfaceOrientationLandscapeRight));
+//}
 
 
 - (void)didReceiveMemoryWarning {
@@ -69,22 +69,20 @@
 	int sender_tag = ((UIButton *) sender).tag;
 	
 	switch (sender_tag) {
-		case DIRECT_MODE_BTN_TAG:
-		{
-			
-			[delegate sendStatus:1];
-
-			//[self dismissModalViewControllerAnimated:NO	];
-			break;
-		}
-		case ROUTER_MODE_BTN_TAG:
+        case ACTION_SETUP_BM:
 		{ 
-			[delegate sendStatus:2];
-			//[self dismissModalViewControllerAnimated:NO];
+            NSLog(@"AcTION SETUP BM"); 
+            NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+			[userDefaults setBool:TRUE forKey:FIRST_TIME_SETUP];
+			[userDefaults synchronize];
+		
+            [delegate sendStatus:1];
+            
 			break; 
 		}
-		case STOP_AND_EXIT_BTN_TAG:
+		case ACTION_LOGIN:
 		{
+            [delegate sendStatus:2];
 			break;
 		}
 		default:

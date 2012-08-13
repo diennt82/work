@@ -74,7 +74,7 @@
 		
 		// Create the request.
 		NSMutableURLRequest *theRequest=[NSMutableURLRequest requestWithURL:[NSURL URLWithString:url]
-																cachePolicy:NSURLRequestUseProtocolCachePolicy
+																cachePolicy: NSURLRequestReloadIgnoringLocalCacheData
 															timeoutInterval:timeout];
 		NSString *authHeader = [@"Basic " stringByAppendingFormat:@"%@", [Util getCredentials]];  
 		[theRequest addValue:authHeader forHTTPHeaderField:@"Authorization"];

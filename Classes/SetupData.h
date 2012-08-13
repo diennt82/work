@@ -11,8 +11,10 @@
 #import "CamProfile.h"
 #import "Util.h"
 
+/* Change this every time the setup data changed -- 
+ */ 
+#define DATA_BARKER  0xbeef0002
 
-#define DATA_BARKER 0xdeadbeef
 
 @interface SetupData : NSObject {
 
