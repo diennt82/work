@@ -11,7 +11,7 @@
 
 @implementation AviRecord
 
--ReceiveAudio:(NSData*)audioData 
+-(void)ReceiveAudio:(NSData*)audioData
 {
 	int i = 0;
 	int audioLen = [audioData length];
@@ -70,7 +70,7 @@
 	iFileSize = ftell(avi_info->fd);
 }
 
--ReceiveImage:(NSData*)imgData
+-(void)ReceiveImage:(NSData*)imgData
 {
 	if(avi_info->mp4.m_idxSizeWrited + 16 > sizeof(avi_info->mp4.m_idxBuf))
 	{

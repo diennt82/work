@@ -324,11 +324,11 @@ struct AVI_INFO {
 	int iBeginRecAudioFlag, iBeginRecImgFlag;
 }
 
--ReceiveAudio:(NSData*)audioData;
+-(void)ReceiveAudio:(NSData*)audioData;
 -(int)DistanceFrame:(int)aBegin aEnd:(int)aEnd;
 -ResetCounter;
 -GetAudio:(NSData*)audioData resetAudioBufferCount:(int)resetAudioBufferCount;
--ReceiveImage:(NSData*)imgData;
+-(void)ReceiveImage:(NSData*)imgData;
 -GetImage:(NSData*)imgData imgIndex:(int)imgIndex;
 -(int)GetRecordFlag;
 -SetRecordFlag:(int)recordFlag;
