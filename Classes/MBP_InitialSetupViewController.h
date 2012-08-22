@@ -27,6 +27,8 @@
 - (void)presentModallyOn:(UIViewController *)parent;
 
 - (IBAction)handleButtonPress:(id)sender;
--(void) startMonitorCallBack;
+-(IBAction)handleBackButton:(id)sender;
+- (IBAction)goBackToFirstScreen:(id)sender;
 
+-(void) startMonitorCallBack;
 @end

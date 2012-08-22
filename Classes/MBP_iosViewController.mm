@@ -149,154 +149,10 @@
 	[self presentModalViewController:firstPage animated:YES];
 #endif 
 	
-    
-#if 0
-    //Goto Login if Not first time
 
-    [userDefaults setBool:TRUE forKey:_AutoLogin];
-    [userDefaults synchronize];
-
-    [NSTimer scheduledTimerWithTimeInterval:0.10
-                                 target:self
-                               selector:@selector(show_login_or_reg:)
-                               userInfo:nil
-                                repeats:NO];
-#endif
     
 }
 
-
-
-
--(void) waitForDirectCamera:(NSTimer *) exp
-{
-	//Load a view that wait for the camera to be connected 
-	NSString * currentSSID = [CameraPassword fetchSSIDInfo];
-	
-	
-	if ([currentSSID hasPrefix:DEFAULT_SSID_PREFIX])
-	{
-		//yeah we're connected ... check for ip??
-		
-		NSString * bc = @"";
-		NSString * own = @"";
-		[MBP_iosViewController getBroadcastAddress:&bc AndOwnIp:&own];
-		
-		if ([own hasPrefix:DEFAULT_IP_PREFIX])
-		{
-			
-			//We got the ip too.. proceed to enable the "next" btn
-			[self.direcModeWaitProgress stopAnimating]; 
-			self.direcModeWaitConnect.hidden = NO; 
-			self.direcModeWaitConnect.tag = DIRECT_MODE_NEXT_BTN;
-			
-			NSLog(@"camera ip:%@",  own );
-			
-			//dont reschedule another wake up 
-			return; 
-		}
-		
-	}
-	
-	//check back later.. 
-	[NSTimer scheduledTimerWithTimeInterval: 3.0// 
-									 target:self
-								   selector:@selector(waitForDirectCamera:)
-								   userInfo:nil
-									repeats:NO];	
-	
-}
-
-
-/* Simply try to authenticate and connect to the camera 
- at default address 192.168.2.1 
- */
--(void) startDirectConnect
-{
-#if 0
-	self.shouldReloadWhenEnterBG = TRUE;
-	[self.direcModeWaitView removeFromSuperview];
-	
-	[[NSBundle mainBundle] loadNibNamed:@"MBP_CamView" 
-								  owner:self 
-								options:nil];
-	
-	
-	[self.view addSubview:camView];
-	
-	[camView.oneCamView initializedWithViewController:self];
-
-	
-	
-	
-	
-	/* Setup for 1 cam */
-	
-	
-	UIPinchGestureRecognizer * pinchGesture = 
-	[[UIPinchGestureRecognizer alloc] initWithTarget:self
-											  action:@selector(handlePinchGesture:)];
-	[camView.oneCamView.videoView addGestureRecognizer:pinchGesture];
-	[pinchGesture release];
-	
-	/* Kick off the two timer for direction sensing */
-	currentDirUD = DIRECTION_V_NON;
-	lastDirUD    = DIRECTION_V_NON;
-	delay_update_lastDir_count = 1;
-	
-	
-	
-	send_UD_dir_req_timer = 
-	[NSTimer scheduledTimerWithTimeInterval:0.1
-									 target:self
-								   selector:@selector(v_directional_change_callback:)
-								   userInfo:nil
-									repeats:YES];
-	
-	currentDirLR = DIRECTION_H_NON;
-	lastDirLR    = DIRECTION_H_NON;
-	delay_update_lastDirLR_count = 1;
-	
-	
-	
-	send_LR_dir_req_timer = 
-	[NSTimer scheduledTimerWithTimeInterval:0.2
-									 target:self
-								   selector:@selector(h_directional_change_callback:)
-								   userInfo:nil
-									repeats:YES];
-	
-	
-	
-	
-	
-	[self.view addSubview:camView];
-	
-	
-	[self.camView.statusBar switchChannel:10];
-	
-	self.camView.oneCamView.hidden = NO;
-
-	self.camView.oneCamView.progressView.hidden = NO;
-	self.camView.statusBar.temperature_label.hidden = NO;
-	[self.camView.oneCamView.progressView startAnimating];
-	current_view_mode = CURRENT_VIEW_MODE_SINGLE;
-	
-	
-	[comm babymonitorAuthentication];
-	
-	
-	[NSTimer scheduledTimerWithTimeInterval: 0.125//0.04 
-									 target:self
-								   selector:@selector(_connectDefaultRabot:)
-								   userInfo:nil
-									repeats:NO];
-	
-	
-#endif 
-	
-	
-}
 -(void) startShowingCameraList
 {
     
@@ -540,127 +396,8 @@
     [super dealloc];
 }
 
-
-- (void) showSideMenusAndStatus
-{
-	
-	if ( fullScreenTimer != nil )
-	{
-		//invalidate the timer .. 
-		[fullScreenTimer invalidate];
-		fullScreenTimer = nil;
-	}
-		NSLog(@"show menus");
-	if (self.camView != nil)
-	{
-		self.camView.oneCamView.directionPad.hidden = NO;
-		self.camView.oneCamView.directionIndicator.hidden = NO;
-		
-		
-		self.camView.statusBar.hidden = NO;
-		self.camView.leftSideMenu.hidden = NO;
-		self.camView.rightSideMenu.hidden = NO;
-		
-	}
-}
-- (void) showJoysticksOnly
-{
-	NSLog(@"show joystick");
-	if (self.camView != nil)
-	{
-		self.camView.oneCamView.directionPad.hidden = NO;
-		self.camView.oneCamView.directionIndicator.hidden = NO;
-		
-		
-		self.camView.statusBar.hidden = YES;
-		self.camView.leftSideMenu.hidden = YES;
-		self.camView.rightSideMenu.hidden = YES;
-		
-	}
-}
-- (void) showFullScreenNow: (NSTimer*) exp
-{
-	
-	
-	fullScreenTimer = nil;
-	
-	//Make status bar, left, right menus disappear
-	if (self.camView != nil)
-	{
-		self.camView.oneCamView.directionPad.hidden = YES;
-		self.camView.oneCamView.directionIndicator.hidden = YES;
-		
-		
-		self.camView.statusBar.hidden = YES;
-		self.camView.leftSideMenu.hidden = YES;
-		self.camView.rightSideMenu.hidden = YES;
-		
-	}
-}
-
-
-- (void) tryToShowFullScreen
-{
-	
-	if ( (fullScreenTimer != nil))
-	{
-		//invalidate the timer .. 
-		[fullScreenTimer invalidate];
-		fullScreenTimer = nil;
-	}
-	
-
-	NSLog(@"start fullscreen timer .");
-	fullScreenTimer = [NSTimer scheduledTimerWithTimeInterval:10.0 
-											  target:self 
-											selector:@selector(showFullScreenNow:) 
-											userInfo:nil
-											 repeats:NO];
-	
-}
-
-
-#pragma mark - Battery notifications
-
-- (void)batteryLevelDidChange:(NSNotification *)notification
-{
-	[self  updateBatteryIcon];
-}
-
-
-- (void) updateBatteryIcon
-{
-	/* 0.0  (0%) - 1.0 (100%)*/
-	float lvl = [UIDevice currentDevice].batteryLevel;
-	if (lvl == -1.0)
-	{
-		//invalide battery state .. could be simulator 
-		return; 
-	}
-	int index = (int)(lvl / 0.2);
-	
-	if (lvl == 1.0)
-	{
-		index  = 4;
-	}
-	
-	NSLog(@"batt lvl:%f, index:%d", lvl, index);
-	
-	
-	NSArray * batteryLvl; 
-	batteryLvl = [[NSArray alloc] initWithObjects:@"status_icon1_5.png",@"status_icon1_1.png",
-				@"status_icon1_2.png", @"status_icon1_3.png", @"status_icon1_4.png"
-				,nil];
-	
-	UIImage * img = [UIImage imageNamed:(NSString*)[batteryLvl objectAtIndex:index]];
-	
-	[self.camView.statusBar.batt_status_icon setImage:img];
-	
-}
-
-
 #pragma mark -
-#pragma mark ConnectionMethodDelegate - Handle navigation 
+#pragma mark ConnectionMethodDelegate - Views navigation 
 
 /**** Main program switching point is here *****/ 
 - (void)sendStatus:(int) method
@@ -670,7 +407,7 @@
 		case 1: 
 		{
 			
-			NSLog(@"GO to initial BM setup");
+			NSLog(@">>> SETUP ");
 			[self dismissModalViewControllerAnimated:NO	];
 			self.shouldReloadWhenEnterBG = FALSE;
             
@@ -691,29 +428,22 @@
 		}
 		case 2: //GOTO ROUTER mode - Login 
 		{
-            NSLog(@" go to Login "); 
+            NSLog(@">>> Login "); 
 
 			[self dismissModalViewControllerAnimated:NO	];
-						
-             NSLog(@" go to Login 02");
-//			[NSTimer scheduledTimerWithTimeInterval:0.10
-//											 target:self
-//										   selector:@selector(show_login_or_reg:)
-//										   userInfo:nil
-//											repeats:NO];
             
             NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
             
             [userDefaults setBool:TRUE forKey:_AutoLogin];
             [userDefaults synchronize];
-            NSLog(@"show_login... 1"); 
+
             
             MBP_LoginOrRegistration * loginOrReg;
             loginOrReg = [[MBP_LoginOrRegistration alloc] initWithNibName:@"MBP_LoginOrRegistration"
                                                                    bundle:nil
                                                          withConnDelegate:self];
             
-            NSLog(@"show_login... 2"); 
+
             //Use navigation controller 
             [loginOrReg presentModallyOn:self];
             
@@ -806,38 +536,6 @@
 	}
 	
 }
-
--(void) prepareToViewRemotely:(CamChannel *) ch
-{
-	//setup remote camera via upnp 
-	
-	RemoteConnection * cameraConn;
-	
-	
-	cameraConn = [[RemoteConnection alloc]init]; 
-	if ([cameraConn connectToRemoteCamera:ch
-								 callback:self
-								 Selector:@selector(remoteConnectionSucceeded:)
-							 FailSelector:@selector(remoteConnectionFailed:)])
-	{
-		//the process started successfuly
-	}
-	else 
-	{
-		NSLog(@"Start remote connection Failed!!!"); 
-		//ERROR condition
-		UIAlertView *_alert = [[UIAlertView alloc]
-							   initWithTitle:@"Remote View Error"
-							   message:@"Initializing remote connection failed, please retry" 
-							   delegate:self
-							   cancelButtonTitle:@"OK"
-							   otherButtonTitles:nil];
-		[_alert show];
-		[_alert release];
-	}		
-}
-
-
 
 
 #pragma mark -
@@ -2647,113 +2345,6 @@
 }
 
 
-
-//---------------------------------------------
-//------- Walkie Talkie 
-//---------------------------------------------
-#pragma mark -
-#pragma mark Walkie Talkie - Stream audio from iphone
-
-- (BOOL) toggle_walkie_talkie
-{
-	NSLog(@"talk: %d", walkie_talkie_enabled);
-	@synchronized (self)
-	{
-		if ( walkie_talkie_enabled == YES)
-		{
-			walkie_talkie_enabled = NO;
-			
-			
-			[self performSelectorInBackground:@selector(set_Walkie_Talkie_bg:) 
-								   withObject:[NSString stringWithFormat:@"%d",walkie_talkie_enabled]];
-					
-			
-			if (audioOut != nil)
-			{
-				[audioOut disconnectFromAudioSocket];
-				[audioOut release];
-			}
-			
-			
-		}
-		else 
-		{
-			walkie_talkie_enabled = YES;
-			
-			[self performSelectorInBackground:@selector(set_Walkie_Talkie_bg:) 
-								   withObject:[NSString stringWithFormat:@"%d",walkie_talkie_enabled]];
-
-			audioOut = [[AudioOutStreamer alloc] initWithDeviceIp:comm.device_ip 
-													   andPTTport:IRABOT_AUDIO_RECORDING_PORT];
-			[audioOut connectToAudioSocket];
-
-		}
-		
-	}
-	return walkie_talkie_enabled ;
-	
-}
-
-
-- (void) set_Walkie_Talkie_bg: (NSString *) status
-{
-	NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
-		
-	NSString * command = [NSString stringWithFormat:@"%@%@",SET_PTT,status];
-	
-	if(comm != nil)
-	{
-		[comm sendCommandAndBlock:command];
-	}
-	
-	[pool release];
-}
-
-#pragma mark -
-#pragma mark wifi level 
-
-/* When video is on, batt and wifi are stored in video data, 
- use this function to update the UI
- */
-- (void) update_battery_and_wifi:(Byte) wifi_and_battery 
-{
-	/* bit:0-3: battery
-	 bit:4-7: wifi
-	 */
-	
-
-	int wifi = (wifi_and_battery & 0xF0)>>4 ;
-	UIImage *wifi_img = nil;
-	
-	//NSLog(@"battery: %d, wifi: %d", battery, wifi);
-
-	
-	// UPdate wifi status
-	
-	switch (wifi) {
-		case 0: 
-			wifi_img = [UIImage imageNamed:@"Wifi_0_icon.png"];
-			break;
-		case 1: //25% 
-			wifi_img = [UIImage imageNamed:@"Wifi_1_icon.png"];
-			break;
-			
-		case 2: //50%
-			wifi_img = [UIImage imageNamed:@"Wifi_2_icon.png"];
-			break;
-		case 3: //75%
-			wifi_img = [UIImage imageNamed:@"Wifi_3_icon.png"];
-			break;
-		case 4: //~100%
-			wifi_img = [UIImage imageNamed:@"Wifi_full_icon.png"];
-			break;
-		default:
-			break;
-	}
-
-	[self.camView.statusBar.wifi_status_icon setImage:wifi_img];
-	
-}
 
 #pragma mark - 
 #pragma mark Melody control

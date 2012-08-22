@@ -92,7 +92,7 @@
 					<object class="IBUITextView" id="219931300">
 						<reference key="NSNextResponder" ref="562086244"/>
 						<int key="NSvFlags">292</int>
-						<string key="NSFrame">{{20, 56}, {240, 38}}</string>
+						<string key="NSFrame">{{35, 56}, {240, 38}}</string>
 						<reference key="NSSuperview" ref="562086244"/>
 						<reference key="NSWindow"/>
 						<reference key="NSNextKeyView" ref="536275236"/>
@@ -129,7 +129,7 @@
 					<object class="IBUITextView" id="208241725">
 						<reference key="NSNextResponder" ref="562086244"/>
 						<int key="NSvFlags">292</int>
-						<string key="NSFrame">{{20, 145}, {240, 57}}</string>
+						<string key="NSFrame">{{35, 145}, {240, 57}}</string>
 						<reference key="NSSuperview" ref="562086244"/>
 						<reference key="NSWindow"/>
 						<reference key="NSNextKeyView" ref="89477601"/>
@@ -154,10 +154,10 @@
 					<object class="IBUITextField" id="536275236">
 						<reference key="NSNextResponder" ref="562086244"/>
 						<int key="NSvFlags">292</int>
-						<string key="NSFrame">{{20, 96}, {240, 31}}</string>
+						<string key="NSFrame">{{40, 96}, {240, 31}}</string>
 						<reference key="NSSuperview" ref="562086244"/>
 						<reference key="NSWindow"/>
-						<reference key="NSNextKeyView" ref="580931551"/>
+						<reference key="NSNextKeyView"/>
 						<string key="NSReuseIdentifierKey">_NS:9</string>
 						<bool key="IBUIOpaque">NO</bool>
 						<bool key="IBUIClipsSubviews">YES</bool>
@@ -177,17 +177,6 @@
 						</object>
 						<reference key="IBUIFontDescription" ref="173539520"/>
 						<reference key="IBUIFont" ref="209055042"/>
-					</object>
-					<object class="IBUIImageView" id="580931551">
-						<reference key="NSNextResponder" ref="562086244"/>
-						<int key="NSvFlags">-2147483356</int>
-						<string key="NSFrame">{{270, 96}, {30, 30}}</string>
-						<reference key="NSSuperview" ref="562086244"/>
-						<reference key="NSWindow"/>
-						<reference key="NSNextKeyView" ref="208241725"/>
-						<string key="NSReuseIdentifierKey">_NS:9</string>
-						<bool key="IBUIUserInteractionEnabled">NO</bool>
-						<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
 					</object>
 				</array>
 				<string key="NSFrame">{{0, 20}, {320, 460}}</string>
@@ -265,7 +254,6 @@
 							<reference ref="219931300"/>
 							<reference ref="536275236"/>
 							<reference ref="208241725"/>
-							<reference ref="580931551"/>
 							<reference ref="641915103"/>
 							<reference ref="89477601"/>
 						</array>
@@ -292,11 +280,6 @@
 						<reference key="parent" ref="562086244"/>
 					</object>
 					<object class="IBObjectRecord">
-						<int key="objectID">13</int>
-						<reference key="object" ref="580931551"/>
-						<reference key="parent" ref="562086244"/>
-					</object>
-					<object class="IBObjectRecord">
 						<int key="objectID">22</int>
 						<reference key="object" ref="641915103"/>
 						<reference key="parent" ref="562086244"/>
@@ -309,7 +292,6 @@
 				<string key="-2.CustomClassName">UIResponder</string>
 				<string key="-2.IBPluginDependency">com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 				<string key="12.IBPluginDependency">com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
-				<string key="13.IBPluginDependency">com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 				<string key="22.IBPluginDependency">com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 				<string key="3.IBPluginDependency">com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 				<string key="6.IBPluginDependency">com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>

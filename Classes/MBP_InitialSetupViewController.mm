@@ -56,7 +56,17 @@
     //If not first time setup.. show the back key 
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     BOOL isFirstTimeSetup = [userDefaults boolForKey:FIRST_TIME_SETUP];
-    if (!isFirstTimeSetup)
+    if (isFirstTimeSetup)
+    {
+        UIBarButtonItem *backButton = 
+        [[UIBarButtonItem alloc] initWithTitle:@"Back" 
+                                         style:UIBarButtonItemStyleBordered 
+                                        target:self 
+                                        action:@selector(goBackToFirstScreen:)];          
+        self.navigationItem.leftBarButtonItem = backButton;
+        [backButton release];
+    }
+    else
     {
         UIBarButtonItem *backButton = 
         [[UIBarButtonItem alloc] initWithTitle:@"Back" 
@@ -109,6 +119,14 @@
 {
     //simply relogin
     [self.delegate sendStatus:3];//rescan 
+}
+
+
+
+
+- (IBAction)goBackToFirstScreen:(id)sender
+{
+    [self.delegate sendStatus:7];//rescan
 }
 
 - (IBAction)handleButtonPress:(id)sender
