@@ -399,4 +399,81 @@
 	
 }
 
+#pragma  mark -
+#pragma  mark UDT relay 
+
+
+
+
+-(UdtSocketWrapper * ) connectToUDTRelay: (CamChannel *) ch 
+{
+    
+    //1. Send HTTP query to get relay security
+    BMS_Communication * bms_comm; 
+    bms_comm  = [[BMS_Communication alloc] initWithObject:self
+                                                 Selector:@selector(getRelaySecSuccessWithResponse:) 
+                                             FailSelector:@selector(getRelaySecFailedWithError:) 
+                                                ServerErr:@selector(getRelaySecFailedServerUnreachable)];
+    
+    NSString * mac = [Util strip_colon_fr_mac:ch.profile.mac_address];	
+	
+	NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+	NSString * user_email = (NSString *) [userDefaults objectForKey:@"PortalUseremail"];
+	NSString * user_pass = (NSString *) [userDefaults objectForKey:@"PortalPassword"];
+    
+    NSData * response_dat = [bms_comm BMS_getRelaySecBlockedWithUser:user_email AndPass:user_pass macAddr:mac];
+    
+    if (response_dat == nil)
+    {
+        NSLog(@"error getting Relay key from BMS"); 
+        return nil;
+    }
+    
+    
+    NSString *relaySecInfo = [[[NSString alloc] initWithData:response_dat encoding: NSUTF8StringEncoding] autorelease];
+    //Macaddress:mac<br>Secret_key:key-(64 bytes)
+    NSLog(@"relaySecInfo:%@",relaySecInfo );
+    
+    NSArray * tokens = [relaySecInfo componentsSeparatedByString:@"<br>"];
+    NSString * secKey_ = (NSString *) [tokens objectAtIndex:1]; 
+    NSArray * tokens2 = [secKey_ componentsSeparatedByString:@":"];
+    NSString * relay_sk = (NSString *) [tokens2 objectAtIndex:1]; 
+     NSLog(@"relay_sk:%@",relay_sk);
+    
+    if (relay_sk == nil)
+    {
+        NSLog(@"error extracting Relay key from BMS"); 
+        return nil;
+    }
+    
+    
+    NSString * relayToken = [ch calculateRelayToken:relay_sk withUserPass:[user_email stringByAppendingFormat:@":%@",user_pass]];
+    
+    ch.relayToken = relayToken; 
+     NSLog(@"relayToken:%@",relayToken);
+    
+    STUN_Communication * stunConn;
+    
+    
+    stunConn = [[STUN_Communication alloc]init]; 
+    
+    return [stunConn connectToStunRelay:ch];
+     
+}
+
+
+-(void) getRelaySecSuccessWithResponse:(NSData*) responseData
+{
+    
+}
+- (void) getRelaySecFailedWithError:(NSHTTPURLResponse*) error_response
+{
+    
+}
+- (void) getRelaySecFailedServerUnreachable
+{
+    
+}
+
+
 @end

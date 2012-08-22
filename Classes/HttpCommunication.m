@@ -281,6 +281,14 @@
 
 - (void) babymonitorSetNewPass:(NSString * )newPass
 {
+    //Store user/pass
+    NSString * macc = [CameraPassword fetchBSSIDInfo];
+    //Make sure overwrite the passwort with default; 
+    CameraPassword * cp = [[CameraPassword alloc] initWithMac:macc 
+                                                         User:BASIC_AUTH_DEFAULT_USER 
+                                                         Pass:BASIC_AUTH_DEFAULT_PASS];
+    [CameraPassword saveCameraPassword:cp];
+    
     NSString * userPass  = [NSString stringWithFormat:@"%@:%@", 
                             BASIC_AUTH_DEFAULT_USER,newPass];
     
@@ -294,13 +302,12 @@
 	NSString * response = [self sendCommandAndBlock:setup_cmd ];
     NSLog(@"after res: %@", response);
     
-    //Store user/pass
-    NSString * macc = [CameraPassword fetchBSSIDInfo];
+   
     if (macc != nil)
     {
-        CameraPassword * cp = [[CameraPassword alloc] initWithMac:macc 
-                                                             User:BASIC_AUTH_DEFAULT_USER 
-                                                             Pass:newPass];
+        cp = [[CameraPassword alloc] initWithMac:macc 
+                                            User:BASIC_AUTH_DEFAULT_USER 
+                                            Pass:newPass];
         
         NSLog(@"saving NEW password: %@ for %@",newPass, macc);
         [CameraPassword saveCameraPassword:cp];

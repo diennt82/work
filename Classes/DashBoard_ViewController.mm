@@ -20,6 +20,9 @@
 @synthesize  tabBarController;
 
 @synthesize  topbar;
+@synthesize  editModeEnabled;
+@synthesize edittedChannelIndex; 
+
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
@@ -53,7 +56,9 @@ withConnDelegate:(id<ConnectionMethodDelegate> ) caller
     [super viewDidLoad];
 	// Do any additional setup after loading the view.
     
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     
+    BOOL isOffline = [userDefaults boolForKey:_OfflineMode];
     
     
     [self.navigationController setNavigationBarHidden:YES];
@@ -66,14 +71,37 @@ withConnDelegate:(id<ConnectionMethodDelegate> ) caller
     // create an array for the buttons
     NSMutableArray* buttons = [[NSMutableArray alloc] initWithCapacity:3];
     
-    // create a standard reload button
-    UIBarButtonItem *reloadButton = [[UIBarButtonItem alloc]
-                                     initWithBarButtonSystemItem:UIBarButtonSystemItemEdit
-                                     target:nil
-                                     action:nil];
-    reloadButton.style = UIBarButtonItemStyleBordered;
-    [buttons addObject:reloadButton];
-    [reloadButton release];
+
+    if (isOffline == TRUE)
+    {
+        UIBarButtonItem *editButton = [[UIBarButtonItem alloc]
+                                       initWithTitle:@"Edit"
+                                       style:UIBarButtonItemStyleBordered
+                                       target:nil
+                                       action:nil]; 
+        
+        [buttons addObject:editButton];
+        [editButton release];
+    }
+    else 
+    {
+//        UIBarButtonItem *reloadButton = [[UIBarButtonItem alloc]
+//                                         initWithBarButtonSystemItem:UIBarButtonSystemItemEdit
+//                                         target:self
+//                                         action:@selector(editCameras:)];
+//        reloadButton.style = UIBarButtonItemStyleBordered;
+//        [buttons addObject:reloadButton];
+//        [reloadButton release];
+//        
+        UIBarButtonItem *editButton = [[UIBarButtonItem alloc]
+                                       initWithTitle:@"Edit"
+                                       style:UIBarButtonItemStyleBordered
+                                       target:self
+                                       action:@selector(editCameras:)]; 
+        
+        [buttons addObject:editButton];
+        [editButton release];
+    }
     
     // create a spacer between the buttons
     UIBarButtonItem *spacer = [[UIBarButtonItem alloc]
@@ -104,10 +132,11 @@ withConnDelegate:(id<ConnectionMethodDelegate> ) caller
     
     // create a standard delete button with the trash icon
     UIBarButtonItem *snapButton = [[UIBarButtonItem alloc]
-                                   initWithBarButtonSystemItem:UIBarButtonSystemItemStop
-                                   target:nil
-                                   action:nil];
-    snapButton.style = UIBarButtonItemStyleBordered;
+                                   initWithImage:[UIImage imageNamed:@"scan_camera_icon.png"]
+                                   style:UIBarButtonItemStyleBordered
+                                   target:self
+                                   action:@selector(scanCameras:)];
+
     [buttons addObject:snapButton];
     [snapButton release];
     
@@ -129,11 +158,10 @@ withConnDelegate:(id<ConnectionMethodDelegate> ) caller
         
     [self.view addSubview:topbar];
     
+    self.editModeEnabled = FALSE;
     
     
-    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-
-    BOOL isOffline = [userDefaults boolForKey:_OfflineMode];
+   
     
     if (isOffline == YES)
     {
@@ -199,7 +227,7 @@ withConnDelegate:(id<ConnectionMethodDelegate> ) caller
     
     if (listOfChannel != nil)
     {
-         NSLog(@"Num of row: %d",[listOfChannel count]);
+       
     
         return [listOfChannel count];
     }
@@ -209,82 +237,156 @@ withConnDelegate:(id<ConnectionMethodDelegate> ) caller
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
-    static NSString *CellIdentifier = @"Cell";
-    
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-    if (cell == nil) {
-        [[NSBundle mainBundle] loadNibNamed:@"DashBoard_camView" owner:self options:nil];
-        cell = self.cellView;
-        self.cellView = nil; 
-    }
-    //Get refernce to cell content
-    UIImageView * snapshot = (UIImageView *) [cell viewWithTag:500];
-    UILabel * camName  = (UILabel *) [cell viewWithTag:501];
-    UILabel * camLoc  = (UILabel *) [cell viewWithTag:502];
-    UIImageView * camStatusInd = (UIImageView *) [cell viewWithTag:503];
-    UILabel * camStatus = (UILabel *) [cell viewWithTag:504];
     
     
     
-    // Set up the cell...
-    CamChannel * ch = (CamChannel*)[listOfChannel objectAtIndex:indexPath.row] ;
-    CamProfile * cp = ch.profile; 
-    
-    //NSLog(@"cell: %d %d", indexPath.row , cp.minuteSinceLastComm);
-    
-    if (ch != nil)
+    if (self.editModeEnabled == TRUE)
     {
         
-        //set camera info
-        if (cp.isInLocal == TRUE)
+        static NSString *CellIdentifier = @"Cell1";
+        
+        UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+        NSLog(@"Edit cell: %d ", indexPath.row);
+
+        
+        if (cell == nil) {
+            NSLog(@"Load new");
+            [[NSBundle mainBundle] loadNibNamed:@"DashBoard_camEdit" owner:self options:nil];
+            cell = self.cellView;
+            self.cellView = nil; 
+        }
+        
+        
+        UIImageView * snapshot = (UIImageView *) [cell viewWithTag:500];
+        UILabel * camName  = (UILabel *) [cell viewWithTag:501];
+        
+        UIButton *renButton = (UIButton *) [cell viewWithTag:505]; 
+        UIButton *remButton = (UIButton *) [cell viewWithTag:506]; 
+        
+        ///////IF IT IS REUSED --->> DIE DIE DIE
+        renButton.tag = indexPath.row;
+        remButton.tag = indexPath.row;
+        // Set up the cell...
+        CamChannel * ch = (CamChannel*)[listOfChannel objectAtIndex:indexPath.row] ;
+        CamProfile * cp = ch.profile; 
+        
+        if (ch != nil)
         {
-
-            [camStatusInd setImage:[UIImage imageNamed:@"camera_online.png"]];
-
-            [camLoc setText:@"Local Wifi"]; 
-            [camStatus setText:@"Available"];
+                      
+            //Set camera name
+            [camName setText:cp.name]; 
+            
+            //set camera image
+            if (cp.profileImage != nil)
+            {
+                [snapshot setImage:cp.profileImage];
+            }
+            else 
+            {
+                [snapshot setImage:[UIImage imageNamed:@"photo_item.png"]];
+            }
             
         }
-        else if (cp.minuteSinceLastComm <=5 ) 
-        {
-            [camStatusInd setImage:[UIImage imageNamed:@"camera_remote.png"]];
-            [camLoc setText:@"Remote Network"];
-            [camStatus setText:@"Camera is not in local network"];
+        else {
+            NSLog(@"cell: %d nil", indexPath.row);
         }
-        else 
-        {
-            [camStatusInd setImage:[UIImage imageNamed:@"camera_offline.png"]];
-            [camLoc setText:@"Remote Network"];
-            [camStatus setText:@"Not Available"];
-        }
-
         
-        //Set camera name
-        [camName setText:cp.name]; 
         
-        //set camera image
-        if (cp.profileImage != nil)
-        {
-            [snapshot setImage:cp.profileImage];
-        }
-        else 
-        {
-            [snapshot setImage:[UIImage imageNamed:@"photo_item.png"]];
-        }
+        
+        
+        return cell;
 
     }
-    else {
-        NSLog(@"cell: %d nil", indexPath.row);
+    else //Normal Mode
+    {
+        
+        static NSString *CellIdentifier = @"Cell";
+        
+        UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+        
+        if (cell == nil) {
+            [[NSBundle mainBundle] loadNibNamed:@"DashBoard_camView" owner:self options:nil];
+            cell = self.cellView;
+            self.cellView = nil; 
+        }
+        //Get refernce to cell content
+        UIImageView * snapshot = (UIImageView *) [cell viewWithTag:500];
+        UILabel * camName  = (UILabel *) [cell viewWithTag:501];
+        UILabel * camLoc  = (UILabel *) [cell viewWithTag:502];
+        UIImageView * camStatusInd = (UIImageView *) [cell viewWithTag:503];
+        UILabel * camStatus = (UILabel *) [cell viewWithTag:504];
+        
+        
+        
+        // Set up the cell...
+        CamChannel * ch = (CamChannel*)[listOfChannel objectAtIndex:indexPath.row] ;
+        CamProfile * cp = ch.profile; 
+        
+        //NSLog(@"cell: %d %d", indexPath.row , cp.minuteSinceLastComm);
+        
+        if (ch != nil)
+        {
+            
+            //set camera info
+            if (cp.isInLocal == TRUE)
+            {
+                
+                [camStatusInd setImage:[UIImage imageNamed:@"camera_online.png"]];
+                
+                [camLoc setText:@"Local Wifi"]; 
+                [camStatus setText:@"Available"];
+                
+            }
+            else if (cp.minuteSinceLastComm <=10 ) 
+            {
+                [camStatusInd setImage:[UIImage imageNamed:@"camera_online.png"]];
+                [camLoc setText:@"Remote Network"];
+                [camStatus setText:@"Camera is not in local network"];
+            }
+            else 
+            {
+                [camStatusInd setImage:[UIImage imageNamed:@"camera_offline.png"]];
+                [camLoc setText:@"Remote Network"];
+                [camStatus setText:@"Not Available"];
+            }
+            
+            
+            //Set camera name
+            [camName setText:cp.name]; 
+            
+            //set camera image
+            if (cp.profileImage != nil)
+            {
+                [snapshot setImage:cp.profileImage];
+            }
+            else 
+            {
+                [snapshot setImage:[UIImage imageNamed:@"photo_item.png"]];
+            }
+            
+        }
+        else {
+            NSLog(@"cell: %d nil", indexPath.row);
+        }
+        
+        return cell;
+
     }
+
     
     
-    return cell;
+      
 }
 
 - (void)tableView: (UITableView *)tableView didSelectRowAtIndexPath: (NSIndexPath *)indexPath 
 {
     [tableView deselectRowAtIndexPath:[tableView indexPathForSelectedRow] 
                              animated:NO];
+    
+    if (self.editModeEnabled == TRUE)
+    {
+        return; // don't start streaming in Edit mode 
+    }
     
     int idx=indexPath.row;
     
@@ -316,30 +418,13 @@ withConnDelegate:(id<ConnectionMethodDelegate> ) caller
 {
     UINavigationController *    navController;
     
-    //tabBarController isalready initiated
-    
-#if 0
-    //setup nav controller 
-    navController= [[[UINavigationController alloc]initWithRootViewController:self] autorelease];
-    
-    // Create a navigation controller with us as its root.
-    assert(navController != nil);
-    
-    
-    // Set up the Cancel button on the left of the navigation bar.
-    self.navigationItem.leftBarButtonItem  = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(cancelAction:)] autorelease];
-    assert(self.navigationItem.leftBarButtonItem != nil);
-    self.navigationItem.rightBarButtonItem = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone   target:self action:@selector(doneAction:)] autorelease];
-    assert(self.navigationItem.rightBarButtonItem != nil);
-#else 
-    
-    NSLog(@"Nav + TAB"); 
+   
     UITabBarItem * camList  = [[UITabBarItem alloc]initWithTitle:@"Cameras"
                                                            image:[UIImage imageNamed:@"bb_camera_slider_icon.png"]
                                                              tag:1];
     [self setTabBarItem:camList];
     UITabBarItem * account  = [[UITabBarItem alloc]initWithTitle:@"Account"
-                                                           image:[UIImage imageNamed:@"bb_setting_icon.png"]
+                                                           image:[UIImage imageNamed:@"account_icon.png"]
                                                              tag:2];
     
     
@@ -353,15 +438,12 @@ withConnDelegate:(id<ConnectionMethodDelegate> ) caller
     [tabBarController setViewControllers:views];
     
     
-    
-    
-    
-
     //setup nav controller 
     navController= [[[UINavigationController alloc]initWithRootViewController:tabBarController] autorelease];
     
     // Create a navigation controller with us as its root.
     assert(navController != nil);
+    
     
     [navController setNavigationBarHidden:YES];
     
@@ -371,19 +453,29 @@ withConnDelegate:(id<ConnectionMethodDelegate> ) caller
     assert(self.navigationItem.leftBarButtonItem != nil);
     self.navigationItem.rightBarButtonItem = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone   target:self action:@selector(doneAction:)] autorelease];
     assert(self.navigationItem.rightBarButtonItem != nil);
-#endif
+
+    
+    [navController.navigationBar setBarStyle:UIBarStyleBlackTranslucent];
+    
+    
     // Present the navigation controller on the specified parent 
     // view controller.
     
-    [parent presentModalViewController:navController animated:YES];
+    [parent presentModalViewController:navController animated:NO];
 }
 
 
 
 -(void) forceRelogin
 {
+    
+    
+    
     [delegate sendStatus:5];
 }
+
+#pragma  mark - 
+#pragma mark ACTIONS ..
 
 -(IBAction)addCamera:(id)sender
 {
@@ -401,6 +493,380 @@ withConnDelegate:(id<ConnectionMethodDelegate> ) caller
 {
     [self forceRelogin];
 }
+
+-(IBAction)scanCameras:(id)sender
+{
+    if ([listOfChannel count] >1)
+    {
+        
+        int localCameras = 0;
+        CamChannel * ch; 
+        for (int i =0; i< [listOfChannel count]; i++)
+        {
+            ch = (CamChannel *) [listOfChannel objectAtIndex:i]; 
+            
+            if (ch.profile.isInLocal)
+            {
+                localCameras ++; 
+            }
+        }
+        
+        if (localCameras > 1)
+        {
+            
+            QuickViewCamera_ViewController * scanCamCtrl;
+            scanCamCtrl = [[QuickViewCamera_ViewController alloc] initWithNibName:@"QuickViewCamera_ViewController"
+                                                                           bundle:nil];
+            scanCamCtrl.listOfChannel = self.listOfChannel;
+            
+            [self.navigationController pushViewController:scanCamCtrl animated:NO];    
+            [scanCamCtrl release];
+        }
+        else
+        {
+            NSLog(@"Scan disabled with less than 2 cam");
+        }
+    }
+}
+
+-(IBAction)editCameras:(id)sender
+{
+    UIBarButtonItem * button = (UIBarButtonItem *) sender; 
+    
+    if (self.editModeEnabled == FALSE)
+    {
+        self.editModeEnabled = TRUE;
+        button.title = @"Cancel"; 
+        
+    }
+    else
+    {
+        self.editModeEnabled = FALSE;
+        
+        button.title = @"Edit"; 
+    }
+    
+    //[cameraList reloadData];
+    
+    [cameraList performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:YES];
+    
+}
+
+
+
+-(IBAction)removeCamera:(id)sender
+{
+    CamChannel * ch = (CamChannel *) [listOfChannel objectAtIndex:((UIButton *)sender).tag]; 
+    
+    NSLog(@"Remove camera.. %@",ch.profile.name );    
+    
+    self.edittedChannelIndex = ((UIButton *)sender).tag;
+    
+    [self  showDialog:ALERT_REMOVE_CAM]; 
+    
+}
+-(IBAction)renameCamera:(id)sender
+{
+    NSLog(@"Rename camera.. "); 
+        
+    self.edittedChannelIndex = ((UIButton *)sender).tag;
+    [self askForNewName]; 
+
+    
+}
+#pragma  mark - 
+
+	
+	
+- (void) askForNewName 
+{
+    
+    UIAlertView * _myAlert = nil;
+    
+    _myAlert = [[UIAlertView alloc] initWithTitle:@"Change Camera Name" 
+                                          message:@"Please enter new name for this camera\n\n" 
+                                         delegate:self 
+                                cancelButtonTitle:@"Cancel"
+                                otherButtonTitles:@"Ok", 
+                nil];
+    _myAlert.tag = ALERT_CHANGE_NAME; //used for tracking later 
+    
+    UITextField *myTextField = [[UITextField alloc] initWithFrame:CGRectMake(32.0, 75.0, 220.0, 25.0)];
+    [myTextField setBackgroundColor:[UIColor whiteColor]];
+    myTextField.placeholder = @"New Name";
+    myTextField.borderStyle = UITextBorderStyleRoundedRect;
+    myTextField.backgroundColor = [UIColor whiteColor];
+    myTextField.textColor = [UIColor blackColor];
+    myTextField.delegate = self;
+    myTextField.tag = 10;
+    [myTextField becomeFirstResponder];
+    [_myAlert addSubview:myTextField];
+    CGAffineTransform myTransform = CGAffineTransformMakeTranslation(0.0, 0.0);
+    [_myAlert setTransform:myTransform];
+    [_myAlert show];
+    [_myAlert release];
+    
+    
+}
+
+#pragma mark -
+#pragma mark Alertview delegate
+
+- (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex {
+	
+	int tag = alertView.tag ;
+	
+	if (tag == ALERT_CHANGE_NAME)
+	{
+		switch(buttonIndex) {
+			case 0:
+				break;
+			case 1:
+			{
+				NSString * newName = [(UITextField*)[alertView viewWithTag:10] text];
+				if( (newName == nil) || [newName length] ==0)
+				{
+					
+					[self showDialog:ALERT_NAME_CANT_BE_EMPTY];
+				}
+				else {
+					[self onCameraNameChanged:newName];
+				}
+				break;
+			}
+			default:
+				break;
+				
+		}
+	}
+	else if (tag == ALERT_NAME_CANT_BE_EMPTY)
+	{
+		//any button pressed -- dont care -- just launched the alert to ask for name again
+		[self askForNewName];
+	}
+	
+	else if (tag == ALERT_REMOVE_CAM_LOCAL)
+	{
+		if (buttonIndex == 1)
+		{
+			[self onCameraRemoveLocal];
+		}
+	}
+	else if (tag == ALERT_REMOVE_CAM_REMOTE)
+	{
+		
+		if (buttonIndex == 1)
+		{
+			[self onCameraRemoveRemote];
+		}
+		
+	}
+	
+	
+}
+#pragma mark - 
+
+#pragma mark Subfunctions to handle rename/remove - Borrow from menu 
+
+- (void) showDialog:(int) dialogType
+{
+	switch (dialogType) {
+		
+		case DIALOG_CANT_RENAME:
+		{
+			NSString * msg =@"Unable to rename this camera. Please log-in and try again";
+			UIAlertView *alert = [[UIAlertView alloc]
+								  initWithTitle:@""
+								  message:msg 
+								  delegate:nil
+								  cancelButtonTitle:@"OK"
+								  otherButtonTitles:nil];
+			[alert show];
+			[alert release];
+			break;
+		}
+		case ALERT_NAME_CANT_BE_EMPTY:
+		{
+			NSString * msg =@"Camera name cant be empty, please try again";
+			UIAlertView *alert = [[UIAlertView alloc]
+								  initWithTitle:@""
+								  message:msg 
+								  delegate:self
+								  cancelButtonTitle:@"OK"
+								  otherButtonTitles:nil];
+			alert.tag = ALERT_NAME_CANT_BE_EMPTY; 
+			[alert show];
+			[alert release];
+			break;
+		}
+		case ALERT_REMOVE_CAM:
+		{
+            CamChannel * ch = (CamChannel *) [listOfChannel objectAtIndex:self.edittedChannelIndex];
+			BOOL deviceInLocal = ch.profile.isInLocal; 
+            if (deviceInLocal)
+            {
+                
+                NSString * msg =@"Please confirm that you want to remove this camera from your account. This action will also switch your camera to direct mode.";
+                UIAlertView *alert = [[UIAlertView alloc]
+                                      initWithTitle:@""
+                                      message:msg 
+                                      delegate:self
+                                      cancelButtonTitle:@"Cancel"
+                                      otherButtonTitles:@"OK",nil];
+                alert.tag = ALERT_REMOVE_CAM_LOCAL; 
+                [alert show];
+                [alert release];
+                
+            }
+            else
+            {
+                NSString * msg =@"Please confirm that you want to remove this camera from your account. The camera is not accessible right now, it will not be switched to direct mode. Please refer to FAQ to reset it manually.";
+                UIAlertView *alert = [[UIAlertView alloc]
+                                      initWithTitle:@""
+                                      message:msg 
+                                      delegate:self
+                                      cancelButtonTitle:@"Cancel"
+                                      otherButtonTitles:@"OK",nil];
+                
+                alert.tag = ALERT_REMOVE_CAM_REMOTE; 
+                [alert show];
+                [alert release];
+            }
+            
+			
+            
+			break;
+		}
+            
+		
+            
+		default:
+			break;
+	}
+}
+
+//callback frm alert
+- (void) onCameraNameChanged:(NSString*) newName
+{
+    
+    
+    CamChannel * ch = (CamChannel *) [listOfChannel objectAtIndex:self.edittedChannelIndex]; 
+    
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+	NSString * userName = (NSString *) [userDefaults objectForKey:@"PortalUseremail"];
+	NSString * userPass = (NSString *) [userDefaults objectForKey:@"PortalPassword"];
+	
+	    
+	//Update BMS server with the new name;;
+	
+	BMS_Communication * bms_comm; 
+	bms_comm = [[BMS_Communication alloc] initWithObject:self
+												Selector:@selector(changeNameSuccessWithResponse:) 
+											FailSelector:@selector(changeNameFailedWithError:) 
+											   ServerErr:@selector(changeNameFailedServerUnreachable)];
+	
+	[bms_comm BMS_camNameWithUser:userName
+                          AndPass:userPass 
+                          macAddr:ch.profile.mac_address
+                          camName:newName];
+   
+    
+    ch.profile.name = newName;
+    
+}
+
+
+
+-(void) changeNameSuccessWithResponse:(NSData *) responsedata
+{
+	NSLog(@"changeName success");
+    
+    [cameraList reloadData] ; 
+    
+}
+-(void) changeNameFailedWithError:(NSHTTPURLResponse*) error_response
+{
+	NSLog(@"changeNamed failed errorcode: ");
+    [cameraList reloadData] ; 
+}
+-(void) changeNameFailedServerUnreachable
+{
+	NSLog(@"server unreachable");
+    [cameraList reloadData] ; 
+}
+
+
+
+-(void) onCameraRemoveLocal
+{
+	NSString * command , *response; 
+	
+    CamChannel * ch = (CamChannel *) [listOfChannel objectAtIndex:self.edittedChannelIndex];
+    
+    HttpCommunication * dev_comm = [[HttpCommunication alloc]init];
+    dev_comm.device_ip = ch.profile.ip_address;
+    dev_comm.device_port = ch.profile.port; 
+
+	command = SWITCH_TO_DIRECT_MODE; 
+	response = [dev_comm sendCommandAndBlock:command];
+	
+	NSLog(@"swithToDirect res: %@", response);
+	
+	command = RESTART_HTTP_CMD;
+	response = [dev_comm sendCommandAndBlock:command];
+	NSLog(@"restart res: %@", response);
+	
+    
+    [self onCameraRemoveRemote]; 
+   	
+}
+
+
+-(void) onCameraRemoveRemote
+{
+    
+    CamChannel * ch = (CamChannel *) [listOfChannel objectAtIndex:self.edittedChannelIndex];
+    
+    
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+	NSString * userName = (NSString *) [userDefaults objectForKey:@"PortalUseremail"];
+	NSString * userPass = (NSString *) [userDefaults objectForKey:@"PortalPassword"];
+	
+    
+
+    
+	BMS_Communication * bms_comm; 
+	bms_comm = [[BMS_Communication alloc] initWithObject:self
+												Selector:@selector(removeCamSuccessWithResponse:) 
+											FailSelector:@selector(removeCamFailedWithError:) 
+											   ServerErr:@selector(removeCamFailedServerUnreachable)];
+	
+	[bms_comm BMS_delCamWithUser:userName AndPass:userPass macAddr:ch.profile.mac_address];
+    
+        
+}
+
+
+
+-(void) removeCamSuccessWithResponse:(NSData *) responsedata
+{
+	NSLog(@"removeCam success-- fatality");
+    
+    [self forceRelogin];
+	
+}
+-(void) removeCamFailedWithError:(NSHTTPURLResponse*) error_response
+{
+	NSLog(@"removeCam failed errorcode:");
+    [self forceRelogin];
+}
+-(void) removeCamFailedServerUnreachable
+{
+	NSLog(@"server unreachable");
+    [self forceRelogin];
+}
+
+#pragma mark -
 
 
 @end

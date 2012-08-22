@@ -9,6 +9,7 @@
 #import "CamChannel.h"
 #import "CamProfile.h"
 #import "BMS_Communication.h"
+#import "STUN_Communication.h"
 
 @interface RemoteConnection : NSObject {
 
@@ -29,6 +30,14 @@
 				 FailSelector: (SEL) fail; 
 
 
+
+
+//Only called when app has failed to connect to UDT camera directly 
+// Lengthy blocking function
+-(UdtSocketWrapper *) connectToUDTRelay: (CamChannel *) ch ;
+
+
+
 //-- Private --- // 
 
 
@@ -46,5 +55,9 @@
 -(void) viewRmtSuccessWithResponse:(NSData*) responseData;
 - (void) viewRmtFailedWithError:(NSHTTPURLResponse*) error_response;
 - (void) viewRmtFailedServerUnreachable;
+
+-(void) getRelaySecSuccessWithResponse:(NSData*) responseData;
+- (void) getRelaySecFailedWithError:(NSHTTPURLResponse*) error_response;
+- (void) getRelaySecFailedServerUnreachable;
 
 @end

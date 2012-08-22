@@ -12,8 +12,15 @@
 #import "AviRecord.h"
 #import "CameraPassword.h"
 #import "HttpCommunication.h"
-
+#import "RemoteConnection.h"
 #import "UdtSocketWrapper.h"
+
+@protocol StreamerOrientationAdapter
+
+-(void) switchToOrientation:(UIInterfaceOrientation)orientation;
+
+
+@end
 
 @protocol StreamerEventHandler
 
@@ -41,7 +48,7 @@
 
 @end
 
-@interface MBP_Streamer : NSObject {
+@interface MBP_Streamer : NSObject <StreamerOrientationAdapter> {
 
 	UIImageView * videoImage;
 
@@ -86,6 +93,11 @@
     id<StreamerFrameRateUpdater> mFrameUpdater;
     id<StreamerTemperatureUpdater> mTempUpdater; 
     
+    
+    UIInterfaceOrientation currentOrientation; 
+    
+    CamChannel * streamingChannel; 
+    
 	
 }
 @property (nonatomic) int device_port,communication_mode, local_port;
@@ -105,6 +117,9 @@
 @property (nonatomic) BOOL disableAudio; 
 @property (nonatomic, assign) id<StreamerFrameRateUpdater> mFrameUpdater;
 @property (nonatomic, assign) id<StreamerTemperatureUpdater> mTempUpdater; 
+@property (nonatomic) UIInterfaceOrientation currentOrientation; 
+
+@property (nonatomic, retain)CamChannel *  streamingChannel; 
 
 
 
@@ -117,6 +132,10 @@
 - (void) stopStreaming;
 -(void) startUdtStream;
 
+-(void) switchToUdtRelayServer; 
+- (void) startUdtRelayStream;
+
+
 - (void) PlayPCM:(NSData*)pcm ;
 
 - (NSString * ) requestURLSync:(NSString*)url withTimeOut:(NSTimeInterval) timeout;
@@ -127,5 +146,12 @@
 - (void) stopRecording;
 -(void) toggleRecording;
 - (UIImage*)imageWithImage:(UIImage*)image scaledToRect:(CGRect)newRect;
+
+
+
+
+-(void) switchToOrientation:(UIInterfaceOrientation)orientation;
+-(UIImage *) adaptToCurrentOrientation:(UIImage *) orig;
+- (UIImage*)imageByCropping:(UIImage *)imageToCrop toRect:(CGRect)rect;
 
 @end

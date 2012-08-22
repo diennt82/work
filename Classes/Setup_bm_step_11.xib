@@ -56,7 +56,7 @@
 					<object class="IBUITextView" id="29008925">
 						<reference key="NSNextResponder" ref="689768342"/>
 						<int key="NSvFlags">292</int>
-						<string key="NSFrame">{{20, 50}, {290, 31}}</string>
+						<string key="NSFrame">{{17, 48}, {280, 31}}</string>
 						<reference key="NSSuperview" ref="689768342"/>
 						<reference key="NSWindow"/>
 						<reference key="NSNextKeyView" ref="767890795"/>
@@ -119,10 +119,9 @@
 					<object class="IBUIButton" id="921270938">
 						<reference key="NSNextResponder" ref="689768342"/>
 						<int key="NSvFlags">292</int>
-						<string key="NSFrame">{{80, 392}, {161, 37}}</string>
+						<string key="NSFrame">{{80, 351}, {161, 37}}</string>
 						<reference key="NSSuperview" ref="689768342"/>
 						<reference key="NSWindow"/>
-						<reference key="NSNextKeyView"/>
 						<string key="NSReuseIdentifierKey">_NS:9</string>
 						<bool key="IBUIOpaque">NO</bool>
 						<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
@@ -194,7 +193,7 @@
 					<object class="IBUILabel" id="278526678">
 						<reference key="NSNextResponder" ref="689768342"/>
 						<int key="NSvFlags">292</int>
-						<string key="NSFrame">{{30, 262}, {109, 21}}</string>
+						<string key="NSFrame">{{80, 262}, {109, 21}}</string>
 						<reference key="NSSuperview" ref="689768342"/>
 						<reference key="NSWindow"/>
 						<reference key="NSNextKeyView" ref="921270938"/>
@@ -316,8 +315,6 @@
 						<int key="objectID">3</int>
 						<reference key="object" ref="689768342"/>
 						<array class="NSMutableArray" key="children">
-							<reference ref="921270938"/>
-							<reference ref="29008925"/>
 							<reference ref="767890795"/>
 							<reference ref="359585698"/>
 							<reference ref="728289983"/>
@@ -325,6 +322,8 @@
 							<reference ref="465219109"/>
 							<reference ref="278526678"/>
 							<reference ref="228855270"/>
+							<reference ref="921270938"/>
+							<reference ref="29008925"/>
 						</array>
 						<reference key="parent" ref="0"/>
 					</object>
@@ -417,7 +416,9 @@
 						</object>
 					</dictionary>
 					<dictionary class="NSMutableDictionary" key="outlets">
+						<string key="cameraAddedView">UIView</string>
 						<string key="cameraName">UILabel</string>
+						<string key="homeSSID">UILabel</string>
 						<string key="progressView">UIView</string>
 						<string key="setupCompleteView">UIView</string>
 						<string key="setupFailView">UIView</string>
@@ -425,8 +426,16 @@
 						<string key="userNameLabel">UILabel</string>
 					</dictionary>
 					<dictionary class="NSMutableDictionary" key="toOneOutletInfosByName">
+						<object class="IBToOneOutletInfo" key="cameraAddedView">
+							<string key="name">cameraAddedView</string>
+							<string key="candidateClassName">UIView</string>
+						</object>
 						<object class="IBToOneOutletInfo" key="cameraName">
 							<string key="name">cameraName</string>
+							<string key="candidateClassName">UILabel</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="homeSSID">
+							<string key="name">homeSSID</string>
 							<string key="candidateClassName">UILabel</string>
 						</object>
 						<object class="IBToOneOutletInfo" key="progressView">

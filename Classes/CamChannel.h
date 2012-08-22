@@ -38,6 +38,9 @@
 	NSString * channID;
 	NSString * secretKey; 
 	int localUdtPort; 
+    
+    //remote STun RElay Stuff
+    NSString * relayToken; 
 	
 	
 }
@@ -46,7 +49,7 @@
 @property (nonatomic) int channel_configure_status, channel_index;
 @property (nonatomic, retain) NSString * remoteViewKey; 
 @property (nonatomic, retain) NSTimer * remoteViewTimer;
-@property (nonatomic, retain) NSString * channID, *secretKey;
+@property (nonatomic, retain) NSString * channID, *secretKey, *relayToken;
 @property (nonatomic) int localUdtPort, communication_mode; 
 
 
@@ -62,8 +65,12 @@
 
 - (NSMutableData *) getBytes;
 -(void) startViewTimer:(id) caller select:(SEL) sel;
+-(void) abortViewTimer; 
 
 -(NSData *) getEncChannId;
 -(NSData *) getEncMac;
 -(NSData *) decryptServerMessage:(NSData *) encrypted_data; 
+
+-(NSString*) calculateRelayToken:(NSString *) relaySk 
+                    withUserPass: (NSString *) user_colon_pass;
 @end

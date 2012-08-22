@@ -7,6 +7,7 @@
 //
 
 #import "HttpCommunication.h"
+#import "BMS_Communication.h"
 #import "UdtSocketWrapper.h"
 
 #define STUN_COMMAND_PART @"action=command&command="
@@ -32,6 +33,7 @@
 - (void) sendCommand:(NSString *) command;
 - (NSString *) sendCommandAndBlock:(NSString *)command;
 
+- (NSData * ) sendCommandThruUdtServer:(NSString *) command withMac:(NSString *) mac AndChannel:(NSString*) chann;
 
 
 @end

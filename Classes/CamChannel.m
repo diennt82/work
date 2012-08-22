@@ -18,6 +18,7 @@
 @synthesize channID, secretKey;
 
 @synthesize localUdtPort, communication_mode; 
+@synthesize  relayToken; 
 
 - (id) initWithChannelIndex:(int) index
 {
@@ -274,6 +275,16 @@
 	
 }
 
+-(void) abortViewTimer
+{
+    //clear the current timer if exits
+	if (self.remoteViewTimer != nil && 
+		[self.remoteViewTimer isValid])
+	{
+		[self.remoteViewTimer invalidate]; 
+	}
+}
+
 -(void) dealloc
 {
 	if ( self.profile != nil)
@@ -284,11 +295,13 @@
 	[remoteViewTimer release];
 	[channID release];
 	[secretKey release];
+    [relayToken release];
 	[super dealloc];
 }
 
 
-
+#pragma mark -
+#pragma mark Channel stuff
 
 -(NSData *) getEncChannId
 {
@@ -335,6 +348,23 @@
 }
 
 
+
+-(NSString*) calculateRelayToken:(NSString *) relaySk 
+                     withUserPass: (NSString *) user_colon_pass
+{
+    // macaddress:ENC(email:pass)
+    NSString * msg = [[Util strip_colon_fr_mac:self.profile.mac_address]  stringByAppendingString:@":"]; 
+    
+    NSData * input = [user_colon_pass  dataUsingEncoding: NSUTF8StringEncoding];
+    NSData * enc_user_pass = [SymmetricCipher _AESEncryptWithKey:relaySk data:input];
+    NSString * encodeEncrypted = [NSString base64StringFromData:enc_user_pass length:[enc_user_pass length]];
+    
+    msg = [msg stringByAppendingString:encodeEncrypted]; 
+
+    
+    return msg; 
+}
+
 +(NSString*) convertIntToIpStr:(uint ) ip
 {
 	NSString * res = @""; 
@@ -352,5 +382,8 @@
 	
 	
 }
+
+
+
 
 @end

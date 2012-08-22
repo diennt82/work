@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "MBP_iosViewController.h"
 #import "Step_04_ViewController.h"
+#import "Step_10_ViewController.h"
 
 #define OPEN_WIFI_BTN_TAG 1001
 
@@ -20,11 +21,12 @@
     NSString * homeWifiSSID; 
 	NSString * cameraMac; 
 	NSString * cameraName;
+    
 
 }
 
 @property (nonatomic, retain) UIView * inProgress; 
-@property (nonatomic, retain) NSString * cameraMac, * cameraName;
+@property (nonatomic, retain) NSString * cameraMac, * cameraName, * homeWifiSSID;
 
 - (IBAction)handleButtonPress:(id)sender;
 - (void) hideProgess;

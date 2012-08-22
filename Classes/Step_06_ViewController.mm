@@ -91,7 +91,7 @@
     if (![self restoreDataIfPossible] )
 	{
 		//Try to read the ssid from preference: 
-        self.deviceConf.ssid = ssid; 
+        self.deviceConf.ssid = self.ssid; 
     }
     
 }
@@ -365,6 +365,8 @@
     NSString * camera_mac = [CameraPassword fetchBSSIDInfo];
     //camera_mac = [Util strip_colon_fr_mac:camera_mac]; 
     
+     self.deviceConf.ssid = self.ssid; 
+    
     //save mac address for used later
 
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
@@ -457,11 +459,18 @@
         //load step 10
         NSLog(@"Add cam... "); 
         NSLog(@"Load Step 10"); 
+        
+        if (sent_conf.ssid != nil)
+        {
+            NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+            [userDefaults setObject:sent_conf.ssid  forKey:HOME_SSID];
+            [userDefaults synchronize];
+        }
+
         //Load the next xib
+        
         Step_10_ViewController *step10ViewController = [[Step_10_ViewController alloc]
                                                         initWithNibName:@"Step_10_ViewController" bundle:nil];
-        
-        step10ViewController.homeSSID.text = sent_conf.ssid;
         
         [self.navigationController pushViewController:step10ViewController animated:NO];    
         [step10ViewController release];

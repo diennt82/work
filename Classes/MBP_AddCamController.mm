@@ -496,7 +496,7 @@
 			
 			NSString * mac = [Util strip_colon_fr_mac:self.cameraMac];
 #if TARGET_IPHONE_SIMULATOR == 1
-			NSString * camName = @"Moto-Cam-";
+			NSString * camName = @"Camera-";
 #else
 			NSString * camName = self.cameraName;
 #endif

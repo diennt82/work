@@ -15,13 +15,15 @@
 @implementation Step_03_ViewController
 
 @synthesize  inProgress;
-@synthesize   cameraMac,  cameraName;
+@synthesize   cameraMac,  cameraName, homeWifiSSID;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
         // Custom initialization
+        
+         
     }
     return self;
 }
@@ -40,20 +42,17 @@
                                      action:nil] autorelease];
     
     task_cancelled  = NO;
-    
-    [NSTimer scheduledTimerWithTimeInterval:3.0
-                                     target:self
-                                   selector:@selector(showProgress:) 
-                                   userInfo:nil
-                                    repeats:NO];
-    
-    
+       
     [NSTimer scheduledTimerWithTimeInterval:2.0
                                      target:self
                                    selector:@selector(checkConnectionToCamera:) 
                                    userInfo:nil
                                     repeats:NO];
-
+    
+    self.homeWifiSSID = [CameraPassword fetchSSIDInfo];
+    
+        
+    NSLog(@"homeWifiSSID: %@", self.homeWifiSSID);
     
 }
 
@@ -71,6 +70,7 @@
 
 -(void) dealloc
 {
+    [homeWifiSSID release]; 
     [inProgress release];
     [cameraName release];
     [cameraMac release];
@@ -89,24 +89,30 @@
         NSLog(@"Can't Open wifi"); 
         //Open wifi
         [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"prefs:root=WIFI"]];
-        
-        
     }
-    
     
 }
 
 -(void) showProgress:(NSTimer *) exp
 {
-    NSLog(@"show progress"); 
-    if (self.inProgress != nil)
+    NSLog(@"show progress "); 
+    
+    //if (![Step_09_ViewController isWifiConnectionAvailable])
     {
-        NSLog(@"show progress 01 ");
-         self.inProgress.hidden = NO;
-        [self.view addSubview:self.inProgress];
+        if (self.inProgress != nil)
+        {
+            NSLog(@"show progress 01 ");
+            self.inProgress.hidden = NO;
+            [self.view addSubview:self.inProgress];
+            
+            
+        }
+
         
     }
     
+   
+        
 }
 
 - (void) hideProgess
@@ -148,9 +154,23 @@
 #endif
 	
     
-     NSLog(@"checkConnectionToCamera 02");
+    
+   
 	NSString * currentSSID = [CameraPassword fetchSSIDInfo];
 	
+    if ( currentSSID == nil ||
+        self.homeWifiSSID  ==nil ||
+        ![self.homeWifiSSID isEqualToString:currentSSID]
+        )
+    {
+         NSLog(@"cshow progress 02");
+        [self showProgress:nil];
+       
+    }
+    
+    
+    
+    
 	 NSLog(@"checkConnectionToCamera 03: %@", currentSSID);
 	if ([currentSSID hasPrefix:DEFAULT_SSID_PREFIX])
 	{

@@ -138,58 +138,6 @@
 	return TRUE;
 }
 
-- (NSData *)BMS_getCameraListBlockedWithUser:(NSString *) user_email AndPass:(NSString*) user_pass
-{
-    NSData * dataReply;
-	NSURLResponse * response;
-    NSError* error = nil;
-    NSString * http_cmd = [NSString stringWithFormat:@"%@%@",BMS_PHONESERVICE, BMS_CMD_PART];
-	http_cmd = [http_cmd stringByAppendingFormat:@"%@", GET_CAM_LIST_CMD];
-	http_cmd = [http_cmd stringByAppendingFormat:@"%@%@", GET_CAM_LIST_PARAM_1, user_email];
-    
-	
-	NSLog(@"getCamlist query:%@", http_cmd);
-	
-    
-	if (selIfSuccess == nil ||selIfFailure == nil|| selIfServerFail ==nil)
-	{
-		NSLog(@"ERR: selector is not set");
-		return FALSE;
-	}
-	
-	NSString* plain = [NSString stringWithFormat:@"%@:%@",
-					   user_email, user_pass];
-	NSData* plainData = [plain dataUsingEncoding:NSUTF8StringEncoding];
-	NSString * portalCred = [NSString base64StringFromData:plainData length:[plainData length]];
-	
-	
-	@synchronized(self)
-	{
-		
-		NSMutableURLRequest *theRequest=[NSMutableURLRequest requestWithURL:[NSURL URLWithString:http_cmd]
-																cachePolicy: NSURLRequestReloadIgnoringLocalCacheData
-															timeoutInterval:BMS_DEFAULT_TIME_OUT];
-		
-		NSString *authHeader = [@"Basic " stringByAppendingFormat:@"%@",portalCred];  
-		[theRequest addValue:authHeader forHTTPHeaderField:@"Authorization"];
-		
-        
-        error = nil;
-        dataReply = [NSURLConnection sendSynchronousRequest:theRequest 
-                                          returningResponse:&response 
-                                                      error:&error];
-        
-	}
-    
-    if ( (dataReply == nil)||  (error != nil))
-    {
-        return nil; 
-    }
-    else
-    {
-        return dataReply; 
-    }
-}
 
 - (BOOL)BMS_addCamWithUser:(NSString*) user_email AndPass:(NSString*) user_pass macAddr:(NSString *) mac camName:(NSString*) name
 {
@@ -578,65 +526,6 @@
 	return TRUE;
 }
 
-- (NSData *)BMS_getCameraSnapshotBlockedWithUser:(NSString *) user_email 
-                                         AndPass:(NSString*) user_pass 
-                                         macAddr:(NSString *) macWithColon 
-{
-    NSString * mac_ = [Util strip_colon_fr_mac:macWithColon];
-
-    
-    NSData * dataReply;
-	NSURLResponse * response;
-    NSError* error = nil;
-    NSString * http_cmd = [NSString stringWithFormat:@"%@%@",BMS_PHONESERVICE, BMS_CMD_PART];
-	http_cmd = [http_cmd stringByAppendingFormat:@"%@", GET_IMG_CMD];
-	http_cmd = [http_cmd stringByAppendingFormat:@"%@%@", GET_IMG_PARAM_1, mac_];
-    
-	
-	NSLog(@"getCamlist query:%@", http_cmd);
-	
-    
-	if (selIfSuccess == nil ||selIfFailure == nil|| selIfServerFail ==nil)
-	{
-		NSLog(@"ERR: selector is not set");
-		return FALSE;
-	}
-	
-	NSString* plain = [NSString stringWithFormat:@"%@:%@",
-					   user_email, user_pass];
-	NSData* plainData = [plain dataUsingEncoding:NSUTF8StringEncoding];
-	NSString * portalCred = [NSString base64StringFromData:plainData length:[plainData length]];
-	
-	
-	@synchronized(self)
-	{
-		
-		NSMutableURLRequest *theRequest=[NSMutableURLRequest requestWithURL:[NSURL URLWithString:http_cmd]
-																cachePolicy: NSURLRequestReloadIgnoringLocalCacheData
-															timeoutInterval:BMS_DEFAULT_TIME_OUT];
-		
-		NSString *authHeader = [@"Basic " stringByAppendingFormat:@"%@",portalCred];  
-		[theRequest addValue:authHeader forHTTPHeaderField:@"Authorization"];
-		
-        
-        error = nil;
-        dataReply = [NSURLConnection sendSynchronousRequest:theRequest 
-                                          returningResponse:&response 
-                                                      error:&error];
-        
-	}
-    
-    if ( (dataReply == nil)||  (error != nil))
-    {
-        return nil; 
-    }
-    else
-    {
-        return dataReply; 
-    }
-
-}
-
 
 - (BOOL)BMS_resetUserPassword:(NSString*) user_email
 {
@@ -673,6 +562,281 @@
 	return TRUE;
 }
 
+
+
+-(BOOL) BMS_getRelaySecWithUser:(NSString*) user_email AndPass:(NSString*) user_pass macAddr:(NSString *) macWithColon 
+{
+    
+    NSString * mac_ = [Util strip_colon_fr_mac:macWithColon];
+
+    
+    NSString * http_cmd = [NSString stringWithFormat:@"%@%@",BMS_PHONESERVICE, BMS_CMD_PART];
+	http_cmd = [http_cmd stringByAppendingFormat:@"%@", GET_RELAY_KEY];
+	http_cmd = [http_cmd stringByAppendingFormat:@"%@%@", GET_RELAY_KEY_PARAM_1, mac_];
+
+	
+	NSLog(@"getRelayS query:%@", http_cmd);
+	
+	
+	if (selIfSuccess == nil ||selIfFailure == nil|| selIfServerFail ==nil)
+	{
+		NSLog(@"ERR: selector is not set");
+		return FALSE;
+	}
+	
+	NSString* plain = [NSString stringWithFormat:@"%@:%@",
+					   user_email, user_pass];
+	NSData* plainData = [plain dataUsingEncoding:NSUTF8StringEncoding];
+	NSString * portalCred = [NSString base64StringFromData:plainData length:[plainData length]];
+	
+	
+	
+	@synchronized(self)
+	{
+		
+		NSMutableURLRequest *theRequest=[NSMutableURLRequest requestWithURL:[NSURL URLWithString:http_cmd]
+																cachePolicy: NSURLRequestReloadIgnoringLocalCacheData
+															timeoutInterval:BMS_DEFAULT_TIME_OUT];
+		
+		NSString *authHeader = [@"Basic " stringByAppendingFormat:@"%@",portalCred];  
+		[theRequest addValue:authHeader forHTTPHeaderField:@"Authorization"];
+		
+		url_connection = [[NSURLConnection alloc] initWithRequest:theRequest 
+														 delegate:self
+												 startImmediately:TRUE];
+		
+		
+	}
+	
+	return TRUE;
+
+    
+}
+#pragma mark - 
+#pragma mark Blocked queries
+
+
+- (NSData *)BMS_getCameraListBlockedWithUser:(NSString *) user_email AndPass:(NSString*) user_pass
+{
+    NSData * dataReply;
+	NSURLResponse * response;
+    NSError* error = nil;
+    NSString * http_cmd = [NSString stringWithFormat:@"%@%@",BMS_PHONESERVICE, BMS_CMD_PART];
+	http_cmd = [http_cmd stringByAppendingFormat:@"%@", GET_CAM_LIST_CMD];
+	http_cmd = [http_cmd stringByAppendingFormat:@"%@%@", GET_CAM_LIST_PARAM_1, user_email];
+    
+	
+	NSLog(@"getCamlist query:%@", http_cmd);
+	
+ 
+	NSString* plain = [NSString stringWithFormat:@"%@:%@",
+					   user_email, user_pass];
+	NSData* plainData = [plain dataUsingEncoding:NSUTF8StringEncoding];
+	NSString * portalCred = [NSString base64StringFromData:plainData length:[plainData length]];
+	
+	
+	@synchronized(self)
+	{
+		
+		NSMutableURLRequest *theRequest=[NSMutableURLRequest requestWithURL:[NSURL URLWithString:http_cmd]
+																cachePolicy: NSURLRequestReloadIgnoringLocalCacheData
+															timeoutInterval:BMS_DEFAULT_TIME_OUT];
+		
+		NSString *authHeader = [@"Basic " stringByAppendingFormat:@"%@",portalCred];  
+		[theRequest addValue:authHeader forHTTPHeaderField:@"Authorization"];
+		
+        
+        error = nil;
+        dataReply = [NSURLConnection sendSynchronousRequest:theRequest 
+                                          returningResponse:&response 
+                                                      error:&error];
+        
+	}
+    
+    if ( (dataReply == nil)||  (error != nil))
+    {
+        return nil; 
+    }
+    else
+    {
+        return dataReply; 
+    }
+}
+
+
+
+- (NSData *)BMS_getCameraSnapshotBlockedWithUser:(NSString *) user_email 
+                                         AndPass:(NSString*) user_pass 
+                                         macAddr:(NSString *) macWithColon 
+{
+    NSString * mac_ = [Util strip_colon_fr_mac:macWithColon];
+    
+    
+    NSData * dataReply;
+	NSURLResponse * response;
+    NSError* error = nil;
+    NSString * http_cmd = [NSString stringWithFormat:@"%@%@",BMS_PHONESERVICE, BMS_CMD_PART];
+	http_cmd = [http_cmd stringByAppendingFormat:@"%@", GET_IMG_CMD];
+	http_cmd = [http_cmd stringByAppendingFormat:@"%@%@", GET_IMG_PARAM_1, mac_];
+    
+	
+	NSLog(@"getCamlist query:%@", http_cmd);
+	
+    
+	
+	
+	NSString* plain = [NSString stringWithFormat:@"%@:%@",
+					   user_email, user_pass];
+	NSData* plainData = [plain dataUsingEncoding:NSUTF8StringEncoding];
+	NSString * portalCred = [NSString base64StringFromData:plainData length:[plainData length]];
+	
+	
+	@synchronized(self)
+	{
+		
+		NSMutableURLRequest *theRequest=[NSMutableURLRequest requestWithURL:[NSURL URLWithString:http_cmd]
+																cachePolicy: NSURLRequestReloadIgnoringLocalCacheData
+															timeoutInterval:BMS_DEFAULT_TIME_OUT];
+		
+		NSString *authHeader = [@"Basic " stringByAppendingFormat:@"%@",portalCred];  
+		[theRequest addValue:authHeader forHTTPHeaderField:@"Authorization"];
+		
+        
+        error = nil;
+        dataReply = [NSURLConnection sendSynchronousRequest:theRequest 
+                                          returningResponse:&response 
+                                                      error:&error];
+        
+	}
+    
+    if ( (dataReply == nil)||  (error != nil))
+    {
+        return nil; 
+    }
+    else
+    {
+        return dataReply; 
+    }
+    
+}
+
+
+
+
+- (NSData *) BMS_getRelaySecBlockedWithUser:(NSString*) user_email AndPass:(NSString*) user_pass macAddr:(NSString *) macWithColon 
+{
+    NSData * dataReply;
+	NSURLResponse * response;
+    NSError* error = nil;
+    
+    NSString * mac_ = [Util strip_colon_fr_mac:macWithColon];
+    
+    
+    NSString * http_cmd = [NSString stringWithFormat:@"%@%@",BMS_PHONESERVICE, BMS_CMD_PART];
+	http_cmd = [http_cmd stringByAppendingFormat:@"%@", GET_RELAY_KEY];
+	http_cmd = [http_cmd stringByAppendingFormat:@"%@%@", GET_RELAY_KEY_PARAM_1, mac_];
+    
+	
+	NSLog(@"getRelayS query:%@", http_cmd);
+	
+    NSString* plain = [NSString stringWithFormat:@"%@:%@",
+					   user_email, user_pass];
+	NSData* plainData = [plain dataUsingEncoding:NSUTF8StringEncoding];
+	NSString * portalCred = [NSString base64StringFromData:plainData length:[plainData length]];
+	
+	
+	
+	@synchronized(self)
+	{
+		
+		NSMutableURLRequest *theRequest=[NSMutableURLRequest requestWithURL:[NSURL URLWithString:http_cmd]
+																cachePolicy: NSURLRequestReloadIgnoringLocalCacheData
+															timeoutInterval:BMS_DEFAULT_TIME_OUT];
+		
+		NSString *authHeader = [@"Basic " stringByAppendingFormat:@"%@",portalCred];  
+		[theRequest addValue:authHeader forHTTPHeaderField:@"Authorization"];
+        
+        
+        error = nil;
+        dataReply = [NSURLConnection sendSynchronousRequest:theRequest 
+                                          returningResponse:&response 
+                                                      error:&error];
+        
+	}
+    
+    if ( (dataReply == nil)||  (error != nil))
+    {
+        return nil; 
+    }
+    else
+    {
+        return dataReply; 
+    }
+
+}
+
+- (NSData *) BMS_sendCmdViaServeBlockedWithUser:(NSString*) user_email 
+                                        AndPass:(NSString*) user_pass 
+                                        macAddr:(NSString *) macWithColon 
+                                        channId:(NSString*) channelId 
+                                        command:(NSString *)udt_command
+{
+    
+    NSData * dataReply;
+	NSURLResponse * response;
+    NSError* error = nil;
+    
+    NSString * mac_ = [Util strip_colon_fr_mac:macWithColon];
+    
+    
+    NSString * http_cmd = [NSString stringWithFormat:@"%@%@",BMS_PHONESERVICE, BMS_CMD_PART];
+	http_cmd = [http_cmd stringByAppendingFormat:@"%@", SEND_CTRL_CMD];
+	http_cmd = [http_cmd stringByAppendingFormat:@"%@%@", SEND_CTRL_CMD_PARAM_1, mac_];
+    http_cmd = [http_cmd stringByAppendingFormat:@"%@%@", SEND_CTRL_CMD_PARAM_2, channelId];
+    http_cmd = [http_cmd stringByAppendingFormat:@"%@%@", SEND_CTRL_CMD_PARAM_3,udt_command];
+    
+	
+	NSLog(@"send udt query:%@", http_cmd);
+    
+    
+
+	
+	NSString* plain = [NSString stringWithFormat:@"%@:%@",
+					   user_email, user_pass];
+	NSData* plainData = [plain dataUsingEncoding:NSUTF8StringEncoding];
+	NSString * portalCred = [NSString base64StringFromData:plainData length:[plainData length]];
+	
+	@synchronized(self)
+	{
+		
+		NSMutableURLRequest *theRequest=[NSMutableURLRequest requestWithURL:[NSURL URLWithString:http_cmd]
+																cachePolicy: NSURLRequestReloadIgnoringLocalCacheData
+															timeoutInterval:BMS_DEFAULT_TIME_OUT];
+		
+		NSString *authHeader = [@"Basic " stringByAppendingFormat:@"%@",portalCred];  
+		[theRequest addValue:authHeader forHTTPHeaderField:@"Authorization"];
+        
+        
+        error = nil;
+        dataReply = [NSURLConnection sendSynchronousRequest:theRequest 
+                                          returningResponse:&response 
+                                                      error:&error];
+        
+	}
+    
+    if ( (dataReply == nil)||  (error != nil))
+    {
+        return nil; 
+    }
+    else
+    {
+        return dataReply; 
+    }
+    
+
+    
+    
+}
 #pragma mark - 
 
 #pragma mark NSURLConnection Delegate functions

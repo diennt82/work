@@ -206,7 +206,7 @@
         [_alert release];
     }
     
-    else if (![self isWifiConnectionAvailable] )
+    else if (![Step_09_ViewController isWifiConnectionAvailable] )
     {
 
         UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Unable to create Account"
@@ -248,7 +248,7 @@
 }
 
 
-- (BOOL)isWifiConnectionAvailable {
++ (BOOL)isWifiConnectionAvailable {
     
     Reachability* wifiReach = [Reachability reachabilityForLocalWiFi];
     NetworkStatus netStatus = [wifiReach currentReachabilityStatus];

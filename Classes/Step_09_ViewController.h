@@ -30,10 +30,11 @@
 
 
 -(IBAction) handleNextButton:(id) sender;
--(BOOL) isWifiConnectionAvailable;
++(BOOL) isWifiConnectionAvailable;
 
 //REG callbacks;
 - (void) regSuccessWithResponse:(NSData*) responseData;
 - (void) regFailedWithError:(NSHTTPURLResponse*) error_response; 
 - (void) regFailedServerUnreachable; 
+
 @end

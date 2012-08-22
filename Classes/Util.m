@@ -466,7 +466,7 @@ static int socketFlag = 0;
 
 + (NSString*) getDFCredentials
 {
-	NSString* plain = [NSString stringWithFormat:@"%@:%@", @"moto-cam", @"000000"];
+	NSString* plain = [NSString stringWithFormat:@"%@:%@", @"camera", @"000000"];
 	NSData* plainData = [plain dataUsingEncoding:NSUTF8StringEncoding];
 	return [NSString base64StringFromData:plainData length:[plainData length]];
 }
@@ -480,7 +480,7 @@ static int socketFlag = 0;
 		camPass = @"000000"; //set to default; 
 	}
 	
-	NSString* plain = [NSString stringWithFormat:@"%@:%@", @"moto-cam", camPass];
+	NSString* plain = [NSString stringWithFormat:@"%@:%@", @"camera", camPass];
 	NSData* plainData = [plain dataUsingEncoding:NSUTF8StringEncoding];
 	return [NSString base64StringFromData:plainData length:[plainData length]];
 }

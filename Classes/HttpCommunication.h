@@ -13,7 +13,7 @@
 
 #define DEFAULT_TIME_OUT 5000
 
-#define BASIC_AUTH_DEFAULT_USER @"moto-cam"
+#define BASIC_AUTH_DEFAULT_USER @"camera"
 #define BASIC_AUTH_DEFAULT_PASS @"000000"
 
 #define AVSTREAM_REQUEST @"GET /?action=appletvastream"
@@ -92,6 +92,8 @@
 #define RESET_UPNP @"reset_upnp"
 
 #define GET_ROUTER_LIST @"get_routers_list"
+
+
 
 
 #define ALERT_ASK_FOR_PASSWD 1

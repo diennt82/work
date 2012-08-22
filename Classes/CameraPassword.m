@@ -114,7 +114,7 @@
 	
 #if TARGET_IPHONE_SIMULATOR == 1
 	//return @"NX-BROADBAND";
-    return @"Moto-Cam-123456";
+    return @"Camera-123456";
 #else 
 	
 	CFDictionaryRef info = nil;
@@ -132,7 +132,7 @@
 			info = CNCopyCurrentNetworkInfo((CFStringRef)ifnam);
 			
 			
-			if (CFDictionaryContainsKey(info,kCNNetworkInfoKeySSID) == true)
+			if (info != nil && CFDictionaryContainsKey(info,kCNNetworkInfoKeySSID) == true)
 			{
 				res = [NSString stringWithFormat:@"%@", CFDictionaryGetValue(info, kCNNetworkInfoKeySSID)];
 				

@@ -44,8 +44,14 @@
                                                     ServerErr:@selector(getCamListServerUnreachable)];
     NSData  * responseData = [self.bms_comm BMS_getCameraListBlockedWithUser:userName AndPass:self.userPass];
     
-    
-    [self getCamListSuccess:responseData]; 
+    if (responseData != nil)
+    {
+        [self getCamListSuccess:responseData]; 
+    }
+    else
+    {
+        [self getCamListServerUnreachable] ;
+    }
     
     //NSLog(@"UserAccount: query_camera_list_blocked END");
 }

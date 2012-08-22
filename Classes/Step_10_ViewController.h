@@ -10,6 +10,8 @@
 #import "ScanForCamera.h"
 @class ScanForCamera;
 
+#define HOME_SSID @"home_ssid"
+
 @interface Step_10_ViewController : UIViewController
 {
     IBOutlet UIView * progressView; 

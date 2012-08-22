@@ -18,7 +18,7 @@
 #define AIBALL_GET_REQUEST @"GET /?action=appletvastream HTTP/1.1\r\n"
 
 
-#define DEFAULT_SSID_PREFIX @"Moto-Cam-"
+#define DEFAULT_SSID_PREFIX @"Camera-"
 #define DEFAULT_IP_PREFIX @"192.168.2."
 
 

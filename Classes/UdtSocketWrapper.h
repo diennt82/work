@@ -36,6 +36,7 @@
 -(int) sendDataViaUdt:(NSData *) data;
 -(int) recvDataViaUdt:(NSMutableData *) responseData dataLen:(int) len ;
 
+-(BOOL) isOpen; 
 
 -(void) close;
 

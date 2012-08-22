@@ -13,6 +13,87 @@
 @implementation STUN_Communication
 @synthesize mChannel;
 
+
+-(UdtSocketWrapper *)connectToStunRelay: (CamChannel *) ch
+{
+    if (ch.profile.mac_address == nil)
+	{
+		return nil; 
+	}
+	
+	mChannel = ch; 
+	[mChannel retain];
+    
+    NSMutableData * messageToStun, * response_data ;
+    
+    if (ch.relayToken == nil)
+    {
+        NSLog(@"ERROR relay token is nil"); 
+        return nil; 
+    }
+    messageToStun = [[NSMutableData alloc] initWithData:[ch.relayToken dataUsingEncoding:NSUTF8StringEncoding]];
+
+    // start STUN communication process..
+    UdtSocketWrapper * udt_wrapper = [[ UdtSocketWrapper alloc] init];
+    int localPort, response_len = 50 ; 
+    [udt_wrapper createUdtStreamSocket];
+    
+    
+    struct in_addr * server_ip = [UdtSocketWrapper getIpfromHostName:STUN_RELAY_SERVER_IP];
+
+    localPort = [udt_wrapper connectViaUdtSock:server_ip
+                                          port:STUN_RELAY_SERVER_PORT];
+    NSLog(@"sock connected at port: %d",localPort );
+    
+    [udt_wrapper sendDataViaUdt:(NSData *) messageToStun]; 
+    
+    
+    response_data = [[NSMutableData alloc] initWithLength:response_len]; 
+    response_len = [udt_wrapper recvDataViaUdt:response_data 
+                                       dataLen:response_len];
+    if (response_len > 3)
+    {
+        NSRange  response_range= NSMakeRange(0,3);
+        NSData * response_dat = [response_data subdataWithRange:response_range];
+        NSString * tag = [[[NSString alloc] initWithData:response_dat encoding: NSUTF8StringEncoding] autorelease];
+        
+        if ([tag isEqualToString:@"&&&"])
+        {
+            //Connect  To camera Succeeded
+            response_range= NSMakeRange(0,15);
+            response_dat = [response_data subdataWithRange:response_range];
+
+            NSLog(@"Relay Success tag: %@", tag); 
+            return udt_wrapper;
+        }
+        else if ([tag isEqualToString:@"###"]) {
+            //Relay ERROR 
+            response_range= NSMakeRange(0,15);
+            response_dat = [response_data subdataWithRange:response_range];
+            tag = [[[NSString alloc] initWithData:response_dat encoding: NSUTF8StringEncoding] autorelease];
+            
+            NSLog(@"Relay error tag: %@", tag); 
+            
+            return nil;
+        }
+        else if ([tag isEqualToString:@"@@@"]) {
+            //other ERROR 
+             response_range= NSMakeRange(0,15); 
+            response_dat = [response_data subdataWithRange:response_range];
+            tag = [[[NSString alloc] initWithData:response_dat encoding: NSUTF8StringEncoding] autorelease];
+            
+            NSLog(@"Relay error  tag: %@", tag); 
+            return nil;
+        }
+
+        
+    }
+    
+    
+    return nil; 
+    
+}
+
 -(BOOL) connectToRemoteCamera: (CamChannel *) ch 
 					 callback: (id) caller 
 					 Selector: (SEL) success 
@@ -30,8 +111,8 @@
 	_Success_SEL = success; 
 	_Failure_SEL = fail; 
 	
-	//kick off by querying IsCamReady...
-	retry_getting_camera_availability = 8; 
+	//kick off by querying IsCamReady...up to 20secs..
+	retry_getting_camera_availability = 20; 
 	
 	BMS_Communication * bms_comm; 
 	
@@ -114,6 +195,11 @@
 	}
 	else //retry 
 	{
+        
+        
+        [NSThread sleepForTimeInterval:1.0]; 
+        
+        
 		BMS_Communication * bms_comm; 
 		
 		NSString * mac = [Util strip_colon_fr_mac:mChannel.profile.mac_address];

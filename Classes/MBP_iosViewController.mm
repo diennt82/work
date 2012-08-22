@@ -379,7 +379,7 @@
 			else 
 			{
 				
-				[itemView.cameraLocationIndicator setImage:[UIImage imageNamed:@"camera_remote.png"]];
+				[itemView.cameraLocationIndicator setImage:[UIImage imageNamed:@"camera_online.png"]];
 					
 			}
 			
@@ -755,7 +755,8 @@
 			NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
 			[userDefaults setBool:TRUE forKey:_AutoLogin];
 			[userDefaults synchronize];
-			[NSTimer scheduledTimerWithTimeInterval:0.01
+            
+			[NSTimer scheduledTimerWithTimeInterval:2.0
 											 target:self
 										   selector:@selector(show_login_or_reg:)
 										   userInfo:nil

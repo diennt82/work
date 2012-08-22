@@ -27,10 +27,13 @@
 @synthesize  recTimeLabel, recTimer; 
 
 @synthesize mFrameUpdater,mTempUpdater;
-
+@synthesize  currentOrientation; 
+@synthesize  streamingChannel; 
 
 - (id) initWithIp:(NSString *) ip andPort:(int) port handler:(id<StreamerEventHandler>) handler
 {
+    [super init]; 
+    
 	self.device_ip = ip;
 	self.device_port = port; 
 	NSLog(@"init with %@:%d", self.device_ip, self.device_port);
@@ -40,6 +43,9 @@
 	mHandler = handler; 
 	hasStoppedByCaller = FALSE; 
 	disableAudio = NO;
+    
+    self.streamingChannel = nil; 
+    self.currentOrientation = UIInterfaceOrientationPortrait;
 	return self;
 	
 }
@@ -60,7 +66,7 @@
 	[udtSocket release];
 	[pcmPlayer release];
     [recTimer release];
-    
+    [streamingChannel  release] ; 
 	[super dealloc];
 }
 
@@ -90,7 +96,7 @@
     }
 	recordInProgress = NO;
     
-	currentZoomLevel = 5.0;
+	self.currentZoomLevel = 5.0;
 	
 
 		
@@ -121,7 +127,7 @@
     }
 	recordInProgress = NO;
 
-	currentZoomLevel = 5.0;
+	self.currentZoomLevel = 5.0;
 
 	
 	initialFlag = 1;
@@ -232,6 +238,55 @@
 #pragma mark -
 #pragma mark  UDT stream 
 
+-(void) switchToUdtRelayServer
+{
+    //UdtSocketWrapper * udtSocket = nil; 
+    RemoteConnection * relayConn = [[RemoteConnection alloc]init]; 
+    
+    if (streamingChannel == nil)
+    {
+        NSLog(@"Streaming channel is NIL in RELAY mode ... ERROR"); 
+        return; 
+    }
+	self.udtSocket= [relayConn connectToUDTRelay:self.streamingChannel];
+        
+    if (self.udtSocket == nil)
+    {
+        NSLog(@"Fail to open relay socket "); 
+        return; 
+    }
+    responseData = [[NSMutableData alloc] init];
+    
+    if ( pcmPlayer == nil)
+    {
+        /* Start the player to playback & record */
+        pcmPlayer = [[PCMPlayer alloc] init];
+        [[pcmPlayer player] setPlay_now:FALSE];
+        [pcmPlayer Play];
+        
+    }
+    else {
+        [[pcmPlayer player] setPlay_now:FALSE];
+        
+    }
+    
+    
+    NSLog(@"Streaming channel in RELAY mode ... Starting");
+    
+#if 0
+    NSThread * keepAliveThrd = [[NSThread alloc] initWithTarget:self
+                                                       selector:@selector(keepAlive:)
+                                                         object:self]; 
+    
+    [keepAliveThrd start]; 
+#endif ///TODO check wth servers
+    
+    udtStreamerThd = [[NSThread alloc] initWithTarget:self
+                                             selector:@selector(readVideoDataFromSocket:)
+                                               object:self]; 
+    
+    [udtStreamerThd start]; 
+}
 
 - (void) startUdtStream
 {
@@ -247,7 +302,7 @@
         [self stopRecording];
     }
     recordInProgress = NO;
-	currentZoomLevel = 5.0;
+	self.currentZoomLevel = 5.0;
 	
 	initialFlag = 1;
 	
@@ -259,43 +314,87 @@
 	NSLog(@"connect to %@:%d from localport: %d server_ip:%d", self.device_ip, self.device_port , 
 		  self.local_port, server_ip->s_addr);
 	
-	int localPort = [udtSocket connectViaUdtSock:server_ip
-										  port:self.device_port];
-	
-	if (local_port != localPort)
-	{
-		NSLog(@"connecting port is different from localport: %d %d", local_port, localPort); 
-	}
-	NSString * msg = nil; 
-	msg = [NSString stringWithFormat:@"%@%@%@",
-			  AVSTREAM_UDT_REQ, AVSTREAM_PARAM_1,self.remoteViewKey];
-	NSData * msg_ = [[NSData alloc] initWithBytes:[msg UTF8String] length:[msg length]]; 
-	
-	[udtSocket sendDataViaUdt:msg_]; 
-	
-	
-	responseData = [[NSMutableData alloc] init];
-	
-	if ( pcmPlayer == nil)
-	{
-		/* Start the player to playback & record */
-		pcmPlayer = [[PCMPlayer alloc] init];
-		[[pcmPlayer player] setPlay_now:FALSE];
-		[pcmPlayer Play];
-		
-	}
-	else {
-		[[pcmPlayer player] setPlay_now:FALSE];
-		
-	}
+	int localPort = -1 ; 
 
+#if 0 //Force relay
+    
+    
+    [NSThread sleepForTimeInterval:25.0];
+    [udtSocket close]; 
+#else
+
+    NSDate * now = [NSDate date]; 
+    NSDate * timeout = [NSDate dateWithTimeInterval:25.0 sinceDate:now];
+     //The receiver is earlier in time than anotherDate, NSOrderedAscending.
+    while ([now compare:timeout] ==   NSOrderedAscending)
+    {
+               
+        
+        localPort = [udtSocket connectViaUdtSock:server_ip
+                                            port:self.device_port];
+        NSLog(@"localPort = %d", localPort);  
+        if (localPort > 0)
+        {
+            break; 
+        }
+        
+        now = [NSDate date]; 
+
+    }
+#endif
+    
+    if (localPort < 0 ) 
+    {
+        
+        ///// STUN RELAY /////////
+        //Still fail after retries --- Go for relay now
+        NSLog(@"RELAY RELAY RELAY"); 
+        [self switchToUdtRelayServer ]; 
+        return;
+    }
+    
+    
+    ///// STUN direct /////////
+    if (local_port != localPort)
+    {
+        NSLog(@"connecting port is different from localport: %d %d", local_port, localPort); 
+    }
+    NSString * msg = nil; 
+    msg = [NSString stringWithFormat:@"%@%@%@",
+           AVSTREAM_UDT_REQ, AVSTREAM_PARAM_1,self.remoteViewKey];
+    NSData * msg_ = [[NSData alloc] initWithBytes:[msg UTF8String] length:[msg length]]; 
+    
+    [udtSocket sendDataViaUdt:msg_]; 
+    
+    
+    responseData = [[NSMutableData alloc] init];
+    
+    if ( pcmPlayer == nil)
+    {
+        /* Start the player to playback & record */
+        pcmPlayer = [[PCMPlayer alloc] init];
+        [[pcmPlayer player] setPlay_now:FALSE];
+        [pcmPlayer Play];
+        
+    }
+    else {
+        [[pcmPlayer player] setPlay_now:FALSE];
+        
+    }
+    
+    
+  
+    
+    
+    udtStreamerThd = [[NSThread alloc] initWithTarget:self
+                                             selector:@selector(readVideoDataFromSocket:)
+                                               object:self]; 
+    
+    [udtStreamerThd start]; 
+
+    
 	
 	
-	udtStreamerThd = [[NSThread alloc] initWithTarget:self
-											 selector:@selector(readVideoDataFromSocket:)
-											   object:self]; 
-	
-	[udtStreamerThd start]; 
 	
 }
 
@@ -304,10 +403,19 @@
 	[mHandler statusReport:STREAM_STARTED andObj:obj];
 	
 }
+
+- (void) sendStatusStoppedWithErrOnMainThread:(NSObject *) obj
+{
+    [mHandler statusReport:REMOTE_STREAM_STOPPED_UNEXPECTEDLY andObj:obj];
+}
+
+
 -(void) sendStatusStoppedReportOnMainThread:(NSObject *) obj
 {
 	[mHandler statusReport:STREAM_STOPPED andObj:obj];
 }
+
+
 
 #define READ_16K_DATA 16*1024
 
@@ -315,6 +423,7 @@
 {
 	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
 	
+    NSLog(@"readVideoDataFromSocket enter: 01"); 
 
 	UdtSocketWrapper * socket = streamer.udtSocket;//grap the opened socket 
 	
@@ -327,15 +436,16 @@
 	
 	NSMutableData* data, *buffer;
 	int bytesRead = -1; 
-	//TODO:..responseData
+	
 	data = [[NSMutableData alloc]initWithLength:READ_16K_DATA]; //16k
-								
+
+    NSLog(@"readVideoDataFromSocket enter: 02"); 			
 
 	[self performSelectorOnMainThread:@selector(sendStatusStartedReportOnMainThread:) 
 											withObject:nil
 							waitUntilDone:YES];
 	
-	
+    BOOL exitedUnexpectedly = FALSE; 
 	//int i = 2; 
 	//while (i -- >=0)
 	while (![[NSThread currentThread] isCancelled])
@@ -343,7 +453,17 @@
 		
 		//read 
 		bytesRead = [socket recvDataViaUdt:data dataLen:READ_16K_DATA];
-		if (bytesRead < 0 || bytesRead > READ_16K_DATA)
+        if (bytesRead <0)
+        {
+            exitedUnexpectedly = TRUE; 
+            //STream has stopped due to some connection error
+            [self performSelectorOnMainThread:@selector(sendStatusStoppedWithErrOnMainThread:) 
+                                   withObject:nil
+                                waitUntilDone:YES];
+            
+            break; 
+        }
+		if ( bytesRead > READ_16K_DATA)
 		{
 			continue;
 		}
@@ -491,14 +611,14 @@
 						UIImage *image = [UIImage imageWithData:imageData];
 						
 
+						image = [self adaptToCurrentOrientation:image]; 
 						
-						
-						if (currentZoomLevel < 5.0f)
+						if (self.currentZoomLevel < 5.0f)
 						{
 							//CGRect frame = camView.oneCamView.videoView.frame;
 							
-							CGFloat newDeltaWidth =   image.size.width*(5.0f - currentZoomLevel)*2;
-							CGFloat newDeltaHeight =  image.size.height*(5.0f - currentZoomLevel)*2;
+							CGFloat newDeltaWidth =   image.size.width*(5.0f - self.currentZoomLevel)*2;
+							CGFloat newDeltaHeight =  image.size.height*(5.0f - self.currentZoomLevel)*2;
 							CGRect newRect = CGRectZero;
 							newRect.origin.x = - newDeltaWidth/2;
 							newRect.origin.y = - newDeltaHeight/2;
@@ -506,8 +626,8 @@
 							newRect.size.width =  image.size.width +newDeltaWidth;
 							newRect.size.height = image.size.height +newDeltaHeight;
 							
-							//NSLog(@"newsize :%f, %f %f %f", newRect.size.width, newRect.size.height,
-							//	  newDeltaWidth, newDeltaHeight);
+//							NSLog(@"newsize :%f, %f %f %f", newRect.size.width, newRect.size.height,
+//								  newDeltaWidth, newDeltaHeight);
 							image = [self imageWithImage:image scaledToRect:newRect];
 							
 						}
@@ -576,11 +696,12 @@
 		
 	} //While (thread is running)
 		
-	
-	
-	[self performSelectorOnMainThread:@selector(sendStatusStoppedReportOnMainThread:) 
+	if (!exitedUnexpectedly)
+	{
+        [self performSelectorOnMainThread:@selector(sendStatusStoppedReportOnMainThread:) 
 							   withObject:nil
 							waitUntilDone:YES];
+    }
 	
 	
 	[pool drain];
@@ -589,6 +710,45 @@
 }
 
 
+-(void) keepAlive:(MBP_Streamer *) streamer 
+{
+    
+    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+	
+    NSLog(@"keepAlive enter: 01"); 
+    
+	UdtSocketWrapper * socket = streamer.udtSocket;//grap the opened socket 
+    
+    NSString * hello = @"hello"; 
+    int count = 1, data_sent  = -1 ; 
+    NSString * hello_msg; 
+    while ([socket isOpen])
+    {
+        hello_msg = [hello stringByAppendingFormat:@"%d", count]; 
+        count ++; 
+        
+        data_sent = [socket sendDataViaUdt:[hello dataUsingEncoding:NSUTF8StringEncoding]]; 
+        
+        NSLog(@"sent: %@", hello_msg); 
+        
+        //there is no way to check wether socket is opened -- simply to send data thru it .. if error -assume it's closed
+        if (data_sent <0)
+        {
+            break;
+        }
+        
+        [NSThread sleepForTimeInterval:1.0]; 
+    }
+    
+    NSLog(@"keepAlive exit: 01"); 
+    
+    
+    
+    [pool drain];
+	//arrive here -- means exit
+	[NSThread exit];
+    
+}
 
 #pragma mark -
 #pragma mark Audio Playback
@@ -747,14 +907,14 @@
 					UIImage *image = [UIImage imageWithData:imageData];
 					
 			
-					
+					image = [self adaptToCurrentOrientation:image];
 
-					if (currentZoomLevel < 5.0f)
+					if (self.currentZoomLevel < 5.0f)
 					{
-						//CGRect frame = camView.oneCamView.videoView.frame;
+						//currentZoomLevel = 1,2,3,4.. smaller means more magnified
 						
-						CGFloat newDeltaWidth =   image.size.width*(5.0f - currentZoomLevel)*2;
-						CGFloat newDeltaHeight =  image.size.height*(5.0f - currentZoomLevel)*2;
+						CGFloat newDeltaWidth =   image.size.width*( self.currentZoomLevel*0.1);
+						CGFloat newDeltaHeight =  image.size.height*( self.currentZoomLevel*0.1);
 						CGRect newRect = CGRectZero;
 						newRect.origin.x = - newDeltaWidth/2;
 						newRect.origin.y = - newDeltaHeight/2;
@@ -762,14 +922,16 @@
 						newRect.size.width =  image.size.width +newDeltaWidth;
 						newRect.size.height = image.size.height +newDeltaHeight;
 						
-						//NSLog(@"newsize :%f, %f %f %f", newRect.size.width, newRect.size.height,
-						//	  newDeltaWidth, newDeltaHeight);
+                        //NSLog(@"newsize :%f, %f %f %f", newRect.size.width, newRect.size.height,
+						//	 newDeltaWidth, newDeltaHeight);
 						image = [self imageWithImage:image scaledToRect:newRect];
 						
 					}
 
-					
-					[self.videoImage setImage:[UIImage imageWithData:imageData]];
+
+					[self.videoImage setImage:image];
+                    
+                    //[self.videoImage setImage:[UIImage imageWithData:imageData]];
 					
 
 					if (self.takeSnapshot == YES)
@@ -1123,7 +1285,101 @@
 
 
 
+#pragma mark -
+#pragma mark Orientation changed 
+-(void) switchToOrientation:(UIInterfaceOrientation)orientation
+{
+    
 
+    self.currentOrientation = orientation; 
+   
+        
+}
 
+-(UIImage *) adaptToCurrentOrientation:(UIImage *) orig
+{
+    
+    if (self.currentOrientation == UIInterfaceOrientationLandscapeLeft || 
+        self.currentOrientation == UIInterfaceOrientationLandscapeRight) 
+    {
+       
+        
+        return orig; 
+        
+    }
+    else if (self.currentOrientation == UIInterfaceOrientationPortrait ||
+             self.currentOrientation == UIInterfaceOrientationPortraitUpsideDown) 
+    {
+        //NSLog(@"Portrait view");
+        
+        
+       // NSLog(@"Portrait view orig size: %0.2f %0.2f ", orig.size.width, orig.size.height );
+        float new_height = orig.size.height;
+        float hw_ratio = (float)orig.size.height/(float)orig.size.width;
+        
+        float new_width = hw_ratio *new_height ;
+        
+        float new_x =( (float)orig.size.width - new_width)/2;
+       
+        
+        //!! watchout: autoreleased 
+        UIImage* newImage = [self imageByCropping:orig toRect:CGRectMake(new_x, 0, new_width, new_height)];
+        return  newImage; 
+                
+    }
+    
+    
+    return orig; 
+}
+
+- (UIImage*)imageByCropping:(UIImage *)imageToCrop toRect:(CGRect)rect
+
+{
+    
+    //create a context to do our clipping in
+    
+    UIGraphicsBeginImageContext(rect.size);
+    
+    CGContextRef currentContext = UIGraphicsGetCurrentContext();
+    
+    //create a rect with the size we want to crop the image to
+    //the X and Y here are zero so we start at the beginning of our
+    //newly created context
+    
+    
+    
+    CGRect clippedRect = CGRectMake(0, 0, rect.size.width, rect.size.height);
+    
+    CGContextClipToRect( currentContext, clippedRect);
+    
+    //create a rect equivalent to the full size of the image
+    //offset the rect by the X and Y we want to start the crop
+    //from in order to cut off anything before them
+    
+    CGRect drawRect = CGRectMake(rect.origin.x * -1,
+                                 rect.origin.y * -1,
+                                 imageToCrop.size.width,
+                                 imageToCrop.size.height);
+    
+    //draw the image to our clipped context using our offset rect
+    
+    //CGContextDrawImage(currentContext, drawRect, imageToCrop.CGImage);
+    [imageToCrop drawInRect:drawRect];
+    
+    
+    
+    //pull the image from our cropped context
+    
+    UIImage *cropped = UIGraphicsGetImageFromCurrentImageContext();
+    
+    //pop the context to get back to the default
+    
+    UIGraphicsEndImageContext();
+    
+    //Note: this is autoreleased
+    
+    return cropped;
+    
+}
 
 @end

@@ -93,9 +93,15 @@
 
         NSLog(@"Normal Add cam sequence" );
         
+        NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+        NSString * homeSsid = (NSString *) [userDefaults objectForKey:HOME_SSID];
+        
+        
+        
         [self.view addSubview:self.progressView];
         self.progressView.hidden = YES;
         [self.view addSubview:cameraAddedView];
+        self.homeSSID.text = homeSsid; 
         
         
     }
@@ -131,7 +137,7 @@
     
     NSString * mac = [Util strip_colon_fr_mac:self.cameraMac];
 #if TARGET_IPHONE_SIMULATOR == 1
-    NSString * camName = @"Moto-Cam-";
+    NSString * camName = @"Camera-";
 #else
 
     
@@ -411,7 +417,7 @@
 	
 	[self extractMasterKey:raw_data];
 	
-	num_scan_time = 3; //can be changed later
+	num_scan_time = 60; //about 3 mins of scanning ... 
 	
 	// 2 of 3. wait for the camera to reboot completely
 	

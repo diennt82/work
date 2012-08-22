@@ -39,10 +39,12 @@
 	}
 	
 	udt_socket = UDT::socket(AF_INET, SOCK_STREAM, 0);  
+    /*
 	int timeout = 5000; 
 	setsockopt(udt_socket, 0, UDT_SNDTIMEO,(void*) &timeout , sizeof(int));
 	setsockopt(udt_socket, 0, UDT_RCVTIMEO,(void*) &timeout , sizeof(int));
-	
+	*/
+    
 	if (self.local_port > 0)
 	{
 
@@ -99,7 +101,7 @@
 	saddr->sin_addr.s_addr = ip->s_addr;
 	saddr->sin_port = htons(port);
 	bzero(saddr->sin_zero, 8);
-	
+    
 	retVal = UDT::connect(udt_socket, &remote_sock_addr, sizeof(remote_sock_addr));
 	
 	if (retVal == UDT::ERROR)
@@ -124,6 +126,11 @@
 	
 	
 	return localPortNumber; //connected to server thru this local port
+}
+
+-(BOOL) isOpen
+{
+    return TRUE; 
 }
 
 -(void) close
@@ -159,7 +166,7 @@
 	
 	if (retVal <0)
 	{
-		NSLog(@"recv error");
+		NSLog(@"recv error:%d",retVal);
 	}
 	else if (retVal < len)
 	{

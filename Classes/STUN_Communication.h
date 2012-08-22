@@ -1,5 +1,5 @@
 //
-//  STUN_Communication.h
+//  STUN_Communication.h - Handle communication while setting up with STUN server 
 //  MBP_ios
 //
 //  Created by NxComm on 7/4/12.
@@ -20,7 +20,7 @@
 #define STUN_SERVER_IP @"monitoreverywhere.com"
 #define STUN_SERVER_PORT 8000
 
-#define STUN_RELAY_SERVER_IP @"23.23.180.23"
+#define STUN_RELAY_SERVER_IP @"23.23.179.227"
 #define STUN_RELAY_SERVER_PORT 44444
 
 
@@ -51,9 +51,10 @@
 					 Selector: (SEL) success 
 				 FailSelector: (SEL) fail; 
 
+-(UdtSocketWrapper *)connectToStunRelay: (CamChannel *) ch;
 
 
-- (void) queryEncCameraInfoFromStunServer;
+
 
 
 - (void) availFailedWithError:(NSHTTPURLResponse*) error_response;

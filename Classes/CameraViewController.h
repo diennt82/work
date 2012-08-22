@@ -35,6 +35,35 @@
 #define LOCAL_VIDEO_STOPPED_UNEXPECTEDLY 0x1001
 #define REMOTE_VIDEO_STOPPED_UNEXPECTEDLY 0x1002
 
+
+#define ZOOM_STEP 0.25
+
+
+#define HIGH_TEMPERATURE_THRESHOLD_C 29
+#define LOW_TEMPERATURE_THRESHOLD_C 14
+#define REMOTE_VIDEO_TIMEOUT 0x1000
+#define LOCAL_VIDEO_STOPPED_UNEXPECTEDLY 0x1001
+#define REMOTE_VIDEO_STOPPED_UNEXPECTEDLY 0x1002
+
+
+#define SPK_CONTROL_BTN  702
+
+
+#define PTT_CONTROL_BTN  701
+#define PTT_ENGAGE_BTN 711
+
+#define MEL_CONTROL_BTN  700
+#define MEL_CANCEL_BTN  1
+#define MEL_DONE_BTN    2
+#define MEL_ONOFF_SW    3
+
+#define VIEW_DIRECTIONPAD_TAG 500
+#define VIEW_DIRECTIONIND_TAG 501
+
+
+#define CMD_SENDING_INTERVAL 0.2 /*sec*/
+
+
 @interface CameraViewController : UIViewController<StreamerEventHandler,ConnectionMethodDelegate , StreamerFrameRateUpdater, StreamerTemperatureUpdater>
 {
     IBOutlet UILabel * temperature_label; 
@@ -64,6 +93,8 @@
     IBOutlet UIButton * videoAndSnapshotButton; 
     IBOutlet UILabel * videoAndSnapshotTime; 
     
+    IBOutlet UISlider * zoombar; 
+    IBOutlet UIView * zoombarView;
    
     
     HttpCommunication * comm; 
@@ -93,6 +124,8 @@
     
     AudioOutStreamer * audioOut; 
     
+    CGFloat currentZoomLvl; 
+    
     
 }
 
@@ -103,6 +136,8 @@
 @property (nonatomic, retain) CamChannel * selected_channel;
 @property (nonatomic, retain) IBOutlet UIImageView * videoView;
 @property (nonatomic, retain) NSTimer * alertTimer; 
+@property (nonatomic, assign) UISlider * zoombar; 
+@property (nonatomic) float currentZoomLvl; 
 //@property (nonatomic, retain) IBOutlet UIView *progessView; 
 
 
@@ -112,6 +147,8 @@
 
 -(IBAction)buttonCamPressed:(id)sender;
 
+
+-(IBAction)silderMoved:(id)sender;
 
 //Video & Snapshot control
 -(IBAction)buttonSnapPress:(id)sender;
@@ -130,5 +167,6 @@
 -(void) updateTemperature:(int) temp;
 -(void) updateFrameRate:(int) frameRate;
 
+-(void) startCameraConnection:(NSTimer *) exp;
 
 @end

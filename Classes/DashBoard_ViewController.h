@@ -13,8 +13,12 @@
 #import "CamProfile.h"
 #import "CameraViewController.h"
 #import "Account_ViewController.h"
+#import "QuickViewCamera_ViewController.h"
 
-@interface DashBoard_ViewController : UIViewController<UITableViewDataSource, UITableViewDelegate>
+
+
+
+@interface DashBoard_ViewController : UIViewController<UITableViewDataSource, UITableViewDelegate, UINavigationControllerDelegate, UITextFieldDelegate>
 {
     IBOutlet UITableViewCell *cellView;
     IBOutlet UITableView * cameraList; 
@@ -26,8 +30,10 @@
     
     id<ConnectionMethodDelegate> delegate; 
     
-     UIToolbar * topbar; 
+    UIToolbar * topbar; 
     
+    BOOL editModeEnabled; 
+    int edittedChannelIndex; 
 }
 @property (nonatomic, retain) IBOutlet UITabBarController *tabBarController;
 
@@ -35,6 +41,8 @@
 @property (nonatomic, assign) IBOutlet UITableViewCell *cellView;
 @property (nonatomic, assign) id<ConnectionMethodDelegate> delegate;
 @property (nonatomic, retain)  UIToolbar *  topbar;
+@property (nonatomic) BOOL editModeEnabled; 
+@property (nonatomic) int edittedChannelIndex; 
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil 
      withConnDelegate:(id<ConnectionMethodDelegate> ) caller;
@@ -43,6 +51,13 @@
 -(void) logout; 
 -(IBAction)addCamera:(id)sender;
 -(IBAction)checkNow:(id)sender;
+-(IBAction)scanCameras:(id)sender;
+
+
+-(IBAction)editCameras:(id)sender;
+-(IBAction)removeCamera:(id)sender;
+-(IBAction)renameCamera:(id)sender;
+
 
 
 @end

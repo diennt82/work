@@ -19,6 +19,8 @@
 @synthesize  comm, scomm;
 @synthesize  streamer,selected_channel;
 @synthesize  alertTimer;
+@synthesize  zoombar; 
+@synthesize  currentZoomLvl; 
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -36,9 +38,11 @@
 
 -(void) dealloc
 {
-    [super dealloc];
+    
     [temperature_label release];
     [videoAndSnapshotTime release];
+    
+    [super dealloc];
 }
 - (void)viewDidLoad
 {
@@ -71,20 +75,7 @@
         
         progressView.hidden = NO;
         [self.view addSubview:progressView];
-        
-        
-        //REMOTE OR LOCAL
-        if (selected_channel.profile.isInLocal == YES)
-        {
-            NSLog(@"channel is %d with cam name: %@", selected_channel.channel_index, selected_channel.profile.name);
-            [self setupInfraCamera:selected_channel];
-        }
-        else
-        {
-            [self prepareToViewRemotely:selected_channel];
-        }
-
-        
+        [self.view bringSubviewToFront:progressView];
         
         
         
@@ -124,22 +115,62 @@
         //video & snapshot stuff
         [self initVideoAndSnapshotView];
 
+        currentZoomLvl = 0; 
+        
+        
+        [NSTimer scheduledTimerWithTimeInterval:2.0
+                                         target:self
+                                       selector:@selector(startCameraConnection:) 
+                                       userInfo:nil 
+                                        repeats:NO];
+                
     }
     
 }
 
-
+-(void) startCameraConnection:(NSTimer *) exp
+{
+    //REMOTE OR LOCAL
+    if (self.selected_channel.profile.isInLocal == YES)
+    {
+        NSLog(@"channel is %d with cam name: %@", self.selected_channel.channel_index, self.selected_channel.profile.name);
+        [self setupInfraCamera:self.selected_channel];
+    }
+    else
+    {
+        [self prepareToViewRemotely:self.selected_channel];
+    }
+    
+    
+    
+    
+}
 
 -(void) viewWillAppear:(BOOL)animated
 {
-    NSLog(@"viewWillAppear");
+    
     //Setup navigation bar
     [self.navigationController setNavigationBarHidden:YES];
 
     UIDeviceOrientation deviceOrientation = [UIDevice currentDevice].orientation;
     
+    
+    UIInterfaceOrientation infOrientation = (UIInterfaceOrientation)deviceOrientation;
+    
+    if ( deviceOrientation == UIDeviceOrientationUnknown ||
+         deviceOrientation == UIDeviceOrientationFaceDown ||
+         deviceOrientation == UIDeviceOrientationFaceUp)
+    {
+        infOrientation = UIInterfaceOrientationPortrait;
+    }
+     
+   
+    
     NSLog(@"try to rotate myself");
-    [self adjustViewsForOrientation:(UIInterfaceOrientation)deviceOrientation];
+    [self adjustViewsForOrientation:infOrientation];
+    
+  
+
 }
 
 - (void)viewDidUnload
@@ -158,6 +189,14 @@
 
 - (void) adjustViewsForOrientation:(UIInterfaceOrientation)orientation
 {
+
+    BOOL shouldShowProgress = FALSE; 
+    
+    if (progressView.hidden == NO)
+    {
+        shouldShowProgress = TRUE; 
+    }
+    
     
     if (orientation == UIInterfaceOrientationLandscapeLeft || orientation == UIInterfaceOrientationLandscapeRight) 
     {
@@ -171,12 +210,28 @@
         //Need to rotate the video - snashot tool bar
         NSLog(@"Load 222 land the video view");
         
-#if 1
+
         CGAffineTransform transform = CGAffineTransformMakeRotation(-M_PI_2);
         UIView* toolbar = [videoAndSnapshotView viewWithTag:1];
         toolbar.transform = transform;
         toolbar.frame = CGRectMake(369, 20, 111, 300) ;   
-#endif
+
+        
+        
+        //Rotate the slider 
+        zoombarView.transform = CGAffineTransformRotate(zoombarView.transform, -M_PI*0.5);
+        //Initializng the slider value to zero.
+        self.zoombar.value=currentZoomLvl*ZOOM_STEP;
+        zoombarView.frame = CGRectMake(440, 80, 41  ,224) ;  
+        
+        UIImage *sliderMaximum = [[UIImage alloc] init];
+        [self.zoombar setMinimumTrackImage:sliderMaximum forState:UIControlStateNormal];
+        [self.zoombar setMaximumTrackImage:sliderMaximum forState:UIControlStateNormal];
+        [self.zoombar setThumbImage:[UIImage imageNamed:@"zoom_bar_thumb_.png"] forState:UIControlStateNormal];
+        
+        
+       
+        
         
     }
     else if (orientation == UIInterfaceOrientationPortrait || orientation == UIInterfaceOrientationPortraitUpsideDown) 
@@ -188,6 +243,20 @@
         
 
         
+        
+        NSLog(@"Rotating zoom bar...");
+        
+        
+        //Rotate the slider 
+        zoombarView.transform = CGAffineTransformRotate(zoombarView.transform, -M_PI*0.5);
+        //Initializng the slider value to zero.
+        self.zoombar.value=currentZoomLvl*ZOOM_STEP;
+        zoombarView.frame = CGRectMake(280, 200, 41  ,224) ;  
+        
+        UIImage *sliderMaximum = [[UIImage alloc] init];
+        [self.zoombar setMinimumTrackImage:sliderMaximum forState:UIControlStateNormal];
+        [self.zoombar setMaximumTrackImage:sliderMaximum forState:UIControlStateNormal];
+        [self.zoombar setThumbImage:[UIImage imageNamed:@"zoom_bar_thumb_.png"] forState:UIControlStateNormal];
     }
     
     
@@ -197,6 +266,7 @@
     streamer.mTempUpdater = self;
     streamer.mFrameUpdater = self;
     streamer.recTimeLabel  = videoAndSnapshotTime; 
+    [streamer switchToOrientation:orientation];
     
     barBtnName.title = selected_channel.profile.name;
   
@@ -216,8 +286,23 @@
     //
     [self initVideoAndSnapshotView];
     
+    
+    //re-show progress if  it is being shown
+    if (shouldShowProgress)
+    {
+        [self.view addSubview:progressView]; 
+        [self.view bringSubviewToFront:progressView]; 
+    }
+    else
+    {
+        progressView.hidden = YES; 
+    }
+    
+    
     //TODO:  settings button 
     //      update direction pad, controls
+
+    
 
     
 }
@@ -230,6 +315,9 @@
     if (streamer.recordInProgress == YES)
         [streamer stopRecording];   
     [streamer stopStreaming];
+    
+    NSLog(@"abort remote timer ");
+    [self.selected_channel abortViewTimer];
     
     [self.navigationController popViewControllerAnimated:NO];
     
@@ -299,7 +387,7 @@
 		//use timer only if it is remote view 
 		[ch startViewTimer:self select:@selector(remoteViewTimeout:)];
 		
-		
+		streamer.streamingChannel = ch;
 		
 		[streamer setVideoImage:videoView];
         streamer.mTempUpdater = self;
@@ -308,14 +396,15 @@
 		[streamer startUdtStream]; 
 		
 		
-		if (scomm != nil)
+        
+		if (self.scomm != nil)
 		{
-			[scomm release]; 
-			scomm = nil;
+			
+			self.scomm = nil;
 		}
 		
-		scomm = [[StunCommunication alloc] initWithIp:ip port:port lPort:ch.localUdtPort]; 
-		
+		self.scomm = [[StunCommunication alloc]init]; 
+
 		
 	}
 	else
@@ -389,8 +478,10 @@
     BOOL isOffline = [userDefaults boolForKey:_OfflineMode];
     
 	[userDefaults setBool:!(isOffline) forKey:_is_Loggedin];
-    
-	[userDefaults setObject:streamingSSID forKey:_streamingSSID]; 
+    if (streamingSSID != nil)
+    {
+        [userDefaults setObject:streamingSSID forKey:_streamingSSID]; 
+    }
 	
 	NSString * old_usr_email = (NSString *) [userDefaults objectForKey:@"PortalUseremail"];
 	NSString * old_pass = (NSString *) [userDefaults objectForKey:@"PortalPassword"];
@@ -408,7 +499,7 @@
 	[userDefaults synchronize]; 
     
     
-	NSLog(@"show watiing"); 
+	NSLog(@"End of setupInfraCamera"); 
 	
 	
     
@@ -416,9 +507,6 @@
 
 #pragma mark -
 #pragma mark  Temp & frame rate update 
-
-#define HIGH_TEMPERATURE_THRESHOLD_C 29
-#define LOW_TEMPERATURE_THRESHOLD_C 14
 
 
 
@@ -557,7 +645,7 @@
 
 -(void) statusReport:(int) status andObj:(NSObject*) obj
 {
-	
+
 	
 	switch (status) {
 		case STREAM_STARTED:
@@ -569,7 +657,11 @@
 			if (selected_channel.communication_mode == COMM_MODE_STUN)
 			{
                 
-				[self.scomm sendCommand:SET_RESOLUTION_QVGA];
+                NSLog(@"send set QVGA"); 
+
+                [self.scomm sendCommandThruUdtServer:SET_RESOLUTION_QVGA 
+                                             withMac:self.selected_channel.profile.mac_address
+                                          AndChannel:self.selected_channel.channID];
 				
 			}
 			
@@ -608,9 +700,10 @@
 			
 			//popup ?
 			
-			if (self.alertTimer != nil)
+			if (self.alertTimer != nil && [self.alertTimer isValid])
 			{
 				//some periodic is running dont care
+                NSLog(@"some periodic is running dont care");
 				
 			}
 			else
@@ -638,10 +731,10 @@
 			//For remote stream, we restart by quering the BMS again 
 			[self prepareToViewRemotely:selected_channel];
 			
-			if (self.alertTimer != nil)
+			if (self.alertTimer != nil && [self.alertTimer isValid])
 			{
 				//some periodic is running dont care
-				
+				NSLog(@"some periodic is running dont care");
 			}
 			else
 			{
@@ -744,9 +837,7 @@
 #pragma mark -
 #pragma mark Alertview delegate
 
-#define REMOTE_VIDEO_TIMEOUT 0x1000
-#define LOCAL_VIDEO_STOPPED_UNEXPECTEDLY 0x1001
-#define REMOTE_VIDEO_STOPPED_UNEXPECTEDLY 0x1002
+
 - (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex
 {
 	
@@ -854,7 +945,7 @@
     
     directionPad.hidden = YES;
     controlButtons.hidden = YES;
-         
+    zoombarView.hidden = YES;
     
 }
 
@@ -900,6 +991,7 @@
     
     directionPad.hidden = YES;
     controlButtons.hidden = YES;
+    zoombarView.hidden = YES;
 	
 
 }
@@ -918,7 +1010,7 @@
     topToolBar.hidden = NO;
     directionPad.hidden = NO;
     controlButtons.hidden = NO;
-    
+    zoombarView.hidden = NO;
     [self exitSubFunction];
     
 }
@@ -1068,7 +1160,7 @@
 
 #pragma  mark -
 #pragma mark SPK
-#define SPK_CONTROL_BTN  702
+
 
 -(IBAction)buttonSpkPressed:(id)sender
 {
@@ -1103,6 +1195,45 @@
 
 #pragma  mark -
 
+#pragma  mark -
+#pragma mark Zoom control
+
+
+
+
+-(IBAction)silderMoved:(id)sender
+{
+    //NSLog(@"Slider moved"); 
+    UISlider * slider = (UISlider *) sender;
+    int sliderValue = (int) (slider.value/ZOOM_STEP);
+    
+    [slider setValue:(sliderValue*ZOOM_STEP) animated:YES];
+
+    currentZoomLvl = (float)sliderValue;
+    //NSLog(@"Slider moved: %f", currentZoomLvl); 
+    if (self.streamer != nil)
+    {
+        
+        if (currentZoomLvl >5.0)
+        {
+            currentZoomLvl = 5.0;
+        }
+        else if (currentZoomLvl < 0.0)
+        {
+            currentZoomLvl =0.0 ;
+        }
+        
+ 
+        
+        
+        
+        [self.streamer setCurrentZoomLevel:self.currentZoomLvl];
+            
+        
+     }
+    
+}
+#pragma  mark -
 
 #pragma  mark -
 #pragma mark PTT
@@ -1205,8 +1336,6 @@
 
 
 
-#define PTT_CONTROL_BTN  701
-#define PTT_ENGAGE_BTN 711
 
 -(IBAction)buttonPttPressed:(id)sender
 {
@@ -1231,10 +1360,7 @@
 #pragma  mark -
 #pragma mark Melody
 
-#define MEL_CONTROL_BTN  700
-#define MEL_CANCEL_BTN  1
-#define MEL_DONE_BTN    2
-#define MEL_ONOFF_SW    3
+
 
 -(IBAction) buttonMelodyPressed:(id) sender
 {
@@ -1276,35 +1402,38 @@
 
 -(void) setMelody:(int) melodyIdx
 {
-    if (comm != nil)
+    NSString * command = nil;
+    if (melodyIdx == 0 ) //mute
     {
-        NSString * command = nil;
-        if (melodyIdx == 0 ) //mute
+        command = SET_MELODY_OFF;
+    }
+    else 
+    {
+        command = [NSString stringWithFormat:@"%@%d",SET_MELODY,melodyIdx];
+    }
+    
+    if (selected_channel.communication_mode == COMM_MODE_STUN)
+    {
+        if (self.scomm != nil)
         {
-            command = SET_MELODY_OFF;
-        }
-        else 
-        {
-            command = [NSString stringWithFormat:@"%@%d",SET_MELODY,melodyIdx];
-        }
-        
-        if (selected_channel.communication_mode == COMM_MODE_STUN)
-        {
-            if (self.scomm != nil)
-            {
-                NSLog(@"sending melody");
-                [self.scomm sendCommand:command	];
-            }
-        }
-        else 
-        {
+            NSLog(@"sending melody");
             
-            if (comm != nil)
-            {
-                [comm sendCommandAndBlock:command];
-            }
+            
+            [self.scomm sendCommandThruUdtServer:command 
+                                         withMac:self.selected_channel.profile.mac_address
+                                      AndChannel:self.selected_channel.channID];
         }
+        else {
+            NSLog(@"sending melody self.scomm == nil");
+        }
+    }
+    else 
+    {
         
+        if (comm != nil)
+        {
+            [comm sendCommandAndBlock:command];
+        }
     }
 
 }
@@ -1401,8 +1530,7 @@
 #pragma  mark -
 #pragma mark touches
 
-#define VIEW_DIRECTIONPAD_TAG 500
-#define VIEW_DIRECTIONIND_TAG 501
+
 
 //----- handle all touches here then propagate into directionview 
 
@@ -1646,7 +1774,6 @@
 #pragma mark -
 #pragma mark Direction 
 
-#define CMD_SENDING_INTERVAL 0.2 /*sec*/
 
 /* call when touch begin */
 - (void) updateVerticalDirection_begin:(int)dir inStep: (uint) step
@@ -1906,16 +2033,31 @@
 	
 	if (dir_str != nil)
 	{
-		// - Send direction update to device 
-        //NSLog(@"send :%@ %f", dir_str, duty_cycle);
-		//[self performSelectorInBackground:@selector(requestURLSync_bg:) 
-		//					   withObject:[Util getMotorControlURL:dir_str 
-		//												wDutyCycle:duty_cycle]];
-        
-		//Non block send-
-		[comm sendCommand:dir_str];
 		
-		
+				
+        if (selected_channel.communication_mode == COMM_MODE_STUN)
+        {
+            if (self.scomm != nil)
+            {
+                NSLog(@"sending UD Direction: ");
+                
+                
+                [self.scomm sendCommandThruUdtServer:dir_str 
+                                             withMac:self.selected_channel.profile.mac_address
+                                          AndChannel:self.selected_channel.channID];
+            }
+        }
+        else 
+        {
+            
+            if (comm != nil)
+            {
+                //Non block send-
+                [comm sendCommand:dir_str];
+
+            }
+        }
+
         
 	}
 }
@@ -1952,11 +2094,29 @@
 	if (dir_str != nil)
 	{
 		
-		[comm sendCommand:dir_str];
-		//NSLog(@"send: %@", dir_str);
-		//[self performSelectorInBackground:@selector(requestURLSync_bg:) 
-        //							   withObject:[Util getMotorControlURL:dir_str 
-        //														wDutyCycle:IRABOT_DUTYCYCLE_LR_MAX]];
+        if (selected_channel.communication_mode == COMM_MODE_STUN)
+        {
+            if (self.scomm != nil)
+            {
+                NSLog(@"sending LR Direction: ");
+                
+                
+                [self.scomm sendCommandThruUdtServer:dir_str 
+                                             withMac:self.selected_channel.profile.mac_address
+                                          AndChannel:self.selected_channel.channID];
+            }
+        }
+        else 
+        {
+            
+            if (comm != nil)
+            {
+                //Non block send-
+                [comm sendCommand:dir_str];
+                
+            }
+        }
+        
         
 	}
 	
