@@ -16,10 +16,9 @@
 
 @synthesize cameraMenuItems, cameraMenuItemValues;
 
-@synthesize manualFWDView, manualFWDCancel,manualFWDChange, manualFWDprt80,manualFWDprt51108, manualOrAuto; 
-@synthesize manualFWDSubView;
 
 @synthesize camChan; 
+@synthesize dev_s_comm ;
 /*
  // The designated initializer.  Override if you create the controller programmatically and want to perform customization that is not appropriate for viewDidLoad.
  */
@@ -166,31 +165,25 @@
 	temperature = [[NSArray alloc] initWithObjects:@"Fahrenheit",@"Celsius",nil];
 	videoQuality = [[NSArray alloc] initWithObjects:@"High Quality (VGA)",@"Normal Quality (QVGA)",nil]; 
 	
-//	NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-//	BOOL gotoSubMenu = [userDefaults boolForKey:_to_SubMenu];
-//	
-//	if (gotoSubMenu == TRUE)
-//	{
-//		//Read data and setup sub menu now.. 
-//	}
-//	else {
-//		//setup main menu .. 
-//	}
-
-	
-
-    
+    progressView.hidden = NO; 
+    [self.view bringSubviewToFront:progressView]; 
     
 	if (commMode == COMM_MODE_STUN)
 	{
-#if 0
-		dev_s_comm = [[StunCommunication alloc] initWithIp:deviceIp
-													  port:devicePort
-													 lPort:xxxx]; 
-		
-#endif 
+
+        /*20120822: Camera settings page is on OVERLAY mode 
+          This means the connection to the camera is still going on. 
+        --> No need to setup a new connection here . Just simply send the command over 
+         to BMS */
+        
 		NSLog(@"com mode STUN"); 
-		[self setupStunConnectionToMac:deviceMac];
+		//[self setupStunConnectionToMac:deviceMac];
+        
+        if (self.dev_s_comm == nil)
+        {
+            NSLog(@"ERROR no COMM channel being set"); 
+        }
+        
 		
 	}
 	else 
@@ -199,57 +192,15 @@
 		dev_comm.device_ip = deviceIp;
 		dev_comm.device_port = devicePort;
 		
-		[self setupSubMenu];
-	
-	}
-	
+    }
+    
+    
+    
+    //Let it delay a bit 
+	[self performSelector:@selector(setupSubMenu) withObject:nil afterDelay:0.10];
 }
 
 
-
-
--(void) setupStunConnectionToMac:(NSString *) mac 
-{
-	NSString * _mac = [Util	strip_colon_fr_mac:mac];
-	NSLog(@"call setup dummy stun connection:%@", _mac); 
-	
-	CamChannel * dummy = [[CamChannel alloc]init]; 
-	dummy.channID = 0; 
-	dummy.channel_index = 1; 
-	dummy.communication_mode = COMM_MODE_STUN; 
-	dummy.profile = [[CamProfile alloc]initWithMacAddr:_mac];
-	dummy.profile.name = @"dummy"; 
-	
-	
-	
-	
-	//setup remote camera via upnp 
-	
-	RemoteConnection * cameraConn;
-	
-	
-	cameraConn = [[RemoteConnection alloc]init]; 
-	if ([cameraConn connectToRemoteCamera:dummy
-								 callback:self
-								 Selector:@selector(remoteConnectionSucceeded:)
-							 FailSelector:@selector(remoteConnectionFailed:)])
-	{
-		//the process started successfuly
-	}
-	else 
-	{
-		NSLog(@"Start remote connection Failed!!!"); 
-		//ERROR condition
-		UIAlertView *_alert = [[UIAlertView alloc]
-							   initWithTitle:@"Remote View Error"
-							   message:@"Initializing remote connection failed, please retry" 
-							   delegate:self
-							   cancelButtonTitle:@"OK"
-							   otherButtonTitles:nil];
-		[_alert show];
-		[_alert release];
-	}		
-}
 
 
 /**/
@@ -321,88 +272,10 @@
 }
 
 
-#pragma mark Remote Connection Callbacks
-
--(void) remoteConnectionSucceeded:(CamChannel *) camChannel
-{
-	
-	//Start to display this channel
-	camChan = camChannel;
-	
-	NSLog(@"Remote camera-channel is %d with cam name: %@", camChan.channel_index, camChan.profile.name);
-	//create a stream to this channel;
-	
-	
-	
-	dummy_streamer = [[MBP_Streamer alloc]initWithIp:camChan.profile.ip_address 
-									   andPort:camChan.profile.port
-									   handler:self ];
-	dummy_streamer.remoteView = TRUE;
-	dummy_streamer.remoteViewKey = camChan.remoteViewKey; 
-	dummy_streamer.communication_mode = COMM_MODE_STUN;
-	dummy_streamer.local_port = camChan.localUdtPort; 
-	
-	
-	[dummy_streamer startUdtStream]; 
-	
-
-	dev_s_comm = [[StunCommunication alloc] initWithIp:camChan.profile.ip_address
-												  port:camChan.profile.port
-												 lPort:camChan.localUdtPort]; 
-	
-
-	
-	
-}
-
--(void) remoteConnectionFailed:(CamChannel *) camChannel
-{
-	//camChannel = nil 
-	
-	NSLog(@"Remote connection Failed!!!");
-}
-
-
-
-#pragma mark -
-#pragma mark StreamerEventHandler
-
--(void) statusReport:(int) status andObj:(NSObject*) obj
-{
-	
-	
-	switch (status) {
-		case STREAM_STARTED:
-		{
-			
-			
-			break;
-		}
-		case STREAM_STOPPED:
-			break;
-		case STREAM_STOPPED_UNEXPECTEDLY:
-		{
-			
-			
-			break;
-		}
-		case REMOTE_STREAM_STOPPED_UNEXPECTEDLY:
-		{
-			
-			break;
-		}
-		case STREAM_RESTARTED:
-			break; 
-		default:
-			break;
-	}
-}
 #pragma mark -
 
 - (void) setupSubMenu
 {
-	
-	//1. setup title bar with name
 	
 	
 	//2.query camera settings 
@@ -411,86 +284,90 @@
 	[self updateTemperatureConversion];
 	[self updateVolumeLvl];
 	[self updateVQ];
-	if (isDirectMode == TRUE)
-	{
-		[self updateCamPass];
-	}
+	
+    
 	
 	//reload table 
 	[self.cameraMenu reloadData];
 	
+    
+    progressView.hidden = YES; 
 }
 
--(void) updateCamPass
-{
-	NSString * camPass = [CameraPassword getPasswordForCam:deviceMac]; 
-	if (camPass == nil)
-	{
-		camPass = @"000000";
-	}
-	[self.cameraMenuItemValues setValue:camPass forKey:_CAMPASS_DICT_KEY];
-}
 
 
 - (void) updateVoxStatus
 {
 	NSString * response, * command;
-	command = VOX_STATUS;
-	response = [dev_comm sendCommandAndBlock:command];
-	
-	if ( (response != nil)  && [response hasPrefix:VOX_STATUS])
+    
+    if (commMode == COMM_MODE_STUN)
 	{
-		NSString * str_value = [response substringFromIndex:([VOX_STATUS length] + 2)];
-		
-		int vox_status  = [str_value intValue];
-		if (vox_status == 0)
-		{
-			//vox disabled
-			voxLevel = 0;
-			[self.cameraMenuItemValues setValue:@"Disabled" forKey:_VOX_DICT_KEY];
-			return;
-		}
-	}
-	
-	
-	command = VOX_GET_THRESHOLD;
-	response = [dev_comm sendCommandAndBlock:command];
-	if ( (response != nil)  && [response hasPrefix:VOX_GET_THRESHOLD])
-	{
-		NSString * str_value = [response substringFromIndex:([VOX_GET_THRESHOLD length] + 2)];
-		
-		int vox_value  = [str_value intValue];
-		
-		NSString * lvl = @"-1"; 
-		
-		switch(vox_value)
-		{
-			case -10:
-				lvl = @"Level 1(low)";
-				voxLevel = 1;
-				break;
-			case -20:
-				lvl = @"Level 2";
-				voxLevel = 2;
-				break;
-			case -30:
-				lvl = @"Level 3";
-				voxLevel = 3;
-				break;
-			case -38:
-				lvl = @"Level 4(High)";
-				voxLevel = 4;
-				break;
-			default:
-				break;
-		}
-		
-		
-		
-		[self.cameraMenuItemValues setValue:lvl forKey:_VOX_DICT_KEY];
+        //Not supported in Stun
+        voxLevel = 0;
+        [self.cameraMenuItemValues setValue:@"Not supported" forKey:_VOX_DICT_KEY];
+        return;
 
-
-	}
+    }
+    else
+    {
+        
+        command = VOX_STATUS;
+        response = [dev_comm sendCommandAndBlock:command];
+        
+        if ( (response != nil)  && [response hasPrefix:VOX_STATUS])
+        {
+            NSString * str_value = [response substringFromIndex:([VOX_STATUS length] + 2)];
+            
+            int vox_status  = [str_value intValue];
+            if (vox_status == 0)
+            {
+                //vox disabled
+                voxLevel = 0;
+                [self.cameraMenuItemValues setValue:@"Disabled" forKey:_VOX_DICT_KEY];
+                return;
+            }
+        }
+        
+        
+        command = VOX_GET_THRESHOLD;
+        response = [dev_comm sendCommandAndBlock:command];
+        if ( (response != nil)  && [response hasPrefix:VOX_GET_THRESHOLD])
+        {
+            NSString * str_value = [response substringFromIndex:([VOX_GET_THRESHOLD length] + 2)];
+            
+            int vox_value  = [str_value intValue];
+            
+            NSString * lvl = @"-1"; 
+            
+            switch(vox_value)
+            {
+                case -10:
+                    lvl = @"Level 1(low)";
+                    voxLevel = 1;
+                    break;
+                case -20:
+                    lvl = @"Level 2";
+                    voxLevel = 2;
+                    break;
+                case -30:
+                    lvl = @"Level 3";
+                    voxLevel = 3;
+                    break;
+                case -38:
+                    lvl = @"Level 4(High)";
+                    voxLevel = 4;
+                    break;
+                default:
+                    break;
+            }
+            
+            
+            
+            [self.cameraMenuItemValues setValue:lvl forKey:_VOX_DICT_KEY];
+            
+            
+        }
+    }
 	
 }
 
@@ -527,9 +404,32 @@
 
 - (void) updateVolumeLvl
 {
-	NSString * response, * command;
+	NSString * response = nil, * command;
 	command = GET_VOLUME;
-	response = [dev_comm sendCommandAndBlock:command];
+    
+    if (commMode == COMM_MODE_STUN)
+	{
+        NSData * response_data; 
+        response_data =  [self.dev_s_comm sendCommandThruUdtServer:command 
+                                                           withMac:camChan.profile.mac_address
+                                                        AndChannel:camChan.channID];
+        
+        if (response_data != nil)
+        {
+            response = [[[NSString alloc] initWithData:response_data encoding: NSUTF8StringEncoding] autorelease];
+            
+        }
+        else
+        {
+            NSLog(@"updateVolumeLvl:Failed to get response via Stun Server"); 
+        }
+        
+    }
+    else
+    {
+     
+        response = [dev_comm sendCommandAndBlock:command];
+    }
 	
 	if ( (response != nil)  && [response hasPrefix:GET_VOLUME])
 	{
@@ -574,47 +474,70 @@
 }
 - (void) updateBrightnessLvl
 {
-	NSString * response, * command;
+	NSString * response = nil , * command;
+    
 	command = GET_BRIGHTNESS_VALUE;
-	response = [dev_comm sendCommandAndBlock:command];
-	
-	if ( (response != nil)  && [response hasPrefix:GET_BRIGHTNESS_VALUE])
+    
+    if (commMode == COMM_MODE_STUN)
 	{
-		NSString * str_value = [response substringFromIndex:([GET_BRIGHTNESS_VALUE length] + 2)];
-		
-		int bright  = [str_value intValue];
-		
-		bright = bright/2 ; 
-		NSString * lvl = nil; 
-		switch(bright)
-		{
-			case 0:
-				lvl = @"Level 1";
-				break;
-			case 1:
-				lvl = @"Level 2";
-				break;
-			case 2:
-				lvl = @"Level 3";
-				break;
-			case 3:
-				lvl = @"Level 4";
-				break;
-			default:
-				break;
-		}
-		
-		if (lvl != nil)
-		{
-			brightLevel = bright;
-			//vox disabled
-			[self.cameraMenuItemValues setValue:lvl forKey:_BR_DICT_KEY];
-	
-		}
-	}
-	
-	
-	
+        NSData * response_data; 
+        response_data =  [self.dev_s_comm sendCommandThruUdtServer:command 
+                                                           withMac:camChan.profile.mac_address
+                                                        AndChannel:camChan.channID];
+        
+        if (response_data != nil)
+        {
+            response = [[[NSString alloc] initWithData:response_data encoding: NSUTF8StringEncoding] autorelease];
+            
+        }
+        else
+        {
+            NSLog(@"updateBrightnessLvl:Failed to get response via Stun Server"); 
+        }
+        
+    }
+    else
+    {
+        
+        response = [dev_comm sendCommandAndBlock:command];
+        
+    }
+    if ( (response != nil)  && [response hasPrefix:GET_BRIGHTNESS_VALUE])
+    {
+        NSString * str_value = [response substringFromIndex:([GET_BRIGHTNESS_VALUE length] + 2)];
+        
+        int bright  = [str_value intValue];
+        
+        bright = bright/2 ; 
+        NSString * lvl = nil; 
+        switch(bright)
+        {
+            case 0:
+                lvl = @"Level 1";
+                break;
+            case 1:
+                lvl = @"Level 2";
+                break;
+            case 2:
+                lvl = @"Level 3";
+                break;
+            case 3:
+                lvl = @"Level 4";
+                break;
+            default:
+                break;
+        }
+        
+        if (lvl != nil)
+        {
+            brightLevel = bright;
+            //vox disabled
+            [self.cameraMenuItemValues setValue:lvl forKey:_BR_DICT_KEY];
+            
+        }
+    }
+    
+
 }
 
 
@@ -677,16 +600,18 @@
 		
 
 		
-		if (cell == nil) {
+		if (cell == nil) 
+        {
 
 			cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault
 										    reuseIdentifier:CellIdentifier1] autorelease];
             
-            NSLog(@"create new");
+            
 		}
-		else {
+		else 
+        {
 
-            NSLog(@"re use");
+
             
 			//Clear old data incase of reuse
 			NSArray * arr = [cell.contentView subviews];
@@ -1081,39 +1006,15 @@
 	
 }
 
--(void) onViewAngle
-{
-	if (deviceIp == nil )
-	{
-		[self showDialog:DIALOG_IS_NOT_REACHABLE];
-		return;
-	}
-	
-	[self viewAnglePopup];
-}
-
-
-
-- (void) viewAnglePopup 
-{
-	
-	UIAlertView * _myAlert = nil;
-	
-	_myAlert = [[UIAlertView alloc] initWithTitle:@"Change Camera Angle" 
-										  message:@"Flip the camera angle by 180 degree?" 
-										 delegate:self 
-								cancelButtonTitle:@"Cancel"
-								otherButtonTitles:@"Ok", 
-				nil];
-	_myAlert.tag = ALERT_CHANGE_ANGLE; //used for tracking later 
-	[_myAlert show];
-	[_myAlert release];
-	
-	
-}
-
-
 -(void) onInformation
+{
+ 
+    progressView.hidden = NO; 
+    [self.view bringSubviewToFront:progressView]; 
+    
+    [self performSelector:@selector(onInformation_worker) withObject:nil afterDelay:0.10];
+}
+-(void) onInformation_worker
 {
 	if (deviceIp == nil)
 	{
@@ -1123,7 +1024,29 @@
 	
 	NSString * response, * command;
 	command = GET_VERSION;
-	response = [dev_comm sendCommandAndBlock:command];
+    
+    if (commMode == COMM_MODE_STUN)
+	{
+        NSData * response_data; 
+        response_data =  [self.dev_s_comm sendCommandThruUdtServer:command 
+                                                           withMac:camChan.profile.mac_address
+                                                        AndChannel:camChan.channID];
+        
+        if (response_data != nil)
+        {
+            response = [[[NSString alloc] initWithData:response_data encoding: NSUTF8StringEncoding] autorelease];
+            
+        }
+        else
+        {
+            NSLog(@"onInformation:Failed to get response via Stun Server"); 
+        }
+        
+    }
+    else
+    {
+        response = [dev_comm sendCommandAndBlock:command];
+    }
 	NSString * version = nil; 
 	
 	if ( (response != nil)  && [response hasPrefix:GET_VERSION])
@@ -1152,6 +1075,8 @@
 	[alert show];
 	[alert release];
 
+    
+     progressView.hidden = YES; 
 	
 	
 }
@@ -1195,7 +1120,14 @@
 -(void) onVox
 {
 	
-	
+	if (self.camChan.communication_mode == COMM_MODE_STUN)
+    {
+        //[self showDialog: DIALOG_IS_NOT_SUPPORTED];
+        //simply return for now.
+		return; 
+    }
+    
+    
 	if (deviceIp == nil)
 	{
 		[self showDialog: DIALOG_IS_NOT_REACHABLE];
@@ -1237,196 +1169,10 @@
 	[self showDialog:ALERT_REMOVE_CAM];
 }
 
-
--(void) onCheckUPnpStatus
-{
-	if (deviceIp == nil)
-	{
-		[self showDialog: DIALOG_IS_NOT_REACHABLE];
-		return; 
-	}
-	
-	
-	//may need to do in background..
-	
-	
-	NSString * command , *response ; 
-	command = GET_UPNP_PORT; 
-	response = [dev_comm sendCommandAndBlock:command];
-	int upnp_port = -1; 
-	int upnp_status;
-	
-	if ( (response != nil)  && [response hasPrefix:GET_UPNP_PORT])
-	{
-		NSString * upnp_port_str; 
-		upnp_port_str = [response substringFromIndex:([GET_UPNP_PORT length] + 2)];
-		
-		upnp_port = [upnp_port_str intValue];
-		
-	}
-	
-	if (upnp_port != -1 && upnp_port != 0 )
-	{
-		///upnp_status = MSG_MANUAL_FWD;
-		[self showDialog:ALERT_MANUAL_FWD_MODE];
-	}
-	else
-	{
-		
-		command = CHECK_UPNP;
-		response = [dev_comm sendCommandAndBlock:command];
-		
-		if ( (response != nil)  && [response hasPrefix:CHECK_UPNP])
-		{
-			NSString * upnp_status_str; 
-			upnp_status_str = [response substringFromIndex:([CHECK_UPNP length] + 2)];
-			
-			upnp_status = [upnp_status_str intValue];
-			
-		}
-		
-
-	
-		switch (upnp_status) {
-			case 1:
-				[self showDialog:ALERT_UPNP_OK];
-				break;
-
-			case 0:
-				[self showDialog:ALERT_UPNP_NOT_OK];
-				break;
-			case 2:
-				[self showDialog:ALERT_UPNP_RUNNING];
-				break;
-				
-			default:
-				break;
-		}
-		
-
-		
-	}
-		
-	
-	
-}
-
--(void) onManualPortFwd
-{
-	if (deviceIp == nil)
-	{
-		[self showDialog: DIALOG_IS_NOT_REACHABLE];
-		return; 
-	}
-	
-	
-	//may need to do in background..
-	
-	BOOL camera_upnp_status_auto;
-	NSString * command , *response ; 
-	command = GET_UPNP_PORT; 
-	response = [dev_comm sendCommandAndBlock:command];
-	int upnp_port = -1; 
-
-	int camera_fwd_port_AV, camera_fwd_port_PTT; 
-	
-	if ( (response != nil)  && [response hasPrefix:GET_UPNP_PORT])
-	{
-		NSString * upnp_port_str; 
-		upnp_port_str = [response substringFromIndex:([GET_UPNP_PORT length] + 2)];
-		
-		upnp_port = [upnp_port_str intValue];
-	
-		
-		if (upnp_port == 0) 
-		{
-			camera_upnp_status_auto = TRUE;
-		}
-		else if (upnp_port >0)
-		{
-			camera_upnp_status_auto = FALSE;
-			camera_fwd_port_AV = (upnp_port>>16) & 0xFFFF;
-			camera_fwd_port_PTT = upnp_port & 0xFFFF;
-			
-		}
-	}
-	
-	[self.view addSubview:self.manualFWDView];
-	
-	if (camera_upnp_status_auto == TRUE)
-	{
-		self.manualOrAuto.selectedSegmentIndex = 0; 
-		self.manualFWDSubView.hidden = YES;
-	}
-	else 
-	{
-		self.manualOrAuto.selectedSegmentIndex = 1; 
-		self.manualFWDSubView.hidden = NO;
-		
-		[self.manualFWDprt80 becomeFirstResponder];
-		[self.manualFWDprt51108 becomeFirstResponder];
-		
-		[self.manualFWDprt80 setText:[NSString stringWithFormat:@"%d",camera_fwd_port_AV]];
-		[self.manualFWDprt51108 setText:[NSString stringWithFormat:@"%d",camera_fwd_port_PTT]];
-		
-	}
-
-}
-
--(void) onChangePassword
-{
-	if (deviceIp == nil)
-	{
-		[self showDialog: DIALOG_IS_NOT_REACHABLE];
-		return; 
-	}
-
-	
-	[self askForNewPassword];
-	
-}
-
-
-
-- (void) askForNewPassword 
-{
-	
-	UIAlertView * _myAlert = nil;
-    
-	
-	_myAlert = [[UIAlertView alloc] initWithTitle:@"Change Camera Password" 
-										  message:@"Please enter new password for this camera.\nPassword has to be 6 characters.\n\n" 
-										 delegate:self 
-								cancelButtonTitle:@"Cancel"
-								otherButtonTitles:@"Ok", 
-				nil];
-	_myAlert.tag = ALERT_CHANGE_CAMPASS; //used for tracking later 
-    UITextField *myTextField = [[UITextField alloc] initWithFrame:CGRectMake(32.0, 75.0, 220.0, 25.0)];
-    [myTextField setBackgroundColor:[UIColor whiteColor]];
-    myTextField.placeholder = @"Password";
-    myTextField.borderStyle = UITextBorderStyleRoundedRect;
-    myTextField.backgroundColor = [UIColor whiteColor];
-    myTextField.textColor = [UIColor blackColor];
-    myTextField.delegate = self;
-    myTextField.tag = 10;
-    [myTextField becomeFirstResponder];
-    [_myAlert addSubview:myTextField];
-    CGAffineTransform myTransform = CGAffineTransformMakeTranslation(0.0, 0.0);
-    [_myAlert setTransform:myTransform];
-    [_myAlert show];
-    [_myAlert release];
-    
-    
-	
-	
-}
-
 - (BOOL)textFieldShouldReturn:(UITextField *)textField {
     [textField resignFirstResponder];
     return YES;
 }
-
-
 
 
 #pragma mark -
@@ -1437,65 +1183,7 @@
 	int tag = ((UIView *) sender).tag; 
 	
 	switch (tag ) {
-		case 100:
-			if (self.manualOrAuto.selectedSegmentIndex == 0)
-			{
-				self.manualFWDSubView.hidden = YES;
-			}
-			else {
-				self.manualFWDSubView.hidden = NO; 
-			}
-
-
-			
-			
-			break;
-		case 101: //cancel;
-			[self.manualFWDView removeFromSuperview];
-			break;
-		case 102: //change
-		{
-			NSString *  param_1;
-			if ([self.manualOrAuto isEnabledForSegmentAtIndex:0] )
-			{
-				//automatic
-				param_1 =@"0";
-			}
-			else 
-			{
-				//manual
-				
-				if ( [self.manualFWDprt80.text length] == 0 ||
-					 [self.manualFWDprt51108.text length] == 0)
-				{
-					[self showDialog:ALERT_EMPTY_PORTS];
-				}
-				
-				int port80 = [self.manualFWDprt80.text intValue];
-				int port51108 = [self.manualFWDprt51108.text intValue];
-				
-				if (  (port80 < 1024 && port80 >65535 ) ||
-					(port51108 < 1024 && port51108 >65535 ))
-				{
-					[self showDialog:ALERT_INVALID_PORTS];
-				}					
-				
-				
-				param_1 =[NSString stringWithFormat:@"%x%x", port80, port51108];
-			}
-			
-			
-			NSString * command = SET_UPNP_PORT;
-			command = [command stringByAppendingFormat:@"%@%@", 
-					   SET_UPNP_PORT_PARAM_1, param_1];
-			
-
-			//Dont block here because set_upnp_port&setup=0 will not response -- crap
-			[dev_comm sendCommand:command];
-			
-			[self.manualFWDView removeFromSuperview];			
-			break;
-		}
+		
 		case 110: //BacK
 		{
 			[delegate sendStatus:6 ];
@@ -1674,7 +1362,7 @@
 		(pickerView.tag == BRIGHTNESS_LEVEL_PICKER))
 	{	
 		
-		NSLog(@"level: %d --> %@", row, [levels objectAtIndex:row]);
+		//NSLog(@"level: %d --> %@", row, [levels objectAtIndex:row]);
 		return [levels objectAtIndex:row];
 	}
 	
@@ -1704,43 +1392,7 @@
 #pragma mark Callbacks 
 
 
--(void)onCameraPassChanged: (NSString *) newpass
-{
-	
-	NSString *command, *response; 
-	
-	
-	command = [NSString stringWithFormat:@"%@%@%@:%@",
-			   BASIC_AUTH_USR_PWD_CHANGE, 
-			   BASIC_AUTH_USR_PWD_CHANGE_PARAM,
-			   BASIC_AUTH_DEFAULT_USER,
-			   newpass];
-	response = [dev_comm sendCommandAndBlock:command];
-	
-	NSLog(@"changepass res: %@", response);
 
-	if ( (response != nil)  && [response hasPrefix:BASIC_AUTH_USR_PWD_CHANGE])
-	{
-	
-		NSString * str_value = [response substringFromIndex:([BASIC_AUTH_USR_PWD_CHANGE length] + 2)];
-		
-		if ( [str_value isEqualToString:@"0"])
-		{
-			//save camera password now 
-
-			CameraPassword * cp = [[CameraPassword alloc] initWithMac:deviceMac 
-																 User:BASIC_AUTH_DEFAULT_USER 
-																 Pass:newpass];
-		    [CameraPassword saveCameraPassword:cp];
-		}
-		else {
-			[self showDialog:ALERT_CHANGE_PASS_FAILED];
-		}
-
-		
-		
-	}
-}
 
 -(void) goBackAndReLogin
 {
@@ -1774,7 +1426,7 @@
 	bms_comm = [[BMS_Communication alloc] initWithObject:self
 												Selector:@selector(removeCamSuccessWithResponse:) 
 											FailSelector:@selector(removeCamFailedWithError:) 
-											   ServerErr:@selector(removeCamFailedServerUnreachable)];
+                                            ServerErr:@selector(removeCamFailedServerUnreachable)];
 	
 	[bms_comm BMS_delCamWithUser:userName AndPass:userPass macAddr:deviceMac];
 	
@@ -1875,17 +1527,34 @@
 	}
 
 	NSString *response; 
-	
-	response = [dev_comm sendCommandAndBlock:command];
-	//NSLog(@"response: %@", response);
+    
+    
+ 
+    
+    response = [dev_comm sendCommandAndBlock:command];
+    //NSLog(@"response: %@", response);
+    
+    	
 	[self updateVoxStatus];
 	[self.cameraMenu reloadData];
 	
 }
 
--(void) onSetBrightnessLevel:(int) level
+
+-(void)onSetBrightnessLevel:(int) level
 {
-	int _level = level *2; 
+    progressView.hidden = NO; 
+    [self.view bringSubviewToFront:progressView]; 
+    
+
+    [self performSelector:@selector(onSetBrightnessLevel_:) 
+               withObject:[[NSNumber alloc] initWithInt:level] 
+               afterDelay:0.10];
+}
+
+-(void) onSetBrightnessLevel_:(NSNumber *) lvl
+{
+	int _level = [lvl intValue] *2; 
 	
 	if (_level >8)
 	{
@@ -1893,14 +1562,33 @@
 	}
 	
 	//get the current level 
-	NSString * response, * command;
+	NSString * response = nil, * command;
 	
 	
 	int bright = 0;
 	do 
 	{
+        response = nil; 
 		command = GET_BRIGHTNESS_VALUE;
-		response = [dev_comm sendCommandAndBlock:command];
+        
+        if (self.camChan.communication_mode == COMM_MODE_STUN)
+        {
+            if (self.dev_s_comm != nil)
+            {
+                NSData * response_data; 
+                response_data = [self.dev_s_comm sendCommandThruUdtServer:command 
+                                                  withMac:self.camChan.profile.mac_address
+                                               AndChannel:self.camChan.channID];
+                response = [[[NSString alloc] initWithData:response_data encoding: NSASCIIStringEncoding] autorelease];
+                
+            }
+            
+        }
+        else
+        {
+            response = [dev_comm sendCommandAndBlock:command];
+        }
+        
 		if ( (response != nil)  && [response hasPrefix:GET_BRIGHTNESS_VALUE])
 		{
 			NSString * str_value = [response substringFromIndex:([GET_BRIGHTNESS_VALUE length] + 2)];
@@ -1923,21 +1611,51 @@
 			break;
 		}
 
-		
-		response = [dev_comm sendCommandAndBlock:command];
+        if (self.camChan.communication_mode == COMM_MODE_STUN)
+        {
+            if (self.dev_s_comm != nil)
+            {
+                
+                [self.dev_s_comm sendCommandThruUdtServer:command 
+                                                  withMac:self.camChan.profile.mac_address
+                                               AndChannel:self.camChan.channID];
+                
+            }
+            
+        }
+        else
+        {
+            [dev_comm sendCommandAndBlock:command];
+        }
 	
 	}
 	while (bright != 0);
 	
+    progressView.hidden = YES;
+    
 	[self updateBrightnessLvl];
 	[self.cameraMenu reloadData];
 
 }
 
 
--(void) onSetVolumeLevel:(int) level
+-(void)onSetVolumeLevel:(int) level
 {
-	int _level = level *25; 
+    progressView.hidden = NO; 
+    [self.view bringSubviewToFront:progressView]; 
+    
+    
+    [self performSelector:@selector(onSetVolumeLevel_:) 
+               withObject:[[NSNumber alloc] initWithInt:level] 
+               afterDelay:0.10];
+}
+
+
+-(void) onSetVolumeLevel_:(NSNumber *) lvl
+{
+    
+    
+	int _level = [lvl intValue] *25; 
 	
 	if (_level >100)
 	{
@@ -1947,7 +1665,24 @@
 	
 	NSString * response, * command;
 	command = [NSString stringWithFormat:@"%@%@%d",SET_VOLUME, SET_VOLUME_PARAM, _level];
-	response = [dev_comm sendCommandAndBlock:command];
+    
+    if (self.camChan.communication_mode == COMM_MODE_STUN)
+    {
+        if (self.dev_s_comm != nil)
+        {
+            NSData * response_data; 
+            response_data = [self.dev_s_comm sendCommandThruUdtServer:command 
+                                                              withMac:self.camChan.profile.mac_address
+                                                           AndChannel:self.camChan.channID];
+            response = [[[NSString alloc] initWithData:response_data encoding: NSASCIIStringEncoding] autorelease];
+            
+        }
+        
+    }
+    else
+    {
+        response = [dev_comm sendCommandAndBlock:command];
+    }
 	
 	if ( (response != nil)  && [response hasPrefix:SET_VOLUME])
 	{

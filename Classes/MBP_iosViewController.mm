@@ -100,14 +100,6 @@
 	self.comm = [[HttpCommunication alloc]init]; 
 	
 	fullScreenTimer = nil;
-	
-	
-	[UIDevice currentDevice].batteryMonitoringEnabled = YES;
-	
-	// Register for battery level and state change notifications.
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(batteryLevelDidChange:)
-                                                 name:UIDeviceBatteryLevelDidChangeNotification object:nil];
 
 }
 

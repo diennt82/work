@@ -30,7 +30,7 @@
         
         
         melodies = [[NSArray alloc] initWithObjects:@"Rock a Bye Baby",
-                    @"Lullaby and Goodnight", @"Lavender Blue", @"Twinkle Twinkle Little Start",
+                    @"Lullaby and Goodnight", @"Lavender Blue", @"Twinkle Twinkle Little Star",
                     @"Hush Little Baby",nil];
     }
     return self;
@@ -123,7 +123,7 @@
                                        selector:@selector(startCameraConnection:) 
                                        userInfo:nil 
                                         repeats:NO];
-                
+       
     }
     
 }
@@ -298,10 +298,9 @@
         progressView.hidden = YES; 
     }
     
-    
-    //TODO:  settings button 
-    //      update direction pad, controls
-
+    //make rounded edge view
+    lullabyView.layer.cornerRadius = 5;
+    lullabyView.layer.masksToBounds = YES;
     
 
     
@@ -326,8 +325,7 @@
 
 -(void) goToCameraSettings
 {
-    //Stop the current streamer??or not??
-    //[streamer stopStreaming];
+    
     
     MBP_MenuViewController * menuViewCtrl;
     
@@ -335,6 +333,12 @@
     menuViewCtrl = [[MBP_MenuViewController alloc] initWithNibName:@"MBP_MenuViewController"
                                                             bundle:nil withConnDelegate:self modeDirect:NO];
     
+    if ((self.selected_channel.communication_mode == COMM_MODE_STUN) &&
+         (self.scomm != nil))
+    {
+        menuViewCtrl.dev_s_comm = self.scomm; 
+        menuViewCtrl.camChan = self.selected_channel; 
+    }
     
     [self.navigationController pushViewController:menuViewCtrl animated:NO];    
     
@@ -393,7 +397,7 @@
         streamer.mTempUpdater = self;
         streamer.mFrameUpdater = self;
         [streamer setRecTimeLabel:videoAndSnapshotTime];
-		[streamer startUdtStream]; 
+		[streamer performSelector:@selector(startUdtStream) withObject:nil afterDelay:0.05]; 
 		
 		
         
@@ -1385,12 +1389,21 @@
             }
             else
             {
-                //TODO:Clear all melody
-                
+
+                //Clear all melody
+                UITableView * melodies_tb = (UITableView *) [lullabyView viewWithTag:1]; 
+                                
+                NSIndexPath *oldIndexPath = [NSIndexPath indexPathForRow:melody_index inSection:1];
+                UITableViewCell *oldCell = [melodies_tb cellForRowAtIndexPath:oldIndexPath];
+                if (oldCell.accessoryType == UITableViewCellAccessoryCheckmark) {
+                    oldCell.accessoryType = UITableViewCellAccessoryNone;
+                    NSLog(@"disable checkmark for index:%d", oldIndexPath.row);
+                }
+
                 
                 melody_index = -1; 
                 //send melody off
-                [self setMelody:0]; 
+                [self setMelody:[[NSNumber alloc]initWithInt:0]]; 
             }
             
             
@@ -1400,16 +1413,22 @@
      
 }
 
--(void) setMelody:(int) melodyIdx
+-(void) setMelody:(NSNumber *) melody
 {
     NSString * command = nil;
+    int melodyIdx = [melody intValue];
+    
     if (melodyIdx == 0 ) //mute
     {
         command = SET_MELODY_OFF;
+        [lullabyOnOff setOn:FALSE];
     }
     else 
     {
         command = [NSString stringWithFormat:@"%@%d",SET_MELODY,melodyIdx];
+        
+        [lullabyOnOff setOn:TRUE];
+        
     }
     
     if (selected_channel.communication_mode == COMM_MODE_STUN)
@@ -1503,24 +1522,32 @@
 {
     
     [tableView deselectRowAtIndexPath:indexPath animated:NO];
-    if (melody_index == indexPath.row) {
+    if (melody_index == indexPath.row)
+    {
         return;
     }
     NSIndexPath *oldIndexPath = [NSIndexPath indexPathForRow:melody_index inSection:1];
-    
+           
     UITableViewCell *newCell = [tableView cellForRowAtIndexPath:indexPath];
     if (newCell.accessoryType == UITableViewCellAccessoryNone) {
         newCell.accessoryType = UITableViewCellAccessoryCheckmark;
+
         melody_index= indexPath.row;
     }
     
+    
+  
     UITableViewCell *oldCell = [tableView cellForRowAtIndexPath:oldIndexPath];
     if (oldCell.accessoryType == UITableViewCellAccessoryCheckmark) {
         oldCell.accessoryType = UITableViewCellAccessoryNone;
+
     }
     
-    [self setMelody:(melody_index+1)];
-   
+    [self performSelector:@selector(setMelody:)
+               withObject:[[NSNumber alloc]initWithInt:(melody_index+1)]    
+               afterDelay:0.01];
+
+    
 }
 
 

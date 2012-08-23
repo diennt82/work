@@ -78,19 +78,12 @@
 
 @interface MBP_MenuViewController : UIViewController <UITableViewDelegate, UITableViewDataSource,StreamerEventHandler, UITextFieldDelegate>{
 
-	//NSArray * mainMenuItems; 
-	//IBOutlet UITableView * mainMenu;
+	IBOutlet UIView * progressView;
 	IBOutlet UITableView * cameraMenu;
 	IBOutlet UIPickerView * mPickerView;
     IBOutlet UIImageView * background;
 	
-	IBOutlet UIView * manualFWDView; 
-	IBOutlet UIView * manualFWDSubView; 
-	IBOutlet UIButton * manualFWDCancel; 
-	IBOutlet UIButton * manualFWDChange; 
-	IBOutlet UITextField * manualFWDprt80;
-	IBOutlet UITextField * manualFWDprt51108; 
-	IBOutlet UISegmentedControl * manualOrAuto; 
+ 
 	
 	
 	NSArray *cameraMenuItems;
@@ -113,6 +106,7 @@
 	HttpCommunication * dev_comm; 
 	StunCommunication * dev_s_comm;
 	
+
 	
 	NSArray * levels;
 	NSArray * voxlevels;
@@ -126,7 +120,9 @@
 	int videoQ;
 	int commMode;
 	CamChannel * camChan;
-	MBP_Streamer * dummy_streamer; 
+
+    
+    
 	
 }
 @property (nonatomic, retain) IBOutlet UIPickerView * mPickerView;
@@ -136,15 +132,8 @@
 @property (nonatomic, retain) NSArray *cameraMenuItems;
 @property (nonatomic, retain) NSMutableDictionary *cameraMenuItemValues;
 
-
-@property (nonatomic, retain) IBOutlet UIView * manualFWDView, *manualFWDSubView; 
-@property (nonatomic, retain) IBOutlet UIButton * manualFWDCancel; 
-@property (nonatomic, retain) IBOutlet UIButton * manualFWDChange; 
-@property (nonatomic, retain) IBOutlet UITextField * manualFWDprt80;
-@property (nonatomic, retain) IBOutlet UITextField * manualFWDprt51108; 
-@property (nonatomic, retain) IBOutlet UISegmentedControl * manualOrAuto; 
-
-@property (nonatomic, retain) CamChannel *  camChan; 
+@property (nonatomic, assign) StunCommunication *dev_s_comm; 
+@property (nonatomic, assign) CamChannel *  camChan; 
 
 - (id)initWithNibName:(NSString *)nibNameOrNil 
 				bundle:(NSBundle *)nibBundleOrNil 
@@ -204,5 +193,9 @@
 
 
 -(void) setupStunConnectionToMac:(NSString *) mac ;
+
+-(void) onSetVolumeLevel_:(NSNumber *) lvl;
+-(void) onSetBrightnessLevel_:(NSNumber *) lvl;
+-(void) onInformation_worker;
 
 @end

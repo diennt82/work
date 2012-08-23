@@ -59,7 +59,6 @@
 						<string key="NSFrame">{{27, 360}, {265, 37}}</string>
 						<reference key="NSSuperview" ref="254689072"/>
 						<reference key="NSWindow"/>
-						<reference key="NSNextKeyView"/>
 						<string key="NSReuseIdentifierKey">_NS:9</string>
 						<bool key="IBUIOpaque">NO</bool>
 						<int key="IBUITag">1001</int>
@@ -276,7 +275,6 @@
 						<string key="NSFrame">{{143, 260}, {37, 37}}</string>
 						<reference key="NSSuperview" ref="755422099"/>
 						<reference key="NSWindow"/>
-						<reference key="NSNextKeyView"/>
 						<string key="NSReuseIdentifierKey">_NS:9</string>
 						<bool key="IBUIOpaque">NO</bool>
 						<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
@@ -488,7 +486,7 @@
 		<bool key="IBDocument.PluginDeclaredDependenciesTrackSystemTargetVersion">YES</bool>
 		<int key="IBDocument.defaultPropertyAccessControl">3</int>
 		<dictionary class="NSMutableDictionary" key="IBDocument.LastKnownImageSizes">
-			<string key="bb_pic_1.png">{554, 284}</string>
+			<string key="bb_pic_1.png">{605, 320}</string>
 			<string key="black_background.png">{640, 960}</string>
 			<string key="dialog_bg.png">{370, 370}</string>
 		</dictionary>

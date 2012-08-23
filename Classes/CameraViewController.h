@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <QuartzCore/QuartzCore.h>
 #import "CamChannel.h"
 #import "CamProfile.h"
 #import "MBP_Streamer.h"
@@ -83,6 +84,9 @@
     IBOutlet UIView *progressView; 
     
     IBOutlet UIView * lullabyView; 
+    IBOutlet UISwitch * lullabyOnOff; 
+    
+    
     IBOutlet UITableViewCell * musicOnOffCell;
     IBOutlet UITableViewCell * songtitleCell; 
     

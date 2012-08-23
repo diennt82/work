@@ -15,8 +15,10 @@
 		2899E5220DE3E06400AC0155 /* MBP_iosViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2899E5210DE3E06400AC0155 /* MBP_iosViewController.xib */; };
 		28AD733F0D9D9553002E5188 /* MainWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 28AD733E0D9D9553002E5188 /* MainWindow.xib */; };
 		28D7ACF80DDB3853001CB0EB /* MBP_iosViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 28D7ACF70DDB3853001CB0EB /* MBP_iosViewController.mm */; };
+		3809A42C15E49A4B0098BBC0 /* bb_pic_1.png in Resources */ = {isa = PBXBuildFile; fileRef = 3809A42B15E49A4B0098BBC0 /* bb_pic_1.png */; };
+		3809A42F15E4A2520098BBC0 /* bb_melody_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 3809A42D15E4A2520098BBC0 /* bb_melody_icon.png */; };
+		3809A43015E4A2520098BBC0 /* bb_melody_off_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 3809A42E15E4A2520098BBC0 /* bb_melody_off_icon.png */; };
 		3812F82515C8BF0600DADFA6 /* bb_setting_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 3812F82415C8BF0600DADFA6 /* bb_setting_icon.png */; };
-		3812F82A15C8BF3600DADFA6 /* bb_melody_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 3812F82615C8BF3600DADFA6 /* bb_melody_icon.png */; };
 		3812F82B15C8BF3600DADFA6 /* bb_ptt_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 3812F82715C8BF3600DADFA6 /* bb_ptt_icon.png */; };
 		3812F82C15C8BF3600DADFA6 /* bb_snap_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 3812F82815C8BF3600DADFA6 /* bb_snap_icon.png */; };
 		3812F82D15C8BF3600DADFA6 /* bb_spk_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 3812F82915C8BF3600DADFA6 /* bb_spk_icon.png */; };
@@ -27,7 +29,6 @@
 		3812F83715C8BFC900DADFA6 /* circle_buttons1_up.png in Resources */ = {isa = PBXBuildFile; fileRef = 3812F83215C8BFC900DADFA6 /* circle_buttons1_up.png */; };
 		3812F83915C8C3EE00DADFA6 /* bb_check_list.png in Resources */ = {isa = PBXBuildFile; fileRef = 3812F83815C8C3EE00DADFA6 /* bb_check_list.png */; };
 		3812F83B15C8C49000DADFA6 /* bb_line.png in Resources */ = {isa = PBXBuildFile; fileRef = 3812F83A15C8C49000DADFA6 /* bb_line.png */; };
-		3812F83F15C8C9BE00DADFA6 /* bb_pic_1.png in Resources */ = {isa = PBXBuildFile; fileRef = 3812F83E15C8C9BE00DADFA6 /* bb_pic_1.png */; };
 		3812F84115C8DB5600DADFA6 /* CameraViewController_land.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3812F84015C8DB5600DADFA6 /* CameraViewController_land.xib */; };
 		38355AE715CB76630045909C /* Account_ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 38355AE515CB76630045909C /* Account_ViewController.m */; };
 		38355AE815CB76630045909C /* Account_ViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 38355AE615CB76630045909C /* Account_ViewController.xib */; };
@@ -281,8 +282,10 @@
 		28D7ACF70DDB3853001CB0EB /* MBP_iosViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = MBP_iosViewController.mm; sourceTree = "<group>"; };
 		29B97316FDCFA39411CA2CEA /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		32CA4F630368D1EE00C91783 /* MBP_ios_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MBP_ios_Prefix.pch; sourceTree = "<group>"; };
+		3809A42B15E49A4B0098BBC0 /* bb_pic_1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bb_pic_1.png; sourceTree = "<group>"; };
+		3809A42D15E4A2520098BBC0 /* bb_melody_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bb_melody_icon.png; sourceTree = "<group>"; };
+		3809A42E15E4A2520098BBC0 /* bb_melody_off_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bb_melody_off_icon.png; sourceTree = "<group>"; };
 		3812F82415C8BF0600DADFA6 /* bb_setting_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bb_setting_icon.png; sourceTree = "<group>"; };
-		3812F82615C8BF3600DADFA6 /* bb_melody_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bb_melody_icon.png; sourceTree = "<group>"; };
 		3812F82715C8BF3600DADFA6 /* bb_ptt_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bb_ptt_icon.png; sourceTree = "<group>"; };
 		3812F82815C8BF3600DADFA6 /* bb_snap_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bb_snap_icon.png; sourceTree = "<group>"; };
 		3812F82915C8BF3600DADFA6 /* bb_spk_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bb_spk_icon.png; sourceTree = "<group>"; };
@@ -293,7 +296,6 @@
 		3812F83215C8BFC900DADFA6 /* circle_buttons1_up.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = circle_buttons1_up.png; sourceTree = "<group>"; };
 		3812F83815C8C3EE00DADFA6 /* bb_check_list.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bb_check_list.png; sourceTree = "<group>"; };
 		3812F83A15C8C49000DADFA6 /* bb_line.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bb_line.png; sourceTree = "<group>"; };
-		3812F83E15C8C9BE00DADFA6 /* bb_pic_1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bb_pic_1.png; sourceTree = "<group>"; };
 		3812F84015C8DB5600DADFA6 /* CameraViewController_land.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CameraViewController_land.xib; sourceTree = "<group>"; };
 		38355AE415CB76630045909C /* Account_ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Account_ViewController.h; sourceTree = "<group>"; };
 		38355AE515CB76630045909C /* Account_ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Account_ViewController.m; sourceTree = "<group>"; };
@@ -780,9 +782,6 @@
 				97987E411546AF2C0066C49B /* UserAccount.m */,
 				28D7ACF60DDB3853001CB0EB /* MBP_iosViewController.h */,
 				28D7ACF70DDB3853001CB0EB /* MBP_iosViewController.mm */,
-				9719EC59155C9F30005419FC /* MBP_MenuViewController.h */,
-				9719EC5A155C9F30005419FC /* MBP_MenuViewController.mm */,
-				9719EC5B155C9F30005419FC /* MBP_MenuViewController.xib */,
 				97987DEF1546A1630066C49B /* MBP_LoginOrRegistration.h */,
 				97987DF01546A1630066C49B /* MBP_LoginOrRegistration.m */,
 				97987DF11546A1630066C49B /* MBP_LoginOrRegistration.xib */,
@@ -801,11 +800,6 @@
 				972E290D15A3F77600E60A96 /* STUN_Communication.mm */,
 				97137B9515AE742A00BEBBD6 /* StunCommunication.h */,
 				97137B9615AE742A00BEBBD6 /* StunCommunication.mm */,
-				38CFFF7715BD4ECB009A2EE2 /* CameraViewController.xib */,
-				3812F84015C8DB5600DADFA6 /* CameraViewController_land.xib */,
-				38A62E8615C8F03C00DEA520 /* SongTitleView.xib */,
-				38C79E2915C7C444006EE378 /* CameraViewController.h */,
-				38C79E2A15C7C446006EE378 /* CameraViewController.mm */,
 				38CC5A1215DCBBBF00067C54 /* QuickViewCamera_ViewController.h */,
 				38CC5A1315DCBBC100067C54 /* QuickViewCamera_ViewController.mm */,
 				38CC5A1415DCBBC200067C54 /* QuickViewCamera_ViewController.xib */,
@@ -815,6 +809,14 @@
 				38CC5A1D15DCF8F300067C54 /* DashBoard_camEdit.xib */,
 				38C79E2315C786A0006EE378 /* DashBoard_ViewController.h */,
 				38C79E2415C786A1006EE378 /* DashBoard_ViewController.mm */,
+				38CFFF7715BD4ECB009A2EE2 /* CameraViewController.xib */,
+				3812F84015C8DB5600DADFA6 /* CameraViewController_land.xib */,
+				38A62E8615C8F03C00DEA520 /* SongTitleView.xib */,
+				38C79E2915C7C444006EE378 /* CameraViewController.h */,
+				38C79E2A15C7C446006EE378 /* CameraViewController.mm */,
+				9719EC59155C9F30005419FC /* MBP_MenuViewController.h */,
+				9719EC5A155C9F30005419FC /* MBP_MenuViewController.mm */,
+				9719EC5B155C9F30005419FC /* MBP_MenuViewController.xib */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -889,6 +891,9 @@
 		3812F82315C8BEC700DADFA6 /* images13 */ = {
 			isa = PBXGroup;
 			children = (
+				3809A42D15E4A2520098BBC0 /* bb_melody_icon.png */,
+				3809A42E15E4A2520098BBC0 /* bb_melody_off_icon.png */,
+				3809A42B15E49A4B0098BBC0 /* bb_pic_1.png */,
 				38CC5A1915DCF51E00067C54 /* homepage.png */,
 				38CC5A1A15DCF51E00067C54 /* homepage_p.png */,
 				38AC741315D9199E00618188 /* account_icon.png */,
@@ -912,7 +917,6 @@
 				38A62E8E15C93E4700DEA520 /* bb_camera_toolbar.png */,
 				38A62E8815C9137000DEA520 /* bb_vs_mike_off.png */,
 				38A62E8915C9137000DEA520 /* bb_vs_mike_on.png */,
-				3812F83E15C8C9BE00DADFA6 /* bb_pic_1.png */,
 				3812F83A15C8C49000DADFA6 /* bb_line.png */,
 				3812F83815C8C3EE00DADFA6 /* bb_check_list.png */,
 				3812F82E15C8BFC800DADFA6 /* circle_buttons1_2.png */,
@@ -920,7 +924,6 @@
 				3812F83015C8BFC900DADFA6 /* circle_buttons1_lf.png */,
 				3812F83115C8BFC900DADFA6 /* circle_buttons1_rt.png */,
 				3812F83215C8BFC900DADFA6 /* circle_buttons1_up.png */,
-				3812F82615C8BF3600DADFA6 /* bb_melody_icon.png */,
 				3812F82715C8BF3600DADFA6 /* bb_ptt_icon.png */,
 				3812F82815C8BF3600DADFA6 /* bb_snap_icon.png */,
 				3812F82915C8BF3600DADFA6 /* bb_spk_icon.png */,
@@ -1226,7 +1229,6 @@
 				38A478F415C02674008682FE /* Step_05_tableViewCell.xib in Resources */,
 				38C79E2715C78818006EE378 /* DashBoard_camView.xib in Resources */,
 				3812F82515C8BF0600DADFA6 /* bb_setting_icon.png in Resources */,
-				3812F82A15C8BF3600DADFA6 /* bb_melody_icon.png in Resources */,
 				3812F82B15C8BF3600DADFA6 /* bb_ptt_icon.png in Resources */,
 				3812F82C15C8BF3600DADFA6 /* bb_snap_icon.png in Resources */,
 				3812F82D15C8BF3600DADFA6 /* bb_spk_icon.png in Resources */,
@@ -1237,7 +1239,6 @@
 				3812F83715C8BFC900DADFA6 /* circle_buttons1_up.png in Resources */,
 				3812F83915C8C3EE00DADFA6 /* bb_check_list.png in Resources */,
 				3812F83B15C8C49000DADFA6 /* bb_line.png in Resources */,
-				3812F83F15C8C9BE00DADFA6 /* bb_pic_1.png in Resources */,
 				3812F84115C8DB5600DADFA6 /* CameraViewController_land.xib in Resources */,
 				38A62E8715C8F03C00DEA520 /* SongTitleView.xib in Resources */,
 				38A62E8A15C9137000DEA520 /* bb_vs_mike_off.png in Resources */,
@@ -1271,6 +1272,9 @@
 				38CC5A1B15DCF51E00067C54 /* homepage.png in Resources */,
 				38CC5A1C15DCF51E00067C54 /* homepage_p.png in Resources */,
 				38CC5A1E15DCF8F500067C54 /* DashBoard_camEdit.xib in Resources */,
+				3809A42C15E49A4B0098BBC0 /* bb_pic_1.png in Resources */,
+				3809A42F15E4A2520098BBC0 /* bb_melody_icon.png in Resources */,
+				3809A43015E4A2520098BBC0 /* bb_melody_off_icon.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

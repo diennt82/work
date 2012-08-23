@@ -373,6 +373,7 @@
 									<bytes key="NSWhite">MCAwAA</bytes>
 								</object>
 								<bool key="IBUIClipsSubviews">YES</bool>
+								<int key="IBUITag">1</int>
 								<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
 								<bool key="IBUIAlwaysBounceVertical">YES</bool>
 								<int key="IBUIStyle">1</int>
@@ -404,6 +405,7 @@
 						<string key="NSFrame">{{373, 96}, {107, 107}}</string>
 						<reference key="NSSuperview" ref="887761465"/>
 						<reference key="NSWindow"/>
+						<reference key="NSNextKeyView"/>
 						<string key="NSReuseIdentifierKey">_NS:9</string>
 						<bool key="IBUIOpaque">NO</bool>
 						<int key="IBUIContentMode">1</int>
@@ -633,6 +635,7 @@
 								<string key="NSFrame">{{106, 8}, {94, 27}}</string>
 								<reference key="NSSuperview" ref="338058553"/>
 								<reference key="NSWindow"/>
+								<reference key="NSNextKeyView"/>
 								<string key="NSReuseIdentifierKey">_NS:9</string>
 								<bool key="IBUIOpaque">NO</bool>
 								<int key="IBUITag">3</int>
@@ -754,6 +757,7 @@
 								<string key="NSFrame">{{284, 63}, {30, 30}}</string>
 								<reference key="NSSuperview" ref="171460509"/>
 								<reference key="NSWindow"/>
+								<reference key="NSNextKeyView"/>
 								<string key="NSReuseIdentifierKey">_NS:9</string>
 								<int key="IBUIContentMode">1</int>
 								<bool key="IBUIUserInteractionEnabled">NO</bool>
@@ -994,6 +998,14 @@
 						<reference key="destination" ref="269973914"/>
 					</object>
 					<int key="connectionID">114</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBCocoaTouchOutletConnection" key="connection">
+						<string key="label">lullabyOnOff</string>
+						<reference key="source" ref="372490531"/>
+						<reference key="destination" ref="215293453"/>
+					</object>
+					<int key="connectionID">115</int>
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBCocoaTouchEventConnection" key="connection">
@@ -1462,7 +1474,7 @@
 			<nil key="activeLocalization"/>
 			<dictionary class="NSMutableDictionary" key="localizations"/>
 			<nil key="sourceID"/>
-			<int key="maxID">114</int>
+			<int key="maxID">115</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<array class="NSMutableArray" key="referencedPartialClassDescriptions">
@@ -1516,6 +1528,7 @@
 						<string key="directionPad">UIImageView</string>
 						<string key="lowRes_bg">UIImageView</string>
 						<string key="lowRes_label">UILabel</string>
+						<string key="lullabyOnOff">UISwitch</string>
 						<string key="lullabyView">UIView</string>
 						<string key="musicOnOffCell">UITableViewCell</string>
 						<string key="progressView">UIView</string>
@@ -1560,6 +1573,10 @@
 						<object class="IBToOneOutletInfo" key="lowRes_label">
 							<string key="name">lowRes_label</string>
 							<string key="candidateClassName">UILabel</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="lullabyOnOff">
+							<string key="name">lullabyOnOff</string>
+							<string key="candidateClassName">UISwitch</string>
 						</object>
 						<object class="IBToOneOutletInfo" key="lullabyView">
 							<string key="name">lullabyView</string>
@@ -1641,7 +1658,7 @@
 			<string key="bb_cam_btn.png">{195, 83}</string>
 			<string key="bb_camera_slider_icon.png">{31, 28}</string>
 			<string key="bb_camera_toolbar.png">{640, 107}</string>
-			<string key="bb_melody_icon.png">{50, 50}</string>
+			<string key="bb_melody_icon.png">{74, 74}</string>
 			<string key="bb_ptt_icon.png">{36, 52}</string>
 			<string key="bb_setting_icon.png">{20, 18}</string>
 			<string key="bb_snap_icon.png">{50, 50}</string>

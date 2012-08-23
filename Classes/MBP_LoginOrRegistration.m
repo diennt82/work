@@ -45,14 +45,10 @@
 // Implement viewDidLoad to do additional setup after loading the view, typically from a nib.
 - (void)viewDidLoad {
     [super viewDidLoad];
-	
-	    
-    NSLog(@"Login Or register viewdidload");
-
-    
+	  
+       
     self.navigationItem.title = @"Login"; 
-    NSLog(@"Login Or register viewdidload 001 ");
-
+   
     //Back key
     self.navigationItem.backBarButtonItem =
     [[[UIBarButtonItem alloc] initWithTitle:@"Back"

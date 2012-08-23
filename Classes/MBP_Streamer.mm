@@ -253,6 +253,8 @@
     if (self.udtSocket == nil)
     {
         NSLog(@"Fail to open relay socket "); 
+        
+        [self sendStatusStoppedReportOnMainThread:nil];
         return; 
     }
     responseData = [[NSMutableData alloc] init];
@@ -446,7 +448,7 @@
 							waitUntilDone:YES];
 	
     BOOL exitedUnexpectedly = FALSE; 
-	//int i = 2; 
+	int ignore_err_count = 5; 
 	//while (i -- >=0)
 	while (![[NSThread currentThread] isCancelled])
 	{
@@ -455,14 +457,28 @@
 		bytesRead = [socket recvDataViaUdt:data dataLen:READ_16K_DATA];
         if (bytesRead <0)
         {
-            exitedUnexpectedly = TRUE; 
-            //STream has stopped due to some connection error
-            [self performSelectorOnMainThread:@selector(sendStatusStoppedWithErrOnMainThread:) 
-                                   withObject:nil
-                                waitUntilDone:YES];
-            
-            break; 
+            if (ignore_err_count -- < 0)
+            {
+                
+                exitedUnexpectedly = TRUE; 
+                //STream has stopped due to some connection error
+                [self performSelectorOnMainThread:@selector(sendStatusStoppedWithErrOnMainThread:) 
+                                       withObject:nil
+                                    waitUntilDone:YES];
+                
+                break; 
+            }
+            else
+            {
+                //return to read again
+                [NSThread sleepForTimeInterval:1.0]; 
+                continue; 
+            }
         }
+        
+        //Refresh
+        ignore_err_count = 5; 
+        
 		if ( bytesRead > READ_16K_DATA)
 		{
 			continue;
