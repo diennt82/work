@@ -299,7 +299,7 @@
 
 -(void) cancelAction:(id) sender
 {
-    
+    [delegate sendStatus:7];
 }
 
 -(void) doneAction:(id) sender

@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <AudioToolbox/AudioToolbox.h>
 #import <QuartzCore/QuartzCore.h>
 #import "CamChannel.h"
 #import "CamProfile.h"
@@ -17,6 +18,8 @@
 #import "RemoteConnection.h"
 #import "AudioOutStreamer.h"
 #import "MBP_LoginOrRegistration.h"
+
+
 
 
 

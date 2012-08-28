@@ -310,7 +310,11 @@
 -(void) goBackToCameraList
 {
     NSLog(@"goback to camera list"); 
-
+    
+    //Play beep
+    AudioServicesPlaySystemSound(1100);
+    
+    
     if (streamer.recordInProgress == YES)
         [streamer stopRecording];   
     [streamer stopStreaming];
@@ -326,6 +330,9 @@
 -(void) goToCameraSettings
 {
     
+    //Play beep
+    AudioServicesPlaySystemSound(1100);
+	
     
     MBP_MenuViewController * menuViewCtrl;
     
@@ -588,9 +595,25 @@
 #pragma mark -
 #pragma mark StreamerEventHandler
 
+-(void) playSound
+{
+    SystemSoundID soundFileObject;
+    CFBundleRef mainbundle = CFBundleGetMainBundle();
+    CFURLRef soundFileURLRef = CFBundleCopyResourceURL(mainbundle, CFSTR("beep"), CFSTR("wav"), NULL);
+    AudioServicesCreateSystemSoundID(soundFileURLRef, &soundFileObject);
+    //Play beep
+    AudioServicesPlaySystemSound(soundFileObject);
+	
+    
+
+}
+
 -(void) periodicPopup:(NSTimer *) exp
 {
-	NSString * msg = (NSString *) [exp userInfo]; 
+	NSString * msg = (NSString *) [exp userInfo];
+    
+    [self playSound]; 
+       
 	if ( alert != nil)
 	{
 		if ([alert isVisible]) 
@@ -618,8 +641,9 @@
 	
 	[alert retain]; 
 	
-	
-	
+    
+    
+   	
 	
 }
 
@@ -715,14 +739,31 @@
                 
 				self.alertTimer = [NSTimer scheduledTimerWithTimeInterval:5.0
 																   target:self 
-																 selector:@selector(periodicPopup:) 
+																 selector:@selector(periodicPopup:)
 																 userInfo:msg 
 																  repeats:YES];
 				[self.alertTimer fire] ;//fire once now
                 
 			}
 			
-			
+            /* Stop Streamming */
+            
+            NSLog(@"stop Streaming");
+			[self.streamer stopStreaming];
+
+            /* TODO: need to re-scan for the camera */
+            
+            /* Start streaming */
+            
+            [NSTimer scheduledTimerWithTimeInterval:1.0
+                                             target:self
+                                           selector:@selector(startCameraConnection:)
+                                           userInfo:nil
+                                            repeats:NO];
+            
+            
+            
+            
 			break;
 		}
 		case REMOTE_STREAM_STOPPED_UNEXPECTEDLY:

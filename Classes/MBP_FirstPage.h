@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <AudioToolbox/AudioToolbox.h>
 #import "ConnectionMethodDelegate.h"
 
 #define ACTION_SETUP_BM 100

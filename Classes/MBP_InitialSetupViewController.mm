@@ -126,7 +126,7 @@
 
 - (IBAction)goBackToFirstScreen:(id)sender
 {
-    [self.delegate sendStatus:7];//rescan
+    [self.delegate sendStatus:7];
 }
 
 - (IBAction)handleButtonPress:(id)sender

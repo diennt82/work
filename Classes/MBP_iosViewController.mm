@@ -497,7 +497,7 @@
 		}
 		case  7:
 		{
-			NSLog(@"Back from login - display first page ");
+			NSLog(@" display first page ");
 			[self dismissModalViewControllerAnimated:NO];
 			
 			
