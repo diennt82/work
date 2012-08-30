@@ -11,7 +11,8 @@
 @interface Step_08_ViewController : UIViewController
 {
     NSString * ssid; 
-    IBOutlet UILabel * ssidView; 
+    IBOutlet UILabel * ssidView;
+    IBOutlet UILabel * ssidView_1;
     
 }
 @property (nonatomic, retain) NSString * ssid;

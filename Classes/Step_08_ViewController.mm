@@ -30,6 +30,7 @@
 	// Do any additional setup after loading the view.
     self.navigationItem.title = @"Camera Configured"; 
     ssidView.text = self.ssid;
+    ssidView_1.text = self.ssid;
     self.navigationItem.hidesBackButton = YES;
     
     self.navigationItem.backBarButtonItem =

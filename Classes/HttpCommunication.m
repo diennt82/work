@@ -270,8 +270,8 @@
             
            
 
-			
-			return -2;
+			return 0; // Dont ask for new password
+			//return -2;
 		}
 
 		

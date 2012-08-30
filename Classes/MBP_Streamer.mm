@@ -149,7 +149,7 @@
 								 AVSTREAM_PARAM_2 ];	
 	if (self.remoteView == TRUE && self.remoteViewKey != nil)
 	{
-		getReq = [NSString stringWithFormat:@"%@%@%@%@\r\n\r\n",
+		getReq = [NSString stringWithFormat:@"%@%@%@%@\r\n",
 				  AVSTREAM_REQUEST, AVSTREAM_PARAM_1,self.remoteViewKey,
 				 AVSTREAM_PARAM_2 ];
 	}

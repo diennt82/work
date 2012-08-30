@@ -56,7 +56,7 @@
                                      action:nil] autorelease];
 
     
-    [self.navigationController setNavigationBarHidden:YES];
+  
     if (self.selected_channel != nil)
     {
         CamProfile * cp = selected_channel.profile;
@@ -148,10 +148,16 @@
 
 -(void) viewWillAppear:(BOOL)animated
 {
-    
-    //Setup navigation bar
     [self.navigationController setNavigationBarHidden:YES];
+    [self checkOrientation];
+}
+-(void) checkOrientation 
+{
+    NSLog(@"check orientation .... ");
 
+    
+#if 0
+    
     UIDeviceOrientation deviceOrientation = [UIDevice currentDevice].orientation;
     
     
@@ -163,11 +169,12 @@
     {
         infOrientation = UIInterfaceOrientationPortrait;
     }
-     
+#endif 
    
     
-    NSLog(@"try to rotate myself");
-    [self adjustViewsForOrientation:infOrientation];
+     UIInterfaceOrientation infOrientation = [UIApplication sharedApplication].statusBarOrientation;
+    
+        [self adjustViewsForOrientation:infOrientation];
     
   
 
@@ -183,7 +190,9 @@
 {
     return YES;//(interfaceOrientation == UIInterfaceOrientationPortrait);
 }
-- (void) willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration {
+- (void) willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
+{
+    NSLog(@"willRotateToInterfaceOrientation: %d" , toInterfaceOrientation);
     [self adjustViewsForOrientation:toInterfaceOrientation];
 }
 
@@ -208,7 +217,7 @@
         
 
         //Need to rotate the video - snashot tool bar
-        NSLog(@"Load 222 land the video view");
+        NSLog(@"Load  the video view in landscape");
         
 
         CGAffineTransform transform = CGAffineTransformMakeRotation(-M_PI_2);
@@ -633,8 +642,8 @@
 			 initWithTitle:@"Streamer Stopped"
 			 message:msg
 			 delegate:self
-			 cancelButtonTitle:@"Stop Monitoring"
-			 otherButtonTitles:@"Continue",nil];
+			 cancelButtonTitle:@"Cancel"
+			 otherButtonTitles:nil];
 	
 	alert.tag = LOCAL_VIDEO_STOPPED_UNEXPECTEDLY;
 	[alert show];
@@ -703,10 +712,11 @@
 			NSString * currSSID = [CameraPassword fetchSSIDInfo]; 
 			NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
 			NSString * streamSSID =  (NSString *) [userDefaults objectForKey:_streamingSSID];
-			NSString * msg = @"Network lost link. Please check the Phone, Camera and Wifi router or move closer to the Router" ;
+			NSString * msg = @"Camera disconnected due to network connectivity problem. Trying to reconnect..." ;
 			
 			if (currSSID != nil && streamSSID != nil)
 			{
+#if 0 // use only 1 message
 				if ([currSSID compare:streamSSID] == NSOrderedSame)
 				{
 					//Still on the same wifi 
@@ -718,6 +728,7 @@
 					msg = [msg stringByAppendingString:streamSSID];
 				}
                 
+#endif 
 			}
 			else
 			{
@@ -916,18 +927,15 @@
 	else if (tag == LOCAL_VIDEO_STOPPED_UNEXPECTEDLY)
 	{
 		switch(buttonIndex) {
-			case 0: //Stop monitoring 
+			case 0: //Cancel 
 				NSLog(@"Stop monitoring  -- go back to camera list-");
 				[self stopPeriodicPopup]; 
                 
-
-				
 				
 				[self goBackToCameraList];
 				
 				break;
-			case 1: //continue -- streamer is connecting so we dont do anything here.
-				break;
+			
 			default:
 				break;
 		}
