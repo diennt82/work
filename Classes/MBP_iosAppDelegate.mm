@@ -38,8 +38,143 @@
 	freopen([logPath cStringUsingEncoding:NSASCIIStringEncoding], "a+", stderr);
 	NSLog(@"Log location: %@",logPath);
 #endif
+    
+    
+    // Let the device know we want to receive push notifications
+	[[UIApplication sharedApplication] registerForRemoteNotificationTypes:
+     (UIRemoteNotificationType) (UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeAlert)];
 	
+    
+    
+       
+    NSDictionary * userInfo = [launchOptions objectForKey:UIApplicationLaunchOptionsRemoteNotificationKey]; 
+    if (userInfo)
+    {
+        NSLog(@" Checking launchOptions"); 
+        
+        NSString * str2 = (NSString *) [userInfo objectForKey:@"alert"]; 
+        NSString * str3 = (NSString *) [userInfo objectForKey:@"mac"]; 
+        NSString * str4 = (NSString *) [userInfo objectForKey:@"val"]; 
+        NSString * str5 = (NSString *) [userInfo objectForKey:@"time"]; 
+        NSLog(@" %@ %@ %@", str2, str3, str4); 
+    }
+    
+    
     return YES;
+}
+
+- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo
+{
+    NSLog(@"Remote push rcv while running");
+    
+    NSLog(@" Checking userInfo"); 
+   
+    if (userInfo)
+    {
+        NSString * str2 = (NSString *) [userInfo objectForKey:@"alert"]; 
+        NSString * str3 = (NSString *) [userInfo objectForKey:@"mac"]; 
+        NSString * str4 = (NSString *) [userInfo objectForKey:@"val"]; 
+        NSString * str5 = (NSString *) [userInfo objectForKey:@"time"]; 
+        NSLog(@"%@ %@ %@ %@",  str2, str3, str4 , str5);  
+        
+        
+        
+        
+        if ( [application applicationState] == UIApplicationStateActive)
+        {
+            //App is running now
+            
+        }
+        
+        if ( [application applicationState] == UIApplicationStateInactive)
+        {
+#if 0
+            NSLog(@"LOGIN from appdelegate"); 
+            NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+			[userDefaults setBool:TRUE forKey:_AutoLogin];
+			[userDefaults synchronize];
+            
+            
+			[viewController performSelectorOnMainThread:@selector(show_login_or_reg:)
+                                             withObject:nil
+                                          waitUntilDone:NO]; 
+#else
+            NSLog(@"Send status"); 
+            [self performSelectorOnMainThread:@selector(forceLogin) withObject:nil waitUntilDone:YES]; 
+            
+#endif 
+        }
+        
+        
+#if 0
+        
+        if ([self shouldAlertForThisMac:str3])
+        {
+            NSLog(@" should Alert for this mac!! "); 
+         
+            
+            
+     
+        }
+#endif 
+        
+        
+    }
+
+}
+
+-(void) forceLogin
+{
+    [viewController sendStatus:2]; 
+}
+
+
+
+
+- (BOOL) shouldAlertForThisMac:(NSString*) mac_without_colon
+{
+    SetupData * savedData = [[SetupData alloc]init];
+	if ([savedData restore_session_data] ==TRUE)
+	{
+		
+		NSArray * restored_profiles = savedData.configured_cams;
+        CamProfile * cp = nil; 
+        for (int i =0; i< [restored_profiles count]; i++)
+        {
+            cp = (CamProfile *) [restored_profiles objectAtIndex:i]; 
+            if (cp!= nil && 
+                cp.mac_address != nil )
+            {
+                NSString *  mac_wo_colon = [Util strip_colon_fr_mac:cp.mac_address]; 
+                if ([mac_wo_colon isEqualToString:mac_without_colon])
+                {
+                    return TRUE; 
+                }
+            }
+                
+        }
+        
+        
+        
+        
+	}
+    
+    return FALSE; 
+}
+
+
+
+// Delegation methods
+- (void)application:(UIApplication *)app didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)devToken {
+    const void *devTokenBytes = [devToken bytes];
+    NSLog(@"My token is: %@", devToken);
+    
+    //self.registered = YES;
+    //[self sendProviderDeviceToken:devTokenBytes]; // custom method
+}
+
+- (void)application:(UIApplication *)app didFailToRegisterForRemoteNotificationsWithError:(NSError *)err {
+    NSLog(@"Error in registration. Error: %@", err);
 }
 
 
@@ -59,48 +194,27 @@
 	
 	NSLog(@"Enter background"); 
 #if 0
-	if (viewController.streamer != nil)
-	{
-		
-		[viewController.streamer stopStreaming];
-		//[viewController.streamer release];
-		viewController.streamer = nil;
-		NSLog(@"stopped streamming "); 
-	}
-#endif
+	
+
 	
 	
 	if (viewController.shouldReloadWhenEnterBG == TRUE	)
 	{
 		[viewController dismissModalViewControllerAnimated:NO];
-	
-		if (viewController.camView != nil)
-		{
-			[viewController.camView removeFromSuperview];
-			//[viewController.camView release];
-			viewController.camView = nil;
-		}
-		
-		if (viewController.camListView != nil)
-		{
-			[viewController.camListView removeFromSuperview];
-			[viewController.camListView release];
-			viewController.camListView = nil;
-		}
-		
+			
 	
 		
 		NSLog(@"reload view--"); 
 		//if (viewController.shouldReloadWhenEnterBG == TRUE	)
-		{
+		//{
 			//Go back to first page 
-			[viewController viewDidLoad];
-		}
+		//	[viewController viewDidLoad];
+		//}
 		
 		
 			
 	}
-	
+#endif
 		
 }
 

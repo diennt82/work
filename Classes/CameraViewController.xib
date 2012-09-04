@@ -151,6 +151,10 @@
 									<bytes key="NSRGB">MC4xOTYwNzg0MzQ2IDAuMzA5ODAzOTMyOSAwLjUyMTU2ODY1NgA</bytes>
 								</object>
 								<reference key="IBUINormalTitleShadowColor" ref="544785552"/>
+								<object class="NSCustomResource" key="IBUIDisabledImage">
+									<string key="NSClassName">NSImage</string>
+									<string key="NSResourceName">bb_ptt_icon_d.png</string>
+								</object>
 								<object class="NSCustomResource" key="IBUINormalImage">
 									<string key="NSClassName">NSImage</string>
 									<string key="NSResourceName">bb_ptt_icon.png</string>
@@ -202,15 +206,15 @@
 									<bytes key="NSRGB">MC4xOTYwNzg0MzQ2IDAuMzA5ODAzOTMyOSAwLjUyMTU2ODY1NgA</bytes>
 								</object>
 								<reference key="IBUINormalTitleShadowColor" ref="544785552"/>
-								<object class="NSCustomResource" key="IBUIDisabledImage" id="662228599">
+								<object class="NSCustomResource" key="IBUIDisabledImage">
 									<string key="NSClassName">NSImage</string>
 									<string key="NSResourceName">bb_spk_icon_d.png</string>
 								</object>
-								<reference key="IBUISelectedImage" ref="662228599"/>
-								<object class="NSCustomResource" key="IBUINormalImage">
+								<object class="NSCustomResource" key="IBUISelectedImage" id="53826896">
 									<string key="NSClassName">NSImage</string>
 									<string key="NSResourceName">bb_spk_icon.png</string>
 								</object>
+								<reference key="IBUINormalImage" ref="53826896"/>
 								<reference key="IBUIFontDescription" ref="661765167"/>
 								<reference key="IBUIFont" ref="554474580"/>
 							</object>
@@ -432,6 +436,7 @@
 						<string key="NSFrame">{{119, 347}, {107, 107}}</string>
 						<reference key="NSSuperview" ref="191373211"/>
 						<reference key="NSWindow"/>
+						<reference key="NSNextKeyView"/>
 						<string key="NSReuseIdentifierKey">_NS:9</string>
 						<bool key="IBUIOpaque">NO</bool>
 						<int key="IBUIContentMode">1</int>
@@ -625,6 +630,7 @@
 								<string key="NSFrame">{{106, 8}, {94, 27}}</string>
 								<reference key="NSSuperview" ref="204644013"/>
 								<reference key="NSWindow"/>
+								<reference key="NSNextKeyView"/>
 								<string key="NSReuseIdentifierKey">_NS:9</string>
 								<bool key="IBUIOpaque">NO</bool>
 								<int key="IBUITag">3</int>
@@ -746,6 +752,7 @@
 								<string key="NSFrame">{{284, 81}, {30, 30}}</string>
 								<reference key="NSSuperview" ref="486065245"/>
 								<reference key="NSWindow"/>
+								<reference key="NSNextKeyView"/>
 								<string key="NSReuseIdentifierKey">_NS:9</string>
 								<int key="IBUIContentMode">1</int>
 								<bool key="IBUIUserInteractionEnabled">NO</bool>
@@ -1181,26 +1188,31 @@
 							<reference ref="246709205"/>
 						</array>
 						<reference key="parent" ref="191373211"/>
+						<string key="objectName">Buttons</string>
 					</object>
 					<object class="IBObjectRecord">
 						<int key="objectID">16</int>
 						<reference key="object" ref="37655077"/>
 						<reference key="parent" ref="633129718"/>
+						<string key="objectName">Melody </string>
 					</object>
 					<object class="IBObjectRecord">
 						<int key="objectID">17</int>
 						<reference key="object" ref="246709205"/>
 						<reference key="parent" ref="633129718"/>
+						<string key="objectName">ptt</string>
 					</object>
 					<object class="IBObjectRecord">
 						<int key="objectID">18</int>
 						<reference key="object" ref="168192588"/>
 						<reference key="parent" ref="633129718"/>
+						<string key="objectName">snapshot</string>
 					</object>
 					<object class="IBObjectRecord">
 						<int key="objectID">19</int>
 						<reference key="object" ref="808668137"/>
 						<reference key="parent" ref="633129718"/>
+						<string key="objectName">spker</string>
 					</object>
 					<object class="IBObjectRecord">
 						<int key="objectID">22</int>
@@ -1423,9 +1435,10 @@
 				<string key="15.IBPluginDependency">com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 				<string key="16.IBPluginDependency">com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 				<string key="17.IBPluginDependency">com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
+				<real value="3" key="17.IBUIButtonInspectorSelectedStateConfigurationMetadataKey"/>
 				<string key="18.IBPluginDependency">com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 				<string key="19.IBPluginDependency">com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
-				<real value="2" key="19.IBUIButtonInspectorSelectedStateConfigurationMetadataKey"/>
+				<real value="0.0" key="19.IBUIButtonInspectorSelectedStateConfigurationMetadataKey"/>
 				<string key="22.IBPluginDependency">com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 				<string key="23.IBPluginDependency">com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 				<string key="24.IBPluginDependency">com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
@@ -1644,8 +1657,9 @@
 			<string key="bb_cam_btn.png">{195, 83}</string>
 			<string key="bb_camera_slider_icon.png">{31, 28}</string>
 			<string key="bb_camera_toolbar.png">{640, 107}</string>
-			<string key="bb_melody_icon.png">{74, 74}</string>
+			<string key="bb_melody_icon.png">{32, 36}</string>
 			<string key="bb_ptt_icon.png">{36, 52}</string>
+			<string key="bb_ptt_icon_d.png">{74, 74}</string>
 			<string key="bb_setting_icon.png">{20, 18}</string>
 			<string key="bb_snap_icon.png">{50, 50}</string>
 			<string key="bb_spk_icon.png">{50, 50}</string>

@@ -182,6 +182,10 @@
 									<bytes key="NSRGB">MC4xOTYwNzg0MzQ2IDAuMzA5ODAzOTMyOSAwLjUyMTU2ODY1NgA</bytes>
 								</object>
 								<reference key="IBUINormalTitleShadowColor" ref="340312782"/>
+								<object class="NSCustomResource" key="IBUIDisabledImage">
+									<string key="NSClassName">NSImage</string>
+									<string key="NSResourceName">bb_ptt_icon_d.png</string>
+								</object>
 								<object class="NSCustomResource" key="IBUINormalImage">
 									<string key="NSClassName">NSImage</string>
 									<string key="NSResourceName">bb_ptt_icon.png</string>
@@ -1170,6 +1174,7 @@
 							<reference ref="1056680057"/>
 						</array>
 						<reference key="parent" ref="887761465"/>
+						<string key="objectName">Buttons</string>
 					</object>
 					<object class="IBObjectRecord">
 						<int key="objectID">7</int>
@@ -1223,21 +1228,25 @@
 						<int key="objectID">15</int>
 						<reference key="object" ref="278133064"/>
 						<reference key="parent" ref="1026610680"/>
+						<string key="objectName">snapshot</string>
 					</object>
 					<object class="IBObjectRecord">
 						<int key="objectID">16</int>
 						<reference key="object" ref="5125215"/>
 						<reference key="parent" ref="1026610680"/>
+						<string key="objectName">spk</string>
 					</object>
 					<object class="IBObjectRecord">
 						<int key="objectID">17</int>
 						<reference key="object" ref="306928760"/>
 						<reference key="parent" ref="1026610680"/>
+						<string key="objectName">melody</string>
 					</object>
 					<object class="IBObjectRecord">
 						<int key="objectID">18</int>
 						<reference key="object" ref="1056680057"/>
 						<reference key="parent" ref="1026610680"/>
+						<string key="objectName">ptt</string>
 					</object>
 					<object class="IBObjectRecord">
 						<int key="objectID">31</int>
@@ -1439,6 +1448,7 @@
 				<real value="3" key="16.IBUIButtonInspectorSelectedStateConfigurationMetadataKey"/>
 				<string key="17.IBPluginDependency">com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 				<string key="18.IBPluginDependency">com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
+				<real value="3" key="18.IBUIButtonInspectorSelectedStateConfigurationMetadataKey"/>
 				<string key="3.IBPluginDependency">com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 				<string key="31.IBPluginDependency">com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 				<string key="32.IBPluginDependency">com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
@@ -1658,8 +1668,9 @@
 			<string key="bb_cam_btn.png">{195, 83}</string>
 			<string key="bb_camera_slider_icon.png">{31, 28}</string>
 			<string key="bb_camera_toolbar.png">{640, 107}</string>
-			<string key="bb_melody_icon.png">{74, 74}</string>
+			<string key="bb_melody_icon.png">{32, 36}</string>
 			<string key="bb_ptt_icon.png">{36, 52}</string>
+			<string key="bb_ptt_icon_d.png">{74, 74}</string>
 			<string key="bb_setting_icon.png">{20, 18}</string>
 			<string key="bb_snap_icon.png">{50, 50}</string>
 			<string key="bb_spk_icon.png">{50, 50}</string>

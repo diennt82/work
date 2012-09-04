@@ -58,15 +58,14 @@
 
 
 #define _streamingSSID @"string_Streaming_SSID"
+#define _triggeredByVox @"bool_Vox_Trigger"
 
-
-@interface MBP_iosViewController : UIViewController <SetupHttpDelegate, ConnectionMethodDelegate,UIActionSheetDelegate, StreamerEventHandler, ScanForCameraNotifier	> {
+@interface MBP_iosViewController : UIViewController <SetupHttpDelegate, ConnectionMethodDelegate,UIActionSheetDelegate, ScanForCameraNotifier	> {
 
 	
 	
     //NOT USED - TO BE REMOVED
-    IBOutlet MBP_CamView * camView;
-    	IBOutlet MBP_CamListView * camListView; 
+
     IBOutlet UIView * direcModeWaitView; 
 	IBOutlet UIButton * direcModeWaitConnect;
 	IBOutlet UIActivityIndicatorView * direcModeWaitProgress;
@@ -149,8 +148,7 @@
 @property (nonatomic, retain) IBOutlet UIButton *direcModeWaitConnect; 
 @property (nonatomic, retain) IBOutlet UIView * progressView, * direcModeWaitView; 
 @property (nonatomic, retain) IBOutlet UIActivityIndicatorView * direcModeWaitProgress;
-@property (nonatomic,retain) 	IBOutlet MBP_CamListView * camListView; 
-@property (nonatomic,retain) IBOutlet MBP_CamView * camView; 
+
 @property (nonatomic,retain) IBOutlet MBP_MainMenuView * mainMenuView;
 
 @property (nonatomic,retain) HttpCommunication *comm;
@@ -208,7 +206,7 @@
 - (void) takeSnapShot:(UIImage *) image;
 - (void) startRecording;
 - (void) stopRecording;
-- (void) handleLongPress: (UIGestureRecognizer *) sender;
+- (IBAction) handleLongPress: (UIGestureRecognizer *) sender;
 
 
 - (BOOL) toggle_walkie_talkie;

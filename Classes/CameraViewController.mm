@@ -22,6 +22,8 @@
 @synthesize  zoombar; 
 @synthesize  currentZoomLvl; 
 
+@synthesize  ptt_disabled, spk_disabled;
+
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
@@ -48,6 +50,15 @@
 {
     [super viewDidLoad];
 	// Do any additional setup after loading the view.
+    
+    
+    [[NSNotificationCenter defaultCenter] addObserver: self
+                                             selector: @selector(handleEnteredBackground) 
+                                                 name: UIApplicationDidEnterBackgroundNotification
+                                               object: nil];
+    
+    //TODO: UIApplicationWillEnterForegroundNotification
+    
     
     self.navigationItem.backBarButtonItem =
     [[[UIBarButtonItem alloc] initWithTitle:@"Back"
@@ -117,6 +128,9 @@
 
         currentZoomLvl = 0; 
         
+        ptt_disabled = FALSE; 
+        spk_disabled = FALSE; 
+        
         
         [NSTimer scheduledTimerWithTimeInterval:2.0
                                          target:self
@@ -128,13 +142,20 @@
     
 }
 
+-(void) handleEnteredBackground
+{
+    NSLog(@"Back to camera list"); 
+    //For now just go back to camera list 
+    [self goBackToCameraList]; 
+}
+
 -(void) startCameraConnection:(NSTimer *) exp
 {
     //REMOTE OR LOCAL
     if (self.selected_channel.profile.isInLocal == YES)
     {
-        NSLog(@"channel is %d with cam name: %@", self.selected_channel.channel_index, self.selected_channel.profile.name);
-        [self setupInfraCamera:self.selected_channel];
+
+        [self setupInfraCamera:self.selected_channel];        
     }
     else
     {
@@ -145,6 +166,9 @@
     
     
 }
+
+
+
 
 -(void) viewWillAppear:(BOOL)animated
 {
@@ -320,9 +344,7 @@
 {
     NSLog(@"goback to camera list"); 
     
-    //Play beep
-    AudioServicesPlaySystemSound(1100);
-    
+      
     
     if (streamer.recordInProgress == YES)
         [streamer stopRecording];   
@@ -339,9 +361,6 @@
 -(void) goToCameraSettings
 {
     
-    //Play beep
-    AudioServicesPlaySystemSound(1100);
-	
     
     MBP_MenuViewController * menuViewCtrl;
     
@@ -365,15 +384,6 @@
 
 -(void) setupInfraCamera:(CamChannel *) ch
 {
-		
-	/* setup talk back
-	
-	UILongPressGestureRecognizer *lpgr = [[UILongPressGestureRecognizer alloc] 
-										  initWithTarget:self action:@selector(handleLongPress:)];
-	lpgr.minimumPressDuration = 2; //user needs to press for 2 seconds
-	[self.camView.rightSideMenu.pushTTButton addGestureRecognizer:lpgr];
-	[lpgr release];
-     */
     	
 	self.temperature_label.hidden = NO;
     
@@ -1392,6 +1402,17 @@
 
 -(IBAction)buttonPttPressed:(id)sender
 {
+    
+    if ( (self.selected_channel != nil) && 
+         (self.selected_channel.communication_mode == COMM_MODE_STUN)
+        )
+    {
+        //Dont support in stun mode
+        NSLog(@"STUN mode -- return"); 
+        return; 
+    }
+    
+    
     int tag = ((UIView *) sender).tag; 
     
     switch (tag)

@@ -133,6 +133,8 @@
     
     CGFloat currentZoomLvl; 
     
+    BOOL ptt_disabled, spk_disabled; 
+    
     
 }
 
@@ -145,7 +147,7 @@
 @property (nonatomic, retain) NSTimer * alertTimer; 
 @property (nonatomic, assign) UISlider * zoombar; 
 @property (nonatomic) float currentZoomLvl; 
-//@property (nonatomic, retain) IBOutlet UIView *progessView; 
+@property (nonatomic) BOOL ptt_disabled, spk_disabled; 
 
 
 -(IBAction)buttonMelodyPressed:(id) sender;

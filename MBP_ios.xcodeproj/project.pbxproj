@@ -668,8 +668,6 @@
 				9770CC0814304011009E69EF /* MBP_LeftSideMenuView.m */,
 				978E1FAE155A7C4200743DE4 /* MBP_RightSideMenuView.m */,
 				978E1FAF155A7C4200743DE4 /* MBP_RightSideMenuView.h */,
-				1D3623240D0F684500981E51 /* MBP_iosAppDelegate.h */,
-				1D3623250D0F684500981E51 /* MBP_iosAppDelegate.mm */,
 				9770CB7C143030A9009E69EF /* MBP_CamView.h */,
 				9770CB7D143030A9009E69EF /* MBP_CamView.mm */,
 				9770CC2F1430533B009E69EF /* MBP_MulitCamView.h */,
@@ -778,8 +776,6 @@
 				97C49AAF154784F4008B7D03 /* SetupData.m */,
 				97987E401546AF2C0066C49B /* UserAccount.h */,
 				97987E411546AF2C0066C49B /* UserAccount.m */,
-				28D7ACF60DDB3853001CB0EB /* MBP_iosViewController.h */,
-				28D7ACF70DDB3853001CB0EB /* MBP_iosViewController.mm */,
 				97987DEF1546A1630066C49B /* MBP_LoginOrRegistration.h */,
 				97987DF01546A1630066C49B /* MBP_LoginOrRegistration.m */,
 				97987DF11546A1630066C49B /* MBP_LoginOrRegistration.xib */,
@@ -815,6 +811,10 @@
 				9719EC59155C9F30005419FC /* MBP_MenuViewController.h */,
 				9719EC5A155C9F30005419FC /* MBP_MenuViewController.mm */,
 				9719EC5B155C9F30005419FC /* MBP_MenuViewController.xib */,
+				28D7ACF60DDB3853001CB0EB /* MBP_iosViewController.h */,
+				28D7ACF70DDB3853001CB0EB /* MBP_iosViewController.mm */,
+				1D3623240D0F684500981E51 /* MBP_iosAppDelegate.h */,
+				1D3623250D0F684500981E51 /* MBP_iosAppDelegate.mm */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -1380,9 +1380,6 @@
 					"\"$(SRCROOT)/../openssl_lib/iPhoneOS-armv6/lib\"",
 				);
 				PRODUCT_NAME = MBP_ios;
-				PROVISIONING_PROFILE = "99E3F4DD-FCFF-4AD8-BC1C-0FA2AEF93AAA";
-				"PROVISIONING_PROFILE[sdk=*]" = "99E3F4DD-FCFF-4AD8-BC1C-0FA2AEF93AAA";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "DF4DECFB-1AF5-41AC-AFBA-B8B29702AF20";
 				SDKROOT = iphoneos5.1;
 				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/external_include/**";
 			};
@@ -1406,8 +1403,6 @@
 					"\"$(SRCROOT)\"",
 				);
 				PRODUCT_NAME = MBP_ios;
-				PROVISIONING_PROFILE = "DF4DECFB-1AF5-41AC-AFBA-B8B29702AF20";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "DF4DECFB-1AF5-41AC-AFBA-B8B29702AF20";
 				SDKROOT = iphoneos5.1;
 				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/external_include/**";
 				VALIDATE_PRODUCT = YES;
@@ -1418,7 +1413,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Paul Tsui (KSWYEMQH37)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Paul Tsui (KSWYEMQH37)";
 				GCC_C_LANGUAGE_STANDARD = c99;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
@@ -1429,7 +1425,8 @@
 				OTHER_LDFLAGS = "";
 				PREBINDING = NO;
 				PRODUCT_NAME = MSC3;
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
+				PROVISIONING_PROFILE = "F796A130-07DF-428B-802E-EDD8DA9575AF";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "F796A130-07DF-428B-802E-EDD8DA9575AF";
 				SDKROOT = iphoneos4.1;
 				USER_HEADER_SEARCH_PATHS = "\"$(SRCROOT)/external_include\"/**";
 			};
@@ -1450,8 +1447,6 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 4.1;
 				LIBRARY_SEARCH_PATHS = "\"$(SRCROOT)\"";
 				PRODUCT_NAME = msc3;
-				PROVISIONING_PROFILE = "DF4DECFB-1AF5-41AC-AFBA-B8B29702AF20";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "DF4DECFB-1AF5-41AC-AFBA-B8B29702AF20";
 				SDKROOT = iphoneos5.1;
 				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/external_include/**";
 				VALIDATE_PRODUCT = YES;
@@ -1462,7 +1457,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Paul Tsui (KSWYEMQH37)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Paul Tsui (KSWYEMQH37)";
 				GCC_C_LANGUAGE_STANDARD = c99;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
@@ -1471,6 +1467,8 @@
 				MACH_O_TYPE = mh_execute;
 				OTHER_LDFLAGS = "";
 				PREBINDING = NO;
+				PROVISIONING_PROFILE = "F796A130-07DF-428B-802E-EDD8DA9575AF";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "F796A130-07DF-428B-802E-EDD8DA9575AF";
 				SDKROOT = iphoneos4.1;
 				USER_HEADER_SEARCH_PATHS = "\"$(SRCROOT)/external_include\"/**";
 			};
@@ -1480,7 +1478,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Paul Tsui (KSWYEMQH37)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Paul Tsui (KSWYEMQH37)";
 				GCC_C_LANGUAGE_STANDARD = c99;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
@@ -1490,6 +1489,8 @@
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
 				OTHER_LDFLAGS = "";
 				PREBINDING = NO;
+				PROVISIONING_PROFILE = "F796A130-07DF-428B-802E-EDD8DA9575AF";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "F796A130-07DF-428B-802E-EDD8DA9575AF";
 				SDKROOT = iphoneos4.1;
 				USER_HEADER_SEARCH_PATHS = "\"$(SRCROOT)/external_include\"/**";
 			};
