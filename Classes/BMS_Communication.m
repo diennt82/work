@@ -837,6 +837,80 @@
     
     
 }
+
+
+
+- (NSData *) BMS_sendPushRegistrationBlockWithUser:(NSString*) user_email 
+                                           AndPass:(NSString*) user_pass 
+                                             regId:(NSString *) regId
+{
+    NSData * dataReply;
+	NSURLResponse * response;
+    NSError* error = nil;
+    
+    NSString * mac_ = [Util strip_colon_fr_mac:macWithColon];
+    
+    
+    NSString * http_cmd = [NSString stringWithFormat:@"%@%@",BMS_PHONESERVICE, BMS_CMD_PART];
+	http_cmd = [http_cmd stringByAppendingFormat:@"%@", SEND_CTRL_CMD];
+	http_cmd = [http_cmd stringByAppendingFormat:@"%@%@", SEND_CTRL_CMD_PARAM_1, user_email];
+    http_cmd = [http_cmd stringByAppendingFormat:@"%@%@", SEND_CTRL_CMD_PARAM_2, regId];
+    http_cmd = [http_cmd stringByAppendingFormat:@"%@%@", SEND_CTRL_CMD_PARAM_3,udt_command];
+    
+	
+	NSLog(@"send udt query:%@", http_cmd);
+    
+    
+    
+	
+	NSString* plain = [NSString stringWithFormat:@"%@:%@",
+					   user_email, user_pass];
+	NSData* plainData = [plain dataUsingEncoding:NSUTF8StringEncoding];
+	NSString * portalCred = [NSString base64StringFromData:plainData length:[plainData length]];
+	
+	@synchronized(self)
+	{
+		
+		NSMutableURLRequest *theRequest=[NSMutableURLRequest requestWithURL:[NSURL URLWithString:http_cmd]
+																cachePolicy: NSURLRequestReloadIgnoringLocalCacheData
+															timeoutInterval:BMS_DEFAULT_TIME_OUT];
+		
+		NSString *authHeader = [@"Basic " stringByAppendingFormat:@"%@",portalCred];  
+		[theRequest addValue:authHeader forHTTPHeaderField:@"Authorization"];
+        
+        
+        error = nil;
+        dataReply = [NSURLConnection sendSynchronousRequest:theRequest 
+                                          returningResponse:&response 
+                                                      error:&error];
+        
+	}
+    
+    if ( (dataReply == nil)||  (error != nil))
+    {
+        return nil; 
+    }
+    else
+    {
+        return dataReply; 
+    }
+    
+
+}
+
+
+
+- (NSData *) BMS_sendPushUnRegistrationBlockWithUser:(NSString*) user_email 
+                                             AndPass:(NSString*) user_pass 
+                                               regId:(NSString *) regId
+{
+
+}
+
+
+
+
+
 #pragma mark - 
 
 #pragma mark NSURLConnection Delegate functions

@@ -136,6 +136,15 @@
                                         AndPass:(NSString*) user_pass 
                                         macAddr:(NSString *) macWithColon channId:(NSString*) channelId command:(NSString *)udt_command;
 
+- (NSData *) BMS_sendPushRegistrationBlockWithUser:(NSString*) user_email 
+                                           AndPass:(NSString*) user_pass 
+                                             regId:(NSString *) regId;
+
+
+
+- (NSData *) BMS_sendPushUnRegistrationBlockWithUser:(NSString*) user_email 
+                                           AndPass:(NSString*) user_pass 
+                                             regId:(NSString *) regId;
 
 
 @end

@@ -1413,8 +1413,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
-				CODE_SIGN_IDENTITY = "iPhone Developer: Paul Tsui (KSWYEMQH37)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Paul Tsui (KSWYEMQH37)";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Binatone Electronics International Limited";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Binatone Electronics International Limited";
 				GCC_C_LANGUAGE_STANDARD = c99;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
@@ -1425,8 +1425,8 @@
 				OTHER_LDFLAGS = "";
 				PREBINDING = NO;
 				PRODUCT_NAME = MSC3;
-				PROVISIONING_PROFILE = "F796A130-07DF-428B-802E-EDD8DA9575AF";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "F796A130-07DF-428B-802E-EDD8DA9575AF";
+				PROVISIONING_PROFILE = "082EB804-8DB3-4133-828C-C1BB90622B90";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "082EB804-8DB3-4133-828C-C1BB90622B90";
 				SDKROOT = iphoneos4.1;
 				USER_HEADER_SEARCH_PATHS = "\"$(SRCROOT)/external_include\"/**";
 			};
@@ -1467,8 +1467,8 @@
 				MACH_O_TYPE = mh_execute;
 				OTHER_LDFLAGS = "";
 				PREBINDING = NO;
-				PROVISIONING_PROFILE = "F796A130-07DF-428B-802E-EDD8DA9575AF";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "F796A130-07DF-428B-802E-EDD8DA9575AF";
+				PROVISIONING_PROFILE = "1524C122-7C02-48F7-B655-5285CCB877C8";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "1524C122-7C02-48F7-B655-5285CCB877C8";
 				SDKROOT = iphoneos4.1;
 				USER_HEADER_SEARCH_PATHS = "\"$(SRCROOT)/external_include\"/**";
 			};
@@ -1478,8 +1478,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
-				CODE_SIGN_IDENTITY = "iPhone Developer: Paul Tsui (KSWYEMQH37)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Paul Tsui (KSWYEMQH37)";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Binatone Electronics International Limited";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Binatone Electronics International Limited";
 				GCC_C_LANGUAGE_STANDARD = c99;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
@@ -1489,8 +1489,8 @@
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
 				OTHER_LDFLAGS = "";
 				PREBINDING = NO;
-				PROVISIONING_PROFILE = "F796A130-07DF-428B-802E-EDD8DA9575AF";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "F796A130-07DF-428B-802E-EDD8DA9575AF";
+				PROVISIONING_PROFILE = "082EB804-8DB3-4133-828C-C1BB90622B90";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "082EB804-8DB3-4133-828C-C1BB90622B90";
 				SDKROOT = iphoneos4.1;
 				USER_HEADER_SEARCH_PATHS = "\"$(SRCROOT)/external_include\"/**";
 			};
