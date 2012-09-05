@@ -18,6 +18,8 @@
 
 @interface MBP_FirstPage : UIViewController {
 
+    IBOutlet UILabel * versionText; 
+    
 	id <ConnectionMethodDelegate> delegate; 
 
 }

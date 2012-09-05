@@ -1153,7 +1153,7 @@
 	if (!error)
 	{
 		title = @"Snapshot";
-		message = @"saved to the photo album";
+		message = @"saved to Photo Album";
 		
 	}
 	else
@@ -1265,21 +1265,54 @@
     
     if (iFileName != nil)
     {
-        NSString *title = @"Video Recording";
-        NSString * message = [NSString stringWithFormat:@"saved at %@", iFileName];
-        
-        UIAlertView *alert = [[UIAlertView alloc]
-                              initWithTitle:title
-                              message:message 
-                              delegate:self
-                              cancelButtonTitle:@"OK"
-                              otherButtonTitles:nil];
-        [alert show];
-        [alert release];
-        
+        [self saveVideoToAlbum:iFileName];
         
         [iFileName release];
 	}
+}
+
+-(void) saveVideoToAlbum:(NSString *) fileName
+{
+//Save the video
+    if (UIVideoAtPathIsCompatibleWithSavedPhotosAlbum(fileName))
+    {
+        NSLog(@"Saving to album now"); 
+        UISaveVideoAtPathToSavedPhotosAlbum(fileName, self,@selector(videoSavedToPhotosAlbum:didFinishSavingWithError:contextInfo:), nil);
+    }
+    else
+    {
+        NSLog(@"can't save to album"); 
+    }
+        
+}
+
+- (void)videoSavedToPhotosAlbum:(UIImage *)image didFinishSavingWithError:(NSError *)error contextInfo:(void *)contextInfo
+{
+    NSString *title = @"Video";
+   
+    
+    NSString * message = [NSString stringWithFormat:@"saved at %@", iFileName];
+    
+    
+    if (!error)
+	{
+		message = @"saved to Photo Album";
+		
+	}
+    else {
+        title = @"Error";
+		message = [error description];
+    }
+    
+    
+    UIAlertView *alert = [[UIAlertView alloc]
+                          initWithTitle:title
+                          message:message 
+                          delegate:self
+                          cancelButtonTitle:@"OK"
+                          otherButtonTitles:nil];
+    [alert show];
+    [alert release];
 }
 
 

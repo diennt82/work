@@ -40,9 +40,7 @@
 #endif
     
     
-    // Let the device know we want to receive push notifications
-	[[UIApplication sharedApplication] registerForRemoteNotificationTypes:
-     (UIRemoteNotificationType) (UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeAlert)];
+   
 	
     
     
@@ -65,10 +63,16 @@
 
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo
 {
-    NSLog(@"Remote push rcv while running");
+    NSLog(@"clear the notification");
+    
+    [[UIApplication sharedApplication] setApplicationIconBadgeNumber:1];
+    [[UIApplication sharedApplication] setApplicationIconBadgeNumber:0];
+    [[UIApplication sharedApplication] cancelAllLocalNotifications];
     
     NSLog(@" Checking userInfo"); 
-   
+    
+    
+    
     if (userInfo)
     {
         NSString * str2 = (NSString *) [userInfo objectForKey:@"alert"]; 
@@ -83,6 +87,18 @@
         if ( [application applicationState] == UIApplicationStateActive)
         {
             //App is running now
+            
+            NSString * msg = [NSString stringWithFormat:@"Alert %@ from %@",str2,  str3];
+            
+            UIAlertView *alert = [[UIAlertView alloc]
+                                  initWithTitle:@"MBP_ios"
+                                  message:msg
+                                  delegate:self
+                                  cancelButtonTitle:@"OK"
+                                  otherButtonTitles:nil];
+            [alert show];
+            [alert release];
+            
             
         }
         
@@ -111,10 +127,10 @@
         if ([self shouldAlertForThisMac:str3])
         {
             NSLog(@" should Alert for this mac!! "); 
-         
             
             
-     
+            
+            
         }
 #endif 
         

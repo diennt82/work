@@ -153,6 +153,7 @@
 	
     [self readPreferenceData];
     
+ 
         
     //Setup navigation bar
     [self.navigationController setNavigationBarHidden:NO];
@@ -270,6 +271,8 @@
 	[cameraMenuItemValues release];
 	[super dealloc];
 }
+
+
 
 
 #pragma mark -

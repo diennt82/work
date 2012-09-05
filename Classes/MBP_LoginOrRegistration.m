@@ -508,8 +508,7 @@
 	}
 
 	
-	NSLog(@"aaaa before saving usr : %@ , %@", temp_user_str, self.temp_user_email);
-	
+		
 	//Store user/pass for later use
 	
 	[userDefaults setObject:self.temp_user_email forKey:@"PortalUseremail"];
@@ -518,6 +517,15 @@
 	[userDefaults synchronize];
 	
 	//MOVE on now .. 
+    
+    
+    //REGister for push 
+    NSLog(@"REGister for push");
+
+    // Let the device know we want to receive push notifications
+	[[UIApplication sharedApplication] registerForRemoteNotificationTypes:
+     (UIRemoteNotificationType) (UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeAlert)];
+    
 
 	
 	account = [[UserAccount alloc] initWithUser:self.temp_user_email

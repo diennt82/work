@@ -16,7 +16,8 @@
 
  // The designated initializer.  Override if you create the controller programmatically and want to perform customization that is not appropriate for viewDidLoad.
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil withConnDelegate:(id<ConnectionMethodDelegate>) d  {
-    if ((self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil])) {
+    if ((self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]))
+    {
         // Custom initialization
 		
 		delegate = d;
@@ -27,10 +28,17 @@
 
 /*
 // Implement viewDidLoad to do additional setup after loading the view, typically from a nib.
+ */
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    //Read version 
+    NSString *version = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
+
+    version = [NSString stringWithFormat:@"%@",version]; 
+    versionText.text =version;
 }
-*/
+
 
 //
 //- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {

@@ -273,6 +273,10 @@
 		case 3:
             //may be offline mode
             NSLog(@" back from Login - login success"); 
+            
+            
+            
+            
             [self scan_for_devices];
             
 			//Back from login- login success 
@@ -341,6 +345,14 @@
 		case 8 : //back from login -failed Or logout
 		{
 			[self dismissModalViewControllerAnimated:NO	];
+            
+            NSLog(@"DE-REGister push");
+          
+            // Let the device know we want to receive push notifications
+            [[UIApplication sharedApplication] unregisterForRemoteNotifications];            
+
+            
+            
 			NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
 			[userDefaults setBool:FALSE forKey:_AutoLogin];
 			[userDefaults synchronize];

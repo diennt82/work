@@ -343,17 +343,19 @@
 -(void) goBackToCameraList
 {
     NSLog(@"goback to camera list"); 
-    
-      
-    
+        
     if (streamer.recordInProgress == YES)
         [streamer stopRecording];   
     [streamer stopStreaming];
     
-    NSLog(@"abort remote timer ");
+    //NSLog(@"abort remote timer ");
     [self.selected_channel abortViewTimer];
     
-    [self.navigationController popViewControllerAnimated:NO];
+    //[self.navigationController popViewControllerAnimated:NO];
+    
+    [self.navigationController popToRootViewControllerAnimated:NO]; 
+    
+
     
     
 }
