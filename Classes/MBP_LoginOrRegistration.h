@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "MBP_iosAppDelegate.h"
 #import "BMS_Communication.h"
 #import	"UserAccount.h"
 #import "ConnectionMethodDelegate.h"

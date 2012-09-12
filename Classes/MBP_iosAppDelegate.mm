@@ -41,9 +41,8 @@
     
     
    
-	
-    
-    
+   
+        
        
     NSDictionary * userInfo = [launchOptions objectForKey:UIApplicationLaunchOptionsRemoteNotificationKey]; 
     if (userInfo)
@@ -79,9 +78,36 @@
         NSString * str3 = (NSString *) [userInfo objectForKey:@"mac"]; 
         NSString * str4 = (NSString *) [userInfo objectForKey:@"val"]; 
         NSString * str5 = (NSString *) [userInfo objectForKey:@"time"]; 
-        NSLog(@"%@ %@ %@ %@",  str2, str3, str4 , str5);  
+        NSString * str6 = (NSString *) [userInfo objectForKey:@"cameraname"]; 
+        
+        NSLog(@"%@ %@ %@ %@ %@",  str2, str3, str4 , str5, str6);  
+        
+        if (str2 == nil ||
+            str3 == nil ||
+            str4 == nil ||
+            str5 == nil ||
+            str6 == nil )
+        {
+            NSLog(@"NIL info.. silencely return"); 
+            return; 
+        }
+        
+        int rcvTimeStamp = [[NSDate date] timeIntervalSince1970];
+        CameraAlert * camAlert = [[CameraAlert alloc]initWithTimeStamp1:rcvTimeStamp];
+        //set other values
+        camAlert.cameraMacNoColon = [Util add_colon_to_mac:str3];
+        
+        camAlert.cameraName = str6;
+        camAlert.alertType = str2;
+        camAlert.alertTime =str5;
+        camAlert.alertVal = str4;
         
         
+
+        if ([CameraAlert insertAlertForCamera:camAlert] == TRUE)
+        {
+            NSLog(@"Alert inserted successfully"); 
+        }
         
         
         if ( [application applicationState] == UIApplicationStateActive)
@@ -182,11 +208,33 @@
 
 // Delegation methods
 - (void)application:(UIApplication *)app didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)devToken {
-    const void *devTokenBytes = [devToken bytes];
+
     NSLog(@"My token is: %@", devToken);
+
+
+    NSString * devTokenStr = [devToken hexadecimalString];
     
-    //self.registered = YES;
-    //[self sendProviderDeviceToken:devTokenBytes]; // custom method
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    [userDefaults setObject:devTokenStr forKey:_push_dev_token]; 
+    [userDefaults synchronize];
+    
+    NSString * user_pass = (NSString *) [userDefaults objectForKey:@"PortalPassword"];
+    NSString * user_email  = (NSString*) [userDefaults objectForKey:@"PortalUseremail"];
+    
+    BMS_Communication * bms_comm1; 
+    bms_comm1  = [[BMS_Communication alloc] initWithObject:self
+                                                  Selector:nil 
+                                              FailSelector:nil
+                                                 ServerErr:nil];
+    
+    NSData * response_dat = [bms_comm1 BMS_sendPushRegistrationBlockWithUser:user_email
+                                                                     AndPass:user_pass
+                                                                       regId:devTokenStr];
+    
+
+    
+    
+   
 }
 
 - (void)application:(UIApplication *)app didFailToRegisterForRemoteNotificationsWithError:(NSError *)err {
@@ -277,6 +325,10 @@
     [window release];
     [super dealloc];
 }
+
+
+
+
 
 
 @end

@@ -83,6 +83,18 @@
 #define SEND_CTRL_CMD_PARAM_2 @"&channelid="
 #define SEND_CTRL_CMD_PARAM_3 @"&query="
 
+
+#define PUSH_REG_CMD @"register_ios_device"
+#define PUSH_REG_CMD_PARAM_1 @"&email="
+#define PUSH_REG_CMD_PARAM_2 @"&registrationId="
+
+#define PUSH_UNREG_CMD @"register_ios_device"
+#define PUSH_UNREG_CMD_PARAM_1 @"&registrationId="
+
+
+
+
+
 @interface BMS_Communication : NSObject {
 
 	id obj;
@@ -97,6 +109,11 @@
 	
 	
 }
+
+@property (nonatomic, assign) id obj; 
+
+
+
 - (id) initWithObject: (id) caller Selector: (SEL) success FailSelector: (SEL) fail ServerErr:(SEL) serverErr;
 
 

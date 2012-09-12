@@ -346,14 +346,28 @@
 		{
 			[self dismissModalViewControllerAnimated:NO	];
             
-            NSLog(@"DE-REGister push");
-          
+            NSLog(@"DE-REGister push with both parties: APNs and BMS ");
+           
+            
+            NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+            NSString * user_pass = (NSString *) [userDefaults objectForKey:@"PortalPassword"];
+            NSString * user_email  = (NSString*)[userDefaults objectForKey:@"PortalUseremail"];
+            NSString * devTokenStr =(NSString*) [userDefaults objectForKey:_push_dev_token]; 
+            
             // Let the device know we want to receive push notifications
             [[UIApplication sharedApplication] unregisterForRemoteNotifications];            
 
+            BMS_Communication * bms_comm1; 
+            bms_comm1  = [[BMS_Communication alloc] initWithObject:self
+                                                          Selector:nil 
+                                                      FailSelector:nil
+                                                         ServerErr:nil];
+            
+            NSData * response_dat = [bms_comm1 BMS_sendPushUnRegistrationBlockWithUser:user_pass
+                                                                             AndPass:user_pass
+                                                                               regId:devTokenStr];
             
             
-			NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
 			[userDefaults setBool:FALSE forKey:_AutoLogin];
 			[userDefaults synchronize];
 			

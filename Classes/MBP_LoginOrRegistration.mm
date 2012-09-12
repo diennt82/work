@@ -304,6 +304,9 @@
 
 -(void) doneAction:(id) sender
 {
+    NSLog(@"aaa"); 
+    [userName resignFirstResponder];
+    [password resignFirstResponder];
     
     temp_user_str = userName.text;
     temp_pass_str = password.text;
@@ -315,7 +318,7 @@
                                                 Selector:@selector(loginSuccessWithResponse:) 
                                             FailSelector:@selector(loginFailedWithError:) 
                                                ServerErr:@selector(loginFailedServerUnreachable)];
-    
+
     [bms_comm BMS_loginWithUser:temp_user_str AndPass:temp_pass_str];
     
     
@@ -518,16 +521,17 @@
 	
 	//MOVE on now .. 
     
+       
     
     //REGister for push 
     NSLog(@"REGister for push");
-
+    
     // Let the device know we want to receive push notifications
 	[[UIApplication sharedApplication] registerForRemoteNotificationTypes:
      (UIRemoteNotificationType) (UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeAlert)];
+       
     
-
-	
+    
 	account = [[UserAccount alloc] initWithUser:self.temp_user_email
 										AndPass:self.temp_pass_str
 								   WithListener: delegate];
@@ -535,7 +539,6 @@
     
     //BLOCKED method
     [account query_camera_list_blocked];
-
 
 }
 
@@ -587,8 +590,10 @@
 
 - (void) regSuccessWithResponse:(NSData*) responseData
 {
-	
-	NSString * response = [NSString stringWithCharacters:[responseData bytes] length:[responseData length]]; 
+
+    NSString * response = [[NSString alloc] initWithData:responseData encoding:NSUTF8StringEncoding]; 
+    
+
 	
 	NSLog(@"register success : %@", response );
 	

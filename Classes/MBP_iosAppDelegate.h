@@ -8,7 +8,11 @@
 
 #import <UIKit/UIKit.h>
 #import "MBP_iosViewController.h"
+#import "NSData+Conversion.h"
+#import "CameraAlert.h"
 
+
+#define _push_dev_token @"PUSH_NOTIFICATION_DEVICE_TOKEN"
 
 @interface MBP_iosAppDelegate : NSObject <UIApplicationDelegate> {
     UIWindow *window;
