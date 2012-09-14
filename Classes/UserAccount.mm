@@ -7,7 +7,7 @@
 //
 
 #import "UserAccount.h"
-
+#import "MBP_iosAppDelegate.h"
 
 @implementation UserAccount
 
@@ -58,8 +58,6 @@
 
 -(void) query_snapshot_from_server:(NSArray *) cam_profiles
 {
-    NSLog(@"UserAccount: query_camera_snap"); 
-    
     
     ////set dummy selectors here -- these will not be called since we r using BLOCKED functions
 	self.bms_comm = [[BMS_Communication alloc] initWithObject:self
@@ -96,13 +94,6 @@
         snapShotData = nil; 
     }
     
-	
-	
-    
-    
-    NSLog(@"UserAccount: query_camera_snap END "); 
-
-    
     
 }
 
@@ -126,27 +117,139 @@
 
 -(void) getCamListSuccess:(NSData*) responseData
 {
-    NSLog(@"getCamListSuccess 01 "); 
+
 	
 	NSString * raw_data = [[[NSString alloc] initWithData:responseData encoding: NSASCIIStringEncoding] autorelease];
 
-	NSLog(@"getcam response: %@", raw_data);
+
 	NSMutableArray * cam_profiles;
 	cam_profiles = [self parse_camera_list:raw_data];
 	
-	NSLog(@"after parsing total cam: %d", [cam_profiles count]);
+	//NSLog(@"after parsing total cam: %d", [cam_profiles count]);
 	
 	
-	/* query snapshot from online */
-    [self query_snapshot_from_server:cam_profiles];
+	/* 20120913: DONT query snapshot from online 
+    [self query_snapshot_from_server:cam_profiles];*/
 	
+    
+    //query disabled alerts ----- Wait for the registration id 
+    if(cam_profiles != nil && [cam_profiles count] >0)
+    {
+        for (int i=0; i<[cam_profiles count]; i++)
+        {
+            [self query_disabled_alert_list:[cam_profiles objectAtIndex:i] ]; 
+        }
+        
+    }
+   
+    
 	/* sync_online_and_offline_data*/
 	[self sync_online_and_offline_data:cam_profiles];
-	
 	
 	[delegate sendStatus:3];
 	
 }
+
+
+
+-(void) query_disabled_alert_list:(CamProfile *) cp
+{
+
+    //All enabled - default
+    cp.soundAlertEnabled = TRUE;
+    cp.tempHiAlertEnabled = TRUE;
+    cp.tempLoAlertEnabled = TRUE;
+
+    
+    
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    NSString * device_token = (NSString *)[userDefaults objectForKey:_push_dev_token]; 
+    
+    BMS_Communication * bms_alerts = [[BMS_Communication alloc] initWithObject:self
+                                                                      Selector:nil 
+                                                                  FailSelector:nil 
+                                                                     ServerErr:nil];
+	
+	//call get camlist query here 
+	NSData* responseData = [bms_alerts BMS_getDisabledAlertBlockWithUser:self.userName 
+                                                                 AndPass:self.userPass 
+                                                                   regId:device_token 
+                                                                   ofMac:cp.mac_address];
+                            
+                            
+    NSString * raw_data = [[[NSString alloc] initWithData:responseData encoding: NSUTF8StringEncoding] autorelease];
+    NSLog(@"response: %@", raw_data); 
+//    Response:
+//    ""<br>mac=[mac address]
+//    <br>cameraname=[camera name]
+//    <br>Total_disabled_alerts=[count]
+//    <br>alert=<alert>
+//    <br>alert=<alert>
+//    <br>alert=<alert>
+    NSArray * token_list;
+
+	token_list = [raw_data componentsSeparatedByString:@"<br>"];
+    if ([token_list count] > 4)
+    {
+        int alertCount; 
+        
+        NSArray * token_list_1 = [[token_list objectAtIndex:3] componentsSeparatedByString:@"="];
+        
+        alertCount = [[token_list_1 objectAtIndex:1] intValue]; 
+        NSLog(@"Alert disabled is: %d", alertCount); 
+        
+        int i = 0;
+        NSString * disabledAlert;
+        while (i < alertCount)
+        {
+            token_list_1 = [[token_list objectAtIndex:(i+4)] componentsSeparatedByString:@"="];
+            
+            disabledAlert= [token_list_1 objectAtIndex:1] ;
+            disabledAlert = [disabledAlert stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+            
+             NSLog(@"disabledAlert disabled is:%@--> %@",[token_list objectAtIndex:(i+4)],  disabledAlert); 
+            
+            if ( [disabledAlert isEqualToString:ALERT_TYPE_SOUND])
+            {
+                NSLog(@"Set sound  for cam: %@", cp.mac_address);
+                cp.soundAlertEnabled = FALSE;
+               
+            }
+            else if ( [disabledAlert isEqualToString:ALERT_TYPE_TEMP_HI] )
+            {
+                NSLog(@"Set tempHiAlertEnabled  for cam: %@", cp.mac_address);
+                cp.tempHiAlertEnabled = FALSE;
+               
+            }
+            else if ([disabledAlert isEqualToString:ALERT_TYPE_TEMP_LO] )
+            {
+                NSLog(@"Set temp low  for cam: %@", cp.mac_address);
+                 cp.tempLoAlertEnabled = FALSE;
+            }
+            
+            i++;
+        }
+        
+        
+                
+        
+    }
+    else
+    {
+        NSLog(@"Token list count <4 :%@, %@, %@, %@",[token_list objectAtIndex:0],
+              [token_list objectAtIndex:1],
+              [token_list objectAtIndex:2],
+              [token_list objectAtIndex:3]); 
+        
+        
+              
+    }
+                            
+}
+
+
+
+
 -(void) getCamListFailure:(NSHTTPURLResponse*) error_response
 {
 	NSLog(@"Loging failed with error code:%d", [error_response statusCode]);
@@ -204,7 +307,7 @@
 	total_cam = [total_cam_str intValue];
 	
 
-	NSLog(@"tok list count:%d", [token_list count] -2);
+	//NSLog(@"tok list count:%d", [token_list count] -2);
 	//take into account the last empty token
 	if (total_cam !=0 && total_cam !=( [token_list count] -2))
 	{
@@ -219,7 +322,7 @@
 		return cam_list; 
 	}
 	
-	NSLog(@"total: %@ int:%d", total_cam_str, total_cam);
+
 	int i = 1; 
 	NSString * cam_entry; 
 	NSArray * cam_entry_tokens; 
@@ -229,7 +332,7 @@
 	{
 		
 		cam_entry = [token_list objectAtIndex:i];
-		NSLog(@"cam-entry: %@", cam_entry);
+
 		cam_entry_tokens = [cam_entry componentsSeparatedByString:@","];
 		if ([cam_entry_tokens count] != CAM_LIST_ENTRY_NUM_TOKEN)
 		{
@@ -279,7 +382,7 @@
                 cp.ip_address = local_ip ;
             }
             
-			  NSLog(@"cp.ip_address: %@ time_diff:%d", cp.ip_address,time_diff_);
+
 			
 			[cam_list addObject:cp];
 		}
@@ -401,7 +504,7 @@
 	}
 	
 	[offline_data save_session_data];
-	NSLog(@"after saving session data");
+	//NSLog(@"after saving session data");
 	
 	
 

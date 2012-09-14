@@ -183,7 +183,7 @@
 
 - (void) scan_for_devices_done
 {
-    
+#if 0 //20120913: DONT SCan for local snapshot
     HttpCommunication * dev_com = [[HttpCommunication alloc] init]; 
     CamProfile * cp;
     NSData * snap_data;
@@ -205,7 +205,7 @@
     }
     
     NSLog(@"Scan locally done"); 
-    
+#endif 
 	@synchronized (self)
 	{
 		deviceScanInProgress = NO;

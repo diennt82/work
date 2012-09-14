@@ -7,11 +7,14 @@
 //
 
 #import <Foundation/Foundation.h>
+//#import "MBP_iosAppDelegate.h"
 #import "BMS_Communication.h"
 #import "CamProfile.h"
 #import "Util.h"
 #import "SetupData.h"
 #import "ConnectionMethodDelegate.h"
+
+
 
 @interface UserAccount : NSObject {
 
@@ -39,5 +42,7 @@
 -(void) sync_online_and_offline_data:(NSMutableArray *) online_list;
 
 -(void) query_snapshot_from_server:(NSArray *) cam_profiles;
+
+-(void) query_disabled_alert_list:(NSArray *) cam_profiles;
 
 @end

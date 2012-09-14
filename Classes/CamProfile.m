@@ -17,6 +17,8 @@
 
 @synthesize name, last_comm, minuteSinceLastComm, isInLocal;
 
+@synthesize   soundAlertEnabled,tempHiAlertEnabled,tempLoAlertEnabled;
+
 -(void) initWithResponse:(NSString*) response andHost:(NSString *) host
 {
 	NSRange port_range ={16,8}; 
@@ -121,6 +123,17 @@
 	[data appendBytes:&temp_len length:1];
 	[data appendBytes:[temp UTF8String] length:[temp length]];
 	
+    
+    //alert status
+    char alertStatus = (self.soundAlertEnabled == TRUE)?1:0; 
+    [data appendBytes:&alertStatus length:sizeof(char)];
+    alertStatus = (self.tempHiAlertEnabled == TRUE)?1:0; 
+    [data appendBytes:&alertStatus length:sizeof(char)];
+    alertStatus = (self.tempLoAlertEnabled == TRUE)?1:0; 
+    [data appendBytes:&alertStatus length:sizeof(char)];
+    
+    
+    
 	//lastComm
 	temp = self.last_comm; 
 	if (self.last_comm = nil)
@@ -258,8 +271,26 @@
 		free(_name);		
 		
 		
+        //sound alert status
+        char alertStatus = 1;
+        NSRange salertStatRange = {name_range.location + len,1}; 
+        [data getBytes:&alertStatus range:salertStatRange];
+        this.soundAlertEnabled = (alertStatus==1); 
+        
+         //temp hi alert status
+        NSRange th_alertStatRange = {salertStatRange.location + 1,1}; 
+        [data getBytes:&alertStatus range:th_alertStatRange];
+        this.tempHiAlertEnabled = (alertStatus==1);
+        
+         //temp lo alert status
+        NSRange tl_alertStatRange = {th_alertStatRange.location + 1,1}; 
+        [data getBytes:&alertStatus range:tl_alertStatRange];
+        this.tempLoAlertEnabled = (alertStatus==1);
+        NSLog(@"alert stat: %d %d %d", this.soundAlertEnabled, this.tempHiAlertEnabled, this.tempLoAlertEnabled);
+        
+        
 		//LastComm
-		NSRange lastComm_len_range = {name_range.location + len,1};
+		NSRange lastComm_len_range = {tl_alertStatRange.location + 1,1};
 		[data getBytes:&len range:lastComm_len_range];
 		char * _lastComm = malloc(len+1);
 		_lastComm[len] = '\0';

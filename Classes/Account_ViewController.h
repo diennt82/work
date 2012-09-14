@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "ConnectionMethodDelegate.h"
+#import "CameraAlert.h"
 
 @interface Account_ViewController : UIViewController
 {

@@ -142,6 +142,13 @@
     }
     else
     {
+        
+        //User logout -- 
+        // 1 . Clear all alert 
+        [CameraAlert clearAllAlerts]; 
+        //TODO: 2 . Clear offline data 
+        
+        
         [mdelegate sendStatus:8];
     }
     

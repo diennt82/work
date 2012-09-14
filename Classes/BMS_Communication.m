@@ -957,6 +957,185 @@
 
 
 
+- (NSData *) BMS_getDisabledAlertBlockWithUser:(NSString*) user_email 
+                                           AndPass:(NSString*) user_pass 
+                                             regId:(NSString *) regId
+                                         ofMac:(NSString *) macWColon
+{
+    NSData * dataReply;
+	NSURLResponse * response;
+    NSError* error = nil;
+    
+    NSString * _mac = [Util strip_colon_fr_mac:macWColon]; 
+    
+    NSString * http_cmd1 = [NSString stringWithFormat:@"%@%@",BMS_PHONESERVICE, BMS_CMD_PART];
+	http_cmd1 = [http_cmd1 stringByAppendingFormat:@"%@", GET_DISABLED_ALERTS_CMD];
+	http_cmd1 = [http_cmd1 stringByAppendingFormat:@"%@%@", GET_DISABLED_ALERTS_CMD_PARAM_1, regId];
+    http_cmd1 = [http_cmd1 stringByAppendingFormat:@"%@%@", GET_DISABLED_ALERTS_CMD_PARAM_2,_mac ];
+    
+    
+	
+	NSLog(@"send query:%@", http_cmd1);
+    
+    
+    
+	
+	NSString* plain = [NSString stringWithFormat:@"%@:%@",
+					   user_email, user_pass];
+	NSData* plainData = [plain dataUsingEncoding:NSUTF8StringEncoding];
+	NSString * portalCred = [NSString base64StringFromData:plainData length:[plainData length]];
+	
+	@synchronized(self)
+	{
+		
+		NSMutableURLRequest *theRequest=[NSMutableURLRequest requestWithURL:[NSURL URLWithString:http_cmd1]
+																cachePolicy: NSURLRequestReloadIgnoringLocalCacheData
+															timeoutInterval:BMS_DEFAULT_TIME_OUT];
+		
+		NSString *authHeader = [@"Basic " stringByAppendingFormat:@"%@",portalCred];  
+		[theRequest addValue:authHeader forHTTPHeaderField:@"Authorization"];
+        
+        
+        error = nil;
+        dataReply = [NSURLConnection sendSynchronousRequest:theRequest 
+                                          returningResponse:&response 
+                                                      error:&error];
+        
+	}
+    
+    if ( (dataReply == nil)||  (error != nil))
+    {
+        return nil; 
+    }
+    else
+    {
+        return dataReply; 
+    }
+    
+    
+}
+
+
+
+
+- (NSData *) BMS_enabledAlertBlockWithUser:(NSString*) user_email 
+                                   AndPass:(NSString*) user_pass 
+                                     regId:(NSString *) regId
+                                     ofMac:(NSString *) macWColon
+                                 alertType:(NSString *) alertType
+{
+    NSData * dataReply;
+	NSURLResponse * response;
+    NSError* error = nil;
+    
+    NSString * _mac = [Util strip_colon_fr_mac:macWColon]; 
+    
+    NSString * http_cmd1 = [NSString stringWithFormat:@"%@%@",BMS_PHONESERVICE, BMS_CMD_PART];
+	http_cmd1 = [http_cmd1 stringByAppendingFormat:@"%@", ENABLE_ALERTS_CMD];
+	http_cmd1 = [http_cmd1 stringByAppendingFormat:@"%@%@", ENABLE_ALERTS_CMD_PARAM_1, regId];
+    http_cmd1 = [http_cmd1 stringByAppendingFormat:@"%@%@", ENABLE_ALERTS_CMD_PARAM_2,_mac ];
+    http_cmd1 = [http_cmd1 stringByAppendingFormat:@"%@%@", ENABLE_ALERTS_CMD_PARAM_3,alertType ];
+    
+    
+	
+	NSLog(@"send query:%@", http_cmd1);
+    
+	
+	NSString* plain = [NSString stringWithFormat:@"%@:%@",
+					   user_email, user_pass];
+	NSData* plainData = [plain dataUsingEncoding:NSUTF8StringEncoding];
+	NSString * portalCred = [NSString base64StringFromData:plainData length:[plainData length]];
+	
+	@synchronized(self)
+	{
+		
+		NSMutableURLRequest *theRequest=[NSMutableURLRequest requestWithURL:[NSURL URLWithString:http_cmd1]
+																cachePolicy: NSURLRequestReloadIgnoringLocalCacheData
+															timeoutInterval:BMS_DEFAULT_TIME_OUT];
+		
+		NSString *authHeader = [@"Basic " stringByAppendingFormat:@"%@",portalCred];  
+		[theRequest addValue:authHeader forHTTPHeaderField:@"Authorization"];
+        
+        
+        error = nil;
+        dataReply = [NSURLConnection sendSynchronousRequest:theRequest 
+                                          returningResponse:&response 
+                                                      error:&error];
+        
+	}
+    
+    if ( (dataReply == nil)||  (error != nil))
+    {
+        return nil; 
+    }
+    else
+    {
+        return dataReply; 
+    }
+    
+    
+}
+
+- (NSData *) BMS_disabledAlertBlockWithUser:(NSString*) user_email 
+                                   AndPass:(NSString*) user_pass 
+                                     regId:(NSString *) regId
+                                     ofMac:(NSString *) macWColon
+                                 alertType:(NSString *) alertType
+{
+    NSData * dataReply;
+	NSURLResponse * response;
+    NSError* error = nil;
+    
+    NSString * _mac = [Util strip_colon_fr_mac:macWColon]; 
+    
+    NSString * http_cmd1 = [NSString stringWithFormat:@"%@%@",BMS_PHONESERVICE, BMS_CMD_PART];
+	http_cmd1 = [http_cmd1 stringByAppendingFormat:@"%@", DISABLE_ALERTS_CMD];
+	http_cmd1 = [http_cmd1 stringByAppendingFormat:@"%@%@", DISABLE_ALERTS_CMD_PARAM_1, regId];
+    http_cmd1 = [http_cmd1 stringByAppendingFormat:@"%@%@", DISABLE_ALERTS_CMD_PARAM_2,_mac ];
+    http_cmd1 = [http_cmd1 stringByAppendingFormat:@"%@%@", DISABLE_ALERTS_CMD_PARAM_3,alertType ];
+    
+    
+	
+	NSLog(@"send query:%@", http_cmd1);
+    
+	
+	NSString* plain = [NSString stringWithFormat:@"%@:%@",
+					   user_email, user_pass];
+	NSData* plainData = [plain dataUsingEncoding:NSUTF8StringEncoding];
+	NSString * portalCred = [NSString base64StringFromData:plainData length:[plainData length]];
+	
+	@synchronized(self)
+	{
+		
+		NSMutableURLRequest *theRequest=[NSMutableURLRequest requestWithURL:[NSURL URLWithString:http_cmd1]
+																cachePolicy: NSURLRequestReloadIgnoringLocalCacheData
+															timeoutInterval:BMS_DEFAULT_TIME_OUT];
+		
+		NSString *authHeader = [@"Basic " stringByAppendingFormat:@"%@",portalCred];  
+		[theRequest addValue:authHeader forHTTPHeaderField:@"Authorization"];
+        
+        
+        error = nil;
+        dataReply = [NSURLConnection sendSynchronousRequest:theRequest 
+                                          returningResponse:&response 
+                                                      error:&error];
+        
+	}
+    
+    if ( (dataReply == nil)||  (error != nil))
+    {
+        return nil; 
+    }
+    else
+    {
+        return dataReply; 
+    }
+    
+    
+}
+
+
+
 
 #pragma mark - 
 

@@ -14,7 +14,7 @@
 #import "CameraViewController.h"
 #import "Account_ViewController.h"
 #import "QuickViewCamera_ViewController.h"
-
+#import "AlertSettingAdaptor.h"
 
 
 
@@ -25,6 +25,10 @@
     IBOutlet UITabBarController *tabBarController;
 
     IBOutlet UIView * offlineView; 
+    
+    IBOutlet UITableView * alertSettingTableView;
+    IBOutlet UIView * alertSettingView;
+    IBOutlet UILabel * alertSettingViewTitle;
     
     NSArray * listOfChannel; 
     
@@ -57,6 +61,8 @@
 -(IBAction)editCameras:(id)sender;
 -(IBAction)removeCamera:(id)sender;
 -(IBAction)renameCamera:(id)sender;
+-(IBAction)alertSetting:(id)sender;
+-(IBAction)alertSettingDone:(id)sender;
 
 
 

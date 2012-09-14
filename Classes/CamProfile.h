@@ -33,6 +33,9 @@
 	int minuteSinceLastComm;
 	
 	BOOL isInLocal; 
+    BOOL soundAlertEnabled;
+    BOOL tempHiAlertEnabled;
+    BOOL tempLoAlertEnabled;
 }
 
 @property (nonatomic,retain) NSString* scan_response, *ip_address, * mac_address;
@@ -43,6 +46,7 @@
 @property (nonatomic, retain) NSData * profileImageData;
 
 @property (nonatomic,retain) NSString * name, *last_comm; 
+@property (nonatomic) BOOL soundAlertEnabled,tempHiAlertEnabled,tempLoAlertEnabled;
 
 
 -(void) initWithResponse:(NSString*) response andHost:(NSString *) host;

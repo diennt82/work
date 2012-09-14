@@ -13,7 +13,7 @@
 
 /* Change this every time the setup data changed -- 
  */ 
-#define DATA_BARKER  0xbeef0002
+#define DATA_BARKER  0xbeef0003
 
 
 @interface SetupData : NSObject {

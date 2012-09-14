@@ -88,8 +88,24 @@
 #define PUSH_REG_CMD_PARAM_1 @"&email="
 #define PUSH_REG_CMD_PARAM_2 @"&registrationId="
 
-#define PUSH_UNREG_CMD @"register_ios_device"
+#define PUSH_UNREG_CMD @"unregister_ios_device"
 #define PUSH_UNREG_CMD_PARAM_1 @"&registrationId="
+
+
+#define GET_DISABLED_ALERTS_CMD @"get_disabled_alerts_ios"
+#define GET_DISABLED_ALERTS_CMD_PARAM_1 @"&registrationId="
+#define GET_DISABLED_ALERTS_CMD_PARAM_2 @"&mac="
+
+#define ENABLE_ALERTS_CMD @"enable_notifications_ios"
+#define ENABLE_ALERTS_CMD_PARAM_1 @"&registrationId="
+#define ENABLE_ALERTS_CMD_PARAM_2 @"&mac="
+#define ENABLE_ALERTS_CMD_PARAM_3 @"&alert="
+
+#define DISABLE_ALERTS_CMD @"disable_notifications_ios"
+#define DISABLE_ALERTS_CMD_PARAM_1 @"&registrationId="
+#define DISABLE_ALERTS_CMD_PARAM_2 @"&mac="
+#define DISABLE_ALERTS_CMD_PARAM_3 @"&alert="
+
 
 
 
@@ -162,6 +178,18 @@
 - (NSData *) BMS_sendPushUnRegistrationBlockWithUser:(NSString*) user_email 
                                            AndPass:(NSString*) user_pass 
                                              regId:(NSString *) regId;
+
+
+
+- (NSData *) BMS_getDisabledAlertBlockWithUser:(NSString*) user_email 
+                                       AndPass:(NSString*) user_pass 
+                                         regId:(NSString *) regId
+                                         ofMac:(NSString *) macWColon;
+- (NSData *) BMS_enabledAlertBlockWithUser:(NSString*) user_email 
+                                   AndPass:(NSString*) user_pass 
+                                     regId:(NSString *) regId
+                                     ofMac:(NSString *) macWColon
+                                 alertType:(NSString *) alertType;
 
 
 @end

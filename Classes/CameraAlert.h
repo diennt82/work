@@ -36,6 +36,7 @@
 +(void) reloadBlankTableIfNeeded;
 +( NSArray * ) getAllAlertForCamera:(NSString *) macWithColon;
 +( BOOL ) insertAlertForCamera:(CameraAlert *) camAlert;
-
++(void) clearAllAlertForCamera:(NSString *) macWithColon ;
++(void) clearAllAlerts;
 
 @end

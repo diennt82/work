@@ -351,11 +351,13 @@
     //NSLog(@"abort remote timer ");
     [self.selected_channel abortViewTimer];
     
-    //[self.navigationController popViewControllerAnimated:NO];
+
     
     [self.navigationController popToRootViewControllerAnimated:NO]; 
     
-
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    [userDefaults removeObjectForKey:CAM_IN_VEW];
+    [userDefaults synchronize];
     
     
 }

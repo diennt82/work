@@ -262,10 +262,13 @@ withConnDelegate:(id<ConnectionMethodDelegate> ) caller
         
         UIButton *renButton = (UIButton *) [cell viewWithTag:505]; 
         UIButton *remButton = (UIButton *) [cell viewWithTag:506]; 
+        UIButton * alertButtons = (UIButton *) [cell viewWithTag:507]; 
         
         ///////IF IT IS REUSED --->> DIE DIE DIE
         renButton.tag = indexPath.row;
         remButton.tag = indexPath.row;
+        alertButtons.tag = indexPath.row; 
+        
         // Set up the cell...
         CamChannel * ch = (CamChannel*)[listOfChannel objectAtIndex:indexPath.row] ;
         CamProfile * cp = ch.profile; 
@@ -285,6 +288,7 @@ withConnDelegate:(id<ConnectionMethodDelegate> ) caller
             {
                 [snapshot setImage:[UIImage imageNamed:@"photo_item.png"]];
             }
+
             
         }
         else {
@@ -317,6 +321,15 @@ withConnDelegate:(id<ConnectionMethodDelegate> ) caller
         UILabel * camStatus = (UILabel *) [cell viewWithTag:504];
         
         
+        UIImageView * soundAlert = (UIImageView *) [cell viewWithTag:508]; 
+        UIImageView * tempAlert = (UIImageView *) [cell viewWithTag:509]; 
+        
+        
+        soundAlert.hidden = YES;
+        tempAlert.hidden = YES;
+
+        
+        
         
         // Set up the cell...
         CamChannel * ch = (CamChannel*)[listOfChannel objectAtIndex:indexPath.row] ;
@@ -326,6 +339,33 @@ withConnDelegate:(id<ConnectionMethodDelegate> ) caller
         
         if (ch != nil)
         {
+            
+            NSArray * alerts  = [ CameraAlert getAllAlertForCamera:cp.mac_address];
+            CameraAlert * camAlert; 
+            if (alerts != nil)
+            {
+                
+                 NSLog(@"alerts count: %d for cam: %@",[alerts count], cp.mac_address);
+                
+                for (int i =0; i <[alerts count]; i++)
+                {
+                    camAlert = (CameraAlert *) [alerts objectAtIndex:i]; 
+                    if ( [camAlert.alertType isEqualToString:ALERT_TYPE_SOUND])
+                    {
+                        NSLog(@"Set sound indicator for cam: %@", cp.mac_address);
+                        soundAlert.hidden = NO;
+                    }
+                    else if ( [camAlert.alertType isEqualToString:ALERT_TYPE_TEMP_HI]  || 
+                           [camAlert.alertType isEqualToString:ALERT_TYPE_TEMP_LO] )
+                    {
+                        NSLog(@"Set temp indicator for cam: %@", cp.mac_address);
+                        tempAlert.hidden = NO;
+                    }
+                    
+                }
+            }
+            
+            
             
             //set camera info
             if (cp.isInLocal == TRUE)
@@ -387,10 +427,7 @@ withConnDelegate:(id<ConnectionMethodDelegate> ) caller
     {
         return; // don't start streaming in Edit mode 
     }
-    
-    int idx=indexPath.row;
-    
-    NSLog(@"cell: %d pressed",idx);
+     
     CamChannel * ch = (CamChannel*)[listOfChannel objectAtIndex:indexPath.row] ;
     
     if (ch != nil &&
@@ -398,6 +435,18 @@ withConnDelegate:(id<ConnectionMethodDelegate> ) caller
         (ch.profile.isInLocal ==YES || ch.profile.minuteSinceLastComm <=5)
         )
     {
+        
+        NSLog(@"clear alert for: %@",ch.profile.mac_address);
+        // Clear all alert for this camera 
+        [CameraAlert clearAllAlertForCamera:ch.profile.mac_address]; 
+        
+        [tableView reloadData]; 
+        
+        
+        NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+        [userDefaults setObject:ch.profile.mac_address forKey:CAM_IN_VEW];
+        [userDefaults synchronize];
+        
         
         CameraViewController * viewCamCtrl;
         viewCamCtrl = [[CameraViewController alloc] initWithNibName:@"CameraViewController"
@@ -552,6 +601,33 @@ withConnDelegate:(id<ConnectionMethodDelegate> ) caller
     
 }
 
+-(IBAction)alertSetting:(id)sender
+{
+    CamChannel * ch = (CamChannel *) [listOfChannel objectAtIndex:((UIButton *)sender).tag]; 
+    
+    NSLog(@"alert setting for camera: %@",ch.profile.name );    
+    
+    
+    
+    [self.view addSubview:alertSettingView]; 
+    [self.view bringSubviewToFront:alertSettingView]; 
+    
+    alertSettingViewTitle.text = ch.profile.name;
+    
+    
+    AlertSettingAdaptor * settingAdaptor; 
+    settingAdaptor = [[AlertSettingAdaptor alloc] initWithCam:ch.profile]; 
+    alertSettingTableView.dataSource = settingAdaptor;
+    alertSettingTableView.delegate = settingAdaptor;
+    
+}
+
+-(IBAction)alertSettingDone:(id)sender
+{
+    ///Close 
+    [alertSettingView removeFromSuperview]; 
+}
+
 
 
 -(IBAction)removeCamera:(id)sender
@@ -584,7 +660,7 @@ withConnDelegate:(id<ConnectionMethodDelegate> ) caller
     UIAlertView * _myAlert = nil;
     
     _myAlert = [[UIAlertView alloc] initWithTitle:@"Change Camera Name" 
-                                          message:@"Please enter new name for this camera\n\n" 
+                                          message:@"Please enter new name for this camera\n\n\n" 
                                          delegate:self 
                                 cancelButtonTitle:@"Cancel"
                                 otherButtonTitles:@"Ok", 

@@ -39,8 +39,8 @@
 	NSLog(@"Log location: %@",logPath);
 #endif
     
-    
-   
+    NSLog(@"Checking alert database"); 
+    [CameraAlert reloadBlankTableIfNeeded];
    
         
        
@@ -95,7 +95,7 @@
         int rcvTimeStamp = [[NSDate date] timeIntervalSince1970];
         CameraAlert * camAlert = [[CameraAlert alloc]initWithTimeStamp1:rcvTimeStamp];
         //set other values
-        camAlert.cameraMacNoColon = [Util add_colon_to_mac:str3];
+        camAlert.cameraMacNoColon = str3;
         
         camAlert.cameraName = str6;
         camAlert.alertType = str2;
@@ -113,18 +113,7 @@
         if ( [application applicationState] == UIApplicationStateActive)
         {
             //App is running now
-            
-            NSString * msg = [NSString stringWithFormat:@"Alert %@ from %@",str2,  str3];
-            
-            UIAlertView *alert = [[UIAlertView alloc]
-                                  initWithTitle:@"MBP_ios"
-                                  message:msg
-                                  delegate:self
-                                  cancelButtonTitle:@"OK"
-                                  otherButtonTitles:nil];
-            [alert show];
-            [alert release];
-            
+            [viewController pushNotificationRcvedInForeground: camAlert];
             
         }
         
@@ -164,6 +153,7 @@
     }
 
 }
+
 
 -(void) forceLogin
 {
@@ -257,28 +247,7 @@
      */
 	
 	NSLog(@"Enter background"); 
-#if 0
-	
 
-	
-	
-	if (viewController.shouldReloadWhenEnterBG == TRUE	)
-	{
-		[viewController dismissModalViewControllerAnimated:NO];
-			
-	
-		
-		NSLog(@"reload view--"); 
-		//if (viewController.shouldReloadWhenEnterBG == TRUE	)
-		//{
-			//Go back to first page 
-		//	[viewController viewDidLoad];
-		//}
-		
-		
-			
-	}
-#endif
 		
 }
 
@@ -288,7 +257,7 @@
      Called as part of  transition from the background to the inactive state: here you can undo many of the changes made on entering the background.
      */
 	
-	NSLog(@"Enter foreground - do nothing.. "); 
+	NSLog(@"Enter foreground "); 
 	
 			
 		

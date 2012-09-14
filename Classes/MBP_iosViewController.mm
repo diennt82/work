@@ -90,7 +90,7 @@
 	
 	
 	
-	walkie_talkie_enabled = NO;
+	//walkie_talkie_enabled = NO;
 	
 
 	current_view_mode = CURRENT_VIEW_MODE_MULTI;
@@ -346,7 +346,7 @@
 		{
 			[self dismissModalViewControllerAnimated:NO	];
             
-            NSLog(@"DE-REGister push with both parties: APNs and BMS ");
+            NSLog(@"De-Register push with both parties: APNs and BMS ");
            
             
             NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
@@ -363,12 +363,14 @@
                                                       FailSelector:nil
                                                          ServerErr:nil];
             
-            NSData * response_dat = [bms_comm1 BMS_sendPushUnRegistrationBlockWithUser:user_pass
+            NSData * response_dat = [bms_comm1 BMS_sendPushUnRegistrationBlockWithUser:user_email
                                                                              AndPass:user_pass
                                                                                regId:devTokenStr];
             
-            
-			[userDefaults setBool:FALSE forKey:_AutoLogin];
+            //REmove password and registration id 
+            [userDefaults removeObjectForKey:@"PortalPassword"];
+            [userDefaults removeObjectForKey:_push_dev_token];
+			//[userDefaults setBool:FALSE forKey:_AutoLogin];
 			[userDefaults synchronize];
 			
 			[NSTimer scheduledTimerWithTimeInterval:0.10
@@ -384,7 +386,91 @@
 	
 }
 
+#define ALERT_PUSH_RECVED 200
 
+-(void) pushNotificationRcvedInForeground:(CameraAlert *) camAlert
+
+{
+    //Check if we should popup
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    //mac with COLON 
+    NSString * camInView = (NSString*)[userDefaults objectForKey:CAM_IN_VEW];
+    
+    if (camInView != nil)
+    {
+        
+        if ( [[Util strip_colon_fr_mac:camInView] isEqualToString:camAlert.cameraMacNoColon])
+        {
+            NSLog(@"Silencely return, don't popup"); 
+            return;
+        }
+        
+    }
+    
+    
+    
+    
+    NSString * msg = @"Sound detected";
+    
+    if ( [camAlert.alertType isEqualToString:ALERT_TYPE_TEMP_HI]  )
+    {
+        msg = @"Temperature too high";
+    }
+    else if ([camAlert.alertType isEqualToString:ALERT_TYPE_TEMP_LO])
+    {
+        msg = @"Temperature too low";
+    }
+
+    
+    if (pushAlert != nil )
+    {
+        if ([pushAlert isVisible])
+        {
+            [pushAlert dismissWithClickedButtonIndex:0 animated:NO]; 
+        }
+        
+        [pushAlert release]; 
+    }
+    
+    pushAlert = [[UIAlertView alloc]
+                 initWithTitle:camAlert.cameraName
+                 message:msg
+                 delegate:self
+                 cancelButtonTitle:@"OK"
+                 otherButtonTitles:nil];
+    pushAlert.tag = ALERT_PUSH_RECVED; 
+    [pushAlert show];
+    
+    
+    return; 
+    
+}
+#pragma mark -
+#pragma mark Alertview delegate
+
+- (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex {
+	
+	int tag = alertView.tag ;
+	
+	if (tag == ALERT_PUSH_RECVED)
+	{
+		switch(buttonIndex) {
+			case 0:
+                NSLog(@"reload camera list"); 
+                /////Force reload of dash board 
+                [self dismissModalViewControllerAnimated:NO];                
+                [self startShowingCameraList];
+
+				break;
+            default:
+				break;
+				
+		}
+	}
+		
+	
+}
+#pragma mark - 
 
 #pragma mark Remote Connection Callbacks
 
@@ -417,9 +503,6 @@
 #pragma mark -
 #pragma mark Connectivity
 
-
-#define SOCKET_ID_LISTEN  100
-#define SOCKET_ID_SEND    200
 
 - (void) scan_for_devices
 {
@@ -505,8 +588,7 @@
 							)
 						{
 							//Re-bind camera - channel
-							NSLog(@"binding cam: %@(%@) to channel:%d",
-								  cp.name, cp.mac_address, ch.channel_index);
+							
 							[ch setCamProfile:cp]; 
 							cp.isSelected = TRUE;
 							[cp setChannel:ch];

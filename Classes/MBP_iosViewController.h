@@ -35,6 +35,8 @@
 #import "ScanForCameraProtocol.h"
 #import "DashBoard_ViewController.h"
 
+#import "CameraAlert.h"
+
 
 #define DIRECTION_V_NON  0x01
 #define DIRECTION_V_UP   0x02
@@ -60,6 +62,7 @@
 
 #define _streamingSSID @"string_Streaming_SSID"
 #define _triggeredByVox @"bool_Vox_Trigger"
+#define CAM_IN_VEW @"string_Camera_Mac_Being_Viewed"
 
 @interface MBP_iosViewController : UIViewController <SetupHttpDelegate, ConnectionMethodDelegate,UIActionSheetDelegate, ScanForCameraNotifier	> {
 
@@ -83,18 +86,20 @@
 	
 	NSTimer * voice_data_timer;
 #endif
-    PCMPlayer * pcmPlayer;
+    //PCMPlayer * pcmPlayer;
     //NSMutableArray * scan_results ;
 	//int next_profile_index;
 	//BOOL deviceScanInProgress;
-    
+    /* 
 	BOOL walkie_talkie_enabled;
 	AudioOutStreamer * audioOut; 
-	/* Direction */
+	Direction
 	NSTimer * send_UD_dir_req_timer; 
 	NSTimer * send_LR_dir_req_timer;
-	/* Added to support direction update */
-	BOOL v_direction_update_needed, h_direction_update_needed;
+     
+      */
+	/* Added to support direction update
+	BOOL v_direction_update_needed, h_direction_update_needed; */
 	
 	int currentDirUD, lastDirUD;
 	int delay_update_lastDir_count;	
@@ -143,6 +148,8 @@
     IBOutlet UILabel * statusDialogLabel;
     IBOutlet UITextView * statusDialogText;
     
+    UIAlertView * pushAlert; 
+    
 
 	
 }
@@ -154,18 +161,18 @@
 
 @property (nonatomic,retain) HttpCommunication *comm;
 
-//@property (nonatomic,retain) NSMutableArray * scan_results ;
-//@property (nonatomic) int next_profile_index;
 
 @property (nonatomic) BOOL toTakeSnapShot, recordInProgress, shouldReloadWhenEnterBG;
 @property (nonatomic, retain) NSString * bc_addr, *own_addr;
 
 @property (nonatomic, retain) NSArray * channel_array; 
 @property (nonatomic, retain) NSMutableArray * restored_profiles ;
-//@property (nonatomic, retain) MBP_Streamer * streamer; 
+
 
 @property (nonatomic, retain) NSTimer * fullScreenTimer, *alertTimer; 
 @property (nonatomic, retain) StunCommunication * scomm; 
+
+
 
 
 - (void) initialize ;
@@ -266,5 +273,10 @@
 -(void) periodicPopup:(NSTimer *) exp;
 
 -(void) stopPeriodicPopup;
+
+
+
+
+-(void) pushNotificationRcvedInForeground:(CameraAlert *) camAlert;
 @end
 
