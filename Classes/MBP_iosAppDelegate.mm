@@ -105,7 +105,7 @@
         
         
         
-#if 0     
+    
         
         if ( [application applicationState] == UIApplicationStateInactive)
         {
@@ -114,7 +114,7 @@
             [self performSelectorOnMainThread:@selector(forceLogin) withObject:nil waitUntilDone:YES];             
         }
         
-                
+#if 0        
         if ([self shouldAlertForThisMac:str3])
         {
             NSLog(@" should Alert for this mac!! "); 
@@ -236,8 +236,8 @@
 	NSLog(@"Enter foreground "); 
 	
     
-    NSLog(@"Re login"); 
-    [self performSelectorOnMainThread:@selector(forceLogin) withObject:nil waitUntilDone:YES];   
+//    NSLog(@"Re login"); 
+//    [self performSelectorOnMainThread:@selector(forceLogin) withObject:nil waitUntilDone:YES];   
 			
 		
 }

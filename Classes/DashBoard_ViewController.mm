@@ -105,7 +105,7 @@ withConnDelegate:(id<ConnectionMethodDelegate> ) caller
     
     // create a spacer between the buttons
     UIBarButtonItem *spacer = [[UIBarButtonItem alloc]
-                               initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace
+                               initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace
                                target:nil
                                action:nil];
     [buttons addObject:spacer];
@@ -122,7 +122,7 @@ withConnDelegate:(id<ConnectionMethodDelegate> ) caller
     
     // create a spacer between the buttons
     spacer = [[UIBarButtonItem alloc]
-              initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace
+              initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace
               target:nil
               action:nil];
     [buttons addObject:spacer];
@@ -783,7 +783,7 @@ withConnDelegate:(id<ConnectionMethodDelegate> ) caller
             if (deviceInLocal)
             {
                 
-                NSString * msg =@"Please confirm that you want to remove this camera from your account. This action will also switch your camera to direct mode.";
+                NSString * msg =@"Please confirm that you want to remove this camera from your account. This action will also reset the camera to setup mode.";
                 UIAlertView *alert = [[UIAlertView alloc]
                                       initWithTitle:@""
                                       message:msg 
@@ -797,7 +797,7 @@ withConnDelegate:(id<ConnectionMethodDelegate> ) caller
             }
             else
             {
-                NSString * msg =@"Please confirm that you want to remove this camera from your account. The camera is not accessible right now, it will not be switched to direct mode. Please refer to FAQ to reset it manually.";
+                NSString * msg =@"Please confirm that you want to remove this camera from your account. The camera is not accessible right now, it will not be switched to setup mode. Please refer to FAQ to reset it manually.";
                 UIAlertView *alert = [[UIAlertView alloc]
                                       initWithTitle:@""
                                       message:msg 
@@ -856,19 +856,19 @@ withConnDelegate:(id<ConnectionMethodDelegate> ) caller
 
 -(void) changeNameSuccessWithResponse:(NSData *) responsedata
 {
-	NSLog(@"changeName success");
+
     
     [cameraList reloadData] ; 
     
 }
 -(void) changeNameFailedWithError:(NSHTTPURLResponse*) error_response
 {
-	NSLog(@"changeNamed failed errorcode: ");
+
     [cameraList reloadData] ; 
 }
 -(void) changeNameFailedServerUnreachable
 {
-	NSLog(@"server unreachable");
+
     [cameraList reloadData] ; 
 }
 
@@ -887,11 +887,11 @@ withConnDelegate:(id<ConnectionMethodDelegate> ) caller
 	command = SWITCH_TO_DIRECT_MODE; 
 	response = [dev_comm sendCommandAndBlock:command];
 	
-	NSLog(@"swithToDirect res: %@", response);
+
 	
 	command = RESTART_HTTP_CMD;
 	response = [dev_comm sendCommandAndBlock:command];
-	NSLog(@"restart res: %@", response);
+
 	
     
     [self onCameraRemoveRemote]; 

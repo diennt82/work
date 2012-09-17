@@ -57,7 +57,7 @@
     
     // create a spacer between the buttons
     UIBarButtonItem *spacer = [[UIBarButtonItem alloc]
-                               initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace
+                               initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace
                                target:nil
                                action:nil];
     [buttons addObject:spacer];
@@ -74,15 +74,11 @@
     
     // create a spacer between the buttons
     spacer = [[UIBarButtonItem alloc]
-              initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace
+              initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace
               target:nil
               action:nil];
     [buttons addObject:spacer];
     [spacer release];
-    
-    
-    
-  
     
     
     // create a standard delete button with the trash icon

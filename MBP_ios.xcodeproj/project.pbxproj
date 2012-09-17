@@ -632,11 +632,6 @@
 				38CC5A1315DCBBC100067C54 /* QuickViewCamera_ViewController.mm */,
 				38CC5A1415DCBBC200067C54 /* QuickViewCamera_ViewController.xib */,
 				38CC5A1715DCEE3C00067C54 /* QuickViewCamera_landscape.xib */,
-				38CFFF7715BD4ECB009A2EE2 /* CameraViewController.xib */,
-				3812F84015C8DB5600DADFA6 /* CameraViewController_land.xib */,
-				38A62E8615C8F03C00DEA520 /* SongTitleView.xib */,
-				38C79E2915C7C444006EE378 /* CameraViewController.h */,
-				38C79E2A15C7C446006EE378 /* CameraViewController.mm */,
 				9719EC59155C9F30005419FC /* MBP_MenuViewController.h */,
 				9719EC5A155C9F30005419FC /* MBP_MenuViewController.mm */,
 				9719EC5B155C9F30005419FC /* MBP_MenuViewController.xib */,
@@ -667,6 +662,11 @@
 				97C49AAF154784F4008B7D03 /* SetupData.m */,
 				97987E401546AF2C0066C49B /* UserAccount.h */,
 				97987E411546AF2C0066C49B /* UserAccount.mm */,
+				38CFFF7715BD4ECB009A2EE2 /* CameraViewController.xib */,
+				3812F84015C8DB5600DADFA6 /* CameraViewController_land.xib */,
+				38A62E8615C8F03C00DEA520 /* SongTitleView.xib */,
+				38C79E2915C7C444006EE378 /* CameraViewController.h */,
+				38C79E2A15C7C446006EE378 /* CameraViewController.mm */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -1050,9 +1050,9 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CODE_SIGN_ENTITLEMENTS = "";
-				CODE_SIGN_IDENTITY = "iPhone Distribution: Binatone Electronics International Limited";
-				"CODE_SIGN_IDENTITY[sdk=*]" = "iPhone Distribution: Binatone Electronics International Limited";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Binatone Electronics International Limited";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Paul Tsui (KSWYEMQH37)";
+				"CODE_SIGN_IDENTITY[sdk=*]" = "iPhone Developer: Paul Tsui (KSWYEMQH37)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Paul Tsui (KSWYEMQH37)";
 				COPY_PHASE_STRIP = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1073,9 +1073,9 @@
 					"\"$(SRCROOT)/../openssl_lib/iPhoneOS-armv6/lib\"",
 				);
 				PRODUCT_NAME = MBP_ios;
-				PROVISIONING_PROFILE = "34574F98-B6D1-4DBB-B04D-A8B6FD6B44E0";
-				"PROVISIONING_PROFILE[sdk=*]" = "34574F98-B6D1-4DBB-B04D-A8B6FD6B44E0";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "34574F98-B6D1-4DBB-B04D-A8B6FD6B44E0";
+				PROVISIONING_PROFILE = "72F6C4FD-2E1C-476C-96F7-D7CE07C3BCFA";
+				"PROVISIONING_PROFILE[sdk=*]" = "72F6C4FD-2E1C-476C-96F7-D7CE07C3BCFA";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "72F6C4FD-2E1C-476C-96F7-D7CE07C3BCFA";
 				SDKROOT = iphoneos;
 				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/external_include/**";
 			};
@@ -1086,8 +1086,8 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CODE_SIGN_ENTITLEMENTS = "";
-				CODE_SIGN_IDENTITY = "iPhone Distribution: Binatone Electronics International Limited";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Binatone Electronics International Limited";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Paul Tsui (KSWYEMQH37)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Paul Tsui (KSWYEMQH37)";
 				COPY_PHASE_STRIP = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1103,6 +1103,8 @@
 					"\"$(SRCROOT)\"",
 				);
 				PRODUCT_NAME = MBP_ios;
+				PROVISIONING_PROFILE = "B03333C9-C962-4882-858E-58924CC7D06E";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "B03333C9-C962-4882-858E-58924CC7D06E";
 				SDKROOT = iphoneos;
 				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/external_include/**";
 				VALIDATE_PRODUCT = YES;
@@ -1136,8 +1138,8 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CODE_SIGN_ENTITLEMENTS = "";
-				CODE_SIGN_IDENTITY = "iPhone Distribution: Binatone Electronics International Limited";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Binatone Electronics International Limited";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Paul Tsui (KSWYEMQH37)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Paul Tsui (KSWYEMQH37)";
 				COPY_PHASE_STRIP = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1150,6 +1152,8 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 4.1;
 				LIBRARY_SEARCH_PATHS = "\"$(SRCROOT)\"";
 				PRODUCT_NAME = msc3;
+				PROVISIONING_PROFILE = "B03333C9-C962-4882-858E-58924CC7D06E";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "B03333C9-C962-4882-858E-58924CC7D06E";
 				SDKROOT = iphoneos;
 				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/external_include/**";
 				VALIDATE_PRODUCT = YES;

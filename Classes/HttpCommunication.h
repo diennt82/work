@@ -41,6 +41,7 @@
 
 #define SET_MELODY_OFF @"melodystop"
 #define SET_MELODY @"melody"
+#define GET_MELODY @"value_melody"
 
 #define SET_PTT @"audio_out"
 

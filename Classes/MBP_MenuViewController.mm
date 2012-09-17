@@ -164,7 +164,7 @@
 	voxlevels = [[NSArray alloc] initWithObjects:@"Disable",
 				 @"Level1(Low)", @"Level2", @"Level3", @"Level4 (High)", nil];
 	temperature = [[NSArray alloc] initWithObjects:@"Fahrenheit",@"Celsius",nil];
-	videoQuality = [[NSArray alloc] initWithObjects:@"High Quality (VGA)",@"Normal Quality (QVGA)",nil]; 
+	videoQuality = [[NSArray alloc] initWithObjects:@"Normal Quality (QVGA)",@"High Quality (VGA)",nil]; 
 	
     progressView.hidden = NO; 
     [self.view bringSubviewToFront:progressView]; 

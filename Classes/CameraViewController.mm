@@ -168,9 +168,6 @@
         [self prepareToViewRemotely:self.selected_channel];
     }
     
-    
-    
-    
 }
 
 
@@ -353,6 +350,7 @@
     //
     [self initVideoAndSnapshotView];
     
+    [self setUIMelodyOnOff]; 
     
     //re-show progress if  it is being shown
     if (shouldShowProgress)
@@ -487,6 +485,9 @@
 		comm.device_port = port; 
 		[comm sendCommand:SET_RESOLUTION_QVGA];
         
+       
+        //update melody ui 
+        [self setUIMelodyOnOff]; 
 		
 		if (streamer != nil)
 		{
@@ -520,6 +521,9 @@
 		
 		
 		
+        
+        
+        
         [streamer setVideoImage:videoView];
 		streamer.mTempUpdater = self;
         streamer.mFrameUpdater = self;
@@ -668,6 +672,8 @@
 	NSString * msg = (NSString *) [exp userInfo];
     
     [self playSound]; 
+    [self playSound]; 
+    [self playSound]; 
        
 	if ( alert != nil)
 	{
@@ -685,7 +691,7 @@
 	
 	
 	alert = [[UIAlertView alloc]
-			 initWithTitle:@"Streamer Stopped"
+			 initWithTitle:@"" //empty on purpose
 			 message:msg
 			 delegate:self
 			 cancelButtonTitle:@"Cancel"
@@ -1045,6 +1051,7 @@
     directionPad.hidden = YES;
     controlButtons.hidden = YES;
     zoombarView.hidden = YES;
+     topToolBar.hidden = YES;
     
 }
 
@@ -1082,12 +1089,8 @@
 - (void) showFullScreenNow: (NSTimer*) exp
 {
 	
-	
 	fullScreenTimer = nil;
-		
-    
     topToolBar.hidden = YES;
-    
     directionPad.hidden = YES;
     controlButtons.hidden = YES;
     zoombarView.hidden = YES;
@@ -1098,19 +1101,14 @@
 
 - (void) showSideMenusAndStatus
 {
-	
-	if ( fullScreenTimer != nil && [fullScreenTimer isValid] )
-	{
-		//invalidate the timer .. 
-		[fullScreenTimer invalidate];
-		fullScreenTimer = nil;
-	}
-    NSLog(@"show menus");
+    NSLog(@"111 show menus");
     topToolBar.hidden = NO;
     directionPad.hidden = NO;
     controlButtons.hidden = NO;
     zoombarView.hidden = NO;
     [self exitSubFunction];
+    
+    [self tryToShowFullScreen];
     
 }
 
@@ -1273,10 +1271,14 @@
             if (([btn state] &  UIControlStateSelected )== UIControlStateSelected)
             {
                 btn.selected = NO;
+                
+                
+                
+                
             }
             else
             {   
-                 btn.selected = YES;
+                btn.selected = YES;
             }
             
             
@@ -1470,7 +1472,47 @@
 #pragma  mark -
 #pragma mark Melody
 
+-(void) setUIMelodyOnOff
+{
+    NSData * responseData  = [comm sendCommandAndBlock_raw:GET_MELODY];
+    
+    if (responseData != nil)
+    {
+        NSString *response = [[[NSString alloc] initWithData:responseData encoding: NSUTF8StringEncoding] autorelease];
+        if ( (response != nil)  && [response hasPrefix:GET_MELODY])
+        {
+            NSString * str_value = [response substringFromIndex:([GET_MELODY length] + 2)];
+            
+            int _melody_index  = [str_value intValue];
+            
+            if (_melody_index == 0)
+            {
+                //set icon off
+                [lullabyButton setImage:[UIImage imageNamed:@"bb_melody_off_icon.png"] forState:UIControlStateNormal];
+                [lullabyOnOff setOn:FALSE];
+                
+                melody_index = -1;
+                
+            }
+            else 
+            {
+                melody_index = (_melody_index-1) ;
+                
+                //set icon on 
+                [lullabyButton setImage:[UIImage imageNamed:@"bb_melody_icon.png"] forState:UIControlStateNormal];
+                [lullabyOnOff setOn:TRUE];
+                
+                
+                 UITableView * melodies_tb = (UITableView *) [lullabyView viewWithTag:1];
+                [melodies_tb reloadData]; 
+            }
+            
+            
+        }
+        
+    }
 
+}
 
 -(IBAction) buttonMelodyPressed:(id) sender
 {
@@ -1528,11 +1570,12 @@
     {
         command = SET_MELODY_OFF;
         [lullabyOnOff setOn:FALSE];
+        [lullabyButton setImage:[UIImage imageNamed:@"bb_melody_off_icon.png"] forState:UIControlStateNormal];
     }
     else 
     {
         command = [NSString stringWithFormat:@"%@%d",SET_MELODY,melodyIdx];
-        
+         [lullabyButton setImage:[UIImage imageNamed:@"bb_melody_icon.png"] forState:UIControlStateNormal];
         [lullabyOnOff setOn:TRUE];
         
     }

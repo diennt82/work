@@ -94,6 +94,7 @@
     IBOutlet UITableViewCell * songtitleCell; 
     
     IBOutlet UIButton * pttButton; 
+    IBOutlet UIButton * lullabyButton; 
     
     IBOutlet UIView * videoAndSnapshotView; 
     IBOutlet UISlider *videoAndSnapshotSlider;

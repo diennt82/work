@@ -408,8 +408,8 @@
                  initWithTitle:camAlert.cameraName
                  message:msg
                  delegate:self
-                 cancelButtonTitle:@"OK"
-                 otherButtonTitles:nil];
+                 cancelButtonTitle:@"OK" 
+                 otherButtonTitles: nil];
     pushAlert.tag = ALERT_PUSH_RECVED; 
     [pushAlert show];
     
@@ -427,7 +427,9 @@
 	if (tag == ALERT_PUSH_RECVED)
 	{
 		switch(buttonIndex) {
-			case 0:
+            case 0:
+                //break;
+			//case 1:
                
                 
                 if (dashBoard != nil)
