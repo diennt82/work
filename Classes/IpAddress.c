@@ -70,7 +70,7 @@ int GetIPAddresses()
 	int                 i, len, flags;
 	char                buffer[BUFFERSIZE], *ptr, lastname[IFNAMSIZ], *cptr;
 	struct ifconf       ifc;
-	struct ifreq        *ifr, ifrcopy, ifrcopy1;
+	struct ifreq        *ifr, ifrcopy;
 	struct sockaddr_in	*sin, *broadcast;
 	
 	char temp[80];

@@ -52,7 +52,7 @@
         NSString * str2 = (NSString *) [userInfo objectForKey:@"alert"]; 
         NSString * str3 = (NSString *) [userInfo objectForKey:@"mac"]; 
         NSString * str4 = (NSString *) [userInfo objectForKey:@"val"]; 
-        NSString * str5 = (NSString *) [userInfo objectForKey:@"time"]; 
+//        NSString * str5 = (NSString *) [userInfo objectForKey:@"time"]; 
         NSLog(@" %@ %@ %@", str2, str3, str4); 
     }
     

@@ -70,9 +70,6 @@
 	
     //NOT USED - TO BE REMOVED
 
-    IBOutlet UIView * direcModeWaitView; 
-	IBOutlet UIButton * direcModeWaitConnect;
-	IBOutlet UIActivityIndicatorView * direcModeWaitProgress;
 
     AsyncSocket * listenSocket;
 	
@@ -153,9 +150,9 @@
 
 	
 }
-@property (nonatomic, retain) IBOutlet UIButton *direcModeWaitConnect; 
-@property (nonatomic, retain) IBOutlet UIView * progressView, * direcModeWaitView; 
-@property (nonatomic, retain) IBOutlet UIActivityIndicatorView * direcModeWaitProgress;
+
+@property (nonatomic, retain) IBOutlet UIView * progressView; 
+
 
 @property (nonatomic,retain) IBOutlet MBP_MainMenuView * mainMenuView;
 

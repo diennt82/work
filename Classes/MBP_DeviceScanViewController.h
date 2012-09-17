@@ -27,7 +27,7 @@
 #define SCAN_MENU_SAVE_BTN_TAG 810
 
 
-#define DATA_BARKER 0xdeadbeef
+//#define DATA_BARKER 0xdeadbeef
 
 @class CamProfile;
 

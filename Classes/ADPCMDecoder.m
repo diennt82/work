@@ -46,7 +46,7 @@ static const int BLOCKBYTES = (505-1)/2+4;
 	dataPtr[outPos++]=adpcmPtr[inPos++];
 	dataPtr[outPos++]=adpcmPtr[inPos++];
 	
-	int lastOutput=dataPtr[0]&0xff | dataPtr[1]<<8;
+	int lastOutput=(dataPtr[0]&0xff) | dataPtr[1]<<8;
 	
 	int stepIndex=adpcmPtr[inPos++];
 	inPos++;
@@ -165,14 +165,14 @@ static const int BLOCKBYTES = (505-1)/2+4;
 	int outPos=0;
 	
 	// Initial sample uncompressed
-	int lastOutput=(int)data[0+offset]&0xff | (int)data[1+offset]<<8;
+	int lastOutput=((int)data[0+offset]&0xff) | (int)data[1+offset]<<8;
 	adpcm[outPos++]=data[0+offset];
 	adpcm[outPos++]=data[1+offset];
 	maxLevel=lastOutput;
 	minLevel=lastOutput;
 	
 	// Initial step index - let's find the next sample and pick the closest
-	int nextSample=(int)data[2+offset]&0xff | (int)data[3+offset]<<8;
+	int nextSample=((int)data[2+offset]&0xff) | (int)data[3+offset]<<8;
 	int initialDifference=abs(nextSample-lastOutput);
 	int stepIndex=0;
 	for(;stepIndex< 89 ;stepIndex++)
@@ -188,7 +188,7 @@ static const int BLOCKBYTES = (505-1)/2+4;
 	BOOL highNibble=false;
 	for(int i=2;i<length;i+=2)
 	{
-		int target=(int)data[i+offset]&0xff | (int)data[i+offset+1]<<8;
+		int target=((int)data[i+offset]&0xff) | (int)data[i+offset+1]<<8;
 		maxLevel=MAX_2(maxLevel,target);
 		minLevel=MIN_2(minLevel,target);
 		
