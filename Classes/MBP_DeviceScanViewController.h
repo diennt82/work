@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "CamProfile.h"
-
+#import "SetupData.h"
 
 
 #define SCAN_MENU_BACK_BTN_TAG 800

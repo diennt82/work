@@ -33,23 +33,13 @@
 @synthesize bc_addr,own_addr;
 
 
-
-@synthesize comm; 
-
-
 @synthesize channel_array; 
 @synthesize restored_profiles ; 
 
-//@synthesize streamer; 
-
 @synthesize progressView;
 
-@synthesize fullScreenTimer, alertTimer;
-
-@synthesize direcModeWaitView,direcModeWaitConnect, direcModeWaitProgress; 
-
 @synthesize shouldReloadWhenEnterBG;
-@synthesize scomm; 
+
 
 /*
 // The designated initializer. Override to perform setup that is required before the view is loaded.
@@ -75,31 +65,13 @@
 {
 
 	self.mainMenuView = nil;
-	
-	
 
 	shouldReloadWhenEnterBG = TRUE;
 	
 	self.toTakeSnapShot = NO;
 	self.recordInProgress = NO;
 
-//	self.scan_results = [NSMutableArray arrayWithCapacity:64]; 
-//	self.scan_results = [[NSMutableArray alloc]init]; 
-//	self.next_profile_index = 0;
 
-	
-	
-	
-	//walkie_talkie_enabled = NO;
-	
-
-	current_view_mode = CURRENT_VIEW_MODE_MULTI;
-//	deviceScanInProgress = NO;
-	
-	
-	self.comm = [[HttpCommunication alloc]init]; 
-	
-	fullScreenTimer = nil;
 
 }
 
@@ -150,7 +122,7 @@
 {
     
     
-	DashBoard_ViewController * dashBoard;
+	
 	dashBoard = [[DashBoard_ViewController alloc] initWithNibName:@"DashBoard_ViewController"
 														   bundle:nil
 												 withConnDelegate:self];
@@ -206,14 +178,14 @@
 - (void)dealloc {
 
 	[mainMenuView release];
-//	[scan_results release];
+
 	[bc_addr release];
 	[own_addr release];
-	[comm release];
+
 	[channel_array release]; 
 	[restored_profiles release];
-	[fullScreenTimer release];
-	[scomm release] ;
+
+
     [super dealloc];
 }
 
@@ -386,9 +358,9 @@
 	
 }
 
-#define ALERT_PUSH_RECVED 200
 
--(void) pushNotificationRcvedInForeground:(CameraAlert *) camAlert
+
+-(BOOL) pushNotificationRcvedInForeground:(CameraAlert *) camAlert
 
 {
     //Check if we should popup
@@ -402,7 +374,7 @@
         if ( [[Util strip_colon_fr_mac:camInView] isEqualToString:camAlert.cameraMacNoColon])
         {
             NSLog(@"Silencely return, don't popup"); 
-            return;
+            return FALSE;
         }
         
     }
@@ -442,7 +414,7 @@
     [pushAlert show];
     
     
-    return; 
+    return TRUE; 
     
 }
 #pragma mark -
@@ -456,6 +428,34 @@
 	{
 		switch(buttonIndex) {
 			case 0:
+               
+                
+                if (dashBoard != nil)
+                {
+                     NSLog(@"close all windows and thread"); 
+                    
+                    //[dashBoard.navigationController popToRootViewControllerAnimated:NO]; 
+
+                    NSArray * views = dashBoard.navigationController.viewControllers; 
+
+                    
+                     NSLog(@"views count = %d",[views count] );
+                    if ( [views count] > 1) 
+                    {
+                        NSLog(@"002");
+                        //views objectAtIndex:0  = uitabbarcontroller 
+
+
+                        CameraViewController * camView = (CameraViewController *) [views objectAtIndex:1]; 
+                        [camView goBackToCameraList]; 
+                    }
+                    
+                    
+                    
+                    
+                }
+                
+                
                 NSLog(@"reload camera list"); 
                 /////Force reload of dash board 
                 [self dismissModalViewControllerAnimated:NO];                
@@ -471,31 +471,6 @@
 	
 }
 #pragma mark - 
-
-#pragma mark Remote Connection Callbacks
-
-
--(void) remoteConnectionSucceeded:(CamChannel *) camChannel
-{
-	
-	//Start to display this channel
-	selected_channel = camChannel;
-	
-	NSLog(@"Remote camera-channel is %d with cam name: %@", selected_channel.channel_index, selected_channel.profile.name);
-	[self setupInfraCamera:selected_channel];
-}
-
--(void) remoteConnectionFailed:(CamChannel *) camChannel
-{
-	//camChannel = nil 
-	
-	NSLog(@"Remote connection Failed!!!");
-
-	
-	self.progressView.hidden = YES;
-	
-
-}
 
 
 

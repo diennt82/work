@@ -10,7 +10,6 @@
 #import <AVFoundation/AVFoundation.h>
 #import "MBP_CamView.h"
 #import "MBP_MainMenuView.h"
-#import "AiBallVideoListViewController.h"
 
 #import "MBP_MainSetupViewController.h"
 #import "MBP_InitialSetupViewController.h"
@@ -51,14 +50,13 @@
 #define CURRENT_VIEW_MODE_MULTI 0x11
 #define CURRENT_VIEW_MODE_SINGLE 0x12
 
-@class AiBallVideoListViewController;
+@class DashBoard_ViewController; 
 @class MBP_CamView;
-//@class MBP_MainMenuView;
 @class CamProfile;
 
 #define DIRECT_MODE_NEXT_BTN 311
 
-
+#define ALERT_PUSH_RECVED 200
 
 #define _streamingSSID @"string_Streaming_SSID"
 #define _triggeredByVox @"bool_Vox_Trigger"
@@ -69,34 +67,7 @@
 	
 	
     //NOT USED - TO BE REMOVED
-
-
-    AsyncSocket * listenSocket;
-	
-	int initialFlag;
-	NSMutableData *responseData;
-    
-#if 0 // defined(IRABOT_AUDIO_RECORDING_SUPPORT)
-	AsyncSocket * sendingSocket;
-	NSMutableData * pcm_data;
-	
-	
-	NSTimer * voice_data_timer;
-#endif
-    //PCMPlayer * pcmPlayer;
-    //NSMutableArray * scan_results ;
-	//int next_profile_index;
-	//BOOL deviceScanInProgress;
-    /* 
-	BOOL walkie_talkie_enabled;
-	AudioOutStreamer * audioOut; 
-	Direction
-	NSTimer * send_UD_dir_req_timer; 
-	NSTimer * send_LR_dir_req_timer;
-     
-      */
-	/* Added to support direction update
-	BOOL v_direction_update_needed, h_direction_update_needed; */
+ 
 	
 	int currentDirUD, lastDirUD;
 	int delay_update_lastDir_count;	
@@ -104,20 +75,8 @@
 	int delay_update_lastDirLR_count;
 	
 	int melody_index;
+	//UIAlertView * alert;
 
-	int current_view_mode; 
-	
-	HttpCommunication * comm; 
-	//MBP_Streamer * streamer; 
-	CamChannel * selected_channel; 
-	NSTimer * fullScreenTimer; 
-
-	
-	UIAlertView * alert;
-	NSTimer * alertTimer; 
-	
-	
-	StunCommunication * scomm; 
     
     ///IN USED
     IBOutlet MBP_MainMenuView * mainMenuView;
@@ -147,16 +106,15 @@
     
     UIAlertView * pushAlert; 
     
+    DashBoard_ViewController * dashBoard;
 
 	
 }
 
 @property (nonatomic, retain) IBOutlet UIView * progressView; 
-
-
 @property (nonatomic,retain) IBOutlet MBP_MainMenuView * mainMenuView;
 
-@property (nonatomic,retain) HttpCommunication *comm;
+//@property (nonatomic,retain) HttpCommunication *comm;
 
 
 @property (nonatomic) BOOL toTakeSnapShot, recordInProgress, shouldReloadWhenEnterBG;
@@ -167,7 +125,7 @@
 
 
 @property (nonatomic, retain) NSTimer * fullScreenTimer, *alertTimer; 
-@property (nonatomic, retain) StunCommunication * scomm; 
+
 
 
 
@@ -274,6 +232,6 @@
 
 
 
--(void) pushNotificationRcvedInForeground:(CameraAlert *) camAlert;
+-(BOOL) pushNotificationRcvedInForeground:(CameraAlert *) camAlert;
 @end
 

@@ -38,6 +38,8 @@
     
     BOOL editModeEnabled; 
     int edittedChannelIndex; 
+    
+   
 }
 @property (nonatomic, retain) IBOutlet UITabBarController *tabBarController;
 

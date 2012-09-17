@@ -41,21 +41,6 @@
     
     NSLog(@"Checking alert database"); 
     [CameraAlert reloadBlankTableIfNeeded];
-   
-        
-       
-    NSDictionary * userInfo = [launchOptions objectForKey:UIApplicationLaunchOptionsRemoteNotificationKey]; 
-    if (userInfo)
-    {
-        NSLog(@" Checking launchOptions"); 
-        
-        NSString * str2 = (NSString *) [userInfo objectForKey:@"alert"]; 
-        NSString * str3 = (NSString *) [userInfo objectForKey:@"mac"]; 
-        NSString * str4 = (NSString *) [userInfo objectForKey:@"val"]; 
-//        NSString * str5 = (NSString *) [userInfo objectForKey:@"time"]; 
-        NSLog(@" %@ %@ %@", str2, str3, str4); 
-    }
-    
     
     return YES;
 }
@@ -67,7 +52,7 @@
     [[UIApplication sharedApplication] setApplicationIconBadgeNumber:1];
     [[UIApplication sharedApplication] setApplicationIconBadgeNumber:0];
     [[UIApplication sharedApplication] cancelAllLocalNotifications];
-    
+        
     NSLog(@" Checking userInfo"); 
     
     
@@ -102,43 +87,34 @@
         camAlert.alertTime =str5;
         camAlert.alertVal = str4;
         
-        
+        BOOL shouldStoreAlert = TRUE; 
 
-        if ([CameraAlert insertAlertForCamera:camAlert] == TRUE)
+        
+        //Next few lines: ORDER MATTERS
+        if ( [application applicationState] == UIApplicationStateActive)
+        {
+            //App is running now
+            shouldStoreAlert = [viewController pushNotificationRcvedInForeground: camAlert];
+            
+        }
+        
+        if (shouldStoreAlert && [CameraAlert insertAlertForCamera:camAlert] == TRUE)
         {
             NSLog(@"Alert inserted successfully"); 
         }
         
         
-        if ( [application applicationState] == UIApplicationStateActive)
-        {
-            //App is running now
-            [viewController pushNotificationRcvedInForeground: camAlert];
-            
-        }
+        
+#if 0     
         
         if ( [application applicationState] == UIApplicationStateInactive)
         {
-#if 0
-            NSLog(@"LOGIN from appdelegate"); 
-            NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-			[userDefaults setBool:TRUE forKey:_AutoLogin];
-			[userDefaults synchronize];
             
-            
-			[viewController performSelectorOnMainThread:@selector(show_login_or_reg:)
-                                             withObject:nil
-                                          waitUntilDone:NO]; 
-#else
-            NSLog(@"Send status"); 
-            [self performSelectorOnMainThread:@selector(forceLogin) withObject:nil waitUntilDone:YES]; 
-            
-#endif 
+            NSLog(@"Re login"); 
+            [self performSelectorOnMainThread:@selector(forceLogin) withObject:nil waitUntilDone:YES];             
         }
         
-        
-#if 0
-        
+                
         if ([self shouldAlertForThisMac:str3])
         {
             NSLog(@" should Alert for this mac!! "); 
@@ -259,6 +235,9 @@
 	
 	NSLog(@"Enter foreground "); 
 	
+    
+    NSLog(@"Re login"); 
+    [self performSelectorOnMainThread:@selector(forceLogin) withObject:nil waitUntilDone:YES];   
 			
 		
 }

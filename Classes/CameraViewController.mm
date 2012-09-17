@@ -49,15 +49,21 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    
+    ///TEST 
+    
+    int viewCount = [self.navigationController.viewControllers count]; 
+    NSLog(@"View count = %d", viewCount); 
+    
+    /// TEST - END
+    
+    
 	// Do any additional setup after loading the view.
-    
-    
     [[NSNotificationCenter defaultCenter] addObserver: self
                                              selector: @selector(handleEnteredBackground) 
                                                  name: UIApplicationDidEnterBackgroundNotification
                                                object: nil];
-    
-    //TODO: UIApplicationWillEnterForegroundNotification
     
     
     self.navigationItem.backBarButtonItem =
@@ -175,6 +181,34 @@
     [self.navigationController setNavigationBarHidden:YES];
     [self checkOrientation];
 }
+
+
+
+- (void)viewWillDisappear:(BOOL)animated {
+    NSArray *viewControllers = self.navigationController.viewControllers;
+    if (viewControllers.count > 1 && [viewControllers objectAtIndex:viewControllers.count-2] == self) {
+        // View is disappearing because a new view controller was pushed onto the stack
+        NSLog(@"New view controller was pushed---> Settings");
+    } else if ([viewControllers indexOfObject:self] == NSNotFound) {
+        // View is disappearing because it was popped from the stack
+        NSLog(@"View controller was popped --- We are closing down.. killall video thread");
+        
+        if (streamer.recordInProgress == YES)
+            [streamer stopRecording];   
+        [streamer stopStreaming];
+        
+        //NSLog(@"abort remote timer ");
+        [self.selected_channel abortViewTimer];
+        
+        NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+        [userDefaults removeObjectForKey:CAM_IN_VEW];
+        [userDefaults synchronize];
+        
+
+        
+    }
+}
+
 -(void) checkOrientation 
 {
     NSLog(@"check orientation .... ");
@@ -350,8 +384,6 @@
     
     //NSLog(@"abort remote timer ");
     [self.selected_channel abortViewTimer];
-    
-
     
     [self.navigationController popToRootViewControllerAnimated:NO]; 
     

@@ -156,7 +156,7 @@
 
 -(IBAction)buttonCamPressed:(id)sender;
 
-
+-(void) goBackToCameraList;
 -(IBAction)silderMoved:(id)sender;
 
 //Video & Snapshot control

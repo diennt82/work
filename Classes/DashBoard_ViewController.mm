@@ -447,8 +447,9 @@ withConnDelegate:(id<ConnectionMethodDelegate> ) caller
         [userDefaults setObject:ch.profile.mac_address forKey:CAM_IN_VEW];
         [userDefaults synchronize];
         
+
+        CameraViewController * viewCamCtrl;  
         
-        CameraViewController * viewCamCtrl;
         viewCamCtrl = [[CameraViewController alloc] initWithNibName:@"CameraViewController"
                                                                bundle:nil];
         viewCamCtrl.selected_channel = ch;
@@ -505,7 +506,7 @@ withConnDelegate:(id<ConnectionMethodDelegate> ) caller
 
     
     [navController.navigationBar setBarStyle:UIBarStyleBlackTranslucent];
-    
+
     
     // Present the navigation controller on the specified parent 
     // view controller.
