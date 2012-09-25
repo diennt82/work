@@ -25,9 +25,10 @@
 
 @property (nonatomic, retain) RemoteIOPlayer *player;
 @property (nonatomic, retain) AudioRecorder * recorder;
+@property (nonatomic, retain) InMemoryAudioFile *inMemoryAudioFile;
 
-
--(void) Play;
+- (void) Play: (BOOL) recordEnabled;
+//-(void) Play;
 - (void) Stop;
 - (void) WritePCM:(unsigned char*)pcm length:(int)length;
 

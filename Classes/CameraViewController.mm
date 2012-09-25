@@ -1352,6 +1352,7 @@
             
             audioOut = [[AudioOutStreamer alloc] initWithDeviceIp:comm.device_ip 
 													   andPTTport:IRABOT_AUDIO_RECORDING_PORT];
+            [audioOut retain]; 
 			[audioOut connectToAudioSocket];
 
 			
@@ -1365,6 +1366,7 @@
             
             if (audioOut != nil)
 			{
+                NSLog(@"disconnect audio out "); 
 				[audioOut disconnectFromAudioSocket];
 				[audioOut release];
 			}

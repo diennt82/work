@@ -19,6 +19,9 @@
 //	[inMemoryAudioFile reset];
 	
 	//iInitialFlag = 0;
+    
+    player = nil; 
+    self = [super init]; 
 	return self;
 }
 
@@ -27,8 +30,10 @@
 	if(inMemoryAudioFile != nil) {
 		[inMemoryAudioFile release];
 	}
+    [player release];
 	[super dealloc];
 }
+
 - (void) startRecord
 {
 	if(iInitialFlag == 1)
@@ -40,7 +45,11 @@
 	}
 	[inMemoryAudioFile reset];
 	
-	[player setRecording_now:TRUE];
+    if (self.player != nil)
+    {
+                NSLog(@"AAA who call me bbb");
+        [self.player setRecording_now:TRUE];
+    }
 }
 
 - (void) stopRecord
@@ -48,7 +57,12 @@
 	//Delete all data in buffer; 
 	[inMemoryAudioFile flush];
 	
-	[player setRecording_now:FALSE];
+    if (self.player != nil)
+    {
+        
+        NSLog(@"AAA who call me");
+        [self.player setRecording_now:FALSE];
+    }
 	
 }
 

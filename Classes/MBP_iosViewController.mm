@@ -11,7 +11,7 @@
 #import <CFNetwork/CFNetwork.h>
 #import "MBP_FirstPage.h"
 #import "MBP_iosViewController.h"
-#import "MBP_CamView.h"
+//#import "MBP_CamView.h"
 #import "Util.h"
 #import "ADPCMDecoder.h"
 #import "AsyncUdpSocket.h"
@@ -27,8 +27,8 @@
 
 @implementation MBP_iosViewController
 
-@synthesize  mainMenuView;
-//@synthesize scan_results, next_profile_index;
+//@synthesize  mainMenuView;
+
 @synthesize toTakeSnapShot,recordInProgress ;
 @synthesize bc_addr,own_addr;
 
@@ -39,6 +39,8 @@
 @synthesize progressView;
 
 @synthesize shouldReloadWhenEnterBG;
+
+
 
 
 /*
@@ -64,7 +66,7 @@
 - (void) initialize 
 {
 
-	self.mainMenuView = nil;
+	//self.mainMenuView = nil;
 
 	shouldReloadWhenEnterBG = TRUE;
 	
@@ -177,7 +179,7 @@
 
 - (void)dealloc {
 
-	[mainMenuView release];
+	// [mainMenuView release];
 
 	[bc_addr release];
 	[own_addr release];

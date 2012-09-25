@@ -56,15 +56,19 @@
 {
 	NSLog(@"Streamer released called");
 	[self stopStreaming];
-	
-	//[super dealloc];
+	//[pcmPlayer release];
+    
+
 	[listenSocket release];
 	[responseData release];
 	[device_ip release];
-	// cant release as this is passed from outside	[videoImage release];
 	
+	
+    
 	[udtSocket release];
-	[pcmPlayer release];
+	
+    
+    
     [recTimer release];
     [streamingChannel  release] ; 
 	[super dealloc];
@@ -167,7 +171,7 @@
 		/* Start the player to playback & record */
 		pcmPlayer = [[PCMPlayer alloc] init];
 		[[pcmPlayer player] setPlay_now:FALSE];
-		[pcmPlayer Play];
+		[pcmPlayer Play:FALSE];
 		
 	}
 	else {
@@ -264,7 +268,7 @@
         /* Start the player to playback & record */
         pcmPlayer = [[PCMPlayer alloc] init];
         [[pcmPlayer player] setPlay_now:FALSE];
-        [pcmPlayer Play];
+        [pcmPlayer Play:FALSE];
         
     }
     else {
@@ -376,7 +380,7 @@
         /* Start the player to playback & record */
         pcmPlayer = [[PCMPlayer alloc] init];
         [[pcmPlayer player] setPlay_now:FALSE];
-        [pcmPlayer Play];
+        [pcmPlayer Play:FALSE];
         
     }
     else {
@@ -807,7 +811,8 @@
 		//process data
 		NSString* initialResponse = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
 		NSRange range = [initialResponse rangeOfString:AUTHENTICATION_ERROR];
-		if(range.location != NSNotFound) {
+		if(range.location != NSNotFound)
+        {
 			return;
 		}
 		[initialResponse release];
@@ -823,7 +828,9 @@
 		
 		buffer = [[NSMutableData alloc] init];
 		[buffer appendData:tmpData];
-	} else {
+	} 
+    else 
+    {
 		buffer = [[NSMutableData alloc] init];
 		[buffer appendData:responseData];
 		[buffer appendData:data];	

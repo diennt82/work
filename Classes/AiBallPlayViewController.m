@@ -107,7 +107,7 @@
 {
 	if(pcmPlayer == nil) {
 		pcmPlayer = [[PCMPlayer alloc] init];
-		[pcmPlayer Play];
+		[pcmPlayer Play:FALSE];
 		[[pcmPlayer player] setPlay_now:TRUE];
 	}
 	

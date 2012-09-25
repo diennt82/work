@@ -23,6 +23,9 @@
 	int device_port; 
 }
 
+
+@property (nonatomic, retain) PCMPlayer * pcmPlayer; 
+
 -(id) initWithDeviceIp:(NSString *) ip andPTTport: (int) port;
 
 - (void) connectToAudioSocket;

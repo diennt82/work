@@ -125,18 +125,14 @@
 		975341571431B4C20037DDAC /* IpAddress.c in Sources */ = {isa = PBXBuildFile; fileRef = 975341561431B4C20037DDAC /* IpAddress.c */; };
 		975342611432B8180037DDAC /* CamProfile.m in Sources */ = {isa = PBXBuildFile; fileRef = 975342601432B8180037DDAC /* CamProfile.m */; };
 		975343EF1432F88D0037DDAC /* AviRecord.m in Sources */ = {isa = PBXBuildFile; fileRef = 975343EE1432F88D0037DDAC /* AviRecord.m */; };
-		9753448D14330FBB0037DDAC /* MBP_MainMenuView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9753448C14330FBB0037DDAC /* MBP_MainMenuView.m */; };
 		9753451B143325610037DDAC /* AiBallVideoListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 97534519143325600037DDAC /* AiBallVideoListViewController.m */; };
 		9753451C143325610037DDAC /* AiBallVideoListViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9753451A143325600037DDAC /* AiBallVideoListViewController.xib */; };
 		9753452B143325C30037DDAC /* AiBallPlayViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 97534529143325C30037DDAC /* AiBallPlayViewController.m */; };
 		9753452C143325C30037DDAC /* AiBallPlayViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9753452A143325C30037DDAC /* AiBallPlayViewController.xib */; };
 		97534535143325EE0037DDAC /* AiBallAviPlayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 97534534143325EE0037DDAC /* AiBallAviPlayer.m */; };
-		9770CB7E143030A9009E69EF /* MBP_CamView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 9770CB7D143030A9009E69EF /* MBP_CamView.mm */; };
 		9770CBEC14303E3E009E69EF /* MBP_StatusBarView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9770CBEB14303E3E009E69EF /* MBP_StatusBarView.m */; };
 		9770CC0914304011009E69EF /* MBP_LeftSideMenuView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9770CC0814304011009E69EF /* MBP_LeftSideMenuView.m */; };
-		9770CC0C1430402C009E69EF /* MBP_MainCameraView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 9770CC0B1430402C009E69EF /* MBP_MainCameraView.mm */; };
 		9770CC311430533B009E69EF /* MBP_MulitCamView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 9770CC301430533B009E69EF /* MBP_MulitCamView.mm */; };
-		9770CD1514306B56009E69EF /* MBP_CamView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9770CD1414306B56009E69EF /* MBP_CamView.xib */; };
 		9770CD8D143073AE009E69EF /* ADPCMDecoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 9770CD86143073AE009E69EF /* ADPCMDecoder.m */; };
 		9770CD8E143073AE009E69EF /* AiBallBase64Encoding.m in Sources */ = {isa = PBXBuildFile; fileRef = 9770CD88143073AE009E69EF /* AiBallBase64Encoding.m */; };
 		9770CD8F143073AE009E69EF /* AsyncSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = 9770CD8A143073AE009E69EF /* AsyncSocket.m */; };
@@ -166,8 +162,6 @@
 		97A3BF4715453F69000C3546 /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 97A3BF4615453F69000C3546 /* CoreFoundation.framework */; };
 		97A3C00515455054000C3546 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 97A3C00415455054000C3546 /* SystemConfiguration.framework */; };
 		97B8F6671439B58000924E84 /* DeviceConfiguration.m in Sources */ = {isa = PBXBuildFile; fileRef = 97B8F6661439B58000924E84 /* DeviceConfiguration.m */; };
-		97B8F807143ADCC700924E84 /* MBP_MainSetupViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 97B8F805143ADCC700924E84 /* MBP_MainSetupViewController.mm */; };
-		97C061CD143AEDA30016286D /* MBP_MainSetupViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 97C061CC143AEDA30016286D /* MBP_MainSetupViewController.xib */; };
 		97C06252143AF5C80016286D /* MBP_DeviceConfigureViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 97C0624F143AF5C80016286D /* MBP_DeviceConfigureViewController.xib */; };
 		97C06253143AF5C80016286D /* MBP_DeviceConfigureViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 97C06251143AF5C80016286D /* MBP_DeviceConfigureViewController.mm */; };
 		97C0626A143AF6AC0016286D /* MBP_DeviceScanViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 97C06268143AF6AC0016286D /* MBP_DeviceScanViewController.m */; };
@@ -344,8 +338,6 @@
 		975342601432B8180037DDAC /* CamProfile.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CamProfile.m; sourceTree = "<group>"; };
 		975343ED1432F88D0037DDAC /* AviRecord.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AviRecord.h; sourceTree = "<group>"; };
 		975343EE1432F88D0037DDAC /* AviRecord.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AviRecord.m; sourceTree = "<group>"; };
-		9753448B14330FBB0037DDAC /* MBP_MainMenuView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MBP_MainMenuView.h; sourceTree = "<group>"; };
-		9753448C14330FBB0037DDAC /* MBP_MainMenuView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MBP_MainMenuView.m; sourceTree = "<group>"; };
 		97534518143325600037DDAC /* AiBallVideoListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AiBallVideoListViewController.h; sourceTree = "<group>"; };
 		97534519143325600037DDAC /* AiBallVideoListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AiBallVideoListViewController.m; sourceTree = "<group>"; };
 		9753451A143325600037DDAC /* AiBallVideoListViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = AiBallVideoListViewController.xib; sourceTree = "<group>"; };
@@ -355,17 +347,12 @@
 		97534533143325EE0037DDAC /* AiBallAviPlayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AiBallAviPlayer.h; sourceTree = "<group>"; };
 		97534534143325EE0037DDAC /* AiBallAviPlayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AiBallAviPlayer.m; sourceTree = "<group>"; };
 		97534538143326080037DDAC /* AiBallVideoSink.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AiBallVideoSink.h; sourceTree = "<group>"; };
-		9770CB7C143030A9009E69EF /* MBP_CamView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MBP_CamView.h; sourceTree = "<group>"; };
-		9770CB7D143030A9009E69EF /* MBP_CamView.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = MBP_CamView.mm; sourceTree = "<group>"; };
 		9770CBEA14303E3E009E69EF /* MBP_StatusBarView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MBP_StatusBarView.h; sourceTree = "<group>"; };
 		9770CBEB14303E3E009E69EF /* MBP_StatusBarView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MBP_StatusBarView.m; sourceTree = "<group>"; };
 		9770CC0714304011009E69EF /* MBP_LeftSideMenuView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MBP_LeftSideMenuView.h; sourceTree = "<group>"; };
 		9770CC0814304011009E69EF /* MBP_LeftSideMenuView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MBP_LeftSideMenuView.m; sourceTree = "<group>"; };
-		9770CC0A1430402C009E69EF /* MBP_MainCameraView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MBP_MainCameraView.h; sourceTree = "<group>"; };
-		9770CC0B1430402C009E69EF /* MBP_MainCameraView.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = MBP_MainCameraView.mm; sourceTree = "<group>"; };
 		9770CC2F1430533B009E69EF /* MBP_MulitCamView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MBP_MulitCamView.h; sourceTree = "<group>"; };
 		9770CC301430533B009E69EF /* MBP_MulitCamView.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = MBP_MulitCamView.mm; sourceTree = "<group>"; };
-		9770CD1414306B56009E69EF /* MBP_CamView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MBP_CamView.xib; sourceTree = "<group>"; };
 		9770CD67143071DA009E69EF /* PublicDefine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PublicDefine.h; sourceTree = "<group>"; };
 		9770CD85143073AE009E69EF /* ADPCMDecoder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ADPCMDecoder.h; sourceTree = "<group>"; };
 		9770CD86143073AE009E69EF /* ADPCMDecoder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ADPCMDecoder.m; sourceTree = "<group>"; };
@@ -417,9 +404,6 @@
 		97A3C00415455054000C3546 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		97B8F6651439B58000924E84 /* DeviceConfiguration.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DeviceConfiguration.h; sourceTree = "<group>"; };
 		97B8F6661439B58000924E84 /* DeviceConfiguration.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DeviceConfiguration.m; sourceTree = "<group>"; };
-		97B8F804143ADCC700924E84 /* MBP_MainSetupViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MBP_MainSetupViewController.h; sourceTree = "<group>"; };
-		97B8F805143ADCC700924E84 /* MBP_MainSetupViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = MBP_MainSetupViewController.mm; sourceTree = "<group>"; };
-		97C061CC143AEDA30016286D /* MBP_MainSetupViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MBP_MainSetupViewController.xib; sourceTree = "<group>"; };
 		97C0624F143AF5C80016286D /* MBP_DeviceConfigureViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MBP_DeviceConfigureViewController.xib; sourceTree = "<group>"; };
 		97C06250143AF5C80016286D /* MBP_DeviceConfigureViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MBP_DeviceConfigureViewController.h; sourceTree = "<group>"; };
 		97C06251143AF5C80016286D /* MBP_DeviceConfigureViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = MBP_DeviceConfigureViewController.mm; sourceTree = "<group>"; };
@@ -505,21 +489,14 @@
 				975343EE1432F88D0037DDAC /* AviRecord.m */,
 				97B8F6651439B58000924E84 /* DeviceConfiguration.h */,
 				97B8F6661439B58000924E84 /* DeviceConfiguration.m */,
-				9753448B14330FBB0037DDAC /* MBP_MainMenuView.h */,
-				9753448C14330FBB0037DDAC /* MBP_MainMenuView.m */,
 				9770CBEA14303E3E009E69EF /* MBP_StatusBarView.h */,
 				9770CBEB14303E3E009E69EF /* MBP_StatusBarView.m */,
 				9770CC0714304011009E69EF /* MBP_LeftSideMenuView.h */,
 				9770CC0814304011009E69EF /* MBP_LeftSideMenuView.m */,
 				978E1FAE155A7C4200743DE4 /* MBP_RightSideMenuView.m */,
 				978E1FAF155A7C4200743DE4 /* MBP_RightSideMenuView.h */,
-				9770CB7C143030A9009E69EF /* MBP_CamView.h */,
-				9770CB7D143030A9009E69EF /* MBP_CamView.mm */,
 				9770CC2F1430533B009E69EF /* MBP_MulitCamView.h */,
 				9770CC301430533B009E69EF /* MBP_MulitCamView.mm */,
-				97C061CC143AEDA30016286D /* MBP_MainSetupViewController.xib */,
-				97B8F804143ADCC700924E84 /* MBP_MainSetupViewController.h */,
-				97B8F805143ADCC700924E84 /* MBP_MainSetupViewController.mm */,
 				97987D2C154698100066C49B /* ConnectionMethodDelegate.h */,
 				97C06267143AF6AC0016286D /* MBP_DeviceScanViewController.h */,
 				97C06268143AF6AC0016286D /* MBP_DeviceScanViewController.m */,
@@ -542,8 +519,6 @@
 				97C49B331547B410008B7D03 /* MBP_CamListView.xib */,
 				97C49B801547BD52008B7D03 /* MBP_CamListView.h */,
 				97C49B811547BD52008B7D03 /* MBP_CamListView.m */,
-				97423427155BA503007DCBCD /* AudioOutStreamer.h */,
-				97423428155BA503007DCBCD /* AudioOutStreamer.m */,
 				97C0624F143AF5C80016286D /* MBP_DeviceConfigureViewController.xib */,
 				97C06250143AF5C80016286D /* MBP_DeviceConfigureViewController.h */,
 				97C06251143AF5C80016286D /* MBP_DeviceConfigureViewController.mm */,
@@ -604,8 +579,6 @@
 				978E9A801551313000B59E90 /* MBP_AddCamController.xib */,
 				9745CF611553FD5F00800CA6 /* MBP_AddCamController_4.xib */,
 				9745CF151553F01500800CA6 /* MBP_AddCamController_3.xib */,
-				9770CC0A1430402C009E69EF /* MBP_MainCameraView.h */,
-				9770CC0B1430402C009E69EF /* MBP_MainCameraView.mm */,
 				97987CD515468C2E0066C49B /* MBP_FirstPage.h */,
 				97987CD615468C2E0066C49B /* MBP_FirstPage.m */,
 				38CFFF5315BD100B009A2EE2 /* MBP_FirstPage.xib */,
@@ -618,8 +591,6 @@
 				38CE2A1015D4FA3600B8F7EC /* ForgotPwdViewController.h */,
 				38CE2A1115D4FA3700B8F7EC /* ForgotPwdViewController.m */,
 				38CE2A1215D4FA3700B8F7EC /* ForgotPwdViewController.xib */,
-				97F0F166143C45FA0076B749 /* MBP_Streamer.h */,
-				97F0F167143C45FA0076B749 /* MBP_Streamer.mm */,
 				97FE7D0E15998C0B000826F0 /* RemoteConnection.h */,
 				97FE7D0F15998C0B000826F0 /* RemoteConnection.mm */,
 				97F0F04A143C0CA00076B749 /* CamChannel.h */,
@@ -667,6 +638,10 @@
 				38A62E8615C8F03C00DEA520 /* SongTitleView.xib */,
 				38C79E2915C7C444006EE378 /* CameraViewController.h */,
 				38C79E2A15C7C446006EE378 /* CameraViewController.mm */,
+				97F0F166143C45FA0076B749 /* MBP_Streamer.h */,
+				97F0F167143C45FA0076B749 /* MBP_Streamer.mm */,
+				97423427155BA503007DCBCD /* AudioOutStreamer.h */,
+				97423428155BA503007DCBCD /* AudioOutStreamer.m */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -711,7 +686,6 @@
 				38362C1C15FDEE400077E188 /* alert_history.sqlite */,
 				97E3AAD5147E257400A0922A /* iTunesArtWork */,
 				9709A93415ECC3C300302C97 /* beep.wav */,
-				9770CD1414306B56009E69EF /* MBP_CamView.xib */,
 				2899E5210DE3E06400AC0155 /* MBP_iosViewController.xib */,
 				28AD733E0D9D9553002E5188 /* MainWindow.xib */,
 				8D1107310486CEB800E47090 /* MBP_ios-Info.plist */,
@@ -864,10 +838,8 @@
 				38362C1D15FDEE400077E188 /* alert_history.sqlite in Resources */,
 				28AD733F0D9D9553002E5188 /* MainWindow.xib in Resources */,
 				2899E5220DE3E06400AC0155 /* MBP_iosViewController.xib in Resources */,
-				9770CD1514306B56009E69EF /* MBP_CamView.xib in Resources */,
 				9753451C143325610037DDAC /* AiBallVideoListViewController.xib in Resources */,
 				9753452C143325C30037DDAC /* AiBallPlayViewController.xib in Resources */,
-				97C061CD143AEDA30016286D /* MBP_MainSetupViewController.xib in Resources */,
 				97C06252143AF5C80016286D /* MBP_DeviceConfigureViewController.xib in Resources */,
 				97C0626B143AF6AC0016286D /* MBP_DeviceScanViewController.xib in Resources */,
 				977D9A12143DA29100ABA946 /* MBP_RemoteAccessViewController.xib in Resources */,
@@ -972,10 +944,8 @@
 				1D60589B0D05DD56006BFB54 /* main.m in Sources */,
 				1D3623260D0F684500981E51 /* MBP_iosAppDelegate.mm in Sources */,
 				28D7ACF80DDB3853001CB0EB /* MBP_iosViewController.mm in Sources */,
-				9770CB7E143030A9009E69EF /* MBP_CamView.mm in Sources */,
 				9770CBEC14303E3E009E69EF /* MBP_StatusBarView.m in Sources */,
 				9770CC0914304011009E69EF /* MBP_LeftSideMenuView.m in Sources */,
-				9770CC0C1430402C009E69EF /* MBP_MainCameraView.mm in Sources */,
 				9770CC311430533B009E69EF /* MBP_MulitCamView.mm in Sources */,
 				9770CD8D143073AE009E69EF /* ADPCMDecoder.m in Sources */,
 				9770CD8E143073AE009E69EF /* AiBallBase64Encoding.m in Sources */,
@@ -989,12 +959,10 @@
 				975341571431B4C20037DDAC /* IpAddress.c in Sources */,
 				975342611432B8180037DDAC /* CamProfile.m in Sources */,
 				975343EF1432F88D0037DDAC /* AviRecord.m in Sources */,
-				9753448D14330FBB0037DDAC /* MBP_MainMenuView.m in Sources */,
 				9753451B143325610037DDAC /* AiBallVideoListViewController.m in Sources */,
 				9753452B143325C30037DDAC /* AiBallPlayViewController.m in Sources */,
 				97534535143325EE0037DDAC /* AiBallAviPlayer.m in Sources */,
 				97B8F6671439B58000924E84 /* DeviceConfiguration.m in Sources */,
-				97B8F807143ADCC700924E84 /* MBP_MainSetupViewController.mm in Sources */,
 				97C06253143AF5C80016286D /* MBP_DeviceConfigureViewController.mm in Sources */,
 				97C0626A143AF6AC0016286D /* MBP_DeviceScanViewController.m in Sources */,
 				97F0F04C143C0CA00076B749 /* CamChannel.m in Sources */,
@@ -1073,9 +1041,6 @@
 					"\"$(SRCROOT)/../openssl_lib/iPhoneOS-armv6/lib\"",
 				);
 				PRODUCT_NAME = MBP_ios;
-				PROVISIONING_PROFILE = "72F6C4FD-2E1C-476C-96F7-D7CE07C3BCFA";
-				"PROVISIONING_PROFILE[sdk=*]" = "72F6C4FD-2E1C-476C-96F7-D7CE07C3BCFA";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "72F6C4FD-2E1C-476C-96F7-D7CE07C3BCFA";
 				SDKROOT = iphoneos;
 				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/external_include/**";
 			};

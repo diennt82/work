@@ -23,10 +23,20 @@
 @synthesize recordedAudioFile;
 
 @synthesize recording_now, play_now;
+@synthesize  recordEnabled;
+@synthesize audioFormatR;
+@synthesize  audioUnit ;
 
-AudioComponentInstance audioUnit;
-AudioStreamBasicDescription audioFormat;
-AudioStreamBasicDescription audioFormatR;
+
+
+-(id) init
+{
+    self = [super init  ]; 
+    recordEnabled = FALSE;
+    recording_now = FALSE; 
+    play_now = FALSE;
+    return self; 
+}
 
 -(OSStatus)start{
 	
@@ -43,6 +53,7 @@ AudioStreamBasicDescription audioFormatR;
 #if DBG_AUDIO
 	 fclose(fp);
 #endif 
+
 	AudioUnitUninitialize(audioUnit);
 }
 
@@ -78,13 +89,13 @@ static OSStatus playbackCallback(void *inRefCon,
 	RemoteIOPlayer *remoteIOplayer = (RemoteIOPlayer *)inRefCon;
 	
 	
-	if ( (remoteIOplayer.play_now == FALSE) || 
-		(remoteIOplayer.inMemoryAudioFile == nil) )
+	if ( (remoteIOplayer.inMemoryAudioFile == nil)  ||
+        (remoteIOplayer.play_now == FALSE) )
 	{
 		
 		return noErr;
 	}
-	//NSLog(@"playback  #buffs %d" ,ioData->mNumberBuffers);
+	//NSLog(@"player ref  %p #buffs %d" ,remoteIOplayer, ioData->mNumberBuffers);
 	
 	//loop through all the buffers that need to be filled
 	for (int i = 0 ; i < ioData->mNumberBuffers; i++){
@@ -128,6 +139,8 @@ static OSStatus recordingCallback(void *inRefCon,
 		
 	RemoteIOPlayer *remoteIOplayer = (RemoteIOPlayer *)inRefCon;
 
+    //NSLog(@"recording ref  %p" ,remoteIOplayer);
+    
 	if ( (remoteIOplayer.recording_now == FALSE) || 
 		 (remoteIOplayer.recordedAudioFile == nil) )
 	{
@@ -145,11 +158,11 @@ static OSStatus recordingCallback(void *inRefCon,
 	
 	bufferList->mNumberBuffers = 1;
 	bufferList->mBuffers[0].mNumberChannels = 1;
-	bufferList->mBuffers[0].mDataByteSize = inNumberFrames * audioFormatR.mBytesPerFrame	;
-	bufferList->mBuffers[0].mData = malloc(inNumberFrames * audioFormatR.mBytesPerFrame);
+	bufferList->mBuffers[0].mDataByteSize = inNumberFrames * remoteIOplayer.audioFormatR.mBytesPerFrame	;
+	bufferList->mBuffers[0].mData = malloc(inNumberFrames * remoteIOplayer.audioFormatR.mBytesPerFrame);
 	
 
-	memset(bufferList->mBuffers[0].mData, 0, inNumberFrames * audioFormatR.mBytesPerFrame );
+	memset(bufferList->mBuffers[0].mData, 0, inNumberFrames * remoteIOplayer.audioFormatR.mBytesPerFrame );
 	
 	
     // Then:
@@ -157,7 +170,7 @@ static OSStatus recordingCallback(void *inRefCon,
 	
     OSStatus status;
 	
-    status = AudioUnitRender(audioUnit, 
+    status = AudioUnitRender(remoteIOplayer.audioUnit, 
                              ioActionFlags, 
                              inTimeStamp, 
                              inBusNumber, 
@@ -168,7 +181,7 @@ static OSStatus recordingCallback(void *inRefCon,
 
 	///IT WORKS !!!
 	[[remoteIOplayer recordedAudioFile] storePCMFrames_byte: bufferList->mBuffers[0].mData 
-											   withLen: (inNumberFrames*audioFormatR.mBytesPerFrame) ];
+											   withLen: (inNumberFrames*remoteIOplayer.audioFormatR.mBytesPerFrame) ];
 
 	
 #if 0 //DBG_AUDIO
@@ -209,12 +222,15 @@ static OSStatus recordingCallback(void *inRefCon,
 	UInt32 flag = 1;
 	
 #ifdef IRABOT_AUDIO_RECORDING_SUPPORT
-	status = AudioUnitSetProperty(audioUnit, 
-								  kAudioOutputUnitProperty_EnableIO, 
-								  kAudioUnitScope_Input, 
-								  kInputBus,
-								  &flag, 
-								  sizeof(flag));
+    if (self.recordEnabled == TRUE)
+    {
+        status = AudioUnitSetProperty(audioUnit, 
+                                      kAudioOutputUnitProperty_EnableIO, 
+                                      kAudioUnitScope_Input, 
+                                      kInputBus,
+                                      &flag, 
+                                      sizeof(flag));
+    }
 #endif
 
 	//disable playback 
@@ -232,27 +248,29 @@ static OSStatus recordingCallback(void *inRefCon,
 	
 	//Apply format
 #ifdef IRABOT_AUDIO_RECORDING_SUPPORT
-	
-	// Describe format
-	audioFormatR.mSampleRate		= 8000.00; //*/ 44100; 
-	audioFormatR.mFormatID			= kAudioFormatLinearPCM;
-	audioFormatR.mFormatFlags		= kAudioFormatFlagIsSignedInteger | kAudioFormatFlagIsPacked ;
-	audioFormatR.mFramesPerPacket	= 1;
-	audioFormatR.mChannelsPerFrame	= 1;
-	audioFormatR.mBitsPerChannel	= 16;
-	audioFormatR.mBytesPerPacket	= 2;
-	audioFormatR.mBytesPerFrame		= 2;
-	audioFormatR.mReserved		= 0;
-	
-	status = AudioUnitSetProperty(audioUnit, 
-								  kAudioUnitProperty_StreamFormat, 
-								  kAudioUnitScope_Output, 
-								  kInputBus, 
-								  &audioFormatR, 
-								  sizeof(audioFormatR));
-	
-	//NSLog(@"1 ret: %d", status);
-
+	if (self.recordEnabled == TRUE)
+    {
+        // Describe format
+        audioFormatR.mSampleRate		= 8000.00; //*/ 44100; 
+        audioFormatR.mFormatID			= kAudioFormatLinearPCM;
+        audioFormatR.mFormatFlags		= kAudioFormatFlagIsSignedInteger | kAudioFormatFlagIsPacked ;
+        audioFormatR.mFramesPerPacket	= 1;
+        audioFormatR.mChannelsPerFrame	= 1;
+        audioFormatR.mBitsPerChannel	= 16;
+        audioFormatR.mBytesPerPacket	= 2;
+        audioFormatR.mBytesPerFrame		= 2;
+        audioFormatR.mReserved		= 0;
+        
+        status = AudioUnitSetProperty(audioUnit, 
+                                      kAudioUnitProperty_StreamFormat, 
+                                      kAudioUnitScope_Output, 
+                                      kInputBus, 
+                                      &audioFormatR, 
+                                      sizeof(audioFormatR));
+        
+        //NSLog(@"1 ret: %d", status);
+        
+    }
 #endif 
 	
 	// Describe format
@@ -276,15 +294,17 @@ static OSStatus recordingCallback(void *inRefCon,
 	// Set input callback
 	AURenderCallbackStruct callbackStruct;
 #ifdef IRABOT_AUDIO_RECORDING_SUPPORT
-	callbackStruct.inputProc = recordingCallback;
-	callbackStruct.inputProcRefCon = self;
-	status = AudioUnitSetProperty(audioUnit, 
-								  kAudioOutputUnitProperty_SetInputCallback, 
-								  kAudioUnitScope_Global, 
-								  kInputBus, 
-								  &callbackStruct, 
-								  sizeof(callbackStruct));
-	
+    if (self.recordEnabled == TRUE)
+    {
+        callbackStruct.inputProc = recordingCallback;
+        callbackStruct.inputProcRefCon = self;
+        status = AudioUnitSetProperty(audioUnit, 
+                                      kAudioOutputUnitProperty_SetInputCallback, 
+                                      kAudioUnitScope_Global, 
+                                      kInputBus, 
+                                      &callbackStruct, 
+                                      sizeof(callbackStruct));
+	}
 #endif
 	
 	// Set up the playback  callback
@@ -301,14 +321,17 @@ static OSStatus recordingCallback(void *inRefCon,
 								  sizeof(callbackStruct));
 	
 #ifdef IRABOT_AUDIO_RECORDING_SUPPORT
-	// Disable buffer allocation for the recorder
-	flag = 0;
-	status = AudioUnitSetProperty(audioUnit, 
-								  kAudioUnitProperty_ShouldAllocateBuffer,
-								  kAudioUnitScope_Output, 
-								  kInputBus,
-								  &flag, 
-								  sizeof(flag));
+    if (self.recordEnabled == TRUE)
+    {
+        // Disable buffer allocation for the recorder
+        flag = 0;
+        status = AudioUnitSetProperty(audioUnit, 
+                                      kAudioUnitProperty_ShouldAllocateBuffer,
+                                      kAudioUnitScope_Output, 
+                                      kInputBus,
+                                      &flag, 
+                                      sizeof(flag));
+    }
 #endif 
 	
 	

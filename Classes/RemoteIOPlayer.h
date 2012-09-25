@@ -7,23 +7,37 @@
 //
 
 #import <Foundation/Foundation.h>
+#include <AudioUnit/AudioUnit.h>
+
 #import "PublicDefine.h"
 #import "InMemoryAudioFile.h"
 
-@interface RemoteIOPlayer : NSObject {
-	InMemoryAudioFile *inMemoryAudioFile;
-	
+@interface RemoteIOPlayer : NSObject 
+{
+	InMemoryAudioFile *inMemoryAudioFile;	
 	InMemoryAudioFile *recordedAudioFile;
+
+	BOOL recordEnabled; 
 	
-	BOOL recording_now; 
+    BOOL recording_now; 
 	BOOL play_now;
-	
-	}
+    
+    AudioComponentInstance audioUnit;
+    AudioStreamBasicDescription audioFormat;
+    AudioStreamBasicDescription audioFormatR;
+    
+
+
+}
+
+//@property (nonatomic, retain)  AudioStreamBasicDescription audioFormat;
+@property (nonatomic)  AudioStreamBasicDescription audioFormatR;
+@property (nonatomic) AudioComponentInstance audioUnit;
 
 @property (nonatomic, retain) InMemoryAudioFile *inMemoryAudioFile;
 
 @property (nonatomic, retain) InMemoryAudioFile *recordedAudioFile;
-@property (nonatomic) BOOL recording_now, play_now;
+@property (nonatomic) BOOL recording_now, play_now, recordEnabled;
 
 -(OSStatus)start;
 -(OSStatus)stop;

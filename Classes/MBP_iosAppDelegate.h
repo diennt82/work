@@ -18,6 +18,7 @@
 #define  ALERT_TYPE_TEMP_HI  @"2"
 #define  ALERT_TYPE_TEMP_LO @"3"
 
+@class MBP_iosViewController;
 
 @interface MBP_iosAppDelegate : NSObject <UIApplicationDelegate> {
     UIWindow *window;

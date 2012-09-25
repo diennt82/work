@@ -10,6 +10,8 @@
 
 
 @implementation AudioOutStreamer
+@synthesize pcmPlayer; 
+
 
 -(id) initWithDeviceIp:(NSString *) ip andPTTport: (int) port
 {
@@ -20,17 +22,26 @@
 	return self; 
 }
 
+-(void) dealloc
+{
+    [pcmPlayer release]; 
+    
+    [super dealloc]; 
+}
 
 /* Connect to the audio streaming socket to stream recorded data TO device */
 - (void) connectToAudioSocket 
 {
+
+    
+    
 	/* Start the player to playback & record */
-	pcmPlayer = [[PCMPlayer alloc] init];
+	self.pcmPlayer = [[PCMPlayer alloc] init];
 	pcm_data = [[NSMutableData alloc] init];
 	
-	[pcmPlayer Play];//initialize
-	[[pcmPlayer player] setPlay_now:FALSE];//disable playback 
-	[pcmPlayer.recorder startRecord];
+	[self.pcmPlayer Play:TRUE];//initialize
+	[[self.pcmPlayer player] setPlay_now:FALSE];//disable playback 
+	[self.pcmPlayer.recorder startRecord];
 	
 	sendingSocket = [[AsyncSocket alloc] initWithDelegate:self];
 	[sendingSocket setUserData:SOCKET_ID_SEND];
@@ -45,12 +56,16 @@
 
 - (void) disconnectFromAudioSocket
 {
+   
 	//disconnect 
-	if (pcmPlayer != nil)
+	if (self.pcmPlayer != nil)
 	{
-		[pcmPlayer.recorder stopRecord];
-		[pcmPlayer Stop];
-		[pcmPlayer release];
+         NSLog(@"pcmPlayer stop & release "); 
+        [[self.pcmPlayer player] setPlay_now:FALSE];
+		[self.pcmPlayer.recorder stopRecord];
+		[self.pcmPlayer Stop];
+		[self.pcmPlayer release];
+        self.pcmPlayer = nil; 
 	}
 	
 	if (voice_data_timer != nil)
@@ -87,7 +102,7 @@
 {
 	
 	/* read 2kb everytime */
-	[pcmPlayer.recorder.inMemoryAudioFile readBytesPCM:pcm_data 
+	[self.pcmPlayer.recorder.inMemoryAudioFile readBytesPCM:pcm_data 
 											withLength:2*1024]; //2*1024
 	
 	[sendingSocket writeData:pcm_data withTimeout:2 tag:SENDING_SOCKET_TAG];

@@ -11,23 +11,33 @@
 @implementation PCMPlayer
 
 @synthesize player;
-
 @synthesize recorder;
+@synthesize inMemoryAudioFile;
 
 
 - (id) init
 {
 	iInitialFlag = 1;
+    self = [super init]; 
+    recorder = nil;
+    player = nil; 
+    inMemoryAudioFile= nil; 
+    
+
+    
 	return self;
 }
 
 
-- (void) Play
+- (void) Play: (BOOL) recordEnabled
 {
 	if(iInitialFlag == 1)
 	{
 		//allocate the audio player
 		player = [[RemoteIOPlayer alloc]init];
+        
+        player.recordEnabled = recordEnabled; 
+        
 		//initialise the audio player
 		[player intialiseAudio];
 		inMemoryAudioFile = [[InMemoryAudioFile alloc]init];
@@ -66,21 +76,33 @@
 
 
 - (void)dealloc {
-    [super dealloc];
+    
+
+
+    
 	if (recorder != nil)
 	{
-		[recorder stopRecord];
+
+        //Dont call stop record here let whoever start it .. to stop it 
+		//[recorder stopRecord];
 		[recorder release];
+        recorder = nil; 
 	}
 	if(player != nil) {
+
+
 		[player cleanUp];
 		[player release];
 		player = nil;
 	}
 	if(inMemoryAudioFile != nil) {
+
 		[inMemoryAudioFile release];
 	}
-	
+    
+
+
+	[super dealloc];
    
 }
 @end

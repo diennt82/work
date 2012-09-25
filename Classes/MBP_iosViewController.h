@@ -8,10 +8,10 @@
 
 #import <UIKit/UIKit.h>
 #import <AVFoundation/AVFoundation.h>
-#import "MBP_CamView.h"
-#import "MBP_MainMenuView.h"
 
-#import "MBP_MainSetupViewController.h"
+
+
+
 #import "MBP_InitialSetupViewController.h"
 #import "AsyncSocket.h"
 #import "AviRecord.h"
@@ -62,7 +62,7 @@
 #define _triggeredByVox @"bool_Vox_Trigger"
 #define CAM_IN_VEW @"string_Camera_Mac_Being_Viewed"
 
-@interface MBP_iosViewController : UIViewController <SetupHttpDelegate, ConnectionMethodDelegate,UIActionSheetDelegate, ScanForCameraNotifier	> {
+@interface MBP_iosViewController : UIViewController < ConnectionMethodDelegate,UIActionSheetDelegate, ScanForCameraNotifier	> {
 
 	
 	
@@ -79,7 +79,7 @@
 
     
     ///IN USED
-    IBOutlet MBP_MainMenuView * mainMenuView;
+   // IBOutlet MBP_MainMenuView * mainMenuView;
 	IBOutlet UIView * progressView; 
 	
 	AviRecord* iRecorder;
@@ -112,7 +112,7 @@
 }
 
 @property (nonatomic, retain) IBOutlet UIView * progressView; 
-@property (nonatomic,retain) IBOutlet MBP_MainMenuView * mainMenuView;
+//@property (nonatomic,retain) IBOutlet MBP_MainMenuView * mainMenuView;
 
 //@property (nonatomic,retain) HttpCommunication *comm;
 
@@ -124,113 +124,22 @@
 @property (nonatomic, retain) NSMutableArray * restored_profiles ;
 
 
-@property (nonatomic, retain) NSTimer * fullScreenTimer, *alertTimer; 
-
-
-
+//@property (nonatomic, retain) NSTimer * fullScreenTimer, *alertTimer; 
 
 
 - (void) initialize ;
-
-- (IBAction) sideMenuButtonClicked:(id) sender;
-- (IBAction) mainMenuButtonClicked:(id) sender;
-
--(void) startConnect;
 - (void) scan_for_devices;
--(void) scan_for_devices_done:(NSMutableArray *) scan_results ;
-
-//-(void) switchToSingleCameraMode:(int) channel_number;
-
-- (void) setupDirectModeCamera; 
-- (void) disconnectRabot;
-
-- (void)onSocket:(AsyncSocket *)sock didReadData:(NSData *)data withTag:(long)tag;
-- (void)onSocket:(AsyncSocket *)sock willDisconnectWithError:(NSError *)err;
-- (void)onSocket:(AsyncSocket *)sock didConnectToHost:(NSString *)host port:(UInt16)port;
-- (void)onSocketDidDisconnect:(AsyncSocket *)sock;
-
 + (void)getBroadcastAddress:(NSString **) bcast AndOwnIp:(NSString**) ownip;
-
-
-
 - (NSString * ) requestURLSync:(NSString*)url withTimeOut:(NSTimeInterval) timeout;
 - (void ) requestURLSync_bg:(NSString*)url;
 
-- (void) PlayPCM:(NSData*)pcm;
-
-- (void) onMelody: (UIButton*) sender;
-- (void) set_Melody_bg: (NSString *) status;
-
-- (void)wakeup_display_main_cam:(NSTimer*) timer_exp;
-
-
-
-
-- (void) takeSnapShot:(UIImage *) image;
-- (void) startRecording;
-- (void) stopRecording;
-- (IBAction) handleLongPress: (UIGestureRecognizer *) sender;
-
-
-- (BOOL) toggle_walkie_talkie;
-- (void) set_Walkie_Talkie_bg: (NSString *) status;
-
-- (UIImage*)imageWithImage:(UIImage*)image 
-			  scaledToRect:(CGRect)newRect;
-
-
-
-- (void) updateVerticalDirection:(int)dir inStep: (uint) step withAnimation:(BOOL) animate;
-- (void) updateVerticalDirection_begin:(int)dir inStep: (uint) step;
-- (void) updateVerticalDirection_end:(int)dir inStep: (uint) step;
-
-- (void) updateHorizontalDirection:(int)dir inStep: (uint) step withAnimation:(BOOL) animate;
-- (void) updateHorizontalDirection_begin:(int)dir inStep: (uint) step;
-- (void) updateHorizontalDirection_end:(int)dir inStep: (uint) step;
-
-- (void) send_UD_dir_to_rabot:(int) direction;
-- (void) send_LR_dir_to_rabot:(int) direction;
-/* added to accommodate more delay for the first time detecting
- direction change */
-- (void) v_directional_change_callback:(NSTimer *) timer_exp;
-- (void) h_directional_change_callback:(NSTimer *) timer_exp;
-
-
 - (BOOL) restoreConfigData;
-- (void) get_current_melody:  (UIButton*)sender updateIcons: (NSArray*) img_array;
-- (void) set_current_melody_status:  (UIImageView*)sender updateIcons: (NSArray*) img_array;
-- (void) update_battery_and_wifi:(Byte) wifi_and_battery;
-
-
 
 -(void) startShowingCameraList;
 
-
-- (void) channelSelect: (UIGestureRecognizer *) sender;
--(void) setupInfraCamera:(CamChannel *) ch;
-
-- (IBAction) cameraListButtonClicked:(id) sender;
--(void) tryToShowFullScreen;
-- (void) showFullScreenNow: (NSTimer*) exp;
-- (void) showSideMenusAndStatus;
-- (void) showJoysticksOnly;
-- (IBAction) sideMenuButtonPressed:(id) sender;
-- (void) updateBatteryIcon;
 //delegate
 - (void)sendConfiguration:(DeviceConfiguration *) conf;
 - (void)sendStatus:(int) status;
-
--(void) waitForDirectCamera:(NSTimer *) exp;
-
--(void) remoteConnectionFailed:(CamChannel *) camChannel;
--(void) remoteConnectionSucceeded:(CamChannel *) camChannel;
--(void) prepareToViewRemotely:(CamChannel *) ch;
--(void) periodicPopup:(NSTimer *) exp;
-
--(void) stopPeriodicPopup;
-
-
-
 
 -(BOOL) pushNotificationRcvedInForeground:(CameraAlert *) camAlert;
 @end
