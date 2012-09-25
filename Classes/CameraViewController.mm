@@ -136,7 +136,8 @@
         
         ptt_enabled = TRUE; 
 
-        
+        //init the ptt port to default 
+        self.selected_channel.profile.ptt_port = IRABOT_AUDIO_RECORDING_PORT;
         
         
         [NSTimer scheduledTimerWithTimeInterval:2.0
@@ -248,7 +249,7 @@
 }
 - (void) willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
 {
-    NSLog(@"willRotateToInterfaceOrientation: %d" , toInterfaceOrientation);
+
     [self adjustViewsForOrientation:toInterfaceOrientation];
 }
 
@@ -275,7 +276,7 @@
         
 
         //Need to rotate the video - snashot tool bar
-        NSLog(@"Load  the video view in landscape");
+
         
 
         CGAffineTransform transform = CGAffineTransformMakeRotation(-M_PI_2);
@@ -303,15 +304,10 @@
     }
     else if (orientation == UIInterfaceOrientationPortrait || orientation == UIInterfaceOrientationPortraitUpsideDown) 
     {
-        NSLog(@"Load Portrait view");
+
         [[NSBundle mainBundle] loadNibNamed:@"CameraViewController" 
 									  owner:self 
 									options:nil];
-        
-
-        
-        
-        NSLog(@"Rotating zoom bar...");
         
         
         //Rotate the slider 
@@ -375,7 +371,6 @@
     UIButton * spk = (UIButton*) [self.view viewWithTag:SPK_CONTROL_BTN]; 
     if (spk != nil)
     {
-        NSLog(@"set button to selected state"); 
         spk.selected = self.streamer.disableAudio;
     }
     
@@ -596,15 +591,13 @@
         UIButton * spk = (UIButton*) [self.view viewWithTag:SPK_CONTROL_BTN]; 
         if (spk != nil)
         {
-            NSLog(@"simulate a button pressed "); 
+
             [spk sendActionsForControlEvents:UIControlEventTouchUpInside];
         }
         
         UIButton * ptt = (UIButton *) [self.view viewWithTag:PTT_CONTROL_BTN]; 
         if (ptt != nil)
         {
-            NSLog(@"set PTT disabled >>>> "); 
-
             ptt_enabled = FALSE; 
             ptt.selected = !ptt_enabled; 
         }
@@ -1388,7 +1381,7 @@
 								   withObject:[NSString stringWithFormat:@"%d",walkie_talkie_enabled]];
             
             audioOut = [[AudioOutStreamer alloc] initWithDeviceIp:comm.device_ip 
-													   andPTTport:IRABOT_AUDIO_RECORDING_PORT];
+													   andPTTport:self.selected_channel.profile.ptt_port];
             [audioOut retain]; 
 			[audioOut connectToAudioSocket];
 
@@ -1463,6 +1456,18 @@
         
         NSLog(@"stop PTT");
         [self setEnablePtt:NO];
+        
+        
+        
+        
+        UIButton * spk = (UIButton*) [self.view viewWithTag:SPK_CONTROL_BTN]; 
+        if (spk != nil && (self.streamer.disableAudio == TRUE))
+        {
+            //Toggle camera audio when ptt disabled 
+            NSLog(@"Toggle camera audio when ptt disabled ");
+            [spk sendActionsForControlEvents:UIControlEventTouchUpInside];
+        }
+        
     }
     
     
@@ -1496,6 +1501,7 @@
     {
         ptt_enabled = TRUE; 
         pttBtn.selected = FALSE; 
+        
         
     }
     

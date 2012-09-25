@@ -50,8 +50,11 @@
 	
 	int port = device_port;
 	
+    
+    NSLog(@"pTT to: %@:%d",device_ip, port);
+    
 	//Non-blocking connect
-	[sendingSocket connectToHost:ip onPort:port withTimeout:2 error:nil];
+	[sendingSocket connectToHost:ip onPort:port withTimeout:5 error:nil];
 }
 
 - (void) disconnectFromAudioSocket
@@ -117,7 +120,7 @@
 {
 
 	
-	if(port == IRABOT_AUDIO_RECORDING_PORT)
+	//if(port == IRABOT_AUDIO_RECORDING_PORT)
 	{
 
 		//Start sending the first 2Kb of data per 0.128 sec
@@ -129,6 +132,19 @@
 	}
 
 	
+}
+- (void)onSocket:(AsyncSocket *)sock willDisconnectWithError:(NSError *)err
+{
+	NSLog(@"AudioOutStreamer- connection failed with error:%d:%@" , 
+		  [err code], err);
+    UIAlertView *_alert = [[UIAlertView alloc]
+                           initWithTitle:@"Initializing Push-to-talk failed"
+                           message:err.localizedDescription 
+                           delegate:self
+                           cancelButtonTitle:@"OK"
+                           otherButtonTitles:nil];
+    [_alert show];
+    [_alert release];
 }
 
 - (void)onSocketDidDisconnect:(AsyncSocket *)sock

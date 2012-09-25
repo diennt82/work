@@ -47,7 +47,7 @@
 	
     if (self.player != nil)
     {
-                NSLog(@"AAA who call me bbb");
+               
         [self.player setRecording_now:TRUE];
     }
 }
@@ -60,7 +60,6 @@
     if (self.player != nil)
     {
         
-        NSLog(@"AAA who call me");
         [self.player setRecording_now:FALSE];
     }
 	
