@@ -37,6 +37,8 @@
 		3812F83915C8C3EE00DADFA6 /* bb_check_list.png in Resources */ = {isa = PBXBuildFile; fileRef = 3812F83815C8C3EE00DADFA6 /* bb_check_list.png */; };
 		3812F83B15C8C49000DADFA6 /* bb_line.png in Resources */ = {isa = PBXBuildFile; fileRef = 3812F83A15C8C49000DADFA6 /* bb_line.png */; };
 		3812F84115C8DB5600DADFA6 /* CameraViewController_land.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3812F84015C8DB5600DADFA6 /* CameraViewController_land.xib */; };
+		38167AC216118DB600B7FA0A /* bb_pic_2.png in Resources */ = {isa = PBXBuildFile; fileRef = 38167AC116118DB600B7FA0A /* bb_pic_2.png */; };
+		38167AC51611AB1800B7FA0A /* bb_ptt_icon_d.png in Resources */ = {isa = PBXBuildFile; fileRef = 38167AC41611AB1700B7FA0A /* bb_ptt_icon_d.png */; };
 		38355AE715CB76630045909C /* Account_ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 38355AE515CB76630045909C /* Account_ViewController.m */; };
 		38355AE815CB76630045909C /* Account_ViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 38355AE615CB76630045909C /* Account_ViewController.xib */; };
 		38362C1D15FDEE400077E188 /* alert_history.sqlite in Resources */ = {isa = PBXBuildFile; fileRef = 38362C1C15FDEE400077E188 /* alert_history.sqlite */; };
@@ -130,9 +132,6 @@
 		9753452B143325C30037DDAC /* AiBallPlayViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 97534529143325C30037DDAC /* AiBallPlayViewController.m */; };
 		9753452C143325C30037DDAC /* AiBallPlayViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9753452A143325C30037DDAC /* AiBallPlayViewController.xib */; };
 		97534535143325EE0037DDAC /* AiBallAviPlayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 97534534143325EE0037DDAC /* AiBallAviPlayer.m */; };
-		9770CBEC14303E3E009E69EF /* MBP_StatusBarView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9770CBEB14303E3E009E69EF /* MBP_StatusBarView.m */; };
-		9770CC0914304011009E69EF /* MBP_LeftSideMenuView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9770CC0814304011009E69EF /* MBP_LeftSideMenuView.m */; };
-		9770CC311430533B009E69EF /* MBP_MulitCamView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 9770CC301430533B009E69EF /* MBP_MulitCamView.mm */; };
 		9770CD8D143073AE009E69EF /* ADPCMDecoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 9770CD86143073AE009E69EF /* ADPCMDecoder.m */; };
 		9770CD8E143073AE009E69EF /* AiBallBase64Encoding.m in Sources */ = {isa = PBXBuildFile; fileRef = 9770CD88143073AE009E69EF /* AiBallBase64Encoding.m */; };
 		9770CD8F143073AE009E69EF /* AsyncSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = 9770CD8A143073AE009E69EF /* AsyncSocket.m */; };
@@ -146,7 +145,6 @@
 		9770CEC81430783A009E69EF /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9770CEC71430783A009E69EF /* CFNetwork.framework */; };
 		977D9A11143DA29100ABA946 /* MBP_RemoteAccessViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 977D9A0F143DA29100ABA946 /* MBP_RemoteAccessViewController.m */; };
 		977D9A12143DA29100ABA946 /* MBP_RemoteAccessViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 977D9A10143DA29100ABA946 /* MBP_RemoteAccessViewController.xib */; };
-		978E1FB0155A7C4200743DE4 /* MBP_RightSideMenuView.m in Sources */ = {isa = PBXBuildFile; fileRef = 978E1FAE155A7C4200743DE4 /* MBP_RightSideMenuView.m */; };
 		978E9A811551313000B59E90 /* MBP_AddCamController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 978E9A7F1551313000B59E90 /* MBP_AddCamController.mm */; };
 		978E9A821551313000B59E90 /* MBP_AddCamController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 978E9A801551313000B59E90 /* MBP_AddCamController.xib */; };
 		97987CCD154687490066C49B /* background.png in Resources */ = {isa = PBXBuildFile; fileRef = 97987CCC154687490066C49B /* background.png */; };
@@ -221,6 +219,8 @@
 		3812F83815C8C3EE00DADFA6 /* bb_check_list.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bb_check_list.png; sourceTree = "<group>"; };
 		3812F83A15C8C49000DADFA6 /* bb_line.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bb_line.png; sourceTree = "<group>"; };
 		3812F84015C8DB5600DADFA6 /* CameraViewController_land.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CameraViewController_land.xib; sourceTree = "<group>"; };
+		38167AC116118DB600B7FA0A /* bb_pic_2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bb_pic_2.png; sourceTree = "<group>"; };
+		38167AC41611AB1700B7FA0A /* bb_ptt_icon_d.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bb_ptt_icon_d.png; sourceTree = "<group>"; };
 		38355AE415CB76630045909C /* Account_ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Account_ViewController.h; sourceTree = "<group>"; };
 		38355AE515CB76630045909C /* Account_ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Account_ViewController.m; sourceTree = "<group>"; };
 		38355AE615CB76630045909C /* Account_ViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = Account_ViewController.xib; sourceTree = "<group>"; };
@@ -347,12 +347,6 @@
 		97534533143325EE0037DDAC /* AiBallAviPlayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AiBallAviPlayer.h; sourceTree = "<group>"; };
 		97534534143325EE0037DDAC /* AiBallAviPlayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AiBallAviPlayer.m; sourceTree = "<group>"; };
 		97534538143326080037DDAC /* AiBallVideoSink.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AiBallVideoSink.h; sourceTree = "<group>"; };
-		9770CBEA14303E3E009E69EF /* MBP_StatusBarView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MBP_StatusBarView.h; sourceTree = "<group>"; };
-		9770CBEB14303E3E009E69EF /* MBP_StatusBarView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MBP_StatusBarView.m; sourceTree = "<group>"; };
-		9770CC0714304011009E69EF /* MBP_LeftSideMenuView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MBP_LeftSideMenuView.h; sourceTree = "<group>"; };
-		9770CC0814304011009E69EF /* MBP_LeftSideMenuView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MBP_LeftSideMenuView.m; sourceTree = "<group>"; };
-		9770CC2F1430533B009E69EF /* MBP_MulitCamView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MBP_MulitCamView.h; sourceTree = "<group>"; };
-		9770CC301430533B009E69EF /* MBP_MulitCamView.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = MBP_MulitCamView.mm; sourceTree = "<group>"; };
 		9770CD67143071DA009E69EF /* PublicDefine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PublicDefine.h; sourceTree = "<group>"; };
 		9770CD85143073AE009E69EF /* ADPCMDecoder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ADPCMDecoder.h; sourceTree = "<group>"; };
 		9770CD86143073AE009E69EF /* ADPCMDecoder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ADPCMDecoder.m; sourceTree = "<group>"; };
@@ -376,8 +370,6 @@
 		977D9A0E143DA29100ABA946 /* MBP_RemoteAccessViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MBP_RemoteAccessViewController.h; sourceTree = "<group>"; };
 		977D9A0F143DA29100ABA946 /* MBP_RemoteAccessViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MBP_RemoteAccessViewController.m; sourceTree = "<group>"; };
 		977D9A10143DA29100ABA946 /* MBP_RemoteAccessViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MBP_RemoteAccessViewController.xib; sourceTree = "<group>"; };
-		978E1FAE155A7C4200743DE4 /* MBP_RightSideMenuView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MBP_RightSideMenuView.m; sourceTree = "<group>"; };
-		978E1FAF155A7C4200743DE4 /* MBP_RightSideMenuView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MBP_RightSideMenuView.h; sourceTree = "<group>"; };
 		978E9A7E1551313000B59E90 /* MBP_AddCamController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MBP_AddCamController.h; sourceTree = "<group>"; };
 		978E9A7F1551313000B59E90 /* MBP_AddCamController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = MBP_AddCamController.mm; sourceTree = "<group>"; };
 		978E9A801551313000B59E90 /* MBP_AddCamController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MBP_AddCamController.xib; sourceTree = "<group>"; };
@@ -489,14 +481,6 @@
 				975343EE1432F88D0037DDAC /* AviRecord.m */,
 				97B8F6651439B58000924E84 /* DeviceConfiguration.h */,
 				97B8F6661439B58000924E84 /* DeviceConfiguration.m */,
-				9770CBEA14303E3E009E69EF /* MBP_StatusBarView.h */,
-				9770CBEB14303E3E009E69EF /* MBP_StatusBarView.m */,
-				9770CC0714304011009E69EF /* MBP_LeftSideMenuView.h */,
-				9770CC0814304011009E69EF /* MBP_LeftSideMenuView.m */,
-				978E1FAE155A7C4200743DE4 /* MBP_RightSideMenuView.m */,
-				978E1FAF155A7C4200743DE4 /* MBP_RightSideMenuView.h */,
-				9770CC2F1430533B009E69EF /* MBP_MulitCamView.h */,
-				9770CC301430533B009E69EF /* MBP_MulitCamView.mm */,
 				97987D2C154698100066C49B /* ConnectionMethodDelegate.h */,
 				97C06267143AF6AC0016286D /* MBP_DeviceScanViewController.h */,
 				97C06268143AF6AC0016286D /* MBP_DeviceScanViewController.m */,
@@ -718,6 +702,7 @@
 		3812F82315C8BEC700DADFA6 /* images13 */ = {
 			isa = PBXGroup;
 			children = (
+				38167AC116118DB600B7FA0A /* bb_pic_2.png */,
 				3803A8781602D44100B4DD97 /* temp_alert.png */,
 				3803A8791602D44100B4DD97 /* voice_alert.png */,
 				3803A8751601981100B4DD97 /* photo_item.png */,
@@ -755,6 +740,7 @@
 				3812F83115C8BFC900DADFA6 /* circle_buttons1_rt.png */,
 				3812F83215C8BFC900DADFA6 /* circle_buttons1_up.png */,
 				3812F82715C8BF3600DADFA6 /* bb_ptt_icon.png */,
+				38167AC41611AB1700B7FA0A /* bb_ptt_icon_d.png */,
 				3812F82815C8BF3600DADFA6 /* bb_snap_icon.png */,
 				3812F82915C8BF3600DADFA6 /* bb_spk_icon.png */,
 				38A62E8C15C92BDF00DEA520 /* bb_spk_icon_d.png */,
@@ -928,6 +914,8 @@
 				3803A87A1602D44100B4DD97 /* temp_alert.png in Resources */,
 				3803A87B1602D44100B4DD97 /* voice_alert.png in Resources */,
 				3803A87D16031F6300B4DD97 /* AlertSettingView.xib in Resources */,
+				38167AC216118DB600B7FA0A /* bb_pic_2.png in Resources */,
+				38167AC51611AB1800B7FA0A /* bb_ptt_icon_d.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -944,9 +932,6 @@
 				1D60589B0D05DD56006BFB54 /* main.m in Sources */,
 				1D3623260D0F684500981E51 /* MBP_iosAppDelegate.mm in Sources */,
 				28D7ACF80DDB3853001CB0EB /* MBP_iosViewController.mm in Sources */,
-				9770CBEC14303E3E009E69EF /* MBP_StatusBarView.m in Sources */,
-				9770CC0914304011009E69EF /* MBP_LeftSideMenuView.m in Sources */,
-				9770CC311430533B009E69EF /* MBP_MulitCamView.mm in Sources */,
 				9770CD8D143073AE009E69EF /* ADPCMDecoder.m in Sources */,
 				9770CD8E143073AE009E69EF /* AiBallBase64Encoding.m in Sources */,
 				9770CD8F143073AE009E69EF /* AsyncSocket.m in Sources */,
@@ -979,7 +964,6 @@
 				97C49B821547BD52008B7D03 /* MBP_CamListView.m in Sources */,
 				978E9A811551313000B59E90 /* MBP_AddCamController.mm in Sources */,
 				9745CE5D1553CF9200800CA6 /* ScanForCamera.mm in Sources */,
-				978E1FB0155A7C4200743DE4 /* MBP_RightSideMenuView.m in Sources */,
 				97423429155BA503007DCBCD /* AudioOutStreamer.m in Sources */,
 				9719EC5C155C9F30005419FC /* MBP_MenuViewController.mm in Sources */,
 				97FE7D1015998C0B000826F0 /* RemoteConnection.mm in Sources */,

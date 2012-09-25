@@ -22,7 +22,7 @@
 @synthesize  zoombar; 
 @synthesize  currentZoomLvl; 
 
-@synthesize  ptt_disabled, spk_disabled;
+@synthesize  ptt_enabled;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -134,8 +134,9 @@
 
         currentZoomLvl = 0; 
         
-        ptt_disabled = FALSE; 
-        spk_disabled = FALSE; 
+        ptt_enabled = TRUE; 
+
+        
         
         
         [NSTimer scheduledTimerWithTimeInterval:2.0
@@ -255,11 +256,13 @@
 {
 
     BOOL shouldShowProgress = FALSE; 
-    
+
     if (progressView.hidden == NO)
     {
         shouldShowProgress = TRUE; 
     }
+   
+   
     
     
     if (orientation == UIInterfaceOrientationLandscapeLeft || orientation == UIInterfaceOrientationLandscapeRight) 
@@ -367,7 +370,23 @@
     lullabyView.layer.cornerRadius = 5;
     lullabyView.layer.masksToBounds = YES;
     
-
+    
+   
+    UIButton * spk = (UIButton*) [self.view viewWithTag:SPK_CONTROL_BTN]; 
+    if (spk != nil)
+    {
+        NSLog(@"set button to selected state"); 
+        spk.selected = self.streamer.disableAudio;
+    }
+    
+    
+    
+    UIButton * ptt = (UIButton *) [self.view viewWithTag:PTT_CONTROL_BTN]; 
+    if (ptt != nil &&  (ptt_enabled == FALSE ))
+    {
+        ptt.selected = !ptt_enabled; 
+    }
+    
     
 }
 
@@ -569,10 +588,31 @@
 	[userDefaults synchronize]; 
     
     
-	NSLog(@"End of setupInfraCamera"); 
-	
 	
     
+    //Disable speaker for remote connections
+    if (ch.profile.isInLocal != TRUE)
+    {
+        UIButton * spk = (UIButton*) [self.view viewWithTag:SPK_CONTROL_BTN]; 
+        if (spk != nil)
+        {
+            NSLog(@"simulate a button pressed "); 
+            [spk sendActionsForControlEvents:UIControlEventTouchUpInside];
+        }
+        
+        UIButton * ptt = (UIButton *) [self.view viewWithTag:PTT_CONTROL_BTN]; 
+        if (ptt != nil)
+        {
+            NSLog(@"set PTT disabled >>>> "); 
+
+            ptt_enabled = FALSE; 
+            ptt.selected = !ptt_enabled; 
+        }
+        
+    }
+	
+	
+    NSLog(@"End of setupInfraCamera"); 
 }
 
 #pragma mark -
@@ -1271,10 +1311,7 @@
             if (([btn state] &  UIControlStateSelected )== UIControlStateSelected)
             {
                 btn.selected = NO;
-                
-                
-                
-                
+                                
             }
             else
             {   
@@ -1452,9 +1489,20 @@
         return; 
     }
     
+    UIButton * pttBtn  = (UIButton *) sender; 
+    int tag = pttBtn.tag; 
+
+    if (ptt_enabled == FALSE)
+    {
+        ptt_enabled = TRUE; 
+        pttBtn.selected = FALSE; 
+        
+    }
     
-    int tag = ((UIView *) sender).tag; 
     
+    
+    
+        
     switch (tag)
     {
         case PTT_CONTROL_BTN:

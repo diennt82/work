@@ -385,6 +385,7 @@
 	
 	NSString *authHeader = [@"Basic " stringByAppendingFormat:@"%@", [Util getDFCredentials]];  
 	
+#if 0 //NO LONGER need to use password
 	NSString * macc = [CameraPassword fetchBSSIDInfo];
 	if (macc != nil)
 	{
@@ -405,7 +406,8 @@
 		authHeader = [@"Basic " stringByAppendingFormat:@"%@", newCred];  
 		
 	}
-	
+#endif 
+    
 	@synchronized(self)
 	{
 		

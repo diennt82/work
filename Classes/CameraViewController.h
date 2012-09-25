@@ -134,7 +134,7 @@
     
     CGFloat currentZoomLvl; 
     
-    BOOL ptt_disabled, spk_disabled; 
+    BOOL ptt_enabled; 
     
     
 }
@@ -148,7 +148,7 @@
 @property (nonatomic, retain) NSTimer * alertTimer; 
 @property (nonatomic, assign) UISlider * zoombar; 
 @property (nonatomic) float currentZoomLvl; 
-@property (nonatomic) BOOL ptt_disabled, spk_disabled; 
+@property (nonatomic) BOOL ptt_enabled; 
 
 
 -(IBAction)buttonMelodyPressed:(id) sender;
