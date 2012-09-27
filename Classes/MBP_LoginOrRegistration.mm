@@ -304,7 +304,7 @@
 
 -(void) doneAction:(id) sender
 {
-    NSLog(@"aaa"); 
+   
     [userName resignFirstResponder];
     [password resignFirstResponder];
     

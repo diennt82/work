@@ -29,6 +29,7 @@
     IBOutlet UITableView * alertSettingTableView;
     IBOutlet UIView * alertSettingView;
     IBOutlet UILabel * alertSettingViewTitle;
+    IBOutlet UIView * progressView; 
     
     NSArray * listOfChannel; 
     

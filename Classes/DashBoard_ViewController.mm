@@ -160,9 +160,7 @@ withConnDelegate:(id<ConnectionMethodDelegate> ) caller
     
     self.editModeEnabled = FALSE;
     
-    
-   
-    
+       
     if (isOffline == YES)
     {
         NSLog(@"OFFLINE OFFLINE OFFLINE");
@@ -611,13 +609,19 @@ withConnDelegate:(id<ConnectionMethodDelegate> ) caller
     
     
     [self.view addSubview:alertSettingView]; 
+    [self.view addSubview:progressView]; 
+    
     [self.view bringSubviewToFront:alertSettingView]; 
+    
+    //[self.view bringSubviewToFront:progressView]; 
+    
     
     alertSettingViewTitle.text = ch.profile.name;
     
     
     AlertSettingAdaptor * settingAdaptor; 
     settingAdaptor = [[AlertSettingAdaptor alloc] initWithCam:ch.profile]; 
+    settingAdaptor.progressView = progressView;
     alertSettingTableView.dataSource = settingAdaptor;
     alertSettingTableView.delegate = settingAdaptor;
     
@@ -627,6 +631,7 @@ withConnDelegate:(id<ConnectionMethodDelegate> ) caller
 {
     ///Close 
     [alertSettingView removeFromSuperview]; 
+    [progressView removeFromSuperview];
 }
 
 

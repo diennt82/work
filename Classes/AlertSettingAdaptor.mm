@@ -12,7 +12,7 @@
 
 @synthesize soundCellView, tempHiCellView,  tempLoCellView;
 
-
+@synthesize  progressView;
 
 -(id) init
 {
@@ -106,41 +106,57 @@
     }
     else
     {
-         NSLog(@"update sound alert");
-        NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-        NSString * user_pass = (NSString *) [userDefaults objectForKey:@"PortalPassword"];
-        NSString * user_email  = (NSString*)[userDefaults objectForKey:@"PortalUseremail"];
-        NSString * devTokenStr =(NSString*) [userDefaults objectForKey:_push_dev_token];
         
-        BMS_Communication * bms_alerts = [[BMS_Communication alloc] initWithObject:self
-                                                                          Selector:nil 
-                                                                      FailSelector:nil 
-                                                                         ServerErr:nil];
-        if (alertSw.isOn)
-        {
-            //call get camlist query here 
-            NSData* responseData = [bms_alerts BMS_enabledAlertBlockWithUser:user_email 
-                                                                     AndPass:user_pass 
-                                                                       regId:devTokenStr 
-                                                                       ofMac:camera.mac_address
-                                                                   alertType:ALERT_TYPE_SOUND];
-        }
-        else 
-        {
-            //call get camlist query here 
-            NSData* responseData = [bms_alerts BMS_disabledAlertBlockWithUser:user_email 
-                                                                     AndPass:user_pass 
-                                                                       regId:devTokenStr 
-                                                                       ofMac:camera.mac_address
-                                                                   alertType:ALERT_TYPE_SOUND];
-
-        }
+        progressView.hidden = NO; 
+        [[progressView superview] bringSubviewToFront:progressView];
         
-        camera.soundAlertEnabled  =  alertSw.isOn;
-       
+        
+        [NSTimer scheduledTimerWithTimeInterval:0.1 target:self 
+                                       selector:@selector(updateSoundAlert:) 
+                                       userInfo:alertSw 
+                                        repeats:NO];
         
     }
 }
+
+-(void) updateSoundAlert:(NSTimer *) exp
+{
+    UISwitch * alertSw = (UISwitch *) exp.userInfo;
+ NSLog(@"update sound alert");
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    NSString * user_pass = (NSString *) [userDefaults objectForKey:@"PortalPassword"];
+    NSString * user_email  = (NSString*)[userDefaults objectForKey:@"PortalUseremail"];
+    NSString * devTokenStr =(NSString*) [userDefaults objectForKey:_push_dev_token];
+    
+    BMS_Communication * bms_alerts = [[BMS_Communication alloc] initWithObject:self
+                                                                      Selector:nil 
+                                                                  FailSelector:nil 
+                                                                     ServerErr:nil];
+    if (alertSw.isOn)
+    {
+        //call get camlist query here 
+        NSData* responseData = [bms_alerts BMS_enabledAlertBlockWithUser:user_email 
+                                                                 AndPass:user_pass 
+                                                                   regId:devTokenStr 
+                                                                   ofMac:camera.mac_address
+                                                               alertType:ALERT_TYPE_SOUND];
+    }
+    else 
+    {
+        //call get camlist query here 
+        NSData* responseData = [bms_alerts BMS_disabledAlertBlockWithUser:user_email 
+                                                                  AndPass:user_pass 
+                                                                    regId:devTokenStr 
+                                                                    ofMac:camera.mac_address
+                                                                alertType:ALERT_TYPE_SOUND];
+        
+    }
+    
+    camera.soundAlertEnabled  =  alertSw.isOn;
+    progressView.hidden = YES;         
+
+}
+
 -(IBAction)tempHiAlertChanged   :(id)sender
 {
     UISwitch * alertSw = (UISwitch *) sender;
@@ -150,44 +166,62 @@
     }
     else
     {
-                NSLog(@"update temmp hi alert");
-        NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-        NSString * user_pass = (NSString *) [userDefaults objectForKey:@"PortalPassword"];
-        NSString * user_email  = (NSString*)[userDefaults objectForKey:@"PortalUseremail"];
-        NSString * devTokenStr =(NSString*) [userDefaults objectForKey:_push_dev_token];
+              
+        progressView.hidden = NO; 
+        [[progressView superview] bringSubviewToFront:progressView];
         
-        BMS_Communication * bms_alerts = [[BMS_Communication alloc] initWithObject:self
-                                                                          Selector:nil 
-                                                                      FailSelector:nil 
-                                                                         ServerErr:nil];
         
-        if (alertSw.isOn)
-        {
-            //call get camlist query here 
-            NSData* responseData = [bms_alerts BMS_enabledAlertBlockWithUser:user_email 
-                                                                     AndPass:user_pass 
-                                                                       regId:devTokenStr 
-                                                                       ofMac:camera.mac_address
-                                                                   alertType:ALERT_TYPE_TEMP_HI];
-        }
-        else 
-        {
-            //call get camlist query here 
-            NSData* responseData = [bms_alerts BMS_disabledAlertBlockWithUser:user_email 
-                                                                      AndPass:user_pass 
-                                                                        regId:devTokenStr 
-                                                                        ofMac:camera.mac_address
-                                                                    alertType:ALERT_TYPE_TEMP_HI];
-            
-        }
-        
-        camera.tempHiAlertEnabled  =  alertSw.isOn;
+        [NSTimer scheduledTimerWithTimeInterval:0.1 target:self 
+                                       selector:@selector(updateTempHiAlert:) 
+                                       userInfo:alertSw 
+                                        repeats:NO];
         
 
-            
+                   
     }
 }
 
+-(void) updateTempHiAlert:(NSTimer *) exp
+{
+    
+    UISwitch * alertSw = (UISwitch *) exp.userInfo;
+    
+      NSLog(@"update temmp hi alert");
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    NSString * user_pass = (NSString *) [userDefaults objectForKey:@"PortalPassword"];
+    NSString * user_email  = (NSString*)[userDefaults objectForKey:@"PortalUseremail"];
+    NSString * devTokenStr =(NSString*) [userDefaults objectForKey:_push_dev_token];
+    
+    BMS_Communication * bms_alerts = [[BMS_Communication alloc] initWithObject:self
+                                                                      Selector:nil 
+                                                                  FailSelector:nil 
+                                                                     ServerErr:nil];
+    
+    if (alertSw.isOn)
+    {
+        //call get camlist query here 
+        NSData* responseData = [bms_alerts BMS_enabledAlertBlockWithUser:user_email 
+                                                                 AndPass:user_pass 
+                                                                   regId:devTokenStr 
+                                                                   ofMac:camera.mac_address
+                                                               alertType:ALERT_TYPE_TEMP_HI];
+    }
+    else 
+    {
+        //call get camlist query here 
+        NSData* responseData = [bms_alerts BMS_disabledAlertBlockWithUser:user_email 
+                                                                  AndPass:user_pass 
+                                                                    regId:devTokenStr 
+                                                                    ofMac:camera.mac_address
+                                                                alertType:ALERT_TYPE_TEMP_HI];
+        
+    }
+    
+    camera.tempHiAlertEnabled  =  alertSw.isOn;
+    
+    progressView.hidden = YES;  
+    
+}
 -(IBAction)tempLoAlertChanged   :(id)sender
 {
     UISwitch * alertSw = (UISwitch *) sender;
@@ -197,40 +231,57 @@
     }
     else
     {
-        NSLog(@"update temmp log alert");
-        NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-        NSString * user_pass = (NSString *) [userDefaults objectForKey:@"PortalPassword"];
-        NSString * user_email  = (NSString*)[userDefaults objectForKey:@"PortalUseremail"];
-        NSString * devTokenStr =(NSString*) [userDefaults objectForKey:_push_dev_token];
         
-        BMS_Communication * bms_alerts = [[BMS_Communication alloc] initWithObject:self
-                                                                          Selector:nil 
-                                                                      FailSelector:nil 
-                                                                         ServerErr:nil];
+        progressView.hidden = NO; 
+        [[progressView superview] bringSubviewToFront:progressView];
         
-        if (alertSw.isOn)
-        {
-            //call get camlist query here 
-            NSData* responseData = [bms_alerts BMS_enabledAlertBlockWithUser:user_email 
-                                                                     AndPass:user_pass 
-                                                                       regId:devTokenStr 
-                                                                       ofMac:camera.mac_address
-                                                                   alertType:ALERT_TYPE_TEMP_LO];
-        }
-        else 
-        {
-            //call get camlist query here 
-            NSData* responseData = [bms_alerts BMS_disabledAlertBlockWithUser:user_email 
-                                                                      AndPass:user_pass 
-                                                                        regId:devTokenStr 
-                                                                        ofMac:camera.mac_address
-                                                                    alertType:ALERT_TYPE_TEMP_LO];
-            
-        }
         
-        camera.tempLoAlertEnabled  =  alertSw.isOn;
+        [NSTimer scheduledTimerWithTimeInterval:0.1 target:self 
+                                       selector:@selector(updateTempLoAlert:) 
+                                       userInfo:alertSw 
+                                        repeats:NO];
+        
+        
+        
     }
 }
-
+-(void) updateTempLoAlert:(NSTimer *) exp
+{
+    
+    UISwitch * alertSw = (UISwitch *) exp.userInfo;
+        
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    NSString * user_pass = (NSString *) [userDefaults objectForKey:@"PortalPassword"];
+    NSString * user_email  = (NSString*)[userDefaults objectForKey:@"PortalUseremail"];
+    NSString * devTokenStr =(NSString*) [userDefaults objectForKey:_push_dev_token];
+    
+    BMS_Communication * bms_alerts = [[BMS_Communication alloc] initWithObject:self
+                                                                      Selector:nil 
+                                                                  FailSelector:nil 
+                                                                     ServerErr:nil];
+    NSLog(@"update temmp log alert");
+    if (alertSw.isOn)
+    {
+        //call get camlist query here 
+        NSData* responseData = [bms_alerts BMS_enabledAlertBlockWithUser:user_email 
+                                                                 AndPass:user_pass 
+                                                                   regId:devTokenStr 
+                                                                   ofMac:camera.mac_address
+                                                               alertType:ALERT_TYPE_TEMP_LO];
+    }
+    else 
+    {
+        //call get camlist query here 
+        NSData* responseData = [bms_alerts BMS_disabledAlertBlockWithUser:user_email 
+                                                                  AndPass:user_pass 
+                                                                    regId:devTokenStr 
+                                                                    ofMac:camera.mac_address
+                                                                alertType:ALERT_TYPE_TEMP_LO];
+        
+    }
+    
+    camera.tempLoAlertEnabled  =  alertSw.isOn;    progressView.hidden = YES;  
+    
+}
 
 @end

@@ -24,12 +24,21 @@
 
 @synthesize  ptt_enabled;
 
+
+SystemSoundID soundFileObject;
+
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
         // Custom initialization
         
+        
+        
+       
+        CFBundleRef mainbundle = CFBundleGetMainBundle();
+        CFURLRef soundFileURLRef = CFBundleCopyResourceURL(mainbundle, CFSTR("beep"), CFSTR("wav"), NULL);
+        AudioServicesCreateSystemSoundID(soundFileURLRef, &soundFileObject);
         
         melodies = [[NSArray alloc] initWithObjects:@"Rock a Bye Baby",
                     @"Lullaby and Goodnight", @"Lavender Blue", @"Twinkle Twinkle Little Star",
@@ -497,11 +506,10 @@
 		comm = [[HttpCommunication alloc]init];
 		comm.device_ip = ip;
 		comm.device_port = port; 
-		[comm sendCommand:SET_RESOLUTION_QVGA];
+		//[comm sendCommand:SET_RESOLUTION_QVGA];
         
        
-        //update melody ui 
-        [self setUIMelodyOnOff]; 
+        
 		
 		if (streamer != nil)
 		{
@@ -689,10 +697,10 @@
 
 -(void) playSound
 {
-    SystemSoundID soundFileObject;
-    CFBundleRef mainbundle = CFBundleGetMainBundle();
-    CFURLRef soundFileURLRef = CFBundleCopyResourceURL(mainbundle, CFSTR("beep"), CFSTR("wav"), NULL);
-    AudioServicesCreateSystemSoundID(soundFileURLRef, &soundFileObject);
+//    SystemSoundID soundFileObject;
+//    CFBundleRef mainbundle = CFBundleGetMainBundle();
+//    CFURLRef soundFileURLRef = CFBundleCopyResourceURL(mainbundle, CFSTR("beep"), CFSTR("wav"), NULL);
+//    AudioServicesCreateSystemSoundID(soundFileURLRef, &soundFileObject);
     //Play beep
     AudioServicesPlaySystemSound(soundFileObject);
 	
@@ -705,8 +713,7 @@
 	NSString * msg = (NSString *) [exp userInfo];
     
     [self playSound]; 
-    [self playSound]; 
-    [self playSound]; 
+    
        
 	if ( alert != nil)
 	{
@@ -770,10 +777,17 @@
 
 	
 	switch (status) {
+        case CONNECTED_TO_CAMERA:
+        {
+            //update melody ui 
+            [self setUIMelodyOnOff]; 
+
+            break;
+        }
 		case STREAM_STARTED:
 		{
 			progressView.hidden = YES;
-			
+			            
 			[self stopPeriodicPopup]; 
 			
 			if (selected_channel.communication_mode == COMM_MODE_STUN)

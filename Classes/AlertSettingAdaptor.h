@@ -15,11 +15,12 @@
     IBOutlet UITableViewCell *soundCellView;
     IBOutlet UITableViewCell *tempHiCellView;
     IBOutlet UITableViewCell *tempLoCellView;
+    UIView * progressView; 
     
     CamProfile * camera; 
 }
 
-
+@property (nonatomic, assign) UIView * progressView; 
 @property (nonatomic, assign) IBOutlet UITableViewCell *soundCellView,* tempHiCellView, * tempLoCellView;
 
 -(id) initWithCam:(CamProfile *)cp;

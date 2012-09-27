@@ -1308,7 +1308,7 @@
 			pickerView.hidden = YES;//close it now 
 			break;
 		case BRIGHTNESS_LEVEL_PICKER:
-			[self onSetBrightnessLevel:row+1];
+			[self onSetBrightnessLevel:row];
 			pickerView.hidden = YES;
 			break;
 		case VOX_LEVEL_PICKER:
@@ -1568,7 +1568,7 @@
 	NSString * response = nil, * command;
 	
 	
-	int bright = 0;
+	int bright = -1;
 	do 
 	{
         response = nil; 
@@ -1632,7 +1632,7 @@
         }
 	
 	}
-	while (bright != 0);
+	while (bright != _level);
 	
     progressView.hidden = YES;
     
@@ -1692,6 +1692,9 @@
 		//Dont care about response, here -- just simply read back the volume level
 	}
 	
+    progressView.hidden = YES;
+    
+    
 	[self updateVolumeLvl];
 	[self.cameraMenu reloadData];
 	

@@ -1048,7 +1048,9 @@
 
 - (void)onSocket:(AsyncSocket *)sock didConnectToHost:(NSString *)host port:(UInt16)port
 {
-	NSLog(@"Streamer- connected to host: %@", host);
+	NSLog(@"Streamer- connected to camera: %@", host);
+    [mHandler statusReport:CONNECTED_TO_CAMERA andObj:nil];
+    
 	[self receiveData];
 	
 }

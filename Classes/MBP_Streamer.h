@@ -31,6 +31,8 @@
 #define STREAM_STOPPED              4
 #define REMOTE_STREAM_STOPPED_UNEXPECTEDLY 5
 
+#define CONNECTED_TO_CAMERA         6
+
 -(void) statusReport:(int) status andObj:(NSObject*) obj; 
 
 @end
