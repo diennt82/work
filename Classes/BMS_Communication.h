@@ -107,7 +107,23 @@
 #define DISABLE_ALERTS_CMD_PARAM_3 @"&alert="
 
 
+//// NEW SET of PUSH NOTIFICATION 
 
+#define ENABLE_ALERTS_U_CMD @"enable_notifications"
+#define ENABLE_ALERTS_U_CMD_PARAM_1 @"&username="
+#define ENABLE_ALERTS_U_CMD_PARAM_2 @"&mac="
+#define ENABLE_ALERTS_U_CMD_PARAM_3 @"&alert="
+
+
+#define DISABLE_ALERTS_U_CMD @"disable_notifications"
+#define DISABLE_ALERTS_U_CMD_PARAM_1 @"&username="
+#define DISABLE_ALERTS_U_CMD_PARAM_2 @"&mac="
+#define DISABLE_ALERTS_U_CMD_PARAM_3 @"&alert="
+
+
+#define GET_DISABLED_ALERTS_U_CMD @"get_disabled_alerts"
+#define GET_DISABLED_ALERTS_U_CMD_PARAM_1 @"&username="
+#define GET_DISABLED_ALERTS_U_CMD_PARAM_2 @"&mac="
 
 
 
@@ -190,6 +206,24 @@
                                      regId:(NSString *) regId
                                      ofMac:(NSString *) macWColon
                                  alertType:(NSString *) alertType;
+
+
+
+- (NSData *) BMS_getDisabledAlertBlockWithUser_1:(NSString*) user_email 
+                                         AndPass:(NSString*) user_pass 
+                                           ofMac:(NSString *) macWColon;
+
+- (NSData *) BMS_enabledAlertBlockWithUser_1:(NSString*) user_email 
+                                     AndPass:(NSString*) user_pass 
+                                       ofMac:(NSString *) macWColon
+                                   alertType:(NSString *) alertType;
+
+
+
+- (NSData *) BMS_disabledAlertBlockWithUser_1:(NSString*) user_email 
+                                      AndPass:(NSString*) user_pass 
+                                        ofMac:(NSString *) macWColon
+                                    alertType:(NSString *) alertType;
 
 
 @end

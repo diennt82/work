@@ -604,34 +604,19 @@ withConnDelegate:(id<ConnectionMethodDelegate> ) caller
 {
     CamChannel * ch = (CamChannel *) [listOfChannel objectAtIndex:((UIButton *)sender).tag]; 
     
-    NSLog(@"alert setting for camera: %@",ch.profile.name );    
+   
+    
+    AlertSettingViewController * alertSettings = [[AlertSettingViewController alloc]initWithNibName:@"AlertSettingViewController" bundle:nil];
+    alertSettings.camera = ch.profile;
     
     
-    
-    [self.view addSubview:alertSettingView]; 
-    [self.view addSubview:progressView]; 
-    
-    [self.view bringSubviewToFront:alertSettingView]; 
-    
-    //[self.view bringSubviewToFront:progressView]; 
-    
-    
-    alertSettingViewTitle.text = ch.profile.name;
-    
-    
-    AlertSettingAdaptor * settingAdaptor; 
-    settingAdaptor = [[AlertSettingAdaptor alloc] initWithCam:ch.profile]; 
-    settingAdaptor.progressView = progressView;
-    alertSettingTableView.dataSource = settingAdaptor;
-    alertSettingTableView.delegate = settingAdaptor;
-    
-}
+    [self.navigationController pushViewController:alertSettings animated:NO];    
+    [alertSettings release];
 
--(IBAction)alertSettingDone:(id)sender
-{
-    ///Close 
-    [alertSettingView removeFromSuperview]; 
-    [progressView removeFromSuperview];
+    
+    //[self presentModalViewController:alertSettings animated:NO];
+    
+    
 }
 
 

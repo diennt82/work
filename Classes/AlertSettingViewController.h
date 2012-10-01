@@ -1,32 +1,37 @@
 //
-//  AlertSettingAdaptor.h
+//  AlertSettingViewController.h
 //  MBP_ios
 //
-//  Created by NxComm on 9/14/12.
+//  Created by NxComm on 10/1/12.
 //  Copyright (c) 2012 Smart Panda Ltd. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
+#import <UIKit/UIKit.h>
 #import "CamProfile.h"
-#import "MBP_iosViewController.h"
-
-@interface AlertSettingAdaptor : NSObject<UITableViewDelegate, UITableViewDataSource>
+#import "BMS_Communication.h"
+#import "MBP_iosAppDelegate.h"
+@interface AlertSettingViewController : UIViewController<UITableViewDelegate, UITableViewDataSource>
 {
     IBOutlet UITableViewCell *soundCellView;
     IBOutlet UITableViewCell *tempHiCellView;
     IBOutlet UITableViewCell *tempLoCellView;
-    UIView * progressView; 
+    IBOutlet UIView * progressView; 
+    IBOutlet UILabel * f_title; 
+    
+    IBOutlet UITableView * alertTable; 
     
     CamProfile * camera; 
 }
 
-@property (nonatomic, assign) UIView * progressView; 
 @property (nonatomic, assign) IBOutlet UITableViewCell *soundCellView,* tempHiCellView, * tempLoCellView;
 
--(id) initWithCam:(CamProfile *)cp;
+@property (nonatomic, assign) CamProfile * camera; 
+
 
 -(IBAction)soundAlertChanged   :(id)sender;
 -(IBAction)tempHiAlertChanged   :(id)sender;
 -(IBAction)tempLoAlertChanged   :(id)sender;
+-(IBAction)donePressed:(id)sender;
+
 
 @end

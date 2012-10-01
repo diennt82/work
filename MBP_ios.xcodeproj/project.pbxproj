@@ -20,11 +20,11 @@
 		3803A8761601981100B4DD97 /* photo_item.png in Resources */ = {isa = PBXBuildFile; fileRef = 3803A8751601981100B4DD97 /* photo_item.png */; };
 		3803A87A1602D44100B4DD97 /* temp_alert.png in Resources */ = {isa = PBXBuildFile; fileRef = 3803A8781602D44100B4DD97 /* temp_alert.png */; };
 		3803A87B1602D44100B4DD97 /* voice_alert.png in Resources */ = {isa = PBXBuildFile; fileRef = 3803A8791602D44100B4DD97 /* voice_alert.png */; };
-		3803A87D16031F6300B4DD97 /* AlertSettingView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3803A87C16031F6200B4DD97 /* AlertSettingView.xib */; };
-		3803A885160320F800B4DD97 /* AlertSettingAdaptor.mm in Sources */ = {isa = PBXBuildFile; fileRef = 3803A884160320F800B4DD97 /* AlertSettingAdaptor.mm */; };
 		3809A42C15E49A4B0098BBC0 /* bb_pic_1.png in Resources */ = {isa = PBXBuildFile; fileRef = 3809A42B15E49A4B0098BBC0 /* bb_pic_1.png */; };
 		3809A42F15E4A2520098BBC0 /* bb_melody_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 3809A42D15E4A2520098BBC0 /* bb_melody_icon.png */; };
 		3809A43015E4A2520098BBC0 /* bb_melody_off_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 3809A42E15E4A2520098BBC0 /* bb_melody_off_icon.png */; };
+		380C430016195047001434C0 /* AlertSettingViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 380C42FE16195047001434C0 /* AlertSettingViewController.mm */; };
+		380C430116195047001434C0 /* AlertSettingViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 380C42FF16195047001434C0 /* AlertSettingViewController.xib */; };
 		3812F82515C8BF0600DADFA6 /* bb_setting_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 3812F82415C8BF0600DADFA6 /* bb_setting_icon.png */; };
 		3812F82B15C8BF3600DADFA6 /* bb_ptt_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 3812F82715C8BF3600DADFA6 /* bb_ptt_icon.png */; };
 		3812F82C15C8BF3600DADFA6 /* bb_snap_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 3812F82815C8BF3600DADFA6 /* bb_snap_icon.png */; };
@@ -201,12 +201,12 @@
 		3803A8771601B73E00B4DD97 /* alert_history.sqlite */ = {isa = PBXFileReference; lastKnownFileType = file; path = alert_history.sqlite; sourceTree = "<group>"; };
 		3803A8781602D44100B4DD97 /* temp_alert.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = temp_alert.png; sourceTree = "<group>"; };
 		3803A8791602D44100B4DD97 /* voice_alert.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = voice_alert.png; sourceTree = "<group>"; };
-		3803A87C16031F6200B4DD97 /* AlertSettingView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = AlertSettingView.xib; sourceTree = "<group>"; };
-		3803A883160320F700B4DD97 /* AlertSettingAdaptor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AlertSettingAdaptor.h; sourceTree = "<group>"; };
-		3803A884160320F800B4DD97 /* AlertSettingAdaptor.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = AlertSettingAdaptor.mm; sourceTree = "<group>"; };
 		3809A42B15E49A4B0098BBC0 /* bb_pic_1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bb_pic_1.png; sourceTree = "<group>"; };
 		3809A42D15E4A2520098BBC0 /* bb_melody_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bb_melody_icon.png; sourceTree = "<group>"; };
 		3809A42E15E4A2520098BBC0 /* bb_melody_off_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bb_melody_off_icon.png; sourceTree = "<group>"; };
+		380C42FD16195047001434C0 /* AlertSettingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AlertSettingViewController.h; sourceTree = "<group>"; };
+		380C42FE16195047001434C0 /* AlertSettingViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = AlertSettingViewController.mm; sourceTree = "<group>"; };
+		380C42FF16195047001434C0 /* AlertSettingViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = AlertSettingViewController.xib; sourceTree = "<group>"; };
 		3812F82415C8BF0600DADFA6 /* bb_setting_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bb_setting_icon.png; sourceTree = "<group>"; };
 		3812F82715C8BF3600DADFA6 /* bb_ptt_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bb_ptt_icon.png; sourceTree = "<group>"; };
 		3812F82815C8BF3600DADFA6 /* bb_snap_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bb_snap_icon.png; sourceTree = "<group>"; };
@@ -598,19 +598,16 @@
 				38CA70A515F75E53002CD1C5 /* NSData+Conversion.m */,
 				3803A85C15FDF15600B4DD97 /* CameraAlert.h */,
 				3803A85D15FDF15600B4DD97 /* CameraAlert.m */,
-				38CFFF7515BD3E67009A2EE2 /* DashBoard_ViewController.xib */,
-				38C79E2615C78816006EE378 /* DashBoard_camView.xib */,
-				38CC5A1D15DCF8F300067C54 /* DashBoard_camEdit.xib */,
-				38C79E2315C786A0006EE378 /* DashBoard_ViewController.h */,
-				38C79E2415C786A1006EE378 /* DashBoard_ViewController.mm */,
 				38355AE415CB76630045909C /* Account_ViewController.h */,
 				38355AE515CB76630045909C /* Account_ViewController.m */,
 				38355AE615CB76630045909C /* Account_ViewController.xib */,
 				97987E441546B04C0066C49B /* BMS_Communication.h */,
 				97987E451546B04C0066C49B /* BMS_Communication.m */,
-				3803A87C16031F6200B4DD97 /* AlertSettingView.xib */,
-				3803A883160320F700B4DD97 /* AlertSettingAdaptor.h */,
-				3803A884160320F800B4DD97 /* AlertSettingAdaptor.mm */,
+				38CFFF7515BD3E67009A2EE2 /* DashBoard_ViewController.xib */,
+				38C79E2615C78816006EE378 /* DashBoard_camView.xib */,
+				38CC5A1D15DCF8F300067C54 /* DashBoard_camEdit.xib */,
+				38C79E2315C786A0006EE378 /* DashBoard_ViewController.h */,
+				38C79E2415C786A1006EE378 /* DashBoard_ViewController.mm */,
 				9753425F1432B8180037DDAC /* CamProfile.h */,
 				975342601432B8180037DDAC /* CamProfile.m */,
 				97C49AAE154784F4008B7D03 /* SetupData.h */,
@@ -626,6 +623,9 @@
 				97F0F167143C45FA0076B749 /* MBP_Streamer.mm */,
 				97423427155BA503007DCBCD /* AudioOutStreamer.h */,
 				97423428155BA503007DCBCD /* AudioOutStreamer.m */,
+				380C42FD16195047001434C0 /* AlertSettingViewController.h */,
+				380C42FE16195047001434C0 /* AlertSettingViewController.mm */,
+				380C42FF16195047001434C0 /* AlertSettingViewController.xib */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -913,9 +913,9 @@
 				3803A8761601981100B4DD97 /* photo_item.png in Resources */,
 				3803A87A1602D44100B4DD97 /* temp_alert.png in Resources */,
 				3803A87B1602D44100B4DD97 /* voice_alert.png in Resources */,
-				3803A87D16031F6300B4DD97 /* AlertSettingView.xib in Resources */,
 				38167AC216118DB600B7FA0A /* bb_pic_2.png in Resources */,
 				38167AC51611AB1800B7FA0A /* bb_ptt_icon_d.png in Resources */,
+				380C430116195047001434C0 /* AlertSettingViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -990,7 +990,7 @@
 				38CE2A1315D4FA3800B8F7EC /* ForgotPwdViewController.m in Sources */,
 				38CC5A1515DCBBC300067C54 /* QuickViewCamera_ViewController.mm in Sources */,
 				3803A85E15FDF15600B4DD97 /* CameraAlert.m in Sources */,
-				3803A885160320F800B4DD97 /* AlertSettingAdaptor.mm in Sources */,
+				380C430016195047001434C0 /* AlertSettingViewController.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -132,6 +132,7 @@
     [self query_snapshot_from_server:cam_profiles];*/
 	
     
+    /* 20121001: Dont query disabled alerts here will do it when the list is opened 
     //query disabled alerts ----- Wait for the registration id 
     if(cam_profiles != nil && [cam_profiles count] >0)
     {
@@ -141,7 +142,7 @@
         }
         
     }
-   
+   */
     
 	/* sync_online_and_offline_data*/
 	[self sync_online_and_offline_data:cam_profiles];
@@ -155,6 +156,7 @@
 -(void) query_disabled_alert_list:(CamProfile *) cp
 {
 
+     NSLog(@" query_disabled_alert_list camera: %@",cp.name); 
     //All enabled - default
     cp.soundAlertEnabled = TRUE;
     cp.tempHiAlertEnabled = TRUE;

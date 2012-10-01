@@ -14,7 +14,7 @@
 #import "CameraViewController.h"
 #import "Account_ViewController.h"
 #import "QuickViewCamera_ViewController.h"
-#import "AlertSettingAdaptor.h"
+#import "AlertSettingViewController.h"
 
 
 
@@ -26,11 +26,7 @@
 
     IBOutlet UIView * offlineView; 
     
-    IBOutlet UITableView * alertSettingTableView;
-    IBOutlet UIView * alertSettingView;
-    IBOutlet UILabel * alertSettingViewTitle;
-    IBOutlet UIView * progressView; 
-    
+       
     NSArray * listOfChannel; 
     
     id<ConnectionMethodDelegate> delegate; 
@@ -65,7 +61,7 @@
 -(IBAction)removeCamera:(id)sender;
 -(IBAction)renameCamera:(id)sender;
 -(IBAction)alertSetting:(id)sender;
--(IBAction)alertSettingDone:(id)sender;
+
 
 
 
