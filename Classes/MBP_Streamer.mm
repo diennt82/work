@@ -230,8 +230,8 @@
 		msg = [NSString stringWithFormat:@"%@%@",
 			   STUN_CMD_PART, CLOSE_STUN_SESSION];
 		NSData * msg_ = [[NSData alloc] initWithBytes:[msg UTF8String] length:[msg length]]; 
-		NSLog(@"send close session.. & close sock"); 
-		[udtSocket sendDataViaUdt:msg_];
+		NSLog(@"DONT send close session.. & close sock"); 
+		//[udtSocket sendDataViaUdt:msg_];
 		
 		
 		[udtSocket close];
@@ -1274,7 +1274,12 @@
     
     if (iFileName != nil)
     {
-        [self saveVideoToAlbum:iFileName];
+        //[self saveVideoToAlbum:iFileName];
+        
+        
+        NSLog(@"Don't Saving to album now"); 
+        
+        [self videoSavedToPhotosAlbum:nil didFinishSavingWithError:nil contextInfo:nil];
         
         [iFileName release];
 	}
@@ -1299,13 +1304,16 @@
 {
     NSString *title = @"Video";
    
+    NSArray* items = [iFileName componentsSeparatedByString:@"/"];
     
-    NSString * message = [NSString stringWithFormat:@"saved at %@", iFileName];
+    NSString * shortName = (NSString *)[items lastObject]; 
+    
+    NSString * message = [NSString stringWithFormat:@"saved as %@", shortName];
     
     
     if (!error)
 	{
-		message = @"saved to Photo Album";
+		//message = @"saved to Photo Album";
 		
 	}
     else {

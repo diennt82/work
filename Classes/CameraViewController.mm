@@ -60,14 +60,6 @@ SystemSoundID soundFileObject;
     [super viewDidLoad];
     
     
-    ///TEST 
-    
-    int viewCount = [self.navigationController.viewControllers count]; 
-    NSLog(@"View count = %d", viewCount); 
-    
-    /// TEST - END
-    
-    
 	// Do any additional setup after loading the view.
     [[NSNotificationCenter defaultCenter] addObserver: self
                                              selector: @selector(handleEnteredBackground) 
@@ -81,8 +73,7 @@ SystemSoundID soundFileObject;
                                      target:nil
                                      action:nil] autorelease];
 
-    
-  
+       
     if (self.selected_channel != nil)
     {
         CamProfile * cp = selected_channel.profile;
@@ -318,7 +309,16 @@ SystemSoundID soundFileObject;
 									  owner:self 
 									options:nil];
         
-        
+        CGRect rect = [[UIApplication sharedApplication] statusBarFrame]; // Get status bar frame dimensions
+        NSLog(@"Statusbar frame: %1.0f, %1.0f, %1.0f, %1.0f", rect.origin.x,
+              rect.origin.y, rect.size.width, rect.size.height);
+        //HACK : incase hotspot is turned on
+        if (rect.size.height>21 &&  rect.size.height<50)
+        {
+            topToolBar.frame = CGRectMake(topToolBar.frame.origin.x,topToolBar.frame.origin.y+20, 
+                                          topToolBar.frame.size.width, topToolBar.frame.size.height); 
+        }
+
         //Rotate the slider 
         zoombarView.transform = CGAffineTransformRotate(zoombarView.transform, -M_PI*0.5);
         //Initializng the slider value to zero.

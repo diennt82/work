@@ -94,22 +94,22 @@
         if (shouldAutoLogin == TRUE	)
         {
             
-            BMS_Communication * bms_comm; 
-            bms_comm = [[BMS_Communication alloc] initWithObject:self
-                                                        Selector:@selector(loginSuccessWithResponse:) 
-                                                    FailSelector:@selector(loginFailedWithError:) 
-                                                       ServerErr:@selector(loginFailedServerUnreachable)];
-            
-            [bms_comm BMS_loginWithUser:self.temp_user_str AndPass:self.temp_pass_str];
-            
-            
             self.progressView.hidden = NO;
             [self.progressLabel setText:@"Connecting to BMS..." ];
             self.navigationItem.leftBarButtonItem.enabled = NO ;
             self.navigationItem.rightBarButtonItem.enabled = NO;  
             
+            
+            [NSTimer scheduledTimerWithTimeInterval:0.1
+                                             target:self
+                                           selector:@selector(doSignIn:)
+                                           userInfo:nil
+                                            repeats:NO]; 
+            
+            
         }
-        else {
+        else 
+        {
             
             self.progressView.hidden = YES;  
             NSLog(@" NO LOGIN"); 
@@ -191,6 +191,18 @@
     // view controller.
 
     [parent presentModalViewController:navController animated:YES];
+}
+
+
+-(void) doSignIn :(NSTimer *) exp
+{
+    BMS_Communication * bms_comm; 
+    bms_comm = [[BMS_Communication alloc] initWithObject:self
+                                                Selector:@selector(loginSuccessWithResponse:) 
+                                            FailSelector:@selector(loginFailedWithError:) 
+                                               ServerErr:@selector(loginFailedServerUnreachable)];
+    
+    [bms_comm BMS_loginWithUser:self.temp_user_str AndPass:self.temp_pass_str];
 }
 
 #pragma mark -

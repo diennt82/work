@@ -152,7 +152,7 @@
 }
 
 
-
+/******* NOT USED : OBSOLETE *********/
 -(void) query_disabled_alert_list:(CamProfile *) cp
 {
 
@@ -248,7 +248,7 @@
     }
                             
 }
-
+/******************************/
 
 
 

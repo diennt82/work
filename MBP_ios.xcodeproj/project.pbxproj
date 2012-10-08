@@ -198,7 +198,6 @@
 		3803A85F15FF42DA00B4DD97 /* libsqlite3.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.0.dylib; path = usr/lib/libsqlite3.0.dylib; sourceTree = SDKROOT; };
 		3803A86115FF42ED00B4DD97 /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = usr/lib/libsqlite3.dylib; sourceTree = SDKROOT; };
 		3803A8751601981100B4DD97 /* photo_item.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = photo_item.png; sourceTree = "<group>"; };
-		3803A8771601B73E00B4DD97 /* alert_history.sqlite */ = {isa = PBXFileReference; lastKnownFileType = file; path = alert_history.sqlite; sourceTree = "<group>"; };
 		3803A8781602D44100B4DD97 /* temp_alert.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = temp_alert.png; sourceTree = "<group>"; };
 		3803A8791602D44100B4DD97 /* voice_alert.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = voice_alert.png; sourceTree = "<group>"; };
 		3809A42B15E49A4B0098BBC0 /* bb_pic_1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bb_pic_1.png; sourceTree = "<group>"; };
@@ -641,7 +640,6 @@
 		29B97314FDCFA39411CA2CEA /* CustomTemplate */ = {
 			isa = PBXGroup;
 			children = (
-				3803A8771601B73E00B4DD97 /* alert_history.sqlite */,
 				3812F82315C8BEC700DADFA6 /* images13 */,
 				97987CC1154683700066C49B /* images12 */,
 				9770CB87143032BC009E69EF /* images */,
@@ -1001,6 +999,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = (
+					armv7,
+					armv6,
+				);
 				CODE_SIGN_ENTITLEMENTS = "";
 				CODE_SIGN_IDENTITY = "iPhone Developer: Paul Tsui (KSWYEMQH37)";
 				"CODE_SIGN_IDENTITY[sdk=*]" = "iPhone Developer: Paul Tsui (KSWYEMQH37)";
@@ -1025,6 +1027,8 @@
 					"\"$(SRCROOT)/../openssl_lib/iPhoneOS-armv6/lib\"",
 				);
 				PRODUCT_NAME = MBP_ios;
+				"PROVISIONING_PROFILE[sdk=*]" = "FF4FECB8-0A70-41CC-B152-F35169E2EE6B";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "FF4FECB8-0A70-41CC-B152-F35169E2EE6B";
 				SDKROOT = iphoneos;
 				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/external_include/**";
 			};
@@ -1034,6 +1038,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = (
+					armv7,
+					armv6,
+				);
 				CODE_SIGN_ENTITLEMENTS = "";
 				CODE_SIGN_IDENTITY = "iPhone Developer: Paul Tsui (KSWYEMQH37)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Paul Tsui (KSWYEMQH37)";
@@ -1052,6 +1060,8 @@
 					"\"$(SRCROOT)\"",
 				);
 				PRODUCT_NAME = MBP_ios;
+				PROVISIONING_PROFILE = "FF4FECB8-0A70-41CC-B152-F35169E2EE6B";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "FF4FECB8-0A70-41CC-B152-F35169E2EE6B";
 				SDKROOT = iphoneos;
 				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/external_include/**";
 				VALIDATE_PRODUCT = YES;
@@ -1082,9 +1092,13 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = (
+					armv7,
+					armv6,
+				);
 				CODE_SIGN_ENTITLEMENTS = "";
-				CODE_SIGN_IDENTITY = "iPhone Developer: Paul Tsui (KSWYEMQH37)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Paul Tsui (KSWYEMQH37)";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Binatone Electronics International Limited";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Binatone Electronics International Limited";
 				COPY_PHASE_STRIP = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1097,6 +1111,8 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 4.1;
 				LIBRARY_SEARCH_PATHS = "\"$(SRCROOT)\"";
 				PRODUCT_NAME = msc3;
+				PROVISIONING_PROFILE = "118099D3-F799-4F23-B5A0-2D5783EDB82F";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "118099D3-F799-4F23-B5A0-2D5783EDB82F";
 				SDKROOT = iphoneos;
 				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/external_include/**";
 				VALIDATE_PRODUCT = YES;

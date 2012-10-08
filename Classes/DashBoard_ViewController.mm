@@ -128,17 +128,18 @@ withConnDelegate:(id<ConnectionMethodDelegate> ) caller
     [buttons addObject:spacer];
     [spacer release];
 
-    
-    
-    // create a standard delete button with the trash icon
-    UIBarButtonItem *snapButton = [[UIBarButtonItem alloc]
-                                   initWithImage:[UIImage imageNamed:@"scan_camera_icon.png"]
-                                   style:UIBarButtonItemStyleBordered
-                                   target:self
-                                   action:@selector(scanCameras:)];
-
-    [buttons addObject:snapButton];
-    [snapButton release];
+    if ([listOfChannel count] >1)
+    {
+        // create a standard delete button with the trash icon
+        UIBarButtonItem *snapButton = [[UIBarButtonItem alloc]
+                                       initWithImage:[UIImage imageNamed:@"scan_camera_icon.png"]
+                                       style:UIBarButtonItemStyleBordered
+                                       target:self
+                                       action:@selector(scanCameras:)];
+        
+        [buttons addObject:snapButton];
+        [snapButton release];
+    }
     
     
     // create a standard delete button with the trash icon

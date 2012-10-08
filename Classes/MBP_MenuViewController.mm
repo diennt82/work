@@ -595,7 +595,7 @@
     if (tag == CAM_MENU_TAG)
 	{
 		static NSString *CellIdentifier1 = @"CamMenuCell";
-		UILabel * label, * value;
+		UILabel * label, *value;
 		int label_width; 
 
 		
@@ -631,13 +631,14 @@
 		
 		cell.contentView.frame= CGRectMake(0, 0, self.cameraMenu.frame.size.width,cell.contentView.frame.size.height);
 	
-		label_width = self.cameraMenu.frame.size.width/2;
+		label_width = self.cameraMenu.frame.size.width/2 - 2;
 	
-		label= [[UILabel alloc] initWithFrame:CGRectMake(0,0, label_width, 
+		label= [[UILabel alloc] initWithFrame:CGRectMake(2,0, label_width, 
 														 cell.contentView.frame.size.height)];
 		label.adjustsFontSizeToFitWidth = YES;
         label.backgroundColor = [UIColor clearColor];
         label.textColor = [UIColor whiteColor];
+        label.numberOfLines =2 ; 
 		/*
 		label.text = [Internationalization get:[[self.cameraMenuItems allKeys] objectAtIndex:indexPath.row]
 										 alter:[[self.cameraMenuItems allKeys] objectAtIndex:indexPath.row]];
@@ -655,9 +656,12 @@
 										 alter:[[self.cameraMenuItems allValues] objectAtIndex:indexPath.row]];
 		 */
 		
+        value.lineBreakMode = UILineBreakModeWordWrap;
+        
 		value.text = [self.cameraMenuItemValues  objectForKey:label.text];
         value.textColor = [UIColor whiteColor];
         value.backgroundColor = [UIColor clearColor];
+        value.numberOfLines =2 ; 
 
         //[cell.contentView setBackgroundColor:[UIColor clearColor]];
         [cell setBackgroundColor:[UIColor clearColor]];

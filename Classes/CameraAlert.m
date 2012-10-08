@@ -80,7 +80,7 @@ static sqlite3_stmt *init_statement = nil;
     NSArray * paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
     NSString * documentDirectory = [paths objectAtIndex:0]; 
     
-    NSString *writableDBPath = [documentDirectory stringByAppendingPathComponent:@"alert_history.sqlite"];
+    NSString *writableDBPath = [documentDirectory stringByAppendingPathComponent:@".alert_history.sqlite"];
     success = [fileManager fileExistsAtPath:writableDBPath];
     
     if (success) 
@@ -121,7 +121,7 @@ static sqlite3_stmt *init_statement = nil;
     
     NSArray * paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
     NSString * documentDirectory = [paths objectAtIndex:0]; 
-    NSString *writableDBPath = [documentDirectory stringByAppendingPathComponent:@"alert_history.sqlite"];
+    NSString *writableDBPath = [documentDirectory stringByAppendingPathComponent:@".alert_history.sqlite"];
     sqlite3 * database; 
 
     if (sqlite3_open([writableDBPath UTF8String], &database) == SQLITE_OK)
@@ -162,7 +162,7 @@ static sqlite3_stmt *init_statement = nil;
  
     NSArray * paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
     NSString * documentDirectory = [paths objectAtIndex:0]; 
-    NSString *writableDBPath = [documentDirectory stringByAppendingPathComponent:@"alert_history.sqlite"];
+    NSString *writableDBPath = [documentDirectory stringByAppendingPathComponent:@".alert_history.sqlite"];
     sqlite3 * database; 
     
     NSString * _mac = [Util strip_colon_fr_mac:macWithColon]; 
@@ -203,7 +203,7 @@ static sqlite3_stmt *init_statement = nil;
     
     NSArray * paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
     NSString * documentDirectory = [paths objectAtIndex:0]; 
-    NSString *writableDBPath = [documentDirectory stringByAppendingPathComponent:@"alert_history.sqlite"];
+    NSString *writableDBPath = [documentDirectory stringByAppendingPathComponent:@".alert_history.sqlite"];
     sqlite3 * database; 
     
 
@@ -243,7 +243,7 @@ static sqlite3_stmt *init_statement = nil;
     
     NSArray * paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
     NSString * documentDirectory = [paths objectAtIndex:0]; 
-    NSString *writableDBPath = [documentDirectory stringByAppendingPathComponent:@"alert_history.sqlite"];
+    NSString *writableDBPath = [documentDirectory stringByAppendingPathComponent:@".alert_history.sqlite"];
      sqlite3 * database; 
     NSString * _mac = [Util strip_colon_fr_mac:macWithColon]; 
     if (sqlite3_open([writableDBPath UTF8String], &database) == SQLITE_OK)

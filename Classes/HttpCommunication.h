@@ -66,7 +66,8 @@
 #define BASIC_AUTH_USR_PWD_CHANGE @"save_http_usr_passwd"
 #define BASIC_AUTH_USR_PWD_CHANGE_PARAM @"&setup="
 
-#define SWITCH_TO_DIRECT_MODE @"switch_to_uap"
+//#define SWITCH_TO_DIRECT_MODE @"switch_to_uap"
+#define SWITCH_TO_DIRECT_MODE @"reset_factory"
 
 #define LR_STOP @"lr_stop"
 #define FB_STOP @"fb_stop"

@@ -343,7 +343,7 @@ static int socketFlag = 0;
 
 + (NSString * ) getDataFileName
 {
-	return [NSString stringWithFormat:@"%@%@%@", [Util getRecordDirectory], @"/", @"cam.dat"];
+	return [NSString stringWithFormat:@"%@%@%@", [Util getRecordDirectory], @"/", @".cam.dat"];
 
 }
 

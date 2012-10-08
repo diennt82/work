@@ -223,15 +223,15 @@
     
     if (alertSw.isOn)
     {
-        //call get camlist query here 
-        NSData* responseData = [bms_alerts BMS_disabledAlertBlockWithUser_1:user_email 
+       
+        NSData* responseData = [bms_alerts BMS_enabledAlertBlockWithUser_1:user_email 
                                                                  AndPass:user_pass 
                                                                    ofMac:camera.mac_address
                                                                alertType:ALERT_TYPE_TEMP_HI];
     }
     else 
     {
-        //call get camlist query here 
+       
         NSData* responseData = [bms_alerts BMS_disabledAlertBlockWithUser_1:user_email 
                                                                   AndPass:user_pass 
                                                                     ofMac:camera.mac_address

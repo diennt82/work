@@ -56,7 +56,8 @@
 
 #define DIRECT_MODE_NEXT_BTN 311
 
-#define ALERT_PUSH_RECVED 200
+#define ALERT_PUSH_RECVED_RESCAN_AFTER 200
+#define ALERT_PUSH_RECVED_RELOGIN_AFTER 201
 
 #define _streamingSSID @"string_Streaming_SSID"
 #define _triggeredByVox @"bool_Vox_Trigger"

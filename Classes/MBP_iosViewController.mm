@@ -362,6 +362,41 @@
 
 
 
+
+- (BOOL) isThisMacStoredOffline:(NSString*) mac_without_colon
+{
+    
+    if (self.restored_profiles == nil && 
+        self.channel_array == nil)
+    {
+        // No offline data is available --> force re login
+        return FALSE;
+        
+    }
+    
+    
+    CamProfile * cp = nil; 
+    for (int i =0; i< [self.restored_profiles count]; i++)
+    {
+        cp = (CamProfile *) [self.restored_profiles objectAtIndex:i]; 
+        if (cp!= nil && 
+            cp.mac_address != nil )
+        {
+            NSString *  mac_wo_colon = [Util strip_colon_fr_mac:cp.mac_address]; 
+            if ([mac_wo_colon isEqualToString:mac_without_colon])
+            {
+                return TRUE; 
+            }
+        }
+        
+    }
+            
+       
+    return FALSE; 
+}
+
+
+
 -(BOOL) pushNotificationRcvedInForeground:(CameraAlert *) camAlert
 
 {
@@ -412,7 +447,18 @@
                  delegate:self
                  cancelButtonTitle:@"Cancel" 
                  otherButtonTitles:@"Go to Camera list",nil];
-    pushAlert.tag = ALERT_PUSH_RECVED; 
+    if ([self isThisMacStoredOffline:camAlert.cameraMacNoColon])
+    {
+        
+        pushAlert.tag = ALERT_PUSH_RECVED_RESCAN_AFTER;
+    }
+    else
+    {
+        NSLog(@"Relogin"); 
+        [self sendStatus:2];
+        pushAlert.tag = ALERT_PUSH_RECVED_RELOGIN_AFTER;
+    }
+   
     [pushAlert show];
     
     
@@ -426,7 +472,7 @@
 	
 	int tag = alertView.tag ;
 	
-	if (tag == ALERT_PUSH_RECVED)
+	if (tag == ALERT_PUSH_RECVED_RESCAN_AFTER)
 	{
 		switch(buttonIndex) {
             case 0:
@@ -440,16 +486,10 @@
                     
                     //[dashBoard.navigationController popToRootViewControllerAnimated:NO]; 
 
-                    NSArray * views = dashBoard.navigationController.viewControllers; 
-
-                    
+                    NSArray * views = dashBoard.navigationController.viewControllers;                     
                      NSLog(@"views count = %d",[views count] );
                     if ( [views count] > 1) 
                     {
-                        NSLog(@"002");
-                        //views objectAtIndex:0  = uitabbarcontroller 
-
-
                         CameraViewController * camView = (CameraViewController *) [views objectAtIndex:1]; 
                         [camView goBackToCameraList]; 
                     }
@@ -459,19 +499,56 @@
                     
                 }
                 
+                [self dismissModalViewControllerAnimated:NO];
                 
-                NSLog(@"reload camera list"); 
-                /////Force reload of dash board 
-                [self dismissModalViewControllerAnimated:NO];                
-                [self startShowingCameraList];
-
+                NSLog(@"Re-scan "); 
+                [self sendStatus:3];
+                
+                
+               
 				break;
             default:
 				break;
 				
 		}
 	}
-		
+    else if (tag == ALERT_PUSH_RECVED_RELOGIN_AFTER)
+	{
+		switch(buttonIndex) {
+            case 0:
+                break;
+			case 1:
+                
+                
+                if (dashBoard != nil)
+                {
+                    NSLog(@"close all windows and thread"); 
+                    
+                    //[dashBoard.navigationController popToRootViewControllerAnimated:NO]; 
+                    
+                    NSArray * views = dashBoard.navigationController.viewControllers;                     
+                    NSLog(@"views count = %d",[views count] );
+                    if ( [views count] > 1) 
+                    {
+                        CameraViewController * camView = (CameraViewController *) [views objectAtIndex:1]; 
+                        [camView goBackToCameraList]; 
+                    }
+                    
+                    
+                    
+                    
+                }
+                
+                [self dismissModalViewControllerAnimated:NO];
+                
+                NSLog(@"Re-login  "); 
+                [self sendStatus:2];
+				break;
+            default:
+				break;
+				
+		}
+	}
 	
 }
 #pragma mark - 
