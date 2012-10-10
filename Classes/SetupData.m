@@ -68,7 +68,7 @@
 		fwrite(&data_len, sizeof(char), 1, fd);
 		fwrite([chann bytes], 1, [chann length], fd);
 	}
-
+    
 	///Store cam profiles
 	int numberOfProfiles = [self.configured_cams count];
 	fwrite(&numberOfProfiles,sizeof(int),1,fd);
@@ -79,7 +79,9 @@
 	{
 		cp = [[self.configured_cams objectAtIndex:i] getBytes];
 		data_len = [cp length];
+#if DEBUG_RESTORE_DATA 
         NSLog(@"setup: profile len %d ", data_len);
+#endif
 		fwrite(&data_len,sizeof(int), 1,fd);
 		fwrite([cp bytes], 1, [cp length], fd);
 	}
@@ -115,7 +117,7 @@
 	/* read barker */
 	fread(&barker, sizeof(int), 1, fd);
 	
-	NSLog(@"barker = %x", barker);
+    
 	
 	if (barker == DATA_BARKER)
 	{
@@ -196,10 +198,12 @@
         int profile_len = -1 ; 
 		while (cp_count < numOfProfile)
 		{
-		
+            
 			//Read cam profile entry len 
 			fread(&profile_len, sizeof(int), 1, fd);
+#if DEBUG_RESTORE_DATA 
             NSLog(@"setup:restore profile len %d ", profile_len);
+#endif
 			buff = malloc(profile_len);
 			//Read cam profile entry data
 			fread(buff, sizeof (char), profile_len,fd);
@@ -225,7 +229,9 @@
 	}
     else
     {
+#if DEBUG_RESTORE_DATA
         NSLog(@"Wrong data barker, delete the file "); 
+#endif
         fclose(fd);
         unlink([file UTF8String]);
     }

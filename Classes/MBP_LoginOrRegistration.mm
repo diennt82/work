@@ -479,8 +479,6 @@
 	
 	
 	
-	NSLog(@"login success response: %@",response );
-	
 	NSRange isEmail = [temp_user_str rangeOfString:@"@"];
 	if (isEmail.location != NSNotFound)
 	{
@@ -503,8 +501,7 @@
         
        
         
-		NSLog(@"extracted email  : %@  id: %@", self.temp_user_email,self.temp_user_str );
-	}
+    }
 	else 
 	{
 		//ERROR condition
@@ -536,7 +533,7 @@
        
     
     //REGister for push 
-    NSLog(@"REGister for push");
+   
     
     // Let the device know we want to receive push notifications
 	[[UIApplication sharedApplication] registerForRemoteNotificationTypes:

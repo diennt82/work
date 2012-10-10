@@ -14,7 +14,7 @@
 /* Change this every time the setup data changed -- 
  */ 
 #define DATA_BARKER  0xbeef0003
-
+#define DEBUG_RESTORE_DATA 0
 
 @interface SetupData : NSObject {
 

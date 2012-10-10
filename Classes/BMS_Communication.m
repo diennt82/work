@@ -35,7 +35,7 @@
 	http_cmd = [http_cmd stringByAppendingFormat:@"%@%@", USR_LOGIN_PARAM_4, @"iPhone"];
 	http_cmd = [http_cmd stringByAppendingFormat:@"%@%d", USR_LOGIN_PARAM_5,[user_pass length]];
 
-	NSLog(@"login query:%@", http_cmd);
+	//NSLog(@"login query:%@", http_cmd);
 	
 
 	if (selIfSuccess == nil ||selIfFailure == nil|| selIfServerFail ==nil)
@@ -104,7 +104,7 @@
 	http_cmd = [http_cmd stringByAppendingFormat:@"%@%@", GET_CAM_LIST_PARAM_1, user_email];
 
 	
-	NSLog(@"getCamlist query:%@", http_cmd);
+	//NSLog(@"getCamlist query:%@", http_cmd);
 	
 
 	if (selIfSuccess == nil ||selIfFailure == nil|| selIfServerFail ==nil)
@@ -627,7 +627,7 @@
 	http_cmd = [http_cmd stringByAppendingFormat:@"%@%@", GET_CAM_LIST_PARAM_1, user_email];
     
 	
-	NSLog(@"getCamlist query:%@", http_cmd);
+	//NSLog(@"getCamlist query:%@", http_cmd);
 	
  
 	NSString* plain = [NSString stringWithFormat:@"%@:%@",
@@ -681,7 +681,7 @@
 	http_cmd = [http_cmd stringByAppendingFormat:@"%@%@", GET_IMG_PARAM_1, mac_];
     
 	
-	NSLog(@"getCamlist query:%@", http_cmd);
+	//NSLog(@"getCamlist query:%@", http_cmd);
 	
     
 	
@@ -856,11 +856,6 @@
 	http_cmd1 = [http_cmd1 stringByAppendingFormat:@"%@%@", PUSH_REG_CMD_PARAM_1, user_email];
     http_cmd1 = [http_cmd1 stringByAppendingFormat:@"%@%@", PUSH_REG_CMD_PARAM_2, regId];
 
-    
-	
-	NSLog(@"send reg query:%@", http_cmd1);
-    
-    
     
 	
 	NSString* plain = [NSString stringWithFormat:@"%@:%@",

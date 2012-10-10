@@ -172,8 +172,7 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
     
-    NSLog(@"cellForRowAtIndexPath ::%d", indexPath.row);
-    if (indexPath.row == USERNAME_INDEX) {
+       if (indexPath.row == USERNAME_INDEX) {
         return userNameCell;
     }
    

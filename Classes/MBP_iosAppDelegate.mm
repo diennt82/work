@@ -39,7 +39,7 @@
 	NSLog(@"Log location: %@",logPath);
 #endif
     
-    NSLog(@"Checking alert database"); 
+
     [CameraAlert reloadBlankTableIfNeeded];
     
     return YES;
@@ -47,13 +47,13 @@
 
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo
 {
-    NSLog(@"clear the notification");
     
+    //clear status notification 
     [[UIApplication sharedApplication] setApplicationIconBadgeNumber:1];
     [[UIApplication sharedApplication] setApplicationIconBadgeNumber:0];
     [[UIApplication sharedApplication] cancelAllLocalNotifications];
         
-    NSLog(@" Checking userInfo"); 
+   
     
     
     
@@ -114,18 +114,6 @@
             [self performSelectorOnMainThread:@selector(forceLogin) withObject:nil waitUntilDone:YES];             
         }
         
-#if 0        
-        if ([self shouldAlertForThisMac:str3])
-        {
-            NSLog(@" should Alert for this mac!! "); 
-            
-            
-            
-            
-        }
-#endif 
-        
-        
     }
 
 }
@@ -175,7 +163,7 @@
 // Delegation methods
 - (void)application:(UIApplication *)app didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)devToken {
 
-    NSLog(@"My token is: %@", devToken);
+    //NSLog(@"My token is: %@", devToken);
 
 
     NSString * devTokenStr = [devToken hexadecimalString];

@@ -9,6 +9,8 @@
 #import <UIKit/UIKit.h>
 #import <sqlite3.h>
 
+#define DEBUG_CAM_ALERT_DB 0 
+
 @interface CameraAlert : NSObject {
     
     sqlite3 * database; 

@@ -265,11 +265,11 @@ withConnDelegate:(id<ConnectionMethodDelegate> ) caller
         static NSString *CellIdentifier = @"Cell1";
         
         UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-        NSLog(@"Edit cell: %d ", indexPath.row);
+
 
         
         if (cell == nil) {
-            NSLog(@"Load new");
+
             [[NSBundle mainBundle] loadNibNamed:@"DashBoard_camEdit" owner:self options:nil];
             cell = self.cellView;
             self.cellView = nil; 
@@ -364,7 +364,7 @@ withConnDelegate:(id<ConnectionMethodDelegate> ) caller
             if (alerts != nil)
             {
                 
-                 NSLog(@"alerts count: %d for cam: %@",[alerts count], cp.mac_address);
+                 //NSLog(@"alerts count: %d for cam: %@",[alerts count], cp.mac_address);
                 
                 for (int i =0; i <[alerts count]; i++)
                 {

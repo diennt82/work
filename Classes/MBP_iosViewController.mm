@@ -128,9 +128,7 @@
 	dashBoard = [[DashBoard_ViewController alloc] initWithNibName:@"DashBoard_ViewController"
 														   bundle:nil
 												 withConnDelegate:self];
-    
-    
-    NSLog(@"camListView.channelViews : %d",[channel_array count]);
+   
     
     NSMutableArray * validChannels = [[NSMutableArray alloc]init ];
     
@@ -223,7 +221,7 @@
 		}
 		case 2: //GOTO ROUTER mode - Login 
 		{
-            NSLog(@">>> Login "); 
+            //NSLog(@">>> Login "); 
 
 			[self dismissModalViewControllerAnimated:NO	];
             
@@ -246,7 +244,7 @@
 		}
 		case 3:
             //may be offline mode
-            NSLog(@" back from Login - login success"); 
+            //NSLog(@" back from Login - login success"); 
             
             
             
@@ -733,8 +731,8 @@
 	//For Iphone4
 	//deviceBroadcastIP = [NSString stringWithFormat:@"%s", broadcast_addrs[i-1]];
 	
-	NSLog(@"broadcast iP: %d %@",i, deviceBroadcastIP);
-	NSLog(@"own iP: %d %@",i, deviceIP);
+	//NSLog(@"broadcast iP: %d %@",i, deviceBroadcastIP);
+	//NSLog(@"own iP: %d %@",i, deviceIP);
 	if (deviceIP != nil)
 	{
 		*ownip = [NSString stringWithString:deviceIP];

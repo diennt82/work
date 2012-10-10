@@ -76,10 +76,7 @@
 	str = [str stringByAppendingString:my_ip_str];
 	str = [str substringToIndex:47];
 	
-	
-	
-	NSLog(@"scan req: %@", str);
-	
+		
 	NSData* bytes = [str dataUsingEncoding:NSUTF8StringEncoding];
 	
 	
@@ -299,7 +296,7 @@
 	{
 		CamProfile * newProfile = [CamProfile alloc];
 		
-		NSLog(@"rcv fr: %@", host);
+		//NSLog(@"rcv fr: %@", host);
 		
 		[newProfile initWithResponse:data_str andHost:host];
 		

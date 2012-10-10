@@ -53,7 +53,7 @@ static sqlite3_stmt *init_statement = nil;
     
     
     return self;
-
+    
 }
 
 -(id) initWithTimeStamp1:(NSInteger) timeStamp 
@@ -85,14 +85,18 @@ static sqlite3_stmt *init_statement = nil;
     
     if (success) 
     {
+#if DEBUG_CAM_ALERT_DB
         NSLog(@"No need to reload"); 
+#endif
         return;
     }
     
     
     
     NSString * defaultDBPath = [[[NSBundle mainBundle] resourcePath] stringByAppendingPathComponent:@"alert_history.sqlite"];
+#if DEBUG_CAM_ALERT_DB
     NSLog(@"defaultDBPath: %@", defaultDBPath); 
+#endif
     
     
     success = [fileManager copyItemAtPath:defaultDBPath toPath:writableDBPath error:&error]; 
@@ -108,7 +112,7 @@ static sqlite3_stmt *init_statement = nil;
 
 +( BOOL) insertAlertForCamera:(CameraAlert  *) camAlert 
 {
-
+    
     
     // history(rcvTimeStamp integer primary key, cameraMacNoColon varchar(12), cameraName varchar, alertType varchar, alertTime varchar, alertVal varchar);
     //INSERT INTO Persons VALUES (...)
@@ -116,14 +120,14 @@ static sqlite3_stmt *init_statement = nil;
     
     int timeStamp = [[NSDate date] timeIntervalSince1970]; ; 
     
- 
+    
     
     
     NSArray * paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
     NSString * documentDirectory = [paths objectAtIndex:0]; 
     NSString *writableDBPath = [documentDirectory stringByAppendingPathComponent:@".alert_history.sqlite"];
     sqlite3 * database; 
-
+    
     if (sqlite3_open([writableDBPath UTF8String], &database) == SQLITE_OK)
     {
         //set other values
@@ -138,10 +142,14 @@ static sqlite3_stmt *init_statement = nil;
         {
             if (sqlite3_step(statement) != SQLITE_DONE)
             {
+#if DEBUG_CAM_ALERT_DB
                 NSLog(@"ADD alert to database error"); 
+#endif
             }
             else {
+#if DEBUG_CAM_ALERT_DB
                 NSLog(@"ADD alert to database OK"); 
+#endif
             }
             
             sqlite3_reset(statement);
@@ -149,8 +157,8 @@ static sqlite3_stmt *init_statement = nil;
         
     }
     sqlite3_close(database);
-
-        
+    
+    
     
     return TRUE; 
 }
@@ -159,7 +167,7 @@ static sqlite3_stmt *init_statement = nil;
 //Clear api
 +(void) clearAllAlertForCamera:(NSString *) macWithColon 
 {
- 
+    
     NSArray * paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
     NSString * documentDirectory = [paths objectAtIndex:0]; 
     NSString *writableDBPath = [documentDirectory stringByAppendingPathComponent:@".alert_history.sqlite"];
@@ -180,10 +188,14 @@ static sqlite3_stmt *init_statement = nil;
         {
             if (sqlite3_step(statement) != SQLITE_DONE)
             {
+#if DEBUG_CAM_ALERT_DB
                 NSLog(@"DEL alert fr database error"); 
+#endif
             }
             else {
+#if DEBUG_CAM_ALERT_DB
                 NSLog(@"DEL alert fr database OK"); 
+#endif
             }
             
             sqlite3_reset(statement);
@@ -206,7 +218,7 @@ static sqlite3_stmt *init_statement = nil;
     NSString *writableDBPath = [documentDirectory stringByAppendingPathComponent:@".alert_history.sqlite"];
     sqlite3 * database; 
     
-
+    
     
     if (sqlite3_open([writableDBPath UTF8String], &database) == SQLITE_OK)
     {
@@ -220,10 +232,14 @@ static sqlite3_stmt *init_statement = nil;
         {
             if (sqlite3_step(statement) != SQLITE_DONE)
             {
+#if DEBUG_CAM_ALERT_DB
                 NSLog(@"DEL alert fr database error"); 
+#endif
             }
             else {
+#if DEBUG_CAM_ALERT_DB
                 NSLog(@"DEL alert fr database OK"); 
+#endif
             }
             
             sqlite3_reset(statement);
@@ -244,52 +260,54 @@ static sqlite3_stmt *init_statement = nil;
     NSArray * paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
     NSString * documentDirectory = [paths objectAtIndex:0]; 
     NSString *writableDBPath = [documentDirectory stringByAppendingPathComponent:@".alert_history.sqlite"];
-     sqlite3 * database; 
+    sqlite3 * database; 
     NSString * _mac = [Util strip_colon_fr_mac:macWithColon]; 
     if (sqlite3_open([writableDBPath UTF8String], &database) == SQLITE_OK)
     {
         NSString * _stmt = [NSString stringWithFormat:@"SELECT * from history where cameraMacNoColon='%@'", _mac]; 
-        
+#if DEBUG_CAM_ALERT_DB
         NSLog(@"Db stmt: %@", _stmt); 
+#endif
         
         const char * stmt = [_stmt UTF8String]; 
-
+        
         sqlite3_stmt * statement ; 
         
         if (sqlite3_prepare_v2(database, stmt, -1, &statement, NULL) == SQLITE_OK)
         {
-
+            
             while (sqlite3_step(statement) == SQLITE_ROW)
             {
                 
-
+                
                 int rcvTimeStamp = sqlite3_column_int(statement, 0); 
-
+                
                 
                 CameraAlert * camAlert = [[CameraAlert alloc]initWithTimeStamp1:rcvTimeStamp];
                 
-
+                
                 //set other values
                 camAlert.cameraMacNoColon = [NSString stringWithUTF8String:(char *) sqlite3_column_text(statement,1)];
-
-
-                camAlert.cameraName = [NSString stringWithUTF8String:(char *) sqlite3_column_text(statement,2)];
-
-                camAlert.alertType = [NSString stringWithUTF8String:(char *) sqlite3_column_text(statement,3)];
-
-                camAlert.alertTime = [NSString stringWithUTF8String:(char *) sqlite3_column_text(statement,4)];
-
-                camAlert.alertVal = [NSString stringWithUTF8String:(char *) sqlite3_column_text(statement,5)];
-
                 
-
+                
+                camAlert.cameraName = [NSString stringWithUTF8String:(char *) sqlite3_column_text(statement,2)];
+                
+                camAlert.alertType = [NSString stringWithUTF8String:(char *) sqlite3_column_text(statement,3)];
+                
+                camAlert.alertTime = [NSString stringWithUTF8String:(char *) sqlite3_column_text(statement,4)];
+                
+                camAlert.alertVal = [NSString stringWithUTF8String:(char *) sqlite3_column_text(statement,5)];
+                
+                
+                
                 
                 [alerts addObject:camAlert];
                 [camAlert release]; 
             }
             
-            
-             NSLog(@"sqlite3_step !=  SQLITE_ROW"); 
+#if DEBUG_CAM_ALERT_DB
+            NSLog(@"sqlite3_step !=  SQLITE_ROW"); 
+#endif
         }
         else
         {

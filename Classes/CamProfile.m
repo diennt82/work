@@ -32,7 +32,7 @@
 	NSRange mac_range = {24,17};
 	self.mac_address = [response substringWithRange:mac_range];
 	self.mac_address = [self.mac_address uppercaseString];
-
+    
     self.profileImage = nil;
 	
 	self.isRemoteAccess = NO;
@@ -83,8 +83,8 @@
 	int myport,minute ; 
 	char temp_len ;
 	
-
-
+    
+    
 	temp = self.mac_address;
 	
 	ip = self.ip_address;
@@ -102,7 +102,7 @@
 	{
 		ip = @"nil";
 	}
-     
+    
     
 	temp_len = [ip length];
 	[data appendBytes:&temp_len length:1];
@@ -111,7 +111,7 @@
 	//port
 	[data appendBytes:&myport length:sizeof(int)];
 	
-
+    
 	
 	//name
 	temp = self.name; 
@@ -143,7 +143,7 @@
 	temp_len = [temp length];
 	[data appendBytes:&temp_len length:1];
 	[data appendBytes:[temp UTF8String] length:[temp length]];
-
+    
     //self.minuteSinceLastComm
     minute= self.minuteSinceLastComm;
     [data appendBytes:&minute length:sizeof(int)];
@@ -152,25 +152,29 @@
     
     if ( self.profileImage != nil)
     {
-       
+        
         NSData * imageData = UIImageJPEGRepresentation(self.profileImage , 1.0);
         int img_len; 
         img_len = [imageData length];
         [data appendBytes:&img_len length:sizeof(int)];
         [data appendBytes:[imageData bytes] length:[imageData length]];
         
-         NSLog(@">>>>>>>>>stored snapshot, len:%d",img_len );
+        NSLog(@">>>>>>>>>stored snapshot, len:%d",img_len );
     }
     
     int endOfRec = END_OF_RECORD; 
     [data appendBytes:&endOfRec length:sizeof(int)];
     
     
-    NSLog(@">>getBytes : profile len: %d", [data length]);
+    //NSLog(@">>getBytes : profile len: %d", [data length]);
     
 	return data;
 	
 }
+
+
+
+
 
 + (CamProfile *) restoreFromData: (NSData *) data
 {
@@ -179,7 +183,7 @@
 	unsigned char len = 0;
 	
 	
-
+    
 	
 	
 	NSRange mac_len_range = {0,1};
@@ -194,7 +198,7 @@
 	mac_str[len] = '\0';
 	
 	NSString * mac = [NSString stringWithUTF8String:mac_str];
-		
+    
 	if ( mac == nil)
 	{
 		NSLog(@"mac is nil, cstring: %s", mac_str);
@@ -206,7 +210,7 @@
 	}
 	else {
 		this =[[CamProfile alloc] initWithMacAddr:mac];
-				
+        
 		/* assume */
 		if ( [mac isEqualToString:@"NOTSET"])
 		{
@@ -223,7 +227,7 @@
 		
 		NSRange ip_range = {ip_len_range.location +1, len};
 		[data getBytes:_ip range:ip_range];
-				
+        
 		NSString * ip = [NSString stringWithUTF8String:_ip];
 		
 		
@@ -237,7 +241,7 @@
 			this.ip_address = ip; 
 		}
 		free(_ip);
-
+        
 		//Port
 		int mport = 0;
 		NSRange port_range = {ip_range.location + len,4};
@@ -251,8 +255,8 @@
 		else {
 			this.port = mport; 
 		}
-
-
+        
+        
 		
 		
 		
@@ -277,17 +281,18 @@
         [data getBytes:&alertStatus range:salertStatRange];
         this.soundAlertEnabled = (alertStatus==1); 
         
-         //temp hi alert status
+        //temp hi alert status
         NSRange th_alertStatRange = {salertStatRange.location + 1,1}; 
         [data getBytes:&alertStatus range:th_alertStatRange];
         this.tempHiAlertEnabled = (alertStatus==1);
         
-         //temp lo alert status
+        //temp lo alert status
         NSRange tl_alertStatRange = {th_alertStatRange.location + 1,1}; 
         [data getBytes:&alertStatus range:tl_alertStatRange];
         this.tempLoAlertEnabled = (alertStatus==1);
+#if DEBUG_RESTORE_DATA
         NSLog(@"alert stat: %d %d %d", this.soundAlertEnabled, this.tempHiAlertEnabled, this.tempLoAlertEnabled);
-        
+#endif 
         
 		//LastComm
 		NSRange lastComm_len_range = {tl_alertStatRange.location + 1,1};
@@ -310,7 +315,7 @@
         NSRange min_range = {lastComm_len_range.location + len+1,4};
 		
 		[data getBytes:&minute range:min_range];
-		 
+        
 		this.minuteSinceLastComm = minute; 
 		
 		
@@ -321,16 +326,20 @@
         [data getBytes:&endOfRec range:e_range]; 
         if (endOfRec != END_OF_RECORD)
         {
+#if DEBUG_RESTORE_DATA
             NSLog(@"restored:111 May be some image"); 
+#endif
             
             int img_len = 0; 
             NSRange img_len_range = {min_range.location+4,4};
             [data getBytes:&img_len range:img_len_range];
+#if DEBUG_RESTORE_DATA
             NSLog(@"restored: ImageLen: %d", img_len); 
+#endif
             
 #if 0
             char * _img_data = malloc(len);
-                      
+            
             NSRange img_range = {img_len_range.location +4, img_len};
             
             [data getBytes:_img_data range:img_range];
@@ -344,7 +353,7 @@
             //this.profileImage = [[UIImage alloc]initWithData:img_data];
             
             
-           
+            
             NSLog(@"restored: restored image done"); 
             
             free(_img_data);	
@@ -360,9 +369,10 @@
             //this.profileImage = [[UIImage alloc]initWithData:img_data];
             
             
-            
+#if DEBUG_RESTORE_DATA
             NSLog(@"restored: restored image done 112"); 
-
+#endif
+            
             
 #endif
             
@@ -370,7 +380,9 @@
         }
         else
         {
+#if DEBUG_RESTORE_DATA
             NSLog(@"restored: No image - End of record");
+#endif
         }
         
         
@@ -379,10 +391,10 @@
 	
 	free(mac_str);
 	
-	
+#if DEBUG_RESTORE_DATA
 	NSLog(@"restored: name:%@ mac:%@, ip:%@,prt:%d lastCom:%@ min:%d",this.name, 
 		  this.mac_address, this.ip_address, this.port, this.last_comm, this.minuteSinceLastComm);
-	
+#endif
 	return this;
 }
 

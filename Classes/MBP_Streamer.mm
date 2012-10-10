@@ -429,7 +429,7 @@
 {
 	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
 	
-    NSLog(@"readVideoDataFromSocket enter: 01"); 
+    NSLog(@"STUN: readVideoDataFromSocket enter: 01"); 
 
 	UdtSocketWrapper * socket = streamer.udtSocket;//grap the opened socket 
 	
@@ -445,7 +445,7 @@
 	
 	data = [[NSMutableData alloc]initWithLength:READ_16K_DATA]; //16k
 
-    NSLog(@"readVideoDataFromSocket enter: 02"); 			
+   			
 
 	[self performSelectorOnMainThread:@selector(sendStatusStartedReportOnMainThread:) 
 											withObject:nil
@@ -724,6 +724,9 @@
     }
 	
 	
+    
+     NSLog(@"STUN: readVideoDataFromSocket exit"); 
+    
 	[pool drain];
 	//arrive here -- means exit
 	[NSThread exit];
