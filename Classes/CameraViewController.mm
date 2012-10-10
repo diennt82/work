@@ -1275,6 +1275,8 @@ SystemSoundID soundFileObject;
     //
     if (videoAndSnapshotSlider.value == 0)
     {
+       
+        
         //snapshot
         if (streamer.recordInProgress == NO)
         {	
@@ -1283,6 +1285,22 @@ SystemSoundID soundFileObject;
     }
     else 
     {
+         //20121010: issue 412 : disable until we finish implementing the video app
+
+        NSString * msg = @"Video recording is not supported, comming soon";
+        
+        UIAlertView *
+        _alert = [[UIAlertView alloc]
+                  initWithTitle:@"Not supported" 
+                  message:msg
+                  delegate:self
+                  cancelButtonTitle:@"OK"
+                  otherButtonTitles:nil];
+    
+        [_alert show];
+        [_alert release]; 
+        
+#if 0    
         //video cap
         [streamer toggleRecording ]; 
         
@@ -1308,6 +1326,7 @@ SystemSoundID soundFileObject;
             [videoAndSnapshotButton setImage:[UIImage imageNamed:@"bb_recording_btn.png" ]
                                     forState:UIControlStateNormal];
         }
+#endif
     }
 }
 
