@@ -11,7 +11,7 @@
 #import "DeviceConfiguration.h"
 #import "PublicDefine.h"
 
-#define DEFAULT_TIME_OUT 5000
+#define DEFAULT_TIME_OUT 10.0 // this is Seconds.
 
 #define BASIC_AUTH_DEFAULT_USER @"camera"
 #define BASIC_AUTH_DEFAULT_PASS @"000000"
@@ -95,8 +95,11 @@
 
 #define GET_ROUTER_LIST @"get_routers_list"
 
+#define CHECK_FW_UPGRADE @"check_fw_upgrade"
+#define REQUEST_FW_UPGRADE @"request_fw_upgrade"
 
 
+#define BURNING_PROCESS @"burning_process :"
 
 #define ALERT_ASK_FOR_PASSWD 1
 #define ALERT_ASK_FOR_NEW_PASSWD 2
@@ -133,6 +136,7 @@
 -(NSData * ) getSnapshot;
 - (void) askForUserPass;
 - (void) askForNewUserPass;
+- (NSString *) getUpgradeProgress:(NSError **)error;
 
 
 

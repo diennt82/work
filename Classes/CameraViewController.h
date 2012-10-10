@@ -49,6 +49,8 @@
 #define LOCAL_VIDEO_STOPPED_UNEXPECTEDLY 0x1001
 #define REMOTE_VIDEO_STOPPED_UNEXPECTEDLY 0x1002
 
+#define FW_OTA_UPGRADE_AVAILABLE 0x1003
+
 
 #define SPK_CONTROL_BTN  702
 
@@ -103,6 +105,11 @@
     
     IBOutlet UISlider * zoombar; 
     IBOutlet UIView * zoombarView;
+    
+    
+    IBOutlet UIView * upgradeFwView; 
+    IBOutlet UILabel * percentageLabel;
+    IBOutlet UIProgressView * percentageProgress;
    
     
     HttpCommunication * comm; 
@@ -134,7 +141,7 @@
     
     CGFloat currentZoomLvl; 
     
-    BOOL ptt_enabled; 
+    BOOL ptt_enabled, askForFWUpgradeOnce; 
     
     
 }
@@ -148,7 +155,7 @@
 @property (nonatomic, retain) NSTimer * alertTimer; 
 @property (nonatomic, assign) UISlider * zoombar; 
 @property (nonatomic) float currentZoomLvl; 
-@property (nonatomic) BOOL ptt_enabled; 
+@property (nonatomic) BOOL ptt_enabled,askForFWUpgradeOnce; 
 
 
 -(IBAction)buttonMelodyPressed:(id) sender;

@@ -22,7 +22,7 @@
 @synthesize  zoombar; 
 @synthesize  currentZoomLvl; 
 
-@synthesize  ptt_enabled;
+@synthesize  ptt_enabled,askForFWUpgradeOnce;
 
 
 SystemSoundID soundFileObject;
@@ -43,6 +43,8 @@ SystemSoundID soundFileObject;
         melodies = [[NSArray alloc] initWithObjects:@"Rock a Bye Baby",
                     @"Lullaby and Goodnight", @"Lavender Blue", @"Twinkle Twinkle Little Star",
                     @"Hush Little Baby",nil];
+        
+        self.askForFWUpgradeOnce = YES;
     }
     return self;
 }
@@ -245,6 +247,12 @@ SystemSoundID soundFileObject;
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
 {
+    
+    if (upgradeFwView != nil && ![upgradeFwView isHidden])
+    {
+        //Dont rotate if we are upgrading..
+        return NO; 
+    }
     return YES;//(interfaceOrientation == UIInterfaceOrientationPortrait);
 }
 - (void) willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
@@ -392,6 +400,19 @@ SystemSoundID soundFileObject;
     }
     
     
+}
+
+
+-(void) goBackAndReLogin
+{
+    NSLog(@"Go all the way bacK");
+    
+    UITabBarController * root =  (UITabBarController *)[[self.navigationController viewControllers] objectAtIndex:0];
+    [self.navigationController popToRootViewControllerAnimated:NO];
+    
+    DashBoard_ViewController * dashBoard =  (DashBoard_ViewController *)[[root viewControllers] objectAtIndex:0]; 
+    
+    [dashBoard forceRelogin];
 }
 
 
@@ -790,16 +811,11 @@ SystemSoundID soundFileObject;
 			            
 			[self stopPeriodicPopup]; 
 			
-			if (selected_channel.communication_mode == COMM_MODE_STUN)
-			{
-                
-                NSLog(@"send set QVGA"); 
-
-                [self.scomm sendCommandThruUdtServer:SET_RESOLUTION_QVGA 
-                                             withMac:self.selected_channel.profile.mac_address
-                                          AndChannel:self.selected_channel.channID];
-				
-			}
+            if ( self.selected_channel.profile.isInLocal && (self.askForFWUpgradeOnce == YES))
+            {
+                [self performSelectorInBackground:@selector(checkIfUpgradeIsPossible) withObject:nil];
+                self.askForFWUpgradeOnce = NO; 
+            }
 			
 			break;
 		}
@@ -1060,6 +1076,25 @@ SystemSoundID soundFileObject;
 		[alert release];
 		alert = nil; 
 	}
+    else if (tag ==FW_OTA_UPGRADE_AVAILABLE)
+    {
+        switch(buttonIndex) {
+			case 0: //Cancel
+				
+								
+				break;
+			case 1: //OK - request_fw_upgrade.
+                //Stop streaming first 
+                [self.streamer stopStreaming];
+                
+                [self startUpgradeFW];
+
+                
+				break;
+			default:
+				break;
+		}
+    }
 }
 
 
@@ -2369,7 +2404,226 @@ SystemSoundID soundFileObject;
 }
 
 #pragma mark - 
+#pragma mark FW OTA UPGRADE
 
+
+-(void) showFWUpgradeDialog:(NSString *) version
+{
+    
+    
+    NSString * msg = [NSString stringWithFormat:@"A camera firmware %@ is available. Do you want to upgrade now?",version];
+    
+    UIAlertView *
+    _alert = [[UIAlertView alloc]
+			 initWithTitle:@"Camera Firwmare Upgrade" 
+			 message:msg
+			 delegate:self
+			 cancelButtonTitle:@"Cancel"
+			 otherButtonTitles:@"OK",nil];
+	
+	_alert.tag = FW_OTA_UPGRADE_AVAILABLE;
+	[_alert show];
+	[_alert release]; 
+
+    
+}
+
+- (void) checkIfUpgradeIsPossible
+{
+	NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
+    
+    
+	NSString * command = [NSString stringWithFormat:@"%@",CHECK_FW_UPGRADE];
+	
+	if(comm != nil)
+	{
+		NSString * response = [comm sendCommandAndBlock:command];
+        
+        //if upgrade is not possible : return '0' or if command is not supported 'check_fw_upgrade: -1' 
+        
+        response = [response stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+        
+        if ( [response isEqualToString:@"0"] || [response isEqualToString:@"check_fw_upgrade: -1"])
+        {
+            //NO upgrade
+            //simply die off
+            
+            NSLog(@"NOoooo Upgrade "); 
+        }
+        else 
+        {
+          
+            
+            //some upgrade is available .. 
+            
+            NSLog(@"Upgrade possible"); 
+            [self performSelectorOnMainThread:@selector(showFWUpgradeDialog:) withObject:response waitUntilDone:NO];
+        }
+        
+        
+        
+	}
+	
+	[pool release];
+}
+
+-(void) startUpgradeFW
+{
+    //Load the UI 
+    [[NSBundle mainBundle] loadNibNamed:@"FWUpgradeView" owner:self options:nil];
+    
+    //Disable all these since we will get out of here after finishing
+    topToolBar.userInteractionEnabled = NO; 
+    controlButtons.userInteractionEnabled = NO; 
+    directionPad.userInteractionEnabled = NO; 
+    temperature_label.hidden = YES;
+    temperature_bg.hidden = YES; 
+    self.view.userInteractionEnabled = NO; 
+    
+    [self.view addSubview:upgradeFwView]; 
+    [self.view bringSubviewToFront:upgradeFwView]; 
+        
+    UIInterfaceOrientation orientation = [UIApplication sharedApplication].statusBarOrientation;
+
+    if (orientation == UIInterfaceOrientationLandscapeLeft || orientation == UIInterfaceOrientationLandscapeRight) 
+    {
+        CGAffineTransform transform = CGAffineTransformMakeTranslation(80,20);
+        upgradeFwView.transform = transform;
+
+    }
+    else if (orientation == UIInterfaceOrientationPortrait || orientation == UIInterfaceOrientationPortraitUpsideDown) 
+    {
+        
+        CGAffineTransform transform = CGAffineTransformMakeTranslation(0, 120);
+        upgradeFwView.transform = transform;
+
+    }
+    
+    percentageLabel.text = @"--"; 
+    percentageProgress.progress = 0.0; 
+    
+    
+    
+    NSString * command = [NSString stringWithFormat:@"%@",REQUEST_FW_UPGRADE];
+	
+	if(comm != nil)
+	{
+		[comm sendCommandAndBlock:command];
+    }
+    
+    [self performSelectorInBackground:@selector(upgradeFwProgress_bg)  withObject:nil] ;
+
+    
+    
+}
+
+
+-(void) upgradeFwProgress_ui:(NSNumber *) number
+{
+    int value =  [number intValue]; 
+    float _value = (float) value;
+    _value = _value/100.0; 
+    
+    if (value >=0)
+    {
+        percentageLabel.text = [NSString stringWithFormat:@"%d%%", value];
+        percentageProgress.progress = _value; 
+    }
+    
+}
+
+-(void) upgradeDoneWaitForReboot
+{
+    UILabel * text = (UILabel*)[upgradeFwView viewWithTag:12];  
+    text.text = @"Restarting Camera...";
+    
+    percentageLabel.text = @"--";
+    percentageProgress.progress = 0.0; 
+
+    [self performSelectorInBackground:@selector(upgradeFwReboot_bg)  withObject:nil] ;
+}
+
+
+
+-(void) upgradeFwReboot_bg
+{
+    //percentageProgress.
+    NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
+
+    //float totalTime  = 80.0; // 80 sec reboot time
+    
+    float sleepPeriod = 80.0 / 100; // 100 cycles
+    int percentage = 0; 
+    while (percentage ++ < 100)
+    {
+        
+        
+        [self performSelectorOnMainThread:@selector(upgradeFwProgress_ui:) 
+                               withObject:[NSNumber numberWithInt:percentage]
+                            waitUntilDone:YES];
+        
+        [NSThread sleepForTimeInterval:sleepPeriod];
+        
+    }
+    
+    [self performSelectorOnMainThread:@selector(goBackAndReLogin) withObject:nil waitUntilDone:NO]; 
+    [pool release];
+
+}
+
+-(void) upgradeFwProgress_bg
+{
+    //percentageProgress.
+    NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
+    NSError * error = nil ; 
+    
+	
+	if(comm != nil)
+	{
+		
+        
+        //[NSThread sleepForTimeInterval:5.0];
+        NSString * response ;
+        while (true)
+        {
+            
+            error = nil;
+            response = [comm getUpgradeProgress:&error]; 
+            //NSLog(@"response: %@",response);
+            if (error != nil)
+            {
+                
+                NSLog(@"error: %@ code:%d \n", [error localizedDescription] ,[error code]);
+                break; 
+                
+            }
+            else
+            {
+                //show the response
+                
+                NSString * percentage = [response substringFromIndex:[BURNING_PROCESS length]]; 
+                
+                [self performSelectorOnMainThread:@selector(upgradeFwProgress_ui:) 
+                                       withObject:[NSNumber numberWithInt:[percentage intValue]]
+                                    waitUntilDone:YES];
+                
+                
+            }
+            
+            [NSThread sleepForTimeInterval:3.0];
+        }
+        
+        
+        
+        
+        NSLog(@"Upgrade exiting... "); 
+        
+	}
+    
+    
+    [self performSelectorOnMainThread:@selector(upgradeDoneWaitForReboot) withObject:nil waitUntilDone:NO]; 
+    [pool release];
+}
 
 
 @end

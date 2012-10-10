@@ -128,7 +128,7 @@ withConnDelegate:(id<ConnectionMethodDelegate> ) caller
     [buttons addObject:spacer];
     [spacer release];
 
-    if ([listOfChannel count] >1)
+    if ([self shouldShowScanButton])
     {
         // create a standard delete button with the trash icon
         UIBarButtonItem *snapButton = [[UIBarButtonItem alloc]
@@ -207,6 +207,26 @@ withConnDelegate:(id<ConnectionMethodDelegate> ) caller
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
 {
     return  (interfaceOrientation == UIInterfaceOrientationPortrait);
+}
+
+
+- (BOOL) shouldShowScanButton
+{
+    CamChannel * chan = nil; 
+    int localCount = 0; 
+    for (int i =0 ;i<[listOfChannel count]; i++)
+    {
+        
+        chan = (CamChannel *) [listOfChannel objectAtIndex:i];
+        if (chan.profile.isInLocal == YES)
+        {
+            localCount ++;
+        }
+        
+    }
+    
+    return (localCount >1); 
+    
 }
 
 #pragma mark -

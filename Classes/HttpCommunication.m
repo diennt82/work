@@ -438,6 +438,46 @@
 	return dataReply ;
 }
 
+-(NSString *) getUpgradeProgress:(NSError **)error
+{
+    NSData * dataReply;
+    NSURLResponse* response;
+	
+    NSString * stringReply = nil;
+    
+    NSTimeInterval timeout = DEFAULT_TIME_OUT ; 
+    
+    NSString * http_cmd = [NSString stringWithFormat:@"http://%@:8080/cgi-bin/fullupgrade",device_ip]; 
+    
+    
+    // Create the request.
+    NSMutableURLRequest *theRequest=[NSMutableURLRequest requestWithURL:[NSURL URLWithString:http_cmd]
+                                                            cachePolicy: NSURLRequestReloadIgnoringLocalCacheData
+                                                        timeoutInterval:timeout];
+    
+
+    
+    
+    dataReply = [NSURLConnection sendSynchronousRequest:theRequest returningResponse:&response error:error];
+    
+    
+    if (*error != nil)
+    {
+       
+        dataReply = nil; 
+    }
+    else
+    {  
+        // Interpret the response
+        stringReply = (NSString *)[[NSString alloc] initWithData:dataReply encoding:NSUTF8StringEncoding];
+        
+        *error = nil;
+    }
+    
+    return stringReply;
+
+}
+
 - (NSData *) getSnapshot
 {
 	//NSLog(@"send request: %@", url);

@@ -20,6 +20,7 @@
 		3803A8761601981100B4DD97 /* photo_item.png in Resources */ = {isa = PBXBuildFile; fileRef = 3803A8751601981100B4DD97 /* photo_item.png */; };
 		3803A87A1602D44100B4DD97 /* temp_alert.png in Resources */ = {isa = PBXBuildFile; fileRef = 3803A8781602D44100B4DD97 /* temp_alert.png */; };
 		3803A87B1602D44100B4DD97 /* voice_alert.png in Resources */ = {isa = PBXBuildFile; fileRef = 3803A8791602D44100B4DD97 /* voice_alert.png */; };
+		3804A6F8162434C200216E45 /* beep.wav in Resources */ = {isa = PBXBuildFile; fileRef = 3804A6F7162434C200216E45 /* beep.wav */; };
 		3809A42C15E49A4B0098BBC0 /* bb_pic_1.png in Resources */ = {isa = PBXBuildFile; fileRef = 3809A42B15E49A4B0098BBC0 /* bb_pic_1.png */; };
 		3809A42F15E4A2520098BBC0 /* bb_melody_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 3809A42D15E4A2520098BBC0 /* bb_melody_icon.png */; };
 		3809A43015E4A2520098BBC0 /* bb_melody_off_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 3809A42E15E4A2520098BBC0 /* bb_melody_off_icon.png */; };
@@ -109,7 +110,7 @@
 		38CFFF7415BD352F009A2EE2 /* Setup_bm_step_12.xib in Resources */ = {isa = PBXBuildFile; fileRef = 38CFFF7315BD352F009A2EE2 /* Setup_bm_step_12.xib */; };
 		38CFFF7615BD3E67009A2EE2 /* DashBoard_ViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 38CFFF7515BD3E67009A2EE2 /* DashBoard_ViewController.xib */; };
 		38CFFF7815BD4ECC009A2EE2 /* CameraViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 38CFFF7715BD4ECB009A2EE2 /* CameraViewController.xib */; };
-		9709A93515ECC3C300302C97 /* beep.wav in Resources */ = {isa = PBXBuildFile; fileRef = 9709A93415ECC3C300302C97 /* beep.wav */; };
+		38FC1EBA1622E9350082E7F9 /* FWUpgradeView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 38FC1EB91622E9340082E7F9 /* FWUpgradeView.xib */; };
 		97137B9715AE742A00BEBBD6 /* StunCommunication.mm in Sources */ = {isa = PBXBuildFile; fileRef = 97137B9615AE742A00BEBBD6 /* StunCommunication.mm */; };
 		9719EC5C155C9F30005419FC /* MBP_MenuViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 9719EC5A155C9F30005419FC /* MBP_MenuViewController.mm */; };
 		9719EC5D155C9F30005419FC /* MBP_MenuViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9719EC5B155C9F30005419FC /* MBP_MenuViewController.xib */; };
@@ -200,6 +201,7 @@
 		3803A8751601981100B4DD97 /* photo_item.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = photo_item.png; sourceTree = "<group>"; };
 		3803A8781602D44100B4DD97 /* temp_alert.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = temp_alert.png; sourceTree = "<group>"; };
 		3803A8791602D44100B4DD97 /* voice_alert.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = voice_alert.png; sourceTree = "<group>"; };
+		3804A6F7162434C200216E45 /* beep.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = beep.wav; sourceTree = "<group>"; };
 		3809A42B15E49A4B0098BBC0 /* bb_pic_1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bb_pic_1.png; sourceTree = "<group>"; };
 		3809A42D15E4A2520098BBC0 /* bb_melody_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bb_melody_icon.png; sourceTree = "<group>"; };
 		3809A42E15E4A2520098BBC0 /* bb_melody_off_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bb_melody_off_icon.png; sourceTree = "<group>"; };
@@ -307,9 +309,9 @@
 		38CFFF7315BD352F009A2EE2 /* Setup_bm_step_12.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = Setup_bm_step_12.xib; sourceTree = "<group>"; };
 		38CFFF7515BD3E67009A2EE2 /* DashBoard_ViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = DashBoard_ViewController.xib; sourceTree = "<group>"; };
 		38CFFF7715BD4ECB009A2EE2 /* CameraViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CameraViewController.xib; sourceTree = "<group>"; };
+		38FC1EB91622E9340082E7F9 /* FWUpgradeView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FWUpgradeView.xib; sourceTree = "<group>"; };
 		8D1107310486CEB800E47090 /* MBP_ios-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "MBP_ios-Info.plist"; plistStructureDefinitionIdentifier = "com.apple.xcode.plist.structure-definition.iphone.info-plist"; sourceTree = "<group>"; };
 		9704F37E14B76202000B4AA5 /* Entitlements.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Entitlements.plist; sourceTree = "<group>"; };
-		9709A93415ECC3C300302C97 /* beep.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = beep.wav; sourceTree = "<group>"; };
 		97137B9515AE742A00BEBBD6 /* StunCommunication.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StunCommunication.h; sourceTree = "<group>"; };
 		97137B9615AE742A00BEBBD6 /* StunCommunication.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = StunCommunication.mm; sourceTree = "<group>"; };
 		9719EC59155C9F30005419FC /* MBP_MenuViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MBP_MenuViewController.h; sourceTree = "<group>"; };
@@ -552,8 +554,6 @@
 				97D00811159D9FF500B1D92F /* WifiEntry.m */,
 				97D0081A159DA24400B1D92F /* WifiListParser.h */,
 				97D0081B159DA24400B1D92F /* WifiListParser.m */,
-				97A3BD6D1545094F000C3546 /* HttpCommunication.h */,
-				97A3BD6E1545094F000C3546 /* HttpCommunication.m */,
 				38C79E1C15C25F90006EE378 /* Reachability.h */,
 				38C79E1D15C25F90006EE378 /* Reachability.m */,
 				978E9A7E1551313000B59E90 /* MBP_AddCamController.h */,
@@ -613,11 +613,6 @@
 				97C49AAF154784F4008B7D03 /* SetupData.m */,
 				97987E401546AF2C0066C49B /* UserAccount.h */,
 				97987E411546AF2C0066C49B /* UserAccount.mm */,
-				38CFFF7715BD4ECB009A2EE2 /* CameraViewController.xib */,
-				3812F84015C8DB5600DADFA6 /* CameraViewController_land.xib */,
-				38A62E8615C8F03C00DEA520 /* SongTitleView.xib */,
-				38C79E2915C7C444006EE378 /* CameraViewController.h */,
-				38C79E2A15C7C446006EE378 /* CameraViewController.mm */,
 				97F0F166143C45FA0076B749 /* MBP_Streamer.h */,
 				97F0F167143C45FA0076B749 /* MBP_Streamer.mm */,
 				97423427155BA503007DCBCD /* AudioOutStreamer.h */,
@@ -625,6 +620,14 @@
 				380C42FD16195047001434C0 /* AlertSettingViewController.h */,
 				380C42FE16195047001434C0 /* AlertSettingViewController.mm */,
 				380C42FF16195047001434C0 /* AlertSettingViewController.xib */,
+				97A3BD6D1545094F000C3546 /* HttpCommunication.h */,
+				97A3BD6E1545094F000C3546 /* HttpCommunication.m */,
+				38CFFF7715BD4ECB009A2EE2 /* CameraViewController.xib */,
+				38FC1EB91622E9340082E7F9 /* FWUpgradeView.xib */,
+				3812F84015C8DB5600DADFA6 /* CameraViewController_land.xib */,
+				38A62E8615C8F03C00DEA520 /* SongTitleView.xib */,
+				38C79E2915C7C444006EE378 /* CameraViewController.h */,
+				38C79E2A15C7C446006EE378 /* CameraViewController.mm */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -665,9 +668,9 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				3804A6F7162434C200216E45 /* beep.wav */,
 				38362C1C15FDEE400077E188 /* alert_history.sqlite */,
 				97E3AAD5147E257400A0922A /* iTunesArtWork */,
-				9709A93415ECC3C300302C97 /* beep.wav */,
 				2899E5210DE3E06400AC0155 /* MBP_iosViewController.xib */,
 				28AD733E0D9D9553002E5188 /* MainWindow.xib */,
 				8D1107310486CEB800E47090 /* MBP_ios-Info.plist */,
@@ -907,13 +910,14 @@
 				3809A42C15E49A4B0098BBC0 /* bb_pic_1.png in Resources */,
 				3809A42F15E4A2520098BBC0 /* bb_melody_icon.png in Resources */,
 				3809A43015E4A2520098BBC0 /* bb_melody_off_icon.png in Resources */,
-				9709A93515ECC3C300302C97 /* beep.wav in Resources */,
 				3803A8761601981100B4DD97 /* photo_item.png in Resources */,
 				3803A87A1602D44100B4DD97 /* temp_alert.png in Resources */,
 				3803A87B1602D44100B4DD97 /* voice_alert.png in Resources */,
 				38167AC216118DB600B7FA0A /* bb_pic_2.png in Resources */,
 				38167AC51611AB1800B7FA0A /* bb_ptt_icon_d.png in Resources */,
 				380C430116195047001434C0 /* AlertSettingViewController.xib in Resources */,
+				38FC1EBA1622E9350082E7F9 /* FWUpgradeView.xib in Resources */,
+				3804A6F8162434C200216E45 /* beep.wav in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
