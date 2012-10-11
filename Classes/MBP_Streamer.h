@@ -99,7 +99,9 @@
     UIInterfaceOrientation currentOrientation; 
     
     CamChannel * streamingChannel; 
+    BOOL stillReading;
     
+     NSThread * readTimeoutThrd ;
 	
 }
 @property (nonatomic) int device_port,communication_mode, local_port;
@@ -116,7 +118,7 @@
 
 @property (nonatomic, retain) NSTimer * recTimer;
 
-@property (nonatomic) BOOL disableAudio; 
+@property (nonatomic) BOOL disableAudio,stillReading; 
 @property (nonatomic, assign) id<StreamerFrameRateUpdater> mFrameUpdater;
 @property (nonatomic, assign) id<StreamerTemperatureUpdater> mTempUpdater; 
 @property (nonatomic) UIInterfaceOrientation currentOrientation; 

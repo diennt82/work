@@ -29,6 +29,7 @@
 @synthesize mFrameUpdater,mTempUpdater;
 @synthesize  currentOrientation; 
 @synthesize  streamingChannel; 
+@synthesize  stillReading;
 
 - (id) initWithIp:(NSString *) ip andPort:(int) port handler:(id<StreamerEventHandler>) handler
 {
@@ -224,17 +225,31 @@
 			NSLog(@"streamerThrd is running --stop it now"); 
 			[udtStreamerThd cancel];
 		}
-		
+		if (readTimeoutThrd!= nil && [readTimeoutThrd isExecuting])
+		{
+			NSLog(@"readTimeoutThrd is running --stop it now"); 
+			[readTimeoutThrd cancel];
+		}
+        
+        
 		
 		NSString * msg = nil; 
 		msg = [NSString stringWithFormat:@"%@%@",
 			   STUN_CMD_PART, CLOSE_STUN_SESSION];
 		NSData * msg_ = [[NSData alloc] initWithBytes:[msg UTF8String] length:[msg length]]; 
-		NSLog(@"DONT send close session.. & close sock"); 
-		//[udtSocket sendDataViaUdt:msg_];
+		
+        
+        if ([udtSocket isOpen])
+        {
+            NSLog(@"Send close session.. & close sock"); 
+            [udtSocket sendDataViaUdt:msg_];
+            [udtSocket close];
+        }
+		else {
+            NSLog(@"udtSocket already close -- "); 
+        }
 		
 		
-		[udtSocket close];
 	}
 	
 }
@@ -286,6 +301,17 @@
     
     [keepAliveThrd start]; 
 #endif ///TODO check wth servers
+    
+    
+   
+    
+    readTimeoutThrd = [[NSThread alloc] initWithTarget:self
+                                              selector:@selector(readTimeoutCheck:)
+                                                object:self]; 
+    
+    [readTimeoutThrd start]; 
+    
+    
     
     udtStreamerThd = [[NSThread alloc] initWithTarget:self
                                              selector:@selector(readVideoDataFromSocket:)
@@ -390,7 +416,11 @@
     
     
   
+    readTimeoutThrd = [[NSThread alloc] initWithTarget:self
+                                              selector:@selector(readTimeoutCheck:)
+                                                object:self]; 
     
+    [readTimeoutThrd start];   
     
     udtStreamerThd = [[NSThread alloc] initWithTarget:self
                                              selector:@selector(readVideoDataFromSocket:)
@@ -429,7 +459,7 @@
 {
 	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
 	
-    NSLog(@"readVideoDataFromSocket enter: 01"); 
+    NSLog(@"STUN Main readVideoDataFromSocket enter: 01"); 
 
 	UdtSocketWrapper * socket = streamer.udtSocket;//grap the opened socket 
 	
@@ -445,22 +475,28 @@
 	
 	data = [[NSMutableData alloc]initWithLength:READ_16K_DATA]; //16k
 
-    NSLog(@"readVideoDataFromSocket enter: 02"); 			
+    			
 
 	[self performSelectorOnMainThread:@selector(sendStatusStartedReportOnMainThread:) 
 											withObject:nil
 							waitUntilDone:YES];
 	
     BOOL exitedUnexpectedly = FALSE; 
-	int ignore_err_count = 5; 
+	int ignore_err_count = 4; // ~20 sec
 	//while (i -- >=0)
 	while (![[NSThread currentThread] isCancelled])
 	{
+        
+        if (streamer.streamingChannel.stopStreaming == TRUE)
+        {
+            break;
+        }
 		
 		//read 
 		bytesRead = [socket recvDataViaUdt:data dataLen:READ_16K_DATA];
         if (bytesRead <0)
         {
+            NSLog(@"bytesRead:%d ignoreCount:%d", bytesRead, ignore_err_count);
             if (ignore_err_count -- < 0)
             {
                 
@@ -478,10 +514,16 @@
                 [NSThread sleepForTimeInterval:1.0]; 
                 continue; 
             }
+            
+            
+             
         }
         
+        //Kick this timeout 
+        streamer.stillReading = TRUE;
+        
         //Refresh
-        ignore_err_count = 5; 
+        ignore_err_count = 4; 
         
 		if ( bytesRead > READ_16K_DATA)
 		{
@@ -723,13 +765,54 @@
 							waitUntilDone:YES];
     }
 	
-	
+    NSLog(@"STUN Main readVideoDataFromSocket exit"); 
+
 	[pool drain];
 	//arrive here -- means exit
 	[NSThread exit];
 }
 
+ 
 
+-(void) readTimeoutCheck:(MBP_Streamer *) streamer 
+{
+    
+    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+	UdtSocketWrapper * socket = streamer.udtSocket;//grap the opened socket 
+    
+    NSLog(@"readTimeoutCheck enter: 01"); 
+    
+    while ([socket isOpen]) //This check is not really effective??
+    {
+        
+        [NSThread sleepForTimeInterval:10.0];
+        
+        if (streamer.stillReading == FALSE)
+        {
+            if (socket != nil && [socket isOpen])
+            {
+                NSLog(@"readTimeoutCheck: TIMEOUT! close sock"); 
+                [socket close];
+                break;
+            }
+        }
+        else
+        {
+            streamer.stillReading = FALSE;
+        }
+    }
+   
+    
+    
+    NSLog(@"readTimeoutCheck exit: 01"); 
+    
+    
+    
+    [pool drain];
+	//arrive here -- means exit
+	[NSThread exit];
+    
+}
 -(void) keepAlive:(MBP_Streamer *) streamer 
 {
     

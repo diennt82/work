@@ -136,7 +136,6 @@
     
     BOOL ptt_enabled; 
     
-    
 }
 
 @property (nonatomic, retain) IBOutlet UILabel * temperature_label, *videoAndSnapshotTime; 

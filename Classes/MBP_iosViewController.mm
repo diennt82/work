@@ -40,6 +40,7 @@
 
 @synthesize shouldReloadWhenEnterBG;
 
+@synthesize app_stage;
 
 
 
@@ -74,6 +75,7 @@
 	self.recordInProgress = NO;
 
 
+    self.app_stage = APP_STAGE_INIT;
 
 }
 
@@ -102,6 +104,8 @@
 - (void)wakeup_display_login:(NSTimer*) timer_exp
 {
 
+    self.app_stage = APP_STAGE_INIT;
+    
     //hide splash screen page
     [self.view addSubview:backgroundView];
     
@@ -247,9 +251,8 @@
 		case 3:
             //may be offline mode
             NSLog(@" back from Login - login success"); 
-            
-            
-            
+                      
+            self.app_stage = APP_STAGE_LOGGED_IN;
             
             [self scan_for_devices];
             

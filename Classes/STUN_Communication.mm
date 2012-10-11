@@ -104,6 +104,9 @@
 		return FALSE; 
 	}
 	
+    
+    
+        
 	mChannel = ch; 
 	[mChannel retain]; 
 	
@@ -145,6 +148,13 @@
 
 - (void) availSuccessWithResponse:(NSData*) responseData
 {
+    
+    if (mChannel.stopStreaming == TRUE)
+    {
+        [_caller performSelector:_Failure_SEL withObject:nil ];
+        return ;
+    }
+    
 	NSString * raw_data = [[[NSString alloc] initWithData:responseData encoding: NSASCIIStringEncoding] autorelease];
 	
 	NSLog(@"isavail response: %@", raw_data);
@@ -152,6 +162,7 @@
 	// if success means camera is available 
 	//Next, get the security info
 	
+
 	
 	BMS_Communication * bms_comm; 
 	
@@ -176,19 +187,24 @@
 	
 	NSLog(@" failed with error code:%d", [error_response statusCode]);
 	
+    if (mChannel.stopStreaming == TRUE)
+    {
+        [_caller performSelector:_Failure_SEL withObject:nil ];
+        return ;
+    }    
 	// if success means camera is NOT available 
 	retry_getting_camera_availability--;
 	if (retry_getting_camera_availability <=0)
 	{
 		//ERROR condition
-		UIAlertView *alert = [[UIAlertView alloc]
-							  initWithTitle:@"Get Camera Status Error"
-							  message:[NSString stringWithFormat:@"Server error code: %@", [Util get_error_description:[error_response statusCode]]] 
-							  delegate:self
-							  cancelButtonTitle:@"OK"
-							  otherButtonTitles:nil];
-		[alert show];
-		[alert release];
+//		UIAlertView *alert = [[UIAlertView alloc]
+//							  initWithTitle:@"Get Camera Status Error"
+//							  message:[NSString stringWithFormat:@"Server error code: %@", [Util get_error_description:[error_response statusCode]]] 
+//							  delegate:self
+//							  cancelButtonTitle:@"OK"
+//							  otherButtonTitles:nil];
+//		[alert show];
+//		[alert release];
 		
 		//Pass some info back to caller
 		[_caller performSelector:_Failure_SEL withObject:nil ];
@@ -225,21 +241,26 @@
 }
 - (void) availFailedServerUnreachable
 {
-	
+	if (mChannel.stopStreaming == TRUE)
+    {
+        [_caller performSelector:_Failure_SEL withObject:nil ];
+        return ;
+    }
+    
 	NSLog(@" failed : server unreachable");
 	// if success means camera is NOT available 
 	retry_getting_camera_availability--;
 	if (retry_getting_camera_availability <=0)
 	{
 		//ERROR condition
-		UIAlertView *alert = [[UIAlertView alloc]
-							  initWithTitle:@"Get Camera Status Error"
-							  message:@"Server unreachable"
-							  delegate:self
-							  cancelButtonTitle:@"OK"
-							  otherButtonTitles:nil];
-		[alert show];
-		[alert release];
+//		UIAlertView *alert = [[UIAlertView alloc]
+//							  initWithTitle:@"Get Camera Status Error"
+//							  message:@"Server unreachable"
+//							  delegate:self
+//							  cancelButtonTitle:@"OK"
+//							  otherButtonTitles:nil];
+//		[alert show];
+//		[alert release];
 		
 		[_caller performSelector:_Failure_SEL withObject:nil ];
 	}
@@ -278,6 +299,12 @@
 
 - (void) getSecSuccessWithResponse:(NSData*) responseData
 {
+    
+    if (mChannel.stopStreaming == TRUE)
+    {
+        [_caller performSelector:_Failure_SEL withObject:nil ];
+        return ;
+    }
 	
 	NSString * raw_data = [[[NSString alloc] initWithData:responseData encoding: NSASCIIStringEncoding] autorelease];
 	
@@ -436,29 +463,42 @@
 - (void) getSecFailedWithError:(NSHTTPURLResponse*) error_response
 {
 
+    if (mChannel.stopStreaming == TRUE)
+    {
+        [_caller performSelector:_Failure_SEL withObject:nil ];
+        return ;
+    }
+    
 	//ERROR condition
-	UIAlertView *alert = [[UIAlertView alloc]
-						  initWithTitle:@"Get Security Info Error"
-						  message:[NSString stringWithFormat:@"Server error code: %@", [Util get_error_description:[error_response statusCode]]]
-						  delegate:self
-						  cancelButtonTitle:@"OK"
-						  otherButtonTitles:nil];
-	[alert show];
-	[alert release];
+//	UIAlertView *alert = [[UIAlertView alloc]
+//						  initWithTitle:@"Get Security Info Error"
+//						  message:[NSString stringWithFormat:@"Server error code: %@", [Util get_error_description:[error_response statusCode]]]
+//						  delegate:self
+//						  cancelButtonTitle:@"OK"
+//						  otherButtonTitles:nil];
+//	[alert show];
+//	[alert release];
 	
 	[_caller performSelector:_Failure_SEL withObject:nil ];
 }
 - (void) getSecFailedServerUnreachable
 {
+    if (mChannel.stopStreaming == TRUE)
+    {
+        [_caller performSelector:_Failure_SEL withObject:nil ];
+        return ;
+    }
+    
+    
 	//ERROR condition
-	UIAlertView *alert = [[UIAlertView alloc]
-						  initWithTitle:@"Get Security Info Error"
-						  message:@"Server unreachable"
-						  delegate:self
-						  cancelButtonTitle:@"OK"
-						  otherButtonTitles:nil];
-	[alert show];
-	[alert release];
+//	UIAlertView *alert = [[UIAlertView alloc]
+//						  initWithTitle:@"Get Security Info Error"
+//						  message:@"Server unreachable"
+//						  delegate:self
+//						  cancelButtonTitle:@"OK"
+//						  otherButtonTitles:nil];
+//	[alert show];
+//	[alert release];
 	
 	[_caller performSelector:_Failure_SEL withObject:nil ];
 }

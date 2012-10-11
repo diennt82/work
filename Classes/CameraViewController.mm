@@ -25,6 +25,7 @@
 @synthesize  ptt_enabled;
 
 
+
 SystemSoundID soundFileObject;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
@@ -39,6 +40,7 @@ SystemSoundID soundFileObject;
         CFBundleRef mainbundle = CFBundleGetMainBundle();
         CFURLRef soundFileURLRef = CFBundleCopyResourceURL(mainbundle, CFSTR("beep"), CFSTR("wav"), NULL);
         AudioServicesCreateSystemSoundID(soundFileURLRef, &soundFileObject);
+        
         
         melodies = [[NSArray alloc] initWithObjects:@"Rock a Bye Baby",
                     @"Lullaby and Goodnight", @"Lavender Blue", @"Twinkle Twinkle Little Star",
@@ -136,6 +138,9 @@ SystemSoundID soundFileObject;
         
         ptt_enabled = TRUE; 
 
+
+        self.selected_channel.stopStreaming = FALSE; 
+        
         //init the ptt port to default 
         self.selected_channel.profile.ptt_port = IRABOT_AUDIO_RECORDING_PORT;
         
@@ -399,9 +404,13 @@ SystemSoundID soundFileObject;
 {
     NSLog(@"goback to camera list"); 
         
+
+    
     if (streamer.recordInProgress == YES)
         [streamer stopRecording];   
     [streamer stopStreaming];
+    
+    
     
     //NSLog(@"abort remote timer ");
     [self.selected_channel abortViewTimer];
@@ -701,6 +710,17 @@ SystemSoundID soundFileObject;
 //    CFBundleRef mainbundle = CFBundleGetMainBundle();
 //    CFURLRef soundFileURLRef = CFBundleCopyResourceURL(mainbundle, CFSTR("beep"), CFSTR("wav"), NULL);
 //    AudioServicesCreateSystemSoundID(soundFileURLRef, &soundFileObject);
+    
+    NSLog(@"Play the B"); 
+    
+    //201201011 This is needed to play the system sound on top of audio from camera 
+    UInt32 sessionCategory = kAudioSessionCategory_AmbientSound;    // 1     
+    AudioSessionSetProperty (
+                             kAudioSessionProperty_AudioCategory,                        // 2
+                             sizeof (sessionCategory),                                   // 3
+                             &sessionCategory                                            // 4
+                             );
+
     //Play beep
     AudioServicesPlaySystemSound(soundFileObject);
 	
@@ -723,6 +743,10 @@ SystemSoundID soundFileObject;
 			
 			return; 
 		}
+        else
+        {
+            NSLog(@"alert not visible -- going to release "); 
+        }
 		
 		[alert release]; 
 		alert = nil; 
@@ -771,6 +795,7 @@ SystemSoundID soundFileObject;
 	}
 }
 
+ 
 
 -(void) statusReport:(int) status andObj:(NSObject*) obj
 {
@@ -790,20 +815,10 @@ SystemSoundID soundFileObject;
 			            
 			[self stopPeriodicPopup]; 
 			
-			if (selected_channel.communication_mode == COMM_MODE_STUN)
-			{
-                
-                NSLog(@"send set QVGA"); 
-
-                [self.scomm sendCommandThruUdtServer:SET_RESOLUTION_QVGA 
-                                             withMac:self.selected_channel.profile.mac_address
-                                          AndChannel:self.selected_channel.channID];
-				
-			}
-			
 			break;
 		}
 		case STREAM_STOPPED:
+            
 			break;
 		case STREAM_STOPPED_UNEXPECTEDLY:
 		{
@@ -881,11 +896,9 @@ SystemSoundID soundFileObject;
 			NSString * msg = @"Network lost link. Please check the Phone, Camera and Wifi router or move closer to the Router" ;
 			
 			// signal streamer to stop 
-			self.streamer.hasStoppedByCaller = TRUE; 
+			//self.streamer.hasStoppedByCaller = TRUE; 
 			
-			//For remote stream, we restart by quering the BMS again 
-			[self prepareToViewRemotely:selected_channel];
-			
+            
 			if (self.alertTimer != nil && [self.alertTimer isValid])
 			{
 				//some periodic is running dont care
@@ -902,6 +915,15 @@ SystemSoundID soundFileObject;
 				[self.alertTimer fire] ;//fire once now
 				
 			}
+            
+            //Stop stream - clean up all resources 
+            [self.streamer stopStreaming]; 
+            
+            
+            
+            //For remote stream, we restart by quering the BMS again 
+			[self prepareToViewRemotely:selected_channel];
+
 			
 			break;
 		}
@@ -917,6 +939,12 @@ SystemSoundID soundFileObject;
 
 -(void) prepareToViewRemotely:(CamChannel *) ch
 {
+    
+    if (ch.stopStreaming == TRUE)
+    {
+        return;
+    }
+    
 	//setup remote camera via upnp 
 	
 	RemoteConnection * cameraConn;
@@ -952,12 +980,21 @@ SystemSoundID soundFileObject;
 
 -(void) remoteConnectionSucceeded:(CamChannel *) camChannel
 {
-	
+ 
 	//Start to display this channel
 	selected_channel = camChannel;
+    if (self.selected_channel.stopStreaming == TRUE)
+    {
+        return;
+    }
+    
 	
+#if 1
 	NSLog(@"Remote camera-channel is %d with cam name: %@", selected_channel.channel_index, selected_channel.profile.name);
 	[self setupInfraCamera:selected_channel];
+#endif 
+       
+    
 }
 
 -(void) remoteConnectionFailed:(CamChannel *) camChannel
@@ -966,16 +1003,28 @@ SystemSoundID soundFileObject;
 	
 	NSLog(@"Remote connection Failed!!!");
     
+    if (self.selected_channel.stopStreaming == TRUE)
+    {
+        return;
+    }
+    
+    
 	
 	progressView.hidden = YES;
 	
+    [self statusReport:REMOTE_STREAM_STOPPED_UNEXPECTEDLY andObj:nil];
+    
+    
     
 }
 
 -(void) remoteViewTimeout:(NSTimer *) expired
 {
 	//View time as expired --- popup now. 
-	
+    if (self.selected_channel.stopStreaming == TRUE)
+    {
+        return;
+    }
     
 	UIAlertView *_alert = [[UIAlertView alloc]
                            initWithTitle:@"Time out"
@@ -1003,7 +1052,8 @@ SystemSoundID soundFileObject;
 		switch(buttonIndex) {
 			case 0:
 				NSLog(@"Stop remote view -- go back to camera list-");
-								
+                            
+                self.selected_channel.stopStreaming = TRUE;
 				[self goBackToCameraList];
 				
 				break;
@@ -1030,7 +1080,8 @@ SystemSoundID soundFileObject;
 				NSLog(@"Stop monitoring  -- go back to camera list-");
 				[self stopPeriodicPopup]; 
                 
-				
+                self.selected_channel.stopStreaming = TRUE;
+                
 				[self goBackToCameraList];
 				
 				break;
@@ -1047,8 +1098,8 @@ SystemSoundID soundFileObject;
 			case 0: //Stop monitoring 
 				NSLog(@"Stop monitoring  -- go back to camera list-");
 				[self stopPeriodicPopup]; 
-                
-				[self goBackToCameraList];
+                self.selected_channel.stopStreaming = TRUE;
+                [self goBackToCameraList];
 				
 				break;
 			case 1: //continue -- streamer is connecting so we dont do anything here.

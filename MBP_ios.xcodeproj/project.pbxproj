@@ -576,8 +576,6 @@
 				38CE2A1215D4FA3700B8F7EC /* ForgotPwdViewController.xib */,
 				97FE7D0E15998C0B000826F0 /* RemoteConnection.h */,
 				97FE7D0F15998C0B000826F0 /* RemoteConnection.mm */,
-				97F0F04A143C0CA00076B749 /* CamChannel.h */,
-				97F0F04B143C0CA00076B749 /* CamChannel.m */,
 				972E290C15A3F77600E60A96 /* STUN_Communication.h */,
 				972E290D15A3F77600E60A96 /* STUN_Communication.mm */,
 				97137B9515AE742A00BEBBD6 /* StunCommunication.h */,
@@ -625,6 +623,8 @@
 				380C42FD16195047001434C0 /* AlertSettingViewController.h */,
 				380C42FE16195047001434C0 /* AlertSettingViewController.mm */,
 				380C42FF16195047001434C0 /* AlertSettingViewController.xib */,
+				97F0F04A143C0CA00076B749 /* CamChannel.h */,
+				97F0F04B143C0CA00076B749 /* CamChannel.m */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
