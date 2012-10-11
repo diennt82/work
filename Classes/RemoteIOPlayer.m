@@ -349,11 +349,13 @@ static OSStatus recordingCallback(void *inRefCon,
 	//NSLog(@"Error: %d", status);
 	
 	UInt32 audioRouteOverride = kAudioSessionOverrideAudioRoute_Speaker; 
-	status = AudioSessionSetProperty (kAudioSessionProperty_OverrideAudioRoute, sizeof (audioRouteOverride), &audioRouteOverride);
+	status = AudioSessionSetProperty (
+                                      kAudioSessionProperty_OverrideAudioRoute, 
+                                      sizeof (audioRouteOverride), 
+                                      &audioRouteOverride);
 	//NSLog(@"Error: %d", status);
 	
-	
-
+    
 	// Initialise
 	status = AudioUnitInitialize(audioUnit);
 	//

@@ -31,7 +31,6 @@
 
 
 
-
 //Only called when app has failed to connect to UDT camera directly 
 // Lengthy blocking function
 -(UdtSocketWrapper *) connectToUDTRelay: (CamChannel *) ch ;

@@ -143,7 +143,6 @@
     
     BOOL ptt_enabled, askForFWUpgradeOnce; 
     
-    
 }
 
 @property (nonatomic, retain) IBOutlet UILabel * temperature_label, *videoAndSnapshotTime; 

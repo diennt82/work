@@ -63,6 +63,10 @@
 #define _triggeredByVox @"bool_Vox_Trigger"
 #define CAM_IN_VEW @"string_Camera_Mac_Being_Viewed"
 
+
+#define APP_STAGE_INIT 1
+#define APP_STAGE_LOGGED_IN 2
+
 @interface MBP_iosViewController : UIViewController < ConnectionMethodDelegate,UIActionSheetDelegate, ScanForCameraNotifier	> {
 
 	
@@ -108,6 +112,8 @@
     UIAlertView * pushAlert; 
     
     DashBoard_ViewController * dashBoard;
+    
+    int app_stage; 
 
 	
 }
@@ -123,6 +129,7 @@
 
 @property (nonatomic, retain) NSArray * channel_array; 
 @property (nonatomic, retain) NSMutableArray * restored_profiles ;
+@property (nonatomic) int app_stage; 
 
 
 //@property (nonatomic, retain) NSTimer * fullScreenTimer, *alertTimer; 

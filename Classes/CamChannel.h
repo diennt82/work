@@ -42,6 +42,7 @@
     //remote STun RElay Stuff
     NSString * relayToken; 
 	
+    BOOL stopStreaming; 
 	
 }
 
@@ -51,6 +52,7 @@
 @property (nonatomic, retain) NSTimer * remoteViewTimer;
 @property (nonatomic, retain) NSString * channID, *secretKey, *relayToken;
 @property (nonatomic) int localUdtPort, communication_mode; 
+@property (nonatomic) BOOL stopStreaming;
 
 
 +(NSString*) convertIntToIpStr:(uint ) ip;

@@ -8,6 +8,7 @@
 
 #import "UdtSocketWrapper.h"
 
+#define DEBUG 1
 
 @implementation UdtSocketWrapper
 @synthesize udt_socket,local_port;
@@ -39,11 +40,40 @@
 	}
 	
 	udt_socket = UDT::socket(AF_INET, SOCK_STREAM, 0);  
-    /*
-	int timeout = 5000; 
-	setsockopt(udt_socket, 0, UDT_SNDTIMEO,(void*) &timeout , sizeof(int));
-	setsockopt(udt_socket, 0, UDT_RCVTIMEO,(void*) &timeout , sizeof(int));
-	*/
+    
+    
+    int timeout = 0;
+#if DEBUG
+    int len = sizeof(int);
+    
+    UDT::getsockopt(udt_socket, 0, UDT_RCVTIMEO,(void*) &timeout , &len);
+    
+    NSLog(@"Default Rcv Timeout is : %d", timeout); 
+    
+    timeout = 0;
+    len = sizeof(int);
+    UDT::getsockopt(udt_socket, 0, UDT_SNDTIMEO,(void*) &timeout , &len);
+    
+    NSLog(@"Default Snd Timeout is : %d", timeout); 
+#endif 
+    
+	timeout = 5000; 
+	UDT::setsockopt(udt_socket, 0, UDT_SNDTIMEO,(void*) &timeout , sizeof(int));
+	UDT::setsockopt(udt_socket, 0, UDT_RCVTIMEO,(void*) &timeout , sizeof(int));
+	
+#if DEBUG
+    len = sizeof(int);
+    
+    UDT::getsockopt(udt_socket, 0, UDT_RCVTIMEO,(void*) &timeout , &len);
+    
+    NSLog(@"set Rcv Timeout : %d", timeout); 
+    
+    timeout = 0;
+    len = sizeof(int);
+    UDT::getsockopt(udt_socket, 0, UDT_SNDTIMEO,(void*) &timeout , &len);
+    
+    NSLog(@"set Snd Timeout  : %d", timeout); 
+#endif 
     
 	if (self.local_port > 0)
 	{

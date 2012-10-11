@@ -86,6 +86,9 @@
 
 - (void) getStreamSuccessWithResponse:(NSData*) responseData
 {
+  
+    
+    
 	NSString * raw_data = [[[NSString alloc] initWithData:responseData encoding: NSASCIIStringEncoding] autorelease];
 	
 	NSLog(@"getStream response: %@", raw_data);
@@ -140,15 +143,15 @@
 				else 
 				{
 					NSLog(@"Start remote connection Failed!!!"); 
-					//ERROR condition
-					UIAlertView *_alert = [[UIAlertView alloc]
-										   initWithTitle:@"Remote View Error"
-										   message:@"Initializing remote connection failed, please retry" 
-										   delegate:self
-										   cancelButtonTitle:@"OK"
-										   otherButtonTitles:nil];
-					[_alert show];
-					[_alert release];
+//					//ERROR condition
+//					UIAlertView *_alert = [[UIAlertView alloc]
+//										   initWithTitle:@"Remote View Error"
+//										   message:@"Initializing remote connection failed, please retry" 
+//										   delegate:self
+//										   cancelButtonTitle:@"OK"
+//										   otherButtonTitles:nil];
+//					[_alert show];
+//					[_alert release];
 					
 					[_caller performSelector:_Failure_SEL withObject:nil ];
 				}		
@@ -171,17 +174,20 @@
 - (void) getStreamFailedWithError:(NSHTTPURLResponse*) error_response
 {
 	
+    
+    
+    
 	NSLog(@" failed with error code:%d", [error_response statusCode]);
 	
-	//ERROR condition
-	UIAlertView *alert = [[UIAlertView alloc]
-						  initWithTitle:@"Get Stream Mode Error"
-						  message:[NSString stringWithFormat:@"Server error code: %@", [Util get_error_description:[error_response statusCode]]] 
-						  delegate:self
-						  cancelButtonTitle:@"OK"
-						  otherButtonTitles:nil];
-	[alert show];
-	[alert release];
+//	//ERROR condition
+//	UIAlertView *alert = [[UIAlertView alloc]
+//						  initWithTitle:@"Get Stream Mode Error"
+//						  message:[NSString stringWithFormat:@"Server error code: %@", [Util get_error_description:[error_response statusCode]]] 
+//						  delegate:self
+//						  cancelButtonTitle:@"OK"
+//						  otherButtonTitles:nil];
+//	[alert show];
+//	[alert release];
 	
     //Pass some info back to caller
 	[_caller performSelector:_Failure_SEL withObject:nil ];
@@ -193,14 +199,14 @@
 	NSLog(@" failed : server unreachable");
 	
 	//ERROR condition
-	UIAlertView *alert = [[UIAlertView alloc]
-						  initWithTitle:@"Get Stream Mode Error"
-						  message:@"Server unreachable"
-						  delegate:self
-						  cancelButtonTitle:@"OK"
-						  otherButtonTitles:nil];
-	[alert show];
-	[alert release];
+//	UIAlertView *alert = [[UIAlertView alloc]
+//						  initWithTitle:@"Get Stream Mode Error"
+//						  message:@"Server unreachable"
+//						  delegate:self
+//						  cancelButtonTitle:@"OK"
+//						  otherButtonTitles:nil];
+//	[alert show];
+//	[alert release];
 	
 	[_caller performSelector:_Failure_SEL withObject:nil ];
 	return;
@@ -214,15 +220,15 @@
 
 	NSLog(@"failed with error code:%d", [error_response statusCode]);
 	
-	//ERROR condition
-	UIAlertView *alert = [[UIAlertView alloc]
-						  initWithTitle:@"Get Upnp/manual Ports Error"
-						  message:[NSString stringWithFormat:@"Server error code: %@", [Util get_error_description:[error_response statusCode]]]
-						  delegate:self
-						  cancelButtonTitle:@"OK"
-						  otherButtonTitles:nil];
-	[alert show];
-	[alert release];
+//	//ERROR condition
+//	UIAlertView *alert = [[UIAlertView alloc]
+//						  initWithTitle:@"Get Upnp/manual Ports Error"
+//						  message:[NSString stringWithFormat:@"Server error code: %@", [Util get_error_description:[error_response statusCode]]]
+//						  delegate:self
+//						  cancelButtonTitle:@"OK"
+//						  otherButtonTitles:nil];
+//	[alert show];
+//	[alert release];
 	
     //Pass some info back to caller
 	[_caller performSelector:_Failure_SEL withObject:nil ];
@@ -234,14 +240,14 @@
 	NSLog(@" failed : server unreachable");
 	
 	//ERROR condition
-	UIAlertView *alert = [[UIAlertView alloc]
-						  initWithTitle:@"Get Upnp/manual Ports Error"
-						  message:@"Server unreachable"
-						  delegate:self
-						  cancelButtonTitle:@"OK"
-						  otherButtonTitles:nil];
-	[alert show];
-	[alert release];
+//	UIAlertView *alert = [[UIAlertView alloc]
+//						  initWithTitle:@"Get Upnp/manual Ports Error"
+//						  message:@"Server unreachable"
+//						  delegate:self
+//						  cancelButtonTitle:@"OK"
+//						  otherButtonTitles:nil];
+//	[alert show];
+//	[alert release];
 	
 	[_caller performSelector:_Failure_SEL withObject:nil ];
 	return;
@@ -312,14 +318,14 @@
 	NSLog(@"failed with error code:%d", [error_response statusCode]);
 	
 	//ERROR condition
-	UIAlertView *alert = [[UIAlertView alloc]
-						  initWithTitle:@"View Remote Error"
-						  message:[NSString stringWithFormat:@"Server error code: %@", [Util get_error_description:[error_response statusCode]]] 
-						  delegate:self
-						  cancelButtonTitle:@"OK"
-						  otherButtonTitles:nil];
-	[alert show];
-	[alert release];
+//	UIAlertView *alert = [[UIAlertView alloc]
+//						  initWithTitle:@"View Remote Error"
+//						  message:[NSString stringWithFormat:@"Server error code: %@", [Util get_error_description:[error_response statusCode]]] 
+//						  delegate:self
+//						  cancelButtonTitle:@"OK"
+//						  otherButtonTitles:nil];
+//	[alert show];
+//	[alert release];
 	
     //Pass some info back to caller
 	[_caller performSelector:_Failure_SEL withObject:nil ];
@@ -332,14 +338,14 @@
 	NSLog(@" failed : server unreachable");
 	
 	//ERROR condition
-	UIAlertView *alert = [[UIAlertView alloc]
-						  initWithTitle:@"View Remote Error"
-						  message:@"Server unreachable"
-						  delegate:self
-						  cancelButtonTitle:@"OK"
-						  otherButtonTitles:nil];
-	[alert show];
-	[alert release];
+//	UIAlertView *alert = [[UIAlertView alloc]
+//						  initWithTitle:@"View Remote Error"
+//						  message:@"Server unreachable"
+//						  delegate:self
+//						  cancelButtonTitle:@"OK"
+//						  otherButtonTitles:nil];
+//	[alert show];
+//	[alert release];
 	
 	[_caller performSelector:_Failure_SEL withObject:nil ];
 	return;

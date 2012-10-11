@@ -124,6 +124,14 @@
     [viewController sendStatus:2]; 
 }
 
+-(void) forceScan
+{
+    [viewController sendStatus:3]; 
+}
+-(void) showInit
+{
+    [viewController sendStatus:7]; 
+}
 
 
 
@@ -212,6 +220,10 @@
 	
 	NSLog(@"Enter background"); 
 
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+	[userDefaults setInteger:viewController.app_stage forKey:@"ApplicationStage"];
+    [userDefaults synchronize];
+    
 		
 }
 
@@ -223,6 +235,17 @@
 	
 	NSLog(@"Enter foreground "); 
 	
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+	viewController.app_stage = [userDefaults integerForKey:@"ApplicationStage"];
+
+    if (viewController.app_stage == APP_STAGE_LOGGED_IN)
+    {
+        [self performSelectorOnMainThread:@selector(forceScan) withObject:nil waitUntilDone:YES];
+    }
+    else
+    {
+         [self performSelectorOnMainThread:@selector(showInit) withObject:nil waitUntilDone:YES];
+    }
     
 //    NSLog(@"Re login"); 
 //    [self performSelectorOnMainThread:@selector(forceLogin) withObject:nil waitUntilDone:YES];   
