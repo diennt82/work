@@ -242,6 +242,10 @@
     {
         [self performSelectorOnMainThread:@selector(forceScan) withObject:nil waitUntilDone:YES];
     }
+    else if (viewController.app_stage ==  APP_STAGE_SETUP)
+    {
+        //Do nothing -- stay at the current page
+    }
     else
     {
          [self performSelectorOnMainThread:@selector(showInit) withObject:nil waitUntilDone:YES];

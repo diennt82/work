@@ -1031,8 +1031,7 @@
 					"\"$(SRCROOT)/../openssl_lib/iPhoneOS-armv6/lib\"",
 				);
 				PRODUCT_NAME = MBP_ios;
-				"PROVISIONING_PROFILE[sdk=*]" = "FF4FECB8-0A70-41CC-B152-F35169E2EE6B";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "FF4FECB8-0A70-41CC-B152-F35169E2EE6B";
+				PROVISIONING_PROFILE = "B86A6CF1-9DD1-4D4B-970D-FAEE935EF5E3";
 				SDKROOT = iphoneos;
 				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/external_include/**";
 			};
@@ -1064,8 +1063,7 @@
 					"\"$(SRCROOT)\"",
 				);
 				PRODUCT_NAME = MBP_ios;
-				PROVISIONING_PROFILE = "FF4FECB8-0A70-41CC-B152-F35169E2EE6B";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "FF4FECB8-0A70-41CC-B152-F35169E2EE6B";
+				PROVISIONING_PROFILE = "B86A6CF1-9DD1-4D4B-970D-FAEE935EF5E3";
 				SDKROOT = iphoneos;
 				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/external_include/**";
 				VALIDATE_PRODUCT = YES;
@@ -1101,8 +1099,8 @@
 					armv6,
 				);
 				CODE_SIGN_ENTITLEMENTS = "";
-				CODE_SIGN_IDENTITY = "iPhone Distribution: Binatone Electronics International Limited";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Binatone Electronics International Limited";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Paul Tsui (KSWYEMQH37)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Paul Tsui (KSWYEMQH37)";
 				COPY_PHASE_STRIP = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1115,8 +1113,8 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 4.1;
 				LIBRARY_SEARCH_PATHS = "\"$(SRCROOT)\"";
 				PRODUCT_NAME = msc3;
-				PROVISIONING_PROFILE = "118099D3-F799-4F23-B5A0-2D5783EDB82F";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "118099D3-F799-4F23-B5A0-2D5783EDB82F";
+				PROVISIONING_PROFILE = "B86A6CF1-9DD1-4D4B-970D-FAEE935EF5E3";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "B86A6CF1-9DD1-4D4B-970D-FAEE935EF5E3";
 				SDKROOT = iphoneos;
 				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/external_include/**";
 				VALIDATE_PRODUCT = YES;

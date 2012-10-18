@@ -85,14 +85,7 @@ withConnDelegate:(id<ConnectionMethodDelegate> ) caller
     }
     else 
     {
-//        UIBarButtonItem *reloadButton = [[UIBarButtonItem alloc]
-//                                         initWithBarButtonSystemItem:UIBarButtonSystemItemEdit
-//                                         target:self
-//                                         action:@selector(editCameras:)];
-//        reloadButton.style = UIBarButtonItemStyleBordered;
-//        [buttons addObject:reloadButton];
-//        [reloadButton release];
-//        
+
         UIBarButtonItem *editButton = [[UIBarButtonItem alloc]
                                        initWithTitle:@"Edit"
                                        style:UIBarButtonItemStyleBordered
@@ -103,13 +96,22 @@ withConnDelegate:(id<ConnectionMethodDelegate> ) caller
         [editButton release];
     }
     
+    UIBarButtonItem *reloadButton = [[UIBarButtonItem alloc]
+                                     initWithBarButtonSystemItem:UIBarButtonSystemItemRefresh
+                                     target:self
+                                     action:@selector(refreshCameras:)];
+    reloadButton.style = UIBarButtonItemStyleBordered;
+    [buttons addObject:reloadButton];
+    [reloadButton release];
+           
     // create a spacer between the buttons
-    UIBarButtonItem *spacer = [[UIBarButtonItem alloc]
-                               initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace
-                               target:nil
-                               action:nil];
+    UIBarButtonItem * spacer = [[UIBarButtonItem alloc]
+              initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace
+              target:nil
+              action:nil];
     [buttons addObject:spacer];
     [spacer release];
+    
     
     //Label
     UIBarButtonItem *label = [[UIBarButtonItem alloc]
@@ -620,6 +622,13 @@ withConnDelegate:(id<ConnectionMethodDelegate> ) caller
     [cameraList performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:YES];
     
 }
+
+
+-(IBAction)refreshCameras :(id)sender
+{
+    [delegate sendStatus:3];
+}
+ 
 
 -(IBAction)alertSetting:(id)sender
 {

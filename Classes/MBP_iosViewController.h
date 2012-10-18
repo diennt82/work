@@ -66,6 +66,7 @@
 
 #define APP_STAGE_INIT 1
 #define APP_STAGE_LOGGED_IN 2
+#define APP_STAGE_SETUP 3
 
 @interface MBP_iosViewController : UIViewController < ConnectionMethodDelegate,UIActionSheetDelegate, ScanForCameraNotifier	> {
 
@@ -99,7 +100,6 @@
 	NSString * own_addr;
 
     
-    BOOL shouldReloadWhenEnterBG;
     NSArray * channel_array; 
 	NSMutableArray * restored_profiles ; 
 
@@ -124,7 +124,7 @@
 //@property (nonatomic,retain) HttpCommunication *comm;
 
 
-@property (nonatomic) BOOL toTakeSnapShot, recordInProgress, shouldReloadWhenEnterBG;
+@property (nonatomic) BOOL toTakeSnapShot, recordInProgress;
 @property (nonatomic, retain) NSString * bc_addr, *own_addr;
 
 @property (nonatomic, retain) NSArray * channel_array; 

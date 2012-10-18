@@ -38,7 +38,7 @@
 
 @synthesize progressView;
 
-@synthesize shouldReloadWhenEnterBG;
+
 
 @synthesize app_stage;
 
@@ -66,11 +66,6 @@ return self;
 
 - (void) initialize 
 {
-
-	//self.mainMenuView = nil;
-
-	shouldReloadWhenEnterBG = TRUE;
-
 	self.toTakeSnapShot = NO;
 	self.recordInProgress = NO;
 
@@ -206,8 +201,8 @@ return self;
 
 				NSLog(@">>> SETUP ");
 				[self dismissModalViewControllerAnimated:NO	];
-				self.shouldReloadWhenEnterBG = FALSE;
 
+                self.app_stage = APP_STAGE_SETUP;
 
 
 
@@ -261,7 +256,7 @@ return self;
 		case 4:
 			{
 				NSLog(@" back from adding cam. relogin -- to get the new cam data");
-				self.shouldReloadWhenEnterBG = TRUE;
+
 				NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
 				[userDefaults setBool:TRUE forKey:_AutoLogin];
 				[userDefaults synchronize];
