@@ -38,6 +38,9 @@
     UIAlertView * alert;
 	NSTimer * alertTimer;
     
+    
+    SystemSoundID soundFileObject;
+    
 
 }
 

@@ -141,7 +141,9 @@
     
     CGFloat currentZoomLvl; 
     
-    BOOL ptt_enabled, askForFWUpgradeOnce; 
+    BOOL ptt_enabled, askForFWUpgradeOnce;
+    
+    SystemSoundID soundFileObject;
     
 }
 

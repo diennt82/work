@@ -580,10 +580,6 @@
 				972E290D15A3F77600E60A96 /* STUN_Communication.mm */,
 				97137B9515AE742A00BEBBD6 /* StunCommunication.h */,
 				97137B9615AE742A00BEBBD6 /* StunCommunication.mm */,
-				38CC5A1215DCBBBF00067C54 /* QuickViewCamera_ViewController.h */,
-				38CC5A1315DCBBC100067C54 /* QuickViewCamera_ViewController.mm */,
-				38CC5A1415DCBBC200067C54 /* QuickViewCamera_ViewController.xib */,
-				38CC5A1715DCEE3C00067C54 /* QuickViewCamera_landscape.xib */,
 				9719EC59155C9F30005419FC /* MBP_MenuViewController.h */,
 				9719EC5A155C9F30005419FC /* MBP_MenuViewController.mm */,
 				9719EC5B155C9F30005419FC /* MBP_MenuViewController.xib */,
@@ -628,6 +624,10 @@
 				38A62E8615C8F03C00DEA520 /* SongTitleView.xib */,
 				38C79E2915C7C444006EE378 /* CameraViewController.h */,
 				38C79E2A15C7C446006EE378 /* CameraViewController.mm */,
+				38CC5A1215DCBBBF00067C54 /* QuickViewCamera_ViewController.h */,
+				38CC5A1315DCBBC100067C54 /* QuickViewCamera_ViewController.mm */,
+				38CC5A1415DCBBC200067C54 /* QuickViewCamera_ViewController.xib */,
+				38CC5A1715DCEE3C00067C54 /* QuickViewCamera_landscape.xib */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
