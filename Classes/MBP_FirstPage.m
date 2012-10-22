@@ -35,7 +35,7 @@
     //Read version 
     NSString *version = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
 
-    version = [NSString stringWithFormat:@"Version: %@",version]; 
+    version = [NSString stringWithFormat:@"Version %@",version]; 
     versionText.text =version;
 }
 
