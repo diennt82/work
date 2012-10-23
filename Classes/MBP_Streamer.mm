@@ -273,7 +273,7 @@
 	{
 		NSLog(@"Fail to open relay socket "); 
 
-		[self sendStatusStoppedReportOnMainThread:nil];
+		[self sendStatusStoppedWithErrOnMainThread:nil];
 		return; 
 	}
 	responseData = [[NSMutableData alloc] init];

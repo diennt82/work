@@ -22,7 +22,7 @@
 @synthesize  zoombar;
 @synthesize  currentZoomLvl;
 
-@synthesize  ptt_enabled,askForFWUpgradeOnce;
+@synthesize  ptt_enabled,askForFWUpgradeOnce, enableControls;
 
 
 
@@ -139,6 +139,7 @@
         
 		ptt_enabled = TRUE;
         
+        self.enableControls = FALSE;
         
 		self.selected_channel.stopStreaming = FALSE;
         
@@ -450,6 +451,11 @@
 -(void) goToCameraSettings
 {
     
+    if (self.enableControls == FALSE)
+    {
+        //siliently return;
+        return; 
+    }
     
 	MBP_MenuViewController * menuViewCtrl;
     
@@ -827,6 +833,7 @@
 	switch (status) {
 		case CONNECTED_TO_CAMERA:
         {
+            self.enableControls = TRUE;
             //update melody ui
             [self setUIMelodyOnOff];
             
@@ -1299,6 +1306,7 @@
 -(void) swithVideoAndSnapshotView:(BOOL) on
 {
     
+    
 	//[self hideAllFunction];
     
 	if (on == YES)
@@ -1329,6 +1337,13 @@
 
 -(IBAction)buttonCamPressed:(id)sender
 {
+    
+    if (self.enableControls == FALSE)
+    {
+        //siliently return;
+        return;
+    }
+    
 	[self hideAllFunction];
     
 	[self swithVideoAndSnapshotView:YES];
@@ -1336,6 +1351,14 @@
 }
 -(IBAction)buttonSnapPress:(id)sender
 {
+    
+    if (self.enableControls == FALSE)
+    {
+        //siliently return;
+        return;
+    }
+    
+    
 	//
 	if (videoAndSnapshotSlider.value == 0)
 	{
@@ -1396,6 +1419,13 @@
 
 - (IBAction)sliderChanged:(id)sender
 {
+    if (self.enableControls == FALSE)
+    {
+        //siliently return;
+        return;
+    }
+    
+    
 	int sliderValue;
 	sliderValue = lroundf(videoAndSnapshotSlider.value);
 	[videoAndSnapshotSlider setValue:sliderValue animated:YES];
@@ -1426,6 +1456,13 @@
 
 -(IBAction)buttonSpkPressed:(id)sender
 {
+    if (self.enableControls == FALSE)
+    {
+        //siliently return;
+        return;
+    }
+    
+    
 	int tag = ((UIView *) sender).tag;
     
 	switch (tag)
@@ -1466,6 +1503,14 @@
 
 -(IBAction)silderMoved:(id)sender
 {
+    
+    if (self.enableControls == FALSE)
+    {
+        //siliently return;
+        return;
+    }
+    
+    
 	//NSLog(@"Slider moved");
 	UISlider * slider = (UISlider *) sender;
 	int sliderValue = (int) (slider.value/ZOOM_STEP);
@@ -1503,6 +1548,7 @@
 
 - (BOOL) setEnablePtt:(BOOL) walkie_talkie_enabled
 {
+    
     
 	@synchronized (self)
 	{
@@ -1607,6 +1653,13 @@
 
 -(void) showPttButton
 {
+    if (self.enableControls == FALSE)
+    {
+        //siliently return;
+        return;
+    }
+    
+    
 	pttButton.hidden = NO;
 	[self.view bringSubviewToFront:pttButton];
 }
@@ -1616,6 +1669,12 @@
 
 -(IBAction)buttonPttPressed:(id)sender
 {
+    if (self.enableControls == FALSE)
+    {
+        //siliently return;
+        return;
+    }
+    
     
 	if ( (self.selected_channel != nil) &&
         (self.selected_channel.communication_mode == COMM_MODE_STUN)
@@ -1704,6 +1763,12 @@
 
 -(IBAction) buttonMelodyPressed:(id) sender
 {
+    if (self.enableControls == FALSE)
+    {
+        //siliently return;
+        return;
+    }
+    
 	int tag = ((UIView *) sender).tag;
     
 	switch (tag)
@@ -1900,6 +1965,14 @@
 
 - (void) touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
 {
+    
+    if (self.enableControls == FALSE)
+    {
+        //siliently return;
+        return;
+    }
+    
+    
 	UITouch *touch;
 	CGPoint location ;
 	NSSet *allTouches = [event allTouches];
@@ -1931,6 +2004,12 @@
 
 - (void) touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
 {
+    
+    if (self.enableControls == FALSE)
+    {
+        //siliently return;
+        return;
+    }
 	UITouch *touch;
 	CGPoint location ;
 	NSSet *allTouches = [event allTouches];
@@ -1958,6 +2037,13 @@
 
 - (void) touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event
 {
+    if (self.enableControls == FALSE)
+    {
+        //siliently return;
+        return;
+    }
+    
+    
 	UITouch *touch;
 	CGPoint location ;
 	NSSet *allTouches = [event allTouches];
