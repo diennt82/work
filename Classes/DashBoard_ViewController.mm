@@ -85,15 +85,20 @@ withConnDelegate:(id<ConnectionMethodDelegate> ) caller
     }
     else 
     {
-
-        UIBarButtonItem *editButton = [[UIBarButtonItem alloc]
-                                       initWithTitle:@"Edit"
-                                       style:UIBarButtonItemStyleBordered
-                                       target:self
-                                       action:@selector(editCameras:)]; 
         
-        [buttons addObject:editButton];
-        [editButton release];
+        if ([self shouldShowEditButton])
+        {
+
+            UIBarButtonItem *editButton = [[UIBarButtonItem alloc]
+                                           initWithTitle:@"Edit"
+                                           style:UIBarButtonItemStyleBordered
+                                           target:self
+                                           action:@selector(editCameras:)];
+            
+            [buttons addObject:editButton];
+            [editButton release];
+            
+        }
     }
     
     UIBarButtonItem *reloadButton = [[UIBarButtonItem alloc]
@@ -196,7 +201,22 @@ withConnDelegate:(id<ConnectionMethodDelegate> ) caller
         cameraList.frame = CGRectMake(cameraList.frame.origin.x, cameraList.frame.origin.y,
                                       cameraList.frame.size.width,
                                       387);
-       
+     
+        
+        
+        if (![self shouldShowEditButton])
+        {
+            cameraList.hidden = YES;
+            emptyCameraListView.frame = CGRectMake(emptyCameraListView.frame.origin.x,
+                                                   emptyCameraListView.frame.origin.y+100,
+                                                   emptyCameraListView.frame.size.width,
+                                                   emptyCameraListView.frame.size.height);
+            [self.view addSubview:emptyCameraListView];
+            [self.view bringSubviewToFront:emptyCameraListView];
+            
+            
+        }
+
     }
 }
 
@@ -231,6 +251,13 @@ withConnDelegate:(id<ConnectionMethodDelegate> ) caller
     
 }
 
+
+
+- (BOOL) shouldShowEditButton
+{
+    return ([listOfChannel count] >0);
+}
+
 #pragma mark -
 #pragma mark Table view delegates & datasource
 
@@ -255,7 +282,17 @@ withConnDelegate:(id<ConnectionMethodDelegate> ) caller
     
     return 0; 
 }
-
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if (self.editModeEnabled == TRUE)
+    {
+         return 181;
+    }
+    else
+    {
+        return 135; 
+    }
+}
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
     
@@ -391,23 +428,30 @@ withConnDelegate:(id<ConnectionMethodDelegate> ) caller
             //set camera info
             if (cp.isInLocal == TRUE)
             {
-                
-                [camStatusInd setImage:[UIImage imageNamed:@"camera_online.png"]];
+                //20121023: phung: ui review comments.
+                //[camStatusInd setImage:[UIImage imageNamed:@"camera_online.png"]];
+                //[camStatus setText:@"Available"];
+                camStatusInd.hidden = YES;
+                camStatus.hidden  = YES; 
                 
                 [camLoc setText:@"Local Wifi"]; 
-                [camStatus setText:@"Available"];
-                
+                                
             }
             else if (cp.minuteSinceLastComm <=10 ) 
             {
-                [camStatusInd setImage:[UIImage imageNamed:@"camera_online.png"]];
-                [camLoc setText:@"Remote Network"];
-                [camStatus setText:@"Camera is not in local network"];
+                //20121023: phung: ui review comments.
+                //[camStatusInd setImage:[UIImage imageNamed:@"camera_online.png"]];
+                //[camStatus setText:@"Camera is not in local network"];
+                camStatusInd.hidden = YES;
+                camStatus.hidden  = YES; 
+                
+                [camLoc setText:@"Remote Camera"];
             }
             else 
             {
                 [camStatusInd setImage:[UIImage imageNamed:@"camera_offline.png"]];
-                [camLoc setText:@"Remote Network"];
+                camStatusInd.hidden = NO;
+                [camLoc setText:@"Remote Camera"];
                 [camStatus setText:@"Not Available"];
             }
             
@@ -688,7 +732,7 @@ withConnDelegate:(id<ConnectionMethodDelegate> ) caller
                 nil];
     _myAlert.tag = ALERT_CHANGE_NAME; //used for tracking later 
     
-    UITextField *myTextField = [[UITextField alloc] initWithFrame:CGRectMake(32.0, 75.0, 220.0, 25.0)];
+    UITextField *myTextField = [[UITextField alloc] initWithFrame:CGRectMake(32.0, 85.0, 220.0, 30.0)];
     [myTextField setBackgroundColor:[UIColor whiteColor]];
     myTextField.placeholder = @"New Name";
     myTextField.borderStyle = UITextBorderStyleRoundedRect;

@@ -44,8 +44,9 @@
 							<object class="IBUIImageView" id="938928507">
 								<reference key="NSNextResponder" ref="408402238"/>
 								<int key="NSvFlags">292</int>
-								<string key="NSFrame">{{8, 21}, {92, 92}}</string>
+								<string key="NSFrame">{{8, 44}, {92, 92}}</string>
 								<reference key="NSSuperview" ref="408402238"/>
+								<reference key="NSWindow"/>
 								<reference key="NSNextKeyView" ref="253697169"/>
 								<string key="NSReuseIdentifierKey">_NS:9</string>
 								<int key="IBUIContentMode">1</int>
@@ -62,6 +63,7 @@
 								<int key="NSvFlags">292</int>
 								<string key="NSFrame">{{114, 0}, {200, 32}}</string>
 								<reference key="NSSuperview" ref="408402238"/>
+								<reference key="NSWindow"/>
 								<reference key="NSNextKeyView" ref="76207271"/>
 								<string key="NSReuseIdentifierKey">_NS:9</string>
 								<bool key="IBUIOpaque">NO</bool>
@@ -101,8 +103,9 @@
 							<object class="IBUIButton" id="76207271">
 								<reference key="NSNextResponder" ref="408402238"/>
 								<int key="NSvFlags">292</int>
-								<string key="NSFrame">{{108, 40}, {83, 37}}</string>
+								<string key="NSFrame">{{114, 36}, {83, 37}}</string>
 								<reference key="NSSuperview" ref="408402238"/>
+								<reference key="NSWindow"/>
 								<reference key="NSNextKeyView" ref="1068198534"/>
 								<string key="NSReuseIdentifierKey">_NS:9</string>
 								<bool key="IBUIOpaque">NO</bool>
@@ -134,8 +137,9 @@
 							<object class="IBUIButton" id="1068198534">
 								<reference key="NSNextResponder" ref="408402238"/>
 								<int key="NSvFlags">292</int>
-								<string key="NSFrame">{{230, 40}, {84, 37}}</string>
+								<string key="NSFrame">{{113, 80}, {84, 37}}</string>
 								<reference key="NSSuperview" ref="408402238"/>
+								<reference key="NSWindow"/>
 								<reference key="NSNextKeyView" ref="178050028"/>
 								<string key="NSReuseIdentifierKey">_NS:9</string>
 								<bool key="IBUIOpaque">NO</bool>
@@ -157,8 +161,9 @@
 							<object class="IBUIButton" id="178050028">
 								<reference key="NSNextResponder" ref="408402238"/>
 								<int key="NSvFlags">292</int>
-								<string key="NSFrame">{{148, 85}, {122, 37}}</string>
+								<string key="NSFrame">{{114, 124}, {122, 37}}</string>
 								<reference key="NSSuperview" ref="408402238"/>
+								<reference key="NSWindow"/>
 								<string key="NSReuseIdentifierKey">_NS:9</string>
 								<bool key="IBUIOpaque">NO</bool>
 								<int key="IBUITag">507</int>
@@ -177,8 +182,9 @@
 								<reference key="IBUIFont" ref="1545623"/>
 							</object>
 						</array>
-						<string key="NSFrameSize">{340, 134}</string>
+						<string key="NSFrameSize">{340, 180}</string>
 						<reference key="NSSuperview" ref="944241598"/>
+						<reference key="NSWindow"/>
 						<reference key="NSNextKeyView" ref="938928507"/>
 						<string key="NSReuseIdentifierKey">_NS:11</string>
 						<object class="NSColor" key="IBUIBackgroundColor" id="161154926">
@@ -192,15 +198,16 @@
 						<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
 					</object>
 				</array>
-				<string key="NSFrameSize">{340, 135}</string>
+				<string key="NSFrameSize">{340, 181}</string>
 				<reference key="NSSuperview"/>
+				<reference key="NSWindow"/>
 				<reference key="NSNextKeyView" ref="408402238"/>
 				<string key="NSReuseIdentifierKey">_NS:9</string>
 				<reference key="IBUIBackgroundColor" ref="161154926"/>
 				<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
 				<reference key="IBUIContentView" ref="408402238"/>
 				<string key="IBUIReuseIdentifier">Cell1</string>
-				<real value="110" key="IBUIRowHeight"/>
+				<real value="156" key="IBUIRowHeight"/>
 			</object>
 		</array>
 		<object class="IBObjectContainer" key="IBDocument.Objects">
@@ -264,11 +271,11 @@
 						<int key="objectID">3</int>
 						<reference key="object" ref="944241598"/>
 						<array class="NSMutableArray" key="children">
-							<reference ref="253697169"/>
 							<reference ref="938928507"/>
 							<reference ref="76207271"/>
 							<reference ref="1068198534"/>
 							<reference ref="178050028"/>
+							<reference ref="253697169"/>
 						</array>
 						<reference key="parent" ref="0"/>
 						<string key="objectName">Edit Mode</string>
@@ -318,7 +325,86 @@
 			<nil key="sourceID"/>
 			<int key="maxID">18</int>
 		</object>
-		<object class="IBClassDescriber" key="IBDocument.Classes"/>
+		<object class="IBClassDescriber" key="IBDocument.Classes">
+			<array class="NSMutableArray" key="referencedPartialClassDescriptions">
+				<object class="IBPartialClassDescription">
+					<string key="className">DashBoard_ViewController</string>
+					<string key="superclassName">UIViewController</string>
+					<dictionary class="NSMutableDictionary" key="actions">
+						<string key="addCamera:">id</string>
+						<string key="alertSetting:">id</string>
+						<string key="checkNow:">id</string>
+						<string key="editCameras:">id</string>
+						<string key="removeCamera:">id</string>
+						<string key="renameCamera:">id</string>
+						<string key="scanCameras:">id</string>
+					</dictionary>
+					<dictionary class="NSMutableDictionary" key="actionInfosByName">
+						<object class="IBActionInfo" key="addCamera:">
+							<string key="name">addCamera:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+						<object class="IBActionInfo" key="alertSetting:">
+							<string key="name">alertSetting:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+						<object class="IBActionInfo" key="checkNow:">
+							<string key="name">checkNow:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+						<object class="IBActionInfo" key="editCameras:">
+							<string key="name">editCameras:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+						<object class="IBActionInfo" key="removeCamera:">
+							<string key="name">removeCamera:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+						<object class="IBActionInfo" key="renameCamera:">
+							<string key="name">renameCamera:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+						<object class="IBActionInfo" key="scanCameras:">
+							<string key="name">scanCameras:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+					</dictionary>
+					<dictionary class="NSMutableDictionary" key="outlets">
+						<string key="cameraList">UITableView</string>
+						<string key="cellView">UITableViewCell</string>
+						<string key="emptyCameraListView">UIView</string>
+						<string key="offlineView">UIView</string>
+						<string key="tabBarController">UITabBarController</string>
+					</dictionary>
+					<dictionary class="NSMutableDictionary" key="toOneOutletInfosByName">
+						<object class="IBToOneOutletInfo" key="cameraList">
+							<string key="name">cameraList</string>
+							<string key="candidateClassName">UITableView</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="cellView">
+							<string key="name">cellView</string>
+							<string key="candidateClassName">UITableViewCell</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="emptyCameraListView">
+							<string key="name">emptyCameraListView</string>
+							<string key="candidateClassName">UIView</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="offlineView">
+							<string key="name">offlineView</string>
+							<string key="candidateClassName">UIView</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="tabBarController">
+							<string key="name">tabBarController</string>
+							<string key="candidateClassName">UITabBarController</string>
+						</object>
+					</dictionary>
+					<object class="IBClassDescriptionSource" key="sourceIdentifier">
+						<string key="majorKey">IBProjectSource</string>
+						<string key="minorKey">./Classes/DashBoard_ViewController.h</string>
+					</object>
+				</object>
+			</array>
+		</object>
 		<int key="IBDocument.localizationMode">0</int>
 		<string key="IBDocument.TargetRuntimeIdentifier">IBCocoaTouchFramework</string>
 		<object class="NSMutableDictionary" key="IBDocument.PluginDeclaredDependencyDefaults">

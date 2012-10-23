@@ -32,11 +32,11 @@
 #define _OfflineMode @"offlineMode"
 
 
-@interface MBP_LoginOrRegistration : UIViewController <UITableViewDataSource, UITableViewDelegate> {
+@interface MBP_LoginOrRegistration : UIViewController <UITableViewDataSource, UITableViewDelegate,UITextFieldDelegate> {
 
 	IBOutlet UITextField * userName; 
 	IBOutlet UITextField * password; 
-	IBOutlet UISwitch * remember_pass_sw; 
+
 	IBOutlet UIView * progressView; 
 	IBOutlet UILabel * progressLabel; 
 	
@@ -71,7 +71,7 @@
 
 @property (nonatomic,retain) IBOutlet UITextField * userName; 
 @property (nonatomic,retain) IBOutlet UITextField * password; 
-@property (nonatomic,retain) IBOutlet UISwitch * remember_pass_sw; 
+
 
 @property (nonatomic,retain) IBOutlet UIView * progressView; 
 @property (nonatomic,retain) IBOutlet UILabel * progressLabel; 
@@ -89,6 +89,9 @@
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil withConnDelegate:(id<ConnectionMethodDelegate>) delegate;
 
 - (IBAction) handleButtonPressed:(id) sender;
+- (IBAction) createNewAccount:(id)sender;
+- (IBAction) editChanged:(id)sender;
+
 //LOGIN callbacks;
 - (void) loginSuccessWithResponse:(NSData*) responseData;
 - (void) loginFailedWithError:(NSHTTPURLResponse*) error_response; 

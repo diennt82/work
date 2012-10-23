@@ -45,6 +45,7 @@
 		38362C1D15FDEE400077E188 /* alert_history.sqlite in Resources */ = {isa = PBXBuildFile; fileRef = 38362C1C15FDEE400077E188 /* alert_history.sqlite */; };
 		3887DD8415CB697C0077048D /* libcrypto.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3887DD8215CB697C0077048D /* libcrypto.a */; };
 		3887DD8515CB697C0077048D /* libUdtLib.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3887DD8315CB697C0077048D /* libUdtLib.a */; };
+		38A13AF316363147000138EA /* UnderlinedUILabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 38A13AF216363147000138EA /* UnderlinedUILabel.m */; };
 		38A478D015BD64F9008682FE /* MBP_InitialSetupViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 38A478CE15BD64F9008682FE /* MBP_InitialSetupViewController.mm */; };
 		38A478D915BE484B008682FE /* Step_02_ViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 38A478D815BE484B008682FE /* Step_02_ViewController.mm */; };
 		38A478DC15BE4BFA008682FE /* Step_03_ViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 38A478DB15BE4BFA008682FE /* Step_03_ViewController.mm */; };
@@ -228,6 +229,8 @@
 		38362C1C15FDEE400077E188 /* alert_history.sqlite */ = {isa = PBXFileReference; lastKnownFileType = file; path = alert_history.sqlite; sourceTree = "<group>"; };
 		3887DD8215CB697C0077048D /* libcrypto.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libcrypto.a; sourceTree = "<group>"; };
 		3887DD8315CB697C0077048D /* libUdtLib.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libUdtLib.a; sourceTree = "<group>"; };
+		38A13AF116363147000138EA /* UnderlinedUILabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UnderlinedUILabel.h; sourceTree = "<group>"; };
+		38A13AF216363147000138EA /* UnderlinedUILabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UnderlinedUILabel.m; sourceTree = "<group>"; };
 		38A478CD15BD64F9008682FE /* MBP_InitialSetupViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MBP_InitialSetupViewController.h; sourceTree = "<group>"; };
 		38A478CE15BD64F9008682FE /* MBP_InitialSetupViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = MBP_InitialSetupViewController.mm; sourceTree = "<group>"; };
 		38A478D715BE484B008682FE /* Step_02_ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Step_02_ViewController.h; sourceTree = "<group>"; };
@@ -628,6 +631,8 @@
 				38CC5A1315DCBBC100067C54 /* QuickViewCamera_ViewController.mm */,
 				38CC5A1415DCBBC200067C54 /* QuickViewCamera_ViewController.xib */,
 				38CC5A1715DCEE3C00067C54 /* QuickViewCamera_landscape.xib */,
+				38A13AF116363147000138EA /* UnderlinedUILabel.h */,
+				38A13AF216363147000138EA /* UnderlinedUILabel.m */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -993,6 +998,7 @@
 				38CC5A1515DCBBC300067C54 /* QuickViewCamera_ViewController.mm in Sources */,
 				3803A85E15FDF15600B4DD97 /* CameraAlert.m in Sources */,
 				380C430016195047001434C0 /* AlertSettingViewController.mm in Sources */,
+				38A13AF316363147000138EA /* UnderlinedUILabel.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

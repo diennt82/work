@@ -60,6 +60,8 @@
 {
 	[super viewDidLoad];
     
+    //disable timeout
+    [UIApplication sharedApplication].idleTimerDisabled = YES;
     
 	// Do any additional setup after loading the view.
 	[[NSNotificationCenter defaultCenter] addObserver: self
@@ -408,6 +410,8 @@
 -(void) goBackAndReLogin
 {
 	NSLog(@"Go all the way bacK");
+    //enable timeout
+    [UIApplication sharedApplication].idleTimerDisabled = NO;
     
 	UITabBarController * root =  (UITabBarController *)[[self.navigationController viewControllers] objectAtIndex:0];
 	[self.navigationController popToRootViewControllerAnimated:NO];
@@ -422,7 +426,8 @@
 {
 	NSLog(@"goback to camera list");
     
-    
+    //enable timeout
+    [UIApplication sharedApplication].idleTimerDisabled = NO;
     
 	if (streamer.recordInProgress == YES)
 		[streamer stopRecording];

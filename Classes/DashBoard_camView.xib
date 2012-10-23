@@ -60,7 +60,7 @@
 							<object class="IBUILabel" id="264926524">
 								<reference key="NSNextResponder" ref="1009069205"/>
 								<int key="NSvFlags">292</int>
-								<string key="NSFrame">{{114, 4}, {200, 32}}</string>
+								<string key="NSFrame">{{114, 0}, {200, 32}}</string>
 								<reference key="NSSuperview" ref="1009069205"/>
 								<reference key="NSWindow"/>
 								<reference key="NSNextKeyView" ref="798613219"/>
@@ -102,7 +102,7 @@
 							<object class="IBUILabel" id="798613219">
 								<reference key="NSNextResponder" ref="1009069205"/>
 								<int key="NSvFlags">292</int>
-								<string key="NSFrame">{{128, 38}, {82, 21}}</string>
+								<string key="NSFrame">{{114, 38}, {146, 21}}</string>
 								<reference key="NSSuperview" ref="1009069205"/>
 								<reference key="NSWindow"/>
 								<reference key="NSNextKeyView" ref="326275334"/>
@@ -121,7 +121,6 @@
 								</object>
 								<reference key="IBUIHighlightedColor" ref="446138727"/>
 								<int key="IBUIBaselineAdjustment">0</int>
-								<float key="IBUIMinimumFontSize">10</float>
 								<object class="IBUIFontDescription" key="IBUIFontDescription">
 									<int key="type">1</int>
 									<double key="pointSize">14</double>
@@ -131,6 +130,7 @@
 									<double key="NSSize">14</double>
 									<int key="NSfFlags">16</int>
 								</object>
+								<bool key="IBUIAdjustsFontSizeToFit">NO</bool>
 							</object>
 							<object class="IBUILabel" id="938767883">
 								<reference key="NSNextResponder" ref="1009069205"/>
@@ -172,7 +172,7 @@
 							<object class="IBUIImageView" id="326275334">
 								<reference key="NSNextResponder" ref="1009069205"/>
 								<int key="NSvFlags">292</int>
-								<string key="NSFrame">{{128, 70}, {30, 30}}</string>
+								<string key="NSFrame">{{114, 70}, {30, 30}}</string>
 								<reference key="NSSuperview" ref="1009069205"/>
 								<reference key="NSWindow"/>
 								<reference key="NSNextKeyView" ref="938767883"/>
@@ -280,9 +280,9 @@
 							<reference ref="326275334"/>
 							<reference ref="798613219"/>
 							<reference ref="938767883"/>
-							<reference ref="264926524"/>
 							<reference ref="617459638"/>
 							<reference ref="310938159"/>
+							<reference ref="264926524"/>
 						</array>
 						<reference key="parent" ref="0"/>
 					</object>
@@ -353,6 +353,7 @@
 						<string key="alertSetting:">id</string>
 						<string key="checkNow:">id</string>
 						<string key="editCameras:">id</string>
+						<string key="refreshCameras:">id</string>
 						<string key="removeCamera:">id</string>
 						<string key="renameCamera:">id</string>
 						<string key="scanCameras:">id</string>
@@ -374,6 +375,10 @@
 							<string key="name">editCameras:</string>
 							<string key="candidateClassName">id</string>
 						</object>
+						<object class="IBActionInfo" key="refreshCameras:">
+							<string key="name">refreshCameras:</string>
+							<string key="candidateClassName">id</string>
+						</object>
 						<object class="IBActionInfo" key="removeCamera:">
 							<string key="name">removeCamera:</string>
 							<string key="candidateClassName">id</string>
@@ -390,6 +395,7 @@
 					<dictionary class="NSMutableDictionary" key="outlets">
 						<string key="cameraList">UITableView</string>
 						<string key="cellView">UITableViewCell</string>
+						<string key="emptyCameraListView">UIView</string>
 						<string key="offlineView">UIView</string>
 						<string key="tabBarController">UITabBarController</string>
 					</dictionary>
@@ -401,6 +407,10 @@
 						<object class="IBToOneOutletInfo" key="cellView">
 							<string key="name">cellView</string>
 							<string key="candidateClassName">UITableViewCell</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="emptyCameraListView">
+							<string key="name">emptyCameraListView</string>
+							<string key="candidateClassName">UIView</string>
 						</object>
 						<object class="IBToOneOutletInfo" key="offlineView">
 							<string key="name">offlineView</string>

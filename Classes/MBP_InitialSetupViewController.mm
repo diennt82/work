@@ -61,7 +61,7 @@
   
 
         UIBarButtonItem *backButton = 
-        [[UIBarButtonItem alloc] initWithTitle:@"Back" 
+        [[UIBarButtonItem alloc] initWithTitle:@"Cancel" 
                                          style:UIBarButtonItemStyleBordered 
                                         target:self 
                                         action:@selector(goBackToFirstScreen:)];          
@@ -72,7 +72,7 @@
     {
         
         UIBarButtonItem *backButton = 
-        [[UIBarButtonItem alloc] initWithTitle:@"Back" 
+        [[UIBarButtonItem alloc] initWithTitle:@"Cancel" 
                                          style:UIBarButtonItemStyleBordered 
                                         target:self 
                                         action:@selector(handleBackButton:)];          
