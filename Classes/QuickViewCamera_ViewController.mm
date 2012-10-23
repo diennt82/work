@@ -291,7 +291,8 @@
 		{
 			[alert setMessage:msg];
 			
-			return; 
+		
+            return;
 		}
 		
 		[alert release]; 

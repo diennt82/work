@@ -602,7 +602,7 @@
 	//ERROR condition
 	UIAlertView *alert = [[UIAlertView alloc]
 						  initWithTitle:@"Login Error"
-						  message:[NSString stringWithFormat:@"Server error code: %d", [error_response statusCode]] 
+						  message:[NSString stringWithFormat:@"Server error: %@", [BMS_Communication getLocalizedMessageForError:[error_response statusCode]]]
 						  delegate:self
 						  cancelButtonTitle:@"OK"
 						  otherButtonTitles:nil];
@@ -668,7 +668,7 @@
 	//ERROR condition
 	UIAlertView *alert = [[UIAlertView alloc]
 						  initWithTitle:@"Registration Error"
-						  message:[NSString stringWithFormat:@"Server error code: %d", [error_response statusCode]] 
+						  message:[NSString stringWithFormat:@"Server error: %@", [BMS_Communication getLocalizedMessageForError:[error_response statusCode]]] 
 						  delegate:self
 						  cancelButtonTitle:@"OK"
 						  otherButtonTitles:nil];

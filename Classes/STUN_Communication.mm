@@ -472,7 +472,7 @@
 	//ERROR condition
 //	UIAlertView *alert = [[UIAlertView alloc]
 //						  initWithTitle:@"Get Security Info Error"
-//						  message:[NSString stringWithFormat:@"Server error code: %@", [Util get_error_description:[error_response statusCode]]]
+//						  message:[NSString stringWithFormat:@"Server error: %@", [BMS_Communication getLocalizedMessageForError:[error_response statusCode]]]
 //						  delegate:self
 //						  cancelButtonTitle:@"OK"
 //						  otherButtonTitles:nil];

@@ -437,7 +437,7 @@
 	//ERROR condition
 	UIAlertView *alert = [[UIAlertView alloc]
 						  initWithTitle:@"AddCam Error"
-						  message:[NSString stringWithFormat:@"Server error code: %d", [error_response statusCode]] 
+						  message:[NSString stringWithFormat:@"Server error: %@", [BMS_Communication getLocalizedMessageForError:[error_response statusCode]]]
 						  delegate:self
 						  cancelButtonTitle:@"OK"
 						  otherButtonTitles:nil];
@@ -477,7 +477,7 @@
 }
 -(void) removeCamFailedWithError:(NSHTTPURLResponse*) error_response
 {
-	NSLog(@"removeCam failed errorcode: ");
+	NSLog(@"removeCam failed Server error: %@", [BMS_Communication getLocalizedMessageForError:[error_response statusCode]]);
 }
 -(void) removeCamFailedServerUnreachable
 {
