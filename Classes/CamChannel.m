@@ -267,8 +267,10 @@
 		[self.remoteViewTimer invalidate]; 
 	}
 	
-	
-	self.remoteViewTimer = [NSTimer scheduledTimerWithTimeInterval:5*60 //5min 
+	NSLog(@"reduce timeout to 1 min for TEST ");
+    
+    //Reduce to 1 min for test ONLY xxxxxx;
+	self.remoteViewTimer = [NSTimer scheduledTimerWithTimeInterval:1*60 //5min
 															target:caller 
 														  selector:sel 
 														  userInfo:nil 

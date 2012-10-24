@@ -19,36 +19,36 @@
 
 @synthesize takeSnapshot,recordInProgress;
 @synthesize currentZoomLevel, hasStoppedByCaller, communication_mode;
-@synthesize local_port; 
+@synthesize local_port;
 
-@synthesize udtSocket; 
+@synthesize udtSocket;
 @synthesize  disableAudio;
 
-@synthesize  recTimeLabel, recTimer; 
+@synthesize  recTimeLabel, recTimer;
 
 @synthesize mFrameUpdater,mTempUpdater;
-@synthesize  currentOrientation; 
-@synthesize  streamingChannel; 
+@synthesize  currentOrientation;
+@synthesize  streamingChannel;
 @synthesize  stillReading;
 
 - (id) initWithIp:(NSString *) ip andPort:(int) port handler:(id<StreamerEventHandler>) handler
 {
-	[super init]; 
-
+	[super init];
+    
 	self.device_ip = ip;
-	self.device_port = port; 
+	self.device_port = port;
 	NSLog(@"init with %@:%d", self.device_ip, self.device_port);
-	self.remoteView = FALSE; 
-	self.remoteViewKey = nil; 
-	self.local_port = 0; 
-	mHandler = handler; 
-	hasStoppedByCaller = FALSE; 
+	self.remoteView = FALSE;
+	self.remoteViewKey = nil;
+	self.local_port = 0;
+	mHandler = handler;
+	hasStoppedByCaller = FALSE;
 	disableAudio = NO;
-
-	self.streamingChannel = nil; 
+    
+	self.streamingChannel = nil;
 	self.currentOrientation = UIInterfaceOrientationPortrait;
 	return self;
-
+    
 }
 
 
@@ -58,20 +58,20 @@
 	NSLog(@"Streamer released called");
 	[self stopStreaming];
 	//[pcmPlayer release];
-
-
+    
+    
 	[listenSocket release];
 	[responseData release];
 	[device_ip release];
-
-
-
+    
+    
+    
 	[udtSocket release];
-
-
-
+    
+    
+    
 	[recTimer release];
-	[streamingChannel  release] ; 
+	[streamingChannel  release] ;
 	[super dealloc];
 }
 
@@ -85,44 +85,44 @@
 }
 
 #pragma mark -
-#pragma mark  HTTP stream 
+#pragma mark  HTTP stream
 - (void) startStreaming
 {
 	NSLog(@"connect to %@:%d", self.device_ip, self.device_port);
-
+    
 	/**** REset some variables */
-
-	reconnectLimits = 3; 
-
+    
+	reconnectLimits = 3;
+    
 	takeSnapshot = NO;
 	if (recordInProgress == YES)
 	{
 		[self stopRecording];
 	}
 	recordInProgress = NO;
-
+    
 	self.currentZoomLevel = 5.0;
-
-
-
+    
+    
+    
 	initialFlag = 1;
-	listenSocket = [[AsyncSocket alloc] initWithDelegate:self];	
+	listenSocket = [[AsyncSocket alloc] initWithDelegate:self];
 	//Non-blocking connect
-	[listenSocket connectToHost:self.device_ip 
-		onPort:self.device_port
-		withTimeout:5
-		error:nil];
-
-
-
+	[listenSocket connectToHost:self.device_ip
+                         onPort:self.device_port
+                    withTimeout:5
+                          error:nil];
+    
+    
+    
 }
 //same as startStreaming for now, however may change later.. keep it separate.
 -(void) reConnect
 {
-
+    
 	//stop streaming first
-	[self stopStreaming]; 
-
+	[self stopStreaming];
+    
 	NSLog(@"reConnect .. to camera: %@:%d",self.device_ip, self.device_port );
 	/**** REset some variables */
 	takeSnapshot = NO;
@@ -131,53 +131,53 @@
 		[self stopRecording];
 	}
 	recordInProgress = NO;
-
+    
 	self.currentZoomLevel = 5.0;
-
-
+    
+    
 	initialFlag = 1;
-
+    
 	listenSocket = [[AsyncSocket alloc] initWithDelegate:self];
 	//Non-blocking connect
-	[listenSocket connectToHost:self.device_ip 
-		onPort:self.device_port
-		withTimeout:3
-		error:nil];
-
-
+	[listenSocket connectToHost:self.device_ip
+                         onPort:self.device_port
+                    withTimeout:3
+                          error:nil];
+    
+    
 }
 
 - (void) receiveData
 {
 	NSString *getReq = [NSString stringWithFormat:@"%@%@\r\n\r\n",
-		 AVSTREAM_REQUEST, 
-		 AVSTREAM_PARAM_2 ];	
+                        AVSTREAM_REQUEST,
+                        AVSTREAM_PARAM_2 ];
 	if (self.remoteView == TRUE && self.remoteViewKey != nil)
 	{
 		getReq = [NSString stringWithFormat:@"%@%@%@%@\r\n",
-		       AVSTREAM_REQUEST, AVSTREAM_PARAM_1,self.remoteViewKey,
-		       AVSTREAM_PARAM_2 ];
+                  AVSTREAM_REQUEST, AVSTREAM_PARAM_1,self.remoteViewKey,
+                  AVSTREAM_PARAM_2 ];
 	}
-
-	NSLog(@"getReq: %@", getReq); 
-
+    
+	NSLog(@"getReq: %@", getReq);
+    
 	NSData *getReqData = [getReq dataUsingEncoding:NSUTF8StringEncoding];
-
+    
 	[listenSocket writeData:getReqData withTimeout:2 tag:1];
-	[listenSocket readDataWithTimeout:2 tag:1];	
+	[listenSocket readDataWithTimeout:2 tag:1];
 	responseData = [[NSMutableData alloc] init];
-
+    
 	if ( pcmPlayer == nil)
 	{
 		/* Start the player to playback & record */
 		pcmPlayer = [[PCMPlayer alloc] init];
 		[[pcmPlayer player] setPlay_now:FALSE];
 		[pcmPlayer Play:FALSE];
-
+        
 	}
 	else {
 		[[pcmPlayer player] setPlay_now:FALSE];
-
+        
 	}
 }
 
@@ -187,7 +187,7 @@
 	{
 		[self.videoImage setImage:[UIImage imageNamed:@"homepage.png"]];
 	}
-
+    
 	//NSLog(@"stop streaming : %p", listenSocket);
 	if(listenSocket != nil) {
 		[listenSocket disconnect];
@@ -195,18 +195,18 @@
 		[listenSocket release];
 		listenSocket = nil;
 	}
-
+    
 	if(responseData != nil) {
 		[responseData release];
 		responseData = nil;
 	}
-
-
+    
+    
 	initialFlag = 0;
-
-
-
-
+    
+    
+    
+    
 	if (pcmPlayer != nil)
 	{
 		/* kill the audio player */
@@ -215,119 +215,152 @@
 		[pcmPlayer release];
 		pcmPlayer = nil;
 	}
-
-
-
+    
+    
+    
 	if (udtStreamerThd != nil)
 	{
 		if ([udtStreamerThd isExecuting])
 		{
-			NSLog(@"streamerThrd is running --stop it now"); 
+			NSLog(@"streamerThrd is running --stop it now");
 			[udtStreamerThd cancel];
+            
+            
+//            int waitCount = 5; //5sec
+//            while (![udtStreamerThd isFinished] && (waitCount -- > 0) )
+//            {
+//                [NSThread sleepForTimeInterval:1.0];
+//                NSLog(@"streamer wait %d ", waitCount); 
+//            }
+            
+            
+            //udtStreamerThd = nil;
 		}
+        
 		if (readTimeoutThrd!= nil && [readTimeoutThrd isExecuting])
 		{
-			NSLog(@"readTimeoutThrd is running --stop it now"); 
+			NSLog(@"readTimeoutThrd is running --stop it now");
 			[readTimeoutThrd cancel];
+            
+            
+//            int waitCount = 5; //5sec
+//            while ([readTimeoutThrd isExecuting] && (waitCount -- > 0) )
+//            {
+//                [NSThread sleepForTimeInterval:1.0];
+//                NSLog(@"readTO wait %d ", waitCount); 
+//            }
+            
+            //readTimeoutThrd = nil;
 		}
-
-
-
-		NSString * msg = nil; 
+        
+        
+        
+		NSString * msg = nil;
 		msg = [NSString stringWithFormat:@"%@%@",
-		    STUN_CMD_PART, CLOSE_STUN_SESSION];
-		NSData * msg_ = [[NSData alloc] initWithBytes:[msg UTF8String] length:[msg length]]; 
-
-
+               STUN_CMD_PART, CLOSE_STUN_SESSION];
+		NSData * msg_ = [[NSData alloc] initWithBytes:[msg UTF8String] length:[msg length]];
+        
+        
 		if ([udtSocket isOpen])
 		{
-			NSLog(@"Send close session.. & close sock"); 
+			NSLog(@"Send close session.. & close sock");
 			[udtSocket sendDataViaUdt:msg_];
 			[udtSocket close];
 		}
 		else {
-			NSLog(@"udtSocket already close -- "); 
+			NSLog(@"udtSocket already close -- ");
 		}
-
-
+        
+        
 	}
-
+    
 }
 
 #pragma mark -
-#pragma mark  UDT stream 
+#pragma mark  UDT stream
+
+/* called from background thread*/
+-(void) updateImage:(UIImage *) img
+{
+    [self.videoImage setImage:img];
+    
+    
+    //[img release];
+    
+}
+
 
 -(void) switchToUdtRelayServer
 {
-	//UdtSocketWrapper * udtSocket = nil; 
-	RemoteConnection * relayConn = [[RemoteConnection alloc]init]; 
-
+	//UdtSocketWrapper * udtSocket = nil;
+	RemoteConnection * relayConn = [[RemoteConnection alloc]init];
+    
 	if (streamingChannel == nil)
 	{
-		NSLog(@"Streaming channel is NIL in RELAY mode ... ERROR"); 
-		return; 
+		NSLog(@"Streaming channel is NIL in RELAY mode ... ERROR");
+		return;
 	}
 	self.udtSocket= [relayConn connectToUDTRelay:self.streamingChannel];
-
+    
 	if (self.udtSocket == nil)
 	{
-		NSLog(@"Fail to open relay socket "); 
-
+		NSLog(@"Fail to open relay socket ");
+        
 		[self sendStatusStoppedWithErrOnMainThread:nil];
-		return; 
+		return;
 	}
 	responseData = [[NSMutableData alloc] init];
-
+    
 	if ( pcmPlayer == nil)
 	{
 		/* Start the player to playback & record */
 		pcmPlayer = [[PCMPlayer alloc] init];
 		[[pcmPlayer player] setPlay_now:FALSE];
 		[pcmPlayer Play:FALSE];
-
+        
 	}
 	else {
 		[[pcmPlayer player] setPlay_now:FALSE];
-
+        
 	}
-
-
+    
+    
 	NSLog(@"Streaming channel in RELAY mode ... Starting");
-
+    
 #if 0
 	NSThread * keepAliveThrd = [[NSThread alloc] initWithTarget:self
-		selector:@selector(keepAlive:)
-		object:self]; 
-
-	[keepAliveThrd start]; 
+                                                       selector:@selector(keepAlive:)
+                                                         object:self];
+    
+	[keepAliveThrd start];
 #endif ///TODO check wth servers
-
-
-
-
+    
+    
+    
+    
 	readTimeoutThrd = [[NSThread alloc] initWithTarget:self
-		selector:@selector(readTimeoutCheck:)
-		object:self]; 
-
-	[readTimeoutThrd start]; 
-
-
-
+                                              selector:@selector(readTimeoutCheck:)
+                                                object:self];
+    
+	[readTimeoutThrd start];
+    
+    
+    
 	udtStreamerThd = [[NSThread alloc] initWithTarget:self
-		selector:@selector(readVideoDataFromSocket:)
-		object:self]; 
-
-	[udtStreamerThd start]; 
+                                             selector:@selector(readVideoDataFromSocket:)
+                                               object:self];
+    
+	[udtStreamerThd start];
 }
 
 - (void) startUdtStream
 {
-
-
+    
+    
 	/**** REset some variables */
-
-	reconnectLimits = 3; 
-
+    
+	reconnectLimits = 3;
+    
 	takeSnapshot = NO;
 	if (recordInProgress == YES)
 	{
@@ -335,109 +368,111 @@
 	}
 	recordInProgress = NO;
 	self.currentZoomLevel = 5.0;
-
+    
 	initialFlag = 1;
-
+    
 	udtSocket = [[UdtSocketWrapper alloc]initWithLocalPort:self.local_port];
-	[udtSocket createUdtStreamSocket]; 
-
+	[udtSocket createUdtStreamSocket];
+    
 	struct in_addr * server_ip = [UdtSocketWrapper getIpfromHostName:self.device_ip];
-
-	NSLog(@"connect to %@:%d from localport: %d server_ip:%d", self.device_ip, self.device_port , 
-			self.local_port, server_ip->s_addr);
-
-	int localPort = -1 ; 
-
+    
+	NSLog(@"connect to %@:%d from localport: %d server_ip:%d", self.device_ip, self.device_port ,
+          self.local_port, server_ip->s_addr);
+    
+	int localPort = -1 ;
+    
+    responseData = [[NSMutableData alloc] init];
+    
 #if 0 //Force relay
-
-
+    
+    
 	[NSThread sleepForTimeInterval:25.0];
-	[udtSocket close]; 
+	[udtSocket close];
 #else
-
-	NSDate * now = [NSDate date]; 
+    
+	NSDate * now = [NSDate date];
 	NSDate * timeout = [NSDate dateWithTimeInterval:25.0 sinceDate:now];
 	//The receiver is earlier in time than anotherDate, NSOrderedAscending.
 	while ([now compare:timeout] ==   NSOrderedAscending)
 	{
-
-
+        
+        
 		localPort = [udtSocket connectViaUdtSock:server_ip
-			port:self.device_port];
-		NSLog(@"localPort = %d", localPort);  
+                                            port:self.device_port];
+		NSLog(@"localPort = %d", localPort);
 		if (localPort > 0)
 		{
-			break; 
+			break;
 		}
-
-		now = [NSDate date]; 
-
+        
+		now = [NSDate date];
+        
 	}
 #endif
-
-	if (localPort < 0 ) 
+    
+	if (localPort < 0 )
 	{
-
+        
 		///// STUN RELAY /////////
 		//Still fail after retries --- Go for relay now
-		NSLog(@"RELAY RELAY RELAY"); 
-		[self switchToUdtRelayServer ]; 
+		NSLog(@"RELAY RELAY RELAY");
+		[self switchToUdtRelayServer ];
 		return;
 	}
-
-
+    
+    
 	///// STUN direct /////////
 	if (local_port != localPort)
 	{
-		NSLog(@"connecting port is different from localport: %d %d", local_port, localPort); 
+		NSLog(@"connecting port is different from localport: %d %d", local_port, localPort);
 	}
-	NSString * msg = nil; 
+	NSString * msg = nil;
 	msg = [NSString stringWithFormat:@"%@%@%@",
-	    AVSTREAM_UDT_REQ, AVSTREAM_PARAM_1,self.remoteViewKey];
-	NSData * msg_ = [[NSData alloc] initWithBytes:[msg UTF8String] length:[msg length]]; 
-
-	[udtSocket sendDataViaUdt:msg_]; 
-
-
-	responseData = [[NSMutableData alloc] init];
-
+           AVSTREAM_UDT_REQ, AVSTREAM_PARAM_1,self.remoteViewKey];
+	NSData * msg_ = [[NSData alloc] initWithBytes:[msg UTF8String] length:[msg length]];
+    
+	[udtSocket sendDataViaUdt:msg_];
+    
+    
+	
+    
 	if ( pcmPlayer == nil)
 	{
 		/* Start the player to playback & record */
 		pcmPlayer = [[PCMPlayer alloc] init];
 		[[pcmPlayer player] setPlay_now:FALSE];
 		[pcmPlayer Play:FALSE];
-
+        
 	}
 	else {
 		[[pcmPlayer player] setPlay_now:FALSE];
-
+        
 	}
-
-
-
+    
+    
+    
 	readTimeoutThrd = [[NSThread alloc] initWithTarget:self
-		selector:@selector(readTimeoutCheck:)
-		object:self]; 
-
-	[readTimeoutThrd start];   
-
+                                              selector:@selector(readTimeoutCheck:)
+                                                object:self];
+    
+	[readTimeoutThrd start];
+    
 	udtStreamerThd = [[NSThread alloc] initWithTarget:self
-		selector:@selector(readVideoDataFromSocket:)
-		object:self]; 
-
-	[udtStreamerThd start]; 
-
-
-
-
-
+                                             selector:@selector(readVideoDataFromSocket:)
+                                               object:self];
+    
+	[udtStreamerThd start];
+    
+    
+    
+    
+    
 }
 
 -(void) sendStatusStartedReportOnMainThread:(NSObject *) obj
 {
 	[mHandler statusReport:STREAM_STARTED andObj:obj];
-
+    
 }
 
 - (void) sendStatusStoppedWithErrOnMainThread:(NSObject *) obj
@@ -455,341 +490,380 @@
 
 #define READ_16K_DATA 16*1024
 
--(void) readVideoDataFromSocket:(MBP_Streamer *) streamer 
+-(void) readVideoDataFromSocket:(MBP_Streamer *) streamer
 {
 	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-
-	NSLog(@"STUN Main readVideoDataFromSocket enter: 01"); 
-
-	UdtSocketWrapper * socket = streamer.udtSocket;//grap the opened socket 
-
+    
+    
+    
+	NSLog(@"STUN Main readVideoDataFromSocket enter: 01");
+    
+	UdtSocketWrapper * socket = streamer.udtSocket;//grap the opened socket
+    
 	NSString *strBoundary = BOUNDARY_STRING;
 	NSData *boundaryString = [strBoundary dataUsingEncoding:NSUTF8StringEncoding];
-
+    
 	NSString *strDoubleReturn = @"\r\n\r\n";
 	NSData *doubleReturnString = [strDoubleReturn dataUsingEncoding:NSUTF8StringEncoding];
-
-
+    
+    
 	NSMutableData* data, *buffer;
-	int bytesRead = -1; 
-
+	int bytesRead = -1;
+    
+    
+    
+    
 	data = [[NSMutableData alloc]initWithLength:READ_16K_DATA]; //16k
-
-	[self performSelectorOnMainThread:@selector(sendStatusStartedReportOnMainThread:) 
-		withObject:nil
-		waitUntilDone:YES];
-
-	BOOL exitedUnexpectedly = FALSE; 
+    
+	[self performSelectorOnMainThread:@selector(sendStatusStartedReportOnMainThread:)
+                           withObject:nil
+                        waitUntilDone:YES];
+    
+	BOOL exitedUnexpectedly = FALSE;
 	int ignore_err_count = 4; // ~20 sec
 	//while (i -- >=0)
 	while (![[NSThread currentThread] isCancelled])
 	{
-
+        
 		if (streamer.streamingChannel.stopStreaming == TRUE)
 		{
 			break;
 		}
-
-		//read 
+        
+		//read
 		bytesRead = [socket recvDataViaUdt:data dataLen:READ_16K_DATA];
 		if (bytesRead <0)
 		{
 			NSLog(@"bytesRead:%d ignoreCount:%d", bytesRead, ignore_err_count);
 			if (ignore_err_count -- < 0)
 			{
-
-				exitedUnexpectedly = TRUE; 
+                
+				exitedUnexpectedly = TRUE;
 				//STream has stopped due to some connection error
-				[self performSelectorOnMainThread:@selector(sendStatusStoppedWithErrOnMainThread:) 
-					withObject:nil
-					waitUntilDone:YES];
-
-				break; 
+				[self performSelectorOnMainThread:@selector(sendStatusStoppedWithErrOnMainThread:)
+                                       withObject:nil
+                                    waitUntilDone:YES];
+                
+				break;
 			}
 			else
 			{
 				//return to read again
-				[NSThread sleepForTimeInterval:1.0]; 
-				continue; 
+				[NSThread sleepForTimeInterval:1.0];
+				continue;
 			}
-
-
-
+            
+            
+            
 		}
-
-		//Kick this timeout 
+        
+		//Kick this timeout
 		streamer.stillReading = TRUE;
-
+        
 		//Refresh
-		ignore_err_count = 4; 
-
+		ignore_err_count = 4;
+        
 		if ( bytesRead > READ_16K_DATA)
 		{
 			continue;
 		}
 		[data setLength:bytesRead];
-
-		//NSLog(@"bytesRead:%d initialFlag: %d, res_len: %d",bytesRead, initialFlag, [responseData length]); 
-
+        
+		//NSLog(@"bytesRead:%d initialFlag: %d, res_len: %d",bytesRead, initialFlag, [responseData length]);
+        
+        
+        
 		//NSRange dbg_range = {0, 22};
 		//		NSData * dbg_data = [data subdataWithRange:dbg_range];
 		//		NSString * raw_data = [[[NSString alloc] initWithData:dbg_data encoding: NSUTF8StringEncoding] autorelease];
 		//		NSLog(@"rawdata :%@", raw_data);
-
+        
 		if(initialFlag) {
-
+            
 			// truncate the http header
 			[responseData appendData:data];
 			int pos = [Util offsetOfBytes:responseData searchPattern:doubleReturnString];
-			if(pos < 0) 
+			if(pos < 0)
 			{
 				NSLog(@"pos <0");
-				continue; 
-
+				continue;
+                
 			}
-
+            
 			initialFlag = 0;
 			NSRange range0 = {pos + 4, [responseData length] - pos - 4};
 			NSData* tmpData = [responseData subdataWithRange:range0];
-
+            
 			buffer = [[NSMutableData alloc] init];
 			[buffer appendData:tmpData];
-		} else {
-
-
-
+            
+		}
+        else
+        {
+            
+            
+            
 			buffer = [[NSMutableData alloc] init];
 			[buffer appendData:responseData];
-			[buffer appendData:data];	
+			[buffer appendData:data];
 		}
-
-
-
-
-		int length = [buffer length];	
-
+        
+        
+        
+        
+        
+		int length = [buffer length];
+        
 		int index = 0;
 		int totalOffset = 0;
-
+        
 		while(1) {
 			NSRange range = {totalOffset, length - totalOffset};
 			NSData* ptr = [buffer subdataWithRange:range];
 			int endPos = [Util offsetOfBytes:ptr searchPattern:boundaryString];
 			//NSLog(@"endPos=%d", endPos);
-
-
-
-
-
+            
+            
+            
+            
+            
+            
 			if(endPos >= 0) {
 				// there is a match for the end boundary
 				// we have the entire data chunk ready
+                
+                
 				if(endPos > 0) {
-
+                    
+                    index = endPos + [boundaryString length];
+					totalOffset += index;
+                    
+                    
 					/* Try to find the boundary into the body */
 					NSRange range1 = {0, endPos};
-					NSData* data = [ptr subdataWithRange:range1];
-					int dl = [data length];
+					NSData* data_1 = [ptr subdataWithRange:range1];
+					int dl = [data_1 length];
 					//Byte* p1 = (Byte*)[data bytes];
-
-
-					index = endPos + [boundaryString length];
-					totalOffset += index;
-
-
-					int startIndex = [Util offsetOfBytes:data searchPattern:doubleReturnString];
-
+                    
+                    
+					int startIndex = [Util offsetOfBytes:data_1 searchPattern:doubleReturnString];
+                    
 					/* Start of body in HTTP response
-
+                     
 					 */
 					if(startIndex >= 0) {
-
+                        
 						NSRange range2 = {startIndex + 4, dl - startIndex - 4};
-						NSData* actualData = [data subdataWithRange:range2];
+						NSData* actualData = [data_1 subdataWithRange:range2];
 						Byte* actualDataPtr = (Byte*)[actualData bytes];
 						int audioLength = (actualDataPtr[1] << 24) + (actualDataPtr[2] << 16) + (actualDataPtr[3] << 8) + actualDataPtr[4];
 						int imageIndex = (actualDataPtr[5] << 24) + (actualDataPtr[6] << 16) + (actualDataPtr[7] << 8) + actualDataPtr[8];
-
-
-
+                        
+                        
+                        
 						Byte resetAudioBufferCount = actualDataPtr[10];
 						int temperature = (actualDataPtr[11]<<24) | (actualDataPtr[12]<<16) |
-							(actualDataPtr[13]<<8 )|   actualDataPtr[14];
-
-						//Update temperature 
+                        (actualDataPtr[13]<<8 )|   actualDataPtr[14];
+                        
+						//Update temperature
 						if (self.mTempUpdater != nil)
 						{
-							[self.mTempUpdater updateTemperature:temperature];																
+							[self.mTempUpdater updateTemperature:temperature];
 						}
-
-
-
-
-
-
-						int avdata_offset = 10 + 4 + 1 ; //old data + temperature + 1 
-
-
-
-#ifdef IBALL_AUDIO_SUPPORT	
+                        
+						int avdata_offset = 10 + 4 + 1 ; //old data + temperature + 1
+                        
+                        
+                        
+#if defined(IBALL_AUDIO_SUPPORT	)
 						if( (disableAudio == NO) &&  audioLength > 0 )
 						{
 							NSRange range3 = {avdata_offset, audioLength};
 							NSData* audioData = [actualData subdataWithRange:range3];
 #ifdef IRABOT_PCM_AUDIO_SUPPORT
 							NSData* decodedPCM = audioData;
-
+                            
 #else
 							NSMutableData* decodedPCM = [[NSMutableData alloc] init];
 							[ADPCMDecoder Decode:audioData outData:decodedPCM];
 #endif
-
-
-							if(self.recordInProgress) 
+                            
+                            
+							if(self.recordInProgress)
 							{
 								[iRecorder GetAudio:decodedPCM resetAudioBufferCount:resetAudioBufferCount];
 							}
-
-
+                            
+                            
 							[self performSelectorOnMainThread:@selector(PlayPCM:)
-								withObject:decodedPCM
-								waitUntilDone:YES];
+                                                   withObject:decodedPCM
+                                                waitUntilDone:YES];
 							//[self PlayPCM:decodedPCM];
-
+                            
 #if !defined(IRABOT_PCM_AUDIO_SUPPORT)
 							[decodedPCM release];
 #endif
-
-
-
-						} 
+                            [audioData release];
+                            
+                            
+						}
 #endif /* IBALL_AUDIO_SUPPORT */
-
-						NSRange range4 = {avdata_offset + audioLength, 
+                        
+                        
+                      
+                        
+						NSRange range4 = {avdata_offset + audioLength,
 							[actualData length] - avdata_offset - audioLength};
-						NSData* imageData = [actualData subdataWithRange:range4];
-						UIImage *image = [UIImage imageWithData:imageData];
+						NSData* imageData =  [[actualData subdataWithRange:range4] autorelease];
+                        
 
-
-						image = [self adaptToCurrentOrientation:image]; 
+                        
+                                              
+						UIImage *image = [[UIImage imageWithData:imageData]autorelease];
+                        image = [self adaptToCurrentOrientation:image];
+             
 
 						if (self.currentZoomLevel < 5.0f)
 						{
 							//CGRect frame = camView.oneCamView.videoView.frame;
-
+                            
 							CGFloat newDeltaWidth =   image.size.width*(5.0f - self.currentZoomLevel)*2;
 							CGFloat newDeltaHeight =  image.size.height*(5.0f - self.currentZoomLevel)*2;
 							CGRect newRect = CGRectZero;
 							newRect.origin.x = - newDeltaWidth/2;
 							newRect.origin.y = - newDeltaHeight/2;
-
+                            
 							newRect.size.width =  image.size.width +newDeltaWidth;
 							newRect.size.height = image.size.height +newDeltaHeight;
-
+                            
 							//							NSLog(@"newsize :%f, %f %f %f", newRect.size.width, newRect.size.height,
 							//								  newDeltaWidth, newDeltaHeight);
 							image = [self imageWithImage:image scaledToRect:newRect];
-
+                            
 						}
-
-						//NSLog(@"post image to image view <0");
-
-						//update graphics on main thread 
-						[self.videoImage performSelectorOnMainThread:@selector(setImage:) 
-							withObject:image
-							waitUntilDone:YES];
-
-
-
+                        
+                        //NSLog(@"post image to image view <0");
+                        
+						
+                        
+                        [self performSelectorOnMainThread:@selector(updateImage:) withObject:image waitUntilDone:YES];
+                        
+                        
+                        
 						//[streamer.videoImage setImage:[UIImage imageWithData:imageData]];
-
-
+                        
+                        
 						if (self.takeSnapshot == YES)
 						{
 							[self saveSnapShot:image];
 							self.takeSnapshot = NO;
 						}
-
-
-
+                        
+                        
+                        
 						if (self.recordInProgress == YES)
 						{
-
+                            
 							[iRecorder GetImage:imageData imgIndex:imageIndex];
 							if([iRecorder GetCurrentRecordSize] >= iMaxRecordSize) {
 								[self stopRecording];
 								//[self startRecording];
 							}
-
+                            
 						}
+                        
+                        
+                    
 
-
-						//[actualData release];
+                        [image release];
+						
+                        [imageData release];
+                        
+                        [actualData release];
+                        
 					}
-					else {
-
-						NSLog(@"startindex <0"); 
+					else
+                    {
+                        
+						NSLog(@"startindex <0");
 						/* Looks like we have an empty HTTP response */
-						// DO nothing with it for now 
+						// DO nothing with it for now
 					}
-				} else {
+                    
+                    
+                    
+                    
+                    [data_1 release];
+				}
+                else // endPos == 0
+                {
 					// for initial condition
 					// we will skip the boundary
 					index = [boundaryString length];
 					totalOffset = index;
 				}
+                
+                
+                [ptr release];
 			}
-			else //endPos < 0 
+			else //endPos < 0
 			{
 				// no match
 				// break the loop and wait for the next data chunk
 				[responseData setLength:[ptr length]];
 				[responseData setData:ptr];
-
+                
+                
+               
+                [ptr release];
+                
 				break;
 			}
 		} //while (1)
-
+        
 		[buffer release];
-
-
-
+        
 	} //While (thread is running)
-
+    
 	if (!exitedUnexpectedly)
 	{
-		[self performSelectorOnMainThread:@selector(sendStatusStoppedReportOnMainThread:) 
-			withObject:nil
-			waitUntilDone:YES];
+		[self performSelectorOnMainThread:@selector(sendStatusStoppedReportOnMainThread:)
+                               withObject:nil
+                            waitUntilDone:YES];
 	}
-
-	NSLog(@"STUN Main readVideoDataFromSocket exit"); 
-
-	[pool drain];
+    
+	NSLog(@"STUN Main readVideoDataFromSocket exit");
+    
+    [data release];
+    
+    //[responseData release];
+    
+    [pool drain];
+    
 	//arrive here -- means exit
 	[NSThread exit];
 }
 
 
 
--(void) readTimeoutCheck:(MBP_Streamer *) streamer 
+-(void) readTimeoutCheck:(MBP_Streamer *) streamer
 {
-
+    
 	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-	UdtSocketWrapper * socket = streamer.udtSocket;//grap the opened socket 
-
-	NSLog(@"readTimeoutCheck enter: 01"); 
-
+	UdtSocketWrapper * socket = streamer.udtSocket;//grap the opened socket
+    
+	NSLog(@"readTimeoutCheck enter: 01");
+    
 	while ([socket isOpen]) //This check is not really effective??
 	{
-
+        
 		[NSThread sleepForTimeInterval:10.0];
-
+        
 		if (streamer.stillReading == FALSE)
 		{
 			if (socket != nil && [socket isOpen])
 			{
-				NSLog(@"readTimeoutCheck: TIMEOUT! close sock"); 
+				NSLog(@"readTimeoutCheck: TIMEOUT! close sock");
 				[socket close];
 				break;
 			}
@@ -799,96 +873,96 @@
 			streamer.stillReading = FALSE;
 		}
 	}
-
-
-
-	NSLog(@"readTimeoutCheck exit: 01"); 
-
-
-
+    
+    
+    
+	NSLog(@"readTimeoutCheck exit: 01");
+    
+    
+    
 	[pool drain];
 	//arrive here -- means exit
 	[NSThread exit];
-
+    
 }
--(void) keepAlive:(MBP_Streamer *) streamer 
+-(void) keepAlive:(MBP_Streamer *) streamer
 {
-
+    
 	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-
-	NSLog(@"keepAlive enter: 01"); 
-
-	UdtSocketWrapper * socket = streamer.udtSocket;//grap the opened socket 
-
-	NSString * hello = @"hello"; 
-	int count = 1, data_sent  = -1 ; 
-	NSString * hello_msg; 
+    
+	NSLog(@"keepAlive enter: 01");
+    
+	UdtSocketWrapper * socket = streamer.udtSocket;//grap the opened socket
+    
+	NSString * hello = @"hello";
+	int count = 1, data_sent  = -1 ;
+	NSString * hello_msg;
 	while ([socket isOpen])
 	{
-		hello_msg = [hello stringByAppendingFormat:@"%d", count]; 
-		count ++; 
-
-		data_sent = [socket sendDataViaUdt:[hello dataUsingEncoding:NSUTF8StringEncoding]]; 
-
-		NSLog(@"sent: %@", hello_msg); 
-
+		hello_msg = [hello stringByAppendingFormat:@"%d", count];
+		count ++;
+        
+		data_sent = [socket sendDataViaUdt:[hello dataUsingEncoding:NSUTF8StringEncoding]];
+        
+		NSLog(@"sent: %@", hello_msg);
+        
 		//there is no way to check wether socket is opened -- simply to send data thru it .. if error -assume it's closed
 		if (data_sent <0)
 		{
 			break;
 		}
-
-		[NSThread sleepForTimeInterval:1.0]; 
+        
+		[NSThread sleepForTimeInterval:1.0];
 	}
-
-	NSLog(@"keepAlive exit: 01"); 
-
-
-
+    
+	NSLog(@"keepAlive exit: 01");
+    
+    
+    
 	[pool drain];
 	//arrive here -- means exit
 	[NSThread exit];
-
+    
 }
 
 #pragma mark -
 #pragma mark Audio Playback
 
-- (void) PlayPCM:(NSData*)pcm 
+- (void) PlayPCM:(NSData*)pcm
 {
-
-	//Start play back 
+    
+	//Start play back
 	[[pcmPlayer player] setPlay_now:TRUE];
-
+    
 	[pcmPlayer WritePCM:(unsigned char *)[pcm bytes] length:[pcm length]];
 }
 
 
 
-#pragma mark - 
-#pragma mark TCP delegate 
+#pragma mark -
+#pragma mark TCP delegate
 
 
 - (void)onSocket:(AsyncSocket *)sock didReadData:(NSData *)data withTag:(long)tag
 {
-
+    
 	[mHandler statusReport:STREAM_STARTED andObj:nil];
-
+    
 	//NSLog(@"stream only get data");
 	[listenSocket readDataWithTimeout:3 tag:tag];
-
+    
 	NSString *strBoundary = BOUNDARY_STRING;
 	NSData *boundaryString = [strBoundary dataUsingEncoding:NSUTF8StringEncoding];
-
+    
 	NSString *strDoubleReturn = @"\r\n\r\n";
 	NSData *doubleReturnString = [strDoubleReturn dataUsingEncoding:NSUTF8StringEncoding];
-
+    
 	NSMutableData* buffer;
-
-
+    
+    
 	if(initialFlag) {
-
-
+        
+        
 		//process data
 		NSString* initialResponse = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
 		NSRange range = [initialResponse rangeOfString:AUTHENTICATION_ERROR];
@@ -897,172 +971,172 @@
 			return;
 		}
 		[initialResponse release];
-
+        
 		// truncate the http header
 		[responseData appendData:data];
 		int pos = [Util offsetOfBytes:responseData searchPattern:doubleReturnString];
 		if(pos < 0) return;
-
+        
 		initialFlag = 0;
 		NSRange range0 = {pos + 4, [responseData length] - pos - 4};
 		NSData* tmpData = [responseData subdataWithRange:range0];
-
+        
 		buffer = [[NSMutableData alloc] init];
 		[buffer appendData:tmpData];
-	} 
-	else 
+	}
+	else
 	{
 		buffer = [[NSMutableData alloc] init];
 		[buffer appendData:responseData];
-		[buffer appendData:data];	
+		[buffer appendData:data];
 	}
-
-
-
-	int length = [buffer length];	
-
+    
+    
+    
+	int length = [buffer length];
+    
 	int index = 0;
 	int totalOffset = 0;
-
+    
 	while(1) {
 		NSRange range = {totalOffset, length - totalOffset};
 		NSData* ptr = [buffer subdataWithRange:range];
 		int endPos = [Util offsetOfBytes:ptr searchPattern:boundaryString];
-
-
+        
+        
 		if(endPos >= 0) {
 			// there is a match for the end boundary
 			// we have the entire data chunk ready
 			if(endPos > 0) {
-
+                
 				/* Try to find the boundary into the body */
 				NSRange range1 = {0, endPos};
 				NSData* data = [ptr subdataWithRange:range1];
 				int dl = [data length];
 				//Byte* p1 = (Byte*)[data bytes];
-
+                
 				index = endPos + [boundaryString length];
 				totalOffset += index;
 				int startIndex = [Util offsetOfBytes:data searchPattern:doubleReturnString];
-
+                
 				/* Start of body in HTTP response
-
+                 
 				 */
 				if(startIndex >= 0) {
-
+                    
 					NSRange range2 = {startIndex + 4, dl - startIndex - 4};
 					NSData* actualData = [data subdataWithRange:range2];
 					Byte* actualDataPtr = (Byte*)[actualData bytes];
 					int audioLength = (actualDataPtr[1] << 24) + (actualDataPtr[2] << 16) + (actualDataPtr[3] << 8) + actualDataPtr[4];
 					int imageIndex = (actualDataPtr[5] << 24) + (actualDataPtr[6] << 16) + (actualDataPtr[7] << 8) + actualDataPtr[8];
-
-
-
+                    
+                    
+                    
 					Byte resetAudioBufferCount = actualDataPtr[10];
 					int temperature = (actualDataPtr[11]<<24) | (actualDataPtr[12]<<16) |
-						(actualDataPtr[13]<<8 )|   actualDataPtr[14];
-
-					//Update temperature 
+                    (actualDataPtr[13]<<8 )|   actualDataPtr[14];
+                    
+					//Update temperature
 					if (self.mTempUpdater != nil)
 					{
-						[self.mTempUpdater updateTemperature:temperature];																
+						[self.mTempUpdater updateTemperature:temperature];
 					}
-
-
-					int avdata_offset = 10 + 4 + 1 ; //old data + temperature + 1 
-
-
-
-#ifdef IBALL_AUDIO_SUPPORT	
+                    
+                    
+					int avdata_offset = 10 + 4 + 1 ; //old data + temperature + 1
+                    
+                    
+                    
+#ifdef IBALL_AUDIO_SUPPORT
 					if( (disableAudio == NO) && audioLength > 0 )
 					{
 						NSRange range3 = {avdata_offset, audioLength};
 						NSData* audioData = [actualData subdataWithRange:range3];
 #ifdef IRABOT_PCM_AUDIO_SUPPORT
 						NSData* decodedPCM = audioData;
-
+                        
 #else
 						NSMutableData* decodedPCM = [[NSMutableData alloc] init];
 						[ADPCMDecoder Decode:audioData outData:decodedPCM];
 #endif
-
-
-						if(self.recordInProgress) 
+                        
+                        
+						if(self.recordInProgress)
 						{
 							[iRecorder GetAudio:decodedPCM resetAudioBufferCount:resetAudioBufferCount];
 						}
 						//NSLog(@"decoded audio len: %d", [decodedPCM length]);
-
-
+                        
+                        
 						[self PlayPCM:decodedPCM];
-
+                        
 #if !defined(IRABOT_PCM_AUDIO_SUPPORT)
 						[decodedPCM release];
 #endif
-
-
-
-					} 
+                        
+                        
+                        
+					}
 #endif /* IBALL_AUDIO_SUPPORT */
-
-					NSRange range4 = {avdata_offset + audioLength, 
+                    
+					NSRange range4 = {avdata_offset + audioLength,
 						[actualData length] - avdata_offset - audioLength};
 					NSData* imageData = [actualData subdataWithRange:range4];
 					UIImage *image = [UIImage imageWithData:imageData];
-
-
+                    
+                    
 					image = [self adaptToCurrentOrientation:image];
-
+                    
 					if (self.currentZoomLevel < 5.0f)
 					{
 						//currentZoomLevel = 1,2,3,4.. smaller means more magnified
-
+                        
 						CGFloat newDeltaWidth =   image.size.width*( self.currentZoomLevel*0.1);
 						CGFloat newDeltaHeight =  image.size.height*( self.currentZoomLevel*0.1);
 						CGRect newRect = CGRectZero;
 						newRect.origin.x = - newDeltaWidth/2;
 						newRect.origin.y = - newDeltaHeight/2;
-
+                        
 						newRect.size.width =  image.size.width +newDeltaWidth;
 						newRect.size.height = image.size.height +newDeltaHeight;
-
+                        
 						//NSLog(@"newsize :%f, %f %f %f", newRect.size.width, newRect.size.height,
 						//	 newDeltaWidth, newDeltaHeight);
 						image = [self imageWithImage:image scaledToRect:newRect];
-
+                        
 					}
-
-
+                    
+                    
 					[self.videoImage setImage:image];
-
+                    
 					//[self.videoImage setImage:[UIImage imageWithData:imageData]];
-
-
+                    
+                    
 					if (self.takeSnapshot == YES)
 					{
 						[self saveSnapShot:image];
 						self.takeSnapshot = NO;
 					}
-
-
-
+                    
+                    
+                    
 					if (self.recordInProgress == YES)
 					{
-
+                        
 						[iRecorder GetImage:imageData imgIndex:imageIndex];
 						if([iRecorder GetCurrentRecordSize] >= iMaxRecordSize) {
 							[self stopRecording];
 							//[self startRecording];
 						}
-
+                        
 					}
-
-
+                    
+                    
 					//[actualData release];
 				}
 				else {
 					/* Looks like we have an empty HTTP response */
-					// DO nothing with it for now 
+					// DO nothing with it for now
 				}
 			} else {
 				// for initial condition
@@ -1079,39 +1153,39 @@
 			break;
 		}
 	}
-
+    
 	[buffer release];
-
-
+    
+    
 }
 
 
 - (void)onSocket:(AsyncSocket *)sock willDisconnectWithError:(NSError *)err
 {
-	NSLog(@"Streamer- connection failed with error:%d:%@" , 
-			[err code], err);
-
+	NSLog(@"Streamer- connection failed with error:%d:%@" ,
+          [err code], err);
+    
 	[self.videoImage setImage:[UIImage imageNamed:@"homepage.png"]];
-
+    
 	if (hasStoppedByCaller == TRUE)
 	{
-		//simply return 
-		return; 
+		//simply return
+		return;
 	}
-
+    
 	NSLog(@"Streamer- AsyncSocketReadTimeoutError");
-	reconnectLimits --; 
+	reconnectLimits --;
 	if (reconnectLimits  > 0)
 	{
 		[self reConnect];
 	}
-
-
+    
+    
 	if (reconnectLimits <=1)
 	{
-		reconnectLimits = 3; //keep retrying ... 
-
-
+		reconnectLimits = 3; //keep retrying ...
+        
+        
 		if (self.remoteView == TRUE)
 		{
 			NSLog(@"Streamer-REMOTE send message : STREAM_STOPPED_UNEXPECTEDLY");
@@ -1122,7 +1196,7 @@
 			NSLog(@"Streamer- send message : STREAM_STOPPED_UNEXPECTEDLY");
 			[mHandler statusReport:STREAM_STOPPED_UNEXPECTEDLY andObj:nil];
 		}
-
+        
 	}
 }
 
@@ -1131,79 +1205,79 @@
 {
 	NSLog(@"Streamer- connected to camera: %@", host);
 	[mHandler statusReport:CONNECTED_TO_CAMERA andObj:nil];
-
+    
 	[self receiveData];
-
+    
 }
 
 - (void)onSocketDidDisconnect:(AsyncSocket *)sock
 {
-
+    
 }
 
 
 
 #pragma mark -
-#pragma mark HTTP Request 
+#pragma mark HTTP Request
 
 
 
 - (void ) requestURLSync_bg:(NSString*)url {
-
+    
 	NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
-
+    
 	//incase of demo, don't send the request
-
+    
 	{
 		//NSLog(@"url : %@", url);
-
+        
 		/* use a small value of timeout in this case */
 		[self requestURLSync:url withTimeOut:IRABOT_HTTP_REQ_TIMEOUT];
 	}
-
+    
 	[pool release];
 }
 
 /* Just use in background only */
-- (NSString * ) requestURLSync:(NSString*)url withTimeOut:(NSTimeInterval) timeout 
+- (NSString * ) requestURLSync:(NSString*)url withTimeOut:(NSTimeInterval) timeout
 {
-
+    
 	//NSLog(@"send request: %@", url);
-
+    
 	NSURLResponse* response;
 	NSError* error = nil;
 	NSData *dataReply = nil;
 	NSString * stringReply = nil;
-
-
+    
+    
 	@synchronized(self)
 	{
-
+        
 		// Create the request.
 		NSMutableURLRequest *theRequest=[NSMutableURLRequest requestWithURL:[NSURL URLWithString:url]
-			cachePolicy: NSURLRequestReloadIgnoringLocalCacheData
-			timeoutInterval:timeout];
-		NSString *authHeader = [@"Basic " stringByAppendingFormat:@"%@", [Util getCredentials]];  
+                                                                cachePolicy: NSURLRequestReloadIgnoringLocalCacheData
+                                                            timeoutInterval:timeout];
+		NSString *authHeader = [@"Basic " stringByAppendingFormat:@"%@", [Util getCredentials]];
 		[theRequest addValue:authHeader forHTTPHeaderField:@"Authorization"];
-
+        
 		dataReply = [NSURLConnection sendSynchronousRequest:theRequest returningResponse:&response error:&error];
-
-
+        
+        
 		if (error != nil)
 		{
 			//NSLog(@"error: %@\n", error);
 		}
 		else {
-
+            
 			// Interpret the response
 			stringReply = (NSString *)[[NSString alloc] initWithData:dataReply encoding:NSUTF8StringEncoding];
 			[stringReply autorelease];
 		}
-
-
+        
+        
 	}
-
-
+    
+    
 	return stringReply ;
 }
 
@@ -1213,38 +1287,38 @@
 #pragma mark -
 #pragma mark SnapShot
 
-- (void) saveSnapShot:(UIImage *) image 
+- (void) saveSnapShot:(UIImage *) image
 {
 #if 0
 	NSString *savedImagePath = [Util getSnapshotFileName];
-
+    
 	/* get it as PNG format */
 	NSData *imageData = UIImagePNGRepresentation(image);
-	[imageData writeToFile:savedImagePath atomically:NO]; 
+	[imageData writeToFile:savedImagePath atomically:NO];
 #else
-
+    
 	/* save to photo album */
-	UIImageWriteToSavedPhotosAlbum(image, 
-			self,
-			@selector(imageSavedToPhotosAlbum:didFinishSavingWithError:contextInfo:),
-			nil);
-
+	UIImageWriteToSavedPhotosAlbum(image,
+                                   self,
+                                   @selector(imageSavedToPhotosAlbum:didFinishSavingWithError:contextInfo:),
+                                   nil);
+    
 #endif
-
-
-
+    
+    
+    
 }
 
 - (void)imageSavedToPhotosAlbum:(UIImage *)image didFinishSavingWithError:(NSError *)error contextInfo:(void *)contextInfo {
 	NSString *message;
 	NSString *title;
 	//self.statusLabel.text = @"";
-
+    
 	if (!error)
 	{
 		title = @"Snapshot";
 		message = @"saved to Photo Album";
-
+        
 	}
 	else
 	{
@@ -1252,22 +1326,22 @@
 		message = [error description];
 		NSLog(@"Error when writing file to image library: %@", [error localizedDescription]);
 		NSLog(@"Error code %d", [error code]);
-
+        
 	}
 	UIAlertView *alert = [[UIAlertView alloc]
-		initWithTitle:title
-		message:message 
-		delegate:self
-		cancelButtonTitle:@"OK"
-		otherButtonTitles:nil];
+                          initWithTitle:title
+                          message:message
+                          delegate:self
+                          cancelButtonTitle:@"OK"
+                          otherButtonTitles:nil];
 	[alert show];
 	[alert release];
-
+    
 }
 
 
 #pragma mark -
-#pragma mark Video Recording 
+#pragma mark Video Recording
 
 
 
@@ -1277,10 +1351,10 @@
 	if (self.recordInProgress == YES)
 	{
 		NSLog(@"Stop recording");
-
+        
 		[self stopRecording];
 		self.recordInProgress = NO;
-
+        
 	}
 	else
 	{
@@ -1291,77 +1365,77 @@
 }
 
 - (void) showClock:(NSTimer *) exp {
-
+    
 	NSDate * startDate = (NSDate *) exp.userInfo;
-
-
-
+    
+    
+    
 	NSTimeInterval ellapseSec = abs([startDate timeIntervalSinceNow]);
-
+    
 	//NSLog(@"showClock ellapseSec:%0.2f",ellapseSec);
-
+    
 	NSInteger hours = ellapseSec / 3600;
 	NSInteger remainder = ((NSInteger)ellapseSec)% 3600;
 	NSInteger minutes = remainder / 60;
 	NSInteger seconds = remainder % 60;
-
+    
 	//recTimeLabel.text = [NSString stringWithFormat:@"%02d:%02d:%02d", hours, minutes, seconds];
-
+    
 	[self.recTimeLabel performSelectorOnMainThread:@selector(setText:)
-		withObject: [NSString stringWithFormat:@"%02d:%02d:%02d", hours, minutes, seconds] waitUntilDone:YES];
-
+                                        withObject: [NSString stringWithFormat:@"%02d:%02d:%02d", hours, minutes, seconds] waitUntilDone:YES];
+    
 	//NSLog(@" recTimeLabel.text: %@", [NSString stringWithFormat:@"%02d:%02d:%02d", hours, minutes, seconds]); 
 }
 
 - (void) startRecording
 {
-
-
+    
+    
 	iMaxRecordSize = [Util getMaxRecordSize] * 1024 * 1024;
-
+    
 	iFileName = [Util getRecordFileName];
-
+    
 	NSLog(@"Recording started: %@ max:%d",iFileName, iMaxRecordSize);
-
+    
 	if(iRecorder == NULL) {
 		iRecorder = [[AviRecord alloc] init];
 	}
 	//[iRecorder Init:iFileName];
-
+    
 	[iRecorder InitWithFilename:iFileName video_width:320 video_height:240];
-
-
+    
+    
 	NSDate * now = [NSDate date];
 	self.recTimer = [NSTimer scheduledTimerWithTimeInterval:1.0
-		target:self 
-		selector:@selector(showClock:) 
-		userInfo:now 
-		repeats:YES];
-
+                                                     target:self 
+                                                   selector:@selector(showClock:) 
+                                                   userInfo:now 
+                                                    repeats:YES];
+    
 	[iFileName retain];
 }
 
 - (void) stopRecording
 {
 	if (self.recTimer != nil && 
-			[self.recTimer isValid])
+        [self.recTimer isValid])
 	{
 		[self.recTimer invalidate]; 
-
+        
 	}
-
-
+    
+    
 	[iRecorder Close];
-
+    
 	if (iFileName != nil)
 	{
 		//[self saveVideoToAlbum:iFileName];
-
-
+        
+        
 		NSLog(@"Don't Saving to album now"); 
-
+        
 		[self videoSavedToPhotosAlbum:nil didFinishSavingWithError:nil contextInfo:nil];
-
+        
 		[iFileName release];
 	}
 }
@@ -1378,37 +1452,37 @@
 	{
 		NSLog(@"can't save to album"); 
 	}
-
+    
 }
 
 - (void)videoSavedToPhotosAlbum:(UIImage *)image didFinishSavingWithError:(NSError *)error contextInfo:(void *)contextInfo
 {
 	NSString *title = @"Video";
-
+    
 	NSArray* items = [iFileName componentsSeparatedByString:@"/"];
-
+    
 	NSString * shortName = (NSString *)[items lastObject]; 
-
+    
 	NSString * message = [NSString stringWithFormat:@"saved as %@", shortName];
-
-
+    
+    
 	if (!error)
 	{
 		//message = @"saved to Photo Album";
-
+        
 	}
 	else {
 		title = @"Error";
 		message = [error description];
 	}
-
-
+    
+    
 	UIAlertView *alert = [[UIAlertView alloc]
-		initWithTitle:title
-		message:message 
-		delegate:self
-		cancelButtonTitle:@"OK"
-		otherButtonTitles:nil];
+                          initWithTitle:title
+                          message:message 
+                          delegate:self
+                          cancelButtonTitle:@"OK"
+                          otherButtonTitles:nil];
 	[alert show];
 	[alert release];
 }
@@ -1420,11 +1494,11 @@
 - (UIImage*)imageWithImage:(UIImage*)image scaledToRect:(CGRect)newRect
 {
 	UIGraphicsBeginImageContext(image.size);
-
+    
 	[image drawInRect:newRect];
 	UIImage* newImage = UIGraphicsGetImageFromCurrentImageContext();
 	UIGraphicsEndImageContext();
-
+    
 	return newImage;
 }
 
@@ -1436,97 +1510,100 @@
 #pragma mark Orientation changed 
 -(void) switchToOrientation:(UIInterfaceOrientation)orientation
 {
-
-
+    
+    
 	self.currentOrientation = orientation; 
-
-
+    
+    
 }
 
 -(UIImage *) adaptToCurrentOrientation:(UIImage *) orig
 {
-
+    
 	if (self.currentOrientation == UIInterfaceOrientationLandscapeLeft || 
-			self.currentOrientation == UIInterfaceOrientationLandscapeRight) 
+        self.currentOrientation == UIInterfaceOrientationLandscapeRight) 
 	{
-
-
+        
+        
 		return orig; 
-
+        
 	}
 	else if (self.currentOrientation == UIInterfaceOrientationPortrait ||
-			self.currentOrientation == UIInterfaceOrientationPortraitUpsideDown) 
+             self.currentOrientation == UIInterfaceOrientationPortraitUpsideDown) 
 	{
 		//NSLog(@"Portrait view");
-
-
+        
+        
 		// NSLog(@"Portrait view orig size: %0.2f %0.2f ", orig.size.width, orig.size.height );
 		float new_height = orig.size.height;
 		float hw_ratio = (float)orig.size.height/(float)orig.size.width;
-
+        
 		float new_width = hw_ratio *new_height ;
-
+        
 		float new_x =( (float)orig.size.width - new_width)/2;
-
-
+        
+        
 		//!! watchout: autoreleased 
-		UIImage* newImage = [self imageByCropping:orig toRect:CGRectMake(new_x, 0, new_width, new_height)];
+		UIImage* newImage = [[self imageByCropping:orig toRect:CGRectMake(new_x, 0, new_width, new_height)] autorelease];
+        
+        [orig release];
+        
 		return  newImage; 
-
+        
 	}
-
-
+    
+    
 	return orig; 
 }
 
 - (UIImage*)imageByCropping:(UIImage *)imageToCrop toRect:(CGRect)rect
 
 {
-
+    
 	//create a context to do our clipping in
-
+    
 	UIGraphicsBeginImageContext(rect.size);
-
+    
 	CGContextRef currentContext = UIGraphicsGetCurrentContext();
-
+    
 	//create a rect with the size we want to crop the image to
 	//the X and Y here are zero so we start at the beginning of our
 	//newly created context
-
-
-
+    
+    
+    
 	CGRect clippedRect = CGRectMake(0, 0, rect.size.width, rect.size.height);
-
+    
 	CGContextClipToRect( currentContext, clippedRect);
-
+    
 	//create a rect equivalent to the full size of the image
 	//offset the rect by the X and Y we want to start the crop
 	//from in order to cut off anything before them
-
+    
 	CGRect drawRect = CGRectMake(rect.origin.x * -1,
-			rect.origin.y * -1,
-			imageToCrop.size.width,
-			imageToCrop.size.height);
-
+                                 rect.origin.y * -1,
+                                 imageToCrop.size.width,
+                                 imageToCrop.size.height);
+    
 	//draw the image to our clipped context using our offset rect
-
+    
 	//CGContextDrawImage(currentContext, drawRect, imageToCrop.CGImage);
 	[imageToCrop drawInRect:drawRect];
-
-
-
+    
+    
+    
 	//pull the image from our cropped context
-
+    
 	UIImage *cropped = UIGraphicsGetImageFromCurrentImageContext();
-
+    
 	//pop the context to get back to the default
-
+    
 	UIGraphicsEndImageContext();
-
+    
 	//Note: this is autoreleased
-
+    
 	return cropped;
-
+    
 }
 
 @end

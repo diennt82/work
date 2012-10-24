@@ -36,5 +36,7 @@
 	<false/>
 	<key>UIFileSharingEnabled</key>
 	<true/>
+	<key>UIInterfaceOrientation</key>
+	<string>UIInterfaceOrientationPortrait</string>
 </dict>
 </plist>

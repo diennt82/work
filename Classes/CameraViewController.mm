@@ -250,6 +250,7 @@
 	// Release any retained subviews of the main view.
 }
 
+//// DEPRECATED from IOS 6
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
 {
     
@@ -260,6 +261,21 @@
 	}
 	return YES;//(interfaceOrientation == UIInterfaceOrientationPortrait);
 }
+
+//////////////// IOS6 replacement 
+
+-(BOOL) shouldAutorotate
+{
+    if (upgradeFwView != nil && ![upgradeFwView isHidden])
+	{
+		//Dont rotate if we are upgrading..
+		return NO;
+	}
+	return YES;
+}
+
+/////////////
+
 - (void) willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
 {
     
@@ -833,7 +849,7 @@
 	switch (status) {
 		case CONNECTED_TO_CAMERA:
         {
-            self.enableControls = TRUE;
+            
             //update melody ui
             [self setUIMelodyOnOff];
             
@@ -841,6 +857,7 @@
         }
 		case STREAM_STARTED:
         {
+            self.enableControls = TRUE;
             progressView.hidden = YES;
             
             [self stopPeriodicPopup];
@@ -1096,7 +1113,7 @@
 			case 1:
             {
                 //video is still playing now-- no need to stop
-                NSLog(@"start a 2nd round");
+                NSLog(@"start the 2nd round");
                 //just refresh the timer..
                 if (selected_channel != nil)
                 {
