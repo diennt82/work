@@ -141,7 +141,14 @@
     
     CGFloat currentZoomLvl; 
     
-    BOOL ptt_enabled, askForFWUpgradeOnce; 
+    BOOL enableControls; 
+    BOOL ptt_enabled, askForFWUpgradeOnce;
+    
+    SystemSoundID soundFileObject;
+    
+    
+    
+    
     
 }
 
@@ -154,7 +161,7 @@
 @property (nonatomic, retain) NSTimer * alertTimer; 
 @property (nonatomic, assign) UISlider * zoombar; 
 @property (nonatomic) float currentZoomLvl; 
-@property (nonatomic) BOOL ptt_enabled,askForFWUpgradeOnce; 
+@property (nonatomic) BOOL ptt_enabled,askForFWUpgradeOnce,enableControls;
 
 
 -(IBAction)buttonMelodyPressed:(id) sender;

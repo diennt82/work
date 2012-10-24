@@ -24,7 +24,8 @@
     IBOutlet UITableView * cameraList; 
     IBOutlet UITabBarController *tabBarController;
 
-    IBOutlet UIView * offlineView; 
+    IBOutlet UIView * offlineView;
+    IBOutlet UIView * emptyCameraListView; 
     
        
     NSArray * listOfChannel; 
@@ -63,6 +64,8 @@
 -(IBAction)alertSetting:(id)sender;
 
 
+- (BOOL) shouldShowEditButton;
+- (BOOL) shouldShowScanButton;
 
 
 @end

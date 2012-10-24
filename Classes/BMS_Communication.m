@@ -1384,4 +1384,76 @@
 }
 
 
+
++(NSString*) getLocalizedMessageForError:(int) err
+{
+    NSString * result = @"Unknown error";
+    
+    
+    switch(err)
+    {
+            
+        case 404:
+            result = @"Server is temporarily not available";
+            break;
+        case 601:
+            result = @"Invalid command passed. Please check the query.";
+            break;
+        case 602:
+            result = @"Required parameter(s) are missing.";
+            break;
+        case 603:
+            result = @"Length of the parameter is out of expected boundaries.";
+            break;
+        case 611:
+            result = @"Camera does not exist.";
+            break;
+        case 612:
+            result =@"Unable to communicate with the camera.";
+            break;
+        case 613:
+            result = @"Unable to communicate with the camera.";
+            break;
+        case 614:
+            result = @"Camera is not ready for streaming";
+            break;
+        case 621:
+            result =@"Email Id is not registered.";
+            break;
+        case 622:
+            result =@"Email Id registed but not activated.";
+            break;
+        case 623:
+            result =@"Email Id is already activated.";
+            break;
+        case 624:
+            result =@"Activation failed. Either user is not registered or the activation period is expired. Please register again.";
+            break;
+        case 625:
+            result =@"Activation failed. Invalid activation key.";
+            break;
+        case 626:
+            result =@"Authentication failed, either Email Id or Password is invalid.";
+            break;
+        case 627:
+            result =@"Camera is not associated with any user (email id).";
+            break;
+        case 628:
+            result =@"Email is already registered";
+            break;
+        case 636:
+            result =@"Username is already registered";
+            break;
+        case 699:
+            result =@"Unhandled exception occured, please contact administrator.";
+            break;
+        default:
+            result =[NSString stringWithFormat:@"Unknown error - %d", err];
+            break;
+            
+    }
+    return result;
+    
+}
+
 @end

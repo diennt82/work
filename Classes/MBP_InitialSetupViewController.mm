@@ -58,8 +58,10 @@
     BOOL isFirstTimeSetup = [userDefaults boolForKey:FIRST_TIME_SETUP];
     if (isFirstTimeSetup)
     {
+  
+
         UIBarButtonItem *backButton = 
-        [[UIBarButtonItem alloc] initWithTitle:@"Back" 
+        [[UIBarButtonItem alloc] initWithTitle:@"Cancel" 
                                          style:UIBarButtonItemStyleBordered 
                                         target:self 
                                         action:@selector(goBackToFirstScreen:)];          
@@ -68,8 +70,9 @@
     }
     else
     {
+        
         UIBarButtonItem *backButton = 
-        [[UIBarButtonItem alloc] initWithTitle:@"Back" 
+        [[UIBarButtonItem alloc] initWithTitle:@"Cancel" 
                                          style:UIBarButtonItemStyleBordered 
                                         target:self 
                                         action:@selector(handleBackButton:)];          

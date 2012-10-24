@@ -24,6 +24,11 @@
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
         // Custom initialization
+        
+        CFBundleRef mainbundle = CFBundleGetMainBundle();
+		CFURLRef soundFileURLRef = CFBundleCopyResourceURL(mainbundle, CFSTR("beep"), CFSTR("wav"), NULL);
+		AudioServicesCreateSystemSoundID(soundFileURLRef, &soundFileObject);
+        
     }
     return self;
 }
@@ -246,16 +251,48 @@
 #pragma mark -
 #pragma mark StreamerEventHandler
 
+
+-(void) playSound
+{
+	//    SystemSoundID soundFileObject;
+	//    CFBundleRef mainbundle = CFBundleGetMainBundle();
+	//    CFURLRef soundFileURLRef = CFBundleCopyResourceURL(mainbundle, CFSTR("beep"), CFSTR("wav"), NULL);
+	//    AudioServicesCreateSystemSoundID(soundFileURLRef, &soundFileObject);
+    
+	NSLog(@"Play the B");
+    
+	//201201011 This is needed to play the system sound on top of audio from camera
+	UInt32 sessionCategory = kAudioSessionCategory_AmbientSound;    // 1
+	AudioSessionSetProperty (
+                             kAudioSessionProperty_AudioCategory,                        // 2
+                             sizeof (sessionCategory),                                   // 3
+                             &sessionCategory                                            // 4
+                             );
+    
+	//Play beep
+	AudioServicesPlaySystemSound(soundFileObject);
+    
+    
+    
+}
+
+
 -(void) periodicPopup:(NSTimer *) exp
 {
-	NSString * msg = (NSString *) [exp userInfo]; 
+	NSString * msg = (NSString *) [exp userInfo];
+    
+    [self playSound];
+    
+    
+    
 	if ( alert != nil)
 	{
 		if ([alert isVisible]) 
 		{
 			[alert setMessage:msg];
 			
-			return; 
+		
+            return;
 		}
 		
 		[alert release]; 
@@ -313,7 +350,18 @@
 		case STREAM_STARTED:
 		{
 			progressView.hidden = YES;
-			[self stopPeriodicPopup]; 
+			[self stopPeriodicPopup];
+            
+            
+            if (self.flipTimer == nil  || ![self.flipTimer isValid])
+            {
+                NSLog(@"restart flip timer "); 
+                self.flipTimer = [NSTimer scheduledTimerWithTimeInterval:20.0
+                                                                  target:self
+                                                                selector:@selector(channelFlip:)
+                                                                userInfo:nil
+                                                                 repeats:YES];
+            }
 			
 			break;
 		}

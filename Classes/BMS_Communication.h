@@ -145,6 +145,7 @@
 @property (nonatomic, assign) id obj; 
 
 
++(NSString*) getLocalizedMessageForError:(int) err;
 
 - (id) initWithObject: (id) caller Selector: (SEL) success FailSelector: (SEL) fail ServerErr:(SEL) serverErr;
 

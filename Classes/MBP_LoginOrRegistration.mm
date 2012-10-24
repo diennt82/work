@@ -11,7 +11,7 @@
 
 @implementation MBP_LoginOrRegistration
 
-@synthesize userName, password, remember_pass_sw;
+@synthesize userName, password;
 @synthesize progressLabel, progressView;
 
 @synthesize regUserName;
@@ -55,8 +55,12 @@
                                       style:UIBarButtonItemStyleBordered
                                      target:nil
                                      action:nil] autorelease];
+
     
     [self.view addSubview:self.progressView];
+    
+    
+  
     
      self.temp_user_email  = @"";
     self.temp_pass_str =@"";
@@ -115,6 +119,10 @@
             NSLog(@" NO LOGIN"); 
         }
 	}
+    else
+    {
+        self.navigationItem.rightBarButtonItem.enabled = NO;
+    }
 
 }
 
@@ -145,7 +153,7 @@
     NSLog(@"Login dealloc...");
 	[userName release];
 	[password release];
-	[remember_pass_sw release];
+
 
 	[progressView release];
 	[progressLabel release];
@@ -165,9 +173,28 @@
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField
 {
+     
 	[textField resignFirstResponder];
+    
+    
+    //NSLog(@" %d %d",[self.userName.text length], [self.password.text length] );
+    
+    if ([self.userName.text length] > 0
+        && [self.password.text length] > 0)
+    {
+        //enable Done btn
+        self.navigationItem.rightBarButtonItem.enabled = YES;
+    }
+    else
+    {
+        //enable Done btn
+        self.navigationItem.rightBarButtonItem.enabled = NO;
+
+    }
+    
 	return NO;
 }
+
 
 - (void)presentModallyOn:(UIViewController *)parent
 {
@@ -185,6 +212,7 @@
     self.navigationItem.leftBarButtonItem  = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(cancelAction:)] autorelease];
     assert(self.navigationItem.leftBarButtonItem != nil);
     self.navigationItem.rightBarButtonItem = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone   target:self action:@selector(doneAction:)] autorelease];
+
     assert(self.navigationItem.rightBarButtonItem != nil);
 
     // Present the navigation controller on the specified parent 
@@ -264,11 +292,17 @@
     
     if (indexPath.section == 0 && indexPath.row == USERNAME_INDEX) 
     {
-
+        
+        UITextField * txtField = (UITextField*) [userNameCell viewWithTag:203];
+        txtField.delegate = self; 
         return userNameCell;
     }
     if (indexPath.section == 0 && indexPath.row == USERPASS_INDEX)
     {
+        
+        UITextField * txtField = (UITextField*) [userPassCell viewWithTag:204];
+        txtField.delegate = self;
+
         return userPassCell;
     }
     if (indexPath.section == 1 &&  indexPath.row == FORGOTPASS_INDEX)
@@ -308,6 +342,11 @@
 
 #pragma mark -
 #pragma mark Button Handling 
+
+- (IBAction) createNewAccount:(id)sender
+{
+    [delegate sendStatus:1];
+}
 
 -(void) cancelAction:(id) sender
 {
@@ -563,7 +602,7 @@
 	//ERROR condition
 	UIAlertView *alert = [[UIAlertView alloc]
 						  initWithTitle:@"Login Error"
-						  message:[NSString stringWithFormat:@"Server error code: %d", [error_response statusCode]] 
+						  message:[NSString stringWithFormat:@"Server error: %@", [BMS_Communication getLocalizedMessageForError:[error_response statusCode]]]
 						  delegate:self
 						  cancelButtonTitle:@"OK"
 						  otherButtonTitles:nil];
@@ -629,7 +668,7 @@
 	//ERROR condition
 	UIAlertView *alert = [[UIAlertView alloc]
 						  initWithTitle:@"Registration Error"
-						  message:[NSString stringWithFormat:@"Server error code: %d", [error_response statusCode]] 
+						  message:[NSString stringWithFormat:@"Server error: %@", [BMS_Communication getLocalizedMessageForError:[error_response statusCode]]] 
 						  delegate:self
 						  cancelButtonTitle:@"OK"
 						  otherButtonTitles:nil];
