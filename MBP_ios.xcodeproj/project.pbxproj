@@ -795,7 +795,7 @@
 		29B97313FDCFA39411CA2CEA /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0430;
+				LastUpgradeCheck = 0450;
 				ORGANIZATIONNAME = "Smart Panda Ltd";
 			};
 			buildConfigurationList = C01FCF4E08A954540054247B /* Build configuration list for PBXProject "MBP_ios" */;
@@ -1020,6 +1020,7 @@
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = MBP_ios_Prefix.pch;
+				GCC_THUMB_SUPPORT = NO;
 				HEADER_SEARCH_PATHS = "\"$(SRCROOT)/external_include/\"/**";
 				INFOPLIST_FILE = "MBP_ios-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 4.1;
@@ -1031,7 +1032,9 @@
 					"\"$(SRCROOT)/../openssl_lib/iPhoneOS-armv6/lib\"",
 				);
 				PRODUCT_NAME = MBP_ios;
-				PROVISIONING_PROFILE = "B86A6CF1-9DD1-4D4B-970D-FAEE935EF5E3";
+				PROVISIONING_PROFILE = "034E897A-0BE2-4C73-83D1-4971F15E2D87";
+				"PROVISIONING_PROFILE[sdk=*]" = "034E897A-0BE2-4C73-83D1-4971F15E2D87";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "034E897A-0BE2-4C73-83D1-4971F15E2D87";
 				SDKROOT = iphoneos;
 				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/external_include/**";
 			};
@@ -1055,6 +1058,7 @@
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = MBP_ios_Prefix.pch;
+				GCC_THUMB_SUPPORT = NO;
 				HEADER_SEARCH_PATHS = "\"$(SRCROOT)/external_include/\"/**";
 				INFOPLIST_FILE = "MBP_ios-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 4.1;
@@ -1063,7 +1067,8 @@
 					"\"$(SRCROOT)\"",
 				);
 				PRODUCT_NAME = MBP_ios;
-				PROVISIONING_PROFILE = "B86A6CF1-9DD1-4D4B-970D-FAEE935EF5E3";
+				PROVISIONING_PROFILE = "034E897A-0BE2-4C73-83D1-4971F15E2D87";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "034E897A-0BE2-4C73-83D1-4971F15E2D87";
 				SDKROOT = iphoneos;
 				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/external_include/**";
 				VALIDATE_PRODUCT = YES;
@@ -1074,8 +1079,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
-				CODE_SIGN_IDENTITY = "iPhone Developer: Paul Tsui (KSWYEMQH37)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Paul Tsui (KSWYEMQH37)";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Binatone Electronics International Limited";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Binatone Electronics International Limited";
 				GCC_C_LANGUAGE_STANDARD = c99;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
@@ -1085,6 +1090,8 @@
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
 				OTHER_LDFLAGS = "";
 				PRODUCT_NAME = MSC3;
+				PROVISIONING_PROFILE = "727C543F-C3C7-44B6-A94E-7E330A15535E";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "727C543F-C3C7-44B6-A94E-7E330A15535E";
 				SDKROOT = iphoneos;
 				USER_HEADER_SEARCH_PATHS = "\"$(SRCROOT)/external_include\"/**";
 			};
@@ -1108,13 +1115,14 @@
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = MBP_ios_Prefix.pch;
+				GCC_THUMB_SUPPORT = NO;
 				HEADER_SEARCH_PATHS = "\"$(SRCROOT)/external_include/\"/**";
 				INFOPLIST_FILE = "MBP_ios-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 4.1;
 				LIBRARY_SEARCH_PATHS = "\"$(SRCROOT)\"";
 				PRODUCT_NAME = msc3;
-				PROVISIONING_PROFILE = "B86A6CF1-9DD1-4D4B-970D-FAEE935EF5E3";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "B86A6CF1-9DD1-4D4B-970D-FAEE935EF5E3";
+				PROVISIONING_PROFILE = "034E897A-0BE2-4C73-83D1-4971F15E2D87";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "034E897A-0BE2-4C73-83D1-4971F15E2D87";
 				SDKROOT = iphoneos;
 				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/external_include/**";
 				VALIDATE_PRODUCT = YES;
@@ -1125,8 +1133,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
-				CODE_SIGN_IDENTITY = "iPhone Developer: Paul Tsui (KSWYEMQH37)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Paul Tsui (KSWYEMQH37)";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Binatone Electronics International Limited";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Binatone Electronics International Limited";
 				GCC_C_LANGUAGE_STANDARD = c99;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
@@ -1134,6 +1142,8 @@
 				LIBRARY_SEARCH_PATHS = "\"$(SRCROOT)\"";
 				MACH_O_TYPE = mh_execute;
 				OTHER_LDFLAGS = "";
+				PROVISIONING_PROFILE = "727C543F-C3C7-44B6-A94E-7E330A15535E";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "727C543F-C3C7-44B6-A94E-7E330A15535E";
 				SDKROOT = iphoneos;
 				USER_HEADER_SEARCH_PATHS = "\"$(SRCROOT)/external_include\"/**";
 			};
@@ -1153,6 +1163,8 @@
 				MACH_O_TYPE = mh_execute;
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
 				OTHER_LDFLAGS = "";
+				PROVISIONING_PROFILE = "B86A6CF1-9DD1-4D4B-970D-FAEE935EF5E3";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "B86A6CF1-9DD1-4D4B-970D-FAEE935EF5E3";
 				SDKROOT = iphoneos;
 				USER_HEADER_SEARCH_PATHS = "\"$(SRCROOT)/external_include\"/**";
 			};
