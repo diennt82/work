@@ -1029,7 +1029,7 @@
 				GCC_THUMB_SUPPORT = NO;
 				HEADER_SEARCH_PATHS = "\"$(SRCROOT)/external_include/\"/**";
 				INFOPLIST_FILE = "MBP_ios-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 4.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
 				LIBRARY_SEARCH_PATHS = (
 					"\"$(SRCROOT)/../UdtLib/build/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"",
 					"\"$(SRCROOT)/../openssl_lib/iPhoneSimulator-i386/lib\"",
@@ -1064,7 +1064,7 @@
 				GCC_THUMB_SUPPORT = NO;
 				HEADER_SEARCH_PATHS = "\"$(SRCROOT)/external_include/\"/**";
 				INFOPLIST_FILE = "MBP_ios-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 4.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)\"",
@@ -1080,21 +1080,24 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
-				CODE_SIGN_IDENTITY = "iPhone Developer: Paul Tsui (KSWYEMQH37)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Paul Tsui (KSWYEMQH37)";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Binatone Electronics International Limited";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Binatone Electronics International Limited";
 				GCC_C_LANGUAGE_STANDARD = c99;
+				GCC_VERSION = "";
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = "\"$(SRCROOT)/external_include\"";
+				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
 				LIBRARY_SEARCH_PATHS = "\"$(SRCROOT)\"";
 				MACH_O_TYPE = mh_execute;
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
 				OTHER_LDFLAGS = "";
 				PRODUCT_NAME = MSC3;
-				PROVISIONING_PROFILE = "B86A6CF1-9DD1-4D4B-970D-FAEE935EF5E3";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "B86A6CF1-9DD1-4D4B-970D-FAEE935EF5E3";
+				PROVISIONING_PROFILE = "FCA129C5-C8E2-4E25-B710-D331A685F087";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "52EE9AF9-AD90-4723-BB27-3D65732E020A";
 				SDKROOT = iphoneos;
 				USER_HEADER_SEARCH_PATHS = "\"$(SRCROOT)/external_include\"/**";
+				VALID_ARCHS = "armv7 armv7s";
 			};
 			name = Distribute;
 		};
@@ -1119,7 +1122,7 @@
 				GCC_THUMB_SUPPORT = NO;
 				HEADER_SEARCH_PATHS = "\"$(SRCROOT)/external_include/\"/**";
 				INFOPLIST_FILE = "MBP_ios-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 4.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
 				LIBRARY_SEARCH_PATHS = "\"$(SRCROOT)\"";
 				PRODUCT_NAME = msc3;
 				SDKROOT = iphoneos;
@@ -1135,9 +1138,11 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer: Paul Tsui (KSWYEMQH37)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Paul Tsui (KSWYEMQH37)";
 				GCC_C_LANGUAGE_STANDARD = c99;
+				GCC_VERSION = "";
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = "\"$(SRCROOT)/external_include\"";
+				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
 				LIBRARY_SEARCH_PATHS = "\"$(SRCROOT)\"";
 				MACH_O_TYPE = mh_execute;
 				OTHER_LDFLAGS = "";
@@ -1145,6 +1150,7 @@
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "B86A6CF1-9DD1-4D4B-970D-FAEE935EF5E3";
 				SDKROOT = iphoneos;
 				USER_HEADER_SEARCH_PATHS = "\"$(SRCROOT)/external_include\"/**";
+				VALID_ARCHS = "armv7 armv7s";
 			};
 			name = Debug;
 		};
@@ -1155,9 +1161,11 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer: Paul Tsui (KSWYEMQH37)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Paul Tsui (KSWYEMQH37)";
 				GCC_C_LANGUAGE_STANDARD = c99;
+				GCC_VERSION = "";
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = "\"$(SRCROOT)/external_include\"";
+				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
 				LIBRARY_SEARCH_PATHS = "\"$(SRCROOT)\"";
 				MACH_O_TYPE = mh_execute;
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
@@ -1166,6 +1174,7 @@
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "B86A6CF1-9DD1-4D4B-970D-FAEE935EF5E3";
 				SDKROOT = iphoneos;
 				USER_HEADER_SEARCH_PATHS = "\"$(SRCROOT)/external_include\"/**";
+				VALID_ARCHS = "armv7 armv7s";
 			};
 			name = Release;
 		};
