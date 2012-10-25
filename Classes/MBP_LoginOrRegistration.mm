@@ -72,7 +72,7 @@
 	//can be user email or user name here --  
 	NSString * old_usr = (NSString *) [userDefaults objectForKey:@"PortalUsername"];	
 	NSString * old_pass = (NSString *) [userDefaults objectForKey:@"PortalPassword"];
-	 self.temp_user_email  = (NSString*) [userDefaults objectForKey:@"PortalUseremail"];
+    self.temp_user_email  = (NSString*) [userDefaults objectForKey:@"PortalUseremail"];
     
 	if (old_usr != nil)
 	{
@@ -133,6 +133,25 @@
 	        (interfaceOrientation == UIInterfaceOrientationLandscapeRight));
 }
 */
+
+//nvr called here -- always call at iosViewController
+- (BOOL) shouldAutorotate
+{
+    return YES;
+}
+
+-(NSUInteger)supportedInterfaceOrientations
+{
+    
+    return UIInterfaceOrientationMaskPortrait;
+    
+}
+
+- (UIInterfaceOrientation)preferredInterfaceOrientationForPresentation
+{
+    return UIInterfaceOrientationPortrait;
+}
+
 
 - (void)didReceiveMemoryWarning {
     // Releases the view if it doesn't have a superview.

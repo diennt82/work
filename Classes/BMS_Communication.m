@@ -7,6 +7,7 @@
 //
 
 #import "BMS_Communication.h"
+#import "AiBallBase64Encoding.h"
 
 
 @implementation BMS_Communication
@@ -613,6 +614,62 @@
 
     
 }
+
+
+-(BOOL) BMS_sendCmdViaServeNonBlockedWithUser:(NSString*) user_email
+                                        AndPass:(NSString*) user_pass
+                                        macAddr:(NSString *) macWithColon
+                                        channId:(NSString*) channelId
+                                        command:(NSString *)udt_command
+{
+    
+ 
+    NSString * mac_ = [Util strip_colon_fr_mac:macWithColon];
+    
+    
+    NSString * http_cmd = [NSString stringWithFormat:@"%@%@",BMS_PHONESERVICE, BMS_CMD_PART];
+	http_cmd = [http_cmd stringByAppendingFormat:@"%@", SEND_CTRL_CMD];
+	http_cmd = [http_cmd stringByAppendingFormat:@"%@%@", SEND_CTRL_CMD_PARAM_1, mac_];
+    http_cmd = [http_cmd stringByAppendingFormat:@"%@%@", SEND_CTRL_CMD_PARAM_2, channelId];
+    http_cmd = [http_cmd stringByAppendingFormat:@"%@%@", SEND_CTRL_CMD_PARAM_3,udt_command];
+    
+	
+	NSLog(@"send udt query:%@", http_cmd);
+    
+    
+    
+	
+	NSString* plain = [NSString stringWithFormat:@"%@:%@",
+					   user_email, user_pass];
+	NSData* plainData = [plain dataUsingEncoding:NSUTF8StringEncoding];
+	NSString * portalCred = [NSString base64StringFromData:plainData length:[plainData length]];
+	
+	@synchronized(self)
+	{
+		
+		NSMutableURLRequest *theRequest=[NSMutableURLRequest requestWithURL:[NSURL URLWithString:http_cmd]
+																cachePolicy: NSURLRequestReloadIgnoringLocalCacheData
+															timeoutInterval:BMS_DEFAULT_TIME_OUT];
+		
+		NSString *authHeader = [@"Basic " stringByAppendingFormat:@"%@",portalCred];
+		[theRequest addValue:authHeader forHTTPHeaderField:@"Authorization"];
+
+        url_connection = [[NSURLConnection alloc] initWithRequest:theRequest
+														 delegate:nil //so that it will not call delegate function
+												 startImmediately:TRUE];
+		
+
+    }
+    
+   
+    
+    return TRUE;
+    
+    
+}
+
+
+
 #pragma mark - 
 #pragma mark Blocked queries
 

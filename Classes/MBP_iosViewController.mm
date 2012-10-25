@@ -105,15 +105,39 @@ return self;
 	[self.view addSubview:backgroundView];
 
 
-#if 1 // show Login Page
-	MBP_FirstPage * firstPage;
-	firstPage = [[MBP_FirstPage alloc] initWithNibName:@"MBP_FirstPage"
-		bundle:nil
-		withConnDelegate:self];
-
-	[self presentModalViewController:firstPage animated:YES];
-#endif 
-
+    //load user/pass
+	NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+	
+	//can be user email or user name here --
+	NSString * old_usr = (NSString *) [userDefaults objectForKey:@"PortalUsername"];
+	NSString * old_pass = (NSString *) [userDefaults objectForKey:@"PortalPassword"];
+    
+    if (old_usr  != nil && old_pass != nil)
+    {
+        
+        [userDefaults setBool:TRUE forKey:_AutoLogin];
+        [userDefaults synchronize];
+        
+        
+        MBP_LoginOrRegistration * loginOrReg;
+        loginOrReg = [[MBP_LoginOrRegistration alloc] initWithNibName:@"MBP_LoginOrRegistration"
+                                                               bundle:nil
+                                                     withConnDelegate:self];
+        
+        
+        //Use navigation controller
+        [loginOrReg presentModallyOn:self];
+    }
+    else
+    {
+        MBP_FirstPage * firstPage;
+        firstPage = [[MBP_FirstPage alloc] initWithNibName:@"MBP_FirstPage"
+                                                    bundle:nil
+                                          withConnDelegate:self];
+        
+        [self presentModalViewController:firstPage animated:YES];
+        
+    }
 
 
 
@@ -148,8 +172,8 @@ return self;
 
 /*
 // Override to allow orientations other than the default portrait orientation.
- */
-- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
+  
+ - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
 
 	// Return YES for supported orientations
 
@@ -158,6 +182,39 @@ return self;
 	return YES;
 
 }
+*/
+
+
+
+- (BOOL) shouldAutorotate
+{
+    if ( ( self.modalViewController != nil) &&
+        !([self.modalViewController isKindOfClass:[UINavigationController class]] )
+        )
+    {
+        return  [self.modalViewController shouldAutorotate];
+    }
+    
+    return NO;
+}
+
+-(NSUInteger)supportedInterfaceOrientations
+{
+    
+//    if ( ( self.modalViewController != nil) &&
+//          !([self.modalViewController isKindOfClass:[UINavigationController class]] )
+//        )
+//    {
+//        return  [self.modalViewController supportedInterfaceOrientations];
+//    }
+    
+    return UIInterfaceOrientationMaskPortrait;
+
+}
+
+
+
+
 
 
 

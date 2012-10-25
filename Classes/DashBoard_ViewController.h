@@ -16,7 +16,7 @@
 #import "QuickViewCamera_ViewController.h"
 #import "AlertSettingViewController.h"
 
-
+#define  MAX_CAM_ALLOWED 4
 
 @interface DashBoard_ViewController : UIViewController<UITableViewDataSource, UITableViewDelegate, UINavigationControllerDelegate, UITextFieldDelegate>
 {

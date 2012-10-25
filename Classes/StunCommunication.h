@@ -34,6 +34,6 @@
 - (NSString *) sendCommandAndBlock:(NSString *)command;
 
 - (NSData * ) sendCommandThruUdtServer:(NSString *) command withMac:(NSString *) mac AndChannel:(NSString*) chann;
-
+- (void ) sendCommandThruUdtServerNonBlock:(NSString *) command withMac:(NSString *) mac AndChannel:(NSString*) chann;
 
 @end

@@ -259,13 +259,14 @@
 		//Dont rotate if we are upgrading..
 		return NO;
 	}
-	return YES;//(interfaceOrientation == UIInterfaceOrientationPortrait);
+	return YES;
 }
 
 //////////////// IOS6 replacement 
 
 -(BOOL) shouldAutorotate
 {
+    NSLog(@"Should Auto Rotate"); 
     if (upgradeFwView != nil && ![upgradeFwView isHidden])
 	{
 		//Dont rotate if we are upgrading..
@@ -650,11 +651,12 @@
 	//Disable speaker for remote connections
 	if (ch.profile.isInLocal != TRUE)
 	{
-		UIButton * spk = (UIButton*) [self.view viewWithTag:SPK_CONTROL_BTN];
-		if (spk != nil)
+		UIButton * spk_btn = (UIButton*) [self.view viewWithTag:SPK_CONTROL_BTN];
+		if (spk_btn != nil)
 		{
+            spk_btn.selected = YES;
+            [self setEnableSpk:spk_btn.selected];
             
-			[spk sendActionsForControlEvents:UIControlEventTouchUpInside];
 		}
         
 		UIButton * ptt = (UIButton *) [self.view viewWithTag:PTT_CONTROL_BTN];
@@ -1042,10 +1044,11 @@
 	}
     
     
-#if 1
+  
+    
 	NSLog(@"Remote camera-channel is %d with cam name: %@", selected_channel.channel_index, selected_channel.profile.name);
 	[self setupInfraCamera:selected_channel];
-#endif
+
     
     
 }
@@ -2509,7 +2512,7 @@
 				NSLog(@"sending UD Direction: ");
                 
                 
-				[self.scomm sendCommandThruUdtServer:dir_str 
+				[self.scomm sendCommandThruUdtServerNonBlock:dir_str 
                                              withMac:self.selected_channel.profile.mac_address
                                           AndChannel:self.selected_channel.channID];
 			}
@@ -2545,13 +2548,13 @@
 		case DIRECTION_H_LF	:
             
 			dir_str= MOVE_LEFT;
-			dir_str= [NSString stringWithFormat:@"%@%.1f", dir_str, IRABOT_DUTYCYCLE_LR_MAX];
+			dir_str= [NSString stringWithFormat:@"%@%.1f", dir_str,(float) IRABOT_DUTYCYCLE_LR_MAX];
             
 			break;
 		case DIRECTION_H_RT	:
             
 			dir_str= MOVE_RIGHT;
-			dir_str= [NSString stringWithFormat:@"%@%.1f", dir_str, IRABOT_DUTYCYCLE_LR_MAX];
+			dir_str= [NSString stringWithFormat:@"%@%.1f", dir_str,(float) IRABOT_DUTYCYCLE_LR_MAX];
             
 			break;
 		default:
@@ -2568,7 +2571,7 @@
 				NSLog(@"sending LR Direction: ");
                 
                 
-				[self.scomm sendCommandThruUdtServer:dir_str 
+				[self.scomm sendCommandThruUdtServerNonBlock:dir_str 
                                              withMac:self.selected_channel.profile.mac_address
                                           AndChannel:self.selected_channel.channID];
 			}

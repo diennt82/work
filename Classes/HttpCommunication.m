@@ -550,7 +550,7 @@
 
 
 
-
+//Non-block
 - (void) sendCommand:(NSString *) command
 {
 	

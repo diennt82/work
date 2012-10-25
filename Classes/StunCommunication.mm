@@ -48,6 +48,31 @@
 
     
 }
+
+
+- (void ) sendCommandThruUdtServerNonBlock:(NSString *) command withMac:(NSString *) mac AndChannel:(NSString*) chann
+{
+    
+    BMS_Communication * bms_comm;
+    bms_comm  = [[BMS_Communication alloc] initWithObject:self
+                                                 Selector:nil
+                                             FailSelector:nil
+                                                ServerErr:nil];
+    
+   	
+	NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+	NSString * user_email = (NSString *) [userDefaults objectForKey:@"PortalUseremail"];
+	NSString * user_pass = (NSString *) [userDefaults objectForKey:@"PortalPassword"];
+    
+    [bms_comm BMS_sendCmdViaServeNonBlockedWithUser:user_email
+                                                                 AndPass:user_pass
+                                                                 macAddr:mac
+                                                                 channId:chann
+                                                                 command:command];
+    return;
+}
+
+
 - (void) sendCommand:(NSString *) command
 {
 	NSMutableData * response_data; 

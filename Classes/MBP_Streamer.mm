@@ -285,8 +285,6 @@
     [self.videoImage setImage:img];
     
     
-    //[img release];
-    
 }
 
 
@@ -492,7 +490,7 @@
 
 -(void) readVideoDataFromSocket:(MBP_Streamer *) streamer
 {
-	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+	
     
     
     
@@ -509,7 +507,7 @@
     
 	NSMutableData* data, *buffer;
 	int bytesRead = -1;
-    
+    NSData* ptr;
     
     
     
@@ -525,10 +523,13 @@
 	while (![[NSThread currentThread] isCancelled])
 	{
         
+        
 		if (streamer.streamingChannel.stopStreaming == TRUE)
 		{
 			break;
 		}
+        NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+
         
 		//read
 		bytesRead = [socket recvDataViaUdt:data dataLen:READ_16K_DATA];
@@ -569,9 +570,9 @@
 		}
 		[data setLength:bytesRead];
         
-		//NSLog(@"bytesRead:%d initialFlag: %d, res_len: %d",bytesRead, initialFlag, [responseData length]);
         
-        
+        //NSLog(@"bytesRead:%d initialFlag: %d, res_len: %d",bytesRead, initialFlag, [responseData length]);
+
         
 		//NSRange dbg_range = {0, 22};
 		//		NSData * dbg_data = [data subdataWithRange:dbg_range];
@@ -610,28 +611,27 @@
         
         
         
-        
+
         
 		int length = [buffer length];
         
 		int index = 0;
 		int totalOffset = 0;
         
+        
 		while(1) {
 			NSRange range = {totalOffset, length - totalOffset};
-			NSData* ptr = [buffer subdataWithRange:range];
+			ptr = [buffer subdataWithRange:range];
 			int endPos = [Util offsetOfBytes:ptr searchPattern:boundaryString];
 			//NSLog(@"endPos=%d", endPos);
             
-            
-            
-            
+    
             
             
 			if(endPos >= 0) {
 				// there is a match for the end boundary
 				// we have the entire data chunk ready
-                
+#if 1 // DEBUG MEM ALLOC LEAK
                 
 				if(endPos > 0) {
                     
@@ -703,7 +703,7 @@
 #if !defined(IRABOT_PCM_AUDIO_SUPPORT)
 							[decodedPCM release];
 #endif
-                            [audioData release];
+                            //[audioData release];
                             
                             
 						}
@@ -714,12 +714,11 @@
                         
 						NSRange range4 = {avdata_offset + audioLength,
 							[actualData length] - avdata_offset - audioLength};
-						NSData* imageData =  [[actualData subdataWithRange:range4] autorelease];
+						NSData* imageData =  [actualData subdataWithRange:range4];
                         
-
-                        
-                                              
-						UIImage *image = [[UIImage imageWithData:imageData]autorelease];
+                                     
+						UIImage *image = [UIImage imageWithData:imageData];
+#if 1
                         image = [self adaptToCurrentOrientation:image];
                        
              
@@ -772,15 +771,17 @@
 							}
                             
 						}
+#else
+                        NSLog(@"Do post image"); 
                         
-                        
+#endif
                     
 
-                        [image release];
+                        //[image release];
 						
-                        [imageData release];
+                        //[imageData release];
                         
-                        [actualData release];
+                        //[actualData release];
                         
 					}
 					else
@@ -794,7 +795,7 @@
                     
                     
                     
-                    [data_1 release];
+                    //[data_1 release];
 				}
                 else // endPos == 0
                 {
@@ -803,9 +804,11 @@
 					index = [boundaryString length];
 					totalOffset = index;
 				}
-                
-                
-                [ptr release];
+#else
+                index = endPos + [boundaryString length];
+                totalOffset += index;             
+#endif
+              
 			}
 			else //endPos < 0
 			{
@@ -814,17 +817,28 @@
 				[responseData setLength:[ptr length]];
 				[responseData setData:ptr];
                 
-                
+                //NSLog(@"response data len: %d", [responseData length]);
                
-                [ptr release];
+                
                 
 				break;
 			}
+            
+            
+            
+            
 		} //while (1)
+  
+  
         
 		[buffer release];
         
+        
+        [pool drain];
+
+        
 	} //While (thread is running)
+    
     
 	if (!exitedUnexpectedly)
 	{
@@ -837,10 +851,7 @@
     
     [data release];
     
-    //[responseData release];
-    
-    [pool drain];
-    
+        
 	//arrive here -- means exit
 	[NSThread exit];
 }
@@ -1511,11 +1522,7 @@
 #pragma mark Orientation changed 
 -(void) switchToOrientation:(UIInterfaceOrientation)orientation
 {
-    
-    
-	self.currentOrientation = orientation; 
-    
-    
+	self.currentOrientation = orientation;
 }
 
 -(UIImage *) adaptToCurrentOrientation:(UIImage *) orig
@@ -1546,10 +1553,7 @@
         
 		//!! watchout: autoreleased 
 		UIImage* newImage = [self imageByCropping:orig toRect:CGRectMake(new_x, 0, new_width, new_height)] ;
-        if (self.communication_mode == COMM_MODE_STUN)
-        {
-            // [orig release];
-        }
+      
         
 		return  newImage; 
         

@@ -231,6 +231,11 @@ withConnDelegate:(id<ConnectionMethodDelegate> ) caller
     return  (interfaceOrientation == UIInterfaceOrientationPortrait);
 }
 
+-(BOOL) shouldAutorotate
+{
+    return NO ;
+}
+
 
 - (BOOL) shouldShowScanButton
 {
@@ -592,16 +597,25 @@ withConnDelegate:(id<ConnectionMethodDelegate> ) caller
 #pragma  mark - 
 #pragma mark ACTIONS ..
 
+
+
+
 -(IBAction)addCamera:(id)sender
 {
     
-    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-    [userDefaults setBool:FALSE forKey:FIRST_TIME_SETUP];
-    [userDefaults synchronize];
-    
-    [delegate sendStatus:1];//initial setup 
-    
-    
+    if ([listOfChannel count] < MAX_CAM_ALLOWED)
+    {
+        NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+        [userDefaults setBool:FALSE forKey:FIRST_TIME_SETUP];
+        [userDefaults synchronize];
+        
+        [delegate sendStatus:1];//initial setup
+        
+    }
+    else
+    {
+        [self showDialog:DIALOG_CANT_ADD_CAM];
+    }
     
 }
 -(IBAction)checkNow:(id)sender
@@ -879,7 +893,19 @@ withConnDelegate:(id<ConnectionMethodDelegate> ) caller
 			break;
 		}
             
-		
+		case DIALOG_CANT_ADD_CAM:
+		{
+			NSString * msg =@"Please remove one camera from the current  list before addding the new one";
+			UIAlertView *alert = [[UIAlertView alloc]
+								  initWithTitle:@""
+								  message:msg
+								  delegate:nil
+								  cancelButtonTitle:@"OK"
+								  otherButtonTitles:nil];
+			[alert show];
+			[alert release];
+			break;
+		}
             
 		default:
 			break;

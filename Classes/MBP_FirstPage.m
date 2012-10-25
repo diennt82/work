@@ -37,6 +37,10 @@
 
     version = [NSString stringWithFormat:@"Version %@",version]; 
     versionText.text =version;
+    
+    
+
+
 }
 
 
@@ -45,6 +49,21 @@
 //    return ((interfaceOrientation == UIInterfaceOrientationLandscapeLeft) || 
 //	        (interfaceOrientation == UIInterfaceOrientationLandscapeRight));
 //}
+
+
+- (BOOL) shouldAutorotate
+{
+    return NO;
+}
+
+-(NSUInteger)supportedInterfaceOrientations
+{
+   
+    return UIInterfaceOrientationMaskPortrait;
+    
+}
+
+
 
 
 - (void)didReceiveMemoryWarning {

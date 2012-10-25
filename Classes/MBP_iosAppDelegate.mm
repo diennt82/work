@@ -23,7 +23,9 @@
     // Override point for customization after application launch.
 
     // Add the view controller's view to the window and display.
-    [window addSubview:viewController.view];
+    // OBSOLETE: [window addSubview:viewController.view];
+  
+    [window setRootViewController:viewController];
     [window makeKeyAndVisible];
 
 	
@@ -271,6 +273,25 @@
      See also applicationDidEnterBackground:.
      */
 }
+
+/*A bit mask of the UIInterfaceOrientation constants that indicate the orientations to use for the view controllers.*/
+
+- (NSUInteger)application:(UIApplication *)application supportedInterfaceOrientationsForWindow:(UIWindow *)window
+{
+    
+ //   return UIInterfaceOrientationMaskAllButUpsideDown;
+    
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    NSString * camInView = (NSString*)[userDefaults objectForKey:CAM_IN_VEW];
+    
+	if (camInView != nil)
+	{
+		return  UIInterfaceOrientationMaskAllButUpsideDown;   
+	}
+    
+   return  UIInterfaceOrientationMaskPortrait;
+}
+
 
 
 #pragma mark -
