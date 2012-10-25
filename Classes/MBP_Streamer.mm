@@ -721,6 +721,7 @@
                                               
 						UIImage *image = [[UIImage imageWithData:imageData]autorelease];
                         image = [self adaptToCurrentOrientation:image];
+                       
              
 
 						if (self.currentZoomLevel < 5.0f)
@@ -1544,9 +1545,11 @@
         
         
 		//!! watchout: autoreleased 
-		UIImage* newImage = [[self imageByCropping:orig toRect:CGRectMake(new_x, 0, new_width, new_height)] autorelease];
-        
-        [orig release];
+		UIImage* newImage = [self imageByCropping:orig toRect:CGRectMake(new_x, 0, new_width, new_height)] ;
+        if (self.communication_mode == COMM_MODE_STUN)
+        {
+            // [orig release];
+        }
         
 		return  newImage; 
         
