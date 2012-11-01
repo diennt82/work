@@ -160,7 +160,7 @@
 
 -(void) handleNextButton:(id) sender
 {
-    UITextField * _userName = (UITextField *)[self.userName viewWithTag:200];
+    UITextField * _userName = (UITextField *)[self.userName viewWithTag:201];
     UITextField * _userPass = (UITextField *)[self.userPass viewWithTag:200];
     UITextField * _userCPass = (UITextField *)[self.userCPass viewWithTag:200];
     UITextField * _userEmail = (UITextField *)[self.userEmail viewWithTag:200];

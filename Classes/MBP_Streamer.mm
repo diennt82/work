@@ -149,7 +149,13 @@
 
 - (void) receiveData
 {
-	NSString *getReq = [NSString stringWithFormat:@"%@%@\r\n\r\n",
+    
+
+    //
+    //	NSString *getReq = [NSString stringWithFormat:@"%@Authorization: Basic %@\r\n\r\n", AIBALL_GET_REQUEST, [Util getCredentials]];
+    
+    //GET /?action=appletvastream HTTP/1.1\r\nAuthorization: Basic xxxxx\r\n\r\n    
+	NSString *getReq = [NSString stringWithFormat:@"%@%@\r\n",
                         AVSTREAM_REQUEST,
                         AVSTREAM_PARAM_2 ];
 	if (self.remoteView == TRUE && self.remoteViewKey != nil)
@@ -158,6 +164,10 @@
                   AVSTREAM_REQUEST, AVSTREAM_PARAM_1,self.remoteViewKey,
                   AVSTREAM_PARAM_2 ];
 	}
+    
+    //Attach Basic authen:
+    getReq = [getReq stringByAppendingFormat:@"Authorization: Basic %@\r\n\r\n",[Util getDFCredentials] ];
+    
     
 	NSLog(@"getReq: %@", getReq);
     
@@ -960,7 +970,7 @@
     
 	[mHandler statusReport:STREAM_STARTED andObj:nil];
     
-	//NSLog(@"stream only get data");
+	
 	[listenSocket readDataWithTimeout:3 tag:tag];
     
 	NSString *strBoundary = BOUNDARY_STRING;
@@ -980,6 +990,11 @@
 		NSRange range = [initialResponse rangeOfString:AUTHENTICATION_ERROR];
 		if(range.location != NSNotFound)
 		{
+            // auth error ->>>>>>> force re-connect
+            NSLog(@"auth ERROR-- stop streaming ");
+            [self stopStreaming];
+            [mHandler statusReport:STREAM_STOPPED_UNEXPECTEDLY andObj:nil];
+
 			return;
 		}
 		[initialResponse release];
@@ -987,8 +1002,11 @@
 		// truncate the http header
 		[responseData appendData:data];
 		int pos = [Util offsetOfBytes:responseData searchPattern:doubleReturnString];
-		if(pos < 0) return;
-        
+		if(pos < 0) {
+            NSLog(@"pos < 0 ");
+            return;
+        }
+    
 		initialFlag = 0;
 		NSRange range0 = {pos + 4, [responseData length] - pos - 4};
 		NSData* tmpData = [responseData subdataWithRange:range0];
@@ -1118,7 +1136,7 @@
                         
 					}
                     
-                    
+                    //NSLog(@"setVideo Image" );
 					[self.videoImage setImage:image];
                     
 					//[self.videoImage setImage:[UIImage imageWithData:imageData]];
@@ -1149,14 +1167,18 @@
 				else {
 					/* Looks like we have an empty HTTP response */
 					// DO nothing with it for now
+
 				}
 			} else {
 				// for initial condition
 				// we will skip the boundary
 				index = [boundaryString length];
 				totalOffset = index;
+                
+
 			}
 		} else {
+
 			// no match
 			// break the loop and wait for the next data chunk
 			[responseData setLength:[ptr length]];
