@@ -44,7 +44,7 @@
     [super viewDidLoad];
 	// Do any additional setup after loading the view.
     
-    self.navigationItem.title = @"Camera Configured"; 
+    self.navigationItem.title = @"Create Account"; 
 
 #if 0
     self.navigationItem.backBarButtonItem =
@@ -112,12 +112,18 @@
 
 - (void)textFieldDidBeginEditing:(UITextField *)textField
 {
+    int tag = textField.tag;
+    if (tag == 201)
+        return; 
     [self animateTextField: textField up: YES];
 }
 
 
 - (void)textFieldDidEndEditing:(UITextField *)textField
 {
+    int tag = textField.tag;
+    if (tag == 201)
+        return;
     [self animateTextField: textField up: NO];
 }
 
@@ -141,7 +147,16 @@
     
     return NO;
 }
+-(IBAction) showTermOfUse_:(id) sender
+{
 
+    NSLog(@"Load Term of use");
+    //Load the next xib
+    ToUViewController  * vc = [[ToUViewController alloc]
+                                                    initWithNibName:@"ToUViewController" bundle:nil];
+    [self.navigationController pushViewController:vc animated:NO];
+    [vc release];
+}
 
 -(void) handleNextButton:(id) sender
 {

@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "BMS_Communication.h"
 #import "Reachability.h"
+#import "ToUViewController.h"
 #import "Step_10_ViewController.h"
 
 
@@ -18,6 +19,9 @@
     IBOutlet UITableViewCell * userPass;
     IBOutlet UITableViewCell * userCPass;
     IBOutlet UITableViewCell * userEmail;
+    
+ 
+    
      NSString * tmp_user_str,* tmp_pass_str,* tmp_user_email;
 }
 
@@ -28,7 +32,7 @@
 
 @property (nonatomic, retain)  NSString * tmp_user_str,* tmp_pass_str,* tmp_user_email;
 
-
+-(IBAction) showTermOfUse_:(id) sender;
 -(IBAction) handleNextButton:(id) sender;
 +(BOOL) isWifiConnectionAvailable;
 
