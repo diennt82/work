@@ -150,7 +150,7 @@
 {
     int tag = ((UIButton*)sender).tag;
     
-#if 1
+
     
     if (tag == CONTINUE_BTN_TAG)
     {
@@ -166,20 +166,6 @@
 
     }
     
-    
-#else /// TEST TEST TEST 
-    
-    NSLog(@"Load step 09");
-    //Load the next xib
-    Step_09_ViewController *step09ViewController = [[Step_09_ViewController alloc]
-                                                    initWithNibName:@"Step_09_ViewController" bundle:nil];
-    
-    
-    [self.navigationController pushViewController:step09ViewController animated:NO];
-    
-    [step09ViewController release];
-    
-#endif 
     
 }
 
