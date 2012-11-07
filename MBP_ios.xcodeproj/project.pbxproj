@@ -426,7 +426,7 @@
 		97DA238116425F9E00EE2528 /* ToUViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ToUViewController.h; sourceTree = "<group>"; };
 		97DA238216425F9E00EE2528 /* ToUViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ToUViewController.m; sourceTree = "<group>"; };
 		97DA238316425F9F00EE2528 /* ToUViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ToUViewController.xib; sourceTree = "<group>"; };
-		97DC55BF14BAFAAD00AA4911 /* MBP_ios.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MBP_ios.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		97DC55BF14BAFAAD00AA4911 /* Baby Cam.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Baby Cam.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		97DEEA4014308B71008212FF /* AsyncUdpSocket.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AsyncUdpSocket.m; sourceTree = "<group>"; };
 		97DEEA4114308B71008212FF /* AsyncUdpSocket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AsyncUdpSocket.h; sourceTree = "<group>"; };
 		97E3AAD5147E257400A0922A /* iTunesArtWork */ = {isa = PBXFileReference; lastKnownFileType = file; path = iTunesArtWork; sourceTree = "<group>"; };
@@ -650,7 +650,7 @@
 		19C28FACFE9D520D11CA2CBB /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				97DC55BF14BAFAAD00AA4911 /* MBP_ios.app */,
+				97DC55BF14BAFAAD00AA4911 /* Baby Cam.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -802,7 +802,7 @@
 			);
 			name = MSC3;
 			productName = MBP_ios;
-			productReference = 97DC55BF14BAFAAD00AA4911 /* MBP_ios.app */;
+			productReference = 97DC55BF14BAFAAD00AA4911 /* Baby Cam.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -1051,7 +1051,7 @@
 					"\"$(SRCROOT)\"",
 					"\"$(SRCROOT)/../openssl_lib/iPhoneOS-armv6/lib\"",
 				);
-				PRODUCT_NAME = MBP_ios;
+				PRODUCT_NAME = "Baby Cam";
 				SDKROOT = iphoneos;
 				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/external_include/**";
 			};
@@ -1083,7 +1083,7 @@
 					"$(inherited)",
 					"\"$(SRCROOT)\"",
 				);
-				PRODUCT_NAME = MBP_ios;
+				PRODUCT_NAME = "Baby Cam";
 				SDKROOT = iphoneos;
 				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/external_include/**";
 				VALIDATE_PRODUCT = YES;
@@ -1106,7 +1106,7 @@
 				MACH_O_TYPE = mh_execute;
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
 				OTHER_LDFLAGS = "";
-				PRODUCT_NAME = MSC3;
+				PRODUCT_NAME = "Baby Cam";
 				PROVISIONING_PROFILE = "FCA129C5-C8E2-4E25-B710-D331A685F087";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "52EE9AF9-AD90-4723-BB27-3D65732E020A";
 				SDKROOT = iphoneos;
@@ -1138,7 +1138,7 @@
 				INFOPLIST_FILE = "MBP_ios-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
 				LIBRARY_SEARCH_PATHS = "\"$(SRCROOT)\"";
-				PRODUCT_NAME = msc3;
+				PRODUCT_NAME = "Baby Cam";
 				SDKROOT = iphoneos;
 				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/external_include/**";
 				VALIDATE_PRODUCT = YES;
@@ -1160,6 +1160,7 @@
 				LIBRARY_SEARCH_PATHS = "\"$(SRCROOT)\"";
 				MACH_O_TYPE = mh_execute;
 				OTHER_LDFLAGS = "";
+				PRODUCT_NAME = "Baby Cam";
 				SDKROOT = iphoneos;
 				USER_HEADER_SEARCH_PATHS = "\"$(SRCROOT)/external_include\"/**";
 				VALID_ARCHS = "armv7 armv7s";
@@ -1182,6 +1183,7 @@
 				MACH_O_TYPE = mh_execute;
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
 				OTHER_LDFLAGS = "";
+				PRODUCT_NAME = "Baby Cam";
 				SDKROOT = iphoneos;
 				USER_HEADER_SEARCH_PATHS = "\"$(SRCROOT)/external_include\"/**";
 				VALID_ARCHS = "armv7 armv7s";
