@@ -19,7 +19,8 @@
 
 @synthesize localUdtPort, communication_mode; 
 @synthesize  relayToken; 
-@synthesize stopStreaming; 
+@synthesize stopStreaming;
+@synthesize remoteConnectionError;
 
 - (id) initWithChannelIndex:(int) index
 {

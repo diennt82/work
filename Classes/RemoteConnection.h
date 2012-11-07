@@ -11,6 +11,9 @@
 #import "BMS_Communication.h"
 #import "STUN_Communication.h"
 
+#define  NO_ERROR         0 
+#define  REQUEST_TIMEOUT -1001 //same as "Request Timeout" error code
+
 @interface RemoteConnection : NSObject {
 
 	CamChannel *mChannel; 

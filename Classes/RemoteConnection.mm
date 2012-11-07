@@ -189,10 +189,15 @@
 //	[alert show];
 //	[alert release];
 	
+    
+    self.mChannel.remoteConnectionError =  [error_response statusCode];
     //Pass some info back to caller
 	[_caller performSelector:_Failure_SEL withObject:nil ];
 	return;
 }
+
+
+
 - (void) getStreamFailedServerUnreachable
 {
 
@@ -208,6 +213,7 @@
 //	[alert show];
 //	[alert release];
 	
+    self.mChannel.remoteConnectionError =  REQUEST_TIMEOUT;
 	[_caller performSelector:_Failure_SEL withObject:nil ];
 	return;
 }
@@ -230,6 +236,7 @@
 //	[alert show];
 //	[alert release];
 	
+    self.mChannel.remoteConnectionError =  [error_response statusCode];
     //Pass some info back to caller
 	[_caller performSelector:_Failure_SEL withObject:nil ];
 	return;
@@ -248,7 +255,9 @@
 //						  otherButtonTitles:nil];
 //	[alert show];
 //	[alert release];
-	
+
+    self.mChannel.remoteConnectionError =  REQUEST_TIMEOUT;
+
 	[_caller performSelector:_Failure_SEL withObject:nil ];
 	return;
 	
@@ -328,6 +337,7 @@
 //	[alert release];
 	
     //Pass some info back to caller
+        self.mChannel.remoteConnectionError =  [error_response statusCode];
 	[_caller performSelector:_Failure_SEL withObject:nil ];
 	return;
 	
@@ -346,7 +356,8 @@
 //						  otherButtonTitles:nil];
 //	[alert show];
 //	[alert release];
-	
+    
+    self.mChannel.remoteConnectionError =  REQUEST_TIMEOUT;
 	[_caller performSelector:_Failure_SEL withObject:nil ];
 	return;
 }

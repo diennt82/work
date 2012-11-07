@@ -175,6 +175,9 @@
 	}
 	else
 	{
+        
+
+        
 		[self prepareToViewRemotely:self.selected_channel];
 	}
     
@@ -979,6 +982,12 @@
             //simply popup and ask to retry and show camera list
             NSString * msg = @"Can't start video stream, the BabyMonitor is busy, try again later." ;
             
+            if (self.selected_channel.remoteConnectionError == REQUEST_TIMEOUT)
+            {
+                msg = @"Server request timeout, try again later" ;
+            }
+            
+            
             UIAlertView *_alert = [[UIAlertView alloc]
                                    initWithTitle:@""
                                    message:msg
@@ -1013,7 +1022,8 @@
 	//setup remote camera via upnp
     
 	RemoteConnection * cameraConn;
-    
+
+    ch.remoteConnectionError = NO_ERROR; 
     
 	cameraConn = [[RemoteConnection alloc]init];
 	if ([cameraConn connectToRemoteCamera:ch
