@@ -250,6 +250,11 @@
 	
 }
 
+-(void) cancel
+{
+    self.notifier = nil; 
+}
+
 #pragma mark -- UDP delegate
 /**
  * Called when the datagram with the given tag has been sent.

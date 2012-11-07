@@ -444,6 +444,8 @@
 {
 	NSLog(@"goback to camera list");
     
+    
+    
     //enable timeout
     [UIApplication sharedApplication].idleTimerDisabled = NO;
     
@@ -451,6 +453,10 @@
 		[streamer stopRecording];
 	[streamer stopStreaming];
     
+    if (scanner != nil)
+    {
+        [scanner cancel];
+    }
     
     
 	//NSLog(@"abort remote timer ");
@@ -753,10 +759,7 @@
 
 -(void) playSound
 {
-	//    SystemSoundID soundFileObject;
-	//    CFBundleRef mainbundle = CFBundleGetMainBundle();
-	//    CFURLRef soundFileURLRef = CFBundleCopyResourceURL(mainbundle, CFSTR("beep"), CFSTR("wav"), NULL);
-	//    AudioServicesCreateSystemSoundID(soundFileURLRef, &soundFileObject);
+	
     
 	NSLog(@"Play the B");
     
@@ -769,8 +772,8 @@
                              );
     
 	//Play beep
-	AudioServicesPlaySystemSound(soundFileObject);
-    
+	//AudioServicesPlaySystemSound(soundFileObject);
+    AudioServicesPlayAlertSound(soundFileObject);
     
     
 }
@@ -927,19 +930,21 @@
             }
             
             /* Stop Streamming */
-            
-            NSLog(@"stop Streaming");
             [self.streamer stopStreaming];
             
-            /* TODO: need to re-scan for the camera */
+            /* re-scan for the camera */
+            [self scan_for_missing_camera];
             
-            /* Start streaming */
+            
+            
+            
+            /* Start streaming 
             
             [NSTimer scheduledTimerWithTimeInterval:1.0
                                              target:self
                                            selector:@selector(startCameraConnection:)
                                            userInfo:nil
-                                            repeats:NO];
+                                            repeats:NO];*/
             
             
             
@@ -2813,6 +2818,71 @@
 	[self performSelectorOnMainThread:@selector(upgradeDoneWaitForReboot) withObject:nil waitUntilDone:NO]; 
 	[pool release];
 }
+
+
+#pragma mark -
+#pragma mark Scan cameras
+
+- (void) scan_for_missing_camera
+{
+    NSLog(@"scanning for : %@", self.selected_channel.profile.mac_address);
+
+	scanner = [[ScanForCamera alloc] initWithNotifier:self];
+	[scanner scan_for_device:self.selected_channel.profile.mac_address];
+    
+}
+
+
+- (void)scan_done:(NSArray *) _scan_results
+{
+	//Sync
+    
+    if ([_scan_results count] ==0 )
+    {
+        //empty result... rescan
+        NSLog(@"Empty result-> Re- scan");
+        [self scan_for_missing_camera];
+        
+    }
+    else
+    {
+        //confirm the mac address
+        CamProfile * cp = self.selected_channel.profile;
+        BOOL found = FALSE;
+        for (int j = 0; j < [_scan_results count]; j++)
+        {
+            CamProfile * cp1 = (CamProfile *) [_scan_results objectAtIndex:j];
+            
+            if ( [cp.mac_address isEqualToString:cp1.mac_address])
+            {
+                //FOUND - copy ip address.
+                cp.ip_address = cp1.ip_address;
+                found = TRUE;
+                break;
+            }
+        }
+        
+        
+        if (!found)
+        {
+            //Rescann...
+            NSLog(@"Re- scan for : %@", self.selected_channel.profile.mac_address);
+            [self scan_for_missing_camera];
+        }
+        else
+        {
+            //Restart streaming..
+            NSLog(@"Re-start streaming for : %@", self.selected_channel.profile.mac_address);
+            [NSTimer scheduledTimerWithTimeInterval:0.1
+                                             target:self
+                                           selector:@selector(startCameraConnection:)
+                                           userInfo:nil
+                                            repeats:NO];
+        }
+    }
+    
+}
+#pragma mark -
 
 
 @end

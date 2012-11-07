@@ -45,5 +45,6 @@
 - (void) scan_for_device:(NSString*) mac; 
 
 -(void) scan_done_notify;
+-(void) cancel;
 
 @end

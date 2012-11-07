@@ -17,7 +17,11 @@
 @synthesize streamer;
 @synthesize listOfChannel;
 @synthesize currentChannelIndex; 
-@synthesize  flipTimer, alertTimer; 
+@synthesize  flipTimer, alertTimer;
+
+@synthesize selected_channel;
+
+SystemSoundID soundFileObject;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -26,9 +30,12 @@
         // Custom initialization
         
         CFBundleRef mainbundle = CFBundleGetMainBundle();
-		CFURLRef soundFileURLRef = CFBundleCopyResourceURL(mainbundle, CFSTR("beep"), CFSTR("wav"), NULL);
-		AudioServicesCreateSystemSoundID(soundFileURLRef, &soundFileObject);
+        CFURLRef soundFileURLRef = CFBundleCopyResourceURL(mainbundle, CFSTR("beep"), CFSTR("wav"), NULL);
+        OSStatus status = AudioServicesCreateSystemSoundID(soundFileURLRef, &soundFileObject);
         
+        NSLog(@"sound obj: %ld  sstatus: %ld", soundFileObject, status);
+
+
     }
     return self;
 }
@@ -38,7 +45,7 @@
     [streamer release];
     [listOfChannel release];
     [flipTimer release]; 
-    
+    [selected_channel release];
     [super dealloc];
 }
 
@@ -139,6 +146,10 @@
 
 -(void) goBackToCameraList
 {
+    if (scanner != nil)
+    {
+        [scanner cancel];
+    }
     
     //invalidate all timer
     if (self.alertTimer != nil && [self.alertTimer isValid])
@@ -206,7 +217,7 @@
     
 	NSLog(@"connect to cam %@: %@:%d",ch.profile.name, ip, port);
     
-    
+    self.selected_channel = ch;
     
     if (streamer != nil)
     {
@@ -254,24 +265,26 @@
 
 -(void) playSound
 {
-	//    SystemSoundID soundFileObject;
-	//    CFBundleRef mainbundle = CFBundleGetMainBundle();
-	//    CFURLRef soundFileURLRef = CFBundleCopyResourceURL(mainbundle, CFSTR("beep"), CFSTR("wav"), NULL);
-	//    AudioServicesCreateSystemSoundID(soundFileURLRef, &soundFileObject);
     
-	NSLog(@"Play the B");
+	NSLog(@"Play the B: %ld", soundFileObject);
+    
+    //NSLog(@"init audio session..");
+    //AudioSessionInitialize(NULL, NULL, NULL, nil);
+    //AudioSessionSetActive(true);
+
+     
     
 	//201201011 This is needed to play the system sound on top of audio from camera
-	UInt32 sessionCategory = kAudioSessionCategory_AmbientSound;    // 1
+	UInt32 sessionCategory =  kAudioSessionCategory_AmbientSound;    // 1
 	AudioSessionSetProperty (
                              kAudioSessionProperty_AudioCategory,                        // 2
                              sizeof (sessionCategory),                                   // 3
                              &sessionCategory                                            // 4
                              );
-    
+
 	//Play beep
-	AudioServicesPlaySystemSound(soundFileObject);
-    
+	//AudioServicesPlaySystemSound(soundFileObject); <- does not work on Iphone
+    AudioServicesPlayAlertSound(soundFileObject);
     
     
 }
@@ -300,7 +313,7 @@
 		
 	}
 	
-	
+	NSLog(@"create new alert"); 
 	alert = [[UIAlertView alloc]
 			 initWithTitle:@"Streamer Stopped"
 			 message:msg
@@ -362,6 +375,7 @@
                                                                 userInfo:nil
                                                                  repeats:YES];
             }
+           
 			
 			break;
 		}
@@ -376,16 +390,23 @@
                 [self.flipTimer invalidate]; 
                 
             }
-            ///////////// TODO check if streamer can auto reconnect
+            /* Stop Streamming */
+            [self.streamer stopStreaming];
+
+            // re-scan for the camera */
+            [self scan_for_missing_camera];
             
             
-			//Perform connectivity check - wifi? 
+            
+            
+			//Perform connectivity check - wifi?
+            
+            
 			//NSString * currSSID = [CameraPassword fetchSSIDInfo]; 
 			NSString * msg = @"Network lost link. Please check the Phone, Camera and Wifi router or move closer to the Router" ;
 			
 			
 			//popup ?
-			
 			if (self.alertTimer != nil && [self.alertTimer isValid])
 			{
 				//some periodic is running dont care
@@ -443,6 +464,15 @@
 	
 }
 
+- (void)alertView:(UIAlertView *)alertView willDismissWithButtonIndex:(NSInteger)buttonIndex
+{
+    NSLog(@"alertView willDismissWithButtonIndex.. ");
+}
+
+- (void)alertViewCancel:(UIAlertView *)alertView
+{
+    NSLog(@"alertView Cancelled.. ");
+}
 
 #pragma mark -
 
@@ -513,6 +543,64 @@
 #pragma mark -
 
 
+#pragma mark - 
+#pragma mark Scan cameras
+
+- (void) scan_for_missing_camera
+{
+    NSLog(@"scanning for : %@", self.selected_channel.profile.mac_address);
+	
+	scanner = [[ScanForCamera alloc] initWithNotifier:self];
+	[scanner scan_for_device:self.selected_channel.profile.mac_address];
+    
+}
+
+
+- (void)scan_done:(NSArray *) _scan_results
+{
+	//Sync
+    
+    if ([_scan_results count] ==0 )
+    {
+        //empty result... rescan
+        NSLog(@"Empty result-> Re- scan");
+        [self scan_for_missing_camera];
+        
+    }
+    else
+    {
+        //confirm the mac address
+        CamProfile * cp = self.selected_channel.profile; 
+        BOOL found = FALSE; 
+        for (int j = 0; j < [_scan_results count]; j++)
+        {
+            CamProfile * cp1 = (CamProfile *) [_scan_results objectAtIndex:j];
+            
+            if ( [cp.mac_address isEqualToString:cp1.mac_address])
+            {
+                //FOUND - copy ip address.
+                cp.ip_address = cp1.ip_address;
+                found = TRUE; 
+                break;
+            }
+        }
+        
+        
+        if (!found)
+        {
+            //Rescann...
+            NSLog(@"Re- scan for : %@", self.selected_channel.profile.mac_address);
+            [self scan_for_missing_camera];
+        }
+        else
+        {
+            //Restart streaming..
+            NSLog(@"Re-start streaming for : %@", self.selected_channel.profile.mac_address);
+            [self viewOneChannel:self.selected_channel];   
+        }
+    }
+    
+}
 #pragma mark - 
 
 

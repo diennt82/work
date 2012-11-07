@@ -18,6 +18,7 @@
 #import "RemoteConnection.h"
 #import "AudioOutStreamer.h"
 #import "MBP_LoginOrRegistration.h"
+#import "ScanForCameraProtocol.h"
 
 
 
@@ -70,7 +71,7 @@
 #define CMD_SENDING_INTERVAL 0.2 /*sec*/
 
 
-@interface CameraViewController : UIViewController<StreamerEventHandler,ConnectionMethodDelegate , StreamerFrameRateUpdater, StreamerTemperatureUpdater>
+@interface CameraViewController : UIViewController<StreamerEventHandler,ConnectionMethodDelegate , StreamerFrameRateUpdater, StreamerTemperatureUpdater, ScanForCameraNotifier>
 {
     IBOutlet UILabel * temperature_label; 
     IBOutlet UIImageView * temperature_bg;
@@ -146,7 +147,7 @@
     
     SystemSoundID soundFileObject;
     
-    
+    ScanForCamera *scanner; 
     
     
     

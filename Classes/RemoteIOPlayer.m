@@ -353,6 +353,14 @@ static OSStatus recordingCallback(void *inRefCon,
                                       kAudioSessionProperty_OverrideAudioRoute, 
                                       sizeof (audioRouteOverride), 
                                       &audioRouteOverride);
+    
+    UInt32 audioMixed = 1;
+	status = AudioSessionSetProperty (
+                                      kAudioSessionProperty_OverrideCategoryMixWithOthers,
+                                      sizeof (audioMixed),
+                                      &audioMixed);
+    
+    
 	//NSLog(@"Error: %d", status);
 	
     
