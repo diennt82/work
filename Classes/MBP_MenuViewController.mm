@@ -139,11 +139,11 @@
 
 -(void) viewWillAppear:(BOOL)animated
 {
-    //check first
-    UIDeviceOrientation deviceOrientation = [UIDevice currentDevice].orientation;
+    
+     NSLog(@"try to rotate myself");
+	
 
-    NSLog(@"try to rotate myself");
-    [self adjustViewsForOrientation:(UIInterfaceOrientation)deviceOrientation];
+    
 }
 
 /**/
@@ -153,7 +153,10 @@
 	
     [self readPreferenceData];
     
- 
+    UIInterfaceOrientation infOrientation = [UIApplication sharedApplication].statusBarOrientation;
+	[self adjustViewsForOrientation:infOrientation];
+    
+    
         
     //Setup navigation bar
     [self.navigationController setNavigationBarHidden:NO];
@@ -225,6 +228,12 @@
 
 - (void) adjustViewsForOrientation:(UIInterfaceOrientation)orientation
 {
+ 
+    BOOL isShown = FALSE; 
+    if (progressView != nil)
+    {
+        isShown = !progressView.isHidden;
+    }
     
     if (orientation == UIInterfaceOrientationLandscapeLeft || orientation == UIInterfaceOrientationLandscapeRight) 
     {
@@ -233,6 +242,13 @@
         CGAffineTransform transform = CGAffineTransformMakeRotation(M_PI_2);
         background.transform = transform;
         background.frame = CGRectMake(0,0, 480,320);
+        
+        [[NSBundle mainBundle] loadNibNamed:@"MBP_MenuProgress_land"
+                                      owner:self
+                                    options:nil];
+        
+        progressView.frame = CGRectMake(0, 0, 480, 320);
+        
     }
     else if (orientation == UIInterfaceOrientationPortrait || orientation == UIInterfaceOrientationPortraitUpsideDown) 
     {
@@ -241,9 +257,22 @@
         background.transform = transform;
         background.frame = CGRectMake(0,0, 320,480);
 
+        [[NSBundle mainBundle] loadNibNamed:@"MBP_MenuProgress_portrait"
+                                      owner:self
+                                    options:nil];
+        
+        progressView.frame = CGRectMake(0, 0, 320  , 480);
+    }
+    
+    [self.view addSubview:progressView];
+    
+    if (isShown)
+    {
+        
+        [self.view bringSubviewToFront:progressView]; 
     }
   
-    
+    [cameraMenu reloadData];
 }
 
 

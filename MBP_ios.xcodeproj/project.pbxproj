@@ -111,6 +111,8 @@
 		38CFFF7415BD352F009A2EE2 /* Setup_bm_step_12.xib in Resources */ = {isa = PBXBuildFile; fileRef = 38CFFF7315BD352F009A2EE2 /* Setup_bm_step_12.xib */; };
 		38CFFF7615BD3E67009A2EE2 /* DashBoard_ViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 38CFFF7515BD3E67009A2EE2 /* DashBoard_ViewController.xib */; };
 		38CFFF7815BD4ECC009A2EE2 /* CameraViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 38CFFF7715BD4ECB009A2EE2 /* CameraViewController.xib */; };
+		38F3D1B1164A467300BB0C77 /* MBP_MenuProgress_portrait.xib in Resources */ = {isa = PBXBuildFile; fileRef = 38F3D1B0164A467200BB0C77 /* MBP_MenuProgress_portrait.xib */; };
+		38F3D1B3164A46E000BB0C77 /* MBP_MenuProgress_land.xib in Resources */ = {isa = PBXBuildFile; fileRef = 38F3D1B2164A46E000BB0C77 /* MBP_MenuProgress_land.xib */; };
 		38FC1EBA1622E9350082E7F9 /* FWUpgradeView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 38FC1EB91622E9340082E7F9 /* FWUpgradeView.xib */; };
 		97137B9715AE742A00BEBBD6 /* StunCommunication.mm in Sources */ = {isa = PBXBuildFile; fileRef = 97137B9615AE742A00BEBBD6 /* StunCommunication.mm */; };
 		9719EC5C155C9F30005419FC /* MBP_MenuViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 9719EC5A155C9F30005419FC /* MBP_MenuViewController.mm */; };
@@ -315,6 +317,8 @@
 		38CFFF7315BD352F009A2EE2 /* Setup_bm_step_12.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = Setup_bm_step_12.xib; sourceTree = "<group>"; };
 		38CFFF7515BD3E67009A2EE2 /* DashBoard_ViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = DashBoard_ViewController.xib; sourceTree = "<group>"; };
 		38CFFF7715BD4ECB009A2EE2 /* CameraViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CameraViewController.xib; sourceTree = "<group>"; };
+		38F3D1B0164A467200BB0C77 /* MBP_MenuProgress_portrait.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MBP_MenuProgress_portrait.xib; sourceTree = "<group>"; };
+		38F3D1B2164A46E000BB0C77 /* MBP_MenuProgress_land.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MBP_MenuProgress_land.xib; sourceTree = "<group>"; };
 		38FC1EB91622E9340082E7F9 /* FWUpgradeView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FWUpgradeView.xib; sourceTree = "<group>"; };
 		8D1107310486CEB800E47090 /* MBP_ios-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "MBP_ios-Info.plist"; plistStructureDefinitionIdentifier = "com.apple.xcode.plist.structure-definition.iphone.info-plist"; sourceTree = "<group>"; };
 		9704F37E14B76202000B4AA5 /* Entitlements.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Entitlements.plist; sourceTree = "<group>"; };
@@ -587,9 +591,6 @@
 				972E290D15A3F77600E60A96 /* STUN_Communication.mm */,
 				97137B9515AE742A00BEBBD6 /* StunCommunication.h */,
 				97137B9615AE742A00BEBBD6 /* StunCommunication.mm */,
-				9719EC59155C9F30005419FC /* MBP_MenuViewController.h */,
-				9719EC5A155C9F30005419FC /* MBP_MenuViewController.mm */,
-				9719EC5B155C9F30005419FC /* MBP_MenuViewController.xib */,
 				38CA70A315F75E15002CD1C5 /* NSData+Conversion.h */,
 				38CA70A515F75E53002CD1C5 /* NSData+Conversion.m */,
 				3803A85C15FDF15600B4DD97 /* CameraAlert.h */,
@@ -643,6 +644,11 @@
 				97987CD515468C2E0066C49B /* MBP_FirstPage.h */,
 				97987CD615468C2E0066C49B /* MBP_FirstPage.m */,
 				38CFFF5315BD100B009A2EE2 /* MBP_FirstPage.xib */,
+				9719EC59155C9F30005419FC /* MBP_MenuViewController.h */,
+				9719EC5A155C9F30005419FC /* MBP_MenuViewController.mm */,
+				9719EC5B155C9F30005419FC /* MBP_MenuViewController.xib */,
+				38F3D1B0164A467200BB0C77 /* MBP_MenuProgress_portrait.xib */,
+				38F3D1B2164A46E000BB0C77 /* MBP_MenuProgress_land.xib */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -936,6 +942,8 @@
 				3804A6F8162434C200216E45 /* beep.wav in Resources */,
 				97DA237A164231BB00EE2528 /* terms_of_use.html in Resources */,
 				97DA238516425FA100EE2528 /* ToUViewController.xib in Resources */,
+				38F3D1B1164A467300BB0C77 /* MBP_MenuProgress_portrait.xib in Resources */,
+				38F3D1B3164A46E000BB0C77 /* MBP_MenuProgress_land.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
