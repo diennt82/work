@@ -834,7 +834,7 @@
 				if (deviceInLocal)
 				{
 					
-					NSString * msg =@"Please confirm that you want to remove this camera from your account. This action will also switch your camera to direct mode.";
+					NSString * msg =@"Please confirm that you want to remove this camera from your account. This action will also switch your camera to default settings. You will need to add the camera into your account again to use it.";
 					UIAlertView *alert = [[UIAlertView alloc]
 										  initWithTitle:@""
 										  message:msg 
