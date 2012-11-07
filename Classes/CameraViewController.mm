@@ -516,7 +516,7 @@
 	{
         
 		//special treatment
-		NSLog(@"created a STUN streamer");
+		NSLog(@"created a STUN streamer on Thread: %@ isMain? %d ", [[NSThread currentThread] name], [[NSThread currentThread] isMainThread]);
         
 		streamer = [[MBP_Streamer alloc]initWithIp:ip
                                            andPort:port
@@ -1116,12 +1116,14 @@
 			case 1:
             {
                 //video is still playing now-- no need to stop
-                NSLog(@"start the 2nd round");
+
+                NSLog(@"start the 2nd round on isMain? %d ",[[NSThread currentThread] isMainThread]);
                 //just refresh the timer..
                 if (selected_channel != nil)
                 {
-                    [selected_channel startViewTimer:self
-                                              select:@selector(remoteViewTimeOut:)];
+                    [selected_channel refreshTimer];
+                    
+                    
                 }
             }
 				break;
