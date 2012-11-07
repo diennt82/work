@@ -26,7 +26,7 @@
 #import "MBP_LoginOrRegistration.h"
 #import "MBP_CamListView.h"
 #import "MBP_Streamer.h"
-#import "MBP_AddCamController.h"
+
 #import "AudioOutStreamer.h"
 #import "MBP_MenuViewController.h"
 #import "RemoteConnection.h"

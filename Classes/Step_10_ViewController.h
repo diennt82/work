@@ -12,6 +12,13 @@
 
 #define HOME_SSID @"home_ssid"
 
+
+#define SEND_CONF_SUCCESS 1
+#define SEND_CONF_ERROR 2
+
+//Master_key=BC0B87B2832B67FF58F11749F19C4915D4B876C2505D9CC7D0D06F79653C8B11
+#define MASTER_KEY @"Master_key="
+
 @interface Step_10_ViewController : UIViewController
 {
     IBOutlet UIView * progressView; 

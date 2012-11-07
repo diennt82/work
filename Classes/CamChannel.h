@@ -32,7 +32,9 @@
 	NSString * remoteViewKey; 
 	int communication_mode; 
 	//remote HTTP stuff
-	NSTimer *  remoteViewTimer; 
+	NSTimer *  remoteViewTimer;
+    
+    
 	
 	//remote STUN Stuff
 	NSString * channID;
