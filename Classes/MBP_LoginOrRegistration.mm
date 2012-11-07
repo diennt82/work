@@ -134,9 +134,10 @@
 }
 */
 
-//nvr called here -- always call at iosViewController
 - (BOOL) shouldAutorotate
 {
+    
+    NSLog(@"loging autorotate"); 
     return YES;
 }
 
