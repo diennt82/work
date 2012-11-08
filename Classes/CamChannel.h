@@ -32,7 +32,9 @@
 	NSString * remoteViewKey; 
 	int communication_mode; 
 	//remote HTTP stuff
-	NSTimer *  remoteViewTimer; 
+	NSTimer *  remoteViewTimer;
+    
+    
 	
 	//remote STUN Stuff
 	NSString * channID;
@@ -42,6 +44,9 @@
     //remote STun RElay Stuff
     NSString * relayToken; 
 	
+    //Remote connection error
+    int remoteConnectionError;
+   
     BOOL stopStreaming;
     
     
@@ -51,7 +56,7 @@
 }
 
 @property (nonatomic, retain) CamProfile * profile;
-@property (nonatomic) int channel_configure_status, channel_index;
+@property (nonatomic) int channel_configure_status, channel_index, remoteConnectionError;
 @property (nonatomic, retain) NSString * remoteViewKey; 
 @property (nonatomic, retain) NSTimer * remoteViewTimer;
 @property (nonatomic, retain) NSString * channID, *secretKey, *relayToken;

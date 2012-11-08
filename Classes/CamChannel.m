@@ -17,9 +17,10 @@
 @synthesize remoteViewTimer;
 @synthesize channID, secretKey;
 
-@synthesize localUdtPort, communication_mode;
-@synthesize  relayToken;
+@synthesize localUdtPort, communication_mode; 
+@synthesize  relayToken; 
 @synthesize stopStreaming;
+@synthesize remoteConnectionError;
 
 - (id) initWithChannelIndex:(int) index
 {

@@ -22,7 +22,7 @@
 @synthesize  zoombar;
 @synthesize  currentZoomLvl;
 
-@synthesize  ptt_enabled,askForFWUpgradeOnce, enableControls;
+@synthesize  ptt_enabled,askForFWUpgradeOnce, enableControls, firstTimeConnect;
 
 
 
@@ -142,6 +142,7 @@
         self.enableControls = FALSE;
         
 		self.selected_channel.stopStreaming = FALSE;
+        self.firstTimeConnect = TRUE; 
         
 		//init the ptt port to default
 		self.selected_channel.profile.ptt_port = IRABOT_AUDIO_RECORDING_PORT;
@@ -174,6 +175,9 @@
 	}
 	else
 	{
+        
+
+        
 		[self prepareToViewRemotely:self.selected_channel];
 	}
     
@@ -217,24 +221,6 @@
 
 -(void) checkOrientation
 {
-	NSLog(@"check orientation .... ");
-    
-    
-#if 0
-    
-	UIDeviceOrientation deviceOrientation = [UIDevice currentDevice].orientation;
-    
-    
-	UIInterfaceOrientation infOrientation = (UIInterfaceOrientation)deviceOrientation;
-    
-	if ( deviceOrientation == UIDeviceOrientationUnknown ||
-        deviceOrientation == UIDeviceOrientationFaceDown ||
-        deviceOrientation == UIDeviceOrientationFaceUp)
-	{
-		infOrientation = UIInterfaceOrientationPortrait;
-	}
-#endif
-    
     
 	UIInterfaceOrientation infOrientation = [UIApplication sharedApplication].statusBarOrientation;
     
@@ -850,7 +836,6 @@
 -(void) statusReport:(int) status andObj:(NSObject*) obj
 {
     
-    
 	switch (status) {
 		case CONNECTED_TO_CAMERA:
         {
@@ -981,14 +966,48 @@
             
             
             
-            //For remote stream, we restart by quering the BMS again
-            [self prepareToViewRemotely:selected_channel];
             
+            //[self prepareToViewRemotely:selected_channel];
+            [NSTimer scheduledTimerWithTimeInterval:1.0
+                                             target:self
+                                           selector:@selector(startCameraConnection:)
+                                           userInfo:nil
+                                            repeats:NO];
             
             break;
         }
 		case STREAM_RESTARTED:
 			break;
+        case REMOTE_STREAM_CANT_CONNECT_FIRST_TIME:
+        {
+            //Stop stream - clean up all resources
+            [self.streamer stopStreaming];
+            self.selected_channel.stopStreaming = TRUE;
+            
+            //simply popup and ask to retry and show camera list
+            NSString * msg = @"Can't start video stream, the BabyMonitor is busy, try again later." ;
+            
+            if (self.selected_channel.remoteConnectionError == REQUEST_TIMEOUT)
+            {
+                msg = @"Server request timeout, try again later" ;
+            }
+            
+            
+            UIAlertView *_alert = [[UIAlertView alloc]
+                                   initWithTitle:@""
+                                   message:msg
+                                   delegate:self
+                                   cancelButtonTitle:@"OK"
+                                   otherButtonTitles:nil];
+            _alert.tag = REMOTE_VIDEO_CANT_START ;
+            [_alert show];
+            [_alert release];
+            
+            
+            
+                       
+            break;
+        }
 		default:
 			break;
 	}
@@ -1008,7 +1027,8 @@
 	//setup remote camera via upnp
     
 	RemoteConnection * cameraConn;
-    
+
+    ch.remoteConnectionError = NO_ERROR; 
     
 	cameraConn = [[RemoteConnection alloc]init];
 	if ([cameraConn connectToRemoteCamera:ch
@@ -1060,8 +1080,6 @@
 
 -(void) remoteConnectionFailed:(CamChannel *) camChannel
 {
-	//camChannel = nil
-    
 	NSLog(@"Remote connection Failed!!!");
     
 	if (self.selected_channel.stopStreaming == TRUE)
@@ -1073,8 +1091,17 @@
     
 	progressView.hidden = YES;
     
-	[self statusReport:REMOTE_STREAM_STOPPED_UNEXPECTEDLY andObj:nil];
+    if (self.firstTimeConnect == TRUE)
+    {
+        self.firstTimeConnect = FALSE;
+        
+        [self statusReport:REMOTE_STREAM_CANT_CONNECT_FIRST_TIME andObj:nil];
+    }
+    else
+    {
     
+        [self statusReport:REMOTE_STREAM_STOPPED_UNEXPECTEDLY andObj:nil];
+    }
     
     
 }
@@ -1193,6 +1220,12 @@
 				break;
 		}
 	}
+    else if (tag == REMOTE_VIDEO_CANT_START)
+    {
+        
+        [self goBackToCameraList];
+    }
+    
 }
 
 
