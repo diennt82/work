@@ -126,10 +126,85 @@
     // e.g. self.myOutlet = nil;
 }
 
+-(void)viewWillAppear:(BOOL)animated
+{
+    NSLog(@"viewWillAppear --");
+    	UIInterfaceOrientation infOrientation = [UIApplication sharedApplication].statusBarOrientation;
+    
+	[self adjustViewsForOrientation:infOrientation];
+    
+    
+    
+}
+
+
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
 {
     return (interfaceOrientation == UIInterfaceOrientationPortrait);
 }
+
+
+-(BOOL) shouldAutorotate
+{
+    NSLog(@"shouldAutorotate --");
+    return YES ;
+}
+
+-(NSUInteger)supportedInterfaceOrientations
+{
+    NSLog(@"supportedInterfaceOrientations --");
+    
+    return UIInterfaceOrientationMaskAllButUpsideDown;
+}
+
+
+- (void) willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
+{
+    
+    NSLog(@"will rotate to interface");
+    
+    [self adjustViewsForOrientation:toInterfaceOrientation];
+}
+
+-(void) adjustViewsForOrientation:(UIInterfaceOrientation) orientation
+{
+    if (orientation == UIInterfaceOrientationLandscapeLeft || orientation == UIInterfaceOrientationLandscapeRight)
+	{
+        
+        
+        mtopbar.frame = CGRectMake(0, 0, 480, mtopbar.frame.size.height);
+        
+        accountInfo.frame = CGRectMake(0,44, 480, 268);
+        
+        UIImageView * bg = (UIImageView*) [self.view viewWithTag:1];
+        if (bg != nil)
+        {
+            //transform.
+            CGAffineTransform transform = CGAffineTransformMakeRotation(-M_PI_2);
+            bg.transform = transform;
+            bg.frame = CGRectMake(0,0, 480, 320);
+        }
+        
+	}
+	else if (orientation == UIInterfaceOrientationPortrait || orientation == UIInterfaceOrientationPortraitUpsideDown)
+	{
+        
+        mtopbar.frame = CGRectMake(0, 0, 320, mtopbar.frame.size.height);
+        accountInfo.frame = CGRectMake(0,44, 320, 268);
+        UIImageView * bg = (UIImageView*) [self.view viewWithTag:1];
+        if (bg != nil)
+        {
+            //transform.
+            CGAffineTransform transform = CGAffineTransformMakeRotation(0);
+            bg.transform = transform;
+            bg.frame = CGRectMake(0,0, 320, 480);
+        }
+    }
+    
+    
+    
+}
+
 
 
 -(void) userLogout

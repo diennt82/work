@@ -76,6 +76,8 @@
 #define CMD_SENDING_INTERVAL 0.2 /*sec*/
 
 
+@class ScanForCamera;
+
 @interface CameraViewController : UIViewController<StreamerEventHandler,ConnectionMethodDelegate , StreamerFrameRateUpdater, StreamerTemperatureUpdater, ScanForCameraNotifier>
 {
     IBOutlet UILabel * temperature_label; 

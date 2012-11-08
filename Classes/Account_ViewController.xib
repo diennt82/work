@@ -47,6 +47,7 @@
 						<reference key="NSWindow"/>
 						<reference key="NSNextKeyView" ref="818880344"/>
 						<string key="NSReuseIdentifierKey">_NS:9</string>
+						<int key="IBUITag">1</int>
 						<bool key="IBUIUserInteractionEnabled">NO</bool>
 						<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
 						<object class="NSCustomResource" key="IBUIImage">
@@ -300,6 +301,14 @@
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBCocoaTouchOutletConnection" key="connection">
+						<string key="label">accountInfo</string>
+						<reference key="source" ref="372490531"/>
+						<reference key="destination" ref="818880344"/>
+					</object>
+					<int key="connectionID">25</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBCocoaTouchOutletConnection" key="connection">
 						<string key="label">dataSource</string>
 						<reference key="source" ref="818880344"/>
 						<reference key="destination" ref="372490531"/>
@@ -412,7 +421,7 @@
 			<nil key="activeLocalization"/>
 			<dictionary class="NSMutableDictionary" key="localizations"/>
 			<nil key="sourceID"/>
-			<int key="maxID">24</int>
+			<int key="maxID">25</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<array class="NSMutableArray" key="referencedPartialClassDescriptions">
@@ -420,10 +429,15 @@
 					<string key="className">Account_ViewController</string>
 					<string key="superclassName">UIViewController</string>
 					<dictionary class="NSMutableDictionary" key="outlets">
+						<string key="accountInfo">UITableView</string>
 						<string key="userEmailCell">UITableViewCell</string>
 						<string key="userNameCell">UITableViewCell</string>
 					</dictionary>
 					<dictionary class="NSMutableDictionary" key="toOneOutletInfosByName">
+						<object class="IBToOneOutletInfo" key="accountInfo">
+							<string key="name">accountInfo</string>
+							<string key="candidateClassName">UITableView</string>
+						</object>
 						<object class="IBToOneOutletInfo" key="userEmailCell">
 							<string key="name">userEmailCell</string>
 							<string key="candidateClassName">UITableViewCell</string>

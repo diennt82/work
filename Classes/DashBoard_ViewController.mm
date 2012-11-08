@@ -857,7 +857,9 @@
     
     [self setupTopBarForEditMode:self.editModeEnabled];
     
-    //[cameraList reloadData];
+    //Adjust orientation if needed
+    UIInterfaceOrientation infOrientation = [UIApplication sharedApplication].statusBarOrientation;
+	[self adjustViewsForOrientation:infOrientation];
     
     [cameraList performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:YES];
     

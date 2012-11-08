@@ -14,7 +14,7 @@
 {
    IBOutlet UITableViewCell * userNameCell,  * userEmailCell;
     UIToolbar * mtopbar; 
-    
+    IBOutlet UITableView * accountInfo; 
     id<ConnectionMethodDelegate> mdelegate; 
     
 }
