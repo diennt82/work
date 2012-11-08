@@ -92,6 +92,15 @@ SystemSoundID soundFileObject;
     
 }
 
+
+-(BOOL) shouldAutorotate
+{
+    NSLog(@"Should Auto Rotate");
+	return YES;
+}
+
+
+
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
 {
     return  YES ;//(interfaceOrientation == UIInterfaceOrientationPortrait);
@@ -169,7 +178,9 @@ SystemSoundID soundFileObject;
    
     [self.navigationController popViewControllerAnimated:NO];
 
-
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+	[userDefaults removeObjectForKey:CAM_IN_VEW];
+	[userDefaults synchronize];
 }
 
 
@@ -211,6 +222,11 @@ SystemSoundID soundFileObject;
 {
     
     cameraNameBarBtn.title = ch.profile.name;
+    
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    [userDefaults setObject:ch.profile.mac_address forKey:CAM_IN_VEW];
+    [userDefaults synchronize];
+    
     
 	NSString* ip = ch.profile.ip_address;
 	int port = ch.profile.port;
