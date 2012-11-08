@@ -12,10 +12,12 @@
 #import "CamChannel.h"
 #import "CamProfile.h"
 #import "CameraViewController.h"
+#import "ScanForCameraProtocol.h"
+#import "ScanForCamera.h"
 
 
 
-@interface QuickViewCamera_ViewController : UIViewController<StreamerEventHandler, StreamerFrameRateUpdater, StreamerTemperatureUpdater>
+@interface QuickViewCamera_ViewController : UIViewController<StreamerEventHandler, StreamerFrameRateUpdater, StreamerTemperatureUpdater, ScanForCameraNotifier>
 {
     IBOutlet UILabel * temperature_label; 
     IBOutlet UIImageView * temperature_bg; 
@@ -29,7 +31,7 @@
     
     
     MBP_Streamer * streamer; 
-	//CamChannel * selected_channel;
+	CamChannel * selected_channel;
     NSArray * listOfChannel; 
     int currentChannelIndex;
     
@@ -39,13 +41,14 @@
 	NSTimer * alertTimer;
     
     
-    SystemSoundID soundFileObject;
+    
+    ScanForCamera * scanner;
     
 
 }
 
 @property (nonatomic, retain) MBP_Streamer * streamer;
-//@property (nonatomic, retain) CamChannel * selected_channel;
+@property (nonatomic, retain) CamChannel * selected_channel;
 @property (nonatomic, retain) NSArray * listOfChannel; 
 @property (nonatomic) int currentChannelIndex; 
 @property (nonatomic, retain) NSTimer * flipTimer, *alertTimer; 
@@ -54,5 +57,7 @@
 -(void) viewOneChannel:(CamChannel *) ch;
 -(void) channelFlip: (NSTimer*) exp;
 
+- (void) scan_for_missing_camera;
+- (void)scan_done:(NSArray *) _scan_results;
 
 @end
