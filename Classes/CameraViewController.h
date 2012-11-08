@@ -193,4 +193,6 @@
 
 -(void) startCameraConnection:(NSTimer *) exp;
 
+-(void) remoteViewTimeout:(NSTimer *) expired;
+
 @end

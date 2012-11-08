@@ -42,7 +42,11 @@
     //remote STun RElay Stuff
     NSString * relayToken; 
 	
-    BOOL stopStreaming; 
+    BOOL stopStreaming;
+    
+    
+    id caller;
+    SEL timerCallback;
 	
 }
 
@@ -53,6 +57,7 @@
 @property (nonatomic, retain) NSString * channID, *secretKey, *relayToken;
 @property (nonatomic) int localUdtPort, communication_mode; 
 @property (nonatomic) BOOL stopStreaming;
+
 
 
 +(NSString*) convertIntToIpStr:(uint ) ip;
@@ -67,7 +72,8 @@
 
 - (NSMutableData *) getBytes;
 -(void) startViewTimer:(id) caller select:(SEL) sel;
--(void) abortViewTimer; 
+-(void) abortViewTimer;
+-(void) refreshTimer;
 
 -(NSData *) getEncChannId;
 -(NSData *) getEncMac;

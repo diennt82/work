@@ -15,13 +15,13 @@
 @implementation DashBoard_ViewController
 @synthesize  cellView;
 @synthesize  listOfChannel;
-@synthesize  delegate; 
+@synthesize  delegate;
 
 @synthesize  tabBarController;
 
 @synthesize  topbar;
 @synthesize  editModeEnabled;
-@synthesize edittedChannelIndex; 
+@synthesize edittedChannelIndex;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -31,13 +31,13 @@
     }
     return self;
 }
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil 
-withConnDelegate:(id<ConnectionMethodDelegate> ) caller
+- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
+     withConnDelegate:(id<ConnectionMethodDelegate> ) caller
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
         // Custom initialization
-        self.delegate = caller; 
+        self.delegate = caller;
     }
     return self;
     
@@ -136,6 +136,7 @@ withConnDelegate:(id<ConnectionMethodDelegate> ) caller
             // create a standard delete button with the trash icon
             UIBarButtonItem *snapButton = [[UIBarButtonItem alloc]
                                            initWithImage:[UIImage imageNamed:@"scan_camera_icon.png"]
+
                                            style:UIBarButtonItemStyleBordered
                                            target:self
                                            action:@selector(scanCameras:)];
@@ -285,23 +286,23 @@ withConnDelegate:(id<ConnectionMethodDelegate> ) caller
         cameraList.frame = CGRectMake(cameraList.frame.origin.x, cameraList.frame.origin.y,
                                       cameraList.frame.size.width,
                                       cameraList.frame.size.height-delta_h);
-        offlineView.hidden = NO; 
+        offlineView.hidden = NO;
         
-        offlineView.frame = CGRectMake(offlineView.frame.origin.x, 
+        offlineView.frame = CGRectMake(offlineView.frame.origin.x,
                                        cameraList.frame.origin.y + cameraList.frame.size.height,
                                        offlineView.frame.size.width, offlineView.frame.size.height);
         
-        //add a subview in layout. 
+        //add a subview in layout.
         [self.view addSubview:offlineView];
     }
     else
     {
-        offlineView.hidden = YES; 
-        //[offlineView removeFromSuperview]; 
+        offlineView.hidden = YES;
+        //[offlineView removeFromSuperview];
         cameraList.frame = CGRectMake(cameraList.frame.origin.x, cameraList.frame.origin.y,
                                       cameraList.frame.size.width,
                                       387);
-     
+        
         
         
         if (![self shouldShowEditButton])
@@ -316,7 +317,7 @@ withConnDelegate:(id<ConnectionMethodDelegate> ) caller
             
             
         }
-
+        
     }
 }
 
@@ -326,21 +327,91 @@ withConnDelegate:(id<ConnectionMethodDelegate> ) caller
     // Release any retained subviews of the main view.
 }
 
+
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
 {
-    return  (interfaceOrientation == UIInterfaceOrientationPortrait);
+    return  ((interfaceOrientation == UIInterfaceOrientationPortrait) ||
+             (interfaceOrientation == UIInterfaceOrientationLandscapeLeft));
 }
+
+
+-(void)viewWillAppear:(BOOL)animated
+{
+    NSLog(@"viewWillAppear --");
+    
+    
+	UIInterfaceOrientation infOrientation = [UIApplication sharedApplication].statusBarOrientation;
+    
+	[self adjustViewsForOrientation:infOrientation];
+    
+    
+    
+}
+
+
 
 -(BOOL) shouldAutorotate
 {
-    return NO ;
+    NSLog(@"shouldAutorotate --");
+    return YES ;
+}
+
+-(NSUInteger)supportedInterfaceOrientations
+{
+    NSLog(@"supportedInterfaceOrientations --");
+
+    return UIInterfaceOrientationMaskAllButUpsideDown;
+}
+
+
+- (void) willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
+{
+    
+    NSLog(@"will rotate to interface");
+
+    [self adjustViewsForOrientation:toInterfaceOrientation];
+}
+
+-(void) adjustViewsForOrientation:(UIInterfaceOrientation) orientation
+{
+    if (orientation == UIInterfaceOrientationLandscapeLeft || orientation == UIInterfaceOrientationLandscapeRight)
+	{
+
+        
+        topbar.frame = CGRectMake(0, 0, 480, topbar.frame.size.height);
+        UIImageView * bg = (UIImageView*) [self.view viewWithTag:1];
+        if (bg != nil)
+        {
+            //transform.
+            CGAffineTransform transform = CGAffineTransformMakeRotation(-M_PI_2);
+            bg.transform = transform;
+            bg.frame = CGRectMake(0,0, 480, 320);
+        }
+        
+	}
+	else if (orientation == UIInterfaceOrientationPortrait || orientation == UIInterfaceOrientationPortraitUpsideDown)
+	{
+
+        topbar.frame = CGRectMake(0, 0, 320, topbar.frame.size.height);
+        UIImageView * bg = (UIImageView*) [self.view viewWithTag:1];
+        if (bg != nil)
+        {
+            //transform.
+            CGAffineTransform transform = CGAffineTransformMakeRotation(0);
+            bg.transform = transform;
+            bg.frame = CGRectMake(0,0, 320, 480);
+        }
+    }
+
+
+
 }
 
 
 - (BOOL) shouldShowScanButton
 {
-    CamChannel * chan = nil; 
-    int localCount = 0; 
+    CamChannel * chan = nil;
+    int localCount = 0;
     for (int i =0 ;i<[listOfChannel count]; i++)
     {
         
@@ -352,7 +423,7 @@ withConnDelegate:(id<ConnectionMethodDelegate> ) caller
         
     }
     
-    return (localCount >1); 
+    return (localCount >1);
     
 }
 
@@ -370,7 +441,7 @@ withConnDelegate:(id<ConnectionMethodDelegate> ) caller
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
     
-    return 1; 
+    return 1;
 }
 
 
@@ -380,22 +451,22 @@ withConnDelegate:(id<ConnectionMethodDelegate> ) caller
     
     if (listOfChannel != nil)
     {
-       
-    
+        
+        
         return [listOfChannel count];
     }
     
-    return 0; 
+    return 0;
 }
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (self.editModeEnabled == TRUE)
     {
-         return 181;
+        return 181;
     }
     else
     {
-        return 135; 
+        return 135;
     }
 }
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -409,49 +480,49 @@ withConnDelegate:(id<ConnectionMethodDelegate> ) caller
         static NSString *CellIdentifier = @"Cell1";
         
         UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-
-
+        
+        
         
         if (cell == nil) {
-
+            
             [[NSBundle mainBundle] loadNibNamed:@"DashBoard_camEdit" owner:self options:nil];
             cell = self.cellView;
-            self.cellView = nil; 
+            self.cellView = nil;
         }
         
         
         UIImageView * snapshot = (UIImageView *) [cell viewWithTag:500];
         UILabel * camName  = (UILabel *) [cell viewWithTag:501];
         
-        UIButton *renButton = (UIButton *) [cell viewWithTag:505]; 
-        UIButton *remButton = (UIButton *) [cell viewWithTag:506]; 
-        UIButton * alertButtons = (UIButton *) [cell viewWithTag:507]; 
+        UIButton *renButton = (UIButton *) [cell viewWithTag:505];
+        UIButton *remButton = (UIButton *) [cell viewWithTag:506];
+        UIButton * alertButtons = (UIButton *) [cell viewWithTag:507];
         
         ///////IF IT IS REUSED --->> DIE DIE DIE
         renButton.tag = indexPath.row;
         remButton.tag = indexPath.row;
-        alertButtons.tag = indexPath.row; 
+        alertButtons.tag = indexPath.row;
         
         // Set up the cell...
         CamChannel * ch = (CamChannel*)[listOfChannel objectAtIndex:indexPath.row] ;
-        CamProfile * cp = ch.profile; 
+        CamProfile * cp = ch.profile;
         
         if (ch != nil)
         {
-                      
+            
             //Set camera name
-            [camName setText:cp.name]; 
+            [camName setText:cp.name];
             
             //set camera image
             if (cp.profileImage != nil)
             {
                 [snapshot setImage:cp.profileImage];
             }
-            else 
+            else
             {
                 [snapshot setImage:[UIImage imageNamed:@"photo_item.png"]];
             }
-
+            
             
         }
         else {
@@ -462,7 +533,7 @@ withConnDelegate:(id<ConnectionMethodDelegate> ) caller
         
         
         return cell;
-
+        
     }
     else //Normal Mode
     {
@@ -474,7 +545,7 @@ withConnDelegate:(id<ConnectionMethodDelegate> ) caller
         if (cell == nil) {
             [[NSBundle mainBundle] loadNibNamed:@"DashBoard_camView" owner:self options:nil];
             cell = self.cellView;
-            self.cellView = nil; 
+            self.cellView = nil;
         }
         //Get refernce to cell content
         UIImageView * snapshot = (UIImageView *) [cell viewWithTag:500];
@@ -484,19 +555,19 @@ withConnDelegate:(id<ConnectionMethodDelegate> ) caller
         UILabel * camStatus = (UILabel *) [cell viewWithTag:504];
         
         
-        UIImageView * soundAlert = (UIImageView *) [cell viewWithTag:508]; 
-        UIImageView * tempAlert = (UIImageView *) [cell viewWithTag:509]; 
+        UIImageView * soundAlert = (UIImageView *) [cell viewWithTag:508];
+        UIImageView * tempAlert = (UIImageView *) [cell viewWithTag:509];
         
         
         soundAlert.hidden = YES;
         tempAlert.hidden = YES;
-
+        
         
         
         
         // Set up the cell...
         CamChannel * ch = (CamChannel*)[listOfChannel objectAtIndex:indexPath.row] ;
-        CamProfile * cp = ch.profile; 
+        CamProfile * cp = ch.profile;
         
         //NSLog(@"cell: %d %d", indexPath.row , cp.minuteSinceLastComm);
         
@@ -504,22 +575,22 @@ withConnDelegate:(id<ConnectionMethodDelegate> ) caller
         {
             
             NSArray * alerts  = [ CameraAlert getAllAlertForCamera:cp.mac_address];
-            CameraAlert * camAlert; 
+            CameraAlert * camAlert;
             if (alerts != nil)
             {
                 
-                 //NSLog(@"alerts count: %d for cam: %@",[alerts count], cp.mac_address);
+                //NSLog(@"alerts count: %d for cam: %@",[alerts count], cp.mac_address);
                 
                 for (int i =0; i <[alerts count]; i++)
                 {
-                    camAlert = (CameraAlert *) [alerts objectAtIndex:i]; 
+                    camAlert = (CameraAlert *) [alerts objectAtIndex:i];
                     if ( [camAlert.alertType isEqualToString:ALERT_TYPE_SOUND])
                     {
                         NSLog(@"Set sound indicator for cam: %@", cp.mac_address);
                         soundAlert.hidden = NO;
                     }
-                    else if ( [camAlert.alertType isEqualToString:ALERT_TYPE_TEMP_HI]  || 
-                           [camAlert.alertType isEqualToString:ALERT_TYPE_TEMP_LO] )
+                    else if ( [camAlert.alertType isEqualToString:ALERT_TYPE_TEMP_HI]  ||
+                             [camAlert.alertType isEqualToString:ALERT_TYPE_TEMP_LO] )
                     {
                         NSLog(@"Set temp indicator for cam: %@", cp.mac_address);
                         tempAlert.hidden = NO;
@@ -537,22 +608,22 @@ withConnDelegate:(id<ConnectionMethodDelegate> ) caller
                 //[camStatusInd setImage:[UIImage imageNamed:@"camera_online.png"]];
                 //[camStatus setText:@"Available"];
                 camStatusInd.hidden = YES;
-                camStatus.hidden  = YES; 
+                camStatus.hidden  = YES;
                 
-                [camLoc setText:@"Local Wifi"]; 
-                                
+                [camLoc setText:@"Local Wifi"];
+                
             }
-            else if (cp.minuteSinceLastComm <=10 ) 
+            else if (cp.minuteSinceLastComm <=10 )
             {
                 //20121023: phung: ui review comments.
                 //[camStatusInd setImage:[UIImage imageNamed:@"camera_online.png"]];
                 //[camStatus setText:@"Camera is not in local network"];
                 camStatusInd.hidden = YES;
-                camStatus.hidden  = YES; 
+                camStatus.hidden  = YES;
                 
                 [camLoc setText:@"Remote Camera"];
             }
-            else 
+            else
             {
                 [camStatusInd setImage:[UIImage imageNamed:@"camera_offline.png"]];
                 camStatusInd.hidden = NO;
@@ -562,14 +633,14 @@ withConnDelegate:(id<ConnectionMethodDelegate> ) caller
             
             
             //Set camera name
-            [camName setText:cp.name]; 
+            [camName setText:cp.name];
             
             //set camera image
             if (cp.profileImage != nil)
             {
                 [snapshot setImage:cp.profileImage];
             }
-            else 
+            else
             {
                 [snapshot setImage:[UIImage imageNamed:@"photo_item.png"]];
             }
@@ -580,24 +651,24 @@ withConnDelegate:(id<ConnectionMethodDelegate> ) caller
         }
         
         return cell;
-
+        
     }
-
     
     
-      
+    
+    
 }
 
-- (void)tableView: (UITableView *)tableView didSelectRowAtIndexPath: (NSIndexPath *)indexPath 
+- (void)tableView: (UITableView *)tableView didSelectRowAtIndexPath: (NSIndexPath *)indexPath
 {
-    [tableView deselectRowAtIndexPath:[tableView indexPathForSelectedRow] 
+    [tableView deselectRowAtIndexPath:[tableView indexPathForSelectedRow]
                              animated:NO];
     
     if (self.editModeEnabled == TRUE)
     {
-        return; // don't start streaming in Edit mode 
+        return; // don't start streaming in Edit mode
     }
-     
+    
     CamChannel * ch = (CamChannel*)[listOfChannel objectAtIndex:indexPath.row] ;
     
     if (ch != nil &&
@@ -607,24 +678,24 @@ withConnDelegate:(id<ConnectionMethodDelegate> ) caller
     {
         
         NSLog(@"clear alert for: %@",ch.profile.mac_address);
-        // Clear all alert for this camera 
-        [CameraAlert clearAllAlertForCamera:ch.profile.mac_address]; 
+        // Clear all alert for this camera
+        [CameraAlert clearAllAlertForCamera:ch.profile.mac_address];
         
-        [tableView reloadData]; 
+        [tableView reloadData];
         
         
         NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
         [userDefaults setObject:ch.profile.mac_address forKey:CAM_IN_VEW];
         [userDefaults synchronize];
         
-
-        CameraViewController * viewCamCtrl;  
+        
+        CameraViewController * viewCamCtrl;
         
         viewCamCtrl = [[CameraViewController alloc] initWithNibName:@"CameraViewController"
-                                                               bundle:nil];
+                                                             bundle:nil];
         viewCamCtrl.selected_channel = ch;
         
-        [self.navigationController pushViewController:viewCamCtrl animated:NO];    
+        [self.navigationController pushViewController:viewCamCtrl animated:NO];
         [viewCamCtrl release];
     }
     
@@ -652,7 +723,7 @@ withConnDelegate:(id<ConnectionMethodDelegate> ) caller
     
     
     Account_ViewController * accountPage = [[Account_ViewController alloc]
-                                             initWithNibName:@"Account_ViewController" bundle:nil];
+                                            initWithNibName:@"Account_ViewController" bundle:nil];
     [accountPage setTabBarItem:account];
     accountPage.mdelegate = self.delegate;
     
@@ -668,7 +739,7 @@ withConnDelegate:(id<ConnectionMethodDelegate> ) caller
     [tabBarController setViewControllers:views];
     
     
-    //setup nav controller 
+    //setup nav controller
     navController= [[[UINavigationController alloc]initWithRootViewController:tabBarController] autorelease];
     
     // Create a navigation controller with us as its root.
@@ -683,12 +754,12 @@ withConnDelegate:(id<ConnectionMethodDelegate> ) caller
     assert(self.navigationItem.leftBarButtonItem != nil);
     self.navigationItem.rightBarButtonItem = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone   target:self action:@selector(doneAction:)] autorelease];
     assert(self.navigationItem.rightBarButtonItem != nil);
-
+    
     
     [navController.navigationBar setBarStyle:UIBarStyleBlackTranslucent];
-
     
-    // Present the navigation controller on the specified parent 
+    
+    // Present the navigation controller on the specified parent
     // view controller.
     
     [parent presentModalViewController:navController animated:NO];
@@ -701,7 +772,7 @@ withConnDelegate:(id<ConnectionMethodDelegate> ) caller
     [delegate sendStatus:5];
 }
 
-#pragma  mark - 
+#pragma  mark -
 #pragma mark ACTIONS ..
 
 
@@ -736,14 +807,14 @@ withConnDelegate:(id<ConnectionMethodDelegate> ) caller
     {
         
         int localCameras = 0;
-        CamChannel * ch; 
+        CamChannel * ch;
         for (int i =0; i< [listOfChannel count]; i++)
         {
-            ch = (CamChannel *) [listOfChannel objectAtIndex:i]; 
+            ch = (CamChannel *) [listOfChannel objectAtIndex:i];
             
             if (ch.profile.isInLocal)
             {
-                localCameras ++; 
+                localCameras ++;
             }
         }
         
@@ -755,7 +826,7 @@ withConnDelegate:(id<ConnectionMethodDelegate> ) caller
                                                                            bundle:nil];
             scanCamCtrl.listOfChannel = self.listOfChannel;
             
-            [self.navigationController pushViewController:scanCamCtrl animated:NO];    
+            [self.navigationController pushViewController:scanCamCtrl animated:NO];
             [scanCamCtrl release];
         }
         else
@@ -780,7 +851,6 @@ withConnDelegate:(id<ConnectionMethodDelegate> ) caller
     else
     {
         self.editModeEnabled = FALSE;
-        
         //button.title = @"Edit";
     }
     
@@ -798,21 +868,21 @@ withConnDelegate:(id<ConnectionMethodDelegate> ) caller
 {
     [delegate sendStatus:3];
 }
- 
+
 
 -(IBAction)alertSetting:(id)sender
 {
-    CamChannel * ch = (CamChannel *) [listOfChannel objectAtIndex:((UIButton *)sender).tag]; 
+    CamChannel * ch = (CamChannel *) [listOfChannel objectAtIndex:((UIButton *)sender).tag];
     
-   
+    
     
     AlertSettingViewController * alertSettings = [[AlertSettingViewController alloc]initWithNibName:@"AlertSettingViewController" bundle:nil];
     alertSettings.camera = ch.profile;
     
     
-    [self.navigationController pushViewController:alertSettings animated:NO];    
+    [self.navigationController pushViewController:alertSettings animated:NO];
     [alertSettings release];
-
+    
     
     //[self presentModalViewController:alertSettings animated:NO];
     
@@ -823,40 +893,40 @@ withConnDelegate:(id<ConnectionMethodDelegate> ) caller
 
 -(IBAction)removeCamera:(id)sender
 {
-    CamChannel * ch = (CamChannel *) [listOfChannel objectAtIndex:((UIButton *)sender).tag]; 
+    CamChannel * ch = (CamChannel *) [listOfChannel objectAtIndex:((UIButton *)sender).tag];
     
-    NSLog(@"Remove camera.. %@",ch.profile.name );    
+    NSLog(@"Remove camera.. %@",ch.profile.name );
     
     self.edittedChannelIndex = ((UIButton *)sender).tag;
     
-    [self  showDialog:ALERT_REMOVE_CAM]; 
+    [self  showDialog:ALERT_REMOVE_CAM];
     
 }
 -(IBAction)renameCamera:(id)sender
 {
-    NSLog(@"Rename camera.. "); 
-        
+    NSLog(@"Rename camera.. ");
+    
     self.edittedChannelIndex = ((UIButton *)sender).tag;
-    [self askForNewName]; 
-
+    [self askForNewName];
+    
     
 }
-#pragma  mark - 
+#pragma  mark -
 
-	
-	
-- (void) askForNewName 
+
+
+- (void) askForNewName
 {
     
     UIAlertView * _myAlert = nil;
     
-    _myAlert = [[UIAlertView alloc] initWithTitle:@"Change Camera Name" 
-                                          message:@"Please enter new name for this camera\n\n\n" 
-                                         delegate:self 
+    _myAlert = [[UIAlertView alloc] initWithTitle:@"Change Camera Name"
+                                          message:@"Please enter new name for this camera\n\n\n"
+                                         delegate:self
                                 cancelButtonTitle:@"Cancel"
-                                otherButtonTitles:@"Ok", 
+                                otherButtonTitles:@"Ok",
                 nil];
-    _myAlert.tag = ALERT_CHANGE_NAME; //used for tracking later 
+    _myAlert.tag = ALERT_CHANGE_NAME; //used for tracking later
     
     UITextField *myTextField = [[UITextField alloc] initWithFrame:CGRectMake(32.0, 85.0, 220.0, 30.0)];
     [myTextField setBackgroundColor:[UIColor whiteColor]];
@@ -931,20 +1001,20 @@ withConnDelegate:(id<ConnectionMethodDelegate> ) caller
 	
 	
 }
-#pragma mark - 
+#pragma mark -
 
-#pragma mark Subfunctions to handle rename/remove - Borrow from menu 
+#pragma mark Subfunctions to handle rename/remove - Borrow from menu
 
 - (void) showDialog:(int) dialogType
 {
 	switch (dialogType) {
-		
+            
 		case DIALOG_CANT_RENAME:
 		{
 			NSString * msg =@"Unable to rename this camera. Please log-in and try again";
 			UIAlertView *alert = [[UIAlertView alloc]
 								  initWithTitle:@""
-								  message:msg 
+								  message:msg
 								  delegate:nil
 								  cancelButtonTitle:@"OK"
 								  otherButtonTitles:nil];
@@ -957,11 +1027,11 @@ withConnDelegate:(id<ConnectionMethodDelegate> ) caller
 			NSString * msg =@"Camera name cant be empty, please try again";
 			UIAlertView *alert = [[UIAlertView alloc]
 								  initWithTitle:@""
-								  message:msg 
+								  message:msg
 								  delegate:self
 								  cancelButtonTitle:@"OK"
 								  otherButtonTitles:nil];
-			alert.tag = ALERT_NAME_CANT_BE_EMPTY; 
+			alert.tag = ALERT_NAME_CANT_BE_EMPTY;
 			[alert show];
 			[alert release];
 			break;
@@ -969,18 +1039,18 @@ withConnDelegate:(id<ConnectionMethodDelegate> ) caller
 		case ALERT_REMOVE_CAM:
 		{
             CamChannel * ch = (CamChannel *) [listOfChannel objectAtIndex:self.edittedChannelIndex];
-			BOOL deviceInLocal = ch.profile.isInLocal; 
+			BOOL deviceInLocal = ch.profile.isInLocal;
             if (deviceInLocal)
             {
                 
                 NSString * msg =@"Please confirm that you want to remove this camera from your account. This action will also reset the camera to setup mode.";
                 UIAlertView *alert = [[UIAlertView alloc]
                                       initWithTitle:@""
-                                      message:msg 
+                                      message:msg
                                       delegate:self
                                       cancelButtonTitle:@"Cancel"
                                       otherButtonTitles:@"OK",nil];
-                alert.tag = ALERT_REMOVE_CAM_LOCAL; 
+                alert.tag = ALERT_REMOVE_CAM_LOCAL;
                 [alert show];
                 [alert release];
                 
@@ -990,12 +1060,12 @@ withConnDelegate:(id<ConnectionMethodDelegate> ) caller
                 NSString * msg =@"Please confirm that you want to remove this camera from your account. The camera is not accessible right now, it will not be switched to setup mode. Please refer to FAQ to reset it manually.";
                 UIAlertView *alert = [[UIAlertView alloc]
                                       initWithTitle:@""
-                                      message:msg 
+                                      message:msg
                                       delegate:self
                                       cancelButtonTitle:@"Cancel"
                                       otherButtonTitles:@"OK",nil];
                 
-                alert.tag = ALERT_REMOVE_CAM_REMOTE; 
+                alert.tag = ALERT_REMOVE_CAM_REMOTE;
                 [alert show];
                 [alert release];
             }
@@ -1029,26 +1099,26 @@ withConnDelegate:(id<ConnectionMethodDelegate> ) caller
 {
     
     
-    CamChannel * ch = (CamChannel *) [listOfChannel objectAtIndex:self.edittedChannelIndex]; 
+    CamChannel * ch = (CamChannel *) [listOfChannel objectAtIndex:self.edittedChannelIndex];
     
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
 	NSString * userName = (NSString *) [userDefaults objectForKey:@"PortalUseremail"];
 	NSString * userPass = (NSString *) [userDefaults objectForKey:@"PortalPassword"];
 	
-	    
+    
 	//Update BMS server with the new name;;
 	
-	BMS_Communication * bms_comm; 
+	BMS_Communication * bms_comm;
 	bms_comm = [[BMS_Communication alloc] initWithObject:self
-												Selector:@selector(changeNameSuccessWithResponse:) 
-											FailSelector:@selector(changeNameFailedWithError:) 
+												Selector:@selector(changeNameSuccessWithResponse:)
+											FailSelector:@selector(changeNameFailedWithError:)
 											   ServerErr:@selector(changeNameFailedServerUnreachable)];
 	
 	[bms_comm BMS_camNameWithUser:userName
-                          AndPass:userPass 
+                          AndPass:userPass
                           macAddr:ch.profile.mac_address
                           camName:newName];
-   
+    
     
     ch.profile.name = newName;
     
@@ -1058,45 +1128,45 @@ withConnDelegate:(id<ConnectionMethodDelegate> ) caller
 
 -(void) changeNameSuccessWithResponse:(NSData *) responsedata
 {
-
     
-    [cameraList reloadData] ; 
+    
+    [cameraList reloadData] ;
     
 }
 -(void) changeNameFailedWithError:(NSHTTPURLResponse*) error_response
 {
-
-    [cameraList reloadData] ; 
+    
+    [cameraList reloadData] ;
 }
 -(void) changeNameFailedServerUnreachable
 {
-
-    [cameraList reloadData] ; 
+    
+    [cameraList reloadData] ;
 }
 
 
 
 -(void) onCameraRemoveLocal
 {
-	NSString * command , *response; 
+	NSString * command , *response;
 	
     CamChannel * ch = (CamChannel *) [listOfChannel objectAtIndex:self.edittedChannelIndex];
     
     HttpCommunication * dev_comm = [[HttpCommunication alloc]init];
     dev_comm.device_ip = ch.profile.ip_address;
-    dev_comm.device_port = ch.profile.port; 
-
-	command = SWITCH_TO_DIRECT_MODE; 
+    dev_comm.device_port = ch.profile.port;
+    
+	command = SWITCH_TO_DIRECT_MODE;
 	response = [dev_comm sendCommandAndBlock:command];
 	
-
+    
 	
 	command = RESTART_HTTP_CMD;
 	response = [dev_comm sendCommandAndBlock:command];
-
+    
 	
     
-    [self onCameraRemoveRemote]; 
+    [self onCameraRemoveRemote];
    	
 }
 
@@ -1112,17 +1182,17 @@ withConnDelegate:(id<ConnectionMethodDelegate> ) caller
 	NSString * userPass = (NSString *) [userDefaults objectForKey:@"PortalPassword"];
 	
     
-
     
-	BMS_Communication * bms_comm; 
+    
+	BMS_Communication * bms_comm;
 	bms_comm = [[BMS_Communication alloc] initWithObject:self
-												Selector:@selector(removeCamSuccessWithResponse:) 
-											FailSelector:@selector(removeCamFailedWithError:) 
+												Selector:@selector(removeCamSuccessWithResponse:)
+											FailSelector:@selector(removeCamFailedWithError:)
 											   ServerErr:@selector(removeCamFailedServerUnreachable)];
 	
 	[bms_comm BMS_delCamWithUser:userName AndPass:userPass macAddr:ch.profile.mac_address];
     
-        
+    
 }
 
 
