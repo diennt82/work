@@ -195,7 +195,16 @@
 {
 	if (self.videoImage != nil)
 	{
-		[self.videoImage setImage:[UIImage imageNamed:@"homepage.png"]];
+        UIInterfaceOrientation infOrientation = [UIApplication sharedApplication].statusBarOrientation;
+        
+        if (infOrientation == UIInterfaceOrientationLandscapeLeft || infOrientation == UIInterfaceOrientationLandscapeRight)
+        {
+            [self.videoImage setImage:[UIImage imageNamed:@"homepage.png"]];
+        }
+        else if (infOrientation == UIInterfaceOrientationPortrait || infOrientation == UIInterfaceOrientationPortraitUpsideDown)
+        {
+            [self.videoImage setImage:[UIImage imageNamed:@"homepage_p.png"]];
+        }
 	}
     
 	//NSLog(@"stop streaming : %p", listenSocket);
