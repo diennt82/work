@@ -164,7 +164,7 @@
 	
 	//setup array for picker view
 	levels = [[NSArray alloc] initWithObjects:@"Level1", @"Level2", @"Level3", @"Level4", nil];
-	voxlevels = [[NSArray alloc] initWithObjects:@"Disable",
+	voxlevels = [[NSArray alloc] initWithObjects:
 				 @"Level1(Low)", @"Level2", @"Level3", @"Level4 (High)", nil];
 	temperature = [[NSArray alloc] initWithObjects:@"Fahrenheit",@"Celsius",nil];
 	videoQuality = [[NSArray alloc] initWithObjects:@"Normal Quality (QVGA)",@"High Quality (VGA)",nil]; 
@@ -332,74 +332,118 @@
 {
 	NSString * response, * command;
     
+    command = VOX_STATUS;
+    
+    
     if (commMode == COMM_MODE_STUN)
 	{
-        //Not supported in Stun
-        voxLevel = 0;
-        [self.cameraMenuItemValues setValue:@"Not supported" forKey:_VOX_DICT_KEY];
-        return;
+        
+        NSData * response_data;
+        response_data =  [self.dev_s_comm sendCommandThruUdtServer:command
+                                                           withMac:camChan.profile.mac_address
+                                                        AndChannel:camChan.channID];
+        
+        if (response_data != nil)
+        {
+            response = [[[NSString alloc] initWithData:response_data encoding: NSUTF8StringEncoding] autorelease];
+            
+        }
+        else
+        {
+            NSLog(@"updateVoxStatus: Failed to get response via Stun Server");
+        }
+
 
     }
     else
+    { 
+        response = [dev_comm sendCommandAndBlock:command];
+    }
+    
+    
+    if ( (response != nil)  && [response hasPrefix:VOX_STATUS])
     {
+        NSString * str_value = [response substringFromIndex:([VOX_STATUS length] + 2)];
         
-        command = VOX_STATUS;
-        response = [dev_comm sendCommandAndBlock:command];
-        
-        if ( (response != nil)  && [response hasPrefix:VOX_STATUS])
+        int vox_status  = [str_value intValue];
+        if (vox_status == 0)
         {
-            NSString * str_value = [response substringFromIndex:([VOX_STATUS length] + 2)];
-            
-            int vox_status  = [str_value intValue];
-            if (vox_status == 0)
-            {
-                //vox disabled
-                voxLevel = 0;
-                [self.cameraMenuItemValues setValue:@"Disabled" forKey:_VOX_DICT_KEY];
-                return;
-            }
-        }
-        
-        
-        command = VOX_GET_THRESHOLD;
-        response = [dev_comm sendCommandAndBlock:command];
-        if ( (response != nil)  && [response hasPrefix:VOX_GET_THRESHOLD])
-        {
-            NSString * str_value = [response substringFromIndex:([VOX_GET_THRESHOLD length] + 2)];
-            
-            int vox_value  = [str_value intValue];
-            
-            NSString * lvl = @"-1"; 
-            
-            switch(vox_value)
-            {
-                case -10:
-                    lvl = @"Level 1(low)";
-                    voxLevel = 1;
-                    break;
-                case -20:
-                    lvl = @"Level 2";
-                    voxLevel = 2;
-                    break;
-                case -30:
-                    lvl = @"Level 3";
-                    voxLevel = 3;
-                    break;
-                case -38:
-                    lvl = @"Level 4(High)";
-                    voxLevel = 4;
-                    break;
-                default:
-                    break;
-            }
-            
-            
-            
-            [self.cameraMenuItemValues setValue:lvl forKey:_VOX_DICT_KEY];
-            
-            
+            //SHOULD NOT BE HERE ANY MORE..
+            NSLog(@"updateVoxStatus: SHOULD NOT BE HERE ANY MORE..");
+            //vox disabled
+            voxLevel = 0;
+            [self.cameraMenuItemValues setValue:@" " forKey:_VOX_DICT_KEY]; 
+            return;
         }
     }
+    
+    
+    command = VOX_GET_THRESHOLD;
+    
+    if (commMode == COMM_MODE_STUN)
+	{
+        
+        NSData * response_data;
+        response_data =  [self.dev_s_comm sendCommandThruUdtServer:command
+                                                           withMac:camChan.profile.mac_address
+                                                        AndChannel:camChan.channID];
+        
+        if (response_data != nil)
+        {
+            response = [[[NSString alloc] initWithData:response_data encoding: NSUTF8StringEncoding] autorelease];
+            
+        }
+        else
+        {
+            NSLog(@"updateVoxStatus: Failed to get response via Stun Server");
+        }
+        
+        
+    }
+    else
+    {
+
+        response = [dev_comm sendCommandAndBlock:command];
+    }
+    
+    
+    if ( (response != nil)  && [response hasPrefix:VOX_GET_THRESHOLD])
+    {
+        NSString * str_value = [response substringFromIndex:([VOX_GET_THRESHOLD length] + 2)];
+        
+        int vox_value  = [str_value intValue];
+        
+        NSString * lvl = @"Level 2";
+        
+        switch(vox_value)
+        {
+            case -10:
+                lvl = @"Level 1(low)";
+                voxLevel = 0;
+                break;
+            case -20:
+                lvl = @"Level 2";
+                voxLevel = 1;
+                break;
+            case -30:
+                lvl = @"Level 3";
+                voxLevel = 2;
+                break;
+            case -38:
+                lvl = @"Level 4(High)";
+                voxLevel = 3;
+                break;
+            default:
+                break;
+        }
+        
+        
+        
+        [self.cameraMenuItemValues setValue:lvl forKey:_VOX_DICT_KEY];
+        
+        
+    }
+    
 	
 }
 
@@ -412,7 +456,7 @@
 	
 	switch (tempunit) {
 		case 0://F
-			[self.cameraMenuItemValues setValue:@"\u00B0F" forKey:_TEMP_DICT_KEY]; 
+			[self.cameraMenuItemValues setValue:@"\u00B0F" forKey:_TEMP_DICT_KEY];
 			break;
 		case 1:
 			[self.cameraMenuItemValues setValue:@"\u00B0C" forKey:_TEMP_DICT_KEY]; 
@@ -1156,14 +1200,6 @@
 -(void) onVox
 {
 	
-	if (self.camChan.communication_mode == COMM_MODE_STUN)
-    {
-        //[self showDialog: DIALOG_IS_NOT_SUPPORTED];
-        //simply return for now.
-		return; 
-    }
-    
-    
 	if (deviceIp == nil)
 	{
 		[self showDialog: DIALOG_IS_NOT_REACHABLE];
@@ -1525,52 +1561,95 @@
 
 -(void) onSetVoxLevel:(int) level
 {
-	NSString * command; 
-	if (level == 0)
-	{
-		//disable
-		command = VOX_DISABLE;
-		
-	}
-	else {
-		int vox_sensitivity; 
-		switch (level)
-		{
-			case 1:
-				vox_sensitivity = -10;
-				break;
-			case 2:
-				vox_sensitivity = -20; 
-				break;
-			case 3:
-				vox_sensitivity = -30;
-				break;
-			case 4:
-				vox_sensitivity = -38;
-				break;
-			default:
-				vox_sensitivity = -20;
-				break;
-		}
-		command = VOX_ENABLE;
-		
-		[dev_comm sendCommandAndBlock:command];
-		
-		command = [NSString stringWithFormat:@"%@%@%d", VOX_SET_THRESHOLD, 
-				   VOX_SET_THRESHOLD_VALUE, vox_sensitivity];
-		
-				
-	}
+    
+    progressView.hidden = NO;
+    [self.view bringSubviewToFront:progressView];
+    
+    
+    [self performSelector:@selector(onSetVoxLevel_:)
+               withObject:[[NSNumber alloc] initWithInt:level]
+               afterDelay:0.10];
+}
 
-	NSString *response; 
+-(void) onSetVoxLevel_:(NSNumber *) lvl
+{
+	int level = [lvl intValue];
+
+
+	NSString * command, * response ;
+   
+    //20121108: no longer need to disable vox on Device..
+    //	if (level == 0)
+    //	{
+    //		//disable
+    //		command = VOX_DISABLE;
+    //
+    //	}else
     
     
- 
+    int vox_sensitivity;
+    switch (level)
+    {
+        case 0:
+            vox_sensitivity = -10;
+            break;
+        case 1:
+            vox_sensitivity = -20;
+            break;
+        case 2:
+            vox_sensitivity = -30;
+            break;
+        case 3:
+            vox_sensitivity = -38;
+            break;
+        default:
+            vox_sensitivity = -20;
+            break;
+    }
+    command = VOX_ENABLE;
     
-    response = [dev_comm sendCommandAndBlock:command];
-    //NSLog(@"response: %@", response);
+    if (self.camChan.communication_mode == COMM_MODE_STUN)
+    {
+        if (self.dev_s_comm != nil)
+        {
+            NSData * response_data;
+            response_data = [self.dev_s_comm sendCommandThruUdtServer:command
+                                                              withMac:self.camChan.profile.mac_address
+                                                           AndChannel:self.camChan.channID];
+            response = [[[NSString alloc] initWithData:response_data encoding: NSASCIIStringEncoding] autorelease];
+            
+        }
+        
+    }
+    else
+    {
+        response = [dev_comm sendCommandAndBlock:command];
+    }
+
     
-    	
+    command = [NSString stringWithFormat:@"%@%@%d", VOX_SET_THRESHOLD,
+               VOX_SET_THRESHOLD_VALUE, vox_sensitivity];
+    
+    if (self.camChan.communication_mode == COMM_MODE_STUN)
+    {
+        if (self.dev_s_comm != nil)
+        {
+            NSData * response_data;
+            response_data = [self.dev_s_comm sendCommandThruUdtServer:command
+                                                              withMac:self.camChan.profile.mac_address
+                                                           AndChannel:self.camChan.channID];
+            response = [[[NSString alloc] initWithData:response_data encoding: NSASCIIStringEncoding] autorelease];
+            
+        }
+        
+    }
+    else
+    {
+        response = [dev_comm sendCommandAndBlock:command];
+    }
+    
+   
+    progressView.hidden = YES;
 	[self updateVoxStatus];
 	[self.cameraMenu reloadData];
 	
