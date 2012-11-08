@@ -51,122 +51,222 @@ withConnDelegate:(id<ConnectionMethodDelegate> ) caller
     [super dealloc];
 }
 
-- (void)viewDidLoad
+-(void) setupTopBarForEditMode:(BOOL) isEditMode
 {
-    [super viewDidLoad];
-	// Do any additional setup after loading the view.
     
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     
     BOOL isOffline = [userDefaults boolForKey:_OfflineMode];
+
     
+    if (isEditMode == FALSE)
+    {
+        //Build ToolBar manually
+        topbar = [[UIToolbar alloc]initWithFrame:CGRectMake(0, 0, 320, 44)];
+        topbar.barStyle = UIBarStyleBlackOpaque;
+        // create an array for the buttons
+        NSMutableArray* buttons = [[NSMutableArray alloc] initWithCapacity:3];
+        
+        
+        if (isOffline == TRUE)
+        {
+//            UIBarButtonItem *editButton = [[UIBarButtonItem alloc]
+//                                           initWithTitle:@"Edit"
+//                                           style:UIBarButtonItemStyleBordered
+//                                           target:nil
+//                                           action:nil];
+//            
+//            [buttons addObject:editButton];
+//            [editButton release];
+        }
+        else
+        {
+            
+            if ([self shouldShowEditButton])
+            {
+                
+                UIBarButtonItem *editButton = [[UIBarButtonItem alloc]
+                                               initWithTitle:@"Edit"
+                                               style:UIBarButtonItemStyleBordered
+                                               target:self
+                                               action:@selector(editCameras:)];
+                
+                [buttons addObject:editButton];
+                [editButton release];
+                
+            }
+        }
+        
+        UIBarButtonItem *reloadButton = [[UIBarButtonItem alloc]
+                                         initWithBarButtonSystemItem:UIBarButtonSystemItemRefresh
+                                         target:self
+                                         action:@selector(refreshCameras:)];
+        reloadButton.style = UIBarButtonItemStyleBordered;
+        [buttons addObject:reloadButton];
+        [reloadButton release];
+        
+        // create a spacer between the buttons
+        UIBarButtonItem * spacer = [[UIBarButtonItem alloc]
+                                    initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace
+                                    target:nil
+                                    action:nil];
+        [buttons addObject:spacer];
+        [spacer release];
+        
+        
+        //Label
+        UIBarButtonItem *label = [[UIBarButtonItem alloc]
+                                  init];
+        label.style = UIBarButtonItemStylePlain;
+        label.title =@"Cameras";
+        [buttons addObject:label];
+        [label release];
+        
+        
+        // create a spacer between the buttons
+        spacer = [[UIBarButtonItem alloc]
+                  initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace
+                  target:nil
+                  action:nil];
+        [buttons addObject:spacer];
+        [spacer release];
+        
+        if ([self shouldShowScanButton])
+        {
+            // create a standard delete button with the trash icon
+            UIBarButtonItem *snapButton = [[UIBarButtonItem alloc]
+                                           initWithImage:[UIImage imageNamed:@"scan_camera_icon.png"]
+                                           style:UIBarButtonItemStyleBordered
+                                           target:self
+                                           action:@selector(scanCameras:)];
+            
+            [buttons addObject:snapButton];
+            [snapButton release];
+        }
+        
+        
+        // create a standard delete button with the trash icon
+        UIBarButtonItem *addButton = [[UIBarButtonItem alloc]
+                                      initWithBarButtonSystemItem:UIBarButtonSystemItemAdd
+                                      target:self
+                                      action:@selector(addCamera:)];
+        addButton.style = UIBarButtonItemStyleBordered;
+        [buttons addObject:addButton];
+        [addButton release];
+        
+        // put the buttons in the toolbar and release them
+        [topbar setItems:buttons animated:NO];
+        [buttons release];
+        
+        
+        
+        [self.view addSubview:topbar];
+    }
+    else
+    {
+        if (topbar != nil)
+        {
+            [topbar removeFromSuperview]; 
+            [topbar release];
+            
+        }
+        
+        //Build ToolBar manually
+        topbar = [[UIToolbar alloc]initWithFrame:CGRectMake(0, 0, 320, 44)];
+        topbar.barStyle = UIBarStyleBlackOpaque;
+        // create an array for the buttons
+        NSMutableArray* buttons = [[NSMutableArray alloc] initWithCapacity:3];
+
+        
+        
+        if (isOffline == TRUE)
+        {
+//            UIBarButtonItem *editButton = [[UIBarButtonItem alloc]
+//                                           initWithTitle:@"Edit"
+//                                           style:UIBarButtonItemStyleBordered
+//                                           target:nil
+//                                           action:nil];
+//            
+//            [buttons addObject:editButton];
+//            [editButton release];
+        }
+        else
+        {
+            
+            if ([self shouldShowEditButton])
+            {
+                
+                UIBarButtonItem *editButton = [[UIBarButtonItem alloc]
+                                               initWithTitle:@"Cancel"
+                                               style:UIBarButtonItemStyleBordered
+                                               target:self
+                                               action:@selector(editCameras:)];
+                
+                [buttons addObject:editButton];
+                [editButton release];
+                
+            }
+        }
+               
+        // create a spacer between the buttons
+        UIBarButtonItem * spacer = [[UIBarButtonItem alloc]
+                                    initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace
+                                    target:nil
+                                    action:nil];
+        [buttons addObject:spacer];
+        [spacer release];
+        
+        
+        //Label
+        UIBarButtonItem *label = [[UIBarButtonItem alloc]
+                                  init];
+        label.style = UIBarButtonItemStylePlain;
+        label.title =@"Cameras";
+        [buttons addObject:label];
+        [label release];
+        
+        
+        // create a spacer between the buttons
+        spacer = [[UIBarButtonItem alloc]
+                  initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace
+                  target:nil
+                  action:nil];
+        [buttons addObject:spacer];
+        [spacer release];
+        
+              
+        // put the buttons in the toolbar and release them
+        [topbar setItems:buttons animated:NO];
+        [buttons release];
+        
+        
+        
+        [self.view addSubview:topbar];
+        
+    }
+
+    
+}
+
+
+
+- (void)viewDidLoad
+{
+    [super viewDidLoad];
+	// Do any additional setup after loading the view.
+       
     
     [self.navigationController setNavigationBarHidden:YES];
     
-    //Build ToolBar manually
     
-   
-    topbar = [[UIToolbar alloc]initWithFrame:CGRectMake(0, 0, 320, 44)];
-    topbar.barStyle = UIBarStyleBlackOpaque;
-    // create an array for the buttons
-    NSMutableArray* buttons = [[NSMutableArray alloc] initWithCapacity:3];
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     
+    BOOL isOffline = [userDefaults boolForKey:_OfflineMode];
 
-    if (isOffline == TRUE)
-    {
-        UIBarButtonItem *editButton = [[UIBarButtonItem alloc]
-                                       initWithTitle:@"Edit"
-                                       style:UIBarButtonItemStyleBordered
-                                       target:nil
-                                       action:nil]; 
-        
-        [buttons addObject:editButton];
-        [editButton release];
-    }
-    else 
-    {
-        
-        if ([self shouldShowEditButton])
-        {
-
-            UIBarButtonItem *editButton = [[UIBarButtonItem alloc]
-                                           initWithTitle:@"Edit"
-                                           style:UIBarButtonItemStyleBordered
-                                           target:self
-                                           action:@selector(editCameras:)];
-            
-            [buttons addObject:editButton];
-            [editButton release];
-            
-        }
-    }
-    
-    UIBarButtonItem *reloadButton = [[UIBarButtonItem alloc]
-                                     initWithBarButtonSystemItem:UIBarButtonSystemItemRefresh
-                                     target:self
-                                     action:@selector(refreshCameras:)];
-    reloadButton.style = UIBarButtonItemStyleBordered;
-    [buttons addObject:reloadButton];
-    [reloadButton release];
-           
-    // create a spacer between the buttons
-    UIBarButtonItem * spacer = [[UIBarButtonItem alloc]
-              initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace
-              target:nil
-              action:nil];
-    [buttons addObject:spacer];
-    [spacer release];
-    
-    
-    //Label
-    UIBarButtonItem *label = [[UIBarButtonItem alloc]
-                              init];
-    label.style = UIBarButtonItemStylePlain;
-    label.title =@"Cameras";
-    [buttons addObject:label];
-    [label release];
-
-    
-    // create a spacer between the buttons
-    spacer = [[UIBarButtonItem alloc]
-              initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace
-              target:nil
-              action:nil];
-    [buttons addObject:spacer];
-    [spacer release];
-
-    if ([self shouldShowScanButton])
-    {
-        // create a standard delete button with the trash icon
-        UIBarButtonItem *snapButton = [[UIBarButtonItem alloc]
-                                       initWithImage:[UIImage imageNamed:@"scan_camera_icon.png"]
-                                       style:UIBarButtonItemStyleBordered
-                                       target:self
-                                       action:@selector(scanCameras:)];
-        
-        [buttons addObject:snapButton];
-        [snapButton release];
-    }
-    
-    
-    // create a standard delete button with the trash icon
-    UIBarButtonItem *addButton = [[UIBarButtonItem alloc]
-                                   initWithBarButtonSystemItem:UIBarButtonSystemItemAdd
-                                   target:self
-                                  action:@selector(addCamera:)];
-    addButton.style = UIBarButtonItemStyleBordered;
-    [buttons addObject:addButton];
-    [addButton release];
-    
-    // put the buttons in the toolbar and release them
-    [topbar setItems:buttons animated:NO];
-    [buttons release];
-
-    
-        
-    [self.view addSubview:topbar];
     
     self.editModeEnabled = FALSE;
+    
+    [self setupTopBarForEditMode:self.editModeEnabled];
     
        
     if (isOffline == YES)
@@ -537,7 +637,10 @@ withConnDelegate:(id<ConnectionMethodDelegate> ) caller
 - (void)presentModallyOn:(UIViewController *)parent
 {
     UINavigationController *    navController;
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     
+    BOOL isOffline = [userDefaults boolForKey:_OfflineMode];
+
    
     UITabBarItem * camList  = [[UITabBarItem alloc]initWithTitle:@"Cameras"
                                                            image:[UIImage imageNamed:@"bb_camera_slider_icon.png"]
@@ -553,7 +656,14 @@ withConnDelegate:(id<ConnectionMethodDelegate> ) caller
     [accountPage setTabBarItem:account];
     accountPage.mdelegate = self.delegate;
     
+    
     NSArray * views = [[NSArray alloc]initWithObjects:self, accountPage, nil];
+    if (isOffline == TRUE)
+    {
+        [views release];
+        views = [[NSArray alloc]initWithObjects:self,  nil];
+    }
+    
     tabBarController = [[UITabBarController alloc]init]; 
     [tabBarController setViewControllers:views];
     
@@ -588,9 +698,6 @@ withConnDelegate:(id<ConnectionMethodDelegate> ) caller
 
 -(void) forceRelogin
 {
-    
-    
-    
     [delegate sendStatus:5];
 }
 
@@ -660,20 +767,25 @@ withConnDelegate:(id<ConnectionMethodDelegate> ) caller
 
 -(IBAction)editCameras:(id)sender
 {
-    UIBarButtonItem * button = (UIBarButtonItem *) sender; 
+    //UIBarButtonItem * button = (UIBarButtonItem *) sender;
+    
+    
     
     if (self.editModeEnabled == FALSE)
     {
         self.editModeEnabled = TRUE;
-        button.title = @"Cancel"; 
+       // button.title = @"Cancel";
         
     }
     else
     {
         self.editModeEnabled = FALSE;
         
-        button.title = @"Edit"; 
+        //button.title = @"Edit";
     }
+    
+    
+    [self setupTopBarForEditMode:self.editModeEnabled];
     
     //[cameraList reloadData];
     

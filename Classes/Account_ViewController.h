@@ -12,7 +12,7 @@
 
 @interface Account_ViewController : UIViewController
 {
-   IBOutlet UITableViewCell * userNameCell, * userCPassCell, * userEmailCell;
+   IBOutlet UITableViewCell * userNameCell,  * userEmailCell;
     UIToolbar * mtopbar; 
     
     id<ConnectionMethodDelegate> mdelegate; 

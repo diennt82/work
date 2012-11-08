@@ -47,6 +47,7 @@
     NSMutableArray* buttons = [[NSMutableArray alloc] initWithCapacity:3];
     
     // create a standard reload button
+#if 0
     UIBarButtonItem *reloadButton = [[UIBarButtonItem alloc]
                                      initWithBarButtonSystemItem:UIBarButtonSystemItemEdit
                                      target:nil
@@ -55,6 +56,7 @@
     [buttons addObject:reloadButton];
     [reloadButton release];
     
+  #endif  
     // create a spacer between the buttons
     UIBarButtonItem *spacer = [[UIBarButtonItem alloc]
                                initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace
@@ -62,6 +64,7 @@
                                action:nil];
     [buttons addObject:spacer];
     [spacer release];
+
     
     //Label
     UIBarButtonItem *label = [[UIBarButtonItem alloc]
@@ -73,20 +76,20 @@
     
     
     // create a spacer between the buttons
-    spacer = [[UIBarButtonItem alloc]
-              initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace
-              target:nil
-              action:nil];
+     spacer = [[UIBarButtonItem alloc]
+                                initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace
+                                target:nil
+                                action:nil];
     [buttons addObject:spacer];
     [spacer release];
     
     
     // create a standard delete button with the trash icon
     UIBarButtonItem *logoutButton = [[UIBarButtonItem alloc]
-                                  initWithTitle:@"Logout"
-                                  style:UIBarButtonItemStyleBordered
-                                  target:self
-                                  action:@selector(userLogout)];
+                                     initWithTitle:@"Logout"
+                                     style:UIBarButtonItemStyleBordered
+                                     target:self
+                                     action:@selector(userLogout)];
     
     [buttons addObject:logoutButton];
     [logoutButton release];
@@ -98,13 +101,13 @@
     
     
     [self.view addSubview:mtopbar];
-
+    
     
     
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
 	
-	//can be user email or user name here --  
-	NSString * user_name = (NSString *) [userDefaults objectForKey:@"PortalUsername"];	
+	//can be user email or user name here --
+	NSString * user_name = (NSString *) [userDefaults objectForKey:@"PortalUsername"];
 	NSString * user_email = (NSString *) [userDefaults objectForKey:@"PortalUseremail"];
     
     
@@ -131,18 +134,18 @@
 
 -(void) userLogout
 {
-    NSLog(@"LOG OUT>>>>"); 
+    NSLog(@"LOG OUT>>>>");
     if (mdelegate == nil)
     {
-        NSLog(@"Delegate is nill"); 
+        NSLog(@"Delegate is nill");
     }
     else
     {
         
-        //User logout -- 
-        // 1 . Clear all alert 
-        [CameraAlert clearAllAlerts]; 
-        //TODO: 2 . Clear offline data 
+        //User logout --
+        // 1 . Clear all alert
+        [CameraAlert clearAllAlerts];
+        //TODO: 2 . Clear offline data
         
         
         [mdelegate sendStatus:8];
@@ -155,11 +158,11 @@
 
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return 3; 
+    return 2;
 }
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    return 1; 
+    return 1;
 }
 
 
@@ -172,14 +175,11 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
     
-       if (indexPath.row == USERNAME_INDEX) {
+    if (indexPath.row == USERNAME_INDEX) {
         return userNameCell;
     }
-   
-    if (indexPath.row == USERCPASS_INDEX)
-    {
-        return userCPassCell;
-    }
+    
+    
     if (indexPath.row == USEREMAIL_INDEX)
     {
         return userEmailCell;

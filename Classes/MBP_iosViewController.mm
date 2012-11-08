@@ -300,7 +300,7 @@ return self;
 			}
 		case 3:
 			//may be offline mode
-
+            statusDialogLabel.hidden = NO;
 			self.app_stage = APP_STAGE_LOGGED_IN;
 
 			[self scan_for_devices];
@@ -331,6 +331,7 @@ return self;
 		case 5: //Just remove camera, currently in CameraMenu page 
 			{
 				NSLog(@"remove cam done");
+                statusDialogLabel.hidden = NO;
 				[self dismissModalViewControllerAnimated:NO];
 
 				NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
@@ -348,8 +349,10 @@ return self;
 		case  6:
 			{
 				NSLog(@"Back from menu");
+                statusDialogLabel.hidden = YES;
 				[self dismissModalViewControllerAnimated:NO];
 				//[self.streamer startStreaming];
+                
 
 
 				break;
@@ -370,6 +373,7 @@ return self;
 			}
 		case 8 : //back from login -failed Or logout
 			{
+                statusDialogLabel.hidden = YES;
 				[self dismissModalViewControllerAnimated:NO	];
 
 				NSLog(@"De-Register push with both parties: APNs and BMS ");
