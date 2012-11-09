@@ -1277,9 +1277,7 @@
 		[fullScreenTimer invalidate];
 		fullScreenTimer = nil;
 	}
-    
-    
-	NSLog(@"start fullscreen timer .");
+
 	fullScreenTimer = [NSTimer scheduledTimerWithTimeInterval:10.0
                                                        target:self
                                                      selector:@selector(showFullScreenNow:)
@@ -1290,11 +1288,18 @@
 
 - (void) showJoysticksOnly
 {
-	NSLog(@"show joystick");
+	NSLog(@"show joystick & cancel FS timer.");
     
 	directionPad.hidden = NO;
-	//self.camView.oneCamView.directionIndicator.hidden = NO;
     
+	//self.camView.oneCamView.directionIndicator.hidden = NO;
+    if ( (fullScreenTimer != nil) && [fullScreenTimer isValid])
+	{
+		//invalidate the timer ..
+		[fullScreenTimer invalidate];
+		fullScreenTimer = nil;
+	}
+
 }
 
 
@@ -2074,10 +2079,10 @@
 	CGPoint location ;
 	NSSet *allTouches = [event allTouches];
 	[super touchesEnded:touches withEvent:event];
-	///NSLog(@"Ended Touches count: %d", [allTouches count]);
+
 	int i =0;
     
-	//[self tryToShowFullScreen];
+	
     
 	for (i =0 ; i < [allTouches count]; i++)
 	{
@@ -2089,6 +2094,7 @@
 		{
             
 			[self touchEventAt:location phase:touch.phase];
+            [self tryToShowFullScreen];
 		}
         
         
