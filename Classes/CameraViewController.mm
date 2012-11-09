@@ -687,7 +687,7 @@
 			tempF= ((float)tempC*9 + 32*5)/5;
             
 			[temperature_label performSelectorOnMainThread:@selector(setText:)
-                                                withObject:[NSString stringWithFormat:@"%.2f \u00B0F", tempF]
+                                                withObject:[NSString stringWithFormat:@"%d \u00B0F", (int)tempF]
                                              waitUntilDone:YES];
             
 			break;

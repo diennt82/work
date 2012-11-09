@@ -217,6 +217,10 @@
     else
     {
         
+        
+        accountInfo.hidden = YES;
+        progress.hidden = NO; 
+        
         //User logout --
         // 1 . Clear all alert
         [CameraAlert clearAllAlerts];
@@ -225,10 +229,6 @@
         
         [mdelegate sendStatus:8];
     }
-    
-    
-    
-    
 }
 
 

@@ -12,10 +12,12 @@
 
 @interface Account_ViewController : UIViewController
 {
-   IBOutlet UITableViewCell * userNameCell,  * userEmailCell;
-    UIToolbar * mtopbar; 
-    IBOutlet UITableView * accountInfo; 
-    id<ConnectionMethodDelegate> mdelegate; 
+    IBOutlet UITableViewCell * userNameCell,  * userEmailCell;
+    UIToolbar * mtopbar;
+    IBOutlet UITableView * accountInfo;
+    id<ConnectionMethodDelegate> mdelegate;
+    
+    IBOutlet UIActivityIndicatorView * progress;
     
 }
 @property (nonatomic, retain)  UIToolbar *  mtopbar;

@@ -169,8 +169,6 @@
 
 
 - (void)dealloc {
-   
-    NSLog(@"Login dealloc...");
 	[userName release];
 	[password release];
 

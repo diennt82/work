@@ -584,15 +584,17 @@
                 for (int i =0; i <[alerts count]; i++)
                 {
                     camAlert = (CameraAlert *) [alerts objectAtIndex:i];
-                    if ( [camAlert.alertType isEqualToString:ALERT_TYPE_SOUND])
+                    if ( [camAlert.alertType isEqualToString:ALERT_TYPE_SOUND]   &&
+                        (soundAlert.hidden == YES) )
                     {
-                        NSLog(@"Set sound indicator for cam: %@", cp.mac_address);
+                        //NSLog(@"Set sound indicator for cam: %@", cp.mac_address);
                         soundAlert.hidden = NO;
                     }
-                    else if ( [camAlert.alertType isEqualToString:ALERT_TYPE_TEMP_HI]  ||
-                             [camAlert.alertType isEqualToString:ALERT_TYPE_TEMP_LO] )
+                    else if ( ([camAlert.alertType isEqualToString:ALERT_TYPE_TEMP_HI]  ||
+                                [camAlert.alertType isEqualToString:ALERT_TYPE_TEMP_LO] )   &&
+                              (tempAlert.hidden == YES) )
                     {
-                        NSLog(@"Set temp indicator for cam: %@", cp.mac_address);
+                        //NSLog(@"Set temp indicator for cam: %@", cp.mac_address);
                         tempAlert.hidden = NO;
                     }
                     

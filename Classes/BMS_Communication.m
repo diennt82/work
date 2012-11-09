@@ -315,7 +315,9 @@
 	NSData* plainData = [plain dataUsingEncoding:NSUTF8StringEncoding];
 	NSString * portalCred = [NSString base64StringFromData:plainData length:[plainData length]];
 	
-	
+	//Stored for used later.
+    basicAuthenUser = user_email;
+    basicAuthenPass = user_pass;
 	
 	@synchronized(self)
 	{
@@ -1373,6 +1375,15 @@
 {
 	NSLog(@"did recv auth challenge: %@", challenge);
 	
+    NSLog(@"user/pass is : %@/%@", basicAuthenUser, basicAuthenPass);
+
+    //REtry ?? or die??
+    NSURLCredential * cred =
+        [NSURLCredential credentialWithUser:basicAuthenUser
+                   password:basicAuthenPass
+                persistence:NSURLCredentialPersistenceForSession];
+    
+    
 }
 
 

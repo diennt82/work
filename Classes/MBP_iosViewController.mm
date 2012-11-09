@@ -376,38 +376,8 @@ return self;
                 statusDialogLabel.hidden = YES;
 				[self dismissModalViewControllerAnimated:NO	];
 
-				NSLog(@"De-Register push with both parties: APNs and BMS ");
-
-
-				NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-				NSString * user_pass = (NSString *) [userDefaults objectForKey:@"PortalPassword"];
-				NSString * user_email  = (NSString*)[userDefaults objectForKey:@"PortalUseremail"];
-				NSString * devTokenStr =(NSString*) [userDefaults objectForKey:_push_dev_token]; 
-
-				// Let the device know we want to receive push notifications
-				[[UIApplication sharedApplication] unregisterForRemoteNotifications];            
-
-				BMS_Communication * bms_comm1; 
-				bms_comm1  = [[BMS_Communication alloc] initWithObject:self
-					Selector:nil 
-					FailSelector:nil
-					ServerErr:nil];
-
-				NSData * response_dat = [bms_comm1 BMS_sendPushUnRegistrationBlockWithUser:user_email
-					AndPass:user_pass
-					regId:devTokenStr];
-
-				//REmove password and registration id 
-				[userDefaults removeObjectForKey:@"PortalPassword"];
-				[userDefaults removeObjectForKey:_push_dev_token];
-				//[userDefaults setBool:FALSE forKey:_AutoLogin];
-				[userDefaults synchronize];
-
-				[NSTimer scheduledTimerWithTimeInterval:0.10
-					target:self
-					selector:@selector(show_login_or_reg:)
-					userInfo:nil
-					repeats:NO];
+                [self performSelectorInBackground:@selector(logoutAndUnregistration_bg) withObject:nil];
+			
 				break;
 			}
 		default:
@@ -415,8 +385,6 @@ return self;
 	}
 
 }
-
-
 
 
 - (BOOL) isThisMacStoredOffline:(NSString*) mac_without_colon
@@ -521,6 +489,54 @@ return self;
 	return TRUE; 
 
 }
+
+-(void) logoutAndUnregistration_bg
+{
+    NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
+    
+    NSLog(@"De-Register push with both parties: APNs and BMS ");
+    
+    
+	NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    NSString * user_pass = (NSString *) [userDefaults objectForKey:@"PortalPassword"];
+    NSString * user_email  = (NSString*)[userDefaults objectForKey:@"PortalUseremail"];
+    NSString * devTokenStr =(NSString*) [userDefaults objectForKey:_push_dev_token];
+    
+    //REmove password and registration id
+    [userDefaults removeObjectForKey:@"PortalPassword"];
+    [userDefaults removeObjectForKey:_push_dev_token];
+    //[userDefaults setBool:FALSE forKey:_AutoLogin];
+    [userDefaults synchronize];
+    
+    
+    // Let the device know we want to receive push notifications
+    [[UIApplication sharedApplication] unregisterForRemoteNotifications];
+    
+    BMS_Communication * bms_comm1;
+    bms_comm1  = [[BMS_Communication alloc] initWithObject:self
+                                                  Selector:nil
+                                              FailSelector:nil
+                                                 ServerErr:nil];
+    
+    NSData * response_dat = [bms_comm1 BMS_sendPushUnRegistrationBlockWithUser:user_email
+                                                                       AndPass:user_pass
+                                                                         regId:devTokenStr];
+    
+    
+    
+    [NSThread sleepForTimeInterval:0.10];
+    
+    [self performSelectorOnMainThread:@selector(show_login_or_reg:)
+                           withObject:nil
+                        waitUntilDone:NO];
+    
+	[pool release];
+}
+
+
+
+
+
 #pragma mark -
 #pragma mark Alertview delegate
 
@@ -837,23 +853,23 @@ return self;
 
 
 
-- (void ) requestURLSync_bg:(NSString*)url {
+//- (void ) requestURLSync_bg:(NSString*)url {
+//
+//	NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
+//
+//	//incase of demo, don't send the request
+//
+//	{
+//		NSLog(@"url : %@", url);
+//
+//		/* use a small value of timeout in this case */
+//		[self requestURLSync:url withTimeOut:IRABOT_HTTP_REQ_TIMEOUT];
+//	}
+//
+//	[pool release];
+//}
 
-	NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
-
-	//incase of demo, don't send the request
-
-	{
-		NSLog(@"url : %@", url);
-
-		/* use a small value of timeout in this case */
-		[self requestURLSync:url withTimeOut:IRABOT_HTTP_REQ_TIMEOUT];
-	}
-
-	[pool release];
-}
-
-/* Just use in background only */
+/* Just use in background only 
 - (NSString * ) requestURLSync:(NSString*)url withTimeOut:(NSTimeInterval) timeout 
 {
 
@@ -896,7 +912,7 @@ return self;
 	return stringReply ;
 }
 
-
+*/
 
 #pragma mark -
 #pragma mark SetupHTTPDelegate

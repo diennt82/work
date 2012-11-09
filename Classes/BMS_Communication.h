@@ -138,6 +138,7 @@
 	NSURLConnection * url_connection; 
 	NSMutableData *responseData;
 	NSHTTPURLResponse* httpResponse ;
+    NSString * basicAuthenUser, * basicAuthenPass;
 	
 	
 }
