@@ -267,7 +267,7 @@
 	
 	//[self.navigationController pushViewController:playViewController animated:YES];
 	
-	[self presentModalViewController:playViewController animated:YES];
+	[self presentModalViewController:playViewController animated:NO];
 
 }
 

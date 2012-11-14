@@ -123,7 +123,18 @@
 
 -(void) forceLogin
 {
-    [viewController sendStatus:2]; 
+    
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    
+    [userDefaults setBool:TRUE forKey:_AutoLogin];
+    [userDefaults synchronize];
+    
+    [NSTimer scheduledTimerWithTimeInterval:0.01
+                                     target:viewController
+                                   selector:@selector(show_login_or_reg:)
+                                   userInfo:nil
+                                    repeats:NO];
+   
 }
 
 -(void) forceScan
@@ -220,11 +231,17 @@
      If your application supports background execution, called instead of applicationWillTerminate: when the user quits.
      */
 	
-	NSLog(@"Enter background"); 
+	NSLog(@"Enter background "); 
 
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
 	[userDefaults setInteger:viewController.app_stage forKey:@"ApplicationStage"];
     [userDefaults synchronize];
+    
+    if (viewController.app_stage == APP_STAGE_LOGGED_IN)
+    {
+        
+        [viewController sendStatus:6];
+    }
     
 		
 }
@@ -235,14 +252,24 @@
      Called as part of  transition from the background to the inactive state: here you can undo many of the changes made on entering the background.
      */
 	
-	NSLog(@"Enter foreground "); 
+	NSLog(@"Enter foreground isMain? %d 01", [[NSThread currentThread] isMainThread]);
 	
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
 	viewController.app_stage = [userDefaults integerForKey:@"ApplicationStage"];
 
     if (viewController.app_stage == APP_STAGE_LOGGED_IN)
     {
-        [self performSelectorOnMainThread:@selector(forceScan) withObject:nil waitUntilDone:YES];
+        //[self performSelectorOnMainThread:@selector(forceScan) withObject:nil waitUntilDone:YES];
+        
+        //20121114: phung: Need to force relogin, because while app in background many things can happen
+        //   1. Wifi loss --> offline mode
+        //   2. User switch on 3G
+        //   3. Or simply no 3g nor 3g -->> offline mode 
+        //   4. Or a remote camera has become unreachable.
+        //  -->>> NEED to relogin to verify
+        [self forceLogin]; 
+
+        
     }
     else if (viewController.app_stage ==  APP_STAGE_SETUP)
     {
@@ -252,12 +279,12 @@
     {
          [self performSelectorOnMainThread:@selector(showInit) withObject:nil waitUntilDone:YES];
     }
-    
-//    NSLog(@"Re login"); 
-//    [self performSelectorOnMainThread:@selector(forceLogin) withObject:nil waitUntilDone:YES];   
-			
-		
+
+
 }
+
+
+
 
 
 - (void)applicationDidBecomeActive:(UIApplication *)application {

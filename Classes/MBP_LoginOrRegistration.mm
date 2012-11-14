@@ -221,6 +221,8 @@
     //setup nav controller 
     navController= [[[UINavigationController alloc]initWithRootViewController:self] autorelease];
     
+   
+    
     // Create a navigation controller with us as its root.
     assert(navController != nil);
     
@@ -236,7 +238,7 @@
     // Present the navigation controller on the specified parent 
     // view controller.
 
-    [parent presentModalViewController:navController animated:YES];
+    [parent presentModalViewController:navController animated:NO];
 }
 
 

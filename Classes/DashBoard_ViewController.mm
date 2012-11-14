@@ -337,8 +337,6 @@
 
 -(void)viewWillAppear:(BOOL)animated
 {
-    NSLog(@"viewWillAppear --");
-    
     
 	UIInterfaceOrientation infOrientation = [UIApplication sharedApplication].statusBarOrientation;
     
@@ -352,13 +350,13 @@
 
 -(BOOL) shouldAutorotate
 {
-    NSLog(@"shouldAutorotate --");
+
     return YES ;
 }
 
 -(NSUInteger)supportedInterfaceOrientations
 {
-    NSLog(@"supportedInterfaceOrientations --");
+
 
     return UIInterfaceOrientationMaskAllButUpsideDown;
 }
@@ -367,7 +365,7 @@
 - (void) willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
 {
     
-    NSLog(@"will rotate to interface");
+
 
     [self adjustViewsForOrientation:toInterfaceOrientation];
 }
@@ -769,16 +767,16 @@
 
 
 
--(void) forceRelogin
-{
-    [delegate sendStatus:5];
-}
+
 
 #pragma  mark -
 #pragma mark ACTIONS ..
 
 
-
+-(void) forceRelogin
+{
+    [delegate sendStatus:5];
+}
 
 -(IBAction)addCamera:(id)sender
 {
@@ -870,7 +868,9 @@
 
 -(IBAction)refreshCameras :(id)sender
 {
-    [delegate sendStatus:3];
+    //[delegate sendStatus:3];
+    //Need to relogin so as to update remote camera status
+    [self forceRelogin];
 }
 
 
