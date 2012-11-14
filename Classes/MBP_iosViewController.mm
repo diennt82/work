@@ -330,7 +330,7 @@ return self;
 		case 5: //Just remove camera, currently in CameraMenu page 
 			{
 
-                statusDialogLabel.hidden = NO;
+                statusDialogLabel.hidden = YES;
 				[self dismissModalViewControllerAnimated:NO];
 
 				NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
