@@ -601,6 +601,11 @@
         
 	}
     
+    //Provide first orientation to streamer
+    [streamer switchToOrientation:[UIApplication sharedApplication].statusBarOrientation];
+    
+    
+    
 	//Store current SSID - to check later
 	NSString * streamingSSID = [CameraPassword fetchSSIDInfo];
 	if (streamingSSID == nil)

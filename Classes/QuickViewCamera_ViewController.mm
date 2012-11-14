@@ -252,23 +252,9 @@ SystemSoundID soundFileObject;
     streamer.mTempUpdater = self;
     streamer.mFrameUpdater = self;
     
-    
-    
-    UIDeviceOrientation deviceOrientation = [UIDevice currentDevice].orientation;
-    
-    
-    UIInterfaceOrientation infOrientation = (UIInterfaceOrientation)deviceOrientation;
-    
-    if ( deviceOrientation == UIDeviceOrientationUnknown ||
-        deviceOrientation == UIDeviceOrientationFaceDown ||
-        deviceOrientation == UIDeviceOrientationFaceUp)
-    {
-        infOrientation = UIInterfaceOrientationPortrait;
-    }
-    
-    [streamer switchToOrientation:infOrientation];
-    
-    
+    //Provide first orientation to streamer
+    [streamer switchToOrientation:[UIApplication sharedApplication].statusBarOrientation];
+   
     [streamer startStreaming];
     
 	

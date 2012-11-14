@@ -1553,7 +1553,26 @@
 #pragma mark Orientation changed 
 -(void) switchToOrientation:(UIInterfaceOrientation)orientation
 {
+  
+    
+    
 	self.currentOrientation = orientation;
+    
+    
+    
+    if (self.currentOrientation == UIInterfaceOrientationLandscapeLeft ||
+        self.currentOrientation == UIInterfaceOrientationLandscapeRight)
+	{
+        
+        NSLog(@"Streamer switch to Landscape orientation");
+        
+	}
+	else if (self.currentOrientation == UIInterfaceOrientationPortrait ||
+             self.currentOrientation == UIInterfaceOrientationPortraitUpsideDown)
+	{
+        
+        NSLog(@"Streamer switch to portrait orientation");
+    }
 }
 
 -(UIImage *) adaptToCurrentOrientation:(UIImage *) orig
