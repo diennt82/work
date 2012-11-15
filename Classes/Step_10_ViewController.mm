@@ -179,18 +179,26 @@
 #pragma  mark -
 #pragma mark Timer callbacks
 
+-(void) setStopScanning:(NSTimer *) exp
+{
+    should_stop_scanning = TRUE;
+    
+}
 - (void) wait_for_camera_to_reboot:(NSTimer *)exp
 {
-	num_scan_time --; 
-	
-	if (num_scan_time < 0)
-	{
-		//reach the scanning limit.. simply give up now.
-		//TODO: error handling 
-		NSLog(@" max scanning time reached.. stop now");
+
+    
+    if (should_stop_scanning == TRUE)
+    {
+        should_stop_scanning = FALSE;
+        NSLog(@" stop scanning now.. should be 4 mins");
 		[self setupFailed];
-		return ; 
-	}
+		return ;
+    }
+    else
+    {
+        NSLog(@"Continue scan..."); 
+    }
 	
 	
 	
@@ -225,7 +233,7 @@
 	if ([scanner getResults:&result])
 	{
 		NSLog(@"Got some result, check if there is this camera that we are waiting for ");
-		
+
 		if (result != nil)
 		{
 			CamProfile * cp ; 
@@ -291,7 +299,7 @@
 			}
 			else //if not found
 			{
-				//scan again .. 
+				                
 			}
             
 		}
@@ -299,6 +307,19 @@
 		{
 			//scan again ..
 		}
+
+        
+        if ([self checkItOnline])
+        {
+            //Found it online
+            NSLog(@"Found it online");
+            return;
+        }
+        else
+        {
+            
+        }
+        
         
         
 		//retry scannning.. 
@@ -312,7 +333,7 @@
 		
 		
 	}
-	else
+    else
 	{
 		
 		//check back later.. 
@@ -322,22 +343,75 @@
 									   userInfo:nil
 										repeats:NO];	
 	}
+    
+    
+    
+    
+  
 }
 
+-(BOOL) checkItOnline
+{
+    //--> Try to search IP onlinexxxx
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    NSString * user_email = (NSString *) [userDefaults objectForKey:@"PortalUseremail"];
+    NSString * user_pass = (NSString *) [userDefaults objectForKey:@"PortalPassword"];
+    
+    UserAccount * account = [[UserAccount alloc] initWithUser:user_email
+                                                      AndPass:user_pass
+                                                 WithListener: nil];
+    
+    NSString * localIp = [account query_cam_ip_online: self.cameraMac];
+    
+    if ( localIp != nil)
+    {
+        
+        NSLog(@"Found a local ip: %@", localIp);
+        HttpCommunication *  comm;
+        comm = [[HttpCommunication alloc]init];
+        comm.device_ip = localIp;
+        
+        
+        
+        NSString * set_mkey = SET_MASTER_KEY;
+        NSString * response;
+        set_mkey =[set_mkey stringByAppendingString:self.master_key];
+        
+        
+        response = [comm sendCommandAndBlock:set_mkey];
+        
+        if (response == nil)
+        {
+            NSLog(@"can't send master key, camera is not fully up");
+        }
+        else
+        {
+            NSLog(@"response: %@", response);
+            ///done
+            NSLog(@"sending master key done");
+            [self setupCompleted];
+            return TRUE;
+        }
+        
+    }
+
+    return FALSE;
+    
+}
 
 - (void) setupCompleted
 {
-	self.progressView.hidden = YES; 
+	self.progressView.hidden = YES;
     //Step 12
-    [[NSBundle mainBundle] loadNibNamed:@"Setup_bm_step_12" 
-                                  owner:self 
+    [[NSBundle mainBundle] loadNibNamed:@"Setup_bm_step_12"
+                                  owner:self
                                 options:nil];
     
     [self.view addSubview:self.setupCompleteView];
 
     
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-    self.cameraName.text =  (NSString *) [userDefaults objectForKey:@"CameraName"];	
+    self.cameraName.text =  (NSString *) [userDefaults objectForKey:@"CameraName"];
     self.navigationItem.title = @"Setup Complete";
 }
 
@@ -357,7 +431,7 @@
 	
 	BMS_Communication * bms_comm; 
 	bms_comm = [[BMS_Communication alloc] initWithObject:self
-												Selector:@selector(removeCamSuccessWithResponse:) 
+												Selector:@selector(removeCamSuccessWithResponse:) ///TEST
 											FailSelector:@selector(removeCamFailedWithError:) 
 											   ServerErr:@selector(removeCamFailedServerUnreachable)];
 	
@@ -417,11 +491,18 @@
 	
 	[self extractMasterKey:raw_data];
 	
-	num_scan_time = 60; //about 3 mins of scanning ... 
-	
+    should_stop_scanning = FALSE;
+    
+    [NSTimer scheduledTimerWithTimeInterval: SCAN_TIMEOUT
+									 target:self
+								   selector:@selector(setStopScanning:)
+								   userInfo:nil
+									repeats:NO];
+    
+    
 	// 2 of 3. wait for the camera to reboot completely
 	
-	[NSTimer scheduledTimerWithTimeInterval: 30//camera reboot time about 50secs  
+	[NSTimer scheduledTimerWithTimeInterval: 30.0//camera reboot time about 50secs
 									 target:self
 								   selector:@selector(wait_for_camera_to_reboot:)
 								   userInfo:nil

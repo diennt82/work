@@ -1402,7 +1402,16 @@
 		responseData = [[NSMutableData alloc] init];	
 	}
 	else {
-		[obj performSelector:selIfFailure withObject:httpResponse];
+        
+        if ([obj respondsToSelector:selIfFailure])
+        {
+            [obj performSelector:selIfFailure withObject:httpResponse];
+        }
+        else
+        {
+            NSLog(@"Failed to call selIfFailure..silence return");
+        }
+		
 		responseData = nil;
 	}
 
@@ -1430,11 +1439,16 @@
             NSLog(@"obj = nil "); 
 
         }
-        
+        if ([self.obj respondsToSelector:selIfSuccess])
+        {
+            [self.obj performSelector:selIfSuccess withObject:responseData ];
+        }
+        else
+        {
+            NSLog(@"Failed to call selIfSuccess..silence return");
+        }
 		
-		[self.obj performSelector:selIfSuccess withObject:responseData];
 		
-
 	
 	}
 	// NSLog(@"connectionDidFinishLoading END "); 
@@ -1446,8 +1460,15 @@
 {
 	NSLog(@"failed with error: %@", error); 
 	
+	if ([self.obj respondsToSelector:selIfServerFail])
+    {
+       [self.obj performSelector:selIfServerFail withObject:nil ];
+    }
+    else
+    {
+        NSLog(@"Failed to call selIfServerFail..silence return");
+    }
 	
-	[self.obj performSelector:selIfServerFail withObject:nil ];
 	
 }
 

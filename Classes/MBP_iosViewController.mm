@@ -135,13 +135,35 @@ return self;
                                                     bundle:nil
                                           withConnDelegate:self];
         
-        [self presentModalViewController:firstPage animated:YES];
+        [self presentModalViewController:firstPage animated:NO];
         
     }
 
 
 
 }
+
+
+- (void)wakeup_display_first_page:(NSTimer*) timer_exp
+{
+    
+	self.app_stage = APP_STAGE_INIT;
+    
+	//hide splash screen page
+	[self.view addSubview:backgroundView];
+    
+    MBP_FirstPage * firstPage;
+    firstPage = [[MBP_FirstPage alloc] initWithNibName:@"MBP_FirstPage"
+                                                bundle:nil
+                                      withConnDelegate:self];
+    
+    [self presentModalViewController:firstPage animated:NO];
+    
+    
+}
+
+
+
 
 -(void) startShowingCameraList
 {
@@ -268,8 +290,7 @@ return self;
 					initWithNibName:@"MBP_InitialSetupViewController" bundle:nil];
 
 
-				initSeupViewController.delegate = self; 
-				//indirectl call - [self presentModalViewController:initSeupViewController animated:NO];            
+				initSeupViewController.delegate = self;
 				[initSeupViewController presentModallyOn:self]; 
 
 
@@ -330,8 +351,8 @@ return self;
 			}
 		case 5: //Just remove camera, currently in CameraMenu page 
 			{
-				NSLog(@"remove cam done");
-                statusDialogLabel.hidden = NO;
+
+                statusDialogLabel.hidden = YES;
 				[self dismissModalViewControllerAnimated:NO];
 
 				NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
@@ -346,7 +367,7 @@ return self;
 
 				break;
 			}
-		case  6:
+		case  6: //USED by AppDelegate as well.. please check if modifying this case
 			{
 				NSLog(@"Back from menu");
                 statusDialogLabel.hidden = YES;
@@ -360,15 +381,15 @@ return self;
 		case  7:
 			{
 				NSLog(@" display first page ");
-				[self dismissModalViewControllerAnimated:NO];
+                statusDialogLabel.hidden = YES;
+                [self dismissModalViewControllerAnimated:NO];
+        
+                [NSTimer scheduledTimerWithTimeInterval:0.01
+                                                 target:self
+                                               selector:@selector(wakeup_display_first_page:)
+                                               userInfo:nil
+                                                repeats:NO];
 
-
-				//go Back to main menu
-				[NSTimer scheduledTimerWithTimeInterval:0.01
-					target:self
-					selector:@selector(wakeup_display_login:)
-					userInfo:nil
-					repeats:NO];
 				break;
 			}
 		case 8 : //back from login -failed Or logout
@@ -955,7 +976,6 @@ return self;
 	//Use navigation controller 
 	[loginOrReg presentModallyOn:self]; 
 
-	//[self presentModalViewController:loginOrReg animated:NO];
 }
 
 

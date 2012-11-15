@@ -67,23 +67,7 @@
     if (tag == CONF_CAM_BTN_TAG)
     {
         
-        
-#if 0
-        if ([camName.text length] <3 ||
-            [camName.text length]  > 12)
-        {
-            //ERROR condition
-            UIAlertView *alert = [[UIAlertView alloc]
-                                  initWithTitle:@"Camera Name Error"
-                                  message:@"Camera name is from 3-12 characters" 
-                                  delegate:nil
-                                  cancelButtonTitle:@"OK"
-                                  otherButtonTitles:nil];
-            [alert show];
-            [alert release];
-            return;
-        }
-#endif 
+
         
         NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
         [userDefaults setObject:camName.text forKey:@"CameraName"];
@@ -136,13 +120,19 @@
     
     router_list_raw = [comm sendCommandAndBlock_raw:GET_ROUTER_LIST];
     
-    WifiListParser * routerListParser = nil; 
-    routerListParser = [[WifiListParser alloc]init];
-    
-    [routerListParser parseData:router_list_raw
-                   whenDoneCall:@selector(setWifiResult:) 
-                         target:self];
-    
+    if (router_list_raw != nil)
+    {
+        WifiListParser * routerListParser = nil;
+        routerListParser = [[WifiListParser alloc]init];
+        
+        [routerListParser parseData:router_list_raw
+                       whenDoneCall:@selector(setWifiResult:)
+                             target:self];
+    }
+    else
+    {
+        NSLog(@"GOT NULL wifi list from camera"); 
+    }
 }
 
 

@@ -126,7 +126,7 @@
     // Present the navigation controller on the specified parent 
     // view controller.
     
-    [parent presentModalViewController:navController animated:YES];
+    [parent presentModalViewController:navController animated:NO];
 }
 
 
