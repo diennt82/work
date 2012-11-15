@@ -588,11 +588,6 @@
 			streamer.communication_mode = COMM_MODE_LOCAL;
 		}
         
-        
-        
-        
-        
-        
 		[streamer setVideoImage:videoView];
 		streamer.mTempUpdater = self;
 		streamer.mFrameUpdater = self;
@@ -1297,7 +1292,7 @@
     
 	directionPad.hidden = NO;
     
-	//self.camView.oneCamView.directionIndicator.hidden = NO;
+
     if ( (fullScreenTimer != nil) && [fullScreenTimer isValid])
 	{
 		//invalidate the timer ..
@@ -1317,6 +1312,7 @@
 	directionPad.hidden = YES;
 	controlButtons.hidden = YES;
 	zoombarView.hidden = YES;
+    pttButton.hidden = YES;
     
     
 }
@@ -1702,11 +1698,10 @@
 	{
 		[btn setImage:[UIImage imageNamed:@"bb_vs_mike_on.png"] forState:UIControlStateNormal];
         
-		NSLog(@"stop PTT");
+		NSLog(@"stop PTT - start fullscreen timer ");
 		[self setEnablePtt:NO];
         
-        
-        
+        [self tryToShowFullScreen];
         
 		UIButton * spk = (UIButton*) [self.view viewWithTag:SPK_CONTROL_BTN];
 		if (spk != nil && (self.streamer.disableAudio == TRUE))
@@ -1732,6 +1727,15 @@
     
 	pttButton.hidden = NO;
 	[self.view bringSubviewToFront:pttButton];
+    
+    //Disable fullscreen timer
+    if ( (fullScreenTimer != nil) && [fullScreenTimer isValid])
+	{
+		//invalidate the timer ..
+		[fullScreenTimer invalidate];
+		fullScreenTimer = nil;
+	}
+    
 }
 
 
