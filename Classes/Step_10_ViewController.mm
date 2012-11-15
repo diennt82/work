@@ -179,18 +179,26 @@
 #pragma  mark -
 #pragma mark Timer callbacks
 
+-(void) setStopScanning:(NSTimer *) exp
+{
+    should_stop_scanning = TRUE;
+    
+}
 - (void) wait_for_camera_to_reboot:(NSTimer *)exp
 {
-	num_scan_time --; 
-	
-	if (num_scan_time < 0)
-	{
-		//reach the scanning limit.. simply give up now.
-		//TODO: error handling 
-		NSLog(@" max scanning time reached.. stop now");
+
+    
+    if (should_stop_scanning == TRUE)
+    {
+        should_stop_scanning = FALSE;
+        NSLog(@" stop scanning now.. should be 4 mins");
 		[self setupFailed];
-		return ; 
-	}
+		return ;
+    }
+    else
+    {
+        NSLog(@"Continue scan..."); 
+    }
 	
 	
 	
@@ -417,11 +425,18 @@
 	
 	[self extractMasterKey:raw_data];
 	
-	num_scan_time = 60; //about 3 mins of scanning ... 
-	
+    should_stop_scanning = FALSE;
+    
+    [NSTimer scheduledTimerWithTimeInterval: SCAN_TIMEOUT
+									 target:self
+								   selector:@selector(setStopScanning:)
+								   userInfo:nil
+									repeats:NO];
+    
+    
 	// 2 of 3. wait for the camera to reboot completely
 	
-	[NSTimer scheduledTimerWithTimeInterval: 30//camera reboot time about 50secs  
+	[NSTimer scheduledTimerWithTimeInterval: 30.0//camera reboot time about 50secs
 									 target:self
 								   selector:@selector(wait_for_camera_to_reboot:)
 								   userInfo:nil
