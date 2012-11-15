@@ -31,10 +31,7 @@
 
 - (void)viewWillDisappear:(BOOL)animated {
 	NSArray *viewControllers = self.navigationController.viewControllers;
-	if (viewControllers.count > 1 && [viewControllers objectAtIndex:viewControllers.count-2] == self) {
-		// View is disappearing because a new view controller was pushed onto the stack
-		NSLog(@"New view controller was pushed");
-	} else if ([viewControllers indexOfObject:self] == NSNotFound) {
+	if ([viewControllers indexOfObject:self] == NSNotFound) {
 		// View is disappearing because it was popped from the stack
 		NSLog(@"View controller was popped --- We are closing down..task_cancelled = YES");
         
