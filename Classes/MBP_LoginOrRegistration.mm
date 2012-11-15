@@ -189,31 +189,6 @@
      [super dealloc];
 }
 
-- (BOOL)textFieldShouldReturn:(UITextField *)textField
-{
-     
-	[textField resignFirstResponder];
-    
-    
-    //NSLog(@" %d %d",[self.userName.text length], [self.password.text length] );
-    
-    if ([self.userName.text length] > 0
-        && [self.password.text length] > 0)
-    {
-        //enable Done btn
-        self.navigationItem.rightBarButtonItem.enabled = YES;
-    }
-    else
-    {
-        //enable Done btn
-        self.navigationItem.rightBarButtonItem.enabled = NO;
-
-    }
-    
-	return NO;
-}
-
-
 - (void)presentModallyOn:(UIViewController *)parent
 {
     UINavigationController *    navController;
@@ -252,6 +227,56 @@
     
     [bms_comm BMS_loginWithUser:self.temp_user_str AndPass:self.temp_pass_str];
 }
+
+#pragma mark -
+#pragma mark TextView  delegate
+
+- (BOOL)textFieldShouldReturn:(UITextField *)textField
+{
+    
+	[textField resignFirstResponder];
+    
+    
+    //NSLog(@" %d %d",[self.userName.text length], [self.password.text length] );
+#if 0
+    if ([self.userName.text length] > 0
+        && [self.password.text length] > 0)
+    {
+        //enable Done btn
+        self.navigationItem.rightBarButtonItem.enabled = YES;
+    }
+    else
+    {
+        //disable Done btn
+        self.navigationItem.rightBarButtonItem.enabled = NO;
+        
+    }
+#endif 
+    
+	return NO;
+}
+
+- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
+{
+    int tag = textField.tag;
+    
+    if (tag == 204 /*password tag */)
+    {
+        //NSLog(@"%@ len :%d ",textField.text, [textField.text length]);
+        if ( ([textField.text length] + [string length] ) >2)
+        {
+            //enable Done btn
+            self.navigationItem.rightBarButtonItem.enabled = YES;
+        }
+        else
+        {
+            //disable Done btn
+            self.navigationItem.rightBarButtonItem.enabled = NO;
+        }
+    }
+    return YES;
+}
+
 
 #pragma mark -
 #pragma mark Alertview delegate
@@ -563,6 +588,7 @@
     }
 	else 
 	{
+        NSLog(@"Invalid response: %@", response); 
 		//ERROR condition
 		self.progressView.hidden = YES;
 		

@@ -19,7 +19,7 @@
 //Master_key=BC0B87B2832B67FF58F11749F19C4915D4B876C2505D9CC7D0D06F79653C8B11
 #define MASTER_KEY @"Master_key="
 
-#define SCAN_TIMEOUT 4*60 //4 mins
+#define SCAN_TIMEOUT 3*60 //3 mins
 
 @interface Step_10_ViewController : UIViewController
 {

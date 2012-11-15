@@ -44,5 +44,6 @@
 -(void) query_snapshot_from_server:(NSArray *) cam_profiles;
 
 -(void) query_disabled_alert_list:(NSArray *) cam_profiles;
+-(NSString *) query_cam_ip_online:(NSString *) mac_no_colon;
 
 @end

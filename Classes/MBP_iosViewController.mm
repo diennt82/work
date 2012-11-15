@@ -143,6 +143,28 @@ return self;
 
 }
 
+
+- (void)wakeup_display_first_page:(NSTimer*) timer_exp
+{
+    
+	self.app_stage = APP_STAGE_INIT;
+    
+	//hide splash screen page
+	[self.view addSubview:backgroundView];
+    
+    MBP_FirstPage * firstPage;
+    firstPage = [[MBP_FirstPage alloc] initWithNibName:@"MBP_FirstPage"
+                                                bundle:nil
+                                      withConnDelegate:self];
+    
+    [self presentModalViewController:firstPage animated:NO];
+    
+    
+}
+
+
+
+
 -(void) startShowingCameraList
 {
 
@@ -360,16 +382,14 @@ return self;
 			{
 				NSLog(@" display first page ");
                 statusDialogLabel.hidden = YES;
+                [self dismissModalViewControllerAnimated:NO];
+        
+                [NSTimer scheduledTimerWithTimeInterval:0.01
+                                                 target:self
+                                               selector:@selector(wakeup_display_first_page:)
+                                               userInfo:nil
+                                                repeats:NO];
 
-				[self dismissModalViewControllerAnimated:NO];
-
-
-				//go Back to main menu
-				[NSTimer scheduledTimerWithTimeInterval:0.01
-					target:self
-					selector:@selector(wakeup_display_login:)
-					userInfo:nil
-					repeats:NO];
 				break;
 			}
 		case 8 : //back from login -failed Or logout

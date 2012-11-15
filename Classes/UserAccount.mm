@@ -35,6 +35,55 @@
     
 }
 
+
+-(NSString *) query_cam_ip_online:(NSString *) mac_w_colon
+{
+    
+    NSString * localIp = nil ;
+    
+    self.bms_comm = [[BMS_Communication alloc] initWithObject:self
+                                                     Selector:@selector(getCamListSuccess:)
+                                                 FailSelector:@selector(getCamListFailure:)
+                                                    ServerErr:@selector(getCamListServerUnreachable)];
+    NSData  * responseData = [self.bms_comm BMS_getCameraListBlockedWithUser:userName AndPass:self.userPass];
+    
+    if (responseData != nil)
+    {
+        
+        NSString * raw_data = [[[NSString alloc] initWithData:responseData encoding: NSASCIIStringEncoding] autorelease];
+        
+        
+        NSMutableArray * cam_profiles;
+        CamProfile *cp;
+        cam_profiles = [self parse_camera_list:raw_data];
+        
+        
+        if(cam_profiles != nil && [cam_profiles count] >0)
+        {
+            for (int i=0; i<[cam_profiles count]; i++)
+            {
+                cp = (CamProfile *)[cam_profiles objectAtIndex:i];
+                if (cp.mac_address != nil &&
+                    [cp.mac_address isEqualToString:[mac_w_colon uppercaseString]] &&
+                    cp.ip_address != nil )
+                {
+                    localIp = cp.ip_address;
+                    break; 
+                }
+            
+            }
+            
+        }
+        
+        
+    }
+
+
+
+    return localIp;
+
+}
+
 -(void) query_camera_list_blocked
 { 
     //NSLog(@"UserAccount: query_camera_list_blocked");
