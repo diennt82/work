@@ -26,7 +26,7 @@
 
     IBOutlet UIView * offlineView;
     IBOutlet UIView * emptyCameraListView; 
-    
+    IBOutlet UIView * progressView; 
        
     NSArray * listOfChannel; 
     

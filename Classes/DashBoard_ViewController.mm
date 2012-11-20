@@ -897,20 +897,33 @@
 
 -(IBAction)removeCamera:(id)sender
 {
-    CamChannel * ch = (CamChannel *) [listOfChannel objectAtIndex:((UIButton *)sender).tag];
+    //CamChannel * ch = (CamChannel *) [listOfChannel objectAtIndex:((UIButton *)sender).tag];
     
-    NSLog(@"Remove camera.. %@",ch.profile.name );
+    //NSLog(@"Remove camera.. %@",ch.profile.name );
     
     self.edittedChannelIndex = ((UIButton *)sender).tag;
+    
+   
+
     
     [self  showDialog:ALERT_REMOVE_CAM];
     
 }
 -(IBAction)renameCamera:(id)sender
 {
-    NSLog(@"Rename camera.. ");
-    
     self.edittedChannelIndex = ((UIButton *)sender).tag;
+    
+    //TODO:
+#if 0
+    UITableViewCell * thisCell = (UITableViewCell *)   ((UIButton *)sender).superview ;
+    //UITableView *tableView = (UITableView *)thisCell.superview;
+    NSIndexPath *indexPath = [cameraList indexPathForCell:thisCell];
+    
+    NSLog(@"new way to get index to camera: index = %d", indexPath.row);
+    self.edittedChannelIndex = indexPath.row;
+
+#endif
+       
     [self askForNewName];
     
     
@@ -1126,6 +1139,10 @@
     
     ch.profile.name = newName;
     
+    progressView.hidden  = NO;
+    [self.view addSubview:progressView];
+    [self.view bringSubviewToFront:progressView]; 
+    
 }
 
 
@@ -1136,6 +1153,23 @@
     
     [cameraList reloadData] ;
     
+    //TODO: save to offline data
+    
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+	NSString * userName = (NSString *) [userDefaults objectForKey:@"PortalUseremail"];
+	NSString * userPass = (NSString *) [userDefaults objectForKey:@"PortalPassword"];
+	
+
+    
+	UserAccount * account = [[UserAccount alloc] initWithUser:userName
+										AndPass:userPass
+								   WithListener: nil];
+    //RE- READ data from server and update offline record 
+    [account readCameraListAndUpdate];
+    
+    
+    progressView.hidden  = YES;
+
 }
 -(void) changeNameFailedWithError:(NSHTTPURLResponse*) error_response
 {

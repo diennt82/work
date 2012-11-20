@@ -85,25 +85,38 @@
 }
 
 -(void) query_camera_list_blocked
-{ 
-    //NSLog(@"UserAccount: query_camera_list_blocked");
+{
+    [self readCameraListAndUpdate];
+    
+    if (delegate != nil)
+    {
+        [delegate sendStatus:3];
+    }
+    //NSLog(@"UserAccount: query_camera_list_blocked END");
+}
+
+
+
+
+-(void) readCameraListAndUpdate
+{
     self.bms_comm = [[BMS_Communication alloc] initWithObject:self
-                                                     Selector:@selector(getCamListSuccess:) 
-                                                 FailSelector:@selector(getCamListFailure:) 
+                                                     Selector:@selector(getCamListSuccess:)
+                                                 FailSelector:@selector(getCamListFailure:)
                                                     ServerErr:@selector(getCamListServerUnreachable)];
     NSData  * responseData = [self.bms_comm BMS_getCameraListBlockedWithUser:userName AndPass:self.userPass];
     
     if (responseData != nil)
     {
-        [self getCamListSuccess:responseData]; 
+        [self getCamListSuccess:responseData];
     }
     else
     {
         [self getCamListServerUnreachable] ;
     }
-    
-    //NSLog(@"UserAccount: query_camera_list_blocked END");
+
 }
+
 
 -(void) query_snapshot_from_server:(NSArray *) cam_profiles
 {
@@ -147,11 +160,12 @@
 }
 
 
+///NOT USED --- 
 -(void) query_camera_list
 {
 	
    
-    
+#if 0
 	self.bms_comm = [[BMS_Communication alloc] initWithObject:self
 												Selector:@selector(getCamListSuccess:) 
 											FailSelector:@selector(getCamListFailure:) 
@@ -159,7 +173,7 @@
 	
 	//call get camlist query here 
 	[self.bms_comm BMS_getCameraListWithUser:self.userName AndPass:self.userPass];
-    
+#endif 
     
     
 }
@@ -196,7 +210,7 @@
 	/* sync_online_and_offline_data*/
 	[self sync_online_and_offline_data:cam_profiles];
 	
-	[delegate sendStatus:3];
+	
 	
 }
 

@@ -629,8 +629,6 @@
 	account = [[UserAccount alloc] initWithUser:self.temp_user_email
 										AndPass:self.temp_pass_str
 								   WithListener: delegate];
-	//[account query_camera_list];
-    
     //BLOCKED method
     [account query_camera_list_blocked];
 
