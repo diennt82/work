@@ -1031,7 +1031,21 @@
 			[alert show];
 			[alert release];
 			break;
-		}		
+		}
+            
+        case ALERT_CHANGE_NAME_FAILED:
+		{
+			NSString * msg =@"Failed to change camera name. Please try again later";
+			UIAlertView *alert = [[UIAlertView alloc]
+								  initWithTitle:@""
+								  message:msg
+								  delegate:nil
+								  cancelButtonTitle:@"OK"
+								  otherButtonTitles:nil];
+			[alert show];
+			[alert release];
+			break;
+		}
 
 		default:
 			break;
@@ -1527,6 +1541,8 @@
 	//Update BMS server with the new name;;
 	
     deviceName = newName;
+    progressView.hidden = NO;
+    [self.view bringSubviewToFront:progressView];
     
 	BMS_Communication * bms_comm; 
 	bms_comm = [[BMS_Communication alloc] initWithObject:self
@@ -1860,14 +1876,27 @@
 
     
     
+    progressView.hidden = YES;
+
+
+    
 }
 -(void) changeNameFailedWithError:(NSHTTPURLResponse*) error_response
 {
 	NSLog(@"changeNamed failed errorcode: ");
+    progressView.hidden = YES;
+    
+    deviceName = [self.cameraMenuItemValues objectForKey:_NAME_DICT_KEY];
+    
+    [self showDialog:ALERT_CHANGE_NAME_FAILED];
 }
 -(void) changeNameFailedServerUnreachable
 {
 	NSLog(@"server unreachable");
+    progressView.hidden = YES;
+    
+    deviceName = [self.cameraMenuItemValues objectForKey:_NAME_DICT_KEY];
+    [self showDialog:ALERT_CHANGE_NAME_FAILED];
 }
 
 
