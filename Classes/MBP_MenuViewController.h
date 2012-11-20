@@ -101,7 +101,7 @@
 	NSString * deviceIp; 
 	int devicePort; 
 	NSString * deviceMac;
-	NSString * deivceName; 
+	NSString * deviceName; 
 	BOOL deviceInLocal; 
 	NSString * httpUserName, * httpUserPass; 
 

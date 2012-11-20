@@ -67,5 +67,8 @@
 - (BOOL) shouldShowEditButton;
 - (BOOL) shouldShowScanButton;
 
+-(void) changeNameSuccessWithResponse:(NSData *) responsedata;
+-(void) changeNameFailedWithError:(NSHTTPURLResponse*) error_response;
+-(void) changeNameFailedServerUnreachable;
 
 @end

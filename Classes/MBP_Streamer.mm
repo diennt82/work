@@ -739,25 +739,23 @@
 						UIImage *image = [UIImage imageWithData:imageData];
 #if 1
                         image = [self adaptToCurrentOrientation:image];
-                       
-             
-
+                    
 						if (self.currentZoomLevel < 5.0f)
 						{
-							//CGRect frame = camView.oneCamView.videoView.frame;
+                            //currentZoomLevel = 1,2,3,4.. smaller means more magnified
                             
-							CGFloat newDeltaWidth =   image.size.width*(5.0f - self.currentZoomLevel)*2;
-							CGFloat newDeltaHeight =  image.size.height*(5.0f - self.currentZoomLevel)*2;
-							CGRect newRect = CGRectZero;
-							newRect.origin.x = - newDeltaWidth/2;
-							newRect.origin.y = - newDeltaHeight/2;
+                            CGFloat newDeltaWidth =   image.size.width*( self.currentZoomLevel*0.1);
+                            CGFloat newDeltaHeight =  image.size.height*( self.currentZoomLevel*0.1);
+                            CGRect newRect = CGRectZero;
+                            newRect.origin.x = - newDeltaWidth/2;
+                            newRect.origin.y = - newDeltaHeight/2;
                             
-							newRect.size.width =  image.size.width +newDeltaWidth;
-							newRect.size.height = image.size.height +newDeltaHeight;
+                            newRect.size.width =  image.size.width +newDeltaWidth;
+                            newRect.size.height = image.size.height +newDeltaHeight;
                             
-							//							NSLog(@"newsize :%f, %f %f %f", newRect.size.width, newRect.size.height,
-							//								  newDeltaWidth, newDeltaHeight);
-							image = [self imageWithImage:image scaledToRect:newRect];
+                            //NSLog(@"newsize :%f, %f %f %f", newRect.size.width, newRect.size.height,
+                            //	 newDeltaWidth, newDeltaHeight);
+                            image = [self imageWithImage:image scaledToRect:newRect];
                             
 						}
                         

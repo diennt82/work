@@ -25,6 +25,8 @@
 @synthesize  ptt_enabled,askForFWUpgradeOnce, enableControls, firstTimeConnect;
 
 
+@synthesize barBtnName;
+
 
 
 

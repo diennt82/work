@@ -126,11 +126,11 @@
 	devicePort = [userDefaults integerForKey:_DevicePort];
 	deviceIp = [userDefaults stringForKey:_DeviceIp];
 	deviceMac = [userDefaults stringForKey:_DeviceMac];
-	deivceName = [userDefaults stringForKey:_DeviceName];
+	deviceName = [userDefaults stringForKey:_DeviceName];
 	
 	commMode = [userDefaults integerForKey:_CommMode]; 
 	
-	[self.cameraMenuItemValues setObject:deivceName forKey:_NAME_DICT_KEY];
+	[self.cameraMenuItemValues setObject:deviceName forKey:_NAME_DICT_KEY];
 	
 	httpUserName = BASIC_AUTH_DEFAULT_USER;
 	httpUserPass = [CameraPassword getPasswordForCam:deviceMac];
@@ -160,7 +160,7 @@
         
     //Setup navigation bar
     [self.navigationController setNavigationBarHidden:NO];
-    self.navigationItem.title = deivceName;
+    self.navigationItem.title = deviceName;
 	
 	//setup array for picker view
 	levels = [[NSArray alloc] initWithObjects:@"Level1", @"Level2", @"Level3", @"Level4", nil];
@@ -1061,14 +1061,14 @@
 	UIAlertView * _myAlert = nil;
 	
 	_myAlert = [[UIAlertView alloc] initWithTitle:@"Change Camera Name" 
-										  message:@"Please enter new name for this camera\n\n" 
+										  message:@"Please enter new name for this camera\n\n\n" 
 										 delegate:self 
 								cancelButtonTitle:@"Cancel"
 								otherButtonTitles:@"Ok", 
 				nil];
 	_myAlert.tag = ALERT_CHANGE_NAME; //used for tracking later 
 
-    UITextField *myTextField = [[UITextField alloc] initWithFrame:CGRectMake(32.0, 75.0, 220.0, 25.0)];
+    UITextField *myTextField = [[UITextField alloc] initWithFrame:CGRectMake(32.0, 90.0, 220.0, 25.0)];
     [myTextField setBackgroundColor:[UIColor whiteColor]];
     myTextField.placeholder = @"New Name";
     myTextField.borderStyle = UITextBorderStyleRoundedRect;
@@ -1526,6 +1526,8 @@
 {
 	//Update BMS server with the new name;;
 	
+    deviceName = newName;
+    
 	BMS_Communication * bms_comm; 
 	bms_comm = [[BMS_Communication alloc] initWithObject:self
 												Selector:@selector(changeNameSuccessWithResponse:) 
@@ -1838,7 +1840,26 @@
 
 -(void) changeNameSuccessWithResponse:(NSData *) responsedata
 {
-	NSLog(@"changeName success");
+	NSLog(@"changeName success - reset the camera name now:");
+    //1. Change title
+     self.navigationItem.title = deviceName;
+    [self.cameraMenuItemValues setObject:deviceName forKey:_NAME_DICT_KEY];
+    [cameraMenu reloadData];
+   
+    //2. Change camera name in cameraview.selected channel
+    NSArray *viewControllerArray = [self.navigationController viewControllers];
+    int parentViewControllerIndex = [viewControllerArray count] - 2;
+    CameraViewController * camview = [viewControllerArray objectAtIndex:parentViewControllerIndex] ;
+    camview.selected_channel.profile.name = deviceName;
+    camview.barBtnName.title = deviceName; 
+
+    //3. Change name in dashboard.
+    UITabBarController * tabs = [viewControllerArray objectAtIndex:(parentViewControllerIndex-1)] ;
+    DashBoard_ViewController * db = [tabs.viewControllers objectAtIndex:0];
+    [db changeNameSuccessWithResponse:nil];
+
+    
+    
 }
 -(void) changeNameFailedWithError:(NSHTTPURLResponse*) error_response
 {
