@@ -20,7 +20,6 @@
 		3803A8761601981100B4DD97 /* photo_item.png in Resources */ = {isa = PBXBuildFile; fileRef = 3803A8751601981100B4DD97 /* photo_item.png */; };
 		3803A87A1602D44100B4DD97 /* temp_alert.png in Resources */ = {isa = PBXBuildFile; fileRef = 3803A8781602D44100B4DD97 /* temp_alert.png */; };
 		3803A87B1602D44100B4DD97 /* voice_alert.png in Resources */ = {isa = PBXBuildFile; fileRef = 3803A8791602D44100B4DD97 /* voice_alert.png */; };
-		3804A6F8162434C200216E45 /* beep.wav in Resources */ = {isa = PBXBuildFile; fileRef = 3804A6F7162434C200216E45 /* beep.wav */; };
 		3809A42C15E49A4B0098BBC0 /* bb_pic_1.png in Resources */ = {isa = PBXBuildFile; fileRef = 3809A42B15E49A4B0098BBC0 /* bb_pic_1.png */; };
 		3809A42F15E4A2520098BBC0 /* bb_melody_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 3809A42D15E4A2520098BBC0 /* bb_melody_icon.png */; };
 		3809A43015E4A2520098BBC0 /* bb_melody_off_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 3809A42E15E4A2520098BBC0 /* bb_melody_off_icon.png */; };
@@ -69,6 +68,7 @@
 		38A62EA015CA2C9300DEA520 /* bb_recording_btn.png in Resources */ = {isa = PBXBuildFile; fileRef = 38A62E9E15CA2C9300DEA520 /* bb_recording_btn.png */; };
 		38A62EA115CA2C9300DEA520 /* bb_cam_btn.png in Resources */ = {isa = PBXBuildFile; fileRef = 38A62E9F15CA2C9300DEA520 /* bb_cam_btn.png */; };
 		38A62EA315CA2E1100DEA520 /* bb_recording_btn_d.png in Resources */ = {isa = PBXBuildFile; fileRef = 38A62EA215CA2E1100DEA520 /* bb_recording_btn_d.png */; };
+		38A7E0E6165B7D8F00C542A6 /* beep.wav in Resources */ = {isa = PBXBuildFile; fileRef = 38A7E0E5165B7D8F00C542A6 /* beep.wav */; };
 		38AC740E15D8CC7E00618188 /* zoom_bar_bg.png in Resources */ = {isa = PBXBuildFile; fileRef = 38AC740D15D8CC7E00618188 /* zoom_bar_bg.png */; };
 		38AC741515D9199E00618188 /* account_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 38AC741315D9199E00618188 /* account_icon.png */; };
 		38AC741815D91A2400618188 /* scan_camera_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 38AC741715D91A2400618188 /* scan_camera_icon.png */; };
@@ -200,7 +200,6 @@
 		3803A8751601981100B4DD97 /* photo_item.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = photo_item.png; sourceTree = "<group>"; };
 		3803A8781602D44100B4DD97 /* temp_alert.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = temp_alert.png; sourceTree = "<group>"; };
 		3803A8791602D44100B4DD97 /* voice_alert.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = voice_alert.png; sourceTree = "<group>"; };
-		3804A6F7162434C200216E45 /* beep.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = beep.wav; sourceTree = "<group>"; };
 		3809A42B15E49A4B0098BBC0 /* bb_pic_1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bb_pic_1.png; sourceTree = "<group>"; };
 		3809A42D15E4A2520098BBC0 /* bb_melody_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bb_melody_icon.png; sourceTree = "<group>"; };
 		3809A42E15E4A2520098BBC0 /* bb_melody_off_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bb_melody_off_icon.png; sourceTree = "<group>"; };
@@ -260,6 +259,7 @@
 		38A62E9E15CA2C9300DEA520 /* bb_recording_btn.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bb_recording_btn.png; sourceTree = "<group>"; };
 		38A62E9F15CA2C9300DEA520 /* bb_cam_btn.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bb_cam_btn.png; sourceTree = "<group>"; };
 		38A62EA215CA2E1100DEA520 /* bb_recording_btn_d.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bb_recording_btn_d.png; sourceTree = "<group>"; };
+		38A7E0E5165B7D8F00C542A6 /* beep.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = beep.wav; sourceTree = "<group>"; };
 		38AC740D15D8CC7E00618188 /* zoom_bar_bg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = zoom_bar_bg.png; sourceTree = "<group>"; };
 		38AC741315D9199E00618188 /* account_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = account_icon.png; sourceTree = "<group>"; };
 		38AC741715D91A2400618188 /* scan_camera_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = scan_camera_icon.png; sourceTree = "<group>"; };
@@ -665,7 +665,7 @@
 			isa = PBXGroup;
 			children = (
 				97DA2379164231BB00EE2528 /* terms_of_use.html */,
-				3804A6F7162434C200216E45 /* beep.wav */,
+				38A7E0E5165B7D8F00C542A6 /* beep.wav */,
 				38362C1C15FDEE400077E188 /* alert_history.sqlite */,
 				97E3AAD5147E257400A0922A /* iTunesArtWork */,
 				2899E5210DE3E06400AC0155 /* MBP_iosViewController.xib */,
@@ -909,11 +909,11 @@
 				38167AC51611AB1800B7FA0A /* bb_ptt_icon_d.png in Resources */,
 				380C430116195047001434C0 /* AlertSettingViewController.xib in Resources */,
 				38FC1EBA1622E9350082E7F9 /* FWUpgradeView.xib in Resources */,
-				3804A6F8162434C200216E45 /* beep.wav in Resources */,
 				97DA237A164231BB00EE2528 /* terms_of_use.html in Resources */,
 				97DA238516425FA100EE2528 /* ToUViewController.xib in Resources */,
 				38F3D1B1164A467300BB0C77 /* MBP_MenuProgress_portrait.xib in Resources */,
 				38F3D1B3164A46E000BB0C77 /* MBP_MenuProgress_land.xib in Resources */,
+				38A7E0E6165B7D8F00C542A6 /* beep.wav in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
