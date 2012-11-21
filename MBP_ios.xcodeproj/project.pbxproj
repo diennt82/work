@@ -144,8 +144,6 @@
 		9770CDF2143076CD009E69EF /* CoreAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9770CDF1143076CD009E69EF /* CoreAudio.framework */; };
 		9770CDF8143076DD009E69EF /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9770CDF7143076DD009E69EF /* AudioToolbox.framework */; };
 		9770CEC81430783A009E69EF /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9770CEC71430783A009E69EF /* CFNetwork.framework */; };
-		977D9A11143DA29100ABA946 /* MBP_RemoteAccessViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 977D9A0F143DA29100ABA946 /* MBP_RemoteAccessViewController.m */; };
-		977D9A12143DA29100ABA946 /* MBP_RemoteAccessViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 977D9A10143DA29100ABA946 /* MBP_RemoteAccessViewController.xib */; };
 		97987CCD154687490066C49B /* background.png in Resources */ = {isa = PBXBuildFile; fileRef = 97987CCC154687490066C49B /* background.png */; };
 		97987CCF154688110066C49B /* partition_bar.png in Resources */ = {isa = PBXBuildFile; fileRef = 97987CCE154688110066C49B /* partition_bar.png */; };
 		97987CD815468C2E0066C49B /* MBP_FirstPage.m in Sources */ = {isa = PBXBuildFile; fileRef = 97987CD615468C2E0066C49B /* MBP_FirstPage.m */; };
@@ -159,8 +157,6 @@
 		97A3BF4715453F69000C3546 /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 97A3BF4615453F69000C3546 /* CoreFoundation.framework */; };
 		97A3C00515455054000C3546 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 97A3C00415455054000C3546 /* SystemConfiguration.framework */; };
 		97B8F6671439B58000924E84 /* DeviceConfiguration.m in Sources */ = {isa = PBXBuildFile; fileRef = 97B8F6661439B58000924E84 /* DeviceConfiguration.m */; };
-		97C0626A143AF6AC0016286D /* MBP_DeviceScanViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 97C06268143AF6AC0016286D /* MBP_DeviceScanViewController.m */; };
-		97C0626B143AF6AC0016286D /* MBP_DeviceScanViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 97C06269143AF6AC0016286D /* MBP_DeviceScanViewController.xib */; };
 		97C49AB0154784F4008B7D03 /* SetupData.m in Sources */ = {isa = PBXBuildFile; fileRef = 97C49AAF154784F4008B7D03 /* SetupData.m */; };
 		97C49B341547B410008B7D03 /* MBP_CamListView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 97C49B331547B410008B7D03 /* MBP_CamListView.xib */; };
 		97C49B381547B5AC008B7D03 /* CamListItemView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 97C49B371547B5AC008B7D03 /* CamListItemView.xib */; };
@@ -368,9 +364,6 @@
 		9770CDF1143076CD009E69EF /* CoreAudio.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreAudio.framework; path = System/Library/Frameworks/CoreAudio.framework; sourceTree = SDKROOT; };
 		9770CDF7143076DD009E69EF /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		9770CEC71430783A009E69EF /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
-		977D9A0E143DA29100ABA946 /* MBP_RemoteAccessViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MBP_RemoteAccessViewController.h; sourceTree = "<group>"; };
-		977D9A0F143DA29100ABA946 /* MBP_RemoteAccessViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MBP_RemoteAccessViewController.m; sourceTree = "<group>"; };
-		977D9A10143DA29100ABA946 /* MBP_RemoteAccessViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MBP_RemoteAccessViewController.xib; sourceTree = "<group>"; };
 		97987CCC154687490066C49B /* background.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = background.png; sourceTree = "<group>"; };
 		97987CCE154688110066C49B /* partition_bar.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = partition_bar.png; sourceTree = "<group>"; };
 		97987CD515468C2E0066C49B /* MBP_FirstPage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MBP_FirstPage.h; sourceTree = "<group>"; };
@@ -394,9 +387,6 @@
 		97A3C00415455054000C3546 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		97B8F6651439B58000924E84 /* DeviceConfiguration.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DeviceConfiguration.h; sourceTree = "<group>"; };
 		97B8F6661439B58000924E84 /* DeviceConfiguration.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DeviceConfiguration.m; sourceTree = "<group>"; };
-		97C06267143AF6AC0016286D /* MBP_DeviceScanViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MBP_DeviceScanViewController.h; sourceTree = "<group>"; };
-		97C06268143AF6AC0016286D /* MBP_DeviceScanViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MBP_DeviceScanViewController.m; sourceTree = "<group>"; };
-		97C06269143AF6AC0016286D /* MBP_DeviceScanViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MBP_DeviceScanViewController.xib; sourceTree = "<group>"; };
 		97C49AAE154784F4008B7D03 /* SetupData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SetupData.h; sourceTree = "<group>"; };
 		97C49AAF154784F4008B7D03 /* SetupData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SetupData.m; sourceTree = "<group>"; };
 		97C49B331547B410008B7D03 /* MBP_CamListView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = MBP_CamListView.xib; path = ../MBP_CamListView.xib; sourceTree = "<group>"; };
@@ -481,12 +471,6 @@
 				97B8F6651439B58000924E84 /* DeviceConfiguration.h */,
 				97B8F6661439B58000924E84 /* DeviceConfiguration.m */,
 				97987D2C154698100066C49B /* ConnectionMethodDelegate.h */,
-				97C06267143AF6AC0016286D /* MBP_DeviceScanViewController.h */,
-				97C06268143AF6AC0016286D /* MBP_DeviceScanViewController.m */,
-				97C06269143AF6AC0016286D /* MBP_DeviceScanViewController.xib */,
-				977D9A0E143DA29100ABA946 /* MBP_RemoteAccessViewController.h */,
-				977D9A0F143DA29100ABA946 /* MBP_RemoteAccessViewController.m */,
-				977D9A10143DA29100ABA946 /* MBP_RemoteAccessViewController.xib */,
 				97534518143325600037DDAC /* AiBallVideoListViewController.h */,
 				97534519143325600037DDAC /* AiBallVideoListViewController.m */,
 				9753451A143325600037DDAC /* AiBallVideoListViewController.xib */,
@@ -824,8 +808,6 @@
 				2899E5220DE3E06400AC0155 /* MBP_iosViewController.xib in Resources */,
 				9753451C143325610037DDAC /* AiBallVideoListViewController.xib in Resources */,
 				9753452C143325C30037DDAC /* AiBallPlayViewController.xib in Resources */,
-				97C0626B143AF6AC0016286D /* MBP_DeviceScanViewController.xib in Resources */,
-				977D9A12143DA29100ABA946 /* MBP_RemoteAccessViewController.xib in Resources */,
 				97D9A1BD143EB03A000E3533 /* video_error.png in Resources */,
 				97E3AAD6147E257400A0922A /* iTunesArtWork in Resources */,
 				97E3AAD8147E25A600A0922A /* mbp_icon57x57.png in Resources */,
@@ -946,10 +928,8 @@
 				9753452B143325C30037DDAC /* AiBallPlayViewController.m in Sources */,
 				97534535143325EE0037DDAC /* AiBallAviPlayer.m in Sources */,
 				97B8F6671439B58000924E84 /* DeviceConfiguration.m in Sources */,
-				97C0626A143AF6AC0016286D /* MBP_DeviceScanViewController.m in Sources */,
 				97F0F04C143C0CA00076B749 /* CamChannel.m in Sources */,
 				97F0F168143C45FA0076B749 /* MBP_Streamer.mm in Sources */,
-				977D9A11143DA29100ABA946 /* MBP_RemoteAccessViewController.m in Sources */,
 				97A3BD6F1545094F000C3546 /* HttpCommunication.m in Sources */,
 				97A3BF0D15453A39000C3546 /* CameraPassword.m in Sources */,
 				97987CD815468C2E0066C49B /* MBP_FirstPage.m in Sources */,

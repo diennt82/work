@@ -115,7 +115,7 @@
     
     int app_stage; 
 
-	
+	int nextCameraToScanIndex;
 }
 
 @property (nonatomic, retain) IBOutlet UIView * progressView; 
@@ -138,6 +138,8 @@
 - (void) initialize ;
 - (void) scan_for_devices;
 + (void)getBroadcastAddress:(NSString **) bcast AndOwnIp:(NSString**) ownip;
++ (void)getBroadcastAddress:(NSString **) bcast AndOwnIp:(NSString**) ownip ipasLong:(long *) _ownip;
+
 - (NSString * ) requestURLSync:(NSString*)url withTimeOut:(NSTimeInterval) timeout;
 - (void ) requestURLSync_bg:(NSString*)url;
 

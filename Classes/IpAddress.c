@@ -39,6 +39,7 @@ char *broadcast_addrs[MAXADDRS];
 char *hw_addrs[MAXADDRS];
 unsigned long ip_addrs[MAXADDRS];
 
+
 static int   nextAddr = 0;
 
 void InitAddresses()
@@ -48,6 +49,7 @@ void InitAddresses()
 	{
 		if_names[i] = ip_names[i] = hw_addrs[i] = NULL;
 		ip_addrs[i] = INVALID_IP;
+
 	}
 }
 
@@ -60,6 +62,7 @@ void FreeAddresses()
 		if (ip_names[i] != 0) free(ip_names[i]);
 		if (hw_addrs[i] != 0) free(hw_addrs[i]);
 		ip_addrs[i] = INVALID_IP;
+
 	}
 	nextAddr = 0; //reinit 
 	InitAddresses();
@@ -71,7 +74,7 @@ int GetIPAddresses()
 	char                buffer[BUFFERSIZE], *ptr, lastname[IFNAMSIZ], *cptr;
 	struct ifconf       ifc;
 	struct ifreq        *ifr, ifrcopy;
-	struct sockaddr_in	*sin, *broadcast;
+	struct sockaddr_in	*sin, *broadcast, * netmask;
 	
 	char temp[80];
 	
@@ -81,6 +84,7 @@ int GetIPAddresses()
 	{
 		if_names[i] = ip_names[i] = NULL;
 		ip_addrs[i] = INVALID_IP;
+
 	}
 	
 	sockfd = socket(AF_INET, SOCK_DGRAM, 0);
@@ -152,7 +156,9 @@ int GetIPAddresses()
 		
 		ip_addrs[nextAddr] = sin->sin_addr.s_addr;
 		
-		
+
+        
+        
 		/** get the broadcast addresses */
 		//ifrcopy1 = *ifr;
 		ioctl(sockfd, SIOCGIFBRDADDR, ifr);
@@ -167,7 +173,7 @@ int GetIPAddresses()
 		}
 		strcpy(broadcast_addrs[nextAddr], temp);
 		
-		
+        
 		++nextAddr;
 	}
 	
