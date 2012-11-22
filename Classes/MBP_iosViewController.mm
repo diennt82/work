@@ -672,9 +672,10 @@ return self;
     if ( restore_successful == TRUE)
 	{
 
-        if ( [self isCurrentConnection3G])
+        if ( [self isCurrentConnection3G] ||
+            [self.restored_profiles count] ==0 )
         {
-            NSLog(@" Connection over 3g --> Skip scanning all together");
+            NSLog(@" Connection over 3g OR empty cam list  --> Skip scanning all together");
             [self finish_scanning];
         }
         else

@@ -83,6 +83,7 @@
 		38C79E2B15C7C44A006EE378 /* CameraViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 38C79E2A15C7C446006EE378 /* CameraViewController.mm */; };
 		38C7A72415CA75AC00564BCA /* camera_offline.png in Resources */ = {isa = PBXBuildFile; fileRef = 38C7A72115CA75AC00564BCA /* camera_offline.png */; };
 		38C7A72515CA75AC00564BCA /* camera_online.png in Resources */ = {isa = PBXBuildFile; fileRef = 38C7A72215CA75AC00564BCA /* camera_online.png */; };
+		38C7DE7A165DDF9E00926EA1 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 38C7DE79165DDF9E00926EA1 /* Default-568h@2x.png */; };
 		38CA70A615F7669D002CD1C5 /* NSData+Conversion.h in Sources */ = {isa = PBXBuildFile; fileRef = 38CA70A315F75E15002CD1C5 /* NSData+Conversion.h */; };
 		38CA70A715F7669D002CD1C5 /* NSData+Conversion.m in Sources */ = {isa = PBXBuildFile; fileRef = 38CA70A515F75E53002CD1C5 /* NSData+Conversion.m */; };
 		38CC5A1515DCBBC300067C54 /* QuickViewCamera_ViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 38CC5A1315DCBBC100067C54 /* QuickViewCamera_ViewController.mm */; };
@@ -276,6 +277,7 @@
 		38C79E2A15C7C446006EE378 /* CameraViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = CameraViewController.mm; sourceTree = "<group>"; };
 		38C7A72115CA75AC00564BCA /* camera_offline.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = camera_offline.png; sourceTree = "<group>"; };
 		38C7A72215CA75AC00564BCA /* camera_online.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = camera_online.png; sourceTree = "<group>"; };
+		38C7DE79165DDF9E00926EA1 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
 		38CA70A315F75E15002CD1C5 /* NSData+Conversion.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSData+Conversion.h"; sourceTree = "<group>"; };
 		38CA70A515F75E53002CD1C5 /* NSData+Conversion.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "NSData+Conversion.m"; sourceTree = "<group>"; };
 		38CC5A1215DCBBBF00067C54 /* QuickViewCamera_ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QuickViewCamera_ViewController.h; sourceTree = "<group>"; };
@@ -623,6 +625,7 @@
 		29B97314FDCFA39411CA2CEA /* CustomTemplate */ = {
 			isa = PBXGroup;
 			children = (
+				38C7DE79165DDF9E00926EA1 /* Default-568h@2x.png */,
 				3812F82315C8BEC700DADFA6 /* images13 */,
 				97987CC1154683700066C49B /* images12 */,
 				9770CB87143032BC009E69EF /* images */,
@@ -896,6 +899,7 @@
 				38F3D1B1164A467300BB0C77 /* MBP_MenuProgress_portrait.xib in Resources */,
 				38F3D1B3164A46E000BB0C77 /* MBP_MenuProgress_land.xib in Resources */,
 				38A7E0E6165B7D8F00C542A6 /* beep.wav in Resources */,
+				38C7DE7A165DDF9E00926EA1 /* Default-568h@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1127,8 +1131,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
-				CODE_SIGN_IDENTITY = "iPhone Developer: Paul Tsui (KSWYEMQH37)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Paul Tsui (KSWYEMQH37)";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Binatone Electronics International Limited";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Binatone Electronics International Limited";
 				GCC_C_LANGUAGE_STANDARD = c99;
 				GCC_VERSION = "";
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
@@ -1140,8 +1144,8 @@
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
 				OTHER_LDFLAGS = "";
 				PRODUCT_NAME = "Baby Cam";
-				PROVISIONING_PROFILE = "20C4ABEF-C855-40F9-9119-0A5E6BB18FAB";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "20C4ABEF-C855-40F9-9119-0A5E6BB18FAB";
+				PROVISIONING_PROFILE = "9F236AE1-DF09-4DA1-A121-E582825128BD";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "9F236AE1-DF09-4DA1-A121-E582825128BD";
 				SDKROOT = iphoneos;
 				USER_HEADER_SEARCH_PATHS = "\"$(SRCROOT)/external_include\"/**";
 				VALID_ARCHS = "armv7 armv7s";

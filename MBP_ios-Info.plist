@@ -11,7 +11,7 @@
 	<key>CFBundleIconFile</key>
 	<string>mbp_icon57x57.png</string>
 	<key>CFBundleIdentifier</key>
-	<string>com.binatonetelecom.msc3</string>
+	<string>com.binatonetelecom.monitoreverywhere</string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>

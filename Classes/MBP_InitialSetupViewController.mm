@@ -135,7 +135,7 @@
 -(IBAction)handleBackButton:(id)sender
 {
     //simply relogin
-    [self.delegate sendStatus:3];//rescan 
+    [self.delegate sendStatus:AFTER_DEL_RELOGIN];//rescan 
 }
 
 
@@ -143,7 +143,7 @@
 
 - (IBAction)goBackToFirstScreen:(id)sender
 {
-    [self.delegate sendStatus:7];
+    [self.delegate sendStatus:FRONT_PAGE];
 }
 
 - (IBAction)handleButtonPress:(id)sender
