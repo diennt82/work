@@ -20,6 +20,7 @@ extern char *broadcast_addrs[MAXADDRS];
 extern char *hw_addrs[MAXADDRS];
 extern unsigned long ip_addrs[MAXADDRS];
 
+
 // Function prototypes
 #ifdef __cplusplus
 extern "C"

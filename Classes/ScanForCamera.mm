@@ -48,7 +48,7 @@
 	
 }
 
-
+//// OLD and NOT USED
 - (void) scan_for_devices
 {
 	
@@ -111,7 +111,11 @@
 	
 }
 
-// scan for a specific device 
+
+
+
+// scan for a specific device
+// @mac : mac address with colon eg: 11:22:33:44:55:66
 - (void) scan_for_device:(NSString*) mac
 {
 	
@@ -162,7 +166,7 @@
 	
 	BOOL status;
 	status = [udpSock bindToPort:10001 error:nil];
-	//[udpSock enableBroadcast:YES error: nil];
+
 	[udpSock receiveWithTimeout:5 tag:1];
 	
 	//NSLog(@"buff size: %d", [udpSock maxReceiveBufferSize]);
@@ -178,31 +182,12 @@
 	
 }
 
+
+
+
 - (void) scan_for_devices_done
 {
-#if 0 //20120913: DONT SCan for local snapshot
-    HttpCommunication * dev_com = [[HttpCommunication alloc] init]; 
-    CamProfile * cp;
-    NSData * snap_data;
-    // scan for snap shot locally
-    for (int i =0; i< [scan_results count]; i++)
-    {
-        cp = (CamProfile *) [scan_results objectAtIndex:i]; 
-        dev_com.device_ip = cp.ip_address; 
-        
-        snap_data = [dev_com getSnapshot];
-        
-        if (snap_data != nil)
-        {
-            cp.profileImage = [UIImage imageWithData:snap_data];
-        }
-        else {
-            NSLog(@"NO local image"); 
-        }
-    }
-    
-    NSLog(@"Scan locally done"); 
-#endif 
+
 	@synchronized (self)
 	{
 		deviceScanInProgress = NO;
@@ -294,7 +279,7 @@
 	
 	data_str = [NSString stringWithUTF8String:(char*)[data bytes]];
 	
-	//NSLog(@"000 rcv fr: %@ : msg: %@", host, data_str);
+	NSLog(@"000 rcv fr: %@ : msg: %@", host, data_str);
 	
 	/* verify signature */
 	if ([data_str hasPrefix:@"Mot-Cam"])
@@ -349,7 +334,7 @@
  **/
 - (void)onUdpSocket:(AsyncUdpSocket *)sock didNotReceiveDataWithTag:(long)tag dueToError:(NSError *)error
 {
-	//NSLog(@"RCV data err: %x (%@)", [error code], [error localizedDescription]);
+	NSLog(@"RCV data err: %x (%@)", [error code], [error localizedDescription]);
 	
 	/* close socket */
 	[sock close];

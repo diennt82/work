@@ -98,6 +98,8 @@
 #define CHECK_FW_UPGRADE @"check_fw_upgrade"
 #define REQUEST_FW_UPGRADE @"request_fw_upgrade"
 
+#define GET_MAC_ADDRESS @"get_mac_address"
+
 
 #define BURNING_PROCESS @"burning_process :"
 

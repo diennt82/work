@@ -16,10 +16,9 @@
 #import "ADPCMDecoder.h"
 #import "AsyncUdpSocket.h"
 
-#import "MBP_DeviceScanViewController.h"
+
 #import "CameraPassword.h"
-
-
+#include <ifaddrs.h>
 #import <sys/socket.h>
 #import <netinet/in.h>
 #import  "IpAddress.h"
@@ -273,17 +272,14 @@ return self;
 /**** Main program switching point is here *****/ 
 - (void)sendStatus:(int) method
 {
-	//TODO: #define all this constants
 	switch (method) {
-		case 1: 
+		case SETUP_CAMERA: 
 			{
 
 				NSLog(@">>> SETUP ");
 				[self dismissModalViewControllerAnimated:NO	];
 
                 self.app_stage = APP_STAGE_SETUP;
-
-
 
 				//Load the next xib
 				MBP_InitialSetupViewController *initSeupViewController = [[MBP_InitialSetupViewController alloc]
@@ -296,7 +292,7 @@ return self;
 
 				break;
 			}
-		case 2: //GOTO ROUTER mode - Login 
+		case LOGIN: //GOTO ROUTER mode - Login
 			{
 				//NSLog(@">>> Login "); 
 
@@ -319,19 +315,22 @@ return self;
 
 				break;
 			}
-		case 3:
+		case SCAN_CAMERA:
 			//may be offline mode
+            NSLog(@"start scanning"); 
             statusDialogLabel.hidden = NO;
 			self.app_stage = APP_STAGE_LOGGED_IN;
 
-			[self scan_for_devices];
+			[self performSelector:@selector(scan_for_devices)
+                       withObject:nil
+                       afterDelay:0.1];
 
 			//Back from login- login success 
 			[self dismissModalViewControllerAnimated:NO];
 			self.progressView.hidden = NO;
 
 			break; 
-		case 4:
+		case AFTER_ADD_RELOGIN:
 			{
 				NSLog(@" back from adding cam. relogin -- to get the new cam data");
 
@@ -349,7 +348,7 @@ return self;
 
 				break; 
 			}
-		case 5: //Just remove camera, currently in CameraMenu page 
+		case AFTER_DEL_RELOGIN: //Just remove camera, currently in CameraMenu page 
 			{
 
                 statusDialogLabel.hidden = YES;
@@ -367,7 +366,7 @@ return self;
 
 				break;
 			}
-		case  6: //USED by AppDelegate as well.. please check if modifying this case
+		case  BACK_FRM_MENU_NOLOAD: //USED by AppDelegate as well.. please check if modifying this case
 			{
 				NSLog(@"Back from menu");
                 statusDialogLabel.hidden = YES;
@@ -378,7 +377,7 @@ return self;
 
 				break;
 			}
-		case  7:
+		case  FRONT_PAGE:
 			{
 				NSLog(@" display first page ");
                 statusDialogLabel.hidden = YES;
@@ -392,7 +391,7 @@ return self;
 
 				break;
 			}
-		case 8 : //back from login -failed Or logout
+		case LOGIN_FAILED_OR_LOGOUT : //back from login -failed Or logout
 			{
                 statusDialogLabel.hidden = YES;
 				[self dismissModalViewControllerAnimated:NO	];
@@ -650,124 +649,331 @@ return self;
 
 
 #pragma mark -
-#pragma mark Connectivity
+#pragma mark Scan For cameras
 
 
 - (void) scan_for_devices
 {
-	ScanForCamera * scanner; 
+#if 0
+    BOOL restore_successful = FALSE;
+	restore_successful = [self restoreConfigData];
+    
+    ScanForCamera * scanner;
 	scanner = [[ScanForCamera alloc] initWithNotifier:self];
 	[scanner scan_for_devices];
-}
-- (void)scan_done:(NSArray *) _scan_results
-{
-	//Sync
-
+    
+    NSLog(@"Start Scan for camera 02");
+    
+#else
+    
 	BOOL restore_successful = FALSE;
-	CamChannel * ch = nil;
 	restore_successful = [self restoreConfigData];
-	CamProfile * cp = nil;
-
-	//Hide it, since we're done
-	self.progressView.hidden = YES;
-
-
-	if ( restore_successful == TRUE)
+    
+    if ( restore_successful == TRUE)
 	{
 
-
-		if (_scan_results != nil &&
-				restored_profiles != nil &&
-				[restored_profiles count] >0)
-		{
-
-			for (int i=0; i<[restored_profiles count]; i++)
-			{
-				if ( [restored_profiles objectAtIndex:i] == nil)
-				{
-					continue;
-				}
-				cp = [restored_profiles objectAtIndex:i]; 
-				cp.isInLocal = FALSE;
-				for (int j = 0; j < [_scan_results count]; j++)
-				{
-					CamProfile * cp1 = (CamProfile *) [_scan_results objectAtIndex:j];
-
-
-					if ( [cp.mac_address isEqualToString:cp1.mac_address])
-					{
-
-
-						cp.ip_address = cp1.ip_address;
-
-						if (cp1.profileImage != nil)
-						{
-							cp.profileImage = cp1.profileImage;
-						}
-
-						cp.isInLocal = TRUE; 
-						cp.port = 80;//localport is always 80
-						//cp setMelodyStatus- TODO
-						//cp setVersionString- TODO
-
-
-					}
-
-				}
-
-			}
-
-
-			/* Rebinding local cameras to restored channel
-			   In the case of remote access, the mac address is set to an 
-			   invalid value "NOTSET" which will not match any MAC address gathered thru 
-			   scanning.
-			 */
-			for (int i = 0; i< [channel_array count]; i++)
-			{
-				ch = (CamChannel*) [channel_array objectAtIndex:i];
-
-				if ( ch.profile != nil)
-				{
-					for (int j = 0; j < [restored_profiles count]; j++)
-					{
-						CamProfile * cp = (CamProfile *) [restored_profiles objectAtIndex:j];
-						if ( !cp.isSelected //&&  
-								//[cp.mac_address isEqualToString:ch.profile.mac_address]
-						   )
-						{
-							//Re-bind camera - channel
-
-							[ch setCamProfile:cp]; 
-							cp.isSelected = TRUE;
-							[cp setChannel:ch];
-							break;
-
-						}
-
-
-					}
-				}
-				else {
-
-					//NSLog(@"channel profile = nil");
-				}
-
-
-			}
-
-		}
-
-
-
-		/* show the camera list page now */
-		[self startShowingCameraList];
-
-	}
-
+        if ( [self isCurrentConnection3G])
+        {
+            NSLog(@" Connection over 3g --> Skip scanning all together");
+            [self finish_scanning];
+        }
+        else
+        {
+            //start
+            nextCameraToScanIndex = 0;
+            [self scan_next_camera:self.restored_profiles index:nextCameraToScanIndex];
+        }
+        
+        
+    }
+    
+     
+#endif
 }
 
-#pragma mark - 
+
+
+
+
+- (void) scan_next_camera:(NSArray *) profiles index:(int) i
+{
+    NSMutableArray * finalResult = [[NSMutableArray alloc] init];
+    CamProfile * cp = nil;
+    
+    BOOL skipScan = FALSE;
+
+    cp =(CamProfile *) [profiles objectAtIndex:i];
+        
+    if (cp != nil &&
+        cp.mac_address !=nil)
+    {
+        
+        //Check if we are in the same network as the camera.. IF so
+        // Try to scan .. otherwise... no point ..
+        if ([self isInTheSameNetworkAsCamera:cp ])
+        {
+            skipScan = [self isCurrentIpAddressValid:cp];
+            
+            if (skipScan)
+            {
+                //Dont need to scan.. call scan_done directly
+                [finalResult addObject:cp];
+                
+                [self performSelector:@selector(scan_done:)
+                           withObject:finalResult afterDelay:0.1];
+                
+            }
+            else // NEED to do local scan
+            {
+                
+                ScanForCamera * scanner;
+                scanner = [[ScanForCamera alloc] initWithNotifier:self];
+                [scanner scan_for_device:cp.mac_address];
+                
+                
+            } /* skipScan = false*/
+            
+        }
+        else
+        {
+            //Skip scanning too and assume we don't get any result
+            [self performSelector:@selector(scan_done:)
+                       withObject:nil afterDelay:0.1];
+        }
+        
+        
+    }
+    return ;
+}
+
+- (void)scan_done:(NSArray *) _scan_results
+{
+     CamProfile * cp =(CamProfile *) [self.restored_profiles objectAtIndex:nextCameraToScanIndex];
+    //scan Done. read scan result
+    
+    
+    
+    if ( _scan_results == nil  || [_scan_results count] == 0 )
+    {
+        //Empty ..not found & also can't use the current IP?
+        //Dont add to the final result
+         cp.isInLocal = FALSE;
+       
+    }
+    else
+    {
+        //found the camera ..
+        // --> update local IP and other info
+       
+        cp.ip_address = ((CamProfile*) [_scan_results objectAtIndex:0]).ip_address;
+        cp.isInLocal = TRUE;
+        cp.port = 80;//localport is always 80
+        
+    }
+
+    NSLog(@"cam:%@ is in Local? %d", cp.mac_address, cp.isInLocal);
+    
+    if ( (nextCameraToScanIndex+1) <[self.restored_profiles count])
+    {
+        nextCameraToScanIndex ++;
+        [self scan_next_camera:self.restored_profiles index:nextCameraToScanIndex];
+    }
+    else
+    {
+        NSLog(@"Stop Scanning");
+        [self finish_scanning];
+    }
+}
+
+
+
+- (void)finish_scanning
+{
+	//Sync
+    
+	CamChannel * ch = nil;
+    
+	//Hide it, since we're done
+	self.progressView.hidden = YES;
+    
+    
+    /* Rebinding local cameras to restored channel
+     In the case of remote access, the mac address is set to an
+     invalid value "NOTSET" which will not match any MAC address gathered thru
+     scanning.
+     */
+    for (int i = 0; i< [channel_array count]; i++)
+    {
+        ch = (CamChannel*) [channel_array objectAtIndex:i];
+        
+        if ( ch.profile != nil)
+        {
+            for (int j = 0; j < [restored_profiles count]; j++)
+            {
+                CamProfile * cp = (CamProfile *) [restored_profiles objectAtIndex:j];
+                if ( !cp.isSelected //&&
+                    //[cp.mac_address isEqualToString:ch.profile.mac_address]
+                    )
+                {
+                    //Re-bind camera - channel
+                    
+                    [ch setCamProfile:cp];
+                    cp.isSelected = TRUE;
+                    [cp setChannel:ch];
+                    break;
+                    
+                }
+                
+                
+            }
+        }
+        else {
+            
+            //NSLog(@"channel profile = nil");
+        }
+        
+        
+    }
+    
+    //TODO: Need to save offline data here???
+    
+    /* show the camera list page now */
+    //[self startShowingCameraList];
+    
+    [self performSelectorOnMainThread:@selector(startShowingCameraList)
+                           withObject:nil
+                        waitUntilDone:NO];
+    
+	
+}
+
+
+
+-(BOOL) isInTheSameNetworkAsCamera :(CamProfile *) cp
+{
+    long ip = 0, ownip =0 ;
+    long netMask = 0 ;
+	struct ifaddrs *ifa = NULL, *ifList;
+    
+    NSString * bc = @"";
+	NSString * own = @"";
+	[MBP_iosViewController getBroadcastAddress:&bc AndOwnIp:&own ipasLong:&ownip];
+    
+    
+    getifaddrs(&ifList); // should check for errors
+    for (ifa = ifList; ifa != NULL; ifa = ifa->ifa_next) {
+        
+        
+        if (ifa->ifa_netmask != NULL)
+        {
+            ip = (( struct sockaddr_in *)ifa->ifa_addr)->sin_addr.s_addr;
+            if (ip == ownip)
+            {
+                netMask = (( struct sockaddr_in *)ifa->ifa_netmask)->sin_addr.s_addr;
+                
+                break;
+            }
+        }
+        
+    }
+    freeifaddrs(ifList); // clean up after yourself
+    
+    
+    if (netMask ==0 || ip ==0)
+    {
+        return FALSE;
+    }
+    
+    long camera_ip =0 ;
+    if (cp != nil &&
+        cp.ip_address != nil)
+    {
+        NSArray * tokens = [cp.ip_address componentsSeparatedByString:@"."];
+        if ([tokens count] != 4)
+        {
+            //sth is wrong
+            return FALSE;
+        }
+        
+        camera_ip = [tokens[0] integerValue] |
+        ([tokens[1] integerValue] << 8) |
+        ([tokens[2] integerValue] << 16) |
+        ([tokens[3] integerValue] << 24) ;
+        
+        
+        
+        if ( (camera_ip & netMask) == (ip & netMask))
+        {
+            NSLog(@"in same subnet");
+            return TRUE;
+        }
+    }
+    
+    return FALSE;
+    
+}
+-(BOOL) isCurrentIpAddressValid :(CamProfile *) cp
+{
+    
+    
+    
+    if (cp != nil &&
+        cp.ip_address != nil)
+    {
+        HttpCommunication * dev_com = [[HttpCommunication alloc] init];
+        
+        dev_com.device_ip = cp.ip_address;
+        
+        NSString * mac = [dev_com sendCommandAndBlock:GET_MAC_ADDRESS];
+        
+        if (mac != nil && mac.length == 12)
+        {
+            mac = [Util add_colon_to_mac:mac];
+            
+            
+            if([mac isEqualToString:cp.mac_address])
+            {
+                return TRUE;
+            }
+        }
+        
+    }
+    
+    
+    return FALSE;
+}
+
+-(BOOL) isCurrentConnection3G
+{
+    Reachability *reachability = [Reachability reachabilityForInternetConnection];
+    [reachability startNotifier];
+    
+    NetworkStatus status = [reachability currentReachabilityStatus];
+    
+    if(status == NotReachable)
+    {
+        //No internet
+    }
+    else if (status == ReachableViaWiFi)
+    {
+        //WiFi
+    }
+    else if (status == ReachableViaWWAN)
+    {
+        //3G
+        
+        return TRUE;
+    }
+   
+    
+     return FALSE;
+    
+}
+
+
+
+
+#pragma mark -
 
 
 
@@ -777,8 +983,8 @@ return self;
 + (void)getBroadcastAddress:(NSString **) bcast AndOwnIp:(NSString**) ownip
 {
 
-	int ret; 
-	//Free & re-init Addresses 
+	int ret;
+	//Free & re-init Addresses
 	FreeAddresses();
 
 	ret = GetIPAddresses();
@@ -838,105 +1044,80 @@ return self;
 		*bcast = [NSString stringWithString:deviceBroadcastIP];
 	}
 
-#if 0	
-	UIAlertView *alert = [[UIAlertView alloc]
-		initWithTitle:@"bc addr:"
-		message:log
-		delegate:self
-		cancelButtonTitle:@"OK"
-		otherButtonTitles:nil];
-	[alert show];
-	[alert release];
-
-
-
-	if (deviceBroadcastIP == nil)
+	
+	return ;
+}
++ (void)getBroadcastAddress:(NSString **) bcast AndOwnIp:(NSString**) ownip ipasLong:(long *) _ownip
+{
+    
+	int ret;
+	//Free & re-init Addresses
+	FreeAddresses();
+    
+	ret = GetIPAddresses();
+	GetHWAddresses();
+	NSString *deviceBroadcastIP = nil;
+	NSString *deviceIP = nil ;
+    
+	NSString * log = @"";
+    
+    
+	int i;
+    
+	for (i=0; i<MAXADDRS; ++i)
 	{
-
-		UIAlertView *alert = [[UIAlertView alloc]
-			initWithTitle:@"bc addr:"
-			message:@"Wifi is not enabled please enable wifi and restart the application"
-			delegate:self
-			cancelButtonTitle:@"OK"
-			otherButtonTitles:nil];
-		[alert show];
-		[alert release];
+		static unsigned long localHost = 0x7F000001;		// 127.0.0.1
+		unsigned long theAddr;
+        
+		theAddr = ip_addrs[i];
+        
+		if (theAddr == INVALID_IP)
+		{
+            
+			break;
+		}
+        
+		if (theAddr == localHost) continue;
+        
+		if (strncmp(if_names[i], "en", strlen("en")) == 0)
+		{
+			deviceBroadcastIP =  [NSString stringWithFormat:@"%s", broadcast_addrs[i]];
+			deviceIP = [NSString stringWithFormat:@"%s", ip_names[i]];
+            *_ownip = ip_addrs[i];
+		}
+        
+        
+        
+		//NSLog(@"%d %s %s %s %s\n", i, if_names[i], hw_addrs[i], ip_names[i],
+		// broadcast_addrs[i]);
+        
+		log = [log stringByAppendingFormat:@"%d %s %s %s %s\n", i, if_names[i], hw_addrs[i], ip_names[i],
+               broadcast_addrs[i]];
+        
 	}
-
-
-#endif	
+    
+    
+	//For Iphone4
+	//deviceBroadcastIP = [NSString stringWithFormat:@"%s", broadcast_addrs[i-1]];
+    
+	//NSLog(@"broadcast iP: %d %@",i, deviceBroadcastIP);
+	//NSLog(@"own iP: %d %@",i, deviceIP);
+	if (deviceIP != nil)
+	{
+		*ownip = [NSString stringWithString:deviceIP];
+	}
+    
+	if (deviceBroadcastIP != nil)
+	{
+		*bcast = [NSString stringWithString:deviceBroadcastIP];
+	}
+    
+	
 	return ;
 }
 
-
 #pragma mark -
-#pragma mark HTTP Request 
-
-
-
-//- (void ) requestURLSync_bg:(NSString*)url {
-//
-//	NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
-//
-//	//incase of demo, don't send the request
-//
-//	{
-//		NSLog(@"url : %@", url);
-//
-//		/* use a small value of timeout in this case */
-//		[self requestURLSync:url withTimeOut:IRABOT_HTTP_REQ_TIMEOUT];
-//	}
-//
-//	[pool release];
-//}
-
-/* Just use in background only 
-- (NSString * ) requestURLSync:(NSString*)url withTimeOut:(NSTimeInterval) timeout 
-{
-
-	//NSLog(@"send request: %@", url);
-
-	NSURLResponse* response;
-	NSError* error = nil;
-	NSData *dataReply = nil;
-	NSString * stringReply = nil;
-
-
-	@synchronized(self)
-	{
-
-		// Create the request.
-		NSMutableURLRequest *theRequest=[NSMutableURLRequest requestWithURL:[NSURL URLWithString:url]
-			cachePolicy: NSURLRequestReloadIgnoringLocalCacheData
-			timeoutInterval:timeout];
-		NSString *authHeader = [@"Basic " stringByAppendingFormat:@"%@", [Util getCredentials]];  
-		[theRequest addValue:authHeader forHTTPHeaderField:@"Authorization"];
-
-		dataReply = [NSURLConnection sendSynchronousRequest:theRequest returningResponse:&response error:&error];
-
-
-		if (error != nil)
-		{
-			//NSLog(@"error: %@\n", error);
-		}
-		else {
-
-			// Interpret the response
-			stringReply = (NSString *)[[NSString alloc] initWithData:dataReply encoding:NSUTF8StringEncoding];
-			[stringReply autorelease];
-		}
-
-
-	}
-
-
-	return stringReply ;
-}
-
-*/
-
-#pragma mark -
-#pragma mark SetupHTTPDelegate
+#pragma mark SetupHTTPDelegate --- NOT USED --- check ..
 
 
 
@@ -954,7 +1135,7 @@ return self;
 
 	//- (NSString * ) requestURLSync:(NSString*)url withTimeOut:(NSTimeInterval) timeout
 	NSString * response = [self requestURLSync:setup_cmd withTimeOut:5];
-	//TODO: check responses ..?
+
 	response = [self requestURLSync:restart_cmd withTimeOut:5];
 
 }
