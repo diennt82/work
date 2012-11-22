@@ -1026,8 +1026,8 @@
 					armv6,
 				);
 				CODE_SIGN_ENTITLEMENTS = "";
-				CODE_SIGN_IDENTITY = "iPhone Developer: Paul Tsui (KSWYEMQH37)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Paul Tsui (KSWYEMQH37)";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Binatone Electronics International Limited";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Binatone Electronics International Limited";
 				COPY_PHASE_STRIP = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1044,6 +1044,8 @@
 					"\"$(SRCROOT)\"",
 				);
 				PRODUCT_NAME = "Baby Cam";
+				PROVISIONING_PROFILE = "9F236AE1-DF09-4DA1-A121-E582825128BD";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "9F236AE1-DF09-4DA1-A121-E582825128BD";
 				SDKROOT = iphoneos;
 				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/external_include/**";
 				VALIDATE_PRODUCT = YES;
@@ -1070,6 +1072,7 @@
 				PROVISIONING_PROFILE = "FCA129C5-C8E2-4E25-B710-D331A685F087";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "52EE9AF9-AD90-4723-BB27-3D65732E020A";
 				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
 				USER_HEADER_SEARCH_PATHS = "\"$(SRCROOT)/external_include\"/**";
 				VALID_ARCHS = "armv7 armv7s";
 			};
@@ -1122,6 +1125,7 @@
 				OTHER_LDFLAGS = "";
 				PRODUCT_NAME = "Baby Cam";
 				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
 				USER_HEADER_SEARCH_PATHS = "\"$(SRCROOT)/external_include\"/**";
 				VALID_ARCHS = "armv7 armv7s";
 			};
@@ -1131,8 +1135,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
-				CODE_SIGN_IDENTITY = "iPhone Distribution: Binatone Electronics International Limited";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Binatone Electronics International Limited";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Paul Tsui (KSWYEMQH37)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Paul Tsui (KSWYEMQH37)";
 				GCC_C_LANGUAGE_STANDARD = c99;
 				GCC_VERSION = "";
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
@@ -1144,9 +1148,10 @@
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
 				OTHER_LDFLAGS = "";
 				PRODUCT_NAME = "Baby Cam";
-				PROVISIONING_PROFILE = "9F236AE1-DF09-4DA1-A121-E582825128BD";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "9F236AE1-DF09-4DA1-A121-E582825128BD";
+				PROVISIONING_PROFILE = "11A4AFB4-BCED-44E7-AB98-36418691FD9F";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "11A4AFB4-BCED-44E7-AB98-36418691FD9F";
 				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
 				USER_HEADER_SEARCH_PATHS = "\"$(SRCROOT)/external_include\"/**";
 				VALID_ARCHS = "armv7 armv7s";
 			};
