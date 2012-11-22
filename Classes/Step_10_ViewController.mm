@@ -104,6 +104,9 @@
         self.homeSSID.text = homeSsid; 
         
         
+        
+        
+        
     }
     
     
@@ -124,9 +127,29 @@
 #pragma  mark -
 #pragma mark button handlers
 
+-(IBAction)tryAddCameraAgain:(id)sender
+{
+    
+    //Go back to the beginning
+    
+    NSLog(@"RESTART aa");
+    
+    
+    //MBP_InitialSetupViewController * initSetupController =(MBP_InitialSetupViewController *) [[self.navigationController viewControllers] objectAtIndex:0];
+    [self.navigationController popToRootViewControllerAnimated:NO];
+    
+    //[initSetupController startMonitorCallBack];
+    
+}
+
 -(IBAction)cameraTest:(id)sender
 {
 
+#if 0 ///TEST TEST TEST 
+    [self  setupFailed];
+#else 
+
+    
     self.progressView.hidden = NO; 
     [self.view bringSubviewToFront:self.progressView];
     //[self.view addSubview:self.progressView]; 
@@ -160,7 +183,8 @@
                          AndPass:user_pass 
                          macAddr:mac 
                          camName:camName];
-
+    
+#endif
     
 }
 
@@ -402,6 +426,7 @@
 - (void) setupCompleted
 {
 	self.progressView.hidden = YES;
+    self.navigationItem.hidesBackButton = YES;
     //Step 12
     [[NSBundle mainBundle] loadNibNamed:@"Setup_bm_step_12"
                                   owner:self
@@ -419,7 +444,7 @@
 - (void)  setupFailed
 {
 	self.progressView.hidden = YES;
-	
+    self.navigationItem.hidesBackButton = YES;
 	
 	NSLog(@"Setup has failed - remove cam on server"); 
 	// send a command to remove camera 
@@ -437,14 +462,23 @@
 	
 	[bms_comm BMS_delCamWithUser:user_email AndPass:user_pass macAddr:mac];
 	
-    self.navigationItem.title = @"Camera not found";
+    self.navigationItem.title = @"Add Camera Failed";
     
     //Step 11 
     [[NSBundle mainBundle] loadNibNamed:@"Setup_bm_step_11" 
                                   owner:self 
                                 options:nil];
 
+    
+    UIScrollView *tempScrollView=(UIScrollView *) [self.setupFailView viewWithTag:1];
+    tempScrollView.contentSize=CGSizeMake(320,400);
+    
     [self.view addSubview:self.setupFailView];
+    
+    
+    
+    
+    
     
     
     
