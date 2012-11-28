@@ -62,13 +62,17 @@
 {
 	[super viewDidLoad];
     
-    //disable timeout
-    [UIApplication sharedApplication].idleTimerDisabled = YES;
     
 	// Do any additional setup after loading the view.
 	[[NSNotificationCenter defaultCenter] addObserver: self
                                              selector: @selector(handleEnteredBackground)
                                                  name: UIApplicationDidEnterBackgroundNotification
+                                               object: nil];
+    
+    // Do any additional setup after loading the view.
+	[[NSNotificationCenter defaultCenter] addObserver: self
+                                             selector: @selector(becomeActive)
+                                                 name: UIApplicationDidBecomeActiveNotification
                                                object: nil];
     
     
@@ -78,8 +82,15 @@
                                      target:nil
                                      action:nil] autorelease];
     
+    [self becomeActive]; 
+	    
+}
+
+-(void) becomeActive
+{
+    NSLog(@"Become ACTIVE .. start channel ");
     
-	if (self.selected_channel != nil)
+    if (self.selected_channel != nil)
 	{
 		CamProfile * cp = selected_channel.profile;
         
@@ -144,7 +155,7 @@
         self.enableControls = FALSE;
         
 		self.selected_channel.stopStreaming = FALSE;
-        self.firstTimeConnect = TRUE; 
+        self.firstTimeConnect = TRUE;
         
 		//init the ptt port to default
 		self.selected_channel.profile.ptt_port = IRABOT_AUDIO_RECORDING_PORT;
@@ -157,14 +168,37 @@
                                         repeats:NO];
         
 	}
+
     
 }
 
 -(void) handleEnteredBackground
 {
-	NSLog(@"Back to camera list");
+	NSLog(@"Enter Background.. stop current streaming");
 	//For now just go back to camera list
-	[self goBackToCameraList];
+    
+        
+	if (streamer.recordInProgress == YES)
+		[streamer stopRecording];
+	[streamer stopStreaming];
+    
+    if (scanner != nil)
+    {
+        [scanner cancel];
+    }
+    
+    
+	//NSLog(@"abort remote timer ");
+	[self.selected_channel abortViewTimer];
+    
+    //Close all dialog..
+    [self stopPeriodicPopup];
+    
+    
+	
+    
+    
+    
 }
 
 -(void) startCameraConnection:(NSTimer *) exp
@@ -415,9 +449,10 @@
 
 -(void) goBackAndReLogin
 {
-	NSLog(@"Go all the way bacK");
-    //enable timeout
-    [UIApplication sharedApplication].idleTimerDisabled = NO;
+	NSLog(@"Go all the way bacK 1");
+ 
+    // Do any additional setup after loading the view.
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
     
 	UITabBarController * root =  (UITabBarController *)[[self.navigationController viewControllers] objectAtIndex:0];
 	[self.navigationController popToRootViewControllerAnimated:NO];
@@ -430,13 +465,12 @@
 
 -(void) goBackToCameraList
 {
-	NSLog(@"goback to camera list");
+	NSLog(@"goback to camera list 1");
     
     
-    
-    //enable timeout
-    [UIApplication sharedApplication].idleTimerDisabled = NO;
-    
+    // Do any additional setup after loading the view.
+    [[NSNotificationCenter defaultCenter] removeObserver:self]; 
+	   
 	if (streamer.recordInProgress == YES)
 		[streamer stopRecording];
 	[streamer stopStreaming];
@@ -823,8 +857,9 @@
 	}
 	if ( alert != nil)
 	{
-		if ([alert isVisible])
+		//if ([alert isVisible])
 		{
+            NSLog(@"dissmis alert"); 
 			[alert dismissWithClickedButtonIndex:1 animated:NO ];
 		}
         

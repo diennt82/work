@@ -775,7 +775,7 @@
 
 -(void) forceRelogin
 {
-    [delegate sendStatus:5];
+    [delegate sendStatus:AFTER_DEL_RELOGIN];
 }
 
 -(IBAction)addCamera:(id)sender
@@ -787,7 +787,7 @@
         [userDefaults setBool:FALSE forKey:FIRST_TIME_SETUP];
         [userDefaults synchronize];
         
-        [delegate sendStatus:1];//initial setup
+        [delegate sendStatus:SETUP_CAMERA];//initial setup
         
     }
     else

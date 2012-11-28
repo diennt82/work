@@ -139,11 +139,11 @@
 
 -(void) forceScan
 {
-    [viewController sendStatus:3]; 
+    [viewController sendStatus:SCAN_CAMERA];
 }
 -(void) showInit
 {
-    [viewController sendStatus:7]; 
+    [viewController sendStatus:FRONT_PAGE]; 
 }
 
 
@@ -237,13 +237,25 @@
 	[userDefaults setInteger:viewController.app_stage forKey:@"ApplicationStage"];
     [userDefaults synchronize];
     
-    if (viewController.app_stage == APP_STAGE_LOGGED_IN)
+    
+    NSString * camInView = (NSString*)[userDefaults objectForKey:CAM_IN_VEW];
+
+    
+    if (camInView != nil)
+	{
+        //Some camera is inview..
+        //Don't reload.. So that later when we come back, we just need to reload
+        
+        
+	}
+    else if (viewController.app_stage == APP_STAGE_LOGGED_IN)
     {
         
-        [viewController sendStatus:6];
+        [viewController sendStatus:BACK_FRM_MENU_NOLOAD];
     }
-    
-		
+
+        
+	
 }
 
 
@@ -257,7 +269,20 @@
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
 	viewController.app_stage = [userDefaults integerForKey:@"ApplicationStage"];
 
-    if (viewController.app_stage == APP_STAGE_LOGGED_IN)
+    NSString * camInView = (NSString*)[userDefaults objectForKey:CAM_IN_VEW];
+    
+    
+    if (camInView != nil)
+	{
+        //Some camera is inview..
+        //How about don't do anything..
+        
+        
+        NSLog(@"Some camera is in view.. do nothing");
+        
+        
+	}
+    else if (viewController.app_stage == APP_STAGE_LOGGED_IN)
     {
         //[self performSelectorOnMainThread:@selector(forceScan) withObject:nil waitUntilDone:YES];
         
@@ -281,6 +306,9 @@
     }
 
 
+    
+   
+    
 }
 
 
@@ -304,10 +332,7 @@
 /*A bit mask of the UIInterfaceOrientation constants that indicate the orientations to use for the view controllers.*/
 
 - (NSUInteger)application:(UIApplication *)application supportedInterfaceOrientationsForWindow:(UIWindow *)window
-{
-    
- //   return UIInterfaceOrientationMaskAllButUpsideDown;
-    
+{    
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     NSString * camInView = (NSString*)[userDefaults objectForKey:CAM_IN_VEW];
     

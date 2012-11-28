@@ -37,7 +37,7 @@
     
 	self.device_ip = ip;
 	self.device_port = port;
-	NSLog(@"init with %@:%d", self.device_ip, self.device_port);
+	//NSLog(@"init with %@:%d", self.device_ip, self.device_port);
 	self.remoteView = FALSE;
 	self.remoteViewKey = nil;
 	self.local_port = 0;
@@ -527,14 +527,12 @@
 	NSMutableData* data, *buffer;
 	int bytesRead = -1;
     NSData* ptr;
-    
+    BOOL firstSuccessRead = FALSE; 
     
     
 	data = [[NSMutableData alloc]initWithLength:READ_16K_DATA]; //16k
     
-	[self performSelectorOnMainThread:@selector(sendStatusStartedReportOnMainThread:)
-                           withObject:nil
-                        waitUntilDone:YES];
+	
     
 	BOOL exitedUnexpectedly = FALSE;
 	int ignore_err_count = 4; // ~20 sec
@@ -576,6 +574,14 @@
             
             
 		}
+        
+        if (firstSuccessRead == FALSE)
+        {
+            [self performSelectorOnMainThread:@selector(sendStatusStartedReportOnMainThread:)
+                                   withObject:nil
+                                waitUntilDone:YES];
+            firstSuccessRead = TRUE;
+        }
         
 		//Kick this timeout
 		streamer.stillReading = TRUE;
@@ -1000,7 +1006,15 @@
             // auth error ->>>>>>> force re-connect
             NSLog(@"auth ERROR-- stop streaming ");
             [self stopStreaming];
-            [mHandler statusReport:STREAM_STOPPED_UNEXPECTEDLY andObj:nil];
+            
+            if (self.remoteView == TRUE && self.remoteViewKey != nil)
+            {
+               [mHandler statusReport:REMOTE_STREAM_STOPPED_UNEXPECTEDLY andObj:nil];
+            }
+            else
+            {
+                [mHandler statusReport:STREAM_STOPPED_UNEXPECTEDLY andObj:nil];
+            }
 
 			return;
 		}
