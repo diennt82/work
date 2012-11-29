@@ -76,7 +76,14 @@
         
         comm = [[HttpCommunication alloc]init];
         comm.device_ip = @"192.168.2.1";//here camera is still in directmode
-        comm.device_port = 80; 
+        comm.device_port = 80;
+        
+        
+        /*20121129: phung skip authentication */
+        
+        [self queryWifiList];
+        
+#if 0
         //Authenticate first
         [comm babymonitorAuthentication];
         
@@ -86,12 +93,14 @@
                                        selector:@selector(isAuthenticationDone:)
                                        userInfo:nil
                                         repeats:NO];
+#endif 
+        
 
     }
 }
 
 
-
+#if 0
 - (void) isAuthenticationDone:(NSTimer *) expired
 {
 	if (comm.authInProgress == FALSE)
@@ -110,7 +119,7 @@
 	}
 	
 }
-
+#endif 
 
 
 -(void) queryWifiList
@@ -131,8 +140,81 @@
     }
     else
     {
-        NSLog(@"GOT NULL wifi list from camera"); 
+        NSLog(@"GOT NULL wifi list from camera");
+        [self askForRetry]; 
     }
+}
+
+
+//Double the timeout.. 
+-(void) queryWifiList_2
+{
+    NSData * router_list_raw;
+    
+    
+    router_list_raw = [comm sendCommandAndBlock_raw:GET_ROUTER_LIST withTimeout:2*DEFAULT_TIME_OUT];
+    
+    if (router_list_raw != nil)
+    {
+        WifiListParser * routerListParser = nil;
+        routerListParser = [[WifiListParser alloc]init];
+        
+        [routerListParser parseData:router_list_raw
+                       whenDoneCall:@selector(setWifiResult:)
+                             target:self];
+    }
+    else
+    {
+        NSLog(@"GOT NULL wifi list from camera");
+        [self askForRetry];
+    }
+}
+
+#define ALERT_ASK_FOR_RETRY_WIFI 1
+
+- (void) askForRetry
+{
+    
+    UIAlertView *_myAlert = nil ;
+    _myAlert = [[UIAlertView alloc] initWithTitle:@"Fail to communicate with camera. Retry?"
+                                          message:@""
+                                         delegate:self
+                                cancelButtonTitle:@"Cancel"
+                                otherButtonTitles:@"Retry",nil];
+    
+    _myAlert.tag = ALERT_ASK_FOR_RETRY_WIFI;
+    _myAlert.delegate = self;
+    
+    CGAffineTransform myTransform = CGAffineTransformMakeTranslation(0.0, 0.0);
+    [_myAlert setTransform:myTransform];
+    [_myAlert show];
+    [_myAlert release];
+    
+}
+
+- (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex {
+    
+    if (alertView.tag == ALERT_ASK_FOR_RETRY_WIFI)
+    {
+        switch(buttonIndex) {
+            case 0:
+                
+                //TODO: Go back to camera detection screen
+                
+                
+                break;
+            case 1:
+                NSLog(@"OK button pressed");
+                
+                //retry ..
+                [self queryWifiList_2];
+
+                break;
+                
+        }
+        
+    }
+    
 }
 
 
