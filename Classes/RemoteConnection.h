@@ -14,6 +14,19 @@
 #define  NO_ERROR         0 
 #define  REQUEST_TIMEOUT -1001 //same as "Request Timeout" error code
 
+
+
+#define STREAMING_MODE @"Streaming_mode="
+#define STREAM_MODE_UNKNOWN 0
+#define STREAM_MODE_MANUAL_PRT_FWD 1
+#define STREAM_MODE_UPNP 2
+#define STREAM_MODE_STUN 3
+
+#define TOTAL_PORTS @"total_ports="
+#define BR_TAG      @"<br>"
+#define PTT_PRT @"audio_port="
+
+
 @interface RemoteConnection : NSObject {
 
 	CamChannel *mChannel; 

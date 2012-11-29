@@ -8,6 +8,7 @@
 
 #import "UserAccount.h"
 #import "MBP_iosAppDelegate.h"
+#import "RemoteConnection.h"
 
 @implementation UserAccount
 
@@ -118,6 +119,8 @@
 }
 
 
+
+
 -(void) query_snapshot_from_server:(NSArray *) cam_profiles
 {
     
@@ -179,36 +182,151 @@
 }
 
 -(void) getCamListSuccess:(NSData*) responseData
-{
-
-	
+{	
 	NSString * raw_data = [[[NSString alloc] initWithData:responseData encoding: NSASCIIStringEncoding] autorelease];
-
 
 	NSMutableArray * cam_profiles;
 	cam_profiles = [self parse_camera_list:raw_data];
-	
-	//NSLog(@"after parsing total cam: %d", [cam_profiles count]);
 	
 	
 	/* 20120913: DONT query snapshot from online 
     [self query_snapshot_from_server:cam_profiles];*/
 	
     
-    /* 20121001: Dont query disabled alerts here will do it when the list is opened 
-    //query disabled alerts ----- Wait for the registration id 
+    //20121129: query remote availability ... 
     if(cam_profiles != nil && [cam_profiles count] >0)
     {
         for (int i=0; i<[cam_profiles count]; i++)
         {
-            [self query_disabled_alert_list:[cam_profiles objectAtIndex:i] ]; 
+            [self query_stream_mode_for_cam:[cam_profiles objectAtIndex:i] ];
         }
         
     }
-   */
+  
     
 	/* sync_online_and_offline_data*/
 	[self sync_online_and_offline_data:cam_profiles];
+	
+	
+}
+
+
+
+-(void) query_stream_mode_for_cam:(CamProfile *) cp
+{
+    
+    //NSLog(@" query_stream_mode_for_cam : %@",cp.name);
+    BMS_Communication * bms_alerts = [[BMS_Communication alloc] initWithObject:self
+                                                                      Selector:nil
+                                                                  FailSelector:nil
+                                                                     ServerErr:nil];
+
+    //call get camlist query here
+	NSData* responseData = [bms_alerts BMS_getStreamModeBlockedWithUser:self.userName
+                                                                 AndPass:self.userPass
+                                                                   macAddr:cp.mac_address];
+    
+    
+    NSString * raw_data = [[[NSString alloc] initWithData:responseData encoding: NSASCIIStringEncoding] autorelease];
+	
+	//NSLog(@"getStream response: %@", raw_data);
+	
+	//Move on -- dont signal caller
+	if ( raw_data != nil && [raw_data hasPrefix:STREAMING_MODE])
+	{
+		NSRange m_range = {[STREAMING_MODE length], 1};
+		int streamMode = [[raw_data substringWithRange:m_range] intValue];
+		
+		switch (streamMode) {
+			case STREAM_MODE_UPNP:
+			case STREAM_MODE_MANUAL_PRT_FWD:
+			{
+				
+                responseData = [bms_alerts BMS_getRemoteStatusBlockedOf:IS_CAM_AVAILABLE_UPNP_CMD
+                                                               withUser:self.userName
+                                                                andPass:self.userPass
+                                                                macAddr:cp.mac_address];
+                raw_data = [[[NSString alloc] initWithData:responseData encoding: NSASCIIStringEncoding] autorelease];
+                NSLog(@"isCam avaiil response: %@", raw_data);
+                if ( raw_data != nil)
+                {
+                    NSArray * tokens = [raw_data componentsSeparatedByString:@":"];
+
+                    if ([tokens count] >=2 )
+                    {
+                        NSString * status = (NSString*) [tokens objectAtIndex:1];
+                        status = [status stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+                                  
+                        if ([status hasPrefix:@"AVAILABLE"] )
+                        {
+                            cp.minuteSinceLastComm = 1; 
+                        }
+                        else
+                        {
+                            cp.minuteSinceLastComm = 24*60;
+                        }
+                    }
+                    else
+                    {
+                        cp.minuteSinceLastComm = 24*60;
+
+                    }
+                    
+                }
+                else
+                {
+                    cp.minuteSinceLastComm = 24*60;
+                }
+                
+				               
+				break;
+			}
+			case STREAM_MODE_STUN:
+			{
+                
+                responseData = [bms_alerts BMS_getRemoteStatusBlockedOf:IS_CAM_AVAILABLE_ONLOAD_CMD
+                                                               withUser:self.userName
+                                                                andPass:self.userPass
+                                                                macAddr:cp.mac_address];
+                raw_data = [[[NSString alloc] initWithData:responseData encoding: NSASCIIStringEncoding] autorelease];
+                NSLog(@"isCam avaiil response: %@", raw_data);
+
+                if ( raw_data != nil)
+                {
+                    NSArray * tokens = [raw_data componentsSeparatedByString:@":"];
+                    if ([tokens count] >=2 )
+                    {
+                        NSString * status = (NSString*) [tokens objectAtIndex:1];
+                        status = [status stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+                        
+                        if ([status hasPrefix:@"AVAILABLE"] )
+                        {
+                            cp.minuteSinceLastComm = 1;
+                        }
+                        else
+                        {
+                            cp.minuteSinceLastComm = 24*60;
+                        }
+                    }
+                    else
+                    {
+                        cp.minuteSinceLastComm = 24*60;
+                        
+                    }
+                    
+                }
+                else
+                {
+                    cp.minuteSinceLastComm = 24*60;
+                }
+				
+				break; 
+			}
+			default:
+				break;
+		}
+		
+	}
 	
 	
 	
@@ -216,7 +334,7 @@
 
 
 /******* NOT USED : OBSOLETE *********/
--(void) query_disabled_alert_list:(CamProfile *) cp
+-(void) query_disabled_alert_list_:(CamProfile *) cp
 {
 
      NSLog(@" query_disabled_alert_list camera: %@",cp.name); 
