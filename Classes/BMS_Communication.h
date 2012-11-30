@@ -125,6 +125,11 @@
 #define GET_DISABLED_ALERTS_U_CMD_PARAM_1 @"&username="
 #define GET_DISABLED_ALERTS_U_CMD_PARAM_2 @"&mac="
 
+#define IS_CAM_AVAILABLE_ONLOAD_CMD @"is_cam_available_onload"
+#define IS_CAM_AVAILABLE_ONLOAD_CMD_PARAM_1 @"&macaddress="
+
+#define IS_CAM_AVAILABLE_UPNP_CMD @"is_cam_available_upnp"
+#define IS_CAM_AVAILABLE_UPNP_CMD_PARAM_1 @"&macaddress="
 
 
 @interface BMS_Communication : NSObject {
@@ -234,6 +239,19 @@
                                       AndPass:(NSString*) user_pass 
                                         ofMac:(NSString *) macWColon
                                     alertType:(NSString *) alertType;
+
+- (NSData *)BMS_getStreamModeBlockedWithUser:(NSString *) user_email
+                                     AndPass:(NSString*) user_pass
+                                     macAddr:(NSString *) mac ;
+
+
+
+- (NSData *)BMS_getRemoteStatusBlockedOf:(NSString*) connectionType
+                                withUser:(NSString *) user_email
+                                 andPass:(NSString*) user_pass
+                                 macAddr:(NSString *) mac ;
+
+
 
 
 @end
