@@ -79,7 +79,9 @@
 #define GET_RELAY_KEY_PARAM_1 @"&macaddress="
 
 
-#define SEND_CTRL_CMD @"send_control_command"
+//OLD: #define SEND_CTRL_CMD @"send_control_command"
+
+#define SEND_CTRL_CMD @"send_stun_command"
 #define SEND_CTRL_CMD_PARAM_1 @"&macaddress="
 #define SEND_CTRL_CMD_PARAM_2 @"&channelid="
 #define SEND_CTRL_CMD_PARAM_3 @"&query="

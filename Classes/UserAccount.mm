@@ -257,7 +257,8 @@
                         NSString * status = (NSString*) [tokens objectAtIndex:1];
                         status = [status stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
                                   
-                        if ([status hasPrefix:@"AVAILABLE"] )
+                        if ([status hasPrefix:@"AVAILABLE"] ||
+                            [status hasPrefix:@"BUSY"])
                         {
                             cp.minuteSinceLastComm = 1; 
                         }
@@ -299,7 +300,8 @@
                         NSString * status = (NSString*) [tokens objectAtIndex:1];
                         status = [status stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
                         
-                        if ([status hasPrefix:@"AVAILABLE"] )
+                        if ([status hasPrefix:@"AVAILABLE"] ||
+                            [status hasPrefix:@"BUSY"])
                         {
                             cp.minuteSinceLastComm = 1;
                         }

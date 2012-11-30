@@ -622,12 +622,17 @@
                                         AndPass:(NSString*) user_pass
                                         macAddr:(NSString *) macWithColon
                                         channId:(NSString*) channelId
-                                        command:(NSString *)udt_command
+                                        command:(NSString *)core_command
 {
     
  
     NSString * mac_ = [Util strip_colon_fr_mac:macWithColon];
     
+    NSString * udt_command  = [NSString stringWithFormat:@"action=command&command=%@", core_command];
+    
+    udt_command = (NSString *)CFURLCreateStringByAddingPercentEscapes(kCFAllocatorDefault, (CFStringRef)udt_command, NULL,
+                                                                      CFSTR(":/?#[]@!$&’()*+,;="),
+                                                                      kCFStringEncodingUTF8) ;
     
     NSString * http_cmd = [NSString stringWithFormat:@"%@%@",BMS_PHONESERVICE, BMS_CMD_PART];
 	http_cmd = [http_cmd stringByAppendingFormat:@"%@", SEND_CTRL_CMD];
@@ -636,7 +641,7 @@
     http_cmd = [http_cmd stringByAppendingFormat:@"%@%@", SEND_CTRL_CMD_PARAM_3,udt_command];
     
 	
-	NSLog(@"send udt query:%@", http_cmd);
+	NSLog(@"1 send udt query:%@", http_cmd);
     
     
     
@@ -839,7 +844,7 @@
                                         AndPass:(NSString*) user_pass 
                                         macAddr:(NSString *) macWithColon 
                                         channId:(NSString*) channelId 
-                                        command:(NSString *)udt_command
+                                        command:(NSString *)core_command
 {
     
     NSData * dataReply;
@@ -849,6 +854,14 @@
     NSString * mac_ = [Util strip_colon_fr_mac:macWithColon];
     
     
+    NSString * udt_command  = [NSString stringWithFormat:@"action=command&command=%@", core_command];
+    
+    udt_command = (NSString *)CFURLCreateStringByAddingPercentEscapes(kCFAllocatorDefault, (CFStringRef)udt_command, NULL,
+                                                                       CFSTR(":/?#[]@!$&’()*+,;="),
+                                                                       kCFStringEncodingUTF8) ;
+    
+
+    
     NSString * http_cmd = [NSString stringWithFormat:@"%@%@",BMS_PHONESERVICE, BMS_CMD_PART];
 	http_cmd = [http_cmd stringByAppendingFormat:@"%@", SEND_CTRL_CMD];
 	http_cmd = [http_cmd stringByAppendingFormat:@"%@%@", SEND_CTRL_CMD_PARAM_1, mac_];
@@ -856,7 +869,7 @@
     http_cmd = [http_cmd stringByAppendingFormat:@"%@%@", SEND_CTRL_CMD_PARAM_3,udt_command];
     
 	
-	NSLog(@"send udt query:%@", http_cmd);
+	NSLog(@"2 send udt query:%@", http_cmd);
     
     
 

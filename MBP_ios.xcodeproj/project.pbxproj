@@ -1026,8 +1026,8 @@
 					armv6,
 				);
 				CODE_SIGN_ENTITLEMENTS = "";
-				CODE_SIGN_IDENTITY = "iPhone Distribution: Binatone Electronics International Limited";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Binatone Electronics International Limited";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Paul Tsui (KSWYEMQH37)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Paul Tsui (KSWYEMQH37)";
 				COPY_PHASE_STRIP = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1044,8 +1044,8 @@
 					"\"$(SRCROOT)\"",
 				);
 				PRODUCT_NAME = "Baby Cam";
-				PROVISIONING_PROFILE = "9F236AE1-DF09-4DA1-A121-E582825128BD";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "9F236AE1-DF09-4DA1-A121-E582825128BD";
+				PROVISIONING_PROFILE = "AF20C915-B330-4487-A1DF-C85D50B7B43E";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "AF20C915-B330-4487-A1DF-C85D50B7B43E";
 				SDKROOT = iphoneos;
 				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/external_include/**";
 				VALIDATE_PRODUCT = YES;
