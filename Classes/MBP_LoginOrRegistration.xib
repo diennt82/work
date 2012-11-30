@@ -421,7 +421,7 @@
 							<object class="IBUILabel" id="726362366">
 								<reference key="NSNextResponder" ref="973056811"/>
 								<int key="NSvFlags">292</int>
-								<string key="NSFrame">{{99, 39}, {122, 54}}</string>
+								<string key="NSFrame">{{0, 39}, {320, 54}}</string>
 								<reference key="NSSuperview" ref="973056811"/>
 								<reference key="NSWindow"/>
 								<reference key="NSNextKeyView" ref="243002884"/>
@@ -435,17 +435,10 @@
 								<reference key="IBUITextColor" ref="475819593"/>
 								<nil key="IBUIHighlightedColor"/>
 								<int key="IBUIBaselineAdjustment">0</int>
-								<float key="IBUIMinimumFontSize">10</float>
 								<int key="IBUITextAlignment">1</int>
-								<object class="IBUIFontDescription" key="IBUIFontDescription">
-									<int key="type">1</int>
-									<double key="pointSize">20</double>
-								</object>
-								<object class="NSFont" key="IBUIFont">
-									<string key="NSName">Helvetica</string>
-									<double key="NSSize">20</double>
-									<int key="NSfFlags">16</int>
-								</object>
+								<reference key="IBUIFontDescription" ref="440722399"/>
+								<reference key="IBUIFont" ref="936652047"/>
+								<bool key="IBUIAdjustsFontSizeToFit">NO</bool>
 							</object>
 						</object>
 						<string key="NSFrame">{{0, 106}, {320, 248}}</string>

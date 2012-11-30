@@ -13,7 +13,7 @@
     NSString * ssid; 
     IBOutlet UILabel * ssidView;
     IBOutlet UILabel * ssidView_1;
-    
+    IBOutlet UIButton * createAccount; 
 }
 @property (nonatomic, retain) NSString * ssid;
 

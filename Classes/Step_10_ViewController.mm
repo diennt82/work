@@ -86,6 +86,8 @@
         
         [self.view addSubview:self.progressView];
         self.progressView.hidden = YES;
+        
+        
     }
     else //not first time --> this is normal add camera sequence..
     {
@@ -103,17 +105,17 @@
         [self.view addSubview:cameraAddedView];
         self.homeSSID.text = homeSsid;
         
+        [NSTimer scheduledTimerWithTimeInterval: 2.0//
+                                         target:self
+                                       selector:@selector(checkConnectionToHomeWifi:)
+                                       userInfo:nil
+                                        repeats:NO];
+
         
         
         
     }
-    
-    [NSTimer scheduledTimerWithTimeInterval: 2.0//
-                                     target:self
-                                   selector:@selector(checkConnectionToHomeWifi:)
-                                   userInfo:nil
-                                    repeats:NO];
-    
+        
 }
 
 - (void)viewDidUnload
