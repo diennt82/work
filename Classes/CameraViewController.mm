@@ -2057,10 +2057,16 @@
         
 	}
     
+#if 1
 	[self performSelector:@selector(setMelody:)
                withObject:[[NSNumber alloc]initWithInt:(melody_index+1)]
-               afterDelay:0.01];
+               afterDelay:0.1];
+#else
+    NSLog(@"haha bg"); 
+    [self performSelectorInBackground:@selector(setMelody:)
+                           withObject:[[NSNumber alloc]initWithInt:(melody_index+1)] ];
     
+#endif //TEST
     
 }
 
