@@ -10,6 +10,7 @@
 #import "Util.h"
 
 #define BMS_DEFAULT_TIME_OUT 30
+//#define BMS_PHONESERVICE @"https://simplimonitor.com/BMS/phoneservice?"
 #define BMS_PHONESERVICE @"https://monitoreverywhere.com/BMS/phoneservice?"
 #define BMS_CMD_PART     @"action=command&command="
 
