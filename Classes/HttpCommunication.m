@@ -478,8 +478,8 @@
             
             if ([error code ] == NSURLErrorTimedOut)
             {
-                ///what??
-                [self timeoutAskForRetry];
+
+                //[self timeoutAskForRetry];
             }
             
 		}
