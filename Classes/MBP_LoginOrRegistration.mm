@@ -390,6 +390,11 @@
 
 - (IBAction) createNewAccount:(id)sender
 {
+    NSLog(@"createNewAccount ---");
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    [userDefaults setBool:TRUE forKey:FIRST_TIME_SETUP];
+    [userDefaults synchronize];
+    
     [delegate sendStatus:1];
 }
 

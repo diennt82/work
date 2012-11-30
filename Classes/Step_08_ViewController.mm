@@ -39,6 +39,16 @@
                                      target:nil
                                      action:nil] autorelease];
     
+    
+    //check back later..
+    [NSTimer scheduledTimerWithTimeInterval: 2.0//
+                                     target:self
+                                   selector:@selector(checkConnectionToHomeWifi:)
+                                   userInfo:nil
+                                    repeats:NO];
+
+    
+    
 }
 
 -(void) dealloc
@@ -61,7 +71,9 @@
 
 -(IBAction)handleButtonPress:(id)sender
 {    
-    NSLog(@"Load step 09");    
+    NSLog(@"Load step 09");
+    
+    
     //Load the next xib
     Step_09_ViewController *step09ViewController = [[Step_09_ViewController alloc]
                                                     initWithNibName:@"Step_09_ViewController" bundle:nil];
@@ -72,4 +84,57 @@
     [step09ViewController release];
     
 }
+
+#pragma  mark -
+#pragma mark Timer callbacks
+
+- (void) checkConnectionToHomeWifi:(NSTimer *) expired
+{
+    
+    
+    NSString * currentSSID = [CameraPassword fetchSSIDInfo];
+    
+    
+    
+    NSLog(@"checkConnectionToHomeWifi 03: %@", currentSSID);
+	if ([currentSSID isEqualToString:self.ssid])
+	{
+		//yeah we're connected ... check for ip??
+		
+		NSString * bc = @"";
+		NSString * own = @"";
+		[MBP_iosViewController getBroadcastAddress:&bc AndOwnIp:&own];
+		
+		if (![own isEqualToString:@""])
+		{
+			
+            //20121130: phung: save it here.. so that we can automatically check later on.
+            if (self.ssid != nil)
+            {
+                NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+                [userDefaults setObject:self.ssid forKey:HOME_SSID];
+                [userDefaults synchronize];
+            }
+            
+            //create account now... 
+            [self handleButtonPress:nil];
+            
+			return;
+		}
+		
+	}
+    
+    //check back later..
+    [NSTimer scheduledTimerWithTimeInterval: 3.0//
+                                     target:self
+                                   selector:@selector(checkConnectionToHomeWifi:)
+                                   userInfo:nil
+                                    repeats:NO];
+	
+}
+
+
+#pragma mark -
+
+
 @end
