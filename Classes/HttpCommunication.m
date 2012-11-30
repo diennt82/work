@@ -122,6 +122,27 @@
 	
 	
 }
+
+- (void) timeoutAskForRetry
+{
+    
+    UIAlertView *_myAlert = nil ;
+    _myAlert = [[UIAlertView alloc] initWithTitle:@"Communication with camera has timeout."
+                                          message:@"Please retry."
+                                         delegate:self
+                                cancelButtonTitle:@"OK"
+                                otherButtonTitles: nil];
+    
+    _myAlert.tag = ALERT_ASK_FOR_RETRY;
+    
+    CGAffineTransform myTransform = CGAffineTransformMakeTranslation(0.0, 0.0);
+    [_myAlert setTransform:myTransform];
+    [_myAlert show];
+    [_myAlert release];
+    	
+}
+
+
 - (BOOL)textFieldShouldReturn:(UITextField *)textField {
 	NSLog(@"Dismiss Return");
 	//[self alertView:(UIAlertView *)[textField  superview] clickedButtonAtIndex:1];
@@ -185,6 +206,18 @@
                 
         }
     }
+    else if (alertView.tag == ALERT_ASK_FOR_RETRY)
+    {
+        switch(buttonIndex) {
+            case 0:
+                NSLog(@"OK button pressed");
+                break;
+            case 1:
+                break;
+                
+        }
+
+    }
 
 }
 
@@ -210,74 +243,104 @@
 		
 		dataReply = [NSURLConnection sendSynchronousRequest:theRequest returningResponse:&response error:&error];
 		
-		
-		if ( (dataReply == nil)||  (error != nil))
+        
+        if ( (dataReply == nil)||  (error != nil))
 		{
-			//NSLog(@"error: %@\n", error);
-			//First Time error means non-default user/pass
-			// next step try to load the password from storage
-			NSString * macc = [CameraPassword fetchBSSIDInfo];
-			if (macc == nil)
-			{
-				NSLog(@"failed NO MAC"); 	
-				return FALSE; 
-			}
-			NSString * cam_pass = [CameraPassword getPasswordForCam:macc];
-			NSLog(@"cam_pass:%@ for %@",cam_pass, macc);
-			if (cam_pass == nil)
-			{
-				//no password 
-				NSLog(@"failed NO password"); 
-				return -1;
-			}
-			
-			
-			NSLog(@"resend cmd to authenticate");
-			NSString* plain = [NSString stringWithFormat:@"%@:%@",
-							   BASIC_AUTH_DEFAULT_USER, cam_pass];
-			NSData* plainData = [plain dataUsingEncoding:NSUTF8StringEncoding];
-			NSString * newCred = [NSString base64StringFromData:plainData length:[plainData length]];
-			
-			NSString *authHeader = [@"Basic " stringByAppendingFormat:@"%@", newCred];  
-			theRequest=[NSMutableURLRequest requestWithURL:[NSURL URLWithString:http_cmd]
-											   cachePolicy: NSURLRequestReloadIgnoringLocalCacheData
-										   timeoutInterval:DEFAULT_TIME_OUT];
-			[theRequest addValue:authHeader forHTTPHeaderField:@"Authorization"];
-			error = nil;
-			dataReply = [NSURLConnection sendSynchronousRequest:theRequest returningResponse:&response error:&error];
-			
-			if (error != nil)
-			{
-				NSLog(@"failed with stored pass"); 
-				return -1;
-			}
-			else {
-				NSLog(@"pass with stored password - save to preference "); 
-				[Util setHttpUsr:BASIC_AUTH_DEFAULT_USER];
-				[Util setHttpPass:cam_pass];
-				return 0; 
-			}
-
-			
+			NSLog(@"error: %@\n", error);
+			if ([error code] ==  NSURLErrorTimedOut)
+            {
+                //[self timeoutAskForRetry];
+                
+            }
 			
 			
 		}
-		else 
+		else
 		{
-						
-			NSString * response = [NSString stringWithUTF8String:[dataReply bytes]];
-			NSLog(@"pass with default. - dataReply: %@", response); 
             
-           
-
+			NSString * response = [NSString stringWithUTF8String:[dataReply bytes]];
+			NSLog(@"pass with default. - dataReply: %@", response);
 			return 0; // Dont ask for new password
-			//return -2;
 		}
 
+#if 0
+        /* HTTP Status Codes
+         200 OK
+         400 Bad Request
+         401 Unauthorized (bad username or password)
+         403 Forbidden
+         404 Not Found
+         502 Bad Gateway
+         503 Service Unavailable
+         */
+        if ([response isKindOfClass: [NSHTTPURLResponse class]]) {
+            int statusCode = [(NSHTTPURLResponse*) response statusCode];
+            
+            if (statusCode == 401)
+            {
+                
+                
+                NSString * macc = [CameraPassword fetchBSSIDInfo];
+                if (macc == nil)
+                {
+                    NSLog(@"failed NO MAC");
+                    return -1;
+                }
+                NSString * cam_pass = [CameraPassword getPasswordForCam:macc];
+                NSLog(@"cam_pass:%@ for %@",cam_pass, macc);
+                if (cam_pass == nil)
+                {
+                    //no password
+                    NSLog(@"failed NO password");
+                    return -1;
+                }
+                
+                
+                NSLog(@"resend cmd to authenticate");
+                NSString* plain = [NSString stringWithFormat:@"%@:%@",
+                                   BASIC_AUTH_DEFAULT_USER, cam_pass];
+                NSData* plainData = [plain dataUsingEncoding:NSUTF8StringEncoding];
+                NSString * newCred = [NSString base64StringFromData:plainData length:[plainData length]];
+                
+                NSString *authHeader = [@"Basic " stringByAppendingFormat:@"%@", newCred];
+                theRequest=[NSMutableURLRequest requestWithURL:[NSURL URLWithString:http_cmd]
+                                                   cachePolicy: NSURLRequestReloadIgnoringLocalCacheData
+                                               timeoutInterval:DEFAULT_TIME_OUT];
+                [theRequest addValue:authHeader forHTTPHeaderField:@"Authorization"];
+                error = nil;
+                dataReply = [NSURLConnection sendSynchronousRequest:theRequest returningResponse:&response error:&error];
+                
+                if (error != nil)
+                {
+                    NSLog(@"failed with stored pass");
+                    return -1;
+                }
+                else {
+                    NSLog(@"pass with stored password - save to preference ");
+                    [Util setHttpUsr:BASIC_AUTH_DEFAULT_USER];
+                    [Util setHttpPass:cam_pass];
+                    return 0;
+                }
+                
+            }
+			else
+            {
+                NSLog(@"Status code is: %@ ", error);
+            }
+			
+            
+        }
+#endif 
+        
+        
+       
 		
 	}
 	
 }
+
+
+
 
 - (void) babymonitorSetNewPass:(NSString * )newPass
 {
@@ -370,44 +433,30 @@
 - (NSData *) sendCommandAndBlock_raw:(NSString *)command
 {
 	//NSLog(@"send request: %@", url);
+    
+    return  [self sendCommandAndBlock_raw:command withTimeout:DEFAULT_TIME_OUT];
+	
+}
+
+
+
+- (NSData *) sendCommandAndBlock_raw:(NSString *)command withTimeout:(NSTimeInterval) newTimeout
+{
+    //NSLog(@"send request: %@", url);
 	NSURLResponse* response;
 	NSError* error = nil;
 	NSData *dataReply = nil;
-
+    
 	
-	NSTimeInterval timeout = DEFAULT_TIME_OUT ; 
+	NSTimeInterval timeout = newTimeout ;
 	
 	NSString * http_cmd = [NSString stringWithFormat:@"http://%@:%d/%@%@",
 						   device_ip, device_port,
-						   HTTP_COMMAND_PART,command]; 
+						   HTTP_COMMAND_PART,command];
 	
 	NSLog(@"http: %@", http_cmd);
 	
-	NSString *authHeader = [@"Basic " stringByAppendingFormat:@"%@", [Util getDFCredentials]];  
-	
-#if 0 //NO LONGER need to use password
-	NSString * macc = [CameraPassword fetchBSSIDInfo];
-	if (macc != nil)
-	{
-		NSString * cam_pass = [CameraPassword getPasswordForCam:macc];
-		NSLog(@"cam_pass:%@ for %@",cam_pass, macc);
-		if (cam_pass == nil)
-		{
-			//no password 
-			NSLog(@"failed NO password: use defautl;"); 
-			cam_pass =@"000000";
-		}
-
-		NSString* plain = [NSString stringWithFormat:@"%@:%@",
-						   BASIC_AUTH_DEFAULT_USER, cam_pass];
-		NSData* plainData = [plain dataUsingEncoding:NSUTF8StringEncoding];
-		NSString * newCred = [NSString base64StringFromData:plainData length:[plainData length]];
-		
-		authHeader = [@"Basic " stringByAppendingFormat:@"%@", newCred];  
-		
-	}
-#endif 
-    
+	NSString *authHeader = [@"Basic " stringByAppendingFormat:@"%@", [Util getDFCredentials]];
 	@synchronized(self)
 	{
 		
@@ -415,7 +464,7 @@
 		NSMutableURLRequest *theRequest=[NSMutableURLRequest requestWithURL:[NSURL URLWithString:http_cmd]
 																cachePolicy: NSURLRequestReloadIgnoringLocalCacheData
 															timeoutInterval:timeout];
-
+        
 		[theRequest addValue:authHeader forHTTPHeaderField:@"Authorization"];
 		
 		
@@ -424,8 +473,15 @@
 		
 		if (error != nil)
 		{
-			//NSLog(@"error: %@\n", error);
-            dataReply = nil; 
+			NSLog(@"error: %@\n", error);
+            dataReply = nil;
+            
+            if ([error code ] == NSURLErrorTimedOut)
+            {
+
+                //[self timeoutAskForRetry];
+            }
+            
 		}
 		else {
 			
@@ -437,6 +493,9 @@
 	
 	return dataReply ;
 }
+
+
+
 
 -(NSString *) getUpgradeProgress:(NSError **)error
 {

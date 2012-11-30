@@ -101,15 +101,18 @@
         [self.view addSubview:self.progressView];
         self.progressView.hidden = YES;
         [self.view addSubview:cameraAddedView];
-        self.homeSSID.text = homeSsid; 
-        
+        self.homeSSID.text = homeSsid;
         
         
         
         
     }
     
-    
+    [NSTimer scheduledTimerWithTimeInterval: 2.0//
+                                     target:self
+                                   selector:@selector(checkConnectionToHomeWifi:)
+                                   userInfo:nil
+                                    repeats:NO];
     
 }
 
@@ -133,12 +136,9 @@
     //Go back to the beginning
     
     NSLog(@"RESTART aa");
-    
-    
-    //MBP_InitialSetupViewController * initSetupController =(MBP_InitialSetupViewController *) [[self.navigationController viewControllers] objectAtIndex:0];
+   
     [self.navigationController popToRootViewControllerAnimated:NO];
-    
-    //[initSetupController startMonitorCallBack];
+
     
 }
 
@@ -202,6 +202,50 @@
 
 #pragma  mark -
 #pragma mark Timer callbacks
+
+- (void) checkConnectionToHomeWifi:(NSTimer *) expired
+{
+    
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    NSString * homeSsid = (NSString *) [userDefaults objectForKey:HOME_SSID];
+	
+    
+    NSString * currentSSID = [CameraPassword fetchSSIDInfo];
+    
+    
+    
+    NSLog(@"checkConnectionToHomeWifi 03: %@", currentSSID);
+	if ([currentSSID isEqualToString:homeSsid])
+	{
+		//yeah we're connected ... check for ip??
+		
+		NSString * bc = @"";
+		NSString * own = @"";
+		[MBP_iosViewController getBroadcastAddress:&bc AndOwnIp:&own];
+		
+		if (![own isEqualToString:@""])
+		{
+			
+            //CameraTest: try to search for camera now..
+            [self cameraTest:nil];
+            
+			return;
+		}
+		
+	}
+	   
+    //check back later..
+    [NSTimer scheduledTimerWithTimeInterval: 3.0//
+                                     target:self
+                                   selector:@selector(checkConnectionToHomeWifi:)
+                                   userInfo:nil
+                                    repeats:NO];
+	
+}
+
+
+#pragma mark -
+
 
 -(void) setStopScanning:(NSTimer *) exp
 {

@@ -99,7 +99,7 @@
         {
             
             self.progressView.hidden = NO;
-            [self.progressLabel setText:@"Connecting to BMS..." ];
+            [self.progressLabel setText:@"Logging in to server..." ];
             self.navigationItem.leftBarButtonItem.enabled = NO ;
             self.navigationItem.rightBarButtonItem.enabled = NO;  
             
@@ -463,7 +463,7 @@
 			[bms_comm BMS_loginWithUser:tmp_user_str AndPass:tmp_pass_str];
 			
 			self.progressView.hidden = NO;
-			[self.progressLabel setText:@"Connecting to BMS..." ];
+			[self.progressLabel setText:@"Logging in to server..." ];
 			
 			break;
 		}

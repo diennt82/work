@@ -170,10 +170,10 @@
    
 	NSString * currentSSID = [CameraPassword fetchSSIDInfo];
 	
-    if ( currentSSID == nil ||
-        self.homeWifiSSID  ==nil ||
-        ![self.homeWifiSSID isEqualToString:currentSSID]
-        )
+//    if ( currentSSID == nil ||
+//        self.homeWifiSSID  ==nil ||
+//        ![self.homeWifiSSID isEqualToString:currentSSID]
+//        )
     {
          NSLog(@"cshow progress 02");
         [self showProgress:nil];

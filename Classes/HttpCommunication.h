@@ -11,7 +11,7 @@
 #import "DeviceConfiguration.h"
 #import "PublicDefine.h"
 
-#define DEFAULT_TIME_OUT 10.0 // this is Seconds.
+#define DEFAULT_TIME_OUT 20.0 // this is Seconds.
 
 #define BASIC_AUTH_DEFAULT_USER @"camera"
 #define BASIC_AUTH_DEFAULT_PASS @"000000"
@@ -105,6 +105,7 @@
 
 #define ALERT_ASK_FOR_PASSWD 1
 #define ALERT_ASK_FOR_NEW_PASSWD 2
+#define ALERT_ASK_FOR_RETRY 3
 
 
 @interface HttpCommunication : NSObject <UITextFieldDelegate> {
@@ -134,6 +135,7 @@
 
 - (void)sendConfiguration:(DeviceConfiguration *) conf;
 - (NSData *) sendCommandAndBlock_raw:(NSString *)command;
+- (NSData *) sendCommandAndBlock_raw:(NSString *)command withTimeout:(NSTimeInterval) newTimeout;
 
 -(NSData * ) getSnapshot;
 - (void) askForUserPass;

@@ -63,7 +63,7 @@
         NSLog(@"empty security ");
     }
     
-    UITextField * _ssid = (UITextField *) [self.ssidCell viewWithTag:1];
+    UITextField * _ssid = (UITextField *) [self.ssidCell viewWithTag:202];
     if (_ssid != nil && (self.isOtherNetwork == FALSE))
     {
         _ssid.text = self.ssid; 
@@ -141,7 +141,7 @@
         //only one cell in this section 
             if (self.isOtherNetwork == TRUE)
             {
-                UITextField * _ssid  = (UITextField*) [ssidCell viewWithTag:1];
+                UITextField * _ssid  = (UITextField*) [ssidCell viewWithTag:202];
                 
                 
                 [_ssid setUserInteractionEnabled:TRUE];
@@ -257,8 +257,33 @@
     //check if password is ok?
     UITextField  * pass = (UITextField*)[self.passwordCell viewWithTag:200];
     UITextField  * confpass = (UITextField*)[self.confPasswordCell viewWithTag:201];
-    NSLog(@"pass : %@ vs %@", pass.text, confpass.text);
+    UITextField * my_ssid = (UITextField*) [self.ssidCell viewWithTag:202];
+    
+    NSLog(@"pass : %@ vs %@  ssid: %@", pass.text, confpass.text, my_ssid.text);
 
+    if (self.isOtherNetwork == TRUE)
+    {
+        
+        if ([my_ssid.text length] == 0)
+        {
+            //error
+            //ERROR condition
+            UIAlertView *_alert = [[UIAlertView alloc]
+                                   initWithTitle:@"SSID cannot be empty"
+                                   message:@"Please fill the SSID name and try again"
+                                   delegate:self
+                                   cancelButtonTitle:@"OK"
+                                   otherButtonTitles:nil];
+            [_alert show];
+            [_alert release];
+            
+            return;
+        }
+        else
+        {
+            self.ssid = my_ssid.text;
+        }
+    }
     
     if ([self.security isEqualToString:@"open"])
     {
@@ -282,6 +307,7 @@
                                    otherButtonTitles:nil];
             [_alert show];
             [_alert release];
+            return;
         }
         else
         {
@@ -421,6 +447,8 @@
         [Util writeDeviceConfigurationData:[deviceConf getWritableConfiguration]];
     }
 
+    
+    NSLog(@"SSID: %@   - %@", self.ssid, self.deviceConf.ssid );
     
     DeviceConfiguration * sent_conf = [[DeviceConfiguration alloc] init];
     
