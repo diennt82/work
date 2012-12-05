@@ -112,11 +112,12 @@
 
 - (void)presentModallyOn:(UIViewController *)parent
 {
-    UINavigationController *    navController;
     
-    //setup nav controller 
-    navController= [[[UINavigationController alloc]initWithRootViewController:self] autorelease];
+    MBPNavController *    navController;
     
+    //setup nav controller
+    navController= [[[MBPNavController alloc]initWithRootViewController:self] autorelease];
+        
     
     // Create a navigation controller with us as its root.
     assert(navController != nil);

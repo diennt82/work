@@ -26,7 +26,7 @@
 
 
 @synthesize barBtnName;
-
+@synthesize  fwUpgradeInProgess;
 
 
 
@@ -315,6 +315,17 @@
 		shouldShowProgress = TRUE;
 	}
     
+    //while upgrading.. remember the text & values before reload the layout
+    NSString * upgradeText, * percentText;
+    float upgradeProgress = 0.0;
+    if (upgradeFwView != nil)
+    {
+        UILabel * text = (UILabel*)[upgradeFwView viewWithTag:12];
+        upgradeText = text.text ;
+        
+        percentText = percentageLabel.text ;
+        upgradeProgress = percentageProgress.progress;
+    }
     
     
     
@@ -350,8 +361,13 @@
 		[self.zoombar setThumbImage:[UIImage imageNamed:@"zoom_bar_thumb_.png"] forState:UIControlStateNormal];
         
         
-        
-        
+
+        if (fwUpgradeInProgess == TRUE)
+        {
+           
+            
+            [[NSBundle mainBundle] loadNibNamed:@"FWUpgradeView_land" owner:self options:nil];            
+        }
         
 	}
 	else if (orientation == UIInterfaceOrientationPortrait || orientation == UIInterfaceOrientationPortraitUpsideDown)
@@ -362,8 +378,8 @@
                                     options:nil];
         
 		CGRect rect = [[UIApplication sharedApplication] statusBarFrame]; // Get status bar frame dimensions
-		NSLog(@"Statusbar frame: %1.0f, %1.0f, %1.0f, %1.0f", rect.origin.x,
-              rect.origin.y, rect.size.width, rect.size.height);
+		//NSLog(@"Statusbar frame: %1.0f, %1.0f, %1.0f, %1.0f", rect.origin.x,
+        //    rect.origin.y, rect.size.width, rect.size.height);
 		//HACK : incase hotspot is turned on
 		if (rect.size.height>21 &&  rect.size.height<50)
 		{
@@ -381,6 +397,13 @@
 		[self.zoombar setMinimumTrackImage:sliderMaximum forState:UIControlStateNormal];
 		[self.zoombar setMaximumTrackImage:sliderMaximum forState:UIControlStateNormal];
 		[self.zoombar setThumbImage:[UIImage imageNamed:@"zoom_bar_thumb_.png"] forState:UIControlStateNormal];
+        
+        
+        if (fwUpgradeInProgess == TRUE)
+        {
+            [[NSBundle mainBundle] loadNibNamed:@"FWUpgradeView" owner:self options:nil];
+        }
+        
 	}
     
     
@@ -404,45 +427,78 @@
     
     
     
-	//PTT stuff
-	[self setupPtt];
-    
-	//
-	[self initVideoAndSnapshotView];
-    
-	[self setUIMelodyOnOff];
-    
-	//re-show progress if  it is being shown
-	if (shouldShowProgress)
-	{
-		[self.view addSubview:progressView];
-		[self.view bringSubviewToFront:progressView];
-	}
-	else
-	{
-		progressView.hidden = YES;
-	}
-    
-	//make rounded edge view
-	lullabyView.layer.cornerRadius = 5;
-	lullabyView.layer.masksToBounds = YES;
-    
-    
-    
-	UIButton * spk = (UIButton*) [self.view viewWithTag:SPK_CONTROL_BTN];
-	if (spk != nil)
-	{
-		spk.selected = self.streamer.disableAudio;
-	}
-    
-    
-    
-	UIButton * ptt = (UIButton *) [self.view viewWithTag:PTT_CONTROL_BTN];
-	if (ptt != nil &&  (ptt_enabled == FALSE ))
-	{
-		ptt.selected = !ptt_enabled;
-	}
-    
+    if (fwUpgradeInProgess == TRUE)
+    {
+
+        
+         progressView.hidden = YES;
+        
+        //Disable all these since we will get out of here after finishing
+        topToolBar.userInteractionEnabled = NO;
+        controlButtons.userInteractionEnabled = NO;
+        directionPad.userInteractionEnabled = NO;
+        temperature_label.hidden = YES;
+        temperature_bg.hidden = YES;
+        self.view.userInteractionEnabled = NO;
+        
+        if (upgradeFwView != nil)
+        {
+            UILabel * text = (UILabel*)[upgradeFwView viewWithTag:12];
+            text.text  =upgradeText  ;
+            
+            percentageLabel.text=  percentText ;
+            percentageProgress.progress= upgradeProgress;
+        }
+        
+        
+        [self.view addSubview:upgradeFwView];
+        [self.view bringSubviewToFront:upgradeFwView];
+        
+    }
+    else
+    {
+        
+        
+        //PTT stuff
+        [self setupPtt];
+        
+        //
+        [self initVideoAndSnapshotView];
+        
+        [self setUIMelodyOnOff];
+        
+        //re-show progress if  it is being shown
+        if (shouldShowProgress)
+        {
+            [self.view addSubview:progressView];
+            [self.view bringSubviewToFront:progressView];
+        }
+        else
+        {
+            progressView.hidden = YES;
+        }
+        
+        //make rounded edge view
+        lullabyView.layer.cornerRadius = 5;
+        lullabyView.layer.masksToBounds = YES;
+        
+        
+        
+        UIButton * spk = (UIButton*) [self.view viewWithTag:SPK_CONTROL_BTN];
+        if (spk != nil)
+        {
+            spk.selected = self.streamer.disableAudio;
+        }
+        
+        
+        
+        UIButton * ptt = (UIButton *) [self.view viewWithTag:PTT_CONTROL_BTN];
+        if (ptt != nil &&  (ptt_enabled == FALSE ))
+        {
+            ptt.selected = !ptt_enabled;
+        }
+    }
+        
     
 }
 
@@ -697,7 +753,13 @@
 	}
     
     
-	NSLog(@"End of setupInfraCamera");
+	NSLog(@"End of setupInfraCamera 11");
+    
+    //DEBUG
+#if 0
+    [self startUpgradeFW];
+    
+#endif
 }
 
 #pragma mark -
@@ -2757,8 +2819,26 @@
 
 -(void) startUpgradeFW
 {
-	//Load the UI 
-	[[NSBundle mainBundle] loadNibNamed:@"FWUpgradeView" owner:self options:nil];
+	//Load the UI
+    UIInterfaceOrientation orientation = [UIApplication sharedApplication].statusBarOrientation;
+	if (orientation == UIInterfaceOrientationLandscapeLeft || orientation == UIInterfaceOrientationLandscapeRight)
+	{
+		//CGAffineTransform transform = CGAffineTransformMakeTranslation(80,20);
+		//upgradeFwView.transform = transform;
+        
+        [[NSBundle mainBundle] loadNibNamed:@"FWUpgradeView_land" owner:self options:nil];
+        
+	}
+	else if (orientation == UIInterfaceOrientationPortrait || orientation == UIInterfaceOrientationPortraitUpsideDown)
+	{
+        
+		//CGAffineTransform transform = CGAffineTransformMakeTranslation(0, 120);
+		//upgradeFwView.transform = transform;
+        
+        [[NSBundle mainBundle] loadNibNamed:@"FWUpgradeView" owner:self options:nil];
+        
+	}
+	
     
 	//Disable all these since we will get out of here after finishing
 	topToolBar.userInteractionEnabled = NO; 
@@ -2766,30 +2846,22 @@
 	directionPad.userInteractionEnabled = NO; 
 	temperature_label.hidden = YES;
 	temperature_bg.hidden = YES; 
-	self.view.userInteractionEnabled = NO; 
+	self.view.userInteractionEnabled = NO;
+    
+    // Do any additional setup after loading the view.
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+    
     
 	[self.view addSubview:upgradeFwView]; 
 	[self.view bringSubviewToFront:upgradeFwView]; 
     
-	UIInterfaceOrientation orientation = [UIApplication sharedApplication].statusBarOrientation;
-    
-	if (orientation == UIInterfaceOrientationLandscapeLeft || orientation == UIInterfaceOrientationLandscapeRight) 
-	{
-		CGAffineTransform transform = CGAffineTransformMakeTranslation(80,20);
-		upgradeFwView.transform = transform;
-        
-	}
-	else if (orientation == UIInterfaceOrientationPortrait || orientation == UIInterfaceOrientationPortraitUpsideDown) 
-	{
-        
-		CGAffineTransform transform = CGAffineTransformMakeTranslation(0, 120);
-		upgradeFwView.transform = transform;
-        
-	}
+	
+   
     
 	percentageLabel.text = @"--"; 
-	percentageProgress.progress = 0.0; 
+	percentageProgress.progress = 0.0;
     
+    fwUpgradeInProgess = TRUE;
     
     
 	NSString * command = [NSString stringWithFormat:@"%@",REQUEST_FW_UPGRADE];
@@ -2800,7 +2872,7 @@
 	}
     
 	[self performSelectorInBackground:@selector(upgradeFwProgress_bg)  withObject:nil] ;
-    
+
     
     
 }
@@ -2814,6 +2886,7 @@
     
 	if (value >=0)
 	{
+        
 		percentageLabel.text = [NSString stringWithFormat:@"%d%%", value];
 		percentageProgress.progress = _value; 
 	}
@@ -2822,7 +2895,7 @@
 
 -(void) upgradeDoneWaitForReboot
 {
-	UILabel * text = (UILabel*)[upgradeFwView viewWithTag:12];  
+	UILabel * text = (UILabel*)[upgradeFwView viewWithTag:12];
 	text.text = @"Restarting Camera...";
     
 	percentageLabel.text = @"--";

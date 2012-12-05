@@ -32,12 +32,15 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    NSLog(@" viewdidload camera: %@",camera.name);    
+    
+    NSLog(@" viewdidload camera: %@",camera.name);
     
     [f_title  setText:camera.name];
     
-    [self.view addSubview:progressView]; 
-    //progressView.hidden = YES;
+    [self.view addSubview:progressView];
+    [self.view bringSubviewToFront:progressView];
+    
+    progressView.hidden = NO;
     
     // Do any additional setup after loading the view from its nib.
     
@@ -52,11 +55,107 @@
     // e.g. self.myOutlet = nil;
 }
 
-- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
-{
-    return (interfaceOrientation == UIInterfaceOrientationPortrait);
+
+- (void)viewWillDisappear:(BOOL)animated {
+	NSArray *viewControllers = self.navigationController.viewControllers;
+	if (viewControllers.count > 1 && [viewControllers objectAtIndex:viewControllers.count-2] == self)
+    {
+        
+    }
+    else if ([viewControllers indexOfObject:self] == NSNotFound)
+    {
+		// View is disappearing because it was popped from the stack
+		NSLog(@"View controller was popped --- ");
+        
+        [self.navigationController setNavigationBarHidden:YES];
+        
+	}
 }
 
+
+
+-(void) viewWillAppear:(BOOL)animated
+{
+	[self.navigationController setNavigationBarHidden:NO];
+	[self checkOrientation];
+}
+
+
+-(void) checkOrientation
+{
+    
+	UIInterfaceOrientation infOrientation = [UIApplication sharedApplication].statusBarOrientation;
+    
+	[self adjustViewsForOrientation:infOrientation];
+    
+    
+    
+}
+//// DEPRECATED from IOS 6
+- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
+{
+    
+	return YES;
+}
+
+//////////////// IOS6 replacement
+
+-(BOOL) shouldAutorotate
+{
+    NSLog(@"Should Auto Rotate");
+  	return YES;
+}
+
+/////////////
+
+- (void) willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
+{
+    
+	[self adjustViewsForOrientation:toInterfaceOrientation];
+}
+
+- (void) adjustViewsForOrientation:(UIInterfaceOrientation)orientation
+{
+    
+    
+    BOOL shouldShowProgress = progressView.hidden;
+    NSString * f_titleText = f_title.text; 
+    
+    
+	if (orientation == UIInterfaceOrientationLandscapeLeft || orientation == UIInterfaceOrientationLandscapeRight)
+	{
+        
+        [[NSBundle mainBundle] loadNibNamed:@"AlertSettingViewController_land"
+                                      owner:self
+                                    options:nil];
+
+
+        
+        
+    }
+	else if (orientation == UIInterfaceOrientationPortrait || orientation == UIInterfaceOrientationPortraitUpsideDown)
+	{
+        
+        [[NSBundle mainBundle] loadNibNamed:@"AlertSettingViewController"
+                                      owner:self
+                                    options:nil];
+
+        
+	}
+    
+    
+    
+    
+    f_title.text =f_titleText;
+    progressView.hidden = shouldShowProgress;
+    
+}
+
+- (void) didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation
+{
+    NSLog(@"didRotateFromInterfaceOrientation 1");
+    [alertTable reloadData];
+}
 
 #pragma mark -
 #pragma mark Table view delegates & datasource
@@ -65,18 +164,18 @@
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
     
-    return 1; 
+    return 1;
 }
 
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     
-    return 3; 
+    return 3;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
-    UISwitch * alertSw; 
+    UISwitch * alertSw;
     switch (indexPath.row) {
         case 0:
             alertSw = (UISwitch *) [soundCellView viewWithTag:1];
@@ -99,15 +198,15 @@
         default:
             break;
     }
-    NSLog(@"Index is:%d", indexPath.row); 
+    NSLog(@"Index is:%d", indexPath.row);
     
-    return nil ; 
+    return nil ;
     
 }
 
-- (void)tableView: (UITableView *)tableView didSelectRowAtIndexPath: (NSIndexPath *)indexPath 
+- (void)tableView: (UITableView *)tableView didSelectRowAtIndexPath: (NSIndexPath *)indexPath
 {
-    [tableView deselectRowAtIndexPath:[tableView indexPathForSelectedRow] 
+    [tableView deselectRowAtIndexPath:[tableView indexPathForSelectedRow]
                              animated:NO];
     
     
@@ -133,13 +232,13 @@
     else
     {
         
-        progressView.hidden = NO; 
+        progressView.hidden = NO;
         [self.view bringSubviewToFront:progressView];
         
         
-        [NSTimer scheduledTimerWithTimeInterval:0.1 target:self 
-                                       selector:@selector(updateSoundAlert:) 
-                                       userInfo:alertSw 
+        [NSTimer scheduledTimerWithTimeInterval:0.1 target:self
+                                       selector:@selector(updateSoundAlert:)
+                                       userInfo:alertSw
                                         repeats:NO];
         
     }
@@ -152,32 +251,32 @@
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     NSString * user_pass = (NSString *) [userDefaults objectForKey:@"PortalPassword"];
     NSString * user_email  = (NSString*)[userDefaults objectForKey:@"PortalUseremail"];
-
+    
     
     BMS_Communication * bms_alerts = [[BMS_Communication alloc] initWithObject:self
-                                                                      Selector:nil 
-                                                                  FailSelector:nil 
+                                                                      Selector:nil
+                                                                  FailSelector:nil
                                                                      ServerErr:nil];
     if (alertSw.isOn)
     {
-        //call get camlist query here 
-        NSData* responseData = [bms_alerts BMS_enabledAlertBlockWithUser_1:user_email 
-                                                                 AndPass:user_pass 
-                                                                   ofMac:camera.mac_address
-                                                               alertType:ALERT_TYPE_SOUND];
+        //call get camlist query here
+        NSData* responseData = [bms_alerts BMS_enabledAlertBlockWithUser_1:user_email
+                                                                   AndPass:user_pass
+                                                                     ofMac:camera.mac_address
+                                                                 alertType:ALERT_TYPE_SOUND];
     }
-    else 
+    else
     {
-        //call get camlist query here 
-        NSData* responseData = [bms_alerts BMS_disabledAlertBlockWithUser_1:user_email 
-                                                                  AndPass:user_pass 
-                                                                    ofMac:camera.mac_address
-                                                                alertType:ALERT_TYPE_SOUND];
+        //call get camlist query here
+        NSData* responseData = [bms_alerts BMS_disabledAlertBlockWithUser_1:user_email
+                                                                    AndPass:user_pass
+                                                                      ofMac:camera.mac_address
+                                                                  alertType:ALERT_TYPE_SOUND];
         
     }
     
     camera.soundAlertEnabled  =  alertSw.isOn;
-    progressView.hidden = YES;         
+    progressView.hidden = YES;
     
 }
 
@@ -191,13 +290,13 @@
     else
     {
         
-        progressView.hidden = NO; 
+        progressView.hidden = NO;
         [[progressView superview] bringSubviewToFront:progressView];
         
         
-        [NSTimer scheduledTimerWithTimeInterval:0.1 target:self 
-                                       selector:@selector(updateTempHiAlert:) 
-                                       userInfo:alertSw 
+        [NSTimer scheduledTimerWithTimeInterval:0.1 target:self
+                                       selector:@selector(updateTempHiAlert:)
+                                       userInfo:alertSw
                                         repeats:NO];
         
         
@@ -214,34 +313,34 @@
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     NSString * user_pass = (NSString *) [userDefaults objectForKey:@"PortalPassword"];
     NSString * user_email  = (NSString*)[userDefaults objectForKey:@"PortalUseremail"];
-
+    
     
     BMS_Communication * bms_alerts = [[BMS_Communication alloc] initWithObject:self
-                                                                      Selector:nil 
-                                                                  FailSelector:nil 
+                                                                      Selector:nil
+                                                                  FailSelector:nil
                                                                      ServerErr:nil];
     
     if (alertSw.isOn)
     {
-       
-        NSData* responseData = [bms_alerts BMS_enabledAlertBlockWithUser_1:user_email 
-                                                                 AndPass:user_pass 
-                                                                   ofMac:camera.mac_address
-                                                               alertType:ALERT_TYPE_TEMP_HI];
+        
+        NSData* responseData = [bms_alerts BMS_enabledAlertBlockWithUser_1:user_email
+                                                                   AndPass:user_pass
+                                                                     ofMac:camera.mac_address
+                                                                 alertType:ALERT_TYPE_TEMP_HI];
     }
-    else 
+    else
     {
-       
-        NSData* responseData = [bms_alerts BMS_disabledAlertBlockWithUser_1:user_email 
-                                                                  AndPass:user_pass 
-                                                                    ofMac:camera.mac_address
-                                                                alertType:ALERT_TYPE_TEMP_HI];
+        
+        NSData* responseData = [bms_alerts BMS_disabledAlertBlockWithUser_1:user_email
+                                                                    AndPass:user_pass
+                                                                      ofMac:camera.mac_address
+                                                                  alertType:ALERT_TYPE_TEMP_HI];
         
     }
     
     camera.tempHiAlertEnabled  =  alertSw.isOn;
     
-    progressView.hidden = YES;  
+    progressView.hidden = YES;
     
 }
 -(IBAction)tempLoAlertChanged   :(id)sender
@@ -254,13 +353,13 @@
     else
     {
         
-        progressView.hidden = NO; 
+        progressView.hidden = NO;
         [[progressView superview] bringSubviewToFront:progressView];
         
         
-        [NSTimer scheduledTimerWithTimeInterval:0.1 target:self 
-                                       selector:@selector(updateTempLoAlert:) 
-                                       userInfo:alertSw 
+        [NSTimer scheduledTimerWithTimeInterval:0.1 target:self
+                                       selector:@selector(updateTempLoAlert:)
+                                       userInfo:alertSw
                                         repeats:NO];
         
         
@@ -275,36 +374,36 @@
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     NSString * user_pass = (NSString *) [userDefaults objectForKey:@"PortalPassword"];
     NSString * user_email  = (NSString*)[userDefaults objectForKey:@"PortalUseremail"];
-
+    
     
     BMS_Communication * bms_alerts = [[BMS_Communication alloc] initWithObject:self
-                                                                      Selector:nil 
-                                                                  FailSelector:nil 
+                                                                      Selector:nil
+                                                                  FailSelector:nil
                                                                      ServerErr:nil];
     NSLog(@"update temmp log alert");
     if (alertSw.isOn)
     {
-        //call get camlist query here 
-        NSData* responseData = [bms_alerts BMS_enabledAlertBlockWithUser_1:user_email 
-                                                                 AndPass:user_pass 
-                                                                   ofMac:camera.mac_address
-                                                               alertType:ALERT_TYPE_TEMP_LO];
+        //call get camlist query here
+        NSData* responseData = [bms_alerts BMS_enabledAlertBlockWithUser_1:user_email
+                                                                   AndPass:user_pass
+                                                                     ofMac:camera.mac_address
+                                                                 alertType:ALERT_TYPE_TEMP_LO];
     }
-    else 
+    else
     {
-        //call get camlist query here 
-        NSData* responseData = [bms_alerts BMS_disabledAlertBlockWithUser_1:user_email 
-                                                                  AndPass:user_pass 
-                                                                    ofMac:camera.mac_address
-                                                                alertType:ALERT_TYPE_TEMP_LO];
+        //call get camlist query here
+        NSData* responseData = [bms_alerts BMS_disabledAlertBlockWithUser_1:user_email
+                                                                    AndPass:user_pass
+                                                                      ofMac:camera.mac_address
+                                                                  alertType:ALERT_TYPE_TEMP_LO];
         
     }
     
-    camera.tempLoAlertEnabled  =  alertSw.isOn;    progressView.hidden = YES;  
+    camera.tempLoAlertEnabled  =  alertSw.isOn;    progressView.hidden = YES;
     
 }
 
-#pragma  mark - 
+#pragma  mark -
 #pragma  mark query disabled alerts
 
 -(void) query_disabled_alert_list:(CamProfile *) cp
@@ -319,18 +418,18 @@
     cp.tempLoAlertEnabled = TRUE;
     
     BMS_Communication * bms_alerts = [[BMS_Communication alloc] initWithObject:self
-                                                                      Selector:nil 
-                                                                  FailSelector:nil 
+                                                                      Selector:nil
+                                                                  FailSelector:nil
                                                                      ServerErr:nil];
 	
-	//call get camlist query here 
-	NSData* responseData = [bms_alerts BMS_getDisabledAlertBlockWithUser_1:userName 
-                                                                   AndPass:userPass 
+	//call get camlist query here
+	NSData* responseData = [bms_alerts BMS_getDisabledAlertBlockWithUser_1:userName
+                                                                   AndPass:userPass
                                                                      ofMac:cp.mac_address];
     
     
     NSString * raw_data = [[[NSString alloc] initWithData:responseData encoding: NSUTF8StringEncoding] autorelease];
-    NSLog(@"response: %@", raw_data); 
+    NSLog(@"response: %@", raw_data);
     //    Response:
     //    ""<br>mac=[mac address]
     //    <br>cameraname=[camera name]
@@ -343,12 +442,12 @@
 	token_list = [raw_data componentsSeparatedByString:@"<br>"];
     if ([token_list count] > 4)
     {
-        int alertCount; 
+        int alertCount;
         
         NSArray * token_list_1 = [[token_list objectAtIndex:3] componentsSeparatedByString:@"="];
         
-        alertCount = [[token_list_1 objectAtIndex:1] intValue]; 
-        NSLog(@"Alert disabled is: %d", alertCount); 
+        alertCount = [[token_list_1 objectAtIndex:1] intValue];
+        NSLog(@"Alert disabled is: %d", alertCount);
         
         int i = 0;
         NSString * disabledAlert;
@@ -359,7 +458,7 @@
             disabledAlert= [token_list_1 objectAtIndex:1] ;
             disabledAlert = [disabledAlert stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
             
-            NSLog(@"disabledAlert disabled is:%@--> %@",[token_list objectAtIndex:(i+4)],  disabledAlert); 
+            NSLog(@"disabledAlert disabled is:%@--> %@",[token_list objectAtIndex:(i+4)],  disabledAlert);
             
             if ( [disabledAlert isEqualToString:ALERT_TYPE_SOUND])
             {
@@ -391,16 +490,16 @@
         NSLog(@"Token list count <4 :%@, %@, %@, %@",[token_list objectAtIndex:0],
               [token_list objectAtIndex:1],
               [token_list objectAtIndex:2],
-              [token_list objectAtIndex:3]); 
+              [token_list objectAtIndex:3]);
         
         
         
     }
-
-
     
     
-    [alertTable reloadData]; 
+    
+    
+    [alertTable reloadData];
     progressView.hidden = YES;
     
     

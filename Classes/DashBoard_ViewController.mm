@@ -887,10 +887,6 @@
     [self.navigationController pushViewController:alertSettings animated:NO];
     [alertSettings release];
     
-    
-    //[self presentModalViewController:alertSettings animated:NO];
-    
-    
 }
 
 

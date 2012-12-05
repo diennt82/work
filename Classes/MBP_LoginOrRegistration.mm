@@ -45,8 +45,10 @@
 // Implement viewDidLoad to do additional setup after loading the view, typically from a nib.
 - (void)viewDidLoad {
     [super viewDidLoad];
-	  
-       
+	  [[UIApplication sharedApplication] setStatusBarOrientation:UIInterfaceOrientationPortrait];
+    
+    
+    
     self.navigationItem.title = @"Login"; 
    
     //Back key
@@ -137,8 +139,8 @@
 - (BOOL) shouldAutorotate
 {
     
-    NSLog(@"loging autorotate"); 
-    return YES;
+    
+    return NO;
 }
 
 -(NSUInteger)supportedInterfaceOrientations
@@ -168,6 +170,14 @@
 }
 
 
+-(void) viewWillAppear:(BOOL)animated
+{
+    
+    NSLog(@"viewWillAppear");  
+    [[UIApplication sharedApplication] setStatusBarOrientation:UIInterfaceOrientationPortrait];
+    //[[UIDevice currentDevice] setOrientation:UIInterfaceOrientationPortrait];
+    
+}
 - (void)dealloc {
 	[userName release];
 	[password release];
@@ -191,12 +201,12 @@
 
 - (void)presentModallyOn:(UIViewController *)parent
 {
-    UINavigationController *    navController;
+    MBPNavController *    navController;
     
     //setup nav controller 
-    navController= [[[UINavigationController alloc]initWithRootViewController:self] autorelease];
+    navController= [[[MBPNavController alloc]initWithRootViewController:self] autorelease];
     
-   
+
     
     // Create a navigation controller with us as its root.
     assert(navController != nil);
