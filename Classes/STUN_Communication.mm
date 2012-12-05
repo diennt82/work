@@ -114,8 +114,8 @@
 	_Success_SEL = success; 
 	_Failure_SEL = fail; 
 	
-	//kick off by querying IsCamReady...up to 20secs..
-	retry_getting_camera_availability = 20; 
+	//kick off by querying IsCamReady.. This can take looonng time.. 
+	retry_getting_camera_availability = 20;
 	
 	BMS_Communication * bms_comm; 
 	
@@ -135,11 +135,29 @@
 								AndPass:user_pass 
 								macAddr:mac ];
 	
+   
+    isCamAvaiTimer =
+    [NSTimer scheduledTimerWithTimeInterval:20
+                                     target:self
+                                   selector:@selector(isCamAvaiTimeOut:)
+                                   userInfo:nil
+                                    repeats:NO]; 
 	
 	return TRUE;
 }
 
 
+
+#pragma mark -
+#pragma mark Timer Callbacks
+
+-(void)isCamAvaiTimeOut:(NSTimer *) exp
+{
+    NSLog(@"20sec timeout -- ");
+    //20sec has timeout stop the task now..
+    retry_getting_camera_availability = -1;
+    
+}
 
 #pragma mark -
 #pragma mark Callbacks 
@@ -153,6 +171,13 @@
     {
         [_caller performSelector:_Failure_SEL withObject:nil ];
         return ;
+    }
+    
+    
+    
+    if ([isCamAvaiTimer isValid])
+    {
+        [isCamAvaiTimer invalidate];
     }
     
 	NSString * raw_data = [[[NSString alloc] initWithData:responseData encoding: NSASCIIStringEncoding] autorelease];
@@ -244,6 +269,9 @@
 	if (mChannel.stopStreaming == TRUE)
     {
         [_caller performSelector:_Failure_SEL withObject:nil ];
+        
+        NSLog(@"isavail server unreachable --- STOP Streaming" );
+
         return ;
     }
     

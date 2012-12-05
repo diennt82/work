@@ -194,8 +194,8 @@
     //Close all dialog..
     [self stopPeriodicPopup];
     
-    
-	
+    //stop streaming.. 
+    self.selected_channel.stopStreaming = TRUE;
     
     
     
