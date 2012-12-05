@@ -44,7 +44,7 @@
 							<object class="IBUIProgressView" id="312909578">
 								<reference key="NSNextResponder" ref="104865740"/>
 								<int key="NSvFlags">292</int>
-								<string key="NSFrame">{{35, 123}, {189, 9}}</string>
+								<string key="NSFrame">{{35, 149}, {189, 9}}</string>
 								<reference key="NSSuperview" ref="104865740"/>
 								<reference key="NSWindow"/>
 								<reference key="NSNextKeyView" ref="363322558"/>
@@ -56,7 +56,7 @@
 							<object class="IBUILabel" id="579599316">
 								<reference key="NSNextResponder" ref="104865740"/>
 								<int key="NSvFlags">292</int>
-								<string key="NSFrame">{{70, 41}, {180, 21}}</string>
+								<string key="NSFrame">{{35, 40}, {250, 48}}</string>
 								<reference key="NSSuperview" ref="104865740"/>
 								<reference key="NSWindow"/>
 								<reference key="NSNextKeyView" ref="572561797"/>
@@ -67,7 +67,7 @@
 								<int key="IBUITag">12</int>
 								<bool key="IBUIUserInteractionEnabled">NO</bool>
 								<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
-								<string key="IBUIText">Upgrading Firmware ...</string>
+								<string key="IBUIText">Upgrading firmware, do not power off the camera</string>
 								<object class="NSColor" key="IBUITextColor">
 									<int key="NSColorSpace">1</int>
 									<bytes key="NSRGB">MSAxIDEAA</bytes>
@@ -78,6 +78,8 @@
 								<nil key="IBUIHighlightedColor"/>
 								<int key="IBUIBaselineAdjustment">0</int>
 								<float key="IBUIMinimumFontSize">10</float>
+								<int key="IBUINumberOfLines">2</int>
+								<int key="IBUITextAlignment">1</int>
 								<object class="IBUIFontDescription" key="IBUIFontDescription" id="793051845">
 									<int key="type">1</int>
 									<double key="pointSize">17</double>
@@ -88,14 +90,14 @@
 									<int key="NSfFlags">16</int>
 								</object>
 								<bool key="IBUIAdjustsFontSizeToFit">NO</bool>
+								<double key="preferredMaxLayoutWidth">250</double>
 							</object>
 							<object class="IBUILabel" id="363322558">
 								<reference key="NSNextResponder" ref="104865740"/>
 								<int key="NSvFlags">292</int>
-								<string key="NSFrame">{{235, 115}, {50, 23}}</string>
+								<string key="NSFrame">{{235, 141}, {50, 23}}</string>
 								<reference key="NSSuperview" ref="104865740"/>
 								<reference key="NSWindow"/>
-								<reference key="NSNextKeyView"/>
 								<string key="NSReuseIdentifierKey">_NS:9</string>
 								<bool key="IBUIOpaque">NO</bool>
 								<bool key="IBUIClipsSubviews">YES</bool>
@@ -118,7 +120,7 @@
 							<object class="IBUIActivityIndicatorView" id="572561797">
 								<reference key="NSNextResponder" ref="104865740"/>
 								<int key="NSvFlags">292</int>
-								<string key="NSFrame">{{141, 70}, {37, 37}}</string>
+								<string key="NSFrame">{{141, 96}, {37, 37}}</string>
 								<reference key="NSSuperview" ref="104865740"/>
 								<reference key="NSWindow"/>
 								<reference key="NSNextKeyView" ref="312909578"/>
@@ -217,10 +219,10 @@
 						<int key="objectID">7</int>
 						<reference key="object" ref="104865740"/>
 						<array class="NSMutableArray" key="children">
-							<reference ref="579599316"/>
 							<reference ref="312909578"/>
 							<reference ref="572561797"/>
 							<reference ref="363322558"/>
+							<reference ref="579599316"/>
 						</array>
 						<reference key="parent" ref="191373211"/>
 						<string key="objectName">upgrade_View</string>
