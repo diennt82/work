@@ -119,10 +119,19 @@ return self;
         
         
         MBP_LoginOrRegistration * loginOrReg;
-        loginOrReg = [[MBP_LoginOrRegistration alloc] initWithNibName:@"MBP_LoginOrRegistration"
-                                                               bundle:nil
-                                                     withConnDelegate:self];
-        
+        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+        {
+            loginOrReg = [[MBP_LoginOrRegistration alloc] initWithNibName:@"MBP_LoginOrRegistration_ipad"
+                                                        bundle:nil
+                                              withConnDelegate:self];
+        }
+        else
+        {
+            loginOrReg = [[MBP_LoginOrRegistration alloc]
+                          initWithNibName:@"MBP_LoginOrRegistration"
+                                                        bundle:nil
+                                              withConnDelegate:self];
+        }
         
         //Use navigation controller
         [loginOrReg presentModallyOn:self];
@@ -130,9 +139,20 @@ return self;
     else
     {
         MBP_FirstPage * firstPage;
-        firstPage = [[MBP_FirstPage alloc] initWithNibName:@"MBP_FirstPage"
-                                                    bundle:nil
-                                          withConnDelegate:self];
+        
+        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+        {
+            firstPage = [[MBP_FirstPage alloc] initWithNibName:@"MBP_FirstPage_ipad"
+                                                        bundle:nil
+                                              withConnDelegate:self];
+        }
+        else
+        {
+            firstPage = [[MBP_FirstPage alloc] initWithNibName:@"MBP_FirstPage"
+                                                        bundle:nil
+                                              withConnDelegate:self];
+        }
+        
         
         [self presentModalViewController:firstPage animated:NO];
         
@@ -152,9 +172,18 @@ return self;
 	[self.view addSubview:backgroundView];
     
     MBP_FirstPage * firstPage;
-    firstPage = [[MBP_FirstPage alloc] initWithNibName:@"MBP_FirstPage"
-                                                bundle:nil
-                                      withConnDelegate:self];
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+    {
+        firstPage = [[MBP_FirstPage alloc] initWithNibName:@"MBP_FirstPage_ipad"
+                                                    bundle:nil
+                                          withConnDelegate:self];
+    }
+    else
+    {
+        firstPage = [[MBP_FirstPage alloc] initWithNibName:@"MBP_FirstPage"
+                                                    bundle:nil
+                                          withConnDelegate:self];
+    }
     
     [self presentModalViewController:firstPage animated:NO];
     
@@ -167,11 +196,21 @@ return self;
 -(void) startShowingCameraList
 {
 
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+    {
+        dashBoard = [[DashBoard_ViewController alloc] initWithNibName:@"DashBoard_ViewController_ipad"
+                                                               bundle:nil
+                                                     withConnDelegate:self];
+    }
+    else
+    {
+        dashBoard = [[DashBoard_ViewController alloc] initWithNibName:@"DashBoard_ViewController"
+                                                               bundle:nil
+                                                     withConnDelegate:self];
+    }
 
 
-	dashBoard = [[DashBoard_ViewController alloc] initWithNibName:@"DashBoard_ViewController"
-		bundle:nil
-		withConnDelegate:self];
+	
 
 
 	NSMutableArray * validChannels = [[NSMutableArray alloc]init ];
@@ -303,11 +342,24 @@ return self;
 				[userDefaults setBool:TRUE forKey:_AutoLogin];
 				[userDefaults synchronize];
 
+                
+                MBP_LoginOrRegistration * loginOrReg;
+                if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+                {
+                    loginOrReg = [[MBP_LoginOrRegistration alloc] initWithNibName:@"MBP_LoginOrRegistration_ipad"
+                                                                           bundle:nil
+                                                                 withConnDelegate:self];
+                }
+                else
+                {
+                    loginOrReg = [[MBP_LoginOrRegistration alloc]
+                                  initWithNibName:@"MBP_LoginOrRegistration"
+                                  bundle:nil
+                                  withConnDelegate:self];
+                }
 
-				MBP_LoginOrRegistration * loginOrReg;
-				loginOrReg = [[MBP_LoginOrRegistration alloc] initWithNibName:@"MBP_LoginOrRegistration"
-					bundle:nil
-					withConnDelegate:self];
+
+				
 
 
 				//Use navigation controller 
@@ -1149,15 +1201,25 @@ return self;
 	NSLog(@"show_login..."); 
 
 
+    MBP_LoginOrRegistration * loginOrReg;
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+    {
+        loginOrReg = [[MBP_LoginOrRegistration alloc] initWithNibName:@"MBP_LoginOrRegistration_ipad"
+                                                               bundle:nil
+                                                     withConnDelegate:self];
+    }
+    else
+    {
+        loginOrReg = [[MBP_LoginOrRegistration alloc]
+                      initWithNibName:@"MBP_LoginOrRegistration"
+                      bundle:nil
+                      withConnDelegate:self];
+    }
 
-	MBP_LoginOrRegistration * loginOrReg;
-	loginOrReg = [[MBP_LoginOrRegistration alloc] initWithNibName:@"MBP_LoginOrRegistration"
-		bundle:nil
-		withConnDelegate:self];
 
 
-	//Use navigation controller 
-	[loginOrReg presentModallyOn:self]; 
+	//Use navigation controller
+	[loginOrReg presentModallyOn:self];
 
 }
 
