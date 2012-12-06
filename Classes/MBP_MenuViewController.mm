@@ -1157,7 +1157,8 @@
 	
 	NSString * bundleVersion = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
 	
-	NSString * information = [NSString stringWithFormat:@"Motorola Baby Monitor\nApplication version: %@\nFirmware version:%@,\nMotorola All rights Reserved.\nCamera address:%@",bundleVersion, version, deviceIp];
+
+	NSString * information = [NSString stringWithFormat:@"Motorola Baby Monitor\nApplication version: %@\nFirmware version:%@,\nMonitoreverywhere \u00A9 All rights Reserved.\nCamera address:%@",bundleVersion, version, deviceIp];
 	
 	
 	UIAlertView *alert = [[UIAlertView alloc]
