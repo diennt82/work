@@ -2505,9 +2505,13 @@
 	@synchronized(directionPad)
 	{
         
-		if (currentDirUD != lastDirUD)
+		if (lastDirUD == DIRECTION_V_NON)
+        {
+            
+        }
+        else
 		{
-			//NSLog(@"vdir callback : %d  %d", currentDirUD, lastDirUD);
+			
 			[self send_UD_dir_to_rabot:currentDirUD];
 		}
         
@@ -2616,7 +2620,11 @@
     
 	@synchronized(directionPad)
 	{
-		if (currentDirLR != lastDirLR)
+		if ( lastDirLR == DIRECTION_H_NON)
+        {
+            //Do nothing.
+        }
+        else //if (currentDirLR != lastDirLR)
 		{
 			[self send_LR_dir_to_rabot:currentDirLR];
 		}
