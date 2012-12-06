@@ -25,6 +25,7 @@
 		3809A43015E4A2520098BBC0 /* bb_melody_off_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 3809A42E15E4A2520098BBC0 /* bb_melody_off_icon.png */; };
 		380C430016195047001434C0 /* AlertSettingViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 380C42FE16195047001434C0 /* AlertSettingViewController.mm */; };
 		380C430116195047001434C0 /* AlertSettingViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 380C42FF16195047001434C0 /* AlertSettingViewController.xib */; };
+		38115F9916709F0F00F0E234 /* Account_ViewController_land.xib in Resources */ = {isa = PBXBuildFile; fileRef = 38115F9816709F0F00F0E234 /* Account_ViewController_land.xib */; };
 		3812F82515C8BF0600DADFA6 /* bb_setting_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 3812F82415C8BF0600DADFA6 /* bb_setting_icon.png */; };
 		3812F82B15C8BF3600DADFA6 /* bb_ptt_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 3812F82715C8BF3600DADFA6 /* bb_ptt_icon.png */; };
 		3812F82C15C8BF3600DADFA6 /* bb_snap_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 3812F82815C8BF3600DADFA6 /* bb_snap_icon.png */; };
@@ -208,6 +209,7 @@
 		380C42FD16195047001434C0 /* AlertSettingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AlertSettingViewController.h; sourceTree = "<group>"; };
 		380C42FE16195047001434C0 /* AlertSettingViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = AlertSettingViewController.mm; sourceTree = "<group>"; };
 		380C42FF16195047001434C0 /* AlertSettingViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = AlertSettingViewController.xib; sourceTree = "<group>"; };
+		38115F9816709F0F00F0E234 /* Account_ViewController_land.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = Account_ViewController_land.xib; sourceTree = "<group>"; };
 		3812F82415C8BF0600DADFA6 /* bb_setting_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bb_setting_icon.png; sourceTree = "<group>"; };
 		3812F82715C8BF3600DADFA6 /* bb_ptt_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bb_ptt_icon.png; sourceTree = "<group>"; };
 		3812F82815C8BF3600DADFA6 /* bb_snap_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bb_snap_icon.png; sourceTree = "<group>"; };
@@ -580,6 +582,7 @@
 				38355AE415CB76630045909C /* Account_ViewController.h */,
 				38355AE515CB76630045909C /* Account_ViewController.m */,
 				38355AE615CB76630045909C /* Account_ViewController.xib */,
+				38115F9816709F0F00F0E234 /* Account_ViewController_land.xib */,
 				38CC5A1215DCBBBF00067C54 /* QuickViewCamera_ViewController.h */,
 				38CC5A1315DCBBC100067C54 /* QuickViewCamera_ViewController.mm */,
 				38CC5A1415DCBBC200067C54 /* QuickViewCamera_ViewController.xib */,
@@ -919,6 +922,7 @@
 				3869913416708450009F3E66 /* CameraViewController_ipad.xib in Resources */,
 				38699127167055B8009F3E66 /* MainWindow_ipad.xib in Resources */,
 				389F45461670947F004951E7 /* CameraViewController_land_ipad.xib in Resources */,
+				38115F9916709F0F00F0E234 /* Account_ViewController_land.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

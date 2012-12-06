@@ -40,6 +40,51 @@
     
     //Build ToolBar manually
     
+    [self buildTopToolBar];
+    
+    
+    [self loadUserData];
+    
+    
+}
+
+- (void)viewDidUnload
+{
+    [super viewDidUnload];
+    // Release any retained subviews of the main view.
+    // e.g. self.myOutlet = nil;
+}
+
+-(void)viewWillAppear:(BOOL)animated
+{
+    NSLog(@"viewWillAppear --");
+    UIInterfaceOrientation infOrientation = [UIApplication sharedApplication].statusBarOrientation;
+    
+	[self adjustViewsForOrientation:infOrientation];
+    
+      [self loadUserData];
+    
+}
+
+-(void)loadUserData
+{
+    
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+	
+	//can be user email or user name here --
+	NSString * user_name = (NSString *) [userDefaults objectForKey:@"PortalUsername"];
+	NSString * user_email = (NSString *) [userDefaults objectForKey:@"PortalUseremail"];
+    
+    
+    UITextField * _user = (UITextField *) [userNameCell viewWithTag:1];
+    _user.text = user_name;
+    _user =  (UITextField *) [userEmailCell viewWithTag:1];
+    _user.text = user_email;
+}
+
+-(void) buildTopToolBar
+{
+    
     
     mtopbar = [[UIToolbar alloc]initWithFrame:CGRectMake(0, 0, 320, 44)];
     mtopbar.barStyle = UIBarStyleBlackOpaque;
@@ -56,7 +101,7 @@
     [buttons addObject:reloadButton];
     [reloadButton release];
     
-  #endif  
+#endif
     // create a spacer between the buttons
     UIBarButtonItem *spacer = [[UIBarButtonItem alloc]
                                initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace
@@ -64,7 +109,7 @@
                                action:nil];
     [buttons addObject:spacer];
     [spacer release];
-
+    
     
     //Label
     UIBarButtonItem *label = [[UIBarButtonItem alloc]
@@ -76,10 +121,10 @@
     
     
     // create a spacer between the buttons
-     spacer = [[UIBarButtonItem alloc]
-                                initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace
-                                target:nil
-                                action:nil];
+    spacer = [[UIBarButtonItem alloc]
+              initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace
+              target:nil
+              action:nil];
     [buttons addObject:spacer];
     [spacer release];
     
@@ -101,40 +146,6 @@
     
     
     [self.view addSubview:mtopbar];
-    
-    
-    
-    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-	
-	//can be user email or user name here --
-	NSString * user_name = (NSString *) [userDefaults objectForKey:@"PortalUsername"];
-	NSString * user_email = (NSString *) [userDefaults objectForKey:@"PortalUseremail"];
-    
-    
-    UITextField * _user = (UITextField *) [userNameCell viewWithTag:1];
-    _user.text = user_name;
-    _user =  (UITextField *) [userEmailCell viewWithTag:1];
-    _user.text = user_email;
-    
-    
-}
-
-- (void)viewDidUnload
-{
-    [super viewDidUnload];
-    // Release any retained subviews of the main view.
-    // e.g. self.myOutlet = nil;
-}
-
--(void)viewWillAppear:(BOOL)animated
-{
-    NSLog(@"viewWillAppear --");
-    	UIInterfaceOrientation infOrientation = [UIApplication sharedApplication].statusBarOrientation;
-    
-	[self adjustViewsForOrientation:infOrientation];
-    
-    
-    
 }
 
 
@@ -166,8 +177,15 @@
     [self adjustViewsForOrientation:toInterfaceOrientation];
 }
 
+-(void ) didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation
+{
+    [self loadUserData];
+    // [accountInfo reloadData];
+}
 -(void) adjustViewsForOrientation:(UIInterfaceOrientation) orientation
 {
+    
+#if 0
     if (orientation == UIInterfaceOrientationLandscapeLeft || orientation == UIInterfaceOrientationLandscapeRight)
 	{
         
@@ -188,8 +206,8 @@
 	}
 	else if (orientation == UIInterfaceOrientationPortrait || orientation == UIInterfaceOrientationPortraitUpsideDown)
 	{
-        
         mtopbar.frame = CGRectMake(0, 0, 320, mtopbar.frame.size.height);
+        
         accountInfo.frame = CGRectMake(0,44, 320, 268);
         UIImageView * bg = (UIImageView*) [self.view viewWithTag:1];
         if (bg != nil)
@@ -201,8 +219,54 @@
         }
     }
     
+#endif
     
     
+	if (orientation == UIInterfaceOrientationLandscapeLeft || orientation == UIInterfaceOrientationLandscapeRight)
+	{
+        
+        [[NSBundle mainBundle] loadNibNamed:@"Account_ViewController_land"
+                                      owner:self
+                                    options:nil];
+        
+        if (mtopbar == nil)
+        {
+            NSLog(@"create new tool bar");
+            [self buildTopToolBar];
+      
+        }
+        mtopbar.frame = CGRectMake(0, 0, 480, mtopbar.frame.size.height);
+
+        
+        
+    }
+	else if (orientation == UIInterfaceOrientationPortrait || orientation == UIInterfaceOrientationPortraitUpsideDown)
+	{
+        
+        [[NSBundle mainBundle] loadNibNamed:@"Account_ViewController"
+                                      owner:self
+                                    options:nil];
+        
+        if (mtopbar == nil)
+        {
+            NSLog(@"create new tool bar p");
+            [self buildTopToolBar];
+            
+        }
+        
+        mtopbar.frame = CGRectMake(0, 0, 320, mtopbar.frame.size.height);
+      
+        
+	}
+    
+   
+    
+    if (mtopbar != nil)
+    {
+        [self.view addSubview:mtopbar];
+        
+        [self.view bringSubviewToFront:mtopbar];
+    }
 }
 
 
@@ -219,7 +283,7 @@
         
         
         accountInfo.hidden = YES;
-        progress.hidden = NO; 
+        progress.hidden = NO;
         
         //User logout --
         // 1 . Clear all alert
