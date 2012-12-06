@@ -36,7 +36,7 @@
 
 	CamChannel *mChannel;
 
-	 
+	  NSTimer * isCamAvaiTimer;
 	
 	int retry_getting_camera_availability; 
 }

@@ -400,12 +400,8 @@
     
     responseData = [[NSMutableData alloc] init];
     
-#if 0 //Force relay
-    
-    
-	[NSThread sleepForTimeInterval:25.0];
-	[udtSocket close];
-#else
+
+  
     
 	NSDate * now = [NSDate date];
 	NSDate * timeout = [NSDate dateWithTimeInterval:25.0 sinceDate:now];
@@ -425,63 +421,86 @@
 		now = [NSDate date];
         
 	}
-#endif
+   
+
     
-	if (localPort < 0 )
+	
+    
+    if (localPort < 0 ) ///// STUN RELAY /////////
 	{
         
-		///// STUN RELAY /////////
 		//Still fail after retries --- Go for relay now
 		NSLog(@"RELAY RELAY RELAY");
 		[self switchToUdtRelayServer ];
 		return;
 	}
-    
-    
-	///// STUN direct /////////
-	if (local_port != localPort)
-	{
-		NSLog(@"connecting port is different from localport: %d %d", local_port, localPort);
-	}
-	NSString * msg = nil;
-	msg = [NSString stringWithFormat:@"%@%@%@",
-           AVSTREAM_UDT_REQ, AVSTREAM_PARAM_1,self.remoteViewKey];
-	NSData * msg_ = [[NSData alloc] initWithBytes:[msg UTF8String] length:[msg length]];
-    
-	[udtSocket sendDataViaUdt:msg_];
-    
-    
-	
-    
-	if ( pcmPlayer == nil)
-	{
-		/* Start the player to playback & record */
-		pcmPlayer = [[PCMPlayer alloc] init];
-		[[pcmPlayer player] setPlay_now:FALSE];
-		[pcmPlayer Play:FALSE];
+	else ///// STUN direct /////////
+    {
+       
+        if (local_port != localPort)
+        {
+            NSLog(@"connecting port is different from localport: %d %d", local_port, localPort);
+        }
+        NSString * msg = nil;
+        msg = [NSString stringWithFormat:@"%@%@%@",
+               AVSTREAM_UDT_REQ, AVSTREAM_PARAM_1,self.remoteViewKey];
+        NSData * msg_ = [[NSData alloc] initWithBytes:[msg UTF8String] length:[msg length]];
         
-	}
-	else {
-		[[pcmPlayer player] setPlay_now:FALSE];
+        [udtSocket sendDataViaUdt:msg_];
+   
+#pragma mark FORCE RELAY
+#if 0
+
+        //sleep for 5 sec 
+        [NSThread sleepForTimeInterval:5.0];
+        msg = [NSString stringWithFormat:@"%@%@",
+               STUN_CMD_PART, CLOSE_STUN_SESSION];
+        msg_ = [[NSData alloc] initWithBytes:[msg UTF8String] length:[msg length]];
         
-	}
-    
-    
-    
-	readTimeoutThrd = [[NSThread alloc] initWithTarget:self
-                                              selector:@selector(readTimeoutCheck:)
-                                                object:self];
-    
-	[readTimeoutThrd start];
-    
-	udtStreamerThd = [[NSThread alloc] initWithTarget:self
-                                             selector:@selector(readVideoDataFromSocket:)
-                                               object:self];
-    
-	[udtStreamerThd start];
-    
-    
-    
+        
+        if ([udtSocket isOpen])
+        {
+            [udtSocket sendDataViaUdt:msg_];
+            [udtSocket close];
+        }
+        
+        NSLog(@"Force  RELAY");
+		[self switchToUdtRelayServer ];
+        return;
+        
+#else
+        
+        
+        
+        if ( pcmPlayer == nil)
+        {
+            /* Start the player to playback & record */
+            pcmPlayer = [[PCMPlayer alloc] init];
+            [[pcmPlayer player] setPlay_now:FALSE];
+            [pcmPlayer Play:FALSE];
+            
+        }
+        else {
+            [[pcmPlayer player] setPlay_now:FALSE];
+            
+        }
+        
+        
+        
+        readTimeoutThrd = [[NSThread alloc] initWithTarget:self
+                                                  selector:@selector(readTimeoutCheck:)
+                                                    object:self];
+        
+        [readTimeoutThrd start];
+        
+        udtStreamerThd = [[NSThread alloc] initWithTarget:self
+                                                 selector:@selector(readVideoDataFromSocket:)
+                                                   object:self];
+        
+        [udtStreamerThd start];
+#endif 
+        
+    }
     
     
 }
@@ -509,10 +528,6 @@
 
 -(void) readVideoDataFromSocket:(MBP_Streamer *) streamer
 {
-	
-    
-    
-    
 	NSLog(@"STUN Main readVideoDataFromSocket enter: 01");
     
 	UdtSocketWrapper * socket = streamer.udtSocket;//grap the opened socket

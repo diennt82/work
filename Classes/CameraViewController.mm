@@ -194,8 +194,8 @@
     //Close all dialog..
     [self stopPeriodicPopup];
     
-    
-	
+    //stop streaming.. 
+    self.selected_channel.stopStreaming = TRUE;
     
     
     
@@ -880,7 +880,9 @@
 		}
 		else
 		{
-			NSLog(@"alert not visible -- going to release ");
+			NSLog(@"alert not visible -- dismiss it & release.. ");
+            
+            [alert dismissWithClickedButtonIndex:1 animated:NO];
 		}
         
 		[alert release];
