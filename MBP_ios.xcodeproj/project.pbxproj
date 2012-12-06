@@ -45,13 +45,14 @@
 		38355AE815CB76630045909C /* Account_ViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 38355AE615CB76630045909C /* Account_ViewController.xib */; };
 		38362C1D15FDEE400077E188 /* alert_history.sqlite in Resources */ = {isa = PBXBuildFile; fileRef = 38362C1C15FDEE400077E188 /* alert_history.sqlite */; };
 		3856CDD2166DFDBC002A1B8A /* FWUpgradeView_land.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3856CDD1166DFDBC002A1B8A /* FWUpgradeView_land.xib */; };
+		38699127167055B8009F3E66 /* MainWindow_ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 38699126167055B8009F3E66 /* MainWindow_ipad.xib */; };
 		3869912D167060E0009F3E66 /* MBP_FirstPage_ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3869912C167060E0009F3E66 /* MBP_FirstPage_ipad.xib */; };
 		38699130167073F7009F3E66 /* MBP_LoginOrRegistration_ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3869912F167073F7009F3E66 /* MBP_LoginOrRegistration_ipad.xib */; };
 		3869913216707F75009F3E66 /* DashBoard_ViewController_ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3869913116707F75009F3E66 /* DashBoard_ViewController_ipad.xib */; };
 		3869913416708450009F3E66 /* CameraViewController_ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3869913316708450009F3E66 /* CameraViewController_ipad.xib */; };
-		38699127167055B8009F3E66 /* MainWindow_ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 38699126167055B8009F3E66 /* MainWindow_ipad.xib */; };
 		3887DD8415CB697C0077048D /* libcrypto.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3887DD8215CB697C0077048D /* libcrypto.a */; };
 		3887DD8515CB697C0077048D /* libUdtLib.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3887DD8315CB697C0077048D /* libUdtLib.a */; };
+		389F45461670947F004951E7 /* CameraViewController_land_ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 389F45451670947F004951E7 /* CameraViewController_land_ipad.xib */; };
 		38A13AF316363147000138EA /* UnderlinedUILabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 38A13AF216363147000138EA /* UnderlinedUILabel.m */; };
 		38A478D015BD64F9008682FE /* MBP_InitialSetupViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 38A478CE15BD64F9008682FE /* MBP_InitialSetupViewController.mm */; };
 		38A478D915BE484B008682FE /* Step_02_ViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 38A478D815BE484B008682FE /* Step_02_ViewController.mm */; };
@@ -229,13 +230,14 @@
 		38355AE615CB76630045909C /* Account_ViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = Account_ViewController.xib; sourceTree = "<group>"; };
 		38362C1C15FDEE400077E188 /* alert_history.sqlite */ = {isa = PBXFileReference; lastKnownFileType = file; path = alert_history.sqlite; sourceTree = "<group>"; };
 		3856CDD1166DFDBC002A1B8A /* FWUpgradeView_land.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FWUpgradeView_land.xib; sourceTree = "<group>"; };
+		38699126167055B8009F3E66 /* MainWindow_ipad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MainWindow_ipad.xib; sourceTree = "<group>"; };
 		3869912C167060E0009F3E66 /* MBP_FirstPage_ipad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MBP_FirstPage_ipad.xib; sourceTree = "<group>"; };
 		3869912F167073F7009F3E66 /* MBP_LoginOrRegistration_ipad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MBP_LoginOrRegistration_ipad.xib; sourceTree = "<group>"; };
 		3869913116707F75009F3E66 /* DashBoard_ViewController_ipad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = DashBoard_ViewController_ipad.xib; sourceTree = "<group>"; };
 		3869913316708450009F3E66 /* CameraViewController_ipad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CameraViewController_ipad.xib; sourceTree = "<group>"; };
-		38699126167055B8009F3E66 /* MainWindow_ipad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MainWindow_ipad.xib; sourceTree = "<group>"; };
 		3887DD8215CB697C0077048D /* libcrypto.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libcrypto.a; sourceTree = "<group>"; };
 		3887DD8315CB697C0077048D /* libUdtLib.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libUdtLib.a; sourceTree = "<group>"; };
+		389F45451670947F004951E7 /* CameraViewController_land_ipad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = CameraViewController_land_ipad.xib; path = ../CameraViewController_land_ipad.xib; sourceTree = "<group>"; };
 		38A13AF116363147000138EA /* UnderlinedUILabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UnderlinedUILabel.h; sourceTree = "<group>"; };
 		38A13AF216363147000138EA /* UnderlinedUILabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UnderlinedUILabel.m; sourceTree = "<group>"; };
 		38A478CD15BD64F9008682FE /* MBP_InitialSetupViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MBP_InitialSetupViewController.h; sourceTree = "<group>"; };
@@ -617,6 +619,7 @@
 				38FC1EB91622E9340082E7F9 /* FWUpgradeView.xib */,
 				3856CDD1166DFDBC002A1B8A /* FWUpgradeView_land.xib */,
 				3812F84015C8DB5600DADFA6 /* CameraViewController_land.xib */,
+				389F45451670947F004951E7 /* CameraViewController_land_ipad.xib */,
 				38A62E8615C8F03C00DEA520 /* SongTitleView.xib */,
 				38C79E2915C7C444006EE378 /* CameraViewController.h */,
 				38C79E2A15C7C446006EE378 /* CameraViewController.mm */,
@@ -915,6 +918,7 @@
 				3869913216707F75009F3E66 /* DashBoard_ViewController_ipad.xib in Resources */,
 				3869913416708450009F3E66 /* CameraViewController_ipad.xib in Resources */,
 				38699127167055B8009F3E66 /* MainWindow_ipad.xib in Resources */,
+				389F45461670947F004951E7 /* CameraViewController_land_ipad.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
