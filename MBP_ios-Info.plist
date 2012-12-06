@@ -36,5 +36,9 @@
 	<false/>
 	<key>UIFileSharingEnabled</key>
 	<true/>
+	<key>NSMainNibFile~ipad</key>
+	<string>MainWindow_ipad</string>
+	<key>UIInterfaceOrientation</key>
+	<string>UIInterfaceOrientationPortrait</string>
 </dict>
 </plist>

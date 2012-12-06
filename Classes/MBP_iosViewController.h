@@ -24,7 +24,6 @@
 #import "HttpCommunication.h"
 #import "ConnectionMethodDelegate.h"
 #import "MBP_LoginOrRegistration.h"
-#import "MBP_CamListView.h"
 #import "MBP_Streamer.h"
 
 #import "AudioOutStreamer.h"

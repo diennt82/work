@@ -49,6 +49,7 @@
 		38699130167073F7009F3E66 /* MBP_LoginOrRegistration_ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3869912F167073F7009F3E66 /* MBP_LoginOrRegistration_ipad.xib */; };
 		3869913216707F75009F3E66 /* DashBoard_ViewController_ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3869913116707F75009F3E66 /* DashBoard_ViewController_ipad.xib */; };
 		3869913416708450009F3E66 /* CameraViewController_ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3869913316708450009F3E66 /* CameraViewController_ipad.xib */; };
+		38699127167055B8009F3E66 /* MainWindow_ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 38699126167055B8009F3E66 /* MainWindow_ipad.xib */; };
 		3887DD8415CB697C0077048D /* libcrypto.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3887DD8215CB697C0077048D /* libcrypto.a */; };
 		3887DD8515CB697C0077048D /* libUdtLib.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3887DD8315CB697C0077048D /* libUdtLib.a */; };
 		38A13AF316363147000138EA /* UnderlinedUILabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 38A13AF216363147000138EA /* UnderlinedUILabel.m */; };
@@ -166,10 +167,6 @@
 		97A3C00515455054000C3546 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 97A3C00415455054000C3546 /* SystemConfiguration.framework */; };
 		97B8F6671439B58000924E84 /* DeviceConfiguration.m in Sources */ = {isa = PBXBuildFile; fileRef = 97B8F6661439B58000924E84 /* DeviceConfiguration.m */; };
 		97C49AB0154784F4008B7D03 /* SetupData.m in Sources */ = {isa = PBXBuildFile; fileRef = 97C49AAF154784F4008B7D03 /* SetupData.m */; };
-		97C49B341547B410008B7D03 /* MBP_CamListView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 97C49B331547B410008B7D03 /* MBP_CamListView.xib */; };
-		97C49B381547B5AC008B7D03 /* CamListItemView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 97C49B371547B5AC008B7D03 /* CamListItemView.xib */; };
-		97C49B551547B6F7008B7D03 /* CamListItemView.m in Sources */ = {isa = PBXBuildFile; fileRef = 97C49B541547B6F7008B7D03 /* CamListItemView.m */; };
-		97C49B821547BD52008B7D03 /* MBP_CamListView.m in Sources */ = {isa = PBXBuildFile; fileRef = 97C49B811547BD52008B7D03 /* MBP_CamListView.m */; };
 		97D00812159D9FF500B1D92F /* WifiEntry.m in Sources */ = {isa = PBXBuildFile; fileRef = 97D00811159D9FF500B1D92F /* WifiEntry.m */; };
 		97D0081C159DA24400B1D92F /* WifiListParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 97D0081B159DA24400B1D92F /* WifiListParser.m */; };
 		97D9A1BD143EB03A000E3533 /* video_error.png in Resources */ = {isa = PBXBuildFile; fileRef = 97D9A1BC143EB03A000E3533 /* video_error.png */; };
@@ -191,7 +188,7 @@
 		1D3623250D0F684500981E51 /* MBP_iosAppDelegate.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = MBP_iosAppDelegate.mm; sourceTree = "<group>"; };
 		1DF5F4DF0D08C38300B7A737 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		288765A40DF7441C002DB57D /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
-		2899E5210DE3E06400AC0155 /* MBP_iosViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MBP_iosViewController.xib; sourceTree = "<group>"; };
+		2899E5210DE3E06400AC0155 /* MBP_iosViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = MBP_iosViewController.xib; path = ../MBP_iosViewController.xib; sourceTree = "<group>"; };
 		28AD733E0D9D9553002E5188 /* MainWindow.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MainWindow.xib; sourceTree = "<group>"; };
 		28D7ACF60DDB3853001CB0EB /* MBP_iosViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MBP_iosViewController.h; sourceTree = "<group>"; };
 		28D7ACF70DDB3853001CB0EB /* MBP_iosViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = MBP_iosViewController.mm; sourceTree = "<group>"; };
@@ -236,6 +233,7 @@
 		3869912F167073F7009F3E66 /* MBP_LoginOrRegistration_ipad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MBP_LoginOrRegistration_ipad.xib; sourceTree = "<group>"; };
 		3869913116707F75009F3E66 /* DashBoard_ViewController_ipad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = DashBoard_ViewController_ipad.xib; sourceTree = "<group>"; };
 		3869913316708450009F3E66 /* CameraViewController_ipad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CameraViewController_ipad.xib; sourceTree = "<group>"; };
+		38699126167055B8009F3E66 /* MainWindow_ipad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MainWindow_ipad.xib; sourceTree = "<group>"; };
 		3887DD8215CB697C0077048D /* libcrypto.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libcrypto.a; sourceTree = "<group>"; };
 		3887DD8315CB697C0077048D /* libUdtLib.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libUdtLib.a; sourceTree = "<group>"; };
 		38A13AF116363147000138EA /* UnderlinedUILabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UnderlinedUILabel.h; sourceTree = "<group>"; };
@@ -406,12 +404,6 @@
 		97B8F6661439B58000924E84 /* DeviceConfiguration.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DeviceConfiguration.m; sourceTree = "<group>"; };
 		97C49AAE154784F4008B7D03 /* SetupData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SetupData.h; sourceTree = "<group>"; };
 		97C49AAF154784F4008B7D03 /* SetupData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SetupData.m; sourceTree = "<group>"; };
-		97C49B331547B410008B7D03 /* MBP_CamListView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = MBP_CamListView.xib; path = ../MBP_CamListView.xib; sourceTree = "<group>"; };
-		97C49B371547B5AC008B7D03 /* CamListItemView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = CamListItemView.xib; path = ../CamListItemView.xib; sourceTree = "<group>"; };
-		97C49B531547B6F7008B7D03 /* CamListItemView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CamListItemView.h; sourceTree = "<group>"; };
-		97C49B541547B6F7008B7D03 /* CamListItemView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CamListItemView.m; sourceTree = "<group>"; };
-		97C49B801547BD52008B7D03 /* MBP_CamListView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MBP_CamListView.h; sourceTree = "<group>"; };
-		97C49B811547BD52008B7D03 /* MBP_CamListView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MBP_CamListView.m; sourceTree = "<group>"; };
 		97D00810159D9FF500B1D92F /* WifiEntry.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WifiEntry.h; sourceTree = "<group>"; };
 		97D00811159D9FF500B1D92F /* WifiEntry.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WifiEntry.m; sourceTree = "<group>"; };
 		97D0081A159DA24400B1D92F /* WifiListParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WifiListParser.h; sourceTree = "<group>"; };
@@ -497,12 +489,6 @@
 				97534533143325EE0037DDAC /* AiBallAviPlayer.h */,
 				97534534143325EE0037DDAC /* AiBallAviPlayer.m */,
 				97534538143326080037DDAC /* AiBallVideoSink.h */,
-				97C49B371547B5AC008B7D03 /* CamListItemView.xib */,
-				97C49B531547B6F7008B7D03 /* CamListItemView.h */,
-				97C49B541547B6F7008B7D03 /* CamListItemView.m */,
-				97C49B331547B410008B7D03 /* MBP_CamListView.xib */,
-				97C49B801547BD52008B7D03 /* MBP_CamListView.h */,
-				97C49B811547BD52008B7D03 /* MBP_CamListView.m */,
 				97A3BF0B15453A39000C3546 /* CameraPassword.h */,
 				97A3BF0C15453A39000C3546 /* CameraPassword.m */,
 				972E294F15A405D400E60A96 /* SymmetricCipher.h */,
@@ -609,6 +595,7 @@
 				3825A4B8166F05C500520872 /* MBPNavController.m */,
 				28D7ACF60DDB3853001CB0EB /* MBP_iosViewController.h */,
 				28D7ACF70DDB3853001CB0EB /* MBP_iosViewController.mm */,
+				2899E5210DE3E06400AC0155 /* MBP_iosViewController.xib */,
 				97987DEF1546A1630066C49B /* MBP_LoginOrRegistration.h */,
 				97987DF01546A1630066C49B /* MBP_LoginOrRegistration.mm */,
 				97987DF11546A1630066C49B /* MBP_LoginOrRegistration.xib */,
@@ -678,8 +665,8 @@
 				38A7E0E5165B7D8F00C542A6 /* beep.wav */,
 				38362C1C15FDEE400077E188 /* alert_history.sqlite */,
 				97E3AAD5147E257400A0922A /* iTunesArtWork */,
-				2899E5210DE3E06400AC0155 /* MBP_iosViewController.xib */,
 				28AD733E0D9D9553002E5188 /* MainWindow.xib */,
+				38699126167055B8009F3E66 /* MainWindow_ipad.xib */,
 				8D1107310486CEB800E47090 /* MBP_ios-Info.plist */,
 				9719ED99155CDC61005419FC /* cameraMenuDirect.plist */,
 				9719EDA1155CDF4C005419FC /* cameraMenuRouter.plist */,
@@ -840,8 +827,6 @@
 				97987CCD154687490066C49B /* background.png in Resources */,
 				97987CCF154688110066C49B /* partition_bar.png in Resources */,
 				97987DF31546A1630066C49B /* MBP_LoginOrRegistration.xib in Resources */,
-				97C49B341547B410008B7D03 /* MBP_CamListView.xib in Resources */,
-				97C49B381547B5AC008B7D03 /* CamListItemView.xib in Resources */,
 				974EF72C1552241C008D6B77 /* ios_Settings.png in Resources */,
 				9719EC5D155C9F30005419FC /* MBP_MenuViewController.xib in Resources */,
 				9719ED9A155CDC61005419FC /* cameraMenuDirect.plist in Resources */,
@@ -929,6 +914,7 @@
 				38699130167073F7009F3E66 /* MBP_LoginOrRegistration_ipad.xib in Resources */,
 				3869913216707F75009F3E66 /* DashBoard_ViewController_ipad.xib in Resources */,
 				3869913416708450009F3E66 /* CameraViewController_ipad.xib in Resources */,
+				38699127167055B8009F3E66 /* MainWindow_ipad.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -970,8 +956,6 @@
 				97987E421546AF2C0066C49B /* UserAccount.mm in Sources */,
 				97987E461546B04C0066C49B /* BMS_Communication.m in Sources */,
 				97C49AB0154784F4008B7D03 /* SetupData.m in Sources */,
-				97C49B551547B6F7008B7D03 /* CamListItemView.m in Sources */,
-				97C49B821547BD52008B7D03 /* MBP_CamListView.m in Sources */,
 				9745CE5D1553CF9200800CA6 /* ScanForCamera.mm in Sources */,
 				97423429155BA503007DCBCD /* AudioOutStreamer.m in Sources */,
 				9719EC5C155C9F30005419FC /* MBP_MenuViewController.mm in Sources */,
