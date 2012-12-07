@@ -474,9 +474,10 @@
     
     if (self.editModeEnabled == TRUE)
     {
-        
         static NSString *CellIdentifier = @"Cell1";
-        
+
+#if 0
+                
         UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
         
         
@@ -488,6 +489,24 @@
             self.cellView = nil;
         }
         
+        
+#else
+       
+        // Use Subclass
+        
+        EditCameraCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+        
+        
+        
+        if (cell == nil) {
+            
+            [[NSBundle mainBundle] loadNibNamed:@"DashBoard_camEdit" owner:self options:nil];
+            cell = self.cellView;
+            self.cellView = nil;
+        }
+
+        
+#endif
         
         UIImageView * snapshot = (UIImageView *) [cell viewWithTag:500];
         UILabel * camName  = (UILabel *) [cell viewWithTag:501];
@@ -527,8 +546,9 @@
             NSLog(@"cell: %d nil", indexPath.row);
         }
         
-        
-        
+        // NSLog(@"cell index : %d ", indexPath.row);
+        cell.cameraIndex  = indexPath.row;
+        cell.vc = self; 
         
         return cell;
         
@@ -924,6 +944,17 @@
     
     
 }
+
+
+
+
+
+
+
+
+
+
+
 #pragma  mark -
 
 

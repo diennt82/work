@@ -16,11 +16,15 @@
 #import "QuickViewCamera_ViewController.h"
 #import "AlertSettingViewController.h"
 
+#import "EditCameraCell.h"
+
+@class  EditCameraCell; 
+
 #define  MAX_CAM_ALLOWED 4
 
 @interface DashBoard_ViewController : UIViewController<UITableViewDataSource, UITableViewDelegate, UINavigationControllerDelegate, UITextFieldDelegate>
 {
-    IBOutlet UITableViewCell *cellView;
+    IBOutlet EditCameraCell *cellView;
     IBOutlet UITableView * cameraList; 
     IBOutlet UITabBarController *tabBarController;
 

@@ -125,6 +125,7 @@
 		38F3D1B1164A467300BB0C77 /* MBP_MenuProgress_portrait.xib in Resources */ = {isa = PBXBuildFile; fileRef = 38F3D1B0164A467200BB0C77 /* MBP_MenuProgress_portrait.xib */; };
 		38F3D1B3164A46E000BB0C77 /* MBP_MenuProgress_land.xib in Resources */ = {isa = PBXBuildFile; fileRef = 38F3D1B2164A46E000BB0C77 /* MBP_MenuProgress_land.xib */; };
 		38FC1EBA1622E9350082E7F9 /* FWUpgradeView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 38FC1EB91622E9340082E7F9 /* FWUpgradeView.xib */; };
+		38FC9D7A16717B0300373F25 /* EditCameraCell.mm in Sources */ = {isa = PBXBuildFile; fileRef = 38FC9D7916717B0300373F25 /* EditCameraCell.mm */; };
 		97137B9715AE742A00BEBBD6 /* StunCommunication.mm in Sources */ = {isa = PBXBuildFile; fileRef = 97137B9615AE742A00BEBBD6 /* StunCommunication.mm */; };
 		9719EC5C155C9F30005419FC /* MBP_MenuViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 9719EC5A155C9F30005419FC /* MBP_MenuViewController.mm */; };
 		9719EC5D155C9F30005419FC /* MBP_MenuViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9719EC5B155C9F30005419FC /* MBP_MenuViewController.xib */; };
@@ -328,6 +329,8 @@
 		38F3D1B0164A467200BB0C77 /* MBP_MenuProgress_portrait.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MBP_MenuProgress_portrait.xib; sourceTree = "<group>"; };
 		38F3D1B2164A46E000BB0C77 /* MBP_MenuProgress_land.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MBP_MenuProgress_land.xib; sourceTree = "<group>"; };
 		38FC1EB91622E9340082E7F9 /* FWUpgradeView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FWUpgradeView.xib; sourceTree = "<group>"; };
+		38FC9D7816717B0300373F25 /* EditCameraCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EditCameraCell.h; sourceTree = "<group>"; };
+		38FC9D7916717B0300373F25 /* EditCameraCell.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = EditCameraCell.mm; sourceTree = "<group>"; };
 		8D1107310486CEB800E47090 /* MBP_ios-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "MBP_ios-Info.plist"; plistStructureDefinitionIdentifier = "com.apple.xcode.plist.structure-definition.iphone.info-plist"; sourceTree = "<group>"; };
 		9704F37E14B76202000B4AA5 /* Entitlements.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Entitlements.plist; sourceTree = "<group>"; };
 		97137B9515AE742A00BEBBD6 /* StunCommunication.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StunCommunication.h; sourceTree = "<group>"; };
@@ -611,12 +614,6 @@
 				97987CD615468C2E0066C49B /* MBP_FirstPage.m */,
 				38CFFF5315BD100B009A2EE2 /* MBP_FirstPage.xib */,
 				3869912C167060E0009F3E66 /* MBP_FirstPage_ipad.xib */,
-				38CFFF7515BD3E67009A2EE2 /* DashBoard_ViewController.xib */,
-				3869913116707F75009F3E66 /* DashBoard_ViewController_ipad.xib */,
-				38C79E2615C78816006EE378 /* DashBoard_camView.xib */,
-				38CC5A1D15DCF8F300067C54 /* DashBoard_camEdit.xib */,
-				38C79E2315C786A0006EE378 /* DashBoard_ViewController.h */,
-				38C79E2415C786A1006EE378 /* DashBoard_ViewController.mm */,
 				38CFFF7715BD4ECB009A2EE2 /* CameraViewController.xib */,
 				3869913316708450009F3E66 /* CameraViewController_ipad.xib */,
 				38FC1EB91622E9340082E7F9 /* FWUpgradeView.xib */,
@@ -626,6 +623,14 @@
 				38A62E8615C8F03C00DEA520 /* SongTitleView.xib */,
 				38C79E2915C7C444006EE378 /* CameraViewController.h */,
 				38C79E2A15C7C446006EE378 /* CameraViewController.mm */,
+				38FC9D7816717B0300373F25 /* EditCameraCell.h */,
+				38FC9D7916717B0300373F25 /* EditCameraCell.mm */,
+				38CFFF7515BD3E67009A2EE2 /* DashBoard_ViewController.xib */,
+				3869913116707F75009F3E66 /* DashBoard_ViewController_ipad.xib */,
+				38C79E2615C78816006EE378 /* DashBoard_camView.xib */,
+				38CC5A1D15DCF8F300067C54 /* DashBoard_camEdit.xib */,
+				38C79E2315C786A0006EE378 /* DashBoard_ViewController.h */,
+				38C79E2415C786A1006EE378 /* DashBoard_ViewController.mm */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -995,6 +1000,7 @@
 				38A13AF316363147000138EA /* UnderlinedUILabel.m in Sources */,
 				97DA238416425FA100EE2528 /* ToUViewController.m in Sources */,
 				3825A4B9166F05C500520872 /* MBPNavController.m in Sources */,
+				38FC9D7A16717B0300373F25 /* EditCameraCell.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
