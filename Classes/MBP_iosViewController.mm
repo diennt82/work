@@ -198,12 +198,16 @@ return self;
 
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
     {
+        NSLog(@"Load IPad");
+        
         dashBoard = [[DashBoard_ViewController alloc] initWithNibName:@"DashBoard_ViewController_ipad"
                                                                bundle:nil
                                                      withConnDelegate:self];
     }
     else
     {
+        NSLog(@"Load IPhne");
+
         dashBoard = [[DashBoard_ViewController alloc] initWithNibName:@"DashBoard_ViewController"
                                                                bundle:nil
                                                      withConnDelegate:self];
