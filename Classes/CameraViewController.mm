@@ -165,7 +165,7 @@
     
     // Do any additional setup after loading the view.
 	[[NSNotificationCenter defaultCenter] addObserver: self
-                                             selector: @selector(becomeActive)
+                                             selector: @selector(becomeActive_)
                                                  name: UIApplicationDidBecomeActiveNotification
                                                object: nil];
     
@@ -181,6 +181,10 @@
 	    
 }
 
+-(void) becomeActive_
+{
+    NSLog(@"Become ACTIVE _  .. do nothing.. ");
+}
 -(void) becomeActive
 {
     NSLog(@"Become ACTIVE .. start channel ");
@@ -277,13 +281,15 @@
 
 -(void) handleEnteredBackground
 {
-	NSLog(@"Enter Background.. stop current streaming");
-	//For now just go back to camera list
-    
-        
+	NSLog(@"Enter Background.. Keep on streamming.. ");
+   
+    //stop streaming..
+#if 0
+    self.selected_channel.stopStreaming = TRUE;
 	if (streamer.recordInProgress == YES)
 		[streamer stopRecording];
 	[streamer stopStreaming];
+   
     
     if (scanner != nil)
     {
@@ -293,15 +299,12 @@
     
 	//NSLog(@"abort remote timer ");
 	[self.selected_channel abortViewTimer];
+#endif
+    
     
     //Close all dialog..
     [self stopPeriodicPopup];
-    
-    //stop streaming.. 
-    self.selected_channel.stopStreaming = TRUE;
-    
-    
-    
+        
 }
 
 -(void) startCameraConnection:(NSTimer *) exp

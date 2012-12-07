@@ -459,7 +459,7 @@ SystemSoundID soundFileObject;
                 
             }
             /* Stop Streamming */
-            [self.streamer stopStreaming];
+            [self.streamer stopStreaming]; 
 
             // re-scan for the camera */
             [self scan_for_missing_camera];
