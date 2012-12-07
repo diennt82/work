@@ -131,7 +131,19 @@ SystemSoundID soundFileObject;
 
 -(void) becomeActive
 {
+    if (self.flipTimer != nil  && [self.flipTimer isValid])
+    {
+        [self.flipTimer invalidate]; 
+    }
     
+    NSLog(@"restart flip timer ");
+    self.flipTimer = [NSTimer scheduledTimerWithTimeInterval:20.0
+                                                      target:self
+                                                    selector:@selector(channelFlip:)
+                                                    userInfo:nil
+                                                     repeats:YES];
+
+
 }
 #pragma mark -
 #pragma  mark Orientation handling
@@ -181,6 +193,8 @@ SystemSoundID soundFileObject;
 
 -(void) goBackToCameraList
 {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+    
     if (scanner != nil)
     {
         [scanner cancel];
