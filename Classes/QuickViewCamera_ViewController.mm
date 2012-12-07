@@ -626,9 +626,17 @@ SystemSoundID soundFileObject;
     if ([_scan_results count] ==0 )
     {
         //empty result... rescan
+<<<<<<< HEAD
         NSLog(@"Empty result-> STREAM_STOPPED_UNEXPECTEDLY to rescan ");
         //[self scan_for_missing_camera];
         [self statusReport:STREAM_STOPPED_UNEXPECTEDLY andObj:nil];
+=======
+        NSLog(@"Empty result-> Re- scan");
+        //-> cause rescan..
+        [self statusReport:STREAM_STOPPED_UNEXPECTEDLY andObj:nil];
+        
+        //[self scan_for_missing_camera];
+>>>>>>> Fixed background audio while viewing..
         
     }
     else
@@ -653,10 +661,16 @@ SystemSoundID soundFileObject;
         if (!found)
         {
             //Rescann...
+<<<<<<< HEAD
             //NSLog(@"Re- scan for : %@", self.selected_channel.profile.mac_address);
             //[self scan_for_missing_camera];
             [self statusReport:STREAM_STOPPED_UNEXPECTEDLY andObj:nil];
 
+=======
+            NSLog(@"Re- scan for : %@", self.selected_channel.profile.mac_address);
+            //-> cause rescan..
+            [self statusReport:STREAM_STOPPED_UNEXPECTEDLY andObj:nil];
+>>>>>>> Fixed background audio while viewing..
         }
         else
         {
