@@ -54,9 +54,23 @@ SystemSoundID soundFileObject;
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
     
+
+	[[NSNotificationCenter defaultCenter] addObserver: self
+                                             selector: @selector(handleEnteredBackground)
+                                                 name: UIApplicationDidEnterBackgroundNotification
+                                               object: nil];
     
-        
-    self.currentChannelIndex = 0; 
+
+	[[NSNotificationCenter defaultCenter] addObserver: self
+                                             selector: @selector(becomeActive)
+                                                 name: UIApplicationDidBecomeActiveNotification
+                                               object: nil];
+    
+    //set Button handler
+    cameraListBarBtn.target = self;
+    cameraListBarBtn.action = @selector(goBackToCameraList);
+    
+    self.currentChannelIndex = 0;
     
     if (self.listOfChannel == nil)
     {
@@ -71,9 +85,11 @@ SystemSoundID soundFileObject;
                                                userInfo:nil
                                                 repeats:YES];
     
-    //set Button handler 
-    cameraListBarBtn.target = self;
-    cameraListBarBtn.action = @selector(goBackToCameraList);
+
+    
+    
+    
+   
     
 
 }
@@ -95,7 +111,7 @@ SystemSoundID soundFileObject;
 
 -(BOOL) shouldAutorotate
 {
-    NSLog(@"Should Auto Rotate");
+    
 	return YES;
 }
 
@@ -107,6 +123,16 @@ SystemSoundID soundFileObject;
 }
 
 
+-(void) handleEnteredBackground
+{
+    NSLog(@"Entr background.. close any popup");
+    [self stopPeriodicPopup];
+}
+
+-(void) becomeActive
+{
+    
+}
 #pragma mark -
 #pragma  mark Orientation handling
 
@@ -345,7 +371,7 @@ SystemSoundID soundFileObject;
 	}
 	if ( alert != nil)
 	{
-		if ([alert isVisible]) 
+		//if ([alert isVisible])
 		{
 			[alert dismissWithClickedButtonIndex:1 animated:NO ];
 		}
