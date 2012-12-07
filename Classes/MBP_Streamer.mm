@@ -344,6 +344,12 @@
     
 	NSLog(@"Streaming channel in RELAY mode ... Starting");
     
+    
+    [self performSelectorOnMainThread:@selector(sendStatusConnectedReportOnMainThread:)
+                           withObject:nil
+                        waitUntilDone:YES];
+    
+    
 #if 0
 	NSThread * keepAliveThrd = [[NSThread alloc] initWithTarget:self
                                                        selector:@selector(keepAlive:)
@@ -351,6 +357,8 @@
     
 	[keepAliveThrd start];
 #endif ///TODO check wth servers
+    
+    
     
     
     
@@ -485,6 +493,10 @@
             
         }
         
+        [self performSelectorOnMainThread:@selector(sendStatusConnectedReportOnMainThread:)
+                               withObject:nil
+                            waitUntilDone:YES];
+        
         
         
         readTimeoutThrd = [[NSThread alloc] initWithTarget:self
@@ -502,6 +514,13 @@
         
     }
     
+    
+}
+
+
+-(void) sendStatusConnectedReportOnMainThread:(NSObject *) obj
+{
+	[mHandler statusReport:CONNECTED_TO_CAMERA andObj:obj];
     
 }
 

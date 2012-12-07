@@ -1897,7 +1897,32 @@
 
 -(void) setUIMelodyOnOff
 {
-	NSData * responseData  = [comm sendCommandAndBlock_raw:GET_MELODY];
+    
+    NSData * responseData  = nil; 
+    if (selected_channel.communication_mode == COMM_MODE_STUN)
+	{
+		if (self.scomm != nil)
+		{
+			NSLog(@"checking melody on/off");
+            
+            
+			responseData= [self.scomm sendCommandThruUdtServer:GET_MELODY
+                                         withMac:self.selected_channel.profile.mac_address
+                                      AndChannel:self.selected_channel.channID];
+		}
+		
+    
+	}
+	else
+	{
+        
+		if (comm != nil)
+		{
+			responseData = [comm sendCommandAndBlock_raw:GET_MELODY];
+		}
+	}
+    
+	
     
 	if (responseData != nil)
 	{
@@ -2100,6 +2125,13 @@
 {
     
 	[tableView deselectRowAtIndexPath:indexPath animated:NO];
+    
+    if (indexPath.section == 0)
+    {
+        //Don't do anything on this section; Music on/off 
+        return;
+    }
+    
 	if (melody_index == indexPath.row)
 	{
 		return;

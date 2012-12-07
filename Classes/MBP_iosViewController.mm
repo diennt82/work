@@ -590,7 +590,8 @@ return self;
                                               FailSelector:nil
                                                  ServerErr:nil];
     
-    NSData * response_dat = [bms_comm1 BMS_sendPushUnRegistrationBlockWithUser:user_email
+    //NSData * response_dat =
+    [bms_comm1 BMS_sendPushUnRegistrationBlockWithUser:user_email
                                                                        AndPass:user_pass
                                                                          regId:devTokenStr];
     

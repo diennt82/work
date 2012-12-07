@@ -202,7 +202,8 @@
                                               FailSelector:nil
                                                  ServerErr:nil];
     
-    NSData * response_dat = [bms_comm1 BMS_sendPushRegistrationBlockWithUser:user_email
+    //NSData * response_dat =
+    [bms_comm1 BMS_sendPushRegistrationBlockWithUser:user_email
                                                                      AndPass:user_pass
                                                                        regId:devTokenStr];
     

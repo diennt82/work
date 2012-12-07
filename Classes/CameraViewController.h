@@ -161,7 +161,7 @@
     
     
 }
-@property (nonatomic) IBOutlet UIBarButtonItem * barBtnName;
+@property (nonatomic, assign) IBOutlet UIBarButtonItem * barBtnName;
 @property (nonatomic, retain) IBOutlet UILabel * temperature_label, *videoAndSnapshotTime; 
 @property (nonatomic, retain) StunCommunication * scomm;
 @property (nonatomic, retain) MBP_Streamer * streamer; 
