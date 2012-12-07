@@ -342,12 +342,17 @@ SystemSoundID soundFileObject;
     
 	if ( alert != nil)
 	{
-		if ([alert isVisible]) 
+		if ([alert isVisible])
 		{
 			[alert setMessage:msg];
 			
 		
             return;
+		}
+        else
+		{
+			NSLog(@"alert not visible -- dismiss it & release.. ");
+            [alert dismissWithClickedButtonIndex:1 animated:NO];
 		}
 		
 		[alert release]; 
@@ -605,8 +610,9 @@ SystemSoundID soundFileObject;
     if ([_scan_results count] ==0 )
     {
         //empty result... rescan
-        NSLog(@"Empty result-> Re- scan");
-        [self scan_for_missing_camera];
+        NSLog(@"Empty result-> STREAM_STOPPED_UNEXPECTEDLY to rescan ");
+        //[self scan_for_missing_camera];
+        [self statusReport:STREAM_STOPPED_UNEXPECTEDLY andObj:nil];
         
     }
     else
@@ -631,8 +637,10 @@ SystemSoundID soundFileObject;
         if (!found)
         {
             //Rescann...
-            NSLog(@"Re- scan for : %@", self.selected_channel.profile.mac_address);
-            [self scan_for_missing_camera];
+            //NSLog(@"Re- scan for : %@", self.selected_channel.profile.mac_address);
+            //[self scan_for_missing_camera];
+            [self statusReport:STREAM_STOPPED_UNEXPECTEDLY andObj:nil];
+
         }
         else
         {
