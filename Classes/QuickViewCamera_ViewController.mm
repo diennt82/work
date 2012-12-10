@@ -54,9 +54,23 @@ SystemSoundID soundFileObject;
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
     
+
+	[[NSNotificationCenter defaultCenter] addObserver: self
+                                             selector: @selector(handleEnteredBackground)
+                                                 name: UIApplicationDidEnterBackgroundNotification
+                                               object: nil];
     
-        
-    self.currentChannelIndex = 0; 
+
+	[[NSNotificationCenter defaultCenter] addObserver: self
+                                             selector: @selector(becomeActive)
+                                                 name: UIApplicationDidBecomeActiveNotification
+                                               object: nil];
+    
+    //set Button handler
+    cameraListBarBtn.target = self;
+    cameraListBarBtn.action = @selector(goBackToCameraList);
+    
+    self.currentChannelIndex = 0;
     
     if (self.listOfChannel == nil)
     {
@@ -71,9 +85,11 @@ SystemSoundID soundFileObject;
                                                userInfo:nil
                                                 repeats:YES];
     
-    //set Button handler 
-    cameraListBarBtn.target = self;
-    cameraListBarBtn.action = @selector(goBackToCameraList);
+
+    
+    
+    
+   
     
 
 }
@@ -95,7 +111,7 @@ SystemSoundID soundFileObject;
 
 -(BOOL) shouldAutorotate
 {
-    NSLog(@"Should Auto Rotate");
+    
 	return YES;
 }
 
@@ -107,6 +123,28 @@ SystemSoundID soundFileObject;
 }
 
 
+-(void) handleEnteredBackground
+{
+    NSLog(@"Entr background.. close any popup");
+    [self stopPeriodicPopup];
+}
+
+-(void) becomeActive
+{
+    if (self.flipTimer != nil  && [self.flipTimer isValid])
+    {
+        [self.flipTimer invalidate]; 
+    }
+    
+    NSLog(@"restart flip timer ");
+    self.flipTimer = [NSTimer scheduledTimerWithTimeInterval:20.0
+                                                      target:self
+                                                    selector:@selector(channelFlip:)
+                                                    userInfo:nil
+                                                     repeats:YES];
+
+
+}
 #pragma mark -
 #pragma  mark Orientation handling
 
@@ -155,6 +193,8 @@ SystemSoundID soundFileObject;
 
 -(void) goBackToCameraList
 {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+    
     if (scanner != nil)
     {
         [scanner cancel];
@@ -302,12 +342,17 @@ SystemSoundID soundFileObject;
     
 	if ( alert != nil)
 	{
-		if ([alert isVisible]) 
+		if ([alert isVisible])
 		{
 			[alert setMessage:msg];
 			
 		
             return;
+		}
+        else
+		{
+			NSLog(@"alert not visible -- dismiss it & release.. ");
+            [alert dismissWithClickedButtonIndex:1 animated:NO];
 		}
 		
 		[alert release]; 
@@ -345,7 +390,7 @@ SystemSoundID soundFileObject;
 	}
 	if ( alert != nil)
 	{
-		if ([alert isVisible]) 
+		//if ([alert isVisible])
 		{
 			[alert dismissWithClickedButtonIndex:1 animated:NO ];
 		}
@@ -565,8 +610,9 @@ SystemSoundID soundFileObject;
     if ([_scan_results count] ==0 )
     {
         //empty result... rescan
-        NSLog(@"Empty result-> Re- scan");
-        [self scan_for_missing_camera];
+        NSLog(@"Empty result-> STREAM_STOPPED_UNEXPECTEDLY to rescan ");
+        //[self scan_for_missing_camera];
+        [self statusReport:STREAM_STOPPED_UNEXPECTEDLY andObj:nil];
         
     }
     else
@@ -591,8 +637,10 @@ SystemSoundID soundFileObject;
         if (!found)
         {
             //Rescann...
-            NSLog(@"Re- scan for : %@", self.selected_channel.profile.mac_address);
-            [self scan_for_missing_camera];
+            //NSLog(@"Re- scan for : %@", self.selected_channel.profile.mac_address);
+            //[self scan_for_missing_camera];
+            [self statusReport:STREAM_STOPPED_UNEXPECTEDLY andObj:nil];
+
         }
         else
         {
