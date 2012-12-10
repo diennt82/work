@@ -393,7 +393,7 @@
     if (orientation == UIInterfaceOrientationLandscapeLeft || orientation == UIInterfaceOrientationLandscapeRight)
 	{
 
-        int screenWidth = self.view.frame.size.width;//480
+        int screenWidth = 480;//self.view.frame.size.width;//480
         topbar.frame = CGRectMake(0, 0, screenWidth, topbar.frame.size.height);
         
         UIImageView * bg = (UIImageView*) [self.view viewWithTag:1];
@@ -402,16 +402,16 @@
             //transform.
             CGAffineTransform transform = CGAffineTransformMakeRotation(-M_PI_2);
             bg.transform = transform;
-           // bg.frame = CGRectMake(0,0, 480, 320);
+           bg.frame = CGRectMake(0,0, 480, 320);
             
-            bg.frame = CGRectMake(0,0, self.view.frame.size.width, self.view.frame.size.height);
+            //bg.frame = CGRectMake(0,0, self.view.frame.size.width, self.view.frame.size.height);
         }
         
 	}
 	else if (orientation == UIInterfaceOrientationPortrait || orientation == UIInterfaceOrientationPortraitUpsideDown)
 	{
 
-        int screenWidth = self.view.frame.size.width;//320
+        int screenWidth = 320;//self.view.frame.size.width;//320
         topbar.frame = CGRectMake(0, 0, screenWidth, topbar.frame.size.height);
         UIImageView * bg = (UIImageView*) [self.view viewWithTag:1];
         if (bg != nil)
@@ -419,8 +419,8 @@
             //transform.
             CGAffineTransform transform = CGAffineTransformMakeRotation(0);
             bg.transform = transform;
-            //bg.frame = CGRectMake(0,0, 320, 480);
-            bg.frame = CGRectMake(0,0, self.view.frame.size.width, self.view.frame.size.height);
+            bg.frame = CGRectMake(0,0, 320, 480);
+            //bg.frame = CGRectMake(0,0, self.view.frame.size.width, self.view.frame.size.height);
         }
     }
 
