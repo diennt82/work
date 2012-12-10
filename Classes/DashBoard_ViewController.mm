@@ -58,11 +58,14 @@
     
     BOOL isOffline = [userDefaults boolForKey:_OfflineMode];
 
+    UIScreen *screen = [UIScreen mainScreen];
+    CGRect screen_frame = [screen applicationFrame];
+    //[myView setFrame:[screen applicationFrame]]
     
     if (isEditMode == FALSE)
     {
         //Build ToolBar manually
-        topbar = [[UIToolbar alloc]initWithFrame:CGRectMake(0, 0, 320, 44)];
+        topbar = [[UIToolbar alloc]initWithFrame:CGRectMake(0, 0, screen_frame.size.width, 44)];
         topbar.barStyle = UIBarStyleBlackOpaque;
         // create an array for the buttons
         NSMutableArray* buttons = [[NSMutableArray alloc] initWithCapacity:3];
@@ -173,7 +176,7 @@
         }
         
         //Build ToolBar manually
-        topbar = [[UIToolbar alloc]initWithFrame:CGRectMake(0, 0, 320, 44)];
+        topbar = [[UIToolbar alloc]initWithFrame:CGRectMake(0, 0, screen_frame.size.width, 44)];
         topbar.barStyle = UIBarStyleBlackOpaque;
         // create an array for the buttons
         NSMutableArray* buttons = [[NSMutableArray alloc] initWithCapacity:3];
@@ -298,10 +301,25 @@
     else
     {
         offlineView.hidden = YES;
-        //[offlineView removeFromSuperview];
-        cameraList.frame = CGRectMake(cameraList.frame.origin.x, cameraList.frame.origin.y,
-                                      cameraList.frame.size.width,
-                                      387);
+
+        
+        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+        {
+                       
+            //cameraList.frame = CGRectMake(cameraList.frame.origin.x, cameraList.frame.origin.y,
+               //                           cameraList.frame.size.width,
+                //                          500);
+        }
+        else
+        {
+
+            
+            cameraList.frame = CGRectMake(cameraList.frame.origin.x, cameraList.frame.origin.y,
+                                          cameraList.frame.size.width,
+                                          387);
+        }
+
+       
         
         
         
@@ -375,29 +393,34 @@
     if (orientation == UIInterfaceOrientationLandscapeLeft || orientation == UIInterfaceOrientationLandscapeRight)
 	{
 
+        int screenWidth = self.view.frame.size.width;//480
+        topbar.frame = CGRectMake(0, 0, screenWidth, topbar.frame.size.height);
         
-        topbar.frame = CGRectMake(0, 0, 480, topbar.frame.size.height);
         UIImageView * bg = (UIImageView*) [self.view viewWithTag:1];
         if (bg != nil)
         {
             //transform.
             CGAffineTransform transform = CGAffineTransformMakeRotation(-M_PI_2);
             bg.transform = transform;
-            bg.frame = CGRectMake(0,0, 480, 320);
+           // bg.frame = CGRectMake(0,0, 480, 320);
+            
+            bg.frame = CGRectMake(0,0, self.view.frame.size.width, self.view.frame.size.height);
         }
         
 	}
 	else if (orientation == UIInterfaceOrientationPortrait || orientation == UIInterfaceOrientationPortraitUpsideDown)
 	{
 
-        topbar.frame = CGRectMake(0, 0, 320, topbar.frame.size.height);
+        int screenWidth = self.view.frame.size.width;//320
+        topbar.frame = CGRectMake(0, 0, screenWidth, topbar.frame.size.height);
         UIImageView * bg = (UIImageView*) [self.view viewWithTag:1];
         if (bg != nil)
         {
             //transform.
             CGAffineTransform transform = CGAffineTransformMakeRotation(0);
             bg.transform = transform;
-            bg.frame = CGRectMake(0,0, 320, 480);
+            //bg.frame = CGRectMake(0,0, 320, 480);
+            bg.frame = CGRectMake(0,0, self.view.frame.size.width, self.view.frame.size.height);
         }
     }
 
