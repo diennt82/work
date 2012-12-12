@@ -306,9 +306,7 @@
         if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
         {
                        
-            //cameraList.frame = CGRectMake(cameraList.frame.origin.x, cameraList.frame.origin.y,
-               //                           cameraList.frame.size.width,
-                //                          500);
+           // Dont resize the table for IPAD .. unless someone is complaining...
         }
         else
         {
@@ -384,16 +382,20 @@
 {
     
 
-
     [self adjustViewsForOrientation:toInterfaceOrientation];
+    
 }
+
 
 -(void) adjustViewsForOrientation:(UIInterfaceOrientation) orientation
 {
     if (orientation == UIInterfaceOrientationLandscapeLeft || orientation == UIInterfaceOrientationLandscapeRight)
 	{
 
-        int screenWidth = 480;//self.view.frame.size.width;//480
+        //since at this time.. the orientation is still NOT CHANGED so need to use the OTHER size
+        int screenWidth = [UIScreen mainScreen].bounds.size.height  ;//480
+        int screenHeight = [UIScreen mainScreen].bounds.size.width;
+        
         topbar.frame = CGRectMake(0, 0, screenWidth, topbar.frame.size.height);
         
         UIImageView * bg = (UIImageView*) [self.view viewWithTag:1];
@@ -402,16 +404,19 @@
             //transform.
             CGAffineTransform transform = CGAffineTransformMakeRotation(-M_PI_2);
             bg.transform = transform;
-           bg.frame = CGRectMake(0,0, 480, 320);
+           //bg.frame = CGRectMake(0,0, 480, 320);
             
-            //bg.frame = CGRectMake(0,0, self.view.frame.size.width, self.view.frame.size.height);
+            bg.frame = CGRectMake(0,0,  screenWidth,screenHeight);
         }
+                
         
 	}
 	else if (orientation == UIInterfaceOrientationPortrait || orientation == UIInterfaceOrientationPortraitUpsideDown)
 	{
 
-        int screenWidth = 320;//self.view.frame.size.width;//320
+        int screenWidth = [UIScreen mainScreen].bounds.size.width  ;//320
+        int screenHeight = [UIScreen mainScreen].bounds.size.height;
+
         topbar.frame = CGRectMake(0, 0, screenWidth, topbar.frame.size.height);
         UIImageView * bg = (UIImageView*) [self.view viewWithTag:1];
         if (bg != nil)
@@ -419,8 +424,8 @@
             //transform.
             CGAffineTransform transform = CGAffineTransformMakeRotation(0);
             bg.transform = transform;
-            bg.frame = CGRectMake(0,0, 320, 480);
-            //bg.frame = CGRectMake(0,0, self.view.frame.size.width, self.view.frame.size.height);
+            //bg.frame = CGRectMake(0,0, 320, 480);
+            bg.frame = CGRectMake(0,0, screenWidth,screenHeight);
         }
     }
 
@@ -764,9 +769,21 @@
                                                            image:[UIImage imageNamed:@"account_icon.png"]
                                                              tag:2];
     
+    Account_ViewController * accountPage = nil;
     
-    Account_ViewController * accountPage = [[Account_ViewController alloc]
-                                            initWithNibName:@"Account_ViewController" bundle:nil];
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+    {
+        accountPage = [[Account_ViewController alloc]
+                       initWithNibName:@"Account_ViewController_ipad" bundle:nil];
+    }
+    else
+    {
+        
+        accountPage = [[Account_ViewController alloc]
+                       initWithNibName:@"Account_ViewController" bundle:nil];
+    
+    }
+    
     [accountPage setTabBarItem:account];
     accountPage.mdelegate = self.delegate;
     

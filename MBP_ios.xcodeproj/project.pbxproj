@@ -146,6 +146,8 @@
 		9753452B143325C30037DDAC /* AiBallPlayViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 97534529143325C30037DDAC /* AiBallPlayViewController.m */; };
 		9753452C143325C30037DDAC /* AiBallPlayViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9753452A143325C30037DDAC /* AiBallPlayViewController.xib */; };
 		97534535143325EE0037DDAC /* AiBallAviPlayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 97534534143325EE0037DDAC /* AiBallAviPlayer.m */; };
+		9765834C1676D126001656D8 /* Account_ViewController_ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9765834B1676D126001656D8 /* Account_ViewController_ipad.xib */; };
+		9765834E1676D25E001656D8 /* Account_ViewController_land_ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9765834D1676D25E001656D8 /* Account_ViewController_land_ipad.xib */; };
 		9770CD8D143073AE009E69EF /* ADPCMDecoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 9770CD86143073AE009E69EF /* ADPCMDecoder.m */; };
 		9770CD8E143073AE009E69EF /* AiBallBase64Encoding.m in Sources */ = {isa = PBXBuildFile; fileRef = 9770CD88143073AE009E69EF /* AiBallBase64Encoding.m */; };
 		9770CD8F143073AE009E69EF /* AsyncSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = 9770CD8A143073AE009E69EF /* AsyncSocket.m */; };
@@ -368,6 +370,8 @@
 		97534533143325EE0037DDAC /* AiBallAviPlayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AiBallAviPlayer.h; sourceTree = "<group>"; };
 		97534534143325EE0037DDAC /* AiBallAviPlayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AiBallAviPlayer.m; sourceTree = "<group>"; };
 		97534538143326080037DDAC /* AiBallVideoSink.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AiBallVideoSink.h; sourceTree = "<group>"; };
+		9765834B1676D126001656D8 /* Account_ViewController_ipad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = Account_ViewController_ipad.xib; sourceTree = "<group>"; };
+		9765834D1676D25E001656D8 /* Account_ViewController_land_ipad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = Account_ViewController_land_ipad.xib; sourceTree = "<group>"; };
 		9770CD67143071DA009E69EF /* PublicDefine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PublicDefine.h; sourceTree = "<group>"; };
 		9770CD85143073AE009E69EF /* ADPCMDecoder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ADPCMDecoder.h; sourceTree = "<group>"; };
 		9770CD86143073AE009E69EF /* ADPCMDecoder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ADPCMDecoder.m; sourceTree = "<group>"; };
@@ -587,7 +591,9 @@
 				38355AE415CB76630045909C /* Account_ViewController.h */,
 				38355AE515CB76630045909C /* Account_ViewController.m */,
 				38355AE615CB76630045909C /* Account_ViewController.xib */,
+				9765834B1676D126001656D8 /* Account_ViewController_ipad.xib */,
 				38115F9816709F0F00F0E234 /* Account_ViewController_land.xib */,
+				9765834D1676D25E001656D8 /* Account_ViewController_land_ipad.xib */,
 				38CC5A1215DCBBBF00067C54 /* QuickViewCamera_ViewController.h */,
 				38CC5A1315DCBBC100067C54 /* QuickViewCamera_ViewController.mm */,
 				38CC5A1415DCBBC200067C54 /* QuickViewCamera_ViewController.xib */,
@@ -932,6 +938,8 @@
 				389F45461670947F004951E7 /* CameraViewController_land_ipad.xib in Resources */,
 				38115F9916709F0F00F0E234 /* Account_ViewController_land.xib in Resources */,
 				97490CB41675AB730043D504 /* MBP_iosViewController_ipad.xib in Resources */,
+				9765834C1676D126001656D8 /* Account_ViewController_ipad.xib in Resources */,
+				9765834E1676D25E001656D8 /* Account_ViewController_land_ipad.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1104,7 +1112,7 @@
 				PROVISIONING_PROFILE = "FCA129C5-C8E2-4E25-B710-D331A685F087";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "52EE9AF9-AD90-4723-BB27-3D65732E020A";
 				SDKROOT = iphoneos;
-				TARGETED_DEVICE_FAMILY = 1;
+				TARGETED_DEVICE_FAMILY = "1,2";
 				USER_HEADER_SEARCH_PATHS = "\"$(SRCROOT)/external_include\"/**";
 				VALID_ARCHS = "armv7 armv7s";
 			};
@@ -1157,7 +1165,7 @@
 				OTHER_LDFLAGS = "";
 				PRODUCT_NAME = "Baby Cam";
 				SDKROOT = iphoneos;
-				TARGETED_DEVICE_FAMILY = 1;
+				TARGETED_DEVICE_FAMILY = "1,2";
 				USER_HEADER_SEARCH_PATHS = "\"$(SRCROOT)/external_include\"/**";
 				VALID_ARCHS = "armv7 armv7s";
 			};
@@ -1183,7 +1191,7 @@
 				PROVISIONING_PROFILE = "AF20C915-B330-4487-A1DF-C85D50B7B43E";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "AF20C915-B330-4487-A1DF-C85D50B7B43E";
 				SDKROOT = iphoneos;
-				TARGETED_DEVICE_FAMILY = 1;
+				TARGETED_DEVICE_FAMILY = "1,2";
 				USER_HEADER_SEARCH_PATHS = "\"$(SRCROOT)/external_include\"/**";
 				VALID_ARCHS = "armv7 armv7s";
 			};

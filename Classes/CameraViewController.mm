@@ -333,10 +333,24 @@
 	{
         
         
-		[[NSBundle mainBundle] loadNibNamed:@"CameraViewController_land"
-                                      owner:self
-                                    options:nil];
         
+        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+        {
+            [[NSBundle mainBundle] loadNibNamed:@"CameraViewController_land_ipad"
+                                          owner:self
+                                        options:nil];
+
+        }
+        else
+        {
+            
+            [[NSBundle mainBundle] loadNibNamed:@"CameraViewController_land"
+                                          owner:self
+                                        options:nil];
+
+        }
+        
+		      
         
 		//Need to rotate the video - snashot tool bar
         
@@ -353,7 +367,22 @@
 		zoombarView.transform = CGAffineTransformRotate(zoombarView.transform, -M_PI*0.5);
 		//Initializng the slider value to zero.
 		self.zoombar.value=currentZoomLvl*ZOOM_STEP;
-		zoombarView.frame = CGRectMake(440, 80, 41  ,224) ;
+        
+        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+        {
+            
+            
+            zoombarView.frame = CGRectMake(950,350, 41, 224);
+            
+        }
+        else
+        {
+            
+            zoombarView.frame = CGRectMake(440, 80, 41  ,224) ;
+            
+        }
+
+
         
 		UIImage *sliderMaximum = [[UIImage alloc] init];
 		[self.zoombar setMinimumTrackImage:sliderMaximum forState:UIControlStateNormal];
@@ -373,9 +402,23 @@
 	else if (orientation == UIInterfaceOrientationPortrait || orientation == UIInterfaceOrientationPortraitUpsideDown)
 	{
         
-		[[NSBundle mainBundle] loadNibNamed:@"CameraViewController"
-                                      owner:self
-                                    options:nil];
+        
+        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+        {
+            
+            [[NSBundle mainBundle] loadNibNamed:@"CameraViewController_ipad"
+                                          owner:self
+                                        options:nil];
+            
+            
+        }
+        else
+        {
+            
+            [[NSBundle mainBundle] loadNibNamed:@"CameraViewController"
+                                          owner:self
+                                        options:nil];
+        }
         
 		CGRect rect = [[UIApplication sharedApplication] statusBarFrame]; // Get status bar frame dimensions
 		//NSLog(@"Statusbar frame: %1.0f, %1.0f, %1.0f, %1.0f", rect.origin.x,
@@ -391,7 +434,22 @@
 		zoombarView.transform = CGAffineTransformRotate(zoombarView.transform, -M_PI*0.5);
 		//Initializng the slider value to zero.
 		self.zoombar.value=currentZoomLvl*ZOOM_STEP;
-		zoombarView.frame = CGRectMake(280, 200, 41  ,224) ;
+
+        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+        {
+            
+            
+            zoombarView.frame = CGRectMake(700,550, 41, 224);
+            
+        }
+        else
+        {
+            
+            zoombarView.frame = CGRectMake(280, 200, 41  ,224) ;
+            
+        }
+        
+		
         
 		UIImage *sliderMaximum = [[UIImage alloc] init];
 		[self.zoombar setMinimumTrackImage:sliderMaximum forState:UIControlStateNormal];

@@ -185,49 +185,23 @@
 -(void) adjustViewsForOrientation:(UIInterfaceOrientation) orientation
 {
     
-#if 0
-    if (orientation == UIInterfaceOrientationLandscapeLeft || orientation == UIInterfaceOrientationLandscapeRight)
-	{
-        
-        
-        mtopbar.frame = CGRectMake(0, 0, 480, mtopbar.frame.size.height);
-        
-        accountInfo.frame = CGRectMake(0,44, 480, 268);
-        
-        UIImageView * bg = (UIImageView*) [self.view viewWithTag:1];
-        if (bg != nil)
-        {
-            //transform.
-            CGAffineTransform transform = CGAffineTransformMakeRotation(-M_PI_2);
-            bg.transform = transform;
-            bg.frame = CGRectMake(0,0, 480, 320);
-        }
-        
-	}
-	else if (orientation == UIInterfaceOrientationPortrait || orientation == UIInterfaceOrientationPortraitUpsideDown)
-	{
-        mtopbar.frame = CGRectMake(0, 0, 320, mtopbar.frame.size.height);
-        
-        accountInfo.frame = CGRectMake(0,44, 320, 268);
-        UIImageView * bg = (UIImageView*) [self.view viewWithTag:1];
-        if (bg != nil)
-        {
-            //transform.
-            CGAffineTransform transform = CGAffineTransformMakeRotation(0);
-            bg.transform = transform;
-            bg.frame = CGRectMake(0,0, 320, 480);
-        }
-    }
-    
-#endif
-    
     
 	if (orientation == UIInterfaceOrientationLandscapeLeft || orientation == UIInterfaceOrientationLandscapeRight)
 	{
         
-        [[NSBundle mainBundle] loadNibNamed:@"Account_ViewController_land"
-                                      owner:self
-                                    options:nil];
+        
+        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+        {
+            [[NSBundle mainBundle] loadNibNamed:@"Account_ViewController_land_ipad"
+                                          owner:self
+                                        options:nil];
+        }
+        else
+        {
+            [[NSBundle mainBundle] loadNibNamed:@"Account_ViewController_land"
+                                          owner:self
+                                        options:nil];
+        }
         
         if (mtopbar == nil)
         {
@@ -235,27 +209,66 @@
             [self buildTopToolBar];
       
         }
-        mtopbar.frame = CGRectMake(0, 0, 480, mtopbar.frame.size.height);
+        
+        
+        //since at this time.. the orientation is still NOT CHANGED so need to use the OTHER size
+        int screenWidth = [UIScreen mainScreen].bounds.size.height  ;//480
+        int screenHeight = [UIScreen mainScreen].bounds.size.width;
+        
+        mtopbar.frame = CGRectMake(0, 0, screenWidth, mtopbar.frame.size.height);
 
+        
+        UIImageView * bg = (UIImageView*) [self.view viewWithTag:1];
+        if (bg != nil)
+        {
+            //transform.
+            CGAffineTransform transform = CGAffineTransformMakeRotation(-M_PI_2);
+            bg.transform = transform;
+            //bg.frame = CGRectMake(0,0, 480, 320);
+            
+            bg.frame = CGRectMake(0,0,  screenWidth,screenHeight);
+        }
         
         
     }
 	else if (orientation == UIInterfaceOrientationPortrait || orientation == UIInterfaceOrientationPortraitUpsideDown)
 	{
         
-        [[NSBundle mainBundle] loadNibNamed:@"Account_ViewController"
-                                      owner:self
-                                    options:nil];
-        
+        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+        {
+            [[NSBundle mainBundle] loadNibNamed:@"Account_ViewController_ipad"
+                                          owner:self
+                                        options:nil];
+        }
+        else
+        {
+
+            [[NSBundle mainBundle] loadNibNamed:@"Account_ViewController"
+                                          owner:self
+                                        options:nil];
+        }
+    
         if (mtopbar == nil)
         {
-            NSLog(@"create new tool bar p");
-            [self buildTopToolBar];
-            
+            [self buildTopToolBar];   
         }
         
-        mtopbar.frame = CGRectMake(0, 0, 320, mtopbar.frame.size.height);
+        
+        //since at this time.. the orientation is still NOT CHANGED so need to use the OTHER size
+        int screenWidth = [UIScreen mainScreen].bounds.size.width  ;//320
+        int screenHeight = [UIScreen mainScreen].bounds.size.height;
+        
+        mtopbar.frame = CGRectMake(0, 0, screenWidth, mtopbar.frame.size.height);
       
+        UIImageView * bg = (UIImageView*) [self.view viewWithTag:1];
+        if (bg != nil)
+        {
+            //transform.
+            CGAffineTransform transform = CGAffineTransformMakeRotation(0);
+            bg.transform = transform;
+            //bg.frame = CGRectMake(0,0, 320, 480);
+            bg.frame = CGRectMake(0,0, screenWidth,screenHeight);
+        }
         
 	}
     
