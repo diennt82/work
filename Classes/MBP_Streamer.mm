@@ -1035,10 +1035,22 @@
 		//process data
 		NSString* initialResponse = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
 		NSRange range = [initialResponse rangeOfString:AUTHENTICATION_ERROR];
-		if(range.location != NSNotFound)
+        
+        if (initialResponse == nil)
+        {
+            
+             NSLog(@"initialResponse = nil... ");
+            
+        }
+        
+		if( (initialResponse!= nil) &&
+            (range.location != NSNotFound)
+           )
 		{
             // auth error ->>>>>>> force re-connect
             NSLog(@"auth ERROR-- stop streaming ");
+            
+            NSLog(@"error response: %@", initialResponse); 
             [self stopStreaming];
             
             if (self.remoteView == TRUE && self.remoteViewKey != nil)
