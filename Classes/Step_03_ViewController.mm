@@ -231,8 +231,31 @@
 {
     NSLog(@"Load step 4"); 
     //Load the next xib
-    Step_04_ViewController *step04ViewController = [[Step_04_ViewController alloc]
-                                                    initWithNibName:@"Step_04_ViewController" bundle:nil];
+    Step_04_ViewController *step04ViewController = nil;
+    
+    
+    
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+    {
+        
+        
+        step04ViewController = [[Step_04_ViewController alloc]
+                                initWithNibName:@"Step_04_ViewController_ipad" bundle:nil];
+        
+    }
+    else
+    {
+        
+        
+        step04ViewController = [[Step_04_ViewController alloc]
+           initWithNibName:@"Step_04_ViewController" bundle:nil];
+        
+       
+        
+    }
+
+    
+    
     
     
     step04ViewController.cameraMac =  self.cameraMac;

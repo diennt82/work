@@ -26,11 +26,11 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-
+    
     self.navigationItem.title = @"Switch On Camera";
-
- 
-
+    
+    
+    
     
     //Setup now but this button will only be seen when go to the NEXT controller
     self.navigationItem.backBarButtonItem =
@@ -53,15 +53,33 @@
 
 - (IBAction)handleButtonPress:(id)sender
 {
-    int tag = ((UIButton*)sender).tag; 
+    int tag = ((UIButton*)sender).tag;
     
     if (tag == CONTINUE_BTN_TAG)
     {
-#if 1
-        NSLog(@"Load step 3"); 
+        
+        NSLog(@"Load step 3");
         //Load the next xib
-        Step_03_ViewController *step03ViewController = [[Step_03_ViewController alloc]
-                                                        initWithNibName:@"Step_03_ViewController" bundle:nil];
+        Step_03_ViewController *step03ViewController = nil;
+        
+        
+        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+        {
+            
+            
+            step03ViewController = [[Step_03_ViewController alloc]initWithNibName:@"Step_03_ViewController_ipad" bundle:nil];
+            
+        }
+        else
+        {
+            step03ViewController = [[Step_03_ViewController alloc]
+                                    initWithNibName:@"Step_03_ViewController" bundle:nil];
+            
+        }
+        
+        
+        
+        
         
         [self.navigationController pushViewController:step03ViewController animated:NO];
         
@@ -69,9 +87,6 @@
         
         
         
-#else //TEST ONLY 
-      
-#endif
     }
     
     

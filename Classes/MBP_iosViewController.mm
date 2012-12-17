@@ -322,13 +322,28 @@ return self;
 				NSLog(@">>> SETUP ");
 				[self dismissModalViewControllerAnimated:NO	];
 
+                
                 self.app_stage = APP_STAGE_SETUP;
 
-				//Load the next xib
-				MBP_InitialSetupViewController *initSeupViewController = [[MBP_InitialSetupViewController alloc]
-					initWithNibName:@"MBP_InitialSetupViewController" bundle:nil];
-
-
+                
+                MBP_InitialSetupViewController *initSeupViewController = nil; 
+                
+                if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+                {
+                   
+                    initSeupViewController = [[MBP_InitialSetupViewController alloc]
+                                              initWithNibName:@"MBP_InitialSetupViewController_ipad" bundle:nil];
+                    
+                }
+                else
+                {
+                    
+                    
+                    initSeupViewController = [[MBP_InitialSetupViewController alloc]
+                                              initWithNibName:@"MBP_InitialSetupViewController" bundle:nil];
+                    
+                }
+                
 				initSeupViewController.delegate = self;
 				[initSeupViewController presentModallyOn:self]; 
 

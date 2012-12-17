@@ -156,10 +156,28 @@
     if (tag == CONTINUE_BTN_TAG)
     {
 
-        NSLog(@"load step 2:"); 
+        NSLog(@"load step 2:");
+        
+        
         //Load the next xib
-        Step_02_ViewController *step02ViewController = [[Step_02_ViewController alloc]
-                                                        initWithNibName:@"Step_02_ViewController" bundle:nil];
+        Step_02_ViewController *step02ViewController = nil;
+  
+        
+        
+        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+        {
+            step02ViewController = [[Step_02_ViewController alloc]
+                                    initWithNibName:@"Step_02_ViewController_ipad" bundle:nil];
+        }
+        else
+        {
+            
+            step02ViewController = [[Step_02_ViewController alloc]
+                                    initWithNibName:@"Step_02_ViewController" bundle:nil];
+        }
+
+        
+      
 
         [self.navigationController pushViewController:step02ViewController animated:NO];
         

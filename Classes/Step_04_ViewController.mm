@@ -243,8 +243,28 @@
     
     NSLog(@"Load step 5"); 
     //Load the next xib
-    Step_05_ViewController *step05ViewController = [[Step_05_ViewController alloc]
-                                                    initWithNibName:@"Step_05_ViewController" bundle:nil];
+    Step_05_ViewController *step05ViewController = nil; 
+    
+    
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+    {
+        
+        
+        step05ViewController =  [[Step_05_ViewController alloc]
+                                 initWithNibName:@"Step_05_ViewController_ipad" bundle:nil];
+        
+    }
+    else
+    {
+        
+        
+        step05ViewController =  [[Step_05_ViewController alloc]
+                                 initWithNibName:@"Step_05_ViewController" bundle:nil];
+        
+        
+        
+    }
+    
     
     
     step05ViewController.listOfWifi = [[NSMutableArray alloc]initWithArray:wifiList];
