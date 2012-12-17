@@ -31,7 +31,7 @@
     [termOfUse loadRequest:
      [NSURLRequest requestWithURL:
       [NSURL fileURLWithPath:
-       [[NSBundle mainBundle] pathForResource:@"terms_of_use" ofType:@"html"] ] ] ];
+       [[NSBundle mainBundle] pathForResource:@"MonitorEverywhere_App_ios_Apple" ofType:@"html"] ] ] ];
 
     
 }
