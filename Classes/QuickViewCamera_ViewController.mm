@@ -148,6 +148,23 @@ SystemSoundID soundFileObject;
 #pragma mark -
 #pragma  mark Orientation handling
 
+-(void) viewWillAppear:(BOOL)animated
+{
+    [self checkOrientation];
+    
+}
+
+-(void) checkOrientation
+{
+    
+	UIInterfaceOrientation infOrientation = [UIApplication sharedApplication].statusBarOrientation;
+    
+	[self adjustViewsForOrientation:infOrientation];
+    
+    
+    
+}
+
 - (void) willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration {
     [self adjustViewsForOrientation:toInterfaceOrientation];
 }

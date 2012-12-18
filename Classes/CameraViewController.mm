@@ -626,8 +626,9 @@
         (self.scomm != nil))
 	{
 		menuViewCtrl.dev_s_comm = self.scomm;
-		menuViewCtrl.camChan = self.selected_channel;
+		
 	}
+    menuViewCtrl.camChan = self.selected_channel;
     
 	[self.navigationController pushViewController:menuViewCtrl animated:NO];
     

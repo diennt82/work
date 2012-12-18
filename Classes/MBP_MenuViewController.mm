@@ -126,8 +126,11 @@
 	devicePort = [userDefaults integerForKey:_DevicePort];
 	deviceIp = [userDefaults stringForKey:_DeviceIp];
 	deviceMac = [userDefaults stringForKey:_DeviceMac];
-	deviceName = [userDefaults stringForKey:_DeviceName];
+	//deviceName = [userDefaults stringForKey:_DeviceName];
 	
+    deviceName = self.camChan.profile.name;
+    
+    
 	commMode = [userDefaults integerForKey:_CommMode]; 
 	
 	[self.cameraMenuItemValues setObject:deviceName forKey:_NAME_DICT_KEY];
@@ -152,6 +155,8 @@
     [super viewDidLoad];
 	
     [self readPreferenceData];
+    
+
     
     UIInterfaceOrientation infOrientation = [UIApplication sharedApplication].statusBarOrientation;
 	[self adjustViewsForOrientation:infOrientation];
@@ -1552,6 +1557,7 @@
 	//Update BMS server with the new name;;
 	
     deviceName = newName;
+    [deviceName retain];
     progressView.hidden = NO;
     [self.view bringSubviewToFront:progressView];
     
@@ -1869,6 +1875,7 @@
 {
 	NSLog(@"changeName success - reset the camera name now:");
     //1. Change title
+    self.camChan.profile.name = deviceName;
      self.navigationItem.title = deviceName;
     [self.cameraMenuItemValues setObject:deviceName forKey:_NAME_DICT_KEY];
     [cameraMenu reloadData];
@@ -1885,7 +1892,7 @@
     DashBoard_ViewController * db = [tabs.viewControllers objectAtIndex:0];
     [db changeNameSuccessWithResponse:nil];
 
-    
+    [deviceName release];
     
     progressView.hidden = YES;
 
@@ -1900,6 +1907,7 @@
     deviceName = [self.cameraMenuItemValues objectForKey:_NAME_DICT_KEY];
     
     [self showDialog:ALERT_CHANGE_NAME_FAILED];
+        [deviceName release];
 }
 -(void) changeNameFailedServerUnreachable
 {
@@ -1908,6 +1916,7 @@
     
     deviceName = [self.cameraMenuItemValues objectForKey:_NAME_DICT_KEY];
     [self showDialog:ALERT_CHANGE_NAME_FAILED];
+        [deviceName release];
 }
 
 
