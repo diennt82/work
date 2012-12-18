@@ -324,10 +324,10 @@
         if (![self shouldShowEditButton])
         {
             cameraList.hidden = YES;
-            emptyCameraListView.frame = CGRectMake(emptyCameraListView.frame.origin.x,
-                                                   emptyCameraListView.frame.origin.y+100,
-                                                   emptyCameraListView.frame.size.width,
-                                                   emptyCameraListView.frame.size.height);
+//            emptyCameraListView.frame = CGRectMake(emptyCameraListView.frame.origin.x,
+//                                                   emptyCameraListView.frame.origin.y+100,
+//                                                   emptyCameraListView.frame.size.width,
+//                                                   emptyCameraListView.frame.size.height);
             [self.view addSubview:emptyCameraListView];
             [self.view bringSubviewToFront:emptyCameraListView];
             
@@ -409,7 +409,13 @@
             bg.frame = CGRectMake(0,0,  screenWidth,screenHeight);
         }
                 
-        
+        if (emptyCameraListView != nil)
+        {
+            emptyCameraListView.frame = CGRectMake(80,
+                                                   60,
+                                                   emptyCameraListView.frame.size.width,
+                                                   emptyCameraListView.frame.size.height);
+        }
 	}
 	else if (orientation == UIInterfaceOrientationPortrait || orientation == UIInterfaceOrientationPortraitUpsideDown)
 	{
@@ -426,6 +432,14 @@
             bg.transform = transform;
             //bg.frame = CGRectMake(0,0, 320, 480);
             bg.frame = CGRectMake(0,0, screenWidth,screenHeight);
+        }
+        
+        if (emptyCameraListView != nil)
+        {
+            emptyCameraListView.frame = CGRectMake(0,
+                                                   100,
+                                                   emptyCameraListView.frame.size.width,
+                                                   emptyCameraListView.frame.size.height);
         }
     }
 
