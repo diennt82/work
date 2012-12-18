@@ -1483,12 +1483,22 @@
 
 -(void) goBackAndReLogin
 {
-    NSLog(@"Go all the way bacK");
+    NSLog(@" CameraMenu: Go all the way bacK");
     
     UITabBarController * root =  (UITabBarController *)[[self.navigationController viewControllers] objectAtIndex:0];
+   
+    CameraViewController * camViewCtl =
+    (CameraViewController *)[[self.navigationController viewControllers]
+                             objectAtIndex:[[self.navigationController viewControllers] count] -2];
+ 
+    [camViewCtl goBackToCameraList];
+    
+    
+    
+    
     [self.navigationController popToRootViewControllerAnimated:NO];
    
-    DashBoard_ViewController * dashBoard =  (DashBoard_ViewController *)[[root viewControllers] objectAtIndex:0]; 
+    DashBoard_ViewController * dashBoard =  (DashBoard_ViewController *)[[root viewControllers] objectAtIndex:0];
     
     [dashBoard forceRelogin];
 }
