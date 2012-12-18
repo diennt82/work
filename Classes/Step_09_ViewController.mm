@@ -308,8 +308,26 @@
 	//Load step 10
     NSLog(@"Load Step 10"); 
     //Load the next xib
-    Step_10_ViewController *step10ViewController = [[Step_10_ViewController alloc]
-                                                    initWithNibName:@"Step_10_ViewController" bundle:nil];
+    Step_10_ViewController *step10ViewController = nil;
+    
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+    {
+        
+        step10ViewController = [[Step_10_ViewController alloc]
+                                initWithNibName:@"Step_10_ViewController" bundle:nil];
+        
+    }
+    else
+    {
+        
+        step10ViewController = [[Step_10_ViewController alloc]
+                                initWithNibName:@"Step_10_ViewController_ipad" bundle:nil];
+        
+    }
+
+    
+    
+    
     [self.navigationController pushViewController:step10ViewController animated:NO];    
     [step10ViewController release];
     

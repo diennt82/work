@@ -142,9 +142,28 @@
         //load step 06
         NSLog(@"Load step 6"); 
         //Load the next xib
-        Step_06_ViewController *step06ViewController = [[Step_06_ViewController alloc]
-                                                    initWithNibName:@"Step_06_ViewController" bundle:nil];
+        Step_06_ViewController *step06ViewController = nil;
+        
+        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+        {
+            
+            step06ViewController = [[Step_06_ViewController alloc]
+                                    initWithNibName:@"Step_06_ViewController_ipad" bundle:nil];
+                        
+        }
+        else
+        {
+            
+            step06ViewController = [[Step_06_ViewController alloc]
+                                    initWithNibName:@"Step_06_ViewController" bundle:nil];
+            
+            
+        }
+        
 
+        
+        
+        
         NSRange noQoute = NSMakeRange(1, [entry.ssid_w_quote length]-2);
         if ([[entry.ssid_w_quote substringWithRange:noQoute] isEqualToString:@"Other Network"])
         {

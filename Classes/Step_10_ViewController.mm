@@ -473,11 +473,24 @@
 {
 	self.progressView.hidden = YES;
     self.navigationItem.hidesBackButton = YES;
+    
+    
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+    {
     //Step 12
-    [[NSBundle mainBundle] loadNibNamed:@"Setup_bm_step_12"
+    [[NSBundle mainBundle] loadNibNamed:@"Setup_bm_step_12_ipad"
                                   owner:self
                                 options:nil];
-    
+    }
+    else
+    {
+        //Step 12
+        [[NSBundle mainBundle] loadNibNamed:@"Setup_bm_step_12"
+                                      owner:self
+                                    options:nil];
+
+        
+    }
     [self.view addSubview:self.setupCompleteView];
 
     
@@ -510,10 +523,26 @@
 	
     self.navigationItem.title = @"Add Camera Failed";
     
-    //Step 11 
-    [[NSBundle mainBundle] loadNibNamed:@"Setup_bm_step_11" 
-                                  owner:self 
-                                options:nil];
+    
+    
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+    {
+        //Step 11
+        [[NSBundle mainBundle] loadNibNamed:@"Setup_bm_step_11_ipad"
+                                      owner:self
+                                    options:nil];
+    }
+    else
+    {
+        //Step 11
+        [[NSBundle mainBundle] loadNibNamed:@"Setup_bm_step_11"
+                                      owner:self
+                                    options:nil];
+        
+        
+    }
+    
+  
 
     
     UIScrollView *tempScrollView=(UIScrollView *) [self.setupFailView viewWithTag:1];

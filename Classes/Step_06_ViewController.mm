@@ -236,13 +236,28 @@
 
 -(void) changeSecurityType
 {
-       
     //load step 07
-    NSLog(@"Load step 7"); 
-    //Load the next xib
-    Step_07_ViewController *step07ViewController = [[Step_07_ViewController alloc]
-                                                    initWithNibName:@"Step_07_ViewController" bundle:nil];
+    NSLog(@"Load step 7");
     
+    
+    //Load the next xib
+    Step_07_ViewController *step07ViewController = nil;
+    
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+    {
+        
+        
+        step07ViewController = [[Step_07_ViewController alloc]
+                                initWithNibName:@"Step_07_ViewController_ipad" bundle:nil];
+        
+    }
+    else
+    {
+        step07ViewController = [[Step_07_ViewController alloc]
+                                initWithNibName:@"Step_07_ViewController" bundle:nil];
+        
+    }
+
     step07ViewController.step06 = self;
     [self.navigationController pushViewController:step07ViewController animated:NO];
     
@@ -473,9 +488,28 @@
             //load step 08
         NSLog(@"Load step 8"); 
         //Load the next xib
-        Step_08_ViewController *step08ViewController = [[Step_08_ViewController alloc]
-                                                        initWithNibName:@"Step_08_ViewController" bundle:nil];
-       
+        Step_08_ViewController *step08ViewController = nil;
+        
+        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+        {
+            
+            step08ViewController = [[Step_08_ViewController alloc]
+                                    initWithNibName:@"Step_08_ViewController_ipad" bundle:nil];
+            
+
+            
+        }
+        else
+        {
+            step08ViewController = [[Step_08_ViewController alloc]
+                                    initWithNibName:@"Step_08_ViewController" bundle:nil];
+            
+            
+        }
+
+        
+        
+        
         step08ViewController.ssid = sent_conf.ssid;
         [self.navigationController pushViewController:step08ViewController animated:NO];
         
@@ -497,8 +531,26 @@
 
         //Load the next xib
         
-        Step_10_ViewController *step10ViewController = [[Step_10_ViewController alloc]
-                                                        initWithNibName:@"Step_10_ViewController" bundle:nil];
+        Step_10_ViewController *step10ViewController = nil;
+        
+        
+        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+        {
+            
+
+            step10ViewController = [[Step_10_ViewController alloc]
+                                    initWithNibName:@"Step_10_ViewController_ipad" bundle:nil];
+            
+        }
+        else
+        {
+       
+            step10ViewController = [[Step_10_ViewController alloc]
+                                    initWithNibName:@"Step_10_ViewController" bundle:nil];
+            
+        }
+
+        
         
         [self.navigationController pushViewController:step10ViewController animated:NO];    
         [step10ViewController release];
