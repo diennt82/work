@@ -240,33 +240,39 @@
         isShown = !progressView.isHidden;
     }
     
+    CGRect screenBounds = [[UIScreen mainScreen] bounds];
+    
+    
     if (orientation == UIInterfaceOrientationLandscapeLeft || orientation == UIInterfaceOrientationLandscapeRight) 
     {
   
 
         CGAffineTransform transform = CGAffineTransformMakeRotation(M_PI_2);
         background.transform = transform;
-        background.frame = CGRectMake(0,0, 480,320);
+        background.frame = CGRectMake(0,0, screenBounds.size.height,
+                                      screenBounds.size.width);
         
         [[NSBundle mainBundle] loadNibNamed:@"MBP_MenuProgress_land"
                                       owner:self
                                     options:nil];
         
-        progressView.frame = CGRectMake(0, 0, 480, 320);
-        
+        progressView.frame = CGRectMake(0, 0, screenBounds.size.height,
+                                        screenBounds.size.width);
     }
     else if (orientation == UIInterfaceOrientationPortrait || orientation == UIInterfaceOrientationPortraitUpsideDown) 
     {
         
         CGAffineTransform transform = CGAffineTransformMakeRotation(M_PI_2);
         background.transform = transform;
-        background.frame = CGRectMake(0,0, 320,480);
+        background.frame = CGRectMake(0,0, screenBounds.size.width,
+                                      screenBounds.size.height);
 
         [[NSBundle mainBundle] loadNibNamed:@"MBP_MenuProgress_portrait"
                                       owner:self
                                     options:nil];
         
-        progressView.frame = CGRectMake(0, 0, 320  , 480);
+        progressView.frame = CGRectMake(0, 0,screenBounds.size.width,
+                                        screenBounds.size.height);
     }
     
     [self.view addSubview:progressView];

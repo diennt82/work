@@ -38,7 +38,7 @@
     version = [NSString stringWithFormat:@"Version %@",version]; 
     versionText.text =version;
     
-    
+    self.view.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
 
 
 }

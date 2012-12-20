@@ -58,6 +58,64 @@
     
 	[super dealloc];
 }
+
+- (void) checkIphone5Size: (UIInterfaceOrientation)orientation
+{
+    CGRect screenBounds = [[UIScreen mainScreen] bounds];
+    
+    
+    if (screenBounds.size.height == 568)
+    {
+        // code for 4-inch screen
+        
+        //TODO: Shift the control button
+       
+        
+        if (orientation == UIInterfaceOrientationLandscapeLeft || orientation == UIInterfaceOrientationLandscapeRight)
+        {
+            NSLog(@"iphone5 SHift right...");
+            CGAffineTransform translate = CGAffineTransformMakeTranslation(44, 0);
+            videoView.transform =translate;
+            
+            CGAffineTransform translate1 = CGAffineTransformMakeTranslation(44, 0);
+            directionPad.transform = translate1;
+            pttButton.transform = translate1;
+            
+            
+            //Rotate the slider
+            zoombarView.transform = CGAffineTransformRotate(translate1, -M_PI*0.5);
+            
+            
+            UIView* toolbar = [videoAndSnapshotView viewWithTag:1];
+            toolbar.frame = CGRectMake(457, 20, 111, 300) ;
+            
+        }
+        else if  (orientation == UIInterfaceOrientationPortrait || orientation == UIInterfaceOrientationPortraitUpsideDown)
+        {
+            
+            NSLog(@"iphone5 SHift down..."); 
+            CGAffineTransform translate = CGAffineTransformMakeTranslation(0, 44);
+            videoView.transform =translate;
+            
+            CGAffineTransform translate1 = CGAffineTransformMakeTranslation(0, 110);
+            directionPad.transform = translate1;
+            pttButton.transform = translate1;
+            controlButtons.transform = translate1;
+            
+
+            videoAndSnapshotView.transform = CGAffineTransformMakeTranslation(0, 88);
+        }
+        
+        
+    }
+    else
+    {
+        // code for 3.5-inch screen
+    }
+}
+
+
+
 - (void)viewDidLoad
 {
 	[super viewDidLoad];
@@ -90,8 +148,16 @@
 {
     NSLog(@"Become ACTIVE .. start channel ");
     
+    CGRect rect = topToolBar.frame;
+    
+    NSLog(@"--1 Statusbar frame: %1.0f, %1.0f, %1.0f, %1.0f", rect.origin.x,
+          rect.origin.y, rect.size.width, rect.size.height);
+    
+    
     if (self.selected_channel != nil)
 	{
+        
+        
 		CamProfile * cp = selected_channel.profile;
         
 		melody_index = -1;
@@ -305,6 +371,42 @@
 	[self adjustViewsForOrientation:toInterfaceOrientation];
 }
 
+-(void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation
+{
+    
+    
+    CGRect rect = [[UIApplication sharedApplication] statusBarFrame]; // Get status bar frame dimensions
+    NSLog(@"1 Statusbar frame: %1.0f, %1.0f, %1.0f, %1.0f", rect.origin.x,
+          rect.origin.y, rect.size.width, rect.size.height);
+    //HACK : incase hotspot is turned on
+    if (rect.size.height>21 &&  rect.size.height<50)
+    {
+        topToolBar.frame = CGRectMake(topToolBar.frame.origin.x,topToolBar.frame.origin.y+20,
+                                      topToolBar.frame.size.width, topToolBar.frame.size.height);
+    }
+#if 1
+    else
+    {
+        if (rect.size.height == 568) // IPHONE5 width
+        {
+            topToolBar.frame = CGRectMake(0,0,
+                                          topToolBar.frame.size.width, topToolBar.frame.size.height);
+        }
+        else
+        {
+            
+            topToolBar.frame = CGRectMake(0,0,
+                                          topToolBar.frame.size.width, topToolBar.frame.size.height);
+            
+        }
+        
+    }
+    
+#endif
+    
+    
+}
+
 - (void) adjustViewsForOrientation:(UIInterfaceOrientation)orientation
 {
     
@@ -419,16 +521,35 @@
                                           owner:self
                                         options:nil];
         }
-        
+#if 0
 		CGRect rect = [[UIApplication sharedApplication] statusBarFrame]; // Get status bar frame dimensions
-		//NSLog(@"Statusbar frame: %1.0f, %1.0f, %1.0f, %1.0f", rect.origin.x,
-        //    rect.origin.y, rect.size.width, rect.size.height);
+		NSLog(@"Statusbar frame: %1.0f, %1.0f, %1.0f, %1.0f", rect.origin.x,
+            rect.origin.y, rect.size.width, rect.size.height);
 		//HACK : incase hotspot is turned on
 		if (rect.size.height>21 &&  rect.size.height<50)
 		{
 			topToolBar.frame = CGRectMake(topToolBar.frame.origin.x,topToolBar.frame.origin.y+20,
                                           topToolBar.frame.size.width, topToolBar.frame.size.height);
 		}
+
+        else
+        {
+            if (rect.size.height == 480) // IPHONE5 width
+            {
+                topToolBar.frame = CGRectMake(0,0,
+                                              topToolBar.frame.size.width, topToolBar.frame.size.height);
+            }
+            else
+            {
+             
+                topToolBar.frame = CGRectMake(0,0,
+                                              topToolBar.frame.size.width, topToolBar.frame.size.height);
+
+            }
+            
+        }
+        
+#endif
         
 		//Rotate the slider
 		zoombarView.transform = CGAffineTransformRotate(zoombarView.transform, -M_PI*0.5);
@@ -464,7 +585,7 @@
         
 	}
     
-    
+    [self checkIphone5Size:orientation];
     
 	//after this the streamer need to be updated
 	streamer.videoImage = videoView;

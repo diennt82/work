@@ -79,6 +79,8 @@ return self;
 
 	[super viewDidLoad];
 
+    
+    self.view.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
 
 	[self initialize];
 
