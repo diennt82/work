@@ -152,8 +152,25 @@
 
     NSLog(@"Load Term of use");
     //Load the next xib
-    ToUViewController  * vc = [[ToUViewController alloc]
-                                                    initWithNibName:@"ToUViewController" bundle:nil];
+    ToUViewController  * vc = nil;
+    
+    
+    
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+    {
+        vc =[[ToUViewController alloc]
+             initWithNibName:@"ToUViewController_ipad" bundle:nil];
+        
+    }
+    else
+    {
+        vc =[[ToUViewController alloc]
+             initWithNibName:@"ToUViewController" bundle:nil];
+    }
+    
+
+    
+    
     [self.navigationController pushViewController:vc animated:NO];
     [vc release];
 }
