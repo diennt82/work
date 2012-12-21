@@ -125,22 +125,49 @@
 	if (orientation == UIInterfaceOrientationLandscapeLeft || orientation == UIInterfaceOrientationLandscapeRight)
 	{
         
-        [[NSBundle mainBundle] loadNibNamed:@"AlertSettingViewController_land"
-                                      owner:self
-                                    options:nil];
+        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+        {
+            [[NSBundle mainBundle] loadNibNamed:@"AlertSettingViewController_land_ipad"
+                                          owner:self
+                                        options:nil];
 
+        }
+        else
+        {
+            [[NSBundle mainBundle] loadNibNamed:@"AlertSettingViewController_land"
+                                          owner:self
+                                        options:nil];
+
+            
+            
+        }
+
+       
 
         
         
     }
 	else if (orientation == UIInterfaceOrientationPortrait || orientation == UIInterfaceOrientationPortraitUpsideDown)
 	{
-        
-        [[NSBundle mainBundle] loadNibNamed:@"AlertSettingViewController"
-                                      owner:self
-                                    options:nil];
+        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+        {
+            [[NSBundle mainBundle] loadNibNamed:@"AlertSettingViewController_ipad"
+                                          owner:self
+                                        options:nil];
+            
 
-        
+            
+        }
+        else
+        {
+            [[NSBundle mainBundle] loadNibNamed:@"AlertSettingViewController"
+                                          owner:self
+                                        options:nil];
+            
+
+            
+        }
+                
 	}
     
     

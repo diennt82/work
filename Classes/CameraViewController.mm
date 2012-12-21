@@ -461,7 +461,20 @@
 		CGAffineTransform transform = CGAffineTransformMakeRotation(-M_PI_2);
 		UIView* toolbar = [videoAndSnapshotView viewWithTag:1];
 		toolbar.transform = transform;
-		toolbar.frame = CGRectMake(369, 20, 111, 300) ;
+      
+        
+        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+        {
+
+            toolbar.frame = CGRectMake(913, 20, 111, 728) ;
+        }
+        else
+        {
+            toolbar.frame = CGRectMake(369, 20, 111, 300) ;
+        }
+        
+        
+		
         
         
         

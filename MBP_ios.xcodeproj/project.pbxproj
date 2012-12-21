@@ -193,6 +193,8 @@
 		97DA238416425FA100EE2528 /* ToUViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 97DA238216425F9E00EE2528 /* ToUViewController.m */; };
 		97DA238516425FA100EE2528 /* ToUViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 97DA238316425F9F00EE2528 /* ToUViewController.xib */; };
 		97DEEA4214308B71008212FF /* AsyncUdpSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = 97DEEA4014308B71008212FF /* AsyncUdpSocket.m */; };
+		97E39E6416840B1900F1A1DB /* AlertSettingViewController_ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 97E39E6316840B1900F1A1DB /* AlertSettingViewController_ipad.xib */; };
+		97E39E6616840CF000F1A1DB /* AlertSettingViewController_land_ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 97E39E6516840CF000F1A1DB /* AlertSettingViewController_land_ipad.xib */; };
 		97E3AAD6147E257400A0922A /* iTunesArtWork in Resources */ = {isa = PBXBuildFile; fileRef = 97E3AAD5147E257400A0922A /* iTunesArtWork */; };
 		97E3AAD8147E25A600A0922A /* mbp_icon57x57.png in Resources */ = {isa = PBXBuildFile; fileRef = 97E3AAD7147E25A600A0922A /* mbp_icon57x57.png */; };
 		97E3CC77159D89EE00481854 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 97E3CC76159D89EE00481854 /* AVFoundation.framework */; };
@@ -455,6 +457,8 @@
 		97DC55BF14BAFAAD00AA4911 /* Baby Cam.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Baby Cam.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		97DEEA4014308B71008212FF /* AsyncUdpSocket.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AsyncUdpSocket.m; sourceTree = "<group>"; };
 		97DEEA4114308B71008212FF /* AsyncUdpSocket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AsyncUdpSocket.h; sourceTree = "<group>"; };
+		97E39E6316840B1900F1A1DB /* AlertSettingViewController_ipad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = AlertSettingViewController_ipad.xib; sourceTree = "<group>"; };
+		97E39E6516840CF000F1A1DB /* AlertSettingViewController_land_ipad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = AlertSettingViewController_land_ipad.xib; sourceTree = "<group>"; };
 		97E3AAD5147E257400A0922A /* iTunesArtWork */ = {isa = PBXFileReference; lastKnownFileType = file; path = iTunesArtWork; sourceTree = "<group>"; };
 		97E3AAD7147E25A600A0922A /* mbp_icon57x57.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = mbp_icon57x57.png; sourceTree = "<group>"; };
 		97E3CC76159D89EE00481854 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
@@ -621,6 +625,8 @@
 				380C42FE16195047001434C0 /* AlertSettingViewController.mm */,
 				380C42FF16195047001434C0 /* AlertSettingViewController.xib */,
 				3825A4B4166EF09500520872 /* AlertSettingViewController_land.xib */,
+				97E39E6316840B1900F1A1DB /* AlertSettingViewController_ipad.xib */,
+				97E39E6516840CF000F1A1DB /* AlertSettingViewController_land_ipad.xib */,
 				97A3BD6D1545094F000C3546 /* HttpCommunication.h */,
 				97A3BD6E1545094F000C3546 /* HttpCommunication.m */,
 				38A13AF116363147000138EA /* UnderlinedUILabel.h */,
@@ -992,6 +998,8 @@
 				974ACB5716804C19005AE4C6 /* Setup_bm_step_11_ipad.xib in Resources */,
 				974ACB59168055F9005AE4C6 /* ToUViewController_ipad.xib in Resources */,
 				974ACB7F168079CB005AE4C6 /* MonitorEverywhere_App_ios_Apple.html in Resources */,
+				97E39E6416840B1900F1A1DB /* AlertSettingViewController_ipad.xib in Resources */,
+				97E39E6616840CF000F1A1DB /* AlertSettingViewController_land_ipad.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
