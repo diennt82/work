@@ -659,6 +659,8 @@
         
         [self setUIMelodyOnOff];
         
+        [self performSelectorInBackground:@selector(setVQ_bg) withObject:nil];
+        
         //re-show progress if  it is being shown
         if (shouldShowProgress)
         {
@@ -1137,6 +1139,7 @@
             
             //update melody ui
             [self setUIMelodyOnOff];
+            [self performSelectorInBackground:@selector(setVQ_bg) withObject:nil];
             
             break;
         }
@@ -1777,6 +1780,111 @@
 #endif
 	}
 }
+
+
+
+-(void) setVQ_bg
+{
+    
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    
+	int videoQ =[userDefaults integerForKey:@"int_VideoQuality"];
+    
+    NSData * responseData  = nil;
+    if (selected_channel.communication_mode == COMM_MODE_STUN)
+	{
+		if (self.scomm != nil)
+		{
+            if (videoQ == 0)
+            {
+                responseData= [self.scomm sendCommandThruUdtServer:SET_RESOLUTION_QVGA
+                                                           withMac:self.selected_channel.profile.mac_address
+                                                        AndChannel:self.selected_channel.channID];
+            }
+            else
+            {
+                responseData= [self.scomm sendCommandThruUdtServer:SET_RESOLUTION_VGA
+                                                           withMac:self.selected_channel.profile.mac_address
+                                                        AndChannel:self.selected_channel.channID];
+            }
+		}
+		
+        
+	}
+	else
+	{
+		if (comm != nil)
+		{
+            if (videoQ == 0)
+            {
+                responseData = [comm sendCommandAndBlock_raw:SET_RESOLUTION_QVGA];
+            }
+            else
+            {
+                responseData = [comm sendCommandAndBlock_raw:SET_RESOLUTION_VGA];
+            }
+		}
+	}
+    
+	
+    
+	if (responseData != nil)
+	{
+		[self performSelectorOnMainThread:@selector(setVQ_fg)
+                               withObject:nil waitUntilDone:NO];
+        
+	}
+    
+}
+
+-(void) setVQ_fg
+{
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    
+	int videoQ =[userDefaults integerForKey:@"int_VideoQuality"];
+    
+    if (videoQ == 0) // QVGA
+    {
+
+        [hqButton setImage:[UIImage imageNamed:@"hq_d.png" ]
+                  forState:UIControlStateNormal];
+    }
+    else
+    {
+
+        [hqButton setImage:[UIImage imageNamed:@"hq.png" ]
+                  forState:UIControlStateNormal];
+    }
+}
+
+-(IBAction)buttonHQPressed:(id) sender
+{
+
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    
+	int videoQ =[userDefaults integerForKey:@"int_VideoQuality"];
+    
+    
+    
+    if (videoQ == 0) // QVGA
+    {
+        videoQ = 1; //VGA
+    }
+    else
+    {
+        videoQ = 0 ; //QVGA
+    }
+    
+    [userDefaults setInteger:videoQ forKey:@"int_VideoQuality"];
+	[userDefaults synchronize];
+	
+
+    [self performSelectorInBackground:@selector(setVQ_bg)
+                           withObject:nil];
+    
+    
+}
+
 
 - (IBAction)sliderChanged:(id)sender
 {

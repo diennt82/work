@@ -195,6 +195,8 @@
 		97DEEA4214308B71008212FF /* AsyncUdpSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = 97DEEA4014308B71008212FF /* AsyncUdpSocket.m */; };
 		97E39E6416840B1900F1A1DB /* AlertSettingViewController_ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 97E39E6316840B1900F1A1DB /* AlertSettingViewController_ipad.xib */; };
 		97E39E6616840CF000F1A1DB /* AlertSettingViewController_land_ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 97E39E6516840CF000F1A1DB /* AlertSettingViewController_land_ipad.xib */; };
+		97E39E691684416700F1A1DB /* hq_d.png in Resources */ = {isa = PBXBuildFile; fileRef = 97E39E671684416700F1A1DB /* hq_d.png */; };
+		97E39E6A1684416700F1A1DB /* hq.png in Resources */ = {isa = PBXBuildFile; fileRef = 97E39E681684416700F1A1DB /* hq.png */; };
 		97E3AAD6147E257400A0922A /* iTunesArtWork in Resources */ = {isa = PBXBuildFile; fileRef = 97E3AAD5147E257400A0922A /* iTunesArtWork */; };
 		97E3AAD8147E25A600A0922A /* mbp_icon57x57.png in Resources */ = {isa = PBXBuildFile; fileRef = 97E3AAD7147E25A600A0922A /* mbp_icon57x57.png */; };
 		97E3CC77159D89EE00481854 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 97E3CC76159D89EE00481854 /* AVFoundation.framework */; };
@@ -459,6 +461,8 @@
 		97DEEA4114308B71008212FF /* AsyncUdpSocket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AsyncUdpSocket.h; sourceTree = "<group>"; };
 		97E39E6316840B1900F1A1DB /* AlertSettingViewController_ipad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = AlertSettingViewController_ipad.xib; sourceTree = "<group>"; };
 		97E39E6516840CF000F1A1DB /* AlertSettingViewController_land_ipad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = AlertSettingViewController_land_ipad.xib; sourceTree = "<group>"; };
+		97E39E671684416700F1A1DB /* hq_d.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = hq_d.png; sourceTree = "<group>"; };
+		97E39E681684416700F1A1DB /* hq.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = hq.png; sourceTree = "<group>"; };
 		97E3AAD5147E257400A0922A /* iTunesArtWork */ = {isa = PBXFileReference; lastKnownFileType = file; path = iTunesArtWork; sourceTree = "<group>"; };
 		97E3AAD7147E25A600A0922A /* mbp_icon57x57.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = mbp_icon57x57.png; sourceTree = "<group>"; };
 		97E3CC76159D89EE00481854 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
@@ -762,6 +766,8 @@
 		3812F82315C8BEC700DADFA6 /* images13 */ = {
 			isa = PBXGroup;
 			children = (
+				97E39E671684416700F1A1DB /* hq_d.png */,
+				97E39E681684416700F1A1DB /* hq.png */,
 				38167AC116118DB600B7FA0A /* bb_pic_2.png */,
 				3803A8781602D44100B4DD97 /* temp_alert.png */,
 				3803A8791602D44100B4DD97 /* voice_alert.png */,
@@ -1000,6 +1006,8 @@
 				974ACB7F168079CB005AE4C6 /* MonitorEverywhere_App_ios_Apple.html in Resources */,
 				97E39E6416840B1900F1A1DB /* AlertSettingViewController_ipad.xib in Resources */,
 				97E39E6616840CF000F1A1DB /* AlertSettingViewController_land_ipad.xib in Resources */,
+				97E39E691684416700F1A1DB /* hq_d.png in Resources */,
+				97E39E6A1684416700F1A1DB /* hq.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

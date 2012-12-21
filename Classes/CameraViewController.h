@@ -104,7 +104,8 @@
     IBOutlet UITableViewCell * songtitleCell; 
     
     IBOutlet UIButton * pttButton; 
-    IBOutlet UIButton * lullabyButton; 
+    IBOutlet UIButton * lullabyButton;
+    IBOutlet UIButton * hqButton; 
     
     IBOutlet UIView * videoAndSnapshotView; 
     IBOutlet UISlider *videoAndSnapshotSlider;
@@ -174,6 +175,7 @@
 @property (nonatomic) BOOL ptt_enabled,askForFWUpgradeOnce,enableControls, firstTimeConnect, fwUpgradeInProgess;
 
 
+-(IBAction)buttonHQPressed:(id) sender;
 -(IBAction)buttonMelodyPressed:(id) sender;
 -(IBAction)buttonPttPressed:(id)sender;
 -(IBAction)buttonSpkPressed:(id)sender;
