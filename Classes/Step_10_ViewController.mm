@@ -144,7 +144,7 @@
     
 }
 
--(IBAction)cameraTest:(id)sender
+-(IBAction)registerCamera:(id)sender
 {
 
 #if 0 ///TEST TEST TEST 
@@ -229,7 +229,7 @@
 		{
 			
             //CameraTest: try to search for camera now..
-            [self cameraTest:nil];
+            [self registerCamera:nil];
             
 			return;
 		}
@@ -639,6 +639,8 @@
 	return;
 	
 }
+
+
 - (void) addCamFailedServerUnreachable
 {
 	NSLog(@"addcam failed : server unreachable");
@@ -646,14 +648,16 @@
 	//ERROR condition
 	UIAlertView *alert = [[UIAlertView alloc]
 						  initWithTitle:@"AddCam Error"
-						  message:@"Server unreachable"
+						  message:@"The device is not able to connect to the server. Please check the WIFI and the internet connection"
 						  delegate:self
-						  cancelButtonTitle:@"OK"
-						  otherButtonTitles:nil];
+						  cancelButtonTitle:@"Cancel"
+						  otherButtonTitles:@"Retry", nil];
+    alert.delegate = self;
+    alert.tag = ALERT_ADDCAM_SERVER_UNREACH;
+    
 	[alert show];
 	[alert release];
     
-    [self  setupFailed];
 	
 }
 
@@ -674,7 +678,35 @@
 	NSLog(@"server unreachable");
 }
 
+#pragma mark - 
+#pragma mark AlertView delegate 
 
+
+
+- (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex
+{
+    
+	int tag = alertView.tag;
+    
+	if (tag == ALERT_ADDCAM_SERVER_UNREACH)
+	{
+		switch(buttonIndex) {
+			case 0: // Cancel
+                [self  setupFailed];
+                
+				break;
+			case 1: // Retry
+                [self registerCamera:nil];
+				break;
+			default:
+				break;
+		}
+	}
+	    
+}
+
+
+#pragma mark -
 
 
 

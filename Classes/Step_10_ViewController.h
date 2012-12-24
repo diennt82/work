@@ -21,6 +21,8 @@
 
 #define SCAN_TIMEOUT 3*60 //3 mins
 
+#define ALERT_ADDCAM_SERVER_UNREACH 1
+
 @interface Step_10_ViewController : UIViewController
 {
     IBOutlet UIView * progressView; 
@@ -48,7 +50,7 @@
 
 @property (nonatomic, retain) NSString *cameraMac,  *master_key; 
 
--(IBAction)cameraTest:(id)sender;
+-(IBAction)registerCamera:(id)sender;
 -(IBAction)starMonitor:(id)sender;
 -(IBAction)tryAddCameraAgain:(id)sender;
 
