@@ -88,8 +88,11 @@
             if ([self shouldShowEditButton])
             {
                 
+                NSString * msg = NSLocalizedStringWithDefaultValue(@"Edit_",nil, [NSBundle mainBundle],
+                                                                     @"Edit_", nil);
+                
                 UIBarButtonItem *editButton = [[UIBarButtonItem alloc]
-                                               initWithTitle:@"Edit"
+                                               initWithTitle:msg
                                                style:UIBarButtonItemStyleBordered
                                                target:self
                                                action:@selector(editCameras:)];
@@ -120,8 +123,12 @@
         //Label
         UIBarButtonItem *label = [[UIBarButtonItem alloc]
                                   init];
+        
+        NSString * msg = NSLocalizedStringWithDefaultValue(@"Cameras_",nil, [NSBundle mainBundle],
+                                                           @"Cameras_", nil);
+        
         label.style = UIBarButtonItemStylePlain;
-        label.title =@"Cameras";
+        label.title =msg;
         [buttons addObject:label];
         [label release];
         
@@ -200,8 +207,11 @@
             if ([self shouldShowEditButton])
             {
                 
+                NSString * msg = NSLocalizedStringWithDefaultValue(@"Cancel_",nil, [NSBundle mainBundle],
+                                                                   @"Cancel_", nil);
+
                 UIBarButtonItem *editButton = [[UIBarButtonItem alloc]
-                                               initWithTitle:@"Cancel"
+                                               initWithTitle:msg
                                                style:UIBarButtonItemStyleBordered
                                                target:self
                                                action:@selector(editCameras:)];
@@ -225,7 +235,10 @@
         UIBarButtonItem *label = [[UIBarButtonItem alloc]
                                   init];
         label.style = UIBarButtonItemStylePlain;
-        label.title =@"Cameras";
+        NSString * msg = NSLocalizedStringWithDefaultValue(@"Cameras_",nil, [NSBundle mainBundle],
+                                                           @"Cameras_", nil);
+
+        label.title =msg;
         [buttons addObject:label];
         [label release];
         
@@ -518,21 +531,7 @@
     {
         static NSString *CellIdentifier = @"Cell1";
 
-#if 0
-                
-        UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-        
-        
-        
-        if (cell == nil) {
-            
-            [[NSBundle mainBundle] loadNibNamed:@"DashBoard_camEdit" owner:self options:nil];
-            cell = self.cellView;
-            self.cellView = nil;
-        }
-        
-        
-#else
+
        
         // Use Subclass
         
@@ -547,8 +546,6 @@
             self.cellView = nil;
         }
 
-        
-#endif
         
         UIImageView * snapshot = (UIImageView *) [cell viewWithTag:500];
         UILabel * camName  = (UILabel *) [cell viewWithTag:501];
@@ -661,7 +658,7 @@
                 }
             }
             
-            
+            NSString * msg = nil; 
             
             //set camera info
             if (cp.isInLocal == TRUE)
@@ -672,7 +669,10 @@
                 camStatusInd.hidden = YES;
                 camStatus.hidden  = YES;
                 
-                [camLoc setText:@"Local Wifi"];
+                
+                msg = NSLocalizedStringWithDefaultValue(@"Local_Wifi",nil, [NSBundle mainBundle],
+                                                  @"Local Wifi", nil);
+                [camLoc setText:msg];
                 
             }
             else if (cp.minuteSinceLastComm <=10 )
@@ -683,14 +683,26 @@
                 camStatusInd.hidden = YES;
                 camStatus.hidden  = YES;
                 
-                [camLoc setText:@"Remote Camera"];
+                msg = NSLocalizedStringWithDefaultValue(@"Remote_Camera",nil, [NSBundle mainBundle],
+                                                        @"Remote Camera", nil);
+
+                
+                [camLoc setText:msg];
             }
             else
             {
                 [camStatusInd setImage:[UIImage imageNamed:@"camera_offline.png"]];
                 camStatusInd.hidden = NO;
-                [camLoc setText:@"Remote Camera"];
-                [camStatus setText:@"Not Available"];
+                msg = NSLocalizedStringWithDefaultValue(@"Remote_Camera",nil, [NSBundle mainBundle],
+                                                        @"Remote Camera", nil);
+
+                
+                [camLoc setText:msg];
+                msg = NSLocalizedStringWithDefaultValue(@"Not_Available",nil, [NSBundle mainBundle],
+                                                        @"Not Available", nil);
+
+                
+                [camStatus setText:msg];
             }
             
             
@@ -773,12 +785,18 @@
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     
     BOOL isOffline = [userDefaults boolForKey:_OfflineMode];
-
    
-    UITabBarItem * camList  = [[UITabBarItem alloc]initWithTitle:@"Cameras"
+    NSString * msg = NSLocalizedStringWithDefaultValue(@"Cameras_",nil, [NSBundle mainBundle],
+                                                       @"Cameras_", nil);
+    
+    UITabBarItem * camList  = [[UITabBarItem alloc]initWithTitle:msg
                                                            image:[UIImage imageNamed:@"bb_camera_slider_icon.png"]
                                                              tag:1];
     [self setTabBarItem:camList];
+    
+    msg = NSLocalizedStringWithDefaultValue(@"Account_",nil, [NSBundle mainBundle],
+                                            @"Account_", nil);
+    
     UITabBarItem * account  = [[UITabBarItem alloc]initWithTitle:@"Account"
                                                            image:[UIImage imageNamed:@"account_icon.png"]
                                                              tag:2];
@@ -982,31 +1000,8 @@
 -(IBAction)renameCamera:(id)sender
 {
     self.edittedChannelIndex = ((UIButton *)sender).tag;
-    
-    //TODO:
-#if 0
-    UITableViewCell * thisCell = (UITableViewCell *)   ((UIButton *)sender).superview ;
-    //UITableView *tableView = (UITableView *)thisCell.superview;
-    NSIndexPath *indexPath = [cameraList indexPathForCell:thisCell];
-    
-    NSLog(@"new way to get index to camera: index = %d", indexPath.row);
-    self.edittedChannelIndex = indexPath.row;
-
-#endif
-       
     [self askForNewName];
-    
-    
 }
-
-
-
-
-
-
-
-
-
 
 
 #pragma  mark -
@@ -1018,17 +1013,31 @@
     
     UIAlertView * _myAlert = nil;
     
-    _myAlert = [[UIAlertView alloc] initWithTitle:@"Change Camera Name"
-                                          message:@"Please enter new name for this camera\n\n\n"
+    NSString * msg = NSLocalizedStringWithDefaultValue(@"Change_Camera_Name",nil, [NSBundle mainBundle],
+                                                       @"Change Camera Name", nil);
+    NSString * msg2 = NSLocalizedStringWithDefaultValue(@"Please_enter_new_name_for_this_camera",nil, [NSBundle mainBundle],
+                                            @"Please enter new name for this camera\n\n\n", nil);
+    
+    NSString * cancel = NSLocalizedStringWithDefaultValue(@"Cancel",nil, [NSBundle mainBundle],
+                                                        @"Cancel", nil);
+
+    NSString * ok = NSLocalizedStringWithDefaultValue(@"Ok",nil, [NSBundle mainBundle],
+                                                        @"Ok", nil);
+
+    NSString * newName = NSLocalizedStringWithDefaultValue(@"New_Name",nil, [NSBundle mainBundle],
+                                                      @"New Name", nil);
+    
+    _myAlert = [[UIAlertView alloc] initWithTitle:msg
+                                          message:msg2 
                                          delegate:self
-                                cancelButtonTitle:@"Cancel"
-                                otherButtonTitles:@"Ok",
+                                cancelButtonTitle:cancel
+                                otherButtonTitles:ok,
                 nil];
     _myAlert.tag = ALERT_CHANGE_NAME; //used for tracking later
     
     UITextField *myTextField = [[UITextField alloc] initWithFrame:CGRectMake(32.0, 85.0, 220.0, 30.0)];
     [myTextField setBackgroundColor:[UIColor whiteColor]];
-    myTextField.placeholder = @"New Name";
+    myTextField.placeholder = newName;
     myTextField.borderStyle = UITextBorderStyleRoundedRect;
     myTextField.backgroundColor = [UIColor whiteColor];
     myTextField.textColor = [UIColor blackColor];
@@ -1105,16 +1114,27 @@
 
 - (void) showDialog:(int) dialogType
 {
+    NSString * ok = NSLocalizedStringWithDefaultValue(@"Ok",nil, [NSBundle mainBundle],
+                                                      @"Ok", nil);
+    NSString * cancel = NSLocalizedStringWithDefaultValue(@"Cancel",nil, [NSBundle mainBundle],
+                                                          @"Cancel", nil);
+
 	switch (dialogType) {
             
 		case DIALOG_CANT_RENAME:
 		{
-			NSString * msg =@"Unable to rename this camera. Please log-in and try again";
+            
+            NSString * msg = NSLocalizedStringWithDefaultValue(@"Unable_to_rename_this_camera",nil, [NSBundle mainBundle],
+                                                                @"Unable to rename this camera. Please log-in and try again", nil);
+
+          
+
+            
 			UIAlertView *alert = [[UIAlertView alloc]
 								  initWithTitle:@""
 								  message:msg
 								  delegate:nil
-								  cancelButtonTitle:@"OK"
+								  cancelButtonTitle:ok
 								  otherButtonTitles:nil];
 			[alert show];
 			[alert release];
@@ -1122,12 +1142,14 @@
 		}
 		case ALERT_NAME_CANT_BE_EMPTY:
 		{
-			NSString * msg =@"Camera name cant be empty, please try again";
+            NSString * msg = NSLocalizedStringWithDefaultValue(@"Camera_name_cant_be_empty",nil, [NSBundle mainBundle],
+                                                               @"Camera name cant be empty, please try again", nil);
+
 			UIAlertView *alert = [[UIAlertView alloc]
 								  initWithTitle:@""
 								  message:msg
 								  delegate:self
-								  cancelButtonTitle:@"OK"
+								  cancelButtonTitle:ok
 								  otherButtonTitles:nil];
 			alert.tag = ALERT_NAME_CANT_BE_EMPTY;
 			[alert show];
@@ -1140,14 +1162,14 @@
 			BOOL deviceInLocal = ch.profile.isInLocal;
             if (deviceInLocal)
             {
-                
-                NSString * msg =@"Please confirm that you want to remove this camera from your account. This action will also reset the camera to setup mode.";
+                NSString * msg = NSLocalizedStringWithDefaultValue(@"Confirm_remove_cam_local",nil, [NSBundle mainBundle],
+                                                                   @"Please confirm that you want to remove this camera from your account. This action will also reset the camera to setup mode.", nil);
                 UIAlertView *alert = [[UIAlertView alloc]
                                       initWithTitle:@""
                                       message:msg
                                       delegate:self
-                                      cancelButtonTitle:@"Cancel"
-                                      otherButtonTitles:@"OK",nil];
+                                      cancelButtonTitle:cancel
+                                      otherButtonTitles:ok,nil];
                 alert.tag = ALERT_REMOVE_CAM_LOCAL;
                 [alert show];
                 [alert release];
@@ -1155,13 +1177,16 @@
             }
             else
             {
-                NSString * msg =@"Please confirm that you want to remove this camera from your account. The camera is not accessible right now, it will not be switched to setup mode. Please refer to FAQ to reset it manually.";
+                NSString * msg = NSLocalizedStringWithDefaultValue(@"Confirm_remove_cam_remote",nil, [NSBundle mainBundle],
+                                                                   @"Please confirm that you want to remove this camera from your account. The camera is not accessible right now, it will not be switched to setup mode. Please refer to FAQ to reset it manually.", nil);
+                
+
                 UIAlertView *alert = [[UIAlertView alloc]
                                       initWithTitle:@""
                                       message:msg
                                       delegate:self
-                                      cancelButtonTitle:@"Cancel"
-                                      otherButtonTitles:@"OK",nil];
+                                      cancelButtonTitle:cancel
+                                      otherButtonTitles:ok,nil];
                 
                 alert.tag = ALERT_REMOVE_CAM_REMOTE;
                 [alert show];
@@ -1175,12 +1200,14 @@
             
 		case DIALOG_CANT_ADD_CAM:
 		{
-			NSString * msg =@"Please remove one camera from the current  list before addding the new one";
+            NSString * msg = NSLocalizedStringWithDefaultValue(@"remove_one_cam",nil, [NSBundle mainBundle],
+                                                              @"Please remove one camera from the current  list before addding the new one", nil);            
+
 			UIAlertView *alert = [[UIAlertView alloc]
 								  initWithTitle:@""
 								  message:msg
 								  delegate:nil
-								  cancelButtonTitle:@"OK"
+								  cancelButtonTitle:ok
 								  otherButtonTitles:nil];
 			[alert show];
 			[alert release];

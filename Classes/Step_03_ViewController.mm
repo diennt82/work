@@ -44,11 +44,14 @@
 {
     [super viewDidLoad];
 	// Do any additional setup after loading the view.
-    self.navigationItem.title = @"Detect Camera";
+    self.navigationItem.title =  NSLocalizedStringWithDefaultValue(@"Detect_Camera",nil, [NSBundle mainBundle],
+                                                                   @"Detect Camera", nil);
+
     
     
     self.navigationItem.backBarButtonItem =
-    [[[UIBarButtonItem alloc] initWithTitle:@"Back"
+    [[[UIBarButtonItem alloc] initWithTitle:NSLocalizedStringWithDefaultValue(@"Back",nil, [NSBundle mainBundle],
+                                                                              @"Back", nil)
                                       style:UIBarButtonItemStyleBordered
                                      target:nil
                                      action:nil] autorelease];

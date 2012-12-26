@@ -28,13 +28,15 @@
 {
     [super viewDidLoad];
 	// Do any additional setup after loading the view.
-    self.navigationItem.title = @"Camera Configured"; 
+    self.navigationItem.title = NSLocalizedStringWithDefaultValue(@"Camera_Configured",nil, [NSBundle mainBundle],
+                                                                  @"Camera Configured" , nil);
     ssidView.text = self.ssid;
     ssidView_1.text = self.ssid;
     self.navigationItem.hidesBackButton = YES;
     
     self.navigationItem.backBarButtonItem =
-    [[[UIBarButtonItem alloc] initWithTitle:@"Back"
+    [[[UIBarButtonItem alloc] initWithTitle:NSLocalizedStringWithDefaultValue(@"Back",nil, [NSBundle mainBundle],
+                                                                              @"Back" , nil)
                                       style:UIBarButtonItemStyleBordered
                                      target:nil
                                      action:nil] autorelease];

@@ -111,11 +111,14 @@
     [spacer release];
     
     
+    NSString * msg  = NSLocalizedStringWithDefaultValue(@"Account",nil, [NSBundle mainBundle],
+                                             @"Account" , nil);
+    
     //Label
     UIBarButtonItem *label = [[UIBarButtonItem alloc]
                               init];
     label.style = UIBarButtonItemStylePlain;
-    label.title =@"Account";
+    label.title =msg;
     [buttons addObject:label];
     [label release];
     
@@ -129,9 +132,12 @@
     [spacer release];
     
     
+    msg  = NSLocalizedStringWithDefaultValue(@"Logout",nil, [NSBundle mainBundle],
+                                             @"Logout" , nil);
+    
     // create a standard delete button with the trash icon
     UIBarButtonItem *logoutButton = [[UIBarButtonItem alloc]
-                                     initWithTitle:@"Logout"
+                                     initWithTitle:msg
                                      style:UIBarButtonItemStyleBordered
                                      target:self
                                      action:@selector(userLogout)];

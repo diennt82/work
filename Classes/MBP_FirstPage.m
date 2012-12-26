@@ -35,7 +35,11 @@
     //Read version 
     NSString *version = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
 
-    version = [NSString stringWithFormat:@"Version %@",version]; 
+    
+    NSString * msg = NSLocalizedStringWithDefaultValue(@"version",nil, [NSBundle mainBundle],
+                                                       @"Version %@" , nil);
+    
+    version = [NSString stringWithFormat:msg,version];
     versionText.text =version;
     
     self.view.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;

@@ -50,7 +50,7 @@
 }
 
 
-
+// NOT USED .. 
 - (void) askForNewUserPass
 {
     
@@ -86,7 +86,7 @@
 	
 }
 
-
+/// NOT USED ... 
 - (void) askForUserPass
 {
     
@@ -126,11 +126,19 @@
 - (void) timeoutAskForRetry
 {
     
+    NSString * msg = NSLocalizedStringWithDefaultValue(@"comm_with_camera_timeout",nil, [NSBundle mainBundle],
+                                                       @"Communication with camera has timeout.", nil);
+    
+    NSString * msg1 = NSLocalizedStringWithDefaultValue(@"comm_with_camera_timeout_msg",nil, [NSBundle mainBundle],
+                                                       @"Please retry.", nil);
+    NSString * ok = NSLocalizedStringWithDefaultValue(@"Ok",nil, [NSBundle mainBundle],
+                                                      @"Ok", nil);
+    
     UIAlertView *_myAlert = nil ;
-    _myAlert = [[UIAlertView alloc] initWithTitle:@"Communication with camera has timeout."
-                                          message:@"Please retry."
+    _myAlert = [[UIAlertView alloc] initWithTitle:msg
+                                          message:msg1
                                          delegate:self
-                                cancelButtonTitle:@"OK"
+                                cancelButtonTitle:ok
                                 otherButtonTitles: nil];
     
     _myAlert.tag = ALERT_ASK_FOR_RETRY;

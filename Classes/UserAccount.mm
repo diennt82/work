@@ -438,13 +438,20 @@
 -(void) getCamListFailure:(NSHTTPURLResponse*) error_response
 {
 	NSLog(@"Loging failed with error code:%d", [error_response statusCode]);
-	
+    NSString * msg = NSLocalizedStringWithDefaultValue(@"Get_Camera_list_Error",nil, [NSBundle mainBundle],
+                                                          @"Get Camera list Error", nil);
+    
+    NSString * msg1 = NSLocalizedStringWithDefaultValue(@"Get_Camera_list_Error_msg",nil, [NSBundle mainBundle],
+                                                       @"Server error: %@", nil);
+    
+    NSString * ok = NSLocalizedStringWithDefaultValue(@"Ok",nil, [NSBundle mainBundle],
+                                                      @"Ok", nil);
 	//ERROR condition
 	UIAlertView *alert = [[UIAlertView alloc]
-						  initWithTitle:@"Get Camera list Error"
-						  message:[NSString stringWithFormat:@"Server error: %@", [BMS_Communication getLocalizedMessageForError:[error_response statusCode]]] 
+						  initWithTitle:msg
+						  message:[NSString stringWithFormat:msg1, [BMS_Communication getLocalizedMessageForError:[error_response statusCode]]] 
 						  delegate:self
-						  cancelButtonTitle:@"OK"
+						  cancelButtonTitle:ok
 						  otherButtonTitles:nil];
 	[alert show];
 	[alert release];
@@ -455,13 +462,22 @@
 - (void)getCamListServerUnreachable
 {
 	NSLog(@"Loging failed : server unreachable");
+    NSString * msg = NSLocalizedStringWithDefaultValue(@"Get_Camera_list_Error",nil, [NSBundle mainBundle],
+                                                       @"Get Camera list Error", nil);
+    
+    NSString * msg1 = NSLocalizedStringWithDefaultValue(@"Get_Camera_list_Error_msg1",nil, [NSBundle mainBundle],
+                                                        @"Server unreachable", nil);
+    
+    NSString * ok = NSLocalizedStringWithDefaultValue(@"Ok",nil, [NSBundle mainBundle],
+                                                      @"Ok", nil);
+
 	
 	//ERROR condition
 	UIAlertView *alert = [[UIAlertView alloc]
-						  initWithTitle:@"Get Camera list Error"
-						  message:@"Server unreachable"
+						  initWithTitle:msg
+						  message:msg1
 						  delegate:self
-						  cancelButtonTitle:@"OK"
+						  cancelButtonTitle:ok
 						  otherButtonTitles:nil];
 	[alert show];
 	[alert release];

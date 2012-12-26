@@ -38,11 +38,13 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
     
-    self.navigationItem.title = @"Forgot Password"; 
+    self.navigationItem.title =  NSLocalizedStringWithDefaultValue(@"Forgot_Password",nil, [NSBundle mainBundle],
+                                                                   @"Forgot Password", nil);
     
     
     UIBarButtonItem *nextButton = 
-    [[UIBarButtonItem alloc] initWithTitle:@"Next" 
+    [[UIBarButtonItem alloc] initWithTitle: NSLocalizedStringWithDefaultValue(@"Next",nil, [NSBundle mainBundle],
+                                                                              @"Next", nil)
                                      style:UIBarButtonItemStylePlain 
                                     target:self 
                                     action:@selector(handleNextButton:)];          
@@ -66,9 +68,11 @@
 
 -(void) handleNextButton:(id) sender
 {
-    //TODO
+
     
-    
+    NSString * ok = NSLocalizedStringWithDefaultValue(@"Ok",nil, [NSBundle mainBundle],
+                                                      @"Ok", nil);
+
     
     userEmail= userEmailTF.text ; 
      
@@ -78,10 +82,12 @@
     {
         //ERROR condition
         UIAlertView *alert = [[UIAlertView alloc]
-                              initWithTitle:@"Email Format error"
-                              message:@"Correct email format is of the form: someone@somedomain.com. Please try again!" 
+                              initWithTitle:NSLocalizedStringWithDefaultValue(@"Email_Format_error",nil, [NSBundle mainBundle],
+                                                                              @"Email Format error", nil)
+                              message:NSLocalizedStringWithDefaultValue(@"Email_Format_error_msg",nil, [NSBundle mainBundle],
+                                                                        @"Correct email format is of the form: someone@somedomain.com. Please try again!", nil)
                               delegate:self
-                              cancelButtonTitle:@"OK"
+                              cancelButtonTitle:ok
                               otherButtonTitles:nil];
         [alert show];
         [alert release];
@@ -124,9 +130,11 @@
     
     
     toEmail.text  = userEmail; 
-    
+    NSString * msg = NSLocalizedStringWithDefaultValue(@"Login" ,nil, [NSBundle mainBundle],
+                                                      @"Login" , nil);
+
     UIBarButtonItem *nextButton = 
-    [[UIBarButtonItem alloc] initWithTitle:@"Login" 
+    [[UIBarButtonItem alloc] initWithTitle:msg
                                      style:UIBarButtonItemStylePlain 
                                     target:self 
                                     action:@selector(handleLoginButton:)];          
@@ -143,13 +151,22 @@
     
 	NSLog(@"ResetPass failed with error code:%d", [error_response statusCode]);
 
-	
+    NSString * msg1 = NSLocalizedStringWithDefaultValue(@"Reset_Password_Error",nil, [NSBundle mainBundle],
+                                                       @"Reset Password Error" , nil);
+    
+    NSString * msg = NSLocalizedStringWithDefaultValue(@"Server_error_" ,nil, [NSBundle mainBundle],
+                                                       @"Server error: %@" , nil);
+
+    NSString * ok = NSLocalizedStringWithDefaultValue(@"Ok",nil, [NSBundle mainBundle],
+                                                      @"Ok", nil);
+    
+    
 	//ERROR condition
 	UIAlertView *alert = [[UIAlertView alloc]
-						  initWithTitle:@"Reset Password Error"
-						  message:[NSString stringWithFormat:@"Server error: %@", [BMS_Communication getLocalizedMessageForError:[error_response statusCode]]] 
+						  initWithTitle:msg1
+						  message:[NSString stringWithFormat:msg, [BMS_Communication getLocalizedMessageForError:[error_response statusCode]]] 
 						  delegate:self
-						  cancelButtonTitle:@"OK"
+						  cancelButtonTitle:ok
 						  otherButtonTitles:nil];
 	[alert show];
 	[alert release];
@@ -164,12 +181,20 @@
     
 	NSLog(@"Reset pass failed : server unreachable");
 
+    NSString * msg1 = NSLocalizedStringWithDefaultValue(@"Reset_Password_Error",nil, [NSBundle mainBundle],
+                                                        @"Reset Password Error" , nil);
+    
+    NSString * msg = NSLocalizedStringWithDefaultValue(@"Server_error_1" ,nil, [NSBundle mainBundle],
+                                                       @"Server is unreachable. Please try again later." , nil);
+    
+    NSString * ok = NSLocalizedStringWithDefaultValue(@"Ok",nil, [NSBundle mainBundle],
+                                                      @"Ok", nil);
 	//ERROR condition
 	UIAlertView *alert = [[UIAlertView alloc]
-						  initWithTitle:@"Reset Password Error"
-						  message:@"Server is unreachable. Please try again later."
+						  initWithTitle:msg1
+						  message:msg
 						  delegate:self
-						  cancelButtonTitle:@"OK"
+						  cancelButtonTitle:ok
 						  otherButtonTitles:nil];
 
 	[alert show];

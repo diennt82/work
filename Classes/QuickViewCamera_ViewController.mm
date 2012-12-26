@@ -376,13 +376,17 @@ SystemSoundID soundFileObject;
 		alert = nil; 
 		
 	}
-	
+    NSString * msg1 = NSLocalizedStringWithDefaultValue(@"Streamer_stopped",nil, [NSBundle mainBundle],
+                                                      @"Streamer Stopped", nil);
+    
+    NSString * ok = NSLocalizedStringWithDefaultValue(@"Ok",nil, [NSBundle mainBundle],
+                                                      @"Ok", nil);
 	NSLog(@"create new alert"); 
 	alert = [[UIAlertView alloc]
-			 initWithTitle:@"Streamer Stopped"
+			 initWithTitle:msg1
 			 message:msg
 			 delegate:self
-			 cancelButtonTitle:@"OK"
+			 cancelButtonTitle:ok
 			 otherButtonTitles:nil];
 	
 	alert.tag = LOCAL_VIDEO_STOPPED_UNEXPECTEDLY;
@@ -462,13 +466,8 @@ SystemSoundID soundFileObject;
             
             
             
-            
-			//Perform connectivity check - wifi?
-            
-            
-			//NSString * currSSID = [CameraPassword fetchSSIDInfo]; 
-			NSString * msg = @"Network lost link. Please check the Phone, Camera and Wifi router or move closer to the Router" ;
-			
+            NSString * msg = NSLocalizedStringWithDefaultValue(@"quickview_lost_link",nil, [NSBundle mainBundle],
+                                                                @"Network lost link. Please check the Phone, Camera and Wifi router or move closer to the Router" , nil);
 			
 			//popup ?
 			if (self.alertTimer != nil && [self.alertTimer isValid])
@@ -530,7 +529,7 @@ SystemSoundID soundFileObject;
 
 - (void)alertView:(UIAlertView *)alertView willDismissWithButtonIndex:(NSInteger)buttonIndex
 {
-    NSLog(@"alertView willDismissWithButtonIndex.. ");
+
 }
 
 - (void)alertViewCancel:(UIAlertView *)alertView

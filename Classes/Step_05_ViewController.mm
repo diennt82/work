@@ -38,10 +38,12 @@
 {
     [super viewDidLoad];
 	// Do any additional setup after loading the view.
-    self.navigationItem.title = @"Configure Camera";
+    self.navigationItem.title = NSLocalizedStringWithDefaultValue(@"Configure_Camera",nil, [NSBundle mainBundle],
+                                                                  @"Configure Camera" , nil);
     
     self.navigationItem.backBarButtonItem =
-    [[[UIBarButtonItem alloc] initWithTitle:@"Back"
+    [[[UIBarButtonItem alloc] initWithTitle:NSLocalizedStringWithDefaultValue(@"Back",nil, [NSBundle mainBundle],
+                                                                              @"Back" , nil)
                                       style:UIBarButtonItemStyleBordered
                                      target:nil
                                      action:nil] autorelease];

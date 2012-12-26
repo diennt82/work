@@ -28,10 +28,12 @@
 {
     [super viewDidLoad];
 	// Do any additional setup after loading the view.
-    self.navigationItem.title = @"Camera Detected";
+    self.navigationItem.title = NSLocalizedStringWithDefaultValue(@"Camera_Detected",nil, [NSBundle mainBundle],
+                                                                  @"Camera Detected" , nil);
     
     self.navigationItem.backBarButtonItem =
-    [[[UIBarButtonItem alloc] initWithTitle:@"Back"
+    [[[UIBarButtonItem alloc] initWithTitle:NSLocalizedStringWithDefaultValue(@"Back",nil, [NSBundle mainBundle],
+                                                                              @"Back" , nil)
                                       style:UIBarButtonItemStyleBordered
                                      target:nil
                                      action:nil] autorelease];
@@ -175,12 +177,24 @@
 - (void) askForRetry
 {
     
+    NSString * msg = NSLocalizedStringWithDefaultValue(@"Fail_to_communicate_with_camera",nil, [NSBundle mainBundle],
+                                                       @"Fail to communicate with camera. Retry?", nil);
+ 
+    
+    NSString * cancel = NSLocalizedStringWithDefaultValue(@"Cancel",nil, [NSBundle mainBundle],
+                                                          @"Cancel", nil);
+    
+    NSString * retry = NSLocalizedStringWithDefaultValue(@"Retry",nil, [NSBundle mainBundle],
+                                                      @"Retry", nil);
+    
+
+    
     UIAlertView *_myAlert = nil ;
-    _myAlert = [[UIAlertView alloc] initWithTitle:@"Fail to communicate with camera. Retry?"
+    _myAlert = [[UIAlertView alloc] initWithTitle:msg
                                           message:@""
                                          delegate:self
-                                cancelButtonTitle:@"Cancel"
-                                otherButtonTitles:@"Retry",nil];
+                                cancelButtonTitle:cancel
+                                otherButtonTitles:retry,nil];
     
     _myAlert.tag = ALERT_ASK_FOR_RETRY_WIFI;
     _myAlert.delegate = self;

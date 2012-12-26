@@ -2,7 +2,7 @@
 <archive type="com.apple.InterfaceBuilder3.CocoaTouch.iPad.XIB" version="8.00">
 	<data>
 		<int key="IBDocument.SystemTarget">1536</int>
-		<string key="IBDocument.SystemVersion">11G63b</string>
+		<string key="IBDocument.SystemVersion">11G63</string>
 		<string key="IBDocument.InterfaceBuilderVersion">2843</string>
 		<string key="IBDocument.AppKitVersion">1138.51</string>
 		<string key="IBDocument.HIToolboxVersion">569.00</string>
@@ -49,7 +49,6 @@
 								<int key="NSvFlags">292</int>
 								<string key="NSFrame">{{161, 15}, {94, 27}}</string>
 								<reference key="NSSuperview" ref="712527824"/>
-								<reference key="NSNextKeyView"/>
 								<string key="NSReuseIdentifierKey">_NS:9</string>
 								<bool key="IBUIOpaque">NO</bool>
 								<int key="IBUITag">1</int>
@@ -114,7 +113,7 @@
 				<real value="59" key="IBUIRowHeight"/>
 			</object>
 			<object class="IBUITableViewCell" id="1006422943">
-				<reference key="NSNextResponder"/>
+				<nil key="NSNextResponder"/>
 				<int key="NSvFlags">292</int>
 				<array class="NSMutableArray" key="NSSubviews">
 					<object class="IBUIView" id="507385729">
@@ -126,7 +125,6 @@
 								<int key="NSvFlags">292</int>
 								<string key="NSFrame">{{161, 15}, {94, 27}}</string>
 								<reference key="NSSuperview" ref="507385729"/>
-								<reference key="NSNextKeyView"/>
 								<string key="NSReuseIdentifierKey">_NS:9</string>
 								<bool key="IBUIOpaque">NO</bool>
 								<int key="IBUITag">1</int>
@@ -172,7 +170,6 @@
 					</object>
 				</array>
 				<string key="NSFrameSize">{261, 59}</string>
-				<reference key="NSSuperview"/>
 				<reference key="NSNextKeyView" ref="507385729"/>
 				<string key="NSReuseIdentifierKey">_NS:9</string>
 				<string key="targetRuntimeIdentifier">IBIPadFramework</string>
@@ -181,7 +178,7 @@
 				<real value="59" key="IBUIRowHeight"/>
 			</object>
 			<object class="IBUITableViewCell" id="265289013">
-				<reference key="NSNextResponder"/>
+				<nil key="NSNextResponder"/>
 				<int key="NSvFlags">292</int>
 				<array class="NSMutableArray" key="NSSubviews">
 					<object class="IBUIView" id="751599065">
@@ -193,7 +190,6 @@
 								<int key="NSvFlags">292</int>
 								<string key="NSFrame">{{161, 15}, {94, 27}}</string>
 								<reference key="NSSuperview" ref="751599065"/>
-								<reference key="NSNextKeyView"/>
 								<string key="NSReuseIdentifierKey">_NS:9</string>
 								<bool key="IBUIOpaque">NO</bool>
 								<int key="IBUITag">1</int>
@@ -239,7 +235,6 @@
 					</object>
 				</array>
 				<string key="NSFrameSize">{261, 59}</string>
-				<reference key="NSSuperview"/>
 				<reference key="NSNextKeyView" ref="751599065"/>
 				<string key="NSReuseIdentifierKey">_NS:9</string>
 				<string key="targetRuntimeIdentifier">IBIPadFramework</string>
@@ -248,7 +243,7 @@
 				<real value="59" key="IBUIRowHeight"/>
 			</object>
 			<object class="IBUIView" id="501642320">
-				<reference key="NSNextResponder"/>
+				<nil key="NSNextResponder"/>
 				<int key="NSvFlags">292</int>
 				<array class="NSMutableArray" key="NSSubviews">
 					<object class="IBUIImageView" id="971430688">
@@ -271,7 +266,6 @@
 						<int key="NSvFlags">274</int>
 						<string key="NSFrame">{{10, 102}, {749, 792}}</string>
 						<reference key="NSSuperview" ref="501642320"/>
-						<reference key="NSNextKeyView"/>
 						<string key="NSReuseIdentifierKey">_NS:9</string>
 						<reference key="IBUIBackgroundColor" ref="817783826"/>
 						<bool key="IBUIClipsSubviews">YES</bool>
@@ -381,7 +375,6 @@
 					</object>
 				</array>
 				<string key="NSFrameSize">{768, 1024}</string>
-				<reference key="NSSuperview"/>
 				<reference key="NSNextKeyView" ref="971430688"/>
 				<string key="NSReuseIdentifierKey">_NS:9</string>
 				<object class="NSColor" key="IBUIBackgroundColor">

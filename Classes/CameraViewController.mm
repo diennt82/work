@@ -40,10 +40,18 @@
 		CFURLRef soundFileURLRef = CFBundleCopyResourceURL(mainbundle, CFSTR("beep"), CFSTR("wav"), NULL);
 		AudioServicesCreateSystemSoundID(soundFileURLRef, &soundFileObject);
         
+        NSString * mel1 = NSLocalizedStringWithDefaultValue(@"melody_1",nil, [NSBundle mainBundle],
+                                                           @"Rock a Bye Baby", nil);
+        NSString * mel2 = NSLocalizedStringWithDefaultValue(@"melody_2",nil, [NSBundle mainBundle],
+                                                            @"Lullaby and Goodnight", nil);
+        NSString * mel3 = NSLocalizedStringWithDefaultValue(@"melody_3",nil, [NSBundle mainBundle],
+                                                           @"Lavender Blue", nil);
+        NSString * mel4 = NSLocalizedStringWithDefaultValue(@"melody_4",nil, [NSBundle mainBundle],
+                                                             @"Twinkle Twinkle Little Star", nil);
+        NSString * mel5 = NSLocalizedStringWithDefaultValue(@"melody_5",nil, [NSBundle mainBundle],
+                                                            @"Hush Little Baby", nil);
         
-		melodies = [[NSArray alloc] initWithObjects:@"Rock a Bye Baby",
-                    @"Lullaby and Goodnight", @"Lavender Blue", @"Twinkle Twinkle Little Star",
-                    @"Hush Little Baby",nil];
+		melodies = [[NSArray alloc] initWithObjects:mel1,mel2,mel3,mel4, mel5,nil];
         
 		self.askForFWUpgradeOnce = YES;
 	}
@@ -133,9 +141,10 @@
                                                  name: UIApplicationDidBecomeActiveNotification
                                                object: nil];
     
-    
+    NSString * msg = NSLocalizedStringWithDefaultValue(@"Back",nil, [NSBundle mainBundle],
+                                                        @"Back", nil);
 	self.navigationItem.backBarButtonItem =
-    [[[UIBarButtonItem alloc] initWithTitle:@"Back"
+    [[[UIBarButtonItem alloc] initWithTitle:msg
                                       style:UIBarButtonItemStyleBordered
                                      target:nil
                                      action:nil] autorelease];
@@ -1085,12 +1094,15 @@
         
 	}
     
+    NSString * cancel = NSLocalizedStringWithDefaultValue(@"Cancel",nil, [NSBundle mainBundle],
+                                                          @"Cancel", nil);
     
+  
 	alert = [[UIAlertView alloc]
              initWithTitle:@"" //empty on purpose
              message:msg
              delegate:self
-             cancelButtonTitle:@"Cancel"
+             cancelButtonTitle:cancel
              otherButtonTitles:nil];
     
 	alert.tag = LOCAL_VIDEO_STOPPED_UNEXPECTEDLY;
@@ -1167,23 +1179,16 @@
             NSString * currSSID = [CameraPassword fetchSSIDInfo];
             NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
             NSString * streamSSID =  (NSString *) [userDefaults objectForKey:_streamingSSID];
-            NSString * msg = @"Camera disconnected due to network connectivity problem. Trying to reconnect..." ;
+
+            
+            NSString * msg = NSLocalizedStringWithDefaultValue(@"network_lost_link",nil, [NSBundle mainBundle],
+                                                                  @"Camera disconnected due to network connectivity problem. Trying to reconnect...", nil);
+            
+            
             
             if (currSSID != nil && streamSSID != nil)
             {
-#if 0 // use only 1 message
-                if ([currSSID compare:streamSSID] == NSOrderedSame)
-                {
-                    //Still on the same wifi
-                    msg =@"Connection to camera has been lost. Please check the camera";
-                }
-                else // hooked up to a different wifi already
-                {
-                    msg = @"Network lost link. Please mover closer to the Router or connect your phone back to Wifi: " ;
-                    msg = [msg stringByAppendingString:streamSSID];
-                }
-                
-#endif
+
             }
             else
             {
@@ -1236,7 +1241,10 @@
         }
 		case REMOTE_STREAM_STOPPED_UNEXPECTEDLY:
         {
-            NSString * msg = @"Network lost link. Please check the Phone, Camera and Wifi router or move closer to the Router" ;
+            
+            NSString * msg = NSLocalizedStringWithDefaultValue(@"network_lost_link2",nil, [NSBundle mainBundle],
+                                                               @"Network lost link. Please check the Phone, Camera and Wifi router or move closer to the Router" , nil);
+            
             
             // signal streamer to stop
             //self.streamer.hasStoppedByCaller = TRUE;
@@ -1283,19 +1291,25 @@
             self.selected_channel.stopStreaming = TRUE;
             
             //simply popup and ask to retry and show camera list
-            NSString * msg = @"Can't start video stream, the BabyMonitor is busy, try again later." ;
+            NSString * msg = NSLocalizedStringWithDefaultValue(@"cant_start_stream",nil, [NSBundle mainBundle],
+                                                               @"Can't start video stream, the BabyMonitor is busy, try again later." , nil);
+            
             
             if (self.selected_channel.remoteConnectionError == REQUEST_TIMEOUT)
             {
-                msg = @"Server request timeout, try again later" ;
+                msg = NSLocalizedStringWithDefaultValue(@"cant_start_stream2",nil, [NSBundle mainBundle],
+                                                        @"Server request timeout, try again later", nil);
+
+
             }
             
-            
+            NSString * ok = NSLocalizedStringWithDefaultValue(@"Ok",nil, [NSBundle mainBundle],
+                                                              @"Ok", nil);
             UIAlertView *_alert = [[UIAlertView alloc]
                                    initWithTitle:@""
                                    message:msg
                                    delegate:self
-                                   cancelButtonTitle:@"OK"
+                                   cancelButtonTitle:ok
                                    otherButtonTitles:nil];
             _alert.tag = REMOTE_VIDEO_CANT_START ;
             [_alert show];
@@ -1339,10 +1353,17 @@
 	else
 	{
 		NSLog(@"Start remote connection Failed!!!");
+        
+        NSString * title = NSLocalizedStringWithDefaultValue(@"Remote_View_Error",nil, [NSBundle mainBundle],
+                                                           @"Remote View Error" , nil);
+        
+        NSString * msg = NSLocalizedStringWithDefaultValue(@"Remote_View_Error_msg",nil, [NSBundle mainBundle],
+                                                            @"Initializing remote connection failed, please retry" , nil);
+        
 		//ERROR condition
 		UIAlertView *_alert = [[UIAlertView alloc]
-                               initWithTitle:@"Remote View Error"
-                               message:@"Initializing remote connection failed, please retry"
+                               initWithTitle:title
+                               message:msg
                                delegate:self
                                cancelButtonTitle:@"OK"
                                otherButtonTitles:nil];
@@ -1412,12 +1433,22 @@
 		return;
 	}
     
+    NSString * title = NSLocalizedStringWithDefaultValue(@"Time_out",nil, [NSBundle mainBundle],
+                                                         @"Time out" , nil);
+    
+    NSString * msg = NSLocalizedStringWithDefaultValue(@"Time_out_msg",nil, [NSBundle mainBundle],
+                                                       @"The video has been viewed for about 5 minutes. Do you want to continue?" , nil);
+
+    NSString * yes = NSLocalizedStringWithDefaultValue(@"Yes",nil, [NSBundle mainBundle],
+                                                         @"Yes" , nil);
+    NSString * no = NSLocalizedStringWithDefaultValue(@"No",nil, [NSBundle mainBundle],
+                                                         @"No" , nil);
 	UIAlertView *_alert = [[UIAlertView alloc]
-                           initWithTitle:@"Time out"
-                           message:@"The video has been viewed for about 5 minutes. Do you want to continue?"
+                           initWithTitle:title
+                           message:msg
                            delegate:self
-                           cancelButtonTitle:@"No"
-                           otherButtonTitles:@"Yes",nil];
+                           cancelButtonTitle:no
+                           otherButtonTitles:yes,nil];
 	_alert.tag = REMOTE_VIDEO_TIMEOUT;
 	[_alert show];
 	[_alert release];
@@ -1738,14 +1769,24 @@
 	{
 		//20121010: issue 412 : disable until we finish implementing the video app
         
-		NSString * msg = @"Video recording is not supported, comming soon";
+        
+        NSString * title = NSLocalizedStringWithDefaultValue(@"Not_supported",nil, [NSBundle mainBundle],
+                                                             @"Not supported" , nil);
+        
+        NSString * msg = NSLocalizedStringWithDefaultValue(@"video_rec_not_supported",nil, [NSBundle mainBundle],
+                                                          @"Video recording is not supported, comming soon" , nil);
+        
+        NSString * ok = NSLocalizedStringWithDefaultValue(@"Ok",nil, [NSBundle mainBundle],
+                                                           @"OK" , nil);
+    
+
         
 		UIAlertView *
         _alert = [[UIAlertView alloc]
-                  initWithTitle:@"Not supported"
+                  initWithTitle:title
                   message:msg
                   delegate:self
-                  cancelButtonTitle:@"OK"
+                  cancelButtonTitle:ok
                   otherButtonTitles:nil];
         
 		[_alert show];
@@ -3103,16 +3144,26 @@
 -(void) showFWUpgradeDialog:(NSString *) version
 {
     
+    NSString * title = NSLocalizedStringWithDefaultValue(@"Camera_fw_upgrade" ,nil, [NSBundle mainBundle],
+                                                         @"Camera Firmware Upgrade"  , nil);
     
-	NSString * msg = [NSString stringWithFormat:@"A camera firmware %@ is available. Do you want to upgrade now?",version];
+    NSString * msg = NSLocalizedStringWithDefaultValue(@"fw_upgrade",nil, [NSBundle mainBundle],
+                                                       @"A camera firmware %@ is available. Do you want to upgrade now?" , nil);
+    
+    NSString * ok = NSLocalizedStringWithDefaultValue(@"Ok",nil, [NSBundle mainBundle],
+                                                      @"OK" , nil);
+    NSString * cancel = NSLocalizedStringWithDefaultValue(@"Cancel",nil, [NSBundle mainBundle],
+                                                      @"Cancel" , nil);
+    
+	msg = [NSString stringWithFormat:msg,version];
     
 	UIAlertView *
     _alert = [[UIAlertView alloc]
-              initWithTitle:@"Camera Firwmare Upgrade" 
+              initWithTitle:title
               message:msg
               delegate:self
-              cancelButtonTitle:@"Cancel"
-              otherButtonTitles:@"OK",nil];
+              cancelButtonTitle:cancel
+              otherButtonTitles:ok,nil];
     
 	_alert.tag = FW_OTA_UPGRADE_AVAILABLE;
 	[_alert show];
@@ -3239,7 +3290,14 @@
 -(void) upgradeDoneWaitForReboot
 {
 	UILabel * text = (UILabel*)[upgradeFwView viewWithTag:12];
-	text.text = @"Restarting Camera...";
+    
+
+    
+    NSString * msg = NSLocalizedStringWithDefaultValue(@"fw_upgrade_1",nil, [NSBundle mainBundle],
+                                                        @"Restarting Camera..." , nil);
+    
+  
+	text.text = msg;
     
 	percentageLabel.text = @"--";
 	percentageProgress.progress = 0.0; 

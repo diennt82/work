@@ -81,7 +81,8 @@
     {  
         // Do any additional setup after loading the view.
         
-        self.navigationItem.title =@"Account Created";
+        self.navigationItem.title =NSLocalizedStringWithDefaultValue(@"Account_Created",nil, [NSBundle mainBundle],
+                                                                     @"Account Created" , nil);
         self.navigationItem.hidesBackButton = YES;
         
         [self.view addSubview:self.progressView];
@@ -91,7 +92,8 @@
     }
     else //not first time --> this is normal add camera sequence..
     {
-        self.navigationItem.title =@"Camera Configured";
+        self.navigationItem.title =NSLocalizedStringWithDefaultValue(@"Camera_Configured",nil, [NSBundle mainBundle],
+                                                                     @"Camera Configured" , nil);
 
         NSLog(@"Normal Add cam sequence" );
         
@@ -496,7 +498,8 @@
     
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     self.cameraName.text =  (NSString *) [userDefaults objectForKey:@"CameraName"];
-    self.navigationItem.title = @"Setup Complete";
+    self.navigationItem.title = NSLocalizedStringWithDefaultValue( @"Setup_Complete",nil, [NSBundle mainBundle],
+                                                                   @"Setup Complete" , nil);
 }
 
 
@@ -521,7 +524,8 @@
 	
 	[bms_comm BMS_delCamWithUser:user_email AndPass:user_pass macAddr:mac];
 	
-    self.navigationItem.title = @"Add Camera Failed";
+    self.navigationItem.title = NSLocalizedStringWithDefaultValue( @"Add_Camera_Failed",nil, [NSBundle mainBundle],
+                                                                  @"Add Camera Failed" , nil);
     
     
     
@@ -624,12 +628,18 @@
 {
 	NSLog(@"addcam failed with error code:%d", [error_response statusCode]);
 	
+    NSString * msg = NSLocalizedStringWithDefaultValue(@"Server_error_" ,nil, [NSBundle mainBundle],
+                                                       @"Server error: %@" , nil);
+    NSString * ok = NSLocalizedStringWithDefaultValue(@"Ok",nil, [NSBundle mainBundle],
+                                                      @"Ok", nil);
+
 	//ERROR condition
 	UIAlertView *alert = [[UIAlertView alloc]
-						  initWithTitle:@"AddCam Error"
-						  message:[NSString stringWithFormat:@"Server error: %@", [BMS_Communication getLocalizedMessageForError:[error_response statusCode]]]
+						  initWithTitle:NSLocalizedStringWithDefaultValue(@"AddCam_Error" ,nil, [NSBundle mainBundle],
+                                                                          @"AddCam Error" , nil)
+						  message:[NSString stringWithFormat:msg, [BMS_Communication getLocalizedMessageForError:[error_response statusCode]]]
 						  delegate:self
-						  cancelButtonTitle:@"OK"
+						  cancelButtonTitle:ok
 						  otherButtonTitles:nil];
 	[alert show];
 	[alert release];
@@ -645,13 +655,22 @@
 {
 	NSLog(@"addcam failed : server unreachable");
 	
+    
+    NSString * msg = NSLocalizedStringWithDefaultValue(@"addcam_error_1" ,nil, [NSBundle mainBundle],
+                                                       @"The device is not able to connect to the server. Please check the WIFI and the internet connection", nil);
+    NSString * cancel = NSLocalizedStringWithDefaultValue(@"Cancel",nil, [NSBundle mainBundle],
+                                                      @"Cancel", nil);
+    
+    NSString * retry = NSLocalizedStringWithDefaultValue(@"Retry",nil, [NSBundle mainBundle],
+                                                          @"Retry", nil);
 	//ERROR condition
 	UIAlertView *alert = [[UIAlertView alloc]
-						  initWithTitle:@"AddCam Error"
-						  message:@"The device is not able to connect to the server. Please check the WIFI and the internet connection"
+						  initWithTitle:NSLocalizedStringWithDefaultValue(@"AddCam_Error" ,nil, [NSBundle mainBundle],
+                                                                          @"AddCam Error" , nil)
+						  message:msg
 						  delegate:self
-						  cancelButtonTitle:@"Cancel"
-						  otherButtonTitles:@"Retry", nil];
+						  cancelButtonTitle:cancel
+						  otherButtonTitles:retry, nil];
     alert.delegate = self;
     alert.tag = ALERT_ADDCAM_SERVER_UNREACH;
     

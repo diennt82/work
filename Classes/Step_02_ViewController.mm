@@ -27,14 +27,14 @@
 {
     [super viewDidLoad];
     
-    self.navigationItem.title = @"Switch On Camera";
+    self.navigationItem.title = NSLocalizedStringWithDefaultValue(@"Switch_On_Camera",nil, [NSBundle mainBundle],
+                                                                  @"Switch On Camera", nil);;
     
-    
-    
-    
+        
     //Setup now but this button will only be seen when go to the NEXT controller
     self.navigationItem.backBarButtonItem =
-    [[[UIBarButtonItem alloc] initWithTitle:@"Back"
+    [[[UIBarButtonItem alloc] initWithTitle:NSLocalizedStringWithDefaultValue(@"Back",nil, [NSBundle mainBundle],
+                                                                              @"Back", nil)
                                       style:UIBarButtonItemStyleBordered
                                      target:nil
                                      action:nil] autorelease];

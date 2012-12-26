@@ -534,17 +534,20 @@ return self;
 	}
 
 
+    NSString * msg = NSLocalizedStringWithDefaultValue(@"Sound_detected",nil, [NSBundle mainBundle],
+                                                       @"Sound detected", nil);
 
 
-	NSString * msg = @"Sound detected";
 
 	if ( [camAlert.alertType isEqualToString:ALERT_TYPE_TEMP_HI]  )
 	{
-		msg = @"Temperature too high";
+		msg =NSLocalizedStringWithDefaultValue( @"Temperature_too_high",nil, [NSBundle mainBundle],
+                                                @"Temperature too high", nil);
 	}
 	else if ([camAlert.alertType isEqualToString:ALERT_TYPE_TEMP_LO])
 	{
-		msg = @"Temperature too low";
+		msg =NSLocalizedStringWithDefaultValue( @"Temperature_too_low",nil, [NSBundle mainBundle],
+                                                    @"Temperature too low", nil);
 	}
 
 
@@ -558,12 +561,20 @@ return self;
 		[pushAlert release]; 
 	}
 
+    
+    
+    msg = NSLocalizedStringWithDefaultValue(@"Cancel",nil, [NSBundle mainBundle],
+                                                       @"Cancel", nil);
+    
+    NSString * msg2 = NSLocalizedStringWithDefaultValue(@"Go_to_Camera_list",nil, [NSBundle mainBundle],
+                                                       @"Go to Camera list", nil);
+    
 	pushAlert = [[UIAlertView alloc]
 		initWithTitle:camAlert.cameraName
 		message:msg
 		delegate:self
-		cancelButtonTitle:@"Cancel" 
-		otherButtonTitles:@"Go to Camera list",nil];
+		cancelButtonTitle:msg
+		otherButtonTitles:msg2,nil];
 	if ([self isThisMacStoredOffline:camAlert.cameraMacNoColon])
 	{
 
@@ -728,17 +739,7 @@ return self;
 
 - (void) scan_for_devices
 {
-#if 0
-    BOOL restore_successful = FALSE;
-	restore_successful = [self restoreConfigData];
-    
-    ScanForCamera * scanner;
-	scanner = [[ScanForCamera alloc] initWithNotifier:self];
-	[scanner scan_for_devices];
-    
-    NSLog(@"Start Scan for camera 02");
-    
-#else
+
     
 	BOOL restore_successful = FALSE;
 	restore_successful = [self restoreConfigData];
@@ -761,9 +762,6 @@ return self;
         
         
     }
-    
-     
-#endif
 }
 
 
@@ -1195,26 +1193,6 @@ return self;
 #pragma mark -
 #pragma mark SetupHTTPDelegate --- NOT USED --- check ..
 
-
-
-
-- (void)sendConfiguration:(DeviceConfiguration *) conf
-{
-	//get configuration string from conf and send over HTTP with default IP 
-	NSString * device_configuration = [conf getDeviceConfString];
-
-	NSString * setup_cmd = [NSString stringWithFormat:@"%@%@%@", 
-		 DEFAULT_AIBALL_SERVER, SETUP_HTTP_CMD,device_configuration];
-	NSString * restart_cmd = [NSString stringWithFormat:@"%@%@", 
-		 DEFAULT_AIBALL_SERVER,RESTART_HTTP_CMD];
-	NSLog(@"before send: %@", setup_cmd);
-
-	//- (NSString * ) requestURLSync:(NSString*)url withTimeOut:(NSTimeInterval) timeout
-	NSString * response = [self requestURLSync:setup_cmd withTimeOut:5];
-
-	response = [self requestURLSync:restart_cmd withTimeOut:5];
-
-}
 
 
 -(void) show_login_or_reg:(NSTimer*) exp

@@ -167,12 +167,48 @@
     [self.navigationController setNavigationBarHidden:NO];
     self.navigationItem.title = deviceName;
 	
+    
+    
+    
+    
 	//setup array for picker view
-	levels = [[NSArray alloc] initWithObjects:@"Level1", @"Level2", @"Level3", @"Level4", nil];
+	levels = [[NSArray alloc] initWithObjects:
+              NSLocalizedStringWithDefaultValue(@"Level1",nil, [NSBundle mainBundle],
+                                                @"Level 1", nil),
+              NSLocalizedStringWithDefaultValue(@"Level2",nil, [NSBundle mainBundle],
+                                                @"Level 2", nil),
+              NSLocalizedStringWithDefaultValue(@"Level3",nil, [NSBundle mainBundle],
+                                                @"Level 3", nil),
+              NSLocalizedStringWithDefaultValue(@"Level4",nil, [NSBundle mainBundle],
+                                                @"Level 4", nil),
+              nil];
+    
+    
 	voxlevels = [[NSArray alloc] initWithObjects:
-				 @"Level1(Low)", @"Level2", @"Level3", @"Level4 (High)", nil];
-	temperature = [[NSArray alloc] initWithObjects:@"Fahrenheit",@"Celsius",nil];
-	videoQuality = [[NSArray alloc] initWithObjects:@"Normal Quality (QVGA)",@"High Quality (VGA)",nil]; 
+                 NSLocalizedStringWithDefaultValue(@"Level1_",nil, [NSBundle mainBundle],
+                                                   @"Level 1 (Low)", nil),
+                 NSLocalizedStringWithDefaultValue(@"Level2",nil, [NSBundle mainBundle],
+                                                   @"Level 2", nil),
+                 NSLocalizedStringWithDefaultValue(@"Level3",nil, [NSBundle mainBundle],
+                                                   @"Level 3", nil),
+                 NSLocalizedStringWithDefaultValue(@"Level4_",nil, [NSBundle mainBundle],
+                                                   @"Level 4 (High)", nil),
+                 nil];
+    
+    
+	temperature = [[NSArray alloc] initWithObjects:
+                   NSLocalizedStringWithDefaultValue(@"Fahrenheit",nil, [NSBundle mainBundle],
+                                                     @"Fahrenheit", nil),
+                   NSLocalizedStringWithDefaultValue(@"Celsius",nil, [NSBundle mainBundle],
+                                                     @"Celsius", nil),
+                   nil];
+    
+	videoQuality = [[NSArray alloc] initWithObjects:
+                    NSLocalizedStringWithDefaultValue(@"Normal_Quality",nil, [NSBundle mainBundle],
+                                                      @"Normal Quality (QVGA)", nil),
+                    NSLocalizedStringWithDefaultValue(@"High_Quality",nil, [NSBundle mainBundle],
+                                                      @"High Quality (VGA)", nil),
+                    nil];
 	
     progressView.hidden = NO; 
     [self.view bringSubviewToFront:progressView]; 
@@ -423,25 +459,30 @@
         NSString * str_value = [response substringFromIndex:([VOX_GET_THRESHOLD length] + 2)];
         
         int vox_value  = [str_value intValue];
-        
-        NSString * lvl = @"Level 2";
+      
+        NSString * lvl = NSLocalizedStringWithDefaultValue(@"Level2",nil, [NSBundle mainBundle],
+                                                           @"Level 2", nil);
         
         switch(vox_value)
         {
             case -10:
-                lvl = @"Level 1(low)";
+                lvl = NSLocalizedStringWithDefaultValue(@"Level1_",nil, [NSBundle mainBundle],
+                                                        @"Level 1 (Low)", nil);
                 voxLevel = 0;
                 break;
             case -20:
-                lvl = @"Level 2";
+                lvl = NSLocalizedStringWithDefaultValue(@"Level2",nil, [NSBundle mainBundle],
+                                                        @"Level 2", nil);
                 voxLevel = 1;
                 break;
             case -30:
-                lvl = @"Level 3";
+                lvl =  NSLocalizedStringWithDefaultValue(@"Level3",nil, [NSBundle mainBundle],
+                                                         @"Level 3", nil);
                 voxLevel = 2;
                 break;
             case -38:
-                lvl = @"Level 4(High)";
+                lvl = NSLocalizedStringWithDefaultValue(@"Level4_",nil, [NSBundle mainBundle],
+                                                        @"Level 4 (High)", nil);
                 voxLevel = 3;
                 break;
             default:
@@ -529,22 +570,26 @@
 			bright = (bright -1)/25 ; 
 		}
 		
-		
-		
-		NSString * lvl = nil; 
+	
+
+		NSString * lvl = nil;
 		switch(bright)
 		{
 			case 0:
-				lvl = @"Level 1";
+				lvl = NSLocalizedStringWithDefaultValue(@"Level1",nil, [NSBundle mainBundle],
+                                                        @"Level 1", nil);
 				break;
 			case 1:
-				lvl = @"Level 2";
+                lvl = NSLocalizedStringWithDefaultValue(@"Level2",nil, [NSBundle mainBundle],
+                                                        @"Level 2", nil);
 				break;
 			case 2:
-				lvl = @"Level 3";
+				lvl =  NSLocalizedStringWithDefaultValue(@"Level3",nil, [NSBundle mainBundle],
+                                                         @"Level 3", nil);
 				break;
 			case 3:
-				lvl = @"Level 4";
+				lvl = NSLocalizedStringWithDefaultValue(@"Level4",nil, [NSBundle mainBundle],
+                                                        @"Level 4", nil);
 				break;
 			default:
 				break;
@@ -600,17 +645,22 @@
         switch(bright)
         {
             case 0:
-                lvl = @"Level 1";
-                break;
-            case 1:
-                lvl = @"Level 2";
-                break;
-            case 2:
-                lvl = @"Level 3";
-                break;
-            case 3:
-                lvl = @"Level 4";
-                break;
+				lvl = NSLocalizedStringWithDefaultValue(@"Level1",nil, [NSBundle mainBundle],
+                                                        @"Level 1", nil);
+				break;
+			case 1:
+                lvl = NSLocalizedStringWithDefaultValue(@"Level2",nil, [NSBundle mainBundle],
+                                                        @"Level 2", nil);
+				break;
+			case 2:
+				lvl =  NSLocalizedStringWithDefaultValue(@"Level3",nil, [NSBundle mainBundle],
+                                                         @"Level 3", nil);
+				break;
+			case 3:
+				lvl = NSLocalizedStringWithDefaultValue(@"Level4",nil, [NSBundle mainBundle],
+                                                        @"Level 4", nil);
+				break;
+
             default:
                 break;
         }
@@ -660,7 +710,6 @@
 		case MAIN_MENU_TAG:
 			return 0;			
 		case CAM_MENU_TAG:
-             NSLog(@"row: %d",  [self.cameraMenuItems  count]);
 			return [self.cameraMenuItems  count];
 			break;
 		default:
@@ -824,14 +873,28 @@
 
 - (void) showDialog:(int) dialogType
 {
+    
+    
+    NSString * msg = nil; 
+
+    
+    NSString * cancel = NSLocalizedStringWithDefaultValue(@"Cancel",nil, [NSBundle mainBundle],
+                                                          @"Cancel", nil);
+    
+    NSString * ok = NSLocalizedStringWithDefaultValue(@"Ok",nil, [NSBundle mainBundle],
+                                                      @"Ok", nil);
+    
+    
 	switch (dialogType) {
 		case DIALOG_IS_NOT_REACHABLE:
 		{
+            msg  = NSLocalizedStringWithDefaultValue(@"cam_menu_err_1",nil, [NSBundle mainBundle],
+                                                               @"Camera is not reachable" , nil);
 			UIAlertView *alert = [[UIAlertView alloc]
 								  initWithTitle:@""
-								  message:@"Camera is not reachable" 
+								  message:msg
 								  delegate:nil
-								  cancelButtonTitle:@"OK"
+								  cancelButtonTitle:ok
 								  otherButtonTitles:nil];
 			[alert show];
 			[alert release];
@@ -839,12 +902,14 @@
 		}
 		case DIALOG_CANT_RENAME:
 		{
-			NSString * msg =@"Unable to rename this camera. Please log-in and try again";
+            msg  = NSLocalizedStringWithDefaultValue(@"cam_menu_err_2",nil, [NSBundle mainBundle],
+                                                    @"Unable to rename this camera. Please re-login and try again" , nil);
+
 			UIAlertView *alert = [[UIAlertView alloc]
 								  initWithTitle:@""
 								  message:msg 
 								  delegate:nil
-								  cancelButtonTitle:@"OK"
+								  cancelButtonTitle:ok
 								  otherButtonTitles:nil];
 			[alert show];
 			[alert release];
@@ -852,12 +917,14 @@
 		}
 		case ALERT_NAME_CANT_BE_EMPTY:
 		{
-			NSString * msg =@"Camera name cant be empty, please try again";
+            msg  = NSLocalizedStringWithDefaultValue(@"cam_menu_err_3",nil, [NSBundle mainBundle],
+                                                     @"Camera name cant be empty, please try again" , nil);
+
 			UIAlertView *alert = [[UIAlertView alloc]
 								  initWithTitle:@""
 								  message:msg 
 								  delegate:self
-								  cancelButtonTitle:@"OK"
+								  cancelButtonTitle:ok
 								  otherButtonTitles:nil];
 			alert.tag = ALERT_NAME_CANT_BE_EMPTY; 
 			[alert show];
@@ -872,13 +939,16 @@
 			
 			if (isLoggedIn == FALSE)
 			{ 
-				//cant' remove 
-				NSString * msg =@"Camera name can't be removed, please log-in";
+				//cant' remove
+                msg  = NSLocalizedStringWithDefaultValue(@"cam_menu_err_4",nil, [NSBundle mainBundle],
+                                                         @"Camera name can't be removed, please log-in" , nil);
+
+
 				UIAlertView *alert = [[UIAlertView alloc]
 									  initWithTitle:@""
 									  message:msg 
 									  delegate:nil
-									  cancelButtonTitle:@"OK"
+									  cancelButtonTitle:ok
 									  otherButtonTitles:nil];
 				[alert show];
 				[alert release];
@@ -888,14 +958,15 @@
 				
 				if (deviceInLocal)
 				{
-					
-					NSString * msg =@"Please confirm that you want to remove this camera from your account. This action will also switch your camera to default settings. You will need to add the camera into your account again to use it.";
+                    msg  = NSLocalizedStringWithDefaultValue(@"cam_rem_msg",nil, [NSBundle mainBundle],
+                                                             @"Please confirm that you want to remove this camera from your account. This action will also switch your camera to default settings. You will need to add the camera into your account again to use it." , nil);
+
 					UIAlertView *alert = [[UIAlertView alloc]
 										  initWithTitle:@""
 										  message:msg 
 										  delegate:self
-										  cancelButtonTitle:@"Cancel"
-										  otherButtonTitles:@"OK",nil];
+										  cancelButtonTitle:cancel
+										  otherButtonTitles:ok,nil];
 					alert.tag = ALERT_REMOVE_CAM_LOCAL; 
 					[alert show];
 					[alert release];
@@ -903,13 +974,14 @@
 				}
 				else
 				{
-					NSString * msg =@"Please confirm that you want to remove this camera from your account. The camera is not accessible right now, it will not be switched to direct mode. Please refer to FAQ to reset it manually.";
+                    msg  = NSLocalizedStringWithDefaultValue(@"cam_rem_msg1",nil, [NSBundle mainBundle],
+                                                             @"Please confirm that you want to remove this camera from your account. The camera is not accessible right now, it will not be switched to direct mode. Please refer to FAQ to reset it manually." , nil);
 					UIAlertView *alert = [[UIAlertView alloc]
 										  initWithTitle:@""
 										  message:msg 
 										  delegate:self
-										  cancelButtonTitle:@"Cancel"
-										  otherButtonTitles:@"OK",nil];
+										  cancelButtonTitle:cancel
+										  otherButtonTitles:ok,nil];
 
 					alert.tag = ALERT_REMOVE_CAM_REMOTE; 
 					[alert show];
@@ -923,135 +995,62 @@
 
 		case ALERT_MANUAL_FWD_MODE:
 		{
-			NSString * msg =@"Camera is in manual port forwarding mode, please check \"Router Port Forwarding Settings\" for more info";
-			UIAlertView *alert = [[UIAlertView alloc]
-								  initWithTitle:@""
-								  message:msg 
-								  delegate:nil
-								  cancelButtonTitle:@"OK"
-								  otherButtonTitles:nil];
-			[alert show];
-			[alert release];
-			
-			break;
+            //Obsolete
+            break;
 		}
 		case ALERT_UPNP_OK:
 		{
-			NSString * msg =@"Camera has successfully opened ports on router";
-			UIAlertView *alert = [[UIAlertView alloc]
-								  initWithTitle:@""
-								  message:msg 
-								  delegate:nil
-								  cancelButtonTitle:@"OK"
-								  otherButtonTitles:nil];
-			[alert show];
-			[alert release];
+			//Obsolete
 			break;
 		}
 		case ALERT_UPNP_NOT_OK:
 		{
-			NSString * msg =@"UPNP is not enabled (or not supported) by router. Please enable UPNP on router.";
-			UIAlertView *alert = [[UIAlertView alloc]
-								  initWithTitle:@""
-								  message:msg 
-								  delegate:nil
-								  cancelButtonTitle:@"OK"
-								  otherButtonTitles:nil];
-			[alert show];
-			[alert release];
+			//Obsolete
 			break;
 		}
 		case ALERT_UPNP_RUNNING:
 		{
-			NSString * msg =@"Camera is still in the process of running UPNP, please check again later";
-			UIAlertView *alert = [[UIAlertView alloc]
-								  initWithTitle:@""
-								  message:msg 
-								  delegate:nil
-								  cancelButtonTitle:@"OK"
-								  otherButtonTitles:nil];
-			[alert show];
-			[alert release];
+			//Obsolete
 			break;
 		}
 		case ALERT_EMPTY_PORTS:
 		{
-			NSString * msg =@"Ports can't be empty, please enter a valid port";
-			UIAlertView *alert = [[UIAlertView alloc]
-								  initWithTitle:@""
-								  message:msg 
-								  delegate:nil
-								  cancelButtonTitle:@"OK"
-								  otherButtonTitles:nil];
-			[alert show];
-			[alert release];
+			//Obsolete
 			break;
 		}	
 
 		case ALERT_INVALID_PORTS:
 		{
-			NSString * msg =@"Port has to be in the range (1024-65535)";
-			UIAlertView *alert = [[UIAlertView alloc]
-								  initWithTitle:@""
-								  message:msg 
-								  delegate:nil
-								  cancelButtonTitle:@"OK"
-								  otherButtonTitles:nil];
-			[alert show];
-			[alert release];
+			//Obsolete
 			break;
 		}	
 		case ALERT_NEED_LOGIN:
 		{
-			NSString * msg =@"You need to login to carry out this operation";
-			UIAlertView *alert = [[UIAlertView alloc]
-								  initWithTitle:@""
-								  message:msg 
-								  delegate:nil
-								  cancelButtonTitle:@"OK"
-								  otherButtonTitles:nil];
-			[alert show];
-			[alert release];
+			//Obsolete
 			break;
 		}	
 		case ALERT_PASS_CANT_BE_EMPTY_NOR_DEFAULT:
 		{
-			NSString * msg =@"Password can't be empty or the same as default password.Please try again";
-			UIAlertView *alert = [[UIAlertView alloc]
-								  initWithTitle:@""
-								  message:msg 
-								  delegate:self
-								  cancelButtonTitle:@"OK"
-								  otherButtonTitles:nil];
-			alert.tag = ALERT_PASS_CANT_BE_EMPTY_NOR_DEFAULT;
-			[alert show];
-			[alert release];
+			//Obsolete
 			break;
 		}		
 			
 
 		case ALERT_CHANGE_PASS_FAILED:
 		{
-			NSString * msg =@"Password changed failed. Please try again later";
-			UIAlertView *alert = [[UIAlertView alloc]
-								  initWithTitle:@""
-								  message:msg 
-								  delegate:nil
-								  cancelButtonTitle:@"OK"
-								  otherButtonTitles:nil];
-			[alert show];
-			[alert release];
+			//Obsolete
 			break;
 		}
             
         case ALERT_CHANGE_NAME_FAILED:
 		{
-			NSString * msg =@"Failed to change camera name. Please try again later";
+            msg  = NSLocalizedStringWithDefaultValue(@"cam_menu_err_5",nil, [NSBundle mainBundle],
+                                                     @"Failed to change camera name. Please try again later" , nil);
 			UIAlertView *alert = [[UIAlertView alloc]
 								  initWithTitle:@""
 								  message:msg
 								  delegate:nil
-								  cancelButtonTitle:@"OK"
+								  cancelButtonTitle:ok
 								  otherButtonTitles:nil];
 			[alert show];
 			[alert release];
@@ -1085,17 +1084,31 @@
 	
 	UIAlertView * _myAlert = nil;
 	
-	_myAlert = [[UIAlertView alloc] initWithTitle:@"Change Camera Name" 
-										  message:@"Please enter new name for this camera\n\n\n" 
+    NSString * msg = NSLocalizedStringWithDefaultValue(@"Change_Camera_Name",nil, [NSBundle mainBundle],
+                                                       @"Change Camera Name", nil);
+    NSString * msg2 = NSLocalizedStringWithDefaultValue(@"Please_enter_new_name_for_this_camera",nil, [NSBundle mainBundle],
+                                                        @"Please enter new name for this camera\n\n\n", nil);
+    
+    NSString * cancel = NSLocalizedStringWithDefaultValue(@"Cancel",nil, [NSBundle mainBundle],
+                                                          @"Cancel", nil);
+    
+    NSString * ok = NSLocalizedStringWithDefaultValue(@"Ok",nil, [NSBundle mainBundle],
+                                                      @"Ok", nil);
+    
+    NSString * newName = NSLocalizedStringWithDefaultValue(@"New_Name",nil, [NSBundle mainBundle],
+                                                           @"New Name", nil);
+
+	_myAlert = [[UIAlertView alloc] initWithTitle:msg
+										  message:msg2
 										 delegate:self 
-								cancelButtonTitle:@"Cancel"
-								otherButtonTitles:@"Ok", 
+								cancelButtonTitle:cancel
+								otherButtonTitles:ok, 
 				nil];
 	_myAlert.tag = ALERT_CHANGE_NAME; //used for tracking later 
 
     UITextField *myTextField = [[UITextField alloc] initWithFrame:CGRectMake(32.0, 90.0, 220.0, 25.0)];
     [myTextField setBackgroundColor:[UIColor whiteColor]];
-    myTextField.placeholder = @"New Name";
+    myTextField.placeholder = newName;
     myTextField.borderStyle = UITextBorderStyleRoundedRect;
     myTextField.backgroundColor = [UIColor whiteColor];
     myTextField.textColor = [UIColor blackColor];
@@ -1168,15 +1181,21 @@
 	
 	NSString * bundleVersion = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
 	
+    NSString * info = NSLocalizedStringWithDefaultValue(@"information",nil, [NSBundle mainBundle],
+                                                       @"Information", nil);
+    NSString * msg = NSLocalizedStringWithDefaultValue(@"information_msg",nil, [NSBundle mainBundle],
+                                                       @"Motorola Baby Monitor\nApplication version: %@\nFirmware version:%@,\nMonitoreverywhere \u00A9 All rights Reserved.\nCamera address:%@", nil);
+    NSString * ok = NSLocalizedStringWithDefaultValue(@"Ok",nil, [NSBundle mainBundle],
+                                                      @"Ok", nil);
 
-	NSString * information = [NSString stringWithFormat:@"Motorola Baby Monitor\nApplication version: %@\nFirmware version:%@,\nMonitoreverywhere \u00A9 All rights Reserved.\nCamera address:%@",bundleVersion, version, deviceIp];
+	NSString * information = [NSString stringWithFormat:msg,bundleVersion, version, deviceIp];
 	
 	
 	UIAlertView *alert = [[UIAlertView alloc]
-						  initWithTitle:@"Information"
+						  initWithTitle:info
 						  message:information
 						  delegate:nil
-						  cancelButtonTitle:@"OK"
+						  cancelButtonTitle:ok
 						  otherButtonTitles:nil];
 	[alert show];
 	[alert release];

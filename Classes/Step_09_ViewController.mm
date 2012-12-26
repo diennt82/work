@@ -44,7 +44,8 @@
     [super viewDidLoad];
 	// Do any additional setup after loading the view.
     
-    self.navigationItem.title = @"Create Account"; 
+    self.navigationItem.title = NSLocalizedStringWithDefaultValue(@"Create_Account",nil, [NSBundle mainBundle],
+                                                                  @"Create Account", nil);
 
 #if 0
     self.navigationItem.backBarButtonItem =
@@ -53,8 +54,10 @@
                                      target:nil
                                      action:nil] autorelease];
 #endif
+    
     UIBarButtonItem *nextButton = 
-    [[UIBarButtonItem alloc] initWithTitle:@"Done" 
+    [[UIBarButtonItem alloc] initWithTitle:NSLocalizedStringWithDefaultValue(@"Done",nil, [NSBundle mainBundle],
+                                                                             @"Done", nil)
                                      style:UIBarButtonItemStylePlain 
                                     target:self 
                                     action:@selector(handleNextButton:)];          
@@ -183,16 +186,26 @@
     UITextField * _userEmail = (UITextField *)[self.userEmail viewWithTag:200];
 
     
+    
+    NSString * msg = nil ;     
+    NSString * ok = NSLocalizedStringWithDefaultValue(@"Ok",nil, [NSBundle mainBundle],
+                                                      @"Ok", nil);
+    NSString * title = nil; 
+    
     //UserName at least 3 chars
     if ([_userName.text length] < 3)
     {
         //error
+        title = NSLocalizedStringWithDefaultValue(@"Create_Account_Failed",nil, [NSBundle mainBundle],
+                                                  @"Create Account Failed" , nil);
+        msg = NSLocalizedStringWithDefaultValue(@"Create_Account_Failed_msg",nil, [NSBundle mainBundle],
+                                                @"User name has to be at least 3 characters" , nil);
         //ERROR condition
         UIAlertView *_alert = [[UIAlertView alloc]
-                               initWithTitle:@"Create Account Failed"
-                               message:@"User name has to be at least 3 characters" 
+                               initWithTitle:title
+                               message:msg
                                delegate:self
-                               cancelButtonTitle:@"OK"
+                               cancelButtonTitle:ok
                                otherButtonTitles:nil];
         [_alert show];
         [_alert release];
@@ -201,12 +214,16 @@
              ([_userPass.text length] > 12) )
     {
         //error
+        title = NSLocalizedStringWithDefaultValue(@"Create_Account_Failed",nil, [NSBundle mainBundle],
+                                                  @"Create Account Failed" , nil);
+        msg = NSLocalizedStringWithDefaultValue(@"Create_Account_Failed_msg1",nil, [NSBundle mainBundle],
+                                                @"Password has to be between 3-12 characters" , nil);
         //ERROR condition
         UIAlertView *_alert = [[UIAlertView alloc]
-                               initWithTitle:@"Create Account Failed"
-                               message:@"Password has to be between 3-12 characters" 
+                               initWithTitle:title
+                               message:msg 
                                delegate:self
-                               cancelButtonTitle:@"OK"
+                               cancelButtonTitle:ok
                                otherButtonTitles:nil];
         [_alert show];
         [_alert release];
@@ -214,12 +231,17 @@
     else if ( ![_userPass.text isEqualToString:_userCPass.text])
     {
         //error
+        title = NSLocalizedStringWithDefaultValue(@"Create_Account_Failed",nil, [NSBundle mainBundle],
+                                                  @"Create Account Failed" , nil);
+        msg = NSLocalizedStringWithDefaultValue(@"Create_Account_Failed_msg2",nil, [NSBundle mainBundle],
+                                                @"Password does not match" , nil);
+
         //ERROR condition
         UIAlertView *_alert = [[UIAlertView alloc]
-                               initWithTitle:@"Create Account Failed"
-                               message:@"Password does not match" 
+                               initWithTitle:title 
+                               message: msg
                                delegate:self
-                               cancelButtonTitle:@"OK"
+                               cancelButtonTitle:ok
                                otherButtonTitles:nil];
         [_alert show];
         [_alert release];
@@ -227,12 +249,17 @@
     else if([_userEmail.text rangeOfString:@"@"].location == NSNotFound)
     {
         //error
+        title = NSLocalizedStringWithDefaultValue(@"Create_Account_Failed",nil, [NSBundle mainBundle],
+                                                  @"Create Account Failed" , nil);
+        msg = NSLocalizedStringWithDefaultValue(@"Create_Account_Failed_msg3",nil, [NSBundle mainBundle],
+                                                @"Invalid email. Email address should be of the form somebody@somewhere.com"  , nil);
+
         //ERROR condition
         UIAlertView *_alert = [[UIAlertView alloc]
-                               initWithTitle:@"Create Account Failed"
-                               message:@"Invalid email. Email address should be of the form somebody@somewhere.com" 
+                               initWithTitle:title
+                               message:msg
                                delegate:self
-                               cancelButtonTitle:@"OK"
+                               cancelButtonTitle:ok
                                otherButtonTitles:nil];
         [_alert show];
         [_alert release];
@@ -241,10 +268,17 @@
     else if (![Step_09_ViewController isWifiConnectionAvailable] )
     {
 
-        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Unable to create Account"
-                                                            message:@"Please select a Wifi network to connect"
+        title = NSLocalizedStringWithDefaultValue(@"Create_Account_Failed",nil, [NSBundle mainBundle],
+                                                  @"Create Account Failed" , nil);
+        msg = NSLocalizedStringWithDefaultValue(@"Create_Account_Failed_msg4",nil, [NSBundle mainBundle],
+                                                @"Please select a Wifi network to connect"  , nil);
+
+        NSString * msg1 = NSLocalizedStringWithDefaultValue(@"Settings",nil, [NSBundle mainBundle],
+                                                            @"Settings"  , nil);
+        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:title
+                                                            message:msg 
                                                            delegate:self
-                                                  cancelButtonTitle:@"Settings"
+                                                  cancelButtonTitle:msg1
                                                   otherButtonTitles:nil];
         [alertView show];
         [alertView release];
@@ -355,13 +389,22 @@
 	NSLog(@"register failed with error code:%d", [error_response statusCode]);
 	
 
+    NSString * msg1 = NSLocalizedStringWithDefaultValue(@"Registration_Error",nil, [NSBundle mainBundle],
+                                                        @"Registration Error" , nil);
+    
+    NSString * msg = NSLocalizedStringWithDefaultValue(@"Server_error_" ,nil, [NSBundle mainBundle],
+                                                       @"Server error: %@" , nil);
+    
+    NSString * ok = NSLocalizedStringWithDefaultValue(@"Ok",nil, [NSBundle mainBundle],
+                                                      @"Ok", nil);
+    
 	
 	//ERROR condition
 	UIAlertView *alert = [[UIAlertView alloc]
-						  initWithTitle:@"Registration Error"
-						  message:[NSString stringWithFormat:@"Server error: %@", [BMS_Communication getLocalizedMessageForError:[error_response statusCode]]] 
+						  initWithTitle:msg1
+						  message:[NSString stringWithFormat:msg, [BMS_Communication getLocalizedMessageForError:[error_response statusCode]]] 
 						  delegate:self
-						  cancelButtonTitle:@"OK"
+						  cancelButtonTitle:ok
 						  otherButtonTitles:nil];
 	[alert show];
 	[alert release];
@@ -372,13 +415,21 @@
 {
 	NSLog(@"register failed : server unreachable");
 	
-
+    NSString * msg1 = NSLocalizedStringWithDefaultValue(@"Registration_Error",nil, [NSBundle mainBundle],
+                                                        @"Registration Error" , nil);
+    
+    NSString * msg = NSLocalizedStringWithDefaultValue(@"Registration_Error_1" ,nil, [NSBundle mainBundle],
+                                                       @"BMS Server is unreachable. Please goto WIFI setting to ensure iOS device is connected to router/3G network" , nil);
+    
+    NSString * ok = NSLocalizedStringWithDefaultValue(@"Ok",nil, [NSBundle mainBundle],
+                                                      @"Ok", nil);
+    
 	//ERROR condition
 	UIAlertView *alert = [[UIAlertView alloc]
-						  initWithTitle:@"Registration Error"
-						  message:@"BMS Server is unreachable. Please goto WIFI setting to ensure iOS device is connected to router/3G network"
+						  initWithTitle:msg1
+						  message:msg
 						  delegate:self
-						  cancelButtonTitle:@"OK"
+						  cancelButtonTitle:ok
 						  otherButtonTitles:nil];
 	[alert show];
 	[alert release];

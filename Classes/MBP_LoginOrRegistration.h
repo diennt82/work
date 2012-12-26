@@ -90,7 +90,6 @@
 
 - (IBAction) handleButtonPressed:(id) sender;
 - (IBAction) createNewAccount:(id)sender;
-- (IBAction) editChanged:(id)sender;
 
 //LOGIN callbacks;
 - (void) loginSuccessWithResponse:(NSData*) responseData;

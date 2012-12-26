@@ -43,10 +43,12 @@
     [super viewDidLoad];
 	// Do any additional setup after loading the view.
     
-    self.navigationItem.title = @"Enter Network Information";
+    self.navigationItem.title = NSLocalizedStringWithDefaultValue(@"Enter_Network_Information",nil, [NSBundle mainBundle],
+                                                                  @"Enter Network Information" , nil);
     
     self.navigationItem.backBarButtonItem =
-    [[[UIBarButtonItem alloc] initWithTitle:@"Back"
+    [[[UIBarButtonItem alloc] initWithTitle: NSLocalizedStringWithDefaultValue(@"Back",nil, [NSBundle mainBundle],
+                                                                               @"Back" , nil)
                                       style:UIBarButtonItemStyleBordered
                                      target:nil
                                      action:nil] autorelease];
@@ -77,7 +79,9 @@
     
     
     UIBarButtonItem *nextButton = 
-    [[UIBarButtonItem alloc] initWithTitle:@"Next" 
+    [[UIBarButtonItem alloc] initWithTitle:NSLocalizedStringWithDefaultValue(@"Next",nil, [NSBundle mainBundle],
+                                                                             @"Next" , nil)
+
                                      style:UIBarButtonItemStylePlain 
                                     target:self 
                                     action:@selector(handleNextButton:)];          

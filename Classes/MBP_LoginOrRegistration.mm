@@ -48,12 +48,17 @@
 	  [[UIApplication sharedApplication] setStatusBarOrientation:UIInterfaceOrientationPortrait];
     
     
-    
-    self.navigationItem.title = @"Login"; 
+    NSString * msg = NSLocalizedStringWithDefaultValue(@"Login",nil, [NSBundle mainBundle],
+                                                          @"Login", nil);
+    self.navigationItem.title = msg;
    
+    
+    msg = NSLocalizedStringWithDefaultValue(@"Back",nil, [NSBundle mainBundle],
+                                            @"Back", nil);
+    
     //Back key
     self.navigationItem.backBarButtonItem =
-    [[[UIBarButtonItem alloc] initWithTitle:@"Back"
+    [[[UIBarButtonItem alloc] initWithTitle:msg
                                       style:UIBarButtonItemStyleBordered
                                      target:nil
                                      action:nil] autorelease];
@@ -100,8 +105,10 @@
         if (shouldAutoLogin == TRUE	)
         {
             
+            NSString * msg = NSLocalizedStringWithDefaultValue(@"Logging_in_to_server" ,nil, [NSBundle mainBundle],
+                                                               @"Logging in to server..." , nil);
             self.progressView.hidden = NO;
-            [self.progressLabel setText:@"Logging in to server..." ];
+            [self.progressLabel setText:msg];
             self.navigationItem.leftBarButtonItem.enabled = NO ;
             self.navigationItem.rightBarButtonItem.enabled = NO;  
             
@@ -431,10 +438,12 @@
                                                ServerErr:@selector(loginFailedServerUnreachable)];
 
     [bms_comm BMS_loginWithUser:temp_user_str AndPass:temp_pass_str];
-    
+   
+    NSString * msg = NSLocalizedStringWithDefaultValue(@"Connecting_to_server" ,nil, [NSBundle mainBundle],
+                                                       @"Connecting to Server..." , nil);
     
     self.progressView.hidden = NO;
-    [self.progressLabel setText:@"Connecting to Server..." ];
+    [self.progressLabel setText:msg ];
     [self.view bringSubviewToFront:self.progressView];
     
     self.navigationItem.leftBarButtonItem.enabled = NO ;
@@ -448,119 +457,6 @@
 {
 	int sender_tag = ((UIButton *) sender).tag;
 	NSLog(@"THIS IS NOT USED ... Sender tag:%d", sender_tag);
-#if 0
-	switch (sender_tag) {
-		case LOGIN_BUTTON_TAG:
-		{
-			tmp_user_str = self.userName.text;
-			tmp_pass_str = self.password.text; 
-			
-			if ([tmp_user_str length] == 0 || [tmp_pass_str length] <3)
-			{
-				//ERROR condition
-				UIAlertView *alert = [[UIAlertView alloc]
-									  initWithTitle:@"Error"
-									  message:@"Username can't be empty, password has to be at lease 3 characters" 
-									  delegate:self
-									  cancelButtonTitle:@"OK"
-									  otherButtonTitles:nil];
-				[alert show];
-				[alert release];
-				return;
-			}
-			
-			BMS_Communication * bms_comm; 
-			bms_comm = [[BMS_Communication alloc] initWithObject:self
-														 Selector:@selector(loginSuccessWithResponse:) 
-													 FailSelector:@selector(loginFailedWithError:) 
-														ServerErr:@selector(loginFailedServerUnreachable)];
-			
-			[bms_comm BMS_loginWithUser:tmp_user_str AndPass:tmp_pass_str];
-			
-			self.progressView.hidden = NO;
-			[self.progressLabel setText:@"Logging in to server..." ];
-			
-			break;
-		}
-		case CREATE_NEW_BUTTON_TAG:
-		{ 
-			[[NSBundle mainBundle] loadNibNamed:@"MBP_LoginOrRegistration_1" 
-										  owner:self 
-										options:nil];
-			[self.view addSubview:registraionView];
-			/*[self.view addSubview:regUserName];
-			[self.view addSubview:regUserPass];
-			[self.view addSubview:regUserEmail];
-			[self.view addSubview:regProgress];
-			[self.view addSubview:regComplete];
-			*/
-			break; 
-		}
-		case BACK_BUTTON_TAG:
-		{
-			[delegate sendStatus:7];
-			break;
-		}
-		case REG_CANCEL_BUTTON_TAG:
-		{
-			//Back to login screen
-			[self.registraionView removeFromSuperview]; 
-			break;
-		}
-		case REG_CREATE_BUTTON_TAG:
-		{
-			
-			tmp_user_str  = self.regUserName.text;
-			tmp_pass_str = self.regUserPass.text; 
-			tmp_user_email= self.regUserEmail.text;
-			
-			NSRange validRange = [tmp_user_email rangeOfString:@"@"];
-			
-			
-			if ([tmp_user_str length] == 0 || [tmp_pass_str length] <3)
-			{
-				//ERROR condition
-				UIAlertView *alert = [[UIAlertView alloc]
-									  initWithTitle:@"Error"
-									  message:@"Username can't be empty and password has to be at lease 3 characters" 
-									  delegate:self
-									  cancelButtonTitle:@"OK"
-									  otherButtonTitles:nil];
-				[alert show];
-				[alert release];
-				return;
-			}
-			else if ( validRange.location == NSNotFound)
-			{
-				UIAlertView *alert = [[UIAlertView alloc]
-									  initWithTitle:@"Error"
-									  message:@"Email entered is not valid. A valid email format is of the form: someone@somedomain.com" 
-									  delegate:self
-									  cancelButtonTitle:@"OK"
-									  otherButtonTitles:nil];
-				[alert show];
-				[alert release];
-				return;
-			}
-			
-			
-			NSLog(@"Start registration"); 
-			
-			BMS_Communication * bms_comm; 
-			bms_comm = [[BMS_Communication alloc] initWithObject:self
-														Selector:@selector(regSuccessWithResponse:) 
-													FailSelector:@selector(regFailedWithError:) 
-													   ServerErr:@selector(regFailedServerUnreachable)];
-			
-			[bms_comm BMS_registerWithUserId:tmp_user_str AndPass:tmp_pass_str AndEmail:tmp_user_email];
-			
-			self.regProgress.hidden = NO;
-			break;
-		}
-		default:
-			break;
-	}
-#endif
 }
 
 #pragma mark -
@@ -607,11 +503,21 @@
 		//ERROR condition
 		self.progressView.hidden = YES;
 		
+        
+        NSString * title = NSLocalizedStringWithDefaultValue(@"Login_Error" ,nil, [NSBundle mainBundle],
+                                                           @"Login Error", nil);
+        NSString * msg = NSLocalizedStringWithDefaultValue(@"Login_Error_msg" ,nil, [NSBundle mainBundle],
+                                                           @"Server response invalid, please try again!", nil);
+
+        NSString * ok = NSLocalizedStringWithDefaultValue(@"Ok" ,nil, [NSBundle mainBundle],
+                                                           @"OK", nil);
+
+        
 		UIAlertView *alert = [[UIAlertView alloc]
-							  initWithTitle:@"Login Error"
-							  message:@"Server response invalid, please try again!"
+							  initWithTitle:title
+							  message:msg
 							  delegate:self
-							  cancelButtonTitle:@"OK"
+							  cancelButtonTitle:ok
 							  otherButtonTitles:nil];
 		[alert show];
 		[alert release];
@@ -658,12 +564,22 @@
 	
 	self.progressView.hidden = YES;
 	
+    
+    NSString * title = NSLocalizedStringWithDefaultValue(@"Login_Error" ,nil, [NSBundle mainBundle],
+                                                         @"Login Error", nil);
+    NSString * msg = NSLocalizedStringWithDefaultValue(@"Login_Error_msg2" ,nil, [NSBundle mainBundle],
+                                                       @"Server error: %@", nil);
+    
+    NSString * ok = NSLocalizedStringWithDefaultValue(@"Ok" ,nil, [NSBundle mainBundle],
+                                                      @"OK", nil);
+
+    
 	//ERROR condition
 	UIAlertView *alert = [[UIAlertView alloc]
-						  initWithTitle:@"Login Error"
-						  message:[NSString stringWithFormat:@"Server error: %@", [BMS_Communication getLocalizedMessageForError:[error_response statusCode]]]
+						  initWithTitle:title
+						  message:[NSString stringWithFormat:msg, [BMS_Communication getLocalizedMessageForError:[error_response statusCode]]]
 						  delegate:self
-						  cancelButtonTitle:@"OK"
+						  cancelButtonTitle:ok
 						  otherButtonTitles:nil];
 	[alert show];
 	[alert release];
@@ -678,84 +594,31 @@
     
 	NSLog(@"Loging failed : server unreachable");
 	self.progressView.hidden = YES;
+    
+    
+    NSString * title = NSLocalizedStringWithDefaultValue(@"Login_Error" ,nil, [NSBundle mainBundle],
+                                                         @"Login Error", nil);
+    NSString * msg = NSLocalizedStringWithDefaultValue(@"Login_Error_msg3" ,nil, [NSBundle mainBundle],
+                                                       @"Server is unreachable. Do you want to access your cameras offline?" ,nil);
+    
+    NSString * no = NSLocalizedStringWithDefaultValue(@"No" ,nil, [NSBundle mainBundle],
+                                                      @"No", nil);
+
+    NSString * yes = NSLocalizedStringWithDefaultValue(@"Yes" ,nil, [NSBundle mainBundle],
+                                                      @"Yes", nil);
+    
 	//ERROR condition
 	UIAlertView *alert = [[UIAlertView alloc]
-						  initWithTitle:@"Login Error"
-						  message:@"Server is unreachable. Do you want to access your cameras offline?"
+						  initWithTitle:title
+						  message:msg 
 						  delegate:self
-						  cancelButtonTitle:@"No"
-						  otherButtonTitles:@"Yes", nil];
+						  cancelButtonTitle:no
+						  otherButtonTitles:yes, nil];
     alert.tag = 112; 
 	[alert show];
 	[alert release];
 	
 }
-
-
-
-
-
-- (void) regSuccessWithResponse:(NSData*) responseData
-{
-
-    NSString * response = [[NSString alloc] initWithData:responseData encoding:NSUTF8StringEncoding]; 
-    
-
-	
-	NSLog(@"register success : %@", response );
-	
-	//Store user/pass for later use
-	NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-
-	[userDefaults setObject:temp_user_email forKey:@"PortalUseremail"];
-	[userDefaults setObject:temp_user_str forKey:@"PortalUsername"];
-	[userDefaults setObject:temp_pass_str forKey:@"PortalPassword"];
-	
-	[userDefaults synchronize];
-	
-	//Try to LOGIN - go back to ioController and re-login--  
-	[delegate sendStatus:2];
-	
-}
-
-- (void) regFailedWithError:(NSHTTPURLResponse*) error_response
-{
-	NSLog(@"register failed with error code:%d", [error_response statusCode]);
-	
-	self.regProgress.hidden = YES;
-	
-	//ERROR condition
-	UIAlertView *alert = [[UIAlertView alloc]
-						  initWithTitle:@"Registration Error"
-						  message:[NSString stringWithFormat:@"Server error: %@", [BMS_Communication getLocalizedMessageForError:[error_response statusCode]]] 
-						  delegate:self
-						  cancelButtonTitle:@"OK"
-						  otherButtonTitles:nil];
-	[alert show];
-	[alert release];
-	return;
-	
-}
-- (void) regFailedServerUnreachable
-{
-	NSLog(@"register failed : server unreachable");
-	
-	self.regProgress.hidden = YES;
-	//ERROR condition
-	UIAlertView *alert = [[UIAlertView alloc]
-						  initWithTitle:@"Registration Error"
-						  message:@"BMS Server is unreachable. Please goto WIFI setting to ensure iOS device is connected to router/3G network"
-						  delegate:self
-						  cancelButtonTitle:@"OK"
-						  otherButtonTitles:nil];
-	[alert show];
-	[alert release];
-	
-}
-
-
-
-
 
 
 @end

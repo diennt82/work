@@ -43,11 +43,13 @@
     
     self.navigationController.navigationBar.barStyle = UIBarStyleBlackOpaque;
     
-   self.navigationItem.title = @"Baby Monitor Setup";
+    self.navigationItem.title = NSLocalizedStringWithDefaultValue(@"Baby_Monitor_Setup",nil, [NSBundle mainBundle],
+                                                                  @"Baby Monitor Setup", nil);
 
     
    self.navigationItem.backBarButtonItem =
-    [[[UIBarButtonItem alloc] initWithTitle:@"Back"
+    [[[UIBarButtonItem alloc] initWithTitle:NSLocalizedStringWithDefaultValue(@"Back",nil, [NSBundle mainBundle],
+                                                                             @"Back", nil)
                                       style:UIBarButtonItemStyleBordered
                                      target:nil
                                      action:nil] autorelease];
@@ -61,7 +63,8 @@
   
 
         UIBarButtonItem *backButton = 
-        [[UIBarButtonItem alloc] initWithTitle:@"Cancel" 
+        [[UIBarButtonItem alloc] initWithTitle:NSLocalizedStringWithDefaultValue(@"Cancel",nil, [NSBundle mainBundle],
+                                                                                 @"Cancel", nil)
                                          style:UIBarButtonItemStyleBordered 
                                         target:self 
                                         action:@selector(goBackToFirstScreen:)];          
@@ -72,7 +75,8 @@
     {
         
         UIBarButtonItem *backButton = 
-        [[UIBarButtonItem alloc] initWithTitle:@"Cancel" 
+        [[UIBarButtonItem alloc] initWithTitle:NSLocalizedStringWithDefaultValue(@"Cancel",nil, [NSBundle mainBundle],
+                                                                                 @"Cancel", nil)
                                          style:UIBarButtonItemStyleBordered 
                                         target:self 
                                         action:@selector(handleBackButton:)];          

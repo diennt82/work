@@ -51,6 +51,8 @@
 		38699130167073F7009F3E66 /* MBP_LoginOrRegistration_ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3869912F167073F7009F3E66 /* MBP_LoginOrRegistration_ipad.xib */; };
 		3869913216707F75009F3E66 /* DashBoard_ViewController_ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3869913116707F75009F3E66 /* DashBoard_ViewController_ipad.xib */; };
 		3869913416708450009F3E66 /* CameraViewController_ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3869913316708450009F3E66 /* CameraViewController_ipad.xib */; };
+		387E718616884E1100E940F9 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 387E718116884E1100E940F9 /* Localizable.strings */; };
+		387E718716884E1100E940F9 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 387E718416884E1100E940F9 /* Localizable.strings */; };
 		3887DD8415CB697C0077048D /* libcrypto.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3887DD8215CB697C0077048D /* libcrypto.a */; };
 		3887DD8515CB697C0077048D /* libUdtLib.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3887DD8315CB697C0077048D /* libUdtLib.a */; };
 		389F45461670947F004951E7 /* CameraViewController_land_ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 389F45451670947F004951E7 /* CameraViewController_land_ipad.xib */; };
@@ -258,6 +260,8 @@
 		3869912F167073F7009F3E66 /* MBP_LoginOrRegistration_ipad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MBP_LoginOrRegistration_ipad.xib; sourceTree = "<group>"; };
 		3869913116707F75009F3E66 /* DashBoard_ViewController_ipad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = DashBoard_ViewController_ipad.xib; sourceTree = "<group>"; };
 		3869913316708450009F3E66 /* CameraViewController_ipad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CameraViewController_ipad.xib; sourceTree = "<group>"; };
+		387E718216884E1100E940F9 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = Localizable.strings; sourceTree = "<group>"; };
+		387E718516884E1100E940F9 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = Localizable.strings; sourceTree = "<group>"; };
 		3887DD8215CB697C0077048D /* libcrypto.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libcrypto.a; sourceTree = "<group>"; };
 		3887DD8315CB697C0077048D /* libUdtLib.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libUdtLib.a; sourceTree = "<group>"; };
 		389F45451670947F004951E7 /* CameraViewController_land_ipad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = CameraViewController_land_ipad.xib; path = ../CameraViewController_land_ipad.xib; sourceTree = "<group>"; };
@@ -704,6 +708,8 @@
 		29B97314FDCFA39411CA2CEA /* CustomTemplate */ = {
 			isa = PBXGroup;
 			children = (
+				387E718016884E1100E940F9 /* en.lproj */,
+				387E718316884E1100E940F9 /* es.lproj */,
 				38C7DE79165DDF9E00926EA1 /* Default-568h@2x.png */,
 				3812F82315C8BEC700DADFA6 /* images13 */,
 				97987CC1154683700066C49B /* images12 */,
@@ -815,6 +821,22 @@
 			name = images13;
 			sourceTree = "<group>";
 		};
+		387E718016884E1100E940F9 /* en.lproj */ = {
+			isa = PBXGroup;
+			children = (
+				387E718116884E1100E940F9 /* Localizable.strings */,
+			);
+			path = en.lproj;
+			sourceTree = "<group>";
+		};
+		387E718316884E1100E940F9 /* es.lproj */ = {
+			isa = PBXGroup;
+			children = (
+				387E718416884E1100E940F9 /* Localizable.strings */,
+			);
+			path = es.lproj;
+			sourceTree = "<group>";
+		};
 		9770CB87143032BC009E69EF /* images */ = {
 			isa = PBXGroup;
 			children = (
@@ -872,6 +894,8 @@
 				Japanese,
 				French,
 				German,
+				en,
+				es,
 			);
 			mainGroup = 29B97314FDCFA39411CA2CEA /* CustomTemplate */;
 			projectDirPath = "";
@@ -1008,6 +1032,8 @@
 				97E39E6616840CF000F1A1DB /* AlertSettingViewController_land_ipad.xib in Resources */,
 				97E39E691684416700F1A1DB /* hq_d.png in Resources */,
 				97E39E6A1684416700F1A1DB /* hq.png in Resources */,
+				387E718616884E1100E940F9 /* Localizable.strings in Resources */,
+				387E718716884E1100E940F9 /* Localizable.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1085,6 +1111,25 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		387E718116884E1100E940F9 /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				387E718216884E1100E940F9 /* en */,
+			);
+			name = Localizable.strings;
+			sourceTree = "<group>";
+		};
+		387E718416884E1100E940F9 /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				387E718516884E1100E940F9 /* es */,
+			);
+			name = Localizable.strings;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
 		1D6058940D05DD3E006BFB54 /* Debug */ = {

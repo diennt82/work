@@ -154,15 +154,12 @@
 + (void)getBroadcastAddress:(NSString **) bcast AndOwnIp:(NSString**) ownip;
 + (void)getBroadcastAddress:(NSString **) bcast AndOwnIp:(NSString**) ownip ipasLong:(long *) _ownip;
 
-- (NSString * ) requestURLSync:(NSString*)url withTimeOut:(NSTimeInterval) timeout;
-- (void ) requestURLSync_bg:(NSString*)url;
-
 - (BOOL) restoreConfigData;
 
 -(void) startShowingCameraList;
 
 //delegate
-- (void)sendConfiguration:(DeviceConfiguration *) conf;
+
 - (void)sendStatus:(int) status;
 
 -(BOOL) pushNotificationRcvedInForeground:(CameraAlert *) camAlert;

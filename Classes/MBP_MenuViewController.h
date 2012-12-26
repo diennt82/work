@@ -78,7 +78,7 @@
 
 
 
-@interface MBP_MenuViewController : UIViewController <UITableViewDelegate, UITableViewDataSource,StreamerEventHandler, UITextFieldDelegate>{
+@interface MBP_MenuViewController : UIViewController <UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate>{
 
 	IBOutlet UIView * progressView;
 	IBOutlet UITableView * cameraMenu;

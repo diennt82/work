@@ -38,10 +38,15 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    // Do any additional setup after loading the view from its nib.
-    self.navigationItem.title = @"Security"; 
 
-    securityTypes = [[NSArray alloc]initWithObjects:@"none", @"wep", @"wap", nil];
+    
+    
+    // Do any additional setup after loading the view from its nib.
+    self.navigationItem.title = NSLocalizedStringWithDefaultValue(@"Security",nil, [NSBundle mainBundle],
+                                                                  @"Security" , nil);
+
+    securityTypes = [[NSArray alloc]initWithObjects:@"none", @"wep" , @"wap",
+                     nil];
 }
 
 - (void)viewDidUnload
