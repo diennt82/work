@@ -92,4 +92,73 @@
     
 }
 
+#pragma  mark -
+#pragma mark Table View delegate & datasource
+
+
+
+#define STEP_1 0
+#define STEP_2 1
+#define STEP_3 2
+
+ 
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    
+    int tag = tableView.tag;
+    
+    //if (tag == 13)
+    {
+       
+        {
+            
+            if (indexPath.row == STEP_1) {
+                return step1_cell;
+            }
+            if (indexPath.row == STEP_2)
+            {
+                return step2_cell;
+            }
+            if (indexPath.row == STEP_3)
+            {
+                return step3_cell;
+            }
+            
+        }
+        
+    }
+    
+    return nil;
+    
+}
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+{
+    return 3;
+}
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
+{
+    return 1;
+}
+
+
+
+- (void)tableView: (UITableView *)tableView didSelectRowAtIndexPath: (NSIndexPath *)indexPath
+{
+    
+    [tableView deselectRowAtIndexPath:[tableView indexPathForSelectedRow]
+                             animated:NO];
+    
+       
+}
+
+#pragma  mark -
+
+
+
+
+
+
+
+
 @end

@@ -13,8 +13,10 @@
 
 
 @interface Step_02_ViewController : UIViewController
-
-
+{
+    IBOutlet UITableViewCell * step1_cell, * step2_cell, * step3_cell;
+    
+}
 
 - (IBAction)handleButtonPress:(id)sender;
 @end
