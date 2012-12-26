@@ -37,7 +37,7 @@
 				<string key="targetRuntimeIdentifier">IBIPadFramework</string>
 			</object>
 			<object class="IBUITableViewCell" id="24477504">
-				<reference key="NSNextResponder"/>
+				<nil key="NSNextResponder"/>
 				<int key="NSvFlags">292</int>
 				<array class="NSMutableArray" key="NSSubviews">
 					<object class="IBUIView" id="712527824">
@@ -104,7 +104,6 @@
 					</object>
 				</array>
 				<string key="NSFrameSize">{261, 59}</string>
-				<reference key="NSSuperview"/>
 				<reference key="NSNextKeyView" ref="712527824"/>
 				<string key="NSReuseIdentifierKey">_NS:9</string>
 				<string key="targetRuntimeIdentifier">IBIPadFramework</string>

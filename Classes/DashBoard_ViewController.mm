@@ -89,7 +89,7 @@
             {
                 
                 NSString * msg = NSLocalizedStringWithDefaultValue(@"Edit_",nil, [NSBundle mainBundle],
-                                                                     @"Edit_", nil);
+                                                                     @"Edit", nil);
                 
                 UIBarButtonItem *editButton = [[UIBarButtonItem alloc]
                                                initWithTitle:msg
@@ -125,7 +125,7 @@
                                   init];
         
         NSString * msg = NSLocalizedStringWithDefaultValue(@"Cameras_",nil, [NSBundle mainBundle],
-                                                           @"Cameras_", nil);
+                                                           @"Cameras", nil);
         
         label.style = UIBarButtonItemStylePlain;
         label.title =msg;
