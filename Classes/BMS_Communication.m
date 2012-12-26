@@ -1599,61 +1599,82 @@
     {
             
         case 404:
-            result = @"Server is temporarily not available";
+            result = NSLocalizedStringWithDefaultValue(@"bms_error_404",nil, [NSBundle mainBundle],
+                                                       @"Server is temporarily not available", nil);
             break;
         case 601:
-            result = @"Invalid command passed. Please check the query.";
+            result =NSLocalizedStringWithDefaultValue(@"bms_error_601",nil, [NSBundle mainBundle],
+                                                       @"Invalid command passed. Please check the query.", nil);
             break;
         case 602:
-            result = @"Required parameter(s) are missing.";
+            result = NSLocalizedStringWithDefaultValue(@"bms_error_602",nil, [NSBundle mainBundle],
+                                                       @"Required parameter(s) are missing.", nil);
             break;
         case 603:
-            result = @"Length of the parameter is out of expected boundaries.";
+            result = NSLocalizedStringWithDefaultValue(@"bms_error_603",nil, [NSBundle mainBundle],
+                                                       @"Length of the parameter is out of expected boundaries.", nil);
             break;
         case 611:
-            result = @"Camera does not exist.";
+            result =NSLocalizedStringWithDefaultValue(@"bms_error_611",nil, [NSBundle mainBundle],
+                                                       @"Camera does not exist.", nil);
             break;
         case 612:
-            result =@"Unable to communicate with the camera.";
+            result =NSLocalizedStringWithDefaultValue(@"bms_error_612",nil, [NSBundle mainBundle],
+                                                      @"Unable to communicate with the camera.", nil);
             break;
         case 613:
-            result = @"Unable to communicate with the camera.";
+            result = NSLocalizedStringWithDefaultValue(@"bms_error_613",nil, [NSBundle mainBundle],
+                                                       @"Unable to communicate with the camera.", nil);
             break;
         case 614:
-            result = @"Camera is not ready for streaming";
+            result = NSLocalizedStringWithDefaultValue(@"bms_error_614",nil, [NSBundle mainBundle],
+                                                       @"Camera is not ready for streaming", nil);
             break;
         case 621:
-            result =@"Email Id is not registered.";
+            result =NSLocalizedStringWithDefaultValue(@"bms_error_621",nil, [NSBundle mainBundle],
+                                                      @"Email Id is not registered.", nil);
             break;
         case 622:
-            result =@"Email Id registed but not activated.";
+            result =NSLocalizedStringWithDefaultValue(@"bms_error_622",nil, [NSBundle mainBundle],
+                                                      @"Email Id registed but not activated.", nil);
             break;
         case 623:
-            result =@"Email Id is already activated.";
+            result =NSLocalizedStringWithDefaultValue(@"bms_error_623",nil, [NSBundle mainBundle],
+                                                      @"Email Id is already activated.", nil);
             break;
         case 624:
-            result =@"Activation failed. Either user is not registered or the activation period is expired. Please register again.";
+            result =NSLocalizedStringWithDefaultValue(@"bms_error_624",nil, [NSBundle mainBundle],
+                                                      @"Activation failed. Either user is not registered or the activation period is expired. Please register again.", nil);
             break;
         case 625:
-            result =@"Activation failed. Invalid activation key.";
+            result =NSLocalizedStringWithDefaultValue(@"bms_error_625",nil, [NSBundle mainBundle],
+                                                      @"Activation failed. Invalid activation key.", nil);
             break;
         case 626:
-            result =@"Authentication failed, either Email Id or Password is invalid.";
+            result =NSLocalizedStringWithDefaultValue(@"bms_error_626",nil, [NSBundle mainBundle],
+                                                      @"Authentication failed, either Email Id or Password is invalid.", nil);
             break;
         case 627:
-            result =@"Camera is not associated with any user (email id).";
+            result =NSLocalizedStringWithDefaultValue(@"bms_error_627",nil, [NSBundle mainBundle],
+                                                      @"Camera is not associated with any user (email id).", nil);
             break;
         case 628:
-            result =@"Email is already registered";
+            result =NSLocalizedStringWithDefaultValue(@"bms_error_628",nil, [NSBundle mainBundle],
+                                                      @"Email is already registered", nil);
             break;
         case 636:
-            result =@"Username is already registered";
+            result =NSLocalizedStringWithDefaultValue(@"bms_error_636",nil, [NSBundle mainBundle],
+                                                      @"Username is already registered", nil);
             break;
         case 699:
-            result =@"Unhandled exception occured, please contact administrator.";
+            result =NSLocalizedStringWithDefaultValue(@"bms_error_699",nil, [NSBundle mainBundle],
+                                                      @"Unhandled exception occured, please contact administrator.", nil);
             break;
         default:
-            result =[NSString stringWithFormat:@"Unknown error - %d", err];
+            result =[NSString stringWithFormat:
+                     NSLocalizedStringWithDefaultValue(@"bms_error_unknown",nil, [NSBundle mainBundle],
+                                                       @"Unknown error - %d", nil)
+                     , err];
             break;
             
     }
