@@ -32,7 +32,7 @@
 #define SET_RESOLUTION_VGA @"VGA640_480"
 #define SET_RESOLUTION_QVGA @"QVGA320_240"
 #define SET_RESOLUTION_QQVGA @"QQVGA160_120"
-
+#define GET_RESOLUTION @"value_resolution" //0 : vga , 1 : qvga
 
 #define SETUP_HTTP_CMD @"setup_wireless_save&setup="
 #define RESTART_HTTP_CMD @"restart_system"
@@ -101,7 +101,11 @@
 #define GET_MAC_ADDRESS @"get_mac_address"
 
 
+
+
 #define BURNING_PROCESS @"burning_process :"
+
+
 
 #define ALERT_ASK_FOR_PASSWD 1
 #define ALERT_ASK_FOR_NEW_PASSWD 2

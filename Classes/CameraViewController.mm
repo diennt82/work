@@ -667,7 +667,7 @@
         
         [self setUIMelodyOnOff];
         
-        [self performSelectorInBackground:@selector(setVQ_bg) withObject:nil];
+        [self performSelectorInBackground:@selector(getVQ_bg) withObject:nil];
         
         //re-show progress if  it is being shown
         if (shouldShowProgress)
@@ -1150,7 +1150,7 @@
             
             //update melody ui
             [self setUIMelodyOnOff];
-            [self performSelectorInBackground:@selector(setVQ_bg) withObject:nil];
+            [self performSelectorInBackground:@selector(getVQ_bg) withObject:nil];
             
             break;
         }
@@ -1823,6 +1823,75 @@
 }
 
 
+-(void) getVQ_bg
+{
+    
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    
+    NSData * responseData  = nil;
+    if (selected_channel.communication_mode == COMM_MODE_STUN)
+	{
+		if (self.scomm != nil)
+		{
+            responseData= [self.scomm sendCommandThruUdtServer:GET_RESOLUTION
+                                                       withMac:self.selected_channel.profile.mac_address
+                                                    AndChannel:self.selected_channel.channID];
+		}
+	}
+	else
+	{
+		if (comm != nil)
+		{
+            responseData = [comm sendCommandAndBlock_raw:GET_RESOLUTION];
+            
+		}
+	}
+    
+	
+    
+	if (responseData != nil)
+	{
+        
+        NSString *response = [[[NSString alloc] initWithData:responseData encoding: NSUTF8StringEncoding] autorelease];
+		if ( (response != nil)  && [response hasPrefix:GET_RESOLUTION])
+		{
+			NSString * str_value = [response substringFromIndex:([GET_RESOLUTION length] + 2)];
+            
+            
+			int _videoQ  = [str_value intValue];
+            //0 - vga , 1 - qvga 
+            if (_videoQ ==0  || _videoQ == 1)
+            {
+             
+                //The store value here is reverted : 0 - qvga , 1 - vga
+                if (_videoQ ==1)
+                {
+                    [userDefaults setInteger:0 forKey:@"int_VideoQuality"];
+                }
+                else
+                {
+                    [userDefaults setInteger:1 forKey:@"int_VideoQuality"];
+                }
+                
+                [userDefaults synchronize]; 
+            }
+            else
+            {
+                //invalid response.. ignore
+            }
+			
+
+            [self performSelectorOnMainThread:@selector(setVQ_fg)
+                                   withObject:nil waitUntilDone:NO];
+            
+		}
+        
+        
+     
+        
+	}
+    
+}
 
 -(void) setVQ_bg
 {
