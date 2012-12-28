@@ -312,7 +312,7 @@
 		[self.remoteViewTimer isValid])
 	{
 		[self.remoteViewTimer invalidate];
-        NSLog(@"after invalidate");
+        
         self.remoteViewTimer = nil ;
 	}
 }

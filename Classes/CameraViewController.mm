@@ -286,9 +286,8 @@
 	}
 	else
 	{
-        
-
-        
+        //NSLog(@"call prepareToViewRemotely in [Main thread].. ");
+        //[self performSelectorInBackground:@selector(prepareToViewRemotely:) withObject:self.selected_channel];
 		[self prepareToViewRemotely:self.selected_channel];
 	}
     
@@ -309,10 +308,10 @@
 	NSArray *viewControllers = self.navigationController.viewControllers;
 	if (viewControllers.count > 1 && [viewControllers objectAtIndex:viewControllers.count-2] == self) {
 		// View is disappearing because a new view controller was pushed onto the stack
-		NSLog(@"New view controller was pushed---> Settings");
+		//NSLog(@"New view controller was pushed---> Settings");
 	} else if ([viewControllers indexOfObject:self] == NSNotFound) {
 		// View is disappearing because it was popped from the stack
-		NSLog(@"View controller was popped --- We are closing down.. killall video thread");
+		//NSLog(@"View controller was popped --- We are closing down.. killall video thread");
         
 		if (streamer.recordInProgress == YES)
 			[streamer stopRecording];
@@ -1049,7 +1048,7 @@
 {
 	
     
-	NSLog(@"Play the B");
+	//NSLog(@"Play the B");
  
 
 	//201201011 This is needed to play the system sound on top of audio from camera
@@ -1223,20 +1222,6 @@
             /* re-scan for the camera */
             [self scan_for_missing_camera];
             
-            
-            
-            
-            /* Start streaming 
-            
-            [NSTimer scheduledTimerWithTimeInterval:1.0
-                                             target:self
-                                           selector:@selector(startCameraConnection:)
-                                           userInfo:nil
-                                            repeats:NO];*/
-            
-            
-            
-            
             break;
         }
 		case REMOTE_STREAM_STOPPED_UNEXPECTEDLY:
@@ -1244,10 +1229,6 @@
             
             NSString * msg = NSLocalizedStringWithDefaultValue(@"network_lost_link2",nil, [NSBundle mainBundle],
                                                                @"Network lost link. Please check the Phone, Camera and Wifi router or move closer to the Router" , nil);
-            
-            
-            // signal streamer to stop
-            //self.streamer.hasStoppedByCaller = TRUE;
             
             
             if (self.alertTimer != nil && [self.alertTimer isValid])
@@ -1270,7 +1251,9 @@
             //Stop stream - clean up all resources
             [self.streamer stopStreaming];
             
-            
+            //nil all comm object
+            self.scomm = nil; //STUN
+            self.comm = nil;// UPNP/local
             
             
             //[self prepareToViewRemotely:selected_channel];
@@ -1345,37 +1328,52 @@
 	cameraConn = [[RemoteConnection alloc]init];
 	if ([cameraConn connectToRemoteCamera:ch
                                  callback:self
-                                 Selector:@selector(remoteConnectionSucceeded:)
-                             FailSelector:@selector(remoteConnectionFailed:)])
+                                 Selector:@selector(remoteConnectionSucceeded_bg:)
+                             FailSelector:@selector(remoteConnectionFailed_bg:)])
 	{
 		//the process started successfuly
 	}
 	else
 	{
-		NSLog(@"Start remote connection Failed!!!");
+		[self performSelectorOnMainThread:@selector(prepareToViewRemotelyFailed)
+                               withObject:nil
+                            waitUntilDone:NO];
         
-        NSString * title = NSLocalizedStringWithDefaultValue(@"Remote_View_Error",nil, [NSBundle mainBundle],
-                                                           @"Remote View Error" , nil);
-        
-        NSString * msg = NSLocalizedStringWithDefaultValue(@"Remote_View_Error_msg",nil, [NSBundle mainBundle],
-                                                            @"Initializing remote connection failed, please retry" , nil);
-        
-		//ERROR condition
-		UIAlertView *_alert = [[UIAlertView alloc]
-                               initWithTitle:title
-                               message:msg
-                               delegate:self
-                               cancelButtonTitle:@"OK"
-                               otherButtonTitles:nil];
-		[_alert show];
-		[_alert release];
 	}
+    
+    
+
+
 }
 
 
+-(void) prepareToViewRemotelyFailed
+{
+    NSLog(@"Start remote connection Failed!!!");
+    
+    NSString * title = NSLocalizedStringWithDefaultValue(@"Remote_View_Error",nil, [NSBundle mainBundle],
+                                                         @"Remote View Error" , nil);
+    
+    NSString * msg = NSLocalizedStringWithDefaultValue(@"Remote_View_Error_msg",nil, [NSBundle mainBundle],
+                                                       @"Initializing remote connection failed, please retry" , nil);
+    
+    //ERROR condition
+    UIAlertView *_alert = [[UIAlertView alloc]
+                           initWithTitle:title
+                           message:msg
+                           delegate:self
+                           cancelButtonTitle:@"OK"
+                           otherButtonTitles:nil];
+    [_alert show];
+    [_alert release];
+}
 
 #pragma mark Remote Connection Callbacks
-
+-(void) remoteConnectionSucceeded_bg:(CamChannel *) camChannel
+{
+    NSLog(@"[BG thread] Remote camera-channel is %d with cam name: %@", selected_channel.channel_index, selected_channel.profile.name);
+    [self performSelectorOnMainThread:@selector(remoteConnectionSucceeded:) withObject:camChannel waitUntilDone:NO];
+}
 
 -(void) remoteConnectionSucceeded:(CamChannel *) camChannel
 {
@@ -1387,28 +1385,31 @@
 		return;
 	}
     
-    
-  
-    
-	NSLog(@"Remote camera-channel is %d with cam name: %@", selected_channel.channel_index, selected_channel.profile.name);
+        
+	NSLog(@"[Main thread] remoteConnectionSucceeded ");
 	[self setupInfraCamera:selected_channel];
-
     
     
+    self.firstTimeConnect = FALSE;
+    
+    
+}
+-(void) remoteConnectionFailed_bg:(CamChannel *) camChannel
+{
+    NSLog(@"[BG thread] remoteConnectionFailed_bg ");
+    [self performSelectorOnMainThread:@selector(remoteConnectionFailed:) withObject:camChannel waitUntilDone:NO];
 }
 
 -(void) remoteConnectionFailed:(CamChannel *) camChannel
 {
-	NSLog(@"Remote connection Failed!!!");
+	NSLog(@"[Main thread]Remote connection Failed!!!");
     
 	if (self.selected_channel.stopStreaming == TRUE)
 	{
 		return;
 	}
     
-    
-    
-	progressView.hidden = YES;
+    progressView.hidden = YES;
     
     if (self.firstTimeConnect == TRUE)
     {
@@ -1649,7 +1650,6 @@
 
 - (void) showSideMenusAndStatus
 {
-	NSLog(@"111 show menus");
 	topToolBar.hidden = NO;
 	directionPad.hidden = NO;
 	controlButtons.hidden = NO;

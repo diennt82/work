@@ -28,6 +28,12 @@
 #define CLOSE_STUN_SESSION @"close_session"
 
 
+
+#define CHANNEL_ID @"ChannelID:"
+#define SEC_KEY    @"Secret_key:"
+#define CHANNEL_ID_LEN 12
+
+
 @interface STUN_Communication : NSObject {
 
 	id  _caller; 

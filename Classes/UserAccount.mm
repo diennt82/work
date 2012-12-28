@@ -247,7 +247,7 @@
                                                                 andPass:self.userPass
                                                                 macAddr:cp.mac_address];
                 raw_data = [[[NSString alloc] initWithData:responseData encoding: NSASCIIStringEncoding] autorelease];
-                NSLog(@"isCam avaiil response: %@", raw_data);
+                NSLog(@"[UPNP]cam %@ isCam avaiil response: %@", cp.mac_address, raw_data);
                 if ( raw_data != nil)
                 {
                     NSArray * tokens = [raw_data componentsSeparatedByString:@":"];
@@ -290,7 +290,7 @@
                                                                 andPass:self.userPass
                                                                 macAddr:cp.mac_address];
                 raw_data = [[[NSString alloc] initWithData:responseData encoding: NSASCIIStringEncoding] autorelease];
-                NSLog(@"isCam avaiil response: %@", raw_data);
+                NSLog(@"[STUN]cam %@ isCam avaiil response: %@",cp.mac_address,  raw_data);
 
                 if ( raw_data != nil)
                 {

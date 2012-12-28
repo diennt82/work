@@ -133,16 +133,6 @@
 				else 
 				{
 					NSLog(@"Start remote connection Failed!!!"); 
-//					//ERROR condition
-//					UIAlertView *_alert = [[UIAlertView alloc]
-//										   initWithTitle:@"Remote View Error"
-//										   message:@"Initializing remote connection failed, please retry" 
-//										   delegate:self
-//										   cancelButtonTitle:@"OK"
-//										   otherButtonTitles:nil];
-//					[_alert show];
-//					[_alert release];
-					
 					[_caller performSelector:_Failure_SEL withObject:nil ];
 				}		
 				

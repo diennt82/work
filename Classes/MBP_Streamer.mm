@@ -306,10 +306,14 @@
     
 }
 
-
 -(void) switchToUdtRelayServer
 {
-	//UdtSocketWrapper * udtSocket = nil;
+#if 1
+    //BG
+    [self performSelectorInBackground:@selector(tryConnectingToStunRelay_bg:) withObject:self.streamingChannel];
+    
+    
+#else
 	RemoteConnection * relayConn = [[RemoteConnection alloc]init];
     
 	if (streamingChannel == nil)
@@ -318,7 +322,35 @@
 		return;
 	}
 	self.udtSocket= [relayConn connectToUDTRelay:self.streamingChannel];
+#endif
     
+}
+-(void) tryConnectingToStunRelay_bg:(CamChannel *) mChannel 
+{
+    NSAutoreleasePool * pool = [[NSAutoreleasePool alloc]init];
+    
+    NSLog(@"[BG thread] tryConnectingToStunRelay_bg"); 
+    
+    RemoteConnection * relayConn = [[RemoteConnection alloc]init];
+    
+	if (streamingChannel == nil)
+	{
+		NSLog(@"Streaming channel is NIL in RELAY mode ... ERROR");
+		return;
+	}
+    UdtSocketWrapper * udtSocket_ =[relayConn connectToUDTRelay:mChannel];
+    
+    [self performSelectorOnMainThread:@selector(connectedToStunRelay:)
+                           withObject:udtSocket_ waitUntilDone:NO];
+     NSLog(@"[BG thread] tryConnectingToStunRelay_bg DONE");
+    [pool drain];
+    
+}
+
+-(void) connectedToStunRelay:(UdtSocketWrapper * ) socket
+{
+    self.udtSocket = socket;
+
 	if (self.udtSocket == nil)
 	{
 		NSLog(@"Fail to open relay socket ");
@@ -341,8 +373,7 @@
         
 	}
     
-    
-	NSLog(@"Streaming channel in RELAY mode ... Starting");
+   
     
     
     [self performSelectorOnMainThread:@selector(sendStatusConnectedReportOnMainThread:)
@@ -350,14 +381,7 @@
                         waitUntilDone:YES];
     
     
-#if 0
-	NSThread * keepAliveThrd = [[NSThread alloc] initWithTarget:self
-                                                       selector:@selector(keepAlive:)
-                                                         object:self];
-    
-	[keepAliveThrd start];
-#endif ///TODO check wth servers
-    
+	NSLog(@"Streaming channel in RELAY mode ... Starting");
     
     
     
@@ -376,6 +400,21 @@
                                                object:self];
     
 	[udtStreamerThd start];
+    
+    
+    
+#if 1
+    
+    NSLog(@"keepAliveThrd starting..  ");
+    
+	NSThread * keepAliveThrd = [[NSThread alloc] initWithTarget:self
+                                                       selector:@selector(keepAlive:)
+                                                         object:self];
+    
+	[keepAliveThrd start];
+#endif ///TODO check wth servers
+    
+
 }
 
 - (void) startUdtStream
@@ -398,18 +437,28 @@
     
 	udtSocket = [[UdtSocketWrapper alloc]initWithLocalPort:self.local_port];
 	[udtSocket createUdtStreamSocket];
+        
+	
+    responseData = [[NSMutableData alloc] init];
+    
+    [self performSelectorInBackground:@selector(tryConnectToUDT_bg:) withObject:udtSocket];
+}
+
+
+-(void) tryConnectToUDT_bg:(UdtSocketWrapper*) udtSocket_
+{
+
+    NSAutoreleasePool * pool = [[NSAutoreleasePool alloc] init];
+    
+    int localPort = -1 ;
     
 	struct in_addr * server_ip = [UdtSocketWrapper getIpfromHostName:self.device_ip];
     
-	NSLog(@"connect to %@:%d from localport: %d server_ip:%d", self.device_ip, self.device_port ,
+	NSLog(@"[BG thread] tryConnectToUDT_bg: connect to %@:%d from localport: %d server_ip:%d",
+          self.device_ip, self.device_port ,
           self.local_port, server_ip->s_addr);
-    
-	int localPort = -1 ;
-    
-    responseData = [[NSMutableData alloc] init];
-    
 
-  
+    
     
 	NSDate * now = [NSDate date];
 	NSDate * timeout = [NSDate dateWithTimeInterval:25.0 sinceDate:now];
@@ -417,10 +466,9 @@
 	while ([now compare:timeout] ==   NSOrderedAscending)
 	{
         
-        
-		localPort = [udtSocket connectViaUdtSock:server_ip
+		localPort = [udtSocket_ connectViaUdtSock:server_ip
                                             port:self.device_port];
-		NSLog(@"localPort = %d", localPort);
+		NSLog(@"[BG thread] tryConnectToUDT_bg: localPort = %d", localPort);
 		if (localPort > 0)
 		{
 			break;
@@ -429,10 +477,19 @@
 		now = [NSDate date];
         
 	}
+    NSNumber* localPort_ = [NSNumber numberWithInt:localPort];
    
+    [self performSelectorOnMainThread:@selector(connectedToUDTPort:) withObject:localPort_ waitUntilDone:NO];
+    
+    [pool drain];
+    
+}
+
+-(void) connectedToUDTPort:(NSNumber*) localPort_
+{
 
     
-	
+    int localPort = [localPort_ integerValue] ;
     
     if (localPort < 0 ) ///// STUN RELAY /////////
 	{
@@ -474,7 +531,7 @@
         
         NSLog(@"Force  RELAY");
 		[self switchToUdtRelayServer ];
-        return;
+
         
 #else
         
@@ -971,9 +1028,10 @@
 		hello_msg = [hello stringByAppendingFormat:@"%d", count];
 		count ++;
         
-		data_sent = [socket sendDataViaUdt:[hello dataUsingEncoding:NSUTF8StringEncoding]];
+        NSData * data = [hello_msg dataUsingEncoding:NSUTF8StringEncoding];
+        data_sent = [socket sendDataViaUdt: data ];
         
-		NSLog(@"sent: %@", hello_msg);
+		//NSLog(@"sent: %@ datasent:%d", hello_msg, data_sent);
         
 		//there is no way to check wether socket is opened -- simply to send data thru it .. if error -assume it's closed
 		if (data_sent <0)
@@ -981,7 +1039,7 @@
 			break;
 		}
         
-		[NSThread sleepForTimeInterval:1.0];
+		[NSThread sleepForTimeInterval:1.5];
 	}
     
 	NSLog(@"keepAlive exit: 01");

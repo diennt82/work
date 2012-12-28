@@ -147,6 +147,141 @@
 }
 
 
+-(void) processSecInfo_bg:(CamChannel *) mChannel_
+{
+    NSAutoreleasePool * pool = [[NSAutoreleasePool alloc]init];
+    
+    if (mChannel_.secretKey != nil && mChannel_.channID != nil)
+    {
+        
+        // encryption stuff
+        NSLog(@"channID: %@", mChannel_.channID);
+        
+        
+        NSData * _encChan = [mChannel_ getEncChannId];
+        
+#if 0 // DEBUG
+        NSString * encChan =@"";
+        for (int i =0; i< [ _encChan length]; i ++)
+        {
+            encChan = [NSString  stringWithFormat:@"%@ %02x", encChan,
+                       ((uint8_t *)[_encChan bytes]) [i] ];
+        }
+        
+        NSLog(@"Enc chan: %@", encChan);
+#endif
+        
+        NSData * _encMac = [mChannel_ getEncMac];
+        NSMutableData * messageToStun, * response_data ;
+        
+        messageToStun = [[NSMutableData alloc] initWithData:_encMac];
+        [messageToStun appendData:_encChan];
+        
+        
+        // start STUN communication process..
+        UdtSocketWrapper * udt_wrapper = [[ UdtSocketWrapper alloc] init];
+        int localPort, response_len = 80 ;
+        [udt_wrapper createUdtStreamSocket];
+        
+        
+        struct in_addr * server_ip = [UdtSocketWrapper getIpfromHostName:STUN_SERVER_IP];
+        
+        
+        NSLog(@"sock created: %d serverip: %d",socket ,
+              server_ip->s_addr);
+        localPort = [udt_wrapper connectViaUdtSock:server_ip
+                                              port:STUN_SERVER_PORT];
+        NSLog(@"sock connected at port: %d",localPort );
+        
+        [udt_wrapper sendDataViaUdt:(NSData *) messageToStun];
+        
+        
+        response_data = [[NSMutableData alloc] initWithLength:response_len];
+        response_len = [udt_wrapper recvDataViaUdt:response_data
+                                           dataLen:response_len];
+        
+        //try decrypt
+        if (response_len == 80) // rcv enough data
+        {
+            NSData * plain_response;
+            plain_response = [mChannel_ decryptServerMessage:(NSData*) response_data];
+            
+            NSRange errRange = {0, 4};
+            NSData * errCode  = [plain_response subdataWithRange:errRange];
+            
+            NSRange camIpRange = {4,8};
+            NSData * camIp = [plain_response subdataWithRange:camIpRange];
+            
+            NSRange camPortRange = {12, 4};
+            NSData *camPort = [plain_response subdataWithRange:camPortRange];
+            
+            NSRange skRange = {16,64};
+            NSData * sskey = [plain_response subdataWithRange:skRange];
+            
+            
+            NSString * _errCode = [[NSString alloc] initWithData:errCode encoding:NSUTF8StringEncoding];
+            NSScanner  * hexVal = [NSScanner scannerWithString:_errCode];
+            uint error_code =  -1;
+            [hexVal scanHexInt:&error_code];
+#if 0 //Debug
+            NSLog(@"errCode: %@ --Int --> %d",_errCode, error_code );
+#endif
+            
+            
+            if (error_code != 200)
+            {
+                //TODO: process if error code is not 200
+                //ERROR out
+                [_caller performSelector:_Failure_SEL withObject:nil ];
+            }
+            NSString * str = [[NSString alloc] initWithData:camIp encoding:NSUTF8StringEncoding];
+            hexVal = [NSScanner scannerWithString:str];
+            uint cam_ip = -1 ;
+            [hexVal scanHexInt:&cam_ip];
+            
+            mChannel_.profile.ip_address = [CamChannel convertIntToIpStr:cam_ip];
+            
+            
+            
+            str = [[NSString alloc] initWithData:camPort encoding:NSUTF8StringEncoding];
+            hexVal = [NSScanner scannerWithString:str];
+            uint cam_prt = -1 ;
+            [hexVal scanHexInt:&cam_prt];
+            mChannel.profile.port = cam_prt;
+            
+            str = [[NSString alloc] initWithData:sskey encoding:NSUTF8StringEncoding];
+            
+            mChannel_.remoteViewKey = str;
+            mChannel_.localUdtPort = localPort; //store this port # for use later
+            
+            
+            [_caller performSelectorOnMainThread:_Success_SEL withObject:mChannel_ waitUntilDone:NO];
+            
+        }
+        else
+        {
+            NSLog(@"ERROR can't rcv enough data to decrypt");
+            [_caller performSelectorOnMainThread:_Failure_SEL withObject:nil waitUntilDone:NO];
+        }
+        
+        
+        
+    }
+    else
+    {
+        //ERROR out
+        [_caller performSelectorOnMainThread:_Failure_SEL withObject:nil waitUntilDone:NO];
+    }
+    
+	
+    
+    
+    
+    
+    
+    
+    [pool drain];
+}
 
 #pragma mark -
 #pragma mark Timer Callbacks
@@ -221,16 +356,6 @@
 	retry_getting_camera_availability--;
 	if (retry_getting_camera_availability <=0)
 	{
-		//ERROR condition
-//		UIAlertView *alert = [[UIAlertView alloc]
-//							  initWithTitle:@"Get Camera Status Error"
-//							  message:[NSString stringWithFormat:@"Server error code: %@", [Util get_error_description:[error_response statusCode]]] 
-//							  delegate:self
-//							  cancelButtonTitle:@"OK"
-//							  otherButtonTitles:nil];
-//		[alert show];
-//		[alert release];
-		
 		//Pass some info back to caller
 		[_caller performSelector:_Failure_SEL withObject:nil ];
 	}
@@ -280,16 +405,6 @@
 	retry_getting_camera_availability--;
 	if (retry_getting_camera_availability <=0)
 	{
-		//ERROR condition
-//		UIAlertView *alert = [[UIAlertView alloc]
-//							  initWithTitle:@"Get Camera Status Error"
-//							  message:@"Server unreachable"
-//							  delegate:self
-//							  cancelButtonTitle:@"OK"
-//							  otherButtonTitles:nil];
-//		[alert show];
-//		[alert release];
-		
 		[_caller performSelector:_Failure_SEL withObject:nil ];
 	}
 	else //retry 
@@ -321,10 +436,6 @@
 }
 
 
-#define CHANNEL_ID @"ChannelID:"
-#define SEC_KEY    @"Secret_key:"
-#define CHANNEL_ID_LEN 12
-
 - (void) getSecSuccessWithResponse:(NSData*) responseData
 {
     
@@ -336,9 +447,41 @@
 	
 	NSString * raw_data = [[[NSString alloc] initWithData:responseData encoding: NSASCIIStringEncoding] autorelease];
 	
-	NSLog(@"getSec response: %@", raw_data);
+	NSLog(@"[Main Thread] getSec response: %@", raw_data);
 	
-	//Move on -- dont signal caller 
+#if 1 // USE BG thread to handle these...
+    if ( raw_data != nil && [raw_data hasPrefix:CHANNEL_ID])
+	{
+		NSString * chann_id = nil, * secret_key = nil ;
+		NSRange cRange = {[CHANNEL_ID length], CHANNEL_ID_LEN};
+		chann_id = [raw_data substringWithRange:cRange];
+		
+		NSRange sRange = [raw_data rangeOfString:SEC_KEY];
+		if (sRange.location != NSNotFound)
+		{
+			int ssKey_start = sRange.location + [SEC_KEY length];
+			secret_key = [raw_data substringFromIndex:ssKey_start];
+		}
+		
+		
+		if (secret_key != nil && chann_id != nil)
+		{
+			mChannel.secretKey  = secret_key;
+			mChannel.channID = chann_id;
+    
+    
+            [self performSelectorInBackground:@selector(processSecInfo_bg:) withObject:mChannel];
+        }
+        else
+		{
+			//ERROR out
+			[_caller performSelector:_Failure_SEL withObject:nil ];
+		}
+    }
+    
+    
+#else
+	//Move on -- dont signal caller
 	if ( raw_data != nil && [raw_data hasPrefix:CHANNEL_ID])
 	{
 		NSString * chann_id = nil, * secret_key = nil ; 
@@ -364,7 +507,7 @@
 
 			NSData * _encChan = [mChannel getEncChannId];
 
-#if 0 // DEBG 
+#if 0 // DEBUG 
 			NSString * encChan =@"";
 			for (int i =0; i< [ _encChan length]; i ++)
 			{
@@ -452,15 +595,9 @@
 				uint cam_prt = -1 ;
 				[hexVal scanHexInt:&cam_prt];
 				mChannel.profile.port = cam_prt;
-				
-#if 0
-				NSLog(@"ip string is: %@:%d", mChannel.profile.ip_address,cam_prt );
-#endif 
-				
+		
 				str = [[NSString alloc] initWithData:sskey encoding:NSUTF8StringEncoding];
-#if 0
-				NSLog(@"sskey: %@", str);
-#endif 
+ 
 				self.mChannel.remoteViewKey = str; 
 				self.mChannel.localUdtPort = localPort; //store this port # for use later
 				
@@ -483,9 +620,10 @@
 			[_caller performSelector:_Failure_SEL withObject:nil ];
 		}
 
-	}		
+	}
+#endif
 	
-	
+
 	
 }
 - (void) getSecFailedWithError:(NSHTTPURLResponse*) error_response
