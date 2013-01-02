@@ -208,7 +208,7 @@
             {
                 
                 NSString * msg = NSLocalizedStringWithDefaultValue(@"Cancel_",nil, [NSBundle mainBundle],
-                                                                   @"Cancel_", nil);
+                                                                   @"Cancel", nil);
 
                 UIBarButtonItem *editButton = [[UIBarButtonItem alloc]
                                                initWithTitle:msg
@@ -236,7 +236,7 @@
                                   init];
         label.style = UIBarButtonItemStylePlain;
         NSString * msg = NSLocalizedStringWithDefaultValue(@"Cameras_",nil, [NSBundle mainBundle],
-                                                           @"Cameras_", nil);
+                                                           @"Cameras", nil);
 
         label.title =msg;
         [buttons addObject:label];
@@ -379,8 +379,9 @@
 
 -(BOOL) shouldAutorotate
 {
-
-    return YES ;
+    
+        return YES ;
+    
 }
 
 -(NSUInteger)supportedInterfaceOrientations
@@ -1010,13 +1011,12 @@
 
 - (void) askForNewName
 {
-    
-    UIAlertView * _myAlert = nil;
-    
+
+       
     NSString * msg = NSLocalizedStringWithDefaultValue(@"Change_Camera_Name",nil, [NSBundle mainBundle],
                                                        @"Change Camera Name", nil);
-    NSString * msg2 = NSLocalizedStringWithDefaultValue(@"Please_enter_new_name_for_this_camera",nil, [NSBundle mainBundle],
-                                            @"Please enter new name for this camera\n\n\n", nil);
+    NSString * msg2 = NSLocalizedStringWithDefaultValue(@"enter_new_camera_name",nil, [NSBundle mainBundle],
+                                            @"Enter new camera name", nil);
     
     NSString * cancel = NSLocalizedStringWithDefaultValue(@"Cancel",nil, [NSBundle mainBundle],
                                                         @"Cancel", nil);
@@ -1024,9 +1024,11 @@
     NSString * ok = NSLocalizedStringWithDefaultValue(@"Ok",nil, [NSBundle mainBundle],
                                                         @"Ok", nil);
 
-    NSString * newName = NSLocalizedStringWithDefaultValue(@"New_Name",nil, [NSBundle mainBundle],
-                                                      @"New Name", nil);
-    
+   // NSString * newName = NSLocalizedStringWithDefaultValue(@"New_Name",nil, [NSBundle mainBundle],
+  //                                                    @"New Name", nil);
+#if 0
+    UIAlertView * _myAlert = nil;
+
     _myAlert = [[UIAlertView alloc] initWithTitle:msg
                                           message:msg2 
                                          delegate:self
@@ -1044,17 +1046,31 @@
     myTextField.delegate = self;
     myTextField.tag = 10;
     [myTextField becomeFirstResponder];
+    
     [_myAlert addSubview:myTextField];
-    CGAffineTransform myTransform = CGAffineTransformMakeTranslation(0.0, 0.0);
-    [_myAlert setTransform:myTransform];
+  
+  
     [_myAlert show];
     [_myAlert release];
     
+#else
     
+    AlertPrompt *prompt = [AlertPrompt alloc];
+    prompt = [prompt initWithTitle:msg
+                           message:msg2
+                      promptholder:msg2
+                          delegate:self
+                 cancelButtonTitle:cancel
+                     okButtonTitle:ok];
+    prompt.tag = ALERT_CHANGE_NAME;
+    [prompt show];
+    [prompt release];
+#endif
 }
 
 #pragma mark -
 #pragma mark Alertview delegate
+
 
 - (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex {
 	
@@ -1067,7 +1083,8 @@
 				break;
 			case 1:
 			{
-				NSString * newName = [(UITextField*)[alertView viewWithTag:10] text];
+                NSString *newName = [(AlertPrompt *)alertView enteredText];
+                
 				if( (newName == nil) || [newName length] ==0)
 				{
 					
@@ -1076,6 +1093,7 @@
 				else {
 					[self onCameraNameChanged:newName];
 				}
+                
 				break;
 			}
 			default:

@@ -58,7 +58,7 @@
     
     task_cancelled  = NO;
        
-    [NSTimer scheduledTimerWithTimeInterval:2.0
+    [NSTimer scheduledTimerWithTimeInterval:5.0
                                      target:self
                                    selector:@selector(checkConnectionToCamera:) 
                                    userInfo:nil

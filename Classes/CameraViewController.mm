@@ -1227,8 +1227,8 @@
 		case REMOTE_STREAM_STOPPED_UNEXPECTEDLY:
         {
             
-            NSString * msg = NSLocalizedStringWithDefaultValue(@"network_lost_link2",nil, [NSBundle mainBundle],
-                                                               @"Network lost link. Please check the Phone, Camera and Wifi router or move closer to the Router" , nil);
+            NSString * msg = NSLocalizedStringWithDefaultValue(@"network_lost_link",nil, [NSBundle mainBundle],
+                                                               @"Camera disconnected due to network connectivity problem. Trying to reconnect...", nil);
             
             
             if (self.alertTimer != nil && [self.alertTimer isValid])

@@ -1079,15 +1079,14 @@
 
 
 
-- (void) askForNewName 
+- (void) askForNewName
 {
-	
-	UIAlertView * _myAlert = nil;
-	
+    
+    
     NSString * msg = NSLocalizedStringWithDefaultValue(@"Change_Camera_Name",nil, [NSBundle mainBundle],
                                                        @"Change Camera Name", nil);
-    NSString * msg2 = NSLocalizedStringWithDefaultValue(@"Please_enter_new_name_for_this_camera",nil, [NSBundle mainBundle],
-                                                        @"Please enter new name for this camera\n\n\n", nil);
+    NSString * msg2 = NSLocalizedStringWithDefaultValue(@"enter_new_camera_name",nil, [NSBundle mainBundle],
+                                                        @"Enter new camera name", nil);
     
     NSString * cancel = NSLocalizedStringWithDefaultValue(@"Cancel",nil, [NSBundle mainBundle],
                                                           @"Cancel", nil);
@@ -1095,18 +1094,20 @@
     NSString * ok = NSLocalizedStringWithDefaultValue(@"Ok",nil, [NSBundle mainBundle],
                                                       @"Ok", nil);
     
-    NSString * newName = NSLocalizedStringWithDefaultValue(@"New_Name",nil, [NSBundle mainBundle],
-                                                           @"New Name", nil);
-
-	_myAlert = [[UIAlertView alloc] initWithTitle:msg
-										  message:msg2
-										 delegate:self 
-								cancelButtonTitle:cancel
-								otherButtonTitles:ok, 
-				nil];
-	_myAlert.tag = ALERT_CHANGE_NAME; //used for tracking later 
-
-    UITextField *myTextField = [[UITextField alloc] initWithFrame:CGRectMake(32.0, 90.0, 220.0, 25.0)];
+    // NSString * newName = NSLocalizedStringWithDefaultValue(@"New_Name",nil, [NSBundle mainBundle],
+    //                                                    @"New Name", nil);
+#if 0
+    UIAlertView * _myAlert = nil;
+    
+    _myAlert = [[UIAlertView alloc] initWithTitle:msg
+                                          message:msg2
+                                         delegate:self
+                                cancelButtonTitle:cancel
+                                otherButtonTitles:ok,
+                nil];
+    _myAlert.tag = ALERT_CHANGE_NAME; //used for tracking later
+    
+    UITextField *myTextField = [[UITextField alloc] initWithFrame:CGRectMake(32.0, 85.0, 220.0, 30.0)];
     [myTextField setBackgroundColor:[UIColor whiteColor]];
     myTextField.placeholder = newName;
     myTextField.borderStyle = UITextBorderStyleRoundedRect;
@@ -1115,14 +1116,28 @@
     myTextField.delegate = self;
     myTextField.tag = 10;
     [myTextField becomeFirstResponder];
+    
     [_myAlert addSubview:myTextField];
-    CGAffineTransform myTransform = CGAffineTransformMakeTranslation(0.0, 0.0);
-    [_myAlert setTransform:myTransform];
+    
+    
     [_myAlert show];
     [_myAlert release];
     
-	
+#else
+    
+    AlertPrompt *prompt = [AlertPrompt alloc];
+    prompt = [prompt initWithTitle:msg
+                           message:msg2
+                      promptholder:msg2
+                          delegate:self
+                 cancelButtonTitle:cancel
+                     okButtonTitle:ok];
+    prompt.tag = ALERT_CHANGE_NAME;
+    [prompt show];
+    [prompt release];
+#endif
 }
+
 
 -(void) onInformation
 {
@@ -1325,7 +1340,7 @@
 				break;
 			case 1:
 			{
-				NSString * newName = ((UITextField*)[alertView viewWithTag:10]).text;
+				NSString *newName = [(AlertPrompt *)alertView enteredText];
 				if( (newName == nil) || [newName length] ==0)
 				{
 					
