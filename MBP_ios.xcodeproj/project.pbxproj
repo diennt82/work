@@ -19,6 +19,7 @@
 		3803A8761601981100B4DD97 /* photo_item.png in Resources */ = {isa = PBXBuildFile; fileRef = 3803A8751601981100B4DD97 /* photo_item.png */; };
 		3803A87A1602D44100B4DD97 /* temp_alert.png in Resources */ = {isa = PBXBuildFile; fileRef = 3803A8781602D44100B4DD97 /* temp_alert.png */; };
 		3803A87B1602D44100B4DD97 /* voice_alert.png in Resources */ = {isa = PBXBuildFile; fileRef = 3803A8791602D44100B4DD97 /* voice_alert.png */; };
+		38096A98168DA3470010F59A /* mbp_icon72x72.png in Resources */ = {isa = PBXBuildFile; fileRef = 38096A97168DA3460010F59A /* mbp_icon72x72.png */; };
 		3809A42C15E49A4B0098BBC0 /* bb_pic_1.png in Resources */ = {isa = PBXBuildFile; fileRef = 3809A42B15E49A4B0098BBC0 /* bb_pic_1.png */; };
 		3809A42F15E4A2520098BBC0 /* bb_melody_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 3809A42D15E4A2520098BBC0 /* bb_melody_icon.png */; };
 		3809A43015E4A2520098BBC0 /* bb_melody_off_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 3809A42E15E4A2520098BBC0 /* bb_melody_off_icon.png */; };
@@ -228,6 +229,7 @@
 		3803A8751601981100B4DD97 /* photo_item.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = photo_item.png; sourceTree = "<group>"; };
 		3803A8781602D44100B4DD97 /* temp_alert.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = temp_alert.png; sourceTree = "<group>"; };
 		3803A8791602D44100B4DD97 /* voice_alert.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = voice_alert.png; sourceTree = "<group>"; };
+		38096A97168DA3460010F59A /* mbp_icon72x72.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = mbp_icon72x72.png; sourceTree = "<group>"; };
 		3809A42B15E49A4B0098BBC0 /* bb_pic_1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bb_pic_1.png; sourceTree = "<group>"; };
 		3809A42D15E4A2520098BBC0 /* bb_melody_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bb_melody_icon.png; sourceTree = "<group>"; };
 		3809A42E15E4A2520098BBC0 /* bb_melody_off_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bb_melody_off_icon.png; sourceTree = "<group>"; };
@@ -959,6 +961,7 @@
 		9770CB87143032BC009E69EF /* images */ = {
 			isa = PBXGroup;
 			children = (
+				38096A97168DA3460010F59A /* mbp_icon72x72.png */,
 				97E3AAD7147E25A600A0922A /* mbp_icon57x57.png */,
 				97D9A1BC143EB03A000E3533 /* video_error.png */,
 			);
@@ -1157,6 +1160,7 @@
 				38DE1CCA168AEDD10049E814 /* bb_setup_icon_step_3.png in Resources */,
 				388396B9168B064500B0D020 /* MBP_iosViewController.xib in Resources */,
 				388396BE168B068400B0D020 /* CameraViewController_land_ipad.xib in Resources */,
+				38096A98168DA3470010F59A /* mbp_icon72x72.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1959,8 +1963,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
-				CODE_SIGN_IDENTITY = "iPhone Developer: Paul Tsui (KSWYEMQH37)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Paul Tsui (KSWYEMQH37)";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Binatone Electronics International Limited";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Binatone Electronics International Limited";
 				GCC_C_LANGUAGE_STANDARD = c99;
 				GCC_VERSION = "";
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
@@ -1972,8 +1976,8 @@
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
 				OTHER_LDFLAGS = "";
 				PRODUCT_NAME = "Baby Cam";
-				PROVISIONING_PROFILE = "3DCD4F61-18E7-4255-AB57-57E60565C9FD";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "3DCD4F61-18E7-4255-AB57-57E60565C9FD";
+				PROVISIONING_PROFILE = "9F236AE1-DF09-4DA1-A121-E582825128BD";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "9F236AE1-DF09-4DA1-A121-E582825128BD";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				USER_HEADER_SEARCH_PATHS = "\"$(SRCROOT)/external_include\"/**";
