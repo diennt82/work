@@ -23,7 +23,7 @@
     if (self) {
         // Custom initialization
         
-         
+         showProgressNextTime= FALSE; 
     }
     return self;
 }
@@ -36,7 +36,7 @@
 		NSLog(@"View controller was popped --- We are closing down..task_cancelled = YES");
         
 		task_cancelled = YES;
-        
+        [[NSNotificationCenter defaultCenter] removeObserver:self];
 	}
 }
 
@@ -58,7 +58,7 @@
     
     task_cancelled  = NO;
        
-    [NSTimer scheduledTimerWithTimeInterval:5.0
+    [NSTimer scheduledTimerWithTimeInterval:2.0
                                      target:self
                                    selector:@selector(checkConnectionToCamera:) 
                                    userInfo:nil
@@ -68,6 +68,21 @@
     
         
     NSLog(@"homeWifiSSID: %@", self.homeWifiSSID);
+    
+    
+    
+	// Do any additional setup after loading the view.
+	[[NSNotificationCenter defaultCenter] addObserver: self
+                                             selector: @selector(handleEnteredBackground)
+                                                 name: UIApplicationDidEnterBackgroundNotification
+                                               object: nil];
+    
+    // Do any additional setup after loading the view.
+	[[NSNotificationCenter defaultCenter] addObserver: self
+                                             selector: @selector(becomeActive)
+                                                 name: UIApplicationDidBecomeActiveNotification
+                                               object: nil];
+
     
 }
 
@@ -106,6 +121,20 @@
         [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"prefs:root=WIFI"]];
     }
     
+}
+
+-(void) handleEnteredBackground
+{
+    showProgressNextTime = TRUE; 
+}
+
+-(void) becomeActive
+{
+    if (showProgressNextTime)
+    {
+        NSLog(@"cshow progress 03");
+        [self showProgress:nil];
+    }
 }
 
 -(void) showProgress:(NSTimer *) exp
@@ -172,17 +201,14 @@
     
    
 	NSString * currentSSID = [CameraPassword fetchSSIDInfo];
-	
-//    if ( currentSSID == nil ||
-//        self.homeWifiSSID  ==nil ||
-//        ![self.homeWifiSSID isEqualToString:currentSSID]
-//        )
+
+#if 0 //Dont show any progress
     {
          NSLog(@"cshow progress 02");
         [self showProgress:nil];
        
     }
-    
+#endif 
     
     
     
@@ -267,6 +293,10 @@
     [self.navigationController pushViewController:step04ViewController animated:NO];
     
     [step04ViewController release];
+    
+    
+    
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
     
     
 }

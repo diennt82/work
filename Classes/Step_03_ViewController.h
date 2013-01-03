@@ -22,6 +22,8 @@
 	NSString * cameraMac; 
 	NSString * cameraName;
     
+    BOOL showProgressNextTime;
+    
 
 }
 

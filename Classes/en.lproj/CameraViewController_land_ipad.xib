@@ -101,7 +101,7 @@
 								<string key="NSFrame">{{6, 51}, {37, 37}}</string>
 								<reference key="NSSuperview" ref="699654620"/>
 								<reference key="NSWindow"/>
-								<reference key="NSNextKeyView" ref="946874269"/>
+								<reference key="NSNextKeyView" ref="66025969"/>
 								<string key="NSReuseIdentifierKey">_NS:9</string>
 								<bool key="IBUIOpaque">NO</bool>
 								<int key="IBUITag">700</int>
@@ -140,7 +140,7 @@
 								<string key="NSFrame">{{6, 5}, {37, 37}}</string>
 								<reference key="NSSuperview" ref="699654620"/>
 								<reference key="NSWindow"/>
-								<reference key="NSNextKeyView" ref="66025969"/>
+								<reference key="NSNextKeyView" ref="670807365"/>
 								<string key="NSReuseIdentifierKey">_NS:9</string>
 								<bool key="IBUIOpaque">NO</bool>
 								<int key="IBUITag">700</int>
@@ -251,7 +251,7 @@
 						<string key="NSFrame">{{0, 456}, {49, 263}}</string>
 						<reference key="NSSuperview" ref="312508815"/>
 						<reference key="NSWindow"/>
-						<reference key="NSNextKeyView" ref="670807365"/>
+						<reference key="NSNextKeyView" ref="946874269"/>
 						<string key="NSReuseIdentifierKey">_NS:9</string>
 						<object class="NSColor" key="IBUIBackgroundColor">
 							<int key="NSColorSpace">1</int>
@@ -314,6 +314,7 @@
 									<string key="NSResourceName">bb_setting_icon.png</string>
 								</object>
 								<string key="targetRuntimeIdentifier">IBIPadFramework</string>
+								<float key="IBUIWidth">30</float>
 								<int key="IBUIStyle">1</int>
 								<reference key="IBUIToolbar" ref="1036299941"/>
 							</object>
@@ -406,6 +407,7 @@
 						<string key="NSFrame">{{891, 615}, {107, 107}}</string>
 						<reference key="NSSuperview" ref="312508815"/>
 						<reference key="NSWindow"/>
+						<reference key="NSNextKeyView"/>
 						<string key="NSReuseIdentifierKey">_NS:9</string>
 						<bool key="IBUIOpaque">NO</bool>
 						<int key="IBUIContentMode">1</int>
@@ -1759,7 +1761,7 @@
 			<string key="bb_melody_icon.png">{32, 36}</string>
 			<string key="bb_ptt_icon.png">{36, 52}</string>
 			<string key="bb_ptt_icon_d.png">{36, 52}</string>
-			<string key="bb_setting_icon.png">{20, 18}</string>
+			<string key="bb_setting_icon.png">{50, 50}</string>
 			<string key="bb_snap_icon.png">{50, 50}</string>
 			<string key="bb_spk_icon.png">{50, 50}</string>
 			<string key="bb_spk_icon_d.png">{50, 50}</string>
