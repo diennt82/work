@@ -17,6 +17,7 @@
 #import "AlertSettingViewController.h"
 
 #import "EditCameraCell.h"
+#import "AlertPrompt.h"
 
 @class  EditCameraCell; 
 

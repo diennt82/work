@@ -440,7 +440,7 @@
 
 - (NSData *) sendCommandAndBlock_raw:(NSString *)command
 {
-	//NSLog(@"send request: %@", url);
+	NSLog(@"send request: %@", command);
     
     return  [self sendCommandAndBlock_raw:command withTimeout:DEFAULT_TIME_OUT];
 	

@@ -40,9 +40,6 @@
 - (BOOL) shouldAutorotate
 {
     
-    NSLog(@"Nav shouldAutorotate ");
-    
-    
     
     return YES;
 }
@@ -50,7 +47,7 @@
 -(NSUInteger)supportedInterfaceOrientations
 {
     
-    NSLog(@"Nav supportedInterfaceOrientations ");
+   
     return UIInterfaceOrientationMaskPortrait;
     
 }

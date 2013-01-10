@@ -665,7 +665,8 @@
         //
         [self initVideoAndSnapshotView];
         
-        [self setUIMelodyOnOff];
+        //[self setUIMelodyOnOff];
+        [self performSelectorInBackground:@selector(setUIMelodyOnOff_bg) withObject:nil];
         
         [self performSelectorInBackground:@selector(getVQ_bg) withObject:nil];
         
@@ -833,6 +834,8 @@
 		}
         
 		self.scomm = [[StunCommunication alloc]init];
+        
+        
         
         
 	}
@@ -1149,8 +1152,24 @@
         {
             
             //update melody ui
-            [self setUIMelodyOnOff];
-            [self performSelectorInBackground:@selector(getVQ_bg) withObject:nil];
+            //[self setUIMelodyOnOff];
+            [self performSelectorInBackground:@selector(setUIMelodyOnOff_bg) withObject:nil];
+            
+            
+            if (streamer.communication_mode != COMM_MODE_LOCAL)
+            {
+                //Force QVGA when first connecting
+                NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+                [userDefaults setInteger:0 forKey:@"int_VideoQuality"];
+                [userDefaults synchronize];
+                [self performSelectorInBackground:@selector(setVQ_bg) withObject:nil];
+                
+                NSLog(@"force QVGA for remote");
+            }
+            else
+            {
+                [self performSelectorInBackground:@selector(getVQ_bg) withObject:nil];
+            }
             
             break;
         }
@@ -1227,8 +1246,8 @@
 		case REMOTE_STREAM_STOPPED_UNEXPECTEDLY:
         {
             
-            NSString * msg = NSLocalizedStringWithDefaultValue(@"network_lost_link2",nil, [NSBundle mainBundle],
-                                                               @"Network lost link. Please check the Phone, Camera and Wifi router or move closer to the Router" , nil);
+            NSString * msg = NSLocalizedStringWithDefaultValue(@"network_lost_link",nil, [NSBundle mainBundle],
+                                                               @"Camera disconnected due to network connectivity problem. Trying to reconnect...", nil);
             
             
             if (self.alertTimer != nil && [self.alertTimer isValid])
@@ -1838,7 +1857,7 @@
                                                     AndChannel:self.selected_channel.channID];
 		}
 	}
-	else
+	else 
 	{
 		if (comm != nil)
 		{
@@ -1881,6 +1900,8 @@
             }
 			
 
+            
+            
             [self performSelectorOnMainThread:@selector(setVQ_fg)
                                    withObject:nil waitUntilDone:NO];
             
@@ -2306,7 +2327,7 @@
 #pragma  mark -
 #pragma mark Melody
 
--(void) setUIMelodyOnOff
+-(void) setUIMelodyOnOff_bg
 {
     
     NSData * responseData  = nil; 
@@ -2344,6 +2365,7 @@
             
 			int _melody_index  = [str_value intValue];
             
+#if 0
 			if (_melody_index == 0)
 			{
 				//set icon off
@@ -2365,12 +2387,43 @@
 				UITableView * melodies_tb = (UITableView *) [lullabyView viewWithTag:1];
 				[melodies_tb reloadData];
 			}
-            
+#else
+            NSNumber * num = [[NSNumber alloc]initWithInt:_melody_index];
+            [self performSelectorOnMainThread:@selector(setMelody_fg:) withObject:num
+                                waitUntilDone:NO];
+#endif
             
 		}
         
 	}
     
+}
+-(void) setMelody_fg:(NSNumber *) melody_idx
+{
+    int _melody_index  = [melody_idx intValue];
+    
+    if (_melody_index == 0)
+    {
+        //set icon off
+        [lullabyButton setImage:[UIImage imageNamed:@"bb_melody_off_icon.png"] forState:UIControlStateNormal];
+        [lullabyOnOff setOn:FALSE];
+        
+        melody_index = -1;
+        
+    }
+    else
+    {
+        melody_index = (_melody_index-1) ;
+        
+        //set icon on
+        [lullabyButton setImage:[UIImage imageNamed:@"bb_melody_icon.png"] forState:UIControlStateNormal];
+        [lullabyOnOff setOn:TRUE];
+        
+        
+        UITableView * melodies_tb = (UITableView *) [lullabyView viewWithTag:1];
+        [melodies_tb reloadData];
+    }
+
 }
 
 -(IBAction) buttonMelodyPressed:(id) sender
@@ -2820,7 +2873,15 @@
 
 - (void) _touchesmoved: (CGPoint) location
 {
-	[self validatePoint:location newMovement:NO ];
+	/*20130102: when moved, the new point may change from vertical to Horizontal plane ,
+     thus reset it here, 
+     later the point will be re-evaluated  and set to the corrent command*/
+    [self updateVerticalDirection_end:0 inStep:0];
+    
+	[self updateHorizontalDirection_end:0 inStep:0];
+    
+    
+    [self validatePoint:location newMovement:NO ];
     
 }
 
@@ -3062,17 +3123,27 @@
 /* Periodically called every 200ms */
 - (void) h_directional_change_callback:(NSTimer *) timer_exp
 {
-    
-	@synchronized(directionPad)
+    BOOL need_to_send = FALSE;
+	    
+    @synchronized(directionPad)
 	{
+        
 		if ( lastDirLR == DIRECTION_H_NON)
         {
             //Do nothing.
         }
         else //if (currentDirLR != lastDirLR)
 		{
-			[self send_LR_dir_to_rabot:currentDirLR];
+			need_to_send = TRUE; 
 		}
+        
+                
+        if (need_to_send)
+        {
+            [self send_LR_dir_to_rabot:currentDirLR];
+        }
+        
+        
 		//Update directions
 		lastDirLR = currentDirLR;
 	}
@@ -3125,10 +3196,16 @@
 			{
 				NSLog(@"sending UD Direction: ");
                 
+//                
+//				[self.scomm sendCommandThruUdtServerNonBlock:dir_str 
+//                                             withMac:self.selected_channel.profile.mac_address
+//                                          AndChannel:self.selected_channel.channID];
                 
-				[self.scomm sendCommandThruUdtServerNonBlock:dir_str 
+                
+                [self.scomm sendCommandThruUdtServer:dir_str
                                              withMac:self.selected_channel.profile.mac_address
                                           AndChannel:self.selected_channel.channID];
+
 			}
 		}
 		else 
@@ -3182,10 +3259,14 @@
 		{
 			if (self.scomm != nil)
 			{
-				NSLog(@"sending LR Direction: ");
+				NSLog(@"sending LR Direction UDT - blocking: ");
                 
                 
-				[self.scomm sendCommandThruUdtServerNonBlock:dir_str 
+//				[self.scomm sendCommandThruUdtServerNonBlock:dir_str 
+//                                             withMac:self.selected_channel.profile.mac_address
+//                                          AndChannel:self.selected_channel.channID];
+                
+                [self.scomm sendCommandThruUdtServer:dir_str
                                              withMac:self.selected_channel.profile.mac_address
                                           AndChannel:self.selected_channel.channID];
 			}
