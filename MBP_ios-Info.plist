@@ -22,7 +22,7 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>2.07</string>
+	<string>2.06</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
@@ -38,7 +38,7 @@
 	<key>UIStatusBarHidden</key>
 	<false/>
 	<key>UIFileSharingEnabled</key>
-	<true/>
+	<false/>
 	<key>NSMainNibFile~ipad</key>
 	<string>MainWindow_ipad</string>
 	<key>UIInterfaceOrientation</key>

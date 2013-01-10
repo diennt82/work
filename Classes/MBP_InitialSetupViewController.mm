@@ -159,7 +159,7 @@
     
     if (tag == CONTINUE_BTN_TAG)
     {
-
+#if 1
         NSLog(@"load step 2:");
         
         
@@ -186,6 +186,52 @@
         [self.navigationController pushViewController:step02ViewController animated:NO];
         
         [step02ViewController release];
+        
+#else
+        
+        //DBG DBG DBG
+        
+        
+        //load step 10
+        NSLog(@"TEST TEST Add cam... ");
+        NSLog(@"Load Step 10");
+        
+        //if (sent_conf.ssid != nil)
+        {
+            NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+            [userDefaults setObject:@"TEST_SSID"  forKey:HOME_SSID];
+            [userDefaults setBool:FALSE forKey:FIRST_TIME_SETUP];
+
+            [userDefaults synchronize];
+        }
+        
+        //Load the next xib
+        
+        Step_10_ViewController *step10ViewController = nil;
+        
+        
+        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+        {
+            
+            
+            step10ViewController = [[Step_10_ViewController alloc]
+                                    initWithNibName:@"Step_10_ViewController_ipad" bundle:nil];
+            
+        }
+        else
+        {
+            
+            step10ViewController = [[Step_10_ViewController alloc]
+                                    initWithNibName:@"Step_10_ViewController" bundle:nil];
+            
+        }
+        
+        
+        
+        [self.navigationController pushViewController:step10ViewController animated:NO];
+        [step10ViewController release];
+        
+#endif
 
     }
     

@@ -198,7 +198,7 @@
         
         
 		send_UD_dir_req_timer =
-        [NSTimer scheduledTimerWithTimeInterval:0.1
+        [NSTimer scheduledTimerWithTimeInterval:0.3
                                          target:self
                                        selector:@selector(v_directional_change_callback:)
                                        userInfo:nil
@@ -211,7 +211,7 @@
         
         
 		send_LR_dir_req_timer =
-        [NSTimer scheduledTimerWithTimeInterval:0.2
+        [NSTimer scheduledTimerWithTimeInterval:0.3
                                          target:self
                                        selector:@selector(h_directional_change_callback:)
                                        userInfo:nil
@@ -763,9 +763,25 @@
     
 	MBP_MenuViewController * menuViewCtrl;
     
+
     
-	menuViewCtrl = [[MBP_MenuViewController alloc] initWithNibName:@"MBP_MenuViewController"
-                                                            bundle:nil withConnDelegate:self modeDirect:NO];
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+    {
+        menuViewCtrl = [[MBP_MenuViewController alloc] initWithNibName:@"MBP_MenuViewController_ipad"
+                                                                bundle:nil withConnDelegate:self modeDirect:NO];
+
+        
+    }
+    else
+    {
+
+        menuViewCtrl = [[MBP_MenuViewController alloc] initWithNibName:@"MBP_MenuViewController"
+                                                                bundle:nil withConnDelegate:self modeDirect:NO];
+
+        
+    }
+
+    
     
 	if ((self.selected_channel.communication_mode == COMM_MODE_STUN) &&
         (self.scomm != nil))

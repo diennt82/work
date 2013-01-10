@@ -159,6 +159,9 @@
 		972E290E15A3F77600E60A96 /* STUN_Communication.mm in Sources */ = {isa = PBXBuildFile; fileRef = 972E290D15A3F77600E60A96 /* STUN_Communication.mm */; };
 		972E295115A405D400E60A96 /* SymmetricCipher.m in Sources */ = {isa = PBXBuildFile; fileRef = 972E295015A405D400E60A96 /* SymmetricCipher.m */; };
 		972E2B8715A4234300E60A96 /* NSData+Base64.m in Sources */ = {isa = PBXBuildFile; fileRef = 972E2B8515A4234300E60A96 /* NSData+Base64.m */; };
+		972FE149169EA37300AEEBAA /* MBP_MenuViewController_ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 972FE148169EA37300AEEBAA /* MBP_MenuViewController_ipad.xib */; };
+		972FE14B169EA40300AEEBAA /* MBP_MenuProgress_portrait_ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 972FE14A169EA40300AEEBAA /* MBP_MenuProgress_portrait_ipad.xib */; };
+		972FE14D169EABFD00AEEBAA /* MBP_MenuProgress_land_ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 972FE14C169EABFD00AEEBAA /* MBP_MenuProgress_land_ipad.xib */; };
 		97423429155BA503007DCBCD /* AudioOutStreamer.m in Sources */ = {isa = PBXBuildFile; fileRef = 97423428155BA503007DCBCD /* AudioOutStreamer.m */; };
 		9745CE5D1553CF9200800CA6 /* ScanForCamera.mm in Sources */ = {isa = PBXBuildFile; fileRef = 9745CE5C1553CF9200800CA6 /* ScanForCamera.mm */; };
 		974ACB59168055F9005AE4C6 /* ToUViewController_ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 974ACB58168055F8005AE4C6 /* ToUViewController_ipad.xib */; };
@@ -509,6 +512,9 @@
 		972E295015A405D400E60A96 /* SymmetricCipher.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SymmetricCipher.m; sourceTree = "<group>"; };
 		972E2B8515A4234300E60A96 /* NSData+Base64.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSData+Base64.m"; sourceTree = "<group>"; };
 		972E2B8615A4234300E60A96 /* NSData+Base64.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSData+Base64.h"; sourceTree = "<group>"; };
+		972FE148169EA37300AEEBAA /* MBP_MenuViewController_ipad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MBP_MenuViewController_ipad.xib; sourceTree = "<group>"; };
+		972FE14A169EA40300AEEBAA /* MBP_MenuProgress_portrait_ipad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MBP_MenuProgress_portrait_ipad.xib; sourceTree = "<group>"; };
+		972FE14C169EABFD00AEEBAA /* MBP_MenuProgress_land_ipad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MBP_MenuProgress_land_ipad.xib; sourceTree = "<group>"; };
 		97423427155BA503007DCBCD /* AudioOutStreamer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AudioOutStreamer.h; sourceTree = "<group>"; };
 		97423428155BA503007DCBCD /* AudioOutStreamer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AudioOutStreamer.m; sourceTree = "<group>"; };
 		9745CE5B1553CF9200800CA6 /* ScanForCamera.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ScanForCamera.h; sourceTree = "<group>"; };
@@ -776,6 +782,9 @@
 				38DE1C25168ADAC00049E814 /* MBP_MenuViewController.xib */,
 				38DE1C20168ADA9E0049E814 /* MBP_MenuProgress_portrait.xib */,
 				38DE1C1B168ADA940049E814 /* MBP_MenuProgress_land.xib */,
+				972FE148169EA37300AEEBAA /* MBP_MenuViewController_ipad.xib */,
+				972FE14A169EA40300AEEBAA /* MBP_MenuProgress_portrait_ipad.xib */,
+				972FE14C169EABFD00AEEBAA /* MBP_MenuProgress_land_ipad.xib */,
 				97F0F04A143C0CA00076B749 /* CamChannel.h */,
 				97F0F04B143C0CA00076B749 /* CamChannel.m */,
 				97FE7D0E15998C0B000826F0 /* RemoteConnection.h */,
@@ -1166,6 +1175,9 @@
 				388396B9168B064500B0D020 /* MBP_iosViewController.xib in Resources */,
 				388396BE168B068400B0D020 /* CameraViewController_land_ipad.xib in Resources */,
 				38096A98168DA3470010F59A /* mbp_icon72x72.png in Resources */,
+				972FE149169EA37300AEEBAA /* MBP_MenuViewController_ipad.xib in Resources */,
+				972FE14B169EA40300AEEBAA /* MBP_MenuProgress_portrait_ipad.xib in Resources */,
+				972FE14D169EABFD00AEEBAA /* MBP_MenuProgress_land_ipad.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1862,8 +1874,8 @@
 					armv6,
 				);
 				CODE_SIGN_ENTITLEMENTS = "";
-				CODE_SIGN_IDENTITY = "iPhone Developer: Paul Tsui (KSWYEMQH37)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Paul Tsui (KSWYEMQH37)";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Binatone Electronics International Limited";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Binatone Electronics International Limited";
 				COPY_PHASE_STRIP = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1880,6 +1892,8 @@
 					"\"$(SRCROOT)\"",
 				);
 				PRODUCT_NAME = "Baby Cam";
+				PROVISIONING_PROFILE = "9F236AE1-DF09-4DA1-A121-E582825128BD";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "9F236AE1-DF09-4DA1-A121-E582825128BD";
 				SDKROOT = iphoneos;
 				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/external_include/**";
 				VALIDATE_PRODUCT = YES;

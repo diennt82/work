@@ -288,12 +288,22 @@
         background.frame = CGRectMake(0,0, screenBounds.size.height,
                                       screenBounds.size.width);
         
-        [[NSBundle mainBundle] loadNibNamed:@"MBP_MenuProgress_land"
-                                      owner:self
-                                    options:nil];
-        
-        progressView.frame = CGRectMake(0, 0, screenBounds.size.height,
-                                        screenBounds.size.width);
+        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+        {
+            [[NSBundle mainBundle] loadNibNamed:@"MBP_MenuProgress_land_ipad"
+                                          owner:self
+                                        options:nil];
+        }
+        else
+        {
+            [[NSBundle mainBundle] loadNibNamed:@"MBP_MenuProgress_land"
+                                          owner:self
+                                        options:nil];
+            
+            progressView.frame = CGRectMake(0, 0, screenBounds.size.height,
+                                            screenBounds.size.width);
+        }
+       
     }
     else if (orientation == UIInterfaceOrientationPortrait || orientation == UIInterfaceOrientationPortraitUpsideDown) 
     {
@@ -303,13 +313,27 @@
         background.frame = CGRectMake(0,0, screenBounds.size.width,
                                       screenBounds.size.height);
 
-        [[NSBundle mainBundle] loadNibNamed:@"MBP_MenuProgress_portrait"
-                                      owner:self
-                                    options:nil];
+        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+        {
+            [[NSBundle mainBundle] loadNibNamed:@"MBP_MenuProgress_portrait_ipad"
+                                          owner:self
+                                        options:nil];
+        }
+        else
+        {
+            [[NSBundle mainBundle] loadNibNamed:@"MBP_MenuProgress_portrait"
+                                          owner:self
+                                        options:nil];
+            
+            progressView.frame = CGRectMake(0, 0,screenBounds.size.width,
+                                            screenBounds.size.height);
+
+        }
+
         
-        progressView.frame = CGRectMake(0, 0,screenBounds.size.width,
-                                        screenBounds.size.height);
-    }
+       
+        
+            }
     
     [self.view addSubview:progressView];
     
