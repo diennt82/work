@@ -12,7 +12,8 @@
 
 @interface Account_ViewController : UIViewController
 {
-    IBOutlet UITableViewCell * userNameCell,  * userEmailCell;
+    IBOutlet UITableViewCell * userNameCell,  * userEmailCell,
+          * versionCell;
     UIToolbar * mtopbar;
     IBOutlet UITableView * accountInfo;
     id<ConnectionMethodDelegate> mdelegate;

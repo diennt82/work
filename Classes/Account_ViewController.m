@@ -80,6 +80,17 @@
     _user.text = user_name;
     _user =  (UITextField *) [userEmailCell viewWithTag:1];
     _user.text = user_email;
+    
+    UITextField * _version = (UITextField *) [versionCell viewWithTag:1];
+    
+    //NSString * msg = NSLocalizedStringWithDefaultValue(@"version",nil, [NSBundle mainBundle],
+      //                                                 @"Version %@" , nil);
+    NSString *version = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
+    
+    //version = [NSString stringWithFormat:msg,version];
+    _version.text = version;
+    
+    
 }
 
 -(void) buildTopToolBar
@@ -316,7 +327,7 @@
 
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return 2;
+    return 3;
 }
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
@@ -326,7 +337,7 @@
 
 #define USERNAME_INDEX 0
 #define USEREMAIL_INDEX 1
-#define USERCPASS_INDEX 2
+#define APPVERSION_INDEX 2
 
 
 
@@ -341,6 +352,11 @@
     if (indexPath.row == USEREMAIL_INDEX)
     {
         return userEmailCell;
+    }
+    
+    if (indexPath.row == APPVERSION_INDEX)
+    {
+        return versionCell;
     }
     
     return nil;
