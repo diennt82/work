@@ -314,6 +314,7 @@
 									<string key="NSResourceName">bb_setting_icon.png</string>
 								</object>
 								<string key="targetRuntimeIdentifier">IBIPadFramework</string>
+								<float key="IBUIWidth">30</float>
 								<int key="IBUIStyle">1</int>
 								<reference key="IBUIToolbar" ref="1036299941"/>
 							</object>
@@ -564,7 +565,7 @@
 								<int key="IBUIContentMode">7</int>
 								<bool key="IBUIUserInteractionEnabled">NO</bool>
 								<string key="targetRuntimeIdentifier">IBIPadFramework</string>
-								<string key="IBUIText">Connecting to Babymonitor...</string>
+								<string key="IBUIText">Connecting to Baby Monitor...</string>
 								<object class="NSColor" key="IBUITextColor">
 									<int key="NSColorSpace">1</int>
 									<bytes key="NSRGB">MSAxIDEAA</bytes>
@@ -1760,7 +1761,7 @@
 			<string key="bb_melody_icon.png">{32, 36}</string>
 			<string key="bb_ptt_icon.png">{36, 52}</string>
 			<string key="bb_ptt_icon_d.png">{36, 52}</string>
-			<string key="bb_setting_icon.png">{20, 18}</string>
+			<string key="bb_setting_icon.png">{50, 50}</string>
 			<string key="bb_snap_icon.png">{50, 50}</string>
 			<string key="bb_spk_icon.png">{50, 50}</string>
 			<string key="bb_spk_icon_d.png">{50, 50}</string>
