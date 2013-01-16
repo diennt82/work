@@ -192,14 +192,14 @@
                                                       @"Ok", nil);
     NSString * title = nil; 
     
-    //UserName at least 3 chars
-    if ([_userName.text length] < 3)
+    //UserName at least 5 chars and at most 20 characters
+    if ([_userName.text length] < 5 || [_userName.text length] > 20)
     {
         //error
         title = NSLocalizedStringWithDefaultValue(@"Create_Account_Failed",nil, [NSBundle mainBundle],
                                                   @"Create Account Failed" , nil);
         msg = NSLocalizedStringWithDefaultValue(@"Create_Account_Failed_msg",nil, [NSBundle mainBundle],
-                                                @"User name has to be at least 3 characters" , nil);
+                                                @"User name has to be between 5-20 characters" , nil);
         //ERROR condition
         UIAlertView *_alert = [[UIAlertView alloc]
                                initWithTitle:title

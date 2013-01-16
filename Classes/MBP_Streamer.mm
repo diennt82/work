@@ -174,7 +174,7 @@
 	NSData *getReqData = [getReq dataUsingEncoding:NSUTF8StringEncoding];
     
 	[listenSocket writeData:getReqData withTimeout:2 tag:1];
-	[listenSocket readDataWithTimeout:2 tag:1];
+	[listenSocket readDataWithTimeout:5.0 tag:1];
 	responseData = [[NSMutableData alloc] init];
     
 	if ( pcmPlayer == nil)
@@ -1076,7 +1076,7 @@
 	[mHandler statusReport:STREAM_STARTED andObj:nil];
     
 	
-	[listenSocket readDataWithTimeout:3 tag:tag];
+	[listenSocket readDataWithTimeout:10.0 tag:tag];
     
 	NSString *strBoundary = BOUNDARY_STRING;
 	NSData *boundaryString = [strBoundary dataUsingEncoding:NSUTF8StringEncoding];

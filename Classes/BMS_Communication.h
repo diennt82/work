@@ -31,7 +31,7 @@
 
 #define GET_CAM_LIST_CMD @"camera_list"
 #define GET_CAM_LIST_PARAM_1 @"&email="
-
+//#define GET_CAM_LIST4_CMD @"camera_list4"
 #define ADD_CAM_CMD @"add_cam"
 #define ADD_CAM_PARAM_1 @"&email="
 #define ADD_CAM_PARAM_2 @"&pass="
