@@ -56,7 +56,8 @@
         
         NSMutableArray * cam_profiles;
         CamProfile *cp;
-        cam_profiles = [self parse_camera_list:raw_data];
+//        cam_profiles = [self parse_camera_list:raw_data];
+        cam_profiles = [self parse_camera_list4:raw_data];
         
         
         if(cam_profiles != nil && [cam_profiles count] >0)
@@ -186,22 +187,23 @@
 	NSString * raw_data = [[[NSString alloc] initWithData:responseData encoding: NSASCIIStringEncoding] autorelease];
 
 	NSMutableArray * cam_profiles;
-	cam_profiles = [self parse_camera_list:raw_data];
+	cam_profiles = [self parse_camera_list4:raw_data];
 	
 	
 	/* 20120913: DONT query snapshot from online 
     [self query_snapshot_from_server:cam_profiles];*/
 	
     
-    //20121129: query remote availability ... 
-    if(cam_profiles != nil && [cam_profiles count] >0)
-    {
-        for (int i=0; i<[cam_profiles count]; i++)
-        {
-            [self query_stream_mode_for_cam:[cam_profiles objectAtIndex:i] ];
-        }
-        
-    }
+    //20121129: query remote availability ...
+    //20130116: already querry in parse_camera_list
+//    if(cam_profiles != nil && [cam_profiles count] >0)
+//    {
+//        for (int i=0; i<[cam_profiles count]; i++)
+//        {
+//            [self query_stream_mode_for_cam:[cam_profiles objectAtIndex:i] ];
+//        }
+//        
+//    }
   
     
 	/* sync_online_and_offline_data*/
@@ -486,12 +488,14 @@
 }
 
 #define CAM_LIST_ENTRY_NUM_TOKEN 5
+#define CAM_LIST_ENTRY_NUM_TOKEN4 11
 #define TOTAL_CAM @"Total_Cameras="
 #define CAM_NAME @" Cam = "
 #define MAC      @" Mac = "
 #define LAST_COMM @"last_comm_from_cam = "
 #define TIME_DIFF @" time_up_to_request = "
 #define LOCAL_IP @" local_ip = "
+#define IS_AVAILABLE @" isAvailable = "
 
 -(NSMutableArray *) parse_camera_list:(NSString*) raw
 {
@@ -540,6 +544,7 @@
 		}
 		else
 		{
+            NSLog(@"CAM_LIST_ENTRY_NUM_TOKEN ----->%int",CAM_LIST_ENTRY_NUM_TOKEN);
 			NSString * cam_name = [cam_entry_tokens objectAtIndex:0];
 			cam_name= [cam_name substringFromIndex:[CAM_NAME length]];
 			
@@ -595,6 +600,120 @@
 	
 	return cam_list;
 }
+
+-(NSMutableArray *) parse_camera_list4:(NSString*) raw
+{
+	
+	NSString * total_cam_str;
+	NSMutableArray * cam_list;
+	NSArray * token_list;
+	int total_cam;
+    //one token_list is a line 
+	token_list = [raw componentsSeparatedByString:@"<br>"];
+	
+	total_cam_str = [token_list objectAtIndex:0];
+	total_cam_str = [total_cam_str substringFromIndex:[TOTAL_CAM length]];
+	
+	total_cam = [total_cam_str intValue];
+	
+    
+	//NSLog(@"tok list count:%d", [token_list count] -2);
+	//take into account the last empty token
+	if (total_cam !=0 && total_cam !=( [token_list count] -2))
+	{
+		return nil;
+		//STh is wrong
+	}
+	cam_list = [[NSMutableArray alloc] init];
+	
+	if (total_cam ==0)
+	{
+		
+		return cam_list;
+	}
+	
+    
+	int i = 1;
+	NSString * cam_entry;
+	NSArray * cam_entry_tokens;
+	CamProfile * cp;
+	
+	while (i < ([token_list count] -1) )
+	{
+		
+		cam_entry = [token_list objectAtIndex:i];
+        
+		cam_entry_tokens = [cam_entry componentsSeparatedByString:@","];
+		if ([cam_entry_tokens count] != CAM_LIST_ENTRY_NUM_TOKEN4)
+		{
+		}
+		else
+		{
+			NSString * cam_name = [cam_entry_tokens objectAtIndex:0];
+			cam_name= [cam_name substringFromIndex:[CAM_NAME length]];
+			
+			NSString * cam_mac = [cam_entry_tokens objectAtIndex:1];
+			cam_mac = [cam_mac substringFromIndex:[MAC length]];
+			if ([cam_mac length] != 12 )
+			{
+				cam_mac =@"00:00:00:00:00:00";
+			}
+			else {
+				cam_mac = [Util add_colon_to_mac:cam_mac];
+			}
+			
+			
+			NSString * last_comm = [cam_entry_tokens objectAtIndex:2];
+			last_comm = [last_comm substringFromIndex:[LAST_COMM length]];
+			
+			
+//			NSString * time_diff = [cam_entry_tokens objectAtIndex:3];
+//			time_diff =[time_diff substringFromIndex:[TIME_DIFF length]];
+//			int time_diff_ = [time_diff  intValue];
+            
+            NSString * local_ip = [cam_entry_tokens  objectAtIndex:8];
+            
+            local_ip = [local_ip substringFromIndex:[LOCAL_IP length]];
+            
+            NSString * is_Available  = [cam_entry_tokens objectAtIndex:10];
+            
+            is_Available = [is_Available substringFromIndex:[IS_AVAILABLE length]];
+			
+            cp = [[CamProfile alloc]initWithMacAddr:cam_mac];
+            cp.last_comm = last_comm;
+//            cp.minuteSinceLastComm = time_diff_;
+            cp.name = cam_name;
+            
+            if([is_Available intValue] == 1)
+            {
+                cp.minuteSinceLastComm = 1;
+            } else {
+                cp.minuteSinceLastComm = 24*60;
+            }
+            if ( (local_ip == nil) ||
+                ([local_ip length] == 0) ||
+                ([local_ip isEqualToString:@"null"] ) )
+            {
+                //garbage ip
+            }
+            else
+            {
+                cp.ip_address = local_ip ;
+            }
+            
+            
+			
+			[cam_list addObject:cp];
+		}
+		i++;
+	}
+	
+	
+	
+	
+	return cam_list;
+}
+
 
 -(void) sync_online_and_offline_data:(NSMutableArray *) online_profiles
 {

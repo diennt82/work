@@ -38,6 +38,7 @@
 - (void)getCamListServerUnreachable; 
 
 -(NSMutableArray *) parse_camera_list:(NSString*) raw;
+-(NSMutableArray *) parse_camera_list4:(NSString*) raw;
 
 -(void) sync_online_and_offline_data:(NSMutableArray *) online_list;
 
