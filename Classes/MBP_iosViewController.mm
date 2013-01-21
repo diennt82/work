@@ -563,7 +563,7 @@ return self;
 
     
     
-    msg = NSLocalizedStringWithDefaultValue(@"Cancel",nil, [NSBundle mainBundle],
+    NSString * cancel = NSLocalizedStringWithDefaultValue(@"Cancel",nil, [NSBundle mainBundle],
                                                        @"Cancel", nil);
     
     NSString * msg2 = NSLocalizedStringWithDefaultValue(@"Go_to_Camera_list",nil, [NSBundle mainBundle],
@@ -573,7 +573,7 @@ return self;
 		initWithTitle:camAlert.cameraName
 		message:msg
 		delegate:self
-		cancelButtonTitle:msg
+		cancelButtonTitle:cancel
 		otherButtonTitles:msg2,nil];
 	if ([self isThisMacStoredOffline:camAlert.cameraMacNoColon])
 	{
