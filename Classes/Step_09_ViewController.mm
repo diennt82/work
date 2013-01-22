@@ -365,14 +365,14 @@
     {
         
         step10ViewController = [[Step_10_ViewController alloc]
-                                initWithNibName:@"Step_10_ViewController" bundle:nil];
+                                initWithNibName:@"Step_10_ViewController_ipad" bundle:nil];
         
     }
     else
     {
         
         step10ViewController = [[Step_10_ViewController alloc]
-                                initWithNibName:@"Step_10_ViewController_ipad" bundle:nil];
+                                initWithNibName:@"Step_10_ViewController" bundle:nil];
         
     }
 

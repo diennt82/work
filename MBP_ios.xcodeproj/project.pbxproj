@@ -1892,7 +1892,6 @@
 					"\"$(SRCROOT)\"",
 				);
 				PRODUCT_NAME = "Baby Cam";
-				PROVISIONING_PROFILE = "DC2F3AF6-4EF3-4440-A7F8-F30DFA871748";
 				SDKROOT = iphoneos;
 				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/external_include/**";
 				VALIDATE_PRODUCT = YES;
