@@ -53,7 +53,7 @@
         
         NSString * raw_data = [[[NSString alloc] initWithData:responseData encoding: NSASCIIStringEncoding] autorelease];
         
-        
+        NSLog(@"camlist4: %@", raw_data);
         NSMutableArray * cam_profiles;
         CamProfile *cp;
 //        cam_profiles = [self parse_camera_list:raw_data];
@@ -186,6 +186,8 @@
 {	
 	NSString * raw_data = [[[NSString alloc] initWithData:responseData encoding: NSASCIIStringEncoding] autorelease];
 
+    NSLog(@"camlist4: %@", raw_data);
+    
 	NSMutableArray * cam_profiles;
 	cam_profiles = [self parse_camera_list4:raw_data];
 	
