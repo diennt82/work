@@ -407,7 +407,9 @@
 	}
 }
 
--(BOOL) checkFWLaterorEqual_08_23:(NSString *) device_version
+
+
+-(BOOL) checkFWLaterorEqual_08_023:(NSString *) device_version
 {
     
     if (device_version != nil) {
@@ -417,8 +419,17 @@
         NSArray * versionArray = [device_version componentsSeparatedByString:@"_"];
         NSString * version_value1 = [versionArray objectAtIndex:0];
         NSString * version_value2 = [versionArray objectAtIndex:1];
-        if ([version_value1 intValue] > 8 || ([version_value1 intValue] == 8 && [version_value2 intValue] > 23)) {
+        
+        NSLog(@"maj:%@ %d, minor:  %d",version_value1, [version_value1 intValue], [version_value2 intValue]);
+        
+        if ( [version_value1 intValue] > 8 ||
+             ([version_value1 intValue] == 8 && [version_value2 intValue] >= 23)
+            )
+        {
             // check version > 08_020 ?
+            
+            NSLog(@"need encode url ");
+            
             return  TRUE;
             
         }
@@ -436,11 +447,18 @@
     NSString * deviceVersion = nil;
     
     deviceVersion = [self sendCommandAndBlock:GET_VERSION];
+
+    if (deviceVersion != nil)
+	{
+        deviceVersion = [deviceVersion substringFromIndex:([GET_VERSION length] + 2)];
+        
+    }
     
     //get configuration string from conf and send over HTTP with default IP
-	NSString * device_configuration = nil; 
-    if ([self checkFWLaterorEqual_08_23:deviceVersion])
+	NSString * device_configuration = nil;  
+    if ([self checkFWLaterorEqual_08_023:deviceVersion]  == TRUE)
     {
+        NSLog(@"encode url now..");
         //ENCODE URL now
         device_configuration = [conf getDeviceEncodedConfString];
     }

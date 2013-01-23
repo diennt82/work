@@ -91,10 +91,11 @@ return self;
 		userInfo:nil
 		repeats:NO];
 
+    
+
 
 
 }
-
 
 
 - (void)wakeup_display_login:(NSTimer*) timer_exp
