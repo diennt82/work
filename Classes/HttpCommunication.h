@@ -131,7 +131,7 @@
 @property (nonatomic,retain) NSString * device_ip; 
 @property (nonatomic) int device_port; 
 @property (nonatomic) BOOL authInProgress;
-@property (nonatomic,assign) NSString * device_version;
+//@property (nonatomic,assign) NSString * device_version;
 
 - (void) sendCommand:(NSString *) command;
 - (NSString *) sendCommandAndBlock:(NSString *)command;
