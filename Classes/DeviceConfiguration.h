@@ -28,4 +28,5 @@
 - (NSMutableDictionary *) getWritableConfiguration;
 - (void) restoreConfigurationData:  (NSDictionary *) dict;
 - (NSString *) getDeviceConfString;
+- (NSString *) getDeviceEncodedConfString;
 @end

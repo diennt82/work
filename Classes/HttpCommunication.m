@@ -11,8 +11,8 @@
 
 @implementation HttpCommunication
 
-@synthesize device_ip, device_port; 
-@synthesize url_connection,authInProgress; 
+@synthesize device_ip, device_port;
+@synthesize url_connection,authInProgress;
 
 @synthesize responseData, credential;
 
@@ -31,7 +31,7 @@
 
 - (void) dealloc
 {
-	
+
 	[device_ip release];
 	
 	if (url_connection != nil)
@@ -239,7 +239,7 @@
 						   device_ip, device_port,
 						   HTTP_COMMAND_PART,GET_VERSION]; 
 	
-	NSLog(@"http: %@", http_cmd);
+	NSLog(@"http ---------------> %@", http_cmd);
 	@synchronized(self)
 	{
 		
@@ -407,16 +407,56 @@
 	}
 }
 
+-(BOOL) checkFWLaterorEqual_08_23:(NSString *) device_version
+{
+    
+    if (device_version != nil) {
+        
+        NSLog(@"device_version ------------>%@",device_version);
+        
+        NSArray * versionArray = [device_version componentsSeparatedByString:@"_"];
+        NSString * version_value1 = [versionArray objectAtIndex:0];
+        NSString * version_value2 = [versionArray objectAtIndex:1];
+        if ([version_value1 intValue] > 8 || ([version_value1 intValue] == 8 && [version_value2 intValue] > 23)) {
+            // check version > 08_020 ?
+            return  TRUE;
+            
+        }
+        
+    }
+    
+    return FALSE;
+}
+
 
 - (void)sendConfiguration:(DeviceConfiguration *) conf
 {
-	//get configuration string from conf and send over HTTP with default IP 
-	NSString * device_configuration = [conf getDeviceConfString];
+    //20130123: check fw version before encoding the url
+    
+    NSString * deviceVersion = nil;
+    
+    deviceVersion = [self sendCommandAndBlock:GET_VERSION];
+    
+    //get configuration string from conf and send over HTTP with default IP
+	NSString * device_configuration = nil; 
+    if ([self checkFWLaterorEqual_08_23:deviceVersion])
+    {
+        //ENCODE URL now
+        device_configuration = [conf getDeviceEncodedConfString];
+    }
+    else
+    {
+        device_configuration = [conf getDeviceConfString];
+    }
+    
+	
 	
 	NSString * setup_cmd = [NSString stringWithFormat:@"%@%@", 
 							 SETUP_HTTP_CMD,device_configuration];
 
 	NSLog(@"before send: %@", setup_cmd);
+    
+
 	
 	NSString * response = [self sendCommandAndBlock:setup_cmd ];
 	//TODO: check responses ..?
@@ -457,13 +497,16 @@
     
 	
 	NSTimeInterval timeout = newTimeout ;
-	
-	NSString * http_cmd = [NSString stringWithFormat:@"http://%@:%d/%@%@",
-						   device_ip, device_port,
-						   HTTP_COMMAND_PART,command];
-	
-	NSLog(@"http: %@", http_cmd);
-	
+    
+    NSString * http_cmd;
+    
+    http_cmd = [NSString stringWithFormat:@"http://%@:%d/%@%@",
+                device_ip, device_port,
+                HTTP_COMMAND_PART,command];
+    
+    NSLog(@"http: %@", http_cmd);
+    
+    
 	NSString *authHeader = [@"Basic " stringByAppendingFormat:@"%@", [Util getDFCredentials]];
 	@synchronized(self)
 	{

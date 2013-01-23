@@ -96,6 +96,22 @@ keyIndex ,key, addressMode, usrName, passWd, wepType;
 	
 	NSLog(@"RESTORE sec: %@, key:%@, addrmode: %@", securityMode, key, addressMode);
 }
+
+- (NSString *) getDeviceEncodedConfString
+{
+    NSString * url_encoded = [self getDeviceConfString];
+    
+    url_encoded =  (NSString *)CFURLCreateStringByAddingPercentEscapes(
+                                                                       NULL,
+                                                                       (CFStringRef)url_encoded,
+                                                                       NULL,
+                                                                       CFSTR("!*'();:@&=+$,/?%#[]"),
+                                                                       kCFStringEncodingUTF8);
+    
+    return url_encoded; 
+    
+}
+
 - (NSString *) getDeviceConfString
 {
 	NSString * conf_str  = @"";

@@ -31,7 +31,6 @@
 }
 -(void) dealloc
 {
-
     [ssid release];
     [security release];
     [password release];
@@ -476,6 +475,7 @@
     //create a http delegate, send the data thru delegate
     HttpCommunication  * deviceComm; 
     deviceComm = [[HttpCommunication alloc]init];
+    
     [deviceComm sendConfiguration:sent_conf];
     
     NSLog(@"Send & reset done");
