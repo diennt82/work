@@ -337,7 +337,10 @@
 	if (viewControllers.count > 1 && [viewControllers objectAtIndex:viewControllers.count-2] == self) {
 		// View is disappearing because a new view controller was pushed onto the stack
 		//NSLog(@"New view controller was pushed---> Settings");
-	} else if ([viewControllers indexOfObject:self] == NSNotFound) {
+        
+	}
+    else if ([viewControllers indexOfObject:self] == NSNotFound)
+    {
 		// View is disappearing because it was popped from the stack
 		//NSLog(@"View controller was popped --- We are closing down.. killall video thread");
         

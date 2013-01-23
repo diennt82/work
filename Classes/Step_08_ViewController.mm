@@ -27,6 +27,11 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+
+    //Hide back button -- can't go back now..
+    self.navigationItem.hidesBackButton = TRUE;
+    
+    
 	// Do any additional setup after loading the view.
     self.navigationItem.title = NSLocalizedStringWithDefaultValue(@"Camera_Configured",nil, [NSBundle mainBundle],
                                                                   @"Camera Configured" , nil);

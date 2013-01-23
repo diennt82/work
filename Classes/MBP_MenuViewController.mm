@@ -1636,12 +1636,28 @@
 
 -(void) onSetVideoQuality:(int) vq
 {
-	NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-	[userDefaults setInteger:vq forKey:@"int_VideoQuality"];
-	[userDefaults synchronize];
+//	NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+//	[userDefaults setInteger:vq forKey:@"int_VideoQuality"];
+//	[userDefaults synchronize];
+
+    //Toggle by cameraviewController... 
+    
+    NSArray *viewControllerArray = [self.navigationController viewControllers];
+    int parentViewControllerIndex = [viewControllerArray count] - 2;
+    CameraViewController * camview = [viewControllerArray objectAtIndex:parentViewControllerIndex] ;
+    
+    NSLog(@"update video res..");
+    [camview buttonHQPressed:nil];
+    
 	
 	[self updateVQ];
+    
+    
 	[self.cameraMenu reloadData];
+    
+    
+   
+    
 	
 }
 -(void) onSetTempUnit:(int) unit

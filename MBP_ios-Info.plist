@@ -38,7 +38,7 @@
 	<key>UIStatusBarHidden</key>
 	<false/>
 	<key>UIFileSharingEnabled</key>
-	<false/>
+	<true/>
 	<key>NSMainNibFile~ipad</key>
 	<string>MainWindow_ipad</string>
 	<key>UIInterfaceOrientation</key>

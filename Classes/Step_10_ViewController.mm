@@ -92,6 +92,10 @@
     }
     else //not first time --> this is normal add camera sequence..
     {
+        
+        //Hide back button -- can't go back now..
+        self.navigationItem.hidesBackButton = TRUE;
+        
         self.navigationItem.title =NSLocalizedStringWithDefaultValue(@"Camera_Configured",nil, [NSBundle mainBundle],
                                                                      @"Camera Configured" , nil);
 
