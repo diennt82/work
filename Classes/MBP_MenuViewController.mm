@@ -489,22 +489,22 @@
         
         switch(vox_value)
         {
-            case -10:
+            case VOX_LEVEL_1:
                 lvl = NSLocalizedStringWithDefaultValue(@"Level1_",nil, [NSBundle mainBundle],
                                                         @"Level 1 (Low)", nil);
                 voxLevel = 0;
                 break;
-            case -20:
+            case VOX_LEVEL_2:
                 lvl = NSLocalizedStringWithDefaultValue(@"Level2",nil, [NSBundle mainBundle],
                                                         @"Level 2", nil);
                 voxLevel = 1;
                 break;
-            case -30:
+            case VOX_LEVEL_3:
                 lvl =  NSLocalizedStringWithDefaultValue(@"Level3",nil, [NSBundle mainBundle],
                                                          @"Level 3", nil);
                 voxLevel = 2;
                 break;
-            case -38:
+            case VOX_LEVEL_4:
                 lvl = NSLocalizedStringWithDefaultValue(@"Level4_",nil, [NSBundle mainBundle],
                                                         @"Level 4 (High)", nil);
                 voxLevel = 3;
@@ -1690,19 +1690,19 @@
     switch (level)
     {
         case 0:
-            vox_sensitivity = -10;
+            vox_sensitivity = VOX_LEVEL_1;
             break;
         case 1:
-            vox_sensitivity = -20;
+            vox_sensitivity = VOX_LEVEL_2;
             break;
         case 2:
-            vox_sensitivity = -30;
+            vox_sensitivity = VOX_LEVEL_3;
             break;
         case 3:
-            vox_sensitivity = -38;
+            vox_sensitivity = VOX_LEVEL_4;
             break;
         default:
-            vox_sensitivity = -20;
+            vox_sensitivity = VOX_LEVEL_2;
             break;
     }
     command = VOX_ENABLE;

@@ -78,6 +78,12 @@
 
 
 
+#define VOX_LEVEL_1 -10
+#define VOX_LEVEL_2 -20
+#define VOX_LEVEL_3 -25
+#define VOX_LEVEL_4 -30
+
+
 @interface MBP_MenuViewController : UIViewController <UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate>{
 
 	IBOutlet UIView * progressView;
