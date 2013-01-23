@@ -97,7 +97,6 @@ return self;
 
 }
 
-
 - (void)wakeup_display_login:(NSTimer*) timer_exp
 {
 
@@ -255,14 +254,15 @@ return self;
 
 - (BOOL) shouldAutorotate
 {
-    if ( ( self.modalViewController != nil) &&
-        !([self.modalViewController isKindOfClass:[UINavigationController class]] )
-        )
-    {
-        return  [self.modalViewController shouldAutorotate];
-    }
-    
-    return NO;
+//    if ( ( self.modalViewController != nil) &&
+//        !([self.modalViewController isKindOfClass:[UINavigationController class]] )
+//        )
+//    {
+//        return  [self.modalViewController shouldAutorotate];
+//    }
+//    
+//    return NO;
+    return YES;
 }
 
 -(NSUInteger)supportedInterfaceOrientations
