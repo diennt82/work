@@ -84,10 +84,23 @@
             NSLog(@"iphone5 SHift right...");
             CGAffineTransform translate = CGAffineTransformMakeTranslation(44, 0);
             videoView.transform =translate;
-            
+
             CGAffineTransform translate1 = CGAffineTransformMakeTranslation(44, 0);
+#if 0
+            //Use transform
             directionPad.transform = translate1;
             pttButton.transform = translate1;
+#else
+            //Adjust frame
+            CGRect newFrame = CGRectMake(directionPad.frame.origin.x+44,
+                                         directionPad.frame.origin.y,
+                                         directionPad.frame.size.width,
+                                         directionPad.frame.size.height) ;
+
+            directionPad.frame = newFrame;
+            pttButton.frame = newFrame;
+            
+#endif
             
             
             //Rotate the slider
@@ -106,8 +119,23 @@
             videoView.transform =translate;
             
             CGAffineTransform translate1 = CGAffineTransformMakeTranslation(0, 110);
+            
+#if 0 
+            //Use transform
             directionPad.transform = translate1;
             pttButton.transform = translate1;
+#else
+            //Adjust frame
+            CGRect newFrame = CGRectMake(directionPad.frame.origin.x,
+                                         directionPad.frame.origin.y+110,
+                                         directionPad.frame.size.width,
+                                         directionPad.frame.size.height) ;
+            
+            directionPad.frame = newFrame;
+            pttButton.frame = newFrame;
+            
+#endif
+            
             controlButtons.transform = translate1;
             
 

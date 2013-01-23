@@ -788,7 +788,7 @@
     BOOL isOffline = [userDefaults boolForKey:_OfflineMode];
    
     NSString * msg = NSLocalizedStringWithDefaultValue(@"Cameras_",nil, [NSBundle mainBundle],
-                                                       @"Cameras_", nil);
+                                                       @"Cameras", nil);
     
     UITabBarItem * camList  = [[UITabBarItem alloc]initWithTitle:msg
                                                            image:[UIImage imageNamed:@"bb_camera_slider_icon.png"]
@@ -796,7 +796,7 @@
     [self setTabBarItem:camList];
     
     msg = NSLocalizedStringWithDefaultValue(@"Account_",nil, [NSBundle mainBundle],
-                                            @"Account_", nil);
+                                            @"Account", nil);
     
     UITabBarItem * account  = [[UITabBarItem alloc]initWithTitle:@"Account"
                                                            image:[UIImage imageNamed:@"account_icon.png"]
