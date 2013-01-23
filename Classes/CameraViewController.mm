@@ -3261,7 +3261,8 @@
 			if (comm != nil)
 			{
 				//Non block send-
-				[comm sendCommand:dir_str];
+				//[comm sendCommand:dir_str];
+                [comm sendCommandAndBlock:dir_str];
                 
 			}
 		}
@@ -3324,7 +3325,10 @@
 			if (comm != nil)
 			{
 				//Non block send-
-				[comm sendCommand:dir_str];
+				//[comm sendCommand:dir_str];
+                
+                [comm sendCommandAndBlock:dir_str];
+
                 
 			}
 		}
