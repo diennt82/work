@@ -42,7 +42,7 @@
 					<object class="IBUIImageView" id="824780268">
 						<reference key="NSNextResponder" ref="612829385"/>
 						<int key="NSvFlags">292</int>
-						<string key="NSFrameSize">{320, 460}</string>
+						<string key="NSFrameSize">{320, 568}</string>
 						<reference key="NSSuperview" ref="612829385"/>
 						<reference key="NSWindow"/>
 						<reference key="NSNextKeyView" ref="658450404"/>
@@ -192,7 +192,6 @@
 						<string key="NSFrame">{{102, 360}, {116, 37}}</string>
 						<reference key="NSSuperview" ref="612829385"/>
 						<reference key="NSWindow"/>
-						<reference key="NSNextKeyView"/>
 						<string key="NSReuseIdentifierKey">_NS:9</string>
 						<bool key="IBUIOpaque">NO</bool>
 						<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
@@ -220,7 +219,7 @@
 						</object>
 					</object>
 				</array>
-				<string key="NSFrameSize">{320, 460}</string>
+				<string key="NSFrameSize">{320, 568}</string>
 				<reference key="NSSuperview"/>
 				<reference key="NSWindow"/>
 				<reference key="NSNextKeyView" ref="824780268"/>
@@ -230,6 +229,23 @@
 					<object class="NSColorSpace" key="NSCustomColorSpace" id="170228222">
 						<int key="NSID">2</int>
 					</object>
+				</object>
+				<object class="IBUIScreenMetrics" key="IBUISimulatedDestinationMetrics" id="234033863">
+					<string key="IBUISimulatedSizeMetricsClass">IBUIScreenMetrics</string>
+					<object class="NSMutableDictionary" key="IBUINormalizedOrientationToSizeMap">
+						<bool key="EncodedWithXMLCoder">YES</bool>
+						<array key="dict.sortedKeys">
+							<integer value="1"/>
+							<integer value="3"/>
+						</array>
+						<array key="dict.values">
+							<string>{320, 568}</string>
+							<string>{568, 320}</string>
+						</array>
+					</object>
+					<string key="IBUITargetRuntime">IBCocoaTouchFramework</string>
+					<string key="IBUIDisplayName">Retina 4 Full Screen</string>
+					<int key="IBUIType">2</int>
 				</object>
 				<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
 			</object>
@@ -288,7 +304,6 @@
 								<string key="NSFrame">{{142, 171}, {37, 37}}</string>
 								<reference key="NSSuperview" ref="860872968"/>
 								<reference key="NSWindow"/>
-								<reference key="NSNextKeyView"/>
 								<string key="NSReuseIdentifierKey">_NS:9</string>
 								<bool key="IBUIOpaque">NO</bool>
 								<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
@@ -347,7 +362,7 @@
 					<object class="IBUIImageView" id="381960928">
 						<reference key="NSNextResponder" ref="620789710"/>
 						<int key="NSvFlags">292</int>
-						<string key="NSFrameSize">{320, 460}</string>
+						<string key="NSFrameSize">{320, 568}</string>
 						<reference key="NSSuperview" ref="620789710"/>
 						<reference key="NSWindow"/>
 						<reference key="NSNextKeyView" ref="578368283"/>
@@ -405,7 +420,6 @@
 						<string key="NSFrame">{{102, 360}, {116, 37}}</string>
 						<reference key="NSSuperview" ref="620789710"/>
 						<reference key="NSWindow"/>
-						<reference key="NSNextKeyView"/>
 						<string key="NSReuseIdentifierKey">_NS:9</string>
 						<bool key="IBUIOpaque">NO</bool>
 						<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
@@ -546,12 +560,13 @@
 						</object>
 					</object>
 				</array>
-				<string key="NSFrameSize">{320, 460}</string>
+				<string key="NSFrameSize">{320, 568}</string>
 				<reference key="NSSuperview"/>
 				<reference key="NSWindow"/>
 				<reference key="NSNextKeyView" ref="381960928"/>
 				<string key="NSReuseIdentifierKey">_NS:9</string>
 				<reference key="IBUIBackgroundColor" ref="560648867"/>
+				<reference key="IBUISimulatedDestinationMetrics" ref="234033863"/>
 				<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
 			</object>
 		</array>
@@ -722,7 +737,6 @@
 						<reference key="object" ref="620789710"/>
 						<array class="NSMutableArray" key="children">
 							<reference ref="135705004"/>
-							<reference ref="381960928"/>
 							<reference ref="262445028"/>
 							<reference ref="987200684"/>
 							<reference ref="279567845"/>
@@ -730,6 +744,7 @@
 							<reference ref="192216076"/>
 							<reference ref="578368283"/>
 							<reference ref="505082562"/>
+							<reference ref="381960928"/>
 						</array>
 						<reference key="parent" ref="0"/>
 					</object>
