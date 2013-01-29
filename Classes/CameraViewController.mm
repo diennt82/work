@@ -1840,7 +1840,7 @@
                                                              @"Not supported" , nil);
         
         NSString * msg = NSLocalizedStringWithDefaultValue(@"video_rec_not_supported",nil, [NSBundle mainBundle],
-                                                          @"Video recording is not supported, comming soon" , nil);
+                                                          @"Video recording is not supported, coming soon" , nil);
         
         NSString * ok = NSLocalizedStringWithDefaultValue(@"Ok",nil, [NSBundle mainBundle],
                                                            @"OK" , nil);
