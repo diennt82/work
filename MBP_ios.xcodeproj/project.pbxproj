@@ -214,6 +214,7 @@
 		97F0F04C143C0CA00076B749 /* CamChannel.m in Sources */ = {isa = PBXBuildFile; fileRef = 97F0F04B143C0CA00076B749 /* CamChannel.m */; };
 		97F0F168143C45FA0076B749 /* MBP_Streamer.mm in Sources */ = {isa = PBXBuildFile; fileRef = 97F0F167143C45FA0076B749 /* MBP_Streamer.mm */; };
 		97FE7D1015998C0B000826F0 /* RemoteConnection.mm in Sources */ = {isa = PBXBuildFile; fileRef = 97FE7D0F15998C0B000826F0 /* RemoteConnection.mm */; };
+		BC6E4A0516BFBB9D00B0D630 /* MBP_InitialSetupViewController_land.xib in Resources */ = {isa = PBXBuildFile; fileRef = BC6E4A0316BFBB9D00B0D630 /* MBP_InitialSetupViewController_land.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -606,6 +607,9 @@
 		97F0F167143C45FA0076B749 /* MBP_Streamer.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = MBP_Streamer.mm; sourceTree = "<group>"; };
 		97FE7D0E15998C0B000826F0 /* RemoteConnection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RemoteConnection.h; sourceTree = "<group>"; };
 		97FE7D0F15998C0B000826F0 /* RemoteConnection.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = RemoteConnection.mm; sourceTree = "<group>"; };
+		BC6E4A0416BFBB9D00B0D630 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/MBP_InitialSetupViewController_land.xib; sourceTree = "<group>"; };
+		BC6E4A0716BFBC1900B0D630 /* fr */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = fr; path = fr.lproj/MBP_InitialSetupViewController_land.xib; sourceTree = "<group>"; };
+		BC6E4A0816BFBC1A00B0D630 /* es */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = es; path = es.lproj/MBP_InitialSetupViewController_land.xib; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -681,6 +685,7 @@
 				38A478CD15BD64F9008682FE /* MBP_InitialSetupViewController.h */,
 				38A478CE15BD64F9008682FE /* MBP_InitialSetupViewController.mm */,
 				38DE1CDC168AFBE00049E814 /* MBP_InitialSetupViewController.xib */,
+				BC6E4A0316BFBB9D00B0D630 /* MBP_InitialSetupViewController_land.xib */,
 				38DE1CD7168AFBCF0049E814 /* MBP_InitialSetupViewController_ipad.xib */,
 				38DE1C84168AEB0E0049E814 /* Step_09_ViewController.xib */,
 				38DE1C7F168AEB000049E814 /* Step_09_ViewController_ipad.xib */,
@@ -1184,6 +1189,7 @@
 				972FE14B169EA40300AEEBAA /* MBP_MenuProgress_portrait_ipad.xib in Resources */,
 				972FE14D169EABFD00AEEBAA /* MBP_MenuProgress_land_ipad.xib in Resources */,
 				381D185D16D4652C00272A8D /* Step_05_tableViewCell_ipad.xib in Resources */,
+				BC6E4A0516BFBB9D00B0D630 /* MBP_InitialSetupViewController_land.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1828,6 +1834,16 @@
 				38DE1CDE168AFBE60049E814 /* fr */,
 			);
 			name = MBP_InitialSetupViewController.xib;
+			sourceTree = "<group>";
+		};
+		BC6E4A0316BFBB9D00B0D630 /* MBP_InitialSetupViewController_land.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				BC6E4A0416BFBB9D00B0D630 /* en */,
+				BC6E4A0716BFBC1900B0D630 /* fr */,
+				BC6E4A0816BFBC1A00B0D630 /* es */,
+			);
+			name = MBP_InitialSetupViewController_land.xib;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */

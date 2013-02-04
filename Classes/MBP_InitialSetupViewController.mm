@@ -141,16 +141,23 @@
 
 - (BOOL) shouldAutorotate
 {
-    return NO;
+    return YES;
 }
 
 -(NSUInteger)supportedInterfaceOrientations
 {
     
-    return UIInterfaceOrientationMaskPortrait;
+    return UIInterfaceOrientationMaskAllButUpsideDown;
     
 }
 
+-(void) adjustViewsForOrientations:(UIInterfaceOrientation) orientation
+{
+    if (orientation == UIInterfaceOrientationLandscapeLeft || orientation == UIInterfaceOrientationLandscapeRight) {
+        
+    } else if (orientation == UIInterfaceOrientationMaskPortrait || orientation == UIInterfaceOrientationMaskPortraitUpsideDown) {
+    }
+}
 
 - (void)presentModallyOn:(UIViewController *)parent
 {
