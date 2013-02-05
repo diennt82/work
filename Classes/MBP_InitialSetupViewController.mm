@@ -83,6 +83,7 @@
 
 }
 
+<<<<<<< HEAD
 -(void)viewWillAppear:(BOOL)animated
 {
     
@@ -129,15 +130,22 @@
     else
     {
         //Do nothing let the normal load..
+        UIInterfaceOrientation orientation = [UIApplication sharedApplication].statusBarOrientation;
+        [self adjustViewsForOrientations:orientation];
+
     }
 }
 
 //Support portrait only mode for now
-//- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
-//{
-//    return (interfaceOrientation == UIInterfaceOrientationPortrait);
-//}
+- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
+{
+    return (interfaceOrientation == UIInterfaceOrientationMaskAllButUpsideDown);
+}
 
+-(void) willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
+{
+    [self adjustViewsForOrientations:toInterfaceOrientation];
+}
 
 - (BOOL) shouldAutorotate
 {
@@ -154,8 +162,27 @@
 -(void) adjustViewsForOrientations:(UIInterfaceOrientation) orientation
 {
     if (orientation == UIInterfaceOrientationLandscapeLeft || orientation == UIInterfaceOrientationLandscapeRight) {
+        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+            
+            [[NSBundle mainBundle] loadNibNamed:@"MBP_InitialSetupViewController_ipad" owner:self options:nil];
+            
+        } else {
+            
+            [[NSBundle mainBundle] loadNibNamed:@"MBP_InitialSetupViewController_land" owner:self options:nil];
+            
+        }
         
     } else if (orientation == UIInterfaceOrientationMaskPortrait || orientation == UIInterfaceOrientationMaskPortraitUpsideDown) {
+        
+        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+            
+            [[NSBundle mainBundle] loadNibNamed:@"MBP_InitialSetupViewController_ipad" owner:self options:nil];
+            
+        } else {
+            
+            [[NSBundle mainBundle] loadNibNamed:@"MBP_InitialSetupViewController" owner:self options:nil];
+            
+        }
     }
 }
 

@@ -275,7 +275,7 @@ return self;
 //        return  [self.modalViewController supportedInterfaceOrientations];
 //    }
     
-    return UIInterfaceOrientationMaskPortrait;
+    return UIInterfaceOrientationMaskAllButUpsideDown;
 
 }
 
