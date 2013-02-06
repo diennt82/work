@@ -56,10 +56,52 @@
     // e.g. self.myOutlet = nil;
 }
 
+-(void) viewWillAppear:(BOOL)animated
+{
+    UIInterfaceOrientation interfaceOrientation = [UIApplication sharedApplication].statusBarOrientation;
+    [self adjustViewsForOrientations:interfaceOrientation];
+}
+
+#pragma mark -
+#pragma mark Rotating
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
 {
-    return (interfaceOrientation == UIInterfaceOrientationPortrait);
+    return (interfaceOrientation == UIInterfaceOrientationMaskAllButUpsideDown);
 }
+
+-(BOOL)shouldAutorotate
+{
+    return YES;
+}
+
+-(NSUInteger) supportedInterfaceOrientations
+{
+    return UIInterfaceOrientationMaskAllButUpsideDown;
+}
+
+-(void) willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
+{
+    [self adjustViewsForOrientations:toInterfaceOrientation];
+}
+
+-(void) adjustViewsForOrientations: (UIInterfaceOrientation) interfaceOrientation
+{
+    if (interfaceOrientation == UIInterfaceOrientationLandscapeLeft || interfaceOrientation == UIInterfaceOrientationLandscapeRight) {
+        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+            [[NSBundle mainBundle] loadNibNamed:@"Step_07_ViewController_ipad" owner:self options:nil];
+        } else {
+            [[NSBundle mainBundle] loadNibNamed:@"Step_07_ViewController_land" owner:self options:nil];
+        }
+    } else if (interfaceOrientation == UIInterfaceOrientationMaskPortrait || interfaceOrientation == UIInterfaceOrientationMaskPortraitUpsideDown)
+    {
+        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+            [[NSBundle mainBundle] loadNibNamed:@"Step_07_ViewController_ipad" owner:self options:nil];
+        } else {
+            [[NSBundle mainBundle] loadNibNamed:@"Step_07_ViewController" owner:self options:nil];
+        }
+    }
+}
+
 
 #pragma  mark -
 #pragma mark Table View delegate & datasource
