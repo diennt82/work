@@ -130,21 +130,6 @@
 	        (interfaceOrientation == UIInterfaceOrientationLandscapeRight));
 }
 */
-
-- (BOOL) shouldAutorotate
-{
-    
-    
-    return NO;
-}
-
--(NSUInteger)supportedInterfaceOrientations
-{
-    
-    return UIInterfaceOrientationMaskPortrait;
-    
-}
-
 - (UIInterfaceOrientation)preferredInterfaceOrientationForPresentation
 {
     return UIInterfaceOrientationPortrait;
@@ -164,15 +149,15 @@
     // e.g. self.myOutlet = nil;
 }
 
-
--(void) viewWillAppear:(BOOL)animated
-{
-    
-    NSLog(@"viewWillAppear");  
-    [[UIApplication sharedApplication] setStatusBarOrientation:UIInterfaceOrientationPortrait];
-    //[[UIDevice currentDevice] setOrientation:UIInterfaceOrientationPortrait];
-    
-}
+//
+//-(void) viewWillAppear:(BOOL)animated
+//{
+//    
+//    NSLog(@"viewWillAppear");  
+//    [[UIApplication sharedApplication] setStatusBarOrientation:UIInterfaceOrientationPortrait];
+//    //[[UIDevice currentDevice] setOrientation:UIInterfaceOrientationPortrait];
+//    
+//}
 - (void)dealloc {
 	[userName release];
 	[password release];
@@ -236,8 +221,6 @@
     
     [bms_comm BMS_loginWithUser:self.temp_user_str AndPass:self.temp_pass_str];
 }
-
-
 
 -(BOOL) isCurrentConnection3G
 {
@@ -328,6 +311,60 @@
                                        selector:@selector(doSignIn:)
                                        userInfo:nil
                                         repeats:NO];
+    }
+}
+-(void) viewWillAppear:(BOOL)animated
+{
+    UIInterfaceOrientation interfaceOrientation = [UIApplication sharedApplication].statusBarOrientation;
+    [self adjustViewsForOrientations:interfaceOrientation];
+}
+
+#pragma mark -
+#pragma mark Rotating
+- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
+{
+    return (interfaceOrientation == UIInterfaceOrientationMaskAllButUpsideDown);
+}
+
+-(BOOL)shouldAutorotate
+{
+    return YES;
+}
+
+-(NSUInteger) supportedInterfaceOrientations
+{
+    return UIInterfaceOrientationMaskAllButUpsideDown;
+}
+
+-(void) willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
+{
+    [self adjustViewsForOrientations:toInterfaceOrientation];
+}
+
+-(void) adjustViewsForOrientations: (UIInterfaceOrientation) interfaceOrientation
+{
+    if (interfaceOrientation == UIInterfaceOrientationLandscapeLeft ||
+        interfaceOrientation == UIInterfaceOrientationLandscapeRight)
+    {
+        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+        {
+            [[NSBundle mainBundle] loadNibNamed:@"MBP_LoginOrRegistration_ipad" owner:self options:nil];
+        }
+        else
+        {
+            [[NSBundle mainBundle] loadNibNamed:@"MBP_LoginOrRegistration_land" owner:self options:nil];
+        }
+    }
+    else if (interfaceOrientation == UIInterfaceOrientationPortrait ||
+             interfaceOrientation == UIInterfaceOrientationPortraitUpsideDown)
+    {
+        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+            [[NSBundle mainBundle] loadNibNamed:@"MBP_LoginOrRegistration_ipad" owner:self options:nil];
+        }
+        else
+        {
+            [[NSBundle mainBundle] loadNibNamed:@"MBP_LoginOrRegistration" owner:self options:nil];
+        }
     }
 }
 

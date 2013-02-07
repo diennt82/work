@@ -226,6 +226,7 @@
 		BCE2C47E16C37E36005890FE /* Setup_bm_step_11_land.xib in Resources */ = {isa = PBXBuildFile; fileRef = BCE2C47C16C37E36005890FE /* Setup_bm_step_11_land.xib */; };
 		BCE2C48316C37F1B005890FE /* Setup_bm_step_12_land.xib in Resources */ = {isa = PBXBuildFile; fileRef = BCE2C48116C37F1B005890FE /* Setup_bm_step_12_land.xib */; };
 		BCE2C48C16C395C1005890FE /* Step_02_ViewController_land.xib in Resources */ = {isa = PBXBuildFile; fileRef = BCE2C48A16C395C1005890FE /* Step_02_ViewController_land.xib */; };
+		BCE2C4B016C3C1FF005890FE /* MBP_LoginOrRegistration_land.xib in Resources */ = {isa = PBXBuildFile; fileRef = BCE2C4AE16C3C1FE005890FE /* MBP_LoginOrRegistration_land.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -652,6 +653,9 @@
 		BCE2C48416C37F76005890FE /* es */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = es; path = es.lproj/Setup_bm_step_12_land.xib; sourceTree = "<group>"; };
 		BCE2C48516C37F78005890FE /* fr */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = fr; path = fr.lproj/Setup_bm_step_12_land.xib; sourceTree = "<group>"; };
 		BCE2C48B16C395C1005890FE /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/Step_02_ViewController_land.xib; sourceTree = "<group>"; };
+		BCE2C4AF16C3C1FF005890FE /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/MBP_LoginOrRegistration_land.xib; sourceTree = "<group>"; };
+		BCE2C4B216C3C456005890FE /* es */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = es; path = es.lproj/MBP_LoginOrRegistration_land.xib; sourceTree = "<group>"; };
+		BCE2C4B316C3C45F005890FE /* fr */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = fr; path = fr.lproj/MBP_LoginOrRegistration_land.xib; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -865,6 +869,7 @@
 				97987DEF1546A1630066C49B /* MBP_LoginOrRegistration.h */,
 				97987DF01546A1630066C49B /* MBP_LoginOrRegistration.mm */,
 				38DE1C0C168ADA550049E814 /* MBP_LoginOrRegistration.xib */,
+				BCE2C4AE16C3C1FE005890FE /* MBP_LoginOrRegistration_land.xib */,
 				38DE1C07168ADA460049E814 /* MBP_LoginOrRegistration_ipad.xib */,
 				1D3623240D0F684500981E51 /* MBP_iosAppDelegate.h */,
 				1D3623250D0F684500981E51 /* MBP_iosAppDelegate.mm */,
@@ -1258,6 +1263,7 @@
 				BCE2C47E16C37E36005890FE /* Setup_bm_step_11_land.xib in Resources */,
 				BCE2C48316C37F1B005890FE /* Setup_bm_step_12_land.xib in Resources */,
 				BCE2C48C16C395C1005890FE /* Step_02_ViewController_land.xib in Resources */,
+				BCE2C4B016C3C1FF005890FE /* MBP_LoginOrRegistration_land.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2020,6 +2026,16 @@
 				BCE2C48B16C395C1005890FE /* en */,
 			);
 			name = Step_02_ViewController_land.xib;
+			sourceTree = "<group>";
+		};
+		BCE2C4AE16C3C1FE005890FE /* MBP_LoginOrRegistration_land.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				BCE2C4AF16C3C1FF005890FE /* en */,
+				BCE2C4B216C3C456005890FE /* es */,
+				BCE2C4B316C3C45F005890FE /* fr */,
+			);
+			name = MBP_LoginOrRegistration_land.xib;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
