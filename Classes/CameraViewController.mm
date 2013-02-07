@@ -3515,7 +3515,7 @@
     
 	//float totalTime  = 80.0; // 80 sec reboot time
     
-	float sleepPeriod = 80.0 / 100; // 100 cycles
+	float sleepPeriod = 120.0 / 100; // 100 cycles
 	int percentage = 0; 
 	while (percentage ++ < 100)
 	{
