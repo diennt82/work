@@ -221,6 +221,8 @@
 		BCA1A4EC16C2779C00E7EF56 /* Step_06_ViewController_land.xib in Resources */ = {isa = PBXBuildFile; fileRef = BCA1A4EA16C2779C00E7EF56 /* Step_06_ViewController_land.xib */; };
 		BCA1A4F316C2799100E7EF56 /* Step_07_ViewController_land.xib in Resources */ = {isa = PBXBuildFile; fileRef = BCA1A4F116C2799100E7EF56 /* Step_07_ViewController_land.xib */; };
 		BCA1A4F816C27A7B00E7EF56 /* Step_08_ViewController_land.xib in Resources */ = {isa = PBXBuildFile; fileRef = BCA1A4F616C27A7A00E7EF56 /* Step_08_ViewController_land.xib */; };
+		BCA8368D16C3675E005B5D1D /* Step_09_ViewController_land.xib in Resources */ = {isa = PBXBuildFile; fileRef = BCA8368B16C3675E005B5D1D /* Step_09_ViewController_land.xib */; };
+		BCE2C47916C36ED3005890FE /* Step_10_ViewController_land.xib in Resources */ = {isa = PBXBuildFile; fileRef = BCE2C47716C36ED3005890FE /* Step_10_ViewController_land.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -632,6 +634,14 @@
 		BCA1A4F416C279F600E7EF56 /* es */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = es; path = es.lproj/Step_07_ViewController_land.xib; sourceTree = "<group>"; };
 		BCA1A4F516C279FC00E7EF56 /* fr */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = fr; path = fr.lproj/Step_07_ViewController_land.xib; sourceTree = "<group>"; };
 		BCA1A4F716C27A7A00E7EF56 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/Step_08_ViewController_land.xib; sourceTree = "<group>"; };
+		BCA8368816C35B3D005B5D1D /* es */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = es; path = es.lproj/Step_08_ViewController_land.xib; sourceTree = "<group>"; };
+		BCA8368A16C35B41005B5D1D /* fr */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = fr; path = fr.lproj/Step_08_ViewController_land.xib; sourceTree = "<group>"; };
+		BCA8368C16C3675E005B5D1D /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/Step_09_ViewController_land.xib; sourceTree = "<group>"; };
+		BCE2C47416C36D8D005890FE /* es */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = es; path = es.lproj/Step_09_ViewController_land.xib; sourceTree = "<group>"; };
+		BCE2C47616C36D92005890FE /* fr */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = fr; path = fr.lproj/Step_09_ViewController_land.xib; sourceTree = "<group>"; };
+		BCE2C47816C36ED3005890FE /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/Step_10_ViewController_land.xib; sourceTree = "<group>"; };
+		BCE2C47A16C37A80005890FE /* es */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = es; path = es.lproj/Step_10_ViewController_land.xib; sourceTree = "<group>"; };
+		BCE2C47B16C37A82005890FE /* fr */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = fr; path = fr.lproj/Step_10_ViewController_land.xib; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -750,7 +760,13 @@
 				38DE1C89168AEB1B0049E814 /* Step_08_ViewController_ipad.xib */,
 				38A478F815C12912008682FE /* Step_08_ViewController.h */,
 				38A478F915C12913008682FE /* Step_08_ViewController.mm */,
+				38DE1C84168AEB0E0049E814 /* Step_09_ViewController.xib */,
+				BCA8368B16C3675E005B5D1D /* Step_09_ViewController_land.xib */,
+				38DE1C7F168AEB000049E814 /* Step_09_ViewController_ipad.xib */,
+				38A478FC15C12CF2008682FE /* Step_09_ViewController.mm */,
+				38A478FB15C12CF1008682FE /* Step_09_ViewController.h */,
 				38DE1C7A168AEAF30049E814 /* Step_10_ViewController.xib */,
+				BCE2C47716C36ED3005890FE /* Step_10_ViewController_land.xib */,
 				38DE1C75168AEAE70049E814 /* Step_10_ViewController_ipad.xib */,
 				38C79E2015C26947006EE378 /* Step_10_ViewController.h */,
 				38C79E2115C26947006EE378 /* Step_10_ViewController.mm */,
@@ -1224,6 +1240,8 @@
 				BCA1A4EC16C2779C00E7EF56 /* Step_06_ViewController_land.xib in Resources */,
 				BCA1A4F316C2799100E7EF56 /* Step_07_ViewController_land.xib in Resources */,
 				BCA1A4F816C27A7B00E7EF56 /* Step_08_ViewController_land.xib in Resources */,
+				BCA8368D16C3675E005B5D1D /* Step_09_ViewController_land.xib in Resources */,
+				BCE2C47916C36ED3005890FE /* Step_10_ViewController_land.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1934,8 +1952,30 @@
 			isa = PBXVariantGroup;
 			children = (
 				BCA1A4F716C27A7A00E7EF56 /* en */,
+				BCA8368816C35B3D005B5D1D /* es */,
+				BCA8368A16C35B41005B5D1D /* fr */,
 			);
 			name = Step_08_ViewController_land.xib;
+			sourceTree = "<group>";
+		};
+		BCA8368B16C3675E005B5D1D /* Step_09_ViewController_land.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				BCA8368C16C3675E005B5D1D /* en */,
+				BCE2C47416C36D8D005890FE /* es */,
+				BCE2C47616C36D92005890FE /* fr */,
+			);
+			name = Step_09_ViewController_land.xib;
+			sourceTree = "<group>";
+		};
+		BCE2C47716C36ED3005890FE /* Step_10_ViewController_land.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				BCE2C47816C36ED3005890FE /* en */,
+				BCE2C47A16C37A80005890FE /* es */,
+				BCE2C47B16C37A82005890FE /* fr */,
+			);
+			name = Step_10_ViewController_land.xib;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
