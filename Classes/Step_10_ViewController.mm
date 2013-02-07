@@ -572,23 +572,24 @@
 	self.progressView.hidden = YES;
     self.navigationItem.hidesBackButton = YES;
     
+    UIInterfaceOrientation interfaceOrientation = [UIApplication sharedApplication].statusBarOrientation;
     
-    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+    if (interfaceOrientation == UIInterfaceOrientationLandscapeLeft || interfaceOrientation == UIInterfaceOrientationLandscapeRight) {
+        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+            [[NSBundle mainBundle] loadNibNamed:@"Setup_bm_step_12_ipad" owner:self options:nil];
+        } else {
+            [[NSBundle mainBundle] loadNibNamed:@"Setup_bm_step_12_land" owner:self options:nil];
+        }
+    } else if (interfaceOrientation == UIInterfaceOrientationMaskPortrait || interfaceOrientation == UIInterfaceOrientationMaskPortraitUpsideDown)
     {
         //Step 12
-        [[NSBundle mainBundle] loadNibNamed:@"Setup_bm_step_12_ipad"
-                                      owner:self
-                                    options:nil];
+        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+            [[NSBundle mainBundle] loadNibNamed:@"Setup_bm_step_12_ipad" owner:self options:nil];
+        } else {
+            [[NSBundle mainBundle] loadNibNamed:@"Setup_bm_step_12" owner:self options:nil];
+        }
     }
-    else
-    {
-        //Step 12
-        [[NSBundle mainBundle] loadNibNamed:@"Setup_bm_step_12"
-                                      owner:self
-                                    options:nil];
 
-        
-    }
     [self.view addSubview:self.setupCompleteView];
 
     
@@ -625,21 +626,21 @@
     
     
     
-    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+    UIInterfaceOrientation interfaceOrientation = [UIApplication sharedApplication].statusBarOrientation;
+    
+    if (interfaceOrientation == UIInterfaceOrientationLandscapeLeft || interfaceOrientation == UIInterfaceOrientationLandscapeRight) {
+        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+            [[NSBundle mainBundle] loadNibNamed:@"Setup_bm_step_11_ipad" owner:self options:nil];
+        } else {
+            [[NSBundle mainBundle] loadNibNamed:@"Setup_bm_step_11_land" owner:self options:nil];
+        }
+    } else if (interfaceOrientation == UIInterfaceOrientationMaskPortrait || interfaceOrientation == UIInterfaceOrientationMaskPortraitUpsideDown)
     {
-        //Step 11
-        [[NSBundle mainBundle] loadNibNamed:@"Setup_bm_step_11_ipad"
-                                      owner:self
-                                    options:nil];
-    }
-    else
-    {
-        //Step 11
-        [[NSBundle mainBundle] loadNibNamed:@"Setup_bm_step_11"
-                                      owner:self
-                                    options:nil];
-        
-        
+        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+            [[NSBundle mainBundle] loadNibNamed:@"Setup_bm_step_11_ipad" owner:self options:nil];
+        } else {
+            [[NSBundle mainBundle] loadNibNamed:@"Setup_bm_step_11" owner:self options:nil];
+        }
     }
     
   
