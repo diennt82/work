@@ -107,7 +107,7 @@
         } else {
             [[NSBundle mainBundle] loadNibNamed:@"Step_08_ViewController_land" owner:self options:nil];
         }
-    } else if (interfaceOrientation == UIInterfaceOrientationMaskPortrait || interfaceOrientation == UIInterfaceOrientationMaskPortraitUpsideDown)
+    } else if (interfaceOrientation == UIInterfaceOrientationPortrait || interfaceOrientation == UIInterfaceOrientationPortraitUpsideDown)
     {
         if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
             [[NSBundle mainBundle] loadNibNamed:@"Step_08_ViewController_ipad" owner:self options:nil];

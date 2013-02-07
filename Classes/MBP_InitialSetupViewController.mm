@@ -161,24 +161,35 @@
 
 -(void) adjustViewsForOrientations:(UIInterfaceOrientation) orientation
 {
-    if (orientation == UIInterfaceOrientationLandscapeLeft || orientation == UIInterfaceOrientationLandscapeRight) {
-        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+    if (orientation == UIInterfaceOrientationLandscapeLeft ||
+        orientation == UIInterfaceOrientationLandscapeRight)
+    {
+        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+        {
             
             [[NSBundle mainBundle] loadNibNamed:@"MBP_InitialSetupViewController_ipad" owner:self options:nil];
             
-        } else {
+        }
+        else
+        {
             
             [[NSBundle mainBundle] loadNibNamed:@"MBP_InitialSetupViewController_land" owner:self options:nil];
             
         }
         
-    } else if (orientation == UIInterfaceOrientationMaskPortrait || orientation == UIInterfaceOrientationMaskPortraitUpsideDown) {
+    }
+    else if (orientation == UIInterfaceOrientationPortrait ||
+             orientation == UIInterfaceOrientationPortraitUpsideDown)
+    {
         
-        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+        {
             
             [[NSBundle mainBundle] loadNibNamed:@"MBP_InitialSetupViewController_ipad" owner:self options:nil];
             
-        } else {
+        }
+        else
+        {
             
             [[NSBundle mainBundle] loadNibNamed:@"MBP_InitialSetupViewController" owner:self options:nil];
             

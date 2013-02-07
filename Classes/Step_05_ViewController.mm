@@ -103,17 +103,26 @@
 
 -(void) adjustViewsForOrientations: (UIInterfaceOrientation) interfaceOrientation
 {
-    if (interfaceOrientation == UIInterfaceOrientationLandscapeLeft || interfaceOrientation == UIInterfaceOrientationLandscapeRight) {
-        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+    if (interfaceOrientation == UIInterfaceOrientationLandscapeLeft ||
+        interfaceOrientation == UIInterfaceOrientationLandscapeRight)
+    {
+        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+        {
             [[NSBundle mainBundle] loadNibNamed:@"Step_05_ViewController_ipad" owner:self options:nil];
-        } else {
+        }
+        else
+        {
             [[NSBundle mainBundle] loadNibNamed:@"Step_05_ViewController_land" owner:self options:nil];
         }
-    } else if (interfaceOrientation == UIInterfaceOrientationMaskPortrait || interfaceOrientation == UIInterfaceOrientationMaskPortraitUpsideDown)
+    }
+    else if (interfaceOrientation == UIInterfaceOrientationPortrait ||
+             interfaceOrientation == UIInterfaceOrientationPortraitUpsideDown)
     {
         if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
             [[NSBundle mainBundle] loadNibNamed:@"Step_05_ViewController_ipad" owner:self options:nil];
-        } else {
+        }
+        else
+        {
             [[NSBundle mainBundle] loadNibNamed:@"Step_05_ViewController" owner:self options:nil];
         }
     }
