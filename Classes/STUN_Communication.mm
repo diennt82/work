@@ -223,9 +223,6 @@
             NSScanner  * hexVal = [NSScanner scannerWithString:_errCode];
             uint error_code =  -1;
             [hexVal scanHexInt:&error_code];
-#if 0 //Debug
-            NSLog(@"errCode: %@ --Int --> %d",_errCode, error_code );
-#endif
             
             
             if (error_code != 200)
