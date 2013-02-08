@@ -269,7 +269,7 @@
         self.remoteViewTimer = nil ;
 	}
     
-    NSLog(@"caller is %p sel is %p", caller , timerCallback);
+    //NSLog(@"caller is %p sel is %p", caller , timerCallback);
 
     self.remoteViewTimer = [NSTimer scheduledTimerWithTimeInterval:5*60
 															target:caller
@@ -293,7 +293,7 @@
     
     caller = _caller;
     timerCallback = _sel;
-    NSLog(@"caller is %p sel is %p", caller , _sel);
+    //NSLog(@"caller is %p sel is %p", caller , _sel);
     
     
     

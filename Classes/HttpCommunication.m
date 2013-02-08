@@ -723,9 +723,10 @@
 
 - (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response;
 {
-	NSLog(@"did recv response"); 
-	
-	
+//	NSLog(@"did recv response");
+	int statusCode = [((NSHTTPURLResponse*) response) statusCode];
+	NSLog(@"did recv response: code: %d", statusCode);
+
 	responseData = [[NSMutableData alloc] init];
 	
 

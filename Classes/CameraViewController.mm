@@ -1369,6 +1369,30 @@
                        
             break;
         }
+        case REMOTE_STREAM_SSKEY_MISMATCH:
+        {
+            //Stop stream - clean up all resources
+            [self.streamer stopStreaming];
+            self.selected_channel.stopStreaming = TRUE;
+            
+            //simply popup and ask to retry and show camera list
+            NSString * msg = NSLocalizedStringWithDefaultValue(@"cant_start_stream_01",nil, [NSBundle mainBundle],
+                                                               @"The session key on camera is mis-matched. Please reset the camera and add the camera again" , nil);
+            
+            
+            NSString * ok = NSLocalizedStringWithDefaultValue(@"Ok",nil, [NSBundle mainBundle],
+                                                              @"Ok", nil);
+            UIAlertView *_alert = [[UIAlertView alloc]
+                                   initWithTitle:@""
+                                   message:msg
+                                   delegate:self
+                                   cancelButtonTitle:ok
+                                   otherButtonTitles:nil];
+            _alert.tag = REMOTE_SSKEY_MISMATCH ;
+            [_alert show];
+            [_alert release];
+            break;
+        }
 		default:
 			break;
 	}
@@ -1619,6 +1643,10 @@
     else if (tag == REMOTE_VIDEO_CANT_START)
     {
         
+        [self goBackToCameraList];
+    }
+    else if (tag == REMOTE_SSKEY_MISMATCH)
+    {
         [self goBackToCameraList];
     }
     

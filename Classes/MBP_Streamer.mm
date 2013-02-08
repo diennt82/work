@@ -86,6 +86,51 @@
 
 #pragma mark -
 #pragma mark  HTTP stream
+
+
+#pragma mark NSURLConnection Delegate functions
+/****** NSURLConnection Delegate functions ******/
+
+
+
+- (void)connection:(NSURLConnection *)connection didReceiveAuthenticationChallenge:(NSURLAuthenticationChallenge *)challenge
+{
+	NSLog(@"did recv auth challenge: %@", challenge);
+	
+}
+
+
+
+- (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response;
+{
+    //	NSLog(@"did recv response");
+	int statusCode = [((NSHTTPURLResponse*) response) statusCode];
+	NSLog(@"did recv response: code: %d", statusCode);
+    
+    
+	
+}
+
+- (void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data {
+
+}
+
+
+- (void)connectionDidFinishLoading:(NSURLConnection *)connection
+{
+    
+	//NSLog(@"response: %@", txt);
+}
+
+
+- (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error
+{
+	NSLog(@"failed with error: %@", error);
+    
+}
+
+
+
 - (void) startStreaming
 {
 	NSLog(@"connect to %@:%d", self.device_ip, self.device_port);
@@ -105,6 +150,72 @@
     
     
     
+    //Connection test
+    if (self.remoteView == TRUE && self.remoteViewKey != nil)
+    {
+        
+        NSError* error= nil;
+        NSHTTPURLResponse * response = nil;
+        NSString * http_cmd = [NSString stringWithFormat:@"http://%@:%d/?%@%@%@",
+                               self.device_ip, self.device_port,
+                               AVSTREAM_UDT_REQ,AVSTREAM_PARAM_1, self.remoteViewKey];
+        NSMutableURLRequest *theRequest=[NSMutableURLRequest requestWithURL:[NSURL URLWithString:http_cmd]
+																cachePolicy: NSURLRequestReloadIgnoringLocalAndRemoteCacheData
+															timeoutInterval:DEFAULT_TIME_OUT];
+        [theRequest setHTTPMethod:@"GET"];
+        
+        NSString *authHeader = [@"Basic " stringByAppendingFormat:@"%@", [Util getDFCredentials]];
+		[theRequest addValue:authHeader forHTTPHeaderField:@"Authorization"];
+        
+        
+        NSString * body = [[NSString alloc] initWithData:theRequest.HTTPBody encoding:NSUTF8StringEncoding ];
+        
+        NSLog(@"Test POST  cmd: %@", body);
+        
+        body  =  [[NSString alloc] initWithContentsOfURL:[NSURL URLWithString:http_cmd] encoding:NSUTF8StringEncoding error:&error];
+        NSLog(@"body 2 : %@, err:%d", body, [error code]);
+   
+#if 0
+        //use delegate funcs
+        [[NSURLConnection alloc] initWithRequest:theRequest
+                                        delegate:self
+                                startImmediately:TRUE];
+
+#else
+
+        NSData * dataReply = [NSURLConnection sendSynchronousRequest:theRequest returningResponse:&response error:&error];
+        
+        
+        NSLog(@"status code: %d",  [response statusCode]);
+        NSString *myString = [[NSString alloc] initWithData:dataReply encoding:NSUTF8StringEncoding];
+        
+        NSLog(@"reply: %@", myString);
+        
+        //if (response != nil)
+        {
+            
+            int statusCode = [(NSHTTPURLResponse*) response statusCode];
+            
+            if ( (statusCode == 401) || (statusCode == 601) )
+            {
+                NSLog(@"get status 401 or 601 -->>>>>>");
+                [mHandler statusReport:REMOTE_STREAM_SSKEY_MISMATCH andObj:nil];
+                
+                return;
+                
+            }
+            
+        }
+    
+        
+        
+        
+#endif 
+        
+    }
+
+    
+
 	initialFlag = 1;
 	listenSocket = [[AsyncSocket alloc] initWithDelegate:self];
 	//Non-blocking connect
@@ -112,8 +223,6 @@
                          onPort:self.device_port
                     withTimeout:5
                           error:nil];
-    
-    
     
 }
 //same as startStreaming for now, however may change later.. keep it separate.
@@ -172,6 +281,9 @@
 	NSLog(@"getReq: %@", getReq);
     
 	NSData *getReqData = [getReq dataUsingEncoding:NSUTF8StringEncoding];
+    
+    
+       
     
 	[listenSocket writeData:getReqData withTimeout:2 tag:1];
 	[listenSocket readDataWithTimeout:5.0 tag:1];
@@ -453,6 +565,15 @@
     int localPort = -1 ;
     
 	struct in_addr * server_ip = [UdtSocketWrapper getIpfromHostName:self.device_ip];
+
+    
+#if 0 //DBG only
+    NSLog(@"[BG thread] Debug 601 error "); 
+    server_ip = [UdtSocketWrapper getIpfromHostName:@"192.168.1.101"];
+    
+    self.device_port = 2345;
+    
+#endif
     
 	NSLog(@"[BG thread] tryConnectToUDT_bg: connect to %@:%d from localport: %d server_ip:%d",
           self.device_ip, self.device_port ,
@@ -465,9 +586,12 @@
 	//The receiver is earlier in time than anotherDate, NSOrderedAscending.
 	while ([now compare:timeout] ==   NSOrderedAscending)
 	{
-        
+     
+
 		localPort = [udtSocket_ connectViaUdtSock:server_ip
                                             port:self.device_port];
+
+
 		NSLog(@"[BG thread] tryConnectToUDT_bg: localPort = %d", localPort);
 		if (localPort > 0)
 		{
@@ -592,12 +716,34 @@
 	[mHandler statusReport:REMOTE_STREAM_STOPPED_UNEXPECTEDLY andObj:obj];
 }
 
+- (void) sendStatusSSkeyErrorOnMainThread:(NSObject *) obj
+{
+	[mHandler statusReport:REMOTE_STREAM_SSKEY_MISMATCH andObj:obj];
+}
 
 -(void) sendStatusStoppedReportOnMainThread:(NSObject *) obj
 {
 	[mHandler statusReport:STREAM_STOPPED andObj:obj];
 }
 
+-(BOOL) isSskeyMismatch: (NSMutableData *) data len:(int) data_len
+{
+    NSRange range = {0, data_len};
+    NSData * myData = [data subdataWithRange:range];
+    
+    
+    NSString *myString = [[NSString alloc] initWithData:myData encoding:NSUTF8StringEncoding];
+    
+    
+    if ( [myString hasPrefix:@"401" ] ||
+         [myString hasPrefix:@"601"])
+    {
+        return TRUE;
+    }
+    
+    return FALSE; 
+    
+}
 
 
 #define READ_16K_DATA 16*1024
@@ -674,6 +820,18 @@
             firstSuccessRead = TRUE;
         }
         
+        if ([self isSskeyMismatch:data len:bytesRead])
+        {
+            NSLog(@"aaa sskey mismatch"); 
+            [self performSelectorOnMainThread:@selector(sendStatusSSkeyErrorOnMainThread:)
+                                   withObject:nil
+                                waitUntilDone:YES];
+            break; 
+        }
+        
+        
+        
+        
 		//Kick this timeout
 		streamer.stillReading = TRUE;
         
@@ -685,6 +843,8 @@
 			continue;
 		}
 		[data setLength:bytesRead];
+        
+        
         
         
         //NSLog(@"bytesRead:%d initialFlag: %d, res_len: %d",bytesRead, initialFlag, [responseData length]);
@@ -1113,7 +1273,7 @@
             
             if (self.remoteView == TRUE && self.remoteViewKey != nil)
             {
-               [mHandler statusReport:REMOTE_STREAM_STOPPED_UNEXPECTEDLY andObj:nil];
+               [mHandler statusReport:REMOTE_STREAM_SSKEY_MISMATCH andObj:nil];
             }
             else
             {
@@ -1324,7 +1484,19 @@
 	NSLog(@"Streamer- connection failed with error:%d:%@" ,
           [err code], err);
     
+
 	[self.videoImage setImage:[UIImage imageNamed:@"homepage.png"]];
+    
+    
+    //Check for session key mismatch
+    if ([err code] == 401 ||
+        [err code] == 601 )
+    {
+        NSLog(@"Streamer- sskey mismatch");
+        [mHandler statusReport:REMOTE_STREAM_SSKEY_MISMATCH andObj:nil];
+        return;
+    }
+    
     
 	if (hasStoppedByCaller == TRUE)
 	{

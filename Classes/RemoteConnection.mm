@@ -271,7 +271,8 @@
 		mChannel.profile.ptt_port = ptt_port;
 		
 	}
-	else {
+	else
+    {
 		
 		NSLog(@"getPort Failed to set PTT port");
 		

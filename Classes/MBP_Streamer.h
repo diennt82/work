@@ -34,6 +34,7 @@
 #define CONNECTED_TO_CAMERA         6
 
 #define REMOTE_STREAM_CANT_CONNECT_FIRST_TIME 7 
+#define REMOTE_STREAM_SSKEY_MISMATCH  8 
 
 -(void) statusReport:(int) status andObj:(NSObject*) obj; 
 
