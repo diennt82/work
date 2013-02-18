@@ -39,7 +39,7 @@
 					<object class="IBUIImageView" id="843846409">
 						<reference key="NSNextResponder" ref="426324760"/>
 						<int key="NSvFlags">292</int>
-						<string key="NSFrameSize">{768, 1004}</string>
+						<string key="NSFrameSize">{1024, 748}</string>
 						<reference key="NSSuperview" ref="426324760"/>
 						<reference key="NSNextKeyView" ref="798459403"/>
 						<string key="NSReuseIdentifierKey">_NS:9</string>
@@ -53,7 +53,7 @@
 					<object class="IBUITableView" id="798459403">
 						<reference key="NSNextResponder" ref="426324760"/>
 						<int key="NSvFlags">274</int>
-						<string key="NSFrame">{{0, 36}, {768, 833}}</string>
+						<string key="NSFrame">{{0, 36}, {1024, 577}}</string>
 						<reference key="NSSuperview" ref="426324760"/>
 						<string key="NSReuseIdentifierKey">_NS:9</string>
 						<object class="NSColor" key="IBUIBackgroundColor">
@@ -73,7 +73,7 @@
 						<float key="IBUISectionFooterHeight">10</float>
 					</object>
 				</array>
-				<string key="NSFrame">{{0, 20}, {768, 1004}}</string>
+				<string key="NSFrame">{{0, 20}, {1024, 748}}</string>
 				<reference key="NSSuperview"/>
 				<reference key="NSNextKeyView" ref="843846409"/>
 				<object class="NSColor" key="IBUIBackgroundColor">
@@ -85,6 +85,10 @@
 				</object>
 				<object class="IBUISimulatedStatusBarMetrics" key="IBUISimulatedStatusBarMetrics">
 					<int key="IBUIStatusBarStyle">2</int>
+				</object>
+				<object class="IBUISimulatedOrientationMetrics" key="IBUISimulatedOrientationMetrics">
+					<int key="IBUIInterfaceOrientation">3</int>
+					<int key="interfaceOrientation">3</int>
 				</object>
 				<object class="IBUIScreenMetrics" key="IBUISimulatedDestinationMetrics">
 					<string key="IBUISimulatedSizeMetricsClass">IBUIScreenMetrics</string>

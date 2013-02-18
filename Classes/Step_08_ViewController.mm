@@ -103,7 +103,7 @@
 {
     if (interfaceOrientation == UIInterfaceOrientationLandscapeLeft || interfaceOrientation == UIInterfaceOrientationLandscapeRight) {
         if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
-            [[NSBundle mainBundle] loadNibNamed:@"Step_08_ViewController_ipad" owner:self options:nil];
+            [[NSBundle mainBundle] loadNibNamed:@"Step_08_ViewController_land_ipad" owner:self options:nil];
         } else {
             [[NSBundle mainBundle] loadNibNamed:@"Step_08_ViewController_land" owner:self options:nil];
         }

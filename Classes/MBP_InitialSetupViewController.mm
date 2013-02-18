@@ -167,7 +167,7 @@
         if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
         {
             
-            [[NSBundle mainBundle] loadNibNamed:@"MBP_InitialSetupViewController_ipad" owner:self options:nil];
+            [[NSBundle mainBundle] loadNibNamed:@"MBP_InitialSetupViewController_ipad_land" owner:self options:nil];
             
         }
         else

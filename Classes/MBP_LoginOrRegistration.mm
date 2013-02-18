@@ -348,7 +348,7 @@
     {
         if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
         {
-            [[NSBundle mainBundle] loadNibNamed:@"MBP_LoginOrRegistration_ipad" owner:self options:nil];
+            [[NSBundle mainBundle] loadNibNamed:@"MBP_LoginOrRegistration_land_ipad" owner:self options:nil];
         }
         else
         {
