@@ -504,6 +504,19 @@
 	
 }
 
+- (NSString *) sendCommandAndBlock:(NSString *)command withTimeout:(float) timeout
+{
+    NSString * stringReply;
+    NSData * dataReply = [self sendCommandAndBlock_raw:command withTimeout:timeout];
+    
+    // Interpret the response
+    stringReply = (NSString *)[[NSString alloc] initWithData:dataReply encoding:NSUTF8StringEncoding];
+    [stringReply autorelease];
+    
+    return stringReply;
+    
+}
+
 
 
 - (NSData *) sendCommandAndBlock_raw:(NSString *)command withTimeout:(NSTimeInterval) newTimeout
