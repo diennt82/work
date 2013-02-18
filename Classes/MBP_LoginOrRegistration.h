@@ -13,6 +13,7 @@
 #import "ConnectionMethodDelegate.h"
 #import "ForgotPwdViewController.h"
 #import "MBPNavController.h"
+#import "Reachability.h"
 
 #define LOGIN_BUTTON_TAG 200
 #define CREATE_NEW_BUTTON_TAG 201
@@ -30,6 +31,8 @@
 
 #define _AutoLogin @"shouldAutoLoginIfPossible"
 #define _OfflineMode @"offlineMode"
+
+#define _Use3G @"use3GToConnect"
 
 
 @interface MBP_LoginOrRegistration : UIViewController <UITableViewDataSource, UITableViewDelegate,UITextFieldDelegate> {

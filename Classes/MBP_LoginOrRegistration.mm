@@ -105,20 +105,8 @@
         if (shouldAutoLogin == TRUE	)
         {
             
-            NSString * msg = NSLocalizedStringWithDefaultValue(@"Logging_in_to_server" ,nil, [NSBundle mainBundle],
-                                                               @"Logging in to server..." , nil);
-            self.progressView.hidden = NO;
-            [self.progressLabel setText:msg];
-            self.navigationItem.leftBarButtonItem.enabled = NO ;
-            self.navigationItem.rightBarButtonItem.enabled = NO;  
-            
-            
-            [NSTimer scheduledTimerWithTimeInterval:0.1
-                                             target:self
-                                           selector:@selector(doSignIn:)
-                                           userInfo:nil
-                                            repeats:NO]; 
-            
+
+            [self check3GConnectionAndPopup];
             
         }
         else 
@@ -236,6 +224,10 @@
 
 -(void) doSignIn :(NSTimer *) exp
 {
+    
+
+    
+    
     BMS_Communication * bms_comm; 
     bms_comm = [[BMS_Communication alloc] initWithObject:self
                                                 Selector:@selector(loginSuccessWithResponse:) 
@@ -243,6 +235,67 @@
                                                ServerErr:@selector(loginFailedServerUnreachable)];
     
     [bms_comm BMS_loginWithUser:self.temp_user_str AndPass:self.temp_pass_str];
+}
+
+
+/* Return True to stop at login screen 
+          False to ignore and continue*/
+
+-(void) check3GConnectionAndPopup
+{
+    Reachability* wifiReach = [Reachability reachabilityForLocalWiFi];
+    NetworkStatus netStatus = [wifiReach currentReachabilityStatus];
+    if (netStatus!=ReachableViaWiFi)
+    {
+        //Popup now..
+        
+        self.navigationItem.leftBarButtonItem.enabled = YES ;
+        self.navigationItem.rightBarButtonItem.enabled = YES;
+        
+        NSLog(@"Wifi is not available ");
+        self.progressView.hidden = YES;
+        
+   
+        NSString * msg = NSLocalizedStringWithDefaultValue(@"wifi_not_available" ,nil, [NSBundle mainBundle],
+                                                           @"Mobile data is enabled. If you continue to connect, you may incur air time charges. Do you want to proceed?" ,nil);
+        
+        NSString * no = NSLocalizedStringWithDefaultValue(@"No" ,nil, [NSBundle mainBundle],
+                                                          @"No", nil);
+        
+        NSString * yes = NSLocalizedStringWithDefaultValue(@"Yes" ,nil, [NSBundle mainBundle],
+                                                           @"Yes", nil);
+        
+        //ERROR condition
+        UIAlertView *alert = [[UIAlertView alloc]
+                              initWithTitle:@""
+                              message:msg
+                              delegate:self
+                              cancelButtonTitle:no
+                              otherButtonTitles:yes, nil];
+        alert.tag = 113;
+        [alert show];
+        [alert release];
+    }
+    else
+    {
+        
+        
+        NSString * msg = NSLocalizedStringWithDefaultValue(@"Logging_in_to_server" ,nil, [NSBundle mainBundle],
+                                                           @"Logging in to server..." , nil);
+        self.progressView.hidden = NO;
+        [self.progressLabel setText:msg];
+        self.navigationItem.leftBarButtonItem.enabled = NO ;
+        self.navigationItem.rightBarButtonItem.enabled = NO;
+        
+        
+        
+        //Is on WIFI -> proceed
+        [NSTimer scheduledTimerWithTimeInterval:0.1
+                                         target:self
+                                       selector:@selector(doSignIn:)
+                                       userInfo:nil
+                                        repeats:NO];
+    }
 }
 
 #pragma mark -
@@ -300,7 +353,7 @@
 - (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex {
 	
 	int tag = alertView.tag;
-	if (tag == 112) //OFFLINE mode ?? 
+	if (tag == 112) //OFFLINE mode ??
     {
         switch (buttonIndex) {
             case 0:
@@ -313,14 +366,53 @@
                 [userDefaults synchronize];
                 
                 //signal iosViewController
-                [delegate sendStatus:3];
+                [delegate sendStatus:SCAN_CAMERA];
                 break;
             }
             default:
                 break;
         }
     }
-	
+  
+    if (tag == 113) // 3g check
+    {
+        switch (buttonIndex)
+        {
+            case 0:
+            {
+                NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+                [userDefaults setBool:NO forKey:_Use3G];
+                [userDefaults synchronize];
+                
+                break;
+            }
+            case 1://Yes - go by 3g
+            {
+                NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+                [userDefaults setBool:YES forKey:_Use3G];
+                [userDefaults synchronize];
+                
+                
+                
+                NSString * msg = NSLocalizedStringWithDefaultValue(@"Logging_in_to_server" ,nil, [NSBundle mainBundle],
+                                                                   @"Logging in to server..." , nil);
+                self.progressView.hidden = NO;
+                [self.progressLabel setText:msg];
+                self.navigationItem.leftBarButtonItem.enabled = NO ;
+                self.navigationItem.rightBarButtonItem.enabled = NO;
+
+                
+                //signal iosViewController
+                [self doSignIn:nil];
+                
+                break;
+            }
+            
+        }
+
+    }
+
+
 }
 
 
