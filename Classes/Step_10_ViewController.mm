@@ -49,6 +49,8 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    //Keep screen on
+    [UIApplication sharedApplication].idleTimerDisabled = YES;
 
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     
@@ -142,6 +144,9 @@
 {
     
     //Go back to the beginning
+
+    // Disable Keep screen on
+    [UIApplication sharedApplication].idleTimerDisabled=  NO;
     
     NSLog(@"RESTART aa");
    
@@ -189,14 +194,15 @@
                          macAddr:mac 
                          camName:camName];
     
-#endif
-    
 }
 
 -(IBAction)starMonitor:(id)sender
 {
     NSLog(@"START MONITOR");
     
+    // Disable Keep screen on
+    [UIApplication sharedApplication].idleTimerDisabled=  NO;
+
    
     MBP_InitialSetupViewController * initSetupController =(MBP_InitialSetupViewController *) [[self.navigationController viewControllers] objectAtIndex:0];
      [self.navigationController popToRootViewControllerAnimated:NO];

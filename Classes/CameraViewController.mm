@@ -1008,11 +1008,7 @@
     
 	NSLog(@"End of setupInfraCamera 11");
     
-    //DEBUG
-#if 0
-    [self startUpgradeFW];
-    
-#endif
+
 }
 
 #pragma mark -
@@ -1217,6 +1213,10 @@
             {
                 [self performSelectorInBackground:@selector(getVQ_bg) withObject:nil];
             }
+            
+            
+            
+            [UIApplication sharedApplication].idleTimerDisabled=  NO;
             
             break;
         }
@@ -1432,6 +1432,7 @@
 	}
     
     
+     [UIApplication sharedApplication].idleTimerDisabled=  YES;
 
 
 }
@@ -1440,6 +1441,8 @@
 -(void) prepareToViewRemotelyFailed
 {
     NSLog(@"Start remote connection Failed!!!");
+    
+    [UIApplication sharedApplication].idleTimerDisabled=  NO;
     
     NSString * title = NSLocalizedStringWithDefaultValue(@"Remote_View_Error",nil, [NSBundle mainBundle],
                                                          @"Remote View Error" , nil);
@@ -1487,6 +1490,7 @@
 -(void) remoteConnectionFailed_bg:(CamChannel *) camChannel
 {
     NSLog(@"[BG thread] remoteConnectionFailed_bg ");
+    
     [self performSelectorOnMainThread:@selector(remoteConnectionFailed:) withObject:camChannel waitUntilDone:NO];
 }
 
@@ -1498,6 +1502,7 @@
 	{
 		return;
 	}
+    [UIApplication sharedApplication].idleTimerDisabled=  NO;
     
     progressView.hidden = YES;
     
