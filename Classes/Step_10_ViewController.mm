@@ -153,9 +153,6 @@
 -(IBAction)registerCamera:(id)sender
 {
 
-#if 0 ///TEST TEST TEST 
-    [self  setupFailed];
-#else 
 
     
     self.progressView.hidden = NO; 
@@ -341,7 +338,7 @@
 				NSString * set_mkey = SET_MASTER_KEY;
 				NSString * response;
 				set_mkey =[set_mkey stringByAppendingString:self.master_key];
-				
+				BOOL master_key_sent = FALSE; 
 				int retries = 10; 
 				do 
 				{
@@ -351,9 +348,18 @@
 					{
 						NSLog(@"can't send master key, camera is not fully up"); 
 					}
-					else {
+					else
+                    {
 						NSLog(@"response: %@", response);
-						break; 
+                        if ([response hasPrefix:@"set_master_key: 0"])
+                        {
+                            ///done
+                            master_key_sent = TRUE;
+                            NSLog(@"sending master key done");
+                            
+                            break;
+                        }
+						
 					}
                     
 					
@@ -365,10 +371,13 @@
 				
 				
 				
-				///done
-				NSLog(@"sending master key done");
-				[self setupCompleted];
-				
+                if (master_key_sent == TRUE)
+                {
+                    ///done
+                    NSLog(@"sending master key done");
+                    [self setupCompleted];
+                }
+               
 				
 				
 				return; 
@@ -463,10 +472,15 @@
         else
         {
             NSLog(@"response: %@", response);
-            ///done
-            NSLog(@"sending master key done");
-            [self setupCompleted];
-            return TRUE;
+            
+            if ([response hasPrefix:@"set_master_key: 0"])
+            {
+                ///done  
+                NSLog(@"sending master key done");
+                [self setupCompleted];
+                return TRUE;
+            }
+           
         }
         
     }
