@@ -46,6 +46,8 @@
 }
 @property (nonatomic, retain) IBOutlet UITabBarController *tabBarController;
 
+@property (nonatomic, retain) IBOutlet UITableView * cameraList;
+
 @property (nonatomic, retain) NSArray * listOfChannel; 
 @property (nonatomic, assign) IBOutlet UITableViewCell *cellView;
 @property (nonatomic, assign) id<ConnectionMethodDelegate> delegate;

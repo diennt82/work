@@ -22,6 +22,8 @@
 @synthesize  topbar;
 @synthesize  editModeEnabled;
 @synthesize edittedChannelIndex;
+@synthesize  cameraList;
+
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -615,7 +617,7 @@
         
         UIImageView * soundAlert = (UIImageView *) [cell viewWithTag:508];
         UIImageView * tempAlert = (UIImageView *) [cell viewWithTag:509];
-        
+        UIActivityIndicatorView * spinner = (UIActivityIndicatorView *) [cell viewWithTag:510];
         
         soundAlert.hidden = YES;
         tempAlert.hidden = YES;
@@ -628,101 +630,129 @@
         CamProfile * cp = ch.profile;
         
         //NSLog(@"cell: %d %d", indexPath.row , cp.minuteSinceLastComm);
-        
-        if (ch != nil)
+        if (cp.hasUpdateLocalStatus == TRUE)
         {
+            [spinner stopAnimating]; 
+            spinner.hidden = YES;
+
             
-            NSArray * alerts  = [ CameraAlert getAllAlertForCamera:cp.mac_address];
-            CameraAlert * camAlert;
-            if (alerts != nil)
+            camStatusInd.hidden = NO;
+            camStatus.hidden  = NO;
+            camLoc.hidden = NO;
+
+            
+            if (ch != nil)
             {
                 
-                //NSLog(@"alerts count: %d for cam: %@",[alerts count], cp.mac_address);
+                //Set camera name
+                [camName setText:cp.name];
                 
-                for (int i =0; i <[alerts count]; i++)
+                NSArray * alerts  = [ CameraAlert getAllAlertForCamera:cp.mac_address];
+                CameraAlert * camAlert;
+                if (alerts != nil)
                 {
-                    camAlert = (CameraAlert *) [alerts objectAtIndex:i];
-                    if ( [camAlert.alertType isEqualToString:ALERT_TYPE_SOUND]   &&
-                        (soundAlert.hidden == YES) )
+                    
+                    //NSLog(@"alerts count: %d for cam: %@",[alerts count], cp.mac_address);
+                    
+                    for (int i =0; i <[alerts count]; i++)
                     {
-                        //NSLog(@"Set sound indicator for cam: %@", cp.mac_address);
-                        soundAlert.hidden = NO;
+                        camAlert = (CameraAlert *) [alerts objectAtIndex:i];
+                        if ( [camAlert.alertType isEqualToString:ALERT_TYPE_SOUND]   &&
+                            (soundAlert.hidden == YES) )
+                        {
+                            //NSLog(@"Set sound indicator for cam: %@", cp.mac_address);
+                            soundAlert.hidden = NO;
+                        }
+                        else if ( ([camAlert.alertType isEqualToString:ALERT_TYPE_TEMP_HI]  ||
+                                   [camAlert.alertType isEqualToString:ALERT_TYPE_TEMP_LO] )   &&
+                                 (tempAlert.hidden == YES) )
+                        {
+                            //NSLog(@"Set temp indicator for cam: %@", cp.mac_address);
+                            tempAlert.hidden = NO;
+                        }
+                        
                     }
-                    else if ( ([camAlert.alertType isEqualToString:ALERT_TYPE_TEMP_HI]  ||
-                                [camAlert.alertType isEqualToString:ALERT_TYPE_TEMP_LO] )   &&
-                              (tempAlert.hidden == YES) )
-                    {
-                        //NSLog(@"Set temp indicator for cam: %@", cp.mac_address);
-                        tempAlert.hidden = NO;
-                    }
+                }
+                
+                NSString * msg = nil;
+                
+                //set camera info
+                if (cp.isInLocal == TRUE)
+                {
+                    //20121023: phung: ui review comments.
+                    //[camStatusInd setImage:[UIImage imageNamed:@"camera_online.png"]];
+                    //[camStatus setText:@"Available"];
+                    camStatusInd.hidden = YES;
+                    camStatus.hidden  = YES;
+                    
+                    
+                    msg = NSLocalizedStringWithDefaultValue(@"Local_Wifi",nil, [NSBundle mainBundle],
+                                                            @"Local Wifi", nil);
+                    [camLoc setText:msg];
                     
                 }
+                else if (cp.minuteSinceLastComm <=10 )
+                {
+                    //20121023: phung: ui review comments.
+                    //[camStatusInd setImage:[UIImage imageNamed:@"camera_online.png"]];
+                    //[camStatus setText:@"Camera is not in local network"];
+                    camStatusInd.hidden = YES;
+                    camStatus.hidden  = YES;
+                    
+                    msg = NSLocalizedStringWithDefaultValue(@"Remote_Camera",nil, [NSBundle mainBundle],
+                                                            @"Remote Camera", nil);
+                    
+                    
+                    [camLoc setText:msg];
+                }
+                else
+                {
+                    [camStatusInd setImage:[UIImage imageNamed:@"camera_offline.png"]];
+                    camStatusInd.hidden = NO;
+                    msg = NSLocalizedStringWithDefaultValue(@"Remote_Camera",nil, [NSBundle mainBundle],
+                                                            @"Remote Camera", nil);
+                    
+                    
+                    [camLoc setText:msg];
+                    msg = NSLocalizedStringWithDefaultValue(@"Not_Available",nil, [NSBundle mainBundle],
+                                                            @"Not Available", nil);
+                    
+                    
+                    [camStatus setText:msg];
+                }
+                
+                
+              
+                
+                //set camera image
+                if (cp.profileImage != nil)
+                {
+                    [snapshot setImage:cp.profileImage];
+                }
+                else
+                {
+                    [snapshot setImage:[UIImage imageNamed:@"photo_item.png"]];
+                }
+                
             }
-            
-            NSString * msg = nil; 
-            
-            //set camera info
-            if (cp.isInLocal == TRUE)
-            {
-                //20121023: phung: ui review comments.
-                //[camStatusInd setImage:[UIImage imageNamed:@"camera_online.png"]];
-                //[camStatus setText:@"Available"];
-                camStatusInd.hidden = YES;
-                camStatus.hidden  = YES;
-                
-                
-                msg = NSLocalizedStringWithDefaultValue(@"Local_Wifi",nil, [NSBundle mainBundle],
-                                                  @"Local Wifi", nil);
-                [camLoc setText:msg];
-                
+            else {
+                NSLog(@"cell: %d nil", indexPath.row);
             }
-            else if (cp.minuteSinceLastComm <=10 )
-            {
-                //20121023: phung: ui review comments.
-                //[camStatusInd setImage:[UIImage imageNamed:@"camera_online.png"]];
-                //[camStatus setText:@"Camera is not in local network"];
-                camStatusInd.hidden = YES;
-                camStatus.hidden  = YES;
-                
-                msg = NSLocalizedStringWithDefaultValue(@"Remote_Camera",nil, [NSBundle mainBundle],
-                                                        @"Remote Camera", nil);
-
-                
-                [camLoc setText:msg];
-            }
-            else
-            {
-                [camStatusInd setImage:[UIImage imageNamed:@"camera_offline.png"]];
-                camStatusInd.hidden = NO;
-                msg = NSLocalizedStringWithDefaultValue(@"Remote_Camera",nil, [NSBundle mainBundle],
-                                                        @"Remote Camera", nil);
-
-                
-                [camLoc setText:msg];
-                msg = NSLocalizedStringWithDefaultValue(@"Not_Available",nil, [NSBundle mainBundle],
-                                                        @"Not Available", nil);
-
-                
-                [camStatus setText:msg];
-            }
-            
-            
+        }
+        else
+        {
+            //spinning..
             //Set camera name
             [camName setText:cp.name];
+
             
-            //set camera image
-            if (cp.profileImage != nil)
-            {
-                [snapshot setImage:cp.profileImage];
-            }
-            else
-            {
-                [snapshot setImage:[UIImage imageNamed:@"photo_item.png"]];
-            }
+            camStatusInd.hidden = YES;
+            camStatus.hidden  = YES;
+            camLoc.hidden = YES;
             
-        }
-        else {
-            NSLog(@"cell: %d nil", indexPath.row);
+            spinner.hidden = NO;
+            
+             [spinner startAnimating];
         }
         
         return cell;

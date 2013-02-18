@@ -748,6 +748,48 @@ return self;
     if ( restore_successful == TRUE)
 	{
 
+        
+        /* Rebinding  cameras to restored channel
+         In the case of remote access, the mac address is set to an
+         invalid value "NOTSET" which will not match any MAC address gathered thru
+         scanning.
+         */
+        CamChannel* ch = nil;
+        
+        for (int i = 0; i< [channel_array count]; i++)
+        {
+            ch = (CamChannel*) [channel_array objectAtIndex:i];
+            
+            if ( ch.profile != nil)
+            {
+                for (int j = 0; j < [restored_profiles count]; j++)
+                {
+                    CamProfile * cp = (CamProfile *) [restored_profiles objectAtIndex:j];
+                    if ( !cp.isSelected //&&
+                        //[cp.mac_address isEqualToString:ch.profile.mac_address]
+                        )
+                    {
+                        //Re-bind camera - channel
+                        
+                        [ch setCamProfile:cp];
+                        cp.isSelected = TRUE;
+                        [cp setChannel:ch];
+                        break;
+                        
+                    }
+                    
+                    
+                }
+            }
+            else {
+                
+                //NSLog(@"channel profile = nil");
+            }
+            
+            
+        }
+        
+        
         if ( [self isCurrentConnection3G] ||
             [self.restored_profiles count] ==0 )
         {
@@ -762,6 +804,8 @@ return self;
         }
         
         
+        NSLog(@" showing cameralist early aaa"); 
+        [self startShowingCameraList];
     }
 }
 
@@ -832,7 +876,8 @@ return self;
     {
         //Empty ..not found & also can't use the current IP?
         //Dont add to the final result
-         cp.isInLocal = FALSE;
+        cp.isInLocal = FALSE;
+        cp.hasUpdateLocalStatus = TRUE;
        
     }
     else
@@ -844,12 +889,24 @@ return self;
         cp.isInLocal = TRUE;
         cp.port = 80;//localport is always 80
         
+        cp.hasUpdateLocalStatus = TRUE;
     }
 
     NSLog(@"cam:%@ is in Local? %d", cp.mac_address, cp.isInLocal);
     
+    
+    
     if ( (nextCameraToScanIndex+1) <[self.restored_profiles count])
     {
+        
+        if (dashBoard != nil)
+        {
+            NSLog(@"reload dashboard in scan_done");
+            [dashBoard.cameraList reloadData];
+            
+        }
+        
+        
         nextCameraToScanIndex ++;
         [self scan_next_camera:self.restored_profiles index:nextCameraToScanIndex];
     }
@@ -864,15 +921,13 @@ return self;
 
 - (void)finish_scanning
 {
-	//Sync
-    
-	CamChannel * ch = nil;
     
 	//Hide it, since we're done
 	self.progressView.hidden = YES;
     
-    
-    /* Rebinding local cameras to restored channel
+#if 0
+    CamChannel * ch = nil;
+    /* Rebinding  cameras to restored channel
      In the case of remote access, the mac address is set to an
      invalid value "NOTSET" which will not match any MAC address gathered thru
      scanning.
@@ -909,17 +964,23 @@ return self;
         
         
     }
+#endif
     
     //TODO: Need to save offline data here???
     
-    /* show the camera list page now */
-    //[self startShowingCameraList];
-    
+    /* show the camera list page now
     [self performSelectorOnMainThread:@selector(startShowingCameraList)
                            withObject:nil
                         waitUntilDone:NO];
-    
-	
+       NOT USED anymore
+     */
+    if (dashBoard != nil)
+    {
+        NSLog(@"reload dashboard in finish"); 
+        [dashBoard.cameraList reloadData];
+        
+    }
+        
 }
 
 

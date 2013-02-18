@@ -36,6 +36,7 @@
     BOOL soundAlertEnabled;
     BOOL tempHiAlertEnabled;
     BOOL tempLoAlertEnabled;
+    BOOL hasUpdateLocalStatus;
 }
 
 @property (nonatomic,retain) NSString* scan_response, *ip_address, * mac_address;
@@ -46,7 +47,7 @@
 @property (nonatomic, retain) NSData * profileImageData;
 
 @property (nonatomic,retain) NSString * name, *last_comm; 
-@property (nonatomic) BOOL soundAlertEnabled,tempHiAlertEnabled,tempLoAlertEnabled;
+@property (nonatomic) BOOL soundAlertEnabled,tempHiAlertEnabled,tempLoAlertEnabled, hasUpdateLocalStatus;
 
 
 -(void) initWithResponse:(NSString*) response andHost:(NSString *) host;
