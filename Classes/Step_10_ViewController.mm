@@ -160,7 +160,7 @@
 {
     if (interfaceOrientation == UIInterfaceOrientationLandscapeLeft || interfaceOrientation == UIInterfaceOrientationLandscapeRight) {
         if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
-            [[NSBundle mainBundle] loadNibNamed:@"Step_10_ViewController_ipad" owner:self options:nil];
+            [[NSBundle mainBundle] loadNibNamed:@"Step_10_ViewController_land_ipad" owner:self options:nil];
         } else {
             [[NSBundle mainBundle] loadNibNamed:@"Step_10_ViewController_land" owner:self options:nil];
         }
@@ -576,7 +576,7 @@
     
     if (interfaceOrientation == UIInterfaceOrientationLandscapeLeft || interfaceOrientation == UIInterfaceOrientationLandscapeRight) {
         if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
-            [[NSBundle mainBundle] loadNibNamed:@"Setup_bm_step_12_ipad" owner:self options:nil];
+            [[NSBundle mainBundle] loadNibNamed:@"Setup_bm_step_12_land_ipad" owner:self options:nil];
         } else {
             [[NSBundle mainBundle] loadNibNamed:@"Setup_bm_step_12_land" owner:self options:nil];
         }
@@ -630,7 +630,7 @@
     
     if (interfaceOrientation == UIInterfaceOrientationLandscapeLeft || interfaceOrientation == UIInterfaceOrientationLandscapeRight) {
         if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
-            [[NSBundle mainBundle] loadNibNamed:@"Setup_bm_step_11_ipad" owner:self options:nil];
+            [[NSBundle mainBundle] loadNibNamed:@"Setup_bm_step_11_land_ipad" owner:self options:nil];
         } else {
             [[NSBundle mainBundle] loadNibNamed:@"Setup_bm_step_11_land" owner:self options:nil];
         }
