@@ -42,7 +42,7 @@
     version = [NSString stringWithFormat:msg,version];
     versionText.text =version;
     
-    self.view.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+    //self.view.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
 
 
 }
@@ -72,22 +72,24 @@
 - (void)dealloc {
     [super dealloc];
 }
+//
+-(void) viewWillAppear:(BOOL)animated
+{
 
-//-(void) viewWillAppear:(BOOL)animated
-//{
-//    UIInterfaceOrientation interfaceOrientation = [UIApplication sharedApplication].statusBarOrientation;
-//    [self adjustViewsForOrientations:interfaceOrientation];
-//}
+    //UIInterfaceOrientation interfaceOrientation = [UIApplication sharedApplication].statusBarOrientation;
+    //[self adjustViewsForOrientations:interfaceOrientation];
+}
 
 #pragma mark -
 #pragma mark Rotating
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
 {
-    return (interfaceOrientation == UIInterfaceOrientationMaskAllButUpsideDown);
+    return  YES;
 }
 
 -(BOOL)shouldAutorotate
 {
+
     return YES;
 }
 
@@ -98,8 +100,15 @@
 
 -(void) willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
 {
+
     [self adjustViewsForOrientations:toInterfaceOrientation];
 }
+
+
+-(void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation
+{
+}
+
 
 -(void) adjustViewsForOrientations: (UIInterfaceOrientation) interfaceOrientation
 {
@@ -112,12 +121,27 @@
         }
         else
         {
-            [[NSBundle mainBundle] loadNibNamed:@"MBP_FirstPage_land" owner:self options:nil];
+          [[NSBundle mainBundle] loadNibNamed:@"MBP_FirstPage_land" owner:self options:nil];
+             
+            //WTF is this??? Still need to rotate & re-frame...??? 
+            CGAffineTransform transform = CGAffineTransformMakeRotation(-M_PI_2);
+            if (interfaceOrientation == UIInterfaceOrientationLandscapeRight)
+            {
+                transform = CGAffineTransformMakeRotation(M_PI_2);
+            }
+            
+            self.view.transform = transform;
+           
+            self.view.frame = CGRectMake(0,0,  self.view.frame.size.height,self.view.frame.size.width);
+            
+            
+            
         }
     }
     else if (interfaceOrientation == UIInterfaceOrientationPortrait ||
              interfaceOrientation == UIInterfaceOrientationPortraitUpsideDown)
     {
+
         if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
             [[NSBundle mainBundle] loadNibNamed:@"MBP_FirstPage_ipad" owner:self options:nil];
         }

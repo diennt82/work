@@ -80,7 +80,7 @@ return self;
 	[super viewDidLoad];
 
     
-    self.view.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+    //self.view.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
 
 	[self initialize];
 
@@ -238,45 +238,26 @@ return self;
 
 /*
 // Override to allow orientations other than the default portrait orientation.
-  
+  */
  - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
 
-	// Return YES for supported orientations
-
-	//return ((interfaceOrientation == UIInterfaceOrientationLandscapeLeft) || 
-	//      (interfaceOrientation == UIInterfaceOrientationLandscapeRight));
 	return YES;
 
 }
-*/
+
 
 
 
 - (BOOL) shouldAutorotate
 {
-//    if ( ( self.modalViewController != nil) &&
-//        !([self.modalViewController isKindOfClass:[UINavigationController class]] )
-//        )
-//    {
-//        return  [self.modalViewController shouldAutorotate];
-//    }
-//    
-//    return NO;
+    
     return YES;
 }
 
 -(NSUInteger)supportedInterfaceOrientations
 {
-    
-//    if ( ( self.modalViewController != nil) &&
-//          !([self.modalViewController isKindOfClass:[UINavigationController class]] )
-//        )
-//    {
-//        return  [self.modalViewController supportedInterfaceOrientations];
-//    }
-    
-    return UIInterfaceOrientationMaskAllButUpsideDown;
 
+    return UIInterfaceOrientationMaskAllButUpsideDown;
 }
 
 
@@ -312,18 +293,16 @@ return self;
 	[super dealloc];
 }
 
-//-(void) viewWillAppear:(BOOL)animated
-//{
+-(void) viewWillAppear:(BOOL)animated
+{
+
 //    UIInterfaceOrientation interfaceOrientation = [UIApplication sharedApplication].statusBarOrientation;
-//    [self adjustViewsForOrientations:interfaceOrientation];
-//}
+    //[self adjustViewsForOrientations:interfaceOrientation];
+}
 
 #pragma mark -
 #pragma mark Rotating
-- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
-{
-    return (interfaceOrientation == UIInterfaceOrientationMaskAllButUpsideDown);
-}
+
 
 
 -(void) willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
