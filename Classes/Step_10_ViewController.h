@@ -50,6 +50,8 @@
 
 @property (nonatomic, retain) NSString *cameraMac,  *master_key; 
 
+-(IBAction) startConfigureCamera:(id)sender;
+
 -(IBAction)registerCamera:(id)sender;
 -(IBAction)starMonitor:(id)sender;
 -(IBAction)tryAddCameraAgain:(id)sender;

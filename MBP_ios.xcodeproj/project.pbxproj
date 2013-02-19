@@ -679,6 +679,10 @@
 				38A478CE15BD64F9008682FE /* MBP_InitialSetupViewController.mm */,
 				38DE1CDC168AFBE00049E814 /* MBP_InitialSetupViewController.xib */,
 				38DE1CD7168AFBCF0049E814 /* MBP_InitialSetupViewController_ipad.xib */,
+				38DE1C84168AEB0E0049E814 /* Step_09_ViewController.xib */,
+				38DE1C7F168AEB000049E814 /* Step_09_ViewController_ipad.xib */,
+				38A478FC15C12CF2008682FE /* Step_09_ViewController.mm */,
+				38A478FB15C12CF1008682FE /* Step_09_ViewController.h */,
 				38DE1CD2168AFBBE0049E814 /* Step_02_ViewController.xib */,
 				38DE1CCD168AFBAA0049E814 /* Step_02_ViewController_ipad.xib */,
 				38A478D715BE484B008682FE /* Step_02_ViewController.h */,
@@ -709,10 +713,6 @@
 				38DE1C89168AEB1B0049E814 /* Step_08_ViewController_ipad.xib */,
 				38A478F815C12912008682FE /* Step_08_ViewController.h */,
 				38A478F915C12913008682FE /* Step_08_ViewController.mm */,
-				38DE1C84168AEB0E0049E814 /* Step_09_ViewController.xib */,
-				38DE1C7F168AEB000049E814 /* Step_09_ViewController_ipad.xib */,
-				38A478FC15C12CF2008682FE /* Step_09_ViewController.mm */,
-				38A478FB15C12CF1008682FE /* Step_09_ViewController.h */,
 				38DE1C7A168AEAF30049E814 /* Step_10_ViewController.xib */,
 				38DE1C75168AEAE70049E814 /* Step_10_ViewController_ipad.xib */,
 				38C79E2015C26947006EE378 /* Step_10_ViewController.h */,
@@ -1994,8 +1994,8 @@
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
 				OTHER_LDFLAGS = "";
 				PRODUCT_NAME = "Baby Cam";
-				PROVISIONING_PROFILE = "D8258751-DE3A-475B-AE12-3B8A5FA0172A";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "D8258751-DE3A-475B-AE12-3B8A5FA0172A";
+				PROVISIONING_PROFILE = "961FAD06-4327-46AF-94AA-DE23BBCDFF91";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "961FAD06-4327-46AF-94AA-DE23BBCDFF91";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				USER_HEADER_SEARCH_PATHS = "\"$(SRCROOT)/external_include\"/**";

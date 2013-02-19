@@ -159,70 +159,66 @@
     
     if (tag == CONTINUE_BTN_TAG)
     {
-#if 1
-        NSLog(@"load step 2:");
-        
-        
-        //Load the next xib
-        Step_02_ViewController *step02ViewController = nil;
-  
-        
-        
-        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+        NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+        BOOL isFirstTimeSetup = [userDefaults boolForKey:FIRST_TIME_SETUP];
+        if (isFirstTimeSetup ==FALSE)
         {
-            step02ViewController = [[Step_02_ViewController alloc]
-                                    initWithNibName:@"Step_02_ViewController_ipad" bundle:nil];
+            NSLog(@"load step 2:");
+            
+            
+            //Load the next xib
+            Step_02_ViewController *step02ViewController = nil;
+            
+            
+            
+            if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+            {
+                step02ViewController = [[Step_02_ViewController alloc]
+                                        initWithNibName:@"Step_02_ViewController_ipad" bundle:nil];
+            }
+            else
+            {
+                
+                step02ViewController = [[Step_02_ViewController alloc]
+                                        initWithNibName:@"Step_02_ViewController" bundle:nil];
+            }
+            
+            
+            
+            
+            [self.navigationController pushViewController:step02ViewController animated:NO];
+            
+            [step02ViewController release];
         }
         else
-        {
+        {  
+            //20130219- app flow changed : Create account first
             
-            step02ViewController = [[Step_02_ViewController alloc]
-                                    initWithNibName:@"Step_02_ViewController" bundle:nil];
-        }
-
-        
-      
-
-        [self.navigationController pushViewController:step02ViewController animated:NO];
-        
-        [step02ViewController release];
-        
-#else
-        
-        //DBG DBG DBG
-        
-        
-        NSLog(@"Load step 09");
-        
-        
-        //Load the next xib
-        Step_09_ViewController *step09ViewController = nil;
-        
-        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
-        {
-            
-            step09ViewController = [[Step_09_ViewController alloc]
-                                    initWithNibName:@"Step_09_ViewController_ipad" bundle:nil];
+            NSLog(@"Load step 09");
             
             
-        }
-        else
-        {
+            //Load the next xib
+            Step_09_ViewController *step09ViewController = nil;
+            
+            if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+            {
+                
+                step09ViewController = [[Step_09_ViewController alloc]
+                                        initWithNibName:@"Step_09_ViewController_ipad" bundle:nil]; 
+            }
+            else
+            {
+                step09ViewController = [[Step_09_ViewController alloc]
+                                        initWithNibName:@"Step_09_ViewController" bundle:nil];
+            }
             
             
-            step09ViewController = [[Step_09_ViewController alloc]
-                                    initWithNibName:@"Step_09_ViewController" bundle:nil];
+            [self.navigationController pushViewController:step09ViewController animated:NO];
             
-            
+            [step09ViewController release];
         }
         
         
-        [self.navigationController pushViewController:step09ViewController animated:NO];
-        
-        [step09ViewController release];
-        
-#endif
-
     }
     
     

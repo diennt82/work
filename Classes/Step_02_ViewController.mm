@@ -38,6 +38,9 @@
                                       style:UIBarButtonItemStyleBordered
                                      target:nil
                                      action:nil] autorelease];
+    
+    //Hide back button -- can't go back now..
+    self.navigationItem.hidesBackButton = TRUE;
 }
 
 - (void)viewDidUnload

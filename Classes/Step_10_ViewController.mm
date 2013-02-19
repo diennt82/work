@@ -149,18 +149,52 @@
 
     
 }
+-(IBAction) startConfigureCamera:(id)sender
+{
+    // Pop all & step 2
+    //NSLog(@"pop all & ....");
+    //[self.navigationController popToRootViewControllerAnimated:NO];
+    
+    
+    
+    //NO longer first time 
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    [userDefaults setBool:FALSE forKey:FIRST_TIME_SETUP];
+    [userDefaults synchronize];
+    
+    NSLog(@"load step 2 ");
+    
+    //Load the next xib
+    Step_02_ViewController *step02ViewController = nil;
+ 
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+    {
+        step02ViewController = [[Step_02_ViewController alloc]
+                                initWithNibName:@"Step_02_ViewController_ipad" bundle:nil];
+    }
+    else
+    {
+        step02ViewController = [[Step_02_ViewController alloc]
+                                initWithNibName:@"Step_02_ViewController" bundle:nil];
+    }
+    
+    [self.navigationController pushViewController:step02ViewController animated:NO];
+    
+    [step02ViewController release];
+    
+}
 
 -(IBAction)registerCamera:(id)sender
 {
 
-#if 0 ///TEST TEST TEST 
+#if 0 ///TEST TEST TEST
     [self  setupFailed];
 #else 
 
     
     self.progressView.hidden = NO; 
     [self.view bringSubviewToFront:self.progressView];
-    //[self.view addSubview:self.progressView]; 
+
     
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     
@@ -172,7 +206,7 @@
 #else
 
     
-     NSString * camName = (NSString *) [userDefaults objectForKey:@"CameraName"];
+    NSString * camName = (NSString *) [userDefaults objectForKey:@"CameraName"];
 #endif
     
     NSLog(@"name: %@ mac: %@", camName, mac);
