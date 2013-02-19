@@ -312,6 +312,52 @@ return self;
 	[super dealloc];
 }
 
+//-(void) viewWillAppear:(BOOL)animated
+//{
+//    UIInterfaceOrientation interfaceOrientation = [UIApplication sharedApplication].statusBarOrientation;
+//    [self adjustViewsForOrientations:interfaceOrientation];
+//}
+
+#pragma mark -
+#pragma mark Rotating
+- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
+{
+    return (interfaceOrientation == UIInterfaceOrientationMaskAllButUpsideDown);
+}
+
+
+-(void) willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
+{
+    [self adjustViewsForOrientations:toInterfaceOrientation];
+}
+
+-(void) adjustViewsForOrientations: (UIInterfaceOrientation) interfaceOrientation
+{
+    if (interfaceOrientation == UIInterfaceOrientationLandscapeLeft ||
+        interfaceOrientation == UIInterfaceOrientationLandscapeRight)
+    {
+        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+        {
+            [[NSBundle mainBundle] loadNibNamed:@"MBP_iosViewController_ipad" owner:self options:nil];
+        }
+        else
+        {
+            [[NSBundle mainBundle] loadNibNamed:@"MBP_iosViewController_land" owner:self options:nil];
+        }
+    }
+    else if (interfaceOrientation == UIInterfaceOrientationPortrait ||
+             interfaceOrientation == UIInterfaceOrientationPortraitUpsideDown)
+    {
+        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+            [[NSBundle mainBundle] loadNibNamed:@"MBP_iosViewController_ipad" owner:self options:nil];
+        }
+        else
+        {
+            [[NSBundle mainBundle] loadNibNamed:@"MBP_iosViewController" owner:self options:nil];
+        }
+    }
+}
+
 #pragma mark -
 #pragma mark ConnectionMethodDelegate - Views navigation 
 

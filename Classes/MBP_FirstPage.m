@@ -48,27 +48,6 @@
 }
 
 
-//
-//- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
-//    return ((interfaceOrientation == UIInterfaceOrientationLandscapeLeft) || 
-//	        (interfaceOrientation == UIInterfaceOrientationLandscapeRight));
-//}
-
-
-- (BOOL) shouldAutorotate
-{
-    return NO;
-}
-
--(NSUInteger)supportedInterfaceOrientations
-{
-   
-    return UIInterfaceOrientationMaskPortrait;
-    
-}
-
-
-
 
 - (void)didReceiveMemoryWarning {
     // Releases the view if it doesn't have a superview.
@@ -94,6 +73,60 @@
     [super dealloc];
 }
 
+-(void) viewWillAppear:(BOOL)animated
+{
+    UIInterfaceOrientation interfaceOrientation = [UIApplication sharedApplication].statusBarOrientation;
+    [self adjustViewsForOrientations:interfaceOrientation];
+}
+
+#pragma mark -
+#pragma mark Rotating
+- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
+{
+    return (interfaceOrientation == UIInterfaceOrientationMaskAllButUpsideDown);
+}
+
+-(BOOL)shouldAutorotate
+{
+    return YES;
+}
+
+-(NSUInteger) supportedInterfaceOrientations
+{
+    return UIInterfaceOrientationMaskAllButUpsideDown;
+}
+
+-(void) willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
+{
+    [self adjustViewsForOrientations:toInterfaceOrientation];
+}
+
+-(void) adjustViewsForOrientations: (UIInterfaceOrientation) interfaceOrientation
+{
+    if (interfaceOrientation == UIInterfaceOrientationLandscapeLeft ||
+        interfaceOrientation == UIInterfaceOrientationLandscapeRight)
+    {
+        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+        {
+            [[NSBundle mainBundle] loadNibNamed:@"MBP_FirstPage_ipad" owner:self options:nil];
+        }
+        else
+        {
+            [[NSBundle mainBundle] loadNibNamed:@"MBP_FirstPage_land" owner:self options:nil];
+        }
+    }
+    else if (interfaceOrientation == UIInterfaceOrientationPortrait ||
+             interfaceOrientation == UIInterfaceOrientationPortraitUpsideDown)
+    {
+        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+            [[NSBundle mainBundle] loadNibNamed:@"MBP_FirstPage_ipad" owner:self options:nil];
+        }
+        else
+        {
+            [[NSBundle mainBundle] loadNibNamed:@"MBP_FirstPage" owner:self options:nil];
+        }
+    }
+}
 
 
 
