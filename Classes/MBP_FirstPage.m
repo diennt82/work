@@ -73,11 +73,11 @@
     [super dealloc];
 }
 
--(void) viewWillAppear:(BOOL)animated
-{
-    UIInterfaceOrientation interfaceOrientation = [UIApplication sharedApplication].statusBarOrientation;
-    [self adjustViewsForOrientations:interfaceOrientation];
-}
+//-(void) viewWillAppear:(BOOL)animated
+//{
+//    UIInterfaceOrientation interfaceOrientation = [UIApplication sharedApplication].statusBarOrientation;
+//    [self adjustViewsForOrientations:interfaceOrientation];
+//}
 
 #pragma mark -
 #pragma mark Rotating
