@@ -49,6 +49,8 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    //Keep screen on
+    [UIApplication sharedApplication].idleTimerDisabled = YES;
 
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     
@@ -137,6 +139,9 @@
 {
     
     //Go back to the beginning
+
+    // Disable Keep screen on
+    [UIApplication sharedApplication].idleTimerDisabled=  NO;
     
     NSLog(@"RESTART aa");
    
@@ -182,10 +187,6 @@
 -(IBAction)registerCamera:(id)sender
 {
 
-#if 0 ///TEST TEST TEST
-    [self  setupFailed];
-#else 
-
     
     self.progressView.hidden = NO; 
     [self.view bringSubviewToFront:self.progressView];
@@ -221,14 +222,15 @@
                          macAddr:mac 
                          camName:camName];
     
-#endif
-    
 }
 
 -(IBAction)starMonitor:(id)sender
 {
     NSLog(@"START MONITOR");
     
+    // Disable Keep screen on
+    [UIApplication sharedApplication].idleTimerDisabled=  NO;
+
    
     MBP_InitialSetupViewController * initSetupController =(MBP_InitialSetupViewController *) [[self.navigationController viewControllers] objectAtIndex:0];
      [self.navigationController popToRootViewControllerAnimated:NO];
@@ -370,7 +372,7 @@
 				NSString * set_mkey = SET_MASTER_KEY;
 				NSString * response;
 				set_mkey =[set_mkey stringByAppendingString:self.master_key];
-				
+				BOOL master_key_sent = FALSE; 
 				int retries = 10; 
 				do 
 				{
@@ -380,9 +382,18 @@
 					{
 						NSLog(@"can't send master key, camera is not fully up"); 
 					}
-					else {
+					else
+                    {
 						NSLog(@"response: %@", response);
-						break; 
+                        if ([response hasPrefix:@"set_master_key: 0"])
+                        {
+                            ///done
+                            master_key_sent = TRUE;
+                            NSLog(@"sending master key done");
+                            
+                            break;
+                        }
+						
 					}
                     
 					
@@ -394,10 +405,13 @@
 				
 				
 				
-				///done
-				NSLog(@"sending master key done");
-				[self setupCompleted];
-				
+                if (master_key_sent == TRUE)
+                {
+                    ///done
+                    NSLog(@"sending master key done");
+                    [self setupCompleted];
+                }
+               
 				
 				
 				return; 
@@ -492,10 +506,15 @@
         else
         {
             NSLog(@"response: %@", response);
-            ///done
-            NSLog(@"sending master key done");
-            [self setupCompleted];
-            return TRUE;
+            
+            if ([response hasPrefix:@"set_master_key: 0"])
+            {
+                ///done  
+                NSLog(@"sending master key done");
+                [self setupCompleted];
+                return TRUE;
+            }
+           
         }
         
     }
