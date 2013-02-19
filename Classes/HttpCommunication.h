@@ -147,6 +147,7 @@
 - (void) askForNewUserPass;
 - (NSString *) getUpgradeProgress:(NSError **)error;
 
+- (NSString *) sendCommandAndBlock:(NSString *)command withTimeout:(float) timeout;
 
 
 

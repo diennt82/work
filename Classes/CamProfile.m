@@ -18,6 +18,10 @@
 @synthesize name, last_comm, minuteSinceLastComm, isInLocal;
 
 @synthesize   soundAlertEnabled,tempHiAlertEnabled,tempLoAlertEnabled;
+@synthesize  hasUpdateLocalStatus;
+
+
+
 
 -(void) initWithResponse:(NSString*) response andHost:(NSString *) host
 {
@@ -211,6 +215,7 @@
 	else {
 		this =[[CamProfile alloc] initWithMacAddr:mac];
         
+        this.hasUpdateLocalStatus = FALSE; 
 		/* assume */
 		if ( [mac isEqualToString:@"NOTSET"])
 		{
