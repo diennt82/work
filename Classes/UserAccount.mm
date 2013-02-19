@@ -54,6 +54,16 @@
         NSString * raw_data = [[[NSString alloc] initWithData:responseData encoding: NSASCIIStringEncoding] autorelease];
         
         NSLog(@"camlist4: %@", raw_data);
+        
+        NSRange br_range = [raw_data rangeOfString:@"<br>"];
+        
+        if ( br_range.location  ==  NSNotFound )
+        {
+            NSLog(@"camlist4: ERROR response");
+            return nil; 
+        }
+        
+        
         NSMutableArray * cam_profiles;
         CamProfile *cp;
 //        cam_profiles = [self parse_camera_list:raw_data];
@@ -172,7 +182,7 @@
 #if 0
 	self.bms_comm = [[BMS_Communication alloc] initWithObject:self
 												Selector:@selector(getCamListSuccess:) 
-											FailSelector:@selector(getCamListFailure:) 
+											FailSelector:@selector(getCamListFailure:)
 											   ServerErr:@selector(getCamListServerUnreachable)];
 	
 	//call get camlist query here 
@@ -187,6 +197,34 @@
 	NSString * raw_data = [[[NSString alloc] initWithData:responseData encoding: NSASCIIStringEncoding] autorelease];
 
     NSLog(@"camlist4: %@", raw_data);
+    NSRange br_range = [raw_data rangeOfString:@"<br>"];
+    
+    if ( br_range.location  ==  NSNotFound )
+    {
+        NSLog(@"Camlist response ERROR");
+
+        NSString * msg = NSLocalizedStringWithDefaultValue(@"Get_Camera_list_Error",nil, [NSBundle mainBundle],
+                                                           @"Get Camera list Error", nil);
+        
+        NSString * msg1 = NSLocalizedStringWithDefaultValue(@"Get_Camera_list_Error_msg",nil, [NSBundle mainBundle],
+                                                            @"Server error: Invalid response", nil);
+        
+        NSString * ok = NSLocalizedStringWithDefaultValue(@"Ok",nil, [NSBundle mainBundle],
+                                                          @"Ok", nil);
+        //ERROR condition
+        UIAlertView *alert = [[UIAlertView alloc]
+                              initWithTitle:msg
+                              message:msg1
+                              delegate:self
+                              cancelButtonTitle:ok
+                              otherButtonTitles:nil];
+        [alert show];
+        [alert release];
+        
+        [delegate sendStatus:8];
+        return;
+
+    }
     
 	NSMutableArray * cam_profiles;
 	cam_profiles = [self parse_camera_list4:raw_data];

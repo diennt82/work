@@ -59,11 +59,6 @@
     self.cameraMac = (NSString *) [userDefaults objectForKey:@"CameraMacWithQuote"];
     
     
-    if (self.cameraMac == nil)
-    {
-        NSLog(@"Empty Camera mac !!!"); 
-    }
-    
     if (self.progressView == nil)
     {
         NSLog(@"progressView = nil!!!!");
