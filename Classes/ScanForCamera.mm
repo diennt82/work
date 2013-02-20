@@ -167,7 +167,7 @@
 	BOOL status;
 	status = [udpSock bindToPort:10001 error:nil];
 
-	[udpSock receiveWithTimeout:5 tag:1];
+	[udpSock receiveWithTimeout:4 tag:1];
 	
 	//NSLog(@"buff size: %d", [udpSock maxReceiveBufferSize]);
 	

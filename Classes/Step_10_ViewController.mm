@@ -531,10 +531,10 @@
     
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
     {
-    //Step 12
-    [[NSBundle mainBundle] loadNibNamed:@"Setup_bm_step_12_ipad"
-                                  owner:self
-                                options:nil];
+        //Step 12
+        [[NSBundle mainBundle] loadNibNamed:@"Setup_bm_step_12_ipad"
+                                      owner:self
+                                    options:nil];
     }
     else
     {

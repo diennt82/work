@@ -150,12 +150,14 @@
 {
  	NSString * mac_ = [Util strip_colon_fr_mac:mac];
 	
+    NSString* escapedName = [name
+                             stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
 	NSString * http_cmd = [NSString stringWithFormat:@"%@%@",BMS_PHONESERVICE, BMS_CMD_PART];
 	http_cmd = [http_cmd stringByAppendingFormat:@"%@", ADD_CAM_CMD];
 	http_cmd = [http_cmd stringByAppendingFormat:@"%@%@", ADD_CAM_PARAM_1, user_email];
 	http_cmd = [http_cmd stringByAppendingFormat:@"%@%@", ADD_CAM_PARAM_2, user_pass];
 	http_cmd = [http_cmd stringByAppendingFormat:@"%@%@", ADD_CAM_PARAM_3, mac_];
-	http_cmd = [http_cmd stringByAppendingFormat:@"%@%@", ADD_CAM_PARAM_4, name];
+	http_cmd = [http_cmd stringByAppendingFormat:@"%@%@", ADD_CAM_PARAM_4, escapedName];
 	http_cmd = [http_cmd stringByAppendingFormat:@"%@%d", ADD_CAM_PARAM_5,[user_pass length]];
 	
 	NSLog(@"addCam query:%@", http_cmd);
