@@ -153,19 +153,19 @@
         }
         else if (indexPath.section == SEC_SECTION)
         {
-
-        if (indexPath.row == SEC_INDEX) {
-            return securityCell;
-        }
-        if (indexPath.row == PASSWORD_INDEX)
-        {
-            return passwordCell;
-        }
-        if (indexPath.row == CONFPASSWORD_INDEX)
-        {
-            return confPasswordCell;
-        }
-
+            
+            if (indexPath.row == SEC_INDEX) {
+                return securityCell;
+            }
+            if (indexPath.row == PASSWORD_INDEX)
+            {
+                return passwordCell;
+            }
+            if (indexPath.row == CONFPASSWORD_INDEX)
+            {
+                return confPasswordCell;
+            }
+            
         }
 
     }
@@ -231,6 +231,39 @@
             }
         }
     }
+    
+    
+    if (indexPath.section == SSID_SECTION)
+    {
+        //only one cell in this section
+        if (self.isOtherNetwork == TRUE)
+        {
+            UITextField * _ssid  = (UITextField*) [ssidCell viewWithTag:202];            
+            [_ssid setUserInteractionEnabled:TRUE];
+            [_ssid becomeFirstResponder];
+        }
+
+    }
+    else if (indexPath.section == SEC_SECTION)
+    {
+        
+        
+        if (indexPath.row == PASSWORD_INDEX)
+        {
+            UITextField * txtField = (UITextField*) [passwordCell viewWithTag:200];
+            [txtField becomeFirstResponder];
+
+        }
+        if (indexPath.row == CONFPASSWORD_INDEX)
+        {
+            
+            UITextField * txtField = (UITextField*) [confPasswordCell viewWithTag:201];
+            [txtField becomeFirstResponder];
+
+        }
+        
+    }
+
     
 }
 

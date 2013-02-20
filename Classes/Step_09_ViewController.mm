@@ -104,6 +104,39 @@
     
 }
 
+- (void)tableView: (UITableView *)tableView didSelectRowAtIndexPath: (NSIndexPath *)indexPath
+{
+    [tableView deselectRowAtIndexPath:[tableView indexPathForSelectedRow]
+                             animated:NO];
+    
+    if (indexPath.row == USERNAME_INDEX) {
+        UITextField * txtField = (UITextField*) [userName viewWithTag:201];
+        [txtField becomeFirstResponder];
+
+    }
+    if (indexPath.row == USERPASS_INDEX)
+    {
+        UITextField * txtField = (UITextField*) [userPass viewWithTag:200];
+        [txtField becomeFirstResponder];
+
+    }
+    if (indexPath.row == USERCPASS_INDEX)
+    {
+        UITextField * txtField = (UITextField*) [userCPass viewWithTag:200];
+        [txtField becomeFirstResponder];
+
+
+    }
+    if (indexPath.row == USEREMAIL_INDEX)
+    {
+        UITextField * txtField = (UITextField*) [userEmail viewWithTag:200];
+        [txtField becomeFirstResponder];
+    }
+    
+    
+}
+
+
 
 - (void)textFieldDidBeginEditing:(UITextField *)textField
 {

@@ -84,6 +84,12 @@
                                                object: nil];
 
     
+    
+    
+   // NSLog(@"Open wifi aaaaaaa");
+    //Open wifi
+    //[[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"prefs:root=WIFI"]];
+    
 }
 
 - (void)viewDidUnload

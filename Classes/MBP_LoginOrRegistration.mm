@@ -396,6 +396,25 @@
         [forgotPwdController release];
         
     }
+    
+    
+    if (indexPath.section == 0 && indexPath.row == USERNAME_INDEX)
+    {
+        
+        UITextField * txtField = (UITextField*) [userNameCell viewWithTag:203];
+        [txtField becomeFirstResponder];
+        
+    }
+    if (indexPath.section == 0 && indexPath.row == USERPASS_INDEX)
+    {
+        
+        UITextField * txtField = (UITextField*) [userPassCell viewWithTag:204];
+        [txtField becomeFirstResponder];
+       
+    }
+
+    
+    
 }
 
 
