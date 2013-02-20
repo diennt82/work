@@ -976,7 +976,9 @@ return self;
      */
     if (dashBoard != nil)
     {
-        NSLog(@"reload dashboard in finish"); 
+        NSLog(@"reload dashboard in finish");
+        [dashBoard setupTopBarForEditMode:dashBoard.editModeEnabled];
+        
         [dashBoard.cameraList reloadData];
         
     }

@@ -64,6 +64,8 @@
 -(IBAction)checkNow:(id)sender;
 -(IBAction)scanCameras:(id)sender;
 
+-(void) setupTopBarForEditMode:(BOOL) isEditMode;
+
 
 -(IBAction)editCameras:(id)sender;
 -(IBAction)removeCamera:(id)sender;
