@@ -110,17 +110,30 @@
         
         cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
         if (cell == nil) {
-            [[NSBundle mainBundle] loadNibNamed:@"Step_05_tableViewCell" owner:self options:nil];
+            
+            if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+            {
+                [[NSBundle mainBundle] loadNibNamed:@"Step_05_tableViewCell_ipad" owner:self options:nil];
+            }
+            else
+            {
+                [[NSBundle mainBundle] loadNibNamed:@"Step_05_tableViewCell" owner:self options:nil];
+            }
             cell = self.cellView;
             self.cellView = nil; 
         }
-        [cell setBackgroundColor:[UIColor clearColor]];
+        [cell setBackgroundColor:[UIColor whiteColor]];
         // Set up the cell...
         WifiEntry *entry = [listOfWifi objectAtIndex:indexPath.row];
         
         UITextField * ssid = (UITextField *)[cell viewWithTag:200];
         ssid.text = entry.ssid_w_quote;
         ssid.backgroundColor = [UIColor clearColor];
+        
+        //NSLog(@"table cell : %f %f ", tableView.frame.size.width, tableView.frame.size.width);
+
+        ssid.frame = CGRectMake(0, 0, tableView.frame.size.width-20, 44);
+        
          
     }
     
