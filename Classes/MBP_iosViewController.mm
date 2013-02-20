@@ -794,6 +794,19 @@ return self;
             [self.restored_profiles count] ==0 )
         {
             NSLog(@" Connection over 3g OR empty cam list  --> Skip scanning all together");
+            
+            
+            for (int j = 0; j < [restored_profiles count]; j++)
+            {
+                CamProfile * cp = (CamProfile *) [restored_profiles objectAtIndex:j];
+                
+                cp.isInLocal = FALSE;
+                cp.hasUpdateLocalStatus = TRUE;
+            }
+            
+            
+            
+            
             [self finish_scanning];
         }
         else
