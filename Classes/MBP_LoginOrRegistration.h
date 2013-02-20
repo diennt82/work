@@ -64,7 +64,8 @@
 	
 	id <ConnectionMethodDelegate> delegate; 
 
-    UserAccount * account ; 
+    UserAccount * account ;
+    BOOL _doneButtonPressed;
 	
 }
 

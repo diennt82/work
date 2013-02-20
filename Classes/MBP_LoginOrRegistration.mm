@@ -66,7 +66,7 @@
     
     [self.view addSubview:self.progressView];
     
-    
+    _doneButtonPressed = NO;
   
     
      self.temp_user_email  = @"";
@@ -317,6 +317,7 @@
 {
     UIInterfaceOrientation interfaceOrientation = [UIApplication sharedApplication].statusBarOrientation;
     [self adjustViewsForOrientations:interfaceOrientation];
+    _doneButtonPressed = NO;
 }
 
 #pragma mark -
@@ -356,7 +357,7 @@
             
             BOOL shouldAutoLogin = [userDefaults boolForKey:_AutoLogin];
             
-            if (shouldAutoLogin == FALSE)
+            if (shouldAutoLogin == FALSE || _doneButtonPressed == YES)
             {
                 [[NSBundle mainBundle] loadNibNamed:@"MBP_LoginOrRegistration_land" owner:self options:nil];
                 
@@ -371,14 +372,14 @@
             }
             else
             {
-                temp_user_str = userName.text;
-                temp_pass_str = password.text;
+                NSString * user = userName.text;
+                NSString * pass = password.text;
                 
-                self.progressView.hidden = YES;
+                self.progressView.hidden = NO;
                 
                 [[NSBundle mainBundle] loadNibNamed:@"MBP_LoginOrRegistration_land" owner:self options:nil];
-                userName.text = temp_user_str;
-                password.text = temp_pass_str;
+                userName.text = user;
+                password.text = pass;
                 
             }
             
@@ -392,13 +393,12 @@
         }
         else
         {
-            [[NSBundle mainBundle] loadNibNamed:@"MBP_LoginOrRegistration" owner:self options:nil];
             
             NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
             
             BOOL shouldAutoLogin = [userDefaults boolForKey:_AutoLogin];
             
-            if (shouldAutoLogin == FALSE)
+            if (shouldAutoLogin == FALSE || _doneButtonPressed == YES)
             {
                 [[NSBundle mainBundle] loadNibNamed:@"MBP_LoginOrRegistration" owner:self options:nil];
                 
@@ -413,14 +413,14 @@
             }
             else
             {
-                temp_user_str = userName.text;
-                temp_pass_str = password.text;
+                NSString * user = userName.text;
+                NSString * pass = password.text;
                 
-                self.progressView.hidden = YES;
+                self.progressView.hidden = NO;
                 
                 [[NSBundle mainBundle] loadNibNamed:@"MBP_LoginOrRegistration" owner:self options:nil];
-                userName.text = temp_user_str;
-                password.text = temp_pass_str;
+                userName.text = user;
+                password.text = pass;
                 
             }
             
@@ -678,11 +678,7 @@
 
 -(void) doneAction:(id) sender
 {
-   
-    
-    
-    
-    
+    _doneButtonPressed = YES;
     [userName resignFirstResponder];
     [password resignFirstResponder];
     
