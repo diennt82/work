@@ -352,7 +352,36 @@
         }
         else
         {
-            [[NSBundle mainBundle] loadNibNamed:@"MBP_LoginOrRegistration_land" owner:self options:nil];
+            NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+            
+            BOOL shouldAutoLogin = [userDefaults boolForKey:_AutoLogin];
+            
+            if (shouldAutoLogin == FALSE)
+            {
+                [[NSBundle mainBundle] loadNibNamed:@"MBP_LoginOrRegistration_land" owner:self options:nil];
+                
+                NSString * msg = NSLocalizedStringWithDefaultValue(@"Logging_in_to_server" ,nil, [NSBundle mainBundle],
+                                                                   @"Logging in to server..." , nil);
+                self.progressView.hidden = NO;
+                [self.progressLabel setText:msg];
+                self.navigationItem.leftBarButtonItem.enabled = NO ;
+                self.navigationItem.rightBarButtonItem.enabled = NO;
+                
+                
+            }
+            else
+            {
+                temp_user_str = userName.text;
+                temp_pass_str = password.text;
+                
+                self.progressView.hidden = YES;
+                
+                [[NSBundle mainBundle] loadNibNamed:@"MBP_LoginOrRegistration_land" owner:self options:nil];
+                userName.text = temp_user_str;
+                password.text = temp_pass_str;
+                
+            }
+            
         }
     }
     else if (interfaceOrientation == UIInterfaceOrientationPortrait ||
@@ -364,6 +393,37 @@
         else
         {
             [[NSBundle mainBundle] loadNibNamed:@"MBP_LoginOrRegistration" owner:self options:nil];
+            
+            NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+            
+            BOOL shouldAutoLogin = [userDefaults boolForKey:_AutoLogin];
+            
+            if (shouldAutoLogin == FALSE)
+            {
+                [[NSBundle mainBundle] loadNibNamed:@"MBP_LoginOrRegistration" owner:self options:nil];
+                
+                NSString * msg = NSLocalizedStringWithDefaultValue(@"Logging_in_to_server" ,nil, [NSBundle mainBundle],
+                                                                   @"Logging in to server..." , nil);
+                self.progressView.hidden = NO;
+                [self.progressLabel setText:msg];
+                self.navigationItem.leftBarButtonItem.enabled = NO ;
+                self.navigationItem.rightBarButtonItem.enabled = NO;
+                
+                
+            }
+            else
+            {
+                temp_user_str = userName.text;
+                temp_pass_str = password.text;
+                
+                self.progressView.hidden = YES;
+                
+                [[NSBundle mainBundle] loadNibNamed:@"MBP_LoginOrRegistration" owner:self options:nil];
+                userName.text = temp_user_str;
+                password.text = temp_pass_str;
+                
+            }
+            
         }
     }
 }

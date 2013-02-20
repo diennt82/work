@@ -322,6 +322,16 @@ return self;
         else
         {
             [[NSBundle mainBundle] loadNibNamed:@"MBP_iosViewController_land" owner:self options:nil];
+            
+            CGAffineTransform transform = CGAffineTransformMakeRotation(-M_PI_2);
+            if (interfaceOrientation == UIInterfaceOrientationLandscapeRight)
+            {
+                transform = CGAffineTransformMakeRotation(M_PI_2);
+            }
+            
+            self.view.transform = transform;
+            
+            self.view.frame = CGRectMake(0,0,  self.view.frame.size.height,self.view.frame.size.width);
         }
     }
     else if (interfaceOrientation == UIInterfaceOrientationPortrait ||
