@@ -359,6 +359,7 @@ return self;
 
 				[self dismissModalViewControllerAnimated:NO	];
 
+                
 				NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
 
 				[userDefaults setBool:TRUE forKey:_AutoLogin];
@@ -1094,6 +1095,11 @@ return self;
     return FALSE;
 }
 
+
+#pragma mark -
+#pragma mark 3G connection checks
+
+
 -(BOOL) isCurrentConnection3G
 {
     Reachability *reachability = [Reachability reachabilityForInternetConnection];
@@ -1120,8 +1126,6 @@ return self;
      return FALSE;
     
 }
-
-
 
 
 #pragma mark -

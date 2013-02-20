@@ -238,14 +238,44 @@
 }
 
 
+
+-(BOOL) isCurrentConnection3G
+{
+    Reachability *reachability = [Reachability reachabilityForInternetConnection];
+    [reachability startNotifier];
+    
+    NetworkStatus status = [reachability currentReachabilityStatus];
+    
+    if(status == NotReachable)
+    {
+        //No internet
+    }
+    else if (status == ReachableViaWiFi)
+    {
+        //WiFi
+    }
+    else if (status == ReachableViaWWAN)
+    {
+        //3G
+        
+        return TRUE;
+    }
+    
+    
+    return FALSE;
+    
+}
+
 /* Return True to stop at login screen 
           False to ignore and continue*/
 
 -(void) check3GConnectionAndPopup
 {
-    Reachability* wifiReach = [Reachability reachabilityForLocalWiFi];
-    NetworkStatus netStatus = [wifiReach currentReachabilityStatus];
-    if (netStatus!=ReachableViaWiFi)
+ 
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    BOOL skip_3g_popup = [userDefaults boolForKey:_Use3G];
+    
+    if (  (skip_3g_popup ==FALSE)  && [self isCurrentConnection3G])
     {
         //Popup now..
         
@@ -265,13 +295,16 @@
         NSString * yes = NSLocalizedStringWithDefaultValue(@"Yes" ,nil, [NSBundle mainBundle],
                                                            @"Yes", nil);
         
+        NSString * yes1 = NSLocalizedStringWithDefaultValue(@"Yes_n" ,nil, [NSBundle mainBundle],
+                                                           @"Yes and don't ask again", nil);
+        
         //ERROR condition
         UIAlertView *alert = [[UIAlertView alloc]
                               initWithTitle:@""
                               message:msg
                               delegate:self
                               cancelButtonTitle:no
-                              otherButtonTitles:yes, nil];
+                              otherButtonTitles:yes,yes1, nil];
         alert.tag = 113;
         [alert show];
         [alert release];
@@ -386,7 +419,22 @@
                 
                 break;
             }
-            case 1://Yes - go by 3g
+            case 1: // Yes - go by 3g
+            {
+                NSString * msg = NSLocalizedStringWithDefaultValue(@"Logging_in_to_server" ,nil, [NSBundle mainBundle],
+                                                                   @"Logging in to server..." , nil);
+                self.progressView.hidden = NO;
+                [self.progressLabel setText:msg];
+                self.navigationItem.leftBarButtonItem.enabled = NO ;
+                self.navigationItem.rightBarButtonItem.enabled = NO;
+                
+                
+                //signal iosViewController
+                [self doSignIn:nil];
+
+                break;
+            }
+            case 2://Yes - DONT ask again
             {
                 NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
                 [userDefaults setBool:YES forKey:_Use3G];
@@ -534,13 +582,19 @@
 -(void) doneAction:(id) sender
 {
    
+    
+    
+    
+    
     [userName resignFirstResponder];
     [password resignFirstResponder];
     
     temp_user_str = userName.text;
     temp_pass_str = password.text;
     
+    [self check3GConnectionAndPopup];
     
+#if 0
     
     BMS_Communication * bms_comm; 
     bms_comm = [[BMS_Communication alloc] initWithObject:self
@@ -559,6 +613,7 @@
     
     self.navigationItem.leftBarButtonItem.enabled = NO ;
     self.navigationItem.rightBarButtonItem.enabled = NO;
+#endif
 
 }
 
