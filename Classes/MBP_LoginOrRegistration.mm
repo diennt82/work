@@ -66,7 +66,7 @@
     
     [self.view addSubview:self.progressView];
     
-    _doneButtonPressed = NO;
+//    _doneButtonPressed = NO;
   
     
      self.temp_user_email  = @"";
@@ -315,9 +315,10 @@
 }
 -(void) viewWillAppear:(BOOL)animated
 {
+    _doneButtonPressed = NO;
     UIInterfaceOrientation interfaceOrientation = [UIApplication sharedApplication].statusBarOrientation;
     [self adjustViewsForOrientations:interfaceOrientation];
-    _doneButtonPressed = NO;
+
 }
 
 #pragma mark -
@@ -357,7 +358,7 @@
             
             BOOL shouldAutoLogin = [userDefaults boolForKey:_AutoLogin];
             
-            if (shouldAutoLogin == FALSE || _doneButtonPressed == YES)
+            if (_doneButtonPressed == YES)
             {
                 [[NSBundle mainBundle] loadNibNamed:@"MBP_LoginOrRegistration_land" owner:self options:nil];
                 
@@ -365,6 +366,7 @@
                                                                    @"Logging in to server..." , nil);
                 self.progressView.hidden = NO;
                 [self.progressLabel setText:msg];
+                [self.view bringSubviewToFront:self.progressView];
                 self.navigationItem.leftBarButtonItem.enabled = NO ;
                 self.navigationItem.rightBarButtonItem.enabled = NO;
                 
@@ -375,7 +377,7 @@
                 NSString * user = userName.text;
                 NSString * pass = password.text;
                 
-                self.progressView.hidden = NO;
+//                self.progressView.hidden = NO;
                 
                 [[NSBundle mainBundle] loadNibNamed:@"MBP_LoginOrRegistration_land" owner:self options:nil];
                 userName.text = user;
@@ -398,7 +400,7 @@
             
             BOOL shouldAutoLogin = [userDefaults boolForKey:_AutoLogin];
             
-            if (shouldAutoLogin == FALSE || _doneButtonPressed == YES)
+            if (_doneButtonPressed == YES)
             {
                 [[NSBundle mainBundle] loadNibNamed:@"MBP_LoginOrRegistration" owner:self options:nil];
                 
@@ -406,6 +408,7 @@
                                                                    @"Logging in to server..." , nil);
                 self.progressView.hidden = NO;
                 [self.progressLabel setText:msg];
+                [self.view bringSubviewToFront:self.progressView];
                 self.navigationItem.leftBarButtonItem.enabled = NO ;
                 self.navigationItem.rightBarButtonItem.enabled = NO;
                 
@@ -416,7 +419,7 @@
                 NSString * user = userName.text;
                 NSString * pass = password.text;
                 
-                self.progressView.hidden = NO;
+//                self.progressView.hidden = NO;
                 
                 [[NSBundle mainBundle] loadNibNamed:@"MBP_LoginOrRegistration" owner:self options:nil];
                 userName.text = user;
