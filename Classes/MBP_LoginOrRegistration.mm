@@ -73,6 +73,8 @@
     
 	//load user/pass  
 	NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    
+    _doneButtonPressed = NO;
 	
 	//can be user email or user name here --  
 	NSString * old_usr = (NSString *) [userDefaults objectForKey:@"PortalUsername"];	
@@ -102,8 +104,8 @@
        
         if (shouldAutoLogin == TRUE	)
         {
-            
 
+            _doneButtonPressed = YES;
             [self check3GConnectionAndPopup];
             
         }
@@ -294,6 +296,7 @@
     {
         
         
+
         NSString * msg = NSLocalizedStringWithDefaultValue(@"Logging_in_to_server" ,nil, [NSBundle mainBundle],
                                                            @"Logging in to server..." , nil);
         self.progressView.hidden = NO;
@@ -313,7 +316,6 @@
 }
 -(void) viewWillAppear:(BOOL)animated
 {
-    _doneButtonPressed = NO;
     UIInterfaceOrientation interfaceOrientation = [UIApplication sharedApplication].statusBarOrientation;
     [self adjustViewsForOrientations:interfaceOrientation];
 
