@@ -89,6 +89,8 @@
         else
         {
             [[NSBundle mainBundle] loadNibNamed:@"Step_04_ViewController_land" owner:self options:nil];
+            
+            camName.text = self.cameraName;
         }
     }
     else if (interfaceOrientation == UIInterfaceOrientationPortrait ||
@@ -101,6 +103,7 @@
         else
         {
             [[NSBundle mainBundle] loadNibNamed:@"Step_04_ViewController" owner:self options:nil];
+            camName.text = self.cameraName;
         }
     }
 }

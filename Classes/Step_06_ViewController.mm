@@ -144,18 +144,50 @@
 
 -(void) adjustViewsForOrientations: (UIInterfaceOrientation) interfaceOrientation
 {
-    if (interfaceOrientation == UIInterfaceOrientationLandscapeLeft || interfaceOrientation == UIInterfaceOrientationLandscapeRight) {
-        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
-            [[NSBundle mainBundle] loadNibNamed:@"Step_06_ViewController_land_ipad" owner:self options:nil];
-        } else {
-            [[NSBundle mainBundle] loadNibNamed:@"Step_06_ViewController_land" owner:self options:nil];
-        }
-    } else if (interfaceOrientation == UIInterfaceOrientationPortrait || interfaceOrientation == UIInterfaceOrientationPortraitUpsideDown)
+    if (interfaceOrientation == UIInterfaceOrientationLandscapeLeft || interfaceOrientation == UIInterfaceOrientationLandscapeRight)
     {
-        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+        {
+            [[NSBundle mainBundle] loadNibNamed:@"Step_06_ViewController_land_ipad" owner:self options:nil];
+        } else
+        {
+            [[NSBundle mainBundle] loadNibNamed:@"Step_06_ViewController_land" owner:self options:nil];
+            
+            UITextField * _ssid = (UITextField *) [self.ssidCell viewWithTag:202];
+            if (_ssid != nil && (self.isOtherNetwork == FALSE))
+            {
+                _ssid.text = self.ssid;
+            }
+            
+            UITextField * _sec = (UITextField *) [self.securityCell viewWithTag:1];
+            if (_sec != nil)
+            {
+                _sec.text = self.security; 
+            }
+            
+        }
+    }
+    else if (interfaceOrientation == UIInterfaceOrientationPortrait || interfaceOrientation == UIInterfaceOrientationPortraitUpsideDown)
+    {
+        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+        {
             [[NSBundle mainBundle] loadNibNamed:@"Step_06_ViewController_ipad" owner:self options:nil];
-        } else {
+        }
+        else
+        {
             [[NSBundle mainBundle] loadNibNamed:@"Step_06_ViewController" owner:self options:nil];
+            
+            UITextField * _ssid = (UITextField *) [self.ssidCell viewWithTag:202];
+            if (_ssid != nil && (self.isOtherNetwork == FALSE))
+            {
+                _ssid.text = self.ssid;
+            }
+            
+            UITextField * _sec = (UITextField *) [self.securityCell viewWithTag:1];
+            if (_sec != nil)
+            {
+                _sec.text = self.security; 
+            }
         }
     }
 }
