@@ -71,18 +71,7 @@
         self.navigationItem.leftBarButtonItem = backButton;
         [backButton release];
     }
-    else
-    {
-        
-        UIBarButtonItem *backButton = 
-        [[UIBarButtonItem alloc] initWithTitle:NSLocalizedStringWithDefaultValue(@"Cancel",nil, [NSBundle mainBundle],
-                                                                                 @"Cancel", nil)
-                                         style:UIBarButtonItemStyleBordered 
-                                        target:self 
-                                        action:@selector(handleBackButton:)];          
-        self.navigationItem.leftBarButtonItem = backButton;
-        [backButton release];
-    }
+   
     
 }
 
@@ -92,6 +81,55 @@
     // Release any retained subviews of the main view.
     // e.g. self.myOutlet = nil;
 
+}
+
+-(void)viewWillAppear:(BOOL)animated
+{
+    
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    BOOL isFirstTimeSetup = [userDefaults boolForKey:FIRST_TIME_SETUP];
+    if (isFirstTimeSetup ==FALSE)
+    {
+        NSLog(@"jump here");
+        NSLog(@"load step 2:");
+        
+        UIBarButtonItem *backButton =
+        [[UIBarButtonItem alloc] initWithTitle:NSLocalizedStringWithDefaultValue(@"Cancel",nil, [NSBundle mainBundle],
+                                                                                 @"Cancel", nil)
+                                         style:UIBarButtonItemStyleBordered
+                                        target:self
+                                        action:@selector(handleBackButton:)];
+        self.navigationItem.leftBarButtonItem = backButton;
+        [backButton release];
+        
+        //Load the next xib
+        Step_02_ViewController *step02ViewController = nil;
+        
+        
+        
+        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+        {
+            step02ViewController = [[Step_02_ViewController alloc]
+                                    initWithNibName:@"Step_02_ViewController_ipad" bundle:nil];
+        }
+        else
+        {
+            
+            step02ViewController = [[Step_02_ViewController alloc]
+                                    initWithNibName:@"Step_02_ViewController" bundle:nil];
+        }
+        
+        
+        
+        
+        [self.navigationController pushViewController:step02ViewController animated:NO];
+        
+        [step02ViewController release];
+    }
+    else
+    {
+        //Do nothing let the normal load..
+    }
 }
 
 //Support portrait only mode for now

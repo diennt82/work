@@ -329,27 +329,55 @@ return self;
                 self.app_stage = APP_STAGE_SETUP;
 
                 
-                MBP_InitialSetupViewController *initSeupViewController = nil; 
-                
-                if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+                NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+                BOOL isFirstTimeSetup = [userDefaults boolForKey:FIRST_TIME_SETUP];
+                if (isFirstTimeSetup ==FALSE)
                 {
-                   
-                    initSeupViewController = [[MBP_InitialSetupViewController alloc]
-                                              initWithNibName:@"MBP_InitialSetupViewController_ipad" bundle:nil];
+                    //Normal add cam sequence
+                    //Load the next xib
+                    Step_02_ViewController *step02ViewController = nil;
                     
+                    
+                    
+                    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+                    {
+                        step02ViewController = [[Step_02_ViewController alloc]
+                                                initWithNibName:@"Step_02_ViewController_ipad" bundle:nil];
+                    }
+                    else
+                    {
+                        
+                        step02ViewController = [[Step_02_ViewController alloc]
+                                                initWithNibName:@"Step_02_ViewController" bundle:nil];
+                    }
+                    
+
+                    step02ViewController.delegate = self;
+                    [step02ViewController presentModallyOn:self];
                 }
                 else
                 {
                     
+                    MBP_InitialSetupViewController *initSeupViewController = nil;
                     
-                    initSeupViewController = [[MBP_InitialSetupViewController alloc]
-                                              initWithNibName:@"MBP_InitialSetupViewController" bundle:nil];
+                    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+                    {
+                        
+                        initSeupViewController = [[MBP_InitialSetupViewController alloc]
+                                                  initWithNibName:@"MBP_InitialSetupViewController_ipad" bundle:nil];
+                        
+                    }
+                    else
+                    {   
+                        initSeupViewController = [[MBP_InitialSetupViewController alloc]
+                                                  initWithNibName:@"MBP_InitialSetupViewController" bundle:nil];
+                        
+                    }
+                    
+                    initSeupViewController.delegate = self;
+                    [initSeupViewController presentModallyOn:self];
                     
                 }
-                
-				initSeupViewController.delegate = self;
-				[initSeupViewController presentModallyOn:self]; 
-
 
 				break;
 			}

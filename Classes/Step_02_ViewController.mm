@@ -8,11 +8,15 @@
 
 #import "Step_02_ViewController.h"
 
+
 @interface Step_02_ViewController ()
 
 @end
 
 @implementation Step_02_ViewController
+
+@synthesize delegate;
+
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -26,6 +30,17 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    self.navigationController.navigationBar.barStyle = UIBarStyleBlackOpaque;
+    UIBarButtonItem *backButton =
+    [[UIBarButtonItem alloc] initWithTitle:NSLocalizedStringWithDefaultValue(@"Cancel",nil, [NSBundle mainBundle],
+                                                                             @"Cancel", nil)
+                                     style:UIBarButtonItemStyleBordered
+                                    target:self
+                                    action:@selector(handleBackButton:)];
+    self.navigationItem.leftBarButtonItem = backButton;
+    [backButton release];
+
     
     self.navigationItem.title = NSLocalizedStringWithDefaultValue(@"Switch_On_Camera",nil, [NSBundle mainBundle],
                                                                   @"Switch On Camera", nil);;
@@ -54,6 +69,49 @@
     return (interfaceOrientation == UIInterfaceOrientationPortrait);
 }
 
+- (void)presentModallyOn:(UIViewController *)parent
+{
+    
+    MBPNavController *    navController;
+    
+    //setup nav controller
+    navController= [[[MBPNavController alloc]initWithRootViewController:self] autorelease];
+    
+    
+    // Create a navigation controller with us as its root.
+    assert(navController != nil);
+    
+    
+    
+    // Present the navigation controller on the specified parent
+    // view controller.
+    
+    [parent presentModalViewController:navController animated:NO];
+}
+
+
+
+#pragma mark - 
+#pragma mark Actions
+
+-(IBAction)handleBackButton:(id)sender
+{
+    //simply relogin
+    [self.delegate sendStatus:AFTER_DEL_RELOGIN];//rescan
+}
+
+- (IBAction)goBackToFirstScreen:(id)sender
+{
+    [self.delegate sendStatus:FRONT_PAGE];
+}
+
+-(void) startMonitorCallBack
+{
+    NSLog(@"LOGINING... ");
+    [self.delegate sendStatus:2];//login];
+}
+
+
 - (IBAction)handleButtonPress:(id)sender
 {
     int tag = ((UIButton*)sender).tag;
@@ -61,7 +119,7 @@
     if (tag == CONTINUE_BTN_TAG)
     {
         
-#if 1
+
         NSLog(@"Load step 3");
         //Load the next xib
         Step_03_ViewController *step03ViewController = nil;
@@ -89,36 +147,6 @@
         
         [step03ViewController release];
         
-#else
-        NSLog(@"Load step 09");
-        
-        
-        //Load the next xib
-        Step_09_ViewController *step09ViewController = nil;
-        
-        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
-        {
-            
-            step09ViewController = [[Step_09_ViewController alloc]
-                                    initWithNibName:@"Step_09_ViewController_ipad" bundle:nil];
-            
-            
-        }
-        else
-        {
-            
-            
-            step09ViewController = [[Step_09_ViewController alloc]
-                                    initWithNibName:@"Step_09_ViewController" bundle:nil];
-            
-            
-        }
-        
-        
-        [self.navigationController pushViewController:step09ViewController animated:NO];
-        
-        [step09ViewController release];
-#endif
         
     }
     

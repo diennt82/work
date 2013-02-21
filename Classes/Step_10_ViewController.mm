@@ -7,6 +7,7 @@
 //
 
 #import "Step_10_ViewController.h"
+#import "StartMonitorCallback.h"
 
 @interface Step_10_ViewController ()
 
@@ -224,6 +225,7 @@
     
 }
 
+
 -(IBAction)starMonitor:(id)sender
 {
     NSLog(@"START MONITOR");
@@ -231,11 +233,12 @@
     // Disable Keep screen on
     [UIApplication sharedApplication].idleTimerDisabled=  NO;
 
-   
-    MBP_InitialSetupViewController * initSetupController =(MBP_InitialSetupViewController *) [[self.navigationController viewControllers] objectAtIndex:0];
+    id<StartMonitorDelegate> delegate = (id<StartMonitorDelegate>) [[self.navigationController viewControllers] objectAtIndex:0];
+    //MBP_InitialSetupViewController * initSetupController =(MBP_InitialSetupViewController *) [[self.navigationController viewControllers] objectAtIndex:0];
      [self.navigationController popToRootViewControllerAnimated:NO];
     
-    [initSetupController startMonitorCallBack];
+    //[initSetupController startMonitorCallBack];
+    [delegate startMonitorCallBack];
 }
 
 

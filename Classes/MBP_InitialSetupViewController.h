@@ -10,12 +10,13 @@
 #import "MBP_iosViewController.h"
 #import "ConnectionMethodDelegate.h"
 #import "Step_02_ViewController.h"
+#import "StartMonitorCallback.h"
 
 
 
 #define CONTINUE_BTN_TAG 1000
 
-@interface MBP_InitialSetupViewController : UIViewController
+@interface MBP_InitialSetupViewController : UIViewController <StartMonitorDelegate>
 {
 
     id<ConnectionMethodDelegate> delegate;
@@ -30,5 +31,5 @@
 -(IBAction)handleBackButton:(id)sender;
 - (IBAction)goBackToFirstScreen:(id)sender;
 
--(void) startMonitorCallBack;
+
 @end

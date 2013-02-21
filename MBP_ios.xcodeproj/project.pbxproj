@@ -259,6 +259,7 @@
 		38355AE415CB76630045909C /* Account_ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Account_ViewController.h; sourceTree = "<group>"; };
 		38355AE515CB76630045909C /* Account_ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Account_ViewController.m; sourceTree = "<group>"; };
 		38362C1C15FDEE400077E188 /* alert_history.sqlite */ = {isa = PBXFileReference; lastKnownFileType = file; path = alert_history.sqlite; sourceTree = "<group>"; };
+		3851C3B716D5CD03007D3781 /* StartMonitorCallback.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = StartMonitorCallback.h; sourceTree = "<group>"; };
 		38699126167055B8009F3E66 /* MainWindow_ipad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MainWindow_ipad.xib; sourceTree = "<group>"; };
 		387E718216884E1100E940F9 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = Localizable.strings; sourceTree = "<group>"; };
 		387E718516884E1100E940F9 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = Localizable.strings; sourceTree = "<group>"; };
@@ -795,6 +796,7 @@
 				3825A4B7166F05C500520872 /* MBPNavController.h */,
 				3825A4B8166F05C500520872 /* MBPNavController.m */,
 				28D7ACF60DDB3853001CB0EB /* MBP_iosViewController.h */,
+				3851C3B716D5CD03007D3781 /* StartMonitorCallback.h */,
 				28D7ACF70DDB3853001CB0EB /* MBP_iosViewController.mm */,
 				388396B7168B064500B0D020 /* MBP_iosViewController.xib */,
 				38DE1C11168ADA6B0049E814 /* MBP_iosViewController_ipad.xib */,
