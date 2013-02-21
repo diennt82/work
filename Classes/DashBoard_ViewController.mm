@@ -802,6 +802,9 @@
         
         [self.navigationController pushViewController:viewCamCtrl animated:NO];
         [viewCamCtrl release];
+        
+        
+        [UIApplication sharedApplication].idleTimerDisabled=  YES;
     }
     
 }

@@ -1240,6 +1240,8 @@
 			break;
 		case STREAM_STOPPED_UNEXPECTEDLY:
         {
+            [UIApplication sharedApplication].idleTimerDisabled=  NO;
+            
             //Perform connectivity check - wifi?
             NSString * currSSID = [CameraPassword fetchSSIDInfo];
             NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
@@ -1432,7 +1434,7 @@
 	}
     
     
-     [UIApplication sharedApplication].idleTimerDisabled=  YES;
+    
 
 
 }
