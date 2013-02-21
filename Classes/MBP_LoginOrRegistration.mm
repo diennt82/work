@@ -66,10 +66,8 @@
     
     [self.view addSubview:self.progressView];
     
-//    _doneButtonPressed = NO;
-  
     
-     self.temp_user_email  = @"";
+    self.temp_user_email  = @"";
     self.temp_pass_str =@"";
     self.temp_pass_str =@"";
     
@@ -354,13 +352,17 @@
         }
         else
         {
-            NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+
+            NSString * user = userName.text;
+            NSString * pass = password.text;
             
-            BOOL shouldAutoLogin = [userDefaults boolForKey:_AutoLogin];
+            [[NSBundle mainBundle] loadNibNamed:@"MBP_LoginOrRegistration_land" owner:self options:nil];
+
+            [self.view addSubview:self.progressView];
             
             if (_doneButtonPressed == YES)
             {
-                [[NSBundle mainBundle] loadNibNamed:@"MBP_LoginOrRegistration_land" owner:self options:nil];
+                
                 
                 NSString * msg = NSLocalizedStringWithDefaultValue(@"Logging_in_to_server" ,nil, [NSBundle mainBundle],
                                                                    @"Logging in to server..." , nil);
@@ -372,18 +374,9 @@
                 
                 
             }
-            else
-            {
-                NSString * user = userName.text;
-                NSString * pass = password.text;
-                
-//                self.progressView.hidden = NO;
-                
-                [[NSBundle mainBundle] loadNibNamed:@"MBP_LoginOrRegistration_land" owner:self options:nil];
-                userName.text = user;
-                password.text = pass;
-                
-            }
+
+            userName.text = user;
+            password.text = pass;
             
         }
     }
@@ -395,17 +388,17 @@
         }
         else
         {
+       
+            NSString * user = userName.text;
+            NSString * pass = password.text;
             
-            NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-            
-            BOOL shouldAutoLogin = [userDefaults boolForKey:_AutoLogin];
-            
+            [[NSBundle mainBundle] loadNibNamed:@"MBP_LoginOrRegistration" owner:self options:nil];
+            [self.view addSubview:self.progressView];
             if (_doneButtonPressed == YES)
-            {
-                [[NSBundle mainBundle] loadNibNamed:@"MBP_LoginOrRegistration" owner:self options:nil];
-                
+            { 
                 NSString * msg = NSLocalizedStringWithDefaultValue(@"Logging_in_to_server" ,nil, [NSBundle mainBundle],
                                                                    @"Logging in to server..." , nil);
+                [self.view addSubview:self.progressView];
                 self.progressView.hidden = NO;
                 [self.progressLabel setText:msg];
                 [self.view bringSubviewToFront:self.progressView];
@@ -414,18 +407,10 @@
                 
                 
             }
-            else
-            {
-                NSString * user = userName.text;
-                NSString * pass = password.text;
-                
-//                self.progressView.hidden = NO;
-                
-                [[NSBundle mainBundle] loadNibNamed:@"MBP_LoginOrRegistration" owner:self options:nil];
-                userName.text = user;
-                password.text = pass;
-                
-            }
+            userName.text = user;
+            password.text = pass;
+            
+
             
         }
     }
