@@ -16,6 +16,10 @@
 #define SEND_CONF_SUCCESS 1
 #define SEND_CONF_ERROR 2
 
+#define SETUP_CAMERAS_UNCOMPLETE 0
+#define SETUP_CAMERAS_COMPLETE 1
+#define SETUP_CAMERAS_FAIL 2
+
 //Master_key=BC0B87B2832B67FF58F11749F19C4915D4B876C2505D9CC7D0D06F79653C8B11
 #define MASTER_KEY @"Master_key="
 
@@ -40,6 +44,8 @@
 
     ScanForCamera * scanner; 
     NSString *cameraMac, *master_key;
+    
+    int setupStatus;
 }
 
 @property (nonatomic,assign) IBOutlet UILabel * homeSSID;

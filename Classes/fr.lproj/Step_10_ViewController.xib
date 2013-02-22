@@ -36,13 +36,13 @@
 				<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
 			</object>
 			<object class="IBUIView" id="612829385">
-				<reference key="NSNextResponder"/>
+				<nil key="NSNextResponder"/>
 				<int key="NSvFlags">274</int>
 				<array class="NSMutableArray" key="NSSubviews">
 					<object class="IBUIImageView" id="824780268">
 						<reference key="NSNextResponder" ref="612829385"/>
 						<int key="NSvFlags">292</int>
-						<string key="NSFrameSize">{320, 460}</string>
+						<string key="NSFrameSize">{320, 568}</string>
 						<reference key="NSSuperview" ref="612829385"/>
 						<reference key="NSNextKeyView" ref="658450404"/>
 						<string key="NSReuseIdentifierKey">_NS:9</string>
@@ -222,6 +222,23 @@
 						<int key="NSID">2</int>
 					</object>
 				</object>
+				<object class="IBUIScreenMetrics" key="IBUISimulatedDestinationMetrics" id="234033863">
+					<string key="IBUISimulatedSizeMetricsClass">IBUIScreenMetrics</string>
+					<object class="NSMutableDictionary" key="IBUINormalizedOrientationToSizeMap">
+						<bool key="EncodedWithXMLCoder">YES</bool>
+						<array key="dict.sortedKeys">
+							<integer value="1"/>
+							<integer value="3"/>
+						</array>
+						<array key="dict.values">
+							<string>{320, 568}</string>
+							<string>{568, 320}</string>
+						</array>
+					</object>
+					<string key="IBUITargetRuntime">IBCocoaTouchFramework</string>
+					<string key="IBUIDisplayName">Retina 4 Full Screen</string>
+					<int key="IBUIType">2</int>
+				</object>
 				<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
 			</object>
 			<object class="IBUIView" id="145019277">
@@ -314,24 +331,26 @@
 						<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
 					</object>
 				</array>
-				<string key="NSFrameSize">{320, 460}</string>
+				<string key="NSFrameSize">{320, 568}</string>
 				<reference key="NSNextKeyView" ref="860872968"/>
 				<string key="NSReuseIdentifierKey">_NS:9</string>
 				<object class="NSColor" key="IBUIBackgroundColor">
 					<int key="NSColorSpace">1</int>
 					<bytes key="NSRGB">MCAwIDAgMC41MgA</bytes>
 				</object>
+				<reference key="IBUISimulatedDestinationMetrics" ref="234033863"/>
 				<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
 			</object>
 			<object class="IBUIView" id="620789710">
-				<nil key="NSNextResponder"/>
+				<reference key="NSNextResponder"/>
 				<int key="NSvFlags">292</int>
 				<array class="NSMutableArray" key="NSSubviews">
 					<object class="IBUIImageView" id="381960928">
 						<reference key="NSNextResponder" ref="620789710"/>
 						<int key="NSvFlags">292</int>
-						<string key="NSFrameSize">{320, 460}</string>
+						<string key="NSFrameSize">{320, 568}</string>
 						<reference key="NSSuperview" ref="620789710"/>
+						<reference key="NSWindow"/>
 						<reference key="NSNextKeyView" ref="578368283"/>
 						<string key="NSReuseIdentifierKey">_NS:9</string>
 						<bool key="IBUIUserInteractionEnabled">NO</bool>
@@ -343,6 +362,7 @@
 						<int key="NSvFlags">-2147483356</int>
 						<string key="NSFrame">{{16, 275}, {289, 65}}</string>
 						<reference key="NSSuperview" ref="620789710"/>
+						<reference key="NSWindow"/>
 						<reference key="NSNextKeyView" ref="192216076"/>
 						<string key="NSReuseIdentifierKey">_NS:9</string>
 						<reference key="IBUIBackgroundColor" ref="560648867"/>
@@ -364,6 +384,7 @@
 						<int key="NSvFlags">-2147483356</int>
 						<string key="NSFrame">{{40, 388}, {240, 52}}</string>
 						<reference key="NSSuperview" ref="620789710"/>
+						<reference key="NSWindow"/>
 						<reference key="NSNextKeyView" ref="135705004"/>
 						<string key="NSReuseIdentifierKey">_NS:9</string>
 						<reference key="IBUIBackgroundColor" ref="560648867"/>
@@ -384,6 +405,7 @@
 						<int key="NSvFlags">-2147483356</int>
 						<string key="NSFrame">{{102, 360}, {116, 37}}</string>
 						<reference key="NSSuperview" ref="620789710"/>
+						<reference key="NSWindow"/>
 						<string key="NSReuseIdentifierKey">_NS:9</string>
 						<bool key="IBUIOpaque">NO</bool>
 						<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
@@ -405,6 +427,7 @@
 						<int key="NSvFlags">-2147483356</int>
 						<string key="NSFrame">{{20, 418}, {240, 30}}</string>
 						<reference key="NSSuperview" ref="620789710"/>
+						<reference key="NSWindow"/>
 						<reference key="NSNextKeyView" ref="987200684"/>
 						<string key="NSReuseIdentifierKey">_NS:9</string>
 						<reference key="IBUIBackgroundColor" ref="560648867"/>
@@ -425,6 +448,7 @@
 						<int key="NSvFlags">292</int>
 						<string key="NSFrame">{{40, 36}, {240, 27}}</string>
 						<reference key="NSSuperview" ref="620789710"/>
+						<reference key="NSWindow"/>
 						<reference key="NSNextKeyView" ref="279567845"/>
 						<string key="NSReuseIdentifierKey">_NS:9</string>
 						<bool key="IBUIOpaque">NO</bool>
@@ -461,6 +485,7 @@
 						<int key="NSvFlags">292</int>
 						<string key="NSFrame">{{18, 69}, {283, 66}}</string>
 						<reference key="NSSuperview" ref="620789710"/>
+						<reference key="NSWindow"/>
 						<reference key="NSNextKeyView" ref="150914339"/>
 						<string key="NSReuseIdentifierKey">_NS:9</string>
 						<reference key="IBUIBackgroundColor" ref="560648867"/>
@@ -487,6 +512,7 @@
 						<int key="NSvFlags">292</int>
 						<string key="NSFrame">{{35, 8}, {248, 33}}</string>
 						<reference key="NSSuperview" ref="620789710"/>
+						<reference key="NSWindow"/>
 						<reference key="NSNextKeyView" ref="505082562"/>
 						<string key="NSReuseIdentifierKey">_NS:9</string>
 						<reference key="IBUIBackgroundColor" ref="560648867"/>
@@ -509,6 +535,7 @@
 						<int key="NSvFlags">292</int>
 						<string key="NSFrame">{{40, 139}, {240, 128}}</string>
 						<reference key="NSSuperview" ref="620789710"/>
+						<reference key="NSWindow"/>
 						<reference key="NSNextKeyView" ref="262445028"/>
 						<string key="NSReuseIdentifierKey">_NS:9</string>
 						<bool key="IBUIUserInteractionEnabled">NO</bool>
@@ -519,10 +546,13 @@
 						</object>
 					</object>
 				</array>
-				<string key="NSFrameSize">{320, 460}</string>
+				<string key="NSFrameSize">{320, 568}</string>
+				<reference key="NSSuperview"/>
+				<reference key="NSWindow"/>
 				<reference key="NSNextKeyView" ref="381960928"/>
 				<string key="NSReuseIdentifierKey">_NS:9</string>
 				<reference key="IBUIBackgroundColor" ref="560648867"/>
+				<reference key="IBUISimulatedDestinationMetrics" ref="234033863"/>
 				<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
 			</object>
 		</array>
@@ -689,11 +719,15 @@
 						<reference key="parent" ref="612829385"/>
 					</object>
 					<object class="IBObjectRecord">
+						<int key="objectID">59</int>
+						<reference key="object" ref="690906681"/>
+						<reference key="parent" ref="860872968"/>
+					</object>
+					<object class="IBObjectRecord">
 						<int key="objectID">49</int>
 						<reference key="object" ref="620789710"/>
 						<array class="NSMutableArray" key="children">
 							<reference ref="135705004"/>
-							<reference ref="381960928"/>
 							<reference ref="262445028"/>
 							<reference ref="987200684"/>
 							<reference ref="279567845"/>
@@ -701,6 +735,7 @@
 							<reference ref="192216076"/>
 							<reference ref="578368283"/>
 							<reference ref="505082562"/>
+							<reference ref="381960928"/>
 						</array>
 						<reference key="parent" ref="0"/>
 					</object>
@@ -710,38 +745,8 @@
 						<reference key="parent" ref="620789710"/>
 					</object>
 					<object class="IBObjectRecord">
-						<int key="objectID">51</int>
-						<reference key="object" ref="192216076"/>
-						<reference key="parent" ref="620789710"/>
-					</object>
-					<object class="IBObjectRecord">
-						<int key="objectID">53</int>
-						<reference key="object" ref="135705004"/>
-						<reference key="parent" ref="620789710"/>
-					</object>
-					<object class="IBObjectRecord">
-						<int key="objectID">57</int>
-						<reference key="object" ref="987200684"/>
-						<reference key="parent" ref="620789710"/>
-					</object>
-					<object class="IBObjectRecord">
-						<int key="objectID">59</int>
-						<reference key="object" ref="690906681"/>
-						<reference key="parent" ref="860872968"/>
-					</object>
-					<object class="IBObjectRecord">
 						<int key="objectID">60</int>
 						<reference key="object" ref="505082562"/>
-						<reference key="parent" ref="620789710"/>
-					</object>
-					<object class="IBObjectRecord">
-						<int key="objectID">62</int>
-						<reference key="object" ref="262445028"/>
-						<reference key="parent" ref="620789710"/>
-					</object>
-					<object class="IBObjectRecord">
-						<int key="objectID">63</int>
-						<reference key="object" ref="279567845"/>
 						<reference key="parent" ref="620789710"/>
 					</object>
 					<object class="IBObjectRecord">
@@ -750,8 +755,33 @@
 						<reference key="parent" ref="620789710"/>
 					</object>
 					<object class="IBObjectRecord">
+						<int key="objectID">51</int>
+						<reference key="object" ref="192216076"/>
+						<reference key="parent" ref="620789710"/>
+					</object>
+					<object class="IBObjectRecord">
 						<int key="objectID">66</int>
 						<reference key="object" ref="150914339"/>
+						<reference key="parent" ref="620789710"/>
+					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">63</int>
+						<reference key="object" ref="279567845"/>
+						<reference key="parent" ref="620789710"/>
+					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">57</int>
+						<reference key="object" ref="987200684"/>
+						<reference key="parent" ref="620789710"/>
+					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">62</int>
+						<reference key="object" ref="262445028"/>
+						<reference key="parent" ref="620789710"/>
+					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">53</int>
+						<reference key="object" ref="135705004"/>
 						<reference key="parent" ref="620789710"/>
 					</object>
 				</array>

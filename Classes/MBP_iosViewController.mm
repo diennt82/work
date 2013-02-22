@@ -321,9 +321,12 @@ return self;
         }
         else
         {
+            BOOL statusHidden = statusDialogLabel.hidden;
+            
             [[NSBundle mainBundle] loadNibNamed:@"MBP_iosViewController_land" owner:self options:nil];
             
             [self.view addSubview:backgroundView];
+            statusDialogLabel.hidden = statusHidden;
             
             CGAffineTransform transform = CGAffineTransformMakeRotation(-M_PI_2);
             if (interfaceOrientation == UIInterfaceOrientationLandscapeRight)
@@ -344,8 +347,10 @@ return self;
         }
         else
         {
+            BOOL statusHidden = statusDialogLabel.hidden;
             [[NSBundle mainBundle] loadNibNamed:@"MBP_iosViewController" owner:self options:nil];
             [self.view addSubview:backgroundView];
+            statusDialogLabel.hidden = statusHidden;
         }
     }
 }

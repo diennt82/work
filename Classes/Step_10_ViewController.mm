@@ -34,8 +34,6 @@
 -(void) dealloc
 {
 
-    
-    
     //[userNameLabel release];
     //[userEmailLabel release];
     //[progressView release]; 
@@ -52,6 +50,8 @@
     [super viewDidLoad];
     //Keep screen on
     [UIApplication sharedApplication].idleTimerDisabled = YES;
+    
+    setupStatus = SETUP_CAMERAS_UNCOMPLETE;
 
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     
@@ -158,18 +158,229 @@
 
 -(void) adjustViewsForOrientations: (UIInterfaceOrientation) interfaceOrientation
 {
-    if (interfaceOrientation == UIInterfaceOrientationLandscapeLeft || interfaceOrientation == UIInterfaceOrientationLandscapeRight) {
-        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
-            [[NSBundle mainBundle] loadNibNamed:@"Step_10_ViewController_land_ipad" owner:self options:nil];
-        } else {
-            [[NSBundle mainBundle] loadNibNamed:@"Step_10_ViewController_land" owner:self options:nil];
-        }
-    } else if (interfaceOrientation == UIInterfaceOrientationPortrait || interfaceOrientation == UIInterfaceOrientationPortraitUpsideDown)
+    if (interfaceOrientation == UIInterfaceOrientationLandscapeLeft || interfaceOrientation == UIInterfaceOrientationLandscapeRight)
     {
-        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+        {
+            [[NSBundle mainBundle] loadNibNamed:@"Step_10_ViewController_land_ipad" owner:self options:nil];
+        }
+        else
+        {
+            if (setupStatus == SETUP_CAMERAS_UNCOMPLETE)
+            {
+                [[NSBundle mainBundle] loadNibNamed:@"Step_10_ViewController_land" owner:self options:nil];
+                
+                NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+                
+                BOOL firstime = [userDefaults boolForKey:FIRST_TIME_SETUP];
+                
+                
+                //Check to see which path we should go
+                if (firstime == TRUE)
+                {
+                    // Do any additional setup after loading the view.
+                    
+                    self.navigationItem.title =NSLocalizedStringWithDefaultValue(@"Account_Created",nil, [NSBundle mainBundle],
+                                                                                 @"Account Created" , nil);
+                    self.navigationItem.hidesBackButton = YES;
+                    
+                    [self.view addSubview:self.progressView];
+                    self.progressView.hidden = YES;
+                    
+                    
+                }
+                else //not first time --> this is normal add camera sequence..
+                {
+                    
+                    //Hide back button -- can't go back now..
+                    self.navigationItem.hidesBackButton = TRUE;
+                    
+                    self.navigationItem.title =NSLocalizedStringWithDefaultValue(@"Camera_Configured",nil, [NSBundle mainBundle],
+                                                                                 @"Camera Configured" , nil);
+                    
+                    NSLog(@"Normal Add cam sequence" );
+                    
+                    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+                    NSString * homeSsid = (NSString *) [userDefaults objectForKey:HOME_SSID];
+                    
+                    
+                    
+                    [self.view addSubview:self.progressView];
+                    self.progressView.hidden = YES;
+                    [self.view addSubview:cameraAddedView];
+                    self.homeSSID.text = homeSsid;
+                    
+                    [NSTimer scheduledTimerWithTimeInterval: 2.0//
+                                                     target:self
+                                                   selector:@selector(checkConnectionToHomeWifi:)
+                                                   userInfo:nil
+                                                    repeats:NO];
+                }
+                
+            }
+            else if (setupStatus == SETUP_CAMERAS_COMPLETE)
+            {
+                
+                self.progressView.hidden = YES;
+                self.navigationItem.hidesBackButton = YES;
+                    [[NSBundle mainBundle] loadNibNamed:@"Setup_bm_step_12_land" owner:self options:nil];
+                
+                
+                
+                [self.view addSubview:self.setupCompleteView];
+                
+                
+                NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+                self.cameraName.text =  (NSString *) [userDefaults objectForKey:@"CameraName"];
+                self.navigationItem.title = NSLocalizedStringWithDefaultValue( @"Setup_Complete",nil, [NSBundle mainBundle],
+                                                                              @"Setup Complete" , nil);
+                
+            }
+            else if (setupStatus == SETUP_CAMERAS_FAIL)
+            {
+                // Add cameras fail in landscape mode
+                self.progressView.hidden = YES;
+                self.navigationItem.hidesBackButton = YES;
+                
+                NSLog(@"Setup has failed - remove cam on server");
+                // send a command to remove camera
+                NSString * mac = [Util strip_colon_fr_mac:self.cameraMac];
+                
+                NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+                NSString * user_email = (NSString *) [userDefaults objectForKey:@"PortalUseremail"];
+                NSString * user_pass = (NSString *) [userDefaults objectForKey:@"PortalPassword"];
+                
+                BMS_Communication * bms_comm;
+                bms_comm = [[BMS_Communication alloc] initWithObject:self
+                                                            Selector:@selector(removeCamSuccessWithResponse:) ///TEST
+                                                        FailSelector:@selector(removeCamFailedWithError:)
+                                                           ServerErr:@selector(removeCamFailedServerUnreachable)];
+                
+                [bms_comm BMS_delCamWithUser:user_email AndPass:user_pass macAddr:mac];
+                
+                self.navigationItem.title = NSLocalizedStringWithDefaultValue( @"Add_Camera_Failed",nil, [NSBundle mainBundle],
+                                                                              @"Add Camera Failed" , nil);
+                
+                [[NSBundle mainBundle] loadNibNamed:@"Setup_bm_step_11_land" owner:self options:nil];
+                
+                UIScrollView *tempScrollView=(UIScrollView *) [self.setupFailView viewWithTag:1];
+//                tempScrollView.contentSize=CGSizeMake(568,200);
+                [tempScrollView setFrame:CGRectMake(0,0,568,200)];
+                [self.view addSubview:self.setupFailView];
+
+            }
+        }
+    }
+    else if (interfaceOrientation == UIInterfaceOrientationPortrait || interfaceOrientation == UIInterfaceOrientationPortraitUpsideDown)
+    {
+        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+        {
             [[NSBundle mainBundle] loadNibNamed:@"Step_10_ViewController_ipad" owner:self options:nil];
-        } else {
-            [[NSBundle mainBundle] loadNibNamed:@"Step_10_ViewController" owner:self options:nil];
+        }
+        else
+        {
+            if (setupStatus == SETUP_CAMERAS_UNCOMPLETE)
+            {
+                [[NSBundle mainBundle] loadNibNamed:@"Step_10_ViewController" owner:self options:nil];
+                
+                NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+                
+                BOOL firstime = [userDefaults boolForKey:FIRST_TIME_SETUP];
+                
+                
+                //Check to see which path we should go
+                if (firstime == TRUE)
+                {
+                    // Do any additional setup after loading the view.
+                    
+                    self.navigationItem.title =NSLocalizedStringWithDefaultValue(@"Account_Created",nil, [NSBundle mainBundle],
+                                                                                 @"Account Created" , nil);
+                    self.navigationItem.hidesBackButton = YES;
+                    
+                    [self.view addSubview:self.progressView];
+                    self.progressView.hidden = YES;
+                    
+                    
+                }
+                else //not first time --> this is normal add camera sequence..
+                {
+                    
+                    //Hide back button -- can't go back now..
+                    self.navigationItem.hidesBackButton = TRUE;
+                    
+                    self.navigationItem.title =NSLocalizedStringWithDefaultValue(@"Camera_Configured",nil, [NSBundle mainBundle],
+                                                                                 @"Camera Configured" , nil);
+                    
+                    NSLog(@"Normal Add cam sequence" );
+                    
+                    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+                    NSString * homeSsid = (NSString *) [userDefaults objectForKey:HOME_SSID];
+                    
+                    
+                    
+                    [self.view addSubview:self.progressView];
+                    self.progressView.hidden = YES;
+                    [self.view addSubview:cameraAddedView];
+                    self.homeSSID.text = homeSsid;
+                    
+                    [NSTimer scheduledTimerWithTimeInterval: 2.0//
+                                                     target:self
+                                                   selector:@selector(checkConnectionToHomeWifi:)
+                                                   userInfo:nil
+                                                    repeats:NO];
+                }
+                
+            }
+            else if (setupStatus == SETUP_CAMERAS_COMPLETE)
+            {
+                //in case iphone is portrait and complete setup
+                self.progressView.hidden = YES;
+                self.navigationItem.hidesBackButton = YES;
+                    [[NSBundle mainBundle] loadNibNamed:@"Setup_bm_step_12" owner:self options:nil];
+                
+                
+                
+                [self.view addSubview:self.setupCompleteView];
+                
+                
+                NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+                self.cameraName.text =  (NSString *) [userDefaults objectForKey:@"CameraName"];
+                self.navigationItem.title = NSLocalizedStringWithDefaultValue( @"Setup_Complete",nil, [NSBundle mainBundle],
+                                                                              @"Setup Complete" , nil);
+            }
+            else if (setupStatus == SETUP_CAMERAS_FAIL)
+            {
+                // Add cameras fail in portrait mode
+
+                self.progressView.hidden = YES;
+                self.navigationItem.hidesBackButton = YES;
+                
+                NSLog(@"Setup has failed - remove cam on server");
+                // send a command to remove camera
+                NSString * mac = [Util strip_colon_fr_mac:self.cameraMac];
+                
+                NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+                NSString * user_email = (NSString *) [userDefaults objectForKey:@"PortalUseremail"];
+                NSString * user_pass = (NSString *) [userDefaults objectForKey:@"PortalPassword"];
+                
+                BMS_Communication * bms_comm;
+                bms_comm = [[BMS_Communication alloc] initWithObject:self
+                                                            Selector:@selector(removeCamSuccessWithResponse:) ///TEST
+                                                        FailSelector:@selector(removeCamFailedWithError:)
+                                                           ServerErr:@selector(removeCamFailedServerUnreachable)];
+                
+                [bms_comm BMS_delCamWithUser:user_email AndPass:user_pass macAddr:mac];
+                
+                self.navigationItem.title = NSLocalizedStringWithDefaultValue( @"Add_Camera_Failed",nil, [NSBundle mainBundle],
+                                                                              @"Add Camera Failed" , nil);
+                
+                [[NSBundle mainBundle] loadNibNamed:@"Setup_bm_step_11" owner:self options:nil];
+                
+                UIScrollView *tempScrollView=(UIScrollView *) [self.setupFailView viewWithTag:1];
+//                tempScrollView.contentSize=CGSizeMake(320,400);
+                [tempScrollView setFrame:CGRectMake(0,0,320,400)];
+                [self.view addSubview:self.setupFailView];
+            }
         }
     }
 }
@@ -569,23 +780,35 @@
 
 - (void) setupCompleted
 {
+    
+    
+    setupStatus = SETUP_CAMERAS_COMPLETE;
 	self.progressView.hidden = YES;
     self.navigationItem.hidesBackButton = YES;
     
     UIInterfaceOrientation interfaceOrientation = [UIApplication sharedApplication].statusBarOrientation;
     
-    if (interfaceOrientation == UIInterfaceOrientationLandscapeLeft || interfaceOrientation == UIInterfaceOrientationLandscapeRight) {
-        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+    if (interfaceOrientation == UIInterfaceOrientationLandscapeLeft || interfaceOrientation == UIInterfaceOrientationLandscapeRight)
+    {
+        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+        {
             [[NSBundle mainBundle] loadNibNamed:@"Setup_bm_step_12_land_ipad" owner:self options:nil];
-        } else {
+        }
+        else
+        {
             [[NSBundle mainBundle] loadNibNamed:@"Setup_bm_step_12_land" owner:self options:nil];
         }
-    } else if (interfaceOrientation == UIInterfaceOrientationPortrait || interfaceOrientation == UIInterfaceOrientationPortraitUpsideDown)
+    }
+    else if (interfaceOrientation == UIInterfaceOrientationPortrait || interfaceOrientation == UIInterfaceOrientationPortraitUpsideDown)
     {
         //Step 12
-        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+        {
             [[NSBundle mainBundle] loadNibNamed:@"Setup_bm_step_12_ipad" owner:self options:nil];
-        } else {
+        }
+        else
+        
+        {
             [[NSBundle mainBundle] loadNibNamed:@"Setup_bm_step_12" owner:self options:nil];
         }
     }
@@ -602,6 +825,7 @@
 
 - (void)  setupFailed
 {
+    setupStatus = SETUP_CAMERAS_FAIL;
 	self.progressView.hidden = YES;
     self.navigationItem.hidesBackButton = YES;
 	
@@ -628,17 +852,25 @@
     
     UIInterfaceOrientation interfaceOrientation = [UIApplication sharedApplication].statusBarOrientation;
     
-    if (interfaceOrientation == UIInterfaceOrientationLandscapeLeft || interfaceOrientation == UIInterfaceOrientationLandscapeRight) {
-        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+    if (interfaceOrientation == UIInterfaceOrientationLandscapeLeft || interfaceOrientation == UIInterfaceOrientationLandscapeRight)
+    {
+        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+        {
             [[NSBundle mainBundle] loadNibNamed:@"Setup_bm_step_11_land_ipad" owner:self options:nil];
-        } else {
+        }
+        else
+        {
             [[NSBundle mainBundle] loadNibNamed:@"Setup_bm_step_11_land" owner:self options:nil];
         }
-    } else if (interfaceOrientation == UIInterfaceOrientationPortrait || interfaceOrientation == UIInterfaceOrientationPortraitUpsideDown)
+    }
+    else if (interfaceOrientation == UIInterfaceOrientationPortrait || interfaceOrientation == UIInterfaceOrientationPortraitUpsideDown)
     {
-        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+        {
             [[NSBundle mainBundle] loadNibNamed:@"Setup_bm_step_11_ipad" owner:self options:nil];
-        } else {
+        }
+        else
+        {
             [[NSBundle mainBundle] loadNibNamed:@"Setup_bm_step_11" owner:self options:nil];
         }
     }
