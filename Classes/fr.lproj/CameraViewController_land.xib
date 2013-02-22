@@ -554,7 +554,7 @@
 							<object class="IBUILabel" id="475809899">
 								<reference key="NSNextResponder" ref="269973914"/>
 								<int key="NSvFlags">292</int>
-								<string key="NSFrame">{{128, 75}, {224, 21}}</string>
+								<string key="NSFrame">{{125, 63}, {231, 45}}</string>
 								<reference key="NSSuperview" ref="269973914"/>
 								<reference key="NSWindow"/>
 								<reference key="NSNextKeyView" ref="777677213"/>
@@ -562,9 +562,10 @@
 								<bool key="IBUIOpaque">NO</bool>
 								<bool key="IBUIClipsSubviews">YES</bool>
 								<int key="IBUIContentMode">7</int>
+								<int key="IBUITag">155</int>
 								<bool key="IBUIUserInteractionEnabled">NO</bool>
 								<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
-								<string key="IBUIText">Connecting to Baby Monitor...</string>
+								<string key="IBUIText">Connecting to Baby Monitor ... </string>
 								<object class="NSColor" key="IBUITextColor">
 									<int key="NSColorSpace">1</int>
 									<bytes key="NSRGB">MSAxIDEAA</bytes>
@@ -574,17 +575,20 @@
 								</object>
 								<nil key="IBUIHighlightedColor"/>
 								<int key="IBUIBaselineAdjustment">0</int>
-								<float key="IBUIMinimumFontSize">10</float>
+								<int key="IBUINumberOfLines">2</int>
+								<int key="IBUITextAlignment">1</int>
 								<reference key="IBUIFontDescription" ref="639135525"/>
 								<reference key="IBUIFont" ref="983307378"/>
+								<bool key="IBUIAdjustsFontSizeToFit">NO</bool>
+								<double key="preferredMaxLayoutWidth">231</double>
 							</object>
 							<object class="IBUIActivityIndicatorView" id="777677213">
 								<reference key="NSNextResponder" ref="269973914"/>
 								<int key="NSvFlags">292</int>
-								<string key="NSFrame">{{212, 114}, {37, 37}}</string>
+								<string key="NSFrame">{{221, 114}, {37, 37}}</string>
 								<reference key="NSSuperview" ref="269973914"/>
 								<reference key="NSWindow"/>
-								<reference key="NSNextKeyView" ref="175958070"/>
+								<reference key="NSNextKeyView" ref="769059203"/>
 								<string key="NSReuseIdentifierKey">_NS:9</string>
 								<bool key="IBUIOpaque">NO</bool>
 								<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
@@ -592,10 +596,10 @@
 								<bool key="IBUIAnimating">YES</bool>
 								<int key="IBUIStyle">0</int>
 							</object>
-							<object class="IBUIButton" id="175958070">
+							<object class="IBUIButton" id="769059203">
 								<reference key="NSNextResponder" ref="269973914"/>
 								<int key="NSvFlags">292</int>
-								<string key="NSFrame">{{194, 172}, {74, 44}}</string>
+								<string key="NSFrame">{{203, 172}, {74, 44}}</string>
 								<reference key="NSSuperview" ref="269973914"/>
 								<reference key="NSWindow"/>
 								<reference key="NSNextKeyView" ref="848862235"/>
@@ -625,7 +629,6 @@
 							<int key="NSColorSpace">1</int>
 							<bytes key="NSRGB">MCAwIDAgMC41MgA</bytes>
 						</object>
-						<bool key="IBUIUserInteractionEnabled">NO</bool>
 						<object class="IBUISimulatedOrientationMetrics" key="IBUISimulatedOrientationMetrics">
 							<int key="IBUIInterfaceOrientation">3</int>
 							<int key="interfaceOrientation">3</int>
@@ -1176,7 +1179,7 @@
 				<object class="IBConnectionRecord">
 					<object class="IBCocoaTouchEventConnection" key="connection">
 						<string key="label">buttonCancelPressed:</string>
-						<reference key="source" ref="175958070"/>
+						<reference key="source" ref="769059203"/>
 						<reference key="destination" ref="372490531"/>
 						<int key="IBEventType">7</int>
 					</object>
@@ -1474,7 +1477,7 @@
 							<reference ref="777677213"/>
 							<reference ref="475809899"/>
 							<reference ref="57774066"/>
-							<reference ref="175958070"/>
+							<reference ref="769059203"/>
 						</array>
 						<reference key="parent" ref="887761465"/>
 						<string key="objectName">progressview</string>
@@ -1502,7 +1505,7 @@
 					</object>
 					<object class="IBObjectRecord">
 						<int key="objectID">121</int>
-						<reference key="object" ref="175958070"/>
+						<reference key="object" ref="769059203"/>
 						<reference key="parent" ref="269973914"/>
 					</object>
 				</array>

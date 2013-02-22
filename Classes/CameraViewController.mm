@@ -451,9 +451,14 @@
     
 	BOOL shouldShowProgress = FALSE;
     
+    NSString * msg = nil ;
+    
 	if (progressView.hidden == NO)
 	{
 		shouldShowProgress = TRUE;
+        
+        UITextView * txtview = (UITextView *) [progressView viewWithTag:155];
+        msg = txtview.text; 
 	}
     
     //while upgrading.. remember the text & values before reload the layout
@@ -704,6 +709,13 @@
         //re-show progress if  it is being shown
         if (shouldShowProgress)
         {
+            if (msg != nil)
+            {
+                UITextView * txtview = (UITextView *) [progressView viewWithTag:155];
+                txtview.text = msg;
+            }
+
+            
             [self.view addSubview:progressView];
             [self.view bringSubviewToFront:progressView];
         }
@@ -1042,6 +1054,8 @@
     //   Go back to camera list
     
     NSLog(@"Cancelling...");
+    
+    [UIApplication sharedApplication].idleTimerDisabled=  NO;
     
     self.selected_channel.stopStreaming = TRUE;
     
@@ -1440,6 +1454,21 @@
             _alert.tag = REMOTE_SSKEY_MISMATCH ;
             [_alert show];
             [_alert release];
+            break;
+        }
+        case SWITCHING_TO_RELAY_SERVER:
+        {
+            
+            //change the message being shown on progress bar -- NEED to take of rotation
+
+            if (progressView != nil)
+            {
+                UITextView * message = (UITextView *)[progressView viewWithTag:155] ;//textview
+                NSString * msg = NSLocalizedStringWithDefaultValue(@"udt_relay_connect",nil, [NSBundle mainBundle],
+                                                                   @"Connecting through relay... please wait..." , nil);
+                message.text = msg;
+                
+            }
             break;
         }
 		default:

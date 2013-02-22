@@ -260,6 +260,8 @@
 		38355AE515CB76630045909C /* Account_ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Account_ViewController.m; sourceTree = "<group>"; };
 		38362C1C15FDEE400077E188 /* alert_history.sqlite */ = {isa = PBXFileReference; lastKnownFileType = file; path = alert_history.sqlite; sourceTree = "<group>"; };
 		3851C3B716D5CD03007D3781 /* StartMonitorCallback.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = StartMonitorCallback.h; sourceTree = "<group>"; };
+		38590B6B16D766330046585B /* es */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = es; path = es.lproj/CameraViewController_ipad.xib; sourceTree = "<group>"; };
+		38590B6C16D766370046585B /* fr */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = fr; path = fr.lproj/CameraViewController_ipad.xib; sourceTree = "<group>"; };
 		38699126167055B8009F3E66 /* MainWindow_ipad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MainWindow_ipad.xib; sourceTree = "<group>"; };
 		387E718216884E1100E940F9 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = Localizable.strings; sourceTree = "<group>"; };
 		387E718516884E1100E940F9 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = Localizable.strings; sourceTree = "<group>"; };
@@ -306,6 +308,12 @@
 		38AC741315D9199E00618188 /* account_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = account_icon.png; sourceTree = "<group>"; };
 		38AC741715D91A2400618188 /* scan_camera_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = scan_camera_icon.png; sourceTree = "<group>"; };
 		38ACC70715D9F8CC00825AB4 /* zoom_bar_thumb_.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = zoom_bar_thumb_.png; sourceTree = "<group>"; };
+		38B5D44F16D75362008AD2CB /* es */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = es; path = es.lproj/CameraViewController.xib; sourceTree = "<group>"; };
+		38B5D45016D75365008AD2CB /* fr */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = fr; path = fr.lproj/CameraViewController.xib; sourceTree = "<group>"; };
+		38B5D45116D753A6008AD2CB /* es */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = es; path = es.lproj/CameraViewController_land_ipad.xib; sourceTree = "<group>"; };
+		38B5D45216D753AA008AD2CB /* fr */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = fr; path = fr.lproj/CameraViewController_land_ipad.xib; sourceTree = "<group>"; };
+		38B5D45516D7546E008AD2CB /* es */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = es; path = es.lproj/CameraViewController_land.xib; sourceTree = "<group>"; };
+		38B5D45616D75472008AD2CB /* fr */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = fr; path = fr.lproj/CameraViewController_land.xib; sourceTree = "<group>"; };
 		38B85E4E15CFA4DC00E5A1FA /* Step_07_tableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = Step_07_tableViewCell.xib; sourceTree = "<group>"; };
 		38B85E5115CFAA7E00E5A1FA /* Step_07_ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Step_07_ViewController.h; sourceTree = "<group>"; };
 		38B85E5215CFAA7E00E5A1FA /* Step_07_ViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = Step_07_ViewController.mm; sourceTree = "<group>"; };
@@ -332,14 +340,6 @@
 		38CE2A0E15D4E07300B8F7EC /* dialog_bg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = dialog_bg.png; sourceTree = "<group>"; };
 		38CE2A1015D4FA3600B8F7EC /* ForgotPwdViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ForgotPwdViewController.h; sourceTree = "<group>"; };
 		38CE2A1115D4FA3700B8F7EC /* ForgotPwdViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ForgotPwdViewController.m; sourceTree = "<group>"; };
-		38DE182316D715BD007B0FB3 /* es */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = es; path = es.lproj/CameraViewController.xib; sourceTree = "<group>"; };
-		38DE182416D715BF007B0FB3 /* fr */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = fr; path = fr.lproj/CameraViewController.xib; sourceTree = "<group>"; };
-		38DE182516D71689007B0FB3 /* es */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = es; path = es.lproj/CameraViewController_land.xib; sourceTree = "<group>"; };
-		38DE182616D71690007B0FB3 /* fr */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = fr; path = fr.lproj/CameraViewController_land.xib; sourceTree = "<group>"; };
-		38DE182716D716E3007B0FB3 /* es */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = es; path = es.lproj/CameraViewController_ipad.xib; sourceTree = "<group>"; };
-		38DE182816D716EB007B0FB3 /* fr */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = fr; path = fr.lproj/CameraViewController_ipad.xib; sourceTree = "<group>"; };
-		38DE182916D71729007B0FB3 /* es */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = es; path = es.lproj/CameraViewController_land_ipad.xib; sourceTree = "<group>"; };
-		38DE182A16D7172D007B0FB3 /* fr */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = fr; path = fr.lproj/CameraViewController_land_ipad.xib; sourceTree = "<group>"; };
 		38DE1BC2168ACFEF0049E814 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/DashBoard_ViewController.xib; sourceTree = "<group>"; };
 		38DE1BC7168AD57D0049E814 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/DashBoard_ViewController_ipad.xib; sourceTree = "<group>"; };
 		38DE1BCA168AD92C0049E814 /* es */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = es; path = es.lproj/DashBoard_ViewController.xib; sourceTree = "<group>"; };
@@ -1294,8 +1294,8 @@
 			isa = PBXVariantGroup;
 			children = (
 				388396BF168B069300B0D020 /* en */,
-				38DE182916D71729007B0FB3 /* es */,
-				38DE182A16D7172D007B0FB3 /* fr */,
+				38B5D45116D753A6008AD2CB /* es */,
+				38B5D45216D753AA008AD2CB /* fr */,
 			);
 			name = CameraViewController_land_ipad.xib;
 			sourceTree = "<group>";
@@ -1354,8 +1354,8 @@
 			isa = PBXVariantGroup;
 			children = (
 				38DE1BE3168AD9E40049E814 /* en */,
-				38DE182516D71689007B0FB3 /* es */,
-				38DE182616D71690007B0FB3 /* fr */,
+				38B5D45516D7546E008AD2CB /* es */,
+				38B5D45616D75472008AD2CB /* fr */,
 			);
 			name = CameraViewController_land.xib;
 			sourceTree = "<group>";
@@ -1384,8 +1384,8 @@
 			isa = PBXVariantGroup;
 			children = (
 				38DE1BF2168ADA100049E814 /* en */,
-				38DE182716D716E3007B0FB3 /* es */,
-				38DE182816D716EB007B0FB3 /* fr */,
+				38590B6B16D766330046585B /* es */,
+				38590B6C16D766370046585B /* fr */,
 			);
 			name = CameraViewController_ipad.xib;
 			sourceTree = "<group>";
@@ -1394,8 +1394,8 @@
 			isa = PBXVariantGroup;
 			children = (
 				38DE1BF7168ADA1C0049E814 /* en */,
-				38DE182316D715BD007B0FB3 /* es */,
-				38DE182416D715BF007B0FB3 /* fr */,
+				38B5D44F16D75362008AD2CB /* es */,
+				38B5D45016D75365008AD2CB /* fr */,
 			);
 			name = CameraViewController.xib;
 			sourceTree = "<group>";

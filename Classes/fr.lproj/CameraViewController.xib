@@ -513,7 +513,7 @@
 							<object class="IBUILabel" id="758929233">
 								<reference key="NSNextResponder" ref="222235439"/>
 								<int key="NSvFlags">292</int>
-								<string key="NSFrame">{{51, 130}, {234, 21}}</string>
+								<string key="NSFrame">{{49, 124}, {234, 45}}</string>
 								<reference key="NSSuperview" ref="222235439"/>
 								<reference key="NSWindow"/>
 								<reference key="NSNextKeyView" ref="737937947"/>
@@ -521,9 +521,10 @@
 								<bool key="IBUIOpaque">NO</bool>
 								<bool key="IBUIClipsSubviews">YES</bool>
 								<int key="IBUIContentMode">7</int>
+								<int key="IBUITag">155</int>
 								<bool key="IBUIUserInteractionEnabled">NO</bool>
 								<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
-								<string key="IBUIText">Connecting to Baby Monitor ... </string>
+								<string key="IBUIText">Connecting to Baby Monitor...</string>
 								<object class="NSColor" key="IBUITextColor">
 									<int key="NSColorSpace">1</int>
 									<bytes key="NSRGB">MSAxIDEAA</bytes>
@@ -533,17 +534,20 @@
 								</object>
 								<nil key="IBUIHighlightedColor"/>
 								<int key="IBUIBaselineAdjustment">0</int>
-								<float key="IBUIMinimumFontSize">10</float>
+								<int key="IBUINumberOfLines">2</int>
+								<int key="IBUITextAlignment">1</int>
 								<reference key="IBUIFontDescription" ref="341997080"/>
 								<reference key="IBUIFont" ref="95267066"/>
+								<bool key="IBUIAdjustsFontSizeToFit">NO</bool>
+								<double key="preferredMaxLayoutWidth">234</double>
 							</object>
 							<object class="IBUIActivityIndicatorView" id="737937947">
 								<reference key="NSNextResponder" ref="222235439"/>
 								<int key="NSvFlags">292</int>
-								<string key="NSFrame">{{142, 164}, {37, 37}}</string>
+								<string key="NSFrame">{{142, 177}, {37, 37}}</string>
 								<reference key="NSSuperview" ref="222235439"/>
 								<reference key="NSWindow"/>
-								<reference key="NSNextKeyView" ref="1005972394"/>
+								<reference key="NSNextKeyView" ref="823908135"/>
 								<string key="NSReuseIdentifierKey">_NS:9</string>
 								<bool key="IBUIOpaque">NO</bool>
 								<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
@@ -551,7 +555,7 @@
 								<bool key="IBUIAnimating">YES</bool>
 								<int key="IBUIStyle">0</int>
 							</object>
-							<object class="IBUIButton" id="1005972394">
+							<object class="IBUIButton" id="823908135">
 								<reference key="NSNextResponder" ref="222235439"/>
 								<int key="NSvFlags">292</int>
 								<string key="NSFrame">{{118, 226}, {84, 44}}</string>
@@ -571,11 +575,11 @@
 									<bytes key="NSRGB">MC4xOTYwNzg0MzE0IDAuMzA5ODAzOTIxNiAwLjUyMTU2ODYyNzUAA</bytes>
 								</object>
 								<reference key="IBUINormalTitleShadowColor" ref="544785552"/>
-								<object class="IBUIFontDescription" key="IBUIFontDescription" id="320377922">
+								<object class="IBUIFontDescription" key="IBUIFontDescription" id="659226518">
 									<int key="type">2</int>
 									<int key="size">2</int>
 								</object>
-								<object class="NSFont" key="IBUIFont" id="790219226">
+								<object class="NSFont" key="IBUIFont" id="151466234">
 									<string key="NSName">Helvetica-Bold</string>
 									<double key="NSSize">18</double>
 									<int key="NSfFlags">16</int>
@@ -591,7 +595,6 @@
 							<int key="NSColorSpace">1</int>
 							<bytes key="NSRGB">MCAwIDAgMC41AA</bytes>
 						</object>
-						<bool key="IBUIUserInteractionEnabled">NO</bool>
 						<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
 					</object>
 					<object class="IBUIImageView" id="1000520582">
@@ -770,8 +773,8 @@
 									<string key="NSClassName">NSImage</string>
 									<string key="NSResourceName">bb_cam_btn.png</string>
 								</object>
-								<reference key="IBUIFontDescription" ref="320377922"/>
-								<reference key="IBUIFont" ref="790219226"/>
+								<reference key="IBUIFontDescription" ref="659226518"/>
+								<reference key="IBUIFont" ref="151466234"/>
 							</object>
 							<object class="IBUISlider" id="177381775">
 								<reference key="NSNextResponder" ref="486065245"/>
@@ -1179,7 +1182,7 @@
 				<object class="IBConnectionRecord">
 					<object class="IBCocoaTouchEventConnection" key="connection">
 						<string key="label">buttonCancelPressed:</string>
-						<reference key="source" ref="1005972394"/>
+						<reference key="source" ref="823908135"/>
 						<reference key="destination" ref="372490531"/>
 						<int key="IBEventType">7</int>
 					</object>
@@ -1483,9 +1486,9 @@
 						<reference key="object" ref="222235439"/>
 						<array class="NSMutableArray" key="children">
 							<reference ref="472363688"/>
-							<reference ref="758929233"/>
 							<reference ref="737937947"/>
-							<reference ref="1005972394"/>
+							<reference ref="823908135"/>
+							<reference ref="758929233"/>
 						</array>
 						<reference key="parent" ref="191373211"/>
 						<string key="objectName">progress view</string>
@@ -1508,7 +1511,7 @@
 					</object>
 					<object class="IBObjectRecord">
 						<int key="objectID">139</int>
-						<reference key="object" ref="1005972394"/>
+						<reference key="object" ref="823908135"/>
 						<reference key="parent" ref="222235439"/>
 					</object>
 				</array>

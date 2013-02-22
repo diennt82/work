@@ -420,6 +420,10 @@
 
 -(void) switchToUdtRelayServer
 {
+    //TODO signal cameraview to change message..
+
+    [mHandler statusReport:SWITCHING_TO_RELAY_SERVER andObj:nil];
+    
 #if 1
     //BG
     [self performSelectorInBackground:@selector(tryConnectingToStunRelay_bg:) withObject:self.streamingChannel];
@@ -598,6 +602,12 @@
 			break;
 		}
         
+        //If it is cancelled
+        if (streamingChannel.stopStreaming == TRUE)
+        {
+            break; 
+        }
+        
 		now = [NSDate date];
         
 	}
@@ -612,6 +622,13 @@
 -(void) connectedToUDTPort:(NSNumber*) localPort_
 {
 
+    
+    //If it is cancelled
+    if (streamingChannel.stopStreaming == TRUE)
+    {
+        NSLog(@"connectedToUDTPort but user canceled");
+        return; 
+    }
     
     int localPort = [localPort_ integerValue] ;
     
