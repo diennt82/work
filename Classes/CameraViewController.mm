@@ -310,7 +310,7 @@
 	if (self.selected_channel.profile.isInLocal == YES)
 	{
         
-		[self setupInfraCamera:self.selected_channel];
+		[self setupCameraStreamer:self.selected_channel];
 	}
 	else
 	{
@@ -829,9 +829,14 @@
 }
 
 
--(void) setupInfraCamera:(CamChannel *) ch
+-(void) setupCameraStreamer:(CamChannel *) ch
 {
     
+    @synchronized(self)
+    {
+        settingupStreamer = TRUE; 
+    }
+       
 	self.temperature_label.hidden = NO;
     
 	//Set camera name
@@ -1005,8 +1010,50 @@
         
 	}
     
+    NSLog(@"End of setupCameraStreamer 11");
+ 
+    //Lastly check if user has cancelled the connection
     
-	NSLog(@"End of setupInfraCamera 11");
+    if (self.selected_channel.stopStreaming == TRUE)
+    {
+        NSLog(@"USER cancelled");
+        [self performSelector:@selector(goBackToCameraList)
+                   withObject:nil
+                   afterDelay:0.1];
+    }
+    
+	
+    @synchronized(self)
+    {
+        settingupStreamer = FALSE;
+    }
+
+
+}
+
+
+-(IBAction)buttonCancelPressed:(id) sender
+{
+    //TODO:
+    /// cancel current connection
+    //   Local connection
+    //   UPNP connection
+    //   Stun connection
+    //   Go back to camera list
+    
+    NSLog(@"Cancelling...");
+    
+    self.selected_channel.stopStreaming = TRUE;
+    
+    
+    if (settingupStreamer == FALSE)
+    {
+        [self goBackToCameraList];
+    }
+    else
+    {
+        //will be handled by setupCameraStreamer 
+    }
     
 
 }
@@ -1477,12 +1524,13 @@
 	selected_channel = camChannel;
 	if (self.selected_channel.stopStreaming == TRUE)
 	{
+        NSLog(@"[Main thread] remoteConnectionSucceeded But channel has stopped streaming");
 		return;
 	}
     
         
-	NSLog(@"[Main thread] remoteConnectionSucceeded ");
-	[self setupInfraCamera:selected_channel];
+	
+	[self setupCameraStreamer:selected_channel];
     
     
     self.firstTimeConnect = FALSE;

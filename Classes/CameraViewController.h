@@ -157,9 +157,7 @@
     
     ScanForCamera *scanner; 
     BOOL firstTimeConnect; 
-    
-    
-    
+    BOOL settingupStreamer; 
     
 }
 @property (nonatomic, assign) IBOutlet UIBarButtonItem * barBtnName;
@@ -181,6 +179,7 @@
 -(IBAction)buttonSpkPressed:(id)sender;
 
 -(IBAction)buttonCamPressed:(id)sender;
+-(IBAction)buttonCancelPressed:(id) sender;
 
 -(void) goBackToCameraList;
 -(IBAction)silderMoved:(id)sender;
