@@ -1987,8 +1987,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
-				CODE_SIGN_IDENTITY = "iPhone Developer: Paul Tsui (KSWYEMQH37)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Paul Tsui (KSWYEMQH37)";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Binatone Electronics International Limited";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Binatone Electronics International Limited";
 				GCC_C_LANGUAGE_STANDARD = c99;
 				GCC_VERSION = "";
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
@@ -2000,8 +2000,8 @@
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
 				OTHER_LDFLAGS = "";
 				PRODUCT_NAME = "Baby Cam";
-				PROVISIONING_PROFILE = "961FAD06-4327-46AF-94AA-DE23BBCDFF91";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "961FAD06-4327-46AF-94AA-DE23BBCDFF91";
+				PROVISIONING_PROFILE = "9F236AE1-DF09-4DA1-A121-E582825128BD";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "9F236AE1-DF09-4DA1-A121-E582825128BD";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				USER_HEADER_SEARCH_PATHS = "\"$(SRCROOT)/external_include\"/**";
