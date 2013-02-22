@@ -151,6 +151,23 @@
             [[NSBundle mainBundle] loadNibNamed:@"Step_06_ViewController_land_ipad" owner:self options:nil];
         } else
         {
+            
+            //Save pass and Confirm Pass before rotating
+            UITextField * _oldPass = (UITextField *) [self.passwordCell viewWithTag:200];
+            NSString * oldPass;
+            if (_oldPass != nil)
+            {
+                oldPass = _oldPass.text;
+            }
+            
+            UITextField * _oldConfPass = (UITextField *)[self.confPasswordCell viewWithTag:201];
+            NSString * oldConfPass;
+            if (_oldConfPass != nil) {
+                oldConfPass = _oldConfPass.text;
+            }
+            
+            
+            
             [[NSBundle mainBundle] loadNibNamed:@"Step_06_ViewController_land" owner:self options:nil];
             
             UITextField * _ssid = (UITextField *) [self.ssidCell viewWithTag:202];
@@ -165,6 +182,18 @@
                 _sec.text = self.security; 
             }
             
+            // Rewrite Pass and Confirm Pass
+            UITextField * _pass = (UITextField *) [self.passwordCell viewWithTag:200];
+            if (_pass != nil)
+            {
+                _pass.text = oldPass;
+            }
+            
+            UITextField * _confPass = (UITextField *)[self.confPasswordCell viewWithTag:201];
+            if (_confPass != nil) {
+                _confPass.text = oldConfPass;
+            }
+            
         }
     }
     else if (interfaceOrientation == UIInterfaceOrientationPortrait || interfaceOrientation == UIInterfaceOrientationPortraitUpsideDown)
@@ -175,6 +204,22 @@
         }
         else
         {
+            
+            //Save pass and Confirm Pass before rotating
+            UITextField * _oldPass = (UITextField *) [self.passwordCell viewWithTag:200];
+            NSString * oldPass;
+            if (_oldPass != nil)
+            {
+                oldPass = _oldPass.text;
+            }
+            
+            UITextField * _oldConfPass = (UITextField *)[self.confPasswordCell viewWithTag:201];
+            NSString * oldConfPass;
+            if (_oldConfPass != nil) {
+                oldConfPass = _oldConfPass.text;
+            }
+            
+            
             [[NSBundle mainBundle] loadNibNamed:@"Step_06_ViewController" owner:self options:nil];
             
             UITextField * _ssid = (UITextField *) [self.ssidCell viewWithTag:202];
@@ -188,6 +233,20 @@
             {
                 _sec.text = self.security; 
             }
+            
+            // Rewrite Pass and Confirm Pass
+            UITextField * _pass = (UITextField *) [self.passwordCell viewWithTag:200];
+            if (_pass != nil)
+            {
+                _pass.text = oldPass;
+            }
+            
+            UITextField * _confPass = (UITextField *)[self.confPasswordCell viewWithTag:201];
+            if (_confPass != nil) {
+                _confPass.text = oldConfPass;
+            }
+            
+            
         }
     }
 }
