@@ -323,6 +323,8 @@ return self;
         {
             [[NSBundle mainBundle] loadNibNamed:@"MBP_iosViewController_land" owner:self options:nil];
             
+            [self.view addSubview:backgroundView];
+            
             CGAffineTransform transform = CGAffineTransformMakeRotation(-M_PI_2);
             if (interfaceOrientation == UIInterfaceOrientationLandscapeRight)
             {
@@ -343,6 +345,7 @@ return self;
         else
         {
             [[NSBundle mainBundle] loadNibNamed:@"MBP_iosViewController" owner:self options:nil];
+            [self.view addSubview:backgroundView];
         }
     }
 }
@@ -353,6 +356,10 @@ return self;
 /**** Main program switching point is here *****/ 
 - (void)sendStatus:(int) method
 {
+    
+    UIInterfaceOrientation orientation = [UIApplication sharedApplication].statusBarOrientation;
+    [self adjustViewsForOrientations:orientation];
+    
 	switch (method) {
 		case SETUP_CAMERA: 
 			{

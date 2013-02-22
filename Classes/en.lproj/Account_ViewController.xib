@@ -109,7 +109,7 @@
 				<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
 			</object>
 			<object class="IBUITableViewCell" id="765728535">
-				<reference key="NSNextResponder"/>
+				<nil key="NSNextResponder"/>
 				<int key="NSvFlags">292</int>
 				<array class="NSMutableArray" key="NSSubviews">
 					<object class="IBUIView" id="399284801">
@@ -210,7 +210,7 @@
 				<reference key="IBUIContentView" ref="399284801"/>
 			</object>
 			<object class="IBUITableViewCell" id="804335829">
-				<reference key="NSNextResponder"/>
+				<nil key="NSNextResponder"/>
 				<int key="NSvFlags">292</int>
 				<array class="NSMutableArray" key="NSSubviews">
 					<object class="IBUIView" id="844226792">
@@ -291,7 +291,7 @@
 				<reference key="IBUIContentView" ref="844226792"/>
 			</object>
 			<object class="IBUITableViewCell" id="680922150">
-				<reference key="NSNextResponder"/>
+				<nil key="NSNextResponder"/>
 				<int key="NSvFlags">292</int>
 				<array class="NSMutableArray" key="NSSubviews">
 					<object class="IBUIView" id="584950962">
