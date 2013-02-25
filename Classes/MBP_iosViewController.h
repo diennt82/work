@@ -122,7 +122,7 @@
     IBOutlet UIView * statusDialogView;
     IBOutlet UILabel * statusDialogLabel;
     IBOutlet UITextView * statusDialogText;
-    IBOutlet UIView * donotaskagainView; 
+ 
     
     UIAlertView * pushAlert; 
     

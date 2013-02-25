@@ -712,6 +712,8 @@
 #pragma mark Login Callbacks
 - (void) loginSuccessWithResponse:(NSData*) responseData
 {
+    //reset it here
+     _doneButtonPressed = NO;
 	
     self.navigationItem.leftBarButtonItem.enabled = YES ;
     self.navigationItem.rightBarButtonItem.enabled = YES;
@@ -806,6 +808,8 @@
 
 - (void) loginFailedWithError:(NSHTTPURLResponse*) error_response
 {
+    //reset it here
+    _doneButtonPressed = NO;
     self.navigationItem.leftBarButtonItem.enabled = YES ;
     self.navigationItem.rightBarButtonItem.enabled = YES;
     
@@ -838,6 +842,8 @@
 - (void) loginFailedServerUnreachable
 {
     
+    //reset it here
+    _doneButtonPressed = NO;
     self.navigationItem.leftBarButtonItem.enabled = YES ;
     self.navigationItem.rightBarButtonItem.enabled = YES;
     

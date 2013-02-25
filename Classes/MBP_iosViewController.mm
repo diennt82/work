@@ -140,20 +140,43 @@ return self;
     }
     else
     {
-        MBP_FirstPage * firstPage;
+        //Showing first page here --- NEED to adapt to proper orientation
         
-        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+        MBP_FirstPage * firstPage;
+        UIInterfaceOrientation interfaceOrientation = [UIApplication sharedApplication].statusBarOrientation;
+        
+        if (interfaceOrientation == UIInterfaceOrientationLandscapeLeft ||
+            interfaceOrientation == UIInterfaceOrientationLandscapeRight)
         {
-            firstPage = [[MBP_FirstPage alloc] initWithNibName:@"MBP_FirstPage_ipad"
-                                                        bundle:nil
-                                              withConnDelegate:self];
-        }
-        else
+            if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+            {
+                firstPage = [[MBP_FirstPage alloc] initWithNibName:@"MBP_FirstPage_ipad"
+                                                            bundle:nil
+                                                  withConnDelegate:self];
+            }
+            else
+            {
+                firstPage = [[MBP_FirstPage alloc] initWithNibName:@"MBP_FirstPage_land"
+                                                            bundle:nil
+                                                  withConnDelegate:self];
+            }    }
+        else if (interfaceOrientation == UIInterfaceOrientationPortrait ||
+                 interfaceOrientation == UIInterfaceOrientationPortraitUpsideDown)
         {
-            firstPage = [[MBP_FirstPage alloc] initWithNibName:@"MBP_FirstPage"
-                                                        bundle:nil
-                                              withConnDelegate:self];
+            if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+            {
+                firstPage = [[MBP_FirstPage alloc] initWithNibName:@"MBP_FirstPage_ipad"
+                                                            bundle:nil
+                                                  withConnDelegate:self];
+            }
+            else
+            {
+                firstPage = [[MBP_FirstPage alloc] initWithNibName:@"MBP_FirstPage"
+                                                            bundle:nil
+                                                  withConnDelegate:self];
+            }
         }
+
         
         
         [self presentModalViewController:firstPage animated:NO];
@@ -170,22 +193,46 @@ return self;
     
 	self.app_stage = APP_STAGE_INIT;
     
-	//hide splash screen page
-	[self.view addSubview:backgroundView];
-    
+    UIInterfaceOrientation interfaceOrientation = [UIApplication sharedApplication].statusBarOrientation;
+
     MBP_FirstPage * firstPage;
-    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+    [self.view addSubview:backgroundView];
+    [self.view bringSubviewToFront:backgroundView];
+    
+    
+    if (interfaceOrientation == UIInterfaceOrientationLandscapeLeft ||
+        interfaceOrientation == UIInterfaceOrientationLandscapeRight)
     {
-        firstPage = [[MBP_FirstPage alloc] initWithNibName:@"MBP_FirstPage_ipad"
-                                                    bundle:nil
-                                          withConnDelegate:self];
-    }
-    else
+        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+        {
+            firstPage = [[MBP_FirstPage alloc] initWithNibName:@"MBP_FirstPage_ipad"
+                                                        bundle:nil
+                                              withConnDelegate:self];
+        }
+        else
+        {
+            firstPage = [[MBP_FirstPage alloc] initWithNibName:@"MBP_FirstPage_land"
+                                                        bundle:nil
+                                              withConnDelegate:self];
+        }    }
+    else if (interfaceOrientation == UIInterfaceOrientationPortrait ||
+             interfaceOrientation == UIInterfaceOrientationPortraitUpsideDown)
     {
-        firstPage = [[MBP_FirstPage alloc] initWithNibName:@"MBP_FirstPage"
-                                                    bundle:nil
-                                          withConnDelegate:self];
+        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+        {
+            firstPage = [[MBP_FirstPage alloc] initWithNibName:@"MBP_FirstPage_ipad"
+                                                        bundle:nil
+                                              withConnDelegate:self];
+        }
+        else
+        {
+            firstPage = [[MBP_FirstPage alloc] initWithNibName:@"MBP_FirstPage"
+                                                        bundle:nil
+                                              withConnDelegate:self];
+        }
     }
+    
+
     
     [self presentModalViewController:firstPage animated:NO];
     
@@ -325,7 +372,8 @@ return self;
             
             [[NSBundle mainBundle] loadNibNamed:@"MBP_iosViewController_land" owner:self options:nil];
             
-            [self.view addSubview:backgroundView];
+            //[self.view addSubview:backgroundView];
+            //backgroundView.hidden = YES;
             statusDialogLabel.hidden = statusHidden;
             
             CGAffineTransform transform = CGAffineTransformMakeRotation(-M_PI_2);
@@ -349,7 +397,8 @@ return self;
         {
             BOOL statusHidden = statusDialogLabel.hidden;
             [[NSBundle mainBundle] loadNibNamed:@"MBP_iosViewController" owner:self options:nil];
-            [self.view addSubview:backgroundView];
+            //[self.view addSubview:backgroundView];
+            //backgroundView.hidden = YES;
             statusDialogLabel.hidden = statusHidden;
         }
     }
@@ -362,8 +411,8 @@ return self;
 - (void)sendStatus:(int) method
 {
     
-    UIInterfaceOrientation orientation = [UIApplication sharedApplication].statusBarOrientation;
-    [self adjustViewsForOrientations:orientation];
+    //UIInterfaceOrientation orientation = [UIApplication sharedApplication].statusBarOrientation;
+    //[self adjustViewsForOrientations:orientation];
     
 	switch (method) {
 		case SETUP_CAMERA: 
@@ -433,7 +482,8 @@ return self;
 				//NSLog(@">>> Login "); 
 
 				[self dismissModalViewControllerAnimated:NO	];
-
+                
+               
                 
 				NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
 
