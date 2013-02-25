@@ -124,7 +124,7 @@
 #pragma mark Rotating
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
 {
-    return (interfaceOrientation == UIInterfaceOrientationMaskAllButUpsideDown);
+    return YES; 
 }
 
 -(BOOL)shouldAutorotate
@@ -517,8 +517,21 @@
 
 - (void) animateTextField: (UITextField*) textField up: (BOOL) up
 {
-    const int movementDistance = 80; // tweak as needed
+    int movementDistance = 80; // tweak as needed
+    
     const float movementDuration = 0.3f; // tweak as needed
+    
+    UIInterfaceOrientation interfaceOrientation = [UIApplication sharedApplication].statusBarOrientation;
+    
+    
+    if (textField.tag ==201 &&
+          (interfaceOrientation == UIInterfaceOrientationLandscapeLeft ||
+           interfaceOrientation == UIInterfaceOrientationLandscapeRight)
+        ) //Confirm Password cell
+    {
+        movementDistance+= 40; 
+    }
+    
     
     int movement = (up ? -movementDistance : movementDistance);
     

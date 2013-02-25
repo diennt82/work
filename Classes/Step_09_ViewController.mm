@@ -55,6 +55,10 @@
                                     action:@selector(handleNextButton:)];          
     self.navigationItem.rightBarButtonItem = nextButton;
     [nextButton release];
+
+    UIInterfaceOrientation interfaceOrientation = [UIApplication sharedApplication].statusBarOrientation;
+    [self adjustViewsForOrientations:interfaceOrientation];
+    
 }
 
 - (void)viewDidUnload
@@ -62,18 +66,24 @@
     [super viewDidUnload];
     // Release any retained subviews of the main view.
 }
+-(void) viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
 
+}
 -(void) viewWillAppear:(BOOL)animated
 {
-    UIInterfaceOrientation interfaceOrientation = [UIApplication sharedApplication].statusBarOrientation;
-    [self adjustViewsForOrientations:interfaceOrientation];
+    [super viewWillAppear:animated];
+
 }
+
+
 
 #pragma mark -
 #pragma mark Rotating
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
 {
-    return (interfaceOrientation == UIInterfaceOrientationMaskAllButUpsideDown);
+    return YES;
 }
 
 -(BOOL)shouldAutorotate
@@ -93,20 +103,30 @@
 
 -(void) adjustViewsForOrientations: (UIInterfaceOrientation) interfaceOrientation
 {
+    
     if (interfaceOrientation == UIInterfaceOrientationLandscapeLeft || interfaceOrientation == UIInterfaceOrientationLandscapeRight) {
-        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+        {
             [[NSBundle mainBundle] loadNibNamed:@"Step_09_ViewController_land_ipad" owner:self options:nil];
-        } else {
+        }
+        else
+        {
             [[NSBundle mainBundle] loadNibNamed:@"Step_09_ViewController_land" owner:self options:nil];
         }
-    } else if (interfaceOrientation == UIInterfaceOrientationPortrait || interfaceOrientation == UIInterfaceOrientationPortraitUpsideDown)
+    }
+    else if (interfaceOrientation == UIInterfaceOrientationPortrait || interfaceOrientation == UIInterfaceOrientationPortraitUpsideDown)
     {
-        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+        {
             [[NSBundle mainBundle] loadNibNamed:@"Step_09_ViewController_ipad" owner:self options:nil];
-        } else {
+        }
+        else
+        {
             [[NSBundle mainBundle] loadNibNamed:@"Step_09_ViewController" owner:self options:nil];
         }
     }
+    
+    
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
@@ -125,16 +145,22 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
         
-    if (indexPath.row == USERNAME_INDEX) {
+    if (indexPath.row == USERNAME_INDEX)
+    {
         return userName;
+        
     }
     if (indexPath.row == USERPASS_INDEX)
     {
-        return userPass;
+        
+       return userPass;
+
     }
     if (indexPath.row == USERCPASS_INDEX)
     {
+        
         return userCPass;
+
     }
     if (indexPath.row == USEREMAIL_INDEX)
     {
@@ -157,20 +183,20 @@
     }
     if (indexPath.row == USERPASS_INDEX)
     {
-        UITextField * txtField = (UITextField*) [userPass viewWithTag:200];
+        UITextField * txtField = (UITextField*) [userPass viewWithTag:202];
         [txtField becomeFirstResponder];
 
     }
     if (indexPath.row == USERCPASS_INDEX)
     {
-        UITextField * txtField = (UITextField*) [userCPass viewWithTag:200];
+        UITextField * txtField = (UITextField*) [userCPass viewWithTag:203];
         [txtField becomeFirstResponder];
 
 
     }
     if (indexPath.row == USEREMAIL_INDEX)
     {
-        UITextField * txtField = (UITextField*) [userEmail viewWithTag:200];
+        UITextField * txtField = (UITextField*) [userEmail viewWithTag:204];
         [txtField becomeFirstResponder];
     }
     
@@ -183,7 +209,17 @@
 {
     int tag = textField.tag;
     if (tag == 201)
-        return; 
+        return;
+    
+    UIInterfaceOrientation interfaceOrientation = [UIApplication sharedApplication].statusBarOrientation;
+    if ( tag == 202 &&
+          (interfaceOrientation == UIInterfaceOrientationLandscapeLeft ||
+           interfaceOrientation == UIInterfaceOrientationLandscapeRight)
+        )
+    {
+        return;
+    }
+    
     [self animateTextField: textField up: YES];
 }
 
@@ -193,6 +229,17 @@
     int tag = textField.tag;
     if (tag == 201)
         return;
+    
+    UIInterfaceOrientation interfaceOrientation = [UIApplication sharedApplication].statusBarOrientation;
+    if ( tag == 202 &&
+        (interfaceOrientation == UIInterfaceOrientationLandscapeLeft ||
+         interfaceOrientation == UIInterfaceOrientationLandscapeRight)
+        )
+    {
+        return;
+    }
+
+    
     [self animateTextField: textField up: NO];
 }
 
@@ -247,9 +294,9 @@
 -(void) handleNextButton:(id) sender
 {
     UITextField * _userName = (UITextField *)[self.userName viewWithTag:201];
-    UITextField * _userPass = (UITextField *)[self.userPass viewWithTag:200];
-    UITextField * _userCPass = (UITextField *)[self.userCPass viewWithTag:200];
-    UITextField * _userEmail = (UITextField *)[self.userEmail viewWithTag:200];
+    UITextField * _userPass = (UITextField *)[self.userPass viewWithTag:202];
+    UITextField * _userCPass = (UITextField *)[self.userCPass viewWithTag:203];
+    UITextField * _userEmail = (UITextField *)[self.userEmail viewWithTag:204];
 
     
     

@@ -19,8 +19,8 @@
     IBOutlet UITableViewCell * userPass;
     IBOutlet UITableViewCell * userCPass;
     IBOutlet UITableViewCell * userEmail;
-    
- 
+  
+
     
      NSString * tmp_user_str,* tmp_pass_str,* tmp_user_email;
 }

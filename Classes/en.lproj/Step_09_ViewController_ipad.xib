@@ -62,7 +62,7 @@
 						<string key="NSFrame">{{45, 465}, {297, 48}}</string>
 						<reference key="NSSuperview" ref="574823980"/>
 						<reference key="NSWindow"/>
-						<reference key="NSNextKeyView" ref="394916680"/>
+						<reference key="NSNextKeyView" ref="1026119923"/>
 						<string key="NSReuseIdentifierKey">_NS:9</string>
 						<object class="NSColor" key="IBUIBackgroundColor" id="396759633">
 							<int key="NSColorSpace">3</int>
@@ -123,7 +123,7 @@
 						<string key="NSFrame">{{0, 36}, {768, 379}}</string>
 						<reference key="NSSuperview" ref="574823980"/>
 						<reference key="NSWindow"/>
-						<reference key="NSNextKeyView" ref="1026119923"/>
+						<reference key="NSNextKeyView" ref="404228117"/>
 						<string key="NSReuseIdentifierKey">_NS:9</string>
 						<reference key="IBUIBackgroundColor" ref="396759633"/>
 						<bool key="IBUIClipsSubviews">YES</bool>
@@ -151,7 +151,7 @@
 						<string key="NSFrame">{{92, 487}, {104, 30}}</string>
 						<reference key="NSSuperview" ref="574823980"/>
 						<reference key="NSWindow"/>
-						<reference key="NSNextKeyView" ref="404228117"/>
+						<reference key="NSNextKeyView" ref="394916680"/>
 						<string key="NSReuseIdentifierKey">_NS:9</string>
 						<bool key="IBUIOpaque">NO</bool>
 						<string key="targetRuntimeIdentifier">IBIPadFramework</string>
@@ -343,7 +343,7 @@
 								<reference key="IBUIBackgroundColor" ref="396759633"/>
 								<bool key="IBUIOpaque">NO</bool>
 								<bool key="IBUIClipsSubviews">YES</bool>
-								<int key="IBUITag">200</int>
+								<int key="IBUITag">202</int>
 								<string key="targetRuntimeIdentifier">IBIPadFramework</string>
 								<int key="IBUIContentVerticalAlignment">0</int>
 								<string key="IBUIText"/>
@@ -424,7 +424,7 @@
 								<reference key="IBUIBackgroundColor" ref="396759633"/>
 								<bool key="IBUIOpaque">NO</bool>
 								<bool key="IBUIClipsSubviews">YES</bool>
-								<int key="IBUITag">200</int>
+								<int key="IBUITag">203</int>
 								<string key="targetRuntimeIdentifier">IBIPadFramework</string>
 								<int key="IBUIContentVerticalAlignment">0</int>
 								<string key="IBUIText"/>
@@ -505,7 +505,7 @@
 								<reference key="IBUIBackgroundColor" ref="396759633"/>
 								<bool key="IBUIOpaque">NO</bool>
 								<bool key="IBUIClipsSubviews">YES</bool>
-								<int key="IBUITag">200</int>
+								<int key="IBUITag">204</int>
 								<string key="targetRuntimeIdentifier">IBIPadFramework</string>
 								<int key="IBUIContentVerticalAlignment">0</int>
 								<string key="IBUIText"/>
