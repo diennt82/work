@@ -104,6 +104,17 @@
 -(void) adjustViewsForOrientations: (UIInterfaceOrientation) interfaceOrientation
 {
     
+    UITextField * _userName = (UITextField *)[self.userName viewWithTag:201];
+    UITextField * _userPass = (UITextField *)[self.userPass viewWithTag:202];
+    UITextField * _userCPass = (UITextField *)[self.userCPass viewWithTag:203];
+    UITextField * _userEmail = (UITextField *)[self.userEmail viewWithTag:204];
+    
+    
+    NSString * name = _userName.text;
+    NSString * pass = _userPass.text;
+    NSString * cpass = _userCPass.text;
+    NSString * email = _userEmail.text;
+    
     if (interfaceOrientation == UIInterfaceOrientationLandscapeLeft || interfaceOrientation == UIInterfaceOrientationLandscapeRight) {
         if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
         {
@@ -126,6 +137,15 @@
         }
     }
     
+    _userName = (UITextField *)[self.userName viewWithTag:201];
+    _userPass = (UITextField *)[self.userPass viewWithTag:202];
+    _userCPass = (UITextField *)[self.userCPass viewWithTag:203];
+    _userEmail = (UITextField *)[self.userEmail viewWithTag:204];
+
+    _userName.text = name; 
+    _userPass.text = pass;
+    _userCPass.text = cpass;
+    _userEmail.text = email;
     
 }
 
