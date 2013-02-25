@@ -168,12 +168,17 @@
         {
             if (setupStatus == SETUP_CAMERAS_UNCOMPLETE)
             {
+                BOOL hidden = self.progressView.hidden;
+                
                 [[NSBundle mainBundle] loadNibNamed:@"Step_10_ViewController_land" owner:self options:nil];
                 
                 NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
                 
                 BOOL firstime = [userDefaults boolForKey:FIRST_TIME_SETUP];
                 
+                
+                [self.view addSubview:self.progressView];
+                self.progressView.hidden = hidden;
                 
                 //Check to see which path we should go
                 if (firstime == TRUE)
@@ -184,8 +189,7 @@
                                                                                  @"Account Created" , nil);
                     self.navigationItem.hidesBackButton = YES;
                     
-                    [self.view addSubview:self.progressView];
-                    self.progressView.hidden = YES;
+                  
                     
                     
                 }
@@ -204,9 +208,6 @@
                     NSString * homeSsid = (NSString *) [userDefaults objectForKey:HOME_SSID];
                     
                     
-                    
-                    [self.view addSubview:self.progressView];
-                    self.progressView.hidden = YES;
                     [self.view addSubview:cameraAddedView];
                     self.homeSSID.text = homeSsid;
                     
@@ -281,12 +282,17 @@
         {
             if (setupStatus == SETUP_CAMERAS_UNCOMPLETE)
             {
+                BOOL hidden = self.progressView.hidden;
+                
                 [[NSBundle mainBundle] loadNibNamed:@"Step_10_ViewController" owner:self options:nil];
                 
                 NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
                 
                 BOOL firstime = [userDefaults boolForKey:FIRST_TIME_SETUP];
                 
+                
+                [self.view addSubview:self.progressView];
+                self.progressView.hidden = hidden;
                 
                 //Check to see which path we should go
                 if (firstime == TRUE)
@@ -297,10 +303,7 @@
                                                                                  @"Account Created" , nil);
                     self.navigationItem.hidesBackButton = YES;
                     
-                    [self.view addSubview:self.progressView];
-                    self.progressView.hidden = YES;
-                    
-                    
+                                        
                 }
                 else //not first time --> this is normal add camera sequence..
                 {
@@ -318,8 +321,6 @@
                     
                     
                     
-                    [self.view addSubview:self.progressView];
-                    self.progressView.hidden = YES;
                     [self.view addSubview:cameraAddedView];
                     self.homeSSID.text = homeSsid;
                     
