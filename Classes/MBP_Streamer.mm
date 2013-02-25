@@ -30,6 +30,7 @@
 @synthesize  currentOrientation;
 @synthesize  streamingChannel;
 @synthesize  stillReading;
+@synthesize latest_connection_error;
 
 - (id) initWithIp:(NSString *) ip andPort:(int) port handler:(id<StreamerEventHandler>) handler
 {
@@ -200,6 +201,7 @@
             {
                 NSLog(@"get status 401 or 601 -->>>>>>");
                 [mHandler statusReport:REMOTE_STREAM_SSKEY_MISMATCH andObj:nil];
+                self.latest_connection_error = statusCode; 
                 
                 return;
                 
@@ -752,10 +754,16 @@
     NSString *myString = [[NSString alloc] initWithData:myData encoding:NSUTF8StringEncoding];
     
     
-    if ( [myString hasPrefix:@"401" ] ||
-         [myString hasPrefix:@"601"])
+    if ( [myString hasPrefix:@"401" ] )
     {
+        self.latest_connection_error = 401;
+        
         return TRUE;
+    }
+    else if ([myString hasPrefix:@"601"])
+    {
+        self.latest_connection_error = 601;
+        return TRUE; 
     }
     
     return FALSE; 
@@ -839,6 +847,7 @@
         
         if ([self isSskeyMismatch:data len:bytesRead])
         {
+            
             NSLog(@"aaa sskey mismatch"); 
             [self performSelectorOnMainThread:@selector(sendStatusSSkeyErrorOnMainThread:)
                                    withObject:nil
@@ -1291,12 +1300,15 @@
             if (self.remoteView == TRUE && self.remoteViewKey != nil)
             {
                [mHandler statusReport:REMOTE_STREAM_SSKEY_MISMATCH andObj:nil];
+                
             }
             else
             {
                 [mHandler statusReport:STREAM_STOPPED_UNEXPECTEDLY andObj:nil];
             }
 
+            self.latest_connection_error = 401;
+            
 			return;
 		}
 		[initialResponse release];
@@ -1511,6 +1523,7 @@
     {
         NSLog(@"Streamer- sskey mismatch");
         [mHandler statusReport:REMOTE_STREAM_SSKEY_MISMATCH andObj:nil];
+        self.latest_connection_error = [err code];
         return;
     }
     

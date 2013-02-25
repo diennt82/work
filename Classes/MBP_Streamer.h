@@ -105,7 +105,8 @@
     CamChannel * streamingChannel; 
     BOOL stillReading;
     
-     NSThread * readTimeoutThrd ;
+    NSThread * readTimeoutThrd ;
+    int latest_connection_error; 
 	
 }
 @property (nonatomic) int device_port,communication_mode, local_port;
@@ -127,7 +128,8 @@
 @property (nonatomic, assign) id<StreamerTemperatureUpdater> mTempUpdater; 
 @property (nonatomic) UIInterfaceOrientation currentOrientation; 
 
-@property (nonatomic, retain)CamChannel *  streamingChannel; 
+@property (nonatomic, retain)CamChannel *  streamingChannel;
+@property (nonatomic) int latest_connection_error;
 
 
 

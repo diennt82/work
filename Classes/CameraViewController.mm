@@ -1440,8 +1440,8 @@
             
             //simply popup and ask to retry and show camera list
             NSString * msg = NSLocalizedStringWithDefaultValue(@"cant_start_stream_01",nil, [NSBundle mainBundle],
-                                                               @"The session key on camera is mis-matched. Please reset the camera and add the camera again" , nil);
-            
+                                                               @"The session key on camera is mis-matched. Please reset the camera and add the camera again.(%d)" , nil);
+            msg = [NSString stringWithFormat:msg, self.streamer.latest_connection_error];
             
             NSString * ok = NSLocalizedStringWithDefaultValue(@"Ok",nil, [NSBundle mainBundle],
                                                               @"Ok", nil);
