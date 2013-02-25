@@ -83,7 +83,6 @@
 
 }
 
-<<<<<<< HEAD
 -(void)viewWillAppear:(BOOL)animated
 {
     
