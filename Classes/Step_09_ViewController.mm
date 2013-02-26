@@ -74,23 +74,10 @@
 -(void) viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    UIInterfaceOrientation interfaceOrientation = [UIApplication sharedApplication].statusBarOrientation;
-    [self adjustViewsForOrientations:interfaceOrientation];
+
      
 }
 
--(void) fixedTableSizeBeforeShowing
-{
-    if (myTable ==nil)
-    {
-        NSLog(@"myTable is NIL!!!");
-        return;
-    }
-    
-    NSLog(@"fixing... myTable");
-    myTable.frame = CGRectMake(0, 36, 768  , 400);
-    
-}
 
 
 #pragma mark -
@@ -113,55 +100,38 @@
 -(void) willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
 {
     
-    [self adjustViewsForOrientations:toInterfaceOrientation];
+
 }
 
 -(void) adjustViewsForOrientations: (UIInterfaceOrientation) interfaceOrientation
 {
     
-    UITextField * _userName = (UITextField *)[self.userName viewWithTag:201];
-    UITextField * _userPass = (UITextField *)[self.userPass viewWithTag:202];
-    UITextField * _userCPass = (UITextField *)[self.userCPass viewWithTag:203];
-    UITextField * _userEmail = (UITextField *)[self.userEmail viewWithTag:204];
+//DO NOTHING HERE --- 
     
-    
-    NSString * name = _userName.text;
-    NSString * pass = _userPass.text;
-    NSString * cpass = _userCPass.text;
-    NSString * email = _userEmail.text;
     
     if (interfaceOrientation == UIInterfaceOrientationLandscapeLeft || interfaceOrientation == UIInterfaceOrientationLandscapeRight) {
         if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
         {
-            [[NSBundle mainBundle] loadNibNamed:@"Step_09_ViewController_land_ipad" owner:self options:nil];
+
         }
         else
         {
-            [[NSBundle mainBundle] loadNibNamed:@"Step_09_ViewController_land" owner:self options:nil];
+
         }
     }
     else if (interfaceOrientation == UIInterfaceOrientationPortrait || interfaceOrientation == UIInterfaceOrientationPortraitUpsideDown)
     {
         if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
         {
-            [[NSBundle mainBundle] loadNibNamed:@"Step_09_ViewController_ipad" owner:self options:nil];
+
+            
         }
         else
         {
-            [[NSBundle mainBundle] loadNibNamed:@"Step_09_ViewController" owner:self options:nil];
+            
         }
     }
-    
-    _userName = (UITextField *)[self.userName viewWithTag:201];
-    _userPass = (UITextField *)[self.userPass viewWithTag:202];
-    _userCPass = (UITextField *)[self.userCPass viewWithTag:203];
-    _userEmail = (UITextField *)[self.userEmail viewWithTag:204];
-
-    _userName.text = name; 
-    _userPass.text = pass;
-    _userCPass.text = cpass;
-    _userEmail.text = email;
-    
+ 
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {

@@ -36,8 +36,7 @@
 -(IBAction) showTermOfUse_:(id) sender;
 -(IBAction) handleNextButton:(id) sender;
 +(BOOL) isWifiConnectionAvailable;
--(void) adjustViewsForOrientations: (UIInterfaceOrientation) interfaceOrientation;
--(void) fixedTableSizeBeforeShowing;
+
 
 
 //REG callbacks;
