@@ -17,7 +17,7 @@
 
 @synthesize  userNameLabel, userEmailLabel,progressView ;
 @synthesize  cameraMac, master_key; 
-@synthesize setupFailView,setupCompleteView,  cameraName; 
+@synthesize  cameraName;
 
 @synthesize  homeSSID;
 
@@ -39,8 +39,8 @@
     //[progressView release]; 
     [cameraMac release];
     [master_key release];
-    //[setupCompleteView release];
-    //[setupFailView release];
+
+
     //[cameraName release];
     [super dealloc];
 }
@@ -51,7 +51,7 @@
     //Keep screen on
     [UIApplication sharedApplication].idleTimerDisabled = YES;
     
-    setupStatus = SETUP_CAMERAS_UNCOMPLETE;
+
 
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     
@@ -166,76 +166,57 @@
         }
         else
         {
-            if (setupStatus == SETUP_CAMERAS_UNCOMPLETE)
-            {
-                BOOL hidden = self.progressView.hidden;
-                [self.progressView removeFromSuperview];
-                [cameraAddedView removeFromSuperview]; 
-                
-                
-                [[NSBundle mainBundle] loadNibNamed:@"Step_10_ViewController_land" owner:self options:nil];
-                
-                NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-                
-                BOOL firstime = [userDefaults boolForKey:FIRST_TIME_SETUP];
-                
-                //can be user email or user name here --
-                self.userNameLabel.text = (NSString *) [userDefaults objectForKey:@"PortalUsername"];
-                self.userEmailLabel.text = (NSString *) [userDefaults objectForKey:@"PortalUseremail"];
 
-                
-                              
-                //Check to see which path we should go
-                if (firstime == TRUE)
-                {
-                    // Do any additional setup after loading the view.
-                    
-                    self.navigationItem.title =NSLocalizedStringWithDefaultValue(@"Account_Created",nil, [NSBundle mainBundle],
-                                                                                 @"Account Created" , nil);
-                    self.navigationItem.hidesBackButton = YES;
-                    
-                  
-                    
-                    
-                }
-                else //not first time --> this is normal add camera sequence..
-                {
-                    
-                    
-                    //Hide back button -- can't go back now..
-                    self.navigationItem.hidesBackButton = TRUE;
-                    
-                    self.navigationItem.title =NSLocalizedStringWithDefaultValue(@"Camera_Configured",nil, [NSBundle mainBundle],
-                                                                                 @"Camera Configured" , nil);
-                    
-                    [self.view addSubview:self.progressView];
-                    self.progressView.hidden = hidden;
-                    [self.view addSubview:cameraAddedView];
-                    NSString * homeSsid = (NSString *) [userDefaults objectForKey:HOME_SSID];
-                    self.homeSSID.text = homeSsid;
-                  
-                }
-                
-            }
-           
-            else if (setupStatus == SETUP_CAMERAS_FAIL)
+            
+            BOOL hidden = self.progressView.hidden;
+            [self.progressView removeFromSuperview];
+            [cameraAddedView removeFromSuperview];
+            
+            
+            [[NSBundle mainBundle] loadNibNamed:@"Step_10_ViewController_land" owner:self options:nil];
+            
+            NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+            
+            BOOL firstime = [userDefaults boolForKey:FIRST_TIME_SETUP];
+            
+            //can be user email or user name here --
+            self.userNameLabel.text = (NSString *) [userDefaults objectForKey:@"PortalUsername"];
+            self.userEmailLabel.text = (NSString *) [userDefaults objectForKey:@"PortalUseremail"];
+            
+            
+            
+            //Check to see which path we should go
+            if (firstime == TRUE)
             {
-                // Add cameras fail in landscape mode
-                self.progressView.hidden = YES;
+                // Do any additional setup after loading the view.
+                
+                self.navigationItem.title =NSLocalizedStringWithDefaultValue(@"Account_Created",nil, [NSBundle mainBundle],
+                                                                             @"Account Created" , nil);
                 self.navigationItem.hidesBackButton = YES;
                 
                 
-                self.navigationItem.title = NSLocalizedStringWithDefaultValue( @"Add_Camera_Failed",nil, [NSBundle mainBundle],
-                                                                              @"Add Camera Failed" , nil);
                 
-                [[NSBundle mainBundle] loadNibNamed:@"Setup_bm_step_11_land" owner:self options:nil];
                 
-                UIScrollView *tempScrollView=(UIScrollView *) [self.setupFailView viewWithTag:1];
-                [tempScrollView setFrame:CGRectMake(0,0,568,200)];
-                [self.view addSubview:self.setupFailView];
-
-
             }
+            else //not first time --> this is normal add camera sequence..
+            {
+                
+                
+                //Hide back button -- can't go back now..
+                self.navigationItem.hidesBackButton = TRUE;
+                
+                self.navigationItem.title =NSLocalizedStringWithDefaultValue(@"Camera_Configured",nil, [NSBundle mainBundle],
+                                                                             @"Camera Configured" , nil);
+                
+                [self.view addSubview:self.progressView];
+                self.progressView.hidden = hidden;
+                [self.view addSubview:cameraAddedView];
+                NSString * homeSsid = (NSString *) [userDefaults objectForKey:HOME_SSID];
+                self.homeSSID.text = homeSsid;
+                
+            }
+            
+            
         }
     }
     else if (interfaceOrientation == UIInterfaceOrientationPortrait || interfaceOrientation == UIInterfaceOrientationPortraitUpsideDown)
@@ -246,73 +227,52 @@
         }
         else
         {
-            if (setupStatus == SETUP_CAMERAS_UNCOMPLETE)
+            
+            BOOL hidden = self.progressView.hidden;
+            
+            [self.progressView removeFromSuperview];
+            [cameraAddedView removeFromSuperview];
+            
+            [[NSBundle mainBundle] loadNibNamed:@"Step_10_ViewController" owner:self options:nil];
+            
+            NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+            
+            BOOL firstime = [userDefaults boolForKey:FIRST_TIME_SETUP];
+            //can be user email or user name here --
+            self.userNameLabel.text = (NSString *) [userDefaults objectForKey:@"PortalUsername"];
+            self.userEmailLabel.text = (NSString *) [userDefaults objectForKey:@"PortalUseremail"];
+            
+            
+            [self.view addSubview:self.progressView];
+            self.progressView.hidden = hidden;
+            
+            //Check to see which path we should go
+            if (firstime == TRUE)
             {
-                BOOL hidden = self.progressView.hidden;
-
-                [self.progressView removeFromSuperview];
-                [cameraAddedView removeFromSuperview];
-
-                [[NSBundle mainBundle] loadNibNamed:@"Step_10_ViewController" owner:self options:nil];
+                // Do any additional setup after loading the view.
                 
-                NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+                self.navigationItem.title =NSLocalizedStringWithDefaultValue(@"Account_Created",nil, [NSBundle mainBundle],
+                                                                             @"Account Created" , nil);
+                self.navigationItem.hidesBackButton = YES;
                 
-                BOOL firstime = [userDefaults boolForKey:FIRST_TIME_SETUP];
-                //can be user email or user name here --
-                self.userNameLabel.text = (NSString *) [userDefaults objectForKey:@"PortalUsername"];
-                self.userEmailLabel.text = (NSString *) [userDefaults objectForKey:@"PortalUseremail"];
                 
+            }
+            else //not first time --> this is normal add camera sequence..
+            {
+                
+                //Hide back button -- can't go back now..
+                self.navigationItem.hidesBackButton = TRUE;
+                
+                self.navigationItem.title =NSLocalizedStringWithDefaultValue(@"Camera_Configured",nil, [NSBundle mainBundle],
+                                                                             @"Camera Configured" , nil);
                 
                 [self.view addSubview:self.progressView];
                 self.progressView.hidden = hidden;
-                
-                //Check to see which path we should go
-                if (firstime == TRUE)
-                {
-                    // Do any additional setup after loading the view.
-                    
-                    self.navigationItem.title =NSLocalizedStringWithDefaultValue(@"Account_Created",nil, [NSBundle mainBundle],
-                                                                                 @"Account Created" , nil);
-                    self.navigationItem.hidesBackButton = YES;
-                    
-                                        
-                }
-                else //not first time --> this is normal add camera sequence..
-                {
-                    
-                    //Hide back button -- can't go back now..
-                    self.navigationItem.hidesBackButton = TRUE;
-                    
-                    self.navigationItem.title =NSLocalizedStringWithDefaultValue(@"Camera_Configured",nil, [NSBundle mainBundle],
-                                                                                 @"Camera Configured" , nil);
-                    
-                    [self.view addSubview:self.progressView];
-                    self.progressView.hidden = hidden;
-                    [self.view addSubview:cameraAddedView];
-                    NSString * homeSsid = (NSString *) [userDefaults objectForKey:HOME_SSID];
-                    self.homeSSID.text = homeSsid;
-                }
-                
+                [self.view addSubview:cameraAddedView];
+                NSString * homeSsid = (NSString *) [userDefaults objectForKey:HOME_SSID];
+                self.homeSSID.text = homeSsid;
             }
             
-            else if (setupStatus == SETUP_CAMERAS_FAIL)
-            {
-                // Add cameras fail in portrait mode
-
-                self.progressView.hidden = YES;
-                self.navigationItem.hidesBackButton = YES;
-                
-                self.navigationItem.title = NSLocalizedStringWithDefaultValue( @"Add_Camera_Failed",nil, [NSBundle mainBundle],
-                                                                              @"Add Camera Failed" , nil);
-                
-                [[NSBundle mainBundle] loadNibNamed:@"Setup_bm_step_11" owner:self options:nil];
-                
-                UIScrollView *tempScrollView=(UIScrollView *) [self.setupFailView viewWithTag:1];
-
-                [tempScrollView setFrame:CGRectMake(0,0,320,400)];
-                [self.view addSubview:self.setupFailView];
-
-            }
         }
     }
 }
@@ -320,20 +280,6 @@
 #pragma  mark -
 #pragma mark button handlers
 
--(IBAction)tryAddCameraAgain:(id)sender
-{
-    
-    //Go back to the beginning
-
-    // Disable Keep screen on
-    [UIApplication sharedApplication].idleTimerDisabled=  NO;
-    
-    NSLog(@"RESTART aa");
-   
-    [self.navigationController popToRootViewControllerAnimated:NO];
-
-    
-}
 -(IBAction) startConfigureCamera:(id)sender
 {
    
@@ -364,49 +310,6 @@
     [step02ViewController release];
     
 }
-
--(IBAction)registerCamera:(id)sender
-{
-
-    
-    self.progressView.hidden = NO; 
-    [self.view bringSubviewToFront:self.progressView];
-
-    
-    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-    
-    BMS_Communication * bms_comm; 
-    
-    NSString * mac = [Util strip_colon_fr_mac:self.cameraMac];
-#if TARGET_IPHONE_SIMULATOR == 1
-    NSString * camName = @"Camera-";
-#else
-
-    
-    NSString * camName = (NSString *) [userDefaults objectForKey:@"CameraName"];
-#endif
-    
-    NSLog(@"name: %@ mac: %@", camName, mac);
-    
-    bms_comm = [[BMS_Communication alloc] initWithObject:self
-                                                Selector:@selector(addCamSuccessWithResponse:) 
-                                            FailSelector:@selector(addCamFailedWithError:) 
-                                               ServerErr:@selector(addCamFailedServerUnreachable)];
-    
-    //NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-    NSString * user_email = (NSString *) [userDefaults objectForKey:@"PortalUseremail"];
-    NSString * user_pass = (NSString *) [userDefaults objectForKey:@"PortalPassword"];
-    
-    
-    [bms_comm BMS_addCamWithUser:user_email 
-                         AndPass:user_pass 
-                         macAddr:mac 
-                         camName:camName];
-    
-}
-
-
-
 
 
 #pragma  mark -
@@ -695,13 +598,9 @@
 
 - (void) setupCompleted
 {
-#if 0 //?DBG - Test setup failed view
-    [self setupFailed];
+
     
-    
-#else
-    
-    setupStatus = SETUP_CAMERAS_COMPLETE;
+
     //Load step 12
     NSLog(@"Load step 12");
     
@@ -731,7 +630,7 @@
     [self.navigationController pushViewController:step12ViewController animated:NO];
     
     [step12ViewController release];
-#endif 
+
     
 }
 

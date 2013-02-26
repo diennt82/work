@@ -35,7 +35,7 @@
     IBOutlet UILabel * userNameLabel;
     IBOutlet UILabel * userEmailLabel;
     
-    IBOutlet UIView * setupFailView, *setupCompleteView; 
+    //IBOutlet UIView * setupFailView, *setupCompleteView;
     IBOutlet UILabel * cameraName; 
     
     IBOutlet UIView * cameraAddedView; 
@@ -47,20 +47,20 @@
     ScanForCamera * scanner; 
     NSString *cameraMac, *master_key;
     
-    int setupStatus;
+
 }
 
 @property (nonatomic,assign) IBOutlet UILabel * homeSSID;
 @property (nonatomic, assign) IBOutlet UIView * progressView; 
 @property (nonatomic, assign) IBOutlet UILabel * userNameLabel;
 @property (nonatomic, assign) IBOutlet UILabel * userEmailLabel,  * cameraName;
-@property (nonatomic, assign) IBOutlet UIView * setupFailView, *setupCompleteView;
+//@property (nonatomic, assign) IBOutlet UIView * setupFailView, *setupCompleteView;
 
 @property (nonatomic, retain) NSString *cameraMac,  *master_key; 
 
 -(IBAction) startConfigureCamera:(id)sender;
 
--(IBAction)registerCamera:(id)sender;
+//-(IBAction)registerCamera:(id)sender;
 
 -(IBAction)tryAddCameraAgain:(id)sender;
 

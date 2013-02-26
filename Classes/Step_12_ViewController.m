@@ -64,16 +64,15 @@
     {
         if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
         {
-            //TODO
+
+            [[NSBundle mainBundle] loadNibNamed:@"Step_12_ViewController_land_ipad" owner:self options:nil];
+            
         }
         else
         {
             [[NSBundle mainBundle] loadNibNamed:@"Step_12_ViewController_land" owner:self options:nil];
-            
-            NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-            self.cameraName.text =  (NSString *) [userDefaults objectForKey:@"CameraName"];
-            self.navigationItem.title = NSLocalizedStringWithDefaultValue( @"Setup_Complete",nil, [NSBundle mainBundle],
-                                                                          @"Setup Complete" , nil);
+
+
             
             
         }
@@ -83,23 +82,23 @@
     {
         if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
         {
-            //TODO
+
+            [[NSBundle mainBundle] loadNibNamed:@"Step_12_ViewController_ipad" owner:self options:nil];
         }
         else
         {            
      
             [[NSBundle mainBundle] loadNibNamed:@"Step_12_ViewController" owner:self options:nil];
             
-            NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-            self.cameraName.text =  (NSString *) [userDefaults objectForKey:@"CameraName"];
-            self.navigationItem.title =
-            NSLocalizedStringWithDefaultValue( @"Setup_Complete",
-                                              nil,
-                                              [NSBundle mainBundle],
-                                              @"Setup Complete" , nil);
+
             
         }
     }
+    
+    
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    self.cameraName.text =  (NSString *) [userDefaults objectForKey:@"CameraName"];
+
 }
 #pragma mark -
 #pragma mark Btn handling 

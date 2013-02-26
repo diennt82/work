@@ -95,13 +95,7 @@
         else
         {
             
-//            self.navigationItem.title =
-//            NSLocalizedStringWithDefaultValue( @"Add_Camera_Failed",
-//                                              nil,
-//                                              [NSBundle mainBundle],
-//                                              @"Add Camera Failed" ,
-//                                              nil);
-            
+
             [[NSBundle mainBundle] loadNibNamed:@"Step_11_ViewController" owner:self options:nil];
             
             UIScrollView *tempScrollView=(UIScrollView *) [self.view viewWithTag:1];

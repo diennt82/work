@@ -170,7 +170,7 @@
     if (tag == CONTINUE_BTN_TAG)
     {
         
-#if 0
+#if 1
         
         NSLog(@"Load step 3");
         //Load the next xib
@@ -200,31 +200,43 @@
         [step03ViewController release];
         
         
-#else // DBG
+#else // DBG - TEST view layout ..
         
         
-        //Load step 11
-        NSLog(@"Load step 11");
+        NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+        
+
+        [userDefaults setObject:@"11:22:33:44:55:66" forKey:@"CameraMacWithQuote"];
+        [userDefaults synchronize];
+       
         
         
+        //Load step 10
+        NSLog(@"Load Step 10");
         //Load the next xib
-        Step_11_ViewController *step11ViewController = nil;
+        Step_10_ViewController *step10ViewController = nil;
         
         if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
         {
-            step11ViewController = [[Step_11_ViewController alloc]
-                                    initWithNibName:@"Step_11_ViewController_ipad" bundle:nil];
+            
+            step10ViewController = [[Step_10_ViewController alloc]
+                                    initWithNibName:@"Step_10_ViewController_ipad" bundle:nil];
+            
         }
         else
         {
-            step11ViewController = [[Step_11_ViewController alloc]
-                                    initWithNibName:@"Step_11_ViewController" bundle:nil];
+            
+            step10ViewController = [[Step_10_ViewController alloc]
+                                    initWithNibName:@"Step_10_ViewController" bundle:nil];
+            
         }
         
         
-        [self.navigationController pushViewController:step11ViewController animated:NO];
         
-        [step11ViewController release];
+        
+        [self.navigationController pushViewController:step10ViewController animated:NO];
+        [step10ViewController release];
+
 #endif
         
     }

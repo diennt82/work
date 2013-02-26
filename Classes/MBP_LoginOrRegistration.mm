@@ -345,77 +345,57 @@
 
 -(void) adjustViewsForOrientations: (UIInterfaceOrientation) interfaceOrientation
 {
+    
+    NSString * user = userName.text;
+    NSString * pass = password.text;
+    [self.progressView removeFromSuperview]; 
+    
     if (interfaceOrientation == UIInterfaceOrientationLandscapeLeft ||
         interfaceOrientation == UIInterfaceOrientationLandscapeRight)
     {
         if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
         {
             [[NSBundle mainBundle] loadNibNamed:@"MBP_LoginOrRegistration_land_ipad" owner:self options:nil];
+           
         }
         else
         {
-
-            NSString * user = userName.text;
-            NSString * pass = password.text;
-            
             [[NSBundle mainBundle] loadNibNamed:@"MBP_LoginOrRegistration_land" owner:self options:nil];
-
-            [self.view addSubview:self.progressView];
-            
-            if (_doneButtonPressed == YES)
-            {
-                
-                
-                NSString * msg = NSLocalizedStringWithDefaultValue(@"Logging_in_to_server" ,nil, [NSBundle mainBundle],
-                                                                   @"Logging in to server..." , nil);
-                self.progressView.hidden = NO;
-                [self.progressLabel setText:msg];
-                [self.view bringSubviewToFront:self.progressView];
-                self.navigationItem.leftBarButtonItem.enabled = NO ;
-                self.navigationItem.rightBarButtonItem.enabled = NO;
-                
-                
-            }
-
-            userName.text = user;
-            password.text = pass;
-            
         }
     }
     else if (interfaceOrientation == UIInterfaceOrientationPortrait ||
              interfaceOrientation == UIInterfaceOrientationPortraitUpsideDown)
     {
-        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+        {
             [[NSBundle mainBundle] loadNibNamed:@"MBP_LoginOrRegistration_ipad" owner:self options:nil];
+            
         }
         else
         {
-       
-            NSString * user = userName.text;
-            NSString * pass = password.text;
-            
             [[NSBundle mainBundle] loadNibNamed:@"MBP_LoginOrRegistration" owner:self options:nil];
-            [self.view addSubview:self.progressView];
-            if (_doneButtonPressed == YES)
-            { 
-                NSString * msg = NSLocalizedStringWithDefaultValue(@"Logging_in_to_server" ,nil, [NSBundle mainBundle],
-                                                                   @"Logging in to server..." , nil);
-                [self.view addSubview:self.progressView];
-                self.progressView.hidden = NO;
-                [self.progressLabel setText:msg];
-                [self.view bringSubviewToFront:self.progressView];
-                self.navigationItem.leftBarButtonItem.enabled = NO ;
-                self.navigationItem.rightBarButtonItem.enabled = NO;
-                
-                
-            }
-            userName.text = user;
-            password.text = pass;
-            
-
-            
         }
     }
+    
+    
+    
+    if (_doneButtonPressed == YES)
+    {
+        NSString * msg = NSLocalizedStringWithDefaultValue(@"Logging_in_to_server" ,nil, [NSBundle mainBundle],
+                                                           @"Logging in to server..." , nil);
+        [self.view addSubview:self.progressView];
+        self.progressView.hidden = NO;
+        [self.progressLabel setText:msg];
+        [self.view bringSubviewToFront:self.progressView];
+        self.navigationItem.leftBarButtonItem.enabled = NO ;
+        self.navigationItem.rightBarButtonItem.enabled = NO;
+        
+        
+    }
+    
+    userName.text = user;
+    password.text = pass;
+
 }
 
 #pragma mark -
