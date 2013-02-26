@@ -35,6 +35,7 @@
 		380CB0DF16DC632700290587 /* Step_11_ViewController_ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 380CB0DD16DC632600290587 /* Step_11_ViewController_ipad.xib */; };
 		380CB0E216DC634D00290587 /* Step_11_ViewController_land_ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 380CB0E016DC634D00290587 /* Step_11_ViewController_land_ipad.xib */; };
 		380CB0E516DC8DE400290587 /* MBP_FirstPage_land_ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 380CB0E316DC8DE400290587 /* MBP_FirstPage_land_ipad.xib */; };
+		380CB0E816DC927500290587 /* MBP_iosViewController_land_ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 380CB0E616DC927400290587 /* MBP_iosViewController_land_ipad.xib */; };
 		3812F82515C8BF0600DADFA6 /* bb_setting_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 3812F82415C8BF0600DADFA6 /* bb_setting_icon.png */; };
 		3812F82B15C8BF3600DADFA6 /* bb_ptt_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 3812F82715C8BF3600DADFA6 /* bb_ptt_icon.png */; };
 		3812F82C15C8BF3600DADFA6 /* bb_snap_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 3812F82815C8BF3600DADFA6 /* bb_snap_icon.png */; };
@@ -285,6 +286,7 @@
 		380CB0DE16DC632700290587 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/Step_11_ViewController_ipad.xib; sourceTree = "<group>"; };
 		380CB0E116DC634D00290587 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/Step_11_ViewController_land_ipad.xib; sourceTree = "<group>"; };
 		380CB0E416DC8DE400290587 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/MBP_FirstPage_land_ipad.xib; sourceTree = "<group>"; };
+		380CB0E716DC927500290587 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/MBP_iosViewController_land_ipad.xib; sourceTree = "<group>"; };
 		3812F82415C8BF0600DADFA6 /* bb_setting_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bb_setting_icon.png; sourceTree = "<group>"; };
 		3812F82715C8BF3600DADFA6 /* bb_ptt_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bb_ptt_icon.png; sourceTree = "<group>"; };
 		3812F82815C8BF3600DADFA6 /* bb_snap_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bb_snap_icon.png; sourceTree = "<group>"; };
@@ -919,6 +921,7 @@
 				388396B7168B064500B0D020 /* MBP_iosViewController.xib */,
 				BCA60D5C16D2356E004A361C /* MBP_iosViewController_land.xib */,
 				38DE1C11168ADA6B0049E814 /* MBP_iosViewController_ipad.xib */,
+				380CB0E616DC927400290587 /* MBP_iosViewController_land_ipad.xib */,
 				97987DEF1546A1630066C49B /* MBP_LoginOrRegistration.h */,
 				97987DF01546A1630066C49B /* MBP_LoginOrRegistration.mm */,
 				38DE1C0C168ADA550049E814 /* MBP_LoginOrRegistration.xib */,
@@ -1338,6 +1341,7 @@
 				380CB0DF16DC632700290587 /* Step_11_ViewController_ipad.xib in Resources */,
 				380CB0E216DC634D00290587 /* Step_11_ViewController_land_ipad.xib in Resources */,
 				380CB0E516DC8DE400290587 /* MBP_FirstPage_land_ipad.xib in Resources */,
+				380CB0E816DC927500290587 /* MBP_iosViewController_land_ipad.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1490,6 +1494,14 @@
 				380CB0E416DC8DE400290587 /* en */,
 			);
 			name = MBP_FirstPage_land_ipad.xib;
+			sourceTree = "<group>";
+		};
+		380CB0E616DC927400290587 /* MBP_iosViewController_land_ipad.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				380CB0E716DC927500290587 /* en */,
+			);
+			name = MBP_iosViewController_land_ipad.xib;
 			sourceTree = "<group>";
 		};
 		387E718116884E1100E940F9 /* Localizable.strings */ = {

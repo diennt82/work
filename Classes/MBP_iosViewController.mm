@@ -83,9 +83,13 @@ return self;
     //self.view.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
 
 	[self initialize];
+    
+    UIInterfaceOrientation interfaceOrientation = [UIApplication sharedApplication].statusBarOrientation;
+    [self adjustViewsForOrientations:interfaceOrientation];
+    
 
 	//go Back to main menu
-	[NSTimer scheduledTimerWithTimeInterval:2
+	[NSTimer scheduledTimerWithTimeInterval:10
 		target:self
 		selector:@selector(wakeup_display_login:)
 		userInfo:nil
@@ -342,9 +346,9 @@ return self;
 
 -(void) viewWillAppear:(BOOL)animated
 {
+    [super viewWillAppear:animated];
+    
 
-//    UIInterfaceOrientation interfaceOrientation = [UIApplication sharedApplication].statusBarOrientation;
-    //[self adjustViewsForOrientations:interfaceOrientation];
 }
 
 #pragma mark -
@@ -364,7 +368,7 @@ return self;
     {
         if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
         {
-            [[NSBundle mainBundle] loadNibNamed:@"MBP_iosViewController_ipad" owner:self options:nil];
+            [[NSBundle mainBundle] loadNibNamed:@"MBP_iosViewController_land_ipad" owner:self options:nil];
         }
         else
         {
@@ -372,20 +376,22 @@ return self;
             
             [[NSBundle mainBundle] loadNibNamed:@"MBP_iosViewController_land" owner:self options:nil];
             
-            //[self.view addSubview:backgroundView];
-            //backgroundView.hidden = YES;
+    
             statusDialogLabel.hidden = statusHidden;
             
-            CGAffineTransform transform = CGAffineTransformMakeRotation(-M_PI_2);
-            if (interfaceOrientation == UIInterfaceOrientationLandscapeRight)
-            {
-                transform = CGAffineTransformMakeRotation(M_PI_2);
-            }
-            
-            self.view.transform = transform;
-            
-            self.view.frame = CGRectMake(0,0,  self.view.frame.size.height,self.view.frame.size.width);
         }
+        
+        CGAffineTransform transform = CGAffineTransformMakeRotation(-M_PI_2);
+        if (interfaceOrientation == UIInterfaceOrientationLandscapeRight)
+        {
+            transform = CGAffineTransformMakeRotation(M_PI_2);
+        }
+        
+        self.view.transform = transform;
+        
+        self.view.frame = CGRectMake(0,0,  self.view.frame.size.height,self.view.frame.size.width);
+
+        
     }
     else if (interfaceOrientation == UIInterfaceOrientationPortrait ||
              interfaceOrientation == UIInterfaceOrientationPortraitUpsideDown)
@@ -397,8 +403,7 @@ return self;
         {
             BOOL statusHidden = statusDialogLabel.hidden;
             [[NSBundle mainBundle] loadNibNamed:@"MBP_iosViewController" owner:self options:nil];
-            //[self.view addSubview:backgroundView];
-            //backgroundView.hidden = YES;
+
             statusDialogLabel.hidden = statusHidden;
         }
     }
