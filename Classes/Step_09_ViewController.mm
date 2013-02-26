@@ -56,8 +56,7 @@
     self.navigationItem.rightBarButtonItem = nextButton;
     [nextButton release];
 
-    UIInterfaceOrientation interfaceOrientation = [UIApplication sharedApplication].statusBarOrientation;
-    [self adjustViewsForOrientations:interfaceOrientation];
+   
     
 }
 
@@ -69,14 +68,29 @@
 -(void) viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
+    
 
 }
 -(void) viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-
+    UIInterfaceOrientation interfaceOrientation = [UIApplication sharedApplication].statusBarOrientation;
+    [self adjustViewsForOrientations:interfaceOrientation];
+     
 }
 
+-(void) fixedTableSizeBeforeShowing
+{
+    if (myTable ==nil)
+    {
+        NSLog(@"myTable is NIL!!!");
+        return;
+    }
+    
+    NSLog(@"fixing... myTable");
+    myTable.frame = CGRectMake(0, 36, 768  , 400);
+    
+}
 
 
 #pragma mark -
@@ -98,6 +112,7 @@
 
 -(void) willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
 {
+    
     [self adjustViewsForOrientations:toInterfaceOrientation];
 }
 
@@ -309,6 +324,7 @@
     
     [self.navigationController pushViewController:vc animated:NO];
     [vc release];
+
 }
 
 -(void) handleNextButton:(id) sender

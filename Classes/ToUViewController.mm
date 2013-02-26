@@ -42,4 +42,21 @@
     // Dispose of any resources that can be recreated.
 }
 
+
+- (void)viewWillDisappear:(BOOL)animated {
+	NSArray *viewControllers = self.navigationController.viewControllers;
+	
+    //GONE now.. ask the lower viewController to rotate
+    Step_09_ViewController * vc = (Step_09_ViewController*) [viewControllers objectAtIndex:viewControllers.count-1];
+    
+    NSLog(@"adjust table"); 
+
+    [vc fixedTableSizeBeforeShowing];
+//     UIInterfaceOrientation interfaceOrientation = [UIApplication sharedApplication].statusBarOrientation;
+//    [vc adjustViewsForOrientations:interfaceOrientation];
+
+    
+}
+
+
 @end

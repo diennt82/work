@@ -21,6 +21,7 @@
     IBOutlet UITableViewCell * userEmail;
   
 
+    IBOutlet UITableView * myTable; 
     
      NSString * tmp_user_str,* tmp_pass_str,* tmp_user_email;
 }
@@ -35,6 +36,9 @@
 -(IBAction) showTermOfUse_:(id) sender;
 -(IBAction) handleNextButton:(id) sender;
 +(BOOL) isWifiConnectionAvailable;
+-(void) adjustViewsForOrientations: (UIInterfaceOrientation) interfaceOrientation;
+-(void) fixedTableSizeBeforeShowing;
+
 
 //REG callbacks;
 - (void) regSuccessWithResponse:(NSData*) responseData;

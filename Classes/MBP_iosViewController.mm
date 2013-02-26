@@ -89,7 +89,7 @@ return self;
     
 
 	//go Back to main menu
-	[NSTimer scheduledTimerWithTimeInterval:10
+	[NSTimer scheduledTimerWithTimeInterval:2
 		target:self
 		selector:@selector(wakeup_display_login:)
 		userInfo:nil
