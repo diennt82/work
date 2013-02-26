@@ -8,6 +8,8 @@
 
 #import <UIKit/UIKit.h>
 #import "ScanForCamera.h"
+#import "Step_12_ViewController.h"
+#import "Step_11_ViewController.h"
 @class ScanForCamera;
 
 #define HOME_SSID @"home_ssid"
@@ -59,7 +61,7 @@
 -(IBAction) startConfigureCamera:(id)sender;
 
 -(IBAction)registerCamera:(id)sender;
--(IBAction)starMonitor:(id)sender;
+
 -(IBAction)tryAddCameraAgain:(id)sender;
 
 - (void) wait_for_camera_to_reboot:(NSTimer *)exp;

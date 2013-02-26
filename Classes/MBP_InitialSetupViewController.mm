@@ -245,9 +245,11 @@
         BOOL isFirstTimeSetup = [userDefaults boolForKey:FIRST_TIME_SETUP];
         if (isFirstTimeSetup ==FALSE)
         {
+            
+            //20130226: phung: flow never comes here any more..
             NSLog(@"load step 2:");
             
-            
+
             //Load the next xib
             Step_02_ViewController *step02ViewController = nil;
             
@@ -271,6 +273,7 @@
             [self.navigationController pushViewController:step02ViewController animated:NO];
             
             [step02ViewController release];
+
         }
         else
         {  

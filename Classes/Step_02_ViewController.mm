@@ -170,7 +170,8 @@
     if (tag == CONTINUE_BTN_TAG)
     {
         
-
+#if 1 
+        
         NSLog(@"Load step 3");
         //Load the next xib
         Step_03_ViewController *step03ViewController = nil;
@@ -199,6 +200,33 @@
         [step03ViewController release];
         
         
+#else // DBG
+        
+        
+        //Load step 11
+        NSLog(@"Load step 11");
+        
+        
+        //Load the next xib
+        Step_11_ViewController *step11ViewController = nil;
+        
+        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+        {
+            step11ViewController = [[Step_11_ViewController alloc]
+                                    initWithNibName:@"Step_11_ViewController_ipad" bundle:nil];
+        }
+        else
+        {
+            step11ViewController = [[Step_11_ViewController alloc]
+                                    initWithNibName:@"Step_11_ViewController" bundle:nil];
+        }
+        
+        
+        [self.navigationController pushViewController:step11ViewController animated:NO];
+        
+        [step11ViewController release];
+#endif
+        
     }
     
     
@@ -213,7 +241,7 @@
 #define STEP_2 1
 #define STEP_3 2
 
- 
+
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     

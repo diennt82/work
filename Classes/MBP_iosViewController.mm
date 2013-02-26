@@ -429,6 +429,7 @@ return self;
                 BOOL isFirstTimeSetup = [userDefaults boolForKey:FIRST_TIME_SETUP];
                 if (isFirstTimeSetup ==FALSE)
                 {
+
                     //Normal add cam sequence
                     //Load the next xib
                     Step_02_ViewController *step02ViewController = nil;
@@ -450,6 +451,11 @@ return self;
 
                     step02ViewController.delegate = self;
                     [step02ViewController presentModallyOn:self];
+
+              
+
+                    
+
                 }
                 else
                 {
