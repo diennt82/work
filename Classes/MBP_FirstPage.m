@@ -41,8 +41,10 @@
     
     version = [NSString stringWithFormat:msg,version];
     versionText.text =version;
+
     
-    //self.view.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+    UIInterfaceOrientation interfaceOrientation = [UIApplication sharedApplication].statusBarOrientation;
+    [self adjustViewsForOrientations:interfaceOrientation];
 
 
 }
@@ -117,26 +119,27 @@
     {
         if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
         {
-            [[NSBundle mainBundle] loadNibNamed:@"MBP_FirstPage_ipad" owner:self options:nil];
+            [[NSBundle mainBundle] loadNibNamed:@"MBP_FirstPage_land_ipad" owner:self options:nil];
         }
         else
         {
           [[NSBundle mainBundle] loadNibNamed:@"MBP_FirstPage_land" owner:self options:nil];
-             
-            //WTF is this??? Still need to rotate & re-frame...??? 
-            CGAffineTransform transform = CGAffineTransformMakeRotation(-M_PI_2);
-            if (interfaceOrientation == UIInterfaceOrientationLandscapeRight)
-            {
-                transform = CGAffineTransformMakeRotation(M_PI_2);
-            }
-            
-            self.view.transform = transform;
-           
-            self.view.frame = CGRectMake(0,0,  self.view.frame.size.height,self.view.frame.size.width);
-            
-            
             
         }
+        
+        
+        //WTF is this??? Still need to rotate & re-frame...???
+        CGAffineTransform transform = CGAffineTransformMakeRotation(-M_PI_2);
+        if (interfaceOrientation == UIInterfaceOrientationLandscapeRight)
+        {
+            transform = CGAffineTransformMakeRotation(M_PI_2);
+        }
+        
+        self.view.transform = transform;
+        
+        self.view.frame = CGRectMake(0,0,  self.view.frame.size.height,self.view.frame.size.width);
+
+        
     }
     else if (interfaceOrientation == UIInterfaceOrientationPortrait ||
              interfaceOrientation == UIInterfaceOrientationPortraitUpsideDown)
