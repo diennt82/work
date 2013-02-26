@@ -528,8 +528,6 @@
 		38DE1CC5168AEDD10049E814 /* bb_setup_icon_step_2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bb_setup_icon_step_2.png; sourceTree = "<group>"; };
 		38DE1CC6168AEDD10049E814 /* bb_setup_icon_step_3.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bb_setup_icon_step_3.png; sourceTree = "<group>"; };
 		38DE1CCC168AFBAA0049E814 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/Step_02_ViewController_ipad.xib; sourceTree = "<group>"; };
-		38DE1CCE168AFBB40049E814 /* fr */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = fr; path = fr.lproj/Step_02_ViewController_ipad.xib; sourceTree = "<group>"; };
-		38DE1CCF168AFBB60049E814 /* es */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = es; path = es.lproj/Step_02_ViewController_ipad.xib; sourceTree = "<group>"; };
 		38DE1CD1168AFBBE0049E814 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/Step_02_ViewController.xib; sourceTree = "<group>"; };
 		38DE1CD3168AFBC60049E814 /* fr */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = fr; path = fr.lproj/Step_02_ViewController.xib; sourceTree = "<group>"; };
 		38DE1CD4168AFBC70049E814 /* es */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = es; path = es.lproj/Step_02_ViewController.xib; sourceTree = "<group>"; };
@@ -694,8 +692,6 @@
 		BCBD80DC16D1DBD00007943B /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/Step_05_ViewController_land_ipad.xib; sourceTree = "<group>"; };
 		BCBD80E216D1DEF70007943B /* es */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = es; path = es.lproj/Step_03_ViewController_land_ipad.xib; sourceTree = "<group>"; };
 		BCBD80E316D1DEFE0007943B /* fr */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = fr; path = fr.lproj/Step_03_ViewController_land_ipad.xib; sourceTree = "<group>"; };
-		BCBD80E616D1DFD40007943B /* es */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = es; path = es.lproj/Step_02_ViewController_land_ipad.xib; sourceTree = "<group>"; };
-		BCBD80E716D1DFDA0007943B /* fr */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = fr; path = fr.lproj/Step_02_ViewController_land_ipad.xib; sourceTree = "<group>"; };
 		BCBD80E916D1E0550007943B /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/Step_06_ViewController_land_ipad.xib; sourceTree = "<group>"; };
 		BCBD80EE16D1E1870007943B /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/Step_07_ViewController_land_ipad.xib; sourceTree = "<group>"; };
 		BCBD80F216D1E2250007943B /* es */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = es; path = es.lproj/Step_07_ViewController_land_ipad.xib; sourceTree = "<group>"; };
@@ -1986,8 +1982,6 @@
 			isa = PBXVariantGroup;
 			children = (
 				38DE1CCC168AFBAA0049E814 /* en */,
-				38DE1CCE168AFBB40049E814 /* fr */,
-				38DE1CCF168AFBB60049E814 /* es */,
 			);
 			name = Step_02_ViewController_ipad.xib;
 			sourceTree = "<group>";
@@ -2146,8 +2140,6 @@
 			isa = PBXVariantGroup;
 			children = (
 				BCBD80CD16D1D7850007943B /* en */,
-				BCBD80E616D1DFD40007943B /* es */,
-				BCBD80E716D1DFDA0007943B /* fr */,
 			);
 			name = Step_02_ViewController_land_ipad.xib;
 			sourceTree = "<group>";

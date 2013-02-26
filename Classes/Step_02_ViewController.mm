@@ -170,7 +170,7 @@
     if (tag == CONTINUE_BTN_TAG)
     {
         
-#if 1 
+#if 0
         
         NSLog(@"Load step 3");
         //Load the next xib

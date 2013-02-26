@@ -72,17 +72,11 @@
     {
         if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
         {
-            //TODO
+            [[NSBundle mainBundle] loadNibNamed:@"Step_11_ViewController_land_ipad" owner:self options:nil];
         }
         else
         {
             // Add cameras fail in landscape mode
-            
-            self.navigationItem.title =
-            NSLocalizedStringWithDefaultValue( @"Add_Camera_Failed",
-                                              nil,
-                                              [NSBundle mainBundle],
-                                              @"Add Camera Failed" , nil);
             
             [[NSBundle mainBundle] loadNibNamed:@"Step_11_ViewController_land" owner:self options:nil];
             
@@ -96,17 +90,17 @@
     {
         if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
         {
-            //TODO
+            [[NSBundle mainBundle] loadNibNamed:@"Step_11_ViewController_ipad" owner:self options:nil];
         }
         else
         {
             
-            self.navigationItem.title =
-            NSLocalizedStringWithDefaultValue( @"Add_Camera_Failed",
-                                              nil,
-                                              [NSBundle mainBundle],
-                                              @"Add Camera Failed" ,
-                                              nil);
+//            self.navigationItem.title =
+//            NSLocalizedStringWithDefaultValue( @"Add_Camera_Failed",
+//                                              nil,
+//                                              [NSBundle mainBundle],
+//                                              @"Add Camera Failed" ,
+//                                              nil);
             
             [[NSBundle mainBundle] loadNibNamed:@"Step_11_ViewController" owner:self options:nil];
             
