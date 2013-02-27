@@ -55,19 +55,35 @@
 
 -(void) setupTopBarForEditMode:(BOOL) isEditMode
 {
+    if (topbar != nil)
+    {
+        [topbar removeFromSuperview];
+        [topbar release];
+        
+    }
     
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     
     BOOL isOffline = [userDefaults boolForKey:_OfflineMode];
 
    
-    int screenWidth = [UIScreen mainScreen].bounds.size.width  ;//320
+    int screenWidth = self.view.frame.size.width;
+    
+    
+    NSLog(@"screenWidth is: %d  view width: %lf", screenWidth,
+          self.view.frame.size.width );
     
     if (isEditMode == FALSE)
     {
         //Build ToolBar manually
         topbar = [[UIToolbar alloc]initWithFrame:CGRectMake(0, 0, screenWidth /*screen_frame.size.width*/, 44)];
         topbar.barStyle = UIBarStyleBlackOpaque;
+        
+        [topbar setAutoresizingMask: UIViewAutoresizingFlexibleWidth|
+                                      UIViewAutoresizingFlexibleLeftMargin|
+                                      UIViewAutoresizingFlexibleRightMargin ];
+        
+        
         // create an array for the buttons
         NSMutableArray* buttons = [[NSMutableArray alloc] initWithCapacity:3];
         
@@ -170,24 +186,20 @@
         [topbar setItems:buttons animated:NO];
         [buttons release];
         
-        [topbar setAutoresizingMask:(UIViewAutoresizingFlexibleLeftMargin|
-                                     UIViewAutoresizingFlexibleRightMargin |
-                                     UIViewAutoresizingFlexibleWidth)];
+        
         
         [self.view addSubview:topbar];
     }
     else //isEditMode = TRUE
     {
-        if (topbar != nil)
-        {
-            [topbar removeFromSuperview]; 
-            [topbar release];
-            
-        }
+        
         
         //Build ToolBar manually
         topbar = [[UIToolbar alloc]initWithFrame:CGRectMake(0, 0, screenWidth, 44)];
         topbar.barStyle = UIBarStyleBlackOpaque;
+        [topbar setAutoresizingMask: UIViewAutoresizingFlexibleWidth|
+                                      UIViewAutoresizingFlexibleLeftMargin|
+                                      UIViewAutoresizingFlexibleRightMargin];
         // create an array for the buttons
         NSMutableArray* buttons = [[NSMutableArray alloc] initWithCapacity:3];
 
@@ -288,12 +300,10 @@
     
     BOOL isOffline = [userDefaults boolForKey:_OfflineMode];
 
-    
+                      
     self.editModeEnabled = FALSE;
-    
     [self setupTopBarForEditMode:self.editModeEnabled];
     
-       
     if (isOffline == YES)
     {
         NSLog(@"OFFLINE OFFLINE OFFLINE");
@@ -437,6 +447,8 @@
     }
 
 
+
+    //[self setupTopBarForEditMode:self.editModeEnabled];
 
 }
 
