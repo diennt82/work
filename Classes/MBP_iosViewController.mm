@@ -108,6 +108,7 @@ return self;
 
 	//hide splash screen page
 	[self.view addSubview:backgroundView];
+    [self.view bringSubviewToFront:backgroundView];
 
 
     //load user/pass
@@ -407,6 +408,8 @@ return self;
             statusDialogLabel.hidden = statusHidden;
         }
     }
+    
+   
 }
 
 #pragma mark -

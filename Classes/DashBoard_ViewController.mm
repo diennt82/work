@@ -60,14 +60,13 @@
     
     BOOL isOffline = [userDefaults boolForKey:_OfflineMode];
 
-    UIScreen *screen = [UIScreen mainScreen];
-    CGRect screen_frame = [screen applicationFrame];
-    //[myView setFrame:[screen applicationFrame]]
+   
+    int screenWidth = [UIScreen mainScreen].bounds.size.width  ;//320
     
     if (isEditMode == FALSE)
     {
         //Build ToolBar manually
-        topbar = [[UIToolbar alloc]initWithFrame:CGRectMake(0, 0, screen_frame.size.width, 44)];
+        topbar = [[UIToolbar alloc]initWithFrame:CGRectMake(0, 0, screenWidth /*screen_frame.size.width*/, 44)];
         topbar.barStyle = UIBarStyleBlackOpaque;
         // create an array for the buttons
         NSMutableArray* buttons = [[NSMutableArray alloc] initWithCapacity:3];
@@ -171,11 +170,13 @@
         [topbar setItems:buttons animated:NO];
         [buttons release];
         
-        
+        [topbar setAutoresizingMask:(UIViewAutoresizingFlexibleLeftMargin|
+                                     UIViewAutoresizingFlexibleRightMargin |
+                                     UIViewAutoresizingFlexibleWidth)];
         
         [self.view addSubview:topbar];
     }
-    else
+    else //isEditMode = TRUE
     {
         if (topbar != nil)
         {
@@ -185,7 +186,7 @@
         }
         
         //Build ToolBar manually
-        topbar = [[UIToolbar alloc]initWithFrame:CGRectMake(0, 0, screen_frame.size.width, 44)];
+        topbar = [[UIToolbar alloc]initWithFrame:CGRectMake(0, 0, screenWidth, 44)];
         topbar.barStyle = UIBarStyleBlackOpaque;
         // create an array for the buttons
         NSMutableArray* buttons = [[NSMutableArray alloc] initWithCapacity:3];
@@ -259,6 +260,11 @@
         [buttons release];
         
         
+        [topbar setAutoresizingMask:(UIViewAutoresizingFlexibleLeftMargin|
+                                     UIViewAutoresizingFlexibleRightMargin |
+                                     UIViewAutoresizingFlexibleWidth)];
+        
+
         
         [self.view addSubview:topbar];
         
@@ -408,22 +414,6 @@
     if (orientation == UIInterfaceOrientationLandscapeLeft || orientation == UIInterfaceOrientationLandscapeRight)
 	{
 
-        //since at this time.. the orientation is still NOT CHANGED so need to use the OTHER size
-        int screenWidth = [UIScreen mainScreen].bounds.size.height  ;//480
-        int screenHeight = [UIScreen mainScreen].bounds.size.width;
-        
-        topbar.frame = CGRectMake(0, 0, screenWidth, topbar.frame.size.height);
-        
-        UIImageView * bg = (UIImageView*) [self.view viewWithTag:1];
-        if (bg != nil)
-        {
-            //transform.
-            CGAffineTransform transform = CGAffineTransformMakeRotation(-M_PI_2);
-            bg.transform = transform;
-           //bg.frame = CGRectMake(0,0, 480, 320);
-            
-            bg.frame = CGRectMake(0,0,  screenWidth,screenHeight);
-        }
                 
         if (emptyCameraListView != nil)
         {
@@ -436,19 +426,6 @@
 	else if (orientation == UIInterfaceOrientationPortrait || orientation == UIInterfaceOrientationPortraitUpsideDown)
 	{
 
-        int screenWidth = [UIScreen mainScreen].bounds.size.width  ;//320
-        int screenHeight = [UIScreen mainScreen].bounds.size.height;
-
-        topbar.frame = CGRectMake(0, 0, screenWidth, topbar.frame.size.height);
-        UIImageView * bg = (UIImageView*) [self.view viewWithTag:1];
-        if (bg != nil)
-        {
-            //transform.
-            CGAffineTransform transform = CGAffineTransformMakeRotation(0);
-            bg.transform = transform;
-            //bg.frame = CGRectMake(0,0, 320, 480);
-            bg.frame = CGRectMake(0,0, screenWidth,screenHeight);
-        }
         
         if (emptyCameraListView != nil)
         {

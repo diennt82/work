@@ -386,13 +386,9 @@
 		38CE2A1115D4FA3700B8F7EC /* ForgotPwdViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ForgotPwdViewController.m; sourceTree = "<group>"; };
 		38DE1BC2168ACFEF0049E814 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/DashBoard_ViewController.xib; sourceTree = "<group>"; };
 		38DE1BC7168AD57D0049E814 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/DashBoard_ViewController_ipad.xib; sourceTree = "<group>"; };
-		38DE1BCA168AD92C0049E814 /* es */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = es; path = es.lproj/DashBoard_ViewController.xib; sourceTree = "<group>"; };
-		38DE1BCB168AD9370049E814 /* es */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = es; path = es.lproj/DashBoard_ViewController_ipad.xib; sourceTree = "<group>"; };
 		38DE1BCD168AD9500049E814 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/DashBoard_camView.xib; sourceTree = "<group>"; };
 		38DE1BCF168AD9590049E814 /* es */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = es; path = es.lproj/DashBoard_camView.xib; sourceTree = "<group>"; };
 		38DE1BD0168AD9920049E814 /* fr */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = fr; path = fr.lproj/DashBoard_camView.xib; sourceTree = "<group>"; };
-		38DE1BD1168AD9970049E814 /* fr */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = fr; path = fr.lproj/DashBoard_ViewController_ipad.xib; sourceTree = "<group>"; };
-		38DE1BD2168AD9990049E814 /* fr */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = fr; path = fr.lproj/DashBoard_ViewController.xib; sourceTree = "<group>"; };
 		38DE1BD4168AD9A10049E814 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/DashBoard_camEdit.xib; sourceTree = "<group>"; };
 		38DE1BD6168AD9A40049E814 /* fr */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = fr; path = fr.lproj/DashBoard_camEdit.xib; sourceTree = "<group>"; };
 		38DE1BD7168AD9A60049E814 /* es */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = es; path = es.lproj/DashBoard_camEdit.xib; sourceTree = "<group>"; };
@@ -1442,8 +1438,6 @@
 			isa = PBXVariantGroup;
 			children = (
 				38DE1BC2168ACFEF0049E814 /* en */,
-				38DE1BCA168AD92C0049E814 /* es */,
-				38DE1BD2168AD9990049E814 /* fr */,
 			);
 			name = DashBoard_ViewController.xib;
 			sourceTree = "<group>";
@@ -1452,8 +1446,6 @@
 			isa = PBXVariantGroup;
 			children = (
 				38DE1BC7168AD57D0049E814 /* en */,
-				38DE1BCB168AD9370049E814 /* es */,
-				38DE1BD1168AD9970049E814 /* fr */,
 			);
 			name = DashBoard_ViewController_ipad.xib;
 			sourceTree = "<group>";
