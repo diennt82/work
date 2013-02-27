@@ -60,7 +60,7 @@
 
 -(IBAction) startConfigureCamera:(id)sender;
 
-//-(IBAction)registerCamera:(id)sender;
+-(IBAction)registerCamera:(id)sender;
 
 -(IBAction)tryAddCameraAgain:(id)sender;
 
