@@ -41,7 +41,7 @@
 				<array class="NSMutableArray" key="NSSubviews">
 					<object class="IBUIImageView" id="956647366">
 						<reference key="NSNextResponder" ref="879783327"/>
-						<int key="NSvFlags">292</int>
+						<int key="NSvFlags">274</int>
 						<string key="NSFrameSize">{768, 1024}</string>
 						<reference key="NSSuperview" ref="879783327"/>
 						<reference key="NSWindow"/>
@@ -56,7 +56,7 @@
 					</object>
 					<object class="IBUITextView" id="525071046">
 						<reference key="NSNextResponder" ref="879783327"/>
-						<int key="NSvFlags">292</int>
+						<int key="NSvFlags">301</int>
 						<string key="NSFrame">{{239, 223}, {290, 31}}</string>
 						<reference key="NSSuperview" ref="879783327"/>
 						<reference key="NSWindow"/>
@@ -92,7 +92,7 @@
 					</object>
 					<object class="IBUILabel" id="1001982632">
 						<reference key="NSNextResponder" ref="879783327"/>
-						<int key="NSvFlags">292</int>
+						<int key="NSvFlags">301</int>
 						<string key="NSFrame">{{195, 276}, {82, 21}}</string>
 						<reference key="NSSuperview" ref="879783327"/>
 						<reference key="NSWindow"/>
@@ -123,7 +123,7 @@
 					</object>
 					<object class="IBUITextView" id="6392513">
 						<reference key="NSNextResponder" ref="879783327"/>
-						<int key="NSvFlags">292</int>
+						<int key="NSvFlags">298</int>
 						<string key="NSFrame">{{197, 423}, {373, 120}}</string>
 						<reference key="NSSuperview" ref="879783327"/>
 						<reference key="NSWindow"/>
@@ -146,7 +146,7 @@
 					</object>
 					<object class="IBUILabel" id="940297270">
 						<reference key="NSNextResponder" ref="879783327"/>
-						<int key="NSvFlags">292</int>
+						<int key="NSvFlags">301</int>
 						<string key="NSFrame">{{334, 276}, {239, 21}}</string>
 						<reference key="NSSuperview" ref="879783327"/>
 						<reference key="NSWindow"/>
@@ -167,7 +167,7 @@
 					</object>
 					<object class="IBUILabel" id="888638554">
 						<reference key="NSNextResponder" ref="879783327"/>
-						<int key="NSvFlags">292</int>
+						<int key="NSvFlags">301</int>
 						<string key="NSFrame">{{285, 276}, {41, 21}}</string>
 						<reference key="NSSuperview" ref="879783327"/>
 						<reference key="NSWindow"/>
@@ -188,7 +188,7 @@
 					</object>
 					<object class="IBUIButton" id="186145591">
 						<reference key="NSNextResponder" ref="879783327"/>
-						<int key="NSvFlags">292</int>
+						<int key="NSvFlags">301</int>
 						<string key="NSFrame">{{270, 687}, {228, 44}}</string>
 						<reference key="NSSuperview" ref="879783327"/>
 						<reference key="NSWindow"/>
@@ -251,16 +251,16 @@
 			</object>
 			<object class="IBUIView" id="943547395">
 				<reference key="NSNextResponder"/>
-				<int key="NSvFlags">292</int>
+				<int key="NSvFlags">274</int>
 				<array class="NSMutableArray" key="NSSubviews">
 					<object class="IBUIView" id="456793354">
 						<reference key="NSNextResponder" ref="943547395"/>
-						<int key="NSvFlags">292</int>
+						<int key="NSvFlags">301</int>
 						<array class="NSMutableArray" key="NSSubviews">
 							<object class="IBUIImageView" id="994107496">
 								<reference key="NSNextResponder" ref="456793354"/>
 								<int key="NSvFlags">292</int>
-								<string key="NSFrame">{{33, 8}, {254, 208}}</string>
+								<string key="NSFrameSize">{300, 300}</string>
 								<reference key="NSSuperview" ref="456793354"/>
 								<reference key="NSWindow"/>
 								<reference key="NSNextKeyView" ref="459021124"/>
@@ -274,8 +274,8 @@
 							</object>
 							<object class="IBUITextView" id="693455983">
 								<reference key="NSNextResponder" ref="456793354"/>
-								<int key="NSvFlags">274</int>
-								<string key="NSFrame">{{64, 8}, {192, 72}}</string>
+								<int key="NSvFlags">292</int>
+								<string key="NSFrame">{{0, 27}, {300, 76}}</string>
 								<reference key="NSSuperview" ref="456793354"/>
 								<reference key="NSWindow"/>
 								<reference key="NSNextKeyView" ref="426932002"/>
@@ -295,20 +295,20 @@
 									<int key="IBUIAutocapitalizationType">2</int>
 									<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
 								</object>
-								<object class="IBUIFontDescription" key="IBUIFontDescription" id="74492126">
+								<object class="IBUIFontDescription" key="IBUIFontDescription" id="751753463">
 									<int key="type">1</int>
-									<double key="pointSize">14</double>
+									<double key="pointSize">17</double>
 								</object>
-								<object class="NSFont" key="IBUIFont" id="375165549">
+								<object class="NSFont" key="IBUIFont" id="531179970">
 									<string key="NSName">Helvetica</string>
-									<double key="NSSize">14</double>
+									<double key="NSSize">17</double>
 									<int key="NSfFlags">16</int>
 								</object>
 							</object>
 							<object class="IBUIActivityIndicatorView" id="426932002">
 								<reference key="NSNextResponder" ref="456793354"/>
 								<int key="NSvFlags">292</int>
-								<string key="NSFrame">{{142, 171}, {37, 37}}</string>
+								<string key="NSFrame">{{132, 217}, {37, 37}}</string>
 								<reference key="NSSuperview" ref="456793354"/>
 								<reference key="NSWindow"/>
 								<string key="NSReuseIdentifierKey">_NS:9</string>
@@ -321,7 +321,7 @@
 							<object class="IBUITextView" id="459021124">
 								<reference key="NSNextResponder" ref="456793354"/>
 								<int key="NSvFlags">292</int>
-								<string key="NSFrame">{{40, 78}, {240, 49}}</string>
+								<string key="NSFrame">{{0, 126}, {300, 49}}</string>
 								<reference key="NSSuperview" ref="456793354"/>
 								<reference key="NSWindow"/>
 								<reference key="NSNextKeyView" ref="693455983"/>
@@ -338,11 +338,11 @@
 									<int key="IBUIAutocapitalizationType">2</int>
 									<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
 								</object>
-								<reference key="IBUIFontDescription" ref="74492126"/>
-								<reference key="IBUIFont" ref="375165549"/>
+								<reference key="IBUIFontDescription" ref="751753463"/>
+								<reference key="IBUIFont" ref="531179970"/>
 							</object>
 						</array>
-						<string key="NSFrame">{{224, 388}, {320, 248}}</string>
+						<string key="NSFrame">{{234, 362}, {300, 300}}</string>
 						<reference key="NSSuperview" ref="943547395"/>
 						<reference key="NSWindow"/>
 						<reference key="NSNextKeyView" ref="994107496"/>
@@ -364,11 +364,11 @@
 			</object>
 			<object class="IBUIView" id="837599693">
 				<reference key="NSNextResponder"/>
-				<int key="NSvFlags">292</int>
+				<int key="NSvFlags">274</int>
 				<array class="NSMutableArray" key="NSSubviews">
 					<object class="IBUIImageView" id="693128050">
 						<reference key="NSNextResponder" ref="837599693"/>
-						<int key="NSvFlags">292</int>
+						<int key="NSvFlags">274</int>
 						<string key="NSFrameSize">{768, 1024}</string>
 						<reference key="NSSuperview" ref="837599693"/>
 						<reference key="NSWindow"/>
@@ -380,7 +380,7 @@
 					</object>
 					<object class="IBUITextView" id="601027539">
 						<reference key="NSNextResponder" ref="837599693"/>
-						<int key="NSvFlags">-2147483356</int>
+						<int key="NSvFlags">-2147483347</int>
 						<string key="NSFrame">{{239, 559}, {289, 65}}</string>
 						<reference key="NSSuperview" ref="837599693"/>
 						<reference key="NSWindow"/>
@@ -397,8 +397,15 @@
 							<int key="IBUIAutocapitalizationType">2</int>
 							<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
 						</object>
-						<reference key="IBUIFontDescription" ref="74492126"/>
-						<reference key="IBUIFont" ref="375165549"/>
+						<object class="IBUIFontDescription" key="IBUIFontDescription" id="74492126">
+							<int key="type">1</int>
+							<double key="pointSize">14</double>
+						</object>
+						<object class="NSFont" key="IBUIFont" id="491080747">
+							<string key="NSName">Helvetica</string>
+							<double key="NSSize">14</double>
+							<int key="NSfFlags">16</int>
+						</object>
 					</object>
 					<object class="IBUITextView" id="801720522">
 						<reference key="NSNextResponder" ref="837599693"/>
@@ -419,7 +426,7 @@
 							<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
 						</object>
 						<reference key="IBUIFontDescription" ref="74492126"/>
-						<reference key="IBUIFont" ref="375165549"/>
+						<reference key="IBUIFont" ref="491080747"/>
 					</object>
 					<object class="IBUIButton" id="667205852">
 						<reference key="NSNextResponder" ref="837599693"/>
@@ -469,11 +476,11 @@
 							<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
 						</object>
 						<reference key="IBUIFontDescription" ref="74492126"/>
-						<reference key="IBUIFont" ref="375165549"/>
+						<reference key="IBUIFont" ref="491080747"/>
 					</object>
 					<object class="IBUILabel" id="974712177">
 						<reference key="NSNextResponder" ref="837599693"/>
-						<int key="NSvFlags">292</int>
+						<int key="NSvFlags">298</int>
 						<string key="NSFrame">{{264, 164}, {240, 27}}</string>
 						<reference key="NSSuperview" ref="837599693"/>
 						<reference key="NSWindow"/>
@@ -510,7 +517,7 @@
 					</object>
 					<object class="IBUITextView" id="621285219">
 						<reference key="NSNextResponder" ref="837599693"/>
-						<int key="NSvFlags">292</int>
+						<int key="NSvFlags">298</int>
 						<string key="NSFrame">{{214, 259}, {340, 82}}</string>
 						<reference key="NSSuperview" ref="837599693"/>
 						<reference key="NSWindow"/>
@@ -532,19 +539,12 @@
 							<int key="IBUIAutocapitalizationType">2</int>
 							<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
 						</object>
-						<object class="IBUIFontDescription" key="IBUIFontDescription">
-							<int key="type">1</int>
-							<double key="pointSize">17</double>
-						</object>
-						<object class="NSFont" key="IBUIFont">
-							<string key="NSName">Helvetica</string>
-							<double key="NSSize">17</double>
-							<int key="NSfFlags">16</int>
-						</object>
+						<reference key="IBUIFontDescription" ref="751753463"/>
+						<reference key="IBUIFont" ref="531179970"/>
 					</object>
 					<object class="IBUITextView" id="861164350">
 						<reference key="NSNextResponder" ref="837599693"/>
-						<int key="NSvFlags">292</int>
+						<int key="NSvFlags">298</int>
 						<string key="NSFrame">{{232, 113}, {303, 33}}</string>
 						<reference key="NSSuperview" ref="837599693"/>
 						<reference key="NSWindow"/>
@@ -567,8 +567,8 @@
 					</object>
 					<object class="IBUIImageView" id="627674734">
 						<reference key="NSNextResponder" ref="837599693"/>
-						<int key="NSvFlags">292</int>
-						<string key="NSFrame">{{227, 349}, {314, 181}}</string>
+						<int key="NSvFlags">301</int>
+						<string key="NSFrame">{{227, 372}, {314, 181}}</string>
 						<reference key="NSSuperview" ref="837599693"/>
 						<reference key="NSWindow"/>
 						<reference key="NSNextKeyView" ref="601027539"/>
@@ -690,6 +690,7 @@
 							<reference ref="456793354"/>
 						</array>
 						<reference key="parent" ref="0"/>
+						<string key="objectName">progressView</string>
 					</object>
 					<object class="IBObjectRecord">
 						<int key="objectID">5</int>
@@ -766,8 +767,8 @@
 						<array class="NSMutableArray" key="children">
 							<reference ref="994107496"/>
 							<reference ref="693455983"/>
-							<reference ref="426932002"/>
 							<reference ref="459021124"/>
+							<reference ref="426932002"/>
 						</array>
 						<reference key="parent" ref="943547395"/>
 					</object>
@@ -878,16 +879,16 @@
 					<string key="className">Step_10_ViewController</string>
 					<string key="superclassName">UIViewController</string>
 					<dictionary class="NSMutableDictionary" key="actions">
+						<string key="registerCamera:">id</string>
 						<string key="startConfigureCamera:">id</string>
-						<string key="tryAddCameraAgain:">id</string>
 					</dictionary>
 					<dictionary class="NSMutableDictionary" key="actionInfosByName">
-						<object class="IBActionInfo" key="startConfigureCamera:">
-							<string key="name">startConfigureCamera:</string>
+						<object class="IBActionInfo" key="registerCamera:">
+							<string key="name">registerCamera:</string>
 							<string key="candidateClassName">id</string>
 						</object>
-						<object class="IBActionInfo" key="tryAddCameraAgain:">
-							<string key="name">tryAddCameraAgain:</string>
+						<object class="IBActionInfo" key="startConfigureCamera:">
+							<string key="name">startConfigureCamera:</string>
 							<string key="candidateClassName">id</string>
 						</object>
 					</dictionary>

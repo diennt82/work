@@ -58,7 +58,6 @@
 						<string key="NSFrame">{{431, 602}, {161, 37}}</string>
 						<reference key="NSSuperview" ref="289681029"/>
 						<reference key="NSWindow"/>
-						<reference key="NSNextKeyView"/>
 						<string key="NSReuseIdentifierKey">_NS:9</string>
 						<bool key="IBUIOpaque">NO</bool>
 						<string key="targetRuntimeIdentifier">IBIPadFramework</string>
@@ -80,11 +79,11 @@
 						</object>
 						<object class="IBUIFontDescription" key="IBUIFontDescription">
 							<int key="type">2</int>
-							<double key="pointSize">15</double>
+							<double key="pointSize">20</double>
 						</object>
 						<object class="NSFont" key="IBUIFont">
 							<string key="NSName">Helvetica-Bold</string>
-							<double key="NSSize">15</double>
+							<double key="NSSize">20</double>
 							<int key="NSfFlags">16</int>
 						</object>
 					</object>

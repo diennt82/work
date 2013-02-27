@@ -67,10 +67,6 @@
         NSLog(@"progressView = nil!!!!");
     }
     
-    
-    
-    
-    
     BOOL firstime = [userDefaults boolForKey:FIRST_TIME_SETUP];
     
     
@@ -118,6 +114,11 @@
         
         
         
+        //DBG ONLY 
+        //self.progressView.hidden = NO;
+        //[self.view bringSubviewToFront:self.progressView];
+        //self.homeSSID.text = @"homeSsid";
+        
     }
         
 }
@@ -158,33 +159,33 @@
 
 -(void) adjustViewsForOrientations: (UIInterfaceOrientation) interfaceOrientation
 {
-    
+#if 0
     
     if (interfaceOrientation == UIInterfaceOrientationLandscapeLeft || interfaceOrientation == UIInterfaceOrientationLandscapeRight)
     {
         if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
         {
-            [[NSBundle mainBundle] loadNibNamed:@"Step_10_ViewController_land_ipad" owner:self options:nil];
+            //[[NSBundle mainBundle] loadNibNamed:@"Step_10_ViewController_land_ipad" owner:self options:nil];
         }
         else
         {
-            [[NSBundle mainBundle] loadNibNamed:@"Step_10_ViewController_land" owner:self options:nil];
+           // [[NSBundle mainBundle] loadNibNamed:@"Step_10_ViewController_land" owner:self options:nil];
         }
     }
     else if (interfaceOrientation == UIInterfaceOrientationPortrait || interfaceOrientation == UIInterfaceOrientationPortraitUpsideDown)
     {
         if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
         {
-            [[NSBundle mainBundle] loadNibNamed:@"Step_10_ViewController_ipad" owner:self options:nil];
+           // [[NSBundle mainBundle] loadNibNamed:@"Step_10_ViewController_ipad" owner:self options:nil];
         }
         else
         {
-            [[NSBundle mainBundle] loadNibNamed:@"Step_10_ViewController" owner:self options:nil];
+           // [[NSBundle mainBundle] loadNibNamed:@"Step_10_ViewController" owner:self options:nil];
             
         }
     }
     
-    
+
     
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     
@@ -195,7 +196,8 @@
     self.userNameLabel.text = (NSString *) [userDefaults objectForKey:@"PortalUsername"];
     self.userEmailLabel.text = (NSString *) [userDefaults objectForKey:@"PortalUseremail"];
     
-    
+     //Hide back button -- can't go back now..
+    self.navigationItem.hidesBackButton = YES;
     
     //Check to see which path we should go
     if (firstime == TRUE)
@@ -204,7 +206,7 @@
         
         self.navigationItem.title =NSLocalizedStringWithDefaultValue(@"Account_Created",nil, [NSBundle mainBundle],
                                                                      @"Account Created" , nil);
-        self.navigationItem.hidesBackButton = YES;
+        
         
         
         
@@ -212,11 +214,7 @@
     }
     else //not first time --> this is normal add camera sequence..
     {
-        
-        
-        //Hide back button -- can't go back now..
-        self.navigationItem.hidesBackButton = TRUE;
-        
+       
         self.navigationItem.title =NSLocalizedStringWithDefaultValue(@"Camera_Configured",nil, [NSBundle mainBundle],
                                                                      @"Camera Configured" , nil);
         
@@ -227,7 +225,7 @@
         self.homeSSID.text = homeSsid;
         
     }
-    
+#endif
 
 }
 

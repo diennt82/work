@@ -62,8 +62,6 @@
 
 -(IBAction)registerCamera:(id)sender;
 
--(IBAction)tryAddCameraAgain:(id)sender;
-
 - (void) wait_for_camera_to_reboot:(NSTimer *)exp;
 - (void) checkScanResult: (NSTimer *) expired;
 
