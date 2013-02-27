@@ -83,7 +83,8 @@
                                                  name: UIApplicationDidBecomeActiveNotification
                                                object: nil];
 
-    
+    [self.view addSubview:self.inProgress];
+    self.inProgress.hidden = YES;
     
     
    // NSLog(@"Open wifi aaaaaaa");
@@ -129,16 +130,25 @@
 
 -(void) adjustViewsForOrientations: (UIInterfaceOrientation) interfaceOrientation
 {
+#if 0
     if (interfaceOrientation == UIInterfaceOrientationLandscapeLeft ||
         interfaceOrientation == UIInterfaceOrientationLandscapeRight)
     {
         if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
         {
-            [[NSBundle mainBundle] loadNibNamed:@"Step_03_ViewController_land_ipad" owner:self options:nil];
+            //[[NSBundle mainBundle] loadNibNamed:@"Step_03_ViewController_land_ipad" owner:self options:nil];
         }
         else
         {
+            BOOL hidden = self.inProgress.hidden;
+            [self.inProgress removeFromSuperview];
+            
+            
             [[NSBundle mainBundle] loadNibNamed:@"Step_03_ViewController_land" owner:self options:nil];
+            
+            [self.view addSubview:self.inProgress];
+            self.inProgress.hidden = hidden;
+            
         }
     }
     else if (interfaceOrientation == UIInterfaceOrientationPortrait ||
@@ -146,13 +156,23 @@
     {
         if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
         {
-            [[NSBundle mainBundle] loadNibNamed:@"Step_03_ViewController_ipad" owner:self options:nil];
+            //[[NSBundle mainBundle] loadNibNamed:@"Step_03_ViewController_ipad" owner:self options:nil];
         }
         else
         {
+            BOOL hidden = self.inProgress.hidden;
+            [self.inProgress removeFromSuperview];
+            
+
             [[NSBundle mainBundle] loadNibNamed:@"Step_03_ViewController" owner:self options:nil];
+            [self.view addSubview:self.inProgress];
+            self.inProgress.hidden = hidden;
+            
+
         }
     }
+    
+#endif
 }
 #pragma mark -
 
@@ -204,8 +224,8 @@
         if (self.inProgress != nil)
         {
             NSLog(@"show progress 01 ");
-            self.inProgress.hidden = NO;
-            [self.view addSubview:self.inProgress];
+            self.inProgress.hidden = NO; 
+            [self.view bringSubviewToFront:self.inProgress];
             
             
         }

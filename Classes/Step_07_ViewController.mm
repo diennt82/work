@@ -47,6 +47,13 @@
 
     securityTypes = [[NSArray alloc]initWithObjects:@"none", @"wep" , @"wap",
                      nil];
+    
+    
+    self.sec_index = -1; 
+    
+//    NSIndexPath * firstRow = [NSIndexPath indexPathForRow:0 inSection:0];
+//    
+//    [myTable selectRowAtIndexPath:firstRow animated:NO scrollPosition:nil];
 }
 
 - (void)viewDidUnload
@@ -66,7 +73,7 @@
 #pragma mark Rotating
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
 {
-    return (interfaceOrientation == UIInterfaceOrientationMaskAllButUpsideDown);
+    return  YES; 
 }
 
 -(BOOL)shouldAutorotate
@@ -86,6 +93,7 @@
 
 -(void) adjustViewsForOrientations: (UIInterfaceOrientation) interfaceOrientation
 {
+#if 0
     if (interfaceOrientation == UIInterfaceOrientationLandscapeLeft || interfaceOrientation == UIInterfaceOrientationLandscapeRight) {
         if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
             [[NSBundle mainBundle] loadNibNamed:@"Step_07_ViewController_land_ipad" owner:self options:nil];
@@ -100,6 +108,7 @@
             [[NSBundle mainBundle] loadNibNamed:@"Step_07_ViewController" owner:self options:nil];
         }
     }
+#endif
 }
 
 
@@ -118,11 +127,22 @@
         
         cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
         if (cell == nil) {
-            [[NSBundle mainBundle] loadNibNamed:@"Step_07_tableViewCell" owner:self options:nil];
+            
+            if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+            {
+                [[NSBundle mainBundle] loadNibNamed:@"Step_07_tableViewCell_ipad" owner:self options:nil];
+            }
+            else
+            {
+                 [[NSBundle mainBundle] loadNibNamed:@"Step_07_tableViewCell" owner:self options:nil];
+            }
+
+            
+           
             cell = self.cellView;
             self.cellView = nil; 
         }
-        [cell setBackgroundColor:[UIColor clearColor]];
+        [cell setBackgroundColor:[UIColor whiteColor]];
         // Set up the cell... 
         
         

@@ -16,6 +16,8 @@
     NSArray * securityTypes;
     
     IBOutlet UITableViewCell * cellView;
+
+    
     
     Step_06_ViewController * step06; 
     int sec_index; 

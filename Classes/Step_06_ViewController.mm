@@ -144,6 +144,7 @@
 
 -(void) adjustViewsForOrientations: (UIInterfaceOrientation) interfaceOrientation
 {
+#if 0
     if (interfaceOrientation == UIInterfaceOrientationLandscapeLeft || interfaceOrientation == UIInterfaceOrientationLandscapeRight)
     {
         if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
@@ -249,6 +250,7 @@
             
         }
     }
+#endif 
 }
 
 
@@ -575,6 +577,12 @@
         
         return NO;
         
+    }
+    else
+    {
+        [textField resignFirstResponder];
+        
+        return NO;
     }
     
     return YES;
