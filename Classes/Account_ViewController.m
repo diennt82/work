@@ -97,22 +97,14 @@
 {
     
     
-    mtopbar = [[UIToolbar alloc]initWithFrame:CGRectMake(0, 0, 320, 44)];
+    int screenWidth = [UIScreen mainScreen].bounds.size.width  ;//320
+        
+    mtopbar = [[UIToolbar alloc]initWithFrame:CGRectMake(0, 0, screenWidth, 44)];
     mtopbar.barStyle = UIBarStyleBlackOpaque;
     // create an array for the buttons
     NSMutableArray* buttons = [[NSMutableArray alloc] initWithCapacity:3];
     
-    // create a standard reload button
-#if 0
-    UIBarButtonItem *reloadButton = [[UIBarButtonItem alloc]
-                                     initWithBarButtonSystemItem:UIBarButtonSystemItemEdit
-                                     target:nil
-                                     action:nil];
-    reloadButton.style = UIBarButtonItemStyleBordered;
-    [buttons addObject:reloadButton];
-    [reloadButton release];
-    
-#endif
+
     // create a spacer between the buttons
     UIBarButtonItem *spacer = [[UIBarButtonItem alloc]
                                initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace
@@ -160,7 +152,9 @@
     [mtopbar setItems:buttons animated:NO];
     [buttons release];
     
-    
+    [mtopbar setAutoresizingMask: (UIViewAutoresizingFlexibleWidth|
+                                   UIViewAutoresizingFlexibleLeftMargin|
+                                   UIViewAutoresizingFlexibleRightMargin) ];
     
     [self.view addSubview:mtopbar];
 }
@@ -168,19 +162,19 @@
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
 {
-    return (interfaceOrientation == UIInterfaceOrientationPortrait);
+    return YES; 
 }
 
 
 -(BOOL) shouldAutorotate
 {
-    NSLog(@"shouldAutorotate --");
+
     return YES ;
 }
 
 -(NSUInteger)supportedInterfaceOrientations
 {
-    NSLog(@"supportedInterfaceOrientations --");
+
     
     return UIInterfaceOrientationMaskAllButUpsideDown;
 }
@@ -188,8 +182,6 @@
 
 - (void) willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
 {
-    
-    NSLog(@"will rotate to interface");
     
     [self adjustViewsForOrientation:toInterfaceOrientation];
 }
@@ -201,7 +193,7 @@
 }
 -(void) adjustViewsForOrientation:(UIInterfaceOrientation) orientation
 {
-    
+#if 0
     
 	if (orientation == UIInterfaceOrientationLandscapeLeft || orientation == UIInterfaceOrientationLandscapeRight)
 	{
@@ -209,43 +201,47 @@
         
         if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
         {
-            [[NSBundle mainBundle] loadNibNamed:@"Account_ViewController_land_ipad"
-                                          owner:self
-                                        options:nil];
+            //[[NSBundle mainBundle] loadNibNamed:@"Account_ViewController_land_ipad"
+               //                           owner:self
+              //                          options:nil];
         }
         else
         {
             [[NSBundle mainBundle] loadNibNamed:@"Account_ViewController_land"
                                           owner:self
                                         options:nil];
-        }
-        
-        if (mtopbar == nil)
-        {
-            NSLog(@"create new tool bar");
-            [self buildTopToolBar];
-      
-        }
-        
-        
-        //since at this time.. the orientation is still NOT CHANGED so need to use the OTHER size
-        int screenWidth = [UIScreen mainScreen].bounds.size.height  ;//480
-        int screenHeight = [UIScreen mainScreen].bounds.size.width;
-        
-        mtopbar.frame = CGRectMake(0, 0, screenWidth, mtopbar.frame.size.height);
-
-        
-        UIImageView * bg = (UIImageView*) [self.view viewWithTag:1];
-        if (bg != nil)
-        {
-            //transform.
-            CGAffineTransform transform = CGAffineTransformMakeRotation(-M_PI_2);
-            bg.transform = transform;
-            //bg.frame = CGRectMake(0,0, 480, 320);
             
-            bg.frame = CGRectMake(0,0,  screenWidth,screenHeight);
+            //since at this time.. the orientation is still NOT CHANGED so need to use the OTHER size
+            int screenWidth = [UIScreen mainScreen].bounds.size.height  ;//480
+            int screenHeight = [UIScreen mainScreen].bounds.size.width;
+            
+            mtopbar.frame = CGRectMake(0, 0, screenWidth, mtopbar.frame.size.height);
+            
+            
+            UIImageView * bg = (UIImageView*) [self.view viewWithTag:1];
+            if (bg != nil)
+            {
+                //transform.
+                CGAffineTransform transform = CGAffineTransformMakeRotation(-M_PI_2);
+                bg.transform = transform;
+                //bg.frame = CGRectMake(0,0, 480, 320);
+                
+                bg.frame = CGRectMake(0,0,  screenWidth,screenHeight);
+            }
+            
+            if (mtopbar == nil)
+            {
+                NSLog(@"create new tool bar");
+                [self buildTopToolBar];
+                
+            }
+
         }
         
+       
+        
+        
+               
         
     }
 	else if (orientation == UIInterfaceOrientationPortrait || orientation == UIInterfaceOrientationPortraitUpsideDown)
@@ -253,9 +249,9 @@
         
         if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
         {
-            [[NSBundle mainBundle] loadNibNamed:@"Account_ViewController_ipad"
-                                          owner:self
-                                        options:nil];
+            //[[NSBundle mainBundle] loadNibNamed:@"Account_ViewController_ipad"
+             //                             owner:self
+              //                          options:nil];
         }
         else
         {
@@ -263,30 +259,33 @@
             [[NSBundle mainBundle] loadNibNamed:@"Account_ViewController"
                                           owner:self
                                         options:nil];
+            
+            //since at this time.. the orientation is still NOT CHANGED so need to use the OTHER size
+            int screenWidth = [UIScreen mainScreen].bounds.size.width  ;//320
+            int screenHeight = [UIScreen mainScreen].bounds.size.height;
+            
+            mtopbar.frame = CGRectMake(0, 0, screenWidth, mtopbar.frame.size.height);
+            
+            UIImageView * bg = (UIImageView*) [self.view viewWithTag:1];
+            if (bg != nil)
+            {
+                //transform.
+                CGAffineTransform transform = CGAffineTransformMakeRotation(0);
+                bg.transform = transform;
+                //bg.frame = CGRectMake(0,0, 320, 480);
+                bg.frame = CGRectMake(0,0, screenWidth,screenHeight);
+            }
+
+            if (mtopbar == nil)
+            {
+                [self buildTopToolBar];
+            }
+            
         }
     
-        if (mtopbar == nil)
-        {
-            [self buildTopToolBar];   
-        }
+       
         
-        
-        //since at this time.. the orientation is still NOT CHANGED so need to use the OTHER size
-        int screenWidth = [UIScreen mainScreen].bounds.size.width  ;//320
-        int screenHeight = [UIScreen mainScreen].bounds.size.height;
-        
-        mtopbar.frame = CGRectMake(0, 0, screenWidth, mtopbar.frame.size.height);
-      
-        UIImageView * bg = (UIImageView*) [self.view viewWithTag:1];
-        if (bg != nil)
-        {
-            //transform.
-            CGAffineTransform transform = CGAffineTransformMakeRotation(0);
-            bg.transform = transform;
-            //bg.frame = CGRectMake(0,0, 320, 480);
-            bg.frame = CGRectMake(0,0, screenWidth,screenHeight);
-        }
-        
+               
 	}
     
    
@@ -297,6 +296,8 @@
         
         [self.view bringSubviewToFront:mtopbar];
     }
+    
+#endif 
 }
 
 
