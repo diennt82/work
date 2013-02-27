@@ -10,6 +10,8 @@
 #import "SymmetricCipher.h"
 
 
+#define DEBUG 0
+
 @implementation CamChannel
 
 @synthesize profile;
@@ -338,15 +340,17 @@
 -(NSData *) getEncChannId
 {
 	NSData * input = [self.channID  dataUsingEncoding: NSUTF8StringEncoding];
-    
+ 
+#if DEBUG
 	NSString * chann = @"";
 	for (int i =0; i< [ input length]; i ++)
 	{
 		chann = [NSString  stringWithFormat:@"%@ %02x", chann,
                  ((uint8_t *)[input bytes]) [i] ];
 	}
-	
+
 	NSLog(@"Input chan: %@", chann);
+#endif
     
 	NSData * output =[SymmetricCipher _AESEncryptWithKey:self.secretKey data:input];
     

@@ -8,7 +8,7 @@
 
 #import "STUN_Communication.h"
 
-
+#define DEBUG 0
 
 @implementation STUN_Communication
 @synthesize mChannel;
@@ -153,14 +153,14 @@
     
     if (mChannel_.secretKey != nil && mChannel_.channID != nil)
     {
-        
+#if DEBUG
         // encryption stuff
         NSLog(@"channID: %@", mChannel_.channID);
-        
+#endif
         
         NSData * _encChan = [mChannel_ getEncChannId];
         
-#if 0 // DEBUG
+#if  DEBUG
         NSString * encChan =@"";
         for (int i =0; i< [ _encChan length]; i ++)
         {
@@ -186,12 +186,15 @@
         
         struct in_addr * server_ip = [UdtSocketWrapper getIpfromHostName:STUN_SERVER_IP];
         
-        
+#if DEBUG
         NSLog(@"sock created: %d serverip: %d",socket ,
               server_ip->s_addr);
+#endif
         localPort = [udt_wrapper connectViaUdtSock:server_ip
                                               port:STUN_SERVER_PORT];
+#if DEBUG
         NSLog(@"sock connected at port: %d",localPort );
+#endif
         
         [udt_wrapper sendDataViaUdt:(NSData *) messageToStun];
         
@@ -285,7 +288,9 @@
 
 -(void)isCamAvaiTimeOut:(NSTimer *) exp
 {
+#if DEBUG
     NSLog(@"20sec timeout -- ");
+#endif
     //20sec has timeout stop the task now..
     retry_getting_camera_availability = -1;
     

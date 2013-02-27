@@ -70,8 +70,6 @@
     int screenWidth = self.view.frame.size.width;
     
     
-    NSLog(@"screenWidth is: %d  view width: %lf", screenWidth,
-          self.view.frame.size.width );
     
     if (isEditMode == FALSE)
     {

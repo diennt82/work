@@ -8,7 +8,7 @@
 
 #import "UdtSocketWrapper.h"
 
-#define DEBUG 1
+#define DEBUG 0
 
 @implementation UdtSocketWrapper
 @synthesize udt_socket,local_port;
