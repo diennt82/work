@@ -36,9 +36,7 @@
 	<key>UIApplicationExitsOnSuspend</key>
 	<false/>
 	<key>UIFileSharingEnabled</key>
-	<false/>
-	<key>UIInterfaceOrientation</key>
-	<string>UIInterfaceOrientationPortrait</string>
+	<true/>
 	<key>UIPrerenderedIcon</key>
 	<true/>
 	<key>UIStatusBarHidden</key>
