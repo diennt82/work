@@ -32,19 +32,17 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    //Read version 
-    NSString *version = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
-
     
-    NSString * msg = NSLocalizedStringWithDefaultValue(@"version",nil, [NSBundle mainBundle],
-                                                       @"Version %@" , nil);
+   
     
-    version = [NSString stringWithFormat:msg,version];
-    versionText.text =version;
+   
 
     
     UIInterfaceOrientation interfaceOrientation = [UIApplication sharedApplication].statusBarOrientation;
     [self adjustViewsForOrientations:interfaceOrientation];
+    
+    
+ 
 
 
 }
@@ -153,6 +151,17 @@
             [[NSBundle mainBundle] loadNibNamed:@"MBP_FirstPage" owner:self options:nil];
         }
     }
+    
+    
+    
+    //Read version
+    NSString *version = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
+    
+    
+    NSString * msg = NSLocalizedStringWithDefaultValue(@"version",nil, [NSBundle mainBundle],
+                                                       @"Version %@" , nil);
+    version = [NSString stringWithFormat:msg,version];
+    versionText.text =version;
 }
 
 

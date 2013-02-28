@@ -53,6 +53,7 @@
 		382CD25816DDE12200BC8E0C /* Step_07_tableViewCell_ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 382CD25716DDE12200BC8E0C /* Step_07_tableViewCell_ipad.xib */; };
 		38355AE715CB76630045909C /* Account_ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 38355AE515CB76630045909C /* Account_ViewController.m */; };
 		38362C1D15FDEE400077E188 /* alert_history.sqlite in Resources */ = {isa = PBXBuildFile; fileRef = 38362C1C15FDEE400077E188 /* alert_history.sqlite */; };
+		38611CE716DF611200C0F42D /* ForgotPwdViewController_ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 38611CE616DF611100C0F42D /* ForgotPwdViewController_ipad.xib */; };
 		38699127167055B8009F3E66 /* MainWindow_ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 38699126167055B8009F3E66 /* MainWindow_ipad.xib */; };
 		386CC7FD16DB555C004119C0 /* bb_splash_screen_horizontal.png in Resources */ = {isa = PBXBuildFile; fileRef = 386CC7FC16DB555C004119C0 /* bb_splash_screen_horizontal.png */; };
 		387E718616884E1100E940F9 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 387E718116884E1100E940F9 /* Localizable.strings */; };
@@ -297,6 +298,7 @@
 		3851C3B716D5CD03007D3781 /* StartMonitorCallback.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = StartMonitorCallback.h; sourceTree = "<group>"; };
 		38590B6B16D766330046585B /* es */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = es; path = es.lproj/CameraViewController_ipad.xib; sourceTree = "<group>"; };
 		38590B6C16D766370046585B /* fr */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = fr; path = fr.lproj/CameraViewController_ipad.xib; sourceTree = "<group>"; };
+		38611CE616DF611100C0F42D /* ForgotPwdViewController_ipad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ForgotPwdViewController_ipad.xib; sourceTree = "<group>"; };
 		38699126167055B8009F3E66 /* MainWindow_ipad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MainWindow_ipad.xib; sourceTree = "<group>"; };
 		386CC7F216DB27FD004119C0 /* es */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = es; path = es.lproj/Step_05_ViewController_land.xib; sourceTree = "<group>"; };
 		386CC7F316DB2801004119C0 /* fr */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = fr; path = fr.lproj/Step_05_ViewController_land.xib; sourceTree = "<group>"; };
@@ -437,8 +439,6 @@
 		38DE1C58168AEA7C0049E814 /* fr */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = fr; path = fr.lproj/AlertSettingViewController.xib; sourceTree = "<group>"; };
 		38DE1C59168AEA7D0049E814 /* es */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = es; path = es.lproj/AlertSettingViewController.xib; sourceTree = "<group>"; };
 		38DE1C5B168AEA890049E814 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/ForgotPwdViewController.xib; sourceTree = "<group>"; };
-		38DE1C5D168AEA8E0049E814 /* fr */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = fr; path = fr.lproj/ForgotPwdViewController.xib; sourceTree = "<group>"; };
-		38DE1C5E168AEA8F0049E814 /* es */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = es; path = es.lproj/ForgotPwdViewController.xib; sourceTree = "<group>"; };
 		38DE1C74168AEAE70049E814 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/Step_10_ViewController_ipad.xib; sourceTree = "<group>"; };
 		38DE1C79168AEAF30049E814 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/Step_10_ViewController.xib; sourceTree = "<group>"; };
 		38DE1C7E168AEB000049E814 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/Step_09_ViewController_ipad.xib; sourceTree = "<group>"; };
@@ -761,6 +761,7 @@
 				38CE2A1015D4FA3600B8F7EC /* ForgotPwdViewController.h */,
 				38CE2A1115D4FA3700B8F7EC /* ForgotPwdViewController.m */,
 				38DE1C5C168AEA890049E814 /* ForgotPwdViewController.xib */,
+				38611CE616DF611100C0F42D /* ForgotPwdViewController_ipad.xib */,
 				972E290C15A3F77600E60A96 /* STUN_Communication.h */,
 				972E290D15A3F77600E60A96 /* STUN_Communication.mm */,
 				97137B9515AE742A00BEBBD6 /* StunCommunication.h */,
@@ -1226,6 +1227,7 @@
 				380CB0E216DC634D00290587 /* Step_11_ViewController_land_ipad.xib in Resources */,
 				380CB0E516DC8DE400290587 /* MBP_FirstPage_land_ipad.xib in Resources */,
 				382CD25816DDE12200BC8E0C /* Step_07_tableViewCell_ipad.xib in Resources */,
+				38611CE716DF611200C0F42D /* ForgotPwdViewController_ipad.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1662,8 +1664,6 @@
 			isa = PBXVariantGroup;
 			children = (
 				38DE1C5B168AEA890049E814 /* en */,
-				38DE1C5D168AEA8E0049E814 /* fr */,
-				38DE1C5E168AEA8F0049E814 /* es */,
 			);
 			name = ForgotPwdViewController.xib;
 			sourceTree = "<group>";

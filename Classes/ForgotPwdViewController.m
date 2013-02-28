@@ -52,6 +52,10 @@
     [nextButton release];
     
     
+    passwordLinkSent.hidden = YES;
+    [self.view addSubview:passwordLinkSent];
+    
+    
 }
 
 - (void)viewDidUnload
@@ -139,7 +143,10 @@
 
 -(void) resetSuccessWithResponse:(NSData*) responseData
 {
-    [self.view addSubview:passwordLinkSent];
+    
+    
+    passwordLinkSent.hidden  = NO;
+    [self.view bringSubviewToFront:passwordLinkSent];
     self.navigationItem.leftBarButtonItem.enabled = YES ;
     self.navigationItem.rightBarButtonItem.enabled = YES;
     [self.navigationItem setHidesBackButton:YES];
