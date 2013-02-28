@@ -87,9 +87,13 @@ return self;
     UIInterfaceOrientation interfaceOrientation = [UIApplication sharedApplication].statusBarOrientation;
     [self adjustViewsForOrientations:interfaceOrientation];
     
+    
+    backgroundView.hidden = YES;
+	[self.view addSubview:backgroundView];
+
 
 	//go Back to main menu
-	[NSTimer scheduledTimerWithTimeInterval:2
+	[NSTimer scheduledTimerWithTimeInterval:10
 		target:self
 		selector:@selector(wakeup_display_login:)
 		userInfo:nil
@@ -107,7 +111,7 @@ return self;
 	self.app_stage = APP_STAGE_INIT;
 
 	//hide splash screen page
-	[self.view addSubview:backgroundView];
+     backgroundView.hidden = NO;
     [self.view bringSubviewToFront:backgroundView];
 
 
@@ -369,10 +373,27 @@ return self;
     {
         if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
         {
-            [[NSBundle mainBundle] loadNibNamed:@"MBP_iosViewController_land_ipad" owner:self options:nil];
+            //[[NSBundle mainBundle] loadNibNamed:@"MBP_iosViewController_land_ipad" owner:self options:nil];
+            
+            UIImageView * splashScreen = (UIImageView*) [self.view viewWithTag:11];
+            
+            UIImage * landscapeImage = [UIImage imageNamed:@"bb_splash_screen_horizontal.png"];
+            
+            [splashScreen setImage:landscapeImage];
+            
+            
         }
         else
         {
+            
+            
+            UIImageView * splashScreen = (UIImageView*) [self.view viewWithTag:11];
+            
+            UIImage * landscapeImage = [UIImage imageNamed:@"bb_splash_screen_horizontal.png"];
+            
+            [splashScreen setImage:landscapeImage];
+
+#if 0
             BOOL statusHidden = statusDialogLabel.hidden;
             
             [[NSBundle mainBundle] loadNibNamed:@"MBP_iosViewController_land" owner:self options:nil];
@@ -380,32 +401,51 @@ return self;
     
             statusDialogLabel.hidden = statusHidden;
             
+            
+            CGAffineTransform transform = CGAffineTransformMakeRotation(-M_PI_2);
+            if (interfaceOrientation == UIInterfaceOrientationLandscapeRight)
+            {
+                transform = CGAffineTransformMakeRotation(M_PI_2);
+            }
+            
+            self.view.transform = transform;
+            
+            self.view.frame = CGRectMake(0,0,  self.view.frame.size.height,self.view.frame.size.width);
+#endif 
+            
         }
         
-        CGAffineTransform transform = CGAffineTransformMakeRotation(-M_PI_2);
-        if (interfaceOrientation == UIInterfaceOrientationLandscapeRight)
-        {
-            transform = CGAffineTransformMakeRotation(M_PI_2);
-        }
-        
-        self.view.transform = transform;
-        
-        self.view.frame = CGRectMake(0,0,  self.view.frame.size.height,self.view.frame.size.width);
-
+       
         
     }
     else if (interfaceOrientation == UIInterfaceOrientationPortrait ||
              interfaceOrientation == UIInterfaceOrientationPortraitUpsideDown)
     {
         if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
-            [[NSBundle mainBundle] loadNibNamed:@"MBP_iosViewController_ipad" owner:self options:nil];
+            //[[NSBundle mainBundle] loadNibNamed:@"MBP_iosViewController_ipad" owner:self options:nil];
+            
+            UIImageView * splashScreen = (UIImageView*) [self.view viewWithTag:11];
+            
+            UIImage * landscapeImage = [UIImage imageNamed:@"splash_screen_portrait.png"];
+            
+            [splashScreen setImage:landscapeImage];
+
         }
         else
         {
+            
+            UIImageView * splashScreen = (UIImageView*) [self.view viewWithTag:11];
+            
+            UIImage * landscapeImage = [UIImage imageNamed:@"splash_screen_portrait.png"];
+            
+            [splashScreen setImage:landscapeImage];
+            
+#if 0
             BOOL statusHidden = statusDialogLabel.hidden;
             [[NSBundle mainBundle] loadNibNamed:@"MBP_iosViewController" owner:self options:nil];
 
             statusDialogLabel.hidden = statusHidden;
+#endif 
         }
     }
     
@@ -418,10 +458,7 @@ return self;
 /**** Main program switching point is here *****/ 
 - (void)sendStatus:(int) method
 {
-    
-    //UIInterfaceOrientation orientation = [UIApplication sharedApplication].statusBarOrientation;
-    //[self adjustViewsForOrientations:orientation];
-    
+
 	switch (method) {
 		case SETUP_CAMERA: 
 			{
