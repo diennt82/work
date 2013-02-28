@@ -90,6 +90,8 @@
 {
 
     
+    [userEmailTF resignFirstResponder];
+    
     NSString * ok = NSLocalizedStringWithDefaultValue(@"Ok",nil, [NSBundle mainBundle],
                                                       @"Ok", nil);
 
