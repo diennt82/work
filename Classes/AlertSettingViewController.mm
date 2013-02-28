@@ -95,14 +95,16 @@
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
 {
     
-	return YES;
+	return   ((interfaceOrientation == UIInterfaceOrientationPortrait) ||
+              (interfaceOrientation == UIInterfaceOrientationLandscapeLeft) ||
+              (interfaceOrientation == UIInterfaceOrientationLandscapeRight));
 }
 
 //////////////// IOS6 replacement
 
 -(BOOL) shouldAutorotate
 {
-    NSLog(@"Should Auto Rotate");
+
   	return YES;
 }
 
@@ -180,7 +182,7 @@
 
 - (void) didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation
 {
-    NSLog(@"didRotateFromInterfaceOrientation 1");
+
     [alertTable reloadData];
 }
 

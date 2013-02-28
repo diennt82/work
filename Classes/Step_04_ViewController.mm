@@ -59,7 +59,9 @@
 #pragma mark Rotating
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
 {
-    return (interfaceOrientation == UIInterfaceOrientationMaskAllButUpsideDown);
+    return   ((interfaceOrientation == UIInterfaceOrientationPortrait) ||
+              (interfaceOrientation == UIInterfaceOrientationLandscapeLeft) ||
+              (interfaceOrientation == UIInterfaceOrientationLandscapeRight));
 }
 
 -(BOOL)shouldAutorotate

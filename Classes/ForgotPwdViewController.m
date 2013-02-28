@@ -63,8 +63,24 @@
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
 {
-    return (interfaceOrientation == UIInterfaceOrientationPortrait);
+    return   ((interfaceOrientation == UIInterfaceOrientationPortrait) ||
+              (interfaceOrientation == UIInterfaceOrientationLandscapeLeft) ||
+              (interfaceOrientation == UIInterfaceOrientationLandscapeRight));
 }
+
+-(BOOL) shouldAutorotate
+{
+    return YES;
+    
+}
+
+
+-(NSUInteger) supportedInterfaceOrientations
+{
+    return UIInterfaceOrientationMaskAllButUpsideDown;
+}
+
+
 
 -(void) handleNextButton:(id) sender
 {

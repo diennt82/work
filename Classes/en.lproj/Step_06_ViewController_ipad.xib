@@ -257,19 +257,16 @@
 								<int key="IBUITag">1</int>
 								<bool key="IBUIUserInteractionEnabled">NO</bool>
 								<string key="targetRuntimeIdentifier">IBIPadFramework</string>
-								<bool key="IBUIUsesAttributedText">YES</bool>
-								<object class="NSAttributedString" key="IBUIAttributedText">
-									<string key="NSString">None</string>
-									<dictionary key="NSAttributes">
-										<reference key="NSColor" ref="266934519"/>
-										<reference key="NSFont" ref="236376263"/>
-										<object class="NSMutableParagraphStyle" key="NSParagraphStyle">
-											<nil key="NSTabStops"/>
-										</object>
-									</dictionary>
-								</object>
+								<string key="IBUIText">None</string>
 								<reference key="IBUIHighlightedColor" ref="320111254"/>
 								<int key="IBUIBaselineAdjustment">0</int>
+								<object class="IBUIFontDescription" key="IBUIFontDescription">
+									<string key="name">Helvetica</string>
+									<string key="family">Helvetica</string>
+									<int key="traits">0</int>
+									<double key="pointSize">20</double>
+								</object>
+								<reference key="IBUIFont" ref="236376263"/>
 								<bool key="IBUIAdjustsFontSizeToFit">NO</bool>
 							</object>
 						</array>
@@ -597,46 +594,55 @@
 					<object class="IBObjectRecord">
 						<int key="objectID">9</int>
 						<reference key="object" ref="175170243"/>
+						<array class="NSMutableArray" key="children"/>
 						<reference key="parent" ref="125754495"/>
 					</object>
 					<object class="IBObjectRecord">
 						<int key="objectID">10</int>
 						<reference key="object" ref="227701294"/>
+						<array class="NSMutableArray" key="children"/>
 						<reference key="parent" ref="37406163"/>
 					</object>
 					<object class="IBObjectRecord">
 						<int key="objectID">11</int>
 						<reference key="object" ref="784859676"/>
+						<array class="NSMutableArray" key="children"/>
 						<reference key="parent" ref="37406163"/>
 					</object>
 					<object class="IBObjectRecord">
 						<int key="objectID">12</int>
 						<reference key="object" ref="890817020"/>
+						<array class="NSMutableArray" key="children"/>
 						<reference key="parent" ref="89406779"/>
 					</object>
 					<object class="IBObjectRecord">
 						<int key="objectID">13</int>
 						<reference key="object" ref="427032171"/>
+						<array class="NSMutableArray" key="children"/>
 						<reference key="parent" ref="89406779"/>
 					</object>
 					<object class="IBObjectRecord">
 						<int key="objectID">14</int>
 						<reference key="object" ref="246837037"/>
+						<array class="NSMutableArray" key="children"/>
 						<reference key="parent" ref="798698667"/>
 					</object>
 					<object class="IBObjectRecord">
 						<int key="objectID">15</int>
 						<reference key="object" ref="162897311"/>
+						<array class="NSMutableArray" key="children"/>
 						<reference key="parent" ref="798698667"/>
 					</object>
 					<object class="IBObjectRecord">
 						<int key="objectID">16</int>
 						<reference key="object" ref="736687737"/>
+						<array class="NSMutableArray" key="children"/>
 						<reference key="parent" ref="544928408"/>
 					</object>
 					<object class="IBObjectRecord">
 						<int key="objectID">17</int>
 						<reference key="object" ref="1063594932"/>
+						<array class="NSMutableArray" key="children"/>
 						<reference key="parent" ref="544928408"/>
 					</object>
 				</array>
@@ -666,7 +672,7 @@
 			<nil key="activeLocalization"/>
 			<dictionary class="NSMutableDictionary" key="localizations"/>
 			<nil key="sourceID"/>
-			<int key="maxID">28</int>
+			<int key="maxID">68</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<array class="NSMutableArray" key="referencedPartialClassDescriptions">

@@ -138,7 +138,9 @@
 //Support portrait only mode for now
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
 {
-    return (interfaceOrientation == UIInterfaceOrientationMaskAllButUpsideDown);
+    return   ((interfaceOrientation == UIInterfaceOrientationPortrait) ||
+              (interfaceOrientation == UIInterfaceOrientationLandscapeLeft) ||
+              (interfaceOrientation == UIInterfaceOrientationLandscapeRight));
 }
 
 -(void) willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
