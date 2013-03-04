@@ -38,7 +38,6 @@
                                      target:nil
                                      action:nil] autorelease];
     
-
     camName.text = self.cameraName;
     
 }
@@ -115,6 +114,14 @@
     camName.text = tempName;
 }
 #pragma mark -
+- (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text
+{
+    if ([text isEqualToString:@"\n"])
+    {
+        [textView resignFirstResponder];
+    }
+    return YES;
+}
 
 -(void) dealloc
 {
@@ -128,7 +135,28 @@
 {
     int tag = ((UIButton*)sender).tag; 
     
-    if (tag == CONF_CAM_BTN_TAG)
+    if ([camName.text length] < 3 || [camName.text length] > 30 )
+    {
+        NSString * title = NSLocalizedStringWithDefaultValue(@"Invalid_Camera_Name", nil, [NSBundle mainBundle],
+                                                             @"Invalid Camera Name", nil);
+        
+        NSString * msg = NSLocalizedStringWithDefaultValue(@"Invalid_Camera_Name_msg", nil, [NSBundle mainBundle],
+                                                           @"Camera Name has to be between 3-30 characters", nil);
+        
+        NSString * ok = NSLocalizedStringWithDefaultValue(@"Ok",nil, [NSBundle mainBundle],
+                                                          @"Ok", nil);
+            
+        
+        UIAlertView * alert = [[UIAlertView alloc] initWithTitle:title
+                                                    message:msg
+                                                    delegate:self
+                                                    cancelButtonTitle:ok
+                                                    otherButtonTitles:nil];
+        
+        [alert show];
+        [alert release];
+    }
+    else if (tag == CONF_CAM_BTN_TAG)
     {
         
 

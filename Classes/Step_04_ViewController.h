@@ -13,9 +13,9 @@
 #import "Step_05_ViewController.h"
 #define CONF_CAM_BTN_TAG 1002
 
-@interface Step_04_ViewController : UIViewController
+@interface Step_04_ViewController : UIViewController<UITextViewDelegate>
 {
-    IBOutlet UITextField * camName; 
+    IBOutlet UITextView * camName;
     
     NSString * homeWifiSSID; 
     NSString * cameraMac; 
