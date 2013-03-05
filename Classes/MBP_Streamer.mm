@@ -1016,65 +1016,65 @@
                         
 						NSRange range4 = {avdata_offset + audioLength,
 							[actualData length] - avdata_offset - audioLength};
-						NSData* imageData =  [actualData subdataWithRange:range4];
-                        
-                                     
-						UIImage *image = [UIImage imageWithData:imageData];
-#if 1
-                        image = [self adaptToCurrentOrientation:image];
-                    
-						if (self.currentZoomLevel < 5.0f)
-						{
-                            //currentZoomLevel = 1,2,3,4.. smaller means more magnified
+						if (range4.length > 2)
+                        {
+                            NSData* imageData =  [actualData subdataWithRange:range4];
                             
-                            CGFloat newDeltaWidth =   image.size.width*( self.currentZoomLevel*0.1);
-                            CGFloat newDeltaHeight =  image.size.height*( self.currentZoomLevel*0.1);
-                            CGRect newRect = CGRectZero;
-                            newRect.origin.x = - newDeltaWidth/2;
-                            newRect.origin.y = - newDeltaHeight/2;
                             
-                            newRect.size.width =  image.size.width +newDeltaWidth;
-                            newRect.size.height = image.size.height +newDeltaHeight;
+                            UIImage *image = [UIImage imageWithData:imageData];
                             
-                            //NSLog(@"newsize :%f, %f %f %f", newRect.size.width, newRect.size.height,
-                            //	 newDeltaWidth, newDeltaHeight);
-                            image = [self imageWithImage:image scaledToRect:newRect];
                             
-						}
-                        
-                        //NSLog(@"post image to image view <0");
-                        
-						
-                        
-                        [self performSelectorOnMainThread:@selector(updateImage:) withObject:image waitUntilDone:YES];
-                        
-                        
-                        
-						//[streamer.videoImage setImage:[UIImage imageWithData:imageData]];
-                        
-                        
-						if (self.takeSnapshot == YES)
-						{
-							[self saveSnapShot:image];
-							self.takeSnapshot = NO;
-						}
-                        
-                        
-                        
-						if (self.recordInProgress == YES)
-						{
+                            image = [self adaptToCurrentOrientation:image];
                             
-							[iRecorder GetImage:imageData imgIndex:imageIndex];
-							if([iRecorder GetCurrentRecordSize] >= iMaxRecordSize) {
-								[self stopRecording];
-								//[self startRecording];
-							}
+                            if (self.currentZoomLevel < 5.0f)
+                            {
+                                //currentZoomLevel = 1,2,3,4.. smaller means more magnified
+                                
+                                CGFloat newDeltaWidth =   image.size.width*( self.currentZoomLevel*0.1);
+                                CGFloat newDeltaHeight =  image.size.height*( self.currentZoomLevel*0.1);
+                                CGRect newRect = CGRectZero;
+                                newRect.origin.x = - newDeltaWidth/2;
+                                newRect.origin.y = - newDeltaHeight/2;
+                                
+                                newRect.size.width =  image.size.width +newDeltaWidth;
+                                newRect.size.height = image.size.height +newDeltaHeight;
+                                
+                                //NSLog(@"newsize :%f, %f %f %f", newRect.size.width, newRect.size.height,
+                                //	 newDeltaWidth, newDeltaHeight);
+                                image = [self imageWithImage:image scaledToRect:newRect];
+                                
+                            }
                             
-						}
-#else
-                        NSLog(@"Do post image"); 
-                        
-#endif
+                            //NSLog(@"post image to image view <0");
+                            
+                            
+                            
+                            [self performSelectorOnMainThread:@selector(updateImage:) withObject:image waitUntilDone:YES];
+                            
+                            
+                            
+                            //[streamer.videoImage setImage:[UIImage imageWithData:imageData]];
+                            
+                            
+                            if (self.takeSnapshot == YES)
+                            {
+                                [self saveSnapShot:image];
+                                self.takeSnapshot = NO;
+                            }
+                            
+                            
+                            
+                            if (self.recordInProgress == YES)
+                            {
+                                
+                                [iRecorder GetImage:imageData imgIndex:imageIndex];
+                                if([iRecorder GetCurrentRecordSize] >= iMaxRecordSize) {
+                                    [self stopRecording];
+                                    //[self startRecording];
+                                }
+                                
+                            }
+                        }
                     
 
                         //[image release];
@@ -1425,57 +1425,62 @@
                     
 					NSRange range4 = {avdata_offset + audioLength,
 						[actualData length] - avdata_offset - audioLength};
-					NSData* imageData = [actualData subdataWithRange:range4];
-					UIImage *image = [UIImage imageWithData:imageData];
                     
+                    if (range4.length > 2 )
+                    {
+                        //NSLog(@"image frame length:%d",range4.length );
                     
-					image = [self adaptToCurrentOrientation:image];
-                    
-					if (self.currentZoomLevel < 5.0f)
-					{
-						//currentZoomLevel = 1,2,3,4.. smaller means more magnified
+                        NSData* imageData = [actualData subdataWithRange:range4];
+                        UIImage *image = [UIImage imageWithData:imageData];
                         
-						CGFloat newDeltaWidth =   image.size.width*( self.currentZoomLevel*0.1);
-						CGFloat newDeltaHeight =  image.size.height*( self.currentZoomLevel*0.1);
-						CGRect newRect = CGRectZero;
-						newRect.origin.x = - newDeltaWidth/2;
-						newRect.origin.y = - newDeltaHeight/2;
                         
-						newRect.size.width =  image.size.width +newDeltaWidth;
-						newRect.size.height = image.size.height +newDeltaHeight;
+                        image = [self adaptToCurrentOrientation:image];
                         
-						//NSLog(@"newsize :%f, %f %f %f", newRect.size.width, newRect.size.height,
-						//	 newDeltaWidth, newDeltaHeight);
-						image = [self imageWithImage:image scaledToRect:newRect];
+                        if (self.currentZoomLevel < 5.0f)
+                        {
+                            //currentZoomLevel = 1,2,3,4.. smaller means more magnified
+                            
+                            CGFloat newDeltaWidth =   image.size.width*( self.currentZoomLevel*0.1);
+                            CGFloat newDeltaHeight =  image.size.height*( self.currentZoomLevel*0.1);
+                            CGRect newRect = CGRectZero;
+                            newRect.origin.x = - newDeltaWidth/2;
+                            newRect.origin.y = - newDeltaHeight/2;
+                            
+                            newRect.size.width =  image.size.width +newDeltaWidth;
+                            newRect.size.height = image.size.height +newDeltaHeight;
+                            
+                            //NSLog(@"newsize :%f, %f %f %f", newRect.size.width, newRect.size.height,
+                            //	 newDeltaWidth, newDeltaHeight);
+                            image = [self imageWithImage:image scaledToRect:newRect];
+                            
+                        }
                         
-					}
-                    
-                    //NSLog(@"setVideo Image" );
-					[self.videoImage setImage:image];
-                    
-					//[self.videoImage setImage:[UIImage imageWithData:imageData]];
-                    
-                    
-					if (self.takeSnapshot == YES)
-					{
-						[self saveSnapShot:image];
-						self.takeSnapshot = NO;
-					}
-                    
-                    
-                    
-					if (self.recordInProgress == YES)
-					{
+                        //NSLog(@"setVideo Image" );
+                        [self.videoImage setImage:image];
                         
-						[iRecorder GetImage:imageData imgIndex:imageIndex];
-						if([iRecorder GetCurrentRecordSize] >= iMaxRecordSize) {
-							[self stopRecording];
-							//[self startRecording];
-						}
+                        //[self.videoImage setImage:[UIImage imageWithData:imageData]];
                         
-					}
-                    
-                    
+                        
+                        if (self.takeSnapshot == YES)
+                        {
+                            [self saveSnapShot:image];
+                            self.takeSnapshot = NO;
+                        }
+                        
+                        
+                        
+                        if (self.recordInProgress == YES)
+                        {
+                            
+                            [iRecorder GetImage:imageData imgIndex:imageIndex];
+                            if([iRecorder GetCurrentRecordSize] >= iMaxRecordSize) {
+                                [self stopRecording];
+                                //[self startRecording];
+                            }
+                            
+                        }
+                        
+                    }
 					//[actualData release];
 				}
 				else {
