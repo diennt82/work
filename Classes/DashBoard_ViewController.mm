@@ -422,8 +422,7 @@
 {
     if (orientation == UIInterfaceOrientationLandscapeLeft || orientation == UIInterfaceOrientationLandscapeRight)
 	{
-
-                
+        
         if (emptyCameraListView != nil)
         {
             emptyCameraListView.frame = CGRectMake(80,
@@ -431,6 +430,8 @@
                                                    emptyCameraListView.frame.size.width,
                                                    emptyCameraListView.frame.size.height);
         }
+        
+        [cameraList reloadData];
 	}
 	else if (orientation == UIInterfaceOrientationPortrait || orientation == UIInterfaceOrientationPortraitUpsideDown)
 	{
@@ -443,6 +444,8 @@
                                                    emptyCameraListView.frame.size.width,
                                                    emptyCameraListView.frame.size.height);
         }
+        
+        [cameraList reloadData];
     }
 
 
@@ -554,6 +557,7 @@
         CamChannel * ch = (CamChannel*)[listOfChannel objectAtIndex:indexPath.row] ;
         CamProfile * cp = ch.profile;
         
+        [camName setNumberOfLines:2];
         if (ch != nil)
         {
             
@@ -616,6 +620,23 @@
         // Set up the cell...
         CamChannel * ch = (CamChannel*)[listOfChannel objectAtIndex:indexPath.row] ;
         CamProfile * cp = ch.profile;
+        
+        // Set frame for camName
+        UIInterfaceOrientation orientation = [UIApplication sharedApplication].statusBarOrientation;
+        if (orientation == UIInterfaceOrientationPortrait && UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone)
+        {
+            CGRect frame = CGRectMake(camName.frame.origin.x, camName.frame.origin.y, 195, 48);
+            [camName setFrame:frame];
+            
+            [camName setNumberOfLines:2];
+        }
+        else
+        {
+            CGRect frame = CGRectMake(camName.frame.origin.x, camName.frame.origin.y, 350, 48);
+            [camName setFrame:frame];
+        }
+        
+        
         
         //NSLog(@"cell: %d %d", indexPath.row , cp.minuteSinceLastComm);
         if (cp.hasUpdateLocalStatus == TRUE)

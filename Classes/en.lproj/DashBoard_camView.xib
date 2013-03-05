@@ -2,9 +2,9 @@
 <archive type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="8.00">
 	<data>
 		<int key="IBDocument.SystemTarget">1552</int>
-		<string key="IBDocument.SystemVersion">11G63</string>
+		<string key="IBDocument.SystemVersion">11E53</string>
 		<string key="IBDocument.InterfaceBuilderVersion">3084</string>
-		<string key="IBDocument.AppKitVersion">1138.51</string>
+		<string key="IBDocument.AppKitVersion">1138.47</string>
 		<string key="IBDocument.HIToolboxVersion">569.00</string>
 		<object class="NSMutableDictionary" key="IBDocument.PluginVersions">
 			<string key="NS.key.0">com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
@@ -46,7 +46,6 @@
 								<int key="NSvFlags">292</int>
 								<string key="NSFrame">{{5, 17}, {100, 100}}</string>
 								<reference key="NSSuperview" ref="1009069205"/>
-								<reference key="NSWindow"/>
 								<reference key="NSNextKeyView" ref="264926524"/>
 								<string key="NSReuseIdentifierKey">_NS:9</string>
 								<int key="IBUIContentMode">1</int>
@@ -61,9 +60,8 @@
 							<object class="IBUILabel" id="264926524">
 								<reference key="NSNextResponder" ref="1009069205"/>
 								<int key="NSvFlags">292</int>
-								<string key="NSFrame">{{116, 7}, {195, 32}}</string>
+								<string key="NSFrame">{{116, 7}, {200, 42}}</string>
 								<reference key="NSSuperview" ref="1009069205"/>
-								<reference key="NSWindow"/>
 								<reference key="NSNextKeyView" ref="798613219"/>
 								<string key="NSReuseIdentifierKey">_NS:9</string>
 								<bool key="IBUIOpaque">NO</bool>
@@ -92,14 +90,13 @@
 									<int key="NSfFlags">16</int>
 								</object>
 								<bool key="IBUIAdjustsFontSizeToFit">NO</bool>
-								<double key="preferredMaxLayoutWidth">195</double>
+								<double key="preferredMaxLayoutWidth">200</double>
 							</object>
 							<object class="IBUILabel" id="798613219">
 								<reference key="NSNextResponder" ref="1009069205"/>
 								<int key="NSvFlags">292</int>
-								<string key="NSFrame">{{117, 30}, {146, 21}}</string>
+								<string key="NSFrame">{{117, 42}, {146, 21}}</string>
 								<reference key="NSSuperview" ref="1009069205"/>
-								<reference key="NSWindow"/>
 								<reference key="NSNextKeyView" ref="326275334"/>
 								<string key="NSReuseIdentifierKey">_NS:9</string>
 								<bool key="IBUIOpaque">NO</bool>
@@ -128,7 +125,6 @@
 								<int key="NSvFlags">292</int>
 								<string key="NSFrame">{{157, 71}, {148, 29}}</string>
 								<reference key="NSSuperview" ref="1009069205"/>
-								<reference key="NSWindow"/>
 								<reference key="NSNextKeyView" ref="12536691"/>
 								<string key="NSReuseIdentifierKey">_NS:9</string>
 								<bool key="IBUIOpaque">NO</bool>
@@ -167,7 +163,6 @@
 								<int key="NSvFlags">292</int>
 								<string key="NSFrame">{{117, 70}, {30, 30}}</string>
 								<reference key="NSSuperview" ref="1009069205"/>
-								<reference key="NSWindow"/>
 								<reference key="NSNextKeyView" ref="938767883"/>
 								<string key="NSReuseIdentifierKey">_NS:9</string>
 								<int key="IBUITag">503</int>
@@ -179,7 +174,6 @@
 								<int key="NSvFlags">-2147483356</int>
 								<string key="NSFrame">{{237, 98}, {30, 30}}</string>
 								<reference key="NSSuperview" ref="1009069205"/>
-								<reference key="NSWindow"/>
 								<reference key="NSNextKeyView" ref="617459638"/>
 								<string key="NSReuseIdentifierKey">_NS:9</string>
 								<int key="IBUITag">508</int>
@@ -195,8 +189,6 @@
 								<int key="NSvFlags">-2147483356</int>
 								<string key="NSFrame">{{275, 98}, {30, 30}}</string>
 								<reference key="NSSuperview" ref="1009069205"/>
-								<reference key="NSWindow"/>
-								<reference key="NSNextKeyView"/>
 								<string key="NSReuseIdentifierKey">_NS:9</string>
 								<int key="IBUITag">509</int>
 								<bool key="IBUIUserInteractionEnabled">NO</bool>
@@ -211,7 +203,6 @@
 								<int key="NSvFlags">301</int>
 								<string key="NSFrame">{{188, 51}, {37, 37}}</string>
 								<reference key="NSSuperview" ref="1009069205"/>
-								<reference key="NSWindow"/>
 								<reference key="NSNextKeyView" ref="310938159"/>
 								<string key="NSReuseIdentifierKey">_NS:9</string>
 								<bool key="IBUIOpaque">NO</bool>
@@ -223,7 +214,6 @@
 						</array>
 						<string key="NSFrameSize">{300, 134}</string>
 						<reference key="NSSuperview" ref="323209722"/>
-						<reference key="NSWindow"/>
 						<reference key="NSNextKeyView" ref="104928382"/>
 						<string key="NSReuseIdentifierKey">_NS:11</string>
 						<object class="NSColor" key="IBUIBackgroundColor" id="44996570">
@@ -239,7 +229,6 @@
 				</array>
 				<string key="NSFrameSize">{320, 135}</string>
 				<reference key="NSSuperview"/>
-				<reference key="NSWindow"/>
 				<reference key="NSNextKeyView" ref="1009069205"/>
 				<string key="NSReuseIdentifierKey">_NS:9</string>
 				<reference key="IBUIBackgroundColor" ref="44996570"/>
@@ -359,123 +348,7 @@
 			<nil key="sourceID"/>
 			<int key="maxID">21</int>
 		</object>
-		<object class="IBClassDescriber" key="IBDocument.Classes">
-			<array class="NSMutableArray" key="referencedPartialClassDescriptions">
-				<object class="IBPartialClassDescription">
-					<string key="className">DashBoard_ViewController</string>
-					<string key="superclassName">UIViewController</string>
-					<dictionary class="NSMutableDictionary" key="actions">
-						<string key="addCamera:">id</string>
-						<string key="alertSetting:">id</string>
-						<string key="checkNow:">id</string>
-						<string key="editCameras:">id</string>
-						<string key="refreshCameras:">id</string>
-						<string key="removeCamera:">id</string>
-						<string key="renameCamera:">id</string>
-						<string key="scanCameras:">id</string>
-					</dictionary>
-					<dictionary class="NSMutableDictionary" key="actionInfosByName">
-						<object class="IBActionInfo" key="addCamera:">
-							<string key="name">addCamera:</string>
-							<string key="candidateClassName">id</string>
-						</object>
-						<object class="IBActionInfo" key="alertSetting:">
-							<string key="name">alertSetting:</string>
-							<string key="candidateClassName">id</string>
-						</object>
-						<object class="IBActionInfo" key="checkNow:">
-							<string key="name">checkNow:</string>
-							<string key="candidateClassName">id</string>
-						</object>
-						<object class="IBActionInfo" key="editCameras:">
-							<string key="name">editCameras:</string>
-							<string key="candidateClassName">id</string>
-						</object>
-						<object class="IBActionInfo" key="refreshCameras:">
-							<string key="name">refreshCameras:</string>
-							<string key="candidateClassName">id</string>
-						</object>
-						<object class="IBActionInfo" key="removeCamera:">
-							<string key="name">removeCamera:</string>
-							<string key="candidateClassName">id</string>
-						</object>
-						<object class="IBActionInfo" key="renameCamera:">
-							<string key="name">renameCamera:</string>
-							<string key="candidateClassName">id</string>
-						</object>
-						<object class="IBActionInfo" key="scanCameras:">
-							<string key="name">scanCameras:</string>
-							<string key="candidateClassName">id</string>
-						</object>
-					</dictionary>
-					<dictionary class="NSMutableDictionary" key="outlets">
-						<string key="cameraList">UITableView</string>
-						<string key="cellView">EditCameraCell</string>
-						<string key="emptyCameraListView">UIView</string>
-						<string key="offlineView">UIView</string>
-						<string key="progressView">UIView</string>
-						<string key="tabBarController">UITabBarController</string>
-					</dictionary>
-					<dictionary class="NSMutableDictionary" key="toOneOutletInfosByName">
-						<object class="IBToOneOutletInfo" key="cameraList">
-							<string key="name">cameraList</string>
-							<string key="candidateClassName">UITableView</string>
-						</object>
-						<object class="IBToOneOutletInfo" key="cellView">
-							<string key="name">cellView</string>
-							<string key="candidateClassName">EditCameraCell</string>
-						</object>
-						<object class="IBToOneOutletInfo" key="emptyCameraListView">
-							<string key="name">emptyCameraListView</string>
-							<string key="candidateClassName">UIView</string>
-						</object>
-						<object class="IBToOneOutletInfo" key="offlineView">
-							<string key="name">offlineView</string>
-							<string key="candidateClassName">UIView</string>
-						</object>
-						<object class="IBToOneOutletInfo" key="progressView">
-							<string key="name">progressView</string>
-							<string key="candidateClassName">UIView</string>
-						</object>
-						<object class="IBToOneOutletInfo" key="tabBarController">
-							<string key="name">tabBarController</string>
-							<string key="candidateClassName">UITabBarController</string>
-						</object>
-					</dictionary>
-					<object class="IBClassDescriptionSource" key="sourceIdentifier">
-						<string key="majorKey">IBProjectSource</string>
-						<string key="minorKey">./Classes/DashBoard_ViewController.h</string>
-					</object>
-				</object>
-				<object class="IBPartialClassDescription">
-					<string key="className">EditCameraCell</string>
-					<string key="superclassName">UITableViewCell</string>
-					<dictionary class="NSMutableDictionary" key="actions">
-						<string key="alertSettings:">id</string>
-						<string key="removeCamera:">id</string>
-						<string key="renameCamera:">id</string>
-					</dictionary>
-					<dictionary class="NSMutableDictionary" key="actionInfosByName">
-						<object class="IBActionInfo" key="alertSettings:">
-							<string key="name">alertSettings:</string>
-							<string key="candidateClassName">id</string>
-						</object>
-						<object class="IBActionInfo" key="removeCamera:">
-							<string key="name">removeCamera:</string>
-							<string key="candidateClassName">id</string>
-						</object>
-						<object class="IBActionInfo" key="renameCamera:">
-							<string key="name">renameCamera:</string>
-							<string key="candidateClassName">id</string>
-						</object>
-					</dictionary>
-					<object class="IBClassDescriptionSource" key="sourceIdentifier">
-						<string key="majorKey">IBProjectSource</string>
-						<string key="minorKey">./Classes/EditCameraCell.h</string>
-					</object>
-				</object>
-			</array>
-		</object>
+		<object class="IBClassDescriber" key="IBDocument.Classes"/>
 		<int key="IBDocument.localizationMode">0</int>
 		<string key="IBDocument.TargetRuntimeIdentifier">IBCocoaTouchFramework</string>
 		<bool key="IBDocument.PluginDeclaredDependenciesTrackSystemTargetVersion">YES</bool>
