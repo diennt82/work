@@ -131,17 +131,69 @@
     [super dealloc];
 }
 
+-(BOOL) checkValidateString: (NSString *) string with: (NSRegularExpression *) regex
+{
+    NSTextCheckingResult * matchs = [regex firstMatchInString:string
+                                                     options:0
+                                                       range:NSMakeRange(0,[string length])];
+    
+    
+    NSRange rangeOfFirstMatch = [regex rangeOfFirstMatchInString:string options:0 range:NSMakeRange(0,[matchs length])];
+    if (NSEqualRanges(rangeOfFirstMatch,NSMakeRange(NSNotFound,0)))
+    {
+        NSString *substringForFirstMatch = [string substringWithRange:rangeOfFirstMatch];
+        NSLog(@"WTF ??? ------------------> %@",substringForFirstMatch);
+        
+        return NO;
+    }
+    
+    return YES;
+}
+
+-(BOOL) isCameraNameValidated:(NSString *) cameraNames
+{
+    BOOL isValid = YES;
+    
+    NSMutableArray *array = [NSMutableArray array];
+    for (int i = 0; i < [cameraNames length]; i++) {
+        [array addObject:[NSString stringWithFormat:@"%C", [cameraNames characterAtIndex:i]]];
+    }
+    NSArray * validChars = [NSArray arrayWithObjects:@"a",@"b",@"c",@"d",@"e",@"f",@"g",@"h",@"i",@"l",@"m",@"n",@"p",@"q",@"s",@"x",@"k",@"w",@"r",@"t",@"y",@"u",@"o",@"j",@"z",@"v",
+                            @"A",@"B",@"C",@"D",@"E",@"F",@"G",@"H",@"I",@"L",@"M",@"N",@"P",@"Q",@"S",@"X",@"K",@"W",@"R",@"T",@"Y",@"U",@"O",@"J",@"Z",@"V",
+                            
+                            @"1",@"2",@"3",@"4",@"5",@"6",@"7",@"8",@"9",@"0",
+                            @".",@"'",@"_",@"-",nil];
+    for (int i = 0; i < [array count]; i ++)
+    {
+        for (int j = 0; j < [validChars count]; j ++)
+        {
+            if (![[array objectAtIndex:i] isEqualToString:[validChars objectAtIndex:j]])
+            {
+                isValid = NO;
+            }
+            
+        }
+        if (isValid == NO)
+        {
+            return NO;
+        }
+    }
+    
+    return YES;
+
+}
+
 - (IBAction)handleButtonPress:(id)sender
 {
     int tag = ((UIButton*)sender).tag; 
     
-    if ([camName.text length] < 3 || [camName.text length] > 30 )
+    if ([camName.text length] < 3 || [camName.text length] > 15 )
     {
         NSString * title = NSLocalizedStringWithDefaultValue(@"Invalid_Camera_Name", nil, [NSBundle mainBundle],
                                                              @"Invalid Camera Name", nil);
         
         NSString * msg = NSLocalizedStringWithDefaultValue(@"Invalid_Camera_Name_msg", nil, [NSBundle mainBundle],
-                                                           @"Camera Name has to be between 3-30 characters", nil);
+                                                           @"Camera Name has to be between 3-15 characters", nil);
         
         NSString * ok = NSLocalizedStringWithDefaultValue(@"Ok",nil, [NSBundle mainBundle],
                                                           @"Ok", nil);
@@ -156,10 +208,36 @@
         [alert show];
         [alert release];
     }
+    else if (![self isCameraNameValidated:camName.text])
+    {       NSString * title = NSLocalizedStringWithDefaultValue(@"Invalid_Camera_Name", nil, [NSBundle mainBundle],
+                                                                 @"Invalid Camera Name", nil);
+            
+            NSString * msg = NSLocalizedStringWithDefaultValue(@"Invalid_Camera_Name_msg2", nil, [NSBundle mainBundle],
+                                                               @"Camera Name has some invalid characters", nil);
+            
+            NSString * ok = NSLocalizedStringWithDefaultValue(@"Ok",nil, [NSBundle mainBundle],
+                                                              @"Ok", nil);
+            
+            
+            UIAlertView * alert = [[UIAlertView alloc] initWithTitle:title
+                                                             message:msg
+                                                            delegate:self
+                                                   cancelButtonTitle:ok
+                                                   otherButtonTitles:nil];
+            
+            [alert show];
+            [alert release];
+    }
     else if (tag == CONF_CAM_BTN_TAG)
     {
+//        NSString * string = [NSString stringWithString:camName.text];
+//        NSError * error = nil;
         
-
+//        NSRegularExpression * regex = [NSRegularExpression regularExpressionWithPattern:@"^[a-zA-Z0-9' \\._-]+$" options:0 error:&error];
+        
+//        [self checkValidateString:string with:regex];
+        
+        
         
         NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
         [userDefaults setObject:camName.text forKey:@"CameraName"];
