@@ -955,10 +955,55 @@
 			[alert release];
 			break;
 		}
+        case ALERT_CAMERA_NAME_LENGHT_ERROR:
+        {
+            NSString * title = NSLocalizedStringWithDefaultValue(@"Invalid_Camera_Name", nil, [NSBundle mainBundle],
+                                                                 @"Invalid Camera Name", nil);
+            
+            NSString * msg = NSLocalizedStringWithDefaultValue(@"Invalid_Camera_Name_msg", nil, [NSBundle mainBundle],
+                                                               @"Camera Name has to be between 3-15 characters", nil);
+            
+            NSString * ok = NSLocalizedStringWithDefaultValue(@"Ok",nil, [NSBundle mainBundle],
+                                                              @"Ok", nil);
+            
+            
+            UIAlertView * alert = [[UIAlertView alloc] initWithTitle:title
+                                                             message:msg
+                                                            delegate:self
+                                                   cancelButtonTitle:ok
+                                                   otherButtonTitles:nil];
+            
+            [alert show];
+            [alert release];
+            
+            break;
+        }
+        case ALERT_INVALID_CAMERA_NAME:
+        {NSString * title = NSLocalizedStringWithDefaultValue(@"Invalid_Camera_Name", nil, [NSBundle mainBundle],
+                                                              @"Invalid Camera Name", nil);
+            
+            NSString * msg = NSLocalizedStringWithDefaultValue(@"Invalid_Camera_Name_msg2", nil, [NSBundle mainBundle],
+                                                               @"Camera Name has some invalid characters", nil);
+            
+            NSString * ok = NSLocalizedStringWithDefaultValue(@"Ok",nil, [NSBundle mainBundle],
+                                                              @"Ok", nil);
+            
+            
+            UIAlertView * alert = [[UIAlertView alloc] initWithTitle:title
+                                                             message:msg
+                                                            delegate:self
+                                                   cancelButtonTitle:ok
+                                                   otherButtonTitles:nil];
+            
+            [alert show];
+            [alert release];
+            
+            break;
+        }
 		case ALERT_REMOVE_CAM:
 		{
 			// isLoggedIn - true  deviceInLocale - false -- remove online
-			// isLoggedIn - fase - need to login 
+			// isLoggedIn - fase - need to login
 			// isLoggedIn - true   deviceInLocal - true -- remove camera(on/offline)
 			
 			if (isLoggedIn == FALSE)
@@ -1350,6 +1395,26 @@
 	}
 }
 
+-(BOOL) isCameraNameValidated:(NSString *) cameraNames
+{
+    
+    NSString * validString = @"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890. '_-";
+    
+    
+    
+    for (int i = 0; i < cameraNames.length; i ++)
+    {
+        NSRange range = [validString rangeOfString:[NSString stringWithFormat:@"%c",[cameraNames characterAtIndex:i]]];
+        if (range.location == NSNotFound) {
+            return NO;
+        }
+    }
+    
+    
+    return YES;
+    
+}
+
 #pragma mark -
 #pragma mark Alertview delegate
 
@@ -1370,6 +1435,14 @@
 					
 					[self showDialog:ALERT_NAME_CANT_BE_EMPTY];
 				}
+                else if (newName.length < 3 || newName.length > 15)
+                {
+                    [self showDialog:ALERT_CAMERA_NAME_LENGHT_ERROR];
+                }
+                else if (![self isCameraNameValidated:newName])
+                {
+                    [self showDialog:ALERT_INVALID_CAMERA_NAME];
+                }
 				else {
 					[self onCameraNameChanged:newName];
 				}
