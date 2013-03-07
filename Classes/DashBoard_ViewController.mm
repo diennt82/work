@@ -1110,6 +1110,27 @@
 #endif
 }
 
+
+-(BOOL) isCameraNameValidated:(NSString *) cameraNames
+{
+    
+    NSString * validString = @"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890.'_-";
+    
+    
+    
+    for (int i = 0; i < cameraNames.length; i ++)
+    {
+        NSRange range = [validString rangeOfString:[NSString stringWithFormat:@"%c",[cameraNames characterAtIndex:i]]];
+        if (range.location == NSNotFound) {
+            return NO;
+        }
+    }
+    
+    
+    return YES;
+    
+}
+
 #pragma mark -
 #pragma mark Alertview delegate
 
@@ -1132,6 +1153,49 @@
 					
 					[self showDialog:ALERT_NAME_CANT_BE_EMPTY];
 				}
+                else if (newName.length < 3 || newName.length > 16)
+                {
+                    NSString * title = NSLocalizedStringWithDefaultValue(@"Invalid_Camera_Name", nil, [NSBundle mainBundle],
+                                                                         @"Invalid Camera Name", nil);
+                    
+                    NSString * msg = NSLocalizedStringWithDefaultValue(@"Invalid_Camera_Name_msg", nil, [NSBundle mainBundle],
+                                                                       @"Camera Name has to be between 3-15 characters", nil);
+                    
+                    NSString * ok = NSLocalizedStringWithDefaultValue(@"Ok",nil, [NSBundle mainBundle],
+                                                                      @"Ok", nil);
+                    
+                    
+                    UIAlertView * alert = [[UIAlertView alloc] initWithTitle:title
+                                                                     message:msg
+                                                                    delegate:self
+                                                           cancelButtonTitle:ok
+                                                           otherButtonTitles:nil];
+                    
+                    [alert show];
+                    [alert release];
+                }
+                else if (![self isCameraNameValidated:newName])
+                {
+                    NSString * title = NSLocalizedStringWithDefaultValue(@"Invalid_Camera_Name", nil, [NSBundle mainBundle],
+                                                                         @"Invalid Camera Name", nil);
+                    
+                    NSString * msg = NSLocalizedStringWithDefaultValue(@"Invalid_Camera_Name_msg2", nil, [NSBundle mainBundle],
+                                                                       @"Camera Name has some invalid characters", nil);
+                    
+                    NSString * ok = NSLocalizedStringWithDefaultValue(@"Ok",nil, [NSBundle mainBundle],
+                                                                      @"Ok", nil);
+                    
+                    
+                    UIAlertView * alert = [[UIAlertView alloc] initWithTitle:title
+                                                                     message:msg
+                                                                    delegate:self
+                                                           cancelButtonTitle:ok
+                                                           otherButtonTitles:nil];
+                    
+                    [alert show];
+                    [alert release];
+                    
+                }
 				else {
 					[self onCameraNameChanged:newName];
 				}
@@ -1165,6 +1229,10 @@
 		}
 		
 	}
+//    else if (tag == ALERT_INVALID_CAMERA_NAME)
+//    {
+//    
+//    }
 	
 	
 }
