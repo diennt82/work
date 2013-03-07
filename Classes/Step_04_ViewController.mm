@@ -131,24 +131,6 @@
     [super dealloc];
 }
 
--(BOOL) checkValidateString: (NSString *) string with: (NSRegularExpression *) regex
-{
-    NSTextCheckingResult * matchs = [regex firstMatchInString:string
-                                                     options:0
-                                                       range:NSMakeRange(0,[string length])];
-    
-    
-    NSRange rangeOfFirstMatch = [regex rangeOfFirstMatchInString:string options:0 range:NSMakeRange(0,[matchs length])];
-    if (NSEqualRanges(rangeOfFirstMatch,NSMakeRange(NSNotFound,0)))
-    {
-        NSString *substringForFirstMatch = [string substringWithRange:rangeOfFirstMatch];
-        NSLog(@"WTF ??? ------------------> %@",substringForFirstMatch);
-        
-        return NO;
-    }
-    
-    return YES;
-}
 
 -(BOOL) isCameraNameValidated:(NSString *) cameraNames
 {
