@@ -152,32 +152,19 @@
 
 -(BOOL) isCameraNameValidated:(NSString *) cameraNames
 {
-    BOOL isValid = YES;
     
-    NSMutableArray *array = [NSMutableArray array];
-    for (int i = 0; i < [cameraNames length]; i++) {
-        [array addObject:[NSString stringWithFormat:@"%C", [cameraNames characterAtIndex:i]]];
-    }
-    NSArray * validChars = [NSArray arrayWithObjects:@"a",@"b",@"c",@"d",@"e",@"f",@"g",@"h",@"i",@"l",@"m",@"n",@"p",@"q",@"s",@"x",@"k",@"w",@"r",@"t",@"y",@"u",@"o",@"j",@"z",@"v",
-                            @"A",@"B",@"C",@"D",@"E",@"F",@"G",@"H",@"I",@"L",@"M",@"N",@"P",@"Q",@"S",@"X",@"K",@"W",@"R",@"T",@"Y",@"U",@"O",@"J",@"Z",@"V",
-                            
-                            @"1",@"2",@"3",@"4",@"5",@"6",@"7",@"8",@"9",@"0",
-                            @".",@"'",@"_",@"-",nil];
-    for (int i = 0; i < [array count]; i ++)
+    NSString * validString = @"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890.'_-";
+
+
+    
+    for (int i = 0; i < cameraNames.length; i ++)
     {
-        for (int j = 0; j < [validChars count]; j ++)
-        {
-            if (![[array objectAtIndex:i] isEqualToString:[validChars objectAtIndex:j]])
-            {
-                isValid = NO;
-            }
-            
-        }
-        if (isValid == NO)
-        {
+        NSRange range = [validString rangeOfString:[NSString stringWithFormat:@"%c",[cameraNames characterAtIndex:i]]];
+        if (range.location == NSNotFound) {
             return NO;
         }
     }
+
     
     return YES;
 
