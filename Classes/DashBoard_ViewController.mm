@@ -1153,7 +1153,7 @@
 					
 					[self showDialog:ALERT_NAME_CANT_BE_EMPTY];
 				}
-                else if (newName.length < 3 || newName.length > 16)
+                else if (newName.length < 3 || newName.length > 15)
                 {
                     NSString * title = NSLocalizedStringWithDefaultValue(@"Invalid_Camera_Name", nil, [NSBundle mainBundle],
                                                                          @"Invalid Camera Name", nil);
