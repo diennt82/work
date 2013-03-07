@@ -1114,7 +1114,7 @@
 -(BOOL) isCameraNameValidated:(NSString *) cameraNames
 {
     
-    NSString * validString = @"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890.'_-";
+    NSString * validString = @"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890. '_-";
     
     
     
