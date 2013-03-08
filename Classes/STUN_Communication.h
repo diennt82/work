@@ -20,7 +20,7 @@
 #define STUN_SERVER_IP @"stun.monitoreverywhere.com"
 #define STUN_SERVER_PORT 8000
 
-#define STUN_RELAY_SERVER_IP @"23.23.179.227"
+#define STUN_RELAY_SERVER_IP @"relay.monitoreverywhere.com"
 #define STUN_RELAY_SERVER_PORT 44444
 
 
