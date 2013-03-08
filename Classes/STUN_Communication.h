@@ -17,7 +17,7 @@
 #import "BMS_Communication.h"
 #import "UdtSocketWrapper.h"
 
-#define STUN_SERVER_IP @"stun.monitoreverywhere.com"
+#define STUN_SERVER_IP @"udt.monitoreverywhere.com"
 #define STUN_SERVER_PORT 8000
 
 #define STUN_RELAY_SERVER_IP @"relay.monitoreverywhere.com"
