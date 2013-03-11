@@ -111,6 +111,12 @@
         if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
         {
 
+            
+            mTableView.frame = CGRectMake(mTableView.frame.origin.x,
+                                          mTableView.frame.origin.y,
+                                          mTableView.frame.size.width,
+                                          550);
+            
         }
         else
         {
@@ -120,8 +126,13 @@
     else if (interfaceOrientation == UIInterfaceOrientationPortrait ||
              interfaceOrientation == UIInterfaceOrientationPortraitUpsideDown)
     {
-        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+        {
 
+            mTableView.frame = CGRectMake(mTableView.frame.origin.x,
+                                          mTableView.frame.origin.y,
+                                          mTableView.frame.size.width,
+                                          833);
         }
         else
         {
