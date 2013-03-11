@@ -715,6 +715,30 @@
 	
 	NSLog(@"addcam response: %@", raw_data);
 	
+    if (raw_data == nil || [raw_data length] == 0)
+    {
+        
+        NSString * msg = NSLocalizedStringWithDefaultValue(@"Invalid_Server_Response",nil, [NSBundle mainBundle],
+                                                           @"Invalid Server Response.(Nil response)" , nil);
+        NSString * ok = NSLocalizedStringWithDefaultValue(@"Ok",nil, [NSBundle mainBundle],
+                                                          @"Ok", nil);
+        
+        //ERROR condition
+        UIAlertView *alert = [[UIAlertView alloc]
+                              initWithTitle:NSLocalizedStringWithDefaultValue(@"AddCam_Error" ,nil, [NSBundle mainBundle],
+                                                                              @"AddCam Error" , nil)
+                              message:msg
+                              delegate:self
+                              cancelButtonTitle:ok
+                              otherButtonTitles:nil];
+        [alert show];
+        [alert release];
+        
+        [self  setupFailed];
+        return; 
+    }
+    
+    
 	[self extractMasterKey:raw_data];
 	
     should_stop_scanning = FALSE;
