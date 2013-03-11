@@ -81,19 +81,22 @@
 
 -(void) filterCameraList
 {
-    for (WifiEntry * wifi in listOfWifi)
+    NSMutableArray * wifiList = [[NSMutableArray alloc] init];
+    
+    for (int i = 0; i < [listOfWifi count]; i++)
     {
-        NSLog(@"SSID Wifi -------------------->%@", wifi.ssid_w_quote);
-        if ([wifi.ssid_w_quote hasPrefix:@"\"Camera-"]) {
+        WifiEntry * wifi = [listOfWifi objectAtIndex:i];
+//        NSLog(@"SSID Wifi -------------------->%@", wifi.ssid_w_quote);
+        if (![wifi.ssid_w_quote hasPrefix:@"\"Camera-"])
+        {
+            [wifiList addObject:wifi];
             
-            [listOfWifi removeObject:wifi];
-            
-            [self filterCameraList];
-            
-            break;
         }
         
     }
+    
+    self.listOfWifi = wifiList;
+    [wifiList release];
 }
 
 #pragma mark -
