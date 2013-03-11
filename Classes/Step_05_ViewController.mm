@@ -64,7 +64,7 @@
     other.encrypt_type = @"None"; 
     
     [self.listOfWifi addObject:other]; 
-    
+    [self filterCameraList];
 }
 
 - (void)viewDidUnload
@@ -77,6 +77,23 @@
 {
     UIInterfaceOrientation interfaceOrientation = [UIApplication sharedApplication].statusBarOrientation;
     [self adjustViewsForOrientations:interfaceOrientation];
+}
+
+-(void) filterCameraList
+{
+    for (WifiEntry * wifi in listOfWifi)
+    {
+        NSLog(@"SSID Wifi -------------------->%@", wifi.ssid_w_quote);
+        if ([wifi.ssid_w_quote hasPrefix:@"\"Camera-"]) {
+            
+            [listOfWifi removeObject:wifi];
+            
+            [self filterCameraList];
+            
+            break;
+        }
+        
+    }
 }
 
 #pragma mark -
