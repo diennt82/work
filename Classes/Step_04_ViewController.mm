@@ -182,7 +182,7 @@
                                                                  @"Invalid Camera Name", nil);
             
             NSString * msg = NSLocalizedStringWithDefaultValue(@"Invalid_Camera_Name_msg2", nil, [NSBundle mainBundle],
-                                                               @"Camera Name has some invalid characters", nil);
+                                                               @"Camera name is invalid. Please enter [0-9],[a-Z], space, dot, hyphen, underscore & single quote only.", nil);
             
             NSString * ok = NSLocalizedStringWithDefaultValue(@"Ok",nil, [NSBundle mainBundle],
                                                               @"Ok", nil);
