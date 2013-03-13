@@ -221,7 +221,7 @@
 		BC3C1ACE16F025B600175AFF /* MBP_MenuViewController_ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = BC3C1AD016F025B600175AFF /* MBP_MenuViewController_ipad.xib */; };
 		BC3C1AD316F025E300175AFF /* MBP_MenuProgress_portrait_ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = BC3C1AD516F025E300175AFF /* MBP_MenuProgress_portrait_ipad.xib */; };
 		BC3C1AD816F025FF00175AFF /* MBP_MenuProgress_land_ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = BC3C1ADA16F025FF00175AFF /* MBP_MenuProgress_land_ipad.xib */; };
-		BC3C1AF616F03D4D00175AFF /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = BC3C1AF816F03D4D00175AFF /* Localizable.strings */; };
+		BC3C1B0316F05C0C00175AFF /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = BC3C1B0516F05C0C00175AFF /* Localizable.strings */; };
 		BC6E4A0516BFBB9D00B0D630 /* MBP_InitialSetupViewController_land.xib in Resources */ = {isa = PBXBuildFile; fileRef = BC6E4A0316BFBB9D00B0D630 /* MBP_InitialSetupViewController_land.xib */; };
 		BCA1A4D816C24CA900E7EF56 /* Step_03_ViewController_land.xib in Resources */ = {isa = PBXBuildFile; fileRef = BCA1A4D616C24CA900E7EF56 /* Step_03_ViewController_land.xib */; };
 		BCA1A4DE16C2569E00E7EF56 /* Step_04_ViewController_land.xib in Resources */ = {isa = PBXBuildFile; fileRef = BCA1A4DC16C2569E00E7EF56 /* Step_04_ViewController_land.xib */; };
@@ -663,9 +663,9 @@
 		BC3C1AEA16F0268000175AFF /* fr */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = fr; path = fr.lproj/DashBoard_ViewController.xib; sourceTree = "<group>"; };
 		BC3C1AEB16F0268800175AFF /* es */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = es; path = es.lproj/DashBoard_ViewController_ipad.xib; sourceTree = "<group>"; };
 		BC3C1AEC16F0268B00175AFF /* fr */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = fr; path = fr.lproj/DashBoard_ViewController_ipad.xib; sourceTree = "<group>"; };
-		BC3C1AF716F03D4D00175AFF /* en */ = {isa = PBXFileReference; lastKnownFileType = file; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
-		BC3C1AF916F03D5400175AFF /* es */ = {isa = PBXFileReference; lastKnownFileType = file; name = es; path = es.lproj/Localizable.strings; sourceTree = "<group>"; };
-		BC3C1AFA16F03D5700175AFF /* fr */ = {isa = PBXFileReference; lastKnownFileType = file; name = fr; path = fr.lproj/Localizable.strings; sourceTree = "<group>"; };
+		BC3C1B0416F05C0C00175AFF /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
+		BC3C1B0616F05C0D00175AFF /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/Localizable.strings; sourceTree = "<group>"; };
+		BC3C1B0716F05E5800175AFF /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/Localizable.strings; sourceTree = "<group>"; };
 		BC6E4A0416BFBB9D00B0D630 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/MBP_InitialSetupViewController_land.xib; sourceTree = "<group>"; };
 		BCA1A4D716C24CA900E7EF56 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/Step_03_ViewController_land.xib; sourceTree = "<group>"; };
 		BCA1A4DD16C2569E00E7EF56 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/Step_04_ViewController_land.xib; sourceTree = "<group>"; };
@@ -953,7 +953,7 @@
 		29B97314FDCFA39411CA2CEA /* CustomTemplate */ = {
 			isa = PBXGroup;
 			children = (
-				BC3C1AF816F03D4D00175AFF /* Localizable.strings */,
+				BC3C1B0516F05C0C00175AFF /* Localizable.strings */,
 				38C7DE79165DDF9E00926EA1 /* Default-568h@2x.png */,
 				3812F82315C8BEC700DADFA6 /* images13 */,
 				97987CC1154683700066C49B /* images12 */,
@@ -1300,6 +1300,7 @@
 				BC8C179C16EF3835008CF6B1 /* Localizable.strings in Resources */,
 				BC3C1AEE16F0367000175AFF /* Localizable.strings in Resources */,
 				BC3C1AF616F03D4D00175AFF /* Localizable.strings in Resources */,
+				BC3C1B0316F05C0C00175AFF /* Localizable.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2002,12 +2003,12 @@
 			name = MBP_MenuProgress_land_ipad.xib;
 			sourceTree = "<group>";
 		};
-		BC3C1AF816F03D4D00175AFF /* Localizable.strings */ = {
+		BC3C1B0516F05C0C00175AFF /* Localizable.strings */ = {
 			isa = PBXVariantGroup;
 			children = (
-				BC3C1AF716F03D4D00175AFF /* en */,
-				BC3C1AF916F03D5400175AFF /* es */,
-				BC3C1AFA16F03D5700175AFF /* fr */,
+				BC3C1B0416F05C0C00175AFF /* en */,
+				BC3C1B0616F05C0D00175AFF /* es */,
+				BC3C1B0716F05E5800175AFF /* fr */,
 			);
 			name = Localizable.strings;
 			sourceTree = "<group>";
