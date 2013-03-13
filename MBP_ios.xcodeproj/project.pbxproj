@@ -953,10 +953,8 @@
 		29B97314FDCFA39411CA2CEA /* CustomTemplate */ = {
 			isa = PBXGroup;
 			children = (
-				BC3C1B0516F05C0C00175AFF /* Localizable.strings */,
 				38C7DE79165DDF9E00926EA1 /* Default-568h@2x.png */,
 				3812F82315C8BEC700DADFA6 /* images13 */,
-				97987CC1154683700066C49B /* images12 */,
 				080E96DDFE201D6D7F000001 /* Classes */,
 				29B97315FDCFA39411CA2CEA /* Other Sources */,
 				29B97317FDCFA39411CA2CEA /* Resources */,
@@ -971,8 +969,10 @@
 		29B97315FDCFA39411CA2CEA /* Other Sources */ = {
 			isa = PBXGroup;
 			children = (
+				97987CC1154683700066C49B /* images12 */,
 				32CA4F630368D1EE00C91783 /* MBP_ios_Prefix.pch */,
 				29B97316FDCFA39411CA2CEA /* main.m */,
+				974EF72B1552241C008D6B77 /* ios_Settings.png */,
 			);
 			name = "Other Sources";
 			sourceTree = "<group>";
@@ -982,6 +982,7 @@
 			children = (
 				380EB15316FC41D8005BAC7F /* Voicemail.aif */,
 				974ACB7E168079CB005AE4C6 /* MonitorEverywhere_App_ios_Apple.html */,
+				BC3C1B0516F05C0C00175AFF /* Localizable.strings */,
 				38A7E0E5165B7D8F00C542A6 /* beep.wav */,
 				38362C1C15FDEE400077E188 /* alert_history.sqlite */,
 				97E3AAD5147E257400A0922A /* iTunesArtWork */,
@@ -1084,7 +1085,6 @@
 		97987CC1154683700066C49B /* images12 */ = {
 			isa = PBXGroup;
 			children = (
-				974EF72B1552241C008D6B77 /* ios_Settings.png */,
 				97987CCE154688110066C49B /* partition_bar.png */,
 				97987CCC154687490066C49B /* background.png */,
 			);
