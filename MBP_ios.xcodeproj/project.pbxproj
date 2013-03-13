@@ -54,7 +54,6 @@
 		382CD25816DDE12200BC8E0C /* Step_07_tableViewCell_ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 382CD25716DDE12200BC8E0C /* Step_07_tableViewCell_ipad.xib */; };
 		38355AE715CB76630045909C /* Account_ViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 38355AE515CB76630045909C /* Account_ViewController.mm */; };
 		38362C1D15FDEE400077E188 /* alert_history.sqlite in Resources */ = {isa = PBXBuildFile; fileRef = 38362C1C15FDEE400077E188 /* alert_history.sqlite */; };
-		38611CE716DF611200C0F42D /* ForgotPwdViewController_ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 38611CE616DF611100C0F42D /* ForgotPwdViewController_ipad.xib */; };
 		38699127167055B8009F3E66 /* MainWindow_ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 38699126167055B8009F3E66 /* MainWindow_ipad.xib */; };
 		386CC7FD16DB555C004119C0 /* bb_splash_screen_horizontal.png in Resources */ = {isa = PBXBuildFile; fileRef = 386CC7FC16DB555C004119C0 /* bb_splash_screen_horizontal.png */; };
 		387E718616884E1100E940F9 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 387E718116884E1100E940F9 /* Localizable.strings */; };
@@ -169,9 +168,6 @@
 		972E290E15A3F77600E60A96 /* STUN_Communication.mm in Sources */ = {isa = PBXBuildFile; fileRef = 972E290D15A3F77600E60A96 /* STUN_Communication.mm */; };
 		972E295115A405D400E60A96 /* SymmetricCipher.m in Sources */ = {isa = PBXBuildFile; fileRef = 972E295015A405D400E60A96 /* SymmetricCipher.m */; };
 		972E2B8715A4234300E60A96 /* NSData+Base64.m in Sources */ = {isa = PBXBuildFile; fileRef = 972E2B8515A4234300E60A96 /* NSData+Base64.m */; };
-		972FE149169EA37300AEEBAA /* MBP_MenuViewController_ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 972FE148169EA37300AEEBAA /* MBP_MenuViewController_ipad.xib */; };
-		972FE14B169EA40300AEEBAA /* MBP_MenuProgress_portrait_ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 972FE14A169EA40300AEEBAA /* MBP_MenuProgress_portrait_ipad.xib */; };
-		972FE14D169EABFD00AEEBAA /* MBP_MenuProgress_land_ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 972FE14C169EABFD00AEEBAA /* MBP_MenuProgress_land_ipad.xib */; };
 		97423429155BA503007DCBCD /* AudioOutStreamer.m in Sources */ = {isa = PBXBuildFile; fileRef = 97423428155BA503007DCBCD /* AudioOutStreamer.m */; };
 		9745CE5D1553CF9200800CA6 /* ScanForCamera.mm in Sources */ = {isa = PBXBuildFile; fileRef = 9745CE5C1553CF9200800CA6 /* ScanForCamera.mm */; };
 		974ACB59168055F9005AE4C6 /* ToUViewController_ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 974ACB58168055F8005AE4C6 /* ToUViewController_ipad.xib */; };
@@ -223,7 +219,13 @@
 		97F0F04C143C0CA00076B749 /* CamChannel.m in Sources */ = {isa = PBXBuildFile; fileRef = 97F0F04B143C0CA00076B749 /* CamChannel.m */; };
 		97F0F168143C45FA0076B749 /* MBP_Streamer.mm in Sources */ = {isa = PBXBuildFile; fileRef = 97F0F167143C45FA0076B749 /* MBP_Streamer.mm */; };
 		97FE7D1015998C0B000826F0 /* RemoteConnection.mm in Sources */ = {isa = PBXBuildFile; fileRef = 97FE7D0F15998C0B000826F0 /* RemoteConnection.mm */; };
+		BC3C1AC516F0257000175AFF /* ForgotPwdViewController_ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = BC3C1AC716F0257000175AFF /* ForgotPwdViewController_ipad.xib */; };
+		BC3C1ACE16F025B600175AFF /* MBP_MenuViewController_ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = BC3C1AD016F025B600175AFF /* MBP_MenuViewController_ipad.xib */; };
+		BC3C1AD316F025E300175AFF /* MBP_MenuProgress_portrait_ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = BC3C1AD516F025E300175AFF /* MBP_MenuProgress_portrait_ipad.xib */; };
+		BC3C1AD816F025FF00175AFF /* MBP_MenuProgress_land_ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = BC3C1ADA16F025FF00175AFF /* MBP_MenuProgress_land_ipad.xib */; };
+		BC3C1AEE16F0367000175AFF /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = BC3C1AED16F0366D00175AFF /* Localizable.strings */; };
 		BC6E4A0516BFBB9D00B0D630 /* MBP_InitialSetupViewController_land.xib in Resources */ = {isa = PBXBuildFile; fileRef = BC6E4A0316BFBB9D00B0D630 /* MBP_InitialSetupViewController_land.xib */; };
+		BC8C179C16EF3835008CF6B1 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = BC8C179916EF3835008CF6B1 /* Localizable.strings */; };
 		BCA1A4D816C24CA900E7EF56 /* Step_03_ViewController_land.xib in Resources */ = {isa = PBXBuildFile; fileRef = BCA1A4D616C24CA900E7EF56 /* Step_03_ViewController_land.xib */; };
 		BCA1A4DE16C2569E00E7EF56 /* Step_04_ViewController_land.xib in Resources */ = {isa = PBXBuildFile; fileRef = BCA1A4DC16C2569E00E7EF56 /* Step_04_ViewController_land.xib */; };
 		BCA1A4E716C26EFB00E7EF56 /* Step_05_ViewController_land.xib in Resources */ = {isa = PBXBuildFile; fileRef = BCA1A4E516C26EFB00E7EF56 /* Step_05_ViewController_land.xib */; };
@@ -300,15 +302,12 @@
 		3851C3B716D5CD03007D3781 /* StartMonitorCallback.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = StartMonitorCallback.h; sourceTree = "<group>"; };
 		38590B6B16D766330046585B /* es */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = es; path = es.lproj/CameraViewController_ipad.xib; sourceTree = "<group>"; };
 		38590B6C16D766370046585B /* fr */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = fr; path = fr.lproj/CameraViewController_ipad.xib; sourceTree = "<group>"; };
-		38611CE616DF611100C0F42D /* ForgotPwdViewController_ipad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ForgotPwdViewController_ipad.xib; sourceTree = "<group>"; };
 		38699126167055B8009F3E66 /* MainWindow_ipad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MainWindow_ipad.xib; sourceTree = "<group>"; };
 		386CC7F216DB27FD004119C0 /* es */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = es; path = es.lproj/Step_05_ViewController_land.xib; sourceTree = "<group>"; };
 		386CC7F316DB2801004119C0 /* fr */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = fr; path = fr.lproj/Step_05_ViewController_land.xib; sourceTree = "<group>"; };
 		386CC7F816DB540A004119C0 /* es */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = es; path = es.lproj/MBP_InitialSetupViewController_land.xib; sourceTree = "<group>"; };
 		386CC7F916DB540E004119C0 /* fr */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = fr; path = fr.lproj/MBP_InitialSetupViewController_land.xib; sourceTree = "<group>"; };
 		386CC7FC16DB555C004119C0 /* bb_splash_screen_horizontal.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bb_splash_screen_horizontal.png; sourceTree = "<group>"; };
-		386CC80A16DB5D7D004119C0 /* es */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = es; path = es.lproj/Step_06_ViewController_land_not_used.xib; sourceTree = "<group>"; };
-		386CC80B16DB5D7F004119C0 /* fr */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = fr; path = fr.lproj/Step_06_ViewController_land_not_used.xib; sourceTree = "<group>"; };
 		387E718216884E1100E940F9 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = Localizable.strings; sourceTree = "<group>"; };
 		387E718516884E1100E940F9 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = Localizable.strings; sourceTree = "<group>"; };
 		388396B8168B064500B0D020 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/MBP_iosViewController.xib; sourceTree = "<group>"; };
@@ -493,9 +492,6 @@
 		972E295015A405D400E60A96 /* SymmetricCipher.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SymmetricCipher.m; sourceTree = "<group>"; };
 		972E2B8515A4234300E60A96 /* NSData+Base64.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSData+Base64.m"; sourceTree = "<group>"; };
 		972E2B8615A4234300E60A96 /* NSData+Base64.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSData+Base64.h"; sourceTree = "<group>"; };
-		972FE148169EA37300AEEBAA /* MBP_MenuViewController_ipad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MBP_MenuViewController_ipad.xib; sourceTree = "<group>"; };
-		972FE14A169EA40300AEEBAA /* MBP_MenuProgress_portrait_ipad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MBP_MenuProgress_portrait_ipad.xib; sourceTree = "<group>"; };
-		972FE14C169EABFD00AEEBAA /* MBP_MenuProgress_land_ipad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MBP_MenuProgress_land_ipad.xib; sourceTree = "<group>"; };
 		97423427155BA503007DCBCD /* AudioOutStreamer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AudioOutStreamer.h; sourceTree = "<group>"; };
 		97423428155BA503007DCBCD /* AudioOutStreamer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AudioOutStreamer.m; sourceTree = "<group>"; };
 		9745CE5B1553CF9200800CA6 /* ScanForCamera.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ScanForCamera.h; sourceTree = "<group>"; };
@@ -584,7 +580,97 @@
 		97F0F167143C45FA0076B749 /* MBP_Streamer.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = MBP_Streamer.mm; sourceTree = "<group>"; };
 		97FE7D0E15998C0B000826F0 /* RemoteConnection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RemoteConnection.h; sourceTree = "<group>"; };
 		97FE7D0F15998C0B000826F0 /* RemoteConnection.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = RemoteConnection.mm; sourceTree = "<group>"; };
+		BC3C1A8816F0223800175AFF /* es */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = es; path = es.lproj/MBP_iosViewController_ipad.xib; sourceTree = "<group>"; };
+		BC3C1A8916F0223900175AFF /* fr */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = fr; path = fr.lproj/MBP_iosViewController_ipad.xib; sourceTree = "<group>"; };
+		BC3C1A8A16F022A400175AFF /* es */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = es; path = es.lproj/MBP_InitialSetupViewController_ipad.xib; sourceTree = "<group>"; };
+		BC3C1A8B16F022A600175AFF /* fr */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = fr; path = fr.lproj/MBP_InitialSetupViewController_ipad.xib; sourceTree = "<group>"; };
+		BC3C1A8C16F022AC00175AFF /* es */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = es; path = es.lproj/MBP_InitialSetupViewController_ipad_land.xib; sourceTree = "<group>"; };
+		BC3C1A8D16F022B300175AFF /* fr */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = fr; path = fr.lproj/MBP_InitialSetupViewController_ipad_land.xib; sourceTree = "<group>"; };
+		BC3C1A8E16F022BB00175AFF /* es */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = es; path = es.lproj/Step_09_ViewController.xib; sourceTree = "<group>"; };
+		BC3C1A8F16F022BD00175AFF /* fr */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = fr; path = fr.lproj/Step_09_ViewController.xib; sourceTree = "<group>"; };
+		BC3C1A9016F022C400175AFF /* es */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = es; path = es.lproj/Step_09_ViewController_ipad.xib; sourceTree = "<group>"; };
+		BC3C1A9116F022C600175AFF /* fr */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = fr; path = fr.lproj/Step_09_ViewController_ipad.xib; sourceTree = "<group>"; };
+		BC3C1A9216F022D100175AFF /* es */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = es; path = es.lproj/Step_02_ViewController_ipad.xib; sourceTree = "<group>"; };
+		BC3C1A9316F022D300175AFF /* fr */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = fr; path = fr.lproj/Step_02_ViewController_ipad.xib; sourceTree = "<group>"; };
+		BC3C1A9416F022D800175AFF /* es */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = es; path = es.lproj/Step_02_ViewController_land_ipad.xib; sourceTree = "<group>"; };
+		BC3C1A9516F022DB00175AFF /* fr */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = fr; path = fr.lproj/Step_02_ViewController_land_ipad.xib; sourceTree = "<group>"; };
+		BC3C1A9616F022E200175AFF /* es */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = es; path = es.lproj/Step_03_ViewController.xib; sourceTree = "<group>"; };
+		BC3C1A9716F022E500175AFF /* fr */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = fr; path = fr.lproj/Step_03_ViewController.xib; sourceTree = "<group>"; };
+		BC3C1A9816F022EB00175AFF /* es */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = es; path = es.lproj/Step_03_ViewController_ipad.xib; sourceTree = "<group>"; };
+		BC3C1A9916F022ED00175AFF /* fr */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = fr; path = fr.lproj/Step_03_ViewController_ipad.xib; sourceTree = "<group>"; };
+		BC3C1A9A16F022F200175AFF /* es */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = es; path = es.lproj/Step_04_ViewController.xib; sourceTree = "<group>"; };
+		BC3C1A9B16F022F400175AFF /* fr */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = fr; path = fr.lproj/Step_04_ViewController.xib; sourceTree = "<group>"; };
+		BC3C1A9C16F0230100175AFF /* es */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = es; path = es.lproj/Step_04_ViewController_land.xib; sourceTree = "<group>"; };
+		BC3C1A9D16F0230600175AFF /* fr */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = fr; path = fr.lproj/Step_04_ViewController_land.xib; sourceTree = "<group>"; };
+		BC3C1A9E16F0230C00175AFF /* es */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = es; path = es.lproj/Step_04_ViewController_ipad.xib; sourceTree = "<group>"; };
+		BC3C1A9F16F0231200175AFF /* fr */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = fr; path = fr.lproj/Step_04_ViewController_ipad.xib; sourceTree = "<group>"; };
+		BC3C1AA016F0231800175AFF /* es */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = es; path = es.lproj/Step_04_ViewController_land_ipad.xib; sourceTree = "<group>"; };
+		BC3C1AA116F0231A00175AFF /* fr */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = fr; path = fr.lproj/Step_04_ViewController_land_ipad.xib; sourceTree = "<group>"; };
+		BC3C1AA216F0242C00175AFF /* es */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = es; path = es.lproj/Step_05_ViewController_ipad.xib; sourceTree = "<group>"; };
+		BC3C1AA316F0242E00175AFF /* fr */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = fr; path = fr.lproj/Step_05_ViewController_ipad.xib; sourceTree = "<group>"; };
+		BC3C1AA416F0244500175AFF /* es */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = es; path = es.lproj/Step_06_ViewController.xib; sourceTree = "<group>"; };
+		BC3C1AA516F0244700175AFF /* fr */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = fr; path = fr.lproj/Step_06_ViewController.xib; sourceTree = "<group>"; };
+		BC3C1AA616F0245400175AFF /* es */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = es; path = es.lproj/Step_06_ViewController_ipad.xib; sourceTree = "<group>"; };
+		BC3C1AA716F0245600175AFF /* fr */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = fr; path = fr.lproj/Step_06_ViewController_ipad.xib; sourceTree = "<group>"; };
+		BC3C1AA816F0249800175AFF /* es */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = es; path = es.lproj/Step_07_ViewController.xib; sourceTree = "<group>"; };
+		BC3C1AA916F0249A00175AFF /* fr */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = fr; path = fr.lproj/Step_07_ViewController.xib; sourceTree = "<group>"; };
+		BC3C1AAA16F024A200175AFF /* es */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = es; path = es.lproj/Step_07_ViewController_ipad.xib; sourceTree = "<group>"; };
+		BC3C1AAB16F024A400175AFF /* fr */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = fr; path = fr.lproj/Step_07_ViewController_ipad.xib; sourceTree = "<group>"; };
+		BC3C1AAC16F024B500175AFF /* es */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = es; path = es.lproj/Step_10_ViewController.xib; sourceTree = "<group>"; };
+		BC3C1AAD16F024B800175AFF /* fr */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = fr; path = fr.lproj/Step_10_ViewController.xib; sourceTree = "<group>"; };
+		BC3C1AAE16F024BD00175AFF /* es */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = es; path = es.lproj/Step_10_ViewController_ipad.xib; sourceTree = "<group>"; };
+		BC3C1AAF16F024C000175AFF /* fr */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = fr; path = fr.lproj/Step_10_ViewController_ipad.xib; sourceTree = "<group>"; };
+		BC3C1AB016F024C600175AFF /* es */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = es; path = es.lproj/Step_12_ViewController.xib; sourceTree = "<group>"; };
+		BC3C1AB116F024C900175AFF /* fr */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = fr; path = fr.lproj/Step_12_ViewController.xib; sourceTree = "<group>"; };
+		BC3C1AB316F024D800175AFF /* es */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = es; path = es.lproj/Step_12_ViewController_land.xib; sourceTree = "<group>"; };
+		BC3C1AB416F024DC00175AFF /* fr */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = fr; path = fr.lproj/Step_12_ViewController_land.xib; sourceTree = "<group>"; };
+		BC3C1AB516F024E400175AFF /* es */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = es; path = es.lproj/Step_12_ViewController_ipad.xib; sourceTree = "<group>"; };
+		BC3C1AB616F024E900175AFF /* fr */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = fr; path = fr.lproj/Step_12_ViewController_ipad.xib; sourceTree = "<group>"; };
+		BC3C1AB716F024F100175AFF /* es */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = es; path = es.lproj/Step_12_ViewController_land_ipad.xib; sourceTree = "<group>"; };
+		BC3C1AB816F024F300175AFF /* fr */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = fr; path = fr.lproj/Step_12_ViewController_land_ipad.xib; sourceTree = "<group>"; };
+		BC3C1ABA16F024FD00175AFF /* es */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = es; path = es.lproj/Step_11_ViewController.xib; sourceTree = "<group>"; };
+		BC3C1ABB16F024FF00175AFF /* fr */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = fr; path = fr.lproj/Step_11_ViewController.xib; sourceTree = "<group>"; };
+		BC3C1ABC16F0251300175AFF /* es */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = es; path = es.lproj/Step_11_ViewController_land.xib; sourceTree = "<group>"; };
+		BC3C1ABD16F0251600175AFF /* fr */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = fr; path = fr.lproj/Step_11_ViewController_land.xib; sourceTree = "<group>"; };
+		BC3C1ABF16F0252100175AFF /* es */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = es; path = es.lproj/Step_11_ViewController_ipad.xib; sourceTree = "<group>"; };
+		BC3C1AC016F0252400175AFF /* fr */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = fr; path = fr.lproj/Step_11_ViewController_ipad.xib; sourceTree = "<group>"; };
+		BC3C1AC116F0252F00175AFF /* es */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = es; path = es.lproj/Step_11_ViewController_land_ipad.xib; sourceTree = "<group>"; };
+		BC3C1AC216F0253500175AFF /* fr */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = fr; path = fr.lproj/Step_11_ViewController_land_ipad.xib; sourceTree = "<group>"; };
+		BC3C1AC316F0254600175AFF /* es */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = es; path = es.lproj/ForgotPwdViewController.xib; sourceTree = "<group>"; };
+		BC3C1AC416F0255000175AFF /* fr */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = fr; path = fr.lproj/ForgotPwdViewController.xib; sourceTree = "<group>"; };
+		BC3C1AC616F0257000175AFF /* en */ = {isa = PBXFileReference; lastKnownFileType = file; name = en; path = en.lproj/ForgotPwdViewController_ipad.xib; sourceTree = "<group>"; };
+		BC3C1AC816F0258300175AFF /* es */ = {isa = PBXFileReference; lastKnownFileType = file; name = es; path = es.lproj/ForgotPwdViewController_ipad.xib; sourceTree = "<group>"; };
+		BC3C1AC916F0258700175AFF /* fr */ = {isa = PBXFileReference; lastKnownFileType = file; name = fr; path = fr.lproj/ForgotPwdViewController_ipad.xib; sourceTree = "<group>"; };
+		BC3C1ACA16F0259100175AFF /* es */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = es; path = es.lproj/Account_ViewController.xib; sourceTree = "<group>"; };
+		BC3C1ACB16F0259400175AFF /* fr */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = fr; path = fr.lproj/Account_ViewController.xib; sourceTree = "<group>"; };
+		BC3C1ACC16F0259A00175AFF /* es */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = es; path = es.lproj/Account_ViewController_ipad.xib; sourceTree = "<group>"; };
+		BC3C1ACD16F0259F00175AFF /* fr */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = fr; path = fr.lproj/Account_ViewController_ipad.xib; sourceTree = "<group>"; };
+		BC3C1ACF16F025B600175AFF /* en */ = {isa = PBXFileReference; lastKnownFileType = file; name = en; path = en.lproj/MBP_MenuViewController_ipad.xib; sourceTree = "<group>"; };
+		BC3C1AD116F025D200175AFF /* es */ = {isa = PBXFileReference; lastKnownFileType = file; name = es; path = es.lproj/MBP_MenuViewController_ipad.xib; sourceTree = "<group>"; };
+		BC3C1AD216F025D500175AFF /* fr */ = {isa = PBXFileReference; lastKnownFileType = file; name = fr; path = fr.lproj/MBP_MenuViewController_ipad.xib; sourceTree = "<group>"; };
+		BC3C1AD416F025E300175AFF /* en */ = {isa = PBXFileReference; lastKnownFileType = file; name = en; path = en.lproj/MBP_MenuProgress_portrait_ipad.xib; sourceTree = "<group>"; };
+		BC3C1AD616F025F100175AFF /* es */ = {isa = PBXFileReference; lastKnownFileType = file; name = es; path = es.lproj/MBP_MenuProgress_portrait_ipad.xib; sourceTree = "<group>"; };
+		BC3C1AD716F025F600175AFF /* fr */ = {isa = PBXFileReference; lastKnownFileType = file; name = fr; path = fr.lproj/MBP_MenuProgress_portrait_ipad.xib; sourceTree = "<group>"; };
+		BC3C1AD916F025FF00175AFF /* en */ = {isa = PBXFileReference; lastKnownFileType = file; name = en; path = en.lproj/MBP_MenuProgress_land_ipad.xib; sourceTree = "<group>"; };
+		BC3C1ADB16F0262000175AFF /* es */ = {isa = PBXFileReference; lastKnownFileType = file; name = es; path = es.lproj/MBP_MenuProgress_land_ipad.xib; sourceTree = "<group>"; };
+		BC3C1ADC16F0262400175AFF /* fr */ = {isa = PBXFileReference; lastKnownFileType = file; name = fr; path = fr.lproj/MBP_MenuProgress_land_ipad.xib; sourceTree = "<group>"; };
+		BC3C1ADD16F0263100175AFF /* es */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = es; path = es.lproj/MBP_LoginOrRegistration.xib; sourceTree = "<group>"; };
+		BC3C1ADE16F0263800175AFF /* fr */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = fr; path = fr.lproj/MBP_LoginOrRegistration.xib; sourceTree = "<group>"; };
+		BC3C1ADF16F0263E00175AFF /* es */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = es; path = es.lproj/MBP_LoginOrRegistration_land.xib; sourceTree = "<group>"; };
+		BC3C1AE016F0264200175AFF /* fr */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = fr; path = fr.lproj/MBP_LoginOrRegistration_land.xib; sourceTree = "<group>"; };
+		BC3C1AE116F0264900175AFF /* es */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = es; path = es.lproj/MBP_LoginOrRegistration_ipad.xib; sourceTree = "<group>"; };
+		BC3C1AE316F0265000175AFF /* fr */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = fr; path = fr.lproj/MBP_LoginOrRegistration_ipad.xib; sourceTree = "<group>"; };
+		BC3C1AE416F0265800175AFF /* es */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = es; path = es.lproj/MBP_FirstPage_ipad.xib; sourceTree = "<group>"; };
+		BC3C1AE516F0265B00175AFF /* fr */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = fr; path = fr.lproj/MBP_FirstPage_ipad.xib; sourceTree = "<group>"; };
+		BC3C1AE716F0266700175AFF /* es */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = es; path = es.lproj/MBP_FirstPage_land_ipad.xib; sourceTree = "<group>"; };
+		BC3C1AE816F0266A00175AFF /* fr */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = fr; path = fr.lproj/MBP_FirstPage_land_ipad.xib; sourceTree = "<group>"; };
+		BC3C1AE916F0267900175AFF /* es */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = es; path = es.lproj/DashBoard_ViewController.xib; sourceTree = "<group>"; };
+		BC3C1AEA16F0268000175AFF /* fr */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = fr; path = fr.lproj/DashBoard_ViewController.xib; sourceTree = "<group>"; };
+		BC3C1AEB16F0268800175AFF /* es */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = es; path = es.lproj/DashBoard_ViewController_ipad.xib; sourceTree = "<group>"; };
+		BC3C1AEC16F0268B00175AFF /* fr */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = fr; path = fr.lproj/DashBoard_ViewController_ipad.xib; sourceTree = "<group>"; };
+		BC3C1AED16F0366D00175AFF /* Localizable.strings */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; path = Localizable.strings; sourceTree = "<group>"; };
 		BC6E4A0416BFBB9D00B0D630 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/MBP_InitialSetupViewController_land.xib; sourceTree = "<group>"; };
+		BC8C179A16EF3835008CF6B1 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = Localizable.strings; sourceTree = "<group>"; };
 		BCA1A4D716C24CA900E7EF56 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/Step_03_ViewController_land.xib; sourceTree = "<group>"; };
 		BCA1A4DD16C2569E00E7EF56 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/Step_04_ViewController_land.xib; sourceTree = "<group>"; };
 		BCA1A4E316C25E7800E7EF56 /* es */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = es; path = es.lproj/Step_03_ViewController_land.xib; sourceTree = "<group>"; };
@@ -608,6 +694,8 @@
 		BCBD80F816D1E3DD0007943B /* fr */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = fr; path = fr.lproj/Step_08_ViewController_land_ipad.xib; sourceTree = "<group>"; };
 		BCE2C48B16C395C1005890FE /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/Step_02_ViewController_land.xib; sourceTree = "<group>"; };
 		BCE2C4AF16C3C1FF005890FE /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/MBP_LoginOrRegistration_land.xib; sourceTree = "<group>"; };
+		BCE30C8716F01F61003E297A /* es */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = es; path = es.lproj/MBP_iosViewController.xib; sourceTree = "<group>"; };
+		BCE30C8816F01F63003E297A /* fr */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = fr; path = fr.lproj/MBP_iosViewController.xib; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -763,7 +851,7 @@
 				38CE2A1015D4FA3600B8F7EC /* ForgotPwdViewController.h */,
 				38CE2A1115D4FA3700B8F7EC /* ForgotPwdViewController.m */,
 				38DE1C5C168AEA890049E814 /* ForgotPwdViewController.xib */,
-				38611CE616DF611100C0F42D /* ForgotPwdViewController_ipad.xib */,
+				BC3C1AC716F0257000175AFF /* ForgotPwdViewController_ipad.xib */,
 				972E290C15A3F77600E60A96 /* STUN_Communication.h */,
 				972E290D15A3F77600E60A96 /* STUN_Communication.mm */,
 				97137B9515AE742A00BEBBD6 /* StunCommunication.h */,
@@ -807,9 +895,9 @@
 				38DE1C25168ADAC00049E814 /* MBP_MenuViewController.xib */,
 				38DE1C20168ADA9E0049E814 /* MBP_MenuProgress_portrait.xib */,
 				38DE1C1B168ADA940049E814 /* MBP_MenuProgress_land.xib */,
-				972FE148169EA37300AEEBAA /* MBP_MenuViewController_ipad.xib */,
-				972FE14A169EA40300AEEBAA /* MBP_MenuProgress_portrait_ipad.xib */,
-				972FE14C169EABFD00AEEBAA /* MBP_MenuProgress_land_ipad.xib */,
+				BC3C1AD016F025B600175AFF /* MBP_MenuViewController_ipad.xib */,
+				BC3C1AD516F025E300175AFF /* MBP_MenuProgress_portrait_ipad.xib */,
+				BC3C1ADA16F025FF00175AFF /* MBP_MenuProgress_land_ipad.xib */,
 				97F0F04A143C0CA00076B749 /* CamChannel.h */,
 				97F0F04B143C0CA00076B749 /* CamChannel.m */,
 				97FE7D0E15998C0B000826F0 /* RemoteConnection.h */,
@@ -869,6 +957,7 @@
 		29B97314FDCFA39411CA2CEA /* CustomTemplate */ = {
 			isa = PBXGroup;
 			children = (
+				BC8C179616EF3835008CF6B1 /* fr.lproj */,
 				387E718016884E1100E940F9 /* en.lproj */,
 				387E718316884E1100E940F9 /* es.lproj */,
 				38C7DE79165DDF9E00926EA1 /* Default-568h@2x.png */,
@@ -899,6 +988,7 @@
 			children = (
 				380EB15316FC41D8005BAC7F /* Voicemail.aif */,
 				974ACB7E168079CB005AE4C6 /* MonitorEverywhere_App_ios_Apple.html */,
+				BC3C1AED16F0366D00175AFF /* Localizable.strings */,
 				38A7E0E5165B7D8F00C542A6 /* beep.wav */,
 				38362C1C15FDEE400077E188 /* alert_history.sqlite */,
 				97E3AAD5147E257400A0922A /* iTunesArtWork */,
@@ -1022,6 +1112,14 @@
 				97987CCC154687490066C49B /* background.png */,
 			);
 			name = images12;
+			sourceTree = "<group>";
+		};
+		BC8C179616EF3835008CF6B1 /* fr.lproj */ = {
+			isa = PBXGroup;
+			children = (
+				BC8C179916EF3835008CF6B1 /* Localizable.strings */,
+			);
+			path = fr.lproj;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -1201,9 +1299,9 @@
 				388396B9168B064500B0D020 /* MBP_iosViewController.xib in Resources */,
 				388396BE168B068400B0D020 /* CameraViewController_land_ipad.xib in Resources */,
 				38096A98168DA3470010F59A /* mbp_icon72x72.png in Resources */,
-				972FE149169EA37300AEEBAA /* MBP_MenuViewController_ipad.xib in Resources */,
-				972FE14B169EA40300AEEBAA /* MBP_MenuProgress_portrait_ipad.xib in Resources */,
-				972FE14D169EABFD00AEEBAA /* MBP_MenuProgress_land_ipad.xib in Resources */,
+				BC3C1ACE16F025B600175AFF /* MBP_MenuViewController_ipad.xib in Resources */,
+				BC3C1AD316F025E300175AFF /* MBP_MenuProgress_portrait_ipad.xib in Resources */,
+				BC3C1AD816F025FF00175AFF /* MBP_MenuProgress_land_ipad.xib in Resources */,
 				381D185D16D4652C00272A8D /* Step_05_tableViewCell_ipad.xib in Resources */,
 				BC6E4A0516BFBB9D00B0D630 /* MBP_InitialSetupViewController_land.xib in Resources */,
 				BCA1A4D816C24CA900E7EF56 /* Step_03_ViewController_land.xib in Resources */,
@@ -1232,6 +1330,8 @@
 				382CD25816DDE12200BC8E0C /* Step_07_tableViewCell_ipad.xib in Resources */,
 				38611CE716DF611200C0F42D /* ForgotPwdViewController_ipad.xib in Resources */,
 				380EB15416FC41D8005BAC7F /* Voicemail.aif in Resources */,
+				BC8C179C16EF3835008CF6B1 /* Localizable.strings in Resources */,
+				BC3C1AEE16F0367000175AFF /* Localizable.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1318,6 +1418,8 @@
 			isa = PBXVariantGroup;
 			children = (
 				380CB0C916DC5A9E00290587 /* en */,
+				BC3C1AB016F024C600175AFF /* es */,
+				BC3C1AB116F024C900175AFF /* fr */,
 			);
 			name = Step_12_ViewController.xib;
 			sourceTree = "<group>";
@@ -1326,6 +1428,8 @@
 			isa = PBXVariantGroup;
 			children = (
 				380CB0CC16DC5AD500290587 /* en */,
+				BC3C1AB316F024D800175AFF /* es */,
+				BC3C1AB416F024DC00175AFF /* fr */,
 			);
 			name = Step_12_ViewController_land.xib;
 			sourceTree = "<group>";
@@ -1334,6 +1438,8 @@
 			isa = PBXVariantGroup;
 			children = (
 				380CB0CF16DC5B2000290587 /* en */,
+				BC3C1AB516F024E400175AFF /* es */,
+				BC3C1AB616F024E900175AFF /* fr */,
 			);
 			name = Step_12_ViewController_ipad.xib;
 			sourceTree = "<group>";
@@ -1342,6 +1448,8 @@
 			isa = PBXVariantGroup;
 			children = (
 				380CB0D216DC5D8100290587 /* en */,
+				BC3C1AB716F024F100175AFF /* es */,
+				BC3C1AB816F024F300175AFF /* fr */,
 			);
 			name = Step_12_ViewController_land_ipad.xib;
 			sourceTree = "<group>";
@@ -1350,6 +1458,8 @@
 			isa = PBXVariantGroup;
 			children = (
 				380CB0D816DC612000290587 /* en */,
+				BC3C1ABA16F024FD00175AFF /* es */,
+				BC3C1ABB16F024FF00175AFF /* fr */,
 			);
 			name = Step_11_ViewController.xib;
 			sourceTree = "<group>";
@@ -1358,6 +1468,8 @@
 			isa = PBXVariantGroup;
 			children = (
 				380CB0DB16DC630400290587 /* en */,
+				BC3C1ABC16F0251300175AFF /* es */,
+				BC3C1ABD16F0251600175AFF /* fr */,
 			);
 			name = Step_11_ViewController_land.xib;
 			sourceTree = "<group>";
@@ -1366,6 +1478,8 @@
 			isa = PBXVariantGroup;
 			children = (
 				380CB0DE16DC632700290587 /* en */,
+				BC3C1ABF16F0252100175AFF /* es */,
+				BC3C1AC016F0252400175AFF /* fr */,
 			);
 			name = Step_11_ViewController_ipad.xib;
 			sourceTree = "<group>";
@@ -1374,6 +1488,8 @@
 			isa = PBXVariantGroup;
 			children = (
 				380CB0E116DC634D00290587 /* en */,
+				BC3C1AC116F0252F00175AFF /* es */,
+				BC3C1AC216F0253500175AFF /* fr */,
 			);
 			name = Step_11_ViewController_land_ipad.xib;
 			sourceTree = "<group>";
@@ -1382,6 +1498,8 @@
 			isa = PBXVariantGroup;
 			children = (
 				380CB0E416DC8DE400290587 /* en */,
+				BC3C1AE716F0266700175AFF /* es */,
+				BC3C1AE816F0266A00175AFF /* fr */,
 			);
 			name = MBP_FirstPage_land_ipad.xib;
 			sourceTree = "<group>";
@@ -1406,6 +1524,8 @@
 			isa = PBXVariantGroup;
 			children = (
 				388396B8168B064500B0D020 /* en */,
+				BCE30C8716F01F61003E297A /* es */,
+				BCE30C8816F01F63003E297A /* fr */,
 			);
 			name = MBP_iosViewController.xib;
 			sourceTree = "<group>";
@@ -1424,6 +1544,8 @@
 			isa = PBXVariantGroup;
 			children = (
 				38DE1BC2168ACFEF0049E814 /* en */,
+				BC3C1AE916F0267900175AFF /* es */,
+				BC3C1AEA16F0268000175AFF /* fr */,
 			);
 			name = DashBoard_ViewController.xib;
 			sourceTree = "<group>";
@@ -1432,6 +1554,8 @@
 			isa = PBXVariantGroup;
 			children = (
 				38DE1BC7168AD57D0049E814 /* en */,
+				BC3C1AEB16F0268800175AFF /* es */,
+				BC3C1AEC16F0268B00175AFF /* fr */,
 			);
 			name = DashBoard_ViewController_ipad.xib;
 			sourceTree = "<group>";
@@ -1520,6 +1644,8 @@
 			isa = PBXVariantGroup;
 			children = (
 				38DE1BFC168ADA280049E814 /* en */,
+				BC3C1AE416F0265800175AFF /* es */,
+				BC3C1AE516F0265B00175AFF /* fr */,
 			);
 			name = MBP_FirstPage_ipad.xib;
 			sourceTree = "<group>";
@@ -1538,6 +1664,8 @@
 			isa = PBXVariantGroup;
 			children = (
 				38DE1C06168ADA460049E814 /* en */,
+				BC3C1AE116F0264900175AFF /* es */,
+				BC3C1AE316F0265000175AFF /* fr */,
 			);
 			name = MBP_LoginOrRegistration_ipad.xib;
 			sourceTree = "<group>";
@@ -1546,6 +1674,8 @@
 			isa = PBXVariantGroup;
 			children = (
 				38DE1C0B168ADA550049E814 /* en */,
+				BC3C1ADD16F0263100175AFF /* es */,
+				BC3C1ADE16F0263800175AFF /* fr */,
 			);
 			name = MBP_LoginOrRegistration.xib;
 			sourceTree = "<group>";
@@ -1554,6 +1684,8 @@
 			isa = PBXVariantGroup;
 			children = (
 				38DE1C10168ADA6B0049E814 /* en */,
+				BC3C1A8816F0223800175AFF /* es */,
+				BC3C1A8916F0223900175AFF /* fr */,
 			);
 			name = MBP_iosViewController_ipad.xib;
 			sourceTree = "<group>";
@@ -1612,6 +1744,8 @@
 			isa = PBXVariantGroup;
 			children = (
 				38DE1C3D168ADD110049E814 /* en */,
+				BC3C1ACC16F0259A00175AFF /* es */,
+				BC3C1ACD16F0259F00175AFF /* fr */,
 			);
 			name = Account_ViewController_ipad.xib;
 			sourceTree = "<group>";
@@ -1620,6 +1754,8 @@
 			isa = PBXVariantGroup;
 			children = (
 				38DE1C42168ADD1C0049E814 /* en */,
+				BC3C1ACA16F0259100175AFF /* es */,
+				BC3C1ACB16F0259400175AFF /* fr */,
 			);
 			name = Account_ViewController.xib;
 			sourceTree = "<group>";
@@ -1668,6 +1804,8 @@
 			isa = PBXVariantGroup;
 			children = (
 				38DE1C5B168AEA890049E814 /* en */,
+				BC3C1AC316F0254600175AFF /* es */,
+				BC3C1AC416F0255000175AFF /* fr */,
 			);
 			name = ForgotPwdViewController.xib;
 			sourceTree = "<group>";
@@ -1676,6 +1814,8 @@
 			isa = PBXVariantGroup;
 			children = (
 				38DE1C74168AEAE70049E814 /* en */,
+				BC3C1AAE16F024BD00175AFF /* es */,
+				BC3C1AAF16F024C000175AFF /* fr */,
 			);
 			name = Step_10_ViewController_ipad.xib;
 			sourceTree = "<group>";
@@ -1684,6 +1824,8 @@
 			isa = PBXVariantGroup;
 			children = (
 				38DE1C79168AEAF30049E814 /* en */,
+				BC3C1AAC16F024B500175AFF /* es */,
+				BC3C1AAD16F024B800175AFF /* fr */,
 			);
 			name = Step_10_ViewController.xib;
 			sourceTree = "<group>";
@@ -1692,6 +1834,8 @@
 			isa = PBXVariantGroup;
 			children = (
 				38DE1C7E168AEB000049E814 /* en */,
+				BC3C1A9016F022C400175AFF /* es */,
+				BC3C1A9116F022C600175AFF /* fr */,
 			);
 			name = Step_09_ViewController_ipad.xib;
 			sourceTree = "<group>";
@@ -1700,6 +1844,8 @@
 			isa = PBXVariantGroup;
 			children = (
 				38DE1C83168AEB0E0049E814 /* en */,
+				BC3C1A8E16F022BB00175AFF /* es */,
+				BC3C1A8F16F022BD00175AFF /* fr */,
 			);
 			name = Step_09_ViewController.xib;
 			sourceTree = "<group>";
@@ -1728,6 +1874,8 @@
 			isa = PBXVariantGroup;
 			children = (
 				38DE1C92168AEB370049E814 /* en */,
+				BC3C1AAA16F024A200175AFF /* es */,
+				BC3C1AAB16F024A400175AFF /* fr */,
 			);
 			name = Step_07_ViewController_ipad.xib;
 			sourceTree = "<group>";
@@ -1736,6 +1884,8 @@
 			isa = PBXVariantGroup;
 			children = (
 				38DE1C97168AEB450049E814 /* en */,
+				BC3C1AA816F0249800175AFF /* es */,
+				BC3C1AA916F0249A00175AFF /* fr */,
 			);
 			name = Step_07_ViewController.xib;
 			sourceTree = "<group>";
@@ -1744,6 +1894,8 @@
 			isa = PBXVariantGroup;
 			children = (
 				38DE1C9C168AEB510049E814 /* en */,
+				BC3C1AA616F0245400175AFF /* es */,
+				BC3C1AA716F0245600175AFF /* fr */,
 			);
 			name = Step_06_ViewController_ipad.xib;
 			sourceTree = "<group>";
@@ -1752,6 +1904,8 @@
 			isa = PBXVariantGroup;
 			children = (
 				38DE1CA1168AEB6D0049E814 /* en */,
+				BC3C1AA416F0244500175AFF /* es */,
+				BC3C1AA516F0244700175AFF /* fr */,
 			);
 			name = Step_06_ViewController.xib;
 			sourceTree = "<group>";
@@ -1760,6 +1914,8 @@
 			isa = PBXVariantGroup;
 			children = (
 				38DE1CA6168AEB800049E814 /* en */,
+				BC3C1AA216F0242C00175AFF /* es */,
+				BC3C1AA316F0242E00175AFF /* fr */,
 			);
 			name = Step_05_ViewController_ipad.xib;
 			sourceTree = "<group>";
@@ -1778,6 +1934,8 @@
 			isa = PBXVariantGroup;
 			children = (
 				38DE1CB0168AEB970049E814 /* en */,
+				BC3C1A9E16F0230C00175AFF /* es */,
+				BC3C1A9F16F0231200175AFF /* fr */,
 			);
 			name = Step_04_ViewController_ipad.xib;
 			sourceTree = "<group>";
@@ -1786,6 +1944,8 @@
 			isa = PBXVariantGroup;
 			children = (
 				38DE1CB5168AEBA40049E814 /* en */,
+				BC3C1A9A16F022F200175AFF /* es */,
+				BC3C1A9B16F022F400175AFF /* fr */,
 			);
 			name = Step_04_ViewController.xib;
 			sourceTree = "<group>";
@@ -1794,6 +1954,8 @@
 			isa = PBXVariantGroup;
 			children = (
 				38DE1CBA168AEBAF0049E814 /* en */,
+				BC3C1A9816F022EB00175AFF /* es */,
+				BC3C1A9916F022ED00175AFF /* fr */,
 			);
 			name = Step_03_ViewController_ipad.xib;
 			sourceTree = "<group>";
@@ -1802,6 +1964,8 @@
 			isa = PBXVariantGroup;
 			children = (
 				38DE1CBF168AEBBC0049E814 /* en */,
+				BC3C1A9616F022E200175AFF /* es */,
+				BC3C1A9716F022E500175AFF /* fr */,
 			);
 			name = Step_03_ViewController.xib;
 			sourceTree = "<group>";
@@ -1810,6 +1974,8 @@
 			isa = PBXVariantGroup;
 			children = (
 				38DE1CCC168AFBAA0049E814 /* en */,
+				BC3C1A9216F022D100175AFF /* es */,
+				BC3C1A9316F022D300175AFF /* fr */,
 			);
 			name = Step_02_ViewController_ipad.xib;
 			sourceTree = "<group>";
@@ -1828,6 +1994,8 @@
 			isa = PBXVariantGroup;
 			children = (
 				38DE1CD6168AFBCF0049E814 /* en */,
+				BC3C1A8A16F022A400175AFF /* es */,
+				BC3C1A8B16F022A600175AFF /* fr */,
 			);
 			name = MBP_InitialSetupViewController_ipad.xib;
 			sourceTree = "<group>";
@@ -1842,6 +2010,46 @@
 			name = MBP_InitialSetupViewController.xib;
 			sourceTree = "<group>";
 		};
+		BC3C1AC716F0257000175AFF /* ForgotPwdViewController_ipad.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				BC3C1AC616F0257000175AFF /* en */,
+				BC3C1AC816F0258300175AFF /* es */,
+				BC3C1AC916F0258700175AFF /* fr */,
+			);
+			name = ForgotPwdViewController_ipad.xib;
+			sourceTree = "<group>";
+		};
+		BC3C1AD016F025B600175AFF /* MBP_MenuViewController_ipad.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				BC3C1ACF16F025B600175AFF /* en */,
+				BC3C1AD116F025D200175AFF /* es */,
+				BC3C1AD216F025D500175AFF /* fr */,
+			);
+			name = MBP_MenuViewController_ipad.xib;
+			sourceTree = "<group>";
+		};
+		BC3C1AD516F025E300175AFF /* MBP_MenuProgress_portrait_ipad.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				BC3C1AD416F025E300175AFF /* en */,
+				BC3C1AD616F025F100175AFF /* es */,
+				BC3C1AD716F025F600175AFF /* fr */,
+			);
+			name = MBP_MenuProgress_portrait_ipad.xib;
+			sourceTree = "<group>";
+		};
+		BC3C1ADA16F025FF00175AFF /* MBP_MenuProgress_land_ipad.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				BC3C1AD916F025FF00175AFF /* en */,
+				BC3C1ADB16F0262000175AFF /* es */,
+				BC3C1ADC16F0262400175AFF /* fr */,
+			);
+			name = MBP_MenuProgress_land_ipad.xib;
+			sourceTree = "<group>";
+		};
 		BC6E4A0316BFBB9D00B0D630 /* MBP_InitialSetupViewController_land.xib */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -1850,6 +2058,14 @@
 				386CC7F916DB540E004119C0 /* fr */,
 			);
 			name = MBP_InitialSetupViewController_land.xib;
+			sourceTree = "<group>";
+		};
+		BC8C179916EF3835008CF6B1 /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				BC8C179A16EF3835008CF6B1 /* fr */,
+			);
+			name = Localizable.strings;
 			sourceTree = "<group>";
 		};
 		BCA1A4D616C24CA900E7EF56 /* Step_03_ViewController_land.xib */ = {
@@ -1866,6 +2082,8 @@
 			isa = PBXVariantGroup;
 			children = (
 				BCA1A4DD16C2569E00E7EF56 /* en */,
+				BC3C1A9C16F0230100175AFF /* es */,
+				BC3C1A9D16F0230600175AFF /* fr */,
 			);
 			name = Step_04_ViewController_land.xib;
 			sourceTree = "<group>";
@@ -1884,8 +2102,6 @@
 			isa = PBXVariantGroup;
 			children = (
 				BCA1A4EB16C2779C00E7EF56 /* en */,
-				386CC80A16DB5D7D004119C0 /* es */,
-				386CC80B16DB5D7F004119C0 /* fr */,
 			);
 			name = Step_06_ViewController_land_not_used.xib;
 			sourceTree = "<group>";
@@ -1922,6 +2138,8 @@
 			isa = PBXVariantGroup;
 			children = (
 				BCBD80C016D1D0480007943B /* en */,
+				BC3C1A8C16F022AC00175AFF /* es */,
+				BC3C1A8D16F022B300175AFF /* fr */,
 			);
 			name = MBP_InitialSetupViewController_ipad_land.xib;
 			sourceTree = "<group>";
@@ -1930,6 +2148,8 @@
 			isa = PBXVariantGroup;
 			children = (
 				BCBD80CD16D1D7850007943B /* en */,
+				BC3C1A9416F022D800175AFF /* es */,
+				BC3C1A9516F022DB00175AFF /* fr */,
 			);
 			name = Step_02_ViewController_land_ipad.xib;
 			sourceTree = "<group>";
@@ -1938,6 +2158,8 @@
 			isa = PBXVariantGroup;
 			children = (
 				BCBD80D716D1DA920007943B /* en */,
+				BC3C1AA016F0231800175AFF /* es */,
+				BC3C1AA116F0231A00175AFF /* fr */,
 			);
 			name = Step_04_ViewController_land_ipad.xib;
 			sourceTree = "<group>";
@@ -1966,6 +2188,8 @@
 			isa = PBXVariantGroup;
 			children = (
 				BCE2C4AF16C3C1FF005890FE /* en */,
+				BC3C1ADF16F0263E00175AFF /* es */,
+				BC3C1AE016F0264200175AFF /* fr */,
 			);
 			name = MBP_LoginOrRegistration_land.xib;
 			sourceTree = "<group>";
