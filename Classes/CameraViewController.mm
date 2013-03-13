@@ -36,9 +36,7 @@
 	if (self) {
 		// Custom initialization
         
-		CFBundleRef mainbundle = CFBundleGetMainBundle();
-		CFURLRef soundFileURLRef = CFBundleCopyResourceURL(mainbundle, CFSTR("beep"), CFSTR("wav"), NULL);
-		AudioServicesCreateSystemSoundID(soundFileURLRef, &soundFileObject);
+		
         
         NSString * mel1 = NSLocalizedStringWithDefaultValue(@"melody_1",nil, [NSBundle mainBundle],
                                                            @"Rock a Bye Baby", nil);
@@ -176,6 +174,11 @@
                                       style:UIBarButtonItemStyleBordered
                                      target:nil
                                      action:nil] autorelease];
+    
+    
+    CFBundleRef mainbundle = CFBundleGetMainBundle();
+    CFURLRef soundFileURLRef = CFBundleCopyResourceURL(mainbundle, CFSTR("beep"), CFSTR("wav"), NULL);
+    AudioServicesCreateSystemSoundID(soundFileURLRef, &soundFileObject);
     
     [self becomeActive]; 
 	    
@@ -778,7 +781,9 @@
 	   
 	if (streamer.recordInProgress == YES)
 		[streamer stopRecording];
-	[streamer stopStreaming];
+    
+    //close pcm player as well.. we don't need it any longer
+	[streamer stopStreaming:TRUE];
     
     if (scanner != nil)
     {
@@ -1170,8 +1175,15 @@
                              );
 
 	//Play beep
-	//AudioServicesPlaySystemSound(soundFileObject);
-    AudioServicesPlayAlertSound(soundFileObject);
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+    {
+        AudioServicesPlaySystemSound(soundFileObject);
+    }
+    else
+    {
+        AudioServicesPlayAlertSound(soundFileObject);
+    }
+    
     
     
 }

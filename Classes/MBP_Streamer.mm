@@ -58,7 +58,7 @@
 {
 	NSLog(@"Streamer released called");
 	[self stopStreaming];
-	//[pcmPlayer release];
+
     
     
 	[listenSocket release];
@@ -307,6 +307,13 @@
 
 - (void) stopStreaming
 {
+    [self stopStreaming:FALSE];
+}
+
+
+- (void) stopStreaming:(BOOL) stopPcm
+{
+    
 	if (self.videoImage != nil)
 	{
         UIInterfaceOrientation infOrientation = [UIApplication sharedApplication].statusBarOrientation;
@@ -337,18 +344,30 @@
     
 	initialFlag = 0;
     
-    
-    
-    
-	if (pcmPlayer != nil)
+
+    if (pcmPlayer != nil)
 	{
-		/* kill the audio player */
-		[[pcmPlayer player] setPlay_now:FALSE];
-		[pcmPlayer Stop];
-		[pcmPlayer release];
-		pcmPlayer = nil;
+        
+		if (stopPcm == FALSE)
+        {
+            NSLog(@"Streamer stopStreaming: Don't stop pcm player");
+            
+            /* kill the audio player */
+            [[pcmPlayer player] setPlay_now:FALSE];
+        }
+        else
+        {
+            
+            /* kill the audio player */
+            [[pcmPlayer player] setPlay_now:FALSE];
+            [pcmPlayer Stop];
+            [pcmPlayer release];
+            pcmPlayer = nil;
+        }
+        
+        
+        
 	}
-    
     
     
 	if (udtStreamerThd != nil)
@@ -359,12 +378,12 @@
 			[udtStreamerThd cancel];
             
             
-//            int waitCount = 5; //5sec
-//            while (![udtStreamerThd isFinished] && (waitCount -- > 0) )
-//            {
-//                [NSThread sleepForTimeInterval:1.0];
-//                NSLog(@"streamer wait %d ", waitCount); 
-//            }
+            //            int waitCount = 5; //5sec
+            //            while (![udtStreamerThd isFinished] && (waitCount -- > 0) )
+            //            {
+            //                [NSThread sleepForTimeInterval:1.0];
+            //                NSLog(@"streamer wait %d ", waitCount);
+            //            }
             
             
             //udtStreamerThd = nil;
@@ -376,12 +395,12 @@
 			[readTimeoutThrd cancel];
             
             
-//            int waitCount = 5; //5sec
-//            while ([readTimeoutThrd isExecuting] && (waitCount -- > 0) )
-//            {
-//                [NSThread sleepForTimeInterval:1.0];
-//                NSLog(@"readTO wait %d ", waitCount); 
-//            }
+            //            int waitCount = 5; //5sec
+            //            while ([readTimeoutThrd isExecuting] && (waitCount -- > 0) )
+            //            {
+            //                [NSThread sleepForTimeInterval:1.0];
+            //                NSLog(@"readTO wait %d ", waitCount);
+            //            }
             
             //readTimeoutThrd = nil;
 		}

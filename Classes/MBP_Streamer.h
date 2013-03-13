@@ -140,6 +140,10 @@
 - (void) setVideoView:(UIImageView *) view;
 - (void) startStreaming;
 - (void) stopStreaming;
+
+- (void) stopStreaming:(BOOL) stopPcm;
+
+
 -(void) startUdtStream;
 
 -(void) switchToUdtRelayServer; 
