@@ -76,6 +76,8 @@
 #define CMD_SENDING_INTERVAL 0.2 /*sec*/
 
 
+#define CURRENT_SPKR_STATUS @"speaker_on_off_status"
+
 @class ScanForCamera;
 
 @interface CameraViewController : UIViewController<StreamerEventHandler,ConnectionMethodDelegate , StreamerFrameRateUpdater, StreamerTemperatureUpdater, ScanForCameraNotifier>
@@ -157,7 +159,10 @@
     
     ScanForCamera *scanner; 
     BOOL firstTimeConnect; 
-    BOOL settingupStreamer; 
+    BOOL settingupStreamer;
+    
+    //Remember user settings while they are watching this Video....
+    NSMutableDictionary * userSettings;
     
 }
 @property (nonatomic, assign) IBOutlet UIBarButtonItem * barBtnName;
@@ -171,7 +176,7 @@
 @property (nonatomic, assign) UISlider * zoombar; 
 @property (nonatomic) float currentZoomLvl; 
 @property (nonatomic) BOOL ptt_enabled,askForFWUpgradeOnce,enableControls, firstTimeConnect, fwUpgradeInProgess;
-
+@property (nonatomic,retain) NSDictionary * userSettings;
 
 -(IBAction)buttonHQPressed:(id) sender;
 -(IBAction)buttonMelodyPressed:(id) sender;

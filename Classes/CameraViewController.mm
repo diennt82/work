@@ -28,6 +28,7 @@
 @synthesize barBtnName;
 @synthesize  fwUpgradeInProgess;
 
+@synthesize  userSettings;
 
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
@@ -52,6 +53,10 @@
 		melodies = [[NSArray alloc] initWithObjects:mel1,mel2,mel3,mel4, mel5,nil];
         
 		self.askForFWUpgradeOnce = YES;
+        
+        
+        self.userSettings = [[NSMutableDictionary alloc]init];
+        
 	}
 	return self;
 }
@@ -61,7 +66,7 @@
     
 	[temperature_label release];
 	[videoAndSnapshotTime release];
-    
+    [userSettings release];
 	[super dealloc];
 }
 
@@ -1016,7 +1021,18 @@
 		UIButton * spk_btn = (UIButton*) [self.view viewWithTag:SPK_CONTROL_BTN];
 		if (spk_btn != nil)
 		{
-            spk_btn.selected = YES;
+            
+            NSNumber *bool_val = [self.userSettings objectForKey:CURRENT_SPKR_STATUS];
+            if (bool_val != nil)
+            {
+                
+                NSLog(@"found dic entry value: %d",[bool_val boolValue] );
+                spk_btn.selected = [bool_val boolValue];
+            }
+            else
+            {
+                spk_btn.selected = YES;
+            }
             [self setEnableSpk:spk_btn.selected];
             
 		}
@@ -2228,6 +2244,7 @@
 #pragma mark SPK
 
 
+
 -(IBAction)buttonSpkPressed:(id)sender
 {
     if (self.enableControls == FALSE)
@@ -2254,6 +2271,11 @@
 				btn.selected = YES;
 			}
             
+           
+           
+            //store the latest user settings here so that later we can restore 
+            [self.userSettings setValue:[NSNumber numberWithBool:btn.selected]
+                                 forKey:CURRENT_SPKR_STATUS];
             
 			[self setEnableSpk:btn.selected];
             

@@ -56,7 +56,6 @@
 
 - (void) dealloc
 {
-	NSLog(@"Streamer released called");
 	[self stopStreaming];
 
     
@@ -1906,14 +1905,14 @@
         self.currentOrientation == UIInterfaceOrientationLandscapeRight)
 	{
         
-        NSLog(@"Streamer switch to Landscape orientation");
+        //NSLog(@"Streamer switch to Landscape orientation");
         
 	}
 	else if (self.currentOrientation == UIInterfaceOrientationPortrait ||
              self.currentOrientation == UIInterfaceOrientationPortraitUpsideDown)
 	{
         
-        NSLog(@"Streamer switch to portrait orientation");
+      //  NSLog(@"Streamer switch to portrait orientation");
     }
 }
 
