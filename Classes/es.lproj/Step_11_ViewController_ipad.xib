@@ -65,7 +65,7 @@
 						<int key="IBUIContentHorizontalAlignment">0</int>
 						<int key="IBUIContentVerticalAlignment">0</int>
 						<int key="IBUIButtonType">1</int>
-						<string key="IBUINormalTitle">Try Again</string>
+						<string key="IBUINormalTitle">Intentarlo otra vez</string>
 						<object class="NSColor" key="IBUIHighlightedTitleColor" id="536204430">
 							<int key="NSColorSpace">3</int>
 							<bytes key="NSWhite">MQA</bytes>
@@ -111,7 +111,7 @@
 								<bool key="IBUIShowsHorizontalScrollIndicator">NO</bool>
 								<bool key="IBUIShowsVerticalScrollIndicator">NO</bool>
 								<bool key="IBUIEditable">NO</bool>
-								<string key="IBUIText">2. Press and hold the RESET button at the bottom of the camera</string>
+								<string key="IBUIText">2. Mantenga pulsado el botón RESET en la parte inferior de la cámara</string>
 								<reference key="IBUITextColor" ref="536204430"/>
 								<object class="IBUITextInputTraits" key="IBUITextInputTraits">
 									<int key="IBUIAutocapitalizationType">2</int>
@@ -130,7 +130,7 @@
 							<object class="IBUITextView" id="631083919">
 								<reference key="NSNextResponder" ref="615834224"/>
 								<int key="NSvFlags">292</int>
-								<string key="NSFrame">{{68, 165}, {406, 35}}</string>
+								<string key="NSFrame">{{68, 151}, {406, 49}}</string>
 								<reference key="NSSuperview" ref="615834224"/>
 								<reference key="NSWindow"/>
 								<reference key="NSNextKeyView" ref="693124017"/>
@@ -143,7 +143,7 @@
 								<bool key="IBUIShowsHorizontalScrollIndicator">NO</bool>
 								<bool key="IBUIShowsVerticalScrollIndicator">NO</bool>
 								<bool key="IBUIEditable">NO</bool>
-								<string key="IBUIText">To Try Add Camera again, please follow the steps below:</string>
+								<string key="IBUIText">Para intentar agregar cámara otra vez, por favor siga los siguientes pasos:</string>
 								<reference key="IBUITextColor" ref="536204430"/>
 								<object class="IBUITextInputTraits" key="IBUITextInputTraits">
 									<int key="IBUIAutocapitalizationType">2</int>
@@ -168,7 +168,7 @@
 								<bool key="IBUIShowsHorizontalScrollIndicator">NO</bool>
 								<bool key="IBUIShowsVerticalScrollIndicator">NO</bool>
 								<bool key="IBUIEditable">NO</bool>
-								<string key="IBUIText">It might be because of the following reasons:</string>
+								<string key="IBUIText">Podría ser por las siguientes razones:</string>
 								<reference key="IBUITextColor" ref="536204430"/>
 								<int key="IBUITextAlignment">1</int>
 								<object class="IBUITextInputTraits" key="IBUITextInputTraits">
@@ -195,7 +195,7 @@
 								<bool key="IBUIShowsHorizontalScrollIndicator">NO</bool>
 								<bool key="IBUIShowsVerticalScrollIndicator">NO</bool>
 								<bool key="IBUIEditable">NO</bool>
-								<string key="IBUIText">1. Please ensure your Wi-Fi password is correct.</string>
+								<string key="IBUIText">1. Por favor asegúrese que su contraseña de Wi-Fi sea correcta.</string>
 								<reference key="IBUITextColor" ref="536204430"/>
 								<object class="IBUITextInputTraits" key="IBUITextInputTraits">
 									<int key="IBUIAutocapitalizationType">2</int>
@@ -220,7 +220,7 @@
 								<bool key="IBUIShowsHorizontalScrollIndicator">NO</bool>
 								<bool key="IBUIShowsVerticalScrollIndicator">NO</bool>
 								<bool key="IBUIEditable">NO</bool>
-								<string key="IBUIText">1. Switch OFF your camera</string>
+								<string key="IBUIText">1. Apague su cámara</string>
 								<reference key="IBUITextColor" ref="536204430"/>
 								<object class="IBUITextInputTraits" key="IBUITextInputTraits">
 									<int key="IBUIAutocapitalizationType">2</int>
@@ -245,7 +245,7 @@
 								<bool key="IBUIShowsHorizontalScrollIndicator">NO</bool>
 								<bool key="IBUIShowsVerticalScrollIndicator">NO</bool>
 								<bool key="IBUIEditable">NO</bool>
-								<string key="IBUIText">3. Power ON your camera</string>
+								<string key="IBUIText">3. Encienda su cámara</string>
 								<reference key="IBUITextColor" ref="536204430"/>
 								<object class="IBUITextInputTraits" key="IBUITextInputTraits">
 									<int key="IBUIAutocapitalizationType">2</int>
@@ -270,7 +270,7 @@
 								<bool key="IBUIShowsHorizontalScrollIndicator">NO</bool>
 								<bool key="IBUIShowsVerticalScrollIndicator">NO</bool>
 								<bool key="IBUIEditable">NO</bool>
-								<string key="IBUIText">4. Wait for around 15 seconds. The camera will beep and restart</string>
+								<string key="IBUIText">4. Espere unos 15 segundos. La cámara emitirá un pitido y se reiniciará</string>
 								<reference key="IBUITextColor" ref="536204430"/>
 								<object class="IBUITextInputTraits" key="IBUITextInputTraits">
 									<int key="IBUIAutocapitalizationType">2</int>
@@ -295,7 +295,7 @@
 								<bool key="IBUIShowsHorizontalScrollIndicator">NO</bool>
 								<bool key="IBUIShowsVerticalScrollIndicator">NO</bool>
 								<bool key="IBUIEditable">NO</bool>
-								<string key="IBUIText">2. Please check if your iOS device is connected to the same Wi-Fi network as your camera.</string>
+								<string key="IBUIText">2. Por favor compruebe si su dispositivo iOS esta conectado a la misma red Wi-Fi que su cámara.</string>
 								<reference key="IBUITextColor" ref="536204430"/>
 								<object class="IBUITextInputTraits" key="IBUITextInputTraits">
 									<int key="IBUIAutocapitalizationType">2</int>
@@ -320,7 +320,7 @@
 								<bool key="IBUIShowsHorizontalScrollIndicator">NO</bool>
 								<bool key="IBUIShowsVerticalScrollIndicator">NO</bool>
 								<bool key="IBUIEditable">NO</bool>
-								<string key="IBUIText">5. The camera is now in setup mode again</string>
+								<string key="IBUIText">5. La cámara vuelve a estar en modo de configuración ahora</string>
 								<reference key="IBUITextColor" ref="536204430"/>
 								<object class="IBUITextInputTraits" key="IBUITextInputTraits">
 									<int key="IBUIAutocapitalizationType">2</int>
