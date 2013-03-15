@@ -1014,19 +1014,18 @@
     
     
     
+    NSNumber *bool_val = [self.userSettings objectForKey:CURRENT_SPKR_STATUS];
     
+    UIButton * spk_btn = (UIButton*) [self.view viewWithTag:SPK_CONTROL_BTN];
 	//Disable speaker for remote connections
 	if (ch.profile.isInLocal != TRUE)
 	{
-		UIButton * spk_btn = (UIButton*) [self.view viewWithTag:SPK_CONTROL_BTN];
+		
 		if (spk_btn != nil)
 		{
-            
-            NSNumber *bool_val = [self.userSettings objectForKey:CURRENT_SPKR_STATUS];
             if (bool_val != nil)
             {
                 
-                NSLog(@"found dic entry value: %d",[bool_val boolValue] );
                 spk_btn.selected = [bool_val boolValue];
             }
             else
@@ -1045,6 +1044,15 @@
 		}
         
 	}
+    else //Local connection: also remember user choices.
+    {
+        if (bool_val != nil)
+        {
+            spk_btn.selected = [bool_val boolValue];
+        }
+        
+        
+    }
     
     NSLog(@"End of setupCameraStreamer 11");
  
@@ -1173,7 +1181,7 @@
 
 
 #pragma mark -
-#pragma mark StreamerEventHandler
+#pragma mark Timer Callbacks
 
 -(void) playSound
 {
@@ -1203,6 +1211,25 @@
     
     
 }
+
+-(void)periodicBeep:(NSTimer*) exp
+{
+    [self playSound];
+}
+
+-(void) stopPeriodicBeep
+{
+	if (self.alertTimer != nil)
+	{
+		if ([self.alertTimer isValid])
+		{
+			[self.alertTimer invalidate];
+		}
+        
+	}
+}
+
+
 
 -(void) periodicPopup:(NSTimer *) exp
 {
@@ -1278,6 +1305,8 @@
 }
 
 
+#pragma mark -
+#pragma mark StreamerEventHandler
 
 -(void) statusReport:(int) status andObj:(NSObject*) obj
 {
@@ -1415,8 +1444,6 @@
             self.scomm = nil; //STUN
             self.comm = nil;// UPNP/local
             
-            
-            //[self prepareToViewRemotely:selected_channel];
             [NSTimer scheduledTimerWithTimeInterval:1.0
                                              target:self
                                            selector:@selector(startCameraConnection:)
@@ -1658,6 +1685,52 @@
 	_alert.tag = REMOTE_VIDEO_TIMEOUT;
 	[_alert show];
 	[_alert release];
+    
+    
+    
+    NSLog(@"Timeout: stopping video stream..");
+    
+    self.selected_channel.stopStreaming = TRUE;
+	if (streamer.recordInProgress == YES)
+		[streamer stopRecording];
+    //close pcm player as well.. we don't need it any longer
+	[streamer stopStreaming:FALSE];
+   	//NSLog(@"abort remote timer ");
+	[self.selected_channel abortViewTimer];
+    
+    
+    
+    if (self.alertTimer != nil && [self.alertTimer isValid])
+    {
+        NSLog(@"some periodic is running ..over rule because timeout now");
+        
+        [self stopPeriodicPopup];
+        
+    }
+    
+    
+    /// if we are in background --> Beep periodically
+    UIApplication *application = [UIApplication sharedApplication];
+    if (application.applicationState == UIApplicationStateActive)
+    {
+        // update the tab bar item
+    }
+    else
+    {
+            
+        self.alertTimer = [NSTimer scheduledTimerWithTimeInterval:5.0
+                                                           target:self
+                                                         selector:@selector(periodicBeep:)
+                                                         userInfo:msg
+                                                          repeats:YES];
+        [self.alertTimer fire] ;//fire once now
+
+
+    }
+    
+    
+    
+    
 }
 
 
@@ -1672,27 +1745,33 @@
     
 	if (tag == REMOTE_VIDEO_TIMEOUT)
 	{
+        
+        [self stopPeriodicBeep];
+        
 		switch(buttonIndex) {
 			case 0:
-				NSLog(@"Stop remote view -- go back to camera list-");
-                
-				self.selected_channel.stopStreaming = TRUE;
 				[self goBackToCameraList];
-                
 				break;
 			case 1:
-            {
-                //video is still playing now-- no need to stop
-
-                NSLog(@"start the 2nd round on isMain? %d ",[[NSThread currentThread] isMainThread]);
-                //just refresh the timer..
-                if (selected_channel != nil)
-                {
-                    [selected_channel refreshTimer];
-                    
-                    
-                }
-            }
+                
+                //Stop stream - [TRUE: reset the pcm player as well] as we are going to create a new one
+                [self.streamer stopStreaming:TRUE];
+                
+                //nil all comm object
+                self.scomm = nil; //STUN
+                self.comm = nil;// UPNP/local
+               
+                //REset channel
+                self.selected_channel.stopStreaming = FALSE;
+                progressView.hidden = NO;
+                [self.view bringSubviewToFront:progressView];
+                
+                [NSTimer scheduledTimerWithTimeInterval:0.1
+                                                 target:self
+                                               selector:@selector(startCameraConnection:)
+                                               userInfo:nil
+                                                repeats:NO];
+                
 				break;
 			default:
 				break;
@@ -1702,11 +1781,8 @@
 	{
 		switch(buttonIndex) {
 			case 0: //Cancel
-				NSLog(@"Stop monitoring  -- go back to camera list-");
 				[self stopPeriodicPopup];
-                
 				self.selected_channel.stopStreaming = TRUE;
-                
 				[self goBackToCameraList];
                 
 				break;
@@ -1721,7 +1797,7 @@
 	{
 		switch(buttonIndex) {
 			case 0: //Stop monitoring
-				NSLog(@"Stop monitoring  -- go back to camera list-");
+
 				[self stopPeriodicPopup];
 				self.selected_channel.stopStreaming = TRUE;
 				[self goBackToCameraList];
@@ -1777,7 +1853,6 @@
 	switch (method) {
 		case 1: //this camera is going to be removed soon..do sth about it now.
         {
-            NSLog(@"Stop Streaming ");
             //Stop streaming first
             [streamer stopStreaming];
             break;
@@ -1827,8 +1902,6 @@
 
 - (void) showJoysticksOnly
 {
-	NSLog(@"show joystick & cancel FS timer.");
-    
 	directionPad.hidden = NO;
     
 
@@ -2370,7 +2443,6 @@
             
 			if (audioOut != nil)
 			{
-				NSLog(@"disconnect audio out ");
 				[audioOut disconnectFromAudioSocket];
 				[audioOut release];
 			}
@@ -2419,7 +2491,7 @@
 	if ([gest state] == UIGestureRecognizerStateBegan)
 	{
 		[btn setImage:[UIImage imageNamed:@"bb_vs_mike_off.png"] forState:UIControlStateNormal];
-		NSLog(@"start PTT");
+
 		[self setEnablePtt:YES];
         
         
@@ -2428,7 +2500,7 @@
 	{
 		[btn setImage:[UIImage imageNamed:@"bb_vs_mike_on.png"] forState:UIControlStateNormal];
         
-		NSLog(@"stop PTT - start fullscreen timer ");
+
 		[self setEnablePtt:NO];
         
         [self tryToShowFullScreen];
@@ -2437,7 +2509,6 @@
 		if (spk != nil && (self.streamer.disableAudio == TRUE))
 		{
 			//Toggle camera audio when ptt disabled
-			NSLog(@"Toggle camera audio when ptt disabled ");
 			[spk sendActionsForControlEvents:UIControlEventTouchUpInside];
 		}
         
@@ -2485,7 +2556,7 @@
         )
 	{
 		//Dont support in stun mode
-		NSLog(@"STUN mode -- return");
+
 		return;
 	}
     
@@ -2531,8 +2602,6 @@
 	{
 		if (self.scomm != nil)
 		{
-			NSLog(@"checking melody on/off");
-            
             
 			responseData= [self.scomm sendCommandThruUdtServer:GET_MELODY
                                          withMac:self.selected_channel.profile.mac_address
@@ -2560,34 +2629,10 @@
 			NSString * str_value = [response substringFromIndex:([GET_MELODY length] + 2)];
             
 			int _melody_index  = [str_value intValue];
-            
-#if 0
-			if (_melody_index == 0)
-			{
-				//set icon off
-				[lullabyButton setImage:[UIImage imageNamed:@"bb_melody_off_icon.png"] forState:UIControlStateNormal];
-				[lullabyOnOff setOn:FALSE];
-                
-				melody_index = -1;
-                
-			}
-			else
-			{
-				melody_index = (_melody_index-1) ;
-                
-				//set icon on
-				[lullabyButton setImage:[UIImage imageNamed:@"bb_melody_icon.png"] forState:UIControlStateNormal];
-				[lullabyOnOff setOn:TRUE];
-                
-                
-				UITableView * melodies_tb = (UITableView *) [lullabyView viewWithTag:1];
-				[melodies_tb reloadData];
-			}
-#else
             NSNumber * num = [[NSNumber alloc]initWithInt:_melody_index];
             [self performSelectorOnMainThread:@selector(setMelody_fg:) withObject:num
                                 waitUntilDone:NO];
-#endif
+
             
 		}
         
@@ -2659,7 +2704,6 @@
 				UITableViewCell *oldCell = [melodies_tb cellForRowAtIndexPath:oldIndexPath];
 				if (oldCell.accessoryType == UITableViewCellAccessoryCheckmark) {
 					oldCell.accessoryType = UITableViewCellAccessoryNone;
-					NSLog(@"disable checkmark for index:%d", oldIndexPath.row);
 				}
                 
                 
@@ -2698,9 +2742,6 @@
 	{
 		if (self.scomm != nil)
 		{
-			NSLog(@"sending melody");
-            
-            
 			[self.scomm sendCommandThruUdtServer:command
                                          withMac:self.selected_channel.profile.mac_address
                                       AndChannel:self.selected_channel.channID];
@@ -2813,16 +2854,11 @@
         
 	}
     
-#if 1
+
 	[self performSelector:@selector(setMelody:)
                withObject:[[NSNumber alloc]initWithInt:(melody_index+1)]
                afterDelay:0.1];
-#else
-    NSLog(@"haha bg"); 
-    [self performSelectorInBackground:@selector(setMelody:)
-                           withObject:[[NSNumber alloc]initWithInt:(melody_index+1)] ];
-    
-#endif //TEST
+
     
 }
 
@@ -3092,14 +3128,10 @@
 	[self validatePoint:beginLocation newMovement:NO ];
     
     
-    
-    
-#if 1
-    
 	[self updateVerticalDirection_end:0 inStep:0];
     
 	[self updateHorizontalDirection_end:0 inStep:0];
-#endif
+
     
 }
 #pragma mark -
@@ -3390,13 +3422,6 @@
 		{
 			if (self.scomm != nil)
 			{
-				NSLog(@"sending UD Direction: ");
-                
-//                
-//				[self.scomm sendCommandThruUdtServerNonBlock:dir_str 
-//                                             withMac:self.selected_channel.profile.mac_address
-//                                          AndChannel:self.selected_channel.channID];
-                
                 
                 [self.scomm sendCommandThruUdtServer:dir_str
                                              withMac:self.selected_channel.profile.mac_address
@@ -3456,12 +3481,6 @@
 		{
 			if (self.scomm != nil)
 			{
-				NSLog(@"sending LR Direction UDT - blocking: ");
-                
-                
-//				[self.scomm sendCommandThruUdtServerNonBlock:dir_str 
-//                                             withMac:self.selected_channel.profile.mac_address
-//                                          AndChannel:self.selected_channel.channID];
                 
                 [self.scomm sendCommandThruUdtServer:dir_str
                                              withMac:self.selected_channel.profile.mac_address
@@ -3541,8 +3560,6 @@
 		{
 			//NO upgrade
 			//simply die off
-            
-			NSLog(@"NOoooo Upgrade "); 
 		}
 		else 
 		{

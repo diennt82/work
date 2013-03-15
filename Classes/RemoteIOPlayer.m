@@ -89,42 +89,75 @@ static OSStatus playbackCallback(void *inRefCon,
 	RemoteIOPlayer *remoteIOplayer = (RemoteIOPlayer *)inRefCon;
 	
 	
-	if ( (remoteIOplayer.inMemoryAudioFile == nil)  ||
-        (remoteIOplayer.play_now == FALSE) )
+	if ( (remoteIOplayer.inMemoryAudioFile == nil)
+        //|| (remoteIOplayer.play_now == FALSE)
+        )
 	{
 		
 		return noErr;
 	}
-	//NSLog(@"player ref  %p #buffs %d" ,remoteIOplayer, ioData->mNumberBuffers);
-	
-	//loop through all the buffers that need to be filled
-	for (int i = 0 ; i < ioData->mNumberBuffers; i++){
-		//get the buffer to be filled
-		AudioBuffer buffer = ioData->mBuffers[i];
-		
-		//if needed we can get the number of bytes that will fill the buffer using
-		// int numberOfSamples = ioData->mBuffers[i].mDataByteSize;
-		
-		//get the buffer and point to it as an UInt32 (as we will be filling it with 32 bit samples)
-		//if we wanted we could grab it as a 16 bit and put in the samples for left and right seperately
-		//but the loop below would be for(j = 0; j < inNumberFrames * 2; j++) as each frame is a 32 bit number
-		UInt32 *frameBuffer = buffer.mData;
-		
-		
-		//NSLog(@"playback frames %d mDataBye:%d" ,inNumberFrames, buffer.mDataByteSize);
-		
-		//loop through the buffer and fill the frames
-		for (int j = 0; j < inNumberFrames; j++){
-			// get NextPacket returns a 32 bit value, one frame.
-			frameBuffer[j] = [[remoteIOplayer inMemoryAudioFile] getNextPacket];
-			
+    
+    
+    
+    if  (remoteIOplayer.play_now == FALSE)
+    {
+        //flush all data now... so that later getNextPacket return 0 ;
+        //loop through all the buffers that need to be filled
+        for (int i = 0 ; i < ioData->mNumberBuffers; i++)
+        {
+            //get the buffer to be filled
+            AudioBuffer buffer = ioData->mBuffers[i];
+          
+            UInt32 *frameBuffer = buffer.mData;
+            //loop through the buffer and fill the frames
+            for (int j = 0; j < inNumberFrames; j++){
+                // get NextPacket returns a 32 bit value, one frame.
+                frameBuffer[j] = 0; 
+
+            }
+        }
+        
+        if ([[remoteIOplayer inMemoryAudioFile] length] > 0 )
+        {
+            NSLog(@"flush audio buff"); 
+            [[remoteIOplayer inMemoryAudioFile] flush];
+        }
+        
+        
+
+    }
+    else
+    {
+        
+        //loop through all the buffers that need to be filled
+        for (int i = 0 ; i < ioData->mNumberBuffers; i++)
+        {
+            //get the buffer to be filled
+            AudioBuffer buffer = ioData->mBuffers[i];
+            
+            //if needed we can get the number of bytes that will fill the buffer using
+            // int numberOfSamples = ioData->mBuffers[i].mDataByteSize;
+            
+            //get the buffer and point to it as an UInt32 (as we will be filling it with 32 bit samples)
+            //if we wanted we could grab it as a 16 bit and put in the samples for left and right seperately
+            //but the loop below would be for(j = 0; j < inNumberFrames * 2; j++) as each frame is a 32 bit number
+            UInt32 *frameBuffer = buffer.mData;
+            
+            
+            //loop through the buffer and fill the frames
+            for (int j = 0; j < inNumberFrames; j++){
+                // get NextPacket returns a 32 bit value, one frame.
+                frameBuffer[j] = [[remoteIOplayer inMemoryAudioFile] getNextPacket];
+                
 #if DBG_AUDIO
-			/* DBG : save this data to a file to playback later */
-			fwrite(&frameBuffer[j],4, 1, fp);
+                /* DBG : save this data to a file to playback later */
+                fwrite(&frameBuffer[j],4, 1, fp);
 #endif 	
-		}
-	}
-	//dodgy return :)
+            }
+        }
+    }
+    
+
     return noErr;
 }
 

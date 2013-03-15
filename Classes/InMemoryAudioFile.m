@@ -45,10 +45,13 @@
 -(UInt32)getNextPacket{	
 	@synchronized(iAudioBuffer) {
 		// if we reach the end of buffer, return 0
-		if(iReadPosition >= [iAudioBuffer length] - 1) {
+		if(iReadPosition >= [iAudioBuffer length] - 1)
+        {
+
 			return 0;
 		}
-		
+    
+        
 		// truncate the buffer to discard played data
 		if(iReadPosition > 16 * 1024) {
 			NSRange range = {0, iReadPosition};
@@ -60,25 +63,6 @@
 		short val = ptr[iReadPosition/2];	
 		
 		iReadPosition += 2;
-		
-		/***
-		{
-		 // Amplify the audio
-		 long processed_val;
-		 
-		 processed_val = val;
-		 processed_val = processed_val<< 2; // 4x
-		 
-		 if (processed_val <= 32767 && processed_val >= -32768) {
-		 val = processed_val;
-		 } else if (processed_val > 32767) {
-		 val = 32767;
-		 } else if (processed_val < -32768) {
-		 val = -32768;
-		 }
-			
-		}
-		 ***/	
 		
 		
 		UInt32 ret = (val | (val << 16));

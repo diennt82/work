@@ -308,9 +308,6 @@
 	http_cmd = [http_cmd stringByAppendingFormat:@"%@%@", GET_STREAM_MODE_PARAM_1, mac_];
 	
 	
-	NSLog(@"getStreamMode query:%@", http_cmd);
-	
-	
 	if (selIfSuccess == nil ||selIfFailure == nil|| selIfServerFail ==nil)
 	{
 		NSLog(@"ERR: selector is not set");

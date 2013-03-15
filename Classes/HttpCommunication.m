@@ -268,7 +268,7 @@
             
 			NSString * response = [NSString stringWithUTF8String:[dataReply bytes]];
 			NSLog(@"pass with default. - dataReply: %@", response);
-			return 0; // Dont ask for new password
+			
 		}
 
 #if 0
@@ -345,6 +345,8 @@
 		
 	}
 	
+    
+    return 0; // Dont ask for new password
 }
 
 
@@ -414,13 +416,9 @@
     
     if (device_version != nil) {
         
-        NSLog(@"device_version ------------>%@",device_version);
-        
         NSArray * versionArray = [device_version componentsSeparatedByString:@"_"];
         NSString * version_value1 = [versionArray objectAtIndex:0];
         NSString * version_value2 = [versionArray objectAtIndex:1];
-        
-        NSLog(@"maj:%@ %d, minor:  %d",version_value1, [version_value1 intValue], [version_value2 intValue]);
         
         if ( [version_value1 intValue] > 8 ||
              ([version_value1 intValue] == 8 && [version_value2 intValue] >= 23)
@@ -428,7 +426,7 @@
         {
             // check version > 08_020 ?
             
-            NSLog(@"need encode url ");
+
             
             return  TRUE;
             
@@ -498,8 +496,6 @@
 
 - (NSData *) sendCommandAndBlock_raw:(NSString *)command
 {
-	NSLog(@"send request: %@", command);
-    
     return  [self sendCommandAndBlock_raw:command withTimeout:DEFAULT_TIME_OUT];
 	
 }
@@ -534,8 +530,6 @@
     http_cmd = [NSString stringWithFormat:@"http://%@:%d/%@%@",
                 device_ip, device_port,
                 HTTP_COMMAND_PART,command];
-    
-    NSLog(@"http: %@", http_cmd);
     
     
 	NSString *authHeader = [@"Basic " stringByAppendingFormat:@"%@", [Util getDFCredentials]];
@@ -633,7 +627,7 @@
 						   device_ip, device_port,
 						   SNAPSHOT_REQUEST]; 
 	
-	NSLog(@"getSnapshot: %@", http_cmd);
+
 	
 	NSString *authHeader = [@"Basic " stringByAppendingFormat:@"%@", [Util getDFCredentials]];  
 	
@@ -641,7 +635,7 @@
 	if (macc != nil)
 	{
 		NSString * cam_pass = [CameraPassword getPasswordForCam:macc];
-		NSLog(@"cam_pass:%@ for %@",cam_pass, macc);
+
 		if (cam_pass == nil)
 		{
 			//no password 
@@ -700,8 +694,7 @@
 	NSString * http_cmd = [NSString stringWithFormat:@"http://%@:%d/%@%@",
 						   device_ip, device_port,
 						   HTTP_COMMAND_PART,command]; 
-	
-	NSLog(@"http: %@", http_cmd);
+
 	@synchronized(self)
 	{
 		
