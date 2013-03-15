@@ -55,7 +55,7 @@
 					<object class="IBUITextView" id="759490419">
 						<reference key="NSNextResponder" ref="460047669"/>
 						<int key="NSvFlags">292</int>
-						<string key="NSFrame">{{121, 0}, {526, 60}}</string>
+						<string key="NSFrame">{{103, 0}, {562, 60}}</string>
 						<reference key="NSSuperview" ref="460047669"/>
 						<reference key="NSWindow"/>
 						<reference key="NSNextKeyView" ref="1016240247"/>
@@ -68,7 +68,7 @@
 						<bool key="IBUIMultipleTouchEnabled">YES</bool>
 						<string key="targetRuntimeIdentifier">IBIPadFramework</string>
 						<bool key="IBUIEditable">NO</bool>
-						<string key="IBUIText">Select the wifi connection that your camera can use</string>
+						<string key="IBUIText">Seleccione la conexión wifi que su cámara puede usar</string>
 						<object class="NSColor" key="IBUITextColor">
 							<int key="NSColorSpace">3</int>
 							<bytes key="NSWhite">MQA</bytes>
