@@ -692,10 +692,55 @@ return self;
 
 
 
--(BOOL) pushNotificationRcvedInForeground:(CameraAlert *) camAlert
 
+-(BOOL) isServerAnnouncement: (CameraAlert *) camAlert
 {
-	//Check if we should popup
+    if ( [camAlert.alertType isEqualToString:ALERT_GENERIC_SERVER_INFO]  )
+    {
+        
+        return TRUE;
+    }
+    
+    
+    
+    return FALSE;
+}
+
+
+-(BOOL) pushNotificationRcvedInForeground:(CameraAlert *) camAlert
+{
+
+    // IF this is just a server announcement - Dont do anything -
+    if ([self isServerAnnouncement:camAlert])
+    {
+        
+        
+        
+        NSString * ok = NSLocalizedStringWithDefaultValue(@"Ok",nil, [NSBundle mainBundle],
+                                                              @"Ok", nil);
+        
+       
+        
+        NSString * msg = camAlert.alertVal;
+        
+        pushAlert = [[UIAlertView alloc]
+                     initWithTitle:camAlert.cameraName
+                     message:msg
+                     delegate:self
+                     cancelButtonTitle:ok
+                     otherButtonTitles:nil];
+        
+        [pushAlert show];
+        
+        
+        
+        
+        return FALSE ;
+        
+    }
+	
+    
+    //Check if we should popup
 	NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
 	//mac with COLON 
 	NSString * camInView = (NSString*)[userDefaults objectForKey:CAM_IN_VEW];

@@ -14,6 +14,7 @@
 
 #define _push_dev_token @"PUSH_NOTIFICATION_DEVICE_TOKEN"
 
+#define ALERT_GENERIC_SERVER_INFO @"0"
 #define  ALERT_TYPE_SOUND    @"1"
 #define  ALERT_TYPE_TEMP_HI  @"2"
 #define  ALERT_TYPE_TEMP_LO @"3"
