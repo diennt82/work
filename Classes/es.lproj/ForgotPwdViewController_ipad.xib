@@ -56,7 +56,7 @@
 					<object class="IBUILabel" id="439106828">
 						<reference key="NSNextResponder" ref="221714538"/>
 						<int key="NSvFlags">301</int>
-						<string key="NSFrame">{{170, 285}, {367, 73}}</string>
+						<string key="NSFrame">{{170, 256}, {367, 102}}</string>
 						<reference key="NSSuperview" ref="221714538"/>
 						<reference key="NSWindow"/>
 						<reference key="NSNextKeyView" ref="79112448"/>
@@ -66,14 +66,14 @@
 						<int key="IBUIContentMode">7</int>
 						<bool key="IBUIUserInteractionEnabled">NO</bool>
 						<string key="targetRuntimeIdentifier">IBIPadFramework</string>
-						<string key="IBUIText">Enter your email address and we will send you a reset link</string>
+						<string key="IBUIText">Introduzca su dirección de email y le mandaremos un enlace de restablecimiento</string>
 						<object class="NSColor" key="IBUITextColor" id="843137329">
 							<int key="NSColorSpace">1</int>
 							<bytes key="NSRGB">MSAxIDEAA</bytes>
 						</object>
 						<nil key="IBUIHighlightedColor"/>
 						<int key="IBUIBaselineAdjustment">0</int>
-						<int key="IBUINumberOfLines">2</int>
+						<int key="IBUINumberOfLines">3</int>
 						<object class="IBUIFontDescription" key="IBUIFontDescription" id="387752567">
 							<int key="type">1</int>
 							<double key="pointSize">20</double>
@@ -92,6 +92,7 @@
 						<string key="NSFrame">{{165, 366}, {407, 31}}</string>
 						<reference key="NSSuperview" ref="221714538"/>
 						<reference key="NSWindow"/>
+						<reference key="NSNextKeyView"/>
 						<string key="NSReuseIdentifierKey">_NS:9</string>
 						<bool key="IBUIOpaque">NO</bool>
 						<bool key="IBUIClipsSubviews">YES</bool>
@@ -134,7 +135,7 @@
 				<string key="targetRuntimeIdentifier">IBIPadFramework</string>
 			</object>
 			<object class="IBUIView" id="130650824">
-				<nil key="NSNextResponder"/>
+				<reference key="NSNextResponder"/>
 				<int key="NSvFlags">274</int>
 				<array class="NSMutableArray" key="NSSubviews">
 					<object class="IBUIImageView" id="866065035">
@@ -142,6 +143,7 @@
 						<int key="NSvFlags">274</int>
 						<string key="NSFrameSize">{768, 1010}</string>
 						<reference key="NSSuperview" ref="130650824"/>
+						<reference key="NSWindow"/>
 						<reference key="NSNextKeyView" ref="600753708"/>
 						<string key="NSReuseIdentifierKey">_NS:9</string>
 						<bool key="IBUIUserInteractionEnabled">NO</bool>
@@ -153,6 +155,7 @@
 						<int key="NSvFlags">301</int>
 						<string key="NSFrame">{{244, 71}, {280, 73}}</string>
 						<reference key="NSSuperview" ref="130650824"/>
+						<reference key="NSWindow"/>
 						<reference key="NSNextKeyView" ref="350575487"/>
 						<string key="NSReuseIdentifierKey">_NS:9</string>
 						<bool key="IBUIOpaque">NO</bool>
@@ -160,7 +163,7 @@
 						<int key="IBUIContentMode">7</int>
 						<bool key="IBUIUserInteractionEnabled">NO</bool>
 						<string key="targetRuntimeIdentifier">IBIPadFramework</string>
-						<string key="IBUIText">A link to reset your password has been sent to </string>
+						<string key="IBUIText">Se ha enviado un link para restablecer su contraseña a</string>
 						<reference key="IBUITextColor" ref="843137329"/>
 						<nil key="IBUIHighlightedColor"/>
 						<int key="IBUIBaselineAdjustment">0</int>
@@ -183,6 +186,7 @@
 						<int key="NSvFlags">301</int>
 						<string key="NSFrame">{{274, 151}, {212, 21}}</string>
 						<reference key="NSSuperview" ref="130650824"/>
+						<reference key="NSWindow"/>
 						<reference key="NSNextKeyView" ref="547748041"/>
 						<string key="NSReuseIdentifierKey">_NS:9</string>
 						<bool key="IBUIOpaque">NO</bool>
@@ -190,7 +194,7 @@
 						<int key="IBUIContentMode">7</int>
 						<bool key="IBUIUserInteractionEnabled">NO</bool>
 						<string key="targetRuntimeIdentifier">IBIPadFramework</string>
-						<string key="IBUIText">someone@somewhere.com</string>
+						<string key="IBUIText">alguien@algunaparte.com</string>
 						<reference key="IBUITextColor" ref="843137329"/>
 						<nil key="IBUIHighlightedColor"/>
 						<int key="IBUIBaselineAdjustment">0</int>
@@ -203,6 +207,7 @@
 						<int key="NSvFlags">-2147483347</int>
 						<string key="NSFrame">{{311, 868}, {149, 37}}</string>
 						<reference key="NSSuperview" ref="130650824"/>
+						<reference key="NSWindow"/>
 						<string key="NSReuseIdentifierKey">_NS:9</string>
 						<bool key="IBUIOpaque">NO</bool>
 						<bool key="IBUIUserInteractionEnabled">NO</bool>
@@ -236,6 +241,8 @@
 					</object>
 				</array>
 				<string key="NSFrame">{{0, 20}, {768, 1004}}</string>
+				<reference key="NSSuperview"/>
+				<reference key="NSWindow"/>
 				<reference key="NSNextKeyView" ref="866065035"/>
 				<object class="NSColor" key="IBUIBackgroundColor">
 					<int key="NSColorSpace">3</int>
