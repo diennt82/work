@@ -64,7 +64,7 @@
 						<int key="IBUIContentHorizontalAlignment">0</int>
 						<int key="IBUIContentVerticalAlignment">0</int>
 						<int key="IBUIButtonType">1</int>
-						<string key="IBUINormalTitle">Start monitor</string>
+						<string key="IBUINormalTitle">Iniciar monitor</string>
 						<object class="NSColor" key="IBUIHighlightedTitleColor" id="594577239">
 							<int key="NSColorSpace">3</int>
 							<bytes key="NSWhite">MQA</bytes>
@@ -100,7 +100,7 @@
 						<int key="IBUIContentMode">7</int>
 						<bool key="IBUIUserInteractionEnabled">NO</bool>
 						<string key="targetRuntimeIdentifier">IBIPadFramework</string>
-						<string key="IBUIText">Congratulations</string>
+						<string key="IBUIText">Enhorabuena</string>
 						<reference key="IBUITextColor" ref="594577239"/>
 						<nil key="IBUIHighlightedColor"/>
 						<int key="IBUIBaselineAdjustment">0</int>
@@ -161,7 +161,7 @@
 						<int key="IBUIContentMode">7</int>
 						<bool key="IBUIUserInteractionEnabled">NO</bool>
 						<string key="targetRuntimeIdentifier">IBIPadFramework</string>
-						<string key="IBUIText">camera is found</string>
+						<string key="IBUIText">Cámara encontrada</string>
 						<reference key="IBUITextColor" ref="594577239"/>
 						<nil key="IBUIHighlightedColor"/>
 						<int key="IBUIBaselineAdjustment">0</int>
