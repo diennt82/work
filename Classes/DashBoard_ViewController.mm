@@ -837,10 +837,10 @@
                                                              tag:1];
     [self setTabBarItem:camList];
     
-    msg = NSLocalizedStringWithDefaultValue(@"Account_",nil, [NSBundle mainBundle],
+    NSString * msgAccount = NSLocalizedStringWithDefaultValue(@"Account_",nil, [NSBundle mainBundle],
                                             @"Account", nil);
     
-    UITabBarItem * account  = [[UITabBarItem alloc]initWithTitle:@"Account"
+    UITabBarItem * account  = [[UITabBarItem alloc]initWithTitle:msgAccount
                                                            image:[UIImage imageNamed:@"account_icon.png"]
                                                              tag:2];
     
