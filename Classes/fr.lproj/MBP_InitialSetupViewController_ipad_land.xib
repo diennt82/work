@@ -55,10 +55,10 @@
 					<object class="IBUILabel" id="4299209">
 						<reference key="NSNextResponder" ref="1028092142"/>
 						<int key="NSvFlags">292</int>
-						<string key="NSFrame">{{320, 77}, {384, 83}}</string>
+						<string key="NSFrame">{{287, 77}, {450, 83}}</string>
 						<reference key="NSSuperview" ref="1028092142"/>
 						<reference key="NSWindow"/>
-						<reference key="NSNextKeyView" ref="863755952"/>
+						<reference key="NSNextKeyView" ref="421968457"/>
 						<string key="NSReuseIdentifierKey">_NS:9</string>
 						<object class="NSColor" key="IBUIBackgroundColor" id="36799084">
 							<int key="NSColorSpace">3</int>
@@ -69,7 +69,7 @@
 						<int key="IBUIContentMode">7</int>
 						<bool key="IBUIUserInteractionEnabled">NO</bool>
 						<string key="targetRuntimeIdentifier">IBIPadFramework</string>
-						<string key="IBUIText">Complete three simple steps to get your baby monitor started! </string>
+						<string key="IBUIText">Effectuez trois étapes simples pour commencer à faire fonctionner votre écoute-bébé ! </string>
 						<object class="NSColor" key="IBUITextColor" id="90745201">
 							<int key="NSColorSpace">3</int>
 							<bytes key="NSWhite">MQA</bytes>
@@ -88,7 +88,7 @@
 							<double key="NSSize">20</double>
 							<int key="NSfFlags">16</int>
 						</object>
-						<double key="preferredMaxLayoutWidth">384</double>
+						<double key="preferredMaxLayoutWidth">450</double>
 					</object>
 					<object class="IBUILabel" id="39801690">
 						<reference key="NSNextResponder" ref="1028092142"/>
@@ -96,7 +96,7 @@
 						<string key="NSFrame">{{398, 376}, {228, 21}}</string>
 						<reference key="NSSuperview" ref="1028092142"/>
 						<reference key="NSWindow"/>
-						<reference key="NSNextKeyView" ref="421968457"/>
+						<reference key="NSNextKeyView" ref="667330614"/>
 						<string key="NSReuseIdentifierKey">_NS:9</string>
 						<reference key="IBUIBackgroundColor" ref="36799084"/>
 						<bool key="IBUIOpaque">NO</bool>
@@ -104,7 +104,7 @@
 						<int key="IBUIContentMode">7</int>
 						<bool key="IBUIUserInteractionEnabled">NO</bool>
 						<string key="targetRuntimeIdentifier">IBIPadFramework</string>
-						<string key="IBUIText">Connect camera to Wi-Fi</string>
+						<string key="IBUIText">Connecter caméra au Wi-Fi</string>
 						<reference key="IBUITextColor" ref="90745201"/>
 						<nil key="IBUIHighlightedColor"/>
 						<int key="IBUIBaselineAdjustment">0</int>
@@ -118,7 +118,7 @@
 						<string key="NSFrame">{{419, 202}, {186, 21}}</string>
 						<reference key="NSSuperview" ref="1028092142"/>
 						<reference key="NSWindow"/>
-						<reference key="NSNextKeyView" ref="667330614"/>
+						<reference key="NSNextKeyView" ref="863755952"/>
 						<string key="NSReuseIdentifierKey">_NS:9</string>
 						<reference key="IBUIBackgroundColor" ref="36799084"/>
 						<bool key="IBUIOpaque">NO</bool>
@@ -126,7 +126,7 @@
 						<int key="IBUIContentMode">7</int>
 						<bool key="IBUIUserInteractionEnabled">NO</bool>
 						<string key="targetRuntimeIdentifier">IBIPadFramework</string>
-						<string key="IBUIText">Create Account</string>
+						<string key="IBUIText">Créer compte</string>
 						<reference key="IBUITextColor" ref="90745201"/>
 						<nil key="IBUIHighlightedColor"/>
 						<int key="IBUIBaselineAdjustment">0</int>
@@ -149,7 +149,7 @@
 						<int key="IBUIContentMode">7</int>
 						<bool key="IBUIUserInteractionEnabled">NO</bool>
 						<string key="targetRuntimeIdentifier">IBIPadFramework</string>
-						<string key="IBUIText">Detect Camera</string>
+						<string key="IBUIText">Détecter Caméra</string>
 						<reference key="IBUITextColor" ref="90745201"/>
 						<nil key="IBUIHighlightedColor"/>
 						<int key="IBUIBaselineAdjustment">0</int>
@@ -164,6 +164,7 @@
 						<string key="NSFrame">{{379, 550}, {265, 37}}</string>
 						<reference key="NSSuperview" ref="1028092142"/>
 						<reference key="NSWindow"/>
+						<reference key="NSNextKeyView"/>
 						<string key="NSReuseIdentifierKey">_NS:9</string>
 						<bool key="IBUIOpaque">NO</bool>
 						<int key="IBUITag">1000</int>
@@ -171,7 +172,7 @@
 						<int key="IBUIContentHorizontalAlignment">0</int>
 						<int key="IBUIContentVerticalAlignment">0</int>
 						<int key="IBUIButtonType">1</int>
-						<string key="IBUINormalTitle">Continue</string>
+						<string key="IBUINormalTitle">Continuer</string>
 						<reference key="IBUIHighlightedTitleColor" ref="90745201"/>
 						<object class="NSColor" key="IBUINormalTitleColor">
 							<int key="NSColorSpace">1</int>

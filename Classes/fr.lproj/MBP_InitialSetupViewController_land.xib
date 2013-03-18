@@ -2,9 +2,9 @@
 <archive type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="8.00">
 	<data>
 		<int key="IBDocument.SystemTarget">1552</int>
-		<string key="IBDocument.SystemVersion">11G63</string>
+		<string key="IBDocument.SystemVersion">11E53</string>
 		<string key="IBDocument.InterfaceBuilderVersion">3084</string>
-		<string key="IBDocument.AppKitVersion">1138.51</string>
+		<string key="IBDocument.AppKitVersion">1138.47</string>
 		<string key="IBDocument.HIToolboxVersion">569.00</string>
 		<object class="NSMutableDictionary" key="IBDocument.PluginVersions">
 			<string key="NS.key.0">com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
@@ -55,10 +55,10 @@
 					<object class="IBUILabel" id="409725125">
 						<reference key="NSNextResponder" ref="191373211"/>
 						<int key="NSvFlags">292</int>
-						<string key="NSFrame">{{147, 0}, {273, 83}}</string>
+						<string key="NSFrame">{{84, 0}, {400, 83}}</string>
 						<reference key="NSSuperview" ref="191373211"/>
 						<reference key="NSWindow"/>
-						<reference key="NSNextKeyView" ref="314776464"/>
+						<reference key="NSNextKeyView" ref="622365844"/>
 						<string key="NSReuseIdentifierKey">_NS:9</string>
 						<object class="NSColor" key="IBUIBackgroundColor" id="735215990">
 							<int key="NSColorSpace">3</int>
@@ -69,7 +69,7 @@
 						<int key="IBUIContentMode">7</int>
 						<bool key="IBUIUserInteractionEnabled">NO</bool>
 						<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
-						<string key="IBUIText">Complete three simple steps to get your baby monitor started! </string>
+						<string key="IBUIText">Effectuez trois étapes simples pour commencer à faire fonctionner votre écoute-bébé ! </string>
 						<object class="NSColor" key="IBUITextColor" id="693138768">
 							<int key="NSColorSpace">3</int>
 							<bytes key="NSWhite">MQA</bytes>
@@ -88,7 +88,7 @@
 							<double key="NSSize">17</double>
 							<int key="NSfFlags">16</int>
 						</object>
-						<double key="preferredMaxLayoutWidth">273</double>
+						<double key="preferredMaxLayoutWidth">400</double>
 					</object>
 					<object class="IBUILabel" id="730059289">
 						<reference key="NSNextResponder" ref="191373211"/>
@@ -96,7 +96,7 @@
 						<string key="NSFrame">{{188, 153}, {191, 21}}</string>
 						<reference key="NSSuperview" ref="191373211"/>
 						<reference key="NSWindow"/>
-						<reference key="NSNextKeyView" ref="622365844"/>
+						<reference key="NSNextKeyView" ref="634698770"/>
 						<string key="NSReuseIdentifierKey">_NS:9</string>
 						<reference key="IBUIBackgroundColor" ref="735215990"/>
 						<bool key="IBUIOpaque">NO</bool>
@@ -104,7 +104,7 @@
 						<int key="IBUIContentMode">7</int>
 						<bool key="IBUIUserInteractionEnabled">NO</bool>
 						<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
-						<string key="IBUIText">Connect camera to Wi-Fi</string>
+						<string key="IBUIText">Connecter caméra au Wi-Fi</string>
 						<reference key="IBUITextColor" ref="693138768"/>
 						<nil key="IBUIHighlightedColor"/>
 						<int key="IBUIBaselineAdjustment">0</int>
@@ -118,7 +118,7 @@
 						<string key="NSFrame">{{223, 77}, {122, 21}}</string>
 						<reference key="NSSuperview" ref="191373211"/>
 						<reference key="NSWindow"/>
-						<reference key="NSNextKeyView" ref="634698770"/>
+						<reference key="NSNextKeyView" ref="314776464"/>
 						<string key="NSReuseIdentifierKey">_NS:9</string>
 						<reference key="IBUIBackgroundColor" ref="735215990"/>
 						<bool key="IBUIOpaque">NO</bool>
@@ -126,7 +126,7 @@
 						<int key="IBUIContentMode">7</int>
 						<bool key="IBUIUserInteractionEnabled">NO</bool>
 						<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
-						<string key="IBUIText">Create Account</string>
+						<string key="IBUIText">Créer compte</string>
 						<reference key="IBUITextColor" ref="693138768"/>
 						<nil key="IBUIHighlightedColor"/>
 						<int key="IBUIBaselineAdjustment">0</int>
@@ -149,7 +149,7 @@
 						<int key="IBUIContentMode">7</int>
 						<bool key="IBUIUserInteractionEnabled">NO</bool>
 						<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
-						<string key="IBUIText">Detect Camera</string>
+						<string key="IBUIText">Détecter Caméra</string>
 						<reference key="IBUITextColor" ref="693138768"/>
 						<nil key="IBUIHighlightedColor"/>
 						<int key="IBUIBaselineAdjustment">0</int>
@@ -164,6 +164,7 @@
 						<string key="NSFrame">{{151, 200}, {265, 37}}</string>
 						<reference key="NSSuperview" ref="191373211"/>
 						<reference key="NSWindow"/>
+						<reference key="NSNextKeyView"/>
 						<string key="NSReuseIdentifierKey">_NS:9</string>
 						<bool key="IBUIOpaque">NO</bool>
 						<int key="IBUITag">1000</int>
@@ -171,7 +172,7 @@
 						<int key="IBUIContentHorizontalAlignment">0</int>
 						<int key="IBUIContentVerticalAlignment">0</int>
 						<int key="IBUIButtonType">1</int>
-						<string key="IBUINormalTitle">Continue</string>
+						<string key="IBUINormalTitle">Continuer</string>
 						<reference key="IBUIHighlightedTitleColor" ref="693138768"/>
 						<object class="NSColor" key="IBUINormalTitleColor">
 							<int key="NSColorSpace">1</int>
