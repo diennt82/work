@@ -63,7 +63,7 @@
 						<string key="NSFrame">{{89, 80}, {301, 227}}</string>
 						<reference key="NSSuperview" ref="344459400"/>
 						<reference key="NSWindow"/>
-						<reference key="NSNextKeyView" ref="899314955"/>
+						<reference key="NSNextKeyView"/>
 						<string key="NSReuseIdentifierKey">_NS:9</string>
 						<object class="NSColor" key="IBUIBackgroundColor" id="256039690">
 							<int key="NSColorSpace">3</int>
@@ -86,6 +86,7 @@
 						<string key="NSFrame">{{159, 38}, {161, 41}}</string>
 						<reference key="NSSuperview" ref="344459400"/>
 						<reference key="NSWindow"/>
+						<reference key="NSNextKeyView" ref="399961351"/>
 						<string key="NSReuseIdentifierKey">_NS:9</string>
 						<bool key="IBUIOpaque">NO</bool>
 						<bool key="IBUIClipsSubviews">YES</bool>
@@ -164,7 +165,7 @@
 								<string key="NSFrame">{{222, 196}, {37, 37}}</string>
 								<reference key="NSSuperview" ref="873322010"/>
 								<reference key="NSWindow"/>
-								<reference key="NSNextKeyView" ref="399961351"/>
+								<reference key="NSNextKeyView" ref="899314955"/>
 								<string key="NSReuseIdentifierKey">_NS:9</string>
 								<bool key="IBUIOpaque">NO</bool>
 								<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
@@ -215,6 +216,7 @@
 								<string key="NSFrame">{{161, 15}, {94, 27}}</string>
 								<reference key="NSSuperview" ref="475310257"/>
 								<reference key="NSWindow"/>
+								<reference key="NSNextKeyView"/>
 								<string key="NSReuseIdentifierKey">_NS:9</string>
 								<bool key="IBUIOpaque">NO</bool>
 								<int key="IBUITag">1</int>
@@ -285,6 +287,7 @@
 								<string key="NSFrame">{{161, 15}, {94, 27}}</string>
 								<reference key="NSSuperview" ref="319946527"/>
 								<reference key="NSWindow"/>
+								<reference key="NSNextKeyView"/>
 								<string key="NSReuseIdentifierKey">_NS:9</string>
 								<bool key="IBUIOpaque">NO</bool>
 								<int key="IBUITag">1</int>
@@ -355,6 +358,7 @@
 								<string key="NSFrame">{{161, 15}, {94, 27}}</string>
 								<reference key="NSSuperview" ref="777033370"/>
 								<reference key="NSWindow"/>
+								<reference key="NSNextKeyView"/>
 								<string key="NSReuseIdentifierKey">_NS:9</string>
 								<bool key="IBUIOpaque">NO</bool>
 								<int key="IBUITag">1</int>
@@ -376,7 +380,7 @@
 								<int key="IBUIContentMode">7</int>
 								<bool key="IBUIUserInteractionEnabled">NO</bool>
 								<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
-								<string key="IBUIText">Low Temperature Alert</string>
+								<string key="IBUIText">Alerta de baja temperatura</string>
 								<reference key="IBUITextColor" ref="508195145"/>
 								<reference key="IBUIHighlightedColor" ref="508195145"/>
 								<int key="IBUIBaselineAdjustment">0</int>
@@ -752,10 +756,6 @@
 		</object>
 		<int key="IBDocument.localizationMode">0</int>
 		<string key="IBDocument.TargetRuntimeIdentifier">IBCocoaTouchFramework</string>
-		<object class="NSMutableDictionary" key="IBDocument.PluginDeclaredDependencyDefaults">
-			<string key="NS.key.0">com.apple.InterfaceBuilder.CocoaTouchPlugin.iPhoneOS</string>
-			<real value="1552" key="NS.object.0"/>
-		</object>
 		<bool key="IBDocument.PluginDeclaredDependenciesTrackSystemTargetVersion">YES</bool>
 		<int key="IBDocument.defaultPropertyAccessControl">3</int>
 		<dictionary class="NSMutableDictionary" key="IBDocument.LastKnownImageSizes">
