@@ -368,7 +368,7 @@
 										<int key="IBUISystemItemIdentifier">1</int>
 									</object>
 									<object class="IBUIBarButtonItem" id="106371357">
-										<string key="IBUITitle">Lullaby</string>
+										<string key="IBUITitle">Canción de cuna</string>
 										<string key="targetRuntimeIdentifier">IBIPadFramework</string>
 										<reference key="IBUIToolbar" ref="403890208"/>
 									</object>
