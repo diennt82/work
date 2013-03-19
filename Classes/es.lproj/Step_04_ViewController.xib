@@ -129,7 +129,7 @@
 					<object class="IBUITextView" id="208241725">
 						<reference key="NSNextResponder" ref="562086244"/>
 						<int key="NSvFlags">292</int>
-						<string key="NSFrame">{{35, 145}, {240, 57}}</string>
+						<string key="NSFrame">{{35, 146}, {240, 57}}</string>
 						<reference key="NSSuperview" ref="562086244"/>
 						<reference key="NSWindow"/>
 						<reference key="NSNextKeyView" ref="89477601"/>
@@ -138,7 +138,7 @@
 						<bool key="IBUIClipsSubviews">YES</bool>
 						<bool key="IBUIUserInteractionEnabled">NO</bool>
 						<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
-						<string key="IBUIText">Sugerencias:"Collin's bedroom", "Playroom"</string>
+						<string key="IBUIText">Sugerencias:"Collin's bedroom", "Cuarto de juegos"</string>
 						<object class="NSColor" key="IBUITextColor">
 							<int key="NSColorSpace">3</int>
 							<bytes key="NSWhite">MQA</bytes>
@@ -266,10 +266,10 @@
 						<reference key="object" ref="562086244"/>
 						<array class="NSMutableArray" key="children">
 							<reference ref="219931300"/>
-							<reference ref="208241725"/>
 							<reference ref="641915103"/>
 							<reference ref="89477601"/>
 							<reference ref="274341614"/>
+							<reference ref="208241725"/>
 						</array>
 						<reference key="parent" ref="0"/>
 					</object>
