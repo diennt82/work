@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <archive type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="8.00">
 	<data>
-		<int key="IBDocument.SystemTarget">1536</int>
-		<string key="IBDocument.SystemVersion">11G63</string>
-		<string key="IBDocument.InterfaceBuilderVersion">2843</string>
-		<string key="IBDocument.AppKitVersion">1138.51</string>
+		<int key="IBDocument.SystemTarget">1552</int>
+		<string key="IBDocument.SystemVersion">11E53</string>
+		<string key="IBDocument.InterfaceBuilderVersion">3084</string>
+		<string key="IBDocument.AppKitVersion">1138.47</string>
 		<string key="IBDocument.HIToolboxVersion">569.00</string>
 		<object class="NSMutableDictionary" key="IBDocument.PluginVersions">
 			<string key="NS.key.0">com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
-			<string key="NS.object.0">1929</string>
+			<string key="NS.object.0">2083</string>
 		</object>
 		<array key="IBDocument.IntegratedClassDependencies">
 			<string>IBProxyObject</string>
@@ -57,7 +57,7 @@
 					<object class="IBUITextView" id="649335591">
 						<reference key="NSNextResponder" ref="435179814"/>
 						<int key="NSvFlags">292</int>
-						<string key="NSFrame">{{10, 69}, {283, 66}}</string>
+						<string key="NSFrame">{{0, 66}, {320, 79}}</string>
 						<reference key="NSSuperview" ref="435179814"/>
 						<reference key="NSWindow"/>
 						<reference key="NSNextKeyView" ref="613766470"/>
@@ -70,7 +70,7 @@
 						<bool key="IBUIUserInteractionEnabled">NO</bool>
 						<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
 						<bool key="IBUIEditable">NO</bool>
-						<string key="IBUIText">How to reach Wi-Fi Network? Select settings in iphone home screen and then select Wi-Fi.</string>
+						<string key="IBUIText">Comment accéder au Réseau Wi-Fi ? Sélectionnez les paramètres dans l'écran d'accueil de votre iphone, puis sélectionnez Wi-Fi .</string>
 						<object class="NSColor" key="IBUITextColor">
 							<int key="NSColorSpace">3</int>
 							<bytes key="NSWhite">MQA</bytes>
@@ -96,7 +96,7 @@
 					<object class="IBUITextView" id="1005661850">
 						<reference key="NSNextResponder" ref="435179814"/>
 						<int key="NSvFlags">292</int>
-						<string key="NSFrame">{{36, 5}, {247, 30}}</string>
+						<string key="NSFrame">{{36, 5}, {252, 30}}</string>
 						<reference key="NSSuperview" ref="435179814"/>
 						<reference key="NSWindow"/>
 						<reference key="NSNextKeyView" ref="1018321630"/>
@@ -104,9 +104,10 @@
 						<reference key="IBUIBackgroundColor" ref="758838400"/>
 						<bool key="IBUIClipsSubviews">YES</bool>
 						<bool key="IBUIMultipleTouchEnabled">YES</bool>
+						<bool key="IBUIUserInteractionEnabled">NO</bool>
 						<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
 						<bool key="IBUIEditable">NO</bool>
-						<string key="IBUIText">Please switch to Wi-Fi network :</string>
+						<string key="IBUIText">Veuillez revenir au réseau Wi-Fi :</string>
 						<object class="NSColor" key="IBUITextColor" id="388414589">
 							<int key="NSColorSpace">3</int>
 							<bytes key="NSWhite">MQA</bytes>
@@ -137,6 +138,7 @@
 						<reference key="IBUIBackgroundColor" ref="758838400"/>
 						<bool key="IBUIClipsSubviews">YES</bool>
 						<bool key="IBUIMultipleTouchEnabled">YES</bool>
+						<bool key="IBUIUserInteractionEnabled">NO</bool>
 						<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
 						<string key="IBUIText">Please switch back to the Wi-Fi network </string>
 						<reference key="IBUITextColor" ref="388414589"/>
@@ -150,7 +152,7 @@
 					<object class="IBUITextView" id="79753947">
 						<reference key="NSNextResponder" ref="435179814"/>
 						<int key="NSvFlags">292</int>
-						<string key="NSFrame">{{41, 261}, {230, 45}}</string>
+						<string key="NSFrame">{{0, 278}, {320, 45}}</string>
 						<reference key="NSSuperview" ref="435179814"/>
 						<reference key="NSWindow"/>
 						<reference key="NSNextKeyView" ref="406286057"/>
@@ -158,9 +160,10 @@
 						<reference key="IBUIBackgroundColor" ref="758838400"/>
 						<bool key="IBUIClipsSubviews">YES</bool>
 						<bool key="IBUIMultipleTouchEnabled">YES</bool>
+						<bool key="IBUIUserInteractionEnabled">NO</bool>
 						<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
 						<bool key="IBUIEditable">NO</bool>
-						<string key="IBUIText">Once the above step is done, return here to create an account</string>
+						<string key="IBUIText">Une fois l'étape ci-dessus terminée, revenez ici pour créer un compte</string>
 						<reference key="IBUITextColor" ref="388414589"/>
 						<int key="IBUITextAlignment">1</int>
 						<object class="IBUITextInputTraits" key="IBUITextInputTraits">
@@ -208,6 +211,7 @@
 						<reference key="IBUIBackgroundColor" ref="758838400"/>
 						<bool key="IBUIClipsSubviews">YES</bool>
 						<bool key="IBUIMultipleTouchEnabled">YES</bool>
+						<bool key="IBUIUserInteractionEnabled">NO</bool>
 						<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
 						<string key="IBUIText">Your camera is configured to WiFi </string>
 						<reference key="IBUITextColor" ref="388414589"/>
@@ -227,6 +231,7 @@
 						<reference key="NSNextKeyView" ref="462762763"/>
 						<string key="NSReuseIdentifierKey">_NS:9</string>
 						<bool key="IBUIOpaque">NO</bool>
+						<bool key="IBUIUserInteractionEnabled">NO</bool>
 						<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
 						<int key="IBUIContentHorizontalAlignment">0</int>
 						<int key="IBUIContentVerticalAlignment">0</int>
@@ -284,7 +289,7 @@
 					<object class="IBUIImageView" id="613766470">
 						<reference key="NSNextResponder" ref="435179814"/>
 						<int key="NSvFlags">292</int>
-						<string key="NSFrame">{{31, 132}, {240, 128}}</string>
+						<string key="NSFrame">{{31, 150}, {240, 128}}</string>
 						<reference key="NSSuperview" ref="435179814"/>
 						<reference key="NSWindow"/>
 						<reference key="NSNextKeyView" ref="79753947"/>
@@ -305,6 +310,7 @@
 						<reference key="NSNextKeyView" ref="890354537"/>
 						<string key="NSReuseIdentifierKey">_NS:9</string>
 						<bool key="IBUIOpaque">NO</bool>
+						<bool key="IBUIUserInteractionEnabled">NO</bool>
 						<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
 						<bool key="IBUIHidesWhenStopped">NO</bool>
 						<bool key="IBUIAnimating">YES</bool>
@@ -398,10 +404,10 @@
 							<reference ref="1005661850"/>
 							<reference ref="1035988290"/>
 							<reference ref="649335591"/>
-							<reference ref="79753947"/>
 							<reference ref="613766470"/>
 							<reference ref="1018321630"/>
 							<reference ref="462762763"/>
+							<reference ref="79753947"/>
 						</array>
 						<reference key="parent" ref="0"/>
 					</object>
@@ -536,6 +542,6 @@
 			<string key="bb_pic_2.png">{514, 255}</string>
 			<string key="black_background.png">{640, 960}</string>
 		</dictionary>
-		<string key="IBCocoaTouchPluginVersion">1929</string>
+		<string key="IBCocoaTouchPluginVersion">2083</string>
 	</data>
 </archive>
