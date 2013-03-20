@@ -55,7 +55,7 @@
 					<object class="IBUIButton" id="89477601">
 						<reference key="NSNextResponder" ref="562086244"/>
 						<int key="NSvFlags">292</int>
-						<string key="NSFrame">{{35, 345}, {265, 37}}</string>
+						<string key="NSFrame">{{23, 345}, {274, 37}}</string>
 						<reference key="NSSuperview" ref="562086244"/>
 						<reference key="NSWindow"/>
 						<string key="NSReuseIdentifierKey">_NS:9</string>
@@ -65,7 +65,7 @@
 						<int key="IBUIContentHorizontalAlignment">0</int>
 						<int key="IBUIContentVerticalAlignment">0</int>
 						<int key="IBUIButtonType">1</int>
-						<string key="IBUINormalTitle">Configure Camera to Wi-Fi</string>
+						<string key="IBUINormalTitle">Configurer Caméra à un réseau Wi-Fi</string>
 						<object class="NSColor" key="IBUIHighlightedTitleColor">
 							<int key="NSColorSpace">3</int>
 							<bytes key="NSWhite">MQA</bytes>
@@ -91,7 +91,7 @@
 					<object class="IBUITextView" id="219931300">
 						<reference key="NSNextResponder" ref="562086244"/>
 						<int key="NSvFlags">292</int>
-						<string key="NSFrame">{{35, 56}, {240, 38}}</string>
+						<string key="NSFrame">{{40, 28}, {240, 46}}</string>
 						<reference key="NSSuperview" ref="562086244"/>
 						<reference key="NSWindow"/>
 						<reference key="NSNextKeyView" ref="274341614"/>
@@ -103,7 +103,7 @@
 						<bool key="IBUIClipsSubviews">YES</bool>
 						<bool key="IBUIMultipleTouchEnabled">YES</bool>
 						<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
-						<string key="IBUIText">You can rename your camera</string>
+						<string key="IBUIText">Vous pouvez renommer votre caméra</string>
 						<object class="NSColor" key="IBUITextColor">
 							<int key="NSColorSpace">3</int>
 							<bytes key="NSWhite">MQA</bytes>
@@ -137,7 +137,7 @@
 						<bool key="IBUIClipsSubviews">YES</bool>
 						<bool key="IBUIUserInteractionEnabled">NO</bool>
 						<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
-						<string key="IBUIText">Suggestions:"Collin's bedroom", "Playroom"</string>
+						<string key="IBUIText">Suggestions : "Salle de Jeux"</string>
 						<object class="NSColor" key="IBUITextColor">
 							<int key="NSColorSpace">3</int>
 							<bytes key="NSWhite">MQA</bytes>
@@ -263,11 +263,11 @@
 						<int key="objectID">3</int>
 						<reference key="object" ref="562086244"/>
 						<array class="NSMutableArray" key="children">
-							<reference ref="219931300"/>
 							<reference ref="208241725"/>
 							<reference ref="641915103"/>
 							<reference ref="89477601"/>
 							<reference ref="274341614"/>
+							<reference ref="219931300"/>
 						</array>
 						<reference key="parent" ref="0"/>
 					</object>
