@@ -66,7 +66,7 @@
 						<int key="IBUIContentMode">7</int>
 						<bool key="IBUIUserInteractionEnabled">NO</bool>
 						<string key="targetRuntimeIdentifier">IBIPadFramework</string>
-						<string key="IBUIText">Enter your email address and we will send you a reset link</string>
+						<string key="IBUIText">Entrez votre adresse e-mail et nous vous enverrons un lien de reconfiguration</string>
 						<object class="NSColor" key="IBUITextColor" id="843137329">
 							<int key="NSColorSpace">1</int>
 							<bytes key="NSRGB">MSAxIDEAA</bytes>
@@ -134,7 +134,7 @@
 				<string key="targetRuntimeIdentifier">IBIPadFramework</string>
 			</object>
 			<object class="IBUIView" id="130650824">
-				<nil key="NSNextResponder"/>
+				<reference key="NSNextResponder"/>
 				<int key="NSvFlags">274</int>
 				<array class="NSMutableArray" key="NSSubviews">
 					<object class="IBUIImageView" id="866065035">
@@ -142,6 +142,7 @@
 						<int key="NSvFlags">274</int>
 						<string key="NSFrameSize">{768, 1010}</string>
 						<reference key="NSSuperview" ref="130650824"/>
+						<reference key="NSWindow"/>
 						<reference key="NSNextKeyView" ref="600753708"/>
 						<string key="NSReuseIdentifierKey">_NS:9</string>
 						<bool key="IBUIUserInteractionEnabled">NO</bool>
@@ -153,6 +154,7 @@
 						<int key="NSvFlags">301</int>
 						<string key="NSFrame">{{244, 71}, {280, 73}}</string>
 						<reference key="NSSuperview" ref="130650824"/>
+						<reference key="NSWindow"/>
 						<reference key="NSNextKeyView" ref="350575487"/>
 						<string key="NSReuseIdentifierKey">_NS:9</string>
 						<bool key="IBUIOpaque">NO</bool>
@@ -160,7 +162,7 @@
 						<int key="IBUIContentMode">7</int>
 						<bool key="IBUIUserInteractionEnabled">NO</bool>
 						<string key="targetRuntimeIdentifier">IBIPadFramework</string>
-						<string key="IBUIText">A link to reset your password has been sent to </string>
+						<string key="IBUIText">Un lien pour réinitialiser votre mot de passe a été envoyé à </string>
 						<reference key="IBUITextColor" ref="843137329"/>
 						<nil key="IBUIHighlightedColor"/>
 						<int key="IBUIBaselineAdjustment">0</int>
@@ -183,6 +185,7 @@
 						<int key="NSvFlags">301</int>
 						<string key="NSFrame">{{274, 151}, {212, 21}}</string>
 						<reference key="NSSuperview" ref="130650824"/>
+						<reference key="NSWindow"/>
 						<reference key="NSNextKeyView" ref="547748041"/>
 						<string key="NSReuseIdentifierKey">_NS:9</string>
 						<bool key="IBUIOpaque">NO</bool>
@@ -203,6 +206,7 @@
 						<int key="NSvFlags">-2147483347</int>
 						<string key="NSFrame">{{311, 868}, {149, 37}}</string>
 						<reference key="NSSuperview" ref="130650824"/>
+						<reference key="NSWindow"/>
 						<string key="NSReuseIdentifierKey">_NS:9</string>
 						<bool key="IBUIOpaque">NO</bool>
 						<bool key="IBUIUserInteractionEnabled">NO</bool>
@@ -236,6 +240,8 @@
 					</object>
 				</array>
 				<string key="NSFrame">{{0, 20}, {768, 1004}}</string>
+				<reference key="NSSuperview"/>
+				<reference key="NSWindow"/>
 				<reference key="NSNextKeyView" ref="866065035"/>
 				<object class="NSColor" key="IBUIBackgroundColor">
 					<int key="NSColorSpace">3</int>
