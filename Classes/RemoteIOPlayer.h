@@ -26,6 +26,8 @@
     AudioStreamBasicDescription audioFormat;
     AudioStreamBasicDescription audioFormatR;
     
+    BOOL interruptedOnPlayback; 
+    
 
 
 }
@@ -37,7 +39,7 @@
 @property (nonatomic, retain) InMemoryAudioFile *inMemoryAudioFile;
 
 @property (nonatomic, retain) InMemoryAudioFile *recordedAudioFile;
-@property (nonatomic) BOOL recording_now, play_now, recordEnabled;
+@property (nonatomic) BOOL recording_now, play_now, recordEnabled, interruptedOnPlayback;
 
 -(OSStatus)start;
 -(OSStatus)stop;

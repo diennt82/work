@@ -26,7 +26,7 @@
 @synthesize  recordEnabled;
 @synthesize audioFormatR;
 @synthesize  audioUnit ;
-
+@synthesize interruptedOnPlayback;
 
 
 -(id) init
@@ -160,6 +160,40 @@ static OSStatus playbackCallback(void *inRefCon,
 
     return noErr;
 }
+
+
+void interruptionListenerCallback (void    *inUserData,                                                // 1
+                                   UInt32  interruptionState                                           // 2
+                                   )
+{
+    //get a copy of the objectiveC class "self" we need this to get the next sample to fill the buffer
+	RemoteIOPlayer *remoteIOplayer = (RemoteIOPlayer *)inUserData;
+    
+    if (interruptionState == kAudioSessionBeginInterruption)
+    {
+        remoteIOplayer.interruptedOnPlayback = YES;
+        
+        //Paused
+        
+        AudioSessionSetActive(false);
+        //NSLog(@"Interrupted audio sessin");
+    }
+    else if ((interruptionState == kAudioSessionEndInterruption) &&
+             remoteIOplayer.interruptedOnPlayback)
+    {
+        //Resume
+        //NSLog(@"UnInterrupted audio sessin  -- > Restart");
+        
+        remoteIOplayer.interruptedOnPlayback = NO;
+        
+        [remoteIOplayer cleanUp];
+        [remoteIOplayer intialiseAudio];
+        [remoteIOplayer start];
+    }
+}
+
+
+
 
 #ifdef IRABOT_AUDIO_RECORDING_SUPPORT
 static OSStatus recordingCallback(void *inRefCon, 
@@ -368,7 +402,7 @@ static OSStatus recordingCallback(void *inRefCon,
 #endif 
 	
 	
-	AudioSessionInitialize(NULL, NULL, NULL, nil);
+	AudioSessionInitialize(NULL, NULL, interruptionListenerCallback, self);
 	AudioSessionSetActive(true);
 	
 

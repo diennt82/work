@@ -185,7 +185,10 @@
     CFURLRef soundFileURLRef = CFBundleCopyResourceURL(mainbundle, CFSTR("beep"), CFSTR("wav"), NULL);
     AudioServicesCreateSystemSoundID(soundFileURLRef, &soundFileObject);
     
-    [self becomeActive]; 
+    [self becomeActive];
+    
+        
+
 	    
 }
 
@@ -287,6 +290,7 @@
     
 }
 
+
 -(void) handleEnteredBackground
 {
 	NSLog(@"Enter Background.. Keep on streamming.. ");
@@ -312,6 +316,11 @@
     
     //Close all dialog..
     [self stopPeriodicPopup];
+    
+    
+    
+    
+    
         
 }
 
