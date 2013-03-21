@@ -16,7 +16,10 @@
 @synthesize cameraName; 
 @synthesize alertType; 
 @synthesize alertVal; 
-@synthesize alertTime; 
+@synthesize alertTime;
+@synthesize server_url;
+
+
 
 static sqlite3_stmt *init_statement = nil;
 
@@ -63,6 +66,8 @@ static sqlite3_stmt *init_statement = nil;
     
     rcvTimeStamp = timeStamp;
     database = nil; 
+    server_url = nil;
+    
     
     return self;
     

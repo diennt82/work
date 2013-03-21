@@ -12,9 +12,11 @@
 @interface AlertPrompt : UIAlertView
 {
     UITextField *textField;
+    NSString * otherInfo; 
 }
 @property (nonatomic, retain) UITextField *textField;
 @property (readonly) NSString *enteredText;
+@property (nonatomic, retain) NSString * otherInfo;
 
 -(id) initWithTitle:(NSString *)title
               message:(NSString *)message

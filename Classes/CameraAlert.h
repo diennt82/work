@@ -19,7 +19,10 @@
     NSString * cameraName; 
     NSString * alertType; 
     NSString * alertVal; 
-    NSString * alertTime; 
+    NSString * alertTime;
+    
+    //especially for server announcement 
+    NSString * server_url;
     
 }
 
@@ -28,7 +31,8 @@
 @property (nonatomic, retain)     NSString * cameraName; 
 @property (nonatomic, retain)     NSString * alertType; 
 @property (nonatomic, retain)     NSString * alertVal; 
-@property (nonatomic, retain)     NSString * alertTime; 
+@property (nonatomic, retain)     NSString * alertTime;
+@property (nonatomic, retain)     NSString * server_url; 
 
 
 -(id) initWithTimeStamp:(NSInteger) timeStamp database:(sqlite3 *) db; 

@@ -692,10 +692,67 @@ return self;
 
 
 
--(BOOL) pushNotificationRcvedInForeground:(CameraAlert *) camAlert
 
+-(BOOL) isServerAnnouncement: (CameraAlert *) camAlert
 {
-	//Check if we should popup
+    if ( [camAlert.alertType isEqualToString:ALERT_GENERIC_SERVER_INFO]  )
+    {
+        
+        return TRUE;
+    }
+    
+    
+    
+    return FALSE;
+}
+
+
+-(BOOL) pushNotificationRcvedInForeground:(CameraAlert *) camAlert
+{
+
+    // IF this is just a server announcement - Dont do anything -
+    if ([self isServerAnnouncement:camAlert])
+    {
+        
+        
+        
+        NSString * ignore = NSLocalizedStringWithDefaultValue(@"close",nil, [NSBundle mainBundle],
+                                                              @"Close", nil);
+        
+        NSString * details = NSLocalizedStringWithDefaultValue(@"detail",nil, [NSBundle mainBundle],
+                                                              @"Detail", nil);
+        
+
+        
+        NSString * msg = camAlert.alertVal;
+        
+        
+        
+        
+
+        
+        
+        pushAlert = [[AlertPrompt alloc]
+                     initWithTitle:camAlert.cameraName
+                     message:msg
+                     delegate:self
+                     cancelButtonTitle:ignore
+                     otherButtonTitles:details, nil];
+        ((AlertPrompt*)pushAlert).otherInfo = camAlert.server_url;
+        
+        pushAlert.tag = ALERT_PUSH_SERVER_ANNOUNCEMENT;
+        
+        [pushAlert show];
+        
+        
+        
+        
+        return FALSE ;
+        
+    }
+	
+    
+    //Check if we should popup
 	NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
 	//mac with COLON 
 	NSString * camInView = (NSString*)[userDefaults objectForKey:CAM_IN_VEW];
@@ -896,7 +953,7 @@ return self;
 
 				[self dismissModalViewControllerAnimated:NO];
 
-				NSLog(@"Re-login  "); 
+				 
 				[self sendStatus:2];
 				break;
 			default:
@@ -904,9 +961,41 @@ return self;
 
 		}
 	}
+    else if (tag == ALERT_PUSH_SERVER_ANNOUNCEMENT)
+    {
+        switch(buttonIndex)
+        {
+			case 0://IGNORE
+				break; 
+			case 1://Detail
+            {
+                // Open the web browser now..
+                NSString * url =  ((AlertPrompt*)alertView).otherInfo;
+            
+                
+                if (url != nil)
+                {
+                    if ( [url hasPrefix:@"http://"] != TRUE)
+                    {
+                        url  = [NSString stringWithFormat:@"http://%@", url];
+                    }
+                    
+                    
+                    NSLog(@"final url:%@ ",url);
+                    
+                    NSURL *ns_url = [NSURL URLWithString:url];
+                    
+                    [[UIApplication sharedApplication] openURL:ns_url];
+                }
+                break;
+            }
+            default:
+                break;
+        }
+    }
 
 }
-#pragma mark - 
+#pragma mark -
 
 
 

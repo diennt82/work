@@ -65,7 +65,9 @@
         NSString * str3 = (NSString *) [userInfo objectForKey:@"mac"]; 
         NSString * str4 = (NSString *) [userInfo objectForKey:@"val"]; 
         NSString * str5 = (NSString *) [userInfo objectForKey:@"time"]; 
-        NSString * str6 = (NSString *) [userInfo objectForKey:@"cameraname"]; 
+        NSString * str6 = (NSString *) [userInfo objectForKey:@"cameraname"];
+        NSString * str7 = (NSString *) [userInfo objectForKey:@"url"];
+        
         
         NSLog(@"%@ %@ %@ %@ %@",  str2, str3, str4 , str5, str6);  
         
@@ -88,6 +90,12 @@
         camAlert.alertType = str2;
         camAlert.alertTime =str5;
         camAlert.alertVal = str4;
+        
+        if (str7 != nil)
+        {
+            camAlert.server_url = str7;
+            NSLog(@"server url is :%@", camAlert.server_url);
+        }
         
         BOOL shouldStoreAlert = TRUE; 
 
