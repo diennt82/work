@@ -89,7 +89,7 @@
 				<string key="targetRuntimeIdentifier">IBIPadFramework</string>
 			</object>
 			<object class="IBUIView" id="670034298">
-				<nil key="NSNextResponder"/>
+				<reference key="NSNextResponder"/>
 				<int key="NSvFlags">274</int>
 				<array class="NSMutableArray" key="NSSubviews">
 					<object class="IBUIImageView" id="479549754">
@@ -97,6 +97,7 @@
 						<int key="NSvFlags">274</int>
 						<string key="NSFrameSize">{768, 1024}</string>
 						<reference key="NSSuperview" ref="670034298"/>
+						<reference key="NSWindow"/>
 						<reference key="NSNextKeyView" ref="501113996"/>
 						<string key="NSReuseIdentifierKey">_NS:9</string>
 						<bool key="IBUIUserInteractionEnabled">NO</bool>
@@ -115,6 +116,7 @@
 								<int key="NSvFlags">301</int>
 								<string key="NSFrame">{{93, 160}, {37, 37}}</string>
 								<reference key="NSSuperview" ref="501113996"/>
+								<reference key="NSWindow"/>
 								<string key="NSReuseIdentifierKey">_NS:9</string>
 								<bool key="IBUIOpaque">NO</bool>
 								<string key="targetRuntimeIdentifier">IBIPadFramework</string>
@@ -125,8 +127,9 @@
 							<object class="IBUILabel" id="595719569">
 								<reference key="NSNextResponder" ref="501113996"/>
 								<int key="NSvFlags">-2147483347</int>
-								<string key="NSFrame">{{20, 61}, {165, 48}}</string>
+								<string key="NSFrame">{{0, 61}, {222, 48}}</string>
 								<reference key="NSSuperview" ref="501113996"/>
+								<reference key="NSWindow"/>
 								<reference key="NSNextKeyView" ref="563592877"/>
 								<string key="NSReuseIdentifierKey">_NS:9</string>
 								<bool key="IBUIOpaque">NO</bool>
@@ -134,7 +137,7 @@
 								<int key="IBUIContentMode">7</int>
 								<bool key="IBUIUserInteractionEnabled">NO</bool>
 								<string key="targetRuntimeIdentifier">IBIPadFramework</string>
-								<string key="IBUIText">Updating Camera list. Please wait...</string>
+								<string key="IBUIText">Mise à jour liste de caméras. Veuillez patienter ...</string>
 								<object class="NSColor" key="IBUITextColor">
 									<int key="NSColorSpace">1</int>
 									<bytes key="NSRGB">MSAxIDEAA</bytes>
@@ -156,11 +159,12 @@
 									<double key="NSSize">15</double>
 									<int key="NSfFlags">16</int>
 								</object>
-								<double key="preferredMaxLayoutWidth">165</double>
+								<double key="preferredMaxLayoutWidth">222</double>
 							</object>
 						</array>
 						<string key="NSFrame">{{273, 397}, {222, 230}}</string>
 						<reference key="NSSuperview" ref="670034298"/>
+						<reference key="NSWindow"/>
 						<reference key="NSNextKeyView" ref="595719569"/>
 						<string key="NSReuseIdentifierKey">_NS:9</string>
 						<object class="NSColor" key="IBUIBackgroundColor">
@@ -171,6 +175,8 @@
 					</object>
 				</array>
 				<string key="NSFrameSize">{768, 1024}</string>
+				<reference key="NSSuperview"/>
+				<reference key="NSWindow"/>
 				<reference key="NSNextKeyView" ref="479549754"/>
 				<string key="NSReuseIdentifierKey">_NS:9</string>
 				<object class="NSColor" key="IBUIBackgroundColor">
