@@ -194,7 +194,21 @@
 
 -(void) becomeActive_
 {
-    NSLog(@"Become ACTIVE _  .. do nothing.. ");
+    //if Remote --- restart streaming
+    // else if local -- do nothing
+    if ( (self.selected_channel != nil) &&
+         (self.selected_channel.profile.isInLocal == NO)
+       )
+    {
+        [self becomeActive];
+    }
+    else
+    {
+        NSLog(@"Become ACTIVE _  .. do nothing.. ");
+    }
+    
+    
+    
 }
 -(void) becomeActive
 {
@@ -293,32 +307,35 @@
 
 -(void) handleEnteredBackground
 {
-	NSLog(@"Enter Background.. Keep on streamming.. ");
-   
-    //stop streaming..
-#if 0
-    self.selected_channel.stopStreaming = TRUE;
-	if (streamer.recordInProgress == YES)
-		[streamer stopRecording];
-	[streamer stopStreaming];
+	
    
     
-    if (scanner != nil)
+    if ( (self.selected_channel != nil) &&
+        (self.selected_channel.profile.isInLocal == NO)
+        )
     {
-        [scanner cancel];
+        self.selected_channel.stopStreaming = TRUE;
+        if (streamer.recordInProgress == YES)
+            [streamer stopRecording];
+        [streamer stopStreaming];
+        
+        
+        if (scanner != nil)
+        {
+            [scanner cancel];
+        }
+        
+        
+        //NSLog(@"abort remote timer ");
+        [self.selected_channel abortViewTimer];
     }
-    
-    
-	//NSLog(@"abort remote timer ");
-	[self.selected_channel abortViewTimer];
-#endif
-    
-    
+    else
+    {
+       NSLog(@"Enter Background.. Keep on streamming.. ");
+    }
+
     //Close all dialog..
     [self stopPeriodicPopup];
-    
-    
-    
     
     
         
