@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <archive type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="8.00">
 	<data>
-		<int key="IBDocument.SystemTarget">1536</int>
-		<string key="IBDocument.SystemVersion">11G63</string>
-		<string key="IBDocument.InterfaceBuilderVersion">2843</string>
-		<string key="IBDocument.AppKitVersion">1138.51</string>
+		<int key="IBDocument.SystemTarget">1552</int>
+		<string key="IBDocument.SystemVersion">11E53</string>
+		<string key="IBDocument.InterfaceBuilderVersion">3084</string>
+		<string key="IBDocument.AppKitVersion">1138.47</string>
 		<string key="IBDocument.HIToolboxVersion">569.00</string>
 		<object class="NSMutableDictionary" key="IBDocument.PluginVersions">
 			<string key="NS.key.0">com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
-			<string key="NS.object.0">1929</string>
+			<string key="NS.object.0">2083</string>
 		</object>
 		<array key="IBDocument.IntegratedClassDependencies">
 			<string>IBProxyObject</string>
@@ -56,7 +56,7 @@
 							<object class="IBUILabel" id="579599316">
 								<reference key="NSNextResponder" ref="104865740"/>
 								<int key="NSvFlags">292</int>
-								<string key="NSFrame">{{35, 40}, {250, 46}}</string>
+								<string key="NSFrame">{{35, 20}, {250, 66}}</string>
 								<reference key="NSSuperview" ref="104865740"/>
 								<reference key="NSWindow"/>
 								<reference key="NSNextKeyView" ref="572561797"/>
@@ -67,7 +67,7 @@
 								<int key="IBUITag">12</int>
 								<bool key="IBUIUserInteractionEnabled">NO</bool>
 								<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
-								<string key="IBUIText">Upgrading firmware, do not power off the camera</string>
+								<string key="IBUIText">Mise à niveau du firmware, veuillez ne pas éteindre la caméra</string>
 								<object class="NSColor" key="IBUITextColor">
 									<int key="NSColorSpace">1</int>
 									<bytes key="NSRGB">MSAxIDEAA</bytes>
@@ -78,7 +78,7 @@
 								<nil key="IBUIHighlightedColor"/>
 								<int key="IBUIBaselineAdjustment">0</int>
 								<float key="IBUIMinimumFontSize">10</float>
-								<int key="IBUINumberOfLines">2</int>
+								<int key="IBUINumberOfLines">3</int>
 								<int key="IBUITextAlignment">1</int>
 								<object class="IBUIFontDescription" key="IBUIFontDescription" id="793051845">
 									<int key="type">1</int>
@@ -98,6 +98,7 @@
 								<string key="NSFrame">{{235, 142}, {50, 23}}</string>
 								<reference key="NSSuperview" ref="104865740"/>
 								<reference key="NSWindow"/>
+								<reference key="NSNextKeyView"/>
 								<string key="NSReuseIdentifierKey">_NS:9</string>
 								<bool key="IBUIOpaque">NO</bool>
 								<bool key="IBUIClipsSubviews">YES</bool>
@@ -279,6 +280,8 @@
 					<string key="superclassName">UIViewController</string>
 					<dictionary class="NSMutableDictionary" key="actions">
 						<string key="buttonCamPressed:">id</string>
+						<string key="buttonCancelPressed:">id</string>
+						<string key="buttonHQPressed:">id</string>
 						<string key="buttonMelodyPressed:">id</string>
 						<string key="buttonPttPressed:">id</string>
 						<string key="buttonSnapPress:">id</string>
@@ -289,6 +292,14 @@
 					<dictionary class="NSMutableDictionary" key="actionInfosByName">
 						<object class="IBActionInfo" key="buttonCamPressed:">
 							<string key="name">buttonCamPressed:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+						<object class="IBActionInfo" key="buttonCancelPressed:">
+							<string key="name">buttonCancelPressed:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+						<object class="IBActionInfo" key="buttonHQPressed:">
+							<string key="name">buttonHQPressed:</string>
 							<string key="candidateClassName">id</string>
 						</object>
 						<object class="IBActionInfo" key="buttonMelodyPressed:">
@@ -322,6 +333,7 @@
 						<string key="barBtnSetttings">UIBarButtonItem</string>
 						<string key="controlButtons">UIView</string>
 						<string key="directionPad">UIImageView</string>
+						<string key="hqButton">UIButton</string>
 						<string key="lowRes_bg">UIImageView</string>
 						<string key="lowRes_label">UILabel</string>
 						<string key="lullabyButton">UIButton</string>
@@ -365,6 +377,10 @@
 						<object class="IBToOneOutletInfo" key="directionPad">
 							<string key="name">directionPad</string>
 							<string key="candidateClassName">UIImageView</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="hqButton">
+							<string key="name">hqButton</string>
+							<string key="candidateClassName">UIButton</string>
 						</object>
 						<object class="IBToOneOutletInfo" key="lowRes_bg">
 							<string key="name">lowRes_bg</string>
@@ -466,10 +482,10 @@
 		<string key="IBDocument.TargetRuntimeIdentifier">IBCocoaTouchFramework</string>
 		<object class="NSMutableDictionary" key="IBDocument.PluginDeclaredDependencyDefaults">
 			<string key="NS.key.0">com.apple.InterfaceBuilder.CocoaTouchPlugin.iPhoneOS</string>
-			<real value="1536" key="NS.object.0"/>
+			<real value="1552" key="NS.object.0"/>
 		</object>
 		<bool key="IBDocument.PluginDeclaredDependenciesTrackSystemTargetVersion">YES</bool>
 		<int key="IBDocument.defaultPropertyAccessControl">3</int>
-		<string key="IBCocoaTouchPluginVersion">1929</string>
+		<string key="IBCocoaTouchPluginVersion">2083</string>
 	</data>
 </archive>
