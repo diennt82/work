@@ -7,7 +7,7 @@
 //
 
 #import "Account_ViewController.h"
-
+#import "MBP_iosViewController.h"
 @interface Account_ViewController ()
 
 @end
@@ -324,7 +324,7 @@
         //TODO: 2 . Clear offline data
         
         
-        [mdelegate sendStatus:8];
+        [mdelegate sendStatus:LOGIN_FAILED_OR_LOGOUT];
     }
 }
 

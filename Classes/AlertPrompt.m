@@ -10,7 +10,11 @@
 
 @implementation AlertPrompt
 @synthesize textField;
+@synthesize otherInfo;
+
 @synthesize enteredText;
+
+
 - (id)initWithTitle:(NSString *)title
             message:(NSString *)message
        promptholder:(NSString *) placeHolder

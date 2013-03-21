@@ -57,6 +57,8 @@
 
 #define ALERT_PUSH_RECVED_RESCAN_AFTER 200
 #define ALERT_PUSH_RECVED_RELOGIN_AFTER 201
+#define ALERT_PUSH_SERVER_ANNOUNCEMENT 203
+
 
 #define _streamingSSID @"string_Streaming_SSID"
 #define _triggeredByVox @"bool_Vox_Trigger"
