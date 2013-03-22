@@ -50,12 +50,14 @@
     UIBarButtonItem *nextButton = 
     [[UIBarButtonItem alloc] initWithTitle:NSLocalizedStringWithDefaultValue(@"Done",nil, [NSBundle mainBundle],
                                                                              @"Done", nil)
-                                     style:UIBarButtonItemStylePlain 
+                                     style:UIBarButtonItemStyleBordered 
                                     target:self 
                                     action:@selector(handleNextButton:)];          
     self.navigationItem.rightBarButtonItem = nextButton;
     [nextButton release];
 
+    
+    self.navigationItem.rightBarButtonItem.enabled = NO;
    
     
 }
@@ -248,6 +250,45 @@
 
     
     [self animateTextField: textField up: NO];
+}
+
+
+
+- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
+{
+    [self validateAllfieldsEnableSignUp];
+    
+    return YES;
+}
+
+
+-(void) validateAllfieldsEnableSignUp
+{
+    UITextField * _userName = (UITextField *)[userName viewWithTag:201];
+    UITextField * _userPass = (UITextField *)[userPass viewWithTag:202];
+    UITextField * _userCPass =(UITextField *) [userCPass viewWithTag:203];
+    UITextField * _userEmail = (UITextField *)[userEmail viewWithTag:204];
+    
+    
+    
+    if ( (_userName.text.length > 0) &&
+        (_userPass.text.length > 0) &&
+        (_userCPass.text.length > 0) &&
+        (_userEmail.text.length > 0) 
+        )
+    {
+        //Enable the "DONE" button
+
+        self.navigationItem.rightBarButtonItem.enabled = YES;
+        
+    }
+    else
+    {
+        //disable the "DONE"  button
+                self.navigationItem.rightBarButtonItem.enabled = NO;
+    }
+    
+
 }
 
 - (void) animateTextField: (UITextField*) textField up: (BOOL) up
