@@ -35,6 +35,7 @@
 		380CB0DF16DC632700290587 /* Step_11_ViewController_ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 380CB0DD16DC632600290587 /* Step_11_ViewController_ipad.xib */; };
 		380CB0E216DC634D00290587 /* Step_11_ViewController_land_ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 380CB0E016DC634D00290587 /* Step_11_ViewController_land_ipad.xib */; };
 		380CB0E516DC8DE400290587 /* MBP_FirstPage_land_ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 380CB0E316DC8DE400290587 /* MBP_FirstPage_land_ipad.xib */; };
+		380EB15416FC41D8005BAC7F /* Voicemail.aif in Resources */ = {isa = PBXBuildFile; fileRef = 380EB15316FC41D8005BAC7F /* Voicemail.aif */; };
 		3812F82515C8BF0600DADFA6 /* bb_setting_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 3812F82415C8BF0600DADFA6 /* bb_setting_icon.png */; };
 		3812F82B15C8BF3600DADFA6 /* bb_ptt_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 3812F82715C8BF3600DADFA6 /* bb_ptt_icon.png */; };
 		3812F82C15C8BF3600DADFA6 /* bb_snap_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 3812F82815C8BF3600DADFA6 /* bb_snap_icon.png */; };
@@ -275,6 +276,7 @@
 		380CB0DE16DC632700290587 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/Step_11_ViewController_ipad.xib; sourceTree = "<group>"; };
 		380CB0E116DC634D00290587 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/Step_11_ViewController_land_ipad.xib; sourceTree = "<group>"; };
 		380CB0E416DC8DE400290587 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/MBP_FirstPage_land_ipad.xib; sourceTree = "<group>"; };
+		380EB15316FC41D8005BAC7F /* Voicemail.aif */ = {isa = PBXFileReference; lastKnownFileType = file; path = Voicemail.aif; sourceTree = "<group>"; };
 		3812F82415C8BF0600DADFA6 /* bb_setting_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bb_setting_icon.png; sourceTree = "<group>"; };
 		3812F82715C8BF3600DADFA6 /* bb_ptt_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bb_ptt_icon.png; sourceTree = "<group>"; };
 		3812F82815C8BF3600DADFA6 /* bb_snap_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bb_snap_icon.png; sourceTree = "<group>"; };
@@ -895,6 +897,7 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				380EB15316FC41D8005BAC7F /* Voicemail.aif */,
 				974ACB7E168079CB005AE4C6 /* MonitorEverywhere_App_ios_Apple.html */,
 				38A7E0E5165B7D8F00C542A6 /* beep.wav */,
 				38362C1C15FDEE400077E188 /* alert_history.sqlite */,
@@ -1228,6 +1231,7 @@
 				380CB0E516DC8DE400290587 /* MBP_FirstPage_land_ipad.xib in Resources */,
 				382CD25816DDE12200BC8E0C /* Step_07_tableViewCell_ipad.xib in Resources */,
 				38611CE716DF611200C0F42D /* ForgotPwdViewController_ipad.xib in Resources */,
+				380EB15416FC41D8005BAC7F /* Voicemail.aif in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

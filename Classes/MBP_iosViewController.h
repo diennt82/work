@@ -102,6 +102,9 @@
     
     ///IN USED
    // IBOutlet MBP_MainMenuView * mainMenuView;
+    
+    SystemSoundID soundFileObject;
+    
 	IBOutlet UIView * progressView; 
 	
 	AviRecord* iRecorder;

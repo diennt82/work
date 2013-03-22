@@ -71,6 +71,10 @@ return self;
 
 	self.app_stage = APP_STAGE_INIT;
 
+    CFBundleRef mainbundle = CFBundleGetMainBundle();
+    CFURLRef soundFileURLRef = CFBundleCopyResourceURL(mainbundle, CFSTR("Voicemail"), CFSTR("aif"), NULL);
+    AudioServicesCreateSystemSoundID(soundFileURLRef, &soundFileObject);
+    
 }
 
 /**/
@@ -742,6 +746,7 @@ return self;
         
         pushAlert.tag = ALERT_PUSH_SERVER_ANNOUNCEMENT;
         
+        [self playSound];
         [pushAlert show];
         
         
@@ -821,12 +826,43 @@ return self;
 		[self sendStatus:2];
 		pushAlert.tag = ALERT_PUSH_RECVED_RELOGIN_AFTER;
 	}
+    [self playSound];
 
 	[pushAlert show];
+    
 
 
 	return TRUE; 
 
+}
+
+-(void) playSound
+{
+	
+    
+	//NSLog(@"Play the B");
+    
+    
+	//201201011 This is needed to play the system sound on top of audio from camera
+	UInt32 sessionCategory = kAudioSessionCategory_AmbientSound;    // 1
+	AudioSessionSetProperty (
+                             kAudioSessionProperty_AudioCategory,                        // 2
+                             sizeof (sessionCategory),                                   // 3
+                             &sessionCategory                                            // 4
+                             );
+    
+	//Play beep
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+    {
+        AudioServicesPlaySystemSound(soundFileObject);
+    }
+    else
+    {
+        AudioServicesPlayAlertSound(soundFileObject);
+    }
+    
+    
+    
 }
 
 -(void) logoutAndUnregistration_bg
