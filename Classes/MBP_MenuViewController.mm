@@ -798,8 +798,7 @@
         label.numberOfLines =2 ; 
 		
         label.text = NSLocalizedStringWithDefaultValue([self.cameraMenuItems objectAtIndex:indexPath.row], nil, [NSBundle mainBundle], [self.cameraMenuItems objectAtIndex:indexPath.row], nil);
-		
-
+   
 		
 		value = [[UILabel alloc] initWithFrame:CGRectMake(label_width,0, label_width, 
 														  cell.contentView.frame.size.height)];

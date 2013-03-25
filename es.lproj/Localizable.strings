@@ -417,3 +417,18 @@
 /* No comment provided by engineer. */
 "Yes_n" = "Yes and don't ask again";
 
+"Camera Name:" = "Camera Name:";
+
+"Camera Volume:" = "Camera Volume:";
+
+"Camera Brightness:" = "Camera Brightness:";
+
+"Sound Sensitivity Settings:" = "Sound Sensitivity Settings:";
+
+"Temperature Unit:" = "Temperature Unit:";
+
+"Video Quality:" = "Video Quality:";
+
+"Remove this camera" = "Remove this camera";
+
+"Information" = "Information";
