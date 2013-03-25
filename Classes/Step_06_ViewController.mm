@@ -147,112 +147,40 @@
 -(void) adjustViewsForOrientations: (UIInterfaceOrientation) interfaceOrientation
 {
 #if 0
-    if (interfaceOrientation == UIInterfaceOrientationLandscapeLeft || interfaceOrientation == UIInterfaceOrientationLandscapeRight)
+    if (interfaceOrientation == UIInterfaceOrientationLandscapeLeft ||
+        interfaceOrientation == UIInterfaceOrientationLandscapeRight)
     {
-        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
-        {
-            //[[NSBundle mainBundle] loadNibNamed:@"Step_06_ViewController_land_ipad" owner:self options:nil];
-        } else
-        {
-            
-            //Save pass and Confirm Pass before rotating
-            UITextField * _oldPass = (UITextField *) [self.passwordCell viewWithTag:200];
-            NSString * oldPass;
-            if (_oldPass != nil)
-            {
-                oldPass = _oldPass.text;
-            }
-            
-            UITextField * _oldConfPass = (UITextField *)[self.confPasswordCell viewWithTag:201];
-            NSString * oldConfPass;
-            if (_oldConfPass != nil) {
-                oldConfPass = _oldConfPass.text;
-            }
-            
-            
-            
-            [[NSBundle mainBundle] loadNibNamed:@"Step_06_ViewController_land" owner:self options:nil];
-            
-            UITextField * _ssid = (UITextField *) [self.ssidCell viewWithTag:202];
-            if (_ssid != nil && (self.isOtherNetwork == FALSE))
-            {
-                _ssid.text = self.ssid;
-            }
-            
-            UITextField * _sec = (UITextField *) [self.securityCell viewWithTag:1];
-            if (_sec != nil)
-            {
-                _sec.text = self.security; 
-            }
-            
-            // Rewrite Pass and Confirm Pass
-            UITextField * _pass = (UITextField *) [self.passwordCell viewWithTag:200];
-            if (_pass != nil)
-            {
-                _pass.text = oldPass;
-            }
-            
-            UITextField * _confPass = (UITextField *)[self.confPasswordCell viewWithTag:201];
-            if (_confPass != nil) {
-                _confPass.text = oldConfPass;
-            }
-            
-        }
+        
     }
-    else if (interfaceOrientation == UIInterfaceOrientationPortrait || interfaceOrientation == UIInterfaceOrientationPortraitUpsideDown)
+    else if (interfaceOrientation == UIInterfaceOrientationPortrait ||
+             interfaceOrientation == UIInterfaceOrientationPortraitUpsideDown)
     {
-        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
-        {
-            //[[NSBundle mainBundle] loadNibNamed:@"Step_06_ViewController_ipad" owner:self options:nil];
-        }
-        else
-        {
-            
-            //Save pass and Confirm Pass before rotating
-            UITextField * _oldPass = (UITextField *) [self.passwordCell viewWithTag:200];
-            NSString * oldPass;
-            if (_oldPass != nil)
-            {
-                oldPass = _oldPass.text;
-            }
-            
-            UITextField * _oldConfPass = (UITextField *)[self.confPasswordCell viewWithTag:201];
-            NSString * oldConfPass;
-            if (_oldConfPass != nil) {
-                oldConfPass = _oldConfPass.text;
-            }
-            
-            
-            [[NSBundle mainBundle] loadNibNamed:@"Step_06_ViewController" owner:self options:nil];
-            
-            UITextField * _ssid = (UITextField *) [self.ssidCell viewWithTag:202];
-            if (_ssid != nil && (self.isOtherNetwork == FALSE))
-            {
-                _ssid.text = self.ssid;
-            }
-            
-            UITextField * _sec = (UITextField *) [self.securityCell viewWithTag:1];
-            if (_sec != nil)
-            {
-                _sec.text = self.security; 
-            }
-            
-            // Rewrite Pass and Confirm Pass
-            UITextField * _pass = (UITextField *) [self.passwordCell viewWithTag:200];
-            if (_pass != nil)
-            {
-                _pass.text = oldPass;
-            }
-            
-            UITextField * _confPass = (UITextField *)[self.confPasswordCell viewWithTag:201];
-            if (_confPass != nil) {
-                _confPass.text = oldConfPass;
-            }
-            
-            
-        }
+        
     }
-#endif 
+#endif
+    
+    
+    //Resign all keyboard...
+    UITextField * textField = nil;
+    
+    textField = (UITextField *) [self.view viewWithTag:200];
+    if(textField != nil)
+    {
+        [textField resignFirstResponder]; 
+    }
+    
+    textField = (UITextField *) [self.view viewWithTag:201];
+    if(textField != nil)
+    {
+        [textField resignFirstResponder];
+    }
+    
+    textField = (UITextField *) [self.view viewWithTag:202];
+    if(textField != nil)
+    {
+        [textField resignFirstResponder];
+    }
+    
 }
 
 
