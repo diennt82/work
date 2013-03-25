@@ -350,13 +350,13 @@
 		if (stopPcm == FALSE)
         {
             NSLog(@"Streamer stopStreaming: Don't stop pcm player");
-            
-            /* kill the audio player */
+           
             [[pcmPlayer player] setPlay_now:FALSE];
         }
         else
         {
             
+            NSLog(@"Streamer stopStreaming: KILL pcm player");
             /* kill the audio player */
             [[pcmPlayer player] setPlay_now:FALSE];
             [pcmPlayer Stop];
