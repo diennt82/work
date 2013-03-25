@@ -417,18 +417,18 @@
 /* No comment provided by engineer. */
 "Yes_n" = "Yes and don't ask again";
 
-"Camera Name:" = "Camera Name:";
+"Camera Name:" = "Nombre de Cámara:";
 
-"Camera Volume:" = "Camera Volume:";
+"Camera Volume:" = "Volumén de la Cámara:";
 
-"Camera Brightness:" = "Camera Brightness:";
+"Camera Brightness:" = "Brillo de la Cámara:";
 
-"Sound Sensitivity Settings:" = "Sound Sensitivity Settings:";
+"Sound Sensitivity Settings:" = "Configuración de la Sensibilidad del Sonido";
 
-"Temperature Unit:" = "Temperature Unit:";
+"Temperature Unit:" = "Unidad de Temperatura:";
 
-"Video Quality:" = "Video Quality:";
+"Video Quality:" = "Calidad de Vídeo:";
 
-"Remove this camera" = "Remove this camera";
+"Remove this camera" = "Quitar esta cámar";
 
-"Information" = "Information";
+"Information" = "Información";
