@@ -796,12 +796,8 @@
         label.backgroundColor = [UIColor clearColor];
         label.textColor = [UIColor whiteColor];
         label.numberOfLines =2 ; 
-		/*
-		label.text = [Internationalization get:[[self.cameraMenuItems allKeys] objectAtIndex:indexPath.row]
-										 alter:[[self.cameraMenuItems allKeys] objectAtIndex:indexPath.row]];
 		
-		*/
-		label.text =[self.cameraMenuItems objectAtIndex:indexPath.row];
+        label.text = NSLocalizedStringWithDefaultValue([self.cameraMenuItems objectAtIndex:indexPath.row], nil, [NSBundle mainBundle], [self.cameraMenuItems objectAtIndex:indexPath.row], nil);
 		
 
 		
@@ -815,7 +811,7 @@
 		
         value.lineBreakMode = UILineBreakModeWordWrap;
         
-		value.text = [self.cameraMenuItemValues  objectForKey:label.text];
+		value.text = [self.cameraMenuItemValues  objectForKey:[self.cameraMenuItems objectAtIndex:indexPath.row]];
         value.textColor = [UIColor whiteColor];
         value.backgroundColor = [UIColor clearColor];
         value.numberOfLines =2 ; 

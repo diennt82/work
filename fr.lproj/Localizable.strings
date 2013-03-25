@@ -415,6 +415,25 @@
 "Yes" = "Oui";
 
 /* No comment provided by engineer. */
-"Yes_n" = "Yes and don't ask again";
+"Camera Name:" = "Nom Caméra :";
 
+/* No comment provided by engineer. */
+"Camera Volume:" = "Volume Caméra :";
 
+/* No comment provided by engineer. */
+"Camera Brightness:" = "Luminosité Caméra :";
+
+/* No comment provided by engineer. */
+"Sound Sensitivity Settings:" = "Configuration de la Sensibilité du Son :";
+
+/* No comment provided by engineer. */
+"Temperature Unit:" = "Unité de Température :";
+
+/* No comment provided by engineer. */
+"Video Quality:" = "Qualité Vidéo";
+
+/* No comment provided by engineer. */
+"Remove this camera" = "Retirer cette caméra";
+
+/* No comment provided by engineer. */
+"Information" = "Information";
