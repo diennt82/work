@@ -570,6 +570,8 @@
 		97F0F167143C45FA0076B749 /* MBP_Streamer.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = MBP_Streamer.mm; sourceTree = "<group>"; };
 		97FE7D0E15998C0B000826F0 /* RemoteConnection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RemoteConnection.h; sourceTree = "<group>"; };
 		97FE7D0F15998C0B000826F0 /* RemoteConnection.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = RemoteConnection.mm; sourceTree = "<group>"; };
+		BC22999D1700469B005AA83D /* es */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = es; path = es.lproj/DashBoard_camView.xib; sourceTree = "<group>"; };
+		BC22999E170046A2005AA83D /* fr */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = fr; path = fr.lproj/DashBoard_camView.xib; sourceTree = "<group>"; };
 		BC3C1A8816F0223800175AFF /* es */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = es; path = es.lproj/MBP_iosViewController_ipad.xib; sourceTree = "<group>"; };
 		BC3C1A8916F0223900175AFF /* fr */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = fr; path = fr.lproj/MBP_iosViewController_ipad.xib; sourceTree = "<group>"; };
 		BC3C1A8A16F022A400175AFF /* es */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = es; path = es.lproj/MBP_InitialSetupViewController_ipad.xib; sourceTree = "<group>"; };
