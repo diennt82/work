@@ -215,6 +215,7 @@
 		97F0F04C143C0CA00076B749 /* CamChannel.m in Sources */ = {isa = PBXBuildFile; fileRef = 97F0F04B143C0CA00076B749 /* CamChannel.m */; };
 		97F0F168143C45FA0076B749 /* MBP_Streamer.mm in Sources */ = {isa = PBXBuildFile; fileRef = 97F0F167143C45FA0076B749 /* MBP_Streamer.mm */; };
 		97FE7D1015998C0B000826F0 /* RemoteConnection.mm in Sources */ = {isa = PBXBuildFile; fileRef = 97FE7D0F15998C0B000826F0 /* RemoteConnection.mm */; };
+		BC22994B17000447005AA83D /* cameraMenuRouter.plist in Resources */ = {isa = PBXBuildFile; fileRef = BC22994D17000447005AA83D /* cameraMenuRouter.plist */; };
 		BC3C1AC516F0257000175AFF /* ForgotPwdViewController_ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = BC3C1AC716F0257000175AFF /* ForgotPwdViewController_ipad.xib */; };
 		BC3C1ACE16F025B600175AFF /* MBP_MenuViewController_ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = BC3C1AD016F025B600175AFF /* MBP_MenuViewController_ipad.xib */; };
 		BC3C1AD316F025E300175AFF /* MBP_MenuProgress_portrait_ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = BC3C1AD516F025E300175AFF /* MBP_MenuProgress_portrait_ipad.xib */; };
@@ -568,6 +569,8 @@
 		97F0F167143C45FA0076B749 /* MBP_Streamer.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = MBP_Streamer.mm; sourceTree = "<group>"; };
 		97FE7D0E15998C0B000826F0 /* RemoteConnection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RemoteConnection.h; sourceTree = "<group>"; };
 		97FE7D0F15998C0B000826F0 /* RemoteConnection.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = RemoteConnection.mm; sourceTree = "<group>"; };
+		BC22994C17000447005AA83D /* en */ = {isa = PBXFileReference; lastKnownFileType = file; name = en; path = en.lproj/cameraMenuRouter.plist; sourceTree = "<group>"; };
+		BC22994E1700044E005AA83D /* es */ = {isa = PBXFileReference; lastKnownFileType = file; name = es; path = es.lproj/cameraMenuRouter.plist; sourceTree = "<group>"; };
 		BC3C1A8816F0223800175AFF /* es */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = es; path = es.lproj/MBP_iosViewController_ipad.xib; sourceTree = "<group>"; };
 		BC3C1A8916F0223900175AFF /* fr */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = fr; path = fr.lproj/MBP_iosViewController_ipad.xib; sourceTree = "<group>"; };
 		BC3C1A8A16F022A400175AFF /* es */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = es; path = es.lproj/MBP_InitialSetupViewController_ipad.xib; sourceTree = "<group>"; };
@@ -2083,6 +2086,15 @@
 				BC5B0FEB17018F1D00D2C308 /* sv */,
 			);
 			name = MBP_InitialSetupViewController.xib;
+			sourceTree = "<group>";
+		};
+		BC22994D17000447005AA83D /* cameraMenuRouter.plist */ = {
+			isa = PBXVariantGroup;
+			children = (
+				BC22994C17000447005AA83D /* en */,
+				BC22994E1700044E005AA83D /* es */,
+			);
+			name = cameraMenuRouter.plist;
 			sourceTree = "<group>";
 		};
 		BC3C1AC716F0257000175AFF /* ForgotPwdViewController_ipad.xib */ = {

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<array>
+	<string>Nombre de Cámara:</string>
+	<string>Volumén de la Cámara:</string>
+	<string>Brillo de la Cámara:</string>
+	<string>Configuración de la Sensibilidad del Sonido</string>
+	<string>Unidad de Temperatura:</string>
+	<string>Calidad de Vídeo:</string>
+	<string>Quitar esta cámara</string>
+	<string>Información:</string>
+</array>
+</plist>
