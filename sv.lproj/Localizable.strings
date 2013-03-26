@@ -1,0 +1,420 @@
+/* 
+  Localizable.strings
+  MBP_ios
+
+  Created by nxcomm on 13/03/13.
+  Copyright (c) 2013 Smart Panda Ltd. All rights reserved.
+*/
+
+/* No comment provided by engineer. */
+"Account" = "Account";
+
+/* No comment provided by engineer. */
+"Account_" = "Account";
+
+/* No comment provided by engineer. */
+"Account_Created" = "Account Created";
+
+/* No comment provided by engineer. */
+"Add_Camera_Failed" = "Add Camera Failed";
+
+/* No comment provided by engineer. */
+"AddCam_Error" = "AddCam Error";
+
+/* No comment provided by engineer. */
+"addcam_error_1" = "The device is not able to connect to the server. Please check the WIFI and the internet connection";
+
+/* No comment provided by engineer. */
+"Baby_Monitor_Setup" = "Baby Monitor Setup";
+
+/* No comment provided by engineer. */
+"Back" = "Back";
+
+/* No comment provided by engineer. */
+"bms_error_404" = "Server is temporarily not available";
+
+/* No comment provided by engineer. */
+"bms_error_601" = "Invalid command passed. Please check the query.";
+
+/* No comment provided by engineer. */
+"bms_error_602" = "Required parameter(s) are missing.";
+
+/* No comment provided by engineer. */
+"bms_error_603" = "Length of the parameter is out of expected boundaries.";
+
+/* No comment provided by engineer. */
+"bms_error_611" = "Camera does not exist.";
+
+/* No comment provided by engineer. */
+"bms_error_612" = "Unable to communicate with the camera.";
+
+/* No comment provided by engineer. */
+"bms_error_613" = "Unable to communicate with the camera.";
+
+/* No comment provided by engineer. */
+"bms_error_614" = "Camera is not ready for streaming";
+
+/* No comment provided by engineer. */
+"bms_error_621" = "Email Id is not registered.";
+
+/* No comment provided by engineer. */
+"bms_error_622" = "Email Id registed but not activated.";
+
+/* No comment provided by engineer. */
+"bms_error_623" = "Email Id is already activated.";
+
+/* No comment provided by engineer. */
+"bms_error_624" = "Activation failed. Either user is not registered or the activation period is expired. Please register again.";
+
+/* No comment provided by engineer. */
+"bms_error_625" = "Activation failed. Invalid activation key.";
+
+/* No comment provided by engineer. */
+"bms_error_626" = "Authentication failed, either Email Id or Password is invalid.";
+
+/* No comment provided by engineer. */
+"bms_error_627" = "Camera is not associated with any user (email id).";
+
+/* No comment provided by engineer. */
+"bms_error_628" = "Email is already registered";
+
+/* No comment provided by engineer. */
+"bms_error_636" = "Username is already registered";
+
+/* No comment provided by engineer. */
+"bms_error_699" = "Unhandled exception occured, please contact administrator.";
+
+/* No comment provided by engineer. */
+"bms_error_unknown" = "Unknown error - %d";
+
+/* No comment provided by engineer. */
+"cam_menu_err_1" = "Camera is not reachable";
+
+/* No comment provided by engineer. */
+"cam_menu_err_2" = "Unable to rename this camera. Please re-login and try again";
+
+/* No comment provided by engineer. */
+"cam_menu_err_3" = "Camera name cant be empty, please try again";
+
+/* No comment provided by engineer. */
+"cam_menu_err_4" = "Camera name can't be removed, please log-in";
+
+/* No comment provided by engineer. */
+"cam_menu_err_5" = "Failed to change camera name. Please try again later";
+
+/* No comment provided by engineer. */
+"cam_rem_msg" = "Please confirm that you want to remove this camera from your account. This action will also switch your camera to default settings. You will need to add the camera into your account again to use it.";
+
+/* No comment provided by engineer. */
+"cam_rem_msg1" = "Please confirm that you want to remove this camera from your account. The camera is not accessible right now, it will not be switched to direct mode. Please refer to FAQ to reset it manually.";
+
+/* No comment provided by engineer. */
+"Camera_Configured" = "Camera Configured";
+
+/* No comment provided by engineer. */
+"Camera_Detected" = "Camera Detected";
+
+/* No comment provided by engineer. */
+"Camera_fw_upgrade" = "Camera Firmware Upgrade";
+
+/* No comment provided by engineer. */
+"Camera_name_cant_be_empty" = "Camera name cant be empty, please try again";
+
+/* No comment provided by engineer. */
+"Cameras_" = "Cameras";
+
+/* No comment provided by engineer. */
+"Cancel" = "Cancel";
+
+/* No comment provided by engineer. */
+"Cancel_" = "Cancel";
+
+/* No comment provided by engineer. */
+"cant_start_stream" = "Can't start video stream, the BabyMonitor is busy, try again later.";
+
+/* No comment provided by engineer. */
+"cant_start_stream2" = "Server request timeout, try again later";
+
+/* No comment provided by engineer. */
+"cant_start_stream_01" = "The session key on camera is mis-matched. Please reset the camera and add the camera again.(%d)";
+
+/* No comment provided by engineer. */
+"Celsius" = "Celsius";
+
+/* No comment provided by engineer. */
+"Change_Camera_Name" = "Change Camera Name";
+
+/* No comment provided by engineer. */
+"comm_with_camera_timeout" = "Communication with camera has timeout.";
+
+/* No comment provided by engineer. */
+"comm_with_camera_timeout_msg" = "Please retry.";
+
+/* No comment provided by engineer. */
+"Configure_Camera" = "Configure Camera";
+
+/* No comment provided by engineer. */
+"Confirm_remove_cam_local" = "Please confirm that you want to remove this camera from your account. This action will also reset the camera to setup mode.";
+
+/* No comment provided by engineer. */
+"Confirm_remove_cam_remote" = "Please confirm that you want to remove this camera from your account. The camera is not accessible right now, it will not be switched to setup mode. Please refer to FAQ to reset it manually.";
+
+/* No comment provided by engineer. */
+"Connecting_to_server" = "Connecting to Server...";
+
+/* No comment provided by engineer. */
+"Create_Account" = "Create Account";
+
+/* No comment provided by engineer. */
+"Create_Account_Failed" = "Create Account Failed";
+
+/* No comment provided by engineer. */
+"Create_Account_Failed_msg" = "User name has to be between 5-20 characters";
+
+/* No comment provided by engineer. */
+"Create_Account_Failed_msg1" = "Password has to be between 3-12 characters";
+
+/* No comment provided by engineer. */
+"Create_Account_Failed_msg2" = "Password does not match";
+
+/* No comment provided by engineer. */
+"Create_Account_Failed_msg3" = "Invalid email. Email address should be of the form somebody@somewhere.com";
+
+/* No comment provided by engineer. */
+"Create_Account_Failed_msg4" = "Please select a Wifi network to connect";
+
+/* No comment provided by engineer. */
+"Detect_Camera" = "Detect Camera";
+
+/* No comment provided by engineer. */
+"Done" = "Done";
+
+/* No comment provided by engineer. */
+"Edit_" = "Edit";
+
+/* No comment provided by engineer. */
+"Email_Format_error" = "Email Format error";
+
+/* No comment provided by engineer. */
+"Email_Format_error_msg" = "Correct email format is of the form: someone@somedomain.com. Please try again!";
+
+/* No comment provided by engineer. */
+"Enter_Network_Information" = "Enter Network Information";
+
+/* No comment provided by engineer. */
+"enter_new_camera_name" = "Enter new camera name";
+
+/* No comment provided by engineer. */
+"Fahrenheit" = "Fahrenheit";
+
+/* No comment provided by engineer. */
+"Fail_to_communicate_with_camera" = "Fail to communicate with camera. Retry?";
+
+/* No comment provided by engineer. */
+"Forgot_Password" = "Forgot Password";
+
+/* No comment provided by engineer. */
+"fw_upgrade" = "A camera firmware %@ is available. Do you want to upgrade now?";
+
+/* No comment provided by engineer. */
+"fw_upgrade_1" = "Restarting Camera...";
+
+/* No comment provided by engineer. */
+"Get_Camera_list_Error" = "Get Camera list Error";
+
+/* No comment provided by engineer. */
+"Get_Camera_list_Error_msg" = "Server error: Invalid response";
+
+/* No comment provided by engineer. */
+"Get_Camera_list_Error_msg1" = "Server unreachable";
+
+/* No comment provided by engineer. */
+"Go_to_Camera_list" = "Go to Camera list";
+
+/* No comment provided by engineer. */
+"High_Quality" = "High Quality (VGA)";
+
+/* No comment provided by engineer. */
+"information" = "Information";
+
+/* No comment provided by engineer. */
+"information_msg" = "Motorola Baby Monitor\nApplication version: %1$@\nFirmware version:%2$@,\nMonitoreverywhere © All rights Reserved.\nCamera address:%3$@";
+
+/* No comment provided by engineer. */
+"Invalid_Camera_Name" = "Invalid Camera Name";
+
+/* No comment provided by engineer. */
+"Invalid_Camera_Name_msg" = "Camera Name has to be between 3-15 characters";
+
+/* No comment provided by engineer. */
+"Invalid_Camera_Name_msg2" = "Camera name is invalid. Please enter [0-9],[a-Z], space, dot, hyphen, underscore & single quote only.";
+
+/* No comment provided by engineer. */
+"Invalid_Server_Response" = "Invalid Server Response.(Nil response)";
+
+/* No comment provided by engineer. */
+"Level1" = "Level 1";
+
+/* No comment provided by engineer. */
+"Level1_" = "Level 1 (Low)";
+
+/* No comment provided by engineer. */
+"Level2" = "Level 2";
+
+/* No comment provided by engineer. */
+"Level3" = "Level 3";
+
+/* No comment provided by engineer. */
+"Level4" = "Level 4";
+
+/* No comment provided by engineer. */
+"Level4_" = "Level 4 (High)";
+
+/* No comment provided by engineer. */
+"Local_Wifi" = "Local Wifi";
+
+/* No comment provided by engineer. */
+"Logging_in_to_server" = "Logging in to server...";
+
+/* No comment provided by engineer. */
+"Login" = "Login";
+
+/* No comment provided by engineer. */
+"Login_Error" = "Login Error";
+
+/* No comment provided by engineer. */
+"Login_Error_msg" = "Server response invalid, please try again!";
+
+/* No comment provided by engineer. */
+"Login_Error_msg2" = "Server error: %@";
+
+/* No comment provided by engineer. */
+"Login_Error_msg3" = "Server is unreachable. Do you want to access your cameras offline?";
+
+/* No comment provided by engineer. */
+"Logout" = "Logout";
+
+/* No comment provided by engineer. */
+"melody_1" = "Rock a Bye Baby";
+
+/* No comment provided by engineer. */
+"melody_2" = "Lullaby and Goodnight";
+
+/* No comment provided by engineer. */
+"melody_3" = "Lavender Blue";
+
+/* No comment provided by engineer. */
+"melody_4" = "Twinkle Twinkle Little Star";
+
+/* No comment provided by engineer. */
+"melody_5" = "Hush Little Baby";
+
+/* No comment provided by engineer. */
+"network_lost_link" = "Camera disconnected due to network connectivity problem. Trying to reconnect...";
+
+/* No comment provided by engineer. */
+"New_Name" = "New Name";
+
+/* No comment provided by engineer. */
+"Next" = "Next";
+
+/* No comment provided by engineer. */
+"No" = "No";
+
+/* No comment provided by engineer. */
+"Normal_Quality" = "Normal Quality (QVGA)";
+
+/* No comment provided by engineer. */
+"Not_Available" = "Not Available";
+
+/* No comment provided by engineer. */
+"Not_supported" = "Not supported";
+
+/* No comment provided by engineer. */
+"Ok" = "Ok";
+
+/* No comment provided by engineer. */
+"quickview_lost_link" = "Network lost link. Please check the Phone, Camera and Wifi router or move closer to the Router";
+
+/* No comment provided by engineer. */
+"Registration_Error" = "Registration Error";
+
+/* No comment provided by engineer. */
+"Registration_Error_1" = "BMS Server is unreachable. Please goto WIFI setting to ensure iOS device is connected to router/3G network";
+
+/* No comment provided by engineer. */
+"Remote_Camera" = "Remote Camera";
+
+/* No comment provided by engineer. */
+"Remote_View_Error" = "Remote View Error";
+
+/* No comment provided by engineer. */
+"Remote_View_Error_msg" = "Initializing remote connection failed, please retry";
+
+/* No comment provided by engineer. */
+"remove_one_cam" = "Please remove one camera from the current  list before addding the new one";
+
+/* No comment provided by engineer. */
+"Reset_Password_Error" = "Reset Password Error";
+
+/* No comment provided by engineer. */
+"Retry" = "Retry";
+
+/* No comment provided by engineer. */
+"Security" = "Security";
+
+/* No comment provided by engineer. */
+"Server_error_" = "Server error: %@";
+
+/* No comment provided by engineer. */
+"Server_error_1" = "Server is unreachable. Please try again later.";
+
+/* No comment provided by engineer. */
+"Settings" = "Settings";
+
+/* No comment provided by engineer. */
+"Setup_Complete" = "Setup Complete";
+
+/* No comment provided by engineer. */
+"Sound_detected" = "Sound detected";
+
+/* No comment provided by engineer. */
+"Streamer_stopped" = "Streamer Stopped";
+
+/* No comment provided by engineer. */
+"Switch_On_Camera" = "Switch On Camera";
+
+/* No comment provided by engineer. */
+"Temperature_too_high" = "Temperature too high";
+
+/* No comment provided by engineer. */
+"Temperature_too_low" = "Temperature too low";
+
+/* No comment provided by engineer. */
+"Time_out" = "Time out";
+
+/* No comment provided by engineer. */
+"Time_out_msg" = "The video has been viewed for about 5 minutes. Do you want to continue?";
+
+/* No comment provided by engineer. */
+"udt_relay_connect" = "Connecting through relay... please wait...";
+
+/* No comment provided by engineer. */
+"Unable_to_rename_this_camera" = "Unable to rename this camera. Please log-in and try again";
+
+/* No comment provided by engineer. */
+"version" = "Version %@";
+
+/* No comment provided by engineer. */
+"video_rec_not_supported" = "Video recording is not supported, coming soon";
+
+/* No comment provided by engineer. */
+"wifi_not_available" = "Mobile data is enabled. If you continue to connect, you may incur air time charges. Do you want to proceed?";
+
+/* No comment provided by engineer. */
+"Yes" = "Yes";
+
+/* No comment provided by engineer. */
+"Yes_n" = "Yes and don't ask again";
+
+
