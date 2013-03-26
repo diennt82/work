@@ -220,7 +220,7 @@
 		BC3C1AD316F025E300175AFF /* MBP_MenuProgress_portrait_ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = BC3C1AD516F025E300175AFF /* MBP_MenuProgress_portrait_ipad.xib */; };
 		BC3C1AD816F025FF00175AFF /* MBP_MenuProgress_land_ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = BC3C1ADA16F025FF00175AFF /* MBP_MenuProgress_land_ipad.xib */; };
 		BC3C1B0316F05C0C00175AFF /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = BC3C1B0516F05C0C00175AFF /* Localizable.strings */; };
-		BC467A7A16FF702A002326AE /* cameraMenuRouter.plist in Resources */ = {isa = PBXBuildFile; fileRef = BC467A7C16FF702A002326AE /* cameraMenuRouter.plist */; };
+		BC5B0FCE1701855600D2C308 /* cameraMenuRouter.plist in Resources */ = {isa = PBXBuildFile; fileRef = BC5B0FCD1701855600D2C308 /* cameraMenuRouter.plist */; };
 		BC6E4A0516BFBB9D00B0D630 /* MBP_InitialSetupViewController_land.xib in Resources */ = {isa = PBXBuildFile; fileRef = BC6E4A0316BFBB9D00B0D630 /* MBP_InitialSetupViewController_land.xib */; };
 		BCA1A4D816C24CA900E7EF56 /* Step_03_ViewController_land.xib in Resources */ = {isa = PBXBuildFile; fileRef = BCA1A4D616C24CA900E7EF56 /* Step_03_ViewController_land.xib */; };
 		BCA1A4DE16C2569E00E7EF56 /* Step_04_ViewController_land.xib in Resources */ = {isa = PBXBuildFile; fileRef = BCA1A4DC16C2569E00E7EF56 /* Step_04_ViewController_land.xib */; };
@@ -572,7 +572,6 @@
 		97F0F167143C45FA0076B749 /* MBP_Streamer.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = MBP_Streamer.mm; sourceTree = "<group>"; };
 		97FE7D0E15998C0B000826F0 /* RemoteConnection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RemoteConnection.h; sourceTree = "<group>"; };
 		97FE7D0F15998C0B000826F0 /* RemoteConnection.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = RemoteConnection.mm; sourceTree = "<group>"; };
-		BC22994816FFF5BD005AA83D /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = en; path = en.lproj/cameraMenuRouter.plist; sourceTree = "<group>"; };
 		BC3C1A8816F0223800175AFF /* es */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = es; path = es.lproj/MBP_iosViewController_ipad.xib; sourceTree = "<group>"; };
 		BC3C1A8916F0223900175AFF /* fr */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = fr; path = fr.lproj/MBP_iosViewController_ipad.xib; sourceTree = "<group>"; };
 		BC3C1A8A16F022A400175AFF /* es */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = es; path = es.lproj/MBP_InitialSetupViewController_ipad.xib; sourceTree = "<group>"; };
@@ -664,7 +663,7 @@
 		BC3C1B0416F05C0C00175AFF /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		BC3C1B0616F05C0D00175AFF /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/Localizable.strings; sourceTree = "<group>"; };
 		BC3C1B0716F05E5800175AFF /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/Localizable.strings; sourceTree = "<group>"; };
-		BC467A7E16FF7031002326AE /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = fr; path = fr.lproj/cameraMenuRouter.plist; sourceTree = "<group>"; };
+		BC5B0FCD1701855600D2C308 /* cameraMenuRouter.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = cameraMenuRouter.plist; sourceTree = "<group>"; };
 		BC6E4A0416BFBB9D00B0D630 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/MBP_InitialSetupViewController_land.xib; sourceTree = "<group>"; };
 		BCA1A4D716C24CA900E7EF56 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/Step_03_ViewController_land.xib; sourceTree = "<group>"; };
 		BCA1A4DD16C2569E00E7EF56 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/Step_04_ViewController_land.xib; sourceTree = "<group>"; };
@@ -980,7 +979,7 @@
 			isa = PBXGroup;
 			children = (
 				380EB15316FC41D8005BAC7F /* Voicemail.aif */,
-				BC467A7C16FF702A002326AE /* cameraMenuRouter.plist */,
+				BC5B0FCD1701855600D2C308 /* cameraMenuRouter.plist */,
 				974ACB7E168079CB005AE4C6 /* MonitorEverywhere_App_ios_Apple.html */,
 				BC3C1B0516F05C0C00175AFF /* Localizable.strings */,
 				38A7E0E5165B7D8F00C542A6 /* beep.wav */,
@@ -1297,7 +1296,7 @@
 				BC3C1AEE16F0367000175AFF /* Localizable.strings in Resources */,
 				BC3C1AF616F03D4D00175AFF /* Localizable.strings in Resources */,
 				BC3C1B0316F05C0C00175AFF /* Localizable.strings in Resources */,
-				BC467A7A16FF702A002326AE /* cameraMenuRouter.plist in Resources */,
+				BC5B0FCE1701855600D2C308 /* cameraMenuRouter.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2008,16 +2007,6 @@
 				BC3C1B0716F05E5800175AFF /* fr */,
 			);
 			name = Localizable.strings;
-			sourceTree = "<group>";
-		};
-		BC467A7C16FF702A002326AE /* cameraMenuRouter.plist */ = {
-			isa = PBXVariantGroup;
-			children = (
-				BC467A7E16FF7031002326AE /* fr */,
-				BC22994816FFF5BD005AA83D /* en */,
-			);
-			name = cameraMenuRouter.plist;
-			path = Classes;
 			sourceTree = "<group>";
 		};
 		BC6E4A0316BFBB9D00B0D630 /* MBP_InitialSetupViewController_land.xib */ = {
