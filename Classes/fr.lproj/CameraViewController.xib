@@ -303,7 +303,7 @@
 						<int key="IBUIBarStyle">2</int>
 						<array class="NSMutableArray" key="IBUIItems">
 							<object class="IBUIBarButtonItem" id="947995345">
-								<string key="IBUITitle">Cameras</string>
+								<string key="IBUITitle">Caméras</string>
 								<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
 								<int key="IBUIStyle">1</int>
 								<reference key="IBUIToolbar" ref="98283542"/>
@@ -422,7 +422,6 @@
 						<string key="NSFrame">{{119, 327}, {107, 107}}</string>
 						<reference key="NSSuperview" ref="191373211"/>
 						<reference key="NSWindow"/>
-						<reference key="NSNextKeyView"/>
 						<string key="NSReuseIdentifierKey">_NS:9</string>
 						<bool key="IBUIOpaque">NO</bool>
 						<int key="IBUIContentMode">1</int>
@@ -707,7 +706,6 @@
 								<string key="NSFrame">{{106, 8}, {94, 27}}</string>
 								<reference key="NSSuperview" ref="204644013"/>
 								<reference key="NSWindow"/>
-								<reference key="NSNextKeyView"/>
 								<string key="NSReuseIdentifierKey">_NS:9</string>
 								<bool key="IBUIOpaque">NO</bool>
 								<int key="IBUITag">3</int>
@@ -822,7 +820,6 @@
 								<string key="NSFrame">{{284, 81}, {30, 30}}</string>
 								<reference key="NSSuperview" ref="486065245"/>
 								<reference key="NSWindow"/>
-								<reference key="NSNextKeyView"/>
 								<string key="NSReuseIdentifierKey">_NS:9</string>
 								<int key="IBUIContentMode">1</int>
 								<bool key="IBUIUserInteractionEnabled">NO</bool>
