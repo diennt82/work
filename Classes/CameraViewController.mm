@@ -328,14 +328,16 @@
         
         //NSLog(@"abort remote timer ");
         [self.selected_channel abortViewTimer];
+        
+        //Close all dialog..
+        [self stopPeriodicPopup];
     }
     else
     {
        NSLog(@"Enter Background.. Keep on streamming.. ");
     }
 
-    //Close all dialog..
-    [self stopPeriodicPopup];
+   
     
     
         
@@ -961,10 +963,10 @@
         
 		if (streamer != nil)
 		{
-			[streamer stopStreaming];
+			//close pcm player as well.. we don't need it any longer
+            [streamer stopStreaming:TRUE];
 			[streamer release];
 		}
-        
         
         
         
