@@ -417,4 +417,26 @@
 /* No comment provided by engineer. */
 "Yes_n" = "Yes and don't ask again";
 
+/* No comment provided by engineer. */
+"Camera Name:" = "Kameranamn:";
 
+/* No comment provided by engineer. */
+"Camera Volume:" = "Volym:";
+
+/* No comment provided by engineer. */
+"Camera Brightness:" = "Ljusstyrka:";
+
+/* No comment provided by engineer. */
+"Sound Sensitivity Settings:" = "Inställning för ljudkänslighet:";
+
+/* No comment provided by engineer. */
+"Temperature Unit:" = "Temperaturenhet:";
+
+/* No comment provided by engineer. */
+"Video Quality:" = "Bildkvalitet:";
+
+/* No comment provided by engineer. */
+"Remove this camera" = "Ta bort kameran";
+
+/* No comment provided by engineer. */
+"Information" = "Information";
