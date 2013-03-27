@@ -43,6 +43,7 @@
 						<int key="NSvFlags">292</int>
 						<string key="NSFrameSize">{320, 568}</string>
 						<reference key="NSSuperview" ref="689768342"/>
+						<reference key="NSWindow"/>
 						<reference key="NSNextKeyView" ref="64595327"/>
 						<string key="NSReuseIdentifierKey">_NS:9</string>
 						<bool key="IBUIUserInteractionEnabled">NO</bool>
@@ -57,6 +58,7 @@
 						<int key="NSvFlags">292</int>
 						<string key="NSFrame">{{80, 359}, {161, 44}}</string>
 						<reference key="NSSuperview" ref="689768342"/>
+						<reference key="NSWindow"/>
 						<string key="NSReuseIdentifierKey">_NS:9</string>
 						<bool key="IBUIOpaque">NO</bool>
 						<int key="IBUITag">100</int>
@@ -64,7 +66,7 @@
 						<int key="IBUIContentHorizontalAlignment">0</int>
 						<int key="IBUIContentVerticalAlignment">0</int>
 						<int key="IBUIButtonType">1</int>
-						<string key="IBUINormalTitle">Try Again</string>
+						<string key="IBUINormalTitle">Försök igen</string>
 						<object class="NSColor" key="IBUIHighlightedTitleColor" id="711618386">
 							<int key="NSColorSpace">3</int>
 							<bytes key="NSWhite">MQA</bytes>
@@ -96,6 +98,7 @@
 								<int key="NSvFlags">292</int>
 								<string key="NSFrame">{{14, 224}, {297, 51}}</string>
 								<reference key="NSSuperview" ref="64595327"/>
+								<reference key="NSWindow"/>
 								<reference key="NSNextKeyView" ref="225335263"/>
 								<string key="NSReuseIdentifierKey">_NS:9</string>
 								<object class="NSColor" key="IBUIBackgroundColor" id="894357346">
@@ -108,7 +111,7 @@
 								<bool key="IBUIScrollEnabled">NO</bool>
 								<bool key="IBUIShowsHorizontalScrollIndicator">NO</bool>
 								<bool key="IBUIShowsVerticalScrollIndicator">NO</bool>
-								<string key="IBUIText">2. Press and hold the RESET button at the bottom of the camera</string>
+								<string key="IBUIText">2. Tryck och håll in RESET knappen i botten på kameran</string>
 								<reference key="IBUITextColor" ref="711618386"/>
 								<object class="IBUITextInputTraits" key="IBUITextInputTraits">
 									<int key="IBUIAutocapitalizationType">2</int>
@@ -129,6 +132,7 @@
 								<int key="NSvFlags">292</int>
 								<string key="NSFrame">{{0, 156}, {320, 48}}</string>
 								<reference key="NSSuperview" ref="64595327"/>
+								<reference key="NSWindow"/>
 								<reference key="NSNextKeyView" ref="639675128"/>
 								<string key="NSReuseIdentifierKey">_NS:9</string>
 								<reference key="IBUIBackgroundColor" ref="894357346"/>
@@ -138,7 +142,7 @@
 								<bool key="IBUIScrollEnabled">NO</bool>
 								<bool key="IBUIShowsHorizontalScrollIndicator">NO</bool>
 								<bool key="IBUIShowsVerticalScrollIndicator">NO</bool>
-								<string key="IBUIText">To Try Add Camera again, please follow the steps below:</string>
+								<string key="IBUIText">Försök lägga till kamera igen, följ stegen nedan:</string>
 								<reference key="IBUITextColor" ref="711618386"/>
 								<object class="IBUITextInputTraits" key="IBUITextInputTraits">
 									<int key="IBUIAutocapitalizationType">2</int>
@@ -152,6 +156,7 @@
 								<int key="NSvFlags">292</int>
 								<string key="NSFrameSize">{320, 31}</string>
 								<reference key="NSSuperview" ref="64595327"/>
+								<reference key="NSWindow"/>
 								<reference key="NSNextKeyView" ref="767890795"/>
 								<string key="NSReuseIdentifierKey">_NS:9</string>
 								<reference key="IBUIBackgroundColor" ref="894357346"/>
@@ -161,7 +166,7 @@
 								<bool key="IBUIScrollEnabled">NO</bool>
 								<bool key="IBUIShowsHorizontalScrollIndicator">NO</bool>
 								<bool key="IBUIShowsVerticalScrollIndicator">NO</bool>
-								<string key="IBUIText">It might be because of the following reasons:</string>
+								<string key="IBUIText">Det kan bero på följande orsaker:</string>
 								<reference key="IBUITextColor" ref="711618386"/>
 								<int key="IBUITextAlignment">1</int>
 								<object class="IBUITextInputTraits" key="IBUITextInputTraits">
@@ -176,6 +181,7 @@
 								<int key="NSvFlags">292</int>
 								<string key="NSFrame">{{12, 23}, {288, 63}}</string>
 								<reference key="NSSuperview" ref="64595327"/>
+								<reference key="NSWindow"/>
 								<reference key="NSNextKeyView" ref="994709530"/>
 								<string key="NSReuseIdentifierKey">_NS:9</string>
 								<reference key="IBUIBackgroundColor" ref="894357346"/>
@@ -186,7 +192,7 @@
 								<bool key="IBUIScrollEnabled">NO</bool>
 								<bool key="IBUIShowsHorizontalScrollIndicator">NO</bool>
 								<bool key="IBUIShowsVerticalScrollIndicator">NO</bool>
-								<string key="IBUIText">1. Please ensure your Wi-Fi password is correct.</string>
+								<string key="IBUIText">1. Säkerställ att ditt Wi-Fi-lösenord är korrekt.</string>
 								<reference key="IBUITextColor" ref="711618386"/>
 								<object class="IBUITextInputTraits" key="IBUITextInputTraits">
 									<int key="IBUIAutocapitalizationType">2</int>
@@ -200,6 +206,7 @@
 								<int key="NSvFlags">292</int>
 								<string key="NSFrame">{{14, 199}, {297, 32}}</string>
 								<reference key="NSSuperview" ref="64595327"/>
+								<reference key="NSWindow"/>
 								<reference key="NSNextKeyView" ref="155792614"/>
 								<string key="NSReuseIdentifierKey">_NS:9</string>
 								<reference key="IBUIBackgroundColor" ref="894357346"/>
@@ -209,7 +216,7 @@
 								<bool key="IBUIScrollEnabled">NO</bool>
 								<bool key="IBUIShowsHorizontalScrollIndicator">NO</bool>
 								<bool key="IBUIShowsVerticalScrollIndicator">NO</bool>
-								<string key="IBUIText">1. Switch OFF your camera</string>
+								<string key="IBUIText">1. Stäng AV din kamera</string>
 								<reference key="IBUITextColor" ref="711618386"/>
 								<object class="IBUITextInputTraits" key="IBUITextInputTraits">
 									<int key="IBUIAutocapitalizationType">2</int>
@@ -223,6 +230,7 @@
 								<int key="NSvFlags">292</int>
 								<string key="NSFrame">{{14, 266}, {297, 32}}</string>
 								<reference key="NSSuperview" ref="64595327"/>
+								<reference key="NSWindow"/>
 								<reference key="NSNextKeyView" ref="703661381"/>
 								<string key="NSReuseIdentifierKey">_NS:9</string>
 								<reference key="IBUIBackgroundColor" ref="894357346"/>
@@ -232,7 +240,7 @@
 								<bool key="IBUIScrollEnabled">NO</bool>
 								<bool key="IBUIShowsHorizontalScrollIndicator">NO</bool>
 								<bool key="IBUIShowsVerticalScrollIndicator">NO</bool>
-								<string key="IBUIText">3. Power ON your camera</string>
+								<string key="IBUIText">3. Sätt PÅ din kamera</string>
 								<reference key="IBUITextColor" ref="711618386"/>
 								<object class="IBUITextInputTraits" key="IBUITextInputTraits">
 									<int key="IBUIAutocapitalizationType">2</int>
@@ -246,6 +254,7 @@
 								<int key="NSvFlags">292</int>
 								<string key="NSFrame">{{14, 289}, {297, 53}}</string>
 								<reference key="NSSuperview" ref="64595327"/>
+								<reference key="NSWindow"/>
 								<reference key="NSNextKeyView" ref="570593002"/>
 								<string key="NSReuseIdentifierKey">_NS:9</string>
 								<reference key="IBUIBackgroundColor" ref="894357346"/>
@@ -255,7 +264,7 @@
 								<bool key="IBUIScrollEnabled">NO</bool>
 								<bool key="IBUIShowsHorizontalScrollIndicator">NO</bool>
 								<bool key="IBUIShowsVerticalScrollIndicator">NO</bool>
-								<string key="IBUIText">4. Wait for around 15 seconds. The camera will beep and restart</string>
+								<string key="IBUIText">4. Vänta omkring 15 sekunder. Kameran kommer att pipa till och starta om</string>
 								<reference key="IBUITextColor" ref="711618386"/>
 								<object class="IBUITextInputTraits" key="IBUITextInputTraits">
 									<int key="IBUIAutocapitalizationType">2</int>
@@ -269,6 +278,7 @@
 								<int key="NSvFlags">292</int>
 								<string key="NSFrame">{{12, 68}, {297, 63}}</string>
 								<reference key="NSSuperview" ref="64595327"/>
+								<reference key="NSWindow"/>
 								<reference key="NSNextKeyView" ref="293771906"/>
 								<string key="NSReuseIdentifierKey">_NS:9</string>
 								<reference key="IBUIBackgroundColor" ref="894357346"/>
@@ -278,7 +288,7 @@
 								<bool key="IBUIScrollEnabled">NO</bool>
 								<bool key="IBUIShowsHorizontalScrollIndicator">NO</bool>
 								<bool key="IBUIShowsVerticalScrollIndicator">NO</bool>
-								<string key="IBUIText">2. Please check if your iOS device is connected to the same Wi-Fi network as your camera.</string>
+								<string key="IBUIText">2. Kontrollera om din iOS enhet är ansluten till samma Wi-Fi nätverk som din kamera.</string>
 								<reference key="IBUITextColor" ref="711618386"/>
 								<object class="IBUITextInputTraits" key="IBUITextInputTraits">
 									<int key="IBUIAutocapitalizationType">2</int>
@@ -292,6 +302,7 @@
 								<int key="NSvFlags">292</int>
 								<string key="NSFrame">{{14, 331}, {297, 53}}</string>
 								<reference key="NSSuperview" ref="64595327"/>
+								<reference key="NSWindow"/>
 								<reference key="NSNextKeyView" ref="921270938"/>
 								<string key="NSReuseIdentifierKey">_NS:9</string>
 								<reference key="IBUIBackgroundColor" ref="894357346"/>
@@ -313,6 +324,7 @@
 						</array>
 						<string key="NSFrameSize">{320, 311}</string>
 						<reference key="NSSuperview" ref="689768342"/>
+						<reference key="NSWindow"/>
 						<reference key="NSNextKeyView" ref="29008925"/>
 						<string key="NSReuseIdentifierKey">_NS:9</string>
 						<bool key="IBUIClipsSubviews">YES</bool>
@@ -324,6 +336,7 @@
 				</array>
 				<string key="NSFrameSize">{320, 568}</string>
 				<reference key="NSSuperview"/>
+				<reference key="NSWindow"/>
 				<reference key="NSNextKeyView" ref="228855270"/>
 				<object class="NSColor" key="IBUIBackgroundColor">
 					<int key="NSColorSpace">3</int>
