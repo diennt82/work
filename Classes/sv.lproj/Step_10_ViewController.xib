@@ -44,7 +44,6 @@
 						<int key="NSvFlags">274</int>
 						<string key="NSFrameSize">{320, 568}</string>
 						<reference key="NSSuperview" ref="612829385"/>
-						<reference key="NSWindow"/>
 						<reference key="NSNextKeyView" ref="658450404"/>
 						<string key="NSReuseIdentifierKey">_NS:9</string>
 						<bool key="IBUIUserInteractionEnabled">NO</bool>
@@ -59,7 +58,6 @@
 						<int key="NSvFlags">301</int>
 						<string key="NSFrame">{{66, 36}, {187, 31}}</string>
 						<reference key="NSSuperview" ref="612829385"/>
-						<reference key="NSWindow"/>
 						<reference key="NSNextKeyView" ref="722025651"/>
 						<string key="NSReuseIdentifierKey">_NS:9</string>
 						<object class="NSColor" key="IBUIBackgroundColor" id="560648867">
@@ -95,7 +93,6 @@
 						<int key="NSvFlags">298</int>
 						<string key="NSFrame">{{12, 251}, {297, 89}}</string>
 						<reference key="NSSuperview" ref="612829385"/>
-						<reference key="NSWindow"/>
 						<reference key="NSNextKeyView" ref="882045242"/>
 						<string key="NSReuseIdentifierKey">_NS:9</string>
 						<reference key="IBUIBackgroundColor" ref="560648867"/>
@@ -118,8 +115,6 @@
 						<int key="NSvFlags">301</int>
 						<string key="NSFrame">{{78, 356}, {166, 44}}</string>
 						<reference key="NSSuperview" ref="612829385"/>
-						<reference key="NSWindow"/>
-						<reference key="NSNextKeyView"/>
 						<string key="NSReuseIdentifierKey">_NS:9</string>
 						<bool key="IBUIOpaque">NO</bool>
 						<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
@@ -155,7 +150,6 @@
 								<int key="NSvFlags">301</int>
 								<string key="NSFrame">{{2, 3}, {61, 21}}</string>
 								<reference key="NSSuperview" ref="722025651"/>
-								<reference key="NSWindow"/>
 								<reference key="NSNextKeyView" ref="45712998"/>
 								<string key="NSReuseIdentifierKey">_NS:9</string>
 								<bool key="IBUIOpaque">NO</bool>
@@ -186,7 +180,6 @@
 								<int key="NSvFlags">301</int>
 								<string key="NSFrame">{{112, 3}, {169, 21}}</string>
 								<reference key="NSSuperview" ref="722025651"/>
-								<reference key="NSWindow"/>
 								<reference key="NSNextKeyView" ref="636331093"/>
 								<string key="NSReuseIdentifierKey">_NS:9</string>
 								<bool key="IBUIOpaque">NO</bool>
@@ -207,7 +200,6 @@
 								<int key="NSvFlags">301</int>
 								<string key="NSFrame">{{71, 3}, {33, 21}}</string>
 								<reference key="NSSuperview" ref="722025651"/>
-								<reference key="NSWindow"/>
 								<reference key="NSNextKeyView" ref="1046026787"/>
 								<string key="NSReuseIdentifierKey">_NS:9</string>
 								<bool key="IBUIOpaque">NO</bool>
@@ -226,7 +218,6 @@
 						</array>
 						<string key="NSFrame">{{14, 80}, {292, 33}}</string>
 						<reference key="NSSuperview" ref="612829385"/>
-						<reference key="NSWindow"/>
 						<reference key="NSNextKeyView" ref="97142564"/>
 						<string key="NSReuseIdentifierKey">_NS:9</string>
 						<reference key="IBUIBackgroundColor" ref="560648867"/>
@@ -236,7 +227,6 @@
 				</array>
 				<string key="NSFrameSize">{320, 568}</string>
 				<reference key="NSSuperview"/>
-				<reference key="NSWindow"/>
 				<reference key="NSNextKeyView" ref="824780268"/>
 				<object class="NSColor" key="IBUIBackgroundColor">
 					<int key="NSColorSpace">3</int>
@@ -734,66 +724,7 @@
 			<nil key="sourceID"/>
 			<int key="maxID">69</int>
 		</object>
-		<object class="IBClassDescriber" key="IBDocument.Classes">
-			<array class="NSMutableArray" key="referencedPartialClassDescriptions">
-				<object class="IBPartialClassDescription">
-					<string key="className">Step_10_ViewController</string>
-					<string key="superclassName">UIViewController</string>
-					<dictionary class="NSMutableDictionary" key="actions">
-						<string key="registerCamera:">id</string>
-						<string key="startConfigureCamera:">id</string>
-					</dictionary>
-					<dictionary class="NSMutableDictionary" key="actionInfosByName">
-						<object class="IBActionInfo" key="registerCamera:">
-							<string key="name">registerCamera:</string>
-							<string key="candidateClassName">id</string>
-						</object>
-						<object class="IBActionInfo" key="startConfigureCamera:">
-							<string key="name">startConfigureCamera:</string>
-							<string key="candidateClassName">id</string>
-						</object>
-					</dictionary>
-					<dictionary class="NSMutableDictionary" key="outlets">
-						<string key="cameraAddedView">UIView</string>
-						<string key="cameraName">UILabel</string>
-						<string key="homeSSID">UILabel</string>
-						<string key="progressView">UIView</string>
-						<string key="userEmailLabel">UILabel</string>
-						<string key="userNameLabel">UILabel</string>
-					</dictionary>
-					<dictionary class="NSMutableDictionary" key="toOneOutletInfosByName">
-						<object class="IBToOneOutletInfo" key="cameraAddedView">
-							<string key="name">cameraAddedView</string>
-							<string key="candidateClassName">UIView</string>
-						</object>
-						<object class="IBToOneOutletInfo" key="cameraName">
-							<string key="name">cameraName</string>
-							<string key="candidateClassName">UILabel</string>
-						</object>
-						<object class="IBToOneOutletInfo" key="homeSSID">
-							<string key="name">homeSSID</string>
-							<string key="candidateClassName">UILabel</string>
-						</object>
-						<object class="IBToOneOutletInfo" key="progressView">
-							<string key="name">progressView</string>
-							<string key="candidateClassName">UIView</string>
-						</object>
-						<object class="IBToOneOutletInfo" key="userEmailLabel">
-							<string key="name">userEmailLabel</string>
-							<string key="candidateClassName">UILabel</string>
-						</object>
-						<object class="IBToOneOutletInfo" key="userNameLabel">
-							<string key="name">userNameLabel</string>
-							<string key="candidateClassName">UILabel</string>
-						</object>
-					</dictionary>
-					<object class="IBClassDescriptionSource" key="sourceIdentifier">
-						<string key="majorKey">IBProjectSource</string>
-						<string key="minorKey">./Classes/Step_10_ViewController.h</string>
-					</object>
-				</object>
-			</array>
-		</object>
+		<object class="IBClassDescriber" key="IBDocument.Classes"/>
 		<int key="IBDocument.localizationMode">0</int>
 		<string key="IBDocument.TargetRuntimeIdentifier">IBCocoaTouchFramework</string>
 		<bool key="IBDocument.PluginDeclaredDependenciesTrackSystemTargetVersion">YES</bool>
