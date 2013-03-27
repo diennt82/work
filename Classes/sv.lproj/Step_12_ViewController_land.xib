@@ -58,6 +58,7 @@
 						<string key="NSFrame">{{204, 186}, {161, 37}}</string>
 						<reference key="NSSuperview" ref="954864808"/>
 						<reference key="NSWindow"/>
+						<reference key="NSNextKeyView"/>
 						<string key="NSReuseIdentifierKey">_NS:9</string>
 						<bool key="IBUIOpaque">NO</bool>
 						<int key="IBUITag">100</int>
@@ -65,7 +66,7 @@
 						<int key="IBUIContentHorizontalAlignment">0</int>
 						<int key="IBUIContentVerticalAlignment">0</int>
 						<int key="IBUIButtonType">1</int>
-						<string key="IBUINormalTitle">Start monitor</string>
+						<string key="IBUINormalTitle">Starta monitor</string>
 						<object class="NSColor" key="IBUIHighlightedTitleColor" id="6704011">
 							<int key="NSColorSpace">3</int>
 							<bytes key="NSWhite">MQA</bytes>
@@ -101,11 +102,12 @@
 						<int key="IBUIContentMode">7</int>
 						<bool key="IBUIUserInteractionEnabled">NO</bool>
 						<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
-						<string key="IBUIText">Congratulations</string>
+						<string key="IBUIText">Grattis</string>
 						<reference key="IBUITextColor" ref="6704011"/>
 						<nil key="IBUIHighlightedColor"/>
 						<int key="IBUIBaselineAdjustment">0</int>
 						<float key="IBUIMinimumFontSize">10</float>
+						<int key="IBUITextAlignment">1</int>
 						<object class="IBUIFontDescription" key="IBUIFontDescription" id="723880761">
 							<int key="type">1</int>
 							<double key="pointSize">17</double>
@@ -154,7 +156,7 @@
 					<object class="IBUILabel" id="119189152">
 						<reference key="NSNextResponder" ref="954864808"/>
 						<int key="NSvFlags">292</int>
-						<string key="NSFrame">{{222, 112}, {123, 21}}</string>
+						<string key="NSFrame">{{209, 112}, {150, 21}}</string>
 						<reference key="NSSuperview" ref="954864808"/>
 						<reference key="NSWindow"/>
 						<reference key="NSNextKeyView" ref="1661576"/>
@@ -164,7 +166,7 @@
 						<int key="IBUIContentMode">7</int>
 						<bool key="IBUIUserInteractionEnabled">NO</bool>
 						<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
-						<string key="IBUIText">camera is found</string>
+						<string key="IBUIText">kameran har hittats</string>
 						<reference key="IBUITextColor" ref="6704011"/>
 						<nil key="IBUIHighlightedColor"/>
 						<int key="IBUIBaselineAdjustment">0</int>
