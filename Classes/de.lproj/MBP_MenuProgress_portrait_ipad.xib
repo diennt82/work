@@ -61,7 +61,7 @@
 							<object class="IBUILabel" id="482048995">
 								<reference key="NSNextResponder" ref="254870159"/>
 								<int key="NSvFlags">292</int>
-								<string key="NSFrame">{{54, 202}, {234, 21}}</string>
+								<string key="NSFrame">{{54, 202}, {234, 43}}</string>
 								<reference key="NSSuperview" ref="254870159"/>
 								<reference key="NSWindow"/>
 								<reference key="NSNextKeyView" ref="575877270"/>
@@ -72,7 +72,7 @@
 								<int key="IBUIContentMode">7</int>
 								<bool key="IBUIUserInteractionEnabled">NO</bool>
 								<string key="targetRuntimeIdentifier">IBIPadFramework</string>
-								<string key="IBUIText">Updating camera status...</string>
+								<string key="IBUIText">Der Kamerastatus wird aktualisiert …</string>
 								<object class="NSColor" key="IBUITextColor">
 									<int key="NSColorSpace">1</int>
 									<bytes key="NSRGB">MSAxIDEAA</bytes>
@@ -83,6 +83,8 @@
 								<nil key="IBUIHighlightedColor"/>
 								<int key="IBUIBaselineAdjustment">0</int>
 								<float key="IBUIMinimumFontSize">10</float>
+								<int key="IBUINumberOfLines">2</int>
+								<int key="IBUITextAlignment">1</int>
 								<object class="IBUIFontDescription" key="IBUIFontDescription">
 									<int key="type">1</int>
 									<double key="pointSize">17</double>
@@ -93,6 +95,7 @@
 									<int key="NSfFlags">16</int>
 								</object>
 								<bool key="IBUIAdjustsFontSizeToFit">NO</bool>
+								<double key="preferredMaxLayoutWidth">234</double>
 							</object>
 							<object class="IBUIActivityIndicatorView" id="575877270">
 								<reference key="NSNextResponder" ref="254870159"/>
@@ -100,6 +103,7 @@
 								<string key="NSFrame">{{153, 262}, {37, 37}}</string>
 								<reference key="NSSuperview" ref="254870159"/>
 								<reference key="NSWindow"/>
+								<reference key="NSNextKeyView"/>
 								<string key="NSReuseIdentifierKey">_NS:9</string>
 								<bool key="IBUIOpaque">NO</bool>
 								<string key="targetRuntimeIdentifier">IBIPadFramework</string>
