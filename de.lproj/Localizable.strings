@@ -49,7 +49,7 @@
 "bms_error_612" = "Kommunikation mit der Kamera fehlgeschlagen";
 
 /* No comment provided by engineer. */
-"bms_error_613" = "Unable to communicate with the camera.";
+"bms_error_613" = "Kann nicht mit der Kamera kommunizieren.";
 
 /* No comment provided by engineer. */
 "bms_error_614" = "Kamera nicht bereit für Datenstrom";
@@ -67,7 +67,7 @@
 "bms_error_624" = "Aktivierung gescheitert. Der Benutzer ist entweder nicht angemeldet oder der Aktivierungszeitraum ist abgelaufen. Melden Sie sich bitte erneut an.";
 
 /* No comment provided by engineer. */
-"bms_error_625" = "Activation failed. Invalid activation key.";
+"bms_error_625" = "Aktivierung fehlgeschlagen. Ungültiger Aktivierungsschlüssel.";
 
 /* No comment provided by engineer. */
 "bms_error_626" = "Authentication failed, either Email Id or Password is invalid.";
