@@ -406,7 +406,7 @@
 "version" = "Version %@";
 
 /* No comment provided by engineer. */
-"video_rec_not_supported" = "Video recording is not supported, coming soon";
+"video_rec_not_supported" = "Videoaufzeichnung wird nicht unterstützt, kommt aber bald";
 
 /* No comment provided by engineer. */
 "wifi_not_available" = "Mobile data is enabled. If you continue to connect, you may incur air time charges. Do you want to proceed?";
