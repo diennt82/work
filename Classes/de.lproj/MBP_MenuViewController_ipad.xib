@@ -81,6 +81,7 @@
 						<string key="NSFrame">{{0, 394}, {768, 216}}</string>
 						<reference key="NSSuperview" ref="146305519"/>
 						<reference key="NSWindow"/>
+						<reference key="NSNextKeyView"/>
 						<reference key="IBUIBackgroundColor" ref="495019453"/>
 						<string key="targetRuntimeIdentifier">IBIPadFramework</string>
 						<bool key="IBUIShowsSelectionIndicator">YES</bool>
