@@ -2,9 +2,9 @@
 <archive type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="8.00">
 	<data>
 		<int key="IBDocument.SystemTarget">1552</int>
-		<string key="IBDocument.SystemVersion">11G63</string>
+		<string key="IBDocument.SystemVersion">11E53</string>
 		<string key="IBDocument.InterfaceBuilderVersion">3084</string>
-		<string key="IBDocument.AppKitVersion">1138.51</string>
+		<string key="IBDocument.AppKitVersion">1138.47</string>
 		<string key="IBDocument.HIToolboxVersion">569.00</string>
 		<object class="NSMutableDictionary" key="IBDocument.PluginVersions">
 			<string key="NS.key.0">com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
@@ -547,9 +547,9 @@
 						<int key="objectID">83</int>
 						<reference key="object" ref="351056838"/>
 						<array class="NSMutableArray" key="children">
-							<reference ref="55169355"/>
 							<reference ref="321685080"/>
 							<reference ref="842986382"/>
+							<reference ref="55169355"/>
 						</array>
 						<reference key="parent" ref="960418127"/>
 						<string key="objectName">progressview</string>
@@ -609,7 +609,6 @@
 						<string key="alertSetting:">id</string>
 						<string key="checkNow:">id</string>
 						<string key="editCameras:">id</string>
-						<string key="refreshCameras:">id</string>
 						<string key="removeCamera:">id</string>
 						<string key="renameCamera:">id</string>
 						<string key="scanCameras:">id</string>
@@ -631,10 +630,6 @@
 							<string key="name">editCameras:</string>
 							<string key="candidateClassName">id</string>
 						</object>
-						<object class="IBActionInfo" key="refreshCameras:">
-							<string key="name">refreshCameras:</string>
-							<string key="candidateClassName">id</string>
-						</object>
 						<object class="IBActionInfo" key="removeCamera:">
 							<string key="name">removeCamera:</string>
 							<string key="candidateClassName">id</string>
@@ -650,7 +645,7 @@
 					</dictionary>
 					<dictionary class="NSMutableDictionary" key="outlets">
 						<string key="cameraList">UITableView</string>
-						<string key="cellView">EditCameraCell</string>
+						<string key="cellView">UITableViewCell</string>
 						<string key="emptyCameraListView">UIView</string>
 						<string key="offlineView">UIView</string>
 						<string key="progressView">UIView</string>
@@ -663,7 +658,7 @@
 						</object>
 						<object class="IBToOneOutletInfo" key="cellView">
 							<string key="name">cellView</string>
-							<string key="candidateClassName">EditCameraCell</string>
+							<string key="candidateClassName">UITableViewCell</string>
 						</object>
 						<object class="IBToOneOutletInfo" key="emptyCameraListView">
 							<string key="name">emptyCameraListView</string>
@@ -685,33 +680,6 @@
 					<object class="IBClassDescriptionSource" key="sourceIdentifier">
 						<string key="majorKey">IBProjectSource</string>
 						<string key="minorKey">./Classes/DashBoard_ViewController.h</string>
-					</object>
-				</object>
-				<object class="IBPartialClassDescription">
-					<string key="className">EditCameraCell</string>
-					<string key="superclassName">UITableViewCell</string>
-					<dictionary class="NSMutableDictionary" key="actions">
-						<string key="alertSettings:">id</string>
-						<string key="removeCamera:">id</string>
-						<string key="renameCamera:">id</string>
-					</dictionary>
-					<dictionary class="NSMutableDictionary" key="actionInfosByName">
-						<object class="IBActionInfo" key="alertSettings:">
-							<string key="name">alertSettings:</string>
-							<string key="candidateClassName">id</string>
-						</object>
-						<object class="IBActionInfo" key="removeCamera:">
-							<string key="name">removeCamera:</string>
-							<string key="candidateClassName">id</string>
-						</object>
-						<object class="IBActionInfo" key="renameCamera:">
-							<string key="name">renameCamera:</string>
-							<string key="candidateClassName">id</string>
-						</object>
-					</dictionary>
-					<object class="IBClassDescriptionSource" key="sourceIdentifier">
-						<string key="majorKey">IBProjectSource</string>
-						<string key="minorKey">./Classes/EditCameraCell.h</string>
 					</object>
 				</object>
 			</array>

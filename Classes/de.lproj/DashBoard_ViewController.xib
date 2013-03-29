@@ -2,9 +2,9 @@
 <archive type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="8.00">
 	<data>
 		<int key="IBDocument.SystemTarget">1552</int>
-		<string key="IBDocument.SystemVersion">11G63</string>
+		<string key="IBDocument.SystemVersion">11E53</string>
 		<string key="IBDocument.InterfaceBuilderVersion">3084</string>
-		<string key="IBDocument.AppKitVersion">1138.51</string>
+		<string key="IBDocument.AppKitVersion">1138.47</string>
 		<string key="IBDocument.HIToolboxVersion">569.00</string>
 		<object class="NSMutableDictionary" key="IBDocument.PluginVersions">
 			<string key="NS.key.0">com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
@@ -61,6 +61,7 @@
 						<string key="NSFrame">{{0, 49}, {320, 387}}</string>
 						<reference key="NSSuperview" ref="191373211"/>
 						<reference key="NSWindow"/>
+						<reference key="NSNextKeyView"/>
 						<string key="NSReuseIdentifierKey">_NS:9</string>
 						<object class="NSColor" key="IBUIBackgroundColor" id="440130367">
 							<int key="NSColorSpace">3</int>
@@ -111,7 +112,7 @@
 					<object class="IBUILabel" id="147684496">
 						<reference key="NSNextResponder" ref="280730474"/>
 						<int key="NSvFlags">292</int>
-						<string key="NSFrame">{{57, 0}, {195, 47}}</string>
+						<string key="NSFrame">{{57, 0}, {263, 60}}</string>
 						<reference key="NSSuperview" ref="280730474"/>
 						<reference key="NSWindow"/>
 						<reference key="NSNextKeyView" ref="653349576"/>
@@ -121,7 +122,7 @@
 						<int key="IBUIContentMode">7</int>
 						<bool key="IBUIUserInteractionEnabled">NO</bool>
 						<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
-						<string key="IBUIText">Unable to connect to monitoreverywhere.com </string>
+						<string key="IBUIText">Verbindung zu monitoreverywhere.com fehlgeschlagen </string>
 						<object class="NSColor" key="IBUITextColor" id="971269093">
 							<int key="NSColorSpace">3</int>
 							<bytes key="NSWhite">MQA</bytes>
@@ -129,7 +130,7 @@
 						<nil key="IBUIHighlightedColor"/>
 						<int key="IBUIBaselineAdjustment">0</int>
 						<float key="IBUIMinimumFontSize">10</float>
-						<int key="IBUINumberOfLines">2</int>
+						<int key="IBUINumberOfLines">3</int>
 						<object class="IBUIFontDescription" key="IBUIFontDescription" id="550426855">
 							<int key="type">1</int>
 							<double key="pointSize">17</double>
@@ -139,7 +140,7 @@
 							<double key="NSSize">17</double>
 							<int key="NSfFlags">16</int>
 						</object>
-						<double key="preferredMaxLayoutWidth">195</double>
+						<double key="preferredMaxLayoutWidth">263</double>
 					</object>
 					<object class="IBUILabel" id="205750042">
 						<reference key="NSNextResponder" ref="280730474"/>
@@ -147,13 +148,14 @@
 						<string key="NSFrame">{{11, 40}, {296, 56}}</string>
 						<reference key="NSSuperview" ref="280730474"/>
 						<reference key="NSWindow"/>
+						<reference key="NSNextKeyView"/>
 						<string key="NSReuseIdentifierKey">_NS:9</string>
 						<bool key="IBUIOpaque">NO</bool>
 						<bool key="IBUIClipsSubviews">YES</bool>
 						<int key="IBUIContentMode">7</int>
 						<bool key="IBUIUserInteractionEnabled">NO</bool>
 						<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
-						<string key="IBUIText">You can access only local cameras until better Wi-Fi connectivity is restored </string>
+						<string key="IBUIText">Sie können nur auf lokale Kameras zugreifen, wenn eine bessere WLAN-Konnektivität wiederhergestellt ist. </string>
 						<reference key="IBUITextColor" ref="971269093"/>
 						<nil key="IBUIHighlightedColor"/>
 						<int key="IBUIBaselineAdjustment">0</int>
@@ -173,7 +175,7 @@
 					<object class="IBUIButton" id="653349576">
 						<reference key="NSNextResponder" ref="280730474"/>
 						<int key="NSvFlags">292</int>
-						<string key="NSFrame">{{10, 91}, {107, 37}}</string>
+						<string key="NSFrame">{{10, 91}, {128, 37}}</string>
 						<reference key="NSSuperview" ref="280730474"/>
 						<reference key="NSWindow"/>
 						<reference key="NSNextKeyView" ref="205750042"/>
@@ -183,7 +185,7 @@
 						<int key="IBUIContentHorizontalAlignment">0</int>
 						<int key="IBUIContentVerticalAlignment">0</int>
 						<int key="IBUIButtonType">1</int>
-						<string key="IBUINormalTitle">Check Now</string>
+						<string key="IBUINormalTitle">Jetzt überprüfen</string>
 						<reference key="IBUIHighlightedTitleColor" ref="971269093"/>
 						<object class="NSColor" key="IBUINormalTitleColor">
 							<int key="NSColorSpace">1</int>
@@ -229,7 +231,7 @@
 						<int key="IBUIContentMode">7</int>
 						<bool key="IBUIUserInteractionEnabled">NO</bool>
 						<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
-						<string key="IBUIText">There is currently no camera in this account.</string>
+						<string key="IBUIText">Auf diesem Konto befindet sich gegenwärtig keine Kamera.</string>
 						<object class="NSColor" key="IBUITextColor">
 							<int key="NSColorSpace">1</int>
 							<bytes key="NSRGB">MSAxIDEAA</bytes>
@@ -249,16 +251,17 @@
 					<object class="IBUIButton" id="704317507">
 						<reference key="NSNextResponder" ref="950927004"/>
 						<int key="NSvFlags">292</int>
-						<string key="NSFrame">{{75, 141}, {169, 44}}</string>
+						<string key="NSFrame">{{60, 141}, {200, 44}}</string>
 						<reference key="NSSuperview" ref="950927004"/>
 						<reference key="NSWindow"/>
+						<reference key="NSNextKeyView"/>
 						<string key="NSReuseIdentifierKey">_NS:9</string>
 						<bool key="IBUIOpaque">NO</bool>
 						<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
 						<int key="IBUIContentHorizontalAlignment">0</int>
 						<int key="IBUIContentVerticalAlignment">0</int>
 						<int key="IBUIButtonType">1</int>
-						<string key="IBUINormalTitle">Setup a new camera</string>
+						<string key="IBUINormalTitle">Neue Kamera einrichten</string>
 						<reference key="IBUIHighlightedTitleColor" ref="971269093"/>
 						<object class="NSColor" key="IBUINormalTitleColor">
 							<int key="NSColorSpace">1</int>
@@ -309,7 +312,7 @@
 							<object class="IBUILabel" id="842986382">
 								<reference key="NSNextResponder" ref="351056838"/>
 								<int key="NSvFlags">292</int>
-								<string key="NSFrame">{{54, 202}, {234, 21}}</string>
+								<string key="NSFrame">{{54, 167}, {234, 56}}</string>
 								<reference key="NSSuperview" ref="351056838"/>
 								<reference key="NSWindow"/>
 								<reference key="NSNextKeyView" ref="321685080"/>
@@ -320,7 +323,7 @@
 								<int key="IBUIContentMode">7</int>
 								<bool key="IBUIUserInteractionEnabled">NO</bool>
 								<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
-								<string key="IBUIText">Updating camera settings ...</string>
+								<string key="IBUIText">Die Kameraeinstellungen werden aktualisiert …</string>
 								<object class="NSColor" key="IBUITextColor">
 									<int key="NSColorSpace">1</int>
 									<bytes key="NSRGB">MSAxIDEAA</bytes>
@@ -329,9 +332,12 @@
 								<nil key="IBUIHighlightedColor"/>
 								<int key="IBUIBaselineAdjustment">0</int>
 								<float key="IBUIMinimumFontSize">10</float>
+								<int key="IBUINumberOfLines">2</int>
+								<int key="IBUITextAlignment">1</int>
 								<reference key="IBUIFontDescription" ref="550426855"/>
 								<reference key="IBUIFont" ref="853008890"/>
 								<bool key="IBUIAdjustsFontSizeToFit">NO</bool>
+								<double key="preferredMaxLayoutWidth">234</double>
 							</object>
 							<object class="IBUIActivityIndicatorView" id="321685080">
 								<reference key="NSNextResponder" ref="351056838"/>
@@ -339,6 +345,7 @@
 								<string key="NSFrame">{{153, 262}, {37, 37}}</string>
 								<reference key="NSSuperview" ref="351056838"/>
 								<reference key="NSWindow"/>
+								<reference key="NSNextKeyView"/>
 								<string key="NSReuseIdentifierKey">_NS:9</string>
 								<bool key="IBUIOpaque">NO</bool>
 								<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
@@ -609,7 +616,6 @@
 						<string key="alertSetting:">id</string>
 						<string key="checkNow:">id</string>
 						<string key="editCameras:">id</string>
-						<string key="refreshCameras:">id</string>
 						<string key="removeCamera:">id</string>
 						<string key="renameCamera:">id</string>
 						<string key="scanCameras:">id</string>
@@ -631,10 +637,6 @@
 							<string key="name">editCameras:</string>
 							<string key="candidateClassName">id</string>
 						</object>
-						<object class="IBActionInfo" key="refreshCameras:">
-							<string key="name">refreshCameras:</string>
-							<string key="candidateClassName">id</string>
-						</object>
 						<object class="IBActionInfo" key="removeCamera:">
 							<string key="name">removeCamera:</string>
 							<string key="candidateClassName">id</string>
@@ -650,7 +652,7 @@
 					</dictionary>
 					<dictionary class="NSMutableDictionary" key="outlets">
 						<string key="cameraList">UITableView</string>
-						<string key="cellView">EditCameraCell</string>
+						<string key="cellView">UITableViewCell</string>
 						<string key="emptyCameraListView">UIView</string>
 						<string key="offlineView">UIView</string>
 						<string key="progressView">UIView</string>
@@ -663,7 +665,7 @@
 						</object>
 						<object class="IBToOneOutletInfo" key="cellView">
 							<string key="name">cellView</string>
-							<string key="candidateClassName">EditCameraCell</string>
+							<string key="candidateClassName">UITableViewCell</string>
 						</object>
 						<object class="IBToOneOutletInfo" key="emptyCameraListView">
 							<string key="name">emptyCameraListView</string>
@@ -685,33 +687,6 @@
 					<object class="IBClassDescriptionSource" key="sourceIdentifier">
 						<string key="majorKey">IBProjectSource</string>
 						<string key="minorKey">./Classes/DashBoard_ViewController.h</string>
-					</object>
-				</object>
-				<object class="IBPartialClassDescription">
-					<string key="className">EditCameraCell</string>
-					<string key="superclassName">UITableViewCell</string>
-					<dictionary class="NSMutableDictionary" key="actions">
-						<string key="alertSettings:">id</string>
-						<string key="removeCamera:">id</string>
-						<string key="renameCamera:">id</string>
-					</dictionary>
-					<dictionary class="NSMutableDictionary" key="actionInfosByName">
-						<object class="IBActionInfo" key="alertSettings:">
-							<string key="name">alertSettings:</string>
-							<string key="candidateClassName">id</string>
-						</object>
-						<object class="IBActionInfo" key="removeCamera:">
-							<string key="name">removeCamera:</string>
-							<string key="candidateClassName">id</string>
-						</object>
-						<object class="IBActionInfo" key="renameCamera:">
-							<string key="name">renameCamera:</string>
-							<string key="candidateClassName">id</string>
-						</object>
-					</dictionary>
-					<object class="IBClassDescriptionSource" key="sourceIdentifier">
-						<string key="majorKey">IBProjectSource</string>
-						<string key="minorKey">./Classes/EditCameraCell.h</string>
 					</object>
 				</object>
 			</array>
