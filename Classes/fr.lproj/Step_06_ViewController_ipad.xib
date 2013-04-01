@@ -83,6 +83,7 @@
 								<string key="NSFrame">{{158, 0}, {331, 52}}</string>
 								<reference key="NSSuperview" ref="339553807"/>
 								<reference key="NSWindow"/>
+								<reference key="NSNextKeyView"/>
 								<string key="NSReuseIdentifierKey">_NS:9</string>
 								<reference key="IBUIBackgroundColor" ref="591855424"/>
 								<bool key="IBUIOpaque">NO</bool>
@@ -168,6 +169,7 @@
 								<string key="NSFrame">{{127, 0}, {366, 52}}</string>
 								<reference key="NSSuperview" ref="262668091"/>
 								<reference key="NSWindow"/>
+								<reference key="NSNextKeyView"/>
 								<string key="NSReuseIdentifierKey">_NS:9</string>
 								<reference key="IBUIBackgroundColor" ref="591855424"/>
 								<bool key="IBUIOpaque">NO</bool>
@@ -250,6 +252,7 @@
 								<string key="NSFrame">{{110, 0}, {362, 52}}</string>
 								<reference key="NSSuperview" ref="65325634"/>
 								<reference key="NSWindow"/>
+								<reference key="NSNextKeyView"/>
 								<string key="NSReuseIdentifierKey">_NS:9</string>
 								<bool key="IBUIOpaque">NO</bool>
 								<bool key="IBUIClipsSubviews">YES</bool>
@@ -257,7 +260,7 @@
 								<int key="IBUITag">1</int>
 								<bool key="IBUIUserInteractionEnabled">NO</bool>
 								<string key="targetRuntimeIdentifier">IBIPadFramework</string>
-								<string key="IBUIText">None</string>
+								<string key="IBUIText">Aucun</string>
 								<reference key="IBUIHighlightedColor" ref="320111254"/>
 								<int key="IBUIBaselineAdjustment">0</int>
 								<object class="IBUIFontDescription" key="IBUIFontDescription">
@@ -334,6 +337,7 @@
 								<string key="NSFrame">{{110, 0}, {386, 52}}</string>
 								<reference key="NSSuperview" ref="85625761"/>
 								<reference key="NSWindow"/>
+								<reference key="NSNextKeyView"/>
 								<string key="NSReuseIdentifierKey">_NS:9</string>
 								<reference key="IBUIBackgroundColor" ref="591855424"/>
 								<bool key="IBUIOpaque">NO</bool>
