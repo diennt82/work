@@ -46,6 +46,8 @@
 								<int key="NSvFlags">274</int>
 								<string key="NSFrameSize">{768, 1004}</string>
 								<reference key="NSSuperview" ref="412686742"/>
+								<reference key="NSWindow"/>
+								<reference key="NSNextKeyView"/>
 								<string key="NSReuseIdentifierKey">_NS:9</string>
 								<int key="IBUITag">11</int>
 								<bool key="IBUIUserInteractionEnabled">NO</bool>
@@ -58,6 +60,7 @@
 						</array>
 						<string key="NSFrameSize">{768, 1004}</string>
 						<reference key="NSSuperview" ref="961039527"/>
+						<reference key="NSWindow"/>
 						<reference key="NSNextKeyView" ref="225380070"/>
 						<object class="NSColor" key="IBUIBackgroundColor">
 							<int key="NSColorSpace">3</int>
@@ -72,6 +75,7 @@
 				</array>
 				<string key="NSFrame">{{0, 20}, {768, 1004}}</string>
 				<reference key="NSSuperview"/>
+				<reference key="NSWindow"/>
 				<reference key="NSNextKeyView" ref="412686742"/>
 				<object class="NSColor" key="IBUIBackgroundColor">
 					<int key="NSColorSpace">3</int>
@@ -86,7 +90,7 @@
 				<string key="targetRuntimeIdentifier">IBIPadFramework</string>
 			</object>
 			<object class="IBUIView" id="670034298">
-				<nil key="NSNextResponder"/>
+				<reference key="NSNextResponder"/>
 				<int key="NSvFlags">274</int>
 				<array class="NSMutableArray" key="NSSubviews">
 					<object class="IBUIImageView" id="479549754">
@@ -94,6 +98,7 @@
 						<int key="NSvFlags">274</int>
 						<string key="NSFrameSize">{768, 1024}</string>
 						<reference key="NSSuperview" ref="670034298"/>
+						<reference key="NSWindow"/>
 						<reference key="NSNextKeyView" ref="501113996"/>
 						<string key="NSReuseIdentifierKey">_NS:9</string>
 						<bool key="IBUIUserInteractionEnabled">NO</bool>
@@ -112,6 +117,8 @@
 								<int key="NSvFlags">301</int>
 								<string key="NSFrame">{{93, 160}, {37, 37}}</string>
 								<reference key="NSSuperview" ref="501113996"/>
+								<reference key="NSWindow"/>
+								<reference key="NSNextKeyView"/>
 								<string key="NSReuseIdentifierKey">_NS:9</string>
 								<bool key="IBUIOpaque">NO</bool>
 								<string key="targetRuntimeIdentifier">IBIPadFramework</string>
@@ -122,8 +129,9 @@
 							<object class="IBUILabel" id="595719569">
 								<reference key="NSNextResponder" ref="501113996"/>
 								<int key="NSvFlags">-2147483347</int>
-								<string key="NSFrame">{{20, 61}, {165, 48}}</string>
+								<string key="NSFrame">{{11, 48}, {200, 61}}</string>
 								<reference key="NSSuperview" ref="501113996"/>
+								<reference key="NSWindow"/>
 								<reference key="NSNextKeyView" ref="563592877"/>
 								<string key="NSReuseIdentifierKey">_NS:9</string>
 								<bool key="IBUIOpaque">NO</bool>
@@ -131,7 +139,7 @@
 								<int key="IBUIContentMode">7</int>
 								<bool key="IBUIUserInteractionEnabled">NO</bool>
 								<string key="targetRuntimeIdentifier">IBIPadFramework</string>
-								<string key="IBUIText">Updating Camera list. Please wait...</string>
+								<string key="IBUIText">Aggiornamento elenco videocamere in corso. Attendere...</string>
 								<object class="NSColor" key="IBUITextColor">
 									<int key="NSColorSpace">1</int>
 									<bytes key="NSRGB">MSAxIDEAA</bytes>
@@ -142,7 +150,7 @@
 								<nil key="IBUIHighlightedColor"/>
 								<int key="IBUIBaselineAdjustment">0</int>
 								<float key="IBUIMinimumFontSize">10</float>
-								<int key="IBUINumberOfLines">2</int>
+								<int key="IBUINumberOfLines">3</int>
 								<int key="IBUITextAlignment">1</int>
 								<object class="IBUIFontDescription" key="IBUIFontDescription">
 									<int key="type">1</int>
@@ -153,11 +161,12 @@
 									<double key="NSSize">15</double>
 									<int key="NSfFlags">16</int>
 								</object>
-								<double key="preferredMaxLayoutWidth">165</double>
+								<double key="preferredMaxLayoutWidth">200</double>
 							</object>
 						</array>
 						<string key="NSFrame">{{273, 397}, {222, 230}}</string>
 						<reference key="NSSuperview" ref="670034298"/>
+						<reference key="NSWindow"/>
 						<reference key="NSNextKeyView" ref="595719569"/>
 						<string key="NSReuseIdentifierKey">_NS:9</string>
 						<object class="NSColor" key="IBUIBackgroundColor">
@@ -168,6 +177,8 @@
 					</object>
 				</array>
 				<string key="NSFrameSize">{768, 1024}</string>
+				<reference key="NSSuperview"/>
+				<reference key="NSWindow"/>
 				<reference key="NSNextKeyView" ref="479549754"/>
 				<string key="NSReuseIdentifierKey">_NS:9</string>
 				<object class="NSColor" key="IBUIBackgroundColor">
@@ -317,7 +328,47 @@
 			<nil key="sourceID"/>
 			<int key="maxID">41</int>
 		</object>
-		<object class="IBClassDescriber" key="IBDocument.Classes"/>
+		<object class="IBClassDescriber" key="IBDocument.Classes">
+			<array class="NSMutableArray" key="referencedPartialClassDescriptions">
+				<object class="IBPartialClassDescription">
+					<string key="className">MBP_iosViewController</string>
+					<string key="superclassName">UIViewController</string>
+					<dictionary class="NSMutableDictionary" key="outlets">
+						<string key="backgroundView">UIView</string>
+						<string key="progressView">UIView</string>
+						<string key="statusDialogLabel">UILabel</string>
+						<string key="statusDialogText">UITextView</string>
+						<string key="statusDialogView">UIView</string>
+					</dictionary>
+					<dictionary class="NSMutableDictionary" key="toOneOutletInfosByName">
+						<object class="IBToOneOutletInfo" key="backgroundView">
+							<string key="name">backgroundView</string>
+							<string key="candidateClassName">UIView</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="progressView">
+							<string key="name">progressView</string>
+							<string key="candidateClassName">UIView</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="statusDialogLabel">
+							<string key="name">statusDialogLabel</string>
+							<string key="candidateClassName">UILabel</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="statusDialogText">
+							<string key="name">statusDialogText</string>
+							<string key="candidateClassName">UITextView</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="statusDialogView">
+							<string key="name">statusDialogView</string>
+							<string key="candidateClassName">UIView</string>
+						</object>
+					</dictionary>
+					<object class="IBClassDescriptionSource" key="sourceIdentifier">
+						<string key="majorKey">IBProjectSource</string>
+						<string key="minorKey">./Classes/MBP_iosViewController.h</string>
+					</object>
+				</object>
+			</array>
+		</object>
 		<int key="IBDocument.localizationMode">0</int>
 		<string key="IBDocument.TargetRuntimeIdentifier">IBIPadFramework</string>
 		<bool key="IBDocument.PluginDeclaredDependenciesTrackSystemTargetVersion">YES</bool>
