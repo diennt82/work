@@ -80,6 +80,7 @@
 						<string key="NSFrame">{{620, 869}, {120, 120}}</string>
 						<reference key="NSSuperview" ref="692566689"/>
 						<reference key="NSWindow"/>
+						<reference key="NSNextKeyView"/>
 						<string key="NSReuseIdentifierKey">_NS:9</string>
 						<int key="IBUITag">500</int>
 						<string key="targetRuntimeIdentifier">IBIPadFramework</string>
@@ -302,7 +303,7 @@
 						<int key="IBUIBarStyle">2</int>
 						<array class="NSMutableArray" key="IBUIItems">
 							<object class="IBUIBarButtonItem" id="53871315">
-								<string key="IBUITitle">Cámaras</string>
+								<string key="IBUITitle">Cameras</string>
 								<string key="targetRuntimeIdentifier">IBIPadFramework</string>
 								<int key="IBUIStyle">1</int>
 								<reference key="IBUIToolbar" ref="88426463"/>
