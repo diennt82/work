@@ -50,6 +50,7 @@
 								<string key="NSFrame">{{161, 15}, {94, 27}}</string>
 								<reference key="NSSuperview" ref="712527824"/>
 								<reference key="NSWindow"/>
+								<reference key="NSNextKeyView"/>
 								<string key="NSReuseIdentifierKey">_NS:9</string>
 								<bool key="IBUIOpaque">NO</bool>
 								<int key="IBUITag">1</int>
@@ -71,7 +72,7 @@
 								<int key="IBUIContentMode">7</int>
 								<bool key="IBUIUserInteractionEnabled">NO</bool>
 								<string key="targetRuntimeIdentifier">IBIPadFramework</string>
-								<string key="IBUIText">Sound Alert</string>
+								<string key="IBUIText">Avviso sonoro</string>
 								<object class="NSColor" key="IBUITextColor" id="287301501">
 									<int key="NSColorSpace">3</int>
 									<bytes key="NSWhite">MQA</bytes>
@@ -117,7 +118,7 @@
 				<real value="59" key="IBUIRowHeight"/>
 			</object>
 			<object class="IBUITableViewCell" id="1006422943">
-				<nil key="NSNextResponder"/>
+				<reference key="NSNextResponder"/>
 				<int key="NSvFlags">292</int>
 				<array class="NSMutableArray" key="NSSubviews">
 					<object class="IBUIView" id="507385729">
@@ -129,6 +130,8 @@
 								<int key="NSvFlags">292</int>
 								<string key="NSFrame">{{161, 15}, {94, 27}}</string>
 								<reference key="NSSuperview" ref="507385729"/>
+								<reference key="NSWindow"/>
+								<reference key="NSNextKeyView"/>
 								<string key="NSReuseIdentifierKey">_NS:9</string>
 								<bool key="IBUIOpaque">NO</bool>
 								<int key="IBUITag">1</int>
@@ -140,8 +143,9 @@
 							<object class="IBUILabel" id="302359971">
 								<reference key="NSNextResponder" ref="507385729"/>
 								<int key="NSvFlags">292</int>
-								<string key="NSFrame">{{3, 3}, {157, 53}}</string>
+								<string key="NSFrame">{{0, 2}, {157, 53}}</string>
 								<reference key="NSSuperview" ref="507385729"/>
+								<reference key="NSWindow"/>
 								<reference key="NSNextKeyView" ref="807676502"/>
 								<string key="NSReuseIdentifierKey">_NS:9</string>
 								<bool key="IBUIOpaque">NO</bool>
@@ -149,7 +153,7 @@
 								<int key="IBUIContentMode">7</int>
 								<bool key="IBUIUserInteractionEnabled">NO</bool>
 								<string key="targetRuntimeIdentifier">IBIPadFramework</string>
-								<string key="IBUIText">High Temperature Alert</string>
+								<string key="IBUIText">Allarme alta temperatura</string>
 								<reference key="IBUITextColor" ref="287301501"/>
 								<reference key="IBUIHighlightedColor" ref="287301501"/>
 								<int key="IBUIBaselineAdjustment">0</int>
@@ -163,6 +167,7 @@
 						</array>
 						<string key="NSFrameSize">{261, 58}</string>
 						<reference key="NSSuperview" ref="1006422943"/>
+						<reference key="NSWindow"/>
 						<reference key="NSNextKeyView" ref="302359971"/>
 						<string key="NSReuseIdentifierKey">_NS:11</string>
 						<reference key="IBUIBackgroundColor" ref="817783826"/>
@@ -174,6 +179,8 @@
 					</object>
 				</array>
 				<string key="NSFrameSize">{261, 59}</string>
+				<reference key="NSSuperview"/>
+				<reference key="NSWindow"/>
 				<reference key="NSNextKeyView" ref="507385729"/>
 				<string key="NSReuseIdentifierKey">_NS:9</string>
 				<string key="targetRuntimeIdentifier">IBIPadFramework</string>
@@ -182,7 +189,7 @@
 				<real value="59" key="IBUIRowHeight"/>
 			</object>
 			<object class="IBUITableViewCell" id="265289013">
-				<nil key="NSNextResponder"/>
+				<reference key="NSNextResponder"/>
 				<int key="NSvFlags">292</int>
 				<array class="NSMutableArray" key="NSSubviews">
 					<object class="IBUIView" id="751599065">
@@ -194,6 +201,8 @@
 								<int key="NSvFlags">292</int>
 								<string key="NSFrame">{{161, 15}, {94, 27}}</string>
 								<reference key="NSSuperview" ref="751599065"/>
+								<reference key="NSWindow"/>
+								<reference key="NSNextKeyView"/>
 								<string key="NSReuseIdentifierKey">_NS:9</string>
 								<bool key="IBUIOpaque">NO</bool>
 								<int key="IBUITag">1</int>
@@ -207,6 +216,7 @@
 								<int key="NSvFlags">292</int>
 								<string key="NSFrame">{{4, 2}, {151, 53}}</string>
 								<reference key="NSSuperview" ref="751599065"/>
+								<reference key="NSWindow"/>
 								<reference key="NSNextKeyView" ref="582743172"/>
 								<string key="NSReuseIdentifierKey">_NS:9</string>
 								<bool key="IBUIOpaque">NO</bool>
@@ -214,7 +224,7 @@
 								<int key="IBUIContentMode">7</int>
 								<bool key="IBUIUserInteractionEnabled">NO</bool>
 								<string key="targetRuntimeIdentifier">IBIPadFramework</string>
-								<string key="IBUIText">Low Temperature Alert</string>
+								<string key="IBUIText">Allarme bassa temperatura</string>
 								<reference key="IBUITextColor" ref="287301501"/>
 								<reference key="IBUIHighlightedColor" ref="287301501"/>
 								<int key="IBUIBaselineAdjustment">0</int>
@@ -228,6 +238,7 @@
 						</array>
 						<string key="NSFrameSize">{261, 58}</string>
 						<reference key="NSSuperview" ref="265289013"/>
+						<reference key="NSWindow"/>
 						<reference key="NSNextKeyView" ref="795537537"/>
 						<string key="NSReuseIdentifierKey">_NS:11</string>
 						<reference key="IBUIBackgroundColor" ref="817783826"/>
@@ -239,6 +250,8 @@
 					</object>
 				</array>
 				<string key="NSFrameSize">{261, 59}</string>
+				<reference key="NSSuperview"/>
+				<reference key="NSWindow"/>
 				<reference key="NSNextKeyView" ref="751599065"/>
 				<string key="NSReuseIdentifierKey">_NS:9</string>
 				<string key="targetRuntimeIdentifier">IBIPadFramework</string>
@@ -247,7 +260,7 @@
 				<real value="59" key="IBUIRowHeight"/>
 			</object>
 			<object class="IBUIView" id="501642320">
-				<nil key="NSNextResponder"/>
+				<reference key="NSNextResponder"/>
 				<int key="NSvFlags">292</int>
 				<array class="NSMutableArray" key="NSSubviews">
 					<object class="IBUIImageView" id="971430688">
@@ -255,6 +268,7 @@
 						<int key="NSvFlags">292</int>
 						<string key="NSFrameSize">{768, 1024}</string>
 						<reference key="NSSuperview" ref="501642320"/>
+						<reference key="NSWindow"/>
 						<reference key="NSNextKeyView" ref="391585346"/>
 						<string key="NSReuseIdentifierKey">_NS:9</string>
 						<int key="IBUITag">111</int>
@@ -270,6 +284,8 @@
 						<int key="NSvFlags">274</int>
 						<string key="NSFrame">{{10, 102}, {749, 792}}</string>
 						<reference key="NSSuperview" ref="501642320"/>
+						<reference key="NSWindow"/>
+						<reference key="NSNextKeyView"/>
 						<string key="NSReuseIdentifierKey">_NS:9</string>
 						<reference key="IBUIBackgroundColor" ref="817783826"/>
 						<bool key="IBUIClipsSubviews">YES</bool>
@@ -286,8 +302,9 @@
 					<object class="IBUILabel" id="125120763">
 						<reference key="NSNextResponder" ref="501642320"/>
 						<int key="NSvFlags">292</int>
-						<string key="NSFrame">{{303, 40}, {161, 41}}</string>
+						<string key="NSFrame">{{250, 40}, {267, 41}}</string>
 						<reference key="NSSuperview" ref="501642320"/>
+						<reference key="NSWindow"/>
 						<reference key="NSNextKeyView" ref="92486370"/>
 						<string key="NSReuseIdentifierKey">_NS:9</string>
 						<bool key="IBUIOpaque">NO</bool>
@@ -295,7 +312,7 @@
 						<int key="IBUIContentMode">7</int>
 						<bool key="IBUIUserInteractionEnabled">NO</bool>
 						<string key="targetRuntimeIdentifier">IBIPadFramework</string>
-						<string key="IBUIText">Camera Alert Settings</string>
+						<string key="IBUIText">Impostazioni allarme videocamera</string>
 						<object class="NSColor" key="IBUITextColor">
 							<int key="NSColorSpace">1</int>
 							<bytes key="NSRGB">MSAxIDEAA</bytes>
@@ -318,6 +335,7 @@
 								<int key="NSvFlags">274</int>
 								<string key="NSFrame">{{234, 362}, {300, 300}}</string>
 								<reference key="NSSuperview" ref="391585346"/>
+								<reference key="NSWindow"/>
 								<reference key="NSNextKeyView" ref="25154289"/>
 								<string key="NSReuseIdentifierKey">_NS:9</string>
 								<int key="IBUIContentMode">1</int>
@@ -333,6 +351,7 @@
 								<int key="NSvFlags">292</int>
 								<string key="NSFrame">{{267, 490}, {234, 21}}</string>
 								<reference key="NSSuperview" ref="391585346"/>
+								<reference key="NSWindow"/>
 								<reference key="NSNextKeyView" ref="46533"/>
 								<string key="NSReuseIdentifierKey">_NS:9</string>
 								<bool key="IBUIOpaque">NO</bool>
@@ -340,7 +359,7 @@
 								<int key="IBUIContentMode">7</int>
 								<bool key="IBUIUserInteractionEnabled">NO</bool>
 								<string key="targetRuntimeIdentifier">IBIPadFramework</string>
-								<string key="IBUIText">Connecting to Server... </string>
+								<string key="IBUIText">Connessione al server... </string>
 								<object class="NSColor" key="IBUITextColor">
 									<int key="NSColorSpace">1</int>
 									<bytes key="NSRGB">MSAxIDEAA</bytes>
@@ -357,6 +376,7 @@
 								<int key="NSvFlags">292</int>
 								<string key="NSFrame">{{365, 550}, {37, 37}}</string>
 								<reference key="NSSuperview" ref="391585346"/>
+								<reference key="NSWindow"/>
 								<reference key="NSNextKeyView" ref="125120763"/>
 								<string key="NSReuseIdentifierKey">_NS:9</string>
 								<bool key="IBUIOpaque">NO</bool>
@@ -368,6 +388,7 @@
 						</array>
 						<string key="NSFrameSize">{768, 1024}</string>
 						<reference key="NSSuperview" ref="501642320"/>
+						<reference key="NSWindow"/>
 						<reference key="NSNextKeyView" ref="817743931"/>
 						<string key="NSReuseIdentifierKey">_NS:9</string>
 						<object class="NSColor" key="IBUIBackgroundColor">
@@ -379,6 +400,8 @@
 					</object>
 				</array>
 				<string key="NSFrameSize">{768, 1024}</string>
+				<reference key="NSSuperview"/>
+				<reference key="NSWindow"/>
 				<reference key="NSNextKeyView" ref="971430688"/>
 				<string key="NSReuseIdentifierKey">_NS:9</string>
 				<object class="NSColor" key="IBUIBackgroundColor">
