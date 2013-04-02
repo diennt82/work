@@ -59,6 +59,7 @@
 						<string key="NSFrame">{{80, 359}, {161, 44}}</string>
 						<reference key="NSSuperview" ref="689768342"/>
 						<reference key="NSWindow"/>
+						<reference key="NSNextKeyView"/>
 						<string key="NSReuseIdentifierKey">_NS:9</string>
 						<bool key="IBUIOpaque">NO</bool>
 						<int key="IBUITag">100</int>
@@ -66,7 +67,7 @@
 						<int key="IBUIContentHorizontalAlignment">0</int>
 						<int key="IBUIContentVerticalAlignment">0</int>
 						<int key="IBUIButtonType">1</int>
-						<string key="IBUINormalTitle">Try Again</string>
+						<string key="IBUINormalTitle">Essayez à nouveau</string>
 						<object class="NSColor" key="IBUIHighlightedTitleColor" id="711618386">
 							<int key="NSColorSpace">3</int>
 							<bytes key="NSWhite">MQA</bytes>
@@ -111,7 +112,7 @@
 								<bool key="IBUIScrollEnabled">NO</bool>
 								<bool key="IBUIShowsHorizontalScrollIndicator">NO</bool>
 								<bool key="IBUIShowsVerticalScrollIndicator">NO</bool>
-								<string key="IBUIText">2. Press and hold the RESET button at the bottom of the camera</string>
+								<string key="IBUIText">2. Appuyez et maintenez enfoncé le bouton de reinitialisation (RESET) situé sous la caméra.</string>
 								<reference key="IBUITextColor" ref="711618386"/>
 								<object class="IBUITextInputTraits" key="IBUITextInputTraits">
 									<int key="IBUIAutocapitalizationType">2</int>
@@ -142,7 +143,7 @@
 								<bool key="IBUIScrollEnabled">NO</bool>
 								<bool key="IBUIShowsHorizontalScrollIndicator">NO</bool>
 								<bool key="IBUIShowsVerticalScrollIndicator">NO</bool>
-								<string key="IBUIText">To Try Add Camera again, please follow the steps below:</string>
+								<string key="IBUIText">Pour Essayer d'Ajouter une Caméra de nouveau (Try Add Camera), veuillez suivre les étapes suivantes :</string>
 								<reference key="IBUITextColor" ref="711618386"/>
 								<object class="IBUITextInputTraits" key="IBUITextInputTraits">
 									<int key="IBUIAutocapitalizationType">2</int>
@@ -166,7 +167,7 @@
 								<bool key="IBUIScrollEnabled">NO</bool>
 								<bool key="IBUIShowsHorizontalScrollIndicator">NO</bool>
 								<bool key="IBUIShowsVerticalScrollIndicator">NO</bool>
-								<string key="IBUIText">It might be because of the following reasons:</string>
+								<string key="IBUIText">La cause peut être pour les raisons suivantes :</string>
 								<reference key="IBUITextColor" ref="711618386"/>
 								<int key="IBUITextAlignment">1</int>
 								<object class="IBUITextInputTraits" key="IBUITextInputTraits">
@@ -192,7 +193,7 @@
 								<bool key="IBUIScrollEnabled">NO</bool>
 								<bool key="IBUIShowsHorizontalScrollIndicator">NO</bool>
 								<bool key="IBUIShowsVerticalScrollIndicator">NO</bool>
-								<string key="IBUIText">1. Please ensure your Wi-Fi password is correct.</string>
+								<string key="IBUIText">1. Assurez-vous que vous utilisez le bon mot de passe Wi-Fi.</string>
 								<reference key="IBUITextColor" ref="711618386"/>
 								<object class="IBUITextInputTraits" key="IBUITextInputTraits">
 									<int key="IBUIAutocapitalizationType">2</int>
@@ -216,7 +217,7 @@
 								<bool key="IBUIScrollEnabled">NO</bool>
 								<bool key="IBUIShowsHorizontalScrollIndicator">NO</bool>
 								<bool key="IBUIShowsVerticalScrollIndicator">NO</bool>
-								<string key="IBUIText">1. Switch OFF your camera</string>
+								<string key="IBUIText">1. Éteignez (OFF) votre caméra</string>
 								<reference key="IBUITextColor" ref="711618386"/>
 								<object class="IBUITextInputTraits" key="IBUITextInputTraits">
 									<int key="IBUIAutocapitalizationType">2</int>
@@ -240,7 +241,7 @@
 								<bool key="IBUIScrollEnabled">NO</bool>
 								<bool key="IBUIShowsHorizontalScrollIndicator">NO</bool>
 								<bool key="IBUIShowsVerticalScrollIndicator">NO</bool>
-								<string key="IBUIText">3. Power ON your camera</string>
+								<string key="IBUIText">3. Démarrez (ON) votre caméra</string>
 								<reference key="IBUITextColor" ref="711618386"/>
 								<object class="IBUITextInputTraits" key="IBUITextInputTraits">
 									<int key="IBUIAutocapitalizationType">2</int>
@@ -264,7 +265,7 @@
 								<bool key="IBUIScrollEnabled">NO</bool>
 								<bool key="IBUIShowsHorizontalScrollIndicator">NO</bool>
 								<bool key="IBUIShowsVerticalScrollIndicator">NO</bool>
-								<string key="IBUIText">4. Wait for around 15 seconds. The camera will beep and restart</string>
+								<string key="IBUIText">4. Attendez environ 15 secondes. La caméra émet un son et redémarre.</string>
 								<reference key="IBUITextColor" ref="711618386"/>
 								<object class="IBUITextInputTraits" key="IBUITextInputTraits">
 									<int key="IBUIAutocapitalizationType">2</int>
@@ -288,7 +289,7 @@
 								<bool key="IBUIScrollEnabled">NO</bool>
 								<bool key="IBUIShowsHorizontalScrollIndicator">NO</bool>
 								<bool key="IBUIShowsVerticalScrollIndicator">NO</bool>
-								<string key="IBUIText">2. Please check if your iOS device is connected to the same Wi-Fi network as your camera.</string>
+								<string key="IBUIText">2. Veuillez vous assurer que votre dispositif iOS et votre caméra sont connectés sur le même réseau.</string>
 								<reference key="IBUITextColor" ref="711618386"/>
 								<object class="IBUITextInputTraits" key="IBUITextInputTraits">
 									<int key="IBUIAutocapitalizationType">2</int>
@@ -312,7 +313,7 @@
 								<bool key="IBUIScrollEnabled">NO</bool>
 								<bool key="IBUIShowsHorizontalScrollIndicator">NO</bool>
 								<bool key="IBUIShowsVerticalScrollIndicator">NO</bool>
-								<string key="IBUIText">5. The camera is now in setup mode again</string>
+								<string key="IBUIText">5. La caméra est de nouveau en mode de réglage.</string>
 								<reference key="IBUITextColor" ref="711618386"/>
 								<object class="IBUITextInputTraits" key="IBUITextInputTraits">
 									<int key="IBUIAutocapitalizationType">2</int>
@@ -537,10 +538,6 @@
 		</object>
 		<int key="IBDocument.localizationMode">0</int>
 		<string key="IBDocument.TargetRuntimeIdentifier">IBCocoaTouchFramework</string>
-		<object class="NSMutableDictionary" key="IBDocument.PluginDeclaredDependencyDefaults">
-			<string key="NS.key.0">com.apple.InterfaceBuilder.CocoaTouchPlugin.iPhoneOS</string>
-			<real value="1552" key="NS.object.0"/>
-		</object>
 		<bool key="IBDocument.PluginDeclaredDependenciesTrackSystemTargetVersion">YES</bool>
 		<int key="IBDocument.defaultPropertyAccessControl">3</int>
 		<object class="NSMutableDictionary" key="IBDocument.LastKnownImageSizes">
