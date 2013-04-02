@@ -124,10 +124,10 @@
 "Cameras_" = "Kameras";
 
 /* No comment provided by engineer. */
-"Cancel" = "Kameras";
+"Cancel" = "Abbrechen";
 
 /* No comment provided by engineer. */
-"Cancel_" = "Kameras";
+"Cancel_" = "Abbrechen";
 
 /* No comment provided by engineer. */
 "cant_start_stream" = "Videostrom kann nicht gestartet werden, der BabyMonitor ist ausgelastet. Versuchen Sie es bitte später noch einmal.";
