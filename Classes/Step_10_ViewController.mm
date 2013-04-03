@@ -307,7 +307,13 @@
 
 #pragma  mark -
 #pragma mark Timer callbacks
-
+-(void) silentRetryTimeout:(NSTimer *) expired
+{
+    
+    //TIMEOUT --
+    should_retry_silently = FALSE; 
+    
+}
 - (void) checkConnectionToHomeWifi:(NSTimer *) expired
 {
     
@@ -331,8 +337,19 @@
 		if (![own isEqualToString:@""])
 		{
 			
+            should_retry_silently = TRUE;
+            
             //CameraTest: try to search for camera now..
             [self registerCamera:nil];
+            
+            
+            
+            //check back later..
+            [NSTimer scheduledTimerWithTimeInterval: 4.0//
+                                             target:self
+                                           selector:@selector(silentRetryTimeout:)
+                                           userInfo:nil
+                                            repeats:NO];
             
 			return;
 		}
@@ -788,32 +805,43 @@
 }
 
 
+
+
+
 - (void) addCamFailedServerUnreachable
 {
 	NSLog(@"addcam failed : server unreachable");
 	
-    
-    NSString * msg = NSLocalizedStringWithDefaultValue(@"addcam_error_1" ,nil, [NSBundle mainBundle],
-                                                       @"The device is not able to connect to the server. Please check the WIFI and the internet connection", nil);
-    NSString * cancel = NSLocalizedStringWithDefaultValue(@"Cancel",nil, [NSBundle mainBundle],
-                                                      @"Cancel", nil);
-    
-    NSString * retry = NSLocalizedStringWithDefaultValue(@"Retry",nil, [NSBundle mainBundle],
-                                                          @"Retry", nil);
-	//ERROR condition
-	UIAlertView *alert = [[UIAlertView alloc]
-						  initWithTitle:NSLocalizedStringWithDefaultValue(@"AddCam_Error" ,nil, [NSBundle mainBundle],
-                                                                          @"AddCam Error" , nil)
-						  message:msg
-						  delegate:self
-						  cancelButtonTitle:cancel
-						  otherButtonTitles:retry, nil];
-    alert.delegate = self;
-    alert.tag = ALERT_ADDCAM_SERVER_UNREACH;
-    
-	[alert show];
-	[alert release];
-    
+    if (should_retry_silently == TRUE)
+    {
+        NSLog(@"addcam failed : Retry without popup");
+        [self registerCamera:nil];
+    }
+    else
+    {
+        
+        NSString * msg = NSLocalizedStringWithDefaultValue(@"addcam_error_1" ,nil, [NSBundle mainBundle],
+                                                           @"The device is not able to connect to the server. Please check the WIFI and the internet. Go to WIFI setting to confirm device is connected to intended router", nil);
+        NSString * cancel = NSLocalizedStringWithDefaultValue(@"Cancel",nil, [NSBundle mainBundle],
+                                                              @"Cancel", nil);
+        
+        NSString * retry = NSLocalizedStringWithDefaultValue(@"Retry",nil, [NSBundle mainBundle],
+                                                             @"Retry", nil);
+        //ERROR condition
+        UIAlertView *alert = [[UIAlertView alloc]
+                              initWithTitle:NSLocalizedStringWithDefaultValue(@"AddCam_Error" ,nil, [NSBundle mainBundle],
+                                                                              @"AddCam Error" , nil)
+                              message:msg
+                              delegate:self
+                              cancelButtonTitle:cancel
+                              otherButtonTitles:retry, nil];
+        alert.delegate = self;
+        alert.tag = ALERT_ADDCAM_SERVER_UNREACH;
+        
+        [alert show];
+        [alert release];
+    }
+
 	
 }
 

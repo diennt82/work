@@ -47,7 +47,7 @@
     ScanForCamera * scanner; 
     NSString *cameraMac, *master_key;
     
-
+    BOOL should_retry_silently ;
 }
 
 @property (nonatomic,assign) IBOutlet UILabel * homeSSID;
