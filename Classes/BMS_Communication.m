@@ -258,10 +258,9 @@
 	http_cmd = [http_cmd stringByAppendingFormat:@"%@", DEL_CAM_CMD];
 	http_cmd = [http_cmd stringByAppendingFormat:@"%@%@", DEL_CAM_PARAM_1, user_email];
 	http_cmd = [http_cmd stringByAppendingFormat:@"%@%@", DEL_CAM_PARAM_2, mac_];
-
-	
+    
+    
 	NSLog(@"delName query:%@", http_cmd);
-	
 	
 	if (selIfSuccess == nil ||selIfFailure == nil|| selIfServerFail ==nil)
 	{
@@ -287,6 +286,53 @@
 		[theRequest addValue:authHeader forHTTPHeaderField:@"Authorization"];
 		
 		url_connection = [[NSURLConnection alloc] initWithRequest:theRequest 
+														 delegate:self
+												 startImmediately:TRUE];
+		
+		
+	}
+	
+	return TRUE;
+	
+	
+}
+
+- (BOOL)BMS_delCamRemoteWithUser:(NSString*) user_email AndPass:(NSString*) user_pass macAddr:(NSString *) mac
+{
+	NSString * mac_ = [Util strip_colon_fr_mac:mac];
+    
+	NSString * http_cmd_remote = [NSString stringWithFormat:@"%@%@",BMS_PHONESERVICE,BMS_CMD_PART];
+    http_cmd_remote = [http_cmd_remote stringByAppendingFormat:@"%@",DEL_AND_RESET_CAM_CMD];
+    http_cmd_remote = [http_cmd_remote stringByAppendingFormat:@"%@%@", DEL_CAM_PARAM_2, mac_];
+    http_cmd_remote = [http_cmd_remote stringByAppendingFormat:@"%@%@",DEL_CAM_PARAM_1,user_email];
+    
+    
+	NSLog(@"delCamRemote: %@",http_cmd_remote);
+	
+	if (selIfSuccess == nil ||selIfFailure == nil|| selIfServerFail ==nil)
+	{
+		NSLog(@"ERR: selector is not set");
+		return FALSE;
+	}
+	
+	NSString* plain = [NSString stringWithFormat:@"%@:%@",
+					   user_email, user_pass];
+	NSData* plainData = [plain dataUsingEncoding:NSUTF8StringEncoding];
+	NSString * portalCred = [NSString base64StringFromData:plainData length:[plainData length]];
+	
+	
+	
+	@synchronized(self)
+	{
+		
+		NSMutableURLRequest *theRequest=[NSMutableURLRequest requestWithURL:[NSURL URLWithString:http_cmd_remote]
+																cachePolicy: NSURLRequestReloadIgnoringLocalCacheData
+															timeoutInterval:BMS_DEFAULT_TIME_OUT];
+		
+		NSString *authHeader = [@"Basic " stringByAppendingFormat:@"%@",portalCred];
+		[theRequest addValue:authHeader forHTTPHeaderField:@"Authorization"];
+		
+		url_connection = [[NSURLConnection alloc] initWithRequest:theRequest
 														 delegate:self
 												 startImmediately:TRUE];
 		

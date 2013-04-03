@@ -49,6 +49,7 @@
 
 
 #define DEL_CAM_CMD  @"delete_cam"
+#define DEL_AND_RESET_CAM_CMD @"delete_reset_cam"
 #define DEL_CAM_PARAM_1 @"&email="
 #define DEL_CAM_PARAM_2 @"&macaddress="
 
@@ -173,6 +174,8 @@
 - (BOOL)BMS_addCamWithUser:(NSString*) user_email AndPass:(NSString*) user_pass macAddr:(NSString *) mac camName:(NSString*) name;
 
 - (BOOL)BMS_delCamWithUser:(NSString*) user_email AndPass:(NSString*) user_pass macAddr:(NSString *) mac;
+
+- (BOOL)BMS_delCamRemoteWithUser:(NSString*) user_email AndPass:(NSString*) user_pass macAddr:(NSString *) mac;
 
 - (BOOL)BMS_camNameWithUser:(NSString*) user_email AndPass:(NSString*) user_pass macAddr:(NSString *) mac camName:(NSString*) name;
 

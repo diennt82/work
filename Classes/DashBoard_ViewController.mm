@@ -1440,7 +1440,23 @@
     
 	
     
-    [self onCameraRemoveRemote];
+//    [self onCameraRemoveRemote];
+    
+    
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+	NSString * userName = (NSString *) [userDefaults objectForKey:@"PortalUseremail"];
+	NSString * userPass = (NSString *) [userDefaults objectForKey:@"PortalPassword"];
+	
+    
+    
+    
+	BMS_Communication * bms_comm;
+	bms_comm = [[BMS_Communication alloc] initWithObject:self
+												Selector:@selector(removeCamSuccessWithResponse:)
+											FailSelector:@selector(removeCamFailedWithError:)
+											   ServerErr:@selector(removeCamFailedServerUnreachable)];
+	
+	[bms_comm BMS_delCamWithUser:userName AndPass:userPass macAddr:ch.profile.mac_address];
    	
 }
 
@@ -1464,7 +1480,7 @@
 											FailSelector:@selector(removeCamFailedWithError:)
 											   ServerErr:@selector(removeCamFailedServerUnreachable)];
 	
-	[bms_comm BMS_delCamWithUser:userName AndPass:userPass macAddr:ch.profile.mac_address];
+	[bms_comm BMS_delCamRemoteWithUser:userName AndPass:userPass macAddr:ch.profile.mac_address];
     
     
 }
