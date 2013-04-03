@@ -22,7 +22,7 @@
 "AddCam_Error" = "AddCam Error";
 
 /* No comment provided by engineer. */
-"addcam_error_1" = "The device is not able to connect to the server. Please check the WIFI and the internet connection";
+"addcam_error_1" = "The device is not able to connect to the server. Please check the WIFI and the internet. Go to WIFI setting to confirm device is connected to intended router";
 
 /* No comment provided by engineer. */
 "Baby_Monitor_Setup" = "Baby Monitor Setup";
@@ -145,6 +145,9 @@
 "Change_Camera_Name" = "Change Camera Name";
 
 /* No comment provided by engineer. */
+"close" = "Close";
+
+/* No comment provided by engineer. */
 "comm_with_camera_timeout" = "Communication with camera has timeout.";
 
 /* No comment provided by engineer. */
@@ -182,6 +185,9 @@
 
 /* No comment provided by engineer. */
 "Create_Account_Failed_msg4" = "Please select a Wifi network to connect";
+
+/* No comment provided by engineer. */
+"detail" = "Detail";
 
 /* No comment provided by engineer. */
 "Detect_Camera" = "Detect Camera";

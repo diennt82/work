@@ -145,6 +145,7 @@
 "Change_Camera_Name" = "Changer Nom de la caméra";
 
 /* No comment provided by engineer. */
+"close" = "Close";
 "comm_with_camera_timeout" = "Communication avec la caméra a expiré.";
 
 /* No comment provided by engineer. */
@@ -184,6 +185,7 @@
 "Create_Account_Failed_msg4" = "Veuillez sélectionner un réseau WiFi pour vous connecter";
 
 /* No comment provided by engineer. */
+"detail" = "Detail";
 "Detect_Camera" = "Détecter Caméra";
 
 /* No comment provided by engineer. */

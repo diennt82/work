@@ -4,3 +4,4 @@ MBP_ios.xcodeproj/mighty.pbxuser
 MBP_ios.xcodeproj/project.xcworkspace/
 MBP_ios.xcodeproj/xcuserdata/
 build/
+*.strings
