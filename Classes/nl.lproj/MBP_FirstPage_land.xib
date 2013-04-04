@@ -250,7 +250,7 @@
 						<int key="IBUIContentMode">7</int>
 						<bool key="IBUIUserInteractionEnabled">NO</bool>
 						<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
-						<string key="IBUIText">Version 1.21</string>
+						<string key="IBUIText">Versie 1.21</string>
 						<object class="NSColor" key="IBUITextColor">
 							<int key="NSColorSpace">1</int>
 							<bytes key="NSRGB">MC45MTQ1MDgzMjIgMC45MTQ1MDgzMjIgMC45MTQ1MDgzMjIAA</bytes>
