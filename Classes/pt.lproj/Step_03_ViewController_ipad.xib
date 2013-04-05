@@ -44,7 +44,7 @@
 						<string key="NSFrameSize">{768, 1004}</string>
 						<reference key="NSSuperview" ref="86759567"/>
 						<reference key="NSWindow"/>
-						<reference key="NSNextKeyView" ref="606291813"/>
+						<reference key="NSNextKeyView" ref="588722778"/>
 						<string key="NSReuseIdentifierKey">_NS:9</string>
 						<bool key="IBUIUserInteractionEnabled">NO</bool>
 						<string key="targetRuntimeIdentifier">IBIPadFramework</string>
@@ -56,10 +56,10 @@
 					<object class="IBUITextView" id="588722778">
 						<reference key="NSNextResponder" ref="86759567"/>
 						<int key="NSvFlags">301</int>
-						<string key="NSFrame">{{232, 70}, {305, 33}}</string>
+						<string key="NSFrame">{{193, 70}, {380, 33}}</string>
 						<reference key="NSSuperview" ref="86759567"/>
 						<reference key="NSWindow"/>
-						<reference key="NSNextKeyView" ref="715552329"/>
+						<reference key="NSNextKeyView" ref="606291813"/>
 						<string key="NSReuseIdentifierKey">_NS:9</string>
 						<object class="NSColor" key="IBUIBackgroundColor" id="884468071">
 							<int key="NSColorSpace">3</int>
@@ -69,7 +69,7 @@
 						<bool key="IBUIMultipleTouchEnabled">YES</bool>
 						<string key="targetRuntimeIdentifier">IBIPadFramework</string>
 						<bool key="IBUIEditable">NO</bool>
-						<string key="IBUIText">Select baby monitor camera.</string>
+						<string key="IBUIText">Selecione a câmera monitor do bebé.</string>
 						<object class="NSColor" key="IBUITextColor">
 							<int key="NSColorSpace">3</int>
 							<bytes key="NSWhite">MQA</bytes>
@@ -98,14 +98,14 @@
 						<string key="NSFrame">{{212, 96}, {344, 54}}</string>
 						<reference key="NSSuperview" ref="86759567"/>
 						<reference key="NSWindow"/>
-						<reference key="NSNextKeyView" ref="588722778"/>
+						<reference key="NSNextKeyView" ref="715552329"/>
 						<string key="NSReuseIdentifierKey">_NS:9</string>
 						<bool key="IBUIOpaque">NO</bool>
 						<bool key="IBUIClipsSubviews">YES</bool>
 						<int key="IBUIContentMode">7</int>
 						<bool key="IBUIUserInteractionEnabled">NO</bool>
 						<string key="targetRuntimeIdentifier">IBIPadFramework</string>
-						<string key="IBUIText"> It will be listed under Wi-Fi networks.</string>
+						<string key="IBUIText">Ele será listado em redes Wi-Fi.</string>
 						<object class="NSColor" key="IBUITextColor">
 							<int key="NSColorSpace">3</int>
 							<bytes key="NSWhite">MQA</bytes>
@@ -113,6 +113,7 @@
 						<nil key="IBUIHighlightedColor"/>
 						<int key="IBUIBaselineAdjustment">0</int>
 						<float key="IBUIMinimumFontSize">10</float>
+						<int key="IBUITextAlignment">1</int>
 						<reference key="IBUIFontDescription" ref="464635634"/>
 						<reference key="IBUIFont" ref="667343546"/>
 						<bool key="IBUIAdjustsFontSizeToFit">NO</bool>
@@ -130,7 +131,7 @@
 						<bool key="IBUIUserInteractionEnabled">NO</bool>
 						<string key="targetRuntimeIdentifier">IBIPadFramework</string>
 						<bool key="IBUIEditable">NO</bool>
-						<string key="IBUIText">How to reach Wi-Fi Network? Select settings in iphone home screen and then select Wi-Fi.</string>
+						<string key="IBUIText">Como chegar à rede Wi-Fi? Selecione as configurações no ecrã inicial do iPhone e selecione Wi-Fi.</string>
 						<object class="NSColor" key="IBUITextColor">
 							<int key="NSColorSpace">3</int>
 							<bytes key="NSWhite">MQA</bytes>
@@ -170,7 +171,7 @@
 					<object class="IBUITextView" id="515362282">
 						<reference key="NSNextResponder" ref="86759567"/>
 						<int key="NSvFlags">298</int>
-						<string key="NSFrame">{{242, 535}, {279, 57}}</string>
+						<string key="NSFrame">{{242, 535}, {279, 77}}</string>
 						<reference key="NSSuperview" ref="86759567"/>
 						<reference key="NSWindow"/>
 						<reference key="NSNextKeyView" ref="502543994"/>
@@ -180,7 +181,7 @@
 						<bool key="IBUIUserInteractionEnabled">NO</bool>
 						<string key="targetRuntimeIdentifier">IBIPadFramework</string>
 						<bool key="IBUIEditable">NO</bool>
-						<string key="IBUIText">Note - This will disconnect other wi-fi settings for a short while.</string>
+						<string key="IBUIText">Nota - Isto vai desligar outros configurações Wi-Fi durante um curto tempo.</string>
 						<object class="NSColor" key="IBUITextColor">
 							<int key="NSColorSpace">3</int>
 							<bytes key="NSWhite">MQA</bytes>
@@ -196,7 +197,7 @@
 					<object class="IBUITextView" id="502543994">
 						<reference key="NSNextResponder" ref="86759567"/>
 						<int key="NSvFlags">298</int>
-						<string key="NSFrame">{{174, 652}, {419, 57}}</string>
+						<string key="NSFrame">{{174, 652}, {419, 87}}</string>
 						<reference key="NSSuperview" ref="86759567"/>
 						<reference key="NSWindow"/>
 						<reference key="NSNextKeyView"/>
@@ -206,7 +207,7 @@
 						<bool key="IBUIUserInteractionEnabled">NO</bool>
 						<string key="targetRuntimeIdentifier">IBIPadFramework</string>
 						<bool key="IBUIEditable">NO</bool>
-						<string key="IBUIText">Once the above step is done, return here to continue with camera setup</string>
+						<string key="IBUIText">Uma vez que o passo acima tenha sido dado, volte aqui para continuar com a configuração da câmera</string>
 						<object class="NSColor" key="IBUITextColor">
 							<int key="NSColorSpace">3</int>
 							<bytes key="NSWhite">MQA</bytes>
@@ -266,7 +267,7 @@
 						<bool key="IBUIClipsSubviews">YES</bool>
 						<bool key="IBUIUserInteractionEnabled">NO</bool>
 						<string key="targetRuntimeIdentifier">IBIPadFramework</string>
-						<string key="IBUIText">Checking connection to Baby Monitor ...</string>
+						<string key="IBUIText">A verificar a conexão do Monitor do Bebé ...</string>
 						<object class="NSColor" key="IBUITextColor">
 							<int key="NSColorSpace">1</int>
 							<bytes key="NSRGB">MSAxIDEAA</bytes>
