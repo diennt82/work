@@ -70,7 +70,7 @@
 						<bool key="IBUIUserInteractionEnabled">NO</bool>
 						<string key="targetRuntimeIdentifier">IBIPadFramework</string>
 						<bool key="IBUIEditable">NO</bool>
-						<string key="IBUIText">How to reach Wi-Fi Network? Select settings in iphone home screen and then select Wi-Fi.</string>
+						<string key="IBUIText">Como chegar à rede Wi-Fi? Selecione as configurações no ecrã inicial do iPhone e selecione Wi-Fi.</string>
 						<object class="NSColor" key="IBUITextColor">
 							<int key="NSColorSpace">3</int>
 							<bytes key="NSWhite">MQA</bytes>
@@ -96,7 +96,7 @@
 					<object class="IBUITextView" id="72086330">
 						<reference key="NSNextResponder" ref="302943020"/>
 						<int key="NSvFlags">292</int>
-						<string key="NSFrame">{{214, 61}, {314, 40}}</string>
+						<string key="NSFrame">{{214, 61}, {333, 40}}</string>
 						<reference key="NSSuperview" ref="302943020"/>
 						<reference key="NSWindow"/>
 						<reference key="NSNextKeyView" ref="307135042"/>
@@ -106,7 +106,7 @@
 						<bool key="IBUIMultipleTouchEnabled">YES</bool>
 						<string key="targetRuntimeIdentifier">IBIPadFramework</string>
 						<bool key="IBUIEditable">NO</bool>
-						<string key="IBUIText">Please switch to Wi-Fi network :</string>
+						<string key="IBUIText">Por favor, mude para a rede Wi-Fi:</string>
 						<object class="NSColor" key="IBUITextColor" id="890522694">
 							<int key="NSColorSpace">3</int>
 							<bytes key="NSWhite">MQA</bytes>
@@ -150,7 +150,7 @@
 					<object class="IBUITextView" id="1047265239">
 						<reference key="NSNextResponder" ref="302943020"/>
 						<int key="NSvFlags">292</int>
-						<string key="NSFrame">{{206, 536}, {356, 73}}</string>
+						<string key="NSFrame">{{206, 524}, {356, 85}}</string>
 						<reference key="NSSuperview" ref="302943020"/>
 						<reference key="NSWindow"/>
 						<reference key="NSNextKeyView" ref="782255699"/>
@@ -160,7 +160,7 @@
 						<bool key="IBUIMultipleTouchEnabled">YES</bool>
 						<string key="targetRuntimeIdentifier">IBIPadFramework</string>
 						<bool key="IBUIEditable">NO</bool>
-						<string key="IBUIText">Once the above step is done, return here to create an account</string>
+						<string key="IBUIText">Uma vez que o passo acima tenha sido dado, volte aqui para criar uma conta</string>
 						<reference key="IBUITextColor" ref="890522694"/>
 						<int key="IBUITextAlignment">1</int>
 						<object class="IBUITextInputTraits" key="IBUITextInputTraits">
@@ -176,6 +176,7 @@
 						<string key="NSFrame">{{369, 699}, {170, 27}}</string>
 						<reference key="NSSuperview" ref="302943020"/>
 						<reference key="NSWindow"/>
+						<reference key="NSNextKeyView"/>
 						<string key="NSReuseIdentifierKey">_NS:9</string>
 						<bool key="IBUIOpaque">NO</bool>
 						<bool key="IBUIClipsSubviews">YES</bool>
