@@ -57,7 +57,7 @@
 							<object class="IBUILabel" id="729098039">
 								<reference key="NSNextResponder" ref="912865519"/>
 								<int key="NSvFlags">292</int>
-								<string key="NSFrame">{{142, 98}, {196, 21}}</string>
+								<string key="NSFrame">{{142, 98}, {196, 42}}</string>
 								<reference key="NSSuperview" ref="912865519"/>
 								<reference key="NSWindow"/>
 								<reference key="NSNextKeyView" ref="547826983"/>
@@ -67,7 +67,7 @@
 								<int key="IBUIContentMode">7</int>
 								<bool key="IBUIUserInteractionEnabled">NO</bool>
 								<string key="targetRuntimeIdentifier">IBIPadFramework</string>
-								<string key="IBUIText">Updating camera status...</string>
+								<string key="IBUIText">A atualizar o estado da câmera ...</string>
 								<object class="NSColor" key="IBUITextColor">
 									<int key="NSColorSpace">1</int>
 									<bytes key="NSRGB">MSAxIDEAA</bytes>
@@ -78,6 +78,8 @@
 								<nil key="IBUIHighlightedColor"/>
 								<int key="IBUIBaselineAdjustment">0</int>
 								<float key="IBUIMinimumFontSize">10</float>
+								<int key="IBUINumberOfLines">2</int>
+								<int key="IBUITextAlignment">1</int>
 								<object class="IBUIFontDescription" key="IBUIFontDescription">
 									<int key="type">1</int>
 									<double key="pointSize">16</double>
@@ -88,6 +90,7 @@
 									<int key="NSfFlags">16</int>
 								</object>
 								<bool key="IBUIAdjustsFontSizeToFit">NO</bool>
+								<double key="preferredMaxLayoutWidth">196</double>
 							</object>
 							<object class="IBUIActivityIndicatorView" id="547826983">
 								<reference key="NSNextResponder" ref="912865519"/>
@@ -95,6 +98,7 @@
 								<string key="NSFrame">{{222, 158}, {37, 37}}</string>
 								<reference key="NSSuperview" ref="912865519"/>
 								<reference key="NSWindow"/>
+								<reference key="NSNextKeyView"/>
 								<string key="NSReuseIdentifierKey">_NS:9</string>
 								<bool key="IBUIOpaque">NO</bool>
 								<string key="targetRuntimeIdentifier">IBIPadFramework</string>
