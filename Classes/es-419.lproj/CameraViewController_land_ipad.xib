@@ -73,7 +73,7 @@
 						<int key="IBUITag">602</int>
 						<bool key="IBUIUserInteractionEnabled">NO</bool>
 						<string key="targetRuntimeIdentifier">IBIPadFramework</string>
-						<string key="IBUIText">Low Res</string>
+						<string key="IBUIText">Res baja</string>
 						<object class="NSColor" key="IBUITextColor">
 							<int key="NSColorSpace">1</int>
 							<bytes key="NSRGB">MSAxIDEAA</bytes>
@@ -288,7 +288,7 @@
 						<int key="IBUIBarStyle">2</int>
 						<array class="NSMutableArray" key="IBUIItems">
 							<object class="IBUIBarButtonItem" id="820457153">
-								<string key="IBUITitle">Cameras</string>
+								<string key="IBUITitle">Cámaras</string>
 								<string key="targetRuntimeIdentifier">IBIPadFramework</string>
 								<int key="IBUIStyle">1</int>
 								<reference key="IBUIToolbar" ref="1036299941"/>
@@ -368,7 +368,7 @@
 										<int key="IBUISystemItemIdentifier">1</int>
 									</object>
 									<object class="IBUIBarButtonItem" id="106371357">
-										<string key="IBUITitle">Lullaby</string>
+										<string key="IBUITitle">Canción de cuna</string>
 										<string key="targetRuntimeIdentifier">IBIPadFramework</string>
 										<reference key="IBUIToolbar" ref="403890208"/>
 									</object>
@@ -566,7 +566,7 @@
 								<int key="IBUITag">155</int>
 								<bool key="IBUIUserInteractionEnabled">NO</bool>
 								<string key="targetRuntimeIdentifier">IBIPadFramework</string>
-								<string key="IBUIText">Connecting to Baby Monitor...</string>
+								<string key="IBUIText">Conectando a monitor de bebé... </string>
 								<object class="NSColor" key="IBUITextColor">
 									<int key="NSColorSpace">1</int>
 									<bytes key="NSRGB">MSAxIDEAA</bytes>
@@ -610,7 +610,7 @@
 								<int key="IBUIContentHorizontalAlignment">0</int>
 								<int key="IBUIContentVerticalAlignment">0</int>
 								<int key="IBUIButtonType">1</int>
-								<string key="IBUINormalTitle">Cancel</string>
+								<string key="IBUINormalTitle">Cancelar</string>
 								<reference key="IBUIHighlightedTitleColor" ref="425406358"/>
 								<object class="NSColor" key="IBUINormalTitleColor">
 									<int key="NSColorSpace">1</int>
@@ -677,7 +677,7 @@
 								<int key="IBUIContentMode">7</int>
 								<bool key="IBUIUserInteractionEnabled">NO</bool>
 								<string key="targetRuntimeIdentifier">IBIPadFramework</string>
-								<string key="IBUIText">Music On</string>
+								<string key="IBUIText">Música encendida</string>
 								<object class="NSColor" key="IBUITextColor">
 									<int key="NSColorSpace">1</int>
 									<bytes key="NSRGB">MCAwIDAAA</bytes>
