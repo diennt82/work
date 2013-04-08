@@ -7,106 +7,106 @@
 */
 
 /* No comment provided by engineer. */
-"Account" = "Account";
+"Account" = "Cuenta";
 
 /* No comment provided by engineer. */
-"Account_" = "Account";
+"Account_" = "Cuenta";
 
 /* No comment provided by engineer. */
-"Account_Created" = "Account Created";
+"Account_Created" = "Cuenta creada";
 
 /* No comment provided by engineer. */
-"Add_Camera_Failed" = "Add Camera Failed";
+"Add_Camera_Failed" = "Error al agregar cámara";
 
 /* No comment provided by engineer. */
-"AddCam_Error" = "AddCam Error";
+"AddCam_Error" = "Error AddCam";
 
 /* No comment provided by engineer. */
-"addcam_error_1" = "The device is not able to connect to the server. Please check the WIFI and the internet connection";
+"addcam_error_1" = "El dispositivo no puede conectarse al servidor. Revise el Wi-Fi y la conexión a Internet";
 
 /* No comment provided by engineer. */
-"Baby_Monitor_Setup" = "Baby Monitor Setup";
+"Baby_Monitor_Setup" = "Configuración del monitor bebé";
 
 /* No comment provided by engineer. */
-"Back" = "Back";
+"Back" = "Posterior";
 
 /* No comment provided by engineer. */
-"bms_error_404" = "Server is temporarily not available";
+"bms_error_404" = "Servidor no está disponible temporalmente";
 
 /* No comment provided by engineer. */
-"bms_error_601" = "Invalid command passed. Please check the query.";
+"bms_error_601" = "Se pasó un comando no válido. Verifique la consulta.";
 
 /* No comment provided by engineer. */
-"bms_error_602" = "Required parameter(s) are missing.";
+"bms_error_602" = "Faltan los parámetro(s) requerido(s).";
 
 /* No comment provided by engineer. */
-"bms_error_603" = "Length of the parameter is out of expected boundaries.";
+"bms_error_603" = "La longitud del parámetro está fuera de los límites esperados.";
 
 /* No comment provided by engineer. */
-"bms_error_611" = "Camera does not exist.";
+"bms_error_611" = "No existe cámara.";
 
 /* No comment provided by engineer. */
-"bms_error_612" = "Unable to communicate with the camera.";
+"bms_error_612" = "No es posible comunicarse con la cámara.";
 
 /* No comment provided by engineer. */
 "bms_error_613" = "Unable to communicate with the camera.";
 
 /* No comment provided by engineer. */
-"bms_error_614" = "Camera is not ready for streaming";
+"bms_error_614" = "La cámara no está lista para transmisión";
 
 /* No comment provided by engineer. */
-"bms_error_621" = "Email Id is not registered.";
+"bms_error_621" = "Id de correo electrónico no está registrado.";
 
 /* No comment provided by engineer. */
-"bms_error_622" = "Email Id registed but not activated.";
+"bms_error_622" = "Id de correo electrónico registrado pero no activado.";
 
 /* No comment provided by engineer. */
-"bms_error_623" = "Email Id is already activated.";
+"bms_error_623" = "ID del correo electrónico ya está activado.";
 
 /* No comment provided by engineer. */
-"bms_error_624" = "Activation failed. Either user is not registered or the activation period is expired. Please register again.";
+"bms_error_624" = "Error de activación. O el usuario no está registrado o el período de activación ha expirado. Por favor regístrese nuevamente.";
 
 /* No comment provided by engineer. */
 "bms_error_625" = "Activation failed. Invalid activation key.";
 
 /* No comment provided by engineer. */
-"bms_error_626" = "Authentication failed, either Email Id or Password is invalid.";
+"bms_error_626" = "Error de autenticación, ya sea el ID del correo electrónico o la contraseña no son válidos.";
 
 /* No comment provided by engineer. */
-"bms_error_627" = "Camera is not associated with any user (email id).";
+"bms_error_627" = "La cámara no está asociada a ningún usuario (id de correo electrónico).";
 
 /* No comment provided by engineer. */
-"bms_error_628" = "Email is already registered";
+"bms_error_628" = "Correo electrónico ya está registrado";
 
 /* No comment provided by engineer. */
-"bms_error_636" = "Username is already registered";
+"bms_error_636" = "El nombre de usuario ya está registrado";
 
 /* No comment provided by engineer. */
-"bms_error_699" = "Unhandled exception occured, please contact administrator.";
+"bms_error_699" = "Se ha producido una excepción no controlada, póngase en contacto con el administrador.";
 
 /* No comment provided by engineer. */
-"bms_error_unknown" = "Unknown error - %d";
+"bms_error_unknown" = "Error desconocido - %d";
 
 /* No comment provided by engineer. */
-"cam_menu_err_1" = "Camera is not reachable";
+"cam_menu_err_1" = "La cámara no es accesible";
 
 /* No comment provided by engineer. */
-"cam_menu_err_2" = "Unable to rename this camera. Please re-login and try again";
+"cam_menu_err_2" = "No es posible cambiar el nombre de esta cámara. Vuelva a iniciar sesión y vuelva a intentarlo";
 
 /* No comment provided by engineer. */
-"cam_menu_err_3" = "Camera name cant be empty, please try again";
+"cam_menu_err_3" = "El nombre de la cámara no puede estar vacío, inténtelo de nuevo";
 
 /* No comment provided by engineer. */
-"cam_menu_err_4" = "Camera name can't be removed, please log-in";
+"cam_menu_err_4" = "El nombre de la cámara no se puede eliminar, inicie sesión en";
 
 /* No comment provided by engineer. */
-"cam_menu_err_5" = "Failed to change camera name. Please try again later";
+"cam_menu_err_5" = "No se ha podido cambiar el nombre de la cámara. Inténtelo de nuevo más tarde";
 
 /* No comment provided by engineer. */
-"cam_rem_msg" = "Please confirm that you want to remove this camera from your account. This action will also switch your camera to default settings. You will need to add the camera into your account again to use it.";
+"cam_rem_msg" = "Por favor confirme que desea eliminar esta cámara de su cuenta. Esta acción también cambiará la cámara a los ajustes predeterminados. Será necesario agregar la cámara a su cuenta nuevamente para usarla.";
 
 /* No comment provided by engineer. */
-"cam_rem_msg1" = "Please confirm that you want to remove this camera from your account. The camera is not accessible right now, it will not be switched to direct mode. Please refer to FAQ to reset it manually.";
+"cam_rem_msg1" = "Por favor confirme que desea eliminar esta cámara de su cuenta. La cámara no está disponible en estos momentos, no se cambiará al modo de acceso directo. Por favor, consulte FAQ (preguntas frecuentes) para restablecer manualmente.";
 
 /* No comment provided by engineer. */
 "Camera_Configured" = "Camera Configured";
@@ -115,25 +115,25 @@
 "Camera_Detected" = "Camera Detected";
 
 /* No comment provided by engineer. */
-"Camera_fw_upgrade" = "Camera Firmware Upgrade";
+"Camera_fw_upgrade" = "Actualización del firmware de la cámara";
 
 /* No comment provided by engineer. */
-"Camera_name_cant_be_empty" = "Camera name cant be empty, please try again";
+"Camera_name_cant_be_empty" = "El nombre de la cámara no puede estar vacío, inténtelo de nuevo";
 
 /* No comment provided by engineer. */
-"Cameras_" = "Cameras";
+"Cameras_" = "Cámaras";
 
 /* No comment provided by engineer. */
-"Cancel" = "Cancel";
+"Cancel" = "Cancelar";
 
 /* No comment provided by engineer. */
-"Cancel_" = "Cancel";
+"Cancel_" = "Cancelar";
 
 /* No comment provided by engineer. */
-"cant_start_stream" = "Can't start video stream, the BabyMonitor is busy, try again later.";
+"cant_start_stream" = "No se puede iniciar secuencia de vídeo, el monitor de bebé está ocupado, inténtelo de nuevo más tarde.";
 
 /* No comment provided by engineer. */
-"cant_start_stream2" = "Server request timeout, try again later";
+"cant_start_stream2" = "Petición del servidor de tiempo de espera, volver a intentar más tarde";
 
 /* No comment provided by engineer. */
 "cant_start_stream_01" = "The session key on camera is mis-matched. Please reset the camera and add the camera again.(%d)";
@@ -142,31 +142,31 @@
 "Celsius" = "Celsius";
 
 /* No comment provided by engineer. */
-"Change_Camera_Name" = "Change Camera Name";
+"Change_Camera_Name" = "Cambiar nombre de cámara";
 
 /* No comment provided by engineer. */
-"comm_with_camera_timeout" = "Communication with camera has timeout.";
+"comm_with_camera_timeout" = "La comunicación con la cámara tiene tiempo de espera.";
 
 /* No comment provided by engineer. */
-"comm_with_camera_timeout_msg" = "Please retry.";
+"comm_with_camera_timeout_msg" = "Vuelva a intentarlo.";
 
 /* No comment provided by engineer. */
-"Configure_Camera" = "Configure Camera";
+"Configure_Camera" = "Configurar cámara";
 
 /* No comment provided by engineer. */
-"Confirm_remove_cam_local" = "Please confirm that you want to remove this camera from your account. This action will also reset the camera to setup mode.";
+"Confirm_remove_cam_local" = "Por favor confirme que desea eliminar esta cámara de su cuenta. Esta acción también restablecerá la cámara al modo de configuración.";
 
 /* No comment provided by engineer. */
-"Confirm_remove_cam_remote" = "Please confirm that you want to remove this camera from your account. The camera is not accessible right now, it will not be switched to setup mode. Please refer to FAQ to reset it manually.";
+"Confirm_remove_cam_remote" = "Por favor confirme que desea eliminar esta cámara de su cuenta. La cámara no está disponible en estos momentos, no se cambiará al modo de acceso directo. Por favor, consulte FAQ (preguntas frecuentes) para restablecer manualmente.";
 
 /* No comment provided by engineer. */
-"Connecting_to_server" = "Connecting to Server...";
+"Connecting_to_server" = "Conectando con el servidor... ";
 
 /* No comment provided by engineer. */
 "Create_Account" = "Create Account";
 
 /* No comment provided by engineer. */
-"Create_Account_Failed" = "Create Account Failed";
+"Create_Account_Failed" = "No se ha podido crear cuenta";
 
 /* No comment provided by engineer. */
 "Create_Account_Failed_msg" = "User name has to be between 5-20 characters";
@@ -175,31 +175,31 @@
 "Create_Account_Failed_msg1" = "Password has to be between 3-12 characters";
 
 /* No comment provided by engineer. */
-"Create_Account_Failed_msg2" = "Password does not match";
+"Create_Account_Failed_msg2" = "La contraseña no coincide";
 
 /* No comment provided by engineer. */
-"Create_Account_Failed_msg3" = "Invalid email. Email address should be of the form somebody@somewhere.com";
+"Create_Account_Failed_msg3" = "Correo electrónico no válido. La dirección correo electrónico debe ser de la forma alguien@enalgunlugar.com";
 
 /* No comment provided by engineer. */
-"Create_Account_Failed_msg4" = "Please select a Wifi network to connect";
+"Create_Account_Failed_msg4" = "Seleccione una red Wi-Fi para conectarse";
 
 /* No comment provided by engineer. */
-"Detect_Camera" = "Detect Camera";
+"Detect_Camera" = "Detectar cámara";
 
 /* No comment provided by engineer. */
-"Done" = "Done";
+"Done" = "Listo";
 
 /* No comment provided by engineer. */
-"Edit_" = "Edit";
+"Edit_" = "Editar";
 
 /* No comment provided by engineer. */
-"Email_Format_error" = "Email Format error";
+"Email_Format_error" = "Error de formato de correo electrónico";
 
 /* No comment provided by engineer. */
-"Email_Format_error_msg" = "Correct email format is of the form: someone@somedomain.com. Please try again!";
+"Email_Format_error_msg" = "El formato correcto de correo electrónico es: alguien@algundominio.com. ¡Por favor intente nuevamente!";
 
 /* No comment provided by engineer. */
-"Enter_Network_Information" = "Enter Network Information";
+"Enter_Network_Information" = "Ingresar información de la red";
 
 /* No comment provided by engineer. */
 "enter_new_camera_name" = "Enter new camera name";
@@ -208,34 +208,34 @@
 "Fahrenheit" = "Fahrenheit";
 
 /* No comment provided by engineer. */
-"Fail_to_communicate_with_camera" = "Fail to communicate with camera. Retry?";
+"Fail_to_communicate_with_camera" = "Error de comunicación con la cámara. ¿Volver a intentar?";
 
 /* No comment provided by engineer. */
-"Forgot_Password" = "Forgot Password";
+"Forgot_Password" = "Ha olvidado su contraseña";
 
 /* No comment provided by engineer. */
-"fw_upgrade" = "A camera firmware %@ is available. Do you want to upgrade now?";
+"fw_upgrade" = "El firmware %@ de la cámara está disponible. ¿Quiere actualizar ahora?";
 
 /* No comment provided by engineer. */
-"fw_upgrade_1" = "Restarting Camera...";
+"fw_upgrade_1" = "Reiniciando cámara...";
 
 /* No comment provided by engineer. */
-"Get_Camera_list_Error" = "Get Camera list Error";
+"Get_Camera_list_Error" = "Error al recibir lista de cámaras";
 
 /* No comment provided by engineer. */
 "Get_Camera_list_Error_msg" = "Server error: Invalid response";
 
 /* No comment provided by engineer. */
-"Get_Camera_list_Error_msg1" = "Server unreachable";
+"Get_Camera_list_Error_msg1" = "No se puede acceder al servidor";
 
 /* No comment provided by engineer. */
-"Go_to_Camera_list" = "Go to Camera list";
+"Go_to_Camera_list" = "Ir a la lista de cámaras";
 
 /* No comment provided by engineer. */
-"High_Quality" = "High Quality (VGA)";
+"High_Quality" = "De alta calidad (VGA)";
 
 /* No comment provided by engineer. */
-"information" = "Information";
+"information" = "Información";
 
 /* No comment provided by engineer. */
 "information_msg" = "Motorola Baby Monitor\nApplication version: %1$@\nFirmware version:%2$@,\nMonitoreverywhere © All rights Reserved.\nCamera address:%3$@";
@@ -253,182 +253,182 @@
 "Invalid_Server_Response" = "Invalid Server Response.(Nil response)";
 
 /* No comment provided by engineer. */
-"Level1" = "Level 1";
+"Level1" = "Nivel 1";
 
 /* No comment provided by engineer. */
-"Level1_" = "Level 1 (Low)";
+"Level1_" = "Nivel 1 (bajo)";
 
 /* No comment provided by engineer. */
-"Level2" = "Level 2";
+"Level2" = "Nivel 2";
 
 /* No comment provided by engineer. */
-"Level3" = "Level 3";
+"Level3" = "Nivel 3";
 
 /* No comment provided by engineer. */
-"Level4" = "Level 4";
+"Level4" = "Nivel 4";
 
 /* No comment provided by engineer. */
-"Level4_" = "Level 4 (High)";
+"Level4_" = "Nivel 4 (alto)";
 
 /* No comment provided by engineer. */
-"Local_Wifi" = "Local Wifi";
+"Local_Wifi" = "Wifi Local";
 
 /* No comment provided by engineer. */
-"Logging_in_to_server" = "Logging in to server...";
+"Logging_in_to_server" = "Iniciando sesión en el servidor ...";
 
 /* No comment provided by engineer. */
-"Login" = "Login";
+"Login" = "Inicio de sesión";
 
 /* No comment provided by engineer. */
-"Login_Error" = "Login Error";
+"Login_Error" = "Error de inicio";
 
 /* No comment provided by engineer. */
-"Login_Error_msg" = "Server response invalid, please try again!";
+"Login_Error_msg" = "¡Respuesta del servidor inválida, por favor intentar de nuevo!";
 
 /* No comment provided by engineer. */
-"Login_Error_msg2" = "Server error: %@";
+"Login_Error_msg2" = "Error de servidor: %@";
 
 /* No comment provided by engineer. */
-"Login_Error_msg3" = "Server is unreachable. Do you want to access your cameras offline?";
+"Login_Error_msg3" = "No se puede acceder al servidor. ¿Desea acceder a las cámaras sin conexión?";
 
 /* No comment provided by engineer. */
-"Logout" = "Logout";
+"Logout" = "Finalizar sesión";
 
 /* No comment provided by engineer. */
 "melody_1" = "Rock a Bye Baby";
 
 /* No comment provided by engineer. */
-"melody_2" = "Lullaby and Goodnight";
+"melody_2" = "Canción de cuna y buenas noches";
 
 /* No comment provided by engineer. */
-"melody_3" = "Lavender Blue";
+"melody_3" = "Lavanda azul";
 
 /* No comment provided by engineer. */
 "melody_4" = "Twinkle Twinkle Little Star";
 
 /* No comment provided by engineer. */
-"melody_5" = "Hush Little Baby";
+"melody_5" = "Calla pequeño bebé";
 
 /* No comment provided by engineer. */
-"network_lost_link" = "Camera disconnected due to network connectivity problem. Trying to reconnect...";
+"network_lost_link" = "Cámara desconectada debido a un problema de conectividad de red. Tratando de volver a conectar ...";
 
 /* No comment provided by engineer. */
-"New_Name" = "New Name";
+"New_Name" = "Nuevo nombre";
 
 /* No comment provided by engineer. */
-"Next" = "Next";
+"Next" = "Siguiente";
 
 /* No comment provided by engineer. */
 "No" = "No";
 
 /* No comment provided by engineer. */
-"Normal_Quality" = "Normal Quality (QVGA)";
+"Normal_Quality" = "Calidad normal (QVGA)";
 
 /* No comment provided by engineer. */
-"Not_Available" = "Not Available";
+"Not_Available" = "No disponible";
 
 /* No comment provided by engineer. */
-"Not_supported" = "Not supported";
+"Not_supported" = "Incompatible";
 
 /* No comment provided by engineer. */
 "Ok" = "Ok";
 
 /* No comment provided by engineer. */
-"quickview_lost_link" = "Network lost link. Please check the Phone, Camera and Wifi router or move closer to the Router";
+"quickview_lost_link" = "La red perdió el enlace. Por favor revise el teléfono, la cámara y el enrutador Wifi o acérquese al enrutador";
 
 /* No comment provided by engineer. */
-"Registration_Error" = "Registration Error";
+"Registration_Error" = "Error de registro";
 
 /* No comment provided by engineer. */
-"Registration_Error_1" = "BMS Server is unreachable. Please goto WIFI setting to ensure iOS device is connected to router/3G network";
+"Registration_Error_1" = "No se puede acceder al servidor BMS. Vaya a la configuración WIFI para asegurar que el dispositivo iOS esté conectado a la red enrutador/3G";
 
 /* No comment provided by engineer. */
-"Remote_Camera" = "Remote Camera";
+"Remote_Camera" = "Cámara remota";
 
 /* No comment provided by engineer. */
-"Remote_View_Error" = "Remote View Error";
+"Remote_View_Error" = "Error de vista remota";
 
 /* No comment provided by engineer. */
-"Remote_View_Error_msg" = "Initializing remote connection failed, please retry";
+"Remote_View_Error_msg" = "Error al inicializar conexión remota, por favor volver a intentar";
 
 /* No comment provided by engineer. */
-"remove_one_cam" = "Please remove one camera from the current  list before addding the new one";
+"remove_one_cam" = "Elimine una cámara de la lista actual antes de agregar una nueva";
 
 /* No comment provided by engineer. */
-"Reset_Password_Error" = "Reset Password Error";
+"Reset_Password_Error" = "Restablecer error de contraseña";
 
 /* No comment provided by engineer. */
-"Retry" = "Retry";
+"Retry" = "Volver a intentar";
 
 /* No comment provided by engineer. */
-"Security" = "Security";
+"Security" = "Seguridad";
 
 /* No comment provided by engineer. */
-"Server_error_" = "Server error: %@";
+"Server_error_" = "Error de servidor: %@";
 
 /* No comment provided by engineer. */
-"Server_error_1" = "Server is unreachable. Please try again later.";
+"Server_error_1" = "No se puede acceder al servidor. Inténtelo de nuevo más tarde.";
 
 /* No comment provided by engineer. */
-"Settings" = "Settings";
+"Settings" = "Ajustes";
 
 /* No comment provided by engineer. */
-"Setup_Complete" = "Setup Complete";
+"Setup_Complete" = "Instalación completada";
 
 /* No comment provided by engineer. */
-"Sound_detected" = "Sound detected";
+"Sound_detected" = "Sonido detectado";
 
 /* No comment provided by engineer. */
-"Streamer_stopped" = "Streamer Stopped";
+"Streamer_stopped" = "Transmisor detenido";
 
 /* No comment provided by engineer. */
-"Switch_On_Camera" = "Switch On Camera";
+"Switch_On_Camera" = "Encender la cámara";
 
 /* No comment provided by engineer. */
-"Temperature_too_high" = "Temperature too high";
+"Temperature_too_high" = "Temperatura demasiado alta";
 
 /* No comment provided by engineer. */
-"Temperature_too_low" = "Temperature too low";
+"Temperature_too_low" = "Temperatura demasiado baja";
 
 /* No comment provided by engineer. */
-"Time_out" = "Time out";
+"Time_out" = "Tiempo de espera";
 
 /* No comment provided by engineer. */
-"Time_out_msg" = "The video has been viewed for about 5 minutes. Do you want to continue?";
+"Time_out_msg" = "El video ha sido visto por cerca de 5 minutos. ¿Quiere continuar?";
 
 /* No comment provided by engineer. */
 "udt_relay_connect" = "Connecting through relay... please wait...";
 
 /* No comment provided by engineer. */
-"Unable_to_rename_this_camera" = "Unable to rename this camera. Please log-in and try again";
+"Unable_to_rename_this_camera" = "No es posible cambiar el nombre de esta cámara. Iniciar sesión y volver a intentar";
 
 /* No comment provided by engineer. */
-"version" = "Version %@";
+"version" = "Versión %@";
 
 /* No comment provided by engineer. */
-"video_rec_not_supported" = "Video recording is not supported, coming soon";
+"video_rec_not_supported" = "La grabación de vídeo no es compatible, disponible próximamente";
 
 /* No comment provided by engineer. */
 "wifi_not_available" = "Mobile data is enabled. If you continue to connect, you may incur air time charges. Do you want to proceed?";
 
 /* No comment provided by engineer. */
-"Yes" = "Yes";
+"Yes" = "Sí";
 
 /* No comment provided by engineer. */
 "Yes_n" = "Yes and don't ask again";
 
-"Camera Name:" = "Camera Name:";
+"Camera Name:" = "Nombre de la Cámara";
 
-"Camera Volume:" = "Camera Volume:";
+"Camera Volume:" = "Volumen de la Cámara";
 
-"Camera Brightness:" = "Camera Brightness:";
+"Camera Brightness:" = "Brillo de la Cámara";
 
-"Sound Sensitivity Settings:" = "Sound Sensitivity Settings:";
+"Sound Sensitivity Settings:" = "Configuración de Sensibilidad al Sonido:";
 
-"Temperature Unit:" = "Temperature Unit:";
+"Temperature Unit:" = "Unidad de Temperatura:";
 
-"Video Quality:" = "Video Quality:";
+"Video Quality:" = "Calidad de Video:";
 
-"Remove this camera" = "Remove this camera";
+"Remove this camera" = "Remover esta cámara";
 
-"Information" = "Information";
+"Information" = "Información";
