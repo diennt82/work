@@ -57,6 +57,7 @@
 						<int key="NSvFlags">292</int>
 						<string key="NSFrame">{{23, 11}, {273, 83}}</string>
 						<reference key="NSSuperview" ref="191373211"/>
+						<reference key="NSWindow"/>
 						<reference key="NSNextKeyView" ref="622365844"/>
 						<string key="NSReuseIdentifierKey">_NS:9</string>
 						<object class="NSColor" key="IBUIBackgroundColor" id="735215990">
@@ -68,7 +69,7 @@
 						<int key="IBUIContentMode">7</int>
 						<bool key="IBUIUserInteractionEnabled">NO</bool>
 						<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
-						<string key="IBUIText">Complete three simple steps to get your baby monitor started! </string>
+						<string key="IBUIText">¡Completar tres pasos sencillos para iniciar su monitor de bebé! </string>
 						<object class="NSColor" key="IBUITextColor" id="693138768">
 							<int key="NSColorSpace">3</int>
 							<bytes key="NSWhite">MQA</bytes>
@@ -92,8 +93,9 @@
 					<object class="IBUILabel" id="730059289">
 						<reference key="NSNextResponder" ref="191373211"/>
 						<int key="NSvFlags">292</int>
-						<string key="NSFrame">{{65, 197}, {191, 21}}</string>
+						<string key="NSFrame">{{56, 197}, {222, 21}}</string>
 						<reference key="NSSuperview" ref="191373211"/>
+						<reference key="NSWindow"/>
 						<reference key="NSNextKeyView" ref="634698770"/>
 						<string key="NSReuseIdentifierKey">_NS:9</string>
 						<reference key="IBUIBackgroundColor" ref="735215990"/>
@@ -102,7 +104,7 @@
 						<int key="IBUIContentMode">7</int>
 						<bool key="IBUIUserInteractionEnabled">NO</bool>
 						<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
-						<string key="IBUIText">Connect camera to Wi-Fi</string>
+						<string key="IBUIText">Conecte la cámara a redes Wi-Fi</string>
 						<reference key="IBUITextColor" ref="693138768"/>
 						<nil key="IBUIHighlightedColor"/>
 						<int key="IBUIBaselineAdjustment">0</int>
@@ -115,6 +117,7 @@
 						<int key="NSvFlags">292</int>
 						<string key="NSFrame">{{99, 112}, {122, 21}}</string>
 						<reference key="NSSuperview" ref="191373211"/>
+						<reference key="NSWindow"/>
 						<reference key="NSNextKeyView" ref="314776464"/>
 						<string key="NSReuseIdentifierKey">_NS:9</string>
 						<reference key="IBUIBackgroundColor" ref="735215990"/>
@@ -123,7 +126,7 @@
 						<int key="IBUIContentMode">7</int>
 						<bool key="IBUIUserInteractionEnabled">NO</bool>
 						<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
-						<string key="IBUIText">Create Account</string>
+						<string key="IBUIText">Crear cuenta</string>
 						<reference key="IBUITextColor" ref="693138768"/>
 						<nil key="IBUIHighlightedColor"/>
 						<int key="IBUIBaselineAdjustment">0</int>
@@ -146,7 +149,7 @@
 						<int key="IBUIContentMode">7</int>
 						<bool key="IBUIUserInteractionEnabled">NO</bool>
 						<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
-						<string key="IBUIText">Detect Camera</string>
+						<string key="IBUIText">Detectar cámara</string>
 						<reference key="IBUITextColor" ref="693138768"/>
 						<nil key="IBUIHighlightedColor"/>
 						<int key="IBUIBaselineAdjustment">0</int>
@@ -160,6 +163,7 @@
 						<int key="NSvFlags">292</int>
 						<string key="NSFrame">{{35, 345}, {265, 37}}</string>
 						<reference key="NSSuperview" ref="191373211"/>
+						<reference key="NSWindow"/>
 						<reference key="NSNextKeyView"/>
 						<string key="NSReuseIdentifierKey">_NS:9</string>
 						<bool key="IBUIOpaque">NO</bool>
@@ -168,7 +172,7 @@
 						<int key="IBUIContentHorizontalAlignment">0</int>
 						<int key="IBUIContentVerticalAlignment">0</int>
 						<int key="IBUIButtonType">1</int>
-						<string key="IBUINormalTitle">Continue</string>
+						<string key="IBUINormalTitle">Continuar</string>
 						<reference key="IBUIHighlightedTitleColor" ref="693138768"/>
 						<object class="NSColor" key="IBUINormalTitleColor">
 							<int key="NSColorSpace">1</int>
@@ -256,9 +260,9 @@
 							<reference ref="314776464"/>
 							<reference ref="409725125"/>
 							<reference ref="652470321"/>
-							<reference ref="730059289"/>
 							<reference ref="622365844"/>
 							<reference ref="634698770"/>
+							<reference ref="730059289"/>
 						</array>
 						<reference key="parent" ref="0"/>
 					</object>
