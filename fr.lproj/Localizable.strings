@@ -240,7 +240,7 @@
 "information" = "Informations";
 
 /* No comment provided by engineer. */
-"information_msg" = "Motorola Baby Monitor\nApplication version: %1$@\nFirmware version:%2$@,\nMotorola \u00A9 Tous droits Réservés.\nCamera address:%3$@";
+"information_msg" = "Monitor Everywhere\nApplication version: %1$@\nFirmware version:%2$@,\nMonitoreverywhere \@ Tous droits Réservés.\nCamera address:%3$@";
 
 /* No comment provided by engineer. */
 "Invalid_Camera_Name" = "Invalid Camera Name";
@@ -273,7 +273,7 @@
 "Level4_" = "Niveau 4 (haut)";
 
 /* No comment provided by engineer. */
-"Local_Wifi" = "Local Wifi";
+"Local_Wifi" = "From local Wi-Fi";
 
 /* No comment provided by engineer. */
 "Logging_in_to_server" = "Connexion au serveur ...";
@@ -439,3 +439,6 @@
 
 /* No comment provided by engineer. */
 "Information" = "Informations";
+
+/* No comment provided by engineer. */
+"Confirm_Pass_Fail" = "Le mot de passe ne correspond pas. S'il vous plaît, saisir à nouveau !";
