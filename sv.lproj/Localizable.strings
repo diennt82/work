@@ -238,7 +238,7 @@
 "information" = "Information";
 
 /* No comment provided by engineer. */
-"information_msg" = "Motorola Baby Monitor\nApplication version: %1$@\nFirmware version:%2$@,\nMonitoreverywhere © All rights Reserved.\nCamera address:%3$@";
+"information_msg" = "Monitor Everywhere\nProgramversion: %1$s\nOperativsystemversion:%2$s,\nMonitoreverywhere \@ Upphovsrättskyddat.\nKamera address:%3$s";
 
 /* No comment provided by engineer. */
 "Invalid_Camera_Name" = "Invalid Camera Name";
@@ -250,7 +250,7 @@
 "Invalid_Camera_Name_msg2" = "Camera name is invalid. Please enter [0-9],[a-Z], space, dot, hyphen, underscore & single quote only.";
 
 /* No comment provided by engineer. */
-"Invalid_Server_Response" = "Invalid Server Response.(Nil response)";
+"Invalid_Server_Response" = "Felaktigt svar från servern";
 
 /* No comment provided by engineer. */
 "Level1" = "Nivå 1";
@@ -271,7 +271,7 @@
 "Level4_" = "Nivå 4 (hög)";
 
 /* No comment provided by engineer. */
-"Local_Wifi" = "Local Wifi";
+"Local_Wifi" = "Från lokalt wifi-nätverk";
 
 /* No comment provided by engineer. */
 "Logging_in_to_server" = "Loggar in på server...";
@@ -397,7 +397,7 @@
 "Time_out_msg" = "Videon har visats under omkring 5 minuter. Vill du fortsätta?";
 
 /* No comment provided by engineer. */
-"udt_relay_connect" = "Connecting through relay... please wait...";
+"udt_relay_connect" = "Ansluter genom vidarekoppling...vänta...";
 
 /* No comment provided by engineer. */
 "Unable_to_rename_this_camera" = "Kan inte döpa om den här kameran. Logga in och försök igen";
@@ -409,7 +409,7 @@
 "video_rec_not_supported" = "Videoinspelning stöds inte, kommer snart";
 
 /* No comment provided by engineer. */
-"wifi_not_available" = "Mobile data is enabled. If you continue to connect, you may incur air time charges. Do you want to proceed?";
+"wifi_not_available" = "Datamottagning med mobil har aktiverats. Om du fortsätter och ansluter kan du komma att debiteras för uppkopplingstiden. Vill du fortsätta?";
 
 /* No comment provided by engineer. */
 "Yes" = "Ja";
@@ -440,3 +440,6 @@
 
 /* No comment provided by engineer. */
 "Information" = "Information";
+
+/* No comment provided by engineer. */
+"Confirm_Pass_Fail" = "Lösenorden är olika. Skriv in igen.";
