@@ -264,7 +264,7 @@
 								<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
 								<int key="IBUIContentVerticalAlignment">0</int>
 								<string key="IBUIText"/>
-								<string key="IBUIPlaceholder">Nombre de usuario  (eg. jonhsmith123)</string>
+								<string key="IBUIPlaceholder">Nombre de Usuario (ej. Johnsmith123)</string>
 								<object class="NSColor" key="IBUITextColor" id="892048065">
 									<int key="NSColorSpace">3</int>
 									<bytes key="NSWhite">MAA</bytes>
@@ -432,7 +432,7 @@
 								<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
 								<int key="IBUIContentVerticalAlignment">0</int>
 								<string key="IBUIText"/>
-								<string key="IBUIPlaceholder">Confirmar</string>
+								<string key="IBUIPlaceholder">Confirmar Contraseña</string>
 								<reference key="IBUITextColor" ref="892048065"/>
 								<bool key="IBUIAdjustsFontSizeToFit">YES</bool>
 								<float key="IBUIMinimumFontSize">17</float>
@@ -515,7 +515,7 @@
 								<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
 								<int key="IBUIContentVerticalAlignment">0</int>
 								<string key="IBUIText"/>
-								<string key="IBUIPlaceholder">Email</string>
+								<string key="IBUIPlaceholder">Tu email</string>
 								<reference key="IBUITextColor" ref="892048065"/>
 								<bool key="IBUIAdjustsFontSizeToFit">YES</bool>
 								<float key="IBUIMinimumFontSize">17</float>
