@@ -264,6 +264,7 @@
 								<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
 								<int key="IBUIContentVerticalAlignment">0</int>
 								<string key="IBUIText"/>
+								<string key="IBUIPlaceholder">Nombre de Usuario (por ejemplo, jose123)</string>
 								<object class="NSColor" key="IBUITextColor" id="892048065">
 									<int key="NSColorSpace">3</int>
 									<bytes key="NSWhite">MAA</bytes>
@@ -348,6 +349,7 @@
 								<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
 								<int key="IBUIContentVerticalAlignment">0</int>
 								<string key="IBUIText"/>
+								<string key="IBUIPlaceholder">Clave</string>
 								<reference key="IBUITextColor" ref="892048065"/>
 								<bool key="IBUIAdjustsFontSizeToFit">YES</bool>
 								<float key="IBUIMinimumFontSize">17</float>
@@ -430,6 +432,7 @@
 								<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
 								<int key="IBUIContentVerticalAlignment">0</int>
 								<string key="IBUIText"/>
+								<string key="IBUIPlaceholder">Confirmar Contraseña</string>
 								<reference key="IBUITextColor" ref="892048065"/>
 								<bool key="IBUIAdjustsFontSizeToFit">YES</bool>
 								<float key="IBUIMinimumFontSize">17</float>
@@ -475,7 +478,7 @@
 							<object class="IBUILabel" id="83976410">
 								<reference key="NSNextResponder" ref="563305225"/>
 								<int key="NSvFlags">292</int>
-								<string key="NSFrame">{{20, 12}, {113, 21}}</string>
+								<string key="NSFrame">{{20, 11}, {113, 21}}</string>
 								<reference key="NSSuperview" ref="563305225"/>
 								<reference key="NSWindow"/>
 								<reference key="NSNextKeyView" ref="403999813"/>
@@ -512,6 +515,7 @@
 								<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
 								<int key="IBUIContentVerticalAlignment">0</int>
 								<string key="IBUIText"/>
+								<string key="IBUIPlaceholder">Su email</string>
 								<reference key="IBUITextColor" ref="892048065"/>
 								<bool key="IBUIAdjustsFontSizeToFit">YES</bool>
 								<float key="IBUIMinimumFontSize">17</float>
@@ -718,8 +722,8 @@
 						<int key="objectID">24</int>
 						<reference key="object" ref="144233783"/>
 						<array class="NSMutableArray" key="children">
-							<reference ref="473598262"/>
 							<reference ref="942947220"/>
+							<reference ref="473598262"/>
 						</array>
 						<reference key="parent" ref="0"/>
 					</object>
@@ -746,8 +750,8 @@
 						<int key="objectID">28</int>
 						<reference key="object" ref="116129629"/>
 						<array class="NSMutableArray" key="children">
-							<reference ref="83976410"/>
 							<reference ref="403999813"/>
+							<reference ref="83976410"/>
 						</array>
 						<reference key="parent" ref="0"/>
 					</object>
