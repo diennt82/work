@@ -241,7 +241,7 @@
 							<object class="IBUITextField" id="514645748">
 								<reference key="NSNextResponder" ref="82841173"/>
 								<int key="NSvFlags">292</int>
-								<string key="NSFrame">{{205, 0}, {287, 52}}</string>
+								<string key="NSFrame">{{214, 0}, {278, 52}}</string>
 								<reference key="NSSuperview" ref="82841173"/>
 								<reference key="NSWindow"/>
 								<reference key="NSNextKeyView"/>
@@ -253,6 +253,7 @@
 								<string key="targetRuntimeIdentifier">IBIPadFramework</string>
 								<int key="IBUIContentVerticalAlignment">0</int>
 								<string key="IBUIText"/>
+								<string key="IBUIPlaceholder">Nazwa użytkownika (np. johnsmith123)</string>
 								<object class="NSColor" key="IBUITextColor" id="986848460">
 									<int key="NSColorSpace">3</int>
 									<bytes key="NSWhite">MAA</bytes>
@@ -325,7 +326,7 @@
 							<object class="IBUITextField" id="441240092">
 								<reference key="NSNextResponder" ref="371059358"/>
 								<int key="NSvFlags">292</int>
-								<string key="NSFrame">{{129, 0}, {363, 52}}</string>
+								<string key="NSFrame">{{133, 0}, {363, 52}}</string>
 								<reference key="NSSuperview" ref="371059358"/>
 								<reference key="NSWindow"/>
 								<reference key="NSNextKeyView"/>
@@ -337,6 +338,7 @@
 								<string key="targetRuntimeIdentifier">IBIPadFramework</string>
 								<int key="IBUIContentVerticalAlignment">0</int>
 								<string key="IBUIText"/>
+								<string key="IBUIPlaceholder">Hasło</string>
 								<reference key="IBUITextColor" ref="986848460"/>
 								<float key="IBUIMinimumFontSize">20</float>
 								<object class="IBUITextInputTraits" key="IBUITextInputTraits">
@@ -418,6 +420,7 @@
 								<string key="targetRuntimeIdentifier">IBIPadFramework</string>
 								<int key="IBUIContentVerticalAlignment">0</int>
 								<string key="IBUIText"/>
+								<string key="IBUIPlaceholder">Potwierdź hasło</string>
 								<reference key="IBUITextColor" ref="986848460"/>
 								<bool key="IBUIAdjustsFontSizeToFit">YES</bool>
 								<float key="IBUIMinimumFontSize">20</float>
@@ -500,6 +503,7 @@
 								<string key="targetRuntimeIdentifier">IBIPadFramework</string>
 								<int key="IBUIContentVerticalAlignment">0</int>
 								<string key="IBUIText"/>
+								<string key="IBUIPlaceholder">Twój adres e-mail</string>
 								<reference key="IBUITextColor" ref="986848460"/>
 								<bool key="IBUIAdjustsFontSizeToFit">YES</bool>
 								<float key="IBUIMinimumFontSize">20</float>
@@ -687,8 +691,8 @@
 						<int key="objectID">5</int>
 						<reference key="object" ref="381768537"/>
 						<array class="NSMutableArray" key="children">
-							<reference ref="441240092"/>
 							<reference ref="266878418"/>
+							<reference ref="441240092"/>
 						</array>
 						<reference key="parent" ref="0"/>
 					</object>
