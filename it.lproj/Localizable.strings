@@ -238,7 +238,7 @@
 "information" = "Informazioni";
 
 /* No comment provided by engineer. */
-"information_msg" = "Motorola Baby Monitor\nApplication version: %1$@\nFirmware version:%2$@,\nMonitoreverywhere © All rights Reserved.\nCamera address:%3$@";
+"information_msg" = "Monitor Everywhere\nVersione Applicazione: %1$@\nVersione Firmware:%2$@,\nMonitoreverywhere \@ Tutti i diritti riservati.\nIndirizzo videocamera:%3$@";
 
 /* No comment provided by engineer. */
 "Invalid_Camera_Name" = "Invalid Camera Name";
@@ -250,7 +250,7 @@
 "Invalid_Camera_Name_msg2" = "Camera name is invalid. Please enter [0-9],[a-Z], space, dot, hyphen, underscore & single quote only.";
 
 /* No comment provided by engineer. */
-"Invalid_Server_Response" = "Invalid Server Response.(Nil response)";
+"Invalid_Server_Response" = "Risposta del server non valida";
 
 /* No comment provided by engineer. */
 "Level1" = "Livello 1";
@@ -271,7 +271,7 @@
 "Level4_" = "Livello 4 (Alto)";
 
 /* No comment provided by engineer. */
-"Local_Wifi" = "Wi-Fi locale";
+"Local_Wifi" = "Da Wi-Fi locale";
 
 /* No comment provided by engineer. */
 "Logging_in_to_server" = "Accesso al server in corso...";
@@ -397,7 +397,7 @@
 "Time_out_msg" = "Il video è stato visualizzato per circa 5 minuti. Continuare?";
 
 /* No comment provided by engineer. */
-"udt_relay_connect" = "Connecting through relay... please wait...";
+"udt_relay_connect" = "Connessione via relay in corso… attendere…";
 
 /* No comment provided by engineer. */
 "Unable_to_rename_this_camera" = "Impossibile rinominare questa videocamera. Accedere e riprovare";
@@ -409,7 +409,7 @@
 "video_rec_not_supported" = "La registrazione video non è supportata, presto lo sarà";
 
 /* No comment provided by engineer. */
-"wifi_not_available" = "Mobile data is enabled. If you continue to connect, you may incur air time charges. Do you want to proceed?";
+"wifi_not_available" = "La trasmissione di dati sul cellulare è abilitata. Procedendo con il collegamento, ti potrebbero venir addebitati dei costi di traffico. Desideri proseguire?";
 
 /* No comment provided by engineer. */
 "Yes" = "Sì";
@@ -432,3 +432,6 @@
 "Remove this camera" = "Elimina questa videocamera";
 
 "Information" = "Informazioni";
+
+/* No comment provided by engineer. */
+"Confirm_Pass_Fail" = "La password non corrisponde, prego inserirla di nuovo!";
