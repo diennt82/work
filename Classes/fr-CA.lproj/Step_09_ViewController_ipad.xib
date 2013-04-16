@@ -146,6 +146,7 @@
 						<string key="NSFrame">{{102, 553}, {211, 30}}</string>
 						<reference key="NSSuperview" ref="574823980"/>
 						<reference key="NSWindow"/>
+						<reference key="NSNextKeyView"/>
 						<string key="NSReuseIdentifierKey">_NS:9</string>
 						<bool key="IBUIOpaque">NO</bool>
 						<string key="targetRuntimeIdentifier">IBIPadFramework</string>
@@ -243,6 +244,7 @@
 								<string key="NSFrame">{{205, 0}, {287, 52}}</string>
 								<reference key="NSSuperview" ref="82841173"/>
 								<reference key="NSWindow"/>
+								<reference key="NSNextKeyView"/>
 								<string key="NSReuseIdentifierKey">_NS:9</string>
 								<reference key="IBUIBackgroundColor" ref="396759633"/>
 								<bool key="IBUIOpaque">NO</bool>
@@ -251,6 +253,7 @@
 								<string key="targetRuntimeIdentifier">IBIPadFramework</string>
 								<int key="IBUIContentVerticalAlignment">0</int>
 								<string key="IBUIText"/>
+								<string key="IBUIPlaceholder">Nom d'utilisateur (par exemple : johnsmith123)</string>
 								<object class="NSColor" key="IBUITextColor" id="986848460">
 									<int key="NSColorSpace">3</int>
 									<bytes key="NSWhite">MAA</bytes>
@@ -326,6 +329,7 @@
 								<string key="NSFrame">{{172, 0}, {320, 52}}</string>
 								<reference key="NSSuperview" ref="371059358"/>
 								<reference key="NSWindow"/>
+								<reference key="NSNextKeyView"/>
 								<string key="NSReuseIdentifierKey">_NS:9</string>
 								<reference key="IBUIBackgroundColor" ref="396759633"/>
 								<bool key="IBUIOpaque">NO</bool>
@@ -334,6 +338,7 @@
 								<string key="targetRuntimeIdentifier">IBIPadFramework</string>
 								<int key="IBUIContentVerticalAlignment">0</int>
 								<string key="IBUIText"/>
+								<string key="IBUIPlaceholder">Mot de passe</string>
 								<reference key="IBUITextColor" ref="986848460"/>
 								<float key="IBUIMinimumFontSize">20</float>
 								<object class="IBUITextInputTraits" key="IBUITextInputTraits">
@@ -406,6 +411,7 @@
 								<string key="NSFrame">{{174, 0}, {318, 52}}</string>
 								<reference key="NSSuperview" ref="159699885"/>
 								<reference key="NSWindow"/>
+								<reference key="NSNextKeyView"/>
 								<string key="NSReuseIdentifierKey">_NS:9</string>
 								<reference key="IBUIBackgroundColor" ref="396759633"/>
 								<bool key="IBUIOpaque">NO</bool>
@@ -414,6 +420,7 @@
 								<string key="targetRuntimeIdentifier">IBIPadFramework</string>
 								<int key="IBUIContentVerticalAlignment">0</int>
 								<string key="IBUIText"/>
+								<string key="IBUIPlaceholder">Confirmer le Mot de Passe</string>
 								<reference key="IBUITextColor" ref="986848460"/>
 								<bool key="IBUIAdjustsFontSizeToFit">YES</bool>
 								<float key="IBUIMinimumFontSize">20</float>
@@ -487,6 +494,7 @@
 								<string key="NSFrame">{{129, 0}, {363, 52}}</string>
 								<reference key="NSSuperview" ref="418385698"/>
 								<reference key="NSWindow"/>
+								<reference key="NSNextKeyView"/>
 								<string key="NSReuseIdentifierKey">_NS:9</string>
 								<reference key="IBUIBackgroundColor" ref="396759633"/>
 								<bool key="IBUIOpaque">NO</bool>
@@ -495,6 +503,7 @@
 								<string key="targetRuntimeIdentifier">IBIPadFramework</string>
 								<int key="IBUIContentVerticalAlignment">0</int>
 								<string key="IBUIText"/>
+								<string key="IBUIPlaceholder">Votre courriel</string>
 								<reference key="IBUITextColor" ref="986848460"/>
 								<bool key="IBUIAdjustsFontSizeToFit">YES</bool>
 								<float key="IBUIMinimumFontSize">20</float>
