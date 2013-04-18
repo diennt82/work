@@ -340,6 +340,23 @@
 
 }
 
+-(BOOL) isValidEmail:(NSString *) email
+{
+    if ([email rangeOfString:@"@"].location == NSNotFound)
+    {
+        return NO;
+    }
+    
+    NSArray * array = [email componentsSeparatedByString:@"@"];
+    NSString * domain = [array objectAtIndex:1];
+    NSLog(@"Domain is : %@",domain);
+    
+    NSString * regex = @"[_a-zA-Z0-9-]+(\\.[_a-zA-Z0-9-]+)+";
+    NSPredicate * validatedDomain = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", regex];
+    
+    return [validatedDomain evaluateWithObject:domain];
+}
+
 -(void) handleNextButton:(id) sender
 {
     UITextField * _userName = (UITextField *)[self.userName viewWithTag:201];
@@ -408,7 +425,7 @@
         [_alert show];
         [_alert release];
     }
-    else if([_userEmail.text rangeOfString:@"@"].location == NSNotFound)
+    else if(![self isValidEmail:_userEmail.text])
     {
         //error
         title = NSLocalizedStringWithDefaultValue(@"Create_Account_Failed",nil, [NSBundle mainBundle],
@@ -550,28 +567,44 @@
 
 - (void) regFailedWithError:(NSHTTPURLResponse*) error_response
 {
-	NSLog(@"register failed with error code:%d", [error_response statusCode]);
-	
-
-    NSString * msg1 = NSLocalizedStringWithDefaultValue(@"Registration_Error",nil, [NSBundle mainBundle],
-                                                        @"Registration Error" , nil);
-    
-    NSString * msg = NSLocalizedStringWithDefaultValue(@"Server_error_" ,nil, [NSBundle mainBundle],
-                                                       @"Server error: %@" , nil);
-    
+//	NSLog(@"register failed with error code:%d", [error_response statusCode]);
+//	
+//
+//    NSString * msg1 = NSLocalizedStringWithDefaultValue(@"Registration_Error",nil, [NSBundle mainBundle],
+//                                                        @"Registration Error" , nil);
+//    
+//    NSString * msg = NSLocalizedStringWithDefaultValue(@"Server_error_" ,nil, [NSBundle mainBundle],
+//                                                       @"Server error: %@" , nil);
+//    
     NSString * ok = NSLocalizedStringWithDefaultValue(@"Ok",nil, [NSBundle mainBundle],
                                                       @"Ok", nil);
+//
+//	
+//	//ERROR condition
+//	UIAlertView *alert = [[UIAlertView alloc]
+//						  initWithTitle:msg1
+//						  message:[NSString stringWithFormat:msg, [BMS_Communication getLocalizedMessageForError:[error_response statusCode]]] 
+//						  delegate:self
+//						  cancelButtonTitle:ok
+//						  otherButtonTitles:nil];
+//	[alert show];
+//	[alert release];
     
-	
-	//ERROR condition
-	UIAlertView *alert = [[UIAlertView alloc]
-						  initWithTitle:msg1
-						  message:[NSString stringWithFormat:msg, [BMS_Communication getLocalizedMessageForError:[error_response statusCode]]] 
-						  delegate:self
-						  cancelButtonTitle:ok
-						  otherButtonTitles:nil];
-	[alert show];
-	[alert release];
+    NSString * title = NSLocalizedStringWithDefaultValue(@"Create_Account_Failed",nil, [NSBundle mainBundle],
+                                              @"Create Account Failed" , nil);
+    NSString * msg = NSLocalizedStringWithDefaultValue(@"Create_Account_Failed_msg3",nil, [NSBundle mainBundle],
+                                            @"Invalid email. Email address should be of the form somebody@somewhere.com"  , nil);
+    
+    //ERROR condition
+    UIAlertView *_alert = [[UIAlertView alloc]
+                           initWithTitle:title
+                           message:msg
+                           delegate:self
+                           cancelButtonTitle:ok
+                           otherButtonTitles:nil];
+    [_alert show];
+    [_alert release];
+    
 	return;
 	
 }

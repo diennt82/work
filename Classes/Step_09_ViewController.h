@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <Foundation/NSPredicate.h>
 #import "BMS_Communication.h"
 #import "Reachability.h"
 #import "ToUViewController.h"
