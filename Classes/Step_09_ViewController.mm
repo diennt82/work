@@ -351,10 +351,16 @@
     NSString * domain = [array objectAtIndex:1];
     NSLog(@"Domain is : %@",domain);
     
+    NSError *error = NULL;
+    NSRegularExpression *regexExpr = [NSRegularExpression regularExpressionWithPattern:@"\\([^\\)]*\\)" options:NSRegularExpressionCaseInsensitive error:&error];
+    NSString *modifiedString = [regexExpr stringByReplacingMatchesInString:domain options:0 range:NSMakeRange(0, [domain length]) withTemplate:@""];
+    
+    NSLog(@"modifiedString ------> %@", modifiedString);
+    
     NSString * regex = @"[_a-zA-Z0-9-]+(\\.[_a-zA-Z0-9-]+)+";
     NSPredicate * validatedDomain = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", regex];
     
-    return [validatedDomain evaluateWithObject:domain];
+    return [validatedDomain evaluateWithObject:modifiedString];
 }
 
 -(void) handleNextButton:(id) sender
