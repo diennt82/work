@@ -1491,7 +1491,7 @@
             //simply popup and ask to retry and show camera list
             NSString * msg = NSLocalizedStringWithDefaultValue(@"cant_start_stream",nil, [NSBundle mainBundle],
                                                                @"Can't start video stream, the BabyMonitor is busy, try again later." , nil);
-            
+            msg = [NSString stringWithFormat:@"%@ (%d)", msg, self.selected_channel.remoteConnectionError];
             
             if (self.selected_channel.remoteConnectionError == REQUEST_TIMEOUT)
             {
