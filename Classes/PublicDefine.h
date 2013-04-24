@@ -28,7 +28,9 @@
 //#define DEFAULT_AIBALL_SERVER @"http://192.168.1.107:80"
 
 #define BOUNDARY_STRING @"--boundarydonotcross"
-#define AUTHENTICATION_ERROR @"HTTP/1.0 401 Unauthorized"
+#define AUTHENTICATION_ERROR @"HTTP/1.0 401"
+
+#define SESSIONKEY_MISMATCHED @"HTTP/1.0 601"
 
 #define MAX_IMAGE_BUF_NUMBER 2
 #define MAX_IMAGE_BUF_LEN 65536
