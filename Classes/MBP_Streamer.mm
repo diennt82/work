@@ -32,6 +32,8 @@
 @synthesize  stillReading;
 @synthesize latest_connection_error;
 
+@synthesize istream,ostream;
+
 - (id) initWithIp:(NSString *) ip andPort:(int) port handler:(id<StreamerEventHandler>) handler
 {
 	[super init];
@@ -72,6 +74,9 @@
     
 	[recTimer release];
 	[streamingChannel  release] ;
+    [istream release];
+    [ostream release];
+    
 	[super dealloc];
 }
 
@@ -153,12 +158,21 @@
     //Connection test
     if (self.remoteView == TRUE && self.remoteViewKey != nil)
     {
-        
+#if 0
+        NSString * dummySSkey = @"0000D1D8B628E243CD7AF6F9672304434C5B409ACE23D24A081E8B585FFF5DE3";
         NSError* error= nil;
         NSHTTPURLResponse * response = nil;
         NSString * http_cmd = [NSString stringWithFormat:@"http://%@:%d/?%@%@%@",
                                self.device_ip, self.device_port,
-                               AVSTREAM_UDT_REQ,AVSTREAM_PARAM_1, self.remoteViewKey];
+                               AVSTREAM_UDT_REQ,AVSTREAM_PARAM_1, dummySSkey ]; //self.remoteViewKey];
+        
+        
+        
+        http_cmd = [NSString stringWithFormat:@"http://%@:%d/?%@",
+                    self.device_ip, self.device_port,
+                    @"action=command&command=get_version" ];
+        
+        
         NSMutableURLRequest *theRequest=[NSMutableURLRequest requestWithURL:[NSURL URLWithString:http_cmd]
 																cachePolicy: NSURLRequestReloadIgnoringLocalAndRemoteCacheData
 															timeoutInterval:DEFAULT_TIME_OUT];
@@ -168,20 +182,14 @@
 		[theRequest addValue:authHeader forHTTPHeaderField:@"Authorization"];
         
         
-        NSString * body = [[NSString alloc] initWithData:theRequest.HTTPBody encoding:NSUTF8StringEncoding ];
+        NSString * body = nil; //[[NSString alloc] initWithData:theRequest.HTTPBody encoding:NSUTF8StringEncoding ];
         
-        NSLog(@"Test POST  cmd: %@", body);
+
         
         body  =  [[NSString alloc] initWithContentsOfURL:[NSURL URLWithString:http_cmd] encoding:NSUTF8StringEncoding error:&error];
-        NSLog(@"body 2 : %@, err:%d", body, [error code]);
+        NSLog(@"222 body 2 : %@, err:%d", body, [error code]);
    
-#if 0
-        //use delegate funcs
-        [[NSURLConnection alloc] initWithRequest:theRequest
-                                        delegate:self
-                                startImmediately:TRUE];
 
-#else
 
         NSData * dataReply = [NSURLConnection sendSynchronousRequest:theRequest returningResponse:&response error:&error];
         
@@ -207,16 +215,40 @@
             }
             
         }
-    
+#else
         
+#if 0
+        //USE a more primitive way - CFStream
+        NSString * urlStr = [NSString stringWithFormat:@"%@",self.device_ip ];
+                
+        CFReadStreamRef readStream;
+        CFWriteStreamRef writeStream;
+        CFStreamCreatePairWithSocketToHost(NULL, (CFStringRef)urlStr, self.device_port, &readStream, &writeStream);
+        
+        NSInputStream *inputStream = ( NSInputStream *)readStream;
+        NSOutputStream *outputStream = ( NSOutputStream *)writeStream;
+        [inputStream setDelegate:self];
+        [outputStream setDelegate:self];
+        [inputStream scheduleInRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
+        [outputStream scheduleInRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
+        [inputStream open];
+        [outputStream open];
+        
+        
+        /* Store a reference to the input and output streams so that
+         they don't go away.... */
+        self.ostream = outputStream;
+        self.istream = inputStream; 
         
         
 #endif 
         
+#endif
+    
     }
 
     
-
+#if 1
 	initialFlag = 1;
 	listenSocket = [[AsyncSocket alloc] initWithDelegate:self];
 	//Non-blocking connect
@@ -225,7 +257,82 @@
                     withTimeout:5
                           error:nil];
     
+#endif // FOR NOW 
+    
 }
+
+
+#pragma mark -
+#pragma mark NSStreamDelegate
+#pragma mark - 
+
+- (void)stream:(NSStream *)theStream handleEvent:(NSStreamEvent)eventCode
+{
+    switch(eventCode) {
+        case NSStreamEventHasSpaceAvailable: //Write
+        {
+            if (theStream == ostream)
+            {
+                NSString * str = [NSString stringWithFormat:
+                                  @"GET /?action=appletvastream&remote_session=0000D1D8B628E243CD7AF6F9672304434C5B409ACE23D24A081E8B585FFF5DE3 HTTP/1.1\r\n\r\n"];
+                const uint8_t * rawstring =
+                (const uint8_t *)[str UTF8String];
+                [ostream write:rawstring maxLength:str.length];
+                [ostream close];
+            }
+            break;
+        }
+            
+        case NSStreamEventHasBytesAvailable:// Read
+        {
+            if (theStream == istream)
+            {
+                NSMutableData * _data = [[NSMutableData data] retain];
+                
+                uint8_t buf[1024];
+                unsigned int len = 0;
+                len = [(NSInputStream *)theStream read:buf maxLength:1024];
+                if(len)
+                {
+                    [_data appendBytes:(const void *)buf length:len];
+                    
+                    
+                    
+                    NSString *txt = [[[NSString alloc] initWithData:responseData encoding: NSASCIIStringEncoding] autorelease];
+                     NSLog(@"rcv str:%@",txt);
+                    
+                    // bytesRead is an instance variable of type NSNumber.
+                    //[bytesRead setIntValue:[bytesRead intValue]+len];
+                }
+                else
+                {
+                    NSLog(@"no buffer!");
+                }
+                break;
+                
+                
+            }
+            break;
+        }
+        case NSStreamEventEndEncountered:
+        {
+             NSLog(@"STREam ended");
+            break;
+        }
+        case NSStreamEventErrorOccurred:
+        {
+         NSLog(@"STREam errror ");
+            break;
+        }
+            
+            // continued ...
+    }
+}
+
+
+#pragma mark -
+
+
 //same as startStreaming for now, however may change later.. keep it separate.
 -(void) reConnect
 {

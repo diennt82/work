@@ -54,7 +54,7 @@
 
 @end
 
-@interface MBP_Streamer : NSObject <StreamerOrientationAdapter> {
+@interface MBP_Streamer : NSObject <StreamerOrientationAdapter, NSStreamDelegate> {
 
 	UIImageView * videoImage;
 
@@ -106,9 +106,21 @@
     BOOL stillReading;
     
     NSThread * readTimeoutThrd ;
-    int latest_connection_error; 
+    int latest_connection_error;
+
+#if 1
+    
+    NSInputStream * istream;
+    NSOutputStream * ostream;
+    
+#endif
 	
 }
+#if 1
+
+@property (nonatomic, retain) NSInputStream * istream;
+@property (nonatomic, retain) NSOutputStream * ostream;
+#endif
 @property (nonatomic) int device_port,communication_mode, local_port;
 @property (nonatomic,retain) NSString * device_ip, *remoteViewKey;
 @property (nonatomic,retain) UIImageView * videoImage;
