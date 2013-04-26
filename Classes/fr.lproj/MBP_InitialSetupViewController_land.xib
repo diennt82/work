@@ -69,7 +69,7 @@
 						<int key="IBUIContentMode">7</int>
 						<bool key="IBUIUserInteractionEnabled">NO</bool>
 						<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
-						<string key="IBUIText">Effectuez trois étapes simples pour commencer à faire fonctionner votre écoute-bébé ! </string>
+						<string key="IBUIText">Effectuez trois étapes simples pour commencer à faire fonctionner votre moniteur ! </string>
 						<object class="NSColor" key="IBUITextColor" id="693138768">
 							<int key="NSColorSpace">3</int>
 							<bytes key="NSWhite">MQA</bytes>

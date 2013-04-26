@@ -80,6 +80,7 @@
 						<string key="NSFrame">{{620, 869}, {120, 120}}</string>
 						<reference key="NSSuperview" ref="692566689"/>
 						<reference key="NSWindow"/>
+						<reference key="NSNextKeyView"/>
 						<string key="NSReuseIdentifierKey">_NS:9</string>
 						<int key="IBUITag">500</int>
 						<string key="targetRuntimeIdentifier">IBIPadFramework</string>
@@ -524,7 +525,7 @@
 								<int key="IBUITag">155</int>
 								<bool key="IBUIUserInteractionEnabled">NO</bool>
 								<string key="targetRuntimeIdentifier">IBIPadFramework</string>
-								<string key="IBUIText">En cours de connexion à l'Ecoute-Bébé... </string>
+								<string key="IBUIText">En cours de connexion... </string>
 								<object class="NSColor" key="IBUITextColor">
 									<int key="NSColorSpace">1</int>
 									<bytes key="NSRGB">MSAxIDEAA</bytes>
@@ -684,6 +685,7 @@
 								<string key="NSFrame">{{106, 8}, {94, 27}}</string>
 								<reference key="NSSuperview" ref="202352908"/>
 								<reference key="NSWindow"/>
+								<reference key="NSNextKeyView"/>
 								<string key="NSReuseIdentifierKey">_NS:9</string>
 								<bool key="IBUIOpaque">NO</bool>
 								<int key="IBUITag">3</int>
@@ -805,6 +807,7 @@
 								<string key="NSFrame">{{718, 40}, {30, 30}}</string>
 								<reference key="NSSuperview" ref="359036566"/>
 								<reference key="NSWindow"/>
+								<reference key="NSNextKeyView"/>
 								<string key="NSReuseIdentifierKey">_NS:9</string>
 								<int key="IBUIContentMode">1</int>
 								<bool key="IBUIUserInteractionEnabled">NO</bool>
@@ -1485,9 +1488,9 @@
 						<reference key="object" ref="323974733"/>
 						<array class="NSMutableArray" key="children">
 							<reference ref="846955681"/>
-							<reference ref="320366637"/>
 							<reference ref="585767543"/>
 							<reference ref="301938219"/>
+							<reference ref="320366637"/>
 						</array>
 						<reference key="parent" ref="692566689"/>
 						<string key="objectName">progress view</string>

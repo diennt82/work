@@ -60,6 +60,7 @@
 						<string key="NSFrame">{{252, 790}, {265, 37}}</string>
 						<reference key="NSSuperview" ref="927024215"/>
 						<reference key="NSWindow"/>
+						<reference key="NSNextKeyView"/>
 						<string key="NSReuseIdentifierKey">_NS:9</string>
 						<bool key="IBUIOpaque">NO</bool>
 						<int key="IBUITag">1000</int>
@@ -166,13 +167,14 @@
 								<string key="NSFrame">{{105, 0}, {482, 121}}</string>
 								<reference key="NSSuperview" ref="338402660"/>
 								<reference key="NSWindow"/>
+								<reference key="NSNextKeyView"/>
 								<string key="NSReuseIdentifierKey">_NS:9</string>
 								<bool key="IBUIOpaque">NO</bool>
 								<bool key="IBUIClipsSubviews">YES</bool>
 								<int key="IBUIContentMode">7</int>
 								<bool key="IBUIUserInteractionEnabled">NO</bool>
 								<string key="targetRuntimeIdentifier">IBIPadFramework</string>
-								<string key="IBUIText">Commutez sur la caméra de l'écoute-bébé</string>
+								<string key="IBUIText">Commutez sur la caméra</string>
 								<object class="NSColor" key="IBUITextColor">
 									<int key="NSColorSpace">1</int>
 									<bytes key="NSRGB">MSAxIDEAA</bytes>
@@ -249,6 +251,7 @@
 								<string key="NSFrame">{{105, 0}, {482, 121}}</string>
 								<reference key="NSSuperview" ref="523282992"/>
 								<reference key="NSWindow"/>
+								<reference key="NSNextKeyView"/>
 								<string key="NSReuseIdentifierKey">_NS:9</string>
 								<bool key="IBUIOpaque">NO</bool>
 								<bool key="IBUIClipsSubviews">YES</bool>
@@ -323,6 +326,7 @@
 								<string key="NSFrame">{{105, 0}, {482, 121}}</string>
 								<reference key="NSSuperview" ref="42270757"/>
 								<reference key="NSWindow"/>
+								<reference key="NSNextKeyView"/>
 								<string key="NSReuseIdentifierKey">_NS:9</string>
 								<bool key="IBUIOpaque">NO</bool>
 								<bool key="IBUIClipsSubviews">YES</bool>

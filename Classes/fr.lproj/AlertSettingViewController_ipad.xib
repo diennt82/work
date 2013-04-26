@@ -50,7 +50,6 @@
 								<string key="NSFrame">{{161, 15}, {94, 27}}</string>
 								<reference key="NSSuperview" ref="712527824"/>
 								<reference key="NSWindow"/>
-								<reference key="NSNextKeyView"/>
 								<string key="NSReuseIdentifierKey">_NS:9</string>
 								<bool key="IBUIOpaque">NO</bool>
 								<int key="IBUITag">1</int>
@@ -131,7 +130,6 @@
 								<string key="NSFrame">{{161, 15}, {94, 27}}</string>
 								<reference key="NSSuperview" ref="507385729"/>
 								<reference key="NSWindow"/>
-								<reference key="NSNextKeyView"/>
 								<string key="NSReuseIdentifierKey">_NS:9</string>
 								<bool key="IBUIOpaque">NO</bool>
 								<int key="IBUITag">1</int>
@@ -202,7 +200,6 @@
 								<string key="NSFrame">{{161, 15}, {94, 27}}</string>
 								<reference key="NSSuperview" ref="751599065"/>
 								<reference key="NSWindow"/>
-								<reference key="NSNextKeyView"/>
 								<string key="NSReuseIdentifierKey">_NS:9</string>
 								<bool key="IBUIOpaque">NO</bool>
 								<int key="IBUITag">1</int>
@@ -285,7 +282,6 @@
 						<string key="NSFrame">{{10, 102}, {749, 792}}</string>
 						<reference key="NSSuperview" ref="501642320"/>
 						<reference key="NSWindow"/>
-						<reference key="NSNextKeyView"/>
 						<string key="NSReuseIdentifierKey">_NS:9</string>
 						<reference key="IBUIBackgroundColor" ref="817783826"/>
 						<bool key="IBUIClipsSubviews">YES</bool>
