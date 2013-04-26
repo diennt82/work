@@ -2,9 +2,9 @@
 <archive type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="8.00">
 	<data>
 		<int key="IBDocument.SystemTarget">1552</int>
-		<string key="IBDocument.SystemVersion">11E53</string>
+		<string key="IBDocument.SystemVersion">11G63</string>
 		<string key="IBDocument.InterfaceBuilderVersion">3084</string>
-		<string key="IBDocument.AppKitVersion">1138.47</string>
+		<string key="IBDocument.AppKitVersion">1138.51</string>
 		<string key="IBDocument.HIToolboxVersion">569.00</string>
 		<object class="NSMutableDictionary" key="IBDocument.PluginVersions">
 			<string key="NS.key.0">com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
@@ -113,15 +113,16 @@
 					<object class="IBUIButton" id="882045242">
 						<reference key="NSNextResponder" ref="612829385"/>
 						<int key="NSvFlags">301</int>
-						<string key="NSFrame">{{78, 356}, {166, 44}}</string>
+						<string key="NSFrame">{{99, 356}, {125, 44}}</string>
 						<reference key="NSSuperview" ref="612829385"/>
+						<reference key="NSNextKeyView"/>
 						<string key="NSReuseIdentifierKey">_NS:9</string>
 						<bool key="IBUIOpaque">NO</bool>
 						<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
 						<int key="IBUIContentHorizontalAlignment">0</int>
 						<int key="IBUIContentVerticalAlignment">0</int>
 						<int key="IBUIButtonType">1</int>
-						<string key="IBUINormalTitle">Setup Baby Monitor</string>
+						<string key="IBUINormalTitle">Setup Monitor</string>
 						<reference key="IBUIHighlightedTitleColor" ref="91690186"/>
 						<object class="NSColor" key="IBUINormalTitleColor">
 							<int key="NSColorSpace">1</int>
@@ -180,7 +181,7 @@
 								<int key="NSvFlags">301</int>
 								<string key="NSFrame">{{112, 3}, {169, 21}}</string>
 								<reference key="NSSuperview" ref="722025651"/>
-								<reference key="NSNextKeyView" ref="97142564"/>
+								<reference key="NSNextKeyView" ref="636331093"/>
 								<string key="NSReuseIdentifierKey">_NS:9</string>
 								<bool key="IBUIOpaque">NO</bool>
 								<bool key="IBUIClipsSubviews">YES</bool>
@@ -200,7 +201,7 @@
 								<int key="NSvFlags">301</int>
 								<string key="NSFrame">{{71, 3}, {33, 21}}</string>
 								<reference key="NSSuperview" ref="722025651"/>
-								<reference key="NSNextKeyView" ref="636331093"/>
+								<reference key="NSNextKeyView" ref="1046026787"/>
 								<string key="NSReuseIdentifierKey">_NS:9</string>
 								<bool key="IBUIOpaque">NO</bool>
 								<bool key="IBUIClipsSubviews">YES</bool>
@@ -218,7 +219,7 @@
 						</array>
 						<string key="NSFrame">{{14, 80}, {292, 33}}</string>
 						<reference key="NSSuperview" ref="612829385"/>
-						<reference key="NSNextKeyView" ref="1046026787"/>
+						<reference key="NSNextKeyView" ref="97142564"/>
 						<string key="NSReuseIdentifierKey">_NS:9</string>
 						<reference key="IBUIBackgroundColor" ref="560648867"/>
 						<bool key="IBUIUserInteractionEnabled">NO</bool>
@@ -306,6 +307,7 @@
 								<int key="NSvFlags">301</int>
 								<string key="NSFrame">{{142, 171}, {37, 37}}</string>
 								<reference key="NSSuperview" ref="860872968"/>
+								<reference key="NSNextKeyView"/>
 								<string key="NSReuseIdentifierKey">_NS:9</string>
 								<bool key="IBUIOpaque">NO</bool>
 								<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
@@ -414,6 +416,7 @@
 						<int key="NSvFlags">298</int>
 						<string key="NSFrame">{{18, 162}, {283, 66}}</string>
 						<reference key="NSSuperview" ref="620789710"/>
+						<reference key="NSNextKeyView" ref="150914339"/>
 						<string key="NSReuseIdentifierKey">_NS:9</string>
 						<reference key="IBUIBackgroundColor" ref="560648867"/>
 						<bool key="IBUIClipsSubviews">YES</bool>
@@ -461,6 +464,7 @@
 						<int key="NSvFlags">301</int>
 						<string key="NSFrame">{{39, 347}, {240, 128}}</string>
 						<reference key="NSSuperview" ref="620789710"/>
+						<reference key="NSNextKeyView"/>
 						<string key="NSReuseIdentifierKey">_NS:9</string>
 						<bool key="IBUIUserInteractionEnabled">NO</bool>
 						<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
