@@ -192,13 +192,14 @@
 						<string key="NSFrame">{{270, 687}, {228, 44}}</string>
 						<reference key="NSSuperview" ref="879783327"/>
 						<reference key="NSWindow"/>
+						<reference key="NSNextKeyView"/>
 						<string key="NSReuseIdentifierKey">_NS:9</string>
 						<bool key="IBUIOpaque">NO</bool>
 						<string key="targetRuntimeIdentifier">IBIPadFramework</string>
 						<int key="IBUIContentHorizontalAlignment">0</int>
 						<int key="IBUIContentVerticalAlignment">0</int>
 						<int key="IBUIButtonType">1</int>
-						<string key="IBUINormalTitle">Setup Baby Monitor</string>
+						<string key="IBUINormalTitle">Configuración Monitor</string>
 						<reference key="IBUIHighlightedTitleColor" ref="998742624"/>
 						<object class="NSColor" key="IBUINormalTitleColor">
 							<int key="NSColorSpace">1</int>
@@ -263,7 +264,7 @@
 								<string key="NSFrameSize">{300, 300}</string>
 								<reference key="NSSuperview" ref="456793354"/>
 								<reference key="NSWindow"/>
-								<reference key="NSNextKeyView" ref="459021124"/>
+								<reference key="NSNextKeyView" ref="693455983"/>
 								<string key="NSReuseIdentifierKey">_NS:9</string>
 								<bool key="IBUIUserInteractionEnabled">NO</bool>
 								<string key="targetRuntimeIdentifier">IBIPadFramework</string>
@@ -278,7 +279,7 @@
 								<string key="NSFrame">{{0, 27}, {300, 76}}</string>
 								<reference key="NSSuperview" ref="456793354"/>
 								<reference key="NSWindow"/>
-								<reference key="NSNextKeyView" ref="426932002"/>
+								<reference key="NSNextKeyView" ref="459021124"/>
 								<string key="NSReuseIdentifierKey">_NS:9</string>
 								<reference key="IBUIBackgroundColor" ref="507519549"/>
 								<bool key="IBUIClipsSubviews">YES</bool>
@@ -311,6 +312,7 @@
 								<string key="NSFrame">{{132, 217}, {37, 37}}</string>
 								<reference key="NSSuperview" ref="456793354"/>
 								<reference key="NSWindow"/>
+								<reference key="NSNextKeyView"/>
 								<string key="NSReuseIdentifierKey">_NS:9</string>
 								<bool key="IBUIOpaque">NO</bool>
 								<string key="targetRuntimeIdentifier">IBIPadFramework</string>
@@ -324,7 +326,7 @@
 								<string key="NSFrame">{{0, 126}, {300, 49}}</string>
 								<reference key="NSSuperview" ref="456793354"/>
 								<reference key="NSWindow"/>
-								<reference key="NSNextKeyView" ref="693455983"/>
+								<reference key="NSNextKeyView" ref="426932002"/>
 								<string key="NSReuseIdentifierKey">_NS:9</string>
 								<reference key="IBUIBackgroundColor" ref="507519549"/>
 								<bool key="IBUIClipsSubviews">YES</bool>
@@ -434,6 +436,7 @@
 						<string key="NSFrame">{{325, 644}, {116, 37}}</string>
 						<reference key="NSSuperview" ref="837599693"/>
 						<reference key="NSWindow"/>
+						<reference key="NSNextKeyView"/>
 						<string key="NSReuseIdentifierKey">_NS:9</string>
 						<bool key="IBUIOpaque">NO</bool>
 						<string key="targetRuntimeIdentifier">IBIPadFramework</string>

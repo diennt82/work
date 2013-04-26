@@ -105,7 +105,7 @@
 						<bool key="IBUIMultipleTouchEnabled">YES</bool>
 						<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
 						<bool key="IBUIEditable">NO</bool>
-						<string key="IBUIText">Seleccione cámara de monitor de bebé</string>
+						<string key="IBUIText">Seleccione cámara de monitor</string>
 						<object class="NSColor" key="IBUITextColor">
 							<int key="NSColorSpace">3</int>
 							<bytes key="NSWhite">MQA</bytes>
@@ -132,6 +132,7 @@
 						<string key="NSFrame">{{0, 240}, {568, 57}}</string>
 						<reference key="NSSuperview" ref="254689072"/>
 						<reference key="NSWindow"/>
+						<reference key="NSNextKeyView"/>
 						<string key="NSReuseIdentifierKey">_NS:9</string>
 						<reference key="IBUIBackgroundColor" ref="710765290"/>
 						<bool key="IBUIClipsSubviews">YES</bool>
@@ -285,7 +286,7 @@
 						<bool key="IBUIClipsSubviews">YES</bool>
 						<bool key="IBUIUserInteractionEnabled">NO</bool>
 						<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
-						<string key="IBUIText">Controlando conexión al monitor de bebé …</string>
+						<string key="IBUIText">Controlando conexión al monitor …</string>
 						<object class="NSColor" key="IBUITextColor">
 							<int key="NSColorSpace">1</int>
 							<bytes key="NSRGB">MSAxIDEAA</bytes>
@@ -304,6 +305,7 @@
 						<string key="NSFrame">{{266, 185}, {37, 37}}</string>
 						<reference key="NSSuperview" ref="755422099"/>
 						<reference key="NSWindow"/>
+						<reference key="NSNextKeyView"/>
 						<string key="NSReuseIdentifierKey">_NS:9</string>
 						<bool key="IBUIOpaque">NO</bool>
 						<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>

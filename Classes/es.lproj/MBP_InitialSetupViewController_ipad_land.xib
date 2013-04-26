@@ -58,7 +58,7 @@
 						<string key="NSFrame">{{320, 77}, {384, 83}}</string>
 						<reference key="NSSuperview" ref="1028092142"/>
 						<reference key="NSWindow"/>
-						<reference key="NSNextKeyView" ref="863755952"/>
+						<reference key="NSNextKeyView" ref="421968457"/>
 						<string key="NSReuseIdentifierKey">_NS:9</string>
 						<object class="NSColor" key="IBUIBackgroundColor" id="36799084">
 							<int key="NSColorSpace">3</int>
@@ -69,7 +69,7 @@
 						<int key="IBUIContentMode">7</int>
 						<bool key="IBUIUserInteractionEnabled">NO</bool>
 						<string key="targetRuntimeIdentifier">IBIPadFramework</string>
-						<string key="IBUIText">Complete tres pasos simples para poner en funcionamiento a su monitor de bebé!</string>
+						<string key="IBUIText">Complete tres pasos simples para poner en funcionamiento a su monitor!</string>
 						<object class="NSColor" key="IBUITextColor" id="90745201">
 							<int key="NSColorSpace">3</int>
 							<bytes key="NSWhite">MQA</bytes>
@@ -96,7 +96,7 @@
 						<string key="NSFrame">{{398, 376}, {228, 21}}</string>
 						<reference key="NSSuperview" ref="1028092142"/>
 						<reference key="NSWindow"/>
-						<reference key="NSNextKeyView" ref="421968457"/>
+						<reference key="NSNextKeyView" ref="667330614"/>
 						<string key="NSReuseIdentifierKey">_NS:9</string>
 						<reference key="IBUIBackgroundColor" ref="36799084"/>
 						<bool key="IBUIOpaque">NO</bool>
@@ -118,7 +118,7 @@
 						<string key="NSFrame">{{419, 202}, {186, 21}}</string>
 						<reference key="NSSuperview" ref="1028092142"/>
 						<reference key="NSWindow"/>
-						<reference key="NSNextKeyView" ref="667330614"/>
+						<reference key="NSNextKeyView" ref="863755952"/>
 						<string key="NSReuseIdentifierKey">_NS:9</string>
 						<reference key="IBUIBackgroundColor" ref="36799084"/>
 						<bool key="IBUIOpaque">NO</bool>
@@ -164,6 +164,7 @@
 						<string key="NSFrame">{{379, 550}, {265, 37}}</string>
 						<reference key="NSSuperview" ref="1028092142"/>
 						<reference key="NSWindow"/>
+						<reference key="NSNextKeyView"/>
 						<string key="NSReuseIdentifierKey">_NS:9</string>
 						<bool key="IBUIOpaque">NO</bool>
 						<int key="IBUITag">1000</int>
