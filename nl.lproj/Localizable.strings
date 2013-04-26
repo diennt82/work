@@ -25,7 +25,7 @@
 "addcam_error_1" = "Het apparaat is niet in staat om verbinding te maken met de server. Controleer de WIFI en de internetverbinding";
 
 /* No comment provided by engineer. */
-"Baby_Monitor_Setup" = "Babyfoon instellen";
+"Baby_Monitor_Setup" = "Monitor instellen";
 
 /* No comment provided by engineer. */
 "Back" = "Terug";
@@ -130,7 +130,7 @@
 "Cancel_" = "Annuleren";
 
 /* No comment provided by engineer. */
-"cant_start_stream" = "Kan videostream niet starten, de BabyMonitor is bezet, probeer het later opnieuw.";
+"cant_start_stream" = "Kan videostream niet starten, de Monitor is bezet, probeer het later opnieuw.";
 
 /* No comment provided by engineer. */
 "cant_start_stream2" = "Serveraanvraag time-out, probeer het later opnieuw";
@@ -238,7 +238,7 @@
 "information" = "Informatie";
 
 /* No comment provided by engineer. */
-"information_msg" = "Motorola Baby Monitor\nApplication version: %1$@\nFirmware version:%2$@,\nMonitoreverywhere © All rights Reserved.\nCamera address:%3$@";
+"information_msg" = "Motorola Monitor\nApplication version: %1$@\nFirmware version:%2$@,\nMonitoreverywhere © All rights Reserved.\nCamera address:%3$@";
 
 /* No comment provided by engineer. */
 "Invalid_Camera_Name" = "Invalid Camera Name";

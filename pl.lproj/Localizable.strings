@@ -25,7 +25,7 @@
 "addcam_error_1" = "Urządzenie nie może podłączyć się do serwera. Prosimy sprawdzić połączenie WIFI i internetowe";
 
 /* No comment provided by engineer. */
-"Baby_Monitor_Setup" = "Ustawienia monitorowania dziecka";
+"Baby_Monitor_Setup" = "Ustawienia monitor";
 
 /* No comment provided by engineer. */
 "Back" = "Do tyłu";
@@ -130,7 +130,7 @@
 "Cancel_" = "Anuluj";
 
 /* No comment provided by engineer. */
-"cant_start_stream" = "Nie można uruchomić strumienia video, BabyMonitor jest zajęty, spróbuj ponownie później.";
+"cant_start_stream" = "Nie można uruchomić strumienia video, Monitor jest zajęty, spróbuj ponownie później.";
 
 /* No comment provided by engineer. */
 "cant_start_stream2" = "Server request timeout, try again later";
@@ -238,7 +238,7 @@
 "information" = "Informacja";
 
 /* No comment provided by engineer. */
-"information_msg" = "Motorola Baby Monitor\nApplication version: %1$@\nFirmware version:%2$@,\nMonitoreverywhere © All rights Reserved.\nCamera address:%3$@";
+"information_msg" = "Motorola Monitor\nApplication version: %1$@\nFirmware version:%2$@,\nMonitoreverywhere © All rights Reserved.\nCamera address:%3$@";
 
 /* No comment provided by engineer. */
 "Invalid_Camera_Name" = "Invalid Camera Name";

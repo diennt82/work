@@ -1265,7 +1265,7 @@
     NSString * info = NSLocalizedStringWithDefaultValue(@"information",nil, [NSBundle mainBundle],
                                                        @"Information", nil);
     NSString * msg = NSLocalizedStringWithDefaultValue(@"information_msg",nil, [NSBundle mainBundle],
-                                                       @"Motorola Baby Monitor\nApplication version: %@\nFirmware version:%@,\nMonitoreverywhere \u00A9 All rights Reserved.\nCamera address:%@", nil);
+                                                       @"Motorola Monitor\nApplication version: %@\nFirmware version:%@,\nMonitoreverywhere \u00A9 All rights Reserved.\nCamera address:%@", nil);
     NSString * ok = NSLocalizedStringWithDefaultValue(@"Ok",nil, [NSBundle mainBundle],
                                                       @"Ok", nil);
 

@@ -44,7 +44,7 @@
     self.navigationController.navigationBar.barStyle = UIBarStyleBlackOpaque;
     
     self.navigationItem.title = NSLocalizedStringWithDefaultValue(@"Baby_Monitor_Setup",nil, [NSBundle mainBundle],
-                                                                  @"Baby Monitor Setup", nil);
+                                                                  @"Monitor Setup", nil);
 
     
    self.navigationItem.backBarButtonItem =

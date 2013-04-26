@@ -25,7 +25,7 @@
 "addcam_error_1" = "Le périphérique n'est pas en mesure de se connecter au serveur. Veuillez vérifier le WIFI et la connexion internet";
 
 /* No comment provided by engineer. */
-"Baby_Monitor_Setup" = "Configuration de l'Ecoute-Bébé";
+"Baby_Monitor_Setup" = "Configuration de Moniteur";
 
 /* No comment provided by engineer. */
 "Back" = "Retour";
@@ -240,7 +240,7 @@
 "information" = "Informations";
 
 /* No comment provided by engineer. */
-"information_msg" = "Motorola Baby Monitor\nApplication version: %1$@\nFirmware version:%2$@,\nMonitoreverywhere © All rights Reserved.\nCamera address:%3$@";
+"information_msg" = "Motorola Monitor\nApplication version: %1$@\nFirmware version:%2$@,\nMonitoreverywhere © All rights Reserved.\nCamera address:%3$@";
 
 /* No comment provided by engineer. */
 "Invalid_Camera_Name" = "Invalid Camera Name";
