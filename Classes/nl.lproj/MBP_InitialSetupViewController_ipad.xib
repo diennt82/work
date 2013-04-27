@@ -69,7 +69,7 @@
 						<int key="IBUIContentMode">7</int>
 						<bool key="IBUIUserInteractionEnabled">NO</bool>
 						<string key="targetRuntimeIdentifier">IBIPadFramework</string>
-						<string key="IBUIText">Voltooi drie eenvoudige stappen om uw babyfoon starten! </string>
+						<string key="IBUIText">Voltooi drie eenvoudige stappen om uw starten! </string>
 						<object class="NSColor" key="IBUITextColor" id="90745201">
 							<int key="NSColorSpace">3</int>
 							<bytes key="NSWhite">MQA</bytes>
@@ -256,9 +256,9 @@
 							<reference ref="667330614"/>
 							<reference ref="421968457"/>
 							<reference ref="793373155"/>
-							<reference ref="4299209"/>
 							<reference ref="863755952"/>
 							<reference ref="39801690"/>
+							<reference ref="4299209"/>
 						</array>
 						<reference key="parent" ref="0"/>
 					</object>
