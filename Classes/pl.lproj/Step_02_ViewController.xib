@@ -149,7 +149,7 @@
 							<object class="IBUILabel" id="952000233">
 								<reference key="NSNextResponder" ref="862282391"/>
 								<int key="NSvFlags">292</int>
-								<string key="NSFrame">{{92, 13}, {176, 58}}</string>
+								<string key="NSFrame">{{92, 14}, {176, 58}}</string>
 								<reference key="NSSuperview" ref="862282391"/>
 								<reference key="NSWindow"/>
 								<reference key="NSNextKeyView"/>
@@ -159,7 +159,7 @@
 								<int key="IBUIContentMode">7</int>
 								<bool key="IBUIUserInteractionEnabled">NO</bool>
 								<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
-								<string key="IBUIText">Włącz kamerę monitorującą dzieci</string>
+								<string key="IBUIText">Włącz kamerę monitor! </string>
 								<object class="NSColor" key="IBUITextColor">
 									<int key="NSColorSpace">1</int>
 									<bytes key="NSRGB">MSAxIDEAA</bytes>
