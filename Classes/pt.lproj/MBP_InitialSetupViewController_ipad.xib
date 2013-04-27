@@ -69,7 +69,7 @@
 						<int key="IBUIContentMode">7</int>
 						<bool key="IBUIUserInteractionEnabled">NO</bool>
 						<string key="targetRuntimeIdentifier">IBIPadFramework</string>
-						<string key="IBUIText">Completar três passos simples para iniciar o seu monitor do bebé!</string>
+						<string key="IBUIText">Completar três passos simples para iniciar o seu monitor!</string>
 						<object class="NSColor" key="IBUITextColor" id="90745201">
 							<int key="NSColorSpace">3</int>
 							<bytes key="NSWhite">MQA</bytes>
