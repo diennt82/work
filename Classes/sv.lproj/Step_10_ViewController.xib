@@ -119,13 +119,14 @@
 						<string key="NSFrame">{{60, 356}, {200, 44}}</string>
 						<reference key="NSSuperview" ref="612829385"/>
 						<reference key="NSWindow"/>
+						<reference key="NSNextKeyView"/>
 						<string key="NSReuseIdentifierKey">_NS:9</string>
 						<bool key="IBUIOpaque">NO</bool>
 						<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
 						<int key="IBUIContentHorizontalAlignment">0</int>
 						<int key="IBUIContentVerticalAlignment">0</int>
 						<int key="IBUIButtonType">1</int>
-						<string key="IBUINormalTitle">Babymonitor inställning</string>
+						<string key="IBUINormalTitle">monitor inställning</string>
 						<reference key="IBUIHighlightedTitleColor" ref="91690186"/>
 						<object class="NSColor" key="IBUINormalTitleColor">
 							<int key="NSColorSpace">1</int>
@@ -318,6 +319,7 @@
 								<string key="NSFrame">{{142, 171}, {37, 37}}</string>
 								<reference key="NSSuperview" ref="860872968"/>
 								<reference key="NSWindow"/>
+								<reference key="NSNextKeyView"/>
 								<string key="NSReuseIdentifierKey">_NS:9</string>
 								<bool key="IBUIOpaque">NO</bool>
 								<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
@@ -482,6 +484,7 @@
 						<string key="NSFrame">{{39, 347}, {240, 128}}</string>
 						<reference key="NSSuperview" ref="620789710"/>
 						<reference key="NSWindow"/>
+						<reference key="NSNextKeyView"/>
 						<string key="NSReuseIdentifierKey">_NS:9</string>
 						<bool key="IBUIUserInteractionEnabled">NO</bool>
 						<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
