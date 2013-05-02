@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 #import <AVFoundation/AVFoundation.h>
 #import <UIKit/UIScreen.h>
+#import <UIKit/UIColor.h>
 
 
 

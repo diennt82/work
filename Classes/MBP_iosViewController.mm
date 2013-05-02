@@ -111,8 +111,18 @@ return self;
     sunBackground = [[UIImageView alloc]initWithFrame:deviceScreen];
     [sunBackground setImage:[UIImage imageNamed:@"ME-sun_background.png"]];
     
+    UITextField * initTextView = [[UITextField alloc] initWithFrame:CGRectMake(deviceScreen.size.width/2 - 50, deviceScreen.size.height - 40, 200 , 30)];
+    
+    NSString * initString = NSLocalizedStringWithDefaultValue(@"Initialize", nil,
+                                                              [NSBundle mainBundle],
+                                                              @"INITIALIZING...", nil);
+    [initTextView setTextColor:[UIColor whiteColor]];
+    [initTextView setText:initString];
+    
     [self.view addSubview:sunBackground];
     [self.view bringSubviewToFront:sunBackground];
+    [self.view addSubview:initTextView];
+    [self.view bringSubviewToFront:initTextView];
     
     
     
@@ -151,39 +161,6 @@ return self;
                                         [UIImage imageNamed:@"mestartup000030.png"],
                                         [UIImage imageNamed:@"mestartup000031.png"],
                                         [UIImage imageNamed:@"mestartup000032.png"],
-//                                        [UIImage imageNamed:@"mestartup2000033.png"],
-//                                        [UIImage imageNamed:@"mestartup2000034.png"],
-//                                        [UIImage imageNamed:@"mestartup2000035.png"],
-//                                        [UIImage imageNamed:@"mestartup2000036.png"],
-//                                        [UIImage imageNamed:@"mestartup2000037.png"],
-//                                        [UIImage imageNamed:@"mestartup2000038.png"],
-//                                        [UIImage imageNamed:@"mestartup2000039.png"],
-//                                        [UIImage imageNamed:@"mestartup2000040.png"],
-//                                        [UIImage imageNamed:@"mestartup2000041.png"],
-//                                        [UIImage imageNamed:@"mestartup2000042.png"],
-//                                        [UIImage imageNamed:@"mestartup2000043.png"],
-//                                        [UIImage imageNamed:@"mestartup2000044.png"],
-//                                        [UIImage imageNamed:@"mestartup2000045.png"],
-//                                        [UIImage imageNamed:@"mestartup2000046.png"],
-//                                        [UIImage imageNamed:@"mestartup2000047.png"],
-//                                        [UIImage imageNamed:@"mestartup2000048.png"],
-//                                        [UIImage imageNamed:@"mestartup2000049.png"],
-//                                        [UIImage imageNamed:@"mestartup2000050.png"],
-//                                        [UIImage imageNamed:@"mestartup2000051.png"],
-//                                        [UIImage imageNamed:@"mestartup2000052.png"],
-//                                        [UIImage imageNamed:@"mestartup2000053.png"],
-//                                        [UIImage imageNamed:@"mestartup2000054.png"],
-//                                        [UIImage imageNamed:@"mestartup2000055.png"],
-//                                        [UIImage imageNamed:@"mestartup2000056.png"],
-//                                        [UIImage imageNamed:@"mestartup2000057.png"],
-//                                        [UIImage imageNamed:@"mestartup2000058.png"],
-//                                        [UIImage imageNamed:@"mestartup2000059.png"],
-//                                        [UIImage imageNamed:@"mestartup2000060.png"],
-//                                        [UIImage imageNamed:@"mestartup2000061.png"],
-//                                        [UIImage imageNamed:@"mestartup2000062.png"],
-//                                        [UIImage imageNamed:@"mestartup2000063.png"],
-//                                        [UIImage imageNamed:@"mestartup2000064.png"],
-//                                        [UIImage imageNamed:@"mestartup2000065.png"],
                                         
                                          nil];
     splashScreen.animationDuration =6.5;
@@ -191,6 +168,9 @@ return self;
     
     [self.view addSubview:splashScreen];
     [self.view bringSubviewToFront:splashScreen];
+    [self.view bringSubviewToFront:initTextView];
+    
+    [initTextView release];
     
     [splashScreen startAnimating];
     
@@ -460,7 +440,8 @@ return self;
 - (void)dealloc {
 
 	// [mainMenuView release];
-
+    [splashScreen release];
+    [sunBackground release];
 	[bc_addr release];
 	[own_addr release];
 
