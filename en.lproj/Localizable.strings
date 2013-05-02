@@ -301,19 +301,19 @@
 "Logout" = "Logout";
 
 /* No comment provided by engineer. */
-"melody_1" = "Rock a Bye Baby";
+"melody_1" = "Melody 1";
 
 /* No comment provided by engineer. */
-"melody_2" = "Lullaby and Goodnight";
+"melody_2" = "Melody 2";
 
 /* No comment provided by engineer. */
-"melody_3" = "Lavender Blue";
+"melody_3" = "Melody 3";
 
 /* No comment provided by engineer. */
-"melody_4" = "Twinkle Twinkle Little Star";
+"melody_4" = "Melody 4";
 
 /* No comment provided by engineer. */
-"melody_5" = "Hush Little Baby";
+"melody_5" = "Melody 5";
 
 /* No comment provided by engineer. */
 "network_lost_link" = "Camera disconnected due to network connectivity problem. Trying to reconnect...";
