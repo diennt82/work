@@ -36,6 +36,7 @@
 @synthesize restored_profiles ; 
 
 @synthesize progressView;
+@synthesize splashScreen;
 
 
 
@@ -97,16 +98,74 @@ return self;
 
 
 	//go Back to main menu
-	[NSTimer scheduledTimerWithTimeInterval:2
+	[NSTimer scheduledTimerWithTimeInterval:6
 		target:self
 		selector:@selector(wakeup_display_login:)
 		userInfo:nil
 		repeats:NO];
 
     
+#if 1
+    NSArray * frames = [NSArray arrayWithObjects:
+                        [UIImage imageNamed:@"mestarup2000012.png"],
+                        [UIImage imageNamed:@"mestarup2000014.png"],
+                        [UIImage imageNamed:@"mestarup2000016.png"],
+                        /*
+                        [UIImage imageNamed:@"mestarup2000019.png"],
+                        [UIImage imageNamed:@"mestarup2000020.png"],
+                        [UIImage imageNamed:@"mestarup2000022.png"],
+                        [UIImage imageNamed:@"mestarup2000024.png"],
+                        [UIImage imageNamed:@"mestarup2000026.png"],
+                        [UIImage imageNamed:@"mestarup2000029.png"],
+                        [UIImage imageNamed:@"mestarup2000030.png"],
+                        [UIImage imageNamed:@"mestarup2000032.png"],
+                        [UIImage imageNamed:@"mestarup2000034.png"],
+                        [UIImage imageNamed:@"mestarup2000036.png"],
+                        [UIImage imageNamed:@"mestarup2000039.png"],
+                        [UIImage imageNamed:@"mestarup2000040.png"],
+                        [UIImage imageNamed:@"mestarup2000042.png"],
+                        [UIImage imageNamed:@"mestarup2000044.png"],
+                        [UIImage imageNamed:@"mestarup2000046.png"],
+                        [UIImage imageNamed:@"mestarup2000049.png"],
+                        [UIImage imageNamed:@"mestarup2000050.png"],
+                        [UIImage imageNamed:@"mestarup2000052.png"],
+                        [UIImage imageNamed:@"mestarup2000054.png"],
+                        [UIImage imageNamed:@"mestarup2000056.png"],
+                        [UIImage imageNamed:@"mestarup2000059.png"],
+                        [UIImage imageNamed:@"mestarup2000060.png"],
+                        [UIImage imageNamed:@"mestarup2000062.png"],
+                        [UIImage imageNamed:@"mestarup2000064.png"],
+                        [UIImage imageNamed:@"mestarup2000065.png"],
+                         */
+                        nil];
+    
+    self.splashScreen.animationImages = frames;
+    splashScreen.animationDuration =5.5;
+    splashScreen.animationRepeatCount = 1;
+    //[frames release];
+    [NSTimer scheduledTimerWithTimeInterval:0.1
+                                     target:self
+                                   selector:@selector(wakeup_start_animte:)
+                                   userInfo:nil
+                                    repeats:NO];
+    
+    
+#else
+    
+    self.splashScreen.image = [UIImage imageNamed:@"mestartup2000012.png"];
+
+#endif
+    
+    
+
+}
 
 
 
+- (void)wakeup_start_animte:(NSTimer*) timer_exp
+{
+    [self.splashScreen startAnimating];
+    
 }
 
 - (void)wakeup_display_login:(NSTimer*) timer_exp

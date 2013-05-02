@@ -127,6 +127,8 @@
     IBOutlet UIView * statusDialogView;
     IBOutlet UILabel * statusDialogLabel;
     IBOutlet UITextView * statusDialogText;
+    
+    IBOutlet UIImageView * splashScreen;
  
     
     UIAlertView * pushAlert; 
@@ -138,7 +140,8 @@
 	int nextCameraToScanIndex;
 }
 
-@property (nonatomic, retain) IBOutlet UIView * progressView; 
+@property (nonatomic, retain) IBOutlet UIView * progressView;
+@property (nonatomic, assign) IBOutlet UIImageView * splashScreen;
 //@property (nonatomic,retain) IBOutlet MBP_MainMenuView * mainMenuView;
 
 //@property (nonatomic,retain) HttpCommunication *comm;
