@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import <AVFoundation/AVFoundation.h>
+#import <UIKit/UIScreen.h>
 
 
 
@@ -129,6 +130,7 @@
     IBOutlet UITextView * statusDialogText;
     
     IBOutlet UIImageView * splashScreen;
+    IBOutlet UIImageView * sunBackground;
  
     
     UIAlertView * pushAlert; 
@@ -141,7 +143,8 @@
 }
 
 @property (nonatomic, retain) IBOutlet UIView * progressView;
-@property (nonatomic, assign) IBOutlet UIImageView * splashScreen;
+@property (nonatomic, retain) IBOutlet UIImageView * splashScreen;
+@property (nonatomic, retain) IBOutlet UIImageView * sunBackground;
 //@property (nonatomic,retain) IBOutlet MBP_MainMenuView * mainMenuView;
 
 //@property (nonatomic,retain) HttpCommunication *comm;

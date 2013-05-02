@@ -37,6 +37,7 @@
 
 @synthesize progressView;
 @synthesize splashScreen;
+@synthesize sunBackground;
 
 
 
@@ -98,51 +99,101 @@ return self;
 
 
 	//go Back to main menu
-	[NSTimer scheduledTimerWithTimeInterval:6
+	[NSTimer scheduledTimerWithTimeInterval:8
 		target:self
 		selector:@selector(wakeup_display_login:)
 		userInfo:nil
 		repeats:NO];
 
-    
+
 #if 1
-    NSArray * frames = [NSArray arrayWithObjects:
-                        [UIImage imageNamed:@"mestarup2000012.png"],
-                        [UIImage imageNamed:@"mestarup2000014.png"],
-                        [UIImage imageNamed:@"mestarup2000016.png"],
-                        /*
-                        [UIImage imageNamed:@"mestarup2000019.png"],
-                        [UIImage imageNamed:@"mestarup2000020.png"],
-                        [UIImage imageNamed:@"mestarup2000022.png"],
-                        [UIImage imageNamed:@"mestarup2000024.png"],
-                        [UIImage imageNamed:@"mestarup2000026.png"],
-                        [UIImage imageNamed:@"mestarup2000029.png"],
-                        [UIImage imageNamed:@"mestarup2000030.png"],
-                        [UIImage imageNamed:@"mestarup2000032.png"],
-                        [UIImage imageNamed:@"mestarup2000034.png"],
-                        [UIImage imageNamed:@"mestarup2000036.png"],
-                        [UIImage imageNamed:@"mestarup2000039.png"],
-                        [UIImage imageNamed:@"mestarup2000040.png"],
-                        [UIImage imageNamed:@"mestarup2000042.png"],
-                        [UIImage imageNamed:@"mestarup2000044.png"],
-                        [UIImage imageNamed:@"mestarup2000046.png"],
-                        [UIImage imageNamed:@"mestarup2000049.png"],
-                        [UIImage imageNamed:@"mestarup2000050.png"],
-                        [UIImage imageNamed:@"mestarup2000052.png"],
-                        [UIImage imageNamed:@"mestarup2000054.png"],
-                        [UIImage imageNamed:@"mestarup2000056.png"],
-                        [UIImage imageNamed:@"mestarup2000059.png"],
-                        [UIImage imageNamed:@"mestarup2000060.png"],
-                        [UIImage imageNamed:@"mestarup2000062.png"],
-                        [UIImage imageNamed:@"mestarup2000064.png"],
-                        [UIImage imageNamed:@"mestarup2000065.png"],
-                         */
-                        nil];
     
-    self.splashScreen.animationImages = frames;
-    splashScreen.animationDuration =5.5;
+    sunBackground = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"ME-sun_background.png"]];
+    [self.view addSubview:sunBackground];
+    [self.view bringSubviewToFront:sunBackground];
+    
+    
+    CGRect deviceScreen = [UIScreen mainScreen].bounds;
+    self.splashScreen = [[UIImageView alloc ] initWithFrame:deviceScreen];
+    
+    self.splashScreen.animationImages =[NSArray arrayWithObjects:
+                                        [UIImage imageNamed:@"mestartup2000001.png"],
+                                        [UIImage imageNamed:@"mestartup2000002.png"],
+                                        [UIImage imageNamed:@"mestartup2000003.png"],
+                                        [UIImage imageNamed:@"mestartup2000004.png"],
+                                        [UIImage imageNamed:@"mestartup2000005.png"],
+//                                        [UIImage imageNamed:@"mestartup2000006.png"],
+//                                        [UIImage imageNamed:@"mestartup2000007.png"],
+//                                        [UIImage imageNamed:@"mestartup2000008.png"],
+//                                        [UIImage imageNamed:@"mestartup2000009.png"],
+//                                        [UIImage imageNamed:@"mestartup2000010.png"],
+                                        [UIImage imageNamed:@"mestartup2000011.png"],
+                                        [UIImage imageNamed:@"mestartup2000012.png"],
+                                        [UIImage imageNamed:@"mestartup2000013.png"],
+                                        [UIImage imageNamed:@"mestartup2000014.png"],
+                                        [UIImage imageNamed:@"mestartup2000015.png"],
+//                                        [UIImage imageNamed:@"mestartup2000016.png"],
+//                                        [UIImage imageNamed:@"mestartup2000017.png"],
+//                                        [UIImage imageNamed:@"mestartup2000018.png"],
+//                                        [UIImage imageNamed:@"mestartup2000019.png"],
+//                                        [UIImage imageNamed:@"mestartup2000020.png"],
+                                        [UIImage imageNamed:@"mestartup2000021.png"],
+                                        [UIImage imageNamed:@"mestartup2000022.png"],
+                                        [UIImage imageNamed:@"mestartup2000023.png"],
+                                        [UIImage imageNamed:@"mestartup2000024.png"],
+                                        [UIImage imageNamed:@"mestartup2000025.png"],
+//                                        [UIImage imageNamed:@"mestartup2000026.png"],
+//                                        [UIImage imageNamed:@"mestartup2000027.png"],
+//                                        [UIImage imageNamed:@"mestartup2000028.png"],
+//                                        [UIImage imageNamed:@"mestartup2000029.png"],
+//                                        [UIImage imageNamed:@"mestartup2000030.png"],
+                                        [UIImage imageNamed:@"mestartup2000031.png"],
+                                        [UIImage imageNamed:@"mestartup2000032.png"],
+                                        [UIImage imageNamed:@"mestartup2000033.png"],
+                                        [UIImage imageNamed:@"mestartup2000034.png"],
+                                        [UIImage imageNamed:@"mestartup2000035.png"],
+//                                        [UIImage imageNamed:@"mestartup2000036.png"],
+//                                        [UIImage imageNamed:@"mestartup2000037.png"],
+//                                        [UIImage imageNamed:@"mestartup2000038.png"],
+//                                        [UIImage imageNamed:@"mestartup2000039.png"],
+//                                        [UIImage imageNamed:@"mestartup2000040.png"],
+                                        [UIImage imageNamed:@"mestartup2000041.png"],
+                                        [UIImage imageNamed:@"mestartup2000042.png"],
+                                        [UIImage imageNamed:@"mestartup2000043.png"],
+                                        [UIImage imageNamed:@"mestartup2000044.png"],
+                                        [UIImage imageNamed:@"mestartup2000045.png"],
+//                                        [UIImage imageNamed:@"mestartup2000046.png"],
+//                                        [UIImage imageNamed:@"mestartup2000047.png"],
+//                                        [UIImage imageNamed:@"mestartup2000048.png"],
+//                                        [UIImage imageNamed:@"mestartup2000049.png"],
+//                                        [UIImage imageNamed:@"mestartup2000050.png"],
+                                        [UIImage imageNamed:@"mestartup2000051.png"],
+                                        [UIImage imageNamed:@"mestartup2000052.png"],
+                                        [UIImage imageNamed:@"mestartup2000053.png"],
+                                        [UIImage imageNamed:@"mestartup2000054.png"],
+                                        [UIImage imageNamed:@"mestartup2000055.png"],
+//                                        [UIImage imageNamed:@"mestartup2000056.png"],
+//                                        [UIImage imageNamed:@"mestartup2000057.png"],
+//                                        [UIImage imageNamed:@"mestartup2000058.png"],
+//                                        [UIImage imageNamed:@"mestartup2000059.png"],
+//                                        [UIImage imageNamed:@"mestartup2000060.png"],
+                                        [UIImage imageNamed:@"mestartup2000061.png"],
+                                        [UIImage imageNamed:@"mestartup2000062.png"],
+                                        [UIImage imageNamed:@"mestartup2000063.png"],
+                                        [UIImage imageNamed:@"mestartup2000064.png"],
+                                        [UIImage imageNamed:@"mestartup2000065.png"],
+                                        
+                                         nil];
+    splashScreen.animationDuration =6.5;
     splashScreen.animationRepeatCount = 1;
-    //[frames release];
+    
+    [self.view addSubview:splashScreen];
+    [self.view bringSubviewToFront:splashScreen];
+    
+    [splashScreen startAnimating];
+    
+    
+
     [NSTimer scheduledTimerWithTimeInterval:0.1
                                      target:self
                                    selector:@selector(wakeup_start_animte:)
@@ -157,6 +208,7 @@ return self;
 #endif
     
     
+    
 
 }
 
@@ -164,7 +216,12 @@ return self;
 
 - (void)wakeup_start_animte:(NSTimer*) timer_exp
 {
-    [self.splashScreen startAnimating];
+
+    NSLog(@"is animating? %d", [self.splashScreen isAnimating]);
+    
+    NSLog(@"animating images == nil? %d", (self.splashScreen.animationImages == nil));
+    NSLog(@"count? %d", [self.splashScreen.animationImages count]);
+    //[self.splashScreen startAnimating];
     
 }
 
@@ -408,6 +465,7 @@ return self;
 	[channel_array release]; 
 	[restored_profiles release];
 
+    [splashScreen release];
 
 	[super dealloc];
 }
@@ -455,6 +513,7 @@ return self;
             UIImage * landscapeImage = [UIImage imageNamed:@"bb_splash_screen_horizontal.png"];
             
             [splashScreen setImage:landscapeImage];
+            
 
 #if 0
             BOOL statusHidden = statusDialogLabel.hidden;
@@ -506,9 +565,9 @@ return self;
 #if 0
             BOOL statusHidden = statusDialogLabel.hidden;
             [[NSBundle mainBundle] loadNibNamed:@"MBP_iosViewController" owner:self options:nil];
-
+            
             statusDialogLabel.hidden = statusHidden;
-#endif 
+#endif
         }
     }
     
