@@ -323,7 +323,7 @@
         }
         else if (infOrientation == UIInterfaceOrientationPortrait || infOrientation == UIInterfaceOrientationPortraitUpsideDown)
         {
-            [self.videoImage setImage:[UIImage imageNamed:@"homepage_p.png"]];
+            [self.videoImage setImage:[UIImage imageNamed:@"homepage_p1.png"]];
         }
 	}
     
