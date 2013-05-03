@@ -90,9 +90,6 @@ return self;
 
 	[self initialize];
     
-    UIInterfaceOrientation interfaceOrientation = [UIApplication sharedApplication].statusBarOrientation;
-    [self adjustViewsForOrientations:interfaceOrientation];
-    
     
     backgroundView.hidden = YES;
 	[self.view addSubview:backgroundView];
@@ -105,9 +102,48 @@ return self;
 		userInfo:nil
 		repeats:NO];
 
+    UIInterfaceOrientation interfaceOrientation = [UIApplication sharedApplication].statusBarOrientation;
+//    [self adjustViewsForOrientations:interfaceOrientation];
+    
+    [self start_animation_with_orientation:interfaceOrientation];
 
 #if 1
-    CGRect deviceScreen = [UIScreen mainScreen].bounds;
+    
+    
+#else
+    
+    self.splashScreen.image = [UIImage imageNamed:@"mestartup2000012.png"];
+
+#endif
+    
+    
+    
+
+}
+
+-(CGRect) deviceFrameWithOrientation:(UIInterfaceOrientation) orientation
+{
+    CGRect deviceBound = [UIScreen mainScreen].bounds;
+    
+    if (orientation == UIInterfaceOrientationLandscapeLeft ||
+        orientation == UIInterfaceOrientationLandscapeRight)
+    {
+        CGRect newBound = CGRectMake(0, 0, deviceBound.size.height, deviceBound.size.width);
+        return newBound;
+    }
+    if (orientation == UIInterfaceOrientationPortrait ||
+        orientation == UIInterfaceOrientationPortraitUpsideDown)
+    {
+        return deviceBound;
+    }
+    
+    return deviceBound;
+}
+
+-(void)start_animation_with_orientation :(UIInterfaceOrientation) orientation
+{
+    CGRect deviceScreen = [self deviceFrameWithOrientation:orientation];
+//    CGRect deviceScreen = CGRectMake(0, 0, 480, 320);
     sunBackground = [[UIImageView alloc]initWithFrame:deviceScreen];
     [sunBackground setImage:[UIImage imageNamed:@"ME-sun_background.png"]];
     
@@ -126,6 +162,7 @@ return self;
     
     self.splashScreen = [[UIImageView alloc ] initWithFrame:deviceScreen];
     [self.splashScreen setImage:[UIImage imageNamed:@"mestartup000032.png"]];
+    [self.splashScreen setContentMode:UIViewContentModeScaleAspectFit];
     
     self.splashScreen.animationImages =[NSArray arrayWithObjects:
                                         [UIImage imageNamed:@"mestartup000001.png"],
@@ -160,7 +197,7 @@ return self;
                                         [UIImage imageNamed:@"mestartup000030.png"],
                                         [UIImage imageNamed:@"mestartup000031.png"],
                                         [UIImage imageNamed:@"mestartup000032.png"],
-                                         nil];
+                                        nil];
     splashScreen.animationDuration = 6.5;
     splashScreen.animationRepeatCount = 1;
     
@@ -173,25 +210,13 @@ return self;
     [splashScreen startAnimating];
     
     
-
-    [NSTimer scheduledTimerWithTimeInterval:0.1
-                                     target:self
-                                   selector:@selector(wakeup_start_animte:)
-                                   userInfo:nil
-                                    repeats:NO];
     
-    
-#else
-    
-    self.splashScreen.image = [UIImage imageNamed:@"mestartup2000012.png"];
-
-#endif
-    
-    
-    
-
+//    [NSTimer scheduledTimerWithTimeInterval:0.1
+//                                     target:self
+//                                   selector:@selector(wakeup_start_animte:)
+//                                   userInfo:nil
+//                                    repeats:NO];
 }
-
 
 
 - (void)wakeup_start_animte:(NSTimer*) timer_exp
@@ -470,31 +495,46 @@ return self;
 
 -(void) adjustViewsForOrientations: (UIInterfaceOrientation) interfaceOrientation
 {
+    CGRect newFrame = [self deviceFrameWithOrientation:interfaceOrientation];
+    if (splashScreen)
+    {
+        [splashScreen setFrame:newFrame];
+    }
+    if (sunBackground)
+    {
+        [sunBackground setFrame:newFrame];
+    }
+    
+    
     if (interfaceOrientation == UIInterfaceOrientationLandscapeLeft ||
         interfaceOrientation == UIInterfaceOrientationLandscapeRight)
     {
+        if (sunBackground)
+        {
+            [sunBackground setImage:[UIImage imageNamed:@"ME-screen_landscape.png"]];
+        }
+        
+        
         if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
         {
             //[[NSBundle mainBundle] loadNibNamed:@"MBP_iosViewController_land_ipad" owner:self options:nil];
             
-            UIImageView * splashScreen = (UIImageView*) [self.view viewWithTag:11];
-            
-            UIImage * landscapeImage = [UIImage imageNamed:@"bb_splash_screen_horizontal.png"];
-            
-            [splashScreen setImage:landscapeImage];
-            
+//            UIImageView * splashScreen = (UIImageView*) [self.view viewWithTag:11];
+//            
+//            UIImage * landscapeImage = [UIImage imageNamed:@"bb_splash_screen_horizontal.png"];
+//            
+//            [splashScreen setImage:landscapeImage];
             
         }
         else
         {
             
             
-            UIImageView * splashScreen = (UIImageView*) [self.view viewWithTag:11];
-            
-            UIImage * landscapeImage = [UIImage imageNamed:@"bb_splash_screen_horizontal.png"];
-            
-            [splashScreen setImage:landscapeImage];
-            
+//            UIImageView * splashScreen = (UIImageView*) [self.view viewWithTag:11];
+//            
+//            UIImage * landscapeImage = [UIImage imageNamed:@"bb_splash_screen_horizontal.png"];
+//            
+//            [splashScreen setImage:landscapeImage];
 
 #if 0
             BOOL statusHidden = statusDialogLabel.hidden;
@@ -524,24 +564,30 @@ return self;
     else if (interfaceOrientation == UIInterfaceOrientationPortrait ||
              interfaceOrientation == UIInterfaceOrientationPortraitUpsideDown)
     {
+        if (sunBackground)
+        {
+            [sunBackground setImage:[UIImage imageNamed:@"ME-sun_background.png"]];
+        }
+        
+        
         if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
             //[[NSBundle mainBundle] loadNibNamed:@"MBP_iosViewController_ipad" owner:self options:nil];
             
-            UIImageView * splashScreen = (UIImageView*) [self.view viewWithTag:11];
-            
-            UIImage * landscapeImage = [UIImage imageNamed:@"splash_screen_portrait.png"];
-            
-            [splashScreen setImage:landscapeImage];
+//            UIImageView * splashScreen = (UIImageView*) [self.view viewWithTag:11];
+//            
+//            UIImage * landscapeImage = [UIImage imageNamed:@"splash_screen_portrait.png"];
+//            
+//            [splashScreen setImage:landscapeImage];
 
         }
         else
         {
             
-            UIImageView * splashScreen = (UIImageView*) [self.view viewWithTag:11];
-            
-            UIImage * landscapeImage = [UIImage imageNamed:@"splash_screen_portrait.png"];
-            
-            [splashScreen setImage:landscapeImage];
+//            UIImageView * splashScreen = (UIImageView*) [self.view viewWithTag:11];
+//            
+//            UIImage * landscapeImage = [UIImage imageNamed:@"splash_screen_portrait.png"];
+//            
+//            [splashScreen setImage:landscapeImage];
             
 #if 0
             BOOL statusHidden = statusDialogLabel.hidden;

@@ -222,6 +222,7 @@
 		BC3C1AD816F025FF00175AFF /* MBP_MenuProgress_land_ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = BC3C1ADA16F025FF00175AFF /* MBP_MenuProgress_land_ipad.xib */; };
 		BC3C1B0316F05C0C00175AFF /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = BC3C1B0516F05C0C00175AFF /* Localizable.strings */; };
 		BC3ECF16173225F700904539 /* black_background.png in Resources */ = {isa = PBXBuildFile; fileRef = BC3ECF15173225F700904539 /* black_background.png */; };
+		BC4D8D8C1733B9BB005C34BB /* ME-screen_landscape.png in Resources */ = {isa = PBXBuildFile; fileRef = BC4D8D8B1733B9BB005C34BB /* ME-screen_landscape.png */; };
 		BC5B0FCE1701855600D2C308 /* cameraMenuRouter.plist in Resources */ = {isa = PBXBuildFile; fileRef = BC5B0FCD1701855600D2C308 /* cameraMenuRouter.plist */; };
 		BC6E4A0516BFBB9D00B0D630 /* MBP_InitialSetupViewController_land.xib in Resources */ = {isa = PBXBuildFile; fileRef = BC6E4A0316BFBB9D00B0D630 /* MBP_InitialSetupViewController_land.xib */; };
 		BCA1A4D816C24CA900E7EF56 /* Step_03_ViewController_land.xib in Resources */ = {isa = PBXBuildFile; fileRef = BCA1A4D616C24CA900E7EF56 /* Step_03_ViewController_land.xib */; };
@@ -698,6 +699,7 @@
 		BC3C1B0616F05C0D00175AFF /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/Localizable.strings; sourceTree = "<group>"; };
 		BC3C1B0716F05E5800175AFF /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/Localizable.strings; sourceTree = "<group>"; };
 		BC3ECF15173225F700904539 /* black_background.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = black_background.png; sourceTree = "<group>"; };
+		BC4D8D8B1733B9BB005C34BB /* ME-screen_landscape.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ME-screen_landscape.png"; sourceTree = "<group>"; };
 		BC5B0FCD1701855600D2C308 /* cameraMenuRouter.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = cameraMenuRouter.plist; sourceTree = "<group>"; };
 		BC5B0FCF1701893D00D2C308 /* es */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = es; path = es.lproj/DashBoard_camView.xib; sourceTree = "<group>"; };
 		BC5B0FD01701894000D2C308 /* fr */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = fr; path = fr.lproj/DashBoard_camView.xib; sourceTree = "<group>"; };
@@ -1683,6 +1685,7 @@
 		3812F82315C8BEC700DADFA6 /* images13 */ = {
 			isa = PBXGroup;
 			children = (
+				BC4D8D8B1733B9BB005C34BB /* ME-screen_landscape.png */,
 				BCF944F01732749300F58B22 /* homepage_p1.png */,
 				BCF944B0173262BB00F58B22 /* mestartup000002.png */,
 				BCF944B1173262BC00F58B22 /* mestartup000003.png */,
@@ -2040,6 +2043,7 @@
 				BCF944EE173262BC00F58B22 /* mestartup000032.png in Resources */,
 				BCF944EF173262BC00F58B22 /* mestartup000001.png in Resources */,
 				BCF944F11732749300F58B22 /* homepage_p1.png in Resources */,
+				BC4D8D8C1733B9BB005C34BB /* ME-screen_landscape.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
