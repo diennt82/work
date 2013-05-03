@@ -124,9 +124,8 @@ return self;
     [self.view addSubview:initTextView];
     [self.view bringSubviewToFront:initTextView];
     
-    
-    
     self.splashScreen = [[UIImageView alloc ] initWithFrame:deviceScreen];
+    [self.splashScreen setImage:[UIImage imageNamed:@"mestartup000032.png"]];
     
     self.splashScreen.animationImages =[NSArray arrayWithObjects:
                                         [UIImage imageNamed:@"mestartup000001.png"],
@@ -161,9 +160,8 @@ return self;
                                         [UIImage imageNamed:@"mestartup000030.png"],
                                         [UIImage imageNamed:@"mestartup000031.png"],
                                         [UIImage imageNamed:@"mestartup000032.png"],
-                                        
                                          nil];
-    splashScreen.animationDuration =6.5;
+    splashScreen.animationDuration = 6.5;
     splashScreen.animationRepeatCount = 1;
     
     [self.view addSubview:splashScreen];
