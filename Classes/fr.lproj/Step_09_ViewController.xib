@@ -124,7 +124,7 @@
 						<string key="NSFrameSize">{320, 223}</string>
 						<reference key="NSSuperview" ref="40837917"/>
 						<reference key="NSWindow"/>
-						<reference key="NSNextKeyView" ref="89821411"/>
+						<reference key="NSNextKeyView" ref="212064589"/>
 						<string key="NSReuseIdentifierKey">_NS:9</string>
 						<reference key="IBUIBackgroundColor" ref="654960882"/>
 						<bool key="IBUIClipsSubviews">YES</bool>
@@ -262,7 +262,7 @@
 								<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
 								<int key="IBUIContentVerticalAlignment">0</int>
 								<string key="IBUIText"/>
-								<string key="IBUIPlaceholder"> (eg. jonhsmith123)</string>
+								<string key="IBUIPlaceholder">Pseudo (par exemple : johnsmith123)</string>
 								<object class="NSColor" key="IBUITextColor" id="892048065">
 									<int key="NSColorSpace">3</int>
 									<bytes key="NSWhite">MAA</bytes>
@@ -428,7 +428,7 @@
 								<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
 								<int key="IBUIContentVerticalAlignment">0</int>
 								<string key="IBUIText"/>
-								<string key="IBUIPlaceholder">Confirmer</string>
+								<string key="IBUIPlaceholder">Confirmer le Mot de Passe</string>
 								<reference key="IBUITextColor" ref="892048065"/>
 								<bool key="IBUIAdjustsFontSizeToFit">YES</bool>
 								<float key="IBUIMinimumFontSize">17</float>
@@ -510,7 +510,7 @@
 								<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
 								<int key="IBUIContentVerticalAlignment">0</int>
 								<string key="IBUIText"/>
-								<string key="IBUIPlaceholder">Email</string>
+								<string key="IBUIPlaceholder">Votre e-mail</string>
 								<reference key="IBUITextColor" ref="892048065"/>
 								<bool key="IBUIAdjustsFontSizeToFit">YES</bool>
 								<float key="IBUIMinimumFontSize">17</float>

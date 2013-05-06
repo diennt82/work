@@ -238,7 +238,7 @@
 "information" = "Information";
 
 /* No comment provided by engineer. */
-"information_msg" = "Motorola Monitor\nApplication version: %1$@\nFirmware version:%2$@,\nMonitoreverywhere © All rights Reserved.\nCamera address:%3$@";
+"information_msg" = "Monitor Everywhere\nApplication version: %1$@\nFirmware version:%2$@,\nMonitoreverywhere \@ All rights Reserved.\nCamera address:%3$@";
 
 /* No comment provided by engineer. */
 "Invalid_Camera_Name" = "Invalid Camera Name";
@@ -271,7 +271,7 @@
 "Level4_" = "Stufe 4 (Hoch)";
 
 /* No comment provided by engineer. */
-"Local_Wifi" = "Lokales WLAN";
+"Local_Wifi" = "Vom lokalen WLAN";
 
 /* No comment provided by engineer. */
 "Logging_in_to_server" = "Einloggen in den Server…";
@@ -397,7 +397,7 @@
 "Time_out_msg" = "Das Video wurde über 5 Minuten lang angesehen. Möchten Sie damit fortfahren?";
 
 /* No comment provided by engineer. */
-"udt_relay_connect" = "Connecting through relay... please wait...";
+"udt_relay_connect" = "Verbinden durch Relay... Bitte warten...";
 
 /* No comment provided by engineer. */
 "Unable_to_rename_this_camera" = "Umbenennen dieser Kamera fehlgeschlagen Bitte einloggen und noch einmal versuchen";
@@ -409,7 +409,7 @@
 "video_rec_not_supported" = "Videoaufzeichnung wird nicht unterstützt, kommt aber bald";
 
 /* No comment provided by engineer. */
-"wifi_not_available" = "Mobile data is enabled. If you continue to connect, you may incur air time charges. Do you want to proceed?";
+"wifi_not_available" = "Mobile Daten sind eingeschaltet. Wenn Sie mit der Verbindung fortfahren, können dafür Gebühren anfallen. Wollen Sie fortfahren?";
 
 /* No comment provided by engineer. */
 "Yes" = "Ja";
@@ -434,3 +434,5 @@
 "Information" = "Information";
 
 "Initialize" = "INITIALIZING...";
+/* No comment provided by engineer. */
+"Confirm_Pass_Fail" = "Wachtwoord komt niet overeen, vul het opnieuw in!";

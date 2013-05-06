@@ -1764,7 +1764,7 @@
 	if (!error)
 	{
 		title = @"Snapshot";
-		message = @"saved to Photo Album";
+		message = @"Saved to Photo Album";
         
 	}
 	else

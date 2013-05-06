@@ -240,7 +240,7 @@
 "information" = "Informations";
 
 /* No comment provided by engineer. */
-"information_msg" = "Motorola Monitor\nApplication version: %1$@\nFirmware version:%2$@,\nMonitoreverywhere © All rights Reserved.\nCamera address:%3$@";
+"information_msg" = "Surveillance partout\nApplication version: %1$@\nFirmware version:%2$@,\nSurveillance partout \@ Tous droits Réservés.\nCamera address:%3$@";
 
 /* No comment provided by engineer. */
 "Invalid_Camera_Name" = "Invalid Camera Name";
@@ -252,7 +252,7 @@
 "Invalid_Camera_Name_msg2" = "Camera name is invalid. Please enter [0-9],[a-Z], space, dot, hyphen, underscore & single quote only.";
 
 /* No comment provided by engineer. */
-"Invalid_Server_Response" = "Invalid Server Response.(Nil response)";
+"Invalid_Server_Response" = "Réponse du serveur invalide :";
 
 /* No comment provided by engineer. */
 "Level1" = "Niveau 1";
@@ -273,7 +273,7 @@
 "Level4_" = "Niveau 4 (haut)";
 
 /* No comment provided by engineer. */
-"Local_Wifi" = "Local Wifi";
+"Local_Wifi" = "Du Wi-Fi local";
 
 /* No comment provided by engineer. */
 "Logging_in_to_server" = "Connexion au serveur ...";
@@ -399,7 +399,7 @@
 "Time_out_msg" = "La vidéo a été visionnée pendant environ 5 minutes. Souhaitez-vous poursuivre ?";
 
 /* No comment provided by engineer. */
-"udt_relay_connect" = "Connecting through relay... please wait...";
+"udt_relay_connect" = "Connexion par le biais de relais... s'il vous plaît, patientez...";
 
 /* No comment provided by engineer. */
 "Unable_to_rename_this_camera" = "Impossible de renommer la caméra. Veuillez vous connecter et réessayer";
@@ -411,7 +411,7 @@
 "video_rec_not_supported" = "L'enregistrement vidéo n'est pas pris en charge, à venir prochainement";
 
 /* No comment provided by engineer. */
-"wifi_not_available" = "Mobile data is enabled. If you continue to connect, you may incur air time charges. Do you want to proceed?";
+"wifi_not_available" = "Les données mobiles sont activées. Si vous continuez à vous connecter, des frais de temps d'antenne peuvent être chargés. Voulez-vous continuer ?";
 
 /* No comment provided by engineer. */
 "Yes" = "Oui";
@@ -438,6 +438,8 @@
 "Remove this camera" = "Retirer cette caméra";
 
 /* No comment provided by engineer. */
-"Information" = "Information";
 
 "Initialize" = "INITIALIZING...";
+
+/* No comment provided by engineer. */
+"Confirm_Pass_Fail" = "Le mot de passe ne correspond pas. S'il vous plaît, saisir à nouveau !";

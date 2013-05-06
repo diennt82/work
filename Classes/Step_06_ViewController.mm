@@ -412,10 +412,13 @@
             (![pass.text isEqualToString:confpass.text]))
         {
             //error
+            
+            NSString * msg_fail = NSLocalizedStringWithDefaultValue(@"Confirm_Pass_Fail", nil, [NSBundle mainBundle], @"Le mot de passe ne correspond pas. S'il vous plaît, saisir à nouveau !", nil);
+            
             //ERROR condition
             UIAlertView *_alert = [[UIAlertView alloc]
                                    initWithTitle:@"Confirm Password Failed"
-                                   message:@"Password does not match, please try again" 
+                                   message:msg_fail 
                                    delegate:self
                                    cancelButtonTitle:@"OK"
                                    otherButtonTitles:nil];
@@ -491,11 +494,11 @@
          
             NSLog(@"pass not match: %@ vs %@", confpass, self.password);
 
-            
+            NSString * msg_fail = NSLocalizedStringWithDefaultValue(@"Confirm_Pass_Fail", nil, [NSBundle mainBundle], @"Le mot de passe ne correspond pas. S'il vous plaît, saisir à nouveau !", nil);
             //ERROR condition
             UIAlertView *_alert = [[UIAlertView alloc]
                                    initWithTitle:@"Confirm Password Failed"
-                                   message:@"Password does not match, please try again" 
+                                   message:msg_fail
                                    delegate:self
                                    cancelButtonTitle:@"OK"
                                    otherButtonTitles:nil];

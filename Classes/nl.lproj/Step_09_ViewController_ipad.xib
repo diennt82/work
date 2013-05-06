@@ -233,7 +233,7 @@
 							<object class="IBUITextField" id="514645748">
 								<reference key="NSNextResponder" ref="82841173"/>
 								<int key="NSvFlags">292</int>
-								<string key="NSFrame">{{129, 0}, {363, 52}}</string>
+								<string key="NSFrame">{{194, 0}, {298, 52}}</string>
 								<reference key="NSSuperview" ref="82841173"/>
 								<string key="NSReuseIdentifierKey">_NS:9</string>
 								<reference key="IBUIBackgroundColor" ref="396759633"/>
@@ -243,6 +243,7 @@
 								<string key="targetRuntimeIdentifier">IBIPadFramework</string>
 								<int key="IBUIContentVerticalAlignment">0</int>
 								<string key="IBUIText"/>
+								<string key="IBUIPlaceholder">Gebruikersnaam (bijv. johnsmith123)</string>
 								<object class="NSColor" key="IBUITextColor" id="986848460">
 									<int key="NSColorSpace">3</int>
 									<bytes key="NSWhite">MAA</bytes>
@@ -312,7 +313,7 @@
 							<object class="IBUITextField" id="441240092">
 								<reference key="NSNextResponder" ref="371059358"/>
 								<int key="NSvFlags">292</int>
-								<string key="NSFrame">{{129, 0}, {363, 52}}</string>
+								<string key="NSFrame">{{156, 0}, {336, 52}}</string>
 								<reference key="NSSuperview" ref="371059358"/>
 								<string key="NSReuseIdentifierKey">_NS:9</string>
 								<reference key="IBUIBackgroundColor" ref="396759633"/>
@@ -322,6 +323,7 @@
 								<string key="targetRuntimeIdentifier">IBIPadFramework</string>
 								<int key="IBUIContentVerticalAlignment">0</int>
 								<string key="IBUIText"/>
+								<string key="IBUIPlaceholder">Wachtwoord</string>
 								<reference key="IBUITextColor" ref="986848460"/>
 								<float key="IBUIMinimumFontSize">20</float>
 								<object class="IBUITextInputTraits" key="IBUITextInputTraits">
@@ -388,7 +390,7 @@
 							<object class="IBUITextField" id="868768325">
 								<reference key="NSNextResponder" ref="159699885"/>
 								<int key="NSvFlags">292</int>
-								<string key="NSFrame">{{129, 0}, {363, 52}}</string>
+								<string key="NSFrame">{{142, 0}, {350, 52}}</string>
 								<reference key="NSSuperview" ref="159699885"/>
 								<string key="NSReuseIdentifierKey">_NS:9</string>
 								<reference key="IBUIBackgroundColor" ref="396759633"/>
@@ -398,6 +400,7 @@
 								<string key="targetRuntimeIdentifier">IBIPadFramework</string>
 								<int key="IBUIContentVerticalAlignment">0</int>
 								<string key="IBUIText"/>
+								<string key="IBUIPlaceholder">Bevestig Wachtwoord</string>
 								<reference key="IBUITextColor" ref="986848460"/>
 								<bool key="IBUIAdjustsFontSizeToFit">YES</bool>
 								<float key="IBUIMinimumFontSize">20</float>
@@ -475,6 +478,7 @@
 								<string key="targetRuntimeIdentifier">IBIPadFramework</string>
 								<int key="IBUIContentVerticalAlignment">0</int>
 								<string key="IBUIText"/>
+								<string key="IBUIPlaceholder">Uw e-mail</string>
 								<reference key="IBUITextColor" ref="986848460"/>
 								<bool key="IBUIAdjustsFontSizeToFit">YES</bool>
 								<float key="IBUIMinimumFontSize">20</float>

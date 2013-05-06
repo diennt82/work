@@ -238,7 +238,7 @@
 "information" = "Información";
 
 /* No comment provided by engineer. */
-"information_msg" = "Motorola Monitor\nApplication version: %1$@\nFirmware version:%2$@,\nMonitoreverywhere © All rights Reserved.\nCamera address:%3$@";
+"information_msg" = "Versión de Aplicación\n Monitor Everywhere (vigilar desde todas partes): %1$@\nVersión Firmware:%2$@,\nMonitor Everywhere (vigilar desde todas partes) \@ Todo los derechos reservados.\nDirección Cámara:%3$@";
 
 /* No comment provided by engineer. */
 "Invalid_Camera_Name" = "Invalid Camera Name";
@@ -250,7 +250,7 @@
 "Invalid_Camera_Name_msg2" = "Camera name is invalid. Please enter [0-9],[a-Z], space, dot, hyphen, underscore & single quote only.";
 
 /* No comment provided by engineer. */
-"Invalid_Server_Response" = "Invalid Server Response.(Nil response)";
+"Invalid_Server_Response" = "Respuesta del servidor invalida";
 
 /* No comment provided by engineer. */
 "Level1" = "Nivel 1";
@@ -271,7 +271,7 @@
 "Level4_" = "Nivel 4 (alto)";
 
 /* No comment provided by engineer. */
-"Local_Wifi" = "Wifi local";
+"Local_Wifi" = "Desde Wi-Fi local";
 
 /* No comment provided by engineer. */
 "Logging_in_to_server" = "Iniciar sesión en servidor…";
@@ -397,7 +397,7 @@
 "Time_out_msg" = "El video ha sido visto por cerca de 5 minutos. ¿Desea continuar?";
 
 /* No comment provided by engineer. */
-"udt_relay_connect" = "Connecting through relay... please wait...";
+"udt_relay_connect" = "Conectando mediante rele…por favor espera…";
 
 /* No comment provided by engineer. */
 "Unable_to_rename_this_camera" = "Imposible renombrar esta cámara. Por favor inicie sesión y vuelva a intentarlo";
@@ -409,7 +409,7 @@
 "video_rec_not_supported" = "La grabación de vídeo no es compatible, llegará próximamente";
 
 /* No comment provided by engineer. */
-"wifi_not_available" = "Mobile data is enabled. If you continue to connect, you may incur air time charges. Do you want to proceed?";
+"wifi_not_available" = "Los datos de movil estan activados. Si continuas conectandote, puede que tenga recargo. ¿Quieres proceder?";
 
 /* No comment provided by engineer. */
 "Yes" = "Sí";
@@ -434,3 +434,5 @@
 "Information" = "Información";
 
 "Initialize" = "INICIALIZANDO...";
+/* No comment provided by engineer. */
+"Confirm_Pass_Fail" = "¡La contraseña no coincide, por favor introducir de nuevo!";
