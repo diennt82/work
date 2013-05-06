@@ -32,6 +32,8 @@
 @synthesize  stillReading;
 @synthesize latest_connection_error;
 
+@synthesize istream,ostream;
+
 - (id) initWithIp:(NSString *) ip andPort:(int) port handler:(id<StreamerEventHandler>) handler
 {
 	[super init];
@@ -72,6 +74,9 @@
     
 	[recTimer release];
 	[streamingChannel  release] ;
+    [istream release];
+    [ostream release];
+    
 	[super dealloc];
 }
 
@@ -86,48 +91,6 @@
 
 #pragma mark -
 #pragma mark  HTTP stream
-
-
-#pragma mark NSURLConnection Delegate functions
-/****** NSURLConnection Delegate functions ******/
-
-
-
-- (void)connection:(NSURLConnection *)connection didReceiveAuthenticationChallenge:(NSURLAuthenticationChallenge *)challenge
-{
-	NSLog(@"did recv auth challenge: %@", challenge);
-	
-}
-
-
-
-- (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response;
-{
-    //	NSLog(@"did recv response");
-	int statusCode = [((NSHTTPURLResponse*) response) statusCode];
-	NSLog(@"did recv response: code: %d", statusCode);
-    
-    
-	
-}
-
-- (void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data {
-
-}
-
-
-- (void)connectionDidFinishLoading:(NSURLConnection *)connection
-{
-    
-	//NSLog(@"response: %@", txt);
-}
-
-
-- (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error
-{
-	NSLog(@"failed with error: %@", error);
-    
-}
 
 
 
@@ -150,82 +113,185 @@
     
     
     
-    //Connection test
+    //REMOTE CONNECTION : check sskey
+    
     if (self.remoteView == TRUE && self.remoteViewKey != nil)
     {
-        
-        NSError* error= nil;
-        NSHTTPURLResponse * response = nil;
-        NSString * http_cmd = [NSString stringWithFormat:@"http://%@:%d/?%@%@%@",
-                               self.device_ip, self.device_port,
-                               AVSTREAM_UDT_REQ,AVSTREAM_PARAM_1, self.remoteViewKey];
-        NSMutableURLRequest *theRequest=[NSMutableURLRequest requestWithURL:[NSURL URLWithString:http_cmd]
-																cachePolicy: NSURLRequestReloadIgnoringLocalAndRemoteCacheData
-															timeoutInterval:DEFAULT_TIME_OUT];
-        [theRequest setHTTPMethod:@"GET"];
-        
-        NSString *authHeader = [@"Basic " stringByAppendingFormat:@"%@", [Util getDFCredentials]];
-		[theRequest addValue:authHeader forHTTPHeaderField:@"Authorization"];
-        
-        
-        NSString * body = [[NSString alloc] initWithData:theRequest.HTTPBody encoding:NSUTF8StringEncoding ];
-        
-        NSLog(@"Test POST  cmd: %@", body);
-        
-        body  =  [[NSString alloc] initWithContentsOfURL:[NSURL URLWithString:http_cmd] encoding:NSUTF8StringEncoding error:&error];
-        NSLog(@"body 2 : %@, err:%d", body, [error code]);
-   
-#if 0
-        //use delegate funcs
-        [[NSURLConnection alloc] initWithRequest:theRequest
-                                        delegate:self
-                                startImmediately:TRUE];
-
-#else
-
-        NSData * dataReply = [NSURLConnection sendSynchronousRequest:theRequest returningResponse:&response error:&error];
-        
-        
-        NSLog(@"status code: %d",  [response statusCode]);
-        NSString *myString = [[NSString alloc] initWithData:dataReply encoding:NSUTF8StringEncoding];
-        
-        NSLog(@"reply: %@", myString);
-        
-        //if (response != nil)
-        {
-            
-            int statusCode = [(NSHTTPURLResponse*) response statusCode];
-            
-            if ( (statusCode == 401) || (statusCode == 601) )
-            {
-                NSLog(@"get status 401 or 601 -->>>>>>");
-                [mHandler statusReport:REMOTE_STREAM_SSKEY_MISMATCH andObj:nil];
-                self.latest_connection_error = statusCode; 
+        //USE a more primitive way - CFStream
                 
-                return;
-                
-            }
+        CFReadStreamRef readStream;
+        CFWriteStreamRef writeStream;
+        CFStreamCreatePairWithSocketToHost(NULL, (CFStringRef)self.device_ip, self.device_port, &readStream, &writeStream);
+        
+        NSInputStream *inputStream = ( NSInputStream *)readStream;
+        NSOutputStream *outputStream = ( NSOutputStream *)writeStream;
+        [inputStream setDelegate:self];
+        [outputStream setDelegate:self];
+        [inputStream scheduleInRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
+        [outputStream scheduleInRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
+        [inputStream open];
+        [outputStream open];
+        
+        
+        /* Store a reference to the input and output streams so that
+         they don't go away.... */
+        self.ostream = outputStream;
+        self.istream = inputStream; 
+     
+        
+        //  The actual call to create listenSocket is done after we verified the sskey
+        //  -- Check the callback  (void)stream:(NSStream *)theStream handleEvent:(NSStreamEvent)eventCode
             
-        }
-    
+    }
+    else // LOCAL CONNECTION
+    {
         
-        
-        
-#endif 
+        initialFlag = 1;
+        listenSocket = [[AsyncSocket alloc] initWithDelegate:self];
+        //Non-blocking connect
+        [listenSocket connectToHost:self.device_ip
+                             onPort:self.device_port
+                        withTimeout:5
+                              error:nil];
         
     }
-
-    
-
-	initialFlag = 1;
-	listenSocket = [[AsyncSocket alloc] initWithDelegate:self];
-	//Non-blocking connect
-	[listenSocket connectToHost:self.device_ip
-                         onPort:self.device_port
-                    withTimeout:5
-                          error:nil];
     
 }
+
+
+#pragma mark -
+#pragma mark NSStreamDelegate
+
+
+- (void)stream:(NSStream *)theStream handleEvent:(NSStreamEvent)eventCode
+{
+    switch(eventCode) {
+        case NSStreamEventHasSpaceAvailable: //Write
+        {
+            
+            if (theStream == ostream)
+            {
+                
+                
+                NSString * getReq; 
+               
+                getReq = [NSString stringWithFormat:@"%@%@%@%@\r\n",
+                          AVSTREAM_REQUEST, AVSTREAM_PARAM_1,self.remoteViewKey,
+                          AVSTREAM_PARAM_2 ];
+                
+                //Attach Basic authen:
+                getReq = [getReq stringByAppendingFormat:@"Authorization: Basic %@\r\n\r\n",[Util getDFCredentials] ];
+                
+                                
+                const uint8_t * rawstring = (const uint8_t *)[getReq UTF8String];
+                [ostream write:rawstring maxLength:getReq.length];
+                [ostream close];
+            }
+            break;
+        }
+            
+        case NSStreamEventHasBytesAvailable:// Read
+        {
+
+            if (theStream == istream)
+            {
+                NSMutableData * _data = [[NSMutableData data] retain];
+                
+                uint8_t buf[1024];
+                unsigned int len = 0;
+                len = [(NSInputStream *)theStream read:buf maxLength:1024];
+                
+                [istream close];
+                
+                if(len)
+                {
+                    [_data appendBytes:(const void *)buf length:len];
+                                        
+                    NSString *txt = [[[NSString alloc] initWithData:_data encoding: NSUTF8StringEncoding] autorelease];
+                    //NSLog(@"response 1: %@", txt);
+                    
+                    NSRange range1 = [txt rangeOfString:AUTHENTICATION_ERROR];
+                    NSRange range2 = [txt rangeOfString:SESSIONKEY_MISMATCHED];
+                    
+                  
+                    if (txt == nil)
+                    {
+                        [self stopStreaming];
+                        [mHandler statusReport:STREAM_STOPPED_UNEXPECTEDLY andObj:nil];
+                    }
+                    else if(
+                            (range1.location != NSNotFound) ||
+                            (range2.location != NSNotFound)
+                           )
+                    {
+                        // auth error ->>>>>>> force re-connect
+                        NSLog(@"auth/sskey  ERROR-- stop streaming ");
+                       
+                        self.latest_connection_error = 401;
+                        if  (range2.location != NSNotFound)
+                        {
+                            self.latest_connection_error = 601;
+                        }
+                        
+                        NSLog(@"error response: %@", txt);
+                        [self stopStreaming];
+                        
+                        if (self.remoteView == TRUE && self.remoteViewKey != nil)
+                        {
+                            [mHandler statusReport:REMOTE_STREAM_SSKEY_MISMATCH andObj:nil];
+                            
+                        }
+                        else
+                        {
+                            [mHandler statusReport:STREAM_STOPPED_UNEXPECTEDLY andObj:nil];
+                        }
+                        
+                        
+                    }
+                    else
+                    {
+
+                        //Start acutal connection 
+                        initialFlag = 1;
+                        listenSocket = [[AsyncSocket alloc] initWithDelegate:self];
+                        //Non-blocking connect
+                        [listenSocket connectToHost:self.device_ip
+                                             onPort:self.device_port
+                                        withTimeout:5
+                                              error:nil];
+
+                    }
+                    
+
+                }
+                else
+                {
+                    NSLog(@"no buffer!");
+                }
+               
+                
+                
+            }
+            break;
+        }
+        case NSStreamEventEndEncountered:
+        {
+             NSLog(@"STREam ended");
+            break;
+        }
+        case NSStreamEventErrorOccurred:
+        {
+         NSLog(@"STREam errror ");
+            break;
+        }
+            
+    }
+}
+
+
+#pragma mark -
+
+
 //same as startStreaming for now, however may change later.. keep it separate.
 -(void) reConnect
 {
@@ -261,9 +327,6 @@
 {
     
 
-    //
-    //	NSString *getReq = [NSString stringWithFormat:@"%@Authorization: Basic %@\r\n\r\n", AIBALL_GET_REQUEST, [Util getCredentials]];
-    
     //GET /?action=appletvastream HTTP/1.1\r\nAuthorization: Basic xxxxx\r\n\r\n    
 	NSString *getReq = [NSString stringWithFormat:@"%@%@\r\n",
                         AVSTREAM_REQUEST,
@@ -271,7 +334,7 @@
 	if (self.remoteView == TRUE && self.remoteViewKey != nil)
 	{
 		getReq = [NSString stringWithFormat:@"%@%@%@%@\r\n",
-                  AVSTREAM_REQUEST, AVSTREAM_PARAM_1,self.remoteViewKey,
+                  AVSTREAM_REQUEST, AVSTREAM_PARAM_1, self.remoteViewKey,
                   AVSTREAM_PARAM_2 ];
 	}
     
