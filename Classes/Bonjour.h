@@ -8,6 +8,13 @@
 
 #import <UIKit/UIKit.h>
 #import <Foundation/NSNetServices.h>
+#include <arpa/inet.h>
+
+@protocol BonjourDelegate
+-(void) bonjourReturnCameraList:(NSMutableDictionary *) cameraList;
+@end
+
+
 @interface Bonjour : UIViewController <NSNetServiceBrowserDelegate, NSNetServiceDelegate>
 {
     NSNetServiceBrowser * _browserService;
@@ -15,7 +22,8 @@
 }
 
 @property (nonatomic, retain) NSTimer * timer;
-@property (assign, nonatomic) id<NSNetServiceBrowserDelegate> delegate;
+@property (assign, nonatomic) id<BonjourDelegate> delegate;
 @property (assign, nonatomic) BOOL isSearching;
 @property (nonatomic, retain) NSMutableArray * serviceArray;
+@property (nonatomic, retain) NSMutableDictionary * cameraList;
 @end
