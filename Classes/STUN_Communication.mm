@@ -274,14 +274,111 @@
     }
     
 	
-    
-    
+
     
     
     
     
     [pool drain];
 }
+
+
+
+
+
+-(BOOL)  isConnectingOnSymmetricNat
+{
+    //prepare message
+    NSMutableData * messageToSever, * response_data;
+    int localPort, response_len = 128 ;
+    NSString* firstMessage, * secondMessage;
+    
+    messageToSever = [[NSMutableData alloc] initWithData:[SYM_NAT_CHECK_MSG dataUsingEncoding:NSUTF8StringEncoding]];
+    
+    
+    //Open socket to server
+    // start UDT communication process..
+    UdtSocketWrapper * udt_wrapper = [[ UdtSocketWrapper alloc] initWithLocalPort:SYM_NAT_CHECK_LOCAL_PORT];
+    [udt_wrapper createUdtStreamSocket];
+    
+    // Bind to a port
+    
+    // Send first message
+    
+    // Recv server response
+    
+    struct in_addr * server_ip = [UdtSocketWrapper getIpfromHostName:SYM_NAT_CHECK_SERVER_1];
+    
+    localPort = [udt_wrapper connectViaUdtSock:server_ip
+                                          port:SYM_NAT_CHECK_SERVER1_PORT];
+    NSLog(@"sock 1 connected at port: %d",localPort );
+    
+    [udt_wrapper sendDataViaUdt:(NSData *) messageToSever];
+    
+    response_data = [[NSMutableData alloc] initWithLength:response_len];
+    response_len = [udt_wrapper recvDataViaUdt:response_data
+                                       dataLen:response_len];
+    
+    if ( response_len > 0)
+    {
+        NSLog(@"response: %@", [[NSString alloc] initWithData:response_data encoding:NSUTF8StringEncoding]);
+     
+        firstMessage = [[NSString alloc] initWithData:response_data encoding:NSUTF8StringEncoding];
+    }
+    
+    // Open socket to server2
+    server_ip = [UdtSocketWrapper getIpfromHostName:SYM_NAT_CHECK_SERVER_2];
+    
+    // Bind to the SAME port: done in UdtWrapperSocket initWithLocalPort..
+    
+    
+    // Send second message
+    
+    
+    // Recv second message
+    
+    localPort = [udt_wrapper connectViaUdtSock:server_ip
+                                          port:SYM_NAT_CHECK_SERVER1_PORT];
+    NSLog(@"sock 2 connected at port: %d",localPort );
+    
+    [udt_wrapper sendDataViaUdt:(NSData *) messageToSever];
+    
+    response_data = [[NSMutableData alloc] initWithLength:response_len];
+    response_len = [udt_wrapper recvDataViaUdt:response_data
+                                       dataLen:response_len];
+    
+    if ( response_len > 0)
+    {
+        NSLog(@"response 2: %@", [[NSString alloc] initWithData:response_data encoding:NSUTF8StringEncoding]);
+        
+        secondMessage = [[NSString alloc] initWithData:response_data encoding:NSUTF8StringEncoding];
+    }
+    // Parse both message
+    NSString * firstMessageIp, * firstMessagePort, *secondMessageIp, *secondMessagePort;
+    
+    NSArray * token = [firstMessage componentsSeparatedByString:@"::"];
+    firstMessageIp = (NSString*)[token objectAtIndex:0];
+    firstMessagePort = (NSString*)[token objectAtIndex:1];
+    
+    token = [secondMessage componentsSeparatedByString:@"::"];
+    secondMessageIp = (NSString*)[token objectAtIndex:0];
+    secondMessagePort = (NSString*)[token objectAtIndex:1];
+    
+    // Compare IP and port values
+    if (![firstMessageIp isEqualToString:secondMessage])
+    {
+        NSLog(@"Local ip are different");
+    }
+    
+    if ([firstMessagePort isEqualToString:secondMessagePort])
+    {
+        return TRUE;
+    }
+    // Same -> TRUE ; otherwise -> False
+    
+    return FALSE;
+}
+
 
 #pragma mark -
 #pragma mark Timer Callbacks
@@ -323,25 +420,35 @@
 	
 	// if success means camera is available 
 	//Next, get the security info
-	
+    
+    
+    //Check SYM NAT
 
-	
-	BMS_Communication * bms_comm; 
-	
-	bms_comm = [[BMS_Communication alloc] initWithObject:self
-												Selector:@selector(getSecSuccessWithResponse:) 
-											FailSelector:@selector(getSecFailedWithError:) 
-											   ServerErr:@selector(getSecFailedServerUnreachable)];
-	
-	NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-	NSString * user_email = (NSString *) [userDefaults objectForKey:@"PortalUseremail"];
-	NSString * user_pass = (NSString *) [userDefaults objectForKey:@"PortalPassword"];
-	
-	
-	[bms_comm BMS_getSecInfoWithUser:user_email 
+    if ([self isConnectingOnSymmetricNat])
+    {
+        NSLog(@"connecting over SYMMETRIC NAT >>>>>>>>>>>>>>>");
+    
+        
+    }
+    else
+    {
+    
+        BMS_Communication * bms_comm;
+        
+        bms_comm = [[BMS_Communication alloc] initWithObject:self
+                                                    Selector:@selector(getSecSuccessWithResponse:)
+                                                FailSelector:@selector(getSecFailedWithError:)
+                                                   ServerErr:@selector(getSecFailedServerUnreachable)];
+        
+        NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+        NSString * user_email = (NSString *) [userDefaults objectForKey:@"PortalUseremail"];
+        NSString * user_pass = (NSString *) [userDefaults objectForKey:@"PortalPassword"];
+        
+        
+        [bms_comm BMS_getSecInfoWithUser:user_email 
 								 AndPass:user_pass ];
-	
-	
+        
+	}
 	
 }
 - (void) availFailedWithError:(NSHTTPURLResponse*) error_response
@@ -670,6 +777,8 @@
 	
 	[_caller performSelector:_Failure_SEL withObject:nil ];
 }
+
+
 
 
 

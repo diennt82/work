@@ -24,6 +24,19 @@
 #define STUN_RELAY_SERVER_PORT 44444
 
 
+#define SYM_NAT_CHECK_SERVER_1  @"nat1.monitoreverywhere.com"
+#define SYM_NAT_CHECK_SERVER_2  @"nat2.monitoreverywhere.com"
+
+#define SYM_NAT_CHECK_SERVER1_PORT 9999
+#define SYM_NAT_CHECK_SERVER2_PORT 9999
+#define SYM_NAT_CHECK_LOCAL_PORT 2345
+
+#define SYM_NAT_CHECK_MSG       @"NATTEST"
+
+
+
+
+
 #define STUN_CMD_PART @"action=command&command="
 #define CLOSE_STUN_SESSION @"close_session"
 
@@ -60,7 +73,7 @@
 -(UdtSocketWrapper *)connectToStunRelay: (CamChannel *) ch;
 
 
-
+-(BOOL)  isConnectingOnSymmetricNat;
 
 
 - (void) availFailedWithError:(NSHTTPURLResponse*) error_response;
