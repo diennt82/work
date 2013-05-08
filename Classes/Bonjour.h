@@ -11,7 +11,7 @@
 #include <arpa/inet.h>
 
 @protocol BonjourDelegate
--(void) bonjourReturnCameraList:(NSMutableDictionary *) cameraList;
+-(void) bonjourReturnCameraList:(NSMutableArray *) cameraList;
 @end
 
 
@@ -25,5 +25,7 @@
 @property (assign, nonatomic) id<BonjourDelegate> delegate;
 @property (assign, nonatomic) BOOL isSearching;
 @property (nonatomic, retain) NSMutableArray * serviceArray;
-@property (nonatomic, retain) NSMutableDictionary * cameraList;
+@property (nonatomic, retain) NSMutableArray * cameraList;
+
+- (void) startScanLocalWiFi;
 @end

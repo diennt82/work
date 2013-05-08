@@ -24,7 +24,7 @@
 
 @synthesize temp_user_str; 
 @synthesize temp_pass_str; 
-@synthesize temp_user_email  ;
+@synthesize temp_user_email ,bonjour, camerasLocalWiFi;
 
 @synthesize  account; 
 
@@ -32,7 +32,8 @@
 // The designated initializer.  Override if you create the controller programmatically and want to perform customization that is not appropriate for viewDidLoad.
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil withConnDelegate:(id<ConnectionMethodDelegate>) d;
 {
-    if ((self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil])) {
+    if ((self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]))
+    {
         // Custom initialization
 		
 		delegate = d;
@@ -176,6 +177,7 @@
     [temp_user_email release];
     [temp_user_str release];
     [account release];
+    [bonjour release];
      [super dealloc];
 }
 
@@ -832,9 +834,22 @@
 	account = [[UserAccount alloc] initWithUser:self.temp_user_email
 										AndPass:self.temp_pass_str
 								   WithListener: delegate];
-    //BLOCKED method
-    [account query_camera_list_blocked];
+    //Using Bonjour first
+    if (!bonjour)
+    {
+        bonjour = [[[Bonjour alloc]init] autorelease];
+        [bonjour setDelegate:self];
+    }
+    
+    @synchronized(self)
+    {
+        [bonjour startScanLocalWiFi];
+        
+        //BLOCKED method
+//        [account query_camera_list_blocked];
 
+    }
+    
 }
 
 - (void) loginFailedWithError:(NSHTTPURLResponse*) error_response
@@ -906,5 +921,15 @@
 	
 }
 
-
+#pragma mark -
+#pragma mark Bonjour Delegate
+-(void) bonjourReturnCameraList:(NSMutableArray *)cameraList
+{
+    self.camerasLocalWiFi = cameraList;
+    
+    for (NSDictionary * camera in camerasLocalWiFi)
+    {
+        NSLog(@"--------------------> %@",[camera objectForKey:@"ip_address"]);
+    }
+}
 @end

@@ -8,7 +8,7 @@
 
 #import "Bonjour.h"
 #define DOMAINS @"local"
-#define SERVICE @"_camera._tcp"
+#define SERVICE @"_udisks-ssh._tcp."
 
 @interface Bonjour ()
 @end
@@ -42,7 +42,7 @@
     
     if (self.cameraList)
     {
-        self.cameraList = [[NSMutableDictionary alloc] init];
+        self.cameraList = [[NSMutableArray alloc] init];
     }
     
     return self;
@@ -80,11 +80,21 @@
 -(void) netServiceBrowserDidStopSearch:(NSNetServiceBrowser *)aNetServiceBrowser
 {
     isSearching = NO;
-    [self resolveCameraList];
+    NSLog(@"Number of Services is : %i",[serviceArray count]);
+//    [self resolveCameraList];
+}
+
+- (void)netServiceBrowser:(NSNetServiceBrowser *)aNetServiceBrowser didNotSearch:(NSDictionary *)errorDict
+{
+    NSLog(@"error : %@", errorDict.description);
 }
 
 -(void) resolveCameraList
 {
+    if (!serviceArray)
+    {
+        return;
+    }
     for (NSNetService * aNetService in serviceArray)
     {
         @synchronized(self)
@@ -111,19 +121,18 @@
         struct sockaddr_in *socketAddress = (struct sockaddr_in *) [address bytes];
         NSLog(@"Service name: %@ , ip: %s , port %i", [service name], inet_ntoa(socketAddress->sin_addr), [service port]);
         serviceName = [service name];
-        ip_address = inet_ntoa(socketAddress->sin_addr);
+        ip_address = (NSString *)inet_ntoa(socketAddress->sin_addr);
     }
     
     NSDictionary * dict = [[NSNetService dictionaryFromTXTRecordData:[service TXTRecordData]] retain];
     
 	NSString * macAddress = [self decodeHexToString:[dict objectForKey:@"mac"]];
     
-    NSLog(@"Mac ----------> %@", [self decodeHexToString:@"<34383032 32613263 61633331>"]);
+//    NSLog(@"Mac ----------> %@", [self decodeHexToString:@"<34383032 32613263 61633331>"]);
     
     NSDictionary * cameraInfo = [[NSDictionary alloc]initWithObjectsAndKeys:serviceName,@"seviceName",ip_address,@"ip_address",macAddress,@"macAddress", nil];
     
-    [self.cameraList addEntriesFromDictionary:cameraInfo];
-    [self.delegate bonjourReturnCameraList:cameraList];
+    [self.cameraList addObject:cameraInfo];
     [cameraInfo release];
     [dict release];
 	[service release];
@@ -164,6 +173,11 @@
 {
     
     
+}
+
+- (void)netServiceDidStop:(NSNetService *)sender;
+{
+    [self.delegate bonjourReturnCameraList:cameraList];
 }
 
 - (void)stopCurrentResolve {
