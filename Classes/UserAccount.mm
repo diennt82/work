@@ -14,7 +14,7 @@
 
 @synthesize   userName,  userPass;
 @synthesize delegate; 
-@synthesize  bms_comm;
+@synthesize  bms_comm, bonjourDelegate;
 
 -(id) initWithUser:(NSString*)user AndPass:(NSString*) pass WithListener:(id <ConnectionMethodDelegate>) d; 
 {
@@ -29,6 +29,7 @@
 
 -(void) dealloc
 {
+    [_bonjourBrowser release];
     [userName release];
     [userPass release];
     [bms_comm release];
@@ -211,7 +212,6 @@
     
 	NSMutableArray * cam_profiles;
 	cam_profiles = [self parse_camera_list:raw_data];
-    
     
 	/* sync_online_and_offline_data*/
 	[self sync_online_and_offline_data:cam_profiles];
@@ -774,6 +774,14 @@
 	
 }
 
-
+#pragma mark -
+#pragma mark Bonjour Delegate
+-(void) bonjourReturnCameraListAvailable:(NSMutableArray *)cameraList
+{
+    for (CamProfile * cam in cameraList)
+    {
+        NSLog(@"Camera in available for this user : %@", cam.ip_address);
+    }
+}
 
 @end

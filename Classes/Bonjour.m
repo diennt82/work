@@ -8,7 +8,7 @@
 
 #import "Bonjour.h"
 #define DOMAINS @"local"
-#define SERVICE @"_udisks-ssh._tcp."
+#define SERVICE @"_camera._tcp."
 
 @interface Bonjour ()
 @end
@@ -19,10 +19,21 @@
 @synthesize timer;
 @synthesize delegate;
 @synthesize serviceArray;
-@synthesize cameraList;
+@synthesize cameraList, camera_profiles;
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
+    if (self) {
+        // Custom initialization
+    }
+    
+    
+    return self;
+}
+
+-(id) initwithCamProfiles:(NSMutableArray *) camera_profiles
+{
+    self = [super init];
     if (self) {
         // Custom initialization
     }
@@ -40,12 +51,20 @@
         [_browserService setDelegate:self];
     }
     
-    if (self.cameraList)
+    if (!self.cameraList)
     {
         self.cameraList = [[NSMutableArray alloc] init];
     }
     
+    if (self.camera_profiles == nil)
+    {
+        self.camera_profiles = [[NSMutableArray alloc] init];
+    }
+    
+    self.camera_profiles = camera_profiles;
+    
     return self;
+
 }
 
 - (void)viewDidLoad
@@ -57,6 +76,12 @@
 
 - (void) startScanLocalWiFi
 {
+    if (_browserService)
+    {
+        [_browserService stop];
+        [_browserService setDelegate:self];
+    }
+    
     [_browserService searchForServicesOfType:SERVICE inDomain:DOMAINS];
 }
 
@@ -65,6 +90,7 @@
 -(void) netServiceBrowserWillSearch:(NSNetServiceBrowser *)aNetServiceBrowser
 {
     isSearching = YES;
+    [serviceArray removeAllObjects];
 }
 
 -(void)netServiceBrowser:(NSNetServiceBrowser *)aNetServiceBrowser didFindService:(NSNetService *)aNetService moreComing:(BOOL)moreComing
@@ -74,6 +100,7 @@
     if (!moreComing)
     {
         isSearching = NO;
+        [self resolveCameraList];
     }
 }
 
@@ -81,7 +108,6 @@
 {
     isSearching = NO;
     NSLog(@"Number of Services is : %i",[serviceArray count]);
-//    [self resolveCameraList];
 }
 
 - (void)netServiceBrowser:(NSNetServiceBrowser *)aNetServiceBrowser didNotSearch:(NSDictionary *)errorDict
@@ -95,97 +121,58 @@
     {
         return;
     }
+    
+    _lastService = [serviceArray lastObject];
+    
     for (NSNetService * aNetService in serviceArray)
     {
-        @synchronized(self)
-        {
-            _currentService = aNetService;
             [aNetService setDelegate:self];
-            [aNetService resolveWithTimeout:0.0];
-            self.timer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:nil userInfo:aNetService repeats:NO];
-        }
+            [aNetService resolveWithTimeout:5.0];
+//            self.timer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:nil userInfo:aNetService repeats:NO];
     }
 }
 #pragma mark -
 #pragma mark NSNetResolveDelegate
-- (void)netServiceDidResolveAddress:(NSNetService *)service {
-	assert(service == _currentService);
+- (void)netServiceDidResolveAddress:(NSNetService *)service
+{
 	
 	[service retain];
-	[self stopCurrentResolve];
     
     NSString * serviceName;
-    NSString * ip_address;
+    char * ip_address;
     for (NSData *address in [service addresses])
     {
         struct sockaddr_in *socketAddress = (struct sockaddr_in *) [address bytes];
-        NSLog(@"Service name: %@ , ip: %s , port %i", [service name], inet_ntoa(socketAddress->sin_addr), [service port]);
         serviceName = [service name];
-        ip_address = (NSString *)inet_ntoa(socketAddress->sin_addr);
+        ip_address = inet_ntoa(socketAddress->sin_addr);
     }
     
     NSDictionary * dict = [[NSNetService dictionaryFromTXTRecordData:[service TXTRecordData]] retain];
     
-	NSString * macAddress = [self decodeHexToString:[dict objectForKey:@"mac"]];
+	NSData * macAddress = [dict objectForKey:@"mac"];
     
-//    NSLog(@"Mac ----------> %@", [self decodeHexToString:@"<34383032 32613263 61633331>"]);
+    NSString * strMac = [[NSString alloc] initWithData:macAddress encoding:NSASCIIStringEncoding];
     
-    NSDictionary * cameraInfo = [[NSDictionary alloc]initWithObjectsAndKeys:serviceName,@"seviceName",ip_address,@"ip_address",macAddress,@"macAddress", nil];
+//    NSString * ip = [NSString stringWithFormat:@"%s",ip_address];
     
-    [self.cameraList addObject:cameraInfo];
-    [cameraInfo release];
-    [dict release];
-	[service release];
-}
-
--(NSString *) decodeHexToString:(NSString *) string
-{
-    NSString * newString1 = [string stringByReplacingOccurrencesOfString:@" " withString:@""];
-    NSString * newString2 = [newString1 stringByReplacingOccurrencesOfString:@"<" withString:@""];
-    NSString * finalString = [newString2 stringByReplacingOccurrencesOfString:@">" withString:@""];
+    strMac = [Util add_colon_to_mac:strMac];
     
-    NSMutableString * newString = [[[NSMutableString alloc] init] autorelease];
-    int i = 0;
-    while (i < [finalString length])
+    for (CamProfile * cam_profile in camera_profiles)
     {
-        NSString * hexChar = [finalString substringWithRange: NSMakeRange(i, 2)];
-        int value = 0;
-        sscanf([hexChar cStringUsingEncoding:NSASCIIStringEncoding], "%x", &value);
-        [newString appendFormat:@"%c", (char)value];
-        i+=2;
+        if ([strMac isEqualToString:cam_profile.mac_address])
+        {
+            [self.cameraList addObject:cam_profile];
+        }
     }
     
-    return newString;
-}
-
-- (NSString *)copyStringFromTXTDict:(NSDictionary *)dict which:(NSString*)which
-{
-	// Helper for getting information from the TXT data
-	NSData* data = [dict objectForKey:which];
-	NSString *resultString = nil;
-	if (data) {
-		resultString = [[NSString alloc] initWithData:data encoding:NSASCIIStringEncoding];
-	}
-	return resultString;
-}
-
-- (void)netService:(NSNetService *)sender didUpdateTXTRecordData:(NSData *)data
-{
+    if (service == _lastService)
+    {
+        [self.delegate bonjourReturnCameraListAvailable:self.cameraList];
+    }
     
-    
-}
-
-- (void)netServiceDidStop:(NSNetService *)sender;
-{
-    [self.delegate bonjourReturnCameraList:cameraList];
-}
-
-- (void)stopCurrentResolve {
-    //	self.needsActivityIndicator = NO;
-	self.timer = nil;
-    
-	[_currentService stop];
-	_currentService = nil;
+    [strMac release];
+    [dict release];
+	[service release];
 }
 
 #pragma mark -
@@ -197,6 +184,8 @@
 
 -(void) dealloc
 {
+    [camera_profiles release];
+    [cameraList release];
     [timer release];
     delegate = nil;
     [serviceArray removeAllObjects];

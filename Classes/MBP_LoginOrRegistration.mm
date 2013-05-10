@@ -24,7 +24,7 @@
 
 @synthesize temp_user_str; 
 @synthesize temp_pass_str; 
-@synthesize temp_user_email ,bonjour, camerasLocalWiFi;
+@synthesize temp_user_email ;
 
 @synthesize  account; 
 
@@ -46,6 +46,7 @@
 // Implement viewDidLoad to do additional setup after loading the view, typically from a nib.
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
 	  [[UIApplication sharedApplication] setStatusBarOrientation:UIInterfaceOrientationPortrait];
     
     
@@ -177,7 +178,6 @@
     [temp_user_email release];
     [temp_user_str release];
     [account release];
-    [bonjour release];
      [super dealloc];
 }
 
@@ -207,7 +207,6 @@
 
     [parent presentModalViewController:navController animated:NO];
 }
-
 
 -(void) doSignIn :(NSTimer *) exp
 {
@@ -834,21 +833,10 @@
 	account = [[UserAccount alloc] initWithUser:self.temp_user_email
 										AndPass:self.temp_pass_str
 								   WithListener: delegate];
-    //Using Bonjour first
-    if (!bonjour)
-    {
-        bonjour = [[[Bonjour alloc]init] autorelease];
-        [bonjour setDelegate:self];
-    }
     
-    @synchronized(self)
-    {
-        [bonjour startScanLocalWiFi];
         
         //BLOCKED method
-//        [account query_camera_list_blocked];
-
-    }
+        [account query_camera_list_blocked];
     
 }
 
@@ -919,17 +907,5 @@
 	[alert show];
 	[alert release];
 	
-}
-
-#pragma mark -
-#pragma mark Bonjour Delegate
--(void) bonjourReturnCameraList:(NSMutableArray *)cameraList
-{
-    self.camerasLocalWiFi = cameraList;
-    
-    for (NSDictionary * camera in camerasLocalWiFi)
-    {
-        NSLog(@"--------------------> %@",[camera objectForKey:@"ip_address"]);
-    }
 }
 @end

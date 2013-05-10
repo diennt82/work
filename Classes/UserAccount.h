@@ -12,20 +12,24 @@
 #import "Util.h"
 #import "SetupData.h"
 #import "ConnectionMethodDelegate.h"
+#import "Bonjour.h"
 
 
 
-@interface UserAccount : NSObject {
+@interface UserAccount : NSObject <BonjourDelegate>
+{
 
 	NSString * userName;
 	NSString * userPass; 
     BMS_Communication * bms_comm; 
 	
-	id <ConnectionMethodDelegate> delegate; 	
+	id <ConnectionMethodDelegate> delegate;
+    Bonjour * _bonjourBrowser;
 }
-@property (nonatomic,assign) id <ConnectionMethodDelegate> delegate; 	
-@property (nonatomic, retain) NSString * userName, * userPass;
-@property (nonatomic,retain)BMS_Communication * bms_comm;
+@property (nonatomic,assign) id <ConnectionMethodDelegate> delegate;
+@property (nonatomic,assign) id <BonjourDelegate> bonjourDelegate;
+@property (nonatomic,retain) NSString * userName, * userPass;
+@property (nonatomic,retain) BMS_Communication * bms_comm;
 
 
 -(id) initWithUser:(NSString*)user AndPass:(NSString*) pass WithListener:(id <ConnectionMethodDelegate>) d;

@@ -14,7 +14,6 @@
 #import "ForgotPwdViewController.h"
 #import "MBPNavController.h"
 #import "Reachability.h"
-#import "Bonjour.h"
 
 #define LOGIN_BUTTON_TAG 200
 #define CREATE_NEW_BUTTON_TAG 201
@@ -90,8 +89,6 @@
 @property (nonatomic, retain) 	NSString * temp_user_str, * temp_pass_str, * temp_user_email  ; 
 
 @property (nonatomic, retain) UserAccount *account;
-@property (nonatomic, retain) Bonjour * bonjour;
-@property (nonatomic, retain) NSMutableArray * camerasLocalWiFi;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil withConnDelegate:(id<ConnectionMethodDelegate>) delegate;
 
