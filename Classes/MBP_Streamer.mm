@@ -197,18 +197,22 @@
             {
                 NSMutableData * _data = [[NSMutableData data] retain];
                 
-                uint8_t buf[1024];
+                uint8_t buf[256];
                 unsigned int len = 0;
-                len = [(NSInputStream *)theStream read:buf maxLength:1024];
+                len = [(NSInputStream *)theStream read:buf maxLength:256];
                 
                 [istream close];
                 
                 if(len)
                 {
                     [_data appendBytes:(const void *)buf length:len];
+                    
+                    NSLog(@"initial read len: %d raw-response: %@",len, _data);
+
+                    
                                         
                     NSString *txt = [[[NSString alloc] initWithData:_data encoding: NSUTF8StringEncoding] autorelease];
-                    //NSLog(@"response 1: %@", txt);
+                    NSLog(@"decode-response: %@", txt);
                     
                     NSRange range1 = [txt rangeOfString:AUTHENTICATION_ERROR];
                     NSRange range2 = [txt rangeOfString:SESSIONKEY_MISMATCHED];
@@ -217,7 +221,7 @@
                     if (txt == nil)
                     {
                         [self stopStreaming];
-                        [mHandler statusReport:STREAM_STOPPED_UNEXPECTEDLY andObj:nil];
+                        [mHandler statusReport:REMOTE_STREAM_STOPPED_UNEXPECTEDLY andObj:nil];
                     }
                     else if(
                             (range1.location != NSNotFound) ||
@@ -243,7 +247,7 @@
                         }
                         else
                         {
-                            [mHandler statusReport:STREAM_STOPPED_UNEXPECTEDLY andObj:nil];
+                            [mHandler statusReport:REMOTE_STREAM_STOPPED_UNEXPECTEDLY andObj:nil];
                         }
                         
                         
@@ -257,7 +261,7 @@
                         //Non-blocking connect
                         [listenSocket connectToHost:self.device_ip
                                              onPort:self.device_port
-                                        withTimeout:5
+                                        withTimeout:15
                                               error:nil];
 
                     }
