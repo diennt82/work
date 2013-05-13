@@ -3739,19 +3739,24 @@
 	{
         
         
-		//[NSThread sleepForTimeInterval:5.0];
+        NSDate * timeOut = [[NSDate alloc]initWithTimeInterval:(6*60.0) sinceDate:[NSDate date]];
+
 		NSString * response ;
+        
+        
+        
 		while (true)
 		{
             
 			error = nil;
 			response = [comm getUpgradeProgress:&error]; 
-			//NSLog(@"response: %@",response);
+
 			if (error != nil)
 			{
                 
 				NSLog(@"error: %@ code:%d \n", [error localizedDescription] ,[error code]);
-				break; 
+                //Dont break here -- retry until timeout or 100% Success
+				//break;
                 
 			}
 			else
@@ -3768,6 +3773,17 @@
 			}
             
 			[NSThread sleepForTimeInterval:3.0];
+            
+            
+            if ([timeOut compare:[NSDate date]] == NSOrderedAscending  ||
+                [timeOut compare:[NSDate date]] == NSOrderedSame )
+            {
+                //Timeout
+                NSLog(@"Upgrade Timeout --");
+                break;
+                
+            }
+            
 		}
         
         
