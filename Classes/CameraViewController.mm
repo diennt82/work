@@ -3765,9 +3765,19 @@
                 
 				NSString * percentage = [response substringFromIndex:[BURNING_PROCESS length]]; 
                 
-				[self performSelectorOnMainThread:@selector(upgradeFwProgress_ui:) 
+				[self performSelectorOnMainThread:@selector(upgradeFwProgress_ui:)
                                        withObject:[NSNumber numberWithInt:[percentage intValue]]
                                     waitUntilDone:YES];
+                
+                
+                
+                
+                if ([percentage intValue] == 100)
+                {
+                    NSLog(@"Upgrade 100%% --");
+                    break;
+
+                }
                 
                 
 			}
