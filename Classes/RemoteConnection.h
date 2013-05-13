@@ -22,6 +22,8 @@
 #define STREAM_MODE_UPNP 2
 #define STREAM_MODE_STUN 3
 
+#define STREAM_MODE_RELAY2 5
+
 #define TOTAL_PORTS @"total_ports="
 #define BR_TAG      @"<br>"
 #define PTT_PRT @"audio_port="

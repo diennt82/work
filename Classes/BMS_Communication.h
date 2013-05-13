@@ -12,8 +12,8 @@
 
 #define BMS_DEFAULT_TIME_OUT 30.0 
 
-//#define BMS_PHONESERVICE @"https://simplimonitor.com/BMS/phoneservice?"
-#define BMS_PHONESERVICE @"https://monitoreverywhere.com/BMS/phoneservice?"
+#define BMS_PHONESERVICE @"https://simplimonitor.com/BMS/phoneservice?"
+//#define BMS_PHONESERVICE @"https://monitoreverywhere.com/BMS/phoneservice?"
 #define BMS_CMD_PART     @"action=command&command="
 
 
@@ -81,6 +81,11 @@
 
 #define GET_RELAY_KEY @"get_relaysec_info"
 #define GET_RELAY_KEY_PARAM_1 @"&macaddress="
+
+#define VIEW_CAM_RELAY @"view_cam_relay"
+#define VIEW_CAM_RELAY_PARAM_1 @"&macaddress="
+#define VIEW_CAM_RELAY_PARAM_2 @"&email="
+
 
 
 //OLD: #define SEND_CTRL_CMD @"send_control_command"
@@ -194,6 +199,9 @@
 - (BOOL)BMS_resetUserPassword:(NSString*) user_email;
 
 -(BOOL) BMS_getRelaySecWithUser:(NSString*) user_email AndPass:(NSString*) user_pass macAddr:(NSString *) macWithColon ;
+
+
+-(BOOL) BMS_viewCamRelayWithUser:(NSString*) user_email AndPass:(NSString*) user_pass macAddr:(NSString *) macWithColon;
 
 
 

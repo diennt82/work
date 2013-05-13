@@ -213,7 +213,8 @@
     progressView.hidden = NO; 
     [self.view bringSubviewToFront:progressView]; 
     
-	if (commMode == COMM_MODE_STUN)
+	if (  commMode == COMM_MODE_STUN      ||
+        commMode ==  COMM_MODE_STUN_RELAY2 )
 	{
 
         /*20120822: Camera settings page is on OVERLAY mode 
@@ -406,7 +407,8 @@
     command = VOX_STATUS;
     
     
-    if (commMode == COMM_MODE_STUN)
+    if (  commMode == COMM_MODE_STUN      ||
+        commMode ==  COMM_MODE_STUN_RELAY2 )
 	{
         
         NSData * response_data;
@@ -451,7 +453,8 @@
     
     command = VOX_GET_THRESHOLD;
     
-    if (commMode == COMM_MODE_STUN)
+    if (  commMode == COMM_MODE_STUN      ||
+        commMode ==  COMM_MODE_STUN_RELAY2 )
 	{
         
         NSData * response_data;
@@ -559,7 +562,8 @@
 	NSString * response = nil, * command;
 	command = GET_VOLUME;
     
-    if (commMode == COMM_MODE_STUN)
+    if (  commMode == COMM_MODE_STUN      ||
+        commMode ==  COMM_MODE_STUN_RELAY2 )
 	{
         NSData * response_data; 
         response_data =  [self.dev_s_comm sendCommandThruUdtServer:command 
@@ -634,7 +638,8 @@
     
 	command = GET_BRIGHTNESS_VALUE;
     
-    if (commMode == COMM_MODE_STUN)
+    if (  commMode == COMM_MODE_STUN      ||
+        commMode ==  COMM_MODE_STUN_RELAY2 )
 	{
         NSData * response_data; 
         response_data =  [self.dev_s_comm sendCommandThruUdtServer:command 
@@ -1224,7 +1229,8 @@
 	NSString * response, * command;
 	command = GET_VERSION;
     
-    if (commMode == COMM_MODE_STUN)
+    if (  commMode == COMM_MODE_STUN      ||
+        commMode ==  COMM_MODE_STUN_RELAY2 )
 	{
         NSData * response_data; 
         response_data =  [self.dev_s_comm sendCommandThruUdtServer:command 
@@ -1793,7 +1799,8 @@
     }
     command = VOX_ENABLE;
     
-    if (self.camChan.communication_mode == COMM_MODE_STUN)
+    if (self.camChan.communication_mode == COMM_MODE_STUN   ||
+         self.camChan.communication_mode ==  COMM_MODE_STUN_RELAY2 )
     {
         if (self.dev_s_comm != nil)
         {
@@ -1815,7 +1822,8 @@
     command = [NSString stringWithFormat:@"%@%@%d", VOX_SET_THRESHOLD,
                VOX_SET_THRESHOLD_VALUE, vox_sensitivity];
     
-    if (self.camChan.communication_mode == COMM_MODE_STUN)
+    if (self.camChan.communication_mode == COMM_MODE_STUN   ||
+        self.camChan.communication_mode ==  COMM_MODE_STUN_RELAY2 )
     {
         if (self.dev_s_comm != nil)
         {
@@ -1871,7 +1879,8 @@
         response = nil; 
 		command = GET_BRIGHTNESS_VALUE;
         
-        if (self.camChan.communication_mode == COMM_MODE_STUN)
+        if (self.camChan.communication_mode == COMM_MODE_STUN   ||
+            self.camChan.communication_mode ==  COMM_MODE_STUN_RELAY2 )
         {
             if (self.dev_s_comm != nil)
             {
@@ -1911,7 +1920,8 @@
 			break;
 		}
 
-        if (self.camChan.communication_mode == COMM_MODE_STUN)
+        if (self.camChan.communication_mode == COMM_MODE_STUN   ||
+            self.camChan.communication_mode ==  COMM_MODE_STUN_RELAY2 )
         {
             if (self.dev_s_comm != nil)
             {
@@ -1966,7 +1976,8 @@
 	NSString * response, * command;
 	command = [NSString stringWithFormat:@"%@%@%d",SET_VOLUME, SET_VOLUME_PARAM, _level];
     
-    if (self.camChan.communication_mode == COMM_MODE_STUN)
+    if (self.camChan.communication_mode == COMM_MODE_STUN   ||
+        self.camChan.communication_mode ==  COMM_MODE_STUN_RELAY2 )
     {
         if (self.dev_s_comm != nil)
         {

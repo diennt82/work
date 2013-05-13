@@ -140,6 +140,14 @@
 				
 				break; 
 			}
+                
+            case STREAM_MODE_RELAY2:
+            {
+                /// TODO:
+                NSLog(@"TODO "); 
+                
+                break;
+            }
 			default:
 				break;
 		}

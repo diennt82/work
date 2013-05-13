@@ -34,6 +34,11 @@
 
 @synthesize istream,ostream;
 
+
+
+
+
+
 - (id) initWithIp:(NSString *) ip andPort:(int) port handler:(id<StreamerEventHandler>) handler
 {
 	[super init];
@@ -115,7 +120,7 @@
     
     //REMOTE CONNECTION : check sskey
     
-    if (self.remoteView == TRUE && self.remoteViewKey != nil)
+    if (self.communication_mode == COMM_MODE_UPNP && self.remoteView == TRUE && self.remoteViewKey != nil)
     {
         //USE a more primitive way - CFStream
                 
@@ -142,6 +147,18 @@
         //  The actual call to create listenSocket is done after we verified the sskey
         //  -- Check the callback  (void)stream:(NSStream *)theStream handleEvent:(NSStreamEvent)eventCode
             
+    }
+    else if (self.communication_mode == COMM_MODE_STUN_RELAY2)
+    {
+        initialFlag = 1;
+        listenSocket = [[AsyncSocket alloc] initWithDelegate:self];
+        //Non-blocking connect
+        [listenSocket connectToHost:self.device_ip
+                             onPort:self.device_port
+                        withTimeout:15
+                              error:nil];
+        
+
     }
     else // LOCAL CONNECTION
     {
@@ -335,16 +352,36 @@
 	NSString *getReq = [NSString stringWithFormat:@"%@%@\r\n",
                         AVSTREAM_REQUEST,
                         AVSTREAM_PARAM_2 ];
-	if (self.remoteView == TRUE && self.remoteViewKey != nil)
-	{
-		getReq = [NSString stringWithFormat:@"%@%@%@%@\r\n",
-                  AVSTREAM_REQUEST, AVSTREAM_PARAM_1, self.remoteViewKey,
-                  AVSTREAM_PARAM_2 ];
-	}
-    
     //Attach Basic authen:
     getReq = [getReq stringByAppendingFormat:@"Authorization: Basic %@\r\n\r\n",[Util getDFCredentials] ];
+
     
+	if (self.remoteView == TRUE && self.remoteViewKey != nil)
+	{
+        if (self.communication_mode == COMM_MODE_UPNP)
+        {
+            getReq = [NSString stringWithFormat:@"%@%@%@%@\r\n",
+                      AVSTREAM_REQUEST, AVSTREAM_PARAM_1, self.remoteViewKey,
+                      AVSTREAM_PARAM_2 ];
+            
+            //Attach Basic authen:
+            getReq = [getReq stringByAppendingFormat:@"Authorization: Basic %@\r\n\r\n",[Util getDFCredentials] ];
+
+            
+        }
+        else if (self.communication_mode == COMM_MODE_STUN_RELAY2)
+        {
+            // GET /streamingservice?action=command&command=get_relay_stream&channelId=...&mac=...&skey=...
+            getReq = [NSString stringWithFormat:@"%@%@%@%@%@%@%@%@%@%@\r\n",
+                      STREAMING_SERVICE, STUN_CMD_PART, RELAY2_STREAM_CMD,
+                      RELAY2_STREAM_CMD_PARAM1, self.streamingChannel.channID,
+                      RELAY2_STREAM_CMD_PARAM2, [Util strip_colon_fr_mac:self.streamingChannel.profile.mac_address],
+                      RELAY2_STREAM_CMD_PARAM3, self.remoteViewKey,
+                      AVSTREAM_PARAM_2 ];
+        }
+	}
+    
+       
     
 	NSLog(@"getReq: %@", getReq);
     
@@ -353,8 +390,8 @@
     
        
     
-	[listenSocket writeData:getReqData withTimeout:2 tag:1];
-	[listenSocket readDataWithTimeout:5.0 tag:1];
+	[listenSocket writeData:getReqData withTimeout:10 tag:1];
+	[listenSocket readDataWithTimeout:30.0 tag:1];
 	responseData = [[NSMutableData alloc] init];
     
 	if ( pcmPlayer == nil)
@@ -473,26 +510,368 @@
         
         
         
-		NSString * msg = nil;
-		msg = [NSString stringWithFormat:@"%@%@",
-               STUN_CMD_PART, CLOSE_STUN_SESSION];
-		NSData * msg_ = [[NSData alloc] initWithBytes:[msg UTF8String] length:[msg length]];
+        [mHandler statusReport:REMOTE_STREAM_STOPPED andObj:nil];
         
         
-		if ([udtSocket isOpen])
-		{
-			NSLog(@"Send close session.. & close sock");
-			[udtSocket sendDataViaUdt:msg_];
-			[udtSocket close];
-		}
-		else {
-			NSLog(@"udtSocket already close -- ");
-		}
+//		NSString * msg = nil;
+//		msg = [NSString stringWithFormat:@"%@%@",
+//               STUN_CMD_PART, CLOSE_STUN_SESSION];
+//		NSData * msg_ = [[NSData alloc] initWithBytes:[msg UTF8String] length:[msg length]];
+//        
+//        
+//		if ([udtSocket isOpen])
+//		{
+//			NSLog(@"Send close session.. & close sock");
+//			[udtSocket sendDataViaUdt:msg_];
+//			[udtSocket close];
+//		}
+//		else {
+//			NSLog(@"udtSocket already close -- ");
+//		}
         
         
 	}
     
+    
+    if (communication_mode == COMM_MODE_STUN_RELAY2)
+    {
+        [mHandler statusReport:REMOTE_STREAM_STOPPED andObj:nil];
+
+    }
 }
+
+
+#pragma mark -
+#pragma mark TCP delegate
+
+
+- (void)onSocket:(AsyncSocket *)sock didReadData:(NSData *)data withTag:(long)tag
+{
+    
+	[mHandler statusReport:STREAM_STARTED andObj:nil];
+    
+	
+	[listenSocket readDataWithTimeout:10.0 tag:tag];
+    
+	NSString *strBoundary = BOUNDARY_STRING;
+	NSData *boundaryString = [strBoundary dataUsingEncoding:NSUTF8StringEncoding];
+    
+	NSString *strDoubleReturn = @"\r\n\r\n";
+	NSData *doubleReturnString = [strDoubleReturn dataUsingEncoding:NSUTF8StringEncoding];
+    
+	NSMutableData* buffer;
+    
+    
+	if(initialFlag) {
+        
+        
+		//process data
+		NSString* initialResponse = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+		NSRange range = [initialResponse rangeOfString:AUTHENTICATION_ERROR];
+        
+        if (initialResponse == nil)
+        {
+            
+            NSLog(@"initialResponse = nil... ");
+            
+        }
+        
+		if( (initialResponse!= nil) &&
+           (range.location != NSNotFound)
+           )
+		{
+            // auth error ->>>>>>> force re-connect
+            NSLog(@"auth ERROR-- stop streaming ");
+            
+            NSLog(@"error response: %@", initialResponse);
+            [self stopStreaming];
+            
+            if (self.remoteView == TRUE && self.remoteViewKey != nil)
+            {
+                [mHandler statusReport:REMOTE_STREAM_SSKEY_MISMATCH andObj:nil];
+                
+            }
+            else
+            {
+                [mHandler statusReport:STREAM_STOPPED_UNEXPECTEDLY andObj:nil];
+            }
+            
+            self.latest_connection_error = 401;
+            
+			return;
+		}
+		[initialResponse release];
+        
+		// truncate the http header
+		[responseData appendData:data];
+		int pos = [Util offsetOfBytes:responseData searchPattern:doubleReturnString];
+		if(pos < 0) {
+            NSLog(@"pos < 0 ");
+            return;
+        }
+        
+		initialFlag = 0;
+		NSRange range0 = {pos + 4, [responseData length] - pos - 4};
+		NSData* tmpData = [responseData subdataWithRange:range0];
+        
+		buffer = [[NSMutableData alloc] init];
+		[buffer appendData:tmpData];
+	}
+	else
+	{
+		buffer = [[NSMutableData alloc] init];
+		[buffer appendData:responseData];
+		[buffer appendData:data];
+	}
+    
+    
+    
+	int length = [buffer length];
+    
+	int index = 0;
+	int totalOffset = 0;
+    
+	while(1) {
+		NSRange range = {totalOffset, length - totalOffset};
+		NSData* ptr = [buffer subdataWithRange:range];
+		int endPos = [Util offsetOfBytes:ptr searchPattern:boundaryString];
+        
+        
+		if(endPos >= 0) {
+			// there is a match for the end boundary
+			// we have the entire data chunk ready
+			if(endPos > 0) {
+                
+				/* Try to find the boundary into the body */
+				NSRange range1 = {0, endPos};
+				NSData* data = [ptr subdataWithRange:range1];
+				int dl = [data length];
+				//Byte* p1 = (Byte*)[data bytes];
+                
+				index = endPos + [boundaryString length];
+				totalOffset += index;
+				int startIndex = [Util offsetOfBytes:data searchPattern:doubleReturnString];
+                
+				/* Start of body in HTTP response
+                 
+				 */
+				if(startIndex >= 0) {
+                    
+					NSRange range2 = {startIndex + 4, dl - startIndex - 4};
+					NSData* actualData = [data subdataWithRange:range2];
+					Byte* actualDataPtr = (Byte*)[actualData bytes];
+					int audioLength = (actualDataPtr[1] << 24) + (actualDataPtr[2] << 16) + (actualDataPtr[3] << 8) + actualDataPtr[4];
+					int imageIndex = (actualDataPtr[5] << 24) + (actualDataPtr[6] << 16) + (actualDataPtr[7] << 8) + actualDataPtr[8];
+                    
+                    
+                    
+					Byte resetAudioBufferCount = actualDataPtr[10];
+					int temperature = (actualDataPtr[11]<<24) | (actualDataPtr[12]<<16) |
+                    (actualDataPtr[13]<<8 )|   actualDataPtr[14];
+                    
+					//Update temperature
+					if (self.mTempUpdater != nil)
+					{
+						[self.mTempUpdater updateTemperature:temperature];
+					}
+                    
+                    
+					int avdata_offset = 10 + 4 + 1 ; //old data + temperature + 1
+                    
+                    
+                    
+#ifdef IBALL_AUDIO_SUPPORT
+					if( (disableAudio == NO) && audioLength > 0 )
+					{
+						NSRange range3 = {avdata_offset, audioLength};
+						NSData* audioData = [actualData subdataWithRange:range3];
+#ifdef IRABOT_PCM_AUDIO_SUPPORT
+						NSData* decodedPCM = audioData;
+                        
+#else
+						NSMutableData* decodedPCM = [[NSMutableData alloc] init];
+						[ADPCMDecoder Decode:audioData outData:decodedPCM];
+#endif
+                        
+                        
+						if(self.recordInProgress)
+						{
+							[iRecorder GetAudio:decodedPCM resetAudioBufferCount:resetAudioBufferCount];
+						}
+						//NSLog(@"decoded audio len: %d", [decodedPCM length]);
+                        
+                        
+						[self PlayPCM:decodedPCM];
+                        
+#if !defined(IRABOT_PCM_AUDIO_SUPPORT)
+						[decodedPCM release];
+#endif
+                        
+                        
+                        
+					}
+#endif /* IBALL_AUDIO_SUPPORT */
+                    
+					NSRange range4 = {avdata_offset + audioLength,
+						[actualData length] - avdata_offset - audioLength};
+                    
+                    if (range4.length > 2 )
+                    {
+                        //NSLog(@"image frame length:%d",range4.length );
+                        
+                        NSData* imageData = [actualData subdataWithRange:range4];
+                        UIImage *image = [UIImage imageWithData:imageData];
+                        
+                        
+                        image = [self adaptToCurrentOrientation:image];
+                        
+                        if (self.currentZoomLevel < 5.0f)
+                        {
+                            //currentZoomLevel = 1,2,3,4.. smaller means more magnified
+                            
+                            CGFloat newDeltaWidth =   image.size.width*( self.currentZoomLevel*0.1);
+                            CGFloat newDeltaHeight =  image.size.height*( self.currentZoomLevel*0.1);
+                            CGRect newRect = CGRectZero;
+                            newRect.origin.x = - newDeltaWidth/2;
+                            newRect.origin.y = - newDeltaHeight/2;
+                            
+                            newRect.size.width =  image.size.width +newDeltaWidth;
+                            newRect.size.height = image.size.height +newDeltaHeight;
+                            
+                            //NSLog(@"newsize :%f, %f %f %f", newRect.size.width, newRect.size.height,
+                            //	 newDeltaWidth, newDeltaHeight);
+                            image = [self imageWithImage:image scaledToRect:newRect];
+                            
+                        }
+                        
+                        //NSLog(@"setVideo Image" );
+                        [self.videoImage setImage:image];
+                        
+                        //[self.videoImage setImage:[UIImage imageWithData:imageData]];
+                        
+                        
+                        if (self.takeSnapshot == YES)
+                        {
+                            [self saveSnapShot:image];
+                            self.takeSnapshot = NO;
+                        }
+                        
+                        
+                        
+                        if (self.recordInProgress == YES)
+                        {
+                            
+                            [iRecorder GetImage:imageData imgIndex:imageIndex];
+                            if([iRecorder GetCurrentRecordSize] >= iMaxRecordSize) {
+                                [self stopRecording];
+                                //[self startRecording];
+                            }
+                            
+                        }
+                        
+                    }
+					//[actualData release];
+				}
+				else {
+					/* Looks like we have an empty HTTP response */
+					// DO nothing with it for now
+                    
+				}
+			} else {
+				// for initial condition
+				// we will skip the boundary
+				index = [boundaryString length];
+				totalOffset = index;
+                
+                
+			}
+		} else {
+            
+			// no match
+			// break the loop and wait for the next data chunk
+			[responseData setLength:[ptr length]];
+			[responseData setData:ptr];
+			//[ptr release];
+			break;
+		}
+	}
+    
+	[buffer release];
+    
+    
+}
+
+
+- (void)onSocket:(AsyncSocket *)sock willDisconnectWithError:(NSError *)err
+{
+	NSLog(@"Streamer- connection failed with error:%d:%@" ,
+          [err code], err);
+    
+    
+	[self.videoImage setImage:[UIImage imageNamed:@"homepage.png"]];
+    
+    
+    //Check for session key mismatch
+    if ([err code] == 401 ||
+        [err code] == 601 )
+    {
+        NSLog(@"Streamer- sskey mismatch");
+        [mHandler statusReport:REMOTE_STREAM_SSKEY_MISMATCH andObj:nil];
+        self.latest_connection_error = [err code];
+        return;
+    }
+    
+    
+	if (hasStoppedByCaller == TRUE)
+	{
+		//simply return
+		return;
+	}
+    
+	NSLog(@"Streamer- AsyncSocketReadTimeoutError");
+	reconnectLimits --;
+	if (reconnectLimits  > 0)
+	{
+		[self reConnect];
+	}
+    
+    
+	if (reconnectLimits <=1)
+	{
+		reconnectLimits = 3; //keep retrying ...
+        
+        
+		if (self.remoteView == TRUE)
+		{
+			NSLog(@"Streamer-REMOTE send message : STREAM_STOPPED_UNEXPECTEDLY");
+			[mHandler statusReport:REMOTE_STREAM_STOPPED_UNEXPECTEDLY andObj:nil];
+		}
+		else
+		{
+			NSLog(@"Streamer- send message : STREAM_STOPPED_UNEXPECTEDLY");
+			[mHandler statusReport:STREAM_STOPPED_UNEXPECTEDLY andObj:nil];
+		}
+        
+	}
+}
+
+
+- (void)onSocket:(AsyncSocket *)sock didConnectToHost:(NSString *)host port:(UInt16)port
+{
+	NSLog(@"Streamer- connected to camera: %@", host);
+	[mHandler statusReport:CONNECTED_TO_CAMERA andObj:nil];
+    
+	[self receiveData];
+    
+}
+
+- (void)onSocketDidDisconnect:(AsyncSocket *)sock
+{
+    
+}
+
+
+
 
 #pragma mark -
 #pragma mark  UDT stream
@@ -658,13 +1037,7 @@
 	struct in_addr * server_ip = [UdtSocketWrapper getIpfromHostName:self.device_ip];
 
     
-#if 0 //DBG only
-    NSLog(@"[BG thread] Debug 601 error "); 
-    server_ip = [UdtSocketWrapper getIpfromHostName:@"192.168.1.101"];
-    
-    self.device_port = 2345;
-    
-#endif
+
     
 	NSLog(@"[BG thread] tryConnectToUDT_bg: connect to %@:%d from localport: %d server_ip:%d",
           self.device_ip, self.device_port ,
@@ -827,7 +1200,7 @@
 
 -(void) sendStatusStoppedReportOnMainThread:(NSObject *) obj
 {
-	[mHandler statusReport:STREAM_STOPPED andObj:obj];
+	[mHandler statusReport:REMOTE_STREAM_STOPPED andObj:obj];
 }
 
 -(BOOL) isSskeyMismatch: (NSMutableData *) data len:(int) data_len
@@ -1335,336 +1708,6 @@
 	[pcmPlayer WritePCM:(unsigned char *)[pcm bytes] length:[pcm length]];
 }
 
-
-
-#pragma mark -
-#pragma mark TCP delegate
-
-
-- (void)onSocket:(AsyncSocket *)sock didReadData:(NSData *)data withTag:(long)tag
-{
-    
-	[mHandler statusReport:STREAM_STARTED andObj:nil];
-    
-	
-	[listenSocket readDataWithTimeout:10.0 tag:tag];
-    
-	NSString *strBoundary = BOUNDARY_STRING;
-	NSData *boundaryString = [strBoundary dataUsingEncoding:NSUTF8StringEncoding];
-    
-	NSString *strDoubleReturn = @"\r\n\r\n";
-	NSData *doubleReturnString = [strDoubleReturn dataUsingEncoding:NSUTF8StringEncoding];
-    
-	NSMutableData* buffer;
-    
-    
-	if(initialFlag) {
-        
-        
-		//process data
-		NSString* initialResponse = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
-		NSRange range = [initialResponse rangeOfString:AUTHENTICATION_ERROR];
-        
-        if (initialResponse == nil)
-        {
-            
-             NSLog(@"initialResponse = nil... ");
-            
-        }
-        
-		if( (initialResponse!= nil) &&
-            (range.location != NSNotFound)
-           )
-		{
-            // auth error ->>>>>>> force re-connect
-            NSLog(@"auth ERROR-- stop streaming ");
-            
-            NSLog(@"error response: %@", initialResponse); 
-            [self stopStreaming];
-            
-            if (self.remoteView == TRUE && self.remoteViewKey != nil)
-            {
-               [mHandler statusReport:REMOTE_STREAM_SSKEY_MISMATCH andObj:nil];
-                
-            }
-            else
-            {
-                [mHandler statusReport:STREAM_STOPPED_UNEXPECTEDLY andObj:nil];
-            }
-
-            self.latest_connection_error = 401;
-            
-			return;
-		}
-		[initialResponse release];
-        
-		// truncate the http header
-		[responseData appendData:data];
-		int pos = [Util offsetOfBytes:responseData searchPattern:doubleReturnString];
-		if(pos < 0) {
-            NSLog(@"pos < 0 ");
-            return;
-        }
-    
-		initialFlag = 0;
-		NSRange range0 = {pos + 4, [responseData length] - pos - 4};
-		NSData* tmpData = [responseData subdataWithRange:range0];
-        
-		buffer = [[NSMutableData alloc] init];
-		[buffer appendData:tmpData];
-	}
-	else
-	{
-		buffer = [[NSMutableData alloc] init];
-		[buffer appendData:responseData];
-		[buffer appendData:data];
-	}
-    
-    
-    
-	int length = [buffer length];
-    
-	int index = 0;
-	int totalOffset = 0;
-    
-	while(1) {
-		NSRange range = {totalOffset, length - totalOffset};
-		NSData* ptr = [buffer subdataWithRange:range];
-		int endPos = [Util offsetOfBytes:ptr searchPattern:boundaryString];
-        
-        
-		if(endPos >= 0) {
-			// there is a match for the end boundary
-			// we have the entire data chunk ready
-			if(endPos > 0) {
-                
-				/* Try to find the boundary into the body */
-				NSRange range1 = {0, endPos};
-				NSData* data = [ptr subdataWithRange:range1];
-				int dl = [data length];
-				//Byte* p1 = (Byte*)[data bytes];
-                
-				index = endPos + [boundaryString length];
-				totalOffset += index;
-				int startIndex = [Util offsetOfBytes:data searchPattern:doubleReturnString];
-                
-				/* Start of body in HTTP response
-                 
-				 */
-				if(startIndex >= 0) {
-                    
-					NSRange range2 = {startIndex + 4, dl - startIndex - 4};
-					NSData* actualData = [data subdataWithRange:range2];
-					Byte* actualDataPtr = (Byte*)[actualData bytes];
-					int audioLength = (actualDataPtr[1] << 24) + (actualDataPtr[2] << 16) + (actualDataPtr[3] << 8) + actualDataPtr[4];
-					int imageIndex = (actualDataPtr[5] << 24) + (actualDataPtr[6] << 16) + (actualDataPtr[7] << 8) + actualDataPtr[8];
-                    
-                    
-                    
-					Byte resetAudioBufferCount = actualDataPtr[10];
-					int temperature = (actualDataPtr[11]<<24) | (actualDataPtr[12]<<16) |
-                    (actualDataPtr[13]<<8 )|   actualDataPtr[14];
-                    
-					//Update temperature
-					if (self.mTempUpdater != nil)
-					{
-						[self.mTempUpdater updateTemperature:temperature];
-					}
-                    
-                    
-					int avdata_offset = 10 + 4 + 1 ; //old data + temperature + 1
-                    
-                    
-                    
-#ifdef IBALL_AUDIO_SUPPORT
-					if( (disableAudio == NO) && audioLength > 0 )
-					{
-						NSRange range3 = {avdata_offset, audioLength};
-						NSData* audioData = [actualData subdataWithRange:range3];
-#ifdef IRABOT_PCM_AUDIO_SUPPORT
-						NSData* decodedPCM = audioData;
-                        
-#else
-						NSMutableData* decodedPCM = [[NSMutableData alloc] init];
-						[ADPCMDecoder Decode:audioData outData:decodedPCM];
-#endif
-                        
-                        
-						if(self.recordInProgress)
-						{
-							[iRecorder GetAudio:decodedPCM resetAudioBufferCount:resetAudioBufferCount];
-						}
-						//NSLog(@"decoded audio len: %d", [decodedPCM length]);
-                        
-                        
-						[self PlayPCM:decodedPCM];
-                        
-#if !defined(IRABOT_PCM_AUDIO_SUPPORT)
-						[decodedPCM release];
-#endif
-                        
-                        
-                        
-					}
-#endif /* IBALL_AUDIO_SUPPORT */
-                    
-					NSRange range4 = {avdata_offset + audioLength,
-						[actualData length] - avdata_offset - audioLength};
-                    
-                    if (range4.length > 2 )
-                    {
-                        //NSLog(@"image frame length:%d",range4.length );
-                    
-                        NSData* imageData = [actualData subdataWithRange:range4];
-                        UIImage *image = [UIImage imageWithData:imageData];
-                        
-                        
-                        image = [self adaptToCurrentOrientation:image];
-                        
-                        if (self.currentZoomLevel < 5.0f)
-                        {
-                            //currentZoomLevel = 1,2,3,4.. smaller means more magnified
-                            
-                            CGFloat newDeltaWidth =   image.size.width*( self.currentZoomLevel*0.1);
-                            CGFloat newDeltaHeight =  image.size.height*( self.currentZoomLevel*0.1);
-                            CGRect newRect = CGRectZero;
-                            newRect.origin.x = - newDeltaWidth/2;
-                            newRect.origin.y = - newDeltaHeight/2;
-                            
-                            newRect.size.width =  image.size.width +newDeltaWidth;
-                            newRect.size.height = image.size.height +newDeltaHeight;
-                            
-                            //NSLog(@"newsize :%f, %f %f %f", newRect.size.width, newRect.size.height,
-                            //	 newDeltaWidth, newDeltaHeight);
-                            image = [self imageWithImage:image scaledToRect:newRect];
-                            
-                        }
-                        
-                        //NSLog(@"setVideo Image" );
-                        [self.videoImage setImage:image];
-                        
-                        //[self.videoImage setImage:[UIImage imageWithData:imageData]];
-                        
-                        
-                        if (self.takeSnapshot == YES)
-                        {
-                            [self saveSnapShot:image];
-                            self.takeSnapshot = NO;
-                        }
-                        
-                        
-                        
-                        if (self.recordInProgress == YES)
-                        {
-                            
-                            [iRecorder GetImage:imageData imgIndex:imageIndex];
-                            if([iRecorder GetCurrentRecordSize] >= iMaxRecordSize) {
-                                [self stopRecording];
-                                //[self startRecording];
-                            }
-                            
-                        }
-                        
-                    }
-					//[actualData release];
-				}
-				else {
-					/* Looks like we have an empty HTTP response */
-					// DO nothing with it for now
-
-				}
-			} else {
-				// for initial condition
-				// we will skip the boundary
-				index = [boundaryString length];
-				totalOffset = index;
-                
-
-			}
-		} else {
-
-			// no match
-			// break the loop and wait for the next data chunk
-			[responseData setLength:[ptr length]];
-			[responseData setData:ptr];
-			//[ptr release];
-			break;
-		}
-	}
-    
-	[buffer release];
-    
-    
-}
-
-
-- (void)onSocket:(AsyncSocket *)sock willDisconnectWithError:(NSError *)err
-{
-	NSLog(@"Streamer- connection failed with error:%d:%@" ,
-          [err code], err);
-    
-
-	[self.videoImage setImage:[UIImage imageNamed:@"homepage.png"]];
-    
-    
-    //Check for session key mismatch
-    if ([err code] == 401 ||
-        [err code] == 601 )
-    {
-        NSLog(@"Streamer- sskey mismatch");
-        [mHandler statusReport:REMOTE_STREAM_SSKEY_MISMATCH andObj:nil];
-        self.latest_connection_error = [err code];
-        return;
-    }
-    
-    
-	if (hasStoppedByCaller == TRUE)
-	{
-		//simply return
-		return;
-	}
-    
-	NSLog(@"Streamer- AsyncSocketReadTimeoutError");
-	reconnectLimits --;
-	if (reconnectLimits  > 0)
-	{
-		[self reConnect];
-	}
-    
-    
-	if (reconnectLimits <=1)
-	{
-		reconnectLimits = 3; //keep retrying ...
-        
-        
-		if (self.remoteView == TRUE)
-		{
-			NSLog(@"Streamer-REMOTE send message : STREAM_STOPPED_UNEXPECTEDLY");
-			[mHandler statusReport:REMOTE_STREAM_STOPPED_UNEXPECTEDLY andObj:nil];
-		}
-		else
-		{
-			NSLog(@"Streamer- send message : STREAM_STOPPED_UNEXPECTEDLY");
-			[mHandler statusReport:STREAM_STOPPED_UNEXPECTEDLY andObj:nil];
-		}
-        
-	}
-}
-
-
-- (void)onSocket:(AsyncSocket *)sock didConnectToHost:(NSString *)host port:(UInt16)port
-{
-	NSLog(@"Streamer- connected to camera: %@", host);
-	[mHandler statusReport:CONNECTED_TO_CAMERA andObj:nil];
-    
-	[self receiveData];
-    
-}
-
-- (void)onSocketDidDisconnect:(AsyncSocket *)sock
-{
-    
-}
 
 
 

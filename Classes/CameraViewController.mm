@@ -848,7 +848,8 @@
 
     
     
-	if ((self.selected_channel.communication_mode == COMM_MODE_STUN) &&
+	if ((  selected_channel.communication_mode == COMM_MODE_STUN      ||
+         selected_channel.communication_mode ==  COMM_MODE_STUN_RELAY2 )  &&
         (self.scomm != nil))
 	{
 		menuViewCtrl.dev_s_comm = self.scomm;
@@ -888,8 +889,8 @@
     
 	if (ch.communication_mode == COMM_MODE_STUN)
 	{
-        
-		//special treatment
+        //Command over BMS + Stream over UDT 
+
 		NSLog(@"created a STUN streamer on Thread: %@ isMain? %d ", [[NSThread currentThread] name], [[NSThread currentThread] isMainThread]);
         
 		streamer = [[MBP_Streamer alloc]initWithIp:ip
@@ -897,6 +898,7 @@
                                            handler:self ];
 		streamer.remoteView = TRUE;
 		streamer.remoteViewKey = ch.remoteViewKey;
+        
 		streamer.communication_mode = COMM_MODE_STUN;
 		streamer.local_port = ch.localUdtPort;
         
@@ -923,7 +925,40 @@
         
         
         
+    }
+    else if (ch.communication_mode == COMM_MODE_STUN_RELAY2)
+    {
+        //Command over BMS + Stream over relay2 
+        NSLog(@"created a RELAY2 streamer on Thread: %@ isMain? %d ", [[NSThread currentThread] name], [[NSThread currentThread] isMainThread]);
         
+        
+		streamer = [[MBP_Streamer alloc]initWithIp:RELAY2_SERVER
+                                           andPort:80
+                                           handler:self ];
+		streamer.remoteView = TRUE;
+		streamer.remoteViewKey = ch.remoteViewKey;
+        
+		streamer.communication_mode = COMM_MODE_STUN_RELAY2;
+
+        
+		streamer.streamingChannel = ch;
+        
+		[streamer setVideoImage:videoView];
+		streamer.mTempUpdater = self;
+		streamer.mFrameUpdater = self;
+		[streamer setRecTimeLabel:videoAndSnapshotTime];
+		[streamer performSelector:@selector(startStreaming) withObject:nil afterDelay:0.05];
+        
+        //use timer only if it is remote view
+        [ch startViewTimer:self select:@selector(remoteViewTimeout:)];
+        
+		if (self.scomm != nil)
+		{
+            
+			self.scomm = nil;
+		}
+        
+		self.scomm = [[StunCommunication alloc]init];
 	}
 	else
 	{
@@ -1323,9 +1358,8 @@
 	switch (status) {
 		case CONNECTED_TO_CAMERA:
         {
-            
+#if 1
             //update melody ui
-            //[self setUIMelodyOnOff];
             [self performSelectorInBackground:@selector(setUIMelodyOnOff_bg) withObject:nil];
             
             
@@ -1344,7 +1378,7 @@
                 [self performSelectorInBackground:@selector(getVQ_bg) withObject:nil];
             }
             
-            
+#endif
             
             [UIApplication sharedApplication].idleTimerDisabled=  NO;
             
@@ -1536,6 +1570,26 @@
                 message.text = msg;
                 
             }
+            break;
+        }
+        case REMOTE_STREAM_STOPPED:
+        {
+            
+            if (streamer.communication_mode == COMM_MODE_STUN_RELAY2 ||
+                streamer.communication_mode == COMM_MODE_STUN )
+            {
+
+                if (self.scomm != nil)
+                {
+                    
+                    [self.scomm sendCommandThruUdtServer:CLOSE_STUN_SESSION
+                                                 withMac:self.selected_channel.profile.mac_address
+                                              AndChannel:self.selected_channel.channID];
+                }
+            }
+
+            
+            
             break;
         }
 		default:
@@ -2120,7 +2174,8 @@
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     
     NSData * responseData  = nil;
-    if (selected_channel.communication_mode == COMM_MODE_STUN)
+    if (  selected_channel.communication_mode == COMM_MODE_STUN      ||
+         selected_channel.communication_mode ==  COMM_MODE_STUN_RELAY2 )
 	{
 		if (self.scomm != nil)
 		{
@@ -2194,7 +2249,8 @@
 	int videoQ =[userDefaults integerForKey:@"int_VideoQuality"];
     
     NSData * responseData  = nil;
-    if (selected_channel.communication_mode == COMM_MODE_STUN)
+    if (  selected_channel.communication_mode == COMM_MODE_STUN      ||
+        selected_channel.communication_mode ==  COMM_MODE_STUN_RELAY2 )
 	{
 		if (self.scomm != nil)
 		{
@@ -2561,7 +2617,8 @@
     
     
 	if ( (self.selected_channel != nil) &&
-        (self.selected_channel.communication_mode == COMM_MODE_STUN)
+        (  selected_channel.communication_mode == COMM_MODE_STUN      ||
+         selected_channel.communication_mode ==  COMM_MODE_STUN_RELAY2 )
         )
 	{
 		//Dont support in stun mode
@@ -2607,7 +2664,8 @@
 {
     
     NSData * responseData  = nil; 
-    if (selected_channel.communication_mode == COMM_MODE_STUN)
+    if (  selected_channel.communication_mode == COMM_MODE_STUN      ||
+        selected_channel.communication_mode ==  COMM_MODE_STUN_RELAY2 )
 	{
 		if (self.scomm != nil)
 		{
@@ -2747,7 +2805,8 @@
         
 	}
     
-	if (selected_channel.communication_mode == COMM_MODE_STUN)
+	if (  selected_channel.communication_mode == COMM_MODE_STUN      ||
+        selected_channel.communication_mode ==  COMM_MODE_STUN_RELAY2 )
 	{
 		if (self.scomm != nil)
 		{
@@ -3427,7 +3486,8 @@
 	{
         
         
-		if (selected_channel.communication_mode == COMM_MODE_STUN)
+		if (  selected_channel.communication_mode == COMM_MODE_STUN      ||
+            selected_channel.communication_mode ==  COMM_MODE_STUN_RELAY2 )
 		{
 			if (self.scomm != nil)
 			{
@@ -3486,7 +3546,8 @@
 	if (dir_str != nil)
 	{
         
-		if (selected_channel.communication_mode == COMM_MODE_STUN)
+		if (  selected_channel.communication_mode == COMM_MODE_STUN      ||
+            selected_channel.communication_mode ==  COMM_MODE_STUN_RELAY2 )
 		{
 			if (self.scomm != nil)
 			{

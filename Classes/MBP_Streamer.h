@@ -36,6 +36,7 @@
 #define REMOTE_STREAM_CANT_CONNECT_FIRST_TIME 7 
 #define REMOTE_STREAM_SSKEY_MISMATCH    8 
 #define SWITCHING_TO_RELAY_SERVER       9
+#define REMOTE_STREAM_STOPPED          10
 
 -(void) statusReport:(int) status andObj:(NSObject*) obj; 
 

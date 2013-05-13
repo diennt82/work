@@ -668,6 +668,53 @@
 }
 
 
+-(BOOL) BMS_viewCamRelayWithUser:(NSString*) user_email AndPass:(NSString*) user_pass macAddr:(NSString *) macWithColon
+{
+    NSString * mac_ = [Util strip_colon_fr_mac:macWithColon];
+    
+    
+    NSString * http_cmd = [NSString stringWithFormat:@"%@%@",BMS_PHONESERVICE, BMS_CMD_PART];
+	http_cmd = [http_cmd stringByAppendingFormat:@"%@", VIEW_CAM_RELAY];
+	http_cmd = [http_cmd stringByAppendingFormat:@"%@%@", VIEW_CAM_RELAY_PARAM_1, mac_];
+    http_cmd = [http_cmd stringByAppendingFormat:@"%@%@", VIEW_CAM_RELAY_PARAM_2, user_email];
+    
+	
+	NSLog(@"viewCamrelay query:%@", http_cmd);
+	
+	
+	if (selIfSuccess == nil ||selIfFailure == nil|| selIfServerFail ==nil)
+	{
+		NSLog(@"ERR: selector is not set");
+		return FALSE;
+	}
+	
+	NSString* plain = [NSString stringWithFormat:@"%@:%@",
+					   user_email, user_pass];
+	NSData* plainData = [plain dataUsingEncoding:NSUTF8StringEncoding];
+	NSString * portalCred = [NSString base64StringFromData:plainData length:[plainData length]];
+	
+	
+	
+	@synchronized(self)
+	{
+		
+		NSMutableURLRequest *theRequest=[NSMutableURLRequest requestWithURL:[NSURL URLWithString:http_cmd]
+																cachePolicy: NSURLRequestReloadIgnoringLocalCacheData
+															timeoutInterval:BMS_DEFAULT_TIME_OUT];
+		
+		NSString *authHeader = [@"Basic " stringByAppendingFormat:@"%@",portalCred];
+		[theRequest addValue:authHeader forHTTPHeaderField:@"Authorization"];
+		
+		url_connection = [[NSURLConnection alloc] initWithRequest:theRequest
+														 delegate:self
+												 startImmediately:TRUE];
+		
+		
+	}
+	
+	return TRUE;
+}
+
 -(BOOL) BMS_sendCmdViaServeNonBlockedWithUser:(NSString*) user_email
                                         AndPass:(NSString*) user_pass
                                         macAddr:(NSString *) macWithColon

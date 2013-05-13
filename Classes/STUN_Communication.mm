@@ -291,7 +291,7 @@
     //prepare message
     NSMutableData * messageToSever, * response_data;
     int localPort, response_len = 128 ;
-    NSString* firstMessage, * secondMessage;
+    NSString* firstMessage =  nil , * secondMessage = nil;
     
     messageToSever = [[NSMutableData alloc] initWithData:[SYM_NAT_CHECK_MSG dataUsingEncoding:NSUTF8StringEncoding]];
     
@@ -326,14 +326,20 @@
         firstMessage = [[NSString alloc] initWithData:response_data encoding:NSUTF8StringEncoding];
     }
     
+    
+    [udt_wrapper close];
+    [udt_wrapper release];
+    
+    
     // Open socket to server2
+    response_len = 128;
+    udt_wrapper = [[ UdtSocketWrapper alloc] initWithLocalPort:SYM_NAT_CHECK_LOCAL_PORT];
+    [udt_wrapper createUdtStreamSocket];
     server_ip = [UdtSocketWrapper getIpfromHostName:SYM_NAT_CHECK_SERVER_2];
     
     // Bind to the SAME port: done in UdtWrapperSocket initWithLocalPort..
     
-    
     // Send second message
-    
     
     // Recv second message
     
@@ -353,30 +359,41 @@
         
         secondMessage = [[NSString alloc] initWithData:response_data encoding:NSUTF8StringEncoding];
     }
-    // Parse both message
-    NSString * firstMessageIp, * firstMessagePort, *secondMessageIp, *secondMessagePort;
     
-    NSArray * token = [firstMessage componentsSeparatedByString:@"::"];
-    firstMessageIp = (NSString*)[token objectAtIndex:0];
-    firstMessagePort = (NSString*)[token objectAtIndex:1];
-    
-    token = [secondMessage componentsSeparatedByString:@"::"];
-    secondMessageIp = (NSString*)[token objectAtIndex:0];
-    secondMessagePort = (NSString*)[token objectAtIndex:1];
-    
-    // Compare IP and port values
-    if (![firstMessageIp isEqualToString:secondMessage])
+    if (firstMessage != nil && secondMessage != nil)
     {
-        NSLog(@"Local ip are different");
+        
+        // Parse both message
+        NSString * firstMessageIp, * firstMessagePort, *secondMessageIp, *secondMessagePort;
+        
+        NSArray * token = [firstMessage componentsSeparatedByString:@"::"];
+        firstMessageIp = (NSString*)[token objectAtIndex:0];
+        firstMessagePort = (NSString*)[token objectAtIndex:1];
+        
+        token = [secondMessage componentsSeparatedByString:@"::"];
+        secondMessageIp = (NSString*)[token objectAtIndex:0];
+        secondMessagePort = (NSString*)[token objectAtIndex:1];
+        
+        // Compare IP and port values
+        if (![firstMessageIp isEqualToString:secondMessageIp])
+        {
+            NSLog(@"Local ip are different");
+        }
+        
+        if ([firstMessagePort isEqualToString:secondMessagePort])
+        {
+            return TRUE;
+        }
+    }
+    else
+    {
+         NSLog(@"Failed to get response from nat[x] server");
     }
     
-    if ([firstMessagePort isEqualToString:secondMessagePort])
-    {
-        return TRUE;
-    }
-    // Same -> TRUE ; otherwise -> False
+    //return FALSE;
     
-    return FALSE;
+    //FOR NOW _ FORCE RELay
+    return TRUE;
 }
 
 
@@ -426,8 +443,30 @@
 
     if ([self isConnectingOnSymmetricNat])
     {
-        NSLog(@"connecting over SYMMETRIC NAT >>>>>>>>>>>>>>>");
-    
+        NSLog(@"connecting over SYMMETRIC NAT >>>>>>>>>RELAY 2>>>>>");
+        
+        //change comm mode
+        mChannel.communication_mode  = COMM_MODE_STUN_RELAY2;
+        
+        
+        BMS_Communication * bms_comm;
+        
+        bms_comm = [[BMS_Communication alloc] initWithObject:self
+                                                    Selector:@selector(viewCamRelaySuccessWithResponse:)
+                                                FailSelector:@selector(viewCamRelayFailedWithError:)
+                                                   ServerErr:@selector(viewCamRelayFailedServerUnreachable)];
+        
+        NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+        NSString * user_email = (NSString *) [userDefaults objectForKey:@"PortalUseremail"];
+        NSString * user_pass = (NSString *) [userDefaults objectForKey:@"PortalPassword"];
+        
+        
+        [bms_comm BMS_viewCamRelayWithUser:user_email
+                                   AndPass:user_pass
+                                   macAddr:mChannel.profile.mac_address];
+        
+        
+        
         
     }
     else
@@ -543,6 +582,92 @@
 	
 	return;
 }
+
+
+-(void) viewCamRelaySuccessWithResponse: (NSData*) responseData
+{
+    
+    if (mChannel.stopStreaming == TRUE)
+    {
+        [_caller performSelector:_Failure_SEL withObject:nil ];
+        return ;
+    }
+	
+	NSString * raw_data = [[[NSString alloc] initWithData:responseData encoding: NSASCIIStringEncoding] autorelease];
+	
+    
+	NSLog(@"[Main Thread] ViewRelay2 response: %@", raw_data);
+    if ( raw_data != nil && [raw_data hasPrefix:RELAY_SSKEY])
+	{
+        NSArray * tokens = [raw_data componentsSeparatedByString:@"<br>"];
+        
+
+		NSString * chann_id = nil, * session_key = nil ;
+        
+        session_key = (NSString *) [tokens objectAtIndex:1];
+        NSArray * sskey_tokens = [session_key componentsSeparatedByString:@"="];
+
+        session_key = (NSString *) [sskey_tokens objectAtIndex:1];
+        
+        
+        chann_id = (NSString *) [tokens objectAtIndex:2];
+        NSArray * chann_id_tokens = [chann_id componentsSeparatedByString:@"="];
+
+        chann_id = (NSString *) [chann_id_tokens objectAtIndex:1];
+        
+        		
+		if (session_key != nil && chann_id != nil)
+		{
+			mChannel.remoteViewKey  = session_key;
+			mChannel.channID = chann_id;
+            
+            NSLog(@"[Main Thread] ViewRelay2 sskey: %@ & channid: %@", session_key, chann_id);
+
+            
+            [_caller performSelectorOnMainThread:_Success_SEL withObject:mChannel waitUntilDone:NO];
+            
+        }
+        else
+		{
+			//ERROR out
+			[_caller performSelector:_Failure_SEL withObject:nil ];
+		}
+    }
+    
+
+    
+    
+    
+}
+
+-(void) viewCamRelayFailedWithError:(NSHTTPURLResponse*) error_response
+{
+    if (mChannel.stopStreaming == TRUE)
+    {
+        [_caller performSelector:_Failure_SEL withObject:nil ];
+        return ;
+    }
+    
+	[_caller performSelector:_Failure_SEL withObject:nil ];
+}
+
+
+
+
+-(void) viewCamRelayFailedServerUnreachable
+{
+    if (mChannel.stopStreaming == TRUE)
+    {
+        [_caller performSelector:_Failure_SEL withObject:nil ];
+        return ;
+    }
+	
+	[_caller performSelector:_Failure_SEL withObject:nil ];
+
+}
+
+
+
 
 
 - (void) getSecSuccessWithResponse:(NSData*) responseData
@@ -744,15 +869,7 @@
         return ;
     }
     
-	//ERROR condition
-//	UIAlertView *alert = [[UIAlertView alloc]
-//						  initWithTitle:@"Get Security Info Error"
-//						  message:[NSString stringWithFormat:@"Server error: %@", [BMS_Communication getLocalizedMessageForError:[error_response statusCode]]]
-//						  delegate:self
-//						  cancelButtonTitle:@"OK"
-//						  otherButtonTitles:nil];
-//	[alert show];
-//	[alert release];
+
 	
 	[_caller performSelector:_Failure_SEL withObject:nil ];
 }
@@ -764,16 +881,7 @@
         return ;
     }
     
-    
-	//ERROR condition
-//	UIAlertView *alert = [[UIAlertView alloc]
-//						  initWithTitle:@"Get Security Info Error"
-//						  message:@"Server unreachable"
-//						  delegate:self
-//						  cancelButtonTitle:@"OK"
-//						  otherButtonTitles:nil];
-//	[alert show];
-//	[alert release];
+
 	
 	[_caller performSelector:_Failure_SEL withObject:nil ];
 }

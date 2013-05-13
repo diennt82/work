@@ -16,9 +16,10 @@
 #define CONFIGURE_STATUS_ASSIGNED 0x102
 
 
-#define COMM_MODE_LOCAL 1
-#define COMM_MODE_UPNP 2
-#define COMM_MODE_STUN 3
+#define COMM_MODE_LOCAL       1
+#define COMM_MODE_UPNP        2
+#define COMM_MODE_STUN        3
+#define COMM_MODE_STUN_RELAY2 4
 
 @class CamProfile;
 @interface CamChannel : NSObject {

@@ -23,7 +23,6 @@
 #define STUN_RELAY_SERVER_IP @"relay.monitoreverywhere.com"
 #define STUN_RELAY_SERVER_PORT 44444
 
-
 #define SYM_NAT_CHECK_SERVER_1  @"nat1.monitoreverywhere.com"
 #define SYM_NAT_CHECK_SERVER_2  @"nat2.monitoreverywhere.com"
 
@@ -34,10 +33,22 @@
 #define SYM_NAT_CHECK_MSG       @"NATTEST"
 
 
-
-
-
 #define STUN_CMD_PART @"action=command&command="
+
+
+
+#define RELAY2_SERVER @"relay2.simplimonitor.com"
+#define STREAMING_SERVICE @"GET /streamingservice?"
+
+#define RELAY2_STREAM_CMD @"get_relay_stream"
+#define RELAY2_STREAM_CMD_PARAM1 @"&channelId="
+#define RELAY2_STREAM_CMD_PARAM2 @"&mac="
+#define RELAY2_STREAM_CMD_PARAM3 @"&skey="
+
+
+
+
+
 #define CLOSE_STUN_SESSION @"close_session"
 
 
@@ -45,6 +56,9 @@
 #define CHANNEL_ID @"ChannelID:"
 #define SEC_KEY    @"Secret_key:"
 #define CHANNEL_ID_LEN 12
+
+#define RELAY_SSKEY @"<br>SessionKey="
+#define RELAY_CHANNEL_ID @"<br>channelId="
 
 
 @interface STUN_Communication : NSObject {
