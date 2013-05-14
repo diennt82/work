@@ -40,7 +40,7 @@
     
     isSearching = NO;
     
-    if (self.serviceArray == nil)
+    if (!self.serviceArray)
     {
         self.serviceArray = [[NSMutableArray alloc] init];
     }
@@ -56,7 +56,7 @@
         self.cameraList = [[NSMutableArray alloc] init];
     }
     
-    if (self.camera_profiles == nil)
+    if (!self.camera_profiles)
     {
         self.camera_profiles = [[NSMutableArray alloc] init];
     }
@@ -117,12 +117,13 @@
 
 -(void) resolveCameraList
 {
-    if (!serviceArray)
+    if ([serviceArray count] == 0)
     {
         return;
     }
     
     _lastService = [serviceArray lastObject];
+    [_browserService stop];
     
     for (NSNetService * aNetService in serviceArray)
     {
@@ -135,19 +136,17 @@
 #pragma mark NSNetResolveDelegate
 - (void)netServiceDidResolveAddress:(NSNetService *)service
 {
-	
-	[service retain];
     
-    NSString * serviceName;
-    char * ip_address;
-    for (NSData *address in [service addresses])
-    {
-        struct sockaddr_in *socketAddress = (struct sockaddr_in *) [address bytes];
-        serviceName = [service name];
-        ip_address = inet_ntoa(socketAddress->sin_addr);
-    }
+//    NSString * serviceName;
+//    char * ip_address;
+//    for (NSData *address in [service addresses])
+//    {
+//        struct sockaddr_in *socketAddress = (struct sockaddr_in *) [address bytes];
+//        serviceName = [service name];
+//        ip_address = inet_ntoa(socketAddress->sin_addr);
+//    }
     
-    NSDictionary * dict = [[NSNetService dictionaryFromTXTRecordData:[service TXTRecordData]] retain];
+    NSDictionary * dict = [NSNetService dictionaryFromTXTRecordData:[service TXTRecordData]];
     
 	NSData * macAddress = [dict objectForKey:@"mac"];
     
@@ -155,11 +154,11 @@
     
 //    NSString * ip = [NSString stringWithFormat:@"%s",ip_address];
     
-    strMac = [Util add_colon_to_mac:strMac];
+    NSString * macString = [Util add_colon_to_mac:strMac];
     
     for (CamProfile * cam_profile in camera_profiles)
     {
-        if ([strMac isEqualToString:cam_profile.mac_address])
+        if ([macString isEqualToString:cam_profile.mac_address])
         {
             [self.cameraList addObject:cam_profile];
         }
@@ -171,8 +170,6 @@
     }
     
     [strMac release];
-    [dict release];
-	[service release];
 }
 
 #pragma mark -
@@ -184,9 +181,11 @@
 
 -(void) dealloc
 {
+    [_lastService release];
+    [_browserService release];
     [camera_profiles release];
     [cameraList release];
-    [timer release];
+//    [timer release];
     delegate = nil;
     [serviceArray removeAllObjects];
     [super dealloc];

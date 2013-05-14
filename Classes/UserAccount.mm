@@ -122,6 +122,18 @@
     if (responseData != nil)
     {
         [self getCamListSuccess:responseData];
+        
+        NSString * raw_data = [[[NSString alloc] initWithData:responseData encoding: NSASCIIStringEncoding] autorelease];
+        NSMutableArray * cam_profiles;
+        cam_profiles = [self parse_camera_list4:raw_data];
+        
+        if (!_bonjourBrowser)
+        {
+            _bonjourBrowser = [[Bonjour alloc] initwithCamProfiles:cam_profiles];
+            _bonjourBrowser.delegate = self;
+        }
+        
+        [_bonjourBrowser startScanLocalWiFi];
     }
     else
     {
@@ -667,7 +679,8 @@
 	{
 				
 	}
-	else {
+	else
+    {
 		//
 		NSLog(@"No offline data ");
 	}
@@ -778,9 +791,18 @@
 #pragma mark Bonjour Delegate
 -(void) bonjourReturnCameraListAvailable:(NSMutableArray *)cameraList
 {
+    BMS_Communication * bms_server = [[BMS_Communication alloc] initWithObject:self
+                                                                      Selector:@selector(getCamListSuccess:)
+                                                                  FailSelector:@selector(getCamListFailure:)
+                                                                     ServerErr:@selector(getCamListServerUnreachable)];
     for (CamProfile * cam in cameraList)
     {
-        NSLog(@"Camera in available for this user : %@", cam.ip_address);
+        if ([bms_server BMS_isCamAvailableWithUser:userName
+                                           AndPass:userPass
+                                           macAddr:cam.mac_address])
+        {
+            NSLog(@"This camera : %@ is available for this user ", cam.mac_address);
+        }
     }
 }
 
