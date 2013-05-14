@@ -106,7 +106,7 @@
 "cam_rem_msg" = "Please confirm that you want to remove this camera from your account. This action will also switch your camera to default settings. You will need to add the camera into your account again to use it.";
 
 /* No comment provided by engineer. */
-"cam_rem_msg1" = "Please confirm that you want to remove this camera from your account. The camera is not accessible right now, it will not be switched to direct mode. Please refer to FAQ to reset it manually.";
+"cam_rem_msg1" = "Please confirm that you want to remove this camera from your account. The camera is not accessible right now, it will not be switched to Setup mode. Please press and hold the reset button on the camera bottom for 5 seconds before adding camera again into your account";
 
 /* No comment provided by engineer. */
 "Camera_Configured" = "Camera Configured";
@@ -157,7 +157,7 @@
 "Configure_Camera" = "Configure Camera";
 
 /* No comment provided by engineer. */
-"Confirm_remove_cam_local" = "Please confirm that you want to remove this camera from your account. This action will also reset the camera to setup mode.";
+"Confirm_remove_cam_local" = "Please confirm that you want to remove this camera from your account. This action will also reset your camera to Setup mode. To use it again, you will need to add the camera into your account";
 
 /* No comment provided by engineer. */
 "Confirm_remove_cam_remote" = "Please confirm that you want to remove this camera from your account. The camera is not accessible right now, it will not be switched to setup mode. Please refer to FAQ to reset it manually.";
@@ -244,7 +244,7 @@
 "information" = "Information";
 
 /* No comment provided by engineer. */
-"information_msg" = "Motorola Monitor\nApplication version: %1$@\nFirmware version:%2$@,\nMonitoreverywhere © All rights Reserved.\nCamera address:%3$@";
+"information_msg" = "Monitor Everywhere\nApplication version: %1$@\nFirmware version:%2$@,\nMonitoreverywhere © All rights Reserved.\nCamera address:%3$@";
 
 /* No comment provided by engineer. */
 "Invalid_Camera_Name" = "Invalid Camera Name";
@@ -301,19 +301,19 @@
 "Logout" = "Logout";
 
 /* No comment provided by engineer. */
-"melody_1" = "Melody 1";
+"melody_1" = "Rock a Bye Baby";
 
 /* No comment provided by engineer. */
-"melody_2" = "Melody 2";
+"melody_2" = "Lullaby and Goodnight";
 
 /* No comment provided by engineer. */
-"melody_3" = "Melody 3";
+"melody_3" = "Lavender Blue";
 
 /* No comment provided by engineer. */
-"melody_4" = "Melody 4";
+"melody_4" = "Twinkle Twinkle Little Star";
 
 /* No comment provided by engineer. */
-"melody_5" = "Melody 5";
+"melody_5" = "Hush Little Baby";
 
 /* No comment provided by engineer. */
 "network_lost_link" = "Camera disconnected due to network connectivity problem. Trying to reconnect...";

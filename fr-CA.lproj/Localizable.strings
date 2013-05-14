@@ -238,11 +238,7 @@
 "information" = "Information";
 
 /* No comment provided by engineer. */
-<<<<<<< HEAD
-"information_msg" = "Motorola Monitor\nApplication version: %1$@\nFirmware version:%2$@,\nMonitoreverywhere © All rights Reserved.\nCamera address:%3$@";
-=======
 "information_msg" = "Moniteur dans Tous les Lieux\nApplication version: %1$@\nFirmware version:%2$@,\nMoniteur dans Tous les Lieux \@ Tous droits Réservés.\nCamera address:%3$@";
->>>>>>> 20130426_nguyendang_issueLatinhSpanish
 
 /* No comment provided by engineer. */
 "Invalid_Camera_Name" = "Invalid Camera Name";
