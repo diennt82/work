@@ -947,7 +947,7 @@
 		streamer.mTempUpdater = self;
 		streamer.mFrameUpdater = self;
 		[streamer setRecTimeLabel:videoAndSnapshotTime];
-		[streamer performSelector:@selector(startStreaming) withObject:nil afterDelay:0.05];
+		[streamer performSelector:@selector(startStreaming) withObject:nil afterDelay:1.0];
         
         //use timer only if it is remote view
         [ch startViewTimer:self select:@selector(remoteViewTimeout:)];
@@ -1358,7 +1358,7 @@
 	switch (status) {
 		case CONNECTED_TO_CAMERA:
         {
-#if 1
+
             //update melody ui
             [self performSelectorInBackground:@selector(setUIMelodyOnOff_bg) withObject:nil];
             
@@ -1376,9 +1376,10 @@
             else
             {
                 [self performSelectorInBackground:@selector(getVQ_bg) withObject:nil];
+                
             }
-            
-#endif
+
+
             
             [UIApplication sharedApplication].idleTimerDisabled=  NO;
             

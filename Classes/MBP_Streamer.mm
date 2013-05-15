@@ -372,7 +372,7 @@
         else if (self.communication_mode == COMM_MODE_STUN_RELAY2)
         {
             // GET /streamingservice?action=command&command=get_relay_stream&channelId=...&mac=...&skey=...
-            getReq = [NSString stringWithFormat:@"%@%@%@%@%@%@%@%@%@%@\r\n",
+            getReq = [NSString stringWithFormat:@"%@%@%@%@%@%@%@%@%@%@\r\n\r\n",
                       STREAMING_SERVICE, STUN_CMD_PART, RELAY2_STREAM_CMD,
                       RELAY2_STREAM_CMD_PARAM1, self.streamingChannel.channID,
                       RELAY2_STREAM_CMD_PARAM2, [Util strip_colon_fr_mac:self.streamingChannel.profile.mac_address],
@@ -383,14 +383,12 @@
     
        
     
-	NSLog(@"getReq: %@", getReq);
+	NSLog(@"getRe1q: %@", getReq);
     
 	NSData *getReqData = [getReq dataUsingEncoding:NSUTF8StringEncoding];
     
     
-       
-    
-	[listenSocket writeData:getReqData withTimeout:10 tag:1];
+	[listenSocket writeData:getReqData withTimeout:-1 tag:1];
 	[listenSocket readDataWithTimeout:30.0 tag:1];
 	responseData = [[NSMutableData alloc] init];
     
@@ -566,14 +564,19 @@
         
         
 		//process data
-		NSString* initialResponse = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+        NSRange  readableHdr_range = {0,128};
+        NSData * readableHdr = [data subdataWithRange:readableHdr_range];
+		NSString* initialResponse = [[NSString alloc] initWithData:readableHdr encoding:NSUTF8StringEncoding];
 		NSRange range = [initialResponse rangeOfString:AUTHENTICATION_ERROR];
         
         if (initialResponse == nil)
         {
             
             NSLog(@"initialResponse = nil... ");
-            
+        }
+        else
+        {
+            NSLog(@"initialResponse = %@", initialResponse);
         }
         
 		if( (initialResponse!= nil) &&
@@ -609,9 +612,43 @@
             NSLog(@"pos < 0 ");
             return;
         }
+        else
+        {
+            NSLog(@"doubleReturnString pos = %d, [responseData length]: %d  ",
+                  pos, [responseData length]);
+
+        }
+#if 1 //TEST 
+        
+        int boundaryString_pos = [Util offsetOfBytes:responseData searchPattern:boundaryString];
+        
+        if(boundaryString_pos < 0) {
+            NSLog(@"boundaryString_pos < 0 ");
+
+        }
+        else
+        {
+            NSLog(@"boundaryString_pos pos = %d,  ",
+                  boundaryString_pos);
+            
+        }
+        
+        
+                
+#endif 
         
 		initialFlag = 0;
+        
+#if 0
 		NSRange range0 = {pos + 4, [responseData length] - pos - 4};
+#else
+     
+        
+        
+        NSRange range0 = {boundaryString_pos, [responseData length] - boundaryString_pos };
+        
+        
+#endif
 		NSData* tmpData = [responseData subdataWithRange:range0];
         
 		buffer = [[NSMutableData alloc] init];
@@ -633,10 +670,13 @@
     
 	while(1) {
 		NSRange range = {totalOffset, length - totalOffset};
+        
+      
+        
 		NSData* ptr = [buffer subdataWithRange:range];
 		int endPos = [Util offsetOfBytes:ptr searchPattern:boundaryString];
         
-        
+    
 		if(endPos >= 0) {
 			// there is a match for the end boundary
 			// we have the entire data chunk ready
@@ -652,15 +692,21 @@
 				totalOffset += index;
 				int startIndex = [Util offsetOfBytes:data searchPattern:doubleReturnString];
                 
+                
+                NSLog(@"startIndex  = %d, endPos: %d , dl : %d",
+                      startIndex, endPos, dl);
 				/* Start of body in HTTP response
                  
 				 */
 				if(startIndex >= 0) {
                     
 					NSRange range2 = {startIndex + 4, dl - startIndex - 4};
+                    
+                    
 					NSData* actualData = [data subdataWithRange:range2];
 					Byte* actualDataPtr = (Byte*)[actualData bytes];
 					int audioLength = (actualDataPtr[1] << 24) + (actualDataPtr[2] << 16) + (actualDataPtr[3] << 8) + actualDataPtr[4];
+                    
 					int imageIndex = (actualDataPtr[5] << 24) + (actualDataPtr[6] << 16) + (actualDataPtr[7] << 8) + actualDataPtr[8];
                     
                     
@@ -678,12 +724,15 @@
                     
 					int avdata_offset = 10 + 4 + 1 ; //old data + temperature + 1
                     
-                    
+                    NSLog(@"avdata_offset  = %d, audioLength: %d",
+                          avdata_offset, audioLength);
                     
 #ifdef IBALL_AUDIO_SUPPORT
 					if( (disableAudio == NO) && audioLength > 0 )
 					{
 						NSRange range3 = {avdata_offset, audioLength};
+                        
+                        
 						NSData* audioData = [actualData subdataWithRange:range3];
 #ifdef IRABOT_PCM_AUDIO_SUPPORT
 						NSData* decodedPCM = audioData;
@@ -715,10 +764,11 @@
 					NSRange range4 = {avdata_offset + audioLength,
 						[actualData length] - avdata_offset - audioLength};
                     
+                    NSLog(@"range4  = %d, len %d",
+                          range4.location   , range4.length);
+                    
                     if (range4.length > 2 )
                     {
-                        //NSLog(@"image frame length:%d",range4.length );
-                        
                         NSData* imageData = [actualData subdataWithRange:range4];
                         UIImage *image = [UIImage imageWithData:imageData];
                         
@@ -801,6 +851,10 @@
     
 }
 
+- (void)onSocket:(AsyncSocket *)sock didWriteDataWithTag:(long)tag
+{
+
+}
 
 - (void)onSocket:(AsyncSocket *)sock willDisconnectWithError:(NSError *)err
 {
@@ -828,7 +882,9 @@
 		return;
 	}
     
-	NSLog(@"Streamer- AsyncSocketReadTimeoutError");
+
+#if 0 // DEBUG ONLY
+    
 	reconnectLimits --;
 	if (reconnectLimits  > 0)
 	{
@@ -843,7 +899,7 @@
         
 		if (self.remoteView == TRUE)
 		{
-			NSLog(@"Streamer-REMOTE send message : STREAM_STOPPED_UNEXPECTEDLY");
+			NSLog(@"Streamer-REMOTE send message : REMOTE_STREAM_STOPPED_UNEXPECTEDLY");
 			[mHandler statusReport:REMOTE_STREAM_STOPPED_UNEXPECTEDLY andObj:nil];
 		}
 		else
@@ -853,6 +909,9 @@
 		}
         
 	}
+    
+    
+#endif // DEBUG ONLY
 }
 
 

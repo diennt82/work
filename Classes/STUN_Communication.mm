@@ -608,12 +608,14 @@
         NSArray * sskey_tokens = [session_key componentsSeparatedByString:@"="];
 
         session_key = (NSString *) [sskey_tokens objectAtIndex:1];
+        session_key  = [session_key stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
         
         
         chann_id = (NSString *) [tokens objectAtIndex:2];
         NSArray * chann_id_tokens = [chann_id componentsSeparatedByString:@"="];
 
         chann_id = (NSString *) [chann_id_tokens objectAtIndex:1];
+        chann_id  = [chann_id stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
         
         		
 		if (session_key != nil && chann_id != nil)
@@ -621,7 +623,7 @@
 			mChannel.remoteViewKey  = session_key;
 			mChannel.channID = chann_id;
             
-            NSLog(@"[Main Thread] ViewRelay2 sskey: %@ & channid: %@", session_key, chann_id);
+            NSLog(@"[Main Thread] ViewRelay2 sskey: %@ & channid: %@|||||", session_key, chann_id);
 
             
             [_caller performSelectorOnMainThread:_Success_SEL withObject:mChannel waitUntilDone:NO];
