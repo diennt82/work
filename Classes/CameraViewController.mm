@@ -506,6 +506,9 @@
     if (upgradeFwView != nil)
     {
         UILabel * text = (UILabel*)[upgradeFwView viewWithTag:12];
+        
+      
+       
         upgradeText = text.text ;
         
         percentText = percentageLabel.text ;
@@ -617,35 +620,7 @@
                                           owner:self
                                         options:nil];
         }
-#if 0
-		CGRect rect = [[UIApplication sharedApplication] statusBarFrame]; // Get status bar frame dimensions
-		NSLog(@"Statusbar frame: %1.0f, %1.0f, %1.0f, %1.0f", rect.origin.x,
-            rect.origin.y, rect.size.width, rect.size.height);
-		//HACK : incase hotspot is turned on
-		if (rect.size.height>21 &&  rect.size.height<50)
-		{
-			topToolBar.frame = CGRectMake(topToolBar.frame.origin.x,topToolBar.frame.origin.y+20,
-                                          topToolBar.frame.size.width, topToolBar.frame.size.height);
-		}
 
-        else
-        {
-            if (rect.size.height == 480) // IPHONE5 width
-            {
-                topToolBar.frame = CGRectMake(0,0,
-                                              topToolBar.frame.size.width, topToolBar.frame.size.height);
-            }
-            else
-            {
-             
-                topToolBar.frame = CGRectMake(0,0,
-                                              topToolBar.frame.size.width, topToolBar.frame.size.height);
-
-            }
-            
-        }
-        
-#endif
         
 		//Rotate the slider
 		zoombarView.transform = CGAffineTransformRotate(zoombarView.transform, -M_PI*0.5);
@@ -720,6 +695,12 @@
         {
             UILabel * text = (UILabel*)[upgradeFwView viewWithTag:12];
             text.text  =upgradeText  ;
+            
+            
+            /*20130515 : phung: change the main text Size in Upgrading dialog */
+            text.frame = CGRectMake(0, 15, 320, 74);
+            text.numberOfLines = 3;
+            
             
             percentageLabel.text=  percentText ;
             percentageProgress.progress= upgradeProgress;
@@ -3639,6 +3620,17 @@
     
     // Do any additional setup after loading the view.
     [[NSNotificationCenter defaultCenter] removeObserver:self];
+    
+    
+    
+    /*20130515 : phung: change the main text in Upgrading dialog */
+    UILabel * text = (UILabel*)[upgradeFwView viewWithTag:12];
+    text.frame = CGRectMake(0, 15, 320, 74);
+    text.numberOfLines = 3;
+    
+    NSString * msg = NSLocalizedStringWithDefaultValue(@"fw_upgrade_2",nil, [NSBundle mainBundle],
+                                                       @"Upgrading firmware, do not power off the camera. This process may take up to 5 mins..." , nil);
+    text.text = msg;
     
     
 	[self.view addSubview:upgradeFwView]; 
