@@ -95,6 +95,144 @@
 }
 
 #pragma mark -
+#pragma mark NSStreamDelegate
+
+
+- (void)stream:(NSStream *)theStream handleEvent:(NSStreamEvent)eventCode
+{
+    switch(eventCode) {
+        case NSStreamEventHasSpaceAvailable: //Write
+        {
+            
+            if (theStream == ostream)
+            {
+                
+                
+                NSString * getReq;
+                
+                getReq = [NSString stringWithFormat:@"%@%@%@%@\r\n",
+                          AVSTREAM_REQUEST, AVSTREAM_PARAM_1,self.remoteViewKey,
+                          AVSTREAM_PARAM_2 ];
+                
+                //Attach Basic authen:
+                getReq = [getReq stringByAppendingFormat:@"Authorization: Basic %@\r\n\r\n",[Util getDFCredentials] ];
+                
+                
+                const uint8_t * rawstring = (const uint8_t *)[getReq UTF8String];
+                [ostream write:rawstring maxLength:getReq.length];
+                [ostream close];
+            }
+            break;
+        }
+            
+        case NSStreamEventHasBytesAvailable:// Read
+        {
+            
+            if (theStream == istream)
+            {
+                NSMutableData * _data = [[NSMutableData data] retain];
+                
+                uint8_t buf[256];
+                unsigned int len = 0;
+                len = [(NSInputStream *)theStream read:buf maxLength:256];
+                
+                [istream close];
+                
+                if(len)
+                {
+                    [_data appendBytes:(const void *)buf length:len];
+                    
+                    NSLog(@"initial read len: %d raw-response: %@",len, _data);
+                    
+                    
+                    
+                    NSString *txt = [[[NSString alloc] initWithData:_data encoding: NSUTF8StringEncoding] autorelease];
+                    NSLog(@"decode-response: %@", txt);
+                    
+                    NSRange range1 = [txt rangeOfString:AUTHENTICATION_ERROR];
+                    NSRange range2 = [txt rangeOfString:SESSIONKEY_MISMATCHED];
+                    
+                    
+                    if (txt == nil)
+                    {
+                        [self stopStreaming];
+                        [mHandler statusReport:REMOTE_STREAM_STOPPED_UNEXPECTEDLY andObj:nil];
+                    }
+                    else if(
+                            (range1.location != NSNotFound) ||
+                            (range2.location != NSNotFound)
+                            )
+                    {
+                        // auth error ->>>>>>> force re-connect
+                        NSLog(@"auth/sskey  ERROR-- stop streaming ");
+                        
+                        self.latest_connection_error = 401;
+                        if  (range2.location != NSNotFound)
+                        {
+                            self.latest_connection_error = 601;
+                        }
+                        
+                        NSLog(@"error response: %@", txt);
+                        [self stopStreaming];
+                        
+                        if (self.remoteView == TRUE && self.remoteViewKey != nil)
+                        {
+                            [mHandler statusReport:REMOTE_STREAM_SSKEY_MISMATCH andObj:nil];
+                            
+                        }
+                        else
+                        {
+                            [mHandler statusReport:REMOTE_STREAM_STOPPED_UNEXPECTEDLY andObj:nil];
+                        }
+                        
+                        
+                    }
+                    else
+                    {
+                        
+                        //Start acutal connection
+                        initialFlag = 1;
+                        listenSocket = [[AsyncSocket alloc] initWithDelegate:self];
+                        //Non-blocking connect
+                        [listenSocket connectToHost:self.device_ip
+                                             onPort:self.device_port
+                                        withTimeout:15
+                                              error:nil];
+                        
+                    }
+                    
+                    
+                }
+                else
+                {
+                    NSLog(@"no buffer!");
+                }
+                
+                
+                
+            }
+            break;
+        }
+        case NSStreamEventEndEncountered:
+        {
+            NSLog(@"STREam ended");
+            break;
+        }
+        case NSStreamEventErrorOccurred:
+        {
+            NSLog(@"STREam errror ");
+            break;
+        }
+            
+    }
+}
+
+
+#pragma mark -
+
+
+
+#pragma mark -
 #pragma mark  HTTP stream
 
 
@@ -176,141 +314,6 @@
 }
 
 
-#pragma mark -
-#pragma mark NSStreamDelegate
-
-
-- (void)stream:(NSStream *)theStream handleEvent:(NSStreamEvent)eventCode
-{
-    switch(eventCode) {
-        case NSStreamEventHasSpaceAvailable: //Write
-        {
-            
-            if (theStream == ostream)
-            {
-                
-                
-                NSString * getReq; 
-               
-                getReq = [NSString stringWithFormat:@"%@%@%@%@\r\n",
-                          AVSTREAM_REQUEST, AVSTREAM_PARAM_1,self.remoteViewKey,
-                          AVSTREAM_PARAM_2 ];
-                
-                //Attach Basic authen:
-                getReq = [getReq stringByAppendingFormat:@"Authorization: Basic %@\r\n\r\n",[Util getDFCredentials] ];
-                
-                                
-                const uint8_t * rawstring = (const uint8_t *)[getReq UTF8String];
-                [ostream write:rawstring maxLength:getReq.length];
-                [ostream close];
-            }
-            break;
-        }
-            
-        case NSStreamEventHasBytesAvailable:// Read
-        {
-
-            if (theStream == istream)
-            {
-                NSMutableData * _data = [[NSMutableData data] retain];
-                
-                uint8_t buf[256];
-                unsigned int len = 0;
-                len = [(NSInputStream *)theStream read:buf maxLength:256];
-                
-                [istream close];
-                
-                if(len)
-                {
-                    [_data appendBytes:(const void *)buf length:len];
-                    
-                    NSLog(@"initial read len: %d raw-response: %@",len, _data);
-
-                    
-                                        
-                    NSString *txt = [[[NSString alloc] initWithData:_data encoding: NSUTF8StringEncoding] autorelease];
-                    NSLog(@"decode-response: %@", txt);
-                    
-                    NSRange range1 = [txt rangeOfString:AUTHENTICATION_ERROR];
-                    NSRange range2 = [txt rangeOfString:SESSIONKEY_MISMATCHED];
-                    
-                  
-                    if (txt == nil)
-                    {
-                        [self stopStreaming];
-                        [mHandler statusReport:REMOTE_STREAM_STOPPED_UNEXPECTEDLY andObj:nil];
-                    }
-                    else if(
-                            (range1.location != NSNotFound) ||
-                            (range2.location != NSNotFound)
-                           )
-                    {
-                        // auth error ->>>>>>> force re-connect
-                        NSLog(@"auth/sskey  ERROR-- stop streaming ");
-                       
-                        self.latest_connection_error = 401;
-                        if  (range2.location != NSNotFound)
-                        {
-                            self.latest_connection_error = 601;
-                        }
-                        
-                        NSLog(@"error response: %@", txt);
-                        [self stopStreaming];
-                        
-                        if (self.remoteView == TRUE && self.remoteViewKey != nil)
-                        {
-                            [mHandler statusReport:REMOTE_STREAM_SSKEY_MISMATCH andObj:nil];
-                            
-                        }
-                        else
-                        {
-                            [mHandler statusReport:REMOTE_STREAM_STOPPED_UNEXPECTEDLY andObj:nil];
-                        }
-                        
-                        
-                    }
-                    else
-                    {
-
-                        //Start acutal connection 
-                        initialFlag = 1;
-                        listenSocket = [[AsyncSocket alloc] initWithDelegate:self];
-                        //Non-blocking connect
-                        [listenSocket connectToHost:self.device_ip
-                                             onPort:self.device_port
-                                        withTimeout:15
-                                              error:nil];
-
-                    }
-                    
-
-                }
-                else
-                {
-                    NSLog(@"no buffer!");
-                }
-               
-                
-                
-            }
-            break;
-        }
-        case NSStreamEventEndEncountered:
-        {
-             NSLog(@"STREam ended");
-            break;
-        }
-        case NSStreamEventErrorOccurred:
-        {
-         NSLog(@"STREam errror ");
-            break;
-        }
-            
-    }
-}
-
-
-#pragma mark -
 
 
 //same as startStreaming for now, however may change later.. keep it separate.
@@ -389,8 +392,9 @@
     
     
 	[listenSocket writeData:getReqData withTimeout:-1 tag:1];
-	[listenSocket readDataWithTimeout:30.0 tag:1];
+	[listenSocket readDataWithTimeout:10.0 tag:1];
 	responseData = [[NSMutableData alloc] init];
+
     
 	if ( pcmPlayer == nil)
 	{
@@ -541,48 +545,41 @@
 
 #pragma mark -
 #pragma mark TCP delegate
-
-
-- (void)onSocket:(AsyncSocket *)sock didReadData:(NSData *)data withTag:(long)tag
+/* Return TRUE -> ok to continue
+         FALSE --> Stop for error
+ */
+-(BOOL) verifyMainHttpHeader:(NSData *) httpchunk
 {
     
-	[mHandler statusReport:STREAM_STARTED andObj:nil];
-    
-	
-	[listenSocket readDataWithTimeout:10.0 tag:tag];
-    
-	NSString *strBoundary = BOUNDARY_STRING;
-	NSData *boundaryString = [strBoundary dataUsingEncoding:NSUTF8StringEncoding];
-    
-	NSString *strDoubleReturn = @"\r\n\r\n";
-	NSData *doubleReturnString = [strDoubleReturn dataUsingEncoding:NSUTF8StringEncoding];
-    
-	NSMutableData* buffer;
+    BOOL status = TRUE; 
+       
+    //decode the readable HTTP header (128 bytes) is enough
+    NSRange  readableHdr_range = {0,128};
+    NSData * readableHdr = [responseData subdataWithRange:readableHdr_range];
     
     
-	if(initialFlag) {
+    
+    
+    /* First thing first, check for response code (anything not 200)
+     - ...
+     - AUTH FAILED
+     - REMOTE_STREAM_SSKEY_MISMATCH
+     */
+    
+    NSString* initialResponse = [[NSString alloc] initWithData:readableHdr encoding:NSUTF8StringEncoding];
+    NSRange range = [initialResponse rangeOfString:AUTHENTICATION_ERROR];
+    
+    do
+    {
         
-        
-		//process data
-        NSRange  readableHdr_range = {0,128};
-        NSData * readableHdr = [data subdataWithRange:readableHdr_range];
-		NSString* initialResponse = [[NSString alloc] initWithData:readableHdr encoding:NSUTF8StringEncoding];
-		NSRange range = [initialResponse rangeOfString:AUTHENTICATION_ERROR];
-        
-        if (initialResponse == nil)
-        {
-            
-            NSLog(@"initialResponse = nil... ");
-        }
-        else
+        //DBG
         {
             NSLog(@"initialResponse = %@", initialResponse);
         }
         
-		if( (initialResponse!= nil) &&
-           (range.location != NSNotFound)
-           )
-		{
+        
+        if(range.location != NSNotFound)
+        {
             // auth error ->>>>>>> force re-connect
             NSLog(@"auth ERROR-- stop streaming ");
             
@@ -601,12 +598,288 @@
             
             self.latest_connection_error = 401;
             
-			return;
-		}
-		[initialResponse release];
+            status = FALSE;
+        }
         
-		// truncate the http header
-		[responseData appendData:data];
+        
+        
+        
+        
+        range = [initialResponse rangeOfString:RELAY2_ERROR_851];
+        if(range.location != NSNotFound)
+        {
+            // auth error ->>>>>>> force re-connect
+            NSLog(@"Relay2  ERROR 851-- stop streaming ");
+            NSLog(@"error response: %@", initialResponse);
+            
+            [self stopStreaming];
+            
+            if (self.remoteView == TRUE && self.remoteViewKey != nil)
+            {
+                [mHandler statusReport:REMOTE_STREAM_STOPPED_UNEXPECTEDLY andObj:nil];
+                
+            }
+            else  //SHOULD NOT happen
+            {
+                [mHandler statusReport:STREAM_STOPPED_UNEXPECTEDLY andObj:nil];
+            }
+            
+            self.latest_connection_error = 851;
+            
+            status = FALSE;
+        }
+        
+        
+    } while (false); 
+    
+    [initialResponse release];
+    
+
+    return status;
+}
+
+
+/* return -1 if there is any  error , >0 :  the frame length*/
+-(int) readSubHttpHeaderForFrameLen:(NSData *) subHttpHeader
+{
+    
+    //DBG
+    NSString * exposedString1 = [[NSString alloc]initWithData:subHttpHeader encoding:NSUTF8StringEncoding];
+    exposedString1 =[exposedString1 stringByReplacingOccurrencesOfString:@"\r" withString:@"\\r"];
+    exposedString1 =[exposedString1 stringByReplacingOccurrencesOfString:@"\n" withString:@"\\n"];
+    NSLog(@"subHeaders: %@--or--%@",exposedString1, subHttpHeader);
+    
+    
+    
+    NSString * exposedString = [[NSString alloc]initWithData:subHttpHeader encoding:NSUTF8StringEncoding];
+    //should get: \r\nContent-Type: image/jpeg\r\nContent-Length: 12007\r\n\r\n
+    
+    exposedString = [exposedString  stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+    //should get: Content-Type: image/jpeg\r\nContent-Length: 12007
+    
+    
+    
+    
+    
+    
+    NSArray * subHeaders = [exposedString componentsSeparatedByCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]] ;
+    //should have: {"Content-Type:", "image/jpeg","", "Content-Length:", "12007"} ..
+    
+    int ret = -1; 
+    for (int i =0; i< [subHeaders count]; i++)
+    {
+        
+        NSString * token = (NSString *) [subHeaders objectAtIndex:i];
+        
+        if ([token isEqualToString:@"Content-Type:" ])
+        {
+            NSString * token1 = (NSString *) [subHeaders objectAtIndex:i+1];
+            if (![token1 isEqualToString:@"image/jpeg"])
+            {
+                ret = -1;
+                break;
+                
+            }
+            
+        }
+        
+        if ([token isEqualToString:@"Content-Length:" ])
+        {
+            NSString * token1 = (NSString *) [subHeaders objectAtIndex:i+1];
+            
+            ret = [token1 integerValue];
+            
+            break;
+            
+        }
+        
+        
+    }
+    
+    NSLog(@"subHeaders: ret = %d",ret);
+    
+    
+    return ret;
+
+}
+
+
+-(void) processOneFrame:(NSData*) actualData
+{
+    Byte* actualDataPtr = (Byte*)[actualData bytes];
+    int audioLength = (actualDataPtr[1] << 24) + (actualDataPtr[2] << 16) + (actualDataPtr[3] << 8) + actualDataPtr[4];
+    
+    int imageIndex = (actualDataPtr[5] << 24) + (actualDataPtr[6] << 16) + (actualDataPtr[7] << 8) + actualDataPtr[8];
+    
+    
+    
+    Byte resetAudioBufferCount = actualDataPtr[10];
+    int temperature = (actualDataPtr[11]<<24) | (actualDataPtr[12]<<16) |
+    (actualDataPtr[13]<<8 )|   actualDataPtr[14];
+    
+    //Update temperature
+    if (self.mTempUpdater != nil)
+    {
+        [self.mTempUpdater updateTemperature:temperature];
+    }
+    
+    
+    int avdata_offset = 10 + 4 + 1 ; //old data + temperature + 1
+    
+    NSLog(@"avdata_offset  = %d, audioLength: %d",
+          avdata_offset, audioLength);
+    
+#ifdef IBALL_AUDIO_SUPPORT
+    if( (disableAudio == NO) && audioLength > 0 )
+    {
+        NSRange range3 = {avdata_offset, audioLength};
+        
+        
+        NSData* audioData = [actualData subdataWithRange:range3];
+#ifdef IRABOT_PCM_AUDIO_SUPPORT
+        NSData* decodedPCM = audioData;
+        
+#else
+        NSMutableData* decodedPCM = [[NSMutableData alloc] init];
+        [ADPCMDecoder Decode:audioData outData:decodedPCM];
+#endif
+        
+        
+        if(self.recordInProgress)
+        {
+            [iRecorder GetAudio:decodedPCM resetAudioBufferCount:resetAudioBufferCount];
+        }
+        //NSLog(@"decoded audio len: %d", [decodedPCM length]);
+        
+        
+        [self PlayPCM:decodedPCM];
+        
+#if !defined(IRABOT_PCM_AUDIO_SUPPORT)
+        [decodedPCM release];
+#endif
+        
+        
+        
+    }
+#endif /* IBALL_AUDIO_SUPPORT */
+    
+    NSRange range4 = {avdata_offset + audioLength,
+        [actualData length] - avdata_offset - audioLength};
+    
+    NSLog(@"range4  = %d, len %d",
+          range4.location   , range4.length);
+    
+    if (range4.length > 2 )
+    {
+        NSData* imageData = [actualData subdataWithRange:range4];
+        UIImage *image = [UIImage imageWithData:imageData];
+        
+        
+        image = [self adaptToCurrentOrientation:image];
+        
+        if (self.currentZoomLevel < 5.0f)
+        {
+            //currentZoomLevel = 1,2,3,4.. smaller means more magnified
+            
+            CGFloat newDeltaWidth =   image.size.width*( self.currentZoomLevel*0.1);
+            CGFloat newDeltaHeight =  image.size.height*( self.currentZoomLevel*0.1);
+            CGRect newRect = CGRectZero;
+            newRect.origin.x = - newDeltaWidth/2;
+            newRect.origin.y = - newDeltaHeight/2;
+            
+            newRect.size.width =  image.size.width +newDeltaWidth;
+            newRect.size.height = image.size.height +newDeltaHeight;
+            
+            //NSLog(@"newsize :%f, %f %f %f", newRect.size.width, newRect.size.height,
+            //	 newDeltaWidth, newDeltaHeight);
+            image = [self imageWithImage:image scaledToRect:newRect];
+            
+        }
+        
+        //NSLog(@"setVideo Image" );
+        [self.videoImage setImage:image];
+        
+        //[self.videoImage setImage:[UIImage imageWithData:imageData]];
+        
+        
+        if (self.takeSnapshot == YES)
+        {
+            [self saveSnapShot:image];
+            self.takeSnapshot = NO;
+        }
+        
+        
+        
+        if (self.recordInProgress == YES)
+        {
+            
+            [iRecorder GetImage:imageData imgIndex:imageIndex];
+            if([iRecorder GetCurrentRecordSize] >= iMaxRecordSize) {
+                [self stopRecording];
+                //[self startRecording];
+            }
+            
+        }
+        
+    }
+    
+    
+    
+    return;
+}
+
+
+- (void)onSocket:(AsyncSocket *)sock didReadData:(NSData *)data withTag:(long)tag
+{
+    
+	[mHandler statusReport:STREAM_STARTED andObj:nil];
+    
+	
+	[listenSocket readDataWithTimeout:5.0 tag:tag];
+    
+	NSString *strBoundary = BOUNDARY_STRING;
+	NSData *boundaryString = [strBoundary dataUsingEncoding:NSUTF8StringEncoding];
+    
+	NSString *strDoubleReturn = @"\r\n\r\n";
+	NSData *doubleReturnString = [strDoubleReturn dataUsingEncoding:NSUTF8StringEncoding];
+    
+	NSMutableData* buffer;
+    
+    
+	if(initialFlag) {
+        
+        
+        
+        // make sure we have at least enough data to decode header
+        //     Else re-read
+        if ( [responseData length] ==  0 && // NO data yet
+            [data length] < 256) //Need at least this much to decode header
+        {
+            
+            NSLog(@"Read %d too little data -> continue reading .. ", [data length]);
+            
+            //push data to responseData for storage until the next chunk come
+            [responseData appendData:data];
+            
+            return;
+        }
+        
+        
+        /* If there is some response data .. OR data lenght is > 256,
+           append those with data to responseData
+        
+           And try to decode the HTTP header from responseData
+         */
+        [responseData appendData:data];
+                        
+        if ( [self verifyMainHttpHeader:responseData] == FALSE)
+        {
+            return;
+        }
+        
+       
+#if 0
+        
 		int pos = [Util offsetOfBytes:responseData searchPattern:doubleReturnString];
 		if(pos < 0) {
             NSLog(@"pos < 0 ");
@@ -618,7 +891,13 @@
                   pos, [responseData length]);
 
         }
-#if 1 //TEST 
+        
+        initialFlag = 0;
+		NSRange range0 = {pos + 4, [responseData length] - pos - 4};
+
+        
+#else 
+        
         
         int boundaryString_pos = [Util offsetOfBytes:responseData searchPattern:boundaryString];
         
@@ -634,21 +913,15 @@
         }
         
         
-                
-#endif 
-        
-		initialFlag = 0;
-        
-#if 0
-		NSRange range0 = {pos + 4, [responseData length] - pos - 4};
-#else
-     
-        
-        
+        initialFlag = 0;
         NSRange range0 = {boundaryString_pos, [responseData length] - boundaryString_pos };
         
         
-#endif
+                
+#endif 
+        
+		
+        // truncate the http header: range0{ 0 ....  first boundaryString } 
 		NSData* tmpData = [responseData subdataWithRange:range0];
         
 		buffer = [[NSMutableData alloc] init];
@@ -663,6 +936,30 @@
     
     
     
+    /* 
+     1st time:
+     From here buffer should contains, one or more frames.
+     --boundarydonotcross
+     Content-Type: image/jpeg
+     Content-Length: xxxxxx
+     <raw data ... >
+     --boundarydonotcross
+     Content-......
+      ...
+     
+     =========
+     2nd time:
+     "\r\n"Content-Type: image/jpeg
+     Content-Length: xxxxxx
+     <raw data ... >
+     --boundarydonotcross
+     Content-......
+     ...
+     
+     
+     */
+    
+    
 	int length = [buffer length];
     
 	int index = 0;
@@ -671,17 +968,23 @@
 	while(1) {
 		NSRange range = {totalOffset, length - totalOffset};
         
-      
-        
 		NSData* ptr = [buffer subdataWithRange:range];
+        
+        
+        
 		int endPos = [Util offsetOfBytes:ptr searchPattern:boundaryString];
         
-    
-		if(endPos >= 0) {
-			// there is a match for the end boundary
-			// we have the entire data chunk ready
-			if(endPos > 0) {
-                
+        
+        if (endPos == 0)
+        {
+            // boundarystring is right here
+            // --> Skip it and search again
+            index = [boundaryString length];
+            totalOffset = index;
+        }
+		else if(endPos > 0)
+        {
+	   
 				/* Try to find the boundary into the body */
 				NSRange range1 = {0, endPos};
 				NSData* data = [ptr subdataWithRange:range1];
@@ -690,153 +993,59 @@
                 
 				index = endPos + [boundaryString length];
 				totalOffset += index;
+            
 				int startIndex = [Util offsetOfBytes:data searchPattern:doubleReturnString];
                 
                 
                 NSLog(@"startIndex  = %d, endPos: %d , dl : %d",
                       startIndex, endPos, dl);
-				/* Start of body in HTTP response
-                 
-				 */
-				if(startIndex >= 0) {
-                    
-					NSRange range2 = {startIndex + 4, dl - startIndex - 4};
-                    
-                    
-					NSData* actualData = [data subdataWithRange:range2];
-					Byte* actualDataPtr = (Byte*)[actualData bytes];
-					int audioLength = (actualDataPtr[1] << 24) + (actualDataPtr[2] << 16) + (actualDataPtr[3] << 8) + actualDataPtr[4];
-                    
-					int imageIndex = (actualDataPtr[5] << 24) + (actualDataPtr[6] << 16) + (actualDataPtr[7] << 8) + actualDataPtr[8];
-                    
-                    
-                    
-					Byte resetAudioBufferCount = actualDataPtr[10];
-					int temperature = (actualDataPtr[11]<<24) | (actualDataPtr[12]<<16) |
-                    (actualDataPtr[13]<<8 )|   actualDataPtr[14];
-                    
-					//Update temperature
-					if (self.mTempUpdater != nil)
-					{
-						[self.mTempUpdater updateTemperature:temperature];
-					}
-                    
-                    
-					int avdata_offset = 10 + 4 + 1 ; //old data + temperature + 1
-                    
-                    NSLog(@"avdata_offset  = %d, audioLength: %d",
-                          avdata_offset, audioLength);
-                    
-#ifdef IBALL_AUDIO_SUPPORT
-					if( (disableAudio == NO) && audioLength > 0 )
-					{
-						NSRange range3 = {avdata_offset, audioLength};
-                        
-                        
-						NSData* audioData = [actualData subdataWithRange:range3];
-#ifdef IRABOT_PCM_AUDIO_SUPPORT
-						NSData* decodedPCM = audioData;
-                        
-#else
-						NSMutableData* decodedPCM = [[NSMutableData alloc] init];
-						[ADPCMDecoder Decode:audioData outData:decodedPCM];
-#endif
-                        
-                        
-						if(self.recordInProgress)
-						{
-							[iRecorder GetAudio:decodedPCM resetAudioBufferCount:resetAudioBufferCount];
-						}
-						//NSLog(@"decoded audio len: %d", [decodedPCM length]);
-                        
-                        
-						[self PlayPCM:decodedPCM];
-                        
-#if !defined(IRABOT_PCM_AUDIO_SUPPORT)
-						[decodedPCM release];
-#endif
-                        
-                        
-                        
-					}
-#endif /* IBALL_AUDIO_SUPPORT */
-                    
-					NSRange range4 = {avdata_offset + audioLength,
-						[actualData length] - avdata_offset - audioLength};
-                    
-                    NSLog(@"range4  = %d, len %d",
-                          range4.location   , range4.length);
-                    
-                    if (range4.length > 2 )
-                    {
-                        NSData* imageData = [actualData subdataWithRange:range4];
-                        UIImage *image = [UIImage imageWithData:imageData];
-                        
-                        
-                        image = [self adaptToCurrentOrientation:image];
-                        
-                        if (self.currentZoomLevel < 5.0f)
-                        {
-                            //currentZoomLevel = 1,2,3,4.. smaller means more magnified
-                            
-                            CGFloat newDeltaWidth =   image.size.width*( self.currentZoomLevel*0.1);
-                            CGFloat newDeltaHeight =  image.size.height*( self.currentZoomLevel*0.1);
-                            CGRect newRect = CGRectZero;
-                            newRect.origin.x = - newDeltaWidth/2;
-                            newRect.origin.y = - newDeltaHeight/2;
-                            
-                            newRect.size.width =  image.size.width +newDeltaWidth;
-                            newRect.size.height = image.size.height +newDeltaHeight;
-                            
-                            //NSLog(@"newsize :%f, %f %f %f", newRect.size.width, newRect.size.height,
-                            //	 newDeltaWidth, newDeltaHeight);
-                            image = [self imageWithImage:image scaledToRect:newRect];
-                            
-                        }
-                        
-                        //NSLog(@"setVideo Image" );
-                        [self.videoImage setImage:image];
-                        
-                        //[self.videoImage setImage:[UIImage imageWithData:imageData]];
-                        
-                        
-                        if (self.takeSnapshot == YES)
-                        {
-                            [self saveSnapShot:image];
-                            self.takeSnapshot = NO;
-                        }
-                        
-                        
-                        
-                        if (self.recordInProgress == YES)
-                        {
-                            
-                            [iRecorder GetImage:imageData imgIndex:imageIndex];
-                            if([iRecorder GetCurrentRecordSize] >= iMaxRecordSize) {
-                                [self stopRecording];
-                                //[self startRecording];
-                            }
-                            
-                        }
-                        
-                    }
-					//[actualData release];
-				}
-				else {
-					/* Looks like we have an empty HTTP response */
-					// DO nothing with it for now
-                    
-				}
-			} else {
-				// for initial condition
-				// we will skip the boundary
-				index = [boundaryString length];
-				totalOffset = index;
+				
                 
-                
-			}
-		} else {
             
+                if(startIndex  == 0)
+                {
+                    // doubleReturnString is right here
+                    // --> Skip it and search again
+                    index = [doubleReturnString length];
+                    totalOffset = index;
+                }
+                else if(startIndex > 0)
+                {
+                    //move pass the double return string
+                    startIndex += [strDoubleReturn length];
+                    
+                    
+                    
+                    NSRange  subHdrRange = {0, startIndex };
+                    NSData* subHdrData = [data subdataWithRange:subHdrRange];
+                    
+                    
+                    int frameLength  = [self readSubHttpHeaderForFrameLen:subHdrData];
+                    if (frameLength < 0)
+                    {
+                        //skip over chunk of data
+                        return; 
+                    }
+                    
+                    
+                    NSRange range2 = {startIndex , frameLength};
+                    
+                    
+                    /* Start of body in HTTP response*/
+					NSData* actualData = [data subdataWithRange:range2];
+                    [self processOneFrame:actualData]; 
+                    
+                }
+                
+                
+                
+			
+		}
+        
+        else
+        {
+            NSLog(@"break & and some data left: %d  %@", [ptr length],
+                  [[NSString alloc] initWithData:ptr encoding:NSUTF8StringEncoding]);
 			// no match
 			// break the loop and wait for the next data chunk
 			[responseData setLength:[ptr length]];
