@@ -78,12 +78,24 @@
     [_browserService searchForServicesOfType:SERVICE inDomain:DOMAINS];
 }
 
+-(void) stopScanLocalWiFi
+{
+    [_browserService stop];
+}
+
 #pragma mark -
 #pragma mark NSNetServiceDelegate
 -(void) netServiceBrowserWillSearch:(NSNetServiceBrowser *)aNetServiceBrowser
 {
     isSearching = YES;
     [serviceArray removeAllObjects];
+    if (timer)
+    {
+        [timer invalidate];
+        self.timer = nil;
+    }
+    
+    self.timer = [NSTimer scheduledTimerWithTimeInterval:3.0 target:self selector:@selector(stopScanLocalWiFi) userInfo:nil repeats:NO];
 }
 
 -(void)netServiceBrowser:(NSNetServiceBrowser *)aNetServiceBrowser didFindService:(NSNetService *)aNetService moreComing:(BOOL)moreComing
@@ -100,6 +112,7 @@
 -(void) netServiceBrowserDidStopSearch:(NSNetServiceBrowser *)aNetServiceBrowser
 {
     isSearching = NO;
+    [self.delegate bonjourReturnCameraListAvailable:self.cameraList];
     NSLog(@"Number of Services is : %i",[serviceArray count]);
 }
 
@@ -115,16 +128,14 @@
         return;
     }
     
+    nextIndex = 0;
     _lastService = [serviceArray lastObject];
-//    [_browserService stop];
     
-    for (NSNetService * aNetService in serviceArray)
-    {
-            [aNetService setDelegate:self];
-            [aNetService resolveWithTimeout:5.0];
-//            self.timer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:nil userInfo:aNetService repeats:NO];
+    NSNetService * aNetService = [serviceArray objectAtIndex:nextIndex];
+    [aNetService setDelegate:self];
+    [aNetService resolveWithTimeout:0.0];
+    
     }
-}
 #pragma mark -
 #pragma mark NSNetResolveDelegate
 - (void)netServiceDidResolveAddress:(NSNetService *)service
@@ -144,23 +155,29 @@
     CamProfile * cam_profile = [[CamProfile alloc] initWithMacAddr:macString];
     [cam_profile setIp_address:ip];
     
-//    for (CamProfile * cam_profile in camera_profiles)
-//    {
         if ([self isCameraIP:ip availableWith:macString])
         {
             [self.cameraList addObject:cam_profile];
         }
-//    }
     
     if (service == _lastService)
     {
         [self.delegate bonjourReturnCameraListAvailable:self.cameraList];
+    }
+    else
+    {
+        nextIndex += 1;
+        NSNetService * nextService = [serviceArray objectAtIndex:nextIndex];
+            [nextService setDelegate:self];
+            [nextService resolveWithTimeout:0.0];
     }
     
     [ip release];
     [strMac release];
 }
 
+
+// Not use
 -(NSData *) getMacCamera:(NSString *) ip_string
 {
     NSData * mac;
@@ -203,23 +220,23 @@
         return  NO;
     }
     
+    HttpCommunication * dev_com = [[HttpCommunication alloc] init];
     
-    NSData * data = [self getMacCamera:ip];
-    if (data == nil)
+    dev_com.device_ip = ip;
+    
+    NSString * mac = [dev_com sendCommandAndBlock:GET_MAC_ADDRESS withTimeout:5.0];
+    
+    if (mac != nil && mac.length == 12)
     {
-        return NO;
+        mac = [Util add_colon_to_mac:mac];
+        
+        
+        if([mac isEqualToString:macAddress])
+        {
+            return YES;
+        }
     }
-    
-    NSString * macString = [[NSString alloc] initWithData:data encoding:NSASCIIStringEncoding];
-    
-    NSString * mac = [Util add_colon_to_mac:macString];
-    
-    if ([macAddress isEqualToString:mac])
-    {
-        [macString release];
-        return  YES;
-    }
-    [macString release];
+
     return  NO;
 }
 #pragma mark -
@@ -236,6 +253,8 @@
     [camera_profiles release];
     [cameraList release];
 //    [timer release];
+    [timer invalidate];
+    self.timer = nil;
     delegate = nil;
     [serviceArray removeAllObjects];
     [super dealloc];

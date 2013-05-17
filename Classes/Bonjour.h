@@ -10,6 +10,7 @@
 #import <Foundation/NSNetServices.h>
 #include <arpa/inet.h>
 #include "CamProfile.h"
+#include "HttpCommunication.h"
 
 @protocol BonjourDelegate
 -(void) bonjourReturnCameraListAvailable:(NSMutableArray *) cameraList;
@@ -20,7 +21,9 @@
 {
     NSNetServiceBrowser * _browserService;
     NSNetService * _lastService;
-    NSURLConnection * url_connection; 
+    NSURLConnection * url_connection;
+    
+    int nextIndex;
     
 }
 

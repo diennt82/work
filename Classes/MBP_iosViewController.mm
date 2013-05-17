@@ -1302,7 +1302,7 @@ return self;
         //Check if we are in the same network as the camera.. IF so
         // Try to scan .. otherwise... no point ..
         //20121130: phung: incase the ip address is not valid... also try to scan .. 
-        if ( cp.ip_address == nil || [self isInTheSameNetworkAsCamera:cp ])
+        if ( cp.ip_address == nil || [self isInTheSameNetworkWithCamera:cp ])
         {
             skipScan = [self isCurrentIpAddressValid:cp];
             
@@ -1319,24 +1319,10 @@ return self;
             }
             else // NEED to do local scan
             {
-                if ([_bonjourList count] == 0)
-                {
-                    ScanForCamera * scanner;
-                    scanner = [[ScanForCamera alloc] initWithNotifier:self];
-                    [scanner scan_for_device:cp.mac_address];
-                }
-                else
-                {
-                    for (CamProfile * cam_profile in _bonjourList)
-                    {
-                        if ([cp.mac_address isEqualToString:cam_profile.mac_address])
-                        {
-                            [finalResult addObject:cp];
-                            [self performSelector:@selector(scan_done:) withObject:finalResult afterDelay:0.1];
-                        }
-                    }
-
-                }
+                ScanForCamera * scanner;
+                scanner = [[ScanForCamera alloc] initWithNotifier:self];
+                [scanner scan_for_device:cp.mac_address];
+                
                                 
                 NSLog(@"camera_profiles count : %i",[_bonjourList count]);
                 
@@ -1493,6 +1479,23 @@ return self;
     }
     
     return FALSE;
+    
+}
+
+-(BOOL) isInTheSameNetworkWithCamera : (CamProfile *) cp
+{
+    if (_bonjourList && [_bonjourList count] != 0)
+    {
+        for (CamProfile * cam in _bonjourList)
+        {
+            if ([cam.mac_address isEqualToString:cp.mac_address])
+            {
+                return YES;
+            }
+        }
+    }
+    else
+        return [self isInTheSameNetworkAsCamera:cp];
     
 }
 -(BOOL) isCurrentIpAddressValid :(CamProfile *) cp
@@ -1772,6 +1775,7 @@ return self;
     
     //start
     _bonjourList = cameraList;
+    
     nextCameraToScanIndex = 0;
     [self scan_next_camera:self.restored_profiles index:nextCameraToScanIndex];
 }
