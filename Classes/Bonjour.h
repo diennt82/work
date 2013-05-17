@@ -20,6 +20,7 @@
 {
     NSNetServiceBrowser * _browserService;
     NSNetService * _lastService;
+    NSURLConnection * url_connection; 
     
 }
 
@@ -31,5 +32,6 @@
 @property (nonatomic, retain) NSMutableArray * cameraList;
 
 - (void) startScanLocalWiFi;
--(id) initwithCamProfiles:(NSMutableArray *) camera_profiles;
+-(id) initBrowser;
+- (BOOL) isCameraIP:(NSString *) ip availableWith:(NSString *) macAddress;
 @end

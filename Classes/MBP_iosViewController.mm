@@ -69,6 +69,8 @@ return self;
 {
 	self.toTakeSnapShot = NO;
 	self.recordInProgress = NO;
+    
+    _bonjourList = [[NSArray alloc] init];
 
 
 	self.app_stage = APP_STAGE_INIT;
@@ -463,6 +465,8 @@ return self;
 - (void)dealloc {
 
 	// [mainMenuView release];
+    [_bonjourBrowser release];
+    [_bonjourList release];
     [splashScreen release];
     [sunBackground release];
 	[bc_addr release];
@@ -1258,9 +1262,18 @@ return self;
         }
         else
         {
-            //start
-            nextCameraToScanIndex = 0;
-            [self scan_next_camera:self.restored_profiles index:nextCameraToScanIndex];
+            // 20130516_nguyendang :
+            // Start scan Bonjour here
+            // Return the list of camera available in network
+            
+            if (!_bonjourBrowser)
+            {
+                _bonjourBrowser = [[Bonjour alloc] initBrowser];
+                [_bonjourBrowser setDelegate:self];
+            }
+            
+            [_bonjourBrowser startScanLocalWiFi];
+            
         }
         
         
@@ -1306,10 +1319,26 @@ return self;
             }
             else // NEED to do local scan
             {
-                
-                ScanForCamera * scanner;
-                scanner = [[ScanForCamera alloc] initWithNotifier:self];
-                [scanner scan_for_device:cp.mac_address];
+                if ([_bonjourList count] == 0)
+                {
+                    ScanForCamera * scanner;
+                    scanner = [[ScanForCamera alloc] initWithNotifier:self];
+                    [scanner scan_for_device:cp.mac_address];
+                }
+                else
+                {
+                    for (CamProfile * cam_profile in _bonjourList)
+                    {
+                        if ([cp.mac_address isEqualToString:cam_profile.mac_address])
+                        {
+                            [finalResult addObject:cp];
+                            [self performSelector:@selector(scan_done:) withObject:finalResult afterDelay:0.1];
+                        }
+                    }
+
+                }
+                                
+                NSLog(@"camera_profiles count : %i",[_bonjourList count]);
                 
                 
             } /* skipScan = false*/
@@ -1728,5 +1757,24 @@ return self;
 
 	return TRUE;
 }
+
+
+#pragma mark -
+#pragma mark Bonjour Delegate
+
+
+-(void) bonjourReturnCameraListAvailable:(NSMutableArray *)cameraList
+{
+//    for (CamProfile * cam in cameraList)
+//    {
+//            NSLog(@"This camera : %@ is available for this user ", cam.mac_address);
+//    }
+    
+    //start
+    _bonjourList = cameraList;
+    nextCameraToScanIndex = 0;
+    [self scan_next_camera:self.restored_profiles index:nextCameraToScanIndex];
+}
+
 
 @end

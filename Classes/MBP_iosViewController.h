@@ -36,7 +36,7 @@
 #import "DashBoard_ViewController.h"
 
 #import "CameraAlert.h"
-
+#import "Bonjour.h"
 
 #define DIRECTION_V_NON  0x01
 #define DIRECTION_V_UP   0x02
@@ -86,7 +86,8 @@
 
 
 
-@interface MBP_iosViewController : UIViewController < ConnectionMethodDelegate,UIActionSheetDelegate, ScanForCameraNotifier	> {
+@interface MBP_iosViewController : UIViewController <BonjourDelegate,ConnectionMethodDelegate,UIActionSheetDelegate,ScanForCameraNotifier>
+{
 
 	
 	
@@ -141,11 +142,16 @@
     int app_stage; 
 
 	int nextCameraToScanIndex;
+    
+    Bonjour * _bonjourBrowser;
+    
+    NSArray * _bonjourList;
 }
 
 @property (nonatomic, retain) IBOutlet UIView * progressView;
 @property (nonatomic, retain) IBOutlet UIImageView * splashScreen;
 @property (nonatomic, retain) IBOutlet UIImageView * sunBackground;
+@property (nonatomic, assign) id<BonjourDelegate> bonjourDelegate;
 //@property (nonatomic,retain) IBOutlet MBP_MainMenuView * mainMenuView;
 
 //@property (nonatomic,retain) HttpCommunication *comm;

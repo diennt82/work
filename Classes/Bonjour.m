@@ -31,7 +31,7 @@
     return self;
 }
 
--(id) initwithCamProfiles:(NSMutableArray *) camera_profiles
+-(id) initBrowser
 {
     self = [super init];
     if (self) {
@@ -55,13 +55,6 @@
     {
         self.cameraList = [[NSMutableArray alloc] init];
     }
-    
-    if (!self.camera_profiles)
-    {
-        self.camera_profiles = [[NSMutableArray alloc] init];
-    }
-    
-    self.camera_profiles = camera_profiles;
     
     return self;
 
@@ -123,7 +116,7 @@
     }
     
     _lastService = [serviceArray lastObject];
-    [_browserService stop];
+//    [_browserService stop];
     
     for (NSNetService * aNetService in serviceArray)
     {
@@ -136,42 +129,99 @@
 #pragma mark NSNetResolveDelegate
 - (void)netServiceDidResolveAddress:(NSNetService *)service
 {
-    
-//    NSString * serviceName;
-//    char * ip_address;
-//    for (NSData *address in [service addresses])
-//    {
-//        struct sockaddr_in *socketAddress = (struct sockaddr_in *) [address bytes];
-//        serviceName = [service name];
-//        ip_address = inet_ntoa(socketAddress->sin_addr);
-//    }
-    
     NSDictionary * dict = [NSNetService dictionaryFromTXTRecordData:[service TXTRecordData]];
     
 	NSData * macAddress = [dict objectForKey:@"mac"];
     
     NSString * strMac = [[NSString alloc] initWithData:macAddress encoding:NSASCIIStringEncoding];
     
-//    NSString * ip = [NSString stringWithFormat:@"%s",ip_address];
+    NSData * ipString = [dict objectForKey:@"ip"];
+    
+    NSString * ip = [[NSString alloc] initWithData:ipString encoding:NSASCIIStringEncoding];
     
     NSString * macString = [Util add_colon_to_mac:strMac];
     
-    for (CamProfile * cam_profile in camera_profiles)
-    {
-        if ([macString isEqualToString:cam_profile.mac_address])
+    CamProfile * cam_profile = [[CamProfile alloc] initWithMacAddr:macString];
+    [cam_profile setIp_address:ip];
+    
+//    for (CamProfile * cam_profile in camera_profiles)
+//    {
+        if ([self isCameraIP:ip availableWith:macString])
         {
             [self.cameraList addObject:cam_profile];
         }
-    }
+//    }
     
     if (service == _lastService)
     {
         [self.delegate bonjourReturnCameraListAvailable:self.cameraList];
     }
     
+    [ip release];
     [strMac release];
 }
 
+-(NSData *) getMacCamera:(NSString *) ip_string
+{
+    NSData * mac;
+	NSURLResponse * response;
+    NSError* error = nil;
+    NSString * httpRequest = [NSString stringWithFormat:@"%@%@%@",
+                              @"http://",
+                              ip_string,
+                              @"/?action=command&command=get_mac_address"];
+    
+    @synchronized(self)
+	{
+		
+		NSMutableURLRequest *theRequest=[NSMutableURLRequest requestWithURL:[NSURL URLWithString:httpRequest]
+																cachePolicy: NSURLRequestReloadIgnoringLocalCacheData
+															timeoutInterval:3.0];
+		
+        error = nil;
+        mac = [NSURLConnection sendSynchronousRequest:theRequest
+                                          returningResponse:&response
+                                                      error:&error];
+        
+	}
+    
+    if ( (mac == nil) ||  (error != nil))
+    {
+        return nil;
+    }
+    else
+    {
+        return mac;
+    }
+    
+}
+
+- (BOOL) isCameraIP:(NSString *) ip availableWith:(NSString *) macAddress
+{
+    if (ip == nil || macAddress == nil)
+    {
+        return  NO;
+    }
+    
+    
+    NSData * data = [self getMacCamera:ip];
+    if (data == nil)
+    {
+        return NO;
+    }
+    
+    NSString * macString = [[NSString alloc] initWithData:data encoding:NSASCIIStringEncoding];
+    
+    NSString * mac = [Util add_colon_to_mac:macString];
+    
+    if ([macAddress isEqualToString:mac])
+    {
+        [macString release];
+        return  YES;
+    }
+    [macString release];
+    return  NO;
+}
 #pragma mark -
 - (void)didReceiveMemoryWarning
 {
