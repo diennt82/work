@@ -204,6 +204,11 @@
 -(BOOL) BMS_viewCamRelayWithUser:(NSString*) user_email AndPass:(NSString*) user_pass macAddr:(NSString *) macWithColon;
 
 
+- (NSData *) BMS_sendCoreCmdViaServeBlockedWithUser:(NSString*) user_email
+                                            AndPass:(NSString*) user_pass
+                                            macAddr:(NSString *) macWithColon
+                                            channId:(NSString*) channelId
+                                            command:(NSString *)core_command;
 
 -(BOOL) BMS_sendCmdViaServeNonBlockedWithUser:(NSString*) user_email
                                       AndPass:(NSString*) user_pass

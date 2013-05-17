@@ -391,7 +391,7 @@
 	NSData *getReqData = [getReq dataUsingEncoding:NSUTF8StringEncoding];
     
     
-	[listenSocket writeData:getReqData withTimeout:-1 tag:1];
+	[listenSocket writeData:getReqData withTimeout:1.0 tag:1];
 	[listenSocket readDataWithTimeout:10.0 tag:1];
 	responseData = [[NSMutableData alloc] init];
 
@@ -498,39 +498,9 @@
 		{
 			NSLog(@"readTimeoutThrd is running --stop it now");
 			[readTimeoutThrd cancel];
-            
-            
-            //            int waitCount = 5; //5sec
-            //            while ([readTimeoutThrd isExecuting] && (waitCount -- > 0) )
-            //            {
-            //                [NSThread sleepForTimeInterval:1.0];
-            //                NSLog(@"readTO wait %d ", waitCount);
-            //            }
-            
-            //readTimeoutThrd = nil;
-		}
-        
-        
+        }
         
         [mHandler statusReport:REMOTE_STREAM_STOPPED andObj:nil];
-        
-        
-//		NSString * msg = nil;
-//		msg = [NSString stringWithFormat:@"%@%@",
-//               STUN_CMD_PART, CLOSE_STUN_SESSION];
-//		NSData * msg_ = [[NSData alloc] initWithBytes:[msg UTF8String] length:[msg length]];
-//        
-//        
-//		if ([udtSocket isOpen])
-//		{
-//			NSLog(@"Send close session.. & close sock");
-//			[udtSocket sendDataViaUdt:msg_];
-//			[udtSocket close];
-//		}
-//		else {
-//			NSLog(@"udtSocket already close -- ");
-//		}
-        
         
 	}
     
@@ -555,7 +525,7 @@
        
     //decode the readable HTTP header (128 bytes) is enough
     NSRange  readableHdr_range = {0,128};
-    NSData * readableHdr = [responseData subdataWithRange:readableHdr_range];
+    NSData * readableHdr = [httpchunk subdataWithRange:readableHdr_range];
     
     
     
@@ -571,12 +541,12 @@
     
     do
     {
-        
+#if 0
         //DBG
         {
             NSLog(@"initialResponse = %@", initialResponse);
         }
-        
+#endif
         
         if(range.location != NSNotFound)
         {
@@ -643,12 +613,13 @@
 -(int) readSubHttpHeaderForFrameLen:(NSData *) subHttpHeader
 {
     
+#if 0
     //DBG
     NSString * exposedString1 = [[NSString alloc]initWithData:subHttpHeader encoding:NSUTF8StringEncoding];
     exposedString1 =[exposedString1 stringByReplacingOccurrencesOfString:@"\r" withString:@"\\r"];
     exposedString1 =[exposedString1 stringByReplacingOccurrencesOfString:@"\n" withString:@"\\n"];
     NSLog(@"subHeaders: %@--or--%@",exposedString1, subHttpHeader);
-    
+#endif
     
     
     NSString * exposedString = [[NSString alloc]initWithData:subHttpHeader encoding:NSUTF8StringEncoding];
@@ -726,8 +697,8 @@
     
     int avdata_offset = 10 + 4 + 1 ; //old data + temperature + 1
     
-    NSLog(@"avdata_offset  = %d, audioLength: %d",
-          avdata_offset, audioLength);
+//    NSLog(@"avdata_offset  = %d, audioLength: %d",
+//          avdata_offset, audioLength);
     
 #ifdef IBALL_AUDIO_SUPPORT
     if( (disableAudio == NO) && audioLength > 0 )
@@ -766,8 +737,8 @@
     NSRange range4 = {avdata_offset + audioLength,
         [actualData length] - avdata_offset - audioLength};
     
-    NSLog(@"range4  = %d, len %d",
-          range4.location   , range4.length);
+//    NSLog(@"range4  = %d, len %d",
+//          range4.location   , range4.length);
     
     if (range4.length > 2 )
     {
@@ -831,177 +802,209 @@
 
 - (void)onSocket:(AsyncSocket *)sock didReadData:(NSData *)data withTag:(long)tag
 {
-    
-	[mHandler statusReport:STREAM_STARTED andObj:nil];
-    
-	
-	[listenSocket readDataWithTimeout:5.0 tag:tag];
-    
-	NSString *strBoundary = BOUNDARY_STRING;
+        
+    NSString *strBoundary = BOUNDARY_STRING;
 	NSData *boundaryString = [strBoundary dataUsingEncoding:NSUTF8StringEncoding];
     
 	NSString *strDoubleReturn = @"\r\n\r\n";
 	NSData *doubleReturnString = [strDoubleReturn dataUsingEncoding:NSUTF8StringEncoding];
     
 	NSMutableData* buffer;
-    
-    
-	if(initialFlag) {
+
+    @synchronized(self)
+    {
         
         
+#if 0
+        [listenSocket readDataWithTimeout:5.0 tag:tag];
+#else
+        //read until next boundary
+        [listenSocket readDataToData:boundaryString withTimeout:5.0 tag:tag];
         
-        // make sure we have at least enough data to decode header
-        //     Else re-read
-        if ( [responseData length] ==  0 && // NO data yet
-            [data length] < 256) //Need at least this much to decode header
+#endif
+        
+	    
+        
+        if(initialFlag)
         {
             
-            NSLog(@"Read %d too little data -> continue reading .. ", [data length]);
+            [mHandler statusReport:STREAM_STARTED andObj:nil];
             
-            //push data to responseData for storage until the next chunk come
+            // make sure we have at least enough data to decode header
+            //     Else re-read
+            if ( [responseData length] ==  0 && // NO data yet
+                [data length] < 256) //Need at least this much to decode header
+            {
+                
+                NSLog(@"Read %d too little data -> continue reading .. ", [data length]);
+                
+                //push data to responseData for storage until the next chunk come
+                [responseData appendData:data];
+                
+                return;
+            }
+            
+            
+            /* If there is some response data .. OR data lenght is > 256,
+             append those with data to responseData
+             
+             And try to decode the HTTP header from responseData
+             */
             [responseData appendData:data];
             
-            return;
-        }
-        
-        
-        /* If there is some response data .. OR data lenght is > 256,
-           append those with data to responseData
-        
-           And try to decode the HTTP header from responseData
-         */
-        [responseData appendData:data];
-                        
-        if ( [self verifyMainHttpHeader:responseData] == FALSE)
-        {
-            return;
-        }
-        
-       
-#if 0
-        
-		int pos = [Util offsetOfBytes:responseData searchPattern:doubleReturnString];
-		if(pos < 0) {
-            NSLog(@"pos < 0 ");
-            return;
-        }
-        else
-        {
-            NSLog(@"doubleReturnString pos = %d, [responseData length]: %d  ",
-                  pos, [responseData length]);
-
-        }
-        
-        initialFlag = 0;
-		NSRange range0 = {pos + 4, [responseData length] - pos - 4};
-
-        
-#else 
-        
-        
-        int boundaryString_pos = [Util offsetOfBytes:responseData searchPattern:boundaryString];
-        
-        if(boundaryString_pos < 0) {
-            NSLog(@"boundaryString_pos < 0 ");
-
-        }
-        else
-        {
-            NSLog(@"boundaryString_pos pos = %d,  ",
-                  boundaryString_pos);
+            if ( [self verifyMainHttpHeader:responseData] == FALSE)
+            {
+                return;
+            }
             
-        }
-        
-        
-        initialFlag = 0;
-        NSRange range0 = {boundaryString_pos, [responseData length] - boundaryString_pos };
-        
-        
+            
+            NSLog(@"INIT responseData len = %d  ",[responseData length]);
+#if 0
+            
+            int pos = [Util offsetOfBytes:responseData searchPattern:doubleReturnString];
+            if(pos < 0) {
+                NSLog(@"pos < 0 ");
+                return;
+            }
+            else
+            {
+                NSLog(@"doubleReturnString pos = %d, [responseData length]: %d  ",
+                      pos, [responseData length]);
                 
-#endif 
-        
-		
-        // truncate the http header: range0{ 0 ....  first boundaryString } 
-		NSData* tmpData = [responseData subdataWithRange:range0];
-        
-		buffer = [[NSMutableData alloc] init];
-		[buffer appendData:tmpData];
-	}
-	else
-	{
-		buffer = [[NSMutableData alloc] init];
-		[buffer appendData:responseData];
-		[buffer appendData:data];
-	}
-    
-    
-    
-    /* 
-     1st time:
-     From here buffer should contains, one or more frames.
-     --boundarydonotcross
-     Content-Type: image/jpeg
-     Content-Length: xxxxxx
-     <raw data ... >
-     --boundarydonotcross
-     Content-......
-      ...
-     
-     =========
-     2nd time:
-     "\r\n"Content-Type: image/jpeg
-     Content-Length: xxxxxx
-     <raw data ... >
-     --boundarydonotcross
-     Content-......
-     ...
-     
-     
-     */
-    
-    
-	int length = [buffer length];
-    
-	int index = 0;
-	int totalOffset = 0;
-    
-	while(1) {
-		NSRange range = {totalOffset, length - totalOffset};
-        
-		NSData* ptr = [buffer subdataWithRange:range];
-        
-        
-        
-		int endPos = [Util offsetOfBytes:ptr searchPattern:boundaryString];
-        
-        
-        if (endPos == 0)
-        {
-            // boundarystring is right here
-            // --> Skip it and search again
-            index = [boundaryString length];
-            totalOffset = index;
+            }
+            
+            initialFlag = 0;
+            NSRange range0 = {pos + 4, [responseData length] - pos - 4};
+            
+            
+#else
+            
+            
+            int boundaryString_pos = [Util offsetOfBytes:responseData searchPattern:boundaryString];
+            
+            if(boundaryString_pos < 0) {
+                NSLog(@"boundaryString_pos < 0 ");
+                
+            }
+            else
+            {
+                NSLog(@"boundaryString_pos pos = %d,  ",
+                      boundaryString_pos);
+                
+                boundaryString_pos += [strBoundary length];
+                
+                NSLog(@"boundaryString_pos2 pos = %d,  ",
+                      boundaryString_pos);
+            }
+            
+            
+            initialFlag = 0;
+            NSRange range0 = {boundaryString_pos, [responseData length] - boundaryString_pos };
+            
+            
+            
+#endif
+            
+            
+            // truncate the http header: range0{ 0 ....  first boundaryString }
+            NSData* tmpData = [responseData subdataWithRange:range0];
+            
+            buffer = [[NSMutableData alloc] init];
+            [buffer appendData:tmpData];
         }
-		else if(endPos > 0)
+        else
         {
-	   
+            
+            
+            buffer = [[NSMutableData alloc] init];
+            [buffer appendData:responseData];
+            [buffer appendData:data];
+        }
+        
+        
+        
+        /*
+         1st time:
+         From here buffer should contains, one or more frames.
+         --boundarydonotcross\r\n
+         Content-Type: image/jpeg\r\n
+         Content-Length: xxxxxx\r\n
+         <raw data ... >
+         --boundarydonotcross\r\n
+         Content-......
+         ...
+         
+         =========
+         2nd time:
+         \r\nContent-Type: image/jpeg
+         Content-Length: xxxxxx
+         <raw data ... >
+         --boundarydonotcross
+         Content-......
+         ...
+         
+         
+         */
+        
+        
+        
+        
+        int length = [buffer length];
+        
+        int index = 0;
+        int totalOffset = 0;
+        
+#if 1 //DBG
+        if (length > 50)
+        {
+            NSRange  dbgRange = {0, 50 };
+            NSData* dbgData = [buffer subdataWithRange:dbgRange];
+            NSString * exposedString1 = [[NSString alloc]initWithData:dbgData encoding:NSUTF8StringEncoding];
+            exposedString1 =[exposedString1 stringByReplacingOccurrencesOfString:@"\r" withString:@"\\r"];
+            exposedString1 =[exposedString1 stringByReplacingOccurrencesOfString:@"\n" withString:@"\\n"];
+            NSLog(@"clear data Enter getdata remain: %d  first 50bytes: %@<<<", length,exposedString1);
+        }
+#endif
+        
+        
+        while(1) {
+            NSRange range = {totalOffset, length - totalOffset};
+            
+            NSData* ptr = [buffer subdataWithRange:range];
+            
+            
+            
+            int endPos = [Util offsetOfBytes:ptr searchPattern:boundaryString];
+            
+            
+            if (endPos == 0)
+            {
+                // boundarystring is right here
+                // --> Skip it and search again
+                index = [boundaryString length];
+                totalOffset = index;
+            }
+            else if(endPos > 0)
+            {
+                
 				/* Try to find the boundary into the body */
 				NSRange range1 = {0, endPos};
+                
 				NSData* data = [ptr subdataWithRange:range1];
-				int dl = [data length];
+                
+				//int dl = [data length];
 				//Byte* p1 = (Byte*)[data bytes];
                 
 				index = endPos + [boundaryString length];
 				totalOffset += index;
-            
+                
 				int startIndex = [Util offsetOfBytes:data searchPattern:doubleReturnString];
                 
                 
-                NSLog(@"startIndex  = %d, endPos: %d , dl : %d",
-                      startIndex, endPos, dl);
+                
 				
                 
-            
+                
                 if(startIndex  == 0)
                 {
                     // doubleReturnString is right here
@@ -1024,11 +1027,18 @@
                     if (frameLength < 0)
                     {
                         //skip over chunk of data
-                        return; 
+                        return;
                     }
                     
                     
+                    //THere is a different b/w start + framelength AND endPos .. ? Dont know why
                     NSRange range2 = {startIndex , frameLength};
+                    
+                    
+                    
+                    
+//                    NSLog(@"2 startIndex  = %d, calEndpost (start+len): %d, endPos: %d ,  totalBuffer : %d",
+//                          startIndex, startIndex + frameLength, endPos, [ptr length]);
                     
                     
                     /* Start of body in HTTP response*/
@@ -1039,25 +1049,25 @@
                 
                 
                 
-			
-		}
+                
+            }
+            
+            else
+            {
+                // no match
+                // break the loop and wait for the next data chunk
+                [responseData resetBytesInRange:NSMakeRange(0, [responseData length])];
+                
+                [responseData setLength:[ptr length]];
+                [responseData setData:ptr];
+                //[ptr release];
+                break;
+            }
+        }
         
-        else
-        {
-            NSLog(@"break & and some data left: %d  %@", [ptr length],
-                  [[NSString alloc] initWithData:ptr encoding:NSUTF8StringEncoding]);
-			// no match
-			// break the loop and wait for the next data chunk
-			[responseData setLength:[ptr length]];
-			[responseData setData:ptr];
-			//[ptr release];
-			break;
-		}
-	}
-    
-	[buffer release];
-    
-    
+        [buffer release];
+        
+    }// @synchronized(self)
 }
 
 - (void)onSocket:(AsyncSocket *)sock didWriteDataWithTag:(long)tag
@@ -1092,7 +1102,7 @@
 	}
     
 
-#if 0 // DEBUG ONLY
+#if 1 //
     
 	reconnectLimits --;
 	if (reconnectLimits  > 0)
@@ -1387,16 +1397,6 @@
 
         //sleep for 5 sec 
         [NSThread sleepForTimeInterval:5.0];
-        msg = [NSString stringWithFormat:@"%@%@",
-               STUN_CMD_PART, CLOSE_STUN_SESSION];
-        msg_ = [[NSData alloc] initWithBytes:[msg UTF8String] length:[msg length]];
-        
-        
-        if ([udtSocket isOpen])
-        {
-            [udtSocket sendDataViaUdt:msg_];
-            [udtSocket close];
-        }
         
         NSLog(@"Force  RELAY");
 		[self switchToUdtRelayServer ];
@@ -1598,15 +1598,7 @@
         
         
         
-        
-        //NSLog(@"bytesRead:%d initialFlag: %d, res_len: %d",bytesRead, initialFlag, [responseData length]);
-
-        
-		//NSRange dbg_range = {0, 22};
-		//		NSData * dbg_data = [data subdataWithRange:dbg_range];
-		//		NSString * raw_data = [[[NSString alloc] initWithData:dbg_data encoding: NSUTF8StringEncoding] autorelease];
-		//		NSLog(@"rawdata :%@", raw_data);
-        
+       
 		if(initialFlag) {
             
 			// truncate the http header

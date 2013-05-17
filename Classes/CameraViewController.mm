@@ -1575,21 +1575,20 @@
         }
         case REMOTE_STREAM_STOPPED:
         {
-            
+#if 0 //dont close_session
             if (streamer.communication_mode == COMM_MODE_STUN_RELAY2 ||
                 streamer.communication_mode == COMM_MODE_STUN )
             {
 
                 if (self.scomm != nil)
                 {
-                    
-                    [self.scomm sendCommandThruUdtServer:CLOSE_STUN_SESSION
-                                                 withMac:self.selected_channel.profile.mac_address
+
+                    [self.scomm sendCloseSessionThruBMS:self.selected_channel.profile.mac_address
                                               AndChannel:self.selected_channel.channID];
                 }
             }
 
-            
+#endif
             
             break;
         }

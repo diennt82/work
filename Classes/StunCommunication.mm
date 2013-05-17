@@ -7,6 +7,7 @@
 //
 
 #import "StunCommunication.h"
+#import "STUN_Communication.h"
 
 
 @implementation StunCommunication
@@ -24,6 +25,35 @@
 	[super init]; 
 	return self; 
 }
+
+- (NSData * ) sendCloseSessionThruBMS:(NSString *) mac AndChannel:(NSString*) chann
+{
+    
+    BMS_Communication * bms_comm;
+    bms_comm  = [[BMS_Communication alloc] initWithObject:self
+                                                 Selector:nil
+                                             FailSelector:nil
+                                                ServerErr:nil];
+    
+   	
+	NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+	NSString * user_email = (NSString *) [userDefaults objectForKey:@"PortalUseremail"];
+	NSString * user_pass = (NSString *) [userDefaults objectForKey:@"PortalPassword"];
+    
+    
+
+    NSData * response_dat = [bms_comm BMS_sendCoreCmdViaServeBlockedWithUser:user_email
+                                                                 AndPass:user_pass
+                                                                 macAddr:mac
+                                                                 channId:chann
+                                                                 command:CLOSE_STUN_SESSION];
+    return response_dat;
+    
+    
+    
+}
+
+
 - (NSData * ) sendCommandThruUdtServer:(NSString *) command withMac:(NSString *) mac AndChannel:(NSString*) chann
 {
     
