@@ -174,7 +174,7 @@
 -(void) toggleRecording;
 - (UIImage*)imageWithImage:(UIImage*)image scaledToRect:(CGRect)newRect;
 
-
+-(void) startStreamingFromRelay2;
 
 
 -(void) switchToOrientation:(UIInterfaceOrientation)orientation;

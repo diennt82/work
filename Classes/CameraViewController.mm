@@ -1358,13 +1358,14 @@
 	switch (status) {
 		case CONNECTED_TO_CAMERA:
         {
-
+#if 0 //DBG
             //update melody ui
             [self performSelectorInBackground:@selector(setUIMelodyOnOff_bg) withObject:nil];
             
             
             if (streamer.communication_mode != COMM_MODE_LOCAL)
             {
+                
                 //Force QVGA when first connecting
                 NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
                 [userDefaults setInteger:0 forKey:@"int_VideoQuality"];
@@ -1378,7 +1379,7 @@
                 [self performSelectorInBackground:@selector(getVQ_bg) withObject:nil];
                 
             }
-
+#endif
 
             
             [UIApplication sharedApplication].idleTimerDisabled=  NO;

@@ -93,6 +93,136 @@
 {
 	self.videoImage = view;
 }
+#pragma mark -
+
+#pragma mark NSURLConnection Delegate functions
+/****** NSURLConnection Delegate functions ******/
+
+
+
+- (void)connection:(NSURLConnection *)connection didReceiveAuthenticationChallenge:(NSURLAuthenticationChallenge *)challenge
+{
+	NSLog(@"did recv auth challenge: %@", challenge);
+
+    
+}
+
+int bytesToRead;
+
+
+- (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response;
+{
+    
+	NSHTTPURLResponse* httpResponse = (NSHTTPURLResponse*)response;
+	
+	int responseStatusCode = [httpResponse statusCode];
+	
+    
+	if (responseStatusCode == 200)
+	{
+        
+		NSLog(@"Got Response 200");
+        
+        
+        NSDictionary * headers = [httpResponse allHeaderFields];
+        
+        for (int i =0 ; i <headers.count; i++)
+        {
+            NSLog(@"entry: %d: %@<<>>%@", i, [[headers allKeys] objectAtIndex:i],
+                  [[headers allValues] objectAtIndex:i]);
+
+        }
+        
+        //Different meaning.. 
+        [responseData resetBytesInRange:NSMakeRange(0, [responseData length])];
+        [responseData setLength:0];
+        bytesToRead = [(NSString*)[headers objectForKey:@"Content-Length"]intValue];
+        
+        NSLog(@"Got Response 200- bytesToRead: %d", bytesToRead);
+    }
+	else
+    {
+        
+        
+        {
+            NSLog(@"Failed to call selIfFailure..silence return");
+        }
+		
+		responseData = nil;
+	}
+    
+	
+    
+}
+
+- (NSURLRequest *)connection:(NSURLConnection *)connection willSendRequest:(NSURLRequest *)request redirectResponse:(NSURLResponse *)redirectResponse
+{
+    
+    NSLog(@"Redirect >>>>>>>>>> %@",  [[request URL]absoluteString]);
+    
+    
+
+    return request;
+}
+
+- (void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data
+{
+
+	if (streamingChannel.stopStreaming == TRUE)
+    {
+        [connection cancel];
+        return;
+    }
+    //NSLog(@"Recived: %d", [data length]);
+    
+#if 0
+    if ([data length] > 128)
+    {
+        NSRange  readableHdr_range = {0,128};
+        NSData * readableHdr = [data subdataWithRange:readableHdr_range];
+        
+        //DBG
+        NSString * exposedString1 = [[NSString alloc]initWithData:readableHdr encoding:NSUTF8StringEncoding];
+        exposedString1 =[exposedString1 stringByReplacingOccurrencesOfString:@"\r" withString:@"\\r"];
+        exposedString1 =[exposedString1 stringByReplacingOccurrencesOfString:@"\n" withString:@"\\n"];
+        NSLog(@"subHeaders: %@-",exposedString1);
+    }
+#endif
+    
+    [responseData appendData:data];
+
+    if ( [responseData length] >= bytesToRead)
+    {
+        NSLog(@"process one frame now" );
+
+        [self processOneFrame:responseData];
+    }
+}
+
+
+- (void)connectionDidFinishLoading:(NSURLConnection *)connection
+{
+    
+	if (responseData != nil)
+	{
+		
+		
+        
+	}
+	 NSLog(@"connectionDidFinishLoading END ");
+    
+}
+
+
+- (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error
+{
+	NSLog(@"failed with error: %@", error);
+	
+
+	
+}
+
+
 
 #pragma mark -
 #pragma mark NSStreamDelegate
@@ -109,14 +239,13 @@
                 
                 
                 NSString * getReq;
-                
                 getReq = [NSString stringWithFormat:@"%@%@%@%@\r\n",
                           AVSTREAM_REQUEST, AVSTREAM_PARAM_1,self.remoteViewKey,
                           AVSTREAM_PARAM_2 ];
                 
+                
                 //Attach Basic authen:
                 getReq = [getReq stringByAppendingFormat:@"Authorization: Basic %@\r\n\r\n",[Util getDFCredentials] ];
-                
                 
                 const uint8_t * rawstring = (const uint8_t *)[getReq UTF8String];
                 [ostream write:rawstring maxLength:getReq.length];
@@ -130,6 +259,7 @@
             
             if (theStream == istream)
             {
+
                 NSMutableData * _data = [[NSMutableData data] retain];
                 
                 uint8_t buf[256];
@@ -208,7 +338,7 @@
                     NSLog(@"no buffer!");
                 }
                 
-                
+
                 
             }
             break;
@@ -235,7 +365,58 @@
 #pragma mark -
 #pragma mark  HTTP stream
 
+-(void) startStreamingFromRelay2
+{
+    NSString * http_cmd_remote = [NSString stringWithFormat:@"http://%@%@",RELAY2_SERVER,@"/streamingservice?action=command&command="];
+    
+    http_cmd_remote = [http_cmd_remote stringByAppendingFormat:@"%@",RELAY2_STREAM_CMD];
+    
+    http_cmd_remote = [http_cmd_remote stringByAppendingFormat:@"%@%@", RELAY2_STREAM_CMD_PARAM1, self.streamingChannel.channID];
+    http_cmd_remote = [http_cmd_remote stringByAppendingFormat:@"%@%@",RELAY2_STREAM_CMD_PARAM2, [Util strip_colon_fr_mac:self.streamingChannel.profile.mac_address]];
+                       
+    http_cmd_remote = [http_cmd_remote stringByAppendingFormat:@"%@%@", RELAY2_STREAM_CMD_PARAM3, self.remoteViewKey];
+                       
+   
+    
+	NSLog(@"vCamRemote: %@",http_cmd_remote);
+	
+		
+	@synchronized(self)
+	{
+		
+		NSMutableURLRequest *theRequest=[NSMutableURLRequest requestWithURL:[NSURL URLWithString:http_cmd_remote]
+																cachePolicy: NSURLRequestReloadIgnoringLocalCacheData
+															timeoutInterval:BMS_DEFAULT_TIME_OUT];
+		
+		
+		NSURLConnection * url_connection = [[NSURLConnection alloc] initWithRequest:theRequest
+														 delegate:self
+												 startImmediately:TRUE];
+		
+		
+	}
+	
+    
+    responseData = [[NSMutableData alloc] init];
+    
+    
+    if ( pcmPlayer == nil)
+    {
+        /* Start the player to playback & record */
+        pcmPlayer = [[PCMPlayer alloc] init];
+        [[pcmPlayer player] setPlay_now:FALSE];
+        [pcmPlayer Play:FALSE];
+        
+    }
+    else {
+        [[pcmPlayer player] setPlay_now:FALSE];
+        
+    }
 
+    
+	return ;
+	
+}
 
 - (void) startStreaming
 {
@@ -288,6 +469,7 @@
     }
     else if (self.communication_mode == COMM_MODE_STUN_RELAY2)
     {
+#if 0
         initialFlag = 1;
         listenSocket = [[AsyncSocket alloc] initWithDelegate:self];
         //Non-blocking connect
@@ -295,6 +477,12 @@
                              onPort:self.device_port
                         withTimeout:15
                               error:nil];
+#else
+
+        [self startStreamingFromRelay2];
+        
+        
+#endif
         
 
     }
@@ -386,13 +574,23 @@
     
        
     
-	NSLog(@"getRe1q: %@", getReq);
+	NSLog(@"1getReq: %@", getReq);
     
 	NSData *getReqData = [getReq dataUsingEncoding:NSUTF8StringEncoding];
     
     
 	[listenSocket writeData:getReqData withTimeout:1.0 tag:1];
-	[listenSocket readDataWithTimeout:10.0 tag:1];
+    
+    
+    
+    NSString *strBoundary = BOUNDARY_STRING;
+	NSData *boundaryString = [strBoundary dataUsingEncoding:NSUTF8StringEncoding];
+
+    //read until next boundary
+    [listenSocket readDataToData:boundaryString withTimeout:10.0 tag:1];
+    
+	
+    
 	responseData = [[NSMutableData alloc] init];
 
     
@@ -541,12 +739,13 @@
     
     do
     {
-#if 0
+#if 1
         //DBG
         {
             NSLog(@"initialResponse = %@", initialResponse);
         }
 #endif
+        
         
         if(range.location != NSNotFound)
         {
@@ -697,8 +896,8 @@
     
     int avdata_offset = 10 + 4 + 1 ; //old data + temperature + 1
     
-//    NSLog(@"avdata_offset  = %d, audioLength: %d",
-//          avdata_offset, audioLength);
+    NSLog(@"avdata_offset  = %d, audioLength: %d",
+          avdata_offset, audioLength);
     
 #ifdef IBALL_AUDIO_SUPPORT
     if( (disableAudio == NO) && audioLength > 0 )
@@ -737,8 +936,8 @@
     NSRange range4 = {avdata_offset + audioLength,
         [actualData length] - avdata_offset - audioLength};
     
-//    NSLog(@"range4  = %d, len %d",
-//          range4.location   , range4.length);
+    NSLog(@"range4  = %d, len %d",
+          range4.location   , range4.length);
     
     if (range4.length > 2 )
     {
@@ -800,35 +999,29 @@
 }
 
 
-- (void)onSocket:(AsyncSocket *)sock didReadData:(NSData *)data withTag:(long)tag
+-(void) process:(NSData *) data
 {
-        
+    
+    
     NSString *strBoundary = BOUNDARY_STRING;
 	NSData *boundaryString = [strBoundary dataUsingEncoding:NSUTF8StringEncoding];
+    
     
 	NSString *strDoubleReturn = @"\r\n\r\n";
 	NSData *doubleReturnString = [strDoubleReturn dataUsingEncoding:NSUTF8StringEncoding];
     
-	NSMutableData* buffer;
-
+	NSMutableData* buffer ;
     @synchronized(self)
     {
         
         
-#if 0
-        [listenSocket readDataWithTimeout:5.0 tag:tag];
-#else
-        //read until next boundary
-        [listenSocket readDataToData:boundaryString withTimeout:5.0 tag:tag];
-        
-#endif
-        
-	    
+        buffer = [[NSMutableData alloc] init];
+        [mHandler statusReport:STREAM_STARTED andObj:nil];
         
         if(initialFlag)
         {
             
-            [mHandler statusReport:STREAM_STARTED andObj:nil];
+            
             
             // make sure we have at least enough data to decode header
             //     Else re-read
@@ -909,16 +1102,16 @@
             // truncate the http header: range0{ 0 ....  first boundaryString }
             NSData* tmpData = [responseData subdataWithRange:range0];
             
-            buffer = [[NSMutableData alloc] init];
-            [buffer appendData:tmpData];
+            
+            [buffer setData:tmpData];
         }
         else
         {
             
-            
-            buffer = [[NSMutableData alloc] init];
             [buffer appendData:responseData];
             [buffer appendData:data];
+            
+            
         }
         
         
@@ -959,6 +1152,7 @@
         {
             NSRange  dbgRange = {0, 50 };
             NSData* dbgData = [buffer subdataWithRange:dbgRange];
+            
             NSString * exposedString1 = [[NSString alloc]initWithData:dbgData encoding:NSUTF8StringEncoding];
             exposedString1 =[exposedString1 stringByReplacingOccurrencesOfString:@"\r" withString:@"\\r"];
             exposedString1 =[exposedString1 stringByReplacingOccurrencesOfString:@"\n" withString:@"\\n"];
@@ -1037,13 +1231,13 @@
                     
                     
                     
-//                    NSLog(@"2 startIndex  = %d, calEndpost (start+len): %d, endPos: %d ,  totalBuffer : %d",
-//                          startIndex, startIndex + frameLength, endPos, [ptr length]);
+                    //                    NSLog(@"2 startIndex  = %d, calEndpost (start+len): %d, endPos: %d ,  totalBuffer : %d",
+                    //                          startIndex, startIndex + frameLength, endPos, [ptr length]);
                     
                     
                     /* Start of body in HTTP response*/
 					NSData* actualData = [data subdataWithRange:range2];
-                    [self processOneFrame:actualData]; 
+                    [self processOneFrame:actualData];
                     
                 }
                 
@@ -1069,6 +1263,23 @@
         
     }// @synchronized(self)
 }
+
+
+
+- (void)onSocket:(AsyncSocket *)sock didReadData:(NSData *)data withTag:(long)tag
+{
+    
+    
+    NSString *strBoundary = BOUNDARY_STRING;
+	NSData *boundaryString = [strBoundary dataUsingEncoding:NSUTF8StringEncoding];
+    
+    //read until next boundary
+    [listenSocket readDataToData:boundaryString withTimeout:5.0 tag:tag+1];
+
+    
+    [self process:data];
+    
+ }
 
 - (void)onSocket:(AsyncSocket *)sock didWriteDataWithTag:(long)tag
 {
