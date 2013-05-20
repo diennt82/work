@@ -299,7 +299,20 @@
     NSString * user_pass = (NSString *) [userDefaults objectForKey:@"PortalPassword"];
     
     
-    [bms_comm BMS_addCamWithUser:user_email AndPass:user_pass macAddr:mac camName:camName];
+    NSString * deviceCodecs = (NSString *)[userDefaults objectForKey:CODEC_PREFS];
+    
+    NSString * codec = CODEC_MJPEG;
+    NSRange range1 = [deviceCodecs rangeOfString:CODEC_H264] ;
+    if ( range1.location != NSNotFound)
+    {
+        codec = CODEC_H264;
+    }
+
+    [bms_comm BMS_addCamWithUser:user_email
+                         AndPass:user_pass
+                         macAddr:mac
+                         camName:camName
+                           camCodec:codec];
     
 }
 

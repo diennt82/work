@@ -594,12 +594,24 @@
     HttpCommunication  * deviceComm; 
     deviceComm = [[HttpCommunication alloc]init];
     
+    
+    NSString * deviceCodec;
+    deviceCodec = [deviceComm sendCommandAndBlock:GET_CODECS_SUPPORT
+                                withTimeout:5.0];
+    
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    [userDefaults setObject:deviceCodec  forKey:CODEC_PREFS];
+    [userDefaults synchronize];
+    
+    
     [deviceComm sendConfiguration:sent_conf];
     
     NSLog(@"Send & reset done");
     
     
-    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+
+    
+    userDefaults = [NSUserDefaults standardUserDefaults];
     BOOL isFirstTimeSetup = [userDefaults boolForKey:FIRST_TIME_SETUP];
   
     

@@ -37,8 +37,10 @@
     BOOL tempHiAlertEnabled;
     BOOL tempLoAlertEnabled;
     BOOL hasUpdateLocalStatus;
+    
+    NSString * fw_version ,  * codecs;
 }
-
+@property (nonatomic,retain) NSString * fw_version, *codecs;
 @property (nonatomic,retain) NSString* scan_response, *ip_address, * mac_address;
 @property (nonatomic) int port, minuteSinceLastComm, ptt_port;
 @property (nonatomic) BOOL isSelected, isRemoteAccess,isInLocal;
@@ -55,5 +57,7 @@
 - (NSMutableData *) getBytes; 
 
 + (CamProfile *) restoreFromData: (NSData *) data;
+-(BOOL) isNewerThan08_038;
+
 
 @end

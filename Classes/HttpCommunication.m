@@ -475,7 +475,7 @@
 
 	
 	NSString * response = [self sendCommandAndBlock:setup_cmd ];
-	//TODO: check responses ..?
+
 	response = [self sendCommandAndBlock:RESTART_HTTP_CMD ];
 	
 }

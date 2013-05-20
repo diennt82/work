@@ -439,10 +439,11 @@
 	//Next, get the security info
     
     
-    //Check SYM NAT
-
-    if ([self isConnectingOnSymmetricNat])
+    
+    if (mChannel.profile.isNewerThan08_038 &&
+        ([self isConnectingOnSymmetricNat]))
     {
+        //Check SYM NAT
         NSLog(@"connecting over SYMMETRIC NAT >>>>>>>>>RELAY 2>>>>>");
         
         //change comm mode
@@ -471,6 +472,8 @@
     }
     else
     {
+        
+        NSLog(@"app is NOT behind Sym-nat OR camera version is < 08_039"); 
     
         BMS_Communication * bms_comm;
         

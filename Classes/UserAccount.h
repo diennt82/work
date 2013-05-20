@@ -31,14 +31,14 @@
 
 -(id) initWithUser:(NSString*)user AndPass:(NSString*) pass WithListener:(id <ConnectionMethodDelegate>) d;
 -(void) query_camera_list_blocked;
--(void) query_camera_list;
+
 //Get cam list callbacks
 -(void) getCamListSuccess:(NSData*) raw_data;
 -(void) getCamListFailure:(NSHTTPURLResponse*) error_response; 
 - (void)getCamListServerUnreachable; 
 
+
 -(NSMutableArray *) parse_camera_list:(NSString*) raw;
--(NSMutableArray *) parse_camera_list4:(NSString*) raw;
 
 -(void) sync_online_and_offline_data:(NSMutableArray *) online_list;
 

@@ -100,8 +100,8 @@
 
 #define GET_MAC_ADDRESS @"get_mac_address"
 
-
-
+#define CODEC_PREFS @"device_codecs"
+#define GET_CODECS_SUPPORT @"get_codecs_support"
 
 #define BURNING_PROCESS @"burning_process :"
 
@@ -149,6 +149,7 @@
 
 - (NSString *) sendCommandAndBlock:(NSString *)command withTimeout:(float) timeout;
 
+- (NSString *) sendCommandAndBlock:(NSString *)command;
 
 
 #pragma mark NSURLConnection Delegate functions

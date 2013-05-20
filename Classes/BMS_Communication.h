@@ -34,6 +34,7 @@
 #define GET_CAM_LIST_CMD @"camera_list"
 #define GET_CAM_LIST_PARAM_1 @"&email="
 #define GET_CAM_LIST4_CMD @"camera_list4"
+#define GET_CAM_LIST5_CMD @"camera_list5"
 
 #define ADD_CAM_CMD @"add_cam"
 #define ADD_CAM_PARAM_1 @"&email="
@@ -41,6 +42,13 @@
 #define ADD_CAM_PARAM_3 @"&macaddress="
 #define ADD_CAM_PARAM_4 @"&cam_name="
 #define ADD_CAM_PARAM_5 @"&pass_len="
+#define ADD_CAM_PARAM_6 @"&codec="
+
+
+#define CODEC_MJPEG   @"MJPEG"
+#define CODEC_H264    @"H264"
+
+
 
 #define UPDATE_CAM_CMD @"update_user_cam"
 #define UPDATE_CAM_PARAM_1 @"&email="
@@ -176,7 +184,11 @@
 
 - (NSData *)BMS_getCameraListBlockedWithUser:(NSString *) user_email AndPass:(NSString*) user_pass;
 
-- (BOOL)BMS_addCamWithUser:(NSString*) user_email AndPass:(NSString*) user_pass macAddr:(NSString *) mac camName:(NSString*) name;
+- (BOOL)BMS_addCamWithUser:(NSString*) user_email
+                   AndPass:(NSString*) user_pass
+                   macAddr:(NSString *) mac
+                   camName:(NSString*) name
+                  camCodec:(NSString *) codec;
 
 - (BOOL)BMS_delCamWithUser:(NSString*) user_email AndPass:(NSString*) user_pass macAddr:(NSString *) mac;
 

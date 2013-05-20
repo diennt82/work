@@ -20,6 +20,7 @@
 @synthesize   soundAlertEnabled,tempHiAlertEnabled,tempLoAlertEnabled;
 @synthesize  hasUpdateLocalStatus;
 
+@synthesize fw_version, codecs;
 
 
 
@@ -62,10 +63,48 @@
 	return self;
 }
 
+-(BOOL) isNewerThan08_038
+{
+    
 
+    if ( fw_version != nil)
+    {
+        NSLog(@"Camera fw: %@", fw_version);
+        
+        if ([fw_version isEqualToString:@"0"])
+        {
+            return FALSE;
+        }
+        
+        //FW versioN: xx_yyy
+        NSArray * tokens = [fw_version componentsSeparatedByString:@"_"];
+        int maj_version = [(NSString*) [tokens objectAtIndex:0] intValue];
+        int min_version = [(NSString*) [tokens objectAtIndex:1] intValue];
+
+        if (maj_version > 8)
+        {
+            return TRUE;
+        }
+        else
+        {
+            if (min_version >= 39)
+            {
+                return TRUE;
+            }
+        }
+        
+    }
+    
+    
+    
+    
+    return FALSE;
+}
 
 - (void) dealloc
 {
+    [codecs release];
+    [fw_version release]; 
 	[profileImageData release];
 	[channel release];
 	[scan_response release];

@@ -37,8 +37,24 @@
                                       style:UIBarButtonItemStyleBordered
                                      target:nil
                                      action:nil] autorelease];
+
+    if ([camName isMemberOfClass:[UITextView class]] )
+    {
+        NSLog(@"Cast to UI TextView");
+        ((UITextView *)camName).text = self.cameraName;
+        
+    }
+
     
-    camName.text = self.cameraName;
+
+    
+    if ([camName isMemberOfClass:[UITextField class]] )
+    {
+        NSLog(@"Cast to UI Textfield"); 
+        ((UITextField *)camName).text = self.cameraName;
+
+    }
+    
     
 }
 
@@ -80,8 +96,23 @@
 
 -(void) adjustViewsForOrientations: (UIInterfaceOrientation) interfaceOrientation
 {
+     NSString * tempName = @"";
     
-    NSString * tempName = camName.text;
+    if ([camName isMemberOfClass:[UITextView class]] )
+    {
+        
+        tempName = ((UITextView *)camName).text;
+        
+    }
+     
+    if ([camName isMemberOfClass:[UITextField class]] )
+    {
+
+        tempName = ((UITextField *)camName).text ;
+        
+    }
+    
+   
     
     if (interfaceOrientation == UIInterfaceOrientationLandscapeLeft ||
         interfaceOrientation == UIInterfaceOrientationLandscapeRight)
@@ -111,7 +142,23 @@
     }
     
     
-    camName.text = tempName;
+    
+    if ([camName isMemberOfClass:[UITextView class]] )
+    {
+
+       
+        ((UITextView *)camName).text  = tempName;
+        
+    }
+    
+    if ([camName isMemberOfClass:[UITextField class]] )
+    {
+
+        ((UITextField *)camName).text = tempName ;
+    }
+    
+
+    
 }
 #pragma mark -
 - (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text
@@ -156,7 +203,24 @@
 {
     int tag = ((UIButton*)sender).tag; 
     
-    if ([camName.text length] < 3 || [camName.text length] > 15 )
+    NSString * cameraName_text = @"";
+    
+    if ([camName isMemberOfClass:[UITextView class]] )
+    {
+        
+        cameraName_text =((UITextView *)camName).text  ;
+        
+    }
+    
+    if ([camName isMemberOfClass:[UITextField class]] )
+    {
+        
+        cameraName_text =((UITextField *)camName).text;
+    }
+    
+    
+    
+    if ([cameraName_text length] < 3 || [cameraName_text length] > 15 )
     {
         NSString * title = NSLocalizedStringWithDefaultValue(@"Invalid_Camera_Name", nil, [NSBundle mainBundle],
                                                              @"Invalid Camera Name", nil);
@@ -177,7 +241,7 @@
         [alert show];
         [alert release];
     }
-    else if (![self isCameraNameValidated:camName.text])
+    else if (![self isCameraNameValidated:cameraName_text])
     {       NSString * title = NSLocalizedStringWithDefaultValue(@"Invalid_Camera_Name", nil, [NSBundle mainBundle],
                                                                  @"Invalid Camera Name", nil);
             
@@ -199,17 +263,10 @@
     }
     else if (tag == CONF_CAM_BTN_TAG)
     {
-//        NSString * string = [NSString stringWithString:camName.text];
-//        NSError * error = nil;
-        
-//        NSRegularExpression * regex = [NSRegularExpression regularExpressionWithPattern:@"^[a-zA-Z0-9' \\._-]+$" options:0 error:&error];
-        
-//        [self checkValidateString:string with:regex];
-        
-        
+
         
         NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-        [userDefaults setObject:camName.text forKey:@"CameraName"];
+        [userDefaults setObject:cameraName_text forKey:@"CameraName"];
         [userDefaults synchronize];
         
         
@@ -221,44 +278,9 @@
         /*20121129: phung skip authentication */
         
         [self queryWifiList];
-        
-#if 0
-        //Authenticate first
-        [comm babymonitorAuthentication];
-        
-        
-        [NSTimer scheduledTimerWithTimeInterval: 0.125//0.04 
-                                         target:self
-                                       selector:@selector(isAuthenticationDone:)
-                                       userInfo:nil
-                                        repeats:NO];
-#endif 
-        
 
     }
 }
-
-
-#if 0
-- (void) isAuthenticationDone:(NSTimer *) expired
-{
-	if (comm.authInProgress == FALSE)
-	{
-		NSLog(@"bm auth passed!");
-		[self queryWifiList];
-		
-	}
-	else 
-	{
-		[NSTimer scheduledTimerWithTimeInterval:1//0.04 
-										 target:self
-									   selector:@selector(isAuthenticationDone:)
-									   userInfo:nil
-										repeats:NO];
-	}
-	
-}
-#endif 
 
 
 -(void) queryWifiList

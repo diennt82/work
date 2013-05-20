@@ -15,7 +15,7 @@
 
 @interface Step_04_ViewController : UIViewController<UITextViewDelegate>
 {
-    IBOutlet UITextView * camName;
+    IBOutlet UIView * camName;
     
     NSString * homeWifiSSID; 
     NSString * cameraMac; 

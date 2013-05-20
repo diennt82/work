@@ -143,8 +143,33 @@
                 
             case STREAM_MODE_RELAY2:
             {
-                /// TODO:
-                NSLog(@"TODO "); 
+
+                NSLog(@"Switch to STUN relay 2 From here ");
+                STUN_Communication * stunConn;
+				stunConn = [[STUN_Communication alloc]init];
+
+                
+                //change comm mode
+                self.mChannel.communication_mode  = COMM_MODE_STUN_RELAY2;
+                
+                
+                BMS_Communication * bms_comm;
+                
+                bms_comm = [[BMS_Communication alloc] initWithObject:stunConn
+                                                            Selector:@selector(viewCamRelaySuccessWithResponse:)
+                                                        FailSelector:@selector(viewCamRelayFailedWithError:)
+                                                           ServerErr:@selector(viewCamRelayFailedServerUnreachable)];
+                
+                NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+                NSString * user_email = (NSString *) [userDefaults objectForKey:@"PortalUseremail"];
+                NSString * user_pass = (NSString *) [userDefaults objectForKey:@"PortalPassword"];
+                
+                
+                [bms_comm BMS_viewCamRelayWithUser:user_email
+                                           AndPass:user_pass
+                                           macAddr:mChannel.profile.mac_address];
+                
+
                 
                 break;
             }

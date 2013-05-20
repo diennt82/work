@@ -100,12 +100,8 @@
 
 - (BOOL)BMS_getCameraListWithUser:(NSString *) user_email AndPass:(NSString*) user_pass;
 {
-//	NSString * http_cmd = [NSString stringWithFormat:@"%@%@",BMS_PHONESERVICE, BMS_CMD_PART];
-//	http_cmd = [http_cmd stringByAppendingFormat:@"%@", GET_CAM_LIST_CMD];
-//	http_cmd = [http_cmd stringByAppendingFormat:@"%@%@", GET_CAM_LIST_PARAM_1, user_email];
-
     NSString * http_cmd = [NSString stringWithFormat:@"%@%@",BMS_PHONESERVICE, BMS_CMD_PART];
-	http_cmd = [http_cmd stringByAppendingFormat:@"%@", GET_CAM_LIST4_CMD];
+	http_cmd = [http_cmd stringByAppendingFormat:@"%@", GET_CAM_LIST5_CMD];
 	http_cmd = [http_cmd stringByAppendingFormat:@"%@%@", GET_CAM_LIST_PARAM_1, user_email];
 
 	
@@ -146,7 +142,11 @@
 
 
 
-- (BOOL)BMS_addCamWithUser:(NSString*) user_email AndPass:(NSString*) user_pass macAddr:(NSString *) mac camName:(NSString*) name
+- (BOOL)BMS_addCamWithUser:(NSString*) user_email
+                   AndPass:(NSString*) user_pass
+                   macAddr:(NSString *) mac
+                   camName:(NSString*) name
+                  camCodec:(NSString *) codec
 {
  	NSString * mac_ = [Util strip_colon_fr_mac:mac];
 	
@@ -159,6 +159,7 @@
 	http_cmd = [http_cmd stringByAppendingFormat:@"%@%@", ADD_CAM_PARAM_3, mac_];
 	http_cmd = [http_cmd stringByAppendingFormat:@"%@%@", ADD_CAM_PARAM_4, escapedName];
 	http_cmd = [http_cmd stringByAppendingFormat:@"%@%d", ADD_CAM_PARAM_5,[user_pass length]];
+    http_cmd = [http_cmd stringByAppendingFormat:@"%@%@", ADD_CAM_PARAM_6, codec];
 	
 	NSLog(@"addCam query:%@", http_cmd);
 	
@@ -783,12 +784,9 @@
     NSData * dataReply;
 	NSURLResponse * response;
     NSError* error = nil;
-//    NSString * http_cmd = [NSString stringWithFormat:@"%@%@",BMS_PHONESERVICE, BMS_CMD_PART];
-//	http_cmd = [http_cmd stringByAppendingFormat:@"%@", GET_CAM_LIST_CMD];
-//	http_cmd = [http_cmd stringByAppendingFormat:@"%@%@", GET_CAM_LIST_PARAM_1, user_email];
 
     NSString * http_cmd = [NSString stringWithFormat:@"%@%@",BMS_PHONESERVICE, BMS_CMD_PART];
-	http_cmd = [http_cmd stringByAppendingFormat:@"%@", GET_CAM_LIST4_CMD];
+	http_cmd = [http_cmd stringByAppendingFormat:@"%@", GET_CAM_LIST5_CMD];
 	http_cmd = [http_cmd stringByAppendingFormat:@"%@%@", GET_CAM_LIST_PARAM_1, user_email];
 	
 	//NSLog(@"getCamlist query:%@", http_cmd);

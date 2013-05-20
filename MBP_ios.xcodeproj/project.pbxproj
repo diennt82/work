@@ -3488,9 +3488,9 @@
 					armv6,
 				);
 				CODE_SIGN_ENTITLEMENTS = "";
-				CODE_SIGN_IDENTITY = "iPhone Developer: Paul Tsui (KSWYEMQH37)";
-				"CODE_SIGN_IDENTITY[sdk=*]" = "iPhone Developer: Paul Tsui (KSWYEMQH37)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Paul Tsui (KSWYEMQH37)";
+				CODE_SIGN_IDENTITY = "iPhone Developer: steve lee (BVQT22TERJ)";
+				"CODE_SIGN_IDENTITY[sdk=*]" = "iPhone Developer: steve lee (BVQT22TERJ)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: steve lee (BVQT22TERJ)";
 				COPY_PHASE_STRIP = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -3512,6 +3512,9 @@
 					"\"$(SRCROOT)/../openssl_lib/iPhoneOS-armv6/lib\"",
 				);
 				PRODUCT_NAME = Camera;
+				PROVISIONING_PROFILE = "0D5F1A24-1460-4CCA-9215-5395EDAB9270";
+				"PROVISIONING_PROFILE[sdk=*]" = "6C82F2BC-6CB1-49AC-ABDC-ED104A70384A";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "0D5F1A24-1460-4CCA-9215-5395EDAB9270";
 				SDKROOT = iphoneos;
 				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/external_include/**";
 			};
@@ -3526,8 +3529,8 @@
 					armv6,
 				);
 				CODE_SIGN_ENTITLEMENTS = "";
-				CODE_SIGN_IDENTITY = "iPhone Developer: Paul Tsui (KSWYEMQH37)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Paul Tsui (KSWYEMQH37)";
+				CODE_SIGN_IDENTITY = "iPhone Developer: steve lee (BVQT22TERJ)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: steve lee (BVQT22TERJ)";
 				COPY_PHASE_STRIP = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -3544,8 +3547,8 @@
 					"\"$(SRCROOT)\"",
 				);
 				PRODUCT_NAME = Camera;
-				PROVISIONING_PROFILE = "85CE57E8-8BB4-4DCF-BDA0-AE6D857B78F7";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "85CE57E8-8BB4-4DCF-BDA0-AE6D857B78F7";
+				PROVISIONING_PROFILE = "6C82F2BC-6CB1-49AC-ABDC-ED104A70384A";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "6C82F2BC-6CB1-49AC-ABDC-ED104A70384A";
 				SDKROOT = iphoneos;
 				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/external_include/**";
 				VALIDATE_PRODUCT = YES;
@@ -3587,8 +3590,8 @@
 					armv6,
 				);
 				CODE_SIGN_ENTITLEMENTS = "";
-				CODE_SIGN_IDENTITY = "iPhone Developer: Paul Tsui (KSWYEMQH37)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Paul Tsui (KSWYEMQH37)";
+				CODE_SIGN_IDENTITY = "iPhone Developer: steve lee (BVQT22TERJ)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: steve lee (BVQT22TERJ)";
 				COPY_PHASE_STRIP = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -3602,6 +3605,8 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
 				LIBRARY_SEARCH_PATHS = "\"$(SRCROOT)\"";
 				PRODUCT_NAME = Camera;
+				PROVISIONING_PROFILE = "6C82F2BC-6CB1-49AC-ABDC-ED104A70384A";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "0D5F1A24-1460-4CCA-9215-5395EDAB9270";
 				SDKROOT = iphoneos;
 				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/external_include/**";
 				VALIDATE_PRODUCT = YES;
