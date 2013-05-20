@@ -115,6 +115,10 @@
     NSOutputStream * ostream;
     
 #endif
+    
+    //Relay 2
+    int bytesToRead;
+    NSURLConnection  * relay2_connection;
 	
 }
 #if 1

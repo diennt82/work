@@ -107,7 +107,7 @@
     
 }
 
-int bytesToRead;
+
 
 
 - (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response;
@@ -120,25 +120,20 @@ int bytesToRead;
     
 	if (responseStatusCode == 200)
 	{
-        
-		NSLog(@"Got Response 200");
-        
-        
         NSDictionary * headers = [httpResponse allHeaderFields];
-        
-        for (int i =0 ; i <headers.count; i++)
-        {
-            NSLog(@"entry: %d: %@<<>>%@", i, [[headers allKeys] objectAtIndex:i],
-                  [[headers allValues] objectAtIndex:i]);
-
-        }
         
         //Different meaning.. 
         [responseData resetBytesInRange:NSMakeRange(0, [responseData length])];
         [responseData setLength:0];
         bytesToRead = [(NSString*)[headers objectForKey:@"Content-Length"]intValue];
         
-        NSLog(@"Got Response 200- bytesToRead: %d", bytesToRead);
+        
+        if (initialFlag == 1)
+        {
+            [mHandler statusReport:STREAM_STARTED andObj:nil];
+            initialFlag = 0;
+        }
+
     }
 	else
     {
@@ -168,33 +163,15 @@ int bytesToRead;
 - (void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data
 {
 
-	if (streamingChannel.stopStreaming == TRUE)
-    {
-        [connection cancel];
-        return;
-    }
-    //NSLog(@"Recived: %d", [data length]);
-    
-#if 0
-    if ([data length] > 128)
-    {
-        NSRange  readableHdr_range = {0,128};
-        NSData * readableHdr = [data subdataWithRange:readableHdr_range];
-        
-        //DBG
-        NSString * exposedString1 = [[NSString alloc]initWithData:readableHdr encoding:NSUTF8StringEncoding];
-        exposedString1 =[exposedString1 stringByReplacingOccurrencesOfString:@"\r" withString:@"\\r"];
-        exposedString1 =[exposedString1 stringByReplacingOccurrencesOfString:@"\n" withString:@"\\n"];
-        NSLog(@"subHeaders: %@-",exposedString1);
-    }
-#endif
+	
+   
+
     
     [responseData appendData:data];
 
     if ( [responseData length] >= bytesToRead)
     {
-        NSLog(@"process one frame now" );
-
+        
         [self processOneFrame:responseData];
     }
 }
@@ -203,12 +180,7 @@ int bytesToRead;
 - (void)connectionDidFinishLoading:(NSURLConnection *)connection
 {
     
-	if (responseData != nil)
-	{
-		
-		
-        
-	}
+	
 	 NSLog(@"connectionDidFinishLoading END ");
     
 }
@@ -218,8 +190,32 @@ int bytesToRead;
 {
 	NSLog(@"failed with error: %@", error);
 	
-
-	
+    
+	[self.videoImage setImage:[UIImage imageNamed:@"homepage.png"]];
+    
+   
+    
+	if (hasStoppedByCaller == TRUE)
+	{
+		//simply return
+		return;
+	}
+   
+	reconnectLimits --;
+	if (reconnectLimits  > 0)
+	{
+		[self startStreamingFromRelay2];
+	}
+    else
+    {
+        if (self.remoteView == TRUE)
+		{
+            ///SEND this message -> stream stopped & restart 
+			NSLog(@"Streamer-REMOTE send message : REMOTE_STREAM_STOPPED_UNEXPECTEDLY");
+			[mHandler statusReport:REMOTE_STREAM_STOPPED_UNEXPECTEDLY andObj:nil];
+		}
+    }
+    
 }
 
 
@@ -386,10 +382,10 @@ int bytesToRead;
 		
 		NSMutableURLRequest *theRequest=[NSMutableURLRequest requestWithURL:[NSURL URLWithString:http_cmd_remote]
 																cachePolicy: NSURLRequestReloadIgnoringLocalCacheData
-															timeoutInterval:BMS_DEFAULT_TIME_OUT];
+															timeoutInterval:2.0];
 		
 		
-		NSURLConnection * url_connection = [[NSURLConnection alloc] initWithRequest:theRequest
+		relay2_connection = [[NSURLConnection alloc] initWithRequest:theRequest
 														 delegate:self
 												 startImmediately:TRUE];
 		
@@ -398,7 +394,7 @@ int bytesToRead;
 	
     
     responseData = [[NSMutableData alloc] init];
-    
+    initialFlag = 1;
     
     if ( pcmPlayer == nil)
     {
@@ -707,6 +703,10 @@ int bytesToRead;
     {
         [mHandler statusReport:REMOTE_STREAM_STOPPED andObj:nil];
 
+        if (relay2_connection != nil)
+        {
+            [relay2_connection cancel];
+        }
     }
 }
 
@@ -866,7 +866,7 @@ int bytesToRead;
         
     }
     
-    NSLog(@"subHeaders: ret = %d",ret);
+
     
     
     return ret;
@@ -896,8 +896,8 @@ int bytesToRead;
     
     int avdata_offset = 10 + 4 + 1 ; //old data + temperature + 1
     
-    NSLog(@"avdata_offset  = %d, audioLength: %d",
-          avdata_offset, audioLength);
+//    NSLog(@"avdata_offset  = %d, audioLength: %d",
+//          avdata_offset, audioLength);
     
 #ifdef IBALL_AUDIO_SUPPORT
     if( (disableAudio == NO) && audioLength > 0 )
@@ -936,8 +936,8 @@ int bytesToRead;
     NSRange range4 = {avdata_offset + audioLength,
         [actualData length] - avdata_offset - audioLength};
     
-    NSLog(@"range4  = %d, len %d",
-          range4.location   , range4.length);
+//    NSLog(@"range4  = %d, len %d",
+//          range4.location   , range4.length);
     
     if (range4.length > 2 )
     {
@@ -1016,12 +1016,12 @@ int bytesToRead;
         
         
         buffer = [[NSMutableData alloc] init];
-        [mHandler statusReport:STREAM_STARTED andObj:nil];
+        
         
         if(initialFlag)
         {
             
-            
+            [mHandler statusReport:STREAM_STARTED andObj:nil];
             
             // make sure we have at least enough data to decode header
             //     Else re-read
@@ -1313,7 +1313,7 @@ int bytesToRead;
 	}
     
 
-#if 1 //
+
     
 	reconnectLimits --;
 	if (reconnectLimits  > 0)
@@ -1341,7 +1341,7 @@ int bytesToRead;
 	}
     
     
-#endif // DEBUG ONLY
+
 }
 
 
