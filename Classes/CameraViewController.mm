@@ -1358,7 +1358,7 @@
 	switch (status) {
 		case CONNECTED_TO_CAMERA:
         {
-#if 0 //DBG
+#if 1 //DBG
             //update melody ui
             [self performSelectorInBackground:@selector(setUIMelodyOnOff_bg) withObject:nil];
             
@@ -1463,6 +1463,11 @@
             
             NSString * msg = NSLocalizedStringWithDefaultValue(@"network_lost_link",nil, [NSBundle mainBundle],
                                                                @"Camera disconnected due to network connectivity problem. Trying to reconnect...", nil);
+            
+#if 1
+            msg = [NSString stringWithFormat:@"%@(%d)",msg,
+                   self.streamer.latest_connection_error ];
+#endif
             
             
             if (self.alertTimer != nil && [self.alertTimer isValid])
@@ -1576,7 +1581,7 @@
         }
         case REMOTE_STREAM_STOPPED:
         {
-#if 0 //dont close_session
+#if 1 //dont close_session
             if (streamer.communication_mode == COMM_MODE_STUN_RELAY2 ||
                 streamer.communication_mode == COMM_MODE_STUN )
             {

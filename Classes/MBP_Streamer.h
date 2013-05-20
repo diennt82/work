@@ -55,7 +55,7 @@
 
 @end
 
-@interface MBP_Streamer : NSObject <StreamerOrientationAdapter, NSStreamDelegate> {
+@interface MBP_Streamer : NSObject <StreamerOrientationAdapter, NSStreamDelegate, NSURLConnectionDelegate> {
 
 	UIImageView * videoImage;
 
@@ -118,14 +118,14 @@
     
     //Relay 2
     int bytesToRead;
-    NSURLConnection  * relay2_connection;
-	
+    NSURLConnection  * relay2_connection;	
 }
 #if 1
 
 @property (nonatomic, retain) NSInputStream * istream;
 @property (nonatomic, retain) NSOutputStream * ostream;
 #endif
+@property (nonatomic, retain) NSURLConnection  * relay2_connection;
 @property (nonatomic) int device_port,communication_mode, local_port;
 @property (nonatomic,retain) NSString * device_ip, *remoteViewKey;
 @property (nonatomic,retain) UIImageView * videoImage;

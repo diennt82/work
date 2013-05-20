@@ -33,7 +33,7 @@
 @synthesize latest_connection_error;
 
 @synthesize istream,ostream;
-
+@synthesize relay2_connection;
 
 
 
@@ -65,7 +65,7 @@
 {
 	[self stopStreaming];
 
-    
+    [relay2_connection release];
     
 	[listenSocket release];
 	[responseData release];
@@ -137,11 +137,18 @@
     }
 	else
     {
-        
-        
         {
-            NSLog(@"Failed to call selIfFailure..silence return");
+            NSLog(@"didReceiveResponse: status code: %d",responseStatusCode );
         }
+        
+        self.latest_connection_error = responseStatusCode;
+        
+        if (self.remoteView == TRUE)
+		{
+            ///SEND this message -> stream stopped & restart
+			NSLog(@"Streamer-REMOTE send message : REMOTE_STREAM_STOPPED_UNEXPECTEDLY");
+			[mHandler statusReport:REMOTE_STREAM_STOPPED_UNEXPECTEDLY andObj:nil];
+		}
 		
 		responseData = nil;
 	}
@@ -181,14 +188,14 @@
 {
     
 	
-	 NSLog(@"connectionDidFinishLoading END ");
+	 NSLog(@"Streamer: connectionDidFinishLoading END -- Should not happen");
     
 }
 
 
 - (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error
 {
-	NSLog(@"failed with error: %@", error);
+	NSLog(@"NSURLConnection failed error: %@ retry: %d", error, reconnectLimits);
 	
     
 	[self.videoImage setImage:[UIImage imageNamed:@"homepage.png"]];
@@ -204,10 +211,25 @@
 	reconnectLimits --;
 	if (reconnectLimits  > 0)
 	{
+        
+        if (relay2_connection != nil)
+        {
+            [relay2_connection cancel];
+            [relay2_connection release];
+        }
+        
 		[self startStreamingFromRelay2];
 	}
     else
     {
+        if (relay2_connection != nil)
+        {
+            [relay2_connection cancel];
+        }
+
+        reconnectLimits = 3; //reset for next time..
+        
+        
         if (self.remoteView == TRUE)
 		{
             ///SEND this message -> stream stopped & restart 
@@ -372,9 +394,9 @@
                        
     http_cmd_remote = [http_cmd_remote stringByAppendingFormat:@"%@%@", RELAY2_STREAM_CMD_PARAM3, self.remoteViewKey];
                        
-   
+    [mHandler statusReport:SWITCHING_TO_RELAY_SERVER andObj:nil];
     
-	NSLog(@"vCamRemote: %@",http_cmd_remote);
+	NSLog(@"Short Timeout - CamRemote: %@",http_cmd_remote);
 	
 		
 	@synchronized(self)
@@ -382,7 +404,7 @@
 		
 		NSMutableURLRequest *theRequest=[NSMutableURLRequest requestWithURL:[NSURL URLWithString:http_cmd_remote]
 																cachePolicy: NSURLRequestReloadIgnoringLocalCacheData
-															timeoutInterval:2.0];
+															timeoutInterval:15.0];
 		
 		
 		relay2_connection = [[NSURLConnection alloc] initWithRequest:theRequest
@@ -675,17 +697,7 @@
 		{
 			NSLog(@"streamerThrd is running --stop it now");
 			[udtStreamerThd cancel];
-            
-            
-            //            int waitCount = 5; //5sec
-            //            while (![udtStreamerThd isFinished] && (waitCount -- > 0) )
-            //            {
-            //                [NSThread sleepForTimeInterval:1.0];
-            //                NSLog(@"streamer wait %d ", waitCount);
-            //            }
-            
-            
-            //udtStreamerThd = nil;
+           
 		}
         
 		if (readTimeoutThrd!= nil && [readTimeoutThrd isExecuting])
@@ -706,6 +718,7 @@
         if (relay2_connection != nil)
         {
             [relay2_connection cancel];
+
         }
     }
 }
@@ -739,7 +752,7 @@
     
     do
     {
-#if 1
+#if 0
         //DBG
         {
             NSLog(@"initialResponse = %@", initialResponse);
@@ -773,30 +786,7 @@
         
         
         
-        
-        range = [initialResponse rangeOfString:RELAY2_ERROR_851];
-        if(range.location != NSNotFound)
-        {
-            // auth error ->>>>>>> force re-connect
-            NSLog(@"Relay2  ERROR 851-- stop streaming ");
-            NSLog(@"error response: %@", initialResponse);
-            
-            [self stopStreaming];
-            
-            if (self.remoteView == TRUE && self.remoteViewKey != nil)
-            {
-                [mHandler statusReport:REMOTE_STREAM_STOPPED_UNEXPECTEDLY andObj:nil];
-                
-            }
-            else  //SHOULD NOT happen
-            {
-                [mHandler statusReport:STREAM_STOPPED_UNEXPECTEDLY andObj:nil];
-            }
-            
-            self.latest_connection_error = 851;
-            
-            status = FALSE;
-        }
+     
         
         
     } while (false); 
@@ -1147,7 +1137,7 @@
         int index = 0;
         int totalOffset = 0;
         
-#if 1 //DBG
+#if 0 //DBG
         if (length > 50)
         {
             NSRange  dbgRange = {0, 50 };
@@ -1375,8 +1365,7 @@
 
 -(void) switchToUdtRelayServer
 {
-    //TODO signal cameraview to change message..
-
+    // signal cameraview to change message..
     [mHandler statusReport:SWITCHING_TO_RELAY_SERVER andObj:nil];
     
 #if 1
