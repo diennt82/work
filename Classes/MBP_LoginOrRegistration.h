@@ -35,7 +35,7 @@
 #define _Use3G @"use3GToConnect"
 
 
-@interface MBP_LoginOrRegistration : UIViewController <UITableViewDataSource, UITableViewDelegate,UITextFieldDelegate,BonjourDelegate> {
+@interface MBP_LoginOrRegistration : UIViewController <UITableViewDataSource, UITableViewDelegate,UITextFieldDelegate> {
 
 	IBOutlet UITextField * userName; 
 	IBOutlet UITextField * password; 

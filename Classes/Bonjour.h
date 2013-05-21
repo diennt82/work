@@ -17,7 +17,7 @@
 @end
 
 
-@interface Bonjour : UIViewController <NSNetServiceBrowserDelegate, NSNetServiceDelegate>
+@interface Bonjour : NSObject <NSNetServiceBrowserDelegate, NSNetServiceDelegate>
 {
     NSNetServiceBrowser * _browserService;
     NSNetService * _lastService;

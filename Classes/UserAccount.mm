@@ -14,7 +14,7 @@
 
 @synthesize   userName,  userPass;
 @synthesize delegate; 
-@synthesize  bms_comm, bonjourDelegate;
+@synthesize  bms_comm;
 
 -(id) initWithUser:(NSString*)user AndPass:(NSString*) pass WithListener:(id <ConnectionMethodDelegate>) d; 
 {
@@ -28,7 +28,7 @@
 
 
 -(void) dealloc
-{    [_bonjourBrowser release];
+{
     [userName release];
     [userPass release];
     [bms_comm release];
