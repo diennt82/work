@@ -73,8 +73,7 @@
 #define VIEW_CAM_PARAM_1 @"&email="
 #define VIEW_CAM_PARAM_2 @"&macaddress="
 
-#define IS_CAM_AVAIL @"is_cam_available"
-#define IS_CAM_AVAIL_PARAM_1 @"&macaddress="
+
 
 #define GET_SECURITY_INFO @"get_security_info"
 #define GET_SECURITY_INFO_PARAM_1 @"&email="
@@ -145,10 +144,10 @@
 #define GET_DISABLED_ALERTS_U_CMD_PARAM_1 @"&username="
 #define GET_DISABLED_ALERTS_U_CMD_PARAM_2 @"&mac="
 
-#define IS_CAM_AVAILABLE_ONLOAD_CMD @"is_cam_available_onload"
+#define IS_CAM_AVAILABLE_ONLOAD_CMD @"is_cam_available_onload2"
 #define IS_CAM_AVAILABLE_ONLOAD_CMD_PARAM_1 @"&macaddress="
 
-#define IS_CAM_AVAILABLE_UPNP_CMD @"is_cam_available_upnp"
+#define IS_CAM_AVAILABLE_UPNP_CMD @"is_cam_available_upnp2"
 #define IS_CAM_AVAILABLE_UPNP_CMD_PARAM_1 @"&macaddress="
 
 

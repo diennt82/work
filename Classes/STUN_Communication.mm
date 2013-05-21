@@ -424,73 +424,141 @@
         return ;
     }
     
-    
-    
-    if ([isCamAvaiTimer isValid])
-    {
-        [isCamAvaiTimer invalidate];
-    }
-    
 	NSString * raw_data = [[[NSString alloc] initWithData:responseData encoding: NSASCIIStringEncoding] autorelease];
 	
-	NSLog(@"isavail response: %@", raw_data);
-	
-	// if success means camera is available 
-	//Next, get the security info
-    
-    
-    
-    if (mChannel.profile.isNewerThan08_038 &&
-        ([self isConnectingOnSymmetricNat]))
+
+    NSLog(@"[STUN isCam avaiil response: %@",  raw_data);
+    BOOL isAvailable = FALSE;
+    if ( raw_data != nil)
     {
-        //Check SYM NAT
-        NSLog(@"connecting over SYMMETRIC NAT >>>>>>>>>RELAY 2>>>>>");
-        
-        //change comm mode
-        mChannel.communication_mode  = COMM_MODE_STUN_RELAY2;
-        
-        
-        BMS_Communication * bms_comm;
-        
-        bms_comm = [[BMS_Communication alloc] initWithObject:self
-                                                    Selector:@selector(viewCamRelaySuccessWithResponse:)
-                                                FailSelector:@selector(viewCamRelayFailedWithError:)
-                                                   ServerErr:@selector(viewCamRelayFailedServerUnreachable)];
-        
-        NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-        NSString * user_email = (NSString *) [userDefaults objectForKey:@"PortalUseremail"];
-        NSString * user_pass = (NSString *) [userDefaults objectForKey:@"PortalPassword"];
-        
-        
-        [bms_comm BMS_viewCamRelayWithUser:user_email
-                                   AndPass:user_pass
-                                   macAddr:mChannel.profile.mac_address];
-        
-        
-        
+        NSArray * tokens = [raw_data componentsSeparatedByString:@":"];
+        if ([tokens count] >=2 )
+        {
+            NSString * status = (NSString*) [tokens objectAtIndex:1];
+            status = [status stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+            
+            if ([status hasPrefix:@"AVAILABLE"])
+            {
+                isAvailable = TRUE; 
+            }
+            else
+            {
+
+            }
+        }
+        else
+        {
+
+            
+        }
         
     }
-    else
+    
+	// if success means camera is available
+    
+    if (isAvailable == TRUE)
     {
         
-        NSLog(@"app is NOT behind Sym-nat OR camera version is < 08_039"); 
+        if ([isCamAvaiTimer isValid])
+        {
+            [isCamAvaiTimer invalidate];
+        }
     
-        BMS_Communication * bms_comm;
-        
-        bms_comm = [[BMS_Communication alloc] initWithObject:self
-                                                    Selector:@selector(getSecSuccessWithResponse:)
-                                                FailSelector:@selector(getSecFailedWithError:)
-                                                   ServerErr:@selector(getSecFailedServerUnreachable)];
-        
-        NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-        NSString * user_email = (NSString *) [userDefaults objectForKey:@"PortalUseremail"];
-        NSString * user_pass = (NSString *) [userDefaults objectForKey:@"PortalPassword"];
         
         
-        [bms_comm BMS_getSecInfoWithUser:user_email 
-								 AndPass:user_pass ];
+        if (mChannel.profile.isNewerThan08_038 &&
+            ([self isConnectingOnSymmetricNat]))
+        {
+            //Check SYM NAT
+            NSLog(@"connecting over SYMMETRIC NAT >>>>>>>>>RELAY 2>>>>>");
+            
+            //change comm mode
+            mChannel.communication_mode  = COMM_MODE_STUN_RELAY2;
+            
+            
+            BMS_Communication * bms_comm;
+            
+            bms_comm = [[BMS_Communication alloc] initWithObject:self
+                                                        Selector:@selector(viewCamRelaySuccessWithResponse:)
+                                                    FailSelector:@selector(viewCamRelayFailedWithError:)
+                                                       ServerErr:@selector(viewCamRelayFailedServerUnreachable)];
+            
+            NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+            NSString * user_email = (NSString *) [userDefaults objectForKey:@"PortalUseremail"];
+            NSString * user_pass = (NSString *) [userDefaults objectForKey:@"PortalPassword"];
+            
+            
+            [bms_comm BMS_viewCamRelayWithUser:user_email
+                                       AndPass:user_pass
+                                       macAddr:mChannel.profile.mac_address];
+            
+            
+            
+            
+        }
+        else
+        {
+            
+            NSLog(@"app is NOT behind Sym-nat OR camera version is < 08_039");
+            
+            BMS_Communication * bms_comm;
+            
+            bms_comm = [[BMS_Communication alloc] initWithObject:self
+                                                        Selector:@selector(getSecSuccessWithResponse:)
+                                                    FailSelector:@selector(getSecFailedWithError:)
+                                                       ServerErr:@selector(getSecFailedServerUnreachable)];
+            
+            NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+            NSString * user_email = (NSString *) [userDefaults objectForKey:@"PortalUseremail"];
+            NSString * user_pass = (NSString *) [userDefaults objectForKey:@"PortalPassword"];
+            
+            
+            [bms_comm BMS_getSecInfoWithUser:user_email
+                                     AndPass:user_pass ];
+            
+        }
         
-	}
+    }
+    else //Camera is BUSY or NOT AVAILABLE
+    {
+        //Check again 
+        
+        if (retry_getting_camera_availability <=0)
+        {
+            //Pass some info back to caller
+            [_caller performSelector:_Failure_SEL withObject:nil ];
+        }
+        else //retry
+        {
+            
+            
+            [NSThread sleepForTimeInterval:1.0];
+            
+            
+            BMS_Communication * bms_comm;
+            
+            NSString * mac = [Util strip_colon_fr_mac:mChannel.profile.mac_address];
+            
+            bms_comm = [[BMS_Communication alloc] initWithObject:self
+                                                        Selector:@selector(availSuccessWithResponse:)
+                                                    FailSelector:@selector(availFailedWithError:)
+                                                       ServerErr:@selector(availFailedServerUnreachable)];
+            
+            NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+            NSString * user_email = (NSString *) [userDefaults objectForKey:@"PortalUseremail"];
+            NSString * user_pass = (NSString *) [userDefaults objectForKey:@"PortalPassword"];
+            
+            
+            [bms_comm BMS_isCamAvailableWithUser:user_email 
+                                         AndPass:user_pass 
+                                         macAddr:mac ];
+            
+            
+        }
+		
+
+    }
+    
 	
 }
 - (void) availFailedWithError:(NSHTTPURLResponse*) error_response
@@ -503,8 +571,7 @@
         [_caller performSelector:_Failure_SEL withObject:nil ];
         return ;
     }    
-	// if success means camera is NOT available 
-	retry_getting_camera_availability--;
+	// retry_getting_camera_availability  will be -1 when timer is due
 	if (retry_getting_camera_availability <=0)
 	{
 		//Pass some info back to caller
@@ -552,8 +619,8 @@
     }
     
 	NSLog(@" failed : server unreachable");
-	// if success means camera is NOT available 
-	retry_getting_camera_availability--;
+    
+	// retry_getting_camera_availability  will be -1 when timer is due
 	if (retry_getting_camera_availability <=0)
 	{
 		[_caller performSelector:_Failure_SEL withObject:nil ];

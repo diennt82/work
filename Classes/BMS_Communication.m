@@ -493,8 +493,8 @@
 	NSString * mac_ = [Util strip_colon_fr_mac:mac];
 	
 	NSString * http_cmd = [NSString stringWithFormat:@"%@%@",BMS_PHONESERVICE, BMS_CMD_PART];
-	http_cmd = [http_cmd stringByAppendingFormat:@"%@", IS_CAM_AVAIL];
-	http_cmd = [http_cmd stringByAppendingFormat:@"%@%@", IS_CAM_AVAIL_PARAM_1, mac_];
+	http_cmd = [http_cmd stringByAppendingFormat:@"%@", IS_CAM_AVAILABLE_ONLOAD_CMD];
+	http_cmd = [http_cmd stringByAppendingFormat:@"%@%@", IS_CAM_AVAILABLE_ONLOAD_CMD_PARAM_1, mac_];
 
 	
 	
