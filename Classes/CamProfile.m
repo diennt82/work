@@ -158,7 +158,7 @@
 	
 	//name
 	temp = self.name; 
-	if (self.name = nil)
+	if (self.name == nil)
 	{
 		temp =@"nil";
 	}
@@ -179,7 +179,7 @@
     
 	//lastComm
 	temp = self.last_comm; 
-	if (self.last_comm = nil)
+	if (self.last_comm == nil)
 	{
 		temp = @"none";
 	}
@@ -193,11 +193,21 @@
 	//NSLog(@"ip minute: %d", minute);
     
     
+#if 1
+    //fw_version
+    temp = self.fw_version;
+    temp_len = [temp length];
+    [data appendBytes:&temp_len length:1];
+    [data appendBytes:[temp UTF8String] length:[temp length]];
+    
+#endif
+    
+    
     if ( self.profileImage != nil)
     {
         
         NSData * imageData = UIImageJPEGRepresentation(self.profileImage , 1.0);
-        int img_len; 
+        int img_len;
         img_len = [imageData length];
         [data appendBytes:&img_len length:sizeof(int)];
         [data appendBytes:[imageData bytes] length:[imageData length]];
@@ -205,7 +215,8 @@
         NSLog(@">>>>>>>>>stored snapshot, len:%d",img_len );
     }
     
-    int endOfRec = END_OF_RECORD; 
+    
+    int endOfRec = END_OF_RECORD;
     [data appendBytes:&endOfRec length:sizeof(int)];
     
     
@@ -357,17 +368,41 @@
         //self.minuteSinceLastComm
         int minute= 0;
         NSRange min_range = {lastComm_len_range.location + len+1,4};
-		
 		[data getBytes:&minute range:min_range];
-        
 		this.minuteSinceLastComm = minute; 
 		
+#if 1
+		//fw_version
+        NSRange fw_len_range = {min_range.location + 4,1};
+		[data getBytes:&len range:fw_len_range];
+		char * _fw_ver = malloc(len+1);
+		_fw_ver[len] = '\0';
 		
+		NSRange fw_range = {fw_len_range.location +1, len};
+		[data getBytes:_fw_ver range:fw_range];
+		NSString * fw = [NSString stringWithUTF8String:_fw_ver];
+		this.fw_version = fw;
+		free(_fw_ver);
+        
+#if DEBUG_RESTORE_DATA
+        NSLog(@"restored:fw _: %@", this.fw_version);
+#endif
+        
+        
+        //Check if this is the end of record
+        int endOfRec= 0;
+        NSRange e_range = {fw_range.location+len,4};
+
+        
+#else
         
         //Check if this is the end of record
         int endOfRec= 0;
         NSRange e_range = {min_range.location+4,4};
-        [data getBytes:&endOfRec range:e_range]; 
+                
+#endif
+        [data getBytes:&endOfRec range:e_range];
+
         if (endOfRec != END_OF_RECORD)
         {
 #if DEBUG_RESTORE_DATA

@@ -1352,7 +1352,7 @@ return self;
         cp.hasUpdateLocalStatus = TRUE;
     }
 
-    NSLog(@"cam:%@ is in Local? %d", cp.mac_address, cp.isInLocal);
+    NSLog(@"cam:%@ is in Local? %d fw:%@", cp.mac_address, cp.isInLocal, cp.fw_version);
     
     
     
@@ -1428,12 +1428,6 @@ return self;
     
     //TODO: Need to save offline data here???
     
-    /* show the camera list page now
-    [self performSelectorOnMainThread:@selector(startShowingCameraList)
-                           withObject:nil
-                        waitUntilDone:NO];
-       NOT USED anymore
-     */
     if (dashBoard != nil)
     {
         NSLog(@"reload dashboard in finish");
