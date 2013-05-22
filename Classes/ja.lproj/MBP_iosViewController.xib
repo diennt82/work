@@ -52,6 +52,7 @@
 								<string key="NSFrameSize">{320, 548}</string>
 								<reference key="NSSuperview" ref="749553265"/>
 								<reference key="NSWindow"/>
+								<reference key="NSNextKeyView"/>
 								<string key="NSReuseIdentifierKey">_NS:9</string>
 								<int key="IBUITag">11</int>
 								<bool key="IBUIUserInteractionEnabled">NO</bool>
@@ -125,6 +126,7 @@
 								<string key="NSFrame">{{93, 160}, {37, 37}}</string>
 								<reference key="NSSuperview" ref="540382353"/>
 								<reference key="NSWindow"/>
+								<reference key="NSNextKeyView"/>
 								<string key="NSReuseIdentifierKey">_NS:9</string>
 								<bool key="IBUIOpaque">NO</bool>
 								<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
@@ -135,7 +137,7 @@
 							<object class="IBUILabel" id="828437817">
 								<reference key="NSNextResponder" ref="540382353"/>
 								<int key="NSvFlags">-2147483347</int>
-								<string key="NSFrame">{{20, 61}, {165, 48}}</string>
+								<string key="NSFrame">{{0, 61}, {222, 48}}</string>
 								<reference key="NSSuperview" ref="540382353"/>
 								<reference key="NSWindow"/>
 								<reference key="NSNextKeyView" ref="1054577259"/>
@@ -145,7 +147,7 @@
 								<int key="IBUIContentMode">7</int>
 								<bool key="IBUIUserInteractionEnabled">NO</bool>
 								<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
-								<string key="IBUIText">Updating Camera list. Please wait...</string>
+								<string key="IBUIText">カメラリストの更新中。お待ち下さい。</string>
 								<object class="NSColor" key="IBUITextColor">
 									<int key="NSColorSpace">1</int>
 									<bytes key="NSRGB">MSAxIDEAA</bytes>
@@ -167,7 +169,7 @@
 									<double key="NSSize">15</double>
 									<int key="NSfFlags">16</int>
 								</object>
-								<double key="preferredMaxLayoutWidth">165</double>
+								<double key="preferredMaxLayoutWidth">222</double>
 							</object>
 						</object>
 						<string key="NSFrame">{{49, 103}, {222, 230}}</string>
