@@ -14,14 +14,63 @@
 @synthesize mChannel;
 
 
+
+-(BOOL) connectToStunRelay2:(CamChannel *) ch
+                   callback: (id) caller
+                   Selector: (SEL) success
+               FailSelector: (SEL) fail
+{
+    _caller = caller ;
+	_Success_SEL = success;
+	_Failure_SEL = fail;
+
+    if (ch.profile.mac_address == nil)
+	{
+		return FALSE;
+	}
+	
+	mChannel = ch;
+	[mChannel retain];
+    
+
+    NSLog(@"Stream mode 5 >>>>>>>>>RELAY 2>>>>>");
+    
+    //change comm mode
+    mChannel.communication_mode  = COMM_MODE_STUN_RELAY2;
+    
+    
+    BMS_Communication * bms_comm;
+    
+    bms_comm = [[BMS_Communication alloc] initWithObject:self
+                                                Selector:@selector(viewCamRelaySuccessWithResponse:)
+                                            FailSelector:@selector(viewCamRelayFailedWithError:)
+                                               ServerErr:@selector(viewCamRelayFailedServerUnreachable)];
+    
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    NSString * user_email = (NSString *) [userDefaults objectForKey:@"PortalUseremail"];
+    NSString * user_pass = (NSString *) [userDefaults objectForKey:@"PortalPassword"];
+    
+    
+    [bms_comm BMS_viewCamRelayWithUser:user_email
+                               AndPass:user_pass
+                               macAddr:mChannel.profile.mac_address];
+    
+    
+    
+    
+    
+    
+    return TRUE;
+}
+
 -(UdtSocketWrapper *)connectToStunRelay: (CamChannel *) ch
 {
     if (ch.profile.mac_address == nil)
 	{
-		return nil; 
+		return nil;
 	}
 	
-	mChannel = ch; 
+	mChannel = ch;
 	[mChannel retain];
     
     NSMutableData * messageToStun, * response_data ;

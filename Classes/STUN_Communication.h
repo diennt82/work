@@ -79,6 +79,12 @@
 
 //- (id) initWithObject: (id) caller Selector: (SEL) success FailSelector: (SEL) fail ServerErr:(SEL) serverErr;
 
+
+-(BOOL) connectToStunRelay2:(CamChannel *) ch
+                   callback: (id) caller
+                   Selector: (SEL) success
+               FailSelector: (SEL) fail;
+
 -(BOOL) connectToRemoteCamera: (CamChannel *) ch 
 					 callback: (id) caller 
 					 Selector: (SEL) success 
