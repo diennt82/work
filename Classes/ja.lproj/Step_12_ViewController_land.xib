@@ -58,6 +58,7 @@
 						<string key="NSFrame">{{204, 186}, {161, 37}}</string>
 						<reference key="NSSuperview" ref="954864808"/>
 						<reference key="NSWindow"/>
+						<reference key="NSNextKeyView"/>
 						<string key="NSReuseIdentifierKey">_NS:9</string>
 						<bool key="IBUIOpaque">NO</bool>
 						<int key="IBUITag">100</int>
@@ -65,7 +66,7 @@
 						<int key="IBUIContentHorizontalAlignment">0</int>
 						<int key="IBUIContentVerticalAlignment">0</int>
 						<int key="IBUIButtonType">1</int>
-						<string key="IBUINormalTitle">Start monitor</string>
+						<string key="IBUINormalTitle">モニターの開始</string>
 						<object class="NSColor" key="IBUIHighlightedTitleColor" id="6704011">
 							<int key="NSColorSpace">3</int>
 							<bytes key="NSWhite">MQA</bytes>
@@ -101,7 +102,7 @@
 						<int key="IBUIContentMode">7</int>
 						<bool key="IBUIUserInteractionEnabled">NO</bool>
 						<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
-						<string key="IBUIText">Congratulations</string>
+						<string key="IBUIText">おめでとうございます</string>
 						<reference key="IBUITextColor" ref="6704011"/>
 						<nil key="IBUIHighlightedColor"/>
 						<int key="IBUIBaselineAdjustment">0</int>
@@ -154,7 +155,7 @@
 					<object class="IBUILabel" id="119189152">
 						<reference key="NSNextResponder" ref="954864808"/>
 						<int key="NSvFlags">292</int>
-						<string key="NSFrame">{{222, 112}, {123, 21}}</string>
+						<string key="NSFrame">{{222, 112}, {143, 21}}</string>
 						<reference key="NSSuperview" ref="954864808"/>
 						<reference key="NSWindow"/>
 						<reference key="NSNextKeyView" ref="1661576"/>
@@ -164,7 +165,7 @@
 						<int key="IBUIContentMode">7</int>
 						<bool key="IBUIUserInteractionEnabled">NO</bool>
 						<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
-						<string key="IBUIText">camera is found</string>
+						<string key="IBUIText">カメラが見つかりました。</string>
 						<reference key="IBUITextColor" ref="6704011"/>
 						<nil key="IBUIHighlightedColor"/>
 						<int key="IBUIBaselineAdjustment">0</int>
@@ -349,10 +350,6 @@
 		</object>
 		<int key="IBDocument.localizationMode">0</int>
 		<string key="IBDocument.TargetRuntimeIdentifier">IBCocoaTouchFramework</string>
-		<object class="NSMutableDictionary" key="IBDocument.PluginDeclaredDependencyDefaults">
-			<string key="NS.key.0">com.apple.InterfaceBuilder.CocoaTouchPlugin.iPhoneOS</string>
-			<real value="1552" key="NS.object.0"/>
-		</object>
 		<bool key="IBDocument.PluginDeclaredDependenciesTrackSystemTargetVersion">YES</bool>
 		<int key="IBDocument.defaultPropertyAccessControl">3</int>
 		<object class="NSMutableDictionary" key="IBDocument.LastKnownImageSizes">

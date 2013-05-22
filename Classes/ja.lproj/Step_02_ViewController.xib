@@ -88,6 +88,7 @@
 						<string key="NSFrame">{{28, 347}, {265, 37}}</string>
 						<reference key="NSSuperview" ref="1042671249"/>
 						<reference key="NSWindow"/>
+						<reference key="NSNextKeyView"/>
 						<string key="NSReuseIdentifierKey">_NS:9</string>
 						<bool key="IBUIOpaque">NO</bool>
 						<int key="IBUITag">1000</int>
@@ -95,7 +96,7 @@
 						<int key="IBUIContentHorizontalAlignment">0</int>
 						<int key="IBUIContentVerticalAlignment">0</int>
 						<int key="IBUIButtonType">1</int>
-						<string key="IBUINormalTitle">Continue</string>
+						<string key="IBUINormalTitle">続ける</string>
 						<object class="NSColor" key="IBUIHighlightedTitleColor" id="261669044">
 							<int key="NSColorSpace">3</int>
 							<bytes key="NSWhite">MQA</bytes>
@@ -151,13 +152,14 @@
 								<string key="NSFrame">{{92, 13}, {176, 58}}</string>
 								<reference key="NSSuperview" ref="862282391"/>
 								<reference key="NSWindow"/>
+								<reference key="NSNextKeyView"/>
 								<string key="NSReuseIdentifierKey">_NS:9</string>
 								<bool key="IBUIOpaque">NO</bool>
 								<bool key="IBUIClipsSubviews">YES</bool>
 								<int key="IBUIContentMode">7</int>
 								<bool key="IBUIUserInteractionEnabled">NO</bool>
 								<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
-								<string key="IBUIText">Switch on the camera</string>
+								<string key="IBUIText">カメラの電源を入れる。</string>
 								<object class="NSColor" key="IBUITextColor">
 									<int key="NSColorSpace">1</int>
 									<bytes key="NSRGB">MSAxIDEAA</bytes>
@@ -234,13 +236,14 @@
 								<string key="NSFrame">{{87, 13}, {198, 58}}</string>
 								<reference key="NSSuperview" ref="1053552222"/>
 								<reference key="NSWindow"/>
+								<reference key="NSNextKeyView"/>
 								<string key="NSReuseIdentifierKey">_NS:9</string>
 								<bool key="IBUIOpaque">NO</bool>
 								<bool key="IBUIClipsSubviews">YES</bool>
 								<int key="IBUIContentMode">7</int>
 								<bool key="IBUIUserInteractionEnabled">NO</bool>
 								<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
-								<string key="IBUIText">Wait for a couple of minutes while it warms up</string>
+								<string key="IBUIText">準備中です。数分お待ち下さい。</string>
 								<object class="NSColor" key="IBUITextColor">
 									<int key="NSColorSpace">1</int>
 									<bytes key="NSRGB">MSAxIDEAA</bytes>
@@ -305,16 +308,17 @@
 							<object class="IBUILabel" id="1071688162">
 								<reference key="NSNextResponder" ref="904881810"/>
 								<int key="NSvFlags">292</int>
-								<string key="NSFrame">{{92, 13}, {192, 58}}</string>
+								<string key="NSFrame">{{92, 13}, {221, 58}}</string>
 								<reference key="NSSuperview" ref="904881810"/>
 								<reference key="NSWindow"/>
+								<reference key="NSNextKeyView"/>
 								<string key="NSReuseIdentifierKey">_NS:9</string>
 								<bool key="IBUIOpaque">NO</bool>
 								<bool key="IBUIClipsSubviews">YES</bool>
 								<int key="IBUIContentMode">7</int>
 								<bool key="IBUIUserInteractionEnabled">NO</bool>
 								<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
-								<string key="IBUIText">When the green light starts blinking, proceed</string>
+								<string key="IBUIText">緑色のLEDが点滅したら、処理を進めて下さい。</string>
 								<object class="NSColor" key="IBUITextColor">
 									<int key="NSColorSpace">1</int>
 									<bytes key="NSRGB">MSAxIDEAA</bytes>
@@ -326,7 +330,7 @@
 								<reference key="IBUIFontDescription" ref="967126407"/>
 								<reference key="IBUIFont" ref="294234414"/>
 								<bool key="IBUIAdjustsFontSizeToFit">NO</bool>
-								<double key="preferredMaxLayoutWidth">192</double>
+								<double key="preferredMaxLayoutWidth">221</double>
 							</object>
 							<object class="IBUIImageView" id="779915702">
 								<reference key="NSNextResponder" ref="904881810"/>

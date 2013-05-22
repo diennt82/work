@@ -2,9 +2,9 @@
 <archive type="com.apple.InterfaceBuilder3.CocoaTouch.iPad.XIB" version="8.00">
 	<data>
 		<int key="IBDocument.SystemTarget">1552</int>
-		<string key="IBDocument.SystemVersion">11G63</string>
+		<string key="IBDocument.SystemVersion">11E53</string>
 		<string key="IBDocument.InterfaceBuilderVersion">3084</string>
-		<string key="IBDocument.AppKitVersion">1138.51</string>
+		<string key="IBDocument.AppKitVersion">1138.47</string>
 		<string key="IBDocument.HIToolboxVersion">569.00</string>
 		<object class="NSMutableDictionary" key="IBDocument.PluginVersions">
 			<string key="NS.key.0">com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
@@ -57,7 +57,7 @@
 					<object class="IBUITextView" id="525071046">
 						<reference key="NSNextResponder" ref="879783327"/>
 						<int key="NSvFlags">301</int>
-						<string key="NSFrame">{{239, 223}, {290, 31}}</string>
+						<string key="NSFrame">{{167, 207}, {406, 47}}</string>
 						<reference key="NSSuperview" ref="879783327"/>
 						<reference key="NSWindow"/>
 						<reference key="NSNextKeyView" ref="1001982632"/>
@@ -70,7 +70,7 @@
 						<bool key="IBUIMultipleTouchEnabled">YES</bool>
 						<string key="targetRuntimeIdentifier">IBIPadFramework</string>
 						<bool key="IBUIEditable">NO</bool>
-						<string key="IBUIText">You are signed up as </string>
+						<string key="IBUIText">***としてサインアップしています。</string>
 						<object class="NSColor" key="IBUITextColor" id="998742624">
 							<int key="NSColorSpace">3</int>
 							<bytes key="NSWhite">MQA</bytes>
@@ -124,7 +124,7 @@
 					<object class="IBUITextView" id="6392513">
 						<reference key="NSNextResponder" ref="879783327"/>
 						<int key="NSvFlags">298</int>
-						<string key="NSFrame">{{197, 423}, {373, 120}}</string>
+						<string key="NSFrame">{{197, 399}, {373, 144}}</string>
 						<reference key="NSSuperview" ref="879783327"/>
 						<reference key="NSWindow"/>
 						<reference key="NSNextKeyView" ref="186145591"/>
@@ -134,7 +134,7 @@
 						<bool key="IBUIMultipleTouchEnabled">YES</bool>
 						<string key="targetRuntimeIdentifier">IBIPadFramework</string>
 						<bool key="IBUIEditable">NO</bool>
-						<string key="IBUIText">You can access your camera any time from this app from home or work. Or on the web at www.monitoreverywhere.com</string>
+						<string key="IBUIText">このアプリを使って、自宅や職場からいつでもカメラにアクセスできます。また、www.monitoreverywhere.comからもアクセスできます。</string>
 						<reference key="IBUITextColor" ref="998742624"/>
 						<int key="IBUITextAlignment">1</int>
 						<object class="IBUITextInputTraits" key="IBUITextInputTraits">
@@ -199,7 +199,7 @@
 						<int key="IBUIContentHorizontalAlignment">0</int>
 						<int key="IBUIContentVerticalAlignment">0</int>
 						<int key="IBUIButtonType">1</int>
-						<string key="IBUINormalTitle">Setup Monitor</string>
+						<string key="IBUINormalTitle">モニターの設定</string>
 						<reference key="IBUIHighlightedTitleColor" ref="998742624"/>
 						<object class="NSColor" key="IBUINormalTitleColor">
 							<int key="NSColorSpace">1</int>
@@ -286,7 +286,7 @@
 								<bool key="IBUIMultipleTouchEnabled">YES</bool>
 								<string key="targetRuntimeIdentifier">IBIPadFramework</string>
 								<bool key="IBUIEditable">NO</bool>
-								<string key="IBUIText">We are finding your camera after you have configured the first time. </string>
+								<string key="IBUIText">最初の設定完了後にカメラを探しています。</string>
 								<object class="NSColor" key="IBUITextColor" id="929768057">
 									<int key="NSColorSpace">1</int>
 									<bytes key="NSRGB">MSAxIDEAA</bytes>
@@ -323,7 +323,7 @@
 							<object class="IBUITextView" id="459021124">
 								<reference key="NSNextResponder" ref="456793354"/>
 								<int key="NSvFlags">292</int>
-								<string key="NSFrame">{{0, 126}, {300, 49}}</string>
+								<string key="NSFrame">{{0, 111}, {300, 64}}</string>
 								<reference key="NSSuperview" ref="456793354"/>
 								<reference key="NSWindow"/>
 								<reference key="NSNextKeyView" ref="426932002"/>
@@ -333,7 +333,7 @@
 								<bool key="IBUIUserInteractionEnabled">NO</bool>
 								<string key="targetRuntimeIdentifier">IBIPadFramework</string>
 								<bool key="IBUIEditable">NO</bool>
-								<string key="IBUIText">This will take about 3 minutes to complete. Please wait...</string>
+								<string key="IBUIText">これは、完了するまでに約３分かかります。しばらく、お待ち下さい。</string>
 								<reference key="IBUITextColor" ref="929768057"/>
 								<int key="IBUITextAlignment">1</int>
 								<object class="IBUITextInputTraits" key="IBUITextInputTraits">
@@ -531,7 +531,7 @@
 						<bool key="IBUIUserInteractionEnabled">NO</bool>
 						<string key="targetRuntimeIdentifier">IBIPadFramework</string>
 						<bool key="IBUIEditable">NO</bool>
-						<string key="IBUIText">How to reach Wi-Fi Network? Select settings in iphone home screen and then select Wi-Fi.</string>
+						<string key="IBUIText">Wi-Fiネットワークに接続する方法は？iPhoneのホームスクリーンから設定を選択して、Wi-Fiを選択して下さい。</string>
 						<object class="NSColor" key="IBUITextColor">
 							<int key="NSColorSpace">3</int>
 							<bytes key="NSWhite">MQA</bytes>
@@ -548,7 +548,7 @@
 					<object class="IBUITextView" id="861164350">
 						<reference key="NSNextResponder" ref="837599693"/>
 						<int key="NSvFlags">298</int>
-						<string key="NSFrame">{{232, 113}, {303, 33}}</string>
+						<string key="NSFrame">{{168, 113}, {422, 33}}</string>
 						<reference key="NSSuperview" ref="837599693"/>
 						<reference key="NSWindow"/>
 						<reference key="NSNextKeyView" ref="974712177"/>
@@ -558,7 +558,7 @@
 						<bool key="IBUIMultipleTouchEnabled">YES</bool>
 						<string key="targetRuntimeIdentifier">IBIPadFramework</string>
 						<bool key="IBUIEditable">NO</bool>
-						<string key="IBUIText">Please switch to Wi-Fi network :</string>
+						<string key="IBUIText">Wi-Fiネットワークに切替て下さい。：</string>
 						<reference key="IBUITextColor" ref="998742624"/>
 						<int key="IBUITextAlignment">1</int>
 						<object class="IBUITextInputTraits" key="IBUITextInputTraits">
@@ -706,8 +706,8 @@
 							<reference ref="667205852"/>
 							<reference ref="974712177"/>
 							<reference ref="627674734"/>
-							<reference ref="861164350"/>
 							<reference ref="621285219"/>
+							<reference ref="861164350"/>
 						</array>
 						<reference key="parent" ref="0"/>
 					</object>
