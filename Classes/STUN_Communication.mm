@@ -431,7 +431,7 @@
         
         if ([firstMessagePort isEqualToString:secondMessagePort])
         {
-            return TRUE;
+            return FALSE;
         }
     }
     else
@@ -439,10 +439,8 @@
          NSLog(@"Failed to get response from nat[x] server");
     }
     
-    //return FALSE;
-    
-    //FOR NOW _ FORCE RELay
     return TRUE;
+    
 }
 
 
@@ -516,7 +514,7 @@
         
         
         if (mChannel.profile.isNewerThan08_038 &&
-            ([self isConnectingOnSymmetricNat]))
+            ( [self isConnectingOnSymmetricNat]))
         {
             //Check SYM NAT
             NSLog(@"connecting over SYMMETRIC NAT >>>>>>>>>RELAY 2>>>>>");
