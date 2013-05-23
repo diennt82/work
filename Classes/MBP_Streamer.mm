@@ -459,6 +459,8 @@
     
     if (self.communication_mode == COMM_MODE_UPNP && self.remoteView == TRUE && self.remoteViewKey != nil)
     {
+        
+#if 0
         //USE a more primitive way - CFStream
                 
         CFReadStreamRef readStream;
@@ -478,12 +480,26 @@
         /* Store a reference to the input and output streams so that
          they don't go away.... */
         self.ostream = outputStream;
-        self.istream = inputStream; 
-     
+        self.istream = inputStream;
         
         //  The actual call to create listenSocket is done after we verified the sskey
         //  -- Check the callback  (void)stream:(NSStream *)theStream handleEvent:(NSStreamEvent)eventCode
-            
+#else
+        
+        //Start acutal connection
+        initialFlag = 1;
+        listenSocket = [[AsyncSocket alloc] initWithDelegate:self];
+        //Non-blocking connect
+        [listenSocket connectToHost:self.device_ip
+                             onPort:self.device_port
+                        withTimeout:15
+                              error:nil];
+
+        
+#endif
+        
+        
+        
     }
     else if (self.communication_mode == COMM_MODE_STUN_RELAY2)
     {
@@ -570,7 +586,8 @@
         if (self.communication_mode == COMM_MODE_UPNP)
         {
             getReq = [NSString stringWithFormat:@"%@%@%@%@\r\n",
-                      AVSTREAM_REQUEST, AVSTREAM_PARAM_1, self.remoteViewKey,
+                      AVSTREAM_REQUEST, AVSTREAM_PARAM_1,
+                      @"35EFAAAE8B590939ADC9DF3813283B9A5D4CD59D38785B9D7F80BC5FAF741234",//self.remoteViewKey,
                       AVSTREAM_PARAM_2 ];
             
             //Attach Basic authen:
@@ -592,7 +609,7 @@
     
        
     
-	NSLog(@"1getReq: %@", getReq);
+	NSLog(@"Fake sskey getReq: %@", getReq);
     
 	NSData *getReqData = [getReq dataUsingEncoding:NSUTF8StringEncoding];
     
@@ -1284,17 +1301,52 @@
     
 	[self.videoImage setImage:[UIImage imageNamed:@"homepage.png"]];
     
+    NSData * unreadData =  [sock unreadData];
     
-    //Check for session key mismatch
-    if ([err code] == 401 ||
-        [err code] == 601 )
+    
+    if ( unreadData != nil)
     {
-        NSLog(@"Streamer- sskey mismatch");
-        [mHandler statusReport:REMOTE_STREAM_SSKEY_MISMATCH andObj:nil];
-        self.latest_connection_error = [err code];
-        return;
+        //TODO: extract & strings the data see if can catch this stupid thing
+        NSString* unReadResponse = [[NSString alloc] initWithData:unreadData encoding:NSUTF8StringEncoding];
+#if 0 //DBG
+
+        unReadResponse =[unReadResponse stringByReplacingOccurrencesOfString:@"\r" withString:@"\\r"];
+        unReadResponse =[unReadResponse stringByReplacingOccurrencesOfString:@"\n" withString:@"\\n"];
+        
+        NSLog(@"Streamer- unReadResponse: %@" ,
+               unReadResponse);
+#endif 
+        
+        //Check for session key mismatch
+        
+        NSRange range = [unReadResponse rangeOfString:SESSIONKEY_MISMATCHED];
+        
+        if ( range.location != NSNotFound)
+        {
+            NSLog(@"Streamer- sskey mismatch");
+            self.latest_connection_error = 601;
+            [mHandler statusReport:REMOTE_STREAM_SSKEY_MISMATCH andObj:nil];
+
+            return;
+        }
+
+        
+        range = [unReadResponse rangeOfString:AUTHENTICATION_ERROR];
+        
+        if ( range.location != NSNotFound)
+        {
+            NSLog(@"Streamer- auth error");
+            self.latest_connection_error = 401;
+            [mHandler statusReport:REMOTE_STREAM_SSKEY_MISMATCH andObj:nil];
+            
+            return;
+        }
+
+        
     }
     
+    
+       
     
 	if (hasStoppedByCaller == TRUE)
 	{
@@ -1302,8 +1354,6 @@
 		return;
 	}
     
-
-
     
 	reconnectLimits --;
 	if (reconnectLimits  > 0)

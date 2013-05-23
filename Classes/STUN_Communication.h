@@ -17,6 +17,9 @@
 #import "BMS_Communication.h"
 #import "UdtSocketWrapper.h"
 
+//#define RELAY2_SERVER @"relay2.simplimonitor.com"
+#define RELAY2_SERVER @"relay2.monitoreverywhere.com"
+
 #define STUN_SERVER_IP @"udt.monitoreverywhere.com"
 #define STUN_SERVER_PORT 8000
 
@@ -37,7 +40,9 @@
 
 
 
-#define RELAY2_SERVER @"relay2.simplimonitor.com"
+
+
+
 #define STREAMING_SERVICE @"GET /streamingservice?"
 
 #define RELAY2_STREAM_CMD @"get_relay_stream"
