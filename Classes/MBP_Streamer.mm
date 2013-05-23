@@ -587,7 +587,7 @@
         {
             getReq = [NSString stringWithFormat:@"%@%@%@%@\r\n",
                       AVSTREAM_REQUEST, AVSTREAM_PARAM_1,
-                      @"35EFAAAE8B590939ADC9DF3813283B9A5D4CD59D38785B9D7F80BC5FAF741234",//self.remoteViewKey,
+                      self.remoteViewKey,
                       AVSTREAM_PARAM_2 ];
             
             //Attach Basic authen:
