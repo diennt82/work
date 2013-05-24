@@ -96,7 +96,7 @@ return self;
 
 
 	//go Back to main menu
-	[NSTimer scheduledTimerWithTimeInterval:8
+	[NSTimer scheduledTimerWithTimeInterval:4
 		target:self
 		selector:@selector(wakeup_display_login:)
 		userInfo:nil
@@ -165,25 +165,25 @@ return self;
     [self.splashScreen setContentMode:UIViewContentModeScaleAspectFit];
     
     self.splashScreen.animationImages =[NSArray arrayWithObjects:
-                                        [UIImage imageNamed:@"mestartup000001.png"],
-                                        [UIImage imageNamed:@"mestartup000002.png"],
-                                        [UIImage imageNamed:@"mestartup000003.png"],
-                                        [UIImage imageNamed:@"mestartup000004.png"],
-                                        [UIImage imageNamed:@"mestartup000005.png"],
-                                        [UIImage imageNamed:@"mestartup000006.png"],
-                                        [UIImage imageNamed:@"mestartup000007.png"],
-                                        [UIImage imageNamed:@"mestartup000008.png"],
-                                        [UIImage imageNamed:@"mestartup000009.png"],
-                                        [UIImage imageNamed:@"mestartup000010.png"],
-                                        [UIImage imageNamed:@"mestartup000011.png"],
-                                        [UIImage imageNamed:@"mestartup000012.png"],
-                                        [UIImage imageNamed:@"mestartup000013.png"],
-                                        [UIImage imageNamed:@"mestartup000014.png"],
-                                        [UIImage imageNamed:@"mestartup000015.png"],
-                                        [UIImage imageNamed:@"mestartup000016.png"],
-                                        [UIImage imageNamed:@"mestartup000017.png"],
-                                        [UIImage imageNamed:@"mestartup000018.png"],
-                                        [UIImage imageNamed:@"mestartup000019.png"],
+//                                        [UIImage imageNamed:@"mestartup000001.png"],
+//                                        [UIImage imageNamed:@"mestartup000002.png"],
+//                                        [UIImage imageNamed:@"mestartup000003.png"],
+//                                        [UIImage imageNamed:@"mestartup000004.png"],
+//                                        [UIImage imageNamed:@"mestartup000005.png"],
+//                                        [UIImage imageNamed:@"mestartup000006.png"],
+//                                        [UIImage imageNamed:@"mestartup000007.png"],
+//                                        [UIImage imageNamed:@"mestartup000008.png"],
+//                                        [UIImage imageNamed:@"mestartup000009.png"],
+//                                        [UIImage imageNamed:@"mestartup000010.png"],
+//                                        [UIImage imageNamed:@"mestartup000011.png"],
+//                                        [UIImage imageNamed:@"mestartup000012.png"],
+//                                        [UIImage imageNamed:@"mestartup000013.png"],
+//                                        [UIImage imageNamed:@"mestartup000014.png"],
+//                                        [UIImage imageNamed:@"mestartup000015.png"],
+//                                        [UIImage imageNamed:@"mestartup000016.png"],
+//                                        [UIImage imageNamed:@"mestartup000017.png"],
+//                                        [UIImage imageNamed:@"mestartup000018.png"],
+//                                        [UIImage imageNamed:@"mestartup000019.png"],
                                         [UIImage imageNamed:@"mestartup000020.png"],
                                         [UIImage imageNamed:@"mestartup000021.png"],
                                         [UIImage imageNamed:@"mestartup000022.png"],
@@ -198,7 +198,7 @@ return self;
                                         [UIImage imageNamed:@"mestartup000031.png"],
                                         [UIImage imageNamed:@"mestartup000032.png"],
                                         nil];
-    splashScreen.animationDuration = 6.5;
+    splashScreen.animationDuration = 3.5;
     splashScreen.animationRepeatCount = 1;
     
     [self.view addSubview:splashScreen];
