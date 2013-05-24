@@ -12,7 +12,7 @@
 
 @implementation UserAccount
 
-@synthesize   userName,  userPass;
+@synthesize   userName,userPass;
 @synthesize delegate; 
 @synthesize  bms_comm;
 
@@ -102,7 +102,7 @@
     
     if (delegate != nil)
     {
-        [delegate sendStatus:3];
+        [delegate sendStatus:9];
     }
     //NSLog(@"UserAccount: query_camera_list_blocked END");
 }
@@ -773,4 +773,5 @@
 
 	
 }
+
 @end

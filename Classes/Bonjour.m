@@ -20,25 +20,27 @@
 @synthesize delegate;
 @synthesize serviceArray;
 @synthesize cameraList, camera_profiles;
+@synthesize bonjourStatus;
+
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
         // Custom initialization
+        bonjourStatus = BONJOUR_STATUS_DEFAULT;
     }
     
     
     return self;
 }
 
--(id) initBrowser
+-(void) initSetupWith:(NSMutableArray *) cameras
 {
-    self = [super init];
-    if (self) {
-        // Custom initialization
-    }
+    _cameras = cameras;
+    bonjourStatus = BONJOUR_STATUS_DEFAULT;
     
     isSearching = NO;
+    
     
     if (!self.serviceArray)
     {
@@ -55,16 +57,6 @@
     {
         self.cameraList = [[NSMutableArray alloc] init];
     }
-    
-    return self;
-
-}
-
-- (void)viewDidLoad
-{
-    [super viewDidLoad];
-	// Do any additional setup after loading the view.
-    
 }
 
 - (void) startScanLocalWiFi
@@ -105,12 +97,17 @@
     if (!moreComing)
     {
         isSearching = NO;
+        bonjourStatus = BONJOUR_STATUS_OK;
         [self resolveCameraList];
     }
 }
 
 -(void) netServiceBrowserDidStopSearch:(NSNetServiceBrowser *)aNetServiceBrowser
 {
+    if (bonjourStatus == BONJOUR_STATUS_DEFAULT && self.serviceArray == nil)
+    {
+        bonjourStatus = BONJOUR_STATUS_TIMEOUT;
+    }
     isSearching = NO;
     [self.delegate bonjourReturnCameraListAvailable:self.cameraList];
     NSLog(@"Number of Services is : %i",[serviceArray count]);
@@ -118,7 +115,10 @@
 
 - (void)netServiceBrowser:(NSNetServiceBrowser *)aNetServiceBrowser didNotSearch:(NSDictionary *)errorDict
 {
+    bonjourStatus = BONJOUR_STATUS_ERROR;
     NSLog(@"error : %@", errorDict.description);
+    
+    [self.delegate bonjourReturnCameraListAvailable:cameraList];
 }
 
 -(void) resolveCameraList
@@ -155,10 +155,14 @@
     CamProfile * cam_profile = [[CamProfile alloc] initWithMacAddr:macString];
     [cam_profile setIp_address:ip];
     
-        if ([self isCameraIP:ip availableWith:macString])
+    for (CamProfile * cam_profile in _cameras)
+    {
+        if ([self isCameraIP:ip availableWith:macString] &&
+            [cam_profile.mac_address isEqualToString:macString])
         {
             [self.cameraList addObject:cam_profile];
         }
+    }
     
     if (service == _lastService)
     {
@@ -248,11 +252,11 @@
 
 -(void) dealloc
 {
+    [_cameras release];
     [_lastService release];
     [_browserService release];
     [camera_profiles release];
     [cameraList release];
-//    [timer release];
     [timer invalidate];
     self.timer = nil;
     delegate = nil;

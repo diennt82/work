@@ -11,6 +11,12 @@
 #include <arpa/inet.h>
 #include "CamProfile.h"
 #include "HttpCommunication.h"
+#include "CamProfile.h"
+
+#define BONJOUR_STATUS_DEFAULT 0
+#define BONJOUR_STATUS_OK 1
+#define BONJOUR_STATUS_TIMEOUT 2
+#define BONJOUR_STATUS_ERROR 3
 
 @protocol BonjourDelegate
 -(void) bonjourReturnCameraListAvailable:(NSMutableArray *) cameraList;
@@ -24,7 +30,7 @@
     NSURLConnection * url_connection;
     
     int nextIndex;
-    
+    NSArray * _cameras;
 }
 
 @property (nonatomic, retain) NSMutableArray * camera_profiles;
@@ -34,7 +40,9 @@
 @property (nonatomic, retain) NSMutableArray * serviceArray;
 @property (nonatomic, retain) NSMutableArray * cameraList;
 
+@property (nonatomic, assign) int bonjourStatus;
+
 - (void) startScanLocalWiFi;
--(id) initBrowser;
-- (BOOL) isCameraIP:(NSString *) ip availableWith:(NSString *) macAddress;
+-(BOOL) isCameraIP:(NSString *) ip availableWith:(NSString *) macAddress;
+-(void) initSetupWith:(NSMutableArray *) cameras;
 @end

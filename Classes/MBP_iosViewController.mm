@@ -804,17 +804,116 @@ return self;
 			
 				break;
 			}
+        case SCAN_BONJOUR_CAMERA :
+        {
+            /*
+             20130523_nguyendang :
+             Scan camera with bonjour here
+             If have any problem ? Back to Scan_for_camera
+             */
+            NSLog(@"start scanning Bonjour");
+            
+            statusDialogLabel.hidden = NO;
+			self.app_stage = APP_STAGE_LOGGED_IN;
+            
+            [self performSelector:@selector(callForStartScanningBonjour) withObject:nil afterDelay:0.1];
+            
+            //Back from login- login success
+            [self dismissModalViewControllerAnimated:NO];
+            self.progressView.hidden = NO;
+            
+            [self startShowingCameraList];
+            
+            break;
+        }
 		default:
 			break;
 	}
 
 }
 
+-(void) callForStartScanningBonjour
+{
+    BOOL restore_successful = FALSE;
+    restore_successful = [self restoreConfigData];
+    if (restore_successful == YES)
+    {
+        // Binding ????
+        CamChannel* ch = nil;
+        
+        for (int i = 0; i< [channel_array count]; i++)
+        {
+            ch = (CamChannel*) [channel_array objectAtIndex:i];
+            
+            if ( ch.profile != nil)
+            {
+                for (int j = 0; j < [restored_profiles count]; j++)
+                {
+                    CamProfile * cp = (CamProfile *) [restored_profiles objectAtIndex:j];
+                    if ( !cp.isSelected //&&
+                        //[cp.mac_address isEqualToString:ch.profile.mac_address]
+                        )
+                    {
+                        //Re-bind camera - channel
+                        
+                        [ch setCamProfile:cp];
+                        cp.isSelected = TRUE;
+                        [cp setChannel:ch];
+                        break;
+                        
+                    }
+                    
+                    
+                }
+            }
+            else {
+                
+                //NSLog(@"channel profile = nil");
+            }
+            
+            
+        }
+        
+        
+        if ( [self isCurrentConnection3G] ||
+            [self.restored_profiles count] ==0 )
+        {
+            NSLog(@" Connection over 3g OR empty cam list  --> Skip scanning all together");
+            
+            
+            for (int j = 0; j < [restored_profiles count]; j++)
+            {
+                CamProfile * cp = (CamProfile *) [restored_profiles objectAtIndex:j];
+                
+                cp.isInLocal = FALSE;
+                cp.hasUpdateLocalStatus = TRUE;
+            }
+            
+            
+            
+            
+            [self finish_scanning];
+        }
+        else
+        {
+            if (!_bonjourBrowser)
+            {
+                _bonjourBrowser = [[Bonjour alloc] init];
+                [_bonjourBrowser initSetupWith:self.restored_profiles];
+                [_bonjourBrowser setDelegate:self];
+            }
+            
+            [_bonjourBrowser startScanLocalWiFi];
+            
+        }
+        
+    }
+}
 
 - (BOOL) isThisMacStoredOffline:(NSString*) mac_without_colon
 {
 
-	if (self.restored_profiles == nil && 
+	if (self.restored_profiles == nil &&
 			self.channel_array == nil)
 	{
 		// No offline data is available --> force re login
@@ -823,17 +922,17 @@ return self;
 	}
 
 
-	CamProfile * cp = nil; 
+	CamProfile * cp = nil;
 	for (int i =0; i< [self.restored_profiles count]; i++)
 	{
-		cp = (CamProfile *) [self.restored_profiles objectAtIndex:i]; 
-		if (cp!= nil && 
+		cp = (CamProfile *) [self.restored_profiles objectAtIndex:i];
+		if (cp!= nil &&
 				cp.mac_address != nil )
 		{
-			NSString *  mac_wo_colon = [Util strip_colon_fr_mac:cp.mac_address]; 
+			NSString *  mac_wo_colon = [Util strip_colon_fr_mac:cp.mac_address];
 			if ([mac_wo_colon isEqualToString:mac_without_colon])
 			{
-				return TRUE; 
+				return TRUE;
 			}
 		}
 
@@ -1262,17 +1361,8 @@ return self;
         }
         else
         {
-            // 20130516_nguyendang :
-            // Start scan Bonjour here
-            // Return the list of camera available in network
-            
-            if (!_bonjourBrowser)
-            {
-                _bonjourBrowser = [[Bonjour alloc] initBrowser];
-                [_bonjourBrowser setDelegate:self];
-            }
-            
-            [_bonjourBrowser startScanLocalWiFi];
+            nextCameraToScanIndex = 0;
+            [self scan_next_camera:self.restored_profiles index:nextCameraToScanIndex];
             
         }
         
@@ -1302,21 +1392,8 @@ return self;
         //Check if we are in the same network as the camera.. IF so
         // Try to scan .. otherwise... no point ..
         //20121130: phung: incase the ip address is not valid... also try to scan ..
-        if( cp.ip_address == nil)
+        if (cp.ip_address == nil && [self isInTheSameNetworkWithCamera:cp ])
         {
-            ScanForCamera * scanner;
-            scanner = [[ScanForCamera alloc] initWithNotifier:self];
-            [scanner scan_for_device:cp.mac_address];
-            
-            
-            NSLog(@"camera_profiles count : %i",[_bonjourList count]);
-            
-        }
-        else if ([self isInTheSameNetworkWithCamera:cp ])
-        {
-            /*
-             Still need "skipScan" incase We dont have Bonjour devices
-             */
             skipScan = [self isCurrentIpAddressValid:cp];
             
             if (skipScan)
@@ -1785,11 +1862,30 @@ return self;
 //            NSLog(@"This camera : %@ is available for this user ", cam.mac_address);
 //    }
     
-    //start
-    _bonjourList = cameraList;
+    //SCAN_BONJOUR_OK = 1
+    if (_bonjourBrowser.bonjourStatus == BONJOUR_STATUS_OK && cameraList != nil)
+    {
+        for (CamProfile * cp in self.restored_profiles)
+        {
+            for (CamProfile * camera in cameraList)
+            {
+                if ([cp.mac_address isEqualToString:camera.mac_address])
+                {
+                    cp.ip_address = camera.ip_address;
+                    cp.isInLocal = YES;
+                    cp.port = 80;
+                    cp.hasUpdateLocalStatus = YES;
+                }
+            }
+        }
+        
+        [self finish_scanning];
+    }
+    else
+    {
+        [self sendStatus:SCAN_CAMERA];
+    }
     
-    nextCameraToScanIndex = 0;
-    [self scan_next_camera:self.restored_profiles index:nextCameraToScanIndex];
 }
 
 
