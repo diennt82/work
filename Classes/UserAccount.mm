@@ -102,7 +102,7 @@
     
     if (delegate != nil)
     {
-        [delegate sendStatus:9];
+        [delegate sendStatus:3];
     }
     //NSLog(@"UserAccount: query_camera_list_blocked END");
 }

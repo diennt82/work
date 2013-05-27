@@ -80,6 +80,7 @@
 -(void) netServiceBrowserWillSearch:(NSNetServiceBrowser *)aNetServiceBrowser
 {
     isSearching = YES;
+    bonjourStatus = BONJOUR_STATUS_DEFAULT;
     [serviceArray removeAllObjects];
     if (timer)
     {
@@ -104,12 +105,19 @@
 
 -(void) netServiceBrowserDidStopSearch:(NSNetServiceBrowser *)aNetServiceBrowser
 {
-    if (bonjourStatus == BONJOUR_STATUS_DEFAULT && self.serviceArray == nil)
+    isSearching = NO;
+    
+    if ([serviceArray count] == 0)
     {
         bonjourStatus = BONJOUR_STATUS_TIMEOUT;
+        
+        [self.delegate bonjourReturnCameraListAvailable:self.cameraList];
     }
-    isSearching = NO;
-    [self.delegate bonjourReturnCameraListAvailable:self.cameraList];
+    else
+    {
+        bonjourStatus = BONJOUR_STATUS_OK;
+        [self resolveCameraList];
+    }
     NSLog(@"Number of Services is : %i",[serviceArray count]);
 }
 
