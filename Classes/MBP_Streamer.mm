@@ -1416,30 +1416,32 @@
 -(void) switchToUdtRelayServer
 {
     // signal cameraview to change message..
-    [mHandler statusReport:SWITCHING_TO_RELAY_SERVER andObj:nil];
     
-#if 1
-    //BG
-    [self performSelectorInBackground:@selector(tryConnectingToStunRelay_bg:) withObject:self.streamingChannel];
+
     
-    
-#else
-	RemoteConnection * relayConn = [[RemoteConnection alloc]init];
-    
-	if (streamingChannel == nil)
-	{
-		NSLog(@"Streaming channel is NIL in RELAY mode ... ERROR");
-		return;
-	}
-	self.udtSocket= [relayConn connectToUDTRelay:self.streamingChannel];
-#endif
+    // Switch to new relay IF The FW version allows
+    if ([self.streamingChannel.profile isNewerThan08_038])
+    {
+        //DO nothing here - as the mHandler is doing it.
+        NSLog(@"Switching to relay2... ");
+        
+        [mHandler statusReport:SWITCHING_TO_RELAY2_SERVER andObj:nil];
+    }
+    else
+    {
+        
+        [mHandler statusReport:SWITCHING_TO_RELAY_SERVER andObj:nil];
+        NSLog(@"OLD-RELAY");
+        //BG
+        [self performSelectorInBackground:@selector(tryConnectingToStunRelay_bg:) withObject:self.streamingChannel];
+    }
     
 }
 -(void) tryConnectingToStunRelay_bg:(CamChannel *) mChannel 
 {
     NSAutoreleasePool * pool = [[NSAutoreleasePool alloc]init];
     
-    NSLog(@"[BG thread] tryConnectingToStunRelay_bg"); 
+
     
     RemoteConnection * relayConn = [[RemoteConnection alloc]init];
     
@@ -1452,7 +1454,7 @@
     
     [self performSelectorOnMainThread:@selector(connectedToStunRelay:)
                            withObject:udtSocket_ waitUntilDone:NO];
-     NSLog(@"[BG thread] tryConnectingToStunRelay_bg DONE");
+
     [pool drain];
     
 }
@@ -1624,7 +1626,7 @@
 	{
         
 		//Still fail after retries --- Go for relay now
-		NSLog(@"RELAY RELAY RELAY");
+		
 		[self switchToUdtRelayServer ];
 		return;
 	}

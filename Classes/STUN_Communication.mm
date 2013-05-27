@@ -513,7 +513,7 @@
     
         
         
-        if (mChannel.profile.isNewerThan08_038 &&
+        if ([mChannel.profile isNewerThan08_038] &&
             ( [self isConnectingOnSymmetricNat]))
         {
             //Check SYM NAT
