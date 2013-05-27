@@ -56,7 +56,7 @@
 					<object class="IBUIButton" id="921270938">
 						<reference key="NSNextResponder" ref="689768342"/>
 						<int key="NSvFlags">292</int>
-						<string key="NSFrame">{{204, 210}, {161, 44}}</string>
+						<string key="NSFrame">{{204, 210}, {185, 44}}</string>
 						<reference key="NSSuperview" ref="689768342"/>
 						<reference key="NSWindow"/>
 						<reference key="NSNextKeyView"/>
@@ -67,7 +67,7 @@
 						<int key="IBUIContentHorizontalAlignment">0</int>
 						<int key="IBUIContentVerticalAlignment">0</int>
 						<int key="IBUIButtonType">1</int>
-						<string key="IBUINormalTitle">Intentar nuevamente</string>
+						<string key="IBUINormalTitle">もう一度試して下さい。</string>
 						<object class="NSColor" key="IBUIHighlightedTitleColor" id="711618386">
 							<int key="NSColorSpace">3</int>
 							<bytes key="NSWhite">MQA</bytes>
@@ -113,7 +113,7 @@
 								<bool key="IBUIShowsHorizontalScrollIndicator">NO</bool>
 								<bool key="IBUIShowsVerticalScrollIndicator">NO</bool>
 								<bool key="IBUIEditable">NO</bool>
-								<string key="IBUIText">2. Pulse y mantenga pulsado el botón RESET en la parte inferior de la cámara</string>
+								<string key="IBUIText">カメラの底面にあるRESETボタンを押し続けて下さい。</string>
 								<reference key="IBUITextColor" ref="711618386"/>
 								<object class="IBUITextInputTraits" key="IBUITextInputTraits">
 									<int key="IBUIAutocapitalizationType">2</int>
@@ -145,7 +145,7 @@
 								<bool key="IBUIShowsHorizontalScrollIndicator">NO</bool>
 								<bool key="IBUIShowsVerticalScrollIndicator">NO</bool>
 								<bool key="IBUIEditable">NO</bool>
-								<string key="IBUIText">Para intentar agregar la cámara de nuevo, siga los siguientes pasos:</string>
+								<string key="IBUIText">次のステップに従ってカメラを再度追加して下さい。</string>
 								<reference key="IBUITextColor" ref="711618386"/>
 								<object class="IBUITextInputTraits" key="IBUITextInputTraits">
 									<int key="IBUIAutocapitalizationType">2</int>
@@ -170,7 +170,7 @@
 								<bool key="IBUIShowsHorizontalScrollIndicator">NO</bool>
 								<bool key="IBUIShowsVerticalScrollIndicator">NO</bool>
 								<bool key="IBUIEditable">NO</bool>
-								<string key="IBUIText">Podría ser debido a las razones siguientes:</string>
+								<string key="IBUIText">以下の理由が考えられます。：</string>
 								<reference key="IBUITextColor" ref="711618386"/>
 								<int key="IBUITextAlignment">1</int>
 								<object class="IBUITextInputTraits" key="IBUITextInputTraits">
@@ -197,7 +197,7 @@
 								<bool key="IBUIShowsHorizontalScrollIndicator">NO</bool>
 								<bool key="IBUIShowsVerticalScrollIndicator">NO</bool>
 								<bool key="IBUIEditable">NO</bool>
-								<string key="IBUIText">1. Asegúrese de que su contraseña Wi-fi esté correcta.</string>
+								<string key="IBUIText">Wi-Fiパスワードが正しいことを確認して下さい。</string>
 								<reference key="IBUITextColor" ref="711618386"/>
 								<object class="IBUITextInputTraits" key="IBUITextInputTraits">
 									<int key="IBUIAutocapitalizationType">2</int>
@@ -222,7 +222,7 @@
 								<bool key="IBUIShowsHorizontalScrollIndicator">NO</bool>
 								<bool key="IBUIShowsVerticalScrollIndicator">NO</bool>
 								<bool key="IBUIEditable">NO</bool>
-								<string key="IBUIText">1. Apague la cámara</string>
+								<string key="IBUIText">カメラの電源をOFFにして下さい。</string>
 								<reference key="IBUITextColor" ref="711618386"/>
 								<object class="IBUITextInputTraits" key="IBUITextInputTraits">
 									<int key="IBUIAutocapitalizationType">2</int>
@@ -247,7 +247,7 @@
 								<bool key="IBUIShowsHorizontalScrollIndicator">NO</bool>
 								<bool key="IBUIShowsVerticalScrollIndicator">NO</bool>
 								<bool key="IBUIEditable">NO</bool>
-								<string key="IBUIText">3. Encienda la cámara</string>
+								<string key="IBUIText">カメラの電源を入れます。</string>
 								<reference key="IBUITextColor" ref="711618386"/>
 								<object class="IBUITextInputTraits" key="IBUITextInputTraits">
 									<int key="IBUIAutocapitalizationType">2</int>
@@ -272,7 +272,7 @@
 								<bool key="IBUIShowsHorizontalScrollIndicator">NO</bool>
 								<bool key="IBUIShowsVerticalScrollIndicator">NO</bool>
 								<bool key="IBUIEditable">NO</bool>
-								<string key="IBUIText">4. Espere alrededor de 15 segundos. La cámara emitirá un pitido y se reiniciará</string>
+								<string key="IBUIText">約１５秒待って下さい。カメラがピーという音と共に再起動します。</string>
 								<reference key="IBUITextColor" ref="711618386"/>
 								<object class="IBUITextInputTraits" key="IBUITextInputTraits">
 									<int key="IBUIAutocapitalizationType">2</int>
@@ -322,7 +322,7 @@
 								<bool key="IBUIShowsHorizontalScrollIndicator">NO</bool>
 								<bool key="IBUIShowsVerticalScrollIndicator">NO</bool>
 								<bool key="IBUIEditable">NO</bool>
-								<string key="IBUIText">5. La cámara está de nuevo en el modo de configuración</string>
+								<string key="IBUIText">カメラがセットアップモードになります。</string>
 								<reference key="IBUITextColor" ref="711618386"/>
 								<object class="IBUITextInputTraits" key="IBUITextInputTraits">
 									<int key="IBUIAutocapitalizationType">2</int>
