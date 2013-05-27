@@ -609,7 +609,7 @@
     
        
     
-	NSLog(@"Fake sskey getReq: %@", getReq);
+	NSLog(@"getReq: %@", getReq);
     
 	NSData *getReqData = [getReq dataUsingEncoding:NSUTF8StringEncoding];
     
@@ -1281,7 +1281,7 @@
 	NSData *boundaryString = [strBoundary dataUsingEncoding:NSUTF8StringEncoding];
     
     //read until next boundary
-    [listenSocket readDataToData:boundaryString withTimeout:5.0 tag:tag+1];
+    [listenSocket readDataToData:boundaryString withTimeout:10.0 tag:tag];
 
     
     [self process:data];
@@ -1308,7 +1308,7 @@
     {
         //TODO: extract & strings the data see if can catch this stupid thing
         NSString* unReadResponse = [[NSString alloc] initWithData:unreadData encoding:NSUTF8StringEncoding];
-#if 0 //DBG
+#if 1 //DBG
 
         unReadResponse =[unReadResponse stringByReplacingOccurrencesOfString:@"\r" withString:@"\\r"];
         unReadResponse =[unReadResponse stringByReplacingOccurrencesOfString:@"\n" withString:@"\\n"];
@@ -1316,32 +1316,35 @@
         NSLog(@"Streamer- unReadResponse: %@" ,
                unReadResponse);
 #endif 
-        
-        //Check for session key mismatch
-        
-        NSRange range = [unReadResponse rangeOfString:SESSIONKEY_MISMATCHED];
-        
-        if ( range.location != NSNotFound)
+        //if it failed to decode the string ->return Nil
+        if (unReadResponse != nil)
         {
-            NSLog(@"Streamer- sskey mismatch");
-            self.latest_connection_error = 601;
-            [mHandler statusReport:REMOTE_STREAM_SSKEY_MISMATCH andObj:nil];
-
-            return;
-        }
-
-        
-        range = [unReadResponse rangeOfString:AUTHENTICATION_ERROR];
-        
-        if ( range.location != NSNotFound)
-        {
-            NSLog(@"Streamer- auth error");
-            self.latest_connection_error = 401;
-            [mHandler statusReport:REMOTE_STREAM_SSKEY_MISMATCH andObj:nil];
             
-            return;
+            //Check for session key mismatch
+            
+            NSRange range = [unReadResponse rangeOfString:SESSIONKEY_MISMATCHED];
+            
+            if ( range.location != NSNotFound)
+            {
+                NSLog(@"Streamer- sskey mismatch");
+                self.latest_connection_error = 601;
+                [mHandler statusReport:REMOTE_STREAM_SSKEY_MISMATCH andObj:nil];
+                
+                return;
+            }
+            
+            
+            range = [unReadResponse rangeOfString:AUTHENTICATION_ERROR];
+            
+            if ( range.location != NSNotFound)
+            {
+                NSLog(@"Streamer- auth error");
+                self.latest_connection_error = 401;
+                [mHandler statusReport:REMOTE_STREAM_SSKEY_MISMATCH andObj:nil];
+                
+                return;
+            }
         }
-
         
     }
     
