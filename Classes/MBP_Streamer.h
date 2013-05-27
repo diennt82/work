@@ -38,6 +38,9 @@
 #define SWITCHING_TO_RELAY_SERVER       9
 #define REMOTE_STREAM_STOPPED          10
 
+#define SWITCHING_TO_RELAY2_SERVER     11
+
+
 -(void) statusReport:(int) status andObj:(NSObject*) obj; 
 
 @end

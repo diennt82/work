@@ -1564,7 +1564,7 @@
             [_alert release];
             break;
         }
-        case SWITCHING_TO_RELAY_SERVER:
+        case SWITCHING_TO_RELAY_SERVER:// just update the dialog
         {
             
             //change the message being shown on progress bar -- NEED to take of rotation
@@ -1577,6 +1577,11 @@
                 message.text = msg;
                 
             }
+            
+            
+                       
+            
+            
             break;
         }
         case REMOTE_STREAM_STOPPED:
@@ -1589,6 +1594,7 @@
                 if (self.scomm != nil)
                 {
 
+                     NSLog(@"Send close session");
                     [self.scomm sendCloseSessionThruBMS:self.selected_channel.profile.mac_address
                                               AndChannel:self.selected_channel.channID];
                 }
@@ -1597,6 +1603,29 @@
 #endif
             
             break;
+        }
+        case  SWITCHING_TO_RELAY2_SERVER: //do the switching..
+        {
+            
+            if ([self.selected_channel.profile isNewerThan08_038])
+            {
+                
+                
+                
+                //close pcm player as well.. we don't need it any longer
+                //  Will open again once the relay2 is up
+                [streamer stopStreaming:TRUE];
+                
+                if (scanner != nil)
+                {
+                    [scanner cancel];
+                }
+                [self.selected_channel abortViewTimer];
+                
+                NSLog(@"FW version is newer thang 08_038 ->NEW -RELAY");
+                [self switchToRelay2ForNonSymmetricNatApp];
+            }
+
         }
 		default:
 			break;
@@ -1664,6 +1693,36 @@
                            otherButtonTitles:nil];
     [_alert show];
     [_alert release];
+}
+
+
+-(void) switchToRelay2ForNonSymmetricNatApp
+{
+    NSLog(@"Switch to STUN relay 2 From here ");
+    STUN_Communication * stunConn;
+    stunConn = [[STUN_Communication alloc]init];
+    
+    //change comm mode
+    self.selected_channel.communication_mode  = COMM_MODE_STUN_RELAY2;
+    
+    
+    
+    if ([stunConn connectToStunRelay2:selected_channel
+                             callback:self
+                             Selector:@selector(remoteConnectionSucceeded_bg:)
+                         FailSelector:@selector(remoteConnectionFailed_bg:)])
+    {
+        //the process started successfuly
+    }
+    else
+    {
+        [self performSelectorOnMainThread:@selector(prepareToViewRemotelyFailed)
+                               withObject:nil
+                            waitUntilDone:NO];
+    }
+    
+    
+
 }
 
 #pragma mark Remote Connection Callbacks
