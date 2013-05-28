@@ -822,8 +822,6 @@ return self;
             [self dismissModalViewControllerAnimated:NO];
             self.progressView.hidden = NO;
             
-            [self startShowingCameraList];
-            
             break;
         }
 		default:
@@ -906,6 +904,9 @@ return self;
             [_bonjourBrowser startScanLocalWiFi];
             
         }
+        
+        
+        [self startShowingCameraList];
         
     }
 }
@@ -1372,9 +1373,66 @@ return self;
     }
 }
 
-
-
-
+-(void) scan_for_camera:(CamProfile *) cp
+{
+    BOOL skipScan = FALSE;
+    
+    if (cp != nil &&
+        cp.mac_address !=nil)
+    {
+        
+        //Check if we are in the same network as the camera.. IF so
+        // Try to scan .. otherwise... no point ..
+        //20121130: phung: incase the ip address is not valid... also try to scan ..
+        if (cp.ip_address == nil && [self isInTheSameNetworkAsCamera:cp ])
+        {
+            skipScan = [self isCurrentIpAddressValid:cp];
+            
+            for (CamProfile * cam in restored_profiles)
+            {
+                if (skipScan)
+                {
+                
+                    if ([cp.mac_address isEqualToString:cam.mac_address])
+                    {
+                        cam.ip_address = cp.ip_address;
+                        cam.isInLocal = YES;
+                        cam.hasUpdateLocalStatus = YES;
+                        cam.port = 80;
+                        
+                        break;
+                    }
+                    
+                }else // NEED to do local scan
+                {
+                    ScanForCamera * scanner;
+                    scanner = [[ScanForCamera alloc] initWithNotifier:self];
+                    [scanner scan_for_device:cam.mac_address];
+                    
+                    
+                    
+                } /* skipScan = false*/
+                
+            }
+            
+            
+        }
+        else
+        {
+            //Skip scanning too and assume we don't get any result
+            for (CamProfile * cam in restored_profiles)
+            {
+                if ([cp.mac_address isEqualToString: cam.mac_address])
+                {
+                    cam.isInLocal = NO;
+                    cam.hasUpdateLocalStatus = YES;
+                }
+            }
+        }
+        
+        
+    }
+}
 
 - (void) scan_next_camera:(NSArray *) profiles index:(int) i
 {
@@ -1392,7 +1450,7 @@ return self;
         //Check if we are in the same network as the camera.. IF so
         // Try to scan .. otherwise... no point ..
         //20121130: phung: incase the ip address is not valid... also try to scan ..
-        if (cp.ip_address == nil && [self isInTheSameNetworkWithCamera:cp ])
+        if (cp.ip_address == nil && [self isInTheSameNetworkAsCamera:cp ])
         {
             skipScan = [self isCurrentIpAddressValid:cp];
             
@@ -1413,8 +1471,6 @@ return self;
                 scanner = [[ScanForCamera alloc] initWithNotifier:self];
                 [scanner scan_for_device:cp.mac_address];
                 
-                                
-                NSLog(@"camera_profiles count : %i",[_bonjourList count]);
                 
                 
             } /* skipScan = false*/
@@ -1483,8 +1539,6 @@ return self;
         [self finish_scanning];
     }
 }
-
-
 
 - (void)finish_scanning
 {
@@ -1856,26 +1910,40 @@ return self;
 
 
 -(void) bonjourReturnCameraListAvailable:(NSMutableArray *)cameraList
-{
-//    for (CamProfile * cam in cameraList)
-//    {
-//            NSLog(@"This camera : %@ is available for this user ", cam.mac_address);
-//    }
-    
-    //SCAN_BONJOUR_OK = 1
-    if (_bonjourBrowser.bonjourStatus == BONJOUR_STATUS_OK && cameraList != nil)
+{    //SCAN_BONJOUR_OK = 1
+    if (_bonjourBrowser.bonjourStatus == BONJOUR_STATUS_OK)
     {
-        for (CamProfile * cp in self.restored_profiles)
+        for (int i =0 ; i < [restored_profiles count]; i ++)
         {
+            CamProfile * cp = (CamProfile *)[restored_profiles objectAtIndex:i];
+            BOOL needScanLocal = YES;
+            
             for (CamProfile * camera in cameraList)
             {
                 if ([cp.mac_address isEqualToString:camera.mac_address])
                 {
+                    //Update local
+                    //Reload DashBoard
                     cp.ip_address = camera.ip_address;
                     cp.isInLocal = YES;
                     cp.port = 80;
-                    cp.hasUpdateLocalStatus = YES;
+                    cp.hasUpdateLocalStatus = TRUE;
+                    needScanLocal = NO;
+                    
+                    if (dashBoard != nil)
+                    {
+                        [dashBoard.cameraList reloadData];
+                        
+                    }
+                    
+                    break;
                 }
+            }
+            
+            if (needScanLocal)
+            {
+                //Not exist in Bonjour list, scan normally
+                [self scan_for_camera:cp];
             }
         }
         

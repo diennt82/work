@@ -88,7 +88,7 @@
         self.timer = nil;
     }
     
-    self.timer = [NSTimer scheduledTimerWithTimeInterval:3.0 target:self selector:@selector(stopScanLocalWiFi) userInfo:nil repeats:NO];
+    self.timer = [NSTimer scheduledTimerWithTimeInterval:0.3 target:self selector:@selector(stopScanLocalWiFi) userInfo:nil repeats:NO];
 }
 
 -(void)netServiceBrowser:(NSNetServiceBrowser *)aNetServiceBrowser didFindService:(NSNetService *)aNetService moreComing:(BOOL)moreComing
@@ -99,7 +99,7 @@
     {
         isSearching = NO;
         bonjourStatus = BONJOUR_STATUS_OK;
-        [self resolveCameraList];
+//        [self resolveCameraList];
     }
 }
 
