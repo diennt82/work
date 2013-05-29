@@ -37,21 +37,6 @@
 	if (self) {
 		// Custom initialization
         
-		
-        
-        NSString * mel1 = NSLocalizedStringWithDefaultValue(@"melody_1",nil, [NSBundle mainBundle],
-                                                           @"Rock a Bye Baby", nil);
-        NSString * mel2 = NSLocalizedStringWithDefaultValue(@"melody_2",nil, [NSBundle mainBundle],
-                                                            @"Lullaby and Goodnight", nil);
-        NSString * mel3 = NSLocalizedStringWithDefaultValue(@"melody_3",nil, [NSBundle mainBundle],
-                                                           @"Lavender Blue", nil);
-        NSString * mel4 = NSLocalizedStringWithDefaultValue(@"melody_4",nil, [NSBundle mainBundle],
-                                                             @"Twinkle Twinkle Little Star", nil);
-        NSString * mel5 = NSLocalizedStringWithDefaultValue(@"melody_5",nil, [NSBundle mainBundle],
-                                                            @"Hush Little Baby", nil);
-        
-		melodies = [[NSArray alloc] initWithObjects:mel1,mel2,mel3,mel4, mel5,nil];
-        
 		self.askForFWUpgradeOnce = YES;
         
         
@@ -63,7 +48,7 @@
 
 -(void) dealloc
 {
-    
+    [melodies release];
 	[temperature_label release];
 	[videoAndSnapshotTime release];
     [userSettings release];
@@ -159,7 +144,49 @@
 {
 	[super viewDidLoad];
     
-    
+    if (selected_channel)
+    {
+        NSString * fw_version = selected_channel.profile.fw_version;
+        NSLog(@"Camera fw: %@", fw_version);
+        
+        if (![fw_version isEqualToString:@"0"])
+        {
+            NSArray * tokens = [fw_version componentsSeparatedByString:@"_"];
+            int maj_version = [(NSString*) [tokens objectAtIndex:0] intValue];
+            
+            if (maj_version > 8)
+            {
+                NSString * mel1 = NSLocalizedStringWithDefaultValue(@"melody_I",nil, [NSBundle mainBundle],
+                                                                    @"Melody 1", nil);
+                NSString * mel2 = NSLocalizedStringWithDefaultValue(@"melody_II",nil, [NSBundle mainBundle],
+                                                                    @"Melody 2", nil);
+                NSString * mel3 = NSLocalizedStringWithDefaultValue(@"melody_III",nil, [NSBundle mainBundle],
+                                                                    @"Melody 3", nil);
+                NSString * mel4 = NSLocalizedStringWithDefaultValue(@"melody_IV",nil, [NSBundle mainBundle],
+                                                                    @"Melody 4", nil);
+                NSString * mel5 = NSLocalizedStringWithDefaultValue(@"melody_V",nil, [NSBundle mainBundle],
+                                                                    @"Melody 5", nil);
+                
+                melodies = [[NSArray alloc] initWithObjects:mel1,mel2,mel3,mel4, mel5,nil];
+            }
+            else
+            {
+                NSString * mel1 = NSLocalizedStringWithDefaultValue(@"melody_1",nil, [NSBundle mainBundle],
+                                                                    @"Rock a Bye Baby", nil);
+                NSString * mel2 = NSLocalizedStringWithDefaultValue(@"melody_2",nil, [NSBundle mainBundle],
+                                                                    @"Lullaby and Goodnight", nil);
+                NSString * mel3 = NSLocalizedStringWithDefaultValue(@"melody_3",nil, [NSBundle mainBundle],
+                                                                    @"Lavender Blue", nil);
+                NSString * mel4 = NSLocalizedStringWithDefaultValue(@"melody_4",nil, [NSBundle mainBundle],
+                                                                    @"Twinkle Twinkle Little Star", nil);
+                NSString * mel5 = NSLocalizedStringWithDefaultValue(@"melody_5",nil, [NSBundle mainBundle],
+                                                                    @"Hush Little Baby", nil);
+                
+                melodies = [[NSArray alloc] initWithObjects:mel1,mel2,mel3,mel4, mel5,nil];
+            }
+        }
+        
+    }
 	// Do any additional setup after loading the view.
 	[[NSNotificationCenter defaultCenter] addObserver: self
                                              selector: @selector(handleEnteredBackground)
