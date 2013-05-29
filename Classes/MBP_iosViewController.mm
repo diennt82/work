@@ -1384,7 +1384,7 @@ return self;
         //Check if we are in the same network as the camera.. IF so
         // Try to scan .. otherwise... no point ..
         //20121130: phung: incase the ip address is not valid... also try to scan ..
-        if (cp.ip_address == nil && [self isInTheSameNetworkAsCamera:cp ])
+        if (cp.ip_address == nil || [self isInTheSameNetworkAsCamera:cp ])
         {
             skipScan = [self isCurrentIpAddressValid:cp];
             
