@@ -11,7 +11,7 @@
 
 @implementation WifiListParser
 
-@synthesize wifiLists; 
+@synthesize wifiLists;
 
 
 -(void) dealloc
@@ -23,21 +23,24 @@
 
 - (void)parseData:(NSData *) xmlWifiList whenDoneCall:(SEL) _parserCallback target:(id) obj
 {
-	//NSData * xmlData; <--- populate the xml content 
-#if 1	
+	//NSData * xmlData; <--- populate the xml content
+#if 1
     _callback = _parserCallback;
-    caller = obj; 
+    caller = obj;
 	xmlParser = [[NSXMLParser alloc] initWithData:xmlWifiList];
 	[xmlParser setDelegate:self];
     [xmlParser setShouldProcessNamespaces:NO];
     [xmlParser setShouldReportNamespacePrefixes:NO];
     [xmlParser setShouldResolveExternalEntities:NO];
     [xmlParser parse];
-
-#else 
+    
+#else
+    
+    _callback = _parserCallback;
+    caller = obj;
 	
-	//TEST 
-	NSString *path = [[NSBundle mainBundle] pathForResource:@"routers_list" ofType:@"xml"];
+	//TEST
+	NSString *path = [[NSBundle mainBundle] pathForResource:@"routers" ofType:@"xml"];
 	NSURL *file_url = [NSURL fileURLWithPath:path];
 	xmlParser = [[NSXMLParser alloc] initWithContentsOfURL:file_url];
 	[xmlParser setDelegate:self];
@@ -67,73 +70,73 @@
 
 
 
-- (void)parserDidStartDocument:(NSXMLParser *)parser 
+- (void)parserDidStartDocument:(NSXMLParser *)parser
 {
     NSLog(@"Document started");
 }
 
-- (void)parser:(NSXMLParser *)parser parseErrorOccurred:(NSError *)parseError 
+- (void)parser:(NSXMLParser *)parser parseErrorOccurred:(NSError *)parseError
 {
     NSLog(@"Error: %@", [parseError localizedDescription]);
 }
 
-- (void)parser:(NSXMLParser *)parser didStartElement:(NSString *)elementName 
-  namespaceURI:(NSString *)namespaceURI 
- qualifiedName:(NSString *)qName 
+- (void)parser:(NSXMLParser *)parser didStartElement:(NSString *)elementName
+  namespaceURI:(NSString *)namespaceURI
+ qualifiedName:(NSString *)qName
     attributes:(NSDictionary *)attributeDict
 {
-   if ([elementName isEqualToString:WIFI_LIST_VERSION])
-   {
-       list_version = [attributeDict objectForKey:WIFI_LIST_VERSION_ATT];
-   }
-
+    if ([elementName isEqualToString:WIFI_LIST_VERSION])
+    {
+        list_version = [attributeDict objectForKey:WIFI_LIST_VERSION_ATT];
+    }
+    
     if ([elementName isEqualToString:NUM_ENTRY])
     {
-        currentStringValue = nil;   
+        currentStringValue = nil;
     }
     if ([elementName isEqualToString:WIFI_ENTRY])
     {
-        currentEntry = [[WifiEntry alloc] init ]; 
+        currentEntry = [[WifiEntry alloc] init ];
     }
     
     if ([elementName isEqualToString:WIFI_ENTRY_SSID])
     {
-        currentStringValue = nil;   
+        currentStringValue = nil;
     }
     
     if ([elementName isEqualToString:WIFI_ENTRY_BSSID])
     {
-        currentStringValue = nil;   
+        currentStringValue = nil;
     }
-
+    
     if ([elementName isEqualToString:WIFI_ENTRY_AUTH_MODE])
     {
-        currentStringValue = nil;   
+        currentStringValue = nil;
     }
-
-
+    
+    
     if ([elementName isEqualToString:WIFI_ENTRY_QUALITY])
     {
-        currentStringValue = nil;   
+        currentStringValue = nil;
     }
-   
+    
     if ([elementName isEqualToString:WIFI_ENTRY_SIGNAL_LEVEL])
     {
-        //Do nothing for now   
+        //Do nothing for now
     }
     if ([elementName isEqualToString:WIFI_ENTRY_NOISE_LEVEL])
     {
-        //Do nothing for now   
+        //Do nothing for now
     }
     if ([elementName isEqualToString:WIFI_ENTRY_CHANNEL])
     {
-        //Do nothing for now   
+        //Do nothing for now
     }
-
+    
 }
 
-- (void)parser:(NSXMLParser *)parser didEndElement:(NSString *)elementName 
-  namespaceURI:(NSString *)namespaceURI 
+- (void)parser:(NSXMLParser *)parser didEndElement:(NSString *)elementName
+  namespaceURI:(NSString *)namespaceURI
  qualifiedName:(NSString *)qName
 {
 	
@@ -147,7 +150,7 @@
             
         }
         
-       
+        
     }
     
     if ([elementName isEqualToString:WIFI_ENTRY])
@@ -181,15 +184,15 @@
         {
             currentEntry.bssid = currentStringValue;
         }
-          
+        
     }
     
-
+    
     
     
     if ([elementName isEqualToString:WIFI_ENTRY_AUTH_MODE])
     {
-            
+        
         if (currentEntry != nil)
         {
             if (currentStringValue == nil)
@@ -218,7 +221,7 @@
             {
                 
             }
-            else 
+            else
             {
                 currentEntry.quality = currentStringValue;
                 
@@ -226,28 +229,28 @@
             
             
         }
-  
+        
     }
     
     if ([elementName isEqualToString:WIFI_ENTRY_SIGNAL_LEVEL])
     {
-        //Do nothing for now   
+        //Do nothing for now
     }
     if ([elementName isEqualToString:WIFI_ENTRY_NOISE_LEVEL])
     {
-        //Do nothing for now   
+        //Do nothing for now
     }
     if ([elementName isEqualToString:WIFI_ENTRY_CHANNEL])
     {
-        //Do nothing for now   
+        //Do nothing for now
     }
-
+    
     
     //reset for the next element
-    currentStringValue = nil; 
-}        
+    currentStringValue = nil;
+}
 
-- (void)parser:(NSXMLParser *)parser foundCharacters:(NSString *)string 
+- (void)parser:(NSXMLParser *)parser foundCharacters:(NSString *)string
 {
     if (!currentStringValue) {
         // currentStringValue is an NSMutableString instance variable
@@ -256,7 +259,7 @@
     [currentStringValue appendString:string];
 }
 
-- (void)parserDidEndDocument:(NSXMLParser *)parser 
+- (void)parserDidEndDocument:(NSXMLParser *)parser
 {
     NSLog(@"Document finished");
     

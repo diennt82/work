@@ -149,7 +149,13 @@ keyIndex ,key, addressMode, usrName, passWd, wepType;
 	NSString * address_mode = @"0"; //assuming DHCP
 	conf_str = [conf_str stringByAppendingString:address_mode];
 	
-	NSString * ssid_len = [NSString stringWithFormat:@"%03d",[ssid length]];
+//	NSString * ssid_len = [NSString stringWithFormat:@"%03d",[ssid length]];
+    
+    NSLog(@"[Ssid length]: %d vs byte[] len: %d",[ssid length],
+          [[ssid dataUsingEncoding:NSUTF8StringEncoding] length]);
+    
+    NSString * ssid_len = [NSString stringWithFormat:@"%03d",[[ssid dataUsingEncoding:NSUTF8StringEncoding] length]];
+    
 	conf_str = [conf_str stringByAppendingString:ssid_len];
 	
 	NSString * sec_key_len = [NSString stringWithFormat:@"%02d",[key length]];

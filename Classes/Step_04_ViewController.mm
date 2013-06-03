@@ -398,8 +398,10 @@
    
     
     
-#if 0
+#if 1
      WifiEntry * entry; 
+    
+    
     for (int i =0; i< wifiList.count; i++)
     {
         entry = [wifiList objectAtIndex:i]; 
