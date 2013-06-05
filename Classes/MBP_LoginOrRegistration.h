@@ -88,7 +88,7 @@
 
 @property (nonatomic, retain) 	NSString * temp_user_str, * temp_pass_str, * temp_user_email  ; 
 
-@property (nonatomic, retain) UserAccount *account;
+@property (nonatomic, retain) UserAccount *account; 
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil withConnDelegate:(id<ConnectionMethodDelegate>) delegate;
 

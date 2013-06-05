@@ -24,7 +24,7 @@
 
 @synthesize temp_user_str; 
 @synthesize temp_pass_str; 
-@synthesize temp_user_email ;
+@synthesize temp_user_email  ;
 
 @synthesize  account; 
 
@@ -32,8 +32,7 @@
 // The designated initializer.  Override if you create the controller programmatically and want to perform customization that is not appropriate for viewDidLoad.
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil withConnDelegate:(id<ConnectionMethodDelegate>) d;
 {
-    if ((self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]))
-    {
+    if ((self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil])){
         // Custom initialization
 		
 		delegate = d;
@@ -46,7 +45,6 @@
 // Implement viewDidLoad to do additional setup after loading the view, typically from a nib.
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
 	  [[UIApplication sharedApplication] setStatusBarOrientation:UIInterfaceOrientationPortrait];
     
     
@@ -207,6 +205,7 @@
 
     [parent presentModalViewController:navController animated:NO];
 }
+
 
 -(void) doSignIn :(NSTimer *) exp
 {
@@ -833,10 +832,9 @@
 	account = [[UserAccount alloc] initWithUser:self.temp_user_email
 										AndPass:self.temp_pass_str
 								   WithListener: delegate];
-    
-        
-        //BLOCKED method
-        [account query_camera_list_blocked];
+            
+    //BLOCKED method
+    [account query_camera_list_blocked];
     
 }
 
@@ -908,4 +906,6 @@
 	[alert release];
 	
 }
+
+
 @end

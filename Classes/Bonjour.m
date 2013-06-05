@@ -160,9 +160,6 @@
     
     NSString * macString = [Util add_colon_to_mac:strMac];
     
-    CamProfile * cam_profile = [[CamProfile alloc] initWithMacAddr:macString];
-    [cam_profile setIp_address:ip];
-    
     for (CamProfile * cam_profile in _cameras)
     {
         if ([self isCameraIP:ip availableWith:macString] &&

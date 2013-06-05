@@ -38,6 +38,7 @@
 #import "CameraAlert.h"
 #import "Bonjour.h"
 
+
 #define DIRECTION_V_NON  0x01
 #define DIRECTION_V_UP   0x02
 #define DIRECTION_V_DN   0x04
@@ -145,8 +146,6 @@
 	int nextCameraToScanIndex;
     
     Bonjour * _bonjourBrowser;
-    
-    NSArray * _bonjourList;
 }
 
 @property (nonatomic, retain) IBOutlet UIView * progressView;

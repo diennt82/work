@@ -70,7 +70,6 @@ return self;
 	self.toTakeSnapShot = NO;
 	self.recordInProgress = NO;
     
-    _bonjourList = [[NSArray alloc] init];
 
 
 	self.app_stage = APP_STAGE_INIT;
@@ -466,7 +465,6 @@ return self;
 
 	// [mainMenuView release];
     [_bonjourBrowser release];
-    [_bonjourList release];
     [splashScreen release];
     [sunBackground release];
 	[bc_addr release];
@@ -1626,21 +1624,6 @@ return self;
     
 }
 
--(BOOL) isInTheSameNetworkWithCamera : (CamProfile *) cp
-{
-    if (_bonjourList && [_bonjourList count] != 0)
-    {
-        for (CamProfile * cam in _bonjourList)
-        {
-            if ([cam.mac_address isEqualToString:cp.mac_address])
-            {
-                return YES;
-            }
-        }
-    }
-    
-    return [self isInTheSameNetworkAsCamera:cp];
-}
 -(BOOL) isCurrentIpAddressValid :(CamProfile *) cp
 {
     
