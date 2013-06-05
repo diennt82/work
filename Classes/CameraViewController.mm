@@ -153,10 +153,9 @@
         
         if (![fw_version isEqualToString:@"0"])
         {
-            NSArray * tokens = [fw_version componentsSeparatedByString:@"_"];
-            int maj_version = [(NSString*) [tokens objectAtIndex:0] intValue];
             
-            if (maj_version > 8)
+            
+            if (![CamProfile isFW_version_08_xxx:fw_version])
             {
                 NSString * mel1 = NSLocalizedStringWithDefaultValue(@"melody_I",nil, [NSBundle mainBundle],
                                                                     @"Melody 1", nil);
@@ -273,7 +272,9 @@
             }
             else
             {
-                [melodyFW setTitle:@"Lullaby"];
+                NSString * lullaby = NSLocalizedStringWithDefaultValue(@"Lullaby",nil, [NSBundle mainBundle],
+                                                                    @"Lullaby", nil);
+                [melodyFW setTitle:lullaby];
             }
         }
         

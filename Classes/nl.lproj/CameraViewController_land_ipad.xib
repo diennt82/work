@@ -407,7 +407,6 @@
 						<string key="NSFrame">{{891, 615}, {107, 107}}</string>
 						<reference key="NSSuperview" ref="312508815"/>
 						<reference key="NSWindow"/>
-						<reference key="NSNextKeyView"/>
 						<string key="NSReuseIdentifierKey">_NS:9</string>
 						<bool key="IBUIOpaque">NO</bool>
 						<int key="IBUIContentMode">1</int>
@@ -811,7 +810,6 @@
 								<string key="NSFrame">{{284, 63}, {30, 30}}</string>
 								<reference key="NSSuperview" ref="417843566"/>
 								<reference key="NSWindow"/>
-								<reference key="NSNextKeyView"/>
 								<string key="NSReuseIdentifierKey">_NS:9</string>
 								<int key="IBUIContentMode">1</int>
 								<bool key="IBUIUserInteractionEnabled">NO</bool>
@@ -1093,6 +1091,14 @@
 						<reference key="destination" ref="946874269"/>
 					</object>
 					<int key="connectionID">203</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBCocoaTouchOutletConnection" key="connection">
+						<string key="label">melodyFW</string>
+						<reference key="source" ref="372490531"/>
+						<reference key="destination" ref="106371357"/>
+					</object>
+					<int key="connectionID">209</int>
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBCocoaTouchEventConnection" key="connection">
@@ -1616,7 +1622,7 @@
 			<nil key="activeLocalization"/>
 			<dictionary class="NSMutableDictionary" key="localizations"/>
 			<nil key="sourceID"/>
-			<int key="maxID">208</int>
+			<int key="maxID">209</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<array class="NSMutableArray" key="referencedPartialClassDescriptions">
@@ -1684,6 +1690,7 @@
 						<string key="lullabyButton">UIButton</string>
 						<string key="lullabyOnOff">UISwitch</string>
 						<string key="lullabyView">UIView</string>
+						<string key="melodyFW">UIBarButtonItem</string>
 						<string key="musicOnOffCell">UITableViewCell</string>
 						<string key="percentageLabel">UILabel</string>
 						<string key="percentageProgress">UIProgressView</string>
@@ -1746,6 +1753,10 @@
 						<object class="IBToOneOutletInfo" key="lullabyView">
 							<string key="name">lullabyView</string>
 							<string key="candidateClassName">UIView</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="melodyFW">
+							<string key="name">melodyFW</string>
+							<string key="candidateClassName">UIBarButtonItem</string>
 						</object>
 						<object class="IBToOneOutletInfo" key="musicOnOffCell">
 							<string key="name">musicOnOffCell</string>
