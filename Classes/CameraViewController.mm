@@ -21,6 +21,7 @@
 @synthesize  alertTimer;
 @synthesize  zoombar;
 @synthesize  currentZoomLvl;
+@synthesize melodyFW;
 
 @synthesize  ptt_enabled,askForFWUpgradeOnce, enableControls, firstTimeConnect;
 
@@ -48,6 +49,7 @@
 
 -(void) dealloc
 {
+    [melodyFW release];
     [melodies release];
 	[temperature_label release];
 	[videoAndSnapshotTime release];
@@ -213,7 +215,6 @@
     AudioServicesCreateSystemSoundID(soundFileURLRef, &soundFileObject);
     
     [self becomeActive];
-    
         
 
 	    
@@ -256,6 +257,26 @@
 		melody_index = -1;
 		//Set camera name
 		barBtnName.title = cp.name;
+        
+        //set Melody name
+        NSString * fw_version = selected_channel.profile.fw_version;
+        NSLog(@"Camera fw: %@", fw_version);
+        
+        if (![fw_version isEqualToString:@"0"])
+        {
+            NSArray * tokens = [fw_version componentsSeparatedByString:@"_"];
+            int maj_version = [(NSString*) [tokens objectAtIndex:0] intValue];
+            
+            if (maj_version > 8)
+            {
+                [melodyFW setTitle:@"Melody"];
+            }
+            else
+            {
+                [melodyFW setTitle:@"Lullaby"];
+            }
+        }
+        
         
 		//set Button handler
 		barBtnCamera.target = self;
@@ -693,6 +714,24 @@
 	[streamer switchToOrientation:orientation];
     
 	barBtnName.title = selected_channel.profile.name;
+    //set Melody name
+    NSString * fw_version = selected_channel.profile.fw_version;
+    NSLog(@"Camera fw: %@", fw_version);
+    
+    if (![fw_version isEqualToString:@"0"])
+    {
+        NSArray * tokens = [fw_version componentsSeparatedByString:@"_"];
+        int maj_version = [(NSString*) [tokens objectAtIndex:0] intValue];
+        
+        if (maj_version > 8)
+        {
+            [melodyFW setTitle:@"Melody"];
+        }
+        else
+        {
+            [melodyFW setTitle:@"Lullaby"];
+        }
+    }
     
 	//set Button handler
 	barBtnCamera.target = self;
