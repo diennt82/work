@@ -155,7 +155,7 @@
         {
             
             
-            if (![CamProfile isFW_version_08_xxx:fw_version])
+            if (!selected_channel.profile.isFW_version_08_xxx)
             {
                 NSString * mel1 = NSLocalizedStringWithDefaultValue(@"melody_I",nil, [NSBundle mainBundle],
                                                                     @"Melody 1", nil);

@@ -478,9 +478,9 @@
 }
 
 
-+(BOOL) isFW_version_08_xxx:(NSString *)fw_version
+-(BOOL) isFW_version_08_xxx
 {
-    NSArray * tokens = [fw_version componentsSeparatedByString:@"_"];
+    NSArray * tokens = [self.fw_version componentsSeparatedByString:@"_"];
     int maj_version = [(NSString*) [tokens objectAtIndex:0] intValue];
     
     if (maj_version > 8)
