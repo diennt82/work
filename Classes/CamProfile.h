@@ -58,6 +58,6 @@
 
 + (CamProfile *) restoreFromData: (NSData *) data;
 -(BOOL) isNewerThan08_038;
-
+-(BOOL) isFW_version_08_xxx;
 
 @end

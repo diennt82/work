@@ -99,7 +99,7 @@
     IBOutlet UIView *progressView; 
     
     IBOutlet UIView * lullabyView; 
-    IBOutlet UISwitch * lullabyOnOff; 
+    IBOutlet UISwitch * lullabyOnOff;
     
     
     IBOutlet UITableViewCell * musicOnOffCell;
@@ -165,6 +165,7 @@
     NSMutableDictionary * userSettings;
     
 }
+@property (nonatomic, retain) IBOutlet UIBarButtonItem * melodyFW;
 @property (nonatomic, assign) IBOutlet UIBarButtonItem * barBtnName;
 @property (nonatomic, retain) IBOutlet UILabel * temperature_label, *videoAndSnapshotTime; 
 @property (nonatomic, retain) StunCommunication * scomm;
