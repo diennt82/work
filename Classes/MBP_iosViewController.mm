@@ -1347,7 +1347,7 @@ return self;
        
         cp.ip_address = ((CamProfile*) [_scan_results objectAtIndex:0]).ip_address;
         cp.isInLocal = TRUE;
-        cp.port = 80;//localport is always 80
+        cp.port = ((CamProfile*) [_scan_results objectAtIndex:0]).port;//localport is always 80
         
         cp.hasUpdateLocalStatus = TRUE;
     }
