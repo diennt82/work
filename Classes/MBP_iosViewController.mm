@@ -1295,6 +1295,8 @@ return self;
             
             if (skipScan)
             {
+                
+                cp.port = 80;
                 //Dont need to scan.. call scan_done directly
                 [finalResult addObject:cp];
                 
