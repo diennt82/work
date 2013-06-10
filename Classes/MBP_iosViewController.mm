@@ -1408,7 +1408,7 @@ return self;
                     [scanner scan_for_device:cam.mac_address];
                     
                     
-                    
+                    [scanner release];
                 } /* skipScan = false*/
                 
             }
