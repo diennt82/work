@@ -45,7 +45,7 @@
     self.navigationItem.title = NSLocalizedStringWithDefaultValue(@"Security",nil, [NSBundle mainBundle],
                                                                   @"Security" , nil);
 
-    securityTypes = [[NSArray alloc]initWithObjects:@"none", @"wep" , @"wap",
+    securityTypes = [[NSArray alloc]initWithObjects:@"none", @"wep" , @"wpa",
                      nil];
     
     

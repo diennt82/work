@@ -1373,10 +1373,13 @@
 		if (self.remoteView == TRUE)
 		{
 			NSLog(@"Streamer-REMOTE send message : REMOTE_STREAM_STOPPED_UNEXPECTEDLY");
+            self.latest_connection_error = ([err code]!=0)? [err code]:-1;
 			[mHandler statusReport:REMOTE_STREAM_STOPPED_UNEXPECTEDLY andObj:nil];
 		}
 		else
 		{
+            
+            self.latest_connection_error = ([err code]!=0)? [err code]:-1;
 			NSLog(@"Streamer- send message : STREAM_STOPPED_UNEXPECTEDLY");
 			[mHandler statusReport:STREAM_STOPPED_UNEXPECTEDLY andObj:nil];
 		}

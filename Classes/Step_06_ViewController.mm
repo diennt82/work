@@ -441,13 +441,23 @@
 
 - (void)textFieldDidBeginEditing:(UITextField *)textField
 {
-    [self animateTextField: textField up: YES];
+    if (textField.tag !=202 ) // Dont move if it's the SSID name
+    {
+     
+        [self animateTextField: textField up: YES];
+    }
 }
 
 
 - (void)textFieldDidEndEditing:(UITextField *)textField
 {
-    [self animateTextField: textField up: NO];
+    
+    if (textField.tag !=202 ) // Dont move if it's the SSID name
+    {
+        
+        [self animateTextField: textField up: NO];
+    }
+
 }
 
 - (void) animateTextField: (UITextField*) textField up: (BOOL) up

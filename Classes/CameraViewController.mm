@@ -1475,9 +1475,18 @@
             NSString * streamSSID =  (NSString *) [userDefaults objectForKey:_streamingSSID];
 
             
+
             NSString * msg = NSLocalizedStringWithDefaultValue(@"network_lost_link",nil, [NSBundle mainBundle],
                                                                   @"Camera disconnected due to network connectivity problem. Trying to reconnect...", nil);
             
+            
+#if 1
+            if (self.streamer != nil)
+            {
+                msg = [NSString stringWithFormat:@"%@(%d)",msg,
+                       self.streamer.latest_connection_error ];
+            }
+#endif
             
             
             if (currSSID != nil && streamSSID != nil)
@@ -1526,8 +1535,12 @@
                                                                @"Camera disconnected due to network connectivity problem. Trying to reconnect...", nil);
             
 #if 1
-            msg = [NSString stringWithFormat:@"%@(%d)",msg,
-                   self.streamer.latest_connection_error ];
+            msg = [NSString stringWithFormat:@"%@ (%d)", msg, self.selected_channel.remoteConnectionError];
+            if (self.streamer != nil)
+            {
+                msg = [NSString stringWithFormat:@"%@(%d)",msg,
+                       self.streamer.latest_connection_error ];
+            }
 #endif
             
             
