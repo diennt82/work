@@ -6,7 +6,7 @@
 //  Copyright 2012 Smart Panda Ltd. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
+
 #import "CamChannel.h"
 #import "CamProfile.h"
 #import "Util.h"

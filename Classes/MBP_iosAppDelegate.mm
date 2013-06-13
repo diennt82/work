@@ -22,9 +22,14 @@
     
     // Override point for customization after application launch.
 
-    // Add the view controller's view to the window and display.
-    // OBSOLETE: [window addSubview:viewController.view];
+
+    // !!!: Use the next line only during TEST - appstore release: need to comment this line
+    [TestFlight setDeviceIdentifier:[[UIDevice currentDevice] uniqueIdentifier]];
+    
   
+    //Add testflight app token - For remote login & crash reporting
+    [TestFlight takeOff:@"4574de50-f54d-4414-a803-fc460426c915"];
+    
     [window setRootViewController:viewController];
     [window makeKeyAndVisible];
 

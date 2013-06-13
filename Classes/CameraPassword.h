@@ -6,8 +6,6 @@
 //  Copyright 2012 Smart Panda Ltd. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
-#import <CoreFoundation/CoreFoundation.h>
 
 @interface CameraPassword : NSObject {
 

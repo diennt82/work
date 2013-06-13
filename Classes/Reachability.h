@@ -46,7 +46,7 @@
 */
 
 
-#import <Foundation/Foundation.h>
+
 #import <SystemConfiguration/SystemConfiguration.h>
 
 typedef enum {

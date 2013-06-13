@@ -6,8 +6,7 @@
 //  Copyright 2012 Smart Panda Ltd. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
-//#import "MBP_iosAppDelegate.h"
+
 #import "BMS_Communication.h"
 #import "CamProfile.h"
 #import "Util.h"

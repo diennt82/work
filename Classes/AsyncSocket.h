@@ -8,7 +8,7 @@
 //  http://code.google.com/p/cocoaasyncsocket/
 //
 
-#import <Foundation/Foundation.h>
+
 
 @class AsyncSocket;
 @class AsyncReadPacket;
