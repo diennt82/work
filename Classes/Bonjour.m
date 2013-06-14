@@ -61,11 +61,11 @@
 
 - (void) startScanLocalWiFi
 {
-    if (_browserService)
-    {
-        [_browserService stop];
-        [_browserService setDelegate:self];
-    }
+//    if (_browserService)
+//    {
+//        [_browserService stop];
+//        [_browserService setDelegate:self];
+//    }
     
     [_browserService searchForServicesOfType:SERVICE inDomain:DOMAINS];
 }

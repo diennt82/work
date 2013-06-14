@@ -1408,7 +1408,7 @@ return self;
                     [scanner scan_for_device:cam.mac_address];
                     
                     
-                    [scanner release];
+//                    [scanner release];
                 } /* skipScan = false*/
                 
             }
@@ -1515,7 +1515,10 @@ return self;
 
     NSLog(@"cam:%@ is in Local? %d fw:%@", cp.mac_address, cp.isInLocal, cp.fw_version);
     
-    
+    if ([self isOnBonjourMode])
+    {
+        return;
+    }
     
     if ( (nextCameraToScanIndex+1) <[self.restored_profiles count])
     {
@@ -1890,6 +1893,15 @@ return self;
 
 #pragma mark -
 #pragma mark Bonjour Delegate
+-(BOOL) isOnBonjourMode
+{
+    if (_bonjourBrowser != nil && _bonjourBrowser.bonjourStatus == BONJOUR_STATUS_OK)
+    {
+        return YES;
+    }
+    
+    return NO;
+}
 
 
 -(void) bonjourReturnCameraListAvailable:(NSMutableArray *)cameraList
@@ -1922,6 +1934,9 @@ return self;
                     break;
                 }
             }
+            
+            //If a camera name does not exist in Bonjour 's cameraList,
+            //It could be still in local
             
             if (needScanLocal)
             {
