@@ -238,7 +238,7 @@
 "information" = "Information";
 
 /* No comment provided by engineer. */
-"information_msg" = "Monitor Everywhere\nProgramversion: %1$@\nOperativsystemversion:%2$@,\nMonitoreverywhere \@ Upphovsrättskyddat.\nKamera address:%3$@";
+"information_msg" = "Monitor Everywhere\nProgramversion: %1$@\nOperativsystemversion:%2$@,\nMonitoreverywhere \@ Upphovsrättskyddat.";
 
 /* No comment provided by engineer. */
 "Invalid_Camera_Name" = "Invalid Camera Name";

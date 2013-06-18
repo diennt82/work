@@ -238,7 +238,7 @@
 "information" = "Information";
 
 /* No comment provided by engineer. */
-"information_msg" = "Moniteur dans Tous les Lieux\nApplication version: %1$@\nFirmware version:%2$@,\nMoniteur dans Tous les Lieux \@ Tous droits Réservés.\nCamera address:%3$@";
+"information_msg" = "Moniteur dans Tous les Lieux\nApplication version: %1$@\nFirmware version:%2$@,\nMoniteur dans Tous les Lieux \@ Tous droits Réservés.";
 
 /* No comment provided by engineer. */
 "Invalid_Camera_Name" = "Invalid Camera Name";
