@@ -158,7 +158,7 @@
     
     NSString * ip = [[NSString alloc] initWithData:ipString encoding:NSASCIIStringEncoding];
     
-    NSString * macString = [Util add_colon_to_mac:strMac];
+    NSString * macString = [[Util add_colon_to_mac:strMac] uppercaseString];
     
     for (CamProfile * cam_profile in _cameras)
     {
