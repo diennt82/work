@@ -162,14 +162,14 @@
     
     for (CamProfile * cam_profile in _cameras)
     {
-        if ([self isCameraIP:ip availableWith:macString] &&
-            [cam_profile.mac_address isEqualToString:macString])
+        if ([cam_profile.mac_address isEqualToString:macString] &&
+            [self isCameraIP:ip availableWith:macString])
         {
             [self.cameraList addObject:cam_profile];
         }
     }
     
-    if (service == _lastService)
+    if (nextIndex == [serviceArray count] - 1)
     {
         [self.delegate bonjourReturnCameraListAvailable:self.cameraList];
     }
@@ -185,6 +185,22 @@
     [strMac release];
 }
 
+- (void)netService:(NSNetService *)sender didNotResolve:(NSDictionary *)errorDict
+{
+    NSLog(@"Error with : %@", errorDict.description);
+    
+    if (nextIndex >= [serviceArray count] - 1)
+    {
+        [self.delegate bonjourReturnCameraListAvailable:self.cameraList];
+    }
+    else
+    {
+        nextIndex += 1;
+        NSNetService * nextService = [serviceArray objectAtIndex:nextIndex];
+        [nextService setDelegate:self];
+        [nextService resolveWithTimeout:0.0];
+    }
+}
 
 // Not use
 -(NSData *) getMacCamera:(NSString *) ip_string
