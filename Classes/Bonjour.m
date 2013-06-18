@@ -141,7 +141,7 @@
     
     NSNetService * aNetService = [serviceArray objectAtIndex:nextIndex];
     [aNetService setDelegate:self];
-    [aNetService resolveWithTimeout:0.0];
+    [aNetService resolveWithTimeout:5.0];
     
     }
 #pragma mark -
@@ -178,7 +178,7 @@
         nextIndex += 1;
         NSNetService * nextService = [serviceArray objectAtIndex:nextIndex];
             [nextService setDelegate:self];
-            [nextService resolveWithTimeout:0.0];
+            [nextService resolveWithTimeout:5.0];
     }
     
     [ip release];
@@ -198,7 +198,7 @@
         nextIndex += 1;
         NSNetService * nextService = [serviceArray objectAtIndex:nextIndex];
         [nextService setDelegate:self];
-        [nextService resolveWithTimeout:0.0];
+        [nextService resolveWithTimeout:5.0];
     }
 }
 
@@ -249,7 +249,7 @@
     
     dev_com.device_ip = ip;
     
-    NSString * mac = [dev_com sendCommandAndBlock:GET_MAC_ADDRESS withTimeout:5.0];
+    NSString * mac = [dev_com sendCommandAndBlock:GET_MAC_ADDRESS withTimeout:3.0];
     
     if (mac != nil && mac.length == 12)
     {

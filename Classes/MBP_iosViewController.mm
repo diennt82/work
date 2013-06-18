@@ -1639,7 +1639,7 @@ return self;
         
         dev_com.device_ip = cp.ip_address;
         
-        NSString * mac = [dev_com sendCommandAndBlock:GET_MAC_ADDRESS withTimeout:5.0];
+        NSString * mac = [dev_com sendCommandAndBlock:GET_MAC_ADDRESS withTimeout:3.0];
         
         if (mac != nil && mac.length == 12)
         {
