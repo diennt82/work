@@ -24,6 +24,7 @@
 	NSMutableArray * scan_results; 
 	BOOL deviceScanInProgress; 
     id<ScanForCameraNotifier> notifier;
+    int mode;
 }
 
 
@@ -37,6 +38,7 @@
 
 @property (nonatomic, assign) id<ScanForCameraNotifier> notifier;
 
+-(id) initWithNotifier:(id<ScanForCameraNotifier>) caller withMode:(int) scanMode;
 -(id) initWithNotifier:(id<ScanForCameraNotifier>) caller;
 
 - (void) scan_for_devices;

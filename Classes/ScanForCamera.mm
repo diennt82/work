@@ -7,7 +7,8 @@
 //
 
 #import "ScanForCamera.h"
-
+#define NORMAL 0
+#define BONJOUR 1
 
 @implementation ScanForCamera
 
@@ -34,10 +35,22 @@
 	bc_addr = @"";
 	own_addr = @"";
 	self.scan_results = [[NSMutableArray alloc]init];
-    self.notifier = caller; 
+    self.notifier = caller;
+    mode = NORMAL;
 	return self;
 }
 
+-(id) initWithNotifier:(id<ScanForCameraNotifier>) caller withMode:(int) scanMode
+{
+    [super init];
+	next_profile_index = 0;
+	bc_addr = @"";
+	own_addr = @"";
+	self.scan_results = [[NSMutableArray alloc]init];
+    self.notifier = caller;
+    mode = scanMode;
+	return self;
+}
 
 - (void) dealloc
 {
@@ -209,8 +222,14 @@
             outArray = [[NSArray alloc]initWithArray:scan_results
                                            copyItems:NO];
         }
-        
-        [self.notifier scan_done:outArray];
+        if (mode == NORMAL)
+        {
+            [self.notifier scan_done:outArray];
+        }
+        else
+        {
+            [self.notifier scanDoneWithBonjour:outArray];
+        }
      }
     else {
         NSLog(@"Scan Done without notifier"); 
