@@ -238,7 +238,7 @@
 "information" = "Informazioni";
 
 /* No comment provided by engineer. */
-"information_msg" = "Monitor ovunque\nVersione Applicazione: %1$@\nVersione Firmware:%2$@,\nMonitor ovunque \@ Tutti i diritti riservati.\nIndirizzo videocamera:%3$@";
+"information_msg" = "Monitor ovunque\nVersione Applicazione: %1$@\nVersione Firmware:%2$@,\nMonitor ovunque \@ Tutti i diritti riservati.";
 
 /* No comment provided by engineer. */
 "Invalid_Camera_Name" = "Invalid Camera Name";

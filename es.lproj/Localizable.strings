@@ -238,7 +238,7 @@
 "information" = "Información";
 
 /* No comment provided by engineer. */
-"information_msg" = "Versión de Aplicación\n Monitor Everywhere (vigilar desde todas partes): %1$@\nVersión Firmware:%2$@,\nMonitor Everywhere (vigilar desde todas partes) \@ Todo los derechos reservados.\nDirección Cámara:%3$@";
+"information_msg" = "Versión de Aplicación\n Monitor Everywhere (vigilar desde todas partes): %1$@\nVersión Firmware:%2$@,\nMonitor Everywhere (vigilar desde todas partes) \@ Todo los derechos reservados.";
 
 /* No comment provided by engineer. */
 "Invalid_Camera_Name" = "Invalid Camera Name";
