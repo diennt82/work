@@ -1271,11 +1271,11 @@
     NSString * info = NSLocalizedStringWithDefaultValue(@"information",nil, [NSBundle mainBundle],
                                                        @"Information", nil);
     NSString * msg = NSLocalizedStringWithDefaultValue(@"information_msg",nil, [NSBundle mainBundle],
-                                                       @"Motorola Monitor\nApplication version: %@\nFirmware version:%@,\nMonitoreverywhere \u00A9 All rights Reserved.\nCamera address:%@", nil);
+                                                       @"Motorola Monitor\nApplication version: %@\nFirmware version:%@,\nMonitoreverywhere \u00A9 All rights Reserved.\n", nil);
     NSString * ok = NSLocalizedStringWithDefaultValue(@"Ok",nil, [NSBundle mainBundle],
                                                       @"Ok", nil);
 
-	NSString * information = [NSString stringWithFormat:msg,bundleVersion, version, deviceIp];
+	NSString * information = [NSString stringWithFormat:msg,bundleVersion, version];
 	
 	
 	UIAlertView *alert = [[UIAlertView alloc]
