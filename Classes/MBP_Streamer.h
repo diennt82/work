@@ -112,22 +112,28 @@
     NSThread * readTimeoutThrd ;
     int latest_connection_error;
 
-#if 1
     
     NSInputStream * istream;
     NSOutputStream * ostream;
     
-#endif
+
     
     //Relay 2
     int bytesToRead;
-    NSURLConnection  * relay2_connection;	
+    NSURLConnection  * relay2_connection;
+    
+    
+    //Skip frame
+    int framesToSkip;
+    
+    
 }
-#if 1
+
+@property (nonatomic) int framesToSkip;
 
 @property (nonatomic, retain) NSInputStream * istream;
 @property (nonatomic, retain) NSOutputStream * ostream;
-#endif
+
 @property (nonatomic, retain) NSURLConnection  * relay2_connection;
 @property (nonatomic) int device_port,communication_mode, local_port;
 @property (nonatomic,retain) NSString * device_ip, *remoteViewKey;
@@ -167,8 +173,6 @@
 -(void) startUdtStream;
 
 -(void) switchToUdtRelayServer; 
-- (void) startUdtRelayStream;
-
 
 - (void) PlayPCM:(NSData*)pcm ;
 

@@ -28,6 +28,8 @@
 #define SCAN_TIMEOUT 5*60 //5 mins
 
 #define ALERT_ADDCAM_SERVER_UNREACH 1
+#define ALERT_ADDCAM_MACCHECK_FAILED 2
+
 
 @interface Step_10_ViewController : UIViewController
 {

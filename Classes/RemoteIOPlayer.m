@@ -169,9 +169,17 @@ void interruptionListenerCallback (void    *inUserData,                         
     //get a copy of the objectiveC class "self" we need this to get the next sample to fill the buffer
 	RemoteIOPlayer *remoteIOplayer = (RemoteIOPlayer *)inUserData;
     
+    
+    if (remoteIOplayer == nil)
+    {
+        return;
+    }
+    
     if (interruptionState == kAudioSessionBeginInterruption)
     {
+        
         remoteIOplayer.interruptedOnPlayback = YES;
+        
         
         //Paused
         
@@ -179,7 +187,8 @@ void interruptionListenerCallback (void    *inUserData,                         
         //NSLog(@"Interrupted audio sessin");
     }
     else if ((interruptionState == kAudioSessionEndInterruption) &&
-             remoteIOplayer.interruptedOnPlayback)
+             (remoteIOplayer.interruptedOnPlayback )
+             )
     {
         //Resume
         //NSLog(@"UnInterrupted audio sessin  -- > Restart");

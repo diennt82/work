@@ -2481,6 +2481,12 @@
                            withObject:nil];
     
     
+    if (self.streamer != nil)
+    {
+        self.streamer.framesToSkip = 20;
+    }
+    
+    
 }
 
 
@@ -3753,6 +3759,14 @@
 - (void) checkIfUpgradeIsPossible
 {
 	NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
+    
+   if ( [BMS_Communication doSomeChecksForMac:selected_channel.profile.mac_address] == -2)
+   {
+       NSLog(@"FWupgrade: Fail maccheck ");
+       
+       return;
+   }
+    
     
     
 	NSString * command = [NSString stringWithFormat:@"%@",CHECK_FW_UPGRADE];

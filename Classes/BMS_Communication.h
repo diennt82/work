@@ -151,6 +151,16 @@
 #define IS_CAM_AVAILABLE_UPNP_CMD_PARAM_1 @"&macaddress="
 
 
+@interface MyHTTPURLResponse : NSURLResponse {
+    NSDictionary *myDict;
+}
+- (void)setAllHeaderFields:(NSDictionary *)dictionary;
+-(id) init;
+-(int) statusCode;
+@end
+
+
+
 @interface BMS_Communication : NSObject {
 
 	id obj;
@@ -167,10 +177,16 @@
 	
 }
 
+
+
 @property (nonatomic, assign) id obj; 
 
 
 +(NSString*) getLocalizedMessageForError:(int) err;
+
++(int) doSomeChecksForMac:(NSString *) mac_address;
+
+
 
 - (id) initWithObject: (id) caller Selector: (SEL) success FailSelector: (SEL) fail ServerErr:(SEL) serverErr;
 
@@ -285,6 +301,8 @@
                                  macAddr:(NSString *) mac ;
 
 
-
+- (BOOL)BMS_executeBlockingMacCheckCmdwithUser:(NSString *) user_email
+                                       andPass:(NSString*) user_pass
+                                       macAddr:(NSString *) mac;
 
 @end

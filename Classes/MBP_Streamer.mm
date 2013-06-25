@@ -35,7 +35,7 @@
 @synthesize istream,ostream;
 @synthesize relay2_connection;
 
-
+@synthesize framesToSkip;
 
 
 
@@ -55,6 +55,7 @@
     
 	self.streamingChannel = nil;
 	self.currentOrientation = UIInterfaceOrientationPortrait;
+    framesToSkip = 0;
 	return self;
     
 }
@@ -441,6 +442,8 @@
 	NSLog(@"connect to %@:%d", self.device_ip, self.device_port);
     
 	/**** REset some variables */
+    
+    framesToSkip = 0;
     
 	reconnectLimits = 3;
     
@@ -973,11 +976,17 @@
             
         }
         
-        //NSLog(@"setVideo Image" );
-        [self.videoImage setImage:image];
         
-        //[self.videoImage setImage:[UIImage imageWithData:imageData]];
-        
+        if ( framesToSkip > 0)
+        {
+            //NSLog(@"Skip %d more frames" , framesToSkip);
+            framesToSkip --;
+        }
+        else
+        {
+            //NSLog(@"setVideo Image" );
+            [self.videoImage setImage:image];
+        }
         
         if (self.takeSnapshot == YES)
         {
@@ -1059,26 +1068,7 @@
             
             
             NSLog(@"INIT responseData len = %d  ",[responseData length]);
-#if 0
-            
-            int pos = [Util offsetOfBytes:responseData searchPattern:doubleReturnString];
-            if(pos < 0) {
-                NSLog(@"pos < 0 ");
-                return;
-            }
-            else
-            {
-                NSLog(@"doubleReturnString pos = %d, [responseData length]: %d  ",
-                      pos, [responseData length]);
-                
-            }
-            
-            initialFlag = 0;
-            NSRange range0 = {pos + 4, [responseData length] - pos - 4};
-            
-            
-#else
-            
+
             
             int boundaryString_pos = [Util offsetOfBytes:responseData searchPattern:boundaryString];
             
@@ -1100,10 +1090,7 @@
             
             initialFlag = 0;
             NSRange range0 = {boundaryString_pos, [responseData length] - boundaryString_pos };
-            
-            
-            
-#endif
+
             
             
             // truncate the http header: range0{ 0 ....  first boundaryString }
@@ -1414,7 +1401,15 @@
 /* called from background thread*/
 -(void) updateImage:(UIImage *) img
 {
-    [self.videoImage setImage:img];
+    
+    if ( framesToSkip > 0)
+    {
+        framesToSkip --;
+    }
+    else
+    {
+        [self.videoImage setImage:img];
+    }
     
     
 }
@@ -1542,7 +1537,7 @@
 	/**** REset some variables */
     
 	reconnectLimits = 3;
-    
+    framesToSkip = 0;
 	takeSnapshot = NO;
 	if (recordInProgress == YES)
 	{
@@ -2027,9 +2022,6 @@
                             
                             [self performSelectorOnMainThread:@selector(updateImage:) withObject:image waitUntilDone:YES];
                             
-                            
-                            
-                            //[streamer.videoImage setImage:[UIImage imageWithData:imageData]];
                             
                             
                             if (self.takeSnapshot == YES)

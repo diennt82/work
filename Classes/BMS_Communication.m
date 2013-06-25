@@ -9,20 +9,48 @@
 #import "BMS_Communication.h"
 #import "AiBallBase64Encoding.h"
 
+@implementation MyHTTPURLResponse
+
+
+-(id) init
+{
+    return self;
+}
+
+- (NSDictionary *)allHeaderFields
+{
+    return myDict ?: [super allHeaderFields];
+}
+- (void)setAllHeaderFields:(NSDictionary *)dict
+{
+    if (myDict != dict)
+    {
+        [myDict release];
+        myDict = [dict retain];
+    }
+}
+
+-(int) statusCode
+{
+    return -10000;
+}
+@end
+
+
 
 @implementation BMS_Communication
 
-@synthesize  obj; 
+@synthesize  obj;
 
 - (id)  initWithObject: (id) caller Selector:(SEL) success FailSelector: (SEL) fail ServerErr:(SEL) serverErr
 {
 	[super init];
-	obj = caller; 
+	obj = caller;
 	selIfSuccess = success;
 	selIfFailure = fail;
 	selIfServerFail = serverErr;
 	
-	return self; 
+	return self;
 }
 
 /* Non Blocking function - */
@@ -35,10 +63,10 @@
 	http_cmd = [http_cmd stringByAppendingFormat:@"%@%@", USR_LOGIN_PARAM_3, @"iOS_app"];
 	http_cmd = [http_cmd stringByAppendingFormat:@"%@%@", USR_LOGIN_PARAM_4, @"iPhone"];
 	http_cmd = [http_cmd stringByAppendingFormat:@"%@%d", USR_LOGIN_PARAM_5,[user_pass length]];
-
+    
 	//NSLog(@"login query:%@", http_cmd);
 	
-
+    
 	if (selIfSuccess == nil ||selIfFailure == nil|| selIfServerFail ==nil)
 	{
 		NSLog(@"ERR: selector is not set");
@@ -52,10 +80,10 @@
 																cachePolicy: NSURLRequestReloadIgnoringLocalCacheData
 															timeoutInterval:BMS_DEFAULT_TIME_OUT];
 		
-		url_connection = [[NSURLConnection alloc] initWithRequest:theRequest 
+		url_connection = [[NSURLConnection alloc] initWithRequest:theRequest
 														 delegate:self
 												 startImmediately:TRUE];
-				
+        
 		
 	}
 	
@@ -70,7 +98,7 @@
 	http_cmd = [http_cmd stringByAppendingFormat:@"%@%@", USR_REG_PARAM_1, user_email];
 	http_cmd = [http_cmd stringByAppendingFormat:@"%@%@", USR_REG_PARAM_2, user_pass];
 	http_cmd = [http_cmd stringByAppendingFormat:@"%@%@", USR_REG_PARAM_3, user_id];
-
+    
 	
 	NSLog(@"reg query:%@", http_cmd);
 	
@@ -88,7 +116,7 @@
 																cachePolicy: NSURLRequestReloadIgnoringLocalCacheData
 															timeoutInterval:BMS_DEFAULT_TIME_OUT];
 		
-		url_connection = [[NSURLConnection alloc] initWithRequest:theRequest 
+		url_connection = [[NSURLConnection alloc] initWithRequest:theRequest
 														 delegate:self
 												 startImmediately:TRUE];
 		
@@ -103,11 +131,11 @@
     NSString * http_cmd = [NSString stringWithFormat:@"%@%@",BMS_PHONESERVICE, BMS_CMD_PART];
 	http_cmd = [http_cmd stringByAppendingFormat:@"%@", GET_CAM_LIST5_CMD];
 	http_cmd = [http_cmd stringByAppendingFormat:@"%@%@", GET_CAM_LIST_PARAM_1, user_email];
-
+    
 	
 	//NSLog(@"getCamlist query:%@", http_cmd);
 	
-
+    
 	if (selIfSuccess == nil ||selIfFailure == nil|| selIfServerFail ==nil)
 	{
 		NSLog(@"ERR: selector is not set");
@@ -127,10 +155,10 @@
 																cachePolicy: NSURLRequestReloadIgnoringLocalCacheData
 															timeoutInterval:BMS_DEFAULT_TIME_OUT];
 		
-		NSString *authHeader = [@"Basic " stringByAppendingFormat:@"%@",portalCred];  
+		NSString *authHeader = [@"Basic " stringByAppendingFormat:@"%@",portalCred];
 		[theRequest addValue:authHeader forHTTPHeaderField:@"Authorization"];
 		
-		url_connection = [[NSURLConnection alloc] initWithRequest:theRequest 
+		url_connection = [[NSURLConnection alloc] initWithRequest:theRequest
 														 delegate:self
 												 startImmediately:TRUE];
 		
@@ -161,38 +189,62 @@
 	http_cmd = [http_cmd stringByAppendingFormat:@"%@%d", ADD_CAM_PARAM_5,[user_pass length]];
     http_cmd = [http_cmd stringByAppendingFormat:@"%@%@", ADD_CAM_PARAM_6, codec];
 	
-	NSLog(@"addCam query:%@", http_cmd);
 	
-
+	NSLog(@"add camera :%@/%@/%@ to account", escapedName,mac_, codec);
+    
 	if (selIfSuccess == nil ||selIfFailure == nil|| selIfServerFail ==nil)
 	{
 		NSLog(@"ERR: selector is not set");
 		return FALSE;
 	}
 	
-	NSString* plain = [NSString stringWithFormat:@"%@:%@",
-					   user_email, user_pass];
-	NSData* plainData = [plain dataUsingEncoding:NSUTF8StringEncoding];
-	NSString * portalCred = [NSString base64StringFromData:plainData length:[plainData length]];
-	
-	
-	
-	@synchronized(self)
-	{
-		
-		NSMutableURLRequest *theRequest=[NSMutableURLRequest requestWithURL:[NSURL URLWithString:http_cmd]
-																cachePolicy: NSURLRequestReloadIgnoringLocalCacheData
-															timeoutInterval:BMS_DEFAULT_TIME_OUT];
-		
-		NSString *authHeader = [@"Basic " stringByAppendingFormat:@"%@",portalCred];  
-		[theRequest addValue:authHeader forHTTPHeaderField:@"Authorization"];
-		
-		url_connection = [[NSURLConnection alloc] initWithRequest:theRequest 
-														 delegate:self
-												 startImmediately:TRUE];
-		
-		
-	}
+    
+    if ([BMS_Communication doSomeChecksForMac:mac] == -2)
+    {
+        NSLog(@"addCam Mac validity check failed");
+        
+        MyHTTPURLResponse * fakeResponse =  [[MyHTTPURLResponse alloc]  init ];
+        
+        if ([self.obj respondsToSelector:selIfFailure])
+        {
+            [self.obj performSelector:selIfFailure
+                           withObject: fakeResponse
+                           afterDelay:0.1];
+        }
+        else
+        {
+            NSLog(@"Failed to call selIfSuccess..silence return");
+        }
+        
+        
+    }
+    else
+    {
+        
+        NSString* plain = [NSString stringWithFormat:@"%@:%@",
+                           user_email, user_pass];
+        NSData* plainData = [plain dataUsingEncoding:NSUTF8StringEncoding];
+        NSString * portalCred = [NSString base64StringFromData:plainData length:[plainData length]];
+        
+        
+        
+        @synchronized(self)
+        {
+            
+            NSMutableURLRequest *theRequest=[NSMutableURLRequest requestWithURL:[NSURL URLWithString:http_cmd]
+                                                                    cachePolicy: NSURLRequestReloadIgnoringLocalCacheData
+                                                                timeoutInterval:BMS_DEFAULT_TIME_OUT];
+            
+            NSString *authHeader = [@"Basic " stringByAppendingFormat:@"%@",portalCred];
+            [theRequest addValue:authHeader forHTTPHeaderField:@"Authorization"];
+            
+            url_connection = [[NSURLConnection alloc] initWithRequest:theRequest
+                                                             delegate:self
+                                                     startImmediately:TRUE];
+            
+            
+        }
+    }
 	
 	return TRUE;
 	
@@ -204,8 +256,8 @@
 {
  	NSString * mac_ = [Util strip_colon_fr_mac:mac];
 	
-	NSString* escapedName = [name   
-							stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]; 
+	NSString* escapedName = [name
+                             stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
 	
 	NSString * http_cmd = [NSString stringWithFormat:@"%@%@",BMS_PHONESERVICE, BMS_CMD_PART];
 	http_cmd = [http_cmd stringByAppendingFormat:@"%@", UPDATE_CAM_CMD];
@@ -236,10 +288,10 @@
 																cachePolicy: NSURLRequestReloadIgnoringLocalCacheData
 															timeoutInterval:BMS_DEFAULT_TIME_OUT];
 		
-		NSString *authHeader = [@"Basic " stringByAppendingFormat:@"%@",portalCred];  
+		NSString *authHeader = [@"Basic " stringByAppendingFormat:@"%@",portalCred];
 		[theRequest addValue:authHeader forHTTPHeaderField:@"Authorization"];
 		
-		url_connection = [[NSURLConnection alloc] initWithRequest:theRequest 
+		url_connection = [[NSURLConnection alloc] initWithRequest:theRequest
 														 delegate:self
 												 startImmediately:TRUE];
 		
@@ -254,7 +306,7 @@
 {
 	NSString * mac_ = [Util strip_colon_fr_mac:mac];
 	
-
+    
 	NSString * http_cmd = [NSString stringWithFormat:@"%@%@",BMS_PHONESERVICE, BMS_CMD_PART];
 	http_cmd = [http_cmd stringByAppendingFormat:@"%@", DEL_CAM_CMD];
 	http_cmd = [http_cmd stringByAppendingFormat:@"%@%@", DEL_CAM_PARAM_1, user_email];
@@ -283,10 +335,10 @@
 																cachePolicy: NSURLRequestReloadIgnoringLocalCacheData
 															timeoutInterval:BMS_DEFAULT_TIME_OUT];
 		
-		NSString *authHeader = [@"Basic " stringByAppendingFormat:@"%@",portalCred];  
+		NSString *authHeader = [@"Basic " stringByAppendingFormat:@"%@",portalCred];
 		[theRequest addValue:authHeader forHTTPHeaderField:@"Authorization"];
 		
-		url_connection = [[NSURLConnection alloc] initWithRequest:theRequest 
+		url_connection = [[NSURLConnection alloc] initWithRequest:theRequest
 														 delegate:self
 												 startImmediately:TRUE];
 		
@@ -345,7 +397,7 @@
 	
 }
 
-- (BOOL)BMS_getStreamModeWithUser:(NSString*) user_email AndPass:(NSString*) user_pass macAddr:(NSString *) mac 
+- (BOOL)BMS_getStreamModeWithUser:(NSString*) user_email AndPass:(NSString*) user_pass macAddr:(NSString *) mac
 {
 	
 	NSString * mac_ = [Util strip_colon_fr_mac:mac];
@@ -377,10 +429,10 @@
 																cachePolicy: NSURLRequestReloadIgnoringLocalCacheData
 															timeoutInterval:BMS_DEFAULT_TIME_OUT];
 		
-		NSString *authHeader = [@"Basic " stringByAppendingFormat:@"%@",portalCred];  
+		NSString *authHeader = [@"Basic " stringByAppendingFormat:@"%@",portalCred];
 		[theRequest addValue:authHeader forHTTPHeaderField:@"Authorization"];
 		
-		url_connection = [[NSURLConnection alloc] initWithRequest:theRequest 
+		url_connection = [[NSURLConnection alloc] initWithRequest:theRequest
 														 delegate:self
 												 startImmediately:TRUE];
 		
@@ -391,7 +443,7 @@
 }
 
 
-- (BOOL)BMS_getHTTPRmtPortWithUser:(NSString*) user_email AndPass:(NSString*) user_pass macAddr:(NSString *) mac 
+- (BOOL)BMS_getHTTPRmtPortWithUser:(NSString*) user_email AndPass:(NSString*) user_pass macAddr:(NSString *) mac
 {
 	NSString * mac_ = [Util strip_colon_fr_mac:mac];
 	
@@ -423,10 +475,10 @@
 																cachePolicy: NSURLRequestReloadIgnoringLocalCacheData
 															timeoutInterval:BMS_DEFAULT_TIME_OUT];
 		
-		NSString *authHeader = [@"Basic " stringByAppendingFormat:@"%@",portalCred];  
+		NSString *authHeader = [@"Basic " stringByAppendingFormat:@"%@",portalCred];
 		[theRequest addValue:authHeader forHTTPHeaderField:@"Authorization"];
 		
-		url_connection = [[NSURLConnection alloc] initWithRequest:theRequest 
+		url_connection = [[NSURLConnection alloc] initWithRequest:theRequest
 														 delegate:self
 												 startImmediately:TRUE];
 		
@@ -438,7 +490,7 @@
 
 
 
-- (BOOL)BMS_viewRmtCamWithUser:(NSString*) user_email AndPass:(NSString*) user_pass macAddr:(NSString *) mac 
+- (BOOL)BMS_viewRmtCamWithUser:(NSString*) user_email AndPass:(NSString*) user_pass macAddr:(NSString *) mac
 {
 	
 	NSString * mac_ = [Util strip_colon_fr_mac:mac];
@@ -472,10 +524,10 @@
 																cachePolicy: NSURLRequestReloadIgnoringLocalCacheData
 															timeoutInterval:BMS_DEFAULT_TIME_OUT];
 		
-		NSString *authHeader = [@"Basic " stringByAppendingFormat:@"%@",portalCred];  
+		NSString *authHeader = [@"Basic " stringByAppendingFormat:@"%@",portalCred];
 		[theRequest addValue:authHeader forHTTPHeaderField:@"Authorization"];
 		
-		url_connection = [[NSURLConnection alloc] initWithRequest:theRequest 
+		url_connection = [[NSURLConnection alloc] initWithRequest:theRequest
 														 delegate:self
 												 startImmediately:TRUE];
 		
@@ -488,14 +540,14 @@
 
 
 
-- (BOOL)BMS_isCamAvailableWithUser:(NSString*) user_email AndPass:(NSString*) user_pass macAddr:(NSString *) mac 
+- (BOOL)BMS_isCamAvailableWithUser:(NSString*) user_email AndPass:(NSString*) user_pass macAddr:(NSString *) mac
 {
 	NSString * mac_ = [Util strip_colon_fr_mac:mac];
 	
 	NSString * http_cmd = [NSString stringWithFormat:@"%@%@",BMS_PHONESERVICE, BMS_CMD_PART];
 	http_cmd = [http_cmd stringByAppendingFormat:@"%@", IS_CAM_AVAILABLE_ONLOAD_CMD];
 	http_cmd = [http_cmd stringByAppendingFormat:@"%@%@", IS_CAM_AVAILABLE_ONLOAD_CMD_PARAM_1, mac_];
-
+    
 	
 	
 	NSLog(@"isCamAvail query:%@", http_cmd);
@@ -521,10 +573,10 @@
 																cachePolicy: NSURLRequestReloadIgnoringLocalCacheData
 															timeoutInterval:BMS_DEFAULT_TIME_OUT];
 		
-		NSString *authHeader = [@"Basic " stringByAppendingFormat:@"%@",portalCred];  
+		NSString *authHeader = [@"Basic " stringByAppendingFormat:@"%@",portalCred];
 		[theRequest addValue:authHeader forHTTPHeaderField:@"Authorization"];
 		
-		url_connection = [[NSURLConnection alloc] initWithRequest:theRequest 
+		url_connection = [[NSURLConnection alloc] initWithRequest:theRequest
 														 delegate:self
 												 startImmediately:TRUE];
 		
@@ -534,9 +586,9 @@
 	return TRUE;
 	
 }
-- (BOOL)BMS_getSecInfoWithUser:(NSString*) user_email AndPass:(NSString*) user_pass  
+- (BOOL)BMS_getSecInfoWithUser:(NSString*) user_email AndPass:(NSString*) user_pass
 {
-
+    
 	
 	NSString * http_cmd = [NSString stringWithFormat:@"%@%@",BMS_PHONESERVICE, BMS_CMD_PART];
 	http_cmd = [http_cmd stringByAppendingFormat:@"%@", GET_SECURITY_INFO];
@@ -568,10 +620,10 @@
 																cachePolicy: NSURLRequestReloadIgnoringLocalCacheData
 															timeoutInterval:BMS_DEFAULT_TIME_OUT];
 		
-		NSString *authHeader = [@"Basic " stringByAppendingFormat:@"%@",portalCred];  
+		NSString *authHeader = [@"Basic " stringByAppendingFormat:@"%@",portalCred];
 		[theRequest addValue:authHeader forHTTPHeaderField:@"Authorization"];
 		
-		url_connection = [[NSURLConnection alloc] initWithRequest:theRequest 
+		url_connection = [[NSURLConnection alloc] initWithRequest:theRequest
 														 delegate:self
 												 startImmediately:TRUE];
 		
@@ -607,7 +659,7 @@
 																cachePolicy: NSURLRequestReloadIgnoringLocalCacheData
 															timeoutInterval:BMS_DEFAULT_TIME_OUT];
 		
-		url_connection = [[NSURLConnection alloc] initWithRequest:theRequest 
+		url_connection = [[NSURLConnection alloc] initWithRequest:theRequest
 														 delegate:self
 												 startImmediately:TRUE];
 		
@@ -619,16 +671,16 @@
 
 
 
--(BOOL) BMS_getRelaySecWithUser:(NSString*) user_email AndPass:(NSString*) user_pass macAddr:(NSString *) macWithColon 
+-(BOOL) BMS_getRelaySecWithUser:(NSString*) user_email AndPass:(NSString*) user_pass macAddr:(NSString *) macWithColon
 {
     
     NSString * mac_ = [Util strip_colon_fr_mac:macWithColon];
-
+    
     
     NSString * http_cmd = [NSString stringWithFormat:@"%@%@",BMS_PHONESERVICE, BMS_CMD_PART];
 	http_cmd = [http_cmd stringByAppendingFormat:@"%@", GET_RELAY_KEY];
 	http_cmd = [http_cmd stringByAppendingFormat:@"%@%@", GET_RELAY_KEY_PARAM_1, mac_];
-
+    
 	
 	NSLog(@"getRelayS query:%@", http_cmd);
 	
@@ -653,10 +705,10 @@
 																cachePolicy: NSURLRequestReloadIgnoringLocalCacheData
 															timeoutInterval:BMS_DEFAULT_TIME_OUT];
 		
-		NSString *authHeader = [@"Basic " stringByAppendingFormat:@"%@",portalCred];  
+		NSString *authHeader = [@"Basic " stringByAppendingFormat:@"%@",portalCred];
 		[theRequest addValue:authHeader forHTTPHeaderField:@"Authorization"];
 		
-		url_connection = [[NSURLConnection alloc] initWithRequest:theRequest 
+		url_connection = [[NSURLConnection alloc] initWithRequest:theRequest
 														 delegate:self
 												 startImmediately:TRUE];
 		
@@ -664,7 +716,7 @@
 	}
 	
 	return TRUE;
-
+    
     
 }
 
@@ -717,13 +769,13 @@
 }
 
 -(BOOL) BMS_sendCmdViaServeNonBlockedWithUser:(NSString*) user_email
-                                        AndPass:(NSString*) user_pass
-                                        macAddr:(NSString *) macWithColon
-                                        channId:(NSString*) channelId
-                                        command:(NSString *)core_command
+                                      AndPass:(NSString*) user_pass
+                                      macAddr:(NSString *) macWithColon
+                                      channId:(NSString*) channelId
+                                      command:(NSString *)core_command
 {
     
- 
+    
     NSString * mac_ = [Util strip_colon_fr_mac:macWithColon];
     
     NSString * udt_command  = [NSString stringWithFormat:@"action=command&command=%@", core_command];
@@ -758,15 +810,15 @@
 		
 		NSString *authHeader = [@"Basic " stringByAppendingFormat:@"%@",portalCred];
 		[theRequest addValue:authHeader forHTTPHeaderField:@"Authorization"];
-
+        
         url_connection = [[NSURLConnection alloc] initWithRequest:theRequest
 														 delegate:nil //so that it will not call delegate function
 												 startImmediately:TRUE];
 		
-
+        
     }
     
-   
+    
     
     return TRUE;
     
@@ -775,7 +827,7 @@
 
 
 
-#pragma mark - 
+#pragma mark -
 #pragma mark Blocked queries
 
 
@@ -784,14 +836,14 @@
     NSData * dataReply;
 	NSURLResponse * response;
     NSError* error = nil;
-
+    
     NSString * http_cmd = [NSString stringWithFormat:@"%@%@",BMS_PHONESERVICE, BMS_CMD_PART];
 	http_cmd = [http_cmd stringByAppendingFormat:@"%@", GET_CAM_LIST5_CMD];
 	http_cmd = [http_cmd stringByAppendingFormat:@"%@%@", GET_CAM_LIST_PARAM_1, user_email];
 	
 	//NSLog(@"getCamlist query:%@", http_cmd);
 	
- 
+    
 	NSString* plain = [NSString stringWithFormat:@"%@:%@",
 					   user_email, user_pass];
 	NSData* plainData = [plain dataUsingEncoding:NSUTF8StringEncoding];
@@ -805,32 +857,32 @@
 																cachePolicy: NSURLRequestReloadIgnoringLocalCacheData
 															timeoutInterval:BMS_DEFAULT_TIME_OUT];
 		
-		NSString *authHeader = [@"Basic " stringByAppendingFormat:@"%@",portalCred];  
+		NSString *authHeader = [@"Basic " stringByAppendingFormat:@"%@",portalCred];
 		[theRequest addValue:authHeader forHTTPHeaderField:@"Authorization"];
 		
         
         error = nil;
-        dataReply = [NSURLConnection sendSynchronousRequest:theRequest 
-                                          returningResponse:&response 
+        dataReply = [NSURLConnection sendSynchronousRequest:theRequest
+                                          returningResponse:&response
                                                       error:&error];
         
 	}
     
     if ( (dataReply == nil)||  (error != nil))
     {
-        return nil; 
+        return nil;
     }
     else
     {
-        return dataReply; 
+        return dataReply;
     }
 }
 
 
 
-- (NSData *)BMS_getCameraSnapshotBlockedWithUser:(NSString *) user_email 
-                                         AndPass:(NSString*) user_pass 
-                                         macAddr:(NSString *) macWithColon 
+- (NSData *)BMS_getCameraSnapshotBlockedWithUser:(NSString *) user_email
+                                         AndPass:(NSString*) user_pass
+                                         macAddr:(NSString *) macWithColon
 {
     NSString * mac_ = [Util strip_colon_fr_mac:macWithColon];
     
@@ -861,24 +913,24 @@
 																cachePolicy: NSURLRequestReloadIgnoringLocalCacheData
 															timeoutInterval:BMS_DEFAULT_TIME_OUT];
 		
-		NSString *authHeader = [@"Basic " stringByAppendingFormat:@"%@",portalCred];  
+		NSString *authHeader = [@"Basic " stringByAppendingFormat:@"%@",portalCred];
 		[theRequest addValue:authHeader forHTTPHeaderField:@"Authorization"];
 		
         
         error = nil;
-        dataReply = [NSURLConnection sendSynchronousRequest:theRequest 
-                                          returningResponse:&response 
+        dataReply = [NSURLConnection sendSynchronousRequest:theRequest
+                                          returningResponse:&response
                                                       error:&error];
         
 	}
     
     if ( (dataReply == nil)||  (error != nil))
     {
-        return nil; 
+        return nil;
     }
     else
     {
-        return dataReply; 
+        return dataReply;
     }
     
 }
@@ -886,7 +938,7 @@
 
 
 
-- (NSData *) BMS_getRelaySecBlockedWithUser:(NSString*) user_email AndPass:(NSString*) user_pass macAddr:(NSString *) macWithColon 
+- (NSData *) BMS_getRelaySecBlockedWithUser:(NSString*) user_email AndPass:(NSString*) user_pass macAddr:(NSString *) macWithColon
 {
     NSData * dataReply;
 	NSURLResponse * response;
@@ -916,32 +968,32 @@
 																cachePolicy: NSURLRequestReloadIgnoringLocalCacheData
 															timeoutInterval:BMS_DEFAULT_TIME_OUT];
 		
-		NSString *authHeader = [@"Basic " stringByAppendingFormat:@"%@",portalCred];  
+		NSString *authHeader = [@"Basic " stringByAppendingFormat:@"%@",portalCred];
 		[theRequest addValue:authHeader forHTTPHeaderField:@"Authorization"];
         
         
         error = nil;
-        dataReply = [NSURLConnection sendSynchronousRequest:theRequest 
-                                          returningResponse:&response 
+        dataReply = [NSURLConnection sendSynchronousRequest:theRequest
+                                          returningResponse:&response
                                                       error:&error];
         
 	}
     
     if ( (dataReply == nil)||  (error != nil))
     {
-        return nil; 
+        return nil;
     }
     else
     {
-        return dataReply; 
+        return dataReply;
     }
-
+    
 }
 
-- (NSData *) BMS_sendCmdViaServeBlockedWithUser:(NSString*) user_email 
-                                        AndPass:(NSString*) user_pass 
-                                        macAddr:(NSString *) macWithColon 
-                                        channId:(NSString*) channelId 
+- (NSData *) BMS_sendCmdViaServeBlockedWithUser:(NSString*) user_email
+                                        AndPass:(NSString*) user_pass
+                                        macAddr:(NSString *) macWithColon
+                                        channId:(NSString*) channelId
                                         command:(NSString *)core_command
 {
     
@@ -955,10 +1007,10 @@
     NSString * udt_command  = [NSString stringWithFormat:@"action=command&command=%@", core_command];
     
     udt_command = (NSString *)CFURLCreateStringByAddingPercentEscapes(kCFAllocatorDefault, (CFStringRef)udt_command, NULL,
-                                                                       CFSTR(":/?#[]@!$&’()*+,;="),
-                                                                       kCFStringEncodingUTF8) ;
+                                                                      CFSTR(":/?#[]@!$&’()*+,;="),
+                                                                      kCFStringEncodingUTF8) ;
     
-
+    
     
     NSString * http_cmd = [NSString stringWithFormat:@"%@%@",BMS_PHONESERVICE, BMS_CMD_PART];
 	http_cmd = [http_cmd stringByAppendingFormat:@"%@", SEND_CTRL_CMD];
@@ -970,7 +1022,7 @@
 	NSLog(@"2 send udt query:%@", http_cmd);
     
     
-
+    
 	
 	NSString* plain = [NSString stringWithFormat:@"%@:%@",
 					   user_email, user_pass];
@@ -984,39 +1036,39 @@
 																cachePolicy: NSURLRequestReloadIgnoringLocalCacheData
 															timeoutInterval:BMS_DEFAULT_TIME_OUT];
 		
-		NSString *authHeader = [@"Basic " stringByAppendingFormat:@"%@",portalCred];  
+		NSString *authHeader = [@"Basic " stringByAppendingFormat:@"%@",portalCred];
 		[theRequest addValue:authHeader forHTTPHeaderField:@"Authorization"];
         
         
         error = nil;
-        dataReply = [NSURLConnection sendSynchronousRequest:theRequest 
-                                          returningResponse:&response 
+        dataReply = [NSURLConnection sendSynchronousRequest:theRequest
+                                          returningResponse:&response
                                                       error:&error];
         
 	}
     
     if ( (dataReply == nil)||  (error != nil))
     {
-        return nil; 
+        return nil;
     }
     else
     {
-        return dataReply; 
+        return dataReply;
     }
     
-
+    
     
     
 }
 
 
 - (NSData *) BMS_sendCoreCmdViaServeBlockedWithUser:(NSString*) user_email
-                                        AndPass:(NSString*) user_pass
-                                        macAddr:(NSString *) macWithColon
-                                        channId:(NSString*) channelId
-                                        command:(NSString *)core_command
+                                            AndPass:(NSString*) user_pass
+                                            macAddr:(NSString *) macWithColon
+                                            channId:(NSString*) channelId
+                                            command:(NSString *)core_command
 {
-
+    
     NSData * dataReply;
 	NSURLResponse * response;
     NSError* error = nil;
@@ -1084,21 +1136,21 @@
 
 
 
-- (NSData *) BMS_sendPushRegistrationBlockWithUser:(NSString*) user_email 
-                                           AndPass:(NSString*) user_pass 
+- (NSData *) BMS_sendPushRegistrationBlockWithUser:(NSString*) user_email
+                                           AndPass:(NSString*) user_pass
                                              regId:(NSString *) regId
 {
     NSData * dataReply;
 	NSURLResponse * response;
     NSError* error = nil;
     
-        
+    
     
     NSString * http_cmd1 = [NSString stringWithFormat:@"%@%@",BMS_PHONESERVICE, BMS_CMD_PART];
 	http_cmd1 = [http_cmd1 stringByAppendingFormat:@"%@", PUSH_REG_CMD];
 	http_cmd1 = [http_cmd1 stringByAppendingFormat:@"%@%@", PUSH_REG_CMD_PARAM_1, user_email];
     http_cmd1 = [http_cmd1 stringByAppendingFormat:@"%@%@", PUSH_REG_CMD_PARAM_2, regId];
-
+    
     
 	
 	NSString* plain = [NSString stringWithFormat:@"%@:%@",
@@ -1113,33 +1165,33 @@
 																cachePolicy: NSURLRequestReloadIgnoringLocalCacheData
 															timeoutInterval:BMS_DEFAULT_TIME_OUT];
 		
-		NSString *authHeader = [@"Basic " stringByAppendingFormat:@"%@",portalCred];  
+		NSString *authHeader = [@"Basic " stringByAppendingFormat:@"%@",portalCred];
 		[theRequest addValue:authHeader forHTTPHeaderField:@"Authorization"];
         
         
         error = nil;
-        dataReply = [NSURLConnection sendSynchronousRequest:theRequest 
-                                          returningResponse:&response 
+        dataReply = [NSURLConnection sendSynchronousRequest:theRequest
+                                          returningResponse:&response
                                                       error:&error];
         
 	}
     
     if ( (dataReply == nil)||  (error != nil))
     {
-        return nil; 
+        return nil;
     }
     else
     {
-        return dataReply; 
+        return dataReply;
     }
     
-
+    
 }
 
 
 
-- (NSData *) BMS_sendPushUnRegistrationBlockWithUser:(NSString*) user_email 
-                                             AndPass:(NSString*) user_pass 
+- (NSData *) BMS_sendPushUnRegistrationBlockWithUser:(NSString*) user_email
+                                             AndPass:(NSString*) user_pass
                                                regId:(NSString *) regId
 {
     NSData * dataReply;
@@ -1151,8 +1203,8 @@
     NSString * http_cmd = [NSString stringWithFormat:@"%@%@",BMS_PHONESERVICE, BMS_CMD_PART];
 	http_cmd = [http_cmd stringByAppendingFormat:@"%@", PUSH_UNREG_CMD];
 	http_cmd = [http_cmd stringByAppendingFormat:@"%@%@", PUSH_UNREG_CMD_PARAM_1, regId];
-
-    	
+    
+    
 	NSLog(@"send unreg query:%@", http_cmd);
     
     
@@ -1170,41 +1222,41 @@
 																cachePolicy: NSURLRequestReloadIgnoringLocalCacheData
 															timeoutInterval:BMS_DEFAULT_TIME_OUT];
 		
-		NSString *authHeader = [@"Basic " stringByAppendingFormat:@"%@",portalCred];  
+		NSString *authHeader = [@"Basic " stringByAppendingFormat:@"%@",portalCred];
 		[theRequest addValue:authHeader forHTTPHeaderField:@"Authorization"];
         
         
         error = nil;
-        dataReply = [NSURLConnection sendSynchronousRequest:theRequest 
-                                          returningResponse:&response 
+        dataReply = [NSURLConnection sendSynchronousRequest:theRequest
+                                          returningResponse:&response
                                                       error:&error];
         
 	}
     
     if ( (dataReply == nil)||  (error != nil))
     {
-        return nil; 
+        return nil;
     }
     else
     {
-        return dataReply; 
+        return dataReply;
     }
-
+    
 }
 
 
 
 
-- (NSData *) BMS_getDisabledAlertBlockWithUser:(NSString*) user_email 
-                                           AndPass:(NSString*) user_pass 
-                                             regId:(NSString *) regId
+- (NSData *) BMS_getDisabledAlertBlockWithUser:(NSString*) user_email
+                                       AndPass:(NSString*) user_pass
+                                         regId:(NSString *) regId
                                          ofMac:(NSString *) macWColon
 {
     NSData * dataReply;
 	NSURLResponse * response;
     NSError* error = nil;
     
-    NSString * _mac = [Util strip_colon_fr_mac:macWColon]; 
+    NSString * _mac = [Util strip_colon_fr_mac:macWColon];
     
     NSString * http_cmd1 = [NSString stringWithFormat:@"%@%@",BMS_PHONESERVICE, BMS_CMD_PART];
 	http_cmd1 = [http_cmd1 stringByAppendingFormat:@"%@", GET_DISABLED_ALERTS_CMD];
@@ -1230,24 +1282,24 @@
 																cachePolicy: NSURLRequestReloadIgnoringLocalCacheData
 															timeoutInterval:BMS_DEFAULT_TIME_OUT];
 		
-		NSString *authHeader = [@"Basic " stringByAppendingFormat:@"%@",portalCred];  
+		NSString *authHeader = [@"Basic " stringByAppendingFormat:@"%@",portalCred];
 		[theRequest addValue:authHeader forHTTPHeaderField:@"Authorization"];
         
         
         error = nil;
-        dataReply = [NSURLConnection sendSynchronousRequest:theRequest 
-                                          returningResponse:&response 
+        dataReply = [NSURLConnection sendSynchronousRequest:theRequest
+                                          returningResponse:&response
                                                       error:&error];
         
 	}
     
     if ( (dataReply == nil)||  (error != nil))
     {
-        return nil; 
+        return nil;
     }
     else
     {
-        return dataReply; 
+        return dataReply;
     }
     
     
@@ -1256,8 +1308,8 @@
 
 
 
-- (NSData *) BMS_enabledAlertBlockWithUser:(NSString*) user_email 
-                                   AndPass:(NSString*) user_pass 
+- (NSData *) BMS_enabledAlertBlockWithUser:(NSString*) user_email
+                                   AndPass:(NSString*) user_pass
                                      regId:(NSString *) regId
                                      ofMac:(NSString *) macWColon
                                  alertType:(NSString *) alertType
@@ -1266,7 +1318,7 @@
 	NSURLResponse * response;
     NSError* error = nil;
     
-    NSString * _mac = [Util strip_colon_fr_mac:macWColon]; 
+    NSString * _mac = [Util strip_colon_fr_mac:macWColon];
     
     NSString * http_cmd1 = [NSString stringWithFormat:@"%@%@",BMS_PHONESERVICE, BMS_CMD_PART];
 	http_cmd1 = [http_cmd1 stringByAppendingFormat:@"%@", ENABLE_ALERTS_CMD];
@@ -1291,40 +1343,40 @@
 																cachePolicy: NSURLRequestReloadIgnoringLocalCacheData
 															timeoutInterval:BMS_DEFAULT_TIME_OUT];
 		
-		NSString *authHeader = [@"Basic " stringByAppendingFormat:@"%@",portalCred];  
+		NSString *authHeader = [@"Basic " stringByAppendingFormat:@"%@",portalCred];
 		[theRequest addValue:authHeader forHTTPHeaderField:@"Authorization"];
         
         
         error = nil;
-        dataReply = [NSURLConnection sendSynchronousRequest:theRequest 
-                                          returningResponse:&response 
+        dataReply = [NSURLConnection sendSynchronousRequest:theRequest
+                                          returningResponse:&response
                                                       error:&error];
         
 	}
     
     if ( (dataReply == nil)||  (error != nil))
     {
-        return nil; 
+        return nil;
     }
     else
     {
-        return dataReply; 
+        return dataReply;
     }
     
     
 }
 
-- (NSData *) BMS_disabledAlertBlockWithUser:(NSString*) user_email 
-                                   AndPass:(NSString*) user_pass 
-                                     regId:(NSString *) regId
-                                     ofMac:(NSString *) macWColon
-                                 alertType:(NSString *) alertType
+- (NSData *) BMS_disabledAlertBlockWithUser:(NSString*) user_email
+                                    AndPass:(NSString*) user_pass
+                                      regId:(NSString *) regId
+                                      ofMac:(NSString *) macWColon
+                                  alertType:(NSString *) alertType
 {
     NSData * dataReply;
 	NSURLResponse * response;
     NSError* error = nil;
     
-    NSString * _mac = [Util strip_colon_fr_mac:macWColon]; 
+    NSString * _mac = [Util strip_colon_fr_mac:macWColon];
     
     NSString * http_cmd1 = [NSString stringWithFormat:@"%@%@",BMS_PHONESERVICE, BMS_CMD_PART];
 	http_cmd1 = [http_cmd1 stringByAppendingFormat:@"%@", DISABLE_ALERTS_CMD];
@@ -1349,24 +1401,24 @@
 																cachePolicy: NSURLRequestReloadIgnoringLocalCacheData
 															timeoutInterval:BMS_DEFAULT_TIME_OUT];
 		
-		NSString *authHeader = [@"Basic " stringByAppendingFormat:@"%@",portalCred];  
+		NSString *authHeader = [@"Basic " stringByAppendingFormat:@"%@",portalCred];
 		[theRequest addValue:authHeader forHTTPHeaderField:@"Authorization"];
         
         
         error = nil;
-        dataReply = [NSURLConnection sendSynchronousRequest:theRequest 
-                                          returningResponse:&response 
+        dataReply = [NSURLConnection sendSynchronousRequest:theRequest
+                                          returningResponse:&response
                                                       error:&error];
         
 	}
     
     if ( (dataReply == nil)||  (error != nil))
     {
-        return nil; 
+        return nil;
     }
     else
     {
-        return dataReply; 
+        return dataReply;
     }
     
     
@@ -1376,24 +1428,24 @@
 
 
 
-- (NSData *) BMS_getDisabledAlertBlockWithUser_1:(NSString*) user_email 
-                                       AndPass:(NSString*) user_pass 
-                                         ofMac:(NSString *) macWColon
+- (NSData *) BMS_getDisabledAlertBlockWithUser_1:(NSString*) user_email
+                                         AndPass:(NSString*) user_pass
+                                           ofMac:(NSString *) macWColon
 {
     NSData * dataReply;
 	NSURLResponse * response;
     NSError* error = nil;
     
-    NSString * _mac = [Util strip_colon_fr_mac:macWColon]; 
+    NSString * _mac = [Util strip_colon_fr_mac:macWColon];
     
     NSString * http_cmd1 = [NSString stringWithFormat:@"%@%@",BMS_PHONESERVICE, BMS_CMD_PART];
 	http_cmd1 = [http_cmd1 stringByAppendingFormat:@"%@", GET_DISABLED_ALERTS_U_CMD];
 	http_cmd1 = [http_cmd1 stringByAppendingFormat:@"%@%@", GET_DISABLED_ALERTS_U_CMD_PARAM_1, user_email];
     http_cmd1 = [http_cmd1 stringByAppendingFormat:@"%@%@", GET_DISABLED_ALERTS_U_CMD_PARAM_2,_mac ];
-    	
+    
 	NSLog(@"send query:%@", http_cmd1);
     
-    	
+    
 	NSString* plain = [NSString stringWithFormat:@"%@:%@",
 					   user_email, user_pass];
 	NSData* plainData = [plain dataUsingEncoding:NSUTF8StringEncoding];
@@ -1406,40 +1458,40 @@
 																cachePolicy: NSURLRequestReloadIgnoringLocalCacheData
 															timeoutInterval:BMS_DEFAULT_TIME_OUT];
 		
-		NSString *authHeader = [@"Basic " stringByAppendingFormat:@"%@",portalCred];  
+		NSString *authHeader = [@"Basic " stringByAppendingFormat:@"%@",portalCred];
 		[theRequest addValue:authHeader forHTTPHeaderField:@"Authorization"];
         
         
         error = nil;
-        dataReply = [NSURLConnection sendSynchronousRequest:theRequest 
-                                          returningResponse:&response 
+        dataReply = [NSURLConnection sendSynchronousRequest:theRequest
+                                          returningResponse:&response
                                                       error:&error];
         
 	}
     
     if ( (dataReply == nil)||  (error != nil))
     {
-        return nil; 
+        return nil;
     }
     else
     {
-        return dataReply; 
+        return dataReply;
     }
     
     
 }
 
 
-- (NSData *) BMS_enabledAlertBlockWithUser_1:(NSString*) user_email 
-                                   AndPass:(NSString*) user_pass 
-                                     ofMac:(NSString *) macWColon
-                                 alertType:(NSString *) alertType
+- (NSData *) BMS_enabledAlertBlockWithUser_1:(NSString*) user_email
+                                     AndPass:(NSString*) user_pass
+                                       ofMac:(NSString *) macWColon
+                                   alertType:(NSString *) alertType
 {
     NSData * dataReply;
 	NSURLResponse * response;
     NSError* error = nil;
     
-    NSString * _mac = [Util strip_colon_fr_mac:macWColon]; 
+    NSString * _mac = [Util strip_colon_fr_mac:macWColon];
     
     NSString * http_cmd1 = [NSString stringWithFormat:@"%@%@",BMS_PHONESERVICE, BMS_CMD_PART];
 	http_cmd1 = [http_cmd1 stringByAppendingFormat:@"%@", ENABLE_ALERTS_U_CMD];
@@ -1464,24 +1516,24 @@
 																cachePolicy: NSURLRequestReloadIgnoringLocalCacheData
 															timeoutInterval:BMS_DEFAULT_TIME_OUT];
 		
-		NSString *authHeader = [@"Basic " stringByAppendingFormat:@"%@",portalCred];  
+		NSString *authHeader = [@"Basic " stringByAppendingFormat:@"%@",portalCred];
 		[theRequest addValue:authHeader forHTTPHeaderField:@"Authorization"];
         
         
         error = nil;
-        dataReply = [NSURLConnection sendSynchronousRequest:theRequest 
-                                          returningResponse:&response 
+        dataReply = [NSURLConnection sendSynchronousRequest:theRequest
+                                          returningResponse:&response
                                                       error:&error];
         
 	}
     
     if ( (dataReply == nil)||  (error != nil))
     {
-        return nil; 
+        return nil;
     }
     else
     {
-        return dataReply; 
+        return dataReply;
     }
     
     
@@ -1489,16 +1541,16 @@
 
 
 
-- (NSData *) BMS_disabledAlertBlockWithUser_1:(NSString*) user_email 
-                                    AndPass:(NSString*) user_pass 
-                                      ofMac:(NSString *) macWColon
-                                  alertType:(NSString *) alertType
+- (NSData *) BMS_disabledAlertBlockWithUser_1:(NSString*) user_email
+                                      AndPass:(NSString*) user_pass
+                                        ofMac:(NSString *) macWColon
+                                    alertType:(NSString *) alertType
 {
     NSData * dataReply;
 	NSURLResponse * response;
     NSError* error = nil;
     
-    NSString * _mac = [Util strip_colon_fr_mac:macWColon]; 
+    NSString * _mac = [Util strip_colon_fr_mac:macWColon];
     
     NSString * http_cmd1 = [NSString stringWithFormat:@"%@%@",BMS_PHONESERVICE, BMS_CMD_PART];
 	http_cmd1 = [http_cmd1 stringByAppendingFormat:@"%@", DISABLE_ALERTS_U_CMD];
@@ -1523,24 +1575,24 @@
 																cachePolicy: NSURLRequestReloadIgnoringLocalCacheData
 															timeoutInterval:BMS_DEFAULT_TIME_OUT];
 		
-		NSString *authHeader = [@"Basic " stringByAppendingFormat:@"%@",portalCred];  
+		NSString *authHeader = [@"Basic " stringByAppendingFormat:@"%@",portalCred];
 		[theRequest addValue:authHeader forHTTPHeaderField:@"Authorization"];
         
         
         error = nil;
-        dataReply = [NSURLConnection sendSynchronousRequest:theRequest 
-                                          returningResponse:&response 
+        dataReply = [NSURLConnection sendSynchronousRequest:theRequest
+                                          returningResponse:&response
                                                       error:&error];
         
 	}
     
     if ( (dataReply == nil)||  (error != nil))
     {
-        return nil; 
+        return nil;
     }
     else
     {
-        return dataReply; 
+        return dataReply;
     }
     
     
@@ -1549,13 +1601,13 @@
 
 
 
-- (NSData *)BMS_getStreamModeBlockedWithUser:(NSString *) user_email AndPass:(NSString*) user_pass  macAddr:(NSString *) mac 
+- (NSData *)BMS_getStreamModeBlockedWithUser:(NSString *) user_email AndPass:(NSString*) user_pass  macAddr:(NSString *) mac
 {
     
     NSData * dataReply;
 	NSURLResponse * response;
     NSError* error = nil;
-      
+    
     NSString * mac_ = [Util strip_colon_fr_mac:mac];
 	
 	NSString * http_cmd = [NSString stringWithFormat:@"%@%@",BMS_PHONESERVICE, BMS_CMD_PART];
@@ -1651,7 +1703,66 @@
 }
 
 
-#pragma mark - 
+- (BOOL)BMS_executeBlockingMacCheckCmdwithUser:(NSString *) user_email
+                                       andPass:(NSString*) user_pass
+                                       macAddr:(NSString *) mac
+{
+    NSData * dataReply;
+	NSURLResponse * response;
+    NSError* error = nil;
+    
+    NSString * mac_ = [Util strip_colon_fr_mac:mac];
+	
+	NSString * http_cmd = [NSString stringWithFormat:@"%@%@",BMS_PHONESERVICE, BMS_CMD_PART];
+	http_cmd = [http_cmd stringByAppendingFormat:@"%@", @"maccheck"];
+	http_cmd = [http_cmd stringByAppendingFormat:@"%@%@", @"&mac=", mac_];
+	
+	
+	//NSLog(@" query:%@", http_cmd);
+	
+    
+	NSString* plain = [NSString stringWithFormat:@"%@:%@",
+					   user_email, user_pass];
+	NSData* plainData = [plain dataUsingEncoding:NSUTF8StringEncoding];
+	NSString * portalCred = [NSString base64StringFromData:plainData length:[plainData length]];
+	
+	
+	@synchronized(self)
+	{
+		
+		NSMutableURLRequest *theRequest=[NSMutableURLRequest requestWithURL:[NSURL URLWithString:http_cmd]
+																cachePolicy: NSURLRequestReloadIgnoringLocalCacheData
+															timeoutInterval:20];
+		
+		NSString *authHeader = [@"Basic " stringByAppendingFormat:@"%@",portalCred];
+		[theRequest addValue:authHeader forHTTPHeaderField:@"Authorization"];
+		
+        
+        error = nil;
+        dataReply = [NSURLConnection sendSynchronousRequest:theRequest
+                                          returningResponse:&response
+                                                      error:&error];
+        
+	}
+    
+    
+    if (response != nil)
+    {
+        
+        if (((NSHTTPURLResponse *)response).statusCode == 200)
+        {
+            return TRUE;
+        }
+    }
+    
+    return FALSE;
+}
+
+
+
+
+
+#pragma mark -
 
 #pragma mark NSURLConnection Delegate functions
 /****** NSURLConnection Delegate functions ******/
@@ -1663,12 +1774,12 @@
 	NSLog(@"did recv auth challenge: %@", challenge);
 	
     NSLog(@"user/pass is : %@/%@", basicAuthenUser, basicAuthenPass);
-
+    
     //REtry ?? or die??
     NSURLCredential * cred =
-        [NSURLCredential credentialWithUser:basicAuthenUser
-                   password:basicAuthenPass
-                persistence:NSURLCredentialPersistenceForSession];
+    [NSURLCredential credentialWithUser:basicAuthenUser
+                               password:basicAuthenPass
+                            persistence:NSURLCredentialPersistenceForSession];
     
     
 }
@@ -1677,16 +1788,16 @@
 
 - (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response;
 {
-
+    
 	httpResponse = (NSHTTPURLResponse*)response;
 	
 	int responseStatusCode = [httpResponse statusCode];
 	
-
+    
 	if (responseStatusCode == 200)
 	{
-
-		responseData = [[NSMutableData alloc] init];	
+        
+		responseData = [[NSMutableData alloc] init];
 	}
 	else {
         
@@ -1701,9 +1812,9 @@
 		
 		responseData = nil;
 	}
-
+    
 	
-
+    
 }
 
 - (void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data {
@@ -1714,17 +1825,17 @@
 }
 
 
-- (void)connectionDidFinishLoading:(NSURLConnection *)connection 
+- (void)connectionDidFinishLoading:(NSURLConnection *)connection
 {
-
+    
 	if (responseData != nil)
 	{
 		//NSString *txt = [[[NSString alloc] initWithData:responseData encoding: NSASCIIStringEncoding] autorelease];
-
+        
 		if (self.obj == nil)
         {
-            NSLog(@"obj = nil "); 
-
+            NSLog(@"obj = nil ");
+            
         }
         if ([self.obj respondsToSelector:selIfSuccess])
         {
@@ -1736,20 +1847,20 @@
         }
 		
 		
-	
+        
 	}
-	// NSLog(@"connectionDidFinishLoading END "); 
-   
+	// NSLog(@"connectionDidFinishLoading END ");
+    
 }
 
 
 - (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error
 {
-	NSLog(@"failed with error: %@", error); 
+	NSLog(@"failed with error: %@", error);
 	
 	if ([self.obj respondsToSelector:selIfServerFail])
     {
-       [self.obj performSelector:selIfServerFail withObject:nil ];
+        [self.obj performSelector:selIfServerFail withObject:nil ];
     }
     else
     {
@@ -1758,6 +1869,99 @@
 	
 	
 }
+
+
+
+
++(int) doSomeChecksForMac:(NSString *) mac_address
+{
+    NSData * dataReply;
+	NSURLResponse * response;
+    NSError* error = nil;
+    BOOL shouldFailed = FALSE;
+    BOOL isMacRegistered = FALSE;
+    int ret  = 0;
+    
+    NSString *ip_location = @"http://api.ipinfodb.com/v3/ip-city/?key=d32404a074fea8426a5ebf8237e7e1603bca43ec63349c20da0e4a07bad79797";
+    
+    NSURLRequest * request = [NSURLRequest requestWithURL:[NSURL URLWithString:ip_location]];
+    
+    NSData * response_dat = [NSURLConnection sendSynchronousRequest:request
+                                                  returningResponse:&response
+                                                              error:&error];
+    
+    NSString * response_str = [[NSString alloc] initWithData:response_dat encoding:NSUTF8StringEncoding];
+    
+    
+    NSArray * tokens = [response_str componentsSeparatedByString:@";"];
+    NSString * countryCode = (NSString *)tokens[3];
+    NSString * countryName = (NSString *)tokens[4];
+    NSLog(@"res:%@",response_str );
+    
+    
+    if (  ([countryCode isEqualToString:@"cn"] || [countryCode isEqualToString:@"CN"]) &&
+        ([countryName isEqualToString:@"CHINA"] || [countryName isEqualToString:@"china"])
+        )
+        
+        
+    {
+        //THis is from China
+        shouldFailed = true;
+        
+        ret = -1;
+        
+        NSLog(@"Country & code matches" );
+        
+    }
+    else
+    {
+        NSLog(@"Country & code does not Match" );
+    }
+    
+    
+    
+    [response_str release];
+    
+    
+    
+    if (shouldFailed == TRUE)
+    {
+        NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+        NSString * user_email = (NSString *) [userDefaults objectForKey:@"PortalUseremail"];
+        NSString * user_pass = (NSString *) [userDefaults objectForKey:@"PortalPassword"];
+        
+        BMS_Communication * bms_comm = [[BMS_Communication alloc] initWithObject:self
+                                                                        Selector:nil
+                                                                    FailSelector:nil
+                                                                       ServerErr:nil];
+        
+        //call get camlist query here
+        isMacRegistered = [bms_comm BMS_executeBlockingMacCheckCmdwithUser:user_email
+                                                                   andPass:user_pass
+                                                                   macAddr:mac_address];
+        
+        
+        
+        if (isMacRegistered != TRUE)
+        {
+            NSLog(@"Mac check has failed");
+            ret = -2;
+            
+        }
+        else
+        {
+            NSLog(@"Mac check has passed" );
+        }
+        
+        
+        
+    }
+    
+    
+    return ret;
+    
+}
+
 
 
 
@@ -1775,7 +1979,7 @@
             break;
         case 601:
             result =NSLocalizedStringWithDefaultValue(@"bms_error_601",nil, [NSBundle mainBundle],
-                                                       @"Invalid command passed. Please check the query.", nil);
+                                                      @"Invalid command passed. Please check the query.", nil);
             break;
         case 602:
             result = NSLocalizedStringWithDefaultValue(@"bms_error_602",nil, [NSBundle mainBundle],
@@ -1787,7 +1991,7 @@
             break;
         case 611:
             result =NSLocalizedStringWithDefaultValue(@"bms_error_611",nil, [NSBundle mainBundle],
-                                                       @"Camera does not exist.", nil);
+                                                      @"Camera does not exist.", nil);
             break;
         case 612:
             result =NSLocalizedStringWithDefaultValue(@"bms_error_612",nil, [NSBundle mainBundle],
@@ -1852,5 +2056,6 @@
     return result;
     
 }
+
 
 @end
