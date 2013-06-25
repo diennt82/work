@@ -102,7 +102,7 @@
     
     if (delegate != nil)
     {
-        [delegate sendStatus:9];
+        [delegate sendStatus:SCAN_BONJOUR_CAMERA];
     }
     //NSLog(@"UserAccount: query_camera_list_blocked END");
 }

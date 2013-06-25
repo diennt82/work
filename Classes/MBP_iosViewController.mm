@@ -1450,9 +1450,20 @@ return self;
 
     NSLog(@"cam:%@ is in Local? %d fw:%@", cp.mac_address, cp.isInLocal, cp.fw_version);
     
-    if ( (nextCameraToScanIndex+1) <[self.restored_profiles count])
+    [self scanNextIndex:(++nextCameraToScanIndex)];
+}
+
+- (void) scanNextIndex:(int) index
+{
+    // Stop scanning
+    if (index == [self.restored_profiles count])
     {
-        
+        [self finish_scanning];
+    }
+    // this camera at index has not been scanned
+    else if (index < [self.restored_profiles count] &&
+        ((CamProfile *)[self.restored_profiles objectAtIndex:index]).hasUpdateLocalStatus == NO)
+    {
         if (dashBoard != nil)
         {
             NSLog(@"reload dashboard in scan_done");
@@ -1460,15 +1471,22 @@ return self;
             
         }
         
-        
-        nextCameraToScanIndex ++;
-        [self scan_next_camera:self.restored_profiles index:nextCameraToScanIndex];
+        [self scan_next_camera:self.restored_profiles index:index];
     }
-    else
+    // this camera at index has been scanned
+    else if (index < [self.restored_profiles count] &&
+             ((CamProfile *)[self.restored_profiles objectAtIndex:index]).hasUpdateLocalStatus == YES)
     {
-        NSLog(@"Stop Scanning");
-        [self finish_scanning];
+        if (dashBoard != nil)
+        {
+            NSLog(@"reload dashboard in scan_done");
+            [dashBoard.cameraList reloadData];
+            
+        }
+        
+        [self scanNextIndex:(++index)];
     }
+    
 }
 
 - (void)finish_scanning
@@ -1842,125 +1860,22 @@ return self;
 #pragma mark Bonjour Method
 -(void) scanDevicesWithBonjourList:(NSArray *) cpList
 {
-    nextCameraToScanIndex = 0;
-    [self scanCameraWithBonjour:cpList index: nextCameraToScanIndex];
-}
-
-- (void) scanCameraWithBonjour:(NSArray *) cameraList index:(int) index
-{
-    NSMutableArray * finalResult = [[NSMutableArray alloc] init];
-    CamProfile * cp = [self.restored_profiles objectAtIndex:index];
-    if (cp != nil && cp.mac_address != nil)
+    // update all cameras are available in cpList
+    for (CamProfile * cam in self.restored_profiles)
     {
-        BOOL found = NO;
-        
-        for (CamProfile * cam in cameraList)
+        for (CamProfile * cp in cpList)
         {
-            if ([cp.mac_address isEqualToString:cam.mac_address])
+            if ([cam.mac_address isEqualToString:cp.mac_address])
             {
-                found = YES;
-                [finalResult addObject:cp];
-                [self performSelector:@selector(scanDoneWithBonjour:)
-                           withObject:finalResult afterDelay:0.1];
+                cam.ip_address = cp.ip_address;
+                cam.isInLocal = YES;
+                cam.port = 80;
+                cam.hasUpdateLocalStatus = YES;
             }
         }
-        
-        if (!found)
-        {
-            [self scanForCamera:cp];
-        }
     }
     
-    [finalResult release];
-}
-
--(void) scanDoneWithBonjour:(NSArray *) scan_result
-{
-    CamProfile * camera = [self.restored_profiles objectAtIndex:nextCameraToScanIndex];
-    if (scan_result == nil || [scan_result count] == 0)
-    {
-        camera.isInLocal = NO;
-        camera.hasUpdateLocalStatus = YES;
-    }
-    else
-    {
-        camera.ip_address = ((CamProfile *) [scan_result objectAtIndex:0]).ip_address;
-        camera.isInLocal = YES;
-        camera.hasUpdateLocalStatus = YES;
-        camera.port = ((CamProfile*) [scan_result objectAtIndex:0]).port;;//local port
-    }
-    
-    if ( (nextCameraToScanIndex+1) <[self.restored_profiles count])
-    {
-        
-        if (dashBoard != nil)
-        {
-            NSLog(@"reload dashboard in scan_done");
-            [dashBoard.cameraList reloadData];
-            
-        }
-        
-        
-        nextCameraToScanIndex ++;
-        [self scan_next_camera:self.restored_profiles index:nextCameraToScanIndex];
-    }
-    else
-    {
-        NSLog(@"Stop Scanning");
-        // Re-use the finish method cause it 's independent with restore_profiles
-        [self finish_scanning];
-    }
-}
-
--(void) scanForCamera:(CamProfile *) cp
-{
-    NSMutableArray * finalResult = [[NSMutableArray alloc] init];
-    
-    BOOL skipScan = FALSE;
-    
-    cp =(CamProfile *) [self.restored_profiles objectAtIndex:nextCameraToScanIndex];
-    
-    if (cp != nil &&
-        cp.mac_address !=nil)
-    {
-        
-        //Check if we are in the same network as the camera.. IF so
-        // Try to scan .. otherwise... no point ..
-        //20121130: phung: incase the ip address is not valid... also try to scan ..
-        if (cp.ip_address == nil || [self isInTheSameNetworkAsCamera:cp ])
-        {
-            skipScan = [self isCurrentIpAddressValid:cp];
-            
-            if (skipScan)
-            {
-                
-                cp.port = 80;
-                //Dont need to scan.. call scan_done directly
-                [finalResult addObject:cp];
-                [self performSelector:@selector(scanDoneWithBonjour:)
-                           withObject:finalResult afterDelay:0.1];
-                
-            }
-            else // NEED to do local scan <--------- problem here
-            {
-                ScanForCamera * scanner;
-                scanner = [[ScanForCamera alloc] initWithNotifier:self withMode:1];
-                [scanner scan_for_device:cp.mac_address];
-                
-                
-                
-            } /* skipScan = false*/
-            
-        }
-        else
-        {
-            //Skip scanning too and assume we don't get any result
-            [self performSelector:@selector(scanDoneWithBonjour:)
-                       withObject:nil afterDelay:0.1];
-        }
-        
-        
-    }
-    [finalResult release];
+    // Re-scan for whole profiles
+    [self scanNextIndex:0];
 }
 @end

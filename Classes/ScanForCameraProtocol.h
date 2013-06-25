@@ -10,7 +10,6 @@
 
 @protocol ScanForCameraNotifier
 - (void)scan_done:(NSArray *) scan_result;
--(void) scanDoneWithBonjour:(NSArray *) scan_result;
 @end
 
 
