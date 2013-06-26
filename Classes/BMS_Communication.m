@@ -1892,35 +1892,42 @@
     
     NSString * response_str = [[NSString alloc] initWithData:response_dat encoding:NSUTF8StringEncoding];
     
-    
-    NSArray * tokens = [response_str componentsSeparatedByString:@";"];
-    NSString * countryCode = (NSString *)tokens[3];
-    NSString * countryName = (NSString *)tokens[4];
-    NSLog(@"res:%@",response_str );
-    
-    
-    if (  ([countryCode isEqualToString:@"cn"] || [countryCode isEqualToString:@"CN"]) &&
-        ([countryName isEqualToString:@"CHINA"] || [countryName isEqualToString:@"china"])
-        )
-        
-        
+    if (response_str != nil && error == nil)
     {
-        //THis is from China
-        shouldFailed = true;
+        NSArray * tokens = [response_str componentsSeparatedByString:@";"];
         
-        ret = -1;
         
-        NSLog(@"Country & code matches" );
         
+        NSString * countryCode = (NSString *)tokens[3];
+        NSString * countryName = (NSString *)tokens[4];
+        NSLog(@"res:%@",response_str );
+        
+        
+        if (  ([countryCode isEqualToString:@"cn"] || [countryCode isEqualToString:@"CN"]) &&
+            ([countryName isEqualToString:@"CHINA"] || [countryName isEqualToString:@"china"])
+            )
+            
+            
+        {
+            //THis is from China
+            shouldFailed = true;
+            
+            ret = -1;
+            
+            NSLog(@"Country & code matches" );
+            
+        }
+        else
+        {
+            NSLog(@"Country & code does not Match" );
+        }
+        
+        
+        [response_str release];
     }
-    else
-    {
-        NSLog(@"Country & code does not Match" );
-    }
     
     
     
-    [response_str release];
     
     
     

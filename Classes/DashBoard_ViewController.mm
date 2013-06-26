@@ -88,14 +88,7 @@
         
         if (isOffline == TRUE)
         {
-//            UIBarButtonItem *editButton = [[UIBarButtonItem alloc]
-//                                           initWithTitle:@"Edit"
-//                                           style:UIBarButtonItemStyleBordered
-//                                           target:nil
-//                                           action:nil];
-//            
-//            [buttons addObject:editButton];
-//            [editButton release];
+
         }
         else
         {
@@ -281,6 +274,19 @@
     }
 
     
+    
+    //adjust for offline mode
+    if( offlineView != nil && offlineView.isHidden == NO)
+    {
+        
+        offlineView.frame = CGRectMake(0, cameraList.frame.origin.y + cameraList.frame.size.height,
+                                       offlineView.frame.size.width,
+                                       offlineView.frame.size.height);
+    }
+    
+
+    
+    
 }
 
 
@@ -308,24 +314,45 @@
         
         int delta_h =  offlineView.frame.size.height;
         
-        if (self.tabBarController.tabBar.hidden == NO)
-        {
-            delta_h += self.tabBarController.tabBar.frame.size.height;
-        }
+//        self.tabBarController.tabBar.hidden = YES;
+//        
+//        if (self.tabBarController.tabBar.hidden == NO)
+//        {
+//            delta_h += self.tabBarController.tabBar.frame.size.height;
+//        }
+        
+        int newHeight = (cameraList.frame.size.height-delta_h) ;
         
         
         //Adjust table size
         cameraList.frame = CGRectMake(cameraList.frame.origin.x, cameraList.frame.origin.y,
                                       cameraList.frame.size.width,
-                                      cameraList.frame.size.height-delta_h);
-        offlineView.hidden = NO;
+                                      newHeight);
+        
+        
+        
         
         offlineView.frame = CGRectMake(offlineView.frame.origin.x,
                                        cameraList.frame.origin.y + cameraList.frame.size.height,
                                        offlineView.frame.size.width, offlineView.frame.size.height);
         
+        
+        //UIScrollView * scrollView =  (UIScrollView*) [offlineView viewWithTag:1];
+        UIScrollView * scrollView =  (UIScrollView*) [offlineView.subviews objectAtIndex:0];
+        
+        if (scrollView != nil)
+        {
+            [scrollView setContentSize:CGSizeMake(offlineView.frame.size.width,150)];
+        }
+
+        
+        offlineView.hidden = NO;
         //add a subview in layout.
         [self.view addSubview:offlineView];
+        
+        
+        
+        
     }
     else
     {
@@ -409,6 +436,20 @@
 }
 
 
+-(void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation
+{
+    
+    if( offlineView != nil && offlineView.isHidden == NO)
+    {
+        
+        offlineView.frame = CGRectMake(0,  cameraList.frame.origin.y + cameraList.frame.size.height,
+                                       offlineView.frame.size.width, offlineView.frame.size.height);
+    }
+
+    
+    
+}
+
 - (void) willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
 {
     
@@ -430,8 +471,10 @@
                                                    emptyCameraListView.frame.size.width,
                                                    emptyCameraListView.frame.size.height);
         }
-        
         [cameraList reloadData];
+        
+                
+        
 	}
 	else if (orientation == UIInterfaceOrientationPortrait || orientation == UIInterfaceOrientationPortraitUpsideDown)
 	{
@@ -446,11 +489,11 @@
         }
         
         [cameraList reloadData];
+        
+       
     }
 
 
-
-    //[self setupTopBarForEditMode:self.editModeEnabled];
 
 }
 
@@ -869,6 +912,7 @@
         [views release];
         views = [[NSArray alloc]initWithObjects:self,  nil];
     }
+    
     
     tabBarController = [[UITabBarController alloc]init]; 
     [tabBarController setViewControllers:views];

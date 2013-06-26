@@ -1387,46 +1387,6 @@ return self;
 	//Hide it, since we're done
 	self.progressView.hidden = YES;
     
-#if 0
-    CamChannel * ch = nil;
-    /* Rebinding  cameras to restored channel
-     In the case of remote access, the mac address is set to an
-     invalid value "NOTSET" which will not match any MAC address gathered thru
-     scanning.
-     */
-    for (int i = 0; i< [channel_array count]; i++)
-    {
-        ch = (CamChannel*) [channel_array objectAtIndex:i];
-        
-        if ( ch.profile != nil)
-        {
-            for (int j = 0; j < [restored_profiles count]; j++)
-            {
-                CamProfile * cp = (CamProfile *) [restored_profiles objectAtIndex:j];
-                if ( !cp.isSelected //&&
-                    //[cp.mac_address isEqualToString:ch.profile.mac_address]
-                    )
-                {
-                    //Re-bind camera - channel
-                    
-                    [ch setCamProfile:cp];
-                    cp.isSelected = TRUE;
-                    [cp setChannel:ch];
-                    break;
-                    
-                }
-                
-                
-            }
-        }
-        else {
-            
-            //NSLog(@"channel profile = nil");
-        }
-        
-        
-    }
-#endif
     
     //TODO: Need to save offline data here???
     

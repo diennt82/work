@@ -556,8 +556,9 @@
 		cam_entry = [token_list objectAtIndex:i];
         
 		cam_entry_tokens = [cam_entry componentsSeparatedByString:@","];
-		if ([cam_entry_tokens count] != CAM_LIST_ENTRY_NUM_TOKEN)
+		if ([cam_entry_tokens count] < CAM_LIST_ENTRY_NUM_TOKEN)
 		{
+            NSLog(@"error parsing camera list response"); 
 		}
 		else
 		{
@@ -581,16 +582,37 @@
             NSString * local_ip = [cam_entry_tokens  objectAtIndex:8];
             local_ip = [local_ip substringFromIndex:[LOCAL_IP length]];
             
-            NSString * is_Available  = [cam_entry_tokens objectAtIndex:10];
-            is_Available = [is_Available substringFromIndex:[IS_AVAILABLE length]];
+            
+            NSString * is_Available = nil;
+            NSString * codec = nil;
+            NSString * str;
+            NSString * fw_version = nil;
+            
 
-			
-            NSString * codec = [cam_entry_tokens objectAtIndex:11];
-            codec = [codec substringFromIndex:[CODEC length]];
-            
-            NSString * fw_version = [cam_entry_tokens objectAtIndex:12];
-            fw_version = [fw_version substringFromIndex:[CAMERA_FW_VER length]];
-            
+            //Server sometimes responses with malform data -- so we have to do it brute force way
+            //Start from 8 becoz next item can be error
+            for (int i = 8; i< cam_entry_tokens.count; i++)
+            {
+                str = (NSString *) [cam_entry_tokens objectAtIndex:i];
+                if ([str hasPrefix:IS_AVAILABLE])
+                {
+                     is_Available = [str substringFromIndex:[IS_AVAILABLE length]];
+                }
+                else if ([str hasPrefix:CODEC])
+                {
+                    codec = [str substringFromIndex:[CODEC length]];
+                }
+                else if ([str hasPrefix:CAMERA_FW_VER])
+                {
+                    fw_version = [str substringFromIndex:[CAMERA_FW_VER length]];
+
+                }
+            }
+             
+           
+
+		
+                       
             
             cp = [[CamProfile alloc]initWithMacAddr:cam_mac];
             cp.last_comm = last_comm;
