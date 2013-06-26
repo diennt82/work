@@ -1449,20 +1449,20 @@ return self;
     }
 
     NSLog(@"cam:%@ is in Local? %d fw:%@", cp.mac_address, cp.isInLocal, cp.fw_version);
-    
-    [self scanNextIndex:(++nextCameraToScanIndex)];
+    ++ nextCameraToScanIndex;
+    [self scanNextIndex];
 }
 
-- (void) scanNextIndex:(int) index
+- (void) scanNextIndex
 {
     // Stop scanning
-    if (index == [self.restored_profiles count])
+    if (nextCameraToScanIndex == [self.restored_profiles count])
     {
         [self finish_scanning];
     }
     // this camera at index has not been scanned
-    else if (index < [self.restored_profiles count] &&
-        ((CamProfile *)[self.restored_profiles objectAtIndex:index]).hasUpdateLocalStatus == NO)
+    else if (nextCameraToScanIndex < [self.restored_profiles count] &&
+        ((CamProfile *)[self.restored_profiles objectAtIndex:nextCameraToScanIndex]).hasUpdateLocalStatus == NO)
     {
         if (dashBoard != nil)
         {
@@ -1471,11 +1471,11 @@ return self;
             
         }
         
-        [self scan_next_camera:self.restored_profiles index:index];
+        [self scan_next_camera:self.restored_profiles index:nextCameraToScanIndex];
     }
     // this camera at index has been scanned
-    else if (index < [self.restored_profiles count] &&
-             ((CamProfile *)[self.restored_profiles objectAtIndex:index]).hasUpdateLocalStatus == YES)
+    else if (nextCameraToScanIndex < [self.restored_profiles count] &&
+             ((CamProfile *)[self.restored_profiles objectAtIndex:nextCameraToScanIndex]).hasUpdateLocalStatus == YES)
     {
         if (dashBoard != nil)
         {
@@ -1483,8 +1483,8 @@ return self;
             [dashBoard.cameraList reloadData];
             
         }
-        
-        [self scanNextIndex:(++index)];
+        ++nextCameraToScanIndex;
+        [self scanNextIndex];
     }
     
 }
@@ -1876,6 +1876,7 @@ return self;
     }
     
     // Re-scan for whole profiles
-    [self scanNextIndex:0];
+    nextCameraToScanIndex = 0;
+    [self scanNextIndex];
 }
 @end
