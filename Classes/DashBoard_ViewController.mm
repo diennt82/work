@@ -333,7 +333,8 @@
         
         
         offlineView.frame = CGRectMake(offlineView.frame.origin.x,
-                                       cameraList.frame.origin.y + cameraList.frame.size.height,
+                                       /*cameraList.frame.origin.y + cameraList.frame.size.height,*/
+                                       1000,//obscure place
                                        offlineView.frame.size.width, offlineView.frame.size.height);
         
         
