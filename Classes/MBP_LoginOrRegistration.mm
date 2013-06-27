@@ -212,7 +212,7 @@
     
 
     
-#if 0
+#if 1
     BMS_Communication * bms_comm; 
     bms_comm = [[BMS_Communication alloc] initWithObject:self
                                                 Selector:@selector(loginSuccessWithResponse:) 
