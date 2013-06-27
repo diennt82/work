@@ -6,6 +6,10 @@
     #import <Foundation/Foundation.h>
     #import <UIKit/UIKit.h>
     #import "TestFlight.h"
-    //Switch to TFLog for remote loging
-    #define NSLog TFLog
+
+//Does not work very well
+//Switch to TFLog for remote loging
+    //#define NSLog TFLog
+
+
 #endif
