@@ -212,7 +212,7 @@
     
 
     
-    
+#if 0
     BMS_Communication * bms_comm; 
     bms_comm = [[BMS_Communication alloc] initWithObject:self
                                                 Selector:@selector(loginSuccessWithResponse:) 
@@ -220,6 +220,10 @@
                                                ServerErr:@selector(loginFailedServerUnreachable)];
     
     [bms_comm BMS_loginWithUser:self.temp_user_str AndPass:self.temp_pass_str];
+#else 
+    [self loginFailedServerUnreachable];
+#endif
+    
 }
 
 -(BOOL) isCurrentConnection3G

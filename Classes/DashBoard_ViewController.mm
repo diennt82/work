@@ -347,7 +347,7 @@
         if (scrollView != nil && [scrollView isKindOfClass:[UIScrollView class]] )
         {
             UIScrollView* scrollView_ = (UIScrollView*) scrollView;
-            [scrollView_ setContentSize:CGSizeMake(offlineView.frame.size.width,150)];
+            [scrollView_ setContentSize:CGSizeMake(offlineView.frame.size.width,200)];
         }
 
         
