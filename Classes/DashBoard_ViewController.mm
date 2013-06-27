@@ -339,11 +339,15 @@
         
         
         //UIScrollView * scrollView =  (UIScrollView*) [offlineView viewWithTag:1];
-        UIScrollView * scrollView =  (UIScrollView*) [offlineView.subviews objectAtIndex:0];
+        //UIScrollView * scrollView =  (UIScrollView*) [offlineView.subviews objectAtIndex:0];
         
-        if (scrollView != nil)
+        UIView * scrollView =  [offlineView.subviews objectAtIndex:0];
+
+        
+        if (scrollView != nil && [scrollView isKindOfClass:[UIScrollView class]] )
         {
-            [scrollView setContentSize:CGSizeMake(offlineView.frame.size.width,150)];
+            UIScrollView* scrollView_ = (UIScrollView*) scrollView;
+            [scrollView_ setContentSize:CGSizeMake(offlineView.frame.size.width,150)];
         }
 
         
