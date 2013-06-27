@@ -198,7 +198,7 @@
 		return FALSE;
 	}
 	
-    
+#if 0
     if ([BMS_Communication doSomeChecksForMac:mac] == -2)
     {
         NSLog(@"addCam Mac validity check failed");
@@ -219,6 +219,8 @@
         
     }
     else
+#endif
+        
     {
         
         NSString* plain = [NSString stringWithFormat:@"%@:%@",

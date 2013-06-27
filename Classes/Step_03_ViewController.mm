@@ -23,7 +23,7 @@
     if (self) {
         // Custom initialization
         
-         showProgressNextTime= FALSE; 
+        showProgressNextTime= FALSE;
     }
     return self;
 }
@@ -46,7 +46,7 @@
 	// Do any additional setup after loading the view.
     self.navigationItem.title =  NSLocalizedStringWithDefaultValue(@"Detect_Camera",nil, [NSBundle mainBundle],
                                                                    @"Detect Camera", nil);
-
+    
     
     
     self.navigationItem.backBarButtonItem =
@@ -57,16 +57,16 @@
                                      action:nil] autorelease];
     
     task_cancelled  = NO;
-       
+    
     [NSTimer scheduledTimerWithTimeInterval:2.0
                                      target:self
-                                   selector:@selector(checkConnectionToCamera:) 
+                                   selector:@selector(checkConnectionToCamera:)
                                    userInfo:nil
                                     repeats:NO];
     
     self.homeWifiSSID = [CameraPassword fetchSSIDInfo];
     
-        
+    
     NSLog(@"homeWifiSSID: %@", self.homeWifiSSID);
     
     
@@ -82,12 +82,12 @@
                                              selector: @selector(becomeActive)
                                                  name: UIApplicationDidBecomeActiveNotification
                                                object: nil];
-
+    
     [self.view addSubview:self.inProgress];
     self.inProgress.hidden = YES;
     
     
-   // NSLog(@"Open wifi aaaaaaa");
+    // NSLog(@"Open wifi aaaaaaa");
     //Open wifi
     //[[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"prefs:root=WIFI"]];
     
@@ -164,12 +164,12 @@
             BOOL hidden = self.inProgress.hidden;
             [self.inProgress removeFromSuperview];
             
-
+            
             [[NSBundle mainBundle] loadNibNamed:@"Step_03_ViewController" owner:self options:nil];
             [self.view addSubview:self.inProgress];
             self.inProgress.hidden = hidden;
             
-
+            
         }
     }
     
@@ -179,23 +179,23 @@
 
 -(void) dealloc
 {
-    [homeWifiSSID release]; 
+    [homeWifiSSID release];
     [inProgress release];
     [cameraName release];
     [cameraMac release];
-        [super dealloc];
+    [super dealloc];
 }
 
 
 
 - (IBAction)handleButtonPress:(id)sender
 {
-    int tag = ((UIButton*)sender).tag; 
+    int tag = ((UIButton*)sender).tag;
     
     if (tag == OPEN_WIFI_BTN_TAG)
     {
-
-        NSLog(@"Can't Open wifi"); 
+        
+        NSLog(@"Can't Open wifi");
         //Open wifi
         [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"prefs:root=WIFI"]];
     }
@@ -204,7 +204,7 @@
 
 -(void) handleEnteredBackground
 {
-    showProgressNextTime = TRUE; 
+    showProgressNextTime = TRUE;
 }
 
 -(void) becomeActive
@@ -218,34 +218,34 @@
 
 -(void) showProgress:(NSTimer *) exp
 {
-    NSLog(@"show progress "); 
+    NSLog(@"show progress ");
     
     //if (![Step_09_ViewController isWifiConnectionAvailable])
     {
         if (self.inProgress != nil)
         {
             NSLog(@"show progress 01 ");
-            self.inProgress.hidden = NO; 
+            self.inProgress.hidden = NO;
             [self.view bringSubviewToFront:self.inProgress];
             
             
         }
-
+        
         
     }
     
-   
-        
+    
+    
 }
 
 - (void) hideProgess
 {
-    NSLog(@"hide progress"); 
+    NSLog(@"hide progress");
     if (self.inProgress != nil)
     {
-        self.inProgress.hidden = YES; 
+        self.inProgress.hidden = YES;
     }
-
+    
 }
 
 
@@ -255,43 +255,43 @@
 	
 #if TARGET_IPHONE_SIMULATOR != 1
     
-     NSLog(@"checkConnectionToCamera"); 
+    NSLog(@"checkConnectionToCamera");
     
 	NSString * bc1 = @"";
 	NSString * own1 = @"";
 	[MBP_iosViewController getBroadcastAddress:&bc1 AndOwnIp:&own1];
-	//check for ip available before check for SSID to avoid crashing .. 
+	//check for ip available before check for SSID to avoid crashing ..
 	if ([own1 isEqualToString:@""])
 	{
 		NSLog(@"IP is not available.. comeback later..");
-		//check back later.. 
-		[NSTimer scheduledTimerWithTimeInterval: 3// 
+		//check back later..
+		[NSTimer scheduledTimerWithTimeInterval: 3//
 										 target:self
 									   selector:@selector(checkConnectionToCamera:)
 									   userInfo:nil
-										repeats:NO];	
-		return; 
+										repeats:NO];
+		return;
 	}
     
-    NSLog(@"checkConnectionToCamera 01"); 
+    NSLog(@"checkConnectionToCamera 01");
 #endif
 	
     
     
-   
+    
 	NSString * currentSSID = [CameraPassword fetchSSIDInfo];
-
+    
 #if 0 //Dont show any progress
     {
-         NSLog(@"cshow progress 02");
+        NSLog(@"cshow progress 02");
         [self showProgress:nil];
-       
+        
     }
-#endif 
+#endif
     
     
     
-	 NSLog(@"checkConnectionToCamera 03: %@", currentSSID);
+    NSLog(@"checkConnectionToCamera 03: %@", currentSSID);
 	if ([currentSSID hasPrefix:DEFAULT_SSID_PREFIX])
 	{
 		//yeah we're connected ... check for ip??
@@ -303,17 +303,17 @@
 		if ([own hasPrefix:DEFAULT_IP_PREFIX])
 		{
 			
-           
+            
 			//remember the mac address .. very important
 			self.cameraMac = [CameraPassword fetchBSSIDInfo];
 			self.cameraName = currentSSID;
 			
 			NSLog(@"camera mac: %@ ip:%@", self.cameraMac, own );
 			
-			//dont reschedule another wake up 
-            [self hideProgess]; 
-			[self moveToNextStep]; 
-			return; 
+			//dont reschedule another wake up
+            [self hideProgess];
+			[self moveToNextStep];
+			return;
 		}
 		
 	}
@@ -326,52 +326,104 @@
 	}
 	else {
         
-		//check back later.. 
-		[NSTimer scheduledTimerWithTimeInterval: 3// 
+		//check back later..
+		[NSTimer scheduledTimerWithTimeInterval: 3//
 										 target:self
 									   selector:@selector(checkConnectionToCamera:)
 									   userInfo:nil
-										repeats:NO];	
+										repeats:NO];
 	}
 }
 
+
+
 -(void) moveToNextStep
 {
-    NSLog(@"Load step 4"); 
-    //Load the next xib
-    Step_04_ViewController *step04ViewController = nil;
+    HttpCommunication * comm = [[HttpCommunication alloc] init];
+    [comm autorelease];
+    
+    NSString * fw_version = [comm sendCommandAndBlock:GET_VERSION];
     
     
-    
-    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+    if ( fw_version != nil                   &&
+        [fw_version isEqualToString:VERSION_18_037]
+        )
     {
+        //Fatality!!!
+        NSLog(@"Failed validity check -- go back");
         
         
-        step04ViewController = [[Step_04_ViewController alloc]
-                                initWithNibName:@"Step_04_ViewController_ipad" bundle:nil];
+        NSString * msg = nil;
+        NSString * ok = NSLocalizedStringWithDefaultValue(@"Ok",nil, [NSBundle mainBundle],
+                                                          @"Ok", nil);
+        
+        UIAlertView *alert;
+        
+        
+        msg =NSLocalizedStringWithDefaultValue(@"Server_error_maccheck" ,nil, [NSBundle mainBundle],
+                                               @"This camera is not registered. Setup camera failed." , nil);
+        
+        alert = [[UIAlertView alloc]
+                 initWithTitle:NSLocalizedStringWithDefaultValue(@"AddCam_Error" ,nil, [NSBundle mainBundle],
+                                                                 @"AddCam Error" , nil)
+                 message:msg
+                 delegate:self
+                 cancelButtonTitle:ok
+                 otherButtonTitles:nil];
+        
+        alert.tag = ALERT_FWCHECK_FAILED;
+        
+        [alert show];
+        [alert release];
+        
+        
+        
+        
+        
+        
         
     }
     else
     {
         
+        NSLog(@"Load step 4");
+        //Load the next xib
+        Step_04_ViewController *step04ViewController = nil;
         
-        step04ViewController = [[Step_04_ViewController alloc]
-           initWithNibName:@"Step_04_ViewController" bundle:nil];
         
-       
+        
+        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+        {
+            
+            
+            step04ViewController = [[Step_04_ViewController alloc]
+                                    initWithNibName:@"Step_04_ViewController_ipad" bundle:nil];
+            
+        }
+        else
+        {
+            
+            
+            step04ViewController = [[Step_04_ViewController alloc]
+                                    initWithNibName:@"Step_04_ViewController" bundle:nil];
+            
+            
+            
+        }
+        
+        
+        
+        
+        
+        step04ViewController.cameraMac =  self.cameraMac;
+        step04ViewController.cameraName  =self.cameraName;
+        
+        [self.navigationController pushViewController:step04ViewController animated:NO];
+        
+        [step04ViewController release];
         
     }
-
     
-    
-    
-    
-    step04ViewController.cameraMac =  self.cameraMac;
-    step04ViewController.cameraName  =self.cameraName;
-    
-    [self.navigationController pushViewController:step04ViewController animated:NO];
-    
-    [step04ViewController release];
     
     
     
@@ -379,5 +431,36 @@
     
     
 }
+
+-(void) setupFailedFWCheck
+{
+    NSLog(@"setupFailedFWCheck has failed ");
+    //Go back to the beginning
+    [UIApplication sharedApplication].idleTimerDisabled=  NO;
+    [self.navigationController popToRootViewControllerAnimated:NO];
+}
+
+#pragma mark -
+#pragma mark AlertView delegate
+
+
+
+- (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex
+{
+    
+	int tag = alertView.tag;
+    
+    if (tag == ALERT_FWCHECK_FAILED)
+    {
+        ///go back
+        
+        [self setupFailedFWCheck];
+    }
+    
+}
+
+
+#pragma mark -
+
 
 @end

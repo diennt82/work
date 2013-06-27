@@ -12,6 +12,9 @@
 #import "Step_10_ViewController.h"
 
 #define OPEN_WIFI_BTN_TAG 1001
+#define ALERT_FWCHECK_FAILED 2
+
+#define VERSION_18_037 @"get_version: 18_037"
 
 @interface Step_03_ViewController : UIViewController
 {
