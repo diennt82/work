@@ -1450,19 +1450,19 @@ return self;
 
     NSLog(@"cam:%@ is in Local? %d fw:%@", cp.mac_address, cp.isInLocal, cp.fw_version);
     ++ nextCameraToScanIndex;
-    [self scanNextIndex];
+    [self scanNextIndex:&nextCameraToScanIndex];
 }
 
-- (void) scanNextIndex
+- (void) scanNextIndex: (int *) index
 {
     // Stop scanning
-    if (nextCameraToScanIndex == [self.restored_profiles count])
+    if (*index == [self.restored_profiles count])
     {
         [self finish_scanning];
     }
     // this camera at index has not been scanned
-    else if (nextCameraToScanIndex < [self.restored_profiles count] &&
-        ((CamProfile *)[self.restored_profiles objectAtIndex:nextCameraToScanIndex]).hasUpdateLocalStatus == NO)
+    else if (*index < [self.restored_profiles count] &&
+        ((CamProfile *)[self.restored_profiles objectAtIndex:*index]).hasUpdateLocalStatus == NO)
     {
         if (dashBoard != nil)
         {
@@ -1471,11 +1471,11 @@ return self;
             
         }
         
-        [self scan_next_camera:self.restored_profiles index:nextCameraToScanIndex];
+        [self scan_next_camera:self.restored_profiles index:*index];
     }
     // this camera at index has been scanned
-    else if (nextCameraToScanIndex < [self.restored_profiles count] &&
-             ((CamProfile *)[self.restored_profiles objectAtIndex:nextCameraToScanIndex]).hasUpdateLocalStatus == YES)
+    else if (*index < [self.restored_profiles count] &&
+             ((CamProfile *)[self.restored_profiles objectAtIndex:*index]).hasUpdateLocalStatus == YES)
     {
         if (dashBoard != nil)
         {
@@ -1483,8 +1483,8 @@ return self;
             [dashBoard.cameraList reloadData];
             
         }
-        ++nextCameraToScanIndex;
-        [self scanNextIndex];
+        ++(*index);
+        [self scanNextIndex:index];
     }
     
 }
@@ -1877,6 +1877,6 @@ return self;
     
     // Re-scan for whole profiles
     nextCameraToScanIndex = 0;
-    [self scanNextIndex];
+    [self scanNextIndex:&nextCameraToScanIndex];
 }
 @end
