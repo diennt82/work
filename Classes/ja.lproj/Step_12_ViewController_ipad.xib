@@ -152,7 +152,7 @@
 					<object class="IBUILabel" id="698776298">
 						<reference key="NSNextResponder" ref="289681029"/>
 						<int key="NSvFlags">292</int>
-						<string key="NSFrame">{{302, 295}, {257, 44}}</string>
+						<string key="NSFrame">{{231, 295}, {328, 44}}</string>
 						<reference key="NSSuperview" ref="289681029"/>
 						<reference key="NSWindow"/>
 						<reference key="NSNextKeyView" ref="590529613"/>
@@ -162,7 +162,7 @@
 						<int key="IBUIContentMode">7</int>
 						<bool key="IBUIUserInteractionEnabled">NO</bool>
 						<string key="targetRuntimeIdentifier">IBIPadFramework</string>
-						<string key="IBUIText">カメラが見つかりました。</string>
+						<string key="IBUIText">カメラの設定が完了しました。</string>
 						<reference key="IBUITextColor" ref="594577239"/>
 						<nil key="IBUIHighlightedColor"/>
 						<int key="IBUIBaselineAdjustment">0</int>

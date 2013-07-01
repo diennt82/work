@@ -290,7 +290,7 @@
 							<object class="IBUITextView" id="1013873061">
 								<reference key="NSNextResponder" ref="860872968"/>
 								<int key="NSvFlags">301</int>
-								<string key="NSFrame">{{64, 8}, {192, 72}}</string>
+								<string key="NSFrame">{{64, 8}, {192, 41}}</string>
 								<reference key="NSSuperview" ref="860872968"/>
 								<reference key="NSWindow"/>
 								<reference key="NSNextKeyView" ref="135996905"/>
@@ -300,7 +300,7 @@
 								<bool key="IBUIMultipleTouchEnabled">YES</bool>
 								<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
 								<bool key="IBUIEditable">NO</bool>
-								<string key="IBUIText">最初の設定完了後にカメラを探しています。</string>
+								<string key="IBUIText">カメラを探しています。</string>
 								<object class="NSColor" key="IBUITextColor" id="332179470">
 									<int key="NSColorSpace">1</int>
 									<bytes key="NSRGB">MSAxIDEAA</bytes>
@@ -330,7 +330,7 @@
 							<object class="IBUITextView" id="611501158">
 								<reference key="NSNextResponder" ref="860872968"/>
 								<int key="NSvFlags">301</int>
-								<string key="NSFrame">{{40, 78}, {240, 49}}</string>
+								<string key="NSFrame">{{40, 52}, {240, 75}}</string>
 								<reference key="NSSuperview" ref="860872968"/>
 								<reference key="NSWindow"/>
 								<reference key="NSNextKeyView" ref="1013873061"/>
@@ -340,7 +340,8 @@
 								<bool key="IBUIUserInteractionEnabled">NO</bool>
 								<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
 								<bool key="IBUIEditable">NO</bool>
-								<string key="IBUIText">これは、完了するまでに約３分かかります。しばらく、お待ち下さい。</string>
+								<string type="base64-UTF8" key="IBUIText">57SE77yT5YiG56iL5bqm44GL44GL44KK44G+44GZ44CCDeOBl+OBsOOCieOBj+OAgeOBneOBruOBvuOB
+vuOBrueKtuaFi+OBp+OBiuW+heOBoeS4i+OBleOBhOOAgg</string>
 								<reference key="IBUITextColor" ref="332179470"/>
 								<int key="IBUITextAlignment">1</int>
 								<object class="IBUITextInputTraits" key="IBUITextInputTraits">

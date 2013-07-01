@@ -57,7 +57,7 @@
 					<object class="IBUITextView" id="649335591">
 						<reference key="NSNextResponder" ref="435179814"/>
 						<int key="NSvFlags">292</int>
-						<string key="NSFrame">{{10, 57}, {283, 78}}</string>
+						<string key="NSFrame">{{11, 71}, {283, 78}}</string>
 						<reference key="NSSuperview" ref="435179814"/>
 						<reference key="NSWindow"/>
 						<reference key="NSNextKeyView" ref="1018321630"/>
@@ -96,7 +96,7 @@
 					<object class="IBUITextView" id="1005661850">
 						<reference key="NSNextResponder" ref="435179814"/>
 						<int key="NSvFlags">292</int>
-						<string key="NSFrame">{{10, 5}, {310, 30}}</string>
+						<string key="NSFrameSize">{320, 55}</string>
 						<reference key="NSSuperview" ref="435179814"/>
 						<reference key="NSWindow"/>
 						<reference key="NSNextKeyView" ref="649335591"/>
@@ -106,7 +106,7 @@
 						<bool key="IBUIMultipleTouchEnabled">YES</bool>
 						<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
 						<bool key="IBUIEditable">NO</bool>
-						<string key="IBUIText">Wi-Fiネットワークに切替て下さい。：</string>
+						<string key="IBUIText">以下のWi-Fiネットワークに切替えて下さい：</string>
 						<object class="NSColor" key="IBUITextColor" id="388414589">
 							<int key="NSColorSpace">3</int>
 							<bytes key="NSWhite">MQA</bytes>
@@ -150,7 +150,7 @@
 					<object class="IBUITextView" id="79753947">
 						<reference key="NSNextResponder" ref="435179814"/>
 						<int key="NSvFlags">292</int>
-						<string key="NSFrame">{{41, 261}, {259, 57}}</string>
+						<string key="NSFrame">{{41, 268}, {259, 57}}</string>
 						<reference key="NSSuperview" ref="435179814"/>
 						<reference key="NSWindow"/>
 						<reference key="NSNextKeyView" ref="406286057"/>
@@ -255,7 +255,7 @@
 					<object class="IBUILabel" id="1018321630">
 						<reference key="NSNextResponder" ref="435179814"/>
 						<int key="NSvFlags">292</int>
-						<string key="NSFrame">{{51, 39}, {219, 24}}</string>
+						<string key="NSFrame">{{50, 54}, {219, 24}}</string>
 						<reference key="NSSuperview" ref="435179814"/>
 						<reference key="NSWindow"/>
 						<reference key="NSNextKeyView" ref="613766470"/>
@@ -285,7 +285,7 @@
 					<object class="IBUIImageView" id="613766470">
 						<reference key="NSNextResponder" ref="435179814"/>
 						<int key="NSvFlags">292</int>
-						<string key="NSFrame">{{31, 132}, {240, 128}}</string>
+						<string key="NSFrame">{{40, 150}, {240, 128}}</string>
 						<reference key="NSSuperview" ref="435179814"/>
 						<reference key="NSWindow"/>
 						<reference key="NSNextKeyView" ref="79753947"/>
@@ -414,12 +414,12 @@
 							<reference ref="536637571"/>
 							<reference ref="316133179"/>
 							<reference ref="1005661850"/>
-							<reference ref="649335591"/>
-							<reference ref="79753947"/>
-							<reference ref="613766470"/>
-							<reference ref="1018321630"/>
 							<reference ref="462762763"/>
 							<reference ref="1035988290"/>
+							<reference ref="79753947"/>
+							<reference ref="649335591"/>
+							<reference ref="1018321630"/>
+							<reference ref="613766470"/>
 						</array>
 						<reference key="parent" ref="0"/>
 					</object>

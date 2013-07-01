@@ -238,7 +238,7 @@
 								<int key="IBUIContentMode">7</int>
 								<bool key="IBUIUserInteractionEnabled">NO</bool>
 								<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
-								<string key="IBUIText">サウンドアラート</string>
+								<string key="IBUIText">サウンド警告</string>
 								<object class="NSColor" key="IBUITextColor" id="508195145">
 									<int key="NSColorSpace">3</int>
 									<bytes key="NSWhite">MQA</bytes>
@@ -309,7 +309,7 @@
 								<int key="IBUIContentMode">7</int>
 								<bool key="IBUIUserInteractionEnabled">NO</bool>
 								<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
-								<string key="IBUIText">高温度アラート</string>
+								<string key="IBUIText">高温度警告</string>
 								<reference key="IBUITextColor" ref="508195145"/>
 								<reference key="IBUIHighlightedColor" ref="508195145"/>
 								<int key="IBUIBaselineAdjustment">0</int>
@@ -380,7 +380,7 @@
 								<int key="IBUIContentMode">7</int>
 								<bool key="IBUIUserInteractionEnabled">NO</bool>
 								<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
-								<string key="IBUIText">低温度アラート</string>
+								<string key="IBUIText">低温度警告</string>
 								<reference key="IBUITextColor" ref="508195145"/>
 								<reference key="IBUIHighlightedColor" ref="508195145"/>
 								<int key="IBUIBaselineAdjustment">0</int>

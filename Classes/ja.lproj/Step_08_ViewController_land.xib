@@ -96,7 +96,7 @@
 					<object class="IBUITextView" id="1005661850">
 						<reference key="NSNextResponder" ref="435179814"/>
 						<int key="NSvFlags">292</int>
-						<string key="NSFrame">{{160, 0}, {296, 30}}</string>
+						<string key="NSFrame">{{108, 0}, {348, 30}}</string>
 						<reference key="NSSuperview" ref="435179814"/>
 						<reference key="NSWindow"/>
 						<reference key="NSNextKeyView" ref="649335591"/>
@@ -106,7 +106,7 @@
 						<bool key="IBUIMultipleTouchEnabled">YES</bool>
 						<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
 						<bool key="IBUIEditable">NO</bool>
-						<string key="IBUIText">Wi-Fiネットワークに切替て下さい。：</string>
+						<string key="IBUIText">以下のWi-Fiネットワークに切替えて下さい：</string>
 						<object class="NSColor" key="IBUITextColor" id="388414589">
 							<int key="NSColorSpace">3</int>
 							<bytes key="NSWhite">MQA</bytes>

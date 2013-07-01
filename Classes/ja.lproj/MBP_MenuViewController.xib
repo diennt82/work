@@ -82,9 +82,10 @@
 					<object class="IBUIPickerView" id="42191965">
 						<reference key="NSNextResponder" ref="191373211"/>
 						<int key="NSvFlags">-2147483358</int>
-						<string key="NSFrame">{{80, 77}, {160, 216}}</string>
+						<string key="NSFrame">{{60, 77}, {200, 216}}</string>
 						<reference key="NSSuperview" ref="191373211"/>
 						<reference key="NSWindow"/>
+						<reference key="NSNextKeyView"/>
 						<reference key="IBUIBackgroundColor" ref="176120498"/>
 						<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
 						<bool key="IBUIShowsSelectionIndicator">YES</bool>
