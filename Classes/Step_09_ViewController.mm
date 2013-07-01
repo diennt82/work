@@ -103,7 +103,14 @@
 
 -(void) willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
 {
-    
+    UITextField * _userName = (UITextField *)[userName viewWithTag:201];
+    [_userName resignFirstResponder];
+    UITextField * _userPass = (UITextField *)[userPass viewWithTag:202];
+    [_userPass resignFirstResponder];
+    UITextField * _userCPass =(UITextField *) [userCPass viewWithTag:203];
+    [_userCPass resignFirstResponder];
+    UITextField * _userEmail = (UITextField *)[userEmail viewWithTag:204];
+    [_userEmail resignFirstResponder];
 
 }
 
@@ -114,6 +121,7 @@
     
     
     if (interfaceOrientation == UIInterfaceOrientationLandscapeLeft || interfaceOrientation == UIInterfaceOrientationLandscapeRight) {
+        
         if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
         {
 
@@ -194,13 +202,11 @@
     {
         UITextField * txtField = (UITextField*) [userPass viewWithTag:202];
         [txtField becomeFirstResponder];
-
     }
     if (indexPath.row == USERCPASS_INDEX)
     {
         UITextField * txtField = (UITextField*) [userCPass viewWithTag:203];
         [txtField becomeFirstResponder];
-
 
     }
     if (indexPath.row == USEREMAIL_INDEX)
@@ -229,7 +235,13 @@
         return;
     }
     
-    [self animateTextField: textField up: YES];
+    //Just start Animation when the app is landscape mode
+    UIInterfaceOrientation orientation = [[UIApplication sharedApplication] statusBarOrientation];
+    if (orientation == UIInterfaceOrientationLandscapeLeft ||
+        orientation == UIInterfaceOrientationLandscapeRight)
+    {
+        [self animateTextField: textField up: YES];
+    }
 }
 
 
@@ -248,8 +260,12 @@
         return;
     }
 
-    
-    [self animateTextField: textField up: NO];
+    UIInterfaceOrientation orientation = [[UIApplication sharedApplication] statusBarOrientation];
+    if (orientation == UIInterfaceOrientationLandscapeLeft ||
+        orientation == UIInterfaceOrientationLandscapeRight)
+    {
+        [self animateTextField: textField up: NO];
+    }
 }
 
 
@@ -308,7 +324,6 @@
 - (BOOL)textFieldShouldReturn:(UITextField *)textField {
     
     [textField resignFirstResponder];
-    
     return NO;
 }
 -(IBAction) showTermOfUse_:(id) sender
