@@ -15,6 +15,10 @@
 @implementation Step_08_ViewController
 @synthesize  ssid;
 
+@synthesize timeOut;
+@synthesize shouldStopScanning; 
+
+
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
@@ -37,9 +41,9 @@
                                                                   @"Camera Configured" , nil);
     ssidView.text = self.ssid;
     ssidView_1.text = self.ssid;
-    self.navigationItem.hidesBackButton = YES;
+    self.navigationItem.hidesBackButton = YES;    self.navigationItem.backBarButtonItem =
     
-    self.navigationItem.backBarButtonItem =
+
     [[[UIBarButtonItem alloc] initWithTitle:NSLocalizedStringWithDefaultValue(@"Back",nil, [NSBundle mainBundle],
                                                                               @"Back" , nil)
                                       style:UIBarButtonItemStyleBordered
@@ -56,11 +60,23 @@
 
     
     
+    shouldStopScanning = FALSE;
+    
+    timeOut = [NSTimer scheduledTimerWithTimeInterval:2*60.0
+                                 target:self
+                                   selector:@selector(homeWifiScanTimeout:)
+                                   userInfo:nil
+                                    repeats:NO];
+    
+    
+    
 }
 
 -(void) dealloc
 {
     [ssid release];
+    [timeOut release];
+    
     [super dealloc];
     
 }
@@ -123,6 +139,11 @@
 {    
     NSLog(@"Load step 09");
     
+    if (timeOut != nil && [timeOut isValid])
+    {
+        [timeOut invalidate];
+    }
+    
     
     //Load the next xib
     Step_09_ViewController *step09ViewController = nil;
@@ -152,12 +173,57 @@
     
 }
 
+
+
+
+- (void)  setupFailed
+{
+    //Load step 11
+    NSLog(@"Load step 11");
+    
+    
+    //Load the next xib
+    Step_11_ViewController *step11ViewController = nil;
+    
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+    {
+        step11ViewController = [[Step_11_ViewController alloc]
+                                initWithNibName:@"Step_11_ViewController_ipad" bundle:nil];
+    }
+    else
+    {
+        step11ViewController = [[Step_11_ViewController alloc]
+                                initWithNibName:@"Step_11_ViewController" bundle:nil];
+    }
+    
+    
+    [self.navigationController pushViewController:step11ViewController animated:NO];
+    
+    [step11ViewController release];
+    
+    
+}
+
+
+
 #pragma  mark -
 #pragma mark Timer callbacks
 
+-(void) homeWifiScanTimeout: (NSTimer *) expired
+{
+    NSLog(@" Timeout while trying to search for Home Wifi: %@", self.ssid);
+    
+    shouldStopScanning = TRUE;
+    
+}
+
 - (void) checkConnectionToHomeWifi:(NSTimer *) expired
 {
-    
+    if (shouldStopScanning == TRUE)
+    {
+        [self setupFailed];
+        return;   
+    }
     
     NSString * currentSSID = [CameraPassword fetchSSIDInfo];
     

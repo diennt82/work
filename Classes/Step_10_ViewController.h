@@ -28,8 +28,6 @@
 #define SCAN_TIMEOUT 5*60 //5 mins
 
 #define ALERT_ADDCAM_SERVER_UNREACH 1
-#define ALERT_ADDCAM_MACCHECK_FAILED 2
-
 
 @interface Step_10_ViewController : UIViewController
 {
@@ -50,6 +48,10 @@
     NSString *cameraMac, *master_key;
     
     BOOL should_retry_silently ;
+    
+    BOOL shouldStopScanning;
+    NSTimer * timeOut;
+    
 }
 
 @property (nonatomic,assign) IBOutlet UILabel * homeSSID;
@@ -59,6 +61,9 @@
 //@property (nonatomic, assign) IBOutlet UIView * setupFailView, *setupCompleteView;
 
 @property (nonatomic, retain) NSString *cameraMac,  *master_key; 
+@property (nonatomic, retain) NSTimer * timeOut;
+@property (nonatomic) BOOL shouldStopScanning;
+
 
 -(IBAction) startConfigureCamera:(id)sender;
 
