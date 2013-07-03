@@ -582,6 +582,13 @@
         }
         
 		      
+        //Set frame for pttButton
+        //Adjust frame
+        CGRect newFrame = CGRectMake(directionPad.frame.origin.x,
+                                     directionPad.frame.origin.y,
+                                     directionPad.frame.size.width,
+                                     directionPad.frame.size.height) ;
+        pttButton.frame = newFrame;
         
 		//Need to rotate the video - snashot tool bar
         
@@ -664,7 +671,12 @@
                                         options:nil];
         }
 
-        
+        //set frame for pttButton
+        CGRect newFrame = CGRectMake(directionPad.frame.origin.x,
+                                     directionPad.frame.origin.y,
+                                     directionPad.frame.size.width,
+                                     directionPad.frame.size.height) ;
+        pttButton.frame = newFrame;
 		//Rotate the slider
 		zoombarView.transform = CGAffineTransformRotate(zoombarView.transform, -M_PI*0.5);
 		//Initializng the slider value to zero.
