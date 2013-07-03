@@ -68,7 +68,7 @@
 						<int key="IBUIContentHorizontalAlignment">0</int>
 						<int key="IBUIContentVerticalAlignment">0</int>
 						<int key="IBUIButtonType">1</int>
-						<string key="IBUINormalTitle">続ける</string>
+						<string key="IBUINormalTitle">次へ</string>
 						<object class="NSColor" key="IBUIHighlightedTitleColor" id="1072711025">
 							<int key="NSColorSpace">3</int>
 							<bytes key="NSWhite">MQA</bytes>
@@ -178,7 +178,7 @@
 								<int key="IBUIContentMode">7</int>
 								<bool key="IBUIUserInteractionEnabled">NO</bool>
 								<string key="targetRuntimeIdentifier">IBIPadFramework</string>
-								<string key="IBUIText">緑色のLEDが点滅したら、処理を進めて下さい。</string>
+								<string key="IBUIText">緑のLEDが点滅したら、”次へ”ボタンを押して下さい。</string>
 								<object class="NSColor" key="IBUITextColor">
 									<int key="NSColorSpace">1</int>
 									<bytes key="NSRGB">MSAxIDEAA</bytes>
@@ -262,7 +262,7 @@
 								<int key="IBUIContentMode">7</int>
 								<bool key="IBUIUserInteractionEnabled">NO</bool>
 								<string key="targetRuntimeIdentifier">IBIPadFramework</string>
-								<string key="IBUIText">カメラの電源を入れる。</string>
+								<string key="IBUIText">カメラの電源を入れます。</string>
 								<object class="NSColor" key="IBUITextColor">
 									<int key="NSColorSpace">1</int>
 									<bytes key="NSRGB">MSAxIDEAA</bytes>
@@ -510,8 +510,8 @@
 						<int key="objectID">42</int>
 						<reference key="object" ref="1030255043"/>
 						<array class="NSMutableArray" key="children">
-							<reference ref="179141893"/>
 							<reference ref="424733670"/>
+							<reference ref="179141893"/>
 						</array>
 						<reference key="parent" ref="0"/>
 						<string key="objectName">step1</string>

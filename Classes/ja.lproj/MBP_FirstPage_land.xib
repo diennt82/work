@@ -70,7 +70,7 @@
 						<int key="IBUIContentMode">7</int>
 						<bool key="IBUIUserInteractionEnabled">NO</bool>
 						<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
-						<string key="IBUIText">***へようこそ</string>
+						<string key="IBUIText">ようこそ</string>
 						<object class="NSColor" key="IBUITextColor" id="1005797488">
 							<int key="NSColorSpace">3</int>
 							<bytes key="NSWhite">MQA</bytes>
@@ -102,7 +102,7 @@
 						<int key="IBUIContentMode">7</int>
 						<bool key="IBUIUserInteractionEnabled">NO</bool>
 						<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
-						<string key="IBUIText">Monitor Everywhere</string>
+						<string key="IBUIText">Monitor Everywhereへ</string>
 						<reference key="IBUITextColor" ref="1005797488"/>
 						<nil key="IBUIHighlightedColor"/>
 						<int key="IBUIBaselineAdjustment">0</int>
@@ -121,7 +121,7 @@
 					<object class="IBUILabel" id="538067469">
 						<reference key="NSNextResponder" ref="191373211"/>
 						<int key="NSvFlags">256</int>
-						<string key="NSFrame">{{124, 80}, {320, 53}}</string>
+						<string key="NSFrame">{{124, 76}, {320, 53}}</string>
 						<reference key="NSSuperview" ref="191373211"/>
 						<reference key="NSWindow"/>
 						<reference key="NSNextKeyView" ref="842132172"/>
@@ -132,7 +132,7 @@
 						<int key="IBUIContentMode">7</int>
 						<bool key="IBUIUserInteractionEnabled">NO</bool>
 						<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
-						<string key="IBUIText">初めてですか？</string>
+						<string key="IBUIText">初めての方?</string>
 						<reference key="IBUITextColor" ref="1005797488"/>
 						<nil key="IBUIHighlightedColor"/>
 						<int key="IBUIBaselineAdjustment">0</int>
@@ -155,7 +155,7 @@
 						<int key="IBUIContentMode">7</int>
 						<bool key="IBUIUserInteractionEnabled">NO</bool>
 						<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
-						<string key="IBUIText">アカウントを持っていますか？</string>
+						<string key="IBUIText">アカウントを持っている方</string>
 						<reference key="IBUITextColor" ref="1005797488"/>
 						<nil key="IBUIHighlightedColor"/>
 						<int key="IBUIBaselineAdjustment">0</int>
@@ -249,7 +249,7 @@
 						<int key="IBUIContentMode">7</int>
 						<bool key="IBUIUserInteractionEnabled">NO</bool>
 						<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
-						<string key="IBUIText">バージョン 1.21</string>
+						<string key="IBUIText">Version 1.21</string>
 						<object class="NSColor" key="IBUITextColor">
 							<int key="NSColorSpace">1</int>
 							<bytes key="NSRGB">MC45MTQ1MDgzMjIgMC45MTQ1MDgzMjIgMC45MTQ1MDgzMjIAA</bytes>
@@ -363,9 +363,9 @@
 							<reference ref="369269128"/>
 							<reference ref="21856065"/>
 							<reference ref="359728430"/>
-							<reference ref="538067469"/>
 							<reference ref="975620660"/>
 							<reference ref="842132172"/>
+							<reference ref="538067469"/>
 						</array>
 						<reference key="parent" ref="0"/>
 					</object>

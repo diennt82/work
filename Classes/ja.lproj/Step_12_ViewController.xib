@@ -154,7 +154,7 @@
 					<object class="IBUILabel" id="119189152">
 						<reference key="NSNextResponder" ref="954864808"/>
 						<int key="NSvFlags">292</int>
-						<string key="NSFrame">{{99, 206}, {123, 21}}</string>
+						<string key="NSFrame">{{71, 206}, {195, 21}}</string>
 						<reference key="NSSuperview" ref="954864808"/>
 						<reference key="NSWindow"/>
 						<reference key="NSNextKeyView" ref="1661576"/>
@@ -164,11 +164,12 @@
 						<int key="IBUIContentMode">7</int>
 						<bool key="IBUIUserInteractionEnabled">NO</bool>
 						<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
-						<string key="IBUIText">カメラが見つかりました。</string>
+						<string key="IBUIText">カメラの設定が完了しました。</string>
 						<reference key="IBUITextColor" ref="6704011"/>
 						<nil key="IBUIHighlightedColor"/>
 						<int key="IBUIBaselineAdjustment">0</int>
 						<float key="IBUIMinimumFontSize">10</float>
+						<int key="IBUITextAlignment">1</int>
 						<reference key="IBUIFontDescription" ref="723880761"/>
 						<reference key="IBUIFont" ref="887076949"/>
 					</object>

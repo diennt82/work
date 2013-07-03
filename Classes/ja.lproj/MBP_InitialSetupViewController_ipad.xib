@@ -69,7 +69,7 @@
 						<int key="IBUIContentMode">7</int>
 						<bool key="IBUIUserInteractionEnabled">NO</bool>
 						<string key="targetRuntimeIdentifier">IBIPadFramework</string>
-						<string key="IBUIText">モニターを使用する為に３つの設定をして下さい。</string>
+						<string key="IBUIText">これから、モニターを使用する為に以下の３つの設定を行います。</string>
 						<object class="NSColor" key="IBUITextColor" id="90745201">
 							<int key="NSColorSpace">3</int>
 							<bytes key="NSWhite">MQA</bytes>
@@ -104,7 +104,7 @@
 						<int key="IBUIContentMode">7</int>
 						<bool key="IBUIUserInteractionEnabled">NO</bool>
 						<string key="targetRuntimeIdentifier">IBIPadFramework</string>
-						<string key="IBUIText">Wi-Fiに接続します。</string>
+						<string key="IBUIText">（３）Wi-Fi接続</string>
 						<reference key="IBUITextColor" ref="90745201"/>
 						<nil key="IBUIHighlightedColor"/>
 						<int key="IBUIBaselineAdjustment">0</int>
@@ -127,7 +127,7 @@
 						<int key="IBUIContentMode">7</int>
 						<bool key="IBUIUserInteractionEnabled">NO</bool>
 						<string key="targetRuntimeIdentifier">IBIPadFramework</string>
-						<string key="IBUIText">アカウントの作成</string>
+						<string key="IBUIText">（１）アカウント作成</string>
 						<reference key="IBUITextColor" ref="90745201"/>
 						<nil key="IBUIHighlightedColor"/>
 						<int key="IBUIBaselineAdjustment">0</int>
@@ -150,7 +150,7 @@
 						<int key="IBUIContentMode">7</int>
 						<bool key="IBUIUserInteractionEnabled">NO</bool>
 						<string key="targetRuntimeIdentifier">IBIPadFramework</string>
-						<string key="IBUIText">カメラを検出しました。</string>
+						<string key="IBUIText">（２）カメラの検出</string>
 						<reference key="IBUITextColor" ref="90745201"/>
 						<nil key="IBUIHighlightedColor"/>
 						<int key="IBUIBaselineAdjustment">0</int>
@@ -173,7 +173,7 @@
 						<int key="IBUIContentHorizontalAlignment">0</int>
 						<int key="IBUIContentVerticalAlignment">0</int>
 						<int key="IBUIButtonType">1</int>
-						<string key="IBUINormalTitle">続ける</string>
+						<string key="IBUINormalTitle">次へ</string>
 						<reference key="IBUIHighlightedTitleColor" ref="90745201"/>
 						<object class="NSColor" key="IBUINormalTitleColor">
 							<int key="NSColorSpace">1</int>
@@ -254,12 +254,12 @@
 						<int key="objectID">3</int>
 						<reference key="object" ref="1028092142"/>
 						<array class="NSMutableArray" key="children">
-							<reference ref="667330614"/>
 							<reference ref="421968457"/>
 							<reference ref="793373155"/>
 							<reference ref="4299209"/>
 							<reference ref="863755952"/>
 							<reference ref="39801690"/>
+							<reference ref="667330614"/>
 						</array>
 						<reference key="parent" ref="0"/>
 					</object>

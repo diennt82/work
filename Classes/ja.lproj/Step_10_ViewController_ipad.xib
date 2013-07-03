@@ -276,7 +276,7 @@
 							<object class="IBUITextView" id="693455983">
 								<reference key="NSNextResponder" ref="456793354"/>
 								<int key="NSvFlags">292</int>
-								<string key="NSFrame">{{0, 27}, {300, 76}}</string>
+								<string key="NSFrame">{{0, 20}, {300, 49}}</string>
 								<reference key="NSSuperview" ref="456793354"/>
 								<reference key="NSWindow"/>
 								<reference key="NSNextKeyView" ref="459021124"/>
@@ -286,7 +286,7 @@
 								<bool key="IBUIMultipleTouchEnabled">YES</bool>
 								<string key="targetRuntimeIdentifier">IBIPadFramework</string>
 								<bool key="IBUIEditable">NO</bool>
-								<string key="IBUIText">最初の設定完了後にカメラを探しています。</string>
+								<string key="IBUIText">カメラを探しています。</string>
 								<object class="NSColor" key="IBUITextColor" id="929768057">
 									<int key="NSColorSpace">1</int>
 									<bytes key="NSRGB">MSAxIDEAA</bytes>
@@ -323,7 +323,7 @@
 							<object class="IBUITextView" id="459021124">
 								<reference key="NSNextResponder" ref="456793354"/>
 								<int key="NSvFlags">292</int>
-								<string key="NSFrame">{{0, 111}, {300, 64}}</string>
+								<string key="NSFrame">{{0, 88}, {300, 101}}</string>
 								<reference key="NSSuperview" ref="456793354"/>
 								<reference key="NSWindow"/>
 								<reference key="NSNextKeyView" ref="426932002"/>
@@ -333,7 +333,8 @@
 								<bool key="IBUIUserInteractionEnabled">NO</bool>
 								<string key="targetRuntimeIdentifier">IBIPadFramework</string>
 								<bool key="IBUIEditable">NO</bool>
-								<string key="IBUIText">これは、完了するまでに約３分かかります。しばらく、お待ち下さい。</string>
+								<string type="base64-UTF8" key="IBUIText">57SE77yT5YiG56iL5bqm44GL44GL44KK44G+44GZ44CCDeOBl+OBsOOCieOBj+OAgeOBneOBruOBvuOB
+vuOBrueKtuaFi+OBp+OBiuW+heOBoeS4i+OBleOBhOOAgg</string>
 								<reference key="IBUITextColor" ref="929768057"/>
 								<int key="IBUITextAlignment">1</int>
 								<object class="IBUITextInputTraits" key="IBUITextInputTraits">
@@ -769,9 +770,9 @@
 						<reference key="object" ref="456793354"/>
 						<array class="NSMutableArray" key="children">
 							<reference ref="994107496"/>
+							<reference ref="426932002"/>
 							<reference ref="693455983"/>
 							<reference ref="459021124"/>
-							<reference ref="426932002"/>
 						</array>
 						<reference key="parent" ref="943547395"/>
 					</object>

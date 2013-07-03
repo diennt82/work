@@ -71,7 +71,7 @@
 						<bool key="IBUIClipsSubviews">YES</bool>
 						<bool key="IBUIUserInteractionEnabled">NO</bool>
 						<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
-						<string key="IBUIText">上をクリックすると、当社に合意したことになります。</string>
+						<string key="IBUIText">上の"完了"ボタンを押すと、当社の利用規約に合意したと見なします。</string>
 						<object class="NSColor" key="IBUITextColor" id="747374525">
 							<int key="NSColorSpace">3</int>
 							<bytes key="NSWhite">MQA</bytes>
@@ -93,7 +93,7 @@
 					<object class="IBUILabel" id="818012445">
 						<reference key="NSNextResponder" ref="40837917"/>
 						<int key="NSvFlags">292</int>
-						<string key="NSFrame">{{86, 246}, {87, 21}}</string>
+						<string key="NSFrame">{{188, 246}, {87, 21}}</string>
 						<reference key="NSSuperview" ref="40837917"/>
 						<reference key="NSWindow"/>
 						<reference key="NSNextKeyView"/>
@@ -149,7 +149,7 @@
 					<object class="IBUIButton" id="89821411">
 						<reference key="NSNextResponder" ref="40837917"/>
 						<int key="NSvFlags">292</int>
-						<string key="NSFrame">{{86, 242}, {104, 30}}</string>
+						<string key="NSFrame">{{171, 242}, {104, 30}}</string>
 						<reference key="NSSuperview" ref="40837917"/>
 						<reference key="NSWindow"/>
 						<reference key="NSNextKeyView" ref="818012445"/>
@@ -489,7 +489,7 @@
 								<int key="IBUIContentMode">7</int>
 								<bool key="IBUIUserInteractionEnabled">NO</bool>
 								<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
-								<string key="IBUIText">メールアドレス</string>
+								<string key="IBUIText">Eメール</string>
 								<object class="NSColor" key="IBUITextColor">
 									<int key="NSColorSpace">1</int>
 									<bytes key="NSRGB">MC4xNzYwMTE1NTkyIDAuNDA1ODE5Njg4NCAwLjY2MzY0Mzk3MzIAA</bytes>
