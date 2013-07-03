@@ -619,7 +619,7 @@
     //ERROR condition
     UIAlertView *_alert = [[UIAlertView alloc]
                            initWithTitle:title
-                           message:msg
+                           message:[BMS_Communication getLocalizedMessageForError:[error_response statusCode]]
                            delegate:self
                            cancelButtonTitle:ok
                            otherButtonTitles:nil];
