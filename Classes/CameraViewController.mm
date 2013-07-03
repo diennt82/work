@@ -253,7 +253,7 @@
         
         //set Melody name
         NSString * fw_version = selected_channel.profile.fw_version;
-        NSLog(@"Camera fw: %@", fw_version);
+
         
         if (![fw_version isEqualToString:@"0"])
         {
@@ -711,7 +711,7 @@
 	barBtnName.title = selected_channel.profile.name;
     //set Melody name
     NSString * fw_version = selected_channel.profile.fw_version;
-    NSLog(@"Camera fw: %@", fw_version);
+
     
     if (![fw_version isEqualToString:@"0"])
     {
@@ -1200,10 +1200,13 @@
     if (settingupStreamer == FALSE)
     {
         [self goBackToCameraList];
+        NSLog(@"streamer is done setting up.. cancel here");
     }
     else
     {
-        //will be handled by setupCameraStreamer 
+        //will be handled by setupCameraStreamer
+        
+         NSLog(@"streamer is setting up.. cancel later setupCameraStreamer");
     }
     
 

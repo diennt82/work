@@ -1902,7 +1902,7 @@
         
         NSString * countryCode = (NSString *)tokens[3];
         NSString * countryName = (NSString *)tokens[4];
-        NSLog(@"res:%@",response_str );
+        //NSLog(@"res:%@",response_str );
         
         
         if (  ([countryCode isEqualToString:@"cn"] || [countryCode isEqualToString:@"CN"]) &&

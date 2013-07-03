@@ -463,31 +463,7 @@
     if (self.communication_mode == COMM_MODE_UPNP && self.remoteView == TRUE && self.remoteViewKey != nil)
     {
         
-#if 0
-        //USE a more primitive way - CFStream
-                
-        CFReadStreamRef readStream;
-        CFWriteStreamRef writeStream;
-        CFStreamCreatePairWithSocketToHost(NULL, (CFStringRef)self.device_ip, self.device_port, &readStream, &writeStream);
-        
-        NSInputStream *inputStream = ( NSInputStream *)readStream;
-        NSOutputStream *outputStream = ( NSOutputStream *)writeStream;
-        [inputStream setDelegate:self];
-        [outputStream setDelegate:self];
-        [inputStream scheduleInRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
-        [outputStream scheduleInRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
-        [inputStream open];
-        [outputStream open];
-        
-        
-        /* Store a reference to the input and output streams so that
-         they don't go away.... */
-        self.ostream = outputStream;
-        self.istream = inputStream;
-        
-        //  The actual call to create listenSocket is done after we verified the sskey
-        //  -- Check the callback  (void)stream:(NSStream *)theStream handleEvent:(NSStreamEvent)eventCode
-#else
+
         
         //Start acutal connection
         initialFlag = 1;
@@ -497,30 +473,11 @@
                              onPort:self.device_port
                         withTimeout:15
                               error:nil];
-
-        
-#endif
-        
-        
         
     }
     else if (self.communication_mode == COMM_MODE_STUN_RELAY2)
     {
-#if 0
-        initialFlag = 1;
-        listenSocket = [[AsyncSocket alloc] initWithDelegate:self];
-        //Non-blocking connect
-        [listenSocket connectToHost:self.device_ip
-                             onPort:self.device_port
-                        withTimeout:15
-                              error:nil];
-#else
-
         [self startStreamingFromRelay2];
-        
-        
-#endif
-        
 
     }
     else // LOCAL CONNECTION
@@ -612,7 +569,7 @@
     
        
     
-	NSLog(@"getReq: %@", getReq);
+	//NSLog(@"getReq: %@", getReq);
     
 	NSData *getReqData = [getReq dataUsingEncoding:NSUTF8StringEncoding];
     
@@ -1067,7 +1024,7 @@
             }
             
             
-            NSLog(@"INIT responseData len = %d  ",[responseData length]);
+            //NSLog(@"INIT responseData len = %d  ",[responseData length]);
 
             
             int boundaryString_pos = [Util offsetOfBytes:responseData searchPattern:boundaryString];
@@ -1078,13 +1035,10 @@
             }
             else
             {
-                NSLog(@"boundaryString_pos pos = %d,  ",
-                      boundaryString_pos);
-                
+                                
                 boundaryString_pos += [strBoundary length];
                 
-                NSLog(@"boundaryString_pos2 pos = %d,  ",
-                      boundaryString_pos);
+               
             }
             
             
