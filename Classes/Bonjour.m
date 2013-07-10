@@ -141,7 +141,7 @@
     
     NSNetService * aNetService = [serviceArray objectAtIndex:nextIndex];
     [aNetService setDelegate:self];
-    [aNetService resolveWithTimeout:5.0];
+    [aNetService resolveWithTimeout:0.3];
     
     }
 #pragma mark -
@@ -178,7 +178,7 @@
         nextIndex += 1;
         NSNetService * nextService = [serviceArray objectAtIndex:nextIndex];
             [nextService setDelegate:self];
-            [nextService resolveWithTimeout:5.0];
+            [nextService resolveWithTimeout:0.5];
     }
     
     [ip release];
@@ -198,7 +198,7 @@
         nextIndex += 1;
         NSNetService * nextService = [serviceArray objectAtIndex:nextIndex];
         [nextService setDelegate:self];
-        [nextService resolveWithTimeout:5.0];
+        [nextService resolveWithTimeout:0.3];
     }
 }
 
