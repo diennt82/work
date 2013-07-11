@@ -474,7 +474,7 @@ return self;
 	[restored_profiles release];
 
     [splashScreen release];
-
+    [bonjourThread release];
 	[super dealloc];
 }
 
