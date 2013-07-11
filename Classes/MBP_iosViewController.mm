@@ -913,22 +913,21 @@ return self;
 
 -(void) scan_with_bonjour
 {
-//    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-    
-    NSDate * endDate;
-    _bonjourBrowser = [[Bonjour alloc] initSetupWith:self.restored_profiles];
-    [_bonjourBrowser setDelegate:self];
-    
-    [_bonjourBrowser startScanLocalWiFi];
-    
-    endDate = [NSDate dateWithTimeIntervalSinceNow:0.5];
-    while (_bonjourBrowser.isSearching)
+    @autoreleasepool
     {
-        [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode beforeDate:endDate];
+        NSDate * endDate;
+        _bonjourBrowser = [[[Bonjour alloc] initSetupWith:self.restored_profiles] autorelease];
+        [_bonjourBrowser setDelegate:self];
+        
+        [_bonjourBrowser startScanLocalWiFi];
+        
+        endDate = [NSDate dateWithTimeIntervalSinceNow:0.5];
+        while (_bonjourBrowser.isSearching)
+        {
+            [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode beforeDate:endDate];
+        }
+        bonjourList = _bonjourBrowser.cameraList;
     }
-    bonjourList = _bonjourBrowser.cameraList;
-    
-//    [pool drain];
     
     [NSThread exit];
 }

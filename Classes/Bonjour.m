@@ -303,7 +303,7 @@
     [timer invalidate];
     self.timer = nil;
     self.delegate = nil;
-    [serviceArray removeAllObjects];
+    [serviceArray release];
     [super dealloc];
 }
 @end
