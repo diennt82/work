@@ -39,7 +39,6 @@
 @property (assign, nonatomic) BOOL isSearching;
 @property (nonatomic, retain) NSMutableArray * serviceArray;
 @property (nonatomic, retain) NSMutableArray * cameraList;
-@property (nonatomic, retain) NSArray * camera;
 
 @property (nonatomic, assign) int bonjourStatus;
 

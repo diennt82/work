@@ -21,7 +21,6 @@
 @synthesize serviceArray;
 @synthesize cameraList, camera_profiles;
 @synthesize bonjourStatus;
-@synthesize camera = _cameras;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -66,11 +65,6 @@
 
 - (void) startScanLocalWiFi
 {
-//    if (_browserService)
-//    {
-//        [_browserService stop];
-//        [_browserService setDelegate:self];
-//    }
     
     [_browserService searchForServicesOfType:SERVICE inDomain:DOMAINS];
 }
@@ -103,7 +97,6 @@
     if (!moreComing)
     {
         bonjourStatus = BONJOUR_STATUS_OK;
-//        [self resolveCameraList];
     }
 }
 
@@ -117,7 +110,6 @@
         {
             NSLog(@"Bonjour Scanning Done !");
             isSearching = NO;
-//            [self.delegate bonjourReturnCameraListAvailable:self.cameraList];
         }
     }
     else
@@ -136,7 +128,6 @@
     {
         NSLog(@"Bonjour Scanning Done !");
         isSearching = NO;
-        [self.delegate bonjourReturnCameraListAvailable:cameraList];
     }
 }
 
@@ -152,7 +143,7 @@
     
     NSNetService * aNetService = [serviceArray objectAtIndex:nextIndex];
     [aNetService setDelegate:self];
-    [aNetService resolveWithTimeout:0.3];
+    [aNetService resolveWithTimeout:0.5];
     
     }
 #pragma mark -
@@ -186,7 +177,6 @@
         {
             NSLog(@"Bonjour Scanning Done !");
             isSearching = NO;
-//            [self.delegate bonjourReturnCameraListAvailable:self.cameraList];
         }
     
     }
@@ -212,7 +202,6 @@
         {
             NSLog(@"Bonjour Scanning Done !");
             isSearching = NO;
-//            [self.delegate bonjourReturnCameraListAvailable:self.cameraList];
         }
     }
     else
@@ -220,7 +209,7 @@
         nextIndex += 1;
         NSNetService * nextService = [serviceArray objectAtIndex:nextIndex];
         [nextService setDelegate:self];
-        [nextService resolveWithTimeout:0.3];
+        [nextService resolveWithTimeout:0.5];
     }
 }
 
@@ -300,7 +289,6 @@
     [_browserService release];
     [camera_profiles release];
     [cameraList release];
-    [timer invalidate];
     self.timer = nil;
     self.delegate = nil;
     [serviceArray release];
