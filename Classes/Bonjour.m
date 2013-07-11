@@ -21,6 +21,7 @@
 @synthesize serviceArray;
 @synthesize cameraList, camera_profiles;
 @synthesize bonjourStatus;
+@synthesize camera = _cameras;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -28,35 +29,39 @@
     if (self) {
         // Custom initialization
         bonjourStatus = BONJOUR_STATUS_DEFAULT;
+        isSearching = YES;
     }
     
     
     return self;
 }
 
--(void) initSetupWith:(NSMutableArray *) cameras
+-(id) initSetupWith:(NSMutableArray *) cameras
 {
-    _cameras = cameras;
-    bonjourStatus = BONJOUR_STATUS_DEFAULT;
-    
-    isSearching = NO;
-    
-    
-    if (!self.serviceArray)
+    if (self)
     {
-        self.serviceArray = [[NSMutableArray alloc] init];
+        _cameras = cameras;
+        bonjourStatus = BONJOUR_STATUS_DEFAULT;
+        
+        isSearching = YES;
+        
+        if (!self.serviceArray)
+        {
+            self.serviceArray = [[NSMutableArray alloc] init];
+        }
+        
+        if (!_browserService)
+        {
+            _browserService = [[NSNetServiceBrowser alloc]init];
+            [_browserService setDelegate:self];
+        }
+        
+        if (!self.cameraList)
+        {
+            self.cameraList = [[NSMutableArray alloc] init];
+        }
     }
-    
-    if (!_browserService)
-    {
-        _browserService = [[NSNetServiceBrowser alloc]init];
-        [_browserService setDelegate:self];
-    }
-    
-    if (!self.cameraList)
-    {
-        self.cameraList = [[NSMutableArray alloc] init];
-    }
+    return self;
 }
 
 - (void) startScanLocalWiFi
@@ -97,7 +102,6 @@
     
     if (!moreComing)
     {
-        isSearching = NO;
         bonjourStatus = BONJOUR_STATUS_OK;
 //        [self resolveCameraList];
     }
@@ -105,13 +109,16 @@
 
 -(void) netServiceBrowserDidStopSearch:(NSNetServiceBrowser *)aNetServiceBrowser
 {
-    isSearching = NO;
     
     if ([serviceArray count] == 0)
     {
         bonjourStatus = BONJOUR_STATUS_TIMEOUT;
-        
-        [self.delegate bonjourReturnCameraListAvailable:self.cameraList];
+        @synchronized(self)
+        {
+            NSLog(@"Bonjour Scanning Done !");
+            isSearching = NO;
+//            [self.delegate bonjourReturnCameraListAvailable:self.cameraList];
+        }
     }
     else
     {
@@ -125,8 +132,12 @@
 {
     bonjourStatus = BONJOUR_STATUS_ERROR;
     NSLog(@"error : %@", errorDict.description);
-    
-    [self.delegate bonjourReturnCameraListAvailable:cameraList];
+    @synchronized(self)
+    {
+        NSLog(@"Bonjour Scanning Done !");
+        isSearching = NO;
+        [self.delegate bonjourReturnCameraListAvailable:cameraList];
+    }
 }
 
 -(void) resolveCameraList
@@ -171,7 +182,13 @@
     
     if (nextIndex == [serviceArray count] - 1)
     {
-        [self.delegate bonjourReturnCameraListAvailable:self.cameraList];
+        @synchronized(self)
+        {
+            NSLog(@"Bonjour Scanning Done !");
+            isSearching = NO;
+//            [self.delegate bonjourReturnCameraListAvailable:self.cameraList];
+        }
+    
     }
     else
     {
@@ -191,7 +208,12 @@
     
     if (nextIndex >= [serviceArray count] - 1)
     {
-        [self.delegate bonjourReturnCameraListAvailable:self.cameraList];
+        @synchronized(self)
+        {
+            NSLog(@"Bonjour Scanning Done !");
+            isSearching = NO;
+//            [self.delegate bonjourReturnCameraListAvailable:self.cameraList];
+        }
     }
     else
     {
@@ -280,7 +302,7 @@
     [cameraList release];
     [timer invalidate];
     self.timer = nil;
-    delegate = nil;
+    self.delegate = nil;
     [serviceArray removeAllObjects];
     [super dealloc];
 }

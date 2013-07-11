@@ -10,6 +10,7 @@
 #import <AVFoundation/AVFoundation.h>
 #import <UIKit/UIScreen.h>
 #import <UIKit/UIColor.h>
+#import <Foundation/NSRunLoop.h>
 
 
 
@@ -146,6 +147,9 @@
 	int nextCameraToScanIndex;
     
     Bonjour * _bonjourBrowser;
+    BOOL isRebinded;
+    NSArray * bonjourList;
+    NSThread * bonjourThread;
 }
 
 @property (nonatomic, retain) IBOutlet UIView * progressView;

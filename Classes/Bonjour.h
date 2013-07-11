@@ -39,10 +39,11 @@
 @property (assign, nonatomic) BOOL isSearching;
 @property (nonatomic, retain) NSMutableArray * serviceArray;
 @property (nonatomic, retain) NSMutableArray * cameraList;
+@property (nonatomic, retain) NSArray * camera;
 
 @property (nonatomic, assign) int bonjourStatus;
 
-- (void) startScanLocalWiFi;
+-(void) startScanLocalWiFi;
 -(BOOL) isCameraIP:(NSString *) ip availableWith:(NSString *) macAddress;
--(void) initSetupWith:(NSMutableArray *) cameras;
+-(id) initSetupWith:(NSMutableArray *) cameras;
 @end
