@@ -46,7 +46,7 @@
 "bms_error_611" = "La videocamera non esiste.";
 
 /* No comment provided by engineer. */
-"bms_error_612" = "Impossibile comunicare con la videocamera.";
+"bms_error_612" = "Can't start video stream due to camera port is inaccessible. Monitor is re-acquiring the port. Try again after 1 to 2 minutes. (612)";
 
 /* No comment provided by engineer. */
 "bms_error_613" = "Impossibile comunicare con la videocamera.";
