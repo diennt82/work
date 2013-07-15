@@ -49,6 +49,11 @@
 
 -(void) dealloc
 {
+    if (streamer)
+    {
+        [streamer stopStreaming:YES];
+        [streamer release];
+    }
     [melodyFW release];
     [melodies release];
 	[temperature_label release];
@@ -862,15 +867,22 @@
 {
 	NSLog(@"goback to camera list 1");
     
-    
+
     // Do any additional setup after loading the view.
-    [[NSNotificationCenter defaultCenter] removeObserver:self]; 
-	   
-	if (streamer.recordInProgress == YES)
-		[streamer stopRecording];
-    
-    //close pcm player as well.. we don't need it any longer
-	[streamer stopStreaming:TRUE];
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+    while (streamer == nil && selected_channel.profile.isInLocal == YES)
+    {
+        NSLog(@"Waiting for streamer Init");
+        NSDate * endDate = [NSDate dateWithTimeIntervalSinceNow:0.5];
+        [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode beforeDate:endDate];
+    }
+	
+    if (streamer.recordInProgress == YES)
+        [streamer stopRecording];
+        
+        //close pcm player as well.. we don't need it any longer
+    [streamer stopStreaming:TRUE];
+	
     
     if (scanner != nil)
     {
