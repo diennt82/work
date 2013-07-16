@@ -9,11 +9,21 @@
 #import "BMS_Communication.h"
 #import "Util.h"
 
+#define  OFFICIAL_SERVER 0 
 
 #define BMS_DEFAULT_TIME_OUT 30.0 
 
-//#define BMS_PHONESERVICE @"https://simplimonitor.com/BMS/phoneservice?"
+#if OFFICIAL_SERVER
+
 #define BMS_PHONESERVICE @"https://www.monitoreverywhere.com/BMS/phoneservice?"
+
+#else
+
+#define BMS_PHONESERVICE @"https://simplimonitor.com/BMS/phoneservice?"
+#endif
+
+
+
 #define BMS_CMD_PART     @"action=command&command="
 
 

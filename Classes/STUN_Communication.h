@@ -17,17 +17,35 @@
 #import "BMS_Communication.h"
 #import "UdtSocketWrapper.h"
 
-//#define RELAY2_SERVER @"relay2.simplimonitor.com"
+
+#if OFFICIAL_SERVER
+
 #define RELAY2_SERVER @"relay2.monitoreverywhere.com"
-
 #define STUN_SERVER_IP @"udt.monitoreverywhere.com"
-#define STUN_SERVER_PORT 8000
-
 #define STUN_RELAY_SERVER_IP @"relay.monitoreverywhere.com"
-#define STUN_RELAY_SERVER_PORT 44444
 
 #define SYM_NAT_CHECK_SERVER_1  @"nat1.monitoreverywhere.com"
 #define SYM_NAT_CHECK_SERVER_2  @"nat2.monitoreverywhere.com"
+
+
+#else
+
+#define RELAY2_SERVER @"relay2.simplimonitor.com"
+#define STUN_SERVER_IP @"udt.simplimonitor.com"
+#define STUN_RELAY_SERVER_IP @"relay.simplimonitor.com"
+
+#define SYM_NAT_CHECK_SERVER_1  @"nat1.simplimonitor.com"
+#define SYM_NAT_CHECK_SERVER_2  @"nat2.simplimonitor.com"
+
+#endif
+
+
+
+#define STUN_SERVER_PORT 8000
+
+
+#define STUN_RELAY_SERVER_PORT 44444
+
 
 #define SYM_NAT_CHECK_SERVER1_PORT 9999
 #define SYM_NAT_CHECK_SERVER2_PORT 9999
