@@ -46,7 +46,7 @@
 "bms_error_611" = "Camera bestaat niet.";
 
 /* No comment provided by engineer. */
-"bms_error_612" = "Kan niet communiceren met de camera.";
+"bms_error_612" = "Can't start video stream due to camera port is inaccessible. Monitor is re-acquiring the port. Try again after 1 to 2 minutes. (612)";
 
 /* No comment provided by engineer. */
 "bms_error_613" = "Kan niet communiceren met de camera.";
