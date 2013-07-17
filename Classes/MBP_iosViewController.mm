@@ -723,6 +723,7 @@ return self;
             statusDialogLabel.hidden = NO;
 			self.app_stage = APP_STAGE_LOGGED_IN;
 
+            isRebinded = [self rebindCameraResource];
 			[self performSelector:@selector(scan_for_devices)
                        withObject:nil
                        afterDelay:0.1];

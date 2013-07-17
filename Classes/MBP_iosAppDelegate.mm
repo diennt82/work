@@ -150,15 +150,11 @@
    
 }
 
--(void) forceScan
-{
-    [viewController sendStatus:SCAN_CAMERA];
-}
+
 -(void) showInit
 {
     [viewController sendStatus:FRONT_PAGE]; 
 }
-
 
 
 - (BOOL) shouldAlertForThisMac:(NSString*) mac_without_colon
