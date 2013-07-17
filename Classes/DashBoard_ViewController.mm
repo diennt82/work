@@ -831,11 +831,18 @@
         return; // don't start streaming in Edit mode
     }
     
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    
+    
+    BOOL isOffline = [userDefaults boolForKey:_OfflineMode];
+    
+
+    
     CamChannel * ch = (CamChannel*)[listOfChannel objectAtIndex:indexPath.row] ;
     
-    if (ch != nil &&
-        ch.profile != nil &&
-        (ch.profile.isInLocal ==YES || ch.profile.minuteSinceLastComm <=5)
+    if (ch != nil && ch.profile != nil &&
+         (ch.profile.isInLocal ==YES ||
+              ((isOffline == FALSE ) && (ch.profile.minuteSinceLastComm <=5)) )
         )
     {
         
@@ -846,7 +853,6 @@
         [tableView reloadData];
         
         
-        NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
         [userDefaults setObject:ch.profile.mac_address forKey:CAM_IN_VEW];
         [userDefaults synchronize];
         

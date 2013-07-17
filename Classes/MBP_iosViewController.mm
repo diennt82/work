@@ -1312,16 +1312,8 @@ return self;
 
 - (void) scan_for_devices
 {
-
-    
-	
-    
     if (isRebinded)
 	{
-
-        
-        
-        
         
         if ( [self isCurrentConnection3G] ||
             [self.restored_profiles count] ==0 )

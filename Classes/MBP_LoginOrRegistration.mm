@@ -502,7 +502,9 @@
                 [userDefaults synchronize];
                 
                 //signal iosViewController
-                [delegate sendStatus:SCAN_CAMERA];
+                //[delegate sendStatus:SCAN_CAMERA];
+                //Scan using bonjour
+                [delegate sendStatus:SCAN_BONJOUR_CAMERA];
                 break;
             }
             default:
