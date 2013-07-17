@@ -872,7 +872,6 @@
     [[NSNotificationCenter defaultCenter] removeObserver:self];
     while (streamer == nil && selected_channel.profile.isInLocal == YES)
     {
-        NSLog(@"Waiting for streamer Init");
         NSDate * endDate = [NSDate dateWithTimeIntervalSinceNow:0.5];
         [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode beforeDate:endDate];
     }
