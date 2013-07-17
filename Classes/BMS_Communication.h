@@ -9,7 +9,7 @@
 #import "BMS_Communication.h"
 #import "Util.h"
 
-#define  OFFICIAL_SERVER 0 
+#define  OFFICIAL_SERVER 1 
 
 #define BMS_DEFAULT_TIME_OUT 30.0 
 
