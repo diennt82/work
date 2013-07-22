@@ -796,7 +796,10 @@
         NSString * ok = NSLocalizedStringWithDefaultValue(@"Ok" ,nil, [NSBundle mainBundle],
                                                            @"OK", nil);
 
-        
+        [[[GAI sharedInstance] defaultTracker] trackEventWithCategory:@"Login"
+                                                           withAction:@"Login Failed"
+                                                            withLabel:@"Login failed because of an unhandled exception from server"
+                                                            withValue:nil];
 		UIAlertView *alert = [[UIAlertView alloc]
 							  initWithTitle:title
 							  message:msg
@@ -834,7 +837,11 @@
 	account = [[UserAccount alloc] initWithUser:self.temp_user_email
 										AndPass:self.temp_pass_str
 								   WithListener: delegate];
-            
+    
+    [[[GAI sharedInstance] defaultTracker] trackEventWithCategory:@"Login"
+                                                       withAction:@"Login Success"
+                                                        withLabel:@"Login success"
+                                                        withValue:nil];
     //BLOCKED method
     [account query_camera_list_blocked];
     
@@ -870,6 +877,10 @@
 						  otherButtonTitles:nil];
 	[alert show];
 	[alert release];
+    [[[GAI sharedInstance]defaultTracker] trackEventWithCategory:@"Login"
+                                                      withAction:@"Login Failed"
+                                                       withLabel:@"msg"
+                                                       withValue:nil];
 	return;
 	
 }
@@ -906,6 +917,10 @@
     alert.tag = 112; 
 	[alert show];
 	[alert release];
+    [[[GAI sharedInstance]defaultTracker] trackEventWithCategory:@"Login"
+                                                      withAction:@"Login Failed"
+                                                       withLabel:@"Login failed because of server is unreachable"
+                                                       withValue:nil];
 	
 }
 
