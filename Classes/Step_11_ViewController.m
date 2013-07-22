@@ -122,7 +122,10 @@
     [UIApplication sharedApplication].idleTimerDisabled=  NO;
     [self.navigationController popToRootViewControllerAnimated:NO];
     
-    
+    [[[GAI sharedInstance] defaultTracker] sendEventWithCategory:@"Add Cameras"
+                                                      withAction:@"Add Camera Failed"
+                                                       withLabel:@"Add Camera Failed with :"
+                                                       withValue:nil];
 }
 
 
