@@ -196,7 +196,7 @@
                                 initWithNibName:@"Step_11_ViewController" bundle:nil];
     }
     
-    
+    step11ViewController.errorCode = @"Time Out";
     [self.navigationController pushViewController:step11ViewController animated:NO];
     
     [step11ViewController release];

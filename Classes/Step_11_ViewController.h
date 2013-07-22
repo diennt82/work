@@ -12,6 +12,6 @@
 {
     
 }
-
+@property (nonatomic, assign) NSString * errorCode;
 -(IBAction)tryAddCameraAgain:(id)sender;
 @end

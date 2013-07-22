@@ -121,10 +121,10 @@
     // Disable Keep screen on
     [UIApplication sharedApplication].idleTimerDisabled=  NO;
     [self.navigationController popToRootViewControllerAnimated:NO];
-    
+    NSString * msgLabel = [NSString stringWithFormat:@"Add Camera Failed with errorCode:%@",self.errorCode];
     [[[GAI sharedInstance] defaultTracker] sendEventWithCategory:@"Add Cameras"
                                                       withAction:@"Add Camera Failed"
-                                                       withLabel:@"Add Camera Failed with :"
+                                                       withLabel:msgLabel
                                                        withValue:nil];
 }
 
