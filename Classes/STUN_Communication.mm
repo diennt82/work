@@ -415,19 +415,22 @@
         // Parse both message
         NSString * firstMessageIp, * firstMessagePort, *secondMessageIp, *secondMessagePort;
         
+        //::27.66.163.63::8515:: -> {"","27.66.163.63", "8515",""}
         NSArray * token = [firstMessage componentsSeparatedByString:@"::"];
-        firstMessageIp = (NSString*)[token objectAtIndex:0];
-        firstMessagePort = (NSString*)[token objectAtIndex:1];
+        firstMessageIp = (NSString*)[token objectAtIndex:1];
+        firstMessagePort = (NSString*)[token objectAtIndex:2];
         
         token = [secondMessage componentsSeparatedByString:@"::"];
-        secondMessageIp = (NSString*)[token objectAtIndex:0];
-        secondMessagePort = (NSString*)[token objectAtIndex:1];
+        secondMessageIp = (NSString*)[token objectAtIndex:1];
+        secondMessagePort = (NSString*)[token objectAtIndex:2];
         
         // Compare IP and port values
         if (![firstMessageIp isEqualToString:secondMessageIp])
         {
             NSLog(@"Local ip are different");
         }
+        
+        NSLog(@"1. firstMessagePort: %@ vs  secondMessagePort: %@",firstMessagePort, secondMessagePort);
         
         if ([firstMessagePort isEqualToString:secondMessagePort])
         {
