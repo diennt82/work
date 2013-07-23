@@ -227,6 +227,9 @@
 		BC4D8D8C1733B9BB005C34BB /* ME-screen_landscape.png in Resources */ = {isa = PBXBuildFile; fileRef = BC4D8D8B1733B9BB005C34BB /* ME-screen_landscape.png */; };
 		BC5B0FCE1701855600D2C308 /* cameraMenuRouter.plist in Resources */ = {isa = PBXBuildFile; fileRef = BC5B0FCD1701855600D2C308 /* cameraMenuRouter.plist */; };
 		BC6E4A0516BFBB9D00B0D630 /* MBP_InitialSetupViewController_land.xib in Resources */ = {isa = PBXBuildFile; fileRef = BC6E4A0316BFBB9D00B0D630 /* MBP_InitialSetupViewController_land.xib */; };
+		BC883A6A1798E68D001D02D8 /* libGoogleAnalytics.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BC883A681798E68D001D02D8 /* libGoogleAnalytics.a */; };
+		BC883A6B1798E68D001D02D8 /* libGoogleAnalytics_debug.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BC883A691798E68D001D02D8 /* libGoogleAnalytics_debug.a */; };
+		BC883A6D1798EB81001D02D8 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BC883A6C1798EB81001D02D8 /* CoreData.framework */; };
 		BCA1A4D816C24CA900E7EF56 /* Step_03_ViewController_land.xib in Resources */ = {isa = PBXBuildFile; fileRef = BCA1A4D616C24CA900E7EF56 /* Step_03_ViewController_land.xib */; };
 		BCA1A4DE16C2569E00E7EF56 /* Step_04_ViewController_land.xib in Resources */ = {isa = PBXBuildFile; fileRef = BCA1A4DC16C2569E00E7EF56 /* Step_04_ViewController_land.xib */; };
 		BCA1A4E716C26EFB00E7EF56 /* Step_05_ViewController_land.xib in Resources */ = {isa = PBXBuildFile; fileRef = BCA1A4E516C26EFB00E7EF56 /* Step_05_ViewController_land.xib */; };
@@ -861,6 +864,14 @@
 		BC5B101C17018F2A00D2C308 /* sv */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = sv; path = sv.lproj/MBP_MenuViewController.xib; sourceTree = "<group>"; };
 		BC5B101D17018F2B00D2C308 /* sv */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sv; path = sv.lproj/Localizable.strings; sourceTree = "<group>"; };
 		BC6E4A0416BFBB9D00B0D630 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/MBP_InitialSetupViewController_land.xib; sourceTree = "<group>"; };
+		BC883A631798E68D001D02D8 /* GAI.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GAI.h; sourceTree = "<group>"; };
+		BC883A641798E68D001D02D8 /* GAITrackedViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GAITrackedViewController.h; sourceTree = "<group>"; };
+		BC883A651798E68D001D02D8 /* GAITracker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GAITracker.h; sourceTree = "<group>"; };
+		BC883A661798E68D001D02D8 /* GAITransaction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GAITransaction.h; sourceTree = "<group>"; };
+		BC883A671798E68D001D02D8 /* GAITransactionItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GAITransactionItem.h; sourceTree = "<group>"; };
+		BC883A681798E68D001D02D8 /* libGoogleAnalytics.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libGoogleAnalytics.a; sourceTree = "<group>"; };
+		BC883A691798E68D001D02D8 /* libGoogleAnalytics_debug.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libGoogleAnalytics_debug.a; sourceTree = "<group>"; };
+		BC883A6C1798EB81001D02D8 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		BC89DB7B1703EB3A00BED0CE /* de */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = de; path = de.lproj/MBP_InitialSetupViewController.xib; sourceTree = "<group>"; };
 		BC89DB7C1703EB3A00BED0CE /* de */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = de; path = de.lproj/MBP_InitialSetupViewController_land.xib; sourceTree = "<group>"; };
 		BC89DB7D1703EB3B00BED0CE /* de */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = de; path = de.lproj/MBP_InitialSetupViewController_ipad.xib; sourceTree = "<group>"; };
@@ -1452,6 +1463,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BC883A6D1798EB81001D02D8 /* CoreData.framework in Frameworks */,
 				38962C8517695CB30016AE16 /* libTestFlight.a in Frameworks */,
 				38962C831769587E0016AE16 /* libz.dylib in Frameworks */,
 				3803A86215FF42ED00B4DD97 /* libsqlite3.dylib in Frameworks */,
@@ -1466,6 +1478,8 @@
 				97E3CC77159D89EE00481854 /* AVFoundation.framework in Frameworks */,
 				3887DD8415CB697C0077048D /* libcrypto.a in Frameworks */,
 				3887DD8515CB697C0077048D /* libUdtLib.a in Frameworks */,
+				BC883A6A1798E68D001D02D8 /* libGoogleAnalytics.a in Frameworks */,
+				BC883A6B1798E68D001D02D8 /* libGoogleAnalytics_debug.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1475,6 +1489,7 @@
 		080E96DDFE201D6D7F000001 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				BC883A621798E68D001D02D8 /* Google Analytics Library */,
 				97987D40154698A10066C49B /* SetupHttpDelegate.h */,
 				9770CD85143073AE009E69EF /* ADPCMDecoder.h */,
 				9770CD86143073AE009E69EF /* ADPCMDecoder.m */,
@@ -1708,6 +1723,7 @@
 		29B97314FDCFA39411CA2CEA /* CustomTemplate */ = {
 			isa = PBXGroup;
 			children = (
+				BC883A6C1798EB81001D02D8 /* CoreData.framework */,
 				38962C8417695CB20016AE16 /* libTestFlight.a */,
 				38962C821769587E0016AE16 /* libz.dylib */,
 				38962C80176958640016AE16 /* libTestFlight.a */,
@@ -1885,6 +1901,20 @@
 				97987CCC154687490066C49B /* background.png */,
 			);
 			name = images12;
+			sourceTree = "<group>";
+		};
+		BC883A621798E68D001D02D8 /* Google Analytics Library */ = {
+			isa = PBXGroup;
+			children = (
+				BC883A631798E68D001D02D8 /* GAI.h */,
+				BC883A641798E68D001D02D8 /* GAITrackedViewController.h */,
+				BC883A651798E68D001D02D8 /* GAITracker.h */,
+				BC883A661798E68D001D02D8 /* GAITransaction.h */,
+				BC883A671798E68D001D02D8 /* GAITransactionItem.h */,
+				BC883A681798E68D001D02D8 /* libGoogleAnalytics.a */,
+				BC883A691798E68D001D02D8 /* libGoogleAnalytics_debug.a */,
+			);
+			path = "Google Analytics Library";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -3680,6 +3710,7 @@
 					"\"$(SRCROOT)\"",
 					"\"$(SRCROOT)/../openssl_lib/iPhoneOS-armv6/lib\"",
 					"\"$(SRCROOT)/../../Downloads/TestFlightSDK1.2.6\"",
+					"\"$(SRCROOT)/Classes/Google Analytics Library\"",
 				);
 				PRODUCT_NAME = Camera;
 				SDKROOT = iphoneos;
@@ -3713,6 +3744,7 @@
 					"$(inherited)",
 					"\"$(SRCROOT)\"",
 					"\"$(SRCROOT)/../../Downloads/TestFlightSDK1.2.6\"",
+					"\"$(SRCROOT)/Classes/Google Analytics Library\"",
 				);
 				PRODUCT_NAME = Camera;
 				SDKROOT = iphoneos;
@@ -3765,6 +3797,7 @@
 				LIBRARY_SEARCH_PATHS = (
 					"\"$(SRCROOT)\"",
 					"\"$(SRCROOT)/../../Downloads/TestFlightSDK1.2.6\"",
+					"\"$(SRCROOT)/Classes/Google Analytics Library\"",
 				);
 				PRODUCT_NAME = Camera;
 				RAMEWORK_SEARCH_PATHS = "$(inherited) \"$(SRCROOT)\"";

@@ -8,6 +8,7 @@
 
 #import "BMS_Communication.h"
 #import "AiBallBase64Encoding.h"
+#import "GAI.h"
 
 @implementation MyHTTPURLResponse
 
@@ -1917,7 +1918,10 @@
             ret = -1;
             
             NSLog(@"Country & code matches" );
-            
+            [[[GAI sharedInstance] defaultTracker] trackEventWithCategory:@"Add Cameras"
+                                                               withAction:@"Register and CamCheck Failed"
+                                                                withLabel:@"Country code & MAC check for Cam failed"
+                                                                withValue:nil];
         }
         else
         {

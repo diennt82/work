@@ -14,6 +14,7 @@
 #import "ForgotPwdViewController.h"
 #import "MBPNavController.h"
 #import "Reachability.h"
+#import "GAITrackedViewController.h"
 
 #define LOGIN_BUTTON_TAG 200
 #define CREATE_NEW_BUTTON_TAG 201
@@ -35,7 +36,7 @@
 #define _Use3G @"use3GToConnect"
 
 
-@interface MBP_LoginOrRegistration : UIViewController <UITableViewDataSource, UITableViewDelegate,UITextFieldDelegate> {
+@interface MBP_LoginOrRegistration : GAITrackedViewController <UITableViewDataSource, UITableViewDelegate,UITextFieldDelegate> {
 
 	IBOutlet UITextField * userName; 
 	IBOutlet UITextField * password; 

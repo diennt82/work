@@ -359,6 +359,7 @@
     {
 
         //Now we are not connecting to any wifi??
+        self.errorCode = @"Not connecting to any wifi";
         [self setupFailed];
         return;
     }
@@ -436,6 +437,7 @@
     {
         should_stop_scanning = FALSE;
         NSLog(@" stop scanning now.. should be 4 mins");
+        self.errorCode = @"Time Out";
 		[self setupFailed];
 		return ;
     }
@@ -517,7 +519,11 @@
 					
 					if (response == nil)
 					{
-						NSLog(@"can't send master key, camera is not fully up"); 
+						NSLog(@"can't send master key, camera is not fully up");
+                        [[[GAI sharedInstance] defaultTracker] trackEventWithCategory:@"Add Cameras"
+                                                                           withAction:@"Get MasterKey"
+                                                                            withLabel:@"Add MasterKey Failed Cause respond is nil"
+                                                                            withValue:nil];
 					}
 					else
                     {
@@ -739,7 +745,7 @@
                                 initWithNibName:@"Step_11_ViewController" bundle:nil];   
     }
     
-    
+    step11ViewController.errorCode = self.errorCode;
     [self.navigationController pushViewController:step11ViewController animated:NO];
     
     [step11ViewController release];
@@ -765,6 +771,10 @@
 		if ([self.master_key length] != 64)
 		{
 			NSLog(@"ERROR master key len is %d: %@", master_key.length , master_key);
+            [[[GAI sharedInstance] defaultTracker] trackEventWithCategory:@"Add Cameras"
+                                                               withAction:@"Get MasterKey"
+                                                                withLabel:@"Add MasterKey Failed Cause error with masterKey length"
+                                                                withValue:nil];
 		}
 		else {
 			NSLog(@"Master key is %@",  master_key);
@@ -804,7 +814,7 @@
                               otherButtonTitles:nil];
         [alert show];
         [alert release];
-        
+        self.errorCode = msg;
         [self  setupFailed];
         return; 
     }
@@ -851,7 +861,7 @@
 						  otherButtonTitles:nil];
 	[alert show];
 	[alert release];
-    
+    self.errorCode = msg;
     [self  setupFailed];
     
 	return;
@@ -930,6 +940,7 @@
 	{
 		switch(buttonIndex) {
 			case 0: // Cancel
+                self.errorCode = @"Server Unreachable";
                 [self  setupFailed];
                 
 				break;

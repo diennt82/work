@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "StartMonitorCallback.h"
+#import "GAI.h"
 
 @interface Step_12_ViewController : UIViewController
 {

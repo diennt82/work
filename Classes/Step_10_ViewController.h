@@ -63,7 +63,7 @@
 @property (nonatomic, retain) NSString *cameraMac,  *master_key; 
 @property (nonatomic, retain) NSTimer * timeOut;
 @property (nonatomic) BOOL shouldStopScanning;
-
+@property (nonatomic, assign) NSString * errorCode;
 
 -(IBAction) startConfigureCamera:(id)sender;
 

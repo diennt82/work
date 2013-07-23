@@ -8,7 +8,7 @@
 
 #import "DashBoard_ViewController.h"
 
-@interface DashBoard_ViewController ()
+@interface DashBoard_ViewController()
 
 @end
 
@@ -289,7 +289,12 @@
     
 }
 
-
+-(void) viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    [[[GAI sharedInstance] defaultTracker] sendView:@"DashBoard_ViewController"];
+//    self.trackedViewName = @"DasBoard_ViewController";
+}
 
 - (void)viewDidLoad
 {

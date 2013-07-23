@@ -7,11 +7,11 @@
 //
 
 #import <UIKit/UIKit.h>
-
+#import "GAI.h"
 @interface Step_11_ViewController : UIViewController
 {
     
 }
-
+@property (nonatomic, assign) NSString * errorCode;
 -(IBAction)tryAddCameraAgain:(id)sender;
 @end

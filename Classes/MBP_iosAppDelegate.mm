@@ -21,7 +21,19 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {    
     
     // Override point for customization after application launch.
-
+    /*nguyendang_20130719
+        - Add Google Analytics Delegates to this project.
+     */
+    
+    // Optional: automatically send uncaught exceptions to Google Analytics.
+    [GAI sharedInstance].trackUncaughtExceptions = YES;
+    // Optional: set Google Analytics dispatch interval to e.g. 20 seconds.
+    [GAI sharedInstance].dispatchInterval = 20;
+    // Optional: set debug to YES for extra debugging information.
+    [GAI sharedInstance].debug = YES;
+    // Create tracker instance.
+    //UA-ID_INSTANCE is taken from the account analytics on google analytics
+    id<GAITracker> tracker = [[GAI sharedInstance] trackerWithTrackingId:@"UA-42134835-2"];
 
     // !!!: Use the next line only during TEST - appstore release: need to comment this line
     [TestFlight setDeviceIdentifier:[[UIDevice currentDevice] uniqueIdentifier]];

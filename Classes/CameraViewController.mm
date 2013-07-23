@@ -409,7 +409,12 @@
 }
 
 
-
+-(void) viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+//    self.trackedViewName = @"CameraViewController";
+    [[[GAI sharedInstance] defaultTracker] sendView:@"Camera View"];
+}
 
 -(void) viewWillAppear:(BOOL)animated
 {
@@ -1504,6 +1509,10 @@
 
             NSString * msg = NSLocalizedStringWithDefaultValue(@"network_lost_link",nil, [NSBundle mainBundle],
                                                                   @"Camera disconnected due to network connectivity problem. Trying to reconnect...", nil);
+            [[[GAI sharedInstance] defaultTracker] trackEventWithCategory:@"View Remote Camera"
+                                                               withAction:@"Connect to Cam Failed"
+                                                                withLabel:@"Can't connect to network"
+                                                                withValue:nil];
             
             
 #if 1
@@ -1559,6 +1568,10 @@
             
             NSString * msg = NSLocalizedStringWithDefaultValue(@"network_lost_link",nil, [NSBundle mainBundle],
                                                                @"Camera disconnected due to network connectivity problem. Trying to reconnect...", nil);
+            [[[GAI sharedInstance] defaultTracker] trackEventWithCategory:@"View Remote Camera"
+                                                               withAction:@"Connect to Cam Failed"
+                                                                withLabel:@"Can't connect to network"
+                                                                withValue:nil];
             
 #if 1
             msg = [NSString stringWithFormat:@"%@ (%d)", msg, self.selected_channel.remoteConnectionError];
@@ -1635,7 +1648,10 @@
             [_alert show];
             [_alert release];
             
-            
+            [[[GAI sharedInstance] defaultTracker] trackEventWithCategory:@"View Remote Camera"
+                                                               withAction:@"Connect to Cam Failed"
+                                                                withLabel:@"Can't connect to network"
+                                                                withValue:nil];
             
                        
             break;
@@ -1662,6 +1678,10 @@
             _alert.tag = REMOTE_SSKEY_MISMATCH ;
             [_alert show];
             [_alert release];
+            [[[GAI sharedInstance] defaultTracker] trackEventWithCategory:@"View Remote Camera"
+                                                               withAction:@"Connect to Cam Failed"
+                                                                withLabel:@"SESSION KEY MISMATCH"
+                                                                withValue:nil];
             break;
         }
         case SWITCHING_TO_RELAY_SERVER:// just update the dialog
@@ -1841,10 +1861,27 @@
 	{
         NSLog(@"[Main thread] remoteConnectionSucceeded But channel has stopped streaming");
 		return;
+        [[[GAI sharedInstance] defaultTracker] trackEventWithCategory:@"View Remote Cam"
+                                                           withAction:@"View Remote Cam Request Failed"
+                                                            withLabel:@"Has Stopped Streamming"
+                                                            withValue:nil];
 	}
     
         
-	
+	if ([self isCurrentConnection3G])
+    {
+        [[[GAI sharedInstance] defaultTracker ] trackEventWithCategory:@"View Camera Remote"
+                                                            withAction:@"View Camera Success"
+                                                             withLabel:@"View Camera Success With Mobile"
+                                                             withValue:nil];
+    }
+    else
+    {
+        [[[GAI sharedInstance] defaultTracker ] trackEventWithCategory:@"View Camera Remote"
+                                                            withAction:@"View Camera Success"
+                                                             withLabel:@"View Camera Success With Wifi"
+                                                             withValue:nil];
+    }
 	[self setupCameraStreamer:selected_channel];
     
     
@@ -1914,7 +1951,10 @@
 	[_alert show];
 	[_alert release];
     
-    
+    [[[GAI sharedInstance] defaultTracker] trackEventWithCategory:@"View Remote Camera"
+                                                        withAction:@"Connect to Camera Fail"
+                                                        withLabel:@"Time Out"
+                                                        withValue:nil];
     
     NSLog(@"Timeout: stopping video stream..");
     
@@ -1961,6 +2001,34 @@
     
 }
 
+#pragma -
+#pragma Check 3G
+-(BOOL) isCurrentConnection3G
+{
+    Reachability *reachability = [Reachability reachabilityForInternetConnection];
+    [reachability startNotifier];
+    
+    NetworkStatus status = [reachability currentReachabilityStatus];
+    
+    if(status == NotReachable)
+    {
+        //No internet
+    }
+    else if (status == ReachableViaWiFi)
+    {
+        //WiFi
+    }
+    else if (status == ReachableViaWWAN)
+    {
+        //3G
+        
+        return TRUE;
+    }
+    
+    
+    return FALSE;
+    
+}
 
 #pragma mark -
 #pragma mark Alertview delegate
