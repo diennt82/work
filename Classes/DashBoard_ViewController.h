@@ -18,12 +18,13 @@
 
 #import "EditCameraCell.h"
 #import "AlertPrompt.h"
+#import "GAITrackedViewController.h"
 
 @class  EditCameraCell; 
 
 #define  MAX_CAM_ALLOWED 4
 
-@interface DashBoard_ViewController : UIViewController<UITableViewDataSource, UITableViewDelegate, UINavigationControllerDelegate, UITextFieldDelegate>
+@interface DashBoard_ViewController : GAITrackedViewController<UITableViewDataSource, UITableViewDelegate, UINavigationControllerDelegate, UITextFieldDelegate>
 {
     IBOutlet EditCameraCell *cellView;
     IBOutlet UITableView * cameraList; 

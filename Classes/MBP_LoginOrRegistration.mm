@@ -318,6 +318,14 @@
                                         repeats:NO];
     }
 }
+
+-(void) viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+//    self.trackedViewName = @"Login Screen";
+    [[[GAI sharedInstance] defaultTracker] sendView:@"Login Screen"];
+}
+
 -(void) viewWillAppear:(BOOL)animated
 {
     UIInterfaceOrientation interfaceOrientation = [UIApplication sharedApplication].statusBarOrientation;

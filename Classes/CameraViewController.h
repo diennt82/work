@@ -19,6 +19,7 @@
 #import "AudioOutStreamer.h"
 #import "MBP_LoginOrRegistration.h"
 #import "ScanForCameraProtocol.h"
+#import "GAITrackedViewController.h"
 
 
 
@@ -80,7 +81,7 @@
 
 @class ScanForCamera;
 
-@interface CameraViewController : UIViewController<StreamerEventHandler,ConnectionMethodDelegate , StreamerFrameRateUpdater, StreamerTemperatureUpdater, ScanForCameraNotifier>
+@interface CameraViewController : GAITrackedViewController<StreamerEventHandler,ConnectionMethodDelegate , StreamerFrameRateUpdater, StreamerTemperatureUpdater, ScanForCameraNotifier>
 {
     IBOutlet UILabel * temperature_label; 
     IBOutlet UIImageView * temperature_bg;

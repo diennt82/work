@@ -404,7 +404,12 @@
 }
 
 
-
+-(void) viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+//    self.trackedViewName = @"CameraViewController";
+    [[[GAI sharedInstance] defaultTracker] sendView:@"Camera View"];
+}
 
 -(void) viewWillAppear:(BOOL)animated
 {
