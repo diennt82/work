@@ -10,7 +10,7 @@
 #import "CamProfile.h"
 #import "BMS_Communication.h"
 #import "STUN_Communication.h"
-
+#import "GAI.h"
 #define  NO_ERROR         0 
 #define  REQUEST_TIMEOUT -1001 //same as "Request Timeout" error code
 

@@ -112,6 +112,10 @@
 				[bms_comm BMS_getHTTPRmtPortWithUser:user_email 
 											AndPass:user_pass 
 											macAddr:mac ];
+                [[[GAI sharedInstance] defaultTracker]trackEventWithCategory:@"View Remote Camera"
+                                                                  withAction:@"Get Remote Stream Mode Success"
+                                                                   withLabel:@"Stream Mode UPNP"
+                                                                   withValue:nil];
 			
 				break;
 			}
@@ -129,11 +133,19 @@
 										 FailSelector:_Failure_SEL])
 				{
 					//the process started successfuly
+                    [[[GAI sharedInstance] defaultTracker]trackEventWithCategory:@"View Remote Camera"
+                                                                      withAction:@"Get Remote Stream Mode Success"
+                                                                       withLabel:@"Stream Mode STUN"
+                                                                       withValue:nil];
 				}
 				else 
 				{
 					NSLog(@"Start remote connection Failed!!!"); 
 					[_caller performSelector:_Failure_SEL withObject:nil ];
+                    [[[GAI sharedInstance] defaultTracker]trackEventWithCategory:@"View Remote Camera"
+                                                                      withAction:@"Get Remote Stream Mode Failed"
+                                                                       withLabel:@"Stream Mode STUN"
+                                                                       withValue:nil];
 				}		
 				
 				
@@ -159,11 +171,20 @@
                                        FailSelector:_Failure_SEL])
 				{
 					//the process started successfuly
+                    [[[GAI sharedInstance] defaultTracker]trackEventWithCategory:@"View Remote Camera"
+                                                                      withAction:@"Get Remote Stream Mode Success"
+                                                                       withLabel:@"Stream Mode STUN RELAY 2"
+                                                                       withValue:nil];
 				}
 				else
 				{
 					NSLog(@"Start remote connection Failed!!!");
 					[_caller performSelector:_Failure_SEL withObject:nil ];
+                    
+                    [[[GAI sharedInstance] defaultTracker]trackEventWithCategory:@"View Remote Camera"
+                                                                      withAction:@"Get Remote Stream Mode Failed"
+                                                                       withLabel:@"Stream Mode STUN RELAY 2"
+                                                                       withValue:nil];
 				}
                 
                               
@@ -202,6 +223,10 @@
     self.mChannel.remoteConnectionError =  [error_response statusCode];
     //Pass some info back to caller
 	[_caller performSelector:_Failure_SEL withObject:nil ];
+    [[[GAI sharedInstance] defaultTracker]trackEventWithCategory:@"View Remote Camera"
+                                                      withAction:@"Get Remote Stream Mode Failed"
+                                                       withLabel:[error_response description]
+                                                       withValue:nil];
 	return;
 }
 
@@ -224,6 +249,10 @@
 	
     self.mChannel.remoteConnectionError =  REQUEST_TIMEOUT;
 	[_caller performSelector:_Failure_SEL withObject:nil ];
+    [[[GAI sharedInstance] defaultTracker]trackEventWithCategory:@"View Remote Camera"
+                                                      withAction:@"Get Remote Stream Mode Failed"
+                                                       withLabel:@"Server Unreachable"
+                                                       withValue:nil];
 	return;
 }
 
@@ -248,6 +277,10 @@
     self.mChannel.remoteConnectionError =  [error_response statusCode];
     //Pass some info back to caller
 	[_caller performSelector:_Failure_SEL withObject:nil ];
+    [[[GAI sharedInstance] defaultTracker]trackEventWithCategory:@"View Remote Camera"
+                                                      withAction:@"Get Port Failed"
+                                                       withLabel:[error_response description]
+                                                       withValue:nil];
 	return;
 	
 }
@@ -268,6 +301,11 @@
     self.mChannel.remoteConnectionError =  REQUEST_TIMEOUT;
 
 	[_caller performSelector:_Failure_SEL withObject:nil ];
+    [_caller performSelector:_Failure_SEL withObject:nil ];
+    [[[GAI sharedInstance] defaultTracker]trackEventWithCategory:@"View Remote Camera"
+                                                      withAction:@"Get Port Failed"
+                                                       withLabel:@"Sever Unreachable"
+                                                       withValue:nil];
 	return;
 	
 }
@@ -304,6 +342,10 @@
     {
 		
 		NSLog(@"getPort Failed to set PTT port");
+        [[[GAI sharedInstance] defaultTracker] trackEventWithCategory:@"Get Port Camera Failed"
+                                                           withAction:@"Get Port Camera Failed"
+                                                            withLabel:@"Get Port Camera Failed"
+                                                            withValue:nil];
 		
 	}
 
@@ -349,6 +391,26 @@
     //Pass some info back to caller
         self.mChannel.remoteConnectionError =  [error_response statusCode];
 	[_caller performSelector:_Failure_SEL withObject:nil ];
+    NSString * msg = nil;
+    switch (self.mChannel.communication_mode)
+    {
+        case COMM_MODE_UPNP:
+            msg = @"UBNP";
+            break;
+        case COMM_MODE_STUN:
+            msg = @"STUN";
+            break;
+        case COMM_MODE_STUN_RELAY2:
+            msg = @"STUN RELAY 2";
+            break;
+            
+        default:
+            break;
+    }
+    [[[GAI sharedInstance] defaultTracker] trackEventWithCategory:@"View Remote Camera"
+                                                       withAction:@"View Remote Camera Request Failed"
+                                                        withLabel:msg
+                                                        withValue:nil];
 	return;
 	
 }
@@ -369,6 +431,10 @@
     
     self.mChannel.remoteConnectionError =  REQUEST_TIMEOUT;
 	[_caller performSelector:_Failure_SEL withObject:nil ];
+    [[[GAI sharedInstance] defaultTracker] trackEventWithCategory:@"View Remote Camera"
+                                                       withAction:@"View Remote Camera Request Failed"
+                                                        withLabel:@"Server Unreachable"
+                                                        withValue:nil];
 	return;
 }
 
@@ -421,6 +487,10 @@
 	{
 		
 		[_caller performSelector:_Failure_SEL withObject:nil ];
+        [[[GAI sharedInstance] defaultTracker] trackEventWithCategory:@"View Remote Camera"
+                                                           withAction:@"View Remote Camera Request Failed"
+                                                            withLabel:@"Nil Response"
+                                                            withValue:nil];
 
 	}
 	

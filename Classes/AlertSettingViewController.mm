@@ -293,6 +293,10 @@
                                                                    AndPass:user_pass
                                                                      ofMac:camera.mac_address
                                                                  alertType:ALERT_TYPE_SOUND];
+        [[[GAI sharedInstance] defaultTracker]trackEventWithCategory:@"Notifications"
+                                                          withAction:@"Sound notification"
+                                                           withLabel:@"Sound notification"
+                                                           withValue:nil];
     }
     else
     {
@@ -356,6 +360,10 @@
                                                                    AndPass:user_pass
                                                                      ofMac:camera.mac_address
                                                                  alertType:ALERT_TYPE_TEMP_HI];
+        [[[GAI sharedInstance] defaultTracker]trackEventWithCategory:@"Notifications"
+                                                          withAction:@"High temperature notification"
+                                                           withLabel:@"High temperature notification"
+                                                           withValue:nil];
     }
     else
     {
@@ -417,6 +425,10 @@
                                                                    AndPass:user_pass
                                                                      ofMac:camera.mac_address
                                                                  alertType:ALERT_TYPE_TEMP_LO];
+        [[[GAI sharedInstance] defaultTracker]trackEventWithCategory:@"Notifications"
+                                                          withAction:@"Low temperature notification"
+                                                           withLabel:@"Low temperature notification"
+                                                           withValue:nil];
     }
     else
     {
