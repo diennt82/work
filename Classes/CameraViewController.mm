@@ -3857,7 +3857,7 @@
    if ( [BMS_Communication doSomeChecksForMac:selected_channel.profile.mac_address] == -2)
    {
        NSLog(@"FWupgrade: Fail maccheck ");
-       
+       [pool release];
        return;
    }
     
@@ -3873,22 +3873,18 @@
         
 		response = [response stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
         
-		if ( [response isEqualToString:@"0"] || [response isEqualToString:@"check_fw_upgrade: -1"])
+       if (response == nil || [response isEqualToString:@"0"] || [response isEqualToString:@"check_fw_upgrade: -1"])
 		{
 			//NO upgrade
 			//simply die off
 		}
-		else 
+		else // if(response is new_version (e.g: response = 08.045))
 		{
-            
-            
 			//some upgrade is available .. 
             
 			NSLog(@"Upgrade possible"); 
 			[self performSelectorOnMainThread:@selector(showFWUpgradeDialog:) withObject:response waitUntilDone:NO];
 		}
-        
-        
         
 	}
     
