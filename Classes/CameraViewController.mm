@@ -1490,14 +1490,19 @@
                 [self performSelectorInBackground:@selector(checkIfUpgradeIsPossible) withObject:nil];
                 self.askForFWUpgradeOnce = NO;
             }
-
-            NSLog(@"Got STREAM_STARTED") ;
             
-            [[[GAI sharedInstance] defaultTracker] trackEventWithCategory:@"View Camera Remote"
-                                                                withAction:@"Start Stream Success"
-                                                                withLabel:@"Start Stream Success"
-                                                                withValue:nil];
+            //NSLog(@"Got STREAM_STARTED") ;
             
+            if ( self.selected_channel.profile.isInLocal == NO)
+            {
+                
+               
+                
+                [[[GAI sharedInstance] defaultTracker] trackEventWithCategory:@"View Camera Remote"
+                                                                   withAction:@"Start Stream Success"
+                                                                    withLabel:@"Start Stream Success"
+                                                                    withValue:nil];
+            }
             break;
         }
 		case STREAM_STOPPED:
