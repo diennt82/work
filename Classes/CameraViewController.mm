@@ -1490,6 +1490,8 @@
                 [self performSelectorInBackground:@selector(checkIfUpgradeIsPossible) withObject:nil];
                 self.askForFWUpgradeOnce = NO;
             }
+
+            NSLog(@"Got STREAM_STARTED") ;
             
             [[[GAI sharedInstance] defaultTracker] trackEventWithCategory:@"View Camera Remote"
                                                                 withAction:@"Start Stream Success"
@@ -1865,29 +1867,17 @@
 	if (self.selected_channel.stopStreaming == TRUE)
 	{
         NSLog(@"[Main thread] remoteConnectionSucceeded But channel has stopped streaming");
-		return;
+		
         [[[GAI sharedInstance] defaultTracker] trackEventWithCategory:@"View Remote Cam"
                                                            withAction:@"View Remote Cam Request Failed"
                                                             withLabel:@"Has Stopped Streamming"
                                                             withValue:nil];
+        
+        return;
 	}
     
-        
-	if ([self isCurrentConnection3G])
-    {
-        [[[GAI sharedInstance] defaultTracker ] trackEventWithCategory:@"View Camera Remote"
-                                                            withAction:@"View Camera Success"
-                                                             withLabel:@"View Camera Success With Mobile"
-                                                             withValue:nil];
-    }
-    else
-    {
-        [[[GAI sharedInstance] defaultTracker ] trackEventWithCategory:@"View Camera Remote"
-                                                            withAction:@"View Camera Success"
-                                                             withLabel:@"View Camera Success With Wifi"
-                                                             withValue:nil];
-    }
-	[self setupCameraStreamer:selected_channel];
+    
+    [self setupCameraStreamer:selected_channel];
     
     
     self.firstTimeConnect = FALSE;

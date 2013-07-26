@@ -1491,10 +1491,6 @@ Failed:
 	[self startConnectTimeout:timeout];
 	theFlags |= kDidStartDelegate;
 	
-    [[[GAI sharedInstance] defaultTracker] trackEventWithCategory:@"View Camera Remote"
-                                                        withAction:@"Start Stream Success"
-                                                        withLabel:@"Start Stream Success"
-                                                        withValue:nil];
 	return YES;
 	
 Failed:

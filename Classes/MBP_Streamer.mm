@@ -1469,10 +1469,7 @@
     
 	[udtStreamerThd start];
     
-    [[[GAI sharedInstance] defaultTracker] trackEventWithCategory:@"View Camera Remote"
-                                                       withAction:@"Start Streaming Success"
-                                                        withLabel:@"Start Streaming Success"
-                                                        withValue:nil];
+    
     
     
 #if 1
@@ -1605,11 +1602,7 @@
         [udtSocket sendDataViaUdt:msg_];
         
         
-        [[[GAI sharedInstance] defaultTracker] trackEventWithCategory:@"View Camera Remote"
-                                                           withAction:@"Start Streaming Success"
-                                                            withLabel:@"Start Streaming Success"
-                                                            withValue:nil];
-   
+           
 #pragma mark FORCE RELAY
 #if 0
 
