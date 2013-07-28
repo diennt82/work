@@ -8,7 +8,11 @@
 
 #import "Step_06_ViewController.h"
 
-@interface Step_06_ViewController ()
+@interface Step_06_ViewController () <UITextFieldDelegate>
+
+@property (retain, nonatomic) UITextField *tfSSID;
+@property (retain, nonatomic) UITextField *tfPassword;
+@property (retain, nonatomic) UITextField *tfConfirmPass;
 
 @end
 
@@ -85,6 +89,7 @@
                                     target:self 
                                     action:@selector(handleNextButton:)];          
     self.navigationItem.rightBarButtonItem = nextButton;
+    self.navigationItem.rightBarButtonItem.enabled = NO;
     [nextButton release];
         
     /* initialize transient object here */
@@ -97,6 +102,9 @@
         self.deviceConf.ssid = self.ssid; 
     }
     
+    self.tfSSID = (UITextField *)[self.ssidCell viewWithTag:202];
+    self.tfPassword = (UITextField *)[self.passwordCell viewWithTag:200];
+    self.tfConfirmPass = (UITextField *)[self.confPasswordCell viewWithTag:201];
 }
 
 - (void)viewDidUnload
@@ -118,6 +126,40 @@
         _sec.text = self.security; 
     }
 
+}
+
+#pragma mark -
+#pragma mark UITextFieldDelegate
+- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
+    
+    //if (textField.tag ==201) { //conf password
+        UITextField *tfSSID = (UITextField *)[self.ssidCell viewWithTag:202];
+        UITextField *tfPassword = (UITextField *)[self.passwordCell viewWithTag:200];
+        UITextField *tfConfirmPassword = (UITextField *)[self.confPasswordCell viewWithTag:201];
+    NSString *pwString = tfPassword.text;
+    if (textField.tag == 200) {
+        pwString = [pwString stringByAppendingString:string];
+    }
+    
+    NSString *cpwString = tfConfirmPassword.text;
+    if (textField.tag == 201) {
+        cpwString = [cpwString stringByAppendingString:string];
+    }
+        
+        if ((tfSSID != nil && [tfSSID.text length] > 0)
+            && (tfPassword != nil && tfConfirmPassword != nil && [pwString isEqualToString:cpwString]))
+        {
+            self.navigationItem.rightBarButtonItem.enabled = YES;
+            self.navigationItem.rightBarButtonItem.tintColor = [UIColor blueColor];
+        }
+        else
+        {
+            //disable Done btn
+            self.navigationItem.rightBarButtonItem.tintColor = nil;
+            self.navigationItem.rightBarButtonItem.enabled = NO;
+        }
+    //}
+    return YES;
 }
 
 #pragma mark -
