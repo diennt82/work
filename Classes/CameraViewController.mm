@@ -1205,7 +1205,7 @@
     //if (self.selected_channel.stopStreaming == TRUE)
     if (userWantToCancel == TRUE)
     {
-        self.selected_channel.stopStreaming = FALSE;
+        self.selected_channel.stopStreaming = TRUE; 
         
         NSLog(@"USER cancelled 1 ");
         [self performSelector:@selector(goBackToCameraList)
