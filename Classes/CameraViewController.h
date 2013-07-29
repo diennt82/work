@@ -162,6 +162,9 @@
     BOOL firstTimeConnect; 
     BOOL settingupStreamer;
     
+    BOOL userWantToCancel;
+    
+    
     //Remember user settings while they are watching this Video....
     NSMutableDictionary * userSettings;
     

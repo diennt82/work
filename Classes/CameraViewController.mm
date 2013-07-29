@@ -43,6 +43,10 @@
         
         self.userSettings = [[NSMutableDictionary alloc]init];
         
+        
+        
+        
+        
 	}
 	return self;
 }
@@ -336,6 +340,9 @@
         
 		self.selected_channel.stopStreaming = FALSE;
         self.firstTimeConnect = TRUE;
+        
+#pragma mark 2nd mod
+        userWantToCancel  = FALSE;
         
 		//init the ptt port to default
 		self.selected_channel.profile.ptt_port = IRABOT_AUDIO_RECORDING_PORT;
@@ -875,11 +882,15 @@
 
     // Do any additional setup after loading the view.
     [[NSNotificationCenter defaultCenter] removeObserver:self];
+#if 0
     while (streamer == nil && selected_channel.profile.isInLocal == YES)
     {
         NSDate * endDate = [NSDate dateWithTimeIntervalSinceNow:0.5];
         [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode beforeDate:endDate];
     }
+
+    
+#endif
 	
     if (streamer.recordInProgress == YES)
         [streamer stopRecording];
@@ -958,7 +969,7 @@
     
     @synchronized(self)
     {
-        settingupStreamer = TRUE; 
+        settingupStreamer = TRUE;
     }
        
 	self.temperature_label.hidden = NO;
@@ -1191,13 +1202,20 @@
  
     //Lastly check if user has cancelled the connection
     
-    if (self.selected_channel.stopStreaming == TRUE)
+    //if (self.selected_channel.stopStreaming == TRUE)
+    if (userWantToCancel == TRUE)
     {
-        NSLog(@"USER cancelled");
+        self.selected_channel.stopStreaming = FALSE;
+        
+        NSLog(@"USER cancelled 1 ");
         [self performSelector:@selector(goBackToCameraList)
                    withObject:nil
                    afterDelay:0.1];
     }
+    
+    
+   
+    
     
 	
     @synchronized(self)
@@ -1222,11 +1240,30 @@
     
     [UIApplication sharedApplication].idleTimerDisabled=  NO;
     
-    self.selected_channel.stopStreaming = TRUE;
+#pragma  mark 1st mod
+    //self.selected_channel.stopStreaming = TRUE;
+    
+    userWantToCancel = TRUE;
+    NSLog(@"set userWantToCancel, and do nothing...1 ...  ");
     
     
+    UITextView * message = (UITextView *)[progressView viewWithTag:155] ;//textview
+    NSString * msg = NSLocalizedStringWithDefaultValue(@"Cancelling",nil, [NSBundle mainBundle],
+                                                       @"Cancelling ..." , nil);
+    message.text = msg;
+    
+
+    UIButton * btn = (UIButton *) sender;
+    btn.hidden = YES;
+    
+
+   
+    
+#if 0 // ORIG
     if (settingupStreamer == FALSE)
     {
+                
+        
         [self goBackToCameraList];
         NSLog(@"streamer is done setting up.. cancel here");
     }
@@ -1236,7 +1273,7 @@
         
          NSLog(@"streamer is setting up.. cancel later setupCameraStreamer");
     }
-    
+#endif 
 
 }
 
@@ -1450,7 +1487,7 @@
 	switch (status) {
 		case CONNECTED_TO_CAMERA:
         {
-#if 1 //DBG
+
             //update melody ui
             [self performSelectorInBackground:@selector(setUIMelodyOnOff_bg) withObject:nil];
             
@@ -1471,7 +1508,7 @@
                 [self performSelectorInBackground:@selector(getVQ_bg) withObject:nil];
                 
             }
-#endif
+
 
             
             [UIApplication sharedApplication].idleTimerDisabled=  NO;
@@ -1485,23 +1522,36 @@
             
             [self stopPeriodicPopup];
             
-            if ( self.selected_channel.profile.isInLocal && (self.askForFWUpgradeOnce == YES))
+            
+            if (userWantToCancel == TRUE)
             {
-                [self performSelectorInBackground:@selector(checkIfUpgradeIsPossible) withObject:nil];
-                self.askForFWUpgradeOnce = NO;
+
+                NSLog(@"*[STREAM_STARTED] *** USER want to cancel **.. cancel after .1 sec...");
+                self.selected_channel.stopStreaming = TRUE;
+                [self performSelector:@selector(goBackToCameraList)
+                           withObject:nil
+                           afterDelay:0.1];
             }
-            
-            //NSLog(@"Got STREAM_STARTED") ;
-            
-            if ( self.selected_channel.profile.isInLocal == NO)
+            else
             {
+                if ( self.selected_channel.profile.isInLocal && (self.askForFWUpgradeOnce == YES))
+                {
+                    [self performSelectorInBackground:@selector(checkIfUpgradeIsPossible) withObject:nil];
+                    self.askForFWUpgradeOnce = NO;
+                }
                 
-               
+                //NSLog(@"Got STREAM_STARTED") ;
                 
-                [[[GAI sharedInstance] defaultTracker] trackEventWithCategory:@"View Camera Remote"
-                                                                   withAction:@"Start Stream Success"
-                                                                    withLabel:@"Start Stream Success"
-                                                                    withValue:nil];
+                if ( self.selected_channel.profile.isInLocal == NO)
+                {
+                    
+                    
+                    
+                    [[[GAI sharedInstance] defaultTracker] trackEventWithCategory:@"View Camera Remote"
+                                                                       withAction:@"Start Stream Success"
+                                                                        withLabel:@"Start Stream Success"
+                                                                        withValue:nil];
+                }
             }
             break;
         }
@@ -1869,10 +1919,14 @@
     
 	//Start to display this channel
 	selected_channel = camChannel;
-	if (self.selected_channel.stopStreaming == TRUE)
+//	if (self.selected_channel.stopStreaming == TRUE)
+    if (userWantToCancel == TRUE)
 	{
         NSLog(@"[Main thread] remoteConnectionSucceeded But channel has stopped streaming");
 		
+        self.selected_channel.stopStreaming = TRUE;
+        [self goBackToCameraList];
+        
         [[[GAI sharedInstance] defaultTracker] trackEventWithCategory:@"View Remote Cam"
                                                            withAction:@"View Remote Cam Request Failed"
                                                             withLabel:@"Has Stopped Streamming"
@@ -1880,6 +1934,7 @@
         
         return;
 	}
+    
     
     
     [self setupCameraStreamer:selected_channel];
@@ -1900,10 +1955,23 @@
 {
 	NSLog(@"[Main thread]Remote connection Failed!!!");
     
-	if (self.selected_channel.stopStreaming == TRUE)
+//	if (self.selected_channel.stopStreaming == TRUE)
+//	{
+//		return;
+//	}
+    
+    
+    if (userWantToCancel == TRUE)
 	{
-		return;
-	}
+        NSLog(@"[Main thread] remoteConnectionSucceeded But channel has stopped streaming");
+		
+        self.selected_channel.stopStreaming = TRUE;
+        [self goBackToCameraList];
+        return;
+        
+    }
+    
+    
     [UIApplication sharedApplication].idleTimerDisabled=  NO;
     
     progressView.hidden = YES;
