@@ -74,7 +74,7 @@
 
 #define CLOSE_STUN_SESSION @"close_session"
 
-
+#define CLOSE_STUN_RELAY_SESSION @"close_relay_session"
 
 #define CHANNEL_ID @"ChannelID:"
 #define SEC_KEY    @"Secret_key:"

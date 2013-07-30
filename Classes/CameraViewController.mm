@@ -1769,16 +1769,30 @@
         case REMOTE_STREAM_STOPPED:
         {
 #if 1 //dont close_session
-            if (streamer.communication_mode == COMM_MODE_STUN_RELAY2 ||
-                streamer.communication_mode == COMM_MODE_STUN )
+            
+            if ( streamer.communication_mode == COMM_MODE_STUN )
+            {
+                if (self.scomm != nil)
+                {
+                    
+                    NSLog(@"Send close session");
+                    [self.scomm sendCloseSessionThruBMS:self.selected_channel.profile.mac_address
+                                             AndChannel:self.selected_channel.channID
+                                               forRelay:NO];
+                }
+            }
+            if (streamer.communication_mode == COMM_MODE_STUN_RELAY2)
+              
+               
             {
 
                 if (self.scomm != nil)
                 {
 
-                     NSLog(@"Send close session");
+                     NSLog(@"Send close relay session");
                     [self.scomm sendCloseSessionThruBMS:self.selected_channel.profile.mac_address
-                                              AndChannel:self.selected_channel.channID];
+                                              AndChannel:self.selected_channel.channID
+                                               forRelay:YES];
                 }
             }
 

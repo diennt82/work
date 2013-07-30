@@ -26,7 +26,7 @@
 	return self; 
 }
 
-- (NSData * ) sendCloseSessionThruBMS:(NSString *) mac AndChannel:(NSString*) chann
+- (NSData * ) sendCloseSessionThruBMS:(NSString *) mac AndChannel:(NSString*) chann forRelay:(BOOL) isRelay
 {
     
     BMS_Communication * bms_comm;
@@ -41,6 +41,12 @@
 	NSString * user_pass = (NSString *) [userDefaults objectForKey:@"PortalPassword"];
     
     NSString * close_stun_session_cmd = [NSString stringWithFormat:@"action=%@", CLOSE_STUN_SESSION];
+    
+    if (isRelay == YES)
+    {
+        close_stun_session_cmd = [NSString stringWithFormat:@"action=%@", CLOSE_STUN_RELAY_SESSION];
+    }
+    
 
     NSData * response_dat = [bms_comm BMS_sendCoreCmdViaServeBlockedWithUser:user_email
                                                                  AndPass:user_pass

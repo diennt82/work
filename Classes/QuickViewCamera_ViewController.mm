@@ -294,7 +294,7 @@ SystemSoundID soundFileObject;
     
     if (streamer != nil)
     {
-        [streamer stopStreaming];
+        [streamer stopStreaming:TRUE];
         [streamer release];
     }
      

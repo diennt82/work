@@ -35,6 +35,6 @@
 
 - (NSData * ) sendCommandThruUdtServer:(NSString *) command withMac:(NSString *) mac AndChannel:(NSString*) chann;
 - (void ) sendCommandThruUdtServerNonBlock:(NSString *) command withMac:(NSString *) mac AndChannel:(NSString*) chann;
-- (NSData * ) sendCloseSessionThruBMS:(NSString *) mac AndChannel:(NSString*) chann;
+- (NSData * ) sendCloseSessionThruBMS:(NSString *) mac AndChannel:(NSString*) chann forRelay:(BOOL) isRelay;
 
 @end
