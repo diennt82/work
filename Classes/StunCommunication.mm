@@ -40,13 +40,13 @@
 	NSString * user_email = (NSString *) [userDefaults objectForKey:@"PortalUseremail"];
 	NSString * user_pass = (NSString *) [userDefaults objectForKey:@"PortalPassword"];
     
-    
+    NSString * close_stun_session_cmd = [NSString stringWithFormat:@"action=%@", CLOSE_STUN_SESSION];
 
     NSData * response_dat = [bms_comm BMS_sendCoreCmdViaServeBlockedWithUser:user_email
                                                                  AndPass:user_pass
                                                                  macAddr:mac
                                                                  channId:chann
-                                                                 command:CLOSE_STUN_SESSION];
+                                                                 command:close_stun_session_cmd];
     return response_dat;
     
     
