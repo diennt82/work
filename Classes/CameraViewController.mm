@@ -1249,7 +1249,7 @@
 {
     
 	float tempF ;
-	if (tempC < 1 || tempC > 60)
+	if (tempC < -10 || tempC > 100)
 	{
 		return;
 	}
