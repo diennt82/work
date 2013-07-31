@@ -62,6 +62,7 @@
 	[temperature_label release];
 	[videoAndSnapshotTime release];
     [userSettings release];
+    [self.pcmPlayer release];
 	[super dealloc];
 }
 
@@ -215,6 +216,8 @@
     CFURLRef soundFileURLRef = CFBundleCopyResourceURL(mainbundle, CFSTR("beep"), CFSTR("wav"), NULL);
     AudioServicesCreateSystemSoundID(soundFileURLRef, &soundFileObject);
     
+    self.pcmPlayer = [[PCMPlayer alloc] init];
+    
     [self becomeActive];
         
 
@@ -223,11 +226,8 @@
 
 -(void) becomeActive_
 {
-    if (self.pcmPlayer != nil) {
-        [self.pcmPlayer.recorder stopRecord];
-        [self.pcmPlayer Stop];
-        [self.pcmPlayer release];
-    }
+    [self.pcmPlayer.recorder stopRecord];
+    [self.pcmPlayer Stop];
     
     //if Remote --- restart streaming
     // else if local -- do nothing
@@ -392,8 +392,6 @@
     else
     {
        NSLog(@"Enter Background.. Keep on streamming.. ");
-       
-        self.pcmPlayer = [[PCMPlayer alloc] init];
         
         [self.pcmPlayer Play:TRUE];//initialize
         [self.pcmPlayer.recorder startRecord];

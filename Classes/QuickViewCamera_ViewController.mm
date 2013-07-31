@@ -49,6 +49,7 @@ SystemSoundID soundFileObject;
     [listOfChannel release];
     [flipTimer release]; 
     [selected_channel release];
+    [self.pcmPlayer release];
     [super dealloc];
 }
 
@@ -87,6 +88,7 @@ SystemSoundID soundFileObject;
                                                selector:@selector(channelFlip:) 
                                                userInfo:nil
                                                 repeats:YES];
+    self.pcmPlayer = [[PCMPlayer alloc] init];
     
 
     
@@ -129,7 +131,6 @@ SystemSoundID soundFileObject;
 -(void) handleEnteredBackground
 {
     NSLog(@"Entr background.. close any popup");
-    self.pcmPlayer = [[PCMPlayer alloc] init];
     [self.pcmPlayer Play:TRUE];
     [self.pcmPlayer.recorder startRecord];
     
@@ -138,11 +139,8 @@ SystemSoundID soundFileObject;
 
 -(void) becomeActive
 {
-    if (self.pcmPlayer != nil) {
-        [self.pcmPlayer.recorder stopRecord];
-        [self.pcmPlayer Stop];
-        [self.pcmPlayer release];
-    }
+    [self.pcmPlayer.recorder stopRecord];
+    [self.pcmPlayer Stop];
     
     if (self.flipTimer != nil  && [self.flipTimer isValid])
     {
