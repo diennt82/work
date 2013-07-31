@@ -7,8 +7,11 @@
 //
 
 #import "QuickViewCamera_ViewController.h"
+#import "PCMPlayer.h"
 
 @interface QuickViewCamera_ViewController ()
+
+@property (retain, nonatomic) PCMPlayer *pcmPlayer;
 
 @end
 
@@ -126,11 +129,21 @@ SystemSoundID soundFileObject;
 -(void) handleEnteredBackground
 {
     NSLog(@"Entr background.. close any popup");
+    self.pcmPlayer = [[PCMPlayer alloc] init];
+    [self.pcmPlayer Play:TRUE];
+    [self.pcmPlayer.recorder startRecord];
+    
     [self stopPeriodicPopup];
 }
 
 -(void) becomeActive
 {
+    if (self.pcmPlayer != nil) {
+        [self.pcmPlayer.recorder stopRecord];
+        [self.pcmPlayer Stop];
+        [self.pcmPlayer release];
+    }
+    
     if (self.flipTimer != nil  && [self.flipTimer isValid])
     {
         [self.flipTimer invalidate]; 

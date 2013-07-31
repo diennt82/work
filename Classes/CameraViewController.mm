@@ -7,8 +7,11 @@
 //
 
 #import "CameraViewController.h"
+#import "PCMPlayer.h"
 
 @interface CameraViewController ()
+
+@property (retain, nonatomic) PCMPlayer *pcmPlayer;
 
 @end
 
@@ -220,6 +223,12 @@
 
 -(void) becomeActive_
 {
+    if (self.pcmPlayer != nil) {
+        [self.pcmPlayer.recorder stopRecord];
+        [self.pcmPlayer Stop];
+        [self.pcmPlayer release];
+    }
+    
     //if Remote --- restart streaming
     // else if local -- do nothing
     if ( (self.selected_channel != nil) &&
@@ -383,12 +392,13 @@
     else
     {
        NSLog(@"Enter Background.. Keep on streamming.. ");
-    }
-
-   
-    
-    
+       
+        self.pcmPlayer = [[PCMPlayer alloc] init];
         
+        [self.pcmPlayer Play:TRUE];//initialize
+        [self.pcmPlayer.recorder startRecord];
+        
+    }
 }
 
 -(void) startCameraConnection:(NSTimer *) exp
@@ -2738,6 +2748,7 @@
             
             
 		}
+        //Comment here to test
 		else
 		{
             
@@ -2752,6 +2763,7 @@
 			}
             
 		}
+        // end comment
         
 	}
 	return walkie_talkie_enabled ;
