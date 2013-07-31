@@ -2746,7 +2746,6 @@
             
             
 		}
-        //Comment here to test
 		else
 		{
             
@@ -2761,7 +2760,6 @@
 			}
             
 		}
-        // end comment
         
 	}
 	return walkie_talkie_enabled ;
