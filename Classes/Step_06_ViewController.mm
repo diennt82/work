@@ -8,7 +8,11 @@
 
 #import "Step_06_ViewController.h"
 
-@interface Step_06_ViewController ()
+@interface Step_06_ViewController () <UITextFieldDelegate>
+
+@property (retain, nonatomic) UITextField *tfSSID;
+@property (retain, nonatomic) UITextField *tfPassword;
+@property (retain, nonatomic) UITextField *tfConfirmPass;
 
 @end
 
@@ -85,6 +89,7 @@
                                     target:self 
                                     action:@selector(handleNextButton:)];          
     self.navigationItem.rightBarButtonItem = nextButton;
+    self.navigationItem.rightBarButtonItem.enabled = NO;
     [nextButton release];
         
     /* initialize transient object here */
@@ -97,6 +102,13 @@
         self.deviceConf.ssid = self.ssid; 
     }
     
+    self.tfSSID = (UITextField *)[self.ssidCell viewWithTag:202];
+    if (self.tfSSID.text.length > 0) {
+        self.navigationItem.rightBarButtonItem .enabled = YES;
+        self.navigationItem.rightBarButtonItem.tintColor = [UIColor blueColor];
+    }
+    self.tfPassword = (UITextField *)[self.passwordCell viewWithTag:200];
+    self.tfConfirmPass = (UITextField *)[self.confPasswordCell viewWithTag:201];
 }
 
 - (void)viewDidUnload
@@ -118,6 +130,81 @@
         _sec.text = self.security; 
     }
 
+}
+
+#pragma mark -
+#pragma mark UITextFieldDelegate
+- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
+    
+    if (textField.tag == 202) { // SSID
+        
+        NSInteger ssidTextLength = 0;
+        const char * _char = [string cStringUsingEncoding:NSUTF8StringEncoding];
+        int isBackSpace = strcmp(_char, "\b");
+        
+        if (isBackSpace == -8)
+        {
+            ssidTextLength = textField.text.length - 1;
+        }
+        else {
+            ssidTextLength = textField.text.length + string.length;
+        }
+        if (ssidTextLength > 0 && [self.tfPassword.text isEqualToString:self.tfConfirmPass.text]) {
+            self.navigationItem.rightBarButtonItem.enabled = YES;
+            self.navigationItem.rightBarButtonItem.tintColor = [UIColor blueColor];
+        }
+        else {
+            self.navigationItem.rightBarButtonItem.enabled = NO;
+            self.navigationItem.rightBarButtonItem.tintColor = nil;
+        }
+    }
+    else if (textField.tag == 200) { // Password
+        
+        NSString *passString = @"";
+        
+        const char * _char = [string cStringUsingEncoding:NSUTF8StringEncoding];
+        int isBackSpace = strcmp(_char, "\b");
+        
+        if (isBackSpace == -8)
+        {
+            passString = [textField.text substringToIndex:textField.text.length - 1];
+        }
+        else {
+            passString = [textField.text stringByAppendingString:string];
+        }
+        if (self.tfSSID.text.length > 0 && [passString isEqualToString:self.tfConfirmPass.text]) {
+            self.navigationItem.rightBarButtonItem.enabled = YES;
+            self.navigationItem.rightBarButtonItem.tintColor = [UIColor blueColor];
+        }
+        else {
+            self.navigationItem.rightBarButtonItem.enabled = NO;
+            self.navigationItem.rightBarButtonItem.tintColor = nil;
+        }
+    }
+    else if (textField.tag == 201) { // Confirm Password
+        
+        NSString *confirmPassString = @"";
+        
+        const char * _char = [string cStringUsingEncoding:NSUTF8StringEncoding];
+        int isBackSpace = strcmp(_char, "\b");
+        
+        if (isBackSpace == -8)
+        {
+            confirmPassString = [textField.text substringToIndex:textField.text.length - 1];
+        }
+        else {
+            confirmPassString = [textField.text stringByAppendingString:string];
+        }
+        if (self.tfSSID.text.length > 0 && [self.tfPassword.text isEqualToString:confirmPassString]) {
+            self.navigationItem.rightBarButtonItem.enabled = YES;
+            self.navigationItem.rightBarButtonItem.tintColor = [UIColor blueColor];
+        }
+        else {
+            self.navigationItem.rightBarButtonItem.enabled = NO;
+            self.navigationItem.rightBarButtonItem.tintColor = nil;
+        }
+    }
+    return YES;
 }
 
 #pragma mark -
