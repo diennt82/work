@@ -138,6 +138,7 @@ static OSStatus playbackCallback(void *inRefCon,
             //if needed we can get the number of bytes that will fill the buffer using
             // int numberOfSamples = ioData->mBuffers[i].mDataByteSize;
             
+#if 0
             //get the buffer and point to it as an UInt32 (as we will be filling it with 32 bit samples)
             //if we wanted we could grab it as a 16 bit and put in the samples for left and right seperately
             //but the loop below would be for(j = 0; j < inNumberFrames * 2; j++) as each frame is a 32 bit number
@@ -154,6 +155,24 @@ static OSStatus playbackCallback(void *inRefCon,
                 fwrite(&frameBuffer[j],4, 1, fp);
 #endif 	
             }
+            
+#else
+            //Use 1 channel 
+            UInt16 *frameBuffer = buffer.mData;
+            
+            
+            //loop through the buffer and fill the frames
+            for (int j = 0; j < inNumberFrames; j++){
+                // get NextPacket returns a 32 bit value, one frame.
+                frameBuffer[j] = (UInt16) [[remoteIOplayer inMemoryAudioFile] getNextPacket];
+                
+#if DBG_AUDIO
+                /* DBG : save this data to a file to playback later */
+                fwrite(&frameBuffer[j],2, 1, fp);
+#endif
+            }
+
+#endif
         }
     }
     
@@ -354,11 +373,18 @@ static OSStatus recordingCallback(void *inRefCon,
 	audioFormat.mFormatID			= kAudioFormatLinearPCM;
 	audioFormat.mFormatFlags		= kAudioFormatFlagIsSignedInteger | kAudioFormatFlagIsPacked;
 	audioFormat.mFramesPerPacket	= 1;
+#if 0
 	audioFormat.mChannelsPerFrame	= 2;
 	audioFormat.mBitsPerChannel		= 16;
 	audioFormat.mBytesPerPacket		= 4;
 	audioFormat.mBytesPerFrame		= 4;
-	status = AudioUnitSetProperty(audioUnit, 
+#else
+    audioFormat.mChannelsPerFrame	= 1;
+	audioFormat.mBitsPerChannel		= 16;
+	audioFormat.mBytesPerPacket		= 2;
+	audioFormat.mBytesPerFrame		= 2;
+#endif
+	status = AudioUnitSetProperty(audioUnit,
 								  kAudioUnitProperty_StreamFormat, 
 								  kAudioUnitScope_Input, 
 								  kOutputBus, 
