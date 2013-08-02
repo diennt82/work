@@ -7,8 +7,11 @@
 //
 
 #import "CameraViewController.h"
+#import "PCMPlayer.h"
 
 @interface CameraViewController ()
+
+@property (retain, nonatomic) PCMPlayer *pcmPlayer;
 
 @end
 
@@ -59,6 +62,7 @@
 	[temperature_label release];
 	[videoAndSnapshotTime release];
     [userSettings release];
+    [self.pcmPlayer release];
 	[super dealloc];
 }
 
@@ -212,6 +216,8 @@
     CFURLRef soundFileURLRef = CFBundleCopyResourceURL(mainbundle, CFSTR("beep"), CFSTR("wav"), NULL);
     AudioServicesCreateSystemSoundID(soundFileURLRef, &soundFileObject);
     
+    self.pcmPlayer = [[PCMPlayer alloc] init];
+    
     [self becomeActive];
         
 
@@ -220,6 +226,9 @@
 
 -(void) becomeActive_
 {
+    [self.pcmPlayer.recorder stopRecord];
+    [self.pcmPlayer Stop];
+    
     //if Remote --- restart streaming
     // else if local -- do nothing
     if ( (self.selected_channel != nil) &&
@@ -383,12 +392,11 @@
     else
     {
        NSLog(@"Enter Background.. Keep on streamming.. ");
-    }
-
-   
-    
-    
         
+        [self.pcmPlayer Play:TRUE];//initialize
+        [self.pcmPlayer.recorder startRecord];
+        
+    }
 }
 
 -(void) startCameraConnection:(NSTimer *) exp
