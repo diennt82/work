@@ -9,7 +9,7 @@
 //
 
 
-
+#import "GAI.h"
 @class AsyncSocket;
 @class AsyncReadPacket;
 @class AsyncWritePacket;
