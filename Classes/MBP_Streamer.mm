@@ -1227,6 +1227,7 @@
     
     [self process:data];
     
+    
  }
 
 - (void)onSocket:(AsyncSocket *)sock didWriteDataWithTag:(long)tag
@@ -1468,6 +1469,10 @@
     
 	[udtStreamerThd start];
     
+    [[[GAI sharedInstance] defaultTracker] trackEventWithCategory:@"View Camera Remote"
+                                                       withAction:@"Start Streaming Success"
+                                                        withLabel:@"Start Streaming Success"
+                                                        withValue:nil];
     
     
 #if 1
@@ -1598,6 +1603,12 @@
         NSData * msg_ = [[NSData alloc] initWithBytes:[msg UTF8String] length:[msg length]];
         
         [udtSocket sendDataViaUdt:msg_];
+        
+        
+        [[[GAI sharedInstance] defaultTracker] trackEventWithCategory:@"View Camera Remote"
+                                                           withAction:@"Start Streaming Success"
+                                                            withLabel:@"Start Streaming Success"
+                                                            withValue:nil];
    
 #pragma mark FORCE RELAY
 #if 0
