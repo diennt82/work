@@ -164,6 +164,7 @@
 		38E3C85C1694033500A13A70 /* AlertPrompt.m in Sources */ = {isa = PBXBuildFile; fileRef = 38E3C85B1694033500A13A70 /* AlertPrompt.m */; };
 		38FC9D7A16717B0300373F25 /* EditCameraCell.mm in Sources */ = {isa = PBXBuildFile; fileRef = 38FC9D7916717B0300373F25 /* EditCameraCell.mm */; };
 		9704F84117B37CB3005F9868 /* DashBoard_ViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 9704F84017B37CAF005F9868 /* DashBoard_ViewController.mm */; };
+		970A3DBF17B0BFF8002D5DCD /* MyMBS_Communication.m in Sources */ = {isa = PBXBuildFile; fileRef = 970A3DBE17B0BFF8002D5DCD /* MyMBS_Communication.m */; };
 		97137B9715AE742A00BEBBD6 /* StunCommunication.mm in Sources */ = {isa = PBXBuildFile; fileRef = 97137B9615AE742A00BEBBD6 /* StunCommunication.mm */; };
 		9719EC5C155C9F30005419FC /* MBP_MenuViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 9719EC5A155C9F30005419FC /* MBP_MenuViewController.mm */; };
 		972E290E15A3F77600E60A96 /* STUN_Communication.mm in Sources */ = {isa = PBXBuildFile; fileRef = 972E290D15A3F77600E60A96 /* STUN_Communication.mm */; };
@@ -520,6 +521,8 @@
 		9704F37E14B76202000B4AA5 /* Entitlements.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Entitlements.plist; sourceTree = "<group>"; };
 		9704F83F17B37CAD005F9868 /* DashBoard_ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DashBoard_ViewController.h; sourceTree = "<group>"; };
 		9704F84017B37CAF005F9868 /* DashBoard_ViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = DashBoard_ViewController.mm; sourceTree = "<group>"; };
+		970A3DBD17B0BFF8002D5DCD /* MyMBS_Communication.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyMBS_Communication.h; sourceTree = "<group>"; };
+		970A3DBE17B0BFF8002D5DCD /* MyMBS_Communication.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyMBS_Communication.m; sourceTree = "<group>"; };
 		97137B9515AE742A00BEBBD6 /* StunCommunication.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StunCommunication.h; sourceTree = "<group>"; };
 		97137B9615AE742A00BEBBD6 /* StunCommunication.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = StunCommunication.mm; sourceTree = "<group>"; };
 		9719EC59155C9F30005419FC /* MBP_MenuViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MBP_MenuViewController.h; sourceTree = "<group>"; };
@@ -1723,6 +1726,7 @@
 		29B97314FDCFA39411CA2CEA /* CustomTemplate */ = {
 			isa = PBXGroup;
 			children = (
+				970A3DBC17B0B8E4002D5DCD /* NewBMS_Communication */,
 				BC883A6C1798EB81001D02D8 /* CoreData.framework */,
 				38962C8417695CB20016AE16 /* libTestFlight.a */,
 				38962C821769587E0016AE16 /* libz.dylib */,
@@ -1884,6 +1888,15 @@
 				3812F82415C8BF0600DADFA6 /* bb_setting_icon.png */,
 			);
 			name = images13;
+			sourceTree = "<group>";
+		};
+		970A3DBC17B0B8E4002D5DCD /* NewBMS_Communication */ = {
+			isa = PBXGroup;
+			children = (
+				970A3DBD17B0BFF8002D5DCD /* MyMBS_Communication.h */,
+				970A3DBE17B0BFF8002D5DCD /* MyMBS_Communication.m */,
+			);
+			name = NewBMS_Communication;
 			sourceTree = "<group>";
 		};
 		9770CB87143032BC009E69EF /* images */ = {
@@ -2244,6 +2257,7 @@
 				BCB3C77C17379AC000290E76 /* Bonjour.m in Sources */,
 				9704F84117B37CB3005F9868 /* DashBoard_ViewController.mm in Sources */,
 				97F5531517BDD3AF00024017 /* MBPNavController.m in Sources */,
+				970A3DBF17B0BFF8002D5DCD /* MyMBS_Communication.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
