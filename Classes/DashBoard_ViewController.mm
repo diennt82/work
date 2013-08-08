@@ -433,7 +433,7 @@
 
 -(BOOL) shouldAutorotate
 {
-    
+
         return YES ;
     
 }
@@ -883,7 +883,7 @@
 
 - (void)presentModallyOn:(UIViewController *)parent
 {
-    UINavigationController *    navController;
+    MBPNavController *    navController;
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     
     BOOL isOffline = [userDefaults boolForKey:_OfflineMode];
@@ -930,12 +930,12 @@
     }
     
     
-    tabBarController = [[UITabBarController alloc]init]; 
+    tabBarController = [[UITabBarController alloc]init];
     [tabBarController setViewControllers:views];
     
     
     //setup nav controller
-    navController= [[[UINavigationController alloc]initWithRootViewController:tabBarController] autorelease];
+    navController= [[[MBPNavController alloc]initWithRootViewController:tabBarController] autorelease];
     
     // Create a navigation controller with us as its root.
     assert(navController != nil);
