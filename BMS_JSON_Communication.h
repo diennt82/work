@@ -24,8 +24,7 @@
 #define USER_AUTHENTICATION_TOKEN_CMD @"/v1/users/authentication_token.json?"
 #define USER_AUTHENTICATION_TOKEN_PARAM_1 @"login=%@"
 #define USER_AUTHENTICATION_TOKEN_PARAM_2 @"&password=%@"
-#define USER_AUTHENTICATION_TOKEN_PARAM_3 @"&api_key=%@"
-//~/v1/users/authentication_token.json?login=luan00&password=qwe&api_key=q7sPwRzqJ4tqF6w1xKVp
+//~/v1/users/authentication_token.json?login=luan00&password=qwe
 
 #define USER_LOGIN_CMD    @"/v1/users/create_token.json"
 #define USER_LOGIN_PARAM_1 @"\"login\""
@@ -116,8 +115,8 @@
 //~/v1/devices/asasasasas04/request_recovery.json?api_key=kCBb6pxjE5fRbpxHYUEa
 //{"recovery_type":"upnp","status":"recoverable"}
 
-#define DEV_PLAYBACK_CMD @"/v1/devices/%@/playback.json?api_key=%@"
-//~/v1/devices/asasasasas04/playback.json?api_key=kCBb6pxjE5fRbpxHYUEa
+#define DEV_PLAYLIST_CMD @"/v1/devices/%@/playlist.json?api_key=%@"
+//~/v1/devices/asasasasas04/playlist.json?api_key=kCBb6pxjE5fRbpxHYUEa
 
 #define DEV_PORT_OPEN_CMD @"/v1/devices/%@/is_port_open.json?api_key=%@"
 #define DEV_PORT_OPEN_PARAM_1 @"\"port\""
@@ -139,7 +138,7 @@
 //User
 - (BOOL)registerAccount: (NSString *)name andEmail: (NSString *)email andPassword: (NSString *)password andPasswordConfirmation: (NSString *)passwordConfirm;
 
-- (BOOL)getAuthenticationTokenWithLogin: (NSString *)login andPassword: (NSString *)pass andApiKey: (NSString *)apiKey;
+- (BOOL)getAuthenticationTokenWithLogin: (NSString *)login andPassword: (NSString *)pass;
 
 - (BOOL)loginWithUsername: (NSString *)login andPassword: (NSString *)passwrod;
 

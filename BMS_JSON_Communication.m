@@ -98,7 +98,7 @@
     return TRUE;
 }
 
-- (BOOL)getAuthenticationTokenWithLogin: (NSString *)login andPassword: (NSString *)pass andApiKey: (NSString *)apiKey
+- (BOOL)getAuthenticationTokenWithLogin: (NSString *)login andPassword: (NSString *)pass
 {
     if (selIfSuccess == nil ||selIfFailure == nil|| selIfServerFail ==nil)
 	{
@@ -111,7 +111,6 @@
         NSString *requestString = [NSString stringWithFormat:@"%@%@", BMS_JSON_PHONESERVICE, USER_AUTHENTICATION_TOKEN_CMD];
         requestString = [requestString stringByAppendingFormat:USER_AUTHENTICATION_TOKEN_PARAM_1, login];
         requestString = [requestString stringByAppendingFormat:USER_AUTHENTICATION_TOKEN_PARAM_2, pass];
-        requestString = [requestString stringByAppendingFormat:USER_AUTHENTICATION_TOKEN_PARAM_3, apiKey];
         
         NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL: [NSURL URLWithString:requestString]];
         request.timeoutInterval = BMS_JSON_DEFAULT_TIME_OUT;
@@ -729,7 +728,7 @@
     @synchronized(self)
 	{
         NSString *requestString = [NSString stringWithFormat:@"%@", BMS_JSON_PHONESERVICE];
-        requestString = [requestString stringByAppendingFormat:DEV_PLAYBACK_CMD, registrationId, apiKey];
+        requestString = [requestString stringByAppendingFormat:DEV_PLAYLIST_CMD, registrationId, apiKey];
         
         NSLog(@"%@", requestString);
         
