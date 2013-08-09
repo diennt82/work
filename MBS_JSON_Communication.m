@@ -6,9 +6,9 @@
 //  Copyright (c) 2013 Smart Panda Ltd. All rights reserved.
 //
 
-#import "MyMBS_Communication.h"
+#import "MBS_JSON_Communication.h"
 
-@interface MyMBS_Communication ()
+@interface MBS_JSON_Communication ()
 {
     SEL selIfSuccess;
 	SEL selIfFailure;
@@ -22,7 +22,7 @@
 
 @end
 
-@implementation MyMBS_Communication
+@implementation MBS_JSON_Communication
 
 - (id)  initWithObject: (id) caller Selector:(SEL) success FailSelector: (SEL) fail ServerErr:(SEL) serverErr
 {
@@ -630,7 +630,7 @@
     return TRUE;
 }
 
-- (BOOL)requestRecoveryForDeviceWith:(NSString *)registrationId andRecoveryType: (NSString *)recoveryType andStatus: (NSString *)status andApiKey: (NSString *)apiKey
+- (BOOL)requestRecoveryForDeviceWithRegistrationId:(NSString *)registrationId andRecoveryType: (NSString *)recoveryType andStatus: (NSString *)status andApiKey: (NSString *)apiKey
 {
     if (selIfSuccess == nil ||selIfFailure == nil|| selIfServerFail ==nil)
 	{

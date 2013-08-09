@@ -96,7 +96,7 @@
 // ~/v1/devices/asasasasas04.json?suppress_response_codes=1&api_key=ghybzPaxVQ3HtcqH3eMy
 
 #define DEV_UPDATE_BASIC_CMD @"/v1/devices/"
-#define DEV_UPDATE_BASIC_CMD_1 @"/close_session.json?suppress_response_codes=1"
+#define DEV_UPDATE_BASIC_CMD_1 @"/basic.json?suppress_response_codes=1"
 #define DEV_UPDATE_BASIC_PARAM_1 @"&name="
 #define DEV_UPDATE_BASIC_PARAM_2 @"&access_token="
 #define DEV_UPDATE_BASIC_PARAM_3 @"&api_key="
@@ -125,7 +125,7 @@
 // ~End DEVICES
 
 
-@interface MyMBS_Communication : NSObject <NSURLConnectionDelegate, NSURLConnectionDataDelegate>
+@interface MBS_JSON_Communication : NSObject <NSURLConnectionDelegate, NSURLConnectionDataDelegate>
 
 @property (retain, nonatomic) NSMutableData *responseDict;
 @property (retain, nonatomic) NSURLConnection *urlConnection;
@@ -177,7 +177,7 @@
 
 - (BOOL)checkDeviceIsAvailableWithRegistrationId: (NSString *)registrationId andApiKey: (NSString *)apiKey;
 
-- (BOOL)requestRecoveryForDeviceWith:(NSString *)registrationId andRecoveryType: (NSString *)recoveryType andStatus: (NSString *)status andApiKey: (NSString *)apiKey;
+- (BOOL)requestRecoveryForDeviceWithRegistrationId:(NSString *)registrationId andRecoveryType: (NSString *)recoveryType andStatus: (NSString *)status andApiKey: (NSString *)apiKey;
 
 - (BOOL)getAllRecordedFilesWithRegistrationId: (NSString *)registrationId andApiKey: (NSString *)apiKey;
 
