@@ -6,9 +6,9 @@
 //  Copyright (c) 2013 Smart Panda Ltd. All rights reserved.
 //
 
-#import "MBS_JSON_Communication.h"
+#import "BMS_JSON_Communication.h"
 
-@interface MBS_JSON_Communication ()
+@interface BMS_JSON_Communication ()
 {
     SEL selIfSuccess;
 	SEL selIfFailure;
@@ -22,7 +22,7 @@
 
 @end
 
-@implementation MBS_JSON_Communication
+@implementation BMS_JSON_Communication
 
 - (id)  initWithObject: (id) caller Selector:(SEL) success FailSelector: (SEL) fail ServerErr:(SEL) serverErr
 {
@@ -46,8 +46,8 @@
 	
 	@synchronized(self)
 	{
-        NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL: [NSURL URLWithString:[NSString stringWithFormat:@"%@%@", BMS_PHONESERVICE, USER_REG_CMD]]];
-        request.timeoutInterval = BMS_DEFAULT_TIME_OUT;
+        NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL: [NSURL URLWithString:[NSString stringWithFormat:@"%@%@", BMS_JSON_PHONESERVICE, USER_REG_CMD]]];
+        request.timeoutInterval = BMS_JSON_DEFAULT_TIME_OUT;
         
         //Specify that it will be a POST request
         request.HTTPMethod = @"POST";
@@ -78,8 +78,8 @@
 	
 	@synchronized(self)
 	{
-        NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL: [NSURL URLWithString:[NSString stringWithFormat:@"%@%@", BMS_PHONESERVICE, USER_LOGIN_CMD]]];
-        request.timeoutInterval = BMS_DEFAULT_TIME_OUT;
+        NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL: [NSURL URLWithString:[NSString stringWithFormat:@"%@%@", BMS_JSON_PHONESERVICE, USER_LOGIN_CMD]]];
+        request.timeoutInterval = BMS_JSON_DEFAULT_TIME_OUT;
         
         //Specify that it will be a POST request
         request.HTTPMethod = @"POST";
@@ -98,6 +98,29 @@
     return TRUE;
 }
 
+- (BOOL)getAuthenticationTokenWithLogin: (NSString *)login andPassword: (NSString *)pass andApiKey: (NSString *)apiKey
+{
+    if (selIfSuccess == nil ||selIfFailure == nil|| selIfServerFail ==nil)
+	{
+		NSLog(@"ERR: selector is not set");
+		return FALSE;
+	}
+    
+    @synchronized(self)
+	{
+        NSString *requestString = [NSString stringWithFormat:@"%@%@", BMS_JSON_PHONESERVICE, USER_AUTHENTICATION_TOKEN_CMD];
+        requestString = [requestString stringByAppendingFormat:USER_AUTHENTICATION_TOKEN_PARAM_1, login];
+        requestString = [requestString stringByAppendingFormat:USER_AUTHENTICATION_TOKEN_PARAM_2, pass];
+        requestString = [requestString stringByAppendingFormat:USER_AUTHENTICATION_TOKEN_PARAM_3, apiKey];
+        
+        NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL: [NSURL URLWithString:requestString]];
+        request.timeoutInterval = BMS_JSON_DEFAULT_TIME_OUT;
+        
+        self.urlConnection = [[NSURLConnection alloc] initWithRequest:request delegate:self];
+    }
+    return TRUE;
+}
+
 - (BOOL)logoutWithApiKey: (NSString *)apiKey
 {
     if (selIfSuccess == nil ||selIfFailure == nil|| selIfServerFail ==nil)
@@ -108,12 +131,12 @@
 	
 	@synchronized(self)
 	{
-        NSString *requestString = [NSString stringWithFormat:@"%@%@", BMS_PHONESERVICE, USER_LOGOUT_CMD];
+        NSString *requestString = [NSString stringWithFormat:@"%@%@", BMS_JSON_PHONESERVICE, USER_LOGOUT_CMD];
         requestString = [requestString stringByAppendingFormat:@"%@", apiKey];
         
         NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL: [NSURL URLWithString:requestString]];
         
-        request.timeoutInterval = BMS_DEFAULT_TIME_OUT;
+        request.timeoutInterval = BMS_JSON_DEFAULT_TIME_OUT;
         
         //Specify that it will be a POST request
         request.HTTPMethod = @"DELETE";
@@ -137,8 +160,8 @@
     
     @synchronized(self)
 	{
-        NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL: [NSURL URLWithString:[NSString stringWithFormat:@"%@%@%@", BMS_PHONESERVICE, USER_ME_CMD, apiKey]]];
-        request.timeoutInterval = BMS_DEFAULT_TIME_OUT;
+        NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL: [NSURL URLWithString:[NSString stringWithFormat:@"%@%@%@", BMS_JSON_PHONESERVICE, USER_ME_CMD, apiKey]]];
+        request.timeoutInterval = BMS_JSON_DEFAULT_TIME_OUT;
         
         self.urlConnection = [[NSURLConnection alloc] initWithRequest:request delegate:self];
     }
@@ -156,14 +179,14 @@
     
     @synchronized(self)
 	{
-        NSString *requestString = [NSString stringWithFormat:@"%@%@", BMS_PHONESERVICE, USER_UPDATE_CMD];
+        NSString *requestString = [NSString stringWithFormat:@"%@%@", BMS_JSON_PHONESERVICE, USER_UPDATE_CMD];
         requestString = [requestString stringByAppendingFormat:@"%@%@", USER_UPDATE_PARAM_1, newName];
         requestString = [requestString stringByAppendingFormat:@"%@%@", USER_UPDATE_PARAM_2, newEmail];
         requestString = [requestString stringByAppendingFormat:@"%@%@", USER_UPDATE_PARAM_3, apiKey];
         
         NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL: [NSURL URLWithString:requestString]];
         
-        request.timeoutInterval = BMS_DEFAULT_TIME_OUT;
+        request.timeoutInterval = BMS_JSON_DEFAULT_TIME_OUT;
         
         //Specify that it will be a POST request
         request.HTTPMethod = @"PUT";
@@ -188,14 +211,14 @@
     
     @synchronized(self)
 	{
-        NSString *requestString = [NSString stringWithFormat:@"%@%@", BMS_PHONESERVICE, USER_CHANGE_PASS_CMD];
+        NSString *requestString = [NSString stringWithFormat:@"%@%@", BMS_JSON_PHONESERVICE, USER_CHANGE_PASS_CMD];
         requestString = [requestString stringByAppendingFormat:@"%@%@", USER_CHANGE_PASS_PARAM_1, newPassword];
         requestString = [requestString stringByAppendingFormat:@"%@%@", USER_CHANGE_PASS_PARAM_2, passwordConfirm];
         requestString = [requestString stringByAppendingFormat:@"%@%@", USER_CHANGE_PASS_PARAM_3, apiKey];
         
         NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL: [NSURL URLWithString:requestString]];
         
-        request.timeoutInterval = BMS_DEFAULT_TIME_OUT;
+        request.timeoutInterval = BMS_JSON_DEFAULT_TIME_OUT;
         
         //Specify that it will be a POST request
         request.HTTPMethod = @"PUT";
@@ -219,11 +242,11 @@
 	
 	@synchronized(self)
 	{
-        NSString *requestString = [NSString stringWithFormat:@"%@%@", BMS_PHONESERVICE, USER_RESET_PASS_CMD];
+        NSString *requestString = [NSString stringWithFormat:@"%@%@", BMS_JSON_PHONESERVICE, USER_RESET_PASS_CMD];
         requestString = [requestString stringByAppendingFormat:@"%@", apiKey];
         
         NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL: [NSURL URLWithString:requestString]];
-        request.timeoutInterval = BMS_DEFAULT_TIME_OUT;
+        request.timeoutInterval = BMS_JSON_DEFAULT_TIME_OUT;
         
         //Specify that it will be a POST request
         request.HTTPMethod = @"POST";
@@ -254,12 +277,12 @@
 	
 	@synchronized(self)
 	{
-        NSString *requestString = [NSString stringWithFormat:@"%@%@", BMS_PHONESERVICE, DEV_REG_CMD];
+        NSString *requestString = [NSString stringWithFormat:@"%@%@", BMS_JSON_PHONESERVICE, DEV_REG_CMD];
         requestString = [requestString stringByAppendingFormat:@"%@", apiKey];
         NSLog(@"request = %@", requestString);
         
         NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL: [NSURL URLWithString:requestString]];
-        request.timeoutInterval = BMS_DEFAULT_TIME_OUT;
+        request.timeoutInterval = BMS_JSON_DEFAULT_TIME_OUT;
         
         //Specify that it will be a POST request
         request.HTTPMethod = @"POST";
@@ -289,8 +312,8 @@
     
     @synchronized(self)
 	{
-        NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL: [NSURL URLWithString:[NSString stringWithFormat:@"%@%@%@", BMS_PHONESERVICE, DEV_OWN_CMD, apiKey]]];
-        request.timeoutInterval = BMS_DEFAULT_TIME_OUT;
+        NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL: [NSURL URLWithString:[NSString stringWithFormat:@"%@%@%@", BMS_JSON_PHONESERVICE, DEV_OWN_CMD, apiKey]]];
+        request.timeoutInterval = BMS_JSON_DEFAULT_TIME_OUT;
         
         self.urlConnection = [[NSURLConnection alloc] initWithRequest:request delegate:self];
     }
@@ -307,8 +330,8 @@
     
     @synchronized(self)
 	{
-        NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL: [NSURL URLWithString:[NSString stringWithFormat:@"%@%@%@", BMS_PHONESERVICE, DEV_SHARED_CMD, apiKey]]];
-        request.timeoutInterval = BMS_DEFAULT_TIME_OUT;
+        NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL: [NSURL URLWithString:[NSString stringWithFormat:@"%@%@%@", BMS_JSON_PHONESERVICE, DEV_SHARED_CMD, apiKey]]];
+        request.timeoutInterval = BMS_JSON_DEFAULT_TIME_OUT;
         
         self.urlConnection = [[NSURLConnection alloc] initWithRequest:request delegate:self];
     }
@@ -326,8 +349,8 @@
     
     @synchronized(self)
 	{
-        NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL: [NSURL URLWithString:[NSString stringWithFormat:@"%@%@%@", BMS_PHONESERVICE, DEV_PUBLIC_CMD, apiKey]]];
-        request.timeoutInterval = BMS_DEFAULT_TIME_OUT;
+        NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL: [NSURL URLWithString:[NSString stringWithFormat:@"%@%@%@", BMS_JSON_PHONESERVICE, DEV_PUBLIC_CMD, apiKey]]];
+        request.timeoutInterval = BMS_JSON_DEFAULT_TIME_OUT;
         
         self.urlConnection = [[NSURLConnection alloc] initWithRequest:request delegate:self];
     }
@@ -345,15 +368,13 @@
     
     @synchronized(self)
 	{
-        NSString *requestString = [NSString stringWithFormat:@"%@%@", BMS_PHONESERVICE, DEV_BASIC_CMD];
-        requestString = [requestString stringByAppendingString:registrationId];
-        requestString = [requestString stringByAppendingFormat:@"%@", DEV_BASIC_CMD_1];
-        requestString = [requestString stringByAppendingFormat:@"%@", apiKey];
+        NSString *requestString = [NSString stringWithFormat:@"%@", BMS_JSON_PHONESERVICE];
+        requestString = [requestString stringByAppendingFormat:DEV_BASIC_CMD, registrationId, apiKey];
         
         NSLog(@"%@", requestString);
         
         NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL: [NSURL URLWithString:requestString]];
-        request.timeoutInterval = BMS_DEFAULT_TIME_OUT;
+        request.timeoutInterval = BMS_JSON_DEFAULT_TIME_OUT;
         
         self.urlConnection = [[NSURLConnection alloc] initWithRequest:request delegate:self];
     }
@@ -371,15 +392,13 @@
     
     @synchronized(self)
 	{
-        NSString *requestString = [NSString stringWithFormat:@"%@%@", BMS_PHONESERVICE, DEV_CAPABILTY_CDM];
-        requestString = [requestString stringByAppendingString:registrationId];
-        requestString = [requestString stringByAppendingFormat:@"%@", DEV_CAPABILTY_CDM_1];
-        requestString = [requestString stringByAppendingFormat:@"%@", apiKey];
+        NSString *requestString = [NSString stringWithFormat:@"%@", BMS_JSON_PHONESERVICE];
+        requestString = [requestString stringByAppendingFormat:DEV_CAPABILTY_CMD, registrationId, apiKey];
         
         NSLog(@"%@", requestString);
         
         NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL: [NSURL URLWithString:requestString]];
-        request.timeoutInterval = BMS_DEFAULT_TIME_OUT;
+        request.timeoutInterval = BMS_JSON_DEFAULT_TIME_OUT;
         
         self.urlConnection = [[NSURLConnection alloc] initWithRequest:request delegate:self];
     }
@@ -397,13 +416,11 @@
 	
 	@synchronized(self)
 	{
-        NSString *requestString = [NSString stringWithFormat:@"%@%@", BMS_PHONESERVICE, DEV_SEND_COMMAND_CMD];
-        requestString = [requestString stringByAppendingString:registrationId];
-        requestString = [requestString stringByAppendingFormat:@"%@", DEV_SEND_COMMAND_CMD_1];
-        requestString = [requestString stringByAppendingFormat:@"%@", apiKey];
+        NSString *requestString = [NSString stringWithFormat:@"%@", BMS_JSON_PHONESERVICE];
+        requestString = [requestString stringByAppendingFormat:DEV_SEND_COMMAND_CMD, registrationId, apiKey];
         
         NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL: [NSURL URLWithString:requestString]];
-        request.timeoutInterval = BMS_DEFAULT_TIME_OUT;
+        request.timeoutInterval = BMS_JSON_DEFAULT_TIME_OUT;
         
         //Specify that it will be a POST request
         request.HTTPMethod = @"POST";
@@ -433,13 +450,11 @@
 	
 	@synchronized(self)
 	{
-        NSString *requestString = [NSString stringWithFormat:@"%@%@", BMS_PHONESERVICE, DEV_CREATE_SES_CMD];
-        requestString = [requestString stringByAppendingString:registrationId];
-        requestString = [requestString stringByAppendingFormat:@"%@", DEV_CREATE_SES_CMD_1];
-        requestString = [requestString stringByAppendingFormat:@"%@", apiKey];
+        NSString *requestString = [NSString stringWithFormat:@"%@", BMS_JSON_PHONESERVICE];
+        requestString = [requestString stringByAppendingFormat:DEV_CREATE_SESSION_CMD, registrationId, apiKey];
         
         NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL: [NSURL URLWithString:requestString]];
-        request.timeoutInterval = BMS_DEFAULT_TIME_OUT;
+        request.timeoutInterval = BMS_JSON_DEFAULT_TIME_OUT;
         
         //Specify that it will be a POST request
         request.HTTPMethod = @"POST";
@@ -448,7 +463,7 @@
         [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
         
         // Convert your data and set your request's HTTPBody properties
-        NSString *dataString = [NSString stringWithFormat:@"{%@:\"%@\",%@:\"%@\"}", DEV_CREATE_SES_PARAM_1, registrationId, DEV_CREATE_SES_PARAM_2, clientType];
+        NSString *dataString = [NSString stringWithFormat:@"{%@:\"%@\",%@:\"%@\"}", DEV_CREATE_SESSION_PARAM_1, registrationId, DEV_CREATE_SESSION_PARAM_2, clientType];
         NSData *requestBodyData = [dataString dataUsingEncoding:NSUTF8StringEncoding];
         request.HTTPBody = requestBodyData;
         
@@ -468,16 +483,15 @@
 	
 	@synchronized(self)
 	{
-        NSString *requestString = [NSString stringWithFormat:@"%@%@", BMS_PHONESERVICE, DEV_CLOSE_SES_CMD];
-        requestString = [requestString stringByAppendingString:registrationId];
-        requestString = [requestString stringByAppendingFormat:@"%@", DEV_CLOSE_SES_CMD_1];
-        requestString = [requestString stringByAppendingFormat:@"%@%@", DEV_CLOSE_SES_PARAM_2, apiKey];
+        NSString *requestString = [NSString stringWithFormat:@"%@", BMS_JSON_PHONESERVICE];
+        requestString = [requestString stringByAppendingFormat:DEV_CLOSE_SESSION_CMD, registrationId];
+        requestString = [requestString stringByAppendingFormat:@"%@%@", DEV_CLOSE_SESSION_PARAM_2, apiKey];
         
         NSLog(@"request string = %@", requestString);
         
         NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL: [NSURL URLWithString:requestString]];
         
-        request.timeoutInterval = BMS_DEFAULT_TIME_OUT;
+        request.timeoutInterval = BMS_JSON_DEFAULT_TIME_OUT;
         
         //Specify that it will be a POST request
         request.HTTPMethod = @"DELETE";
@@ -502,17 +516,16 @@
 	
 	@synchronized(self)
 	{
-        NSString *requestString = [NSString stringWithFormat:@"%@%@", BMS_PHONESERVICE, DEV_CLOSE_SES_CMD];
-        requestString = [requestString stringByAppendingString:registrationId];
-        requestString = [requestString stringByAppendingFormat:@"%@", DEV_CLOSE_SES_CMD_1];
-                requestString = [requestString stringByAppendingFormat:@"%@%@", DEV_CLOSE_SES_PARAM_1, channedId];
-        requestString = [requestString stringByAppendingFormat:@"%@%@", DEV_CLOSE_SES_PARAM_2, apiKey];
+        NSString *requestString = [NSString stringWithFormat:@"%@", BMS_JSON_PHONESERVICE];
+        requestString = [requestString stringByAppendingFormat:DEV_CLOSE_SESSION_CMD, registrationId];
+                requestString = [requestString stringByAppendingFormat:@"%@%@", DEV_CLOSE_SESSION_PARAM_1, channedId];
+        requestString = [requestString stringByAppendingFormat:@"&%@%@", DEV_CLOSE_SESSION_PARAM_2, apiKey];
         
         NSLog(@"request string = %@", requestString);
         
         NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL: [NSURL URLWithString:requestString]];
         
-        request.timeoutInterval = BMS_DEFAULT_TIME_OUT;
+        request.timeoutInterval = BMS_JSON_DEFAULT_TIME_OUT;
         
         //Specify that it will be a POST request
         request.HTTPMethod = @"DELETE";
@@ -537,16 +550,14 @@
 	
 	@synchronized(self)
 	{
-        NSString *requestString = [NSString stringWithFormat:@"%@%@", BMS_PHONESERVICE, DEV_DEL_CMD];
-        requestString = [requestString stringByAppendingString:registrationId];
-        requestString = [requestString stringByAppendingFormat:@"%@", DEV_DEL_CMD_1];
-        requestString = [requestString stringByAppendingFormat:@"%@", apiKey];
+        NSString *requestString = [NSString stringWithFormat:@"%@", BMS_JSON_PHONESERVICE];
+        requestString = [requestString stringByAppendingFormat:DEV_DEL_CMD, registrationId, apiKey];
         
         NSLog(@"request string = %@", requestString);
         
         NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL: [NSURL URLWithString:requestString]];
         
-        request.timeoutInterval = BMS_DEFAULT_TIME_OUT;
+        request.timeoutInterval = BMS_JSON_DEFAULT_TIME_OUT;
         
         //Specify that it will be a POST request
         request.HTTPMethod = @"DELETE";
@@ -571,9 +582,8 @@
     
     @synchronized(self)
 	{
-        NSString *requestString = [NSString stringWithFormat:@"%@%@", BMS_PHONESERVICE, DEV_UPDATE_BASIC_CMD];
-        requestString = [requestString stringByAppendingFormat:@"%@", registrationId];
-        requestString = [requestString stringByAppendingFormat:@"%@", DEV_UPDATE_BASIC_CMD_1];
+        NSString *requestString = [NSString stringWithFormat:@"%@", BMS_JSON_PHONESERVICE];
+        requestString = [requestString stringByAppendingFormat:DEV_UPDATE_BASIC_CMD, registrationId];
         requestString = [requestString stringByAppendingFormat:@"%@%@", DEV_UPDATE_BASIC_PARAM_1, newName];
         requestString = [requestString stringByAppendingFormat:@"%@%@", DEV_UPDATE_BASIC_PARAM_2, accessToken];
         requestString = [requestString stringByAppendingFormat:@"%@%@", DEV_UPDATE_BASIC_PARAM_3, apiKey];
@@ -582,7 +592,7 @@
         
         NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL: [NSURL URLWithString:requestString]];
         
-        request.timeoutInterval = BMS_DEFAULT_TIME_OUT;
+        request.timeoutInterval = BMS_JSON_DEFAULT_TIME_OUT;
         
         //Specify that it will be a POST request
         request.HTTPMethod = @"PUT";
@@ -597,6 +607,52 @@
     return TRUE;
 }
 
+- (BOOL)settingDeviceWithRegistrationId: (NSString *)regId andApiKey: (NSString *)apiKey andSettings: (NSArray *)settingsArr
+{
+    if (selIfSuccess == nil ||selIfFailure == nil|| selIfServerFail ==nil)
+	{
+		NSLog(@"ERR: selector is not set");
+		return FALSE;
+	}
+	
+	@synchronized(self)
+	{
+        NSString *requestString = [NSString stringWithFormat:@"%@", BMS_JSON_PHONESERVICE];
+        requestString = [requestString stringByAppendingFormat:DEV_SETTINGS_CMD, regId, apiKey];
+        
+        NSLog(@"request = %@", requestString);
+        
+        NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL: [NSURL URLWithString:requestString]];
+        request.timeoutInterval = BMS_JSON_DEFAULT_TIME_OUT;
+        
+        //Specify that it will be a POST request
+        request.HTTPMethod = @"PUT";
+        
+        // This is how we set header fields
+        [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
+        
+        // Convert your data and set your request's HTTPBody properties
+        /*NSString *dataString = [NSString stringWithFormat:@"{%@:\"%@\",%@:\"%@\"}", DEV_CREATE_SESSION_PARAM_1, registrationId, DEV_CREATE_SESSION_PARAM_2, clientType];
+         NSData *requestBodyData = [dataString dataUsingEncoding:NSUTF8StringEncoding];
+         request.HTTPBody = requestBodyData;
+         */
+        NSDictionary *jsonDictInfo = [NSDictionary dictionaryWithObjectsAndKeys:
+                                      apiKey, DEV_SETTINGS_PARAM_1,
+                                      settingsArr, DEV_SETTINGS_PARAM_2,
+                                      nil];
+        NSLog(@"jsonDict = %@", jsonDictInfo);
+        // convert to data
+        NSError *error = nil;
+        NSData *requestBodyData = [NSJSONSerialization dataWithJSONObject:jsonDictInfo
+                                                                  options:NSJSONWritingPrettyPrinted
+                                                                    error:&error];
+        request.HTTPBody = requestBodyData;
+        //Create url connection and fire request
+        self.urlConnection = [[NSURLConnection alloc] initWithRequest:request delegate:self];
+    }
+    return TRUE;
+}
+
 - (BOOL)checkDeviceIsAvailableWithRegistrationId: (NSString *)registrationId andApiKey: (NSString *)apiKey
 {
     if (selIfSuccess == nil ||selIfFailure == nil|| selIfServerFail ==nil)
@@ -607,13 +663,11 @@
 	
 	@synchronized(self)
 	{
-        NSString *requestString = [NSString stringWithFormat:@"%@%@", BMS_PHONESERVICE, DEV_AVAILABLE_CMD];
-        requestString = [requestString stringByAppendingString:registrationId];
-        requestString = [requestString stringByAppendingFormat:@"%@", DEV_AVAILABLE_CMD_1];
-        requestString = [requestString stringByAppendingFormat:@"%@", apiKey];
+        NSString *requestString = [NSString stringWithFormat:@"%@", BMS_JSON_PHONESERVICE];
+        requestString = [requestString stringByAppendingFormat:DEV_AVAILABLE_CMD, registrationId, apiKey];
         
         NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL: [NSURL URLWithString:requestString]];
-        request.timeoutInterval = BMS_DEFAULT_TIME_OUT;
+        request.timeoutInterval = BMS_JSON_DEFAULT_TIME_OUT;
         
         //Specify that it will be a POST request
         request.HTTPMethod = @"POST";
@@ -640,13 +694,11 @@
 	
 	@synchronized(self)
 	{
-        NSString *requestString = [NSString stringWithFormat:@"%@%@", BMS_PHONESERVICE, DEV_REQUEST_RECOVERY_CMD];
-        requestString = [requestString stringByAppendingString:registrationId];
-        requestString = [requestString stringByAppendingFormat:@"%@", DEV_REQUEST_RECOVERY_CMD_1];
-        requestString = [requestString stringByAppendingFormat:@"%@", apiKey];
+        NSString *requestString = [NSString stringWithFormat:@"%@", BMS_JSON_PHONESERVICE];
+        requestString = [requestString stringByAppendingFormat:DEV_REQUEST_RECOVERY_CMD, registrationId, apiKey];
         
         NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL: [NSURL URLWithString:requestString]];
-        request.timeoutInterval = BMS_DEFAULT_TIME_OUT;
+        request.timeoutInterval = BMS_JSON_DEFAULT_TIME_OUT;
         
         //Specify that it will be a POST request
         request.HTTPMethod = @"POST";
@@ -676,15 +728,13 @@
     
     @synchronized(self)
 	{
-        NSString *requestString = [NSString stringWithFormat:@"%@%@", BMS_PHONESERVICE, DEV_PLAYBACK_CMD];
-        requestString = [requestString stringByAppendingString:registrationId];
-        requestString = [requestString stringByAppendingFormat:@"%@", DEV_PLAYBACK_CMD_1];
-        requestString = [requestString stringByAppendingFormat:@"%@", apiKey];
+        NSString *requestString = [NSString stringWithFormat:@"%@", BMS_JSON_PHONESERVICE];
+        requestString = [requestString stringByAppendingFormat:DEV_PLAYBACK_CMD, registrationId, apiKey];
         
         NSLog(@"%@", requestString);
         
         NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL: [NSURL URLWithString:requestString]];
-        request.timeoutInterval = BMS_DEFAULT_TIME_OUT;
+        request.timeoutInterval = BMS_JSON_DEFAULT_TIME_OUT;
         
         self.urlConnection = [[NSURLConnection alloc] initWithRequest:request delegate:self];
     }
@@ -702,13 +752,11 @@
 	
 	@synchronized(self)
 	{
-        NSString *requestString = [NSString stringWithFormat:@"%@%@", BMS_PHONESERVICE, DEV_PORT_OPEN_CMD];
-        requestString = [requestString stringByAppendingString:registrationId];
-        requestString = [requestString stringByAppendingFormat:@"%@", DEV_PORT_OPEN_CMD_1];
-        requestString = [requestString stringByAppendingFormat:@"%@", apiKey];
+        NSString *requestString = [NSString stringWithFormat:@"%@", BMS_JSON_PHONESERVICE];
+        requestString = [requestString stringByAppendingFormat:DEV_PORT_OPEN_CMD, registrationId, apiKey];
         
         NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL: [NSURL URLWithString:requestString]];
-        request.timeoutInterval = BMS_DEFAULT_TIME_OUT;
+        request.timeoutInterval = BMS_JSON_DEFAULT_TIME_OUT;
         
         //Specify that it will be a POST request
         request.HTTPMethod = @"POST";
