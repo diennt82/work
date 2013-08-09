@@ -13,37 +13,37 @@
 #define BMS_PHONESERVICE @"http://api.simplimonitor.com"
 
 //~USER
-#define USR_REG_CMD @"/v1/users/register.json"
-#define USR_REG_PARAM_1 @"\"name\""
-#define USR_REG_PARAM_2 @"\"email\""
-#define USR_REG_PARAM_3 @"\"password\""
-#define USR_REG_PARAM_4 @"\"password_confirmation\""
+#define USER_REG_CMD @"/v1/users/register.json"
+#define USER_REG_PARAM_1 @"\"name\""
+#define USER_REG_PARAM_2 @"\"email\""
+#define USER_REG_PARAM_3 @"\"password\""
+#define USER_REG_PARAM_4 @"\"password_confirmation\""
 //{"name":"luan3","email":"luan3@com.vn","password":"qwe","password_confirmation":"qwe"}
 
-#define USR_LOGIN_CMD    @"/v1/users/create_token.json"
-#define USR_LOGIN_PARAM_1 @"\"login\""
-#define USR_LOGIN_PARAM_2 @"\"password\""
+#define USER_LOGIN_CMD    @"/v1/users/create_token.json"
+#define USER_LOGIN_PARAM_1 @"\"login\""
+#define USER_LOGIN_PARAM_2 @"\"password\""
 //{"login":"luan9","password":"qwe"}
 
-#define USR_LOGOUT_CMD @"v1/users/remove_token.json?suppress_response_codes=1&api_key="
+#define USER_LOGOUT_CMD @"/v1/users/remove_token.json?suppress_response_codes=1&api_key="
 //~/v1/users/remove_token.json?suppress_response_codes=1&api_key=uMsu5fkfSH9wJmLYznex
 
-#define USR_ME_CMD @"/v1/users/me.json?suppress_response_codes=1&api_key="
+#define USER_ME_CMD @"/v1/users/me.json?suppress_response_codes=1&api_key="
 
-#define USR_UPDATE_CMD @"/v1/users/me.json?suppress_response_codes=1"
-#define USR_UPDATE_PARAM_1 @"&name="
-#define USR_UPDATE_PARAM_2 @"&email="
-#define USR_UPDATE_PARAM_3 @"&api_key="
+#define USER_UPDATE_CMD @"/v1/users/me.json?suppress_response_codes=1"
+#define USER_UPDATE_PARAM_1 @"&name="
+#define USER_UPDATE_PARAM_2 @"&email="
+#define USER_UPDATE_PARAM_3 @"&api_key="
 //~/v1/users/me.json?suppress_response_codes=1&name=luan3&email=luan32%40com.vn&api_key=oZYNNw8ykhyVQYMNLRep
 
-#define USR_CHANGE_PASS_CMD @"/v1/users/me/change_password.json?suppress_response_codes=1"
-#define USR_CHANGE_PASS_PARAM_1 @"&password="
-#define USR_CHANGE_PASS_PARAM_2 @"&password_confirmation="
-#define USR_CHANGE_PASS_PARAM_3 @"&api_key="
+#define USER_CHANGE_PASS_CMD @"/v1/users/me/change_password.json?suppress_response_codes=1"
+#define USER_CHANGE_PASS_PARAM_1 @"&password="
+#define USER_CHANGE_PASS_PARAM_2 @"&password_confirmation="
+#define USER_CHANGE_PASS_PARAM_3 @"&api_key="
 //~/v1/users/me/change_password.json?suppress_response_codes=1&password=qwe&password_confirmation=qwe&api_key=4xyVHYPshznDSN1q5PYU
 
-#define USR_RESET_PASS_CMD @"/v1/users/reset_password.json?api_key="
-#define USR_RESET_PASS_PARAM_1 @"\"login\""
+#define USER_RESET_PASS_CMD @"/v1/users/reset_password.json?api_key="
+#define USER_RESET_PASS_PARAM_1 @"\"login\""
 //~/v1/users/reset_password.json?api_key=4xyVHYPshznDSN1q5PYU
 
 //~End USER
@@ -78,7 +78,7 @@
 //{"registration_id":"asasasasas03", "command":"action=command&command=melody1"}
 
 #define DEV_CREATE_SES_CMD @"/v1/devices/"
-#define DEV_CREATE_SES_CMD_1 @"/send_command.json?api_key="
+#define DEV_CREATE_SES_CMD_1 @"/create_session.json?api_key="
 #define DEV_CREATE_SES_PARAM_1 @"\"registration_id\""
 #define DEV_CREATE_SES_PARAM_2 @"\"client_type\""
 #define CLIENT_TYPE @"IOS"
@@ -119,6 +119,7 @@
 
 #define DEV_PORT_OPEN_CMD @"/v1/devices/"
 #define DEV_PORT_OPEN_CMD_1 @"/is_port_open.json?api_key="
+#define DEV_PORT_OPEN_PARAM_1 @"\"port\""
 //~/v1/devices/asasasasas04/is_port_open.json?api_key=kCBb6pxjE5fRbpxHYUEa
 //{"port":"1000"}
 // ~End DEVICES
@@ -128,7 +129,7 @@
 
 @property (retain, nonatomic) NSMutableData *responseDict;
 @property (retain, nonatomic) NSURLConnection *urlConnection;
-@property (retain, nonatomic) NSString *apiKey;
+//@property (retain, nonatomic) NSString *apiKey;
 
 @property (nonatomic, assign) id obj;
 
@@ -139,47 +140,47 @@
 
 - (BOOL)loginWithUsername: (NSString *)login andPassword: (NSString *)passwrod;
 
-- (BOOL)logout;
+- (BOOL)logoutWithApiKey: (NSString *)apiKey;
 
-- (BOOL)getUserInfo;
+- (BOOL)getUserInfoWithApiKey: (NSString *)apiKey;
 
-- (BOOL)updateUserInfoWithNewUsername: (NSString *)newName andNewEmail: (NSString *)newEmail;
+- (BOOL)updateUserInfoWithNewUsername: (NSString *)newName andNewEmail: (NSString *)newEmail andApiKey: (NSString *)apiKey;
 
-- (BOOL)changePasswordWithNewPassword: (NSString *)newPassword andPasswordConfirm: (NSString *)passwordConfirm;
+- (BOOL)changePasswordWithNewPassword: (NSString *)newPassword andPasswordConfirm: (NSString *)passwordConfirm andApiKey: (NSString *)apiKey;
 
-- (BOOL)resetPasswordWithLogin: (NSString *)login;
+- (BOOL)resetPasswordWithLogin: (NSString *)login andApiKey: (NSString *)apiKey;
 
 //Device
-- (BOOL)registerDeviceWithUsername: (NSString *)name andRegId: (NSString *)registrationId andDeviceType: (NSString *)deviceType andModel: (NSString *)model andMode: (NSString *)mode andFwVersion: (NSString *)fwVersion andTimeZone: (NSString *)timeZone;
+- (BOOL)registerDeviceWithNameDevice: (NSString *)nameDevice andRegId: (NSString *)registrationId andDeviceType: (NSString *)deviceType andModel: (NSString *)model andMode: (NSString *)mode andFwVersion: (NSString *)fwVersion andTimeZone: (NSString *)timeZone andApiKey: (NSString *)apiKey;
 
-- (BOOL)getAllDevices;
+- (BOOL)getAllDevicesWithApiKey: (NSString *)apiKey;
 
-- (BOOL)getAllSharedDevices;
+- (BOOL)getAllSharedDevicesWithApiKey: (NSString *)apiKey;
 
-- (BOOL)getAllPublicDevices;
+- (BOOL)getAllPublicDevicesWithApiKey: (NSString *)apiKey;
 
-- (BOOL)getDeviceBasicInfoWithRegistrationId: (NSString *)registrationId;
+- (BOOL)getDeviceBasicInfoWithRegistrationId: (NSString *)registrationId andApiKey: (NSString *)apiKey;
 
-- (BOOL)getDeviceCapabilityInfoWithRegistrationId: (NSString *)registrationId;
+- (BOOL)getDeviceCapabilityInfoWithRegistrationId: (NSString *)registrationId andApiKey: (NSString *)apiKey;
 
-- (BOOL)sendCommandWithRegistrationId: (NSString *)registrationId andCommand: (NSString *)command;
+- (BOOL)sendCommandWithRegistrationId: (NSString *)registrationId andCommand: (NSString *)command andApiKey: (NSString *)apiKey;
 
-- (BOOL)createSessionWithRegistrationId: (NSString *)registrationId andClientType: (NSString *)clientType;
+- (BOOL)createSessionWithRegistrationId: (NSString *)registrationId andClientType: (NSString *)clientType andApiKey: (NSString *)apiKey;
 
-- (BOOL)closeSessionWithRegistrationId: (NSString *)registrationId;
+- (BOOL)closeSessionWithRegistrationId: (NSString *)registrationId andApiKey: (NSString *)apiKey;
 
-- (BOOL)closeSessionWithRegistrationId:(NSString *)registrationId andChannedId: (NSString *)channedId;
+- (BOOL)closeSessionWithRegistrationId:(NSString *)registrationId andChannedId: (NSString *)channedId andApiKey: (NSString *)apiKey;
 
-- (BOOL)deleteDeviceWithRegistrationId: (NSString *)registrationId;
+- (BOOL)deleteDeviceWithRegistrationId: (NSString *)registrationId andApiKey: (NSString *)apiKey;
 
-- (BOOL)updateDeviceBasicInfoWithRegistrationId: (NSString *)registrationId andName: (NSString *)newName andAccessToken: (NSString *)accessToken;
+- (BOOL)updateDeviceBasicInfoWithRegistrationId: (NSString *)registrationId andName: (NSString *)newName andAccessToken: (NSString *)accessToken andApiKey: (NSString *)apiKey;
 
-- (BOOL)checkDeviceIsAvailableWithRegistrationId: (NSString *)registrationId;
+- (BOOL)checkDeviceIsAvailableWithRegistrationId: (NSString *)registrationId andApiKey: (NSString *)apiKey;
 
-- (BOOL)requestRecoveryForDeviceWith:(NSString *)registrationId andRecoveryType: (NSString *)recoveryType andStatus: (NSString *)status;
+- (BOOL)requestRecoveryForDeviceWith:(NSString *)registrationId andRecoveryType: (NSString *)recoveryType andStatus: (NSString *)status andApiKey: (NSString *)apiKey;
 
-- (BOOL)getAllRecordedFilesWithRegistrationId: (NSString *)registrationId;
+- (BOOL)getAllRecordedFilesWithRegistrationId: (NSString *)registrationId andApiKey: (NSString *)apiKey;
 
-- (BOOL)checkDevicePortIsOpenWithRegistration: (NSString *)registrationId;
+- (BOOL)checkDevicePortIsOpenWithRegistration: (NSString *)registrationId andPort: (NSString *)port andApiKey: (NSString *)apiKey;
 
 @end

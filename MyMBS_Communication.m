@@ -46,7 +46,7 @@
 	
 	@synchronized(self)
 	{
-        NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL: [NSURL URLWithString:[NSString stringWithFormat:@"%@%@", BMS_PHONESERVICE, USR_REG_CMD]]];
+        NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL: [NSURL URLWithString:[NSString stringWithFormat:@"%@%@", BMS_PHONESERVICE, USER_REG_CMD]]];
         request.timeoutInterval = BMS_DEFAULT_TIME_OUT;
         
         //Specify that it will be a POST request
@@ -56,7 +56,7 @@
         [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
         
         // Convert your data and set your request's HTTPBody properties
-        NSString *dataString = [NSString stringWithFormat:@"{%@:\"%@\",%@:\"%@\",%@:\"%@\",%@:\"%@\"}", USR_REG_PARAM_1, name, USR_REG_PARAM_2, email, USR_REG_PARAM_3, password, USR_REG_PARAM_4, passwordConfirm];
+        NSString *dataString = [NSString stringWithFormat:@"{%@:\"%@\",%@:\"%@\",%@:\"%@\",%@:\"%@\"}", USER_REG_PARAM_1, name, USER_REG_PARAM_2, email, USER_REG_PARAM_3, password, USER_REG_PARAM_4, passwordConfirm];
         NSData *requestBodyData = [dataString dataUsingEncoding:NSUTF8StringEncoding];
         request.HTTPBody = requestBodyData;
         
@@ -78,7 +78,7 @@
 	
 	@synchronized(self)
 	{
-        NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL: [NSURL URLWithString:[NSString stringWithFormat:@"%@%@", BMS_PHONESERVICE, USR_LOGIN_CMD]]];
+        NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL: [NSURL URLWithString:[NSString stringWithFormat:@"%@%@", BMS_PHONESERVICE, USER_LOGIN_CMD]]];
         request.timeoutInterval = BMS_DEFAULT_TIME_OUT;
         
         //Specify that it will be a POST request
@@ -88,7 +88,7 @@
         [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
         
         // Convert your data and set your request's HTTPBody properties
-        NSString *dataString = [NSString stringWithFormat:@"{%@:\"%@\",%@:\"%@\"}", USR_LOGIN_PARAM_1, login, USR_LOGIN_PARAM_2, passwrod];
+        NSString *dataString = [NSString stringWithFormat:@"{%@:\"%@\",%@:\"%@\"}", USER_LOGIN_PARAM_1, login, USER_LOGIN_PARAM_2, passwrod];
         NSData *requestBodyData = [dataString dataUsingEncoding:NSUTF8StringEncoding];
         request.HTTPBody = requestBodyData;
         
@@ -98,7 +98,7 @@
     return TRUE;
 }
 
-- (BOOL)logout
+- (BOOL)logoutWithApiKey: (NSString *)apiKey
 {
     if (selIfSuccess == nil ||selIfFailure == nil|| selIfServerFail ==nil)
 	{
@@ -108,8 +108,8 @@
 	
 	@synchronized(self)
 	{
-        NSString *requestString = [NSString stringWithFormat:@"%@%@", BMS_PHONESERVICE, USR_LOGOUT_CMD];
-        requestString = [requestString stringByAppendingFormat:@"%@", self.apiKey];
+        NSString *requestString = [NSString stringWithFormat:@"%@%@", BMS_PHONESERVICE, USER_LOGOUT_CMD];
+        requestString = [requestString stringByAppendingFormat:@"%@", apiKey];
         
         NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL: [NSURL URLWithString:requestString]];
         
@@ -127,7 +127,7 @@
     return TRUE;
 }
 
-- (BOOL)getUserInfo
+- (BOOL)getUserInfoWithApiKey: (NSString *)apiKey
 {
     if (selIfSuccess == nil ||selIfFailure == nil|| selIfServerFail ==nil)
 	{
@@ -137,7 +137,7 @@
     
     @synchronized(self)
 	{
-        NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL: [NSURL URLWithString:[NSString stringWithFormat:@"%@%@%@", BMS_PHONESERVICE, USR_ME_CMD, self.apiKey]]];
+        NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL: [NSURL URLWithString:[NSString stringWithFormat:@"%@%@%@", BMS_PHONESERVICE, USER_ME_CMD, apiKey]]];
         request.timeoutInterval = BMS_DEFAULT_TIME_OUT;
         
         self.urlConnection = [[NSURLConnection alloc] initWithRequest:request delegate:self];
@@ -146,7 +146,7 @@
     return TRUE;
 }
 
-- (BOOL)updateUserInfoWithNewUsername: (NSString *)newName andNewEmail: (NSString *)newEmail
+- (BOOL)updateUserInfoWithNewUsername: (NSString *)newName andNewEmail: (NSString *)newEmail andApiKey: (NSString *)apiKey
 {
     if (selIfSuccess == nil ||selIfFailure == nil|| selIfServerFail ==nil)
 	{
@@ -156,10 +156,10 @@
     
     @synchronized(self)
 	{
-        NSString *requestString = [NSString stringWithFormat:@"%@%@", BMS_PHONESERVICE, USR_UPDATE_CMD];
-        requestString = [requestString stringByAppendingFormat:@"%@%@", USR_UPDATE_PARAM_1, newName];
-        requestString = [requestString stringByAppendingFormat:@"%@%@", USR_UPDATE_PARAM_2, newEmail];
-        requestString = [requestString stringByAppendingFormat:@"%@%@", USR_UPDATE_PARAM_3, self.apiKey];
+        NSString *requestString = [NSString stringWithFormat:@"%@%@", BMS_PHONESERVICE, USER_UPDATE_CMD];
+        requestString = [requestString stringByAppendingFormat:@"%@%@", USER_UPDATE_PARAM_1, newName];
+        requestString = [requestString stringByAppendingFormat:@"%@%@", USER_UPDATE_PARAM_2, newEmail];
+        requestString = [requestString stringByAppendingFormat:@"%@%@", USER_UPDATE_PARAM_3, apiKey];
         
         NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL: [NSURL URLWithString:requestString]];
         
@@ -178,7 +178,7 @@
     return TRUE;
 }
 
-- (BOOL)changePasswordWithNewPassword:(NSString *)newPassword andPasswordConfirm:(NSString *)passwordConfirm
+- (BOOL)changePasswordWithNewPassword: (NSString *)newPassword andPasswordConfirm: (NSString *)passwordConfirm andApiKey: (NSString *)apiKey
 {
     if (selIfSuccess == nil ||selIfFailure == nil|| selIfServerFail ==nil)
 	{
@@ -188,10 +188,10 @@
     
     @synchronized(self)
 	{
-        NSString *requestString = [NSString stringWithFormat:@"%@%@", BMS_PHONESERVICE, USR_CHANGE_PASS_CMD];
-        requestString = [requestString stringByAppendingFormat:@"%@%@", USR_CHANGE_PASS_PARAM_1, newPassword];
-        requestString = [requestString stringByAppendingFormat:@"%@%@", USR_CHANGE_PASS_PARAM_2, passwordConfirm];
-        requestString = [requestString stringByAppendingFormat:@"%@%@", USR_CHANGE_PASS_PARAM_3, self.apiKey];
+        NSString *requestString = [NSString stringWithFormat:@"%@%@", BMS_PHONESERVICE, USER_CHANGE_PASS_CMD];
+        requestString = [requestString stringByAppendingFormat:@"%@%@", USER_CHANGE_PASS_PARAM_1, newPassword];
+        requestString = [requestString stringByAppendingFormat:@"%@%@", USER_CHANGE_PASS_PARAM_2, passwordConfirm];
+        requestString = [requestString stringByAppendingFormat:@"%@%@", USER_CHANGE_PASS_PARAM_3, apiKey];
         
         NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL: [NSURL URLWithString:requestString]];
         
@@ -209,7 +209,7 @@
     return TRUE;
 }
 
-- (BOOL)resetPasswordWithLogin: (NSString *)login
+- (BOOL)resetPasswordWithLogin: (NSString *)login andApiKey: (NSString *)apiKey
 {
     if (selIfSuccess == nil ||selIfFailure == nil|| selIfServerFail ==nil)
 	{
@@ -219,8 +219,8 @@
 	
 	@synchronized(self)
 	{
-        NSString *requestString = [NSString stringWithFormat:@"%@%@", BMS_PHONESERVICE, USR_RESET_PASS_CMD];
-        requestString = [requestString stringByAppendingFormat:@"%@", self.apiKey];
+        NSString *requestString = [NSString stringWithFormat:@"%@%@", BMS_PHONESERVICE, USER_RESET_PASS_CMD];
+        requestString = [requestString stringByAppendingFormat:@"%@", apiKey];
         
         NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL: [NSURL URLWithString:requestString]];
         request.timeoutInterval = BMS_DEFAULT_TIME_OUT;
@@ -232,7 +232,7 @@
         [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
         
         // Convert your data and set your request's HTTPBody properties
-        NSString *dataString = [NSString stringWithFormat:@"{%@:\"%@\"}", USR_RESET_PASS_PARAM_1, login];
+        NSString *dataString = [NSString stringWithFormat:@"{%@:\"%@\"}", USER_RESET_PASS_PARAM_1, login];
         NSData *requestBodyData = [dataString dataUsingEncoding:NSUTF8StringEncoding];
         request.HTTPBody = requestBodyData;
         
@@ -244,7 +244,7 @@
 
 #pragma mark - Device
 
-- (BOOL)registerDeviceWithUsername:(NSString *)name andRegId:(NSString *)registrationId andDeviceType:(NSString *)deviceType andModel:(NSString *)model andMode:(NSString *)mode andFwVersion:(NSString *)fwVersion andTimeZone:(NSString *)timeZone
+- (BOOL)registerDeviceWithNameDevice: (NSString *)nameDevice andRegId: (NSString *)registrationId andDeviceType: (NSString *)deviceType andModel: (NSString *)model andMode: (NSString *)mode andFwVersion: (NSString *)fwVersion andTimeZone: (NSString *)timeZone andApiKey: (NSString *)apiKey
 {
     if (selIfSuccess == nil ||selIfFailure == nil|| selIfServerFail ==nil)
 	{
@@ -255,7 +255,8 @@
 	@synchronized(self)
 	{
         NSString *requestString = [NSString stringWithFormat:@"%@%@", BMS_PHONESERVICE, DEV_REG_CMD];
-        requestString = [requestString stringByAppendingFormat:@"%@", self.apiKey];
+        requestString = [requestString stringByAppendingFormat:@"%@", apiKey];
+        NSLog(@"request = %@", requestString);
         
         NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL: [NSURL URLWithString:requestString]];
         request.timeoutInterval = BMS_DEFAULT_TIME_OUT;
@@ -267,7 +268,8 @@
         [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
         
         // Convert your data and set your request's HTTPBody properties
-        NSString *dataString = [NSString stringWithFormat:@"{%@:\"%@\",%@:\"%@\",%@:\"%@\",%@:\"%@\"%@:\"%@\",%@:\"%@\",%@:\"%@\"}", DEV_REG_PARAM_1, name, DEV_REG_PARAM_2, registrationId, DEV_REG_PARAM_3, deviceType, DEV_REG_PARAM_4, model, DEV_REG_PARAM_5, mode, DEV_REG_PARAM_6, fwVersion, DEV_REG_PARAM_7, timeZone];
+        NSString *dataString = [NSString stringWithFormat:@"{%@:\"%@\",%@:\"%@\",%@:\"%@\",%@:\"%@\",%@:\"%@\",%@:\"%@\",%@:\"%@\"}", DEV_REG_PARAM_1, nameDevice, DEV_REG_PARAM_2, registrationId, DEV_REG_PARAM_3, deviceType, DEV_REG_PARAM_4, model, DEV_REG_PARAM_5, mode, DEV_REG_PARAM_6, fwVersion, DEV_REG_PARAM_7, timeZone];
+        NSLog(@"data = %@", dataString);
         NSData *requestBodyData = [dataString dataUsingEncoding:NSUTF8StringEncoding];
         request.HTTPBody = requestBodyData;
         
@@ -277,7 +279,7 @@
     return TRUE;
 }
 
-- (BOOL)getAllDevices
+- (BOOL)getAllDevicesWithApiKey: (NSString *)apiKey
 {
     if (selIfSuccess == nil ||selIfFailure == nil|| selIfServerFail ==nil)
 	{
@@ -287,7 +289,7 @@
     
     @synchronized(self)
 	{
-        NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL: [NSURL URLWithString:[NSString stringWithFormat:@"%@%@%@", BMS_PHONESERVICE, DEV_OWN_CMD, self.apiKey]]];
+        NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL: [NSURL URLWithString:[NSString stringWithFormat:@"%@%@%@", BMS_PHONESERVICE, DEV_OWN_CMD, apiKey]]];
         request.timeoutInterval = BMS_DEFAULT_TIME_OUT;
         
         self.urlConnection = [[NSURLConnection alloc] initWithRequest:request delegate:self];
@@ -295,7 +297,7 @@
     return TRUE;
 }
 
-- (BOOL)getAllSharedDevices
+- (BOOL)getAllSharedDevicesWithApiKey: (NSString *)apiKey
 {
     if (selIfSuccess == nil ||selIfFailure == nil|| selIfServerFail ==nil)
 	{
@@ -305,7 +307,7 @@
     
     @synchronized(self)
 	{
-        NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL: [NSURL URLWithString:[NSString stringWithFormat:@"%@%@%@", BMS_PHONESERVICE, DEV_SHARED_CMD, self.apiKey]]];
+        NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL: [NSURL URLWithString:[NSString stringWithFormat:@"%@%@%@", BMS_PHONESERVICE, DEV_SHARED_CMD, apiKey]]];
         request.timeoutInterval = BMS_DEFAULT_TIME_OUT;
         
         self.urlConnection = [[NSURLConnection alloc] initWithRequest:request delegate:self];
@@ -314,7 +316,7 @@
     return TRUE;
 }
 
-- (BOOL)getAllPublicDevices
+- (BOOL)getAllPublicDevicesWithApiKey: (NSString *)apiKey
 {
     if (selIfSuccess == nil ||selIfFailure == nil|| selIfServerFail ==nil)
 	{
@@ -324,7 +326,7 @@
     
     @synchronized(self)
 	{
-        NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL: [NSURL URLWithString:[NSString stringWithFormat:@"%@%@%@", BMS_PHONESERVICE, DEV_PUBLIC_CMD, self.apiKey]]];
+        NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL: [NSURL URLWithString:[NSString stringWithFormat:@"%@%@%@", BMS_PHONESERVICE, DEV_PUBLIC_CMD, apiKey]]];
         request.timeoutInterval = BMS_DEFAULT_TIME_OUT;
         
         self.urlConnection = [[NSURLConnection alloc] initWithRequest:request delegate:self];
@@ -333,7 +335,7 @@
     return TRUE;
 }
 
-- (BOOL)getDeviceBasicInfoWithRegistrationId:(NSString *)registrationId
+- (BOOL)getDeviceBasicInfoWithRegistrationId: (NSString *)registrationId andApiKey: (NSString *)apiKey
 {
     if (selIfSuccess == nil ||selIfFailure == nil|| selIfServerFail ==nil)
 	{
@@ -346,7 +348,7 @@
         NSString *requestString = [NSString stringWithFormat:@"%@%@", BMS_PHONESERVICE, DEV_BASIC_CMD];
         requestString = [requestString stringByAppendingString:registrationId];
         requestString = [requestString stringByAppendingFormat:@"%@", DEV_BASIC_CMD_1];
-        requestString = [requestString stringByAppendingFormat:@"%@", self.apiKey];
+        requestString = [requestString stringByAppendingFormat:@"%@", apiKey];
         
         NSLog(@"%@", requestString);
         
@@ -359,7 +361,7 @@
     return TRUE;
 }
 
-- (BOOL)getDeviceCapabilityInfoWithRegistrationId:(NSString *)registrationId
+- (BOOL)getDeviceCapabilityInfoWithRegistrationId: (NSString *)registrationId andApiKey: (NSString *)apiKey
 {
     if (selIfSuccess == nil ||selIfFailure == nil|| selIfServerFail ==nil)
 	{
@@ -372,7 +374,7 @@
         NSString *requestString = [NSString stringWithFormat:@"%@%@", BMS_PHONESERVICE, DEV_CAPABILTY_CDM];
         requestString = [requestString stringByAppendingString:registrationId];
         requestString = [requestString stringByAppendingFormat:@"%@", DEV_CAPABILTY_CDM_1];
-        requestString = [requestString stringByAppendingFormat:@"%@", self.apiKey];
+        requestString = [requestString stringByAppendingFormat:@"%@", apiKey];
         
         NSLog(@"%@", requestString);
         
@@ -385,7 +387,7 @@
     return TRUE;
 }
 
-- (BOOL)sendCommandWithRegistrationId:(NSString *)registrationId andCommand:(NSString *)command
+- (BOOL)sendCommandWithRegistrationId: (NSString *)registrationId andCommand: (NSString *)command andApiKey: (NSString *)apiKey
 {
     if (selIfSuccess == nil ||selIfFailure == nil|| selIfServerFail ==nil)
 	{
@@ -398,7 +400,7 @@
         NSString *requestString = [NSString stringWithFormat:@"%@%@", BMS_PHONESERVICE, DEV_SEND_COMMAND_CMD];
         requestString = [requestString stringByAppendingString:registrationId];
         requestString = [requestString stringByAppendingFormat:@"%@", DEV_SEND_COMMAND_CMD_1];
-        requestString = [requestString stringByAppendingFormat:@"%@", self.apiKey];
+        requestString = [requestString stringByAppendingFormat:@"%@", apiKey];
         
         NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL: [NSURL URLWithString:requestString]];
         request.timeoutInterval = BMS_DEFAULT_TIME_OUT;
@@ -421,7 +423,7 @@
     return TRUE;
 }
 
-- (BOOL)createSessionWithRegistrationId:(NSString *)registrationId andClientType:(NSString *)clientType
+- (BOOL)createSessionWithRegistrationId: (NSString *)registrationId andClientType: (NSString *)clientType andApiKey: (NSString *)apiKey
 {
     if (selIfSuccess == nil ||selIfFailure == nil|| selIfServerFail ==nil)
 	{
@@ -434,7 +436,7 @@
         NSString *requestString = [NSString stringWithFormat:@"%@%@", BMS_PHONESERVICE, DEV_CREATE_SES_CMD];
         requestString = [requestString stringByAppendingString:registrationId];
         requestString = [requestString stringByAppendingFormat:@"%@", DEV_CREATE_SES_CMD_1];
-        requestString = [requestString stringByAppendingFormat:@"%@", self.apiKey];
+        requestString = [requestString stringByAppendingFormat:@"%@", apiKey];
         
         NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL: [NSURL URLWithString:requestString]];
         request.timeoutInterval = BMS_DEFAULT_TIME_OUT;
@@ -456,7 +458,7 @@
     return TRUE;
 }
 
-- (BOOL)closeSessionWithRegistrationId: (NSString *)registrationId
+- (BOOL)closeSessionWithRegistrationId: (NSString *)registrationId andApiKey: (NSString *)apiKey
 {
     if (selIfSuccess == nil ||selIfFailure == nil|| selIfServerFail ==nil)
 	{
@@ -469,7 +471,7 @@
         NSString *requestString = [NSString stringWithFormat:@"%@%@", BMS_PHONESERVICE, DEV_CLOSE_SES_CMD];
         requestString = [requestString stringByAppendingString:registrationId];
         requestString = [requestString stringByAppendingFormat:@"%@", DEV_CLOSE_SES_CMD_1];
-        requestString = [requestString stringByAppendingFormat:@"%@%@", DEV_CLOSE_SES_PARAM_2, self.apiKey];
+        requestString = [requestString stringByAppendingFormat:@"%@%@", DEV_CLOSE_SES_PARAM_2, apiKey];
         
         NSLog(@"request string = %@", requestString);
         
@@ -490,7 +492,7 @@
     return TRUE;
 }
 
-- (BOOL)closeSessionWithRegistrationId:(NSString *)registrationId andChannedId: (NSString *)channedId
+- (BOOL)closeSessionWithRegistrationId:(NSString *)registrationId andChannedId: (NSString *)channedId andApiKey: (NSString *)apiKey
 {
     if (selIfSuccess == nil ||selIfFailure == nil|| selIfServerFail ==nil)
 	{
@@ -504,7 +506,7 @@
         requestString = [requestString stringByAppendingString:registrationId];
         requestString = [requestString stringByAppendingFormat:@"%@", DEV_CLOSE_SES_CMD_1];
                 requestString = [requestString stringByAppendingFormat:@"%@%@", DEV_CLOSE_SES_PARAM_1, channedId];
-        requestString = [requestString stringByAppendingFormat:@"%@%@", DEV_CLOSE_SES_PARAM_2, self.apiKey];
+        requestString = [requestString stringByAppendingFormat:@"%@%@", DEV_CLOSE_SES_PARAM_2, apiKey];
         
         NSLog(@"request string = %@", requestString);
         
@@ -525,7 +527,7 @@
     return TRUE;
 }
 
-- (BOOL)deleteDeviceWithRegistrationId:(NSString *)registrationId
+- (BOOL)deleteDeviceWithRegistrationId: (NSString *)registrationId andApiKey: (NSString *)apiKey
 {
     if (selIfSuccess == nil ||selIfFailure == nil|| selIfServerFail ==nil)
 	{
@@ -538,7 +540,7 @@
         NSString *requestString = [NSString stringWithFormat:@"%@%@", BMS_PHONESERVICE, DEV_DEL_CMD];
         requestString = [requestString stringByAppendingString:registrationId];
         requestString = [requestString stringByAppendingFormat:@"%@", DEV_DEL_CMD_1];
-        requestString = [requestString stringByAppendingFormat:@"%@", self.apiKey];
+        requestString = [requestString stringByAppendingFormat:@"%@", apiKey];
         
         NSLog(@"request string = %@", requestString);
         
@@ -559,7 +561,7 @@
     return TRUE;
 }
 
-- (BOOL)updateDeviceBasicInfoWithRegistrationId: (NSString *)registrationId andName: (NSString *)newName andAccessToken: (NSString *)accessToken
+- (BOOL)updateDeviceBasicInfoWithRegistrationId: (NSString *)registrationId andName: (NSString *)newName andAccessToken: (NSString *)accessToken andApiKey: (NSString *)apiKey
 {
     if (selIfSuccess == nil ||selIfFailure == nil|| selIfServerFail ==nil)
 	{
@@ -574,7 +576,7 @@
         requestString = [requestString stringByAppendingFormat:@"%@", DEV_UPDATE_BASIC_CMD_1];
         requestString = [requestString stringByAppendingFormat:@"%@%@", DEV_UPDATE_BASIC_PARAM_1, newName];
         requestString = [requestString stringByAppendingFormat:@"%@%@", DEV_UPDATE_BASIC_PARAM_2, accessToken];
-        requestString = [requestString stringByAppendingFormat:@"%@%@", DEV_UPDATE_BASIC_PARAM_3, self.apiKey];
+        requestString = [requestString stringByAppendingFormat:@"%@%@", DEV_UPDATE_BASIC_PARAM_3, apiKey];
         
         NSLog(@"request string = %@", requestString);
         
@@ -595,7 +597,7 @@
     return TRUE;
 }
 
-- (BOOL)checkDeviceIsAvailableWithRegistrationId:(NSString *)registrationId
+- (BOOL)checkDeviceIsAvailableWithRegistrationId: (NSString *)registrationId andApiKey: (NSString *)apiKey
 {
     if (selIfSuccess == nil ||selIfFailure == nil|| selIfServerFail ==nil)
 	{
@@ -608,7 +610,7 @@
         NSString *requestString = [NSString stringWithFormat:@"%@%@", BMS_PHONESERVICE, DEV_AVAILABLE_CMD];
         requestString = [requestString stringByAppendingString:registrationId];
         requestString = [requestString stringByAppendingFormat:@"%@", DEV_AVAILABLE_CMD_1];
-        requestString = [requestString stringByAppendingFormat:@"%@", self.apiKey];
+        requestString = [requestString stringByAppendingFormat:@"%@", apiKey];
         
         NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL: [NSURL URLWithString:requestString]];
         request.timeoutInterval = BMS_DEFAULT_TIME_OUT;
@@ -628,7 +630,7 @@
     return TRUE;
 }
 
-- (BOOL)requestRecoveryForDeviceWith:(NSString *)registrationId andRecoveryType:(NSString *)recoveryType andStatus:(NSString *)status
+- (BOOL)requestRecoveryForDeviceWith:(NSString *)registrationId andRecoveryType: (NSString *)recoveryType andStatus: (NSString *)status andApiKey: (NSString *)apiKey
 {
     if (selIfSuccess == nil ||selIfFailure == nil|| selIfServerFail ==nil)
 	{
@@ -641,7 +643,7 @@
         NSString *requestString = [NSString stringWithFormat:@"%@%@", BMS_PHONESERVICE, DEV_REQUEST_RECOVERY_CMD];
         requestString = [requestString stringByAppendingString:registrationId];
         requestString = [requestString stringByAppendingFormat:@"%@", DEV_REQUEST_RECOVERY_CMD_1];
-        requestString = [requestString stringByAppendingFormat:@"%@", self.apiKey];
+        requestString = [requestString stringByAppendingFormat:@"%@", apiKey];
         
         NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL: [NSURL URLWithString:requestString]];
         request.timeoutInterval = BMS_DEFAULT_TIME_OUT;
@@ -664,7 +666,7 @@
     return TRUE;
 }
 
-- (BOOL)getAllRecordedFilesWithRegistrationId:(NSString *)registrationId
+- (BOOL)getAllRecordedFilesWithRegistrationId: (NSString *)registrationId andApiKey: (NSString *)apiKey
 {
     if (selIfSuccess == nil ||selIfFailure == nil|| selIfServerFail ==nil)
 	{
@@ -677,7 +679,7 @@
         NSString *requestString = [NSString stringWithFormat:@"%@%@", BMS_PHONESERVICE, DEV_PLAYBACK_CMD];
         requestString = [requestString stringByAppendingString:registrationId];
         requestString = [requestString stringByAppendingFormat:@"%@", DEV_PLAYBACK_CMD_1];
-        requestString = [requestString stringByAppendingFormat:@"%@", self.apiKey];
+        requestString = [requestString stringByAppendingFormat:@"%@", apiKey];
         
         NSLog(@"%@", requestString);
         
@@ -690,8 +692,40 @@
     return TRUE;
 }
 
-- (BOOL)checkDevicePortIsOpenWithRegistration:(NSString *)registrationId
+- (BOOL)checkDevicePortIsOpenWithRegistration: (NSString *)registrationId andPort: (NSString *)port andApiKey: (NSString *)apiKey
 {
+    if (selIfSuccess == nil ||selIfFailure == nil|| selIfServerFail ==nil)
+	{
+		NSLog(@"ERR: selector is not set");
+		return FALSE;
+	}
+	
+	@synchronized(self)
+	{
+        NSString *requestString = [NSString stringWithFormat:@"%@%@", BMS_PHONESERVICE, DEV_PORT_OPEN_CMD];
+        requestString = [requestString stringByAppendingString:registrationId];
+        requestString = [requestString stringByAppendingFormat:@"%@", DEV_PORT_OPEN_CMD_1];
+        requestString = [requestString stringByAppendingFormat:@"%@", apiKey];
+        
+        NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL: [NSURL URLWithString:requestString]];
+        request.timeoutInterval = BMS_DEFAULT_TIME_OUT;
+        
+        //Specify that it will be a POST request
+        request.HTTPMethod = @"POST";
+        
+        // This is how we set header fields
+        [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
+        
+        // Convert your data and set your request's HTTPBody properties
+        NSString *dataString = [NSString stringWithFormat:@"{%@:\"%@\"}", DEV_PORT_OPEN_PARAM_1, port];
+        
+        NSData *requestBodyData = [dataString dataUsingEncoding:NSUTF8StringEncoding];
+        request.HTTPBody = requestBodyData;
+        
+        //Create url connection and fire request
+        self.urlConnection = [[NSURLConnection alloc] initWithRequest:request delegate:self];
+    }
+    
     return TRUE;
 }
 
