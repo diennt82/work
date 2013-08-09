@@ -105,7 +105,7 @@
             
 #endif
             
-            
+            progressView.frame = CGRectMake(progressView.frame.origin.x, progressView.frame.origin.y, progressView.frame.size.width + 88, progressView.frame.size.height);
             //Rotate the slider
             zoombarView.transform = CGAffineTransformRotate(translate1, -M_PI*0.5);
             
@@ -138,7 +138,7 @@
             pttButton.frame = newFrame;
             
 #endif
-            
+            progressView.frame = CGRectMake(progressView.frame.origin.x, progressView.frame.origin.y, progressView.frame.size.width, progressView.frame.size.height + 108);
             controlButtons.transform = translate1;
             
 
