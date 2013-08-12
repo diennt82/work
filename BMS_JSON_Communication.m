@@ -56,8 +56,19 @@
         [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
         
         // Convert your data and set your request's HTTPBody properties
-        NSString *dataString = [NSString stringWithFormat:@"{%@:\"%@\",%@:\"%@\",%@:\"%@\",%@:\"%@\"}", USER_REG_PARAM_1, name, USER_REG_PARAM_2, email, USER_REG_PARAM_3, password, USER_REG_PARAM_4, passwordConfirm];
-        NSData *requestBodyData = [dataString dataUsingEncoding:NSUTF8StringEncoding];
+        //{"name":"luan3","email":"luan3@com.vn","password":"qwe","password_confirmation":"qwe"}
+        NSDictionary *jsonDictInfo = [NSDictionary dictionaryWithObjectsAndKeys:
+                                      name,     USER_REG_PARAM_1,
+                                      email,    USER_REG_PARAM_2,
+                                      password, USER_REG_PARAM_3,
+                                      passwordConfirm, USER_REG_PARAM_4,
+                                      nil];
+        
+        NSLog(@"jsonDict = %@", jsonDictInfo);
+        // convert to data
+        NSData *requestBodyData = [NSJSONSerialization dataWithJSONObject:jsonDictInfo
+                                                                  options:NSJSONWritingPrettyPrinted
+                                                                    error:nil];
         request.HTTPBody = requestBodyData;
         
         
@@ -68,37 +79,7 @@
     return TRUE;
 }
 
-- (BOOL)loginWithUsername: (NSString *)login andPassword: (NSString *)passwrod
-{
-    if (selIfSuccess == nil ||selIfFailure == nil|| selIfServerFail ==nil)
-	{
-		NSLog(@"ERR: selector is not set");
-		return FALSE;
-	}
-	
-	@synchronized(self)
-	{
-        NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL: [NSURL URLWithString:[NSString stringWithFormat:@"%@%@", BMS_JSON_PHONESERVICE, USER_LOGIN_CMD]]];
-        request.timeoutInterval = BMS_JSON_DEFAULT_TIME_OUT;
-        
-        //Specify that it will be a POST request
-        request.HTTPMethod = @"POST";
-        
-        // This is how we set header fields
-        [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
-        
-        // Convert your data and set your request's HTTPBody properties
-        NSString *dataString = [NSString stringWithFormat:@"{%@:\"%@\",%@:\"%@\"}", USER_LOGIN_PARAM_1, login, USER_LOGIN_PARAM_2, passwrod];
-        NSData *requestBodyData = [dataString dataUsingEncoding:NSUTF8StringEncoding];
-        request.HTTPBody = requestBodyData;
-        
-        //Create url connection and fire request
-        self.urlConnection = [[NSURLConnection alloc] initWithRequest:request delegate:self];
-    }
-    return TRUE;
-}
-
-- (BOOL)getAuthenticationTokenWithLogin: (NSString *)login andPassword: (NSString *)pass
+- (BOOL)loginWithLogin: (NSString *)login andPassword: (NSString *)pass
 {
     if (selIfSuccess == nil ||selIfFailure == nil|| selIfServerFail ==nil)
 	{
@@ -115,35 +96,6 @@
         NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL: [NSURL URLWithString:requestString]];
         request.timeoutInterval = BMS_JSON_DEFAULT_TIME_OUT;
         
-        self.urlConnection = [[NSURLConnection alloc] initWithRequest:request delegate:self];
-    }
-    return TRUE;
-}
-
-- (BOOL)logoutWithApiKey: (NSString *)apiKey
-{
-    if (selIfSuccess == nil ||selIfFailure == nil|| selIfServerFail ==nil)
-	{
-		NSLog(@"ERR: selector is not set");
-		return FALSE;
-	}
-	
-	@synchronized(self)
-	{
-        NSString *requestString = [NSString stringWithFormat:@"%@%@", BMS_JSON_PHONESERVICE, USER_LOGOUT_CMD];
-        requestString = [requestString stringByAppendingFormat:@"%@", apiKey];
-        
-        NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL: [NSURL URLWithString:requestString]];
-        
-        request.timeoutInterval = BMS_JSON_DEFAULT_TIME_OUT;
-        
-        //Specify that it will be a POST request
-        request.HTTPMethod = @"DELETE";
-        
-        // This is how we set header fields
-        [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
-        
-        //Create url connection and fire request
         self.urlConnection = [[NSURLConnection alloc] initWithRequest:request delegate:self];
     }
     return TRUE;
@@ -179,9 +131,9 @@
     @synchronized(self)
 	{
         NSString *requestString = [NSString stringWithFormat:@"%@%@", BMS_JSON_PHONESERVICE, USER_UPDATE_CMD];
-        requestString = [requestString stringByAppendingFormat:@"%@%@", USER_UPDATE_PARAM_1, newName];
-        requestString = [requestString stringByAppendingFormat:@"%@%@", USER_UPDATE_PARAM_2, newEmail];
-        requestString = [requestString stringByAppendingFormat:@"%@%@", USER_UPDATE_PARAM_3, apiKey];
+        requestString = [requestString stringByAppendingFormat:USER_UPDATE_PARAM_1, newName];
+        requestString = [requestString stringByAppendingFormat:USER_UPDATE_PARAM_2, newEmail];
+        requestString = [requestString stringByAppendingFormat:USER_UPDATE_PARAM_3, apiKey];
         
         NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL: [NSURL URLWithString:requestString]];
         
@@ -211,9 +163,9 @@
     @synchronized(self)
 	{
         NSString *requestString = [NSString stringWithFormat:@"%@%@", BMS_JSON_PHONESERVICE, USER_CHANGE_PASS_CMD];
-        requestString = [requestString stringByAppendingFormat:@"%@%@", USER_CHANGE_PASS_PARAM_1, newPassword];
-        requestString = [requestString stringByAppendingFormat:@"%@%@", USER_CHANGE_PASS_PARAM_2, passwordConfirm];
-        requestString = [requestString stringByAppendingFormat:@"%@%@", USER_CHANGE_PASS_PARAM_3, apiKey];
+        requestString = [requestString stringByAppendingFormat:USER_CHANGE_PASS_PARAM_1, newPassword];
+        requestString = [requestString stringByAppendingFormat:USER_CHANGE_PASS_PARAM_2, passwordConfirm];
+        requestString = [requestString stringByAppendingFormat:USER_CHANGE_PASS_PARAM_3, apiKey];
         
         NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL: [NSURL URLWithString:requestString]];
         
@@ -254,8 +206,16 @@
         [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
         
         // Convert your data and set your request's HTTPBody properties
-        NSString *dataString = [NSString stringWithFormat:@"{%@:\"%@\"}", USER_RESET_PASS_PARAM_1, login];
-        NSData *requestBodyData = [dataString dataUsingEncoding:NSUTF8StringEncoding];
+        //{"login":"luan"}
+        NSDictionary *jsonDictInfo = [NSDictionary dictionaryWithObjectsAndKeys:
+                                      login, USER_RESET_PASS_PARAM_1,
+                                      nil];
+        
+        NSLog(@"jsonDict = %@", jsonDictInfo);
+        // convert to data
+        NSData *requestBodyData = [NSJSONSerialization dataWithJSONObject:jsonDictInfo
+                                                                  options:NSJSONWritingPrettyPrinted
+                                                                    error:nil];
         request.HTTPBody = requestBodyData;
         
         //Create url connection and fire request
@@ -266,7 +226,7 @@
 
 #pragma mark - Device
 
-- (BOOL)registerDeviceWithNameDevice: (NSString *)nameDevice andRegId: (NSString *)registrationId andDeviceType: (NSString *)deviceType andModel: (NSString *)model andMode: (NSString *)mode andFwVersion: (NSString *)fwVersion andTimeZone: (NSString *)timeZone andApiKey: (NSString *)apiKey
+- (BOOL)registerDeviceWithDeviceName: (NSString *)deviceName andRegId: (NSString *)registrationId andDeviceType: (NSString *)deviceType andModel: (NSString *)model andMode: (NSString *)mode andFwVersion: (NSString *)fwVersion andTimeZone: (NSString *)timeZone andApiKey: (NSString *)apiKey
 {
     if (selIfSuccess == nil ||selIfFailure == nil|| selIfServerFail ==nil)
 	{
@@ -276,8 +236,8 @@
 	
 	@synchronized(self)
 	{
-        NSString *requestString = [NSString stringWithFormat:@"%@%@", BMS_JSON_PHONESERVICE, DEV_REG_CMD];
-        requestString = [requestString stringByAppendingFormat:@"%@", apiKey];
+        NSString *requestString = [NSString stringWithFormat:@"%@", BMS_JSON_PHONESERVICE];
+        requestString = [requestString stringByAppendingFormat:DEV_REG_CMD, apiKey];
         NSLog(@"request = %@", requestString);
         
         NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL: [NSURL URLWithString:requestString]];
@@ -290,9 +250,22 @@
         [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
         
         // Convert your data and set your request's HTTPBody properties
-        NSString *dataString = [NSString stringWithFormat:@"{%@:\"%@\",%@:\"%@\",%@:\"%@\",%@:\"%@\",%@:\"%@\",%@:\"%@\",%@:\"%@\"}", DEV_REG_PARAM_1, nameDevice, DEV_REG_PARAM_2, registrationId, DEV_REG_PARAM_3, deviceType, DEV_REG_PARAM_4, model, DEV_REG_PARAM_5, mode, DEV_REG_PARAM_6, fwVersion, DEV_REG_PARAM_7, timeZone];
-        NSLog(@"data = %@", dataString);
-        NSData *requestBodyData = [dataString dataUsingEncoding:NSUTF8StringEncoding];
+        //{"name":"luan01", "registration_id":"asasasasas12","device_type":"camera", "model":"blink1","mode":"stun","firmware_version":"08_045","time_zone":"+0530"}
+        NSDictionary *jsonDictInfo = [NSDictionary dictionaryWithObjectsAndKeys:
+                                      deviceName,       DEV_REG_PARAM_1,
+                                      registrationId,   DEV_REG_PARAM_2,
+                                      deviceType,       DEV_REG_PARAM_3,
+                                      model,            DEV_REG_PARAM_4,
+                                      mode,             DEV_REG_PARAM_5,
+                                      fwVersion,        DEV_REG_PARAM_6,
+                                      timeZone,         DEV_REG_PARAM_7,
+                                      nil];
+        
+        NSLog(@"jsonDict = %@", jsonDictInfo);
+        // convert to data
+        NSData *requestBodyData = [NSJSONSerialization dataWithJSONObject:jsonDictInfo
+                                                                  options:NSJSONWritingPrettyPrinted
+                                                                    error:nil];
         request.HTTPBody = requestBodyData;
         
         //Create url connection and fire request
@@ -319,44 +292,6 @@
     return TRUE;
 }
 
-- (BOOL)getAllSharedDevicesWithApiKey: (NSString *)apiKey
-{
-    if (selIfSuccess == nil ||selIfFailure == nil|| selIfServerFail ==nil)
-	{
-		NSLog(@"ERR: selector is not set");
-		return FALSE;
-	}
-    
-    @synchronized(self)
-	{
-        NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL: [NSURL URLWithString:[NSString stringWithFormat:@"%@%@%@", BMS_JSON_PHONESERVICE, DEV_SHARED_CMD, apiKey]]];
-        request.timeoutInterval = BMS_JSON_DEFAULT_TIME_OUT;
-        
-        self.urlConnection = [[NSURLConnection alloc] initWithRequest:request delegate:self];
-    }
-
-    return TRUE;
-}
-
-- (BOOL)getAllPublicDevicesWithApiKey: (NSString *)apiKey
-{
-    if (selIfSuccess == nil ||selIfFailure == nil|| selIfServerFail ==nil)
-	{
-		NSLog(@"ERR: selector is not set");
-		return FALSE;
-	}
-    
-    @synchronized(self)
-	{
-        NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL: [NSURL URLWithString:[NSString stringWithFormat:@"%@%@%@", BMS_JSON_PHONESERVICE, DEV_PUBLIC_CMD, apiKey]]];
-        request.timeoutInterval = BMS_JSON_DEFAULT_TIME_OUT;
-        
-        self.urlConnection = [[NSURLConnection alloc] initWithRequest:request delegate:self];
-    }
-    
-    return TRUE;
-}
-
 - (BOOL)getDeviceBasicInfoWithRegistrationId: (NSString *)registrationId andApiKey: (NSString *)apiKey
 {
     if (selIfSuccess == nil ||selIfFailure == nil|| selIfServerFail ==nil)
@@ -369,30 +304,6 @@
 	{
         NSString *requestString = [NSString stringWithFormat:@"%@", BMS_JSON_PHONESERVICE];
         requestString = [requestString stringByAppendingFormat:DEV_BASIC_CMD, registrationId, apiKey];
-        
-        NSLog(@"%@", requestString);
-        
-        NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL: [NSURL URLWithString:requestString]];
-        request.timeoutInterval = BMS_JSON_DEFAULT_TIME_OUT;
-        
-        self.urlConnection = [[NSURLConnection alloc] initWithRequest:request delegate:self];
-    }
-    
-    return TRUE;
-}
-
-- (BOOL)getDeviceCapabilityInfoWithRegistrationId: (NSString *)registrationId andApiKey: (NSString *)apiKey
-{
-    if (selIfSuccess == nil ||selIfFailure == nil|| selIfServerFail ==nil)
-	{
-		NSLog(@"ERR: selector is not set");
-		return FALSE;
-	}
-    
-    @synchronized(self)
-	{
-        NSString *requestString = [NSString stringWithFormat:@"%@", BMS_JSON_PHONESERVICE];
-        requestString = [requestString stringByAppendingFormat:DEV_CAPABILTY_CMD, registrationId, apiKey];
         
         NSLog(@"%@", requestString);
         
@@ -428,8 +339,17 @@
         [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
         
         // Convert your data and set your request's HTTPBody properties
-        NSString *dataString = [NSString stringWithFormat:@"{%@:\"%@\",%@:\"%@\"}", DEV_SEND_COMMAND_PARAM_1, registrationId, DEV_SEND_COMMAND_PARAM_2, command];
-        NSData *requestBodyData = [dataString dataUsingEncoding:NSUTF8StringEncoding];
+        //{"registration_id":"asasasasas03", "command":"action=command&command=melody1"}
+        NSDictionary *jsonDictInfo = [NSDictionary dictionaryWithObjectsAndKeys:
+                                      registrationId, DEV_SEND_COMMAND_PARAM_1,
+                                      command,        DEV_SEND_COMMAND_PARAM_2,
+                                      nil];
+        
+        NSLog(@"jsonDict = %@", jsonDictInfo);
+        // convert to data
+        NSData *requestBodyData = [NSJSONSerialization dataWithJSONObject:jsonDictInfo
+                                                                  options:NSJSONWritingPrettyPrinted
+                                                                    error:nil];
         request.HTTPBody = requestBodyData;
         
         //Create url connection and fire request
@@ -462,80 +382,22 @@
         [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
         
         // Convert your data and set your request's HTTPBody properties
-        NSString *dataString = [NSString stringWithFormat:@"{%@:\"%@\",%@:\"%@\"}", DEV_CREATE_SESSION_PARAM_1, registrationId, DEV_CREATE_SESSION_PARAM_2, clientType];
-        NSData *requestBodyData = [dataString dataUsingEncoding:NSUTF8StringEncoding];
+        //{"registration_id":"asasasasas04", "client_type":"browser"}
+        NSDictionary *jsonDictInfo = [NSDictionary dictionaryWithObjectsAndKeys:
+                                      registrationId, DEV_CREATE_SESSION_PARAM_1,
+                                      clientType,     DEV_CREATE_SESSION_PARAM_2,
+                                      nil];
+        
+        NSLog(@"jsonDict = %@", jsonDictInfo);
+        // convert to data
+        NSData *requestBodyData = [NSJSONSerialization dataWithJSONObject:jsonDictInfo
+                                                                  options:NSJSONWritingPrettyPrinted
+                                                                    error:nil];
         request.HTTPBody = requestBodyData;
         
         //Create url connection and fire request
         self.urlConnection = [[NSURLConnection alloc] initWithRequest:request delegate:self];
     }
-    return TRUE;
-}
-
-- (BOOL)closeSessionWithRegistrationId: (NSString *)registrationId andApiKey: (NSString *)apiKey
-{
-    if (selIfSuccess == nil ||selIfFailure == nil|| selIfServerFail ==nil)
-	{
-		NSLog(@"ERR: selector is not set");
-		return FALSE;
-	}
-	
-	@synchronized(self)
-	{
-        NSString *requestString = [NSString stringWithFormat:@"%@", BMS_JSON_PHONESERVICE];
-        requestString = [requestString stringByAppendingFormat:DEV_CLOSE_SESSION_CMD, registrationId];
-        requestString = [requestString stringByAppendingFormat:@"%@%@", DEV_CLOSE_SESSION_PARAM_2, apiKey];
-        
-        NSLog(@"request string = %@", requestString);
-        
-        NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL: [NSURL URLWithString:requestString]];
-        
-        request.timeoutInterval = BMS_JSON_DEFAULT_TIME_OUT;
-        
-        //Specify that it will be a POST request
-        request.HTTPMethod = @"DELETE";
-        
-        // This is how we set header fields
-        [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
-        
-        //Create url connection and fire request
-        self.urlConnection = [[NSURLConnection alloc] initWithRequest:request delegate:self];
-    }
-    
-    return TRUE;
-}
-
-- (BOOL)closeSessionWithRegistrationId:(NSString *)registrationId andChannedId: (NSString *)channedId andApiKey: (NSString *)apiKey
-{
-    if (selIfSuccess == nil ||selIfFailure == nil|| selIfServerFail ==nil)
-	{
-		NSLog(@"ERR: selector is not set");
-		return FALSE;
-	}
-	
-	@synchronized(self)
-	{
-        NSString *requestString = [NSString stringWithFormat:@"%@", BMS_JSON_PHONESERVICE];
-        requestString = [requestString stringByAppendingFormat:DEV_CLOSE_SESSION_CMD, registrationId];
-                requestString = [requestString stringByAppendingFormat:@"%@%@", DEV_CLOSE_SESSION_PARAM_1, channedId];
-        requestString = [requestString stringByAppendingFormat:@"&%@%@", DEV_CLOSE_SESSION_PARAM_2, apiKey];
-        
-        NSLog(@"request string = %@", requestString);
-        
-        NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL: [NSURL URLWithString:requestString]];
-        
-        request.timeoutInterval = BMS_JSON_DEFAULT_TIME_OUT;
-        
-        //Specify that it will be a POST request
-        request.HTTPMethod = @"DELETE";
-        
-        // This is how we set header fields
-        [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
-        
-        //Create url connection and fire request
-        self.urlConnection = [[NSURLConnection alloc] initWithRequest:request delegate:self];
-    }
-    
     return TRUE;
 }
 
@@ -583,9 +445,9 @@
 	{
         NSString *requestString = [NSString stringWithFormat:@"%@", BMS_JSON_PHONESERVICE];
         requestString = [requestString stringByAppendingFormat:DEV_UPDATE_BASIC_CMD, registrationId];
-        requestString = [requestString stringByAppendingFormat:@"%@%@", DEV_UPDATE_BASIC_PARAM_1, newName];
-        requestString = [requestString stringByAppendingFormat:@"%@%@", DEV_UPDATE_BASIC_PARAM_2, accessToken];
-        requestString = [requestString stringByAppendingFormat:@"%@%@", DEV_UPDATE_BASIC_PARAM_3, apiKey];
+        requestString = [requestString stringByAppendingFormat:DEV_UPDATE_BASIC_PARAM_1, newName];
+        requestString = [requestString stringByAppendingFormat:DEV_UPDATE_BASIC_PARAM_2, accessToken];
+        requestString = [requestString stringByAppendingFormat:DEV_UPDATE_BASIC_PARAM_3, apiKey];
         
         NSLog(@"request string = %@", requestString);
         
@@ -706,8 +568,17 @@
         [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
         
         // Convert your data and set your request's HTTPBody properties
-        NSString *dataString = [NSString stringWithFormat:@"{%@:\"%@\",%@:\"%@\"}", DEV_REQUEST_RECOVERY_PARAM_1, recoveryType, DEV_REQUEST_RECOVERY_PARAM_2, status];
-        NSData *requestBodyData = [dataString dataUsingEncoding:NSUTF8StringEncoding];
+        //{"recovery_type":"upnp","status":"recoverable"}
+        NSDictionary *jsonDictInfo = [NSDictionary dictionaryWithObjectsAndKeys:
+                                      recoveryType, DEV_REQUEST_RECOVERY_PARAM_1,
+                                      status,       DEV_REQUEST_RECOVERY_PARAM_2,
+                                      nil];
+        NSLog(@"jsonDict = %@", jsonDictInfo);
+        // convert to data
+        NSError *error = nil;
+        NSData *requestBodyData = [NSJSONSerialization dataWithJSONObject:jsonDictInfo
+                                                                  options:NSJSONWritingPrettyPrinted
+                                                                    error:&error];
         request.HTTPBody = requestBodyData;
         
         //Create url connection and fire request
@@ -735,41 +606,6 @@
         NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL: [NSURL URLWithString:requestString]];
         request.timeoutInterval = BMS_JSON_DEFAULT_TIME_OUT;
         
-        self.urlConnection = [[NSURLConnection alloc] initWithRequest:request delegate:self];
-    }
-    
-    return TRUE;
-}
-
-- (BOOL)checkDevicePortIsOpenWithRegistration: (NSString *)registrationId andPort: (NSString *)port andApiKey: (NSString *)apiKey
-{
-    if (selIfSuccess == nil ||selIfFailure == nil|| selIfServerFail ==nil)
-	{
-		NSLog(@"ERR: selector is not set");
-		return FALSE;
-	}
-	
-	@synchronized(self)
-	{
-        NSString *requestString = [NSString stringWithFormat:@"%@", BMS_JSON_PHONESERVICE];
-        requestString = [requestString stringByAppendingFormat:DEV_PORT_OPEN_CMD, registrationId, apiKey];
-        
-        NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL: [NSURL URLWithString:requestString]];
-        request.timeoutInterval = BMS_JSON_DEFAULT_TIME_OUT;
-        
-        //Specify that it will be a POST request
-        request.HTTPMethod = @"POST";
-        
-        // This is how we set header fields
-        [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
-        
-        // Convert your data and set your request's HTTPBody properties
-        NSString *dataString = [NSString stringWithFormat:@"{%@:\"%@\"}", DEV_PORT_OPEN_PARAM_1, port];
-        
-        NSData *requestBodyData = [dataString dataUsingEncoding:NSUTF8StringEncoding];
-        request.HTTPBody = requestBodyData;
-        
-        //Create url connection and fire request
         self.urlConnection = [[NSURLConnection alloc] initWithRequest:request delegate:self];
     }
     
