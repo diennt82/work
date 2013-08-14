@@ -2201,11 +2201,7 @@
 	else if (tag ==FW_OTA_UPGRADE_AVAILABLE)
 	{
 		switch(buttonIndex) {
-			case 0: //Cancel
-                
-                
-				break;
-			case 1: //OK - request_fw_upgrade.
+			case 0: //OK - request_fw_upgrade.
 				//Stop streaming first
 				[self.streamer stopStreaming];
                 
@@ -3916,12 +3912,11 @@
                                                          @"Camera Firmware Upgrade"  , nil);
     
     NSString * msg = NSLocalizedStringWithDefaultValue(@"fw_upgrade",nil, [NSBundle mainBundle],
-                                                       @"A camera firmware %@ is available. Do you want to upgrade now?" , nil);
+                                                       @"A camera firmware %@ is available. Press OK to upgrade now!" , nil);
     
     NSString * ok = NSLocalizedStringWithDefaultValue(@"Ok",nil, [NSBundle mainBundle],
                                                       @"OK" , nil);
-    NSString * cancel = NSLocalizedStringWithDefaultValue(@"Cancel",nil, [NSBundle mainBundle],
-                                                      @"Cancel" , nil);
+    //NSString * cancel = NSLocalizedStringWithDefaultValue(@"Cancel",nil, [NSBundle mainBundle], @"Cancel" , nil);
     
 	msg = [NSString stringWithFormat:msg,version];
     
@@ -3930,7 +3925,7 @@
               initWithTitle:title
               message:msg
               delegate:self
-              cancelButtonTitle:cancel
+              cancelButtonTitle:nil
               otherButtonTitles:ok,nil];
     
 	_alert.tag = FW_OTA_UPGRADE_AVAILABLE;

@@ -214,7 +214,7 @@
 "Forgot_Password" = "Glömt lösenord";
 
 /* No comment provided by engineer. */
-"fw_upgrade" = "En kameraprogramvara%@ finns tillgänglig. Vill du uppgradera nu?";
+"fw_upgrade" = "En kameraprogramvara%@ finns tillgänglig. Tryck på OK för att uppgradera nu!";
 
 /* No comment provided by engineer. */
 "fw_upgrade_1" = "Starta om kamera...";

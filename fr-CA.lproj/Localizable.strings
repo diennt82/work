@@ -214,7 +214,7 @@
 "Forgot_Password" = "Mot de passe oublié";
 
 /* No comment provided by engineer. */
-"fw_upgrade" = "La caméra micrologiciel est disponible. Désirez-vous la nouvelle version ?";
+"fw_upgrade" = "La caméra micrologiciel est disponible. Press OK to upgrade now!";
 
 /* No comment provided by engineer. */
 "fw_upgrade_1" = "Redémarrage de la Caméra...";

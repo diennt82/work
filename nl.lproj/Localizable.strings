@@ -214,7 +214,7 @@
 "Forgot_Password" = "Wachtwoord vergeten";
 
 /* No comment provided by engineer. */
-"fw_upgrade" = "Een camera firmware %@ is beschikbaar. Wilt u nu bijwerken?";
+"fw_upgrade" = "Een camera firmware %@ is beschikbaar. Druk op OK om nu te upgraden!";
 
 /* No comment provided by engineer. */
 "fw_upgrade_1" = "Camera herstarten...";

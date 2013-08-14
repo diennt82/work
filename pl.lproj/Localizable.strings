@@ -214,7 +214,7 @@
 "Forgot_Password" = "Zapomniane hasło";
 
 /* No comment provided by engineer. */
-"fw_upgrade" = "Oprogramowanie firmowe kamery %@ jest dostępne. Czy chcesz teraz aktualizować?";
+"fw_upgrade" = "Oprogramowanie firmowe kamery %@ jest dostępne. Naciśnij OK, aby uaktualnić teraz!";
 
 /* No comment provided by engineer. */
 "fw_upgrade_1" = "Restartowanie kamery...";
