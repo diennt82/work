@@ -10,8 +10,6 @@
 
 @interface DashBoard_ViewController() <CameraViewDelegate>
 
-@property (nonatomic, retain)CamChannel *selectedCamChannel;
-
 @end
 
 @implementation DashBoard_ViewController
@@ -52,7 +50,6 @@
 {
     [topbar release];
     [listOfChannel release];
-    [self.selectedCamChannel release];
     [super dealloc];
 }
 
@@ -691,10 +688,6 @@
             [camName setFrame:frame];
         }
         
-        if ([self.selectedCamChannel.profile.mac_address isEqualToString:cp.mac_address]) {
-            ch = self.selectedCamChannel;
-        }
-        
         //NSLog(@"cell: %d %d", indexPath.row , cp.minuteSinceLastComm);
         if (cp.hasUpdateLocalStatus == TRUE && !ch.waitingForStreamerToClose)
         {
@@ -851,10 +844,10 @@
     
     if (ch != nil && ch.profile != nil &&
          (ch.profile.isInLocal ==YES ||
-              ((isOffline == FALSE ) && (ch.profile.minuteSinceLastComm <=5)) )
+              ((isOffline == FALSE ) && (ch.profile.minuteSinceLastComm <=5)) ) &&
+        !ch.waitingForStreamerToClose
         )
     {
-        
         NSLog(@"clear alert for: %@",ch.profile.mac_address);
         // Clear all alert for this camera
         [CameraAlert clearAllAlertForCamera:ch.profile.mac_address];
@@ -873,7 +866,6 @@
         ch.waitingForStreamerToClose = YES;
         viewCamCtrl.selected_channel = ch;
         viewCamCtrl.camDelegate = self;
-        self.selectedCamChannel = ch;
         
         [self.navigationController pushViewController:viewCamCtrl animated:NO];
         [viewCamCtrl release];
@@ -886,8 +878,11 @@
 
 - (void)reportClosedStatusWithSelectedChannel:(CamChannel *)selectedChannel
 {
-    if ([selectedChannel.profile.mac_address isEqualToString: self.selectedCamChannel.profile.mac_address]) {
-        self.selectedCamChannel = selectedChannel;
+    for (CamChannel *ch in listOfChannel) {
+        if ([ch.profile.mac_address isEqualToString:selectedChannel.profile.mac_address]) {
+            ch.waitingForStreamerToClose = NO;
+            break;
+        }
     }
     [self.cameraList reloadData];
 }

@@ -930,7 +930,6 @@
 	//NSLog(@"abort remote timer ");
 	[self.selected_channel abortViewTimer];
     
-    selected_channel.waitingForStreamerToClose = NO;
     [self.camDelegate reportClosedStatusWithSelectedChannel:selected_channel];
 }
 
@@ -1272,7 +1271,6 @@
 
     UIButton * btn = (UIButton *) sender;
     btn.hidden = YES;
-    selected_channel.waitingForStreamerToClose = NO;
     [self.camDelegate reportClosedStatusWithSelectedChannel:selected_channel];
     
 #if 0 // ORIG
