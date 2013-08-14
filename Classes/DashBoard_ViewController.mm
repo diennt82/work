@@ -696,7 +696,7 @@
         }
         
         //NSLog(@"cell: %d %d", indexPath.row , cp.minuteSinceLastComm);
-        if (cp.hasUpdateLocalStatus == TRUE && !ch.opened)
+        if (cp.hasUpdateLocalStatus == TRUE && !ch.waitingForStreamerToClose)
         {
             [spinner stopAnimating]; 
             spinner.hidden = YES;
@@ -870,7 +870,7 @@
         
         viewCamCtrl = [[CameraViewController alloc] initWithNibName:@"CameraViewController"
                                                              bundle:nil];
-        ch.opened = YES;
+        ch.waitingForStreamerToClose = YES;
         viewCamCtrl.selected_channel = ch;
         viewCamCtrl.camDelegate = self;
         self.selectedCamChannel = ch;
