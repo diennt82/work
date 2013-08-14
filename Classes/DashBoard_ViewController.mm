@@ -8,7 +8,9 @@
 
 #import "DashBoard_ViewController.h"
 
-@interface DashBoard_ViewController()
+@interface DashBoard_ViewController() <CameraViewDelegate>
+
+@property (nonatomic, retain)CamChannel *selectedCamChannel;
 
 @end
 
@@ -50,6 +52,7 @@
 {
     [topbar release];
     [listOfChannel release];
+    [self.selectedCamChannel release];
     [super dealloc];
 }
 
@@ -309,7 +312,6 @@
     
     BOOL isOffline = [userDefaults boolForKey:_OfflineMode];
 
-                      
     self.editModeEnabled = FALSE;
     [self setupTopBarForEditMode:self.editModeEnabled];
     
@@ -689,10 +691,12 @@
             [camName setFrame:frame];
         }
         
-        
+        if ([self.selectedCamChannel.profile.mac_address isEqualToString:cp.mac_address]) {
+            ch = self.selectedCamChannel;
+        }
         
         //NSLog(@"cell: %d %d", indexPath.row , cp.minuteSinceLastComm);
-        if (cp.hasUpdateLocalStatus == TRUE)
+        if (cp.hasUpdateLocalStatus == TRUE && !ch.opened)
         {
             [spinner stopAnimating]; 
             spinner.hidden = YES;
@@ -866,7 +870,10 @@
         
         viewCamCtrl = [[CameraViewController alloc] initWithNibName:@"CameraViewController"
                                                              bundle:nil];
+        ch.opened = YES;
         viewCamCtrl.selected_channel = ch;
+        viewCamCtrl.camDelegate = self;
+        self.selectedCamChannel = ch;
         
         [self.navigationController pushViewController:viewCamCtrl animated:NO];
         [viewCamCtrl release];
@@ -875,6 +882,14 @@
         [UIApplication sharedApplication].idleTimerDisabled=  YES;
     }
     
+}
+
+- (void)reportClosedStatusWithSelectedChannel:(CamChannel *)selectedChannel
+{
+    if ([selectedChannel.profile.mac_address isEqualToString: self.selectedCamChannel.profile.mac_address]) {
+        self.selectedCamChannel = selectedChannel;
+    }
+    [self.cameraList reloadData];
 }
 
 #pragma mark -

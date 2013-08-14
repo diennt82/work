@@ -453,7 +453,9 @@
         
 		if (streamer.recordInProgress == YES)
 			[streamer stopRecording];
-		[streamer stopStreaming];
+        if (nil == self.camDelegate) {
+            [streamer stopStreaming];
+        }
         
 		//NSLog(@"abort remote timer ");
 		[self.selected_channel abortViewTimer];
@@ -900,10 +902,22 @@
     
 #endif
 	
+	[self.navigationController popToRootViewControllerAnimated:NO];
+    [self performSelectorInBackground:@selector(processCloseCamera) withObject:nil];
+    
+	NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+	[userDefaults removeObjectForKey:CAM_IN_VEW];
+	[userDefaults synchronize];
+    
+    
+}
+
+- (void)processCloseCamera
+{
     if (streamer.recordInProgress == YES)
         [streamer stopRecording];
-        
-        //close pcm player as well.. we don't need it any longer
+    
+    //close pcm player as well.. we don't need it any longer
     [streamer stopStreaming:TRUE];
 	
     
@@ -916,13 +930,8 @@
 	//NSLog(@"abort remote timer ");
 	[self.selected_channel abortViewTimer];
     
-	[self.navigationController popToRootViewControllerAnimated:NO];
-    
-	NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-	[userDefaults removeObjectForKey:CAM_IN_VEW];
-	[userDefaults synchronize];
-    
-    
+    selected_channel.opened = NO;
+    [self.camDelegate reportClosedStatusWithSelectedChannel:selected_channel];
 }
 
 -(void) goToCameraSettings
@@ -1263,9 +1272,8 @@
 
     UIButton * btn = (UIButton *) sender;
     btn.hidden = YES;
-    
-
-   
+    selected_channel.opened = NO;
+    [self.camDelegate reportClosedStatusWithSelectedChannel:selected_channel];
     
 #if 0 // ORIG
     if (settingupStreamer == FALSE)
