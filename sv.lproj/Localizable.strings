@@ -184,6 +184,9 @@
 "Create_Account_Failed_msg4" = "Välj ett Wifi-nätverk att ansluta till";
 
 /* No comment provided by engineer. */
+"Create_Account_Failed_msg5" = "Användarnamn får inte innehålla specialtecken förutom - _ och.";
+
+/* No comment provided by engineer. */
 "Detect_Camera" = "Upptäck kamera";
 
 /* No comment provided by engineer. */

@@ -414,10 +414,9 @@
     }
     else if (!isValidateUsername)
     {
-        NSString *Create_Account_Failed_msg5 = @"Username should not contain special characters except for - _ and .";
         title = NSLocalizedStringWithDefaultValue(@"Create_Account_Failed",nil, [NSBundle mainBundle],
                                                   @"Create Account Failed" , nil);
-        msg = NSLocalizedStringWithDefaultValue(Create_Account_Failed_msg5, nil, [NSBundle mainBundle],
+        msg = NSLocalizedStringWithDefaultValue(@"Create_Account_Failed_msg5", nil, [NSBundle mainBundle],
                                                 @"Username should not contain special characters except for - _ and ."  , nil);
         
         //ERROR condition

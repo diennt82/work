@@ -185,6 +185,9 @@
 "Create_Account_Failed_msg4" = "Veuillez sélectionner un réseau WiFi pour vous connecter";
 
 /* No comment provided by engineer. */
+"Create_Account_Failed_msg5" = "Nom d'utilisateur ne doit pas contenir de caractères spéciaux sauf pour les - _ et.";
+
+/* No comment provided by engineer. */
 "detail" = "Detail";
 "Detect_Camera" = "Détecter Caméra";
 

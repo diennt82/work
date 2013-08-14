@@ -184,6 +184,9 @@
 "Create_Account_Failed_msg4" = "Selecteer een Wifi-netwerk om te verbinden";
 
 /* No comment provided by engineer. */
+"Create_Account_Failed_msg5" = "Gebruikersnaam mag geen speciale tekens bevatten behalve - _ en.";
+
+/* No comment provided by engineer. */
 "Detect_Camera" = "Detecteer Camera";
 
 /* No comment provided by engineer. */

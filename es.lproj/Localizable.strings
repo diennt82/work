@@ -184,6 +184,9 @@
 "Create_Account_Failed_msg4" = "Por favor seleccione una red Wifi para conectarse";
 
 /* No comment provided by engineer. */
+"Create_Account_Failed_msg5" = "Nombre de usuario no debe contener caracteres especiales, a excepción de - _ y.";
+
+/* No comment provided by engineer. */
 "Detect_Camera" = "Detectar cámara";
 
 /* No comment provided by engineer. */

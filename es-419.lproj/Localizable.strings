@@ -184,6 +184,9 @@
 "Create_Account_Failed_msg4" = "Seleccione una red Wi-Fi para conectarse";
 
 /* No comment provided by engineer. */
+"Create_Account_Failed_msg5" = "Si nomen utentis non continet aliquid speciale praeter - _ et.";
+
+/* No comment provided by engineer. */
 "Detect_Camera" = "Detectar cámara";
 
 /* No comment provided by engineer. */

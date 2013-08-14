@@ -184,6 +184,9 @@
 "Create_Account_Failed_msg4" = "Bitte wählen Sie ein WLAN-Netzwerk zum Verbinden aus";
 
 /* No comment provided by engineer. */
+"Create_Account_Failed_msg5" = "Benutzername darf keine Sonderzeichen außer - und _.";
+
+/* No comment provided by engineer. */
 "Detect_Camera" = "Kamera entdecken";
 
 /* No comment provided by engineer. */

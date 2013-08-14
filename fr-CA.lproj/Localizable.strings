@@ -184,6 +184,9 @@
 "Create_Account_Failed_msg4" = "Veuillez sélectionner un réseau Wi-Fi pour la connection";
 
 /* No comment provided by engineer. */
+"Create_Account_Failed_msg5" = "Username should not contain special characters except for - _ and .";
+
+/* No comment provided by engineer. */
 "Detect_Camera" = "Caméra Détectée";
 
 /* No comment provided by engineer. */

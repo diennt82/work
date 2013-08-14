@@ -184,6 +184,9 @@
 "Create_Account_Failed_msg4" = "Prosimy wybrać sieć Wifi, aby podłączyć";
 
 /* No comment provided by engineer. */
+"Create_Account_Failed_msg5" = "Nazwa użytkownika nie może zawierać znaków specjalnych z wyjątkiem - _ i.";
+
+/* No comment provided by engineer. */
 "Detect_Camera" = "Wykryj kamerę";
 
 /* No comment provided by engineer. */
