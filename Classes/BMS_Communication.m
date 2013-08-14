@@ -57,6 +57,11 @@
 /* Non Blocking function - */
 - (BOOL)BMS_loginWithUser:(NSString*) user_email AndPass:(NSString*) user_pass
 {
+    user_pass = [user_pass stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+    user_pass = [user_pass stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+    
+    user_email = [user_email stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+
 	NSString * http_cmd = [NSString stringWithFormat:@"%@%@",BMS_PHONESERVICE, BMS_CMD_PART];
 	http_cmd = [http_cmd stringByAppendingFormat:@"%@", USR_LOGIN_CMD];
 	http_cmd = [http_cmd stringByAppendingFormat:@"%@%@", USR_LOGIN_PARAM_1, user_email];
@@ -94,6 +99,9 @@
 
 - (BOOL)BMS_registerWithUserId:(NSString*) user_id AndPass:(NSString*) user_pass AndEmail:(NSString *) user_email
 {
+    user_pass = [user_pass stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+    user_pass = [user_pass stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+    
 	NSString * http_cmd = [NSString stringWithFormat:@"%@%@",BMS_PHONESERVICE, BMS_CMD_PART];
 	http_cmd = [http_cmd stringByAppendingFormat:@"%@", USR_REG_CMD];
 	http_cmd = [http_cmd stringByAppendingFormat:@"%@%@", USR_REG_PARAM_1, user_email];
@@ -143,6 +151,7 @@
 		return FALSE;
 	}
 	
+    user_pass = [user_pass stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
 	NSString* plain = [NSString stringWithFormat:@"%@:%@",
 					   user_email, user_pass];
 	NSData* plainData = [plain dataUsingEncoding:NSUTF8StringEncoding];
@@ -177,6 +186,9 @@
                    camName:(NSString*) name
                   camCodec:(NSString *) codec
 {
+    user_pass = [user_pass stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+    NSString *escapes_user_pass = [user_pass stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+    
  	NSString * mac_ = [Util strip_colon_fr_mac:mac];
 	
     NSString* escapedName = [name
@@ -184,10 +196,10 @@
 	NSString * http_cmd = [NSString stringWithFormat:@"%@%@",BMS_PHONESERVICE, BMS_CMD_PART];
 	http_cmd = [http_cmd stringByAppendingFormat:@"%@", ADD_CAM_CMD];
 	http_cmd = [http_cmd stringByAppendingFormat:@"%@%@", ADD_CAM_PARAM_1, user_email];
-	http_cmd = [http_cmd stringByAppendingFormat:@"%@%@", ADD_CAM_PARAM_2, user_pass];
+	http_cmd = [http_cmd stringByAppendingFormat:@"%@%@", ADD_CAM_PARAM_2, escapes_user_pass];
 	http_cmd = [http_cmd stringByAppendingFormat:@"%@%@", ADD_CAM_PARAM_3, mac_];
 	http_cmd = [http_cmd stringByAppendingFormat:@"%@%@", ADD_CAM_PARAM_4, escapedName];
-	http_cmd = [http_cmd stringByAppendingFormat:@"%@%d", ADD_CAM_PARAM_5,[user_pass length]];
+	http_cmd = [http_cmd stringByAppendingFormat:@"%@%d", ADD_CAM_PARAM_5,[escapes_user_pass length]];
     http_cmd = [http_cmd stringByAppendingFormat:@"%@%@", ADD_CAM_PARAM_6, codec];
 	
 	
@@ -277,6 +289,7 @@
 		return FALSE;
 	}
 	
+    user_pass = [user_pass stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
 	NSString* plain = [NSString stringWithFormat:@"%@:%@",
 					   user_email, user_pass];
 	NSData* plainData = [plain dataUsingEncoding:NSUTF8StringEncoding];
@@ -323,7 +336,8 @@
 		NSLog(@"ERR: selector is not set");
 		return FALSE;
 	}
-	
+    
+	user_pass = [user_pass stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
 	NSString* plain = [NSString stringWithFormat:@"%@:%@",
 					   user_email, user_pass];
 	NSData* plainData = [plain dataUsingEncoding:NSUTF8StringEncoding];
@@ -371,6 +385,7 @@
 		return FALSE;
 	}
 	
+    user_pass = [user_pass stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
 	NSString* plain = [NSString stringWithFormat:@"%@:%@",
 					   user_email, user_pass];
 	NSData* plainData = [plain dataUsingEncoding:NSUTF8StringEncoding];
@@ -416,6 +431,7 @@
 		return FALSE;
 	}
 	
+    user_pass = [user_pass stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
 	NSString* plain = [NSString stringWithFormat:@"%@:%@",
 					   user_email, user_pass];
 	NSData* plainData = [plain dataUsingEncoding:NSUTF8StringEncoding];
@@ -464,6 +480,7 @@
 		return FALSE;
 	}
 	
+    user_pass = [user_pass stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
 	NSString* plain = [NSString stringWithFormat:@"%@:%@",
 					   user_email, user_pass];
 	NSData* plainData = [plain dataUsingEncoding:NSUTF8StringEncoding];
@@ -513,6 +530,7 @@
 		return FALSE;
 	}
 	
+    user_pass = [user_pass stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
 	NSString* plain = [NSString stringWithFormat:@"%@:%@",
 					   user_email, user_pass];
 	NSData* plainData = [plain dataUsingEncoding:NSUTF8StringEncoding];
@@ -562,6 +580,7 @@
 		return FALSE;
 	}
 	
+    user_pass = [user_pass stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
 	NSString* plain = [NSString stringWithFormat:@"%@:%@",
 					   user_email, user_pass];
 	NSData* plainData = [plain dataUsingEncoding:NSUTF8StringEncoding];
@@ -591,12 +610,13 @@
 }
 - (BOOL)BMS_getSecInfoWithUser:(NSString*) user_email AndPass:(NSString*) user_pass
 {
-    
+    user_pass = [user_pass stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+    NSString *escapses_user_pass = [user_pass stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
 	
 	NSString * http_cmd = [NSString stringWithFormat:@"%@%@",BMS_PHONESERVICE, BMS_CMD_PART];
 	http_cmd = [http_cmd stringByAppendingFormat:@"%@", GET_SECURITY_INFO];
 	http_cmd = [http_cmd stringByAppendingFormat:@"%@%@", GET_SECURITY_INFO_PARAM_1, user_email];
-	http_cmd = [http_cmd stringByAppendingFormat:@"%@%@", GET_SECURITY_INFO_PARAM_2, user_pass];
+	http_cmd = [http_cmd stringByAppendingFormat:@"%@%@", GET_SECURITY_INFO_PARAM_2, escapses_user_pass];
 	
 	
 	
@@ -694,6 +714,7 @@
 		return FALSE;
 	}
 	
+    user_pass = [user_pass stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
 	NSString* plain = [NSString stringWithFormat:@"%@:%@",
 					   user_email, user_pass];
 	NSData* plainData = [plain dataUsingEncoding:NSUTF8StringEncoding];
@@ -744,6 +765,7 @@
 		return FALSE;
 	}
 	
+    user_pass = [user_pass stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
 	NSString* plain = [NSString stringWithFormat:@"%@:%@",
 					   user_email, user_pass];
 	NSData* plainData = [plain dataUsingEncoding:NSUTF8StringEncoding];
@@ -798,7 +820,7 @@
     
     
     
-	
+	user_pass = [user_pass stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
 	NSString* plain = [NSString stringWithFormat:@"%@:%@",
 					   user_email, user_pass];
 	NSData* plainData = [plain dataUsingEncoding:NSUTF8StringEncoding];
@@ -846,7 +868,7 @@
 	
 	//NSLog(@"getCamlist query:%@", http_cmd);
 	
-    
+    user_pass = [user_pass stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
 	NSString* plain = [NSString stringWithFormat:@"%@:%@",
 					   user_email, user_pass];
 	NSData* plainData = [plain dataUsingEncoding:NSUTF8StringEncoding];
@@ -902,7 +924,7 @@
 	
     
 	
-	
+	user_pass = [user_pass stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
 	NSString* plain = [NSString stringWithFormat:@"%@:%@",
 					   user_email, user_pass];
 	NSData* plainData = [plain dataUsingEncoding:NSUTF8StringEncoding];
@@ -957,6 +979,7 @@
 	
 	NSLog(@"getRelayS query:%@", http_cmd);
 	
+    user_pass = [user_pass stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
     NSString* plain = [NSString stringWithFormat:@"%@:%@",
 					   user_email, user_pass];
 	NSData* plainData = [plain dataUsingEncoding:NSUTF8StringEncoding];
@@ -1026,7 +1049,7 @@
     
     
     
-	
+	user_pass = [user_pass stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
 	NSString* plain = [NSString stringWithFormat:@"%@:%@",
 					   user_email, user_pass];
 	NSData* plainData = [plain dataUsingEncoding:NSUTF8StringEncoding];
@@ -1098,7 +1121,7 @@
     
     
     
-	
+	user_pass = [user_pass stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
 	NSString* plain = [NSString stringWithFormat:@"%@:%@",
 					   user_email, user_pass];
 	NSData* plainData = [plain dataUsingEncoding:NSUTF8StringEncoding];
@@ -1155,7 +1178,7 @@
     http_cmd1 = [http_cmd1 stringByAppendingFormat:@"%@%@", PUSH_REG_CMD_PARAM_2, regId];
     
     
-	
+	user_pass = [user_pass stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
 	NSString* plain = [NSString stringWithFormat:@"%@:%@",
 					   user_email, user_pass];
 	NSData* plainData = [plain dataUsingEncoding:NSUTF8StringEncoding];
@@ -1211,7 +1234,7 @@
 	NSLog(@"send unreg query:%@", http_cmd);
     
     
-    
+    user_pass = [user_pass stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
 	
 	NSString* plain = [NSString stringWithFormat:@"%@:%@",
 					   user_email, user_pass];
@@ -1271,7 +1294,7 @@
 	NSLog(@"send query:%@", http_cmd1);
     
     
-    
+    user_pass = [user_pass stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
 	
 	NSString* plain = [NSString stringWithFormat:@"%@:%@",
 					   user_email, user_pass];
@@ -1333,7 +1356,7 @@
 	
 	NSLog(@"send query:%@", http_cmd1);
     
-	
+	user_pass = [user_pass stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
 	NSString* plain = [NSString stringWithFormat:@"%@:%@",
 					   user_email, user_pass];
 	NSData* plainData = [plain dataUsingEncoding:NSUTF8StringEncoding];
@@ -1391,7 +1414,7 @@
 	
 	NSLog(@"send query:%@", http_cmd1);
     
-	
+	user_pass = [user_pass stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
 	NSString* plain = [NSString stringWithFormat:@"%@:%@",
 					   user_email, user_pass];
 	NSData* plainData = [plain dataUsingEncoding:NSUTF8StringEncoding];
@@ -1448,7 +1471,7 @@
     
 	NSLog(@"send query:%@", http_cmd1);
     
-    
+    user_pass = [user_pass stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
 	NSString* plain = [NSString stringWithFormat:@"%@:%@",
 					   user_email, user_pass];
 	NSData* plainData = [plain dataUsingEncoding:NSUTF8StringEncoding];
@@ -1506,7 +1529,7 @@
 	
 	NSLog(@"send query:%@", http_cmd1);
     
-	
+	user_pass = [user_pass stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
 	NSString* plain = [NSString stringWithFormat:@"%@:%@",
 					   user_email, user_pass];
 	NSData* plainData = [plain dataUsingEncoding:NSUTF8StringEncoding];
@@ -1565,7 +1588,7 @@
 	
 	NSLog(@"send query:%@", http_cmd1);
     
-	
+	user_pass = [user_pass stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
 	NSString* plain = [NSString stringWithFormat:@"%@:%@",
 					   user_email, user_pass];
 	NSData* plainData = [plain dataUsingEncoding:NSUTF8StringEncoding];
@@ -1617,7 +1640,7 @@
 	http_cmd = [http_cmd stringByAppendingFormat:@"%@", GET_STREAM_MODE_CMD];
 	http_cmd = [http_cmd stringByAppendingFormat:@"%@%@", GET_STREAM_MODE_PARAM_1, mac_];
 	
-	
+	user_pass = [user_pass stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
 	NSString* plain = [NSString stringWithFormat:@"%@:%@",
 					   user_email, user_pass];
 	NSData* plainData = [plain dataUsingEncoding:NSUTF8StringEncoding];
@@ -1669,7 +1692,7 @@
 	
 	
 	//NSLog(@" query:%@", http_cmd);
-	
+	user_pass = [user_pass stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
     
 	NSString* plain = [NSString stringWithFormat:@"%@:%@",
 					   user_email, user_pass];
@@ -1723,7 +1746,7 @@
 	
 	//NSLog(@" query:%@", http_cmd);
 	
-    
+    user_pass = [user_pass stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
 	NSString* plain = [NSString stringWithFormat:@"%@:%@",
 					   user_email, user_pass];
 	NSData* plainData = [plain dataUsingEncoding:NSUTF8StringEncoding];
@@ -1949,6 +1972,8 @@
                                                                        ServerErr:nil];
         
         //call get camlist query here
+        user_pass = [user_pass stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+        user_pass = [user_pass stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
         isMacRegistered = [bms_comm BMS_executeBlockingMacCheckCmdwithUser:user_email
                                                                    andPass:user_pass
                                                                    macAddr:mac_address];

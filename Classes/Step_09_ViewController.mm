@@ -385,9 +385,11 @@
     UITextField * _userCPass = (UITextField *)[self.userCPass viewWithTag:203];
     UITextField * _userEmail = (UITextField *)[self.userEmail viewWithTag:204];
 
+    NSString * regex = @"[a-zA-Z0-9._-]+";
+    NSPredicate * validatedUsername = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", regex];
+    BOOL isValidateUsername = [validatedUsername evaluateWithObject:_userName.text];
     
-    
-    NSString * msg = nil ;     
+    NSString * msg = nil ;
     NSString * ok = NSLocalizedStringWithDefaultValue(@"Ok",nil, [NSBundle mainBundle],
                                                       @"Ok", nil);
     NSString * title = nil; 
@@ -409,6 +411,22 @@
                                otherButtonTitles:nil];
         [_alert show];
         [_alert release];
+    }
+    else if (!isValidateUsername)
+    {
+        NSString *Create_Account_Failed_msg5 = @"Username should not contain special characters except for - _ and .";
+        title = NSLocalizedStringWithDefaultValue(@"Create_Account_Failed",nil, [NSBundle mainBundle],
+                                                  @"Create Account Failed" , nil);
+        msg = NSLocalizedStringWithDefaultValue(Create_Account_Failed_msg5, nil, [NSBundle mainBundle],
+                                                @"Username should not contain special characters except for - _ and ."  , nil);
+        
+        //ERROR condition
+        [[[[UIAlertView alloc] initWithTitle:title message:msg
+                                    delegate:self
+                           cancelButtonTitle:ok
+                           otherButtonTitles:nil]
+          autorelease]
+         show];
     }
     else if (([_userPass.text length] < 3) ||
              ([_userPass.text length] > 12) )
@@ -484,10 +502,8 @@
         [alertView release];
 
     }
-    
-    else //Good info now.. 
+    else //Good info now..
     {
-        
         //Register user ...
         self.tmp_user_str = _userName.text;
         self.tmp_pass_str  = _userPass.text;
