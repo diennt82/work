@@ -713,8 +713,9 @@
     [userName resignFirstResponder];
     [password resignFirstResponder];
     
-    temp_user_str = userName.text;
-    temp_pass_str = password.text;
+   
+    self.temp_user_str = [NSString stringWithString:userName.text];
+    self.temp_pass_str = [NSString stringWithString:password.text];
     
     [self check3GConnectionAndPopup];
     
@@ -766,7 +767,7 @@
 	
 	
 	
-	NSRange isEmail = [temp_user_str rangeOfString:@"@"];
+	NSRange isEmail = [self.temp_user_str rangeOfString:@"@"];
 	if (isEmail.location != NSNotFound)
 	{
 		//Dont need to extract from response data 
