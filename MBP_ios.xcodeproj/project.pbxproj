@@ -163,7 +163,6 @@
 		38DE1CDA168AFBE00049E814 /* MBP_InitialSetupViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 38DE1CDC168AFBE00049E814 /* MBP_InitialSetupViewController.xib */; };
 		38E3C85C1694033500A13A70 /* AlertPrompt.m in Sources */ = {isa = PBXBuildFile; fileRef = 38E3C85B1694033500A13A70 /* AlertPrompt.m */; };
 		38FC9D7A16717B0300373F25 /* EditCameraCell.mm in Sources */ = {isa = PBXBuildFile; fileRef = 38FC9D7916717B0300373F25 /* EditCameraCell.mm */; };
-		9704F83B17B37971005F9868 /* MBPNavController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9704F83A17B37970005F9868 /* MBPNavController.m */; };
 		9704F84117B37CB3005F9868 /* DashBoard_ViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 9704F84017B37CAF005F9868 /* DashBoard_ViewController.mm */; };
 		97137B9715AE742A00BEBBD6 /* StunCommunication.mm in Sources */ = {isa = PBXBuildFile; fileRef = 97137B9615AE742A00BEBBD6 /* StunCommunication.mm */; };
 		9719EC5C155C9F30005419FC /* MBP_MenuViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 9719EC5A155C9F30005419FC /* MBP_MenuViewController.mm */; };
@@ -218,6 +217,7 @@
 		97E3CC77159D89EE00481854 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 97E3CC76159D89EE00481854 /* AVFoundation.framework */; };
 		97F0F04C143C0CA00076B749 /* CamChannel.m in Sources */ = {isa = PBXBuildFile; fileRef = 97F0F04B143C0CA00076B749 /* CamChannel.m */; };
 		97F0F168143C45FA0076B749 /* MBP_Streamer.mm in Sources */ = {isa = PBXBuildFile; fileRef = 97F0F167143C45FA0076B749 /* MBP_Streamer.mm */; };
+		97F5531517BDD3AF00024017 /* MBPNavController.m in Sources */ = {isa = PBXBuildFile; fileRef = 97F5531417BDD3AF00024017 /* MBPNavController.m */; };
 		97FE7D1015998C0B000826F0 /* RemoteConnection.mm in Sources */ = {isa = PBXBuildFile; fileRef = 97FE7D0F15998C0B000826F0 /* RemoteConnection.mm */; };
 		BC3C1ACE16F025B600175AFF /* MBP_MenuViewController_ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = BC3C1AD016F025B600175AFF /* MBP_MenuViewController_ipad.xib */; };
 		BC3C1AD316F025E300175AFF /* MBP_MenuProgress_portrait_ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = BC3C1AD516F025E300175AFF /* MBP_MenuProgress_portrait_ipad.xib */; };
@@ -518,7 +518,6 @@
 		38FC9D7916717B0300373F25 /* EditCameraCell.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = EditCameraCell.mm; sourceTree = "<group>"; };
 		8D1107310486CEB800E47090 /* MBP_ios-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "MBP_ios-Info.plist"; plistStructureDefinitionIdentifier = "com.apple.xcode.plist.structure-definition.iphone.info-plist"; sourceTree = "<group>"; };
 		9704F37E14B76202000B4AA5 /* Entitlements.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Entitlements.plist; sourceTree = "<group>"; };
-		9704F83A17B37970005F9868 /* MBPNavController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MBPNavController.m; path = ../../../Downloads/MBPNavController.m; sourceTree = "<group>"; };
 		9704F83F17B37CAD005F9868 /* DashBoard_ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DashBoard_ViewController.h; sourceTree = "<group>"; };
 		9704F84017B37CAF005F9868 /* DashBoard_ViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = DashBoard_ViewController.mm; sourceTree = "<group>"; };
 		97137B9515AE742A00BEBBD6 /* StunCommunication.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StunCommunication.h; sourceTree = "<group>"; };
@@ -615,6 +614,7 @@
 		97F0F04B143C0CA00076B749 /* CamChannel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CamChannel.m; sourceTree = "<group>"; };
 		97F0F166143C45FA0076B749 /* MBP_Streamer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MBP_Streamer.h; sourceTree = "<group>"; };
 		97F0F167143C45FA0076B749 /* MBP_Streamer.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = MBP_Streamer.mm; sourceTree = "<group>"; };
+		97F5531417BDD3AF00024017 /* MBPNavController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MBPNavController.m; sourceTree = "<group>"; };
 		97FE7D0E15998C0B000826F0 /* RemoteConnection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RemoteConnection.h; sourceTree = "<group>"; };
 		97FE7D0F15998C0B000826F0 /* RemoteConnection.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = RemoteConnection.mm; sourceTree = "<group>"; };
 		BC064B39174CDD1F00EFAC66 /* ja */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = ja; path = ja.lproj/Step_11_ViewController_ipad.xib; sourceTree = "<group>"; };
@@ -1491,7 +1491,7 @@
 			children = (
 				9704F83F17B37CAD005F9868 /* DashBoard_ViewController.h */,
 				9704F84017B37CAF005F9868 /* DashBoard_ViewController.mm */,
-				9704F83A17B37970005F9868 /* MBPNavController.m */,
+				97F5531417BDD3AF00024017 /* MBPNavController.m */,
 				BC883A621798E68D001D02D8 /* Google Analytics Library */,
 				97987D40154698A10066C49B /* SetupHttpDelegate.h */,
 				9770CD85143073AE009E69EF /* ADPCMDecoder.h */,
@@ -2242,8 +2242,8 @@
 				380CB0C716DC568500290587 /* Step_12_ViewController.m in Sources */,
 				380CB0D616DC60DC00290587 /* Step_11_ViewController.m in Sources */,
 				BCB3C77C17379AC000290E76 /* Bonjour.m in Sources */,
-				9704F83B17B37971005F9868 /* MBPNavController.m in Sources */,
 				9704F84117B37CB3005F9868 /* DashBoard_ViewController.mm in Sources */,
+				97F5531517BDD3AF00024017 /* MBPNavController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
