@@ -217,7 +217,7 @@
 "Forgot_Password" = "Passwort vergessen";
 
 /* No comment provided by engineer. */
-"fw_upgrade" = "Eine Kamera-Firmware %@ ist erhältlich. Möchten Sie jetzt aktualisieren?";
+"fw_upgrade" = "Eine Kamera-Firmware %@ ist erhältlich. Drücken Sie auf OK, um jetzt zu aktualisieren!";
 
 /* No comment provided by engineer. */
 "fw_upgrade_1" = "Neustart der Kamera …";

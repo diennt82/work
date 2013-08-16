@@ -217,7 +217,7 @@
 "Forgot_Password" = "Esqueceu-se da senha";
 
 /* No comment provided by engineer. */
-"fw_upgrade" = "Um firmware da câmera @% está disponível. Quer atualizar agora?";
+"fw_upgrade" = "Um firmware da câmera @% está disponível. Pressione OK para atualizar agora!";
 
 /* No comment provided by engineer. */
 "fw_upgrade_1" = "Reiniciar Câmera ...";

@@ -219,7 +219,7 @@
 "Forgot_Password" = "Mot de passe oublié";
 
 /* No comment provided by engineer. */
-"fw_upgrade" = "Un firmware de la caméra %@ est disponible. Souhaitez-vous effectuer la mise à niveau maintenant ?";
+"fw_upgrade" = "Un firmware de la caméra %@ est disponible. Appuyez sur OK pour mettre à jour maintenant!";
 
 /* No comment provided by engineer. */
 "fw_upgrade_1" = "Redémarrage caméra en cours...";

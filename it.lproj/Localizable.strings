@@ -217,7 +217,7 @@
 "Forgot_Password" = "Password dimenticata";
 
 /* No comment provided by engineer. */
-"fw_upgrade" = "È disponibile un firmware videocamera %@. Aggiornare ora?";
+"fw_upgrade" = "È disponibile un firmware videocamera %@. Premere OK per eseguire l'aggiornamento ora!";
 
 /* No comment provided by engineer. */
 "fw_upgrade_1" = "Riavvio della videocamera in corso...";
