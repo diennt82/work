@@ -39,9 +39,13 @@
 
 - (BOOL) shouldAutorotate
 {
+    NSLog(@" NAVController: Should Autorotate call topmost view");
     
+    UIViewController * vc = [self.viewControllers objectAtIndex:(self.viewControllers.count -1)];
     
-    return YES;
+    return [vc shouldAutorotate];
+    
+    //return YES;
 }
 
 -(NSUInteger)supportedInterfaceOrientations

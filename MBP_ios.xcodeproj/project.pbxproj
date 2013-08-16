@@ -49,7 +49,6 @@
 		38167AC216118DB600B7FA0A /* bb_pic_2.png in Resources */ = {isa = PBXBuildFile; fileRef = 38167AC116118DB600B7FA0A /* bb_pic_2.png */; };
 		38167AC51611AB1800B7FA0A /* bb_ptt_icon_d.png in Resources */ = {isa = PBXBuildFile; fileRef = 38167AC41611AB1700B7FA0A /* bb_ptt_icon_d.png */; };
 		381D185D16D4652C00272A8D /* Step_05_tableViewCell_ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 381D185C16D4652C00272A8D /* Step_05_tableViewCell_ipad.xib */; };
-		3825A4B9166F05C500520872 /* MBPNavController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3825A4B8166F05C500520872 /* MBPNavController.m */; };
 		382CD25816DDE12200BC8E0C /* Step_07_tableViewCell_ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 382CD25716DDE12200BC8E0C /* Step_07_tableViewCell_ipad.xib */; };
 		38355AE715CB76630045909C /* Account_ViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 38355AE515CB76630045909C /* Account_ViewController.mm */; };
 		38362C1D15FDEE400077E188 /* alert_history.sqlite in Resources */ = {isa = PBXBuildFile; fileRef = 38362C1C15FDEE400077E188 /* alert_history.sqlite */; };
@@ -98,7 +97,6 @@
 		38B85E5415CFAA7F00E5A1FA /* Step_07_ViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 38B85E5215CFAA7E00E5A1FA /* Step_07_ViewController.mm */; };
 		38C79E1F15C26270006EE378 /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = 38C79E1D15C25F90006EE378 /* Reachability.m */; };
 		38C79E2215C26947006EE378 /* Step_10_ViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 38C79E2115C26947006EE378 /* Step_10_ViewController.mm */; };
-		38C79E2515C786A3006EE378 /* DashBoard_ViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 38C79E2415C786A1006EE378 /* DashBoard_ViewController.mm */; };
 		38C79E2B15C7C44A006EE378 /* CameraViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 38C79E2A15C7C446006EE378 /* CameraViewController.mm */; };
 		38C7A72415CA75AC00564BCA /* camera_offline.png in Resources */ = {isa = PBXBuildFile; fileRef = 38C7A72115CA75AC00564BCA /* camera_offline.png */; };
 		38C7A72515CA75AC00564BCA /* camera_online.png in Resources */ = {isa = PBXBuildFile; fileRef = 38C7A72215CA75AC00564BCA /* camera_online.png */; };
@@ -165,6 +163,8 @@
 		38DE1CDA168AFBE00049E814 /* MBP_InitialSetupViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 38DE1CDC168AFBE00049E814 /* MBP_InitialSetupViewController.xib */; };
 		38E3C85C1694033500A13A70 /* AlertPrompt.m in Sources */ = {isa = PBXBuildFile; fileRef = 38E3C85B1694033500A13A70 /* AlertPrompt.m */; };
 		38FC9D7A16717B0300373F25 /* EditCameraCell.mm in Sources */ = {isa = PBXBuildFile; fileRef = 38FC9D7916717B0300373F25 /* EditCameraCell.mm */; };
+		9704F83B17B37971005F9868 /* MBPNavController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9704F83A17B37970005F9868 /* MBPNavController.m */; };
+		9704F84117B37CB3005F9868 /* DashBoard_ViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 9704F84017B37CAF005F9868 /* DashBoard_ViewController.mm */; };
 		97137B9715AE742A00BEBBD6 /* StunCommunication.mm in Sources */ = {isa = PBXBuildFile; fileRef = 97137B9615AE742A00BEBBD6 /* StunCommunication.mm */; };
 		9719EC5C155C9F30005419FC /* MBP_MenuViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 9719EC5A155C9F30005419FC /* MBP_MenuViewController.mm */; };
 		972E290E15A3F77600E60A96 /* STUN_Communication.mm in Sources */ = {isa = PBXBuildFile; fileRef = 972E290D15A3F77600E60A96 /* STUN_Communication.mm */; };
@@ -330,7 +330,6 @@
 		38167AC41611AB1700B7FA0A /* bb_ptt_icon_d.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bb_ptt_icon_d.png; sourceTree = "<group>"; };
 		381D185C16D4652C00272A8D /* Step_05_tableViewCell_ipad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = Step_05_tableViewCell_ipad.xib; sourceTree = "<group>"; };
 		3825A4B7166F05C500520872 /* MBPNavController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MBPNavController.h; sourceTree = "<group>"; };
-		3825A4B8166F05C500520872 /* MBPNavController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MBPNavController.m; sourceTree = "<group>"; };
 		382CD25716DDE12200BC8E0C /* Step_07_tableViewCell_ipad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = Step_07_tableViewCell_ipad.xib; sourceTree = "<group>"; };
 		38355AE415CB76630045909C /* Account_ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Account_ViewController.h; sourceTree = "<group>"; };
 		38355AE515CB76630045909C /* Account_ViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = Account_ViewController.mm; sourceTree = "<group>"; };
@@ -407,8 +406,6 @@
 		38C79E1D15C25F90006EE378 /* Reachability.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Reachability.m; sourceTree = "<group>"; };
 		38C79E2015C26947006EE378 /* Step_10_ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Step_10_ViewController.h; sourceTree = "<group>"; };
 		38C79E2115C26947006EE378 /* Step_10_ViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = Step_10_ViewController.mm; sourceTree = "<group>"; };
-		38C79E2315C786A0006EE378 /* DashBoard_ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DashBoard_ViewController.h; sourceTree = "<group>"; };
-		38C79E2415C786A1006EE378 /* DashBoard_ViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = DashBoard_ViewController.mm; sourceTree = "<group>"; };
 		38C79E2815C79492006EE378 /* ScanForCameraProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ScanForCameraProtocol.h; sourceTree = "<group>"; };
 		38C79E2915C7C444006EE378 /* CameraViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CameraViewController.h; sourceTree = "<group>"; };
 		38C79E2A15C7C446006EE378 /* CameraViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = CameraViewController.mm; sourceTree = "<group>"; };
@@ -521,6 +518,9 @@
 		38FC9D7916717B0300373F25 /* EditCameraCell.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = EditCameraCell.mm; sourceTree = "<group>"; };
 		8D1107310486CEB800E47090 /* MBP_ios-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "MBP_ios-Info.plist"; plistStructureDefinitionIdentifier = "com.apple.xcode.plist.structure-definition.iphone.info-plist"; sourceTree = "<group>"; };
 		9704F37E14B76202000B4AA5 /* Entitlements.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Entitlements.plist; sourceTree = "<group>"; };
+		9704F83A17B37970005F9868 /* MBPNavController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MBPNavController.m; path = ../../../Downloads/MBPNavController.m; sourceTree = "<group>"; };
+		9704F83F17B37CAD005F9868 /* DashBoard_ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DashBoard_ViewController.h; sourceTree = "<group>"; };
+		9704F84017B37CAF005F9868 /* DashBoard_ViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = DashBoard_ViewController.mm; sourceTree = "<group>"; };
 		97137B9515AE742A00BEBBD6 /* StunCommunication.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StunCommunication.h; sourceTree = "<group>"; };
 		97137B9615AE742A00BEBBD6 /* StunCommunication.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = StunCommunication.mm; sourceTree = "<group>"; };
 		9719EC59155C9F30005419FC /* MBP_MenuViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MBP_MenuViewController.h; sourceTree = "<group>"; };
@@ -1489,6 +1489,9 @@
 		080E96DDFE201D6D7F000001 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				9704F83F17B37CAD005F9868 /* DashBoard_ViewController.h */,
+				9704F84017B37CAF005F9868 /* DashBoard_ViewController.mm */,
+				9704F83A17B37970005F9868 /* MBPNavController.m */,
 				BC883A621798E68D001D02D8 /* Google Analytics Library */,
 				97987D40154698A10066C49B /* SetupHttpDelegate.h */,
 				9770CD85143073AE009E69EF /* ADPCMDecoder.h */,
@@ -1668,7 +1671,6 @@
 				97FE7D0E15998C0B000826F0 /* RemoteConnection.h */,
 				97FE7D0F15998C0B000826F0 /* RemoteConnection.mm */,
 				3825A4B7166F05C500520872 /* MBPNavController.h */,
-				3825A4B8166F05C500520872 /* MBPNavController.m */,
 				28D7ACF60DDB3853001CB0EB /* MBP_iosViewController.h */,
 				3851C3B716D5CD03007D3781 /* StartMonitorCallback.h */,
 				28D7ACF70DDB3853001CB0EB /* MBP_iosViewController.mm */,
@@ -1702,8 +1704,6 @@
 				38DE1BC8168AD57D0049E814 /* DashBoard_ViewController_ipad.xib */,
 				38DE1BCE168AD9500049E814 /* DashBoard_camView.xib */,
 				38DE1BD5168AD9A10049E814 /* DashBoard_camEdit.xib */,
-				38C79E2315C786A0006EE378 /* DashBoard_ViewController.h */,
-				38C79E2415C786A1006EE378 /* DashBoard_ViewController.mm */,
 				38E3C85A1694033500A13A70 /* AlertPrompt.h */,
 				38E3C85B1694033500A13A70 /* AlertPrompt.m */,
 				BCB3C77A17379AC000290E76 /* Bonjour.h */,
@@ -2228,7 +2228,6 @@
 				38A478FA15C12914008682FE /* Step_08_ViewController.mm in Sources */,
 				38A478FD15C12CF4008682FE /* Step_09_ViewController.mm in Sources */,
 				38C79E2215C26947006EE378 /* Step_10_ViewController.mm in Sources */,
-				38C79E2515C786A3006EE378 /* DashBoard_ViewController.mm in Sources */,
 				38C79E2B15C7C44A006EE378 /* CameraViewController.mm in Sources */,
 				38355AE715CB76630045909C /* Account_ViewController.mm in Sources */,
 				38B85E5415CFAA7F00E5A1FA /* Step_07_ViewController.mm in Sources */,
@@ -2238,12 +2237,13 @@
 				380C430016195047001434C0 /* AlertSettingViewController.mm in Sources */,
 				38A13AF316363147000138EA /* UnderlinedUILabel.m in Sources */,
 				97DA238416425FA100EE2528 /* ToUViewController.mm in Sources */,
-				3825A4B9166F05C500520872 /* MBPNavController.m in Sources */,
 				38FC9D7A16717B0300373F25 /* EditCameraCell.mm in Sources */,
 				38E3C85C1694033500A13A70 /* AlertPrompt.m in Sources */,
 				380CB0C716DC568500290587 /* Step_12_ViewController.m in Sources */,
 				380CB0D616DC60DC00290587 /* Step_11_ViewController.m in Sources */,
 				BCB3C77C17379AC000290E76 /* Bonjour.m in Sources */,
+				9704F83B17B37971005F9868 /* MBPNavController.m in Sources */,
+				9704F84117B37CB3005F9868 /* DashBoard_ViewController.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -12,6 +12,7 @@
 @interface CameraViewController ()
 
 @property (retain, nonatomic) PCMPlayer *pcmPlayer;
+@property (nonatomic) BOOL walkieTalkieEnabled;
 
 @end
 
@@ -67,6 +68,7 @@
 	[videoAndSnapshotTime release];
     [userSettings release];
     [self.pcmPlayer release];
+    self.walkieTalkieEnabled = NO;
 	[super dealloc];
 }
 
@@ -508,6 +510,10 @@
 		//Dont rotate if we are upgrading..
 		return NO;
 	}
+    
+    if (self.walkieTalkieEnabled) {
+        return NO;
+    }
 	return YES;
 }
 
@@ -2888,6 +2894,7 @@
 	{
 		[btn setImage:[UIImage imageNamed:@"bb_vs_mike_off.png"] forState:UIControlStateNormal];
 
+        self.walkieTalkieEnabled = YES;
 		[self setEnablePtt:YES];
         
         
@@ -2896,7 +2903,7 @@
 	{
 		[btn setImage:[UIImage imageNamed:@"bb_vs_mike_on.png"] forState:UIControlStateNormal];
         
-
+        self.walkieTalkieEnabled = NO;
 		[self setEnablePtt:NO];
         
         [self tryToShowFullScreen];
