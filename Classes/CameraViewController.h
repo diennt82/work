@@ -81,6 +81,12 @@
 
 @class ScanForCamera;
 
+@protocol CameraViewDelegate
+
+- (void)reportClosedStatusWithSelectedChannel: (CamChannel *)selectedChannel;
+
+@end
+
 @interface CameraViewController : GAITrackedViewController<StreamerEventHandler,ConnectionMethodDelegate , StreamerFrameRateUpdater, StreamerTemperatureUpdater, ScanForCameraNotifier>
 {
     IBOutlet UILabel * temperature_label; 
@@ -182,6 +188,7 @@
 @property (nonatomic) float currentZoomLvl; 
 @property (nonatomic) BOOL ptt_enabled,askForFWUpgradeOnce,enableControls, firstTimeConnect, fwUpgradeInProgess;
 @property (nonatomic,retain) NSDictionary * userSettings;
+@property (nonatomic, retain) id<CameraViewDelegate> camDelegate;
 
 -(IBAction)buttonHQPressed:(id) sender;
 -(IBAction)buttonMelodyPressed:(id) sender;

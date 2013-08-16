@@ -8,7 +8,7 @@
 
 #import "DashBoard_ViewController.h"
 
-@interface DashBoard_ViewController()
+@interface DashBoard_ViewController() <CameraViewDelegate>
 
 @end
 
@@ -309,7 +309,6 @@
     
     BOOL isOffline = [userDefaults boolForKey:_OfflineMode];
 
-                      
     self.editModeEnabled = FALSE;
     [self setupTopBarForEditMode:self.editModeEnabled];
     
@@ -689,10 +688,8 @@
             [camName setFrame:frame];
         }
         
-        
-        
         //NSLog(@"cell: %d %d", indexPath.row , cp.minuteSinceLastComm);
-        if (cp.hasUpdateLocalStatus == TRUE)
+        if (cp.hasUpdateLocalStatus == TRUE && !ch.waitingForStreamerToClose)
         {
             [spinner stopAnimating]; 
             spinner.hidden = YES;
@@ -847,10 +844,10 @@
     
     if (ch != nil && ch.profile != nil &&
          (ch.profile.isInLocal ==YES ||
-              ((isOffline == FALSE ) && (ch.profile.minuteSinceLastComm <=5)) )
+              ((isOffline == FALSE ) && (ch.profile.minuteSinceLastComm <=5)) ) &&
+        !ch.waitingForStreamerToClose
         )
     {
-        
         NSLog(@"clear alert for: %@",ch.profile.mac_address);
         // Clear all alert for this camera
         [CameraAlert clearAllAlertForCamera:ch.profile.mac_address];
@@ -866,7 +863,9 @@
         
         viewCamCtrl = [[CameraViewController alloc] initWithNibName:@"CameraViewController"
                                                              bundle:nil];
+        ch.waitingForStreamerToClose = YES;
         viewCamCtrl.selected_channel = ch;
+        viewCamCtrl.camDelegate = self;
         
         [self.navigationController pushViewController:viewCamCtrl animated:NO];
         [viewCamCtrl release];
@@ -875,6 +874,17 @@
         [UIApplication sharedApplication].idleTimerDisabled=  YES;
     }
     
+}
+
+- (void)reportClosedStatusWithSelectedChannel:(CamChannel *)selectedChannel
+{
+    for (CamChannel *ch in listOfChannel) {
+        if ([ch.profile.mac_address isEqualToString:selectedChannel.profile.mac_address]) {
+            ch.waitingForStreamerToClose = NO;
+            break;
+        }
+    }
+    [self.cameraList reloadData];
 }
 
 #pragma mark -
