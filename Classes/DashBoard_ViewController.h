@@ -60,7 +60,7 @@
      withConnDelegate:(id<ConnectionMethodDelegate> ) caller;
 - (void)presentModallyOn:(UIViewController *)parent;
 -(void) forceRelogin;
--(void) logout; 
+//-(void) logout;
 -(IBAction)addCamera:(id)sender;
 -(IBAction)checkNow:(id)sender;
 -(IBAction)scanCameras:(id)sender;

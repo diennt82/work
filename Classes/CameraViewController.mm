@@ -907,6 +907,7 @@
 
     
 #endif
+    NSLog(@"Before popToRoot: streamer poiter = %p", streamer);
     [streamer retain];
 	[self.navigationController popToRootViewControllerAnimated:NO];
     [self performSelectorInBackground:@selector(processCloseCamera) withObject:nil];
@@ -936,9 +937,8 @@
 	[self.selected_channel abortViewTimer];
     
     [self.camDelegate reportClosedStatusWithSelectedChannel:selected_channel];
-    if (nil != streamer) {
-        [streamer release];
-    }
+    NSLog(@"After streamer stop: streamer poiter = %p", streamer);
+    [streamer release];
 }
 
 -(void) goToCameraSettings

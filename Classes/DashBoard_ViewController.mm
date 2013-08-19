@@ -878,8 +878,10 @@
 
 - (void)reportClosedStatusWithSelectedChannel:(CamChannel *)selectedChannel
 {
-    for (CamChannel *ch in listOfChannel) {
-        if ([ch.profile.mac_address isEqualToString:selectedChannel.profile.mac_address]) {
+    for (CamChannel *ch in listOfChannel)
+    {
+        if ([ch.profile.mac_address isEqualToString:selectedChannel.profile.mac_address])
+        {
             ch.waitingForStreamerToClose = NO;
             break;
         }
