@@ -907,14 +907,13 @@
 
     
 #endif
-	
+    [streamer retain];
 	[self.navigationController popToRootViewControllerAnimated:NO];
     [self performSelectorInBackground:@selector(processCloseCamera) withObject:nil];
     
 	NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
 	[userDefaults removeObjectForKey:CAM_IN_VEW];
 	[userDefaults synchronize];
-    
     
 }
 
@@ -937,6 +936,9 @@
 	[self.selected_channel abortViewTimer];
     
     [self.camDelegate reportClosedStatusWithSelectedChannel:selected_channel];
+    if (nil != streamer) {
+        [streamer release];
+    }
 }
 
 -(void) goToCameraSettings
@@ -1011,8 +1013,8 @@
     
 	if (ch.communication_mode == COMM_MODE_STUN)
 	{
-        //Command over BMS + Stream over UDT 
-
+        //Command over BMS + Stream over UDT
+        
 		NSLog(@"created a STUN streamer on Thread: %@ isMain? %d ", [[NSThread currentThread] name], [[NSThread currentThread] isMainThread]);
         
 		streamer = [[MBP_Streamer alloc]initWithIp:ip
@@ -1045,7 +1047,7 @@
         
 		self.scomm = [[StunCommunication alloc]init];
         
-        
+       
         
     }
     else if (ch.communication_mode == COMM_MODE_STUN_RELAY2)
@@ -1061,7 +1063,7 @@
 		streamer.remoteViewKey = ch.remoteViewKey;
         
 		streamer.communication_mode = COMM_MODE_STUN_RELAY2;
-
+        
         
 		streamer.streamingChannel = ch;
         
