@@ -352,7 +352,6 @@
 		self.selected_channel.stopStreaming = FALSE;
         self.firstTimeConnect = TRUE;
         
-#pragma mark 2nd mod
         userWantToCancel  = FALSE;
         
 		//init the ptt port to default
@@ -907,10 +906,10 @@
 
     
 #endif
-    NSLog(@"Before popToRoot: streamer poiter = %p", streamer);
-    [streamer retain];
+    NSLog(@"Before popToRoot: self poiter = %p", self);
+    [self retain];
+    [self performSelectorInBackground:@selector(processCloseCamera_bg:) withObject:self];
 	[self.navigationController popToRootViewControllerAnimated:NO];
-    [self performSelectorInBackground:@selector(processCloseCamera) withObject:nil];
     
 	NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
 	[userDefaults removeObjectForKey:CAM_IN_VEW];
@@ -918,13 +917,14 @@
     
 }
 
-- (void)processCloseCamera
+- (void)processCloseCamera_bg: (id)vc_
 {
-    if (streamer.recordInProgress == YES)
-        [streamer stopRecording];
+    CameraViewController *vc = (CameraViewController *)vc_;
+    if (vc.streamer.recordInProgress == YES)
+        [vc.streamer stopRecording];
     
     //close pcm player as well.. we don't need it any longer
-    [streamer stopStreaming:TRUE];
+    [vc.streamer stopStreaming:TRUE];
 	
     
     if (scanner != nil)
@@ -934,11 +934,11 @@
     
     
 	//NSLog(@"abort remote timer ");
-	[self.selected_channel abortViewTimer];
+	[vc.selected_channel abortViewTimer];
     
-    [self.camDelegate reportClosedStatusWithSelectedChannel:selected_channel];
-    NSLog(@"After streamer stop: streamer poiter = %p", streamer);
-    [streamer release];
+    NSLog(@"After streamer stop: self poiter = %p", vc);
+    [vc.camDelegate reportClosedStatusWithSelectedChannel:selected_channel];
+    [vc release];
 }
 
 -(void) goToCameraSettings
@@ -1264,7 +1264,6 @@
     
     [UIApplication sharedApplication].idleTimerDisabled=  NO;
     
-#pragma  mark 1st mod
     //self.selected_channel.stopStreaming = TRUE;
     
     userWantToCancel = TRUE;
@@ -1279,24 +1278,6 @@
 
     UIButton * btn = (UIButton *) sender;
     btn.hidden = YES;
-    [self.camDelegate reportClosedStatusWithSelectedChannel:selected_channel];
-    
-#if 0 // ORIG
-    if (settingupStreamer == FALSE)
-    {
-                
-        
-        [self goBackToCameraList];
-        NSLog(@"streamer is done setting up.. cancel here");
-    }
-    else
-    {
-        //will be handled by setupCameraStreamer
-        
-         NSLog(@"streamer is setting up.. cancel later setupCameraStreamer");
-    }
-#endif 
-
 }
 
 #pragma mark -

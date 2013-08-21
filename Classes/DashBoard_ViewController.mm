@@ -873,6 +873,10 @@
         
         [UIApplication sharedApplication].idleTimerDisabled=  YES;
     }
+    else if(nil != ch)
+    {
+        NSLog(@"!ch.waitingForStreamerToClose: %d", !ch.waitingForStreamerToClose);
+    }
     
 }
 
@@ -883,7 +887,10 @@
         if ([ch.profile.mac_address isEqualToString:selectedChannel.profile.mac_address])
         {
             ch.waitingForStreamerToClose = NO;
-            break;
+        }
+        else
+        {
+            NSLog(@"ch.waitingForStreamerToClose = %d", ch.waitingForStreamerToClose);
         }
     }
     [self.cameraList reloadData];
