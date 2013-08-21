@@ -1766,6 +1766,7 @@
 			else
 			{
 				//return to read again
+                NSLog(@"NSThread sleep!");
 				[NSThread sleepForTimeInterval:1.0];
 				continue;
 			}
@@ -2066,13 +2067,13 @@
 	} //While (thread is running)
     
     
-	if (!exitedUnexpectedly)
+	/*if (!exitedUnexpectedly)
 	{
 		[self performSelectorOnMainThread:@selector(sendStatusStoppedReportOnMainThread:)
                                withObject:nil
                             waitUntilDone:YES];
 	}
-    
+    */
 	NSLog(@"STUN Main readVideoDataFromSocket exit");
     
     [data release];
