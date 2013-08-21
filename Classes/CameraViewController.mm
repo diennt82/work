@@ -907,6 +907,7 @@
     
 #endif
     NSLog(@"Before popToRoot: self poiter = %p", self);
+    NSLog(@"Before popToRoot -Log camera name: %@ mac address: %@", selected_channel.profile.name, selected_channel.profile.mac_address);
     [self retain];
     [self performSelectorInBackground:@selector(processCloseCamera_bg:) withObject:self];
 	[self.navigationController popToRootViewControllerAnimated:NO];
@@ -936,6 +937,7 @@
 	//NSLog(@"abort remote timer ");
 	[vc.selected_channel abortViewTimer];
     
+    NSLog(@"After streamer stop -Log camera name: %@ mac address: %@", vc.selected_channel.profile.name, vc.selected_channel.profile.mac_address);
     NSLog(@"After streamer stop: self poiter = %p", vc);
     [vc.camDelegate reportClosedStatusWithSelectedChannel:selected_channel];
     [vc release];

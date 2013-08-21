@@ -875,7 +875,7 @@
     }
     else if(nil != ch)
     {
-        NSLog(@"!ch.waitingForStreamerToClose: %d", !ch.waitingForStreamerToClose);
+        NSLog(@"Selected Camera %@, Row = %d", ch.profile.name, indexPath.row);
     }
     
 }
@@ -890,7 +890,7 @@
         }
         else
         {
-            NSLog(@"ch.waitingForStreamerToClose = %d", ch.waitingForStreamerToClose);
+            NSLog(@"Camera %@ waitingForStreamerToClose = %d", ch.profile.name, ch.waitingForStreamerToClose);
         }
     }
     [self.cameraList reloadData];

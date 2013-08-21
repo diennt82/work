@@ -1766,7 +1766,6 @@
 			else
 			{
 				//return to read again
-                NSLog(@"NSThread sleep!");
 				[NSThread sleepForTimeInterval:1.0];
 				continue;
 			}
