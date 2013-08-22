@@ -382,7 +382,7 @@
         self.selected_channel.stopStreaming = TRUE;
         if (streamer.recordInProgress == YES)
             [streamer stopRecording];
-        [streamer stopStreaming];
+        [streamer stopStreaming:TRUE];
         
         
         if (scanner != nil)
