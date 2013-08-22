@@ -3747,6 +3747,8 @@
 					"\"$(SRCROOT)/Classes/Google Analytics Library\"",
 				);
 				PRODUCT_NAME = Camera;
+				PROVISIONING_PROFILE = "7299B5F0-B558-45E7-8AC8-7B81E3CA6614";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "7299B5F0-B558-45E7-8AC8-7B81E3CA6614";
 				SDKROOT = iphoneos;
 				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/external_include/**";
 				VALIDATE_PRODUCT = YES;
