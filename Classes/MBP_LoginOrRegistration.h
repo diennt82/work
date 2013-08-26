@@ -16,6 +16,8 @@
 #import "Reachability.h"
 #import "GAITrackedViewController.h"
 
+#import "BMS_JSON_Communication.h"
+
 #define LOGIN_BUTTON_TAG 200
 #define CREATE_NEW_BUTTON_TAG 201
 #define REMEMBER_PASS_TAG 202
@@ -61,7 +63,7 @@
 	
 	NSString * temp_user_str; 
 	NSString * temp_pass_str; 
-	NSString * temp_user_email  ; 
+	NSString * temp_user_email; 
 	
 	id <ConnectionMethodDelegate> delegate; 
 

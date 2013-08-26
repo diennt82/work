@@ -10,8 +10,8 @@
 
 #define BMS_JSON_DEFAULT_TIME_OUT 30.0f
 
-//#define BMS_JSON_PHONESERVICE @"http://api.simplimonitor.com"
-#define BMS_JSON_PHONESERVICE @"http://dev.simplimonitor.com"
+#define BMS_JSON_PHONESERVICE @"http://api.simplimonitor.com"
+//#define BMS_JSON_PHONESERVICE @"http://dev.simplimonitor.com"
 
 //~USER
 #define USER_REG_CMD @"/v1/users/register.json"

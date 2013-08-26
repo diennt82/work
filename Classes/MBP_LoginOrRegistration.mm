@@ -8,6 +8,11 @@
 
 #import "MBP_LoginOrRegistration.h"
 
+@interface MBP_LoginOrRegistration()
+
+@property (nonatomic, retain) NSString *apiKey;
+
+@end
 
 @implementation MBP_LoginOrRegistration
 
@@ -161,7 +166,7 @@
 - (void)dealloc {
 	[userName release];
 	[password release];
-
+    [self.apiKey release];
 
 	[progressView release];
 	[progressLabel release];
@@ -213,13 +218,19 @@
 
     
 #if 1
-    BMS_Communication * bms_comm; 
+    /*BMS_Communication * bms_comm;
     bms_comm = [[BMS_Communication alloc] initWithObject:self
                                                 Selector:@selector(loginSuccessWithResponse:) 
                                             FailSelector:@selector(loginFailedWithError:) 
                                                ServerErr:@selector(loginFailedServerUnreachable)];
     
     [bms_comm BMS_loginWithUser:self.temp_user_str AndPass:self.temp_pass_str];
+     */
+    BMS_JSON_Communication *jsonComm = [[BMS_JSON_Communication alloc] initWithObject:self
+                                                                             Selector:@selector(loginSuccessWithResponse:)
+                                                                         FailSelector:@selector(loginFailedWithError:)
+                                                                            ServerErr:@selector(loginFailedServerUnreachable)];
+    [jsonComm loginWithLogin:self.temp_user_str andPassword:self.temp_pass_str];
 #else 
     [self loginFailedServerUnreachable];
 #endif
@@ -752,7 +763,7 @@
 
 #pragma mark -
 #pragma mark Login Callbacks
-- (void) loginSuccessWithResponse:(NSData*) responseData
+- (void) loginSuccessWithResponse:(NSDictionary*) responseData
 {
     //reset it here
      _doneButtonPressed = NO;
@@ -762,12 +773,49 @@
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     [userDefaults setBool:NO forKey:_OfflineMode];
     [userDefaults synchronize];
+    
+    
+	//NSString *response = [[[NSString alloc] initWithData:responseData encoding: NSASCIIStringEncoding] autorelease];
+	if (responseData) {
+        NSInteger statusCode = [[responseData objectForKey:@"status"] intValue];
+        if (statusCode == 200) // success
+        {
+            self.apiKey = [[responseData objectForKey:@"data"] objectForKey:@"authentication_token"];
+        }
+        else
+        {
+            NSLog(@"Invalid response: %@", responseData);
+            //ERROR condition
+            self.progressView.hidden = YES;
+            
+            
+            NSString * title = NSLocalizedStringWithDefaultValue(@"Login_Error" ,nil, [NSBundle mainBundle],
+                                                                 @"Login Error", nil);
+            NSString * msg = NSLocalizedStringWithDefaultValue(@"Login_Error_msg" ,nil, [NSBundle mainBundle],
+                                                               @"Server response invalid, please try again!", nil);
+            
+            NSString * ok = NSLocalizedStringWithDefaultValue(@"Ok" ,nil, [NSBundle mainBundle],
+                                                              @"OK", nil);
+            
+            [[[GAI sharedInstance] defaultTracker] trackEventWithCategory:@"Login"
+                                                               withAction:@"Login Failed"
+                                                                withLabel:@"Login failed because of an unhandled exception from server"
+                                                                withValue:nil];
+            UIAlertView *alert = [[UIAlertView alloc]
+                                  initWithTitle:title
+                                  message:msg
+                                  delegate:self
+                                  cancelButtonTitle:ok
+                                  otherButtonTitles:nil];
+            [alert show];
+            [alert release];
+            return;
+            
+        }
+    }
 	
-	NSString *response = [[[NSString alloc] initWithData:responseData encoding: NSASCIIStringEncoding] autorelease];
 	
-	
-	
-	NSRange isEmail = [self.temp_user_str rangeOfString:@"@"];
+	/*NSRange isEmail = [self.temp_user_str rangeOfString:@"@"];
 	if (isEmail.location != NSNotFound)
 	{
 		//Dont need to extract from response data 
@@ -821,7 +869,7 @@
 		
 	}
 
-	
+	*/
 		
 	//Store user/pass for later use
 	
@@ -843,9 +891,13 @@
        
     
     
-	account = [[UserAccount alloc] initWithUser:self.temp_user_email
-										AndPass:self.temp_pass_str
-								   WithListener: delegate];
+//	account = [[UserAccount alloc] initWithUser:self.temp_user_email
+//										AndPass:self.temp_pass_str
+//								   WithListener: delegate];
+    account = [[UserAccount alloc] initWithUser:self.temp_user_str
+                                        andPass:self.temp_pass_str
+                                      andApiKey:self.apiKey
+                                    andListener:delegate];
     
     [[[GAI sharedInstance] defaultTracker] trackEventWithCategory:@"Login"
                                                        withAction:@"Login Success"
@@ -853,17 +905,18 @@
                                                         withValue:nil];
     //BLOCKED method
     [account query_camera_list_blocked];
-    
+    NSLog(@"Login success!");
+    return;
 }
 
-- (void) loginFailedWithError:(NSHTTPURLResponse*) error_response
+- (void) loginFailedWithError:(NSDictionary *) responseError
 {
     //reset it here
     _doneButtonPressed = NO;
     self.navigationItem.leftBarButtonItem.enabled = YES ;
     self.navigationItem.rightBarButtonItem.enabled = YES;
     
-	NSLog(@"Loging failed with error code:%d", [error_response statusCode]);
+	NSLog(@"Loging failed with error code:%@", responseError);
 	
 	self.progressView.hidden = YES;
 	
@@ -880,7 +933,8 @@
 	//ERROR condition
 	UIAlertView *alert = [[UIAlertView alloc]
 						  initWithTitle:title
-						  message:[NSString stringWithFormat:msg, [BMS_Communication getLocalizedMessageForError:[error_response statusCode]]]
+						  //message:[NSString stringWithFormat:msg, [BMS_Communication getLocalizedMessageForError:[error_response statusCode]]]
+                          message:[NSString stringWithFormat:msg, [responseError objectForKey:@"message"]]
 						  delegate:self
 						  cancelButtonTitle:ok
 						  otherButtonTitles:nil];
@@ -891,6 +945,8 @@
                                                        withLabel:@"msg"
                                                        withValue:nil];
 	return;
+     
+    NSLog(@"%d", [[responseError objectForKey:@"status"] intValue]);
 	
 }
 - (void) loginFailedServerUnreachable

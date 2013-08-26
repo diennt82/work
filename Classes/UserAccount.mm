@@ -9,6 +9,13 @@
 #import "UserAccount.h"
 #import "MBP_iosAppDelegate.h"
 #import "RemoteConnection.h"
+#import "BMS_JSON_Communication.h"
+
+@interface UserAccount()
+
+@property (nonatomic, retain) BMS_JSON_Communication *jsonComm;
+
+@end
 
 @implementation UserAccount
 
@@ -26,12 +33,23 @@
 	return self; 
 }
 
+- (id) initWithUser:(NSString *)user andPass:(NSString *)pass andApiKey: (NSString *)apiKey andListener:(id <ConnectionMethodDelegate>) d
+{
+    [super init];
+	self.userName = user;
+	self.userPass = pass;
+    self.apiKey = apiKey;
+	self.delegate = d;
+    
+	return self;
+}
 
 -(void) dealloc
 {
     [userName release];
     [userPass release];
     [bms_comm release];
+    [self.apiKey release];
     [super dealloc];
     
 }
@@ -112,7 +130,7 @@
 
 -(void) readCameraListAndUpdate
 {
-    self.bms_comm = [[BMS_Communication alloc] initWithObject:self
+    /*self.bms_comm = [[BMS_Communication alloc] initWithObject:self
                                                      Selector:@selector(getCamListSuccess:)
                                                  FailSelector:@selector(getCamListFailure:)
                                                     ServerErr:@selector(getCamListServerUnreachable)];
@@ -126,7 +144,12 @@
     {
         [self getCamListServerUnreachable] ;
     }
-
+     */
+    self.jsonComm = [[BMS_JSON_Communication alloc] initWithObject:self
+                                                          Selector:@selector(getCamListSuccess:)
+                                                      FailSelector:@selector(getCamListFailure:)
+                                                         ServerErr:@selector(getCamListServerUnreachable)];
+    [self.jsonComm getAllDevicesWithApiKey:self.apiKey];
 }
 
 
@@ -175,9 +198,45 @@
 
 
 
--(void) getCamListSuccess:(NSData*) responseData
-{	
-	NSString * raw_data = [[[NSString alloc] initWithData:responseData encoding: NSASCIIStringEncoding] autorelease];
+-(void) getCamListSuccess:(NSDictionary *)responseData
+{
+    NSLog(@"responseData %@", responseData);
+    NSArray *dataArr;
+    NSInteger status = [[responseData objectForKey:@"status"] intValue];
+    if (status == 200) {
+        dataArr = [NSArray arrayWithArray:[responseData objectForKey:@"data"]];
+        NSMutableArray * cam_profiles;
+        //cam_profiles = [self parse_camera_list:dataArr];
+        
+        // sync_online_and_offline_data
+        [self sync_online_and_offline_data:cam_profiles];
+    }
+    else
+    {
+        NSString * msg = NSLocalizedStringWithDefaultValue(@"Get_Camera_list_Error",nil, [NSBundle mainBundle],
+                                                           @"Get Camera list Error", nil);
+        
+        NSString * msg1 = NSLocalizedStringWithDefaultValue(@"Get_Camera_list_Error_msg",nil, [NSBundle mainBundle],
+                                                            @"Server error: Invalid response", nil);
+        
+        NSString * ok = NSLocalizedStringWithDefaultValue(@"Ok",nil, [NSBundle mainBundle],
+                                                          @"Ok", nil);
+        //ERROR condition
+        UIAlertView *alert = [[UIAlertView alloc]
+                              initWithTitle:msg
+                              message:msg1
+                              delegate:self
+                              cancelButtonTitle:ok
+                              otherButtonTitles:nil];
+        [alert show];
+        [alert release];
+        
+        [delegate sendStatus:8];
+        return;
+    }
+    
+    NSLog(@"camlist5: %@", dataArr);
+	/*NSString * raw_data = [[[NSString alloc] initWithData:responseData encoding: NSASCIIStringEncoding] autorelease];
 
     NSLog(@"camlist5: %@", raw_data);
     NSRange br_range = [raw_data rangeOfString:@"<br>"];
@@ -212,9 +271,9 @@
 	NSMutableArray * cam_profiles;
 	cam_profiles = [self parse_camera_list:raw_data];
     
-	/* sync_online_and_offline_data*/
+	// sync_online_and_offline_data
 	[self sync_online_and_offline_data:cam_profiles];
-	
+	*/
 	
 }
 

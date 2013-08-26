@@ -631,30 +631,9 @@
 
 - (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response
 {
-    
     self.httpResponse = (NSHTTPURLResponse *)response;
-    int responseStatusCode = [self.httpResponse statusCode];
-    NSLog(@"responseStatusCode = %d", responseStatusCode);
-    
-	if (0 < responseStatusCode && responseStatusCode < 400)
-	{
-		self.responseData = [[NSMutableData alloc] init];
-        //[self.responseData setLength:0];
-	}
-    else {
-        
-        if ([self.obj respondsToSelector:selIfFailure])
-        {
-            [self.obj performSelector:selIfFailure withObject:self.httpResponse];
-        }
-        else
-        {
-            NSLog(@"Failed to call selIfFailure..silence return");
-        }
-		
-		self.responseData = nil;
-	}
-
+    NSLog(@"httpResponse.statusCode = %d", self.httpResponse.statusCode);
+    self.responseData = [[NSMutableData alloc] init];
 }
 
 - (void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data
@@ -674,22 +653,43 @@
 		if (self.obj == nil)
         {
             NSLog(@"obj = nil ");
+            return;
             
         }
-        if ([self.obj respondsToSelector:selIfSuccess])
+        
+        if (0 < self.httpResponse.statusCode && self.httpResponse.statusCode < 400)
         {
-            NSError *error = nil;
-            self.responseDict = [NSDictionary dictionary];
-            self.responseDict = [NSJSONSerialization JSONObjectWithData:self.responseData
-                                                                     options:kNilOptions
-                                                                       error:&error];
-            if (nil == error) {
-                [self.obj performSelector:selIfSuccess withObject:self.responseDict];
+            if ([self.obj respondsToSelector:selIfSuccess])
+            {
+                NSError *error = nil;
+                self.responseDict = [NSDictionary dictionaryWithDictionary:[NSJSONSerialization JSONObjectWithData:self.responseData
+                                                                                                           options:kNilOptions
+                                                                                                             error:&error]];
+                if (nil == error) {
+                    [self.obj performSelector:selIfSuccess withObject:self.responseDict];
+                }
+            }
+            else
+            {
+                NSLog(@"Failed to call selIfSuccess...silence return");
             }
         }
-        else
+        else if (400 <= self.httpResponse.statusCode && self.httpResponse.statusCode < 500)
         {
-            NSLog(@"Failed to call selIfSuccess..silence return");
+            if ([self.obj respondsToSelector:selIfFailure])
+            {
+                NSError *error = nil;
+                self.responseDict = [NSDictionary dictionaryWithDictionary:[NSJSONSerialization JSONObjectWithData:self.responseData
+                                                                                                           options:kNilOptions
+                                                                                                             error:&error]];
+                if (nil == error) {
+                    [self.obj performSelector:selIfFailure withObject:self.responseDict];
+                }
+            }
+            else
+            {
+                NSLog(@"Failed to call selfIfFailure...silence return");
+            }
         }
 	}
 }
