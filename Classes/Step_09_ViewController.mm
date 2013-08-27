@@ -510,15 +510,21 @@
         
  
         NSLog(@"Start registration"); 
-        
-        BMS_Communication * bms_comm; 
+#if JSON_FLAG
+        BMS_JSON_Communication *jsonComm = [[BMS_JSON_Communication alloc] initWithObject:self
+                                                                                 Selector:@selector(regSuccessWithResponse:)
+                                                                             FailSelector:@selector(regFailedWithError:)
+                                                                                ServerErr:@selector(regFailedServerUnreachable)];
+        [jsonComm registerAccountWithUsername:self.tmp_user_str andEmail:self.tmp_user_email andPassword:self.tmp_pass_str andPasswordConfirmation:self.tmp_pass_str];
+#else
+        BMS_Communication * bms_comm;
         bms_comm = [[BMS_Communication alloc] initWithObject:self
                                                     Selector:@selector(regSuccessWithResponse:) 
                                                 FailSelector:@selector(regFailedWithError:) 
                                                    ServerErr:@selector(regFailedServerUnreachable)];
         
         [bms_comm BMS_registerWithUserId:self.tmp_user_str AndPass:self.tmp_pass_str AndEmail:self.tmp_user_email];
-        
+#endif
 
     }
 
@@ -555,14 +561,16 @@
 
 
 
-
+#if JSON_FLAG
+- (void) regSuccessWithResponse:(NSDictionary *) responseData
+#else
 - (void) regSuccessWithResponse:(NSData*) responseData
+#endif
 {
-	
-	NSString * response = [NSString stringWithUTF8String:(const char *)[responseData bytes]] ; 
-	
+#if (JSON_FLAG == 0)
+	NSString * response = [NSString stringWithUTF8String:(const char *)[responseData bytes]] ;
 	NSLog(@"register success : %@", response );
-	
+#endif
 	//Store user/pass for later use
 	NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     
@@ -600,8 +608,11 @@
     [step10ViewController release];
     
 }
-
+#if JSON_FLAG
+- (void) regFailedWithError:(NSDictionary *) error_response
+#else
 - (void) regFailedWithError:(NSHTTPURLResponse*) error_response
+#endif
 {
 //	NSLog(@"register failed with error code:%d", [error_response statusCode]);
 //	
@@ -628,13 +639,17 @@
     
     NSString * title = NSLocalizedStringWithDefaultValue(@"Create_Account_Failed",nil, [NSBundle mainBundle],
                                               @"Create Account Failed" , nil);
-    NSString * msg = NSLocalizedStringWithDefaultValue(@"Create_Account_Failed_msg3",nil, [NSBundle mainBundle],
-                                            @"Invalid email. Email address should be of the form somebody@somewhere.com"  , nil);
+//    NSString * msg = NSLocalizedStringWithDefaultValue(@"Create_Account_Failed_msg3",nil, [NSBundle mainBundle],
+//                                            @"Invalid email. Email address should be of the form somebody@somewhere.com"  , nil);
     
     //ERROR condition
     UIAlertView *_alert = [[UIAlertView alloc]
                            initWithTitle:title
+#if JSON_FLAG
+                           message:[error_response objectForKey:@"message"]
+#else
                            message:[BMS_Communication getLocalizedMessageForError:[error_response statusCode]]
+#endif
                            delegate:self
                            cancelButtonTitle:ok
                            otherButtonTitles:nil];

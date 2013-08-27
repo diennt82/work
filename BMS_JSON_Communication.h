@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
+#define JSON_FLAG 1
 #define BMS_JSON_DEFAULT_TIME_OUT 30.0f
 
 #define BMS_JSON_PHONESERVICE @"http://api.simplimonitor.com"
@@ -112,7 +113,7 @@
 - (id) initWithObject: (id) caller Selector: (SEL) success FailSelector: (SEL) fail ServerErr:(SEL) serverErr;
 
 //User
-- (BOOL)registerAccount: (NSString *)name andEmail: (NSString *)email andPassword: (NSString *)password andPasswordConfirmation: (NSString *)passwordConfirm;
+- (BOOL)registerAccountWithUsername: (NSString *)name andEmail: (NSString *)email andPassword: (NSString *)password andPasswordConfirmation: (NSString *)passwordConfirm;
 
 - (BOOL)loginWithLogin: (NSString *)login andPassword: (NSString *)pass;
 

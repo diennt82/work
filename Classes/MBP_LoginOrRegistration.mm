@@ -215,26 +215,26 @@
 -(void) doSignIn :(NSTimer *) exp
 {
     
-
+#if JSON_FLAG
+    BMS_JSON_Communication *jsonComm = [[BMS_JSON_Communication alloc] initWithObject:self
+                                                                             Selector:@selector(loginSuccessWithResponse:)
+                                                                         FailSelector:@selector(loginFailedWithError:)
+                                                                            ServerErr:@selector(loginFailedServerUnreachable)];
+    [jsonComm loginWithLogin:self.temp_user_str andPassword:self.temp_pass_str];
+#else
     
 #if 1
-    /*BMS_Communication * bms_comm;
+    BMS_Communication * bms_comm;
     bms_comm = [[BMS_Communication alloc] initWithObject:self
                                                 Selector:@selector(loginSuccessWithResponse:) 
                                             FailSelector:@selector(loginFailedWithError:) 
                                                ServerErr:@selector(loginFailedServerUnreachable)];
     
     [bms_comm BMS_loginWithUser:self.temp_user_str AndPass:self.temp_pass_str];
-     */
-    BMS_JSON_Communication *jsonComm = [[BMS_JSON_Communication alloc] initWithObject:self
-                                                                             Selector:@selector(loginSuccessWithResponse:)
-                                                                         FailSelector:@selector(loginFailedWithError:)
-                                                                            ServerErr:@selector(loginFailedServerUnreachable)];
-    [jsonComm loginWithLogin:self.temp_user_str andPassword:self.temp_pass_str];
 #else 
     [self loginFailedServerUnreachable];
 #endif
-    
+#endif
 }
 
 -(BOOL) isCurrentConnection3G
@@ -774,8 +774,10 @@
     [userDefaults setBool:NO forKey:_OfflineMode];
     [userDefaults synchronize];
     
-    
-	//NSString *response = [[[NSString alloc] initWithData:responseData encoding: NSASCIIStringEncoding] autorelease];
+#if (JSON_FLAG == 0)
+	NSString *response = [[[NSString alloc] initWithData:responseData encoding: NSASCIIStringEncoding] autorelease];
+#endif
+#if JSON_FLAG
 	if (responseData) {
         NSInteger statusCode = [[responseData objectForKey:@"status"] intValue];
         if (statusCode == 200) // success
@@ -814,8 +816,8 @@
         }
     }
 	
-	
-	/*NSRange isEmail = [self.temp_user_str rangeOfString:@"@"];
+#else
+	NSRange isEmail = [self.temp_user_str rangeOfString:@"@"];
 	if (isEmail.location != NSNotFound)
 	{
 		//Dont need to extract from response data 
@@ -869,7 +871,7 @@
 		
 	}
 
-	*/
+#endif
 		
 	//Store user/pass for later use
 	
@@ -890,15 +892,16 @@
      (UIRemoteNotificationType) (UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeAlert)];
        
     
-    
-//	account = [[UserAccount alloc] initWithUser:self.temp_user_email
-//										AndPass:self.temp_pass_str
-//								   WithListener: delegate];
+#if JSON_FLAG
     account = [[UserAccount alloc] initWithUser:self.temp_user_str
                                         andPass:self.temp_pass_str
                                       andApiKey:self.apiKey
                                     andListener:delegate];
-    
+#else
+	account = [[UserAccount alloc] initWithUser:self.temp_user_email
+										AndPass:self.temp_pass_str
+								   WithListener: delegate];
+#endif
     [[[GAI sharedInstance] defaultTracker] trackEventWithCategory:@"Login"
                                                        withAction:@"Login Success"
                                                         withLabel:@"Login success"
@@ -933,8 +936,11 @@
 	//ERROR condition
 	UIAlertView *alert = [[UIAlertView alloc]
 						  initWithTitle:title
-						  //message:[NSString stringWithFormat:msg, [BMS_Communication getLocalizedMessageForError:[error_response statusCode]]]
+#if (JSON_FLAG == 0)
+						  message:[NSString stringWithFormat:msg, [BMS_Communication getLocalizedMessageForError:[error_response statusCode]]]
+#else
                           message:[NSString stringWithFormat:msg, [responseError objectForKey:@"message"]]
+#endif
 						  delegate:self
 						  cancelButtonTitle:ok
 						  otherButtonTitles:nil];
@@ -944,10 +950,8 @@
                                                       withAction:@"Login Failed"
                                                        withLabel:@"msg"
                                                        withValue:nil];
-	return;
-     
     NSLog(@"%d", [[responseError objectForKey:@"status"] intValue]);
-	
+	return;
 }
 - (void) loginFailedServerUnreachable
 {
