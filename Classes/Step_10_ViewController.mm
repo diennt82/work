@@ -275,6 +275,40 @@
     
 }
 
+#if JSON_FLAG
+- (IBAction)registerCamera:(id)sender
+{
+    self.progressView.hidden = NO;
+    [self.view bringSubviewToFront:self.progressView];
+    
+    
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    HttpCommunication * comm = [[HttpCommunication alloc] init];
+    [comm autorelease];
+    
+    NSString *apiKey = [userDefaults objectForKey:@"PortalApiKey"];
+    NSLog(@"%@", apiKey);
+    NSString *fwVersion = [comm sendCommandAndBlock:GET_VERSION];
+    NSTimeZone *currentTimeZone = [NSTimeZone localTimeZone];
+    NSLog(@"%d", [currentTimeZone secondsFromGMT]);
+    
+    BMS_JSON_Communication *jsonComm = [[BMS_JSON_Communication alloc] initWithObject:self
+                                                                             Selector:@selector(addCamSuccessWithResponse:)
+                                                                         FailSelector:@selector(addCamFailedWithError:)
+                                                                            ServerErr:@selector(addCamFailedServerUnreachable)];
+    NSString * mac = [Util strip_colon_fr_mac:self.cameraMac];
+    NSString * camName = (NSString *) [userDefaults objectForKey:@"CameraName"];
+    
+    [jsonComm registerDeviceWithDeviceName:camName
+                                  andRegId:mac
+                             andDeviceType:@"Camera"
+                                  andModel:@"blink1_hd"
+                                   andMode:@"upnp"
+                              andFwVersion:@"08_049"
+                               andTimeZone:[NSString stringWithFormat:@"%d", [currentTimeZone secondsFromGMT]]
+                                 andApiKey:apiKey];
+}
+#else
 
 -(IBAction)registerCamera:(id)sender
 {
@@ -285,7 +319,7 @@
     
     
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-    
+
     BMS_Communication * bms_comm;
     
     NSString * mac = [Util strip_colon_fr_mac:self.cameraMac];
@@ -298,7 +332,6 @@
 #endif
     
     NSLog(@"name: %@ mac: %@", camName, mac);
-    
     bms_comm = [[BMS_Communication alloc] initWithObject:self
                                                 Selector:@selector(addCamSuccessWithResponse:)
                                             FailSelector:@selector(addCamFailedWithError:)
@@ -326,7 +359,7 @@
     
 }
 
-
+#endif
 
 #pragma  mark -
 #pragma mark Timer callbacks
@@ -614,7 +647,7 @@
 
 -(BOOL) checkItOnline
 {
-    //--> Try to search IP onlinexxxx
+    NSLog(@"--> Try to search IP onlinexxxx");
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     NSString * user_email = (NSString *) [userDefaults objectForKey:@"PortalUseremail"];
     NSString * user_pass = (NSString *) [userDefaults objectForKey:@"PortalPassword"];
@@ -790,6 +823,29 @@
 
 #pragma mark -
 #pragma mark  Callbacks
+#if JSON_FLAG
+- (void) addCamSuccessWithResponse:(NSDictionary *)responseData
+{
+    NSLog(@"addcam response: %@", responseData);
+    [self extractMasterKey:[[responseData objectForKey:@"data"] objectForKey:@"master_key"]];
+    should_stop_scanning = FALSE;
+    
+    [NSTimer scheduledTimerWithTimeInterval: SCAN_TIMEOUT
+									 target:self
+								   selector:@selector(setStopScanning:)
+								   userInfo:nil
+									repeats:NO];
+    
+    
+	// 2 of 3. wait for the camera to reboot completely
+	
+	[NSTimer scheduledTimerWithTimeInterval: 30.0//camera reboot time about 50secs
+									 target:self
+								   selector:@selector(wait_for_camera_to_reboot:)
+								   userInfo:nil
+									repeats:NO];
+}
+#else
 - (void) addCamSuccessWithResponse:(NSData*) responseData
 {
 	NSString * raw_data = [[[NSString alloc] initWithData:responseData encoding: NSASCIIStringEncoding] autorelease];
@@ -839,9 +895,35 @@
 								   userInfo:nil
 									repeats:NO];
 	
-	
 }
+#endif
 
+#if JSON_FLAG
+- (void) addCamFailedWithError:(NSDictionary *) error_response
+{
+    NSLog(@"addcam failed with error code:%d", [[error_response objectForKey:@"status"] intValue]);
+    
+    NSString * msg = NSLocalizedStringWithDefaultValue(@"Server_error_" ,nil, [NSBundle mainBundle],
+                                                       @"Server error: %@" , nil);
+    NSString * ok = NSLocalizedStringWithDefaultValue(@"Ok",nil, [NSBundle mainBundle],
+                                                      @"Ok", nil);
+    
+	//ERROR condition
+	UIAlertView *alert = [[UIAlertView alloc]
+						  initWithTitle:NSLocalizedStringWithDefaultValue(@"AddCam_Error" ,nil, [NSBundle mainBundle],
+                                                                          @"AddCam Error" , nil)
+						  message:[error_response objectForKey:@"message"]
+						  delegate:self
+						  cancelButtonTitle:ok
+						  otherButtonTitles:nil];
+	[alert show];
+	[alert release];
+    self.errorCode = msg;
+    [self  setupFailed];
+    
+	return;
+}
+#else
 - (void) addCamFailedWithError:(NSHTTPURLResponse*) error_response
 {
 	NSLog(@"addcam failed with error code:%d", [error_response statusCode]);
@@ -865,9 +947,8 @@
     [self  setupFailed];
     
 	return;
-	
 }
-
+#endif
 
 
 

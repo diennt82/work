@@ -563,21 +563,48 @@
 
 #if JSON_FLAG
 - (void) regSuccessWithResponse:(NSDictionary *) responseData
+{
+    //Store user/pass for later use
+	NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    
+	[userDefaults setObject:self.tmp_user_email forKey:@"PortalUseremail"];
+	[userDefaults setObject:self.tmp_user_str forKey:@"PortalUsername"];
+	[userDefaults setObject:self.tmp_pass_str forKey:@"PortalPassword"];
+    [userDefaults setObject:[[responseData objectForKey:@"data"] objectForKey:@"authentication_token"]
+                     forKey:@"PortalApiKey"];
+    //Load step 10
+    NSLog(@"Load Step 10");
+    //Load the next xib
+    Step_10_ViewController *step10ViewController = nil;
+    
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+    {
+        step10ViewController = [[Step_10_ViewController alloc]
+                                initWithNibName:@"Step_10_ViewController_ipad" bundle:nil];
+        
+    }
+    else
+    {
+        step10ViewController = [[Step_10_ViewController alloc]
+                                initWithNibName:@"Step_10_ViewController" bundle:nil];
+        
+    }
+    
+    [self.navigationController pushViewController:step10ViewController animated:NO];
+    [step10ViewController release];
+}
 #else
 - (void) regSuccessWithResponse:(NSData*) responseData
-#endif
 {
-#if (JSON_FLAG == 0)
 	NSString * response = [NSString stringWithUTF8String:(const char *)[responseData bytes]] ;
 	NSLog(@"register success : %@", response );
-#endif
+
 	//Store user/pass for later use
 	NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     
 	[userDefaults setObject:self.tmp_user_email forKey:@"PortalUseremail"];
 	[userDefaults setObject:self.tmp_user_str forKey:@"PortalUsername"];
 	[userDefaults setObject:self.tmp_pass_str forKey:@"PortalPassword"];
-	
 	[userDefaults synchronize];
 	
 
@@ -608,11 +635,26 @@
     [step10ViewController release];
     
 }
+#endif
+
 #if JSON_FLAG
 - (void) regFailedWithError:(NSDictionary *) error_response
+{
+    NSString * ok = NSLocalizedStringWithDefaultValue(@"Ok",nil, [NSBundle mainBundle],
+                                                      @"Ok", nil);
+    NSString * title = NSLocalizedStringWithDefaultValue(@"Create_Account_Failed",nil, [NSBundle mainBundle],
+                                                         @"Create Account Failed" , nil);
+    UIAlertView *_alert = [[UIAlertView alloc]
+                           initWithTitle:title
+                           message:[error_response objectForKey:@"message"]
+                           delegate:self
+                           cancelButtonTitle:ok
+                           otherButtonTitles:nil];
+    [_alert show];
+    [_alert release];
+}
 #else
 - (void) regFailedWithError:(NSHTTPURLResponse*) error_response
-#endif
 {
 //	NSLog(@"register failed with error code:%d", [error_response statusCode]);
 //	
@@ -645,11 +687,7 @@
     //ERROR condition
     UIAlertView *_alert = [[UIAlertView alloc]
                            initWithTitle:title
-#if JSON_FLAG
-                           message:[error_response objectForKey:@"message"]
-#else
                            message:[BMS_Communication getLocalizedMessageForError:[error_response statusCode]]
-#endif
                            delegate:self
                            cancelButtonTitle:ok
                            otherButtonTitles:nil];
@@ -659,6 +697,8 @@
 	return;
 	
 }
+#endif
+
 - (void) regFailedServerUnreachable
 {
 	NSLog(@"register failed : server unreachable");

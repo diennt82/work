@@ -292,6 +292,41 @@
     return TRUE;
 }
 
+- (NSDictionary *)getAllDevicesBlockedWithApiKey: (NSString *)apiKey
+{
+    NSURLResponse * response;
+    NSError* error = nil;
+    NSData *dataReply;
+    if (selIfSuccess == nil ||selIfFailure == nil|| selIfServerFail ==nil)
+	{
+		NSLog(@"ERR: selector is not set");
+		return FALSE;
+	}
+    
+    @synchronized(self)
+	{
+        NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL: [NSURL URLWithString:[NSString stringWithFormat:@"%@%@%@", BMS_JSON_PHONESERVICE, DEV_OWN_CMD, apiKey]]];
+        request.timeoutInterval = BMS_JSON_DEFAULT_TIME_OUT;
+        
+        //self.urlConnection = [[NSURLConnection alloc] initWithRequest:request delegate:self];
+    
+        dataReply = [NSURLConnection sendSynchronousRequest:request
+                                      returningResponse:&response
+                                                  error:&error];
+    }
+
+    if ( (dataReply == nil)||  (error != nil))
+    {
+        return nil;
+    }
+    else
+    {
+        return [NSDictionary dictionaryWithDictionary:[NSJSONSerialization JSONObjectWithData:dataReply
+                                                                                      options:kNilOptions
+                                                                                        error:&error]];;
+    }
+}
+
 - (BOOL)getDeviceBasicInfoWithRegistrationId: (NSString *)registrationId andApiKey: (NSString *)apiKey
 {
     if (selIfSuccess == nil ||selIfFailure == nil|| selIfServerFail ==nil)

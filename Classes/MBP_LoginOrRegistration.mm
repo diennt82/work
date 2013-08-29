@@ -211,17 +211,19 @@
     [parent presentModalViewController:navController animated:NO];
 }
 
-
--(void) doSignIn :(NSTimer *) exp
-{
-    
 #if JSON_FLAG
+- (void)doSignIn :(NSTimer *) exp
+{
     BMS_JSON_Communication *jsonComm = [[BMS_JSON_Communication alloc] initWithObject:self
                                                                              Selector:@selector(loginSuccessWithResponse:)
                                                                          FailSelector:@selector(loginFailedWithError:)
                                                                             ServerErr:@selector(loginFailedServerUnreachable)];
     [jsonComm loginWithLogin:self.temp_user_str andPassword:self.temp_pass_str];
+}
 #else
+
+-(void) doSignIn :(NSTimer *) exp
+{
     
 #if 1
     BMS_Communication * bms_comm;
@@ -234,9 +236,9 @@
 #else 
     [self loginFailedServerUnreachable];
 #endif
-#endif
-}
 
+}
+#endif
 -(BOOL) isCurrentConnection3G
 {
     Reachability *reachability = [Reachability reachabilityForInternetConnection];
@@ -878,6 +880,9 @@
 	[userDefaults setObject:self.temp_user_email forKey:@"PortalUseremail"];
 	[userDefaults setObject:self.temp_user_str forKey:@"PortalUsername"];
 	[userDefaults setObject:self.temp_pass_str forKey:@"PortalPassword"];
+#if JSON_FLAG
+    [userDefaults setObject:self.apiKey forKey:@"PortalApiKey"];
+#endif
 	[userDefaults synchronize];
 	
 	//MOVE on now .. 

@@ -11,8 +11,9 @@
 #define JSON_FLAG 1
 #define BMS_JSON_DEFAULT_TIME_OUT 30.0f
 
-#define BMS_JSON_PHONESERVICE @"http://api.simplimonitor.com"
+//#define BMS_JSON_PHONESERVICE @"http://api.simplimonitor.com"
 //#define BMS_JSON_PHONESERVICE @"http://dev.simplimonitor.com"
+#define BMS_JSON_PHONESERVICE @"http://demo.simplimonitor.com"
 
 //~USER
 #define USER_REG_CMD @"/v1/users/register.json"
@@ -129,6 +130,8 @@
 - (BOOL)registerDeviceWithDeviceName: (NSString *)deviceName andRegId: (NSString *)registrationId andDeviceType: (NSString *)deviceType andModel: (NSString *)model andMode: (NSString *)mode andFwVersion: (NSString *)fwVersion andTimeZone: (NSString *)timeZone andApiKey: (NSString *)apiKey;
 
 - (BOOL)getAllDevicesWithApiKey: (NSString *)apiKey;
+
+- (NSDictionary *)getAllDevicesBlockedWithApiKey: (NSString *)apiKey;
 
 - (BOOL)getDeviceBasicInfoWithRegistrationId: (NSString *)registrationId andApiKey: (NSString *)apiKey;
 
