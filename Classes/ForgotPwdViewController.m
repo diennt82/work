@@ -7,7 +7,7 @@
 //
 
 #import "ForgotPwdViewController.h"
-#import "BMS_JSON_Communication.h"
+#import <SimpliMonitorCommunication/SimpliMonitorCommunication.h>
 
 @interface ForgotPwdViewController ()
 

@@ -7,7 +7,7 @@
 //
 
 #import "DashBoard_ViewController.h"
-#import "BMS_JSON_Communication.h"
+#import <SimpliMonitorCommunication/SimpliMonitorCommunication.h>
 
 @interface DashBoard_ViewController() <CameraViewDelegate>
 

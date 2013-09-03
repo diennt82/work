@@ -14,7 +14,7 @@
 #import "SetupData.h"
 #import "ConnectionMethodDelegate.h"
 
-#import "BMS_JSON_Communication.h"
+#import <SimpliMonitorCommunication/SimpliMonitorCommunication.h>
 
 @interface UserAccount : NSObject
 {

@@ -16,7 +16,7 @@
 #import "Reachability.h"
 #import "GAITrackedViewController.h"
 
-#import "BMS_JSON_Communication.h"
+#import <SimpliMonitorCommunication/SimpliMonitorCommunication.h>
 
 #define LOGIN_BUTTON_TAG 200
 #define CREATE_NEW_BUTTON_TAG 201

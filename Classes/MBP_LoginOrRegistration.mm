@@ -785,6 +785,13 @@
         if (statusCode == 200) // success
         {
             self.apiKey = [[responseData objectForKey:@"data"] objectForKey:@"authentication_token"];
+            
+            // Get user info (email)
+            BMS_JSON_Communication *jsonComm = [[BMS_JSON_Communication alloc] initWithObject:self
+                                                                                     Selector:@selector(getUserInfoSuccessWithResponse:)
+                                                                                 FailSelector:@selector(getUserInfoFailedWithResponse:)
+                                                                                    ServerErr:@selector(getUserInfoFailedServerUnreachable)];
+            [jsonComm getUserInfoWithApiKey:self.apiKey];
         }
         else
         {
@@ -877,7 +884,6 @@
 		
 	//Store user/pass for later use
 	
-	[userDefaults setObject:self.temp_user_email forKey:@"PortalUseremail"];
 	[userDefaults setObject:self.temp_user_str forKey:@"PortalUsername"];
 	[userDefaults setObject:self.temp_pass_str forKey:@"PortalPassword"];
 #if JSON_FLAG
@@ -998,5 +1004,48 @@
 	
 }
 
+- (void)getUserInfoSuccessWithResponse: (NSDictionary *)responseDict
+{
+    if (responseDict) {
+        self.temp_user_email = [[responseDict objectForKey:@"data"] objectForKey:@"email"];
+        
+        NSUserDefaults *userDefalts = [NSUserDefaults standardUserDefaults];
+        [userDefalts setObject:self.temp_user_email forKey:@"PortalUseremail"];
+        [userDefalts synchronize];
+    }
+}
+
+- (void)getUserInfoFailedWithResponse: (NSDictionary *)responseDict
+{
+    NSLog(@"Loging failed with error code:%@", responseDict);
+    
+    NSString * title = @"Get User info failed!";
+    NSString * msg = [responseDict objectForKey:@"message"];
+    
+    NSString * ok = NSLocalizedStringWithDefaultValue(@"Ok" ,nil, [NSBundle mainBundle],
+                                                      @"OK", nil);
+    
+    
+	//ERROR condition
+	[[[[UIAlertView alloc] initWithTitle:title
+                               message:msg
+                              delegate:self
+                     cancelButtonTitle:ok
+                     otherButtonTitles:nil]
+     autorelease]
+     show];
+    NSLog(@"%d", [[responseDict objectForKey:@"status"] intValue]);
+}
+
+- (void)getUserInfoFailedServerUnreachable
+{
+    [[[[UIAlertView alloc] initWithTitle:@"Server Unreachable"
+                                message:@"Server Unreachable"
+                               delegate:self
+                      cancelButtonTitle:nil
+                      otherButtonTitles:@"OK", nil]
+      autorelease]
+     show];
+}
 
 @end

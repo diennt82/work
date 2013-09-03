@@ -9,7 +9,6 @@
 #import "UserAccount.h"
 #import "MBP_iosAppDelegate.h"
 #import "RemoteConnection.h"
-#import "BMS_JSON_Communication.h"
 
 @interface UserAccount()
 
@@ -258,7 +257,10 @@
 
 -(void) getCamListSuccess:(NSDictionary *)responseData
 {
-    NSLog(@"responseData %@", responseData);
+    if (responseData) {
+        NSLog(@"responseData.count = %d", responseData.count);
+    }
+    
     NSArray *dataArr;
     NSMutableArray *camProfiles = nil;
     NSInteger status = [[responseData objectForKey:@"status"] intValue];
@@ -270,11 +272,11 @@
 #if JSON_FLAG
             //[camProfiles = [NSMutableArray alloc] init];
             camProfiles = [self parse_camera_list:dataArr];
+            NSLog(@"camlist5 count: %d", dataArr.count);
 #endif
         }
-        NSLog(@" sync_online_and_offline_data");
+
         [self sync_online_and_offline_data:camProfiles];
-        NSLog(@" sync_online_and_offline_data end");
     }
     else
     {
@@ -301,7 +303,6 @@
         return;
     }
     
-    NSLog(@"camlist5: %@", dataArr);
 #if (JSON_FLAG == 0)
     NSString * raw_data = [[[NSString alloc] initWithData:responseData encoding: NSASCIIStringEncoding] autorelease];
 
@@ -665,7 +666,10 @@
 #if JSON_FLAG
 - (NSMutableArray *)parse_camera_list:(NSArray *)dataArr
 {
-    NSLog(@" dataArr = %@", dataArr);
+    if (dataArr) {
+        NSLog(@"dataArr.count = %d", dataArr.count);
+    }
+    
     NSMutableArray *camList = [[NSMutableArray alloc] init];
     
     for (NSDictionary *camEntry in dataArr)
