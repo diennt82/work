@@ -23,16 +23,7 @@
 @synthesize delegate; 
 @synthesize  bms_comm;
 
--(id) initWithUser:(NSString*)user AndPass:(NSString*) pass WithListener:(id <ConnectionMethodDelegate>) d; 
-{
-	[super init];
-	self.userName = user;
-	self.userPass = pass;
-	self.delegate = d; 
-
-	return self; 
-}
-
+#if JSON_FLAG
 - (id) initWithUser:(NSString *)user andPass:(NSString *)pass andApiKey: (NSString *)apiKey andListener:(id <ConnectionMethodDelegate>) d
 {
     [super init];
@@ -44,8 +35,21 @@
 	return self;
 }
 
+#else
+-(id) initWithUser:(NSString*)user AndPass:(NSString*) pass WithListener:(id <ConnectionMethodDelegate>) d; 
+{
+	[super init];
+	self.userName = user;
+	self.userPass = pass;
+	self.delegate = d; 
+
+	return self; 
+}
+#endif
+
 -(void) dealloc
 {
+    [self.jsonComm release];
     [userName release];
     [userPass release];
     [bms_comm release];
@@ -258,11 +262,13 @@
     NSArray *dataArr;
     NSMutableArray *camProfiles = nil;
     NSInteger status = [[responseData objectForKey:@"status"] intValue];
+    
     if (status == 200) {
         dataArr = [NSArray arrayWithArray:[responseData objectForKey:@"data"]];
+        
         if (dataArr.count > 0) {
 #if JSON_FLAG
-            [camProfiles = [NSMutableArray alloc] init];
+            //[camProfiles = [NSMutableArray alloc] init];
             camProfiles = [self parse_camera_list:dataArr];
 #endif
         }
@@ -272,6 +278,7 @@
     }
     else
     {
+        NSLog(@"body content status = %d", status);
         NSString * msg = NSLocalizedStringWithDefaultValue(@"Get_Camera_list_Error",nil, [NSBundle mainBundle],
                                                            @"Get Camera list Error", nil);
         
@@ -608,8 +615,8 @@
 	[delegate sendStatus:8];
 	return;
 }
-
 #endif
+
 - (void)getCamListServerUnreachable
 {
 	NSLog(@"Loging failed : server unreachable");
@@ -712,7 +719,6 @@
             cp.ip_address = localIp;
         }
          
-        NSLog(@"aaaaaaaa");
         //cp.codecs = codec;
         cp.fw_version = fwVersion;
         

@@ -66,7 +66,7 @@
 
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo
 {
-    
+    NSLog(@"didReceiveRemoteNotification");
     //clear status notification 
     [[UIApplication sharedApplication] setApplicationIconBadgeNumber:1];
     [[UIApplication sharedApplication] setApplicationIconBadgeNumber:0];
@@ -200,8 +200,63 @@
     return FALSE; 
 }
 
+#if JSON_FLAG
 
++ (NSString *)GetUUID {
+    CFUUIDRef theUUID = CFUUIDCreate(NULL);
+    CFStringRef string = CFUUIDCreateString(NULL, theUUID);
+    CFRelease(theUUID);
+    return [(NSString *)string autorelease];
+}
 
+- (void)application:(UIApplication *)app didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)devToken {
+    
+    UIPasteboard *appPasteBoard = [UIPasteboard pasteboardWithName:@"MSC3" create:YES];
+	appPasteBoard.persistent = YES;
+    if ([appPasteBoard string] == nil) {
+        [appPasteBoard setString:[MBP_iosAppDelegate GetUUID]];
+    }
+    
+    
+    NSString *uuidString = [appPasteBoard string];
+    //NSString *uuidString = [MBP_iosAppDelegate GetUUID];
+    NSLog(@"uuidString: %@", uuidString);
+    
+    NSString *applicationName = NSBundle.mainBundle.infoDictionary  [@"CFBundleDisplayName"];
+    NSLog(@"Application name: %@", applicationName);
+    
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    NSString *apiKey = [userDefaults objectForKey:@"PortalApiKey"];
+    
+    BMS_JSON_Communication *jsonComm = [[BMS_JSON_Communication alloc] initWithObject:self
+                                                                             Selector:nil
+                                                                         FailSelector:nil
+                                                                            ServerErr:nil];
+   
+    NSDictionary *responseDict = [jsonComm registerAppBlockedWithName:applicationName
+                                                        andDeviceCode:uuidString
+                                                            andApiKey:apiKey];
+    
+    NSString *appId = [[responseDict objectForKey:@"data"] objectForKey:@"id"];
+    NSLog(@"app id = %@", appId);
+    //NSLog(@"My token is: %@", devToken);
+    
+    
+    NSString * devTokenStr = [devToken hexadecimalString];
+
+    [userDefaults setObject:devTokenStr forKey:_push_dev_token];
+    [userDefaults setObject:appId forKey:@"APP_ID"];
+    [userDefaults synchronize];
+    
+    NSDictionary *responseRegNotifn = [jsonComm registerPushNotificationsBlockedWithAppId:appId
+                                                                      andNotificationType:@"apns"
+                                                                           andDeviceToken:devTokenStr
+                                                                                andApiKey:apiKey];
+    NSLog(@"push status = %d", [[responseRegNotifn objectForKey:@"status"] intValue]);
+     
+}
+
+#else
 // Delegation methods
 - (void)application:(UIApplication *)app didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)devToken {
 
@@ -233,6 +288,7 @@
     
    
 }
+#endif
 
 - (void)application:(UIApplication *)app didFailToRegisterForRemoteNotificationsWithError:(NSError *)err {
     NSLog(@"Error in registration. Error: %@", err);

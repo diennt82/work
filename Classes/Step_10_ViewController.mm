@@ -283,12 +283,13 @@
     
     
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-    HttpCommunication * comm = [[HttpCommunication alloc] init];
-    [comm autorelease];
-    
+        
     NSString *apiKey = [userDefaults objectForKey:@"PortalApiKey"];
-    NSLog(@"%@", apiKey);
-    NSString *fwVersion = [comm sendCommandAndBlock:GET_VERSION];
+    NSString *fwVersion = [userDefaults objectForKey:@"FW_VERSION"];
+    NSString *model = [userDefaults objectForKey:@"MODEL"];
+    
+    NSLog(@"-----fwVersion = %@, ,model = %@", fwVersion, model);
+    
     NSTimeZone *currentTimeZone = [NSTimeZone localTimeZone];
     NSLog(@"%d", [currentTimeZone secondsFromGMT]);
     
@@ -302,9 +303,9 @@
     [jsonComm registerDeviceWithDeviceName:camName
                                   andRegId:mac
                              andDeviceType:@"Camera"
-                                  andModel:@"blink1_hd"
+                                  andModel:model //@"blink1_hd"
                                    andMode:@"upnp"
-                              andFwVersion:@"08_049"
+                              andFwVersion:fwVersion
                                andTimeZone:[NSString stringWithFormat:@"%d", [currentTimeZone secondsFromGMT]]
                                  andApiKey:apiKey];
 }
@@ -478,10 +479,7 @@
     {
         NSLog(@"Continue scan..."); 
     }
-	
-	
-	
-	
+
 	if (scanner == nil)
 	{
 		scanner =[[ScanForCamera alloc]init];
@@ -534,13 +532,10 @@
 			//3 of 3. send the master key to device 
 			if (found == TRUE)
 			{
-				
 				HttpCommunication *  comm; 
 				comm = [[HttpCommunication alloc]init];
 				comm.device_ip = cp.ip_address;
-				
-				
-				
+
 				NSString * set_mkey = SET_MASTER_KEY;
 				NSString * response;
 				set_mkey =[set_mkey stringByAppendingString:self.master_key];
@@ -577,10 +572,7 @@
 					[NSThread sleepForTimeInterval:2];
 					
 				} while (retries -- >0);
-				
-				
-				
-				
+
                 if (master_key_sent == TRUE)
                 {
                     ///done
@@ -600,7 +592,7 @@
 		}
 		else //result = nil
 		{
-			//scan again ..
+			NSLog(@"scan again ..");
 		}
 
         
@@ -610,23 +602,13 @@
             NSLog(@"Found it online");
             return;
         }
-        else
-        {
-            
-        }
         
-        
-        
-		//retry scannning.. 
+		//retry scannning..
 		[NSTimer scheduledTimerWithTimeInterval: 0.01  
 										 target:self
 									   selector:@selector(wait_for_camera_to_reboot:)
 									   userInfo:nil
 										repeats:NO];
-		
-		
-		
-		
 	}
     else
 	{
@@ -637,14 +619,60 @@
 									   selector:@selector(checkScanResult:)
 									   userInfo:nil
 										repeats:NO];	
-	}
-    
-    
-    
-    
-  
+	} 
 }
-
+#if JSON_FLAG
+-(BOOL) checkItOnline
+{
+    NSLog(@"--> Try to search IP onlinexxxx");
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    NSString * userEmail = (NSString *) [userDefaults objectForKey:@"PortalUseremail"];
+    NSString * userPass = (NSString *) [userDefaults objectForKey:@"PortalPassword"];
+    NSString * userApiKey = (NSString *) [userDefaults objectForKey:@"PortalApiKey"];
+    
+    UserAccount *account = [[UserAccount alloc] initWithUser:userEmail
+                                                     andPass:userPass
+                                                   andApiKey:userApiKey
+                                                 andListener:nil];
+    
+    NSString *localIp = [account query_cam_ip_online: self.cameraMac];
+    
+    if ( localIp != nil)
+    {
+        NSLog(@"Found a local ip: %@", localIp);
+        HttpCommunication *  comm;
+        comm = [[HttpCommunication alloc]init];
+        comm.device_ip = localIp;
+        
+        NSString * set_mkey = SET_MASTER_KEY;
+        NSString * response;
+        set_mkey =[set_mkey stringByAppendingString:self.master_key];
+        
+        response = [comm sendCommandAndBlock:set_mkey];
+        
+        if (response == nil)
+        {
+            NSLog(@"can't send master key, camera is not fully up");
+        }
+        else
+        {
+            NSLog(@"response: %@", response);
+            
+            if ([response hasPrefix:@"set_master_key: 0"])
+            {
+                ///done
+                NSLog(@"sending master key done");
+                [self setupCompleted];
+                return TRUE;
+            }
+            
+        }
+        
+    }
+    
+    return FALSE;
+}
+#else
 -(BOOL) checkItOnline
 {
     NSLog(@"--> Try to search IP onlinexxxx");
@@ -696,17 +724,13 @@
     }
 
     return FALSE;
-    
 }
+#endif
 
 - (void) setupCompleted
 {
-
-    
-
     //Load step 12
     NSLog(@"Load step 12");
-    
     
     //Load the next xib
     Step_12_ViewController *step12ViewController = nil;
@@ -716,28 +740,57 @@
         
         step12ViewController = [[Step_12_ViewController alloc]
                                 initWithNibName:@"Step_12_ViewController_ipad" bundle:nil];
-        
-        
     }
     else
     {
-        
-        
         step12ViewController = [[Step_12_ViewController alloc]
                                 initWithNibName:@"Step_12_ViewController" bundle:nil];
-        
-        
     }
-    
-    
+
     [self.navigationController pushViewController:step12ViewController animated:NO];
     
     [step12ViewController release];
-
-    
 }
 
+#if JSON_FLAG
+- (void)  setupFailed
+{
+ 	NSLog(@"Setup has failed - remove cam on server");
+	// send a command to remove camera
+	NSString *mac = [Util strip_colon_fr_mac:self.cameraMac];
+	
+    BMS_JSON_Communication *jsonComm = [[BMS_JSON_Communication alloc] initWithObject:self
+                                                                             Selector:@selector(removeCamSuccessWithResponse:)
+                                                                         FailSelector:@selector(removeCamFailedWithError:)
+                                                                            ServerErr:@selector(removeCamFailedServerUnreachable)];
+    
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    [jsonComm deleteDeviceWithRegistrationId:mac andApiKey:[userDefaults objectForKey:@"PortalApiKey"]];
+    
+    //Load step 11
+    NSLog(@"Load step 11");
+    
+    //Load the next xib
+    Step_11_ViewController *step11ViewController = nil;
+    
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+    {
+        step11ViewController = [[Step_11_ViewController alloc]
+                                initWithNibName:@"Step_11_ViewController_ipad" bundle:nil];
+    }
+    else
+    {
+        step11ViewController = [[Step_11_ViewController alloc]
+                                initWithNibName:@"Step_11_ViewController" bundle:nil];
+    }
+    
+    step11ViewController.errorCode = self.errorCode;
+    [self.navigationController pushViewController:step11ViewController animated:NO];
+    
+    [step11ViewController release];
+}
 
+#else
 - (void)  setupFailed
 {
  	NSLog(@"Setup has failed - remove cam on server"); 
@@ -757,9 +810,6 @@
 	
 	[bms_comm BMS_delCamWithUser:user_email AndPass:user_pass macAddr:mac];
 	
-
-    
-    
     //Load step 11
     NSLog(@"Load step 11");
     
@@ -782,12 +832,11 @@
     [self.navigationController pushViewController:step11ViewController animated:NO];
     
     [step11ViewController release];
-    
-        
 }
+#endif
 
 
-
+//Oblivion
 -(void) extractMasterKey:(NSString*) raw
 {
 	NSArray * token_list;
@@ -827,7 +876,8 @@
 - (void) addCamSuccessWithResponse:(NSDictionary *)responseData
 {
     NSLog(@"addcam response: %@", responseData);
-    [self extractMasterKey:[[responseData objectForKey:@"data"] objectForKey:@"master_key"]];
+    //[self extractMasterKey:[[responseData objectForKey:@"data"] objectForKey:@"master_key"]];
+    self.master_key = [[responseData objectForKey:@"data"] objectForKey:@"master_key"];
     should_stop_scanning = FALSE;
     
     [NSTimer scheduledTimerWithTimeInterval: SCAN_TIMEOUT
@@ -835,8 +885,7 @@
 								   selector:@selector(setStopScanning:)
 								   userInfo:nil
 									repeats:NO];
-    
-    
+
 	// 2 of 3. wait for the camera to reboot completely
 	
 	[NSTimer scheduledTimerWithTimeInterval: 30.0//camera reboot time about 50secs
@@ -901,6 +950,10 @@
 #if JSON_FLAG
 - (void) addCamFailedWithError:(NSDictionary *) error_response
 {
+    if (error_response == nil) {
+        NSLog(@"error_response = nil");
+        return;
+    }
     NSLog(@"addcam failed with error code:%d", [[error_response objectForKey:@"status"] intValue]);
     
     NSString * msg = NSLocalizedStringWithDefaultValue(@"Server_error_" ,nil, [NSBundle mainBundle],
@@ -990,7 +1043,16 @@
 	
 }
 
+#if JSON_FLAG
+-(void) removeCamSuccessWithResponse:(NSDictionary *)responseData
+{
+	NSLog(@"removeCam success");
+	
+	//[delegate sendStatus:5 ];
+	
+}
 
+#else
 -(void) removeCamSuccessWithResponse:(NSData *) responsedata
 {
 	NSLog(@"removeCam success");
@@ -998,10 +1060,20 @@
 	//[delegate sendStatus:5 ];
 	
 }
+#endif
+
+#if JSON_FLAG
+-(void) removeCamFailedWithError:(NSDictionary *)error_response
+{
+	NSLog(@"removeCam failed Server error: %@", [error_response objectForKey:@"message"]);
+}
+
+#else
 -(void) removeCamFailedWithError:(NSHTTPURLResponse*) error_response
 {
 	NSLog(@"removeCam failed Server error: %@", [BMS_Communication getLocalizedMessageForError:[error_response statusCode]]);
 }
+#endif
 -(void) removeCamFailedServerUnreachable
 {
 	NSLog(@"server unreachable");

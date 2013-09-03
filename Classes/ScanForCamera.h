@@ -44,7 +44,7 @@
 - (BOOL) getResults:(NSArray **) out_Array;
 
 - (void) scan_for_device:(NSString*) mac;
-- (NSArray *) scan_for_some_devices:(NSArray *) profiles;
+//- (NSArray *) scan_for_some_devices:(NSArray *) profiles;
 
 -(void) scan_done_notify;
 -(void) cancel;

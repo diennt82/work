@@ -44,13 +44,7 @@
         
 		self.askForFWUpgradeOnce = YES;
         
-        
         self.userSettings = [[NSMutableDictionary alloc]init];
-        
-        
-        
-        
-        
 	}
 	return self;
 }
@@ -145,9 +139,7 @@
             
 
             videoAndSnapshotView.transform = CGAffineTransformMakeTranslation(0, 88);
-        }
-        
-        
+        }   
     }
     else
     {
@@ -224,10 +216,7 @@
     
     self.pcmPlayer = [[PCMPlayer alloc] init];
     
-    [self becomeActive];
-        
-
-	    
+    [self becomeActive];    
 }
 
 -(void) becomeActive_
@@ -263,8 +252,6 @@
     
     if (self.selected_channel != nil)
 	{
-        
-        
 		CamProfile * cp = selected_channel.profile;
         
 		melody_index = -1;
@@ -273,7 +260,6 @@
         
         //set Melody name
         NSString * fw_version = selected_channel.profile.fw_version;
-
         
         if (![fw_version isEqualToString:@"0"])
         {
@@ -1098,20 +1084,14 @@
 		comm = [[HttpCommunication alloc]init];
 		comm.device_ip = ip;
 		comm.device_port = port;
-		//[comm sendCommand:SET_RESOLUTION_QVGA];
-        
-        
-        
-        
+
 		if (streamer != nil)
 		{
 			//close pcm player as well.. we don't need it any longer
             [streamer stopStreaming:TRUE];
 			[streamer release];
 		}
-        
-        
-        
+
 		streamer = [[MBP_Streamer alloc]initWithIp:ip
                                            andPort:port
                                            handler:self ];

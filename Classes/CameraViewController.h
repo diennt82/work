@@ -211,7 +211,7 @@
 - (void) _touchesbegan: (CGPoint) location;
 - (void) _touchesmoved: (CGPoint) location;
 - (void) _touchesended: (CGPoint) location;
-- (void) validatePoint: (CGPoint)location andTranslateV:(UIView*) view began: (BOOL)isBegan;
+//- (void) validatePoint: (CGPoint)location andTranslateV:(UIView*) view began: (BOOL)isBegan;
 
 
 //Temp & Frame rate update 

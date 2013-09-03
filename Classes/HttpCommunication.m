@@ -549,7 +549,7 @@
 		
 		if (error != nil)
 		{
-			NSLog(@"error: %@\n", error);
+			NSLog(@"sendCommandAndBlock_raw error: %@\n", error);
             dataReply = nil;
             
             if ([error code ] == NSURLErrorTimedOut)

@@ -220,8 +220,8 @@
                                                                             ServerErr:@selector(loginFailedServerUnreachable)];
     [jsonComm loginWithLogin:self.temp_user_str andPassword:self.temp_pass_str];
 }
-#else
 
+#else
 -(void) doSignIn :(NSTimer *) exp
 {
     

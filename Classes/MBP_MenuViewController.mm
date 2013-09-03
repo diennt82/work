@@ -1648,6 +1648,33 @@
     [dashBoard forceRelogin];
 }
 
+#if JSON_FLAG
+- (void) onCameraRemoveLocal
+{
+	NSString * command , *response;
+	
+    [delegate sendStatus:1];
+    
+	command = SWITCH_TO_DIRECT_MODE;
+	response = [dev_comm sendCommandAndBlock:command];
+	
+	command = RESTART_HTTP_CMD;
+	response = [dev_comm sendCommandAndBlock:command];
+    
+    NSLog(@"On Camera remove local");
+	
+    BMS_JSON_Communication *jsonComm = [[BMS_JSON_Communication alloc] initWithObject:self
+                                                                             Selector:@selector(removeCamSuccessWithResponse:)
+                                                                         FailSelector:@selector(removeCamFailedWithError:)
+                                                                            ServerErr:@selector(removeCamFailedServerUnreachable)];
+    NSUserDefaults *userDefaluts = [NSUserDefaults standardUserDefaults];
+    NSString *apiKey = [userDefaluts objectForKey:@"PortalApiKey"];
+    NSString *mac = [Util strip_colon_fr_mac:deviceMac];
+	
+	[jsonComm deleteDeviceWithRegistrationId:mac andApiKey:apiKey];
+}
+
+#else
 -(void) onCameraRemoveLocal
 {
 	NSString * command , *response; 
@@ -1677,8 +1704,23 @@
     
     
 }
+#endif
 
+#if JSON_FLAG
+-(void) onCameraRemoveRemote
+{
+	BMS_JSON_Communication *jsonComm = [[BMS_JSON_Communication alloc] initWithObject:self
+                                                                             Selector:@selector(removeCamSuccessWithResponse:)
+                                                                         FailSelector:@selector(removeCamFailedWithError:)
+                                                                            ServerErr:@selector(removeCamFailedServerUnreachable)];
+    NSUserDefaults *userDefaluts = [NSUserDefaults standardUserDefaults];
+    NSString *apiKey = [userDefaluts objectForKey:@"PortalApiKey"];
+    NSString *mac = [Util strip_colon_fr_mac:deviceMac];
+	
+	[jsonComm deleteDeviceWithRegistrationId:mac andApiKey:apiKey];
+}
 
+#else
 -(void) onCameraRemoveRemote
 {
 	BMS_Communication * bms_comm; 
@@ -1689,7 +1731,7 @@
 	
 	[bms_comm BMS_delCamWithUser:userName AndPass:userPass macAddr:deviceMac];
 }
-
+#endif
 
 //callback frm alert
 - (void) onCameraNameChanged:(NSString*) newName
@@ -2011,7 +2053,22 @@
 
 #pragma mark -
 #pragma mark BMS_Communication callbacks 
+#pragma mark BMS_JSON_Communication callbacks 
 
+#if JSON_FLAG
+- (void) removeCamSuccessWithResponse:(NSDictionary *)responseData
+{
+	NSLog(@"removeCam success-- fatality");
+    
+    [self goBackAndReLogin];
+}
+
+- (void) removeCamFailedWithError:(NSDictionary *) errorResponse
+{
+	NSLog(@"removeCam failed errorcode: %d", [[errorResponse objectForKey:@"status"] intValue]);
+}
+
+#else
 -(void) removeCamSuccessWithResponse:(NSData *) responsedata
 {
 	NSLog(@"removeCam success-- fatality");
@@ -2025,6 +2082,8 @@
 {
 	NSLog(@"removeCam failed errorcode:");
 }
+#endif
+
 -(void) removeCamFailedServerUnreachable
 {
 	NSLog(@"server unreachable");

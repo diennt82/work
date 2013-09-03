@@ -105,6 +105,7 @@
 
 #define BURNING_PROCESS @"burning_process :"
 
+#define GET_MODEL @"get_model"
 
 
 #define ALERT_ASK_FOR_PASSWD 1

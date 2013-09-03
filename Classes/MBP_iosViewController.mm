@@ -644,14 +644,8 @@ return self;
                                                 initWithNibName:@"Step_02_ViewController" bundle:nil];
                     }
                     
-
                     step02ViewController.delegate = self;
                     [step02ViewController presentModallyOn:self];
-
-              
-
-                    
-
                 }
                 else
                 {
@@ -1136,6 +1130,46 @@ return self;
     
 }
 
+#if JSON_FLAG
+-(void) logoutAndUnregistration_bg
+{
+    NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
+    
+    NSLog(@"De-Register push with both parties: APNs and BMS ");
+    
+	NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    NSString *apiKey = [userDefaults objectForKey:@"PortalApiKey"];
+    NSString *appId = [userDefaults objectForKey:@"APP_ID"];
+    
+    //REmove password and registration id
+    [userDefaults removeObjectForKey:@"PortalPassword"];
+    [userDefaults removeObjectForKey:_push_dev_token];
+    //[userDefaults removeObjectForKey:@"PortalApiKey"];
+    //[userDefaults setBool:FALSE forKey:_AutoLogin];
+    [userDefaults synchronize];
+    
+    // Let the device know we want to receive push notifications
+    [[UIApplication sharedApplication] unregisterForRemoteNotifications];
+    
+    BMS_JSON_Communication *jsonComm = [[BMS_JSON_Communication alloc] initWithObject:self
+                                                                             Selector:nil
+                                                                         FailSelector:nil
+                                                                            ServerErr:nil];
+    
+    NSDictionary *responseDict = [jsonComm deleteAppBlockedWithAppId:appId
+                                                           andApiKey:apiKey];
+    NSLog(@"logout --> delete app status = %d", [[responseDict objectForKey:@"status"] intValue]);
+    
+    [NSThread sleepForTimeInterval:0.10];
+    
+    [self performSelectorOnMainThread:@selector(show_login_or_reg:)
+                           withObject:nil
+                        waitUntilDone:NO];
+    
+	[pool release];
+}
+
+#else
 -(void) logoutAndUnregistration_bg
 {
     NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
@@ -1179,9 +1213,7 @@ return self;
     
 	[pool release];
 }
-
-
-
+#endif
 
 
 #pragma mark -
