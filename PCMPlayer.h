@@ -6,8 +6,8 @@
 //  Copyright 2011 __MyCompanyName__. All rights reserved.
 //
 
-
-#import "PublicDefine.h"
+#import <Foundation/Foundation.h>
+//#import "PublicDefine.h"
 #import "AudioRecorder.h"
 #import "RemoteIOPlayer.h"
 
@@ -16,7 +16,7 @@
 
 @interface PCMPlayer : NSObject {
 	int iReadyToPlay;
-	int iInitialFlag;
+
 	RemoteIOPlayer *player;
 	InMemoryAudioFile *inMemoryAudioFile;
 	
@@ -26,6 +26,10 @@
 @property (nonatomic, retain) RemoteIOPlayer *player;
 @property (nonatomic, retain) AudioRecorder * recorder;
 @property (nonatomic, retain) InMemoryAudioFile *inMemoryAudioFile;
+
+
+
+- (id) initWithSampleRate:(float) sampleRate andChannels:(int) channel;
 
 - (void) Play: (BOOL) recordEnabled;
 //-(void) Play;

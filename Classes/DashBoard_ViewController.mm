@@ -8,6 +8,7 @@
 
 #import "DashBoard_ViewController.h"
 #import <SimpliMonitorCommunication/SimpliMonitorCommunication.h>
+#import "H264PlayerViewController.h"
 
 @interface DashBoard_ViewController() <CameraViewDelegate>
 
@@ -810,6 +811,41 @@
     } 
 }
 
+#if JSON_FLAG
+- (void)tableView: (UITableView *)tableView didSelectRowAtIndexPath: (NSIndexPath *)indexPath
+{
+    [tableView deselectRowAtIndexPath:[tableView indexPathForSelectedRow]
+                             animated:NO];
+    
+    if (self.editModeEnabled == TRUE)
+    {
+        return; // don't start streaming in Edit mode
+    }
+    
+    CamChannel *ch = (CamChannel*)[listOfChannel objectAtIndex:indexPath.row] ;
+    
+    if (ch != nil &&
+        ch.profile != nil &&
+        (ch.profile.isInLocal ==YES || ch.profile.minuteSinceLastComm <=5)
+        )
+    {
+        H264PlayerViewController *h264ViewController = [[H264PlayerViewController alloc] init];
+        
+        if (ch.profile.isInLocal == YES) {
+            h264ViewController.stream_url = [NSString stringWithFormat:@"rtsp://user:pass@%@:6667/blinkhd", ch.profile.ip_address];
+            h264ViewController.selectedChannel = ch;
+        }
+        else
+        {
+            
+        }
+        
+        [self.navigationController pushViewController:h264ViewController animated:NO];
+        [h264ViewController release];
+    }
+}
+
+#else
 - (void)tableView: (UITableView *)tableView didSelectRowAtIndexPath: (NSIndexPath *)indexPath
 {
     [tableView deselectRowAtIndexPath:[tableView indexPathForSelectedRow]
@@ -866,6 +902,7 @@
     }
     
 }
+#endif
 
 - (void)reportClosedStatusWithSelectedChannel:(CamChannel *)selectedChannel
 {
