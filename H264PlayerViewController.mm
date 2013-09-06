@@ -33,6 +33,10 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
     
+    [[NSBundle mainBundle] loadNibNamed:@"H264PlayerViewController_land"
+                                  owner:self
+                                options:nil];
+    
     NSLog(@"stream_url = %@", self.stream_url);
     
     NSString * msg = NSLocalizedStringWithDefaultValue(@"Back",nil, [NSBundle mainBundle],
@@ -157,7 +161,7 @@
 - (BOOL)shouldAutorotate
 {
     NSLog(@"Should Auto Rotate");
-	return YES;
+	return NO;
 }
 
 - (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
