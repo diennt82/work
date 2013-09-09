@@ -8,11 +8,15 @@
 
 #import "H264PlayerViewController.h"
 #include "mediaplayer.h"
+#import "HttpCommunication.h"
+#import <MonitorCommunication/MonitorCommunication.h>
 
 @interface H264PlayerViewController ()
 {
     MediaPlayer* mp;
 }
+
+@property (nonatomic, retain) HttpCommunication* httpComm;
 
 @end
 
@@ -33,9 +37,7 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
     
-    [[NSBundle mainBundle] loadNibNamed:@"H264PlayerViewController_land"
-                                  owner:self
-                                options:nil];
+    self.stream_url = [NSString stringWithFormat:@"rtsp://user:pass@%@:6667/blinkhd", self.selectedChannel.profile.ip_address];
     
     NSLog(@"stream_url = %@", self.stream_url);
     
@@ -53,7 +55,6 @@
 {
     [super viewWillAppear:animated];
     [self.navigationController setNavigationBarHidden:YES];
-	[self checkOrientation];
 }
 
 #pragma mark - Method
@@ -73,9 +74,56 @@
     [self.view addSubview:self.progressView];
     [self.view bringSubviewToFront:self.progressView];
     
-    [self performSelector:@selector(startStream)
-               withObject:nil
-               afterDelay:0.1];
+//    [self performSelector:@selector(startStream)
+//               withObject:nil
+//               afterDelay:0.1];
+    [self setupCamera];
+}
+
+- (void)setupCamera
+{
+    if (self.httpComm != nil)
+    {
+        [self.httpComm release];
+        self.httpComm = nil;
+    }
+    
+    self.httpComm = [[HttpCommunication alloc]init];
+    self.httpComm.device_ip = self.selectedChannel.profile.ip_address;
+    self.httpComm.device_port = self.selectedChannel.profile.port;
+    
+    //Support remote UPNP video as well
+    if (self.selectedChannel.profile.isInLocal == TRUE)
+    {
+        NSLog(@"created a local streamer");
+        self.stream_url = [NSString stringWithFormat:@"rtsp://user:pass@%@:6667/blinkhd", self.selectedChannel.profile.ip_address];
+        
+        [self performSelector:@selector(startStream)
+                   withObject:nil
+                   afterDelay:0.1];
+    }
+    else
+    {
+        NSLog(@"created a remote streamer");
+        
+        NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+        
+        NSString *apiKey = [userDefaults objectForKey:@"PortalApiKey"];
+        NSString *mac = [Util strip_colon_fr_mac:self.selectedChannel.profile.mac_address];
+        
+        BMS_JSON_Communication *jsonComm = [[BMS_JSON_Communication alloc] initWithObject:self
+                                                                                 Selector:@selector(createSesseionSuccessWithResponse:)
+                                                                             FailSelector:@selector(createSessionFailedWithResponse:)
+                                                                                ServerErr:@selector(createSessionFailedUnreachableSerever)];
+        [jsonComm createSessionWithRegistrationId:mac
+                                    andClientType:@"IOS"
+                                        andApiKey:apiKey];
+//        NSDictionary *responseDict = [jsonComm createSessionBlockedWithRegistrationId:mac
+//                                                                        andClientType: @"IOS"
+//                                                                            andApiKey:apiKey];
+        
+        //self.stream_url = @"rtmp://";
+    }
 }
 
 -(void) startStream
@@ -150,82 +198,37 @@
     mp = NULL;
 }
 
-#pragma mark - Rotation screen
--(void) checkOrientation
+#pragma mark - JSON Callback
+
+- (void)createSesseionSuccessWithResponse: (NSDictionary *)responseDict
 {
-	UIInterfaceOrientation infOrientation = [UIApplication sharedApplication].statusBarOrientation;
-    
-	[self adjustViewsForOrientation:infOrientation];
+    if (responseDict) {
+        if ([[responseDict objectForKey:@"status"] intValue] == 200) {
+            self.stream_url = [[responseDict objectForKey:@"data"] objectForKey:@"url"];
+            
+            [self performSelector:@selector(startStream)
+                       withObject:nil
+                       afterDelay:0.1];
+        }
+    }
+    NSLog(@"createSesseionSuccess");
 }
 
+- (void)createSessionFailedWithResponse: (NSDictionary *)responseDict
+{
+    NSLog(@"createSessionFailedWith code %d", [[responseDict objectForKey:@"status"] intValue]);
+}
+
+- (void)createSessionFailedUnreachableSerever
+{
+    NSLog(@"createSessionFailedUnreachableSerever");
+}
+
+#pragma mark - Rotation screen
 - (BOOL)shouldAutorotate
 {
     NSLog(@"Should Auto Rotate");
 	return NO;
-}
-
-- (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
-{
-    self.progressView.hidden = NO;
-    [self stopStream];
-    [self adjustViewsForOrientation:toInterfaceOrientation];
-}
-
-- (void) adjustViewsForOrientation:(UIInterfaceOrientation)orientation
-{
-	if (orientation == UIInterfaceOrientationLandscapeLeft || orientation == UIInterfaceOrientationLandscapeRight)
-	{ 
-        [[NSBundle mainBundle] loadNibNamed:@"H264PlayerViewController_land"
-                                      owner:self
-                                    options:nil];
-	}
-	else if (orientation == UIInterfaceOrientationPortrait || orientation == UIInterfaceOrientationPortraitUpsideDown)
-	{
-        [[NSBundle mainBundle] loadNibNamed:@"H264PlayerViewController"
-                                      owner:self
-                                    options:nil];
-	}
-    
-    [self checkIphone5Size:orientation];
-    
-	self.cameraNameBarBtnItem.title = self.selectedChannel.profile.name;
-    
-	//set Button handler
-	self.backBarBtnItem.target = self;
-	self.backBarBtnItem.action = @selector(goBackToCameraList);
-}
-
-- (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation
-{
-    CGRect rect = [[UIApplication sharedApplication] statusBarFrame]; // Get status bar frame dimensions
-    NSLog(@"1 Statusbar frame: %1.0f, %1.0f, %1.0f, %1.0f", rect.origin.x,
-          rect.origin.y, rect.size.width, rect.size.height);
-    //HACK : incase hotspot is turned on
-    if (rect.size.height>21 &&  rect.size.height<50)
-    {
-        self.topToolbar.frame = CGRectMake(self.topToolbar.frame.origin.x,self.topToolbar.frame.origin.y+20,
-                                      self.topToolbar.frame.size.width, self.topToolbar.frame.size.height);
-    }
-    else
-    {
-        if (rect.size.height == 568) // IPHONE5 width
-        {
-            self.topToolbar.frame = CGRectMake(0,0,
-                                          self.topToolbar.frame.size.width, self.topToolbar.frame.size.height);
-        }
-        else
-        {
-            
-            self.topToolbar.frame = CGRectMake(0,0,
-                                          self.topToolbar.frame.size.width, self.topToolbar.frame.size.height);
-            
-        }
-        
-    }
-    
-    [self performSelector:@selector(startStream)
-               withObject:nil
-               afterDelay:0.1];
 }
 
 - (void) checkIphone5Size: (UIInterfaceOrientation)orientation
@@ -241,15 +244,6 @@
             self.imageViewVideo.transform = translate;
             
             self.progressView.frame = CGRectMake(self.progressView.frame.origin.x, self.progressView.frame.origin.y, self.progressView.frame.size.width + 88, self.progressView.frame.size.height);
-        }
-        else if  (orientation == UIInterfaceOrientationPortrait || orientation == UIInterfaceOrientationPortraitUpsideDown)
-        {
-            
-            NSLog(@"iphone5 SHift down...");
-            CGAffineTransform translate = CGAffineTransformMakeTranslation(0, 44);
-            self.imageViewVideo.transform =translate;
-            
-            self.progressView.frame = CGRectMake(self.progressView.frame.origin.x, self.progressView.frame.origin.y, self.progressView.frame.size.width, self.progressView.frame.size.height + 108);
         }
     }
 }

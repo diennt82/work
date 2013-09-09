@@ -14,7 +14,7 @@
 #import "SetupData.h"
 #import "ConnectionMethodDelegate.h"
 
-#import <SimpliMonitorCommunication/SimpliMonitorCommunication.h>
+#import <MonitorCommunication/MonitorCommunication.h>
 
 @interface UserAccount : NSObject
 {

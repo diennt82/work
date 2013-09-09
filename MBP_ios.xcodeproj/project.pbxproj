@@ -199,17 +199,24 @@
 		9792FC1917D6E07200365405 /* libpostproc.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9792FC1117D6E07200365405 /* libpostproc.a */; };
 		9792FC1A17D6E07200365405 /* libswresample.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9792FC1217D6E07200365405 /* libswresample.a */; };
 		9792FC1B17D6E07200365405 /* libswscale.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9792FC1317D6E07200365405 /* libswscale.a */; };
-		9792FC1D17D6E0A200365405 /* libH264MediaPlayer.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9792FC1C17D6E0A100365405 /* libH264MediaPlayer.a */; };
 		9792FC2317D72F8300365405 /* H264PlayerViewController_land.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9792FC2217D72F8300365405 /* H264PlayerViewController_land.xib */; };
+		97979F0D17DD632000F9527E /* MonitorCommunication.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 97979F0C17DD632000F9527E /* MonitorCommunication.framework */; };
 		97987CCD154687490066C49B /* background.png in Resources */ = {isa = PBXBuildFile; fileRef = 97987CCC154687490066C49B /* background.png */; };
 		97987CCF154688110066C49B /* partition_bar.png in Resources */ = {isa = PBXBuildFile; fileRef = 97987CCE154688110066C49B /* partition_bar.png */; };
 		97987CD815468C2E0066C49B /* MBP_FirstPage.m in Sources */ = {isa = PBXBuildFile; fileRef = 97987CD615468C2E0066C49B /* MBP_FirstPage.m */; };
 		97987DF21546A1630066C49B /* MBP_LoginOrRegistration.mm in Sources */ = {isa = PBXBuildFile; fileRef = 97987DF01546A1630066C49B /* MBP_LoginOrRegistration.mm */; };
 		97987E421546AF2C0066C49B /* UserAccount.mm in Sources */ = {isa = PBXBuildFile; fileRef = 97987E411546AF2C0066C49B /* UserAccount.mm */; };
 		97987E461546B04C0066C49B /* BMS_Communication.m in Sources */ = {isa = PBXBuildFile; fileRef = 97987E451546B04C0066C49B /* BMS_Communication.m */; };
-		97A07FAC17D5E43400653460 /* SimpliMonitorCommunication.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 97A07FAB17D5E43400653460 /* SimpliMonitorCommunication.framework */; };
+		979BC68B17D990F400B3B373 /* H264PlayerViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 979BC68A17D990F400B3B373 /* H264PlayerViewController.xib */; };
+		979BC68D17D99AF800B3B373 /* libH264MediaPlayer.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 979BC68C17D99AF800B3B373 /* libH264MediaPlayer.a */; };
+		979BC69A17D9B97700B3B373 /* PlaylistViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 979BC69817D9B97700B3B373 /* PlaylistViewController.mm */; };
+		979BC69B17D9B97700B3B373 /* PlaylistViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 979BC69917D9B97700B3B373 /* PlaylistViewController.xib */; };
+		979BC69E17D9BA6C00B3B373 /* PlaylistCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 979BC69D17D9BA6B00B3B373 /* PlaylistCell.m */; };
+		979BC6A017D9BA9D00B3B373 /* PlaylistCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 979BC69F17D9BA9D00B3B373 /* PlaylistCell.xib */; };
+		979BC6A417D9BB9C00B3B373 /* TempViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 979BC6A217D9BB9C00B3B373 /* TempViewController.m */; };
+		979BC6A517D9BB9C00B3B373 /* TempViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 979BC6A317D9BB9C00B3B373 /* TempViewController.xib */; };
+		979BC6A817D9BCB200B3B373 /* PlaylistInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 979BC6A717D9BCB100B3B373 /* PlaylistInfo.m */; };
 		97A07FB117D5FD4A00653460 /* H264PlayerViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 97A07FAF17D5FD4A00653460 /* H264PlayerViewController.mm */; };
-		97A07FB217D5FD4A00653460 /* H264PlayerViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 97A07FB017D5FD4A00653460 /* H264PlayerViewController.xib */; };
 		97A2121F15A57C5400B3A406 /* UdtSocketWrapper.mm in Sources */ = {isa = PBXBuildFile; fileRef = 97A2121E15A57C5400B3A406 /* UdtSocketWrapper.mm */; };
 		97A3BD6F1545094F000C3546 /* HttpCommunication.m in Sources */ = {isa = PBXBuildFile; fileRef = 97A3BD6E1545094F000C3546 /* HttpCommunication.m */; };
 		97A3BF0D15453A39000C3546 /* CameraPassword.m in Sources */ = {isa = PBXBuildFile; fileRef = 97A3BF0C15453A39000C3546 /* CameraPassword.m */; };
@@ -595,10 +602,10 @@
 		9792FC1117D6E07200365405 /* libpostproc.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libpostproc.a; path = "../ffmpegBuild/ffmpeg-ios-build/dist-uarch/lib/libpostproc.a"; sourceTree = "<group>"; };
 		9792FC1217D6E07200365405 /* libswresample.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libswresample.a; path = "../ffmpegBuild/ffmpeg-ios-build/dist-uarch/lib/libswresample.a"; sourceTree = "<group>"; };
 		9792FC1317D6E07200365405 /* libswscale.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libswscale.a; path = "../ffmpegBuild/ffmpeg-ios-build/dist-uarch/lib/libswscale.a"; sourceTree = "<group>"; };
-		9792FC1C17D6E0A100365405 /* libH264MediaPlayer.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libH264MediaPlayer.a; path = ../LibH264Player/DerivedData/H264MediaPlayer/Build/Products/libH264MediaPlayer.a; sourceTree = "<group>"; };
 		9792FC1E17D7149600365405 /* PCMPlayer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PCMPlayer.h; sourceTree = "<group>"; };
 		9792FC1F17D7168B00365405 /* RemoteIOPlayer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RemoteIOPlayer.h; sourceTree = "<group>"; };
 		9792FC2217D72F8300365405 /* H264PlayerViewController_land.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = H264PlayerViewController_land.xib; sourceTree = "<group>"; };
+		97979F0C17DD632000F9527E /* MonitorCommunication.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MonitorCommunication.framework; path = "../MonitorCommunication/DerivedData/MonitorCommunication/Build/Products/Debug-iphoneos/MonitorCommunication.framework"; sourceTree = "<group>"; };
 		97987CCC154687490066C49B /* background.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = background.png; sourceTree = "<group>"; };
 		97987CCE154688110066C49B /* partition_bar.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = partition_bar.png; sourceTree = "<group>"; };
 		97987CD515468C2E0066C49B /* MBP_FirstPage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MBP_FirstPage.h; sourceTree = "<group>"; };
@@ -611,10 +618,21 @@
 		97987E411546AF2C0066C49B /* UserAccount.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = UserAccount.mm; sourceTree = "<group>"; };
 		97987E441546B04C0066C49B /* BMS_Communication.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BMS_Communication.h; sourceTree = "<group>"; };
 		97987E451546B04C0066C49B /* BMS_Communication.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = BMS_Communication.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
-		97A07FAB17D5E43400653460 /* SimpliMonitorCommunication.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SimpliMonitorCommunication.framework; path = ../SimpliMonitorCommunication/Release/SimpliMonitorCommunication.framework; sourceTree = "<group>"; };
+		979BC68A17D990F400B3B373 /* H264PlayerViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = H264PlayerViewController.xib; sourceTree = "<group>"; };
+		979BC68C17D99AF800B3B373 /* libH264MediaPlayer.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libH264MediaPlayer.a; sourceTree = "<group>"; };
+		979BC69717D9B97700B3B373 /* PlaylistViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PlaylistViewController.h; sourceTree = "<group>"; };
+		979BC69817D9B97700B3B373 /* PlaylistViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = PlaylistViewController.mm; sourceTree = "<group>"; };
+		979BC69917D9B97700B3B373 /* PlaylistViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PlaylistViewController.xib; sourceTree = "<group>"; };
+		979BC69C17D9BA6B00B3B373 /* PlaylistCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PlaylistCell.h; sourceTree = "<group>"; };
+		979BC69D17D9BA6B00B3B373 /* PlaylistCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PlaylistCell.m; sourceTree = "<group>"; };
+		979BC69F17D9BA9D00B3B373 /* PlaylistCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PlaylistCell.xib; sourceTree = "<group>"; };
+		979BC6A117D9BB9C00B3B373 /* TempViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TempViewController.h; sourceTree = "<group>"; };
+		979BC6A217D9BB9C00B3B373 /* TempViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TempViewController.m; sourceTree = "<group>"; };
+		979BC6A317D9BB9C00B3B373 /* TempViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TempViewController.xib; sourceTree = "<group>"; };
+		979BC6A617D9BCB100B3B373 /* PlaylistInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PlaylistInfo.h; sourceTree = "<group>"; };
+		979BC6A717D9BCB100B3B373 /* PlaylistInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PlaylistInfo.m; sourceTree = "<group>"; };
 		97A07FAE17D5FD4A00653460 /* H264PlayerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = H264PlayerViewController.h; sourceTree = "<group>"; };
 		97A07FAF17D5FD4A00653460 /* H264PlayerViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = H264PlayerViewController.mm; sourceTree = "<group>"; };
-		97A07FB017D5FD4A00653460 /* H264PlayerViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = H264PlayerViewController.xib; sourceTree = "<group>"; };
 		97A2121D15A57C5400B3A406 /* UdtSocketWrapper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UdtSocketWrapper.h; sourceTree = "<group>"; };
 		97A2121E15A57C5400B3A406 /* UdtSocketWrapper.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = UdtSocketWrapper.mm; sourceTree = "<group>"; };
 		97A3BD6D1545094F000C3546 /* HttpCommunication.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HttpCommunication.h; sourceTree = "<group>"; };
@@ -1494,7 +1512,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9792FC1D17D6E0A200365405 /* libH264MediaPlayer.a in Frameworks */,
+				97979F0D17DD632000F9527E /* MonitorCommunication.framework in Frameworks */,
 				9792FC1417D6E07200365405 /* libavcodec.a in Frameworks */,
 				9792FC1517D6E07200365405 /* libavdevice.a in Frameworks */,
 				9792FC1617D6E07200365405 /* libavfilter.a in Frameworks */,
@@ -1503,7 +1521,6 @@
 				9792FC1917D6E07200365405 /* libpostproc.a in Frameworks */,
 				9792FC1A17D6E07200365405 /* libswresample.a in Frameworks */,
 				9792FC1B17D6E07200365405 /* libswscale.a in Frameworks */,
-				97A07FAC17D5E43400653460 /* SimpliMonitorCommunication.framework in Frameworks */,
 				BC883A6D1798EB81001D02D8 /* CoreData.framework in Frameworks */,
 				38962C8517695CB30016AE16 /* libTestFlight.a in Frameworks */,
 				38962C831769587E0016AE16 /* libz.dylib in Frameworks */,
@@ -1521,6 +1538,7 @@
 				3887DD8515CB697C0077048D /* libUdtLib.a in Frameworks */,
 				BC883A6A1798E68D001D02D8 /* libGoogleAnalytics.a in Frameworks */,
 				BC883A6B1798E68D001D02D8 /* libGoogleAnalytics_debug.a in Frameworks */,
+				979BC68D17D99AF800B3B373 /* libH264MediaPlayer.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1530,6 +1548,7 @@
 		080E96DDFE201D6D7F000001 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				979BC69617D9B8BA00B3B373 /* Playlist */,
 				9792FC0317D6DC8700365405 /* Include */,
 				9792FBD817D6CC6600365405 /* Libraries */,
 				97A07FAD17D5FCFD00653460 /* H264Player */,
@@ -1763,7 +1782,7 @@
 		29B97314FDCFA39411CA2CEA /* CustomTemplate */ = {
 			isa = PBXGroup;
 			children = (
-				97A07FAB17D5E43400653460 /* SimpliMonitorCommunication.framework */,
+				97979F0C17DD632000F9527E /* MonitorCommunication.framework */,
 				BC883A6C1798EB81001D02D8 /* CoreData.framework */,
 				38962C8417695CB20016AE16 /* libTestFlight.a */,
 				38962C821769587E0016AE16 /* libz.dylib */,
@@ -1938,7 +1957,7 @@
 		9792FBD817D6CC6600365405 /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
-				9792FC1C17D6E0A100365405 /* libH264MediaPlayer.a */,
+				979BC68C17D99AF800B3B373 /* libH264MediaPlayer.a */,
 				9792FC0C17D6E07200365405 /* libavcodec.a */,
 				9792FC0D17D6E07200365405 /* libavdevice.a */,
 				9792FC0E17D6E07200365405 /* libavfilter.a */,
@@ -1979,12 +1998,30 @@
 			name = images12;
 			sourceTree = "<group>";
 		};
+		979BC69617D9B8BA00B3B373 /* Playlist */ = {
+			isa = PBXGroup;
+			children = (
+				979BC69717D9B97700B3B373 /* PlaylistViewController.h */,
+				979BC69817D9B97700B3B373 /* PlaylistViewController.mm */,
+				979BC69917D9B97700B3B373 /* PlaylistViewController.xib */,
+				979BC69C17D9BA6B00B3B373 /* PlaylistCell.h */,
+				979BC69D17D9BA6B00B3B373 /* PlaylistCell.m */,
+				979BC69F17D9BA9D00B3B373 /* PlaylistCell.xib */,
+				979BC6A117D9BB9C00B3B373 /* TempViewController.h */,
+				979BC6A217D9BB9C00B3B373 /* TempViewController.m */,
+				979BC6A317D9BB9C00B3B373 /* TempViewController.xib */,
+				979BC6A617D9BCB100B3B373 /* PlaylistInfo.h */,
+				979BC6A717D9BCB100B3B373 /* PlaylistInfo.m */,
+			);
+			name = Playlist;
+			sourceTree = "<group>";
+		};
 		97A07FAD17D5FCFD00653460 /* H264Player */ = {
 			isa = PBXGroup;
 			children = (
+				979BC68A17D990F400B3B373 /* H264PlayerViewController.xib */,
 				97A07FAE17D5FD4A00653460 /* H264PlayerViewController.h */,
 				97A07FAF17D5FD4A00653460 /* H264PlayerViewController.mm */,
-				97A07FB017D5FD4A00653460 /* H264PlayerViewController.xib */,
 				9792FC2217D72F8300365405 /* H264PlayerViewController_land.xib */,
 			);
 			name = H264Player;
@@ -2255,8 +2292,11 @@
 				BCF944EF173262BC00F58B22 /* mestartup000001.png in Resources */,
 				BCF944F11732749300F58B22 /* homepage_p1.png in Resources */,
 				BC4D8D8C1733B9BB005C34BB /* ME-screen_landscape.png in Resources */,
-				97A07FB217D5FD4A00653460 /* H264PlayerViewController.xib in Resources */,
 				9792FC2317D72F8300365405 /* H264PlayerViewController_land.xib in Resources */,
+				979BC68B17D990F400B3B373 /* H264PlayerViewController.xib in Resources */,
+				979BC69B17D9B97700B3B373 /* PlaylistViewController.xib in Resources */,
+				979BC6A017D9BA9D00B3B373 /* PlaylistCell.xib in Resources */,
+				979BC6A517D9BB9C00B3B373 /* TempViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2333,6 +2373,10 @@
 				9704F84117B37CB3005F9868 /* DashBoard_ViewController.mm in Sources */,
 				97F5531517BDD3AF00024017 /* MBPNavController.m in Sources */,
 				97A07FB117D5FD4A00653460 /* H264PlayerViewController.mm in Sources */,
+				979BC69A17D9B97700B3B373 /* PlaylistViewController.mm in Sources */,
+				979BC69E17D9BA6C00B3B373 /* PlaylistCell.m in Sources */,
+				979BC6A417D9BB9C00B3B373 /* TempViewController.m in Sources */,
+				979BC6A817D9BCB200B3B373 /* PlaylistInfo.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3785,6 +3829,8 @@
 					"\"$(SRCROOT)\"",
 					"\"$(SRCROOT)/../../Desktop/Framework\"",
 					"\"$(SRCROOT)/../SimpliMonitorCommunication/Release\"",
+					"\"$(SRCROOT)/../SimpliMonitorCommunication/DerivedData/SimpliMonitorCommunication/Build/Products/Debug-iphoneos\"",
+					"\"$(SRCROOT)/../MonitorCommunication/DerivedData/MonitorCommunication/Build/Products/Debug-iphoneos\"",
 				);
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
@@ -3832,6 +3878,8 @@
 					"\"$(SRCROOT)\"",
 					"\"$(SRCROOT)/../../Desktop/Framework\"",
 					"\"$(SRCROOT)/../SimpliMonitorCommunication/Release\"",
+					"\"$(SRCROOT)/../SimpliMonitorCommunication/DerivedData/SimpliMonitorCommunication/Build/Products/Debug-iphoneos\"",
+					"\"$(SRCROOT)/../MonitorCommunication/DerivedData/MonitorCommunication/Build/Products/Debug-iphoneos\"",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = MBP_ios_Prefix.pch;
@@ -3899,6 +3947,8 @@
 					"$(inherited)",
 					"\"$(SRCROOT)/../../Desktop/Framework\"",
 					"\"$(SRCROOT)/../SimpliMonitorCommunication/Release\"",
+					"\"$(SRCROOT)/../SimpliMonitorCommunication/DerivedData/SimpliMonitorCommunication/Build/Products/Debug-iphoneos\"",
+					"\"$(SRCROOT)/../MonitorCommunication/DerivedData/MonitorCommunication/Build/Products/Debug-iphoneos\"",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = MBP_ios_Prefix.pch;

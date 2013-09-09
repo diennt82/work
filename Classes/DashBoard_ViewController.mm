@@ -7,8 +7,10 @@
 //
 
 #import "DashBoard_ViewController.h"
-#import <SimpliMonitorCommunication/SimpliMonitorCommunication.h>
+#import <MonitorCommunication/MonitorCommunication.h>
 #import "H264PlayerViewController.h"
+#import "PlaylistInfo.h"
+#import "TempViewController.h"
 
 @interface DashBoard_ViewController() <CameraViewDelegate>
 
@@ -831,14 +833,7 @@
     {
         H264PlayerViewController *h264ViewController = [[H264PlayerViewController alloc] init];
         
-        if (ch.profile.isInLocal == YES) {
-            h264ViewController.stream_url = [NSString stringWithFormat:@"rtsp://user:pass@%@:6667/blinkhd", ch.profile.ip_address];
-            h264ViewController.selectedChannel = ch;
-        }
-        else
-        {
-            
-        }
+        h264ViewController.selectedChannel = ch;
         
         [self.navigationController pushViewController:h264ViewController animated:NO];
         [h264ViewController release];
@@ -1111,7 +1106,65 @@
     [self forceRelogin];
 }
 
+#if JSON_FLAG
+-(IBAction)alertSetting:(id)sender
+{
+    progressView.hidden = NO;
+    [self.view addSubview:progressView];
+    [self.view bringSubviewToFront:progressView];
+    
+    CamChannel *ch = (CamChannel *) [listOfChannel objectAtIndex:((UIButton *)sender).tag];
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    
+    BMS_JSON_Communication *jsonComm = [[BMS_JSON_Communication alloc] initWithObject:self
+                                                                             Selector:@selector(getPlaylistSuccessWithResponse:)
+                                                                         FailSelector:@selector(getPlaylistFailedWithResponse:)
+                                                                            ServerErr:@selector(getPlaylistUnreachableSetver)];
+    NSString *mac = [Util strip_colon_fr_mac:ch.profile.mac_address];
+    NSString *apiKey = [userDefaults objectForKey:@"PortalApiKey"];
+    
+    [jsonComm getAllRecordedFilesWithRegistrationId:mac
+                                          andApiKey:apiKey];
+}
 
+- (void)getPlaylistSuccessWithResponse: (NSDictionary *)responseDict
+{
+    if (responseDict) {
+        if ([[responseDict objectForKey:@"status"] intValue] == 200) {
+            NSArray *eventArr = [[responseDict objectForKey:@"data"] objectForKey:@"events"];
+            
+            TempViewController *tempPlaylist = [[TempViewController alloc] init];
+            tempPlaylist.playlistArr = [NSMutableArray array];
+            
+            for (NSDictionary *playlist in eventArr) {
+                NSDictionary *clipInfo = [[playlist objectForKey:@"playlist"] objectAtIndex:0];
+                
+                PlaylistInfo *playlistInfo = [[PlaylistInfo alloc] init];
+                playlistInfo.urlImage = [clipInfo objectForKey:@"image"];
+                playlistInfo.titleString = [clipInfo objectForKey:@"title"];
+                playlistInfo.urlFile = [clipInfo objectForKey:@"file"];
+                
+                [tempPlaylist.playlistArr addObject:playlistInfo];
+            }
+            
+            [self.navigationController pushViewController:tempPlaylist animated:NO];
+            [tempPlaylist release];
+        }
+        progressView.hidden = YES;
+    }
+}
+
+- (void)getPlaylistFailedWithResponse: (NSDictionary *)responseDict
+{
+    NSLog(@"getPlaylistFailedWithResponse");
+}
+
+- (void)getPlaylistUnreachableSetver
+{
+    NSLog(@"getPlaylistUnreachableSetver");
+}
+
+#else
 -(IBAction)alertSetting:(id)sender
 {
     CamChannel * ch = (CamChannel *) [listOfChannel objectAtIndex:((UIButton *)sender).tag];
@@ -1126,7 +1179,7 @@
     [alertSettings release];
     
 }
-
+#endif
 
 
 -(IBAction)removeCamera:(id)sender
