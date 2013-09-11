@@ -9,14 +9,22 @@
 #import "H264PlayerViewController.h"
 #include "mediaplayer.h"
 #import "HttpCommunication.h"
+#import "PlaylistInfo.h"
+#import "PlaylistViewController.h"
+#import "PlaylistCell.h"
 #import <MonitorCommunication/MonitorCommunication.h>
 
-@interface H264PlayerViewController ()
+@interface H264PlayerViewController () <UITableViewDataSource, UITableViewDelegate>
 {
     MediaPlayer* mp;
 }
 
+@property (retain, nonatomic) IBOutlet UITableView *tableViewPlaylist;
+
 @property (nonatomic, retain) HttpCommunication* httpComm;
+@property (nonatomic, retain) NSMutableArray *playlistArray;
+@property (nonatomic) BOOL mpFlag;
+@property (nonatomic, retain) NSArray *eventArr;
 
 @end
 
@@ -48,6 +56,9 @@
                                       style:UIBarButtonItemStyleBordered
                                      target:nil
                                      action:nil] autorelease];
+    self.tableViewPlaylist.delegate = self;
+    self.tableViewPlaylist.dataSource = self;
+    self.tableViewPlaylist.rowHeight = 68;
     [self becomeActive];
 }
 
@@ -55,6 +66,47 @@
 {
     [super viewWillAppear:animated];
     [self.navigationController setNavigationBarHidden:YES];
+    
+//    if (self.mpFlag) {
+//        self.progressView.hidden = NO;
+//        //[self.view bringSubviewToFront:self.progressView];
+//        [self setupCamera];
+//        //[self performSelectorInBackground:@selector(loadEarlierList) withObject:nil];
+//        [self loadEarlierList];
+//        self.mpFlag = FALSE;
+//    }
+}
+
+#pragma mark - Action
+
+- (IBAction)segCtrlAction:(id)sender {
+    
+    if (self.segCtrl.selectedSegmentIndex == 0) {
+        
+        self.tableViewPlaylist.hidden = YES;
+        
+        if (self.mpFlag) {
+            self.progressView.hidden = NO;
+            [self.view bringSubviewToFront:self.progressView];
+            [self setupCamera];
+            self.mpFlag = FALSE;
+        }
+        else
+        {
+            [self.view bringSubviewToFront:self.imageViewVideo];
+        }
+    }
+    else if (self.segCtrl.selectedSegmentIndex == 1)
+    {
+        if (self.playlistArray.count == 0) {
+            self.progressView.hidden = NO;
+        }
+        
+        self.tableViewPlaylist.hidden = NO;
+        [self.view bringSubviewToFront:self.tableViewPlaylist];
+    }
+    
+    NSLog(@"self.segCtrl.selectedSegmentIndex = %d", self.segCtrl.selectedSegmentIndex);
 }
 
 #pragma mark - Method
@@ -64,20 +116,41 @@
     CamProfile *cp = self.selectedChannel.profile;
     
     //Set camera name
-    self.cameraNameBarBtnItem.title = cp.name;
+    //self.cameraNameBarBtnItem.title = cp.name;
     
     //set Button handler
     self.backBarBtnItem.target = self;
     self.backBarBtnItem.action = @selector(goBackToCameraList);
-    
+//    
     self.progressView.hidden = NO;
-    [self.view addSubview:self.progressView];
+    //[self.view addSubview:self.progressView];
     [self.view bringSubviewToFront:self.progressView];
     
 //    [self performSelector:@selector(startStream)
 //               withObject:nil
 //               afterDelay:0.1];
+    NSLog(@"self.segCtrl.selectedSegmentIndex = %d", self.segCtrl.selectedSegmentIndex);
+    
     [self setupCamera];
+    
+    [self performSelectorInBackground:@selector(loadEarlierList) withObject:nil];
+    
+    //[self loadEarlierList];
+
+    if (self.segCtrl.selectedSegmentIndex == 0) {
+        self.tableViewPlaylist.hidden= YES;
+        if (mp) {
+            if (mp->isPlaying()) {
+                [self.view bringSubviewToFront:self.imageViewVideo];
+            }
+        }
+    
+    }
+//    else if (self.segCtrl.selectedSegmentIndex == 1)
+//    {
+//        self.tableViewPlaylist.hidden = NO;
+//        [self.view bringSubviewToFront:self.tableViewPlaylist];
+//    }
 }
 
 - (void)setupCamera
@@ -98,11 +171,12 @@
         NSLog(@"created a local streamer");
         self.stream_url = [NSString stringWithFormat:@"rtsp://user:pass@%@:6667/blinkhd", self.selectedChannel.profile.ip_address];
         
+        //self.progressView.hidden = YES;
         [self performSelector:@selector(startStream)
                    withObject:nil
                    afterDelay:0.1];
     }
-    else
+    else if (self.selectedChannel.profile.minuteSinceLastComm <= 5)
     {
         NSLog(@"created a remote streamer");
         
@@ -128,7 +202,6 @@
 
 -(void) startStream
 {
-    self.progressView.hidden = YES;
     status_t status;
 
     mp = new MediaPlayer();
@@ -149,9 +222,6 @@
         return;
     }
     
-    CGRect rect = CGRectMake(self.imageViewVideo.frame.origin.x, self.imageViewVideo.frame.origin.y, mp->getVideoWidth(0), mp->getVideoHeight(0));
-    
-    NSLog(@"rect = %f, %f, %f, %f", rect.origin.x, rect.origin.y, rect.size.width, rect.size.height);
     mp->setVideoSurface(self.imageViewVideo);
     
     NSLog(@"Prepare the player");
@@ -166,6 +236,7 @@
         exit(1);
     }
     
+    self.progressView.hidden = YES;
     // Play anyhow
     
     status=  mp->start();
@@ -181,7 +252,9 @@
 
 - (void)goBackToCameraList
 {
-    [self stopStream];
+    if (mp) {
+        [self stopStream];
+    }
     
     [self.navigationController popToRootViewControllerAnimated:NO];
 }
@@ -198,20 +271,78 @@
     mp = NULL;
 }
 
+- (void)loadEarlierList
+{
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    
+//    BMS_JSON_Communication *jsonComm = [[BMS_JSON_Communication alloc] initWithObject:self
+//                                                                             Selector:@selector(getPlaylistSuccessWithResponse:)
+//                                                                         FailSelector:@selector(getPlaylistFailedWithResponse:)
+//                                                                            ServerErr:@selector(getPlaylistUnreachableSetver)];
+    BMS_JSON_Communication *jsonComm = [[BMS_JSON_Communication alloc] initWithObject:self
+                                                                             Selector:nil
+                                                                         FailSelector:nil
+                                                                            ServerErr:nil];
+    NSString *mac = [Util strip_colon_fr_mac:self.selectedChannel.profile.mac_address];
+    NSString *apiKey = [userDefaults objectForKey:@"PortalApiKey"];
+    
+//    [jsonComm getAllRecordedFilesWithRegistrationId:mac
+//                                           andEvent:@"04"
+//                                          andApiKey:apiKey];
+    NSDictionary *responseDict = [jsonComm getAllRecordedFilesBlockedWithRegistrationId:mac
+                                                  andEvent:@"04"
+                                                 andApiKey:apiKey];
+    if (responseDict) {
+        if ([[responseDict objectForKey:@"status"] intValue] == 200) {
+            self.eventArr = [[responseDict objectForKey:@"data"] objectForKey:@"events"];
+            
+            //[self.tableViewPlaylist reloadData];
+            
+            self.playlistArray = [NSMutableArray array];
+            
+            for (NSDictionary *playlist in self.eventArr) {
+                NSDictionary *clipInfo = [[playlist objectForKey:@"playlist"] objectAtIndex:0];
+                
+                PlaylistInfo *playlistInfo = [[PlaylistInfo alloc] init];
+                playlistInfo.urlImage = [clipInfo objectForKey:@"image"];
+                playlistInfo.titleString = [clipInfo objectForKey:@"title"];
+                playlistInfo.urlFile = [clipInfo objectForKey:@"file"];
+                
+                [self.playlistArray addObject:playlistInfo];
+                //[self.tableViewPlaylist reloadData];
+            }
+            
+            //[self.tableViewPlaylist performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:NO];
+            [self.tableViewPlaylist reloadData];
+            NSLog(@"reloadData %d", self.playlistArray.count);
+            
+            //[self performSelectorInBackground:@selector(downloadImage) withObject:nil];
+        }
+    }
+    
+    self.progressView.hidden = YES;
+}
+
+//- (void)downloadImage
+//{
+//    
+//}
+
 #pragma mark - JSON Callback
 
 - (void)createSesseionSuccessWithResponse: (NSDictionary *)responseDict
 {
+    NSLog(@"createSesseionSuccessWithResponse %@", responseDict);
     if (responseDict) {
         if ([[responseDict objectForKey:@"status"] intValue] == 200) {
             self.stream_url = [[responseDict objectForKey:@"data"] objectForKey:@"url"];
             
+            //self.progressView.hidden = YES;
             [self performSelector:@selector(startStream)
                        withObject:nil
                        afterDelay:0.1];
         }
     }
-    NSLog(@"createSesseionSuccess");
 }
 
 - (void)createSessionFailedWithResponse: (NSDictionary *)responseDict
@@ -248,6 +379,149 @@
     }
 }
 
+#pragma mark - Table view data source
+
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
+{
+    //#warning Potentially incomplete method implementation.
+    // Return the number of sections.
+    return 1;
+}
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+{
+    //#warning Incomplete method implementation.
+    // Return the number of rows in the section.
+    NSLog(@"self.playlistArray.count = %d", self.playlistArray.count);
+    //return self.eventArr.count;
+    return self.playlistArray.count;
+    //return 7;
+}
+
+- (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if (indexPath.row % 2)
+    {
+        [cell setBackgroundColor:[UIColor colorWithRed:.8 green:.8 blue:1 alpha:1]];
+    }
+    else
+        [cell setBackgroundColor:[UIColor clearColor]];
+}
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+//    static NSString *CellIdentifier = @"Cell";
+//    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+//    if (cell == nil) {
+//        cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
+//    }
+
+    static NSString *playlistCellIdentifier = @"PlaylistCell";
+    
+    NSLog(@"indexPath.row = %d", indexPath.row);
+    
+    PlaylistCell *cell = (PlaylistCell *)[tableView dequeueReusableCellWithIdentifier:playlistCellIdentifier];
+    if (cell == nil)
+    {
+        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"PlaylistCell" owner:self options:nil];
+        for (id obj in nib) {
+            if ([obj isKindOfClass:[PlaylistCell class]]) {
+                cell = (PlaylistCell *)obj;
+                break;
+            }
+        }
+        //cell = [nib objectAtIndex:0];
+    }
+    
+    // Configure the cell...
+    
+    PlaylistInfo *playlistInfo = [self.playlistArray objectAtIndex:indexPath.row];
+    if (playlistInfo) {
+        
+        if (!playlistInfo.imgSnapshot) {
+            [cell.activityIndicator startAnimating];
+            
+            CGSize newSize = CGSizeMake(64, 64);
+            
+            dispatch_queue_t q = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0ul);
+            dispatch_async(q, ^{
+                playlistInfo.imgSnapshot = [self imageWithUrlString:playlistInfo.urlImage scaledToSize:newSize];
+                
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    //NSLog(@"img = %@", img);
+                    cell.imageView.image = playlistInfo.imgSnapshot;
+                    [cell.activityIndicator stopAnimating];
+                    cell.activityIndicator.hidden = YES;
+                });
+            });
+        }
+        else
+        {
+            NSLog(@"playlistInfo.imgSnapshot already");
+            cell.imageView.image = playlistInfo.imgSnapshot;
+        }
+        
+        if (playlistInfo.titleString && ![playlistInfo.titleString isEqualToString:@""]) {
+            cell.labelTitle.text = playlistInfo.titleString;
+        }
+        else
+        {
+            cell.labelTitle.text = @"Title";
+        }
+    }
+    
+    return cell;
+}
+
+- (UIImage *)imageWithUrlString:(NSString *)urlString scaledToSize:(CGSize)newSize
+{
+	UIGraphicsBeginImageContext(newSize);
+    
+	[[UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:urlString]]] drawInRect:CGRectMake(0, 0, newSize.width, newSize.height)];
+    
+	UIImage* newImage = UIGraphicsGetImageFromCurrentImageContext();
+	UIGraphicsEndImageContext();
+    
+	return newImage;
+}
+
+#pragma mark - Table view delegate
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    [tableView deselectRowAtIndexPath:[tableView indexPathForSelectedRow]
+                             animated:NO];
+    //PlaylistInfo *playlistInfo = [[PlaylistInfo alloc] init];
+    PlaylistInfo *playlistInfo = (PlaylistInfo *)[self.playlistArray objectAtIndex:indexPath.row];
+    
+    NSLog(@"urlFile = %@", playlistInfo.urlFile);
+    
+    if(playlistInfo.urlFile && ![playlistInfo.urlFile isEqualToString:@""] && playlistInfo.imgSnapshot)
+    {
+        PlaylistViewController *playlistViewController = [[PlaylistViewController alloc] init];
+        playlistViewController.urlVideo = playlistInfo.urlFile;
+        if (mp) {
+            [self stopStream];
+            self.mpFlag = TRUE;
+        }
+        
+        [self.navigationController pushViewController:playlistViewController animated:NO];
+        [playlistViewController release];
+    }
+    else
+    {
+        NSLog(@"urlFile nil");
+        [[[[UIAlertView alloc] initWithTitle:@"Sorry"
+                                     message:@"Url file maybe empty. Or wait for load image"
+                                    delegate:self
+                           cancelButtonTitle:nil
+                           otherButtonTitles:@"OK", nil]
+          autorelease]
+         show];
+    }
+     
+}
+
 #pragma mark -
 
 - (void)didReceiveMemoryWarning
@@ -257,12 +531,19 @@
 }
 
 - (void)dealloc {
-    [self.stream_url release];
     [_imageViewVideo release];
     [_topToolbar release];
     [_backBarBtnItem release];
     [_progressView release];
     [_cameraNameBarBtnItem release];
+    [_segCtrl release];
+    [_tableViewPlaylist release];
+    
+    [_stream_url release];
+    [_selectedChannel release];
+    [_playlistArray release];
+    [_httpComm release];
+    
     [super dealloc];
 }
 
@@ -272,6 +553,14 @@
     [self setBackBarBtnItem:nil];
     [self setProgressView:nil];
     [self setCameraNameBarBtnItem:nil];
+    [self setSegCtrl:nil];
+    [self setTableViewPlaylist:nil];
+    
+    [self setStream_url:nil];
+    [self setSelectedChannel:nil];
+    [self setPlaylistArray:nil];
+    [self setHttpComm:nil];
+    
     [super viewDidUnload];
 }
 @end

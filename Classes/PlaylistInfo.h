@@ -13,5 +13,6 @@
 @property (nonatomic, retain) NSString *urlImage;
 @property (nonatomic, retain) NSString *titleString;
 @property (nonatomic, retain) NSString *urlFile;
+@property (nonatomic, retain) UIImage *imgSnapshot;
 
 @end

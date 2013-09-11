@@ -17,6 +17,7 @@
 @property (retain, nonatomic) IBOutlet UIBarButtonItem *cameraNameBarBtnItem;
 @property (retain, nonatomic) IBOutlet UIView *progressView;
 
+@property (retain, nonatomic) IBOutlet UISegmentedControl *segCtrl;
 @property (nonatomic, retain) NSString* stream_url;
 @property (nonatomic, retain) CamChannel *selectedChannel;
 

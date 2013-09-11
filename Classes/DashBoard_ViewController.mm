@@ -826,10 +826,9 @@
     
     CamChannel *ch = (CamChannel*)[listOfChannel objectAtIndex:indexPath.row] ;
     
-    if (ch != nil &&
-        ch.profile != nil &&
-        (ch.profile.isInLocal ==YES || ch.profile.minuteSinceLastComm <=5)
-        )
+    NSLog(@"ch = %@, ch.profile = %@, ch.profile.minuteSinceLastComm = %d", ch, ch.profile, ch.profile.minuteSinceLastComm);
+    
+    if (ch != nil && ch.profile != nil)
     {
         H264PlayerViewController *h264ViewController = [[H264PlayerViewController alloc] init];
         
@@ -1123,7 +1122,10 @@
     NSString *mac = [Util strip_colon_fr_mac:ch.profile.mac_address];
     NSString *apiKey = [userDefaults objectForKey:@"PortalApiKey"];
     
+//    [jsonComm getAllRecordedFilesWithRegistrationId:mac
+//                                          andApiKey:apiKey];
     [jsonComm getAllRecordedFilesWithRegistrationId:mac
+                                           andEvent:@"04"
                                           andApiKey:apiKey];
 }
 

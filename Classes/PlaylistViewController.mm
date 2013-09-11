@@ -18,6 +18,7 @@
 @property (retain, nonatomic) IBOutlet UIToolbar *topToolbar;
 @property (retain, nonatomic) IBOutlet UIBarButtonItem *backBarBtnItem;
 @property (retain, nonatomic) IBOutlet UIView *progressView;
+
 @end
 
 @implementation PlaylistViewController
@@ -59,6 +60,7 @@
     self.backBarBtnItem.target = self;
     self.backBarBtnItem.action = @selector(goBackToPlayList);
     
+    //self.progressView.hidden = YES;
     [self performSelector:@selector(startStream)
                withObject:nil
                afterDelay:0.1];
@@ -69,6 +71,7 @@
 -(void) startStream
 {
     //self.progressView.hidden = YES;
+    
     status_t status;
     
     mp = new MediaPlayer();
@@ -103,6 +106,7 @@
         exit(1);
     }
     
+    self.progressView.hidden = YES;
     // Play anyhow
     
     status=  mp->start();
@@ -120,7 +124,9 @@
 
 - (void)goBackToPlayList
 {
-    [self stopStream];
+    if (mp) {
+        [self stopStream];
+    }
     
     [self.navigationController popViewControllerAnimated:YES];
 }
@@ -150,6 +156,9 @@
     [_topToolbar release];
     [_backBarBtnItem release];
     [_progressView release];
+    
+    [_urlVideo release];
+    
     [super dealloc];
 }
 - (void)viewDidUnload {
@@ -157,6 +166,9 @@
     [self setTopToolbar:nil];
     [self setBackBarBtnItem:nil];
     [self setProgressView:nil];
+    
+    [self setUrlVideo:nil];
+    
     [super viewDidUnload];
 }
 @end

@@ -26,4 +26,11 @@
     // Configure the view for the selected state
 }
 
+- (void)dealloc {
+    [self.imageView release];
+    [_labelTitle release];
+    [_labelUrl release];
+    [_activityIndicator release];
+    [super dealloc];
+}
 @end
