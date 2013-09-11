@@ -192,14 +192,6 @@
 		9770CEC81430783A009E69EF /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9770CEC71430783A009E69EF /* CFNetwork.framework */; };
 		978F090117DEFD670053972F /* no_img_available.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = 978F090017DEFD650053972F /* no_img_available.jpeg */; };
 		978F090317DF06C80053972F /* PlaylistCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 978F090217DF06C70053972F /* PlaylistCell.xib */; };
-		9792FC1417D6E07200365405 /* libavcodec.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9792FC0C17D6E07200365405 /* libavcodec.a */; };
-		9792FC1517D6E07200365405 /* libavdevice.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9792FC0D17D6E07200365405 /* libavdevice.a */; };
-		9792FC1617D6E07200365405 /* libavfilter.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9792FC0E17D6E07200365405 /* libavfilter.a */; };
-		9792FC1717D6E07200365405 /* libavformat.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9792FC0F17D6E07200365405 /* libavformat.a */; };
-		9792FC1817D6E07200365405 /* libavutil.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9792FC1017D6E07200365405 /* libavutil.a */; };
-		9792FC1917D6E07200365405 /* libpostproc.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9792FC1117D6E07200365405 /* libpostproc.a */; };
-		9792FC1A17D6E07200365405 /* libswresample.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9792FC1217D6E07200365405 /* libswresample.a */; };
-		9792FC1B17D6E07200365405 /* libswscale.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9792FC1317D6E07200365405 /* libswscale.a */; };
 		9792FC2317D72F8300365405 /* H264PlayerViewController_land.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9792FC2217D72F8300365405 /* H264PlayerViewController_land.xib */; };
 		97987CCD154687490066C49B /* background.png in Resources */ = {isa = PBXBuildFile; fileRef = 97987CCC154687490066C49B /* background.png */; };
 		97987CCF154688110066C49B /* partition_bar.png in Resources */ = {isa = PBXBuildFile; fileRef = 97987CCE154688110066C49B /* partition_bar.png */; };
@@ -234,9 +226,18 @@
 		97F0F168143C45FA0076B749 /* MBP_Streamer.mm in Sources */ = {isa = PBXBuildFile; fileRef = 97F0F167143C45FA0076B749 /* MBP_Streamer.mm */; };
 		97F5531517BDD3AF00024017 /* MBPNavController.m in Sources */ = {isa = PBXBuildFile; fileRef = 97F5531417BDD3AF00024017 /* MBPNavController.m */; };
 		97FE7D1015998C0B000826F0 /* RemoteConnection.mm in Sources */ = {isa = PBXBuildFile; fileRef = 97FE7D0F15998C0B000826F0 /* RemoteConnection.mm */; };
+		A10EC11317E0677C00EA4F9D /* libavcodec.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A10EC10C17E0677C00EA4F9D /* libavcodec.a */; };
+		A10EC11417E0677C00EA4F9D /* libavdevice.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A10EC10D17E0677C00EA4F9D /* libavdevice.a */; };
+		A10EC11517E0677C00EA4F9D /* libavfilter.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A10EC10E17E0677C00EA4F9D /* libavfilter.a */; };
+		A10EC11617E0677C00EA4F9D /* libavformat.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A10EC10F17E0677C00EA4F9D /* libavformat.a */; };
+		A10EC11717E0677C00EA4F9D /* libavutil.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A10EC11017E0677C00EA4F9D /* libavutil.a */; };
+		A10EC11817E0677C00EA4F9D /* libswresample.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A10EC11117E0677C00EA4F9D /* libswresample.a */; };
+		A10EC11917E0677C00EA4F9D /* libswscale.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A10EC11217E0677C00EA4F9D /* libswscale.a */; };
+		A10EC11B17E0681D00EA4F9D /* libUdtLib.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A10EC11A17E0681C00EA4F9D /* libUdtLib.a */; };
+		A10EC11D17E068A000EA4F9D /* libH264MediaPlayer.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A10EC11C17E068A000EA4F9D /* libH264MediaPlayer.a */; };
+		A10EC12017E0692700EA4F9D /* libGoogleAnalytics_debug.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A10EC11E17E0692700EA4F9D /* libGoogleAnalytics_debug.a */; };
+		A10EC12117E0692700EA4F9D /* libGoogleAnalytics.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A10EC11F17E0692700EA4F9D /* libGoogleAnalytics.a */; };
 		A1BB7B9517E0250000463A07 /* MonitorCommunication.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A1BB7B9417E0250000463A07 /* MonitorCommunication.framework */; };
-		A1BB7B9B17E0299500463A07 /* libH264MediaPlayer.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A1BB7B9A17E0299500463A07 /* libH264MediaPlayer.a */; };
-		A1BB7B9D17E029E100463A07 /* libUdtLib.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A1BB7B9C17E029E100463A07 /* libUdtLib.a */; };
 		A1BB7B9F17E02C5C00463A07 /* UdtSocketWrapper.mm in Sources */ = {isa = PBXBuildFile; fileRef = A1BB7B9E17E02C5C00463A07 /* UdtSocketWrapper.mm */; };
 		BC3C1ACE16F025B600175AFF /* MBP_MenuViewController_ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = BC3C1AD016F025B600175AFF /* MBP_MenuViewController_ipad.xib */; };
 		BC3C1AD316F025E300175AFF /* MBP_MenuProgress_portrait_ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = BC3C1AD516F025E300175AFF /* MBP_MenuProgress_portrait_ipad.xib */; };
@@ -246,8 +247,6 @@
 		BC4D8D8C1733B9BB005C34BB /* ME-screen_landscape.png in Resources */ = {isa = PBXBuildFile; fileRef = BC4D8D8B1733B9BB005C34BB /* ME-screen_landscape.png */; };
 		BC5B0FCE1701855600D2C308 /* cameraMenuRouter.plist in Resources */ = {isa = PBXBuildFile; fileRef = BC5B0FCD1701855600D2C308 /* cameraMenuRouter.plist */; };
 		BC6E4A0516BFBB9D00B0D630 /* MBP_InitialSetupViewController_land.xib in Resources */ = {isa = PBXBuildFile; fileRef = BC6E4A0316BFBB9D00B0D630 /* MBP_InitialSetupViewController_land.xib */; };
-		BC883A6A1798E68D001D02D8 /* libGoogleAnalytics.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BC883A681798E68D001D02D8 /* libGoogleAnalytics.a */; };
-		BC883A6B1798E68D001D02D8 /* libGoogleAnalytics_debug.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BC883A691798E68D001D02D8 /* libGoogleAnalytics_debug.a */; };
 		BC883A6D1798EB81001D02D8 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BC883A6C1798EB81001D02D8 /* CoreData.framework */; };
 		BCA1A4D816C24CA900E7EF56 /* Step_03_ViewController_land.xib in Resources */ = {isa = PBXBuildFile; fileRef = BCA1A4D616C24CA900E7EF56 /* Step_03_ViewController_land.xib */; };
 		BCA1A4DE16C2569E00E7EF56 /* Step_04_ViewController_land.xib in Resources */ = {isa = PBXBuildFile; fileRef = BCA1A4DC16C2569E00E7EF56 /* Step_04_ViewController_land.xib */; };
@@ -595,14 +594,6 @@
 		9792FC0917D6DCE700365405 /* output.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = output.h; sourceTree = "<group>"; };
 		9792FC0A17D6DCE700365405 /* packetqueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = packetqueue.h; sourceTree = "<group>"; };
 		9792FC0B17D6DCE700365405 /* thread.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = thread.h; sourceTree = "<group>"; };
-		9792FC0C17D6E07200365405 /* libavcodec.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libavcodec.a; path = "../ffmpegBuild/ffmpeg-ios-build/dist-uarch/lib/libavcodec.a"; sourceTree = "<group>"; };
-		9792FC0D17D6E07200365405 /* libavdevice.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libavdevice.a; path = "../ffmpegBuild/ffmpeg-ios-build/dist-uarch/lib/libavdevice.a"; sourceTree = "<group>"; };
-		9792FC0E17D6E07200365405 /* libavfilter.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libavfilter.a; path = "../ffmpegBuild/ffmpeg-ios-build/dist-uarch/lib/libavfilter.a"; sourceTree = "<group>"; };
-		9792FC0F17D6E07200365405 /* libavformat.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libavformat.a; path = "../ffmpegBuild/ffmpeg-ios-build/dist-uarch/lib/libavformat.a"; sourceTree = "<group>"; };
-		9792FC1017D6E07200365405 /* libavutil.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libavutil.a; path = "../ffmpegBuild/ffmpeg-ios-build/dist-uarch/lib/libavutil.a"; sourceTree = "<group>"; };
-		9792FC1117D6E07200365405 /* libpostproc.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libpostproc.a; path = "../ffmpegBuild/ffmpeg-ios-build/dist-uarch/lib/libpostproc.a"; sourceTree = "<group>"; };
-		9792FC1217D6E07200365405 /* libswresample.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libswresample.a; path = "../ffmpegBuild/ffmpeg-ios-build/dist-uarch/lib/libswresample.a"; sourceTree = "<group>"; };
-		9792FC1317D6E07200365405 /* libswscale.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libswscale.a; path = "../ffmpegBuild/ffmpeg-ios-build/dist-uarch/lib/libswscale.a"; sourceTree = "<group>"; };
 		9792FC1E17D7149600365405 /* PCMPlayer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PCMPlayer.h; sourceTree = "<group>"; };
 		9792FC1F17D7168B00365405 /* RemoteIOPlayer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RemoteIOPlayer.h; sourceTree = "<group>"; };
 		9792FC2217D72F8300365405 /* H264PlayerViewController_land.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = H264PlayerViewController_land.xib; sourceTree = "<group>"; };
@@ -619,7 +610,6 @@
 		97987E441546B04C0066C49B /* BMS_Communication.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BMS_Communication.h; sourceTree = "<group>"; };
 		97987E451546B04C0066C49B /* BMS_Communication.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = BMS_Communication.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		979BC68A17D990F400B3B373 /* H264PlayerViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = H264PlayerViewController.xib; sourceTree = "<group>"; };
-		979BC68C17D99AF800B3B373 /* libH264MediaPlayer.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libH264MediaPlayer.a; sourceTree = "<group>"; };
 		979BC69717D9B97700B3B373 /* PlaylistViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PlaylistViewController.h; sourceTree = "<group>"; };
 		979BC69817D9B97700B3B373 /* PlaylistViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = PlaylistViewController.mm; sourceTree = "<group>"; };
 		979BC69917D9B97700B3B373 /* PlaylistViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PlaylistViewController.xib; sourceTree = "<group>"; };
@@ -663,9 +653,18 @@
 		97F5531417BDD3AF00024017 /* MBPNavController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MBPNavController.m; sourceTree = "<group>"; };
 		97FE7D0E15998C0B000826F0 /* RemoteConnection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RemoteConnection.h; sourceTree = "<group>"; };
 		97FE7D0F15998C0B000826F0 /* RemoteConnection.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = RemoteConnection.mm; sourceTree = "<group>"; };
+		A10EC10C17E0677C00EA4F9D /* libavcodec.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libavcodec.a; path = "../ios-frameworks/ffmpeg/lib/libavcodec.a"; sourceTree = "<group>"; };
+		A10EC10D17E0677C00EA4F9D /* libavdevice.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libavdevice.a; path = "../ios-frameworks/ffmpeg/lib/libavdevice.a"; sourceTree = "<group>"; };
+		A10EC10E17E0677C00EA4F9D /* libavfilter.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libavfilter.a; path = "../ios-frameworks/ffmpeg/lib/libavfilter.a"; sourceTree = "<group>"; };
+		A10EC10F17E0677C00EA4F9D /* libavformat.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libavformat.a; path = "../ios-frameworks/ffmpeg/lib/libavformat.a"; sourceTree = "<group>"; };
+		A10EC11017E0677C00EA4F9D /* libavutil.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libavutil.a; path = "../ios-frameworks/ffmpeg/lib/libavutil.a"; sourceTree = "<group>"; };
+		A10EC11117E0677C00EA4F9D /* libswresample.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libswresample.a; path = "../ios-frameworks/ffmpeg/lib/libswresample.a"; sourceTree = "<group>"; };
+		A10EC11217E0677C00EA4F9D /* libswscale.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libswscale.a; path = "../ios-frameworks/ffmpeg/lib/libswscale.a"; sourceTree = "<group>"; };
+		A10EC11A17E0681C00EA4F9D /* libUdtLib.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libUdtLib.a; path = "../ios-frameworks/udt/libUdtLib.a"; sourceTree = "<group>"; };
+		A10EC11C17E068A000EA4F9D /* libH264MediaPlayer.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libH264MediaPlayer.a; path = "../ios-frameworks/libH264MediaPlayer.a"; sourceTree = "<group>"; };
+		A10EC11E17E0692700EA4F9D /* libGoogleAnalytics_debug.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libGoogleAnalytics_debug.a; path = "../ios-frameworks/Google Analytics Library/libGoogleAnalytics_debug.a"; sourceTree = "<group>"; };
+		A10EC11F17E0692700EA4F9D /* libGoogleAnalytics.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libGoogleAnalytics.a; path = "../ios-frameworks/Google Analytics Library/libGoogleAnalytics.a"; sourceTree = "<group>"; };
 		A1BB7B9417E0250000463A07 /* MonitorCommunication.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MonitorCommunication.framework; path = "../ios-frameworks/MonitorCommunication.framework"; sourceTree = "<group>"; };
-		A1BB7B9A17E0299500463A07 /* libH264MediaPlayer.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libH264MediaPlayer.a; path = "../ios-frameworks/libH264MediaPlayer.a"; sourceTree = "<group>"; };
-		A1BB7B9C17E029E100463A07 /* libUdtLib.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libUdtLib.a; path = "../ios-frameworks/udt/libUdtLib.a"; sourceTree = "<group>"; };
 		A1BB7B9E17E02C5C00463A07 /* UdtSocketWrapper.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = UdtSocketWrapper.mm; sourceTree = "<group>"; };
 		BC064B39174CDD1F00EFAC66 /* ja */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = ja; path = ja.lproj/Step_11_ViewController_ipad.xib; sourceTree = "<group>"; };
 		BC064B3A174CDD2000EFAC66 /* ja */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = ja; path = ja.lproj/Step_11_ViewController_land_ipad.xib; sourceTree = "<group>"; };
@@ -1513,17 +1512,18 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A1BB7B9D17E029E100463A07 /* libUdtLib.a in Frameworks */,
-				A1BB7B9B17E0299500463A07 /* libH264MediaPlayer.a in Frameworks */,
+				A10EC12017E0692700EA4F9D /* libGoogleAnalytics_debug.a in Frameworks */,
+				A10EC12117E0692700EA4F9D /* libGoogleAnalytics.a in Frameworks */,
+				A10EC11D17E068A000EA4F9D /* libH264MediaPlayer.a in Frameworks */,
+				A10EC11B17E0681D00EA4F9D /* libUdtLib.a in Frameworks */,
+				A10EC11317E0677C00EA4F9D /* libavcodec.a in Frameworks */,
+				A10EC11417E0677C00EA4F9D /* libavdevice.a in Frameworks */,
+				A10EC11517E0677C00EA4F9D /* libavfilter.a in Frameworks */,
+				A10EC11617E0677C00EA4F9D /* libavformat.a in Frameworks */,
+				A10EC11717E0677C00EA4F9D /* libavutil.a in Frameworks */,
+				A10EC11817E0677C00EA4F9D /* libswresample.a in Frameworks */,
+				A10EC11917E0677C00EA4F9D /* libswscale.a in Frameworks */,
 				A1BB7B9517E0250000463A07 /* MonitorCommunication.framework in Frameworks */,
-				9792FC1417D6E07200365405 /* libavcodec.a in Frameworks */,
-				9792FC1517D6E07200365405 /* libavdevice.a in Frameworks */,
-				9792FC1617D6E07200365405 /* libavfilter.a in Frameworks */,
-				9792FC1717D6E07200365405 /* libavformat.a in Frameworks */,
-				9792FC1817D6E07200365405 /* libavutil.a in Frameworks */,
-				9792FC1917D6E07200365405 /* libpostproc.a in Frameworks */,
-				9792FC1A17D6E07200365405 /* libswresample.a in Frameworks */,
-				9792FC1B17D6E07200365405 /* libswscale.a in Frameworks */,
 				BC883A6D1798EB81001D02D8 /* CoreData.framework in Frameworks */,
 				38962C8517695CB30016AE16 /* libTestFlight.a in Frameworks */,
 				38962C831769587E0016AE16 /* libz.dylib in Frameworks */,
@@ -1538,8 +1538,6 @@
 				97A3C00515455054000C3546 /* SystemConfiguration.framework in Frameworks */,
 				97E3CC77159D89EE00481854 /* AVFoundation.framework in Frameworks */,
 				3887DD8415CB697C0077048D /* libcrypto.a in Frameworks */,
-				BC883A6A1798E68D001D02D8 /* libGoogleAnalytics.a in Frameworks */,
-				BC883A6B1798E68D001D02D8 /* libGoogleAnalytics_debug.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1551,7 +1549,6 @@
 			children = (
 				979BC69617D9B8BA00B3B373 /* Playlist */,
 				9792FC0317D6DC8700365405 /* Include */,
-				9792FBD817D6CC6600365405 /* Libraries */,
 				97A07FAD17D5FCFD00653460 /* H264Player */,
 				9704F83F17B37CAD005F9868 /* DashBoard_ViewController.h */,
 				9704F84017B37CAF005F9868 /* DashBoard_ViewController.mm */,
@@ -1782,8 +1779,6 @@
 		29B97314FDCFA39411CA2CEA /* CustomTemplate */ = {
 			isa = PBXGroup;
 			children = (
-				A1BB7B9C17E029E100463A07 /* libUdtLib.a */,
-				A1BB7B9A17E0299500463A07 /* libH264MediaPlayer.a */,
 				A1BB7B9417E0250000463A07 /* MonitorCommunication.framework */,
 				BC883A6C1798EB81001D02D8 /* CoreData.framework */,
 				38962C8417695CB20016AE16 /* libTestFlight.a */,
@@ -1834,6 +1829,17 @@
 		29B97323FDCFA39411CA2CEA /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				A10EC11E17E0692700EA4F9D /* libGoogleAnalytics_debug.a */,
+				A10EC11F17E0692700EA4F9D /* libGoogleAnalytics.a */,
+				A10EC11C17E068A000EA4F9D /* libH264MediaPlayer.a */,
+				A10EC11A17E0681C00EA4F9D /* libUdtLib.a */,
+				A10EC10C17E0677C00EA4F9D /* libavcodec.a */,
+				A10EC10D17E0677C00EA4F9D /* libavdevice.a */,
+				A10EC10E17E0677C00EA4F9D /* libavfilter.a */,
+				A10EC10F17E0677C00EA4F9D /* libavformat.a */,
+				A10EC11017E0677C00EA4F9D /* libavutil.a */,
+				A10EC11117E0677C00EA4F9D /* libswresample.a */,
+				A10EC11217E0677C00EA4F9D /* libswscale.a */,
 				3803A86115FF42ED00B4DD97 /* libsqlite3.dylib */,
 				3803A85F15FF42DA00B4DD97 /* libsqlite3.0.dylib */,
 				3887DD8215CB697C0077048D /* libcrypto.a */,
@@ -1953,23 +1959,6 @@
 				97D9A1BC143EB03A000E3533 /* video_error.png */,
 			);
 			name = images;
-			sourceTree = "<group>";
-		};
-		9792FBD817D6CC6600365405 /* Libraries */ = {
-			isa = PBXGroup;
-			children = (
-				979BC68C17D99AF800B3B373 /* libH264MediaPlayer.a */,
-				9792FC0C17D6E07200365405 /* libavcodec.a */,
-				9792FC0D17D6E07200365405 /* libavdevice.a */,
-				9792FC0E17D6E07200365405 /* libavfilter.a */,
-				9792FC0F17D6E07200365405 /* libavformat.a */,
-				9792FC1017D6E07200365405 /* libavutil.a */,
-				9792FC1117D6E07200365405 /* libpostproc.a */,
-				9792FC1217D6E07200365405 /* libswresample.a */,
-				9792FC1317D6E07200365405 /* libswscale.a */,
-			);
-			name = Libraries;
-			path = ..;
 			sourceTree = "<group>";
 		};
 		9792FC0317D6DC8700365405 /* Include */ = {
@@ -3844,21 +3833,26 @@
 					"\"$(SRCROOT)/../ios-frameworks/ffmpeg/include/**\"",
 					"$(SRCROOT)/../ios-frameworks/openssl/**",
 					"\"$(SRCROOT)/../ios-frameworks/udt\"",
+					"\"$(SRCROOT)/../ios-frameworks/Google Analytics Library\"",
 				);
 				INFOPLIST_FILE = "BlinkHD_ios-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				LIBRARY_SEARCH_PATHS = (
-					"\"$(SRCROOT)/../UdtLib/build/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"",
-					"\"$(SRCROOT)/../openssl_lib/iPhoneSimulator-i386/lib\"",
-					"\"$(SRCROOT)/../openssl_lib/iPhoneOS/lib\"",
-					"\"$(SRCROOT)\"",
-					"\"$(SRCROOT)/../openssl_lib/iPhoneOS-armv6/lib\"",
-					"\"$(SRCROOT)/../../Downloads/TestFlightSDK1.2.6\"",
-					"\"$(SRCROOT)/Classes/Google Analytics Library\"",
-					"\"$(SRCROOT)/../ffmpegBuild/ffmpeg-ios-build/dist-uarch/lib\"",
-					"\"$(SRCROOT)/../LibH264Player/DerivedData/H264MediaPlayer/Build/Products\"",
-					"\"$(SRCROOT)/../ios-frameworks\"",
-					"\"$(SRCROOT)/../ios-frameworks/udt\"",
+					"\\\"$(SRCROOT)/../UdtLib/build/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\\\"",
+					"\\\"$(SRCROOT)/../openssl_lib/iPhoneSimulator-i386/lib\\\"",
+					"\\\"$(SRCROOT)/../openssl_lib/iPhoneOS/lib\\\"",
+					"$(SRCROOT)",
+					"\\\"$(SRCROOT)/../openssl_lib/iPhoneOS-armv6/lib\\\"",
+					"\\\"$(SRCROOT)/../../Downloads/TestFlightSDK1.2.6\\\"",
+					"\\\"$(SRCROOT)/Classes/Google\\ Analytics\\ Library\\\"",
+					"\\\"$(SRCROOT)/../ffmpegBuild/ffmpeg-ios-build/dist-uarch/lib\\\"",
+					"\\\"$(SRCROOT)/../LibH264Player/DerivedData/H264MediaPlayer/Build/Products\\\"",
+					"\\\"$(SRCROOT)/../ios-frameworks\\\"",
+					"\\\"$(SRCROOT)/../ios-frameworks/udt\\\"",
+					"/Users/JasonLee/work/ios-frameworks/ffmpeg/lib",
+					"/Users/JasonLee/work/ios-frameworks/udt",
+					"/Users/JasonLee/work/ios-frameworks",
+					"/Users/JasonLee/work/ios-frameworks/Google\\ Analytics\\ Library",
 				);
 				OTHER_LDFLAGS = "-lz";
 				PRODUCT_NAME = "Camera HD";
@@ -3895,18 +3889,23 @@
 					"\"$(SRCROOT)/../ios-frameworks/ffmpeg/include/**\"",
 					"$(SRCROOT)/../ios-frameworks/openssl/**",
 					"\"$(SRCROOT)/../ios-frameworks/udt\"",
+					"\"$(SRCROOT)/../ios-frameworks/Google Analytics Library\"",
 				);
 				INFOPLIST_FILE = "BlinkHD_ios-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"$(SRCROOT)\"",
-					"\"$(SRCROOT)/../../Downloads/TestFlightSDK1.2.6\"",
-					"\"$(SRCROOT)/Classes/Google Analytics Library\"",
-					"\"$(SRCROOT)/../ffmpegBuild/ffmpeg-ios-build/dist-uarch/lib\"",
-					"\"$(SRCROOT)/../LibH264Player/DerivedData/H264MediaPlayer/Build/Products\"",
-					"\"$(SRCROOT)/../ios-frameworks\"",
-					"\"$(SRCROOT)/../ios-frameworks/udt\"",
+					"$(SRCROOT)",
+					"\\\"$(SRCROOT)/../../Downloads/TestFlightSDK1.2.6\\\"",
+					"\\\"$(SRCROOT)/Classes/Google\\ Analytics\\ Library\\\"",
+					"\\\"$(SRCROOT)/../ffmpegBuild/ffmpeg-ios-build/dist-uarch/lib\\\"",
+					"\\\"$(SRCROOT)/../LibH264Player/DerivedData/H264MediaPlayer/Build/Products\\\"",
+					"\\\"$(SRCROOT)/../ios-frameworks\\\"",
+					"\\\"$(SRCROOT)/../ios-frameworks/udt\\\"",
+					"/Users/JasonLee/work/ios-frameworks/ffmpeg/lib",
+					"/Users/JasonLee/work/ios-frameworks/udt",
+					"/Users/JasonLee/work/ios-frameworks",
+					"/Users/JasonLee/work/ios-frameworks/Google\\ Analytics\\ Library",
 				);
 				OTHER_LDFLAGS = "-lz";
 				PRODUCT_NAME = "Camera HD";
@@ -3968,17 +3967,22 @@
 					"\"$(SRCROOT)/../ios-frameworks/ffmpeg/include/**\"",
 					"$(SRCROOT)/../ios-frameworks/openssl/**",
 					"\"$(SRCROOT)/../ios-frameworks/udt\"",
+					"\"$(SRCROOT)/../ios-frameworks/Google Analytics Library\"",
 				);
 				INFOPLIST_FILE = "BlinkHD_ios-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				LIBRARY_SEARCH_PATHS = (
-					"\"$(SRCROOT)\"",
-					"\"$(SRCROOT)/../../Downloads/TestFlightSDK1.2.6\"",
-					"\"$(SRCROOT)/Classes/Google Analytics Library\"",
-					"\"$(SRCROOT)/../ffmpegBuild/ffmpeg-ios-build/dist-uarch/lib\"",
-					"\"$(SRCROOT)/../LibH264Player/DerivedData/H264MediaPlayer/Build/Products\"",
-					"\"$(SRCROOT)/../ios-frameworks\"",
-					"\"$(SRCROOT)/../ios-frameworks/udt\"",
+					"$(SRCROOT)",
+					"\\\"$(SRCROOT)/../../Downloads/TestFlightSDK1.2.6\\\"",
+					"\\\"$(SRCROOT)/Classes/Google\\ Analytics\\ Library\\\"",
+					"\\\"$(SRCROOT)/../ffmpegBuild/ffmpeg-ios-build/dist-uarch/lib\\\"",
+					"\\\"$(SRCROOT)/../LibH264Player/DerivedData/H264MediaPlayer/Build/Products\\\"",
+					"\\\"$(SRCROOT)/../ios-frameworks\\\"",
+					"\\\"$(SRCROOT)/../ios-frameworks/udt\\\"",
+					"/Users/JasonLee/work/ios-frameworks/ffmpeg/lib",
+					"/Users/JasonLee/work/ios-frameworks/udt",
+					"/Users/JasonLee/work/ios-frameworks",
+					"/Users/JasonLee/work/ios-frameworks/Google\\ Analytics\\ Library",
 				);
 				OTHER_LDFLAGS = "-lz";
 				PRODUCT_NAME = "Camera HD";

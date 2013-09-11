@@ -10,6 +10,14 @@
 	<string>${EXECUTABLE_NAME}</string>
 	<key>CFBundleIconFiles</key>
 	<array>
+		<string>mbp_icon114x114</string>
+		<string>mbp_icon57x57.png</string>
+		<string>mbp_icon72x72.png</string>
+	</array>
+	<key>CFBundleIconFiles~ipad</key>
+	<array>
+		<string>mbp_icon144x144</string>
+		<string>mbp_icon114x114</string>
 		<string>mbp_icon57x57.png</string>
 		<string>mbp_icon72x72.png</string>
 	</array>
