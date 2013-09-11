@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
+	<false/>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>BCDE6A01-736E-4BAA-B5C8-1D36207E536B</string>
+	<key>IDESourceControlProjectName</key>
+	<string>BlinkHD_ios</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>6A802EEF-1AC1-4C71-B93C-362C43C78956</key>
+		<string>ssh://nxcomm-office.no-ip.info:22000/cvision-ios-blinkhd-2013.git</string>
+		<key>BEABB18D-29FA-4A57-88FD-96823593CAC0</key>
+		<string>ssh://nxcomm-office.no-ip.info:22000/nxcomm-ios-ffmpeg-lib.git</string>
+		<key>F7065B7A-C48D-48D1-8415-6D8872E346C2</key>
+		<string>ssh://nxcomm-office.no-ip.info:22000/ios-frameworks.git</string>
+	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>BlinkHD_ios.xcodeproj/project.xcworkspace</string>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>6A802EEF-1AC1-4C71-B93C-362C43C78956</key>
+		<string>../..</string>
+		<key>BEABB18D-29FA-4A57-88FD-96823593CAC0</key>
+		<string>../../../ffmpegBuild/ffmpeg-ios-build</string>
+		<key>F7065B7A-C48D-48D1-8415-6D8872E346C2</key>
+		<string>../../../ios-frameworks</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>ssh://nxcomm-office.no-ip.info:22000/cvision-ios-blinkhd-2013.git</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>110</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>6A802EEF-1AC1-4C71-B93C-362C43C78956</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>6A802EEF-1AC1-4C71-B93C-362C43C78956</string>
+			<key>IDESourceControlWCCName</key>
+			<string>cvision-ios-blinkhd-2013</string>
+		</dict>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>BEABB18D-29FA-4A57-88FD-96823593CAC0</string>
+			<key>IDESourceControlWCCName</key>
+			<string>ffmpeg-ios-build</string>
+		</dict>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>F7065B7A-C48D-48D1-8415-6D8872E346C2</string>
+			<key>IDESourceControlWCCName</key>
+			<string>ios-frameworks</string>
+		</dict>
+	</array>
+</dict>
+</plist>
