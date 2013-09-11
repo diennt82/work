@@ -234,10 +234,10 @@
 		A10EC11817E0677C00EA4F9D /* libswresample.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A10EC11117E0677C00EA4F9D /* libswresample.a */; };
 		A10EC11917E0677C00EA4F9D /* libswscale.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A10EC11217E0677C00EA4F9D /* libswscale.a */; };
 		A10EC11B17E0681D00EA4F9D /* libUdtLib.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A10EC11A17E0681C00EA4F9D /* libUdtLib.a */; };
-		A10EC11D17E068A000EA4F9D /* libH264MediaPlayer.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A10EC11C17E068A000EA4F9D /* libH264MediaPlayer.a */; };
 		A10EC12017E0692700EA4F9D /* libGoogleAnalytics_debug.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A10EC11E17E0692700EA4F9D /* libGoogleAnalytics_debug.a */; };
 		A10EC12117E0692700EA4F9D /* libGoogleAnalytics.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A10EC11F17E0692700EA4F9D /* libGoogleAnalytics.a */; };
-		A1BB7B9517E0250000463A07 /* MonitorCommunication.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A1BB7B9417E0250000463A07 /* MonitorCommunication.framework */; };
+		A1A5188017E07DA700E1DFC2 /* H264MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A1A5187F17E07DA700E1DFC2 /* H264MediaPlayer.framework */; };
+		A1A5188117E07DCB00E1DFC2 /* MonitorCommunication.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A1BB7B9417E0250000463A07 /* MonitorCommunication.framework */; };
 		A1BB7B9F17E02C5C00463A07 /* UdtSocketWrapper.mm in Sources */ = {isa = PBXBuildFile; fileRef = A1BB7B9E17E02C5C00463A07 /* UdtSocketWrapper.mm */; };
 		BC3C1ACE16F025B600175AFF /* MBP_MenuViewController_ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = BC3C1AD016F025B600175AFF /* MBP_MenuViewController_ipad.xib */; };
 		BC3C1AD316F025E300175AFF /* MBP_MenuProgress_portrait_ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = BC3C1AD516F025E300175AFF /* MBP_MenuProgress_portrait_ipad.xib */; };
@@ -661,9 +661,9 @@
 		A10EC11117E0677C00EA4F9D /* libswresample.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libswresample.a; path = "../ios-frameworks/ffmpeg/lib/libswresample.a"; sourceTree = "<group>"; };
 		A10EC11217E0677C00EA4F9D /* libswscale.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libswscale.a; path = "../ios-frameworks/ffmpeg/lib/libswscale.a"; sourceTree = "<group>"; };
 		A10EC11A17E0681C00EA4F9D /* libUdtLib.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libUdtLib.a; path = "../ios-frameworks/udt/libUdtLib.a"; sourceTree = "<group>"; };
-		A10EC11C17E068A000EA4F9D /* libH264MediaPlayer.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libH264MediaPlayer.a; path = "../ios-frameworks/libH264MediaPlayer.a"; sourceTree = "<group>"; };
 		A10EC11E17E0692700EA4F9D /* libGoogleAnalytics_debug.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libGoogleAnalytics_debug.a; path = "../ios-frameworks/Google Analytics Library/libGoogleAnalytics_debug.a"; sourceTree = "<group>"; };
 		A10EC11F17E0692700EA4F9D /* libGoogleAnalytics.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libGoogleAnalytics.a; path = "../ios-frameworks/Google Analytics Library/libGoogleAnalytics.a"; sourceTree = "<group>"; };
+		A1A5187F17E07DA700E1DFC2 /* H264MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = H264MediaPlayer.framework; path = "../ios-frameworks/H264MediaPlayer.framework"; sourceTree = "<group>"; };
 		A1BB7B9417E0250000463A07 /* MonitorCommunication.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MonitorCommunication.framework; path = "../ios-frameworks/MonitorCommunication.framework"; sourceTree = "<group>"; };
 		A1BB7B9E17E02C5C00463A07 /* UdtSocketWrapper.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = UdtSocketWrapper.mm; sourceTree = "<group>"; };
 		BC064B39174CDD1F00EFAC66 /* ja */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = ja; path = ja.lproj/Step_11_ViewController_ipad.xib; sourceTree = "<group>"; };
@@ -1512,9 +1512,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A1A5188117E07DCB00E1DFC2 /* MonitorCommunication.framework in Frameworks */,
+				A1A5188017E07DA700E1DFC2 /* H264MediaPlayer.framework in Frameworks */,
 				A10EC12017E0692700EA4F9D /* libGoogleAnalytics_debug.a in Frameworks */,
 				A10EC12117E0692700EA4F9D /* libGoogleAnalytics.a in Frameworks */,
-				A10EC11D17E068A000EA4F9D /* libH264MediaPlayer.a in Frameworks */,
 				A10EC11B17E0681D00EA4F9D /* libUdtLib.a in Frameworks */,
 				A10EC11317E0677C00EA4F9D /* libavcodec.a in Frameworks */,
 				A10EC11417E0677C00EA4F9D /* libavdevice.a in Frameworks */,
@@ -1523,7 +1524,6 @@
 				A10EC11717E0677C00EA4F9D /* libavutil.a in Frameworks */,
 				A10EC11817E0677C00EA4F9D /* libswresample.a in Frameworks */,
 				A10EC11917E0677C00EA4F9D /* libswscale.a in Frameworks */,
-				A1BB7B9517E0250000463A07 /* MonitorCommunication.framework in Frameworks */,
 				BC883A6D1798EB81001D02D8 /* CoreData.framework in Frameworks */,
 				38962C8517695CB30016AE16 /* libTestFlight.a in Frameworks */,
 				38962C831769587E0016AE16 /* libz.dylib in Frameworks */,
@@ -1779,7 +1779,6 @@
 		29B97314FDCFA39411CA2CEA /* CustomTemplate */ = {
 			isa = PBXGroup;
 			children = (
-				A1BB7B9417E0250000463A07 /* MonitorCommunication.framework */,
 				BC883A6C1798EB81001D02D8 /* CoreData.framework */,
 				38962C8417695CB20016AE16 /* libTestFlight.a */,
 				38962C821769587E0016AE16 /* libz.dylib */,
@@ -1829,9 +1828,10 @@
 		29B97323FDCFA39411CA2CEA /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				A1BB7B9417E0250000463A07 /* MonitorCommunication.framework */,
+				A1A5187F17E07DA700E1DFC2 /* H264MediaPlayer.framework */,
 				A10EC11E17E0692700EA4F9D /* libGoogleAnalytics_debug.a */,
 				A10EC11F17E0692700EA4F9D /* libGoogleAnalytics.a */,
-				A10EC11C17E068A000EA4F9D /* libH264MediaPlayer.a */,
 				A10EC11A17E0681C00EA4F9D /* libUdtLib.a */,
 				A10EC10C17E0677C00EA4F9D /* libavcodec.a */,
 				A10EC10D17E0677C00EA4F9D /* libavdevice.a */,
@@ -3817,12 +3817,13 @@
 				COPY_PHASE_STRIP = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"$(SRCROOT)\"",
-					"\"$(SRCROOT)/../../Desktop/Framework\"",
-					"\"$(SRCROOT)/../SimpliMonitorCommunication/Release\"",
-					"\"$(SRCROOT)/../SimpliMonitorCommunication/DerivedData/SimpliMonitorCommunication/Build/Products/Debug-iphoneos\"",
-					"\"$(SRCROOT)/../MonitorCommunication/DerivedData/MonitorCommunication/Build/Products/Debug-iphoneos\"",
-					"\"$(SRCROOT)/../ios-frameworks\"",
+					"$(SRCROOT)",
+					"\\\"$(SRCROOT)/../../Desktop/Framework\\\"",
+					"\\\"$(SRCROOT)/../SimpliMonitorCommunication/Release\\\"",
+					"\\\"$(SRCROOT)/../SimpliMonitorCommunication/DerivedData/SimpliMonitorCommunication/Build/Products/Debug-iphoneos\\\"",
+					"\\\"$(SRCROOT)/../MonitorCommunication/DerivedData/MonitorCommunication/Build/Products/Debug-iphoneos\\\"",
+					"\\\"$(SRCROOT)/../ios-frameworks\\\"",
+					"/Users/JasonLee/work/ios-frameworks",
 				);
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
@@ -3875,12 +3876,13 @@
 				COPY_PHASE_STRIP = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"$(SRCROOT)\"",
-					"\"$(SRCROOT)/../../Desktop/Framework\"",
-					"\"$(SRCROOT)/../SimpliMonitorCommunication/Release\"",
-					"\"$(SRCROOT)/../SimpliMonitorCommunication/DerivedData/SimpliMonitorCommunication/Build/Products/Debug-iphoneos\"",
-					"\"$(SRCROOT)/../MonitorCommunication/DerivedData/MonitorCommunication/Build/Products/Debug-iphoneos\"",
-					"\"$(SRCROOT)/../ios-frameworks\"",
+					"$(SRCROOT)",
+					"\\\"$(SRCROOT)/../../Desktop/Framework\\\"",
+					"\\\"$(SRCROOT)/../SimpliMonitorCommunication/Release\\\"",
+					"\\\"$(SRCROOT)/../SimpliMonitorCommunication/DerivedData/SimpliMonitorCommunication/Build/Products/Debug-iphoneos\\\"",
+					"\\\"$(SRCROOT)/../MonitorCommunication/DerivedData/MonitorCommunication/Build/Products/Debug-iphoneos\\\"",
+					"\\\"$(SRCROOT)/../ios-frameworks\\\"",
+					"/Users/JasonLee/work/ios-frameworks",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = BlinkHD_ios_Prefix.pch;
@@ -3954,11 +3956,12 @@
 				COPY_PHASE_STRIP = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"$(SRCROOT)/../../Desktop/Framework\"",
-					"\"$(SRCROOT)/../SimpliMonitorCommunication/Release\"",
-					"\"$(SRCROOT)/../SimpliMonitorCommunication/DerivedData/SimpliMonitorCommunication/Build/Products/Debug-iphoneos\"",
-					"\"$(SRCROOT)/../MonitorCommunication/DerivedData/MonitorCommunication/Build/Products/Debug-iphoneos\"",
-					"\"$(SRCROOT)/../ios-frameworks\"",
+					"\\\"$(SRCROOT)/../../Desktop/Framework\\\"",
+					"\\\"$(SRCROOT)/../SimpliMonitorCommunication/Release\\\"",
+					"\\\"$(SRCROOT)/../SimpliMonitorCommunication/DerivedData/SimpliMonitorCommunication/Build/Products/Debug-iphoneos\\\"",
+					"\\\"$(SRCROOT)/../MonitorCommunication/DerivedData/MonitorCommunication/Build/Products/Debug-iphoneos\\\"",
+					"\\\"$(SRCROOT)/../ios-frameworks\\\"",
+					"/Users/JasonLee/work/ios-frameworks",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = BlinkHD_ios_Prefix.pch;
