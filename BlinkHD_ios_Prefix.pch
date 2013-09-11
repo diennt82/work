@@ -1,0 +1,15 @@
+//
+// Prefix header for all source files of the 'MBP_ios' target in the 'MBP_ios' project
+//
+
+#ifdef __OBJC__
+    #import <Foundation/Foundation.h>
+    #import <UIKit/UIKit.h>
+    #import "TestFlight.h"
+
+//Does not work very well
+//Switch to TFLog for remote loging
+    //#define NSLog TFLog
+
+
+#endif

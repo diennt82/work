@@ -11,8 +11,8 @@
 #import <Security/Security.h>
 #import <CommonCrypto/CommonDigest.h>
 #import <CommonCrypto/CommonCryptor.h>
-#import <crypto.h>
-#include <openssl/aes.h>
+#import "crypto.h"
+#include "openssl/aes.h"
 
 @interface SymmetricCipher : NSObject {
 
