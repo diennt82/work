@@ -27,7 +27,7 @@
 }
 
 - (void)dealloc {
-    [self.imageView release];
+    [_imgViewSnapshot release];
     [_labelTitle release];
     [_labelUrl release];
     [_activityIndicator release];

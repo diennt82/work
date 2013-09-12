@@ -10,7 +10,7 @@
 
 @interface PlaylistCell : UITableViewCell
 
-@property (retain, nonatomic) IBOutlet UIImageView *imageView;
+@property (retain, nonatomic) IBOutlet UIImageView *imgViewSnapshot;
 @property (retain, nonatomic) IBOutlet UILabel *labelTitle;
 @property (retain, nonatomic) IBOutlet UILabel *labelUrl;
 @property (retain, nonatomic) IBOutlet UIActivityIndicatorView *activityIndicator;

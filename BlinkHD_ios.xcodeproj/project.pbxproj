@@ -162,17 +162,6 @@
 		38DE1CDA168AFBE00049E814 /* MBP_InitialSetupViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 38DE1CDC168AFBE00049E814 /* MBP_InitialSetupViewController.xib */; };
 		38E3C85C1694033500A13A70 /* AlertPrompt.m in Sources */ = {isa = PBXBuildFile; fileRef = 38E3C85B1694033500A13A70 /* AlertPrompt.m */; };
 		38FC9D7A16717B0300373F25 /* EditCameraCell.mm in Sources */ = {isa = PBXBuildFile; fileRef = 38FC9D7916717B0300373F25 /* EditCameraCell.mm */; };
-		97011BB617E07215006E9F99 /* libGoogleAnalytics_debug.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A10EC11E17E0692700EA4F9D /* libGoogleAnalytics_debug.a */; };
-		97011BB717E07215006E9F99 /* libGoogleAnalytics.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A10EC11F17E0692700EA4F9D /* libGoogleAnalytics.a */; };
-		97011BB817E07228006E9F99 /* libavcodec.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A10EC10C17E0677C00EA4F9D /* libavcodec.a */; };
-		97011BB917E07228006E9F99 /* libavdevice.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A10EC10D17E0677C00EA4F9D /* libavdevice.a */; };
-		97011BBA17E07228006E9F99 /* libavfilter.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A10EC10E17E0677C00EA4F9D /* libavfilter.a */; };
-		97011BBB17E07228006E9F99 /* libavformat.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A10EC10F17E0677C00EA4F9D /* libavformat.a */; };
-		97011BBC17E07228006E9F99 /* libavutil.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A10EC11017E0677C00EA4F9D /* libavutil.a */; };
-		97011BBD17E07228006E9F99 /* libswresample.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A10EC11117E0677C00EA4F9D /* libswresample.a */; };
-		97011BBE17E07228006E9F99 /* libswscale.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A10EC11217E0677C00EA4F9D /* libswscale.a */; };
-		97011BBF17E07258006E9F99 /* libUdtLib.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A10EC11A17E0681C00EA4F9D /* libUdtLib.a */; };
-		97011BC017E07276006E9F99 /* libH264MediaPlayer.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A10EC11C17E068A000EA4F9D /* libH264MediaPlayer.a */; };
 		9704F84117B37CB3005F9868 /* DashBoard_ViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 9704F84017B37CAF005F9868 /* DashBoard_ViewController.mm */; };
 		97137B9715AE742A00BEBBD6 /* StunCommunication.mm in Sources */ = {isa = PBXBuildFile; fileRef = 97137B9615AE742A00BEBBD6 /* StunCommunication.mm */; };
 		9719EC5C155C9F30005419FC /* MBP_MenuViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 9719EC5A155C9F30005419FC /* MBP_MenuViewController.mm */; };
@@ -3835,6 +3824,7 @@
 					"\\\"$(SRCROOT)/../MonitorCommunication/DerivedData/MonitorCommunication/Build/Products/Debug-iphoneos\\\"",
 					"\\\"$(SRCROOT)/../ios-frameworks\\\"",
 					"/Users/JasonLee/work/ios-frameworks",
+					"\"$(SRCROOT)/../ios-frameworks\"",
 				);
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
@@ -3893,6 +3883,7 @@
 					"\\\"$(SRCROOT)/../MonitorCommunication/DerivedData/MonitorCommunication/Build/Products/Debug-iphoneos\\\"",
 					"\\\"$(SRCROOT)/../ios-frameworks\\\"",
 					"/Users/JasonLee/work/ios-frameworks",
+					"\"$(SRCROOT)/../ios-frameworks\"",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = BlinkHD_ios_Prefix.pch;
@@ -3972,6 +3963,7 @@
 					"\\\"$(SRCROOT)/../MonitorCommunication/DerivedData/MonitorCommunication/Build/Products/Debug-iphoneos\\\"",
 					"\\\"$(SRCROOT)/../ios-frameworks\\\"",
 					"/Users/JasonLee/work/ios-frameworks",
+					"\"$(SRCROOT)/../ios-frameworks\"",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = BlinkHD_ios_Prefix.pch;

@@ -410,66 +410,62 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    static NSString *CellIdentifier = @"Cell";
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-    if (cell == nil) {
-        cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
-    }
-
-//    static NSString *playlistCellIdentifier = @"PlaylistCell";
-//    
-//    NSLog(@"indexPath.row = %d", indexPath.row);
-//    
-//    PlaylistCell *cell = (PlaylistCell *)[tableView dequeueReusableCellWithIdentifier:playlistCellIdentifier];
-//    if (cell == nil)
-//    {
-//        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"PlaylistCell" owner:self options:nil];
-//        for (id obj in nib) {
-//            if ([obj isKindOfClass:[PlaylistCell class]]) {
-//                cell = (PlaylistCell *)obj;
-//                break;
-//            }
-//        }
-//        //cell = [nib objectAtIndex:0];
+//    static NSString *CellIdentifier = @"Cell";
+//    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+//    if (cell == nil) {
+//        cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
 //    }
+    
+    static NSString *CellIdentifier = @"PlaylistCell";
+    PlaylistCell *cell = [self.tableViewPlaylist dequeueReusableCellWithIdentifier:CellIdentifier];
+    
+    NSArray *objects = [[NSBundle mainBundle] loadNibNamed:@"PlaylistCell" owner:nil options:nil];
+    for (id curObj in objects) {
+        if([curObj isKindOfClass:[UITableViewCell class]]){
+            cell = (PlaylistCell *)curObj;
+            break;
+        }
+    }
     
     // Configure the cell...
     
     PlaylistInfo *playlistInfo = [self.playlistArray objectAtIndex:indexPath.row];
     if (playlistInfo) {
         cell.textLabel.text = @"Title";
-        cell.imageView.image = [UIImage imageNamed:@"no_img_available.jpeg"];
+        cell.imgViewSnapshot.image = [UIImage imageNamed:@"no_img_available.jpeg"];
         
-//        if (!playlistInfo.imgSnapshot) {
-//            [cell.activityIndicator startAnimating];
-//            
-//            CGSize newSize = CGSizeMake(64, 64);
-//            
-//            dispatch_queue_t q = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0ul);
-//            dispatch_async(q, ^{
-//                playlistInfo.imgSnapshot = [self imageWithUrlString:playlistInfo.urlImage scaledToSize:newSize];
-//                
-//                dispatch_async(dispatch_get_main_queue(), ^{
-//                    //NSLog(@"img = %@", img);
-//                    cell.imageView.image = playlistInfo.imgSnapshot;
-//                    [cell.activityIndicator stopAnimating];
-//                    cell.activityIndicator.hidden = YES;
-//                });
-//            });
-//        }
-//        else
-//        {
-//            NSLog(@"playlistInfo.imgSnapshot already");
-//            cell.imageView.image = playlistInfo.imgSnapshot;
-//        }
-//        
-//        if (playlistInfo.titleString && ![playlistInfo.titleString isEqualToString:@""]) {
-//            cell.labelTitle.text = playlistInfo.titleString;
-//        }
-//        else
-//        {
-//            cell.labelTitle.text = @"Title";
-//        }
+        if (!playlistInfo.imgSnapshot) {
+            [cell.activityIndicator startAnimating];
+            
+            CGSize newSize = CGSizeMake(64, 64);
+            
+            dispatch_queue_t q = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0ul);
+            dispatch_async(q, ^{
+                playlistInfo.imgSnapshot = [self imageWithUrlString:playlistInfo.urlImage scaledToSize:newSize];
+                
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    //NSLog(@"img = %@", img);
+                    cell.imageView.image = playlistInfo.imgSnapshot;
+                    [cell.activityIndicator stopAnimating];
+                    cell.activityIndicator.hidden = YES;
+                });
+            });
+        }
+        else
+        {
+            NSLog(@"playlistInfo.imgSnapshot already");
+            cell.imageView.image = playlistInfo.imgSnapshot;
+        }
+        
+        if (playlistInfo.titleString && ![playlistInfo.titleString isEqualToString:@""]) {
+            cell.labelTitle.text = playlistInfo.titleString;
+        }
+        else
+        {
+            cell.labelTitle.text = @"Title";
+        }
+        
+        cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     }
     
     return cell;
