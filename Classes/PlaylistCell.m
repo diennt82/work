@@ -29,7 +29,7 @@
 - (void)dealloc {
     [_imgViewSnapshot release];
     [_labelTitle release];
-    [_labelUrl release];
+    [_labelDate release];
     [_activityIndicator release];
     [super dealloc];
 }

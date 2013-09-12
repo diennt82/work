@@ -12,6 +12,6 @@
 
 @property (retain, nonatomic) IBOutlet UIImageView *imgViewSnapshot;
 @property (retain, nonatomic) IBOutlet UILabel *labelTitle;
-@property (retain, nonatomic) IBOutlet UILabel *labelUrl;
+@property (retain, nonatomic) IBOutlet UILabel *labelDate;
 @property (retain, nonatomic) IBOutlet UIActivityIndicatorView *activityIndicator;
 @end

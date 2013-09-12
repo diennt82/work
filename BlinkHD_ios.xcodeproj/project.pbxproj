@@ -1547,6 +1547,7 @@
 		080E96DDFE201D6D7F000001 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				978B25B317E1B2AE006FC224 /* SlideMenu */,
 				979BC69617D9B8BA00B3B373 /* Playlist */,
 				9792FC0317D6DC8700365405 /* Include */,
 				97A07FAD17D5FCFD00653460 /* H264Player */,
@@ -1959,6 +1960,13 @@
 				97D9A1BC143EB03A000E3533 /* video_error.png */,
 			);
 			name = images;
+			sourceTree = "<group>";
+		};
+		978B25B317E1B2AE006FC224 /* SlideMenu */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = SlideMenu;
 			sourceTree = "<group>";
 		};
 		9792FC0317D6DC8700365405 /* Include */ = {

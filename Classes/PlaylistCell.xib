@@ -92,7 +92,7 @@
 							<object class="IBUILabel" id="701552857">
 								<reference key="NSNextResponder" ref="147229174"/>
 								<int key="NSvFlags">292</int>
-								<string key="NSFrame">{{74, 37}, {22, 21}}</string>
+								<string key="NSFrame">{{74, 37}, {32, 21}}</string>
 								<reference key="NSSuperview" ref="147229174"/>
 								<string key="NSReuseIdentifierKey">_NS:9</string>
 								<bool key="IBUIOpaque">NO</bool>
@@ -100,7 +100,7 @@
 								<int key="IBUIContentMode">7</int>
 								<bool key="IBUIUserInteractionEnabled">NO</bool>
 								<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
-								<string key="IBUIText">Url</string>
+								<string key="IBUIText">Date</string>
 								<reference key="IBUITextColor" ref="350190140"/>
 								<reference key="IBUIHighlightedColor" ref="909114312"/>
 								<int key="IBUIBaselineAdjustment">0</int>
@@ -165,14 +165,6 @@
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBCocoaTouchOutletConnection" key="connection">
-						<string key="label">labelUrl</string>
-						<reference key="source" ref="1013176675"/>
-						<reference key="destination" ref="701552857"/>
-					</object>
-					<int key="connectionID">12</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBCocoaTouchOutletConnection" key="connection">
 						<string key="label">activityIndicator</string>
 						<reference key="source" ref="1013176675"/>
 						<reference key="destination" ref="757104856"/>
@@ -186,6 +178,14 @@
 						<reference key="destination" ref="186631732"/>
 					</object>
 					<int key="connectionID">15</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBCocoaTouchOutletConnection" key="connection">
+						<string key="label">labelDate</string>
+						<reference key="source" ref="1013176675"/>
+						<reference key="destination" ref="701552857"/>
+					</object>
+					<int key="connectionID">16</int>
 				</object>
 			</array>
 			<object class="IBMutableOrderedSet" key="objectRecords">
@@ -256,7 +256,7 @@
 			<nil key="activeLocalization"/>
 			<dictionary class="NSMutableDictionary" key="localizations"/>
 			<nil key="sourceID"/>
-			<int key="maxID">15</int>
+			<int key="maxID">16</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes"/>
 		<int key="IBDocument.localizationMode">0</int>

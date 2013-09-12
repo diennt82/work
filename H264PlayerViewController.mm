@@ -445,7 +445,7 @@
                 
                 dispatch_async(dispatch_get_main_queue(), ^{
                     //NSLog(@"img = %@", img);
-                    cell.imageView.image = playlistInfo.imgSnapshot;
+                    cell.imgViewSnapshot.image = playlistInfo.imgSnapshot;
                     [cell.activityIndicator stopAnimating];
                     cell.activityIndicator.hidden = YES;
                 });
@@ -454,7 +454,7 @@
         else
         {
             NSLog(@"playlistInfo.imgSnapshot already");
-            cell.imageView.image = playlistInfo.imgSnapshot;
+            cell.imgViewSnapshot.image = playlistInfo.imgSnapshot;
         }
         
         if (playlistInfo.titleString && ![playlistInfo.titleString isEqualToString:@""]) {
