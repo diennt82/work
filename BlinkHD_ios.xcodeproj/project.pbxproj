@@ -190,6 +190,14 @@
 		9770CDF2143076CD009E69EF /* CoreAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9770CDF1143076CD009E69EF /* CoreAudio.framework */; };
 		9770CDF8143076DD009E69EF /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9770CDF7143076DD009E69EF /* AudioToolbox.framework */; };
 		9770CEC81430783A009E69EF /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9770CEC71430783A009E69EF /* CFNetwork.framework */; };
+		97735C4417E1CEAA00160DA1 /* MyFrontViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 97735C4217E1CEAA00160DA1 /* MyFrontViewController.m */; };
+		97735C4517E1CEAA00160DA1 /* MyFrontViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 97735C4317E1CEAA00160DA1 /* MyFrontViewController.xib */; };
+		978B25B617E1B41C006FC224 /* reveal-icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 978B25B417E1B41C006FC224 /* reveal-icon.png */; };
+		978B25B717E1B41C006FC224 /* reveal-icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 978B25B517E1B41C006FC224 /* reveal-icon@2x.png */; };
+		978B25BC17E1B43E006FC224 /* MTStackDefaultContainerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 978B25B917E1B43E006FC224 /* MTStackDefaultContainerView.m */; };
+		978B25BD17E1B43E006FC224 /* MTStackViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 978B25BB17E1B43E006FC224 /* MTStackViewController.m */; };
+		978B25C117E1B4AB006FC224 /* BMMenuViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 978B25BF17E1B4AB006FC224 /* BMMenuViewController.m */; };
+		978B25C217E1B4AB006FC224 /* BMMenuViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 978B25C017E1B4AB006FC224 /* BMMenuViewController.xib */; };
 		978F090117DEFD670053972F /* no_img_available.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = 978F090017DEFD650053972F /* no_img_available.jpeg */; };
 		978F090317DF06C80053972F /* PlaylistCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 978F090217DF06C70053972F /* PlaylistCell.xib */; };
 		9792FC2317D72F8300365405 /* H264PlayerViewController_land.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9792FC2217D72F8300365405 /* H264PlayerViewController_land.xib */; };
@@ -584,6 +592,18 @@
 		9770CDF1143076CD009E69EF /* CoreAudio.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreAudio.framework; path = System/Library/Frameworks/CoreAudio.framework; sourceTree = SDKROOT; };
 		9770CDF7143076DD009E69EF /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		9770CEC71430783A009E69EF /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
+		97735C4117E1CEAA00160DA1 /* MyFrontViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyFrontViewController.h; sourceTree = "<group>"; };
+		97735C4217E1CEAA00160DA1 /* MyFrontViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyFrontViewController.m; sourceTree = "<group>"; };
+		97735C4317E1CEAA00160DA1 /* MyFrontViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MyFrontViewController.xib; sourceTree = "<group>"; };
+		978B25B417E1B41C006FC224 /* reveal-icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "reveal-icon.png"; sourceTree = "<group>"; };
+		978B25B517E1B41C006FC224 /* reveal-icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "reveal-icon@2x.png"; sourceTree = "<group>"; };
+		978B25B817E1B43E006FC224 /* MTStackDefaultContainerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTStackDefaultContainerView.h; sourceTree = "<group>"; };
+		978B25B917E1B43E006FC224 /* MTStackDefaultContainerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTStackDefaultContainerView.m; sourceTree = "<group>"; };
+		978B25BA17E1B43E006FC224 /* MTStackViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTStackViewController.h; sourceTree = "<group>"; };
+		978B25BB17E1B43E006FC224 /* MTStackViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTStackViewController.m; sourceTree = "<group>"; };
+		978B25BE17E1B4AB006FC224 /* BMMenuViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BMMenuViewController.h; sourceTree = "<group>"; };
+		978B25BF17E1B4AB006FC224 /* BMMenuViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BMMenuViewController.m; sourceTree = "<group>"; };
+		978B25C017E1B4AB006FC224 /* BMMenuViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = BMMenuViewController.xib; sourceTree = "<group>"; };
 		978F090017DEFD650053972F /* no_img_available.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = no_img_available.jpeg; sourceTree = "<group>"; };
 		978F090217DF06C70053972F /* PlaylistCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PlaylistCell.xib; sourceTree = "<group>"; };
 		9792FC0417D6DCE700365405 /* decoder_audio.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = decoder_audio.h; sourceTree = "<group>"; };
@@ -1512,8 +1532,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A1A5188117E07DCB00E1DFC2 /* MonitorCommunication.framework in Frameworks */,
 				A1A5188017E07DA700E1DFC2 /* H264MediaPlayer.framework in Frameworks */,
+				A1A5188117E07DCB00E1DFC2 /* MonitorCommunication.framework in Frameworks */,
 				A10EC12017E0692700EA4F9D /* libGoogleAnalytics_debug.a in Frameworks */,
 				A10EC12117E0692700EA4F9D /* libGoogleAnalytics.a in Frameworks */,
 				A10EC11B17E0681D00EA4F9D /* libUdtLib.a in Frameworks */,
@@ -1860,6 +1880,8 @@
 		3812F82315C8BEC700DADFA6 /* images13 */ = {
 			isa = PBXGroup;
 			children = (
+				978B25B417E1B41C006FC224 /* reveal-icon.png */,
+				978B25B517E1B41C006FC224 /* reveal-icon@2x.png */,
 				978F090017DEFD650053972F /* no_img_available.jpeg */,
 				BC4D8D8B1733B9BB005C34BB /* ME-screen_landscape.png */,
 				BCF944F01732749300F58B22 /* homepage_p1.png */,
@@ -1965,6 +1987,16 @@
 		978B25B317E1B2AE006FC224 /* SlideMenu */ = {
 			isa = PBXGroup;
 			children = (
+				97735C4117E1CEAA00160DA1 /* MyFrontViewController.h */,
+				97735C4217E1CEAA00160DA1 /* MyFrontViewController.m */,
+				97735C4317E1CEAA00160DA1 /* MyFrontViewController.xib */,
+				978B25B817E1B43E006FC224 /* MTStackDefaultContainerView.h */,
+				978B25B917E1B43E006FC224 /* MTStackDefaultContainerView.m */,
+				978B25BA17E1B43E006FC224 /* MTStackViewController.h */,
+				978B25BB17E1B43E006FC224 /* MTStackViewController.m */,
+				978B25BE17E1B4AB006FC224 /* BMMenuViewController.h */,
+				978B25BF17E1B4AB006FC224 /* BMMenuViewController.m */,
+				978B25C017E1B4AB006FC224 /* BMMenuViewController.xib */,
 			);
 			name = SlideMenu;
 			sourceTree = "<group>";
@@ -2296,6 +2328,10 @@
 				979BC6A517D9BB9C00B3B373 /* TempViewController.xib in Resources */,
 				978F090117DEFD670053972F /* no_img_available.jpeg in Resources */,
 				978F090317DF06C80053972F /* PlaylistCell.xib in Resources */,
+				978B25B617E1B41C006FC224 /* reveal-icon.png in Resources */,
+				978B25B717E1B41C006FC224 /* reveal-icon@2x.png in Resources */,
+				978B25C217E1B4AB006FC224 /* BMMenuViewController.xib in Resources */,
+				97735C4517E1CEAA00160DA1 /* MyFrontViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2376,6 +2412,10 @@
 				979BC6A417D9BB9C00B3B373 /* TempViewController.m in Sources */,
 				979BC6A817D9BCB200B3B373 /* PlaylistInfo.m in Sources */,
 				A1BB7B9F17E02C5C00463A07 /* UdtSocketWrapper.mm in Sources */,
+				978B25BC17E1B43E006FC224 /* MTStackDefaultContainerView.m in Sources */,
+				978B25BD17E1B43E006FC224 /* MTStackViewController.m in Sources */,
+				978B25C117E1B4AB006FC224 /* BMMenuViewController.m in Sources */,
+				97735C4417E1CEAA00160DA1 /* MyFrontViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

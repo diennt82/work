@@ -21,4 +21,6 @@
 @property (nonatomic, retain) NSString* stream_url;
 @property (nonatomic, retain) CamChannel *selectedChannel;
 
+- (void)stopStream;
+
 @end

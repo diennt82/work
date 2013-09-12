@@ -416,22 +416,22 @@
     
     if (device_version != nil) {
         
-        NSArray * versionArray = [device_version componentsSeparatedByString:@"_"];
-        NSString * version_value1 = [versionArray objectAtIndex:0];
-        NSString * version_value2 = [versionArray objectAtIndex:1];
+        NSRange range = [device_version rangeOfString:@"_"];
         
-        if ( [version_value1 intValue] > 8 ||
-             ([version_value1 intValue] == 8 && [version_value2 intValue] >= 23)
-            )
-        {
-            // check version > 08_020 ?
+        if (range.location != NSNotFound) {
+            NSArray * versionArray = [device_version componentsSeparatedByString:@"_"];
+            NSString * version_value1 = [versionArray objectAtIndex:0];
+            NSString * version_value2 = [versionArray objectAtIndex:1];
             
-
-            
-            return  TRUE;
-            
+            if ( [version_value1 intValue] > 8 ||
+                ([version_value1 intValue] == 8 && [version_value2 intValue] >= 23)
+                )
+            {
+                // check version > 08_020 ?
+                return  TRUE;
+                
+            }
         }
-        
     }
     
     return FALSE;

@@ -11,8 +11,12 @@
 #import "H264PlayerViewController.h"
 #import "PlaylistInfo.h"
 #import "TempViewController.h"
+#import "MTStackDefaultContainerView.h"
+#import "MTStackViewController.h"
+#import "BMMenuViewController.h"
+#import "MyFrontViewController.h"
 
-@interface DashBoard_ViewController() <CameraViewDelegate>
+@interface DashBoard_ViewController()// <CameraViewDelegate>
 
 @end
 
@@ -828,14 +832,49 @@
     
     NSLog(@"ch = %@, ch.profile = %@, ch.profile.minuteSinceLastComm = %d", ch, ch.profile, ch.profile.minuteSinceLastComm);
     
-    if (ch != nil && ch.profile != nil)
-    {
+//    if (ch != nil && ch.profile != nil)
+//    {
+//        H264PlayerViewController *h264ViewController = [[H264PlayerViewController alloc] init];
+//        
+//        h264ViewController.selectedChannel = ch;
+//        
+//        [self.navigationController pushViewController:h264ViewController animated:NO];
+//        [h264ViewController release];
+//    }
+    if (ch != nil && ch.profile != nil) {
+        MTStackViewController *stackViewController = [[MTStackViewController alloc] init];
+        stackViewController.animationDurationProportionalToPosition = YES;
+        
+        //MTMenuViewController *menuViewController = [[MTMenuViewController alloc] init];
+        BMMenuViewController *menuViewController = [[BMMenuViewController alloc] init];
+        CGRect foldFrame = CGRectMake(0, 0, stackViewController.slideOffset, CGRectGetHeight(self.view.bounds));
+        menuViewController.view.frame = foldFrame;
+        
+        //stackViewController.leftContainerView = [[MTZoomContainerView alloc] initWithFrame:foldFrame];
+        stackViewController.leftViewController = menuViewController;
+        
+        
         H264PlayerViewController *h264ViewController = [[H264PlayerViewController alloc] init];
-        
         h264ViewController.selectedChannel = ch;
+
+        stackViewController.rightViewController = h264ViewController;
+        stackViewController.rightViewControllerEnabled = YES;
         
-        [self.navigationController pushViewController:h264ViewController animated:NO];
-        [h264ViewController release];
+        menuViewController.firstViewController = h264ViewController;
+
+//        MyFrontViewController *myFrontViewController = [[MyFrontViewController alloc] init];
+//        
+//        stackViewController.rightViewController = myFrontViewController;
+//        stackViewController.rightViewControllerEnabled = YES;
+        
+        UINavigationController *contentNavigationController = [UINavigationController new];
+        //UINavigationController *contenNavigationController = self.navigationController;
+       stackViewController.contentViewController = contentNavigationController;
+        //stackViewController.contentContainerView = (UINavigationController *)self.navigationController;
+        
+        [self presentViewController:stackViewController animated:YES completion:nil];
+        
+        [tableView deselectRowAtIndexPath:indexPath animated:YES];
     }
 }
 

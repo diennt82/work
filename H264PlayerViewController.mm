@@ -12,6 +12,7 @@
 #import "PlaylistInfo.h"
 #import "PlaylistViewController.h"
 #import "PlaylistCell.h"
+#import "MTStackViewController.h"
 #import <MonitorCommunication/MonitorCommunication.h>
 
 @interface H264PlayerViewController () <UITableViewDataSource, UITableViewDelegate>
@@ -20,6 +21,7 @@
 }
 
 @property (retain, nonatomic) IBOutlet UITableView *tableViewPlaylist;
+@property (retain, nonatomic) IBOutlet UIBarButtonItem *barBntItemReveal;
 
 @property (nonatomic, retain) HttpCommunication* httpComm;
 @property (nonatomic, retain) NSMutableArray *playlistArray;
@@ -49,16 +51,30 @@
     
     NSLog(@"stream_url = %@", self.stream_url);
     
-    NSString * msg = NSLocalizedStringWithDefaultValue(@"Back",nil, [NSBundle mainBundle],
-                                                       @"Back", nil);
-	self.navigationItem.backBarButtonItem =
-    [[[UIBarButtonItem alloc] initWithTitle:msg
-                                      style:UIBarButtonItemStyleBordered
-                                     target:nil
-                                     action:nil] autorelease];
+//    NSString * msg = NSLocalizedStringWithDefaultValue(@"Back",nil, [NSBundle mainBundle],
+//                                                       @"Back", nil);
+//    UIBarButtonItem *revealIcon = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"reveal-icon"]
+//                                                                   style:UIBarButtonItemStylePlain
+//                                                                  target:[self stackViewController]
+//                                                                  action:@selector(toggleLeftViewController)];
+    
+    UIBarButtonItem *revealIcon = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"reveal-icon"]
+                                                                   style:UIBarButtonItemStylePlain
+                                                                  target:self
+                                                                  action:@selector(preToggleLeftViewController)];
+
+    self.navigationItem.leftBarButtonItem = revealIcon;
+//	self.navigationItem.backBarButtonItem =
+//    [[[UIBarButtonItem alloc] initWithTitle:msg
+//                                      style:UIBarButtonItemStyleBordered
+//                                     target:nil
+//                                     action:nil] autorelease];
     self.tableViewPlaylist.delegate = self;
     self.tableViewPlaylist.dataSource = self;
     self.tableViewPlaylist.rowHeight = 68;
+    
+    //self.barBntItemReveal.target = [self stackViewController];
+    
     [self becomeActive];
 }
 
@@ -109,6 +125,18 @@
     NSLog(@"self.segCtrl.selectedSegmentIndex = %d", self.segCtrl.selectedSegmentIndex);
 }
 
+- (IBAction)barBntItemRevealAction:(id)sender {
+//    UIBarButtonItem *revealIcon = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"reveal-icon"]
+//                                                                  style:UIBarButtonItemStylePlain
+//                                                                 target:[self stackViewController]
+//                                                                 action:@selector(toggleLeftViewController)];
+    //[self.stackViewController toggleLeftViewController];
+}
+
+- (void)preToggleLeftViewController
+{
+    [self.stackViewController toggleLeftViewController];
+}
 #pragma mark - Method
 
 - (void)becomeActive
@@ -119,9 +147,12 @@
     //self.cameraNameBarBtnItem.title = cp.name;
     
     //set Button handler
-    self.backBarBtnItem.target = self;
-    self.backBarBtnItem.action = @selector(goBackToCameraList);
-//    
+//    self.backBarBtnItem.target = self;
+//    self.backBarBtnItem.action = @selector(goBackToCameraList);
+    
+    self.backBarBtnItem.target = self.stackViewController;
+    self.backBarBtnItem.action = @selector(toggleLeftViewController);
+    
     self.progressView.hidden = NO;
     //[self.view addSubview:self.progressView];
     [self.view bringSubviewToFront:self.progressView];
@@ -542,6 +573,7 @@
     [_playlistArray release];
     [_httpComm release];
     
+    [_barBntItemReveal release];
     [super dealloc];
 }
 
