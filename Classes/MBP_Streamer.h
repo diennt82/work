@@ -6,7 +6,9 @@
 //  Copyright 2011 __MyCompanyName__. All rights reserved.
 //
 
-#import "PCMPlayer.h"
+
+#import <H264MediaPlayer/H264MediaPlayer.h>
+
 #import "AsyncSocket.h"
 #import "ADPCMDecoder.h"
 #import "AviRecord.h"

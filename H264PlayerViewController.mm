@@ -7,13 +7,17 @@
 //
 
 #import "H264PlayerViewController.h"
-#include "mediaplayer.h"
+
+
+
 #import "HttpCommunication.h"
 #import "PlaylistInfo.h"
 #import "PlaylistViewController.h"
 #import "PlaylistCell.h"
 #import "MTStackViewController.h"
 #import <MonitorCommunication/MonitorCommunication.h>
+#import <H264MediaPlayer/H264MediaPlayer.h>
+
 
 @interface H264PlayerViewController () <UITableViewDataSource, UITableViewDelegate>
 {
@@ -223,11 +227,7 @@
         [jsonComm createSessionWithRegistrationId:mac
                                     andClientType:@"IOS"
                                         andApiKey:apiKey];
-//        NSDictionary *responseDict = [jsonComm createSessionBlockedWithRegistrationId:mac
-//                                                                        andClientType: @"IOS"
-//                                                                            andApiKey:apiKey];
-        
-        //self.stream_url = @"rtmp://";
+
     }
 }
 
@@ -235,21 +235,24 @@
 {
     status_t status;
 
-    mp = new MediaPlayer();
+    mp = new MediaPlayer(false);
     
-    NSString * url =@"http://192.168.3.116:6667/blinkhd";
+    //`NSLog(@"Play with TCP Option >>>>> ") ;
+    //mp->setPlayOption(MEDIA_STREAM_RTSP_WITH_TCP);
+    
+    NSString * url ;//=@"http://192.168.3.116:6667/blinkhd";
     
     url = _stream_url;
     
     
     status = mp->setDataSource([url UTF8String]);
-    printf("setDataSource return: %d\n", status);
+    
     
     
     if (status != NO_ERROR) // NOT OK
     {
         
-        printf("setDataSource error: %d\n", status);
+        
         return;
     }
     
@@ -283,23 +286,28 @@
 
 - (void)goBackToCameraList
 {
-    if (mp) {
-        [self stopStream];
-    }
+    
+    [self stopStream];
+    
     
     [self.navigationController popToRootViewControllerAnimated:NO];
 }
 
 - (void)stopStream
 {
-    printf("STOP\n");
-    if (mp->isPlaying())
+    @synchronized(self)
     {
-        mp->suspend();
-        mp->stop();
+        if (mp != NULL)
+        {
+            if (mp->isPlaying())
+            {
+                mp->suspend();
+                mp->stop();
+            }
+            free(mp);
+        }
+        mp = NULL;
     }
-    free(mp);
-    mp = NULL;
 }
 
 - (void)loadEarlierList

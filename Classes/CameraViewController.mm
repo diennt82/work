@@ -7,7 +7,7 @@
 //
 
 #import "CameraViewController.h"
-#import "PCMPlayer.h"
+#import <H264MediaPlayer/H264MediaPlayer.h>
 
 @interface CameraViewController ()
 

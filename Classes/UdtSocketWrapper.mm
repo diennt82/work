@@ -8,7 +8,12 @@
 
 #import "UdtSocketWrapper.h"
 
+
+
 #define DEBUG 0
+
+
+
 
 @implementation UdtSocketWrapper
 @synthesize udt_socket,local_port;
@@ -26,6 +31,7 @@
 	self.local_port = localPort; 
 	return self; 
 }
+#if 0
 
 // typedef int UDTSOCKET; it's an int anyway..
 
@@ -220,4 +226,7 @@
 }
 
 
+#endif 
+
 @end
+

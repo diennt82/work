@@ -121,7 +121,8 @@ static NSString *const MTTableViewCellIdentifier = @"MTTableViewCell";
 {
     NSLog(@"self.stackViewController.rightViewController.title = %@", self.stackViewController.rightViewController.title);
     
-    if (indexPath.row == 3) {
+    if (indexPath.row == 3)
+    {
         [(H264PlayerViewController *)self.firstViewController stopStream];
         [[self stackViewController] hideRightViewController];
         [self dismissViewControllerAnimated:YES completion:^{

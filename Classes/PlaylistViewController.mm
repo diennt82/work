@@ -7,7 +7,8 @@
 //
 
 #import "PlaylistViewController.h"
-#import "mediaplayer.h"
+#import <H264MediaPlayer/H264MediaPlayer.h>
+
 
 @interface PlaylistViewController ()
 {
@@ -74,7 +75,7 @@
     
     status_t status;
     
-    mp = new MediaPlayer();
+    mp = new MediaPlayer(true);
     
     NSString * url =@"http://192.168.3.116:6667/blinkhd";
     

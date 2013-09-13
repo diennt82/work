@@ -9,7 +9,7 @@
 #import "Util.h"
 #import "PublicDefine.h"
 #import "AsyncSocket.h"
-#import "PCMPlayer.h"
+#import <H264MediaPlayer/H264MediaPlayer.h>
 
 #define SOCKET_ID_SEND    200
 

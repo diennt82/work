@@ -12,7 +12,14 @@
 #include <netdb.h>
 #include <arpa/inet.h>
 
-#import "udt.h"
+
+//#include "udt.h"
+
+typedef struct {
+    void * ptr;
+    
+} UDTSOCKET;
+
 @interface UdtSocketWrapper : NSObject {
 
 	UDTSOCKET udt_socket;

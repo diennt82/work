@@ -7,7 +7,8 @@
 //
 
 #import "QuickViewCamera_ViewController.h"
-#import "PCMPlayer.h"
+#import <H264MediaPlayer/H264MediaPlayer.h>
+
 
 @interface QuickViewCamera_ViewController ()
 

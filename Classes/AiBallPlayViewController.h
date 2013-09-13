@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "AiBallAviPlayer.h"
-#import "PCMPlayer.h"
+#import <H264MediaPlayer/H264MediaPlayer.h>
 
 @interface AiBallPlayViewController : UIViewController {
 	AiBallAviPlayer* aviPlayer;
