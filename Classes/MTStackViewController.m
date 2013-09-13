@@ -1083,17 +1083,17 @@ const char *MTStackViewControllerKey = "MTStackViewControllerKey";
 
 - (NSUInteger)supportedInterfaceOrientations
 {
-    return UIInterfaceOrientationMaskPortrait;
+    return UIInterfaceOrientationMaskAllButUpsideDown;
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
 {
-    return UIInterfaceOrientationIsPortrait(interfaceOrientation);
+    return UIInterfaceOrientationIsPortrait(interfaceOrientation) | UIInterfaceOrientationIsLandscape(interfaceOrientation);
 }
 
 - (BOOL)shouldAutorotate
 {
-    return NO;
+    return YES;
 }
 
 @end

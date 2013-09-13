@@ -199,6 +199,11 @@
 		978B25C217E1B4AB006FC224 /* BMMenuViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 978B25C017E1B4AB006FC224 /* BMMenuViewController.xib */; };
 		978F090117DEFD670053972F /* no_img_available.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = 978F090017DEFD650053972F /* no_img_available.jpeg */; };
 		978F090317DF06C80053972F /* PlaylistCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 978F090217DF06C70053972F /* PlaylistCell.xib */; };
+		9792B9AD17E2CC5A009C9F5D /* H264PlayerViewController_ipad_.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9792B9AC17E2CC5A009C9F5D /* H264PlayerViewController_ipad_.xib */; };
+		9792B9AF17E2D1F6009C9F5D /* H264PlayerViewController_ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9792B9AE17E2D1F6009C9F5D /* H264PlayerViewController_ipad.xib */; };
+		9792B9B317E2F8E9009C9F5D /* bb_rec_icon_d.png in Resources */ = {isa = PBXBuildFile; fileRef = 9792B9B017E2F8E9009C9F5D /* bb_rec_icon_d.png */; };
+		9792B9B417E2F8E9009C9F5D /* bb_rec_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 9792B9B117E2F8E9009C9F5D /* bb_rec_icon.png */; };
+		9792B9B517E2F8E9009C9F5D /* i_mode.png in Resources */ = {isa = PBXBuildFile; fileRef = 9792B9B217E2F8E9009C9F5D /* i_mode.png */; };
 		9792FC2317D72F8300365405 /* H264PlayerViewController_land.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9792FC2217D72F8300365405 /* H264PlayerViewController_land.xib */; };
 		97987CCD154687490066C49B /* background.png in Resources */ = {isa = PBXBuildFile; fileRef = 97987CCC154687490066C49B /* background.png */; };
 		97987CCF154688110066C49B /* partition_bar.png in Resources */ = {isa = PBXBuildFile; fileRef = 97987CCE154688110066C49B /* partition_bar.png */; };
@@ -604,6 +609,21 @@
 		978B25C017E1B4AB006FC224 /* BMMenuViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = BMMenuViewController.xib; sourceTree = "<group>"; };
 		978F090017DEFD650053972F /* no_img_available.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = no_img_available.jpeg; sourceTree = "<group>"; };
 		978F090217DF06C70053972F /* PlaylistCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PlaylistCell.xib; sourceTree = "<group>"; };
+		9792B9AC17E2CC5A009C9F5D /* H264PlayerViewController_ipad_.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = H264PlayerViewController_ipad_.xib; sourceTree = "<group>"; };
+		9792B9AE17E2D1F6009C9F5D /* H264PlayerViewController_ipad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = H264PlayerViewController_ipad.xib; sourceTree = "<group>"; };
+		9792B9B017E2F8E9009C9F5D /* bb_rec_icon_d.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bb_rec_icon_d.png; sourceTree = "<group>"; };
+		9792B9B117E2F8E9009C9F5D /* bb_rec_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bb_rec_icon.png; sourceTree = "<group>"; };
+		9792B9B217E2F8E9009C9F5D /* i_mode.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = i_mode.png; sourceTree = "<group>"; };
+		9792FC0417D6DCE700365405 /* decoder_audio.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = decoder_audio.h; sourceTree = "<group>"; };
+		9792FC0517D6DCE700365405 /* decoder_video.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = decoder_video.h; sourceTree = "<group>"; };
+		9792FC0617D6DCE700365405 /* decoder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = decoder.h; sourceTree = "<group>"; };
+		9792FC0717D6DCE700365405 /* Errors.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Errors.h; sourceTree = "<group>"; };
+		9792FC0817D6DCE700365405 /* mediaplayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = mediaplayer.h; sourceTree = "<group>"; };
+		9792FC0917D6DCE700365405 /* output.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = output.h; sourceTree = "<group>"; };
+		9792FC0A17D6DCE700365405 /* packetqueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = packetqueue.h; sourceTree = "<group>"; };
+		9792FC0B17D6DCE700365405 /* thread.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = thread.h; sourceTree = "<group>"; };
+		9792FC1E17D7149600365405 /* PCMPlayer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PCMPlayer.h; sourceTree = "<group>"; };
+		9792FC1F17D7168B00365405 /* RemoteIOPlayer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RemoteIOPlayer.h; sourceTree = "<group>"; };
 		9792FC2217D72F8300365405 /* H264PlayerViewController_land.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = H264PlayerViewController_land.xib; sourceTree = "<group>"; };
 		97987CCC154687490066C49B /* background.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = background.png; sourceTree = "<group>"; };
 		97987CCE154688110066C49B /* partition_bar.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = partition_bar.png; sourceTree = "<group>"; };
@@ -1868,6 +1888,9 @@
 		3812F82315C8BEC700DADFA6 /* images13 */ = {
 			isa = PBXGroup;
 			children = (
+				9792B9B017E2F8E9009C9F5D /* bb_rec_icon_d.png */,
+				9792B9B117E2F8E9009C9F5D /* bb_rec_icon.png */,
+				9792B9B217E2F8E9009C9F5D /* i_mode.png */,
 				978B25B417E1B41C006FC224 /* reveal-icon.png */,
 				978B25B517E1B41C006FC224 /* reveal-icon@2x.png */,
 				978F090017DEFD650053972F /* no_img_available.jpeg */,
@@ -2023,6 +2046,8 @@
 				97A07FAE17D5FD4A00653460 /* H264PlayerViewController.h */,
 				97A07FAF17D5FD4A00653460 /* H264PlayerViewController.mm */,
 				9792FC2217D72F8300365405 /* H264PlayerViewController_land.xib */,
+				9792B9AC17E2CC5A009C9F5D /* H264PlayerViewController_ipad_.xib */,
+				9792B9AE17E2D1F6009C9F5D /* H264PlayerViewController_ipad.xib */,
 			);
 			name = H264Player;
 			path = ..;
@@ -2302,6 +2327,11 @@
 				978B25B717E1B41C006FC224 /* reveal-icon@2x.png in Resources */,
 				978B25C217E1B4AB006FC224 /* BMMenuViewController.xib in Resources */,
 				97735C4517E1CEAA00160DA1 /* MyFrontViewController.xib in Resources */,
+				9792B9AD17E2CC5A009C9F5D /* H264PlayerViewController_ipad_.xib in Resources */,
+				9792B9AF17E2D1F6009C9F5D /* H264PlayerViewController_ipad.xib in Resources */,
+				9792B9B317E2F8E9009C9F5D /* bb_rec_icon_d.png in Resources */,
+				9792B9B417E2F8E9009C9F5D /* bb_rec_icon.png in Resources */,
+				9792B9B517E2F8E9009C9F5D /* i_mode.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

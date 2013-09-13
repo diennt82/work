@@ -6,6 +6,10 @@
 //  Copyright (c) 2013 Smart Panda Ltd. All rights reserved.
 //
 
+#define D1 @"480p"
+#define HD1 @"720p-10"
+#define HD15 @"720p-15"
+
 #import "H264PlayerViewController.h"
 
 
@@ -15,22 +19,28 @@
 #import "PlaylistViewController.h"
 #import "PlaylistCell.h"
 #import "MTStackViewController.h"
+#import "HttpCommunication.h"
 #import <MonitorCommunication/MonitorCommunication.h>
 #import <H264MediaPlayer/H264MediaPlayer.h>
 
 
-@interface H264PlayerViewController () <UITableViewDataSource, UITableViewDelegate>
+@interface H264PlayerViewController ()
+<UITableViewDataSource, UITableViewDelegate, UIPickerViewDelegate, UIPickerViewDataSource>
 {
     MediaPlayer* mp;
 }
 
 @property (retain, nonatomic) IBOutlet UITableView *tableViewPlaylist;
+@property (retain, nonatomic) IBOutlet UIView *viewCtrlButtons;
+@property (retain, nonatomic) IBOutlet UIPickerView *pickerHQOptions;
+
 @property (retain, nonatomic) IBOutlet UIBarButtonItem *barBntItemReveal;
 
 @property (nonatomic, retain) HttpCommunication* httpComm;
 @property (nonatomic, retain) NSMutableArray *playlistArray;
 @property (nonatomic) BOOL mpFlag;
 @property (nonatomic, retain) NSArray *eventArr;
+@property (nonatomic, retain) HttpCommunication *htppComm;
 
 @end
 
@@ -77,6 +87,9 @@
     self.tableViewPlaylist.dataSource = self;
     self.tableViewPlaylist.rowHeight = 68;
     
+    self.pickerHQOptions.delegate = self;
+    self.pickerHQOptions.dataSource = self;
+    
     //self.barBntItemReveal.target = [self stackViewController];
     
     [self becomeActive];
@@ -86,6 +99,7 @@
 {
     [super viewWillAppear:animated];
     [self.navigationController setNavigationBarHidden:YES];
+    [self checkOrientation];
     
 //    if (self.mpFlag) {
 //        self.progressView.hidden = NO;
@@ -128,6 +142,14 @@
     
     NSLog(@"self.segCtrl.selectedSegmentIndex = %d", self.segCtrl.selectedSegmentIndex);
 }
+- (IBAction)hqPressAction:(id)sender {
+    self.pickerHQOptions.hidden = NO;
+    [self.view bringSubviewToFront:self.pickerHQOptions];
+}
+- (IBAction)iFrameOnlyPressAction:(id)sender {
+}
+- (IBAction)recordingPressAction:(id)sender {
+}
 
 - (IBAction)barBntItemRevealAction:(id)sender {
 //    UIBarButtonItem *revealIcon = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"reveal-icon"]
@@ -145,7 +167,7 @@
 
 - (void)becomeActive
 {
-    CamProfile *cp = self.selectedChannel.profile;
+    //CamProfile *cp = self.selectedChannel.profile;
     
     //Set camera name
     //self.cameraNameBarBtnItem.title = cp.name;
@@ -153,7 +175,7 @@
     //set Button handler
 //    self.backBarBtnItem.target = self;
 //    self.backBarBtnItem.action = @selector(goBackToCameraList);
-    
+//SLIDE MENU
     self.backBarBtnItem.target = self.stackViewController;
     self.backBarBtnItem.action = @selector(toggleLeftViewController);
     
@@ -376,7 +398,11 @@
         if ([[responseDict objectForKey:@"status"] intValue] == 200) {
             self.stream_url = [[responseDict objectForKey:@"data"] objectForKey:@"url"];
             
-            //self.progressView.hidden = YES;
+            NSString *tempString = [[self.stream_url componentsSeparatedByString:@"/"] lastObject];
+            
+            if ([tempString isEqualToString:@"blinkhd"] ) {
+                return;
+            }
             [self performSelector:@selector(startStream)
                        withObject:nil
                        afterDelay:0.1];
@@ -398,7 +424,143 @@
 - (BOOL)shouldAutorotate
 {
     NSLog(@"Should Auto Rotate");
-	return NO;
+	return YES;
+}
+
+-(NSUInteger)supportedInterfaceOrientations
+{
+    return (UIInterfaceOrientationMaskLandscapeLeft | UIInterfaceOrientationMaskLandscapeRight);
+}
+
+- (void) willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
+{
+	[self adjustViewsForOrientation:toInterfaceOrientation];
+}
+
+-(void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation
+{
+    
+    
+    CGRect rect = [[UIApplication sharedApplication] statusBarFrame]; // Get status bar frame dimensions
+    NSLog(@"1 Statusbar frame: %1.0f, %1.0f, %1.0f, %1.0f", rect.origin.x,
+          rect.origin.y, rect.size.width, rect.size.height);
+    //HACK : incase hotspot is turned on
+    if (rect.size.height>21 &&  rect.size.height<50)
+    {
+
+    }
+
+    else
+    {
+        
+    }
+}
+
+-(void) checkOrientation
+{
+	UIInterfaceOrientation infOrientation = [UIApplication sharedApplication].statusBarOrientation;
+    
+	[self adjustViewsForOrientation:infOrientation];
+}
+
+- (void) adjustViewsForOrientation:(UIInterfaceOrientation)orientation
+{
+	if (orientation == UIInterfaceOrientationLandscapeLeft || orientation == UIInterfaceOrientationLandscapeRight)
+	{
+        
+        
+        
+        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+        {
+//            [[NSBundle mainBundle] loadNibNamed:@"H264PlayerViewController_land_ipad"
+//                                          owner:self
+//                                        options:nil];
+            CGRect newRect = CGRectMake(0, 44, 1024, 576);
+            self.imageViewVideo.frame = newRect;
+        }
+        else
+        {
+            
+//            [[NSBundle mainBundle] loadNibNamed:@"H264PlayerViewController_land"
+//                                          owner:self
+//                                        options:nil];
+            CGRect newRect = CGRectMake(0, 44, 480, 256);
+            self.imageViewVideo.frame = newRect;
+            self.viewCtrlButtons.frame.origin = CGPointMake(0, 106);
+            //self.progressView.frame = CGRectMake(0, 44, 480, 320);
+            
+//            imageView.frame = CGRectMake(
+//                                         imageView.frame.origin.x,
+//                                         imageView.frame.origin.y, newWidth, newHeight);
+//            
+//            imageView.contentMode = UIViewContentModeBottomLeft; // This determines position of image
+//            imageView.clipsToBounds = YES;
+        }
+        
+        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+        {
+        }
+        else
+        {
+        }
+        
+		//Rotate the slider
+		//zoombarView.transform = CGAffineTransformRotate(zoombarView.transform, -M_PI*0.5);
+		//Initializng the slider value to zero.
+		//self.zoombar.value=currentZoomLvl*ZOOM_STEP;
+        
+        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+        {
+        }
+        else
+        {
+        }
+        
+        //if (fwUpgradeInProgess == TRUE)
+        {
+        }
+        
+	}
+	else if (orientation == UIInterfaceOrientationPortrait || orientation == UIInterfaceOrientationPortraitUpsideDown)
+	{
+        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+        {
+//            [[NSBundle mainBundle] loadNibNamed:@"H264PlayerViewController_ipad"
+//                                          owner:self
+//                                        options:nil];
+            CGRect newRect = CGRectMake(0, 44, 768, 432);
+            self.imageViewVideo.frame = newRect;
+        }
+        else
+        {
+//            [[NSBundle mainBundle] loadNibNamed:@"H264PlayerViewController"
+//                                          owner:self
+//                                        options:nil];
+            CGRect newRect = CGRectMake(0, 44, 320, 180);
+            self.imageViewVideo.frame = newRect;
+            self.viewCtrlButtons.frame.origin = CGPointMake(0, 30);
+            //self.progressView.frame = CGRectMake(0, 44, 320, 480);
+        }
+        
+        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+        {
+        }
+        else
+        {
+        }
+
+        //if (fwUpgradeInProgess == TRUE)
+        {
+        }
+	}
+    
+    [self checkIphone5Size:orientation];
+
+//    self.backBarBtnItem.target = self;
+//    self.backBarBtnItem.action = @selector(goBackToCameraList);
+// SLIDE MENU
+    self.backBarBtnItem.target = self.stackViewController;
+    self.backBarBtnItem.action = @selector(toggleLeftViewController);
 }
 
 - (void) checkIphone5Size: (UIInterfaceOrientation)orientation
@@ -410,10 +572,12 @@
         if (orientation == UIInterfaceOrientationLandscapeLeft || orientation == UIInterfaceOrientationLandscapeRight)
         {
             NSLog(@"iphone5 SHift right...");
-            CGAffineTransform translate = CGAffineTransformMakeTranslation(44, 0);
-            self.imageViewVideo.transform = translate;
+//            CGAffineTransform translate = CGAffineTransformMakeTranslation(44, 0);
+//            self.imageViewVideo.transform = translate;
+            CGRect newRect = CGRectMake(0, 0, 568, 320);
+            self.imageViewVideo.frame = newRect;
             
-            self.progressView.frame = CGRectMake(self.progressView.frame.origin.x, self.progressView.frame.origin.y, self.progressView.frame.size.width + 88, self.progressView.frame.size.height);
+//            self.progressView.frame = CGRectMake(self.progressView.frame.origin.x, self.progressView.frame.origin.y, self.progressView.frame.size.width + 88, self.progressView.frame.size.height);
         }
     }
 }
@@ -429,12 +593,11 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    //#warning Incomplete method implementation.
-    // Return the number of rows in the section.
     NSLog(@"self.playlistArray.count = %d", self.playlistArray.count);
     //return self.eventArr.count;
     return self.playlistArray.count;
-    //return 7;
+    
+    return 0;
 }
 
 - (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
@@ -470,7 +633,6 @@
     
     PlaylistInfo *playlistInfo = [self.playlistArray objectAtIndex:indexPath.row];
     if (playlistInfo) {
-        cell.textLabel.text = @"Title";
         cell.imgViewSnapshot.image = [UIImage imageNamed:@"no_img_available.jpeg"];
         
         if (!playlistInfo.imgSnapshot) {
@@ -506,7 +668,7 @@
         
         cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     }
-    
+
     return cell;
 }
 
@@ -528,7 +690,6 @@
 {
     [tableView deselectRowAtIndexPath:[tableView indexPathForSelectedRow]
                              animated:NO];
-    //PlaylistInfo *playlistInfo = [[PlaylistInfo alloc] init];
     PlaylistInfo *playlistInfo = (PlaylistInfo *)[self.playlistArray objectAtIndex:indexPath.row];
     
     NSLog(@"urlFile = %@", playlistInfo.urlFile);
@@ -556,7 +717,108 @@
           autorelease]
          show];
     }
-     
+}
+
+#pragma mark -
+#pragma mark PickerView DataSource
+
+- (NSInteger)numberOfComponentsInPickerView:(UIPickerView *)pickerView
+{
+    return 1;
+}
+- (NSInteger)pickerView:(UIPickerView *)pickerView numberOfRowsInComponent:(NSInteger)component
+{
+    return 3;
+}
+- (NSString *)pickerView:(UIPickerView *)pickerView
+             titleForRow:(NSInteger)row
+            forComponent:(NSInteger)component
+{
+    NSString *textRow;
+    switch (row) {
+        case 0:
+            textRow = @"D1";
+            break;
+        case 1:
+            textRow = @"HD 1 Mbps";
+            break;
+        case 2:
+            textRow = @"HD 1.5 Mbps";
+            break;
+            
+        default:
+            break;
+    }
+    return textRow;
+} 
+
+
+#pragma mark -
+#pragma mark PickerView Delegate
+- (void)pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row
+      inComponent:(NSInteger)component
+{
+    // send command here
+    pickerView.hidden = YES;
+    
+    [self performSelectorInBackground:@selector(setVQ_bg:)
+                           withObject:[NSNumber numberWithInt:row]];
+}
+
+- (void)setVQ_bg:(NSNumber *) row
+{
+    
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    
+	int videoQ =[userDefaults integerForKey:@"int_VideoQuality"];
+    
+    NSData * responseData  = nil;
+    if (  self.selectedChannel.profile.isInLocal)
+	{
+        NSString *modeVideo = @"";
+		if (self.httpComm != nil)
+		{
+            switch ([row intValue]) {
+                case 0:
+                    modeVideo = @"480p";
+                    break;
+                case 1:
+                    modeVideo = @"720p-10";
+                    break;
+                case 2:
+                    modeVideo = @"720p-15";
+                    break;
+                default:
+                    break;
+            }
+            
+            responseData = [self.httpComm sendCommandAndBlock_raw:SET_RESOLUTION_VGA];
+		}
+	}
+	else if(self.selectedChannel.profile.minuteSinceLastComm <= 5)
+	{
+//        if (self.scomm != nil)
+//		{
+//            if (videoQ == 0)
+//            {
+//                responseData= [self.scomm sendCommandThruUdtServer:SET_RESOLUTION_QVGA
+//                                                           withMac:self.selected_channel.profile.mac_address
+//                                                        AndChannel:self.selected_channel.channID];
+//            }
+//            else
+//            {
+//                responseData= [self.scomm sendCommandThruUdtServer:SET_RESOLUTION_VGA
+//                                                           withMac:self.selected_channel.profile.mac_address
+//                                                        AndChannel:self.selected_channel.channID];
+//            }
+//		}
+	}
+    
+	if (responseData != nil)
+	{
+		[self performSelectorOnMainThread:@selector(setVQ_fg)
+                               withObject:nil waitUntilDone:NO];
+	}
 }
 
 #pragma mark -
@@ -582,6 +844,8 @@
     [_httpComm release];
     
     [_barBntItemReveal release];
+    [_viewCtrlButtons release];
+    [_pickerHQOptions release];
     [super dealloc];
 }
 

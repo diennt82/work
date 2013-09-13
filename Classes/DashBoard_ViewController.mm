@@ -841,6 +841,15 @@
 //        [self.navigationController pushViewController:h264ViewController animated:NO];
 //        [h264ViewController release];
 //    }
+
+//TEST HERE
+//    MyFrontViewController *myFrontVC = [[MyFrontViewController alloc] init];
+//    [self.navigationController pushViewController:myFrontVC animated:YES];
+//    [myFrontVC release];
+//END TEST
+    
+//Slide menu
+
     if (ch != nil && ch.profile != nil) {
         MTStackViewController *stackViewController = [[MTStackViewController alloc] init];
         stackViewController.animationDurationProportionalToPosition = YES;
@@ -861,11 +870,6 @@
         stackViewController.rightViewControllerEnabled = YES;
         
         menuViewController.firstViewController = h264ViewController;
-
-//        MyFrontViewController *myFrontViewController = [[MyFrontViewController alloc] init];
-//        
-//        stackViewController.rightViewController = myFrontViewController;
-//        stackViewController.rightViewControllerEnabled = YES;
         
         UINavigationController *contentNavigationController = [UINavigationController new];
         //UINavigationController *contenNavigationController = self.navigationController;
@@ -873,8 +877,7 @@
         //stackViewController.contentContainerView = (UINavigationController *)self.navigationController;
         
         [self presentViewController:stackViewController animated:YES completion:nil];
-        
-        [tableView deselectRowAtIndexPath:indexPath animated:YES];
+        //[self.navigationController pushViewController:stackViewController animated:YES];
     }
 }
 
