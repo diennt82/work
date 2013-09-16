@@ -679,7 +679,7 @@ return self;
 
 				[self dismissModalViewControllerAnimated:NO	];
                 
-               
+
                 
 				NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
 
@@ -708,7 +708,6 @@ return self;
 
 				//Use navigation controller 
 				[loginOrReg presentModallyOn:self];
-
 				break;
 			}
 		case SCAN_CAMERA:
@@ -799,6 +798,8 @@ return self;
 			}
         case SCAN_BONJOUR_CAMERA :
         {
+            
+#if 0 //DBG DBG ONLY
             /*
              20130523_nguyendang :
              Scan camera with bonjour here
@@ -816,6 +817,28 @@ return self;
             //Back from login- login success
             [self dismissModalViewControllerAnimated:NO];
             self.progressView.hidden = NO;
+            
+#else
+            //Back from login- login success
+            [self dismissViewControllerAnimated:NO completion:nil];
+            self.progressView.hidden = NO;
+            //TEST TEST TEST
+            NotificationViewController * notif_view = [[[NotificationViewController alloc]
+                                                        initWithNibName:@"NotificationViewController" bundle:nil]autorelease];
+            
+            //Feed in data now
+            notif_view.cameraMacNoColon = @"44334C31A004";
+            notif_view.cameraName  = @"Camera-31a004";
+            notif_view.alertType   = @"4";
+            notif_view.alertVal    = @"20130915132303820";
+            
+            [latestCamAlert release];
+            latestCamAlert = nil;
+            
+            [notif_view presentModallyOn:self];
+            
+#endif
+
             
             break;
         }
@@ -1054,6 +1077,11 @@ return self;
 		msg =NSLocalizedStringWithDefaultValue( @"Temperature_too_low",nil, [NSBundle mainBundle],
                                                     @"Temperature too low", nil);
 	}
+    else if ([camAlert.alertType isEqualToString:ALERT_TYPE_MOTION])
+    {
+        msg =NSLocalizedStringWithDefaultValue( @"Motion Detected",nil, [NSBundle mainBundle],
+                                               @"Motion Detected", nil);
+    }
 
 
 	if (pushAlert != nil )
@@ -1071,8 +1099,8 @@ return self;
     NSString * cancel = NSLocalizedStringWithDefaultValue(@"Cancel",nil, [NSBundle mainBundle],
                                                        @"Cancel", nil);
     
-    NSString * msg2 = NSLocalizedStringWithDefaultValue(@"Go_to_Camera_list",nil, [NSBundle mainBundle],
-                                                       @"Go to Camera list", nil);
+    NSString * msg2 = NSLocalizedStringWithDefaultValue(@"View_snapshot",nil, [NSBundle mainBundle],
+                                                       @"View Snapshot", nil);
     
 	pushAlert = [[UIAlertView alloc]
 		initWithTitle:camAlert.cameraName
@@ -1080,6 +1108,7 @@ return self;
 		delegate:self
 		cancelButtonTitle:cancel
 		otherButtonTitles:msg2,nil];
+    
 	if ([self isThisMacStoredOffline:camAlert.cameraMacNoColon])
 	{
 
@@ -1091,8 +1120,19 @@ return self;
 		[self sendStatus:2];
 		pushAlert.tag = ALERT_PUSH_RECVED_RELOGIN_AFTER;
 	}
-    [self playSound];
 
+    //keep the reference here
+    if (latestCamAlert != nil)
+    {
+        [latestCamAlert release];
+        latestCamAlert = nil;
+    }
+    latestCamAlert = camAlert;
+    
+    [self playSound];
+    
+    
+    
 	[pushAlert show];
     
 
@@ -1229,6 +1269,7 @@ return self;
 			case 0:
 				break;
 			case 1:
+            {
 
 
 				if (dashBoard != nil)
@@ -1250,14 +1291,32 @@ return self;
 
 				}
 
-				[self dismissModalViewControllerAnimated:NO];
+				[self dismissViewControllerAnimated:NO completion:nil];
 
-				NSLog(@"Re-scan "); 
+#if 0
+				NSLog(@"Re-scan ");
 				[self sendStatus:3];
 
-
-
+#endif 
+                
+                
+                NotificationViewController * notif_view = [[[NotificationViewController alloc]
+                                                            initWithNibName:@"NotificationViewController" bundle:nil]autorelease];
+                
+                //Feed in data now
+                notif_view.cameraMacNoColon = latestCamAlert.cameraMacNoColon;
+                notif_view.cameraName  = latestCamAlert.cameraName;
+                notif_view.alertType   = latestCamAlert.alertType;
+                notif_view.alertVal    = latestCamAlert.alertVal;
+                
+                [latestCamAlert release];
+                latestCamAlert = nil;
+                
+                [notif_view presentModallyOn:self];
+                
+             
 				break;
+            }
 			default:
 				break;
 

@@ -21,7 +21,6 @@
 
 #import "CamProfile.h"
 #import "CamChannel.h"
-//#import "PCMPlayer.h"
 #import "PublicDefine.h"
 
 #import "HttpCommunication.h"
@@ -38,6 +37,8 @@
 
 #import "CameraAlert.h"
 #import "Bonjour.h"
+
+#import "NotificationViewController.h"
 
 
 #define DIRECTION_V_NON  0x01
@@ -138,7 +139,8 @@
     IBOutlet UIImageView * sunBackground;
  
     
-    UIAlertView * pushAlert; 
+    UIAlertView * pushAlert;
+    CameraAlert * latestCamAlert;
     
     DashBoard_ViewController * dashBoard;
     

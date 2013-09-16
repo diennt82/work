@@ -32,15 +32,16 @@
     // Optional: set debug to YES for extra debugging information.
     [GAI sharedInstance].debug = YES;
     // Create tracker instance.
+    
     //UA-ID_INSTANCE is taken from the account analytics on google analytics
-    id<GAITracker> tracker = [[GAI sharedInstance] trackerWithTrackingId:@"UA-42134835-1"];
+    id<GAITracker> tracker = [[GAI sharedInstance] trackerWithTrackingId:@"UA-42134835-2"];
 
     // !!!: Use the next line only during TEST - appstore release: need to comment this line
-    [TestFlight setDeviceIdentifier:[[UIDevice currentDevice] uniqueIdentifier]];
+    //[TestFlight setDeviceIdentifier:[[UIDevice currentDevice] uniqueIdentifier]];
     
   
     //Add testflight app token - For remote login & crash reporting
-    [TestFlight takeOff:@"4574de50-f54d-4414-a803-fc460426c915"];
+    //[TestFlight takeOff:@"4574de50-f54d-4414-a803-fc460426c915"];
     
     [window setRootViewController:viewController];
     [window makeKeyAndVisible];
@@ -85,7 +86,7 @@
         NSString * str6 = (NSString *) [userInfo objectForKey:@"cameraname"];
         NSString * str7 = (NSString *) [userInfo objectForKey:@"url"];
         
-        
+        //4 44334C31A004 20130914055827490 2013-09-14T05:59:05+00:00 Camera-31a004
         NSLog(@"%@ %@ %@ %@ %@",  str2, str3, str4 , str5, str6);  
         
         if (str2 == nil ||
@@ -99,7 +100,7 @@
         }
         
         int rcvTimeStamp = [[NSDate date] timeIntervalSince1970];
-        CameraAlert * camAlert = [[CameraAlert alloc]initWithTimeStamp1:rcvTimeStamp];
+        CameraAlert * camAlert = [[CameraAlert alloc]initWithTimeStamp1:rcvTimeStamp] ;
         //set other values
         camAlert.cameraMacNoColon = str3;
         
@@ -125,13 +126,12 @@
             
         }
         
-        if (shouldStoreAlert && [CameraAlert insertAlertForCamera:camAlert] == TRUE)
-        {
-            NSLog(@"Alert inserted successfully"); 
-        }
-        
-        
-        
+        //20130914: phung : Dont store alert for now
+//        
+//        if (shouldStoreAlert && [CameraAlert insertAlertForCamera:camAlert] == TRUE)
+//        {
+//            NSLog(@"Alert inserted successfully"); 
+//        }
     
         
         if ( [application applicationState] == UIApplicationStateInactive)

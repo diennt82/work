@@ -832,25 +832,11 @@
     
     NSLog(@"ch = %@, ch.profile = %@, ch.profile.minuteSinceLastComm = %d", ch, ch.profile, ch.profile.minuteSinceLastComm);
     
-//    if (ch != nil && ch.profile != nil)
-//    {
-//        H264PlayerViewController *h264ViewController = [[H264PlayerViewController alloc] init];
-//        
-//        h264ViewController.selectedChannel = ch;
-//        
-//        [self.navigationController pushViewController:h264ViewController animated:NO];
-//        [h264ViewController release];
-//    }
 
-//TEST HERE
-//    MyFrontViewController *myFrontVC = [[MyFrontViewController alloc] init];
-//    [self.navigationController pushViewController:myFrontVC animated:YES];
-//    [myFrontVC release];
-//END TEST
-    
 //Slide menu
 
-    if (ch != nil && ch.profile != nil) {
+    if (ch != nil && ch.profile != nil)
+    {
         MTStackViewController *stackViewController = [[MTStackViewController alloc] init];
         stackViewController.animationDurationProportionalToPosition = YES;
         
@@ -876,12 +862,13 @@
        stackViewController.contentViewController = contentNavigationController;
         //stackViewController.contentContainerView = (UINavigationController *)self.navigationController;
         
-        [self presentViewController:stackViewController animated:YES completion:nil];
-        //[self.navigationController pushViewController:stackViewController animated:YES];
+        [self presentViewController:stackViewController animated:NO completion:nil];
+       
     }
 }
 
 #else
+
 - (void)tableView: (UITableView *)tableView didSelectRowAtIndexPath: (NSIndexPath *)indexPath
 {
     [tableView deselectRowAtIndexPath:[tableView indexPathForSelectedRow]

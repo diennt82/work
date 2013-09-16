@@ -797,28 +797,14 @@
 	}
 	else if(self.selectedChannel.profile.minuteSinceLastComm <= 5)
 	{
-//        if (self.scomm != nil)
-//		{
-//            if (videoQ == 0)
-//            {
-//                responseData= [self.scomm sendCommandThruUdtServer:SET_RESOLUTION_QVGA
-//                                                           withMac:self.selected_channel.profile.mac_address
-//                                                        AndChannel:self.selected_channel.channID];
-//            }
-//            else
-//            {
-//                responseData= [self.scomm sendCommandThruUdtServer:SET_RESOLUTION_VGA
-//                                                           withMac:self.selected_channel.profile.mac_address
-//                                                        AndChannel:self.selected_channel.channID];
-//            }
-//		}
+
 	}
     
-	if (responseData != nil)
-	{
-		[self performSelectorOnMainThread:@selector(setVQ_fg)
-                               withObject:nil waitUntilDone:NO];
-	}
+//	if (responseData != nil)
+//	{
+//		[self performSelectorOnMainThread:@selector(setVQ_fg)
+//                               withObject:nil waitUntilDone:NO];
+//	}
 }
 
 #pragma mark -

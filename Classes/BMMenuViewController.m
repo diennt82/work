@@ -120,13 +120,14 @@ static NSString *const MTTableViewCellIdentifier = @"MTTableViewCell";
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSLog(@"self.stackViewController.rightViewController.title = %@", self.stackViewController.rightViewController.title);
+
+    //Only support exit 
     
     if (indexPath.row == 3)
     {
         [(H264PlayerViewController *)self.firstViewController stopStream];
         [[self stackViewController] hideRightViewController];
-        [self dismissViewControllerAnimated:YES completion:^{
-        }];
+        [self dismissViewControllerAnimated:YES completion:^{}];
     }
     else
     {

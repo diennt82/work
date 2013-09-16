@@ -19,6 +19,7 @@
 #define  ALERT_TYPE_SOUND    @"1"
 #define  ALERT_TYPE_TEMP_HI  @"2"
 #define  ALERT_TYPE_TEMP_LO @"3"
+#define  ALERT_TYPE_MOTION @"4"
 
 @class MBP_iosViewController;
 

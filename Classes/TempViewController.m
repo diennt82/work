@@ -76,12 +76,31 @@
     }
     else
     {
-        cell.textLabel.text = @"Title";
+        cell.textLabel.text = @"Montion Detected";
     }
     
-    cell.accessoryView = UIAccessibilityAnnouncementNotification;
+    
+    //cell.accessoryView = UIAccessibilityAnnouncementNotification;
     
     return cell;
+}
+
+
+- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
+{
+    NSString *sectionName;
+    switch (section)
+    {
+        case 0:
+            sectionName = NSLocalizedString(@"Earlier Events", @"Earlier Events");
+            break;
+        
+            // ...
+        default:
+            sectionName = @"";
+            break;
+    }
+    return sectionName;
 }
 
 /*
@@ -152,7 +171,7 @@
     {
         NSLog(@"urlFile nil");
         [[[[UIAlertView alloc] initWithTitle:@"Empty"
-                                    message:@"Url file maybe empty"
+                                    message:@"Url file is empty"
                                    delegate:self
                           cancelButtonTitle:nil
                           otherButtonTitles:@"OK", nil]

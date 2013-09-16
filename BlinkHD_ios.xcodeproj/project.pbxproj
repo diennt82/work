@@ -162,6 +162,8 @@
 		38DE1CDA168AFBE00049E814 /* MBP_InitialSetupViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 38DE1CDC168AFBE00049E814 /* MBP_InitialSetupViewController.xib */; };
 		38E3C85C1694033500A13A70 /* AlertPrompt.m in Sources */ = {isa = PBXBuildFile; fileRef = 38E3C85B1694033500A13A70 /* AlertPrompt.m */; };
 		38FC9D7A16717B0300373F25 /* EditCameraCell.mm in Sources */ = {isa = PBXBuildFile; fileRef = 38FC9D7916717B0300373F25 /* EditCameraCell.mm */; };
+		84DEA2BB17E42E3F00567836 /* NotificationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 84DEA2B917E42E3F00567836 /* NotificationViewController.m */; };
+		84DEA2BC17E42E3F00567836 /* NotificationViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 84DEA2BA17E42E3F00567836 /* NotificationViewController.xib */; };
 		9704F84117B37CB3005F9868 /* DashBoard_ViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 9704F84017B37CAF005F9868 /* DashBoard_ViewController.mm */; };
 		97137B9715AE742A00BEBBD6 /* StunCommunication.mm in Sources */ = {isa = PBXBuildFile; fileRef = 97137B9615AE742A00BEBBD6 /* StunCommunication.mm */; };
 		9719EC5C155C9F30005419FC /* MBP_MenuViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 9719EC5A155C9F30005419FC /* MBP_MenuViewController.mm */; };
@@ -545,6 +547,9 @@
 		38E3C85B1694033500A13A70 /* AlertPrompt.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AlertPrompt.m; sourceTree = "<group>"; };
 		38FC9D7816717B0300373F25 /* EditCameraCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EditCameraCell.h; sourceTree = "<group>"; };
 		38FC9D7916717B0300373F25 /* EditCameraCell.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = EditCameraCell.mm; sourceTree = "<group>"; };
+		84DEA2B817E42E3F00567836 /* NotificationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NotificationViewController.h; sourceTree = "<group>"; };
+		84DEA2B917E42E3F00567836 /* NotificationViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NotificationViewController.m; sourceTree = "<group>"; };
+		84DEA2BA17E42E3F00567836 /* NotificationViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = NotificationViewController.xib; sourceTree = "<group>"; };
 		8D1107310486CEB800E47090 /* BlinkHD_ios-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "BlinkHD_ios-Info.plist"; plistStructureDefinitionIdentifier = "com.apple.xcode.plist.structure-definition.iphone.info-plist"; sourceTree = "<group>"; };
 		9704F37E14B76202000B4AA5 /* Entitlements.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Entitlements.plist; sourceTree = "<group>"; };
 		9704F83F17B37CAD005F9868 /* DashBoard_ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DashBoard_ViewController.h; sourceTree = "<group>"; };
@@ -614,16 +619,6 @@
 		9792B9B017E2F8E9009C9F5D /* bb_rec_icon_d.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bb_rec_icon_d.png; sourceTree = "<group>"; };
 		9792B9B117E2F8E9009C9F5D /* bb_rec_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bb_rec_icon.png; sourceTree = "<group>"; };
 		9792B9B217E2F8E9009C9F5D /* i_mode.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = i_mode.png; sourceTree = "<group>"; };
-		9792FC0417D6DCE700365405 /* decoder_audio.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = decoder_audio.h; sourceTree = "<group>"; };
-		9792FC0517D6DCE700365405 /* decoder_video.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = decoder_video.h; sourceTree = "<group>"; };
-		9792FC0617D6DCE700365405 /* decoder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = decoder.h; sourceTree = "<group>"; };
-		9792FC0717D6DCE700365405 /* Errors.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Errors.h; sourceTree = "<group>"; };
-		9792FC0817D6DCE700365405 /* mediaplayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = mediaplayer.h; sourceTree = "<group>"; };
-		9792FC0917D6DCE700365405 /* output.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = output.h; sourceTree = "<group>"; };
-		9792FC0A17D6DCE700365405 /* packetqueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = packetqueue.h; sourceTree = "<group>"; };
-		9792FC0B17D6DCE700365405 /* thread.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = thread.h; sourceTree = "<group>"; };
-		9792FC1E17D7149600365405 /* PCMPlayer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PCMPlayer.h; sourceTree = "<group>"; };
-		9792FC1F17D7168B00365405 /* RemoteIOPlayer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RemoteIOPlayer.h; sourceTree = "<group>"; };
 		9792FC2217D72F8300365405 /* H264PlayerViewController_land.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = H264PlayerViewController_land.xib; sourceTree = "<group>"; };
 		97987CCC154687490066C49B /* background.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = background.png; sourceTree = "<group>"; };
 		97987CCE154688110066C49B /* partition_bar.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = partition_bar.png; sourceTree = "<group>"; };
@@ -1577,6 +1572,7 @@
 		080E96DDFE201D6D7F000001 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				84DEA2B717E42DB900567836 /* NotificationView */,
 				978B25B317E1B2AE006FC224 /* SlideMenu */,
 				979BC69617D9B8BA00B3B373 /* Playlist */,
 				97A07FAD17D5FCFD00653460 /* H264Player */,
@@ -1987,6 +1983,16 @@
 			name = images13;
 			sourceTree = "<group>";
 		};
+		84DEA2B717E42DB900567836 /* NotificationView */ = {
+			isa = PBXGroup;
+			children = (
+				84DEA2B817E42E3F00567836 /* NotificationViewController.h */,
+				84DEA2B917E42E3F00567836 /* NotificationViewController.m */,
+				84DEA2BA17E42E3F00567836 /* NotificationViewController.xib */,
+			);
+			name = NotificationView;
+			sourceTree = "<group>";
+		};
 		9770CB87143032BC009E69EF /* images */ = {
 			isa = PBXGroup;
 			children = (
@@ -2332,6 +2338,7 @@
 				9792B9B317E2F8E9009C9F5D /* bb_rec_icon_d.png in Resources */,
 				9792B9B417E2F8E9009C9F5D /* bb_rec_icon.png in Resources */,
 				9792B9B517E2F8E9009C9F5D /* i_mode.png in Resources */,
+				84DEA2BC17E42E3F00567836 /* NotificationViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2415,6 +2422,7 @@
 				978B25BD17E1B43E006FC224 /* MTStackViewController.m in Sources */,
 				978B25C117E1B4AB006FC224 /* BMMenuViewController.m in Sources */,
 				97735C4417E1CEAA00160DA1 /* MyFrontViewController.m in Sources */,
+				84DEA2BB17E42E3F00567836 /* NotificationViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4074,7 +4082,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
-				CODE_SIGN_IDENTITY = "";
+				CODE_SIGN_IDENTITY = "iPhone Developer: steve lee (BVQT22TERJ)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: steve lee (BVQT22TERJ)";
 				GCC_C_LANGUAGE_STANDARD = c99;
 				GCC_VERSION = "";
@@ -4087,7 +4095,8 @@
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
 				OTHER_LDFLAGS = "";
 				PRODUCT_NAME = "Camera HD";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "C8B60F00-EACD-487B-89BD-DF30C45DD34F";
+				PROVISIONING_PROFILE = "4096685E-3957-42CC-BFC9-83F3ADFEDA44";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "4096685E-3957-42CC-BFC9-83F3ADFEDA44";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				USER_HEADER_SEARCH_PATHS = "\"$(SRCROOT)/external_include\"/**";
