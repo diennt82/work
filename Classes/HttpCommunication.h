@@ -113,6 +113,8 @@
 #define ALERT_ASK_FOR_RETRY 3
 
 
+
+
 @interface HttpCommunication : NSObject <UITextFieldDelegate> {
 	NSString * device_ip; 
 	int device_port;

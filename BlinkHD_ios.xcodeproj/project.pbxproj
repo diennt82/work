@@ -1536,9 +1536,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A1A5188117E07DCB00E1DFC2 /* MonitorCommunication.framework in Frameworks */,
 				A11E8C3317E2F82F00915F84 /* H264MediaPlayer.framework in Frameworks */,
 				A11E8C1317E2DB7E00915F84 /* libstdc++.dylib in Frameworks */,
-				A1A5188117E07DCB00E1DFC2 /* MonitorCommunication.framework in Frameworks */,
 				A10EC12017E0692700EA4F9D /* libGoogleAnalytics_debug.a in Frameworks */,
 				A10EC12117E0692700EA4F9D /* libGoogleAnalytics.a in Frameworks */,
 				A10EC11B17E0681D00EA4F9D /* libUdtLib.a in Frameworks */,

@@ -33,6 +33,7 @@
 @property (retain, nonatomic) IBOutlet UITableView *tableViewPlaylist;
 @property (retain, nonatomic) IBOutlet UIView *viewCtrlButtons;
 @property (retain, nonatomic) IBOutlet UIPickerView *pickerHQOptions;
+@property (retain, nonatomic) IBOutlet UIButton *hqViewButton;
 
 @property (retain, nonatomic) IBOutlet UIBarButtonItem *barBntItemReveal;
 
@@ -41,6 +42,7 @@
 @property (nonatomic) BOOL mpFlag;
 @property (nonatomic, retain) NSArray *eventArr;
 @property (nonatomic, retain) HttpCommunication *htppComm;
+@property (nonatomic, retain) BMS_JSON_Communication *jsonComm;
 
 @end
 
@@ -127,7 +129,7 @@
         }
         else
         {
-            [self.view bringSubviewToFront:self.imageViewVideo];
+            //[self.view bringSubviewToFront:self.imageViewVideo];
         }
     }
     else if (self.segCtrl.selectedSegmentIndex == 1)
@@ -196,11 +198,11 @@
 
     if (self.segCtrl.selectedSegmentIndex == 0) {
         self.tableViewPlaylist.hidden= YES;
-        if (mp) {
-            if (mp->isPlaying()) {
-                [self.view bringSubviewToFront:self.imageViewVideo];
-            }
-        }
+//        if (mp) {
+//            if (mp->isPlaying()) {
+//                [self.view bringSubviewToFront:self.imageViewVideo];
+//            }
+//        }
     
     }
 //    else if (self.segCtrl.selectedSegmentIndex == 1)
@@ -232,6 +234,7 @@
         [self performSelector:@selector(startStream)
                    withObject:nil
                    afterDelay:0.1];
+        [self performSelectorInBackground:@selector(getVQ_bg) withObject:nil];
     }
     else if (self.selectedChannel.profile.minuteSinceLastComm <= 5)
     {
@@ -389,6 +392,71 @@
 //    
 //}
 
+-(void) getVQ_bg
+{
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    
+    NSDictionary *responseDict  = nil;
+    NSString *mac = [Util strip_colon_fr_mac:self.selectedChannel.profile.mac_address];
+    NSString *apiKey = [userDefaults objectForKey:@"PortalApikey"];
+    
+    if (self.selectedChannel.profile.isInLocal ) // Replace with httpCommunication after
+	{
+        self.jsonComm = [[[BMS_JSON_Communication alloc] initWithObject:self
+                                                              Selector:nil
+                                                          FailSelector:nil
+                                                             ServerErr:nil] autorelease];
+		if (self.jsonComm != nil)
+		{
+            responseDict= [self.jsonComm sendCommandBlockedWithRegistrationId:mac
+                                                                   andCommand:@"action=command&command=get_resolution"
+                                                                    andApiKey:apiKey];
+		}
+	}
+	else if(self.selectedChannel.profile.minuteSinceLastComm <= 5) // Remote
+	{
+		self.jsonComm = [[[BMS_JSON_Communication alloc] initWithObject:self
+                                                               Selector:nil
+                                                           FailSelector:nil
+                                                              ServerErr:nil] autorelease];
+		if (self.jsonComm != nil)
+		{
+            responseDict= [self.jsonComm sendCommandBlockedWithRegistrationId:mac
+                                                                   andCommand:[NSString stringWithFormat:@"action=command&command=get_resolution"] andApiKey:apiKey];
+		}
+	}
+
+	if (responseDict != nil)
+	{
+        
+        NSInteger status = [[responseDict objectForKey:@"status"] intValue];
+		if (status == 200)
+		{
+			NSString *bodyKey = [[[responseDict objectForKey:@"data"] objectForKey:@"device_response"] objectForKey:@"body"];
+            NSString *modeVideo = [[bodyKey componentsSeparatedByString:@": "] objectAtIndex:1];
+			
+            [self performSelectorOnMainThread:@selector(setVQForground:)
+                                   withObject:modeVideo waitUntilDone:NO];
+		}
+	}
+    
+    NSLog(@"getVQ_bg responseDict = %@", responseDict);
+}
+
+- (void)setVQForground: (NSString *)modeVideo
+{
+    if ([modeVideo isEqualToString:@"480p"]) // ok
+    {
+        [self.hqViewButton setImage:[UIImage imageNamed:@"hq_d.png" ]
+                           forState:UIControlStateNormal];
+    }
+    else if([modeVideo isEqualToString:@"720p_10"] || [modeVideo isEqualToString:@"720p_15"])
+    {
+        [self.hqViewButton setImage:[UIImage imageNamed:@"hq.png" ]
+                           forState:UIControlStateNormal];
+    }
+}
+
 #pragma mark - JSON Callback
 
 - (void)createSesseionSuccessWithResponse: (NSDictionary *)responseDict
@@ -406,6 +474,7 @@
             [self performSelector:@selector(startStream)
                        withObject:nil
                        afterDelay:0.1];
+            [self performSelectorInBackground:@selector(getVQ_bg) withObject:nil];
         }
     }
 }
@@ -770,41 +839,88 @@
     
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     
-	int videoQ =[userDefaults integerForKey:@"int_VideoQuality"];
+	//int videoQ =[userDefaults integerForKey:@"int_VideoQuality"];
     
-    NSData * responseData  = nil;
+    NSString *modeVideo = @"";
+    switch ([row intValue]) {
+        case 0:
+            modeVideo = @"480p";
+            break;
+        case 1:
+            modeVideo = @"720p_10";
+            break;
+        case 2:
+            modeVideo = @"720p_15";
+            break;
+        default:
+            break;
+    }
+    
+    NSString *mac = [Util strip_colon_fr_mac:self.selectedChannel.profile.mac_address];
+    NSString *apiKey = [userDefaults objectForKey:@"PortalApiKey"];
+    
+    NSDictionary *responseData  = nil;
     if (  self.selectedChannel.profile.isInLocal)
 	{
-        NSString *modeVideo = @"";
-		if (self.httpComm != nil)
+        
+        self.jsonComm = [[[BMS_JSON_Communication alloc] initWithObject:self
+                                                              Selector:nil
+                                                          FailSelector:nil
+                                                             ServerErr:nil] autorelease];
+        
+		if (self.jsonComm != nil) // This is httpComm. Replace after
 		{
-            switch ([row intValue]) {
-                case 0:
-                    modeVideo = @"480p";
-                    break;
-                case 1:
-                    modeVideo = @"720p-10";
-                    break;
-                case 2:
-                    modeVideo = @"720p-15";
-                    break;
-                default:
-                    break;
-            }
             
-            responseData = [self.httpComm sendCommandAndBlock_raw:SET_RESOLUTION_VGA];
+            
+//            [self.jsonComm sendCommandWithRegistrationId:mac
+//                                             andCommand:[NSString stringWithFormat:@"action=command&command=%@", modeVideo]
+//                                              andApiKey:apiKey];
+            responseData = [self.jsonComm sendCommandBlockedWithRegistrationId:mac
+                                                     andCommand:[NSString stringWithFormat:@"action=command&command=set_resolution&mode=%@", modeVideo]
+                                                      andApiKey:apiKey];
 		}
 	}
 	else if(self.selectedChannel.profile.minuteSinceLastComm <= 5)
 	{
-
+        
+        self.jsonComm = [[[BMS_JSON_Communication alloc] initWithObject:self
+                                                              Selector:nil
+                                                          FailSelector:nil
+                                                             ServerErr:nil] autorelease];
+        
+        if (self.jsonComm != nil)
+		{
+            responseData = [self.jsonComm sendCommandBlockedWithRegistrationId:mac
+                                                                    andCommand:[NSString stringWithFormat:@"action=command&command=set_resolution&mode=%@", modeVideo]
+                                                                     andApiKey:apiKey];
+		}
 	}
     
-//	if (responseData != nil)
-//	{
-//		[self performSelectorOnMainThread:@selector(setVQ_fg)
-//                               withObject:nil waitUntilDone:NO];
-//	}
+	if (responseData != nil)
+	{
+		[self performSelectorOnMainThread:@selector(setVQ_fg:)
+                               withObject:responseData waitUntilDone:NO];
+	}
+}
+
+-(void) setVQ_fg: (NSDictionary *)responseData
+{
+    
+    NSLog(@"setVQ_fg responseData = %@", responseData);
+    
+    NSInteger status = [[responseData objectForKey:@"status"] intValue];
+    
+    
+    if (status == 200) // ok
+    {
+        [self.hqViewButton setImage:[UIImage imageNamed:@"hq.png" ]
+                  forState:UIControlStateNormal];
+    }
+    else
+    {
+        [self.hqViewButton setImage:[UIImage imageNamed:@"hq_d.png" ]
+                  forState:UIControlStateNormal];
+    }
 }
 
 #pragma mark -
@@ -832,6 +948,7 @@
     [_barBntItemReveal release];
     [_viewCtrlButtons release];
     [_pickerHQOptions release];
+    [_hqViewButton release];
     [super dealloc];
 }
 
