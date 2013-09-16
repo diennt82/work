@@ -398,7 +398,9 @@
     
     NSDictionary *responseDict  = nil;
     NSString *mac = [Util strip_colon_fr_mac:self.selectedChannel.profile.mac_address];
-    NSString *apiKey = [userDefaults objectForKey:@"PortalApikey"];
+    NSString *apiKey = [userDefaults objectForKey:@"PortalApiKey"];
+    NSLog(@"mac %@, apikey %@", mac, apiKey);
+   
     
     if (self.selectedChannel.profile.isInLocal ) // Replace with httpCommunication after
 	{
@@ -732,7 +734,7 @@
         }
         else
         {
-            cell.labelTitle.text = @"Title";
+            cell.labelTitle.text = @"Motion Detected";
         }
         
         cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
