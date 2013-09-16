@@ -34,6 +34,7 @@
 @property (retain, nonatomic) IBOutlet UIView *viewCtrlButtons;
 @property (retain, nonatomic) IBOutlet UIPickerView *pickerHQOptions;
 @property (retain, nonatomic) IBOutlet UIButton *hqViewButton;
+@property (retain, nonatomic) IBOutlet UIButton *triggerRecordingButton;
 
 @property (retain, nonatomic) IBOutlet UIBarButtonItem *barBntItemReveal;
 
@@ -43,6 +44,7 @@
 @property (nonatomic, retain) NSArray *eventArr;
 @property (nonatomic, retain) HttpCommunication *htppComm;
 @property (nonatomic, retain) BMS_JSON_Communication *jsonComm;
+@property (nonatomic) BOOL recordingFlag;
 
 @end
 
@@ -151,6 +153,20 @@
 - (IBAction)iFrameOnlyPressAction:(id)sender {
 }
 - (IBAction)recordingPressAction:(id)sender {
+    self.recordingFlag = !self.recordingFlag;
+    
+    NSString *modeRecording = @"";
+    
+    if (self.recordingFlag) {
+        modeRecording = @"on";
+    }
+    else
+    {
+        modeRecording = @"off";
+    }
+    
+    [self performSelectorInBackground:@selector(setTriggerRecording_bg:)
+                           withObject:modeRecording];
 }
 
 - (IBAction)barBntItemRevealAction:(id)sender {
@@ -456,6 +472,84 @@
     {
         [self.hqViewButton setImage:[UIImage imageNamed:@"hq.png" ]
                            forState:UIControlStateNormal];
+    }
+}
+
+- (void)setTriggerRecording_bg:(NSString *) modeRecording
+{
+    
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    
+    NSString *mac = [Util strip_colon_fr_mac:self.selectedChannel.profile.mac_address];
+    NSString *apiKey = [userDefaults objectForKey:@"PortalApiKey"];
+    
+    NSDictionary *responseData  = nil;
+    if (  self.selectedChannel.profile.isInLocal)
+	{
+        
+        self.jsonComm = [[[BMS_JSON_Communication alloc] initWithObject:self
+                                                               Selector:nil
+                                                           FailSelector:nil
+                                                              ServerErr:nil] autorelease];
+        
+		if (self.jsonComm != nil) // This is httpComm. Replace after
+		{
+            
+            
+            //            [self.jsonComm sendCommandWithRegistrationId:mac
+            //                                             andCommand:[NSString stringWithFormat:@"action=command&command=%@", modeVideo]
+            //                                              andApiKey:apiKey];
+            responseData = [self.jsonComm sendCommandBlockedWithRegistrationId:mac
+                                                                    andCommand:[NSString stringWithFormat:@"action=command&command=set_recording_stat&mode=%@", modeRecording]
+                                                                     andApiKey:apiKey];
+		}
+	}
+	else if(self.selectedChannel.profile.minuteSinceLastComm <= 5)
+	{
+        
+        self.jsonComm = [[[BMS_JSON_Communication alloc] initWithObject:self
+                                                               Selector:nil
+                                                           FailSelector:nil
+                                                              ServerErr:nil] autorelease];
+        
+        if (self.jsonComm != nil)
+		{
+            responseData = [self.jsonComm sendCommandBlockedWithRegistrationId:mac
+                                                                    andCommand:[NSString stringWithFormat:@"action=command&command=set_recording_stat&mode=%@", modeRecording]
+                                                                     andApiKey:apiKey];
+		}
+	}
+    
+	if (responseData != nil)
+	{
+		[self performSelectorOnMainThread:@selector(setTriggerRecording_fg:)
+                               withObject:responseData waitUntilDone:NO];
+	}
+}
+
+-(void) setTriggerRecording_fg: (NSDictionary *)responseData
+{
+    
+    NSLog(@"setTriggerRecording_fg responseData = %@", responseData);
+    
+    NSInteger status = [[responseData objectForKey:@"status"] intValue];
+    
+    
+    if (status == 200) // ok
+    {
+        if (self.recordingFlag) {
+            [self.triggerRecordingButton setImage:[UIImage imageNamed:@"bb_rec_icon.png" ]
+                                         forState:UIControlStateNormal];
+        }
+        else
+        {
+            [self.triggerRecordingButton setImage:[UIImage imageNamed:@"bb_rec_icon_d.png" ]
+                                         forState:UIControlStateNormal];
+        }
+    }
+    else
+    {
+        self.recordingFlag = !self.recordingFlag;
     }
 }
 
@@ -918,13 +1012,23 @@
     
     if (status == 200) // ok
     {
-        [self.hqViewButton setImage:[UIImage imageNamed:@"hq.png" ]
-                  forState:UIControlStateNormal];
+        NSString *bodyKey = [[[responseData objectForKey:@"data"] objectForKey:@"device_response"] objectForKey:@"body"];
+        NSString *modeVideo = [[bodyKey componentsSeparatedByString:@": "] objectAtIndex:1];
+        
+        if ([modeVideo isEqualToString:@"480p"])
+        {
+            [self.hqViewButton setImage:[UIImage imageNamed:@"hq_d.png" ]
+                               forState:UIControlStateNormal];
+        }
+        else if([modeVideo isEqualToString:@"720p_10"] || [modeVideo isEqualToString:@"720p_15"])
+        {
+            [self.hqViewButton setImage:[UIImage imageNamed:@"hq.png" ]
+                               forState:UIControlStateNormal];
+        }
     }
     else
     {
-        [self.hqViewButton setImage:[UIImage imageNamed:@"hq_d.png" ]
-                  forState:UIControlStateNormal];
+        NSLog(@"status = %d", [[responseData objectForKey:@"stats"] intValue]);
     }
 }
 
@@ -954,6 +1058,7 @@
     [_viewCtrlButtons release];
     [_pickerHQOptions release];
     [_hqViewButton release];
+    [_triggerRecordingButton release];
     [super dealloc];
 }
 
