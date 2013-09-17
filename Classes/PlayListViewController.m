@@ -77,7 +77,8 @@
     for (id curObj in objects)
     {
         
-        if([curObj isKindOfClass:[UITableViewCell class]]){
+        if([curObj isKindOfClass:[UITableViewCell class]])
+        {
             cell = (PlaylistCell *)curObj;
             break;
         }
@@ -134,7 +135,7 @@
             
             NSDateFormatter* formatter = [[[NSDateFormatter alloc] init] autorelease];
             [formatter setDateFormat:@"dd-MM-yyyy 'at' HH:mm"];
-            NSTimeZone *gmt = [NSTimeZone timeZoneWithAbbreviation:@"GMT"];
+            NSTimeZone *gmt = [NSTimeZone systemTimeZone];
             [formatter setTimeZone:gmt];
             
             

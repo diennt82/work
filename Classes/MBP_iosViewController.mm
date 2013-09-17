@@ -833,8 +833,7 @@ return self;
             notif_view.alertType   = @"4";
             notif_view.alertVal    = @"20130917065256730";
             
-            [latestCamAlert release];
-            latestCamAlert = nil;
+           
             
             [notif_view presentModallyOn:self];
             
@@ -1110,26 +1109,28 @@ return self;
 		cancelButtonTitle:cancel
 		otherButtonTitles:msg2,nil];
     
-	if ([self isThisMacStoredOffline:camAlert.cameraMacNoColon])
+	//if ([self isThisMacStoredOffline:camAlert.cameraMacNoColon])
 	{
 
 		pushAlert.tag = ALERT_PUSH_RECVED_RESCAN_AFTER;
 	}
-	else
-	{
-		NSLog(@"Relogin"); 
-		[self sendStatus:2];
-		pushAlert.tag = ALERT_PUSH_RECVED_RELOGIN_AFTER;
-	}
+//	else
+//	{
+//		NSLog(@"Relogin"); 
+//		[self sendStatus:2];
+//		pushAlert.tag = ALERT_PUSH_RECVED_RELOGIN_AFTER;
+//	}
 
-    //keep the reference here
-    if (latestCamAlert != nil)
+    @synchronized(self)
     {
-        [latestCamAlert release];
-        latestCamAlert = nil;
+        //keep the reference here
+        if (latestCamAlert != nil)
+        {
+            [latestCamAlert release];
+            latestCamAlert = nil;
+        }
+        latestCamAlert = camAlert;
     }
-    latestCamAlert = camAlert;
-    
     [self playSound];
     
     
@@ -1273,11 +1274,12 @@ return self;
             {
 
 
+
 				if (dashBoard != nil)
 				{
 					NSLog(@"close all windows and thread"); 
 
-					//[dashBoard.navigationController popToRootViewControllerAnimated:NO]; 
+					
 
 					NSArray * views = dashBoard.navigationController.viewControllers;                     
 					NSLog(@"views count = %d",[views count] );
@@ -1295,6 +1297,7 @@ return self;
 				[self dismissViewControllerAnimated:NO completion:nil];
 
 #if 0
+
 				NSLog(@"Re-scan ");
 				[self sendStatus:3];
 
@@ -1303,15 +1306,17 @@ return self;
                 
                 NotificationViewController * notif_view = [[[NotificationViewController alloc]
                                                             initWithNibName:@"NotificationViewController" bundle:nil]autorelease];
-                
-                //Feed in data now
-                notif_view.cameraMacNoColon = latestCamAlert.cameraMacNoColon;
-                notif_view.cameraName  = latestCamAlert.cameraName;
-                notif_view.alertType   = latestCamAlert.alertType;
-                notif_view.alertVal    = latestCamAlert.alertVal;
-                
-                [latestCamAlert release];
-                latestCamAlert = nil;
+                @synchronized(self)
+                {
+                    //Feed in data now
+                    notif_view.cameraMacNoColon = latestCamAlert.cameraMacNoColon;
+                    notif_view.cameraName  = latestCamAlert.cameraName;
+                    notif_view.alertType   = latestCamAlert.alertType;
+                    notif_view.alertVal    = latestCamAlert.alertVal;
+                    
+                    [latestCamAlert release];
+                    latestCamAlert = nil;
+                }
                 
                 [notif_view presentModallyOn:self];
                 

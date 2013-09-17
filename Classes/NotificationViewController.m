@@ -124,8 +124,8 @@
     else
     {
         NSLog(@"urlFile nil");
-        [[[[UIAlertView alloc] initWithTitle:@"Empty"
-                                     message:@"Url file is empty"
+        [[[[UIAlertView alloc] initWithTitle:@"No Clip"
+                                     message:@"No clip is associated with this snapshot"
                                     delegate:self
                            cancelButtonTitle:nil
                            otherButtonTitles:@"OK", nil]
