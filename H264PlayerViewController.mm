@@ -30,6 +30,7 @@
 #import "PlaylistCell.h"
 #import "MTStackViewController.h"
 #import "HttpCommunication.h"
+#import "PlayListViewController.h"
 #import <MonitorCommunication/MonitorCommunication.h>
 #import <H264MediaPlayer/H264MediaPlayer.h>
 
@@ -46,6 +47,7 @@
 @property (retain, nonatomic) IBOutlet UIButton *hqViewButton;
 @property (retain, nonatomic) IBOutlet UIButton *triggerRecordingButton;
 @property (retain, nonatomic) IBOutlet UIImageView *imgViewDrectionPad;
+@property (retain, nonatomic) IBOutlet PlayListViewController *playlistViewController;
 
 @property (retain, nonatomic) IBOutlet UIBarButtonItem *barBntItemReveal;
 
@@ -137,7 +139,7 @@
     
     if (self.segCtrl.selectedSegmentIndex == 0) {
         
-        self.tableViewPlaylist.hidden = YES;
+        self.playlistViewController.tableView.hidden = YES;
         
         if (self.mpFlag) {
             self.progressView.hidden = NO;
@@ -152,12 +154,12 @@
     }
     else if (self.segCtrl.selectedSegmentIndex == 1)
     {
-        if (self.playlistArray.count == 0) {
+        if (self.playlistViewController.playlistArray.count == 0) {
             self.progressView.hidden = NO;
         }
         
-        self.tableViewPlaylist.hidden = NO;
-        [self.view bringSubviewToFront:self.tableViewPlaylist];
+        self.playlistViewController.tableView.hidden = NO;
+        [self.view bringSubviewToFront:self.playlistViewController.tableView];
     }
     
     NSLog(@"self.segCtrl.selectedSegmentIndex = %d", self.segCtrl.selectedSegmentIndex);
@@ -227,7 +229,7 @@
     [self performSelectorInBackground:@selector(loadEarlierList) withObject:nil];
 
     if (self.segCtrl.selectedSegmentIndex == 0) {
-        self.tableViewPlaylist.hidden= YES;
+        self.playlistViewController.tableView.hidden= YES;
     }
     
     //Direction stuf
@@ -436,7 +438,7 @@
             
             //[self.tableViewPlaylist reloadData];
             
-            self.playlistArray = [NSMutableArray array];
+            self.playlistViewController.playlistArray = [NSMutableArray array];
             
             for (NSDictionary *playlist in self.eventArr) {
                 NSDictionary *clipInfo = [[playlist objectForKey:@"playlist"] objectAtIndex:0];
@@ -446,13 +448,13 @@
                 playlistInfo.titleString = [clipInfo objectForKey:@"title"];
                 playlistInfo.urlFile = [clipInfo objectForKey:@"file"];
                 
-                [self.playlistArray addObject:playlistInfo];
+                [self.playlistViewController.playlistArray addObject:playlistInfo];
                 //[self.tableViewPlaylist reloadData];
             }
             
             //[self.tableViewPlaylist performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:NO];
-            [self.tableViewPlaylist reloadData];
-            NSLog(@"reloadData %d", self.playlistArray.count);
+            [self.playlistViewController.tableView reloadData];
+            NSLog(@"reloadData %d", self.playlistViewController.playlistArray.count);
             
             //[self performSelectorInBackground:@selector(downloadImage) withObject:nil];
         }
@@ -1308,144 +1310,6 @@
     }
 }
 
-#pragma mark - Table view data source
-
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
-{
-    //#warning Potentially incomplete method implementation.
-    // Return the number of sections.
-    return 1;
-}
-
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
-{
-    NSLog(@"self.playlistArray.count = %d", self.playlistArray.count);
-    //return self.eventArr.count;
-    return self.playlistArray.count;
-}
-
-- (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    if (indexPath.row % 2)
-    {
-        [cell setBackgroundColor:[UIColor colorWithRed:.8 green:.8 blue:1 alpha:1]];
-    }
-    else
-        [cell setBackgroundColor:[UIColor clearColor]];
-}
-
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-//    static NSString *CellIdentifier = @"Cell";
-//    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-//    if (cell == nil) {
-//        cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
-//    }
-    
-    static NSString *CellIdentifier = @"PlaylistCell";
-    PlaylistCell *cell = [self.tableViewPlaylist dequeueReusableCellWithIdentifier:CellIdentifier];
-    
-    NSArray *objects = [[NSBundle mainBundle] loadNibNamed:@"PlaylistCell" owner:nil options:nil];
-    for (id curObj in objects) {
-        if([curObj isKindOfClass:[UITableViewCell class]]){
-            cell = (PlaylistCell *)curObj;
-            break;
-        }
-    }
-    
-    // Configure the cell...
-    
-    PlaylistInfo *playlistInfo = [self.playlistArray objectAtIndex:indexPath.row];
-    if (playlistInfo) {
-        cell.imgViewSnapshot.image = [UIImage imageNamed:@"no_img_available.jpeg"];
-        
-        if (!playlistInfo.imgSnapshot) {
-            [cell.activityIndicator startAnimating];
-            
-            CGSize newSize = CGSizeMake(64, 64);
-            
-            dispatch_queue_t q = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0ul);
-            dispatch_async(q, ^{
-                playlistInfo.imgSnapshot = [self imageWithUrlString:playlistInfo.urlImage scaledToSize:newSize];
-                
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    //NSLog(@"img = %@", img);
-                    cell.imgViewSnapshot.image = playlistInfo.imgSnapshot;
-                    [cell.activityIndicator stopAnimating];
-                    cell.activityIndicator.hidden = YES;
-                });
-            });
-        }
-        else
-        {
-            NSLog(@"playlistInfo.imgSnapshot already");
-            cell.imgViewSnapshot.image = playlistInfo.imgSnapshot;
-        }
-        
-        if (playlistInfo.titleString && ![playlistInfo.titleString isEqualToString:@""]) {
-            cell.labelTitle.text = playlistInfo.titleString;
-        }
-        else
-        {
-            cell.labelTitle.text = @"Motion Detected";
-        }
-        
-        cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-    }
-
-    return cell;
-}
-
-- (UIImage *)imageWithUrlString:(NSString *)urlString scaledToSize:(CGSize)newSize
-{
-	UIGraphicsBeginImageContext(newSize);
-    
-	[[UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:urlString]]] drawInRect:CGRectMake(0, 0, newSize.width, newSize.height)];
-    
-	UIImage* newImage = UIGraphicsGetImageFromCurrentImageContext();
-	UIGraphicsEndImageContext();
-    
-	return newImage;
-}
-
-#pragma mark - Table view delegate
-
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    [tableView deselectRowAtIndexPath:[tableView indexPathForSelectedRow]
-                             animated:NO];
-    PlaylistInfo *playlistInfo = (PlaylistInfo *)[self.playlistArray objectAtIndex:indexPath.row];
-    
-    NSLog(@"urlFile = %@", playlistInfo.urlFile);
-    
-    if(playlistInfo.urlFile &&
-       ![playlistInfo.urlFile isEqualToString:@""] &&
-       playlistInfo.imgSnapshot)
-    {
-        PlaybackViewController *playbackViewController = [[PlaybackViewController alloc] init];
-        playbackViewController.urlVideo = playlistInfo.urlFile;
-        if (mp != nil)
-        {
-            [self stopStream];
-            self.mpFlag = TRUE;
-        }
-        
-        [self.navigationController pushViewController:playbackViewController animated:NO];
-        [playbackViewController release];
-    }
-    else
-    {
-        NSLog(@"urlFile nil");
-        [[[[UIAlertView alloc] initWithTitle:@"Sorry"
-                                     message:@"Url file maybe empty. Or wait for load image"
-                                    delegate:self
-                           cancelButtonTitle:nil
-                           otherButtonTitles:@"OK", nil]
-          autorelease]
-         show];
-    }
-}
-
 #pragma mark -
 #pragma mark PickerView DataSource
 
@@ -1625,6 +1489,7 @@
     [_imgViewDrectionPad release];
     [_send_UD_dir_req_timer invalidate];
     [_send_LR_dir_req_timer invalidate];
+    [_playlistViewController release];
     [super dealloc];
 }
 

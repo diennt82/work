@@ -799,7 +799,7 @@ return self;
         case SCAN_BONJOUR_CAMERA :
         {
             
-#if 0 //DBG DBG ONLY
+#if 1 //DBG DBG ONLY
             /*
              20130523_nguyendang :
              Scan camera with bonjour here
