@@ -444,6 +444,7 @@
                 NSDictionary *clipInfo = [[playlist objectForKey:@"playlist"] objectAtIndex:0];
                 
                 PlaylistInfo *playlistInfo = [[[PlaylistInfo alloc] init] autorelease];
+                playlistInfo.mac_addr = mac;
                 playlistInfo.urlImage = [clipInfo objectForKey:@"image"];
                 playlistInfo.titleString = [clipInfo objectForKey:@"title"];
                 playlistInfo.urlFile = [clipInfo objectForKey:@"file"];
@@ -1266,7 +1267,7 @@
             CGRect newRect = CGRectMake(0, 44, 320, 180);
             self.imageViewVideo.frame = newRect;
             self.viewCtrlButtons.frame = CGRectMake(0, 44, _viewCtrlButtons.frame.size.width, _viewCtrlButtons.frame.size.height);
-            self.imgViewDrectionPad.frame = CGRectMake(100, 180, _imgViewDrectionPad.frame.size.width, _imgViewDrectionPad.frame.size.height);
+            self.imgViewDrectionPad.frame = CGRectMake(100, 340, _imgViewDrectionPad.frame.size.width, _imgViewDrectionPad.frame.size.height);
             //self.progressView.frame = CGRectMake(0, 44, 320, 480);
         }
         
