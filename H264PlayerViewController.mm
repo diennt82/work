@@ -10,9 +10,19 @@
 #define HD1 @"720p-10"
 #define HD15 @"720p-15"
 
+#define DIRECTION_V_NON  0x01
+#define DIRECTION_V_UP   0x02
+#define DIRECTION_V_DN   0x04
+#define DIRECTION_V_MASK 0xF0
+
+#define DIRECTION_H_NON 0x10
+#define DIRECTION_H_LF  0x20
+#define DIRECTION_H_RT  0x40
+#define DIRECTION_H_MASK 0x0F
+
+#define VIEW_DIRECTIONPAD_TAG 999
+
 #import "H264PlayerViewController.h"
-
-
 
 #import "HttpCommunication.h"
 #import "PlaylistInfo.h"
@@ -35,6 +45,7 @@
 @property (retain, nonatomic) IBOutlet UIPickerView *pickerHQOptions;
 @property (retain, nonatomic) IBOutlet UIButton *hqViewButton;
 @property (retain, nonatomic) IBOutlet UIButton *triggerRecordingButton;
+@property (retain, nonatomic) IBOutlet UIImageView *imgViewDrectionPad;
 
 @property (retain, nonatomic) IBOutlet UIBarButtonItem *barBntItemReveal;
 
@@ -45,6 +56,15 @@
 @property (nonatomic, retain) HttpCommunication *htppComm;
 @property (nonatomic, retain) BMS_JSON_Communication *jsonComm;
 @property (nonatomic) BOOL recordingFlag;
+
+/* Direction */
+@property (nonatomic, retain) NSTimer * send_UD_dir_req_timer;
+@property (nonatomic, retain) NSTimer * send_LR_dir_req_timer;
+/* Added to support direction update */
+@property (nonatomic) int currentDirUD, lastDirUD;
+@property (nonatomic) int delay_update_lastDir_count;
+@property (nonatomic) int currentDirLR,lastDirLR;
+@property (nonatomic) int delay_update_lastDirLR_count;
 
 @end
 
@@ -64,10 +84,6 @@
 {
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
-    
-    self.stream_url = [NSString stringWithFormat:@"rtsp://user:pass@%@:6667/blinkhd", self.selectedChannel.profile.ip_address];
-    
-    NSLog(@"stream_url = %@", self.stream_url);
     
 //    NSString * msg = NSLocalizedStringWithDefaultValue(@"Back",nil, [NSBundle mainBundle],
 //                                                       @"Back", nil);
@@ -125,7 +141,7 @@
         
         if (self.mpFlag) {
             self.progressView.hidden = NO;
-            [self.view bringSubviewToFront:self.progressView];
+            //[self.view bringSubviewToFront:self.progressView];
             [self setupCamera];
             self.mpFlag = FALSE;
         }
@@ -191,11 +207,11 @@
     //self.cameraNameBarBtnItem.title = cp.name;
     
     //set Button handler
-//    self.backBarBtnItem.target = self;
-//    self.backBarBtnItem.action = @selector(goBackToCameraList);
+    self.backBarBtnItem.target = self;
+    self.backBarBtnItem.action = @selector(goBackToCameraList);
 //SLIDE MENU
-    self.backBarBtnItem.target = self.stackViewController;
-    self.backBarBtnItem.action = @selector(toggleLeftViewController);
+//    self.backBarBtnItem.target = self.stackViewController;
+//    self.backBarBtnItem.action = @selector(toggleLeftViewController);
     
     self.progressView.hidden = NO;
     //[self.view addSubview:self.progressView];
@@ -209,23 +225,32 @@
     [self setupCamera];
     
     [self performSelectorInBackground:@selector(loadEarlierList) withObject:nil];
-    
-    //[self loadEarlierList];
 
     if (self.segCtrl.selectedSegmentIndex == 0) {
         self.tableViewPlaylist.hidden= YES;
-//        if (mp) {
-//            if (mp->isPlaying()) {
-//                [self.view bringSubviewToFront:self.imageViewVideo];
-//            }
-//        }
-    
     }
-//    else if (self.segCtrl.selectedSegmentIndex == 1)
-//    {
-//        self.tableViewPlaylist.hidden = NO;
-//        [self.view bringSubviewToFront:self.tableViewPlaylist];
-//    }
+    
+    //Direction stuf
+    /* Kick off the two timer for direction sensing */
+    _currentDirUD = DIRECTION_V_NON;
+    _lastDirUD    = DIRECTION_V_NON;
+    _delay_update_lastDir_count = 1;
+    
+    _send_UD_dir_req_timer = [NSTimer scheduledTimerWithTimeInterval:0.3
+                                                             target:self
+                                                           selector:@selector(v_directional_change_callback:)
+                                                           userInfo:nil
+                                                            repeats:YES];
+    
+    _currentDirLR = DIRECTION_H_NON;
+    _lastDirLR    = DIRECTION_H_NON;
+    _delay_update_lastDirLR_count = 1;
+    
+    _send_LR_dir_req_timer = [NSTimer scheduledTimerWithTimeInterval:0.3
+                                                             target:self
+                                                           selector:@selector(h_directional_change_callback:)
+                                                           userInfo:nil
+                                                            repeats:YES];
 }
 
 - (void)setupCamera
@@ -251,6 +276,7 @@
                    withObject:nil
                    afterDelay:0.1];
         [self performSelectorInBackground:@selector(getVQ_bg) withObject:nil];
+        //[self performSelectorInBackground:@selector(getTriggerRecording_bg) withObject:nil];
     }
     else if (self.selectedChannel.profile.minuteSinceLastComm <= 5)
     {
@@ -261,14 +287,46 @@
         NSString *apiKey = [userDefaults objectForKey:@"PortalApiKey"];
         NSString *mac = [Util strip_colon_fr_mac:self.selectedChannel.profile.mac_address];
         
-        BMS_JSON_Communication *jsonComm = [[BMS_JSON_Communication alloc] initWithObject:self
-                                                                                 Selector:@selector(createSesseionSuccessWithResponse:)
-                                                                             FailSelector:@selector(createSessionFailedWithResponse:)
-                                                                                ServerErr:@selector(createSessionFailedUnreachableSerever)];
-        [jsonComm createSessionWithRegistrationId:mac
-                                    andClientType:@"IOS"
-                                        andApiKey:apiKey];
+//        BMS_JSON_Communication *jsonComm = [[BMS_JSON_Communication alloc] initWithObject:self
+//                                                                                 Selector:@selector(createSesseionSuccessWithResponse:)
+//                                                                             FailSelector:@selector(createSessionFailedWithResponse:)
+//                                                                                ServerErr:@selector(createSessionFailedUnreachableSerever)];
+//        [jsonComm createSessionWithRegistrationId:mac
+//                                    andClientType:@"IOS"
+//                                        andApiKey:apiKey];
+        BMS_JSON_Communication *jsonComm = [[[BMS_JSON_Communication alloc] initWithObject:self
+                                                                                 Selector:nil
+                                                                             FailSelector:nil
+                                                                                ServerErr:nil] autorelease];
+        NSDictionary *responseDict = [jsonComm createSessionBlockedWithRegistrationId:mac
+                                                                     andClientType:@"IOS"
+                                                                         andApiKey:apiKey];
+        if (responseDict) {
+            if ([[responseDict objectForKey:@"status"] intValue] == 200) {
+                self.stream_url = [[responseDict objectForKey:@"data"] objectForKey:@"url"];
+                
+                NSString *tempString = [[self.stream_url componentsSeparatedByString:@"/"] lastObject];
+                
+                if ([tempString isEqualToString:@"blinkhd"] ) {
+                    return;
+                }
+                [self performSelector:@selector(startStream)
+                           withObject:nil
+                           afterDelay:0.1];
+                [self performSelectorInBackground:@selector(getVQ_bg) withObject:nil];
+                //[self performSelectorInBackground:@selector(getTriggerRecording_bg) withObject:nil];
+            }
+        }
+        else
+        {
+            NSLog(@"create session isn't success");
+        }
 
+    }
+    else
+    {
+        self.progressView.hidden = YES;
+        NSLog(@"Camera maybe not available.");
     }
 }
 
@@ -447,15 +505,16 @@
 	if (responseDict != nil)
 	{
         
-        NSInteger status = [[responseDict objectForKey:@"status"] intValue];
-		if (status == 200)
-		{
-			NSString *bodyKey = [[[responseDict objectForKey:@"data"] objectForKey:@"device_response"] objectForKey:@"body"];
-            NSString *modeVideo = [[bodyKey componentsSeparatedByString:@": "] objectAtIndex:1];
-			
-            [self performSelectorOnMainThread:@selector(setVQForground:)
-                                   withObject:modeVideo waitUntilDone:NO];
-		}
+//        NSInteger status = [[responseDict objectForKey:@"status"] intValue];
+//		if (status == 200)
+//		{
+//			NSString *bodyKey = [[[responseDict objectForKey:@"data"] objectForKey:@"device_response"] objectForKey:@"body"];
+//            NSString *modeVideo = [[bodyKey componentsSeparatedByString:@": "] objectAtIndex:1];
+//			
+//            [self performSelectorOnMainThread:@selector(setVQForground:)
+//                                   withObject:modeVideo waitUntilDone:NO];
+//		}
+        [self performSelectorOnMainThread:@selector(setVQ_fg:) withObject:responseDict waitUntilDone:NO];
 	}
     
     NSLog(@"getVQ_bg responseDict = %@", responseDict);
@@ -473,6 +532,50 @@
         [self.hqViewButton setImage:[UIImage imageNamed:@"hq.png" ]
                            forState:UIControlStateNormal];
     }
+}
+
+- (void)getTriggerRecording_bg
+{
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    
+    NSDictionary *responseDict  = nil;
+    NSString *mac = [Util strip_colon_fr_mac:self.selectedChannel.profile.mac_address];
+    NSString *apiKey = [userDefaults objectForKey:@"PortalApiKey"];
+    NSLog(@"mac %@, apikey %@", mac, apiKey);
+    
+    
+    if (self.selectedChannel.profile.isInLocal ) // Replace with httpCommunication after
+	{
+        self.jsonComm = [[[BMS_JSON_Communication alloc] initWithObject:self
+                                                               Selector:nil
+                                                           FailSelector:nil
+                                                              ServerErr:nil] autorelease];
+		if (self.jsonComm != nil)
+		{
+            responseDict= [self.jsonComm sendCommandBlockedWithRegistrationId:mac
+                                                                   andCommand:@"action=command&command=get_recording_stat"
+                                                                    andApiKey:apiKey];
+		}
+	}
+	else if(self.selectedChannel.profile.minuteSinceLastComm <= 5) // Remote
+	{
+		self.jsonComm = [[[BMS_JSON_Communication alloc] initWithObject:self
+                                                               Selector:nil
+                                                           FailSelector:nil
+                                                              ServerErr:nil] autorelease];
+		if (self.jsonComm != nil)
+		{
+            responseDict= [self.jsonComm sendCommandBlockedWithRegistrationId:mac
+                                                                   andCommand:[NSString stringWithFormat:@"action=command&command=get_recording_stat"] andApiKey:apiKey];
+		}
+	}
+    
+	if (responseDict != nil)
+	{
+        [self performSelectorOnMainThread:@selector(setTriggerRecording_fg::) withObject:responseDict waitUntilDone:NO];
+	}
+    
+    NSLog(@"getVQ_bg responseDict = %@", responseDict);
 }
 
 - (void)setTriggerRecording_bg:(NSString *) modeRecording
@@ -551,6 +654,462 @@
     {
         self.recordingFlag = !self.recordingFlag;
     }
+}
+
+#pragma mark -
+#pragma mark - DirectionPad
+
+/* Periodically called every 200ms */
+- (void) v_directional_change_callback:(NSTimer *) timer_exp
+{
+	/* currentDirUD holds the LATEST direction,
+     lastDirUD holds the LAST direction that we have seen
+     - this is called every 100ms
+	 */
+	@synchronized(_imgViewDrectionPad)
+	{
+        
+		if (_lastDirUD != DIRECTION_V_NON)
+        {
+			[self send_UD_dir_to_rabot:_currentDirUD];
+		}
+        
+		//Update directions
+		_lastDirUD = _currentDirUD;
+	}
+}
+
+- (void) send_UD_dir_to_rabot:(int ) direction
+{
+	NSString * dir_str = nil;
+	float duty_cycle = 0;
+    
+	switch (direction) {
+		case DIRECTION_V_NON:
+            
+			dir_str= FB_STOP;
+			break;
+            
+		case DIRECTION_V_DN	:
+            
+			duty_cycle = IRABOT_DUTYCYCLE_MAX +0.1;
+			dir_str= MOVE_DOWN;
+			dir_str = [NSString stringWithFormat:@"%@%.1f", dir_str, duty_cycle];
+            
+			break;
+		case DIRECTION_V_UP	:
+            
+			duty_cycle = IRABOT_DUTYCYCLE_MAX ;
+			dir_str= MOVE_UP;
+			dir_str = [NSString stringWithFormat:@"%@%.1f", dir_str, duty_cycle];
+			break;
+		default:
+			break;
+	}
+    
+	if (dir_str != nil)
+	{
+        if (_selectedChannel.profile.isInLocal)
+		{
+            _httpComm = [[[HttpCommunication alloc] init] autorelease];
+				//Non block send-
+				[_httpComm sendCommand:dir_str];
+                //[_httpComm sendCommandAndBlock:dir_str];
+		}
+		else if(_selectedChannel.profile.minuteSinceLastComm <= 5)
+		{
+            NSString *mac = [Util strip_colon_fr_mac:_selectedChannel.profile.mac_address];
+            NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+            NSString *apiKey = [userDefaults objectForKey:@"PortalApiKey"];
+            
+            _jsonComm = [[[BMS_JSON_Communication alloc] initWithObject:self
+                                                               Selector:nil
+                                                           FailSelector:nil
+                                                              ServerErr:nil] autorelease];
+            NSDictionary *responseDict = [_jsonComm sendCommandBlockedWithRegistrationId:mac
+                                                                              andCommand:[NSString stringWithFormat:@"action=command&command=%@", dir_str]
+                                                                               andApiKey:apiKey];
+            NSLog(@"send_UD_dir_to_rabot status: %d", [[responseDict objectForKey:@"status"] intValue]);
+		}
+	}
+}
+
+- (void) h_directional_change_callback:(NSTimer *) timer_exp
+{
+    BOOL need_to_send = FALSE;
+    
+    @synchronized(_imgViewDrectionPad)
+	{
+		if ( _lastDirLR != DIRECTION_H_NON)
+        {
+			need_to_send = TRUE;
+		}
+        
+        if (need_to_send)
+        {
+            [self send_LR_dir_to_rabot: _currentDirLR];
+        }
+        
+		//Update directions
+		_lastDirLR = _currentDirLR;
+	}
+}
+
+- (void) send_LR_dir_to_rabot:(int ) direction
+{
+	NSString * dir_str = nil;
+    
+	switch (direction)
+    {
+		case DIRECTION_H_NON:
+            
+			dir_str= LR_STOP;
+			break;
+		case DIRECTION_H_LF	:
+            
+			dir_str= MOVE_LEFT;
+			dir_str= [NSString stringWithFormat:@"%@%.1f", dir_str,(float) IRABOT_DUTYCYCLE_LR_MAX];
+            
+			break;
+		case DIRECTION_H_RT	:
+            
+			dir_str= MOVE_RIGHT;
+			dir_str= [NSString stringWithFormat:@"%@%.1f", dir_str,(float) IRABOT_DUTYCYCLE_LR_MAX];
+            
+			break;
+		default:
+			break;
+	}
+    
+    NSLog(@"dir_str: %@", dir_str);
+    
+	if (dir_str != nil)
+	{
+        if (_selectedChannel.profile.isInLocal)
+        {
+            _httpComm = [[[HttpCommunication alloc] init] autorelease];
+				//Non block send-
+				[_httpComm sendCommand:dir_str];
+                
+                //[_httpComm sendCommandAndBlock:dir_str];
+		}
+		else if ( _selectedChannel.profile.minuteSinceLastComm <= 5)
+		{
+            NSString *mac = [Util strip_colon_fr_mac:_selectedChannel.profile.mac_address];
+            NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+            NSString *apiKey = [userDefaults objectForKey:@"PortalApiKey"];
+            
+            _jsonComm = [[[BMS_JSON_Communication alloc] initWithObject:self
+                                                              Selector:nil
+                                                          FailSelector:nil
+                                                             ServerErr:nil] autorelease];
+            NSDictionary *responseDict = [_jsonComm sendCommandBlockedWithRegistrationId:mac
+                                                                              andCommand:[NSString stringWithFormat:@"action=command&command=%@", dir_str]
+                                                                               andApiKey:apiKey];
+            NSLog(@"send_LR_dir_to_rabot status: %d", [[responseDict objectForKey:@"status"] intValue]);
+		}
+	}
+}
+
+- (void) updateVerticalDirection_begin:(int)dir inStep: (uint) step
+{
+	unsigned int newDirection = 0;
+    
+	if (dir == 0)
+	{
+		newDirection = DIRECTION_V_NON;
+	}
+	else //Dir is either V_UP or V_DN
+	{
+		if (dir >0)
+		{
+			newDirection = DIRECTION_V_DN;
+		}
+		else
+		{
+			newDirection = DIRECTION_V_UP;
+		}
+	}
+    
+	@synchronized(_imgViewDrectionPad)
+	{
+		_currentDirUD = newDirection;
+	}
+    
+	//Adjust the fire date to now
+	NSDate * now = [NSDate date];
+	[_send_UD_dir_req_timer setFireDate:now ];    
+}
+
+- (void) updateVerticalDirection:(int)dir inStep: (uint) step withAnimation:(BOOL)animate
+{
+	unsigned int newDirection = 0;
+    
+	if (dir == 0)
+	{
+		newDirection = DIRECTION_V_NON;
+	}
+	else //Dir is either V_UP or V_DN
+	{
+		if (dir >0)
+		{
+			newDirection = DIRECTION_V_DN;
+		}
+		else
+		{
+			newDirection = DIRECTION_V_UP;
+		}
+	}
+    
+	@synchronized(_imgViewDrectionPad)
+	{
+		_currentDirUD = newDirection;
+	}
+}
+
+- (void) updateVerticalDirection_end:(int)dir inStep: (uint) step
+{
+	@synchronized(_imgViewDrectionPad)
+	{
+		_currentDirUD = DIRECTION_V_NON;
+	}
+}
+
+- (void) updateHorizontalDirection_end:(int)dir inStep: (uint) step
+{
+	@synchronized(_imgViewDrectionPad)
+	{
+		_currentDirLR = DIRECTION_H_NON;
+	}
+}
+
+- (void)updateHorizontalDirection_begin:(int)dir inStep: (uint) step
+{
+	unsigned int newDirection = 0;
+    
+	if (dir == 0)
+	{
+		newDirection = DIRECTION_H_NON;
+	}
+	else
+	{
+		if (dir >0)
+		{
+			newDirection = DIRECTION_H_RT;
+		}
+		else
+		{
+			newDirection = DIRECTION_H_LF;
+		}
+	}
+    
+	@synchronized(_imgViewDrectionPad)
+	{
+		_currentDirLR = newDirection;
+	}
+    
+	//Adjust the fire date to now
+	NSDate * now = [NSDate date];
+	[_send_LR_dir_req_timer setFireDate:now ];
+}
+
+- (void) updateHorizontalDirection:(int)dir inStep: (uint) step withAnimation:(BOOL) animate
+{
+	unsigned int newDirection = 0;
+    
+	if (dir == 0)
+	{
+		newDirection = DIRECTION_H_NON;
+	}
+	else
+	{
+		if (dir >0)
+		{
+			newDirection = DIRECTION_H_RT;
+		}
+		else
+		{
+			newDirection = DIRECTION_H_LF;
+		}
+	}
+    
+	@synchronized(_imgViewDrectionPad)
+	{
+		_currentDirLR = newDirection;
+	}
+}
+
+#pragma  mark -
+#pragma mark Touches
+
+//----- handle all touches here then propagate into directionview
+
+- (void) touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
+{
+	NSArray *allTouches = [touches allObjects];
+    
+    for (UITouch *touch in allTouches)
+    {
+        if(touch.view.tag == 999)
+        {
+            NSLog(@"ok");
+            CGPoint location = [touch locationInView:touch.view];
+            [self touchEventAt:location phase:touch.phase];
+        }
+    }
+}
+
+- (void) touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
+{
+	NSArray *allTouches = [touches allObjects];
+    
+    for (UITouch *touch in allTouches)
+    {
+        if(touch.view.tag == 999)
+        {
+            NSLog(@"ok");
+            CGPoint location = [touch locationInView:touch.view];
+            [self touchEventAt:location phase:touch.phase];
+        }
+    }
+}
+
+- (void) touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event
+{        
+	NSArray *allTouches = [touches allObjects];
+    
+    for (UITouch *touch in allTouches)
+    {
+        if(touch.view.tag == 999)
+        {
+            NSLog(@"ok");
+            CGPoint location = [touch locationInView:touch.view];
+            [self touchEventAt:location phase:touch.phase];
+        }
+    }
+}
+
+- (void) touchEventAt:(CGPoint) location phase:(UITouchPhase) phase
+{
+	switch (phase)
+    {
+		case UITouchPhaseBegan:
+			[self _touchesbegan:location];
+			break;
+		case UITouchPhaseMoved:
+		case UITouchPhaseStationary:
+			[self _touchesmoved:location];
+			break;
+		case UITouchPhaseEnded:
+			[self _touchesended:location];
+            
+		default:
+			break;
+	}
+}
+
+- (void) _touchesbegan: (CGPoint) location
+{
+	[self validatePoint:location newMovement:YES ];
+}
+
+- (void) _touchesmoved: (CGPoint) location
+{
+	/*when moved, the new point may change from vertical to Horizontal plane ,
+     thus reset it here,
+     later the point will be re-evaluated  and set to the corrent command*/
+    
+    [self updateVerticalDirection_end:0 inStep:0];
+    
+	[self updateHorizontalDirection_end:0 inStep:0];
+    
+    [self validatePoint:location newMovement:NO ];
+}
+
+- (void) _touchesended: (CGPoint) location
+{
+	CGPoint beginLocation = CGPointMake(_imgViewDrectionPad.center.x - _imgViewDrectionPad.frame.origin.x,
+                                        _imgViewDrectionPad.center.y - _imgViewDrectionPad.frame.origin.y);
+    
+	[self validatePoint:beginLocation newMovement:NO ];
+    
+    
+	[self updateVerticalDirection_end:0 inStep:0];
+    
+	[self updateHorizontalDirection_end:0 inStep:0];
+}
+
+- (void) validatePoint: (CGPoint)location newMovement:(BOOL) isBegan
+{
+	CGPoint translation ;
+    
+	BOOL is_vertical;
+    
+	CGPoint beginLocation = CGPointMake(_imgViewDrectionPad.center.x - _imgViewDrectionPad.frame.origin.x,
+                                        _imgViewDrectionPad.center.y - _imgViewDrectionPad.frame.origin.y);
+    
+	translation.x =  location.x - beginLocation.x;
+	translation.y =  location.y - beginLocation.y;
+	//NSLog(@"val: tran: %f %f", translation.x, translation.y);
+	is_vertical = YES;
+	if ( abs(translation.x) >  abs(translation.y))
+	{
+		is_vertical = NO;
+	}
+    
+	if (is_vertical == YES)
+	{
+		///TODOO: update image
+		if (translation.y > 0)
+		{
+			[_imgViewDrectionPad setImage:[UIImage imageNamed:@"circle_buttons1_dn.png"]];
+		}
+		else if (translation.y <0)
+		{
+			[_imgViewDrectionPad setImage:[UIImage imageNamed:@"circle_buttons1_up.png"]];
+		}
+		else
+		{
+			[_imgViewDrectionPad setImage:[UIImage imageNamed:@"circle_buttons1_2.png"]];
+		}
+        
+		if (isBegan)
+		{
+            
+			[self updateVerticalDirection_begin:translation.y inStep:0];
+		}
+		else
+		{
+			[self updateVerticalDirection:translation.y inStep:0 withAnimation:FALSE];
+		}
+        
+	}
+	else
+	{
+		///TODOO: update image
+		if (translation.x > 0)
+		{
+            
+			[_imgViewDrectionPad setImage:[UIImage imageNamed:@"circle_buttons1_rt.png"]];
+		}
+		else if (translation.x < 0){
+            
+			[_imgViewDrectionPad setImage:[UIImage imageNamed:@"circle_buttons1_lf.png"]];
+		}
+		else
+		{
+			[_imgViewDrectionPad setImage:[UIImage imageNamed:@"circle_buttons1_2.png"]];
+		}
+        
+		if (isBegan)
+		{
+			[self updateHorizontalDirection_begin:translation.x inStep:0];
+		}
+		else {
+            
+			[self updateHorizontalDirection:translation.x inStep:0 withAnimation:FALSE];
+		}
+	}
 }
 
 #pragma mark - JSON Callback
@@ -651,7 +1210,8 @@
 //                                        options:nil];
             CGRect newRect = CGRectMake(0, 44, 480, 256);
             self.imageViewVideo.frame = newRect;
-            self.viewCtrlButtons.frame.origin = CGPointMake(0, 106);
+            self.viewCtrlButtons.frame = CGRectMake(0, 106, _viewCtrlButtons.frame.size.width, _viewCtrlButtons.frame.size.height);
+            self.imgViewDrectionPad.frame = CGRectMake(180, 180, _imgViewDrectionPad.frame.size.width, _imgViewDrectionPad.frame.size.height);
             //self.progressView.frame = CGRectMake(0, 44, 480, 320);
             
 //            imageView.frame = CGRectMake(
@@ -703,7 +1263,8 @@
 //                                        options:nil];
             CGRect newRect = CGRectMake(0, 44, 320, 180);
             self.imageViewVideo.frame = newRect;
-            self.viewCtrlButtons.frame.origin = CGPointMake(0, 30);
+            self.viewCtrlButtons.frame = CGRectMake(0, 44, _viewCtrlButtons.frame.size.width, _viewCtrlButtons.frame.size.height);
+            self.imgViewDrectionPad.frame = CGRectMake(100, 180, _imgViewDrectionPad.frame.size.width, _imgViewDrectionPad.frame.size.height);
             //self.progressView.frame = CGRectMake(0, 44, 320, 480);
         }
         
@@ -721,11 +1282,11 @@
     
     [self checkIphone5Size:orientation];
 
-//    self.backBarBtnItem.target = self;
-//    self.backBarBtnItem.action = @selector(goBackToCameraList);
+    self.backBarBtnItem.target = self;
+    self.backBarBtnItem.action = @selector(goBackToCameraList);
 // SLIDE MENU
-    self.backBarBtnItem.target = self.stackViewController;
-    self.backBarBtnItem.action = @selector(toggleLeftViewController);
+//    self.backBarBtnItem.target = self.stackViewController;
+//    self.backBarBtnItem.action = @selector(toggleLeftViewController);
 }
 
 - (void) checkIphone5Size: (UIInterfaceOrientation)orientation
@@ -761,8 +1322,6 @@
     NSLog(@"self.playlistArray.count = %d", self.playlistArray.count);
     //return self.eventArr.count;
     return self.playlistArray.count;
-    
-    return 0;
 }
 
 - (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
@@ -1013,17 +1572,21 @@
     if (status == 200) // ok
     {
         NSString *bodyKey = [[[responseData objectForKey:@"data"] objectForKey:@"device_response"] objectForKey:@"body"];
-        NSString *modeVideo = [[bodyKey componentsSeparatedByString:@": "] objectAtIndex:1];
         
-        if ([modeVideo isEqualToString:@"480p"])
-        {
-            [self.hqViewButton setImage:[UIImage imageNamed:@"hq_d.png" ]
-                               forState:UIControlStateNormal];
-        }
-        else if([modeVideo isEqualToString:@"720p_10"] || [modeVideo isEqualToString:@"720p_15"])
-        {
-            [self.hqViewButton setImage:[UIImage imageNamed:@"hq.png" ]
-                               forState:UIControlStateNormal];
+        NSRange range = [bodyKey rangeOfString:@": "];
+        if (range.location != NSNotFound) {
+            NSString *modeVideo = [[bodyKey componentsSeparatedByString:@": "] objectAtIndex:1];
+            
+            if ([modeVideo isEqualToString:@"480p"])
+            {
+                [self.hqViewButton setImage:[UIImage imageNamed:@"hq_d.png" ]
+                                   forState:UIControlStateNormal];
+            }
+            else if([modeVideo isEqualToString:@"720p_10"] || [modeVideo isEqualToString:@"720p_15"])
+            {
+                [self.hqViewButton setImage:[UIImage imageNamed:@"hq.png" ]
+                                   forState:UIControlStateNormal];
+            }
         }
     }
     else
@@ -1059,6 +1622,9 @@
     [_pickerHQOptions release];
     [_hqViewButton release];
     [_triggerRecordingButton release];
+    [_imgViewDrectionPad release];
+    [_send_UD_dir_req_timer invalidate];
+    [_send_LR_dir_req_timer invalidate];
     [super dealloc];
 }
 
@@ -1075,6 +1641,8 @@
     [self setSelectedChannel:nil];
     [self setPlaylistArray:nil];
     [self setHttpComm:nil];
+    [self setSend_UD_dir_req_timer:nil];
+    [self setSend_LR_dir_req_timer:nil];
     
     [super viewDidUnload];
 }

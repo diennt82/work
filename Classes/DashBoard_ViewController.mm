@@ -832,39 +832,45 @@
     
     NSLog(@"ch = %@, ch.profile = %@, ch.profile.minuteSinceLastComm = %d", ch, ch.profile, ch.profile.minuteSinceLastComm);
     
+    if (ch != nil && ch.profile != nil) {
+        H264PlayerViewController *h264PlayerViewController = [[H264PlayerViewController alloc] init];
+        h264PlayerViewController.selectedChannel = ch;
+        [self.navigationController pushViewController:h264PlayerViewController animated:YES];
+        [h264PlayerViewController release];
+    }
 
 //Slide menu
 
-    if (ch != nil && ch.profile != nil)
-    {
-        MTStackViewController *stackViewController = [[MTStackViewController alloc] init];
-        stackViewController.animationDurationProportionalToPosition = YES;
-        
-        //MTMenuViewController *menuViewController = [[MTMenuViewController alloc] init];
-        BMMenuViewController *menuViewController = [[BMMenuViewController alloc] init];
-        CGRect foldFrame = CGRectMake(0, 0, stackViewController.slideOffset, CGRectGetHeight(self.view.bounds));
-        menuViewController.view.frame = foldFrame;
-        
-        //stackViewController.leftContainerView = [[MTZoomContainerView alloc] initWithFrame:foldFrame];
-        stackViewController.leftViewController = menuViewController;
-        
-        
-        H264PlayerViewController *h264ViewController = [[H264PlayerViewController alloc] init];
-        h264ViewController.selectedChannel = ch;
-
-        stackViewController.rightViewController = h264ViewController;
-        stackViewController.rightViewControllerEnabled = YES;
-        
-        menuViewController.firstViewController = h264ViewController;
-        
-        UINavigationController *contentNavigationController = [UINavigationController new];
-        //UINavigationController *contenNavigationController = self.navigationController;
-       stackViewController.contentViewController = contentNavigationController;
-        //stackViewController.contentContainerView = (UINavigationController *)self.navigationController;
-        
-        [self presentViewController:stackViewController animated:NO completion:nil];
-       
-    }
+//    if (ch != nil && ch.profile != nil)
+//    {
+//        MTStackViewController *stackViewController = [[MTStackViewController alloc] init];
+//        stackViewController.animationDurationProportionalToPosition = YES;
+//        
+//        //MTMenuViewController *menuViewController = [[MTMenuViewController alloc] init];
+//        BMMenuViewController *menuViewController = [[BMMenuViewController alloc] init];
+//        CGRect foldFrame = CGRectMake(0, 0, stackViewController.slideOffset, CGRectGetHeight(self.view.bounds));
+//        menuViewController.view.frame = foldFrame;
+//        
+//        //stackViewController.leftContainerView = [[MTZoomContainerView alloc] initWithFrame:foldFrame];
+//        stackViewController.leftViewController = menuViewController;
+//        
+//        
+//        H264PlayerViewController *h264ViewController = [[H264PlayerViewController alloc] init];
+//        h264ViewController.selectedChannel = ch;
+//
+//        stackViewController.rightViewController = h264ViewController;
+//        stackViewController.rightViewControllerEnabled = YES;
+//        
+//        menuViewController.firstViewController = h264ViewController;
+//        
+//        UINavigationController *contentNavigationController = [UINavigationController new];
+//        //UINavigationController *contenNavigationController = self.navigationController;
+//       stackViewController.contentViewController = contentNavigationController;
+//        //stackViewController.contentContainerView = (UINavigationController *)self.navigationController;
+//        
+//        [self presentViewController:stackViewController animated:NO completion:nil];
+//       
+//    }
 }
 
 #else
