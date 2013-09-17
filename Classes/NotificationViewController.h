@@ -7,9 +7,11 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "TempViewController.h"
+#import "PlayListViewController.h"
 #import "PlaylistInfo.h"
-#import "PlaylistViewController.h"
+#import "PlaylistCell.h"
+#import "PlaybackViewController.h"
+#import "ConnectionMethodDelegate.h"
 @interface NotificationViewController : UIViewController
 {
     IBOutlet UIImageView * lastest_snapshot;
@@ -17,7 +19,7 @@
     IBOutlet UIButton * btn_view_recording;
 
     
-    IBOutlet TempViewController *tempPlaylist;
+    IBOutlet PlayListViewController *tempPlaylist;
     IBOutlet UIActivityIndicatorView * progress;
     
     NSString * cameraMacNoColon;
@@ -26,13 +28,16 @@
     NSString * alertVal;
     PlaylistInfo *eventInfo;
     
+    id <ConnectionMethodDelegate> delegate; 
+    
 }
 
 @property(nonatomic, retain) NSString * cameraMacNoColon;
 @property(nonatomic, retain) NSString * cameraName;
 @property(nonatomic, retain) NSString * alertType;
 @property(nonatomic, retain) NSString * alertVal;
-@property(nonatomic, retain ) PlaylistInfo * eventInfo; 
+@property(nonatomic, retain ) PlaylistInfo * eventInfo;
+@property(nonatomic, retain) id <ConnectionMethodDelegate> delegate; 
 
 
 -(IBAction) gotoCameraList:(id)sender;

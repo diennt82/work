@@ -19,6 +19,8 @@
 
 @synthesize   cameraMacNoColon, cameraName, alertType, alertVal;
 @synthesize eventInfo;
+@synthesize  delegate;
+
 
 -(void) dealloc
 {
@@ -99,7 +101,10 @@
 
 -(IBAction) gotoCameraList:(id)sender
 {
-    [self dismissViewControllerAnimated:NO completion:nil];
+    [self.navigationController popToRootViewControllerAnimated:NO];
+
+    // Will call dismiss eventually
+    [delegate sendStatus:SCAN_CAMERA];
 
 }
 
@@ -108,14 +113,12 @@
 
     if(eventInfo.urlFile && ![eventInfo.urlFile isEqualToString:@""])
     {
-        PlaylistViewController *playlistViewController = [[PlaylistViewController alloc] init];
-        playlistViewController.urlVideo = eventInfo.urlFile;
+        PlaybackViewController *playbackViewController = [[PlaybackViewController alloc] init];
+        playbackViewController.urlVideo = eventInfo.urlFile;
         
+        [playbackViewController autorelease];
         
-        //[self.navigationController pushViewController:playlistViewController animated:NO];
-        [playlistViewController autorelease];
-        
-        [self presentViewController:playlistViewController animated:NO  completion:nil]; 
+        [self presentViewController:playbackViewController animated:NO  completion:nil]; 
         
     }
     else
@@ -164,7 +167,8 @@
 
 -(IBAction)goBack:(id)sender
 {
-    [self.navigationController popToRootViewControllerAnimated:NO]; 
+    [self gotoCameraList:nil];
+    
 }
 #pragma mark -
 #pragma mark Get Event
@@ -195,12 +199,14 @@
     if (responseDict) {
         if ([[responseDict objectForKey:@"status"] intValue] == 200)
         {
+            NSLog(@"Event : %@ ",responseDict);
+            
             NSArray *eventArr = [[responseDict objectForKey:@"data"] objectForKey:@"events"];
             
 
             if (eventArr.count == 1)
             {
-                tempPlaylist.playlistArr = [NSMutableArray array];
+                tempPlaylist.playlistArray = [NSMutableArray array];
                 
                 //expect 1 event only
                 NSDictionary * eventPlaylist = [eventArr objectAtIndex:0];
@@ -209,7 +215,7 @@
                                           objectAtIndex:0];
                 
                 eventInfo = [[[PlaylistInfo alloc] init] autorelease];
-                
+                eventInfo.mac_addr = self.cameraMacNoColon;
                 eventInfo.urlImage = [clipInfo objectForKey:@"image"];
                 eventInfo.titleString = [clipInfo objectForKey:@"title"];
                 eventInfo.urlFile = [clipInfo objectForKey:@"file"];
@@ -269,21 +275,24 @@
         {
             NSArray *eventArr = [[responseDict objectForKey:@"data"] objectForKey:@"events"];
             
-            //tempPlaylist = [[TempViewController alloc] init];
-            tempPlaylist.playlistArr = [NSMutableArray array];
+            
+            NSLog(@"play list: %@ ",responseDict);
+
+            tempPlaylist.playlistArray = [NSMutableArray array];
             
             for (NSDictionary *playlist in eventArr) {
                 NSDictionary *clipInfo = [[playlist objectForKey:@"playlist"] objectAtIndex:0];
                 
                 PlaylistInfo *playlistInfo = [[[PlaylistInfo alloc] init]autorelease];
+                playlistInfo.mac_addr = self.cameraMacNoColon;
                 playlistInfo.urlImage = [clipInfo objectForKey:@"image"];
                 playlistInfo.titleString = [clipInfo objectForKey:@"title"];
                 playlistInfo.urlFile = [clipInfo objectForKey:@"file"];
                 
-                [tempPlaylist.playlistArr addObject:playlistInfo];
+                [tempPlaylist.playlistArray addObject:playlistInfo];
             }
             
-            NSLog(@"there is %d in playlist", [tempPlaylist.playlistArr count]);
+            NSLog(@"there is %d in playlist", [tempPlaylist.playlistArray count]);
             [progress stopAnimating];
             
             [tempPlaylist.tableView reloadData]; 

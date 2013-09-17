@@ -16,7 +16,7 @@
 
 #import "HttpCommunication.h"
 #import "PlaylistInfo.h"
-#import "PlaylistViewController.h"
+#import "PlaybackViewController.h"
 #import "PlaylistCell.h"
 #import "MTStackViewController.h"
 #import "HttpCommunication.h"
@@ -763,17 +763,20 @@
     
     NSLog(@"urlFile = %@", playlistInfo.urlFile);
     
-    if(playlistInfo.urlFile && ![playlistInfo.urlFile isEqualToString:@""] && playlistInfo.imgSnapshot)
+    if(playlistInfo.urlFile &&
+       ![playlistInfo.urlFile isEqualToString:@""] &&
+       playlistInfo.imgSnapshot)
     {
-        PlaylistViewController *playlistViewController = [[PlaylistViewController alloc] init];
-        playlistViewController.urlVideo = playlistInfo.urlFile;
-        if (mp) {
+        PlaybackViewController *playbackViewController = [[PlaybackViewController alloc] init];
+        playbackViewController.urlVideo = playlistInfo.urlFile;
+        if (mp != nil)
+        {
             [self stopStream];
             self.mpFlag = TRUE;
         }
         
-        [self.navigationController pushViewController:playlistViewController animated:NO];
-        [playlistViewController release];
+        [self.navigationController pushViewController:playbackViewController animated:NO];
+        [playbackViewController release];
     }
     else
     {

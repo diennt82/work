@@ -1,5 +1,5 @@
 //
-//  TempViewController.h
+//  PlaybackViewController
 //  MBP_ios
 //
 //  Created by NxComm on 6/9/13.
@@ -8,8 +8,8 @@
 
 #import <UIKit/UIKit.h>
 
-@interface TempViewController : UITableViewController
+@interface PlaybackViewController : UIViewController
 
-@property (nonatomic, retain) NSMutableArray *playlistArr;
+@property (nonatomic, retain) NSString *urlVideo;
 
 @end

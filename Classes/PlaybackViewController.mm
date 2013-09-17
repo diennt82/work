@@ -1,16 +1,16 @@
 //
-//  PlaylistViewController.m
+//  PlaybackViewController.m
 //  MBP_ios
 //
 //  Created by NxComm on 6/9/13.
 //  Copyright (c) 2013 Smart Panda Ltd. All rights reserved.
 //
 
-#import "PlaylistViewController.h"
+#import "PlaybackViewController.h"
 #import <H264MediaPlayer/H264MediaPlayer.h>
 
 
-@interface PlaylistViewController ()
+@interface PlaybackViewController ()
 {
     MediaPlayer *mp;
 }
@@ -22,7 +22,7 @@
 
 @end
 
-@implementation PlaylistViewController
+@implementation PlaybackViewController
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {

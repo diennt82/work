@@ -615,7 +615,7 @@ return self;
 			{
 
 				NSLog(@">>> SETUP ");
-				[self dismissModalViewControllerAnimated:NO	];
+				[self dismissViewControllerAnimated:NO completion:nil];
 
                 
                 self.app_stage = APP_STAGE_SETUP;
@@ -677,7 +677,7 @@ return self;
 			{
 				//NSLog(@">>> Login "); 
 
-				[self dismissModalViewControllerAnimated:NO	];
+				[self dismissViewControllerAnimated:NO completion:nil];
                 
 
                 
@@ -722,7 +722,7 @@ return self;
                        afterDelay:0.1];
 
 			//Back from login- login success 
-			[self dismissModalViewControllerAnimated:NO];
+			[self dismissViewControllerAnimated:NO completion:nil];
 			self.progressView.hidden = NO;
 
 			break; 
@@ -748,8 +748,8 @@ return self;
 			{
 
                 statusDialogLabel.hidden = YES;
-				[self dismissModalViewControllerAnimated:NO];
-
+				[self dismissViewControllerAnimated:NO completion:nil];
+                
 				NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
 				[userDefaults setBool:TRUE forKey:_AutoLogin];
 				[userDefaults synchronize];
@@ -766,7 +766,7 @@ return self;
 			{
 				NSLog(@"Back from menu");
                 statusDialogLabel.hidden = YES;
-				[self dismissModalViewControllerAnimated:NO];
+				[self dismissViewControllerAnimated:NO completion:nil];
 				//[self.streamer startStreaming];
                 
 
@@ -777,7 +777,7 @@ return self;
 			{
 				NSLog(@" display first page ");
                 statusDialogLabel.hidden = YES;
-                [self dismissModalViewControllerAnimated:NO];
+                [self dismissViewControllerAnimated:NO completion:nil];
         
                 [NSTimer scheduledTimerWithTimeInterval:0.01
                                                  target:self
@@ -790,7 +790,7 @@ return self;
 		case LOGIN_FAILED_OR_LOGOUT : //back from login -failed Or logout
 			{
                 statusDialogLabel.hidden = YES;
-				[self dismissModalViewControllerAnimated:NO	];
+				[self dismissViewControllerAnimated:NO completion:nil];
 
                 [self performSelectorInBackground:@selector(logoutAndUnregistration_bg) withObject:nil];
 			
@@ -799,7 +799,7 @@ return self;
         case SCAN_BONJOUR_CAMERA :
         {
             
-#if 1 //DBG DBG ONLY
+#if 0 //DBG DBG ONLY
             /*
              20130523_nguyendang :
              Scan camera with bonjour here
@@ -826,11 +826,12 @@ return self;
             NotificationViewController * notif_view = [[[NotificationViewController alloc]
                                                         initWithNibName:@"NotificationViewController" bundle:nil]autorelease];
             
+            notif_view.delegate = self;
             //Feed in data now
-            notif_view.cameraMacNoColon = @"44334C31A004";
-            notif_view.cameraName  = @"Camera-31a004";
+            notif_view.cameraMacNoColon = @"48022A2CAC31";
+            notif_view.cameraName  = @"Camera-2cac31";
             notif_view.alertType   = @"4";
-            notif_view.alertVal    = @"20130915132303820";
+            notif_view.alertVal    = @"20130917065256730";
             
             [latestCamAlert release];
             latestCamAlert = nil;

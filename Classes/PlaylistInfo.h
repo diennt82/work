@@ -10,9 +10,15 @@
 
 @interface PlaylistInfo : NSObject
 
+
+@property (nonatomic, retain) NSString * mac_addr; 
+ 
 @property (nonatomic, retain) NSString *urlImage;
 @property (nonatomic, retain) NSString *titleString;
 @property (nonatomic, retain) NSString *urlFile;
 @property (nonatomic, retain) UIImage *imgSnapshot;
+
+-(NSDate *) getTimeCode;
+
 
 @end

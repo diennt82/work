@@ -288,7 +288,7 @@
     NSString *fwVersion = [userDefaults objectForKey:@"FW_VERSION"];
     NSString *model = [userDefaults objectForKey:@"MODEL"];
     
-    NSLog(@"-----fwVersion = %@, ,model = %@", fwVersion, model);
+    //NSLog(@"-----fwVersion = %@, ,model = %@", fwVersion, model);
     
     NSTimeZone *currentTimeZone = [NSTimeZone localTimeZone];
     NSLog(@"%d", [currentTimeZone secondsFromGMT]);

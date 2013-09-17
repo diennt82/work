@@ -10,7 +10,7 @@
 #import <MonitorCommunication/MonitorCommunication.h>
 #import "H264PlayerViewController.h"
 #import "PlaylistInfo.h"
-#import "TempViewController.h"
+#import "PlaybackViewController.h"
 #import "MTStackDefaultContainerView.h"
 #import "MTStackViewController.h"
 #import "BMMenuViewController.h"
@@ -1151,8 +1151,7 @@
     NSString *mac = [Util strip_colon_fr_mac:ch.profile.mac_address];
     NSString *apiKey = [userDefaults objectForKey:@"PortalApiKey"];
     
-//    [jsonComm getAllRecordedFilesWithRegistrationId:mac
-//                                          andApiKey:apiKey];
+
     [jsonComm getAllRecordedFilesWithRegistrationId:mac
                                            andEvent:@"04"
                                           andApiKey:apiKey];
@@ -1164,22 +1163,22 @@
         if ([[responseDict objectForKey:@"status"] intValue] == 200) {
             NSArray *eventArr = [[responseDict objectForKey:@"data"] objectForKey:@"events"];
             
-            TempViewController *tempPlaylist = [[TempViewController alloc] init];
-            tempPlaylist.playlistArr = [NSMutableArray array];
+          PlayListViewController *playlist = [[PlayListViewController alloc] init];
+            playlist.playlistArray = [NSMutableArray array];
             
-            for (NSDictionary *playlist in eventArr) {
-                NSDictionary *clipInfo = [[playlist objectForKey:@"playlist"] objectAtIndex:0];
+            for (NSDictionary *playlistdict in eventArr) {
+                NSDictionary *clipInfo = [[playlistdict objectForKey:@"playlist"] objectAtIndex:0];
                 
                 PlaylistInfo *playlistInfo = [[PlaylistInfo alloc] init];
                 playlistInfo.urlImage = [clipInfo objectForKey:@"image"];
                 playlistInfo.titleString = [clipInfo objectForKey:@"title"];
                 playlistInfo.urlFile = [clipInfo objectForKey:@"file"];
                 
-                [tempPlaylist.playlistArr addObject:playlistInfo];
+                [playlist.playlistArray addObject:playlistInfo];
             }
             
-            [self.navigationController pushViewController:tempPlaylist animated:NO];
-            [tempPlaylist release];
+            [self.navigationController pushViewController:playlist animated:NO];
+            [playlist release];
         }
         progressView.hidden = YES;
     }

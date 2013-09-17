@@ -19,7 +19,7 @@
 #import "EditCameraCell.h"
 #import "AlertPrompt.h"
 #import "GAITrackedViewController.h"
-
+#import "PlaylistViewController.h"
 @class  EditCameraCell; 
 
 #define  MAX_CAM_ALLOWED 4
