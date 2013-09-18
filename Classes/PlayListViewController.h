@@ -15,5 +15,6 @@
 }
 
 @property (nonatomic, retain) NSMutableArray *playlistArray;
+@property (nonatomic, assign) UINavigationController *navController;
 
 @end

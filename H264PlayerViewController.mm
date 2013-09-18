@@ -160,6 +160,7 @@
         
         self.playlistViewController.tableView.hidden = NO;
         [self.view bringSubviewToFront:self.playlistViewController.tableView];
+        self.playlistViewController.navController = self.navigationController;
     }
     
     NSLog(@"self.segCtrl.selectedSegmentIndex = %d", self.segCtrl.selectedSegmentIndex);

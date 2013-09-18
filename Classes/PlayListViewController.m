@@ -94,7 +94,7 @@
         {
             [cell.activityIndicator startAnimating];
             
-            CGSize newSize = CGSizeMake(64, 64);
+            CGSize newSize = CGSizeMake(113, 64);
             
             dispatch_queue_t q = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0ul);
             dispatch_async(q,
@@ -115,6 +115,7 @@
         {
             NSLog(@"playlistInfo.imgSnapshot already");
             cell.imgViewSnapshot.image = playlistInfo.imgSnapshot;
+             cell.activityIndicator.hidden = YES;
         }
         
         //Set motion type
@@ -191,7 +192,7 @@
         playbackViewController.urlVideo = playlistInfo.urlFile;
         
         
-        [self.navigationController pushViewController:playbackViewController animated:NO];
+        [self.navController pushViewController:playbackViewController animated:NO];
         [playbackViewController release];
     }
     else
