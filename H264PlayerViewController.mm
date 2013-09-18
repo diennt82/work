@@ -261,6 +261,7 @@
 //    self.backBarBtnItem.action = @selector(toggleLeftViewController);
     
     self.progressView.hidden = NO;
+    self.pickerHQOptions.hidden = YES;
     //[self.view addSubview:self.progressView];
     [self.view bringSubviewToFront:self.progressView];
     
