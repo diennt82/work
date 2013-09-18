@@ -703,7 +703,7 @@
                 
                 //Set camera name
                 [camName setText:cp.name];
-                
+#if 0 //
                 NSArray * alerts  = [ CameraAlert getAllAlertForCamera:cp.mac_address];
                 CameraAlert * camAlert;
                 if (alerts != nil)
@@ -730,6 +730,7 @@
                         
                     }
                 }
+#endif
                 
                 NSString * msg = nil;
                 

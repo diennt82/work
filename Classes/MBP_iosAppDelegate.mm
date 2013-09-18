@@ -126,12 +126,11 @@
             
         }
         
-        //20130914: phung : Dont store alert for now
-//        
-//        if (shouldStoreAlert && [CameraAlert insertAlertForCamera:camAlert] == TRUE)
-//        {
-//            NSLog(@"Alert inserted successfully"); 
-//        }
+       
+        if (shouldStoreAlert && [CameraAlert insertAlertForCamera:camAlert] == TRUE)
+        {
+            NSLog(@"Alert inserted successfully");
+         }
     
         
         if ( [application applicationState] == UIApplicationStateInactive)

@@ -141,6 +141,8 @@
     BOOL isRebinded;
     NSArray * bonjourList;
     NSThread * bonjourThread;
+    
+
 }
 
 @property (nonatomic, retain) IBOutlet UIView * progressView;

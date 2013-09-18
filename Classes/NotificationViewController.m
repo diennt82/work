@@ -74,10 +74,7 @@
     
     // Do any additional setup after loading the view from its nib.
 
-    
-    //TODO:
     // 1. Load latest snapshot event
-    
     [self getLatestEvent];
     
     
@@ -87,8 +84,6 @@
     [self getPlaylist] ;
     
 }
-
-
 
 
 - (void)didReceiveMemoryWarning

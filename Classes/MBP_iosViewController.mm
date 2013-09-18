@@ -90,7 +90,8 @@ return self;
     //self.view.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
 
 	[self initialize];
-    
+
+
     
     backgroundView.hidden = YES;
 	[self.view addSubview:backgroundView];
@@ -1061,68 +1062,83 @@ return self;
 
 	}
 
+    
+    if (latestCamAlert != nil && [latestCamAlert.cameraMacNoColon  isEqualToString:camAlert.cameraMacNoColon])
+    {
+        NSLog(@"Same cam alert is currenlty stored.Silencely return, don't popup");
+        return FALSE;
+    }
+    
+      
 
+    
+    
     NSString * msg = NSLocalizedStringWithDefaultValue(@"Sound_detected",nil, [NSBundle mainBundle],
                                                        @"Sound detected", nil);
-
-
-
-	if ( [camAlert.alertType isEqualToString:ALERT_TYPE_TEMP_HI]  )
-	{
-		msg =NSLocalizedStringWithDefaultValue( @"Temperature_too_high",nil, [NSBundle mainBundle],
-                                                @"Temperature too high", nil);
-	}
-	else if ([camAlert.alertType isEqualToString:ALERT_TYPE_TEMP_LO])
-	{
-		msg =NSLocalizedStringWithDefaultValue( @"Temperature_too_low",nil, [NSBundle mainBundle],
-                                                    @"Temperature too low", nil);
-	}
+    
+    
+    
+    if ( [camAlert.alertType isEqualToString:ALERT_TYPE_TEMP_HI]  )
+    {
+        msg =NSLocalizedStringWithDefaultValue( @"Temperature_too_high",nil, [NSBundle mainBundle],
+                                               @"Temperature too high", nil);
+    }
+    else if ([camAlert.alertType isEqualToString:ALERT_TYPE_TEMP_LO])
+    {
+        msg =NSLocalizedStringWithDefaultValue( @"Temperature_too_low",nil, [NSBundle mainBundle],
+                                               @"Temperature too low", nil);
+    }
     else if ([camAlert.alertType isEqualToString:ALERT_TYPE_MOTION])
     {
         msg =NSLocalizedStringWithDefaultValue( @"Motion Detected",nil, [NSBundle mainBundle],
                                                @"Motion Detected", nil);
     }
-
-
-	if (pushAlert != nil )
-	{
-		if ([pushAlert isVisible])
-		{
-			[pushAlert dismissWithClickedButtonIndex:0 animated:NO]; 
-		}
-
-		[pushAlert release]; 
-	}
-
     
     
     NSString * cancel = NSLocalizedStringWithDefaultValue(@"Cancel",nil, [NSBundle mainBundle],
-                                                       @"Cancel", nil);
+                                                          @"Cancel", nil);
     
     NSString * msg2 = NSLocalizedStringWithDefaultValue(@"View_snapshot",nil, [NSBundle mainBundle],
-                                                       @"View Snapshot", nil);
+                                                        @"View Snapshot", nil);
     
-	pushAlert = [[UIAlertView alloc]
-		initWithTitle:camAlert.cameraName
-		message:msg
-		delegate:self
-		cancelButtonTitle:cancel
-		otherButtonTitles:msg2,nil];
+    if (pushAlert != nil )
+    {
+        if ([pushAlert isVisible])
+        {
+            [pushAlert dismissWithClickedButtonIndex:0 animated:NO];
+        }
+        
+        [pushAlert release];
+    }
     
-	//if ([self isThisMacStoredOffline:camAlert.cameraMacNoColon])
-	{
-
-		pushAlert.tag = ALERT_PUSH_RECVED_RESCAN_AFTER;
-	}
-//	else
-//	{
-//		NSLog(@"Relogin"); 
-//		[self sendStatus:2];
-//		pushAlert.tag = ALERT_PUSH_RECVED_RELOGIN_AFTER;
-//	}
-
+    
+    
+    
+    pushAlert = [[UIAlertView alloc]
+                 initWithTitle:camAlert.cameraName
+                 message:msg
+                 delegate:self
+                 cancelButtonTitle:cancel
+                 otherButtonTitles:msg2,nil];
+    
+    //if ([self isThisMacStoredOffline:camAlert.cameraMacNoColon])
+    {
+        
+        pushAlert.tag = ALERT_PUSH_RECVED_RESCAN_AFTER;
+        
+        
+        
+    }
+    //	else
+    //	{
+    //		NSLog(@"Relogin");
+    //		[self sendStatus:2];
+    //		pushAlert.tag = ALERT_PUSH_RECVED_RELOGIN_AFTER;
+    //	}
+    
     @synchronized(self)
     {
+        
         //keep the reference here
         if (latestCamAlert != nil)
         {
@@ -1130,18 +1146,22 @@ return self;
             latestCamAlert = nil;
         }
         latestCamAlert = camAlert;
+        
     }
+    
+    
     [self playSound];
     
+    [pushAlert show];
     
     
-	[pushAlert show];
     
 
-
-	return TRUE; 
+	return TRUE;
 
 }
+
+
 
 -(void) playSound
 {
@@ -1186,8 +1206,7 @@ return self;
     //REmove password and registration id
     [userDefaults removeObjectForKey:@"PortalPassword"];
     [userDefaults removeObjectForKey:_push_dev_token];
-    //[userDefaults removeObjectForKey:@"PortalApiKey"];
-    //[userDefaults setBool:FALSE forKey:_AutoLogin];
+    
     [userDefaults synchronize];
     
     // Let the device know we want to receive push notifications

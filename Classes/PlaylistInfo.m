@@ -20,7 +20,7 @@
     {
         
         //try to find the image file name [mac]_[type]_[time_code].jpg
-        //for eg: 48022A2CAC31_04_20130917065256730.jpg // 12-char.jpg = 12 + 1 + 3  -> mac_range.loc = 0, ext_range =12 -> len = 12 - 0  = 12
+        //for eg: 48022A2CAC31/snaps/48022A2CAC31_04_20130917065256730.jpg 
         if (self.mac_addr != nil)
         {
             NSRange mac_range  =  [self.urlImage rangeOfString:self.mac_addr];
