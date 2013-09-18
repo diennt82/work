@@ -159,7 +159,9 @@
 
 @property (nonatomic, retain) NSArray * channel_array; 
 @property (nonatomic, retain) NSMutableArray * restored_profiles ;
-@property (nonatomic) int app_stage; 
+@property (nonatomic) int app_stage;
+
+@property (nonatomic, retain) CameraAlert *camAlert;
 
 
 //@property (nonatomic, retain) NSTimer * fullScreenTimer, *alertTimer; 

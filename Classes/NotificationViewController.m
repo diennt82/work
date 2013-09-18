@@ -24,6 +24,7 @@
 
 -(void) dealloc
 {
+    [_tempPlaylist release];
     [super dealloc];
     [cameraMacNoColon release];
     [cameraName release];
@@ -74,6 +75,8 @@
     
     // Do any additional setup after loading the view from its nib.
 
+    self.tempPlaylist.navController = self.navigationController;
+    
     // 1. Load latest snapshot event
     [self getLatestEvent];
     
@@ -201,7 +204,7 @@
 
             if (eventArr.count == 1)
             {
-                tempPlaylist.playlistArray = [NSMutableArray array];
+                self.tempPlaylist.playlistArray = [NSMutableArray array];
                 
                 //expect 1 event only
                 NSDictionary * eventPlaylist = [eventArr objectAtIndex:0];
@@ -264,6 +267,7 @@
 
 - (void)getPlaylistSuccessWithResponse: (NSDictionary *)responseDict
 {
+    NSLog(@"getPlaylistSuccessWithResponse: %@", responseDict);
     if (responseDict)
     {
         if ([[responseDict objectForKey:@"status"] intValue] == 200)
@@ -273,7 +277,7 @@
             
             NSLog(@"play list: %@ ",responseDict);
 
-            tempPlaylist.playlistArray = [NSMutableArray array];
+            self.tempPlaylist.playlistArray = [NSMutableArray array];
             
             for (NSDictionary *playlist in eventArr) {
                 NSDictionary *clipInfo = [[playlist objectForKey:@"playlist"] objectAtIndex:0];
@@ -284,15 +288,14 @@
                 playlistInfo.titleString = [clipInfo objectForKey:@"title"];
                 playlistInfo.urlFile = [clipInfo objectForKey:@"file"];
                 
-                [tempPlaylist.playlistArray addObject:playlistInfo];
+                [self.tempPlaylist.playlistArray addObject:playlistInfo];
             }
             
-            NSLog(@"there is %d in playlist", [tempPlaylist.playlistArray count]);
+            NSLog(@"there is %d in playlist", [self.tempPlaylist.playlistArray count]);
             [progress stopAnimating];
             
-            [tempPlaylist.tableView reloadData]; 
-            tempPlaylist.view.hidden = NO;
-            
+            [self.tempPlaylist.tableView reloadData];
+            self.tempPlaylist.view.hidden = NO;
         }
         
 

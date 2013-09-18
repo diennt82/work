@@ -22,6 +22,7 @@
 #import <sys/socket.h>
 #import <netinet/in.h>
 #import  "IpAddress.h"
+#import "PlayListViewController.h"
 
 
 @implementation MBP_iosViewController
@@ -315,8 +316,8 @@ return self;
 
         
         
-        [self presentModalViewController:firstPage animated:NO];
-        
+        //[self presentModalViewController:firstPage animated:NO];
+        [self presentViewController:firstPage animated:NO completion:^{}];
     }
 
 
@@ -1939,7 +1940,24 @@ return self;
 
 }
 
-
+- (void)showNotificationViewController: (NSTimer *)exp
+{
+    //Back from login- login success
+    [self dismissViewControllerAnimated:NO completion:nil];
+    self.progressView.hidden = NO;
+    
+    NotificationViewController * notif_view = [[[NotificationViewController alloc]
+                                                initWithNibName:@"NotificationViewController" bundle:nil]autorelease];
+    
+    notif_view.delegate = self;
+    //Feed in data now
+    notif_view.cameraMacNoColon = _camAlert.cameraMacNoColon;
+    notif_view.cameraName  = _camAlert.cameraName;
+    notif_view.alertType   = _camAlert.alertType;
+    notif_view.alertVal    = _camAlert.alertVal;
+    
+    [notif_view presentModallyOn:self];
+}
 
 #pragma mark -
 #pragma mark Read Configure data 

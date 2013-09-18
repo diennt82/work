@@ -834,6 +834,11 @@
     NSLog(@"ch = %@, ch.profile = %@, ch.profile.minuteSinceLastComm = %d", ch, ch.profile, ch.profile.minuteSinceLastComm);
     
     if (ch != nil && ch.profile != nil) {
+        
+        NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+        [userDefaults setObject:ch.profile.mac_address forKey:CAM_IN_VEW];
+        [userDefaults synchronize];
+        
         H264PlayerViewController *h264PlayerViewController = [[H264PlayerViewController alloc] init];
         h264PlayerViewController.selectedChannel = ch;
         [self.navigationController pushViewController:h264PlayerViewController animated:YES];
@@ -1030,7 +1035,8 @@
     // Present the navigation controller on the specified parent
     // view controller.
     
-    [parent presentModalViewController:navController animated:NO];
+    //[parent presentModalViewController:navController animated:NO];
+    [parent presentViewController:navController animated:NO completion:^{}];
 }
 
 
