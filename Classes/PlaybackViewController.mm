@@ -293,12 +293,12 @@
     }
     
     
-    //[self.navigationController popViewControllerAnimated:YES];
+    [self.navigationController popViewControllerAnimated:YES];
     
     
     //DBG
-    [self dismissViewControllerAnimated:NO
-                             completion:nil];
+//    [self dismissViewControllerAnimated:NO
+//                             completion:nil];
 }
 
 - (void)stopStream

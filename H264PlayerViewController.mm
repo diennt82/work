@@ -38,7 +38,7 @@
 
 
 @interface H264PlayerViewController ()
-<UITableViewDataSource, UITableViewDelegate, UIPickerViewDelegate, UIPickerViewDataSource>
+<UITableViewDataSource, UITableViewDelegate, UIPickerViewDelegate, UIPickerViewDataSource, PlaylistDelegate>
 {
     MediaPlayer* mp;
 }
@@ -148,6 +148,13 @@
 //    }
 }
 
+- (void)viewWillDisappear:(BOOL)animated
+{
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+	[userDefaults removeObjectForKey:CAM_IN_VEW];
+	[userDefaults synchronize];
+}
+
 #pragma mark - Action
 
 - (IBAction)segCtrlAction:(id)sender {
@@ -156,11 +163,17 @@
         
         self.playlistViewController.tableView.hidden = YES;
         
-        if (self.mpFlag) {
+        NSLog(@"mpFlag: %d, mp==null: %d", _mpFlag, mp == NULL);
+        
+        if (self.mpFlag && mp == NULL) {
             self.progressView.hidden = NO;
-            //[self.view bringSubviewToFront:self.progressView];
+            [self.view bringSubviewToFront:self.progressView];
             [self setupCamera];
             self.mpFlag = FALSE;
+            
+            NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+            [userDefaults setObject:_selectedChannel.profile.mac_address forKey:CAM_IN_VEW];
+            [userDefaults synchronize];
         }
         else
         {
@@ -172,10 +185,14 @@
         if (self.playlistViewController.playlistArray.count == 0) {
             self.progressView.hidden = NO;
         }
-        
+        else
+        {
+            [self.view bringSubviewToFront:self.playlistViewController.tableView];
+        }
         self.playlistViewController.tableView.hidden = NO;
-        [self.view bringSubviewToFront:self.playlistViewController.tableView];
+        
         self.playlistViewController.navController = self.navigationController;
+        self.playlistViewController.playlistDelegate = self;
     }
     
     NSLog(@"self.segCtrl.selectedSegmentIndex = %d", self.segCtrl.selectedSegmentIndex);
@@ -215,6 +232,15 @@
 {
     [self.stackViewController toggleLeftViewController];
 }
+
+#pragma mark - Delegate Playlist
+
+- (void)stopStreamWhenPushPlayback
+{
+    self.mpFlag = TRUE;
+    [self stopStream];
+}
+
 #pragma mark - Method
 
 - (void)handleBecomeActive
@@ -506,18 +532,11 @@
             //[self.tableViewPlaylist performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:NO];
             [self.playlistViewController.tableView reloadData];
             NSLog(@"reloadData %d", self.playlistViewController.playlistArray.count);
-            
-            //[self performSelectorInBackground:@selector(downloadImage) withObject:nil];
         }
     }
     
     self.progressView.hidden = YES;
 }
-
-//- (void)downloadImage
-//{
-//    
-//}
 
 -(void) getVQ_bg
 {

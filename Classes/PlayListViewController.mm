@@ -192,6 +192,7 @@
         PlaybackViewController *playbackViewController = [[PlaybackViewController alloc] init];
         playbackViewController.clip_info = playlistInfo;
         
+        [self.playlistDelegate stopStreamWhenPushPlayback];
         
         [self.navController pushViewController:playbackViewController animated:NO];
         [playbackViewController release];

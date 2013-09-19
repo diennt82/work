@@ -1020,6 +1020,26 @@ return self;
 
 -(BOOL) pushNotificationRcvedInForeground:(CameraAlert *) camAlert
 {
+    
+    //Check if we should popup
+	NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+	//mac with COLON
+	NSString * camInView = (NSString*)[userDefaults objectForKey:CAM_IN_VEW];
+    
+    NSLog(@"camInView: %@", camInView);
+	
+    if (camInView != nil)
+	{
+        
+        // Don't care any camera in view
+        
+		//if ( [[Util strip_colon_fr_mac:camInView] isEqualToString:camAlert.cameraMacNoColon])
+		{
+			NSLog(@"Silencely return, don't popup");
+			return FALSE;
+		}
+        
+	}
 
     // IF this is just a server announcement - Dont do anything -
     if ([self isServerAnnouncement:camAlert])
@@ -1062,24 +1082,6 @@ return self;
         return FALSE ;
         
     }
-	
-    
-    //Check if we should popup
-	NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-	//mac with COLON 
-	NSString * camInView = (NSString*)[userDefaults objectForKey:CAM_IN_VEW];
-
-	if (camInView != nil)
-	{
-
-		if ( [[Util strip_colon_fr_mac:camInView] isEqualToString:camAlert.cameraMacNoColon])
-		{
-			NSLog(@"Silencely return, don't popup"); 
-			return FALSE;
-		}
-
-	}
-
     
     if (latestCamAlert != nil && [latestCamAlert.cameraMacNoColon  isEqualToString:camAlert.cameraMacNoColon])
     {

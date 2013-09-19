@@ -9,6 +9,12 @@
 #import <UIKit/UIKit.h>
 #import "PlaylistCell.h"
 
+@protocol PlaylistDelegate <NSObject>
+
+- (void)stopStreamWhenPushPlayback;
+
+@end
+
 @interface PlayListViewController : UITableViewController
 {
 
@@ -16,5 +22,6 @@
 
 @property (nonatomic, retain) NSMutableArray *playlistArray;
 @property (nonatomic, assign) UINavigationController *navController;
+@property (nonatomic, retain) id<PlaylistDelegate> playlistDelegate;
 
 @end
