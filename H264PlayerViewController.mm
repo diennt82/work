@@ -159,13 +159,15 @@
 
 - (IBAction)segCtrlAction:(id)sender {
     
-    if (self.segCtrl.selectedSegmentIndex == 0) {
+    if (self.segCtrl.selectedSegmentIndex == 0)
+    {
         
         self.playlistViewController.tableView.hidden = YES;
         
         NSLog(@"mpFlag: %d, mp==null: %d", _mpFlag, mp == NULL);
         
-        if (self.mpFlag && mp == NULL) {
+        if (self.mpFlag && mp == NULL)
+        {
             self.progressView.hidden = NO;
             [self.view bringSubviewToFront:self.progressView];
             [self setupCamera];
@@ -197,18 +199,24 @@
     
     NSLog(@"self.segCtrl.selectedSegmentIndex = %d", self.segCtrl.selectedSegmentIndex);
 }
-- (IBAction)hqPressAction:(id)sender {
+- (IBAction)hqPressAction:(id)sender
+{
     self.pickerHQOptions.hidden = NO;
     [self.view bringSubviewToFront:self.pickerHQOptions];
 }
-- (IBAction)iFrameOnlyPressAction:(id)sender {
+
+- (IBAction)iFrameOnlyPressAction:(id)sender
+{
 }
-- (IBAction)recordingPressAction:(id)sender {
+
+- (IBAction)recordingPressAction:(id)sender
+{
     self.recordingFlag = !self.recordingFlag;
     
     NSString *modeRecording = @"";
     
-    if (self.recordingFlag) {
+    if (self.recordingFlag == TRUE)
+    {
         modeRecording = @"on";
     }
     else
@@ -220,7 +228,8 @@
                            withObject:modeRecording];
 }
 
-- (IBAction)barBntItemRevealAction:(id)sender {
+- (IBAction)barBntItemRevealAction:(id)sender
+{
 //    UIBarButtonItem *revealIcon = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"reveal-icon"]
 //                                                                  style:UIBarButtonItemStylePlain
 //                                                                 target:[self stackViewController]
@@ -245,7 +254,7 @@
 
 - (void)handleBecomeActive
 {
-    if(_selectedChannel.profile.isInLocal)
+    if(_selectedChannel.profile.isInLocal == TRUE)
     {
         NSLog(@"Become ACTIVE _  .. do nothing.. ");
     }
@@ -257,7 +266,7 @@
 
 - (void)handleEnteredBackground
 {
-    if (_selectedChannel.profile.isInLocal)
+    if (_selectedChannel.profile.isInLocal == TRUE)
     {
         NSLog(@"Enter Background.. Keep on streamming.. ");
     }
@@ -300,7 +309,8 @@
     
     [self performSelectorInBackground:@selector(loadEarlierList) withObject:nil];
 
-    if (self.segCtrl.selectedSegmentIndex == 0) {
+    if (self.segCtrl.selectedSegmentIndex == 0)
+    {
         self.playlistViewController.tableView.hidden= YES;
     }
     
@@ -376,15 +386,17 @@
         NSDictionary *responseDict = [jsonComm createSessionBlockedWithRegistrationId:mac
                                                                      andClientType:@"IOS"
                                                                          andApiKey:apiKey];
-        if (responseDict) {
-            if ([[responseDict objectForKey:@"status"] intValue] == 200) {
+        if (responseDict != nil)
+        {
+            if ([[responseDict objectForKey:@"status"] intValue] == 200)
+            {
                 self.stream_url = [[responseDict objectForKey:@"data"] objectForKey:@"url"];
                 
-                NSString *tempString = [[self.stream_url componentsSeparatedByString:@"/"] lastObject];
-                
-                if ([tempString isEqualToString:@"blinkhd"] ) {
-                    return;
-                }
+//                NSString *tempString = [[self.stream_url componentsSeparatedByString:@"/"] lastObject];
+//                
+//                if ([tempString isEqualToString:@"blinkhd"] ) {
+//                    return;
+//                }
                 [self performSelector:@selector(startStream)
                            withObject:nil
                            afterDelay:0.1];
@@ -437,6 +449,7 @@
     status=  mp->prepare();
     
     printf("prepare return: %d\n", status);
+    
     if (status != NO_ERROR) // NOT OK
     {
         
@@ -508,8 +521,10 @@
     NSDictionary *responseDict = [jsonComm getAllRecordedFilesBlockedWithRegistrationId:mac
                                                   andEvent:@"04"
                                                  andApiKey:apiKey];
-    if (responseDict) {
-        if ([[responseDict objectForKey:@"status"] intValue] == 200) {
+    if (responseDict != nil)
+    {
+        if ([[responseDict objectForKey:@"status"] intValue] == 200)
+        {
             self.eventArr = [[responseDict objectForKey:@"data"] objectForKey:@"events"];
             
             //[self.tableViewPlaylist reloadData];
@@ -616,7 +631,7 @@
     NSLog(@"mac %@, apikey %@", mac, apiKey);
     
     
-    if (self.selectedChannel.profile.isInLocal ) // Replace with httpCommunication after
+    if (self.selectedChannel.profile.isInLocal == TRUE) // Replace with httpCommunication after
 	{
         self.jsonComm = [[[BMS_JSON_Communication alloc] initWithObject:self
                                                                Selector:nil
@@ -659,7 +674,7 @@
     NSString *apiKey = [userDefaults objectForKey:@"PortalApiKey"];
     
     NSDictionary *responseData  = nil;
-    if (  self.selectedChannel.profile.isInLocal)
+    if (  self.selectedChannel.profile.isInLocal == TRUE)
 	{
         
         self.jsonComm = [[[BMS_JSON_Communication alloc] initWithObject:self
@@ -712,7 +727,8 @@
     
     if (status == 200) // ok
     {
-        if (self.recordingFlag) {
+        if (self.recordingFlag == TRUE)
+        {
             [self.triggerRecordingButton setImage:[UIImage imageNamed:@"bb_rec_icon.png" ]
                                          forState:UIControlStateNormal];
         }
@@ -1189,15 +1205,18 @@
 - (void)createSesseionSuccessWithResponse: (NSDictionary *)responseDict
 {
     NSLog(@"createSesseionSuccessWithResponse %@", responseDict);
-    if (responseDict) {
-        if ([[responseDict objectForKey:@"status"] intValue] == 200) {
+    if (responseDict != nil)
+    {
+        if ([[responseDict objectForKey:@"status"] intValue] == 200)
+        {
             self.stream_url = [[responseDict objectForKey:@"data"] objectForKey:@"url"];
             
-            NSString *tempString = [[self.stream_url componentsSeparatedByString:@"/"] lastObject];
-            
-            if ([tempString isEqualToString:@"blinkhd"] ) {
-                return;
-            }
+//            NSString *tempString = [[self.stream_url componentsSeparatedByString:@"/"] lastObject];
+//            
+//            if ([tempString isEqualToString:@"blinkhd"] )
+//            {
+//                return;
+//            }
             [self performSelector:@selector(startStream)
                        withObject:nil
                        afterDelay:0.1];
@@ -1452,7 +1471,7 @@
     NSString *apiKey = [userDefaults objectForKey:@"PortalApiKey"];
     
     NSDictionary *responseData  = nil;
-    if (  self.selectedChannel.profile.isInLocal)
+    if (  self.selectedChannel.profile.isInLocal == TRUE)
 	{
         
         self.jsonComm = [[[BMS_JSON_Communication alloc] initWithObject:self
@@ -1472,7 +1491,7 @@
                                                       andApiKey:apiKey];
 		}
 	}
-	else if(self.selectedChannel.profile.minuteSinceLastComm <= 5)
+	else if(self.selectedChannel.profile.minuteSinceLastComm <= 5) // remote
 	{
         
         self.jsonComm = [[[BMS_JSON_Communication alloc] initWithObject:self
@@ -1508,7 +1527,9 @@
         NSString *bodyKey = [[[responseData objectForKey:@"data"] objectForKey:@"device_response"] objectForKey:@"body"];
         
         NSRange range = [bodyKey rangeOfString:@": "];
-        if (range.location != NSNotFound) {
+        
+        if (range.location != NSNotFound)
+        {
             NSString *modeVideo = [[bodyKey componentsSeparatedByString:@": "] objectAtIndex:1];
             
             if ([modeVideo isEqualToString:@"480p"])

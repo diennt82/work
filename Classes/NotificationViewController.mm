@@ -42,7 +42,8 @@
     return self;
 }
 
-- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
+- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
+{
     
 	return (interfaceOrientation == UIInterfaceOrientationMaskPortrait);
     
@@ -109,7 +110,8 @@
 -(IBAction) viewRecording:(id)sender
 {
 
-    if(eventInfo.urlFile && ![eventInfo.urlFile isEqualToString:@""])
+    if(eventInfo.urlFile != nil &&
+       ([eventInfo.urlFile isEqualToString:@""] == FALSE))
     {
         PlaybackViewController *playbackViewController = [[PlaybackViewController alloc] init];
         playbackViewController.clip_info = eventInfo;
@@ -194,7 +196,8 @@
 
 - (void)getEventSuccessWithResponse: (NSDictionary *)responseDict
 {
-    if (responseDict) {
+    if (responseDict != nil)
+    {
         if ([[responseDict objectForKey:@"status"] intValue] == 200)
         {
             NSLog(@"Event : %@ ",responseDict);
@@ -268,7 +271,7 @@
 - (void)getPlaylistSuccessWithResponse: (NSDictionary *)responseDict
 {
     NSLog(@"getPlaylistSuccessWithResponse: %@", responseDict);
-    if (responseDict)
+    if (responseDict != nil)
     {
         if ([[responseDict objectForKey:@"status"] intValue] == 200)
         {

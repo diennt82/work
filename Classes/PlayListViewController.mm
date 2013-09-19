@@ -65,7 +65,9 @@
         [cell setBackgroundColor:[UIColor colorWithRed:.8 green:.8 blue:1 alpha:1]];
     }
     else
+    {
         [cell setBackgroundColor:[UIColor clearColor]];
+    }
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -74,6 +76,7 @@
     PlaylistCell *cell = [self.tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     
     NSArray *objects = [[NSBundle mainBundle] loadNibNamed:@"PlaylistCell" owner:nil options:nil];
+    
     for (id curObj in objects)
     {
         
@@ -90,7 +93,7 @@
     if (playlistInfo) {
         cell.imgViewSnapshot.image = [UIImage imageNamed:@"no_img_available.jpeg"];
         
-        if (!playlistInfo.imgSnapshot)
+        if (playlistInfo.imgSnapshot == nil)
         {
             [cell.activityIndicator startAnimating];
             
@@ -119,7 +122,8 @@
         }
         
         //Set motion type
-        if (playlistInfo.titleString && ![playlistInfo.titleString isEqualToString:@""])
+        if (playlistInfo.titleString != nil &&
+            ([playlistInfo.titleString isEqualToString:@""] == FALSE))
         {
             cell.labelTitle.text = playlistInfo.titleString;
         }
@@ -183,16 +187,17 @@
     
     NSLog(@"urlFile = %@", playlistInfo.urlFile);
     
-    if( playlistInfo.urlFile &&
-       ![playlistInfo.urlFile isEqualToString:@""] &&
-       playlistInfo.imgSnapshot )
+    if( playlistInfo.urlFile != nil &&
+       ([playlistInfo.urlFile isEqualToString:@""] == FALSE )&&
+       playlistInfo.imgSnapshot != nil )
     {
         
         
         PlaybackViewController *playbackViewController = [[PlaybackViewController alloc] init];
         playbackViewController.clip_info = playlistInfo;
         
-        if (!self.playlistDelegate) {
+        if (self.playlistDelegate != nil)
+        {
             [self.playlistDelegate stopStreamWhenPushPlayback];
         }
         

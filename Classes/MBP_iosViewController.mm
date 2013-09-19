@@ -1023,30 +1023,6 @@ return self;
 
 -(BOOL) pushNotificationRcvedInForeground:(CameraAlert *) camAlert
 {
-    
-    //Check if we should popup
-	NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-	//mac with COLON
-	NSString * camInView = (NSString*)[userDefaults objectForKey:CAM_IN_VEW];
-    
-    NSLog(@"camInView: %@", camInView);
-	
-    if (camInView != nil)
-	{
-		if ( [[Util strip_colon_fr_mac:camInView] isEqualToString:camAlert.cameraMacNoColon])
-		{
-			NSLog(@"Silencely return, don't popup");
-			return FALSE;
-		}
-        
-	}
-    
-    if (self.app_stage == APP_STAGE_SETUP)
-    {
-        NSLog(@"APP_STAGE_SETUP. Don't popup!");
-        return FALSE;
-    }
-
     // IF this is just a server announcement - Dont do anything -
     if ([self isServerAnnouncement:camAlert])
     {
@@ -1087,6 +1063,29 @@ return self;
         
         return FALSE ;
         
+    }
+    
+    //Check if we should popup
+	NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+	//mac with COLON
+	NSString * camInView = (NSString*)[userDefaults objectForKey:CAM_IN_VEW];
+    
+    NSLog(@"camInView: %@", camInView);
+	
+    if (camInView != nil)
+	{
+		if ( [[Util strip_colon_fr_mac:camInView] isEqualToString:camAlert.cameraMacNoColon])
+		{
+			NSLog(@"Silencely return, don't popup");
+			return FALSE;
+		}
+        
+	}
+    
+    if (self.app_stage == APP_STAGE_SETUP)
+    {
+        NSLog(@"APP_STAGE_SETUP. Don't popup!");
+        return FALSE;
     }
     
     if (latestCamAlert != nil && [latestCamAlert.cameraMacNoColon  isEqualToString:camAlert.cameraMacNoColon])
@@ -1313,7 +1312,8 @@ return self;
     
 	if (tag == ALERT_PUSH_RECVED_RESCAN_AFTER)
 	{
-		switch(buttonIndex) {
+		switch(buttonIndex)
+        {
 			case 0:
                 [pushAlert release];
                 pushAlert = nil;
@@ -1328,10 +1328,12 @@ return self;
 					NSLog(@"views count = %d",[views count] );
 					if ( [views count] > 1)
 					{
-                        if (views.count > 2) {
+                        if (views.count > 2)
+                        {
                             id obj2 = [views objectAtIndex:2];
                             
-                            if ([obj2 isKindOfClass:[PlaybackViewController class]]) {
+                            if ([obj2 isKindOfClass:[PlaybackViewController class]])
+                            {
                                 PlaybackViewController *playbackViewController = (PlaybackViewController *)obj2;
                                 [playbackViewController stopStream];
                             }
@@ -1339,7 +1341,8 @@ return self;
                         
                         id obj = [views objectAtIndex:1];
                         
-                        if ([obj isKindOfClass:[H264PlayerViewController class]]) {
+                        if ([obj isKindOfClass:[H264PlayerViewController class]])
+                        {
                             H264PlayerViewController * h264PlayerViewController = (H264PlayerViewController *) obj;
                             [h264PlayerViewController goBackToCameraList];
                         }
@@ -1383,7 +1386,8 @@ return self;
 	}
 	else if (tag == ALERT_PUSH_RECVED_RELOGIN_AFTER)
 	{
-		switch(buttonIndex) {
+		switch(buttonIndex)
+        {
 			case 0:
 				break;
 			case 1:
@@ -1398,10 +1402,12 @@ return self;
 					NSLog(@"views count = %d",[views count] );
 					if ( [views count] > 1)
 					{
-						if (views.count > 2) {
+						if (views.count > 2)
+                        {
                             id obj2 = [views objectAtIndex:2];
                             
-                            if ([obj2 isKindOfClass:[PlaybackViewController class]]) {
+                            if ([obj2 isKindOfClass:[PlaybackViewController class]])
+                            {
                                 PlaybackViewController *playbackViewController = (PlaybackViewController *)obj2;
                                 [playbackViewController stopStream];
                             }
@@ -1409,7 +1415,8 @@ return self;
                         
                         id obj = [views objectAtIndex:1];
                         
-                        if ([obj isKindOfClass:[H264PlayerViewController class]]) {
+                        if ([obj isKindOfClass:[H264PlayerViewController class]])
+                        {
                             H264PlayerViewController * h264PlayerViewController = (H264PlayerViewController *) obj;
                             [h264PlayerViewController goBackToCameraList];
                         }

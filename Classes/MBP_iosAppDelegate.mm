@@ -444,7 +444,7 @@
         //   4. Or a remote camera has become unreachable.
         //  -->>> NEED to relogin to verify
 
-        if (self.becomeActiveByNotificationFlag)
+        if (self.becomeActiveByNotificationFlag == TRUE)
         {
             self.becomeActiveByNotificationFlag = FALSE;
         }

@@ -130,7 +130,7 @@
 {
     BOOL got_last_clip = FALSE;
     
-    if (responseDict)
+    if (responseDict != nil)
     {
         if ([[responseDict objectForKey:@"status"] intValue] == 200)
         {
