@@ -56,10 +56,7 @@
     [self goBackToPlayList];
 }
 
-- (void)viewWillDisappear:(BOOL)animated
-{
-    [self stopStream];
-}
+
 
 - (void)becomeActive
 {
