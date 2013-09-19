@@ -1033,10 +1033,7 @@ return self;
 	
     if (camInView != nil)
 	{
-        
-        // Don't care any camera in view
-        
-		//if ( [[Util strip_colon_fr_mac:camInView] isEqualToString:camAlert.cameraMacNoColon])
+		if ( [[Util strip_colon_fr_mac:camInView] isEqualToString:camAlert.cameraMacNoColon])
 		{
 			NSLog(@"Silencely return, don't popup");
 			return FALSE;
@@ -1331,11 +1328,13 @@ return self;
 					NSLog(@"views count = %d",[views count] );
 					if ( [views count] > 1)
 					{
-                        id obj2 = [views objectAtIndex:2];
-                        
-                        if ([obj2 isKindOfClass:[PlaybackViewController class]]) {
-                            PlaybackViewController *playbackViewController = (PlaybackViewController *)obj2;
-                            [playbackViewController stopStream];
+                        if (views.count > 2) {
+                            id obj2 = [views objectAtIndex:2];
+                            
+                            if ([obj2 isKindOfClass:[PlaybackViewController class]]) {
+                                PlaybackViewController *playbackViewController = (PlaybackViewController *)obj2;
+                                [playbackViewController stopStream];
+                            }
                         }
                         
                         id obj = [views objectAtIndex:1];
@@ -1399,8 +1398,21 @@ return self;
 					NSLog(@"views count = %d",[views count] );
 					if ( [views count] > 1)
 					{
-						H264PlayerViewController *h264PlayerViewController = (H264PlayerViewController *) [views objectAtIndex:1];
-						[h264PlayerViewController goBackToCameraList];
+						if (views.count > 2) {
+                            id obj2 = [views objectAtIndex:2];
+                            
+                            if ([obj2 isKindOfClass:[PlaybackViewController class]]) {
+                                PlaybackViewController *playbackViewController = (PlaybackViewController *)obj2;
+                                [playbackViewController stopStream];
+                            }
+                        }
+                        
+                        id obj = [views objectAtIndex:1];
+                        
+                        if ([obj isKindOfClass:[H264PlayerViewController class]]) {
+                            H264PlayerViewController * h264PlayerViewController = (H264PlayerViewController *) obj;
+                            [h264PlayerViewController goBackToCameraList];
+                        }
 					}
 				}
                 
