@@ -40,7 +40,7 @@
 @interface H264PlayerViewController ()
 <UITableViewDataSource, UITableViewDelegate, UIPickerViewDelegate, UIPickerViewDataSource, PlaylistDelegate>
 {
-    MediaPlayer* mp;
+    MediaPlayer* h264Streamer;
 }
 
 @property (retain, nonatomic) IBOutlet UITableView *tableViewPlaylist;
@@ -55,7 +55,7 @@
 
 @property (nonatomic, retain) HttpCommunication* httpComm;
 @property (nonatomic, retain) NSMutableArray *playlistArray;
-@property (nonatomic) BOOL mpFlag;
+@property (nonatomic) BOOL h264StreamerIsInStopped;
 @property (nonatomic, retain) NSArray *eventArr;
 @property (nonatomic, retain) HttpCommunication *htppComm;
 @property (nonatomic, retain) BMS_JSON_Communication *jsonComm;
@@ -159,19 +159,20 @@
 
 - (IBAction)segCtrlAction:(id)sender {
     
-    if (self.segCtrl.selectedSegmentIndex == 0)
+    if (self.segCtrl.selectedSegmentIndex == 0) // Live
     {
         
         self.playlistViewController.tableView.hidden = YES;
         
-        NSLog(@"mpFlag: %d, mp==null: %d", _mpFlag, mp == NULL);
+        NSLog(@"h264StreamerIsInStopped: %d, h264Streamer==null: %d", _h264StreamerIsInStopped, h264Streamer == NULL);
         
-        if (self.mpFlag && mp == NULL)
+        if (self.h264StreamerIsInStopped == TRUE &&
+            h264Streamer == NULL)
         {
             self.progressView.hidden = NO;
             [self.view bringSubviewToFront:self.progressView];
             [self setupCamera];
-            self.mpFlag = FALSE;
+            self.h264StreamerIsInStopped = FALSE;
             
             NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
             [userDefaults setObject:_selectedChannel.profile.mac_address forKey:CAM_IN_VEW];
@@ -179,10 +180,10 @@
         }
         else
         {
-            //[self.view bringSubviewToFront:self.imageViewVideo];
+            // Streamer is showing live view
         }
     }
-    else if (self.segCtrl.selectedSegmentIndex == 1)
+    else if (self.segCtrl.selectedSegmentIndex == 1) // Ealier
     {
         if (self.playlistViewController.playlistArray.count == 0) {
             self.progressView.hidden = NO;
@@ -246,7 +247,7 @@
 
 - (void)stopStreamWhenPushPlayback
 {
-    self.mpFlag = TRUE;
+    self.h264StreamerIsInStopped = TRUE;
     [self stopStream];
 }
 
@@ -421,7 +422,7 @@
 {
     status_t status;
 
-    mp = new MediaPlayer(false);
+    h264Streamer = new MediaPlayer(false);
     
     //`NSLog(@"Play with TCP Option >>>>> ") ;
     //mp->setPlayOption(MEDIA_STREAM_RTSP_WITH_TCP);
@@ -431,7 +432,7 @@
     url = _stream_url;
     
     
-    status = mp->setDataSource([url UTF8String]);
+    status = h264Streamer->setDataSource([url UTF8String]);
     
     
     
@@ -442,11 +443,11 @@
         return;
     }
     
-    mp->setVideoSurface(self.imageViewVideo);
+    h264Streamer->setVideoSurface(self.imageViewVideo);
     
     NSLog(@"Prepare the player");
     
-    status=  mp->prepare();
+    status=  h264Streamer->prepare();
     
     printf("prepare return: %d\n", status);
     
@@ -460,7 +461,7 @@
     self.progressView.hidden = YES;
     // Play anyhow
     
-    status=  mp->start();
+    status=  h264Streamer->start();
     
     printf("start() return: %d\n", status);
     if (status != NO_ERROR) // NOT OK
@@ -487,16 +488,17 @@
 {
     @synchronized(self)
     {
-        if (mp != NULL)
+        if (h264Streamer != NULL)
         {
-            if (mp->isPlaying())
+            if (h264Streamer->isPlaying())
             {
-                mp->suspend();
-                mp->stop();
+                h264Streamer->suspend();
+                h264Streamer->stop();
             }
-            free(mp);
+            free(h264Streamer);
         }
-        mp = NULL;
+        
+        h264Streamer = NULL;
     }
 }
 
@@ -527,8 +529,6 @@
         {
             self.eventArr = [[responseDict objectForKey:@"data"] objectForKey:@"events"];
             
-            //[self.tableViewPlaylist reloadData];
-            
             self.playlistViewController.playlistArray = [NSMutableArray array];
             
             for (NSDictionary *playlist in self.eventArr) {
@@ -541,10 +541,8 @@
                 playlistInfo.urlFile = [clipInfo objectForKey:@"file"];
                 
                 [self.playlistViewController.playlistArray addObject:playlistInfo];
-                //[self.tableViewPlaylist reloadData];
             }
             
-            //[self.tableViewPlaylist performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:NO];
             [self.playlistViewController.tableView reloadData];
             NSLog(@"reloadData %d", self.playlistViewController.playlistArray.count);
         }
