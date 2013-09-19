@@ -31,13 +31,14 @@
     id <ConnectionMethodDelegate> delegate; 
     
 }
+@property (retain, nonatomic) IBOutlet PlayListViewController *tempPlaylist;
 
 @property(nonatomic, retain) NSString * cameraMacNoColon;
 @property(nonatomic, retain) NSString * cameraName;
 @property(nonatomic, retain) NSString * alertType;
 @property(nonatomic, retain) NSString * alertVal;
 @property(nonatomic, retain ) PlaylistInfo * eventInfo;
-@property(nonatomic, retain) id <ConnectionMethodDelegate> delegate; 
+@property(nonatomic, retain) id <ConnectionMethodDelegate> delegate;
 
 
 -(IBAction) gotoCameraList:(id)sender;

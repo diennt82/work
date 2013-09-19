@@ -22,6 +22,8 @@
 
 #define VIEW_DIRECTIONPAD_TAG 999
 
+#define CAM_IN_VEW @"string_Camera_Mac_Being_Viewed"
+
 #import "H264PlayerViewController.h"
 
 #import "HttpCommunication.h"
@@ -100,6 +102,19 @@
                                                                   action:@selector(preToggleLeftViewController)];
 
     self.navigationItem.leftBarButtonItem = revealIcon;
+    
+    // Do any additional setup after loading the view.
+	[[NSNotificationCenter defaultCenter] addObserver: self
+                                             selector: @selector(handleEnteredBackground)
+                                                 name: UIApplicationDidEnterBackgroundNotification
+                                               object: nil];
+    
+    // Do any additional setup after loading the view.
+	[[NSNotificationCenter defaultCenter] addObserver: self
+                                             selector: @selector(handleBecomeActive)
+                                                 name: UIApplicationDidBecomeActiveNotification
+                                               object: nil];
+    
 //	self.navigationItem.backBarButtonItem =
 //    [[[UIBarButtonItem alloc] initWithTitle:msg
 //                                      style:UIBarButtonItemStyleBordered
@@ -202,6 +217,35 @@
 }
 #pragma mark - Method
 
+- (void)handleBecomeActive
+{
+    if(_selectedChannel.profile.isInLocal)
+    {
+        NSLog(@"Become ACTIVE _  .. do nothing.. ");
+    }
+    else if ( _selectedChannel.profile.minuteSinceLastComm <= 5) // Remote
+    {
+        [self becomeActive];
+    }
+}
+
+- (void)handleEnteredBackground
+{
+    if (_selectedChannel.profile.isInLocal)
+    {
+        NSLog(@"Enter Background.. Keep on streamming.. ");
+    }
+    else if (_selectedChannel.profile.minuteSinceLastComm <= 5) // Remote
+    {
+        _selectedChannel.stopStreaming = TRUE;
+        
+        [self stopStream];
+        
+        //NSLog(@"abort remote timer ");
+        [_selectedChannel abortViewTimer];
+    }
+}
+
 - (void)becomeActive
 {
     //CamProfile *cp = self.selectedChannel.profile;
@@ -217,6 +261,7 @@
 //    self.backBarBtnItem.action = @selector(toggleLeftViewController);
     
     self.progressView.hidden = NO;
+    self.pickerHQOptions.hidden = YES;
     //[self.view addSubview:self.progressView];
     [self.view bringSubviewToFront:self.progressView];
     
@@ -278,6 +323,7 @@
         [self performSelector:@selector(startStream)
                    withObject:nil
                    afterDelay:0.1];
+        
         [self performSelectorInBackground:@selector(getVQ_bg) withObject:nil];
         //[self performSelectorInBackground:@selector(getTriggerRecording_bg) withObject:nil];
     }
@@ -391,6 +437,9 @@
     
     [self stopStream];
     
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+	[userDefaults removeObjectForKey:CAM_IN_VEW];
+	[userDefaults synchronize];
     
     [self.navigationController popToRootViewControllerAnimated:NO];
 }

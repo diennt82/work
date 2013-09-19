@@ -31,5 +31,7 @@
 @property (nonatomic, retain) IBOutlet UIWindow *window;
 @property (nonatomic, retain) IBOutlet MBP_iosViewController *viewController;
 
+@property (nonatomic) BOOL becomeActiveByNotificationFlag;
+
 @end
 

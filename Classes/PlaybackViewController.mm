@@ -33,6 +33,8 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
     
+    self.navigationController.navigationBarHidden = YES;
+    
     self.progressView.hidden = NO;
     
     NSString * msg = NSLocalizedStringWithDefaultValue(@"Back",nil, [NSBundle mainBundle],

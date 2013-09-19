@@ -136,8 +136,9 @@
         if ( [application applicationState] == UIApplicationStateInactive)
         {
             
-            NSLog(@"Re login"); 
-            [self performSelectorOnMainThread:@selector(forceLogin) withObject:nil waitUntilDone:YES];             
+            NSLog(@"UIApplicationStateInactive"); 
+            //[self performSelectorOnMainThread:@selector(forceLogin) withObject:nil waitUntilDone:YES];
+            [self performSelectorOnMainThread:@selector(activateNotificationViewController:) withObject:camAlert waitUntilDone:YES];
         }
         
     }
@@ -159,6 +160,17 @@
                                    userInfo:nil
                                     repeats:NO];
    
+}
+
+- (void)activateNotificationViewController: (CameraAlert *)camAlert
+{
+    self.becomeActiveByNotificationFlag = TRUE;
+    viewController.camAlert = camAlert;
+    [NSTimer scheduledTimerWithTimeInterval:0.01
+                                     target:viewController
+                                   selector:@selector(showNotificationViewController:)
+                                   userInfo:nil
+                                    repeats:NO];
 }
 
 
@@ -342,10 +354,72 @@
      */
 	
 	NSLog(@"Enter foreground isMain? %d 01", [[NSThread currentThread] isMainThread]);
+//	
+//    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+//	viewController.app_stage = [userDefaults integerForKey:@"ApplicationStage"];
+//
+//    NSString * camInView = (NSString*)[userDefaults objectForKey:CAM_IN_VEW];
+//    
+//    
+//    if (camInView != nil)
+//	{
+//        //Some camera is inview..
+//        //How about don't do anything..
+//        
+//        
+//        NSLog(@"Some camera is in view.. do nothing");
+//        
+//        
+//	}
+//    else if (viewController.app_stage == APP_STAGE_LOGGED_IN)
+//    {
+//        //[self performSelectorOnMainThread:@selector(forceScan) withObject:nil waitUntilDone:YES];
+//        
+//        //20121114: phung: Need to force relogin, because while app in background many things can happen
+//        //   1. Wifi loss --> offline mode
+//        //   2. User switch on 3G
+//        //   3. Or simply no 3g nor 3g -->> offline mode 
+//        //   4. Or a remote camera has become unreachable.
+//        //  -->>> NEED to relogin to verify
+//        
+//        if (self.becomeActiveByNotificationFlag)
+//        {
+//            self.becomeActiveByNotificationFlag = FALSE;
+//        }
+//        else
+//        {
+//            [self forceLogin];
+//        }
+//    }
+//    else if (viewController.app_stage ==  APP_STAGE_SETUP)
+//    {
+//        //Do nothing -- stay at the current page
+//    }
+//    else
+//    {
+//         [self performSelectorOnMainThread:@selector(showInit) withObject:nil waitUntilDone:YES];
+//    }
+
+
+    
+   
+    
+}
+
+
+
+
+
+- (void)applicationDidBecomeActive:(UIApplication *)application {
+    /*
+     Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
+     */
 	
+    NSLog(@"viewController.app_stage: %d", viewController.app_stage);
+    
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
 	viewController.app_stage = [userDefaults integerForKey:@"ApplicationStage"];
-
+    
     NSString * camInView = (NSString*)[userDefaults objectForKey:CAM_IN_VEW];
     
     
@@ -362,16 +436,22 @@
     else if (viewController.app_stage == APP_STAGE_LOGGED_IN)
     {
         //[self performSelectorOnMainThread:@selector(forceScan) withObject:nil waitUntilDone:YES];
-        
+
         //20121114: phung: Need to force relogin, because while app in background many things can happen
         //   1. Wifi loss --> offline mode
         //   2. User switch on 3G
-        //   3. Or simply no 3g nor 3g -->> offline mode 
+        //   3. Or simply no 3g nor 3g -->> offline mode
         //   4. Or a remote camera has become unreachable.
         //  -->>> NEED to relogin to verify
-        [self forceLogin]; 
 
-        
+        if (self.becomeActiveByNotificationFlag)
+        {
+            self.becomeActiveByNotificationFlag = FALSE;
+        }
+        else
+        {
+            [self forceLogin];
+        }
     }
     else if (viewController.app_stage ==  APP_STAGE_SETUP)
     {
@@ -379,23 +459,9 @@
     }
     else
     {
-         [self performSelectorOnMainThread:@selector(showInit) withObject:nil waitUntilDone:YES];
+        [self performSelectorOnMainThread:@selector(showInit) withObject:nil waitUntilDone:YES];
     }
 
-
-    
-   
-    
-}
-
-
-
-
-
-- (void)applicationDidBecomeActive:(UIApplication *)application {
-    /*
-     Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
-     */
 }
 
 
