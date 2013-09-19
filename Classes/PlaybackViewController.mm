@@ -47,6 +47,11 @@
     [self becomeActive];
 }
 
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [self stopStream];
+}
+
 - (void)becomeActive
 {
     //CamProfile *cp = self.selectedChannel.profile;
@@ -313,7 +318,7 @@
     
     if (listener != NULL)
     {
-        free(listener);
+        //free(listener);
     }
     
     

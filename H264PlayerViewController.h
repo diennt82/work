@@ -22,5 +22,6 @@
 @property (nonatomic, retain) CamChannel *selectedChannel;
 
 - (void)stopStream;
+- (void)goBackToCameraList;
 
 @end

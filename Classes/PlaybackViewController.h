@@ -34,4 +34,6 @@
 
 @property (nonatomic, retain) NSString *urlVideo;
 
+- (void)stopStream;
+
 @end

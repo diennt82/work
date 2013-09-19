@@ -24,6 +24,9 @@
 #import  "IpAddress.h"
 #import "PlayListViewController.h"
 
+#import "H264PlayerViewController.h"
+#import <MonitorCommunication/MonitorCommunication.h>
+
 
 @implementation MBP_iosViewController
 
@@ -384,9 +387,8 @@ return self;
     }
     
 
-    
-    [self presentModalViewController:firstPage animated:NO];
-    
+    //[self presentModalViewController:firstPage animated:NO];
+    [self presentViewController:firstPage animated:NO completion:^{}];
     
 }
 
@@ -834,7 +836,8 @@ return self;
             [self scan_for_devices];
             
             //Back from login- login success
-            [self dismissModalViewControllerAnimated:NO];
+            //[self dismissModalViewControllerAnimated:NO];
+            [self dismissViewControllerAnimated:NO completion:^{}];
             self.progressView.hidden = NO;
             
 #else
@@ -1040,6 +1043,12 @@ return self;
 		}
         
 	}
+    
+    if (self.app_stage == APP_STAGE_SETUP)
+    {
+        NSLog(@"APP_STAGE_SETUP. Don't popup!");
+        return FALSE;
+    }
 
     // IF this is just a server announcement - Dont do anything -
     if ([self isServerAnnouncement:camAlert])
@@ -1300,6 +1309,148 @@ return self;
 #pragma mark -
 #pragma mark Alertview delegate
 
+#if JSON_FLAG
+- (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex {
+    
+	int tag = alertView.tag ;
+    
+	if (tag == ALERT_PUSH_RECVED_RESCAN_AFTER)
+	{
+		switch(buttonIndex) {
+			case 0:
+                [pushAlert release];
+                pushAlert = nil;
+				break;
+			case 1:
+            {
+				if (dashBoard != nil)
+				{
+					NSLog(@"RESCAN_AFTER close all windows and thread");
+                    
+					NSArray * views = dashBoard.navigationController.viewControllers;
+					NSLog(@"views count = %d",[views count] );
+					if ( [views count] > 1)
+					{
+                        id obj2 = [views objectAtIndex:2];
+                        
+                        if ([obj2 isKindOfClass:[PlaybackViewController class]]) {
+                            PlaybackViewController *playbackViewController = (PlaybackViewController *)obj2;
+                            [playbackViewController stopStream];
+                        }
+                        
+                        id obj = [views objectAtIndex:1];
+                        
+                        if ([obj isKindOfClass:[H264PlayerViewController class]]) {
+                            H264PlayerViewController * h264PlayerViewController = (H264PlayerViewController *) obj;
+                            [h264PlayerViewController goBackToCameraList];
+                        }
+					}
+				}
+                
+				[self dismissViewControllerAnimated:NO completion:nil];
+                
+#if 0
+				NSLog(@"Re-scan ");
+				[self sendStatus:3];
+                
+#endif
+                
+                NotificationViewController * notif_view = [[[NotificationViewController alloc]
+                                                            initWithNibName:@"NotificationViewController" bundle:nil]autorelease];
+                @synchronized(self)
+                {
+                    //Feed in data now
+                    notif_view.cameraMacNoColon = latestCamAlert.cameraMacNoColon;
+                    notif_view.cameraName  = latestCamAlert.cameraName;
+                    notif_view.alertType   = latestCamAlert.alertType;
+                    notif_view.alertVal    = latestCamAlert.alertVal;
+                    
+                    notif_view.delegate = self;
+                    
+                    [latestCamAlert release];
+                    latestCamAlert = nil;
+                }
+                
+                [notif_view presentModallyOn:self];
+                
+                [pushAlert release];
+                pushAlert = nil;
+				break;
+            }
+			default:
+				break;
+                
+		}
+	}
+	else if (tag == ALERT_PUSH_RECVED_RELOGIN_AFTER)
+	{
+		switch(buttonIndex) {
+			case 0:
+				break;
+			case 1:
+                
+				if (dashBoard != nil)
+				{
+					NSLog(@"RELOGIN_AFTER close all windows and thread");
+                    
+					//[dashBoard.navigationController popToRootViewControllerAnimated:NO];
+                    
+					NSArray * views = dashBoard.navigationController.viewControllers;
+					NSLog(@"views count = %d",[views count] );
+					if ( [views count] > 1)
+					{
+						H264PlayerViewController *h264PlayerViewController = (H264PlayerViewController *) [views objectAtIndex:1];
+						[h264PlayerViewController goBackToCameraList];
+					}
+				}
+                
+				//[self dismissModalViewControllerAnimated:NO];
+                [self dismissViewControllerAnimated:NO completion:^{}];
+                
+                
+				[self sendStatus:2];
+				break;
+			default:
+				break;
+                
+		}
+	}
+    else if (tag == ALERT_PUSH_SERVER_ANNOUNCEMENT)
+    {
+        switch(buttonIndex)
+        {
+			case 0://IGNORE
+				break;
+			case 1://Detail
+            {
+                // Open the web browser now..
+                NSString * url =  ((AlertPrompt*)alertView).otherInfo;
+                
+                
+                if (url != nil)
+                {
+                    if ( [url hasPrefix:@"http://"] != TRUE)
+                    {
+                        url  = [NSString stringWithFormat:@"http://%@", url];
+                    }
+                    
+                    
+                    NSLog(@"final url:%@ ",url);
+                    
+                    NSURL *ns_url = [NSURL URLWithString:url];
+                    
+                    [[UIApplication sharedApplication] openURL:ns_url];
+                }
+                break;
+            }
+            default:
+                break;
+        }
+    }
+    
+}
+
+#else
 - (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex {
 
 	int tag = alertView.tag ;
@@ -1318,7 +1469,7 @@ return self;
 
 				if (dashBoard != nil)
 				{
-					NSLog(@"close all windows and thread"); 
+					NSLog(@"RESCAN_AFTER close all windows and thread"); 
 
 					
 
@@ -1380,7 +1531,7 @@ return self;
 
 				if (dashBoard != nil)
 				{
-					NSLog(@"close all windows and thread"); 
+					NSLog(@"RELOGIN_AFTER close all windows and thread"); 
 
 					//[dashBoard.navigationController popToRootViewControllerAnimated:NO]; 
 
@@ -1397,7 +1548,8 @@ return self;
 
 				}
 
-				[self dismissModalViewControllerAnimated:NO];
+				//[self dismissModalViewControllerAnimated:NO];
+                [self dismissViewControllerAnimated:NO completion:^{}];
 
 				 
 				[self sendStatus:2];
@@ -1441,9 +1593,9 @@ return self;
     }
 
 }
+#endif
+
 #pragma mark -
-
-
 
 
 #pragma mark -

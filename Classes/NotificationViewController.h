@@ -19,7 +19,7 @@
     IBOutlet UIButton * btn_view_recording;
 
     
-    IBOutlet PlayListViewController *tempPlaylist;
+    //IBOutlet PlayListViewController *tempPlaylist;
     IBOutlet UIActivityIndicatorView * progress;
     
     NSString * cameraMacNoColon;
