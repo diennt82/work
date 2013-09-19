@@ -237,6 +237,20 @@ return self;
 
 	self.app_stage = APP_STAGE_INIT;
 
+    
+#if 0
+    NSLog(@">>> DBG PLAYER  ");
+    PlaybackViewController *playbackViewController = [[PlaybackViewController alloc] init];
+    //playbackViewController.urlVideo = @"http://nxcomm:2009nxcomm@nxcomm-office.no-ip.info/app_release/sub_clips/48022A2CAC31_04_20130917065256730_00001.flv";
+    
+    playbackViewController.urlVideo = @"http://s3.amazonaws.com/sm.wowza.content/48022A2CAC31/clips/48022A2CAC31_04_20130918083756010_00001_last.flv?AWSAccessKeyId=AKIAIDBFDZTAR2EB4KPQ&Expires=1379501535&Signature=m%2FGcG%2BOh8wlwXcWqkiw%2BztAqAn8%3D"; 
+    
+    //[playbackViewController autorelease];
+    
+    [self presentViewController:playbackViewController animated:NO  completion:nil];
+#else
+    
+    
 	//hide splash screen page
      backgroundView.hidden = NO;
     [self.view bringSubviewToFront:backgroundView];
@@ -318,7 +332,7 @@ return self;
         [self presentModalViewController:firstPage animated:NO];
         
     }
-
+#endif
 
 
 }
@@ -615,10 +629,13 @@ return self;
 		case SETUP_CAMERA: 
 			{
 
-				NSLog(@">>> SETUP ");
+				
+                
+                
 				[self dismissViewControllerAnimated:NO completion:nil];
 
-                
+
+                NSLog(@">>> SETUP ");
                 self.app_stage = APP_STAGE_SETUP;
 
                 
@@ -1288,6 +1305,8 @@ return self;
 	{
 		switch(buttonIndex) {
 			case 0:
+                [pushAlert release];
+                pushAlert = nil;
 				break;
 			case 1:
             {
@@ -1339,7 +1358,8 @@ return self;
                 
                 [notif_view presentModallyOn:self];
                 
-             
+                [pushAlert release];
+                pushAlert = nil;
 				break;
             }
 			default:

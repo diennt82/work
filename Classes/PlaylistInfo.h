@@ -11,7 +11,8 @@
 @interface PlaylistInfo : NSObject
 
 
-@property (nonatomic, retain) NSString * mac_addr; 
+@property (nonatomic, retain) NSString * mac_addr;
+
  
 @property (nonatomic, retain) NSString *urlImage;
 @property (nonatomic, retain) NSString *titleString;
@@ -19,6 +20,8 @@
 @property (nonatomic, retain) UIImage *imgSnapshot;
 
 -(NSDate *) getTimeCode;
-
+-(BOOL) isLastClip;
+-(NSString *) getAlertVal;
+-(NSString *) getAlertType;
 
 @end

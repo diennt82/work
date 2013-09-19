@@ -29,7 +29,7 @@
     [cameraName release];
     [alertVal release];
     [alertType release];
-    //[eventInfo release];
+    [eventInfo release];
 }
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
@@ -99,7 +99,7 @@
     [self.navigationController popToRootViewControllerAnimated:NO];
 
     // Will call dismiss eventually
-    [delegate sendStatus:SCAN_CAMERA];
+    [delegate sendStatus:SCAN_BONJOUR_CAMERA];
 
 }
 
@@ -109,9 +109,9 @@
     if(eventInfo.urlFile && ![eventInfo.urlFile isEqualToString:@""])
     {
         PlaybackViewController *playbackViewController = [[PlaybackViewController alloc] init];
-        playbackViewController.urlVideo = eventInfo.urlFile;
+        playbackViewController.clip_info = eventInfo;
         
-        [playbackViewController autorelease];
+        //[playbackViewController autorelease];
         
         [self presentViewController:playbackViewController animated:NO  completion:nil]; 
         
@@ -209,7 +209,7 @@
                 NSDictionary *clipInfo = [[eventPlaylist objectForKey:@"playlist"]
                                           objectAtIndex:0];
                 
-                eventInfo = [[[PlaylistInfo alloc] init] autorelease];
+                eventInfo = [[PlaylistInfo alloc] init] ;
                 eventInfo.mac_addr = self.cameraMacNoColon;
                 eventInfo.urlImage = [clipInfo objectForKey:@"image"];
                 eventInfo.titleString = [clipInfo objectForKey:@"title"];

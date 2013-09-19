@@ -7,22 +7,17 @@
 //
 
 #import "PlaybackViewController.h"
-#import <H264MediaPlayer/H264MediaPlayer.h>
 
+#import <MonitorCommunication/MonitorCommunication.h>
 
-@interface PlaybackViewController ()
-{
-    MediaPlayer *mp;
-}
-
-@property (retain, nonatomic) IBOutlet UIImageView *imageVideo;
-@property (retain, nonatomic) IBOutlet UIToolbar *topToolbar;
-@property (retain, nonatomic) IBOutlet UIBarButtonItem *backBarBtnItem;
-@property (retain, nonatomic) IBOutlet UIView *progressView;
-
-@end
+#include "PlaybackListener.h"
 
 @implementation PlaybackViewController
+
+@synthesize camera_mac;
+@synthesize  clip_info;
+
+
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -61,11 +56,169 @@
     self.backBarBtnItem.target = self;
     self.backBarBtnItem.action = @selector(goBackToPlayList);
     
-    //self.progressView.hidden = YES;
+    
+    clips = [[NSMutableArray alloc]init];
+    
+    //Decide whether or not to start the background polling
+    
+    if (self.clip_info != nil )
+    {
+        
+        listener = new PlaybackListener(self);
+        
+        
+        if ([self.clip_info isLastClip])
+        {
+            //Only one clip & it is the last
+            NSLog(@"this is the olny clip do not poll");
+        }
+        else
+        {
+            
+            
+            // It is not the last clip - scheduling querying of clips
+            list_refresher = [NSTimer scheduledTimerWithTimeInterval:10.0
+                                                              target:self
+                                                            selector:@selector(getCameraPlaylistForEvent:)
+                                                            userInfo:clip_info repeats:NO];
+        }
+        
+        
+        self.urlVideo = self.clip_info.urlFile;
+    }
+    
+    
+
     [self performSelector:@selector(startStream)
                withObject:nil
                afterDelay:0.1];
 }
+
+#pragma mark - Poll camera events
+
+-(void) getCameraPlaylistForEvent:(PlaylistInfo *) first_clip
+{
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    
+    BMS_JSON_Communication *jsonComm = [[BMS_JSON_Communication alloc] initWithObject:self
+                                                                             Selector:@selector(getPlaylistSuccessWithResponse:)
+                                                                         FailSelector:@selector(getPlaylistFailedWithResponse:)
+                                                                            ServerErr:@selector(getPlaylistUnreachableSetver)];
+    NSString *mac = first_clip.mac_addr;
+    
+    NSString *apiKey = [userDefaults objectForKey:@"PortalApiKey"];
+    
+    NSString * event_timecode = [NSString stringWithFormat:@"0%@_%@", [first_clip getAlertType], [first_clip getAlertVal]];
+    
+    [jsonComm getAllRecordedFilesWithRegistrationId:mac
+                                           andEvent:event_timecode
+                                          andApiKey:apiKey];
+    
+   
+
+}
+
+
+- (void)getPlaylistSuccessWithResponse: (NSDictionary *)responseDict
+{
+    BOOL got_last_clip = FALSE;
+    
+    if (responseDict)
+    {
+        if ([[responseDict objectForKey:@"status"] intValue] == 200)
+        {
+            NSArray *eventArr = [[responseDict objectForKey:@"data"] objectForKey:@"events"];
+            
+            
+            NSLog(@"play list: %@ ",responseDict);
+            
+            
+            for (NSDictionary *playlist in eventArr) {
+                NSDictionary *clipInfo = [[playlist objectForKey:@"playlist"] objectAtIndex:0];
+                
+                PlaylistInfo *playlistInfo = [[[PlaylistInfo alloc] init]autorelease];
+                playlistInfo.mac_addr = clip_info.mac_addr;
+                
+                playlistInfo.urlImage = [clipInfo objectForKey:@"image"];
+                playlistInfo.titleString = [clipInfo objectForKey:@"title"];
+                playlistInfo.urlFile = [clipInfo objectForKey:@"file"];
+                
+
+                //check if the clip is in our private array
+                BOOL found = FALSE; 
+                for ( NSString * one_clip in clips)
+                {
+                    if ([playlistInfo.urlFile isEqualToString:one_clip])
+                    {
+                        found = TRUE; 
+                        break;
+                    }
+                }
+                
+                if (found == FALSE)
+                {
+                    //add the clip
+                    [clips addObject:playlistInfo.urlFile];
+                }
+                
+                
+                if ([playlistInfo isLastClip])
+                {
+                    NSLog(@"This is last");
+                    got_last_clip = TRUE;
+                    
+                    
+                }
+                
+            }
+            
+            NSLog(@"there is %d in playlist", [clips count]);
+            
+            
+        }
+        
+        
+        
+    }
+    
+    if (got_last_clip == FALSE)
+    {
+        list_refresher = [NSTimer scheduledTimerWithTimeInterval:10.0
+                                                          target:self
+                                                        selector:@selector(getCameraPlaylistForEvent:)
+                                                        userInfo:clip_info repeats:NO];
+
+    }
+    else
+    {
+        listener->updateFinalClipCount([clips count]);
+    }
+    listener->updateClips(clips);
+    
+}
+
+- (void)getPlaylistFailedWithResponse: (NSDictionary *)responseDict
+{
+    NSLog(@"getPlaylistFailedWithResponse");
+    list_refresher = [NSTimer scheduledTimerWithTimeInterval:10.0
+                                                      target:self
+                                                    selector:@selector(getCameraPlaylistForEvent:)
+                                                    userInfo:clip_info repeats:NO];
+
+}
+
+- (void)getPlaylistUnreachableSetver
+{
+    NSLog(@"getPlaylistUnreachableSetver");
+    list_refresher = [NSTimer scheduledTimerWithTimeInterval:10.0
+                                                      target:self
+                                                    selector:@selector(getCameraPlaylistForEvent:)
+                                                    userInfo:clip_info repeats:NO];
+
+}
+
+
+
 
 #pragma mark - Play Video
 
@@ -76,8 +229,10 @@
     status_t status;
     
     mp = new MediaPlayer(true);
+    mp->setListener(listener);
     
-    NSString * url =@"http://192.168.3.116:6667/blinkhd";
+    
+    NSString * url =@"";
     
     url = self.urlVideo;
     
@@ -125,23 +280,61 @@
 
 - (void)goBackToPlayList
 {
-    if (mp) {
+    if (mp)
+    {
         [self stopStream];
     }
     
-    [self.navigationController popViewControllerAnimated:YES];
+    if ([list_refresher isValid])
+    {
+        [list_refresher invalidate]; 
+    }
+    
+    
+    //[self.navigationController popViewControllerAnimated:YES];
+    
+    
+    //DBG
+    [self dismissViewControllerAnimated:NO
+                             completion:nil];
 }
 
 - (void)stopStream
 {
     printf("STOP\n");
-    if (mp->isPlaying())
+    if (mp != NULL && mp->isPlaying())
     {
         mp->suspend();
         mp->stop();
     }
     free(mp);
+    
+    if (listener != NULL)
+    {
+        free(listener);
+    }
+    
+    
     mp = NULL;
+}
+
+
+-(void) handeMessage:(int) msg ext1: (int) ext1 ext2:(int) ext2
+{
+    
+    switch (msg)
+    {
+        case MEDIA_PLAYBACK_COMPLETE:
+            //DONE Playback
+            //clean up
+            //[self goBackToPlayList];
+            
+            break;
+            
+        default:
+            break;
+    }
+    
 }
 
 #pragma mark -
@@ -159,7 +352,7 @@
     [_progressView release];
     
     [_urlVideo release];
-    
+     [list_refresher release]; 
     [super dealloc];
 }
 - (void)viewDidUnload {

@@ -188,8 +188,9 @@
        playlistInfo.imgSnapshot )
     {
         
+        
         PlaybackViewController *playbackViewController = [[PlaybackViewController alloc] init];
-        playbackViewController.urlVideo = playlistInfo.urlFile;
+        playbackViewController.clip_info = playlistInfo;
         
         
         [self.navController pushViewController:playbackViewController animated:NO];
