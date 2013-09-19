@@ -1413,7 +1413,8 @@
             forComponent:(NSInteger)component
 {
     NSString *textRow;
-    switch (row) {
+    switch (row)
+    {
         case 0:
             textRow = @"D1";
             break;
@@ -1451,7 +1452,8 @@
 	//int videoQ =[userDefaults integerForKey:@"int_VideoQuality"];
     
     NSString *modeVideo = @"";
-    switch ([row intValue]) {
+    switch ([row intValue])
+    {
         case 0:
             modeVideo = @"480p";
             break;
