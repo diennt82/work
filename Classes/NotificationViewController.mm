@@ -10,6 +10,8 @@
 #import <MonitorCommunication/MonitorCommunication.h>
 #import "MBPNavController.h"
 
+#import "ForgotPwdViewController.h"
+
 
 @interface NotificationViewController ()
 
@@ -20,17 +22,20 @@
 @synthesize   cameraMacNoColon, cameraName, alertType, alertVal;
 @synthesize eventInfo;
 @synthesize  delegate;
+@synthesize  tempPlaylist;
 
+@synthesize  lastest_snapshot; 
 
 -(void) dealloc
 {
-    [_tempPlaylist release];
+    [tempPlaylist release];
     [super dealloc];
     [cameraMacNoColon release];
     [cameraName release];
     [alertVal release];
     [alertType release];
     [eventInfo release];
+ 
 }
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
@@ -62,31 +67,30 @@
 {
     [super viewDidLoad];
     
-
-
-    NSString * msg = NSLocalizedStringWithDefaultValue(@"Back",nil, [NSBundle mainBundle],
-                                            @"Back", nil);
+// 
+//    // Do any additional setup after loading the view from its nib.
+//
+//    self.tempPlaylist.navController = self.navigationController;
+//    
+//    // 1. Load latest snapshot event
+//    [self getLatestEvent];
+//    
+//    // 2. Load all playlist
+//    [self getPlaylist] ;
     
-    //Back key
-    self.navigationItem.backBarButtonItem =
-    [[[UIBarButtonItem alloc] initWithTitle:msg
-                                      style:UIBarButtonItemStyleBordered
-                                     target:nil
-                                     action:nil] autorelease];
+}
+-(void ) viewWillAppear:(BOOL)animated
+{
+    NSLog(@"View will appear");
+    [super viewWillAppear:animated];
     
-    // Do any additional setup after loading the view from its nib.
-
     self.tempPlaylist.navController = self.navigationController;
     
     // 1. Load latest snapshot event
     [self getLatestEvent];
     
-    
-    
-    
     // 2. Load all playlist
     [self getPlaylist] ;
-    
 }
 
 
@@ -113,12 +117,16 @@
     if(eventInfo.urlFile != nil &&
        ([eventInfo.urlFile isEqualToString:@""] == FALSE))
     {
-        PlaybackViewController *playbackViewController = [[PlaybackViewController alloc] init];
+        PlaybackViewController *playbackViewController = [[PlaybackViewController alloc] initWithNibName:@"PlaybackViewController"
+                                                                                                  bundle:nil];
         playbackViewController.clip_info = eventInfo;
         
-        //[playbackViewController autorelease];
+        [self.navigationController pushViewController:playbackViewController animated:NO];
         
-        [self presentViewController:playbackViewController animated:NO  completion:nil]; 
+        [playbackViewController release];
+        
+        //[self presentViewController:playbackViewController animated:NO  completion:nil];
+
         
     }
     else
@@ -145,6 +153,12 @@
     navController= [[[MBPNavController alloc]initWithRootViewController:self] autorelease];
     
     
+//    
+//     UINavigationController *    navController;
+//    //setup nav controller
+//    navController= [[[UINavigationController alloc]initWithRootViewController:self] autorelease]; 
+    
+    
     
     // Create a navigation controller with us as its root.
     assert(navController != nil);
@@ -152,7 +166,7 @@
     navController.navigationBar.barStyle = UIBarStyleBlackOpaque;
     
     // Set up the Cancel button on the left of the navigation bar.
-    self.navigationItem.leftBarButtonItem  = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(goBack:)] autorelease];
+    self.navigationItem.leftBarButtonItem  = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(goBack:)] autorelease];
     assert(self.navigationItem.leftBarButtonItem != nil);
    
     // Present the navigation controller on the specified parent
@@ -222,7 +236,7 @@
                 eventInfo.urlFile = [clipInfo objectForKey:@"file"];
                 
                 UIImage * image = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:eventInfo.urlImage]]] ;
-                [image autorelease];
+                //[image autorelease];
                 [lastest_snapshot setImage: image];
             }
             else

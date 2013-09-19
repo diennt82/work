@@ -17,7 +17,7 @@
 @synthesize camera_mac;
 @synthesize  clip_info;
 
-
+@synthesize  imageVideo, topToolbar,backBarBtnItem, progressView, urlVideo;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -33,7 +33,7 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
     
-    self.navigationController.navigationBarHidden = YES;
+    self.navigationController.navigationBarHidden = NO;
     
     self.progressView.hidden = NO;
     
@@ -44,7 +44,16 @@
                                       style:UIBarButtonItemStyleBordered
                                      target:nil
                                      action:nil] autorelease];
+    
+    self.navigationItem.title = @"Camera";
+    
     [self becomeActive];
+}
+-(void) viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    NSLog(@"viewWillDisappear: ");
+    [self goBackToPlayList];
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -54,14 +63,18 @@
 
 - (void)becomeActive
 {
+    
+    mp = NULL;
+    
+    
     //CamProfile *cp = self.selectedChannel.profile;
     
     //Set camera name
     //self.cameraNameBarBtnItem.title = cp.name;
     
     //set Button handler
-    self.backBarBtnItem.target = self;
-    self.backBarBtnItem.action = @selector(goBackToPlayList);
+    //self.backBarBtnItem.target = self;
+   // self.backBarBtnItem.action = @selector(goBackToPlayList);
     
     
     clips = [[NSMutableArray alloc]init];
@@ -71,7 +84,7 @@
     if (self.clip_info != nil )
     {
         
-        listener = new PlaybackListener(self);
+        //listener = new PlaybackListener(self);
         
         
         if ([self.clip_info isLastClip])
@@ -94,6 +107,8 @@
         self.urlVideo = self.clip_info.urlFile;
     }
     
+    
+
     
 
     [self performSelector:@selector(startStream)
@@ -229,6 +244,11 @@
 
 #pragma mark - Play Video
 
+-(IBAction)startStream  :(id)sender
+{
+    [self startStream];
+}
+
 -(void) startStream
 {
     //self.progressView.hidden = YES;
@@ -287,9 +307,9 @@
 
 - (void)goBackToPlayList
 {
-    if (mp)
+    if (mp != NULL)
     {
-        [self stopStream];
+        [self stopStream:nil];
     }
     
     if ([list_refresher isValid])
@@ -300,29 +320,31 @@
     
     [self.navigationController popViewControllerAnimated:YES];
     
-    
-    //DBG
-//    [self dismissViewControllerAnimated:NO
-//                             completion:nil];
 }
 
-- (void)stopStream
+- (IBAction)stopStream:(id) sender
 {
-    printf("STOP\n");
+    NSLog(@"Stop stream start ");
+
     if (mp != NULL && mp->isPlaying())
     {
         mp->suspend();
         mp->stop();
-    }
-    free(mp);
-    
-    if (listener != NULL)
-    {
-        //free(listener);
+        delete mp;
+        mp = NULL;     
     }
     
+  
+    //20130919:phung : delete here will crash !!! don't know why
+
+    //if (listener != NULL)
+    //{
+      //  delete listener;
+    //}
+
     
-    mp = NULL;
+    NSLog(@"Stop stream end");
+    
 }
 
 
@@ -335,6 +357,8 @@
             //DONE Playback
             //clean up
             //[self goBackToPlayList];
+            NSLog(@"Got playback complete>>>>  ");
+            
             
             break;
             
@@ -353,23 +377,18 @@
 }
 
 - (void)dealloc {
-    [_imageVideo release];
-    [_topToolbar release];
-    [_backBarBtnItem release];
-    [_progressView release];
+
+    //[imageVideo release];
+    //[topToolbar release];
+    //[backBarBtnItem release];
+    //[progressView release];
     
-    [_urlVideo release];
-     [list_refresher release]; 
+    //[urlVideo release];
+    
+    
+    //[list_refresher release];
+
     [super dealloc];
 }
-- (void)viewDidUnload {
-    [self setImageVideo:nil];
-    [self setTopToolbar:nil];
-    [self setBackBarBtnItem:nil];
-    [self setProgressView:nil];
-    
-    [self setUrlVideo:nil];
-    
-    [super viewDidUnload];
-}
+
 @end

@@ -193,7 +193,8 @@
     {
         
         
-        PlaybackViewController *playbackViewController = [[PlaybackViewController alloc] init];
+        PlaybackViewController *playbackViewController = [[PlaybackViewController alloc]
+                                                          initWithNibName:@"PlaybackViewController" bundle:nil];
         playbackViewController.clip_info = playlistInfo;
         
         if (self.playlistDelegate != nil)

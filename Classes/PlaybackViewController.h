@@ -15,11 +15,20 @@
 @interface PlaybackViewController : UIViewController<PlayerCallbackHandler>
 
 {
+    IBOutlet UIImageView *imageVideo;
+    IBOutlet UIToolbar *topToolbar;
+    IBOutlet UIBarButtonItem *backBarBtnItem;
+    IBOutlet UIView *progressView;
+    
     MediaPlayer *mp;
     PlaybackListener * listener; 
     
     NSTimer * list_refresher;
     NSMutableArray * clips;
+    
+    NSString *urlVideo;
+    NSString *camera_mac;
+    
 }
 
 @property (retain, nonatomic) IBOutlet UIImageView *imageVideo;
@@ -35,5 +44,9 @@
 @property (nonatomic, retain) NSString *urlVideo;
 
 - (void)stopStream;
+
+
+- (IBAction)stopStream:(id) sender;
+- (IBAction)startStream:(id) sender;
 
 @end

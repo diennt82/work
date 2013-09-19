@@ -820,7 +820,7 @@ return self;
         case SCAN_BONJOUR_CAMERA :
         {
             
-#if 1 //DBG DBG ONLY
+#if 0
             /*
              20130523_nguyendang :
              Scan camera with bonjour here
@@ -839,25 +839,27 @@ return self;
             //[self dismissModalViewControllerAnimated:NO];
             [self dismissViewControllerAnimated:NO completion:^{}];
             self.progressView.hidden = NO;
-            
 #else
-            //Back from login- login success
-            [self dismissViewControllerAnimated:NO completion:nil];
+            [self dismissModalViewControllerAnimated:NO];
             self.progressView.hidden = NO;
-            //TEST TEST TEST
-            NotificationViewController * notif_view = [[[NotificationViewController alloc]
-                                                        initWithNibName:@"NotificationViewController" bundle:nil]autorelease];
             
-            notif_view.delegate = self;
-            //Feed in data now
-            notif_view.cameraMacNoColon = @"48022A2CAC31";
-            notif_view.cameraName  = @"Camera-2cac31";
-            notif_view.alertType   = @"4";
-            notif_view.alertVal    = @"20130917065256730";
-            
-           
+            NotificationViewController * notif_view = [[NotificationViewController alloc]
+                                                       initWithNibName:@"NotificationViewController" bundle:nil];
+            @synchronized(self)
+            {
+                //Feed in data now
+                notif_view.cameraMacNoColon = @"48022A2CAC31";
+                notif_view.cameraName  = @"Cam stup";
+                notif_view.alertType   = @"4";
+                notif_view.alertVal    = @"20130918111817240";
+                notif_view.delegate     = self;
+                
+                [latestCamAlert release];
+                latestCamAlert = nil;
+            }
             
             [notif_view presentModallyOn:self];
+            
             
 #endif
 
@@ -1515,8 +1517,8 @@ return self;
 #endif 
                 
                 
-                NotificationViewController * notif_view = [[[NotificationViewController alloc]
-                                                            initWithNibName:@"NotificationViewController" bundle:nil]autorelease];
+                NotificationViewController * notif_view = [[NotificationViewController alloc]
+                                                            initWithNibName:@"NotificationViewController" bundle:nil];
                 @synchronized(self)
                 {
                     //Feed in data now
@@ -1524,12 +1526,15 @@ return self;
                     notif_view.cameraName  = latestCamAlert.cameraName;
                     notif_view.alertType   = latestCamAlert.alertType;
                     notif_view.alertVal    = latestCamAlert.alertVal;
+                    notif_view.delegate     = self;
                     
                     [latestCamAlert release];
                     latestCamAlert = nil;
                 }
                 
                 [notif_view presentModallyOn:self];
+                
+
                 
                 [pushAlert release];
                 pushAlert = nil;
@@ -2139,8 +2144,8 @@ return self;
     [self dismissViewControllerAnimated:NO completion:nil];
     self.progressView.hidden = NO;
     
-    NotificationViewController * notif_view = [[[NotificationViewController alloc]
-                                                initWithNibName:@"NotificationViewController" bundle:nil]autorelease];
+    NotificationViewController * notif_view = [[NotificationViewController alloc]
+                                                initWithNibName:@"NotificationViewController" bundle:nil];
     
     notif_view.delegate = self;
     //Feed in data now
