@@ -820,7 +820,7 @@ return self;
         case SCAN_BONJOUR_CAMERA :
         {
             
-#if 0
+#if 1
             /*
              20130523_nguyendang :
              Scan camera with bonjour here
