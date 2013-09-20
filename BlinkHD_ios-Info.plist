@@ -22,7 +22,7 @@
 		<string>mbp_icon72x72.png</string>
 	</array>
 	<key>CFBundleIdentifier</key>
-	<string>com.binatonetelecom.monitoreverywhere</string>
+	<string>com.binatonetelecom.hd.monitoreverywhere</string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>
