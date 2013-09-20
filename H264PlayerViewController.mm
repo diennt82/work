@@ -50,6 +50,7 @@
 @property (retain, nonatomic) IBOutlet UIButton *triggerRecordingButton;
 @property (retain, nonatomic) IBOutlet UIImageView *imgViewDrectionPad;
 @property (retain, nonatomic) IBOutlet PlayListViewController *playlistViewController;
+@property (retain, nonatomic) IBOutlet UIActivityIndicatorView *activityIndicator;
 
 @property (retain, nonatomic) IBOutlet UIBarButtonItem *barBntItemReveal;
 
@@ -95,6 +96,8 @@
 //                                                                   style:UIBarButtonItemStylePlain
 //                                                                  target:[self stackViewController]
 //                                                                  action:@selector(toggleLeftViewController)];
+    
+    self.view.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"black_background"]];
     
     UIBarButtonItem *revealIcon = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"reveal-icon"]
                                                                    style:UIBarButtonItemStylePlain
@@ -169,8 +172,10 @@
         if (self.h264StreamerIsInStopped == TRUE &&
             h264Streamer == NULL)
         {
-            self.progressView.hidden = NO;
-            [self.view bringSubviewToFront:self.progressView];
+            self.activityIndicator.hidden = NO;
+            [self.view bringSubviewToFront:self.activityIndicator];
+            [self.activityIndicator startAnimating];
+            
             [self setupCamera];
             self.h264StreamerIsInStopped = FALSE;
             
@@ -183,10 +188,10 @@
             // Streamer is showing live view
         }
     }
-    else if (self.segCtrl.selectedSegmentIndex == 1) // Ealier
+    else if (self.segCtrl.selectedSegmentIndex == 1) // Earlier
     {
         if (self.playlistViewController.playlistArray.count == 0) {
-            self.progressView.hidden = NO;
+            self.activityIndicator.hidden = NO;
         }
         else
         {
@@ -284,26 +289,25 @@
 
 - (void)becomeActive
 {
-    //CamProfile *cp = self.selectedChannel.profile;
+    CamProfile *cp = self.selectedChannel.profile;
     
     //Set camera name
-    //self.cameraNameBarBtnItem.title = cp.name;
+    self.cameraNameBarBtnItem.title = cp.name;
     
     //set Button handler
     self.backBarBtnItem.target = self;
     self.backBarBtnItem.action = @selector(goBackToCameraList);
+    self.backBarBtnItem.enabled = NO;
 //SLIDE MENU
 //    self.backBarBtnItem.target = self.stackViewController;
 //    self.backBarBtnItem.action = @selector(toggleLeftViewController);
     
-    self.progressView.hidden = NO;
     self.pickerHQOptions.hidden = YES;
-    //[self.view addSubview:self.progressView];
-    [self.view bringSubviewToFront:self.progressView];
     
-//    [self performSelector:@selector(startStream)
-//               withObject:nil
-//               afterDelay:0.1];
+    self.activityIndicator.hidden = NO;
+    [self.view bringSubviewToFront:self.activityIndicator];
+    [self.activityIndicator startAnimating];
+    
     NSLog(@"self.segCtrl.selectedSegmentIndex = %d", self.segCtrl.selectedSegmentIndex);
     
     [self setupCamera];
@@ -413,7 +417,10 @@
     }
     else
     {
-        self.progressView.hidden = YES;
+        self.activityIndicator.hidden = YES;
+        [self.activityIndicator stopAnimating];
+        self.backBarBtnItem.enabled = YES;
+        
         NSLog(@"Camera maybe not available.");
     }
 }
@@ -458,7 +465,9 @@
         exit(1);
     }
     
-    self.progressView.hidden = YES;
+    self.activityIndicator.hidden = YES;
+    [self.activityIndicator stopAnimating];
+    self.backBarBtnItem.enabled = YES;
     // Play anyhow
     
     status=  h264Streamer->start();
@@ -548,7 +557,8 @@
         }
     }
     
-    self.progressView.hidden = YES;
+    self.activityIndicator.hidden = YES;
+    [self.activityIndicator stopAnimating];
 }
 
 -(void) getVQ_bg
@@ -657,7 +667,7 @@
     
 	if (responseDict != nil)
 	{
-        [self performSelectorOnMainThread:@selector(setTriggerRecording_fg::) withObject:responseDict waitUntilDone:NO];
+        [self performSelectorOnMainThread:@selector(setTriggerRecording_fg:) withObject:responseDict waitUntilDone:NO];
 	}
     
     NSLog(@"getVQ_bg responseDict = %@", responseDict);
@@ -1280,9 +1290,6 @@
 {
 	if (orientation == UIInterfaceOrientationLandscapeLeft || orientation == UIInterfaceOrientationLandscapeRight)
 	{
-        
-        
-        
         if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
         {
 //            [[NSBundle mainBundle] loadNibNamed:@"H264PlayerViewController_land_ipad"
@@ -1297,43 +1304,16 @@
 //            [[NSBundle mainBundle] loadNibNamed:@"H264PlayerViewController_land"
 //                                          owner:self
 //                                        options:nil];
-            CGRect newRect = CGRectMake(0, 44, 480, 256);
+            CGRect newRect = CGRectMake(0, 0, 480, 256);
             self.imageViewVideo.frame = newRect;
             self.viewCtrlButtons.frame = CGRectMake(0, 106, _viewCtrlButtons.frame.size.width, _viewCtrlButtons.frame.size.height);
             self.imgViewDrectionPad.frame = CGRectMake(180, 180, _imgViewDrectionPad.frame.size.width, _imgViewDrectionPad.frame.size.height);
-            //self.progressView.frame = CGRectMake(0, 44, 480, 320);
+             self.activityIndicator.frame = CGRectMake(230, 118, _activityIndicator.frame.size.width, _activityIndicator.frame.size.height);
             
-//            imageView.frame = CGRectMake(
-//                                         imageView.frame.origin.x,
-//                                         imageView.frame.origin.y, newWidth, newHeight);
-//            
-//            imageView.contentMode = UIViewContentModeBottomLeft; // This determines position of image
-//            imageView.clipsToBounds = YES;
-        }
-        
-        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
-        {
-        }
-        else
-        {
-        }
-        
-		//Rotate the slider
-		//zoombarView.transform = CGAffineTransformRotate(zoombarView.transform, -M_PI*0.5);
-		//Initializng the slider value to zero.
-		//self.zoombar.value=currentZoomLvl*ZOOM_STEP;
-        
-        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
-        {
-        }
-        else
-        {
-        }
-        
-        //if (fwUpgradeInProgess == TRUE)
-        {
-        }
-        
+            self.topToolbar.hidden = YES;
+            self.imgViewDrectionPad.hidden = YES;
+            self.viewCtrlButtons.hidden = YES;
+        }        
 	}
 	else if (orientation == UIInterfaceOrientationPortrait || orientation == UIInterfaceOrientationPortraitUpsideDown)
 	{
@@ -1352,20 +1332,13 @@
 //                                        options:nil];
             CGRect newRect = CGRectMake(0, 44, 320, 180);
             self.imageViewVideo.frame = newRect;
-            self.viewCtrlButtons.frame = CGRectMake(0, 44, _viewCtrlButtons.frame.size.width, _viewCtrlButtons.frame.size.height);
+            self.viewCtrlButtons.frame = CGRectMake(80, 232, _viewCtrlButtons.frame.size.width, _viewCtrlButtons.frame.size.height);
             self.imgViewDrectionPad.frame = CGRectMake(100, 340, _imgViewDrectionPad.frame.size.width, _imgViewDrectionPad.frame.size.height);
-            //self.progressView.frame = CGRectMake(0, 44, 320, 480);
-        }
-        
-        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
-        {
-        }
-        else
-        {
-        }
+            self.activityIndicator.frame = CGRectMake(150, 124, _activityIndicator.frame.size.width, _activityIndicator.frame.size.height);
 
-        //if (fwUpgradeInProgess == TRUE)
-        {
+            self.topToolbar.hidden = NO;
+            self.imgViewDrectionPad.hidden = NO;
+            self.viewCtrlButtons.hidden = NO;
         }
 	}
     
@@ -1392,7 +1365,7 @@
             CGRect newRect = CGRectMake(0, 0, 568, 320);
             self.imageViewVideo.frame = newRect;
             
-//            self.progressView.frame = CGRectMake(self.progressView.frame.origin.x, self.progressView.frame.origin.y, self.progressView.frame.size.width + 88, self.progressView.frame.size.height);
+            self.activityIndicator.frame = CGRectMake(274, 150, _activityIndicator.frame.size.width, _activityIndicator.frame.size.height);
         }
     }
 }
@@ -1581,6 +1554,7 @@
     [_send_UD_dir_req_timer invalidate];
     [_send_LR_dir_req_timer invalidate];
     [_playlistViewController release];
+    [_activityIndicator release];
     [super dealloc];
 }
 

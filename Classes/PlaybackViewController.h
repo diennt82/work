@@ -20,7 +20,7 @@
     IBOutlet UIBarButtonItem *backBarBtnItem;
     IBOutlet UIView *progressView;
     
-    MediaPlayer *mp;
+    MediaPlayer *playbackStreamer;
     PlaybackListener * listener; 
     
     NSTimer * list_refresher;
@@ -35,6 +35,7 @@
 @property (retain, nonatomic) IBOutlet UIToolbar *topToolbar;
 @property (retain, nonatomic) IBOutlet UIBarButtonItem *backBarBtnItem;
 @property (retain, nonatomic) IBOutlet UIView *progressView;
+@property (retain, nonatomic) IBOutlet UIActivityIndicatorView *activityIndicator;
 
 
 @property (nonatomic, retain) PlaylistInfo * clip_info;
@@ -43,7 +44,7 @@
 
 @property (nonatomic, retain) NSString *urlVideo;
 
-- (void)stopStream;
+//- (void)stopStream;
 
 
 - (IBAction)stopStream:(id) sender;

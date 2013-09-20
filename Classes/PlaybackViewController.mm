@@ -35,25 +35,39 @@
     
     self.navigationController.navigationBarHidden = NO;
     
-    self.progressView.hidden = NO;
+    self.view.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"black_background"]];
+    self.activityIndicator.hidden = NO;
+    [self.activityIndicator startAnimating];
     
     NSString * msg = NSLocalizedStringWithDefaultValue(@"Back",nil, [NSBundle mainBundle],
                                                        @"Back", nil);
-	self.navigationItem.backBarButtonItem =
-    [[[UIBarButtonItem alloc] initWithTitle:msg
+    
+    backBarBtnItem = [[[UIBarButtonItem alloc] initWithTitle:msg
                                       style:UIBarButtonItemStyleBordered
-                                     target:nil
-                                     action:nil] autorelease];
+                                     target:self
+                                     action:@selector(goBackToPlayList)] autorelease];
+    
+	self.navigationItem.leftBarButtonItem = backBarBtnItem;
+    self.navigationItem.leftBarButtonItem.tintColor = nil;
+    self.navigationItem.leftBarButtonItem.enabled = NO;
     
     self.navigationItem.title = @"Camera";
     
     [self becomeActive];
 }
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    [self checkOrientation];
+}
+
 -(void) viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
     NSLog(@"viewWillDisappear: ");
-    [self goBackToPlayList];
+    //[self goBackToPlayList];
+    [self stopStream:nil];
 }
 
 
@@ -61,7 +75,7 @@
 - (void)becomeActive
 {
     
-    mp = NULL;
+    playbackStreamer = NULL;
     
     
     //CamProfile *cp = self.selectedChannel.profile;
@@ -247,13 +261,11 @@
 }
 
 -(void) startStream
-{
-    //self.progressView.hidden = YES;
-    
+{    
     status_t status;
     
-    mp = new MediaPlayer(true);
-    mp->setListener(listener);
+    playbackStreamer = new MediaPlayer(true);
+    playbackStreamer->setListener(listener);
     
     
     NSString * url =@"";
@@ -261,7 +273,7 @@
     url = self.urlVideo;
     
     
-    status = mp->setDataSource([url UTF8String]);
+    status = playbackStreamer->setDataSource([url UTF8String]);
     printf("setDataSource return: %d\n", status);
     
     
@@ -272,11 +284,11 @@
         return;
     }
 
-    mp->setVideoSurface(self.imageVideo);
+    playbackStreamer->setVideoSurface(self.imageVideo);
     
     NSLog(@"Prepare the player");
     
-    status=  mp->prepare();
+    status=  playbackStreamer->prepare();
     
     printf("prepare return: %d\n", status);
     if (status != NO_ERROR) // NOT OK
@@ -286,10 +298,14 @@
         exit(1);
     }
     
-    self.progressView.hidden = YES;
+    self.activityIndicator.hidden = YES;
+    [self.activityIndicator stopAnimating];
+    
+    self.navigationItem.leftBarButtonItem.tintColor = [UIColor blueColor];
+    self.navigationItem.leftBarButtonItem.enabled = YES;
     // Play anyhow
     
-    status=  mp->start();
+    status=  playbackStreamer->start();
     
     printf("start() return: %d\n", status);
     if (status != NO_ERROR) // NOT OK
@@ -298,13 +314,11 @@
         printf("start() error: %d\n", status);
         return;
     }
-    
-    self.progressView.hidden = YES;
 }
 
 - (void)goBackToPlayList
 {
-    if (mp != NULL)
+    if (playbackStreamer != NULL)
     {
         [self stopStream:nil];
     }
@@ -323,12 +337,12 @@
 {
     NSLog(@"Stop stream start ");
 
-    if (mp != NULL && mp->isPlaying())
+    if (playbackStreamer != NULL && playbackStreamer->isPlaying())
     {
-        mp->suspend();
-        mp->stop();
-        delete mp;
-        mp = NULL;     
+        playbackStreamer->suspend();
+        playbackStreamer->stop();
+        delete playbackStreamer;
+        playbackStreamer = NULL;     
     }
     
   
@@ -365,6 +379,123 @@
     
 }
 
+#pragma mark - Rotation screen
+- (BOOL)shouldAutorotate
+{
+    NSLog(@"Should Auto Rotate");
+	return YES;
+}
+
+-(NSUInteger)supportedInterfaceOrientations
+{
+    return (UIInterfaceOrientationMaskLandscapeLeft | UIInterfaceOrientationMaskLandscapeRight);
+}
+
+- (void) willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
+{
+	[self adjustViewsForOrientation:toInterfaceOrientation];
+}
+
+-(void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation
+{
+    
+    
+    CGRect rect = [[UIApplication sharedApplication] statusBarFrame]; // Get status bar frame dimensions
+    NSLog(@"1 Statusbar frame: %1.0f, %1.0f, %1.0f, %1.0f", rect.origin.x,
+          rect.origin.y, rect.size.width, rect.size.height);
+    //HACK : incase hotspot is turned on
+    if (rect.size.height>21 &&  rect.size.height<50)
+    {
+        
+    }
+    
+    else
+    {
+        
+    }
+}
+
+-(void) checkOrientation
+{
+	UIInterfaceOrientation infOrientation = [UIApplication sharedApplication].statusBarOrientation;
+    
+	[self adjustViewsForOrientation:infOrientation];
+}
+
+- (void) adjustViewsForOrientation:(UIInterfaceOrientation)orientation
+{
+	if (orientation == UIInterfaceOrientationLandscapeLeft || orientation == UIInterfaceOrientationLandscapeRight)
+	{
+        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+        {
+            //            [[NSBundle mainBundle] loadNibNamed:@"H264PlayerViewController_land_ipad"
+            //                                          owner:self
+            //                                        options:nil];
+            CGRect newRect = CGRectMake(0, 44, 1024, 576);
+            self.imageVideo.frame = newRect;
+        }
+        else
+        {
+            
+            //            [[NSBundle mainBundle] loadNibNamed:@"H264PlayerViewController_land"
+            //                                          owner:self
+            //                                        options:nil];
+            CGRect newRect = CGRectMake(0, 0, 480, 256);
+            self.imageVideo.frame = newRect;
+            
+            self.topToolbar.hidden = YES;
+            self.navigationController.navigationBar.hidden = YES;
+        }
+	}
+	else if (orientation == UIInterfaceOrientationPortrait || orientation == UIInterfaceOrientationPortraitUpsideDown)
+	{
+        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+        {
+            //            [[NSBundle mainBundle] loadNibNamed:@"H264PlayerViewController_ipad"
+            //                                          owner:self
+            //                                        options:nil];
+            CGRect newRect = CGRectMake(0, 44, 768, 432);
+            self.imageVideo.frame = newRect;
+        }
+        else
+        {
+            //            [[NSBundle mainBundle] loadNibNamed:@"H264PlayerViewController"
+            //                                          owner:self
+            //                                        options:nil];
+            CGRect newRect = CGRectMake(0, 44, 320, 180);
+            self.imageVideo.frame = newRect;
+            
+            self.topToolbar.hidden = NO;
+            self.navigationController.navigationBar.hidden = NO;
+        }
+	}
+    
+    [self checkIphone5Size:orientation];
+    
+//    self.backBarBtnItem.target = self;
+//    self.backBarBtnItem.action = @selector(goBackToCameraList);
+    // SLIDE MENU
+    //    self.backBarBtnItem.target = self.stackViewController;
+    //    self.backBarBtnItem.action = @selector(toggleLeftViewController);
+}
+
+- (void) checkIphone5Size: (UIInterfaceOrientation)orientation
+{
+    CGRect screenBounds = [[UIScreen mainScreen] bounds];
+    
+    if (screenBounds.size.height == 568)
+    {
+        if (orientation == UIInterfaceOrientationLandscapeLeft || orientation == UIInterfaceOrientationLandscapeRight)
+        {
+            NSLog(@"iphone5 SHift right...");
+            //            CGAffineTransform translate = CGAffineTransformMakeTranslation(44, 0);
+            //            self.imageViewVideo.transform = translate;
+            CGRect newRect = CGRectMake(0, 0, 568, 320);
+            self.imageVideo.frame = newRect;
+        }
+    }
+}
+
 #pragma mark -
 
 - (void)didReceiveMemoryWarning
@@ -375,7 +506,7 @@
 
 - (void)dealloc {
 
-    //[imageVideo release];
+    [imageVideo release];
     //[topToolbar release];
     //[backBarBtnItem release];
     //[progressView release];
@@ -385,6 +516,7 @@
     
     //[list_refresher release];
 
+    [_activityIndicator release];
     [super dealloc];
 }
 
