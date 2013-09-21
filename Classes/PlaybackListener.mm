@@ -31,6 +31,7 @@ void PlaybackListener::updateClips(NSMutableArray *  newClips)
 }
 void  PlaybackListener::updateFinalClipCount(int clip_count)
 {
+    NSLog(@"set final number of clips: %d", clip_count);
     final_number_of_clips = clip_count;
 }
 
@@ -46,11 +47,14 @@ void PlaybackListener::notify(int msg, int ext1, int ext2)
 
 int PlaybackListener::getNextClip(char** url_cstr)
 {
+    current_clip_index ++;
     
-    if (current_clip_index == final_number_of_clips)
+    if (current_clip_index >= final_number_of_clips)
     {
         return MEDIA_PLAYBACK_STATUS_COMPLETE;
     }
+    
+    
     
     
     if (current_clip_index >= [mClips count])
@@ -59,11 +63,14 @@ int PlaybackListener::getNextClip(char** url_cstr)
     }
     else
     {
-        current_clip_index ++;
-        NSString * current_clip = [mClips objectAtIndex:current_clip_index];
-        * url_cstr = (char *) [current_clip UTF8String];
         
-        return MEDIA_PLAYBACK_STATUS_IN_PROGRESS;
+        NSString * current_clip = [mClips objectAtIndex:current_clip_index];
+        
+        *url_cstr = (char *) malloc( [current_clip length] * sizeof(char));
+        strcpy(*url_cstr, (char *) [current_clip UTF8String]);
+
+        
+        return MEDIA_PLAYBACK_STATUS_STARTED;
     }
     
     

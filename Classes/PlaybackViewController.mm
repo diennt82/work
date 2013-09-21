@@ -222,17 +222,19 @@
         
     }
     
-    if (got_last_clip == FALSE)
+    if (got_last_clip == TRUE)
     {
-        list_refresher = [NSTimer scheduledTimerWithTimeInterval:10.0
-                                                          target:self
-                                                        selector:@selector(getCameraPlaylistForEvent:)
-                                                        userInfo:clip_info repeats:NO];
+        listener->updateFinalClipCount([clips count]);
 
     }
     else
     {
-        listener->updateFinalClipCount([clips count]);
+        
+        
+        list_refresher = [NSTimer scheduledTimerWithTimeInterval:10.0
+                                                          target:self
+                                                        selector:@selector(getCameraPlaylistForEvent:)
+                                                        userInfo:clip_info repeats:NO];
     }
     
     listener->updateClips(clips);
@@ -332,10 +334,6 @@
         [self stopStream:nil];
     }
     
-    if ([list_refresher isValid])
-    {
-        [list_refresher invalidate]; 
-    }
     
     
     [self.navigationController popViewControllerAnimated:YES];
@@ -357,10 +355,10 @@
   
     //20130919:phung : delete here will crash !!! don't know why
 
-    //if (listener != NULL)
-    //{
-      //  delete listener;
-    //}
+    if (listener != NULL)
+    {
+      delete listener;
+    }
 
     
     NSLog(@"Stop stream end");
@@ -376,9 +374,8 @@
         case MEDIA_PLAYBACK_COMPLETE:
             //DONE Playback
             //clean up
-            //[self goBackToPlayList];
-            NSLog(@"Got playback complete>>>>  ");
-            
+            NSLog(@"Got playback complete>>>>  OUT ");
+            [self goBackToPlayList];
             
             break;
             
