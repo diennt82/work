@@ -23,15 +23,16 @@
 #define DIRECTION_H_RT  0x40
 #define DIRECTION_H_MASK 0x0F
 
-#define VIEW_DIRECTIONPAD_TAG 999
+
 
 #define CAM_IN_VEW @"string_Camera_Mac_Being_Viewed"
 
 @implementation H264PlayerViewController
 
 @synthesize  alertTimer;
-
 @synthesize  selectedChannel;
+@synthesize  askForFWUpgradeOnce;
+
 
 #pragma mark - View
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
@@ -210,7 +211,7 @@
 
 #pragma mark - Delegate Stream callback
 
--(void) handeMessage:(int) msg ext1: (int) ext1 ext2:(int) ext2
+-(void) handleMessage:(int) msg ext1: (int) ext1 ext2:(int) ext2
 {
     //NSLog(@"Got msg: %d ext1:%d ext2:%d ", msg, ext1, ext2);
     
@@ -223,6 +224,48 @@
     
     switch (msg)
     {
+        case STREAM_STARTED:
+        {
+
+            self.activityIndicator.hidden = YES;
+            [self.activityIndicator stopAnimating];
+            self.backBarBtnItem.enabled = YES;
+
+            
+            [self stopPeriodicPopup];
+            
+            
+            if (userWantToCancel == TRUE)
+            {
+                
+                NSLog(@"*[STREAM_STARTED] *** USER want to cancel **.. cancel after .1 sec...");
+                self.selectedChannel.stopStreaming = TRUE;
+                [self performSelector:@selector(goBackToCameraList)
+                           withObject:nil
+                           afterDelay:0.1];
+            }
+            else
+            {
+                
+                if ( self.selectedChannel.profile.isInLocal && (self.askForFWUpgradeOnce == YES))
+                {
+                    [self performSelectorInBackground:@selector(checkIfUpgradeIsPossible) withObject:nil];
+                    self.askForFWUpgradeOnce = NO;
+                }
+                
+                //NSLog(@"Got STREAM_STARTED") ;
+                
+                if ( self.selectedChannel.profile.isInLocal == NO)
+                {
+                    [[[GAI sharedInstance] defaultTracker] trackEventWithCategory:@"View Camera Remote"
+                                                                       withAction:@"Start Stream Success"
+                                                                        withLabel:@"Start Stream Success"
+                                                                        withValue:nil];
+                }
+            }
+            break;
+        }
+
         case MEDIA_ERROR_SERVER_DIED:
     	case MEDIA_ERROR_TIMEOUT_WHILE_STREAMING:
         {
@@ -230,6 +273,17 @@
             
     		//mHandler.dispatchMessage(Message.obtain(mHandler, Streamer.MSG_VIDEO_STREAM_HAS_STOPPED_UNEXPECTEDLY));
     		
+            if (userWantToCancel == TRUE)
+            {
+                
+                NSLog(@"*[MEDIA_ERROR_TIMEOUT_WHILE_STREAMING] *** USER want to cancel **.. cancel after .1 sec...");
+                self.selectedChannel.stopStreaming = TRUE;
+                [self performSelector:@selector(goBackToCameraList)
+                           withObject:nil
+                           afterDelay:0.1];
+                return;
+
+            }
             
     		/* TODO:
     		 *
@@ -294,8 +348,23 @@
             /* Stop Streamming */
             [self stopStream];
             
-            /* re-scan for the camera */
-            [self scan_for_missing_camera];
+            
+            
+            if (self.selectedChannel.profile.isInLocal == TRUE)
+            {
+                /* re-scan for the camera */
+                [self scan_for_missing_camera];
+            }
+            else //Remote connection -> go back and retry
+            {
+                //Restart streaming..
+                NSLog(@"Re-start Remote streaming for : %@", self.selectedChannel.profile.mac_address);
+                [NSTimer scheduledTimerWithTimeInterval:0.1
+                                                 target:self
+                                               selector:@selector(setupCamera)
+                                               userInfo:nil
+                                                repeats:NO];
+            }
             
             
     		
@@ -794,46 +863,68 @@
     url = self.stream_url;
     
     
-    status = h264Streamer->setDataSource([url UTF8String]);
-    
-    
-    
-    if (status != NO_ERROR) // NOT OK
+    do
     {
         
+        status = h264Streamer->setDataSource([url UTF8String]);
         
-        return;
+        
+        
+        if (status != NO_ERROR) // NOT OK
+        {
+            NSLog(@"setDataSource  failed");
+            
+            break;
+        }
+        
+        h264Streamer->setVideoSurface(self.imageViewVideo);
+        
+        
+        
+        status=  h264Streamer->prepare();
+        
+        printf("prepare return: %d\n", status);
+        
+        if (status != NO_ERROR) // NOT OK
+        {
+            
+            printf("prepare() error: %d\n", status);
+            break;
+        }
+        
+        // Play anyhow
+        
+        status=  h264Streamer->start();
+        
+        printf("start() return: %d\n", status);
+        if (status != NO_ERROR) // NOT OK
+        {
+            
+            printf("start() error: %d\n", status);
+            break;
+        }
     }
+    while (false);
     
-    h264Streamer->setVideoSurface(self.imageViewVideo);
     
-    NSLog(@"Prepare the player");
-    
-    status=  h264Streamer->prepare();
-    
-    printf("prepare return: %d\n", status);
-    
-    if (status != NO_ERROR) // NOT OK
+    if (status == NO_ERROR)
     {
-        
-        printf("prepare() error: %d\n", status);
-        exit(1);
+        //Consider it's down and perform necessary action ..
+        [self handleMessage:H264_STREAM_STARTED
+                      ext1:0
+                       ext2:0];
     }
-    
-    self.activityIndicator.hidden = YES;
-    [self.activityIndicator stopAnimating];
-    self.backBarBtnItem.enabled = YES;
-    // Play anyhow
-    
-    status=  h264Streamer->start();
-    
-    printf("start() return: %d\n", status);
-    if (status != NO_ERROR) // NOT OK
+    else
     {
-        
-        printf("start() error: %d\n", status);
-        return;
+        //Consider it's down and perform necessary action ..
+        [self handleMessage:MEDIA_ERROR_SERVER_DIED
+                      ext1:0
+                      ext2:0];
     }
+    
+    
+    return ;
+        
 }
 
 - (void)goBackToCameraList
@@ -848,6 +939,41 @@
     [self.navigationController popToRootViewControllerAnimated:NO];
 }
 
+-(void) cleanUpDirectionTimers
+{
+    
+    /* Kick off the two timer for direction sensing */
+    currentDirUD = DIRECTION_V_NON;
+    lastDirUD    = DIRECTION_V_NON;
+    delay_update_lastDir_count = 1;
+    
+    if ( send_UD_dir_req_timer !=nil)
+    {
+        if ([send_UD_dir_req_timer isValid] )
+        {
+            [send_UD_dir_req_timer invalidate];
+            //[send_UD_dir_req_timer release];
+            send_UD_dir_req_timer = nil;
+        }
+    }
+    
+    
+    currentDirLR = DIRECTION_H_NON;
+    lastDirLR    = DIRECTION_H_NON;
+    delay_update_lastDirLR_count = 1;
+    
+    
+    if ( send_LR_dir_req_timer != nil)
+    {
+        if ([send_LR_dir_req_timer isValid])
+        {
+            [send_LR_dir_req_timer invalidate];
+            //[send_LR_dir_req_timer release];
+            send_LR_dir_req_timer = nil;
+        }
+    }
+    
+}
 - (void)stopStream
 {
     @synchronized(self)
@@ -863,6 +989,13 @@
         }
         
         h264Streamer = NULL;
+        
+        [self cleanUpDirectionTimers];
+        if (scanner != nil)
+        {
+            [scanner cancel];
+        }
+        
     }
 }
 
@@ -1948,6 +2081,36 @@
     
 }
 #pragma mark -
+
+#pragma mark Alertview delegate
+
+
+- (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex
+{
+	
+	int tag = alertView.tag;
+	
+	if (tag == LOCAL_VIDEO_STOPPED_UNEXPECTEDLY)
+	{
+		switch(buttonIndex) {
+			case 0: //Stop monitoring
+                
+                userWantToCancel =TRUE;
+                [self stopPeriodicPopup];
+                
+                self.selectedChannel.stopStreaming = TRUE;
+
+                break;
+			case 1: //continue -- streamer is connecting so we dont do anything here.
+				break;
+			default:
+				break;
+		}
+		[alert release];
+		alert = nil;
+	}
+	
+}
 
 #pragma mark -
 #pragma mark Beeping

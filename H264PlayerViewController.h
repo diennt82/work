@@ -26,7 +26,20 @@
 
 
 
+#define H264_STREAM_STARTED              1
+#define H264_STREAM_STOPPED_UNEXPECTEDLY 2
+#define H264_STREAM_RESTARTED            3
+#define H264_STREAM_STOPPED              4
+#define H264_REMOTE_STREAM_STOPPED_UNEXPECTEDLY 5
 
+#define H264_CONNECTED_TO_CAMERA         6
+
+#define H264_REMOTE_STREAM_CANT_CONNECT_FIRST_TIME 7
+#define H264_REMOTE_STREAM_SSKEY_MISMATCH    8
+#define H264_SWITCHING_TO_RELAY_SERVER       9
+#define H264_REMOTE_STREAM_STOPPED          10
+
+#define H264_SWITCHING_TO_RELAY2_SERVER     11
 
 @interface H264PlayerViewController: UIViewController
 <UITableViewDataSource, UITableViewDelegate, UIPickerViewDelegate, UIPickerViewDataSource, PlaylistDelegate,PlayerCallbackHandler,ScanForCameraNotifier>
@@ -43,6 +56,23 @@
     ScanForCamera *scanner;
     
     SystemSoundID soundFileObject;
+    
+    
+    BOOL userWantToCancel;
+    BOOL askForFWUpgradeOnce;
+    
+    
+    int currentDirUD, lastDirUD;
+	int delay_update_lastDir_count;
+	int currentDirLR,lastDirLR;
+	int delay_update_lastDirLR_count;
+    /* Direction */
+	NSTimer * send_UD_dir_req_timer;
+	NSTimer * send_LR_dir_req_timer;
+	/* Added to support direction update */
+	BOOL v_direction_update_needed, h_direction_update_needed;
+
+	
 }
 
 
@@ -67,6 +97,9 @@
 @property (nonatomic, retain) BMS_JSON_Communication *jsonComm;
 @property (nonatomic) BOOL recordingFlag;
 @property (nonatomic) BOOL disableAutorotateFlag;
+
+@property (nonatomic) BOOL askForFWUpgradeOnce;
+
 
 /* Direction */
 @property (nonatomic, retain) NSTimer * send_UD_dir_req_timer;
@@ -96,7 +129,7 @@
 
 - (void)scan_done:(NSArray *) _scan_results;
 
--(void) handeMessage:(int) msg ext1: (int) ext1 ext2:(int) ext2;
+-(void) handleMessage:(int) msg ext1: (int) ext1 ext2:(int) ext2;
 - (void)stopStream;
 - (void)goBackToCameraList;
 @end

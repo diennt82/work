@@ -29,7 +29,7 @@
     PlaylistInfo *eventInfo;
     
     id <ConnectionMethodDelegate> delegate;
-    
+    BOOL readPlayListOnce; 
    
 
     
@@ -43,7 +43,7 @@
 @property(nonatomic, retain) NSString * alertVal;
 @property(nonatomic, retain ) PlaylistInfo * eventInfo;
 @property(nonatomic, retain) id <ConnectionMethodDelegate> delegate;
-
+@property(nonatomic) BOOL readPlayListOnce;  
 
 
 

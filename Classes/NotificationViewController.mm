@@ -23,7 +23,7 @@
 @synthesize eventInfo;
 @synthesize  delegate;
 @synthesize  tempPlaylist;
-
+@synthesize readPlayListOnce;
 @synthesize  lastest_snapshot; 
 
 -(void) dealloc
@@ -84,13 +84,20 @@
     NSLog(@"View will appear");
     [super viewWillAppear:animated];
     
-    self.tempPlaylist.navController = self.navigationController;
-    
-    // 1. Load latest snapshot event
-    [self getLatestEvent];
-    
-    // 2. Load all playlist
-    [self getPlaylist] ;
+    if (self.readPlayListOnce == FALSE)
+    {
+        NSLog(@"View will Do this once ");
+
+        self.tempPlaylist.navController = self.navigationController;
+        
+        // 1. Load latest snapshot event
+        [self getLatestEvent];
+        
+        // 2. Load all playlist
+        [self getPlaylist] ;
+        
+        self.readPlayListOnce = TRUE;
+    }
 }
 
 

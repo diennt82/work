@@ -39,7 +39,7 @@ void PlaybackListener::notify(int msg, int ext1, int ext2)
 {
     if (mHandler != nil)
     {
-        [mHandler handeMessage:msg
+        [mHandler handleMessage:msg
                           ext1:ext1
                           ext2:ext2];
     }

@@ -11,7 +11,7 @@
 @protocol PlayerCallbackHandler <NSObject>
 
 
--(void) handeMessage:(int) msg ext1: (int) ext1 ext2:(int) ext2;
+-(void) handleMessage:(int) msg ext1: (int) ext1 ext2:(int) ext2;
 
 @end
 

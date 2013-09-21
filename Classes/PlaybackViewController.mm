@@ -355,10 +355,10 @@
   
     //20130919:phung : delete here will crash !!! don't know why
 
-    if (listener != NULL)
-    {
-      delete listener;
-    }
+//    if (listener != NULL)
+//    {
+//      delete listener;
+//    }
 
     
     NSLog(@"Stop stream end");
@@ -366,7 +366,7 @@
 }
 
 
--(void) handeMessage:(int) msg ext1: (int) ext1 ext2:(int) ext2
+-(void) handleMessage:(int) msg ext1: (int) ext1 ext2:(int) ext2
 {
     
     switch (msg)
