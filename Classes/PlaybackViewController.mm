@@ -18,6 +18,8 @@
 @synthesize  clip_info;
 
 @synthesize  imageVideo, topToolbar,backBarBtnItem, progressView, urlVideo;
+@synthesize list_refresher;
+
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -108,7 +110,7 @@
             
             
             // It is not the last clip - scheduling querying of clips
-            list_refresher = [NSTimer scheduledTimerWithTimeInterval:10.0
+            self.list_refresher = [NSTimer scheduledTimerWithTimeInterval:10.0
                                                               target:self
                                                             selector:@selector(getCameraPlaylistForEvent:)
                                                             userInfo:clip_info repeats:NO];
@@ -334,7 +336,10 @@
         [self stopStream:nil];
     }
     
-    
+    if (self.list_refresher != nil)
+    {
+        [self.list_refresher invalidate];
+    }
     
     [self.navigationController popViewControllerAnimated:YES];
     
@@ -526,7 +531,7 @@
     //[urlVideo release];
     
     
-    //[list_refresher release];
+    [self.list_refresher release];
 
     [_activityIndicator release];
     [clip_info release];

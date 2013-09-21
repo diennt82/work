@@ -91,12 +91,18 @@
         self.tempPlaylist.navController = self.navigationController;
         
         // 1. Load latest snapshot event
-        [self getLatestEvent];
+        [self performSelectorInBackground:@selector(getLatestEvent_bg) withObject:nil ];
         
         // 2. Load all playlist
-        [self getPlaylist] ;
+        [self performSelectorInBackground:@selector(getPlaylist_bg)  withObject:nil];
         
         self.readPlayListOnce = TRUE;
+    }
+    else
+    {
+        NSLog(@"View reload table data  ");
+
+        [self.tempPlaylist.tableView reloadData];
     }
 }
 
@@ -194,6 +200,71 @@
 #pragma mark -
 #pragma mark Get Event
 
+-(void) getLatestEvent_bg
+{
+    NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
+    
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    
+    BMS_JSON_Communication *jsonComm = [[BMS_JSON_Communication alloc] initWithObject:self
+                                                                             Selector:@selector(getEventSuccessWithResponse:)
+                                                                         FailSelector:@selector(getEventFailedWithResponse:)
+                                                                            ServerErr:@selector(getEventUnreachableSetver)];
+    NSString *mac = self.cameraMacNoColon;
+    
+    NSString *apiKey = [userDefaults objectForKey:@"PortalApiKey"];
+    
+    NSString * event_timecode = [NSString stringWithFormat:@"0%@_%@", self.alertType, self.alertVal];
+    
+    
+    NSDictionary * responseDict = nil;
+    
+    responseDict= [jsonComm getAllRecordedFilesBlockedWithRegistrationId:mac
+                                           andEvent:event_timecode
+                                          andApiKey:apiKey];
+
+    if (responseDict != nil)
+    {
+        if ([[responseDict objectForKey:@"status"] intValue] == 200)
+        {
+            NSLog(@"Event : %@ ",responseDict);
+            
+            NSArray *eventArr = [[responseDict objectForKey:@"data"] objectForKey:@"events"];
+            
+            
+            if (eventArr.count == 1)
+            {
+                
+                
+                //expect 1 event only
+                NSDictionary * eventPlaylist = [eventArr objectAtIndex:0];
+                
+                NSDictionary *clipInfo = [[eventPlaylist objectForKey:@"playlist"]
+                                          objectAtIndex:0];
+                
+                eventInfo = [[PlaylistInfo alloc] init] ;
+                eventInfo.mac_addr = self.cameraMacNoColon;
+                eventInfo.urlImage = [clipInfo objectForKey:@"image"];
+                eventInfo.titleString = [clipInfo objectForKey:@"title"];
+                eventInfo.urlFile = [clipInfo objectForKey:@"file"];
+                
+                UIImage * image = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:eventInfo.urlImage]]] ;
+                
+                
+                [lastest_snapshot performSelectorOnMainThread:@selector(setImage:)
+                                                   withObject:image
+                                                waitUntilDone:NO ];
+            }
+            else
+            {
+                NSLog(@"Empty event ");
+            }
+        }
+        
+    }
+    
+	[pool release];
+}
 
 -(void) getLatestEvent
 {
@@ -228,7 +299,7 @@
 
             if (eventArr.count == 1)
             {
-                self.tempPlaylist.playlistArray = [NSMutableArray array];
+                
                 
                 //expect 1 event only
                 NSDictionary * eventPlaylist = [eventArr objectAtIndex:0];
@@ -268,6 +339,71 @@
 
 #pragma mark -
 #pragma mark Get Playlist
+
+
+-(void) getPlaylist_bg
+{
+    NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
+    
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    
+    BMS_JSON_Communication *jsonComm = [[BMS_JSON_Communication alloc] initWithObject:self
+                                                                             Selector:@selector(getEventSuccessWithResponse:)
+                                                                         FailSelector:@selector(getEventFailedWithResponse:)
+                                                                            ServerErr:@selector(getEventUnreachableSetver)];
+    NSString *mac = self.cameraMacNoColon;
+    
+    NSString *apiKey = [userDefaults objectForKey:@"PortalApiKey"];
+    
+
+    
+    
+    NSDictionary * responseDict = nil;
+    
+    responseDict= [jsonComm getAllRecordedFilesBlockedWithRegistrationId:mac
+                                                                andEvent:[NSString stringWithFormat:@"0%@",self.alertType]
+                                                               andApiKey:apiKey];
+    
+    if (responseDict != nil)
+    {
+        if ([[responseDict objectForKey:@"status"] intValue] == 200)
+        {
+            NSArray *eventArr = [[responseDict objectForKey:@"data"] objectForKey:@"events"];
+            
+            
+            NSLog(@"play list: %@ ",responseDict);
+            
+            self.tempPlaylist.playlistArray = [NSMutableArray array];
+            
+            for (NSDictionary *playlist in eventArr) {
+                NSDictionary *clipInfo = [[playlist objectForKey:@"playlist"] objectAtIndex:0];
+                
+                PlaylistInfo *playlistInfo = [[[PlaylistInfo alloc] init]autorelease];
+                playlistInfo.mac_addr = self.cameraMacNoColon;
+                playlistInfo.urlImage = [clipInfo objectForKey:@"image"];
+                playlistInfo.titleString = [clipInfo objectForKey:@"title"];
+                playlistInfo.urlFile = [clipInfo objectForKey:@"file"];
+                
+                [self.tempPlaylist.playlistArray addObject:playlistInfo];
+            }
+            
+            NSLog(@"there is %d in playlist", [self.tempPlaylist.playlistArray count]);
+            [progress performSelectorOnMainThread:@selector(stopAnimating)
+                                       withObject:nil
+                                    waitUntilDone:NO];
+            
+            
+            [self.tempPlaylist.tableView performSelectorOnMainThread:@selector(reloadData)
+                                                           withObject:nil waitUntilDone:NO ];
+            self.tempPlaylist.view.hidden = NO;
+        }
+        
+        
+        
+    }
+    
+	[pool release];
+}
 
 -(void) getPlaylist
 {

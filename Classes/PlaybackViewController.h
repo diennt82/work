@@ -38,6 +38,7 @@
 @property (retain, nonatomic) IBOutlet UIActivityIndicatorView *activityIndicator;
 
 
+@property (nonatomic, retain)  NSTimer * list_refresher; 
 @property (nonatomic, retain) PlaylistInfo * clip_info;
 
 @property (nonatomic, retain) NSString *camera_mac;
