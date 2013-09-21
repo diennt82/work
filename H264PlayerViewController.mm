@@ -93,6 +93,7 @@
     CFURLRef soundFileURLRef = CFBundleCopyResourceURL(mainbundle, CFSTR("beep"), CFSTR("wav"), NULL);
     AudioServicesCreateSystemSoundID(soundFileURLRef, &soundFileObject);
     
+    //[self scan_for_missing_camera];
     
     [self becomeActive];
 }
@@ -212,6 +213,14 @@
 -(void) handeMessage:(int) msg ext1: (int) ext1 ext2:(int) ext2
 {
     //NSLog(@"Got msg: %d ext1:%d ext2:%d ", msg, ext1, ext2);
+    
+    [self performSelectorOnMainThread:@selector(handleMessageOnMainThread:) withObject:[NSNumber numberWithInt:msg] waitUntilDone:NO];
+}
+
+- (void)handleMessageOnMainThread: (NSNumber *)numberMsg
+{
+    int msg = [numberMsg integerValue];
+    
     switch (msg)
     {
         case MEDIA_ERROR_SERVER_DIED:
@@ -288,9 +297,9 @@
             /* re-scan for the camera */
             [self scan_for_missing_camera];
             
-
+            
     		
-    }
+        }
     		break;
             
         default:
@@ -300,7 +309,7 @@
     
     
     
-#if 0 
+#if 0
     switch (status) {
         case STREAM_STARTED:
         {
@@ -349,7 +358,7 @@
         {
             [UIApplication sharedApplication].idleTimerDisabled=  NO;
             
-                       break;
+            break;
         }
 		case REMOTE_STREAM_STOPPED_UNEXPECTEDLY:
         {
@@ -553,9 +562,7 @@
 			break;
 	}
 #endif
-    
 }
-
 
 
 #pragma mark - Delegate Playlist
@@ -784,7 +791,7 @@
     
     NSString * url ;//=@"http://192.168.3.116:6667/blinkhd";
     
-    url = _stream_url;
+    url = self.stream_url;
     
     
     status = h264Streamer->setDataSource([url UTF8String]);
@@ -1933,7 +1940,7 @@
             NSLog(@"Re-start streaming for : %@", self.selectedChannel.profile.mac_address);
             [NSTimer scheduledTimerWithTimeInterval:0.1
                                              target:self
-                                           selector:@selector(startCameraConnection:)
+                                           selector:@selector(setupCamera)
                                            userInfo:nil
                                             repeats:NO];
         }
@@ -2005,11 +2012,27 @@
 	[alert show];
     
 	[alert retain];
+
+    //[self performSelectorOnMainThread:@selector(showAlertView:) withObject:msg waitUntilDone:YES];
+}
+
+- (void)showAlertView: (NSString *)msg
+{
+    NSString * cancel = NSLocalizedStringWithDefaultValue(@"Cancel",nil, [NSBundle mainBundle],
+                                                          @"Cancel", nil);
     
     
+	alert = [[UIAlertView alloc]
+             initWithTitle:@"" //empty on purpose
+             message:msg
+             delegate:self
+             cancelButtonTitle:cancel
+             otherButtonTitles:nil];
     
+	alert.tag = LOCAL_VIDEO_STOPPED_UNEXPECTEDLY;
+	[alert show];
     
-    
+	[alert retain];
 }
 
 -(void) stopPeriodicPopup
