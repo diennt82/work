@@ -135,10 +135,11 @@
     
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     
-    BMS_JSON_Communication *jsonComm = [[BMS_JSON_Communication alloc] initWithObject:self
+    BMS_JSON_Communication *jsonComm = [[[BMS_JSON_Communication alloc] initWithObject:self
                                                                              Selector:@selector(getPlaylistSuccessWithResponse:)
                                                                          FailSelector:@selector(getPlaylistFailedWithResponse:)
-                                                                            ServerErr:@selector(getPlaylistUnreachableSetver)];
+                                                                            ServerErr:@selector(getPlaylistUnreachableSetver)]
+                                        autorelease];
     NSString *mac = first_clip.mac_addr;
     
     NSString *apiKey = [userDefaults objectForKey:@"PortalApiKey"];
@@ -167,7 +168,7 @@
             
             NSLog(@"play list: %@ ",responseDict);
             
-            NSDictionary *playlist = [eventArr objectAtIndex:0];
+            NSArray *playlist = [[eventArr objectAtIndex:0] objectForKey:@"playlist"];
             
             for (NSDictionary *clipInfo in playlist) {
                 //NSDictionary *clipInfo = [[playlist objectForKey:@"playlist"] objectAtIndex:0];
@@ -531,6 +532,8 @@
     //[list_refresher release];
 
     [_activityIndicator release];
+    [clip_info release];
+    [clips release];
     [super dealloc];
 }
 
