@@ -233,6 +233,7 @@
     {
         listener->updateFinalClipCount([clips count]);
     }
+    
     listener->updateClips(clips);
     
 }

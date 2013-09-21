@@ -6,6 +6,9 @@
 //  Copyright (c) 2013 Smart Panda Ltd. All rights reserved.
 //
 
+#import "H264PlayerViewController.h"
+
+
 #define D1 @"480p"
 #define HD1 @"720p-10"
 #define HD15 @"720p-15"
@@ -24,57 +27,11 @@
 
 #define CAM_IN_VEW @"string_Camera_Mac_Being_Viewed"
 
-#import "H264PlayerViewController.h"
-
-#import "HttpCommunication.h"
-#import "PlaylistInfo.h"
-#import "PlaybackViewController.h"
-#import "PlaylistCell.h"
-#import "MTStackViewController.h"
-#import "HttpCommunication.h"
-#import "PlayListViewController.h"
-#import <MonitorCommunication/MonitorCommunication.h>
-#import <H264MediaPlayer/H264MediaPlayer.h>
-
-
-@interface H264PlayerViewController ()
-<UITableViewDataSource, UITableViewDelegate, UIPickerViewDelegate, UIPickerViewDataSource, PlaylistDelegate>
-{
-    MediaPlayer* h264Streamer;
-}
-
-@property (retain, nonatomic) IBOutlet UITableView *tableViewPlaylist;
-@property (retain, nonatomic) IBOutlet UIView *viewCtrlButtons;
-@property (retain, nonatomic) IBOutlet UIPickerView *pickerHQOptions;
-@property (retain, nonatomic) IBOutlet UIButton *hqViewButton;
-@property (retain, nonatomic) IBOutlet UIButton *triggerRecordingButton;
-@property (retain, nonatomic) IBOutlet UIImageView *imgViewDrectionPad;
-@property (retain, nonatomic) IBOutlet PlayListViewController *playlistViewController;
-@property (retain, nonatomic) IBOutlet UIActivityIndicatorView *activityIndicator;
-
-@property (retain, nonatomic) IBOutlet UIBarButtonItem *barBntItemReveal;
-
-@property (nonatomic, retain) HttpCommunication* httpComm;
-@property (nonatomic, retain) NSMutableArray *playlistArray;
-@property (nonatomic) BOOL h264StreamerIsInStopped;
-@property (nonatomic, retain) NSArray *eventArr;
-@property (nonatomic, retain) HttpCommunication *htppComm;
-@property (nonatomic, retain) BMS_JSON_Communication *jsonComm;
-@property (nonatomic) BOOL recordingFlag;
-@property (nonatomic) BOOL disableAutorotateFlag;
-
-/* Direction */
-@property (nonatomic, retain) NSTimer * send_UD_dir_req_timer;
-@property (nonatomic, retain) NSTimer * send_LR_dir_req_timer;
-/* Added to support direction update */
-@property (nonatomic) int currentDirUD, lastDirUD;
-@property (nonatomic) int delay_update_lastDir_count;
-@property (nonatomic) int currentDirLR,lastDirLR;
-@property (nonatomic) int delay_update_lastDirLR_count;
-
-@end
-
 @implementation H264PlayerViewController
+
+@synthesize  alertTimer;
+
+@synthesize  selectedChannel;
 
 #pragma mark - View
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
@@ -131,6 +88,12 @@
     
     //self.barBntItemReveal.target = [self stackViewController];
     
+    
+    CFBundleRef mainbundle = CFBundleGetMainBundle();
+    CFURLRef soundFileURLRef = CFBundleCopyResourceURL(mainbundle, CFSTR("beep"), CFSTR("wav"), NULL);
+    AudioServicesCreateSystemSoundID(soundFileURLRef, &soundFileObject);
+    
+    
     [self becomeActive];
 }
 
@@ -180,7 +143,7 @@
             self.h264StreamerIsInStopped = FALSE;
             
             NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-            [userDefaults setObject:_selectedChannel.profile.mac_address forKey:CAM_IN_VEW];
+            [userDefaults setObject:selectedChannel.profile.mac_address forKey:CAM_IN_VEW];
             [userDefaults synchronize];
         }
         else
@@ -244,6 +207,357 @@
     [self.stackViewController toggleLeftViewController];
 }
 
+#pragma mark - Delegate Stream callback
+
+-(void) handeMessage:(int) msg ext1: (int) ext1 ext2:(int) ext2
+{
+    NSLog(@"Got msg: %d ext1:%d ext2:%d ", msg, ext1, ext2);
+    switch (msg)
+    {
+        case MEDIA_ERROR_SERVER_DIED:
+    	case MEDIA_ERROR_TIMEOUT_WHILE_STREAMING:
+        {
+    		NSLog(@"Timeout While streaming");
+            
+    		//mHandler.dispatchMessage(Message.obtain(mHandler, Streamer.MSG_VIDEO_STREAM_HAS_STOPPED_UNEXPECTEDLY));
+    		
+            
+    		/* TODO:
+    		 *
+    		 * Why are we failling?
+    		 *    Our issue: Switch WIFIs, or WIFI <--> 3g
+    		 *               Going out of range
+    		 *
+    		 *    Camera issue: Camera turn off/ restarted / Ip changed
+    		 *
+    		 * What mode are we in
+    		 * - Local -> Recovery in local
+    		 * - Remote -> Recovery in REMOTE (UPNP or Wowza)
+    		 *
+             */
+            
+            //Perform connectivity check - wifi?
+            NSString * currSSID = [CameraPassword fetchSSIDInfo];
+            NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+            NSString * streamSSID =  (NSString *) [userDefaults objectForKey:_streamingSSID];
+            
+            
+            
+            NSString * msg = NSLocalizedStringWithDefaultValue(@"network_lost_link",nil, [NSBundle mainBundle],
+                                                               @"Camera disconnected due to network connectivity problem. Trying to reconnect...", nil);
+            [[[GAI sharedInstance] defaultTracker] trackEventWithCategory:@"View Remote Camera"
+                                                               withAction:@"Connect to Cam Failed"
+                                                                withLabel:@"Can't connect to network"
+                                                                withValue:nil];
+            
+            
+            if (currSSID != nil && streamSSID != nil)
+            {
+                
+            }
+            else
+            {
+                //either one of them is nil we skip this check
+                NSLog(@"current %@, storedSSID: %@", currSSID, streamSSID);
+            }
+            
+            
+            //popup ?
+            
+            if (self.alertTimer != nil && [self.alertTimer isValid])
+            {
+                //some periodic is running dont care
+                NSLog(@"some periodic is running dont care");
+                
+            }
+            else
+            {
+                
+                self.alertTimer = [NSTimer scheduledTimerWithTimeInterval:5.0
+                                                                   target:self
+                                                                 selector:@selector(periodicPopup:)
+                                                                 userInfo:msg
+                                                                  repeats:YES];
+                [self.alertTimer fire] ;//fire once now
+                
+            }
+            
+            /* Stop Streamming */
+            [self stopStream];
+            
+            /* re-scan for the camera */
+            [self scan_for_missing_camera];
+            
+
+    		
+    }
+    		break;
+            
+        default:
+            break;
+    }
+    
+    
+    
+    
+#if 0 
+    switch (status) {
+        case STREAM_STARTED:
+        {
+            self.enableControls = TRUE;
+            progressView.hidden = YES;
+            
+            [self stopPeriodicPopup];
+            
+            
+            if (userWantToCancel == TRUE)
+            {
+                
+                NSLog(@"*[STREAM_STARTED] *** USER want to cancel **.. cancel after .1 sec...");
+                self.selected_channel.stopStreaming = TRUE;
+                [self performSelector:@selector(goBackToCameraList)
+                           withObject:nil
+                           afterDelay:0.1];
+            }
+            else
+            {
+                if ( self.selected_channel.profile.isInLocal && (self.askForFWUpgradeOnce == YES))
+                {
+                    [self performSelectorInBackground:@selector(checkIfUpgradeIsPossible) withObject:nil];
+                    self.askForFWUpgradeOnce = NO;
+                }
+                
+                //NSLog(@"Got STREAM_STARTED") ;
+                
+                if ( self.selected_channel.profile.isInLocal == NO)
+                {
+                    
+                    
+                    
+                    [[[GAI sharedInstance] defaultTracker] trackEventWithCategory:@"View Camera Remote"
+                                                                       withAction:@"Start Stream Success"
+                                                                        withLabel:@"Start Stream Success"
+                                                                        withValue:nil];
+                }
+            }
+            break;
+        }
+		case STREAM_STOPPED:
+            
+			break;
+		case STREAM_STOPPED_UNEXPECTEDLY:
+        {
+            [UIApplication sharedApplication].idleTimerDisabled=  NO;
+            
+                       break;
+        }
+		case REMOTE_STREAM_STOPPED_UNEXPECTEDLY:
+        {
+            
+            NSString * msg = NSLocalizedStringWithDefaultValue(@"network_lost_link",nil, [NSBundle mainBundle],
+                                                               @"Camera disconnected due to network connectivity problem. Trying to reconnect...", nil);
+            [[[GAI sharedInstance] defaultTracker] trackEventWithCategory:@"View Remote Camera"
+                                                               withAction:@"Connect to Cam Failed"
+                                                                withLabel:@"Can't connect to network"
+                                                                withValue:nil];
+            
+#if 1
+            msg = [NSString stringWithFormat:@"%@ (%d)", msg, self.selected_channel.remoteConnectionError];
+            if (self.streamer != nil)
+            {
+                msg = [NSString stringWithFormat:@"%@(%d)",msg,
+                       self.streamer.latest_connection_error ];
+            }
+#endif
+            
+            
+            if (self.alertTimer != nil && [self.alertTimer isValid])
+            {
+                //some periodic is running dont care
+                NSLog(@"some periodic is running dont care");
+            }
+            else
+            {
+                
+                self.alertTimer = [NSTimer scheduledTimerWithTimeInterval:5.0
+                                                                   target:self
+                                                                 selector:@selector(periodicPopup:)
+                                                                 userInfo:msg
+                                                                  repeats:YES];
+                [self.alertTimer fire] ;//fire once now
+                
+            }
+            
+            //Stop stream - clean up all resources
+            [self.streamer stopStreaming];
+            
+            //nil all comm object
+            self.scomm = nil; //STUN
+            self.comm = nil;// UPNP/local
+            
+            [NSTimer scheduledTimerWithTimeInterval:1.0
+                                             target:self
+                                           selector:@selector(startCameraConnection:)
+                                           userInfo:nil
+                                            repeats:NO];
+            
+            break;
+        }
+		case STREAM_RESTARTED:
+			break;
+        case REMOTE_STREAM_CANT_CONNECT_FIRST_TIME:
+        {
+            //Stop stream - clean up all resources
+            [self.streamer stopStreaming];
+            self.selected_channel.stopStreaming = TRUE;
+            
+            //simply popup and ask to retry and show camera list
+            NSString * msg = NSLocalizedStringWithDefaultValue(@"cant_start_stream",nil, [NSBundle mainBundle],
+                                                               @"Can't start video stream, the Monitor is busy, try again later." , nil);
+            msg = [NSString stringWithFormat:@"%@ (%d)", msg, self.selected_channel.remoteConnectionError];
+            
+            if (self.selected_channel.remoteConnectionError == REQUEST_TIMEOUT)
+            {
+                msg = NSLocalizedStringWithDefaultValue(@"cant_start_stream2",nil, [NSBundle mainBundle],
+                                                        @"Server request timeout, try again later", nil);
+                
+                
+            }
+            
+            NSString * ok = NSLocalizedStringWithDefaultValue(@"Ok",nil, [NSBundle mainBundle],
+                                                              @"Ok", nil);
+            UIAlertView *_alert = [[UIAlertView alloc]
+                                   initWithTitle:@""
+                                   message:msg
+                                   delegate:self
+                                   cancelButtonTitle:ok
+                                   otherButtonTitles:nil];
+            _alert.tag = REMOTE_VIDEO_CANT_START ;
+            [_alert show];
+            [_alert release];
+            
+            [[[GAI sharedInstance] defaultTracker] trackEventWithCategory:@"View Remote Camera"
+                                                               withAction:@"Connect to Cam Failed"
+                                                                withLabel:@"Can't connect to network"
+                                                                withValue:nil];
+            
+            
+            break;
+        }
+        case REMOTE_STREAM_SSKEY_MISMATCH:
+        {
+            //Stop stream - clean up all resources
+            [self.streamer stopStreaming];
+            self.selected_channel.stopStreaming = TRUE;
+            
+            //simply popup and ask to retry and show camera list
+            NSString * msg = NSLocalizedStringWithDefaultValue(@"cant_start_stream_01",nil, [NSBundle mainBundle],
+                                                               @"The session key on camera is mis-matched. Please reset the camera and add the camera again.(%d)" , nil);
+            msg = [NSString stringWithFormat:msg, self.streamer.latest_connection_error];
+            
+            NSString * ok = NSLocalizedStringWithDefaultValue(@"Ok",nil, [NSBundle mainBundle],
+                                                              @"Ok", nil);
+            UIAlertView *_alert = [[UIAlertView alloc]
+                                   initWithTitle:@""
+                                   message:msg
+                                   delegate:self
+                                   cancelButtonTitle:ok
+                                   otherButtonTitles:nil];
+            _alert.tag = REMOTE_SSKEY_MISMATCH ;
+            [_alert show];
+            [_alert release];
+            [[[GAI sharedInstance] defaultTracker] trackEventWithCategory:@"View Remote Camera"
+                                                               withAction:@"Connect to Cam Failed"
+                                                                withLabel:@"SESSION KEY MISMATCH"
+                                                                withValue:nil];
+            break;
+        }
+        case SWITCHING_TO_RELAY_SERVER:// just update the dialog
+        {
+            
+            //change the message being shown on progress bar -- NEED to take of rotation
+            
+            if (progressView != nil)
+            {
+                UITextView * message = (UITextView *)[progressView viewWithTag:155] ;//textview
+                NSString * msg = NSLocalizedStringWithDefaultValue(@"udt_relay_connect",nil, [NSBundle mainBundle],
+                                                                   @"Connecting through relay... please wait..." , nil);
+                message.text = msg;
+                
+            }
+            
+            
+            
+            
+            
+            break;
+        }
+        case REMOTE_STREAM_STOPPED:
+        {
+#if 1 //dont close_session
+            
+            if ( streamer.communication_mode == COMM_MODE_STUN )
+            {
+                if (self.scomm != nil)
+                {
+                    
+                    NSLog(@"Send close session");
+                    [self.scomm sendCloseSessionThruBMS:self.selected_channel.profile.mac_address
+                                             AndChannel:self.selected_channel.channID
+                                               forRelay:NO];
+                }
+            }
+            if (streamer.communication_mode == COMM_MODE_STUN_RELAY2)
+                
+                
+            {
+                
+                if (self.scomm != nil)
+                {
+                    
+                    NSLog(@"Send close relay session");
+                    [self.scomm sendCloseSessionThruBMS:self.selected_channel.profile.mac_address
+                                             AndChannel:self.selected_channel.channID
+                                               forRelay:YES];
+                }
+            }
+            
+#endif
+            
+            break;
+        }
+        case  SWITCHING_TO_RELAY2_SERVER: //do the switching..
+        {
+            
+            if ([self.selected_channel.profile isNewerThan08_038])
+            {
+                
+                
+                
+                //close pcm player as well.. we don't need it any longer
+                //  Will open again once the relay2 is up
+                [streamer stopStreaming:TRUE];
+                
+                if (scanner != nil)
+                {
+                    [scanner cancel];
+                }
+                [self.selected_channel abortViewTimer];
+                
+                NSLog(@"FW version is newer thang 08_038 ->NEW -RELAY");
+                [self switchToRelay2ForNonSymmetricNatApp];
+            }
+            
+        }
+		default:
+			break;
+	}
+#endif
+    
+}
+
+
+
 #pragma mark - Delegate Playlist
 
 - (void)stopStreamWhenPushPlayback
@@ -256,12 +570,12 @@
 
 - (void)handleBecomeActive
 {
-    if(_selectedChannel.profile.isInLocal == TRUE)
+    if(selectedChannel.profile.isInLocal == TRUE)
     {
         NSLog(@"Become ACTIVE _  .. Local ");
         [self becomeActive];
     }
-    else if ( _selectedChannel.profile.minuteSinceLastComm <= 5) // Remote
+    else if ( selectedChannel.profile.minuteSinceLastComm <= 5) // Remote
     {
         [self becomeActive];
     }
@@ -269,7 +583,7 @@
 
 - (void)handleEnteredBackground
 {
-    if (_selectedChannel.profile.isInLocal == TRUE)
+    if (selectedChannel.profile.isInLocal == TRUE)
     {
         NSLog(@"Enter Background.. Local ");
         _selectedChannel.stopStreaming = TRUE;
@@ -277,14 +591,14 @@
         [self stopStream];
         self.imageViewVideo.backgroundColor = [UIColor blackColor];
     }
-    else if (_selectedChannel.profile.minuteSinceLastComm <= 5) // Remote
+    else if (selectedChannel.profile.minuteSinceLastComm <= 5) // Remote
     {
-        _selectedChannel.stopStreaming = TRUE;
+        selectedChannel.stopStreaming = TRUE;
         
         [self stopStream];
         
         //NSLog(@"abort remote timer ");
-        [_selectedChannel abortViewTimer];
+        [selectedChannel abortViewTimer];
     }
 }
 
@@ -299,6 +613,7 @@
     self.backBarBtnItem.target = self;
     self.backBarBtnItem.action = @selector(goBackToCameraList);
     self.backBarBtnItem.enabled = NO;
+
 //SLIDE MENU
 //    self.backBarBtnItem.target = self.stackViewController;
 //    self.backBarBtnItem.action = @selector(toggleLeftViewController);
@@ -431,8 +746,38 @@
 -(void) startStream
 {
     status_t status;
+    
+    
+    //Store current SSID - to check later
+	NSString * streamingSSID = [CameraPassword fetchSSIDInfo];
+	if (streamingSSID == nil)
+	{
+		NSLog(@"error: streamingSSID is nil before streaming");
+	}
+    
+	NSLog(@"current SSID is: %@", streamingSSID);
+    
+    
+	//Store some of the info for used in menu  --
+    
+	NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+	BOOL isOffline = [userDefaults boolForKey:_OfflineMode];
+    
+	[userDefaults setBool:!(isOffline) forKey:_is_Loggedin];
+	if (streamingSSID != nil)
+	{
+		[userDefaults setObject:streamingSSID forKey:_streamingSSID];
+	}
+    
+    
+    [userDefaults synchronize];
 
     h264Streamer = new MediaPlayer(false);
+    
+    
+    h264StreamerListener = new H264PlayerListener(self);
+    h264Streamer->setListener(h264StreamerListener); 
+    
     
     //`NSLog(@"Play with TCP Option >>>>> ") ;
     //mp->setPlayOption(MEDIA_STREAM_RTSP_WITH_TCP);
@@ -808,16 +1153,16 @@
     
 	if (dir_str != nil)
 	{
-        if (_selectedChannel.profile.isInLocal)
+        if (selectedChannel.profile.isInLocal)
 		{
             _httpComm = [[[HttpCommunication alloc] init] autorelease];
 				//Non block send-
 				[_httpComm sendCommand:dir_str];
                 //[_httpComm sendCommandAndBlock:dir_str];
 		}
-		else if(_selectedChannel.profile.minuteSinceLastComm <= 5)
+		else if(selectedChannel.profile.minuteSinceLastComm <= 5)
 		{
-            NSString *mac = [Util strip_colon_fr_mac:_selectedChannel.profile.mac_address];
+            NSString *mac = [Util strip_colon_fr_mac:selectedChannel.profile.mac_address];
             NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
             NSString *apiKey = [userDefaults objectForKey:@"PortalApiKey"];
             
@@ -884,7 +1229,7 @@
     
 	if (dir_str != nil)
 	{
-        if (_selectedChannel.profile.isInLocal)
+        if (selectedChannel.profile.isInLocal)
         {
             _httpComm = [[[HttpCommunication alloc] init] autorelease];
 				//Non block send-
@@ -892,9 +1237,9 @@
                 
                 //[_httpComm sendCommandAndBlock:dir_str];
 		}
-		else if ( _selectedChannel.profile.minuteSinceLastComm <= 5)
+		else if ( selectedChannel.profile.minuteSinceLastComm <= 5)
 		{
-            NSString *mac = [Util strip_colon_fr_mac:_selectedChannel.profile.mac_address];
+            NSString *mac = [Util strip_colon_fr_mac:selectedChannel.profile.mac_address];
             NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
             NSString *apiKey = [userDefaults objectForKey:@"PortalApiKey"];
             
@@ -1532,6 +1877,193 @@
     }
 }
 
+
+#pragma mark -
+#pragma mark Scan cameras
+
+- (void) scan_for_missing_camera
+{
+    NSLog(@"scanning for : %@", self.selectedChannel.profile.mac_address);
+    
+	scanner = [[ScanForCamera alloc] initWithNotifier:self];
+	[scanner scan_for_device:self.selectedChannel.profile.mac_address];
+    
+}
+
+
+- (void)scan_done:(NSArray *) _scan_results
+{
+	//Sync
+    
+    if ([_scan_results count] ==0 )
+    {
+        //empty result... rescan
+        NSLog(@"Empty result-> Re- scan");
+        [self scan_for_missing_camera];
+        
+    }
+    else
+    {
+        //confirm the mac address
+        CamProfile * cp = self.selectedChannel.profile;
+        BOOL found = FALSE;
+        for (int j = 0; j < [_scan_results count]; j++)
+        {
+            CamProfile * cp1 = (CamProfile *) [_scan_results objectAtIndex:j];
+            
+            if ( [cp.mac_address isEqualToString:cp1.mac_address])
+            {
+                //FOUND - copy ip address.
+                cp.ip_address = cp1.ip_address;
+                found = TRUE;
+                break;
+            }
+        }
+        
+        
+        if (!found)
+        {
+            //Rescann...
+            NSLog(@"Re- scan for : %@", self.selectedChannel.profile.mac_address);
+            [self scan_for_missing_camera];
+        }
+        else
+        {
+            //Restart streaming..
+            NSLog(@"Re-start streaming for : %@", self.selectedChannel.profile.mac_address);
+            [NSTimer scheduledTimerWithTimeInterval:0.1
+                                             target:self
+                                           selector:@selector(startCameraConnection:)
+                                           userInfo:nil
+                                            repeats:NO];
+        }
+    }
+    
+}
+#pragma mark -
+
+#pragma mark -
+#pragma mark Beeping
+
+-(void)periodicBeep:(NSTimer*) exp
+{
+    [self playSound];
+}
+
+-(void) stopPeriodicBeep
+{
+	if (self.alertTimer != nil)
+	{
+		if ([self.alertTimer isValid])
+		{
+			[self.alertTimer invalidate];
+		}
+        
+	}
+}
+
+
+-(void) periodicPopup:(NSTimer *) exp
+{
+	NSString * msg = (NSString *) [exp userInfo];
+    
+	[self playSound];
+    
+    
+	if ( alert != nil)
+	{
+		if ([alert isVisible])
+		{
+			[alert setMessage:msg];
+            
+			return;
+		}
+		else
+		{
+			NSLog(@"alert not visible -- dismiss it & release.. ");
+            
+            [alert dismissWithClickedButtonIndex:1 animated:NO];
+		}
+        
+		[alert release];
+		alert = nil;
+        
+	}
+    
+    NSString * cancel = NSLocalizedStringWithDefaultValue(@"Cancel",nil, [NSBundle mainBundle],
+                                                          @"Cancel", nil);
+    
+    
+	alert = [[UIAlertView alloc]
+             initWithTitle:@"" //empty on purpose
+             message:msg
+             delegate:self
+             cancelButtonTitle:cancel
+             otherButtonTitles:nil];
+    
+	alert.tag = LOCAL_VIDEO_STOPPED_UNEXPECTEDLY;
+	[alert show];
+    
+	[alert retain];
+    
+    
+    
+    
+    
+}
+
+-(void) stopPeriodicPopup
+{
+	if (self.alertTimer != nil)
+	{
+		if ([self.alertTimer isValid])
+		{
+			[self.alertTimer invalidate];
+		}
+        
+	}
+	if ( alert != nil)
+	{
+		//if ([alert isVisible])
+		{
+            NSLog(@"dissmis alert");
+			[alert dismissWithClickedButtonIndex:1 animated:NO ];
+		}
+        
+		[alert release];
+		alert = nil;
+        
+	}
+}
+-(void) playSound
+{
+	
+    
+	//NSLog(@"Play the B");
+    
+    
+	//201201011 This is needed to play the system sound on top of audio from camera
+	UInt32 sessionCategory = kAudioSessionCategory_AmbientSound;    // 1
+	AudioSessionSetProperty (
+                             kAudioSessionProperty_AudioCategory,                        // 2
+                             sizeof (sessionCategory),                                   // 3
+                             &sessionCategory                                            // 4
+                             );
+    
+	//Play beep
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+    {
+        AudioServicesPlaySystemSound(soundFileObject);
+    }
+    else
+    {
+        AudioServicesPlayAlertSound(soundFileObject);
+    }
+    
+    
+    
+}
+
 #pragma mark -
 
 - (void)didReceiveMemoryWarning
@@ -1550,7 +2082,7 @@
     [_tableViewPlaylist release];
     
     [_stream_url release];
-    [_selectedChannel release];
+    [selectedChannel release];
     [_playlistArray release];
     [_httpComm release];
     

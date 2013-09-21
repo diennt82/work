@@ -10,9 +10,10 @@
 
 
 
-H264PlayerListener::H264PlayerListener()
+H264PlayerListener::H264PlayerListener(id<PlayerCallbackHandler> handler)
 {
 
+    mHandler = handler;
 }
 
 H264PlayerListener::~H264PlayerListener()
@@ -22,8 +23,12 @@ H264PlayerListener::~H264PlayerListener()
 
 void H264PlayerListener::notify(int msg, int ext1, int ext2)
 {
-    //TODO:
-    
+    if (mHandler != nil)
+    {
+        [mHandler handeMessage:msg
+                          ext1:ext1
+                          ext2:ext2];
+    }
 }
 
 int H264PlayerListener::getNextClip(char** url)

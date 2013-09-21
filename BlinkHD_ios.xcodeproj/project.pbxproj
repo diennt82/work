@@ -197,7 +197,7 @@
 		978B25B717E1B41C006FC224 /* reveal-icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 978B25B517E1B41C006FC224 /* reveal-icon@2x.png */; };
 		978B25BC17E1B43E006FC224 /* MTStackDefaultContainerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 978B25B917E1B43E006FC224 /* MTStackDefaultContainerView.m */; };
 		978B25BD17E1B43E006FC224 /* MTStackViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 978B25BB17E1B43E006FC224 /* MTStackViewController.m */; };
-		978B25C117E1B4AB006FC224 /* BMMenuViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 978B25BF17E1B4AB006FC224 /* BMMenuViewController.m */; };
+		978B25C117E1B4AB006FC224 /* BMMenuViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 978B25BF17E1B4AB006FC224 /* BMMenuViewController.mm */; };
 		978B25C217E1B4AB006FC224 /* BMMenuViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 978B25C017E1B4AB006FC224 /* BMMenuViewController.xib */; };
 		978F090117DEFD670053972F /* no_img_available.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = 978F090017DEFD650053972F /* no_img_available.jpeg */; };
 		978F090317DF06C80053972F /* PlaylistCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 978F090217DF06C70053972F /* PlaylistCell.xib */; };
@@ -612,7 +612,7 @@
 		978B25BA17E1B43E006FC224 /* MTStackViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTStackViewController.h; sourceTree = "<group>"; };
 		978B25BB17E1B43E006FC224 /* MTStackViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTStackViewController.m; sourceTree = "<group>"; };
 		978B25BE17E1B4AB006FC224 /* BMMenuViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BMMenuViewController.h; sourceTree = "<group>"; };
-		978B25BF17E1B4AB006FC224 /* BMMenuViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BMMenuViewController.m; sourceTree = "<group>"; };
+		978B25BF17E1B4AB006FC224 /* BMMenuViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = BMMenuViewController.mm; sourceTree = "<group>"; };
 		978B25C017E1B4AB006FC224 /* BMMenuViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = BMMenuViewController.xib; sourceTree = "<group>"; };
 		978F090017DEFD650053972F /* no_img_available.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = no_img_available.jpeg; sourceTree = "<group>"; };
 		978F090217DF06C70053972F /* PlaylistCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PlaylistCell.xib; sourceTree = "<group>"; };
@@ -2019,7 +2019,7 @@
 				978B25BA17E1B43E006FC224 /* MTStackViewController.h */,
 				978B25BB17E1B43E006FC224 /* MTStackViewController.m */,
 				978B25BE17E1B4AB006FC224 /* BMMenuViewController.h */,
-				978B25BF17E1B4AB006FC224 /* BMMenuViewController.m */,
+				978B25BF17E1B4AB006FC224 /* BMMenuViewController.mm */,
 				978B25C017E1B4AB006FC224 /* BMMenuViewController.xib */,
 			);
 			name = SlideMenu;
@@ -2432,7 +2432,7 @@
 				A1BB7B9F17E02C5C00463A07 /* UdtSocketWrapper.mm in Sources */,
 				978B25BC17E1B43E006FC224 /* MTStackDefaultContainerView.m in Sources */,
 				978B25BD17E1B43E006FC224 /* MTStackViewController.m in Sources */,
-				978B25C117E1B4AB006FC224 /* BMMenuViewController.m in Sources */,
+				978B25C117E1B4AB006FC224 /* BMMenuViewController.mm in Sources */,
 				97735C4417E1CEAA00160DA1 /* MyFrontViewController.m in Sources */,
 				84DEA2BB17E42E3F00567836 /* NotificationViewController.mm in Sources */,
 				A1E32FAD17E9899800504538 /* H264PlayerListener.mm in Sources */,
