@@ -222,7 +222,7 @@
 
 - (void)application:(UIApplication *)app didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)devToken {
     
-    UIPasteboard *appPasteBoard = [UIPasteboard pasteboardWithName:@"MSC3" create:YES];
+    UIPasteboard *appPasteBoard = [UIPasteboard pasteboardWithName:@"Monitoreverywhere_HD" create:YES];
 	appPasteBoard.persistent = YES;
     if ([appPasteBoard string] == nil) {
         [appPasteBoard setString:[MBP_iosAppDelegate GetUUID]];

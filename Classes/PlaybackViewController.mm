@@ -95,7 +95,7 @@
     if (self.clip_info != nil )
     {
         
-        //listener = new PlaybackListener(self);
+        listener = new PlaybackListener(self);
         
         
         if ([self.clip_info isLastClip])
@@ -129,8 +129,10 @@
 
 #pragma mark - Poll camera events
 
--(void) getCameraPlaylistForEvent:(PlaylistInfo *) first_clip
+-(void) getCameraPlaylistForEvent:(NSTimer *) clipTimer
 {
+    PlaylistInfo *first_clip = [clipTimer userInfo];
+    
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     
     BMS_JSON_Communication *jsonComm = [[BMS_JSON_Communication alloc] initWithObject:self
@@ -165,9 +167,10 @@
             
             NSLog(@"play list: %@ ",responseDict);
             
+            NSDictionary *playlist = [eventArr objectAtIndex:0];
             
-            for (NSDictionary *playlist in eventArr) {
-                NSDictionary *clipInfo = [[playlist objectForKey:@"playlist"] objectAtIndex:0];
+            for (NSDictionary *clipInfo in playlist) {
+                //NSDictionary *clipInfo = [[playlist objectForKey:@"playlist"] objectAtIndex:0];
                 
                 PlaylistInfo *playlistInfo = [[[PlaylistInfo alloc] init]autorelease];
                 playlistInfo.mac_addr = clip_info.mac_addr;
@@ -181,7 +184,10 @@
                 BOOL found = FALSE; 
                 for ( NSString * one_clip in clips)
                 {
-                    if ([playlistInfo.urlFile isEqualToString:one_clip])
+                    NSLog(@"one clip: *%@*", one_clip);
+                    NSLog(@"playlistInfo.url: *%@*", playlistInfo.urlFile);
+                    
+                    if ([playlistInfo containsClip:one_clip])
                     {
                         found = TRUE; 
                         break;
@@ -192,6 +198,7 @@
                 {
                     //add the clip
                     [clips addObject:playlistInfo.urlFile];
+                    NSLog(@"clips: %@", clips);
                 }
                 
                 
@@ -440,8 +447,11 @@
             //            [[NSBundle mainBundle] loadNibNamed:@"H264PlayerViewController_land"
             //                                          owner:self
             //                                        options:nil];
-            CGRect newRect = CGRectMake(0, 0, 480, 256);
+            CGRect newRect = CGRectMake(0, 32, 480, 256);
             self.imageVideo.frame = newRect;
+            
+            self.view.backgroundColor = [UIColor blackColor];
+            [[UIApplication sharedApplication] setStatusBarHidden:YES];
             
             self.topToolbar.hidden = YES;
             self.navigationController.navigationBar.hidden = YES;
@@ -464,6 +474,9 @@
             //                                        options:nil];
             CGRect newRect = CGRectMake(0, 44, 320, 180);
             self.imageVideo.frame = newRect;
+            
+            self.view.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"black_background"]];
+            [[UIApplication sharedApplication] setStatusBarHidden:NO];
             
             self.topToolbar.hidden = NO;
             self.navigationController.navigationBar.hidden = NO;

@@ -61,6 +61,7 @@
 @property (nonatomic, retain) HttpCommunication *htppComm;
 @property (nonatomic, retain) BMS_JSON_Communication *jsonComm;
 @property (nonatomic) BOOL recordingFlag;
+@property (nonatomic) BOOL disableAutorotateFlag;
 
 /* Direction */
 @property (nonatomic, retain) NSTimer * send_UD_dir_req_timer;
@@ -96,8 +97,6 @@
 //                                                                   style:UIBarButtonItemStylePlain
 //                                                                  target:[self stackViewController]
 //                                                                  action:@selector(toggleLeftViewController)];
-    
-    self.view.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"black_background"]];
     
     UIBarButtonItem *revealIcon = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"reveal-icon"]
                                                                    style:UIBarButtonItemStylePlain
@@ -164,6 +163,7 @@
     
     if (self.segCtrl.selectedSegmentIndex == 0) // Live
     {
+        self.disableAutorotateFlag = FALSE;
         
         self.playlistViewController.tableView.hidden = YES;
         
@@ -190,13 +190,9 @@
     }
     else if (self.segCtrl.selectedSegmentIndex == 1) // Earlier
     {
-        if (self.playlistViewController.playlistArray.count == 0) {
-            self.activityIndicator.hidden = NO;
-        }
-        else
-        {
-            [self.view bringSubviewToFront:self.playlistViewController.tableView];
-        }
+        self.disableAutorotateFlag = TRUE;
+        
+        [self.view bringSubviewToFront:self.playlistViewController.tableView];
         self.playlistViewController.tableView.hidden = NO;
         
         self.playlistViewController.navController = self.navigationController;
@@ -262,7 +258,8 @@
 {
     if(_selectedChannel.profile.isInLocal == TRUE)
     {
-        NSLog(@"Become ACTIVE _  .. do nothing.. ");
+        NSLog(@"Become ACTIVE _  .. Local ");
+        [self becomeActive];
     }
     else if ( _selectedChannel.profile.minuteSinceLastComm <= 5) // Remote
     {
@@ -274,7 +271,11 @@
 {
     if (_selectedChannel.profile.isInLocal == TRUE)
     {
-        NSLog(@"Enter Background.. Keep on streamming.. ");
+        NSLog(@"Enter Background.. Local ");
+        _selectedChannel.stopStreaming = TRUE;
+        
+        [self stopStream];
+        self.imageViewVideo.backgroundColor = [UIColor blackColor];
     }
     else if (_selectedChannel.profile.minuteSinceLastComm <= 5) // Remote
     {
@@ -364,7 +365,6 @@
         [self performSelector:@selector(startStream)
                    withObject:nil
                    afterDelay:0.1];
-        
         [self performSelectorInBackground:@selector(getVQ_bg) withObject:nil];
         //[self performSelectorInBackground:@selector(getTriggerRecording_bg) withObject:nil];
     }
@@ -420,6 +420,9 @@
         self.activityIndicator.hidden = YES;
         [self.activityIndicator stopAnimating];
         self.backBarBtnItem.enabled = YES;
+        self.imageViewVideo.image = [UIImage imageNamed:@"camera_offline"];
+        self.viewCtrlButtons.hidden = YES;
+        self.imgViewDrectionPad.hidden= YES;
         
         NSLog(@"Camera maybe not available.");
     }
@@ -1247,7 +1250,7 @@
 - (BOOL)shouldAutorotate
 {
     NSLog(@"Should Auto Rotate");
-	return YES;
+	return !self.disableAutorotateFlag;
 }
 
 -(NSUInteger)supportedInterfaceOrientations
@@ -1304,11 +1307,14 @@
 //            [[NSBundle mainBundle] loadNibNamed:@"H264PlayerViewController_land"
 //                                          owner:self
 //                                        options:nil];
-            CGRect newRect = CGRectMake(0, 0, 480, 256);
+            CGRect newRect = CGRectMake(0, 32, 480, 256);
             self.imageViewVideo.frame = newRect;
             self.viewCtrlButtons.frame = CGRectMake(0, 106, _viewCtrlButtons.frame.size.width, _viewCtrlButtons.frame.size.height);
             self.imgViewDrectionPad.frame = CGRectMake(180, 180, _imgViewDrectionPad.frame.size.width, _imgViewDrectionPad.frame.size.height);
              self.activityIndicator.frame = CGRectMake(230, 118, _activityIndicator.frame.size.width, _activityIndicator.frame.size.height);
+            
+            self.view.backgroundColor = [UIColor blackColor];
+            [[UIApplication sharedApplication] setStatusBarHidden:YES];
             
             self.topToolbar.hidden = YES;
             self.imgViewDrectionPad.hidden = YES;
@@ -1332,10 +1338,13 @@
 //                                        options:nil];
             CGRect newRect = CGRectMake(0, 44, 320, 180);
             self.imageViewVideo.frame = newRect;
-            self.viewCtrlButtons.frame = CGRectMake(80, 232, _viewCtrlButtons.frame.size.width, _viewCtrlButtons.frame.size.height);
+            self.viewCtrlButtons.frame = CGRectMake(0, 224, _viewCtrlButtons.frame.size.width, _viewCtrlButtons.frame.size.height);
             self.imgViewDrectionPad.frame = CGRectMake(100, 340, _imgViewDrectionPad.frame.size.width, _imgViewDrectionPad.frame.size.height);
             self.activityIndicator.frame = CGRectMake(150, 124, _activityIndicator.frame.size.width, _activityIndicator.frame.size.height);
 
+            self.view.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"black_background"]];
+            [[UIApplication sharedApplication] setStatusBarHidden:NO];
+            
             self.topToolbar.hidden = NO;
             self.imgViewDrectionPad.hidden = NO;
             self.viewCtrlButtons.hidden = NO;

@@ -24,4 +24,6 @@
 -(NSString *) getAlertVal;
 -(NSString *) getAlertType;
 
+- (BOOL)containsClip: (NSString *)aString;
+
 @end

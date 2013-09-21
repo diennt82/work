@@ -85,6 +85,7 @@
                 NSArray * tokens =  [mac_type_timecode componentsSeparatedByString:@"_"];
                 
                 type = [tokens objectAtIndex:1];
+                type = [NSString stringWithFormat:@"%d", [[tokens objectAtIndex:1] intValue]];
                 NSLog(@"type: %@", type);
                 
             }
@@ -125,7 +126,7 @@
                 
                 NSArray * tokens =  [mac_type_timecode componentsSeparatedByString:@"_"];
                 
-                val = [tokens objectAtIndex:3];
+                val = [tokens objectAtIndex:2];
                 NSLog(@"val: %@", val);
                 
             }
@@ -181,6 +182,39 @@
             //NIL camera mac
         }
 
+    }
+    
+    return FALSE;
+}
+
+-(BOOL) containsClip: (NSString *)aString
+{
+    if (self.urlFile != nil )
+    {
+        if (self.mac_addr != nil)
+        {
+                    //one clip: http://s3.amazonaws.com/sm.wowza.content/44334C31A004/clips/44334C31A004_04_20130920084531940_00001.flv?AWSAccessKeyId=AKIAIDBFDZTAR2EB4KPQ&Expires=1379731654&Signature=F6grIs%2B91vMmSXC4OiRbqLOfbD8%3D
+            //playlistInfo.url: http://s3.amazonaws.com/sm.wowza.content/44334C31A004/clips/44334C31A004_04_20130920084531940_00001.flv?AWSAccessKeyId=AKIAIDBFDZTAR2EB4KPQ&Expires=1379731665&Signature=Zgji%2B3dZQyuXOYtyLa3G%2Ffk%2FPqI%3D
+            
+            NSRange expiresRange = [self.urlFile rangeOfString:@"&Expires="];
+            
+            NSString *substringUrlFile = @"";
+            
+            if (expiresRange.location != NSNotFound)
+            {
+                substringUrlFile = [self.urlFile substringToIndex:expiresRange.location];
+                
+                if([aString rangeOfString:substringUrlFile].location != NSNotFound)
+                {
+                    return TRUE;
+                }
+            }
+        }
+        else
+        {
+            //NIL camera mac
+        }
+        
     }
     
     return FALSE;
