@@ -211,7 +211,7 @@
 
 -(void) handeMessage:(int) msg ext1: (int) ext1 ext2:(int) ext2
 {
-    NSLog(@"Got msg: %d ext1:%d ext2:%d ", msg, ext1, ext2);
+    //NSLog(@"Got msg: %d ext1:%d ext2:%d ", msg, ext1, ext2);
     switch (msg)
     {
         case MEDIA_ERROR_SERVER_DIED:
