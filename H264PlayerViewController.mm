@@ -586,7 +586,7 @@
     if (selectedChannel.profile.isInLocal == TRUE)
     {
         NSLog(@"Enter Background.. Local ");
-        _selectedChannel.stopStreaming = TRUE;
+        selectedChannel.stopStreaming = TRUE;
         
         [self stopStream];
         self.imageViewVideo.backgroundColor = [UIColor blackColor];

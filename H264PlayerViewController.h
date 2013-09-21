@@ -55,6 +55,7 @@
 @property (retain, nonatomic) IBOutlet UIButton *triggerRecordingButton;
 @property (retain, nonatomic) IBOutlet UIImageView *imgViewDrectionPad;
 @property (retain, nonatomic) IBOutlet PlayListViewController *playlistViewController;
+@property (retain, nonatomic) IBOutlet UIActivityIndicatorView *activityIndicator;
 
 @property (retain, nonatomic) IBOutlet UIBarButtonItem *barBntItemReveal;
 
@@ -65,6 +66,7 @@
 @property (nonatomic, retain) HttpCommunication *htppComm;
 @property (nonatomic, retain) BMS_JSON_Communication *jsonComm;
 @property (nonatomic) BOOL recordingFlag;
+@property (nonatomic) BOOL disableAutorotateFlag;
 
 /* Direction */
 @property (nonatomic, retain) NSTimer * send_UD_dir_req_timer;
