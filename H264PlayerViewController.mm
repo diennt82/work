@@ -117,6 +117,7 @@
 
 - (void)viewWillDisappear:(BOOL)animated
 {
+    [super viewWillDisappear:animated];
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
 	[userDefaults removeObjectForKey:CAM_IN_VEW];
 	[userDefaults synchronize];
@@ -272,6 +273,8 @@
     		NSLog(@"Timeout While streaming");
             
     		//mHandler.dispatchMessage(Message.obtain(mHandler, Streamer.MSG_VIDEO_STREAM_HAS_STOPPED_UNEXPECTEDLY));
+            
+            NSLog(@"userWantToCancel: %d", userWantToCancel);
     		
             if (userWantToCancel == TRUE)
             {
@@ -639,6 +642,8 @@
 - (void)stopStreamWhenPushPlayback
 {
     self.h264StreamerIsInStopped = TRUE;
+    [self stopPeriodicBeep];
+    [self stopPeriodicPopup];
     [self stopStream];
 }
 
@@ -664,12 +669,16 @@
         NSLog(@"Enter Background.. Local ");
         selectedChannel.stopStreaming = TRUE;
         
+        [self stopPeriodicPopup];
+        
         [self stopStream];
         self.imageViewVideo.backgroundColor = [UIColor blackColor];
     }
     else if (selectedChannel.profile.minuteSinceLastComm <= 5) // Remote
     {
         selectedChannel.stopStreaming = TRUE;
+        
+        [self stopPeriodicPopup];
         
         [self stopStream];
         
@@ -713,21 +722,21 @@
     
     //Direction stuf
     /* Kick off the two timer for direction sensing */
-    _currentDirUD = DIRECTION_V_NON;
-    _lastDirUD    = DIRECTION_V_NON;
-    _delay_update_lastDir_count = 1;
+    currentDirUD = DIRECTION_V_NON;
+    lastDirUD    = DIRECTION_V_NON;
+    delay_update_lastDir_count = 1;
     
-    _send_UD_dir_req_timer = [NSTimer scheduledTimerWithTimeInterval:0.3
+    send_UD_dir_req_timer = [NSTimer scheduledTimerWithTimeInterval:0.3
                                                              target:self
                                                            selector:@selector(v_directional_change_callback:)
                                                            userInfo:nil
                                                             repeats:YES];
     
-    _currentDirLR = DIRECTION_H_NON;
-    _lastDirLR    = DIRECTION_H_NON;
-    _delay_update_lastDirLR_count = 1;
+    currentDirLR = DIRECTION_H_NON;
+    lastDirLR    = DIRECTION_H_NON;
+    delay_update_lastDirLR_count = 1;
     
-    _send_LR_dir_req_timer = [NSTimer scheduledTimerWithTimeInterval:0.3
+    send_LR_dir_req_timer = [NSTimer scheduledTimerWithTimeInterval:0.3
                                                              target:self
                                                            selector:@selector(h_directional_change_callback:)
                                                            userInfo:nil
@@ -814,6 +823,7 @@
         self.imageViewVideo.image = [UIImage imageNamed:@"camera_offline"];
         self.viewCtrlButtons.hidden = YES;
         self.imgViewDrectionPad.hidden= YES;
+        self.viewStopStreamingProgress.hidden = YES;
         
         NSLog(@"Camera maybe not available.");
     }
@@ -821,8 +831,17 @@
 
 -(void) startStream
 {
-    status_t status;
+    h264Streamer = new MediaPlayer(false);
     
+    h264StreamerListener = new H264PlayerListener(self);
+    h264Streamer->setListener(h264StreamerListener);
+    
+    [self performSelectorInBackground:@selector(startStream_bg) withObject:nil];
+}
+
+- (void)startStream_bg
+{
+    status_t status;
     
     //Store current SSID - to check later
 	NSString * streamingSSID = [CameraPassword fetchSSIDInfo];
@@ -845,30 +864,17 @@
 		[userDefaults setObject:streamingSSID forKey:_streamingSSID];
 	}
     
-    
     [userDefaults synchronize];
-
-    h264Streamer = new MediaPlayer(false);
-    
-    
-    h264StreamerListener = new H264PlayerListener(self);
-    h264Streamer->setListener(h264StreamerListener); 
-    
     
     //`NSLog(@"Play with TCP Option >>>>> ") ;
     //mp->setPlayOption(MEDIA_STREAM_RTSP_WITH_TCP);
     
-    NSString * url ;//=@"http://192.168.3.116:6667/blinkhd";
-    
-    url = self.stream_url;
-    
+    NSString * url = self.stream_url;
     
     do
     {
         
         status = h264Streamer->setDataSource([url UTF8String]);
-        
-        
         
         if (status != NO_ERROR) // NOT OK
         {
@@ -878,8 +884,6 @@
         }
         
         h264Streamer->setVideoSurface(self.imageViewVideo);
-        
-        
         
         status=  h264Streamer->prepare();
         
@@ -911,24 +915,21 @@
     {
         //Consider it's down and perform necessary action ..
         [self handleMessage:H264_STREAM_STARTED
-                      ext1:0
+                       ext1:0
                        ext2:0];
     }
     else
     {
         //Consider it's down and perform necessary action ..
         [self handleMessage:MEDIA_ERROR_SERVER_DIED
-                      ext1:0
-                      ext2:0];
+                       ext1:0
+                       ext2:0];
     }
-    
-    
-    return ;
-        
 }
 
 - (void)goBackToCameraList
 {
+    [self.view bringSubviewToFront:self.viewStopStreamingProgress];
     
     [self stopStream];
     
@@ -997,6 +998,8 @@
         }
         
     }
+    
+    //[self.activityStopStreamingProgress stopAnimating];
 }
 
 - (void)loadEarlierList
@@ -1045,8 +1048,8 @@
         }
     }
     
-    self.activityIndicator.hidden = YES;
-    [self.activityIndicator stopAnimating];
+    //self.activityIndicator.hidden = YES;
+    //[self.activityIndicator stopAnimating];
 }
 
 -(void) getVQ_bg
@@ -1253,13 +1256,13 @@
 	@synchronized(_imgViewDrectionPad)
 	{
         
-		if (_lastDirUD != DIRECTION_V_NON)
+		if (lastDirUD != DIRECTION_V_NON)
         {
-			[self send_UD_dir_to_rabot:_currentDirUD];
+			[self send_UD_dir_to_rabot:currentDirUD];
 		}
         
 		//Update directions
-		_lastDirUD = _currentDirUD;
+		lastDirUD = currentDirUD;
 	}
 }
 
@@ -1324,18 +1327,18 @@
     
     @synchronized(_imgViewDrectionPad)
 	{
-		if ( _lastDirLR != DIRECTION_H_NON)
+		if ( lastDirLR != DIRECTION_H_NON)
         {
 			need_to_send = TRUE;
 		}
         
         if (need_to_send)
         {
-            [self send_LR_dir_to_rabot: _currentDirLR];
+            [self send_LR_dir_to_rabot: currentDirLR];
         }
         
 		//Update directions
-		_lastDirLR = _currentDirLR;
+		lastDirLR = currentDirLR;
 	}
 }
 
@@ -1417,12 +1420,12 @@
     
 	@synchronized(_imgViewDrectionPad)
 	{
-		_currentDirUD = newDirection;
+		currentDirUD = newDirection;
 	}
     
 	//Adjust the fire date to now
 	NSDate * now = [NSDate date];
-	[_send_UD_dir_req_timer setFireDate:now ];    
+	[send_UD_dir_req_timer setFireDate:now ];    
 }
 
 - (void) updateVerticalDirection:(int)dir inStep: (uint) step withAnimation:(BOOL)animate
@@ -1447,7 +1450,7 @@
     
 	@synchronized(_imgViewDrectionPad)
 	{
-		_currentDirUD = newDirection;
+		currentDirUD = newDirection;
 	}
 }
 
@@ -1455,7 +1458,7 @@
 {
 	@synchronized(_imgViewDrectionPad)
 	{
-		_currentDirUD = DIRECTION_V_NON;
+		currentDirUD = DIRECTION_V_NON;
 	}
 }
 
@@ -1463,7 +1466,7 @@
 {
 	@synchronized(_imgViewDrectionPad)
 	{
-		_currentDirLR = DIRECTION_H_NON;
+		currentDirLR = DIRECTION_H_NON;
 	}
 }
 
@@ -1489,12 +1492,12 @@
     
 	@synchronized(_imgViewDrectionPad)
 	{
-		_currentDirLR = newDirection;
+		currentDirLR= newDirection;
 	}
     
 	//Adjust the fire date to now
 	NSDate * now = [NSDate date];
-	[_send_LR_dir_req_timer setFireDate:now ];
+	[send_LR_dir_req_timer setFireDate:now ];
 }
 
 - (void) updateHorizontalDirection:(int)dir inStep: (uint) step withAnimation:(BOOL) animate
@@ -1519,7 +1522,7 @@
     
 	@synchronized(_imgViewDrectionPad)
 	{
-		_currentDirLR = newDirection;
+		currentDirLR = newDirection;
 	}
 }
 
@@ -1796,7 +1799,7 @@
             self.imageViewVideo.frame = newRect;
             self.viewCtrlButtons.frame = CGRectMake(0, 106, _viewCtrlButtons.frame.size.width, _viewCtrlButtons.frame.size.height);
             self.imgViewDrectionPad.frame = CGRectMake(180, 180, _imgViewDrectionPad.frame.size.width, _imgViewDrectionPad.frame.size.height);
-             self.activityIndicator.frame = CGRectMake(230, 118, _activityIndicator.frame.size.width, _activityIndicator.frame.size.height);
+             self.activityIndicator.frame = CGRectMake(221, 141, _activityIndicator.frame.size.width, _activityIndicator.frame.size.height);
             
             self.view.backgroundColor = [UIColor blackColor];
             [[UIApplication sharedApplication] setStatusBarHidden:YES];
@@ -1825,7 +1828,7 @@
             self.imageViewVideo.frame = newRect;
             self.viewCtrlButtons.frame = CGRectMake(0, 224, _viewCtrlButtons.frame.size.width, _viewCtrlButtons.frame.size.height);
             self.imgViewDrectionPad.frame = CGRectMake(100, 340, _imgViewDrectionPad.frame.size.width, _imgViewDrectionPad.frame.size.height);
-            self.activityIndicator.frame = CGRectMake(150, 124, _activityIndicator.frame.size.width, _activityIndicator.frame.size.height);
+            self.activityIndicator.frame = CGRectMake(141, 124, _activityIndicator.frame.size.width, _activityIndicator.frame.size.height);
 
             self.view.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"black_background"]];
             [[UIApplication sharedApplication] setStatusBarHidden:NO];
@@ -2095,6 +2098,9 @@
 		switch(buttonIndex) {
 			case 0: //Stop monitoring
                 
+                [self.activityIndicator stopAnimating];
+                [self.view bringSubviewToFront:self.viewStopStreamingProgress];
+                
                 userWantToCancel =TRUE;
                 [self stopPeriodicPopup];
                 
@@ -2179,24 +2185,24 @@
     //[self performSelectorOnMainThread:@selector(showAlertView:) withObject:msg waitUntilDone:YES];
 }
 
-- (void)showAlertView: (NSString *)msg
-{
-    NSString * cancel = NSLocalizedStringWithDefaultValue(@"Cancel",nil, [NSBundle mainBundle],
-                                                          @"Cancel", nil);
-    
-    
-	alert = [[UIAlertView alloc]
-             initWithTitle:@"" //empty on purpose
-             message:msg
-             delegate:self
-             cancelButtonTitle:cancel
-             otherButtonTitles:nil];
-    
-	alert.tag = LOCAL_VIDEO_STOPPED_UNEXPECTEDLY;
-	[alert show];
-    
-	[alert retain];
-}
+//- (void)showAlertView: (NSString *)msg
+//{
+//    NSString * cancel = NSLocalizedStringWithDefaultValue(@"Cancel",nil, [NSBundle mainBundle],
+//                                                          @"Cancel", nil);
+//    
+//    
+//	alert = [[UIAlertView alloc]
+//             initWithTitle:@"" //empty on purpose
+//             message:msg
+//             delegate:self
+//             cancelButtonTitle:cancel
+//             otherButtonTitles:nil];
+//    
+//	alert.tag = LOCAL_VIDEO_STOPPED_UNEXPECTEDLY;
+//	[alert show];
+//    
+//	[alert retain];
+//}
 
 -(void) stopPeriodicPopup
 {
@@ -2278,10 +2284,12 @@
     [_hqViewButton release];
     [_triggerRecordingButton release];
     [_imgViewDrectionPad release];
-    [_send_UD_dir_req_timer invalidate];
-    [_send_LR_dir_req_timer invalidate];
+    [send_UD_dir_req_timer invalidate];
+    [send_LR_dir_req_timer invalidate];
     [_playlistViewController release];
     [_activityIndicator release];
+    [_viewStopStreamingProgress release];
+    [_activityStopStreamingProgress release];
     [super dealloc];
 }
 

@@ -200,6 +200,7 @@
         if (self.playlistDelegate != nil)
         {
             [self.playlistDelegate stopStreamWhenPushPlayback];
+            self.playlistDelegate = nil;
         }
         
         [self.navController pushViewController:playbackViewController animated:NO];

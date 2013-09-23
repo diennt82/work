@@ -86,6 +86,8 @@
 @property (retain, nonatomic) IBOutlet UIImageView *imgViewDrectionPad;
 @property (retain, nonatomic) IBOutlet PlayListViewController *playlistViewController;
 @property (retain, nonatomic) IBOutlet UIActivityIndicatorView *activityIndicator;
+@property (retain, nonatomic) IBOutlet UIView *viewStopStreamingProgress;
+@property (retain, nonatomic) IBOutlet UIActivityIndicatorView *activityStopStreamingProgress;
 
 @property (retain, nonatomic) IBOutlet UIBarButtonItem *barBntItemReveal;
 
@@ -102,13 +104,13 @@
 
 
 /* Direction */
-@property (nonatomic, retain) NSTimer * send_UD_dir_req_timer;
-@property (nonatomic, retain) NSTimer * send_LR_dir_req_timer;
-/* Added to support direction update */
-@property (nonatomic) int currentDirUD, lastDirUD;
-@property (nonatomic) int delay_update_lastDir_count;
-@property (nonatomic) int currentDirLR,lastDirLR;
-@property (nonatomic) int delay_update_lastDirLR_count;
+//@property (nonatomic, retain) NSTimer * send_UD_dir_req_timer;
+//@property (nonatomic, retain) NSTimer * send_LR_dir_req_timer;
+///* Added to support direction update */
+//@property (nonatomic) int currentDirUD, lastDirUD;
+//@property (nonatomic) int delay_update_lastDir_count;
+//@property (nonatomic) int currentDirLR,lastDirLR;
+//@property (nonatomic) int delay_update_lastDirLR_count;
 
 #if 1 //Needed or not ??
 

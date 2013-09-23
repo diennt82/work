@@ -275,20 +275,20 @@
 
 -(void) startStream
 {    
-    status_t status;
-    
     playbackStreamer = new MediaPlayer(true);
     playbackStreamer->setListener(listener);
     
+    [self performSelectorInBackground:@selector(startStream_bg) withObject:nil];
+}
+
+- (void)startStream_bg
+{
+    status_t status;
     
-    NSString * url =@"";
-    
-    url = self.urlVideo;
-    
+    NSString * url = self.urlVideo;
     
     status = playbackStreamer->setDataSource([url UTF8String]);
     printf("setDataSource return: %d\n", status);
-    
     
     if (status != NO_ERROR) // NOT OK
     {
@@ -296,7 +296,7 @@
         printf("setDataSource error: %d\n", status);
         return;
     }
-
+    
     playbackStreamer->setVideoSurface(self.imageVideo);
     
     NSLog(@"Prepare the player");
