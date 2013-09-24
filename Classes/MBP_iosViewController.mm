@@ -1092,8 +1092,28 @@ return self;
     
     if (latestCamAlert != nil && [latestCamAlert.cameraMacNoColon  isEqualToString:camAlert.cameraMacNoColon])
     {
-        NSLog(@"Same cam alert is currenlty stored.Silencely return, don't popup");
-        return FALSE;
+        NSLog(@"Same cam alert is currenlty stored.");
+        
+        if (pushAlert != nil &&
+            [pushAlert isVisible])
+        {
+            NSLog(@"Dialog exist, don't popup");
+            
+            @synchronized(self)
+            {
+                
+                //keep the reference here
+                if (latestCamAlert != nil)
+                {
+                    [latestCamAlert release];
+                    latestCamAlert = nil;
+                }
+                latestCamAlert = camAlert;
+                
+            }
+            
+             return FALSE;
+        }
     }
     
       
@@ -1411,7 +1431,7 @@ return self;
                             if ([obj2 isKindOfClass:[PlaybackViewController class]])
                             {
                                 PlaybackViewController *playbackViewController = (PlaybackViewController *)obj2;
-                                [playbackViewController stopStream];
+                                [playbackViewController stopStream:nil];
                             }
                         }
                         
