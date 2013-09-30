@@ -718,6 +718,7 @@
     self.activityIndicator.hidden = NO;
     [self.view bringSubviewToFront:self.activityIndicator];
     [self.activityIndicator startAnimating];
+    self.viewStopStreamingProgress.hidden = YES;
     
     NSLog(@"self.segCtrl.selectedSegmentIndex = %d", self.segCtrl.selectedSegmentIndex);
     
@@ -939,6 +940,7 @@
 
 - (void)goBackToCameraList
 {
+    self.viewStopStreamingProgress.hidden = NO;
     [self.view bringSubviewToFront:self.viewStopStreamingProgress];
     
     [self stopStream];
@@ -1751,6 +1753,12 @@
 - (BOOL)shouldAutorotate
 {
     NSLog(@"Should Auto Rotate");
+    
+    if (userWantToCancel == TRUE)
+    {
+        return NO;
+    }
+    
 	return !self.disableAutorotateFlag;
 }
 
@@ -1876,6 +1884,10 @@
             self.imageViewVideo.frame = newRect;
             
             self.activityIndicator.frame = CGRectMake(274, 150, _activityIndicator.frame.size.width, _activityIndicator.frame.size.height);
+        }
+        else if (orientation == UIInterfaceOrientationPortrait || orientation == UIInterfaceOrientationPortraitUpsideDown)
+        {
+            self.viewStopStreamingProgress.frame = CGRectMake(0, 0, 320, 568);
         }
     }
 }
@@ -2102,6 +2114,7 @@
 			case 0: //Stop monitoring
                 
                 [self.activityIndicator stopAnimating];
+                self.viewStopStreamingProgress.hidden = NO;
                 [self.view bringSubviewToFront:self.viewStopStreamingProgress];
                 
                 userWantToCancel =TRUE;
