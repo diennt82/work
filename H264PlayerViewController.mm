@@ -766,7 +766,7 @@
                    withObject:nil
                    afterDelay:0.1];
         [self performSelectorInBackground:@selector(getVQ_bg) withObject:nil];
-        //[self performSelectorInBackground:@selector(getTriggerRecording_bg) withObject:nil];
+        [self performSelectorInBackground:@selector(getTriggerRecording_bg) withObject:nil];
     }
     else if (self.selectedChannel.profile.minuteSinceLastComm <= 5)
     {
@@ -806,7 +806,7 @@
                            withObject:nil
                            afterDelay:0.1];
                 [self performSelectorInBackground:@selector(getVQ_bg) withObject:nil];
-                //[self performSelectorInBackground:@selector(getTriggerRecording_bg) withObject:nil];
+                [self performSelectorInBackground:@selector(getTriggerRecording_bg) withObject:nil];
             }
         }
         else
@@ -1091,16 +1091,16 @@
 	if (responseDict != nil)
 	{
         
-//        NSInteger status = [[responseDict objectForKey:@"status"] intValue];
-//		if (status == 200)
-//		{
-//			NSString *bodyKey = [[[responseDict objectForKey:@"data"] objectForKey:@"device_response"] objectForKey:@"body"];
-//            NSString *modeVideo = [[bodyKey componentsSeparatedByString:@": "] objectAtIndex:1];
-//			
-//            [self performSelectorOnMainThread:@selector(setVQForground:)
-//                                   withObject:modeVideo waitUntilDone:NO];
-//		}
-        [self performSelectorOnMainThread:@selector(setVQ_fg:) withObject:responseDict waitUntilDone:NO];
+        NSInteger status = [[responseDict objectForKey:@"status"] intValue];
+		if (status == 200)
+		{
+			NSString *bodyKey = [[[responseDict objectForKey:@"data"] objectForKey:@"device_response"] objectForKey:@"body"];
+            NSString *modeVideo = [[bodyKey componentsSeparatedByString:@": "] objectAtIndex:1];
+			
+            [self performSelectorOnMainThread:@selector(setVQForground:)
+                                   withObject:modeVideo waitUntilDone:NO];
+		}
+        //[self performSelectorOnMainThread:@selector(setVQ_fg:) withObject:responseDict waitUntilDone:NO];
 	}
     
     NSLog(@"getVQ_bg responseDict = %@", responseDict);
@@ -1216,30 +1216,33 @@
 	}
 }
 
--(void) setTriggerRecording_fg: (NSDictionary *)responseData
+-(void) setTriggerRecording_fg: (NSDictionary *)responseDict
 {
+    NSLog(@"setTriggerRecording_fg responseData = %@", responseDict);
     
-    NSLog(@"setTriggerRecording_fg responseData = %@", responseData);
-    
-    NSInteger status = [[responseData objectForKey:@"status"] intValue];
-    
+    NSInteger status = [[responseDict objectForKey:@"status"] intValue];
     
     if (status == 200) // ok
     {
-        if (self.recordingFlag == TRUE)
+        NSString *bodyKey = [[[responseDict objectForKey:@"data"] objectForKey:@"device_response"] objectForKey:@"body"];
+        NSString *modeRecording = [[bodyKey componentsSeparatedByString:@": "] objectAtIndex:1];
+        
+        if ([modeRecording isEqualToString:@"on"])
         {
+            self.recordingFlag = TRUE;
             [self.triggerRecordingButton setImage:[UIImage imageNamed:@"bb_rec_icon.png" ]
                                          forState:UIControlStateNormal];
         }
-        else
+        else if([modeRecording isEqualToString:@"off"])
         {
+            self.recordingFlag = FALSE;
             [self.triggerRecordingButton setImage:[UIImage imageNamed:@"bb_rec_icon_d.png" ]
                                          forState:UIControlStateNormal];
         }
     }
     else
     {
-        self.recordingFlag = !self.recordingFlag;
+        //self.recordingFlag = !self.recordingFlag;
     }
 }
 
@@ -1979,44 +1982,34 @@
     
 	if (responseData != nil)
 	{
-		[self performSelectorOnMainThread:@selector(setVQ_fg:)
-                               withObject:responseData waitUntilDone:NO];
+        NSInteger status = [[responseData objectForKey:@"status"] intValue];
+        if (status == 200)
+        {
+            [self performSelectorOnMainThread:@selector(setVQ_fg:)
+                                   withObject:row waitUntilDone:NO];
+        }
+		else
+        {
+            NSLog(@"set resolution: status = %d", [[responseData objectForKey:@"stats"] intValue]);
+        }
 	}
 }
 
--(void) setVQ_fg: (NSDictionary *)responseData
+-(void) setVQ_fg: (NSNumber *)row
 {
-    
-    NSLog(@"setVQ_fg responseData = %@", responseData);
-    
-    NSInteger status = [[responseData objectForKey:@"status"] intValue];
-    
-    
-    if (status == 200) // ok
+    switch ([row intValue])
     {
-        NSString *bodyKey = [[[responseData objectForKey:@"data"] objectForKey:@"device_response"] objectForKey:@"body"];
-        
-        NSRange range = [bodyKey rangeOfString:@": "];
-        
-        if (range.location != NSNotFound)
-        {
-            NSString *modeVideo = [[bodyKey componentsSeparatedByString:@": "] objectAtIndex:1];
-            
-            if ([modeVideo isEqualToString:@"480p"])
-            {
-                [self.hqViewButton setImage:[UIImage imageNamed:@"hq_d.png" ]
-                                   forState:UIControlStateNormal];
-            }
-            else if([modeVideo isEqualToString:@"720p_10"] || [modeVideo isEqualToString:@"720p_15"])
-            {
-                [self.hqViewButton setImage:[UIImage imageNamed:@"hq.png" ]
-                                   forState:UIControlStateNormal];
-            }
-        }
-    }
-    else
-    {
-        NSLog(@"status = %d", [[responseData objectForKey:@"stats"] intValue]);
+        case 0:
+            [self.hqViewButton setImage:[UIImage imageNamed:@"hq_d.png" ]
+                               forState:UIControlStateNormal];
+            break;
+        case 1:
+        case 2:
+            [self.hqViewButton setImage:[UIImage imageNamed:@"hq.png" ]
+                               forState:UIControlStateNormal];
+            break;
+        default:
+            break;
     }
 }
 
@@ -2306,8 +2299,6 @@
     [self setSelectedChannel:nil];
     [self setPlaylistArray:nil];
     [self setHttpComm:nil];
-    [self setSend_UD_dir_req_timer:nil];
-    [self setSend_LR_dir_req_timer:nil];
     
     [super viewDidUnload];
 }
