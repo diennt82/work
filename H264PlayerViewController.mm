@@ -1027,11 +1027,11 @@
     {
         if ([[responseDict objectForKey:@"status"] intValue] == 200)
         {
-            self.eventArr = [[responseDict objectForKey:@"data"] objectForKey:@"events"];
+            NSArray *eventArr = [[responseDict objectForKey:@"data"] objectForKey:@"events"];
             
             self.playlistViewController.playlistArray = [NSMutableArray array];
             
-            for (NSDictionary *playlist in self.eventArr) {
+            for (NSDictionary *playlist in eventArr) {
                 NSDictionary *clipInfo = [[playlist objectForKey:@"playlist"] objectAtIndex:0];
                 
                 PlaylistInfo *playlistInfo = [[[PlaylistInfo alloc] init] autorelease];
@@ -1242,7 +1242,7 @@
     }
     else
     {
-        //self.recordingFlag = !self.recordingFlag;
+        self.recordingFlag = !self.recordingFlag;
     }
 }
 

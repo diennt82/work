@@ -94,7 +94,6 @@
 @property (nonatomic, retain) HttpCommunication* httpComm;
 @property (nonatomic, retain) NSMutableArray *playlistArray;
 @property (nonatomic) BOOL h264StreamerIsInStopped;
-@property (nonatomic, retain) NSArray *eventArr;
 @property (nonatomic, retain) HttpCommunication *htppComm;
 @property (nonatomic, retain) BMS_JSON_Communication *jsonComm;
 @property (nonatomic) BOOL recordingFlag;
