@@ -651,6 +651,11 @@
 
 - (void)handleBecomeActive
 {
+    if (userWantToCancel == TRUE)
+    {
+        return;
+    }
+    
     if(selectedChannel.profile.isInLocal == TRUE)
     {
         NSLog(@"Become ACTIVE _  .. Local ");
@@ -664,6 +669,11 @@
 
 - (void)handleEnteredBackground
 {
+    if (userWantToCancel == TRUE)
+    {
+        return;
+    }
+    
     if (selectedChannel.profile.isInLocal == TRUE)
     {
         NSLog(@"Enter Background.. Local ");
