@@ -100,6 +100,7 @@
 @property (nonatomic) BOOL disableAutorotateFlag;
 
 @property (nonatomic) BOOL askForFWUpgradeOnce;
+@property (nonatomic) int currentMediaStatus;
 
 
 /* Direction */

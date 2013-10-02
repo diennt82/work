@@ -223,15 +223,20 @@
 {
     int msg = [numberMsg integerValue];
     
+    NSLog(@"currentMediaStatus: %d", msg);
+    
     switch (msg)
     {
-        case STREAM_STARTED:
+        case MEDIA_INFO_HAS_FIRST_IMAGE:
         {
-
+            NSLog(@"[MEDIA_PLAYER_HAS_FIRST_IMAGE]");
+            
+            self.currentMediaStatus = msg;
+            
             self.activityIndicator.hidden = YES;
             [self.activityIndicator stopAnimating];
             self.backBarBtnItem.enabled = YES;
-
+            
             
             [self stopPeriodicPopup];
             
@@ -239,7 +244,7 @@
             if (userWantToCancel == TRUE)
             {
                 
-                NSLog(@"*[STREAM_STARTED] *** USER want to cancel **.. cancel after .1 sec...");
+                NSLog(@"*[MEDIA_PLAYER_HAS_FIRST_IMAGE] *** USER want to cancel **.. cancel after .1 sec...");
                 self.selectedChannel.stopStreaming = TRUE;
                 [self performSelector:@selector(goBackToCameraList)
                            withObject:nil
@@ -254,7 +259,7 @@
                     self.askForFWUpgradeOnce = NO;
                 }
                 
-                //NSLog(@"Got STREAM_STARTED") ;
+                //NSLog(@"Got MEDIA_PLAYER_HAS_FIRST_IMAGE") ;
                 
                 if ( self.selectedChannel.profile.isInLocal == NO)
                 {
@@ -264,12 +269,28 @@
                                                                         withValue:nil];
                 }
             }
-            break;
         }
+            break;
+            
+        case MEDIA_PLAYER_STARTED:
+        {
+            self.currentMediaStatus = msg;
+            
+            if (userWantToCancel == TRUE)
+            {
+                self.selectedChannel.stopStreaming = TRUE;
+                [self performSelector:@selector(goBackToCameraList)
+                           withObject:nil
+                           afterDelay:0.1];
+            }
+        }
+            break;
 
         case MEDIA_ERROR_SERVER_DIED:
     	case MEDIA_ERROR_TIMEOUT_WHILE_STREAMING:
         {
+            self.currentMediaStatus = msg;
+            
     		NSLog(@"Timeout While streaming");
             
     		//mHandler.dispatchMessage(Message.obtain(mHandler, Streamer.MSG_VIDEO_STREAM_HAS_STOPPED_UNEXPECTEDLY));
@@ -706,8 +727,8 @@
     
     //set Button handler
     self.backBarBtnItem.target = self;
-    self.backBarBtnItem.action = @selector(goBackToCameraList);
-    self.backBarBtnItem.enabled = NO;
+    self.backBarBtnItem.action = @selector(prepareGoBackToCameraList);
+    //self.backBarBtnItem.enabled = NO;
 
 //SLIDE MENU
 //    self.backBarBtnItem.target = self.stackViewController;
@@ -776,8 +797,8 @@
         [self performSelector:@selector(startStream)
                    withObject:nil
                    afterDelay:0.1];
-        [self performSelectorInBackground:@selector(getVQ_bg) withObject:nil];
-        [self performSelectorInBackground:@selector(getTriggerRecording_bg) withObject:nil];
+        //[self performSelectorInBackground:@selector(getVQ_bg) withObject:nil];
+        //[self performSelectorInBackground:@selector(getTriggerRecording_bg) withObject:nil];
     }
     else if (self.selectedChannel.profile.minuteSinceLastComm <= 5)
     {
@@ -816,8 +837,8 @@
                 [self performSelector:@selector(startStream)
                            withObject:nil
                            afterDelay:0.1];
-                [self performSelectorInBackground:@selector(getVQ_bg) withObject:nil];
-                [self performSelectorInBackground:@selector(getTriggerRecording_bg) withObject:nil];
+                //[self performSelectorInBackground:@selector(getVQ_bg) withObject:nil];
+                //[self performSelectorInBackground:@selector(getTriggerRecording_bg) withObject:nil];
             }
         }
         else
@@ -922,14 +943,7 @@
     while (false);
     
     
-    if (status == NO_ERROR)
-    {
-        //Consider it's down and perform necessary action ..
-        [self handleMessage:H264_STREAM_STARTED
-                       ext1:0
-                       ext2:0];
-    }
-    else
+    if (status != NO_ERROR)
     {
         //Consider it's down and perform necessary action ..
         [self handleMessage:MEDIA_ERROR_SERVER_DIED
@@ -938,11 +952,28 @@
     }
 }
 
-- (void)goBackToCameraList
+- (void)prepareGoBackToCameraList
 {
     self.viewStopStreamingProgress.hidden = NO;
     [self.view bringSubviewToFront:self.viewStopStreamingProgress];
     
+    self.activityIndicator.hidden = YES;
+    [self.activityIndicator stopAnimating];
+    
+    NSLog(@"self.currentMediaStatus: %d", self.currentMediaStatus);
+    
+    if (self.currentMediaStatus == MEDIA_INFO_HAS_FIRST_IMAGE)
+    {
+        [self goBackToCameraList];
+    }
+    else
+    {
+        userWantToCancel = TRUE;
+    }
+}
+
+- (void)goBackToCameraList
+{
     [self stopStream];
     
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
@@ -1173,7 +1204,7 @@
         [self performSelectorOnMainThread:@selector(setTriggerRecording_fg:) withObject:responseDict waitUntilDone:NO];
 	}
     
-    NSLog(@"getVQ_bg responseDict = %@", responseDict);
+    NSLog(@"getTriggerRecording_bg responseDict = %@", responseDict);
 }
 
 - (void)setTriggerRecording_bg:(NSString *) modeRecording
@@ -1863,7 +1894,7 @@
     [self checkIphone5Size:orientation];
 
     self.backBarBtnItem.target = self;
-    self.backBarBtnItem.action = @selector(goBackToCameraList);
+    self.backBarBtnItem.action = @selector(prepareGoBackToCameraList);
 // SLIDE MENU
 //    self.backBarBtnItem.target = self.stackViewController;
 //    self.backBarBtnItem.action = @selector(toggleLeftViewController);
@@ -2041,6 +2072,11 @@
 
 - (void) scan_for_missing_camera
 {
+    if (userWantToCancel == TRUE)
+    {
+        return;
+    }
+    
     NSLog(@"scanning for : %@", self.selectedChannel.profile.mac_address);
     
 	scanner = [[ScanForCamera alloc] initWithNotifier:self];

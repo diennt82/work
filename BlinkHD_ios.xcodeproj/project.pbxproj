@@ -201,6 +201,7 @@
 		978B25C217E1B4AB006FC224 /* BMMenuViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 978B25C017E1B4AB006FC224 /* BMMenuViewController.xib */; };
 		978F090117DEFD670053972F /* no_img_available.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = 978F090017DEFD650053972F /* no_img_available.jpeg */; };
 		978F090317DF06C80053972F /* PlaylistCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 978F090217DF06C70053972F /* PlaylistCell.xib */; };
+		97919DB817FAC15D00A9EDA7 /* H264MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 97919DB717FAC15D00A9EDA7 /* H264MediaPlayer.framework */; };
 		9792B9AD17E2CC5A009C9F5D /* H264PlayerViewController_ipad_.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9792B9AC17E2CC5A009C9F5D /* H264PlayerViewController_ipad_.xib */; };
 		9792B9AF17E2D1F6009C9F5D /* H264PlayerViewController_ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9792B9AE17E2D1F6009C9F5D /* H264PlayerViewController_ipad.xib */; };
 		9792B9B317E2F8E9009C9F5D /* bb_rec_icon_d.png in Resources */ = {isa = PBXBuildFile; fileRef = 9792B9B017E2F8E9009C9F5D /* bb_rec_icon_d.png */; };
@@ -251,7 +252,6 @@
 		A10EC12017E0692700EA4F9D /* libGoogleAnalytics_debug.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A10EC11E17E0692700EA4F9D /* libGoogleAnalytics_debug.a */; };
 		A10EC12117E0692700EA4F9D /* libGoogleAnalytics.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A10EC11F17E0692700EA4F9D /* libGoogleAnalytics.a */; };
 		A11E8C1317E2DB7E00915F84 /* libstdc++.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = A11E8C1217E2DB7D00915F84 /* libstdc++.dylib */; };
-		A11E8C3317E2F82F00915F84 /* H264MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A11E8C3217E2F82F00915F84 /* H264MediaPlayer.framework */; };
 		A1A5188117E07DCB00E1DFC2 /* MonitorCommunication.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A1BB7B9417E0250000463A07 /* MonitorCommunication.framework */; };
 		A1BB7B9F17E02C5C00463A07 /* UdtSocketWrapper.mm in Sources */ = {isa = PBXBuildFile; fileRef = A1BB7B9E17E02C5C00463A07 /* UdtSocketWrapper.mm */; };
 		A1E32FAD17E9899800504538 /* H264PlayerListener.mm in Sources */ = {isa = PBXBuildFile; fileRef = A1E32FAB17E9899800504538 /* H264PlayerListener.mm */; };
@@ -616,6 +616,7 @@
 		978B25C017E1B4AB006FC224 /* BMMenuViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = BMMenuViewController.xib; sourceTree = "<group>"; };
 		978F090017DEFD650053972F /* no_img_available.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = no_img_available.jpeg; sourceTree = "<group>"; };
 		978F090217DF06C70053972F /* PlaylistCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PlaylistCell.xib; sourceTree = "<group>"; };
+		97919DB717FAC15D00A9EDA7 /* H264MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = H264MediaPlayer.framework; path = "../ios-frameworks/H264MediaPlayer.framework"; sourceTree = "<group>"; };
 		9792B9AC17E2CC5A009C9F5D /* H264PlayerViewController_ipad_.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = H264PlayerViewController_ipad_.xib; sourceTree = "<group>"; };
 		9792B9AE17E2D1F6009C9F5D /* H264PlayerViewController_ipad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = H264PlayerViewController_ipad.xib; sourceTree = "<group>"; };
 		9792B9B017E2F8E9009C9F5D /* bb_rec_icon_d.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bb_rec_icon_d.png; sourceTree = "<group>"; };
@@ -689,7 +690,6 @@
 		A10EC11E17E0692700EA4F9D /* libGoogleAnalytics_debug.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libGoogleAnalytics_debug.a; path = "../ios-frameworks/Google Analytics Library/libGoogleAnalytics_debug.a"; sourceTree = "<group>"; };
 		A10EC11F17E0692700EA4F9D /* libGoogleAnalytics.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libGoogleAnalytics.a; path = "../ios-frameworks/Google Analytics Library/libGoogleAnalytics.a"; sourceTree = "<group>"; };
 		A11E8C1217E2DB7D00915F84 /* libstdc++.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libstdc++.dylib"; path = "usr/lib/libstdc++.dylib"; sourceTree = SDKROOT; };
-		A11E8C3217E2F82F00915F84 /* H264MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = H264MediaPlayer.framework; path = "../ios-frameworks/H264MediaPlayer.framework"; sourceTree = "<group>"; };
 		A123DC9717E9A748006CC6FD /* PlayerCallbackHandler.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PlayerCallbackHandler.h; sourceTree = "<group>"; };
 		A1BB7B9417E0250000463A07 /* MonitorCommunication.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MonitorCommunication.framework; path = "../ios-frameworks/MonitorCommunication.framework"; sourceTree = "<group>"; };
 		A1BB7B9E17E02C5C00463A07 /* UdtSocketWrapper.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = UdtSocketWrapper.mm; sourceTree = "<group>"; };
@@ -1543,8 +1543,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				97919DB817FAC15D00A9EDA7 /* H264MediaPlayer.framework in Frameworks */,
 				A1A5188117E07DCB00E1DFC2 /* MonitorCommunication.framework in Frameworks */,
-				A11E8C3317E2F82F00915F84 /* H264MediaPlayer.framework in Frameworks */,
 				A11E8C1317E2DB7E00915F84 /* libstdc++.dylib in Frameworks */,
 				A10EC12017E0692700EA4F9D /* libGoogleAnalytics_debug.a in Frameworks */,
 				A10EC12117E0692700EA4F9D /* libGoogleAnalytics.a in Frameworks */,
@@ -1810,7 +1810,7 @@
 		29B97314FDCFA39411CA2CEA /* CustomTemplate */ = {
 			isa = PBXGroup;
 			children = (
-				A11E8C3217E2F82F00915F84 /* H264MediaPlayer.framework */,
+				97919DB717FAC15D00A9EDA7 /* H264MediaPlayer.framework */,
 				A11E8C1217E2DB7D00915F84 /* libstdc++.dylib */,
 				BC883A6C1798EB81001D02D8 /* CoreData.framework */,
 				38962C8417695CB20016AE16 /* libTestFlight.a */,
@@ -3894,6 +3894,7 @@
 					"\\\"$(SRCROOT)/../ios-frameworks\\\"",
 					"/Users/JasonLee/work/ios-frameworks",
 					"\"$(SRCROOT)/../ios-frameworks\"",
+					"\"$(SRCROOT)/../LibH264Player/DerivedData/H264MediaPlayer/Build/Products/Release-iphoneos\"",
 				);
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
@@ -3954,6 +3955,7 @@
 					"\\\"$(SRCROOT)/../ios-frameworks\\\"",
 					"/Users/JasonLee/work/ios-frameworks",
 					"\"$(SRCROOT)/../ios-frameworks\"",
+					"\"$(SRCROOT)/../LibH264Player/DerivedData/H264MediaPlayer/Build/Products/Release-iphoneos\"",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = BlinkHD_ios_Prefix.pch;
@@ -4035,6 +4037,7 @@
 					"\\\"$(SRCROOT)/../ios-frameworks\\\"",
 					"/Users/JasonLee/work/ios-frameworks",
 					"\"$(SRCROOT)/../ios-frameworks\"",
+					"\"$(SRCROOT)/../LibH264Player/DerivedData/H264MediaPlayer/Build/Products/Release-iphoneos\"",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = BlinkHD_ios_Prefix.pch;
