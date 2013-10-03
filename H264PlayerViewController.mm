@@ -268,6 +268,9 @@
                                                                         withLabel:@"Start Stream Success"
                                                                         withValue:nil];
                 }
+                
+                [self performSelectorInBackground:@selector(getVQ_bg) withObject:nil];
+                [self performSelectorInBackground:@selector(getTriggerRecording_bg) withObject:nil];
             }
         }
             break;
@@ -280,6 +283,14 @@
             {
                 self.selectedChannel.stopStreaming = TRUE;
                 [self performSelector:@selector(goBackToCameraList)
+                           withObject:nil
+                           afterDelay:0.1];
+            }
+            
+            if (self.h264StreamerIsInStopped == TRUE)
+            {
+                self.selectedChannel.stopStreaming = TRUE;
+                [self performSelector:@selector(stopStream)
                            withObject:nil
                            afterDelay:0.1];
             }
@@ -307,6 +318,15 @@
                            afterDelay:0.1];
                 return;
 
+            }
+            
+            if (self.h264StreamerIsInStopped == TRUE)
+            {
+                self.selectedChannel.stopStreaming = TRUE;
+                [self performSelector:@selector(stopStream)
+                           withObject:nil
+                           afterDelay:0.1];
+                return;
             }
             
     		/* TODO:
@@ -665,7 +685,13 @@
     self.h264StreamerIsInStopped = TRUE;
     [self stopPeriodicBeep];
     [self stopPeriodicPopup];
-    [self stopStream];
+    
+    if (self.currentMediaStatus == MEDIA_INFO_HAS_FIRST_IMAGE ||
+        self.currentMediaStatus == MEDIA_PLAYER_STARTED ||
+        (self.currentMediaStatus == 0 && h264Streamer == NULL)) // Media player haven't start yet.
+    {
+        [self stopStream];
+    }
 }
 
 #pragma mark - Method
@@ -700,16 +726,19 @@
         NSLog(@"Enter Background.. Local ");
         selectedChannel.stopStreaming = TRUE;
         
-        [self stopPeriodicPopup];
+        //[self stopPeriodicPopup];
         
         [self stopStream];
+        
+        self.h264StreamerIsInStopped = TRUE;
+        
         self.imageViewVideo.backgroundColor = [UIColor blackColor];
     }
     else if (selectedChannel.profile.minuteSinceLastComm <= 5) // Remote
     {
         selectedChannel.stopStreaming = TRUE;
         
-        [self stopPeriodicPopup];
+        //[self stopPeriodicPopup];
         
         [self stopStream];
         
@@ -942,8 +971,14 @@
     }
     while (false);
     
+    if (status == NO_ERROR)
+    {
+        [self handleMessage:MEDIA_PLAYER_STARTED
+                       ext1:0
+                       ext2:0];
+    }
     
-    if (status != NO_ERROR)
+    else
     {
         //Consider it's down and perform necessary action ..
         [self handleMessage:MEDIA_ERROR_SERVER_DIED
@@ -962,7 +997,9 @@
     
     NSLog(@"self.currentMediaStatus: %d", self.currentMediaStatus);
     
-    if (self.currentMediaStatus == MEDIA_INFO_HAS_FIRST_IMAGE)
+    if (self.currentMediaStatus == MEDIA_INFO_HAS_FIRST_IMAGE ||
+        self.currentMediaStatus == MEDIA_PLAYER_STARTED ||
+        (self.currentMediaStatus == 0 && h264Streamer == NULL)) // Media player haven't start yet.
     {
         [self goBackToCameraList];
     }
@@ -1025,6 +1062,11 @@
         if (h264Streamer != NULL)
         {
             if (h264Streamer->isPlaying())
+            {
+                h264Streamer->suspend();
+                h264Streamer->stop();
+            }
+            else
             {
                 h264Streamer->suspend();
                 h264Streamer->stop();
@@ -2157,6 +2199,8 @@
                 [self stopPeriodicPopup];
                 
                 self.selectedChannel.stopStreaming = TRUE;
+                
+                [self goBackToCameraList];
 
                 break;
 			case 1: //continue -- streamer is connecting so we dont do anything here.
