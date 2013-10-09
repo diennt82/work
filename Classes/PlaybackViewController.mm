@@ -294,6 +294,9 @@
     {
         
         printf("setDataSource error: %d\n", status);
+        [self handleMessage:MEDIA_ERROR_SERVER_DIED
+                       ext1:0
+                       ext2:0];
         return;
     }
     
@@ -325,12 +328,24 @@
     {
         
         printf("start() error: %d\n", status);
+        [self handleMessage:MEDIA_ERROR_SERVER_DIED
+                       ext1:0
+                       ext2:0];
         return;
+    }
+    
+    if (status == NO_ERROR)
+    {
+        [self handleMessage:MEDIA_PLAYER_STARTED
+                       ext1:0
+                       ext2:0];
     }
 }
 
 - (void)goBackToPlayList
 {
+    self.userWantToBack = TRUE;
+    
     if (playbackStreamer != NULL)
     {
         [self stopStream:nil];
@@ -349,12 +364,23 @@
 {
     NSLog(@"Stop stream start ");
 
-    if (playbackStreamer != NULL && playbackStreamer->isPlaying())
+    if (playbackStreamer != NULL)
     {
-        playbackStreamer->suspend();
-        playbackStreamer->stop();
-        delete playbackStreamer;
-        playbackStreamer = NULL;     
+        NSLog(@"Stop stream playbackStreamer != NULL");
+        if(playbackStreamer->isPlaying())
+        {
+            playbackStreamer->suspend();
+            playbackStreamer->stop();
+            delete playbackStreamer;
+            playbackStreamer = NULL;
+        }
+        else // set Data source failed!
+        {
+            playbackStreamer->suspend();
+            playbackStreamer->stop();
+            delete playbackStreamer;
+            playbackStreamer = NULL;
+        }
     }
     
   
@@ -376,11 +402,15 @@
     
     switch (msg)
     {
+        case MEDIA_ERROR_SERVER_DIED:
         case MEDIA_PLAYBACK_COMPLETE:
             //DONE Playback
             //clean up
             NSLog(@"Got playback complete>>>>  OUT ");
-            [self goBackToPlayList];
+            if (self.userWantToBack == FALSE)
+            {
+                [self goBackToPlayList];
+            }
             
             break;
             

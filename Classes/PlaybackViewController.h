@@ -44,6 +44,7 @@
 @property (nonatomic, retain) NSString *camera_mac;
 
 @property (nonatomic, retain) NSString *urlVideo;
+@property (nonatomic) BOOL userWantToBack;
 
 //- (void)stopStream;
 
