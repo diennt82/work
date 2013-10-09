@@ -42,7 +42,7 @@
 #define H264_SWITCHING_TO_RELAY2_SERVER     11
 
 @interface H264PlayerViewController: UIViewController
-<UITableViewDataSource, UITableViewDelegate, UIPickerViewDelegate, UIPickerViewDataSource, PlaylistDelegate,PlayerCallbackHandler,ScanForCameraNotifier>
+<UIPickerViewDelegate, UIPickerViewDataSource, PlaylistDelegate,PlayerCallbackHandler,ScanForCameraNotifier>
 {
     MediaPlayer* h264Streamer;
     

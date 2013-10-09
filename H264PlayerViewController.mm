@@ -80,9 +80,6 @@
 //                                      style:UIBarButtonItemStyleBordered
 //                                     target:nil
 //                                     action:nil] autorelease];
-    self.tableViewPlaylist.delegate = self;
-    self.tableViewPlaylist.dataSource = self;
-    self.tableViewPlaylist.rowHeight = 68;
     
     self.pickerHQOptions.delegate = self;
     self.pickerHQOptions.dataSource = self;
@@ -692,6 +689,10 @@
     {
         [self stopStream];
     }
+    else
+    {
+        h264Streamer->suspend();
+    }
 }
 
 #pragma mark - Method
@@ -728,7 +729,16 @@
         
         //[self stopPeriodicPopup];
         
-        [self stopStream];
+        if (self.currentMediaStatus == MEDIA_INFO_HAS_FIRST_IMAGE ||
+            self.currentMediaStatus == MEDIA_PLAYER_STARTED ||
+            (self.currentMediaStatus == 0 && h264Streamer == NULL)) // Media player haven't start yet.
+        {
+            [self stopStream];
+        }
+        else
+        {
+            h264Streamer->suspend();
+        }
         
         self.h264StreamerIsInStopped = TRUE;
         
@@ -892,6 +902,8 @@
 
 -(void) startStream
 {
+    self.h264StreamerIsInStopped = FALSE;
+    
     h264Streamer = new MediaPlayer(false);
     
     h264StreamerListener = new H264PlayerListener(self);
@@ -1005,6 +1017,7 @@
     }
     else
     {
+        h264Streamer->suspend();
         userWantToCancel = TRUE;
     }
 }
