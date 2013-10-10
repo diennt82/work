@@ -17,7 +17,7 @@
 @synthesize camera_mac;
 @synthesize  clip_info;
 
-@synthesize  imageVideo, topToolbar,backBarBtnItem, progressView, urlVideo;
+@synthesize  imageVideo, urlVideo;//, topToolbar,backBarBtnItem, progressView;
 @synthesize list_refresher;
 
 
@@ -480,11 +480,7 @@
         if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
         {
             CGRect screenBounds = [[UIScreen mainScreen] bounds];
-            
             CGRect newRect = CGRectMake(0, 96, 1024, 576);
-            
-            NSLog(@"width: %f", screenBounds.size.width);
-            NSLog(@"heigth: %f", screenBounds.size.height);
             
             if (screenBounds.size.height == 1920)
             {
@@ -492,20 +488,21 @@
             }
             
             self.imageVideo.frame = newRect;
+            self.activityIndicator.frame = CGRectMake(493, 365, _activityIndicator.frame.size.width, _activityIndicator.frame.size.height);
+            
+            self.view.backgroundColor = [UIColor blackColor];
+            [[UIApplication sharedApplication] setStatusBarHidden:YES];
+            self.navigationController.navigationBar.hidden = YES;
         }
         else
         {
-            
-            //            [[NSBundle mainBundle] loadNibNamed:@"H264PlayerViewController_land"
-            //                                          owner:self
-            //                                        options:nil];
             CGRect newRect = CGRectMake(0, 32, 480, 256);
             self.imageVideo.frame = newRect;
+            self.activityIndicator.frame = CGRectMake(221, 141, _activityIndicator.frame.size.width, _activityIndicator.frame.size.height);
             
             self.view.backgroundColor = [UIColor blackColor];
             [[UIApplication sharedApplication] setStatusBarHidden:YES];
             
-            self.topToolbar.hidden = YES;
             self.navigationController.navigationBar.hidden = YES;
         }
 	}
@@ -523,19 +520,21 @@
             }
             
             self.imageVideo.frame = newRect;
+            self.activityIndicator.frame = CGRectMake(365, 241, _activityIndicator.frame.size.width, _activityIndicator.frame.size.height);
+            
+            [[UIApplication sharedApplication] setStatusBarHidden:NO];
+            self.navigationController.navigationBar.hidden = NO;
         }
         else
         {
-            //            [[NSBundle mainBundle] loadNibNamed:@"H264PlayerViewController"
-            //                                          owner:self
-            //                                        options:nil];
             CGRect newRect = CGRectMake(0, 44, 320, 180);
             self.imageVideo.frame = newRect;
             
             self.view.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"black_background"]];
+            self.activityIndicator.frame = CGRectMake(141, 124, _activityIndicator.frame.size.width, _activityIndicator.frame.size.height);
+            
             [[UIApplication sharedApplication] setStatusBarHidden:NO];
             
-            self.topToolbar.hidden = NO;
             self.navigationController.navigationBar.hidden = NO;
         }
 	}
@@ -558,8 +557,8 @@
         if (orientation == UIInterfaceOrientationLandscapeLeft || orientation == UIInterfaceOrientationLandscapeRight)
         {
             NSLog(@"iphone5 SHift right...");
-            //            CGAffineTransform translate = CGAffineTransformMakeTranslation(44, 0);
-            //            self.imageViewVideo.transform = translate;
+//            CGAffineTransform translate = CGAffineTransformMakeTranslation(44, 0);
+//            self.imageViewVideo.transform = translate;
             CGRect newRect = CGRectMake(0, 0, 568, 320);
             self.imageVideo.frame = newRect;
         }

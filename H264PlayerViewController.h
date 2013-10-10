@@ -78,7 +78,7 @@
 
 @property (nonatomic, retain) NSTimer * alertTimer; 
 
-@property (retain, nonatomic) IBOutlet UITableView *tableViewPlaylist;
+//@property (retain, nonatomic) IBOutlet UITableView *tableViewPlaylist;
 @property (retain, nonatomic) IBOutlet UIView *viewCtrlButtons;
 @property (retain, nonatomic) IBOutlet UIPickerView *pickerHQOptions;
 @property (retain, nonatomic) IBOutlet UIButton *hqViewButton;

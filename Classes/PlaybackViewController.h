@@ -32,9 +32,9 @@
 }
 
 @property (retain, nonatomic) IBOutlet UIImageView *imageVideo;
-@property (retain, nonatomic) IBOutlet UIToolbar *topToolbar;
-@property (retain, nonatomic) IBOutlet UIBarButtonItem *backBarBtnItem;
-@property (retain, nonatomic) IBOutlet UIView *progressView;
+//@property (retain, nonatomic) IBOutlet UIToolbar *topToolbar;
+//@property (retain, nonatomic) IBOutlet UIBarButtonItem *backBarBtnItem;
+//@property (retain, nonatomic) IBOutlet UIView *progressView;
 @property (retain, nonatomic) IBOutlet UIActivityIndicatorView *activityIndicator;
 
 

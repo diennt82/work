@@ -2277,7 +2277,7 @@
         return NO;
     }
     
-	return !self.disableAutorotateFlag;
+	return YES;//!self.disableAutorotateFlag;
 }
 
 -(NSUInteger)supportedInterfaceOrientations
@@ -2339,6 +2339,10 @@
             
             self.activityIndicator.frame = CGRectMake(493, 365, _activityIndicator.frame.size.width, _activityIndicator.frame.size.height);
             
+            CGRect tableViewFrame = self.playlistViewController.tableView.frame;
+            
+            self.playlistViewController.tableView.frame = CGRectMake(0, 0, tableViewFrame.size.width, tableViewFrame.size.height);
+            
             self.view.backgroundColor = [UIColor blackColor];
             [[UIApplication sharedApplication] setStatusBarHidden:YES];
             
@@ -2348,10 +2352,6 @@
         }
         else
         {
-            
-//            [[NSBundle mainBundle] loadNibNamed:@"H264PlayerViewController_land"
-//                                          owner:self
-//                                        options:nil];
             CGRect newRect = CGRectMake(0, 32, 480, 256);
             self.imageViewVideo.frame = newRect;
             self.viewCtrlButtons.frame = CGRectMake(0, 106, _viewCtrlButtons.frame.size.width, _viewCtrlButtons.frame.size.height);
@@ -2364,7 +2364,11 @@
             self.topToolbar.hidden = YES;
             self.imgViewDrectionPad.hidden = YES;
             self.viewCtrlButtons.hidden = YES;
-        }        
+        }
+        
+        CGRect tableViewFrame = self.playlistViewController.tableView.frame;
+        self.playlistViewController.tableView.frame = CGRectMake(0, 0, tableViewFrame.size.width, tableViewFrame.size.height);
+        //self.disableAutorotateFlag = NO;
 	}
 	else if (orientation == UIInterfaceOrientationPortrait || orientation == UIInterfaceOrientationPortraitUpsideDown)
 	{
@@ -2386,6 +2390,7 @@
             
             self.view.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"black_background"]];
             self.viewStopStreamingProgress.hidden = YES;
+            self.activityIndicator.frame = CGRectMake(365, 241, _activityIndicator.frame.size.width, _activityIndicator.frame.size.height);
             
             self.topToolbar.hidden = NO;
             self.imgViewDrectionPad.hidden = NO;
@@ -2409,6 +2414,9 @@
             self.imgViewDrectionPad.hidden = NO;
             self.viewCtrlButtons.hidden = NO;
         }
+        
+        CGRect tableViewFrame = self.playlistViewController.tableView.frame;
+        self.playlistViewController.tableView.frame = CGRectMake(0, 44, tableViewFrame.size.width, tableViewFrame.size.height);
 	}
     
     [self checkIphone5Size:orientation];
@@ -2859,7 +2867,7 @@
     [_progressView release];
     [_cameraNameBarBtnItem release];
     [_segCtrl release];
-    [_tableViewPlaylist release];
+    //[_tableViewPlaylist release];
     
 
     [selectedChannel release];
