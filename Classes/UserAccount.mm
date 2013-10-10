@@ -884,7 +884,7 @@
 #if JSON_FLAG
 - (void)sync_online_and_offline_data:(NSMutableArray *) online_profiles
 {
-    NSLog(@"aaaaaaaa");
+    //NSLog(@"aaaaaaaa");
     SetupData * offline_data = nil;
 	offline_data = [[SetupData alloc] init];
 	

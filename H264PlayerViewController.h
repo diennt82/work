@@ -103,6 +103,7 @@
 @property (nonatomic) int currentMediaStatus;
 @property (nonatomic) BOOL iFrameOnlyFlag;
 @property (nonatomic,retain) StunClient * client; 
+@property (nonatomic, retain) UIImage *imgBackground;
 
 
 /* Direction */

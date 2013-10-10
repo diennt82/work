@@ -42,9 +42,13 @@
                                     options:nil];
     }
     
+    UIGraphicsBeginImageContext(self.view.frame.size);
+    [[UIImage imageNamed:@"black_background"] drawInRect:self.view.bounds];
+    self.imgBackground = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    
     self.navigationController.navigationBarHidden = NO;
     
-    self.view.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"black_background"]];
     self.activityIndicator.hidden = NO;
     [self.activityIndicator startAnimating];
     
@@ -452,8 +456,8 @@
     
     
     CGRect rect = [[UIApplication sharedApplication] statusBarFrame]; // Get status bar frame dimensions
-    NSLog(@"1 Statusbar frame: %1.0f, %1.0f, %1.0f, %1.0f", rect.origin.x,
-          rect.origin.y, rect.size.width, rect.size.height);
+//    NSLog(@"1 Statusbar frame: %1.0f, %1.0f, %1.0f, %1.0f", rect.origin.x,
+//          rect.origin.y, rect.size.width, rect.size.height);
     //HACK : incase hotspot is turned on
     if (rect.size.height>21 &&  rect.size.height<50)
     {
@@ -489,22 +493,18 @@
             
             self.imageVideo.frame = newRect;
             self.activityIndicator.frame = CGRectMake(493, 365, _activityIndicator.frame.size.width, _activityIndicator.frame.size.height);
-            
-            self.view.backgroundColor = [UIColor blackColor];
-            [[UIApplication sharedApplication] setStatusBarHidden:YES];
-            self.navigationController.navigationBar.hidden = YES;
         }
         else
         {
             CGRect newRect = CGRectMake(0, 32, 480, 256);
             self.imageVideo.frame = newRect;
             self.activityIndicator.frame = CGRectMake(221, 141, _activityIndicator.frame.size.width, _activityIndicator.frame.size.height);
-            
-            self.view.backgroundColor = [UIColor blackColor];
-            [[UIApplication sharedApplication] setStatusBarHidden:YES];
-            
-            self.navigationController.navigationBar.hidden = YES;
         }
+        
+        self.view.backgroundColor = [UIColor blackColor];
+        [[UIApplication sharedApplication] setStatusBarHidden:YES];
+        
+        self.navigationController.navigationBar.hidden = YES;
 	}
 	else if (orientation == UIInterfaceOrientationPortrait || orientation == UIInterfaceOrientationPortraitUpsideDown)
 	{
@@ -521,22 +521,20 @@
             
             self.imageVideo.frame = newRect;
             self.activityIndicator.frame = CGRectMake(365, 241, _activityIndicator.frame.size.width, _activityIndicator.frame.size.height);
-            
-            [[UIApplication sharedApplication] setStatusBarHidden:NO];
-            self.navigationController.navigationBar.hidden = NO;
         }
         else
         {
             CGRect newRect = CGRectMake(0, 44, 320, 180);
             self.imageVideo.frame = newRect;
             
-            self.view.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"black_background"]];
             self.activityIndicator.frame = CGRectMake(141, 124, _activityIndicator.frame.size.width, _activityIndicator.frame.size.height);
-            
-            [[UIApplication sharedApplication] setStatusBarHidden:NO];
-            
-            self.navigationController.navigationBar.hidden = NO;
         }
+        
+        [[UIApplication sharedApplication] setStatusBarHidden:NO];
+        
+        self.navigationController.navigationBar.hidden = NO;
+        
+        self.view.backgroundColor = [UIColor colorWithPatternImage:self.imgBackground];
 	}
     
     [self checkIphone5Size:orientation];
@@ -576,7 +574,7 @@
 - (void)dealloc {
 
     [imageVideo release];
-    //[topToolbar release];
+    [_imgBackground release];
     //[backBarBtnItem release];
     //[progressView release];
     

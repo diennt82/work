@@ -56,6 +56,11 @@
                                         options:nil];
     }
     
+    UIGraphicsBeginImageContext(self.view.frame.size);
+    [[UIImage imageNamed:@"black_background"] drawInRect:self.view.bounds];
+    self.imgBackground = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    
 //    NSString * msg = NSLocalizedStringWithDefaultValue(@"Back",nil, [NSBundle mainBundle],
 //                                                       @"Back", nil);
 //    UIBarButtonItem *revealIcon = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"reveal-icon"]
@@ -2295,8 +2300,8 @@
     
     
     CGRect rect = [[UIApplication sharedApplication] statusBarFrame]; // Get status bar frame dimensions
-    NSLog(@"1 Statusbar frame: %1.0f, %1.0f, %1.0f, %1.0f", rect.origin.x,
-          rect.origin.y, rect.size.width, rect.size.height);
+//    NSLog(@"1 Statusbar frame: %1.0f, %1.0f, %1.0f, %1.0f", rect.origin.x,
+//          rect.origin.y, rect.size.width, rect.size.height);
     //HACK : incase hotspot is turned on
     if (rect.size.height>21 &&  rect.size.height<50)
     {
@@ -2338,17 +2343,6 @@
             self.imageViewVideo.frame = newRect;
             
             self.activityIndicator.frame = CGRectMake(493, 365, _activityIndicator.frame.size.width, _activityIndicator.frame.size.height);
-            
-            CGRect tableViewFrame = self.playlistViewController.tableView.frame;
-            
-            self.playlistViewController.tableView.frame = CGRectMake(0, 0, tableViewFrame.size.width, tableViewFrame.size.height);
-            
-            self.view.backgroundColor = [UIColor blackColor];
-            [[UIApplication sharedApplication] setStatusBarHidden:YES];
-            
-            self.topToolbar.hidden = YES;
-            self.imgViewDrectionPad.hidden = YES;
-            self.viewCtrlButtons.hidden = YES;
         }
         else
         {
@@ -2357,14 +2351,14 @@
             self.viewCtrlButtons.frame = CGRectMake(0, 106, _viewCtrlButtons.frame.size.width, _viewCtrlButtons.frame.size.height);
             self.imgViewDrectionPad.frame = CGRectMake(180, 180, _imgViewDrectionPad.frame.size.width, _imgViewDrectionPad.frame.size.height);
              self.activityIndicator.frame = CGRectMake(221, 141, _activityIndicator.frame.size.width, _activityIndicator.frame.size.height);
-            
-            self.view.backgroundColor = [UIColor blackColor];
-            [[UIApplication sharedApplication] setStatusBarHidden:YES];
-            
-            self.topToolbar.hidden = YES;
-            self.imgViewDrectionPad.hidden = YES;
-            self.viewCtrlButtons.hidden = YES;
         }
+        
+        self.view.backgroundColor = [UIColor blackColor];
+        [[UIApplication sharedApplication] setStatusBarHidden:YES];
+        
+        self.topToolbar.hidden = YES;
+        self.imgViewDrectionPad.hidden = YES;
+        self.viewCtrlButtons.hidden = YES;
         
         CGRect tableViewFrame = self.playlistViewController.tableView.frame;
         self.playlistViewController.tableView.frame = CGRectMake(0, 0, tableViewFrame.size.width, tableViewFrame.size.height);
@@ -2386,15 +2380,8 @@
             
             self.imageViewVideo.frame = newRect;
             
-            [[UIApplication sharedApplication] setStatusBarHidden:NO];
-            
-            self.view.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"black_background"]];
             self.viewStopStreamingProgress.hidden = YES;
             self.activityIndicator.frame = CGRectMake(365, 241, _activityIndicator.frame.size.width, _activityIndicator.frame.size.height);
-            
-            self.topToolbar.hidden = NO;
-            self.imgViewDrectionPad.hidden = NO;
-            self.viewCtrlButtons.hidden = NO;
         }
         else
         {
@@ -2406,14 +2393,15 @@
             self.viewCtrlButtons.frame = CGRectMake(0, 224, _viewCtrlButtons.frame.size.width, _viewCtrlButtons.frame.size.height);
             self.imgViewDrectionPad.frame = CGRectMake(100, 340, _imgViewDrectionPad.frame.size.width, _imgViewDrectionPad.frame.size.height);
             self.activityIndicator.frame = CGRectMake(141, 124, _activityIndicator.frame.size.width, _activityIndicator.frame.size.height);
-
-            self.view.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"black_background"]];
-            [[UIApplication sharedApplication] setStatusBarHidden:NO];
-            
-            self.topToolbar.hidden = NO;
-            self.imgViewDrectionPad.hidden = NO;
-            self.viewCtrlButtons.hidden = NO;
         }
+        
+        [[UIApplication sharedApplication] setStatusBarHidden:NO];
+        
+        self.topToolbar.hidden = NO;
+        self.imgViewDrectionPad.hidden = NO;
+        self.viewCtrlButtons.hidden = NO;
+        
+        self.view.backgroundColor = [UIColor colorWithPatternImage:self.imgBackground];
         
         CGRect tableViewFrame = self.playlistViewController.tableView.frame;
         self.playlistViewController.tableView.frame = CGRectMake(0, 44, tableViewFrame.size.width, tableViewFrame.size.height);
@@ -2886,6 +2874,7 @@
     [_activityIndicator release];
     [_viewStopStreamingProgress release];
     [_activityStopStreamingProgress release];
+    [_imgBackground release];
     [super dealloc];
 }
 
@@ -2896,7 +2885,7 @@
     [self setProgressView:nil];
     [self setCameraNameBarBtnItem:nil];
     [self setSegCtrl:nil];
-    [self setTableViewPlaylist:nil];
+    //[self setTableViewPlaylist:nil];
     
 
     [self setSelectedChannel:nil];

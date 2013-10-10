@@ -39,7 +39,6 @@
 
 - (BOOL) shouldAutorotate
 {
-
     UIViewController * vc = [self.viewControllers objectAtIndex:(self.viewControllers.count -1)];
     
     return [vc shouldAutorotate];

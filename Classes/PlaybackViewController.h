@@ -45,6 +45,7 @@
 
 @property (nonatomic, retain) NSString *urlVideo;
 @property (nonatomic) BOOL userWantToBack;
+@property (nonatomic, retain) UIImage *imgBackground;
 
 //- (void)stopStream;
 
