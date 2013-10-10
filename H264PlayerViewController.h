@@ -101,6 +101,7 @@
 
 @property (nonatomic) BOOL askForFWUpgradeOnce;
 @property (nonatomic) int currentMediaStatus;
+@property (nonatomic) BOOL iFrameOnlyFlag;
 
 
 /* Direction */

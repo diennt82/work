@@ -49,6 +49,13 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
     
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+    {
+            [[NSBundle mainBundle] loadNibNamed:@"H264PlayerViewController_ipad"
+                                          owner:self
+                                        options:nil];
+    }
+    
 //    NSString * msg = NSLocalizedStringWithDefaultValue(@"Back",nil, [NSBundle mainBundle],
 //                                                       @"Back", nil);
 //    UIBarButtonItem *revealIcon = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"reveal-icon"]
@@ -172,6 +179,22 @@
 
 - (IBAction)iFrameOnlyPressAction:(id)sender
 {
+    if (h264Streamer != NULL)
+    {
+        if (h264Streamer->isPlaying())
+        {
+            self.iFrameOnlyFlag = ! self.iFrameOnlyFlag;
+            
+            if(self.iFrameOnlyFlag == TRUE)
+            {
+                h264Streamer->setPlayOption(MEDIA_STREAM_IFRAME_ONLY);
+            }
+            else
+            {
+                h264Streamer->setPlayOption(MEDIA_STREAM_ALL_FRAME);
+            }
+        }
+    }
 }
 
 - (IBAction)recordingPressAction:(id)sender
@@ -220,7 +243,7 @@
 {
     int msg = [numberMsg integerValue];
     
-    NSLog(@"currentMediaStatus: %d", msg);
+    //NSLog(@"currentMediaStatus: %d", msg);
     
     switch (msg)
     {
@@ -1890,11 +1913,29 @@
 	{
         if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
         {
-//            [[NSBundle mainBundle] loadNibNamed:@"H264PlayerViewController_land_ipad"
-//                                          owner:self
-//                                        options:nil];
-            CGRect newRect = CGRectMake(0, 44, 1024, 576);
+
+            CGRect screenBounds = [[UIScreen mainScreen] bounds];
+            
+            CGRect newRect = CGRectMake(0, 96, 1024, 576);
+            
+            NSLog(@"width: %f", screenBounds.size.width);
+            NSLog(@"heigth: %f", screenBounds.size.height);
+            
+            if (screenBounds.size.height == 1920)
+            {
+                newRect = CGRectMake(0, 304, 1920, 1080);
+            }
+            
             self.imageViewVideo.frame = newRect;
+            
+            self.activityIndicator.frame = CGRectMake(493, 365, _activityIndicator.frame.size.width, _activityIndicator.frame.size.height);
+            
+            self.view.backgroundColor = [UIColor blackColor];
+            [[UIApplication sharedApplication] setStatusBarHidden:YES];
+            
+            self.topToolbar.hidden = YES;
+            self.imgViewDrectionPad.hidden = YES;
+            self.viewCtrlButtons.hidden = YES;
         }
         else
         {
@@ -1920,11 +1961,26 @@
 	{
         if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
         {
-//            [[NSBundle mainBundle] loadNibNamed:@"H264PlayerViewController_ipad"
-//                                          owner:self
-//                                        options:nil];
+            CGRect screenBounds = [[UIScreen mainScreen] bounds];
+            
             CGRect newRect = CGRectMake(0, 44, 768, 432);
+            
+            if (screenBounds.size.height == 1920)
+            {
+                newRect = CGRectMake(0, 304, 1200, 675);
+                self.viewCtrlButtons.frame = CGRectMake(0, 476, _viewCtrlButtons.frame.size.width + 432, _viewCtrlButtons.frame.size.height);
+            }
+            
             self.imageViewVideo.frame = newRect;
+            
+            [[UIApplication sharedApplication] setStatusBarHidden:NO];
+            
+            self.view.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"black_background"]];
+            self.viewStopStreamingProgress.hidden = YES;
+            
+            self.topToolbar.hidden = NO;
+            self.imgViewDrectionPad.hidden = NO;
+            self.viewCtrlButtons.hidden = NO;
         }
         else
         {

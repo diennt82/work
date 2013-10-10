@@ -35,6 +35,13 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
     
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+    {
+        [[NSBundle mainBundle] loadNibNamed:@"PlaybackViewController_ipad"
+                                      owner:self
+                                    options:nil];
+    }
+    
     self.navigationController.navigationBarHidden = NO;
     
     self.view.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"black_background"]];
@@ -469,10 +476,18 @@
 	{
         if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
         {
-            //            [[NSBundle mainBundle] loadNibNamed:@"H264PlayerViewController_land_ipad"
-            //                                          owner:self
-            //                                        options:nil];
-            CGRect newRect = CGRectMake(0, 44, 1024, 576);
+            CGRect screenBounds = [[UIScreen mainScreen] bounds];
+            
+            CGRect newRect = CGRectMake(0, 96, 1024, 576);
+            
+            NSLog(@"width: %f", screenBounds.size.width);
+            NSLog(@"heigth: %f", screenBounds.size.height);
+            
+            if (screenBounds.size.height == 1920)
+            {
+                newRect = CGRectMake(0, 304, 1920, 1080);
+            }
+            
             self.imageVideo.frame = newRect;
         }
         else
@@ -495,10 +510,15 @@
 	{
         if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
         {
-            //            [[NSBundle mainBundle] loadNibNamed:@"H264PlayerViewController_ipad"
-            //                                          owner:self
-            //                                        options:nil];
+            CGRect screenBounds = [[UIScreen mainScreen] bounds];
+            
             CGRect newRect = CGRectMake(0, 44, 768, 432);
+            
+            if (screenBounds.size.height == 1920)
+            {
+                newRect = CGRectMake(0, 304, 1200, 675);
+            }
+            
             self.imageVideo.frame = newRect;
         }
         else
