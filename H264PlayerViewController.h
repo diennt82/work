@@ -42,7 +42,7 @@
 #define H264_SWITCHING_TO_RELAY2_SERVER     11
 
 @interface H264PlayerViewController: UIViewController
-<UIPickerViewDelegate, UIPickerViewDataSource, PlaylistDelegate,PlayerCallbackHandler,ScanForCameraNotifier>
+<UIPickerViewDelegate, UIPickerViewDataSource, PlaylistDelegate,PlayerCallbackHandler,ScanForCameraNotifier, StunClientDelegate>
 {
     MediaPlayer* h264Streamer;
     
@@ -102,6 +102,7 @@
 @property (nonatomic) BOOL askForFWUpgradeOnce;
 @property (nonatomic) int currentMediaStatus;
 @property (nonatomic) BOOL iFrameOnlyFlag;
+@property (nonatomic,retain) StunClient * client; 
 
 
 /* Direction */
@@ -122,7 +123,7 @@
 @property (retain, nonatomic) IBOutlet UIView *progressView;
 
 @property (retain, nonatomic) IBOutlet UISegmentedControl *segCtrl;
-@property (nonatomic, retain) NSString* stream_url;
+
 @property (nonatomic, retain) CamChannel *selectedChannel;
 
 

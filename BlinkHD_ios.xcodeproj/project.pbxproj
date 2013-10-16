@@ -241,18 +241,25 @@
 		97F0F168143C45FA0076B749 /* MBP_Streamer.mm in Sources */ = {isa = PBXBuildFile; fileRef = 97F0F167143C45FA0076B749 /* MBP_Streamer.mm */; };
 		97F5531517BDD3AF00024017 /* MBPNavController.m in Sources */ = {isa = PBXBuildFile; fileRef = 97F5531417BDD3AF00024017 /* MBPNavController.m */; };
 		97FE7D1015998C0B000826F0 /* RemoteConnection.mm in Sources */ = {isa = PBXBuildFile; fileRef = 97FE7D0F15998C0B000826F0 /* RemoteConnection.mm */; };
-		A10EC11317E0677C00EA4F9D /* libavcodec.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A10EC10C17E0677C00EA4F9D /* libavcodec.a */; };
-		A10EC11417E0677C00EA4F9D /* libavdevice.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A10EC10D17E0677C00EA4F9D /* libavdevice.a */; };
-		A10EC11517E0677C00EA4F9D /* libavfilter.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A10EC10E17E0677C00EA4F9D /* libavfilter.a */; };
-		A10EC11617E0677C00EA4F9D /* libavformat.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A10EC10F17E0677C00EA4F9D /* libavformat.a */; };
-		A10EC11717E0677C00EA4F9D /* libavutil.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A10EC11017E0677C00EA4F9D /* libavutil.a */; };
-		A10EC11817E0677C00EA4F9D /* libswresample.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A10EC11117E0677C00EA4F9D /* libswresample.a */; };
-		A10EC11917E0677C00EA4F9D /* libswscale.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A10EC11217E0677C00EA4F9D /* libswscale.a */; };
 		A10EC11B17E0681D00EA4F9D /* libUdtLib.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A10EC11A17E0681C00EA4F9D /* libUdtLib.a */; };
-		A10EC12017E0692700EA4F9D /* libGoogleAnalytics_debug.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A10EC11E17E0692700EA4F9D /* libGoogleAnalytics_debug.a */; };
-		A10EC12117E0692700EA4F9D /* libGoogleAnalytics.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A10EC11F17E0692700EA4F9D /* libGoogleAnalytics.a */; };
+		A1176B74180D1DD9000B7527 /* stream480p.sdp in Resources */ = {isa = PBXBuildFile; fileRef = A1176B72180D1DD9000B7527 /* stream480p.sdp */; };
+		A1176B75180D1DD9000B7527 /* stream720p.sdp in Resources */ = {isa = PBXBuildFile; fileRef = A1176B73180D1DD9000B7527 /* stream720p.sdp */; };
 		A11E8C1317E2DB7E00915F84 /* libstdc++.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = A11E8C1217E2DB7D00915F84 /* libstdc++.dylib */; };
 		A1A5188117E07DCB00E1DFC2 /* MonitorCommunication.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A1BB7B9417E0250000463A07 /* MonitorCommunication.framework */; };
+		A1A98E8F180BF5AA00C8EBD3 /* client_main.c in Sources */ = {isa = PBXBuildFile; fileRef = A1A98E8B180BF5AA00C8EBD3 /* client_main.c */; };
+		A1A98E90180BF5AA00C8EBD3 /* StunClient.m in Sources */ = {isa = PBXBuildFile; fileRef = A1A98E8E180BF5AA00C8EBD3 /* StunClient.m */; };
+		A1A98E94180BF69800C8EBD3 /* libpj-arm-apple-darwin9.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A1A98E91180BF69700C8EBD3 /* libpj-arm-apple-darwin9.a */; };
+		A1A98E95180BF69800C8EBD3 /* libpjlib-util-arm-apple-darwin9.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A1A98E92180BF69800C8EBD3 /* libpjlib-util-arm-apple-darwin9.a */; };
+		A1A98E96180BF69800C8EBD3 /* libpjnath-arm-apple-darwin9.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A1A98E93180BF69800C8EBD3 /* libpjnath-arm-apple-darwin9.a */; };
+		A1BAF93B180C0604008DA3F1 /* libGoogleAnalytics_debug.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A10EC11E17E0692700EA4F9D /* libGoogleAnalytics_debug.a */; };
+		A1BAF93C180C0604008DA3F1 /* libGoogleAnalytics.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A10EC11F17E0692700EA4F9D /* libGoogleAnalytics.a */; };
+		A1BAF93D180C064E008DA3F1 /* libavcodec.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A10EC10C17E0677C00EA4F9D /* libavcodec.a */; };
+		A1BAF93E180C064E008DA3F1 /* libavdevice.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A10EC10D17E0677C00EA4F9D /* libavdevice.a */; };
+		A1BAF93F180C064E008DA3F1 /* libavfilter.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A10EC10E17E0677C00EA4F9D /* libavfilter.a */; };
+		A1BAF940180C064E008DA3F1 /* libavformat.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A10EC10F17E0677C00EA4F9D /* libavformat.a */; };
+		A1BAF941180C064E008DA3F1 /* libavutil.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A10EC11017E0677C00EA4F9D /* libavutil.a */; };
+		A1BAF942180C064E008DA3F1 /* libswresample.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A10EC11117E0677C00EA4F9D /* libswresample.a */; };
+		A1BAF943180C064E008DA3F1 /* libswscale.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A10EC11217E0677C00EA4F9D /* libswscale.a */; };
 		A1BB7B9F17E02C5C00463A07 /* UdtSocketWrapper.mm in Sources */ = {isa = PBXBuildFile; fileRef = A1BB7B9E17E02C5C00463A07 /* UdtSocketWrapper.mm */; };
 		A1E32FAD17E9899800504538 /* H264PlayerListener.mm in Sources */ = {isa = PBXBuildFile; fileRef = A1E32FAB17E9899800504538 /* H264PlayerListener.mm */; };
 		A1E32FB017E98A4700504538 /* PlaybackListener.mm in Sources */ = {isa = PBXBuildFile; fileRef = A1E32FAE17E98A4700504538 /* PlaybackListener.mm */; };
@@ -689,8 +696,17 @@
 		A10EC11A17E0681C00EA4F9D /* libUdtLib.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libUdtLib.a; path = "../ios-frameworks/udt/libUdtLib.a"; sourceTree = "<group>"; };
 		A10EC11E17E0692700EA4F9D /* libGoogleAnalytics_debug.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libGoogleAnalytics_debug.a; path = "../ios-frameworks/Google Analytics Library/libGoogleAnalytics_debug.a"; sourceTree = "<group>"; };
 		A10EC11F17E0692700EA4F9D /* libGoogleAnalytics.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libGoogleAnalytics.a; path = "../ios-frameworks/Google Analytics Library/libGoogleAnalytics.a"; sourceTree = "<group>"; };
+		A1176B72180D1DD9000B7527 /* stream480p.sdp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = stream480p.sdp; sourceTree = "<group>"; };
+		A1176B73180D1DD9000B7527 /* stream720p.sdp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = stream720p.sdp; sourceTree = "<group>"; };
 		A11E8C1217E2DB7D00915F84 /* libstdc++.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libstdc++.dylib"; path = "usr/lib/libstdc++.dylib"; sourceTree = SDKROOT; };
 		A123DC9717E9A748006CC6FD /* PlayerCallbackHandler.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PlayerCallbackHandler.h; sourceTree = "<group>"; };
+		A1A98E8B180BF5AA00C8EBD3 /* client_main.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = client_main.c; sourceTree = "<group>"; };
+		A1A98E8C180BF5AA00C8EBD3 /* client_main.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = client_main.h; sourceTree = "<group>"; };
+		A1A98E8D180BF5AA00C8EBD3 /* StunClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StunClient.h; sourceTree = "<group>"; };
+		A1A98E8E180BF5AA00C8EBD3 /* StunClient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StunClient.m; sourceTree = "<group>"; };
+		A1A98E91180BF69700C8EBD3 /* libpj-arm-apple-darwin9.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libpj-arm-apple-darwin9.a"; path = "../ios-frameworks/pjsip/arm/lib/libpj-arm-apple-darwin9.a"; sourceTree = "<group>"; };
+		A1A98E92180BF69800C8EBD3 /* libpjlib-util-arm-apple-darwin9.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libpjlib-util-arm-apple-darwin9.a"; path = "../ios-frameworks/pjsip/arm/lib/libpjlib-util-arm-apple-darwin9.a"; sourceTree = "<group>"; };
+		A1A98E93180BF69800C8EBD3 /* libpjnath-arm-apple-darwin9.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libpjnath-arm-apple-darwin9.a"; path = "../ios-frameworks/pjsip/arm/lib/libpjnath-arm-apple-darwin9.a"; sourceTree = "<group>"; };
 		A1BB7B9417E0250000463A07 /* MonitorCommunication.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MonitorCommunication.framework; path = "../ios-frameworks/MonitorCommunication.framework"; sourceTree = "<group>"; };
 		A1BB7B9E17E02C5C00463A07 /* UdtSocketWrapper.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = UdtSocketWrapper.mm; sourceTree = "<group>"; };
 		A1E32FAB17E9899800504538 /* H264PlayerListener.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = H264PlayerListener.mm; sourceTree = "<group>"; };
@@ -1543,19 +1559,22 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A1BAF93D180C064E008DA3F1 /* libavcodec.a in Frameworks */,
+				A1BAF93E180C064E008DA3F1 /* libavdevice.a in Frameworks */,
+				A1BAF93F180C064E008DA3F1 /* libavfilter.a in Frameworks */,
+				A1BAF940180C064E008DA3F1 /* libavformat.a in Frameworks */,
+				A1BAF941180C064E008DA3F1 /* libavutil.a in Frameworks */,
+				A1BAF942180C064E008DA3F1 /* libswresample.a in Frameworks */,
+				A1BAF943180C064E008DA3F1 /* libswscale.a in Frameworks */,
+				A10EC11B17E0681D00EA4F9D /* libUdtLib.a in Frameworks */,
+				A1BAF93B180C0604008DA3F1 /* libGoogleAnalytics_debug.a in Frameworks */,
+				A1BAF93C180C0604008DA3F1 /* libGoogleAnalytics.a in Frameworks */,
+				A1A98E94180BF69800C8EBD3 /* libpj-arm-apple-darwin9.a in Frameworks */,
+				A1A98E95180BF69800C8EBD3 /* libpjlib-util-arm-apple-darwin9.a in Frameworks */,
+				A1A98E96180BF69800C8EBD3 /* libpjnath-arm-apple-darwin9.a in Frameworks */,
 				8B18B9541805184D00FF02C8 /* H264MediaPlayer.framework in Frameworks */,
 				A1A5188117E07DCB00E1DFC2 /* MonitorCommunication.framework in Frameworks */,
 				A11E8C1317E2DB7E00915F84 /* libstdc++.dylib in Frameworks */,
-				A10EC12017E0692700EA4F9D /* libGoogleAnalytics_debug.a in Frameworks */,
-				A10EC12117E0692700EA4F9D /* libGoogleAnalytics.a in Frameworks */,
-				A10EC11B17E0681D00EA4F9D /* libUdtLib.a in Frameworks */,
-				A10EC11317E0677C00EA4F9D /* libavcodec.a in Frameworks */,
-				A10EC11417E0677C00EA4F9D /* libavdevice.a in Frameworks */,
-				A10EC11517E0677C00EA4F9D /* libavfilter.a in Frameworks */,
-				A10EC11617E0677C00EA4F9D /* libavformat.a in Frameworks */,
-				A10EC11717E0677C00EA4F9D /* libavutil.a in Frameworks */,
-				A10EC11817E0677C00EA4F9D /* libswresample.a in Frameworks */,
-				A10EC11917E0677C00EA4F9D /* libswscale.a in Frameworks */,
 				BC883A6D1798EB81001D02D8 /* CoreData.framework in Frameworks */,
 				38962C8517695CB30016AE16 /* libTestFlight.a in Frameworks */,
 				38962C831769587E0016AE16 /* libz.dylib in Frameworks */,
@@ -1579,6 +1598,7 @@
 		080E96DDFE201D6D7F000001 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				A1A98E8A180BF57700C8EBD3 /* PJ_NAT */,
 				84DEA2B717E42DB900567836 /* NotificationView */,
 				978B25B317E1B2AE006FC224 /* SlideMenu */,
 				979BC69617D9B8BA00B3B373 /* Playlist */,
@@ -1842,6 +1862,8 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				A1176B72180D1DD9000B7527 /* stream480p.sdp */,
+				A1176B73180D1DD9000B7527 /* stream720p.sdp */,
 				38483F0C172A33F5009DF61E /* iTunesArtwork */,
 				38483F0D172A33F5009DF61E /* iTunesArtwork@2x */,
 				380EB15316FC41D8005BAC7F /* Voicemail.aif */,
@@ -1860,6 +1882,9 @@
 		29B97323FDCFA39411CA2CEA /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				A1A98E91180BF69700C8EBD3 /* libpj-arm-apple-darwin9.a */,
+				A1A98E92180BF69800C8EBD3 /* libpjlib-util-arm-apple-darwin9.a */,
+				A1A98E93180BF69800C8EBD3 /* libpjnath-arm-apple-darwin9.a */,
 				8B18B9531805184D00FF02C8 /* H264MediaPlayer.framework */,
 				A1BB7B9417E0250000463A07 /* MonitorCommunication.framework */,
 				A10EC11E17E0692700EA4F9D /* libGoogleAnalytics_debug.a */,
@@ -2071,6 +2096,17 @@
 			path = ..;
 			sourceTree = "<group>";
 		};
+		A1A98E8A180BF57700C8EBD3 /* PJ_NAT */ = {
+			isa = PBXGroup;
+			children = (
+				A1A98E8B180BF5AA00C8EBD3 /* client_main.c */,
+				A1A98E8C180BF5AA00C8EBD3 /* client_main.h */,
+				A1A98E8D180BF5AA00C8EBD3 /* StunClient.h */,
+				A1A98E8E180BF5AA00C8EBD3 /* StunClient.m */,
+			);
+			name = PJ_NAT;
+			sourceTree = "<group>";
+		};
 		BC883A621798E68D001D02D8 /* Google Analytics Library */ = {
 			isa = PBXGroup;
 			children = (
@@ -2194,6 +2230,7 @@
 				38A62E9315CA12C000DEA520 /* bb_camera_slider_icon.png in Resources */,
 				38A62E9415CA12C000DEA520 /* bb_video_slider_icon.png in Resources */,
 				38A62E9715CA143200DEA520 /* vid_snap_bg.png in Resources */,
+				A1176B75180D1DD9000B7527 /* stream720p.sdp in Resources */,
 				38A62E9915CA1D2E00DEA520 /* splash_screen_portrait.png in Resources */,
 				38A62E9D15CA2A4800DEA520 /* bb_vid_snap_knob.png in Resources */,
 				38A62EA015CA2C9300DEA520 /* bb_recording_btn.png in Resources */,
@@ -2339,6 +2376,7 @@
 				979BC68B17D990F400B3B373 /* H264PlayerViewController.xib in Resources */,
 				979BC69B17D9B97700B3B373 /* PlaybackViewController.xib in Resources */,
 				979BC6A517D9BB9C00B3B373 /* PlayListViewController.xib in Resources */,
+				A1176B74180D1DD9000B7527 /* stream480p.sdp in Resources */,
 				978F090117DEFD670053972F /* no_img_available.jpeg in Resources */,
 				978F090317DF06C80053972F /* PlaylistCell.xib in Resources */,
 				978B25B617E1B41C006FC224 /* reveal-icon.png in Resources */,
@@ -2397,8 +2435,10 @@
 				97D0081C159DA24400B1D92F /* WifiListParser.m in Sources */,
 				972E290E15A3F77600E60A96 /* STUN_Communication.mm in Sources */,
 				972E295115A405D400E60A96 /* SymmetricCipher.m in Sources */,
+				A1A98E90180BF5AA00C8EBD3 /* StunClient.m in Sources */,
 				972E2B8715A4234300E60A96 /* NSData+Base64.m in Sources */,
 				97137B9715AE742A00BEBBD6 /* StunCommunication.mm in Sources */,
+				A1A98E8F180BF5AA00C8EBD3 /* client_main.c in Sources */,
 				38A478D015BD64F9008682FE /* MBP_InitialSetupViewController.mm in Sources */,
 				38A478D915BE484B008682FE /* Step_02_ViewController.mm in Sources */,
 				38A478DC15BE4BFA008682FE /* Step_03_ViewController.mm in Sources */,
@@ -3911,26 +3951,40 @@
 				INFOPLIST_FILE = "BlinkHD_ios-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				LIBRARY_SEARCH_PATHS = (
-					"\\\"$(SRCROOT)/../UdtLib/build/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\\\"",
-					"\\\"$(SRCROOT)/../openssl_lib/iPhoneSimulator-i386/lib\\\"",
-					"\\\"$(SRCROOT)/../openssl_lib/iPhoneOS/lib\\\"",
+					"\\\\\\\\\\\\\\\"$(SRCROOT)/../UdtLib/build/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\\\\\\\\\\\\\\\"",
+					"\\\\\\\\\\\\\\\"$(SRCROOT)/../openssl_lib/iPhoneSimulator-i386/lib\\\\\\\\\\\\\\\"",
+					"\\\\\\\\\\\\\\\"$(SRCROOT)/../openssl_lib/iPhoneOS/lib\\\\\\\\\\\\\\\"",
 					"$(SRCROOT)",
-					"\\\"$(SRCROOT)/../openssl_lib/iPhoneOS-armv6/lib\\\"",
-					"\\\"$(SRCROOT)/../../Downloads/TestFlightSDK1.2.6\\\"",
-					"\\\"$(SRCROOT)/Classes/Google\\ Analytics\\ Library\\\"",
-					"\\\"$(SRCROOT)/../ffmpegBuild/ffmpeg-ios-build/dist-uarch/lib\\\"",
-					"\\\"$(SRCROOT)/../LibH264Player/DerivedData/H264MediaPlayer/Build/Products\\\"",
-					"\\\"$(SRCROOT)/../ios-frameworks\\\"/**",
-					"\"$(SRCROOT)/../ios-frameworks/Google Analytics Library\"",
-					"\"$(SRCROOT)/../ios-frameworks/ffmpeg/lib\"",
-					"\"$(SRCROOT)/../ios-frameworks/udt\"",
-					"\"$(SRCROOT)/../ios-frameworks\"",
-					"\"$(SRCROOT)/../ios-frameworks/H264Player.lib\"",
+					"\\\\\\\\\\\\\\\"$(SRCROOT)/../openssl_lib/iPhoneOS-armv6/lib\\\\\\\\\\\\\\\"",
+					"\\\\\\\\\\\\\\\"$(SRCROOT)/../../Downloads/TestFlightSDK1.2.6\\\\\\\\\\\\\\\"",
+					"\\\\\\\\\\\\\\\"$(SRCROOT)/Classes/Google\\\\\\\\\\\\\\ Analytics\\\\\\\\\\\\\\ Library\\\\\\\\\\\\\\\"",
+					"\\\\\\\\\\\\\\\"$(SRCROOT)/../ffmpegBuild/ffmpeg-ios-build/dist-uarch/lib\\\\\\\\\\\\\\\"",
+					"\\\\\\\\\\\\\\\"$(SRCROOT)/../LibH264Player/DerivedData/H264MediaPlayer/Build/Products\\\\\\\\\\\\\\\"",
+					"\\\\\\\\\\\\\\\"$(SRCROOT)/../ios-frameworks\\\\\\\\\\\\\\\"/**",
+					"\\\\\\\"$(SRCROOT)/../ios-frameworks/Google\\\\\\ Analytics\\\\\\ Library\\\\\\\"",
+					"\\\\\\\"$(SRCROOT)/../ios-frameworks/ffmpeg/lib\\\\\\\"",
+					"\\\\\\\"$(SRCROOT)/../ios-frameworks/udt\\\\\\\"",
+					"\\\\\\\"$(SRCROOT)/../ios-frameworks\\\\\\\"",
+					"\\\\\\\"$(SRCROOT)/../ios-frameworks/H264Player.lib\\\\\\\"",
+					"/Users/JasonLee/work/ios-frameworks/pjsip/arm/lib",
+					"/Users/JasonLee/work/ios-frameworks/Google\\ Analytics\\ Library",
+					"/Users/JasonLee/work/ios-frameworks/udt",
+					"/Users/JasonLee/work/ios-frameworks/ffmpeg/lib",
+				);
+				OTHER_CFLAGS = (
+					"-DPJ_IS_BIG_ENDIAN=0",
+					"-DPJ_IS_LITTLE_ENDIAN=1",
+					"-DPJ_BUILT_WITH_XCODE=1",
+				);
+				OTHER_CPLUSPLUSFLAGS = (
+					"-DPJ_IS_BIG_ENDIAN=0",
+					"-DPJ_IS_LITTLE_ENDIAN=1",
+					"-DPJ_BUILT_WITH_XCODE=1",
 				);
 				OTHER_LDFLAGS = "-lz";
 				PRODUCT_NAME = "Camera HD";
 				SDKROOT = iphoneos6.1;
-				USER_HEADER_SEARCH_PATHS = "";
+				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/../ios-frameworks/pjsip/arm/include/ $(SRCROOT)/../ios-frameworks/pjsip/arm/include/pj/  $(SRCROOT)/../ios-frameworks/pjsip/arm/include/pjnath/ ";
 			};
 			name = Debug;
 		};
@@ -3973,24 +4027,34 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)",
-					"\\\"$(SRCROOT)/../../Downloads/TestFlightSDK1.2.6\\\"",
-					"\\\"$(SRCROOT)/Classes/Google\\ Analytics\\ Library\\\"",
-					"\\\"$(SRCROOT)/../ffmpegBuild/ffmpeg-ios-build/dist-uarch/lib\\\"",
-					"\\\"$(SRCROOT)/../LibH264Player/DerivedData/H264MediaPlayer/Build/Products\\\"",
-					"\\\"$(SRCROOT)/../ios-frameworks\\\"/**",
-					"\\\"$(SRCROOT)/../ios-frameworks/udt\\\"",
-					"\"$(SRCROOT)/../ios-frameworks/Google Analytics Library\"",
-					"\"$(SRCROOT)/../ios-frameworks/ffmpeg/lib\"",
-					"\"$(SRCROOT)/../ios-frameworks/udt\"",
-					"\"$(SRCROOT)/../ios-frameworks\"",
-					"\"$(SRCROOT)/../ios-frameworks/H264Player.lib\"",
+					"\\\\\\\\\\\\\\\"$(SRCROOT)/../../Downloads/TestFlightSDK1.2.6\\\\\\\\\\\\\\\"",
+					"\\\\\\\\\\\\\\\"$(SRCROOT)/Classes/Google\\\\\\\\\\\\\\ Analytics\\\\\\\\\\\\\\ Library\\\\\\\\\\\\\\\"",
+					"\\\\\\\\\\\\\\\"$(SRCROOT)/../ffmpegBuild/ffmpeg-ios-build/dist-uarch/lib\\\\\\\\\\\\\\\"",
+					"\\\\\\\\\\\\\\\"$(SRCROOT)/../LibH264Player/DerivedData/H264MediaPlayer/Build/Products\\\\\\\\\\\\\\\"",
+					"\\\\\\\\\\\\\\\"$(SRCROOT)/../ios-frameworks\\\\\\\\\\\\\\\"/**",
+					"\\\\\\\\\\\\\\\"$(SRCROOT)/../ios-frameworks/udt\\\\\\\\\\\\\\\"",
+					"\\\\\\\"$(SRCROOT)/../ios-frameworks/Google\\\\\\ Analytics\\\\\\ Library\\\\\\\"",
+					"\\\\\\\"$(SRCROOT)/../ios-frameworks/ffmpeg/lib\\\\\\\"",
+					"\\\\\\\"$(SRCROOT)/../ios-frameworks/udt\\\\\\\"",
+					"\\\\\\\"$(SRCROOT)/../ios-frameworks\\\\\\\"",
+					"\\\\\\\"$(SRCROOT)/../ios-frameworks/H264Player.lib\\\\\\\"",
+					"/Users/JasonLee/work/ios-frameworks/pjsip/arm/lib",
+					"/Users/JasonLee/work/ios-frameworks/Google\\ Analytics\\ Library",
+					"/Users/JasonLee/work/ios-frameworks/udt",
+					"/Users/JasonLee/work/ios-frameworks/ffmpeg/lib",
+				);
+				OTHER_CFLAGS = (
+					"-DNS_BLOCK_ASSERTIONS=1",
+					"-DPJ_IS_BIG_ENDIAN=0",
+					"-DPJ_IS_LITTLE_ENDIAN=1",
+					"-DPJ_BUILT_WITH_XCODE=1",
 				);
 				OTHER_LDFLAGS = "-lz";
 				PRODUCT_NAME = "Camera HD";
 				PROVISIONING_PROFILE = "EA2A6284-970A-4F84-A9A3-5128B5876C33";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "EA2A6284-970A-4F84-A9A3-5128B5876C33";
 				SDKROOT = iphoneos6.1;
-				USER_HEADER_SEARCH_PATHS = "";
+				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/../ios-frameworks/pjsip/arm/include/ $(SRCROOT)/../ios-frameworks/pjsip/arm/include/pj/  $(SRCROOT)/../ios-frameworks/pjsip/arm/include/pjnath/ ";
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;
@@ -4055,23 +4119,33 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(SRCROOT)",
-					"\\\"$(SRCROOT)/../../Downloads/TestFlightSDK1.2.6\\\"",
-					"\\\"$(SRCROOT)/Classes/Google\\ Analytics\\ Library\\\"",
-					"\\\"$(SRCROOT)/../ffmpegBuild/ffmpeg-ios-build/dist-uarch/lib\\\"",
-					"\\\"$(SRCROOT)/../LibH264Player/DerivedData/H264MediaPlayer/Build/Products\\\"",
-					"\\\"$(SRCROOT)/../ios-frameworks\\\"/**",
-					"\\\"$(SRCROOT)/../ios-frameworks/udt\\\"",
-					"\"$(SRCROOT)/../ios-frameworks/Google Analytics Library\"",
-					"\"$(SRCROOT)/../ios-frameworks/ffmpeg/lib\"",
-					"\"$(SRCROOT)/../ios-frameworks/udt\"",
-					"\"$(SRCROOT)/../ios-frameworks\"",
-					"\"$(SRCROOT)/../ios-frameworks/H264Player.lib\"",
+					"\\\\\\\\\\\\\\\"$(SRCROOT)/../../Downloads/TestFlightSDK1.2.6\\\\\\\\\\\\\\\"",
+					"\\\\\\\\\\\\\\\"$(SRCROOT)/Classes/Google\\\\\\\\\\\\\\ Analytics\\\\\\\\\\\\\\ Library\\\\\\\\\\\\\\\"",
+					"\\\\\\\\\\\\\\\"$(SRCROOT)/../ffmpegBuild/ffmpeg-ios-build/dist-uarch/lib\\\\\\\\\\\\\\\"",
+					"\\\\\\\\\\\\\\\"$(SRCROOT)/../LibH264Player/DerivedData/H264MediaPlayer/Build/Products\\\\\\\\\\\\\\\"",
+					"\\\\\\\\\\\\\\\"$(SRCROOT)/../ios-frameworks\\\\\\\\\\\\\\\"/**",
+					"\\\\\\\\\\\\\\\"$(SRCROOT)/../ios-frameworks/udt\\\\\\\\\\\\\\\"",
+					"\\\\\\\"$(SRCROOT)/../ios-frameworks/Google\\\\\\ Analytics\\\\\\ Library\\\\\\\"",
+					"\\\\\\\"$(SRCROOT)/../ios-frameworks/ffmpeg/lib\\\\\\\"",
+					"\\\\\\\"$(SRCROOT)/../ios-frameworks/udt\\\\\\\"",
+					"\\\\\\\"$(SRCROOT)/../ios-frameworks\\\\\\\"",
+					"\\\\\\\"$(SRCROOT)/../ios-frameworks/H264Player.lib\\\\\\\"",
+					"/Users/JasonLee/work/ios-frameworks/pjsip/arm/lib",
+					"/Users/JasonLee/work/ios-frameworks/Google\\ Analytics\\ Library",
+					"/Users/JasonLee/work/ios-frameworks/udt",
+					"/Users/JasonLee/work/ios-frameworks/ffmpeg/lib",
+				);
+				OTHER_CFLAGS = (
+					"-DNS_BLOCK_ASSERTIONS=1",
+					"-DPJ_IS_BIG_ENDIAN=0",
+					"-DPJ_IS_LITTLE_ENDIAN=1",
+					"-DPJ_BUILT_WITH_XCODE=1",
 				);
 				OTHER_LDFLAGS = "-lz";
 				PRODUCT_NAME = "Camera HD";
 				RAMEWORK_SEARCH_PATHS = "$(inherited) \"$(SRCROOT)\"";
 				SDKROOT = iphoneos6.1;
-				USER_HEADER_SEARCH_PATHS = "";
+				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/../ios-frameworks/pjsip/arm/include/ $(SRCROOT)/../ios-frameworks/pjsip/arm/include/pj/  $(SRCROOT)/../ios-frameworks/pjsip/arm/include/pjnath/ ";
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Distribute;

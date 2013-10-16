@@ -15,6 +15,7 @@
 #import "MBPNavController.h"
 #import "Reachability.h"
 #import "GAITrackedViewController.h"
+#import "StunClient.h"
 
 #import <MonitorCommunication/MonitorCommunication.h>
 

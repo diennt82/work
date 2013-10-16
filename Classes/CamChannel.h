@@ -53,6 +53,10 @@
     
     id caller;
     SEL timerCallback;
+    
+    
+    
+    
 	
 }
 
@@ -64,6 +68,18 @@
 @property (nonatomic) int localUdtPort, communication_mode; 
 @property (nonatomic) BOOL stopStreaming;
 @property (nonatomic) BOOL waitingForStreamerToClose;
+
+//Support blinkhd:
+@property (nonatomic,retain) NSString * stream_url;
+@property (nonatomic,retain) NSString * public_ip;
+@property (nonatomic) int local_stun_audio_port;
+@property (nonatomic) int local_stun_video_port;
+@property (nonatomic) int local_fwd_audio_port;
+@property (nonatomic) int local_fwd_video_port;
+
+
+
+
 
 
 

@@ -51,6 +51,13 @@
 @property (nonatomic,retain) NSString * name, *last_comm; 
 @property (nonatomic) BOOL soundAlertEnabled,tempHiAlertEnabled,tempLoAlertEnabled, hasUpdateLocalStatus;
 
+@property (nonatomic,retain) NSString * camera_mapped_address; //camera mapped address
+@property (nonatomic) int camera_stun_audio_port;
+@property (nonatomic) int camera_stun_video_port;
+
+
+
+
 
 -(void) initWithResponse:(NSString*) response andHost:(NSString *) host;
 - (id) initWithMacAddr:(NSString *) mac;

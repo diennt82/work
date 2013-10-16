@@ -293,6 +293,7 @@
     status_t status;
     
     NSString * url = self.urlVideo;
+
     
     status = playbackStreamer->setDataSource([url UTF8String]);
     printf("setDataSource return: %d\n", status);

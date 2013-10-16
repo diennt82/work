@@ -113,6 +113,7 @@
             _doneButtonPressed = YES;
             [self check3GConnectionAndPopup];
             
+
         }
         else 
         {
@@ -274,6 +275,8 @@
 -(void) check3GConnectionAndPopup
 {
  
+    
+    
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     BOOL skip_3g_popup = [userDefaults boolForKey:_Use3G];
     
@@ -734,26 +737,7 @@
     
     [self check3GConnectionAndPopup];
     
-#if 0
-    
-    BMS_Communication * bms_comm; 
-    bms_comm = [[BMS_Communication alloc] initWithObject:self
-                                                Selector:@selector(loginSuccessWithResponse:) 
-                                            FailSelector:@selector(loginFailedWithError:) 
-                                               ServerErr:@selector(loginFailedServerUnreachable)];
-
-    [bms_comm BMS_loginWithUser:temp_user_str AndPass:temp_pass_str];
-   
-    NSString * msg = NSLocalizedStringWithDefaultValue(@"Connecting_to_server" ,nil, [NSBundle mainBundle],
-                                                       @"Connecting to Server..." , nil);
-    
-    self.progressView.hidden = NO;
-    [self.progressLabel setText:msg ];
-    [self.view bringSubviewToFront:self.progressView];
-    
-    self.navigationItem.leftBarButtonItem.enabled = NO ;
-    self.navigationItem.rightBarButtonItem.enabled = NO;
-#endif
+ 
 
 }
 

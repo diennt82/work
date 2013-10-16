@@ -24,6 +24,13 @@
 @synthesize stopStreaming;
 @synthesize remoteConnectionError;
 
+@synthesize  stream_url;
+@synthesize  local_stun_audio_port;
+@synthesize  local_stun_video_port;
+@synthesize  local_fwd_audio_port;
+@synthesize  local_fwd_video_port;
+@synthesize public_ip;
+
 - (id) initWithChannelIndex:(int) index
 {
 	channel_index = index;
@@ -330,6 +337,7 @@
 	[channID release];
 	[secretKey release];
     [relayToken release];
+    [self.stream_url release];
 	[super dealloc];
 }
 

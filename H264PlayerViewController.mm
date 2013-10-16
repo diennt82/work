@@ -32,7 +32,7 @@
 @synthesize  alertTimer;
 @synthesize  selectedChannel;
 @synthesize  askForFWUpgradeOnce;
-
+@synthesize   client;
 
 #pragma mark - View
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
@@ -99,6 +99,11 @@
     AudioServicesCreateSystemSoundID(soundFileURLRef, &soundFileObject);
     
     //[self scan_for_missing_camera];
+    
+    
+    
+    
+
     
     [self becomeActive];
 }
@@ -243,7 +248,7 @@
 {
     int msg = [numberMsg integerValue];
     
-    //NSLog(@"currentMediaStatus: %d", msg);
+    NSLog(@"currentMediaStatus: %d", msg);
     
     switch (msg)
     {
@@ -423,6 +428,7 @@
             {
                 //Restart streaming..
                 NSLog(@"Re-start Remote streaming for : %@", self.selectedChannel.profile.mac_address);
+                
                 [NSTimer scheduledTimerWithTimeInterval:0.1
                                                  target:self
                                                selector:@selector(setupCamera)
@@ -853,60 +859,38 @@
     if (self.selectedChannel.profile.isInLocal == TRUE)
     {
         NSLog(@"created a local streamer");
-        self.stream_url = [NSString stringWithFormat:@"rtsp://user:pass@%@:6667/blinkhd", self.selectedChannel.profile.ip_address];
+        self.selectedChannel.stream_url = [NSString stringWithFormat:@"rtsp://user:pass@%@:6667/blinkhd", self.selectedChannel.profile.ip_address];
+        
+#if 0
+      
+        self.selectedChannel.stream_url = @"rtsp://user:pass@%@:6667/blinkhd";
+#endif
         
         //self.progressView.hidden = YES;
         [self performSelector:@selector(startStream)
                    withObject:nil
                    afterDelay:0.1];
-        //[self performSelectorInBackground:@selector(getVQ_bg) withObject:nil];
-        //[self performSelectorInBackground:@selector(getTriggerRecording_bg) withObject:nil];
+
     }
     else if (self.selectedChannel.profile.minuteSinceLastComm <= 5)
     {
-        NSLog(@"created a remote streamer");
-        
-        NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-        
-        NSString *apiKey = [userDefaults objectForKey:@"PortalApiKey"];
-        NSString *mac = [Util strip_colon_fr_mac:self.selectedChannel.profile.mac_address];
-        
-//        BMS_JSON_Communication *jsonComm = [[BMS_JSON_Communication alloc] initWithObject:self
-//                                                                                 Selector:@selector(createSesseionSuccessWithResponse:)
-//                                                                             FailSelector:@selector(createSessionFailedWithResponse:)
-//                                                                                ServerErr:@selector(createSessionFailedUnreachableSerever)];
-//        [jsonComm createSessionWithRegistrationId:mac
-//                                    andClientType:@"IOS"
-//                                        andApiKey:apiKey];
-        BMS_JSON_Communication *jsonComm = [[[BMS_JSON_Communication alloc] initWithObject:self
-                                                                                 Selector:nil
-                                                                             FailSelector:nil
-                                                                                ServerErr:nil] autorelease];
-        NSDictionary *responseDict = [jsonComm createSessionBlockedWithRegistrationId:mac
-                                                                     andClientType:@"IOS"
-                                                                         andApiKey:apiKey];
-        if (responseDict != nil)
+        NSLog(@"created a remote streamer ");
+        if (self.client == nil)
         {
-            if ([[responseDict objectForKey:@"status"] intValue] == 200)
-            {
-                self.stream_url = [[responseDict objectForKey:@"data"] objectForKey:@"url"];
-                
-//                NSString *tempString = [[self.stream_url componentsSeparatedByString:@"/"] lastObject];
-//                
-//                if ([tempString isEqualToString:@"blinkhd"] ) {
-//                    return;
-//                }
-                [self performSelector:@selector(startStream)
-                           withObject:nil
-                           afterDelay:0.1];
-                //[self performSelectorInBackground:@selector(getVQ_bg) withObject:nil];
-                //[self performSelectorInBackground:@selector(getTriggerRecording_bg) withObject:nil];
-            }
+            self.client = [[StunClient alloc] init] ;
         }
-        else
-        {
-            NSLog(@"create session isn't success");
-        }
+        
+        //Blocking call
+        BOOL status = [self.client test_start_async:self];
+        
+        
+       
+        
+//        NSLog(@"is on Symmetric nat ?: %d",isBehindSymmetricNat );
+//        [userDefaults setBool:isBehindSymmetricNat forKey:APP_IS_ON_SYMMETRIC_NAT];
+//        [userDefaults synchronize];
+        
+        
 
     }
     else
@@ -921,6 +905,26 @@
         
         NSLog(@"Camera maybe not available.");
     }
+}
+-(void) startStunStream
+{
+    
+    do
+    {
+        
+        //send probes
+        
+        [self.client sendAudioProbesToIp: self.selectedChannel.profile.camera_mapped_address
+                                 andPort:self.selectedChannel.profile.camera_stun_audio_port];
+        [NSThread sleepForTimeInterval:0.3];
+        [self.client sendVideoProbesToIp: self.selectedChannel.profile.camera_mapped_address
+                                 andPort:self.selectedChannel.profile.camera_stun_video_port];
+        [NSThread sleepForTimeInterval:0.3];
+        
+    }
+    while (self.selectedChannel.stream_url == nil);
+    
+    [self startStream];
 }
 
 -(void) startStream
@@ -965,8 +969,8 @@
     //`NSLog(@"Play with TCP Option >>>>> ") ;
     //mp->setPlayOption(MEDIA_STREAM_RTSP_WITH_TCP);
     
-    NSString * url = self.stream_url;
-    
+    NSString * url = self.selectedChannel.stream_url;
+    NSLog(@"startStream_bg url = %@", url);
     do
     {
         
@@ -1118,6 +1122,14 @@
             [scanner cancel];
         }
         
+        //FOR STUN
+        if (self.client != nil)
+        {
+            [self.client shutdown];
+            [self.client release];
+            self.client = nil;
+        }
+        
     }
     
     //[self.activityStopStreamingProgress stopAnimating];
@@ -1205,7 +1217,8 @@
 		if (self.jsonComm != nil)
 		{
             responseDict= [self.jsonComm sendCommandBlockedWithRegistrationId:mac
-                                                                   andCommand:[NSString stringWithFormat:@"action=command&command=get_resolution"] andApiKey:apiKey];
+                                                                   andCommand:[NSString stringWithFormat:@"action=command&command=get_resolution"]
+                                                                    andApiKey:apiKey];
 		}
 	}
 
@@ -1367,6 +1380,223 @@
     }
 }
 
+#pragma mark -
+#pragma mark - Stun client delegate
+
+-(void)symmetric_check_result: (BOOL) isBehindSymmetricNat
+{
+    
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0),
+                   ^{
+                       NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+                       NSString *apiKey = [userDefaults objectForKey:@"PortalApiKey"];
+                       NSString *mac = [Util strip_colon_fr_mac:self.selectedChannel.profile.mac_address];
+                       
+                       
+                       
+                       
+                       BMS_JSON_Communication *jsonComm = [[[BMS_JSON_Communication alloc] initWithObject:self
+                                                                                                 Selector:nil
+                                                                                             FailSelector:nil
+                                                                                                ServerErr:nil] autorelease];
+                       NSDictionary *responseDict;
+                       
+                       
+                       if (isBehindSymmetricNat == TRUE) // USE RELAY
+                       {
+                           
+                           responseDict = [jsonComm createSessionBlockedWithRegistrationId:mac
+                                                                             andClientType:@"Browser"
+                                                                                 andApiKey:apiKey];
+                           if (responseDict != nil)
+                           {
+                               if ([[responseDict objectForKey:@"status"] intValue] == 200)
+                               {
+                                   self.selectedChannel.stream_url = [[responseDict objectForKey:@"data"] objectForKey:@"url"];
+                                   
+                                   
+                                   
+                                   //Do it in UI thread
+                                   dispatch_async(dispatch_get_main_queue(),
+                                                  ^{
+                                                      [self startStream];
+                                                  });
+                                   
+                                   
+                               }
+                               else
+                               {
+                                   //TODO : handle Bad response
+                               }
+                           }
+                           else
+                           {
+                               NSLog(@"SERVER unreachable (timeout) ");
+                               //TODO : handle SERVER unreachable (timeout)
+                           }
+                           
+                           
+                       }
+                       else // USE RTSP/STUN
+                       {
+                           
+                           //Set port1, port2
+                           
+                           if ([self.client create_stun_forwarder:self.selectedChannel] != 0 )
+                           {
+                               //TODO: Handle error
+                           }
+                           NSString * cmd_string = [NSString stringWithFormat:@"action=command&command=get_session_key&mode=p2p_stun_rtsp&port1=%d&port2=%d&ip=%@",
+                                                    self.selectedChannel.local_stun_audio_port,
+                                                    self.selectedChannel.local_stun_video_port,
+                                                    self.selectedChannel.public_ip];
+                           
+                           responseDict =  [jsonComm  sendCommandBlockedWithRegistrationId:mac
+                                                                                andCommand:cmd_string
+                                                                                 andApiKey:apiKey];
+                           
+                           if (responseDict != nil)
+                           {
+                               NSString *body = [[[responseDict objectForKey: @"data"] objectForKey: @"device_response"] objectForKey: @"body"];
+                               //"get_session_key: error=200,port1=37171&port2=47608&ip=115.77.250.193,mode=p2p_stun_rtsp"
+                               if (body != nil )
+                               {
+                                   NSArray * tokens = [body componentsSeparatedByString:@","];
+                                   
+                                   if ( [[tokens objectAtIndex:0] hasSuffix:@"error=200"]) //roughly check for "error=200"
+                                   {
+                                       
+                                       
+                                       NSString * ports_ip = [tokens objectAtIndex:1];
+                                       
+                                       NSArray * token1s = [ports_ip componentsSeparatedByString:@"&"];
+                                       NSString * port1_str = [token1s objectAtIndex:0];
+                                       NSString * port2_str = [token1s objectAtIndex:1];
+                                       NSString * cam_ip = [token1s objectAtIndex:2];
+                                       
+                                       
+                                       
+                                       self.selectedChannel.profile.camera_mapped_address = [[cam_ip componentsSeparatedByString:@"="] objectAtIndex:1];
+                                       self.selectedChannel.profile.camera_stun_audio_port = [(NSString *)[[port1_str componentsSeparatedByString:@"="] objectAtIndex:1] intValue];
+                                       self.selectedChannel.profile.camera_stun_video_port =[(NSString *)[[port2_str componentsSeparatedByString:@"="] objectAtIndex:1] intValue];
+                                       
+                                       
+                                       [self performSelectorOnMainThread:@selector(startStunStream)
+                                                         withObject:nil
+                                                      waitUntilDone:NO];
+                                   }
+                                   else
+                                   {
+                                       NSLog(@"Respone error : camera response error: %@", body);
+                                       
+                                       //force server died
+                                       [self performSelectorOnMainThread:@selector(handleMessageOnMainThread:)
+                                                              withObject:[NSNumber numberWithInt:MEDIA_ERROR_SERVER_DIED]
+                                                           waitUntilDone:NO];
+                                       
+                                       
+                                   }
+                               }
+                               else
+                               {
+                                   NSLog(@"Respone error : can't parse \"body\"field from %@", responseDict);
+                                   
+                               }
+                               
+                           }
+                           else
+                           {
+                               NSLog(@"SERVER unreachable (timeout) : responseDict == nil");
+                           }
+                       }
+                       
+                   }
+                   );
+    
+    
+    
+    
+    
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
+        
+        NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+        
+        NSDictionary *responseDict  = nil;
+        NSString *mac = [Util strip_colon_fr_mac:self.selectedChannel.profile.mac_address];
+        NSString *apiKey = [userDefaults objectForKey:@"PortalApiKey"];
+        
+        
+        
+        if (self.selectedChannel.profile.isInLocal ) // Replace with httpCommunication after
+        {
+            self.jsonComm = [[[BMS_JSON_Communication alloc] initWithObject:self
+                                                                   Selector:nil
+                                                               FailSelector:nil
+                                                                  ServerErr:nil] autorelease];
+            if (self.jsonComm != nil)
+            {
+                responseDict= [self.jsonComm sendCommandBlockedWithRegistrationId:mac
+                                                                       andCommand:@"action=command&command=get_resolution"
+                                                                        andApiKey:apiKey];
+            }
+        }
+        else if(self.selectedChannel.profile.minuteSinceLastComm <= 5) // Remote
+        {
+            self.jsonComm = [[[BMS_JSON_Communication alloc] initWithObject:self
+                                                                   Selector:nil
+                                                               FailSelector:nil
+                                                                  ServerErr:nil] autorelease];
+            if (self.jsonComm != nil)
+            {
+                responseDict= [self.jsonComm sendCommandBlockedWithRegistrationId:mac
+                                                                       andCommand:[NSString stringWithFormat:@"action=command&command=get_resolution"]
+                                                                        andApiKey:apiKey];
+            }
+        }
+        
+        if (responseDict != nil)
+        {
+            
+            NSInteger status = [[responseDict objectForKey:@"status"] intValue];
+            if (status == 200)
+            {
+                NSString *bodyKey = [[[responseDict objectForKey:@"data"] objectForKey:@"device_response"] objectForKey:@"body"];
+                NSString *modeVideo = [[bodyKey componentsSeparatedByString:@": "] objectAtIndex:1];
+                
+                
+                if ([modeVideo isEqualToString:@"480p"]) // ok
+                {
+                    self.selectedChannel.stream_url = [[NSBundle mainBundle] pathForResource:@"stream480p" ofType:@"sdp"];
+                }
+                else if([modeVideo isEqualToString:@"720p_10"] || [modeVideo isEqualToString:@"720p_15"])
+                {
+                    self.selectedChannel.stream_url = [[NSBundle mainBundle] pathForResource:@"stream720p" ofType:@"sdp"];
+                }
+                
+            }
+            else
+            {
+                
+                self.selectedChannel.stream_url = [[NSBundle mainBundle] pathForResource:@"stream480p" ofType:@"sdp"];
+            }
+            
+            
+            
+            
+            
+            
+        }
+        else
+        {
+            
+            self.selectedChannel.stream_url = [[NSBundle mainBundle] pathForResource:@"stream480p" ofType:@"sdp"];
+        }
+        
+        NSLog(@"resolution response: %@", responseDict);
+        
+    });
+
+}
 #pragma mark -
 #pragma mark - DirectionPad
 
@@ -1823,40 +2053,7 @@
 	}
 }
 
-#pragma mark - JSON Callback
 
-- (void)createSesseionSuccessWithResponse: (NSDictionary *)responseDict
-{
-    NSLog(@"createSesseionSuccessWithResponse %@", responseDict);
-    if (responseDict != nil)
-    {
-        if ([[responseDict objectForKey:@"status"] intValue] == 200)
-        {
-            self.stream_url = [[responseDict objectForKey:@"data"] objectForKey:@"url"];
-            
-//            NSString *tempString = [[self.stream_url componentsSeparatedByString:@"/"] lastObject];
-//            
-//            if ([tempString isEqualToString:@"blinkhd"] )
-//            {
-//                return;
-//            }
-            [self performSelector:@selector(startStream)
-                       withObject:nil
-                       afterDelay:0.1];
-            [self performSelectorInBackground:@selector(getVQ_bg) withObject:nil];
-        }
-    }
-}
-
-- (void)createSessionFailedWithResponse: (NSDictionary *)responseDict
-{
-    NSLog(@"createSessionFailedWith code %d", [[responseDict objectForKey:@"status"] intValue]);
-}
-
-- (void)createSessionFailedUnreachableSerever
-{
-    NSLog(@"createSessionFailedUnreachableSerever");
-}
 
 #pragma mark - Rotation screen
 - (BOOL)shouldAutorotate
@@ -2236,6 +2433,16 @@
         {
             //Restart streaming..
             NSLog(@"Re-start streaming for : %@", self.selectedChannel.profile.mac_address);
+            
+            
+            if (self.client != nil)
+            {
+                [self.client shutdown];
+                [self.client release];
+                self.client = nil;
+            }
+            
+            
             [NSTimer scheduledTimerWithTimeInterval:0.1
                                              target:self
                                            selector:@selector(setupCamera)
@@ -2430,6 +2637,10 @@
 }
 
 - (void)dealloc {
+    
+    //[self.client shutdown];
+
+    [self.client release];
     [_imageViewVideo release];
     [_topToolbar release];
     [_backBarBtnItem release];
@@ -2438,7 +2649,7 @@
     [_segCtrl release];
     [_tableViewPlaylist release];
     
-    [_stream_url release];
+
     [selectedChannel release];
     [_playlistArray release];
     [_httpComm release];
@@ -2467,7 +2678,7 @@
     [self setSegCtrl:nil];
     [self setTableViewPlaylist:nil];
     
-    [self setStream_url:nil];
+
     [self setSelectedChannel:nil];
     [self setPlaylistArray:nil];
     [self setHttpComm:nil];

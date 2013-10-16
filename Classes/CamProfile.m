@@ -22,6 +22,9 @@
 
 @synthesize fw_version, codecs;
 
+@synthesize  camera_mapped_address;
+@synthesize camera_stun_audio_port;
+@synthesize  camera_stun_video_port;
 
 
 -(void) initWithResponse:(NSString*) response andHost:(NSString *) host
@@ -110,6 +113,7 @@
 	[scan_response release];
 	[mac_address release];
 	[ip_address release];
+    [camera_mapped_address release];
 	[super	dealloc];
 }
 
