@@ -236,6 +236,8 @@
     NSString *applicationName = NSBundle.mainBundle.infoDictionary  [@"CFBundleDisplayName"];
     NSLog(@"Application name: %@", applicationName);
     
+    NSString *swVersion = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
+    
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     NSString *apiKey = [userDefaults objectForKey:@"PortalApiKey"];
     
@@ -244,9 +246,14 @@
                                                                          FailSelector:nil
                                                                             ServerErr:nil];
    
+//    NSDictionary *responseDict = [jsonComm registerAppBlockedWithName:applicationName
+//                                                        andDeviceCode:uuidString
+//                                                            andApiKey:apiKey];
     NSDictionary *responseDict = [jsonComm registerAppBlockedWithName:applicationName
                                                         andDeviceCode:uuidString
+                                                   andSoftwareVersion:swVersion
                                                             andApiKey:apiKey];
+    //NSLog(@"");
     
     NSString *appId = [[responseDict objectForKey:@"data"] objectForKey:@"id"];
     NSLog(@"app id = %@", appId);

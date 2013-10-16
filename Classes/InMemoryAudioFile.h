@@ -28,7 +28,7 @@
 //Record
 - (void) storePCMFrames_byte : (void *) frame_buffers withLen:(int) len_in_byte;
 
-- (void) storePCMFrames : (UInt16*) frame_buffers withLen:(int) len_in_uint16;
+//- (void) storePCMFrames : (UInt16*) frame_buffers withLen:(int) len_in_uint16;
 
 - (int) readBytesPCM: (NSMutableData* ) out_buffer withLength: (int) len;
 

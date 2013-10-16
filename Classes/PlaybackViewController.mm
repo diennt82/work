@@ -176,17 +176,16 @@
     {
         if ([[responseDict objectForKey:@"status"] intValue] == 200)
         {
-            NSArray *eventArr = [[responseDict objectForKey:@"data"] objectForKey:@"events"];
+            NSDictionary *eventDict = [[responseDict objectForKey:@"data"] objectForKey:@"events"];
             
             
             NSLog(@"play list: %@ ",responseDict);
             
-            NSArray *playlist = [[eventArr objectAtIndex:0] objectForKey:@"playlist"];
+            NSArray *playlist = [eventDict objectForKey:[NSString stringWithFormat:@"%d", 0]];
             
-            for (NSDictionary *clipInfo in playlist) {
-                //NSDictionary *clipInfo = [[playlist objectForKey:@"playlist"] objectAtIndex:0];
-                
-                PlaylistInfo *playlistInfo = [[[PlaylistInfo alloc] init]autorelease];
+            for (NSDictionary *clipInfo in playlist)
+            {
+                PlaylistInfo *playlistInfo = [[[PlaylistInfo alloc] init] autorelease];
                 playlistInfo.mac_addr = clip_info.mac_addr;
                 
                 playlistInfo.urlImage = [clipInfo objectForKey:@"image"];

@@ -2198,7 +2198,10 @@ return self;
 	return TRUE;
 }
 
-
+// clear one warning
+- (void)bonjourReturnCameraListAvailable:(NSMutableArray *)cameraList
+{
+}
 
 
 @end

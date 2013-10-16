@@ -229,18 +229,15 @@
         {
             NSLog(@"Event : %@ ",responseDict);
             
-            NSArray *eventArr = [[responseDict objectForKey:@"data"] objectForKey:@"events"];
+            NSDictionary *eventDict = [[responseDict objectForKey:@"data"] objectForKey:@"events"];
             
             
-            if (eventArr.count == 1)
+            if (eventDict.count == 1)
             {
                 
                 
                 //expect 1 event only
-                NSDictionary * eventPlaylist = [eventArr objectAtIndex:0];
-                
-                NSDictionary *clipInfo = [[eventPlaylist objectForKey:@"playlist"]
-                                          objectAtIndex:0];
+                NSDictionary *clipInfo = [[eventDict objectForKey:[NSString stringWithFormat:@"%d", 0]] objectAtIndex:0];
                 
                 eventInfo = [[PlaylistInfo alloc] init] ;
                 eventInfo.mac_addr = self.cameraMacNoColon;
@@ -368,15 +365,15 @@
     {
         if ([[responseDict objectForKey:@"status"] intValue] == 200)
         {
-            NSArray *eventArr = [[responseDict objectForKey:@"data"] objectForKey:@"events"];
-            
+            NSDictionary *eventDict = [[responseDict objectForKey:@"data"] objectForKey:@"events"];
             
             NSLog(@"play list: %@ ",responseDict);
             
             self.tempPlaylist.playlistArray = [NSMutableArray array];
             
-            for (NSDictionary *playlist in eventArr) {
-                NSDictionary *clipInfo = [[playlist objectForKey:@"playlist"] objectAtIndex:0];
+            for (int i = 0; i < eventDict.count; ++i)
+            {
+                NSDictionary *clipInfo = [[eventDict objectForKey:[NSString stringWithFormat:@"%d", i]] objectAtIndex:0];
                 
                 PlaylistInfo *playlistInfo = [[[PlaylistInfo alloc] init]autorelease];
                 playlistInfo.mac_addr = self.cameraMacNoColon;
@@ -432,15 +429,15 @@
     {
         if ([[responseDict objectForKey:@"status"] intValue] == 200)
         {
-            NSArray *eventArr = [[responseDict objectForKey:@"data"] objectForKey:@"events"];
-            
+            NSDictionary *eventDict = [[responseDict objectForKey:@"data"] objectForKey:@"events"];
             
             NSLog(@"play list: %@ ",responseDict);
 
             self.tempPlaylist.playlistArray = [NSMutableArray array];
             
-            for (NSDictionary *playlist in eventArr) {
-                NSDictionary *clipInfo = [[playlist objectForKey:@"playlist"] objectAtIndex:0];
+            for (int i = 0; i < eventDict.count; ++i)
+            {
+                NSDictionary *clipInfo = [[eventDict objectForKey:[NSString stringWithFormat:@"%d", i]] objectAtIndex:0];
                 
                 PlaylistInfo *playlistInfo = [[[PlaylistInfo alloc] init]autorelease];
                 playlistInfo.mac_addr = self.cameraMacNoColon;

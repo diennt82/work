@@ -52,6 +52,7 @@
     self.navigationItem.rightBarButtonItem = nextButton;
     [nextButton release];
     
+    userEmailTF.placeholder = @"User id";
     
     passwordLinkSent.hidden = YES;
     [self.view addSubview:passwordLinkSent];
@@ -90,26 +91,26 @@
 {
     [userEmailTF resignFirstResponder];
     
-    NSString * ok = NSLocalizedStringWithDefaultValue(@"Ok",nil, [NSBundle mainBundle],
-                                                      @"Ok", nil);
+    //NSString * ok = NSLocalizedStringWithDefaultValue(@"Ok",nil, [NSBundle mainBundle],
+    //                                                  @"Ok", nil);
     userEmail= userEmailTF.text ;
     
-    if (userEmail == nil  ||
-        [userEmail rangeOfString:@"@"].location == NSNotFound)
-    {
-        //ERROR condition
-        UIAlertView *alert = [[UIAlertView alloc]
-                              initWithTitle:NSLocalizedStringWithDefaultValue(@"Email_Format_error",nil, [NSBundle mainBundle],
-                                                                              @"Email Format error", nil)
-                              message:NSLocalizedStringWithDefaultValue(@"Email_Format_error_msg",nil, [NSBundle mainBundle],
-                                                                        @"Correct email format is of the form: someone@somedomain.com. Please try again!", nil)
-                              delegate:self
-                              cancelButtonTitle:ok
-                              otherButtonTitles:nil];
-        [alert show];
-        [alert release];
-        return;
-    }
+//    if (userEmail == nil  ||
+//        [userEmail rangeOfString:@"@"].location == NSNotFound)
+//    {
+//        //ERROR condition
+//        UIAlertView *alert = [[UIAlertView alloc]
+//                              initWithTitle:NSLocalizedStringWithDefaultValue(@"Email_Format_error",nil, [NSBundle mainBundle],
+//                                                                              @"Email Format error", nil)
+//                              message:NSLocalizedStringWithDefaultValue(@"Email_Format_error_msg",nil, [NSBundle mainBundle],
+//                                                                        @"Correct email format is of the form: someone@somedomain.com. Please try again!", nil)
+//                              delegate:self
+//                              cancelButtonTitle:ok
+//                              otherButtonTitles:nil];
+//        [alert show];
+//        [alert release];
+//        return;
+//    }
     
     self.navigationItem.leftBarButtonItem.enabled = NO ;
     self.navigationItem.rightBarButtonItem.enabled = NO;
@@ -118,7 +119,7 @@
                                                                              Selector:@selector(resetSuccessWithResponse:)
                                                                          FailSelector:@selector(resetFailedWithError:)
                                                                             ServerErr:@selector(resetFailedServerUnreachable)];
-    [jsonComm resetPasswordWithLogin:userEmail];
+    [jsonComm resetPasswordWithUserID:userEmail];
 }
 
 #else

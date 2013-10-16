@@ -79,7 +79,7 @@
 
 
 
-@interface MBP_iosViewController : UIViewController <BonjourDelegate,ConnectionMethodDelegate,UIActionSheetDelegate,ScanForCameraNotifier>
+@interface MBP_iosViewController : UIViewController <BonjourDelegate, ConnectionMethodDelegate,UIActionSheetDelegate,ScanForCameraNotifier>
 {
 
 	
