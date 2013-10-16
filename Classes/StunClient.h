@@ -13,6 +13,12 @@
 //NSDefault
 #define APP_IS_ON_SYMMETRIC_NAT @"app_is_on_sym_nat"
 
+#define TYPE_UNKNOWN            -1  //checking
+#define TYPE_SYMMETRIC_NAT       1
+#define TYPE_NON_SYMMETRIC_NAT   0
+
+
+
 @protocol StunClientDelegate <NSObject>
 
 -(void)symmetric_check_result: (BOOL) isBehindSymNat;

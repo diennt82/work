@@ -31,7 +31,10 @@
 @synthesize temp_pass_str; 
 @synthesize temp_user_email  ;
 
-@synthesize  account; 
+@synthesize  account;
+
+@synthesize  client;
+
 
 
 // The designated initializer.  Override if you create the controller programmatically and want to perform customization that is not appropriate for viewDidLoad.
@@ -85,6 +88,14 @@
 	NSString * old_usr = (NSString *) [userDefaults objectForKey:@"PortalUsername"];	
 	NSString * old_pass = (NSString *) [userDefaults objectForKey:@"PortalPassword"];
     self.temp_user_email  = (NSString*) [userDefaults objectForKey:@"PortalUseremail"];
+    
+    
+    
+    /* Reset SYM NAT status here */
+    [userDefaults setInteger:TYPE_UNKNOWN forKey:APP_IS_ON_SYMMETRIC_NAT];
+    [userDefaults synchronize];
+    
+    
     
 	if (old_usr != nil)
 	{
@@ -165,6 +176,7 @@
 //    
 //}
 - (void)dealloc {
+    [self.client release];
 	[userName release];
 	[password release];
     [self.apiKey release];
@@ -222,6 +234,17 @@
                                                                          FailSelector:@selector(loginFailedWithError:)
                                                                             ServerErr:@selector(loginFailedServerUnreachable)];
     [jsonComm loginWithLogin:self.temp_user_str andPassword:self.temp_pass_str];
+    
+    
+    
+    if (self.client == nil)
+    {
+        self.client = [[StunClient alloc] init];
+    }
+    
+    [self.client test_start_async:self];
+    
+    
 }
 
 #else
@@ -737,8 +760,6 @@
     
     [self check3GConnectionAndPopup];
     
- 
-
 }
 
 
@@ -748,6 +769,31 @@
 	int sender_tag = ((UIButton *) sender).tag;
 	NSLog(@"THIS IS NOT USED ... Sender tag:%d", sender_tag);
 }
+#pragma mark -
+#pragma mark PJNATH Callbacks
+
+-(void)symmetric_check_result: (BOOL) isBehindSymNat
+{
+    
+    
+    NSInteger result = (isBehindSymNat == TRUE)?TYPE_SYMMETRIC_NAT:TYPE_NON_SYMMETRIC_NAT;
+    
+    
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    [userDefaults setInteger:result forKey:APP_IS_ON_SYMMETRIC_NAT];
+    [userDefaults synchronize];
+    
+    dispatch_async(dispatch_get_main_queue(),
+                   ^{
+                       [self.client shutdown];
+                       [self.client release];
+                   }
+                   );
+    
+    
+    
+}
+
 
 #pragma mark -
 #pragma mark Login Callbacks

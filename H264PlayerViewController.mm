@@ -850,6 +850,14 @@
         [self.httpComm release];
         self.httpComm = nil;
     }
+    if (self.selectedChannel.stream_url != nil)
+    {
+
+        self.selectedChannel.stream_url = nil;
+    }
+    
+    
+    
     
     self.httpComm = [[HttpCommunication alloc]init];
     self.httpComm.device_ip = self.selectedChannel.profile.ip_address;
@@ -880,9 +888,24 @@
             self.client = [[StunClient alloc] init] ;
         }
         
-        //Blocking call
-        BOOL status = [self.client test_start_async:self];
         
+        NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+        int symmetric_nat_status = [userDefaults integerForKey:APP_IS_ON_SYMMETRIC_NAT];
+
+        
+        //For any reason it fails to check earlier, we try checking now.
+        if (symmetric_nat_status == TYPE_UNKNOWN)
+        {
+            //Non Blocking call
+            [self.client test_start_async:self];
+        }
+        else
+        {
+            //call direct the callback
+            
+            [self symmetric_check_result: (symmetric_nat_status == TYPE_SYMMETRIC_NAT)];
+            
+        }
         
        
         
@@ -908,7 +931,9 @@
 }
 -(void) startStunStream
 {
-    
+    NSDate * timeout;
+
+    NSRunLoop * mainloop = [NSRunLoop currentRunLoop];
     do
     {
         
@@ -916,13 +941,22 @@
         
         [self.client sendAudioProbesToIp: self.selectedChannel.profile.camera_mapped_address
                                  andPort:self.selectedChannel.profile.camera_stun_audio_port];
-        [NSThread sleepForTimeInterval:0.3];
+        //[NSThread sleepForTimeInterval:0.3];
+        
+        
+        
+        
         [self.client sendVideoProbesToIp: self.selectedChannel.profile.camera_mapped_address
                                  andPort:self.selectedChannel.profile.camera_stun_video_port];
-        [NSThread sleepForTimeInterval:0.3];
+        //[NSThread sleepForTimeInterval:0.3];
+        
+        
+        timeout = [NSDate dateWithTimeIntervalSinceNow:0.5];
+        [mainloop runUntilDate:timeout];
         
     }
-    while (self.selectedChannel.stream_url == nil);
+    while ( (self.selectedChannel.stream_url == nil) ||
+             (self.selectedChannel.stream_url.length == 0) );
     
     [self startStream];
 }
@@ -1385,6 +1419,11 @@
 
 -(void)symmetric_check_result: (BOOL) isBehindSymmetricNat
 {
+    NSInteger result = (isBehindSymmetricNat == TRUE)?TYPE_SYMMETRIC_NAT:TYPE_NON_SYMMETRIC_NAT;
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    [userDefaults setInteger:result forKey:APP_IS_ON_SYMMETRIC_NAT];
+    [userDefaults synchronize];
+    
     
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0),
                    ^{
@@ -1416,17 +1455,20 @@
                                    
                                    
                                    
-                                   //Do it in UI thread
-                                   dispatch_async(dispatch_get_main_queue(),
-                                                  ^{
-                                                      [self startStream];
-                                                  });
+                                   [self performSelectorOnMainThread:@selector(startStream)
+                                                          withObject:nil
+                                                       waitUntilDone:NO];
                                    
                                    
                                }
                                else
                                {
-                                   //TODO : handle Bad response
+                                   //handle Bad response
+                                   
+                                   //force server died
+                                   [self performSelectorOnMainThread:@selector(handleMessageOnMainThread:)
+                                                          withObject:[NSNumber numberWithInt:MEDIA_ERROR_SERVER_DIED]
+                                                       waitUntilDone:NO];
                                }
                            }
                            else
@@ -1515,9 +1557,8 @@
     
     
     
-    
-    
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0),
+        ^{
         
         NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
         
@@ -1554,6 +1595,8 @@
             }
         }
         
+        
+        
         if (responseDict != nil)
         {
             
@@ -1568,7 +1611,7 @@
                 {
                     self.selectedChannel.stream_url = [[NSBundle mainBundle] pathForResource:@"stream480p" ofType:@"sdp"];
                 }
-                else if([modeVideo isEqualToString:@"720p_10"] || [modeVideo isEqualToString:@"720p_15"])
+                else //if([modeVideo isEqualToString:@"720p_10"] || [modeVideo isEqualToString:@"720p_15"])
                 {
                     self.selectedChannel.stream_url = [[NSBundle mainBundle] pathForResource:@"stream720p" ofType:@"sdp"];
                 }
@@ -1591,6 +1634,8 @@
             
             self.selectedChannel.stream_url = [[NSBundle mainBundle] pathForResource:@"stream480p" ofType:@"sdp"];
         }
+        
+        
         
         NSLog(@"resolution response: %@", responseDict);
         

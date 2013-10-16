@@ -39,7 +39,7 @@
 #define _Use3G @"use3GToConnect"
 
 
-@interface MBP_LoginOrRegistration : GAITrackedViewController <UITableViewDataSource, UITableViewDelegate,UITextFieldDelegate> {
+@interface MBP_LoginOrRegistration : GAITrackedViewController <UITableViewDataSource, UITableViewDelegate,UITextFieldDelegate, StunClientDelegate> {
 
 	IBOutlet UITextField * userName; 
 	IBOutlet UITextField * password; 
@@ -94,6 +94,11 @@
 
 @property (nonatomic, retain) UserAccount *account; 
 
+@property (nonatomic,retain) StunClient * client;
+
+
+
+
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil withConnDelegate:(id<ConnectionMethodDelegate>) delegate;
 
 - (IBAction) handleButtonPressed:(id) sender;
@@ -105,5 +110,7 @@
 - (void) loginFailedServerUnreachable; 
 
 - (void)presentModallyOn:(UIViewController *)parent;
+
+-(void)symmetric_check_result: (BOOL) isBehindSymNat;
 
 @end
