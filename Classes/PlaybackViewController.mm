@@ -281,7 +281,9 @@
 }
 
 -(void) startStream
-{    
+{
+    
+    
     playbackStreamer = new MediaPlayer(true);
     playbackStreamer->setListener(listener);
     

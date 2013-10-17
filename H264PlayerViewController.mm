@@ -907,13 +907,6 @@
             
         }
         
-       
-        
-//        NSLog(@"is on Symmetric nat ?: %d",isBehindSymmetricNat );
-//        [userDefaults setBool:isBehindSymmetricNat forKey:APP_IS_ON_SYMMETRIC_NAT];
-//        [userDefaults synchronize];
-        
-        
 
     }
     else
@@ -954,16 +947,33 @@
         timeout = [NSDate dateWithTimeIntervalSinceNow:0.5];
         [mainloop runUntilDate:timeout];
         
+        if (userWantToCancel== TRUE)
+        {
+            NSLog(@"startStunStream: userWantToCancel >>>>");
+            break;
+            
+        }
+        
     }
     while ( (self.selectedChannel.stream_url == nil) ||
              (self.selectedChannel.stream_url.length == 0) );
-    
+
     [self startStream];
 }
 
 -(void) startStream
 {
     self.h264StreamerIsInStopped = FALSE;
+    
+    
+    
+    if (userWantToCancel== TRUE)
+    {
+        NSLog(@"startStream: userWantToCancel >>>>");
+        return;
+    }
+    
+    
     
     h264Streamer = new MediaPlayer(false);
     
@@ -1070,17 +1080,23 @@
     
     NSLog(@"self.currentMediaStatus: %d", self.currentMediaStatus);
     
+    userWantToCancel = TRUE;
+    self.selectedChannel.stopStreaming = TRUE;
+    
     if (self.currentMediaStatus == MEDIA_INFO_HAS_FIRST_IMAGE ||
         self.currentMediaStatus == MEDIA_PLAYER_STARTED ||
         (self.currentMediaStatus == 0 && h264Streamer == NULL)) // Media player haven't start yet.
     {
+        
+        //TODO: Check for stun mode running...
         [self goBackToCameraList];
     }
     else
     {
         h264Streamer->suspend();
-        userWantToCancel = TRUE;
     }
+    
+    
 }
 
 - (void)goBackToCameraList
@@ -1129,6 +1145,44 @@
     }
     
 }
+
+-(void) stopStunStream
+{
+    if ( (self.selectedChannel != nil)  &&
+         (self.selectedChannel.profile.camera_mapped_address != nil) &&
+         (self.selectedChannel.profile.camera_stun_audio_port != 0) &&
+         (self.selectedChannel.profile.camera_stun_video_port != 0)
+        )
+    { // Make sure we are connecting via STUN
+        
+        NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+        NSString *apiKey = [userDefaults objectForKey:@"PortalApiKey"];
+        NSString *mac = [Util strip_colon_fr_mac:self.selectedChannel.profile.mac_address];
+        
+        
+        BMS_JSON_Communication *jsonComm = [[[BMS_JSON_Communication alloc] initWithObject:self
+                                                                                  Selector:nil
+                                                                              FailSelector:nil
+                                                                                 ServerErr:nil] autorelease];
+        NSDictionary *responseDict;
+        
+        NSString * cmd_string = @"action=command&command=close_p2p_rtsp_stun";
+        
+        responseDict =  [jsonComm  sendCommandBlockedWithRegistrationId:mac
+                                                             andCommand:cmd_string
+                                                              andApiKey:apiKey];
+        
+        
+    }
+    if (self.client != nil)
+    {
+        [self.client shutdown];
+        [self.client release];
+        self.client = nil;
+    }
+
+}
+
 - (void)stopStream
 {
     @synchronized(self)
@@ -1155,14 +1209,7 @@
         {
             [scanner cancel];
         }
-        
-        //FOR STUN
-        if (self.client != nil)
-        {
-            [self.client shutdown];
-            [self.client release];
-            self.client = nil;
-        }
+        [self  stopStunStream];
         
     }
     
@@ -1425,7 +1472,7 @@
     [userDefaults synchronize];
     
     
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0),
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0),
                    ^{
                        NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
                        NSString *apiKey = [userDefaults objectForKey:@"PortalApiKey"];
@@ -1552,12 +1599,19 @@
                            }
                        }
                        
+                       
+                       
+                       
+                      
+                       
                    }
+                   
+                   
                    );
     
     
     
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0),
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0),
         ^{
         
         NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
