@@ -72,7 +72,7 @@
 	/* Added to support direction update */
 	BOOL v_direction_update_needed, h_direction_update_needed;
 
-	
+	NSTimer * probeTimer;
 }
 
 
