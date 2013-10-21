@@ -262,6 +262,8 @@
 		A1BAF942180C064E008DA3F1 /* libswresample.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A10EC11117E0677C00EA4F9D /* libswresample.a */; };
 		A1BAF943180C064E008DA3F1 /* libswscale.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A10EC11217E0677C00EA4F9D /* libswscale.a */; };
 		A1BB7B9F17E02C5C00463A07 /* UdtSocketWrapper.mm in Sources */ = {isa = PBXBuildFile; fileRef = A1BB7B9E17E02C5C00463A07 /* UdtSocketWrapper.mm */; };
+		A1E07DC41814DAE600AE0566 /* ZoneViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A1E07DC21814DAE600AE0566 /* ZoneViewController.m */; };
+		A1E07DC51814DAE600AE0566 /* ZoneViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = A1E07DC31814DAE600AE0566 /* ZoneViewController.xib */; };
 		A1E32FAD17E9899800504538 /* H264PlayerListener.mm in Sources */ = {isa = PBXBuildFile; fileRef = A1E32FAB17E9899800504538 /* H264PlayerListener.mm */; };
 		A1E32FB017E98A4700504538 /* PlaybackListener.mm in Sources */ = {isa = PBXBuildFile; fileRef = A1E32FAE17E98A4700504538 /* PlaybackListener.mm */; };
 		BC3C1ACE16F025B600175AFF /* MBP_MenuViewController_ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = BC3C1AD016F025B600175AFF /* MBP_MenuViewController_ipad.xib */; };
@@ -711,6 +713,9 @@
 		A1A98E93180BF69800C8EBD3 /* libpjnath-arm-apple-darwin9.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libpjnath-arm-apple-darwin9.a"; path = "../ios-frameworks/pjsip/arm/lib/libpjnath-arm-apple-darwin9.a"; sourceTree = "<group>"; };
 		A1BB7B9417E0250000463A07 /* MonitorCommunication.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MonitorCommunication.framework; path = "../ios-frameworks/MonitorCommunication.framework"; sourceTree = "<group>"; };
 		A1BB7B9E17E02C5C00463A07 /* UdtSocketWrapper.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = UdtSocketWrapper.mm; sourceTree = "<group>"; };
+		A1E07DC11814DAE600AE0566 /* ZoneViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZoneViewController.h; sourceTree = "<group>"; };
+		A1E07DC21814DAE600AE0566 /* ZoneViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZoneViewController.m; sourceTree = "<group>"; };
+		A1E07DC31814DAE600AE0566 /* ZoneViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ZoneViewController.xib; sourceTree = "<group>"; };
 		A1E32FAB17E9899800504538 /* H264PlayerListener.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = H264PlayerListener.mm; sourceTree = "<group>"; };
 		A1E32FAC17E9899800504538 /* H264PlayerListener.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = H264PlayerListener.h; sourceTree = "<group>"; };
 		A1E32FAE17E98A4700504538 /* PlaybackListener.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = PlaybackListener.mm; sourceTree = "<group>"; };
@@ -1600,6 +1605,7 @@
 		080E96DDFE201D6D7F000001 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				A1E07DC01814DA1200AE0566 /* Zone Detection */,
 				A1A98E8A180BF57700C8EBD3 /* PJ_NAT */,
 				84DEA2B717E42DB900567836 /* NotificationView */,
 				978B25B317E1B2AE006FC224 /* SlideMenu */,
@@ -2109,6 +2115,16 @@
 			name = PJ_NAT;
 			sourceTree = "<group>";
 		};
+		A1E07DC01814DA1200AE0566 /* Zone Detection */ = {
+			isa = PBXGroup;
+			children = (
+				A1E07DC11814DAE600AE0566 /* ZoneViewController.h */,
+				A1E07DC21814DAE600AE0566 /* ZoneViewController.m */,
+				A1E07DC31814DAE600AE0566 /* ZoneViewController.xib */,
+			);
+			name = "Zone Detection";
+			sourceTree = "<group>";
+		};
 		BC883A621798E68D001D02D8 /* Google Analytics Library */ = {
 			isa = PBXGroup;
 			children = (
@@ -2302,6 +2318,7 @@
 				38DE1CCA168AEDD10049E814 /* bb_setup_icon_step_3.png in Resources */,
 				388396B9168B064500B0D020 /* MBP_iosViewController.xib in Resources */,
 				388396BE168B068400B0D020 /* CameraViewController_land_ipad.xib in Resources */,
+				A1E07DC51814DAE600AE0566 /* ZoneViewController.xib in Resources */,
 				BC3C1ACE16F025B600175AFF /* MBP_MenuViewController_ipad.xib in Resources */,
 				BC3C1AD316F025E300175AFF /* MBP_MenuProgress_portrait_ipad.xib in Resources */,
 				BC3C1AD816F025FF00175AFF /* MBP_MenuProgress_land_ipad.xib in Resources */,
@@ -2444,6 +2461,7 @@
 				38A478D015BD64F9008682FE /* MBP_InitialSetupViewController.mm in Sources */,
 				38A478D915BE484B008682FE /* Step_02_ViewController.mm in Sources */,
 				38A478DC15BE4BFA008682FE /* Step_03_ViewController.mm in Sources */,
+				A1E07DC41814DAE600AE0566 /* ZoneViewController.m in Sources */,
 				38A478E815BE82E0008682FE /* Step_04_ViewController.mm in Sources */,
 				38A478F015C0015F008682FE /* Step_05_ViewController.mm in Sources */,
 				38A478F715C115C3008682FE /* Step_06_ViewController.mm in Sources */,
