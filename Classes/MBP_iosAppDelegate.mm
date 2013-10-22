@@ -59,8 +59,50 @@
 	NSLog(@"Log location: %@",logPath);
 #endif
     
-
+    
+    
     [CameraAlert reloadBlankTableIfNeeded];
+    
+    
+    
+    
+    /* check the server name file */
+    
+    
+    NSError *error;
+    NSString * serverFile = [cachesDirectory stringByAppendingPathComponent:@"server.txt"];
+    NSString* content = [NSString stringWithContentsOfFile:serverFile encoding:NSUTF8StringEncoding error:&error];
+    if (content != nil)
+    {
+        NSArray *allLines = [content componentsSeparatedByString: @"\n"];
+        NSString *firstLine = [allLines objectAtIndex:0];
+         NSLog(@"1 New server is %@",firstLine);
+    }
+    else
+    {
+        NSLog(@"Use default server");
+    }
+#if 0
+	int result;
+    FILE *pFile;
+	char buffer[512];
+	
+    pFile = fopen([serverFile cStringUsingEncoding:NSASCIIStringEncoding], "r");
+    if (pFile != NULL)
+    {
+        result = fread (buffer,1,512,pFile);
+        if (result >  0)
+        {
+            NSLog(@"New server is %@",[NSString stringWithUTF8String:buffer]);
+        }
+    }
+    else
+    {
+        NSLog(@"Use default server");
+    }
+#endif
+    
+    
     
     return YES;
 }
