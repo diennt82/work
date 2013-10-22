@@ -40,8 +40,6 @@
     // !!!: Use the next line only during TEST - appstore release: need to comment this line
     //[TestFlight setDeviceIdentifier:[[UIDevice currentDevice] uniqueIdentifier]];
     
-    [BMS_JSON_Communication setServerInput:@"http://api.simplimonitor.com"];
-    
   
     //Add testflight app token - For remote login & crash reporting
     //[TestFlight takeOff:@"4574de50-f54d-4414-a803-fc460426c915"];
@@ -78,12 +76,17 @@
     if (content != nil)
     {
         NSArray *allLines = [content componentsSeparatedByString: @"\n"];
-        NSString *firstLine = [allLines objectAtIndex:0];
-         NSLog(@"1 New server is %@",firstLine);
+        NSString *serverString = [allLines objectAtIndex:0];
+        
+        [BMS_JSON_Communication setServerInput:serverString];
+            
+         NSLog(@"1 New server is %@",serverString);
     }
     else
     {
         NSLog(@"Use default server");
+        
+        [BMS_JSON_Communication setServerInput:@"http://api.simplimonitor.com/v1"];
     }
 #if 0
 	int result;

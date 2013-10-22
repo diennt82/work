@@ -165,7 +165,7 @@
 		84DEA2BB17E42E3F00567836 /* NotificationViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 84DEA2B917E42E3F00567836 /* NotificationViewController.mm */; };
 		84DEA2BC17E42E3F00567836 /* NotificationViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 84DEA2BA17E42E3F00567836 /* NotificationViewController.xib */; };
 		8B18B9541805184D00FF02C8 /* H264MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8B18B9531805184D00FF02C8 /* H264MediaPlayer.framework */; };
-		8B372ADD18162F36003E3FFF /* MonitorCommunication.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8BD2CD40180EA1F900DF3862 /* MonitorCommunication.framework */; };
+		8B372ADE181632B7003E3FFF /* MonitorCommunication.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8BD2CD40180EA1F900DF3862 /* MonitorCommunication.framework */; };
 		8B68F5D118066CE500661527 /* PlaybackViewController_ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8B68F5D018066CE500661527 /* PlaybackViewController_ipad.xib */; };
 		9704F84117B37CB3005F9868 /* DashBoard_ViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 9704F84017B37CAF005F9868 /* DashBoard_ViewController.mm */; };
 		97137B9715AE742A00BEBBD6 /* StunCommunication.mm in Sources */ = {isa = PBXBuildFile; fileRef = 97137B9615AE742A00BEBBD6 /* StunCommunication.mm */; };
