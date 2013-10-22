@@ -34,10 +34,13 @@
     // Create tracker instance.
     
     //UA-ID_INSTANCE is taken from the account analytics on google analytics
-    id<GAITracker> tracker = [[GAI sharedInstance] trackerWithTrackingId:@"UA-42134835-2"];
+    //id<GAITracker> tracker =
+    [[GAI sharedInstance] trackerWithTrackingId:@"UA-42134835-2"];
 
     // !!!: Use the next line only during TEST - appstore release: need to comment this line
     //[TestFlight setDeviceIdentifier:[[UIDevice currentDevice] uniqueIdentifier]];
+    
+    [BMS_JSON_Communication setServerInput:@"http://api.simplimonitor.com"];
     
   
     //Add testflight app token - For remote login & crash reporting

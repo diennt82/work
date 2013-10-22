@@ -176,25 +176,26 @@
     {
         if ([[responseDict objectForKey:@"status"] intValue] == 200)
         {
-            NSDictionary *eventDict = [[responseDict objectForKey:@"data"] objectForKey:@"events"];
+            NSArray *eventArr = [[responseDict objectForKey:@"data"] objectForKey:@"events"];
             
             
             NSLog(@"play list: %@ ",responseDict);
             
-            NSArray *playlist = [eventDict objectForKey:[NSString stringWithFormat:@"%d", 0]];
+            NSArray *playlist = [[eventArr objectAtIndex:0] objectForKey:@"playlist"];
             
-            for (NSDictionary *clipInfo in playlist)
-            {
-                PlaylistInfo *playlistInfo = [[[PlaylistInfo alloc] init] autorelease];
+            for (NSDictionary *clipInfo in playlist) {
+                //NSDictionary *clipInfo = [[playlist objectForKey:@"playlist"] objectAtIndex:0];
+                
+                PlaylistInfo *playlistInfo = [[[PlaylistInfo alloc] init]autorelease];
                 playlistInfo.mac_addr = clip_info.mac_addr;
                 
                 playlistInfo.urlImage = [clipInfo objectForKey:@"image"];
                 playlistInfo.titleString = [clipInfo objectForKey:@"title"];
                 playlistInfo.urlFile = [clipInfo objectForKey:@"file"];
                 
-
+                
                 //check if the clip is in our private array
-                BOOL found = FALSE; 
+                BOOL found = FALSE;
                 for ( NSString * one_clip in clips)
                 {
                     NSLog(@"one clip: *%@*", one_clip);
@@ -202,7 +203,7 @@
                     
                     if ([playlistInfo containsClip:one_clip])
                     {
-                        found = TRUE; 
+                        found = TRUE;
                         break;
                     }
                 }
@@ -226,12 +227,7 @@
             }
             
             NSLog(@"there is %d in playlist", [clips count]);
-            
-            
         }
-        
-        
-        
     }
     
     if (got_last_clip == TRUE)

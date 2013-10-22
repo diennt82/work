@@ -1282,15 +1282,12 @@
     {
         if ([[responseDict objectForKey:@"status"] intValue] == 200)
         {
-            NSDictionary *eventDict = [[responseDict objectForKey:@"data"] objectForKey:@"events"];
+            NSArray *eventArr = [[responseDict objectForKey:@"data"] objectForKey:@"events"];
             
             self.playlistViewController.playlistArray = [NSMutableArray array];
             
-            NSLog(@"Playlist dictionary count = %d", eventDict.count);
-            
-            for (int i = 0; i < eventDict.count; ++i)
-            {
-                NSDictionary *clipInfo = [[eventDict objectForKey:[NSString stringWithFormat:@"%d", i]] objectAtIndex:0];
+            for (NSDictionary *playlist in eventArr) {
+                NSDictionary *clipInfo = [[playlist objectForKey:@"playlist"] objectAtIndex:0];
                 
                 PlaylistInfo *playlistInfo = [[[PlaylistInfo alloc] init] autorelease];
                 playlistInfo.mac_addr = mac;
@@ -1306,8 +1303,6 @@
         }
     }
     
-    //self.activityIndicator.hidden = YES;
-    //[self.activityIndicator stopAnimating];
 }
 
 -(void) getVQ_bg

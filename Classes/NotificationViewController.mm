@@ -229,15 +229,16 @@
         {
             NSLog(@"Event : %@ ",responseDict);
             
-            NSDictionary *eventDict = [[responseDict objectForKey:@"data"] objectForKey:@"events"];
+            NSArray *eventArr = [[responseDict objectForKey:@"data"] objectForKey:@"events"];
             
             
-            if (eventDict.count == 1)
+            if (eventArr.count == 1)
             {
-                
-                
                 //expect 1 event only
-                NSDictionary *clipInfo = [[eventDict objectForKey:[NSString stringWithFormat:@"%d", 0]] objectAtIndex:0];
+                NSDictionary * eventPlaylist = [eventArr objectAtIndex:0];
+                
+                NSDictionary *clipInfo = [[eventPlaylist objectForKey:@"playlist"]
+                                          objectAtIndex:0];
                 
                 eventInfo = [[PlaylistInfo alloc] init] ;
                 eventInfo.mac_addr = self.cameraMacNoColon;
@@ -257,7 +258,6 @@
                 NSLog(@"Empty event ");
             }
         }
-        
     }
     
 	[pool release];
@@ -365,15 +365,15 @@
     {
         if ([[responseDict objectForKey:@"status"] intValue] == 200)
         {
-            NSDictionary *eventDict = [[responseDict objectForKey:@"data"] objectForKey:@"events"];
+            NSArray *eventArr = [[responseDict objectForKey:@"data"] objectForKey:@"events"];
+            
             
             NSLog(@"play list: %@ ",responseDict);
             
             self.tempPlaylist.playlistArray = [NSMutableArray array];
             
-            for (int i = 0; i < eventDict.count; ++i)
-            {
-                NSDictionary *clipInfo = [[eventDict objectForKey:[NSString stringWithFormat:@"%d", i]] objectAtIndex:0];
+            for (NSDictionary *playlist in eventArr) {
+                NSDictionary *clipInfo = [[playlist objectForKey:@"playlist"] objectAtIndex:0];
                 
                 PlaylistInfo *playlistInfo = [[[PlaylistInfo alloc] init]autorelease];
                 playlistInfo.mac_addr = self.cameraMacNoColon;
@@ -391,12 +391,9 @@
             
             
             [self.tempPlaylist.tableView performSelectorOnMainThread:@selector(reloadData)
-                                                           withObject:nil waitUntilDone:NO ];
+                                                          withObject:nil waitUntilDone:NO ];
             self.tempPlaylist.view.hidden = NO;
         }
-        
-        
-        
     }
     
 	[pool release];
