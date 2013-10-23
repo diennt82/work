@@ -381,14 +381,14 @@
         {
             playbackStreamer->suspend();
             playbackStreamer->stop();
-            delete playbackStreamer;
+            free (playbackStreamer);
             playbackStreamer = NULL;
         }
         else // set Data source failed!
         {
             playbackStreamer->suspend();
             playbackStreamer->stop();
-            delete playbackStreamer;
+            free ( playbackStreamer );
             playbackStreamer = NULL;
         }
     }
@@ -433,7 +433,7 @@
 #pragma mark - Rotation screen
 - (BOOL)shouldAutorotate
 {
-    NSLog(@"Should Auto Rotate");
+
 	return YES;
 }
 

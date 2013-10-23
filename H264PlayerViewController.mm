@@ -260,7 +260,7 @@
             
             self.activityIndicator.hidden = YES;
             [self.activityIndicator stopAnimating];
-
+            
             if (probeTimer != nil && [probeTimer isValid])
             {
                 [probeTimer invalidate];
@@ -328,13 +328,13 @@
             }
         }
             break;
-
+            
         case MEDIA_ERROR_SERVER_DIED:
     	case MEDIA_ERROR_TIMEOUT_WHILE_STREAMING:
         {
             self.currentMediaStatus = msg;
             
-    		NSLog(@"Timeout While streaming");
+    		NSLog(@"Timeout While streaming  OR server DIED ");
             
     		//mHandler.dispatchMessage(Message.obtain(mHandler, Streamer.MSG_VIDEO_STREAM_HAS_STOPPED_UNEXPECTEDLY));
             
@@ -349,7 +349,7 @@
                            withObject:nil
                            afterDelay:0.1];
                 return;
-
+                
             }
             
             if (self.h264StreamerIsInStopped == TRUE)
@@ -444,9 +444,20 @@
             }
             
             
-    		
-        }
     		break;
+        }
+    		
+        case SWITCHING_TO_RELAY_SERVER:// just update the dialog
+        {
+            NSLog(@"switching to relay server");
+            
+            //TODO: Make sure we have closed all stream
+            //Assume we are connecting via Symmetrict NAT
+            [self symmetric_check_result:TRUE];
+            
+            break;
+        }
+            
             
         default:
             break;
@@ -516,14 +527,14 @@
                                                                 withLabel:@"Can't connect to network"
                                                                 withValue:nil];
             
-#if 1
+
             msg = [NSString stringWithFormat:@"%@ (%d)", msg, self.selected_channel.remoteConnectionError];
             if (self.streamer != nil)
             {
                 msg = [NSString stringWithFormat:@"%@(%d)",msg,
                        self.streamer.latest_connection_error ];
             }
-#endif
+
             
             
             if (self.alertTimer != nil && [self.alertTimer isValid])
@@ -649,7 +660,7 @@
         }
         case REMOTE_STREAM_STOPPED:
         {
-#if 1 //dont close_session
+
             
             if ( streamer.communication_mode == COMM_MODE_STUN )
             {
@@ -677,7 +688,7 @@
                 }
             }
             
-#endif
+
             
             break;
         }
@@ -850,6 +861,8 @@
                                                            userInfo:nil
                                                             repeats:YES];
 }
+
+#pragma mark - Setup camera
 
 - (void)setupCamera
 {
@@ -1623,6 +1636,7 @@
                                {
                                    NSArray * tokens = [body componentsSeparatedByString:@","];
                                    
+
                                    if ( [[tokens objectAtIndex:0] hasSuffix:@"error=200"]) //roughly check for "error=200"
                                    {
                                        
@@ -1649,9 +1663,19 @@
                                    {
                                        NSLog(@"Respone error : camera response error: %@", body);
                                        
-                                       //force server died
+                                       
+                                       /* close current session  before continue*/
+                                       cmd_string = @"action=command&command=close_p2p_rtsp_stun";
+                                       
+                                       responseDict =  [jsonComm  sendCommandBlockedWithRegistrationId:mac
+                                                                                            andCommand:cmd_string
+                                                                                             andApiKey:apiKey];
+
+                                       
+                                       
+                                       //relay
                                        [self performSelectorOnMainThread:@selector(handleMessageOnMainThread:)
-                                                              withObject:[NSNumber numberWithInt:MEDIA_ERROR_SERVER_DIED]
+                                                              withObject:[NSNumber numberWithInt:SWITCHING_TO_RELAY_SERVER]
                                                            waitUntilDone:NO];
                                        
                                        
@@ -1660,6 +1684,12 @@
                                else
                                {
                                    NSLog(@"Respone error : can't parse \"body\"field from %@", responseDict);
+                                   
+                                   //force server died
+                                   [self performSelectorOnMainThread:@selector(handleMessageOnMainThread:)
+                                                          withObject:[NSNumber numberWithInt:MEDIA_ERROR_SERVER_DIED]
+                                                       waitUntilDone:NO];
+
                                    
                                }
                                
@@ -1750,7 +1780,7 @@
                                    }
                                    else 
                                    {
-                                       self.selectedChannel.stream_url = [[NSBundle mainBundle] pathForResource:@"stream720p" ofType:@"sdp"];
+                                       self.selectedChannel.stream_url = [[NSBundle mainBundle] pathForResource:@"stream-1" ofType:@"sdp"];
                                    }
                                    
                                }
@@ -2241,7 +2271,6 @@
 #pragma mark - Rotation screen
 - (BOOL)shouldAutorotate
 {
-    NSLog(@"Should Auto Rotate");
     
     if (userWantToCancel == TRUE)
     {
