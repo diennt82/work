@@ -107,7 +107,14 @@
     
     
     self.zoneViewController = [[ZoneViewController alloc] init];
-    self.zoneViewController.view.frame = CGRectMake(0, 258, 320, 190);
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+    {
+        self.zoneViewController.view.frame = CGRectMake(0, 550, 768, 430);
+    }
+    else
+    {
+        self.zoneViewController.view.frame = CGRectMake(0, 258, 320, 190);
+    }
     self.zoneViewController.selectedChannel = self.selectedChannel;
     self.zoneViewController.view.hidden = YES;
     self.zoneViewController.zoneVCDelegate = self;
