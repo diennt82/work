@@ -46,13 +46,15 @@
     
     [window setRootViewController:viewController];
     [window makeKeyAndVisible];
-
+    
+    
+    NSString *cachesDirectory = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
 	
 	
 #if TARGET_IPHONE_SIMULATOR == 0
 	
 	
-	NSString *cachesDirectory = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
+	
 	
 	NSString *logPath = [cachesDirectory stringByAppendingPathComponent:@"application.log"];
 	

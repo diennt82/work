@@ -380,15 +380,16 @@
         {
             playbackStreamer->suspend();
             playbackStreamer->stop();
-            free(playbackStreamer);
+            delete playbackStreamer;
             playbackStreamer = NULL;
         }
         else // set Data source failed!
         {
             playbackStreamer->suspend();
             playbackStreamer->stop();
-            free ( playbackStreamer );
+            delete playbackStreamer;
             playbackStreamer = NULL;
+            
         }
     }
     
