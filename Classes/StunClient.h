@@ -36,9 +36,10 @@
 @property(nonatomic, retain) NSThread* natCheckThread; 
 @property(nonatomic) pj_stun_nat_type nat_type;
 @property (nonatomic) pj_status_t nat_status;
-@property (nonatomic) id<StunClientDelegate> mcallback;
+@property (nonatomic,assign) id<StunClientDelegate> mcallback;
 
 -(BOOL) test_start_;
+-(BOOL) isCheckingForSymmetrictNat; 
 
 -(int) create_stun_forwarder:(CamChannel*) channel;
 

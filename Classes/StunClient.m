@@ -158,6 +158,12 @@ extern int cleanup_pj();
 #pragma mark -
 #pragma mark Chek SYMMETRIC NAT
 
+-(BOOL) isCheckingForSymmetrictNat
+{
+    
+    return self.waiting_for_result;
+
+}
 
 -(BOOL) test_start_async: (id<StunClientDelegate>) callback
 {
