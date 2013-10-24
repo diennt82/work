@@ -106,9 +106,13 @@
     //[self scan_for_missing_camera];
     
     
+    self.zoneViewController = [[ZoneViewController alloc] init];
+    self.zoneViewController.view.frame = CGRectMake(0, 258, 320, 190);
+    self.zoneViewController.selectedChannel = self.selectedChannel;
+    self.zoneViewController.view.hidden = YES;
+    self.zoneViewController.zoneVCDelegate = self;
     
-    
-
+    self.zoneButton.enabled = NO;
     
     [self becomeActive];
 }
@@ -225,6 +229,24 @@
     [self performSelectorInBackground:@selector(setTriggerRecording_bg:)
                            withObject:modeRecording];
 }
+- (IBAction)zoneTouchedAction:(id)sender
+{
+    self.imgViewDrectionPad.hidden = YES;
+    
+    if (self.zoneViewController != nil)
+    {
+        if (self.zoneViewController.view.hidden == NO)
+        {
+            self.zoneViewController.view.hidden = YES;
+        }
+        else
+        {
+            self.zoneViewController.view.hidden = NO;
+            [self.view addSubview:self.zoneViewController.view];
+            [self.view bringSubviewToFront:self.zoneViewController.view];
+        }
+    }
+}
 
 - (IBAction)barBntItemRevealAction:(id)sender
 {
@@ -253,7 +275,7 @@
 {
     int msg = [numberMsg integerValue];
     
-    NSLog(@"currentMediaStatus: %d", msg);
+    //NSLog(@"currentMediaStatus: %d", msg);
     
     switch (msg)
     {
@@ -308,6 +330,7 @@
                 
                 [self performSelectorInBackground:@selector(getVQ_bg) withObject:nil];
                 [self performSelectorInBackground:@selector(getTriggerRecording_bg) withObject:nil];
+                [self performSelectorInBackground:@selector(getZoneDetection_bg) withObject:nil];
             }
         }
             break;
@@ -745,6 +768,19 @@
     {
         h264Streamer->suspend();
     }
+}
+
+#pragma mark - Delegate Zone view controller
+
+- (void)beginProcessing
+{
+    self.viewStopStreamingProgress.hidden = NO;
+    [self.view bringSubviewToFront:self.viewStopStreamingProgress];
+}
+
+- (void)endProcessing
+{
+    self.viewStopStreamingProgress.hidden = YES;
 }
 
 #pragma mark - Method
@@ -1307,62 +1343,63 @@
 
 -(void) getVQ_bg
 {
-    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    NSString *bodyKey = @"";
     
-    NSDictionary *responseDict  = nil;
-    NSString *mac = [Util strip_colon_fr_mac:self.selectedChannel.profile.mac_address];
-    NSString *apiKey = [userDefaults objectForKey:@"PortalApiKey"];
-    NSLog(@"mac %@, apikey %@", mac, apiKey);
-   
-    
-    if (self.selectedChannel.profile.isInLocal ) // Replace with httpCommunication after
+    if (self.selectedChannel.profile.isInLocal )
 	{
-        self.jsonComm = [[[BMS_JSON_Communication alloc] initWithObject:self
-                                                              Selector:nil
-                                                          FailSelector:nil
-                                                             ServerErr:nil] autorelease];
-		if (self.jsonComm != nil)
-		{
-            responseDict= [self.jsonComm sendCommandBlockedWithRegistrationId:mac
-                                                                   andCommand:@"action=command&command=get_resolution"
-                                                                    andApiKey:apiKey];
-		}
+        HttpCommunication *httpCommunication = [[HttpCommunication alloc] init];
+        httpCommunication.device_ip = self.selectedChannel.profile.ip_address;
+        httpCommunication.device_port = self.selectedChannel.profile.port;
+        
+        NSData *responseData = [httpCommunication sendCommandAndBlock_raw:@"get_resolution"];
+        
+        if (responseData != nil)
+        {
+            bodyKey = [[[NSString alloc] initWithData:responseData encoding: NSUTF8StringEncoding] autorelease];
+            
+            NSLog(@"getVQ_bg response string: %@", bodyKey);
+        }
 	}
 	else if(self.selectedChannel.profile.minuteSinceLastComm <= 5) // Remote
 	{
-		self.jsonComm = [[[BMS_JSON_Communication alloc] initWithObject:self
+        NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+        
+        NSString *mac = [Util strip_colon_fr_mac:self.selectedChannel.profile.mac_address];
+        NSString *apiKey = [userDefaults objectForKey:@"PortalApiKey"];
+        NSLog(@"mac %@, apikey %@", mac, apiKey);
+        
+		BMS_JSON_Communication *jsonCommunication = [[[BMS_JSON_Communication alloc] initWithObject:self
                                                                Selector:nil
                                                            FailSelector:nil
                                                               ServerErr:nil] autorelease];
-		if (self.jsonComm != nil)
-		{
-            responseDict= [self.jsonComm sendCommandBlockedWithRegistrationId:mac
-                                                                   andCommand:[NSString stringWithFormat:@"action=command&command=get_resolution"]
-                                                                    andApiKey:apiKey];
-		}
-	}
-
-	if (responseDict != nil)
-	{
         
-        NSInteger status = [[responseDict objectForKey:@"status"] intValue];
-		if (status == 200)
-		{
-			NSString *bodyKey = [[[responseDict objectForKey:@"data"] objectForKey:@"device_response"] objectForKey:@"body"];
+        NSDictionary *responseDict = [jsonCommunication sendCommandBlockedWithRegistrationId:mac
+                                                               andCommand:[NSString stringWithFormat:@"action=command&command=get_resolution"]
+                                                                andApiKey:apiKey];
+        if (responseDict != nil)
+        {
             
-            NSArray * tokens = [bodyKey componentsSeparatedByString:@": "];
-            if ([tokens count] >=2 )
+            NSInteger status = [[responseDict objectForKey:@"status"] intValue];
+            if (status == 200)
             {
-                NSString *modeVideo = [tokens objectAtIndex:1];
-                
-                [self performSelectorOnMainThread:@selector(setVQForground:)
-                                       withObject:modeVideo waitUntilDone:NO];
+                bodyKey = [[[responseDict objectForKey:@"data"] objectForKey:@"device_response"] objectForKey:@"body"];
             }
-		}
-        //[self performSelectorOnMainThread:@selector(setVQ_fg:) withObject:responseDict waitUntilDone:NO];
+        }
+        
+        NSLog(@"getVQ_bg responseDict = %@", responseDict);
 	}
     
-    NSLog(@"getVQ_bg responseDict = %@", responseDict);
+    if (![bodyKey isEqualToString:@""])
+    {
+        NSArray * tokens = [bodyKey componentsSeparatedByString:@": "];
+        if ([tokens count] >=2 )
+        {
+            NSString *modeVideo = [tokens objectAtIndex:1];
+            
+            [self performSelectorOnMainThread:@selector(setVQForground:)
+                                   withObject:modeVideo waitUntilDone:NO];
+        }
+    }
 }
 
 - (void)setVQForground: (NSString *)modeVideo
@@ -1507,6 +1544,123 @@
     {
         self.recordingFlag = !self.recordingFlag;
     }
+}
+
+#pragma mark - Zone Detection
+
+- (void)getZoneDetection_bg
+{
+    NSString *responseString = @"";
+    
+    if (self.selectedChannel.profile .isInLocal == TRUE)
+    {
+        HttpCommunication *httpCommunication = [[HttpCommunication alloc] init];
+        httpCommunication.device_ip = self.selectedChannel.profile.ip_address;
+        httpCommunication.device_port = self.selectedChannel.profile.port;
+        
+        NSData *responseData = [httpCommunication sendCommandAndBlock_raw:@"get_motion_area"];
+        
+        if (responseData != nil)
+        {
+            
+            responseString = [[[NSString alloc] initWithData:responseData encoding: NSUTF8StringEncoding] autorelease];
+            
+            NSLog(@"getZoneDetection_bg response string: %@", responseString);
+        }
+    }
+    else
+    {
+        BMS_JSON_Communication *jsonCommunication = [[[BMS_JSON_Communication alloc] initWithObject:self
+                                                                                           Selector:nil
+                                                                                       FailSelector:nil
+                                                                                          ServerErr:nil] autorelease];
+        
+        NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+        
+        NSString *mac = [Util strip_colon_fr_mac:self.selectedChannel.profile.mac_address];
+        NSString *apiKey = [userDefaults objectForKey:@"PortalApiKey"];
+        
+        NSDictionary *responseDict = [jsonCommunication sendCommandBlockedWithRegistrationId:mac
+                                                                                  andCommand:@"action=command&command=get_motion_area"
+                                                                                   andApiKey:apiKey];
+        if (responseDict != nil)
+        {
+            NSInteger status = [[responseDict objectForKey:@"status"] intValue];
+            if (status == 200)
+            {
+                responseString = [[[responseDict objectForKey:@"data"] objectForKey:@"device_response"] objectForKey:@"body"];
+            }
+        }
+    }
+    
+    if (![responseString isEqualToString:@""])
+    {
+        NSRange tmpRange = [responseString rangeOfString:@"="];
+        
+        if (tmpRange.location != NSNotFound)
+        {
+            NSArray * tokens = [responseString componentsSeparatedByString:@"="];
+            
+            if (tokens.count > 1 )
+            {
+                NSString *zoneString = [tokens lastObject];
+                
+                if (![zoneString isEqualToString:@""])
+                {
+                    NSRange range = [zoneString rangeOfString:@","];
+                    
+                    NSArray *zoneArr = [NSArray array];
+                    
+                    if (range.location != NSNotFound)
+                    {
+                        zoneArr = [NSArray arrayWithArray: [zoneString componentsSeparatedByString:@","]];
+                        
+                        NSLog(@"getZoneDetection_bg: %@", zoneArr);
+                    }
+                    else
+                    {
+                        zoneArr = [NSArray arrayWithObject:zoneString];
+                    }
+                    
+                    [self performSelectorOnMainThread:@selector(setZoneDetection_fg:)
+                                           withObject:zoneArr
+                                        waitUntilDone:NO];
+                }
+            }
+        }
+    }
+    else
+    {
+        self.zoneButton.enabled = YES;
+    }
+    
+    //get_motion_area: grid=AxB,zone=00,11
+}
+
+- (void)setZoneDetection_fg: (NSArray *)zoneArray
+{
+    self.zoneViewController.oldZoneArray = [NSArray arrayWithArray:zoneArray];
+    
+    for (NSString *zoneString in zoneArray)
+    {
+        for (id tmpView in [self.zoneViewController.view subviews])
+        {
+            if ([tmpView isKindOfClass:[UIButton class]])
+            {
+                UIButton *zoneBtn = (UIButton *)tmpView;
+                
+                NSString *tmp = [NSString stringWithFormat:@"%02d", zoneBtn.tag % 100];
+                
+                if ([tmp isEqualToString:zoneString])
+                {
+                    [zoneBtn setImage:[UIImage imageNamed:@"tick.jpeg"] forState:UIControlStateNormal];
+                    break;
+                }
+            }
+        }
+    }
+    
+    self.zoneButton.enabled = YES;
 }
 
 #pragma mark -
@@ -2872,6 +3026,8 @@
     [_viewStopStreamingProgress release];
     [_activityStopStreamingProgress release];
     [_imgBackground release];
+    [_zoneViewController release];
+    [_zoneButton release];
     [super dealloc];
 }
 

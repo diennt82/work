@@ -20,6 +20,7 @@
 #import "PlayerCallbackHandler.h"
 #import "ScanForCamera.h"
 #import "MBP_LoginOrRegistration.h"
+#import "ZoneViewController.h"
 
 #import <MonitorCommunication/MonitorCommunication.h>
 #import <H264MediaPlayer/H264MediaPlayer.h>
@@ -42,7 +43,7 @@
 #define H264_SWITCHING_TO_RELAY2_SERVER     11
 
 @interface H264PlayerViewController: UIViewController
-<UIPickerViewDelegate, UIPickerViewDataSource, PlaylistDelegate,PlayerCallbackHandler,ScanForCameraNotifier, StunClientDelegate>
+<UIPickerViewDelegate, UIPickerViewDataSource, PlaylistDelegate,PlayerCallbackHandler,ScanForCameraNotifier, StunClientDelegate, ZoneViewControlerDeleate>
 {
     MediaPlayer* h264Streamer;
     
@@ -88,6 +89,7 @@
 @property (retain, nonatomic) IBOutlet UIActivityIndicatorView *activityIndicator;
 @property (retain, nonatomic) IBOutlet UIView *viewStopStreamingProgress;
 @property (retain, nonatomic) IBOutlet UIActivityIndicatorView *activityStopStreamingProgress;
+@property (retain, nonatomic) IBOutlet UIButton *zoneButton;
 
 @property (retain, nonatomic) IBOutlet UIBarButtonItem *barBntItemReveal;
 
@@ -104,6 +106,7 @@
 @property (nonatomic) BOOL iFrameOnlyFlag;
 @property (nonatomic,retain) StunClient * client; 
 @property (nonatomic, retain) UIImage *imgBackground;
+@property (nonatomic, retain) ZoneViewController *zoneViewController;
 
 
 /* Direction */

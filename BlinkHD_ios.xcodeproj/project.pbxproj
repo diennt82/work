@@ -164,6 +164,10 @@
 		84DEA2BC17E42E3F00567836 /* NotificationViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 84DEA2BA17E42E3F00567836 /* NotificationViewController.xib */; };
 		8B68F5D118066CE500661527 /* PlaybackViewController_ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8B68F5D018066CE500661527 /* PlaybackViewController_ipad.xib */; };
 		8BA5C47C1818DAAC006B4BB8 /* libcrypto.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A15430FC1818D08A00337EFE /* libcrypto.a */; };
+		8BA5C4801818DCC1006B4BB8 /* ZoneViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8BA5C47E1818DCC1006B4BB8 /* ZoneViewController.m */; };
+		8BA5C4811818DCC1006B4BB8 /* ZoneViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8BA5C47F1818DCC1006B4BB8 /* ZoneViewController.xib */; };
+		8BA5C48318190EDE006B4BB8 /* tick.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = 8BA5C48218190EDE006B4BB8 /* tick.jpeg */; };
+		8BA5C485181911D6006B4BB8 /* untick.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = 8BA5C484181911D6006B4BB8 /* untick.jpeg */; };
 		9704F84117B37CB3005F9868 /* DashBoard_ViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 9704F84017B37CAF005F9868 /* DashBoard_ViewController.mm */; };
 		97137B9715AE742A00BEBBD6 /* StunCommunication.mm in Sources */ = {isa = PBXBuildFile; fileRef = 97137B9615AE742A00BEBBD6 /* StunCommunication.mm */; };
 		9719EC5C155C9F30005419FC /* MBP_MenuViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 9719EC5A155C9F30005419FC /* MBP_MenuViewController.mm */; };
@@ -248,8 +252,6 @@
 		A1A98E8F180BF5AA00C8EBD3 /* client_main.c in Sources */ = {isa = PBXBuildFile; fileRef = A1A98E8B180BF5AA00C8EBD3 /* client_main.c */; };
 		A1A98E90180BF5AA00C8EBD3 /* StunClient.m in Sources */ = {isa = PBXBuildFile; fileRef = A1A98E8E180BF5AA00C8EBD3 /* StunClient.m */; };
 		A1BB7B9F17E02C5C00463A07 /* UdtSocketWrapper.mm in Sources */ = {isa = PBXBuildFile; fileRef = A1BB7B9E17E02C5C00463A07 /* UdtSocketWrapper.mm */; };
-		A1E07DC41814DAE600AE0566 /* ZoneViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A1E07DC21814DAE600AE0566 /* ZoneViewController.m */; };
-		A1E07DC51814DAE600AE0566 /* ZoneViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = A1E07DC31814DAE600AE0566 /* ZoneViewController.xib */; };
 		A1E32FAD17E9899800504538 /* H264PlayerListener.mm in Sources */ = {isa = PBXBuildFile; fileRef = A1E32FAB17E9899800504538 /* H264PlayerListener.mm */; };
 		A1E32FB017E98A4700504538 /* PlaybackListener.mm in Sources */ = {isa = PBXBuildFile; fileRef = A1E32FAE17E98A4700504538 /* PlaybackListener.mm */; };
 		BC3C1ACE16F025B600175AFF /* MBP_MenuViewController_ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = BC3C1AD016F025B600175AFF /* MBP_MenuViewController_ipad.xib */; };
@@ -547,6 +549,11 @@
 		84DEA2B917E42E3F00567836 /* NotificationViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = NotificationViewController.mm; sourceTree = "<group>"; };
 		84DEA2BA17E42E3F00567836 /* NotificationViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = NotificationViewController.xib; sourceTree = "<group>"; };
 		8B68F5D018066CE500661527 /* PlaybackViewController_ipad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PlaybackViewController_ipad.xib; sourceTree = "<group>"; };
+		8BA5C47D1818DCC1006B4BB8 /* ZoneViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZoneViewController.h; sourceTree = "<group>"; };
+		8BA5C47E1818DCC1006B4BB8 /* ZoneViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZoneViewController.m; sourceTree = "<group>"; };
+		8BA5C47F1818DCC1006B4BB8 /* ZoneViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ZoneViewController.xib; sourceTree = "<group>"; };
+		8BA5C48218190EDE006B4BB8 /* tick.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = tick.jpeg; sourceTree = "<group>"; };
+		8BA5C484181911D6006B4BB8 /* untick.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = untick.jpeg; sourceTree = "<group>"; };
 		8D1107310486CEB800E47090 /* BlinkHD_ios-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "BlinkHD_ios-Info.plist"; plistStructureDefinitionIdentifier = "com.apple.xcode.plist.structure-definition.iphone.info-plist"; sourceTree = "<group>"; };
 		9704F37E14B76202000B4AA5 /* Entitlements.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Entitlements.plist; sourceTree = "<group>"; };
 		9704F83F17B37CAD005F9868 /* DashBoard_ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DashBoard_ViewController.h; sourceTree = "<group>"; };
@@ -688,9 +695,6 @@
 		A1A98E8D180BF5AA00C8EBD3 /* StunClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StunClient.h; sourceTree = "<group>"; };
 		A1A98E8E180BF5AA00C8EBD3 /* StunClient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StunClient.m; sourceTree = "<group>"; };
 		A1BB7B9E17E02C5C00463A07 /* UdtSocketWrapper.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = UdtSocketWrapper.mm; sourceTree = "<group>"; };
-		A1E07DC11814DAE600AE0566 /* ZoneViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZoneViewController.h; sourceTree = "<group>"; };
-		A1E07DC21814DAE600AE0566 /* ZoneViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZoneViewController.m; sourceTree = "<group>"; };
-		A1E07DC31814DAE600AE0566 /* ZoneViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ZoneViewController.xib; sourceTree = "<group>"; };
 		A1E32FAB17E9899800504538 /* H264PlayerListener.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = H264PlayerListener.mm; sourceTree = "<group>"; };
 		A1E32FAC17E9899800504538 /* H264PlayerListener.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = H264PlayerListener.h; sourceTree = "<group>"; };
 		A1E32FAE17E98A4700504538 /* PlaybackListener.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = PlaybackListener.mm; sourceTree = "<group>"; };
@@ -2075,9 +2079,11 @@
 		A1E07DC01814DA1200AE0566 /* Zone Detection */ = {
 			isa = PBXGroup;
 			children = (
-				A1E07DC11814DAE600AE0566 /* ZoneViewController.h */,
-				A1E07DC21814DAE600AE0566 /* ZoneViewController.m */,
-				A1E07DC31814DAE600AE0566 /* ZoneViewController.xib */,
+				8BA5C484181911D6006B4BB8 /* untick.jpeg */,
+				8BA5C48218190EDE006B4BB8 /* tick.jpeg */,
+				8BA5C47D1818DCC1006B4BB8 /* ZoneViewController.h */,
+				8BA5C47E1818DCC1006B4BB8 /* ZoneViewController.m */,
+				8BA5C47F1818DCC1006B4BB8 /* ZoneViewController.xib */,
 			);
 			name = "Zone Detection";
 			sourceTree = "<group>";
@@ -2273,7 +2279,6 @@
 				38DE1CCA168AEDD10049E814 /* bb_setup_icon_step_3.png in Resources */,
 				388396B9168B064500B0D020 /* MBP_iosViewController.xib in Resources */,
 				388396BE168B068400B0D020 /* CameraViewController_land_ipad.xib in Resources */,
-				A1E07DC51814DAE600AE0566 /* ZoneViewController.xib in Resources */,
 				BC3C1ACE16F025B600175AFF /* MBP_MenuViewController_ipad.xib in Resources */,
 				BC3C1AD316F025E300175AFF /* MBP_MenuProgress_portrait_ipad.xib in Resources */,
 				BC3C1AD816F025FF00175AFF /* MBP_MenuProgress_land_ipad.xib in Resources */,
@@ -2295,6 +2300,7 @@
 				380CB0CD16DC5AD500290587 /* Step_12_ViewController_land.xib in Resources */,
 				380CB0D016DC5B2000290587 /* Step_12_ViewController_ipad.xib in Resources */,
 				380CB0D316DC5D8100290587 /* Step_12_ViewController_land_ipad.xib in Resources */,
+				8BA5C485181911D6006B4BB8 /* untick.jpeg in Resources */,
 				380CB0D916DC612000290587 /* Step_11_ViewController.xib in Resources */,
 				380CB0DC16DC630400290587 /* Step_11_ViewController_land.xib in Resources */,
 				380CB0DF16DC632700290587 /* Step_11_ViewController_ipad.xib in Resources */,
@@ -2302,9 +2308,11 @@
 				380CB0E516DC8DE400290587 /* MBP_FirstPage_land_ipad.xib in Resources */,
 				382CD25816DDE12200BC8E0C /* Step_07_tableViewCell_ipad.xib in Resources */,
 				380EB15416FC41D8005BAC7F /* Voicemail.aif in Resources */,
+				8BA5C4811818DCC1006B4BB8 /* ZoneViewController.xib in Resources */,
 				BC3C1B0316F05C0C00175AFF /* Localizable.strings in Resources */,
 				BC5B0FCE1701855600D2C308 /* cameraMenuRouter.plist in Resources */,
 				38483F01172A310E009DF61E /* mbp_icon57x57.png in Resources */,
+				8BA5C48318190EDE006B4BB8 /* tick.jpeg in Resources */,
 				38483F03172A3133009DF61E /* mbp_icon72x72.png in Resources */,
 				38483F05172A32C1009DF61E /* mbp_icon114x114.png in Resources */,
 				38483F07172A32D3009DF61E /* mbp_icon144x144.png in Resources */,
@@ -2395,6 +2403,7 @@
 				97A3BF0D15453A39000C3546 /* CameraPassword.m in Sources */,
 				97987CD815468C2E0066C49B /* MBP_FirstPage.m in Sources */,
 				97987DF21546A1630066C49B /* MBP_LoginOrRegistration.mm in Sources */,
+				8BA5C4801818DCC1006B4BB8 /* ZoneViewController.m in Sources */,
 				97987E421546AF2C0066C49B /* UserAccount.mm in Sources */,
 				97987E461546B04C0066C49B /* BMS_Communication.m in Sources */,
 				97C49AB0154784F4008B7D03 /* SetupData.m in Sources */,
@@ -2413,7 +2422,6 @@
 				38A478D015BD64F9008682FE /* MBP_InitialSetupViewController.mm in Sources */,
 				38A478D915BE484B008682FE /* Step_02_ViewController.mm in Sources */,
 				38A478DC15BE4BFA008682FE /* Step_03_ViewController.mm in Sources */,
-				A1E07DC41814DAE600AE0566 /* ZoneViewController.m in Sources */,
 				38A478E815BE82E0008682FE /* Step_04_ViewController.mm in Sources */,
 				38A478F015C0015F008682FE /* Step_05_ViewController.mm in Sources */,
 				38A478F715C115C3008682FE /* Step_06_ViewController.mm in Sources */,
