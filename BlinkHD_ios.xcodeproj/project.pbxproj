@@ -245,6 +245,7 @@
 		A15431011818D10200337EFE /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9770CDF7143076DD009E69EF /* AudioToolbox.framework */; };
 		A15431061818D14100337EFE /* libGoogleAnalytics_debug.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A15431041818D14100337EFE /* libGoogleAnalytics_debug.a */; };
 		A15431071818D14100337EFE /* libGoogleAnalytics.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A15431051818D14100337EFE /* libGoogleAnalytics.a */; };
+		A15431091818DEB800337EFE /* streamvga.sdp in Resources */ = {isa = PBXBuildFile; fileRef = A15431081818DEB800337EFE /* streamvga.sdp */; };
 		A1A98E8F180BF5AA00C8EBD3 /* client_main.c in Sources */ = {isa = PBXBuildFile; fileRef = A1A98E8B180BF5AA00C8EBD3 /* client_main.c */; };
 		A1A98E90180BF5AA00C8EBD3 /* StunClient.m in Sources */ = {isa = PBXBuildFile; fileRef = A1A98E8E180BF5AA00C8EBD3 /* StunClient.m */; };
 		A1BB7B9F17E02C5C00463A07 /* UdtSocketWrapper.mm in Sources */ = {isa = PBXBuildFile; fileRef = A1BB7B9E17E02C5C00463A07 /* UdtSocketWrapper.mm */; };
@@ -683,6 +684,7 @@
 		A15430FD1818D08A00337EFE /* libTestFlight.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libTestFlight.a; path = "../ios-frameworks/libTestFlight.a"; sourceTree = "<group>"; };
 		A15431041818D14100337EFE /* libGoogleAnalytics_debug.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libGoogleAnalytics_debug.a; path = "../ios-frameworks/Google Analytics Library/libGoogleAnalytics_debug.a"; sourceTree = "<group>"; };
 		A15431051818D14100337EFE /* libGoogleAnalytics.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libGoogleAnalytics.a; path = "../ios-frameworks/Google Analytics Library/libGoogleAnalytics.a"; sourceTree = "<group>"; };
+		A15431081818DEB800337EFE /* streamvga.sdp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = streamvga.sdp; sourceTree = "<group>"; };
 		A1A98E8B180BF5AA00C8EBD3 /* client_main.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = client_main.c; sourceTree = "<group>"; };
 		A1A98E8C180BF5AA00C8EBD3 /* client_main.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = client_main.h; sourceTree = "<group>"; };
 		A1A98E8D180BF5AA00C8EBD3 /* StunClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StunClient.h; sourceTree = "<group>"; };
@@ -1827,6 +1829,7 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				A15431081818DEB800337EFE /* streamvga.sdp */,
 				A1176B72180D1DD9000B7527 /* stream480p.sdp */,
 				A1176B73180D1DD9000B7527 /* stream720p.sdp */,
 				38483F0C172A33F5009DF61E /* iTunesArtwork */,
@@ -2334,6 +2337,7 @@
 				BCF944E3173262BC00F58B22 /* mestartup000021.png in Resources */,
 				BCF944E4173262BC00F58B22 /* mestartup000022.png in Resources */,
 				BCF944E5173262BC00F58B22 /* mestartup000023.png in Resources */,
+				A15431091818DEB800337EFE /* streamvga.sdp in Resources */,
 				BCF944E6173262BC00F58B22 /* mestartup000024.png in Resources */,
 				BCF944E7173262BC00F58B22 /* mestartup000025.png in Resources */,
 				BCF944E8173262BC00F58B22 /* mestartup000026.png in Resources */,
