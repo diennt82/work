@@ -68,7 +68,7 @@
     
     
     
-    
+#if 0
     /* check the server name file */
     
     
@@ -90,24 +90,7 @@
         
         [BMS_JSON_Communication setServerInput:@"http://api.simplimonitor.com/v1"];
     }
-#if 0
-	int result;
-    FILE *pFile;
-	char buffer[512];
-	
-    pFile = fopen([serverFile cStringUsingEncoding:NSASCIIStringEncoding], "r");
-    if (pFile != NULL)
-    {
-        result = fread (buffer,1,512,pFile);
-        if (result >  0)
-        {
-            NSLog(@"New server is %@",[NSString stringWithUTF8String:buffer]);
-        }
-    }
-    else
-    {
-        NSLog(@"Use default server");
-    }
+
 #endif
     
     
@@ -296,14 +279,12 @@
                                                                          FailSelector:nil
                                                                             ServerErr:nil];
    
-//    NSDictionary *responseDict = [jsonComm registerAppBlockedWithName:applicationName
-//                                                        andDeviceCode:uuidString
-//                                                            andApiKey:apiKey];
+    //DEMO.SM.COM
     NSDictionary *responseDict = [jsonComm registerAppBlockedWithName:applicationName
                                                         andDeviceCode:uuidString
-                                                   andSoftwareVersion:swVersion
                                                             andApiKey:apiKey];
-    //NSLog(@"");
+    
+
     
     NSString *appId = [[responseDict objectForKey:@"data"] objectForKey:@"id"];
     NSLog(@"app id = %@", appId);

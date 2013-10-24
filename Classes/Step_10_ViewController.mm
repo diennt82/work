@@ -306,21 +306,17 @@
     NSString * mac = [Util strip_colon_fr_mac:self.cameraMac];
     NSString * camName = (NSString *) [userDefaults objectForKey:@"CameraName"];
     
-//    [jsonComm registerDeviceWithDeviceName:camName
-//                                  andRegId:mac
-//                             andDeviceType:@"Camera"
-//                                  andModel:model //@"blink1_hd"
-//                                   andMode:@"upnp"
-//                              andFwVersion:fwVersion
-//                               andTimeZone:stringFromDate
-//                                 andApiKey:apiKey];
-    [jsonComm registerDeviceWithDeviceModelID:@"3"
-                                      andName:camName
-                            andRegistrationID:mac
-                                      andMode:@"upnp"
-                                 andFwVersion:fwVersion
-                                  andTimeZone:stringFromDate
-                                    andApiKey:apiKey];
+    //DEMO.SM.COM
+    [jsonComm registerDeviceWithDeviceName:camName
+                                  andRegId:mac
+                             andDeviceType:@"Camera"
+                                  andModel:model //@"blink1_hd"
+                                   andMode:@"upnp"
+                              andFwVersion:fwVersion
+                               andTimeZone:stringFromDate
+                                 andApiKey:apiKey];
+    
+
 }
 #else
 
