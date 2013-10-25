@@ -103,18 +103,7 @@
     CFURLRef soundFileURLRef = CFBundleCopyResourceURL(mainbundle, CFSTR("beep"), CFSTR("wav"), NULL);
     AudioServicesCreateSystemSoundID(soundFileURLRef, &soundFileObject);
     
-    //[self scan_for_missing_camera];
-    
-    
     self.zoneViewController = [[ZoneViewController alloc] init];
-    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
-    {
-        self.zoneViewController.view.frame = CGRectMake(0, 550, 768, 430);
-    }
-    else
-    {
-        self.zoneViewController.view.frame = CGRectMake(0, 258, 320, 190);
-    }
     self.zoneViewController.selectedChannel = self.selectedChannel;
     self.zoneViewController.view.hidden = YES;
     self.zoneViewController.zoneVCDelegate = self;
@@ -238,21 +227,23 @@
 }
 - (IBAction)zoneTouchedAction:(id)sender
 {
-    self.imgViewDrectionPad.hidden = YES;
-    
     if (self.zoneViewController != nil)
     {
         if (self.zoneViewController.view.hidden == NO)
         {
             self.zoneViewController.view.hidden = YES;
+            self.imgViewDrectionPad.hidden = NO;
         }
         else
         {
             self.zoneViewController.view.hidden = NO;
             [self.view addSubview:self.zoneViewController.view];
             [self.view bringSubviewToFront:self.zoneViewController.view];
+            self.imgViewDrectionPad.hidden = YES;
         }
     }
+    
+    NSLog(@"x: %f, y: %f", self.zoneViewController.view.frame.origin.x, self.zoneViewController.view.frame.origin.y);
 }
 
 - (IBAction)barBntItemRevealAction:(id)sender
@@ -2501,6 +2492,7 @@
             self.imageViewVideo.frame = newRect;
             
             self.activityIndicator.frame = CGRectMake(493, 365, _activityIndicator.frame.size.width, _activityIndicator.frame.size.height);
+            self.zoneViewController.view.frame = newRect;
         }
         else
         {
@@ -2509,6 +2501,7 @@
             self.viewCtrlButtons.frame = CGRectMake(0, 106, _viewCtrlButtons.frame.size.width, _viewCtrlButtons.frame.size.height);
             self.imgViewDrectionPad.frame = CGRectMake(180, 180, _imgViewDrectionPad.frame.size.width, _imgViewDrectionPad.frame.size.height);
              self.activityIndicator.frame = CGRectMake(221, 141, _activityIndicator.frame.size.width, _activityIndicator.frame.size.height);
+            self.zoneViewController.view.frame = newRect;
         }
         
         self.view.backgroundColor = [UIColor blackColor];
@@ -2520,7 +2513,7 @@
         
         CGRect tableViewFrame = self.playlistViewController.tableView.frame;
         self.playlistViewController.tableView.frame = CGRectMake(0, 0, tableViewFrame.size.width, tableViewFrame.size.height);
-        //self.disableAutorotateFlag = NO;
+        self.zoneViewController.view.hidden = YES;
 	}
 	else if (orientation == UIInterfaceOrientationPortrait || orientation == UIInterfaceOrientationPortraitUpsideDown)
 	{
@@ -2540,6 +2533,9 @@
             
             self.viewStopStreamingProgress.hidden = YES;
             self.activityIndicator.frame = CGRectMake(365, 241, _activityIndicator.frame.size.width, _activityIndicator.frame.size.height);
+            
+            self.zoneViewController.view.frame = CGRectMake(0, 550, 768, 430);
+            
         }
         else
         {
@@ -2551,8 +2547,9 @@
             self.viewCtrlButtons.frame = CGRectMake(0, 224, _viewCtrlButtons.frame.size.width, _viewCtrlButtons.frame.size.height);
             self.imgViewDrectionPad.frame = CGRectMake(100, 340, _imgViewDrectionPad.frame.size.width, _imgViewDrectionPad.frame.size.height);
             self.activityIndicator.frame = CGRectMake(141, 124, _activityIndicator.frame.size.width, _activityIndicator.frame.size.height);
+            self.zoneViewController.view.frame = CGRectMake(0, 258, 320, 190);
         }
-        
+    
         [[UIApplication sharedApplication] setStatusBarHidden:NO];
         
         self.topToolbar.hidden = NO;
@@ -2587,12 +2584,14 @@
 //            self.imageViewVideo.transform = translate;
             CGRect newRect = CGRectMake(0, 0, 568, 320);
             self.imageViewVideo.frame = newRect;
+            self.zoneViewController.view.frame = newRect;
             
             self.activityIndicator.frame = CGRectMake(274, 150, _activityIndicator.frame.size.width, _activityIndicator.frame.size.height);
         }
         else if (orientation == UIInterfaceOrientationPortrait || orientation == UIInterfaceOrientationPortraitUpsideDown)
         {
             self.viewStopStreamingProgress.frame = CGRectMake(0, 0, 320, 568);
+            self.zoneViewController.view.frame = CGRectMake(0, 258, 320, 190);
         }
     }
 }
