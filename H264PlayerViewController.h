@@ -73,6 +73,7 @@
 	BOOL v_direction_update_needed, h_direction_update_needed;
 
 	NSTimer * probeTimer;
+     dispatch_queue_t player_func_queue;
 }
 
 

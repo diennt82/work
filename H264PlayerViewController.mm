@@ -257,6 +257,19 @@
     
     switch (msg)
     {
+        case MEDIA_INFO_BITRATE_BPS:
+        {
+            if (userWantToCancel == TRUE)
+            {
+                
+                NSLog(@"*[MEDIA_INFO_BITRATE_BPS] **SHOULD NOT HAPPEN FREQUENTLY* USER want to cancel **.. cancel after .1 sec...");
+                self.selectedChannel.stopStreaming = TRUE;
+                [self performSelector:@selector(goBackToCameraList)
+                           withObject:nil
+                           afterDelay:0.1];
+            }
+
+        }
         case MEDIA_INFO_HAS_FIRST_IMAGE:
         {
             NSLog(@"[MEDIA_PLAYER_HAS_FIRST_IMAGE]");
@@ -345,14 +358,18 @@
             
             NSLog(@"userWantToCancel: %d", userWantToCancel);
     		
+            
             if (userWantToCancel == TRUE)
             {
                 
                 NSLog(@"*[MEDIA_ERROR_TIMEOUT_WHILE_STREAMING] *** USER want to cancel **.. cancel after .1 sec...");
                 self.selectedChannel.stopStreaming = TRUE;
+                
+                                
                 [self performSelector:@selector(goBackToCameraList)
                            withObject:nil
                            afterDelay:0.1];
+                
                 return;
                 
             }
@@ -865,6 +882,15 @@
                                                            selector:@selector(h_directional_change_callback:)
                                                            userInfo:nil
                                                             repeats:YES];
+    
+    /*20131024: phung : create a serial queue for player function calls*/
+    
+    if (player_func_queue == nil)
+    {
+        player_func_queue = dispatch_queue_create("com.nxcomm.H264PlayerQueue", NULL);
+    }
+    
+    
 }
 
 #pragma mark - Setup camera
@@ -985,12 +1011,14 @@
              (self.selectedChannel.stream_url.length == 0) );
 
     
-    
-    probeTimer = [NSTimer scheduledTimerWithTimeInterval:1.0
-                                                  target:self
-                                                selector:@selector(periodicProbe:)
-                                                userInfo:nil
-                                                 repeats:YES];
+    if (userWantToCancel != TRUE)
+    {
+        probeTimer = [NSTimer scheduledTimerWithTimeInterval:1.0
+                                                      target:self
+                                                    selector:@selector(periodicProbe:)
+                                                    userInfo:nil
+                                                     repeats:YES];
+    }
     
     [self startStream];
 }
@@ -1004,6 +1032,10 @@
     if (userWantToCancel== TRUE)
     {
         NSLog(@"startStream: userWantToCancel >>>>");
+        //force this to gobacktoCameralist
+        [self handleMessage:MEDIA_ERROR_SERVER_DIED
+                       ext1:0
+                       ext2:0];
         return;
     }
     
@@ -1014,7 +1046,15 @@
     h264StreamerListener = new H264PlayerListener(self);
     h264Streamer->setListener(h264StreamerListener);
     
+    
+#if 1
     [self performSelectorInBackground:@selector(startStream_bg) withObject:nil];
+#else
+    dispatch_async(player_func_queue, ^{
+        [self startStream_bg];
+    });
+#endif
+    
 }
 
 - (void)startStream_bg
@@ -1065,12 +1105,12 @@
         
         status=  h264Streamer->prepare();
         
-        printf("prepare return: %d\n", status);
+       
         
         if (status != NO_ERROR) // NOT OK
         {
             
-            printf("prepare() error: %d\n", status);
+           
             break;
         }
         
@@ -1078,15 +1118,19 @@
         
         status=  h264Streamer->start();
         
-        printf("start() return: %d\n", status);
+       
         if (status != NO_ERROR) // NOT OK
         {
             
-            printf("start() error: %d\n", status);
+            
             break;
         }
     }
     while (false);
+    
+    
+    
+    
     
     if (status == NO_ERROR)
     {
@@ -1094,13 +1138,17 @@
                        ext1:0
                        ext2:0];
     }
-    
     else
     {
+        
+        
         //Consider it's down and perform necessary action ..
         [self handleMessage:MEDIA_ERROR_SERVER_DIED
                        ext1:0
                        ext2:0];
+        
+        
+        
     }
 }
 
@@ -1137,11 +1185,15 @@
 {
     [self stopStream];
     
+    
+    
+    
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-	[userDefaults removeObjectForKey:CAM_IN_VEW];
-	[userDefaults synchronize];
+    [userDefaults removeObjectForKey:CAM_IN_VEW];
+    [userDefaults synchronize];
     
     [self.navigationController popToRootViewControllerAnimated:NO];
+    
 }
 
 -(void) cleanUpDirectionTimers
@@ -1226,24 +1278,50 @@
 
 - (void)stopStream
 {
+
+#if 0
+    dispatch_async(player_func_queue, ^{
+        
+        if (h264Streamer != NULL)
+        {
+            
+            h264Streamer->suspend();
+            h264Streamer->stop();
+            
+            delete h264Streamer ;
+            h264Streamer = NULL;
+        }
+        
+        
+        
+        [self cleanUpDirectionTimers];
+        if (scanner != nil)
+        {
+            [scanner cancel];
+        }
+        
+        [self performSelectorOnMainThread:@selector(stopStunStream)
+                               withObject:nil
+                            waitUntilDone:NO];
+
+
+    });
+#else
+    
+    NSLog(@"Calling suspend() on thread: %@", [NSThread currentThread]);
+    
     @synchronized(self)
     {
         if (h264Streamer != NULL)
         {
-            if (h264Streamer->isPlaying())
-            {
-                h264Streamer->suspend();
-                h264Streamer->stop();
-            }
-            else
-            {
-                h264Streamer->suspend();
-                h264Streamer->stop();
-            }
-            free(h264Streamer);
+            
+            h264Streamer->suspend();
+            h264Streamer->stop();
+            
+            delete h264Streamer ;
+            h264Streamer = NULL;
         }
-        
-        h264Streamer = NULL;
+
         
         [self cleanUpDirectionTimers];
         if (scanner != nil)
@@ -1253,7 +1331,7 @@
         [self  stopStunStream];
         
     }
-    
+#endif
     //[self.activityStopStreamingProgress stopAnimating];
 }
 
@@ -2676,7 +2754,7 @@
 	{
 		switch(buttonIndex) {
 			case 0: //Stop monitoring
-                
+            {
                 [self.activityIndicator stopAnimating];
                 self.viewStopStreamingProgress.hidden = NO;
                 [self.view bringSubviewToFront:self.viewStopStreamingProgress];
@@ -2684,11 +2762,40 @@
                 userWantToCancel =TRUE;
                 [self stopPeriodicPopup];
                 
-                self.selectedChannel.stopStreaming = TRUE;
                 
-                [self goBackToCameraList];
-
+                /*
+                 
+                 If cancel is pressed while setup streamming, the setup will failed and  MEDIA_ERROR_SERVER_DIED
+                 will be sent to handler. Provided that userWantToCancel = TRUE, handler will set
+                    self.selectedChannel.stopStreaming = TRUE;
+                    & Call  [self goBackToCameraList]   
+                 
+                 
+                 if cancel is press when the player is about to play (stream started but not display (or maybe is displaying)) 
+                 1) MEDIA_PLAYER_STARTED is not sent. Thus when it's sent, Handler will check for (userWantToCancel =TRUE) and do accordingly
+                 2) MEDIA_PLAYER_STARTED is ALREADY sent But no first Image yet, i.e. MEDIA_INFO_HAS_FIRST_IMAGE is not sent
+                          When MEDIA_INFO_HAS_FIRST_IMAGE is sent, the closing will be handled
+                 3) MEDIA_INFO_HAS_FIRST_IMAGE is sent. This popup would already be dissmissed by then. 
+                          But for some reasons, if user is able to press the Cancel during this time.
+                 
+                 
+                 
+                 Thus, no need to explicityly call  " self.selectedChannel.stopStreaming = TRUE & [self goBackToCameraList]" here.
+                 
+                 What needs to be done is to send a signal to interrupt the player.
+                 
+                 
+                 */
+                
+                if (h264Streamer != NULL)
+                {
+                    h264Streamer->sendInterrupt();
+                }
+                
+                
+                
                 break;
+            }
 			case 1: //continue -- streamer is connecting so we dont do anything here.
 				break;
 			default:
