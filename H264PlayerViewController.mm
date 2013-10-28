@@ -1678,7 +1678,7 @@
                        {
                            
                            responseDict = [jsonComm createSessionBlockedWithRegistrationId:mac
-                                                                             andClientType:@"Browser"
+                                                                             andClientType:@"IOS"
                                                                                  andApiKey:apiKey];
                            if (responseDict != nil)
                            {
