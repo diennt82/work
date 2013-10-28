@@ -1264,23 +1264,9 @@
         )
     { // Make sure we are connecting via STUN
         
-        NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-        NSString *apiKey = [userDefaults objectForKey:@"PortalApiKey"];
-        NSString *mac = [Util strip_colon_fr_mac:self.selectedChannel.profile.mac_address];
+        self.selectedChannel.waitingForStreamerToClose = YES;
         
-        
-        BMS_JSON_Communication *jsonComm = [[[BMS_JSON_Communication alloc] initWithObject:self
-                                                                                  Selector:nil
-                                                                              FailSelector:nil
-                                                                                 ServerErr:nil] autorelease];
-        NSDictionary *responseDict;
-        
-        NSString * cmd_string = @"action=command&command=close_p2p_rtsp_stun";
-        
-        responseDict =  [jsonComm  sendCommandBlockedWithRegistrationId:mac
-                                                             andCommand:cmd_string
-                                                              andApiKey:apiKey];
-        
+        [self performSelectorInBackground:@selector(closeStunStream_bg:) withObject:self];
         
     }
     if (self.client != nil)
@@ -1297,6 +1283,29 @@
         self.probeTimer = nil;
     }
 
+}
+
+- (void)closeStunStream_bg: (id)vc
+{
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    NSString *apiKey = [userDefaults objectForKey:@"PortalApiKey"];
+    NSString *mac = [Util strip_colon_fr_mac:self.selectedChannel.profile.mac_address];
+    
+    
+    BMS_JSON_Communication *jsonComm = [[[BMS_JSON_Communication alloc] initWithObject:self
+                                                                              Selector:nil
+                                                                          FailSelector:nil
+                                                                             ServerErr:nil] autorelease];
+    NSDictionary *responseDict = nil;
+    
+    NSString * cmd_string = @"action=command&command=close_p2p_rtsp_stun";
+    
+    responseDict =  [jsonComm  sendCommandBlockedWithRegistrationId:mac
+                                                         andCommand:cmd_string
+                                                          andApiKey:apiKey];
+    H264PlayerViewController *thisVC = (H264PlayerViewController *)vc;
+    [thisVC.h264PlayerVCDelegate stopStreamFinished: thisVC.selectedChannel];
+    [thisVC release];
 }
 
 - (void)stopStream

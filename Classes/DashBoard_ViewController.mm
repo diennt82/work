@@ -16,7 +16,7 @@
 #import "BMMenuViewController.h"
 #import "MyFrontViewController.h"
 
-@interface DashBoard_ViewController()// <CameraViewDelegate>
+@interface DashBoard_ViewController() <H264PlayerVCDelegate>
 
 @end
 
@@ -818,6 +818,23 @@
     } 
 }
 
+- (void)stopStreamFinished: (CamChannel *)camChannel
+{
+    for (CamChannel *obj in self.listOfChannel)
+    {
+        if ([obj.profile.mac_address isEqualToString:camChannel.profile.mac_address])
+        {
+            obj.waitingForStreamerToClose = NO;
+        }
+        else
+        {
+            NSLog(@"%@ ->waitingForClose: %d", obj.profile.name, obj.waitingForStreamerToClose);
+        }
+    }
+    
+    [self.cameraList reloadData];
+}
+
 #if JSON_FLAG
 - (void)tableView: (UITableView *)tableView didSelectRowAtIndexPath: (NSIndexPath *)indexPath
 {
@@ -833,7 +850,10 @@
     
     NSLog(@"ch = %@, ch.profile = %@, ch.profile.minuteSinceLastComm = %d", ch, ch.profile, ch.profile.minuteSinceLastComm);
     
-    if (ch != nil && ch.profile != nil) {
+    if (ch != nil &&
+        ch.profile != nil &&
+        ch.waitingForStreamerToClose == NO)
+    {
         
         NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
         [userDefaults setObject:ch.profile.mac_address forKey:CAM_IN_VEW];
@@ -841,6 +861,7 @@
         
         H264PlayerViewController *h264PlayerViewController = [[H264PlayerViewController alloc] init];
         h264PlayerViewController.selectedChannel = ch;
+        h264PlayerViewController.h264PlayerVCDelegate = self;
         [self.navigationController pushViewController:h264PlayerViewController animated:YES];
         [h264PlayerViewController release];
     }

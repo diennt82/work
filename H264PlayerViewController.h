@@ -41,6 +41,12 @@
 
 #define H264_SWITCHING_TO_RELAY2_SERVER     11
 
+@protocol H264PlayerVCDelegate <NSObject>
+
+- (void)stopStreamFinished: (CamChannel *)camChannel;
+
+@end
+
 @interface H264PlayerViewController: UIViewController
 <UIPickerViewDelegate, UIPickerViewDataSource, PlaylistDelegate,PlayerCallbackHandler,ScanForCameraNotifier, StunClientDelegate>
 {
@@ -106,6 +112,7 @@
 @property (nonatomic,retain) StunClient * client; 
 @property (nonatomic, retain) UIImage *imgBackground;
 @property (nonatomic, retain) NSTimer * probeTimer;
+@property (nonatomic, assign) id<H264PlayerVCDelegate> h264PlayerVCDelegate;
 
 
 /* Direction */
