@@ -68,7 +68,6 @@
     
     
     
-#if 0
     /* check the server name file */
     
     
@@ -91,7 +90,6 @@
         [BMS_JSON_Communication setServerInput:@"http://api.simplimonitor.com/v1"];
     }
 
-#endif
     
     
     
@@ -279,9 +277,10 @@
                                                                          FailSelector:nil
                                                                             ServerErr:nil];
    
-    //DEMO.SM.COM
+    //API
     NSDictionary *responseDict = [jsonComm registerAppBlockedWithName:applicationName
                                                         andDeviceCode:uuidString
+                                                   andSoftwareVersion:swVersion
                                                             andApiKey:apiKey];
     
 
