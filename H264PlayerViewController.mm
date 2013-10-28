@@ -1266,6 +1266,7 @@
         
         self.selectedChannel.waitingForStreamerToClose = YES;
         
+        [self retain];
         [self performSelectorInBackground:@selector(closeStunStream_bg:) withObject:self];
         
     }
