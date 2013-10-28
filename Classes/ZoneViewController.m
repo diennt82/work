@@ -14,7 +14,7 @@
 
 @implementation ZoneViewController
 @synthesize  zone1, zone2, zone3, zone4,zone5,zone6,zone7,zone8,zone9;
-
+@synthesize  zoneMap;
 - (void)dealloc
 {
     [self.zone1 release];
@@ -34,11 +34,19 @@
     [super dealloc];
 }
 
+#define NUM_OF_ZONES 9
+
+
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
         // Custom initialization
+        
+        
+        
+        memset(enabledZones, 0, NUM_OF_ZONES*(sizeof (int) ));
+        
     }
     return self;
 }
@@ -47,11 +55,82 @@
 {
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
-    self.zoneArray = [[NSMutableArray alloc] initWithCapacity:9];
+//    self.zoneArray = [[NSMutableArray alloc] initWithCapacity:NUM_OF_ZONES];
+//    
+//    for (int i = 0; i < NUM_OF_ZONES ; ++i)
+//    {
+//        [self.zoneArray addObject:@"0"];
+//    }
     
-    for (int i = 0; i < 9; ++i)
+    self.view.backgroundColor = [UIColor clearColor];
+    
+    //create 9-element array
+    self.zoneMap = [[NSMutableArray alloc] initWithObjects:
+                    zone1,zone2,zone3,
+                    zone4, zone5,zone6,
+                    zone7,zone8,zone9,nil];
+    
+    
+    
+}
+
+-(void) viewWillAppear:(BOOL)animated
+{
+    [self loadZones];
+}
+
+/* zoneStrings [ "00","11","01"..] */
+-(void) parseZoneStrings:(NSArray * )zoneStrings
+{
+    self.oldZoneArray = [NSArray arrayWithArray:zoneStrings];
+    
+    
+    int row_col, row, col;
+    int linear_index;
+    
+    //rebuild the zone map to int array
+    memset(enabledZones, 0, NUM_OF_ZONES* sizeof(int) );
+    
+    for (NSString *zoneString in zoneStrings)
     {
-        [self.zoneArray addObject:@"0"];
+        row_col = [zoneString integerValue];
+        
+        row = row_col /10;
+        col = row_col %10;
+        
+        linear_index = (row *3) + col;
+        
+        if (linear_index < NUM_OF_ZONES)
+        {
+            enabledZones[linear_index] = 1;
+        }
+        else
+        {
+            //out of range - ignore it
+        }
+    }
+
+    //[self loadZones];
+}
+
+-(void) loadZones
+{
+    UIButton *zoneBtn = nil;
+    
+    
+    for (int i = 0; i < NUM_OF_ZONES; i++)
+    {
+        
+        zoneBtn = (UIButton *) [self.zoneMap objectAtIndex:i];
+        
+        if (enabledZones[i] == 1)
+        {
+            [zoneBtn setImage:[UIImage imageNamed:@"motion_detection_on.png"] forState:UIControlStateNormal];
+        }
+        else
+        {
+            [zoneBtn setImage:[UIImage imageNamed:@"motion_detection_off_1.png"] forState:UIControlStateNormal];
+        }
     }
 }
 
@@ -61,124 +140,30 @@
     if ([sender isKindOfClass:[UIButton class]])
     {
         UIButton *zoneBtn = (UIButton *)sender;
+        UIButton *btn;
         
-        if (zoneBtn == self.zone1)
+        NSLog(@"sizeof(enabledZones): %d", NUM_OF_ZONES);
+        
+        for (int i = 0; i < NUM_OF_ZONES; i++)
         {
-            if ([[self.zoneArray objectAtIndex:0] isEqualToString:@"0"])
+            btn = (UIButton *) [self.zoneMap objectAtIndex:i];
+            
+            if (zoneBtn == btn)
             {
-                [zoneBtn setImage:[UIImage imageNamed:@"tick.jpeg"] forState:UIControlStateNormal];
-                [self.zoneArray setObject:@"00" atIndexedSubscript:0];
-            }
-            else
-            {
-                [zoneBtn setImage:[UIImage imageNamed:@"untick.jpeg"] forState:UIControlStateNormal];
-                [self.zoneArray setObject:@"0" atIndexedSubscript:0];
+                //toggle it
+                if (enabledZones[i] == 1)
+                {
+                    [zoneBtn setImage:[UIImage imageNamed:@"motion_detection_off_1.png"] forState:UIControlStateNormal];
+                    enabledZones[i] = 0;
+                }
+                else
+                {
+                    [zoneBtn setImage:[UIImage imageNamed:@"motion_detection_on.png"] forState:UIControlStateNormal];
+                    enabledZones[i] = 1;
+                }
             }
         }
-        else if (zoneBtn == self.zone2)
-        {
-            if ([[self.zoneArray objectAtIndex:1] isEqualToString:@"0"])
-            {
-                [zoneBtn setImage:[UIImage imageNamed:@"tick.jpeg"] forState:UIControlStateNormal];
-                [self.zoneArray setObject:@"01" atIndexedSubscript:1];
-            }
-            else
-            {
-                [zoneBtn setImage:[UIImage imageNamed:@"untick.jpeg"] forState:UIControlStateNormal];
-                [self.zoneArray setObject:@"0" atIndexedSubscript:1];
-            }
-        }
-        else if (zoneBtn == self.zone3)
-        {
-            if ([[self.zoneArray objectAtIndex:2] isEqualToString:@"0"])
-            {
-                [zoneBtn setImage:[UIImage imageNamed:@"tick.jpeg"] forState:UIControlStateNormal];
-                [self.zoneArray setObject:@"02" atIndexedSubscript:2];
-            }
-            else
-            {
-                [zoneBtn setImage:[UIImage imageNamed:@"untick.jpeg"] forState:UIControlStateNormal];
-                [self.zoneArray setObject:@"0" atIndexedSubscript:2];
-            }
-        }
-        else if (zoneBtn == self.zone4)
-        {
-            if ([[self.zoneArray objectAtIndex:3] isEqualToString:@"0"])
-            {
-                [zoneBtn setImage:[UIImage imageNamed:@"tick.jpeg"] forState:UIControlStateNormal];
-                [self.zoneArray setObject:@"10" atIndexedSubscript:3];
-            }
-            else
-            {
-                [zoneBtn setImage:[UIImage imageNamed:@"untick.jpeg"] forState:UIControlStateNormal];
-                [self.zoneArray setObject:@"0" atIndexedSubscript:3];
-            }
-        }
-        else if (zoneBtn == self.zone5)
-        {
-            if ([[self.zoneArray objectAtIndex:4] isEqualToString:@"0"])
-            {
-                [zoneBtn setImage:[UIImage imageNamed:@"tick.jpeg"] forState:UIControlStateNormal];
-                [self.zoneArray setObject:@"11" atIndexedSubscript:4];
-            }
-            else
-            {
-                [zoneBtn setImage:[UIImage imageNamed:@"untick.jpeg"] forState:UIControlStateNormal];
-                [self.zoneArray setObject:@"0" atIndexedSubscript:4];
-            }
-        }
-        else if (zoneBtn == self.zone6)
-        {
-            if ([[self.zoneArray objectAtIndex:5] isEqualToString:@"0"])
-            {
-                [zoneBtn setImage:[UIImage imageNamed:@"tick.jpeg"] forState:UIControlStateNormal];
-                [self.zoneArray setObject:@"12" atIndexedSubscript:5];
-            }
-            else
-            {
-                [zoneBtn setImage:[UIImage imageNamed:@"untick.jpeg"] forState:UIControlStateNormal];
-                [self.zoneArray setObject:@"0" atIndexedSubscript:5];
-            }
-        }
-        else if (zoneBtn == self.zone7)
-        {
-            if ([[self.zoneArray objectAtIndex:6] isEqualToString:@"0"])
-            {
-                [zoneBtn setImage:[UIImage imageNamed:@"tick.jpeg"] forState:UIControlStateNormal];
-                [self.zoneArray setObject:@"20" atIndexedSubscript:6];
-            }
-            else
-            {
-                [zoneBtn setImage:[UIImage imageNamed:@"untick.jpeg"] forState:UIControlStateNormal];
-                [self.zoneArray setObject:@"0" atIndexedSubscript:6];
-            }
-        }
-        else if (zoneBtn == self.zone8)
-        {
-            if ([[self.zoneArray objectAtIndex:7] isEqualToString:@"0"])
-            {
-                [zoneBtn setImage:[UIImage imageNamed:@"tick.jpeg"] forState:UIControlStateNormal];
-                [self.zoneArray setObject:@"21" atIndexedSubscript:7];
-            }
-            else
-            {
-                [zoneBtn setImage:[UIImage imageNamed:@"untick.jpeg"] forState:UIControlStateNormal];
-                [self.zoneArray setObject:@"0" atIndexedSubscript:7];
-            }
-        }
-        else if (zoneBtn == self.zone9)
-        {
-            if ([[self.zoneArray objectAtIndex:8] isEqualToString:@"0"])
-            {
-                [zoneBtn setImage:[UIImage imageNamed:@"tick.jpeg"] forState:UIControlStateNormal];
-                [self.zoneArray setObject:@"22" atIndexedSubscript:8];
-            }
-            else
-            {
-                [zoneBtn setImage:[UIImage imageNamed:@"untick.jpeg"] forState:UIControlStateNormal];
-                [self.zoneArray setObject:@"0" atIndexedSubscript:8];
-            }
-        }
+        
     }
     
     //NSLog(@"zone array: %@", self.zoneArray);
@@ -186,97 +171,95 @@
 
 - (IBAction)okTouchedAction:(id)sender
 {
-    // send command to camera
+    NSString * set_zone =@"";
     
-    //NSMutableArray *selectedZone = [NSMutableArray array];
-    NSString *zoneString = @"";
+    NSMutableArray * enabled_zone = [[NSMutableArray alloc] init];
     
-    for (NSString *zoneElement in self.zoneArray)
+    int row, col;
+    int linear_index;
+    
+    for (int i = 0; i < sizeof(enabledZones); i++)
     {
-        if(![zoneElement isEqualToString:@"0"])
+        if (enabledZones[i] == 1)
         {
-
-            zoneString = [zoneString stringByAppendingString:[NSString stringWithFormat:@"%@,", zoneElement]];
+            linear_index = i;
+            row = linear_index/3;
+            col = linear_index%3;
+            
+            
+            set_zone =[NSString stringWithFormat:@"%d%d,", row,col];
+            
+            [enabled_zone addObject:set_zone];
+            
+            
+        }
+        else
+        {
+            
         }
     }
     
-    NSLog(@"zone string: %@", zoneString);
     
-    if (![zoneString isEqualToString:@""])
+    
+    NSLog(@"zone string: %@", set_zone);
+    
+    if ([enabled_zone count] >0 )
     {
         //send command with the element
-         [self.zoneVCDelegate beginProcessing];
+        // [self.zoneVCDelegate beginProcessing];
         
-        zoneString = [zoneString substringToIndex:zoneString.length - 1];
+        self.progress.hidden = NO;
+        [self.progress startAnimating];
         
-        [self performSelectorInBackground:@selector(setZoneDetection_bg:) withObject:zoneString];
+      
+    }
+    else
+    {
+        NSLog(@"zEmpty zone string");
+        //[self dismissViewControllerAnimated:NO completion:nil];
+        //[self.navigationController popViewControllerAnimated:NO];
+        
     }
     
-    self.view.hidden = YES;
-    [self.view removeFromSuperview];
-    
-    //NSLog(@"zone str: %@", self.zoneArray);
+     [self performSelectorInBackground:@selector(setZoneDetection_bg:) withObject:enabled_zone];
+ 
 }
 
 - (IBAction)cancelTouchedAction:(id)sender
 {
-    // cancel
-    self.view.hidden = YES;
     
-    [self resetButtonImage];
+    //reload the old zone
+    [self parseZoneStrings:self.oldZoneArray];
     
-    for (NSString *zoneElement in self.oldZoneArray)
-    {
-        for (id obj in [self.view subviews])
-        {
-            if ([obj isKindOfClass:[UIButton class]])
-            {
-                UIButton *zoneBtn = (UIButton *)obj;
-                
-                NSString *tmp = [NSString stringWithFormat:@"%02d", zoneBtn.tag % 100];
-                
-                if ([tmp isEqualToString:zoneElement])
-                {
-                    [zoneBtn setImage:[UIImage imageNamed:@"tick.jpeg"] forState:UIControlStateNormal];
-                    break;
-                }
-            }
-        }
-    }
+   // [self dismissViewControllerAnimated:NO completion:nil];
     
-    for (int i = 0; i < self.zoneArray.count; ++i)
-    {
-        [self.zoneArray setObject:@"0" atIndexedSubscript:i];
-    }
-    
+//    [self.navigationController popViewControllerAnimated:NO];
+
     [self.view removeFromSuperview];
     //NSLog(@"zone array: %@", self.zoneArray);
 }
 
-#pragma mark - Metho
-
-- (void)resetButtonImage
-{
-    for (id obj in [self.view subviews])
-    {
-        if ([obj isKindOfClass:[UIButton class]])
-        {
-            UIButton *zoneBtn = (UIButton *)obj;
-            
-            if (![zoneBtn.titleLabel.text isEqualToString:@"OK"] &&
-                ![zoneBtn.titleLabel.text isEqualToString:@"Cancel"])
-            {
-                [zoneBtn setImage:[UIImage imageNamed:@"untick.jpeg"] forState:UIControlStateNormal];
-            }
-        }
-    }
-}
 
 #pragma mark - Http command
 
-- (void)setZoneDetection_bg: (NSString *)zoneString
+- (void)setZoneDetection_bg: (NSMutableArray *)zoneStrings
 {
     NSString *responseString = @"";
+    /* format the set String*/
+    
+    NSString * set_zone =@"";
+    
+    for (NSString * str in zoneStrings)
+    {
+        set_zone = [set_zone stringByAppendingString:str];
+        set_zone = [set_zone stringByAppendingString:@","];
+    }
+    
+    if ( [set_zone hasSuffix:@","])
+    {
+    //* remove the last ,
+        set_zone = [set_zone substringToIndex:set_zone.length - 1];
+    }
     
     if (self.selectedChannel.profile.isInLocal == TRUE)
     {
@@ -284,7 +267,7 @@
         httpComm.device_ip = self.selectedChannel.profile.ip_address;
         httpComm.device_port = self.selectedChannel.profile.port;
         
-        NSData *responseData = [httpComm sendCommandAndBlock_raw:[NSString stringWithFormat:@"set_motion_area&grid=3x3&zone=%@", zoneString]];
+        NSData *responseData = [httpComm sendCommandAndBlock_raw:[NSString stringWithFormat:@"set_motion_area&grid=3x3&zone=%@", set_zone]];
         
         if (responseData != nil)
         {
@@ -308,7 +291,7 @@
                                                                                           ServerErr:nil] autorelease];
         
         NSDictionary *responseDict = [jsonCommunication sendCommandBlockedWithRegistrationId:mac
-                                                                                  andCommand:[NSString stringWithFormat:@"set_motion_area&grid=3x3&zone=%@", zoneString]
+                                                                                  andCommand:[NSString stringWithFormat:@"set_motion_area&grid=3x3&zone=%@", set_zone]
                                                                                    andApiKey:apiKey];
         if (responseDict != nil)
         {
@@ -331,87 +314,34 @@
         {
             if ([[tokens objectAtIndex:1] isEqualToString:@"0"])
             {
-                [self performSelectorOnMainThread:@selector(setZoneDetection_fg_:)
-                                       withObject:zoneString
-                                    waitUntilDone:NO];
-            }
-        }
-    }
-    else
-    {
-        [self resetButtonImage];
-        
-        for (NSString *zoneElement in self.oldZoneArray)
-        {
-            for (id obj in [self.view subviews])
-            {
-                if ([obj isKindOfClass:[UIButton class]])
-                {
-                    UIButton *zoneBtn = (UIButton *)obj;
-                    
-                    NSString *tmp = [NSString stringWithFormat:@"%02d", zoneBtn.tag % 100];
-                    
-                    if ([tmp isEqualToString:zoneElement])
-                    {
-                        [zoneBtn setImage:[UIImage imageNamed:@"tick.jpeg"] forState:UIControlStateNormal];
-                        break;
-                    }
-                }
-            }
-        }
-        
-        for (int i = 0; i < self.zoneArray.count; ++i)
-        {
-            [self.zoneArray setObject:@"0" atIndexedSubscript:i];
-        }
-        
-        [self.zoneVCDelegate endProcessing];
-    }
-}
+               //We save the new changes.
+                self.oldZoneArray=[NSArray arrayWithArray:zoneStrings];
+               
 
-- (void)setZoneDetection_fg_: (NSString *)zoneString
-{
-    NSArray *zoneArr = [NSArray array];
-    
-    NSRange tmpRange = [zoneString rangeOfString:@","];
-    if (tmpRange.location != NSNotFound)
-    {
-        zoneArr = [NSArray arrayWithArray: [zoneString componentsSeparatedByString:@","]];
-    }
-    else
-    {
-        zoneArr = [NSArray arrayWithObject:zoneString];
-    }
-    
-    [self resetButtonImage];
-    
-    for (NSString *zoneElement in zoneArr)
-    {
-        for (id obj in [self.view subviews])
-        {
-            if ([obj isKindOfClass:[UIButton class]])
-            {
-                UIButton *zoneBtn = (UIButton *)obj;
-                
-                NSString *tmp = [NSString stringWithFormat:@"%02d", zoneBtn.tag % 100];
-                
-                if ([tmp isEqualToString:zoneElement])
-                {
-                    [zoneBtn setImage:[UIImage imageNamed:@"tick.jpeg"] forState:UIControlStateNormal];
-                    break;
-                }
             }
         }
     }
-    
-    self.oldZoneArray = [NSArray arrayWithArray:zoneArr];
-    
-    for (int i = 0; i < self.zoneArray.count; ++i)
+    else
     {
-        [self.zoneArray setObject:@"0" atIndexedSubscript:i];
+        
+        NSLog(@"Failed to set zone");
+        [self performSelectorOnMainThread:@selector(parseZoneStrings:)
+                               withObject:self.oldZoneArray
+                            waitUntilDone:NO];
+        
+        
+        
     }
     
-    [self.zoneVCDelegate endProcessing];
+    //[self.zoneVCDelegate endProcessing];
+    dispatch_async(dispatch_get_main_queue(),
+                   ^{
+                       [self.progress stopAnimating];
+                       
+                       //[self.navigationController popViewControllerAnimated:NO];
+                       
+                        [self.view removeFromSuperview];
+                   });
 }
 
 #pragma mark - json Call back

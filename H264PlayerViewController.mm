@@ -103,9 +103,22 @@
     CFURLRef soundFileURLRef = CFBundleCopyResourceURL(mainbundle, CFSTR("beep"), CFSTR("wav"), NULL);
     AudioServicesCreateSystemSoundID(soundFileURLRef, &soundFileObject);
     
-    self.zoneViewController = [[ZoneViewController alloc] init];
+    //TODO: check if IPAD -> load IPAD
+    
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+    {
+        self.zoneViewController = [[ZoneViewController alloc] initWithNibName:@"ZoneViewController_ipad" bundle:[NSBundle mainBundle]];
+    }
+    else
+    {
+        self.zoneViewController = [[ZoneViewController alloc] initWithNibName:@"ZoneViewController" bundle:[NSBundle mainBundle]];
+
+    }
+    
+    
+    
+    
     self.zoneViewController.selectedChannel = self.selectedChannel;
-    self.zoneViewController.view.hidden = YES;
     self.zoneViewController.zoneVCDelegate = self;
     
     self.zoneButton.enabled = NO;
@@ -118,15 +131,7 @@
     [super viewWillAppear:animated];
     [self.navigationController setNavigationBarHidden:YES];
     [self checkOrientation];
-    
-//    if (self.mpFlag) {
-//        self.progressView.hidden = NO;
-//        //[self.view bringSubviewToFront:self.progressView];
-//        [self setupCamera];
-//        //[self performSelectorInBackground:@selector(loadEarlierList) withObject:nil];
-//        [self loadEarlierList];
-//        self.mpFlag = FALSE;
-//    }
+
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -229,21 +234,20 @@
 {
     if (self.zoneViewController != nil)
     {
-        if (self.zoneViewController.view.hidden == NO)
-        {
-            self.zoneViewController.view.hidden = YES;
-            self.imgViewDrectionPad.hidden = NO;
-        }
-        else
-        {
-            self.zoneViewController.view.hidden = NO;
-            [self.view addSubview:self.zoneViewController.view];
-            [self.view bringSubviewToFront:self.zoneViewController.view];
-            self.imgViewDrectionPad.hidden = YES;
-        }
+        
+//        [self.navigationController  pushViewController:self.zoneViewController
+//                                              animated:NO];
+        [self.view addSubview:self.zoneViewController.view];
+        
+        [self.view bringSubviewToFront:self.zoneViewController.view];
+        
+        
+       
+        
     }
+   
     
-    NSLog(@"x: %f, y: %f", self.zoneViewController.view.frame.origin.x, self.zoneViewController.view.frame.origin.y);
+   
 }
 
 - (IBAction)barBntItemRevealAction:(id)sender
@@ -1637,26 +1641,30 @@
 
 - (void)setZoneDetection_fg: (NSArray *)zoneArray
 {
-    self.zoneViewController.oldZoneArray = [NSArray arrayWithArray:zoneArray];
-    
-    for (NSString *zoneString in zoneArray)
+    if (self.zoneViewController != nil)
     {
-        for (id tmpView in [self.zoneViewController.view subviews])
-        {
-            if ([tmpView isKindOfClass:[UIButton class]])
-            {
-                UIButton *zoneBtn = (UIButton *)tmpView;
-                
-                NSString *tmp = [NSString stringWithFormat:@"%02d", zoneBtn.tag % 100];
-                
-                if ([tmp isEqualToString:zoneString])
-                {
-                    [zoneBtn setImage:[UIImage imageNamed:@"tick.jpeg"] forState:UIControlStateNormal];
-                    break;
-                }
-            }
-        }
+        [self.zoneViewController parseZoneStrings:zoneArray];
     }
+    else
+    {
+        //create new
+        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+        {
+            self.zoneViewController = [[ZoneViewController alloc] initWithNibName:@"ZoneViewController_ipad" bundle:[NSBundle mainBundle]];
+        }
+        else
+        {
+            self.zoneViewController = [[ZoneViewController alloc] initWithNibName:@"ZoneViewController" bundle:[NSBundle mainBundle]];
+            
+        }
+        
+        self.zoneViewController.selectedChannel = self.selectedChannel;
+        self.zoneViewController.zoneVCDelegate = self;
+        
+    }
+    
+    [self.zoneViewController parseZoneStrings:zoneArray];
+    
     
     self.zoneButton.enabled = YES;
 }
@@ -2492,7 +2500,7 @@
             self.imageViewVideo.frame = newRect;
             
             self.activityIndicator.frame = CGRectMake(493, 365, _activityIndicator.frame.size.width, _activityIndicator.frame.size.height);
-            self.zoneViewController.view.frame = newRect;
+            //self.zoneViewController.view.frame = newRect;
         }
         else
         {
@@ -2501,7 +2509,7 @@
             self.viewCtrlButtons.frame = CGRectMake(0, 106, _viewCtrlButtons.frame.size.width, _viewCtrlButtons.frame.size.height);
             self.imgViewDrectionPad.frame = CGRectMake(180, 180, _imgViewDrectionPad.frame.size.width, _imgViewDrectionPad.frame.size.height);
              self.activityIndicator.frame = CGRectMake(221, 141, _activityIndicator.frame.size.width, _activityIndicator.frame.size.height);
-            self.zoneViewController.view.frame = newRect;
+            //self.zoneViewController.view.frame = newRect;
         }
         
         self.view.backgroundColor = [UIColor blackColor];
@@ -2513,7 +2521,7 @@
         
         CGRect tableViewFrame = self.playlistViewController.tableView.frame;
         self.playlistViewController.tableView.frame = CGRectMake(0, 0, tableViewFrame.size.width, tableViewFrame.size.height);
-        self.zoneViewController.view.hidden = YES;
+        //self.zoneViewController.view.hidden = YES;
 	}
 	else if (orientation == UIInterfaceOrientationPortrait || orientation == UIInterfaceOrientationPortraitUpsideDown)
 	{
@@ -2534,7 +2542,7 @@
             self.viewStopStreamingProgress.hidden = YES;
             self.activityIndicator.frame = CGRectMake(365, 241, _activityIndicator.frame.size.width, _activityIndicator.frame.size.height);
             
-            self.zoneViewController.view.frame = CGRectMake(0, 550, 768, 430);
+            //self.zoneViewController.view.frame = CGRectMake(0, 550, 768, 430);
             
         }
         else
@@ -2547,7 +2555,7 @@
             self.viewCtrlButtons.frame = CGRectMake(0, 224, _viewCtrlButtons.frame.size.width, _viewCtrlButtons.frame.size.height);
             self.imgViewDrectionPad.frame = CGRectMake(100, 340, _imgViewDrectionPad.frame.size.width, _imgViewDrectionPad.frame.size.height);
             self.activityIndicator.frame = CGRectMake(141, 124, _activityIndicator.frame.size.width, _activityIndicator.frame.size.height);
-            self.zoneViewController.view.frame = CGRectMake(0, 258, 320, 190);
+            //self.zoneViewController.view.frame = CGRectMake(0, 258, 320, 190);
         }
     
         [[UIApplication sharedApplication] setStatusBarHidden:NO];
@@ -2584,7 +2592,7 @@
 //            self.imageViewVideo.transform = translate;
             CGRect newRect = CGRectMake(0, 0, 568, 320);
             self.imageViewVideo.frame = newRect;
-            self.zoneViewController.view.frame = newRect;
+            //self.zoneViewController.view.frame = newRect;
             
             self.activityIndicator.frame = CGRectMake(274, 150, _activityIndicator.frame.size.width, _activityIndicator.frame.size.height);
         }

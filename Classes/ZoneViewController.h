@@ -19,7 +19,13 @@
 @end
 
 @interface ZoneViewController : UIViewController
-
+{
+    
+    
+    
+    
+    int enabledZones[9];
+}
 
 @property (nonatomic, retain) IBOutlet UIButton * zone1;
 @property (nonatomic, retain) IBOutlet UIButton * zone2;
@@ -31,7 +37,15 @@
 @property (nonatomic, retain) IBOutlet UIButton * zone8;
 @property (nonatomic, retain) IBOutlet UIButton * zone9;
 
-@property (nonatomic, retain) NSMutableArray *zoneArray;
+
+@property(nonatomic, retain) IBOutlet UIActivityIndicatorView * progress; 
+
+
+@property (nonatomic, retain)  NSMutableArray * zoneMap ;
+
+
+
+@property (nonatomic, retain) NSMutableArray *zoneArray ;
 @property (nonatomic, retain) NSMutableArray *oldZoneArray;
 @property (nonatomic, retain) CamChannel *selectedChannel;
 
@@ -39,5 +53,9 @@
 
 - (void)resetButtonImage;
 - (NSArray *)zoneSelectedList;
+
+
+-(void) parseZoneStrings:(NSArray * )zoneStrings;
+
 
 @end

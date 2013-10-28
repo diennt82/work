@@ -166,8 +166,6 @@
 		8BA5C47C1818DAAC006B4BB8 /* libcrypto.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A15430FC1818D08A00337EFE /* libcrypto.a */; };
 		8BA5C4801818DCC1006B4BB8 /* ZoneViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8BA5C47E1818DCC1006B4BB8 /* ZoneViewController.m */; };
 		8BA5C4811818DCC1006B4BB8 /* ZoneViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8BA5C47F1818DCC1006B4BB8 /* ZoneViewController.xib */; };
-		8BA5C48318190EDE006B4BB8 /* tick.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = 8BA5C48218190EDE006B4BB8 /* tick.jpeg */; };
-		8BA5C485181911D6006B4BB8 /* untick.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = 8BA5C484181911D6006B4BB8 /* untick.jpeg */; };
 		9704F84117B37CB3005F9868 /* DashBoard_ViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 9704F84017B37CAF005F9868 /* DashBoard_ViewController.mm */; };
 		97137B9715AE742A00BEBBD6 /* StunCommunication.mm in Sources */ = {isa = PBXBuildFile; fileRef = 97137B9615AE742A00BEBBD6 /* StunCommunication.mm */; };
 		9719EC5C155C9F30005419FC /* MBP_MenuViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 9719EC5A155C9F30005419FC /* MBP_MenuViewController.mm */; };
@@ -249,6 +247,9 @@
 		A15431011818D10200337EFE /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9770CDF7143076DD009E69EF /* AudioToolbox.framework */; };
 		A15431061818D14100337EFE /* libGoogleAnalytics_debug.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A15431041818D14100337EFE /* libGoogleAnalytics_debug.a */; };
 		A15431071818D14100337EFE /* libGoogleAnalytics.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A15431051818D14100337EFE /* libGoogleAnalytics.a */; };
+		A19778ED181E3316007C3CA7 /* ZoneViewController_ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = A19778EC181E3316007C3CA7 /* ZoneViewController_ipad.xib */; };
+		A19778F9181E6C55007C3CA7 /* motion_detection_off_1.png in Resources */ = {isa = PBXBuildFile; fileRef = A19778F7181E6C55007C3CA7 /* motion_detection_off_1.png */; };
+		A19778FB181E6CAB007C3CA7 /* motion_detection_on.png in Resources */ = {isa = PBXBuildFile; fileRef = A19778FA181E6CAB007C3CA7 /* motion_detection_on.png */; };
 		A1A98E8F180BF5AA00C8EBD3 /* client_main.c in Sources */ = {isa = PBXBuildFile; fileRef = A1A98E8B180BF5AA00C8EBD3 /* client_main.c */; };
 		A1A98E90180BF5AA00C8EBD3 /* StunClient.m in Sources */ = {isa = PBXBuildFile; fileRef = A1A98E8E180BF5AA00C8EBD3 /* StunClient.m */; };
 		A1BB7B9F17E02C5C00463A07 /* UdtSocketWrapper.mm in Sources */ = {isa = PBXBuildFile; fileRef = A1BB7B9E17E02C5C00463A07 /* UdtSocketWrapper.mm */; };
@@ -552,8 +553,6 @@
 		8BA5C47D1818DCC1006B4BB8 /* ZoneViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZoneViewController.h; sourceTree = "<group>"; };
 		8BA5C47E1818DCC1006B4BB8 /* ZoneViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZoneViewController.m; sourceTree = "<group>"; };
 		8BA5C47F1818DCC1006B4BB8 /* ZoneViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ZoneViewController.xib; sourceTree = "<group>"; };
-		8BA5C48218190EDE006B4BB8 /* tick.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = tick.jpeg; sourceTree = "<group>"; };
-		8BA5C484181911D6006B4BB8 /* untick.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = untick.jpeg; sourceTree = "<group>"; };
 		8D1107310486CEB800E47090 /* BlinkHD_ios-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "BlinkHD_ios-Info.plist"; plistStructureDefinitionIdentifier = "com.apple.xcode.plist.structure-definition.iphone.info-plist"; sourceTree = "<group>"; };
 		9704F37E14B76202000B4AA5 /* Entitlements.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Entitlements.plist; sourceTree = "<group>"; };
 		9704F83F17B37CAD005F9868 /* DashBoard_ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DashBoard_ViewController.h; sourceTree = "<group>"; };
@@ -690,6 +689,9 @@
 		A15430FD1818D08A00337EFE /* libTestFlight.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libTestFlight.a; path = "../ios-frameworks/libTestFlight.a"; sourceTree = "<group>"; };
 		A15431041818D14100337EFE /* libGoogleAnalytics_debug.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libGoogleAnalytics_debug.a; path = "../ios-frameworks/Google Analytics Library/libGoogleAnalytics_debug.a"; sourceTree = "<group>"; };
 		A15431051818D14100337EFE /* libGoogleAnalytics.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libGoogleAnalytics.a; path = "../ios-frameworks/Google Analytics Library/libGoogleAnalytics.a"; sourceTree = "<group>"; };
+		A19778EC181E3316007C3CA7 /* ZoneViewController_ipad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ZoneViewController_ipad.xib; sourceTree = "<group>"; };
+		A19778F7181E6C55007C3CA7 /* motion_detection_off_1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = motion_detection_off_1.png; sourceTree = "<group>"; };
+		A19778FA181E6CAB007C3CA7 /* motion_detection_on.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = motion_detection_on.png; sourceTree = "<group>"; };
 		A1A98E8B180BF5AA00C8EBD3 /* client_main.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = client_main.c; sourceTree = "<group>"; };
 		A1A98E8C180BF5AA00C8EBD3 /* client_main.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = client_main.h; sourceTree = "<group>"; };
 		A1A98E8D180BF5AA00C8EBD3 /* StunClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StunClient.h; sourceTree = "<group>"; };
@@ -2079,11 +2081,12 @@
 		A1E07DC01814DA1200AE0566 /* Zone Detection */ = {
 			isa = PBXGroup;
 			children = (
-				8BA5C484181911D6006B4BB8 /* untick.jpeg */,
-				8BA5C48218190EDE006B4BB8 /* tick.jpeg */,
+				A19778FA181E6CAB007C3CA7 /* motion_detection_on.png */,
+				A19778F7181E6C55007C3CA7 /* motion_detection_off_1.png */,
 				8BA5C47D1818DCC1006B4BB8 /* ZoneViewController.h */,
 				8BA5C47E1818DCC1006B4BB8 /* ZoneViewController.m */,
 				8BA5C47F1818DCC1006B4BB8 /* ZoneViewController.xib */,
+				A19778EC181E3316007C3CA7 /* ZoneViewController_ipad.xib */,
 			);
 			name = "Zone Detection";
 			sourceTree = "<group>";
@@ -2192,6 +2195,7 @@
 				3812F82515C8BF0600DADFA6 /* bb_setting_icon.png in Resources */,
 				3812F82B15C8BF3600DADFA6 /* bb_ptt_icon.png in Resources */,
 				3812F82C15C8BF3600DADFA6 /* bb_snap_icon.png in Resources */,
+				A19778F9181E6C55007C3CA7 /* motion_detection_off_1.png in Resources */,
 				3812F82D15C8BF3600DADFA6 /* bb_spk_icon.png in Resources */,
 				3812F83315C8BFC900DADFA6 /* circle_buttons1_2.png in Resources */,
 				3812F83415C8BFC900DADFA6 /* circle_buttons1_dn.png in Resources */,
@@ -2239,6 +2243,7 @@
 				3803A8761601981100B4DD97 /* photo_item.png in Resources */,
 				3803A87A1602D44100B4DD97 /* temp_alert.png in Resources */,
 				3803A87B1602D44100B4DD97 /* voice_alert.png in Resources */,
+				A19778ED181E3316007C3CA7 /* ZoneViewController_ipad.xib in Resources */,
 				38167AC216118DB600B7FA0A /* bb_pic_2.png in Resources */,
 				38167AC51611AB1800B7FA0A /* bb_ptt_icon_d.png in Resources */,
 				38DE1C55168AEA770049E814 /* AlertSettingViewController.xib in Resources */,
@@ -2300,7 +2305,6 @@
 				380CB0CD16DC5AD500290587 /* Step_12_ViewController_land.xib in Resources */,
 				380CB0D016DC5B2000290587 /* Step_12_ViewController_ipad.xib in Resources */,
 				380CB0D316DC5D8100290587 /* Step_12_ViewController_land_ipad.xib in Resources */,
-				8BA5C485181911D6006B4BB8 /* untick.jpeg in Resources */,
 				380CB0D916DC612000290587 /* Step_11_ViewController.xib in Resources */,
 				380CB0DC16DC630400290587 /* Step_11_ViewController_land.xib in Resources */,
 				380CB0DF16DC632700290587 /* Step_11_ViewController_ipad.xib in Resources */,
@@ -2312,7 +2316,6 @@
 				BC3C1B0316F05C0C00175AFF /* Localizable.strings in Resources */,
 				BC5B0FCE1701855600D2C308 /* cameraMenuRouter.plist in Resources */,
 				38483F01172A310E009DF61E /* mbp_icon57x57.png in Resources */,
-				8BA5C48318190EDE006B4BB8 /* tick.jpeg in Resources */,
 				38483F03172A3133009DF61E /* mbp_icon72x72.png in Resources */,
 				38483F05172A32C1009DF61E /* mbp_icon114x114.png in Resources */,
 				38483F07172A32D3009DF61E /* mbp_icon144x144.png in Resources */,
@@ -2370,6 +2373,7 @@
 				9792B9B417E2F8E9009C9F5D /* bb_rec_icon.png in Resources */,
 				9792B9B517E2F8E9009C9F5D /* i_mode.png in Resources */,
 				8B68F5D118066CE500661527 /* PlaybackViewController_ipad.xib in Resources */,
+				A19778FB181E6CAB007C3CA7 /* motion_detection_on.png in Resources */,
 				84DEA2BC17E42E3F00567836 /* NotificationViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

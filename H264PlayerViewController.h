@@ -92,6 +92,7 @@
 @property (retain, nonatomic) IBOutlet UIButton *zoneButton;
 
 @property (retain, nonatomic) IBOutlet UIBarButtonItem *barBntItemReveal;
+@property (retain, nonatomic) IBOutlet UIView  * buttons;
 
 @property (nonatomic, retain) HttpCommunication* httpComm;
 @property (nonatomic, retain) NSMutableArray *playlistArray;
@@ -106,7 +107,7 @@
 @property (nonatomic) BOOL iFrameOnlyFlag;
 @property (nonatomic,retain) StunClient * client; 
 @property (nonatomic, retain) UIImage *imgBackground;
-@property (nonatomic, retain) ZoneViewController *zoneViewController;
+@property (nonatomic, retain)  IBOutlet ZoneViewController *zoneViewController;
 
 
 /* Direction */
