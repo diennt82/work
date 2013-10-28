@@ -1257,6 +1257,20 @@
 
 -(void) stopStunStream
 {
+    if (self.client != nil)
+    {
+        [self.client shutdown];
+        [self.client release];
+        self.client = nil;
+    }
+    
+    
+    if (self.probeTimer != nil && [self.probeTimer isValid])
+    {
+        [self.probeTimer invalidate];
+        self.probeTimer = nil;
+    }
+    
     if ( (self.selectedChannel != nil)  &&
          (self.selectedChannel.profile.camera_mapped_address != nil) &&
          (self.selectedChannel.profile.camera_stun_audio_port != 0) &&
@@ -1265,24 +1279,13 @@
     { // Make sure we are connecting via STUN
         
         self.selectedChannel.waitingForStreamerToClose = YES;
+        NSLog(@"waiting for close stream from server");
         
-        [self retain];
-        [self performSelectorInBackground:@selector(closeStunStream_bg:) withObject:self];
+        H264PlayerViewController *vc = (H264PlayerViewController *)[self retain];
+        [self performSelectorInBackground:@selector(closeStunStream_bg:) withObject:vc];
         
     }
-    if (self.client != nil)
-    {
-        [self.client shutdown];
-        [self.client release];
-        self.client = nil;
-    }
-
     
-    if (self.probeTimer != nil && [self.probeTimer isValid])
-    {
-        [self.probeTimer invalidate];
-        self.probeTimer = nil;
-    }
 
 }
 
@@ -1297,15 +1300,16 @@
                                                                               Selector:nil
                                                                           FailSelector:nil
                                                                              ServerErr:nil] autorelease];
-    NSDictionary *responseDict = nil;
     
     NSString * cmd_string = @"action=command&command=close_p2p_rtsp_stun";
     
-    responseDict =  [jsonComm  sendCommandBlockedWithRegistrationId:mac
+    //NSDictionary *responseDict =
+    [jsonComm  sendCommandBlockedWithRegistrationId:mac
                                                          andCommand:cmd_string
                                                           andApiKey:apiKey];
     H264PlayerViewController *thisVC = (H264PlayerViewController *)vc;
     [thisVC.h264PlayerVCDelegate stopStreamFinished: thisVC.selectedChannel];
+    //[responseDict release];
     [thisVC release];
 }
 
