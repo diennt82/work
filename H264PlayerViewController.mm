@@ -279,10 +279,10 @@
             self.activityIndicator.hidden = YES;
             [self.activityIndicator stopAnimating];
             
-            if (probeTimer != nil && [probeTimer isValid])
+            if (self.probeTimer != nil && [self.probeTimer isValid])
             {
-                [probeTimer invalidate];
-                probeTimer = nil;
+                [self.probeTimer invalidate];
+                self.probeTimer = nil;
             }
             
             self.backBarBtnItem.enabled = YES;
@@ -1013,7 +1013,7 @@
     
     if (userWantToCancel != TRUE)
     {
-        probeTimer = [NSTimer scheduledTimerWithTimeInterval:1.0
+        self.probeTimer = [NSTimer scheduledTimerWithTimeInterval:1.0
                                                       target:self
                                                     selector:@selector(periodicProbe:)
                                                     userInfo:nil
@@ -1268,10 +1268,10 @@
     }
 
     
-    if (probeTimer != nil && [probeTimer isValid])
+    if (self.probeTimer != nil && [self.probeTimer isValid])
     {
-        [probeTimer invalidate];
-        probeTimer = nil;
+        [self.probeTimer invalidate];
+        self.probeTimer = nil;
     }
 
 }
@@ -2984,6 +2984,7 @@
     [_viewStopStreamingProgress release];
     [_activityStopStreamingProgress release];
     [_imgBackground release];
+    [_probeTimer release];
     [super dealloc];
 }
 

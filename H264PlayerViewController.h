@@ -72,7 +72,7 @@
 	/* Added to support direction update */
 	BOOL v_direction_update_needed, h_direction_update_needed;
 
-	NSTimer * probeTimer;
+	//NSTimer * probeTimer;
      dispatch_queue_t player_func_queue;
 }
 
@@ -105,6 +105,7 @@
 @property (nonatomic) BOOL iFrameOnlyFlag;
 @property (nonatomic,retain) StunClient * client; 
 @property (nonatomic, retain) UIImage *imgBackground;
+@property (nonatomic, retain) NSTimer * probeTimer;
 
 
 /* Direction */
