@@ -1036,10 +1036,11 @@
     
     if (userWantToCancel != TRUE)
     {
+        NSDate *timeOut = [NSDate dateWithTimeIntervalSinceNow:20];
         self.probeTimer = [NSTimer scheduledTimerWithTimeInterval:1.0
                                                       target:self
                                                     selector:@selector(periodicProbe:)
-                                                    userInfo:nil
+                                                    userInfo:timeOut
                                                      repeats:YES];
     }
     
@@ -1186,6 +1187,7 @@
     NSLog(@"self.currentMediaStatus: %d", self.currentMediaStatus);
     
     userWantToCancel = TRUE;
+    self.wantsToGoBack = YES;
     self.selectedChannel.stopStreaming = TRUE;
     
     if (self.currentMediaStatus == MEDIA_INFO_HAS_FIRST_IMAGE ||
@@ -1308,7 +1310,12 @@
                                                          andCommand:cmd_string
                                                           andApiKey:apiKey];
     H264PlayerViewController *thisVC = (H264PlayerViewController *)vc;
-    [thisVC.h264PlayerVCDelegate stopStreamFinished: thisVC.selectedChannel];
+    if (thisVC.wantsToGoBack == YES ||
+        userWantToCancel == TRUE)
+    {
+        [thisVC.h264PlayerVCDelegate stopStreamFinished: thisVC.selectedChannel];
+        thisVC.h264PlayerVCDelegate = nil;
+    }
     //[responseDict release];
     [thisVC release];
 }
@@ -1636,6 +1643,13 @@
     }
     else if (self.client != nil)
     {
+        if ([[NSDate date] compare:[exp userInfo]] == NSOrderedDescending)
+        {
+            [exp invalidate];
+            NSLog(@"periodicProbe ->timeOut");
+            return;
+        }
+        
         NSDate * timeout;
         
         NSRunLoop * mainloop = [NSRunLoop currentRunLoop];
