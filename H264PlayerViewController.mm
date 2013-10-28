@@ -56,8 +56,8 @@
                                         options:nil];
     }
     
-    UIGraphicsBeginImageContext(self.view.frame.size);
-    [[UIImage imageNamed:@"black_background"] drawInRect:self.view.bounds];
+    UIGraphicsBeginImageContext(UIScreen.mainScreen.bounds.size);
+    [[UIImage imageNamed:@"black_background"] drawInRect:UIScreen.mainScreen.bounds];
     self.imgBackground = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
     
