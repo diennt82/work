@@ -269,7 +269,17 @@
                            afterDelay:0.1];
             }
 
+            if (self.h264StreamerIsInStopped == TRUE)
+            {
+                self.selectedChannel.stopStreaming = TRUE;
+                [self performSelector:@selector(stopStream)
+                           withObject:nil
+                           afterDelay:0.1];
+            }
         }
+            
+            break;
+            
         case MEDIA_INFO_HAS_FIRST_IMAGE:
         {
             NSLog(@"[MEDIA_PLAYER_HAS_FIRST_IMAGE]");
@@ -290,6 +300,14 @@
             
             [self stopPeriodicPopup];
             
+            if (self.h264StreamerIsInStopped == TRUE)
+            {
+                self.selectedChannel.stopStreaming = TRUE;
+                [self performSelector:@selector(stopStream)
+                           withObject:nil
+                           afterDelay:0.1];
+                break;
+            }
             
             if (userWantToCancel == TRUE)
             {
