@@ -752,15 +752,20 @@
     [self stopPeriodicBeep];
     [self stopPeriodicPopup];
     
-    if (self.currentMediaStatus == MEDIA_INFO_HAS_FIRST_IMAGE ||
-        self.currentMediaStatus == MEDIA_PLAYER_STARTED ||
-        (self.currentMediaStatus == 0 && h264Streamer == NULL)) // Media player haven't start yet.
+//    if (self.currentMediaStatus == MEDIA_INFO_HAS_FIRST_IMAGE ||
+//        self.currentMediaStatus == MEDIA_PLAYER_STARTED ||
+//        (self.currentMediaStatus == 0 && h264Streamer == NULL)) // Media player haven't start yet.
+//    {
+//        [self stopStream];
+//    }
+//    else
+//    {
+//        h264Streamer->sendInterrupt();
+//    }
+    
+    if (h264Streamer != NULL)
     {
-        [self stopStream];
-    }
-    else
-    {
-        h264Streamer->suspend();
+        h264Streamer->sendInterrupt(); // Assuming h264Streamer stop itself.
     }
 }
 
@@ -806,7 +811,7 @@
         }
         else
         {
-            h264Streamer->suspend();
+            h264Streamer->sendInterrupt();
         }
         
         self.h264StreamerIsInStopped = TRUE;
@@ -1175,7 +1180,7 @@
     }
     else
     {
-        h264Streamer->suspend();
+        h264Streamer->sendInterrupt();
     }
     
     
