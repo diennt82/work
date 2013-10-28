@@ -1776,7 +1776,11 @@
                            }
                            else
                            {
-                               NSLog(@"SERVER unreachable (timeout) : responseDict == nil");
+                               NSLog(@"SERVER unreachable (timeout) : responseDict == nil --> Need test this more");
+                               
+                               [self performSelectorOnMainThread:@selector(handleMessageOnMainThread:)
+                                                      withObject:[NSNumber numberWithInt:MEDIA_ERROR_SERVER_DIED]
+                                                   waitUntilDone:NO];
                            }
                        }
                        
