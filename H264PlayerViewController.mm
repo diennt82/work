@@ -106,8 +106,7 @@
     //[self scan_for_missing_camera];
     
     
-    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-    NSLog(@"VIEW_NXCOMM_WOWZA: %d", [userDefaults boolForKey:VIEW_NXCOMM_WOWZA]);
+
 
     
     [self becomeActive];
@@ -493,7 +492,7 @@
             
             //TODO: Make sure we have closed all stream
             //Assume we are connecting via Symmetrict NAT
-            [self symmetric_check_result:TRUE];
+            [self remoteConnectingViaSymmectric];
             
             break;
         }
@@ -1948,6 +1947,64 @@
         
     } //if (isBehindSymmetricNat != TRUE)
 }
+
+- (void)remoteConnectingViaSymmectric
+{
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0),
+                   ^{
+                       NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+                       NSString *apiKey = [userDefaults objectForKey:@"PortalApiKey"];
+                       NSString *mac = [Util strip_colon_fr_mac:self.selectedChannel.profile.mac_address];
+                       
+                       BMS_JSON_Communication *jsonComm = [[[BMS_JSON_Communication alloc] initWithObject:self
+                                                                                                 Selector:nil
+                                                                                             FailSelector:nil
+                                                                                                ServerErr:nil] autorelease];
+                       NSDictionary *responseDict = [jsonComm createSessionBlockedWithRegistrationId:mac
+                                                                         andClientType:@"BROWSER"
+                                                                             andApiKey:apiKey];
+                       if (responseDict != nil)
+                       {
+                           if ([[responseDict objectForKey:@"status"] intValue] == 200)
+                           {
+                               NSString *urlResponse = [[responseDict objectForKey:@"data"] objectForKey:@"url"];
+                               
+                               NSUserDefaults *userDefalts = [NSUserDefaults standardUserDefaults];
+                               
+                               if ([urlResponse hasPrefix:ME_WOWZA] &&
+                                   [userDefalts boolForKey:VIEW_NXCOMM_WOWZA] == TRUE)
+                               {
+                                   self.selectedChannel.stream_url = [urlResponse stringByReplacingOccurrencesOfString:ME_WOWZA withString:NXCOMM_WOWZA];
+                               }
+                               else
+                               {
+                                   self.selectedChannel.stream_url = urlResponse;
+                               }
+                               
+                               [self performSelectorOnMainThread:@selector(startStream)
+                                                      withObject:nil
+                                                   waitUntilDone:NO];
+                               
+                               
+                           }
+                           else
+                           {
+                               //handle Bad response
+                               
+                               //force server died
+                               [self performSelectorOnMainThread:@selector(handleMessageOnMainThread:)
+                                                      withObject:[NSNumber numberWithInt:MEDIA_ERROR_SERVER_DIED]
+                                                   waitUntilDone:NO];
+                           }
+                       }
+                       else
+                       {
+                           NSLog(@"SERVER unreachable (timeout) ");
+                           //TODO : handle SERVER unreachable (timeout)
+                       }
+                   });
+}
+
 #pragma mark -
 #pragma mark - DirectionPad
 
