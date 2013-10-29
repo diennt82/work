@@ -187,7 +187,7 @@
             col = linear_index%3;
             
             
-            set_zone =[NSString stringWithFormat:@"%d%d,", row,col];
+            set_zone =[NSString stringWithFormat:@"%d%d", row,col];
             
             [enabled_zone addObject:set_zone];
             

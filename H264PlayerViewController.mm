@@ -293,6 +293,7 @@
                            afterDelay:0.1];
             }
 
+            break;
         }
         case MEDIA_INFO_HAS_FIRST_IMAGE:
         {
@@ -1204,16 +1205,12 @@
     self.selectedChannel.stopStreaming = TRUE;
     
     if (self.currentMediaStatus == MEDIA_INFO_HAS_FIRST_IMAGE ||
-        self.currentMediaStatus == MEDIA_PLAYER_STARTED ||
-        (self.currentMediaStatus == 0 && h264Streamer == NULL)) // Media player haven't start yet.
+        self.currentMediaStatus == MEDIA_PLAYER_STARTED )
+//        (self.currentMediaStatus == 0 && h264Streamer == NULL)) // Media player haven't start yet.
     {
         
-        //TODO: Check for stun mode running...
-        [self goBackToCameraList];
-    }
-    else
-    {
-        h264Streamer->suspend();
+        
+        h264Streamer->sendInterrupt();
     }
     
     
@@ -1685,7 +1682,18 @@
             {
                 NSString *zoneString = [tokens lastObject];
                 
-                if (![zoneString isEqualToString:@""])
+                if ([zoneString isEqualToString:@""])
+                {
+                    NSLog(@" NO zone being set");
+                    
+                    NSArray *zoneArr = [NSArray array];
+                    
+                    [self performSelectorOnMainThread:@selector(setZoneDetection_fg:)
+                                           withObject:zoneArr
+                                        waitUntilDone:NO];
+                    
+                }
+                else
                 {
                     NSRange range = [zoneString rangeOfString:@","];
                     
