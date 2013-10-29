@@ -106,8 +106,8 @@
     //[self scan_for_missing_camera];
     
     
-    
-    
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    NSLog(@"VIEW_NXCOMM_WOWZA: %d", [userDefaults boolForKey:VIEW_NXCOMM_WOWZA]);
 
     
     [self becomeActive];
@@ -1035,6 +1035,8 @@
                                                      repeats:YES];
     }
     
+    NSLog(@"--URL: %@", self.selectedChannel.stream_url);
+    
     [self startStream];
 }
 
@@ -1681,6 +1683,7 @@
                                                                                              FailSelector:nil
                                                                                                 ServerErr:nil] autorelease];
                        NSDictionary *responseDict;
+                       NSLog(@"%@", responseDict);
                        
                        
                        if (isBehindSymmetricNat == TRUE) // USE RELAY
@@ -1693,9 +1696,21 @@
                            {
                                if ([[responseDict objectForKey:@"status"] intValue] == 200)
                                {
-                                   self.selectedChannel.stream_url = [[responseDict objectForKey:@"data"] objectForKey:@"url"];
+                                   //self.selectedChannel.stream_url = [[responseDict objectForKey:@"data"] objectForKey:@"url"];
                                    
+                                   NSString *urlResponse = [[responseDict objectForKey:@"data"] objectForKey:@"url"];
                                    
+                                   NSUserDefaults *userDefalts = [NSUserDefaults standardUserDefaults];
+                                
+                                   if ([urlResponse hasPrefix:ME_WOWZA] &&
+                                       [userDefalts boolForKey:VIEW_NXCOMM_WOWZA] == TRUE)
+                                   {
+                                        self.selectedChannel.stream_url = [urlResponse stringByReplacingOccurrencesOfString:ME_WOWZA withString:NXCOMM_WOWZA];
+                                   }
+                                   else
+                                   {
+                                       self.selectedChannel.stream_url = urlResponse;
+                                   }
                                    
                                    [self performSelectorOnMainThread:@selector(startStream)
                                                           withObject:nil
@@ -1741,6 +1756,8 @@
                            
                            if (responseDict != nil)
                            {
+                               NSLog(@"symmetric_check_result, responseDict: %@", responseDict);
+                               
                                NSString *body = [[[responseDict objectForKey: @"data"] objectForKey: @"device_response"] objectForKey: @"body"];
                                //"get_session_key: error=200,port1=37171&port2=47608&ip=115.77.250.193,mode=p2p_stun_rtsp"
                                

@@ -41,6 +41,10 @@
 
 #define H264_SWITCHING_TO_RELAY2_SERVER     11
 
+#define NXCOMM_WOWZA @"rtmp://nxcomm-office.no-ip.info:1935"
+#define ME_WOWZA @"rtmp://wowza.api.simplimonitor.com:1935"
+#define VIEW_NXCOMM_WOWZA @"nxcomm_wowza"
+
 @protocol H264PlayerVCDelegate <NSObject>
 
 - (void)stopStreamFinished: (CamChannel *)camChannel;
