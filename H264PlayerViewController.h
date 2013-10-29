@@ -113,7 +113,6 @@
 @property (nonatomic, retain) UIImage *imgBackground;
 @property (nonatomic, retain) NSTimer * probeTimer;
 @property (nonatomic, assign) id<H264PlayerVCDelegate> h264PlayerVCDelegate;
-@property (nonatomic) BOOL wantsToGoBack;
 
 
 /* Direction */

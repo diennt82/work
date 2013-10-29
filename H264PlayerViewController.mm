@@ -770,18 +770,13 @@
     [self stopPeriodicBeep];
     [self stopPeriodicPopup];
     
-//    if (self.currentMediaStatus == MEDIA_INFO_HAS_FIRST_IMAGE ||
-//        self.currentMediaStatus == MEDIA_PLAYER_STARTED ||
-//        (self.currentMediaStatus == 0 && h264Streamer == NULL)) // Media player haven't start yet.
-//    {
-//        [self stopStream];
-//    }
-//    else
-//    {
-//        h264Streamer->sendInterrupt();
-//    }
-    
-    if (h264Streamer != NULL)
+    if (self.currentMediaStatus == MEDIA_INFO_HAS_FIRST_IMAGE ||
+        self.currentMediaStatus == MEDIA_PLAYER_STARTED ||
+        (self.currentMediaStatus == 0 && h264Streamer == NULL)) // Media player haven't start yet.
+    {
+        [self stopStream];
+    }
+    else if (h264Streamer != NULL)
     {
         h264Streamer->sendInterrupt(); // Assuming h264Streamer stop itself.
     }
@@ -795,6 +790,8 @@
     {
         return;
     }
+    
+    self.h264StreamerIsInStopped = FALSE;
     
     if(selectedChannel.profile.isInLocal == TRUE)
     {
@@ -814,36 +811,31 @@
         return;
     }
     
+    selectedChannel.stopStreaming = TRUE;
+    
+    //[self stopPeriodicPopup];
+    
+    if (self.currentMediaStatus == MEDIA_INFO_HAS_FIRST_IMAGE ||
+        self.currentMediaStatus == MEDIA_PLAYER_STARTED ||
+        (self.currentMediaStatus == 0 && h264Streamer == NULL)) // Media player haven't start yet.
+    {
+        [self stopStream];
+    }
+    else
+    {
+        h264Streamer->sendInterrupt();
+    }
+    
+    self.h264StreamerIsInStopped = TRUE;
+    
+    self.imageViewVideo.backgroundColor = [UIColor blackColor];
+    
     if (selectedChannel.profile.isInLocal == TRUE)
     {
         NSLog(@"Enter Background.. Local ");
-        selectedChannel.stopStreaming = TRUE;
-        
-        //[self stopPeriodicPopup];
-        
-        if (self.currentMediaStatus == MEDIA_INFO_HAS_FIRST_IMAGE ||
-            self.currentMediaStatus == MEDIA_PLAYER_STARTED ||
-            (self.currentMediaStatus == 0 && h264Streamer == NULL)) // Media player haven't start yet.
-        {
-            [self stopStream];
-        }
-        else
-        {
-            h264Streamer->sendInterrupt();
-        }
-        
-        self.h264StreamerIsInStopped = TRUE;
-        
-        self.imageViewVideo.backgroundColor = [UIColor blackColor];
     }
     else if (selectedChannel.profile.minuteSinceLastComm <= 5) // Remote
     {
-        selectedChannel.stopStreaming = TRUE;
-        
-        //[self stopPeriodicPopup];
-        
-        [self stopStream];
-        
         //NSLog(@"abort remote timer ");
         [selectedChannel abortViewTimer];
     }
@@ -1036,11 +1028,10 @@
     
     if (userWantToCancel != TRUE)
     {
-        NSDate *timeOut = [NSDate dateWithTimeIntervalSinceNow:20];
         self.probeTimer = [NSTimer scheduledTimerWithTimeInterval:1.0
                                                       target:self
                                                     selector:@selector(periodicProbe:)
-                                                    userInfo:timeOut
+                                                    userInfo:nil
                                                      repeats:YES];
     }
     
@@ -1187,7 +1178,6 @@
     NSLog(@"self.currentMediaStatus: %d", self.currentMediaStatus);
     
     userWantToCancel = TRUE;
-    self.wantsToGoBack = YES;
     self.selectedChannel.stopStreaming = TRUE;
     
     if (self.currentMediaStatus == MEDIA_INFO_HAS_FIRST_IMAGE ||
@@ -1310,13 +1300,11 @@
                                                          andCommand:cmd_string
                                                           andApiKey:apiKey];
     H264PlayerViewController *thisVC = (H264PlayerViewController *)vc;
-    if (thisVC.wantsToGoBack == YES ||
-        userWantToCancel == TRUE)
+    if (userWantToCancel == TRUE)
     {
         [thisVC.h264PlayerVCDelegate stopStreamFinished: thisVC.selectedChannel];
         thisVC.h264PlayerVCDelegate = nil;
     }
-    //[responseDict release];
     [thisVC release];
 }
 
@@ -1643,13 +1631,6 @@
     }
     else if (self.client != nil)
     {
-        if ([[NSDate date] compare:[exp userInfo]] == NSOrderedDescending)
-        {
-            [exp invalidate];
-            NSLog(@"periodicProbe ->timeOut");
-            return;
-        }
-        
         NSDate * timeout;
         
         NSRunLoop * mainloop = [NSRunLoop currentRunLoop];
@@ -1706,7 +1687,7 @@
                        {
                            
                            responseDict = [jsonComm createSessionBlockedWithRegistrationId:mac
-                                                                             andClientType:@"IOS"
+                                                                             andClientType:@"BROWSER"
                                                                                  andApiKey:apiKey];
                            if (responseDict != nil)
                            {
