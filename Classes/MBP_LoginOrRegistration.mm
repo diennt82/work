@@ -239,15 +239,20 @@
     
     if (self.client == nil)
     {
-        self.client = [[StunClient alloc] init];
+        self.client = [StunClient alloc];// init];
+        
+        
     }
+    
     
     //If we have not checked -- then start checking, else just skip this step
     if ( [self.client isCheckingForSymmetrictNat]  == FALSE )
     {
+        
+        //init
+        [self.client init];
         [self.client test_start_async:self];
     }
-   
     
     
 }
@@ -791,7 +796,7 @@
     dispatch_async(dispatch_get_main_queue(),
                    ^{
                        [self.client shutdown];
-                       [self.client release];
+                      // [self.client release];
                    }
                    );
     

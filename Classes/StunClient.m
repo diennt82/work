@@ -174,7 +174,7 @@ extern int cleanup_pj();
     
     char* stunServer = STUN_SERVER;
     
-    int countWhile = 0;
+    int countWhile = 1;
     int status;
     while (countWhile++ < 2 )
     {
