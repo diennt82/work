@@ -217,9 +217,7 @@
     NSString * event_timecode = [NSString stringWithFormat:@"0%@_%@", self.alertType, self.alertVal];
     
     
-    NSDictionary * responseDict = nil;
-    
-    responseDict= [jsonComm getAllRecordedFilesBlockedWithRegistrationId:mac
+    NSDictionary *responseDict= [jsonComm getAllRecordedFilesBlockedWithRegistrationId:mac
                                            andEvent:event_timecode
                                           andApiKey:apiKey];
 
@@ -355,9 +353,7 @@
 
     
     
-    NSDictionary * responseDict = nil;
-    
-    responseDict= [jsonComm getAllRecordedFilesBlockedWithRegistrationId:mac
+    NSDictionary *responseDict = [jsonComm getAllRecordedFilesBlockedWithRegistrationId:mac
                                                                 andEvent:[NSString stringWithFormat:@"0%@",self.alertType]
                                                                andApiKey:apiKey];
     
