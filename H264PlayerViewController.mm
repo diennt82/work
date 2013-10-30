@@ -2896,12 +2896,18 @@
                  
                  
                  */
+                NSLog(@"[--- h264Streamer: %p]", h264Streamer);
                 
                 if (h264Streamer != NULL)
                 {
                     h264Streamer->sendInterrupt();
                 }
-                
+                else // if this happen, the activity rotates forever (by right: go back to camera list)
+                {
+                    [self performSelectorOnMainThread:@selector(handleMessageOnMainThread:)
+                                           withObject:[NSNumber numberWithInt:MEDIA_ERROR_SERVER_DIED]
+                                        waitUntilDone:NO];
+                }
                 
                 
                 break;
