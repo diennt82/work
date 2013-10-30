@@ -381,16 +381,15 @@
             }
             
             NSLog(@"there is %d in playlist", [self.tempPlaylist.playlistArray count]);
-            [progress performSelectorOnMainThread:@selector(stopAnimating)
-                                       withObject:nil
-                                    waitUntilDone:NO];
-            
-            
             [self.tempPlaylist.tableView performSelectorOnMainThread:@selector(reloadData)
                                                           withObject:nil waitUntilDone:NO ];
-            self.tempPlaylist.view.hidden = NO;
         }
     }
+    
+    [progress performSelectorOnMainThread:@selector(stopAnimating)
+                               withObject:nil
+                            waitUntilDone:NO];
+    self.tempPlaylist.view.hidden = NO;
     
 	[pool release];
 }
