@@ -820,7 +820,7 @@
     {
         [self stopStream];
     }
-    else
+    else if(h264Streamer != nil)
     {
         h264Streamer->sendInterrupt();
     }
@@ -1107,7 +1107,10 @@
     NSLog(@"startStream_bg url = %@", url);
     do
     {
-        
+        if (url == nil)
+        {
+            break;
+        }
         status = h264Streamer->setDataSource([url UTF8String]);
         
         if (status != NO_ERROR) // NOT OK
@@ -1189,7 +1192,7 @@
         //TODO: Check for stun mode running...
         [self goBackToCameraList];
     }
-    else
+    else if(h264Streamer != nil)
     {
         h264Streamer->sendInterrupt();
     }
