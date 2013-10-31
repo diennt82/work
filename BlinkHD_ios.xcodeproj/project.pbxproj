@@ -163,6 +163,7 @@
 		84DEA2BB17E42E3F00567836 /* NotificationViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 84DEA2B917E42E3F00567836 /* NotificationViewController.mm */; };
 		84DEA2BC17E42E3F00567836 /* NotificationViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 84DEA2BA17E42E3F00567836 /* NotificationViewController.xib */; };
 		8B68F5D118066CE500661527 /* PlaybackViewController_ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8B68F5D018066CE500661527 /* PlaybackViewController_ipad.xib */; };
+		8BA8AE881821F3E900DC9E9F /* stream720p_10_926.sdp in Resources */ = {isa = PBXBuildFile; fileRef = 8BA8AE871821F3E900DC9E9F /* stream720p_10_926.sdp */; };
 		9704F84117B37CB3005F9868 /* DashBoard_ViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 9704F84017B37CAF005F9868 /* DashBoard_ViewController.mm */; };
 		97137B9715AE742A00BEBBD6 /* StunCommunication.mm in Sources */ = {isa = PBXBuildFile; fileRef = 97137B9615AE742A00BEBBD6 /* StunCommunication.mm */; };
 		9719EC5C155C9F30005419FC /* MBP_MenuViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 9719EC5A155C9F30005419FC /* MBP_MenuViewController.mm */; };
@@ -548,6 +549,7 @@
 		84DEA2B917E42E3F00567836 /* NotificationViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = NotificationViewController.mm; sourceTree = "<group>"; };
 		84DEA2BA17E42E3F00567836 /* NotificationViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = NotificationViewController.xib; sourceTree = "<group>"; };
 		8B68F5D018066CE500661527 /* PlaybackViewController_ipad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PlaybackViewController_ipad.xib; sourceTree = "<group>"; };
+		8BA8AE871821F3E900DC9E9F /* stream720p_10_926.sdp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = stream720p_10_926.sdp; sourceTree = "<group>"; };
 		8D1107310486CEB800E47090 /* BlinkHD_ios-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "BlinkHD_ios-Info.plist"; plistStructureDefinitionIdentifier = "com.apple.xcode.plist.structure-definition.iphone.info-plist"; sourceTree = "<group>"; };
 		9704F37E14B76202000B4AA5 /* Entitlements.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Entitlements.plist; sourceTree = "<group>"; };
 		9704F83F17B37CAD005F9868 /* DashBoard_ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DashBoard_ViewController.h; sourceTree = "<group>"; };
@@ -1830,6 +1832,7 @@
 			isa = PBXGroup;
 			children = (
 				A15431081818DEB800337EFE /* streamvga.sdp */,
+				8BA8AE871821F3E900DC9E9F /* stream720p_10_926.sdp */,
 				A1176B72180D1DD9000B7527 /* stream480p.sdp */,
 				A1176B73180D1DD9000B7527 /* stream720p.sdp */,
 				38483F0C172A33F5009DF61E /* iTunesArtwork */,
@@ -2275,6 +2278,7 @@
 				38DE1CC9168AEDD10049E814 /* bb_setup_icon_step_2.png in Resources */,
 				38DE1CCA168AEDD10049E814 /* bb_setup_icon_step_3.png in Resources */,
 				388396B9168B064500B0D020 /* MBP_iosViewController.xib in Resources */,
+				8BA8AE881821F3E900DC9E9F /* stream720p_10_926.sdp in Resources */,
 				388396BE168B068400B0D020 /* CameraViewController_land_ipad.xib in Resources */,
 				A1E07DC51814DAE600AE0566 /* ZoneViewController.xib in Resources */,
 				BC3C1ACE16F025B600175AFF /* MBP_MenuViewController_ipad.xib in Resources */,
