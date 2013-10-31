@@ -1757,11 +1757,21 @@ return self;
         //found the camera ..
         // --> update local IP and other info
        
-        cp.ip_address = ((CamProfile*) [_scan_results objectAtIndex:0]).ip_address;
-        cp.isInLocal = TRUE;
-        cp.port = ((CamProfile*) [_scan_results objectAtIndex:0]).port;//localport is always 80
-        
-        cp.hasUpdateLocalStatus = TRUE;
+        CamProfile* scanned;
+        for (int i=0 ; i< [_scan_results count]; i++)
+        {
+            scanned = ((CamProfile*) [_scan_results objectAtIndex:0]);
+            
+            if ([scanned.mac_address isEqualToString:cp.mac_address])
+            {
+                cp.ip_address = ((CamProfile*) [_scan_results objectAtIndex:0]).ip_address;
+                cp.isInLocal = TRUE;
+                cp.port = ((CamProfile*) [_scan_results objectAtIndex:0]).port;//localport is always 80
+                
+                cp.hasUpdateLocalStatus = TRUE;
+            }
+            
+        }
     }
 
     NSLog(@"cam:%@ is in Local? %d fw:%@", cp.mac_address, cp.isInLocal, cp.fw_version);
