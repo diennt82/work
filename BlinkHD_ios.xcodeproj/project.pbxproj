@@ -181,7 +181,6 @@
 		9770CD8D143073AE009E69EF /* ADPCMDecoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 9770CD86143073AE009E69EF /* ADPCMDecoder.m */; };
 		9770CD8E143073AE009E69EF /* AiBallBase64Encoding.m in Sources */ = {isa = PBXBuildFile; fileRef = 9770CD88143073AE009E69EF /* AiBallBase64Encoding.m */; };
 		9770CD8F143073AE009E69EF /* AsyncSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = 9770CD8A143073AE009E69EF /* AsyncSocket.m */; };
-		9770CD90143073AE009E69EF /* InMemoryAudioFile.m in Sources */ = {isa = PBXBuildFile; fileRef = 9770CD8C143073AE009E69EF /* InMemoryAudioFile.m */; };
 		9770CD99143073C6009E69EF /* Util.m in Sources */ = {isa = PBXBuildFile; fileRef = 9770CD97143073C6009E69EF /* Util.m */; };
 		9770CDF2143076CD009E69EF /* CoreAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9770CDF1143076CD009E69EF /* CoreAudio.framework */; };
 		9770CEC81430783A009E69EF /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9770CEC71430783A009E69EF /* CFNetwork.framework */; };
@@ -584,8 +583,6 @@
 		9770CD88143073AE009E69EF /* AiBallBase64Encoding.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AiBallBase64Encoding.m; sourceTree = "<group>"; };
 		9770CD89143073AE009E69EF /* AsyncSocket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AsyncSocket.h; sourceTree = "<group>"; };
 		9770CD8A143073AE009E69EF /* AsyncSocket.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AsyncSocket.m; sourceTree = "<group>"; };
-		9770CD8B143073AE009E69EF /* InMemoryAudioFile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InMemoryAudioFile.h; sourceTree = "<group>"; };
-		9770CD8C143073AE009E69EF /* InMemoryAudioFile.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InMemoryAudioFile.m; sourceTree = "<group>"; };
 		9770CD96143073C6009E69EF /* Util.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Util.h; sourceTree = "<group>"; };
 		9770CD97143073C6009E69EF /* Util.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Util.m; sourceTree = "<group>"; };
 		9770CDF1143076CD009E69EF /* CoreAudio.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreAudio.framework; path = System/Library/Frameworks/CoreAudio.framework; sourceTree = SDKROOT; };
@@ -1601,8 +1598,6 @@
 				9770CD8A143073AE009E69EF /* AsyncSocket.m */,
 				97DEEA4014308B71008212FF /* AsyncUdpSocket.m */,
 				97DEEA4114308B71008212FF /* AsyncUdpSocket.h */,
-				9770CD8B143073AE009E69EF /* InMemoryAudioFile.h */,
-				9770CD8C143073AE009E69EF /* InMemoryAudioFile.m */,
 				975343ED1432F88D0037DDAC /* AviRecord.h */,
 				975343EE1432F88D0037DDAC /* AviRecord.m */,
 				97B8F6651439B58000924E84 /* DeviceConfiguration.h */,
@@ -2390,7 +2385,6 @@
 				9770CD8D143073AE009E69EF /* ADPCMDecoder.m in Sources */,
 				9770CD8E143073AE009E69EF /* AiBallBase64Encoding.m in Sources */,
 				9770CD8F143073AE009E69EF /* AsyncSocket.m in Sources */,
-				9770CD90143073AE009E69EF /* InMemoryAudioFile.m in Sources */,
 				9770CD99143073C6009E69EF /* Util.m in Sources */,
 				97DEEA4214308B71008212FF /* AsyncUdpSocket.m in Sources */,
 				975341571431B4C20037DDAC /* IpAddress.c in Sources */,
