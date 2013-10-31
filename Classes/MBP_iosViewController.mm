@@ -1768,11 +1768,12 @@ return self;
                 cp.isInLocal = TRUE;
                 cp.port = ((CamProfile*) [_scan_results objectAtIndex:0]).port;//localport is always 80
                 
-                cp.hasUpdateLocalStatus = TRUE;
             }
             
         }
     }
+    
+    cp.hasUpdateLocalStatus = TRUE;
 
     NSLog(@"cam:%@ is in Local? %d fw:%@", cp.mac_address, cp.isInLocal, cp.fw_version);
     ++ nextCameraToScanIndex;
