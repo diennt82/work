@@ -819,8 +819,6 @@ return self;
 			}
         case SCAN_BONJOUR_CAMERA :
         {
-            
-#if 1
             /*
              20130523_nguyendang :
              Scan camera with bonjour here
@@ -839,29 +837,7 @@ return self;
             //[self dismissModalViewControllerAnimated:NO];
             [self dismissViewControllerAnimated:NO completion:^{}];
             self.progressView.hidden = NO;
-#else
-            [self dismissModalViewControllerAnimated:NO];
-            self.progressView.hidden = NO;
-            
-            NotificationViewController * notif_view = [[NotificationViewController alloc]
-                                                       initWithNibName:@"NotificationViewController" bundle:nil];
-            @synchronized(self)
-            {
-                //Feed in data now
-                notif_view.cameraMacNoColon = @"48022A2CAC31";
-                notif_view.cameraName  = @"Cam stup";
-                notif_view.alertType   = @"4";
-                notif_view.alertVal    = @"20130918111817240";
-                notif_view.delegate     = self;
-                
-                [latestCamAlert release];
-                latestCamAlert = nil;
-            }
-            
-            [notif_view presentModallyOn:self];
-            
-            
-#endif
+
 
             
             break;
@@ -1327,7 +1303,7 @@ return self;
 #pragma mark -
 #pragma mark Alertview delegate
 
-#if JSON_FLAG
+
 - (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex {
     
 	int tag = alertView.tag ;
@@ -1378,9 +1354,20 @@ return self;
 				[self sendStatus:3];
                 
 #endif
+                NotificationViewController * notif_view;
+                if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+                {
+                    notif_view = [[[NotificationViewController alloc]
+                                   initWithNibName:@"NotificationViewController_ipad" bundle:nil]autorelease];
+                }
+                else
+                {
+                    notif_view = [[[NotificationViewController alloc]
+                                   initWithNibName:@"NotificationViewController" bundle:nil]autorelease];
+                }
+
                 
-                NotificationViewController * notif_view = [[[NotificationViewController alloc]
-                                                            initWithNibName:@"NotificationViewController" bundle:nil]autorelease];
+                
                 @synchronized(self)
                 {
                     //Feed in data now
@@ -1491,153 +1478,7 @@ return self;
     
 }
 
-#else
-- (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex {
 
-	int tag = alertView.tag ;
-
-	if (tag == ALERT_PUSH_RECVED_RESCAN_AFTER)
-	{
-		switch(buttonIndex) {
-			case 0:
-                [pushAlert release];
-                pushAlert = nil;
-				break;
-			case 1:
-            {
-
-
-
-				if (dashBoard != nil)
-				{
-					NSLog(@"RESCAN_AFTER close all windows and thread"); 
-
-					
-
-					NSArray * views = dashBoard.navigationController.viewControllers;                     
-					NSLog(@"views count = %d",[views count] );
-					if ( [views count] > 1) 
-					{
-						CameraViewController * camView = (CameraViewController *) [views objectAtIndex:1]; 
-						[camView goBackToCameraList]; 
-					}
-
-
-
-
-				}
-
-				[self dismissViewControllerAnimated:NO completion:nil];
-
-#if 0
-
-				NSLog(@"Re-scan ");
-				[self sendStatus:3];
-
-#endif 
-                
-                
-                NotificationViewController * notif_view = [[NotificationViewController alloc]
-                                                            initWithNibName:@"NotificationViewController" bundle:nil];
-                @synchronized(self)
-                {
-                    //Feed in data now
-                    notif_view.cameraMacNoColon = latestCamAlert.cameraMacNoColon;
-                    notif_view.cameraName  = latestCamAlert.cameraName;
-                    notif_view.alertType   = latestCamAlert.alertType;
-                    notif_view.alertVal    = latestCamAlert.alertVal;
-                    notif_view.delegate     = self;
-                    
-                    [latestCamAlert release];
-                    latestCamAlert = nil;
-                }
-                
-                [notif_view presentModallyOn:self];
-                
-
-                
-                [pushAlert release];
-                pushAlert = nil;
-				break;
-            }
-			default:
-				break;
-
-		}
-	}
-	else if (tag == ALERT_PUSH_RECVED_RELOGIN_AFTER)
-	{
-		switch(buttonIndex) {
-			case 0:
-				break;
-			case 1:
-
-
-				if (dashBoard != nil)
-				{
-					NSLog(@"RELOGIN_AFTER close all windows and thread"); 
-
-					//[dashBoard.navigationController popToRootViewControllerAnimated:NO]; 
-
-					NSArray * views = dashBoard.navigationController.viewControllers;                     
-					NSLog(@"views count = %d",[views count] );
-					if ( [views count] > 1) 
-					{
-						CameraViewController * camView = (CameraViewController *) [views objectAtIndex:1]; 
-						[camView goBackToCameraList]; 
-					}
-
-
-
-
-				}
-
-				//[self dismissModalViewControllerAnimated:NO];
-                [self dismissViewControllerAnimated:NO completion:^{}];
-
-				 
-				[self sendStatus:2];
-				break;
-			default:
-				break;
-
-		}
-	}
-    else if (tag == ALERT_PUSH_SERVER_ANNOUNCEMENT)
-    {
-        switch(buttonIndex)
-        {
-			case 0://IGNORE
-				break; 
-			case 1://Detail
-            {
-                // Open the web browser now..
-                NSString * url =  ((AlertPrompt*)alertView).otherInfo;
-            
-                
-                if (url != nil)
-                {
-                    if ( [url hasPrefix:@"http://"] != TRUE)
-                    {
-                        url  = [NSString stringWithFormat:@"http://%@", url];
-                    }
-                    
-                    
-                    NSLog(@"final url:%@ ",url);
-                    
-                    NSURL *ns_url = [NSURL URLWithString:url];
-                    
-                    [[UIApplication sharedApplication] openURL:ns_url];
-                }
-                break;
-            }
-            default:
-                break;
-        }
-    }
-
-}
-#endif
 
 #pragma mark -
 
@@ -2175,8 +2016,21 @@ return self;
     [self dismissViewControllerAnimated:NO completion:nil];
     self.progressView.hidden = NO;
     
-    NotificationViewController * notif_view = [[NotificationViewController alloc]
-                                                initWithNibName:@"NotificationViewController" bundle:nil];
+    
+    NotificationViewController * notif_view;
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+    {
+        notif_view = [[NotificationViewController alloc]
+                      initWithNibName:@"NotificationViewController_ipad" bundle:nil];
+    }
+    else
+    {
+        notif_view = [[NotificationViewController alloc]
+                      initWithNibName:@"NotificationViewController" bundle:nil];
+    }
+
+    
+
     
     notif_view.delegate = self;
     //Feed in data now
