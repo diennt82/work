@@ -1760,13 +1760,13 @@ return self;
         CamProfile* scanned;
         for (int i=0 ; i< [_scan_results count]; i++)
         {
-            scanned = ((CamProfile*) [_scan_results objectAtIndex:0]);
+            scanned = ((CamProfile*) [_scan_results objectAtIndex:i]);
             
             if ([scanned.mac_address isEqualToString:cp.mac_address])
             {
-                cp.ip_address = ((CamProfile*) [_scan_results objectAtIndex:0]).ip_address;
+                cp.ip_address = ((CamProfile*) [_scan_results objectAtIndex:i]).ip_address;
                 cp.isInLocal = TRUE;
-                cp.port = ((CamProfile*) [_scan_results objectAtIndex:0]).port;//localport is always 80
+                cp.port = ((CamProfile*) [_scan_results objectAtIndex:i]).port;//localport is always 80
                 
             }
             
