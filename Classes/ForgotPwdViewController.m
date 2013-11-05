@@ -31,7 +31,7 @@
 }
 -(void) dealloc
 {
-    [  userEmail release];
+    //[  userEmail release];
     [super dealloc];
 }
 - (void)viewDidLoad
