@@ -23,6 +23,7 @@
 @class  EditCameraCell; 
 
 #define  MAX_CAM_ALLOWED 4
+#define ALERT_DEMO_926_TAG 905
 
 @interface DashBoard_ViewController : GAITrackedViewController<UITableViewDataSource, UITableViewDelegate, UINavigationControllerDelegate, UITextFieldDelegate>
 {

@@ -47,14 +47,12 @@ void PlaybackListener::notify(int msg, int ext1, int ext2)
 
 int PlaybackListener::getNextClip(char** url_cstr)
 {
-    current_clip_index ++;
     
-    if (current_clip_index >= final_number_of_clips)
+    if (final_number_of_clips == [mClips count] &&
+        current_clip_index >= final_number_of_clips-1 )
     {
         return MEDIA_PLAYBACK_STATUS_COMPLETE;
     }
-    
-    
     
     
     if (current_clip_index >= [mClips count])
@@ -63,7 +61,8 @@ int PlaybackListener::getNextClip(char** url_cstr)
     }
     else
     {
-        
+        current_clip_index ++;
+
         NSString * current_clip = [mClips objectAtIndex:current_clip_index];
         
         *url_cstr = (char *) malloc( [current_clip length] * sizeof(char));

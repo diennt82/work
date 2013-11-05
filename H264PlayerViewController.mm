@@ -56,8 +56,8 @@
                                         options:nil];
     }
     
-    UIGraphicsBeginImageContext(self.view.frame.size);
-    [[UIImage imageNamed:@"black_background"] drawInRect:self.view.bounds];
+    UIGraphicsBeginImageContext(UIScreen.mainScreen.bounds.size);
+    [[UIImage imageNamed:@"black_background"] drawInRect:UIScreen.mainScreen.bounds];
     self.imgBackground = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
     
@@ -114,9 +114,6 @@
         self.zoneViewController = [[ZoneViewController alloc] initWithNibName:@"ZoneViewController" bundle:[NSBundle mainBundle]];
 
     }
-    
-    
-    
     
     self.zoneViewController.selectedChannel = self.selectedChannel;
     self.zoneViewController.zoneVCDelegate = self;
@@ -292,9 +289,18 @@
                            withObject:nil
                            afterDelay:0.1];
             }
-
-            break;
+            
+            if (self.h264StreamerIsInStopped == TRUE)
+            {
+                self.selectedChannel.stopStreaming = TRUE;
+                [self performSelector:@selector(stopStream)
+                           withObject:nil
+                           afterDelay:0.1];
+            }
         }
+            
+            break;
+            
         case MEDIA_INFO_HAS_FIRST_IMAGE:
         {
             NSLog(@"[MEDIA_PLAYER_HAS_FIRST_IMAGE]");
@@ -304,10 +310,10 @@
             self.activityIndicator.hidden = YES;
             [self.activityIndicator stopAnimating];
             
-            if (probeTimer != nil && [probeTimer isValid])
+            if (self.probeTimer != nil && [self.probeTimer isValid])
             {
-                [probeTimer invalidate];
-                probeTimer = nil;
+                [self.probeTimer invalidate];
+                self.probeTimer = nil;
             }
             
             self.backBarBtnItem.enabled = YES;
@@ -315,6 +321,14 @@
             
             [self stopPeriodicPopup];
             
+            if (self.h264StreamerIsInStopped == TRUE)
+            {
+                self.selectedChannel.stopStreaming = TRUE;
+                [self performSelector:@selector(stopStream)
+                           withObject:nil
+                           afterDelay:0.1];
+                break;
+            }
             
             if (userWantToCancel == TRUE)
             {
@@ -501,7 +515,7 @@
             
             //TODO: Make sure we have closed all stream
             //Assume we are connecting via Symmetrict NAT
-            [self symmetric_check_result:TRUE];
+            [self remoteConnectingViaSymmectric];
             
             break;
         }
@@ -784,9 +798,9 @@
     {
         [self stopStream];
     }
-    else
+    else if (h264Streamer != NULL)
     {
-        h264Streamer->suspend();
+        h264Streamer->sendInterrupt(); // Assuming h264Streamer stop itself.
     }
 }
 
@@ -812,6 +826,8 @@
         return;
     }
     
+    self.h264StreamerIsInStopped = FALSE;
+    
     if(selectedChannel.profile.isInLocal == TRUE)
     {
         NSLog(@"Become ACTIVE _  .. Local ");
@@ -830,36 +846,31 @@
         return;
     }
     
+    selectedChannel.stopStreaming = TRUE;
+    
+    //[self stopPeriodicPopup];
+    
+    if (self.currentMediaStatus == MEDIA_INFO_HAS_FIRST_IMAGE ||
+        self.currentMediaStatus == MEDIA_PLAYER_STARTED ||
+        (self.currentMediaStatus == 0 && h264Streamer == NULL)) // Media player haven't start yet.
+    {
+        [self stopStream];
+    }
+    else if(h264Streamer != nil)
+    {
+        h264Streamer->sendInterrupt();
+    }
+    
+    self.h264StreamerIsInStopped = TRUE;
+    
+    self.imageViewVideo.backgroundColor = [UIColor blackColor];
+    
     if (selectedChannel.profile.isInLocal == TRUE)
     {
         NSLog(@"Enter Background.. Local ");
-        selectedChannel.stopStreaming = TRUE;
-        
-        //[self stopPeriodicPopup];
-        
-        if (self.currentMediaStatus == MEDIA_INFO_HAS_FIRST_IMAGE ||
-            self.currentMediaStatus == MEDIA_PLAYER_STARTED ||
-            (self.currentMediaStatus == 0 && h264Streamer == NULL)) // Media player haven't start yet.
-        {
-            [self stopStream];
-        }
-        else
-        {
-            h264Streamer->suspend();
-        }
-        
-        self.h264StreamerIsInStopped = TRUE;
-        
-        self.imageViewVideo.backgroundColor = [UIColor blackColor];
     }
     else if (selectedChannel.profile.minuteSinceLastComm <= 5) // Remote
     {
-        selectedChannel.stopStreaming = TRUE;
-        
-        //[self stopPeriodicPopup];
-        
-        [self stopStream];
-        
         //NSLog(@"abort remote timer ");
         [selectedChannel abortViewTimer];
     }
@@ -1052,12 +1063,14 @@
     
     if (userWantToCancel != TRUE)
     {
-        probeTimer = [NSTimer scheduledTimerWithTimeInterval:1.0
+        self.probeTimer = [NSTimer scheduledTimerWithTimeInterval:1.0
                                                       target:self
                                                     selector:@selector(periodicProbe:)
                                                     userInfo:nil
                                                      repeats:YES];
     }
+    
+    NSLog(@"--URL: %@", self.selectedChannel.stream_url);
     
     [self startStream];
 }
@@ -1130,7 +1143,10 @@
     NSLog(@"startStream_bg url = %@", url);
     do
     {
-        
+        if (url == nil)
+        {
+            break;
+        }
         status = h264Streamer->setDataSource([url UTF8String]);
         
         if (status != NO_ERROR) // NOT OK
@@ -1209,7 +1225,11 @@
 //        (self.currentMediaStatus == 0 && h264Streamer == NULL)) // Media player haven't start yet.
     {
         
-        
+        //TODO: Check for stun mode running...
+        [self goBackToCameraList];
+    }
+    else if(h264Streamer != nil)
+    {
         h264Streamer->sendInterrupt();
     }
     
@@ -1269,6 +1289,20 @@
 
 -(void) stopStunStream
 {
+    if (self.client != nil)
+    {
+        [self.client shutdown];
+        [self.client release];
+        self.client = nil;
+    }
+    
+    
+    if (self.probeTimer != nil && [self.probeTimer isValid])
+    {
+        [self.probeTimer invalidate];
+        self.probeTimer = nil;
+    }
+    
     if ( (self.selectedChannel != nil)  &&
          (self.selectedChannel.profile.camera_mapped_address != nil) &&
          (self.selectedChannel.profile.camera_stun_audio_port != 0) &&
@@ -1276,39 +1310,42 @@
         )
     { // Make sure we are connecting via STUN
         
-        NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-        NSString *apiKey = [userDefaults objectForKey:@"PortalApiKey"];
-        NSString *mac = [Util strip_colon_fr_mac:self.selectedChannel.profile.mac_address];
+        self.selectedChannel.waitingForStreamerToClose = YES;
+        NSLog(@"waiting for close stream from server");
         
-        
-        BMS_JSON_Communication *jsonComm = [[[BMS_JSON_Communication alloc] initWithObject:self
-                                                                                  Selector:nil
-                                                                              FailSelector:nil
-                                                                                 ServerErr:nil] autorelease];
-        NSDictionary *responseDict;
-        
-        NSString * cmd_string = @"action=command&command=close_p2p_rtsp_stun";
-        
-        responseDict =  [jsonComm  sendCommandBlockedWithRegistrationId:mac
-                                                             andCommand:cmd_string
-                                                              andApiKey:apiKey];
-        
+        H264PlayerViewController *vc = (H264PlayerViewController *)[self retain];
+        [self performSelectorInBackground:@selector(closeStunStream_bg:) withObject:vc];
         
     }
-    if (self.client != nil)
-    {
-        [self.client shutdown];
-        [self.client release];
-        self.client = nil;
-    }
-
     
-    if (probeTimer != nil && [probeTimer isValid])
-    {
-        [probeTimer invalidate];
-        probeTimer = nil;
-    }
 
+}
+
+- (void)closeStunStream_bg: (id)vc
+{
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    NSString *apiKey = [userDefaults objectForKey:@"PortalApiKey"];
+    NSString *mac = [Util strip_colon_fr_mac:self.selectedChannel.profile.mac_address];
+    
+    
+    BMS_JSON_Communication *jsonComm = [[[BMS_JSON_Communication alloc] initWithObject:self
+                                                                              Selector:nil
+                                                                          FailSelector:nil
+                                                                             ServerErr:nil] autorelease];
+    
+    NSString * cmd_string = @"action=command&command=close_p2p_rtsp_stun";
+    
+    //NSDictionary *responseDict =
+    [jsonComm  sendCommandBlockedWithRegistrationId:mac
+                                                         andCommand:cmd_string
+                                                          andApiKey:apiKey];
+    H264PlayerViewController *thisVC = (H264PlayerViewController *)vc;
+    if (userWantToCancel == TRUE)
+    {
+        [thisVC.h264PlayerVCDelegate stopStreamFinished: thisVC.selectedChannel];
+        thisVC.h264PlayerVCDelegate = nil;
+    }
+    [thisVC release];
 }
 
 - (void)stopStream
@@ -1817,21 +1854,34 @@
                                                                                              FailSelector:nil
                                                                                                 ServerErr:nil] autorelease];
                        NSDictionary *responseDict;
+                       NSLog(@"%@", responseDict);
                        
                        
                        if (isBehindSymmetricNat == TRUE) // USE RELAY
                        {
                            
                            responseDict = [jsonComm createSessionBlockedWithRegistrationId:mac
-                                                                             andClientType:@"Browser"
+                                                                             andClientType:@"BROWSER"
                                                                                  andApiKey:apiKey];
                            if (responseDict != nil)
                            {
                                if ([[responseDict objectForKey:@"status"] intValue] == 200)
                                {
-                                   self.selectedChannel.stream_url = [[responseDict objectForKey:@"data"] objectForKey:@"url"];
+                                   //self.selectedChannel.stream_url = [[responseDict objectForKey:@"data"] objectForKey:@"url"];
                                    
+                                   NSString *urlResponse = [[responseDict objectForKey:@"data"] objectForKey:@"url"];
                                    
+                                   NSUserDefaults *userDefalts = [NSUserDefaults standardUserDefaults];
+                                
+                                   if ([urlResponse hasPrefix:ME_WOWZA] &&
+                                       [userDefalts boolForKey:VIEW_NXCOMM_WOWZA] == TRUE)
+                                   {
+                                        self.selectedChannel.stream_url = [urlResponse stringByReplacingOccurrencesOfString:ME_WOWZA withString:NXCOMM_WOWZA];
+                                   }
+                                   else
+                                   {
+                                       self.selectedChannel.stream_url = urlResponse;
+                                   }
                                    
                                    [self performSelectorOnMainThread:@selector(startStream)
                                                           withObject:nil
@@ -1877,6 +1927,8 @@
                            
                            if (responseDict != nil)
                            {
+                               NSLog(@"symmetric_check_result, responseDict: %@", responseDict);
+                               
                                NSString *body = [[[responseDict objectForKey: @"data"] objectForKey: @"device_response"] objectForKey: @"body"];
                                //"get_session_key: error=200,port1=37171&port2=47608&ip=115.77.250.193,mode=p2p_stun_rtsp"
                                
@@ -1944,7 +1996,11 @@
                            }
                            else
                            {
-                               NSLog(@"SERVER unreachable (timeout) : responseDict == nil");
+                               NSLog(@"SERVER unreachable (timeout) : responseDict == nil --> Need test this more");
+                               
+                               [self performSelectorOnMainThread:@selector(handleMessageOnMainThread:)
+                                                      withObject:[NSNumber numberWithInt:MEDIA_ERROR_SERVER_DIED]
+                                                   waitUntilDone:NO];
                            }
                        }
                        
@@ -2025,7 +2081,10 @@
                                        {
                                            self.selectedChannel.stream_url = [[NSBundle mainBundle] pathForResource:@"streamvga" ofType:@"sdp"];
                                        }
-                                       
+                                       else if ([modeVideo isEqualToString:@"720p_10_926"])
+                                       {
+                                           self.selectedChannel.stream_url = [[NSBundle mainBundle] pathForResource:@"stream720p_10_926" ofType:@"sdp"];
+                                       }
                                        else //if([modeVideo isEqualToString:@"720p_10"] || [modeVideo isEqualToString:@"720p_15"])
                                        {
                                            self.selectedChannel.stream_url = [[NSBundle mainBundle] pathForResource:@"stream720p" ofType:@"sdp"];
@@ -2033,7 +2092,7 @@
                                    }
                                    else 
                                    {
-                                       self.selectedChannel.stream_url = [[NSBundle mainBundle] pathForResource:@"stream-1" ofType:@"sdp"];
+                                       self.selectedChannel.stream_url = [[NSBundle mainBundle] pathForResource:@"stream720p_10_926" ofType:@"sdp"];
                                    }
                                    
                                }
@@ -2063,6 +2122,64 @@
         
     } //if (isBehindSymmetricNat != TRUE)
 }
+
+- (void)remoteConnectingViaSymmectric
+{
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0),
+                   ^{
+                       NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+                       NSString *apiKey = [userDefaults objectForKey:@"PortalApiKey"];
+                       NSString *mac = [Util strip_colon_fr_mac:self.selectedChannel.profile.mac_address];
+                       
+                       BMS_JSON_Communication *jsonComm = [[[BMS_JSON_Communication alloc] initWithObject:self
+                                                                                                 Selector:nil
+                                                                                             FailSelector:nil
+                                                                                                ServerErr:nil] autorelease];
+                       NSDictionary *responseDict = [jsonComm createSessionBlockedWithRegistrationId:mac
+                                                                         andClientType:@"BROWSER"
+                                                                             andApiKey:apiKey];
+                       if (responseDict != nil)
+                       {
+                           if ([[responseDict objectForKey:@"status"] intValue] == 200)
+                           {
+                               NSString *urlResponse = [[responseDict objectForKey:@"data"] objectForKey:@"url"];
+                               
+                               NSUserDefaults *userDefalts = [NSUserDefaults standardUserDefaults];
+                               
+                               if ([urlResponse hasPrefix:ME_WOWZA] &&
+                                   [userDefalts boolForKey:VIEW_NXCOMM_WOWZA] == TRUE)
+                               {
+                                   self.selectedChannel.stream_url = [urlResponse stringByReplacingOccurrencesOfString:ME_WOWZA withString:NXCOMM_WOWZA];
+                               }
+                               else
+                               {
+                                   self.selectedChannel.stream_url = urlResponse;
+                               }
+                               
+                               [self performSelectorOnMainThread:@selector(startStream)
+                                                      withObject:nil
+                                                   waitUntilDone:NO];
+                               
+                               
+                           }
+                           else
+                           {
+                               //handle Bad response
+                               
+                               //force server died
+                               [self performSelectorOnMainThread:@selector(handleMessageOnMainThread:)
+                                                      withObject:[NSNumber numberWithInt:MEDIA_ERROR_SERVER_DIED]
+                                                   waitUntilDone:NO];
+                           }
+                       }
+                       else
+                       {
+                           NSLog(@"SERVER unreachable (timeout) ");
+                           //TODO : handle SERVER unreachable (timeout)
+                       }
+                   });
+}
+
 #pragma mark -
 #pragma mark - DirectionPad
 
@@ -2962,12 +3079,18 @@
                  
                  
                  */
+                NSLog(@"[--- h264Streamer: %p]", h264Streamer);
                 
                 if (h264Streamer != NULL)
                 {
                     h264Streamer->sendInterrupt();
                 }
-                
+                else // if this happen, the activity rotates forever (by right: go back to camera list)
+                {
+                    [self performSelectorOnMainThread:@selector(handleMessageOnMainThread:)
+                                           withObject:[NSNumber numberWithInt:MEDIA_ERROR_SERVER_DIED]
+                                        waitUntilDone:NO];
+                }
                 
                 
                 break;
@@ -3162,6 +3285,8 @@
     [_imgBackground release];
     [_zoneViewController release];
     [_zoneButton release];
+    [_probeTimer release];
+    
     [super dealloc];
 }
 

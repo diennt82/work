@@ -42,6 +42,16 @@
 
 #define H264_SWITCHING_TO_RELAY2_SERVER     11
 
+#define NXCOMM_WOWZA @"rtmp://nxcomm-office.no-ip.info:1935"
+#define ME_WOWZA @"rtmp://wowza.api.simplimonitor.com:1935"
+#define VIEW_NXCOMM_WOWZA @"nxcomm_wowza"
+
+@protocol H264PlayerVCDelegate <NSObject>
+
+- (void)stopStreamFinished: (CamChannel *)camChannel;
+
+@end
+
 @interface H264PlayerViewController: UIViewController
 <UIPickerViewDelegate, UIPickerViewDataSource, PlaylistDelegate,PlayerCallbackHandler,ScanForCameraNotifier, StunClientDelegate, ZoneViewControlerDeleate>
 {
@@ -73,7 +83,7 @@
 	/* Added to support direction update */
 	BOOL v_direction_update_needed, h_direction_update_needed;
 
-	NSTimer * probeTimer;
+	//NSTimer * probeTimer;
      dispatch_queue_t player_func_queue;
 }
 
@@ -109,6 +119,8 @@
 @property (nonatomic,retain) StunClient * client; 
 @property (nonatomic, retain) UIImage *imgBackground;
 @property (nonatomic, retain)  IBOutlet ZoneViewController *zoneViewController;
+@property (nonatomic, retain) NSTimer * probeTimer;
+@property (nonatomic, assign) id<H264PlayerVCDelegate> h264PlayerVCDelegate;
 
 
 /* Direction */

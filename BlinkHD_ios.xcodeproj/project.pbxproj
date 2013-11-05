@@ -166,6 +166,7 @@
 		8BA5C47C1818DAAC006B4BB8 /* libcrypto.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A15430FC1818D08A00337EFE /* libcrypto.a */; };
 		8BA5C4801818DCC1006B4BB8 /* ZoneViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8BA5C47E1818DCC1006B4BB8 /* ZoneViewController.m */; };
 		8BA5C4811818DCC1006B4BB8 /* ZoneViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8BA5C47F1818DCC1006B4BB8 /* ZoneViewController.xib */; };
+		8BA8AE881821F3E900DC9E9F /* stream720p_10_926.sdp in Resources */ = {isa = PBXBuildFile; fileRef = 8BA8AE871821F3E900DC9E9F /* stream720p_10_926.sdp */; };
 		9704F84117B37CB3005F9868 /* DashBoard_ViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 9704F84017B37CAF005F9868 /* DashBoard_ViewController.mm */; };
 		97137B9715AE742A00BEBBD6 /* StunCommunication.mm in Sources */ = {isa = PBXBuildFile; fileRef = 97137B9615AE742A00BEBBD6 /* StunCommunication.mm */; };
 		9719EC5C155C9F30005419FC /* MBP_MenuViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 9719EC5A155C9F30005419FC /* MBP_MenuViewController.mm */; };
@@ -183,7 +184,6 @@
 		9770CD8D143073AE009E69EF /* ADPCMDecoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 9770CD86143073AE009E69EF /* ADPCMDecoder.m */; };
 		9770CD8E143073AE009E69EF /* AiBallBase64Encoding.m in Sources */ = {isa = PBXBuildFile; fileRef = 9770CD88143073AE009E69EF /* AiBallBase64Encoding.m */; };
 		9770CD8F143073AE009E69EF /* AsyncSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = 9770CD8A143073AE009E69EF /* AsyncSocket.m */; };
-		9770CD90143073AE009E69EF /* InMemoryAudioFile.m in Sources */ = {isa = PBXBuildFile; fileRef = 9770CD8C143073AE009E69EF /* InMemoryAudioFile.m */; };
 		9770CD99143073C6009E69EF /* Util.m in Sources */ = {isa = PBXBuildFile; fileRef = 9770CD97143073C6009E69EF /* Util.m */; };
 		9770CDF2143076CD009E69EF /* CoreAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9770CDF1143076CD009E69EF /* CoreAudio.framework */; };
 		9770CEC81430783A009E69EF /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9770CEC71430783A009E69EF /* CFNetwork.framework */; };
@@ -554,6 +554,7 @@
 		8BA5C47D1818DCC1006B4BB8 /* ZoneViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZoneViewController.h; sourceTree = "<group>"; };
 		8BA5C47E1818DCC1006B4BB8 /* ZoneViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZoneViewController.m; sourceTree = "<group>"; };
 		8BA5C47F1818DCC1006B4BB8 /* ZoneViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ZoneViewController.xib; sourceTree = "<group>"; };
+		8BA8AE871821F3E900DC9E9F /* stream720p_10_926.sdp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = stream720p_10_926.sdp; sourceTree = "<group>"; };
 		8D1107310486CEB800E47090 /* BlinkHD_ios-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "BlinkHD_ios-Info.plist"; plistStructureDefinitionIdentifier = "com.apple.xcode.plist.structure-definition.iphone.info-plist"; sourceTree = "<group>"; };
 		9704F37E14B76202000B4AA5 /* Entitlements.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Entitlements.plist; sourceTree = "<group>"; };
 		9704F83F17B37CAD005F9868 /* DashBoard_ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DashBoard_ViewController.h; sourceTree = "<group>"; };
@@ -588,8 +589,6 @@
 		9770CD88143073AE009E69EF /* AiBallBase64Encoding.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AiBallBase64Encoding.m; sourceTree = "<group>"; };
 		9770CD89143073AE009E69EF /* AsyncSocket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AsyncSocket.h; sourceTree = "<group>"; };
 		9770CD8A143073AE009E69EF /* AsyncSocket.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AsyncSocket.m; sourceTree = "<group>"; };
-		9770CD8B143073AE009E69EF /* InMemoryAudioFile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InMemoryAudioFile.h; sourceTree = "<group>"; };
-		9770CD8C143073AE009E69EF /* InMemoryAudioFile.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InMemoryAudioFile.m; sourceTree = "<group>"; };
 		9770CD96143073C6009E69EF /* Util.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Util.h; sourceTree = "<group>"; };
 		9770CD97143073C6009E69EF /* Util.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Util.m; sourceTree = "<group>"; };
 		9770CDF1143076CD009E69EF /* CoreAudio.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreAudio.framework; path = System/Library/Frameworks/CoreAudio.framework; sourceTree = SDKROOT; };
@@ -1605,8 +1604,6 @@
 				9770CD8A143073AE009E69EF /* AsyncSocket.m */,
 				97DEEA4014308B71008212FF /* AsyncUdpSocket.m */,
 				97DEEA4114308B71008212FF /* AsyncUdpSocket.h */,
-				9770CD8B143073AE009E69EF /* InMemoryAudioFile.h */,
-				9770CD8C143073AE009E69EF /* InMemoryAudioFile.m */,
 				975343ED1432F88D0037DDAC /* AviRecord.h */,
 				975343EE1432F88D0037DDAC /* AviRecord.m */,
 				97B8F6651439B58000924E84 /* DeviceConfiguration.h */,
@@ -1836,6 +1833,7 @@
 			isa = PBXGroup;
 			children = (
 				A15431081818DEB800337EFE /* streamvga.sdp */,
+				8BA8AE871821F3E900DC9E9F /* stream720p_10_926.sdp */,
 				A1176B72180D1DD9000B7527 /* stream480p.sdp */,
 				A1176B73180D1DD9000B7527 /* stream720p.sdp */,
 				38483F0C172A33F5009DF61E /* iTunesArtwork */,
@@ -2286,6 +2284,7 @@
 				38DE1CC9168AEDD10049E814 /* bb_setup_icon_step_2.png in Resources */,
 				38DE1CCA168AEDD10049E814 /* bb_setup_icon_step_3.png in Resources */,
 				388396B9168B064500B0D020 /* MBP_iosViewController.xib in Resources */,
+				8BA8AE881821F3E900DC9E9F /* stream720p_10_926.sdp in Resources */,
 				388396BE168B068400B0D020 /* CameraViewController_land_ipad.xib in Resources */,
 				BC3C1ACE16F025B600175AFF /* MBP_MenuViewController_ipad.xib in Resources */,
 				BC3C1AD316F025E300175AFF /* MBP_MenuProgress_portrait_ipad.xib in Resources */,
@@ -2398,7 +2397,6 @@
 				9770CD8D143073AE009E69EF /* ADPCMDecoder.m in Sources */,
 				9770CD8E143073AE009E69EF /* AiBallBase64Encoding.m in Sources */,
 				9770CD8F143073AE009E69EF /* AsyncSocket.m in Sources */,
-				9770CD90143073AE009E69EF /* InMemoryAudioFile.m in Sources */,
 				9770CD99143073C6009E69EF /* Util.m in Sources */,
 				97DEEA4214308B71008212FF /* AsyncUdpSocket.m in Sources */,
 				975341571431B4C20037DDAC /* IpAddress.c in Sources */,

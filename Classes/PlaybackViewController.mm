@@ -42,8 +42,8 @@
                                     options:nil];
     }
     
-    UIGraphicsBeginImageContext(self.view.frame.size);
-    [[UIImage imageNamed:@"black_background"] drawInRect:self.view.bounds];
+    UIGraphicsBeginImageContext(UIScreen.mainScreen.bounds.size);
+    [[UIImage imageNamed:@"black_background"] drawInRect:UIScreen.mainScreen.bounds];
     self.imgBackground = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
     
@@ -115,6 +115,10 @@
         {
             //Only one clip & it is the last
             NSLog(@"this is the olny clip do not poll");
+            
+            [clips addObject:clip_info.urlFile];
+            listener->updateClips(clips);
+            listener->updateFinalClipCount(1);
         }
         else
         {
@@ -125,6 +129,7 @@
                                                               target:self
                                                             selector:@selector(getCameraPlaylistForEvent:)
                                                             userInfo:clip_info repeats:NO];
+            NSLog(@"[----- self.list_refresher: %p", self.list_refresher);
         }
         
         
