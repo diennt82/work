@@ -1532,131 +1532,156 @@
 
 - (void)getTriggerRecording_bg
 {
-    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    NSString *responseString = @"";
     
-    NSDictionary *responseDict  = nil;
-    NSString *mac = [Util strip_colon_fr_mac:self.selectedChannel.profile.mac_address];
-    NSString *apiKey = [userDefaults objectForKey:@"PortalApiKey"];
-    NSLog(@"mac %@, apikey %@", mac, apiKey);
-    
-    
-    if (self.selectedChannel.profile.isInLocal == TRUE) // Replace with httpCommunication after
-	{
-        self.jsonComm = [[[BMS_JSON_Communication alloc] initWithObject:self
-                                                               Selector:nil
-                                                           FailSelector:nil
-                                                              ServerErr:nil] autorelease];
-		if (self.jsonComm != nil)
-		{
-            responseDict= [self.jsonComm sendCommandBlockedWithRegistrationId:mac
-                                                                   andCommand:@"action=command&command=get_recording_stat"
-                                                                    andApiKey:apiKey];
-		}
-	}
-	else if(self.selectedChannel.profile.minuteSinceLastComm <= 5) // Remote
-	{
-		self.jsonComm = [[[BMS_JSON_Communication alloc] initWithObject:self
-                                                               Selector:nil
-                                                           FailSelector:nil
-                                                              ServerErr:nil] autorelease];
-		if (self.jsonComm != nil)
-		{
-            responseDict= [self.jsonComm sendCommandBlockedWithRegistrationId:mac
-                                                                   andCommand:[NSString stringWithFormat:@"action=command&command=get_recording_stat"] andApiKey:apiKey];
-		}
-	}
-    
-	if (responseDict != nil)
-	{
-        [self performSelectorOnMainThread:@selector(setTriggerRecording_fg:) withObject:responseDict waitUntilDone:NO];
-	}
-    
-    NSLog(@"getTriggerRecording_bg responseDict = %@", responseDict);
-}
-
-- (void)setTriggerRecording_bg:(NSString *) modeRecording
-{
-    
-    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-    
-    NSString *mac = [Util strip_colon_fr_mac:self.selectedChannel.profile.mac_address];
-    NSString *apiKey = [userDefaults objectForKey:@"PortalApiKey"];
-    
-    NSDictionary *responseData  = nil;
-    if (  self.selectedChannel.profile.isInLocal == TRUE)
-	{
-        
-        self.jsonComm = [[[BMS_JSON_Communication alloc] initWithObject:self
-                                                               Selector:nil
-                                                           FailSelector:nil
-                                                              ServerErr:nil] autorelease];
-        
-		if (self.jsonComm != nil) // This is httpComm. Replace after
-		{
-            
-            
-            //            [self.jsonComm sendCommandWithRegistrationId:mac
-            //                                             andCommand:[NSString stringWithFormat:@"action=command&command=%@", modeVideo]
-            //                                              andApiKey:apiKey];
-            responseData = [self.jsonComm sendCommandBlockedWithRegistrationId:mac
-                                                                    andCommand:[NSString stringWithFormat:@"action=command&command=set_recording_stat&mode=%@", modeRecording]
-                                                                     andApiKey:apiKey];
-		}
-	}
-	else if(self.selectedChannel.profile.minuteSinceLastComm <= 5)
-	{
-        
-        self.jsonComm = [[[BMS_JSON_Communication alloc] initWithObject:self
-                                                               Selector:nil
-                                                           FailSelector:nil
-                                                              ServerErr:nil] autorelease];
-        
-        if (self.jsonComm != nil)
-		{
-            responseData = [self.jsonComm sendCommandBlockedWithRegistrationId:mac
-                                                                    andCommand:[NSString stringWithFormat:@"action=command&command=set_recording_stat&mode=%@", modeRecording]
-                                                                     andApiKey:apiKey];
-		}
-	}
-    
-	if (responseData != nil)
-	{
-		[self performSelectorOnMainThread:@selector(setTriggerRecording_fg:)
-                               withObject:responseData waitUntilDone:NO];
-	}
-}
-
--(void) setTriggerRecording_fg: (NSDictionary *)responseDict
-{
-    NSLog(@"setTriggerRecording_fg responseData = %@", responseDict);
-    
-    NSInteger status = [[responseDict objectForKey:@"status"] intValue];
-    
-    if (status == 200) // ok
+    if (self.selectedChannel.profile .isInLocal == TRUE)
     {
-        NSString *bodyKey = [[[responseDict objectForKey:@"data"] objectForKey:@"device_response"] objectForKey:@"body"];
-        NSArray * tokens = [bodyKey componentsSeparatedByString:@": "];
-        if ([tokens count] >=2 )
+        HttpCommunication *httpCommunication = [[HttpCommunication alloc] init];
+        httpCommunication.device_ip = self.selectedChannel.profile.ip_address;
+        httpCommunication.device_port = self.selectedChannel.profile.port;
+        
+        NSData *responseData = [httpCommunication sendCommandAndBlock_raw:@"get_recording_stat"];
+        
+        if (responseData != nil)
         {
-            NSString *modeRecording = [tokens  objectAtIndex:1];
             
-            if ([modeRecording isEqualToString:@"on"])
+            responseString = [[[NSString alloc] initWithData:responseData encoding: NSUTF8StringEncoding] autorelease];
+            
+            NSLog(@"getTriggerRecording_bg response string: %@", responseString);
+        }
+    }
+    else
+    {
+        BMS_JSON_Communication *jsonCommunication = [[[BMS_JSON_Communication alloc] initWithObject:self
+                                                                                           Selector:nil
+                                                                                       FailSelector:nil
+                                                                                          ServerErr:nil] autorelease];
+        
+        NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+        
+        NSString *mac = [Util strip_colon_fr_mac:self.selectedChannel.profile.mac_address];
+        NSString *apiKey = [userDefaults objectForKey:@"PortalApiKey"];
+        
+        NSDictionary *responseDict = [jsonCommunication sendCommandBlockedWithRegistrationId:mac
+                                                                                  andCommand:@"action=command&command=get_recording_stat"
+                                                                                   andApiKey:apiKey];
+        if (responseDict != nil)
+        {
+            NSInteger status = [[responseDict objectForKey:@"status"] intValue];
+            if (status == 200)
             {
-                self.recordingFlag = TRUE;
-                [self.triggerRecordingButton setImage:[UIImage imageNamed:@"bb_rec_icon.png" ]
-                                             forState:UIControlStateNormal];
+                responseString = [[[responseDict objectForKey:@"data"] objectForKey:@"device_response"] objectForKey:@"body"];
             }
-            else if([modeRecording isEqualToString:@"off"])
+        }
+    }
+    
+    if (![responseString isEqualToString:@""])
+    {
+        NSRange tmpRange = [responseString rangeOfString:@": "];
+        
+        if (tmpRange.location != NSNotFound)
+        {
+            NSArray * tokens = [responseString componentsSeparatedByString:@": "];
+            
+            if (tokens.count > 1 )
             {
-                self.recordingFlag = FALSE;
-                [self.triggerRecordingButton setImage:[UIImage imageNamed:@"bb_rec_icon_d.png" ]
-                                             forState:UIControlStateNormal];
+                NSString *modeRecording = [tokens  objectAtIndex:1];
+                
+                [self performSelectorOnMainThread:@selector(setTriggerRecording_fg:)
+                                       withObject:modeRecording
+                                    waitUntilDone:NO];
             }
         }
     }
     else
     {
         self.recordingFlag = !self.recordingFlag;
+    }
+}
+
+- (void)setTriggerRecording_bg:(NSString *) modeRecording
+{
+    NSString *responseString = @"";
+    
+    if (self.selectedChannel.profile .isInLocal == TRUE)
+    {
+        HttpCommunication *httpCommunication = [[HttpCommunication alloc] init];
+        httpCommunication.device_ip = self.selectedChannel.profile.ip_address;
+        httpCommunication.device_port = self.selectedChannel.profile.port;
+        
+        NSData *responseData = [httpCommunication sendCommandAndBlock_raw:[NSString stringWithFormat:@"set_recording_stat&mode=%@", modeRecording]];
+        
+        if (responseData != nil)
+        {
+            
+            responseString = [[[NSString alloc] initWithData:responseData encoding: NSUTF8StringEncoding] autorelease];
+            
+            NSLog(@"setTriggerRecording_bg response string: %@", responseString);
+        }
+    }
+    else
+    {
+        BMS_JSON_Communication *jsonCommunication = [[[BMS_JSON_Communication alloc] initWithObject:self
+                                                                                           Selector:nil
+                                                                                       FailSelector:nil
+                                                                                          ServerErr:nil] autorelease];
+        
+        NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+        
+        NSString *mac = [Util strip_colon_fr_mac:self.selectedChannel.profile.mac_address];
+        NSString *apiKey = [userDefaults objectForKey:@"PortalApiKey"];
+        
+        NSDictionary *responseDict = [jsonCommunication sendCommandBlockedWithRegistrationId:mac
+                                                                                  andCommand:[NSString stringWithFormat:@"action=command&command=set_recording_stat&mode=%@", modeRecording]
+                                                                                   andApiKey:apiKey];
+        if (responseDict != nil)
+        {
+            NSInteger status = [[responseDict objectForKey:@"status"] intValue];
+            if (status == 200)
+            {
+                responseString = [[[responseDict objectForKey:@"data"] objectForKey:@"device_response"] objectForKey:@"body"];
+            }
+        }
+    }
+    
+    if (![responseString isEqualToString:@""])
+    {
+        NSRange tmpRange = [responseString rangeOfString:@": "];
+        
+        if (tmpRange.location != NSNotFound)
+        {
+            NSArray * tokens = [responseString componentsSeparatedByString:@": "];
+            
+            if (tokens.count > 1 )
+            {
+                NSString *modeRecording = [tokens  objectAtIndex:1];
+                
+                [self performSelectorOnMainThread:@selector(setTriggerRecording_fg:)
+                                       withObject:modeRecording
+                                    waitUntilDone:NO];
+            }
+        }
+    }
+    else
+    {
+        self.recordingFlag = !self.recordingFlag;
+    }
+}
+
+-(void) setTriggerRecording_fg: (NSString *)modeRecording
+{
+            
+    if ([modeRecording isEqualToString:@"on"])
+    {
+        self.recordingFlag = TRUE;
+        [self.triggerRecordingButton setImage:[UIImage imageNamed:@"bb_rec_icon.png" ]
+                                     forState:UIControlStateNormal];
+    }
+    else if([modeRecording isEqualToString:@"off"])
+    {
+        self.recordingFlag = FALSE;
+        [self.triggerRecordingButton setImage:[UIImage imageNamed:@"bb_rec_icon_d.png" ]
+                                     forState:UIControlStateNormal];
     }
 }
 
