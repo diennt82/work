@@ -1461,7 +1461,7 @@
     
     if (self.selectedChannel.profile.isInLocal )
 	{
-        HttpCommunication *httpCommunication = [[HttpCommunication alloc] init];
+        HttpCommunication *httpCommunication = [[[HttpCommunication alloc] init] autorelease];
         httpCommunication.device_ip = self.selectedChannel.profile.ip_address;
         httpCommunication.device_port = self.selectedChannel.profile.port;
         
@@ -1536,7 +1536,7 @@
     
     if (self.selectedChannel.profile .isInLocal == TRUE)
     {
-        HttpCommunication *httpCommunication = [[HttpCommunication alloc] init];
+        HttpCommunication *httpCommunication = [[[HttpCommunication alloc] init] autorelease];
         httpCommunication.device_ip = self.selectedChannel.profile.ip_address;
         httpCommunication.device_port = self.selectedChannel.profile.port;
         
@@ -1605,7 +1605,7 @@
     
     if (self.selectedChannel.profile .isInLocal == TRUE)
     {
-        HttpCommunication *httpCommunication = [[HttpCommunication alloc] init];
+        HttpCommunication *httpCommunication = [[[HttpCommunication alloc] init] autorelease];
         httpCommunication.device_ip = self.selectedChannel.profile.ip_address;
         httpCommunication.device_port = self.selectedChannel.profile.port;
         
@@ -1693,7 +1693,7 @@
     
     if (self.selectedChannel.profile .isInLocal == TRUE)
     {
-        HttpCommunication *httpCommunication = [[HttpCommunication alloc] init];
+        HttpCommunication *httpCommunication = [[[HttpCommunication alloc] init] autorelease];
         httpCommunication.device_ip = self.selectedChannel.profile.ip_address;
         httpCommunication.device_port = self.selectedChannel.profile.port;
         
@@ -2045,103 +2045,87 @@
         
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0),
                        ^{
+                           NSString *bodyKey = @"";
                            
-                           NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-                           
-                           NSDictionary *responseDict  = nil;
-                           NSString *mac = [Util strip_colon_fr_mac:self.selectedChannel.profile.mac_address];
-                           NSString *apiKey = [userDefaults objectForKey:@"PortalApiKey"];
-                           
-                           
-                           
-                           if (self.selectedChannel.profile.isInLocal ) // Replace with httpCommunication after
+                           if (self.selectedChannel.profile.isInLocal )
                            {
-                               self.jsonComm = [[[BMS_JSON_Communication alloc] initWithObject:self
-                                                                                      Selector:nil
-                                                                                  FailSelector:nil
-                                                                                     ServerErr:nil] autorelease];
-                               if (self.jsonComm != nil)
+                               HttpCommunication *httpCommunication = [[[HttpCommunication alloc] init] autorelease];
+                               httpCommunication.device_ip = self.selectedChannel.profile.ip_address;
+                               httpCommunication.device_port = self.selectedChannel.profile.port;
+                               
+                               NSData *responseData = [httpCommunication sendCommandAndBlock_raw:@"get_resolution"];
+                               
+                               if (responseData != nil)
                                {
-                                   responseDict= [self.jsonComm sendCommandBlockedWithRegistrationId:mac
-                                                                                          andCommand:@"action=command&command=get_resolution"
-                                                                                           andApiKey:apiKey];
+                                   bodyKey = [[[NSString alloc] initWithData:responseData encoding: NSUTF8StringEncoding] autorelease];
+                                   
+                                   NSLog(@"symmetric_check_result response string: %@", bodyKey);
                                }
                            }
                            else if(self.selectedChannel.profile.minuteSinceLastComm <= 5) // Remote
                            {
-                               self.jsonComm = [[[BMS_JSON_Communication alloc] initWithObject:self
-                                                                                      Selector:nil
-                                                                                  FailSelector:nil
-                                                                                     ServerErr:nil] autorelease];
-                               if (self.jsonComm != nil)
+                               NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+                               
+                               NSString *mac = [Util strip_colon_fr_mac:self.selectedChannel.profile.mac_address];
+                               NSString *apiKey = [userDefaults objectForKey:@"PortalApiKey"];
+                               NSLog(@"mac %@, apikey %@", mac, apiKey);
+                               
+                               BMS_JSON_Communication *jsonCommunication = [[[BMS_JSON_Communication alloc] initWithObject:self
+                                                                                                                  Selector:nil
+                                                                                                              FailSelector:nil
+                                                                                                                 ServerErr:nil] autorelease];
+                               
+                               NSDictionary *responseDict = [jsonCommunication sendCommandBlockedWithRegistrationId:mac
+                                                                                                         andCommand:[NSString stringWithFormat:@"action=command&command=get_resolution"]
+                                                                                                          andApiKey:apiKey];
+                               if (responseDict != nil)
                                {
-                                   responseDict= [self.jsonComm sendCommandBlockedWithRegistrationId:mac
-                                                                                          andCommand:[NSString stringWithFormat:@"action=command&command=get_resolution"]
-                                                                                           andApiKey:apiKey];
+                                   
+                                   NSInteger status = [[responseDict objectForKey:@"status"] intValue];
+                                   if (status == 200)
+                                   {
+                                       bodyKey = [[[responseDict objectForKey:@"data"] objectForKey:@"device_response"] objectForKey:@"body"];
+                                   }
                                }
+                               
+                               NSLog(@"symmetric_check_result responseDict = %@", responseDict);
                            }
                            
-                           
-                           
-                           if (responseDict != nil)
+                           if (![bodyKey isEqualToString:@""])
                            {
-                               
-                               NSInteger status = [[responseDict objectForKey:@"status"] intValue];
-                               if (status == 200)
+                               NSArray * tokens = [bodyKey componentsSeparatedByString:@": "];
+                               if ([tokens count] >=2 )
                                {
-                                   NSString *bodyKey = [[[responseDict objectForKey:@"data"] objectForKey:@"device_response"] objectForKey:@"body"];
+                                   NSString *modeVideo = [tokens objectAtIndex:1];
                                    
                                    
-                                   NSArray * tokens = [bodyKey componentsSeparatedByString:@": "] ;
-                                   if ([tokens count ] >=2)
+                                   if ([modeVideo isEqualToString:@"480p"]) // ok
                                    {
-                                       NSString *modeVideo = [tokens objectAtIndex:1];
-                                       
-                                       
-                                       if ([modeVideo isEqualToString:@"480p"]) // ok
-                                       {
-                                           self.selectedChannel.stream_url = [[NSBundle mainBundle] pathForResource:@"stream480p" ofType:@"sdp"];
-                                       }
-                                       else if ([modeVideo isEqualToString:@"VGA640_480"]) // Camera server resolution
-                                       {
-                                           self.selectedChannel.stream_url = [[NSBundle mainBundle] pathForResource:@"streamvga" ofType:@"sdp"];
-                                       }
-                                       else if ([modeVideo isEqualToString:@"720p_10_926"])
-                                       {
-                                           self.selectedChannel.stream_url = [[NSBundle mainBundle] pathForResource:@"stream720p_10_926" ofType:@"sdp"];
-                                       }
-                                       else //if([modeVideo isEqualToString:@"720p_10"] || [modeVideo isEqualToString:@"720p_15"])
-                                       {
-                                           self.selectedChannel.stream_url = [[NSBundle mainBundle] pathForResource:@"stream720p" ofType:@"sdp"];
-                                       }
+                                       self.selectedChannel.stream_url = [[NSBundle mainBundle] pathForResource:@"stream480p" ofType:@"sdp"];
                                    }
-                                   else 
+                                   else if ([modeVideo isEqualToString:@"VGA640_480"]) // Camera server resolution
+                                   {
+                                       self.selectedChannel.stream_url = [[NSBundle mainBundle] pathForResource:@"streamvga" ofType:@"sdp"];
+                                   }
+                                   else if ([modeVideo isEqualToString:@"720p_10_926"])
                                    {
                                        self.selectedChannel.stream_url = [[NSBundle mainBundle] pathForResource:@"stream720p_10_926" ofType:@"sdp"];
                                    }
-                                   
+                                   else //if([modeVideo isEqualToString:@"720p_10"] || [modeVideo isEqualToString:@"720p_15"])
+                                   {
+                                       self.selectedChannel.stream_url = [[NSBundle mainBundle] pathForResource:@"stream720p" ofType:@"sdp"];
+                                   }
                                }
                                else
                                {
-                                   
-                                   self.selectedChannel.stream_url = [[NSBundle mainBundle] pathForResource:@"stream720p" ofType:@"sdp"];
+                                   self.selectedChannel.stream_url = [[NSBundle mainBundle] pathForResource:@"stream720p_10_926" ofType:@"sdp"];
                                }
-                               
-                               
-                               
-                               
-                               
-                               
                            }
                            else
                            {
                                
                                self.selectedChannel.stream_url = [[NSBundle mainBundle] pathForResource:@"stream720p" ofType:@"sdp"];
                            }
-                           
-                           
-                           
-                           NSLog(@"resolution response: %@", responseDict);
                            
                        });
         
@@ -2910,26 +2894,22 @@
     NSString *mac = [Util strip_colon_fr_mac:self.selectedChannel.profile.mac_address];
     NSString *apiKey = [userDefaults objectForKey:@"PortalApiKey"];
     
-    NSDictionary *responseData  = nil;
+    NSString *bodyKey = @"";
+    
     if (  self.selectedChannel.profile.isInLocal == TRUE)
 	{
+        HttpCommunication *httpCommunication = [[[HttpCommunication alloc] init] autorelease];
+        httpCommunication.device_ip = self.selectedChannel.profile.ip_address;
+        httpCommunication.device_port = self.selectedChannel.profile.port;
         
-        self.jsonComm = [[[BMS_JSON_Communication alloc] initWithObject:self
-                                                              Selector:nil
-                                                          FailSelector:nil
-                                                             ServerErr:nil] autorelease];
+        NSData *responseData = [httpCommunication sendCommandAndBlock_raw:[NSString stringWithFormat:@"set_resolution&mode=%@", modeVideo]];
         
-		if (self.jsonComm != nil) // This is httpComm. Replace after
-		{
+        if (responseData != nil)
+        {
+            bodyKey = [[[NSString alloc] initWithData:responseData encoding: NSUTF8StringEncoding] autorelease];
             
-            
-//            [self.jsonComm sendCommandWithRegistrationId:mac
-//                                             andCommand:[NSString stringWithFormat:@"action=command&command=%@", modeVideo]
-//                                              andApiKey:apiKey];
-            responseData = [self.jsonComm sendCommandBlockedWithRegistrationId:mac
-                                                     andCommand:[NSString stringWithFormat:@"action=command&command=set_resolution&mode=%@", modeVideo]
-                                                      andApiKey:apiKey];
-		}
+            NSLog(@"setVQ_bg response string: %@", bodyKey);
+        }
 	}
 	else if(self.selectedChannel.profile.minuteSinceLastComm <= 5) // remote
 	{
@@ -2939,27 +2919,43 @@
                                                           FailSelector:nil
                                                              ServerErr:nil] autorelease];
         
-        if (self.jsonComm != nil)
-		{
-            responseData = [self.jsonComm sendCommandBlockedWithRegistrationId:mac
-                                                                    andCommand:[NSString stringWithFormat:@"action=command&command=set_resolution&mode=%@", modeVideo]
-                                                                     andApiKey:apiKey];
-		}
+        NSDictionary *responseDict = [self.jsonComm sendCommandBlockedWithRegistrationId:mac
+                                                                              andCommand:[NSString stringWithFormat:@"action=command&command=set_resolution&mode=%@", modeVideo]
+                                                                               andApiKey:apiKey];
+        NSLog(@"setVQ_bg %@", responseDict);
+        
+        if (responseDict != nil)
+        {
+            NSInteger status = [[responseDict objectForKey:@"status"] intValue];
+            if (status == 200)
+            {
+                bodyKey = [[[responseDict objectForKey:@"data"] objectForKey:@"device_response"] objectForKey:@"body"];
+            }
+            else
+            {
+                NSLog(@"set resolution: status = %d", [[responseDict objectForKey:@"stats"] intValue]);
+            }
+        }
 	}
     
-	if (responseData != nil)
-	{
-        NSInteger status = [[responseData objectForKey:@"status"] intValue];
-        if (status == 200)
+    if (![bodyKey isEqualToString:@""])
+    {
+        NSArray * tokens = [bodyKey componentsSeparatedByString:@": "];
+        if ([tokens count] >=2 )
         {
-            [self performSelectorOnMainThread:@selector(setVQ_fg:)
-                                   withObject:row waitUntilDone:NO];
+            NSString *resultCode = [tokens objectAtIndex:1];
+            
+            if ([resultCode isEqualToString:@"0"]) // whatever this is the result app receive after send command
+            {
+                [self performSelectorOnMainThread:@selector(setVQ_fg:)
+                                       withObject:row waitUntilDone:NO];
+            }
+            else
+            {
+                NSLog(@"setVQ_bg failed! Contact fw team or server team");
+            }
         }
-		else
-        {
-            NSLog(@"set resolution: status = %d", [[responseData objectForKey:@"stats"] intValue]);
-        }
-	}
+    }
 }
 
 -(void) setVQ_fg: (NSNumber *)row
