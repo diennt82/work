@@ -1221,8 +1221,8 @@
     self.selectedChannel.stopStreaming = TRUE;
     
     if (self.currentMediaStatus == MEDIA_INFO_HAS_FIRST_IMAGE ||
-        self.currentMediaStatus == MEDIA_PLAYER_STARTED )
-//        (self.currentMediaStatus == 0 && h264Streamer == NULL)) // Media player haven't start yet.
+        self.currentMediaStatus == MEDIA_PLAYER_STARTED       ||
+        (self.currentMediaStatus == 0 && h264Streamer == NULL)) // Media player haven't start yet.
     {
         
         //TODO: Check for stun mode running...
