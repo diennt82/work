@@ -256,7 +256,7 @@
         return  NO;
     }
     
-    HttpCommunication * dev_com = [[HttpCommunication alloc] init];
+    HttpCommunication * dev_com = [[[HttpCommunication alloc] init] autorelease];
     
     dev_com.device_ip = ip;
     
@@ -278,7 +278,7 @@
 #pragma mark -
 - (void)didReceiveMemoryWarning
 {
-    [super didReceiveMemoryWarning];
+    //[super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
 

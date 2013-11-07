@@ -263,7 +263,7 @@
     
     if (self.selectedChannel.profile.isInLocal == TRUE)
     {
-        HttpCommunication *httpComm = [[HttpCommunication alloc] init];
+        HttpCommunication *httpComm = [[[HttpCommunication alloc] init] autorelease];
         httpComm.device_ip = self.selectedChannel.profile.ip_address;
         httpComm.device_port = self.selectedChannel.profile.port;
         

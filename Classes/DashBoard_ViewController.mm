@@ -1591,7 +1591,7 @@
 	
     CamChannel *ch = (CamChannel *) [listOfChannel objectAtIndex:self.edittedChannelIndex];
     
-    HttpCommunication * dev_comm = [[HttpCommunication alloc]init];
+    HttpCommunication * dev_comm = [[[HttpCommunication alloc]init] autorelease];
     dev_comm.device_ip = ch.profile.ip_address;
     dev_comm.device_port = ch.profile.port;
     

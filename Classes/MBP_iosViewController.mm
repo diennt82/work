@@ -1709,7 +1709,7 @@ return self;
     if (cp != nil &&
         cp.ip_address != nil)
     {
-        HttpCommunication * dev_com = [[HttpCommunication alloc] init];
+        HttpCommunication * dev_com = [[[HttpCommunication alloc] init] autorelease];
         
         dev_com.device_ip = cp.ip_address;
         

@@ -337,8 +337,7 @@
 
 -(void) moveToNextStep
 {
-    HttpCommunication * comm = [[HttpCommunication alloc] init];
-    [comm autorelease];
+    HttpCommunication * comm = [[[HttpCommunication alloc] init] autorelease];
     
     NSString * fw_version = [comm sendCommandAndBlock:GET_VERSION];
     NSString *fwVersion = [[fw_version componentsSeparatedByString:@": "] objectAtIndex:1];
