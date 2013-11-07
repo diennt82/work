@@ -3631,8 +3631,6 @@
 					"\\\\\\\\\\\\\\\"$(SRCROOT)/../ios-frameworks\\\\\\\\\\\\\\\"",
 					"\\\\\\\\\\\\\\\"$(SRCROOT)/../LibH264Player/DerivedData/H264MediaPlayer/Build/Products/Release-iphoneos\\\\\\\\\\\\\\\"",
 					"/Users/developer/work/ios-frameworks",
-					"/Users/JasonLee/work/cvision-ios-blinkhd-2013",
-					"/Users/JasonLee/work/ios-frameworks",
 				);
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
@@ -3707,17 +3705,10 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)",
-					"\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\"$(SRCROOT)/../../Desktop/Framework\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\"",
-					"\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\"$(SRCROOT)/../SimpliMonitorCommunication/Release\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\"",
-					"\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\"$(SRCROOT)/../SimpliMonitorCommunication/DerivedData/SimpliMonitorCommunication/Build/Products/Debug-iphoneos\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\"",
-					"\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\"$(SRCROOT)/../MonitorCommunication/DerivedData/MonitorCommunication/Build/Products/Debug-iphoneos\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\"",
 					"\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\"$(SRCROOT)/../ios-frameworks\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\"",
 					"/Users/developer/work/ios-frameworks",
 					"\\\\\\\\\\\\\\\"$(SRCROOT)/../ios-frameworks\\\\\\\\\\\\\\\"",
-					"\\\\\\\\\\\\\\\"$(SRCROOT)/../LibH264Player/DerivedData/H264MediaPlayer/Build/Products/Release-iphoneos\\\\\\\\\\\\\\\"",
 					"/Users/developer/work/ios-frameworks",
-					"/Users/JasonLee/work/cvision-ios-blinkhd-2013",
-					"/Users/JasonLee/work/ios-frameworks",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = BlinkHD_ios_Prefix.pch;
@@ -3812,8 +3803,6 @@
 					"\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\"$(SRCROOT)/../ios-frameworks\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\"",
 					"\\\\\\\\\\\\\\\"$(SRCROOT)/../ios-frameworks\\\\\\\\\\\\\\\"",
 					"/Users/developer/work/ios-frameworks",
-					"/Users/JasonLee/work/cvision-ios-blinkhd-2013",
-					"/Users/JasonLee/work/ios-frameworks",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = BlinkHD_ios_Prefix.pch;

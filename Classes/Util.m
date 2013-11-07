@@ -26,7 +26,7 @@ static int socketFlag = 0;
 
 + (int)offsetOfBytes:(NSData*)buffer searchPattern:(NSData*)searchPattern
 {
-	return [Util offsetOfBytes:[buffer bytes] 
+	return [Util offsetOfBytes:(Byte *)[buffer bytes] 
 					bufferLength:[buffer length] 
 					searchPattern:[searchPattern bytes] 
 					patternLength:[searchPattern length]
