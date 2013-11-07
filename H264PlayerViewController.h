@@ -46,6 +46,8 @@
 #define ME_WOWZA @"rtmp://wowza.api.simplimonitor.com:1935"
 #define VIEW_NXCOMM_WOWZA @"nxcomm_wowza"
 
+#define LOCAL_VIDEO_STOPPED_UNEXPECTEDLY 0x1001
+
 @protocol H264PlayerVCDelegate <NSObject>
 
 - (void)stopStreamFinished: (CamChannel *)camChannel;

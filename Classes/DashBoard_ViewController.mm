@@ -1130,13 +1130,6 @@
         if (localCameras > 1)
         {
             
-            QuickViewCamera_ViewController * scanCamCtrl;
-            scanCamCtrl = [[QuickViewCamera_ViewController alloc] initWithNibName:@"QuickViewCamera_ViewController"
-                                                                           bundle:nil];
-            scanCamCtrl.listOfChannel = self.listOfChannel;
-            
-            [self.navigationController pushViewController:scanCamCtrl animated:NO];
-            [scanCamCtrl release];
         }
         else
         {

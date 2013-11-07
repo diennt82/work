@@ -1632,15 +1632,6 @@
     
     UITabBarController * root =  (UITabBarController *)[[self.navigationController viewControllers] objectAtIndex:0];
    
-    CameraViewController * camViewCtl =
-    (CameraViewController *)[[self.navigationController viewControllers]
-                             objectAtIndex:[[self.navigationController viewControllers] count] -2];
- 
-    [camViewCtl goBackToCameraList];
-    
-    
-    
-    
     [self.navigationController popToRootViewControllerAnimated:NO];
    
     DashBoard_ViewController * dashBoard =  (DashBoard_ViewController *)[[root viewControllers] objectAtIndex:0];
@@ -1762,12 +1753,7 @@
     
     NSArray *viewControllerArray = [self.navigationController viewControllers];
     int parentViewControllerIndex = [viewControllerArray count] - 2;
-    CameraViewController * camview = [viewControllerArray objectAtIndex:parentViewControllerIndex] ;
-    
-    NSLog(@"update video res..");
-    [camview buttonHQPressed:nil];
-    
-	
+
 	[self updateVQ];
     
     
@@ -2103,9 +2089,6 @@
     //2. Change camera name in cameraview.selected channel
     NSArray *viewControllerArray = [self.navigationController viewControllers];
     int parentViewControllerIndex = [viewControllerArray count] - 2;
-    CameraViewController * camview = [viewControllerArray objectAtIndex:parentViewControllerIndex] ;
-    camview.selected_channel.profile.name = deviceName;
-    camview.barBtnName.title = deviceName; 
 
     //3. Change name in dashboard.
     UITabBarController * tabs = [viewControllerArray objectAtIndex:(parentViewControllerIndex-1)] ;

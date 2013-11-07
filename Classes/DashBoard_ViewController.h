@@ -11,9 +11,7 @@
 #import "ConnectionMethodDelegate.h"
 #import "CamChannel.h"
 #import "CamProfile.h"
-#import "CameraViewController.h"
 #import "Account_ViewController.h"
-#import "QuickViewCamera_ViewController.h"
 #import "AlertSettingViewController.h"
 
 #import "EditCameraCell.h"
