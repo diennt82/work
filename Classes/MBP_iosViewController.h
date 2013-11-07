@@ -14,7 +14,6 @@
 
 #import "MBP_InitialSetupViewController.h"
 #import "AsyncSocket.h"
-#import "AviRecord.h"
 
 #import "CamProfile.h"
 #import "CamChannel.h"
@@ -95,8 +94,6 @@
     SystemSoundID soundFileObject;
     
 	IBOutlet UIView * progressView; 
-	
-	AviRecord* iRecorder;
     
 	BOOL toTakeSnapShot ;
 	BOOL recordInProgress;

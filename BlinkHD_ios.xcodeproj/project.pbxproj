@@ -169,7 +169,6 @@
 		974EF72C1552241C008D6B77 /* ios_Settings.png in Resources */ = {isa = PBXBuildFile; fileRef = 974EF72B1552241C008D6B77 /* ios_Settings.png */; };
 		975341571431B4C20037DDAC /* IpAddress.c in Sources */ = {isa = PBXBuildFile; fileRef = 975341561431B4C20037DDAC /* IpAddress.c */; };
 		975342611432B8180037DDAC /* CamProfile.m in Sources */ = {isa = PBXBuildFile; fileRef = 975342601432B8180037DDAC /* CamProfile.m */; };
-		975343EF1432F88D0037DDAC /* AviRecord.m in Sources */ = {isa = PBXBuildFile; fileRef = 975343EE1432F88D0037DDAC /* AviRecord.m */; };
 		9770CD8E143073AE009E69EF /* AiBallBase64Encoding.m in Sources */ = {isa = PBXBuildFile; fileRef = 9770CD88143073AE009E69EF /* AiBallBase64Encoding.m */; };
 		9770CD8F143073AE009E69EF /* AsyncSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = 9770CD8A143073AE009E69EF /* AsyncSocket.m */; };
 		9770CD99143073C6009E69EF /* Util.m in Sources */ = {isa = PBXBuildFile; fileRef = 9770CD97143073C6009E69EF /* Util.m */; };
@@ -537,8 +536,6 @@
 		975341561431B4C20037DDAC /* IpAddress.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = IpAddress.c; sourceTree = "<group>"; };
 		9753425F1432B8180037DDAC /* CamProfile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CamProfile.h; sourceTree = "<group>"; };
 		975342601432B8180037DDAC /* CamProfile.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CamProfile.m; sourceTree = "<group>"; };
-		975343ED1432F88D0037DDAC /* AviRecord.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AviRecord.h; sourceTree = "<group>"; };
-		975343EE1432F88D0037DDAC /* AviRecord.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AviRecord.m; sourceTree = "<group>"; };
 		9770CD67143071DA009E69EF /* PublicDefine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PublicDefine.h; sourceTree = "<group>"; };
 		9770CD87143073AE009E69EF /* AiBallBase64Encoding.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AiBallBase64Encoding.h; sourceTree = "<group>"; };
 		9770CD88143073AE009E69EF /* AiBallBase64Encoding.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AiBallBase64Encoding.m; sourceTree = "<group>"; };
@@ -1497,8 +1494,6 @@
 				9770CD8A143073AE009E69EF /* AsyncSocket.m */,
 				97DEEA4014308B71008212FF /* AsyncUdpSocket.m */,
 				97DEEA4114308B71008212FF /* AsyncUdpSocket.h */,
-				975343ED1432F88D0037DDAC /* AviRecord.h */,
-				975343EE1432F88D0037DDAC /* AviRecord.m */,
 				97B8F6651439B58000924E84 /* DeviceConfiguration.h */,
 				97B8F6661439B58000924E84 /* DeviceConfiguration.m */,
 				97987D2C154698100066C49B /* ConnectionMethodDelegate.h */,
@@ -2265,7 +2260,6 @@
 				97DEEA4214308B71008212FF /* AsyncUdpSocket.m in Sources */,
 				975341571431B4C20037DDAC /* IpAddress.c in Sources */,
 				975342611432B8180037DDAC /* CamProfile.m in Sources */,
-				975343EF1432F88D0037DDAC /* AviRecord.m in Sources */,
 				97B8F6671439B58000924E84 /* DeviceConfiguration.m in Sources */,
 				97F0F04C143C0CA00076B749 /* CamChannel.m in Sources */,
 				97A3BD6F1545094F000C3546 /* HttpCommunication.m in Sources */,
