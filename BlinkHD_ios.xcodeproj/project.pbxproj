@@ -883,13 +883,6 @@
 		BC5B101C17018F2A00D2C308 /* sv */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = sv; path = sv.lproj/MBP_MenuViewController.xib; sourceTree = "<group>"; };
 		BC5B101D17018F2B00D2C308 /* sv */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sv; path = sv.lproj/Localizable.strings; sourceTree = "<group>"; };
 		BC6E4A0416BFBB9D00B0D630 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/MBP_InitialSetupViewController_land.xib; sourceTree = "<group>"; };
-		BC883A631798E68D001D02D8 /* GAI.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GAI.h; sourceTree = "<group>"; };
-		BC883A641798E68D001D02D8 /* GAITrackedViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GAITrackedViewController.h; sourceTree = "<group>"; };
-		BC883A651798E68D001D02D8 /* GAITracker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GAITracker.h; sourceTree = "<group>"; };
-		BC883A661798E68D001D02D8 /* GAITransaction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GAITransaction.h; sourceTree = "<group>"; };
-		BC883A671798E68D001D02D8 /* GAITransactionItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GAITransactionItem.h; sourceTree = "<group>"; };
-		BC883A681798E68D001D02D8 /* libGoogleAnalytics.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libGoogleAnalytics.a; sourceTree = "<group>"; };
-		BC883A691798E68D001D02D8 /* libGoogleAnalytics_debug.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libGoogleAnalytics_debug.a; sourceTree = "<group>"; };
 		BC883A6C1798EB81001D02D8 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		BC89DB7B1703EB3A00BED0CE /* de */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = de; path = de.lproj/MBP_InitialSetupViewController.xib; sourceTree = "<group>"; };
 		BC89DB7C1703EB3A00BED0CE /* de */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = de; path = de.lproj/MBP_InitialSetupViewController_land.xib; sourceTree = "<group>"; };
@@ -1480,7 +1473,6 @@
 				9704F83F17B37CAD005F9868 /* DashBoard_ViewController.h */,
 				9704F84017B37CAF005F9868 /* DashBoard_ViewController.mm */,
 				97F5531417BDD3AF00024017 /* MBPNavController.m */,
-				BC883A621798E68D001D02D8 /* Google Analytics Library */,
 				97987D40154698A10066C49B /* SetupHttpDelegate.h */,
 				A1BB7B9E17E02C5C00463A07 /* UdtSocketWrapper.mm */,
 				975341551431B4C20037DDAC /* IpAddress.h */,
@@ -1956,20 +1948,6 @@
 				A19778EC181E3316007C3CA7 /* ZoneViewController_ipad.xib */,
 			);
 			name = "Zone Detection";
-			sourceTree = "<group>";
-		};
-		BC883A621798E68D001D02D8 /* Google Analytics Library */ = {
-			isa = PBXGroup;
-			children = (
-				BC883A631798E68D001D02D8 /* GAI.h */,
-				BC883A641798E68D001D02D8 /* GAITrackedViewController.h */,
-				BC883A651798E68D001D02D8 /* GAITracker.h */,
-				BC883A661798E68D001D02D8 /* GAITransaction.h */,
-				BC883A671798E68D001D02D8 /* GAITransactionItem.h */,
-				BC883A681798E68D001D02D8 /* libGoogleAnalytics.a */,
-				BC883A691798E68D001D02D8 /* libGoogleAnalytics_debug.a */,
-			);
-			path = "Google Analytics Library";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
