@@ -170,7 +170,6 @@
 		975341571431B4C20037DDAC /* IpAddress.c in Sources */ = {isa = PBXBuildFile; fileRef = 975341561431B4C20037DDAC /* IpAddress.c */; };
 		975342611432B8180037DDAC /* CamProfile.m in Sources */ = {isa = PBXBuildFile; fileRef = 975342601432B8180037DDAC /* CamProfile.m */; };
 		975343EF1432F88D0037DDAC /* AviRecord.m in Sources */ = {isa = PBXBuildFile; fileRef = 975343EE1432F88D0037DDAC /* AviRecord.m */; };
-		9770CD8D143073AE009E69EF /* ADPCMDecoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 9770CD86143073AE009E69EF /* ADPCMDecoder.m */; };
 		9770CD8E143073AE009E69EF /* AiBallBase64Encoding.m in Sources */ = {isa = PBXBuildFile; fileRef = 9770CD88143073AE009E69EF /* AiBallBase64Encoding.m */; };
 		9770CD8F143073AE009E69EF /* AsyncSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = 9770CD8A143073AE009E69EF /* AsyncSocket.m */; };
 		9770CD99143073C6009E69EF /* Util.m in Sources */ = {isa = PBXBuildFile; fileRef = 9770CD97143073C6009E69EF /* Util.m */; };
@@ -541,8 +540,6 @@
 		975343ED1432F88D0037DDAC /* AviRecord.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AviRecord.h; sourceTree = "<group>"; };
 		975343EE1432F88D0037DDAC /* AviRecord.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AviRecord.m; sourceTree = "<group>"; };
 		9770CD67143071DA009E69EF /* PublicDefine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PublicDefine.h; sourceTree = "<group>"; };
-		9770CD85143073AE009E69EF /* ADPCMDecoder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ADPCMDecoder.h; sourceTree = "<group>"; };
-		9770CD86143073AE009E69EF /* ADPCMDecoder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ADPCMDecoder.m; sourceTree = "<group>"; };
 		9770CD87143073AE009E69EF /* AiBallBase64Encoding.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AiBallBase64Encoding.h; sourceTree = "<group>"; };
 		9770CD88143073AE009E69EF /* AiBallBase64Encoding.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AiBallBase64Encoding.m; sourceTree = "<group>"; };
 		9770CD89143073AE009E69EF /* AsyncSocket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AsyncSocket.h; sourceTree = "<group>"; };
@@ -1488,8 +1485,6 @@
 				97F5531417BDD3AF00024017 /* MBPNavController.m */,
 				BC883A621798E68D001D02D8 /* Google Analytics Library */,
 				97987D40154698A10066C49B /* SetupHttpDelegate.h */,
-				9770CD85143073AE009E69EF /* ADPCMDecoder.h */,
-				9770CD86143073AE009E69EF /* ADPCMDecoder.m */,
 				A1BB7B9E17E02C5C00463A07 /* UdtSocketWrapper.mm */,
 				975341551431B4C20037DDAC /* IpAddress.h */,
 				975341561431B4C20037DDAC /* IpAddress.c */,
@@ -2264,7 +2259,6 @@
 				1D60589B0D05DD56006BFB54 /* main.m in Sources */,
 				1D3623260D0F684500981E51 /* MBP_iosAppDelegate.mm in Sources */,
 				28D7ACF80DDB3853001CB0EB /* MBP_iosViewController.mm in Sources */,
-				9770CD8D143073AE009E69EF /* ADPCMDecoder.m in Sources */,
 				9770CD8E143073AE009E69EF /* AiBallBase64Encoding.m in Sources */,
 				9770CD8F143073AE009E69EF /* AsyncSocket.m in Sources */,
 				9770CD99143073C6009E69EF /* Util.m in Sources */,
