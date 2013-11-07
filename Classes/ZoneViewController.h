@@ -51,7 +51,7 @@
 
 @property (nonatomic, assign) id<ZoneViewControlerDeleate> zoneVCDelegate;
 
-- (void)resetButtonImage;
+//- (void)resetButtonImage;
 - (NSArray *)zoneSelectedList;
 
 

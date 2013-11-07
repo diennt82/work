@@ -9,6 +9,7 @@
 #import "CamProfile.h"
 #import "Util.h"
 #import "SetupData.h"
+#import "AiBallBase64Encoding.h"
 
 
 #define CONFIGURE_STATUS_NOT_ASSIGNED 0x100

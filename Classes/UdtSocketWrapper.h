@@ -33,19 +33,19 @@ typedef struct {
 
 
 //+ (NSString *) getIpfromHostName:(NSString *) hostname;
-+ (struct in_addr *) getIpfromHostName:(NSString *) hostname;
+//+ (struct in_addr *) getIpfromHostName:(NSString *) hostname;
 
 -(id) initWithLocalPort:(int) localPort;
 
-- (int) createUdtStreamSocket;
+//- (int) createUdtStreamSocket;
 //-(int) connectViaUdtSock:(UDTSOCKET *)sock toServer:(NSString *) ip port:(int) port;
--(int) connectViaUdtSock:(struct in_addr *) ip port:(int) port;
--(int) sendDataViaUdt:(NSData *) data;
--(int) recvDataViaUdt:(NSMutableData *) responseData dataLen:(int) len ;
+//-(int) connectViaUdtSock:(struct in_addr *) ip port:(int) port;
+//-(int) sendDataViaUdt:(NSData *) data;
+//-(int) recvDataViaUdt:(NSMutableData *) responseData dataLen:(int) len ;
 
--(BOOL) isOpen; 
+//-(BOOL) isOpen;
 
--(void) close;
+//-(void) close;
 
 
 @end

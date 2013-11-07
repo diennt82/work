@@ -20,7 +20,7 @@
 
 + (NSData *)AESEncryptWithKey:(NSString *)key data:(NSData*) input; 
 + (NSData *)_AESEncryptWithKey:(NSString *)key data:(NSData*) input; 
-+ (NSData *)_AESDecryptWithKey:(NSString *)key data:(NSData*) input; 
++ (NSData *)_AESDecryptWithKey:(NSString *)key data:(NSData*) input;
 
-+ (NSData *)AESDecryptWithKey:(NSString *)key;
+//+ (NSData *)AESDecryptWithKey:(NSString *)key;
 @end

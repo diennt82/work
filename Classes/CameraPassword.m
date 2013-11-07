@@ -407,9 +407,9 @@
 {
 	[super init];
 	
-	self.cameraMacId = [NSString stringWithString:@""]; 
-    self.cameraUser = [NSString stringWithString:@""]; 
-    self.cameraPassword = [NSString stringWithString:@""];
+	self.cameraMacId = @"";//[NSString stringWithString:@""];
+    self.cameraUser = @"";//[NSString stringWithString:@""];
+    self.cameraPassword = @"";//[NSString stringWithString:@""];
 	
 	
     return self; 

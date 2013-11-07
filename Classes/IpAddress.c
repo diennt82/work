@@ -74,7 +74,7 @@ int GetIPAddresses()
 	char                buffer[BUFFERSIZE], *ptr, lastname[IFNAMSIZ], *cptr;
 	struct ifconf       ifc;
 	struct ifreq        *ifr, ifrcopy;
-	struct sockaddr_in	*sin, *broadcast, * netmask;
+	struct sockaddr_in	*sin, *broadcast;//, * netmask;
 	
 	char temp[80];
 	

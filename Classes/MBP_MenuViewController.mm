@@ -748,7 +748,7 @@
 										 alter:[[self.cameraMenuItems allValues] objectAtIndex:indexPath.row]];
 		 */
 		
-        value.lineBreakMode = UILineBreakModeWordWrap;
+        //value.lineBreakMode = UILineBreakModeWordWrap;
         
 		value.text = [self.cameraMenuItemValues  objectForKey:[self.cameraMenuItems objectAtIndex:indexPath.row]];
         value.textColor = [UIColor whiteColor];
@@ -1337,6 +1337,14 @@
     
 }
 
+- (void) askForNewPassword
+{
+}
+
+-(void)onCameraPassChanged: (NSString *) newpass
+{
+}
+
 #pragma mark -
 #pragma mark Alertview delegate
 
@@ -1616,8 +1624,8 @@
 
     //Toggle by cameraviewController... 
     
-    NSArray *viewControllerArray = [self.navigationController viewControllers];
-    int parentViewControllerIndex = [viewControllerArray count] - 2;
+//    NSArray *viewControllerArray = [self.navigationController viewControllers];
+//    int parentViewControllerIndex = [viewControllerArray count] - 2;
 
 	[self updateVQ];
     

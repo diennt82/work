@@ -149,7 +149,7 @@
 - (void) updateTemperatureConversion;
 - (void) updateVolumeLvl;
 - (void) updateVQ;
-- (void)updateCamPass;
+//- (void)updateCamPass;
 
 -(void) onSetVolumeLevel:(int) level;
 -(void) onSetBrightnessLevel:(int) level;
@@ -157,8 +157,8 @@
 -(void) onSetTempUnit:(int) unit;
 -(void) onSetVideoQuality:(int) vq;
 
--(void) onViewAngle;
-- (void) viewAnglePopup ;
+//-(void) onViewAngle;
+//- (void) viewAnglePopup ;
 -(void)onName;
 -(void)onInformation;
 -(void)onVol;
@@ -169,9 +169,9 @@
 
 - (void) showDialog:(int) dialogType;
 -(void) onRemoveCamera;
--(void) onCheckUPnpStatus;
--(void) onManualPortFwd;
--(void) onChangePassword;
+//-(void) onCheckUPnpStatus;
+//-(void) onManualPortFwd;
+//-(void) onChangePassword;
 
 -(void) onCameraRemoveRemote;
 -(void) onCameraRemoveLocal;
@@ -194,7 +194,7 @@
 -(void)onCameraPassChanged: (NSString *) newpass;
 
 
--(void) setupStunConnectionToMac:(NSString *) mac ;
+//-(void) setupStunConnectionToMac:(NSString *) mac ;
 
 -(void) onSetVolumeLevel_:(NSNumber *) lvl;
 -(void) onSetBrightnessLevel_:(NSNumber *) lvl;

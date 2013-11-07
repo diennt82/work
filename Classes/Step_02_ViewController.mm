@@ -260,7 +260,7 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
-    int tag = tableView.tag;
+    //int tag = tableView.tag;
     
     //if (tag == 13)
     {

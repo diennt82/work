@@ -10,6 +10,7 @@
 #import "CameraPassword.h"
 #import "DeviceConfiguration.h"
 #import "PublicDefine.h"
+#import "AiBallBase64Encoding.h"
 
 #define DEFAULT_TIME_OUT 20.0 // this is Seconds.
 
@@ -157,7 +158,7 @@
 
 #pragma mark NSURLConnection Delegate functions
 /****** NSURLConnection Delegate functions ******/
-- (NSURLRequest *)connection:(NSURLConnection *)connection willSendRequest:(NSURLRequest *)request redirectResponse:(NSURLResponse *)response;
+//- (NSURLRequest *)connection:(NSURLConnection *)connection willSendRequest:(NSURLRequest *)request redirectResponse:(NSURLResponse *)response;
 
 /*! 
  @method connection:needNewBodyStream:  
@@ -179,7 +180,7 @@
  @param request The current NSURLRequest object associated with the connection.
  @result The new unopened body stream to use (see setHTTPBodyStream).
  */
-- (NSInputStream *)connection:(NSURLConnection *)connection needNewBodyStream:(NSURLRequest *)request NS_AVAILABLE(10_6, 3_0);
+//- (NSInputStream *)connection:(NSURLConnection *)connection needNewBodyStream:(NSURLRequest *)request NS_AVAILABLE(10_6, 3_0);
 
 /*!
  @method connection:canAuthenticateAgainstProtectionSpace:
@@ -194,7 +195,7 @@
  @param protectionSpace an NSURLProtectionSpace that will be used to generate an authentication challenge
  @result a boolean value that indicates the willingness of the delegate to handle the authentication
  */
-- (BOOL)connection:(NSURLConnection *)connection canAuthenticateAgainstProtectionSpace:(NSURLProtectionSpace *)protectionSpace NS_AVAILABLE(10_6, 3_0);
+//- (BOOL)connection:(NSURLConnection *)connection canAuthenticateAgainstProtectionSpace:(NSURLProtectionSpace *)protectionSpace NS_AVAILABLE(10_6, 3_0);
 
 /*!
  @method connection:didReceiveAuthenticationChallenge:
@@ -213,7 +214,7 @@
  @param connection the connection for which authentication was cancelled
  @param challenge The NSURLAuthenticationChallenge for which to cancel authentication
  */
-- (void)connection:(NSURLConnection *)connection didCancelAuthenticationChallenge:(NSURLAuthenticationChallenge *)challenge;
+//- (void)connection:(NSURLConnection *)connection didCancelAuthenticationChallenge:(NSURLAuthenticationChallenge *)challenge;
 
 /*! 
  @method connectionShouldUseCredentialStorage   
@@ -229,7 +230,7 @@
  @param connection  the NSURLConnection object asking if it should consult the credential storage.
  @result NO if the connection should not consult the credential storage, Yes if it should.
  */
-- (BOOL)connectionShouldUseCredentialStorage:(NSURLConnection *)connection NS_AVAILABLE(10_6, 3_0);
+//- (BOOL)connectionShouldUseCredentialStorage:(NSURLConnection *)connection NS_AVAILABLE(10_6, 3_0);
 
 /*! 
  @method connection:didReceiveResponse:   
@@ -285,7 +286,7 @@
  @param totalBytesWritten total number of bytes written for this connection
  @param totalBytesExpectedToWrite the number of bytes the connection expects to write (can change due to retransmission of body content)
  */
-- (void)connection:(NSURLConnection *)connection didSendBodyData:(NSInteger)bytesWritten totalBytesWritten:(NSInteger)totalBytesWritten totalBytesExpectedToWrite:(NSInteger)totalBytesExpectedToWrite NS_AVAILABLE(10_6, 3_0);
+//- (void)connection:(NSURLConnection *)connection didSendBodyData:(NSInteger)bytesWritten totalBytesWritten:(NSInteger)totalBytesWritten totalBytesExpectedToWrite:(NSInteger)totalBytesExpectedToWrite NS_AVAILABLE(10_6, 3_0);
 
 /*! 
  @method connectionDidFinishLoading:   
@@ -329,7 +330,7 @@
  return nil to indicate that no NSCachedURLResponse should be stored
  for this connection.
  */
-- (NSCachedURLResponse *)connection:(NSURLConnection *)connection willCacheResponse:(NSCachedURLResponse *)cachedResponse;
+//- (NSCachedURLResponse *)connection:(NSURLConnection *)connection willCacheResponse:(NSCachedURLResponse *)cachedResponse;
 
 
 
