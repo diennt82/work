@@ -7,7 +7,6 @@
 //
 
 #import "CamChannel.h"
-#import "SymmetricCipher.h"
 
 
 #define DEBUG 0
@@ -347,48 +346,18 @@
 
 -(NSData *) getEncChannId
 {
-	NSData * input = [self.channID  dataUsingEncoding: NSUTF8StringEncoding];
- 
-#if DEBUG
-	NSString * chann = @"";
-	for (int i =0; i< [ input length]; i ++)
-	{
-		chann = [NSString  stringWithFormat:@"%@ %02x", chann,
-                 ((uint8_t *)[input bytes]) [i] ];
-	}
-
-	NSLog(@"Input chan: %@", chann);
-#endif
-    
-	NSData * output =[SymmetricCipher _AESEncryptWithKey:self.secretKey data:input];
-    
-	
-#if 0 //Test decrypt what i encrypted -
-	NSData * _output = [SymmetricCipher _AESDecryptWithKey:self.secretKey data:output];
-    
-	chann = @"";
-	for (int i =0; i< [ _output length]; i ++)
-	{
-		chann = [NSString  stringWithFormat:@"%@ %02x", chann,
-				 ((uint8_t *)[_output bytes]) [i] ];
-	}
-	
-	NSLog(@"Enc channID Test decrypt: %@ ",chann );
-#endif
-	return output;
+	return nil;
 }
 
 -(NSData *) getEncMac
 {
-	NSData * input = [[Util strip_colon_fr_mac:self.profile.mac_address]  dataUsingEncoding: NSUTF8StringEncoding];
-    
-	return [SymmetricCipher _AESEncryptWithKey:self.secretKey data:input];
+	return nil;
     
 }
 
 -(NSData *) decryptServerMessage:(NSData *) encrypted_data
 {
-	return [SymmetricCipher _AESDecryptWithKey:self.secretKey data:encrypted_data];
+	return nil;
 }
 
 
@@ -396,17 +365,7 @@
 -(NSString*) calculateRelayToken:(NSString *) relaySk
                     withUserPass: (NSString *) user_colon_pass
 {
-    // macaddress:ENC(email:pass)
-    NSString * msg = [[Util strip_colon_fr_mac:self.profile.mac_address]  stringByAppendingString:@":"];
-    
-    NSData * input = [user_colon_pass  dataUsingEncoding: NSUTF8StringEncoding];
-    NSData * enc_user_pass = [SymmetricCipher _AESEncryptWithKey:relaySk data:input];
-    NSString * encodeEncrypted = [NSString base64StringFromData:enc_user_pass length:[enc_user_pass length]];
-    
-    msg = [msg stringByAppendingString:encodeEncrypted];
-    
-    
-    return msg;
+    return nil;
 }
 
 +(NSString*) convertIntToIpStr:(uint ) ip
