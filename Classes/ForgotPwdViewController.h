@@ -7,7 +7,6 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "BMS_Communication.h"
 
 @interface ForgotPwdViewController : UIViewController
 {

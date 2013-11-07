@@ -8,7 +8,6 @@
 
 #import "UserAccount.h"
 #import "MBP_iosAppDelegate.h"
-#import "RemoteConnection.h"
 
 @interface UserAccount()
 
@@ -19,8 +18,7 @@
 @implementation UserAccount
 
 @synthesize   userName,userPass;
-@synthesize delegate; 
-@synthesize  bms_comm;
+@synthesize delegate;
 
 #if JSON_FLAG
 - (id) initWithUser:(NSString *)user andPass:(NSString *)pass andApiKey: (NSString *)apiKey andListener:(id <ConnectionMethodDelegate>) d
@@ -51,7 +49,6 @@
     [self.jsonComm release];
     [userName release];
     [userPass release];
-    [bms_comm release];
     [self.apiKey release];
     [super dealloc];
     
@@ -215,42 +212,6 @@
 -(void) query_snapshot_from_server:(NSArray *) cam_profiles
 {
     
-    ////set dummy selectors here -- these will not be called since we r using BLOCKED functions
-	self.bms_comm = [[BMS_Communication alloc] initWithObject:self
-                                                     Selector:@selector(getCamListSuccess:) 
-                                                 FailSelector:@selector(getCamListFailure:) 
-                                                    ServerErr:@selector(getCamListServerUnreachable)];
-    CamProfile *cp =nil;
-    NSData * snapShotData = nil; 
-    UIImage * snapShotImg = nil; 
-    for (int i =0; i<[cam_profiles count]; i++)
-    {
-        cp = (CamProfile *)[cam_profiles objectAtIndex:i];
-        
-        if (cp == nil)
-        {
-            continue;
-        }
-        //call get camlist query here 
-        snapShotData = [self.bms_comm BMS_getCameraSnapshotBlockedWithUser:self.userName 
-                                                    AndPass:self.userPass
-                                                    macAddr:cp.mac_address];
-        if (snapShotData != nil)
-        {
-            //NSLog(@"UserAccount: rcv pic for cam: %@", cp.name); 
-            snapShotImg = [UIImage imageWithData:snapShotData];
-            cp.profileImage = snapShotImg;
-        }
-        else 
-        {
-            //failed to get snapshot for this camera
-        }
-        
-        // reset
-        snapShotData = nil; 
-    }
-    
-    
 }
 
 
@@ -347,224 +308,7 @@
 -(void) query_stream_mode_for_cam:(CamProfile *) cp
 {
     
-    //NSLog(@" query_stream_mode_for_cam : %@",cp.name);
-    BMS_Communication * bms_alerts = [[BMS_Communication alloc] initWithObject:self
-                                                                      Selector:nil
-                                                                  FailSelector:nil
-                                                                     ServerErr:nil];
-
-    //call get camlist query here
-	NSData* responseData = [bms_alerts BMS_getStreamModeBlockedWithUser:self.userName
-                                                                 AndPass:self.userPass
-                                                                   macAddr:cp.mac_address];
-    
-    
-    NSString * raw_data = [[[NSString alloc] initWithData:responseData encoding: NSASCIIStringEncoding] autorelease];
-	
-	//NSLog(@"getStream response: %@", raw_data);
-	
-	//Move on -- dont signal caller
-	if ( raw_data != nil && [raw_data hasPrefix:STREAMING_MODE])
-	{
-		NSRange m_range = {[STREAMING_MODE length], 1};
-		int streamMode = [[raw_data substringWithRange:m_range] intValue];
-		
-		switch (streamMode) {
-			case STREAM_MODE_UPNP:
-			case STREAM_MODE_MANUAL_PRT_FWD:
-			{
-				
-                responseData = [bms_alerts BMS_getRemoteStatusBlockedOf:IS_CAM_AVAILABLE_UPNP_CMD
-                                                               withUser:self.userName
-                                                                andPass:self.userPass
-                                                                macAddr:cp.mac_address];
-                raw_data = [[[NSString alloc] initWithData:responseData encoding: NSASCIIStringEncoding] autorelease];
-                NSLog(@"[UPNP]cam %@ isCam avaiil response: %@", cp.mac_address, raw_data);
-                if ( raw_data != nil)
-                {
-                    NSArray * tokens = [raw_data componentsSeparatedByString:@":"];
-
-                    if ([tokens count] >=2 )
-                    {
-                        NSString * status = (NSString*) [tokens objectAtIndex:1];
-                        status = [status stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
-                                  
-                        if ([status hasPrefix:@"AVAILABLE"] ||
-                            [status hasPrefix:@"BUSY"])
-                        {
-                            cp.minuteSinceLastComm = 1; 
-                        }
-                        else
-                        {
-                            cp.minuteSinceLastComm = 24*60;
-                        }
-                    }
-                    else
-                    {
-                        cp.minuteSinceLastComm = 24*60;
-
-                    }
-                    
-                }
-                else
-                {
-                    cp.minuteSinceLastComm = 24*60;
-                }
-                
-				               
-				break;
-			}
-			case STREAM_MODE_STUN:
-			{
-                
-                responseData = [bms_alerts BMS_getRemoteStatusBlockedOf:IS_CAM_AVAILABLE_ONLOAD_CMD
-                                                               withUser:self.userName
-                                                                andPass:self.userPass
-                                                                macAddr:cp.mac_address];
-                raw_data = [[[NSString alloc] initWithData:responseData encoding: NSASCIIStringEncoding] autorelease];
-                NSLog(@"[STUN]cam %@ isCam avaiil response: %@",cp.mac_address,  raw_data);
-
-                if ( raw_data != nil)
-                {
-                    NSArray * tokens = [raw_data componentsSeparatedByString:@":"];
-                    if ([tokens count] >=2 )
-                    {
-                        NSString * status = (NSString*) [tokens objectAtIndex:1];
-                        status = [status stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
-                        
-                        if ([status hasPrefix:@"AVAILABLE"] ||
-                            [status hasPrefix:@"BUSY"])
-                        {
-                            cp.minuteSinceLastComm = 1;
-                        }
-                        else
-                        {
-                            cp.minuteSinceLastComm = 24*60;
-                        }
-                    }
-                    else
-                    {
-                        cp.minuteSinceLastComm = 24*60;
-                        
-                    }
-                    
-                }
-                else
-                {
-                    cp.minuteSinceLastComm = 24*60;
-                }
-				
-				break; 
-			}
-			default:
-				break;
-		}
-		
-	}
-	
-	
-	
 }
-
-
-/******* NOT USED : OBSOLETE *********/
--(void) query_disabled_alert_list_:(CamProfile *) cp
-{
-
-     NSLog(@" query_disabled_alert_list camera: %@",cp.name); 
-    //All enabled - default
-    cp.soundAlertEnabled = TRUE;
-    cp.tempHiAlertEnabled = TRUE;
-    cp.tempLoAlertEnabled = TRUE;
-
-    
-    
-    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-    NSString * device_token = (NSString *)[userDefaults objectForKey:_push_dev_token]; 
-    
-    BMS_Communication * bms_alerts = [[BMS_Communication alloc] initWithObject:self
-                                                                      Selector:nil 
-                                                                  FailSelector:nil 
-                                                                     ServerErr:nil];
-	
-	//call get camlist query here 
-	NSData* responseData = [bms_alerts BMS_getDisabledAlertBlockWithUser:self.userName 
-                                                                 AndPass:self.userPass 
-                                                                   regId:device_token 
-                                                                   ofMac:cp.mac_address];
-                            
-                            
-    NSString * raw_data = [[[NSString alloc] initWithData:responseData encoding: NSUTF8StringEncoding] autorelease];
-    NSLog(@"response: %@", raw_data); 
-//    Response:
-//    ""<br>mac=[mac address]
-//    <br>cameraname=[camera name]
-//    <br>Total_disabled_alerts=[count]
-//    <br>alert=<alert>
-//    <br>alert=<alert>
-//    <br>alert=<alert>
-    NSArray * token_list;
-
-	token_list = [raw_data componentsSeparatedByString:@"<br>"];
-    if ([token_list count] > 4)
-    {
-        int alertCount; 
-        
-        NSArray * token_list_1 = [[token_list objectAtIndex:3] componentsSeparatedByString:@"="];
-        
-        alertCount = [[token_list_1 objectAtIndex:1] intValue]; 
-        NSLog(@"Alert disabled is: %d", alertCount); 
-        
-        int i = 0;
-        NSString * disabledAlert;
-        while (i < alertCount)
-        {
-            token_list_1 = [[token_list objectAtIndex:(i+4)] componentsSeparatedByString:@"="];
-            
-            disabledAlert= [token_list_1 objectAtIndex:1] ;
-            disabledAlert = [disabledAlert stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
-            
-             NSLog(@"disabledAlert disabled is:%@--> %@",[token_list objectAtIndex:(i+4)],  disabledAlert); 
-            
-            if ( [disabledAlert isEqualToString:ALERT_TYPE_SOUND])
-            {
-                NSLog(@"Set sound  for cam: %@", cp.mac_address);
-                cp.soundAlertEnabled = FALSE;
-               
-            }
-            else if ( [disabledAlert isEqualToString:ALERT_TYPE_TEMP_HI] )
-            {
-                NSLog(@"Set tempHiAlertEnabled  for cam: %@", cp.mac_address);
-                cp.tempHiAlertEnabled = FALSE;
-               
-            }
-            else if ([disabledAlert isEqualToString:ALERT_TYPE_TEMP_LO] )
-            {
-                NSLog(@"Set temp low  for cam: %@", cp.mac_address);
-                 cp.tempLoAlertEnabled = FALSE;
-            }
-            
-            i++;
-        }
-        
-        
-                
-        
-    }
-    else
-    {
-        NSLog(@"Token list count <4 :%@, %@, %@, %@",[token_list objectAtIndex:0],
-              [token_list objectAtIndex:1],
-              [token_list objectAtIndex:2],
-              [token_list objectAtIndex:3]); 
-        
-        
-              
-    }
-                            
-}
-/******************************/
-
 
 #if JSON_FLAG
 -(void) getCamListFailure:(NSDictionary *)error_response

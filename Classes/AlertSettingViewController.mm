@@ -277,37 +277,8 @@
 {
     UISwitch * alertSw = (UISwitch *) exp.userInfo;
     NSLog(@"update sound alert");
-    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-    NSString * user_pass = (NSString *) [userDefaults objectForKey:@"PortalPassword"];
-    NSString * user_email  = (NSString*)[userDefaults objectForKey:@"PortalUseremail"];
     
-    
-    BMS_Communication * bms_alerts = [[BMS_Communication alloc] initWithObject:self
-                                                                      Selector:nil
-                                                                  FailSelector:nil
-                                                                     ServerErr:nil];
-    if (alertSw.isOn)
-    {
-        //call get camlist query here
-        NSData* responseData = [bms_alerts BMS_enabledAlertBlockWithUser_1:user_email
-                                                                   AndPass:user_pass
-                                                                     ofMac:camera.mac_address
-                                                                 alertType:ALERT_TYPE_SOUND];
-        [[[GAI sharedInstance] defaultTracker]trackEventWithCategory:@"Notifications"
-                                                          withAction:@"Sound notification"
-                                                           withLabel:@"Sound notification"
-                                                           withValue:nil];
-    }
-    else
-    {
-        //call get camlist query here
-        NSData* responseData = [bms_alerts BMS_disabledAlertBlockWithUser_1:user_email
-                                                                    AndPass:user_pass
-                                                                      ofMac:camera.mac_address
-                                                                  alertType:ALERT_TYPE_SOUND];
-        
-    }
-    
+
     camera.soundAlertEnabled  =  alertSw.isOn;
     progressView.hidden = YES;
     
@@ -343,37 +314,7 @@
     UISwitch * alertSw = (UISwitch *) exp.userInfo;
     
     NSLog(@"update temmp hi alert");
-    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-    NSString * user_pass = (NSString *) [userDefaults objectForKey:@"PortalPassword"];
-    NSString * user_email  = (NSString*)[userDefaults objectForKey:@"PortalUseremail"];
-    
-    
-    BMS_Communication * bms_alerts = [[BMS_Communication alloc] initWithObject:self
-                                                                      Selector:nil
-                                                                  FailSelector:nil
-                                                                     ServerErr:nil];
-    
-    if (alertSw.isOn)
-    {
-        
-        NSData* responseData = [bms_alerts BMS_enabledAlertBlockWithUser_1:user_email
-                                                                   AndPass:user_pass
-                                                                     ofMac:camera.mac_address
-                                                                 alertType:ALERT_TYPE_TEMP_HI];
-        [[[GAI sharedInstance] defaultTracker]trackEventWithCategory:@"Notifications"
-                                                          withAction:@"High temperature notification"
-                                                           withLabel:@"High temperature notification"
-                                                           withValue:nil];
-    }
-    else
-    {
-        
-        NSData* responseData = [bms_alerts BMS_disabledAlertBlockWithUser_1:user_email
-                                                                    AndPass:user_pass
-                                                                      ofMac:camera.mac_address
-                                                                  alertType:ALERT_TYPE_TEMP_HI];
-        
-    }
+
     
     camera.tempHiAlertEnabled  =  alertSw.isOn;
     
@@ -408,37 +349,6 @@
     
     UISwitch * alertSw = (UISwitch *) exp.userInfo;
     
-    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-    NSString * user_pass = (NSString *) [userDefaults objectForKey:@"PortalPassword"];
-    NSString * user_email  = (NSString*)[userDefaults objectForKey:@"PortalUseremail"];
-    
-    
-    BMS_Communication * bms_alerts = [[BMS_Communication alloc] initWithObject:self
-                                                                      Selector:nil
-                                                                  FailSelector:nil
-                                                                     ServerErr:nil];
-    NSLog(@"update temmp log alert");
-    if (alertSw.isOn)
-    {
-        //call get camlist query here
-        NSData* responseData = [bms_alerts BMS_enabledAlertBlockWithUser_1:user_email
-                                                                   AndPass:user_pass
-                                                                     ofMac:camera.mac_address
-                                                                 alertType:ALERT_TYPE_TEMP_LO];
-        [[[GAI sharedInstance] defaultTracker]trackEventWithCategory:@"Notifications"
-                                                          withAction:@"Low temperature notification"
-                                                           withLabel:@"Low temperature notification"
-                                                           withValue:nil];
-    }
-    else
-    {
-        //call get camlist query here
-        NSData* responseData = [bms_alerts BMS_disabledAlertBlockWithUser_1:user_email
-                                                                    AndPass:user_pass
-                                                                      ofMac:camera.mac_address
-                                                                  alertType:ALERT_TYPE_TEMP_LO];
-        
-    }
     
     camera.tempLoAlertEnabled  =  alertSw.isOn;    progressView.hidden = YES;
     
@@ -449,96 +359,12 @@
 
 -(void) query_disabled_alert_list:(CamProfile *) cp
 {
-    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-	NSString * userName = (NSString *) [userDefaults objectForKey:@"PortalUseremail"];
-	NSString * userPass = (NSString *) [userDefaults objectForKey:@"PortalPassword"];
+
 	
     //All enabled - default
     cp.soundAlertEnabled = TRUE;
     cp.tempHiAlertEnabled = TRUE;
     cp.tempLoAlertEnabled = TRUE;
-    
-    BMS_Communication * bms_alerts = [[BMS_Communication alloc] initWithObject:self
-                                                                      Selector:nil
-                                                                  FailSelector:nil
-                                                                     ServerErr:nil];
-	
-	//call get camlist query here
-	NSData* responseData = [bms_alerts BMS_getDisabledAlertBlockWithUser_1:userName
-                                                                   AndPass:userPass
-                                                                     ofMac:cp.mac_address];
-    
-    
-    NSString * raw_data = [[[NSString alloc] initWithData:responseData encoding: NSUTF8StringEncoding] autorelease];
-    NSLog(@"response: %@", raw_data);
-    //    Response:
-    //    ""<br>mac=[mac address]
-    //    <br>cameraname=[camera name]
-    //    <br>Total_disabled_alerts=[count]
-    //    <br>alert=<alert>
-    //    <br>alert=<alert>
-    //    <br>alert=<alert>
-    NSArray * token_list;
-    
-	token_list = [raw_data componentsSeparatedByString:@"<br>"];
-    if ([token_list count] > 4)
-    {
-        int alertCount;
-        
-        NSArray * token_list_1 = [[token_list objectAtIndex:3] componentsSeparatedByString:@"="];
-        
-        alertCount = [[token_list_1 objectAtIndex:1] intValue];
-        NSLog(@"Alert disabled is: %d", alertCount);
-        
-        int i = 0;
-        NSString * disabledAlert;
-        while (i < alertCount)
-        {
-            token_list_1 = [[token_list objectAtIndex:(i+4)] componentsSeparatedByString:@"="];
-            
-            disabledAlert= [token_list_1 objectAtIndex:1] ;
-            disabledAlert = [disabledAlert stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
-            
-            NSLog(@"disabledAlert disabled is:%@--> %@",[token_list objectAtIndex:(i+4)],  disabledAlert);
-            
-            if ( [disabledAlert isEqualToString:ALERT_TYPE_SOUND])
-            {
-                NSLog(@"Set sound  for cam: %@", cp.mac_address);
-                cp.soundAlertEnabled = FALSE;
-                
-            }
-            else if ( [disabledAlert isEqualToString:ALERT_TYPE_TEMP_HI] )
-            {
-                NSLog(@"Set tempHiAlertEnabled  for cam: %@", cp.mac_address);
-                cp.tempHiAlertEnabled = FALSE;
-                
-            }
-            else if ([disabledAlert isEqualToString:ALERT_TYPE_TEMP_LO] )
-            {
-                NSLog(@"Set temp low  for cam: %@", cp.mac_address);
-                cp.tempLoAlertEnabled = FALSE;
-            }
-            
-            i++;
-        }
-        
-        
-        
-        
-    }
-    else
-    {
-        NSLog(@"Token list count <4 :%@, %@, %@, %@",[token_list objectAtIndex:0],
-              [token_list objectAtIndex:1],
-              [token_list objectAtIndex:2],
-              [token_list objectAtIndex:3]);
-        
-        
-        
-    }
-    
-    
-    
     
     [alertTable reloadData];
     progressView.hidden = YES;

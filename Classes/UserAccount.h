@@ -8,7 +8,6 @@
 
 #define API_KEY @"API_KEY"
 
-#import "BMS_Communication.h"
 #import "CamProfile.h"
 #import "Util.h"
 #import "SetupData.h"
@@ -20,14 +19,12 @@
 {
 
 	NSString * userName;
-	NSString * userPass; 
-    BMS_Communication * bms_comm; 
+	NSString * userPass;
 	
 	id <ConnectionMethodDelegate> delegate;
 }
 @property (nonatomic,assign) id <ConnectionMethodDelegate> delegate;
 @property (nonatomic,retain) NSString * userName, * userPass;
-@property (nonatomic,retain) BMS_Communication * bms_comm;
 
 @property (nonatomic, retain) NSString *apiKey;
 

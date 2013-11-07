@@ -8,7 +8,6 @@
 
 #import <UIKit/UIKit.h>
 #import "CamProfile.h"
-#import "BMS_Communication.h"
 #import "MBP_iosAppDelegate.h"
 @interface AlertSettingViewController : UIViewController<UITableViewDelegate, UITableViewDataSource>
 {

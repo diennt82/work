@@ -17,8 +17,7 @@
 @synthesize cameraMenuItems, cameraMenuItemValues;
 
 
-@synthesize camChan; 
-@synthesize dev_s_comm ;
+@synthesize camChan;
 /*
  // The designated initializer.  Override if you create the controller programmatically and want to perform customization that is not appropriate for viewDidLoad.
  */
@@ -225,12 +224,6 @@
 		NSLog(@"com mode STUN"); 
 		//[self setupStunConnectionToMac:deviceMac];
         
-        if (self.dev_s_comm == nil)
-        {
-            NSLog(@"ERROR no COMM channel being set"); 
-        }
-        
-		
 	}
 	else 
 	{
@@ -411,22 +404,6 @@
         commMode ==  COMM_MODE_STUN_RELAY2 )
 	{
         
-        NSData * response_data;
-        response_data =  [self.dev_s_comm sendCommandThruUdtServer:command
-                                                           withMac:camChan.profile.mac_address
-                                                        AndChannel:camChan.channID];
-        
-        if (response_data != nil)
-        {
-            response = [[[NSString alloc] initWithData:response_data encoding: NSUTF8StringEncoding] autorelease];
-            
-        }
-        else
-        {
-            NSLog(@"updateVoxStatus: Failed to get response via Stun Server");
-        }
-
-
     }
     else
     { 
@@ -456,22 +433,6 @@
     if (  commMode == COMM_MODE_STUN      ||
         commMode ==  COMM_MODE_STUN_RELAY2 )
 	{
-        
-        NSData * response_data;
-        response_data =  [self.dev_s_comm sendCommandThruUdtServer:command
-                                                           withMac:camChan.profile.mac_address
-                                                        AndChannel:camChan.channID];
-        
-        if (response_data != nil)
-        {
-            response = [[[NSString alloc] initWithData:response_data encoding: NSUTF8StringEncoding] autorelease];
-            
-        }
-        else
-        {
-            NSLog(@"updateVoxStatus: Failed to get response via Stun Server");
-        }
-        
         
     }
     else
@@ -565,20 +526,6 @@
     if (  commMode == COMM_MODE_STUN      ||
         commMode ==  COMM_MODE_STUN_RELAY2 )
 	{
-        NSData * response_data; 
-        response_data =  [self.dev_s_comm sendCommandThruUdtServer:command 
-                                                           withMac:camChan.profile.mac_address
-                                                        AndChannel:camChan.channID];
-        
-        if (response_data != nil)
-        {
-            response = [[[NSString alloc] initWithData:response_data encoding: NSUTF8StringEncoding] autorelease];
-            
-        }
-        else
-        {
-            NSLog(@"updateVolumeLvl:Failed to get response via Stun Server"); 
-        }
         
     }
     else
@@ -641,20 +588,6 @@
     if (  commMode == COMM_MODE_STUN      ||
         commMode ==  COMM_MODE_STUN_RELAY2 )
 	{
-        NSData * response_data; 
-        response_data =  [self.dev_s_comm sendCommandThruUdtServer:command 
-                                                           withMac:camChan.profile.mac_address
-                                                        AndChannel:camChan.channID];
-        
-        if (response_data != nil)
-        {
-            response = [[[NSString alloc] initWithData:response_data encoding: NSUTF8StringEncoding] autorelease];
-            
-        }
-        else
-        {
-            NSLog(@"updateBrightnessLvl:Failed to get response via Stun Server"); 
-        }
         
     }
     else
@@ -1232,20 +1165,6 @@
     if (  commMode == COMM_MODE_STUN      ||
         commMode ==  COMM_MODE_STUN_RELAY2 )
 	{
-        NSData * response_data; 
-        response_data =  [self.dev_s_comm sendCommandThruUdtServer:command 
-                                                           withMac:camChan.profile.mac_address
-                                                        AndChannel:camChan.channID];
-        
-        if (response_data != nil)
-        {
-            response = [[[NSString alloc] initWithData:response_data encoding: NSUTF8StringEncoding] autorelease];
-            
-        }
-        else
-        {
-            NSLog(@"onInformation:Failed to get response via Stun Server"); 
-        }
         
     }
     else
@@ -1734,13 +1653,6 @@
     progressView.hidden = NO;
     [self.view bringSubviewToFront:progressView];
     
-	BMS_Communication * bms_comm; 
-	bms_comm = [[BMS_Communication alloc] initWithObject:self
-												Selector:@selector(changeNameSuccessWithResponse:) 
-											FailSelector:@selector(changeNameFailedWithError:) 
-											   ServerErr:@selector(changeNameFailedServerUnreachable)];
-	
-	[bms_comm BMS_camNameWithUser:userName AndPass:userPass macAddr:deviceMac camName:newName];
 }
 
 -(void) onSetVideoQuality:(int) vq
@@ -1830,16 +1742,6 @@
     if (self.camChan.communication_mode == COMM_MODE_STUN   ||
          self.camChan.communication_mode ==  COMM_MODE_STUN_RELAY2 )
     {
-        if (self.dev_s_comm != nil)
-        {
-            NSData * response_data;
-            response_data = [self.dev_s_comm sendCommandThruUdtServer:command
-                                                              withMac:self.camChan.profile.mac_address
-                                                           AndChannel:self.camChan.channID];
-            response = [[[NSString alloc] initWithData:response_data encoding: NSASCIIStringEncoding] autorelease];
-            
-        }
-        
     }
     else
     {
@@ -1853,15 +1755,6 @@
     if (self.camChan.communication_mode == COMM_MODE_STUN   ||
         self.camChan.communication_mode ==  COMM_MODE_STUN_RELAY2 )
     {
-        if (self.dev_s_comm != nil)
-        {
-            NSData * response_data;
-            response_data = [self.dev_s_comm sendCommandThruUdtServer:command
-                                                              withMac:self.camChan.profile.mac_address
-                                                           AndChannel:self.camChan.channID];
-            response = [[[NSString alloc] initWithData:response_data encoding: NSASCIIStringEncoding] autorelease];
-            
-        }
         
     }
     else
@@ -1910,15 +1803,7 @@
         if (self.camChan.communication_mode == COMM_MODE_STUN   ||
             self.camChan.communication_mode ==  COMM_MODE_STUN_RELAY2 )
         {
-            if (self.dev_s_comm != nil)
-            {
-                NSData * response_data; 
-                response_data = [self.dev_s_comm sendCommandThruUdtServer:command 
-                                                  withMac:self.camChan.profile.mac_address
-                                               AndChannel:self.camChan.channID];
-                response = [[[NSString alloc] initWithData:response_data encoding: NSASCIIStringEncoding] autorelease];
-                
-            }
+            
             
         }
         else
@@ -1951,14 +1836,6 @@
         if (self.camChan.communication_mode == COMM_MODE_STUN   ||
             self.camChan.communication_mode ==  COMM_MODE_STUN_RELAY2 )
         {
-            if (self.dev_s_comm != nil)
-            {
-                
-                [self.dev_s_comm sendCommandThruUdtServer:command 
-                                                  withMac:self.camChan.profile.mac_address
-                                               AndChannel:self.camChan.channID];
-                
-            }
             
         }
         else
@@ -2007,16 +1884,6 @@
     if (self.camChan.communication_mode == COMM_MODE_STUN   ||
         self.camChan.communication_mode ==  COMM_MODE_STUN_RELAY2 )
     {
-        if (self.dev_s_comm != nil)
-        {
-            NSData * response_data; 
-            response_data = [self.dev_s_comm sendCommandThruUdtServer:command 
-                                                              withMac:self.camChan.profile.mac_address
-                                                           AndChannel:self.camChan.channID];
-            response = [[[NSString alloc] initWithData:response_data encoding: NSASCIIStringEncoding] autorelease];
-            
-        }
-        
     }
     else
     {

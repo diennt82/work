@@ -12,9 +12,6 @@
 #import <UIKit/UIColor.h>
 #import <Foundation/NSRunLoop.h>
 
-
-
-
 #import "MBP_InitialSetupViewController.h"
 #import "AsyncSocket.h"
 #import "AviRecord.h"
@@ -26,12 +23,8 @@
 #import "HttpCommunication.h"
 #import "ConnectionMethodDelegate.h"
 #import "MBP_LoginOrRegistration.h"
-#import "MBP_Streamer.h"
 
-#import "AudioOutStreamer.h"
 #import "MBP_MenuViewController.h"
-#import "RemoteConnection.h"
-#import "StunCommunication.h"
 #import "ScanForCameraProtocol.h"
 #import "DashBoard_ViewController.h"
 

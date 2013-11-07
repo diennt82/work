@@ -509,7 +509,7 @@
     		break;
         }
     		
-        case SWITCHING_TO_RELAY_SERVER:// just update the dialog
+        case H264_SWITCHING_TO_RELAY_SERVER:// just update the dialog
         {
             NSLog(@"switching to relay server");
             
@@ -2001,7 +2001,7 @@
                                        
                                        //relay
                                        [self performSelectorOnMainThread:@selector(handleMessageOnMainThread:)
-                                                              withObject:[NSNumber numberWithInt:SWITCHING_TO_RELAY_SERVER]
+                                                              withObject:[NSNumber numberWithInt:H264_SWITCHING_TO_RELAY_SERVER]
                                                            waitUntilDone:NO];
                                        
                                        

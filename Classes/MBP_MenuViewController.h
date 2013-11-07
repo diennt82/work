@@ -9,12 +9,8 @@
 #import <UIKit/UIKit.h>
 #import "ConnectionMethodDelegate.h"
 #import "HttpCommunication.h"
-#import "BMS_Communication.h"
 #import "CameraPassword.h"
 #import "CamChannel.h"
-#import "StunCommunication.h"
-#import "RemoteConnection.h"
-#import "MBP_Streamer.h"
 #import "DashBoard_ViewController.h"
 
 
@@ -114,10 +110,7 @@
 	NSString * httpUserName, * httpUserPass; 
 
 	HttpCommunication * dev_comm; 
-	StunCommunication * dev_s_comm;
-	
 
-	
 	NSArray * levels;
 	NSArray * voxlevels;
 	NSArray * temperature;
@@ -142,7 +135,6 @@
 @property (nonatomic, retain) NSArray *cameraMenuItems;
 @property (nonatomic, retain) NSMutableDictionary *cameraMenuItemValues;
 
-@property (nonatomic, assign) StunCommunication *dev_s_comm; 
 @property (nonatomic, assign) CamChannel *  camChan; 
 
 - (id)initWithNibName:(NSString *)nibNameOrNil 
