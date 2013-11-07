@@ -509,29 +509,15 @@
         self.tmp_user_email  = _userEmail.text; 
         
  
-        NSLog(@"Start registration"); 
-#if JSON_FLAG
+        NSLog(@"Start registration");
+        
         BMS_JSON_Communication *jsonComm = [[BMS_JSON_Communication alloc] initWithObject:self
                                                                                  Selector:@selector(regSuccessWithResponse:)
                                                                              FailSelector:@selector(regFailedWithError:)
                                                                                 ServerErr:@selector(regFailedServerUnreachable)];
         [jsonComm registerAccountWithUsername:self.tmp_user_str andEmail:self.tmp_user_email andPassword:self.tmp_pass_str andPasswordConfirmation:self.tmp_pass_str];
-#else
-        BMS_Communication * bms_comm;
-        bms_comm = [[BMS_Communication alloc] initWithObject:self
-                                                    Selector:@selector(regSuccessWithResponse:) 
-                                                FailSelector:@selector(regFailedWithError:) 
-                                                   ServerErr:@selector(regFailedServerUnreachable)];
-        
-        [bms_comm BMS_registerWithUserId:self.tmp_user_str AndPass:self.tmp_pass_str AndEmail:self.tmp_user_email];
-#endif
 
     }
-
-    
-    
-    
-    
 }
 
 
@@ -558,10 +544,6 @@
 #endif 
 }
 
-
-
-
-#if JSON_FLAG
 - (void) regSuccessWithResponse:(NSDictionary *) responseData
 {
     //Store user/pass for later use
@@ -593,51 +575,7 @@
     [self.navigationController pushViewController:step10ViewController animated:NO];
     [step10ViewController release];
 }
-#else
-- (void) regSuccessWithResponse:(NSData*) responseData
-{
-	NSString * response = [NSString stringWithUTF8String:(const char *)[responseData bytes]] ;
-	NSLog(@"register success : %@", response );
 
-	//Store user/pass for later use
-	NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-    
-	[userDefaults setObject:self.tmp_user_email forKey:@"PortalUseremail"];
-	[userDefaults setObject:self.tmp_user_str forKey:@"PortalUsername"];
-	[userDefaults setObject:self.tmp_pass_str forKey:@"PortalPassword"];
-	[userDefaults synchronize];
-	
-
-	//Load step 10
-    NSLog(@"Load Step 10"); 
-    //Load the next xib
-    Step_10_ViewController *step10ViewController = nil;
-    
-    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
-    {
-        
-        step10ViewController = [[Step_10_ViewController alloc]
-                                initWithNibName:@"Step_10_ViewController_ipad" bundle:nil];
-        
-    }
-    else
-    {
-        
-        step10ViewController = [[Step_10_ViewController alloc]
-                                initWithNibName:@"Step_10_ViewController" bundle:nil];
-        
-    }
-
-    
-    
-    
-    [self.navigationController pushViewController:step10ViewController animated:NO];    
-    [step10ViewController release];
-    
-}
-#endif
-
-#if JSON_FLAG
 - (void) regFailedWithError:(NSDictionary *) error_response
 {
     NSString * ok = NSLocalizedStringWithDefaultValue(@"Ok",nil, [NSBundle mainBundle],
@@ -653,51 +591,6 @@
     [_alert show];
     [_alert release];
 }
-#else
-- (void) regFailedWithError:(NSHTTPURLResponse*) error_response
-{
-//	NSLog(@"register failed with error code:%d", [error_response statusCode]);
-//	
-//
-//    NSString * msg1 = NSLocalizedStringWithDefaultValue(@"Registration_Error",nil, [NSBundle mainBundle],
-//                                                        @"Registration Error" , nil);
-//    
-//    NSString * msg = NSLocalizedStringWithDefaultValue(@"Server_error_" ,nil, [NSBundle mainBundle],
-//                                                       @"Server error: %@" , nil);
-//    
-    NSString * ok = NSLocalizedStringWithDefaultValue(@"Ok",nil, [NSBundle mainBundle],
-                                                      @"Ok", nil);
-//
-//	
-//	//ERROR condition
-//	UIAlertView *alert = [[UIAlertView alloc]
-//						  initWithTitle:msg1
-//						  message:[NSString stringWithFormat:msg, [BMS_Communication getLocalizedMessageForError:[error_response statusCode]]] 
-//						  delegate:self
-//						  cancelButtonTitle:ok
-//						  otherButtonTitles:nil];
-//	[alert show];
-//	[alert release];
-    
-    NSString * title = NSLocalizedStringWithDefaultValue(@"Create_Account_Failed",nil, [NSBundle mainBundle],
-                                              @"Create Account Failed" , nil);
-//    NSString * msg = NSLocalizedStringWithDefaultValue(@"Create_Account_Failed_msg3",nil, [NSBundle mainBundle],
-//                                            @"Invalid email. Email address should be of the form somebody@somewhere.com"  , nil);
-    
-    //ERROR condition
-    UIAlertView *_alert = [[UIAlertView alloc]
-                           initWithTitle:title
-                           message:[BMS_Communication getLocalizedMessageForError:[error_response statusCode]]
-                           delegate:self
-                           cancelButtonTitle:ok
-                           otherButtonTitles:nil];
-    [_alert show];
-    [_alert release];
-    
-	return;
-	
-}
-#endif
 
 - (void) regFailedServerUnreachable
 {

@@ -242,8 +242,6 @@
     return FALSE; 
 }
 
-#if JSON_FLAG
-
 + (NSString *)GetUUID {
     CFUUIDRef theUUID = CFUUIDCreate(NULL);
     CFStringRef string = CFUUIDCreateString(NULL, theUUID);
@@ -303,40 +301,6 @@
     NSLog(@"push status = %d", [[responseRegNotifn objectForKey:@"status"] intValue]);
      
 }
-
-#else
-// Delegation methods
-- (void)application:(UIApplication *)app didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)devToken {
-
-    //NSLog(@"My token is: %@", devToken);
-
-
-    NSString * devTokenStr = [devToken hexadecimalString];
-    
-    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-    [userDefaults setObject:devTokenStr forKey:_push_dev_token]; 
-    [userDefaults synchronize];
-    
-    NSString * user_pass = (NSString *) [userDefaults objectForKey:@"PortalPassword"];
-    NSString * user_email  = (NSString*) [userDefaults objectForKey:@"PortalUseremail"];
-    
-    BMS_Communication * bms_comm1; 
-    bms_comm1  = [[BMS_Communication alloc] initWithObject:self
-                                                  Selector:nil 
-                                              FailSelector:nil
-                                                 ServerErr:nil];
-    
-    //NSData * response_dat =
-    [bms_comm1 BMS_sendPushRegistrationBlockWithUser:user_email
-                                                                     AndPass:user_pass
-                                                                       regId:devTokenStr];
-    
-
-    
-    
-   
-}
-#endif
 
 - (void)application:(UIApplication *)app didFailToRegisterForRemoteNotificationsWithError:(NSError *)err {
     NSLog(@"Error in registration. Error: %@", err);

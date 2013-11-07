@@ -226,7 +226,6 @@
     [parent presentViewController:navController animated:NO completion:^{}];
 }
 
-#if JSON_FLAG
 - (void)doSignIn :(NSTimer *) exp
 {
     BMS_JSON_Communication *jsonComm = [[BMS_JSON_Communication alloc] initWithObject:self
@@ -257,24 +256,6 @@
     
 }
 
-#else
--(void) doSignIn :(NSTimer *) exp
-{
-    
-#if 1
-    BMS_Communication * bms_comm;
-    bms_comm = [[BMS_Communication alloc] initWithObject:self
-                                                Selector:@selector(loginSuccessWithResponse:) 
-                                            FailSelector:@selector(loginFailedWithError:) 
-                                               ServerErr:@selector(loginFailedServerUnreachable)];
-    
-    [bms_comm BMS_loginWithUser:self.temp_user_str AndPass:self.temp_pass_str];
-#else 
-    [self loginFailedServerUnreachable];
-#endif
-
-}
-#endif
 -(BOOL) isCurrentConnection3G
 {
     Reachability *reachability = [Reachability reachabilityForInternetConnection];
@@ -818,10 +799,6 @@
     [userDefaults setBool:NO forKey:_OfflineMode];
     [userDefaults synchronize];
     
-#if (JSON_FLAG == 0)
-	NSString *response = [[[NSString alloc] initWithData:responseData encoding: NSASCIIStringEncoding] autorelease];
-#endif
-#if JSON_FLAG
 	if (responseData) {
         NSInteger statusCode = [[responseData objectForKey:@"status"] intValue];
         if (statusCode == 200) // success
@@ -866,71 +843,13 @@
             
         }
     }
-	
-#else
-	NSRange isEmail = [self.temp_user_str rangeOfString:@"@"];
-	if (isEmail.location != NSNotFound)
-	{
-		//Dont need to extract from response data 
-		self.temp_user_email = temp_user_str;
-		
-	}
-	else if ( [response hasPrefix:@"Email="])
-	{
-        
-        NSArray * substrings = [response componentsSeparatedByString:@"&"];
-        NSString * email_ = [substrings objectAtIndex:0]; 
-        NSString * id_ = [substrings objectAtIndex:1];
-        
-		self.temp_user_email = [email_ substringFromIndex:[@"Email=" length]]; 
-		self.temp_user_email = [self.temp_user_email stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
-        
-        self.temp_user_str =  [id_ substringFromIndex:[@"Id=" length]];
-        self.temp_user_str = [self.temp_user_str stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
-        
-       
-        
-    }
-	else 
-	{
-        NSLog(@"Invalid response: %@", response); 
-		//ERROR condition
-		self.progressView.hidden = YES;
-		
-        
-        NSString * title = NSLocalizedStringWithDefaultValue(@"Login_Error" ,nil, [NSBundle mainBundle],
-                                                           @"Login Error", nil);
-        NSString * msg = NSLocalizedStringWithDefaultValue(@"Login_Error_msg" ,nil, [NSBundle mainBundle],
-                                                           @"Server response invalid, please try again!", nil);
-
-        NSString * ok = NSLocalizedStringWithDefaultValue(@"Ok" ,nil, [NSBundle mainBundle],
-                                                           @"OK", nil);
-
-        [[[GAI sharedInstance] defaultTracker] trackEventWithCategory:@"Login"
-                                                           withAction:@"Login Failed"
-                                                            withLabel:@"Login failed because of an unhandled exception from server"
-                                                            withValue:nil];
-		UIAlertView *alert = [[UIAlertView alloc]
-							  initWithTitle:title
-							  message:msg
-							  delegate:self
-							  cancelButtonTitle:ok
-							  otherButtonTitles:nil];
-		[alert show];
-		[alert release];
-		return;
-		
-	}
-
-#endif
-		
+			
 	//Store user/pass for later use
 	
 	[userDefaults setObject:self.temp_user_str forKey:@"PortalUsername"];
 	[userDefaults setObject:self.temp_pass_str forKey:@"PortalPassword"];
-#if JSON_FLAG
     [userDefaults setObject:self.apiKey forKey:@"PortalApiKey"];
-#endif
+
 	[userDefaults synchronize];
 	
 	//MOVE on now .. 
@@ -945,16 +864,10 @@
      (UIRemoteNotificationType) (UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeAlert)];
        
     
-#if JSON_FLAG
     account = [[UserAccount alloc] initWithUser:self.temp_user_str
                                         andPass:self.temp_pass_str
                                       andApiKey:self.apiKey
                                     andListener:delegate];
-#else
-	account = [[UserAccount alloc] initWithUser:self.temp_user_email
-										AndPass:self.temp_pass_str
-								   WithListener: delegate];
-#endif
     [[[GAI sharedInstance] defaultTracker] trackEventWithCategory:@"Login"
                                                        withAction:@"Login Success"
                                                         withLabel:@"Login success"
@@ -989,11 +902,7 @@
 	//ERROR condition
 	UIAlertView *alert = [[UIAlertView alloc]
 						  initWithTitle:title
-#if (JSON_FLAG == 0)
-						  message:[NSString stringWithFormat:msg, [BMS_Communication getLocalizedMessageForError:[error_response statusCode]]]
-#else
                           message:[NSString stringWithFormat:msg, [responseError objectForKey:@"message"]]
-#endif
 						  delegate:self
 						  cancelButtonTitle:ok
 						  otherButtonTitles:nil];

@@ -1558,7 +1558,6 @@
     [dashBoard forceRelogin];
 }
 
-#if JSON_FLAG
 - (void) onCameraRemoveLocal
 {
 	NSString * command , *response;
@@ -1584,39 +1583,6 @@
 	[jsonComm deleteDeviceWithRegistrationId:mac andApiKey:apiKey];
 }
 
-#else
--(void) onCameraRemoveLocal
-{
-	NSString * command , *response; 
-	
-    
-    [delegate sendStatus:1];
-    
-	command = SWITCH_TO_DIRECT_MODE; 
-	response = [dev_comm sendCommandAndBlock:command];
-	
-	//NSLog(@"swithToDirect res: %@", response);
-	
-	command = RESTART_HTTP_CMD;
-	response = [dev_comm sendCommandAndBlock:command];
-	//NSLog(@"restart res: %@", response);
-	
-	BMS_Communication * bms_comm; 
-	bms_comm = [[BMS_Communication alloc] initWithObject:self
-												Selector:@selector(removeCamSuccessWithResponse:) 
-											FailSelector:@selector(removeCamFailedWithError:) 
-                                            ServerErr:@selector(removeCamFailedServerUnreachable)];
-	
-	[bms_comm BMS_delCamWithUser:userName AndPass:userPass macAddr:deviceMac];
-	
-    //Once we're here -- have to pop back all the way to cam list 
-    
-    
-    
-}
-#endif
-
-#if JSON_FLAG
 -(void) onCameraRemoveRemote
 {
 	BMS_JSON_Communication *jsonComm = [[BMS_JSON_Communication alloc] initWithObject:self
@@ -1629,19 +1595,6 @@
 	
 	[jsonComm deleteDeviceWithRegistrationId:mac andApiKey:apiKey];
 }
-
-#else
--(void) onCameraRemoveRemote
-{
-	BMS_Communication * bms_comm; 
-	bms_comm = [[BMS_Communication alloc] initWithObject:self
-												Selector:@selector(removeCamSuccessWithResponse:) 
-											FailSelector:@selector(removeCamFailedWithError:) 
-											   ServerErr:@selector(removeCamFailedServerUnreachable)];
-	
-	[bms_comm BMS_delCamWithUser:userName AndPass:userPass macAddr:deviceMac];
-}
-#endif
 
 //callback frm alert
 - (void) onCameraNameChanged:(NSString*) newName
@@ -1908,7 +1861,6 @@
 #pragma mark BMS_Communication callbacks 
 #pragma mark BMS_JSON_Communication callbacks 
 
-#if JSON_FLAG
 - (void) removeCamSuccessWithResponse:(NSDictionary *)responseData
 {
 	NSLog(@"removeCam success-- fatality");
@@ -1920,22 +1872,6 @@
 {
 	NSLog(@"removeCam failed errorcode: %d", [[errorResponse objectForKey:@"status"] intValue]);
 }
-
-#else
--(void) removeCamSuccessWithResponse:(NSData *) responsedata
-{
-	NSLog(@"removeCam success-- fatality");
-
-	//[delegate sendStatus:5 ];
-    
-    [self goBackAndReLogin];
-	
-}
--(void) removeCamFailedWithError:(NSHTTPURLResponse*) error_response
-{
-	NSLog(@"removeCam failed errorcode:");
-}
-#endif
 
 -(void) removeCamFailedServerUnreachable
 {

@@ -835,7 +835,6 @@
     [self.cameraList reloadData];
 }
 
-#if JSON_FLAG
 - (void)tableView: (UITableView *)tableView didSelectRowAtIndexPath: (NSIndexPath *)indexPath
 {
     [tableView deselectRowAtIndexPath:[tableView indexPathForSelectedRow]
@@ -913,66 +912,6 @@
 //       
 //    }
 }
-
-#else
-
-- (void)tableView: (UITableView *)tableView didSelectRowAtIndexPath: (NSIndexPath *)indexPath
-{
-    [tableView deselectRowAtIndexPath:[tableView indexPathForSelectedRow]
-                             animated:NO];
-    
-    if (self.editModeEnabled == TRUE)
-    {
-        return; // don't start streaming in Edit mode
-    }
-    
-    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-    
-    
-    BOOL isOffline = [userDefaults boolForKey:_OfflineMode];
-    
-
-    
-    CamChannel * ch = (CamChannel*)[listOfChannel objectAtIndex:indexPath.row] ;
-    
-    if (ch != nil && ch.profile != nil &&
-         (ch.profile.isInLocal ==YES ||
-              ((isOffline == FALSE ) && (ch.profile.minuteSinceLastComm <=5)) ) &&
-        !ch.waitingForStreamerToClose
-        )
-    {
-        NSLog(@"clear alert for: %@",ch.profile.mac_address);
-        // Clear all alert for this camera
-        [CameraAlert clearAllAlertForCamera:ch.profile.mac_address];
-        
-        [tableView reloadData];
-        
-        
-        [userDefaults setObject:ch.profile.mac_address forKey:CAM_IN_VEW];
-        [userDefaults synchronize];
-        
-        
-        CameraViewController * viewCamCtrl;
-        
-        viewCamCtrl = [[CameraViewController alloc] initWithNibName:@"CameraViewController"
-                                                             bundle:nil];
-        ch.waitingForStreamerToClose = YES;
-        viewCamCtrl.selected_channel = ch;
-        viewCamCtrl.camDelegate = self;
-        
-        [self.navigationController pushViewController:viewCamCtrl animated:NO];
-        [viewCamCtrl release];
-        
-        
-        [UIApplication sharedApplication].idleTimerDisabled=  YES;
-    }
-    else if(nil != ch)
-    {
-        NSLog(@"Selected Camera %@, Row = %d", ch.profile.name, indexPath.row);
-    }
-    
-}
-#endif
 
 - (void)reportClosedStatusWithSelectedChannel:(CamChannel *)selectedChannel
 {
@@ -1175,7 +1114,6 @@
     [self forceRelogin];
 }
 
-#if JSON_FLAG
 -(IBAction)alertSetting:(id)sender
 {
     progressView.hidden = NO;
@@ -1234,24 +1172,6 @@
 {
     NSLog(@"getPlaylistUnreachableSetver");
 }
-
-#else
--(IBAction)alertSetting:(id)sender
-{
-    CamChannel * ch = (CamChannel *) [listOfChannel objectAtIndex:((UIButton *)sender).tag];
-    
-    
-    
-    AlertSettingViewController * alertSettings = [[AlertSettingViewController alloc]initWithNibName:@"AlertSettingViewController" bundle:nil];
-    alertSettings.camera = ch.profile;
-    
-    
-    [self.navigationController pushViewController:alertSettings animated:NO];
-    [alertSettings release];
-    
-}
-#endif
-
 
 -(IBAction)removeCamera:(id)sender
 {
@@ -1604,7 +1524,7 @@
 }
 
 //callback frm alert
-#if JSON_FLAG
+
 - (void) onCameraNameChanged:(NSString *) newName
 {
     
@@ -1633,42 +1553,7 @@
     [self.view bringSubviewToFront:progressView];
     
 }
-#else
-- (void) onCameraNameChanged:(NSString*) newName
-{
-    
-    
-    CamChannel * ch = (CamChannel *) [listOfChannel objectAtIndex:self.edittedChannelIndex];
-    
-    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-	NSString * userName = (NSString *) [userDefaults objectForKey:@"PortalUseremail"];
-	NSString * userPass = (NSString *) [userDefaults objectForKey:@"PortalPassword"];
-	
-    
-	//Update BMS server with the new name;;
-	
-	BMS_Communication * bms_comm;
-	bms_comm = [[BMS_Communication alloc] initWithObject:self
-												Selector:@selector(changeNameSuccessWithResponse:)
-											FailSelector:@selector(changeNameFailedWithError:)
-											   ServerErr:@selector(changeNameFailedServerUnreachable)];
-	
-	[bms_comm BMS_camNameWithUser:userName
-                          AndPass:userPass
-                          macAddr:ch.profile.mac_address
-                          camName:newName];
-    
-    
-    ch.profile.name = newName;
-    
-    progressView.hidden  = NO;
-    [self.view addSubview:progressView];
-    [self.view bringSubviewToFront:progressView]; 
-    
-}
-#endif
 
-#if JSON_FLAG
 -(void) changeNameSuccessWithResponse:(NSDictionary *) responseData
 {
     [cameraList reloadData] ;
@@ -1694,45 +1579,12 @@
     [cameraList reloadData] ;
 }
 
-#else
--(void) changeNameSuccessWithResponse:(NSData *) responsedata
-{
-    
-    
-    [cameraList reloadData] ;
-    
-    //TODO: save to offline data
-    
-    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-	NSString * userName = (NSString *) [userDefaults objectForKey:@"PortalUseremail"];
-	NSString * userPass = (NSString *) [userDefaults objectForKey:@"PortalPassword"];
-	
-
-    
-	UserAccount * account = [[UserAccount alloc] initWithUser:userName
-										AndPass:userPass
-								   WithListener: nil];
-    //RE- READ data from server and update offline record 
-    [account readCameraListAndUpdate];
-    
-    
-    progressView.hidden  = YES;
-
-}
--(void) changeNameFailedWithError:(NSHTTPURLResponse*) error_response
-{
-    
-    [cameraList reloadData] ;
-}
-#endif
-
 -(void) changeNameFailedServerUnreachable
 {
     
     [cameraList reloadData] ;
 }
 
-#if JSON_FLAG
 -(void) onCameraRemoveLocal
 {
 	NSString * command , *response;
@@ -1759,49 +1611,6 @@
     [jsonComm deleteDeviceWithRegistrationId:mac andApiKey:[userDefaults objectForKey:@"PortalApiKey"]];
 }
 
-#else
--(void) onCameraRemoveLocal
-{
-	NSString * command , *response;
-	
-    CamChannel * ch = (CamChannel *) [listOfChannel objectAtIndex:self.edittedChannelIndex];
-    
-    HttpCommunication * dev_comm = [[HttpCommunication alloc]init];
-    dev_comm.device_ip = ch.profile.ip_address;
-    dev_comm.device_port = ch.profile.port;
-    
-	command = SWITCH_TO_DIRECT_MODE;
-	response = [dev_comm sendCommandAndBlock:command];
-	
-    
-	
-	command = RESTART_HTTP_CMD;
-	response = [dev_comm sendCommandAndBlock:command];
-    
-	
-    
-//    [self onCameraRemoveRemote];
-    
-    
-    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-	NSString * userName = (NSString *) [userDefaults objectForKey:@"PortalUseremail"];
-	NSString * userPass = (NSString *) [userDefaults objectForKey:@"PortalPassword"];
-	
-    
-    
-    
-	BMS_Communication * bms_comm;
-	bms_comm = [[BMS_Communication alloc] initWithObject:self
-												Selector:@selector(removeCamSuccessWithResponse:)
-											FailSelector:@selector(removeCamFailedWithError:)
-											   ServerErr:@selector(removeCamFailedServerUnreachable)];
-	
-	[bms_comm BMS_delCamWithUser:userName AndPass:userPass macAddr:ch.profile.mac_address];
-   	
-}
-#endif
-
-#if JSON_FLAG
 -(void) onCameraRemoveRemote
 {
     CamChannel * ch = (CamChannel *) [listOfChannel objectAtIndex:self.edittedChannelIndex];
@@ -1816,33 +1625,7 @@
     
     [jsonComm deleteDeviceWithRegistrationId:mac andApiKey:[userDefaults objectForKey:@"PortalApiKey"]];
 }
-#else
--(void) onCameraRemoveRemote
-{
-    
-    CamChannel * ch = (CamChannel *) [listOfChannel objectAtIndex:self.edittedChannelIndex];
-    
-    
-    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-	NSString * userName = (NSString *) [userDefaults objectForKey:@"PortalUseremail"];
-	NSString * userPass = (NSString *) [userDefaults objectForKey:@"PortalPassword"];
-	
-    
-    
-    
-	BMS_Communication * bms_comm;
-	bms_comm = [[BMS_Communication alloc] initWithObject:self
-												Selector:@selector(removeCamSuccessWithResponse:)
-											FailSelector:@selector(removeCamFailedWithError:)
-											   ServerErr:@selector(removeCamFailedServerUnreachable)];
-	
-	[bms_comm BMS_delCamRemoteWithUser:userName AndPass:userPass macAddr:ch.profile.mac_address];
-    
-    
-}
-#endif
 
-#if JSON_FLAG
 - (void) removeCamSuccessWithResponse:(NSDictionary *)responseData
 {
 	NSLog(@"removeCam success-- fatality");
@@ -1856,28 +1639,11 @@
 	NSLog(@"removeCam failed errorcode:");
     [self forceRelogin];
 }
-#else
--(void) removeCamSuccessWithResponse:(NSData *) responsedata
-{
-	NSLog(@"removeCam success-- fatality");
-    
-    [self forceRelogin];
-	
-}
--(void) removeCamFailedWithError:(NSHTTPURLResponse*) error_response
-{
-	NSLog(@"removeCam failed errorcode:");
-    [self forceRelogin];
-}
-#endif
 
 -(void) removeCamFailedServerUnreachable
 {
 	NSLog(@"server unreachable");
     [self forceRelogin];
 }
-
-#pragma mark -
-
 
 @end

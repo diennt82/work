@@ -34,19 +34,11 @@
 -(void) query_camera_list_blocked;
 
 //Get cam list callbacks
-#if JSON_FLAG
 - (void)getCamListSuccess:(NSDictionary *)raw_data;
-#else
--(void) getCamListSuccess:(NSData*) raw_data;
-#endif
 -(void) getCamListFailure:(NSHTTPURLResponse*) error_response; 
 - (void)getCamListServerUnreachable; 
 
-#if JSON_FLAG
 -(NSMutableArray *) parse_camera_list:(NSArray *)raw;
-#else
--(NSMutableArray *) parse_camera_list:(NSString*) raw;
-#endif
 
 -(void) sync_online_and_offline_data:(NSMutableArray *) online_list;
 

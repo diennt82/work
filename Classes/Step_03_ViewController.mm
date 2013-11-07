@@ -335,7 +335,6 @@
 	}
 }
 
-#if JSON_FLAG
 -(void) moveToNextStep
 {
     HttpCommunication * comm = [[HttpCommunication alloc] init];
@@ -427,86 +426,6 @@
     
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
-
-#else
--(void) moveToNextStep
-{
-    HttpCommunication * comm = [[HttpCommunication alloc] init];
-    [comm autorelease];
-    
-    NSString * fw_version = [comm sendCommandAndBlock:GET_VERSION];
-    
-    
-    if ( fw_version != nil                   &&
-        [fw_version isEqualToString:VERSION_18_037]
-        )
-    {
-        //Fatality!!!
-        NSLog(@"Failed validity check -- go back");
-        
-        
-        NSString * msg = nil;
-        NSString * ok = NSLocalizedStringWithDefaultValue(@"Ok",nil, [NSBundle mainBundle],
-                                                          @"Ok", nil);
-        
-        UIAlertView *alert;
-        
-        
-        msg =NSLocalizedStringWithDefaultValue(@"Server_error_maccheck" ,nil, [NSBundle mainBundle],
-                                               @"This camera is not registered. Setup camera failed." , nil);
-        
-        alert = [[UIAlertView alloc]
-                 initWithTitle:NSLocalizedStringWithDefaultValue(@"AddCam_Error" ,nil, [NSBundle mainBundle],
-                                                                 @"AddCam Error" , nil)
-                 message:msg
-                 delegate:self
-                 cancelButtonTitle:ok
-                 otherButtonTitles:nil];
-        
-        alert.tag = ALERT_FWCHECK_FAILED;
-        
-        [alert show];
-        [alert release];   
-    }
-    else
-    {
-        
-        NSLog(@"Load step 4");
-        //Load the next xib
-        Step_04_ViewController *step04ViewController = nil;
-        
-        
-        
-        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
-        {
-
-            step04ViewController = [[Step_04_ViewController alloc]
-                                    initWithNibName:@"Step_04_ViewController_ipad" bundle:nil];
-            
-        }
-        else
-        {
-            step04ViewController = [[Step_04_ViewController alloc]
-                                    initWithNibName:@"Step_04_ViewController" bundle:nil];  
-        }
-
-        step04ViewController.cameraMac =  self.cameraMac;
-        step04ViewController.cameraName  =self.cameraName;
-        
-        [self.navigationController pushViewController:step04ViewController animated:NO];
-        
-        [step04ViewController release];
-        
-    }
-    
-    
-    
-    
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
-    
-    
-}
-#endif
 
 -(void) setupFailedFWCheck
 {
