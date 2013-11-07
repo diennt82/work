@@ -511,10 +511,10 @@
  
         NSLog(@"Start registration");
         
-        BMS_JSON_Communication *jsonComm = [[BMS_JSON_Communication alloc] initWithObject:self
+        BMS_JSON_Communication *jsonComm = [[[BMS_JSON_Communication alloc] initWithObject:self
                                                                                  Selector:@selector(regSuccessWithResponse:)
                                                                              FailSelector:@selector(regFailedWithError:)
-                                                                                ServerErr:@selector(regFailedServerUnreachable)];
+                                                                                ServerErr:@selector(regFailedServerUnreachable)] autorelease];
         [jsonComm registerAccountWithUsername:self.tmp_user_str andEmail:self.tmp_user_email andPassword:self.tmp_pass_str andPasswordConfirmation:self.tmp_pass_str];
 
     }

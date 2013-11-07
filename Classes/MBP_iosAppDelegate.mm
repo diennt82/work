@@ -270,10 +270,10 @@
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     NSString *apiKey = [userDefaults objectForKey:@"PortalApiKey"];
     
-    BMS_JSON_Communication *jsonComm = [[BMS_JSON_Communication alloc] initWithObject:self
+    BMS_JSON_Communication *jsonComm = [[[BMS_JSON_Communication alloc] initWithObject:self
                                                                              Selector:nil
                                                                          FailSelector:nil
-                                                                            ServerErr:nil];
+                                                                            ServerErr:nil] autorelease];
    
     //API
     NSDictionary *responseDict = [jsonComm registerAppBlockedWithName:applicationName

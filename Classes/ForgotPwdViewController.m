@@ -97,10 +97,10 @@
     self.navigationItem.leftBarButtonItem.enabled = NO ;
     self.navigationItem.rightBarButtonItem.enabled = NO;
     
-    BMS_JSON_Communication *jsonComm = [[BMS_JSON_Communication alloc] initWithObject:self
+    BMS_JSON_Communication *jsonComm = [[[BMS_JSON_Communication alloc] initWithObject:self
                                                                              Selector:@selector(resetSuccessWithResponse:)
                                                                          FailSelector:@selector(resetFailedWithError:)
-                                                                            ServerErr:@selector(resetFailedServerUnreachable)];
+                                                                            ServerErr:@selector(resetFailedServerUnreachable)] autorelease];
     [jsonComm resetPasswordWithUserID:userEmail];
 }
 

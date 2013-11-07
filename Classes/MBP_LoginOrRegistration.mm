@@ -228,10 +228,10 @@
 
 - (void)doSignIn :(NSTimer *) exp
 {
-    BMS_JSON_Communication *jsonComm = [[BMS_JSON_Communication alloc] initWithObject:self
+    BMS_JSON_Communication *jsonComm = [[[BMS_JSON_Communication alloc] initWithObject:self
                                                                              Selector:@selector(loginSuccessWithResponse:)
                                                                          FailSelector:@selector(loginFailedWithError:)
-                                                                            ServerErr:@selector(loginFailedServerUnreachable)];
+                                                                            ServerErr:@selector(loginFailedServerUnreachable)] autorelease];
     [jsonComm loginWithLogin:self.temp_user_str andPassword:self.temp_pass_str];
     
     
@@ -806,10 +806,10 @@
             self.apiKey = [[responseData objectForKey:@"data"] objectForKey:@"authentication_token"];
             
             // Get user info (email)
-            BMS_JSON_Communication *jsonComm = [[BMS_JSON_Communication alloc] initWithObject:self
+            BMS_JSON_Communication *jsonComm = [[[BMS_JSON_Communication alloc] initWithObject:self
                                                                                      Selector:@selector(getUserInfoSuccessWithResponse:)
                                                                                  FailSelector:@selector(getUserInfoFailedWithResponse:)
-                                                                                    ServerErr:@selector(getUserInfoFailedServerUnreachable)];
+                                                                                    ServerErr:@selector(getUserInfoFailedServerUnreachable)] autorelease];
             [jsonComm getUserInfoWithApiKey:self.apiKey];
         }
         else

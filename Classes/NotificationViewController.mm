@@ -206,10 +206,10 @@
     
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     
-    BMS_JSON_Communication *jsonComm = [[BMS_JSON_Communication alloc] initWithObject:self
+    BMS_JSON_Communication *jsonComm = [[[BMS_JSON_Communication alloc] initWithObject:self
                                                                              Selector:@selector(getEventSuccessWithResponse:)
                                                                          FailSelector:@selector(getEventFailedWithResponse:)
-                                                                            ServerErr:@selector(getEventUnreachableSetver)];
+                                                                            ServerErr:@selector(getEventUnreachableSetver)] autorelease];
     NSString *mac = self.cameraMacNoColon;
     
     NSString *apiKey = [userDefaults objectForKey:@"PortalApiKey"];
@@ -266,10 +266,10 @@
     
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     
-    BMS_JSON_Communication *jsonComm = [[BMS_JSON_Communication alloc] initWithObject:self
+    BMS_JSON_Communication *jsonComm = [[[BMS_JSON_Communication alloc] initWithObject:self
                                                                              Selector:@selector(getEventSuccessWithResponse:)
                                                                          FailSelector:@selector(getEventFailedWithResponse:)
-                                                                            ServerErr:@selector(getEventUnreachableSetver)];
+                                                                            ServerErr:@selector(getEventUnreachableSetver)] autorelease];
     NSString *mac = self.cameraMacNoColon;
     
     NSString *apiKey = [userDefaults objectForKey:@"PortalApiKey"];
@@ -342,10 +342,10 @@
     
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     
-    BMS_JSON_Communication *jsonComm = [[BMS_JSON_Communication alloc] initWithObject:self
+    BMS_JSON_Communication *jsonComm = [[[BMS_JSON_Communication alloc] initWithObject:self
                                                                              Selector:@selector(getEventSuccessWithResponse:)
                                                                          FailSelector:@selector(getEventFailedWithResponse:)
-                                                                            ServerErr:@selector(getEventUnreachableSetver)];
+                                                                            ServerErr:@selector(getEventUnreachableSetver)] autorelease];
     NSString *mac = self.cameraMacNoColon;
     
     NSString *apiKey = [userDefaults objectForKey:@"PortalApiKey"];
@@ -399,10 +399,10 @@
 
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     
-    BMS_JSON_Communication *jsonComm = [[BMS_JSON_Communication alloc] initWithObject:self
+    BMS_JSON_Communication *jsonComm = [[[BMS_JSON_Communication alloc] initWithObject:self
                                                                              Selector:@selector(getPlaylistSuccessWithResponse:)
                                                                          FailSelector:@selector(getPlaylistFailedWithResponse:)
-                                                                            ServerErr:@selector(getPlaylistUnreachableSetver)];
+                                                                            ServerErr:@selector(getPlaylistUnreachableSetver)] autorelease];
     NSString *mac = self.cameraMacNoColon;
     
     NSString *apiKey = [userDefaults objectForKey:@"PortalApiKey"];

@@ -1123,10 +1123,10 @@
     CamChannel *ch = (CamChannel *) [listOfChannel objectAtIndex:((UIButton *)sender).tag];
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     
-    BMS_JSON_Communication *jsonComm = [[BMS_JSON_Communication alloc] initWithObject:self
+    BMS_JSON_Communication *jsonComm = [[[BMS_JSON_Communication alloc] initWithObject:self
                                                                              Selector:@selector(getPlaylistSuccessWithResponse:)
                                                                          FailSelector:@selector(getPlaylistFailedWithResponse:)
-                                                                            ServerErr:@selector(getPlaylistUnreachableSetver)];
+                                                                            ServerErr:@selector(getPlaylistUnreachableSetver)] autorelease];
     NSString *mac = [Util strip_colon_fr_mac:ch.profile.mac_address];
     NSString *apiKey = [userDefaults objectForKey:@"PortalApiKey"];
     
@@ -1536,10 +1536,10 @@
 	
 	//Update BMS_JSON server with the new name;
     
-    BMS_JSON_Communication *jsonComm = [[BMS_JSON_Communication alloc] initWithObject:self
+    BMS_JSON_Communication *jsonComm = [[[BMS_JSON_Communication alloc] initWithObject:self
                                                                              Selector:@selector(changeNameSuccessWithResponse:)
                                                                          FailSelector:@selector(changeNameFailedWithError:)
-                                                                            ServerErr:@selector(changeNameFailedServerUnreachable)];
+                                                                            ServerErr:@selector(changeNameFailedServerUnreachable)] autorelease];
     NSString *mac = [Util strip_colon_fr_mac:ch.profile.mac_address];
     [jsonComm updateDeviceBasicInfoWithRegistrationId:mac
                                               andName:newName
@@ -1601,10 +1601,10 @@
 	command = RESTART_HTTP_CMD;
 	response = [dev_comm sendCommandAndBlock:command];
     
-    BMS_JSON_Communication *jsonComm = [[BMS_JSON_Communication alloc] initWithObject:self
+    BMS_JSON_Communication *jsonComm = [[[BMS_JSON_Communication alloc] initWithObject:self
                                                                              Selector:@selector(removeCamSuccessWithResponse:)
                                                                          FailSelector:@selector(removeCamFailedWithError:)
-                                                                            ServerErr:@selector(removeCamFailedServerUnreachable)];
+                                                                            ServerErr:@selector(removeCamFailedServerUnreachable)] autorelease];
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     NSString *mac = [Util strip_colon_fr_mac:ch.profile.mac_address];
     NSLog(@"mac_address = %@", mac);
@@ -1615,10 +1615,10 @@
 {
     CamChannel * ch = (CamChannel *) [listOfChannel objectAtIndex:self.edittedChannelIndex];
     
-    BMS_JSON_Communication *jsonComm = [[BMS_JSON_Communication alloc] initWithObject:self
+    BMS_JSON_Communication *jsonComm = [[[BMS_JSON_Communication alloc] initWithObject:self
                                                                              Selector:@selector(removeCamSuccessWithResponse:)
                                                                          FailSelector:@selector(removeCamFailedWithError:)
-                                                                            ServerErr:@selector(removeCamFailedServerUnreachable)];
+                                                                            ServerErr:@selector(removeCamFailedServerUnreachable)] autorelease];
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     NSString *mac = [Util strip_colon_fr_mac:ch.profile.mac_address];
     NSLog(@"mac_address = %@", mac);

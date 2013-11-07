@@ -1572,10 +1572,10 @@
     
     NSLog(@"On Camera remove local");
 	
-    BMS_JSON_Communication *jsonComm = [[BMS_JSON_Communication alloc] initWithObject:self
+    BMS_JSON_Communication *jsonComm = [[[BMS_JSON_Communication alloc] initWithObject:self
                                                                              Selector:@selector(removeCamSuccessWithResponse:)
                                                                          FailSelector:@selector(removeCamFailedWithError:)
-                                                                            ServerErr:@selector(removeCamFailedServerUnreachable)];
+                                                                            ServerErr:@selector(removeCamFailedServerUnreachable)] autorelease];
     NSUserDefaults *userDefaluts = [NSUserDefaults standardUserDefaults];
     NSString *apiKey = [userDefaluts objectForKey:@"PortalApiKey"];
     NSString *mac = [Util strip_colon_fr_mac:deviceMac];
@@ -1585,10 +1585,10 @@
 
 -(void) onCameraRemoveRemote
 {
-	BMS_JSON_Communication *jsonComm = [[BMS_JSON_Communication alloc] initWithObject:self
+	BMS_JSON_Communication *jsonComm = [[[BMS_JSON_Communication alloc] initWithObject:self
                                                                              Selector:@selector(removeCamSuccessWithResponse:)
                                                                          FailSelector:@selector(removeCamFailedWithError:)
-                                                                            ServerErr:@selector(removeCamFailedServerUnreachable)];
+                                                                            ServerErr:@selector(removeCamFailedServerUnreachable)] autorelease];
     NSUserDefaults *userDefaluts = [NSUserDefaults standardUserDefaults];
     NSString *apiKey = [userDefaluts objectForKey:@"PortalApiKey"];
     NSString *mac = [Util strip_colon_fr_mac:deviceMac];

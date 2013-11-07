@@ -667,10 +667,10 @@
 	// send a command to remove camera
 	NSString *mac = [Util strip_colon_fr_mac:self.cameraMac];
 	
-    BMS_JSON_Communication *jsonComm = [[BMS_JSON_Communication alloc] initWithObject:self
+    BMS_JSON_Communication *jsonComm = [[[BMS_JSON_Communication alloc] initWithObject:self
                                                                              Selector:@selector(removeCamSuccessWithResponse:)
                                                                          FailSelector:@selector(removeCamFailedWithError:)
-                                                                            ServerErr:@selector(removeCamFailedServerUnreachable)];
+                                                                            ServerErr:@selector(removeCamFailedServerUnreachable)] autorelease];
     
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     [jsonComm deleteDeviceWithRegistrationId:mac andApiKey:[userDefaults objectForKey:@"PortalApiKey"]];
