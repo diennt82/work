@@ -6,10 +6,7 @@
 //  Copyright 2012 Smart Panda Ltd. All rights reserved.
 //
 
-
-#import "CamChannel.h"
-#import "CamProfile.h"
-#import "Util.h"
+#import <CameraScanner/CameraScanner.h>
 
 /* Change this every time the setup data changed -- 
  */ 

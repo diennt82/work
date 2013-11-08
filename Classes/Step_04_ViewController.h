@@ -7,7 +7,9 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "HttpCommunication.h"
+
+#import <CameraScanner/CameraScanner.h>
+
 #import "WifiEntry.h"
 #import "WifiListParser.h"
 #import "Step_05_ViewController.h"

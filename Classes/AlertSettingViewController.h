@@ -7,8 +7,9 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "CamProfile.h"
+#import <CameraScanner/CameraScanner.h>
 #import "MBP_iosAppDelegate.h"
+
 @interface AlertSettingViewController : UIViewController<UITableViewDelegate, UITableViewDataSource>
 {
     IBOutlet UITableViewCell *soundCellView;

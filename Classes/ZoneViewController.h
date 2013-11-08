@@ -7,9 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "CamChannel.h"
+#import <CameraScanner/CameraScanner.h>
 #import <MonitorCommunication/MonitorCommunication.h>
-#import "HttpCommunication.h"
 
 @protocol ZoneViewControlerDeleate <NSObject>
 

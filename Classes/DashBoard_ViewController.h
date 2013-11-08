@@ -7,10 +7,9 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <CameraScanner/CameraScanner.h>
 #import "MBP_FirstPage.h"
 #import "ConnectionMethodDelegate.h"
-#import "CamChannel.h"
-#import "CamProfile.h"
 #import "Account_ViewController.h"
 #import "AlertSettingViewController.h"
 
@@ -18,6 +17,7 @@
 #import "AlertPrompt.h"
 #import "GAITrackedViewController.h"
 #import "PlaylistViewController.h"
+
 @class  EditCameraCell; 
 
 #define  MAX_CAM_ALLOWED 4

@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import <sqlite3.h>
+#import <CameraScanner/CameraScanner.h>
 
 #define DEBUG_CAM_ALERT_DB 0 
 

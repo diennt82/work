@@ -7,8 +7,9 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <CameraScanner/CameraScanner.h>
+
 #include "client_main.h"
-#import "CamChannel.h"
 
 //NSDefault
 #define APP_IS_ON_SYMMETRIC_NAT @"app_is_on_sym_nat"

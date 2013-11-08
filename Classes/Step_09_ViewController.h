@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <MonitorCommunication/MonitorCommunication.h>
 
 #import "Reachability.h"
 #import "ToUViewController.h"

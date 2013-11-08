@@ -8,12 +8,11 @@
 
 #define API_KEY @"API_KEY"
 
-#import "CamProfile.h"
-#import "Util.h"
+#import <CameraScanner/CameraScanner.h>
+#import <MonitorCommunication/MonitorCommunication.h>
+
 #import "SetupData.h"
 #import "ConnectionMethodDelegate.h"
-
-#import <MonitorCommunication/MonitorCommunication.h>
 
 @interface UserAccount : NSObject
 {

@@ -7,10 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <CameraScanner/CameraScanner.h>
 #import "ConnectionMethodDelegate.h"
-#import "HttpCommunication.h"
-#import "CameraPassword.h"
-#import "CamChannel.h"
 #import "DashBoard_ViewController.h"
 
 

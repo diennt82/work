@@ -11,25 +11,15 @@
 #import <UIKit/UIScreen.h>
 #import <UIKit/UIColor.h>
 #import <Foundation/NSRunLoop.h>
+#import <CameraScanner/CameraScanner.h>
 
 #import "MBP_InitialSetupViewController.h"
-#import "AsyncSocket.h"
-
-#import "CamProfile.h"
-#import "CamChannel.h"
 #import "PublicDefine.h"
-
-#import "HttpCommunication.h"
 #import "ConnectionMethodDelegate.h"
 #import "MBP_LoginOrRegistration.h"
-
 #import "MBP_MenuViewController.h"
-#import "ScanForCameraProtocol.h"
 #import "DashBoard_ViewController.h"
-
 #import "CameraAlert.h"
-#import "Bonjour.h"
-
 #import "NotificationViewController.h"
 
 

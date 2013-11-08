@@ -7,23 +7,19 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "CamChannel.h"
+#import <CameraScanner/CameraScanner.h>
+#import <H264MediaPlayer/H264MediaPlayer.h>
+#import <MonitorCommunication/MonitorCommunication.h>
 
-#import "HttpCommunication.h"
 #import "PlaylistInfo.h"
 #import "PlaybackViewController.h"
 #import "PlaylistCell.h"
 #import "MTStackViewController.h"
-#import "HttpCommunication.h"
 #import "PlayListViewController.h"
 #import "H264PlayerListener.h"
 #import "PlayerCallbackHandler.h"
-#import "ScanForCamera.h"
 #import "MBP_LoginOrRegistration.h"
 #import "ZoneViewController.h"
-
-#import <MonitorCommunication/MonitorCommunication.h>
-#import <H264MediaPlayer/H264MediaPlayer.h>
 
 
 

@@ -7,10 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <CameraScanner/CameraScanner.h>
+
 #import "MBP_FirstPage.h"
-#import "DeviceConfiguration.h"
 #import "Util.h"
-#import "HttpCommunication.h"
 #import "Step_08_ViewController.h"
 #import "Step_07_ViewController.h"
 

@@ -7,9 +7,14 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "ScanForCamera.h"
+#import <CameraScanner/CameraScanner.h>
+#import <MonitorCommunication/MonitorCommunication.h>
+
 #import "Step_12_ViewController.h"
 #import "Step_11_ViewController.h"
+#import "MBP_FirstPage.h"
+#import "Step_02_ViewController.h"
+
 @class ScanForCamera;
 
 #define HOME_SSID @"home_ssid"
