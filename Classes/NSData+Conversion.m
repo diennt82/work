@@ -6,6 +6,7 @@
 //  Copyright (c) 2012 Smart Panda Ltd. All rights reserved.
 //
 
+#import "NSData+Conversion.h"
 
 @implementation NSData (NSData_Conversion)
 
