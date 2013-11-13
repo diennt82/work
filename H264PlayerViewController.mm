@@ -344,10 +344,10 @@
                                                    top,
                                                    destWidth, destHeight);
             //re-set the size 
-            if (h264Streamer != NULL)
-            {
-                h264Streamer->setVideoSurface(self.imageViewVideo);
-            }
+//            if (h264Streamer != NULL)
+//            {
+//                h264Streamer->setVideoSurface(self.imageViewVideo);
+//            }
 
             break;
         }
@@ -1991,9 +1991,11 @@
                                {
                                    //handle Bad response
                                    
+                                   NSArray * args = [NSArray arrayWithObjects:
+                                                     [NSNumber numberWithInt:MEDIA_ERROR_SERVER_DIED],nil];
                                    //force server died
                                    [self performSelectorOnMainThread:@selector(handleMessageOnMainThread:)
-                                                          withObject:[NSNumber numberWithInt:MEDIA_ERROR_SERVER_DIED]
+                                                          withObject:args
                                                        waitUntilDone:NO];
                                }
                            }
@@ -2070,11 +2072,12 @@
                                                                                             andCommand:cmd_string
                                                                                              andApiKey:apiKey];
 
-                                       
+                                       NSArray * args = [NSArray arrayWithObjects:
+                                                         [NSNumber numberWithInt:H264_SWITCHING_TO_RELAY_SERVER],nil];
                                        
                                        //relay
                                        [self performSelectorOnMainThread:@selector(handleMessageOnMainThread:)
-                                                              withObject:[NSNumber numberWithInt:H264_SWITCHING_TO_RELAY_SERVER]
+                                                              withObject:args
                                                            waitUntilDone:NO];
                                        
                                        
@@ -2084,9 +2087,11 @@
                                {
                                    NSLog(@"Respone error : can't parse \"body\"field from %@", responseDict);
                                    
+                                   NSArray * args = [NSArray arrayWithObjects:
+                                                     [NSNumber numberWithInt:MEDIA_ERROR_SERVER_DIED],nil];
                                    //force server died
                                    [self performSelectorOnMainThread:@selector(handleMessageOnMainThread:)
-                                                          withObject:[NSNumber numberWithInt:MEDIA_ERROR_SERVER_DIED]
+                                                          withObject:args
                                                        waitUntilDone:NO];
 
                                }
@@ -2096,8 +2101,11 @@
                            {
                                NSLog(@"SERVER unreachable (timeout) : responseDict == nil --> Need test this more");
                                
+                               NSArray * args = [NSArray arrayWithObjects:
+                                                 [NSNumber numberWithInt:MEDIA_ERROR_SERVER_DIED],nil];
+
                                [self performSelectorOnMainThread:@selector(handleMessageOnMainThread:)
-                                                      withObject:[NSNumber numberWithInt:MEDIA_ERROR_SERVER_DIED]
+                                                      withObject:args
                                                    waitUntilDone:NO];
                            }
                        }
@@ -2180,7 +2188,9 @@
                                    {
                                        self.selectedChannel.stream_url = [[NSBundle mainBundle] pathForResource:@"streamvga" ofType:@"sdp"];
                                    }
-                                   else if ([modeVideo isEqualToString:@"720p_10_926"])
+                                   else if ([modeVideo isEqualToString:@"720p_10_926"] ||
+                                            [modeVideo isEqualToString:@"480p_926"] ||
+                                            [modeVideo isEqualToString:@"360p_926"] )
                                    {
                                        self.selectedChannel.stream_url = [[NSBundle mainBundle] pathForResource:@"stream720p_10_926_alaw" ofType:@"sdp"];
                                    }
@@ -2247,10 +2257,11 @@
                            else
                            {
                                //handle Bad response
-                               
+                               NSArray * args = [NSArray arrayWithObjects:
+                                                 [NSNumber numberWithInt:MEDIA_ERROR_SERVER_DIED],nil];
                                //force server died
                                [self performSelectorOnMainThread:@selector(handleMessageOnMainThread:)
-                                                      withObject:[NSNumber numberWithInt:MEDIA_ERROR_SERVER_DIED]
+                                                      withObject:args
                                                    waitUntilDone:NO];
                            }
                        }
@@ -3192,8 +3203,10 @@
                 }
                 else // if this happen, the activity rotates forever (by right: go back to camera list)
                 {
+                    NSArray * args = [NSArray arrayWithObjects:
+                                      [NSNumber numberWithInt:MEDIA_ERROR_SERVER_DIED],nil];
                     [self performSelectorOnMainThread:@selector(handleMessageOnMainThread:)
-                                           withObject:[NSNumber numberWithInt:MEDIA_ERROR_SERVER_DIED]
+                                           withObject:args
                                         waitUntilDone:NO];
                 }
                 

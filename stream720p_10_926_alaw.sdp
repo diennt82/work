@@ -6,7 +6,7 @@ t=0 0
 c=IN IP4 127.0.0.1
 m=video 13000 RTP/AVP 96
 a=rtpmap:96 H264/90000
-a=fmtp:96 packetization-mode=1; profile-level-id=42 01f;; sprop-parameter-sets=Z0IAH+kAoAty,aM44gA==
+a=fmtp:96 packetization-mode=1; profile-level-id=42 01f;; sprop-parameter-sets=,aM44gA==
 a=control:track0
 m=audio 12000  RTP/AVP 97
 c=IN IP4 127.0.0.1
