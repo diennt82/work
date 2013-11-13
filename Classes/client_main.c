@@ -93,11 +93,12 @@ static int  start_rtcp_forwader(void * data_ptr )
     while ( g.quit != 1 )
     {
         printf("Waiting for packet..  \n");
+        //after 1s it 'll timeout
         n = recvfrom(peer->local_serv_sock_r,mesg,1024,0,(struct sockaddr *)&cliaddr,&len);
         
         
-        printf("Received the following:\n");
-        printf("%s",mesg);
+         printf("Received %d bytes \n",n);
+        //printf("%s",mesg);
         //forward to remote_peer
         
         if (n >0 && peer->remote_peer.sin_addr.s_addr != 0)
@@ -457,6 +458,11 @@ void set_destination_for_peer(struct peer * _peer, char * fwd_ip, int localPort)
         _peer->local_serv_addr_r.sin_family = AF_INET;
         _peer->local_serv_addr_r.sin_addr.s_addr=htonl(INADDR_ANY); //inet_addr(fwd_ip); //Local host
         _peer->local_serv_addr_r.sin_port=htons(localPort+1); //RTCP port
+        
+        struct timeval tv;
+        tv.tv_sec = 1;
+        tv.tv_usec = 0;
+        setsockopt(_peer->local_serv_sock_r, SOL_SOCKET, SO_RCVTIMEO,&tv,sizeof(struct timeval));
         
         
         bind( _peer->local_serv_sock_r,(struct sockaddr *)&_peer->local_serv_addr_r,sizeof(_peer->local_serv_addr_r));

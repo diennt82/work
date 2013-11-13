@@ -267,17 +267,90 @@
 {
     //NSLog(@"Got msg: %d ext1:%d ext2:%d ", msg, ext1, ext2);
     
-    [self performSelectorOnMainThread:@selector(handleMessageOnMainThread:) withObject:[NSNumber numberWithInt:msg] waitUntilDone:NO];
+    NSArray * args = [NSArray arrayWithObjects:
+                      [NSNumber numberWithInt:msg],
+                      [NSNumber numberWithInt:ext1],
+                      [NSNumber numberWithInt:ext2], nil];
+    
+    [self performSelectorOnMainThread:@selector(handleMessageOnMainThread:) withObject:args waitUntilDone:NO];
 }
 
-- (void)handleMessageOnMainThread: (NSNumber *)numberMsg
+- (void)handleMessageOnMainThread: (NSArray * )args
 {
+    
+    NSNumber *numberMsg =(NSNumber *) [args objectAtIndex:0];
+   
+    int ext1 = -1, ext2=-1;
     int msg = [numberMsg integerValue];
+    
+    if ([args count] >= 3)
+    {
+        ext1 = [[args objectAtIndex:1] integerValue];
+        
+        ext2 = [[args objectAtIndex:2] integerValue];
+    }
     
     //NSLog(@"currentMediaStatus: %d", msg);
     
     switch (msg)
     {
+        case MEDIA_INFO_VIDEO_SIZE:
+        {
+            NSLog(@"video size: %d x %d", ext1, ext2);
+            float top =0 , left =0;
+            float destWidth;
+            float destHeight;
+            /*
+             * Maintain Aspect Ratio
+             */
+            float ratio = (float) ext1/ (float)ext2;
+            
+            float fw = self.imageViewVideo.frame.size.height * ratio;
+            float fh = self.imageViewVideo.frame.size.width  / ratio;
+            
+            NSLog(@"video adjusted size:r= %f    fw=%f  fh=%f", ratio, fw, fh);
+            
+            
+            if ( fw > self.imageViewVideo.frame.size.width)
+            {
+                // Use the current width with new-height
+                destWidth = self.imageViewVideo.frame.size.width ;
+                destHeight = fh;
+                
+                // so need to adjust the origin
+                left = self.imageViewVideo.frame.origin.x;
+                top = (self.imageViewVideo.frame.size.height - fh)/2;
+                
+                
+                
+            }
+            else
+            {
+                // Use the new-width with current height
+                
+                destWidth =  fw;
+                destHeight = self.imageViewVideo.frame.size.height;
+                
+                // so need to adjust the origin
+                left = (self.imageViewVideo.frame.size.width - fw)/2;
+                top = self.imageViewVideo.frame.origin.y;
+
+            }
+             NSLog(@"video adjusted size: %f x %f", destWidth, destHeight);
+            
+            
+            
+            self.imageViewVideo.frame = CGRectMake(left,
+                                                   top,
+                                                   destWidth, destHeight);
+            //re-set the size 
+            if (h264Streamer != NULL)
+            {
+                h264Streamer->setVideoSurface(self.imageViewVideo);
+            }
+
+            break;
+        }
         case MEDIA_INFO_BITRATE_BPS:
         {
             if (userWantToCancel == TRUE)
@@ -2704,6 +2777,8 @@
 
             CGRect screenBounds = [[UIScreen mainScreen] bounds];
             
+            
+#if 0
             CGRect newRect = CGRectMake(0, 96, 1024, 576);
             
             NSLog(@"width: %f", screenBounds.size.width);
@@ -2713,6 +2788,9 @@
             {
                 newRect = CGRectMake(0, 304, 1920, 1080);
             }
+            
+#endif
+            CGRect newRect = CGRectMake(0, 0, screenBounds.size.height, screenBounds.size.width);
             
             self.imageViewVideo.frame = newRect;
             
@@ -2750,7 +2828,7 @@
             
             if (screenBounds.size.height == 1920)
             {
-                newRect = CGRectMake(0, 304, 1200, 675);
+                newRect = CGRectMake(0, 44, 1200, 675);
                 self.viewCtrlButtons.frame = CGRectMake(0, 476, _viewCtrlButtons.frame.size.width + 432, _viewCtrlButtons.frame.size.height);
             }
             
@@ -2794,6 +2872,12 @@
 // SLIDE MENU
 //    self.backBarBtnItem.target = self.stackViewController;
 //    self.backBarBtnItem.action = @selector(toggleLeftViewController);
+    
+    if (h264Streamer != NULL)
+    {
+        //trigger re-cal of videosize
+        h264Streamer->videoSizeChanged();
+    }
 }
 
 - (void) checkIphone5Size: (UIInterfaceOrientation)orientation
