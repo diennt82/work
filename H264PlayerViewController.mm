@@ -2109,7 +2109,7 @@
                                    }
                                    else if ([modeVideo isEqualToString:@"720p_10_926"])
                                    {
-                                       self.selectedChannel.stream_url = [[NSBundle mainBundle] pathForResource:@"stream720p_10_926" ofType:@"sdp"];
+                                       self.selectedChannel.stream_url = [[NSBundle mainBundle] pathForResource:@"stream720p_10_926_alaw" ofType:@"sdp"];
                                    }
                                    else //if([modeVideo isEqualToString:@"720p_10"] || [modeVideo isEqualToString:@"720p_15"])
                                    {

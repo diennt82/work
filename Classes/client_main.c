@@ -78,6 +78,43 @@ struct global  * get_stun_data()
 }
 
 
+static int  start_rtcp_forwader(void * data_ptr )
+{
+    
+    struct sockaddr_in  cliaddr ;
+    int n  = 0;
+    unsigned int  len ;
+    char mesg[1024];
+    pj_status_t  status ;
+    struct peer * peer = (struct peer *) data_ptr;
+    
+    printf("RTCP FWD starting.. \n");
+    len = sizeof(cliaddr);
+    while ( g.quit != 1 )
+    {
+        printf("Waiting for packet..  \n");
+        n = recvfrom(peer->local_serv_sock_r,mesg,1024,0,(struct sockaddr *)&cliaddr,&len);
+        
+        
+        printf("Received the following:\n");
+        printf("%s",mesg);
+        //forward to remote_peer
+        
+        if (n >0 && peer->remote_peer.sin_addr.s_addr != 0)
+        {
+            status = pj_stun_sock_sendto(peer->stun_sock, NULL, mesg, n, 0,
+                                         &peer->remote_peer,
+                                         pj_sockaddr_get_len(&peer->remote_peer));
+            if (status != PJ_SUCCESS)
+                my_perror("send RTCP to remote peer failed", status);
+        }
+    }
+    
+    printf("RTCP FWD Exiting.. \n");
+    return 0; 
+}
+
+
 
 static int init()
 {
@@ -399,9 +436,7 @@ void set_destination_for_peer(struct peer * _peer, char * fwd_ip, int localPort)
     {
         _peer->local_serv_sock = camera_socket;
  
-//        PJ_LOG(3,(THIS_FILE, "created local sock:%d",
-//                  _peer->local_serv_sock) );
-        
+
         memset(&_peer->local_serv_addr, 0, sizeof( struct sockaddr_in));
         _peer->local_serv_addr.sin_family = AF_INET;
         _peer->local_serv_addr.sin_addr.s_addr=inet_addr(fwd_ip); //Local host
@@ -410,6 +445,29 @@ void set_destination_for_peer(struct peer * _peer, char * fwd_ip, int localPort)
         
     }
     
+    
+    int read_camera_socket = -1;
+    pj_status_t status;
+    
+    if ((read_camera_socket = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP)) != 0 )
+    {
+        _peer->local_serv_sock_r = read_camera_socket;
+        
+        memset(&_peer->local_serv_addr_r, 0, sizeof( struct sockaddr_in));
+        _peer->local_serv_addr_r.sin_family = AF_INET;
+        _peer->local_serv_addr_r.sin_addr.s_addr=htonl(INADDR_ANY); //inet_addr(fwd_ip); //Local host
+        _peer->local_serv_addr_r.sin_port=htons(localPort+1); //RTCP port
+        
+        
+        bind( _peer->local_serv_sock_r,(struct sockaddr *)&_peer->local_serv_addr_r,sizeof(_peer->local_serv_addr_r));
+        
+        status =  pj_thread_create(g.pool, "RTCP FWDER" ,
+                                   start_rtcp_forwader, _peer , 0, 0,
+                                   &_peer->rtcp_thread) ;
+        
+        
+    }
+
     
     
 }
@@ -463,240 +521,6 @@ static pj_bool_t stun_sock_on_rx_data(pj_stun_sock *stun_sock,
     
     return PJ_TRUE;
 }
-
-
-static void menu(void)
-{
-    pj_turn_session_info info;
-    char client_state[20], relay_addr[80], peer0_addr[80], peer1_addr[80];
-    
-    if (g.relay) {
-        pj_turn_sock_get_info(g.relay, &info);
-        strcpy(client_state, pj_turn_state_name(info.state));
-        if (info.state >= PJ_TURN_STATE_READY)
-            pj_sockaddr_print(&info.relay_addr, relay_addr, sizeof(relay_addr), 3);
-        else
-            strcpy(relay_addr, "0.0.0.0:0");
-    } else {
-        strcpy(client_state, "NULL");
-        strcpy(relay_addr, "0.0.0.0:0");
-    }
-    
-    pj_sockaddr_print(&g.peer[0].mapped_addr, peer0_addr, sizeof(peer0_addr), 3);
-    pj_sockaddr_print(&g.peer[1].mapped_addr, peer1_addr, sizeof(peer1_addr), 3);
-    
-    
-    puts("\n");
-    puts("+=====================================================================+");
-    puts("|             CLIENT                 |             PEER-0             |");
-    puts("|                                    |                                |");
-    printf("| State     : %-12s           | Address: %-21s |\n",
-           client_state, peer0_addr);
-    printf("| Relay addr: %-21s  |                                |\n",
-           relay_addr);
-    puts("|                                    | 0  Send data to relay address  |");
-    puts("| a      Allocate relay              |                                |");
-    puts("| p,pp   Set permission for peer 0/1 +--------------------------------+");
-    puts("| s,ss   Send data to peer 0/1       |             PEER-1             |");
-    puts("| b,bb   BindChannel to peer 0/1     |                                |");
-    printf("| x      Delete allocation           | Address: %-21s |\n",
-           peer1_addr);
-    puts("+------------------------------------+                                |");
-    puts("| q  Quit                  d  Dump   | 1  Send data to relay adderss  |");
-    puts("+------------------------------------+--------------------------------+");
-    printf(">>> ");
-    //fflush(stdout);
-}
-
-
-static void console_main(void)
-{
-    while (!g.quit) {
-        char input[32];
-        struct peer *peer;
-        pj_status_t status;
-        
-        menu();
-        
-        //if (fgets(input, sizeof(input), stdin) == NULL)
-          //  break;
-        
-        switch (input[0]) {
-            case 'a':
-                create_relay();
-                break;
-            case 'd':
-                pj_pool_factory_dump(&g.cp.factory, PJ_TRUE);
-                break;
-            case 's':
-                if (g.relay == NULL) {
-                    puts("Error: no relay");
-                    continue;
-                }
-                if (input[1]!='s')
-                    peer = &g.peer[0];
-                else
-                    peer = &g.peer[1];
-                
-                strcpy(input, "Hello from client");
-                status = pj_turn_sock_sendto(g.relay, (const pj_uint8_t*)input,
-                                             strlen(input)+1,
-                                             &peer->mapped_addr,
-                                             pj_sockaddr_get_len(&peer->mapped_addr));
-                if (status != PJ_SUCCESS)
-                    my_perror("turn_udp_sendto() failed", status);
-                break;
-            case 'b':
-                if (g.relay == NULL) {
-                    puts("Error: no relay");
-                    continue;
-                }
-                if (input[1]!='b')
-                    peer = &g.peer[0];
-                else
-                    peer = &g.peer[1];
-                
-                status = pj_turn_sock_bind_channel(g.relay, &peer->mapped_addr,
-                                                   pj_sockaddr_get_len(&peer->mapped_addr));
-                if (status != PJ_SUCCESS)
-                    my_perror("turn_udp_bind_channel() failed", status);
-                break;
-            case 'p':
-                if (g.relay == NULL) {
-                    puts("Error: no relay");
-                    continue;
-                }
-                if (input[1]!='p')
-                    peer = &g.peer[0];
-                else
-                    peer = &g.peer[1];
-                
-                status = pj_turn_sock_set_perm(g.relay, 1, &peer->mapped_addr, 1);
-                if (status != PJ_SUCCESS)
-                    my_perror("pj_turn_sock_set_perm() failed", status);
-                break;
-            case 'x':
-                if (g.relay == NULL) {
-                    puts("Error: no relay");
-                    continue;
-                }
-                destroy_relay();
-                break;
-            case '0':
-            case '1':
-                if (g.relay == NULL) {
-                    puts("No relay");
-                    break;
-                }
-                peer = &g.peer[input[0]-'0'];
-                sprintf(input, "Hello from peer%d", input[0]-'0');
-                pj_stun_sock_sendto(peer->stun_sock, NULL, input, strlen(input)+1, 0,
-                                    &g.relay_addr, pj_sockaddr_get_len(&g.relay_addr));
-                break;
-            case 'q':
-                g.quit = PJ_TRUE;
-                break;
-        }
-    }
-}
-
-
-
-static void usage(void)
-{
-    puts("Usage: pjturn_client TURN-SERVER [OPTIONS]");
-    puts("");
-    puts("where TURN-SERVER is \"host[:port]\"");
-    puts("");
-    puts("and OPTIONS:");
-    puts(" --tcp, -T             Use TCP to connect to TURN server");
-    puts(" --realm, -r REALM     Set realm of the credential to REALM");
-    puts(" --username, -u UID    Set username of the credential to UID");
-    puts(" --password, -p PASSWD Set password of the credential to PASSWD");
-    puts(" --fingerprint, -F     Use fingerprint for outgoing requests");
-    puts(" --stun-srv, -S  NAME  Use this STUN srv instead of TURN for Binding discovery");
-    puts(" --nameserver, -N IP   Activate DNS SRV, use this DNS server");
-    puts(" --help, -h");
-}
-
-int main_not_used(int argc, char *argv[])
-{
-    struct pj_getopt_option long_options[] = {
-        { "realm",	1, 0, 'r'},
-        { "username",	1, 0, 'u'},
-        { "password",	1, 0, 'p'},
-        { "fingerprint",0, 0, 'F'},
-        { "tcp",        0, 0, 'T'},
-        { "help",	0, 0, 'h'},
-        { "stun-srv",   1, 0, 'S'},
-        { "nameserver", 1, 0, 'N'}
-    };
-    int c, opt_id;
-    char *pos;
-    pj_status_t status;
-    
-    while((c=pj_getopt_long(argc,argv, "r:u:p:S:N:hFT", long_options, &opt_id))!=-1) {
-        switch (c) {
-            case 'r':
-                o.realm = pj_optarg;
-                break;
-            case 'u':
-                o.user_name = pj_optarg;
-                break;
-            case 'p':
-                o.password = pj_optarg;
-                break;
-            case 'h':
-                usage();
-                return 0;
-            case 'F':
-                o.use_fingerprint = PJ_TRUE;
-                break;
-            case 'T':
-                o.use_tcp = PJ_TRUE;
-                break;
-            case 'S':
-                o.stun_server = pj_optarg;
-                break;
-            case 'N':
-                o.nameserver = pj_optarg;
-                break;
-            default:
-                printf("Argument \"%s\" is not valid. Use -h to see help",
-                       argv[pj_optind]);
-                return 1;
-        }
-    }
-    
-    if (pj_optind == argc) {
-        puts("Error: TARGET is needed");
-        usage();
-        return 1;
-    }
-    
-    if ((pos=pj_ansi_strchr(argv[pj_optind], ':')) != NULL) {
-        o.srv_addr = argv[pj_optind];
-        *pos = '\0';
-        o.srv_port = pos+1;
-    } else {
-        o.srv_addr = argv[pj_optind];
-    }
-    
-    if ((status=init()) != 0)
-        goto on_return;
-    
-    //if ((status=create_relay()) != 0)
-    //	goto on_return;
-    
-    console_main();
-    
-on_return:
-    client_shutdown();
-    return status ? 1 : 0;
-}
-
-
-
 
 
 /**** Added    */

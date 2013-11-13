@@ -26,10 +26,17 @@ struct peer
 {
     pj_stun_sock   *stun_sock;
     pj_sockaddr	    mapped_addr;
+
     /* 20131001: added destination */
-    
     struct sockaddr_in local_serv_addr;
     int local_serv_sock;
+    
+    struct sockaddr_in local_serv_addr_r;
+    int local_serv_sock_r;
+    
+    struct pj_sockaddr_in remote_peer;
+    
+    pj_thread_t  * rtcp_thread;
     
     
 };

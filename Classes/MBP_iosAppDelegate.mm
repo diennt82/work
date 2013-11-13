@@ -68,7 +68,7 @@
     
     
     
-    /* check the server name file */
+    /* check the server name file
     
     
     NSError *error;
@@ -89,7 +89,7 @@
         
         [BMS_JSON_Communication setServerInput:@"http://api.simplimonitor.com/v1"];
     }
-
+*/
     
     
     
@@ -275,12 +275,17 @@
                                                                          FailSelector:nil
                                                                             ServerErr:nil] autorelease];
    
-    //API
-    NSDictionary *responseDict = [jsonComm registerAppBlockedWithName:applicationName
-                                                        andDeviceCode:uuidString
-                                                   andSoftwareVersion:swVersion
-                                                            andApiKey:apiKey];
+//    //API
+//    NSDictionary *responseDict = [jsonComm registerAppBlockedWithName:applicationName
+//                                                        andDeviceCode:uuidString
+//                                                   andSoftwareVersion:swVersion
+//                                                            andApiKey:apiKey];
     
+
+    //Demo.sm.com
+    NSDictionary *responseDict = [jsonComm registerAppBlockedWithName: applicationName
+                                                        andDeviceCode: uuidString
+                                                            andApiKey: apiKey];
 
     
     NSString *appId = [[responseDict objectForKey:@"data"] objectForKey:@"id"];

@@ -288,14 +288,14 @@
     
     //NSLog(@"-----fwVersion = %@, ,model = %@", fwVersion, model);
     
-//    NSTimeZone *currentTimeZone = [NSTimeZone localTimeZone];
-//    NSLog(@"%d", [currentTimeZone secondsFromGMT]);
-//    
-//    NSDate *now = [NSDate date];
-//    
-//    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-//    [formatter setDateFormat:@"ZZZ"];
-//    NSString *stringFromDate = [formatter stringFromDate:now];
+    NSTimeZone *currentTimeZone = [NSTimeZone localTimeZone];
+    NSLog(@"%d", [currentTimeZone secondsFromGMT]);
+    
+    NSDate *now = [NSDate date];
+    
+    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+    [formatter setDateFormat:@"ZZZ"];
+    NSString *stringFromDate = [formatter stringFromDate:now];
     
     BMS_JSON_Communication *jsonComm = [[[BMS_JSON_Communication alloc] initWithObject:self
                                                                              Selector:@selector(addCamSuccessWithResponse:)
@@ -305,23 +305,23 @@
     NSString * camName = (NSString *) [userDefaults objectForKey:@"CameraName"];
     
 //    //DEMO.SM.COM
-//    [jsonComm registerDeviceWithDeviceName:camName
-//                                  andRegId:mac
-//                             andDeviceType:@"Camera"
-//                                  andModel:model //@"blink1_hd"
-//                                   andMode:@"upnp"
-//                              andFwVersion:fwVersion
-//                               andTimeZone:stringFromDate
-//                                 andApiKey:apiKey];
+    [jsonComm registerDeviceWithDeviceName:camName
+                                  andRegId:mac
+                             andDeviceType:@"Camera"
+                                  andModel:@"blink1_hd"
+                                   andMode:@"upnp"
+                              andFwVersion:fwVersion
+                               andTimeZone:stringFromDate
+                                 andApiKey:apiKey];
 
-    [jsonComm registerDeviceWithDeviceModelID:@"3"
-                                      andName:camName
-                            andRegistrationID:mac
-                                      andMode:@"upnp"
-                                 andFwVersion:fwVersion
-                                  andTimeZone:@"+07.00"
-                          andSubscriptionType:@"tier1"
-                                    andApiKey:apiKey];
+//    [jsonComm registerDeviceWithDeviceModelID:@"3"
+//                                      andName:camName
+//                            andRegistrationID:mac
+//                                      andMode:@"upnp"
+//                                 andFwVersion:fwVersion
+//                                  andTimeZone:@"+07.00"
+//                          andSubscriptionType:@"tier1"
+//                                    andApiKey:apiKey];
 
 }
 

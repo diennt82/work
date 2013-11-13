@@ -138,9 +138,11 @@ extern int cleanup_pj();
     
     stun_global_data  = get_stun_data();
     aPeer = &stun_global_data->peer[0];
-    [self sendProbesFromSock:aPeer->stun_sock
+    [self sendProbesFromPeer:aPeer
                         ToIp:ip
                      andPort:port];
+    
+    
 }
 -(void) sendVideoProbesToIp:(NSString *) ip andPort:(int) port
 {
@@ -149,7 +151,7 @@ extern int cleanup_pj();
     
     stun_global_data  = get_stun_data();
     aPeer = &stun_global_data->peer[1];
-    [self sendProbesFromSock:aPeer->stun_sock
+    [self sendProbesFromPeer:aPeer
                         ToIp:ip
                      andPort:port];
 }
@@ -286,22 +288,20 @@ extern int cleanup_pj();
 
 
 
--(void) sendProbesFromSock:(pj_stun_sock *)fromSock ToIp: (NSString *) ip_ andPort:(int) port_
+-(void) sendProbesFromPeer:(struct peer *)peer ToIp: (NSString *) ip_ andPort:(int) port_
 {
-    struct pj_sockaddr_in servaddr;
-    
     const char * sendline = "CMD:KICK_START";
     
-    memset(&servaddr,0,sizeof(servaddr));
-    servaddr.sin_family = PJ_AF_INET;
-    servaddr.sin_addr.s_addr=inet_addr([ip_ UTF8String]);
-    servaddr.sin_port=htons(port_);
+    memset(&peer->remote_peer,0,sizeof(peer->remote_peer));
+    peer->remote_peer.sin_family = PJ_AF_INET;
+    peer->remote_peer.sin_addr.s_addr=inet_addr([ip_ UTF8String]);
+    peer->remote_peer.sin_port=htons(port_);
     
     
     pj_status_t status;
     
-    status = pj_stun_sock_sendto(fromSock , NULL, sendline, strlen(sendline)+1, 0,
-                                 &servaddr, pj_sockaddr_get_len(&servaddr));
+    status = pj_stun_sock_sendto(peer->stun_sock , NULL, sendline, strlen(sendline)+1, 0,
+                                 &peer->remote_peer, pj_sockaddr_get_len(&peer->remote_peer));
     
     if (status == PJ_SUCCESS)
     {
