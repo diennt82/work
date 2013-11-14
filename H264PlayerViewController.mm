@@ -103,15 +103,17 @@
     CFURLRef soundFileURLRef = CFBundleCopyResourceURL(mainbundle, CFSTR("beep"), CFSTR("wav"), NULL);
     AudioServicesCreateSystemSoundID(soundFileURLRef, &soundFileObject);
     
+    CFRelease(soundFileURLRef);
+    
     //TODO: check if IPAD -> load IPAD
     
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
     {
-        self.zoneViewController = [[ZoneViewController alloc] initWithNibName:@"ZoneViewController_ipad" bundle:[NSBundle mainBundle]];
+        self.zoneViewController = [[[ZoneViewController alloc] initWithNibName:@"ZoneViewController_ipad" bundle:[NSBundle mainBundle]] autorelease];
     }
     else
     {
-        self.zoneViewController = [[ZoneViewController alloc] initWithNibName:@"ZoneViewController" bundle:[NSBundle mainBundle]];
+        self.zoneViewController = [[[ZoneViewController alloc] initWithNibName:@"ZoneViewController" bundle:[NSBundle mainBundle]] autorelease];
 
     }
     
@@ -1022,7 +1024,6 @@
 {
     if (self.httpComm != nil)
     {
-        [self.httpComm release];
         self.httpComm = nil;
     }
     if (self.selectedChannel.stream_url != nil)
@@ -1034,7 +1035,7 @@
     
     
     
-    self.httpComm = [[HttpCommunication alloc]init];
+    self.httpComm = [[[HttpCommunication alloc]init] autorelease];
     self.httpComm.device_ip = self.selectedChannel.profile.ip_address;
     self.httpComm.device_port = self.selectedChannel.profile.port;
     
@@ -1060,7 +1061,7 @@
         NSLog(@"created a remote streamer ");
         if (self.client == nil)
         {
-            self.client = [[StunClient alloc] init] ;
+            self.client = [[[StunClient alloc] init] autorelease];
         }
         
         
@@ -1184,7 +1185,7 @@
 
 - (void)startStream_bg
 {
-    status_t status;
+    status_t status = !NO_ERROR;
     
     //Store current SSID - to check later
 	NSString * streamingSSID = [CameraPassword fetchSSIDInfo];
@@ -1362,11 +1363,11 @@
 
 -(void) stopStunStream
 {
-    if (self.client != nil)
+    if (client != nil)
     {
-        [self.client shutdown];
-        [self.client release];
-        self.client = nil;
+        [client shutdown];
+        [client release];
+        client = nil;
     }
     
     
@@ -1832,7 +1833,7 @@
                 {
                     NSRange range = [zoneString rangeOfString:@","];
                     
-                    NSArray *zoneArr = [NSArray array];
+                    NSArray *zoneArr;// = [NSArray array];
                     
                     if (range.location != NSNotFound)
                     {
@@ -1871,11 +1872,11 @@
         //create new
         if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
         {
-            self.zoneViewController = [[ZoneViewController alloc] initWithNibName:@"ZoneViewController_ipad" bundle:[NSBundle mainBundle]];
+            self.zoneViewController = [[[ZoneViewController alloc] initWithNibName:@"ZoneViewController_ipad" bundle:[NSBundle mainBundle]] autorelease];
         }
         else
         {
-            self.zoneViewController = [[ZoneViewController alloc] initWithNibName:@"ZoneViewController" bundle:[NSBundle mainBundle]];
+            self.zoneViewController = [[[ZoneViewController alloc] initWithNibName:@"ZoneViewController" bundle:[NSBundle mainBundle]] autorelease];
             
         }
         
@@ -1952,7 +1953,7 @@
                                                                                              FailSelector:nil
                                                                                                 ServerErr:nil] autorelease];
                        NSDictionary *responseDict;
-                       NSLog(@"%@", responseDict);
+                       //NSLog(@"%@", responseDict);
                        
                        
                        if (isBehindSymmetricNat == TRUE) // USE RELAY
@@ -2068,7 +2069,8 @@
                                        /* close current session  before continue*/
                                        cmd_string = @"action=command&command=close_p2p_rtsp_stun";
                                        
-                                       responseDict =  [jsonComm  sendCommandBlockedWithRegistrationId:mac
+                                       //responseDict =
+                                       [jsonComm  sendCommandBlockedWithRegistrationId:mac
                                                                                             andCommand:cmd_string
                                                                                              andApiKey:apiKey];
 
@@ -2935,7 +2937,7 @@
              titleForRow:(NSInteger)row
             forComponent:(NSInteger)component
 {
-    NSString *textRow;
+    NSString *textRow = @"";
     switch (row)
     {
         case 0:
@@ -3136,11 +3138,11 @@
             NSLog(@"Re-start streaming for : %@", self.selectedChannel.profile.mac_address);
             
             
-            if (self.client != nil)
+            if (client != nil)
             {
-                [self.client shutdown];
-                [self.client release];
-                self.client = nil;
+                [client shutdown];
+                [client release];
+                client = nil;
             }
             
             
@@ -3378,7 +3380,7 @@
     
     //[self.client shutdown];
 
-    [self.client release];
+    [client release];
     [_imageViewVideo release];
     [_topToolbar release];
     [_backBarBtnItem release];
