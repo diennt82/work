@@ -1401,10 +1401,10 @@
     NSString *mac = [Util strip_colon_fr_mac:self.selectedChannel.profile.mac_address];
     
     
-    BMS_JSON_Communication *jsonComm = [[[[BMS_JSON_Communication alloc] initWithObject:self
+    BMS_JSON_Communication *jsonComm = [[[BMS_JSON_Communication alloc] initWithObject:self
                                                                               Selector:nil
                                                                           FailSelector:nil
-                                                                             ServerErr:nil] autorelease] autorelease];
+                                                                             ServerErr:nil] autorelease];
     
     NSString * cmd_string = @"action=command&command=close_p2p_rtsp_stun";
     
