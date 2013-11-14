@@ -82,8 +82,15 @@
     
     if (isEditMode == FALSE)
     {
-        //Build ToolBar manually
-        topbar = [[UIToolbar alloc]initWithFrame:CGRectMake(0, 0, screenWidth /*screen_frame.size.width*/, 44)];
+        if (floor(NSFoundationVersionNumber) <= NSFoundationVersionNumber_iOS_6_1) {
+            // Load resources for iOS 6.1 or earlier
+            //Build ToolBar manually
+            topbar = [[UIToolbar alloc]initWithFrame:CGRectMake(0, 0, screenWidth /*screen_frame.size.width*/, 44)];
+        } else {
+            // Load resources for iOS 7 or later
+            //Build ToolBar manually
+            topbar = [[UIToolbar alloc]initWithFrame:CGRectMake(0, 20, screenWidth /*screen_frame.size.width*/, 44)];
+        }
         topbar.barStyle = UIBarStyleBlackOpaque;
         
         [topbar setAutoresizingMask: UIViewAutoresizingFlexibleWidth|
@@ -193,9 +200,15 @@
     else //isEditMode = TRUE
     {
         
-        
-        //Build ToolBar manually
-        topbar = [[UIToolbar alloc]initWithFrame:CGRectMake(0, 0, screenWidth, 44)];
+        if (floor(NSFoundationVersionNumber) <= NSFoundationVersionNumber_iOS_6_1) {
+            // Load resources for iOS 6.1 or earlier
+            //Build ToolBar manually
+            topbar = [[UIToolbar alloc]initWithFrame:CGRectMake(0, 0, screenWidth, 44)];
+        } else {
+            // Load resources for iOS 7 or later
+            //Build ToolBar manually
+            topbar = [[UIToolbar alloc]initWithFrame:CGRectMake(0, 20, screenWidth, 44)];
+        }
         topbar.barStyle = UIBarStyleBlackOpaque;
         [topbar setAutoresizingMask: UIViewAutoresizingFlexibleWidth|
                                       UIViewAutoresizingFlexibleLeftMargin|
@@ -588,6 +601,8 @@
             cell = (EditCameraCell *)self.cellView;
             self.cellView = nil;
         }
+        //set transparent for cell in iOS7
+        cell.backgroundColor = [UIColor clearColor];
 
         
         UIImageView * snapshot = (UIImageView *) [cell viewWithTag:500];
@@ -648,6 +663,10 @@
             cell = self.cellView;
             self.cellView = nil;
         }
+        
+        //set transparent for cell in iOS7
+        cell.backgroundColor = [UIColor clearColor];
+        
         //Get refernce to cell content
         UIImageView * snapshot = (UIImageView *) [cell viewWithTag:500];
         UILabel * camName  = (UILabel *) [cell viewWithTag:501];

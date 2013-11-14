@@ -26,6 +26,7 @@
 
 
 #define CAM_IN_VEW @"string_Camera_Mac_Being_Viewed"
+#define HIGH_STATUS_BAR 20;
 
 @implementation H264PlayerViewController
 
@@ -56,10 +57,12 @@
     }
     
     UIGraphicsBeginImageContext(UIScreen.mainScreen.bounds.size);
-    [[UIImage imageNamed:@"black_background"] drawInRect:UIScreen.mainScreen.bounds];
+    
+    CGRect rectBackground = CGRectMake(0, 20, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height);
+    [[UIImage imageNamed:@"black_background"] drawInRect:rectBackground];
     self.imgBackground = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
-    
+    self.view.backgroundColor = [UIColor colorWithPatternImage:self.imgBackground];
 //    NSString * msg = NSLocalizedStringWithDefaultValue(@"Back",nil, [NSBundle mainBundle],
 //                                                       @"Back", nil);
 //    UIBarButtonItem *revealIcon = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"reveal-icon"]
@@ -2963,6 +2966,7 @@
     
 	if (orientation == UIInterfaceOrientationLandscapeLeft || orientation == UIInterfaceOrientationLandscapeRight)
 	{
+
         
         self.view.backgroundColor = [UIColor blackColor];
         [[UIApplication sharedApplication] setStatusBarHidden:YES];

@@ -62,7 +62,7 @@
     
 	[self adjustViewsForOrientation:infOrientation];
     
-      [self loadUserData];
+    [self loadUserData];
     
 }
 
@@ -84,7 +84,7 @@
     UITextField * _version = (UITextField *) [versionCell viewWithTag:1];
     
     //NSString * msg = NSLocalizedStringWithDefaultValue(@"version",nil, [NSBundle mainBundle],
-      //                                                 @"Version %@" , nil);
+    //                                                 @"Version %@" , nil);
     NSString *version = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
     
     //version = [NSString stringWithFormat:msg,version];
@@ -98,13 +98,21 @@
     
     
     int screenWidth = [UIScreen mainScreen].bounds.size.width  ;//320
-        
-    mtopbar = [[UIToolbar alloc]initWithFrame:CGRectMake(0, 0, screenWidth, 44)];
+    
+    //adjust position of toolbar in iOS7
+    if (floor(NSFoundationVersionNumber) <= NSFoundationVersionNumber_iOS_6_1) {
+        // Load resources for iOS 6.1 or earlier
+        mtopbar = [[UIToolbar alloc]initWithFrame:CGRectMake(0, 0, screenWidth, 44)];
+    } else {
+        // Load resources for iOS 7 or later
+        mtopbar = [[UIToolbar alloc]initWithFrame:CGRectMake(0, 20, screenWidth, 44)];
+    }
+    
     mtopbar.barStyle = UIBarStyleBlackOpaque;
     // create an array for the buttons
     NSMutableArray* buttons = [[NSMutableArray alloc] initWithCapacity:3];
     
-
+    
     // create a spacer between the buttons
     UIBarButtonItem *spacer = [[UIBarButtonItem alloc]
                                initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace
@@ -115,7 +123,7 @@
     
     
     NSString * msg  = NSLocalizedStringWithDefaultValue(@"Account",nil, [NSBundle mainBundle],
-                                             @"Account" , nil);
+                                                        @"Account" , nil);
     
     //Label
     UIBarButtonItem *label = [[UIBarButtonItem alloc]
@@ -170,13 +178,13 @@
 
 -(BOOL) shouldAutorotate
 {
-
+    
     return YES ;
 }
 
 -(NSUInteger)supportedInterfaceOrientations
 {
-
+    
     
     return UIInterfaceOrientationMaskAllButUpsideDown;
 }
@@ -204,8 +212,8 @@
         if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
         {
             //[[NSBundle mainBundle] loadNibNamed:@"Account_ViewController_land_ipad"
-               //                           owner:self
-              //                          options:nil];
+            //                           owner:self
+            //                          options:nil];
         }
         else
         {
@@ -237,13 +245,13 @@
                 [self buildTopToolBar];
                 
             }
-
+            
         }
         
-       
         
         
-               
+        
+        
         
     }
 	else if (orientation == UIInterfaceOrientationPortrait || orientation == UIInterfaceOrientationPortraitUpsideDown)
@@ -252,12 +260,12 @@
         if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
         {
             //[[NSBundle mainBundle] loadNibNamed:@"Account_ViewController_ipad"
-             //                             owner:self
-              //                          options:nil];
+            //                             owner:self
+            //                          options:nil];
         }
         else
         {
-
+            
             [[NSBundle mainBundle] loadNibNamed:@"Account_ViewController"
                                           owner:self
                                         options:nil];
@@ -277,20 +285,20 @@
                 //bg.frame = CGRectMake(0,0, 320, 480);
                 bg.frame = CGRectMake(0,0, screenWidth,screenHeight);
             }
-
+            
             if (mtopbar == nil)
             {
                 [self buildTopToolBar];
             }
             
         }
-    
-       
         
-               
+        
+        
+        
 	}
     
-   
+    
     
     if (mtopbar != nil)
     {
@@ -299,7 +307,7 @@
         [self.view bringSubviewToFront:mtopbar];
     }
     
-#endif 
+#endif
 }
 
 
