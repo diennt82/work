@@ -22,7 +22,7 @@
 
 - (id) initWithUser:(NSString *)user andPass:(NSString *)pass andApiKey: (NSString *)apiKey andListener:(id <ConnectionMethodDelegate>) d
 {
-    [super init];
+    self = [super init];
 	self.userName = user;
 	self.userPass = pass;
     self.apiKey = apiKey;
@@ -34,10 +34,10 @@
 
 -(void) dealloc
 {
-    [self.jsonComm release];
+    [_jsonComm release];
     [userName release];
     [userPass release];
-    [self.apiKey release];
+    [_apiKey release];
     [super dealloc];
     
 }
@@ -125,12 +125,13 @@
         NSLog(@"responseData.count = %d", responseData.count);
     }
     
-    NSArray *dataArr;
-    NSMutableArray *camProfiles = nil;
     NSInteger status = [[responseData objectForKey:@"status"] intValue];
     
-    if (status == 200) {
-        dataArr = [NSArray arrayWithArray:[responseData objectForKey:@"data"]];
+    if (status == 200)
+    {
+        NSArray *dataArr = [NSArray arrayWithArray:[responseData objectForKey:@"data"]];
+        
+        NSMutableArray *camProfiles = nil;
         
         if (dataArr.count > 0) {
             //[camProfiles = [NSMutableArray alloc] init];
@@ -247,7 +248,7 @@
         NSLog(@"dataArr.count = %d", dataArr.count);
     }
     
-    NSMutableArray *camList = [[NSMutableArray alloc] init];
+    NSMutableArray *camList = [[[NSMutableArray alloc] init] autorelease];
     
     for (NSDictionary *camEntry in dataArr)
 	{
@@ -274,7 +275,7 @@
         //NSString * str;
         NSString * fwVersion = [[camEntry objectForKey:@"device_firmware"] objectForKey:@"version"];
         
-        CamProfile *cp = [[CamProfile alloc]initWithMacAddr:camMac];
+        CamProfile *cp = [[[CamProfile alloc]initWithMacAddr:camMac] autorelease];
 
         cp.last_comm = updatedAt;
         cp.name = camName;
@@ -314,8 +315,7 @@
 - (void)sync_online_and_offline_data:(NSMutableArray *) online_profiles
 {
     //NSLog(@"aaaaaaaa");
-    SetupData * offline_data = nil;
-	offline_data = [[SetupData alloc] init];
+    SetupData *offline_data = [[[SetupData alloc] init] autorelease];
 	
 	if ([offline_data restore_session_data] == TRUE)
 	{
@@ -327,10 +327,7 @@
 		NSLog(@"No offline data ");
 	}
     
-    NSMutableArray * offline_profiles = offline_data.configured_cams;
-	
-	
-	if (online_profiles == nil)
+	if (offline_data.configured_cams == nil)
 	{
 		NSLog(@"No online data, Clear offline data");
 		[offline_data.configured_cams release];
@@ -353,7 +350,7 @@
 	}
 	
 	
-	offline_profiles = online_profiles;
+	NSMutableArray * offline_profiles = online_profiles;
 	offline_data.configured_cams = online_profiles;
 	
 	
@@ -396,13 +393,12 @@
 		NSLog(@"offline data: channels = nil or profile = nil");
 		
 		
-		NSMutableArray * channels = nil;
-		channels = [[NSMutableArray alloc]init];
-		CamChannel * ch;
+		NSMutableArray *channels = [[[NSMutableArray alloc]init] autorelease];
+
 		CamProfile * cp;
 		for (int i =0; i<4; i++)
 		{
-			ch = [[CamChannel alloc]initWithChannelIndex:i];
+			CamChannel *ch = [[[CamChannel alloc]initWithChannelIndex:i] autorelease];
 			
 			if (i<[offline_profiles count] && [offline_profiles objectAtIndex:i] != nil)
 			{
