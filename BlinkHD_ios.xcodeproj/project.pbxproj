@@ -152,6 +152,7 @@
 		38E3C85C1694033500A13A70 /* AlertPrompt.m in Sources */ = {isa = PBXBuildFile; fileRef = 38E3C85B1694033500A13A70 /* AlertPrompt.m */; };
 		38FC9D7A16717B0300373F25 /* EditCameraCell.mm in Sources */ = {isa = PBXBuildFile; fileRef = 38FC9D7916717B0300373F25 /* EditCameraCell.mm */; };
 		8408F1811833222A00B00188 /* MonitorCommunication.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8408F1801833222A00B00188 /* MonitorCommunication.framework */; };
+		841D567B1834C1E600ACE7A7 /* streamqvga.sdp in Resources */ = {isa = PBXBuildFile; fileRef = 841D567A1834C1E600ACE7A7 /* streamqvga.sdp */; };
 		84DEA2BB17E42E3F00567836 /* NotificationViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 84DEA2B917E42E3F00567836 /* NotificationViewController.mm */; };
 		84DEA2BC17E42E3F00567836 /* NotificationViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 84DEA2BA17E42E3F00567836 /* NotificationViewController.xib */; };
 		84FD1DCF1832399E00238089 /* stream720p_10_926_alaw.sdp in Resources */ = {isa = PBXBuildFile; fileRef = 84FD1DCE1832399E00238089 /* stream720p_10_926_alaw.sdp */; };
@@ -496,6 +497,7 @@
 		38FC9D7816717B0300373F25 /* EditCameraCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EditCameraCell.h; sourceTree = "<group>"; };
 		38FC9D7916717B0300373F25 /* EditCameraCell.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = EditCameraCell.mm; sourceTree = "<group>"; };
 		8408F1801833222A00B00188 /* MonitorCommunication.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MonitorCommunication.framework; path = "../ios-frameworks/MonitorCommunication.framework"; sourceTree = "<group>"; };
+		841D567A1834C1E600ACE7A7 /* streamqvga.sdp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = streamqvga.sdp; sourceTree = "<group>"; };
 		84DEA2B817E42E3F00567836 /* NotificationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NotificationViewController.h; sourceTree = "<group>"; };
 		84DEA2B917E42E3F00567836 /* NotificationViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = NotificationViewController.mm; sourceTree = "<group>"; };
 		84DEA2BA17E42E3F00567836 /* NotificationViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = NotificationViewController.xib; sourceTree = "<group>"; };
@@ -1625,6 +1627,7 @@
 			isa = PBXGroup;
 			children = (
 				84FD1DCE1832399E00238089 /* stream720p_10_926_alaw.sdp */,
+				841D567A1834C1E600ACE7A7 /* streamqvga.sdp */,
 				A15431081818DEB800337EFE /* streamvga.sdp */,
 				8BA8AE871821F3E900DC9E9F /* stream720p_10_926.sdp */,
 				A1176B72180D1DD9000B7527 /* stream480p.sdp */,
@@ -2034,6 +2037,7 @@
 				38DE1C50168AEA690049E814 /* AlertSettingViewController_land.xib in Resources */,
 				38DE1BFB168ADA280049E814 /* MBP_FirstPage_ipad.xib in Resources */,
 				38DE1C05168ADA460049E814 /* MBP_LoginOrRegistration_ipad.xib in Resources */,
+				841D567B1834C1E600ACE7A7 /* streamqvga.sdp in Resources */,
 				38DE1BC6168AD57D0049E814 /* DashBoard_ViewController_ipad.xib in Resources */,
 				38699127167055B8009F3E66 /* MainWindow_ipad.xib in Resources */,
 				38DE1C0F168ADA6B0049E814 /* MBP_iosViewController_ipad.xib in Resources */,

@@ -1,0 +1,22 @@
+v=0
+s=H264 and PCM
+i=LOCAL_RTSP_SERVER
+t=0 0
+a=tool:LIVE555 Streaming Media v2013.03.07
+a=type:broadcast
+a=control:*
+a=rtcp-unicast: reflection
+a=range:npt=0-
+a=x-qt-text-nam:H264 and PCM
+a=x-qt-text-inf:LOCAL_RTSP_SERVER
+m=audio 12000 RTP/AVP 0
+c=IN IP4 127.0.0.1
+b=AS:128
+a=control:track1
+m=video 13000 RTP/AVP 96
+c=IN IP4 127.0.0.1
+b=AS:512
+a=rtpmap:96 H264/90000
+a=framesize:96 320-240
+a=fmtp:96 packetization-mode=1;profile-level-id=42001E;sprop-parameter-sets=Z01AFNoFB+hAAAAD,aM8yyA==
+a=control:track2

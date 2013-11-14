@@ -2188,6 +2188,10 @@
                                    {
                                        self.selectedChannel.stream_url = [[NSBundle mainBundle] pathForResource:@"streamvga" ofType:@"sdp"];
                                    }
+                                   else if ([modeVideo isEqualToString:@"QVGA320_240"]) // Camera server resolution
+                                   {
+                                       self.selectedChannel.stream_url = [[NSBundle mainBundle] pathForResource:@"streamqvga" ofType:@"sdp"];
+                                   }
                                    else if ([modeVideo isEqualToString:@"720p_10_926"] ||
                                             [modeVideo isEqualToString:@"480p_926"] ||
                                             [modeVideo isEqualToString:@"360p_926"] )
