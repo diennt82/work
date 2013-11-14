@@ -403,10 +403,12 @@ return self;
 			[validChannels addObject:[channel_array objectAtIndex:i]]; 
 
 	}
+    
 	dashBoard.listOfChannel = validChannels;
 
 	[dashBoard presentModallyOn:self];
 
+    [validChannels release];
 }
 
 
