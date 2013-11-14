@@ -160,7 +160,7 @@ return self;
     [self.view addSubview:initTextView];
     [self.view bringSubviewToFront:initTextView];
     
-    self.splashScreen = [[UIImageView alloc ] initWithFrame:deviceScreen];
+    self.splashScreen = [[[UIImageView alloc ] initWithFrame:deviceScreen] autorelease];
     [self.splashScreen setImage:[UIImage imageNamed:@"mestartup000032.png"]];
     [self.splashScreen setContentMode:UIViewContentModeScaleAspectFit];
     
@@ -271,7 +271,7 @@ return self;
     {
         //Showing first page here --- NEED to adapt to proper orientation
         
-        MBP_FirstPage * firstPage;
+        MBP_FirstPage * firstPage = nil;
         UIInterfaceOrientation interfaceOrientation = [UIApplication sharedApplication].statusBarOrientation;
         
         if (interfaceOrientation == UIInterfaceOrientationLandscapeLeft ||
@@ -288,7 +288,8 @@ return self;
                 firstPage = [[MBP_FirstPage alloc] initWithNibName:@"MBP_FirstPage_land"
                                                             bundle:nil
                                                   withConnDelegate:self];
-            }    }
+            }
+        }
         else if (interfaceOrientation == UIInterfaceOrientationPortrait ||
                  interfaceOrientation == UIInterfaceOrientationPortraitUpsideDown)
         {
@@ -324,7 +325,7 @@ return self;
     
     UIInterfaceOrientation interfaceOrientation = [UIApplication sharedApplication].statusBarOrientation;
 
-    MBP_FirstPage * firstPage;
+    MBP_FirstPage * firstPage = nil;
     [self.view addSubview:backgroundView];
     [self.view bringSubviewToFront:backgroundView];
     
@@ -1486,8 +1487,7 @@ return self;
             }
             else // NEED to do local scan
             {
-                ScanForCamera * scanner;
-                scanner = [[ScanForCamera alloc] initWithNotifier:self];
+                ScanForCamera *scanner = [[ScanForCamera alloc] initWithNotifier:self];
                 [scanner scan_for_device:cp.mac_address];
                 
                 
@@ -1504,7 +1504,8 @@ return self;
         
         
     }
-    return ;
+    
+    [finalResult release];
 }
 
 - (void)scan_done:(NSArray *) _scan_results
@@ -1773,11 +1774,10 @@ return self;
 + (void)getBroadcastAddress:(NSString **) bcast AndOwnIp:(NSString**) ownip
 {
 
-	int ret;
 	//Free & re-init Addresses
 	FreeAddresses();
 
-	ret = GetIPAddresses();
+    GetIPAddresses();
 	GetHWAddresses();
 	NSString *deviceBroadcastIP = nil;
 	NSString *deviceIP = nil ;
@@ -1840,11 +1840,10 @@ return self;
 + (void)getBroadcastAddress:(NSString **) bcast AndOwnIp:(NSString**) ownip ipasLong:(long *) _ownip
 {
     
-	int ret;
 	//Free & re-init Addresses
 	FreeAddresses();
-    
-	ret = GetIPAddresses();
+
+    GetIPAddresses();
 	GetHWAddresses();
 	NSString *deviceBroadcastIP = nil;
 	NSString *deviceIP = nil ;
@@ -1980,14 +1979,16 @@ return self;
 - (BOOL) restoreConfigData
 {
 	SetupData * savedData = [[SetupData alloc]init];
+    
 	if ([savedData restore_session_data] ==TRUE)
 	{
 		//NSLog(@"restored data done");
 		self.channel_array = savedData.channels;
 
-
 		self.restored_profiles = savedData.configured_cams;
 	}
+    
+    [savedData release];
 
 	return TRUE;
 }
