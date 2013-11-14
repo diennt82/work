@@ -3554,7 +3554,6 @@
 					"$(inherited)",
 					"$(SRCROOT)",
 					"$(SRCROOT)/../ios-frameworks",
-					"/Users/admin/work/ios-frameworks",
 				);
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
@@ -3612,7 +3611,6 @@
 					"$(inherited)",
 					"$(SRCROOT)",
 					"$(SRCROOT)/../ios-frameworks",
-					"/Users/admin/work/ios-frameworks",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = BlinkHD_ios_Prefix.pch;
@@ -3689,7 +3687,6 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)/../ios-frameworks",
-					"/Users/admin/work/ios-frameworks",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = BlinkHD_ios_Prefix.pch;

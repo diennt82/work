@@ -2033,7 +2033,7 @@
                                NSString *body = [[[responseDict objectForKey: @"data"] objectForKey: @"device_response"] objectForKey: @"body"];
                                //"get_session_key: error=200,port1=37171&port2=47608&ip=115.77.250.193,mode=p2p_stun_rtsp"
                                
-                                NSLog(@"Respone  : camera response : %@", body);
+                                NSLog(@"Respone - camera response : %@", body);
                                if (body != nil )
                                {
                                    NSArray * tokens = [body componentsSeparatedByString:@","];
@@ -2056,14 +2056,16 @@
                                        self.selectedChannel.profile.camera_stun_audio_port = [(NSString *)[[port1_str componentsSeparatedByString:@"="] objectAtIndex:1] intValue];
                                        self.selectedChannel.profile.camera_stun_video_port =[(NSString *)[[port2_str componentsSeparatedByString:@"="] objectAtIndex:1] intValue];
                                        
-                                       
-                                       [self performSelectorOnMainThread:@selector(startStunStream)
-                                                         withObject:nil
-                                                      waitUntilDone:NO];
+                                       if (userWantToCancel == FALSE)
+                                       {
+                                           [self performSelectorOnMainThread:@selector(startStunStream)
+                                                                  withObject:nil
+                                                               waitUntilDone:NO];
+                                       }
                                    }
                                    else
                                    {
-                                       NSLog(@"Respone error : camera response error: %@", body);
+                                       NSLog(@"Respone error - camera response error: %@", body);
                                        
                                        
                                        /* close current session  before continue*/
@@ -2073,21 +2075,23 @@
                                        [jsonComm  sendCommandBlockedWithRegistrationId:mac
                                                                                             andCommand:cmd_string
                                                                                              andApiKey:apiKey];
-
-                                       NSArray * args = [NSArray arrayWithObjects:
-                                                         [NSNumber numberWithInt:H264_SWITCHING_TO_RELAY_SERVER],nil];
                                        
-                                       //relay
-                                       [self performSelectorOnMainThread:@selector(handleMessageOnMainThread:)
-                                                              withObject:args
-                                                           waitUntilDone:NO];
-                                       
+                                       if (userWantToCancel == FALSE)
+                                       {
+                                           NSArray * args = [NSArray arrayWithObjects:
+                                                             [NSNumber numberWithInt:H264_SWITCHING_TO_RELAY_SERVER],nil];
+                                           
+                                           //relay
+                                           [self performSelectorOnMainThread:@selector(handleMessageOnMainThread:)
+                                                                  withObject:args
+                                                               waitUntilDone:NO];
+                                       }
                                        
                                    }
                                }
                                else
                                {
-                                   NSLog(@"Respone error : can't parse \"body\"field from %@", responseDict);
+                                   NSLog(@"Respone error - can't parse \"body\"field from: %@", responseDict);
                                    
                                    NSArray * args = [NSArray arrayWithObjects:
                                                      [NSNumber numberWithInt:MEDIA_ERROR_SERVER_DIED],nil];
@@ -2101,7 +2105,7 @@
                            }
                            else
                            {
-                               NSLog(@"SERVER unreachable (timeout) : responseDict == nil --> Need test this more");
+                               NSLog(@"SERVER unreachable (timeout) - responseDict == nil --> Need test this more");
                                
                                NSArray * args = [NSArray arrayWithObjects:
                                                  [NSNumber numberWithInt:MEDIA_ERROR_SERVER_DIED],nil];
@@ -2254,10 +2258,12 @@
                                    self.selectedChannel.stream_url = urlResponse;
                                }
                                
-                               [self performSelectorOnMainThread:@selector(startStream)
-                                                      withObject:nil
-                                                   waitUntilDone:NO];
-                               
+                               if (userWantToCancel == FALSE)
+                               {
+                                   [self performSelectorOnMainThread:@selector(startStream)
+                                                          withObject:nil
+                                                       waitUntilDone:NO];
+                               }
                                
                            }
                            else
