@@ -75,6 +75,7 @@ return self;
     CFURLRef soundFileURLRef = CFBundleCopyResourceURL(mainbundle, CFSTR("Voicemail"), CFSTR("aif"), NULL);
     AudioServicesCreateSystemSoundID(soundFileURLRef, &soundFileObject);
     
+    CFRelease(soundFileURLRef);
 }
 
 /**/

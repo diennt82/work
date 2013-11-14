@@ -131,7 +131,7 @@
         }
         
         int rcvTimeStamp = [[NSDate date] timeIntervalSince1970];
-        CameraAlert * camAlert = [[CameraAlert alloc]initWithTimeStamp1:rcvTimeStamp] ;
+        CameraAlert * camAlert = [[[CameraAlert alloc]initWithTimeStamp1:rcvTimeStamp] autorelease];
         //set other values
         camAlert.cameraMacNoColon = str3;
         
@@ -228,6 +228,8 @@
                 NSString *  mac_wo_colon = [Util strip_colon_fr_mac:cp.mac_address]; 
                 if ([mac_wo_colon isEqualToString:mac_without_colon])
                 {
+                    [savedData release];
+                    
                     return TRUE; 
                 }
             }
@@ -238,6 +240,8 @@
         
         
 	}
+    
+    [savedData release];
     
     return FALSE; 
 }
@@ -265,7 +269,7 @@
     NSString *applicationName = NSBundle.mainBundle.infoDictionary  [@"CFBundleDisplayName"];
     NSLog(@"Application name: %@", applicationName);
     
-    NSString *swVersion = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
+    //NSString *swVersion = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
     
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     NSString *apiKey = [userDefaults objectForKey:@"PortalApiKey"];
