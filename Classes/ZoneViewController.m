@@ -17,19 +17,20 @@
 @synthesize  zoneMap;
 - (void)dealloc
 {
-    [self.zone1 release];
-    [self.zone2 release];
-    [self.zone3 release];
-    [self.zone4 release];
-    [self.zone5 release];
-    [self.zone6 release];
-    [self.zone7 release];
-    [self.zone8 release];
-    [self.zone9 release];
+    [zone1 release];
+    [zone2 release];
+    [zone3 release];
+    [zone4 release];
+    [zone5 release];
+    [zone6 release];
+    [zone7 release];
+    [zone8 release];
+    [zone9 release];
     
-    [self.zoneArray release];
-    [self.selectedChannel release];
-    [self.oldZoneArray release];
+    [_zoneArray release];
+    [_selectedChannel release];
+    [_oldZoneArray release];
+    [zoneMap release];
     
     [super dealloc];
 }
@@ -65,10 +66,10 @@
     self.view.backgroundColor = [UIColor clearColor];
     
     //create 9-element array
-    self.zoneMap = [[NSMutableArray alloc] initWithObjects:
+    self.zoneMap = [[[NSMutableArray alloc] initWithObjects:
                     zone1,zone2,zone3,
                     zone4, zone5,zone6,
-                    zone7,zone8,zone9,nil];
+                    zone7,zone8,zone9,nil] autorelease];
     
     
     
