@@ -65,6 +65,8 @@
     
     [self.listOfWifi addObject:other]; 
     [self filterCameraList];
+    
+    [other release];
 }
 
 - (void)viewDidUnload

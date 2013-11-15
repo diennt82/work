@@ -442,7 +442,7 @@
     
     
     
-    step05ViewController.listOfWifi = [[NSMutableArray alloc]initWithArray:wifiList];
+    step05ViewController.listOfWifi = [[[NSMutableArray alloc]initWithArray:wifiList] autorelease];
     
     [self.navigationController pushViewController:step05ViewController animated:NO];
     

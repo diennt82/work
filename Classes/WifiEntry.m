@@ -20,7 +20,7 @@
 
 -(id) initWithSSID:(NSString *) ssid
 {
-	[super init];
+	self = [super init];
 	self.ssid_w_quote = ssid; 
 	return self;
 }

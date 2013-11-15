@@ -177,7 +177,6 @@
 		
 		if ( self.channels != nil)
 		{
-			[self.channels release] ;
 			self.channels  = nil; 
 		}
 		

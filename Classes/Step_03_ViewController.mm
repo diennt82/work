@@ -343,23 +343,23 @@
     NSString *fwVersion = [[fw_version componentsSeparatedByString:@": "] objectAtIndex:1];
     NSLog(@"fw_version = %@, fwVersion = %@", fw_version, fwVersion);
     
-    NSString *model = [comm sendCommandAndBlock:GET_MODEL];
-    
-    model = [[model componentsSeparatedByString:@": "] objectAtIndex:1];
-    if ([model isEqualToString:@"-1"]) { // tmp ceamera
-        model = @"blink1_hd";
-    }
-    
-    if ([model isEqualToString:@"blinkhd"]) { // real blinkhd camera
-        model = @"blink1_hd";
-    }
-    
-    NSLog(@"model = %@", model);
+//    NSString *model = [comm sendCommandAndBlock:GET_MODEL];
+//    
+//    model = [[model componentsSeparatedByString:@": "] objectAtIndex:1];
+//    if ([model isEqualToString:@"-1"]) { // tmp ceamera
+//        model = @"blink1_hd";
+//    }
+//    
+//    if ([model isEqualToString:@"blinkhd"]) { // real blinkhd camera
+//        model = @"blink1_hd";
+//    }
+//    
+//    NSLog(@"model = %@", model);
     
     
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     [userDefaults setObject:fwVersion forKey:@"FW_VERSION"];
-    [userDefaults setObject:model forKey:@"MODEL"];
+    //[userDefaults setObject:model forKey:@"MODEL"];
     [userDefaults synchronize];
     
     if ( fw_version != nil                   &&
