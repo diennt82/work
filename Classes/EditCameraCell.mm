@@ -39,6 +39,8 @@
     
    //  NSLog(@"alertSettings cell: %d ", cameraIndex);
     [vc alertSetting:dummy];
+    
+    [dummy release];
 }
 -(IBAction)removeCamera:(id)sender
 {
@@ -50,7 +52,7 @@
    //  NSLog(@"removeCamera cell: %d ", cameraIndex);
     [vc removeCamera:dummy];
 
-    
+    [dummy release];
 }
 -(IBAction)renameCamera:(id)sender
 {
@@ -62,7 +64,7 @@
     
     [vc renameCamera:dummy];
 
-    
+    [dummy release];
 }
 
 

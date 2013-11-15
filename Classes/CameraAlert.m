@@ -260,7 +260,7 @@ static sqlite3_stmt *init_statement = nil;
 +( NSArray * ) getAllAlertForCamera:(NSString *) macWithColon 
 {
     
-    NSMutableArray * alerts = [[NSMutableArray alloc] init]; 
+    NSMutableArray * alerts = [[[NSMutableArray alloc] init] autorelease];
     
     NSArray * paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
     NSString * documentDirectory = [paths objectAtIndex:0]; 

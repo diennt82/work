@@ -297,6 +297,8 @@
     [formatter setDateFormat:@"ZZZ"];
     NSString *stringFromDate = [formatter stringFromDate:now];
     
+    [formatter release];
+    
     BMS_JSON_Communication *jsonComm = [[[BMS_JSON_Communication alloc] initWithObject:self
                                                                              Selector:@selector(addCamSuccessWithResponse:)
                                                                          FailSelector:@selector(addCamFailedWithError:)
@@ -495,8 +497,7 @@
 			//3 of 3. send the master key to device 
 			if (found == TRUE)
 			{
-				HttpCommunication *  comm; 
-				comm = [[HttpCommunication alloc]init];
+				HttpCommunication *comm = [[HttpCommunication alloc]init];
 				comm.device_ip = cp.ip_address;
 
 				NSString * set_mkey = SET_MASTER_KEY;
@@ -543,7 +544,7 @@
                     [self setupCompleted];
                 }
                
-				
+				[comm release];
 				
 				return; 
 			}
@@ -600,11 +601,12 @@
     
     NSString *localIp = [account query_cam_ip_online: self.cameraMac];
     
+    [account release];
+    
     if ( localIp != nil)
     {
         NSLog(@"Found a local ip: %@", localIp);
-        HttpCommunication *  comm;
-        comm = [[HttpCommunication alloc]init];
+        HttpCommunication *comm = [[HttpCommunication alloc]init];
         comm.device_ip = localIp;
         
         NSString * set_mkey = SET_MASTER_KEY;
@@ -625,11 +627,15 @@
             {
                 ///done
                 NSLog(@"sending master key done");
+                
+                [comm release];
                 [self setupCompleted];
                 return TRUE;
             }
             
         }
+        
+        [comm release];
         
     }
     
