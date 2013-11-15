@@ -93,7 +93,7 @@
     [nextButton release];
         
     /* initialize transient object here */
-	self.deviceConf = [[DeviceConfiguration alloc] init];
+	self.deviceConf = [[[DeviceConfiguration alloc] init] autorelease];
 	
 	
     if (![self restoreDataIfPossible] )
@@ -688,12 +688,10 @@
     [sent_conf restoreConfigurationData:[Util readDeviceConfiguration]];
     
     //create a http delegate, send the data thru delegate
-    HttpCommunication  * deviceComm; 
-    deviceComm = [[HttpCommunication alloc]init];
+    HttpCommunication  *deviceComm = [[HttpCommunication alloc]init];
     
     
-    NSString * deviceCodec;
-    deviceCodec = [deviceComm sendCommandAndBlock:GET_CODECS_SUPPORT
+    NSString *deviceCodec = [deviceComm sendCommandAndBlock:GET_CODECS_SUPPORT
                                 withTimeout:5.0];
     
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
@@ -703,9 +701,9 @@
     
     [deviceComm sendConfiguration:sent_conf];
     
+    [deviceComm release];
+    
     NSLog(@"Send & reset done");
-    
-    
 
     
     userDefaults = [NSUserDefaults standardUserDefaults];
@@ -789,6 +787,7 @@
         
     }
     
+    [sent_conf release];
     
 }
 
