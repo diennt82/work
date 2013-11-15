@@ -229,6 +229,17 @@ static int client_shutdown()
         pj_thread_join(g.thread);
         pj_thread_destroy(g.thread);
         g.thread = NULL;
+        
+        //wait for fwder thread to die off too
+        for (i=0; i<PJ_ARRAY_SIZE(g.peer); ++i)
+        {
+            if (g.peer[i].rtcp_thread != NULL)
+            {
+                pj_thread_join(g.peer[i].rtcp_thread);
+                pj_thread_destroy(g.peer[i].rtcp_thread);
+                g.peer[i].rtcp_thread = NULL;
+            }
+        }
     }
     if (g.relay) {
         pj_turn_sock_destroy(g.relay);
