@@ -265,6 +265,11 @@
 	{
 		NSLog(@"IP is not available.. comeback later..");
 		//check back later..
+        if (task_cancelled == YES) // was poped by its parent
+        {
+            return;
+        }
+        
 		[NSTimer scheduledTimerWithTimeInterval: 3//
 										 target:self
 									   selector:@selector(checkConnectionToCamera:)
