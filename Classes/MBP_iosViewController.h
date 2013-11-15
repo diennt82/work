@@ -33,8 +33,8 @@
 #define DIRECTION_H_RT  0x40
 #define DIRECTION_H_MASK 0x0F
 
-#define CURRENT_VIEW_MODE_MULTI 0x11
-#define CURRENT_VIEW_MODE_SINGLE 0x12
+#define CURRENT_VIEW_MODE_MULTI     0x11
+#define CURRENT_VIEW_MODE_SINGLE    0x12
 
 @class DashBoard_ViewController; 
 @class MBP_CamView;
@@ -42,19 +42,20 @@
 
 #define DIRECT_MODE_NEXT_BTN 311
 
-#define ALERT_PUSH_RECVED_RESCAN_AFTER 200
+#define ALERT_PUSH_RECVED_RESCAN_AFTER  200
 #define ALERT_PUSH_RECVED_RELOGIN_AFTER 201
-#define ALERT_PUSH_SERVER_ANNOUNCEMENT 203
+#define ALERT_PUSH_SERVER_ANNOUNCEMENT  203
 
 
-#define _streamingSSID @"string_Streaming_SSID"
+#define _streamingSSID  @"string_Streaming_SSID"
 #define _triggeredByVox @"bool_Vox_Trigger"
-#define CAM_IN_VEW @"string_Camera_Mac_Being_Viewed"
+#define CAM_IN_VEW      @"string_Camera_Mac_Being_Viewed"
 
 
-#define APP_STAGE_INIT 1
-#define APP_STAGE_LOGGED_IN 2
-#define APP_STAGE_SETUP 3
+#define APP_STAGE_INIT          1
+#define APP_STAGE_LOGGING_IN    2
+#define APP_STAGE_LOGGED_IN     3
+#define APP_STAGE_SETUP         4
 
 
 

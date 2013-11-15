@@ -443,6 +443,9 @@
         
         
 	}
+    else if (viewController.app_stage == APP_STAGE_LOGGING_IN)
+    {
+    }
     else if (viewController.app_stage == APP_STAGE_LOGGED_IN)
     {
         //[self performSelectorOnMainThread:@selector(forceScan) withObject:nil waitUntilDone:YES];

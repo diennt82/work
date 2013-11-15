@@ -214,7 +214,6 @@ return self;
 - (void)wakeup_display_login:(NSTimer*) timer_exp
 {
 
-	self.app_stage = APP_STAGE_INIT;
 
     
 #if 0
@@ -248,6 +247,7 @@ return self;
         [userDefaults setBool:TRUE forKey:_AutoLogin];
         [userDefaults synchronize];
         
+        self.app_stage = APP_STAGE_LOGGING_IN;
         
         MBP_LoginOrRegistration * loginOrReg;
         if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
@@ -270,6 +270,7 @@ return self;
     else
     {
         //Showing first page here --- NEED to adapt to proper orientation
+        self.app_stage = APP_STAGE_INIT;
         
         MBP_FirstPage * firstPage = nil;
         UIInterfaceOrientation interfaceOrientation = [UIApplication sharedApplication].statusBarOrientation;
@@ -678,7 +679,7 @@ return self;
 
 				[self dismissViewControllerAnimated:NO completion:nil];
                 
-
+                self.app_stage = APP_STAGE_LOGGING_IN;
                 
 				NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
 
@@ -790,7 +791,8 @@ return self;
 			{
                 statusDialogLabel.hidden = YES;
 				[self dismissViewControllerAnimated:NO completion:nil];
-
+                self.app_stage = APP_STAGE_LOGGING_IN;
+                
                 [self performSelectorInBackground:@selector(logoutAndUnregistration_bg) withObject:nil];
 			
 				break;
@@ -1915,6 +1917,7 @@ return self;
 
 	NSLog(@"show_login..."); 
 
+    self.app_stage = APP_STAGE_LOGGING_IN;
 
     MBP_LoginOrRegistration * loginOrReg;
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
