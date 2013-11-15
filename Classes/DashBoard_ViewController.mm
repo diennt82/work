@@ -948,6 +948,8 @@
                                                              tag:1];
     [self setTabBarItem:camList];
     
+    [camList release];
+    
     NSString * msgAccount = NSLocalizedStringWithDefaultValue(@"Account_",nil, [NSBundle mainBundle],
                                             @"Account", nil);
     
@@ -971,8 +973,9 @@
     }
     
     [accountPage setTabBarItem:account];
-    accountPage.mdelegate = self.delegate;
+    [account release];
     
+    accountPage.mdelegate = self.delegate;
     
     NSArray * views = [[NSArray alloc]initWithObjects:self, accountPage, nil];
     if (isOffline == TRUE)
@@ -985,6 +988,7 @@
     tabBarController = [[UITabBarController alloc]init];
     [tabBarController setViewControllers:views];
     
+    [views release];
     
     //setup nav controller
     navController= [[[MBPNavController alloc]initWithRootViewController:tabBarController] autorelease];
@@ -1116,61 +1120,7 @@
 
 -(IBAction)alertSetting:(id)sender
 {
-    progressView.hidden = NO;
-    [self.view addSubview:progressView];
-    [self.view bringSubviewToFront:progressView];
     
-    CamChannel *ch = (CamChannel *) [listOfChannel objectAtIndex:((UIButton *)sender).tag];
-    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-    
-    BMS_JSON_Communication *jsonComm = [[[BMS_JSON_Communication alloc] initWithObject:self
-                                                                             Selector:@selector(getPlaylistSuccessWithResponse:)
-                                                                         FailSelector:@selector(getPlaylistFailedWithResponse:)
-                                                                            ServerErr:@selector(getPlaylistUnreachableSetver)] autorelease];
-    NSString *mac = [Util strip_colon_fr_mac:ch.profile.mac_address];
-    NSString *apiKey = [userDefaults objectForKey:@"PortalApiKey"];
-    
-
-    [jsonComm getAllRecordedFilesWithRegistrationId:mac
-                                           andEvent:@"04"
-                                          andApiKey:apiKey];
-}
-
-- (void)getPlaylistSuccessWithResponse: (NSDictionary *)responseDict
-{
-    if (responseDict) {
-        if ([[responseDict objectForKey:@"status"] intValue] == 200) {
-            NSArray *eventArr = [[responseDict objectForKey:@"data"] objectForKey:@"events"];
-            
-          PlayListViewController *playlist = [[PlayListViewController alloc] init];
-            playlist.playlistArray = [NSMutableArray array];
-            
-            for (NSDictionary *playlistdict in eventArr) {
-                NSDictionary *clipInfo = [[playlistdict objectForKey:@"playlist"] objectAtIndex:0];
-                
-                PlaylistInfo *playlistInfo = [[PlaylistInfo alloc] init];
-                playlistInfo.urlImage = [clipInfo objectForKey:@"image"];
-                playlistInfo.titleString = [clipInfo objectForKey:@"title"];
-                playlistInfo.urlFile = [clipInfo objectForKey:@"file"];
-                
-                [playlist.playlistArray addObject:playlistInfo];
-            }
-            
-            [self.navigationController pushViewController:playlist animated:NO];
-            [playlist release];
-        }
-        progressView.hidden = YES;
-    }
-}
-
-- (void)getPlaylistFailedWithResponse: (NSDictionary *)responseDict
-{
-    NSLog(@"getPlaylistFailedWithResponse");
-}
-
-- (void)getPlaylistUnreachableSetver
-{
-    NSLog(@"getPlaylistUnreachableSetver");
 }
 
 -(IBAction)removeCamera:(id)sender
@@ -1571,6 +1521,7 @@
                                                   andListener:nil];
     //RE- READ data from server and update offline record
     [account readCameraListAndUpdate];
+    [account release];
     
     progressView.hidden  = YES;
 }
@@ -1587,19 +1538,17 @@
 
 -(void) onCameraRemoveLocal
 {
-	NSString * command , *response;
-	
     CamChannel *ch = (CamChannel *) [listOfChannel objectAtIndex:self.edittedChannelIndex];
     
     HttpCommunication * dev_comm = [[[HttpCommunication alloc]init] autorelease];
     dev_comm.device_ip = ch.profile.ip_address;
     dev_comm.device_port = ch.profile.port;
     
-	command = SWITCH_TO_DIRECT_MODE;
-	response = [dev_comm sendCommandAndBlock:command];
+	NSString * command = SWITCH_TO_DIRECT_MODE;
+	[dev_comm sendCommandAndBlock:command];
 	
 	command = RESTART_HTTP_CMD;
-	response = [dev_comm sendCommandAndBlock:command];
+	[dev_comm sendCommandAndBlock:command];
     
     BMS_JSON_Communication *jsonComm = [[[BMS_JSON_Communication alloc] initWithObject:self
                                                                              Selector:@selector(removeCamSuccessWithResponse:)
