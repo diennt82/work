@@ -16,7 +16,7 @@
 /* used when restoring data */
 -(id) init
 {
-	[super init	];
+	self = [super init	];
 	
 	channels = nil; 
 	configured_cams = nil; 
@@ -28,7 +28,7 @@
 /* used to save data */
 -(id) initWithChannels:(NSMutableArray*)channs AndProfiles:(NSMutableArray*) cps
 {
-	[super init];
+	self = [super init];
 	channels = channs;
 	//cps may be nil--- as it's not used 
 	configured_cams = cps; 
@@ -101,7 +101,6 @@
 	NSString * file = [Util getDataFileName];
 	NSMutableData * channel_data;
 	CamChannel * channel1, * channel2, * channel3, * channel4;
-	channel_data = [[NSMutableData alloc] init];
 	
 	FILE * fd = fopen([file UTF8String], "rb");
 	
@@ -117,7 +116,7 @@
 	/* read barker */
 	fread(&barker, sizeof(int), 1, fd);
 	
-    
+    channel_data = [[NSMutableData alloc] init];
 	
 	if (barker == DATA_BARKER)
 	{
@@ -188,14 +187,12 @@
 		
 		/*** restore cam profiles ***/
 		
-		
-		CamProfile * cp; 
-		
 		int numOfProfile = -1; 
 		fread(&numOfProfile, sizeof(int), 1, fd);
 		self.configured_cams = [[NSMutableArray alloc] initWithCapacity:numOfProfile];
 		int cp_count = 0; 
-        int profile_len = -1 ; 
+        int profile_len = -1 ;
+        
 		while (cp_count < numOfProfile)
 		{
             
@@ -209,7 +206,8 @@
 			fread(buff, sizeof (char), profile_len,fd);
 			//re-use @channel_data buffer  
 			[channel_data appendBytes:buff length:profile_len];
-			cp = [CamProfile restoreFromData:channel_data];
+            
+			CamProfile *cp = [CamProfile restoreFromData:channel_data];
 			
 			[self.configured_cams addObject:cp];
 			
@@ -232,6 +230,8 @@
 #if DEBUG_RESTORE_DATA
         NSLog(@"Wrong data barker, delete the file "); 
 #endif
+        [channel_data release];
+        
         fclose(fd);
         unlink([file UTF8String]);
     }
