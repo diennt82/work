@@ -363,6 +363,7 @@
                 [self performSelector:@selector(goBackToCameraList)
                            withObject:nil
                            afterDelay:0.1];
+                break;
             }
             
             if (self.h264StreamerIsInStopped == TRUE)
@@ -450,6 +451,7 @@
                 [self performSelector:@selector(goBackToCameraList)
                            withObject:nil
                            afterDelay:0.1];
+                break;
             }
             
             if (self.h264StreamerIsInStopped == TRUE)
