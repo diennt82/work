@@ -18,12 +18,7 @@
 
 @implementation Step_06_ViewController
 
-
-
 @synthesize securityCell, ssidCell, passwordCell, confPasswordCell;
-@synthesize ssid,  security, password; 
-@synthesize deviceConf;
-@synthesize  isOtherNetwork;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -35,10 +30,14 @@
 }
 -(void) dealloc
 {
-    [ssid release];
-    [security release];
-    [password release];
-    [deviceConf release];
+    [_tfSSID release];
+    [_tfPassword release];
+    [_tfConfirmPass release];
+    
+    [_ssid release];
+    [_security release];
+    [_password release];
+    [_deviceConf release];
     [super dealloc];
 }
 - (void)viewDidLoad
@@ -68,10 +67,10 @@
         NSLog(@"empty security ");
     }
     
-    UITextField * _ssid = (UITextField *) [self.ssidCell viewWithTag:202];
-    if (_ssid != nil && (self.isOtherNetwork == FALSE))
+    UITextField * tfSsid = (UITextField *) [self.ssidCell viewWithTag:202];
+    if (tfSsid != nil && (self.isOtherNetwork == FALSE))
     {
-        _ssid.text = self.ssid; 
+        tfSsid.text = self.ssid;
     }
     
     UITextField * _sec = (UITextField *) [self.securityCell viewWithTag:1];
@@ -294,10 +293,10 @@
         //only one cell in this section 
             if (self.isOtherNetwork == TRUE)
             {
-                UITextField * _ssid  = (UITextField*) [ssidCell viewWithTag:202];
+                UITextField *tfSsid  = (UITextField*) [ssidCell viewWithTag:202];
                 
                 
-                [_ssid setUserInteractionEnabled:TRUE];
+                [tfSsid setUserInteractionEnabled:TRUE];
             }
             return ssidCell;
         }
@@ -388,9 +387,9 @@
         //only one cell in this section
         if (self.isOtherNetwork == TRUE)
         {
-            UITextField * _ssid  = (UITextField*) [ssidCell viewWithTag:202];            
-            [_ssid setUserInteractionEnabled:TRUE];
-            [_ssid becomeFirstResponder];
+            UITextField *tfSsid  = (UITextField*) [ssidCell viewWithTag:202];
+            [tfSsid setUserInteractionEnabled:TRUE];
+            [tfSsid becomeFirstResponder];
         }
 
     }
@@ -674,10 +673,10 @@
     [self prepareWifiInfo]; 
     
     //Save and send 
-    if ( [deviceConf isDataReadyForStoring])
+    if ( [_deviceConf isDataReadyForStoring])
     {
         NSLog(@"ok to save ");
-        [Util writeDeviceConfigurationData:[deviceConf getWritableConfiguration]];
+        [Util writeDeviceConfigurationData:[_deviceConf getWritableConfiguration]];
     }
 
     

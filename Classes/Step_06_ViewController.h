@@ -17,20 +17,10 @@
 @interface Step_06_ViewController : UIViewController
 {
     
-    NSString * ssid, * security; 
-    NSString * password;
-    
     IBOutlet UITableViewCell * ssidCell;
     IBOutlet UITableViewCell * securityCell;
     IBOutlet UITableViewCell * passwordCell;
     IBOutlet UITableViewCell * confPasswordCell;
-    
-
-    BOOL isOtherNetwork; 
-
-    
-    /* Storage object */
-	DeviceConfiguration * deviceConf;
     
 }
 
@@ -38,6 +28,7 @@
 @property (nonatomic, assign) IBOutlet UITableViewCell * securityCell;
 @property (nonatomic, assign) IBOutlet UITableViewCell * passwordCell;
 @property (nonatomic, assign) IBOutlet UITableViewCell * confPasswordCell;
+
 @property (nonatomic, retain) NSString* ssid, * security, *password; 
 @property (nonatomic, retain) DeviceConfiguration * deviceConf;
 @property (nonatomic, assign) BOOL isOtherNetwork; 
