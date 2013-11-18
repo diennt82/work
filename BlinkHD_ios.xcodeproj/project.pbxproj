@@ -156,6 +156,7 @@
 		84DEA2BB17E42E3F00567836 /* NotificationViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 84DEA2B917E42E3F00567836 /* NotificationViewController.mm */; };
 		84DEA2BC17E42E3F00567836 /* NotificationViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 84DEA2BA17E42E3F00567836 /* NotificationViewController.xib */; };
 		84FD1DCF1832399E00238089 /* stream720p_10_926_alaw.sdp in Resources */ = {isa = PBXBuildFile; fileRef = 84FD1DCE1832399E00238089 /* stream720p_10_926_alaw.sdp */; };
+		8B66804D1839EEA80041F510 /* NotificationViewController_ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8B66804C1839EEA70041F510 /* NotificationViewController_ipad.xib */; };
 		8B68F5D118066CE500661527 /* PlaybackViewController_ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8B68F5D018066CE500661527 /* PlaybackViewController_ipad.xib */; };
 		8BA23841182CBC130022581A /* CameraScanner.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8BA23838182C8E130022581A /* CameraScanner.framework */; };
 		8BA5C47C1818DAAC006B4BB8 /* libcrypto.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A15430FC1818D08A00337EFE /* libcrypto.a */; };
@@ -184,7 +185,6 @@
 		9792B9B317E2F8E9009C9F5D /* bb_rec_icon_d.png in Resources */ = {isa = PBXBuildFile; fileRef = 9792B9B017E2F8E9009C9F5D /* bb_rec_icon_d.png */; };
 		9792B9B417E2F8E9009C9F5D /* bb_rec_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 9792B9B117E2F8E9009C9F5D /* bb_rec_icon.png */; };
 		9792B9B517E2F8E9009C9F5D /* i_mode.png in Resources */ = {isa = PBXBuildFile; fileRef = 9792B9B217E2F8E9009C9F5D /* i_mode.png */; };
-		9792FC2317D72F8300365405 /* H264PlayerViewController_land.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9792FC2217D72F8300365405 /* H264PlayerViewController_land.xib */; };
 		97987CCD154687490066C49B /* background.png in Resources */ = {isa = PBXBuildFile; fileRef = 97987CCC154687490066C49B /* background.png */; };
 		97987CCF154688110066C49B /* partition_bar.png in Resources */ = {isa = PBXBuildFile; fileRef = 97987CCE154688110066C49B /* partition_bar.png */; };
 		97987CD815468C2E0066C49B /* MBP_FirstPage.m in Sources */ = {isa = PBXBuildFile; fileRef = 97987CD615468C2E0066C49B /* MBP_FirstPage.m */; };
@@ -502,6 +502,7 @@
 		84DEA2B917E42E3F00567836 /* NotificationViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = NotificationViewController.mm; sourceTree = "<group>"; };
 		84DEA2BA17E42E3F00567836 /* NotificationViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = NotificationViewController.xib; sourceTree = "<group>"; };
 		84FD1DCE1832399E00238089 /* stream720p_10_926_alaw.sdp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = stream720p_10_926_alaw.sdp; sourceTree = "<group>"; };
+		8B66804C1839EEA70041F510 /* NotificationViewController_ipad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = NotificationViewController_ipad.xib; sourceTree = "<group>"; };
 		8B68F5D018066CE500661527 /* PlaybackViewController_ipad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PlaybackViewController_ipad.xib; sourceTree = "<group>"; };
 		8BA23838182C8E130022581A /* CameraScanner.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CameraScanner.framework; path = "../ios-frameworks/CameraScanner.framework"; sourceTree = "<group>"; };
 		8BA5C47D1818DCC1006B4BB8 /* ZoneViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZoneViewController.h; sourceTree = "<group>"; };
@@ -541,7 +542,6 @@
 		9792B9B017E2F8E9009C9F5D /* bb_rec_icon_d.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bb_rec_icon_d.png; sourceTree = "<group>"; };
 		9792B9B117E2F8E9009C9F5D /* bb_rec_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bb_rec_icon.png; sourceTree = "<group>"; };
 		9792B9B217E2F8E9009C9F5D /* i_mode.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = i_mode.png; sourceTree = "<group>"; };
-		9792FC2217D72F8300365405 /* H264PlayerViewController_land.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = H264PlayerViewController_land.xib; sourceTree = "<group>"; };
 		97987CCC154687490066C49B /* background.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = background.png; sourceTree = "<group>"; };
 		97987CCE154688110066C49B /* partition_bar.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = partition_bar.png; sourceTree = "<group>"; };
 		97987CD515468C2E0066C49B /* MBP_FirstPage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MBP_FirstPage.h; sourceTree = "<group>"; };
@@ -1790,6 +1790,7 @@
 				84DEA2B817E42E3F00567836 /* NotificationViewController.h */,
 				84DEA2B917E42E3F00567836 /* NotificationViewController.mm */,
 				84DEA2BA17E42E3F00567836 /* NotificationViewController.xib */,
+				8B66804C1839EEA70041F510 /* NotificationViewController_ipad.xib */,
 			);
 			name = NotificationView;
 			sourceTree = "<group>";
@@ -1858,7 +1859,6 @@
 				979BC68A17D990F400B3B373 /* H264PlayerViewController.xib */,
 				97A07FAE17D5FD4A00653460 /* H264PlayerViewController.h */,
 				97A07FAF17D5FD4A00653460 /* H264PlayerViewController.mm */,
-				9792FC2217D72F8300365405 /* H264PlayerViewController_land.xib */,
 				9792B9AE17E2D1F6009C9F5D /* H264PlayerViewController_ipad.xib */,
 			);
 			name = H264Player;
@@ -2101,6 +2101,7 @@
 				38483F07172A32D3009DF61E /* mbp_icon144x144.png in Resources */,
 				38483F0E172A33F5009DF61E /* iTunesArtwork in Resources */,
 				38483F0F172A33F5009DF61E /* iTunesArtwork@2x in Resources */,
+				8B66804D1839EEA80041F510 /* NotificationViewController_ipad.xib in Resources */,
 				BC3ECF16173225F700904539 /* black_background.png in Resources */,
 				BCF944AF1732602400F58B22 /* ME-sun_background.png in Resources */,
 				BCF944D0173262BC00F58B22 /* mestartup000002.png in Resources */,
@@ -2139,7 +2140,6 @@
 				BCF944EF173262BC00F58B22 /* mestartup000001.png in Resources */,
 				BCF944F11732749300F58B22 /* homepage_p1.png in Resources */,
 				BC4D8D8C1733B9BB005C34BB /* ME-screen_landscape.png in Resources */,
-				9792FC2317D72F8300365405 /* H264PlayerViewController_land.xib in Resources */,
 				979BC68B17D990F400B3B373 /* H264PlayerViewController.xib in Resources */,
 				979BC69B17D9B97700B3B373 /* PlaybackViewController.xib in Resources */,
 				979BC6A517D9BB9C00B3B373 /* PlayListViewController.xib in Resources */,
