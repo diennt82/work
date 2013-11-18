@@ -87,7 +87,7 @@
     {
         NSLog(@"Use default server");
         
-        [BMS_JSON_Communication setServerInput:@"http://api.simplimonitor.com/v1"];
+        [BMS_JSON_Communication setServerInput:@"http://api.hubble.in/v1"];
     }
 */
     
@@ -270,7 +270,7 @@
     NSString *applicationName = NSBundle.mainBundle.infoDictionary  [@"CFBundleDisplayName"];
     NSLog(@"Application name: %@", applicationName);
     
-    //NSString *swVersion = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
+    NSString *swVersion = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
     
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     NSString *apiKey = [userDefaults objectForKey:@"PortalApiKey"];
@@ -281,16 +281,16 @@
                                                                             ServerErr:nil] autorelease];
    
 //    //API
-//    NSDictionary *responseDict = [jsonComm registerAppBlockedWithName:applicationName
-//                                                        andDeviceCode:uuidString
-//                                                   andSoftwareVersion:swVersion
-//                                                            andApiKey:apiKey];
+    NSDictionary *responseDict = [jsonComm registerAppBlockedWithName:applicationName
+                                                        andDeviceCode:uuidString
+                                                   andSoftwareVersion:swVersion
+                                                            andApiKey:apiKey];
     
 
     //Demo.sm.com
-    NSDictionary *responseDict = [jsonComm registerAppBlockedWithName: applicationName
-                                                        andDeviceCode: uuidString
-                                                            andApiKey: apiKey];
+//    NSDictionary *responseDict = [jsonComm registerAppBlockedWithName: applicationName
+//                                                        andDeviceCode: uuidString
+//                                                            andApiKey: apiKey];
 
     
     NSString *appId = [[responseDict objectForKey:@"data"] objectForKey:@"id"];

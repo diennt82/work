@@ -307,23 +307,24 @@
     NSString * camName = (NSString *) [userDefaults objectForKey:@"CameraName"];
     
 //    //DEMO.SM.COM
-    [jsonComm registerDeviceWithDeviceName:camName
-                                  andRegId:mac
-                             andDeviceType:@"Camera"
-                                  andModel:@"blink1_hd"
-                                   andMode:@"upnp"
-                              andFwVersion:fwVersion
-                               andTimeZone:stringFromDate
-                                 andApiKey:apiKey];
+//    [jsonComm registerDeviceWithDeviceName:camName
+//                                  andRegId:mac
+//                             andDeviceType:@"Camera"
+//                                  andModel:@"blink1_hd"
+//                                   andMode:@"upnp"
+//                              andFwVersion:fwVersion
+//                               andTimeZone:stringFromDate
+//                                 andApiKey:apiKey];
 
-//    [jsonComm registerDeviceWithDeviceModelID:@"3"
-//                                      andName:camName
-//                            andRegistrationID:mac
-//                                      andMode:@"upnp"
-//                                 andFwVersion:fwVersion
-//                                  andTimeZone:@"+07.00"
-//                          andSubscriptionType:@"tier1"
-//                                    andApiKey:apiKey];
+    //Api
+    [jsonComm registerDeviceWithDeviceModelID:@"5"
+                                      andName:camName
+                            andRegistrationID:mac
+                                      andMode:@"upnp"
+                                 andFwVersion:fwVersion
+                                  andTimeZone:@"+07.00"
+                          andSubscriptionType:@"tier1"
+                                    andApiKey:apiKey];
 
 }
 
