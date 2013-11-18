@@ -1384,8 +1384,11 @@
         )
     { // Make sure we are connecting via STUN
         
-        self.selectedChannel.waitingForStreamerToClose = YES;
-        NSLog(@"waiting for close stream from server");
+        if (self.h264PlayerVCDelegate != nil)
+        {
+            self.selectedChannel.waitingForStreamerToClose = YES;
+            NSLog(@"waiting for close stream from server");
+        }
         
         H264PlayerViewController *vc = (H264PlayerViewController *)[self retain];
         [self performSelectorInBackground:@selector(closeStunStream_bg:) withObject:vc];

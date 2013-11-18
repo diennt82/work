@@ -131,7 +131,7 @@
         }
         
         int rcvTimeStamp = [[NSDate date] timeIntervalSince1970];
-        CameraAlert * camAlert = [[[CameraAlert alloc]initWithTimeStamp1:rcvTimeStamp] autorelease];
+        CameraAlert * camAlert = [[CameraAlert alloc]initWithTimeStamp1:rcvTimeStamp];
         //set other values
         camAlert.cameraMacNoColon = str3;
         
@@ -172,6 +172,7 @@
             [self performSelectorOnMainThread:@selector(activateNotificationViewController:) withObject:camAlert waitUntilDone:YES];
         }
         
+        //[camAlert release]; camAlert leak memory but I can't release it.
     }
 
 }
