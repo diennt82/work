@@ -7,7 +7,7 @@
 //
 
 #import "MBP_InitialSetupViewController.h"
-
+#define USE_FILE_XIB_LANDSCAPE_FOR_INIT 0
 @interface MBP_InitialSetupViewController ()
 
 @end
@@ -166,6 +166,7 @@
 
 -(void) adjustViewsForOrientations:(UIInterfaceOrientation) orientation
 {
+#if USE_FILE_XIB_LANDSCAPE_FOR_INIT
     if (orientation == UIInterfaceOrientationLandscapeLeft ||
         orientation == UIInterfaceOrientationLandscapeRight)
     {
@@ -200,6 +201,7 @@
             
         }
     }
+#endif
 }
 
 - (void)presentModallyOn:(UIViewController *)parent
