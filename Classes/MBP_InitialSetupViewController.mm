@@ -41,8 +41,12 @@
     // rootViewController can't be an instance of UITabBarController
     // remember to include RootViewController in your class!
     
-    self.navigationController.navigationBar.barStyle = UIBarStyleBlackOpaque;
-    
+    //set navigation bar style for iOS7
+    if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 7) {
+        self.navigationController.navigationBar.barStyle = UIBarStyleDefault;
+    } else {
+        self.navigationController.navigationBar.barStyle = UIBarStyleBlackOpaque;
+    }
     self.navigationItem.title = NSLocalizedStringWithDefaultValue(@"Baby_Monitor_Setup",nil, [NSBundle mainBundle],
                                                                   @"Monitor Setup", nil);
 

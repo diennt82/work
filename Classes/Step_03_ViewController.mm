@@ -131,49 +131,50 @@
 
 -(void) adjustViewsForOrientations: (UIInterfaceOrientation) interfaceOrientation
 {
-#if 0
-    if (interfaceOrientation == UIInterfaceOrientationLandscapeLeft ||
-        interfaceOrientation == UIInterfaceOrientationLandscapeRight)
-    {
-        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+    if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 7) {
+        // Load resources for iOS 7 or later
+        if (interfaceOrientation == UIInterfaceOrientationLandscapeLeft ||
+            interfaceOrientation == UIInterfaceOrientationLandscapeRight)
         {
-            //[[NSBundle mainBundle] loadNibNamed:@"Step_03_ViewController_land_ipad" owner:self options:nil];
+            if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+            {
+                //[[NSBundle mainBundle] loadNibNamed:@"Step_03_ViewController_land_ipad" owner:self options:nil];
+            }
+            else
+            {
+                BOOL hidden = self.inProgress.hidden;
+                [self.inProgress removeFromSuperview];
+                
+                
+                [[NSBundle mainBundle] loadNibNamed:@"Step_03_ViewController_land" owner:self options:nil];
+                
+                [self.view addSubview:self.inProgress];
+                self.inProgress.hidden = hidden;
+                
+            }
         }
-        else
+        else if (interfaceOrientation == UIInterfaceOrientationPortrait ||
+                 interfaceOrientation == UIInterfaceOrientationPortraitUpsideDown)
         {
-            BOOL hidden = self.inProgress.hidden;
-            [self.inProgress removeFromSuperview];
-            
-            
-            [[NSBundle mainBundle] loadNibNamed:@"Step_03_ViewController_land" owner:self options:nil];
-            
-            [self.view addSubview:self.inProgress];
-            self.inProgress.hidden = hidden;
-            
+            if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+            {
+                //[[NSBundle mainBundle] loadNibNamed:@"Step_03_ViewController_ipad" owner:self options:nil];
+            }
+            else
+            {
+                BOOL hidden = self.inProgress.hidden;
+                [self.inProgress removeFromSuperview];
+                
+                
+                [[NSBundle mainBundle] loadNibNamed:@"Step_03_ViewController" owner:self options:nil];
+                [self.view addSubview:self.inProgress];
+                self.inProgress.hidden = hidden;
+                
+                
+            }
         }
+        
     }
-    else if (interfaceOrientation == UIInterfaceOrientationPortrait ||
-             interfaceOrientation == UIInterfaceOrientationPortraitUpsideDown)
-    {
-        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
-        {
-            //[[NSBundle mainBundle] loadNibNamed:@"Step_03_ViewController_ipad" owner:self options:nil];
-        }
-        else
-        {
-            BOOL hidden = self.inProgress.hidden;
-            [self.inProgress removeFromSuperview];
-            
-            
-            [[NSBundle mainBundle] loadNibNamed:@"Step_03_ViewController" owner:self options:nil];
-            [self.view addSubview:self.inProgress];
-            self.inProgress.hidden = hidden;
-            
-            
-        }
-    }
-    
-#endif
 }
 #pragma mark -
 

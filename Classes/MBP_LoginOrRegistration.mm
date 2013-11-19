@@ -206,7 +206,13 @@
     // Create a navigation controller with us as its root.
     assert(navController != nil);
     
-    navController.navigationBar.barStyle = UIBarStyleBlackOpaque;
+    if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 7) {
+        // Load resources for iOS 7 or later
+        navController.navigationBar.barStyle = UIBarStyleDefault;
+    } else {
+        navController.navigationBar.barStyle = UIBarStyleBlackOpaque;
+    }
+    
 
     // Set up the Cancel button on the left of the navigation bar.
     self.navigationItem.leftBarButtonItem  = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(cancelAction:)] autorelease];

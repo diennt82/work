@@ -30,8 +30,11 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
-    self.navigationController.navigationBar.barStyle = UIBarStyleBlackOpaque;
+    if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 7) {
+        self.navigationController.navigationBar.barStyle = UIBarStyleDefault;
+    } else {
+        self.navigationController.navigationBar.barStyle = UIBarStyleBlackOpaque;
+    }
     UIBarButtonItem *backButton =
     [[UIBarButtonItem alloc] initWithTitle:NSLocalizedStringWithDefaultValue(@"Cancel",nil, [NSBundle mainBundle],
                                                                              @"Cancel", nil)
@@ -268,14 +271,17 @@
         {
             
             if (indexPath.row == STEP_1) {
+                step1_cell.backgroundColor = [UIColor clearColor];
                 return step1_cell;
             }
             if (indexPath.row == STEP_2)
             {
+                step2_cell.backgroundColor = [UIColor clearColor];
                 return step2_cell;
             }
             if (indexPath.row == STEP_3)
             {
+                step3_cell.backgroundColor = [UIColor clearColor];
                 return step3_cell;
             }
             

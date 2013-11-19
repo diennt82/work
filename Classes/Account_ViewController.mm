@@ -36,13 +36,6 @@
     // Do any additional setup after loading the view from its nib.
     
     
-    [self.navigationController setNavigationBarHidden:YES];
-    
-    //Build ToolBar manually
-    
-    [self buildTopToolBar];
-    
-    
     [self loadUserData];
     
     
@@ -54,14 +47,28 @@
     // Release any retained subviews of the main view.
     // e.g. self.myOutlet = nil;
 }
-
+-(void)removeSubViewOfNavigationController {
+    for (UIView *subView in self.navigationController.view.subviews)
+    {
+        
+        if ([subView isKindOfClass:[UIToolbar class]])
+        {
+            
+            [subView removeFromSuperview];
+        }
+    }
+}
 -(void)viewWillAppear:(BOOL)animated
 {
     NSLog(@"viewWillAppear --");
+    if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 7) {
+        [self.navigationController setNavigationBarHidden:NO];
+    } else {
+        [self.navigationController setNavigationBarHidden:YES];
+    }
     UIInterfaceOrientation infOrientation = [UIApplication sharedApplication].statusBarOrientation;
     
 	[self adjustViewsForOrientation:infOrientation];
-    
     [self loadUserData];
     
 }
@@ -93,22 +100,19 @@
     
 }
 
--(void) buildTopToolBar
+-(void) buildTopToolBar: (NSInteger)width
 {
+    int screenWidth = width;
     
-    
-    int screenWidth = [UIScreen mainScreen].bounds.size.width  ;//320
-    
-    //adjust position of toolbar in iOS7
-    if (floor(NSFoundationVersionNumber) <= NSFoundationVersionNumber_iOS_6_1) {
+    if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 7) {
+        // Load resources for iOS 7 or later
+        [self removeSubViewOfNavigationController];
+        mtopbar = [[UIToolbar alloc]initWithFrame:CGRectMake(0, 20, screenWidth, 44)];
+    } else {
         // Load resources for iOS 6.1 or earlier
         mtopbar = [[UIToolbar alloc]initWithFrame:CGRectMake(0, 0, screenWidth, 44)];
-    } else {
-        // Load resources for iOS 7 or later
-        mtopbar = [[UIToolbar alloc]initWithFrame:CGRectMake(0, 20, screenWidth, 44)];
+        mtopbar.barStyle = UIBarStyleBlackOpaque;
     }
-    
-    mtopbar.barStyle = UIBarStyleBlackOpaque;
     // create an array for the buttons
     NSMutableArray* buttons = [[NSMutableArray alloc] initWithCapacity:3];
     
@@ -160,11 +164,14 @@
     [mtopbar setItems:buttons animated:NO];
     [buttons release];
     
-    [mtopbar setAutoresizingMask: (UIViewAutoresizingFlexibleWidth|
-                                   UIViewAutoresizingFlexibleLeftMargin|
-                                   UIViewAutoresizingFlexibleRightMargin) ];
-    
-    [self.view addSubview:mtopbar];
+    if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 7) {
+        [self.navigationController.view addSubview:mtopbar];
+    } else {
+//        [mtopbar setAutoresizingMask: (UIViewAutoresizingFlexibleWidth|
+//                                       UIViewAutoresizingFlexibleLeftMargin|
+//                                       UIViewAutoresizingFlexibleRightMargin) ];
+        [self.view addSubview:mtopbar];
+    }
 }
 
 
@@ -199,10 +206,31 @@
 -(void ) didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation
 {
     [self loadUserData];
+    //    [self adjustViewsForOrientation:fromInterfaceOrientation];
     // [accountInfo reloadData];
 }
 -(void) adjustViewsForOrientation:(UIInterfaceOrientation) orientation
 {
+    
+    if (orientation == UIInterfaceOrientationLandscapeLeft || orientation == UIInterfaceOrientationLandscapeRight)
+	{
+        
+        //since at this time.. the orientation is still NOT CHANGED so need to use the OTHER size
+        int screenWidth = [UIScreen mainScreen].bounds.size.height  ;//480
+        NSLog(@"screenWidth is  %d", screenWidth);
+        //            mtopbar.frame = CGRectMake(0, 0, screenWidth, mtopbar.frame.size.height);
+        [self buildTopToolBar:screenWidth];
+        
+    }	else if (orientation == UIInterfaceOrientationPortrait || orientation == UIInterfaceOrientationPortraitUpsideDown)
+	{
+        
+        //since at this time.. the orientation is still NOT CHANGED so need to use the OTHER size
+        int screenWidth = [UIScreen mainScreen].bounds.size.width  ;//320
+        [self buildTopToolBar:screenWidth];
+        
+    }
+    
+    
 #if 0
     
 	if (orientation == UIInterfaceOrientationLandscapeLeft || orientation == UIInterfaceOrientationLandscapeRight)
@@ -274,7 +302,7 @@
             int screenWidth = [UIScreen mainScreen].bounds.size.width  ;//320
             int screenHeight = [UIScreen mainScreen].bounds.size.height;
             
-            mtopbar.frame = CGRectMake(0, 0, screenWidth, mtopbar.frame.size.height);
+            //            mtopbar.frame = CGRectMake(0, 0, screenWidth, mtopbar.frame.size.height);
             
             UIImageView * bg = (UIImageView*) [self.view viewWithTag:1];
             if (bg != nil)

@@ -61,15 +61,27 @@
     [listOfChannel release];
     [super dealloc];
 }
-
+-(void)removeSubViewOfNavigationController {
+    for (UIView *subView in self.navigationController.view.subviews)
+    {
+        
+        if ([subView isKindOfClass:[UIToolbar class]])
+        {
+            
+            [subView removeFromSuperview];
+        }
+    }
+}
 -(void) setupTopBarForEditMode:(BOOL) isEditMode
 {
-    if (topbar != nil)
-    {
-        [topbar removeFromSuperview];
-        [topbar release];
-        
-    }
+//    if (topbar != nil)
+//    {
+//        [topbar removeFromSuperview];
+//        [topbar release];
+//        
+//    }
+    
+    [self removeSubViewOfNavigationController];
     
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     
@@ -82,16 +94,16 @@
     
     if (isEditMode == FALSE)
     {
-        if (floor(NSFoundationVersionNumber) <= NSFoundationVersionNumber_iOS_6_1) {
-            // Load resources for iOS 6.1 or earlier
-            //Build ToolBar manually
-            topbar = [[UIToolbar alloc]initWithFrame:CGRectMake(0, 0, screenWidth /*screen_frame.size.width*/, 44)];
-        } else {
+        if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 7) {
             // Load resources for iOS 7 or later
             //Build ToolBar manually
-            topbar = [[UIToolbar alloc]initWithFrame:CGRectMake(0, 20, screenWidth /*screen_frame.size.width*/, 44)];
+            topbar = [[UIToolbar alloc]initWithFrame:CGRectMake(0, 20, screenWidth, 44)];
+        } else {
+            // Load resources for iOS 6.1 or earlier
+            //Build ToolBar manually
+            topbar = [[UIToolbar alloc]initWithFrame:CGRectMake(0, 0, screenWidth, 44)];
+            topbar.barStyle = UIBarStyleBlackOpaque;
         }
-        topbar.barStyle = UIBarStyleBlackOpaque;
         
         [topbar setAutoresizingMask: UIViewAutoresizingFlexibleWidth|
                                       UIViewAutoresizingFlexibleLeftMargin|
@@ -195,21 +207,25 @@
         
         
         
-        [self.view addSubview:topbar];
+        if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 7) {
+            [self.navigationController.view addSubview:topbar];
+        } else {
+            [self.view addSubview:topbar];
+        }
     }
     else //isEditMode = TRUE
     {
-        
-        if (floor(NSFoundationVersionNumber) <= NSFoundationVersionNumber_iOS_6_1) {
-            // Load resources for iOS 6.1 or earlier
-            //Build ToolBar manually
-            topbar = [[UIToolbar alloc]initWithFrame:CGRectMake(0, 0, screenWidth, 44)];
-        } else {
+        if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 7) {
             // Load resources for iOS 7 or later
             //Build ToolBar manually
             topbar = [[UIToolbar alloc]initWithFrame:CGRectMake(0, 20, screenWidth, 44)];
+        } else {
+            // Load resources for iOS 6.1 or earlier
+            //Build ToolBar manually
+            topbar = [[UIToolbar alloc]initWithFrame:CGRectMake(0, 0, screenWidth, 44)];
+            topbar.barStyle = UIBarStyleBlackOpaque;
         }
-        topbar.barStyle = UIBarStyleBlackOpaque;
+
         [topbar setAutoresizingMask: UIViewAutoresizingFlexibleWidth|
                                       UIViewAutoresizingFlexibleLeftMargin|
                                       UIViewAutoresizingFlexibleRightMargin];
@@ -287,9 +303,11 @@
                                      UIViewAutoresizingFlexibleRightMargin |
                                      UIViewAutoresizingFlexibleWidth)];
         
-
-        
-        [self.view addSubview:topbar];
+        if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 7) {
+            [self.navigationController.view addSubview:topbar];
+        } else {
+            [self.view addSubview:topbar];
+        }
         
     }
 
@@ -320,10 +338,6 @@
 {
     [super viewDidLoad];
 	// Do any additional setup after loading the view.
-       
-    
-    [self.navigationController setNavigationBarHidden:YES];
-    
     
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     
@@ -331,7 +345,6 @@
 
     self.editModeEnabled = FALSE;
     [self setupTopBarForEditMode:self.editModeEnabled];
-    
     if (isOffline == YES)
     {
         NSLog(@"OFFLINE OFFLINE OFFLINE");
@@ -439,14 +452,16 @@
 
 -(void)viewWillAppear:(BOOL)animated
 {
-    [self.navigationController setNavigationBarHidden:YES];
-    
+    if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 7) {
+        [self.navigationController setNavigationBarHidden:NO];
+    } else {
+        [self.navigationController setNavigationBarHidden:YES];
+    }
+    [self setupTopBarForEditMode:self.editModeEnabled];
 	UIInterfaceOrientation infOrientation = [UIApplication sharedApplication].statusBarOrientation;
     
 	[self adjustViewsForOrientation:infOrientation];
 }
-
-
 
 -(BOOL) shouldAutorotate
 {
@@ -488,12 +503,15 @@
 
 -(void) adjustViewsForOrientation:(UIInterfaceOrientation) orientation
 {
+    CGRect screenRect = [[UIScreen mainScreen] bounds];
+    CGFloat screenHeight = screenRect.size.height;
     if (orientation == UIInterfaceOrientationLandscapeLeft || orientation == UIInterfaceOrientationLandscapeRight)
 	{
         
         if (emptyCameraListView != nil)
         {
-            emptyCameraListView.frame = CGRectMake(80,
+            NSInteger offsetX = (screenHeight - emptyCameraListView.frame.size.width) / 2;
+            emptyCameraListView.frame = CGRectMake(offsetX,
                                                    60,
                                                    emptyCameraListView.frame.size.width,
                                                    emptyCameraListView.frame.size.height);
@@ -855,6 +873,8 @@
 
 - (void)tableView: (UITableView *)tableView didSelectRowAtIndexPath: (NSIndexPath *)indexPath
 {
+    [self.navigationController setNavigationBarHidden:YES];
+    [self removeSubViewOfNavigationController];
     [tableView deselectRowAtIndexPath:[tableView indexPathForSelectedRow]
                              animated:NO];
     
@@ -1002,7 +1022,7 @@
     
     
     [navController setNavigationBarHidden:YES];
-    
+    [self setupTopBarForEditMode:self.editModeEnabled];
     
     // Set up the Cancel button on the left of the navigation bar.
     self.navigationItem.leftBarButtonItem  = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(cancelAction:)] autorelease];
@@ -1011,7 +1031,11 @@
     assert(self.navigationItem.rightBarButtonItem != nil);
     
     
-    [navController.navigationBar setBarStyle:UIBarStyleBlackTranslucent];
+    if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 7) {
+        [navController.navigationBar setBarStyle:UIBarStyleDefault];
+    } else {
+        [navController.navigationBar setBarStyle:UIBarStyleBlackTranslucent];
+    }
     
     
     // Present the navigation controller on the specified parent
