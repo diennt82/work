@@ -305,6 +305,12 @@
             /*
              * Maintain Aspect Ratio
              */
+            if (ext1 == 0 ||
+                ext2 == 0)
+            {
+                break;
+            }
+            
             float ratio = (float) ext1/ (float)ext2;
             
             float fw = self.imageViewVideo.frame.size.height * ratio;
@@ -334,7 +340,15 @@
                 destHeight = self.imageViewVideo.frame.size.height;
                 
                 // so need to adjust the origin
-                left = (self.imageViewVideo.frame.size.width - fw)/2;
+                if (self.imageViewVideo.frame.size.width > fw)
+                {
+                    left = (self.imageViewVideo.frame.size.width - fw)/2;
+                }
+                else
+                {
+                    left = self.imageViewVideo.frame.origin.x;
+                }
+                
                 top = self.imageViewVideo.frame.origin.y;
 
             }
@@ -1322,6 +1336,8 @@
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     [userDefaults removeObjectForKey:CAM_IN_VEW];
     [userDefaults synchronize];
+    
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
     
     [self.navigationController popToRootViewControllerAnimated:NO];
     
@@ -2772,21 +2788,7 @@
 
 -(void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation
 {
-    
-    
-    CGRect rect = [[UIApplication sharedApplication] statusBarFrame]; // Get status bar frame dimensions
-//    NSLog(@"1 Statusbar frame: %1.0f, %1.0f, %1.0f, %1.0f", rect.origin.x,
-//          rect.origin.y, rect.size.width, rect.size.height);
-    //HACK : incase hotspot is turned on
-    if (rect.size.height>21 &&  rect.size.height<50)
-    {
 
-    }
-
-    else
-    {
-        
-    }
 }
 
 -(void) checkOrientation
@@ -2798,42 +2800,15 @@
 
 - (void) adjustViewsForOrientation:(UIInterfaceOrientation)orientation
 {
+    CGRect screenBounds = [[UIScreen mainScreen] bounds];
+    CGFloat screenWidth = screenBounds.size.width;
+    CGFloat screenHeight = screenBounds.size.height;
+    
+    CGSize activitySize = _activityIndicator.frame.size;
+    CGSize tableViewSize = _playlistViewController.tableView.frame.size;
+    
 	if (orientation == UIInterfaceOrientationLandscapeLeft || orientation == UIInterfaceOrientationLandscapeRight)
 	{
-        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
-        {
-
-            CGRect screenBounds = [[UIScreen mainScreen] bounds];
-            
-            
-#if 0
-            CGRect newRect = CGRectMake(0, 96, 1024, 576);
-            
-            NSLog(@"width: %f", screenBounds.size.width);
-            NSLog(@"heigth: %f", screenBounds.size.height);
-            
-            if (screenBounds.size.height == 1920)
-            {
-                newRect = CGRectMake(0, 304, 1920, 1080);
-            }
-            
-#endif
-            CGRect newRect = CGRectMake(0, 0, screenBounds.size.height, screenBounds.size.width);
-            
-            self.imageViewVideo.frame = newRect;
-            
-            self.activityIndicator.frame = CGRectMake(493, 365, _activityIndicator.frame.size.width, _activityIndicator.frame.size.height);
-            //self.zoneViewController.view.frame = newRect;
-        }
-        else
-        {
-            CGRect newRect = CGRectMake(0, 32, 480, 256);
-            self.imageViewVideo.frame = newRect;
-            self.viewCtrlButtons.frame = CGRectMake(0, 106, _viewCtrlButtons.frame.size.width, _viewCtrlButtons.frame.size.height);
-            self.imgViewDrectionPad.frame = CGRectMake(180, 180, _imgViewDrectionPad.frame.size.width, _imgViewDrectionPad.frame.size.height);
-             self.activityIndicator.frame = CGRectMake(221, 141, _activityIndicator.frame.size.width, _activityIndicator.frame.size.height);
-            //self.zoneViewController.view.frame = newRect;
-        }
         
         self.view.backgroundColor = [UIColor blackColor];
         [[UIApplication sharedApplication] setStatusBarHidden:YES];
@@ -2842,58 +2817,36 @@
         self.imgViewDrectionPad.hidden = YES;
         self.viewCtrlButtons.hidden = YES;
         
-        CGRect tableViewFrame = self.playlistViewController.tableView.frame;
-        self.playlistViewController.tableView.frame = CGRectMake(0, 0, tableViewFrame.size.width, tableViewFrame.size.height);
-        //self.zoneViewController.view.hidden = YES;
+        CGFloat imageViewHeight = screenHeight * 9 / 16;
+        CGRect newRect = CGRectMake(0, (screenWidth - imageViewHeight) / 2, screenHeight, imageViewHeight);
+        self.imageViewVideo.frame = newRect;
+        self.viewStopStreamingProgress.frame = CGRectMake(0, 0, screenHeight, screenWidth);
+        self.activityIndicator.frame = CGRectMake(screenHeight / 2 - activitySize.width / 2, screenWidth / 2 - activitySize.height / 2, activitySize.width, activitySize.height);
+        
+        self.playlistViewController.tableView.frame = CGRectMake(0, 20, tableViewSize.width, tableViewSize.height);
 	}
 	else if (orientation == UIInterfaceOrientationPortrait || orientation == UIInterfaceOrientationPortraitUpsideDown)
 	{
-        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
-        {
-            CGRect screenBounds = [[UIScreen mainScreen] bounds];
-            
-            CGRect newRect = CGRectMake(0, 44, 768, 432);
-            
-            if (screenBounds.size.height == 1920)
-            {
-                newRect = CGRectMake(0, 44, 1200, 675);
-                self.viewCtrlButtons.frame = CGRectMake(0, 476, _viewCtrlButtons.frame.size.width + 432, _viewCtrlButtons.frame.size.height);
-            }
-            
-            self.imageViewVideo.frame = newRect;
-            
-            self.viewStopStreamingProgress.hidden = YES;
-            self.activityIndicator.frame = CGRectMake(365, 241, _activityIndicator.frame.size.width, _activityIndicator.frame.size.height);
-            
-            //self.zoneViewController.view.frame = CGRectMake(0, 550, 768, 430);
-            
-        }
-        else
-        {
-//            [[NSBundle mainBundle] loadNibNamed:@"H264PlayerViewController"
-//                                          owner:self
-//                                        options:nil];
-            CGRect newRect = CGRectMake(0, 44, 320, 180);
-            self.imageViewVideo.frame = newRect;
-            self.viewCtrlButtons.frame = CGRectMake(0, 224, _viewCtrlButtons.frame.size.width, _viewCtrlButtons.frame.size.height);
-            self.imgViewDrectionPad.frame = CGRectMake(100, 340, _imgViewDrectionPad.frame.size.width, _imgViewDrectionPad.frame.size.height);
-            self.activityIndicator.frame = CGRectMake(141, 124, _activityIndicator.frame.size.width, _activityIndicator.frame.size.height);
-            //self.zoneViewController.view.frame = CGRectMake(0, 258, 320, 190);
-        }
     
         [[UIApplication sharedApplication] setStatusBarHidden:NO];
+        self.view.backgroundColor = [UIColor colorWithPatternImage:self.imgBackground];
         
         self.topToolbar.hidden = NO;
         self.imgViewDrectionPad.hidden = NO;
         self.viewCtrlButtons.hidden = NO;
+        self.viewStopStreamingProgress.hidden = YES;
         
-        self.view.backgroundColor = [UIColor colorWithPatternImage:self.imgBackground];
+        CGFloat imageViewHeight = screenWidth * 9 / 16;
         
-        CGRect tableViewFrame = self.playlistViewController.tableView.frame;
-        self.playlistViewController.tableView.frame = CGRectMake(0, 44, tableViewFrame.size.width, tableViewFrame.size.height);
+        CGRect destRect = CGRectMake(0, 44, screenWidth, imageViewHeight);
+        self.imageViewVideo.frame = destRect;
+        
+        self.activityIndicator.frame = CGRectMake(screenWidth / 2 - activitySize.width / 2, imageViewHeight / 2 - activitySize.height / 2 + 44, activitySize.width, activitySize.height);
+        self.viewCtrlButtons.frame = CGRectMake(0, imageViewHeight + 44, _viewCtrlButtons.frame.size.width, _viewCtrlButtons.frame.size.height);
+        self.viewStopStreamingProgress.frame = CGRectMake(0, 0, screenWidth, screenHeight);
+        
+        self.playlistViewController.tableView.frame = CGRectMake(0, 44, tableViewSize.width, tableViewSize.height);
 	}
-    
-    [self checkIphone5Size:orientation];
 
     self.backBarBtnItem.target = self;
     self.backBarBtnItem.action = @selector(prepareGoBackToCameraList);
@@ -2905,31 +2858,6 @@
     {
         //trigger re-cal of videosize
         h264Streamer->videoSizeChanged();
-    }
-}
-
-- (void) checkIphone5Size: (UIInterfaceOrientation)orientation
-{
-    CGRect screenBounds = [[UIScreen mainScreen] bounds];
-    
-    if (screenBounds.size.height == 568)
-    {
-        if (orientation == UIInterfaceOrientationLandscapeLeft || orientation == UIInterfaceOrientationLandscapeRight)
-        {
-            NSLog(@"iphone5 SHift right...");
-//            CGAffineTransform translate = CGAffineTransformMakeTranslation(44, 0);
-//            self.imageViewVideo.transform = translate;
-            CGRect newRect = CGRectMake(0, 0, 568, 320);
-            self.imageViewVideo.frame = newRect;
-            //self.zoneViewController.view.frame = newRect;
-            
-            self.activityIndicator.frame = CGRectMake(274, 150, _activityIndicator.frame.size.width, _activityIndicator.frame.size.height);
-        }
-        else if (orientation == UIInterfaceOrientationPortrait || orientation == UIInterfaceOrientationPortraitUpsideDown)
-        {
-            self.viewStopStreamingProgress.frame = CGRectMake(0, 0, 320, 568);
-            self.zoneViewController.view.frame = CGRectMake(0, 258, 320, 190);
-        }
     }
 }
 
