@@ -30,7 +30,6 @@
 @implementation H264PlayerViewController
 
 @synthesize  alertTimer;
-@synthesize  selectedChannel;
 @synthesize  askForFWUpgradeOnce;
 @synthesize   client;
 
@@ -164,7 +163,7 @@
             self.h264StreamerIsInStopped = FALSE;
             
             NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-            [userDefaults setObject:selectedChannel.profile.mac_address forKey:CAM_IN_VEW];
+            [userDefaults setObject:_selectedChannel.profile.mac_address forKey:CAM_IN_VEW];
             [userDefaults synchronize];
         }
         else
@@ -919,12 +918,12 @@
     
     self.h264StreamerIsInStopped = FALSE;
     
-    if(selectedChannel.profile.isInLocal == TRUE)
+    if(_selectedChannel.profile.isInLocal == TRUE)
     {
         NSLog(@"Become ACTIVE _  .. Local ");
         [self becomeActive];
     }
-    else if ( selectedChannel.profile.minuteSinceLastComm <= 5) // Remote
+    else if ( _selectedChannel.profile.minuteSinceLastComm <= 5) // Remote
     {
         [self becomeActive];
     }
@@ -937,7 +936,7 @@
         return;
     }
     
-    selectedChannel.stopStreaming = TRUE;
+    _selectedChannel.stopStreaming = TRUE;
     
     //[self stopPeriodicPopup];
     
@@ -956,14 +955,14 @@
     
     self.imageViewVideo.backgroundColor = [UIColor blackColor];
     
-    if (selectedChannel.profile.isInLocal == TRUE)
+    if (_selectedChannel.profile.isInLocal == TRUE)
     {
         NSLog(@"Enter Background.. Local ");
     }
-    else if (selectedChannel.profile.minuteSinceLastComm <= 5) // Remote
+    else if (_selectedChannel.profile.minuteSinceLastComm <= 5) // Remote
     {
         //NSLog(@"abort remote timer ");
-        [selectedChannel abortViewTimer];
+        [_selectedChannel abortViewTimer];
     }
 }
 
@@ -1918,7 +1917,7 @@
 -(void) periodicProbe:(NSTimer *) exp
 {
     if (userWantToCancel == TRUE  ||
-        selectedChannel.stopStreaming == TRUE)
+        _selectedChannel.stopStreaming == TRUE)
     {
         NSLog(@"Stop probing ... ");
     }
@@ -2359,16 +2358,21 @@
     
 	if (dir_str != nil)
 	{
-        if (selectedChannel.profile.isInLocal)
+        if (_selectedChannel.profile.isInLocal)
 		{
             _httpComm = [[[HttpCommunication alloc] init] autorelease];
-				//Non block send-
-				[_httpComm sendCommand:dir_str];
-                //[_httpComm sendCommandAndBlock:dir_str];
+            _httpComm.device_ip = _selectedChannel.profile.ip_address;
+            _httpComm.device_port = _selectedChannel.profile.port;
+            
+            //Non block send-
+            NSLog(@"device_ip: %@, device_port: %d", _selectedChannel.profile.ip_address, _selectedChannel.profile.port);
+            
+            [_httpComm sendCommand:dir_str];
+            //[_httpComm sendCommandAndBlock:dir_str];
 		}
-		else if(selectedChannel.profile.minuteSinceLastComm <= 5)
+		else if(_selectedChannel.profile.minuteSinceLastComm <= 5)
 		{
-            NSString *mac = [Util strip_colon_fr_mac:selectedChannel.profile.mac_address];
+            NSString *mac = [Util strip_colon_fr_mac:_selectedChannel.profile.mac_address];
             NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
             NSString *apiKey = [userDefaults objectForKey:@"PortalApiKey"];
             
@@ -2435,17 +2439,19 @@
     
 	if (dir_str != nil)
 	{
-        if (selectedChannel.profile.isInLocal)
+        if (_selectedChannel.profile.isInLocal)
         {
             _httpComm = [[[HttpCommunication alloc] init] autorelease];
+            _httpComm.device_ip = _selectedChannel.profile.ip_address;
+            _httpComm.device_port = _selectedChannel.profile.port;
 				//Non block send-
 				[_httpComm sendCommand:dir_str];
                 
                 //[_httpComm sendCommandAndBlock:dir_str];
 		}
-		else if ( selectedChannel.profile.minuteSinceLastComm <= 5)
+		else if ( _selectedChannel.profile.minuteSinceLastComm <= 5)
 		{
-            NSString *mac = [Util strip_colon_fr_mac:selectedChannel.profile.mac_address];
+            NSString *mac = [Util strip_colon_fr_mac:_selectedChannel.profile.mac_address];
             NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
             NSString *apiKey = [userDefaults objectForKey:@"PortalApiKey"];
             
@@ -2602,7 +2608,7 @@
     {
         if(touch.view.tag == 999)
         {
-            NSLog(@"ok");
+            //NSLog(@"ok");
             CGPoint location = [touch locationInView:touch.view];
             [self touchEventAt:location phase:touch.phase];
         }
@@ -2617,7 +2623,7 @@
     {
         if(touch.view.tag == 999)
         {
-            NSLog(@"ok");
+            //NSLog(@"ok");
             CGPoint location = [touch locationInView:touch.view];
             [self touchEventAt:location phase:touch.phase];
         }
@@ -2632,7 +2638,7 @@
     {
         if(touch.view.tag == 999)
         {
-            NSLog(@"ok");
+            //NSLog(@"ok");
             CGPoint location = [touch locationInView:touch.view];
             [self touchEventAt:location phase:touch.phase];
         }
@@ -3232,28 +3238,7 @@
 	[alert show];
     
 	[alert retain];
-
-    //[self performSelectorOnMainThread:@selector(showAlertView:) withObject:msg waitUntilDone:YES];
 }
-
-//- (void)showAlertView: (NSString *)msg
-//{
-//    NSString * cancel = NSLocalizedStringWithDefaultValue(@"Cancel",nil, [NSBundle mainBundle],
-//                                                          @"Cancel", nil);
-//    
-//    
-//	alert = [[UIAlertView alloc]
-//             initWithTitle:@"" //empty on purpose
-//             message:msg
-//             delegate:self
-//             cancelButtonTitle:cancel
-//             otherButtonTitles:nil];
-//    
-//	alert.tag = LOCAL_VIDEO_STOPPED_UNEXPECTEDLY;
-//	[alert show];
-//    
-//	[alert retain];
-//}
 
 -(void) stopPeriodicPopup
 {
@@ -3329,7 +3314,7 @@
     //[_tableViewPlaylist release];
     
 
-    [selectedChannel release];
+    [_selectedChannel release];
     [_playlistArray release];
     [_httpComm release];
     

@@ -60,8 +60,6 @@
     UIAlertView * alert;
 	NSTimer * alertTimer;
     
-    CamChannel *selectedChannel;
-    
     ScanForCamera *scanner;
     
     SystemSoundID soundFileObject;
