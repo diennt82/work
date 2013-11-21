@@ -459,7 +459,7 @@ void set_destination_for_peer(struct peer * _peer, char * fwd_ip, int localPort)
     
     
     int read_camera_socket = -1;
-    pj_status_t status;
+    //pj_status_t status;
     
     if ((read_camera_socket = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP)) != 0 )
     {
@@ -478,7 +478,8 @@ void set_destination_for_peer(struct peer * _peer, char * fwd_ip, int localPort)
         
         bind( _peer->local_serv_sock_r,(struct sockaddr *)&_peer->local_serv_addr_r,sizeof(_peer->local_serv_addr_r));
         
-        status =  pj_thread_create(g.pool, "RTCP FWDER" ,
+        //status =
+        pj_thread_create(g.pool, "RTCP FWDER" ,
                                    start_rtcp_forwader, _peer , 0, 0,
                                    &_peer->rtcp_thread) ;
         

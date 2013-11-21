@@ -33,9 +33,6 @@
 
 @synthesize  account;
 
-@synthesize  client;
-
-
 
 // The designated initializer.  Override if you create the controller programmatically and want to perform customization that is not appropriate for viewDidLoad.
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil withConnDelegate:(id<ConnectionMethodDelegate>) d;
@@ -176,10 +173,10 @@
 //    
 //}
 - (void)dealloc {
-    [self.client release];
+    [_client release];
 	[userName release];
 	[password release];
-    [self.apiKey release];
+    [_apiKey release];
 
 	[progressView release];
 	[progressLabel release];

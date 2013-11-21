@@ -23,7 +23,6 @@
     MediaPlayer *playbackStreamer;
     PlaybackListener * listener; 
     
-    NSTimer * list_refresher;
     NSMutableArray * clips;
     
     NSString *urlVideo;

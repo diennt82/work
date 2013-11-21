@@ -84,7 +84,7 @@
                 
                 NSArray * tokens =  [mac_type_timecode componentsSeparatedByString:@"_"];
                 
-                type = [tokens objectAtIndex:1];
+                //type = [tokens objectAtIndex:1];
                 type = [NSString stringWithFormat:@"%d", [[tokens objectAtIndex:1] intValue]];
                 NSLog(@"type: %@", type);
                 

@@ -18,7 +18,6 @@
 @synthesize  clip_info;
 
 @synthesize  imageVideo, urlVideo;//, topToolbar,backBarBtnItem, progressView;
-@synthesize list_refresher;
 
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
@@ -244,7 +243,7 @@
     {
         
         
-        list_refresher = [NSTimer scheduledTimerWithTimeInterval:10.0
+        self.list_refresher = [NSTimer scheduledTimerWithTimeInterval:10.0
                                                           target:self
                                                         selector:@selector(getCameraPlaylistForEvent:)
                                                         userInfo:clip_info repeats:NO];
@@ -257,7 +256,7 @@
 - (void)getPlaylistFailedWithResponse: (NSDictionary *)responseDict
 {
     NSLog(@"getPlaylistFailedWithResponse");
-    list_refresher = [NSTimer scheduledTimerWithTimeInterval:10.0
+    self.list_refresher = [NSTimer scheduledTimerWithTimeInterval:10.0
                                                       target:self
                                                     selector:@selector(getCameraPlaylistForEvent:)
                                                     userInfo:clip_info repeats:NO];
@@ -267,7 +266,7 @@
 - (void)getPlaylistUnreachableSetver
 {
     NSLog(@"getPlaylistUnreachableSetver");
-    list_refresher = [NSTimer scheduledTimerWithTimeInterval:10.0
+    self.list_refresher = [NSTimer scheduledTimerWithTimeInterval:10.0
                                                       target:self
                                                     selector:@selector(getCameraPlaylistForEvent:)
                                                     userInfo:clip_info repeats:NO];
@@ -480,88 +479,44 @@
 
 - (void) adjustViewsForOrientation:(UIInterfaceOrientation)orientation
 {
+    CGRect screenBounds = [[UIScreen mainScreen] bounds];
+    CGFloat screenWidth = screenBounds.size.width;
+    CGFloat screenHeight = screenBounds.size.height;
+    
+    CGSize activitySize = _activityIndicator.frame.size;
+    
 	if (orientation == UIInterfaceOrientationLandscapeLeft || orientation == UIInterfaceOrientationLandscapeRight)
 	{
-        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
-        {
-            CGRect screenBounds = [[UIScreen mainScreen] bounds];
-            CGRect newRect = CGRectMake(0, 96, 1024, 576);
-            
-            if (screenBounds.size.height == 1920)
-            {
-                newRect = CGRectMake(0, 304, 1920, 1080);
-            }
-            
-            self.imageVideo.frame = newRect;
-            self.activityIndicator.frame = CGRectMake(493, 365, _activityIndicator.frame.size.width, _activityIndicator.frame.size.height);
-        }
-        else
-        {
-            CGRect newRect = CGRectMake(0, 32, 480, 256);
-            self.imageVideo.frame = newRect;
-            self.activityIndicator.frame = CGRectMake(221, 141, _activityIndicator.frame.size.width, _activityIndicator.frame.size.height);
-        }
         
         self.view.backgroundColor = [UIColor blackColor];
         [[UIApplication sharedApplication] setStatusBarHidden:YES];
-        
         self.navigationController.navigationBar.hidden = YES;
+        
+        CGFloat imageViewHeight = screenHeight * 9 / 16;
+        CGRect newRect = CGRectMake(0, (screenWidth - imageViewHeight) / 2, screenHeight, imageViewHeight);
+        self.imageVideo.frame = newRect;
+        self.activityIndicator.frame = CGRectMake(screenHeight / 2 - activitySize.width / 2, screenWidth / 2 - activitySize.height / 2, activitySize.width, activitySize.height);
 	}
 	else if (orientation == UIInterfaceOrientationPortrait || orientation == UIInterfaceOrientationPortraitUpsideDown)
 	{
-        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
-        {
-            CGRect screenBounds = [[UIScreen mainScreen] bounds];
-            
-            CGRect newRect = CGRectMake(0, 44, 768, 432);
-            
-            if (screenBounds.size.height == 1920)
-            {
-                newRect = CGRectMake(0, 304, 1200, 675);
-            }
-            
-            self.imageVideo.frame = newRect;
-            self.activityIndicator.frame = CGRectMake(365, 241, _activityIndicator.frame.size.width, _activityIndicator.frame.size.height);
-        }
-        else
-        {
-            CGRect newRect = CGRectMake(0, 44, 320, 180);
-            self.imageVideo.frame = newRect;
-            
-            self.activityIndicator.frame = CGRectMake(141, 124, _activityIndicator.frame.size.width, _activityIndicator.frame.size.height);
-        }
         
         [[UIApplication sharedApplication] setStatusBarHidden:NO];
-        
         self.navigationController.navigationBar.hidden = NO;
-        
         self.view.backgroundColor = [UIColor colorWithPatternImage:self.imgBackground];
+        
+        CGFloat imageViewHeight = screenWidth * 9 / 16;
+        
+        CGRect destRect = CGRectMake(0, 44, screenWidth, imageViewHeight);
+        self.imageVideo.frame = destRect;
+        
+        self.activityIndicator.frame = CGRectMake(screenWidth / 2 - activitySize.width / 2, imageViewHeight / 2 - activitySize.height / 2 + 44, activitySize.width, activitySize.height);
 	}
-    
-    [self checkIphone5Size:orientation];
     
 //    self.backBarBtnItem.target = self;
 //    self.backBarBtnItem.action = @selector(goBackToCameraList);
     // SLIDE MENU
     //    self.backBarBtnItem.target = self.stackViewController;
     //    self.backBarBtnItem.action = @selector(toggleLeftViewController);
-}
-
-- (void) checkIphone5Size: (UIInterfaceOrientation)orientation
-{
-    CGRect screenBounds = [[UIScreen mainScreen] bounds];
-    
-    if (screenBounds.size.height == 568)
-    {
-        if (orientation == UIInterfaceOrientationLandscapeLeft || orientation == UIInterfaceOrientationLandscapeRight)
-        {
-            NSLog(@"iphone5 SHift right...");
-//            CGAffineTransform translate = CGAffineTransformMakeTranslation(44, 0);
-//            self.imageViewVideo.transform = translate;
-            CGRect newRect = CGRectMake(0, 0, 568, 320);
-            self.imageVideo.frame = newRect;
-        }
-    }
 }
 
 #pragma mark -
@@ -582,7 +537,7 @@
     //[urlVideo release];
     
     
-    [self.list_refresher release];
+    [_list_refresher release];
 
     [_activityIndicator release];
     [clip_info release];
