@@ -53,11 +53,6 @@
     
     self.melodyTableView.delegate = self;
     self.melodyTableView.dataSource = self;
-    
-    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
-    {
-        //self.melodyTableView.frame = CGRectMake(0, 44, self.melodyTableView.frame.size.width, 432);
-    }
 }
 
 - (void)didReceiveMemoryWarning
