@@ -15,6 +15,7 @@
 #import "MTStackViewController.h"
 #import "BMMenuViewController.h"
 #import "MyFrontViewController.h"
+#import "NotificationSettingsViewController.h"
 
 @interface DashBoard_ViewController() <H264PlayerVCDelegate>
 
@@ -425,13 +426,11 @@
 
 -(void)viewWillAppear:(BOOL)animated
 {
+    [self.navigationController setNavigationBarHidden:YES];
     
 	UIInterfaceOrientation infOrientation = [UIApplication sharedApplication].statusBarOrientation;
     
 	[self adjustViewsForOrientation:infOrientation];
-    
-    
-    
 }
 
 
@@ -602,6 +601,12 @@
         renButton.tag = indexPath.row;
         remButton.tag = indexPath.row;
         alertButtons.tag = indexPath.row;
+        
+        NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+        if([userDefaults objectForKey:@"APP_ID"] == nil)
+        {
+            alertButtons.enabled = NO;
+        }
         
         // Set up the cell...
         CamChannel * ch = (CamChannel*)[listOfChannel objectAtIndex:indexPath.row] ;
@@ -1120,7 +1125,21 @@
 
 -(IBAction)alertSetting:(id)sender
 {
+    CamChannel *ch = (CamChannel *) [listOfChannel objectAtIndex:((UIButton *)sender).tag];
     
+    
+    
+//    AlertSettingViewController * alertSettings = [[AlertSettingViewController alloc]initWithNibName:@"AlertSettingViewController" bundle:nil];
+//    alertSettings.camera = ch.profile;
+//    
+//    
+//    [self.navigationController pushViewController:alertSettings animated:NO];
+//    [alertSettings release];
+    NotificationSettingsViewController *notifSettingsVC = [[NotificationSettingsViewController alloc] init];
+    notifSettingsVC.camProfile = ch.profile;
+    
+    [self.navigationController pushViewController:notifSettingsVC animated:YES];
+    [notifSettingsVC release];
 }
 
 -(IBAction)removeCamera:(id)sender

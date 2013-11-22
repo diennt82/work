@@ -252,6 +252,7 @@
     
     for (NSDictionary *camEntry in dataArr)
 	{
+        NSString *deviceID = [camEntry objectForKey:@"id"];
         NSString * camName = [camEntry objectForKey:@"name"];
         NSString * camMac = [camEntry objectForKey:@"registration_id"];
         NSLog(@"camMac = %@", camMac);
@@ -277,6 +278,7 @@
         
         CamProfile *cp = [[[CamProfile alloc]initWithMacAddr:camMac] autorelease];
 
+        cp.camProfileID = [deviceID integerValue];
         cp.last_comm = updatedAt;
         cp.name = camName;
         
