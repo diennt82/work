@@ -124,7 +124,7 @@
     self.melodyViewController = [[[MelodyViewController alloc] initWithNibName:@"MelodyViewController" bundle:[NSBundle mainBundle]] autorelease];
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
     {
-        self.melodyViewController.view.frame = CGRectMake(500, 44, 216, 236);
+        self.melodyViewController.view.frame = CGRectMake(500, 44, 216, 400);
     }
     else
     {
@@ -2043,7 +2043,7 @@
         
         if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
         {
-            self.melodyViewController.view.frame = CGRectMake(100, 44, 216, 236);
+            self.melodyViewController.view.frame = CGRectMake(100, 44, 216, 400);
         }
         else
         {
