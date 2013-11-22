@@ -2508,15 +2508,15 @@
 	{
         if (_selectedChannel.profile.isInLocal)
 		{
-            _httpComm = [[[HttpCommunication alloc] init] autorelease];
-            _httpComm.device_ip = _selectedChannel.profile.ip_address;
-            _httpComm.device_port = _selectedChannel.profile.port;
+            HttpCommunication *httpCommunication = [[[HttpCommunication alloc] init] autorelease];
+            httpCommunication.device_ip = _selectedChannel.profile.ip_address;
+            httpCommunication.device_port = _selectedChannel.profile.port;
             
             //Non block send-
             NSLog(@"device_ip: %@, device_port: %d", _selectedChannel.profile.ip_address, _selectedChannel.profile.port);
             
-            [_httpComm sendCommand:dir_str];
-            //[_httpComm sendCommandAndBlock:dir_str];
+            [httpCommunication sendCommand:dir_str];
+            //[httpCommunication sendCommandAndBlock:dir_str];
 		}
 		else if(_selectedChannel.profile.minuteSinceLastComm <= 5)
 		{
@@ -2524,11 +2524,11 @@
             NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
             NSString *apiKey = [userDefaults objectForKey:@"PortalApiKey"];
             
-            _jsonComm = [[[BMS_JSON_Communication alloc] initWithObject:self
+            BMS_JSON_Communication *jsonCommunication = [[[BMS_JSON_Communication alloc] initWithObject:self
                                                                Selector:nil
                                                            FailSelector:nil
                                                               ServerErr:nil] autorelease];
-            NSDictionary *responseDict = [_jsonComm sendCommandBlockedWithRegistrationId:mac
+            NSDictionary *responseDict = [jsonCommunication sendCommandBlockedWithRegistrationId:mac
                                                                               andCommand:[NSString stringWithFormat:@"action=command&command=%@", dir_str]
                                                                                andApiKey:apiKey];
             NSLog(@"send_UD_dir_to_rabot status: %d", [[responseDict objectForKey:@"status"] intValue]);
@@ -2589,13 +2589,13 @@
 	{
         if (_selectedChannel.profile.isInLocal)
         {
-            _httpComm = [[[HttpCommunication alloc] init] autorelease];
-            _httpComm.device_ip = _selectedChannel.profile.ip_address;
-            _httpComm.device_port = _selectedChannel.profile.port;
+            HttpCommunication *httpCommunication = [[[HttpCommunication alloc] init] autorelease];
+            httpCommunication.device_ip = _selectedChannel.profile.ip_address;
+            httpCommunication.device_port = _selectedChannel.profile.port;
 				//Non block send-
-				[_httpComm sendCommand:dir_str];
+				[httpCommunication sendCommand:dir_str];
                 
-                //[_httpComm sendCommandAndBlock:dir_str];
+                //[httpCommunication sendCommandAndBlock:dir_str];
 		}
 		else if ( _selectedChannel.profile.minuteSinceLastComm <= 5)
 		{
@@ -2603,11 +2603,11 @@
             NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
             NSString *apiKey = [userDefaults objectForKey:@"PortalApiKey"];
             
-            _jsonComm = [[[BMS_JSON_Communication alloc] initWithObject:self
+            BMS_JSON_Communication *jsonCommunication = [[[BMS_JSON_Communication alloc] initWithObject:self
                                                               Selector:nil
                                                           FailSelector:nil
                                                              ServerErr:nil] autorelease];
-            NSDictionary *responseDict = [_jsonComm sendCommandBlockedWithRegistrationId:mac
+            NSDictionary *responseDict = [jsonCommunication sendCommandBlockedWithRegistrationId:mac
                                                                               andCommand:[NSString stringWithFormat:@"action=command&command=%@", dir_str]
                                                                                andApiKey:apiKey];
             NSLog(@"send_LR_dir_to_rabot status: %d", [[responseDict objectForKey:@"status"] intValue]);
