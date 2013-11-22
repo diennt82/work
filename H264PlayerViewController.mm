@@ -121,7 +121,23 @@
     
     self.zoneButton.enabled = NO;
     
+    self.melodyViewController = [[[MelodyViewController alloc] initWithNibName:@"MelodyViewController" bundle:[NSBundle mainBundle]] autorelease];
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+    {
+        self.melodyViewController.view.frame = CGRectMake(500, 44, 216, 236);
+    }
+    else
+    {
+        self.melodyViewController.view.frame = CGRectMake(100, 0, 216, 236);
+    }
+    
+    self.melodyViewController.selectedChannel = self.selectedChannel;
+    self.melodyViewController.melodyVcDelegate = self;
+    self.melodyButton.enabled = NO;
+    
     [self becomeActive];
+    
+    //[self performSelectorInBackground:@selector(getMelodyValue_bg) withObject:nil];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -239,14 +255,19 @@
         
         [self.view bringSubviewToFront:self.zoneViewController.view];
         
-        
-       
-        
     }
    
-    
-   
 }
+
+- (IBAction)melodyTouchAction:(id)sender
+{
+    if (self.melodyViewController != nil)
+    {
+        [self.view addSubview:self.melodyViewController.view];
+        [self.view bringSubviewToFront:self.melodyViewController.view];
+    }
+}
+
 
 - (IBAction)barBntItemRevealAction:(id)sender
 {
@@ -450,6 +471,7 @@
                 [self performSelectorInBackground:@selector(getVQ_bg) withObject:nil];
                 [self performSelectorInBackground:@selector(getTriggerRecording_bg) withObject:nil];
                 [self performSelectorInBackground:@selector(getZoneDetection_bg) withObject:nil];
+                [self performSelectorInBackground:@selector(getMelodyValue_bg) withObject:nil];
             }
         }
             break;
@@ -905,6 +927,22 @@
 - (void)endProcessing
 {
     self.viewStopStreamingProgress.hidden = YES;
+}
+
+#pragma mak - Delegate Melody
+- (void)setMelodyWithIndex:(NSInteger)molodyIndex
+{
+    
+    if (molodyIndex == 0)
+    {
+        //set icon off
+        [self.melodyButton setImage:[UIImage imageNamed:@"bb_melody_off_icon.png"] forState:UIControlStateNormal];
+    }
+    else
+    {
+        //set icon on
+        [self.melodyButton setImage:[UIImage imageNamed:@"bb_melody_icon.png"] forState:UIControlStateNormal];
+    }
 }
 
 #pragma mark - Method
@@ -1909,6 +1947,116 @@
     
     
     self.zoneButton.enabled = YES;
+}
+
+#pragma mark - Melody Control
+
+- (void)getMelodyValue_bg
+{
+    NSString *responseString = @"";
+    
+    if (self.selectedChannel.profile .isInLocal == TRUE)
+    {
+        HttpCommunication *httpCommunication = [[HttpCommunication alloc] init];
+        httpCommunication.device_ip = self.selectedChannel.profile.ip_address;
+        httpCommunication.device_port = self.selectedChannel.profile.port;
+        
+        NSData *responseData = [httpCommunication sendCommandAndBlock_raw:@"value_melody"];
+        
+        [httpCommunication release];
+        
+        if (responseData != nil)
+        {
+            responseString = [[[NSString alloc] initWithData:responseData encoding: NSUTF8StringEncoding] autorelease];
+        }
+    }
+    else
+    {
+        BMS_JSON_Communication *jsonCommunication = [[[BMS_JSON_Communication alloc] initWithObject:self
+                                                                                           Selector:nil
+                                                                                       FailSelector:nil
+                                                                                          ServerErr:nil] autorelease];
+        
+        NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+        
+        NSString *mac = [Util strip_colon_fr_mac:self.selectedChannel.profile.mac_address];
+        NSString *apiKey = [userDefaults objectForKey:@"PortalApiKey"];
+        
+        NSDictionary *responseDict = [jsonCommunication sendCommandBlockedWithRegistrationId:mac
+                                                                                  andCommand:@"action=command&command=value_melody"
+                                                                                   andApiKey:apiKey];
+        if (responseDict != nil)
+        {
+            NSInteger status = [[responseDict objectForKey:@"status"] intValue];
+            if (status == 200)
+            {
+                responseString = [[[responseDict objectForKey:@"data"] objectForKey:@"device_response"] objectForKey:@"body"];
+            }
+        }
+    }
+    
+    NSLog(@"getMelodyValue_bg: %@", responseString);
+    
+    if (![responseString isEqualToString:@""])
+    {
+        NSRange tmpRange = [responseString rangeOfString:@": "];
+        
+        if (tmpRange.location != NSNotFound)
+        {
+            NSArray *tokens = [responseString componentsSeparatedByString:@": "];
+            
+            if (tokens.count > 1 )
+            {
+                NSString *melodyIndex = [tokens lastObject];
+                    
+                [self performSelectorOnMainThread:@selector(setMelodyState_Fg:)
+                                       withObject:melodyIndex
+                                    waitUntilDone:NO];
+            }
+        }
+    }
+    else
+    {
+        self.melodyButton.enabled = YES;
+    }
+}
+
+- (void)setMelodyState_Fg: (NSString *)melodyIndex
+{
+    int melody_index  = [melodyIndex intValue];
+    
+    if (melody_index == 0)
+    {
+        //set icon off
+        [self.melodyButton setImage:[UIImage imageNamed:@"bb_melody_off_icon.png"] forState:UIControlStateNormal];
+    }
+    else
+    {
+        //set icon on
+        [self.melodyButton setImage:[UIImage imageNamed:@"bb_melody_icon.png"] forState:UIControlStateNormal];
+    }
+    
+    if (self.melodyViewController == nil)
+    {
+        //create new
+        self.melodyViewController = [[[MelodyViewController alloc] initWithNibName:@"MelodyViewController" bundle:[NSBundle mainBundle]] autorelease];
+        
+        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+        {
+            self.melodyViewController.view.frame = CGRectMake(100, 44, 216, 236);
+        }
+        else
+        {
+            self.melodyViewController.view.frame = CGRectMake(100, 0, 216, 236);
+        }
+        
+        self.melodyViewController.selectedChannel = self.selectedChannel;
+        self.melodyViewController.melodyVcDelegate = self;
+    }
+    
+    [self.melodyViewController setMelodyState_fg:melody_index];
+    
+    self.melodyButton.enabled = YES;
 }
 
 #pragma mark -
@@ -3335,6 +3483,7 @@
     [_zoneButton release];
     [_probeTimer release];
     
+    [_melodyButton release];
     [super dealloc];
 }
 

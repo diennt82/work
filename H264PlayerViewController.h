@@ -20,6 +20,7 @@
 #import "PlayerCallbackHandler.h"
 #import "MBP_LoginOrRegistration.h"
 #import "ZoneViewController.h"
+#import "MelodyViewController.h"
 
 
 
@@ -51,7 +52,7 @@
 @end
 
 @interface H264PlayerViewController: UIViewController
-<UIPickerViewDelegate, UIPickerViewDataSource, PlaylistDelegate,PlayerCallbackHandler,ScanForCameraNotifier, StunClientDelegate, ZoneViewControlerDeleate>
+<UIPickerViewDelegate, UIPickerViewDataSource, PlaylistDelegate,PlayerCallbackHandler,ScanForCameraNotifier, StunClientDelegate, ZoneViewControlerDeleate, MelodyVCDelegate>
 {
     MediaPlayer* h264Streamer;
     
@@ -86,9 +87,9 @@
 
 @property (nonatomic, retain) NSTimer * alertTimer; 
 
-//@property (retain, nonatomic) IBOutlet UITableView *tableViewPlaylist;
 @property (retain, nonatomic) IBOutlet UIView *viewCtrlButtons;
 @property (retain, nonatomic) IBOutlet UIPickerView *pickerHQOptions;
+@property (retain, nonatomic) IBOutlet UIButton *melodyButton;
 @property (retain, nonatomic) IBOutlet UIButton *hqViewButton;
 @property (retain, nonatomic) IBOutlet UIButton *triggerRecordingButton;
 @property (retain, nonatomic) IBOutlet UIImageView *imgViewDrectionPad;
@@ -117,6 +118,7 @@
 @property (nonatomic, retain)  IBOutlet ZoneViewController *zoneViewController;
 @property (nonatomic, retain) NSTimer * probeTimer;
 @property (nonatomic, assign) id<H264PlayerVCDelegate> h264PlayerVCDelegate;
+@property (nonatomic, retain) MelodyViewController *melodyViewController;
 
 
 /* Direction */

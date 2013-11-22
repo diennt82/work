@@ -15,6 +15,7 @@
                 <outlet property="hqViewButton" destination="59" id="77"/>
                 <outlet property="imageViewVideo" destination="4" id="5"/>
                 <outlet property="imgViewDrectionPad" destination="78" id="79"/>
+                <outlet property="melodyButton" destination="sn8-YB-GGL" id="UBi-xU-Svq"/>
                 <outlet property="pickerHQOptions" destination="75" id="76"/>
                 <outlet property="playlistViewController" destination="80" id="85"/>
                 <outlet property="segCtrl" destination="45" id="47"/>
@@ -148,6 +149,17 @@
                                 <action selector="zoneTouchedAction:" destination="-1" eventType="touchUpInside" id="zpD-yk-w6b"/>
                             </connections>
                         </button>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="sn8-YB-GGL" userLabel="BtnMelody">
+                            <rect key="frame" x="41" y="4" width="37" height="37"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
+                            <state key="normal" image="bb_melody_off_icon.png">
+                                <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                            </state>
+                            <connections>
+                                <action selector="melodyTouchAction:" destination="-1" eventType="touchUpInside" id="Kgz-nu-Yk7"/>
+                            </connections>
+                        </button>
                     </subviews>
                     <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                 </view>
@@ -173,6 +185,7 @@
         </tableViewController>
     </objects>
     <resources>
+        <image name="bb_melody_off_icon.png" width="36" height="40"/>
         <image name="bb_ptt_icon_d.png" width="36" height="52"/>
         <image name="bb_rec_icon_d.png" width="50" height="50"/>
         <image name="circle_buttons1_2.png" width="131" height="131"/>
