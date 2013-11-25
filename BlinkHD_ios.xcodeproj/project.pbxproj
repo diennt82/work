@@ -3635,7 +3635,7 @@
 				);
 				OTHER_LDFLAGS = "-lz";
 				PRODUCT_NAME = "Camera HD";
-				PROVISIONING_PROFILE = "EA2A6284-970A-4F84-A9A3-5128B5876C33";
+				PROVISIONING_PROFILE = "0BCB12CA-8D76-431E-841E-42A5A8FB8455";
 				SDKROOT = iphoneos6.1;
 				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/../ios-frameworks/pjsip/arm/include/ $(SRCROOT)/../ios-frameworks/pjsip/arm/include/pj/ $(SRCROOT)/../ios-frameworks/pjsip/arm/include/pjnath/";
 			};
@@ -3687,8 +3687,8 @@
 				);
 				OTHER_LDFLAGS = "-lz";
 				PRODUCT_NAME = "Camera HD";
-				PROVISIONING_PROFILE = "EA2A6284-970A-4F84-A9A3-5128B5876C33";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "EA2A6284-970A-4F84-A9A3-5128B5876C33";
+				PROVISIONING_PROFILE = "0BCB12CA-8D76-431E-841E-42A5A8FB8455";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "0BCB12CA-8D76-431E-841E-42A5A8FB8455";
 				SDKROOT = iphoneos6.1;
 				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/../ios-frameworks/pjsip/arm/include/ $(SRCROOT)/../ios-frameworks/pjsip/arm/include/pj/ $(SRCROOT)/../ios-frameworks/pjsip/arm/include/pjnath/";
 				VALIDATE_PRODUCT = YES;
@@ -3762,7 +3762,7 @@
 				);
 				OTHER_LDFLAGS = "-lz";
 				PRODUCT_NAME = "Camera HD";
-				PROVISIONING_PROFILE = "EA2A6284-970A-4F84-A9A3-5128B5876C33";
+				PROVISIONING_PROFILE = "0BCB12CA-8D76-431E-841E-42A5A8FB8455";
 				RAMEWORK_SEARCH_PATHS = "$(inherited) \"$(SRCROOT)\"";
 				SDKROOT = iphoneos6.1;
 				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/../ios-frameworks/pjsip/arm/include/ $(SRCROOT)/../ios-frameworks/pjsip/arm/include/pj/ $(SRCROOT)/../ios-frameworks/pjsip/arm/include/pjnath/";
