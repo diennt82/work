@@ -15,6 +15,7 @@
 #import "MTStackViewController.h"
 #import "BMMenuViewController.h"
 #import "MyFrontViewController.h"
+#import "NotificationSettingsViewController.h"
 
 @interface DashBoard_ViewController() <H264PlayerVCDelegate>
 
@@ -425,13 +426,11 @@
 
 -(void)viewWillAppear:(BOOL)animated
 {
+    [self.navigationController setNavigationBarHidden:YES];
     
 	UIInterfaceOrientation infOrientation = [UIApplication sharedApplication].statusBarOrientation;
     
 	[self adjustViewsForOrientation:infOrientation];
-    
-    
-    
 }
 
 
@@ -1106,7 +1105,24 @@
 
 -(IBAction)alertSetting:(id)sender
 {
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    if([userDefaults objectForKey:@"APP_ID"] == nil)
+    {
+        [[[[UIAlertView alloc] initWithTitle:@"Settings Error"
+                                   message:@"App don't register notification"
+                                  delegate:self
+                         cancelButtonTitle:nil
+                           otherButtonTitles:@"OK", nil] autorelease] show];
+        return;
+    }
     
+    CamChannel *ch = (CamChannel *) [listOfChannel objectAtIndex:((UIButton *)sender).tag];
+    
+    NotificationSettingsViewController *notifSettingsVC = [[NotificationSettingsViewController alloc] init];
+    notifSettingsVC.camProfile = ch.profile;
+    
+    [self.navigationController pushViewController:notifSettingsVC animated:YES];
+    [notifSettingsVC release];
 }
 
 -(IBAction)removeCamera:(id)sender
