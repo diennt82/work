@@ -80,6 +80,7 @@
 
 - (IBAction)cancelTouchAction:(id)sender
 {
+    [self.listNotifTableView reloadData];
 }
 
 #pragma mark - Notif Cell Delegate
@@ -220,18 +221,24 @@
 - (void)settingsAppNotifSuccessWithResponse: (NSDictionary *)responseDict
 {
     NSLog(@"settingsAppNotifSuccessWithResponse: %@", responseDict);
+    self.camProfile.soundAlertEnabled = enableAlert[0];
+    self.camProfile.tempHiAlertEnabled = enableAlert[1];
+    self.camProfile.tempLoAlertEnabled = enableAlert[2];
+    self.camProfile.motionDetectionEnabled = enableAlert[3];
     self.processView.hidden = YES;
 }
 
 - (void)settingsAppNotifFailedWithResponse: (NSDictionary *)responseDict
 {
      NSLog(@"settingsAppNotifFailedWithResponse: %@", responseDict);
+    [self.listNotifTableView reloadData];
     self.processView.hidden = YES;
 }
 
 - (void)settingsAppNotifFailedServerUnreachable
 {
     NSLog(@"settingsAppNotifFailedServerUnreachable");
+    [self.listNotifTableView reloadData];
     self.processView.hidden = YES;
 }
 

@@ -372,6 +372,7 @@
 		for (int i=0; i<[offline_profiles count]; i++)
 		{
 			cp = [offline_profiles objectAtIndex:i];
+            
 			if (cp != nil)
 			{
 				for (int j=0; j<[channels count];j++)
