@@ -10,7 +10,7 @@
 
 /* Change this every time the setup data changed -- 
  */ 
-#define DATA_BARKER  0xbeef0005
+#define DATA_BARKER  0xbeef0006
 #define DEBUG_RESTORE_DATA 0
 
 @interface SetupData : NSObject {
