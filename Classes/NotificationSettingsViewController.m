@@ -49,7 +49,6 @@
 
     //self.processView.hidden = YES;
     self.view.backgroundColor = [UIColor colorWithPatternImage:self.backgroundImage];
-    self.processView.frame = CGRectMake(0, 0, UIScreen.mainScreen.bounds.size.width, UIScreen.mainScreen.bounds.size.height);
     
     self.listNotifTableView.dataSource = self;
     self.listNotifTableView.delegate = self;
@@ -99,11 +98,13 @@
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     NSString *apiKey = [userDefaults objectForKey:@"PortalApiKey"];
     
-    BMS_JSON_Communication *jsonComm = [[[BMS_JSON_Communication alloc] initWithObject:self
+    BMS_JSON_Communication *jsonComm = [[BMS_JSON_Communication alloc] initWithObject:self
                                                                               Selector:nil
                                                                           FailSelector:nil
-                                                                             ServerErr:nil] autorelease];
+                                                                             ServerErr:nil];
     NSDictionary *responseDict = [jsonComm getListOfAllAppsBlockedWithApiKey:apiKey];
+    
+    [jsonComm release];
     
     if (responseDict != nil)
     {
@@ -176,9 +177,10 @@
     
     NSMutableArray *settingsArray = [NSMutableArray array];
     
+    NSString *deviceID = [NSString stringWithFormat:@"%d", _camProfile.camProfileID];
+    
     for (int i = 0; i < 4; i++)
     {
-        NSString *deviceID = [NSString stringWithFormat:@"%d", _camProfile.camProfileID];
         NSString *alertType = [NSString stringWithFormat:@"%d", i + 1];
         
         NSString *valueAlert = @"";
@@ -201,13 +203,6 @@
         [settingsArray addObject:settingDict];
         NSLog(@"settingsArray: %@", settingsArray);
     }
-
-//    NSDictionary *elementDict = [NSDictionary dictionaryWithObjectsAndKeys:
-//                                 @"29", @"device_id",
-//                                 @"4", @"alert",
-//                                 @"true", @"is_enabled",
-//                                 nil];
-//    NSArray *settingsArray = [NSArray arrayWithObject:elementDict];
     
     BMS_JSON_Communication *jsonComm = [[[BMS_JSON_Communication alloc] initWithObject:self
                                                                               Selector:@selector(settingsAppNotifSuccessWithResponse:)
@@ -276,7 +271,6 @@
     // Configure the cell...
     
     cell.rowIndex = indexPath.row;
-    cell.deviceID = _camProfile.camProfileID;
     cell.notifSettingsDelegate = self;
     
     switch (indexPath.row) {
@@ -302,8 +296,6 @@
             break;
     }
     
-    NSLog(@"Index is:%d", indexPath.row);
-    
     return cell;
     
 }
@@ -312,8 +304,5 @@
 {
     [tableView deselectRowAtIndexPath:[tableView indexPathForSelectedRow]
                              animated:NO];
-    
-    
-    
 }
 @end

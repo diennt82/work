@@ -20,8 +20,6 @@
 @property (retain, nonatomic) IBOutlet UILabel *settingsLabel;
 
 @property (nonatomic) NSInteger rowIndex;
-@property (nonatomic) NSInteger deviceID;
-@property (nonatomic, retain) NSArray *enableAlertArr;
 @property (nonatomic, assign) id<NotifSettingsCellDelegate> notifSettingsDelegate;
 
 @end
