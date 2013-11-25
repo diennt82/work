@@ -199,10 +199,10 @@
                                      alertType,  @"alert",
                                      valueAlert, @"is_enabled",
                                      nil];
-        NSLog(@"settingDict: %@", settingDict);
         [settingsArray addObject:settingDict];
-        NSLog(@"settingsArray: %@", settingsArray);
     }
+    
+    //NSLog(@"settingsArray: %@", settingsArray);
     
     BMS_JSON_Communication *jsonComm = [[[BMS_JSON_Communication alloc] initWithObject:self
                                                                               Selector:@selector(settingsAppNotifSuccessWithResponse:)
