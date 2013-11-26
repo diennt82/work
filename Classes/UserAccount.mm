@@ -329,7 +329,7 @@
 		NSLog(@"No offline data ");
 	}
     
-	if (offline_data.configured_cams == nil)
+	if (online_profiles == nil)
 	{
 		NSLog(@"No online data, Clear offline data");
 		[offline_data.configured_cams release];
