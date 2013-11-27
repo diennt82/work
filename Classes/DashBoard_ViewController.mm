@@ -892,6 +892,8 @@
         ch.waitingForStreamerToClose == NO &&
         ch.profile.hasUpdateLocalStatus == YES)
     {
+        [CameraAlert clearAllAlertForCamera:ch.profile.mac_address];
+        [UIApplication sharedApplication].idleTimerDisabled = YES;
         
         NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
         [userDefaults setObject:ch.profile.mac_address forKey:CAM_IN_VEW];

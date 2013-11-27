@@ -1378,6 +1378,7 @@
     [userDefaults synchronize];
     
     [[NSNotificationCenter defaultCenter] removeObserver:self];
+    [UIApplication sharedApplication].idleTimerDisabled = NO;
     
     [self.navigationController popToRootViewControllerAnimated:NO];
     
