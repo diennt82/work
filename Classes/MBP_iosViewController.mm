@@ -1451,7 +1451,7 @@ return self;
         }
         
         
-        NSLog(@" showing cameralist early aaa");
+      
         [self performSelectorOnMainThread:@selector(startShowingCameraList) withObject:nil waitUntilDone:NO];
     }
 }
@@ -1628,7 +1628,7 @@ return self;
     if (dashBoard != nil)
     {
         NSLog(@"reload dashboard in finish");
-        [dashBoard setupTopBarForEditMode:dashBoard.editModeEnabled];
+        //[dashBoard setupTopBarForEditMode:dashBoard.editModeEnabled];
         
         [dashBoard.cameraList reloadData];
         
