@@ -75,7 +75,7 @@
                         <barButtonItem style="plain" systemItem="flexibleSpace" id="pMI-6n-BRa"/>
                         <barButtonItem style="plain" id="dL2-36-mBS">
                             <segmentedControl key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="bar" selectedSegmentIndex="0" id="R9k-7s-dUb">
-                                <rect key="frame" x="647" y="7" width="105" height="30"/>
+                                <rect key="frame" x="656" y="7" width="105" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <segments>
                                     <segment title="Now"/>
@@ -144,10 +144,10 @@
                                 <action selector="recordingPressAction:" destination="-1" eventType="touchUpInside" id="Hth-h2-pn3"/>
                             </connections>
                         </button>
-                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="qaC-Nm-tHI">
-                            <rect key="frame" x="563" y="1" width="49" height="44"/>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="qaC-Nm-tHI">
+                            <rect key="frame" x="563" y="0.0" width="45" height="45"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            <state key="normal" title="MD">
+                            <state key="normal" image="bb_motion_icon.png">
                                 <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                             </state>
                             <connections>
@@ -192,7 +192,8 @@
         </tableViewController>
     </objects>
     <resources>
-        <image name="bb_melody_off_icon.png" width="50" height="50"/>
+        <image name="bb_melody_off_icon.png" width="74" height="74"/>
+        <image name="bb_motion_icon.png" width="50" height="50"/>
         <image name="bb_ptt_icon_d.png" width="36" height="52"/>
         <image name="bb_rec_icon_d.png" width="50" height="50"/>
         <image name="circle_buttons1_2.png" width="131" height="131"/>
