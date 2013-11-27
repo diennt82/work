@@ -288,14 +288,15 @@
     
     //NSLog(@"-----fwVersion = %@, ,model = %@", fwVersion, model);
     
-    NSTimeZone *currentTimeZone = [NSTimeZone localTimeZone];
-    NSLog(@"%d", [currentTimeZone secondsFromGMT]);
-    
     NSDate *now = [NSDate date];
-    
     NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
     [formatter setDateFormat:@"ZZZ"];
-    NSString *stringFromDate = [formatter stringFromDate:now];
+    
+    NSMutableString *stringFromDate = [NSMutableString stringWithString:[formatter stringFromDate:now]];
+    
+    [stringFromDate insertString:@"." atIndex:3];
+    
+    NSLog(@"%@", stringFromDate);
     
     [formatter release];
     
@@ -322,7 +323,7 @@
                             andRegistrationID:mac
                                       andMode:@"upnp"
                                  andFwVersion:fwVersion
-                                  andTimeZone:@"+07.00"
+                                  andTimeZone:stringFromDate
                           andSubscriptionType:@"tier1"
                                     andApiKey:apiKey];
 
