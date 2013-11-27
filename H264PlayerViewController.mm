@@ -3001,10 +3001,10 @@
         CGFloat imageViewHeight = screenHeight * 9 / 16;
         CGRect newRect = CGRectMake(0, (screenWidth - imageViewHeight) / 2, screenHeight, imageViewHeight);
         self.imageViewVideo.frame = newRect;
-//        self.viewStopStreamingProgress.frame = CGRectMake(0, 0, screenHeight, screenWidth);
-//        self.activityIndicator.frame = CGRectMake(screenHeight / 2 - activitySize.width / 2, screenWidth / 2 - activitySize.height / 2, activitySize.width, activitySize.height);
-//        
-//        self.playlistViewController.tableView.frame = CGRectMake(0, 20, tableViewSize.width, tableViewSize.height);
+        self.viewStopStreamingProgress.frame = CGRectMake(0, 0, screenHeight, screenWidth);
+        self.activityIndicator.frame = CGRectMake(screenHeight / 2 - activitySize.width / 2, screenWidth / 2 - activitySize.height / 2, activitySize.width, activitySize.height);
+        
+        self.playlistViewController.tableView.frame = CGRectMake(0, 20, tableViewSize.width, tableViewSize.height);
 	}
 	else if (orientation == UIInterfaceOrientationPortrait || orientation == UIInterfaceOrientationPortraitUpsideDown)
 	{
@@ -3019,16 +3019,16 @@
         self.viewCtrlButtons.hidden = NO;
         self.viewStopStreamingProgress.hidden = YES;
         
-//        CGFloat imageViewHeight = screenWidth * 9 / 16;
-//        
-//        CGRect destRect = CGRectMake(0, 44, screenWidth, imageViewHeight);
-//        self.imageViewVideo.frame = destRect;
-//        
-//        self.activityIndicator.frame = CGRectMake(screenWidth / 2 - activitySize.width / 2, imageViewHeight / 2 - activitySize.height / 2 + 44, activitySize.width, activitySize.height);
-//        self.viewCtrlButtons.frame = CGRectMake(0, imageViewHeight + 44, _viewCtrlButtons.frame.size.width, _viewCtrlButtons.frame.size.height);
-//        self.viewStopStreamingProgress.frame = CGRectMake(0, 0, screenWidth, screenHeight);
-//        
-//        self.playlistViewController.tableView.frame = CGRectMake(0, 44, tableViewSize.width, tableViewSize.height);
+        CGFloat imageViewHeight = screenWidth * 9 / 16;
+        
+        CGRect destRect = CGRectMake(0, 44 + 20, screenWidth, imageViewHeight);
+        self.imageViewVideo.frame = destRect;
+
+        self.activityIndicator.frame = CGRectMake(screenWidth / 2 - activitySize.width / 2, imageViewHeight / 2 - activitySize.height / 2 + 44 + 20, activitySize.width, activitySize.height);
+        self.viewCtrlButtons.frame = CGRectMake(0, imageViewHeight + 44 + 20, _viewCtrlButtons.frame.size.width, _viewCtrlButtons.frame.size.height);
+        self.viewStopStreamingProgress.frame = CGRectMake(0, 0, screenWidth, screenHeight);
+        
+        self.playlistViewController.tableView.frame = CGRectMake(0, 44 + 20, tableViewSize.width, tableViewSize.height);
 	}
 
     self.backBarBtnItem.target = self;
