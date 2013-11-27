@@ -53,8 +53,9 @@
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     </imageView>
                     <activityIndicatorView opaque="NO" tag="510" contentMode="scaleToFill" hidesWhenStopped="YES" animating="YES" style="whiteLarge" id="21">
-                        <rect key="frame" x="179" y="51" width="37" height="37"/>
+                        <rect key="frame" x="180" y="50" width="37" height="37"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
+                        <color key="color" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                     </activityIndicatorView>
                 </subviews>
             </tableViewCellContentView>
@@ -62,7 +63,7 @@
         </tableViewCell>
     </objects>
     <resources>
-        <image name="photo_item.png" width="86" height="86"/>
+        <image name="photo_item.png" width="200" height="148"/>
         <image name="temp_alert.png" width="48" height="48"/>
         <image name="voice_alert.png" width="48" height="48"/>
     </resources>

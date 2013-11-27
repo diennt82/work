@@ -22,7 +22,7 @@
 
 - (void)drawRect:(CGRect)rect {
     CGContextRef ctx = UIGraphicsGetCurrentContext();
-    CGContextSetRGBStrokeColor(ctx, 1.0f, 1.0f, 1.0f, 1.0f); // RGBA
+    CGContextSetRGBStrokeColor(ctx, 0.0f, 0.0f, 0.0f, 1.0f); // RGBA
     CGContextSetLineWidth(ctx, 1.5f);
     
     CGContextMoveToPoint(ctx, 0, self.bounds.size.height - 1);

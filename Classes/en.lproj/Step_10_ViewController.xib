@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="4514" systemVersion="13A603" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="4510" systemVersion="12F45" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none">
     <dependencies>
         <deployment defaultVersion="1536" identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3746"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3742"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="Step_10_ViewController">
@@ -29,7 +29,6 @@
                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                     <inset key="insetFor6xAndEarlier" minX="0.0" minY="66" maxX="0.0" maxY="-66"/>
-                    <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                     <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                 </textView>
@@ -38,7 +37,6 @@
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                     <inset key="insetFor6xAndEarlier" minX="0.0" minY="66" maxX="0.0" maxY="-66"/>
-                    <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                     <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                 </textView>
@@ -58,7 +56,7 @@
                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                     <subviews>
                         <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="&quot;benny&quot;" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="10" id="14">
-                            <rect key="frame" x="2" y="3" width="61" height="21"/>
+                            <rect key="frame" x="1.9999999976454874" y="3" width="61" height="21"/>
                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                             <color key="textColor" red="0.0" green="0.0" blue="1" alpha="1" colorSpace="calibratedRGB"/>
@@ -75,7 +73,6 @@
                             <rect key="frame" x="71" y="3" width="33" height="21"/>
                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                            <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             <nil key="highlightedColor"/>
                         </label>
                     </subviews>
@@ -137,14 +134,12 @@
                     <rect key="frame" x="39" y="52" width="240" height="27"/>
                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                     <fontDescription key="fontDescription" type="system" pointSize="16"/>
-                    <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
                     <nil key="highlightedColor"/>
                 </label>
                 <textView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" editable="NO" text="How to reach Wi-Fi Network? Select settings in iphone home screen and then select Wi-Fi." textAlignment="center" id="63">
                     <rect key="frame" x="18" y="162" width="283" height="66"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                    <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                     <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                 </textView>
@@ -152,7 +147,6 @@
                     <rect key="frame" x="35" y="8" width="248" height="33"/>
                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                    <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     <fontDescription key="fontDescription" type="system" pointSize="16"/>
                     <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                 </textView>
@@ -167,6 +161,7 @@
     </objects>
     <resources>
         <image name="bb_pic_2.png" width="514" height="255"/>
+        <image name="black_background.png" width="640" height="960"/>
         <image name="black_background.png" width="640" height="960"/>
         <image name="dialog_bg.png" width="370" height="370"/>
     </resources>

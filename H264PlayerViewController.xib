@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="4514" systemVersion="13A603" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="4510" systemVersion="12F45" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none">
     <dependencies>
         <deployment defaultVersion="1536" identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3742"/>
@@ -76,7 +76,7 @@
                         <barButtonItem style="plain" systemItem="flexibleSpace" id="34"/>
                         <barButtonItem style="plain" id="46">
                             <segmentedControl key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="bar" selectedSegmentIndex="0" id="45">
-                                <rect key="frame" x="199" y="7" width="105" height="30"/>
+                                <rect key="frame" x="209" y="7" width="105" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <segments>
                                     <segment title="Now"/>
@@ -193,7 +193,7 @@
         </tableViewController>
     </objects>
     <resources>
-        <image name="bb_melody_off_icon.png" width="36" height="40"/>
+        <image name="bb_melody_off_icon.png" width="50" height="50"/>
         <image name="bb_ptt_icon_d.png" width="36" height="52"/>
         <image name="bb_rec_icon_d.png" width="50" height="50"/>
         <image name="circle_buttons1_2.png" width="131" height="131"/>

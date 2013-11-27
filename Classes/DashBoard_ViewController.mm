@@ -889,7 +889,8 @@
     
     if (ch != nil &&
         ch.profile != nil &&
-        ch.waitingForStreamerToClose == NO)
+        ch.waitingForStreamerToClose == NO &&
+        ch.profile.hasUpdateLocalStatus == YES)
     {
         
         NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];

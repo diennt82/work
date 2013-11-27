@@ -127,11 +127,11 @@
     self.melodyViewController = [[[MelodyViewController alloc] initWithNibName:@"MelodyViewController" bundle:[NSBundle mainBundle]] autorelease];
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
     {
-        self.melodyViewController.view.frame = CGRectMake(500, 44, 216, 400);
+        self.melodyViewController.view.frame = CGRectMake(500, 432, 216, 400);
     }
     else
     {
-        self.melodyViewController.view.frame = CGRectMake(100, 0, 216, 236);
+        self.melodyViewController.view.frame = CGRectMake(100, 224, 216, 236);
     }
     
     self.melodyViewController.selectedChannel = self.selectedChannel;
@@ -2046,11 +2046,11 @@
         
         if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
         {
-            self.melodyViewController.view.frame = CGRectMake(100, 44, 216, 400);
+            self.melodyViewController.view.frame = CGRectMake(100, 432, 216, 400);
         }
         else
         {
-            self.melodyViewController.view.frame = CGRectMake(100, 0, 216, 236);
+            self.melodyViewController.view.frame = CGRectMake(100, 224, 216, 236);
         }
         
         self.melodyViewController.selectedChannel = self.selectedChannel;
