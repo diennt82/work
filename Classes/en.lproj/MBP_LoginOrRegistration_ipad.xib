@@ -35,14 +35,15 @@
                         <outlet property="delegate" destination="-1" id="29"/>
                     </connections>
                 </tableView>
-                <label opaque="NO" clipsSubviews="YES" contentMode="left" text="Create new account instead" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="5" customClass="UnderlinedUILabel">
-                    <rect key="frame" x="253" y="857" width="261" height="24"/>
+                <label opaque="NO" clipsSubviews="YES" contentMode="scaleAspectFill" text="Create new account instead" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="5" customClass="UnderlinedUILabel">
+                    <rect key="frame" x="253" y="857" width="249" height="24"/>
                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <fontDescription key="fontDescription" type="system" pointSize="20"/>
+                    <color key="textColor" red="0.1760115592" green="0.40581968839999999" blue="0.66364397320000001" alpha="1" colorSpace="calibratedRGB"/>
                     <nil key="highlightedColor"/>
                 </label>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="6">
-                    <rect key="frame" x="248" y="856" width="259" height="29"/>
+                    <rect key="frame" x="248" y="853" width="259" height="34"/>
                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <fontDescription key="fontDescription" type="boldSystem" size="button"/>
                     <state key="normal">
