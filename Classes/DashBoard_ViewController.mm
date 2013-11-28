@@ -16,7 +16,6 @@
 #import "BMMenuViewController.h"
 #import "MyFrontViewController.h"
 #import "NotificationSettingsViewController.h"
-
 @interface DashBoard_ViewController() <H264PlayerVCDelegate>
 
 @end
@@ -62,14 +61,24 @@
     [super dealloc];
 }
 -(void)removeSubViewOfNavigationController {
-    for (UIView *subView in self.navigationController.view.subviews)
+    if (self.topbar != nil)
     {
-        
-        if ([subView isKindOfClass:[UIToolbar class]])
+        [self.topbar removeFromSuperview];
+        self.topbar = nil;
+        [topbar release];
+    }
+    if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 7) {
+        // Load resources for iOS 7 or later
+        [self.navigationController setNavigationBarHidden:NO];
+        for (UIView *subView in self.navigationController.view.subviews)
         {
-            
-            [subView removeFromSuperview];
+            if ([subView isKindOfClass:[UIToolbar class]])
+            {
+                
+                [subView removeFromSuperview];
+            }
         }
+        [self.navigationController.toolbar removeFromSuperview];
     }
 }
 -(void) setupTopBarForEditMode:(BOOL) isEditMode
@@ -97,15 +106,15 @@
         if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 7) {
             // Load resources for iOS 7 or later
             //Build ToolBar manually
-            topbar = [[UIToolbar alloc]initWithFrame:CGRectMake(0, 20, screenWidth, 44)];
+            self.topbar = [[UIToolbar alloc]initWithFrame:CGRectMake(0, 20, screenWidth, 44)];
         } else {
             // Load resources for iOS 6.1 or earlier
             //Build ToolBar manually
-            topbar = [[UIToolbar alloc]initWithFrame:CGRectMake(0, 0, screenWidth, 44)];
-            topbar.barStyle = UIBarStyleBlackOpaque;
+            self.topbar = [[UIToolbar alloc]initWithFrame:CGRectMake(0, 0, screenWidth, 44)];
+            self.topbar.barStyle = UIBarStyleBlackOpaque;
         }
         
-        [topbar setAutoresizingMask: UIViewAutoresizingFlexibleWidth|
+        [self.topbar setAutoresizingMask: UIViewAutoresizingFlexibleWidth|
                                       UIViewAutoresizingFlexibleLeftMargin|
                                       UIViewAutoresizingFlexibleRightMargin ];
         
@@ -202,13 +211,13 @@
         [addButton release];
         
         // put the buttons in the toolbar and release them
-        [topbar setItems:buttons animated:NO];
+        [self.topbar setItems:buttons animated:NO];
         [buttons release];
         
         
         
         if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 7) {
-            [self.navigationController.view addSubview:topbar];
+            [self.navigationController.view addSubview:self.topbar];
         } else {
             [self.view addSubview:topbar];
         }
@@ -332,19 +341,22 @@
     [super viewDidAppear:animated];
     [[[GAI sharedInstance] defaultTracker] sendView:@"DashBoard_ViewController"];
 //    self.trackedViewName = @"DasBoard_ViewController";
+    if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 7) {
+        [self.navigationController setNavigationBarHidden:NO];
+    } else {
+        [self.navigationController setNavigationBarHidden:YES];
+    }
+    [self setupTopBarForEditMode:self.editModeEnabled];
 }
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
 	// Do any additional setup after loading the view.
-    
+
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-    
     BOOL isOffline = [userDefaults boolForKey:_OfflineMode];
 
-    self.editModeEnabled = FALSE;
-    [self setupTopBarForEditMode:self.editModeEnabled];
     if (isOffline == YES)
     {
         NSLog(@"OFFLINE OFFLINE OFFLINE");
@@ -452,14 +464,8 @@
 
 -(void)viewWillAppear:(BOOL)animated
 {
-    if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 7) {
-        [self.navigationController setNavigationBarHidden:NO];
-    } else {
-        [self.navigationController setNavigationBarHidden:YES];
-    }
-    [self setupTopBarForEditMode:self.editModeEnabled];
 	UIInterfaceOrientation infOrientation = [UIApplication sharedApplication].statusBarOrientation;
-    
+
 	[self adjustViewsForOrientation:infOrientation];
 }
 
@@ -873,7 +879,6 @@
 
 - (void)tableView: (UITableView *)tableView didSelectRowAtIndexPath: (NSIndexPath *)indexPath
 {
-    [self.navigationController setNavigationBarHidden:YES];
     [self removeSubViewOfNavigationController];
     [tableView deselectRowAtIndexPath:[tableView indexPathForSelectedRow]
                              animated:NO];
@@ -1024,8 +1029,8 @@
     assert(navController != nil);
     
     
-    [navController setNavigationBarHidden:YES];
-    [self setupTopBarForEditMode:self.editModeEnabled];
+//    [navController setNavigationBarHidden:YES];
+//    [self setupTopBarForEditMode:self.editModeEnabled];
     
     // Set up the Cancel button on the left of the navigation bar.
     self.navigationItem.leftBarButtonItem  = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(cancelAction:)] autorelease];

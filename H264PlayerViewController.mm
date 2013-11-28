@@ -48,13 +48,19 @@
 {
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
-    
+    // only is called in viewDidLoad, make sure it is called once.
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
     {
-            [[NSBundle mainBundle] loadNibNamed:@"H264PlayerViewController_ipad"
-                                          owner:self
-                                        options:nil];
+        [[NSBundle mainBundle] loadNibNamed:@"H264PlayerViewController_ipad"
+                                      owner:self
+                                    options:nil];
     }
+//    else
+//    {
+//        [[NSBundle mainBundle] loadNibNamed:@"H264PlayerViewController"
+//                                      owner:self
+//                                    options:nil];
+//    }
     
     UIGraphicsBeginImageContext(UIScreen.mainScreen.bounds.size);
     
@@ -63,20 +69,7 @@
     self.imgBackground = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
     self.view.backgroundColor = [UIColor colorWithPatternImage:self.imgBackground];
-//    NSString * msg = NSLocalizedStringWithDefaultValue(@"Back",nil, [NSBundle mainBundle],
-//                                                       @"Back", nil);
-//    UIBarButtonItem *revealIcon = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"reveal-icon"]
-//                                                                   style:UIBarButtonItemStylePlain
-//                                                                  target:[self stackViewController]
-//                                                                  action:@selector(toggleLeftViewController)];
-    
-    UIBarButtonItem *revealIcon = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"reveal-icon"]
-                                                                   style:UIBarButtonItemStylePlain
-                                                                  target:self
-                                                                  action:@selector(preToggleLeftViewController)];
 
-    self.navigationItem.leftBarButtonItem = revealIcon;
-    
     // Do any additional setup after loading the view.
 	[[NSNotificationCenter defaultCenter] addObserver: self
                                              selector: @selector(handleEnteredBackground)
@@ -137,16 +130,41 @@
     self.melodyViewController.selectedChannel = self.selectedChannel;
     self.melodyViewController.melodyVcDelegate = self;
     self.melodyButton.enabled = NO;
-    
+    [self updateNavigationBarAndToolBar];
     [self becomeActive];
     
     //[self performSelectorInBackground:@selector(getMelodyValue_bg) withObject:nil];
 }
-
+- (void) updateNavigationBarAndToolBar
+{
+    if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 7)
+    {
+        [self.navigationController setNavigationBarHidden:NO];
+        //first remove all
+        for (UIView *subView in self.navigationController.view.subviews)
+        {
+            if ([subView isKindOfClass:[UIToolbar class]])
+            {
+                
+                [subView removeFromSuperview];
+            }
+        }
+        if (self.topToolbar)
+        {
+            [self.navigationController.view addSubview:self.topToolbar];
+            [self.navigationController.view bringSubviewToFront:self.topToolbar];
+            [self.topToolbar setBarStyle:UIBarStyleDefault];
+        }
+    }
+    else
+    {
+        [self.navigationController setNavigationBarHidden:YES];
+        [self.topToolbar setBarStyle:UIBarStyleBlack];
+    }
+}
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    [self.navigationController setNavigationBarHidden:YES];
     [self checkOrientation];
 
 }
@@ -157,6 +175,11 @@
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
 	[userDefaults removeObjectForKey:CAM_IN_VEW];
 	[userDefaults synchronize];
+    if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 7)
+    {
+        // Load resources for iOS 7 or later
+        [self.topToolbar removeFromSuperview];
+    }
 }
 
 #pragma mark - Action
@@ -1035,12 +1058,11 @@
     
     [self setupCamera];
     
+    //set value default for table view
+    self.playlistViewController.tableView.hidden= YES;
+    // loading earlierlist in background
     [self performSelectorInBackground:@selector(loadEarlierList) withObject:nil];
 
-    if (self.segCtrl.selectedSegmentIndex == 0)
-    {
-        self.playlistViewController.tableView.hidden= YES;
-    }
     
     //Direction stuf
     /* Kick off the two timer for direction sensing */
@@ -1361,6 +1383,10 @@
     else if(h264Streamer != nil)
     {
         h264Streamer->sendInterrupt();
+    }
+    else
+    {
+        [self goBackToCameraList];
     }
     
     
@@ -2958,6 +2984,15 @@
 
 - (void) adjustViewsForOrientation:(UIInterfaceOrientation)orientation
 {
+    NSInteger deltaY;
+    if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 7)
+    {
+        deltaY = HIGH_STATUS_BAR;
+    }
+    else
+    {
+        deltaY = 0;
+    }
     CGRect screenBounds = [[UIScreen mainScreen] bounds];
     CGFloat screenWidth = screenBounds.size.width;
     CGFloat screenHeight = screenBounds.size.height;
@@ -2968,7 +3003,7 @@
 	if (orientation == UIInterfaceOrientationLandscapeLeft || orientation == UIInterfaceOrientationLandscapeRight)
 	{
 
-        
+        [self.navigationController setNavigationBarHidden:YES];
         self.view.backgroundColor = [UIColor blackColor];
         [[UIApplication sharedApplication] setStatusBarHidden:YES];
         
@@ -2986,7 +3021,7 @@
 	}
 	else if (orientation == UIInterfaceOrientationPortrait || orientation == UIInterfaceOrientationPortraitUpsideDown)
 	{
-    
+//        [self updateNavigationBarAndToolBar];
         [[UIApplication sharedApplication] setStatusBarHidden:NO];
         self.view.backgroundColor = [UIColor colorWithPatternImage:self.imgBackground];
         
@@ -2997,14 +3032,14 @@
         
         CGFloat imageViewHeight = screenWidth * 9 / 16;
         
-        CGRect destRect = CGRectMake(0, 44, screenWidth, imageViewHeight);
+        CGRect destRect = CGRectMake(0, 44 + deltaY, screenWidth, imageViewHeight);
         self.imageViewVideo.frame = destRect;
-        
-        self.activityIndicator.frame = CGRectMake(screenWidth / 2 - activitySize.width / 2, imageViewHeight / 2 - activitySize.height / 2 + 44, activitySize.width, activitySize.height);
-        self.viewCtrlButtons.frame = CGRectMake(0, imageViewHeight + 44, _viewCtrlButtons.frame.size.width, _viewCtrlButtons.frame.size.height);
+
+        self.activityIndicator.frame = CGRectMake(screenWidth / 2 - activitySize.width / 2, imageViewHeight / 2 - activitySize.height / 2 + 44 + deltaY, activitySize.width, activitySize.height);
+        self.viewCtrlButtons.frame = CGRectMake(0, imageViewHeight + 44 + deltaY, _viewCtrlButtons.frame.size.width, _viewCtrlButtons.frame.size.height);
         self.viewStopStreamingProgress.frame = CGRectMake(0, 0, screenWidth, screenHeight);
         
-        self.playlistViewController.tableView.frame = CGRectMake(0, 44, tableViewSize.width, tableViewSize.height);
+        self.playlistViewController.tableView.frame = CGRectMake(0, 44 + deltaY, tableViewSize.width, tableViewSize.height);
 	}
 
     self.backBarBtnItem.target = self;
