@@ -152,7 +152,7 @@ return self;
     NSString * initString = NSLocalizedStringWithDefaultValue(@"Initialize", nil,
                                                               [NSBundle mainBundle],
                                                               @"INITIALIZING...", nil);
-    [initTextView setTextColor:[UIColor whiteColor]];
+    [initTextView setTextColor:[UIColor blackColor]];
     [initTextView setText:initString];
     
     [self.view addSubview:sunBackground];
