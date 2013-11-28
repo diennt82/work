@@ -15,10 +15,6 @@
             <rect key="frame" x="0.0" y="0.0" width="1024" height="768"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" image="black_background.png" id="6">
-                    <rect key="frame" x="0.0" y="0.0" width="1024" height="768"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                </imageView>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="5">
                     <rect key="frame" x="431" y="621" width="161" height="44"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -100,12 +96,8 @@
                     </subviews>
                 </scrollView>
             </subviews>
-            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
             <simulatedOrientationMetrics key="simulatedOrientationMetrics" orientation="landscapeRight"/>
             <simulatedScreenMetrics key="simulatedDestinationMetrics"/>
         </view>
     </objects>
-    <resources>
-        <image name="black_background.png" width="640" height="960"/>
-    </resources>
 </document>

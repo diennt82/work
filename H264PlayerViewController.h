@@ -114,7 +114,6 @@
 @property (nonatomic) int currentMediaStatus;
 @property (nonatomic) BOOL iFrameOnlyFlag;
 @property (nonatomic,retain) StunClient * client; 
-@property (nonatomic, retain) UIImage *imgBackground;
 @property (nonatomic, retain)  IBOutlet ZoneViewController *zoneViewController;
 @property (nonatomic, retain) NSTimer * probeTimer;
 @property (nonatomic, assign) id<H264PlayerVCDelegate> h264PlayerVCDelegate;

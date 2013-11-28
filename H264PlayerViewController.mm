@@ -61,14 +61,6 @@
 //                                      owner:self
 //                                    options:nil];
 //    }
-    
-    UIGraphicsBeginImageContext(UIScreen.mainScreen.bounds.size);
-    
-    CGRect rectBackground = CGRectMake(0, 20, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height);
-    [[UIImage imageNamed:@"black_background"] drawInRect:rectBackground];
-    self.imgBackground = UIGraphicsGetImageFromCurrentImageContext();
-    UIGraphicsEndImageContext();
-    self.view.backgroundColor = [UIColor colorWithPatternImage:self.imgBackground];
 
     // Do any additional setup after loading the view.
 	[[NSNotificationCenter defaultCenter] addObserver: self
@@ -3022,7 +3014,7 @@
 	{
 
         [self.navigationController setNavigationBarHidden:YES];
-        self.view.backgroundColor = [UIColor blackColor];
+        self.view.backgroundColor = nil;
         [[UIApplication sharedApplication] setStatusBarHidden:YES];
         
         self.topToolbar.hidden = YES;
@@ -3041,7 +3033,7 @@
 	{
         [self updateNavigationBarAndToolBar];
         [[UIApplication sharedApplication] setStatusBarHidden:NO];
-        self.view.backgroundColor = [UIColor colorWithPatternImage:self.imgBackground];
+        self.view.backgroundColor = [UIColor whiteColor];
         
         self.topToolbar.hidden = NO;
         self.imgViewDrectionPad.hidden = NO;
@@ -3536,7 +3528,6 @@
     [_activityIndicator release];
     [_viewStopStreamingProgress release];
     [_activityStopStreamingProgress release];
-    [_imgBackground release];
     [_zoneViewController release];
     [_zoneButton release];
     [_probeTimer release];

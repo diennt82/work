@@ -41,11 +41,6 @@
                                     options:nil];
     }
     
-    UIGraphicsBeginImageContext(UIScreen.mainScreen.bounds.size);
-    [[UIImage imageNamed:@"black_background"] drawInRect:UIScreen.mainScreen.bounds];
-    self.imgBackground = UIGraphicsGetImageFromCurrentImageContext();
-    UIGraphicsEndImageContext();
-    
     self.navigationController.navigationBarHidden = NO;
     
     self.activityIndicator.hidden = NO;
@@ -488,7 +483,7 @@
 	if (orientation == UIInterfaceOrientationLandscapeLeft || orientation == UIInterfaceOrientationLandscapeRight)
 	{
         
-        self.view.backgroundColor = [UIColor blackColor];
+        self.view.backgroundColor = nil;
         [[UIApplication sharedApplication] setStatusBarHidden:YES];
         self.navigationController.navigationBar.hidden = YES;
         
@@ -502,7 +497,7 @@
         
         [[UIApplication sharedApplication] setStatusBarHidden:NO];
         self.navigationController.navigationBar.hidden = NO;
-        self.view.backgroundColor = [UIColor colorWithPatternImage:self.imgBackground];
+        self.view.backgroundColor = [UIColor whiteColor];
         
         CGFloat imageViewHeight = screenWidth * 9 / 16;
         
@@ -530,12 +525,6 @@
 - (void)dealloc {
 
     [imageVideo release];
-    [_imgBackground release];
-    //[backBarBtnItem release];
-    //[progressView release];
-    
-    //[urlVideo release];
-    
     
     [_list_refresher release];
 

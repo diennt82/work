@@ -15,11 +15,6 @@
             <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" image="black_background.png" id="20">
-                    <rect key="frame" x="0.0" y="20" width="320" height="568"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    <inset key="insetFor6xAndEarlier" minX="0.0" minY="20" maxX="0.0" maxY="-20"/>
-                </imageView>
                 <button opaque="NO" tag="100" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="5">
                     <rect key="frame" x="80" y="424" width="161" height="44"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -102,11 +97,7 @@
                     <inset key="insetFor6xAndEarlier" minX="0.0" minY="65" maxX="0.0" maxY="-65"/>
                 </scrollView>
             </subviews>
-            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
             <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
         </view>
     </objects>
-    <resources>
-        <image name="black_background.png" width="640" height="960"/>
-    </resources>
 </document>

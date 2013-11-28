@@ -176,7 +176,6 @@
                     <color key="color" white="1" alpha="1" colorSpace="calibratedWhite"/>
                 </activityIndicatorView>
             </subviews>
-            <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
             <simulatedStatusBarMetrics key="simulatedStatusBarMetrics"/>
         </view>
         <tableViewController id="GC8-4Y-Omk" customClass="PlayListViewController">

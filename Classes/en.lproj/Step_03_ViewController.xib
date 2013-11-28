@@ -16,10 +16,6 @@
             <rect key="frame" x="0.0" y="0.0" width="320" height="548"/>
             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
             <subviews>
-                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" image="black_background.png" id="30">
-                    <rect key="frame" x="0.0" y="0.0" width="320" height="548"/>
-                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                </imageView>
                 <textView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" editable="NO" text="How to reach Wi-Fi Network? Select settings in iphone home screen and then select Wi-Fi." textAlignment="center" id="36">
                     <rect key="frame" x="12" y="164" width="283" height="66"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
@@ -63,7 +59,6 @@
                     <nil key="highlightedColor"/>
                 </label>
             </subviews>
-            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
             <simulatedStatusBarMetrics key="simulatedStatusBarMetrics"/>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
         </view>
@@ -98,7 +93,6 @@
     </objects>
     <resources>
         <image name="bb_pic_1.png" width="605" height="320"/>
-        <image name="black_background.png" width="640" height="960"/>
         <image name="dialog_bg.png" width="370" height="370"/>
     </resources>
 </document>

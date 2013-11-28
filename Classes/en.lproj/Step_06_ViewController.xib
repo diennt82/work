@@ -19,10 +19,6 @@
             <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" image="black_background.png" id="52">
-                    <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
-                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                </imageView>
                 <tableView clipsSubviews="YES" tag="13" contentMode="scaleToFill" alwaysBounceVertical="YES" scrollEnabled="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" style="grouped" separatorStyle="default" showsSelectionImmediatelyOnTouchBegin="NO" rowHeight="44" sectionHeaderHeight="1" sectionFooterHeight="1" id="26">
                     <rect key="frame" x="0.0" y="35" width="320" height="268"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES"/>
@@ -33,7 +29,6 @@
                     </connections>
                 </tableView>
             </subviews>
-            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
             <simulatedStatusBarMetrics key="simulatedStatusBarMetrics"/>
             <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
         </view>
@@ -150,7 +145,4 @@
             <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
         </tableViewCell>
     </objects>
-    <resources>
-        <image name="black_background.png" width="640" height="960"/>
-    </resources>
 </document>
