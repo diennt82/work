@@ -18,8 +18,6 @@
 @property (retain, nonatomic) IBOutlet UIView *processView;
 @property (retain, nonatomic) IBOutlet UITableView *listNotifTableView;
 
-@property (retain, nonatomic) UIImage *backgroundImage;
-
 @end
 
 @implementation NotificationSettingsViewController
@@ -42,14 +40,6 @@
     
     [self.navigationController setNavigationBarHidden:NO];
     
-    UIGraphicsBeginImageContext(UIScreen.mainScreen.bounds.size);
-    [[UIImage imageNamed:@"black_background"] drawInRect:UIScreen.mainScreen.bounds];
-    self.backgroundImage = UIGraphicsGetImageFromCurrentImageContext();
-    UIGraphicsEndImageContext();
-
-    //self.processView.hidden = YES;
-    self.view.backgroundColor = [UIColor colorWithPatternImage:self.backgroundImage];
-    
     self.listNotifTableView.dataSource = self;
     self.listNotifTableView.delegate = self;
     
@@ -65,7 +55,6 @@
 - (void)dealloc {
     [_processView release];
     [_listNotifTableView release];
-    [_backgroundImage release];
     [super dealloc];
 }
 
