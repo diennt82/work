@@ -55,12 +55,12 @@
                                       owner:self
                                     options:nil];
     }
-    else
-    {
-        [[NSBundle mainBundle] loadNibNamed:@"H264PlayerViewController"
-                                      owner:self
-                                    options:nil];
-    }
+//    else
+//    {
+//        [[NSBundle mainBundle] loadNibNamed:@"H264PlayerViewController"
+//                                      owner:self
+//                                    options:nil];
+//    }
     
     UIGraphicsBeginImageContext(UIScreen.mainScreen.bounds.size);
     
@@ -69,15 +69,7 @@
     self.imgBackground = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
     self.view.backgroundColor = [UIColor colorWithPatternImage:self.imgBackground];
-    
-    if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 7)
-    {
-        [self updateNavigationBarAndToolBar];
-    }
-    else
-    {
-        [self.topToolbar setBarStyle:UIBarStyleBlack];
-    }
+
     // Do any additional setup after loading the view.
 	[[NSNotificationCenter defaultCenter] addObserver: self
                                              selector: @selector(handleEnteredBackground)
@@ -138,34 +130,41 @@
     self.melodyViewController.selectedChannel = self.selectedChannel;
     self.melodyViewController.melodyVcDelegate = self;
     self.melodyButton.enabled = NO;
-    
+    [self updateNavigationBarAndToolBar];
     [self becomeActive];
     
     //[self performSelectorInBackground:@selector(getMelodyValue_bg) withObject:nil];
 }
 - (void) updateNavigationBarAndToolBar
 {
-    //first remove all
-    for (UIView *subView in self.navigationController.view.subviews)
+    if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 7)
     {
-        if ([subView isKindOfClass:[UIToolbar class]])
+        [self.navigationController setNavigationBarHidden:NO];
+        //first remove all
+        for (UIView *subView in self.navigationController.view.subviews)
         {
-            
-            [subView removeFromSuperview];
+            if ([subView isKindOfClass:[UIToolbar class]])
+            {
+                
+                [subView removeFromSuperview];
+            }
+        }
+        if (self.topToolbar)
+        {
+            [self.navigationController.view addSubview:self.topToolbar];
+            [self.navigationController.view bringSubviewToFront:self.topToolbar];
+            [self.topToolbar setBarStyle:UIBarStyleDefault];
         }
     }
-    if (self.topToolbar)
+    else
     {
-        [self.navigationController.view addSubview:self.topToolbar];
-        [self.navigationController.view bringSubviewToFront:self.topToolbar];
-        [self.topToolbar setBarStyle:UIBarStyleDefault];
+        [self.navigationController setNavigationBarHidden:YES];
+        [self.topToolbar setBarStyle:UIBarStyleBlack];
     }
-
 }
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    [self.navigationController setNavigationBarHidden:NO];
     [self checkOrientation];
 
 }
@@ -176,7 +175,11 @@
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
 	[userDefaults removeObjectForKey:CAM_IN_VEW];
 	[userDefaults synchronize];
-    [self.topToolbar removeFromSuperview];
+    if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 7)
+    {
+        // Load resources for iOS 7 or later
+        [self.topToolbar removeFromSuperview];
+    }
 }
 
 #pragma mark - Action
@@ -2980,6 +2983,15 @@
 
 - (void) adjustViewsForOrientation:(UIInterfaceOrientation)orientation
 {
+    NSInteger deltaY;
+    if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 7)
+    {
+        deltaY = HIGH_STATUS_BAR;
+    }
+    else
+    {
+        deltaY = 0;
+    }
     CGRect screenBounds = [[UIScreen mainScreen] bounds];
     CGFloat screenWidth = screenBounds.size.width;
     CGFloat screenHeight = screenBounds.size.height;
@@ -3008,9 +3020,7 @@
 	}
 	else if (orientation == UIInterfaceOrientationPortrait || orientation == UIInterfaceOrientationPortraitUpsideDown)
 	{
-        [self.navigationController setNavigationBarHidden:NO];
-        [self updateNavigationBarAndToolBar];
-    
+//        [self updateNavigationBarAndToolBar];
         [[UIApplication sharedApplication] setStatusBarHidden:NO];
         self.view.backgroundColor = [UIColor colorWithPatternImage:self.imgBackground];
         
@@ -3021,14 +3031,14 @@
         
         CGFloat imageViewHeight = screenWidth * 9 / 16;
         
-        CGRect destRect = CGRectMake(0, 44 + 20, screenWidth, imageViewHeight);
+        CGRect destRect = CGRectMake(0, 44 + deltaY, screenWidth, imageViewHeight);
         self.imageViewVideo.frame = destRect;
 
-        self.activityIndicator.frame = CGRectMake(screenWidth / 2 - activitySize.width / 2, imageViewHeight / 2 - activitySize.height / 2 + 44 + 20, activitySize.width, activitySize.height);
-        self.viewCtrlButtons.frame = CGRectMake(0, imageViewHeight + 44 + 20, _viewCtrlButtons.frame.size.width, _viewCtrlButtons.frame.size.height);
+        self.activityIndicator.frame = CGRectMake(screenWidth / 2 - activitySize.width / 2, imageViewHeight / 2 - activitySize.height / 2 + 44 + deltaY, activitySize.width, activitySize.height);
+        self.viewCtrlButtons.frame = CGRectMake(0, imageViewHeight + 44 + deltaY, _viewCtrlButtons.frame.size.width, _viewCtrlButtons.frame.size.height);
         self.viewStopStreamingProgress.frame = CGRectMake(0, 0, screenWidth, screenHeight);
         
-        self.playlistViewController.tableView.frame = CGRectMake(0, 44 + 20, tableViewSize.width, tableViewSize.height);
+        self.playlistViewController.tableView.frame = CGRectMake(0, 44 + deltaY, tableViewSize.width, tableViewSize.height);
 	}
 
     self.backBarBtnItem.target = self;

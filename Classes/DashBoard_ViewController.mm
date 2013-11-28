@@ -67,15 +67,19 @@
         self.topbar = nil;
         [topbar release];
     }
-    for (UIView *subView in self.navigationController.view.subviews)
-    {
-        if ([subView isKindOfClass:[UIToolbar class]])
+    if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 7) {
+        // Load resources for iOS 7 or later
+        [self.navigationController setNavigationBarHidden:NO];
+        for (UIView *subView in self.navigationController.view.subviews)
         {
-            
-            [subView removeFromSuperview];
+            if ([subView isKindOfClass:[UIToolbar class]])
+            {
+                
+                [subView removeFromSuperview];
+            }
         }
+        [self.navigationController.toolbar removeFromSuperview];
     }
-    [self.navigationController.toolbar removeFromSuperview];
 }
 -(void) setupTopBarForEditMode:(BOOL) isEditMode
 {
