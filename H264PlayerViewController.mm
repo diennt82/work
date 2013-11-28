@@ -126,7 +126,7 @@
     {
         if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 7)
         {
-            self.melodyViewController.view.frame = CGRectMake(100, 224, 316, 236);
+            self.melodyViewController.view.frame = CGRectMake(100, 244, 216, 236);
         }
         else
         {
@@ -137,6 +137,12 @@
     self.melodyViewController.selectedChannel = self.selectedChannel;
     self.melodyViewController.melodyVcDelegate = self;
     self.melodyButton.enabled = NO;
+    
+    self.hqViewButton.enabled = NO;
+    self.triggerRecordingButton.enabled = NO;
+    UIButton *iFrameBtn = (UIButton *)[self.viewCtrlButtons viewWithTag:705];
+    iFrameBtn.enabled = NO;
+    
     [self updateNavigationBarAndToolBar];
     [self becomeActive];
 }
@@ -499,9 +505,9 @@
                                                                         withValue:nil];
                 }
                 
-                [self performSelectorInBackground:@selector(getVQ_bg) withObject:nil];
-                [self performSelectorInBackground:@selector(getTriggerRecording_bg) withObject:nil];
-                [self performSelectorInBackground:@selector(getZoneDetection_bg) withObject:nil];
+                //[self performSelectorInBackground:@selector(getVQ_bg) withObject:nil];
+                //[self performSelectorInBackground:@selector(getTriggerRecording_bg) withObject:nil];
+                //[self performSelectorInBackground:@selector(getZoneDetection_bg) withObject:nil];
                 [self performSelectorInBackground:@selector(getMelodyValue_bg) withObject:nil];
             }
         }
@@ -2084,7 +2090,7 @@
         {
             if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 7)
             {
-                self.melodyViewController.view.frame = CGRectMake(100, 224, 316, 236);
+                self.melodyViewController.view.frame = CGRectMake(100, 244, 216, 236);
             }
             else
             {

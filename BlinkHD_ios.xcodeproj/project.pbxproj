@@ -39,7 +39,6 @@
 		3812F83915C8C3EE00DADFA6 /* bb_check_list.png in Resources */ = {isa = PBXBuildFile; fileRef = 3812F83815C8C3EE00DADFA6 /* bb_check_list.png */; };
 		3812F83B15C8C49000DADFA6 /* bb_line.png in Resources */ = {isa = PBXBuildFile; fileRef = 3812F83A15C8C49000DADFA6 /* bb_line.png */; };
 		38167AC216118DB600B7FA0A /* bb_pic_2.png in Resources */ = {isa = PBXBuildFile; fileRef = 38167AC116118DB600B7FA0A /* bb_pic_2.png */; };
-		38167AC51611AB1800B7FA0A /* bb_ptt_icon_d.png in Resources */ = {isa = PBXBuildFile; fileRef = 38167AC41611AB1700B7FA0A /* bb_ptt_icon_d.png */; };
 		381D185D16D4652C00272A8D /* Step_05_tableViewCell_ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 381D185C16D4652C00272A8D /* Step_05_tableViewCell_ipad.xib */; };
 		382CD25816DDE12200BC8E0C /* Step_07_tableViewCell_ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 382CD25716DDE12200BC8E0C /* Step_07_tableViewCell_ipad.xib */; };
 		38355AE715CB76630045909C /* Account_ViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 38355AE515CB76630045909C /* Account_ViewController.mm */; };
@@ -315,7 +314,6 @@
 		3812F83815C8C3EE00DADFA6 /* bb_check_list.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bb_check_list.png; sourceTree = "<group>"; };
 		3812F83A15C8C49000DADFA6 /* bb_line.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bb_line.png; sourceTree = "<group>"; };
 		38167AC116118DB600B7FA0A /* bb_pic_2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bb_pic_2.png; sourceTree = "<group>"; };
-		38167AC41611AB1700B7FA0A /* bb_ptt_icon_d.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bb_ptt_icon_d.png; sourceTree = "<group>"; };
 		381D185C16D4652C00272A8D /* Step_05_tableViewCell_ipad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = Step_05_tableViewCell_ipad.xib; sourceTree = "<group>"; };
 		3825A4B7166F05C500520872 /* MBPNavController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MBPNavController.h; sourceTree = "<group>"; };
 		382CD25716DDE12200BC8E0C /* Step_07_tableViewCell_ipad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = Step_07_tableViewCell_ipad.xib; sourceTree = "<group>"; };
@@ -1741,7 +1739,6 @@
 				3812F83A15C8C49000DADFA6 /* bb_line.png */,
 				3812F83815C8C3EE00DADFA6 /* bb_check_list.png */,
 				3812F82715C8BF3600DADFA6 /* bb_ptt_icon.png */,
-				38167AC41611AB1700B7FA0A /* bb_ptt_icon_d.png */,
 				3812F82815C8BF3600DADFA6 /* bb_snap_icon.png */,
 				3812F82915C8BF3600DADFA6 /* bb_spk_icon.png */,
 				38A62E8C15C92BDF00DEA520 /* bb_spk_icon_d.png */,
@@ -2020,7 +2017,6 @@
 				3803A87B1602D44100B4DD97 /* voice_alert.png in Resources */,
 				A19778ED181E3316007C3CA7 /* ZoneViewController_ipad.xib in Resources */,
 				38167AC216118DB600B7FA0A /* bb_pic_2.png in Resources */,
-				38167AC51611AB1800B7FA0A /* bb_ptt_icon_d.png in Resources */,
 				38DE1C55168AEA770049E814 /* AlertSettingViewController.xib in Resources */,
 				8BC0A0461844B31700A5FD52 /* mbp_icon57x57.png in Resources */,
 				38DE1BEC168ADA050049E814 /* FWUpgradeView.xib in Resources */,
