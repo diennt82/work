@@ -879,13 +879,16 @@
 
 - (void)tableView: (UITableView *)tableView didSelectRowAtIndexPath: (NSIndexPath *)indexPath
 {
-    [self removeSubViewOfNavigationController];
     [tableView deselectRowAtIndexPath:[tableView indexPathForSelectedRow]
                              animated:NO];
     
     if (self.editModeEnabled == TRUE)
     {
         return; // don't start streaming in Edit mode
+    }
+    else
+    {
+        [self removeSubViewOfNavigationController];
     }
     
     CamChannel *ch = (CamChannel*)[listOfChannel objectAtIndex:indexPath.row] ;

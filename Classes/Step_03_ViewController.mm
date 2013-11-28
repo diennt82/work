@@ -131,7 +131,7 @@
 
 -(void) adjustViewsForOrientations: (UIInterfaceOrientation) interfaceOrientation
 {
-    if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 7) {
+//    if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 7) {
         // Load resources for iOS 7 or later
         if (interfaceOrientation == UIInterfaceOrientationLandscapeLeft ||
             interfaceOrientation == UIInterfaceOrientationLandscapeRight)
@@ -174,7 +174,7 @@
             }
         }
         
-    }
+//    }
 }
 #pragma mark -
 
