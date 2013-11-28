@@ -120,11 +120,18 @@
     self.melodyViewController = [[[MelodyViewController alloc] initWithNibName:@"MelodyViewController" bundle:[NSBundle mainBundle]] autorelease];
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
     {
-        self.melodyViewController.view.frame = CGRectMake(500, 432, 216, 400);
+        self.melodyViewController.view.frame = CGRectMake(500, 632, 216, 400);
     }
     else
     {
-        self.melodyViewController.view.frame = CGRectMake(100, 224, 216, 236);
+        if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 7)
+        {
+            self.melodyViewController.view.frame = CGRectMake(100, 224, 316, 236);
+        }
+        else
+        {
+            self.melodyViewController.view.frame = CGRectMake(100, 224, 216, 236);
+        }
     }
     
     self.melodyViewController.selectedChannel = self.selectedChannel;
@@ -132,8 +139,6 @@
     self.melodyButton.enabled = NO;
     [self updateNavigationBarAndToolBar];
     [self becomeActive];
-    
-    //[self performSelectorInBackground:@selector(getMelodyValue_bg) withObject:nil];
 }
 - (void) updateNavigationBarAndToolBar
 {
@@ -2073,11 +2078,18 @@
         
         if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
         {
-            self.melodyViewController.view.frame = CGRectMake(100, 432, 216, 400);
+            self.melodyViewController.view.frame = CGRectMake(500, 632, 216, 400);
         }
         else
         {
-            self.melodyViewController.view.frame = CGRectMake(100, 224, 216, 236);
+            if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 7)
+            {
+                self.melodyViewController.view.frame = CGRectMake(100, 224, 316, 236);
+            }
+            else
+            {
+                self.melodyViewController.view.frame = CGRectMake(100, 224, 216, 236);
+            }
         }
         
         self.melodyViewController.selectedChannel = self.selectedChannel;
@@ -3021,7 +3033,7 @@
 	}
 	else if (orientation == UIInterfaceOrientationPortrait || orientation == UIInterfaceOrientationPortraitUpsideDown)
 	{
-//        [self updateNavigationBarAndToolBar];
+        [self updateNavigationBarAndToolBar];
         [[UIApplication sharedApplication] setStatusBarHidden:NO];
         self.view.backgroundColor = [UIColor colorWithPatternImage:self.imgBackground];
         
