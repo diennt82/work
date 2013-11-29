@@ -11,7 +11,7 @@
 
 @interface DeviceSettingsViewController () <DeviceSettingsCellDelegate>
 {
-    CGFloat valueSettings[4];
+    CGFloat valueSettings[5];
 }
 @property (retain, nonatomic) IBOutlet UIView *progressView;
 
@@ -38,6 +38,8 @@
  
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
+    
+    [self performSelectorInBackground:@selector(getDeviceSettings_bg) withObject:nil];
     
     self.navigationItem.leftBarButtonItem  = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel
                                                                                             target:self
@@ -83,6 +85,22 @@
 
 #pragma mark - Methods
 
+- (void)getDeviceSettings_bg
+{
+    [self.view addSubview:self.progressView];
+    [self.view bringSubviewToFront:self.progressView];
+    
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    NSString *apiKey = [userDefaults objectForKey:@"PortalApiKey"];
+    
+    BMS_JSON_Communication *jsonComm = [[BMS_JSON_Communication alloc] initWithObject:self
+                                                                             Selector:nil
+                                                                         FailSelector:nil
+                                                                            ServerErr:nil];
+    //NSDictionary *responseDict = [jsonComm getListOfAllAppsBlockedWithApiKey:apiKey];
+    [jsonComm release];
+}
+
 - (void)updateDeviceSettings
 {
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
@@ -92,7 +110,7 @@
     
     NSString *deviceMAC = [Util strip_colon_fr_mac:_camChannel.profile.mac_address];
     
-    for (int i = 0; i < 4; i++)
+    for (int i = 0; i < 6; i++)
     {
         NSString *settingsType = @"";
         
@@ -113,11 +131,15 @@
                 settingsType = @"contrast";
                 break;
                 
+            case 4:
+                settingsType = @"brightness";
+                break;
+                
             default:
                 break;
         }
         
-        NSString *settingsValue = [NSString stringWithFormat:@"%d", (NSInteger)valueSettings[i]];
+        NSString *settingsValue = [NSString stringWithFormat:@"%ld", lroundf(valueSettings[i])];
         
         NSDictionary *settingsDict = [NSDictionary dictionaryWithObjectsAndKeys:
                                      settingsType,   @"name",
@@ -171,7 +193,7 @@
 {
     //#warning Incomplete method implementation.
     // Return the number of rows in the section.
-    return 4;
+    return 5;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -213,6 +235,11 @@
         case 3:
             cell.valueSlider.value = 9.0f;
             cell.nameLabel.text = @"Contrast";
+            break;
+            
+        case 4:
+            cell.valueSlider.value = 6.0f;
+            cell.nameLabel.text = @"Brightness";
             break;
             
         default:

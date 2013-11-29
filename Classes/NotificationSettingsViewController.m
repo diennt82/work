@@ -27,6 +27,7 @@
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
         // Custom initialization
+        self.title = @"Notification Settings";
     }
     return self;
 }
@@ -38,7 +39,14 @@
     
     [self performSelectorInBackground:@selector(getNotificationSettings) withObject:nil];
     
-    [self.navigationController setNavigationBarHidden:NO];
+    self.navigationItem.leftBarButtonItem  = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel
+                                                                                            target:self
+                                                                                            action:@selector(cancelTouchAction:)] autorelease];
+    assert(self.navigationItem.leftBarButtonItem != nil);
+    self.navigationItem.rightBarButtonItem = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone
+                                                                                            target:self
+                                                                                            action:@selector(doneTouchAction:)] autorelease];
+    assert(self.navigationItem.rightBarButtonItem != nil);
     
     self.listNotifTableView.dataSource = self;
     self.listNotifTableView.delegate = self;
@@ -60,6 +68,14 @@
 
 #pragma mark - Action
 
+- (void)doneTouchAction:(id)sender
+{
+    self.processView.hidden = NO;
+    self.navigationItem.leftBarButtonItem.enabled = NO;
+    self.navigationItem.rightBarButtonItem.enabled = NO;
+    [self updateAlertSettings];
+}
+
 - (IBAction)okTouchAction:(id)sender
 {
     self.processView.hidden = NO;
@@ -68,7 +84,8 @@
 
 - (IBAction)cancelTouchAction:(id)sender
 {
-    [self.listNotifTableView reloadData];
+    //[self.listNotifTableView reloadData];
+    [self dismissViewControllerAnimated:YES completion:^{}];
 }
 
 #pragma mark - Notif Cell Delegate
@@ -210,20 +227,26 @@
     self.camProfile.tempLoAlertEnabled = enableAlert[2];
     self.camProfile.motionDetectionEnabled = enableAlert[3];
     self.processView.hidden = YES;
+    //[self.navigationController popViewControllerAnimated:YES];
+    [self dismissViewControllerAnimated:YES completion:^{}];
 }
 
 - (void)settingsAppNotifFailedWithResponse: (NSDictionary *)responseDict
 {
      NSLog(@"settingsAppNotifFailedWithResponse: %@", responseDict);
-    [self.listNotifTableView reloadData];
+    //[self.listNotifTableView reloadData];
     self.processView.hidden = YES;
+    //[self.navigationController popViewControllerAnimated:YES];
+    [self dismissViewControllerAnimated:YES completion:^{}];
 }
 
 - (void)settingsAppNotifFailedServerUnreachable
 {
     NSLog(@"settingsAppNotifFailedServerUnreachable");
-    [self.listNotifTableView reloadData];
+    //[self.listNotifTableView reloadData];
     self.processView.hidden = YES;
+    //[self.navigationController popViewControllerAnimated:YES];
+    [self dismissViewControllerAnimated:YES completion:^{}];
 }
 
 #pragma mark Table view delegates & datasource

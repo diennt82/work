@@ -1179,11 +1179,18 @@
     
     CamChannel *ch = (CamChannel *) [listOfChannel objectAtIndex:((UIButton *)sender).tag];
     
+//    NotificationSettingsViewController *notifSettingsVC = [[NotificationSettingsViewController alloc] init];
+//    notifSettingsVC.camProfile = ch.profile;
+//    
+//    [self.navigationController pushViewController:notifSettingsVC animated:YES];
+//    [notifSettingsVC release];
+    
     NotificationSettingsViewController *notifSettingsVC = [[NotificationSettingsViewController alloc] init];
     notifSettingsVC.camProfile = ch.profile;
-    
-    [self.navigationController pushViewController:notifSettingsVC animated:YES];
+    UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:notifSettingsVC];
     [notifSettingsVC release];
+    [self presentViewController:nav animated:YES completion:^{}];
+    [nav release];
 }
 
 -(IBAction)removeCamera:(id)sender
