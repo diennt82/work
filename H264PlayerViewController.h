@@ -21,6 +21,7 @@
 #import "MBP_LoginOrRegistration.h"
 #import "ZoneViewController.h"
 #import "MelodyViewController.h"
+#import "DeviceSettingsViewController.h"
 
 
 

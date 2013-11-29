@@ -75,7 +75,7 @@
                         <barButtonItem style="plain" systemItem="flexibleSpace" id="34"/>
                         <barButtonItem style="plain" id="46">
                             <segmentedControl key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="bar" selectedSegmentIndex="0" id="45">
-                                <rect key="frame" x="199" y="7" width="105" height="30"/>
+                                <rect key="frame" x="139" y="7" width="105" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <segments>
                                     <segment title="Now"/>
@@ -85,6 +85,11 @@
                                     <action selector="segCtrlAction:" destination="-1" eventType="valueChanged" id="49"/>
                                 </connections>
                             </segmentedControl>
+                        </barButtonItem>
+                        <barButtonItem image="bb_setting_icon.png" style="plain" id="PNT-uH-IZz" userLabel="Bar Button Item - Settings">
+                            <connections>
+                                <action selector="settingsTouchAction:" destination="-1" id="fAh-RQ-hM4"/>
+                            </connections>
                         </barButtonItem>
                     </items>
                 </toolbar>
@@ -194,6 +199,7 @@
         <image name="bb_motion_icon.png" width="50" height="50"/>
         <image name="bb_ptt_icon_d.png" width="36" height="52"/>
         <image name="bb_rec_icon_d.png" width="50" height="50"/>
+        <image name="bb_setting_icon.png" width="50" height="50"/>
         <image name="circle_buttons1_2.png" width="131" height="131"/>
         <image name="hq_d.png" width="48" height="48"/>
         <image name="i_mode.png" width="50" height="48"/>

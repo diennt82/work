@@ -156,6 +156,10 @@
 		8B68F5D118066CE500661527 /* PlaybackViewController_ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8B68F5D018066CE500661527 /* PlaybackViewController_ipad.xib */; };
 		8B9CCBA3183EF8B2007C0F65 /* MelodyViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B9CCBA1183EF8B2007C0F65 /* MelodyViewController.m */; };
 		8B9CCBA4183EF8B2007C0F65 /* MelodyViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8B9CCBA2183EF8B2007C0F65 /* MelodyViewController.xib */; };
+		8BA18CAC184870470097D1AF /* DeviceSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8BA18CAA184870470097D1AF /* DeviceSettingsViewController.m */; };
+		8BA18CAD184870470097D1AF /* DeviceSettingsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8BA18CAB184870470097D1AF /* DeviceSettingsViewController.xib */; };
+		8BA18CB0184879720097D1AF /* DeviceSettingsCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 8BA18CAF184879720097D1AF /* DeviceSettingsCell.m */; };
+		8BA18CB2184879A10097D1AF /* DeviceSettingsCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8BA18CB1184879A10097D1AF /* DeviceSettingsCell.xib */; };
 		8BA23841182CBC130022581A /* CameraScanner.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8BA23838182C8E130022581A /* CameraScanner.framework */; };
 		8BA5C47C1818DAAC006B4BB8 /* libcrypto.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A15430FC1818D08A00337EFE /* libcrypto.a */; };
 		8BA5C4801818DCC1006B4BB8 /* ZoneViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8BA5C47E1818DCC1006B4BB8 /* ZoneViewController.m */; };
@@ -493,6 +497,12 @@
 		8B9CCBA0183EF8B2007C0F65 /* MelodyViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MelodyViewController.h; sourceTree = "<group>"; };
 		8B9CCBA1183EF8B2007C0F65 /* MelodyViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MelodyViewController.m; sourceTree = "<group>"; };
 		8B9CCBA2183EF8B2007C0F65 /* MelodyViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MelodyViewController.xib; sourceTree = "<group>"; };
+		8BA18CA9184870470097D1AF /* DeviceSettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DeviceSettingsViewController.h; sourceTree = "<group>"; };
+		8BA18CAA184870470097D1AF /* DeviceSettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DeviceSettingsViewController.m; sourceTree = "<group>"; };
+		8BA18CAB184870470097D1AF /* DeviceSettingsViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = DeviceSettingsViewController.xib; sourceTree = "<group>"; };
+		8BA18CAE184879720097D1AF /* DeviceSettingsCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DeviceSettingsCell.h; sourceTree = "<group>"; };
+		8BA18CAF184879720097D1AF /* DeviceSettingsCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DeviceSettingsCell.m; sourceTree = "<group>"; };
+		8BA18CB1184879A10097D1AF /* DeviceSettingsCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = DeviceSettingsCell.xib; sourceTree = "<group>"; };
 		8BA23838182C8E130022581A /* CameraScanner.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CameraScanner.framework; path = "../ios-frameworks/CameraScanner.framework"; sourceTree = "<group>"; };
 		8BA5C47D1818DCC1006B4BB8 /* ZoneViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZoneViewController.h; sourceTree = "<group>"; };
 		8BA5C47E1818DCC1006B4BB8 /* ZoneViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZoneViewController.m; sourceTree = "<group>"; };
@@ -1407,6 +1417,7 @@
 		080E96DDFE201D6D7F000001 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				8BA18CA8184870330097D1AF /* DeviceSettings */,
 				8B9CCB9F183EF86C007C0F65 /* MelodyControl */,
 				8B278BE3183DC4BB00A4FF50 /* NotificationSettings */,
 				A1E07DC01814DA1200AE0566 /* Zone Detection */,
@@ -1781,6 +1792,19 @@
 			name = MelodyControl;
 			sourceTree = "<group>";
 		};
+		8BA18CA8184870330097D1AF /* DeviceSettings */ = {
+			isa = PBXGroup;
+			children = (
+				8BA18CA9184870470097D1AF /* DeviceSettingsViewController.h */,
+				8BA18CAA184870470097D1AF /* DeviceSettingsViewController.m */,
+				8BA18CAB184870470097D1AF /* DeviceSettingsViewController.xib */,
+				8BA18CAE184879720097D1AF /* DeviceSettingsCell.h */,
+				8BA18CAF184879720097D1AF /* DeviceSettingsCell.m */,
+				8BA18CB1184879A10097D1AF /* DeviceSettingsCell.xib */,
+			);
+			name = DeviceSettings;
+			sourceTree = "<group>";
+		};
 		9770CB87143032BC009E69EF /* images */ = {
 			isa = PBXGroup;
 			children = (
@@ -1956,6 +1980,7 @@
 				38DE1CB4168AEBA40049E814 /* Step_04_ViewController.xib in Resources */,
 				38DE1CAA168AEB890049E814 /* Step_05_ViewController.xib in Resources */,
 				38DE1CA0168AEB6D0049E814 /* Step_06_ViewController.xib in Resources */,
+				8BA18CB2184879A10097D1AF /* DeviceSettingsCell.xib in Resources */,
 				38DE1C8C168AEB270049E814 /* Step_08_ViewController.xib in Resources */,
 				38DE1C82168AEB0E0049E814 /* Step_09_ViewController.xib in Resources */,
 				38DE1C78168AEAF30049E814 /* Step_10_ViewController.xib in Resources */,
@@ -2049,6 +2074,7 @@
 				8BC0A0471844B31700A5FD52 /* mbp_icon72x72.png in Resources */,
 				38DE1C91168AEB370049E814 /* Step_07_ViewController_ipad.xib in Resources */,
 				38DE1C87168AEB1B0049E814 /* Step_08_ViewController_ipad.xib in Resources */,
+				8BA18CAD184870470097D1AF /* DeviceSettingsViewController.xib in Resources */,
 				38DE1C73168AEAE70049E814 /* Step_10_ViewController_ipad.xib in Resources */,
 				38DE1C7D168AEB000049E814 /* Step_09_ViewController_ipad.xib in Resources */,
 				974ACB59168055F9005AE4C6 /* ToUViewController_ipad.xib in Resources */,
@@ -2143,6 +2169,7 @@
 				1D60589B0D05DD56006BFB54 /* main.m in Sources */,
 				1D3623260D0F684500981E51 /* MBP_iosAppDelegate.mm in Sources */,
 				28D7ACF80DDB3853001CB0EB /* MBP_iosViewController.mm in Sources */,
+				8BA18CAC184870470097D1AF /* DeviceSettingsViewController.m in Sources */,
 				97987CD815468C2E0066C49B /* MBP_FirstPage.m in Sources */,
 				97987DF21546A1630066C49B /* MBP_LoginOrRegistration.mm in Sources */,
 				8BA5C4801818DCC1006B4BB8 /* ZoneViewController.m in Sources */,
@@ -2153,6 +2180,7 @@
 				97D0081C159DA24400B1D92F /* WifiListParser.m in Sources */,
 				A1A98E90180BF5AA00C8EBD3 /* StunClient.m in Sources */,
 				972E2B8715A4234300E60A96 /* NSData+Base64.m in Sources */,
+				8BA18CB0184879720097D1AF /* DeviceSettingsCell.m in Sources */,
 				A1A98E8F180BF5AA00C8EBD3 /* client_main.c in Sources */,
 				38A478D015BD64F9008682FE /* MBP_InitialSetupViewController.mm in Sources */,
 				38A478D915BE484B008682FE /* Step_02_ViewController.mm in Sources */,

@@ -420,11 +420,18 @@
         }
         else
         {
-
-            
-            cameraList.frame = CGRectMake(cameraList.frame.origin.x, cameraList.frame.origin.y,
+            if ([[[UIDevice currentDevice] systemVersion] floatValue] < 7)
+            {
+                cameraList.frame = CGRectMake(cameraList.frame.origin.x, cameraList.frame.origin.y + 64,
+                                              cameraList.frame.size.width,
+                                              387);
+            }
+            else
+            {
+                cameraList.frame = CGRectMake(cameraList.frame.origin.x, cameraList.frame.origin.y,
                                           cameraList.frame.size.width,
                                           387);
+            }
         }
 
        

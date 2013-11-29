@@ -298,6 +298,15 @@
     }
 }
 
+- (IBAction)settingsTouchAction:(id)sender
+{
+    DeviceSettingsViewController *deviceSettings = [[DeviceSettingsViewController alloc] init];
+    deviceSettings.camChannel = self.selectedChannel;
+    UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:deviceSettings];
+    [deviceSettings release];
+    [self presentViewController:nav animated:YES completion:^{}];
+    [nav release];
+}
 
 - (IBAction)barBntItemRevealAction:(id)sender
 {
