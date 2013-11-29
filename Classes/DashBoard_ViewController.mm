@@ -1174,7 +1174,7 @@
     
     NotificationSettingsViewController *notifSettingsVC = [[NotificationSettingsViewController alloc] init];
     notifSettingsVC.camProfile = ch.profile;
-    
+    [self removeSubViewOfNavigationController];
     [self.navigationController pushViewController:notifSettingsVC animated:YES];
     [notifSettingsVC release];
 }
