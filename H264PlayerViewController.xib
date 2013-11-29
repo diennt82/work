@@ -10,7 +10,6 @@
                 <outlet property="activityIndicator" destination="87" id="88"/>
                 <outlet property="activityStopStreamingProgress" destination="90" id="92"/>
                 <outlet property="backBarBtnItem" destination="38" id="40"/>
-                <outlet property="buttons" destination="58" id="0Io-p4-AqK"/>
                 <outlet property="cameraNameBarBtnItem" destination="35" id="42"/>
                 <outlet property="hqViewButton" destination="59" id="77"/>
                 <outlet property="imageViewVideo" destination="4" id="5"/>

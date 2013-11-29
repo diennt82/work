@@ -110,21 +110,6 @@
     self.zoneButton.enabled = NO;
     
     self.melodyViewController = [[[MelodyViewController alloc] initWithNibName:@"MelodyViewController" bundle:[NSBundle mainBundle]] autorelease];
-    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
-    {
-        self.melodyViewController.view.frame = CGRectMake(500, 632, 216, 400);
-    }
-    else
-    {
-        if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 7)
-        {
-            self.melodyViewController.view.frame = CGRectMake(100, 244, 216, 236);
-        }
-        else
-        {
-            self.melodyViewController.view.frame = CGRectMake(100, 224, 216, 236);
-        }
-    }
     
     self.melodyViewController.selectedChannel = self.selectedChannel;
     self.melodyViewController.melodyVcDelegate = self;
@@ -292,6 +277,22 @@
 {
     if (self.melodyViewController != nil)
     {
+        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+        {
+            self.melodyViewController.view.frame = CGRectMake(276, 540, 216, 400);
+        }
+        else
+        {
+            if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 7)
+            {
+                self.melodyViewController.view.frame = CGRectMake(52, 244, 216, 236);
+            }
+            else
+            {
+                self.melodyViewController.view.frame = CGRectMake(52, 224, 216, 236);
+            }
+        }
+        
         [self.view addSubview:self.melodyViewController.view];
         [self.view bringSubviewToFront:self.melodyViewController.view];
     }
@@ -2074,22 +2075,6 @@
         //create new
         self.melodyViewController = [[[MelodyViewController alloc] initWithNibName:@"MelodyViewController" bundle:[NSBundle mainBundle]] autorelease];
         
-        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
-        {
-            self.melodyViewController.view.frame = CGRectMake(500, 632, 216, 400);
-        }
-        else
-        {
-            if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 7)
-            {
-                self.melodyViewController.view.frame = CGRectMake(100, 244, 216, 236);
-            }
-            else
-            {
-                self.melodyViewController.view.frame = CGRectMake(100, 224, 216, 236);
-            }
-        }
-        
         self.melodyViewController.selectedChannel = self.selectedChannel;
         self.melodyViewController.melodyVcDelegate = self;
     }
@@ -3020,6 +3005,7 @@
         self.topToolbar.hidden = YES;
         self.imgViewDrectionPad.hidden = YES;
         self.viewCtrlButtons.hidden = YES;
+        [self.melodyViewController.view removeFromSuperview];
         
         CGFloat imageViewHeight = screenHeight * 9 / 16;
         CGRect newRect = CGRectMake(0, (screenWidth - imageViewHeight) / 2, screenHeight, imageViewHeight);

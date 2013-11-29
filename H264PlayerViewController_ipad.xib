@@ -10,7 +10,6 @@
                 <outlet property="activityIndicator" destination="YeU-B1-crq" id="6iX-zh-tlT"/>
                 <outlet property="activityStopStreamingProgress" destination="W2O-R1-p7T" id="eie-Fe-jmF"/>
                 <outlet property="backBarBtnItem" destination="OSN-2y-gyH" id="4eV-bz-uP5"/>
-                <outlet property="buttons" destination="flZ-zd-nvr" id="S8S-NL-gV4"/>
                 <outlet property="cameraNameBarBtnItem" destination="rSX-Xf-gMR" id="him-T0-ynf"/>
                 <outlet property="hqViewButton" destination="ku2-k4-lrp" id="oFA-J8-Jnc"/>
                 <outlet property="imageViewVideo" destination="ewk-Ss-5Zt" id="hm9-FC-hEY"/>

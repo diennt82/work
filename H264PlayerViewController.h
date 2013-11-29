@@ -100,7 +100,6 @@
 @property (retain, nonatomic) IBOutlet UIButton *zoneButton;
 
 @property (retain, nonatomic) IBOutlet UIBarButtonItem *barBntItemReveal;
-@property (retain, nonatomic) IBOutlet UIView  * buttons;
 
 @property (nonatomic, retain) HttpCommunication* httpComm;
 @property (nonatomic, retain) NSMutableArray *playlistArray;
