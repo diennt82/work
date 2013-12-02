@@ -91,7 +91,7 @@
 	
 	
 	NSArray *cameraMenuItems;
-	NSMutableDictionary * cameraMenuItemValues;
+	NSMutableDictionary *_cameraMenuItemValues;
 	
 	id <ConnectionMethodDelegate> delegate;
 	

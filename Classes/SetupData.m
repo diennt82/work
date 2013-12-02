@@ -38,9 +38,9 @@
 
 - (void) dealloc
 {
-	[super dealloc];
 	[channels release];
 	[configured_cams release];
+    [super dealloc];
 }
 
 -(BOOL) save_session_data
@@ -180,7 +180,7 @@
 			self.channels  = nil; 
 		}
 		
-		self.channels =[[NSMutableArray alloc] initWithObjects:channel1, channel2, channel3, channel4, nil];
+		channels =[[NSMutableArray alloc] initWithObjects:channel1, channel2, channel3, channel4, nil];
 		
 		
 		
@@ -188,7 +188,7 @@
 		
 		int numOfProfile = -1; 
 		fread(&numOfProfile, sizeof(int), 1, fd);
-		self.configured_cams = [[NSMutableArray alloc] initWithCapacity:numOfProfile];
+		configured_cams = [[NSMutableArray alloc] initWithCapacity:numOfProfile];
 		int cp_count = 0; 
         int profile_len = -1 ;
         

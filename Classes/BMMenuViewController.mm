@@ -43,7 +43,7 @@ static NSString *const MTTableViewCellIdentifier = @"MTTableViewCell";
     CGRect frame = self.navigationController.navigationBar.frame;
     self.navigationController.navigationBar.frame = CGRectMake(0, 0, CGRectGetWidth(frame), CGRectGetHeight(frame));
 }
-
+/*
 - (void)viewWillAppear:(BOOL)animated
 {
     if (!_didSetInitialViewController)
@@ -160,5 +160,5 @@ static NSString *const MTTableViewCellIdentifier = @"MTTableViewCell";
     
     return viewController;
 }
-
+*/
 @end

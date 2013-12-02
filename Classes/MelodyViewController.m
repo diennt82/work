@@ -10,6 +10,9 @@
 #import <MonitorCommunication/MonitorCommunication.h>
 
 @interface MelodyViewController () <UITableViewDataSource, UITableViewDelegate>
+{
+    NSArray* _melodies;
+}
 
 @property (retain, nonatomic) IBOutlet UITableView *melodyTableView;
 @property (retain, nonatomic) IBOutlet UIBarButtonItem *melodyTitle;
@@ -20,7 +23,7 @@
 @end
 
 @implementation MelodyViewController
-
+@synthesize melodies = _melodies;
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
@@ -49,7 +52,7 @@
     NSString * mel6 = NSLocalizedStringWithDefaultValue(@"melody_VI",nil, [NSBundle mainBundle],
                                                         @"Melody 6", nil);
     
-    self.melodies = [[NSArray alloc] initWithObjects:mel1,mel2,mel3,mel4, mel5, mel6,nil];
+    _melodies = [[NSArray alloc] initWithObjects:mel1,mel2,mel3,mel4, mel5, mel6,nil];
     
     self.melodyTableView.delegate = self;
     self.melodyTableView.dataSource = self;
