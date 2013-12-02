@@ -876,7 +876,7 @@
                                                         withLabel:@"Login success"
                                                         withValue:nil];
     //BLOCKED method
-    [account query_camera_list_blocked];
+    [account readCameraListAndUpdate];
     NSLog(@"Login success!");
     return;
 }
