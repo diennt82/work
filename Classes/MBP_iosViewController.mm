@@ -810,11 +810,12 @@ return self;
 			self.app_stage = APP_STAGE_LOGGED_IN;
             
             isRebinded = [self rebindCameraResource];
-            [self callForStartScanningBonjour];
-            [self scan_for_devices];
+            [self callForStartScanningBonjour]; // 1. Scan with Bonjour
+            [self scan_for_devices];            // 2. Scan with ip server
+            
+            // 1 & 2 work parallely
             
             //Back from login- login success
-            //[self dismissModalViewControllerAnimated:NO];
             [self dismissViewControllerAnimated:NO completion:^{}];
             self.progressView.hidden = NO;
 
@@ -1540,17 +1541,19 @@ return self;
                 cp.ip_address = ((CamProfile*) [_scan_results objectAtIndex:i]).ip_address;
                 cp.isInLocal = TRUE;
                 cp.port = ((CamProfile*) [_scan_results objectAtIndex:i]).port;//localport is always 80
+                cp.hasUpdateLocalStatus = TRUE;
                 
+                break;
             }
             
         }
     }
     
-    cp.hasUpdateLocalStatus = TRUE;
+    //cp.hasUpdateLocalStatus = TRUE;
 
     NSLog(@"cam:%@ is in Local? %d fw:%@", cp.mac_address, cp.isInLocal, cp.fw_version);
     ++ nextCameraToScanIndex;
-    [self scanNextIndex:&nextCameraToScanIndex];
+    [self scanNextIndex:&nextCameraToScanIndex]; // Sync results of ipserver & bonjour
 }
 
 - (void) scanNextIndex: (int *) index
@@ -1566,7 +1569,7 @@ return self;
             [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode beforeDate:endDate];
         }
         
-        NSLog(@"scanNextIndex, Scan done with bonjourThread- bonjourList: %@", bonjourList);
+        NSLog(@"\n=================================\nSCAN DONE - IPSERVER SYNC BONJOUR\nrestored_profiles: %@\nbonjourList: %@\n=================================\n", restored_profiles, bonjourList);
 
         if(bonjourList && [bonjourList count] != 0)
         {
@@ -1577,20 +1580,23 @@ return self;
                     if ([cp.mac_address isEqualToString:cam.mac_address])
                     {
                         NSLog(@"Camera %@ is on Bonjour, -port: %d", cp.mac_address, cam.port);
-                        cp.hasUpdateLocalStatus = YES;
+                        
                         cp.ip_address = cam.ip_address;
                         cp.isInLocal = YES;
                         cp.port = cam.port;
+                        
+                        break;
                     }
                 }
+                
+                cp.hasUpdateLocalStatus = YES;
             }
         }
         
         [self finish_scanning];
     }
     // this camera at index has not been scanned
-    else if (*index < [self.restored_profiles count] &&
-        ((CamProfile *)[self.restored_profiles objectAtIndex:*index]).hasUpdateLocalStatus == NO)
+    else if (*index < [self.restored_profiles count])
     {
         if (dashBoard != nil)
         {
@@ -1599,22 +1605,19 @@ return self;
             
         }
         
-        [self scan_next_camera:self.restored_profiles index:*index];
-    }
-    // this camera at index has been scanned
-    else if (*index < [self.restored_profiles count] &&
-             ((CamProfile *)[self.restored_profiles objectAtIndex:*index]).hasUpdateLocalStatus == YES)
-    {
-        if (dashBoard != nil)
+        if (((CamProfile *)[self.restored_profiles objectAtIndex:*index]).hasUpdateLocalStatus == NO)
         {
-            NSLog(@"reload dashboard in scan_done");
-            [dashBoard.cameraList reloadData];
-            
+            NSLog(@"This camera at index has not been scanned");
+            [self scan_next_camera:self.restored_profiles index:*index];
         }
-        ++(*index);
-        [self scanNextIndex:index];
+        else
+        {
+            NSLog(@"This camera at index has been scanned");
+            
+            ++(*index);
+            [self scanNextIndex:index];
+        }
     }
-    
 }
 
 - (void)finish_scanning
