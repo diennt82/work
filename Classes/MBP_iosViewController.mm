@@ -1566,6 +1566,7 @@ return self;
             [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode beforeDate:endDate];
         }
         
+        NSLog(@"scanNextIndex, Scan done with bonjourThread- bonjourList: %@", bonjourList);
 
         if(bonjourList && [bonjourList count] != 0)
         {
@@ -1575,11 +1576,11 @@ return self;
                 {
                     if ([cp.mac_address isEqualToString:cam.mac_address])
                     {
-                        NSLog(@"Camera %@ is on Bonjour",cp.mac_address);
+                        NSLog(@"Camera %@ is on Bonjour, -port: %d", cp.mac_address, cam.port);
                         cp.hasUpdateLocalStatus = YES;
                         cp.ip_address = cam.ip_address;
                         cp.isInLocal = YES;
-                        cp.port = 80;
+                        cp.port = cam.port;
                     }
                 }
             }
@@ -1710,11 +1711,13 @@ return self;
     if (cp != nil &&
         cp.ip_address != nil)
     {
-        HttpCommunication * dev_com = [[[HttpCommunication alloc] init] autorelease];
+        HttpCommunication * dev_com = [[HttpCommunication alloc] init];
         
         dev_com.device_ip = cp.ip_address;
         
         NSString * mac = [dev_com sendCommandAndBlock:GET_MAC_ADDRESS withTimeout:3.0];
+        
+        [dev_com release];
         
         if (mac != nil && mac.length == 12)
         {
