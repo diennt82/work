@@ -82,18 +82,6 @@
     return localIp;
 }
 
--(void) query_camera_list_blocked
-{
-    [self readCameraListAndUpdate];
-    
-    if (delegate != nil)
-    {
-        [delegate sendStatus:SCAN_BONJOUR_CAMERA];
-    }
-    //NSLog(@"UserAccount: query_camera_list_blocked END");
-}
-
-
 -(void) readCameraListAndUpdate
 {
     self.jsonComm = [[BMS_JSON_Communication alloc] initWithObject:self
@@ -140,6 +128,11 @@
         }
 
         [self sync_online_and_offline_data:camProfiles];
+        
+        if (delegate != nil)
+        {
+            [delegate sendStatus:SCAN_BONJOUR_CAMERA];
+        }
     }
     else
     {
@@ -162,8 +155,7 @@
         [alert show];
         [alert release];
         
-        [delegate sendStatus:8];
-        return;
+        [delegate sendStatus:LOGIN_FAILED_OR_LOGOUT];
     }
 }
 
@@ -193,7 +185,7 @@
 	[alert show];
 	[alert release];
 	
-	[delegate sendStatus:8];
+	[delegate sendStatus:LOGIN_FAILED_OR_LOGOUT];
 	return;
 }
 
@@ -220,7 +212,7 @@
 	[alert show];
 	[alert release];
 	
-	[delegate sendStatus:8];
+	[delegate sendStatus:LOGIN_FAILED_OR_LOGOUT];
 }
 
 

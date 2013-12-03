@@ -28,7 +28,6 @@
 @property (nonatomic, retain) NSString *apiKey;
 
 - (id) initWithUser:(NSString *)user andPass:(NSString *)pass andApiKey: (NSString *)apiKey andListener:(id <ConnectionMethodDelegate>) d;
--(void) query_camera_list_blocked;
 
 //Get cam list callbacks
 - (void)getCamListSuccess:(NSDictionary *)raw_data;
