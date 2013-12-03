@@ -90,8 +90,8 @@
     [self.view addSubview:self.progressView];
     [self.view bringSubviewToFront:self.progressView];
     
-    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-    NSString *apiKey = [userDefaults objectForKey:@"PortalApiKey"];
+    //NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    //NSString *apiKey = [userDefaults objectForKey:@"PortalApiKey"];
     
     BMS_JSON_Communication *jsonComm = [[BMS_JSON_Communication alloc] initWithObject:self
                                                                              Selector:nil

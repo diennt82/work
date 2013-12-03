@@ -3001,7 +3001,7 @@
     CGFloat screenWidth = screenBounds.size.width;
     CGFloat screenHeight = screenBounds.size.height;
     
-    CGSize activitySize = _activityIndicator.frame.size;
+    //CGSize activitySize = _activityIndicator.frame.size;
     CGSize tableViewSize = _playlistViewController.tableView.frame.size;
     
 	if (orientation == UIInterfaceOrientationLandscapeLeft || orientation == UIInterfaceOrientationLandscapeRight)

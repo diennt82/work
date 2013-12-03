@@ -1527,7 +1527,7 @@ return self;
         //Empty ..not found & also can't use the current IP?
         //Dont add to the final result
         cp.isInLocal = FALSE;
-        cp.hasUpdateLocalStatus = TRUE;
+        //cp.hasUpdateLocalStatus = TRUE;
        
     }
     else
@@ -1552,10 +1552,8 @@ return self;
             
         }
     }
-    
-    //cp.hasUpdateLocalStatus = TRUE;
 
-    NSLog(@"cam:%@ is in Local? %d fw:%@", cp.mac_address, cp.isInLocal, cp.fw_version);
+    NSLog(@"cam:%@ -is in Local:%d -fw:%@", cp.mac_address, cp.isInLocal, cp.fw_version);
     ++ nextCameraToScanIndex;
     [self scanNextIndex:&nextCameraToScanIndex]; // Sync results of ipserver & bonjour
 }
@@ -1593,8 +1591,13 @@ return self;
                     }
                 }
                 
-                cp.hasUpdateLocalStatus = YES;
+                //cp.hasUpdateLocalStatus = YES;
             }
+        }
+       
+        for (CamProfile * cp in restored_profiles)
+        {
+            cp.hasUpdateLocalStatus = YES;
         }
         
         [self finish_scanning];
