@@ -1514,6 +1514,9 @@ return self;
 
 - (void)scan_done:(NSArray *) _scan_results
 {
+    //limit value of nextCameraToScanIndex
+    if (nextCameraToScanIndex > ([self.restored_profiles count] - 1))
+        return;
      CamProfile * cp =(CamProfile *) [self.restored_profiles objectAtIndex:nextCameraToScanIndex];
     //scan Done. read scan result
     
