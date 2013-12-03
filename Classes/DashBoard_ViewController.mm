@@ -27,7 +27,7 @@
 
 @synthesize  tabBarController;
 
-@synthesize  topbar;
+@synthesize  topbar = _topbar;
 @synthesize  editModeEnabled;
 @synthesize edittedChannelIndex;
 @synthesize  cameraList;
@@ -56,16 +56,16 @@
 
 -(void ) dealloc
 {
-    [topbar release];
+    [_topbar release];
     [listOfChannel release];
     [super dealloc];
 }
 -(void)removeSubViewOfNavigationController {
-    if (self.topbar != nil)
+    if (_topbar != nil)
     {
-        [self.topbar removeFromSuperview];
-        self.topbar = nil;
-        [topbar release];
+        [_topbar removeFromSuperview];
+        _topbar = nil;
+        [_topbar release];
     }
     if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 7) {
         // Load resources for iOS 7 or later
@@ -83,13 +83,6 @@
 }
 -(void) setupTopBarForEditMode:(BOOL) isEditMode
 {
-//    if (topbar != nil)
-//    {
-//        [topbar removeFromSuperview];
-//        [topbar release];
-//        
-//    }
-    
     [self removeSubViewOfNavigationController];
     
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
@@ -106,15 +99,15 @@
         if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 7) {
             // Load resources for iOS 7 or later
             //Build ToolBar manually
-            self.topbar = [[UIToolbar alloc]initWithFrame:CGRectMake(0, 20, screenWidth, 44)];
+            _topbar = [[UIToolbar alloc]initWithFrame:CGRectMake(0, 20, screenWidth, 44)];
         } else {
             // Load resources for iOS 6.1 or earlier
             //Build ToolBar manually
-            self.topbar = [[UIToolbar alloc]initWithFrame:CGRectMake(0, 0, screenWidth, 44)];
-            self.topbar.barStyle = UIBarStyleBlackOpaque;
+            _topbar = [[UIToolbar alloc]initWithFrame:CGRectMake(0, 0, screenWidth, 44)];
+            _topbar.barStyle = UIBarStyleBlackOpaque;
         }
         
-        [self.topbar setAutoresizingMask: UIViewAutoresizingFlexibleWidth|
+        [_topbar setAutoresizingMask: UIViewAutoresizingFlexibleWidth|
                                       UIViewAutoresizingFlexibleLeftMargin|
                                       UIViewAutoresizingFlexibleRightMargin ];
         
@@ -217,9 +210,9 @@
         
         
         if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 7) {
-            [self.navigationController.view addSubview:self.topbar];
+            [self.navigationController.view addSubview:_topbar];
         } else {
-            [self.view addSubview:topbar];
+            [self.view addSubview:_topbar];
         }
     }
     else //isEditMode = TRUE
@@ -227,15 +220,15 @@
         if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 7) {
             // Load resources for iOS 7 or later
             //Build ToolBar manually
-            topbar = [[UIToolbar alloc]initWithFrame:CGRectMake(0, 20, screenWidth, 44)];
+            _topbar = [[UIToolbar alloc]initWithFrame:CGRectMake(0, 20, screenWidth, 44)];
         } else {
             // Load resources for iOS 6.1 or earlier
             //Build ToolBar manually
-            topbar = [[UIToolbar alloc]initWithFrame:CGRectMake(0, 0, screenWidth, 44)];
-            topbar.barStyle = UIBarStyleBlackOpaque;
+            _topbar = [[UIToolbar alloc]initWithFrame:CGRectMake(0, 0, screenWidth, 44)];
+            _topbar.barStyle = UIBarStyleBlackOpaque;
         }
 
-        [topbar setAutoresizingMask: UIViewAutoresizingFlexibleWidth|
+        [_topbar setAutoresizingMask: UIViewAutoresizingFlexibleWidth|
                                       UIViewAutoresizingFlexibleLeftMargin|
                                       UIViewAutoresizingFlexibleRightMargin];
         // create an array for the buttons
@@ -304,18 +297,18 @@
         
               
         // put the buttons in the toolbar and release them
-        [topbar setItems:buttons animated:NO];
+        [_topbar setItems:buttons animated:NO];
         [buttons release];
         
         
-        [topbar setAutoresizingMask:(UIViewAutoresizingFlexibleLeftMargin|
+        [_topbar setAutoresizingMask:(UIViewAutoresizingFlexibleLeftMargin|
                                      UIViewAutoresizingFlexibleRightMargin |
                                      UIViewAutoresizingFlexibleWidth)];
         
         if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 7) {
-            [self.navigationController.view addSubview:topbar];
+            [self.navigationController.view addSubview:_topbar];
         } else {
-            [self.view addSubview:topbar];
+            [self.view addSubview:_topbar];
         }
         
     }

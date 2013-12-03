@@ -915,7 +915,8 @@ return self;
     @autoreleasepool
     {
         NSDate * endDate;
-        _bonjourBrowser = [[[Bonjour alloc] initSetupWith:self.restored_profiles] autorelease];
+        // When use autoreleseapool, no need to call autorelease.
+        _bonjourBrowser = [[Bonjour alloc] initSetupWith:self.restored_profiles];
         [_bonjourBrowser setDelegate:self];
         
         [_bonjourBrowser startScanLocalWiFi];
@@ -1492,8 +1493,8 @@ return self;
             {
                 ScanForCamera *scanner = [[ScanForCamera alloc] initWithNotifier:self];
                 [scanner scan_for_device:cp.mac_address];
-                
-                
+                //Can't call release because app is crashed, will fix later
+                //[scanner release];
                 
             } /* skipScan = false*/
             

@@ -333,8 +333,8 @@
     if (online_profiles == nil)
 	{
 		NSLog(@"No online data, Clear offline data");
-		[offline_data.configured_cams release];
-		[offline_data.channels release];
+		offline_data.configured_cams = nil;
+		offline_data.channels = nil;
 		
 		offline_data.configured_cams = [[NSMutableArray alloc]init];//0 size
 		

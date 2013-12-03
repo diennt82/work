@@ -14,7 +14,8 @@
 
 @synthesize cameraMenu, mPickerView;
 
-@synthesize cameraMenuItems, cameraMenuItemValues;
+@synthesize cameraMenuItems;
+@synthesize cameraMenuItemValues = _cameraMenuItemValues;
 
 
 @synthesize camChan;
@@ -49,7 +50,7 @@
         
     
 		
-		self.cameraMenuItemValues = [[NSMutableDictionary alloc]initWithCapacity:[self.cameraMenuItems count]];
+		_cameraMenuItemValues = [[NSMutableDictionary alloc]initWithCapacity:[self.cameraMenuItems count]];
 		for (NSString * str in self.cameraMenuItems)
 		{
 			if (str != nil)
@@ -95,7 +96,7 @@
 						
 		}
 		
-		self.cameraMenuItemValues = [[NSMutableDictionary alloc]initWithCapacity:[self.cameraMenuItems count]];
+		_cameraMenuItemValues = [[NSMutableDictionary alloc]initWithCapacity:[self.cameraMenuItems count]];
 		for (NSString * str in self.cameraMenuItems)
 		{
 			if (str != nil)
@@ -362,7 +363,7 @@
 
 	
 	[cameraMenuItems release];
-	[cameraMenuItemValues release];
+	[_cameraMenuItemValues release];
 	[super dealloc];
 }
 
@@ -395,7 +396,8 @@
 
 - (void) updateVoxStatus
 {
-	NSString * response, * command;
+	NSString *response = nil;
+    NSString *command = nil;
     
     command = VOX_STATUS;
     
@@ -759,6 +761,8 @@
         [cell setBackgroundColor:[UIColor clearColor]];
 		[cell.contentView addSubview:label];
 		[cell.contentView addSubview:value];
+        [label release];
+        [value release];
 	}
 
 	
@@ -1159,7 +1163,8 @@
 		return; 
 	}
 	
-	NSString * response, * command;
+	NSString *response = nil;
+    NSString *command = nil;
 	command = GET_VERSION;
     
     if (  commMode == COMM_MODE_STUN      ||
@@ -1568,15 +1573,15 @@
 
 - (void) onCameraRemoveLocal
 {
-	NSString * command , *response;
+	NSString * command;
 	
     [delegate sendStatus:1];
     
 	command = SWITCH_TO_DIRECT_MODE;
-	response = [dev_comm sendCommandAndBlock:command];
+	[dev_comm sendCommandAndBlock:command];
 	
 	command = RESTART_HTTP_CMD;
-	response = [dev_comm sendCommandAndBlock:command];
+	[dev_comm sendCommandAndBlock:command];
     
     NSLog(@"On Camera remove local");
 	
@@ -1668,7 +1673,7 @@
 	int level = [lvl intValue];
 
 
-	NSString * command, * response ;
+	NSString * command;
    
     //20121108: no longer need to disable vox on Device..
     //	if (level == 0)
@@ -1706,7 +1711,7 @@
     }
     else
     {
-        response = [dev_comm sendCommandAndBlock:command];
+        [dev_comm sendCommandAndBlock:command];
     }
 
     
@@ -1720,7 +1725,7 @@
     }
     else
     {
-        response = [dev_comm sendCommandAndBlock:command];
+        [dev_comm sendCommandAndBlock:command];
     }
     
    
@@ -1839,7 +1844,8 @@
 	}
 	
 	
-	NSString * response, * command;
+	NSString *response = nil;
+    NSString *command= nil;
 	command = [NSString stringWithFormat:@"%@%@%d",SET_VOLUME, SET_VOLUME_PARAM, _level];
     
     if (self.camChan.communication_mode == COMM_MODE_STUN   ||

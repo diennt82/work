@@ -3020,7 +3020,7 @@
         CGRect newRect = CGRectMake(0, (screenWidth - imageViewHeight) / 2, screenHeight, imageViewHeight);
         self.imageViewVideo.frame = newRect;
         self.viewStopStreamingProgress.frame = CGRectMake(0, 0, screenHeight, screenWidth);
-        self.activityIndicator.frame = CGRectMake(screenHeight / 2 - activitySize.width / 2, screenWidth / 2 - activitySize.height / 2, activitySize.width, activitySize.height);
+//        self.activityIndicator.frame = CGRectMake(screenHeight / 2 - activitySize.width / 2, screenWidth / 2 - activitySize.height / 2, activitySize.width, activitySize.height);
         
         self.playlistViewController.tableView.frame = CGRectMake(0, 20, tableViewSize.width, tableViewSize.height);
 	}
@@ -3040,7 +3040,7 @@
         CGRect destRect = CGRectMake(0, 44 + deltaY, screenWidth, imageViewHeight);
         self.imageViewVideo.frame = destRect;
 
-        self.activityIndicator.frame = CGRectMake(screenWidth / 2 - activitySize.width / 2, imageViewHeight / 2 - activitySize.height / 2 + 44 + deltaY, activitySize.width, activitySize.height);
+//        self.activityIndicator.frame = CGRectMake(screenWidgth / 2 - activitySize.width / 2, imageViewHeight / 2 - activitySize.height / 2 + 44 + deltaY, activitySize.width, activitySize.height);
         self.viewCtrlButtons.frame = CGRectMake(0, imageViewHeight + 44 + deltaY, _viewCtrlButtons.frame.size.width, _viewCtrlButtons.frame.size.height);
         self.viewStopStreamingProgress.frame = CGRectMake(0, 0, screenWidth, screenHeight);
         

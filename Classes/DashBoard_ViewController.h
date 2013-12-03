@@ -37,7 +37,7 @@
     
     id<ConnectionMethodDelegate> delegate; 
     
-    UIToolbar * topbar; 
+    UIToolbar *_topbar;
     
     BOOL editModeEnabled; 
     int edittedChannelIndex; 
@@ -51,7 +51,7 @@
 @property (nonatomic, retain) NSArray * listOfChannel; 
 @property (nonatomic, assign) IBOutlet UITableViewCell *cellView;
 @property (nonatomic, assign) id<ConnectionMethodDelegate> delegate;
-@property (nonatomic, retain)  UIToolbar *  topbar;
+@property (nonatomic, retain)  UIToolbar *topbar;
 @property (nonatomic) BOOL editModeEnabled; 
 @property (nonatomic) int edittedChannelIndex; 
 

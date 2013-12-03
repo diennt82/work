@@ -32,6 +32,7 @@
 @synthesize temp_user_email  ;
 
 @synthesize  account;
+@synthesize client = _client;
 
 
 // The designated initializer.  Override if you create the controller programmatically and want to perform customization that is not appropriate for viewDidLoad.
@@ -239,21 +240,21 @@
     
     
     
-    if (self.client == nil)
+    if (_client == nil)
     {
-        self.client = [StunClient alloc];// init];
+        _client = [StunClient alloc]; //init];
         
         
     }
     
     
     //If we have not checked -- then start checking, else just skip this step
-    if ( [self.client isCheckingForSymmetrictNat]  == FALSE )
+    if ( [_client isCheckingForSymmetrictNat]  == FALSE )
     {
         
         //init
-        [self.client init];
-        [self.client test_start_async:self];
+        [_client init];
+        [_client test_start_async:self];
     }
     
     

@@ -43,12 +43,7 @@ extern int cleanup_pj();
 }
 -(void) dealloc
 {
-    
-    
-    
     [super dealloc];
-    [self.natCheckThread release];
-    
 }
 
 
@@ -338,6 +333,10 @@ static void pj_callback_nat_type_set_res(void *user_data, const pj_stun_nat_dete
         vc.nat_type = res->nat_type;
         vc.nat_status = res->status;
 
+    }
+    else
+    {
+        return;
     }
 
     

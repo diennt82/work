@@ -169,7 +169,7 @@ const char *MTStackViewControllerKey = "MTStackViewControllerKey";
     
     UIView *transitionView = [[UIView alloc] initWithFrame:screenBounds];
     [_contentContainerView addSubview:transitionView];
-    
+    [transitionView release];
     _tapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapGestureRecognizerDidTap:)];
     
     _panGestureRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(panGestureRecognizerDidPan:)];
@@ -210,6 +210,7 @@ const char *MTStackViewControllerKey = "MTStackViewControllerKey";
     [view addSubview:_contentContainerView];
     
     [self setView:view];
+    [view release];
 }
 
 #pragma mark - Accessors
@@ -286,6 +287,7 @@ const char *MTStackViewControllerKey = "MTStackViewControllerKey";
 
         UIView *separatorView = [[UIView alloc] initWithFrame:frame];
         [_contentContainerView addSubview:separatorView];
+        [separatorView release];
         _contentContainerView.separatorView = separatorView;
     }
     
