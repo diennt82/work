@@ -6,6 +6,8 @@
 //  Copyright (c) 2012 Smart Panda Ltd. All rights reserved.
 //
 
+#define TAG_IMAGE_VIEW_ANIMATION 595
+
 #import "Step_10_ViewController.h"
 #import "StartMonitorCallback.h"
 
@@ -89,7 +91,7 @@
     }
     else //not first time --> this is normal add camera sequence..
     {
-        
+        [self startAnimationWithOrientation];
         //Hide back button -- can't go back now..
         self.navigationItem.hidesBackButton = TRUE;
         
@@ -108,7 +110,7 @@
         [self.view addSubview:cameraAddedView];
         self.homeSSID.text = homeSsid;
         
-        [NSTimer scheduledTimerWithTimeInterval: 2.0//
+        [NSTimer scheduledTimerWithTimeInterval: 3.0//
                                          target:self
                                        selector:@selector(checkConnectionToHomeWifi:)
                                        userInfo:nil
@@ -143,6 +145,47 @@
 {
     UIInterfaceOrientation interfaceOrientation = [UIApplication sharedApplication].statusBarOrientation;
     [self adjustViewsForOrientations:interfaceOrientation];
+}
+
+- (void)startAnimationWithOrientation
+{
+    UIImageView *animationView =  (UIImageView *)[cameraAddedView viewWithTag:TAG_IMAGE_VIEW_ANIMATION];
+    //UIImageView *animationView = [[UIImageView alloc ] initWithFrame:deviceScreen];
+    
+    [animationView setContentMode:UIViewContentModeScaleAspectFit];
+    
+    if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 7.0)
+    {
+        animationView.animationImages =[NSArray arrayWithObjects:
+                                        [UIImage imageNamed:@"frame-1_update-iOS7_new"],
+                                        [UIImage imageNamed:@"frame-2_update-iOS7_new"],
+                                        [UIImage imageNamed:@"frame-3_update-iOS7_new"],
+                                        [UIImage imageNamed:@"frame-4-2_update-iOS7_new"],
+                                        [UIImage imageNamed:@"frame-5_update-iOS7_new"],
+                                        [UIImage imageNamed:@"frame-6_update-iOS7_new2"],
+                                        nil];
+        NSLog(@"ios 7");
+    }
+    
+    else
+    {
+        animationView.animationImages =[NSArray arrayWithObjects:
+                                        [UIImage imageNamed:@"frame-1_update_new"],
+                                        [UIImage imageNamed:@"frame-2_update_new"],
+                                        [UIImage imageNamed:@"frame-3_update_new"],
+                                        [UIImage imageNamed:@"frame-4-2_update_new"],
+                                        [UIImage imageNamed:@"frame-5_update_new"],
+                                        [UIImage imageNamed:@"frame-6_update_new"],
+                                        nil];
+        NSLog(@"ios < 7");
+    }
+    
+    animationView.animationDuration = 18;
+    animationView.animationRepeatCount = 0;
+    
+    [cameraAddedView bringSubviewToFront:animationView];
+    
+    [animationView startAnimating];
 }
 
 #pragma mark -

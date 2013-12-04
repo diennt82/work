@@ -6,6 +6,8 @@
 //  Copyright (c) 2012 Smart Panda Ltd. All rights reserved.
 //
 
+#define TAG_IMAGE_ANIMATION 599
+
 #import "Step_03_ViewController.h"
 
 @interface Step_03_ViewController ()
@@ -56,9 +58,11 @@
                                      target:nil
                                      action:nil] autorelease];
     
+    [self startAnimationWithOrientation];
+    
     task_cancelled  = NO;
     
-    [NSTimer scheduledTimerWithTimeInterval:2.0
+    [NSTimer scheduledTimerWithTimeInterval:3.0
                                      target:self
                                    selector:@selector(checkConnectionToCamera:)
                                    userInfo:nil
@@ -104,6 +108,48 @@
 {
     UIInterfaceOrientation orientation = [UIApplication sharedApplication].statusBarOrientation;
     [self adjustViewsForOrientations:orientation];
+}
+
+#pragma mark _ Method Animation
+
+- (void)startAnimationWithOrientation
+{
+    UIImageView *animationView =  (UIImageView *)[self.view viewWithTag:TAG_IMAGE_ANIMATION];
+    
+    [animationView setContentMode:UIViewContentModeScaleAspectFit];
+    
+    if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 7.0)
+    {
+        animationView.animationImages =[NSArray arrayWithObjects:
+                                        [UIImage imageNamed:@"frame-1_update-iOS7_new"],
+                                        [UIImage imageNamed:@"frame-2_update-iOS7_new"],
+                                        [UIImage imageNamed:@"frame-3_update-iOS7_new"],
+                                        [UIImage imageNamed:@"frame-4-1_update-iOS7_new"],
+                                        [UIImage imageNamed:@"frame-5_update-iOS7_new"],
+                                        [UIImage imageNamed:@"frame-6_update-iOS7_new2"],
+                                        nil];
+        NSLog(@"ios 7");
+    }
+    
+    else
+    {
+        animationView.animationImages =[NSArray arrayWithObjects:
+                                        [UIImage imageNamed:@"frame-1_update_new"],
+                                        [UIImage imageNamed:@"frame-2_update_new"],
+                                        [UIImage imageNamed:@"frame-3_update_new"],
+                                        [UIImage imageNamed:@"frame-4-1_update_new"],
+                                        [UIImage imageNamed:@"frame-5_update_new"],
+                                        [UIImage imageNamed:@"frame-6_update_new"],
+                                        nil];
+        NSLog(@"ios < 7");
+    }
+    
+    animationView.animationDuration = 18;
+    animationView.animationRepeatCount = 0;
+    
+    [self.view bringSubviewToFront:animationView];
+    
+    [animationView startAnimating];
 }
 
 #pragma mark -

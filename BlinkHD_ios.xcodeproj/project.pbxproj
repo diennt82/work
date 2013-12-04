@@ -154,6 +154,20 @@
 		8B5A5E9D1845A27F0036A9CD /* ME-sun_background.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B5A5E9B1845A27F0036A9CD /* ME-sun_background.png */; };
 		8B66804D1839EEA80041F510 /* NotificationViewController_ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8B66804C1839EEA70041F510 /* NotificationViewController_ipad.xib */; };
 		8B68F5D118066CE500661527 /* PlaybackViewController_ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8B68F5D018066CE500661527 /* PlaybackViewController_ipad.xib */; };
+		8B9B57DC184F0D9900E58543 /* frame-4-1_update-iOS7_new.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B9B57D5184F0D9900E58543 /* frame-4-1_update-iOS7_new.png */; };
+		8B9B57DD184F0D9900E58543 /* frame-4-2_update-iOS7_new.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B9B57D6184F0D9900E58543 /* frame-4-2_update-iOS7_new.png */; };
+		8B9B57DE184F0D9900E58543 /* frame-2_update-iOS7_new.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B9B57D7184F0D9900E58543 /* frame-2_update-iOS7_new.png */; };
+		8B9B57DF184F0D9900E58543 /* frame-3_update-iOS7_new.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B9B57D8184F0D9900E58543 /* frame-3_update-iOS7_new.png */; };
+		8B9B57E0184F0D9900E58543 /* frame-1_update-iOS7_new.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B9B57D9184F0D9900E58543 /* frame-1_update-iOS7_new.png */; };
+		8B9B57E1184F0D9900E58543 /* frame-5_update-iOS7_new.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B9B57DA184F0D9900E58543 /* frame-5_update-iOS7_new.png */; };
+		8B9B57E2184F0D9900E58543 /* frame-6_update-iOS7_new2.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B9B57DB184F0D9900E58543 /* frame-6_update-iOS7_new2.png */; };
+		8B9B57EA184F0DB200E58543 /* frame-6_update_new.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B9B57E3184F0DB200E58543 /* frame-6_update_new.png */; };
+		8B9B57EB184F0DB200E58543 /* frame-5_update_new.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B9B57E4184F0DB200E58543 /* frame-5_update_new.png */; };
+		8B9B57EC184F0DB200E58543 /* frame-2_update_new.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B9B57E5184F0DB200E58543 /* frame-2_update_new.png */; };
+		8B9B57ED184F0DB200E58543 /* frame-1_update_new.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B9B57E6184F0DB200E58543 /* frame-1_update_new.png */; };
+		8B9B57EE184F0DB200E58543 /* frame-4-1_update_new.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B9B57E7184F0DB200E58543 /* frame-4-1_update_new.png */; };
+		8B9B57EF184F0DB200E58543 /* frame-4-2_update_new.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B9B57E8184F0DB200E58543 /* frame-4-2_update_new.png */; };
+		8B9B57F0184F0DB200E58543 /* frame-3_update_new.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B9B57E9184F0DB200E58543 /* frame-3_update_new.png */; };
 		8B9CCBA3183EF8B2007C0F65 /* MelodyViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B9CCBA1183EF8B2007C0F65 /* MelodyViewController.m */; };
 		8B9CCBA4183EF8B2007C0F65 /* MelodyViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8B9CCBA2183EF8B2007C0F65 /* MelodyViewController.xib */; };
 		8BA18CAC184870470097D1AF /* DeviceSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8BA18CAA184870470097D1AF /* DeviceSettingsViewController.m */; };
@@ -494,6 +508,20 @@
 		8B5A5E9B1845A27F0036A9CD /* ME-sun_background.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ME-sun_background.png"; sourceTree = "<group>"; };
 		8B66804C1839EEA70041F510 /* NotificationViewController_ipad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = NotificationViewController_ipad.xib; sourceTree = "<group>"; };
 		8B68F5D018066CE500661527 /* PlaybackViewController_ipad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PlaybackViewController_ipad.xib; sourceTree = "<group>"; };
+		8B9B57D5184F0D9900E58543 /* frame-4-1_update-iOS7_new.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "frame-4-1_update-iOS7_new.png"; sourceTree = "<group>"; };
+		8B9B57D6184F0D9900E58543 /* frame-4-2_update-iOS7_new.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "frame-4-2_update-iOS7_new.png"; sourceTree = "<group>"; };
+		8B9B57D7184F0D9900E58543 /* frame-2_update-iOS7_new.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "frame-2_update-iOS7_new.png"; sourceTree = "<group>"; };
+		8B9B57D8184F0D9900E58543 /* frame-3_update-iOS7_new.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "frame-3_update-iOS7_new.png"; sourceTree = "<group>"; };
+		8B9B57D9184F0D9900E58543 /* frame-1_update-iOS7_new.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "frame-1_update-iOS7_new.png"; sourceTree = "<group>"; };
+		8B9B57DA184F0D9900E58543 /* frame-5_update-iOS7_new.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "frame-5_update-iOS7_new.png"; sourceTree = "<group>"; };
+		8B9B57DB184F0D9900E58543 /* frame-6_update-iOS7_new2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "frame-6_update-iOS7_new2.png"; sourceTree = "<group>"; };
+		8B9B57E3184F0DB200E58543 /* frame-6_update_new.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "frame-6_update_new.png"; sourceTree = "<group>"; };
+		8B9B57E4184F0DB200E58543 /* frame-5_update_new.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "frame-5_update_new.png"; sourceTree = "<group>"; };
+		8B9B57E5184F0DB200E58543 /* frame-2_update_new.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "frame-2_update_new.png"; sourceTree = "<group>"; };
+		8B9B57E6184F0DB200E58543 /* frame-1_update_new.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "frame-1_update_new.png"; sourceTree = "<group>"; };
+		8B9B57E7184F0DB200E58543 /* frame-4-1_update_new.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "frame-4-1_update_new.png"; sourceTree = "<group>"; };
+		8B9B57E8184F0DB200E58543 /* frame-4-2_update_new.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "frame-4-2_update_new.png"; sourceTree = "<group>"; };
+		8B9B57E9184F0DB200E58543 /* frame-3_update_new.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "frame-3_update_new.png"; sourceTree = "<group>"; };
 		8B9CCBA0183EF8B2007C0F65 /* MelodyViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MelodyViewController.h; sourceTree = "<group>"; };
 		8B9CCBA1183EF8B2007C0F65 /* MelodyViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MelodyViewController.m; sourceTree = "<group>"; };
 		8B9CCBA2183EF8B2007C0F65 /* MelodyViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MelodyViewController.xib; sourceTree = "<group>"; };
@@ -1677,6 +1705,7 @@
 		3812F82315C8BEC700DADFA6 /* images13 */ = {
 			isa = PBXGroup;
 			children = (
+				8B9B57D2184F0D4D00E58543 /* AnimeAddCam */,
 				8B0E1DDB1844A0E80080000A /* mestartup000020.png */,
 				8B0E1DDC1844A0E80080000A /* mestartup000021.png */,
 				8B0E1DDD1844A0E80080000A /* mestartup000022.png */,
@@ -1780,6 +1809,43 @@
 				8B278BEC183DC6F700A4FF50 /* NotificationSettingsCell.xib */,
 			);
 			name = NotificationSettings;
+			sourceTree = "<group>";
+		};
+		8B9B57D2184F0D4D00E58543 /* AnimeAddCam */ = {
+			isa = PBXGroup;
+			children = (
+				8B9B57D4184F0D7900E58543 /* iOS7 */,
+				8B9B57D3184F0D6000E58543 /* Below iOS7 */,
+			);
+			name = AnimeAddCam;
+			sourceTree = "<group>";
+		};
+		8B9B57D3184F0D6000E58543 /* Below iOS7 */ = {
+			isa = PBXGroup;
+			children = (
+				8B9B57E3184F0DB200E58543 /* frame-6_update_new.png */,
+				8B9B57E4184F0DB200E58543 /* frame-5_update_new.png */,
+				8B9B57E5184F0DB200E58543 /* frame-2_update_new.png */,
+				8B9B57E6184F0DB200E58543 /* frame-1_update_new.png */,
+				8B9B57E7184F0DB200E58543 /* frame-4-1_update_new.png */,
+				8B9B57E8184F0DB200E58543 /* frame-4-2_update_new.png */,
+				8B9B57E9184F0DB200E58543 /* frame-3_update_new.png */,
+			);
+			name = "Below iOS7";
+			sourceTree = "<group>";
+		};
+		8B9B57D4184F0D7900E58543 /* iOS7 */ = {
+			isa = PBXGroup;
+			children = (
+				8B9B57D5184F0D9900E58543 /* frame-4-1_update-iOS7_new.png */,
+				8B9B57D6184F0D9900E58543 /* frame-4-2_update-iOS7_new.png */,
+				8B9B57D7184F0D9900E58543 /* frame-2_update-iOS7_new.png */,
+				8B9B57D8184F0D9900E58543 /* frame-3_update-iOS7_new.png */,
+				8B9B57D9184F0D9900E58543 /* frame-1_update-iOS7_new.png */,
+				8B9B57DA184F0D9900E58543 /* frame-5_update-iOS7_new.png */,
+				8B9B57DB184F0D9900E58543 /* frame-6_update-iOS7_new2.png */,
+			);
+			name = iOS7;
 			sourceTree = "<group>";
 		};
 		8B9CCB9F183EF86C007C0F65 /* MelodyControl */ = {
@@ -1978,6 +2044,7 @@
 				38DE1CD0168AFBBE0049E814 /* Step_02_ViewController.xib in Resources */,
 				38DE1CBE168AEBBC0049E814 /* Step_03_ViewController.xib in Resources */,
 				38DE1CB4168AEBA40049E814 /* Step_04_ViewController.xib in Resources */,
+				8B9B57EC184F0DB200E58543 /* frame-2_update_new.png in Resources */,
 				38DE1CAA168AEB890049E814 /* Step_05_ViewController.xib in Resources */,
 				38DE1CA0168AEB6D0049E814 /* Step_06_ViewController.xib in Resources */,
 				8BA18CB2184879A10097D1AF /* DeviceSettingsCell.xib in Resources */,
@@ -1986,6 +2053,7 @@
 				38DE1C78168AEAF30049E814 /* Step_10_ViewController.xib in Resources */,
 				38DE1BC1168ACFEF0049E814 /* DashBoard_ViewController.xib in Resources */,
 				38A478F415C02674008682FE /* Step_05_tableViewCell.xib in Resources */,
+				8B9B57ED184F0DB200E58543 /* frame-1_update_new.png in Resources */,
 				38DE1BCC168AD9500049E814 /* DashBoard_camView.xib in Resources */,
 				8B0E1DF41844A0E80080000A /* mestartup000032.png in Resources */,
 				3812F82515C8BF0600DADFA6 /* bb_setting_icon.png in Resources */,
@@ -1996,6 +2064,7 @@
 				3812F82D15C8BF3600DADFA6 /* bb_spk_icon.png in Resources */,
 				8BC0A0331844A91900A5FD52 /* splash_screen_portrait.png in Resources */,
 				3812F83915C8C3EE00DADFA6 /* bb_check_list.png in Resources */,
+				8B9B57EE184F0DB200E58543 /* frame-4-1_update_new.png in Resources */,
 				3812F83B15C8C49000DADFA6 /* bb_line.png in Resources */,
 				38DE1BD8168AD9B40049E814 /* SongTitleView.xib in Resources */,
 				38A62E8A15C9137000DEA520 /* bb_vs_mike_off.png in Resources */,
@@ -2004,6 +2073,8 @@
 				8BC0A04F1844B61900A5FD52 /* homepage_p1.png in Resources */,
 				38A62E8F15C93E4700DEA520 /* bb_camera_toolbar.png in Resources */,
 				8B0E1DF11844A0E80080000A /* mestartup000029.png in Resources */,
+				8B9B57DE184F0D9900E58543 /* frame-2_update-iOS7_new.png in Resources */,
+				8B9B57E0184F0D9900E58543 /* frame-1_update-iOS7_new.png in Resources */,
 				38A62E9315CA12C000DEA520 /* bb_camera_slider_icon.png in Resources */,
 				38A62E9415CA12C000DEA520 /* bb_video_slider_icon.png in Resources */,
 				38A62E9715CA143200DEA520 /* vid_snap_bg.png in Resources */,
@@ -2026,16 +2097,19 @@
 				38CE2A0C15D4B85E00B8F7EC /* temp_alert_bg.png in Resources */,
 				38CE2A0F15D4E07300B8F7EC /* dialog_bg.png in Resources */,
 				38DE1C5A168AEA890049E814 /* ForgotPwdViewController.xib in Resources */,
+				8B9B57EB184F0DB200E58543 /* frame-5_update_new.png in Resources */,
 				8BC0A0491844B31700A5FD52 /* mbp_icon144x144.png in Resources */,
 				38AC740E15D8CC7E00618188 /* zoom_bar_bg.png in Resources */,
 				38AC741515D9199E00618188 /* account_icon.png in Resources */,
 				38AC741815D91A2400618188 /* scan_camera_icon.png in Resources */,
+				8B9B57EF184F0DB200E58543 /* frame-4-2_update_new.png in Resources */,
 				38ACC70815D9F8CC00825AB4 /* zoom_bar_thumb_.png in Resources */,
 				38DE1BD3168AD9A10049E814 /* DashBoard_camEdit.xib in Resources */,
 				8B0E1DEB1844A0E80080000A /* mestartup000023.png in Resources */,
 				8BC0A0211844A6EE00A5FD52 /* bb_setup_icon_step_2.png in Resources */,
 				3809A42C15E49A4B0098BBC0 /* bb_pic_1.png in Resources */,
 				8B0E1DEC1844A0E80080000A /* mestartup000024.png in Resources */,
+				8B9B57E2184F0D9900E58543 /* frame-6_update-iOS7_new2.png in Resources */,
 				8BC0A0311844A8A500A5FD52 /* camera_offline.png in Resources */,
 				8BC0A0191844A58700A5FD52 /* i_mode.png in Resources */,
 				3803A87A1602D44100B4DD97 /* temp_alert.png in Resources */,
@@ -2043,6 +2117,7 @@
 				A19778ED181E3316007C3CA7 /* ZoneViewController_ipad.xib in Resources */,
 				38167AC216118DB600B7FA0A /* bb_pic_2.png in Resources */,
 				38DE1C55168AEA770049E814 /* AlertSettingViewController.xib in Resources */,
+				8B9B57E1184F0D9900E58543 /* frame-5_update-iOS7_new.png in Resources */,
 				8BC0A0461844B31700A5FD52 /* mbp_icon57x57.png in Resources */,
 				38DE1BEC168ADA050049E814 /* FWUpgradeView.xib in Resources */,
 				8B0E1DE81844A0E80080000A /* mestartup000020.png in Resources */,
@@ -2060,6 +2135,7 @@
 				38DE1C05168ADA460049E814 /* MBP_LoginOrRegistration_ipad.xib in Resources */,
 				8B0E1DF71844A3BE0080000A /* bb_rec_icon_d.png in Resources */,
 				8BC0A01B1844A6A200A5FD52 /* bb_splash_screen_horizontal.png in Resources */,
+				8B9B57DF184F0D9900E58543 /* frame-3_update-iOS7_new.png in Resources */,
 				841D567B1834C1E600ACE7A7 /* streamqvga.sdp in Resources */,
 				38DE1BC6168AD57D0049E814 /* DashBoard_ViewController_ipad.xib in Resources */,
 				38699127167055B8009F3E66 /* MainWindow_ipad.xib in Resources */,
@@ -2077,6 +2153,7 @@
 				8BA18CAD184870470097D1AF /* DeviceSettingsViewController.xib in Resources */,
 				38DE1C73168AEAE70049E814 /* Step_10_ViewController_ipad.xib in Resources */,
 				38DE1C7D168AEB000049E814 /* Step_09_ViewController_ipad.xib in Resources */,
+				8B9B57F0184F0DB200E58543 /* frame-3_update_new.png in Resources */,
 				974ACB59168055F9005AE4C6 /* ToUViewController_ipad.xib in Resources */,
 				974ACB7F168079CB005AE4C6 /* MonitorEverywhere_App_ios_Apple.html in Resources */,
 				38DE1C4B168AEA5F0049E814 /* AlertSettingViewController_ipad.xib in Resources */,
@@ -2087,6 +2164,7 @@
 				8BC0A03E1844AC3600A5FD52 /* circle_buttons1_dn.png in Resources */,
 				8BC0A0221844A6EE00A5FD52 /* bb_setup_icon_step_3_eye.png in Resources */,
 				8BA8AE881821F3E900DC9E9F /* stream720p_10_926.sdp in Resources */,
+				8B9B57DC184F0D9900E58543 /* frame-4-1_update-iOS7_new.png in Resources */,
 				BC3C1ACE16F025B600175AFF /* MBP_MenuViewController_ipad.xib in Resources */,
 				BC3C1AD316F025E300175AFF /* MBP_MenuProgress_portrait_ipad.xib in Resources */,
 				BC3C1AD816F025FF00175AFF /* MBP_MenuProgress_land_ipad.xib in Resources */,
@@ -2112,7 +2190,9 @@
 				380CB0CD16DC5AD500290587 /* Step_12_ViewController_land.xib in Resources */,
 				380CB0D016DC5B2000290587 /* Step_12_ViewController_ipad.xib in Resources */,
 				8B5A5E9D1845A27F0036A9CD /* ME-sun_background.png in Resources */,
+				8B9B57DD184F0D9900E58543 /* frame-4-2_update-iOS7_new.png in Resources */,
 				380CB0D316DC5D8100290587 /* Step_12_ViewController_land_ipad.xib in Resources */,
+				8B9B57EA184F0DB200E58543 /* frame-6_update_new.png in Resources */,
 				8BC0A03D1844AC3600A5FD52 /* circle_buttons1_2.png in Resources */,
 				380CB0D916DC612000290587 /* Step_11_ViewController.xib in Resources */,
 				380CB0DC16DC630400290587 /* Step_11_ViewController_land.xib in Resources */,
