@@ -144,7 +144,7 @@
     
     NSMutableArray *settingsArray = [NSMutableArray array];
     
-    NSString *deviceMAC = [Util strip_colon_fr_mac:_camChannel.profile.mac_address];
+    NSString *deviceMAC = [Util strip_colon_fr_mac:self.camChannel.profile.mac_address];
     
     for (int i = 0; i < 5; i++)
     {
