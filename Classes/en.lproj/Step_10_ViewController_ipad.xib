@@ -160,7 +160,7 @@
                     <fontDescription key="fontDescription" type="system" pointSize="20"/>
                     <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                 </textView>
-                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" image="bb_pic_2.png" id="9">
+                <imageView userInteractionEnabled="NO" tag="595" contentMode="scaleToFill" image="bb_pic_2.png" id="9">
                     <rect key="frame" x="227" y="372" width="314" height="181"/>
                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                 </imageView>
