@@ -43,6 +43,15 @@
                                     action:@selector(handleBackButton:)];
     self.navigationItem.leftBarButtonItem = backButton;
     [backButton release];
+    
+    UIBarButtonItem *nextButton =
+    [[UIBarButtonItem alloc] initWithTitle: NSLocalizedStringWithDefaultValue(@"Next",nil, [NSBundle mainBundle],
+                                                                              @"Next", nil)
+                                     style:UIBarButtonItemStylePlain
+                                    target:self
+                                    action:@selector(handleNextButtonAction:)];
+    self.navigationItem.rightBarButtonItem = nextButton;
+    [nextButton release];
 
     
     self.navigationItem.title = NSLocalizedStringWithDefaultValue(@"Switch_On_Camera",nil, [NSBundle mainBundle],
@@ -150,6 +159,24 @@
 
 #pragma mark - 
 #pragma mark Actions
+
+- (void)handleNextButtonAction: (id) sender
+{
+    NSLog(@"Load step 3");
+    //Load the next xib
+    Step_03_ViewController *step03ViewController =
+    [[Step_03_ViewController alloc] initWithNibName:@"Step_03_ViewController"
+                                             bundle:nil];
+    
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+    {
+        step03ViewController = [[Step_03_ViewController alloc]initWithNibName:@"Step_03_ViewController_ipad" bundle:nil];
+    }
+
+    [self.navigationController pushViewController:step03ViewController animated:NO];
+    
+    [step03ViewController release];
+}
 
 -(IBAction)handleBackButton:(id)sender
 {
