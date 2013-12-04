@@ -177,55 +177,56 @@
         {
             NSArray *eventArr = [[responseDict objectForKey:@"data"] objectForKey:@"events"];
             
-            
             NSLog(@"play list: %@ ",responseDict);
             
-            NSArray *playlist = [[eventArr objectAtIndex:0] objectForKey:@"playlist"];
-            
-            for (NSDictionary *clipInfo in playlist) {
-                //NSDictionary *clipInfo = [[playlist objectForKey:@"playlist"] objectAtIndex:0];
+            if (eventArr.count > 0)
+            {
+                NSArray *playlist = [[eventArr objectAtIndex:0] objectForKey:@"playlist"];
                 
-                PlaylistInfo *playlistInfo = [[[PlaylistInfo alloc] init]autorelease];
-                playlistInfo.mac_addr = clip_info.mac_addr;
-                
-                playlistInfo.urlImage = [clipInfo objectForKey:@"image"];
-                playlistInfo.titleString = [clipInfo objectForKey:@"title"];
-                playlistInfo.urlFile = [clipInfo objectForKey:@"file"];
-                
-                
-                //check if the clip is in our private array
-                BOOL found = FALSE;
-                for ( NSString * one_clip in clips)
-                {
-                    NSLog(@"one clip: *%@*", one_clip);
-                    NSLog(@"playlistInfo.url: *%@*", playlistInfo.urlFile);
+                for (NSDictionary *clipInfo in playlist) {
+                    //NSDictionary *clipInfo = [[playlist objectForKey:@"playlist"] objectAtIndex:0];
                     
-                    if ([playlistInfo containsClip:one_clip])
+                    PlaylistInfo *playlistInfo = [[[PlaylistInfo alloc] init]autorelease];
+                    playlistInfo.mac_addr = clip_info.mac_addr;
+                    
+                    playlistInfo.urlImage = [clipInfo objectForKey:@"image"];
+                    playlistInfo.titleString = [clipInfo objectForKey:@"title"];
+                    playlistInfo.urlFile = [clipInfo objectForKey:@"file"];
+                    
+                    
+                    //check if the clip is in our private array
+                    BOOL found = FALSE;
+                    for ( NSString * one_clip in clips)
                     {
-                        found = TRUE;
-                        break;
+                        NSLog(@"one clip: *%@*", one_clip);
+                        NSLog(@"playlistInfo.url: *%@*", playlistInfo.urlFile);
+                        
+                        if ([playlistInfo containsClip:one_clip])
+                        {
+                            found = TRUE;
+                            break;
+                        }
                     }
-                }
-                
-                if (found == FALSE)
-                {
-                    //add the clip
-                    [clips addObject:playlistInfo.urlFile];
-                    NSLog(@"clips: %@", clips);
-                }
-                
-                
-                if ([playlistInfo isLastClip])
-                {
-                    NSLog(@"This is last");
-                    got_last_clip = TRUE;
+                    
+                    if (found == FALSE)
+                    {
+                        //add the clip
+                        [clips addObject:playlistInfo.urlFile];
+                        NSLog(@"clips: %@", clips);
+                    }
                     
                     
+                    if ([playlistInfo isLastClip])
+                    {
+                        NSLog(@"This is last");
+                        got_last_clip = TRUE;
+                    }
+                    
                 }
                 
+                NSLog(@"there is %d in playlist", [clips count]);
             }
             
-            NSLog(@"there is %d in playlist", [clips count]);
         }
     }
     
@@ -290,7 +291,7 @@
 
 - (void)startStream_bg
 {
-    status_t status;
+    status_t status = !NO_ERROR;
     
     NSString * url = self.urlVideo;
 
@@ -494,6 +495,11 @@
 	}
 	else if (orientation == UIInterfaceOrientationPortrait || orientation == UIInterfaceOrientationPortraitUpsideDown)
 	{
+        NSInteger deltaY = 0;
+        if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 7.0)
+        {
+            deltaY = 20;
+        }
         
         [[UIApplication sharedApplication] setStatusBarHidden:NO];
         self.navigationController.navigationBar.hidden = NO;
@@ -501,10 +507,10 @@
         
         CGFloat imageViewHeight = screenWidth * 9 / 16;
         
-        CGRect destRect = CGRectMake(0, 44, screenWidth, imageViewHeight);
+        CGRect destRect = CGRectMake(0, 44 + deltaY, screenWidth, imageViewHeight);
         self.imageVideo.frame = destRect;
         
-        self.activityIndicator.frame = CGRectMake(screenWidth / 2 - activitySize.width / 2, imageViewHeight / 2 - activitySize.height / 2 + 44, activitySize.width, activitySize.height);
+        self.activityIndicator.frame = CGRectMake(screenWidth / 2 - activitySize.width / 2, imageViewHeight / 2 - activitySize.height / 2 + 44 + deltaY, activitySize.width, activitySize.height);
 	}
     
 //    self.backBarBtnItem.target = self;

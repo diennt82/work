@@ -1627,7 +1627,6 @@
             NSLog(@"reloadData %d", self.playlistViewController.playlistArray.count);
         }
     }
-    
 }
 
 -(void) getVQ_bg
@@ -2988,15 +2987,6 @@
 
 - (void) adjustViewsForOrientation:(UIInterfaceOrientation)orientation
 {
-    NSInteger deltaY;
-    if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 7)
-    {
-        deltaY = HIGH_STATUS_BAR;
-    }
-    else
-    {
-        deltaY = 0;
-    }
     CGRect screenBounds = [[UIScreen mainScreen] bounds];
     CGFloat screenWidth = screenBounds.size.width;
     CGFloat screenHeight = screenBounds.size.height;
@@ -3026,6 +3016,12 @@
 	}
 	else if (orientation == UIInterfaceOrientationPortrait || orientation == UIInterfaceOrientationPortraitUpsideDown)
 	{
+        NSInteger deltaY = 0;
+        if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 7.0)
+        {
+            deltaY = HIGH_STATUS_BAR;
+        }
+        
         [self updateNavigationBarAndToolBar];
         [[UIApplication sharedApplication] setStatusBarHidden:NO];
         self.view.backgroundColor = [UIColor whiteColor];

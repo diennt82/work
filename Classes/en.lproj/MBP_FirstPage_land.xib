@@ -76,7 +76,7 @@
                     <inset key="insetFor6xAndEarlier" minX="0.0" minY="20" maxX="0.0" maxY="-20"/>
                 </imageView>
                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Version 1.21" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="10" enabled="NO" adjustsFontSizeToFit="NO" id="14">
-                    <rect key="frame" x="238" y="80" width="92" height="21"/>
+                    <rect key="frame" x="220" y="80" width="129" height="21"/>
                     <autoresizingMask key="autoresizingMask"/>
                     <inset key="insetFor6xAndEarlier" minX="0.0" minY="20" maxX="0.0" maxY="-20"/>
                     <fontDescription key="fontDescription" type="system" pointSize="16"/>
