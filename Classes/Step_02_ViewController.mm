@@ -111,26 +111,26 @@
     if (interfaceOrientation == UIInterfaceOrientationLandscapeLeft ||
         interfaceOrientation == UIInterfaceOrientationLandscapeRight)
     {
-        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
-        {
-            [[NSBundle mainBundle] loadNibNamed:@"Step_02_ViewController_land_ipad" owner:self options:nil];
-        }
-        else
-        {
-            [[NSBundle mainBundle] loadNibNamed:@"Step_02_ViewController_land" owner:self options:nil];
-        }
+//        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+//        {
+//            [[NSBundle mainBundle] loadNibNamed:@"Step_02_ViewController_land_ipad" owner:self options:nil];
+//        }
+//        else
+//        {
+//            [[NSBundle mainBundle] loadNibNamed:@"Step_02_ViewController_land" owner:self options:nil];
+//        }
     }
     else if (interfaceOrientation == UIInterfaceOrientationPortrait ||
              interfaceOrientation == UIInterfaceOrientationPortraitUpsideDown)
     {
-        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
-        {
-            [[NSBundle mainBundle] loadNibNamed:@"Step_02_ViewController_ipad" owner:self options:nil];
-        }
-        else
-        {
-            [[NSBundle mainBundle] loadNibNamed:@"Step_02_ViewController" owner:self options:nil];
-        }
+//        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+//        {
+//            [[NSBundle mainBundle] loadNibNamed:@"Step_02_ViewController_ipad" owner:self options:nil];
+//        }
+//        else
+//        {
+//            [[NSBundle mainBundle] loadNibNamed:@"Step_02_ViewController" owner:self options:nil];
+//        }
     }
 }
 
@@ -290,33 +290,48 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
-    //int tag = tableView.tag;
-    
-    //if (tag == 13)
-    {
-       
-        {
-            
-            if (indexPath.row == STEP_1) {
-                step1_cell.backgroundColor = [UIColor clearColor];
-                return step1_cell;
-            }
-            if (indexPath.row == STEP_2)
-            {
-                step2_cell.backgroundColor = [UIColor clearColor];
-                return step2_cell;
-            }
-            if (indexPath.row == STEP_3)
-            {
-                step3_cell.backgroundColor = [UIColor clearColor];
-                return step3_cell;
-            }
-            
-        }
-        
+    static NSString *CellIdentifier = @"Cell";
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+    if (cell == nil) {
+        cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
     }
     
-    return nil;
+    // Configure the cell...
+    NSString *nameImage = [NSString stringWithFormat:@"bb_setup_icon_step_%d.png", indexPath.row + 1];
+    CGSize newSize = CGSizeMake(64, 64);
+    
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+    {
+        newSize = CGSizeMake(100, 100);
+    }
+    
+    cell.imageView.image = [self imageWithNameString:nameImage scaledToSize:newSize];
+    
+    NSString *textInstruction = @"";
+    
+    switch (indexPath.row)
+    {
+        case STEP_1:
+            textInstruction = @"Switch on the camera";
+            break;
+            
+        case STEP_2:
+            textInstruction = @"Wait for a couple of minutes while it warms up";
+            cell.textLabel.numberOfLines = 2;
+            break;
+            
+        case STEP_3:
+            textInstruction = @"When the green light starts blinking, proceed";
+            cell.textLabel.numberOfLines = 2;
+            break;
+            
+        default:
+            break;
+    }
+    
+    cell.textLabel.text = textInstruction;
+    
+    return cell;
     
 }
 
@@ -341,12 +356,15 @@
 }
 
 #pragma  mark -
-
-
-
-
-
-
-
+- (UIImage *)imageWithNameString:(NSString *)nameString scaledToSize:(CGSize)newSize
+{
+	UIGraphicsBeginImageContext(newSize);
+    [[UIImage imageNamed:nameString] drawInRect:CGRectMake(0, 0, newSize.width, newSize.height)];
+    
+	UIImage* newImage = UIGraphicsGetImageFromCurrentImageContext();
+	UIGraphicsEndImageContext();
+    
+	return newImage;
+}
 
 @end
