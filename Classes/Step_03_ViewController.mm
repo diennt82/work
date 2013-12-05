@@ -386,11 +386,12 @@
 
 -(void) moveToNextStep
 {
-    HttpCommunication * comm = [[[HttpCommunication alloc] init] autorelease];
+    HttpCommunication * comm = [[HttpCommunication alloc] init];
     
     NSString * fw_version = [comm sendCommandAndBlock:GET_VERSION];
-    NSString *fwVersion = [[fw_version componentsSeparatedByString:@": "] objectAtIndex:1];
-    NSLog(@"fw_version = %@, fwVersion = %@", fw_version, fwVersion);
+    [comm release];
+    
+    NSLog(@"Step_03 - moveToNextStep -->fw_version: %@", fw_version);
     
 //    NSString *model = [comm sendCommandAndBlock:GET_MODEL];
 //    
@@ -404,12 +405,6 @@
 //    }
 //    
 //    NSLog(@"model = %@", model);
-    
-    
-    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-    [userDefaults setObject:fwVersion forKey:@"FW_VERSION"];
-    //[userDefaults setObject:model forKey:@"MODEL"];
-    [userDefaults synchronize];
     
     if ( fw_version != nil                   &&
         [fw_version isEqualToString:VERSION_18_037]
@@ -444,6 +439,17 @@
     }
     else
     {
+        NSRange colonRange = [fw_version rangeOfString:@": "];
+        
+        if (colonRange.location != NSNotFound)
+        {
+            NSString *fwVersion = [[fw_version componentsSeparatedByString:@": "] objectAtIndex:1];
+            
+            NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+            [userDefaults setObject:fwVersion forKey:@"FW_VERSION"];
+            //[userDefaults setObject:model forKey:@"MODEL"];
+            [userDefaults synchronize];
+        }
         
         NSLog(@"Load step 4");
         //Load the next xib
