@@ -60,14 +60,6 @@
     
     [self startAnimationWithOrientation];
     
-    task_cancelled  = NO;
-    
-    [NSTimer scheduledTimerWithTimeInterval:3.0
-                                     target:self
-                                   selector:@selector(checkConnectionToCamera:)
-                                   userInfo:nil
-                                    repeats:NO];
-    
     self.homeWifiSSID = [CameraPassword fetchSSIDInfo];
     
     
@@ -75,17 +67,7 @@
     
     
     
-	// Do any additional setup after loading the view.
-	[[NSNotificationCenter defaultCenter] addObserver: self
-                                             selector: @selector(handleEnteredBackground)
-                                                 name: UIApplicationDidEnterBackgroundNotification
-                                               object: nil];
-    
-    // Do any additional setup after loading the view.
-	[[NSNotificationCenter defaultCenter] addObserver: self
-                                             selector: @selector(becomeActive)
-                                                 name: UIApplicationDidBecomeActiveNotification
-                                               object: nil];
+	
     
     [self.view addSubview:self.inProgress];
     self.inProgress.hidden = YES;
@@ -106,6 +88,18 @@
 
 - (void) viewWillAppear:(BOOL)animated
 {
+    // Do any additional setup after loading the view.
+	[[NSNotificationCenter defaultCenter] addObserver: self
+                                             selector: @selector(handleEnteredBackground)
+                                                 name: UIApplicationDidEnterBackgroundNotification
+                                               object: nil];
+    
+    // Do any additional setup after loading the view.
+	[[NSNotificationCenter defaultCenter] addObserver: self
+                                             selector: @selector(becomeActive)
+                                                 name: UIApplicationDidBecomeActiveNotification
+                                               object: nil];
+    
     UIInterfaceOrientation orientation = [UIApplication sharedApplication].statusBarOrientation;
     [self adjustViewsForOrientations:orientation];
 }
@@ -261,6 +255,9 @@
         NSLog(@"cshow progress 03");
         [self showProgress:nil];
     }
+    
+    task_cancelled = NO;
+    [self checkConnectionToCamera:nil];
 }
 
 -(void) showProgress:(NSTimer *) exp

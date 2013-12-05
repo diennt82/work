@@ -1404,6 +1404,7 @@
 				97A07FAD17D5FCFD00653460 /* H264Player */,
 				8B3A90C4185014BB00685090 /* Step_02 */,
 				8B3A90CA185026C000685090 /* Step_03 */,
+				8B5FB3E618505C6600A74E06 /* Step_04 */,
 				9704F83F17B37CAD005F9868 /* DashBoard_ViewController.h */,
 				9704F84017B37CAF005F9868 /* DashBoard_ViewController.mm */,
 				97F5531417BDD3AF00024017 /* MBPNavController.m */,
@@ -1422,12 +1423,6 @@
 				38DE1C7F168AEB000049E814 /* Step_09_ViewController_ipad.xib */,
 				38A478FC15C12CF2008682FE /* Step_09_ViewController.mm */,
 				38A478FB15C12CF1008682FE /* Step_09_ViewController.h */,
-				38DE1CB6168AEBA40049E814 /* Step_04_ViewController.xib */,
-				BCA1A4DC16C2569E00E7EF56 /* Step_04_ViewController_land.xib */,
-				38DE1CB1168AEB970049E814 /* Step_04_ViewController_ipad.xib */,
-				BCBD80D616D1DA920007943B /* Step_04_ViewController_land_ipad.xib */,
-				38A478E615BE82E0008682FE /* Step_04_ViewController.h */,
-				38A478E715BE82E0008682FE /* Step_04_ViewController.mm */,
 				38A478EE15C0015E008682FE /* Step_05_ViewController.h */,
 				38A478EF15C0015E008682FE /* Step_05_ViewController.mm */,
 				38DE1CAC168AEB890049E814 /* Step_05_ViewController.xib */,
@@ -1769,6 +1764,19 @@
 				38A478DB15BE4BFA008682FE /* Step_03_ViewController.mm */,
 			);
 			name = Step_03;
+			sourceTree = "<group>";
+		};
+		8B5FB3E618505C6600A74E06 /* Step_04 */ = {
+			isa = PBXGroup;
+			children = (
+				38DE1CB6168AEBA40049E814 /* Step_04_ViewController.xib */,
+				BCA1A4DC16C2569E00E7EF56 /* Step_04_ViewController_land.xib */,
+				38DE1CB1168AEB970049E814 /* Step_04_ViewController_ipad.xib */,
+				BCBD80D616D1DA920007943B /* Step_04_ViewController_land_ipad.xib */,
+				38A478E615BE82E0008682FE /* Step_04_ViewController.h */,
+				38A478E715BE82E0008682FE /* Step_04_ViewController.mm */,
+			);
+			name = Step_04;
 			sourceTree = "<group>";
 		};
 		8B9B57D2184F0D4D00E58543 /* AnimeAddCam */ = {
