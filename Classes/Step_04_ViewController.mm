@@ -37,6 +37,15 @@
                                       style:UIBarButtonItemStyleBordered
                                      target:nil
                                      action:nil] autorelease];
+    
+    UIBarButtonItem *nextButton =
+    [[UIBarButtonItem alloc] initWithTitle: NSLocalizedStringWithDefaultValue(@"Next",nil, [NSBundle mainBundle],
+                                                                              @"Next", nil)
+                                     style:UIBarButtonItemStylePlain
+                                    target:self
+                                    action:@selector(handleNextBtnTouchAction:)];
+    self.navigationItem.rightBarButtonItem = nextButton;
+    [nextButton release];
 
     if ([camName isMemberOfClass:[UITextView class]] )
     {
@@ -68,6 +77,35 @@
 {
     UIInterfaceOrientation interfaceOrientation = [UIApplication sharedApplication].statusBarOrientation;
     [self adjustViewsForOrientations:interfaceOrientation];
+}
+
+- (void)handleNextBtnTouchAction: (id)sender
+{
+    NSString * cameraName_text = @"";
+    
+    if ([camName isMemberOfClass:[UITextView class]] )
+    {
+        cameraName_text =((UITextView *)camName).text  ;
+    }
+    
+    if ([camName isMemberOfClass:[UITextField class]] )
+    {
+        cameraName_text =((UITextField *)camName).text;
+    }
+    
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    [userDefaults setObject:cameraName_text forKey:@"CameraName"];
+    [userDefaults synchronize];
+    
+    
+    comm = [[HttpCommunication alloc]init];
+    comm.device_ip = @"192.168.2.1";//here camera is still in directmode
+    comm.device_port = 80;
+    
+    
+    /*20121129: phung skip authentication */
+    
+    [self queryWifiList];
 }
 
 #pragma mark -
@@ -117,28 +155,28 @@
     if (interfaceOrientation == UIInterfaceOrientationLandscapeLeft ||
         interfaceOrientation == UIInterfaceOrientationLandscapeRight)
     {
-        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
-        {
-            [[NSBundle mainBundle] loadNibNamed:@"Step_04_ViewController_land_ipad" owner:self options:nil];
-        }
-        else
-        {
-            [[NSBundle mainBundle] loadNibNamed:@"Step_04_ViewController_land" owner:self options:nil];
-            
-            
-        }
+//        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+//        {
+//            [[NSBundle mainBundle] loadNibNamed:@"Step_04_ViewController_land_ipad" owner:self options:nil];
+//        }
+//        else
+//        {
+//            [[NSBundle mainBundle] loadNibNamed:@"Step_04_ViewController_land" owner:self options:nil];
+//            
+//            
+//        }
     }
     else if (interfaceOrientation == UIInterfaceOrientationPortrait ||
              interfaceOrientation == UIInterfaceOrientationPortraitUpsideDown)
     {
-        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
-        {
-            [[NSBundle mainBundle] loadNibNamed:@"Step_04_ViewController_ipad" owner:self options:nil];
-        }
-        else
-        {
-            [[NSBundle mainBundle] loadNibNamed:@"Step_04_ViewController" owner:self options:nil];
-        }
+//        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+//        {
+//            [[NSBundle mainBundle] loadNibNamed:@"Step_04_ViewController_ipad" owner:self options:nil];
+//        }
+//        else
+//        {
+//            [[NSBundle mainBundle] loadNibNamed:@"Step_04_ViewController" owner:self options:nil];
+//        }
     }
     
     
