@@ -192,7 +192,7 @@
                 [self.inProgress removeFromSuperview];
                 
                 
-                [[NSBundle mainBundle] loadNibNamed:@"Step_03_ViewController_land" owner:self options:nil];
+                //[[NSBundle mainBundle] loadNibNamed:@"Step_03_ViewController_land" owner:self options:nil];
                 
                 [self.view addSubview:self.inProgress];
                 self.inProgress.hidden = hidden;
@@ -212,7 +212,7 @@
                 [self.inProgress removeFromSuperview];
                 
                 
-                [[NSBundle mainBundle] loadNibNamed:@"Step_03_ViewController" owner:self options:nil];
+                //[[NSBundle mainBundle] loadNibNamed:@"Step_03_ViewController" owner:self options:nil];
                 [self.view addSubview:self.inProgress];
                 self.inProgress.hidden = hidden;
                 
