@@ -119,7 +119,18 @@
 
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+#if 1
+    static NSString *CellIdentifier = @"Cell";
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+    if (cell == nil) {
+        cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
+    }
     
+    // Configure the cell...
+    cell.textLabel.text = (NSString *) [self.securityTypes objectAtIndex:indexPath.row];
+    
+    return cell;
+#else
     int tag = tableView.tag;
     UITableViewCell *cell = nil;
     if (tag == 12)
@@ -156,7 +167,7 @@
     
     
     return cell;
-    
+#endif
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
