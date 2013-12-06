@@ -1380,6 +1380,7 @@
 				8B3A90CA185026C000685090 /* Step_03 */,
 				8B5FB3E618505C6600A74E06 /* Step_04 */,
 				8B5FB3E718509B4C00A74E06 /* Step_05 */,
+				8BA7F2771851703E00BE0145 /* Step_06 */,
 				8BA7F27618516EB800BE0145 /* Login|Register */,
 				9704F83F17B37CAD005F9868 /* DashBoard_ViewController.h */,
 				9704F84017B37CAF005F9868 /* DashBoard_ViewController.mm */,
@@ -1399,10 +1400,6 @@
 				38DE1C7F168AEB000049E814 /* Step_09_ViewController_ipad.xib */,
 				38A478FC15C12CF2008682FE /* Step_09_ViewController.mm */,
 				38A478FB15C12CF1008682FE /* Step_09_ViewController.h */,
-				38A478F515C115C1008682FE /* Step_06_ViewController.h */,
-				38A478F615C115C2008682FE /* Step_06_ViewController.mm */,
-				38DE1CA2168AEB6D0049E814 /* Step_06_ViewController.xib */,
-				38DE1C9D168AEB510049E814 /* Step_06_ViewController_ipad.xib */,
 				38B85E5115CFAA7E00E5A1FA /* Step_07_ViewController.h */,
 				38B85E5215CFAA7E00E5A1FA /* Step_07_ViewController.mm */,
 				38DE1C98168AEB450049E814 /* Step_07_ViewController.xib */,
@@ -1825,6 +1822,17 @@
 				38DE1C07168ADA460049E814 /* MBP_LoginOrRegistration_ipad.xib */,
 			);
 			name = "Login|Register";
+			sourceTree = "<group>";
+		};
+		8BA7F2771851703E00BE0145 /* Step_06 */ = {
+			isa = PBXGroup;
+			children = (
+				38A478F515C115C1008682FE /* Step_06_ViewController.h */,
+				38A478F615C115C2008682FE /* Step_06_ViewController.mm */,
+				38DE1CA2168AEB6D0049E814 /* Step_06_ViewController.xib */,
+				38DE1C9D168AEB510049E814 /* Step_06_ViewController_ipad.xib */,
+			);
+			name = Step_06;
 			sourceTree = "<group>";
 		};
 		9770CB87143032BC009E69EF /* images */ = {
