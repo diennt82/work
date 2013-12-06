@@ -1226,48 +1226,16 @@
     NSString * ok = NSLocalizedStringWithDefaultValue(@"Ok",nil, [NSBundle mainBundle],
                                                         @"Ok", nil);
 
-   // NSString * newName = NSLocalizedStringWithDefaultValue(@"New_Name",nil, [NSBundle mainBundle],
-  //                                                    @"New Name", nil);
-#if 0
-    UIAlertView * _myAlert = nil;
-
-    _myAlert = [[UIAlertView alloc] initWithTitle:msg
-                                          message:msg2 
-                                         delegate:self
-                                cancelButtonTitle:cancel
-                                otherButtonTitles:ok,
-                nil];
-    _myAlert.tag = ALERT_CHANGE_NAME; //used for tracking later
-    
-    UITextField *myTextField = [[UITextField alloc] initWithFrame:CGRectMake(32.0, 85.0, 220.0, 30.0)];
-    [myTextField setBackgroundColor:[UIColor whiteColor]];
-    myTextField.placeholder = newName;
-    myTextField.borderStyle = UITextBorderStyleRoundedRect;
-    myTextField.backgroundColor = [UIColor whiteColor];
-    myTextField.textColor = [UIColor blackColor];
-    myTextField.delegate = self;
-    myTextField.tag = 10;
-    [myTextField becomeFirstResponder];
-    
-    [_myAlert addSubview:myTextField];
-  
-  
-    [_myAlert show];
-    [_myAlert release];
-    
-#else
-    
-    AlertPrompt *prompt = [AlertPrompt alloc];
-    prompt = [prompt initWithTitle:msg
-                           message:msg2
-                      promptholder:msg2
-                          delegate:self
-                 cancelButtonTitle:cancel
-                     okButtonTitle:ok];
-    prompt.tag = ALERT_CHANGE_NAME;
-    [prompt show];
-    [prompt release];
-#endif
+    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:msg
+                                                        message:nil
+                                                       delegate:self
+                                              cancelButtonTitle:cancel
+                                              otherButtonTitles:ok, nil];
+    alertView.alertViewStyle = UIAlertViewStylePlainTextInput;
+    [alertView textFieldAtIndex:0].placeholder = msg2;
+    alertView.tag = ALERT_CHANGE_NAME;
+    [alertView show];
+    [alertView release];
 }
 
 
@@ -1306,7 +1274,7 @@
 				break;
 			case 1:
 			{
-                NSString *newName = [(AlertPrompt *)alertView enteredText];
+                NSString *newName = [alertView textFieldAtIndex:0].text;
                 
 				if( (newName == nil) || [newName length] ==0)
 				{
@@ -1530,8 +1498,6 @@
                                        andAccessToken:apiKey
                                             andApiKey:apiKey];
     
-    ch.profile.name = newName;
-    
     progressView.hidden  = NO;
     [self.view addSubview:progressView];
     [self.view bringSubviewToFront:progressView];
@@ -1540,6 +1506,14 @@
 
 -(void) changeNameSuccessWithResponse:(NSDictionary *) responseData
 {
+    if (responseData != nil)
+    {
+        NSString *newName = [[responseData objectForKey:@"data"] objectForKey:@"name"];
+        
+        CamChannel * ch = (CamChannel *) [listOfChannel objectAtIndex:self.edittedChannelIndex];
+        ch.profile.name = newName;
+    }
+    
     [cameraList reloadData] ;
     
     //TODO: save to offline data
@@ -1561,20 +1535,21 @@
 }
 -(void) changeNameFailedWithError:(NSDictionary *)errorResponse
 {
-    [cameraList reloadData] ;
+    progressView.hidden  = YES;
+    //[cameraList reloadData] ;
 }
 
 -(void) changeNameFailedServerUnreachable
 {
-    
-    [cameraList reloadData] ;
+    progressView.hidden  = YES;
+    //[cameraList reloadData] ;
 }
 
 -(void) onCameraRemoveLocal
 {
     CamChannel *ch = (CamChannel *) [listOfChannel objectAtIndex:self.edittedChannelIndex];
     
-    HttpCommunication * dev_comm = [[[HttpCommunication alloc]init] autorelease];
+    HttpCommunication * dev_comm = [[HttpCommunication alloc]init];
     dev_comm.device_ip = ch.profile.ip_address;
     dev_comm.device_port = ch.profile.port;
     
@@ -1583,6 +1558,8 @@
 	
 	command = RESTART_HTTP_CMD;
 	[dev_comm sendCommandAndBlock:command];
+    
+    [dev_comm release];
     
     BMS_JSON_Communication *jsonComm = [[[BMS_JSON_Communication alloc] initWithObject:self
                                                                              Selector:@selector(removeCamSuccessWithResponse:)

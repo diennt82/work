@@ -39,7 +39,7 @@
                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                     <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                 </textView>
-                <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" image="bb_pic_1.png" id="9">
+                <imageView userInteractionEnabled="NO" tag="599" contentMode="scaleAspectFit" image="bb_pic_1.png" id="9">
                     <rect key="frame" x="232" y="396" width="298" height="148"/>
                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                     <inset key="insetFor6xAndEarlier" minX="0.0" minY="40" maxX="0.0" maxY="-40"/>

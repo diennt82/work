@@ -39,8 +39,8 @@
                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                     <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                 </textView>
-                <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" image="bb_pic_1.png" id="19">
-                    <rect key="frame" x="40" y="222" width="240" height="112"/>
+                <imageView userInteractionEnabled="NO" tag="599" contentMode="scaleAspectFit" image="bb_pic_1.png" id="19">
+                    <rect key="frame" x="40" y="263" width="240" height="112"/>
                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                     <inset key="insetFor6xAndEarlier" minX="0.0" minY="64" maxX="0.0" maxY="-64"/>
                 </imageView>
