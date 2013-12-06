@@ -134,16 +134,18 @@
         {
 
             
-            mTableView.frame = CGRectMake(mTableView.frame.origin.x,
-                                          mTableView.frame.origin.y,
-                                          mTableView.frame.size.width,
-                                          550);
+            
             
         }
         else
         {
-            [[NSBundle mainBundle] loadNibNamed:@"Step_05_ViewController_land" owner:self options:nil];
+            //[[NSBundle mainBundle] loadNibNamed:@"Step_05_ViewController_land" owner:self options:nil];
         }
+//        mTableView.frame = CGRectMake(mTableView.frame.origin.x,
+//                                      mTableView.frame.origin.y,
+//                                      mTableView.frame.size.width,
+//                                      //550);
+//                                      UIScreen.mainScreen.bounds.size.width - mTableView.frame.origin.y - 84);
     }
     else if (interfaceOrientation == UIInterfaceOrientationPortrait ||
              interfaceOrientation == UIInterfaceOrientationPortraitUpsideDown)
@@ -151,15 +153,17 @@
         if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
         {
 
-            mTableView.frame = CGRectMake(mTableView.frame.origin.x,
-                                          mTableView.frame.origin.y,
-                                          mTableView.frame.size.width,
-                                          833);
         }
         else
         {
-            [[NSBundle mainBundle] loadNibNamed:@"Step_05_ViewController" owner:self options:nil];
+            //[[NSBundle mainBundle] loadNibNamed:@"Step_05_ViewController" owner:self options:nil];
         }
+        
+//        mTableView.frame = CGRectMake(mTableView.frame.origin.x,
+//                                      mTableView.frame.origin.y,
+//                                      mTableView.frame.size.width,
+//                                      //500);
+//                                      UIScreen.mainScreen.bounds.size.height - mTableView.frame.origin.y - 84);
     }
 }
 
@@ -183,10 +187,30 @@
     return 0; 
 
 }
+
+- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
+{
+    NSString *sectionName = @"Select the wifi connection that your camera can use";
+
+    return sectionName;
+}
+
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+#if 1
+    static NSString *CellIdentifier = @"Cell";
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+    if (cell == nil) {
+        cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
+    }
     
+    // Configure the cell...
+    WifiEntry *entry = [listOfWifi objectAtIndex:indexPath.row];
+    cell.textLabel.text = entry.ssid_w_quote;
+    cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     
-    int tag = tableView.tag; 
+    return cell;
+#else
+    int tag = tableView.tag;
     UITableViewCell *cell = nil;
     static NSString *CellIdentifier = @"Cell";
     if (tag == 11)
@@ -224,9 +248,10 @@
     
     
     return cell;
+#endif
 }
 
-- (void)tableView: (UITableView *)tableView didSelectRowAtIndexPath: (NSIndexPath *)indexPath 
+- (void)tableView: (UITableView *)tableView didSelectRowAtIndexPath: (NSIndexPath *)indexPath
 {
     
     [tableView deselectRowAtIndexPath:[tableView indexPathForSelectedRow] 
