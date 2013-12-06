@@ -700,7 +700,7 @@
     
     dispatch_async(dispatch_get_main_queue(),
                    ^{
-                       [self.client shutdown];
+                       [_client shutdown];
                       // [self.client release];
                    }
                    );

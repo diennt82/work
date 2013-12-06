@@ -2399,7 +2399,7 @@
                                    {
                                        self.selectedChannel.stream_url = [[NSBundle mainBundle] pathForResource:@"streamqvga" ofType:@"sdp"];
                                    }
-                                   else if ([modeVideo isEqualToString:@"720p_10_926"] ||
+                                   else if ([modeVideo isEqualToString:@"720p_926"] ||
                                             [modeVideo isEqualToString:@"480p_926"] ||
                                             [modeVideo isEqualToString:@"360p_926"] )
                                    {
