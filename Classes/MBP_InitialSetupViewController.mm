@@ -57,7 +57,15 @@
                                       style:UIBarButtonItemStyleBordered
                                      target:nil
                                      action:nil] autorelease];
-    
+    UIBarButtonItem *nextButton =
+    [[UIBarButtonItem alloc] initWithTitle: NSLocalizedStringWithDefaultValue(@"Next",nil, [NSBundle mainBundle],
+                                                                              @"Next", nil)
+                                     style:UIBarButtonItemStylePlain
+                                    target:self
+                                    action:@selector(handleNextBtnAction:)];
+    self.navigationItem.rightBarButtonItem = nextButton;
+    [nextButton release];
+
 
     //If not first time setup.. show the back key 
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
@@ -244,86 +252,70 @@
 
 - (IBAction)handleButtonPress:(id)sender
 {
-    int tag = ((UIButton*)sender).tag;
-    
-
-    
-    if (tag == CONTINUE_BTN_TAG)
-    {
-        NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-        BOOL isFirstTimeSetup = [userDefaults boolForKey:FIRST_TIME_SETUP];
-        if (isFirstTimeSetup ==FALSE)
-        {
-            
-            //20130226: phung: flow never comes here any more..
-            NSLog(@"load step 2:");
-            
-
-            //Load the next xib
-            Step_02_ViewController *step02ViewController = nil;
-            
-            
-            
-            if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
-            {
-                step02ViewController = [[Step_02_ViewController alloc]
-                                        initWithNibName:@"Step_02_ViewController_ipad" bundle:nil];
-            }
-            else
-            {
-                
-                step02ViewController = [[Step_02_ViewController alloc]
-                                        initWithNibName:@"Step_02_ViewController" bundle:nil];
-            }
-            
-            
-            
-            
-            [self.navigationController pushViewController:step02ViewController animated:NO];
-            
-            [step02ViewController release];
-
-        }
-        else
-        {  
-            //20130219- app flow changed : Create account first
-            
-            NSLog(@"Load step 09");
-            
-            
-            //Load the next xib
-            Step_09_ViewController *step09ViewController = nil;
-            
-            if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
-            {
-                
-                step09ViewController = [[Step_09_ViewController alloc]
-                                        initWithNibName:@"Step_09_ViewController_ipad" bundle:nil]; 
-            }
-            else
-            {
-                step09ViewController = [[Step_09_ViewController alloc]
-                                        initWithNibName:@"Step_09_ViewController" bundle:nil];
-            }
-            
-            
-            [self.navigationController pushViewController:step09ViewController animated:NO];
-            
-            [step09ViewController release];
-        }
-        
-        
-    }
-    
-    
+    //int tag = ((UIButton*)sender).tag;
+    //handleNextBtnAction: (id)sender
 }
 
+- (void)handleNextBtnAction: (id)sender
+{
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    BOOL isFirstTimeSetup = [userDefaults boolForKey:FIRST_TIME_SETUP];
+    
+    if (isFirstTimeSetup ==FALSE)
+    {
+        
+        //20130226: phung: flow never comes here any more..
+        NSLog(@"load step 2:");
 
+        //Load the next xib
+        Step_02_ViewController *step02ViewController = nil;
+        
+        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+        {
+            step02ViewController = [[Step_02_ViewController alloc]
+                                    initWithNibName:@"Step_02_ViewController_ipad" bundle:nil];
+        }
+        else
+        {
+            step02ViewController = [[Step_02_ViewController alloc]
+                                    initWithNibName:@"Step_02_ViewController" bundle:nil];
+        }
+        
+        [self.navigationController pushViewController:step02ViewController animated:NO];
+        
+        [step02ViewController release];
+    }
+    else
+    {
+        //20130219- app flow changed : Create account first
+        
+        NSLog(@"Load step 09");
+        
+        //Load the next xib
+        Step_09_ViewController *step09ViewController = nil;
+        
+        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+        {
+            
+            step09ViewController = [[Step_09_ViewController alloc]
+                                    initWithNibName:@"Step_09_ViewController_ipad" bundle:nil];
+        }
+        else
+        {
+            step09ViewController = [[Step_09_ViewController alloc]
+                                    initWithNibName:@"Step_09_ViewController" bundle:nil];
+        }
+
+        [self.navigationController pushViewController:step09ViewController animated:NO];
+        
+        [step09ViewController release];
+    }
+}
 
 
 -(void) startMonitorCallBack
 {
-    NSLog(@"LOGINING... "); 
+    NSLog(@"LOGINING... ");
     [self.delegate sendStatus:2];//login];
 }
 

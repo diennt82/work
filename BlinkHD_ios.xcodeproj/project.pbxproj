@@ -1382,6 +1382,7 @@
 				978B25B317E1B2AE006FC224 /* SlideMenu */,
 				979BC69617D9B8BA00B3B373 /* Playlist */,
 				97A07FAD17D5FCFD00653460 /* H264Player */,
+				8B76EE801851D29300C0CEEE /* InitialSetup */,
 				8B3A90C4185014BB00685090 /* Step_02 */,
 				8B3A90CA185026C000685090 /* Step_03 */,
 				8B5FB3E618505C6600A74E06 /* Step_04 */,
@@ -1397,12 +1398,6 @@
 				97987D2C154698100066C49B /* ConnectionMethodDelegate.h */,
 				972E2B8515A4234300E60A96 /* NSData+Base64.m */,
 				972E2B8615A4234300E60A96 /* NSData+Base64.h */,
-				38A478CD15BD64F9008682FE /* MBP_InitialSetupViewController.h */,
-				38A478CE15BD64F9008682FE /* MBP_InitialSetupViewController.mm */,
-				38DE1CDC168AFBE00049E814 /* MBP_InitialSetupViewController.xib */,
-				BC6E4A0316BFBB9D00B0D630 /* MBP_InitialSetupViewController_land.xib */,
-				38DE1CD7168AFBCF0049E814 /* MBP_InitialSetupViewController_ipad.xib */,
-				BCBD80BF16D1D0480007943B /* MBP_InitialSetupViewController_ipad_land.xib */,
 				38DE1C84168AEB0E0049E814 /* Step_09_ViewController.xib */,
 				38DE1C7F168AEB000049E814 /* Step_09_ViewController_ipad.xib */,
 				38A478FC15C12CF2008682FE /* Step_09_ViewController.mm */,
@@ -1755,6 +1750,19 @@
 				381D185C16D4652C00272A8D /* Step_05_tableViewCell_ipad.xib */,
 			);
 			name = Step_05;
+			sourceTree = "<group>";
+		};
+		8B76EE801851D29300C0CEEE /* InitialSetup */ = {
+			isa = PBXGroup;
+			children = (
+				38A478CD15BD64F9008682FE /* MBP_InitialSetupViewController.h */,
+				38A478CE15BD64F9008682FE /* MBP_InitialSetupViewController.mm */,
+				38DE1CDC168AFBE00049E814 /* MBP_InitialSetupViewController.xib */,
+				BC6E4A0316BFBB9D00B0D630 /* MBP_InitialSetupViewController_land.xib */,
+				38DE1CD7168AFBCF0049E814 /* MBP_InitialSetupViewController_ipad.xib */,
+				BCBD80BF16D1D0480007943B /* MBP_InitialSetupViewController_ipad_land.xib */,
+			);
+			name = InitialSetup;
 			sourceTree = "<group>";
 		};
 		8B9B57D2184F0D4D00E58543 /* AnimeAddCam */ = {
