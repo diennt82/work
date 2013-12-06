@@ -15,6 +15,8 @@
 }
 @property (retain, nonatomic) IBOutlet UIView *progressView;
 
+@property (retain, nonatomic) NSMutableArray *settingsArr;
+
 @end
 
 @implementation DeviceSettingsViewController
@@ -90,15 +92,49 @@
     [self.view addSubview:self.progressView];
     [self.view bringSubviewToFront:self.progressView];
     
-    //NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-    //NSString *apiKey = [userDefaults objectForKey:@"PortalApiKey"];
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    NSString *apiKey = [userDefaults objectForKey:@"PortalApiKey"];
     
     BMS_JSON_Communication *jsonComm = [[BMS_JSON_Communication alloc] initWithObject:self
                                                                              Selector:nil
                                                                          FailSelector:nil
                                                                             ServerErr:nil];
-    //NSDictionary *responseDict = [jsonComm getListOfAllAppsBlockedWithApiKey:apiKey];
+    
+    NSString *macString = [Util strip_colon_fr_mac:self.camChannel.profile.mac_address];
+    NSDictionary *responseDict = [jsonComm getDeviceBasicInfoBlockedWithRegistrationId:macString
+                                                                             andApiKey:apiKey];
     [jsonComm release];
+    
+    if (responseDict != nil)
+    {
+        NSInteger statusCode = [[responseDict objectForKey:@"status"] integerValue];
+        
+        if (statusCode == 200)
+        {
+            NSArray *deviceSettings = [[responseDict objectForKey:@"data"] objectForKey:@"device_settings"];
+            
+            self.settingsArr = [NSMutableArray array];
+            
+            for (NSDictionary *obj in deviceSettings)
+            {
+                NSString *name = [obj objectForKey:@"key"];
+                NSString *value = [obj objectForKey:@"value"];
+                
+                NSDictionary *settingsDict = [NSDictionary dictionaryWithObjectsAndKeys:
+                                              name,   @"name",
+                                              value,  @"value",
+                                              nil];
+                [self.settingsArr addObject:settingsDict];
+            }
+            
+            if (self.settingsArr.count > 0)
+            {
+                [self.tableView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:NO];
+            }
+        }
+    }
+    
+    [self.progressView removeFromSuperview];
 }
 
 - (void)updateDeviceSettings
@@ -108,9 +144,9 @@
     
     NSMutableArray *settingsArray = [NSMutableArray array];
     
-    NSString *deviceMAC = [Util strip_colon_fr_mac:_camChannel.profile.mac_address];
+    NSString *deviceMAC = [Util strip_colon_fr_mac:self.camChannel.profile.mac_address];
     
-    for (int i = 0; i < 6; i++)
+    for (int i = 0; i < 5; i++)
     {
         NSString *settingsType = @"";
         
@@ -193,7 +229,7 @@
 {
     //#warning Incomplete method implementation.
     // Return the number of rows in the section.
-    return 5;
+    return _settingsArr.count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -214,37 +250,48 @@
     }
     
     // Configure the cell...
+    
+    if (indexPath.row >= self.settingsArr.count)
+    {
+        return cell;
+    }
+    
+    NSDictionary *settingsDict = [self.settingsArr objectAtIndex:indexPath.row];
+    
     cell.deviceStgsCellDelegate = self;
     cell.rowIndex = indexPath.row;
-    switch (indexPath.row) {
-        case 0:
-            cell.valueSlider.value = 3.0f;
-            cell.nameLabel.text = @"Zoom";
-            break;
-            
-        case 1:
-            cell.valueSlider.value = 5.0f;
-            cell.nameLabel.text = @"Pan";
-            break;
-            
-        case 2:
-            cell.valueSlider.value = 7.0f;
-            cell.nameLabel.text = @"Titl";
-            break;
-            
-        case 3:
-            cell.valueSlider.value = 9.0f;
-            cell.nameLabel.text = @"Contrast";
-            break;
-            
-        case 4:
-            cell.valueSlider.value = 6.0f;
-            cell.nameLabel.text = @"Brightness";
-            break;
-            
-        default:
-            break;
-    }
+    cell.nameLabel.text = [settingsDict objectForKey:@"name"];
+    cell.valueSlider.value = [[settingsDict objectForKey:@"value"] floatValue];
+    
+//    switch (indexPath.row) {
+//        case 0:
+//            cell.valueSlider.value = 3.0f;
+//            cell.nameLabel.text = @"Zoom";
+//            break;
+//            
+//        case 1:
+//            cell.valueSlider.value = 5.0f;
+//            cell.nameLabel.text = @"Pan";
+//            break;
+//            
+//        case 2:
+//            cell.valueSlider.value = 7.0f;
+//            cell.nameLabel.text = @"Titl";
+//            break;
+//            
+//        case 3:
+//            cell.valueSlider.value = 9.0f;
+//            cell.nameLabel.text = @"Contrast";
+//            break;
+//            
+//        case 4:
+//            cell.valueSlider.value = 6.0f;
+//            cell.nameLabel.text = @"Brightness";
+//            break;
+//            
+//        default:
+//            break;
+//    }
     
     return cell;
 }
@@ -309,6 +356,7 @@
 
 - (void)dealloc {
     [_progressView release];
+    [_settingsArr release];
     [super dealloc];
 }
 @end
