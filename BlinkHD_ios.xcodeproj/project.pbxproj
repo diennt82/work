@@ -1380,6 +1380,7 @@
 				8B3A90CA185026C000685090 /* Step_03 */,
 				8B5FB3E618505C6600A74E06 /* Step_04 */,
 				8B5FB3E718509B4C00A74E06 /* Step_05 */,
+				8BA7F27618516EB800BE0145 /* Login|Register */,
 				9704F83F17B37CAD005F9868 /* DashBoard_ViewController.h */,
 				9704F84017B37CAF005F9868 /* DashBoard_ViewController.mm */,
 				97F5531417BDD3AF00024017 /* MBPNavController.m */,
@@ -1478,10 +1479,6 @@
 				28D7ACF70DDB3853001CB0EB /* MBP_iosViewController.mm */,
 				388396B7168B064500B0D020 /* MBP_iosViewController.xib */,
 				38DE1C11168ADA6B0049E814 /* MBP_iosViewController_ipad.xib */,
-				97987DEF1546A1630066C49B /* MBP_LoginOrRegistration.h */,
-				97987DF01546A1630066C49B /* MBP_LoginOrRegistration.mm */,
-				38DE1C0C168ADA550049E814 /* MBP_LoginOrRegistration.xib */,
-				38DE1C07168ADA460049E814 /* MBP_LoginOrRegistration_ipad.xib */,
 				1D3623240D0F684500981E51 /* MBP_iosAppDelegate.h */,
 				1D3623250D0F684500981E51 /* MBP_iosAppDelegate.mm */,
 				97987CD515468C2E0066C49B /* MBP_FirstPage.h */,
@@ -1817,6 +1814,17 @@
 				8BA18CB1184879A10097D1AF /* DeviceSettingsCell.xib */,
 			);
 			name = DeviceSettings;
+			sourceTree = "<group>";
+		};
+		8BA7F27618516EB800BE0145 /* Login|Register */ = {
+			isa = PBXGroup;
+			children = (
+				97987DEF1546A1630066C49B /* MBP_LoginOrRegistration.h */,
+				97987DF01546A1630066C49B /* MBP_LoginOrRegistration.mm */,
+				38DE1C0C168ADA550049E814 /* MBP_LoginOrRegistration.xib */,
+				38DE1C07168ADA460049E814 /* MBP_LoginOrRegistration_ipad.xib */,
+			);
+			name = "Login|Register";
 			sourceTree = "<group>";
 		};
 		9770CB87143032BC009E69EF /* images */ = {
