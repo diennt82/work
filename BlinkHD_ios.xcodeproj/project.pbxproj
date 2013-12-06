@@ -179,6 +179,9 @@
 		8BA5C4801818DCC1006B4BB8 /* ZoneViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8BA5C47E1818DCC1006B4BB8 /* ZoneViewController.m */; };
 		8BA5C4811818DCC1006B4BB8 /* ZoneViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8BA5C47F1818DCC1006B4BB8 /* ZoneViewController.xib */; };
 		8BA7B479184587CF003AC489 /* photo_item.png in Resources */ = {isa = PBXBuildFile; fileRef = 8BA7B478184587CF003AC489 /* photo_item.png */; };
+		8BA7F2811851C57200BE0145 /* blink11hd360p.sdp in Resources */ = {isa = PBXBuildFile; fileRef = 8BA7F27E1851C57100BE0145 /* blink11hd360p.sdp */; };
+		8BA7F2821851C57200BE0145 /* blink11hd480p.sdp in Resources */ = {isa = PBXBuildFile; fileRef = 8BA7F27F1851C57100BE0145 /* blink11hd480p.sdp */; };
+		8BA7F2831851C57200BE0145 /* blink11hd720p.sdp in Resources */ = {isa = PBXBuildFile; fileRef = 8BA7F2801851C57100BE0145 /* blink11hd720p.sdp */; };
 		8BA8AE881821F3E900DC9E9F /* stream720p_10_926.sdp in Resources */ = {isa = PBXBuildFile; fileRef = 8BA8AE871821F3E900DC9E9F /* stream720p_10_926.sdp */; };
 		8BC0A0191844A58700A5FD52 /* i_mode.png in Resources */ = {isa = PBXBuildFile; fileRef = 8BC0A0181844A58700A5FD52 /* i_mode.png */; };
 		8BC0A01B1844A6A200A5FD52 /* bb_splash_screen_horizontal.png in Resources */ = {isa = PBXBuildFile; fileRef = 8BC0A01A1844A6A200A5FD52 /* bb_splash_screen_horizontal.png */; };
@@ -530,6 +533,9 @@
 		8BA5C47E1818DCC1006B4BB8 /* ZoneViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZoneViewController.m; sourceTree = "<group>"; };
 		8BA5C47F1818DCC1006B4BB8 /* ZoneViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ZoneViewController.xib; sourceTree = "<group>"; };
 		8BA7B478184587CF003AC489 /* photo_item.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = photo_item.png; sourceTree = "<group>"; };
+		8BA7F27E1851C57100BE0145 /* blink11hd360p.sdp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = blink11hd360p.sdp; sourceTree = "<group>"; };
+		8BA7F27F1851C57100BE0145 /* blink11hd480p.sdp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = blink11hd480p.sdp; sourceTree = "<group>"; };
+		8BA7F2801851C57100BE0145 /* blink11hd720p.sdp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = blink11hd720p.sdp; sourceTree = "<group>"; };
 		8BA8AE871821F3E900DC9E9F /* stream720p_10_926.sdp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = stream720p_10_926.sdp; sourceTree = "<group>"; };
 		8BC0A0181844A58700A5FD52 /* i_mode.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = i_mode.png; sourceTree = "<group>"; };
 		8BC0A01A1844A6A200A5FD52 /* bb_splash_screen_horizontal.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bb_splash_screen_horizontal.png; sourceTree = "<group>"; };
@@ -1536,6 +1542,9 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				8BA7F27E1851C57100BE0145 /* blink11hd360p.sdp */,
+				8BA7F27F1851C57100BE0145 /* blink11hd480p.sdp */,
+				8BA7F2801851C57100BE0145 /* blink11hd720p.sdp */,
 				84FD1DCE1832399E00238089 /* stream720p_10_926_alaw.sdp */,
 				841D567A1834C1E600ACE7A7 /* streamqvga.sdp */,
 				A15431081818DEB800337EFE /* streamvga.sdp */,
@@ -2090,6 +2099,7 @@
 				38167AC216118DB600B7FA0A /* bb_pic_2.png in Resources */,
 				38DE1C55168AEA770049E814 /* AlertSettingViewController.xib in Resources */,
 				8B9B57E1184F0D9900E58543 /* frame-5_update-iOS7_new.png in Resources */,
+				8BA7F2811851C57200BE0145 /* blink11hd360p.sdp in Resources */,
 				8BC0A0461844B31700A5FD52 /* mbp_icon57x57.png in Resources */,
 				38DE1BEC168ADA050049E814 /* FWUpgradeView.xib in Resources */,
 				8B0E1DE81844A0E80080000A /* mestartup000020.png in Resources */,
@@ -2137,6 +2147,7 @@
 				8BC0A0221844A6EE00A5FD52 /* bb_setup_icon_step_3_eye.png in Resources */,
 				8BA8AE881821F3E900DC9E9F /* stream720p_10_926.sdp in Resources */,
 				8B9B57DC184F0D9900E58543 /* frame-4-1_update-iOS7_new.png in Resources */,
+				8BA7F2821851C57200BE0145 /* blink11hd480p.sdp in Resources */,
 				BC3C1ACE16F025B600175AFF /* MBP_MenuViewController_ipad.xib in Resources */,
 				BC3C1AD316F025E300175AFF /* MBP_MenuProgress_portrait_ipad.xib in Resources */,
 				BC3C1AD816F025FF00175AFF /* MBP_MenuProgress_land_ipad.xib in Resources */,
@@ -2167,6 +2178,7 @@
 				380CB0E216DC634D00290587 /* Step_11_ViewController_land_ipad.xib in Resources */,
 				380CB0E516DC8DE400290587 /* MBP_FirstPage_land_ipad.xib in Resources */,
 				382CD25816DDE12200BC8E0C /* Step_07_tableViewCell_ipad.xib in Resources */,
+				8BA7F2831851C57200BE0145 /* blink11hd720p.sdp in Resources */,
 				380EB15416FC41D8005BAC7F /* Voicemail.aif in Resources */,
 				8B9CCBA4183EF8B2007C0F65 /* MelodyViewController.xib in Resources */,
 				8BC0A0411844AC3600A5FD52 /* circle_buttons1_up.png in Resources */,

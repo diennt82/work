@@ -2399,11 +2399,17 @@
                                    {
                                        self.selectedChannel.stream_url = [[NSBundle mainBundle] pathForResource:@"streamqvga" ofType:@"sdp"];
                                    }
-                                   else if ([modeVideo isEqualToString:@"720p_926"] ||
-                                            [modeVideo isEqualToString:@"480p_926"] ||
-                                            [modeVideo isEqualToString:@"360p_926"] )
+                                   else if ([modeVideo isEqualToString:@"720p_926"])
                                    {
-                                       self.selectedChannel.stream_url = [[NSBundle mainBundle] pathForResource:@"stream720p_10_926_alaw" ofType:@"sdp"];
+                                       self.selectedChannel.stream_url = [[NSBundle mainBundle] pathForResource:@"blink11hd720p" ofType:@"sdp"];
+                                   }
+                                   else if ([modeVideo isEqualToString:@"480p_926"])
+                                   {
+                                       self.selectedChannel.stream_url = [[NSBundle mainBundle] pathForResource:@"blink11hd480p" ofType:@"sdp"];
+                                   }
+                                   else if ([modeVideo isEqualToString:@"360p_926"] )
+                                   {
+                                       self.selectedChannel.stream_url = [[NSBundle mainBundle] pathForResource:@"blink11hd360p" ofType:@"sdp"];
                                    }
                                    else //if([modeVideo isEqualToString:@"720p_10"] || [modeVideo isEqualToString:@"720p_15"])
                                    {
