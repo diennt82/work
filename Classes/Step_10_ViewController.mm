@@ -312,6 +312,10 @@
                                 initWithNibName:@"Step_02_ViewController" bundle:nil];
     }
     
+    //Copy from initViewController the delegate which is pointing to MBP_iosViewcontroller. Support cancel button
+    MBP_InitialSetupViewController * vc = (MBP_InitialSetupViewController *) [[self.navigationController viewControllers] objectAtIndex:0];
+    step02ViewController.delegate = vc.delegate;
+    
     [self.navigationController pushViewController:step02ViewController animated:NO];
     
     [step02ViewController release];
