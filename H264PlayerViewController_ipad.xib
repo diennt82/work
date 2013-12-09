@@ -92,7 +92,7 @@
                         </barButtonItem>
                     </items>
                 </toolbar>
-                <imageView tag="999" contentMode="scaleToFill" image="circle_buttons1_2.png" id="WPh-TE-Nhn">
+                <imageView userInteractionEnabled="NO" tag="999" contentMode="scaleToFill" image="circle_buttons1_2_d.png" id="WPh-TE-Nhn">
                     <rect key="frame" x="334" y="820" width="120" height="120"/>
                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                     <inset key="insetFor6xAndEarlier" minX="0.0" minY="20" maxX="0.0" maxY="-20"/>
@@ -200,7 +200,7 @@
         <image name="bb_ptt_icon_d.png" width="36" height="52"/>
         <image name="bb_rec_icon_d.png" width="50" height="50"/>
         <image name="bb_setting_icon.png" width="50" height="50"/>
-        <image name="circle_buttons1_2.png" width="131" height="131"/>
+        <image name="circle_buttons1_2_d.png" width="131" height="131"/>
         <image name="hq_d.png" width="48" height="48"/>
         <image name="i_mode.png" width="50" height="48"/>
         <image name="reveal-icon.png" width="22" height="17"/>

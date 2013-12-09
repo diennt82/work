@@ -511,6 +511,8 @@
                 //[self performSelectorInBackground:@selector(getTriggerRecording_bg) withObject:nil];
                 //[self performSelectorInBackground:@selector(getZoneDetection_bg) withObject:nil];
                 [self performSelectorInBackground:@selector(getMelodyValue_bg) withObject:nil];
+                self.imgViewDrectionPad.userInteractionEnabled = YES;
+                self.imgViewDrectionPad.image = [UIImage imageNamed:@"circle_buttons1_2.png"];
             }
         }
             break;
