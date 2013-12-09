@@ -75,7 +75,7 @@
                         <barButtonItem style="plain" systemItem="flexibleSpace" id="34"/>
                         <barButtonItem style="plain" id="46">
                             <segmentedControl key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="bar" selectedSegmentIndex="0" id="45">
-                                <rect key="frame" x="139" y="7" width="105" height="30"/>
+                                <rect key="frame" x="199" y="7" width="105" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <segments>
                                     <segment title="Now"/>
@@ -85,11 +85,6 @@
                                     <action selector="segCtrlAction:" destination="-1" eventType="valueChanged" id="49"/>
                                 </connections>
                             </segmentedControl>
-                        </barButtonItem>
-                        <barButtonItem enabled="NO" image="bb_setting_icon.png" style="plain" id="PNT-uH-IZz" userLabel="Bar Button Item - Settings">
-                            <connections>
-                                <action selector="settingsTouchAction:" destination="-1" id="fAh-RQ-hM4"/>
-                            </connections>
                         </barButtonItem>
                     </items>
                 </toolbar>
@@ -103,7 +98,7 @@
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                     <subviews>
                         <button opaque="NO" tag="700" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="59" userLabel="hq">
-                            <rect key="frame" x="86" y="4" width="37" height="37"/>
+                            <rect key="frame" x="57" y="4" width="37" height="37"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
                             <state key="normal" image="hq_d.png">
@@ -118,7 +113,7 @@
                             </connections>
                         </button>
                         <button opaque="NO" tag="705" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="61" userLabel="i-frame">
-                            <rect key="frame" x="140" y="4" width="37" height="37"/>
+                            <rect key="frame" x="111" y="4" width="37" height="37"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <fontDescription key="fontDescription" type="system" pointSize="18"/>
                             <state key="normal" image="i_mode.png">
@@ -133,7 +128,7 @@
                             </connections>
                         </button>
                         <button opaque="NO" tag="715" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="60" userLabel="recording">
-                            <rect key="frame" x="193" y="0.0" width="37" height="45"/>
+                            <rect key="frame" x="164" y="0.0" width="37" height="45"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <fontDescription key="fontDescription" type="system" pointSize="15"/>
                             <state key="normal" image="bb_rec_icon_d.png">
@@ -149,7 +144,7 @@
                             </connections>
                         </button>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="Bb9-Uw-IfW">
-                            <rect key="frame" x="255" y="0.0" width="45" height="45"/>
+                            <rect key="frame" x="220" y="0.0" width="45" height="45"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <state key="normal" image="bb_motion_icon.png">
                                 <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
@@ -159,7 +154,7 @@
                             </connections>
                         </button>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="sn8-YB-GGL" userLabel="BtnMelody">
-                            <rect key="frame" x="41" y="4" width="37" height="37"/>
+                            <rect key="frame" x="12" y="4" width="37" height="37"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
                             <state key="normal" image="bb_melody_off_icon.png">
@@ -167,6 +162,16 @@
                             </state>
                             <connections>
                                 <action selector="melodyTouchAction:" destination="-1" eventType="touchUpInside" id="Kgz-nu-Yk7"/>
+                            </connections>
+                        </button>
+                        <button opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="Bg0-Kj-iO2" userLabel="Button - Settings">
+                            <rect key="frame" x="273" y="4" width="40" height="40"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <state key="normal" image="bb_setting_icon.png">
+                                <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                            </state>
+                            <connections>
+                                <action selector="settingsTouchAction:" destination="-1" eventType="touchUpInside" id="qNA-6M-cII"/>
                             </connections>
                         </button>
                     </subviews>
