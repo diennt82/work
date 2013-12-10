@@ -261,11 +261,11 @@ static int client_shutdown()
     }
     if (g.pool) {
         pj_pool_release(g.pool);
+        pj_pool_factory_dump(&g.cp.factory, PJ_TRUE);
+        pj_caching_pool_destroy(&g.cp);
+        pj_shutdown();
         g.pool = NULL;
     }
-    pj_pool_factory_dump(&g.cp.factory, PJ_TRUE);
-    pj_caching_pool_destroy(&g.cp);
-    pj_shutdown();
     return PJ_SUCCESS;
 }
 
@@ -479,6 +479,10 @@ void set_destination_for_peer(struct peer * _peer, char * fwd_ip, int localPort)
         bind( _peer->local_serv_sock_r,(struct sockaddr *)&_peer->local_serv_addr_r,sizeof(_peer->local_serv_addr_r));
         
         //status =
+        if (g.pool == NULL)
+        {
+            return;
+        }
         pj_thread_create(g.pool, "RTCP FWDER" ,
                                    start_rtcp_forwader, _peer , 0, 0,
                                    &_peer->rtcp_thread) ;

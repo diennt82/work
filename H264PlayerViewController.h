@@ -83,6 +83,7 @@
 
 	//NSTimer * probeTimer;
      dispatch_queue_t player_func_queue;
+    BOOL _isCameraOffline;
 }
 
 
@@ -138,6 +139,7 @@
 @property (retain, nonatomic) IBOutlet UIView *progressView;
 
 @property (retain, nonatomic) IBOutlet UISegmentedControl *segCtrl;
+@property (retain, nonatomic) UISegmentedControl *segmentControl;
 
 @property (nonatomic, retain) CamChannel *selectedChannel;
 
