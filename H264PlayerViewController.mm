@@ -1152,7 +1152,7 @@
         NSLog(@"created a remote streamer ");
         if (_client == nil)
         {
-            _client = [[StunClient alloc] init];
+            self.client = [[StunClient alloc] init];
         }
         
         
@@ -3276,11 +3276,11 @@
             NSLog(@"Re-start streaming for : %@", self.selectedChannel.profile.mac_address);
             
             
-            if (_client != nil)
-            {
-                [_client shutdown];
-                [_client release];
-            }
+//            if (_client != nil)
+//            {
+//                [_client shutdown];
+//                [_client release];
+//            }
             
             
             [NSTimer scheduledTimerWithTimeInterval:0.1
@@ -3539,6 +3539,7 @@
 
 - (void)viewWillDisappear:(BOOL)animated
 {
+    [self.navigationController setNavigationBarHidden:YES];
     [[UIApplication sharedApplication] setStatusBarHidden:NO];
     [super viewWillDisappear:animated];
 }
