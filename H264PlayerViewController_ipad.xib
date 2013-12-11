@@ -164,7 +164,7 @@
                                 <action selector="melodyTouchAction:" destination="-1" eventType="touchUpInside" id="Et8-dt-F4O"/>
                             </connections>
                         </button>
-                        <button opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="6Ix-IK-lm1" userLabel="Button - Settings">
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="6Ix-IK-lm1" userLabel="Button - Settings">
                             <rect key="frame" x="680" y="0.0" width="45" height="45"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <state key="normal" image="bb_setting_icon.png">

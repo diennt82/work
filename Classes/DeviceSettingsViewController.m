@@ -8,6 +8,8 @@
 
 #import "DeviceSettingsViewController.h"
 #import "DeviceSettingsCell.h"
+#import "InformationViewController.h"
+#import "CameraSettingsViewController.h"
 
 @interface DeviceSettingsViewController () <DeviceSettingsCellDelegate>
 {
@@ -222,46 +224,110 @@
 {
     //#warning Potentially incomplete method implementation.
     // Return the number of sections.
-    return 1;
+    return 2;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     //#warning Incomplete method implementation.
     // Return the number of rows in the section.
-    return _settingsArr.count;
+    if (section == 0)
+    {
+        return 2;
+    }
+    else
+    {
+        return 1;
+    }
+    //return _settingsArr.count;
+}
+
+- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
+{
+    NSString *sectionName;
+    switch (section)
+    {
+        case 0:
+            sectionName = NSLocalizedString(@"Camera Settings", @"Camera Settings");
+            break;
+            
+            // ...
+        default:
+            sectionName = @"";
+            break;
+    }
+    return sectionName;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    static NSString *CellIdentifier = @"DeviceSettingsCell";
-    DeviceSettingsCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-    
-    NSArray *objects = [[NSBundle mainBundle] loadNibNamed:@"DeviceSettingsCell" owner:nil options:nil];
-    
-    for (id curObj in objects)
-    {
-        
-        if([curObj isKindOfClass:[UITableViewCell class]])
-        {
-            cell = (DeviceSettingsCell *)curObj;
-            break;
-        }
+    static NSString *CellIdentifier = @"Cell";
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+    if (cell == nil) {
+        cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
     }
     
     // Configure the cell...
     
-    if (indexPath.row >= self.settingsArr.count)
+    switch (indexPath.section)
     {
-        return cell;
+        case 0:
+            switch (indexPath.row)
+           {
+                case 0:
+                    cell.textLabel.text = @"Camera Settings";
+                    break;
+                   
+               case 1:
+                   cell.textLabel.text = @"Camera Schedule";
+                   break;
+                   
+                default:
+                    break;
+            }
+            
+            break;
+            
+        case 1:
+            cell.textLabel.text = @"Information";
+            break;
+            
+        default:
+            break;
     }
     
-    NSDictionary *settingsDict = [self.settingsArr objectAtIndex:indexPath.row];
+    cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     
-    cell.deviceStgsCellDelegate = self;
-    cell.rowIndex = indexPath.row;
-    cell.nameLabel.text = [settingsDict objectForKey:@"name"];
-    cell.valueSlider.value = [[settingsDict objectForKey:@"value"] floatValue];
+    return cell;
+    
+//    static NSString *CellIdentifier = @"DeviceSettingsCell";
+//    DeviceSettingsCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+//    
+//    NSArray *objects = [[NSBundle mainBundle] loadNibNamed:@"DeviceSettingsCell" owner:nil options:nil];
+//    
+//    for (id curObj in objects)
+//    {
+//        
+//        if([curObj isKindOfClass:[UITableViewCell class]])
+//        {
+//            cell = (DeviceSettingsCell *)curObj;
+//            break;
+//        }
+//    }
+//    
+//    // Configure the cell...
+//    
+//    if (indexPath.row >= self.settingsArr.count)
+//    {
+//        return cell;
+//    }
+//    
+//    NSDictionary *settingsDict = [self.settingsArr objectAtIndex:indexPath.row];
+//    
+//    cell.deviceStgsCellDelegate = self;
+//    cell.rowIndex = indexPath.row;
+//    cell.nameLabel.text = [settingsDict objectForKey:@"name"];
+//    cell.valueSlider.value = [[settingsDict objectForKey:@"value"] floatValue];
     
 //    switch (indexPath.row) {
 //        case 0:
@@ -292,8 +358,8 @@
 //        default:
 //            break;
 //    }
-    
-    return cell;
+//
+//    return cell;
 }
 
 /*
@@ -341,16 +407,46 @@
 // In a xib-based application, navigation from a table can be handled in -tableView:didSelectRowAtIndexPath:
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    [tableView deselectRowAtIndexPath:[tableView indexPathForSelectedRow]
-                             animated:NO];
+//    [tableView deselectRowAtIndexPath:[tableView indexPathForSelectedRow]
+//                             animated:NO];
     // Navigation logic may go here, for example:
-    // Create the next view controller.
-    // *detailViewController = [[<#DetailViewController#> alloc] initWithNibName:@"<#Nib name#>" bundle:nil];
-
-    // Pass the selected object to the new view controller.
-    
-    // Push the view controller.
-    //[self.navigationController pushViewController:detailViewController animated:YES];
+    if (indexPath.section == 0)
+    {
+        if (indexPath.row == 0)
+        {
+            CameraSettingsViewController *cameraSettingsVC = [[CameraSettingsViewController alloc] init];
+            
+            cameraSettingsVC.volumeState = TRUE;
+            cameraSettingsVC.volumeValue = 1;
+            
+            cameraSettingsVC.brightnessState = FALSE;
+            cameraSettingsVC.brightnessValue = 2;
+            
+            cameraSettingsVC.soundSensitivityState = TRUE;
+            cameraSettingsVC.soundSensivitityValue = 3;
+            
+            cameraSettingsVC.temperatureType = 0;
+            cameraSettingsVC.qualityType     = 1;
+            [self.navigationController pushViewController:cameraSettingsVC animated:YES];
+            [cameraSettingsVC release];
+        }
+        else
+        {
+            // Scheduling
+        }
+    }
+    else
+    {
+        // Create the next view controller.
+        InformationViewController *infoViewController = [[InformationViewController alloc] init];
+        
+        // Pass the selected object to the new view controller.
+        
+        // Push the view controller.
+        [self.navigationController pushViewController:infoViewController animated:YES];
+        
+        [infoViewController release];
+    }
 }
 
 
