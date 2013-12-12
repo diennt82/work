@@ -172,6 +172,21 @@
 		8B9384A818570284009C4771 /* brightness-u.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B9384A618570284009C4771 /* brightness-u.png */; };
 		8B9384AF18570567009C4771 /* ValueSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B9384AD18570567009C4771 /* ValueSettingsViewController.m */; };
 		8B9384B018570567009C4771 /* ValueSettingsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8B9384AE18570567009C4771 /* ValueSettingsViewController.xib */; };
+		8B9899AD1859771800AC3852 /* CameraNameViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B9899AB1859771800AC3852 /* CameraNameViewController.m */; };
+		8B9899AE1859771800AC3852 /* CameraNameViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8B9899AC1859771800AC3852 /* CameraNameViewController.xib */; };
+		8B9899CD1859A04F00AC3852 /* slider-default7-handle.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B9899C91859A04F00AC3852 /* slider-default7-handle.png */; };
+		8B9899CE1859A04F00AC3852 /* slider-default7-handle@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B9899CA1859A04F00AC3852 /* slider-default7-handle@2x.png */; };
+		8B9899CF1859A04F00AC3852 /* NMRangeSlider.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B9899CC1859A04F00AC3852 /* NMRangeSlider.m */; };
+		8B9899DB1859AA6A00AC3852 /* slider-default7-trackBackground.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B9899D51859AA6A00AC3852 /* slider-default7-trackBackground.png */; };
+		8B9899DC1859AA6A00AC3852 /* slider-default7-trackBackground@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B9899D61859AA6A00AC3852 /* slider-default7-trackBackground@2x.png */; };
+		8B9899DD1859AA6A00AC3852 /* slider-default7-trackCrossedOver.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B9899D71859AA6A00AC3852 /* slider-default7-trackCrossedOver.png */; };
+		8B9899DE1859AA6A00AC3852 /* slider-default7-trackCrossedOver@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B9899D81859AA6A00AC3852 /* slider-default7-trackCrossedOver@2x.png */; };
+		8B9899DF1859AA6A00AC3852 /* slider-default7-track.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B9899D91859AA6A00AC3852 /* slider-default7-track.png */; };
+		8B9899E01859AA6A00AC3852 /* slider-default7-track@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B9899DA1859AA6A00AC3852 /* slider-default7-track@2x.png */; };
+		8B9AF69E1858179900AC09C3 /* ScheduleViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B9AF69C1858179900AC09C3 /* ScheduleViewController.m */; };
+		8B9AF69F1858179900AC09C3 /* ScheduleViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8B9AF69D1858179900AC09C3 /* ScheduleViewController.xib */; };
+		8B9AF6A418581D3300AC09C3 /* AddScheduleViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B9AF6A218581D3300AC09C3 /* AddScheduleViewController.m */; };
+		8B9AF6A518581D3300AC09C3 /* AddScheduleViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8B9AF6A318581D3300AC09C3 /* AddScheduleViewController.xib */; };
 		8B9B57DC184F0D9900E58543 /* frame-4-1_update-iOS7_new.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B9B57D5184F0D9900E58543 /* frame-4-1_update-iOS7_new.png */; };
 		8B9B57DD184F0D9900E58543 /* frame-4-2_update-iOS7_new.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B9B57D6184F0D9900E58543 /* frame-4-2_update-iOS7_new.png */; };
 		8B9B57DE184F0D9900E58543 /* frame-2_update-iOS7_new.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B9B57D7184F0D9900E58543 /* frame-2_update-iOS7_new.png */; };
@@ -547,6 +562,25 @@
 		8B9384AC18570567009C4771 /* ValueSettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ValueSettingsViewController.h; sourceTree = "<group>"; };
 		8B9384AD18570567009C4771 /* ValueSettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ValueSettingsViewController.m; sourceTree = "<group>"; };
 		8B9384AE18570567009C4771 /* ValueSettingsViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ValueSettingsViewController.xib; sourceTree = "<group>"; };
+		8B9899AA1859771800AC3852 /* CameraNameViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CameraNameViewController.h; sourceTree = "<group>"; };
+		8B9899AB1859771800AC3852 /* CameraNameViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CameraNameViewController.m; sourceTree = "<group>"; };
+		8B9899AC1859771800AC3852 /* CameraNameViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CameraNameViewController.xib; sourceTree = "<group>"; };
+		8B9899C91859A04F00AC3852 /* slider-default7-handle.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "slider-default7-handle.png"; sourceTree = "<group>"; };
+		8B9899CA1859A04F00AC3852 /* slider-default7-handle@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "slider-default7-handle@2x.png"; sourceTree = "<group>"; };
+		8B9899CB1859A04F00AC3852 /* NMRangeSlider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NMRangeSlider.h; sourceTree = "<group>"; };
+		8B9899CC1859A04F00AC3852 /* NMRangeSlider.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NMRangeSlider.m; sourceTree = "<group>"; };
+		8B9899D51859AA6A00AC3852 /* slider-default7-trackBackground.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "slider-default7-trackBackground.png"; sourceTree = "<group>"; };
+		8B9899D61859AA6A00AC3852 /* slider-default7-trackBackground@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "slider-default7-trackBackground@2x.png"; sourceTree = "<group>"; };
+		8B9899D71859AA6A00AC3852 /* slider-default7-trackCrossedOver.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "slider-default7-trackCrossedOver.png"; sourceTree = "<group>"; };
+		8B9899D81859AA6A00AC3852 /* slider-default7-trackCrossedOver@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "slider-default7-trackCrossedOver@2x.png"; sourceTree = "<group>"; };
+		8B9899D91859AA6A00AC3852 /* slider-default7-track.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "slider-default7-track.png"; sourceTree = "<group>"; };
+		8B9899DA1859AA6A00AC3852 /* slider-default7-track@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "slider-default7-track@2x.png"; sourceTree = "<group>"; };
+		8B9AF69B1858179900AC09C3 /* ScheduleViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ScheduleViewController.h; sourceTree = "<group>"; };
+		8B9AF69C1858179900AC09C3 /* ScheduleViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ScheduleViewController.m; sourceTree = "<group>"; };
+		8B9AF69D1858179900AC09C3 /* ScheduleViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ScheduleViewController.xib; sourceTree = "<group>"; };
+		8B9AF6A118581D3300AC09C3 /* AddScheduleViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AddScheduleViewController.h; sourceTree = "<group>"; };
+		8B9AF6A218581D3300AC09C3 /* AddScheduleViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AddScheduleViewController.m; sourceTree = "<group>"; };
+		8B9AF6A318581D3300AC09C3 /* AddScheduleViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = AddScheduleViewController.xib; sourceTree = "<group>"; };
 		8B9B57D5184F0D9900E58543 /* frame-4-1_update-iOS7_new.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "frame-4-1_update-iOS7_new.png"; sourceTree = "<group>"; };
 		8B9B57D6184F0D9900E58543 /* frame-4-2_update-iOS7_new.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "frame-4-2_update-iOS7_new.png"; sourceTree = "<group>"; };
 		8B9B57D7184F0D9900E58543 /* frame-2_update-iOS7_new.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "frame-2_update-iOS7_new.png"; sourceTree = "<group>"; };
@@ -1818,6 +1852,72 @@
 			name = Step_09;
 			sourceTree = "<group>";
 		};
+		8B9899A9185976E300AC3852 /* Camera name */ = {
+			isa = PBXGroup;
+			children = (
+				8B9899AA1859771800AC3852 /* CameraNameViewController.h */,
+				8B9899AB1859771800AC3852 /* CameraNameViewController.m */,
+				8B9899AC1859771800AC3852 /* CameraNameViewController.xib */,
+			);
+			name = "Camera name";
+			sourceTree = "<group>";
+		};
+		8B9899C81859A03300AC3852 /* NMRangeSlider */ = {
+			isa = PBXGroup;
+			children = (
+				8B9899D51859AA6A00AC3852 /* slider-default7-trackBackground.png */,
+				8B9899D61859AA6A00AC3852 /* slider-default7-trackBackground@2x.png */,
+				8B9899D71859AA6A00AC3852 /* slider-default7-trackCrossedOver.png */,
+				8B9899D81859AA6A00AC3852 /* slider-default7-trackCrossedOver@2x.png */,
+				8B9899D91859AA6A00AC3852 /* slider-default7-track.png */,
+				8B9899DA1859AA6A00AC3852 /* slider-default7-track@2x.png */,
+				8B9899C91859A04F00AC3852 /* slider-default7-handle.png */,
+				8B9899CA1859A04F00AC3852 /* slider-default7-handle@2x.png */,
+				8B9899CB1859A04F00AC3852 /* NMRangeSlider.h */,
+				8B9899CC1859A04F00AC3852 /* NMRangeSlider.m */,
+			);
+			name = NMRangeSlider;
+			sourceTree = "<group>";
+		};
+		8B9AF69A1858177300AC09C3 /* Scheduling */ = {
+			isa = PBXGroup;
+			children = (
+				8B9899C81859A03300AC3852 /* NMRangeSlider */,
+				8B9AF69B1858179900AC09C3 /* ScheduleViewController.h */,
+				8B9AF69C1858179900AC09C3 /* ScheduleViewController.m */,
+				8B9AF69D1858179900AC09C3 /* ScheduleViewController.xib */,
+				8B9AF6A118581D3300AC09C3 /* AddScheduleViewController.h */,
+				8B9AF6A218581D3300AC09C3 /* AddScheduleViewController.m */,
+				8B9AF6A318581D3300AC09C3 /* AddScheduleViewController.xib */,
+			);
+			name = Scheduling;
+			sourceTree = "<group>";
+		};
+		8B9AF6A018581C3A00AC09C3 /* Camera Settings */ = {
+			isa = PBXGroup;
+			children = (
+				8B93847C1856D42C009C4771 /* InformationViewController.h */,
+				8B93847D1856D42C009C4771 /* InformationViewController.m */,
+				8B93847E1856D42C009C4771 /* InformationViewController.xib */,
+				8B9384811856E613009C4771 /* CameraSettingsViewController.h */,
+				8B9384821856E613009C4771 /* CameraSettingsViewController.m */,
+				8B9384831856E613009C4771 /* CameraSettingsViewController.xib */,
+				8B9384861856E940009C4771 /* CameraSettingsCell.h */,
+				8B9384871856E940009C4771 /* CameraSettingsCell.m */,
+				8B9384891856E97D009C4771 /* CameraSettingsCell.xib */,
+				8B93848B1856EC58009C4771 /* CameraStngsCell.h */,
+				8B93848C1856EC58009C4771 /* CameraStngsCell.m */,
+				8B93848E1856ED73009C4771 /* CameraStngsCell.xib */,
+				8B9384901856EEFE009C4771 /* SlideSettingsCell.h */,
+				8B9384911856EEFE009C4771 /* SlideSettingsCell.m */,
+				8B9384931856EF13009C4771 /* SlideSettingsCell.xib */,
+				8B9384AC18570567009C4771 /* ValueSettingsViewController.h */,
+				8B9384AD18570567009C4771 /* ValueSettingsViewController.m */,
+				8B9384AE18570567009C4771 /* ValueSettingsViewController.xib */,
+			);
+			name = "Camera Settings";
+			sourceTree = "<group>";
+		};
 		8B9B57D2184F0D4D00E58543 /* AnimeAddCam */ = {
 			isa = PBXGroup;
 			children = (
@@ -1868,30 +1968,15 @@
 		8BA18CA8184870330097D1AF /* DeviceSettings */ = {
 			isa = PBXGroup;
 			children = (
+				8B9899A9185976E300AC3852 /* Camera name */,
+				8B9AF6A018581C3A00AC09C3 /* Camera Settings */,
+				8B9AF69A1858177300AC09C3 /* Scheduling */,
 				8BA18CA9184870470097D1AF /* DeviceSettingsViewController.h */,
 				8BA18CAA184870470097D1AF /* DeviceSettingsViewController.m */,
 				8BA18CAB184870470097D1AF /* DeviceSettingsViewController.xib */,
 				8BA18CAE184879720097D1AF /* DeviceSettingsCell.h */,
 				8BA18CAF184879720097D1AF /* DeviceSettingsCell.m */,
 				8BA18CB1184879A10097D1AF /* DeviceSettingsCell.xib */,
-				8B93847C1856D42C009C4771 /* InformationViewController.h */,
-				8B93847D1856D42C009C4771 /* InformationViewController.m */,
-				8B93847E1856D42C009C4771 /* InformationViewController.xib */,
-				8B9384811856E613009C4771 /* CameraSettingsViewController.h */,
-				8B9384821856E613009C4771 /* CameraSettingsViewController.m */,
-				8B9384831856E613009C4771 /* CameraSettingsViewController.xib */,
-				8B9384861856E940009C4771 /* CameraSettingsCell.h */,
-				8B9384871856E940009C4771 /* CameraSettingsCell.m */,
-				8B9384891856E97D009C4771 /* CameraSettingsCell.xib */,
-				8B93848B1856EC58009C4771 /* CameraStngsCell.h */,
-				8B93848C1856EC58009C4771 /* CameraStngsCell.m */,
-				8B93848E1856ED73009C4771 /* CameraStngsCell.xib */,
-				8B9384901856EEFE009C4771 /* SlideSettingsCell.h */,
-				8B9384911856EEFE009C4771 /* SlideSettingsCell.m */,
-				8B9384931856EF13009C4771 /* SlideSettingsCell.xib */,
-				8B9384AC18570567009C4771 /* ValueSettingsViewController.h */,
-				8B9384AD18570567009C4771 /* ValueSettingsViewController.m */,
-				8B9384AE18570567009C4771 /* ValueSettingsViewController.xib */,
 			);
 			name = DeviceSettings;
 			sourceTree = "<group>";
@@ -2119,6 +2204,7 @@
 				38DE1CAA168AEB890049E814 /* Step_05_ViewController.xib in Resources */,
 				38DE1CA0168AEB6D0049E814 /* Step_06_ViewController.xib in Resources */,
 				8BA18CB2184879A10097D1AF /* DeviceSettingsCell.xib in Resources */,
+				8B9899CD1859A04F00AC3852 /* slider-default7-handle.png in Resources */,
 				38DE1C8C168AEB270049E814 /* Step_08_ViewController.xib in Resources */,
 				38DE1C82168AEB0E0049E814 /* Step_09_ViewController.xib in Resources */,
 				38DE1C78168AEAF30049E814 /* Step_10_ViewController.xib in Resources */,
@@ -2157,6 +2243,7 @@
 				8B278BE8183DC51300A4FF50 /* NotificationSettingsViewController.xib in Resources */,
 				38A62EA315CA2E1100DEA520 /* bb_recording_btn_d.png in Resources */,
 				38C7A72515CA75AC00564BCA /* camera_online.png in Resources */,
+				8B9899DD1859AA6A00AC3852 /* slider-default7-trackCrossedOver.png in Resources */,
 				8B0E1DF01844A0E80080000A /* mestartup000028.png in Resources */,
 				8B0E1DED1844A0E80080000A /* mestartup000025.png in Resources */,
 				38DE1C41168ADD1C0049E814 /* Account_ViewController.xib in Resources */,
@@ -2178,10 +2265,12 @@
 				38DE1BD3168AD9A10049E814 /* DashBoard_camEdit.xib in Resources */,
 				8B0E1DEB1844A0E80080000A /* mestartup000023.png in Resources */,
 				8BC0A0211844A6EE00A5FD52 /* bb_setup_icon_step_2.png in Resources */,
+				8B9899AE1859771800AC3852 /* CameraNameViewController.xib in Resources */,
 				3809A42C15E49A4B0098BBC0 /* bb_pic_1.png in Resources */,
 				8B9384971856F009009C4771 /* vol-max.png in Resources */,
 				8B9384851856E613009C4771 /* CameraSettingsViewController.xib in Resources */,
 				8B0E1DEC1844A0E80080000A /* mestartup000024.png in Resources */,
+				8B9AF69F1858179900AC09C3 /* ScheduleViewController.xib in Resources */,
 				8B9384801856D42C009C4771 /* InformationViewController.xib in Resources */,
 				8B9384A318570207009C4771 /* sound-s-d.png in Resources */,
 				8B9B57E2184F0D9900E58543 /* frame-6_update-iOS7_new2.png in Resources */,
@@ -2192,6 +2281,7 @@
 				8B9384941856EF13009C4771 /* SlideSettingsCell.xib in Resources */,
 				A19778ED181E3316007C3CA7 /* ZoneViewController_ipad.xib in Resources */,
 				38167AC216118DB600B7FA0A /* bb_pic_2.png in Resources */,
+				8B9899DC1859AA6A00AC3852 /* slider-default7-trackBackground@2x.png in Resources */,
 				38DE1C55168AEA770049E814 /* AlertSettingViewController.xib in Resources */,
 				8B9B57E1184F0D9900E58543 /* frame-5_update-iOS7_new.png in Resources */,
 				8B9384A418570207009C4771 /* sound-s-u.png in Resources */,
@@ -2207,12 +2297,14 @@
 				8BC0A03C1844AC3600A5FD52 /* circle_buttons1_2_d.png in Resources */,
 				38C7DE7A165DDF9E00926EA1 /* Default-568h@2x.png in Resources */,
 				8BC0A0481844B31700A5FD52 /* mbp_icon114x114.png in Resources */,
+				8B9899DB1859AA6A00AC3852 /* slider-default7-trackBackground.png in Resources */,
 				8B93848F1856ED73009C4771 /* CameraStngsCell.xib in Resources */,
 				38DE1BE7168AD9F50049E814 /* FWUpgradeView_land.xib in Resources */,
 				38DE1C50168AEA690049E814 /* AlertSettingViewController_land.xib in Resources */,
 				38DE1BFB168ADA280049E814 /* MBP_FirstPage_ipad.xib in Resources */,
 				38DE1C05168ADA460049E814 /* MBP_LoginOrRegistration_ipad.xib in Resources */,
 				8B0E1DF71844A3BE0080000A /* bb_rec_icon_d.png in Resources */,
+				8B9899CE1859A04F00AC3852 /* slider-default7-handle@2x.png in Resources */,
 				8BC0A01B1844A6A200A5FD52 /* bb_splash_screen_horizontal.png in Resources */,
 				8B9B57DF184F0D9900E58543 /* frame-3_update-iOS7_new.png in Resources */,
 				841D567B1834C1E600ACE7A7 /* streamqvga.sdp in Resources */,
@@ -2239,6 +2331,7 @@
 				38DE1C4B168AEA5F0049E814 /* AlertSettingViewController_ipad.xib in Resources */,
 				38DE1C46168AEA530049E814 /* AlertSettingViewController_land_ipad.xib in Resources */,
 				97E39E691684416700F1A1DB /* hq_d.png in Resources */,
+				8B9899DE1859AA6A00AC3852 /* slider-default7-trackCrossedOver@2x.png in Resources */,
 				97E39E6A1684416700F1A1DB /* hq.png in Resources */,
 				388396B9168B064500B0D020 /* MBP_iosViewController.xib in Resources */,
 				8BC0A03E1844AC3600A5FD52 /* circle_buttons1_dn.png in Resources */,
@@ -2300,6 +2393,8 @@
 				8B0E1DEA1844A0E80080000A /* mestartup000022.png in Resources */,
 				8BC0A0401844AC3600A5FD52 /* circle_buttons1_rt.png in Resources */,
 				978F090317DF06C80053972F /* PlaylistCell.xib in Resources */,
+				8B9AF6A518581D3300AC09C3 /* AddScheduleViewController.xib in Resources */,
+				8B9899E01859AA6A00AC3852 /* slider-default7-track@2x.png in Resources */,
 				978B25B617E1B41C006FC224 /* reveal-icon.png in Resources */,
 				978B25B717E1B41C006FC224 /* reveal-icon@2x.png in Resources */,
 				978B25C217E1B4AB006FC224 /* BMMenuViewController.xib in Resources */,
@@ -2310,6 +2405,7 @@
 				8BC0F0E51845E511008A63A7 /* iTunesArtwork@2x in Resources */,
 				8B9384B018570567009C4771 /* ValueSettingsViewController.xib in Resources */,
 				8B5A5E9C1845A27F0036A9CD /* ME-screen_landscape.png in Resources */,
+				8B9899DF1859AA6A00AC3852 /* slider-default7-track.png in Resources */,
 				8B68F5D118066CE500661527 /* PlaybackViewController_ipad.xib in Resources */,
 				8B93848A1856E97D009C4771 /* CameraSettingsCell.xib in Resources */,
 				A19778FB181E6CAB007C3CA7 /* motion_detection_on.png in Resources */,
@@ -2340,6 +2436,7 @@
 				9719EC5C155C9F30005419FC /* MBP_MenuViewController.mm in Sources */,
 				97D00812159D9FF500B1D92F /* WifiEntry.m in Sources */,
 				97D0081C159DA24400B1D92F /* WifiListParser.m in Sources */,
+				8B9899AD1859771800AC3852 /* CameraNameViewController.m in Sources */,
 				8B93848D1856EC58009C4771 /* CameraStngsCell.m in Sources */,
 				A1A98E90180BF5AA00C8EBD3 /* StunClient.m in Sources */,
 				972E2B8715A4234300E60A96 /* NSData+Base64.m in Sources */,
@@ -2350,7 +2447,9 @@
 				8B93847F1856D42C009C4771 /* InformationViewController.m in Sources */,
 				38A478D915BE484B008682FE /* Step_02_ViewController.mm in Sources */,
 				38A478DC15BE4BFA008682FE /* Step_03_ViewController.mm in Sources */,
+				8B9AF6A418581D3300AC09C3 /* AddScheduleViewController.m in Sources */,
 				38A478E815BE82E0008682FE /* Step_04_ViewController.mm in Sources */,
+				8B9899CF1859A04F00AC3852 /* NMRangeSlider.m in Sources */,
 				38A478F015C0015F008682FE /* Step_05_ViewController.mm in Sources */,
 				38A478F715C115C3008682FE /* Step_06_ViewController.mm in Sources */,
 				38A478FA15C12914008682FE /* Step_08_ViewController.mm in Sources */,
@@ -2385,6 +2484,7 @@
 				84DEA2BB17E42E3F00567836 /* NotificationViewController.mm in Sources */,
 				A1E32FAD17E9899800504538 /* H264PlayerListener.mm in Sources */,
 				A1E32FB017E98A4700504538 /* PlaybackListener.mm in Sources */,
+				8B9AF69E1858179900AC09C3 /* ScheduleViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

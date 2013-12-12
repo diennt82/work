@@ -13,5 +13,6 @@
 @interface DeviceSettingsViewController : UITableViewController
 
 @property (nonatomic, assign) CamChannel *camChannel;
+@property (nonatomic, retain) NSString *cameraName;
 
 @end

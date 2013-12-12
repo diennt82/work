@@ -68,8 +68,30 @@
     
     
     
-    /* check the server name file
+    //check the server name file
     
+//    NSString *path = [[self applicationDocumentsDirectory].path
+//                      stringByAppendingPathComponent:@"server.txt"];
+//    NSString *contentFile = [NSString stringWithContentsOfFile:path encoding:NSUTF8StringEncoding error:NULL];
+//    
+//    if (contentFile != nil)
+//    {
+//        NSArray *allLines = [contentFile componentsSeparatedByString:@"\n"];
+//        NSString *serverString = [allLines objectAtIndex:0];
+//        
+//        NSMutableString *stringT = [[NSMutableString alloc] init];
+//        [stringT appendString:serverString];
+//        @synchronized(self)
+//        {
+//            [BMS_JSON_Communication setServerInput:stringT];
+//        }
+//        [stringT release];
+//        NSLog(@"1 New server is %@", serverString);
+//    }
+//    else
+//    {
+//        NSLog(@"Use default server");
+//    }
     
     NSError *error;
     NSString * serverFile = [cachesDirectory stringByAppendingPathComponent:@"server.txt"];
@@ -77,23 +99,26 @@
     if (content != nil)
     {
         NSArray *allLines = [content componentsSeparatedByString: @"\n"];
-        NSString *serverString = [allLines objectAtIndex:0];
+        NSString *serverString = [NSString stringWithFormat:@"%@",(NSString *)[allLines objectAtIndex:0]];
         
         [BMS_JSON_Communication setServerInput:serverString];
-            
-         NSLog(@"1 New server is %@",serverString);
+        //[BMS_JSON_Communication setServerInput:@"http://api.simplimonitor.com/v1"];
+        //
+         NSLog(@"1 New server is %@", serverString);
     }
     else
     {
         NSLog(@"Use default server");
         
-        [BMS_JSON_Communication setServerInput:@"http://api.hubble.in/v1"];
+        //[BMS_JSON_Communication setServerInput:@"http://api.hubble.in/v1"];
     }
-*/
-    
-    
-    
+
     return YES;
+}
+
+- (NSURL *)applicationDocumentsDirectory {
+    return [[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory
+                                                   inDomains:NSUserDomainMask] lastObject];
 }
 
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo

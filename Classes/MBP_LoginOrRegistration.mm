@@ -236,6 +236,8 @@
                                                                              Selector:@selector(loginSuccessWithResponse:)
                                                                          FailSelector:@selector(loginFailedWithError:)
                                                                             ServerErr:@selector(loginFailedServerUnreachable)] autorelease];
+    
+
     [jsonComm loginWithLogin:self.temp_user_str andPassword:self.temp_pass_str];
     
     

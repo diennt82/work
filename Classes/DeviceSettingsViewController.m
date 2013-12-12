@@ -10,8 +10,11 @@
 #import "DeviceSettingsCell.h"
 #import "InformationViewController.h"
 #import "CameraSettingsViewController.h"
+#import "ScheduleViewController.h"
+#import "CameraSettingsCell.h"
+#import "CameraNameViewController.h"
 
-@interface DeviceSettingsViewController () <DeviceSettingsCellDelegate>
+@interface DeviceSettingsViewController () <DeviceSettingsCellDelegate, UIActionSheetDelegate>
 {
     CGFloat valueSettings[5];
 }
@@ -43,7 +46,7 @@
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
     
-    [self performSelectorInBackground:@selector(getDeviceSettings_bg) withObject:nil];
+    //[self performSelectorInBackground:@selector(getDeviceSettings_bg) withObject:nil];
     
     self.navigationItem.leftBarButtonItem  = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel
                                                                                             target:self
@@ -53,6 +56,15 @@
                                                                                             target:self
                                                                                             action:@selector(doneTouchAction:)] autorelease];
     assert(self.navigationItem.rightBarButtonItem != nil);
+    
+    self.cameraName = self.camChannel.profile.name;
+}
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    
+    [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationAutomatic];
 }
 
 - (void)didReceiveMemoryWarning
@@ -224,14 +236,14 @@
 {
     //#warning Potentially incomplete method implementation.
     // Return the number of sections.
-    return 2;
+    return 4;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     //#warning Incomplete method implementation.
     // Return the number of rows in the section.
-    if (section == 0)
+    if (section == 2)
     {
         return 2;
     }
@@ -247,7 +259,7 @@
     NSString *sectionName;
     switch (section)
     {
-        case 0:
+        case 2:
             sectionName = NSLocalizedString(@"Camera Settings", @"Camera Settings");
             break;
             
@@ -261,44 +273,76 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    static NSString *CellIdentifier = @"Cell";
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-    if (cell == nil) {
-        cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
-    }
-    
-    // Configure the cell...
-    
-    switch (indexPath.section)
+    if (indexPath.section == 0)
     {
-        case 0:
-            switch (indexPath.row)
-           {
+        static NSString *CellIdentifier = @"CameraSettingsCell";
+        CameraSettingsCell *cell = [self.tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+        
+        NSArray *objects = [[NSBundle mainBundle] loadNibNamed:@"CameraSettingsCell" owner:nil options:nil];
+        
+        for (id curObj in objects)
+        {
+            
+            if([curObj isKindOfClass:[UITableViewCell class]])
+            {
+                cell = (CameraSettingsCell *)curObj;
+                break;
+            }
+        }
+
+        cell.nameLabel.text = @"Name";
+        cell.valueLabel.text = self.cameraName;
+        cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+        
+        return cell;
+    }
+    else
+    {
+        static NSString *CellIdentifier = @"Cell";
+        UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+        if (cell == nil) {
+            cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
+        }
+        
+        // Configure the cell...
+        
+        switch (indexPath.section)
+        {
+            case 1:
+                cell.textLabel.text = @"Remove this Camera";
+                break;
+                break;
+                
+            case 2:
+                switch (indexPath.row)
+            {
                 case 0:
                     cell.textLabel.text = @"Camera Settings";
+                    cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
                     break;
-                   
-               case 1:
-                   cell.textLabel.text = @"Camera Schedule";
-                   break;
-                   
+                    
+                case 1:
+                    cell.textLabel.text = @"Camera Schedule";
+                    cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+                    break;
+                    
                 default:
                     break;
             }
-            
-            break;
-            
-        case 1:
-            cell.textLabel.text = @"Information";
-            break;
-            
-        default:
-            break;
+                
+                break;
+                
+            case 3:
+                cell.textLabel.text = @"Information";
+                cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+                break;
+                
+            default:
+                break;
+        }
+        
+        return cell;
     }
-    
-    cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-    
-    return cell;
     
 //    static NSString *CellIdentifier = @"DeviceSettingsCell";
 //    DeviceSettingsCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
@@ -410,7 +454,26 @@
 //    [tableView deselectRowAtIndexPath:[tableView indexPathForSelectedRow]
 //                             animated:NO];
     // Navigation logic may go here, for example:
-    if (indexPath.section == 0)
+    if (indexPath.section == 0) // Name
+    {
+        CameraNameViewController *camNameVC = [[CameraNameViewController alloc] init];
+        camNameVC.cameraName = self.cameraName;
+        camNameVC.parentVC = self;
+        [self.navigationController pushViewController:camNameVC animated:YES];
+        [camNameVC release];
+    }
+    else if(indexPath.section == 1) // Remove
+    {
+        UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:nil
+                                                                 delegate:self
+                                                        cancelButtonTitle:@"Cancel"
+                                                   destructiveButtonTitle:@"Remove Camera"
+                                                        otherButtonTitles:@"Cancel", nil];
+        actionSheet.actionSheetStyle = UIActionSheetStyleDefault;
+        [actionSheet showInView:self.view];
+        [actionSheet release];
+    }
+    else if (indexPath.section == 2) // Settings
     {
         if (indexPath.row == 0)
         {
@@ -433,9 +496,15 @@
         else
         {
             // Scheduling
+            ScheduleViewController *scheduleVC = [[ScheduleViewController alloc] init];
+            scheduleVC.scheduleIsOn = TRUE;
+            
+            [self.navigationController pushViewController:scheduleVC animated:YES];
+            
+            [scheduleVC release];
         }
     }
-    else
+    else // About
     {
         // Create the next view controller.
         InformationViewController *infoViewController = [[InformationViewController alloc] init];
@@ -446,6 +515,16 @@
         [self.navigationController pushViewController:infoViewController animated:YES];
         
         [infoViewController release];
+    }
+}
+
+- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    NSLog(@"The %@ button was tapped.", [actionSheet buttonTitleAtIndex:buttonIndex]);
+    
+    if (buttonIndex == 0)
+    {
+        // Action remove Camera
     }
 }
 
