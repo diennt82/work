@@ -3118,6 +3118,12 @@
     //CGSize activitySize = _activityIndicator.frame.size;
     CGSize tableViewSize = _playlistViewController.tableView.frame.size;
     
+    NSInteger deltaY = 0;
+    if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 7.0)
+    {
+        deltaY = HIGH_STATUS_BAR;
+    }
+    
 	if (orientation == UIInterfaceOrientationLandscapeLeft || orientation == UIInterfaceOrientationLandscapeRight)
 	{
         //landscape mode
@@ -3127,7 +3133,15 @@
             self.view.backgroundColor = nil;
             [[UIApplication sharedApplication] setStatusBarHidden:YES];
         } else {
-            [[UIApplication sharedApplication] setStatusBarHidden:NO];
+            if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 7.0)
+            {
+                [[UIApplication sharedApplication] setStatusBarHidden:YES];
+            }
+            else
+            {
+                [[UIApplication sharedApplication] setStatusBarHidden:NO];
+            }
+            
         }
         
         self.topToolbar.hidden = YES;
@@ -3143,6 +3157,7 @@
         if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
         {
             self.scrollView.contentSize = CGSizeMake(screenWidth, CONTENT_SIZE_W_PORTRAIT_IPAD);
+            self.activityIndicator.frame = CGRectMake((screenHeight - INDICATOR_SIZE)/2, (screenWidth - INDICATOR_SIZE)/2 , INDICATOR_SIZE, INDICATOR_SIZE);
             
         }
         else
@@ -3150,18 +3165,19 @@
             self.scrollView.contentSize = CGSizeMake(screenWidth, CONTENT_SIZE_W_PORTRAIT);
         }
         
-        self.activityIndicator.frame = CGRectMake((screenHeight - INDICATOR_SIZE)/2, (screenWidth - INDICATOR_SIZE)/2 , INDICATOR_SIZE, INDICATOR_SIZE);
+
         self.viewStopStreamingProgress.frame = CGRectMake((screenHeight - INDICATOR_SIZE)/2, (screenWidth - INDICATOR_SIZE)/2 , INDICATOR_SIZE, INDICATOR_SIZE);
-        self.playlistViewController.tableView.frame = CGRectMake(0, 20, screenHeight, tableViewSize.height);
+        if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 7.0)
+        {
+            self.playlistViewController.tableView.frame = CGRectMake(0, 0, screenHeight, tableViewSize.height + 64);
+        } else {
+            self.playlistViewController.tableView.frame = CGRectMake(0, 0 + deltaY, screenHeight, tableViewSize.height + 44);
+        }
 	}
 	else if (orientation == UIInterfaceOrientationPortrait || orientation == UIInterfaceOrientationPortraitUpsideDown)
 	{
         //portrait mode
-        NSInteger deltaY = 0;
-        if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 7.0)
-        {
-            deltaY = HIGH_STATUS_BAR;
-        }
+
         
         //[self updateNavigationBarAndToolBar];
         [self.navigationController setNavigationBarHidden:NO];
@@ -3179,7 +3195,7 @@
         if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
         {
             self.scrollView.contentSize = CGSizeMake(CONTENT_SIZE_W_PORTRAIT_IPAD, CONTENT_SIZE_H_PORTRAIT_IPAD);
-            
+            self.activityIndicator.frame = CGRectMake((screenWidth - INDICATOR_SIZE)/2, imageViewHeight/2 + 44 + deltaY , INDICATOR_SIZE, INDICATOR_SIZE);
         }
         else
         {
@@ -3187,7 +3203,6 @@
         }
 
         self.viewCtrlButtons.frame = CGRectMake(0, imageViewHeight + 44 + deltaY, _viewCtrlButtons.frame.size.width, _viewCtrlButtons.frame.size.height);
-        self.activityIndicator.frame = CGRectMake((screenWidth - INDICATOR_SIZE)/2, imageViewHeight/2 + 44 + deltaY , INDICATOR_SIZE, INDICATOR_SIZE);
         self.viewStopStreamingProgress.frame = CGRectMake((screenWidth - INDICATOR_SIZE)/2, (screenHeight - INDICATOR_SIZE)/2 , INDICATOR_SIZE, INDICATOR_SIZE);
         self.playlistViewController.tableView.frame = CGRectMake(0, 44 + deltaY, tableViewSize.width, tableViewSize.height);
 	}
