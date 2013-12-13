@@ -53,7 +53,7 @@
 @end
 
 @interface H264PlayerViewController: UIViewController
-<UIPickerViewDelegate, UIPickerViewDataSource, PlaylistDelegate,PlayerCallbackHandler,ScanForCameraNotifier, StunClientDelegate, ZoneViewControlerDeleate, MelodyVCDelegate>
+<UIPickerViewDelegate, UIPickerViewDataSource, PlaylistDelegate,PlayerCallbackHandler,ScanForCameraNotifier, StunClientDelegate, ZoneViewControlerDeleate, MelodyVCDelegate, UIScrollViewDelegate>
 {
     MediaPlayer* h264Streamer;
     
@@ -86,7 +86,9 @@
 }
 
 
-@property (nonatomic, retain) NSTimer * alertTimer; 
+@property (nonatomic, retain) NSTimer * alertTimer;
+//Add scrollview to support zoom in and zoom out
+@property (retain, nonatomic) IBOutlet UIScrollView *scrollView;
 
 @property (retain, nonatomic) IBOutlet UIView *viewCtrlButtons;
 @property (retain, nonatomic) IBOutlet UIPickerView *pickerHQOptions;
