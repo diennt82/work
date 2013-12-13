@@ -32,7 +32,7 @@
 
 @synthesize  alertTimer;
 @synthesize  askForFWUpgradeOnce;
-@synthesize   client;
+@synthesize   client = _client;
 
 #pragma mark - View
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
@@ -55,12 +55,6 @@
                                       owner:self
                                     options:nil];
     }
-//    else
-//    {
-//        [[NSBundle mainBundle] loadNibNamed:@"H264PlayerViewController"
-//                                      owner:self
-//                                    options:nil];
-//    }
 
     // Do any additional setup after loading the view.
 	[[NSNotificationCenter defaultCenter] addObserver: self
@@ -73,12 +67,6 @@
                                              selector: @selector(handleBecomeActive)
                                                  name: UIApplicationDidBecomeActiveNotification
                                                object: nil];
-    
-//	self.navigationItem.backBarButtonItem =
-//    [[[UIBarButtonItem alloc] initWithTitle:msg
-//                                      style:UIBarButtonItemStyleBordered
-//                                     target:nil
-//                                     action:nil] autorelease];
     
     self.pickerHQOptions.delegate = self;
     self.pickerHQOptions.dataSource = self;
@@ -123,50 +111,86 @@
     [self updateNavigationBarAndToolBar];
     [self becomeActive];
 }
+
+/*
+ setTitle for iOS7, purpose to change color for text, iOS6 default color is white
+ */
+- (void)setTitle:(NSString *)title
+{
+    UILabel *titleView = (UILabel *)self.navigationItem.titleView;
+    if (!titleView) {
+        titleView = [[UILabel alloc] initWithFrame:CGRectZero];
+        titleView.backgroundColor = [UIColor clearColor];
+//        titleView.font = [UIFont boldSystemFontOfSize:20.0];
+        titleView.shadowColor = [UIColor colorWithWhite:0.0 alpha:0.4];
+        
+        titleView.textColor = [UIColor blueColor]; // Change to desired color
+        
+        self.navigationItem.titleView = titleView;
+        [titleView release];
+    }
+    titleView.text = title;
+    [titleView sizeToFit];
+}
+
 - (void) updateNavigationBarAndToolBar
 {
+    [self.navigationController setNavigationBarHidden:NO];
+    [[UIApplication sharedApplication] setStatusBarHidden:NO];
+    // change the back button to cancel and add an event handler
+    UIImage *imageBack = [UIImage imageNamed:@"reveal-icon.png"];
+    UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithImage:imageBack style:UIBarButtonItemStyleBordered target:self action:@selector(prepareGoBackToCameraList:)];
+    
+    
+    self.navigationItem.leftBarButtonItem = backButton;
+    [backButton release];
+    
+    CamProfile *cp = self.selectedChannel.profile;
+    
+    
+    // Create and configure the segmented control at right of navigationbar
+    _segmentControl = [[UISegmentedControl alloc]
+                       initWithItems:[NSArray arrayWithObjects:@"Now",
+                                      @"Earlier", nil]];
+    _segmentControl.segmentedControlStyle = UISegmentedControlStyleBar;
+    _segmentControl.selectedSegmentIndex = 0;
+    [_segmentControl addTarget:self action:@selector(segCtrlAction:)
+              forControlEvents:UIControlEventValueChanged];
+    // Create the bar button item for the segmented control
+    UIBarButtonItem *segmentControlItem = [[UIBarButtonItem alloc]
+                                           initWithCustomView:_segmentControl];
+    
+    
+    self.navigationItem.rightBarButtonItem = segmentControlItem;
+    [segmentControlItem release];
+    
     if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 7)
     {
-        [self.navigationController setNavigationBarHidden:NO];
-        //first remove all
-        for (UIView *subView in self.navigationController.view.subviews)
-        {
-            if ([subView isKindOfClass:[UIToolbar class]])
-            {
-                
-                [subView removeFromSuperview];
-            }
-        }
-        if (self.topToolbar)
-        {
-            [self.navigationController.view addSubview:self.topToolbar];
-            [self.navigationController.view bringSubviewToFront:self.topToolbar];
-            [self.topToolbar setBarStyle:UIBarStyleDefault];
-        }
+//        [self.navigationController setNavigationBarHidden:NO];
+//        //first remove all
+//        for (UIView *subView in self.navigationController.view.subviews)
+//        {
+//            if ([subView isKindOfClass:[UIToolbar class]])
+//            {
+//                
+//                [subView removeFromSuperview];
+//            }
+//        }
+//        if (self.topToolbar)
+//        {
+//            [self.navigationController.view addSubview:self.topToolbar];
+//            [self.navigationController.view bringSubviewToFront:self.topToolbar];
+//            [self.topToolbar setBarStyle:UIBarStyleDefault];
+//        }
+        
+        [self setTitle:cp.name];
+        [self.navigationController.navigationBar setBarStyle:UIBarStyleDefault];
+
     }
     else
     {
-        [self.navigationController setNavigationBarHidden:YES];
-        [self.topToolbar setBarStyle:UIBarStyleBlack];
-    }
-}
-- (void)viewWillAppear:(BOOL)animated
-{
-    [super viewWillAppear:animated];
-    [self checkOrientation];
-
-}
-
-- (void)viewWillDisappear:(BOOL)animated
-{
-    [super viewWillDisappear:animated];
-    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-	[userDefaults removeObjectForKey:CAM_IN_VEW];
-	[userDefaults synchronize];
-    if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 7)
-    {
-        // Load resources for iOS 7 or later
-        [self.topToolbar removeFromSuperview];
+        [self.navigationItem setTitle:cp.name];
+        [self.topToolbar setHidden:YES];
     }
 }
 
@@ -174,7 +198,7 @@
 
 - (IBAction)segCtrlAction:(id)sender {
     
-    if (self.segCtrl.selectedSegmentIndex == 0) // Live
+    if (_segmentControl.selectedSegmentIndex == 0) // Live
     {
         self.disableAutorotateFlag = FALSE;
         
@@ -201,7 +225,7 @@
             // Streamer is showing live view
         }
     }
-    else if (self.segCtrl.selectedSegmentIndex == 1) // Earlier
+    else if (_segmentControl.selectedSegmentIndex == 1) // Earlier
     {
         self.disableAutorotateFlag = TRUE;
         
@@ -465,7 +489,7 @@
                 self.probeTimer = nil;
             }
             
-            self.backBarBtnItem.enabled = YES;
+//            self.backBarBtnItem.enabled = YES;
             
             
             [self stopPeriodicPopup];
@@ -1049,20 +1073,6 @@
 
 - (void)becomeActive
 {
-    CamProfile *cp = self.selectedChannel.profile;
-    
-    //Set camera name
-    self.cameraNameBarBtnItem.title = cp.name;
-    
-    //set Button handler
-    self.backBarBtnItem.target = self;
-    self.backBarBtnItem.action = @selector(prepareGoBackToCameraList);
-    //self.backBarBtnItem.enabled = NO;
-
-//SLIDE MENU
-//    self.backBarBtnItem.target = self.stackViewController;
-//    self.backBarBtnItem.action = @selector(toggleLeftViewController);
-    
     self.pickerHQOptions.hidden = YES;
     
     self.selectedChannel.stopStreaming = NO;
@@ -1070,8 +1080,6 @@
     [self.view bringSubviewToFront:self.activityIndicator];
     [self.activityIndicator startAnimating];
     self.viewStopStreamingProgress.hidden = YES;
-    
-    NSLog(@"self.segCtrl.selectedSegmentIndex = %d", self.segCtrl.selectedSegmentIndex);
     
     [self setupCamera];
     
@@ -1102,14 +1110,6 @@
                                                            selector:@selector(h_directional_change_callback:)
                                                            userInfo:nil
                                                             repeats:YES];
-    
-    /*20131024: phung : create a serial queue for player function calls*/
-    
-    if (player_func_queue == nil)
-    {
-        player_func_queue = dispatch_queue_create("com.nxcomm.H264PlayerQueue", NULL);
-    }
-    
     
 }
 
@@ -1154,9 +1154,9 @@
     else if (self.selectedChannel.profile.minuteSinceLastComm <= 5)
     {
         NSLog(@"created a remote streamer ");
-        if (self.client == nil)
+        if (_client == nil)
         {
-            self.client = [[[StunClient alloc] init] autorelease];
+            self.client = [[StunClient alloc] init];
         }
         
         
@@ -1182,9 +1182,10 @@
     }
     else
     {
+        _isCameraOffline = YES;
         self.activityIndicator.hidden = YES;
         [self.activityIndicator stopAnimating];
-        self.backBarBtnItem.enabled = YES;
+//        self.backBarBtnItem.enabled = YES;
         self.imageViewVideo.image = [UIImage imageNamed:@"camera_offline"];
         self.viewCtrlButtons.hidden = YES;
         self.imgViewDrectionPad.hidden= YES;
@@ -1376,7 +1377,7 @@
     }
 }
 
-- (void)prepareGoBackToCameraList
+- (void)prepareGoBackToCameraList:(id)sender
 {
     self.viewStopStreamingProgress.hidden = NO;
     [self.view bringSubviewToFront:self.viewStopStreamingProgress];
@@ -1411,11 +1412,12 @@
 
 - (void)goBackToCameraList
 {
-    [self stopStream];
-    
-    
-    
-    
+    //no need call stopStream in offline mode
+    if (!_isCameraOffline)
+    {
+        [self stopStream];
+    }
+
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     [userDefaults removeObjectForKey:CAM_IN_VEW];
     [userDefaults synchronize];
@@ -1423,8 +1425,7 @@
     [[NSNotificationCenter defaultCenter] removeObserver:self];
     [UIApplication sharedApplication].idleTimerDisabled = NO;
     
-    [self.navigationController popToRootViewControllerAnimated:NO];
-    
+    [self.navigationController popToRootViewControllerAnimated:YES];
 }
 
 -(void) cleanUpDirectionTimers
@@ -1465,14 +1466,6 @@
 
 -(void) stopStunStream
 {
-    if (client != nil)
-    {
-        [client shutdown];
-        [client release];
-        client = nil;
-    }
-    
-    
     if (self.probeTimer != nil && [self.probeTimer isValid])
     {
         [self.probeTimer invalidate];
@@ -1495,6 +1488,11 @@
         H264PlayerViewController *vc = (H264PlayerViewController *)[self retain];
         [self performSelectorInBackground:@selector(closeStunStream_bg:) withObject:vc];
         
+    }
+    if (_client != nil)
+    {
+        [_client shutdown];
+        [_client release];
     }
     
 
@@ -3117,7 +3115,7 @@
         [[UIApplication sharedApplication] setStatusBarHidden:NO];
         self.view.backgroundColor = [UIColor whiteColor];
         
-        self.topToolbar.hidden = NO;
+//        self.topToolbar.hidden = NO;
         self.imgViewDrectionPad.hidden = NO;
         self.viewCtrlButtons.hidden = NO;
         self.viewStopStreamingProgress.hidden = YES;
@@ -3134,8 +3132,8 @@
         self.playlistViewController.tableView.frame = CGRectMake(0, 44 + deltaY, tableViewSize.width, tableViewSize.height);
 	}
 
-    self.backBarBtnItem.target = self;
-    self.backBarBtnItem.action = @selector(prepareGoBackToCameraList);
+//    self.backBarBtnItem.target = self;
+//    self.backBarBtnItem.action = @selector(prepareGoBackToCameraList:);
 // SLIDE MENU
 //    self.backBarBtnItem.target = self.stackViewController;
 //    self.backBarBtnItem.action = @selector(toggleLeftViewController);
@@ -3363,12 +3361,11 @@
             NSLog(@"Re-start streaming for : %@", self.selectedChannel.profile.mac_address);
             
             
-            if (client != nil)
-            {
-                [client shutdown];
-                [client release];
-                client = nil;
-            }
+//            if (_client != nil)
+//            {
+//                [_client shutdown];
+//                [_client release];
+//            }
             
             
             [NSTimer scheduledTimerWithTimeInterval:0.1
@@ -3584,13 +3581,13 @@
     
     //[self.client shutdown];
 
-    [client release];
+
     [_imageViewVideo release];
-    [_topToolbar release];
-    [_backBarBtnItem release];
+//    [_topToolbar release];
+
     [_progressView release];
-    [_cameraNameBarBtnItem release];
-    [_segCtrl release];
+
+    [_segmentControl release];
     //[_tableViewPlaylist release];
     
 
@@ -3617,10 +3614,23 @@
     [_melodyButton release];
     [super dealloc];
 }
+- (void)viewWillAppear:(BOOL)animated
+{
+    _isCameraOffline = NO;
+    [super viewWillAppear:animated];
+    [self checkOrientation];
+    
+}
 
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [self.navigationController setNavigationBarHidden:YES];
+    [[UIApplication sharedApplication] setStatusBarHidden:NO];
+    [super viewWillDisappear:animated];
+}
 - (void)viewDidUnload {
     [self setImageViewVideo:nil];
-    [self setTopToolbar:nil];
+//    [self setTopToolbar:nil];
     [self setBackBarBtnItem:nil];
     [self setProgressView:nil];
     [self setCameraNameBarBtnItem:nil];

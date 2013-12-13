@@ -69,7 +69,6 @@
     }
     if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 7) {
         // Load resources for iOS 7 or later
-        [self.navigationController setNavigationBarHidden:NO];
         for (UIView *subView in self.navigationController.view.subviews)
         {
             if ([subView isKindOfClass:[UIToolbar class]])
@@ -333,9 +332,7 @@
 {
     [super viewDidAppear:animated];
     [[[GAI sharedInstance] defaultTracker] sendView:@"DashBoard_ViewController"];
-//    self.trackedViewName = @"DasBoard_ViewController";
     if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 7) {
-        [self.navigationController setNavigationBarHidden:NO];
     } else {
         [self.navigationController setNavigationBarHidden:YES];
     }
