@@ -164,13 +164,15 @@
 {
     NSLog(@"Load step 3");
     //Load the next xib
-    Step_03_ViewController *step03ViewController =
-    [[Step_03_ViewController alloc] initWithNibName:@"Step_03_ViewController"
-                                             bundle:nil];
+    Step_03_ViewController *step03ViewController=nil;
     
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
     {
         step03ViewController = [[Step_03_ViewController alloc]initWithNibName:@"Step_03_ViewController_ipad" bundle:nil];
+    } else {
+        step03ViewController =
+        [[Step_03_ViewController alloc] initWithNibName:@"Step_03_ViewController"
+                                                 bundle:nil];
     }
 
     [self.navigationController pushViewController:step03ViewController animated:NO];

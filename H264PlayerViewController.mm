@@ -24,12 +24,14 @@
 #define DIRECTION_H_MASK 0x0F
 //define for zooming
 #define MAXIMUM_ZOOMING_SCALE   6.0
-#define MINIMUM_ZOOMING_SCALE   1.1f
+#define MINIMUM_ZOOMING_SCALE   1.0f
 #define ZOOM_SCALE              1.5f
 #define CONTENT_SIZE_W_PORTRAIT 320
 #define CONTENT_SIZE_H_PORTRAIT 180
 #define CONTENT_SIZE_W_PORTRAIT_IPAD 768
 #define CONTENT_SIZE_H_PORTRAIT_IPAD 432
+//width and height of indicator
+#define INDICATOR_SIZE               37
 
 #define CAM_IN_VEW @"string_Camera_Mac_Being_Viewed"
 #define HIGH_STATUS_BAR 20;
@@ -170,8 +172,6 @@
 
 - (void) updateNavigationBarAndToolBar
 {
-    [self.navigationController setNavigationBarHidden:NO];
-    [[UIApplication sharedApplication] setStatusBarHidden:NO];
     // change the back button to cancel and add an event handler
     UIImage *imageBack = [UIImage imageNamed:@"reveal-icon.png"];
     UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithImage:imageBack style:UIBarButtonItemStyleBordered target:self action:@selector(prepareGoBackToCameraList:)];
@@ -188,9 +188,9 @@
                        initWithItems:[NSArray arrayWithObjects:@"Now",
                                       @"Earlier", nil]];
     _segmentControl.segmentedControlStyle = UISegmentedControlStyleBar;
-    _segmentControl.selectedSegmentIndex = 0;
     [_segmentControl addTarget:self action:@selector(segCtrlAction:)
               forControlEvents:UIControlEventValueChanged];
+    _segmentControl.selectedSegmentIndex = 0;
     // Create the bar button item for the segmented control
     UIBarButtonItem *segmentControlItem = [[UIBarButtonItem alloc]
                                            initWithCustomView:_segmentControl];
@@ -1191,7 +1191,7 @@
         NSLog(@"created a remote streamer ");
         if (_client == nil)
         {
-            self.client = [[StunClient alloc] init];
+            _client = [[StunClient alloc] init];
         }
         
         
@@ -1460,7 +1460,7 @@
     [[NSNotificationCenter defaultCenter] removeObserver:self];
     [UIApplication sharedApplication].idleTimerDisabled = NO;
     
-    [self.navigationController popToRootViewControllerAnimated:YES];
+    [self.navigationController popToRootViewControllerAnimated:NO];
 }
 
 -(void) cleanUpDirectionTimers
@@ -3120,10 +3120,15 @@
     
 	if (orientation == UIInterfaceOrientationLandscapeLeft || orientation == UIInterfaceOrientationLandscapeRight)
 	{
-
+        //landscape mode
         [self.navigationController setNavigationBarHidden:YES];
-        self.view.backgroundColor = nil;
-        [[UIApplication sharedApplication] setStatusBarHidden:YES];
+        if (_segmentControl.selectedSegmentIndex == 0) // Video View
+        {
+            self.view.backgroundColor = nil;
+            [[UIApplication sharedApplication] setStatusBarHidden:YES];
+        } else {
+            [[UIApplication sharedApplication] setStatusBarHidden:NO];
+        }
         
         self.topToolbar.hidden = YES;
         self.imgViewDrectionPad.hidden = YES;
@@ -3132,7 +3137,7 @@
         
         CGFloat imageViewHeight = screenHeight * 9 / 16;
         CGRect newRect = CGRectMake(0, (screenWidth - imageViewHeight) / 2, screenHeight, imageViewHeight);
-        self.imageViewVideo.frame = newRect;
+        self.imageViewVideo.frame = CGRectMake(0, 0, screenHeight, imageViewHeight);
         self.scrollView.frame = newRect;
         
         if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
@@ -3145,24 +3150,24 @@
             self.scrollView.contentSize = CGSizeMake(screenWidth, CONTENT_SIZE_W_PORTRAIT);
         }
         
-        self.viewStopStreamingProgress.frame = CGRectMake(0, 0, screenHeight, screenWidth);
-//        self.activityIndicator.frame = CGRectMake(screenHeight / 2 - activitySize.width / 2, screenWidth / 2 - activitySize.height / 2, activitySize.width, activitySize.height);
-        
-        self.playlistViewController.tableView.frame = CGRectMake(0, 20, tableViewSize.width, tableViewSize.height);
+        self.activityIndicator.frame = CGRectMake((screenHeight - INDICATOR_SIZE)/2, (screenWidth - INDICATOR_SIZE)/2 , INDICATOR_SIZE, INDICATOR_SIZE);
+        self.viewStopStreamingProgress.frame = CGRectMake((screenHeight - INDICATOR_SIZE)/2, (screenWidth - INDICATOR_SIZE)/2 , INDICATOR_SIZE, INDICATOR_SIZE);
+        self.playlistViewController.tableView.frame = CGRectMake(0, 20, screenHeight, tableViewSize.height);
 	}
 	else if (orientation == UIInterfaceOrientationPortrait || orientation == UIInterfaceOrientationPortraitUpsideDown)
 	{
+        //portrait mode
         NSInteger deltaY = 0;
         if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 7.0)
         {
             deltaY = HIGH_STATUS_BAR;
         }
         
-        [self updateNavigationBarAndToolBar];
+        //[self updateNavigationBarAndToolBar];
+        [self.navigationController setNavigationBarHidden:NO];
         [[UIApplication sharedApplication] setStatusBarHidden:NO];
         self.view.backgroundColor = [UIColor whiteColor];
-        
-//        self.topToolbar.hidden = NO;
+        //self.topToolbar.hidden = NO;
         self.imgViewDrectionPad.hidden = NO;
         self.viewCtrlButtons.hidden = NO;
         self.viewStopStreamingProgress.hidden = YES;
@@ -3181,10 +3186,9 @@
             self.scrollView.contentSize = CGSizeMake(CONTENT_SIZE_W_PORTRAIT, CONTENT_SIZE_H_PORTRAIT);
         }
 
-        //self.activityIndicator.frame = CGRectMake(screenWidgth / 2 - activitySize.width / 2, imageViewHeight / 2 - activitySize.height / 2 + 44 + deltaY, activitySize.width, activitySize.height);
         self.viewCtrlButtons.frame = CGRectMake(0, imageViewHeight + 44 + deltaY, _viewCtrlButtons.frame.size.width, _viewCtrlButtons.frame.size.height);
-        self.viewStopStreamingProgress.frame = CGRectMake(0, 0, screenWidth, screenHeight);
-        
+        self.activityIndicator.frame = CGRectMake((screenWidth - INDICATOR_SIZE)/2, imageViewHeight/2 + 44 + deltaY , INDICATOR_SIZE, INDICATOR_SIZE);
+        self.viewStopStreamingProgress.frame = CGRectMake((screenWidth - INDICATOR_SIZE)/2, (screenHeight - INDICATOR_SIZE)/2 , INDICATOR_SIZE, INDICATOR_SIZE);
         self.playlistViewController.tableView.frame = CGRectMake(0, 44 + deltaY, tableViewSize.width, tableViewSize.height);
 	}
 
