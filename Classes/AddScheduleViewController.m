@@ -11,6 +11,7 @@
 #import "DayViewController.h"
 
 #import "NMRangeSlider.h"
+#import "ScheduleInformation.h"
 
 @interface AddScheduleViewController ()
 
@@ -48,10 +49,23 @@
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
     
-    self.dayArray = [NSArray arrayWithObjects:@"Monday", @"Tuesday", @"Wednesday", @"Thursday", @"Friday", @"Saturday", @"Sunday", nil];
+    self.navigationItem.leftBarButtonItem  = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel
+                                                                                            target:self
+                                                                                            action:@selector(cancelTouchAction:)] autorelease];
+    assert(self.navigationItem.leftBarButtonItem != nil);
+    
+    self.navigationItem.rightBarButtonItem = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemSave
+                                                                                            target:self
+                                                                                            action:@selector(saveTouchAction:)] autorelease];
+    assert(self.navigationItem.rightBarButtonItem != nil);
+    
+    self.dayArray = [NSArray arrayWithObjects:@"Mon", @"Tue", @"Wed", @"Thur", @"Fri", @"Sat", @"Sun", nil];
     
     //self.selectedDayString = @"";
     self.mapDays = [NSMutableArray arrayWithObjects:@"0", @"0", @"0", @"1", @"1", @"0", @"0", nil];
+    
+    self.lowerValue = 07.00;
+    self.upperValue = 19.99;
     
     [self configureLabelSlider];
 }
@@ -125,12 +139,12 @@
                 for (int i = 0; i < 7; i++)
                 {
                     if ([[_mapDays objectAtIndex:i] integerValue] == 1)
-                    {
-                        self.selectedDayString = [_selectedDayString stringByAppendingString:[NSString stringWithFormat:@"%@,", [_dayArray objectAtIndex:i]]];
+                    {                        
+                        self.selectedDayString = [_selectedDayString stringByAppendingString:[NSString stringWithFormat:@"%@, ", [_dayArray objectAtIndex:i]]];
                     }
                 }
                 
-                self.selectedDayString = [_selectedDayString substringToIndex:_selectedDayString.length - 1];
+                self.selectedDayString = [_selectedDayString substringToIndex:_selectedDayString.length - 2];
             }
         }
     }
@@ -148,6 +162,26 @@
     {
         self.view.tintColor = [UIColor orangeColor];
     }
+}
+
+- (void)viewWillDisappear:(BOOL)animated
+{
+    
+}
+
+#pragma mark - Methods
+
+- (void)cancelTouchAction:(id)sender
+{
+    [self.navigationController popViewControllerAnimated:YES];
+}
+
+- (void)saveTouchAction: (id)sender
+{
+    self.lowerValue = self.labelSlider.lowerValue;
+    self.upperValue = self.labelSlider.upperValue;
+    
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 - (void)didReceiveMemoryWarning
@@ -168,8 +202,8 @@
     
     self.labelSlider.minimumRange = 1;
     
-    self.labelSlider.lowerValue = 07.00;
-    self.labelSlider.upperValue = 19.99;
+    self.labelSlider.lowerValue = self.lowerValue;
+    self.labelSlider.upperValue = self.upperValue;
 }
 
 - (NSString *)convertToTimeFormatStringFromFloat: (CGFloat) floatValue
@@ -279,7 +313,7 @@
                 }
             }
             
-            cell.nameLabel.text = @"Range turn on";
+            cell.nameLabel.text = @"Turn on";
             cell.valueLabel.text = [NSString stringWithFormat:@"%@ - %@", self.lowerLabel.text, self.upperLabel.text];
             
             return cell;
@@ -342,24 +376,18 @@
             if (cell.accessoryType == UITableViewCellAccessoryCheckmark)
             {
                 cell.accessoryType = UITableViewCellAccessoryNone;
-                
-                for (int i = 0; i < 2; i++)
-                {
-                    NSIndexPath *idxPath = [NSIndexPath indexPathForRow:i inSection:0];
+                    NSIndexPath *idxPath = [NSIndexPath indexPathForRow:1 inSection:0];
                     CameraSettingsCell *cell = (CameraSettingsCell *)[tableView cellForRowAtIndexPath:idxPath];
                     cell.userInteractionEnabled = YES;
-                }
+                self.isOffAllDay = FALSE;
             }
             else
             {
                 cell.accessoryType = UITableViewCellAccessoryCheckmark;
-                
-                for (int i = 0; i < 2; i++)
-                {
-                    NSIndexPath *idxPath = [NSIndexPath indexPathForRow:i inSection:0];
+                    NSIndexPath *idxPath = [NSIndexPath indexPathForRow:1 inSection:0];
                     CameraSettingsCell *cell = (CameraSettingsCell *)[tableView cellForRowAtIndexPath:idxPath];
                     cell.userInteractionEnabled = NO;
-                }
+                self.isOffAllDay = TRUE;
             }
         }
     }

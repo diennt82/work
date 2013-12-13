@@ -11,5 +11,9 @@
 @interface ScheduleViewController : UITableViewController
 
 @property (nonatomic) BOOL scheduleIsOn;
+@property (nonatomic, retain) NSString *selectedDayString;
+@property (nonatomic) CGFloat lowerValue;
+@property (nonatomic) CGFloat upperValue;
+@property (nonatomic) BOOL isOffAllDay;
 
 @end

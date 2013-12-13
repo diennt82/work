@@ -154,6 +154,7 @@
 		8B5A5E9D1845A27F0036A9CD /* ME-sun_background.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B5A5E9B1845A27F0036A9CD /* ME-sun_background.png */; };
 		8B66804D1839EEA80041F510 /* NotificationViewController_ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8B66804C1839EEA70041F510 /* NotificationViewController_ipad.xib */; };
 		8B68F5D118066CE500661527 /* PlaybackViewController_ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8B68F5D018066CE500661527 /* PlaybackViewController_ipad.xib */; };
+		8B92DC24185ACACA00344530 /* ScheduleInformation.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B92DC23185ACACA00344530 /* ScheduleInformation.m */; };
 		8B93847F1856D42C009C4771 /* InformationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B93847D1856D42C009C4771 /* InformationViewController.m */; };
 		8B9384801856D42C009C4771 /* InformationViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8B93847E1856D42C009C4771 /* InformationViewController.xib */; };
 		8B9384841856E613009C4771 /* CameraSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B9384821856E613009C4771 /* CameraSettingsViewController.m */; };
@@ -540,6 +541,8 @@
 		8B5A5E9B1845A27F0036A9CD /* ME-sun_background.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ME-sun_background.png"; sourceTree = "<group>"; };
 		8B66804C1839EEA70041F510 /* NotificationViewController_ipad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = NotificationViewController_ipad.xib; sourceTree = "<group>"; };
 		8B68F5D018066CE500661527 /* PlaybackViewController_ipad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PlaybackViewController_ipad.xib; sourceTree = "<group>"; };
+		8B92DC22185ACACA00344530 /* ScheduleInformation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ScheduleInformation.h; sourceTree = "<group>"; };
+		8B92DC23185ACACA00344530 /* ScheduleInformation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ScheduleInformation.m; sourceTree = "<group>"; };
 		8B93847C1856D42C009C4771 /* InformationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InformationViewController.h; sourceTree = "<group>"; };
 		8B93847D1856D42C009C4771 /* InformationViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InformationViewController.m; sourceTree = "<group>"; };
 		8B93847E1856D42C009C4771 /* InformationViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = InformationViewController.xib; sourceTree = "<group>"; };
@@ -1897,6 +1900,8 @@
 				8B9899E11859C9EA00AC3852 /* DayViewController.h */,
 				8B9899E21859C9EA00AC3852 /* DayViewController.m */,
 				8B9899E31859C9EA00AC3852 /* DayViewController.xib */,
+				8B92DC22185ACACA00344530 /* ScheduleInformation.h */,
+				8B92DC23185ACACA00344530 /* ScheduleInformation.m */,
 			);
 			name = Scheduling;
 			sourceTree = "<group>";
@@ -2478,6 +2483,7 @@
 				380CB0C716DC568500290587 /* Step_12_ViewController.m in Sources */,
 				380CB0D616DC60DC00290587 /* Step_11_ViewController.m in Sources */,
 				8B9384921856EEFE009C4771 /* SlideSettingsCell.m in Sources */,
+				8B92DC24185ACACA00344530 /* ScheduleInformation.m in Sources */,
 				9704F84117B37CB3005F9868 /* DashBoard_ViewController.mm in Sources */,
 				97F5531517BDD3AF00024017 /* MBPNavController.m in Sources */,
 				97A07FB117D5FD4A00653460 /* H264PlayerViewController.mm in Sources */,

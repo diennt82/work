@@ -7,9 +7,15 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "ScheduleViewController.h"
 
 @interface AddScheduleViewController : UITableViewController
 
+@property (assign, nonatomic) ScheduleViewController *parentVC;
+
+@property (nonatomic) CGFloat lowerValue;
+@property (nonatomic) CGFloat upperValue;
+@property (nonatomic) BOOL isOffAllDay;
 @property (nonatomic, retain) NSMutableArray *mapDays;
 
 @end
