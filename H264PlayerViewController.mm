@@ -22,12 +22,24 @@
 #define DIRECTION_H_LF  0x20
 #define DIRECTION_H_RT  0x40
 #define DIRECTION_H_MASK 0x0F
-
-
+//define for zooming
+#define MAXIMUM_ZOOMING_SCALE   6.0
+#define MINIMUM_ZOOMING_SCALE   1.1f
+#define ZOOM_SCALE              1.5f
+#define CONTENT_SIZE_W_PORTRAIT 320
+#define CONTENT_SIZE_H_PORTRAIT 180
+#define CONTENT_SIZE_W_PORTRAIT_IPAD 768
+#define CONTENT_SIZE_H_PORTRAIT_IPAD 432
 
 #define CAM_IN_VEW @"string_Camera_Mac_Being_Viewed"
 #define HIGH_STATUS_BAR 20;
+@interface H264PlayerViewController ()
 
+- (void)centerScrollViewContents;
+- (void)scrollViewDoubleTapped:(UITapGestureRecognizer*)recognizer;
+- (void)scrollViewTwoFingerTapped:(UITapGestureRecognizer*)recognizer;
+
+@end
 @implementation H264PlayerViewController
 
 @synthesize  alertTimer;
@@ -108,8 +120,31 @@
     UIButton *iFrameBtn = (UIButton *)[self.viewCtrlButtons viewWithTag:705];
     iFrameBtn.enabled = NO;
     
+    [self addGesturesPichInAndOut];
     [self updateNavigationBarAndToolBar];
     [self becomeActive];
+
+}
+- (void)addGesturesPichInAndOut
+{
+    //set background for scrollView
+    [self.scrollView setBackgroundColor:[UIColor clearColor]];
+    //processing for pinch gestures
+    self.scrollView.delegate = self;
+    self.scrollView.maximumZoomScale = MAXIMUM_ZOOMING_SCALE;
+    self.scrollView.minimumZoomScale = MINIMUM_ZOOMING_SCALE;
+    [self centerScrollViewContents];
+    [self resetZooming];
+    //Add action for touch
+    UITapGestureRecognizer *doubleTapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(scrollViewDoubleTapped:)];
+    doubleTapRecognizer.numberOfTapsRequired = 2;
+    doubleTapRecognizer.numberOfTouchesRequired = 1;
+    [self.scrollView addGestureRecognizer:doubleTapRecognizer];
+    
+    UITapGestureRecognizer *twoFingerTapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(scrollViewTwoFingerTapped:)];
+    twoFingerTapRecognizer.numberOfTapsRequired = 1;
+    twoFingerTapRecognizer.numberOfTouchesRequired = 2;
+    [self.scrollView addGestureRecognizer:twoFingerTapRecognizer];
 }
 
 /*
@@ -410,7 +445,7 @@
                 
                 // so need to adjust the origin
                 left = self.imageViewVideo.frame.origin.x;
-                top = (self.imageViewVideo.frame.size.height - fh)/2;
+                top = 0;
                 
                 
                 
@@ -432,7 +467,7 @@
                     left = self.imageViewVideo.frame.origin.x;
                 }
                 
-                top = self.imageViewVideo.frame.origin.y;
+                top = 0;
 
             }
              NSLog(@"video adjusted size: %f x %f", destWidth, destHeight);
@@ -3076,10 +3111,10 @@
 
 - (void) adjustViewsForOrientation:(UIInterfaceOrientation)orientation
 {
+    [self resetZooming];
     CGRect screenBounds = [[UIScreen mainScreen] bounds];
     CGFloat screenWidth = screenBounds.size.width;
     CGFloat screenHeight = screenBounds.size.height;
-    
     //CGSize activitySize = _activityIndicator.frame.size;
     CGSize tableViewSize = _playlistViewController.tableView.frame.size;
     
@@ -3098,6 +3133,18 @@
         CGFloat imageViewHeight = screenHeight * 9 / 16;
         CGRect newRect = CGRectMake(0, (screenWidth - imageViewHeight) / 2, screenHeight, imageViewHeight);
         self.imageViewVideo.frame = newRect;
+        self.scrollView.frame = newRect;
+        
+        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+        {
+            self.scrollView.contentSize = CGSizeMake(screenWidth, CONTENT_SIZE_W_PORTRAIT_IPAD);
+            
+        }
+        else
+        {
+            self.scrollView.contentSize = CGSizeMake(screenWidth, CONTENT_SIZE_W_PORTRAIT);
+        }
+        
         self.viewStopStreamingProgress.frame = CGRectMake(0, 0, screenHeight, screenWidth);
 //        self.activityIndicator.frame = CGRectMake(screenHeight / 2 - activitySize.width / 2, screenWidth / 2 - activitySize.height / 2, activitySize.width, activitySize.height);
         
@@ -3121,11 +3168,20 @@
         self.viewStopStreamingProgress.hidden = YES;
         
         CGFloat imageViewHeight = screenWidth * 9 / 16;
-        
         CGRect destRect = CGRectMake(0, 44 + deltaY, screenWidth, imageViewHeight);
-        self.imageViewVideo.frame = destRect;
+        self.scrollView.frame = destRect;
+        self.imageViewVideo.frame = CGRectMake(0, 0, screenWidth, imageViewHeight);
+        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+        {
+            self.scrollView.contentSize = CGSizeMake(CONTENT_SIZE_W_PORTRAIT_IPAD, CONTENT_SIZE_H_PORTRAIT_IPAD);
+            
+        }
+        else
+        {
+            self.scrollView.contentSize = CGSizeMake(CONTENT_SIZE_W_PORTRAIT, CONTENT_SIZE_H_PORTRAIT);
+        }
 
-//        self.activityIndicator.frame = CGRectMake(screenWidgth / 2 - activitySize.width / 2, imageViewHeight / 2 - activitySize.height / 2 + 44 + deltaY, activitySize.width, activitySize.height);
+        //self.activityIndicator.frame = CGRectMake(screenWidgth / 2 - activitySize.width / 2, imageViewHeight / 2 - activitySize.height / 2 + 44 + deltaY, activitySize.width, activitySize.height);
         self.viewCtrlButtons.frame = CGRectMake(0, imageViewHeight + 44 + deltaY, _viewCtrlButtons.frame.size.width, _viewCtrlButtons.frame.size.height);
         self.viewStopStreamingProgress.frame = CGRectMake(0, 0, screenWidth, screenHeight);
         
@@ -3569,7 +3625,71 @@
     
 }
 
-#pragma mark -
+#pragma mark - Zoom in&out
+- (void)centerScrollViewContents {
+    CGSize boundsSize = self.scrollView.bounds.size;
+    CGRect contentsFrame = self.imageViewVideo.frame;
+    
+    if (contentsFrame.size.width < boundsSize.width) {
+        contentsFrame.origin.x = (boundsSize.width - contentsFrame.size.width) / 2.0f;
+    } else {
+        contentsFrame.origin.x = 0.0f;
+    }
+    
+    if (contentsFrame.size.height < boundsSize.height) {
+        contentsFrame.origin.y = (boundsSize.height - contentsFrame.size.height) / 2.0f;
+    } else {
+        contentsFrame.origin.y = 0.0f;
+    }
+    
+    self.imageViewVideo.frame = contentsFrame;
+}
+
+- (void)scrollViewDoubleTapped:(UITapGestureRecognizer*)recognizer {
+    // Get the location within the image view where we tapped
+    CGPoint pointInView = [recognizer locationInView:self.imageViewVideo];
+    
+    // Get a zoom scale that's zoomed in slightly, capped at the maximum zoom scale specified by the scroll view
+    CGFloat newZoomScale = self.scrollView.zoomScale * ZOOM_SCALE;
+    newZoomScale = MIN(newZoomScale, self.scrollView.maximumZoomScale);
+    
+    // Figure out the rect we want to zoom to, then zoom to it
+    CGSize scrollViewSize = self.scrollView.bounds.size;
+    
+    CGFloat w = scrollViewSize.width / newZoomScale;
+    CGFloat h = scrollViewSize.height / newZoomScale;
+    CGFloat x = pointInView.x - (w / 2.0f);
+    CGFloat y = pointInView.y - (h / 2.0f);
+    
+    CGRect rectToZoomTo = CGRectMake(x, y, w, h);
+    
+    [self.scrollView zoomToRect:rectToZoomTo animated:YES];
+}
+
+- (void)scrollViewTwoFingerTapped:(UITapGestureRecognizer*)recognizer {
+    // Zoom out slightly, capping at the minimum zoom scale specified by the scroll view
+    CGFloat newZoomScale = self.scrollView.zoomScale / ZOOM_SCALE;
+    newZoomScale = MAX(newZoomScale, self.scrollView.minimumZoomScale);
+    [self.scrollView setZoomScale:newZoomScale animated:YES];
+}
+
+- (void)resetZooming
+{
+    CGFloat newZoomScale = MINIMUM_ZOOMING_SCALE;
+    [self.scrollView setZoomScale:newZoomScale animated:YES];
+}
+
+- (UIView*)viewForZoomingInScrollView:(UIScrollView *)scrollView {
+    // Return the view that we want to zoom
+    return self.imageViewVideo;
+}
+
+- (void)scrollViewDidZoom:(UIScrollView *)scrollView {
+    // The scroll view has zoomed, so we need to re-center the contents
+    [self centerScrollViewContents];
+}
+
+#pragma mark - Memory Release
 
 - (void)didReceiveMemoryWarning
 {
@@ -3612,6 +3732,7 @@
     [_probeTimer release];
     
     [_melodyButton release];
+    [_scrollView release];
     [super dealloc];
 }
 - (void)viewWillAppear:(BOOL)animated
