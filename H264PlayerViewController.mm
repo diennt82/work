@@ -233,43 +233,43 @@
 
 - (IBAction)segCtrlAction:(id)sender {
     
-    if (_segmentControl.selectedSegmentIndex == 0) // Live
-    {
-        self.disableAutorotateFlag = FALSE;
-        
-        self.playlistViewController.tableView.hidden = YES;
-        
-        NSLog(@"h264StreamerIsInStopped: %d, h264Streamer==null: %d", _h264StreamerIsInStopped, h264Streamer == NULL);
-        
-        if (self.h264StreamerIsInStopped == TRUE &&
-            h264Streamer == NULL)
-        {
-            self.activityIndicator.hidden = NO;
-            [self.view bringSubviewToFront:self.activityIndicator];
-            [self.activityIndicator startAnimating];
-            
-            [self setupCamera];
-            self.h264StreamerIsInStopped = FALSE;
-            
-            NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-            [userDefaults setObject:_selectedChannel.profile.mac_address forKey:CAM_IN_VEW];
-            [userDefaults synchronize];
-        }
-        else
-        {
-            // Streamer is showing live view
-        }
-    }
-    else if (_segmentControl.selectedSegmentIndex == 1) // Earlier
-    {
-        self.disableAutorotateFlag = TRUE;
-        
-        [self.view bringSubviewToFront:self.playlistViewController.tableView];
-        self.playlistViewController.tableView.hidden = NO;
-        
-        self.playlistViewController.navController = self.navigationController;
-        self.playlistViewController.playlistDelegate = self;
-    }
+//    if (_segmentControl.selectedSegmentIndex == 0) // Live
+//    {
+//        self.disableAutorotateFlag = FALSE;
+//        
+//        self.playlistViewController.tableView.hidden = YES;
+//        
+//        NSLog(@"h264StreamerIsInStopped: %d, h264Streamer==null: %d", _h264StreamerIsInStopped, h264Streamer == NULL);
+//        
+//        if (self.h264StreamerIsInStopped == TRUE &&
+//            h264Streamer == NULL)
+//        {
+//            self.activityIndicator.hidden = NO;
+//            [self.view bringSubviewToFront:self.activityIndicator];
+//            [self.activityIndicator startAnimating];
+//            
+//            [self setupCamera];
+//            self.h264StreamerIsInStopped = FALSE;
+//            
+//            NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+//            [userDefaults setObject:_selectedChannel.profile.mac_address forKey:CAM_IN_VEW];
+//            [userDefaults synchronize];
+//        }
+//        else
+//        {
+//            // Streamer is showing live view
+//        }
+//    }
+//    else if (_segmentControl.selectedSegmentIndex == 1) // Earlier
+//    {
+//        self.disableAutorotateFlag = TRUE;
+//        
+//        [self.view bringSubviewToFront:self.playlistViewController.tableView];
+//        self.playlistViewController.tableView.hidden = NO;
+//        
+//        self.playlistViewController.navController = self.navigationController;
+//        self.playlistViewController.playlistDelegate = self;
+//    }
     
     NSLog(@"self.segCtrl.selectedSegmentIndex = %d", self.segCtrl.selectedSegmentIndex);
 }
