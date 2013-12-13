@@ -8,6 +8,7 @@
 
 #import "AddScheduleViewController.h"
 #import "CameraSettingsCell.h"
+#import "DayViewController.h"
 
 #import "NMRangeSlider.h"
 
@@ -20,8 +21,8 @@
 
 @property (retain, nonatomic) IBOutlet UIDatePicker *schedulDatePicker;
 
-@property (nonatomic)         NSInteger selectedHour;
-@property (nonatomic)         NSInteger selectedMinute;
+@property (nonatomic, retain) NSString *selectedDayString;
+@property (nonatomic, retain) NSArray *dayArray;
 
 @end
 
@@ -32,6 +33,7 @@
     self = [super initWithStyle:style];
     if (self) {
         // Custom initialization
+        self.title = @"Add Scheduling";
     }
     return self;
 }
@@ -46,10 +48,94 @@
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
     
-//    self.lowerLabel.text = @"19";
-//    self.upperLabel.text = @"07";
+    self.dayArray = [NSArray arrayWithObjects:@"Monday", @"Tuesday", @"Wednesday", @"Thursday", @"Friday", @"Saturday", @"Sunday", nil];
+    
+    //self.selectedDayString = @"";
+    self.mapDays = [NSMutableArray arrayWithObjects:@"0", @"0", @"0", @"1", @"1", @"0", @"0", nil];
     
     [self configureLabelSlider];
+}
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    self.selectedDayString = @"";
+    
+    BOOL everyDay = TRUE;
+    
+    for (id obj in _mapDays) // Everyday
+    {
+        if ([obj integerValue] == 0)
+        {
+            everyDay = FALSE;
+            break;
+        }
+    }
+    
+    if (everyDay == TRUE)
+    {
+        self.selectedDayString = @"Everyday";
+    }
+    else // Weeakday
+    {
+        BOOL weekday = TRUE;
+        
+        for (int i = 0; i < 5; i++)
+        {
+            if ([[_mapDays objectAtIndex:i] integerValue] == 0)
+            {
+                weekday = FALSE;
+                break;
+            }
+        }
+        
+        if (weekday == TRUE)
+        {
+            self.selectedDayString = @"Weekday";
+        }
+        else // Weekend
+        {
+            BOOL weekend = TRUE;
+            
+            for (int i = 0; i < 5; i++)
+            {
+                if ([[_mapDays objectAtIndex:i] integerValue] == 1)
+                {
+                    weekend = FALSE;
+                    break;
+                }
+            }
+            
+            if (weekend == TRUE)
+            {
+                for (int i = 5; i < 7; i++)
+                {
+                    if ([[_mapDays objectAtIndex:i] integerValue] == 0)
+                    {
+                        weekend = FALSE;
+                    }
+                }
+            }
+            
+            if (weekend == TRUE)
+            {
+                self.selectedDayString = @"Weekend";
+            }
+            else // Normal
+            {
+                for (int i = 0; i < 7; i++)
+                {
+                    if ([[_mapDays objectAtIndex:i] integerValue] == 1)
+                    {
+                        self.selectedDayString = [_selectedDayString stringByAppendingString:[NSString stringWithFormat:@"%@,", [_dayArray objectAtIndex:i]]];
+                    }
+                }
+                
+                self.selectedDayString = [_selectedDayString substringToIndex:_selectedDayString.length - 1];
+            }
+        }
+    }
+    
+    [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:1] withRowAnimation:UITableViewRowAnimationAutomatic];
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -126,7 +212,7 @@
 {
      [self updateSliderLabels];
     
-    [self.tableView reloadRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:0 inSection:0]] withRowAnimation:UITableViewRowAnimationAutomatic];
+//    [self.tableView reloadRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:0 inSection:0]] withRowAnimation:UITableViewRowAnimationAutomatic];
 }
 
 #pragma mark - Table view data source
@@ -234,104 +320,22 @@
         }
         
         cell.nameLabel.text = @"Repeat every";
-        cell.valueLabel.text = @"Wed";
-        //cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+        cell.valueLabel.text = _selectedDayString;
+        cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
         return cell;
     }
 }
-
-/*
-// Override to support conditional editing of the table view.
-- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    // Return NO if you do not want the specified item to be editable.
-    return YES;
-}
-*/
-
-/*
-// Override to support editing the table view.
-- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    if (editingStyle == UITableViewCellEditingStyleDelete) {
-        // Delete the row from the data source
-        [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
-    }   
-    else if (editingStyle == UITableViewCellEditingStyleInsert) {
-        // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-    }   
-}
-*/
-
-/*
-// Override to support rearranging the table view.
-- (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath
-{
-}
-*/
-
-/*
-// Override to support conditional rearranging of the table view.
-- (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    // Return NO if you do not want the item to be re-orderable.
-    return YES;
-}
-*/
 
 #pragma mark - Table view delegate
 
 // In a xib-based application, navigation from a table can be handled in -tableView:didSelectRowAtIndexPath:
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    // Navigation logic may go here, for example:
-    // Create the next view controller.
-    //<#DetailViewController#> *detailViewController = [[<#DetailViewController#> alloc] initWithNibName:@"<#Nib name#>" bundle:nil];
-
-    // Pass the selected object to the new view controller.
-    
-    // Push the view controller.
-    //[self.navigationController pushViewController:detailViewController animated:YES];
-    
-    
-    //[self.view addSubview:self.schedulDatePicker];
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
     if (indexPath.section == 0)
     {
-        if (indexPath.row == 0 ||
-            indexPath.row == 1)
-        {
-//            CGRect screenBounds = [[UIScreen mainScreen] bounds];
-//            CGFloat screenWidth = screenBounds.size.width;
-//            CGFloat screenHeight = screenBounds.size.height;
-//            
-//            if (self.hourPickerView == nil)
-//            {
-//                self.hourPickerView = [[AFPickerView alloc] initWithFrame:CGRectMake(screenWidth / 2 - WIDTH, screenHeight - HEIGHT - 64, WIDTH, HEIGHT)];
-//                
-//                NSLog(@"x: %f, y: %f", screenWidth / 2 - WIDTH, screenHeight - HEIGHT - 64);
-//                
-//                self.hourPickerView.dataSource = self;
-//                self.hourPickerView.delegate = self;
-//            }
-//            
-//            [self.hourPickerView reloadData];
-//            [self.view addSubview:self.hourPickerView];
-//            
-//            if (self.minutePickerView == nil)
-//            {
-//                self.minutePickerView = [[AFPickerView alloc] initWithFrame:CGRectMake(screenWidth / 2, screenHeight - HEIGHT - 64, WIDTH, HEIGHT)];
-//                self.minutePickerView.dataSource = self;
-//                self.minutePickerView.delegate = self;
-//            }
-//            
-//            [self.minutePickerView reloadData];
-//            [self.view addSubview:self.minutePickerView];
-            
-//            AFViewController *afVC = [[AFViewController alloc] init];
-//            [self.view addSubview:afVC.view];
-        }
-        else
+        if (indexPath.row == 2)
         {
             UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
             
@@ -358,6 +362,13 @@
                 }
             }
         }
+    }
+    else
+    {
+        DayViewController *dayVC = [[DayViewController alloc] init];
+        dayVC.mapDays = self.mapDays;
+        [self.navigationController pushViewController:dayVC animated:YES];
+        [dayVC release];
     }
 }
 

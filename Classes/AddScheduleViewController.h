@@ -10,4 +10,6 @@
 
 @interface AddScheduleViewController : UITableViewController
 
+@property (nonatomic, retain) NSMutableArray *mapDays;
+
 @end

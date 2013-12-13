@@ -183,6 +183,8 @@
 		8B9899DE1859AA6A00AC3852 /* slider-default7-trackCrossedOver@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B9899D81859AA6A00AC3852 /* slider-default7-trackCrossedOver@2x.png */; };
 		8B9899DF1859AA6A00AC3852 /* slider-default7-track.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B9899D91859AA6A00AC3852 /* slider-default7-track.png */; };
 		8B9899E01859AA6A00AC3852 /* slider-default7-track@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B9899DA1859AA6A00AC3852 /* slider-default7-track@2x.png */; };
+		8B9899E41859C9EA00AC3852 /* DayViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B9899E21859C9EA00AC3852 /* DayViewController.m */; };
+		8B9899E51859C9EA00AC3852 /* DayViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8B9899E31859C9EA00AC3852 /* DayViewController.xib */; };
 		8B9AF69E1858179900AC09C3 /* ScheduleViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B9AF69C1858179900AC09C3 /* ScheduleViewController.m */; };
 		8B9AF69F1858179900AC09C3 /* ScheduleViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8B9AF69D1858179900AC09C3 /* ScheduleViewController.xib */; };
 		8B9AF6A418581D3300AC09C3 /* AddScheduleViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B9AF6A218581D3300AC09C3 /* AddScheduleViewController.m */; };
@@ -575,6 +577,9 @@
 		8B9899D81859AA6A00AC3852 /* slider-default7-trackCrossedOver@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "slider-default7-trackCrossedOver@2x.png"; sourceTree = "<group>"; };
 		8B9899D91859AA6A00AC3852 /* slider-default7-track.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "slider-default7-track.png"; sourceTree = "<group>"; };
 		8B9899DA1859AA6A00AC3852 /* slider-default7-track@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "slider-default7-track@2x.png"; sourceTree = "<group>"; };
+		8B9899E11859C9EA00AC3852 /* DayViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DayViewController.h; sourceTree = "<group>"; };
+		8B9899E21859C9EA00AC3852 /* DayViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DayViewController.m; sourceTree = "<group>"; };
+		8B9899E31859C9EA00AC3852 /* DayViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = DayViewController.xib; sourceTree = "<group>"; };
 		8B9AF69B1858179900AC09C3 /* ScheduleViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ScheduleViewController.h; sourceTree = "<group>"; };
 		8B9AF69C1858179900AC09C3 /* ScheduleViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ScheduleViewController.m; sourceTree = "<group>"; };
 		8B9AF69D1858179900AC09C3 /* ScheduleViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ScheduleViewController.xib; sourceTree = "<group>"; };
@@ -1889,6 +1894,9 @@
 				8B9AF6A118581D3300AC09C3 /* AddScheduleViewController.h */,
 				8B9AF6A218581D3300AC09C3 /* AddScheduleViewController.m */,
 				8B9AF6A318581D3300AC09C3 /* AddScheduleViewController.xib */,
+				8B9899E11859C9EA00AC3852 /* DayViewController.h */,
+				8B9899E21859C9EA00AC3852 /* DayViewController.m */,
+				8B9899E31859C9EA00AC3852 /* DayViewController.xib */,
 			);
 			name = Scheduling;
 			sourceTree = "<group>";
@@ -2387,6 +2395,7 @@
 				8B0E1DE91844A0E80080000A /* mestartup000021.png in Resources */,
 				979BC68B17D990F400B3B373 /* H264PlayerViewController.xib in Resources */,
 				979BC69B17D9B97700B3B373 /* PlaybackViewController.xib in Resources */,
+				8B9899E51859C9EA00AC3852 /* DayViewController.xib in Resources */,
 				979BC6A517D9BB9C00B3B373 /* PlayListViewController.xib in Resources */,
 				A1176B74180D1DD9000B7527 /* stream480p.sdp in Resources */,
 				978F090117DEFD670053972F /* no_img_available.jpeg in Resources */,
@@ -2477,6 +2486,7 @@
 				979BC6A417D9BB9C00B3B373 /* PlayListViewController.mm in Sources */,
 				8B278BE7183DC51300A4FF50 /* NotificationSettingsViewController.m in Sources */,
 				979BC6A817D9BCB200B3B373 /* PlaylistInfo.m in Sources */,
+				8B9899E41859C9EA00AC3852 /* DayViewController.m in Sources */,
 				978B25BC17E1B43E006FC224 /* MTStackDefaultContainerView.m in Sources */,
 				978B25BD17E1B43E006FC224 /* MTStackViewController.m in Sources */,
 				978B25C117E1B4AB006FC224 /* BMMenuViewController.mm in Sources */,
