@@ -37,6 +37,7 @@
 #define HIGH_STATUS_BAR 20;
 @interface H264PlayerViewController ()
 
+
 - (void)centerScrollViewContents;
 - (void)scrollViewDoubleTapped:(UITapGestureRecognizer*)recognizer;
 - (void)scrollViewTwoFingerTapped:(UITapGestureRecognizer*)recognizer;
@@ -72,13 +73,19 @@
 
     // Do any additional setup after loading the view.
 	[[NSNotificationCenter defaultCenter] addObserver: self
-                                             selector: @selector(handleEnteredBackground)
+                                             selector: @selector(h264_HandleEnteredBackground)
                                                  name: UIApplicationDidEnterBackgroundNotification
                                                object: nil];
     
+    [[NSNotificationCenter defaultCenter] addObserver: self
+                                             selector: @selector(h264_HandleEnteredBackground)
+                                                 name: UIApplicationWillResignActiveNotification
+                                               object: nil];
+    
+    
     // Do any additional setup after loading the view.
 	[[NSNotificationCenter defaultCenter] addObserver: self
-                                             selector: @selector(handleBecomeActive)
+                                             selector: @selector(h264_HandleBecomeActive)
                                                  name: UIApplicationDidBecomeActiveNotification
                                                object: nil];
     
@@ -1049,28 +1056,30 @@
 
 #pragma mark - Method
 
-- (void)handleBecomeActive
+- (void)h264_HandleBecomeActive
 {
-    if (userWantToCancel == TRUE)
-    {
-        return;
-    }
-    
-    self.h264StreamerIsInStopped = FALSE;
-    
-    if(_selectedChannel.profile.isInLocal == TRUE)
-    {
-        NSLog(@"Become ACTIVE _  .. Local ");
-        [self becomeActive];
-    }
-    else if ( _selectedChannel.profile.minuteSinceLastComm <= 5) // Remote
-    {
-        [self becomeActive];
-    }
+        
+        if (userWantToCancel == TRUE)
+        {
+            return;
+        }
+        
+        self.h264StreamerIsInStopped = FALSE;
+        
+        if(_selectedChannel.profile.isInLocal == TRUE)
+        {
+            NSLog(@"Become ACTIVE _  .. Local ");
+            [self becomeActive];
+        }
+        else if ( _selectedChannel.profile.minuteSinceLastComm <= 5) // Remote
+        {
+            [self becomeActive];
+        }
 }
 
-- (void)handleEnteredBackground
+- (void)h264_HandleEnteredBackground
 {
+    
     if (userWantToCancel == TRUE)
     {
         return;
@@ -1084,10 +1093,15 @@
         self.currentMediaStatus == MEDIA_PLAYER_STARTED ||
         (self.currentMediaStatus == 0 && h264Streamer == NULL)) // Media player haven't start yet.
     {
+        NSLog(@"H264VC - handleEnteredBackground - IF()");
+        
         [self stopStream];
     }
-    else if(h264Streamer != nil)
+    else
+        if(h264Streamer != NULL)
     {
+        NSLog(@"H264VC - handleEnteredBackground - else if(h264Streamer != nil)");
+        
         h264Streamer->sendInterrupt();
     }
     
@@ -1296,7 +1310,11 @@
         return;
     }
     
-    
+    while (h264Streamer != NULL)
+    {
+        NSDate * endDate = [NSDate dateWithTimeIntervalSinceNow:0.5];
+        [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode beforeDate:endDate];
+    }
     
     h264Streamer = new MediaPlayer(false);
     
@@ -1528,6 +1546,7 @@
     {
         [_client shutdown];
         [_client release];
+        _client = nil;
     }
     
 
@@ -1598,6 +1617,7 @@
     {
         if (h264Streamer != NULL)
         {
+            //h264Streamer->setListener(NULL);
             
             h264Streamer->suspend();
             h264Streamer->stop();
