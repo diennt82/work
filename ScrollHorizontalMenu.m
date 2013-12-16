@@ -8,15 +8,16 @@
 
 #import "ScrollHorizontalMenu.h"
 
+
 #define kButtonBaseTag 10000
-#define kLeftOffset 10
-#define kButtonSize 41
+#define kLeftOffset 40
+#define kButtonSize 40
 #define kPaddingBetweenButton 40
 
 @implementation ScrollHorizontalMenu
 
 @synthesize imageMenu = _imageMenu;
-
+@synthesize selectedImage = _selectedImage;
 @synthesize itemSelectedDelegate;
 @synthesize dataSource;
 @synthesize itemCount = _itemCount;
@@ -38,33 +39,48 @@
 	for (UIView *v in viewsToRemove) {
 		[v removeFromSuperview];
 	}
-    
+    self.scrollEnabled = NO;
     self.itemCount = [dataSource numberOfItemsForMenu:self];
-    self.backgroundColor = [dataSource backgroundColorForMenu:self];
-//    self.selectedImage = [dataSource selectedItemImageForMenu:self];
-    
+//    self.backgroundColor = [dataSource backgroundColorForMenu:self];
     int tag = kButtonBaseTag;
-    int xPos = kLeftOffset;
+    int xPos, marginLR;
+    int buttonWidth;
+    int paddingBetweenButton;
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+    {
+        marginLR = kLeftOffset + 100; //padding left and right = 80
+        xPos = kLeftOffset + 40; //
+        buttonWidth = kButtonSize + 20; //60 for iPad
+        paddingBetweenButton = kPaddingBetweenButton  + 25;
+    }
+    else{
+        marginLR = kLeftOffset;
+        xPos = kLeftOffset;
+        buttonWidth = kButtonSize;
+        paddingBetweenButton = kPaddingBetweenButton;
+    }
+    
     
     for(int i = 0 ; i < self.itemCount; i ++)
     {
         NSString *imageName = [dataSource horizMenu:self nameImageForItemAtIndex:i];
+        NSString *imageSelected = [dataSource horizMenu:self nameImageSelectedForItemAtIndex:i];
+        
         UIButton *customButton = [UIButton buttonWithType:UIButtonTypeCustom];
-//        [customButton setBackgroundImage:self.selectedImage forState:UIControlStateSelected];
+        
+        [customButton setBackgroundImage:[UIImage imageNamed:imageName] forState:UIControlStateNormal];
+        [customButton setBackgroundImage:[UIImage imageNamed:imageSelected] forState:UIControlStateSelected];
         
         customButton.tag = tag++;
         [customButton addTarget:self action:@selector(buttonTapped:) forControlEvents:UIControlEventTouchUpInside];
-        
-        int buttonWidth = kButtonSize;
-        [customButton setBackgroundImage:[UIImage imageNamed:imageName] forState:UIControlStateNormal];
         customButton.frame = CGRectMake(xPos, 0, buttonWidth, buttonWidth);
         xPos += buttonWidth;
-        xPos += kPaddingBetweenButton;
+        xPos += paddingBetweenButton;
         [self addSubview:customButton];
     }
-    xPos += kLeftOffset;
+    xPos += marginLR;
     
-    self.contentSize = CGSizeMake(xPos, 41);
+    self.contentSize = CGSizeMake(xPos, buttonWidth);
     [self layoutSubviews];
 }
 
@@ -85,17 +101,21 @@
     {
         UIButton *thisButton = (UIButton*) [self viewWithTag:i + kButtonBaseTag];
         if(i + kButtonBaseTag == button.tag)
+        {
             thisButton.selected = YES;
+        }
+        
         else
             thisButton.selected = NO;
     }
-    
     [self.itemSelectedDelegate horizMenu:self itemSelectedAtIndex:button.tag - kButtonBaseTag];
 }
 
 
 - (void)dealloc
 {
+    [_selectedImage release];
+    _selectedImage = nil;
     [_imageMenu release];
     _imageMenu = nil;
     

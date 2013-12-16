@@ -11,12 +11,13 @@
 
 @protocol ScrollHorizontalMenuDataSource <NSObject>
 @required
-- (UIImage*) selectedItemImageForMenu:(ScrollHorizontalMenu *) tabView;
+- (UIImage *) selectedItemImageForMenu:(ScrollHorizontalMenu *) tabMenu withIndexItem:(NSInteger)index;
 - (UIColor *) backgroundColorForMenu:(ScrollHorizontalMenu*) tabView;
 - (int) numberOfItemsForMenu:(ScrollHorizontalMenu *) tabView;
 
 - (NSString *) horizMenu:(ScrollHorizontalMenu *) horizMenu titleForItemAtIndex:(NSUInteger) index;
 - (NSString*) horizMenu:(ScrollHorizontalMenu *)horizMenu nameImageForItemAtIndex:(NSUInteger)index;
+- (NSString*) horizMenu:(ScrollHorizontalMenu *)horizMenu nameImageSelectedForItemAtIndex:(NSUInteger)index;
 @end
 
 @protocol ScrollHorizontalMenuDelegate <NSObject>
@@ -27,6 +28,7 @@
 @interface ScrollHorizontalMenu : UIScrollView {
     
     int _itemCount;
+    UIImage *_selectedImage;
     //image for menu scroll
     NSMutableArray *_imageMenu;
     id <ScrollHorizontalMenuDataSource> dataSource;
@@ -34,6 +36,7 @@
 }
 
 @property (nonatomic, retain) NSMutableArray *imageMenu;
+@property (nonatomic, retain) UIImage *selectedImage;
 @property (nonatomic, assign) IBOutlet id <ScrollHorizontalMenuDelegate> itemSelectedDelegate;
 @property (nonatomic, retain) IBOutlet id <ScrollHorizontalMenuDataSource> dataSource;
 @property (nonatomic, assign) int itemCount;

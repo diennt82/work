@@ -57,7 +57,9 @@
 <UIPickerViewDelegate, UIPickerViewDataSource, PlaylistDelegate,PlayerCallbackHandler,ScanForCameraNotifier, StunClientDelegate, ZoneViewControlerDeleate, MelodyVCDelegate, UIScrollViewDelegate, ScrollHorizontalMenuDelegate>
 {
     ScrollHorizontalMenu *_horizMenu;
+    int _selectedItemMenu;
     NSMutableArray *_itemImages;
+    NSMutableArray *_itemSelectedImages;
     MediaPlayer* h264Streamer;
     
     H264PlayerListener * h264StreamerListener;
@@ -90,7 +92,11 @@
 }
 
 @property (nonatomic, retain) IBOutlet ScrollHorizontalMenu *horizMenu;
+@property (nonatomic, assign) int selectedItemMenu;
+@property (retain, nonatomic) IBOutlet UIView *ib_bottomView;
+@property (retain, nonatomic) IBOutlet UILabel *ib_temperature;
 @property (nonatomic, retain) NSMutableArray *itemImages;
+@property (nonatomic, retain) NSMutableArray *itemSelectedImages;
 @property (nonatomic, retain) NSTimer * alertTimer;
 //Add scrollview to support zoom in and zoom out
 @property (retain, nonatomic) IBOutlet UIScrollView *scrollView;

@@ -35,6 +35,15 @@
 
 #define CAM_IN_VEW @"string_Camera_Mac_Being_Viewed"
 #define HIGH_STATUS_BAR 20;
+
+//define for Control Panel button
+#define INDEX_PAN_TILT      0
+#define INDEX_MICRO         1
+#define INDEX_RECORDING     2
+#define INDEX_MELODY        3
+#define INDEX_TEMP          4
+
+
 @interface H264PlayerViewController ()
 
 
@@ -50,6 +59,8 @@
 @synthesize   client = _client;
 @synthesize horizMenu = _horizMenu;
 @synthesize itemImages = _itemImages;
+@synthesize itemSelectedImages = _itemSelectedImages;
+@synthesize selectedItemMenu = _selectedItemMenu;
 
 #pragma mark - View
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
@@ -82,8 +93,11 @@
      5.Camera List          bb_camera_slider_icon
      6.Temperature display        temp_alert
      */
-    self.itemImages = [NSMutableArray arrayWithObjects:@"zoom_icon.jpeg", @"microphone-icon.png", @"bb_rec_icon_d.png", @"bb_melody_off_icon.png", @"bb_camera_slider_icon.png", @"temp_alert.png", nil];
+    self.itemImages = [NSMutableArray arrayWithObjects:@"video_action_pan.png", @"video_action_mic.png", @"video_action_video.png", @"video_action_music.png", @"video_action_temp.png", nil];
+    self.itemSelectedImages = [NSMutableArray arrayWithObjects:@"video_action_pan_pressed.png", @"video_action_mic_pressed.png", @"video_action_video_pressed.png", @"video_action_music_pressed.png", @"video_action_temp_pressed.png", nil];
     [self.horizMenu reloadData];
+    self.selectedItemMenu = 0;
+    [self updateBottomView];
 
     // Do any additional setup after loading the view.
 	[[NSNotificationCenter defaultCenter] addObserver: self
@@ -3178,6 +3192,7 @@
             
         }
         
+        [self.ib_bottomView setHidden:YES];
         self.topToolbar.hidden = YES;
         self.imgViewDrectionPad.hidden = YES;
         self.viewCtrlButtons.hidden = YES;
@@ -3215,6 +3230,7 @@
 
         
         //[self updateNavigationBarAndToolBar];
+        [self.ib_bottomView setHidden:NO];
         [self.navigationController setNavigationBarHidden:NO];
         [[UIApplication sharedApplication] setStatusBarHidden:NO];
         self.view.backgroundColor = [UIColor whiteColor];
@@ -3747,14 +3763,14 @@
 
 #pragma mark -
 #pragma mark HorizMenu Data Source
-- (UIImage *) selectedItemImageForMenu:(ScrollHorizontalMenu *) tabMenu
+- (UIImage *) selectedItemImageForMenu:(ScrollHorizontalMenu *) tabMenu withIndexItem:(NSInteger)index
 {
-    return [[UIImage imageNamed:@"ButtonSelected"] stretchableImageWithLeftCapWidth:16 topCapHeight:0];
+    NSString *imageSelected = [self.itemSelectedImages objectAtIndex:index];
+    return [UIImage imageNamed:imageSelected];
 }
-
 - (UIColor *) backgroundColorForMenu:(ScrollHorizontalMenu *)tabView
 {
-    return [UIColor colorWithPatternImage:[UIImage imageNamed:@"MenuBar"]];
+    return [UIColor clearColor];
 }
 
 - (int) numberOfItemsForMenu:(ScrollHorizontalMenu *)tabView
@@ -3766,38 +3782,66 @@
 {
     return [self.itemImages objectAtIndex:index];
 }
+- (NSString *) horizMenu:(ScrollHorizontalMenu *)horizMenu nameImageSelectedForItemAtIndex:(NSUInteger)index
+{
+    return [self.itemSelectedImages objectAtIndex:index];
+}
 #pragma mark -
 #pragma mark HorizMenu Delegate
 -(void) horizMenu:(ScrollHorizontalMenu *)horizMenu itemSelectedAtIndex:(NSUInteger)index
 {
     /*
      //new
-     0.Pan, Tilt & Zoom (bb_setting_icon.png)
-     1.Microphone (for two way audio) bb_setting_icon.png
-     2.Take a photo/Record Video ( bb_rec_icon_d.png )
-     3.Lullaby          bb_melody_off_icon.png
-     4.Camera List          bb_camera_slider_icon
-     5.Temperature display        temp_alert
+     0. pan/tilt, 
+     1. mic, 
+     2. rec, 
+     3. melody, 
+     4. temp
      */
-    
-    if (index == 0) {
+    if (index == INDEX_PAN_TILT) {
         //implement Pan, Tilt & zoom here
-    } else if (index == 1) {
-        // implement Microphone here
-        [self recordingPressAction:nil];
-    } else if (index == 2) {
-        //implement take a photo/record video here
-    } else if (index == 3) {
-        [self melodyTouchAction:nil];
-    } else if (index == 4) {
-        //implement display camera list here
-    } else if (index == 5) {
-        //implement temperature display here
-    } else {
-        NSLog(@"More action at here");
+        _selectedItemMenu = INDEX_PAN_TILT;
     }
+    else if (index == INDEX_MICRO)
+    {
+        // implement Microphone here
+        _selectedItemMenu = INDEX_MICRO;
+        [self recordingPressAction:nil];
+    }
+    else if (index == INDEX_RECORDING)
+    {
+        //implement take a photo/record video here
+        _selectedItemMenu = INDEX_RECORDING;
+    }
+    else if (index == INDEX_MELODY)
+    {
+        _selectedItemMenu = INDEX_MELODY;
+        [self melodyTouchAction:nil];
+    }
+    else if (index == INDEX_TEMP)
+    {
+        //implement display camera list here
+        _selectedItemMenu = INDEX_TEMP;
+    }
+    else {
+        NSLog(@"Action out of bound");
+    }
+    [self updateBottomView];
 }
 
+- (void)updateBottomView
+{
+    if (_selectedItemMenu == INDEX_PAN_TILT)
+    {
+        [self.imgViewDrectionPad setHidden:NO];
+        [self.ib_temperature setHidden:YES];
+    }
+    else if (_selectedItemMenu == INDEX_TEMP)
+    {
+        [self.imgViewDrectionPad setHidden:YES];
+        [self.ib_temperature setHidden:NO];
+    }
+}
 #pragma mark - Memory Release
 
 - (void)didReceiveMemoryWarning
@@ -3842,6 +3886,8 @@
     
     [_melodyButton release];
     [_scrollView release];
+    [_ib_bottomView release];
+    [_ib_temperature release];
     [super dealloc];
 }
 - (void)viewWillAppear:(BOOL)animated
