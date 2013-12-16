@@ -12,6 +12,7 @@
 
 @property (nonatomic, retain) NSString *apiKey;
 
+@property (retain, nonatomic) IBOutlet UITableView *loginTableView;
 @end
 
 @implementation MBP_LoginOrRegistration
@@ -192,6 +193,7 @@
     [temp_user_email release];
     [temp_user_str release];
     [account release];
+    [_loginTableView release];
      [super dealloc];
 }
 
@@ -405,9 +407,15 @@
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField
 {
-    
-	[textField resignFirstResponder];
-    
+    if (textField.tag == 203) // Username
+    {
+        UITextField *passTF = (UITextField *)[userPassCell viewWithTag:204];
+        [passTF becomeFirstResponder];
+    }
+    else
+    {
+        [textField resignFirstResponder];
+    }
     
     //NSLog(@" %d %d",[self.userName.text length], [self.password.text length] );
 #if 0
@@ -447,6 +455,13 @@
         }
     }
     return YES;
+}
+
+- (void)textFieldDidBeginEditing:(UITextField *)textField
+{
+    CGRect rect = _loginTableView.frame;
+    
+    self.loginTableView.frame = CGRectMake(rect.origin.x, rect.origin.y - 44, rect.size.width, rect.size.height);
 }
 
 
@@ -630,6 +645,7 @@
         UITextField * txtField = (UITextField*) [userNameCell viewWithTag:203];
         [txtField becomeFirstResponder];
         
+        tableView.frame = CGRectMake(tableView.frame.origin.x, tableView.frame.origin.y - 44, tableView.frame.size.width, tableView.frame.size.height);
     }
     if (indexPath.section == 0 && indexPath.row == USERPASS_INDEX)
     {
