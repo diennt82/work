@@ -33,34 +33,8 @@
 @synthesize restored_profiles ; 
 
 @synthesize progressView;
-@synthesize splashScreen;
-@synthesize sunBackground;
-
-
 
 @synthesize app_stage;
-
-
-
-/*
-// The designated initializer. Override to perform setup that is required before the view is loaded.
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
-if ((self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil])) {
-// Custom initialization
-
-}
-return self;
-}
- */
-
-/*
-// Implement loadView to create a view hierarchy programmatically, without using a nib.
-- (void)loadView {
-
-[super loadView];
-
-
-}*/
 
 - (void) initialize 
 {
@@ -90,11 +64,6 @@ return self;
 	[self initialize];
 
 
-    
-    backgroundView.hidden = YES;
-	[self.view addSubview:backgroundView];
-
-
 	//go Back to main menu
 	[NSTimer scheduledTimerWithTimeInterval:4
 		target:self
@@ -106,18 +75,6 @@ return self;
 //    [self adjustViewsForOrientations:interfaceOrientation];
     
     [self start_animation_with_orientation:interfaceOrientation];
-
-#if 1
-    
-    
-#else
-    
-    self.splashScreen.image = [UIImage imageNamed:@"mestartup2000012.png"];
-
-#endif
-    
-    
-    
 
 }
 
@@ -142,61 +99,18 @@ return self;
 
 -(void)start_animation_with_orientation :(UIInterfaceOrientation) orientation
 {
-    CGRect deviceScreen = [self deviceFrameWithOrientation:orientation];
-//    CGRect deviceScreen = CGRectMake(0, 0, 480, 320);
-    sunBackground = [[UIImageView alloc]initWithFrame:deviceScreen];
-    [sunBackground setImage:[UIImage imageNamed:@"ME-sun_background.png"]];
-    
-    UITextField * initTextView = [[UITextField alloc] initWithFrame:CGRectMake(deviceScreen.size.width/2 - 50, deviceScreen.size.height - 40, 200 , 30)];
-    
-    NSString * initString = NSLocalizedStringWithDefaultValue(@"Initialize", nil,
-                                                              [NSBundle mainBundle],
-                                                              @"INITIALIZING...", nil);
-    [initTextView setTextColor:[UIColor blackColor]];
-    [initTextView setText:initString];
-    
-    [self.view addSubview:sunBackground];
-    [self.view bringSubviewToFront:sunBackground];
-    [self.view addSubview:initTextView];
-    [self.view bringSubviewToFront:initTextView];
-    
-    self.splashScreen = [[[UIImageView alloc ] initWithFrame:deviceScreen] autorelease];
-    [self.splashScreen setImage:[UIImage imageNamed:@"mestartup000032.png"]];
-    [self.splashScreen setContentMode:UIViewContentModeScaleAspectFit];
-    
+
     self.splashScreen.animationImages =[NSArray arrayWithObjects:
-                                        [UIImage imageNamed:@"mestartup000020.png"],
-                                        [UIImage imageNamed:@"mestartup000021.png"],
-                                        [UIImage imageNamed:@"mestartup000022.png"],
-                                        [UIImage imageNamed:@"mestartup000023.png"],
-                                        [UIImage imageNamed:@"mestartup000024.png"],
-                                        [UIImage imageNamed:@"mestartup000025.png"],
-                                        [UIImage imageNamed:@"mestartup000026.png"],
-                                        [UIImage imageNamed:@"mestartup000027.png"],
-                                        [UIImage imageNamed:@"mestartup000028.png"],
-                                        [UIImage imageNamed:@"mestartup000029.png"],
-                                        [UIImage imageNamed:@"mestartup000030.png"],
-                                        [UIImage imageNamed:@"mestartup000031.png"],
-                                        [UIImage imageNamed:@"mestartup000032.png"],
+                                        [UIImage imageNamed:@"loader0.png"],
+                                        [UIImage imageNamed:@"loader1.png"],
+                                        [UIImage imageNamed:@"loader2.png"],
+                                        [UIImage imageNamed:@"loader3.png"],
+                                        [UIImage imageNamed:@"loader4.png"],
                                         nil];
-    splashScreen.animationDuration = 3.5;
-    splashScreen.animationRepeatCount = 1;
+    self.splashScreen.animationDuration = 3.5;
+    self.splashScreen.animationRepeatCount = 1;
     
-    [self.view addSubview:splashScreen];
-    [self.view bringSubviewToFront:splashScreen];
-    [self.view bringSubviewToFront:initTextView];
-    
-    [initTextView release];
-    
-    [splashScreen startAnimating];
-    
-    
-    
-//    [NSTimer scheduledTimerWithTimeInterval:0.1
-//                                     target:self
-//                                   selector:@selector(wakeup_start_animte:)
-//                                   userInfo:nil
-//                                    repeats:NO];
+    [_splashScreen startAnimating];
 }
 
 
@@ -462,15 +376,13 @@ return self;
 
 	// [mainMenuView release];
     [_bonjourBrowser release];
-    [splashScreen release];
-    [sunBackground release];
+    [_splashScreen release];
 	[bc_addr release];
 	[own_addr release];
 
 	[channel_array release]; 
 	[restored_profiles release];
 
-    [splashScreen release];
     [bonjourThread release];
 	[super dealloc];
 }
@@ -494,25 +406,11 @@ return self;
 
 -(void) adjustViewsForOrientations: (UIInterfaceOrientation) interfaceOrientation
 {
-    CGRect newFrame = [self deviceFrameWithOrientation:interfaceOrientation];
-    if (splashScreen)
-    {
-        [splashScreen setFrame:newFrame];
-    }
-    if (sunBackground)
-    {
-        [sunBackground setFrame:newFrame];
-    }
     
     
     if (interfaceOrientation == UIInterfaceOrientationLandscapeLeft ||
         interfaceOrientation == UIInterfaceOrientationLandscapeRight)
     {
-        if (sunBackground)
-        {
-            [sunBackground setImage:[UIImage imageNamed:@"ME-screen_landscape.png"]];
-        }
-        
         
         if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
         {
@@ -563,11 +461,6 @@ return self;
     else if (interfaceOrientation == UIInterfaceOrientationPortrait ||
              interfaceOrientation == UIInterfaceOrientationPortraitUpsideDown)
     {
-        if (sunBackground)
-        {
-            [sunBackground setImage:[UIImage imageNamed:@"ME-sun_background.png"]];
-        }
-        
         
         if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
             //[[NSBundle mainBundle] loadNibNamed:@"MBP_iosViewController_ipad" owner:self options:nil];

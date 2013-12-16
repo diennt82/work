@@ -104,10 +104,7 @@
     IBOutlet UIView * statusDialogView;
     IBOutlet UILabel * statusDialogLabel;
     IBOutlet UITextView * statusDialogText;
-    
-    IBOutlet UIImageView * splashScreen;
-    IBOutlet UIImageView * sunBackground;
- 
+
     
     UIAlertView * pushAlert;
     CameraAlert * latestCamAlert;
@@ -128,7 +125,6 @@
 
 @property (nonatomic, retain) IBOutlet UIView * progressView;
 @property (nonatomic, retain) IBOutlet UIImageView * splashScreen;
-@property (nonatomic, retain) IBOutlet UIImageView * sunBackground;
 @property (nonatomic, assign) id<BonjourDelegate> bonjourDelegate;
 //@property (nonatomic,retain) IBOutlet MBP_MainMenuView * mainMenuView;
 

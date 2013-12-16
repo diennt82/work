@@ -204,6 +204,12 @@
 		8B9B57EE184F0DB200E58543 /* frame-4-1_update_new.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B9B57E7184F0DB200E58543 /* frame-4-1_update_new.png */; };
 		8B9B57EF184F0DB200E58543 /* frame-4-2_update_new.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B9B57E8184F0DB200E58543 /* frame-4-2_update_new.png */; };
 		8B9B57F0184F0DB200E58543 /* frame-3_update_new.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B9B57E9184F0DB200E58543 /* frame-3_update_new.png */; };
+		8B9C7DF7185F08C90038B3A8 /* loader0.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B9C7DF2185F08C90038B3A8 /* loader0.png */; };
+		8B9C7DF8185F08C90038B3A8 /* loader1.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B9C7DF3185F08C90038B3A8 /* loader1.png */; };
+		8B9C7DF9185F08C90038B3A8 /* loader2.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B9C7DF4185F08C90038B3A8 /* loader2.png */; };
+		8B9C7DFA185F08C90038B3A8 /* loader3.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B9C7DF5185F08C90038B3A8 /* loader3.png */; };
+		8B9C7DFB185F08C90038B3A8 /* loader4.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B9C7DF6185F08C90038B3A8 /* loader4.png */; };
+		8B9C7DFD185F09F70038B3A8 /* loading_logo.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B9C7DFC185F09F70038B3A8 /* loading_logo.png */; };
 		8B9CCBA3183EF8B2007C0F65 /* MelodyViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B9CCBA1183EF8B2007C0F65 /* MelodyViewController.m */; };
 		8B9CCBA4183EF8B2007C0F65 /* MelodyViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8B9CCBA2183EF8B2007C0F65 /* MelodyViewController.xib */; };
 		8BA18CAC184870470097D1AF /* DeviceSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8BA18CAA184870470097D1AF /* DeviceSettingsViewController.m */; };
@@ -603,6 +609,12 @@
 		8B9B57E7184F0DB200E58543 /* frame-4-1_update_new.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "frame-4-1_update_new.png"; sourceTree = "<group>"; };
 		8B9B57E8184F0DB200E58543 /* frame-4-2_update_new.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "frame-4-2_update_new.png"; sourceTree = "<group>"; };
 		8B9B57E9184F0DB200E58543 /* frame-3_update_new.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "frame-3_update_new.png"; sourceTree = "<group>"; };
+		8B9C7DF2185F08C90038B3A8 /* loader0.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = loader0.png; sourceTree = "<group>"; };
+		8B9C7DF3185F08C90038B3A8 /* loader1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = loader1.png; sourceTree = "<group>"; };
+		8B9C7DF4185F08C90038B3A8 /* loader2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = loader2.png; sourceTree = "<group>"; };
+		8B9C7DF5185F08C90038B3A8 /* loader3.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = loader3.png; sourceTree = "<group>"; };
+		8B9C7DF6185F08C90038B3A8 /* loader4.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = loader4.png; sourceTree = "<group>"; };
+		8B9C7DFC185F09F70038B3A8 /* loading_logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = loading_logo.png; sourceTree = "<group>"; };
 		8B9CCBA0183EF8B2007C0F65 /* MelodyViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MelodyViewController.h; sourceTree = "<group>"; };
 		8B9CCBA1183EF8B2007C0F65 /* MelodyViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MelodyViewController.m; sourceTree = "<group>"; };
 		8B9CCBA2183EF8B2007C0F65 /* MelodyViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MelodyViewController.xib; sourceTree = "<group>"; };
@@ -1476,6 +1488,7 @@
 				8B76EE811851DB9200C0CEEE /* Step_09 */,
 				8BA2D62718556D1C0054E63D /* Step_10 */,
 				8BA7F27618516EB800BE0145 /* Login|Register */,
+				8B9C7DF0185F06B10038B3A8 /* MBP_iosViewController */,
 				9704F83F17B37CAD005F9868 /* DashBoard_ViewController.h */,
 				9704F84017B37CAF005F9868 /* DashBoard_ViewController.mm */,
 				97F5531417BDD3AF00024017 /* MBPNavController.m */,
@@ -1545,11 +1558,7 @@
 				BC3C1AD516F025E300175AFF /* MBP_MenuProgress_portrait_ipad.xib */,
 				BC3C1ADA16F025FF00175AFF /* MBP_MenuProgress_land_ipad.xib */,
 				3825A4B7166F05C500520872 /* MBPNavController.h */,
-				28D7ACF60DDB3853001CB0EB /* MBP_iosViewController.h */,
 				3851C3B716D5CD03007D3781 /* StartMonitorCallback.h */,
-				28D7ACF70DDB3853001CB0EB /* MBP_iosViewController.mm */,
-				388396B7168B064500B0D020 /* MBP_iosViewController.xib */,
-				38DE1C11168ADA6B0049E814 /* MBP_iosViewController_ipad.xib */,
 				1D3623240D0F684500981E51 /* MBP_iosAppDelegate.h */,
 				1D3623250D0F684500981E51 /* MBP_iosAppDelegate.mm */,
 				97987CD515468C2E0066C49B /* MBP_FirstPage.h */,
@@ -1589,6 +1598,7 @@
 				38962C821769587E0016AE16 /* libz.dylib */,
 				38C7DE79165DDF9E00926EA1 /* Default-568h@2x.png */,
 				38962C7F1769583A0016AE16 /* TestFlight.h */,
+				8B9C7DF1185F08AF0038B3A8 /* New Hubble Image */,
 				3812F82315C8BEC700DADFA6 /* images13 */,
 				080E96DDFE201D6D7F000001 /* Classes */,
 				29B97315FDCFA39411CA2CEA /* Other Sources */,
@@ -1968,6 +1978,30 @@
 			name = iOS7;
 			sourceTree = "<group>";
 		};
+		8B9C7DF0185F06B10038B3A8 /* MBP_iosViewController */ = {
+			isa = PBXGroup;
+			children = (
+				28D7ACF60DDB3853001CB0EB /* MBP_iosViewController.h */,
+				28D7ACF70DDB3853001CB0EB /* MBP_iosViewController.mm */,
+				388396B7168B064500B0D020 /* MBP_iosViewController.xib */,
+				38DE1C11168ADA6B0049E814 /* MBP_iosViewController_ipad.xib */,
+			);
+			name = MBP_iosViewController;
+			sourceTree = "<group>";
+		};
+		8B9C7DF1185F08AF0038B3A8 /* New Hubble Image */ = {
+			isa = PBXGroup;
+			children = (
+				8B9C7DF2185F08C90038B3A8 /* loader0.png */,
+				8B9C7DF3185F08C90038B3A8 /* loader1.png */,
+				8B9C7DF4185F08C90038B3A8 /* loader2.png */,
+				8B9C7DF5185F08C90038B3A8 /* loader3.png */,
+				8B9C7DF6185F08C90038B3A8 /* loader4.png */,
+				8B9C7DFC185F09F70038B3A8 /* loading_logo.png */,
+			);
+			name = "New Hubble Image";
+			sourceTree = "<group>";
+		};
 		8B9CCB9F183EF86C007C0F65 /* MelodyControl */ = {
 			isa = PBXGroup;
 			children = (
@@ -2310,7 +2344,9 @@
 				8BC0A03C1844AC3600A5FD52 /* circle_buttons1_2_d.png in Resources */,
 				38C7DE7A165DDF9E00926EA1 /* Default-568h@2x.png in Resources */,
 				8BC0A0481844B31700A5FD52 /* mbp_icon114x114.png in Resources */,
+				8B9C7DF9185F08C90038B3A8 /* loader2.png in Resources */,
 				8B9899DB1859AA6A00AC3852 /* slider-default7-trackBackground.png in Resources */,
+				8B9C7DFD185F09F70038B3A8 /* loading_logo.png in Resources */,
 				8B93848F1856ED73009C4771 /* CameraStngsCell.xib in Resources */,
 				38DE1BE7168AD9F50049E814 /* FWUpgradeView_land.xib in Resources */,
 				38DE1C50168AEA690049E814 /* AlertSettingViewController_land.xib in Resources */,
@@ -2357,6 +2393,7 @@
 				BC3C1AD816F025FF00175AFF /* MBP_MenuProgress_land_ipad.xib in Resources */,
 				381D185D16D4652C00272A8D /* Step_05_tableViewCell_ipad.xib in Resources */,
 				BC6E4A0516BFBB9D00B0D630 /* MBP_InitialSetupViewController_land.xib in Resources */,
+				8B9C7DFB185F08C90038B3A8 /* loader4.png in Resources */,
 				8B0E1DF31844A0E80080000A /* mestartup000031.png in Resources */,
 				8BC0A0351844AB8000A5FD52 /* black_background.png in Resources */,
 				BCA1A4E716C26EFB00E7EF56 /* Step_05_ViewController_land.xib in Resources */,
@@ -2377,7 +2414,9 @@
 				380CB0D316DC5D8100290587 /* Step_12_ViewController_land_ipad.xib in Resources */,
 				8B9B57EA184F0DB200E58543 /* frame-6_update_new.png in Resources */,
 				8BC0A03D1844AC3600A5FD52 /* circle_buttons1_2.png in Resources */,
+				8B9C7DFA185F08C90038B3A8 /* loader3.png in Resources */,
 				380CB0D916DC612000290587 /* Step_11_ViewController.xib in Resources */,
+				8B9C7DF8185F08C90038B3A8 /* loader1.png in Resources */,
 				380CB0DC16DC630400290587 /* Step_11_ViewController_land.xib in Resources */,
 				8B0E1DEF1844A0E80080000A /* mestartup000027.png in Resources */,
 				380CB0DF16DC632700290587 /* Step_11_ViewController_ipad.xib in Resources */,
@@ -2399,6 +2438,7 @@
 				84FD1DCF1832399E00238089 /* stream720p_10_926_alaw.sdp in Resources */,
 				8B0E1DE91844A0E80080000A /* mestartup000021.png in Resources */,
 				979BC68B17D990F400B3B373 /* H264PlayerViewController.xib in Resources */,
+				8B9C7DF7185F08C90038B3A8 /* loader0.png in Resources */,
 				979BC69B17D9B97700B3B373 /* PlaybackViewController.xib in Resources */,
 				8B9899E51859C9EA00AC3852 /* DayViewController.xib in Resources */,
 				979BC6A517D9BB9C00B3B373 /* PlayListViewController.xib in Resources */,
