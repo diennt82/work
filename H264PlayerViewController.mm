@@ -48,6 +48,8 @@
 @synthesize  alertTimer;
 @synthesize  askForFWUpgradeOnce;
 @synthesize   client = _client;
+@synthesize horizMenu = _horizMenu;
+@synthesize itemImages = _itemImages;
 
 #pragma mark - View
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
@@ -70,6 +72,18 @@
                                       owner:self
                                     options:nil];
     }
+    
+    /*
+     //create list image for display horizontal scroll view menu
+     1.Pan, Tilt & Zoom (bb_setting_icon.png)
+     2.Microphone (for two way audio) bb_setting_icon.png
+     3.Take a photo/Record Video ( bb_rec_icon_d.png )
+     4.Lullaby          bb_melody_off_icon.png
+     5.Camera List          bb_camera_slider_icon
+     6.Temperature display        temp_alert
+     */
+    self.itemImages = [NSMutableArray arrayWithObjects:@"zoom_icon.jpeg", @"microphone-icon.png", @"bb_rec_icon_d.png", @"bb_melody_off_icon.png", @"bb_camera_slider_icon.png", @"temp_alert.png", nil];
+    [self.horizMenu reloadData];
 
     // Do any additional setup after loading the view.
 	[[NSNotificationCenter defaultCenter] addObserver: self
@@ -3167,6 +3181,7 @@
         self.topToolbar.hidden = YES;
         self.imgViewDrectionPad.hidden = YES;
         self.viewCtrlButtons.hidden = YES;
+        self.horizMenu.hidden = YES;
         [self.melodyViewController.view removeFromSuperview];
         
         CGFloat imageViewHeight = screenHeight * 9 / 16;
@@ -3206,6 +3221,7 @@
         //self.topToolbar.hidden = NO;
         self.imgViewDrectionPad.hidden = NO;
         self.viewCtrlButtons.hidden = NO;
+        self.horizMenu.hidden = NO;
         self.viewStopStreamingProgress.hidden = YES;
         
         CGFloat imageViewHeight = screenWidth * 9 / 16;
@@ -3726,6 +3742,60 @@
 - (void)scrollViewDidZoom:(UIScrollView *)scrollView {
     // The scroll view has zoomed, so we need to re-center the contents
     [self centerScrollViewContents];
+}
+
+
+#pragma mark -
+#pragma mark HorizMenu Data Source
+- (UIImage *) selectedItemImageForMenu:(ScrollHorizontalMenu *) tabMenu
+{
+    return [[UIImage imageNamed:@"ButtonSelected"] stretchableImageWithLeftCapWidth:16 topCapHeight:0];
+}
+
+- (UIColor *) backgroundColorForMenu:(ScrollHorizontalMenu *)tabView
+{
+    return [UIColor colorWithPatternImage:[UIImage imageNamed:@"MenuBar"]];
+}
+
+- (int) numberOfItemsForMenu:(ScrollHorizontalMenu *)tabView
+{
+    return [self.itemImages count];
+}
+
+- (NSString *) horizMenu:(ScrollHorizontalMenu *)horizMenu nameImageForItemAtIndex:(NSUInteger)index
+{
+    return [self.itemImages objectAtIndex:index];
+}
+#pragma mark -
+#pragma mark HorizMenu Delegate
+-(void) horizMenu:(ScrollHorizontalMenu *)horizMenu itemSelectedAtIndex:(NSUInteger)index
+{
+    /*
+     //new
+     0.Pan, Tilt & Zoom (bb_setting_icon.png)
+     1.Microphone (for two way audio) bb_setting_icon.png
+     2.Take a photo/Record Video ( bb_rec_icon_d.png )
+     3.Lullaby          bb_melody_off_icon.png
+     4.Camera List          bb_camera_slider_icon
+     5.Temperature display        temp_alert
+     */
+    
+    if (index == 0) {
+        //implement Pan, Tilt & zoom here
+    } else if (index == 1) {
+        // implement Microphone here
+        [self recordingPressAction:nil];
+    } else if (index == 2) {
+        //implement take a photo/record video here
+    } else if (index == 3) {
+        [self melodyTouchAction:nil];
+    } else if (index == 4) {
+        //implement display camera list here
+    } else if (index == 5) {
+        //implement temperature display here
+    } else {
+        NSLog(@"More action at here");
+    }
 }
 
 #pragma mark - Memory Release

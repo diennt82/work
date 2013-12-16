@@ -22,7 +22,8 @@
 #import "ZoneViewController.h"
 #import "MelodyViewController.h"
 #import "DeviceSettingsViewController.h"
-
+//for scrollHorizontalMenu
+#import "ScrollHorizontalMenu.h"
 
 
 #define H264_STREAM_STARTED              1
@@ -53,8 +54,10 @@
 @end
 
 @interface H264PlayerViewController: UIViewController
-<UIPickerViewDelegate, UIPickerViewDataSource, PlaylistDelegate,PlayerCallbackHandler,ScanForCameraNotifier, StunClientDelegate, ZoneViewControlerDeleate, MelodyVCDelegate, UIScrollViewDelegate>
+<UIPickerViewDelegate, UIPickerViewDataSource, PlaylistDelegate,PlayerCallbackHandler,ScanForCameraNotifier, StunClientDelegate, ZoneViewControlerDeleate, MelodyVCDelegate, UIScrollViewDelegate, ScrollHorizontalMenuDelegate>
 {
+    ScrollHorizontalMenu *_horizMenu;
+    NSMutableArray *_itemImages;
     MediaPlayer* h264Streamer;
     
     H264PlayerListener * h264StreamerListener;
@@ -86,7 +89,8 @@
     BOOL _isCameraOffline;
 }
 
-
+@property (nonatomic, retain) IBOutlet ScrollHorizontalMenu *horizMenu;
+@property (nonatomic, retain) NSMutableArray *itemImages;
 @property (nonatomic, retain) NSTimer * alertTimer;
 //Add scrollview to support zoom in and zoom out
 @property (retain, nonatomic) IBOutlet UIScrollView *scrollView;
