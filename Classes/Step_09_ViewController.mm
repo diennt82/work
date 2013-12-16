@@ -242,6 +242,11 @@
     {
         [self animateTextField: textField up: YES];
     }
+    
+    if (textField.tag == 202 | textField.tag == 203)
+    {
+        myTable.frame = CGRectMake(0, myTable.frame.origin.y - 44, myTable.frame.size.width, myTable.frame.size.height);
+    }
 }
 
 
@@ -323,7 +328,26 @@
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField {
     
-    [textField resignFirstResponder];
+    if (textField.tag == 201)
+    {
+        UITextField *passTF = (UITextField *)[userPass viewWithTag:202];
+        [passTF becomeFirstResponder];
+    }
+    else if(textField.tag == 202)
+    {
+        UITextField *passCTF = (UITextField *)[userCPass viewWithTag:203];
+        [passCTF becomeFirstResponder];
+    }
+    else if(textField.tag == 203)
+    {
+        UITextField *emailTF = (UITextField *)[userEmail viewWithTag:204];
+        [emailTF becomeFirstResponder];
+    }
+    else
+    {
+    
+        [textField resignFirstResponder];
+    }
     return NO;
 }
 -(IBAction) showTermOfUse_:(id) sender
