@@ -22,6 +22,9 @@
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
         // Custom initialization
+        NSString * msgAccount = NSLocalizedStringWithDefaultValue(@"Account_",nil, [NSBundle mainBundle],
+                                                                  @"Account", nil);
+        self.title = msgAccount;
     }
     return self;
 }

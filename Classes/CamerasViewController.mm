@@ -9,11 +9,15 @@
 #import "CamerasViewController.h"
 #import <CameraScanner/CameraScanner.h>
 #import "CamerasCell.h"
+#import "H264PlayerViewController.h"
+#import "CameraAlert.h"
 
-@interface CamerasViewController ()
+@interface CamerasViewController () <H264PlayerVCDelegate>
 
 @property (retain, nonatomic) IBOutlet UITableViewCell *addCameraCell;
+
 @property (retain, nonatomic) UIImage *snapshotImg;
+@property (nonatomic) BOOL isFirttime;
 
 @end
 
@@ -24,6 +28,7 @@
     self = [super initWithStyle:style];
     if (self) {
         // Custom initialization
+        self.title = @"Cameras";
     }
     return self;
 }
@@ -38,13 +43,41 @@
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
     
-    CamProfile *camProfile = [[CamProfile alloc] initWithMacAddr:@"34159E8D4F7F"];
-    CamProfile *camProfile1 = [[CamProfile alloc] initWithMacAddr:@"34159E8D4FFF"];
+    CamProfile *camProfile = [[CamProfile alloc] init];
+    camProfile.name = @"Home";
+     camProfile.mac_address = @"ASASASAS0909";
+    
+    CamProfile *camProfile1 = [[CamProfile alloc] init];
+    camProfile1.name = @"Garden";
     
     self.snapshotImg = [UIImage imageNamed:@"loading_logo.png"];
     
+    self.cameras = [NSMutableArray array];
+    
     [self.cameras addObject:camProfile];
     [self.cameras addObject:camProfile1];
+    
+    if (!_isFirttime) //revert
+    {
+        self.isFirttime = TRUE;
+        
+        [CameraAlert clearAllAlertForCamera:camProfile.mac_address];
+        [UIApplication sharedApplication].idleTimerDisabled = YES;
+        
+        NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+        [userDefaults setObject:camProfile.mac_address forKey:CAM_IN_VEW];
+        [userDefaults synchronize];
+        
+        H264PlayerViewController *h264PlayerViewController = [[H264PlayerViewController alloc] init];
+        
+        CamChannel *ch = [[CamChannel alloc] init];
+        ch.profile = camProfile;
+        
+        h264PlayerViewController.selectedChannel = ch;
+        h264PlayerViewController.h264PlayerVCDelegate = self;
+        [self.navigationController pushViewController:h264PlayerViewController animated:YES];
+        [h264PlayerViewController release];
+    }
     
 }
 - (IBAction)addCameraButtonTouchAction:(id)sender {
@@ -69,19 +102,19 @@
 {
     //#warning Incomplete method implementation.
     // Return the number of rows in the section.
-    if(section == 0)
+    if(section == 1)
     {
-        return 1;
+        return self.cameras.count;
     }
     
-    return self.cameras.count;
+    return 1;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (indexPath.section == 1)
     {
-        return 100;
+        return 168;
     }
     
     return 44; // your dynamic height...
@@ -112,21 +145,21 @@
         
         CamProfile *camProfile = (CamProfile *)[_cameras objectAtIndex:indexPath.row];
         
-        cell.snapshotImage.image = self.snapshotImg;
+        //cell.snapshotImage.image = self.snapshotImg;
         cell.cameraNameLabel.text = camProfile.name;
         
         return cell;
     }
     
-    static NSString *CellIdentifier = @"Cell";
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-    if (cell == nil) {
-        cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
-    }
-    
-    // Configure the cell...
-    
-    return cell;
+//    static NSString *CellIdentifier = @"Cell";
+//    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+//    if (cell == nil) {
+//        cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
+//    }
+//    
+//    // Configure the cell...
+//    
+//    return cell;
 }
 
 /*
@@ -197,6 +230,7 @@
  
 
 - (void)dealloc {
+    [_cameras release];
     [_addCameraCell release];
     [super dealloc];
 }

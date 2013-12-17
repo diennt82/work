@@ -20,6 +20,8 @@
 #import "PlayListViewController.h"
 #import "H264PlayerViewController.h"
 
+#import "MenuViewController.h"
+
 
 @implementation MBP_iosViewController
 
@@ -290,7 +292,25 @@
 
 -(void) startShowingCameraList
 {
+#if 1
+    MenuViewController *menuVC = [[MenuViewController alloc] init];
+    
+	NSMutableArray * validChannels = [[NSMutableArray alloc]init ];
 
+	for (int i =0 ; i< [channel_array count]; i++)
+	{
+		CamChannel * ch = [channel_array objectAtIndex:i];
+		if (ch.profile != nil)
+			[validChannels addObject:[channel_array objectAtIndex:i]];
+
+	}
+
+	menuVC.cameras = validChannels;
+
+	[self presentViewController:menuVC animated:YES completion:^{}];
+
+    [validChannels release];
+#else
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
     {
         NSLog(@"Load IPad");
@@ -327,6 +347,7 @@
 	[dashBoard presentModallyOn:self];
 
     [validChannels release];
+#endif
 }
 
 

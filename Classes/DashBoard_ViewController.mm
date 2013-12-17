@@ -401,7 +401,9 @@
     else
     {
         offlineView.hidden = YES;
-
+        
+        [self.cameraList selectRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0] animated:NO scrollPosition:UITableViewScrollPositionNone];
+        [self tableView:self.cameraList didSelectRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]];
         
         if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
         {
@@ -892,10 +894,10 @@
     
     NSLog(@"ch = %@, ch.profile = %@, ch.profile.minuteSinceLastComm = %d", ch, ch.profile, ch.profile.minuteSinceLastComm);
     
-    if (ch != nil &&
-        ch.profile != nil &&
-        ch.waitingForStreamerToClose == NO &&
-        ch.profile.hasUpdateLocalStatus == YES)
+//    if (ch != nil &&
+//        ch.profile != nil &&
+//        ch.waitingForStreamerToClose == NO &&
+//        ch.profile.hasUpdateLocalStatus == YES)
     {
         [CameraAlert clearAllAlertForCamera:ch.profile.mac_address];
         [UIApplication sharedApplication].idleTimerDisabled = YES;

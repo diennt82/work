@@ -10,4 +10,6 @@
 
 @interface MenuViewController : UITabBarController
 
+@property (nonatomic, retain) NSMutableArray *cameras;
+
 @end

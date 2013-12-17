@@ -7,6 +7,9 @@
 //
 
 #import "MenuViewController.h"
+#import "CamerasViewController.h"
+#import "SettingsViewController.h"
+#import "Account_ViewController.h"
 
 @interface MenuViewController ()
 
@@ -27,6 +30,17 @@
 {
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
+    
+    CamerasViewController *camerasVC = [[CamerasViewController alloc] init];
+    //camerasVC.cameras = self.cameras;
+     UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:camerasVC];
+    
+    SettingsViewController *settingsVC = [[SettingsViewController alloc] init];
+    Account_ViewController *accountVC = [[Account_ViewController alloc] init];
+    
+    
+    
+    self.viewControllers = [NSArray arrayWithObjects:nav, settingsVC, accountVC, nil];
 }
 
 - (void)didReceiveMemoryWarning
