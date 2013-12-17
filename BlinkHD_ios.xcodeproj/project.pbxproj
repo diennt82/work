@@ -162,6 +162,10 @@
 		8B9112CC18601106004301C5 /* GeneralCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8B9112CB18601106004301C5 /* GeneralCell.xib */; };
 		8B9112D018602884004301C5 /* SensitivityCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B9112CF18602884004301C5 /* SensitivityCell.m */; };
 		8B9112D218602898004301C5 /* SensitivityCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8B9112D118602898004301C5 /* SensitivityCell.xib */; };
+		8B9112D71860341C004301C5 /* NotifViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B9112D51860341C004301C5 /* NotifViewController.m */; };
+		8B9112D81860341C004301C5 /* NotifViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8B9112D61860341C004301C5 /* NotifViewController.xib */; };
+		8B9112DA186036A8004301C5 /* Hubble-Camera.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B9112D9186036A8004301C5 /* Hubble-Camera.png */; };
+		8B9112DC1860372D004301C5 /* Hubble-Notif.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B9112DB1860372D004301C5 /* Hubble-Notif.png */; };
 		8B92DC24185ACACA00344530 /* ScheduleInformation.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B92DC23185ACACA00344530 /* ScheduleInformation.m */; };
 		8B93847F1856D42C009C4771 /* InformationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B93847D1856D42C009C4771 /* InformationViewController.m */; };
 		8B9384801856D42C009C4771 /* InformationViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8B93847E1856D42C009C4771 /* InformationViewController.xib */; };
@@ -572,6 +576,11 @@
 		8B9112CE18602884004301C5 /* SensitivityCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SensitivityCell.h; sourceTree = "<group>"; };
 		8B9112CF18602884004301C5 /* SensitivityCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SensitivityCell.m; sourceTree = "<group>"; };
 		8B9112D118602898004301C5 /* SensitivityCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SensitivityCell.xib; sourceTree = "<group>"; };
+		8B9112D41860341C004301C5 /* NotifViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NotifViewController.h; sourceTree = "<group>"; };
+		8B9112D51860341C004301C5 /* NotifViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NotifViewController.m; sourceTree = "<group>"; };
+		8B9112D61860341C004301C5 /* NotifViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = NotifViewController.xib; sourceTree = "<group>"; };
+		8B9112D9186036A8004301C5 /* Hubble-Camera.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Hubble-Camera.png"; sourceTree = "<group>"; };
+		8B9112DB1860372D004301C5 /* Hubble-Notif.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Hubble-Notif.png"; sourceTree = "<group>"; };
 		8B92DC22185ACACA00344530 /* ScheduleInformation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ScheduleInformation.h; sourceTree = "<group>"; };
 		8B92DC23185ACACA00344530 /* ScheduleInformation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ScheduleInformation.m; sourceTree = "<group>"; };
 		8B93847C1856D42C009C4771 /* InformationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InformationViewController.h; sourceTree = "<group>"; };
@@ -1503,6 +1512,7 @@
 		080E96DDFE201D6D7F000001 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				8B9112D3186033B5004301C5 /* HubbleNotifView */,
 				8B9C7DFE185F22090038B3A8 /* MenuHubble */,
 				8BA18CA8184870330097D1AF /* DeviceSettings */,
 				8B9CCB9F183EF86C007C0F65 /* MelodyControl */,
@@ -1925,6 +1935,16 @@
 			name = Sensitivity;
 			sourceTree = "<group>";
 		};
+		8B9112D3186033B5004301C5 /* HubbleNotifView */ = {
+			isa = PBXGroup;
+			children = (
+				8B9112D41860341C004301C5 /* NotifViewController.h */,
+				8B9112D51860341C004301C5 /* NotifViewController.m */,
+				8B9112D61860341C004301C5 /* NotifViewController.xib */,
+			);
+			name = HubbleNotifView;
+			sourceTree = "<group>";
+		};
 		8B9899A9185976E300AC3852 /* Camera name */ = {
 			isa = PBXGroup;
 			children = (
@@ -2055,6 +2075,8 @@
 				8B9C7DF5185F08C90038B3A8 /* loader3.png */,
 				8B9C7DF6185F08C90038B3A8 /* loader4.png */,
 				8B9C7DFC185F09F70038B3A8 /* loading_logo.png */,
+				8B9112D9186036A8004301C5 /* Hubble-Camera.png */,
+				8B9112DB1860372D004301C5 /* Hubble-Notif.png */,
 			);
 			name = "New Hubble Image";
 			sourceTree = "<group>";
@@ -2425,6 +2447,7 @@
 				8B9384851856E613009C4771 /* CameraSettingsViewController.xib in Resources */,
 				8B0E1DEC1844A0E80080000A /* mestartup000024.png in Resources */,
 				8B9AF69F1858179900AC09C3 /* ScheduleViewController.xib in Resources */,
+				8B9112DC1860372D004301C5 /* Hubble-Notif.png in Resources */,
 				8B9384801856D42C009C4771 /* InformationViewController.xib in Resources */,
 				8B9384A318570207009C4771 /* sound-s-d.png in Resources */,
 				8B9B57E2184F0D9900E58543 /* frame-6_update-iOS7_new2.png in Resources */,
@@ -2502,6 +2525,7 @@
 				BC3C1AD816F025FF00175AFF /* MBP_MenuProgress_land_ipad.xib in Resources */,
 				381D185D16D4652C00272A8D /* Step_05_tableViewCell_ipad.xib in Resources */,
 				BC6E4A0516BFBB9D00B0D630 /* MBP_InitialSetupViewController_land.xib in Resources */,
+				8B9112D81860341C004301C5 /* NotifViewController.xib in Resources */,
 				8B9C7DFB185F08C90038B3A8 /* loader4.png in Resources */,
 				8B0E1DF31844A0E80080000A /* mestartup000031.png in Resources */,
 				8BC0A0351844AB8000A5FD52 /* black_background.png in Resources */,
@@ -2518,6 +2542,7 @@
 				380CB0CD16DC5AD500290587 /* Step_12_ViewController_land.xib in Resources */,
 				8B9384A718570284009C4771 /* brightness-d.png in Resources */,
 				380CB0D016DC5B2000290587 /* Step_12_ViewController_ipad.xib in Resources */,
+				8B9112DA186036A8004301C5 /* Hubble-Camera.png in Resources */,
 				8B5A5E9D1845A27F0036A9CD /* ME-sun_background.png in Resources */,
 				8B9B57DD184F0D9900E58543 /* frame-4-2_update-iOS7_new.png in Resources */,
 				380CB0D316DC5D8100290587 /* Step_12_ViewController_land_ipad.xib in Resources */,
@@ -2595,6 +2620,7 @@
 				97987CD815468C2E0066C49B /* MBP_FirstPage.m in Sources */,
 				8B9384AF18570567009C4771 /* ValueSettingsViewController.m in Sources */,
 				97987DF21546A1630066C49B /* MBP_LoginOrRegistration.mm in Sources */,
+				8B9112D71860341C004301C5 /* NotifViewController.m in Sources */,
 				8BA5C4801818DCC1006B4BB8 /* ZoneViewController.m in Sources */,
 				8B9C7E15185F268C0038B3A8 /* CamerasViewController.m in Sources */,
 				97987E421546AF2C0066C49B /* UserAccount.mm in Sources */,
