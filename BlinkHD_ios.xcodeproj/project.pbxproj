@@ -268,6 +268,7 @@
 		8BC0A04F1844B61900A5FD52 /* homepage_p1.png in Resources */ = {isa = PBXBuildFile; fileRef = 8BC0A04E1844B61900A5FD52 /* homepage_p1.png */; };
 		8BC0F0E41845E511008A63A7 /* iTunesArtwork in Resources */ = {isa = PBXBuildFile; fileRef = 8BC0F0E21845E511008A63A7 /* iTunesArtwork */; };
 		8BC0F0E51845E511008A63A7 /* iTunesArtwork@2x in Resources */ = {isa = PBXBuildFile; fileRef = 8BC0F0E31845E511008A63A7 /* iTunesArtwork@2x */; };
+		8BCAE124186068AF00AF870A /* Hubble_logo_back.png in Resources */ = {isa = PBXBuildFile; fileRef = 8BCAE123186068AF00AF870A /* Hubble_logo_back.png */; };
 		8BE896B31845CB3B00674E01 /* bb_motion_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 8BE896B21845CB3B00674E01 /* bb_motion_icon.png */; };
 		8BE896B61845CD4800674E01 /* bb_melody_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 8BE896B41845CD4800674E01 /* bb_melody_icon.png */; };
 		8BE896B71845CD4800674E01 /* bb_melody_off_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 8BE896B51845CD4800674E01 /* bb_melody_off_icon.png */; };
@@ -701,6 +702,7 @@
 		8BC0A04E1844B61900A5FD52 /* homepage_p1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = homepage_p1.png; sourceTree = "<group>"; };
 		8BC0F0E21845E511008A63A7 /* iTunesArtwork */ = {isa = PBXFileReference; lastKnownFileType = file; path = iTunesArtwork; sourceTree = "<group>"; };
 		8BC0F0E31845E511008A63A7 /* iTunesArtwork@2x */ = {isa = PBXFileReference; lastKnownFileType = file; path = "iTunesArtwork@2x"; sourceTree = "<group>"; };
+		8BCAE123186068AF00AF870A /* Hubble_logo_back.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Hubble_logo_back.png; sourceTree = "<group>"; };
 		8BE896B21845CB3B00674E01 /* bb_motion_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bb_motion_icon.png; sourceTree = "<group>"; };
 		8BE896B41845CD4800674E01 /* bb_melody_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bb_melody_icon.png; sourceTree = "<group>"; };
 		8BE896B51845CD4800674E01 /* bb_melody_off_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bb_melody_off_icon.png; sourceTree = "<group>"; };
@@ -2067,6 +2069,7 @@
 		8B9C7DF1185F08AF0038B3A8 /* New Hubble Image */ = {
 			isa = PBXGroup;
 			children = (
+				8BCAE123186068AF00AF870A /* Hubble_logo_back.png */,
 				8B9112C01860054D004301C5 /* AddBtn.png */,
 				8B9112BE18600295004301C5 /* Snapshot.png */,
 				8B9C7DF2185F08C90038B3A8 /* loader0.png */,
@@ -2538,6 +2541,7 @@
 				8B0E1DF81844A3BE0080000A /* bb_rec_icon.png in Resources */,
 				BCA60D6616D23CB3004A361C /* MBP_FirstPage_land.xib in Resources */,
 				380CB0CA16DC5A9E00290587 /* Step_12_ViewController.xib in Resources */,
+				8BCAE124186068AF00AF870A /* Hubble_logo_back.png in Resources */,
 				8B9384981856F009009C4771 /* vol-min.png in Resources */,
 				380CB0CD16DC5AD500290587 /* Step_12_ViewController_land.xib in Resources */,
 				8B9384A718570284009C4771 /* brightness-d.png in Resources */,

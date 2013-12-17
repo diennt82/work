@@ -7,9 +7,11 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "ConnectionMethodDelegate.h"
 
-@interface MenuViewController : UITabBarController
+@interface MenuViewController : UITabBarController <UINavigationControllerDelegate>
 
+@property (nonatomic, assign) id<ConnectionMethodDelegate> menuDelegate;
 @property (nonatomic, retain) NSMutableArray *cameras;
 
 @end

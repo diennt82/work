@@ -6,6 +6,8 @@
 //  Copyright (c) 2013 Smart Panda Ltd. All rights reserved.
 //
 
+#define MAX_CAM_ALLOWED 4
+
 #import "CamerasViewController.h"
 #import <CameraScanner/CameraScanner.h>
 #import "CamerasCell.h"
@@ -41,21 +43,36 @@
     // self.clearsSelectionOnViewWillAppear = NO;
  
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-    // self.navigationItem.rightBarButtonItem = self.editButtonItem;
+    //self.navigationItem.rightBarButtonItem = self.editButtonItem;
+    
+    self.navigationController.navigationBarHidden = NO;
+    
+    UIImage *tmpImg = [UIImage imageNamed:@"Hubble_logo_back.png"];
+    
+    UIBarButtonItem *backBarBtn = [[UIBarButtonItem alloc] initWithImage:tmpImg
+                                                                   style:UIBarButtonItemStylePlain
+                                                                  target:self action:@selector(cameraBackAction:)];
+    
+    self.navigationItem.leftBarButtonItem = backBarBtn;
+    assert(self.navigationItem.leftBarButtonItem != nil);
     
     CamProfile *camProfile = [[CamProfile alloc] init];
     camProfile.name = @"Home";
      camProfile.mac_address = @"ASASASAS0909";
+    CamChannel *ch1 = [[CamChannel alloc] init];
+    ch1.profile = camProfile;
     
     CamProfile *camProfile1 = [[CamProfile alloc] init];
     camProfile1.name = @"Garden";
+    CamChannel *ch2 = [[CamChannel alloc] init];
+    ch2.profile = camProfile1;
     
     self.snapshotImg = [UIImage imageNamed:@"loading_logo.png"];
     
-    self.cameras = [NSMutableArray array];
+    self.camChannels = [NSMutableArray array];
     
-    [self.cameras addObject:camProfile];
-    [self.cameras addObject:camProfile1];
+    [self.camChannels addObject:ch1];
+    [self.camChannels addObject:ch2];
     
     if (!_isFirttime) //revert
     {
@@ -70,17 +87,100 @@
         
         H264PlayerViewController *h264PlayerViewController = [[H264PlayerViewController alloc] init];
         
-        CamChannel *ch = [[CamChannel alloc] init];
-        ch.profile = camProfile;
+        CamChannel *ch = (CamChannel *)[_camChannels objectAtIndex:0];
         
         h264PlayerViewController.selectedChannel = ch;
         h264PlayerViewController.h264PlayerVCDelegate = self;
-        [self.navigationController pushViewController:h264PlayerViewController animated:YES];
+        
+        //NSLog(@"%@", self.parentViewController.description);
+        
+        //MenuViewController *tabBarController = (MenuViewController *)self.parentViewController;
+        
+        [self.parentVC.navigationController pushViewController:h264PlayerViewController animated:YES];
         [h264PlayerViewController release];
     }
     
 }
-- (IBAction)addCameraButtonTouchAction:(id)sender {
+
+- (IBAction)addCameraButtonTouchAction:(id)sender
+{
+    if (_camChannels.count < MAX_CAM_ALLOWED)
+    {
+        NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+        [userDefaults setBool:FALSE forKey:FIRST_TIME_SETUP];
+        [userDefaults synchronize];
+        
+        NSLog(@"addCameraButtonTouchAction: %@", self.parentViewController.description);
+        //MenuViewController *tabBarController = (MenuViewController *)self.parentViewController;
+        [self.parentVC.menuDelegate sendStatus:SETUP_CAMERA];//initial setup
+        
+    }
+    else
+    {
+        [self cameraShowDialog:DIALOG_CANT_ADD_CAM];
+    }
+}
+
+#pragma mark - Methods
+
+- (void) cameraShowDialog:(int) dialogType
+{
+    NSString * ok = NSLocalizedStringWithDefaultValue(@"Ok",nil, [NSBundle mainBundle],
+                                                      @"Ok", nil);
+    
+	switch (dialogType)
+    {
+		case DIALOG_CANT_ADD_CAM:
+		{
+            NSString * msg = NSLocalizedStringWithDefaultValue(@"remove_one_cam",nil, [NSBundle mainBundle],
+                                                               @"Please remove one camera from the current  list before addding the new one", nil);
+            
+			UIAlertView *alert = [[UIAlertView alloc]
+								  initWithTitle:@""
+								  message:msg
+								  delegate:nil
+								  cancelButtonTitle:ok
+								  otherButtonTitles:nil];
+			[alert show];
+			[alert release];
+			break;
+		}
+            
+		default:
+			break;
+	}
+}
+
+#pragma mark - PlayerView Delegate
+
+- (void)stopStreamFinished:(CamChannel *)camChannel
+{
+}
+
+#pragma mark - Methods
+
+- (void)cameraBackAction:(id)sender
+{
+    CamChannel *ch = (CamChannel *)[_camChannels objectAtIndex:0];
+    [CameraAlert clearAllAlertForCamera:ch.profile.mac_address];
+    [UIApplication sharedApplication].idleTimerDisabled = YES;
+    
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    [userDefaults setObject:ch.profile.mac_address forKey:CAM_IN_VEW];
+    [userDefaults synchronize];
+    
+    H264PlayerViewController *h264PlayerViewController = [[H264PlayerViewController alloc] init];
+ 
+    
+    h264PlayerViewController.selectedChannel = ch;
+    h264PlayerViewController.h264PlayerVCDelegate = self;
+    
+    NSLog(@"%@", self.parentViewController.description);
+    
+    //MenuViewController *tabBarController = (MenuViewController *)self.parentViewController;
+    
+    [self.parentVC.navigationController pushViewController:h264PlayerViewController animated:YES];
+    [h264PlayerViewController release];
 }
 
 - (void)didReceiveMemoryWarning
@@ -104,7 +204,7 @@
     // Return the number of rows in the section.
     if(section == 1)
     {
-        return self.cameras.count;
+        return self.camChannels.count;
     }
     
     return 1;
@@ -143,7 +243,9 @@
             }
         }
         
-        CamProfile *camProfile = (CamProfile *)[_cameras objectAtIndex:indexPath.row];
+        CamChannel *ch = (CamChannel *)[_camChannels objectAtIndex:indexPath.row];
+        
+        CamProfile *camProfile = ch.profile;
         
         //cell.snapshotImage.image = self.snapshotImg;
         cell.cameraNameLabel.text = camProfile.name;
@@ -226,11 +328,34 @@
    // [self.navigationController pushViewController:detailViewController animated:YES];
     
     [tableView deselectRowAtIndexPath:indexPath animated:NO];
+    
+    if (indexPath.section == 0)
+    {
+        return;
+    }
+    
+    CamChannel *ch = (CamChannel *)[_camChannels objectAtIndex:indexPath.row] ;
+    
+    [CameraAlert clearAllAlertForCamera:ch.profile.mac_address];
+    [UIApplication sharedApplication].idleTimerDisabled = YES;
+    
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    [userDefaults setObject:ch.profile.mac_address forKey:CAM_IN_VEW];
+    [userDefaults synchronize];
+    
+    H264PlayerViewController *h264PlayerViewController = [[H264PlayerViewController alloc] init];
+    
+    h264PlayerViewController.selectedChannel = ch;
+    h264PlayerViewController.h264PlayerVCDelegate = self;
+    
+    MenuViewController *tabBarController = (MenuViewController *)self.parentViewController;
+    [tabBarController.navigationController pushViewController:h264PlayerViewController animated:YES];
+    [h264PlayerViewController release];
 }
- 
+
 
 - (void)dealloc {
-    [_cameras release];
+    [_camChannels release];
     [_addCameraCell release];
     [super dealloc];
 }

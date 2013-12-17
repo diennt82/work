@@ -1120,6 +1120,11 @@
     }
 }
 
+- (BOOL)hidesBottomBarWhenPushed
+{
+    return YES;
+}
+
 - (void)becomeActive
 {
     self.pickerHQOptions.hidden = YES;

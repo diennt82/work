@@ -38,7 +38,7 @@
 @property (nonatomic, retain)  NSString * tmp_user_str,* tmp_pass_str,* tmp_user_email;
 
 -(IBAction) showTermOfUse_:(id) sender;
--(IBAction) handleNextButton:(id) sender;
+-(IBAction) step09HandleNextButton:(id) sender;
 +(BOOL) isWifiConnectionAvailable;
 
 

@@ -7,9 +7,11 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "MenuViewController.h"
 
 @interface CamerasViewController : UITableViewController
 
-@property (retain, nonatomic) NSMutableArray *cameras;
+@property (assign, nonatomic) MenuViewController *parentVC;
+@property (retain, nonatomic) NSMutableArray *camChannels;
 
 @end

@@ -20,8 +20,6 @@
 #import "PlayListViewController.h"
 #import "H264PlayerViewController.h"
 
-#import "MenuViewController.h"
-
 
 @implementation MBP_iosViewController
 
@@ -293,7 +291,8 @@
 -(void) startShowingCameraList
 {
 #if 1
-    MenuViewController *menuVC = [[MenuViewController alloc] init];
+    
+    self.menuVC = [[MenuViewController alloc] init];
     
 	NSMutableArray * validChannels = [[NSMutableArray alloc]init ];
 
@@ -305,9 +304,12 @@
 
 	}
 
-	menuVC.cameras = validChannels;
+	self.menuVC.cameras = validChannels;
+    self.menuVC.menuDelegate = self;
 
-	[self presentViewController:menuVC animated:YES completion:^{}];
+    UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:self.menuVC];
+    
+	[self presentViewController:nav animated:NO completion:^{}];
 
     [validChannels release];
 #else
@@ -1552,6 +1554,30 @@
         [self finish_scanning];
     }
     // this camera at index has not been scanned
+#if 1
+    else if (*index < [self.restored_profiles count])
+    {
+        if (self.menuVC != nil)
+        {
+            NSLog(@"reload CamerasTableView in scan_done");
+            // Notify to menuVC
+            
+        }
+        
+        if (((CamProfile *)[self.restored_profiles objectAtIndex:*index]).hasUpdateLocalStatus == NO)
+        {
+            NSLog(@"This camera at index has not been scanned");
+            [self scan_next_camera:self.restored_profiles index:*index];
+        }
+        else
+        {
+            NSLog(@"This camera at index has been scanned");
+            
+            ++(*index);
+            [self scanNextIndex:index];
+        }
+    }
+#else
     else if (*index < [self.restored_profiles count])
     {
         if (dashBoard != nil)
@@ -1574,11 +1600,14 @@
             [self scanNextIndex:index];
         }
     }
+#endif
 }
 
 - (void)finish_scanning
 {
-    
+#if 1
+    //Notify to MenuVC
+#else
 	//Hide it, since we're done
 	self.progressView.hidden = YES;
     
@@ -1593,7 +1622,7 @@
         [dashBoard.cameraList reloadData];
         
     }
-        
+#endif
 }
 
 

@@ -21,6 +21,7 @@
 #import "DashBoard_ViewController.h"
 #import "CameraAlert.h"
 #import "NotificationViewController.h"
+#import "MenuViewController.h"
 
 
 #define DIRECTION_V_NON  0x01
@@ -140,7 +141,7 @@
 
 @property (nonatomic, retain) CameraAlert *camAlert;
 
-
+@property (nonatomic, retain) MenuViewController *menuVC;
 //@property (nonatomic, retain) NSTimer * fullScreenTimer, *alertTimer; 
 
 
