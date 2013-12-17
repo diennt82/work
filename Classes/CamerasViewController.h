@@ -10,4 +10,6 @@
 
 @interface CamerasViewController : UITableViewController
 
+@property (retain, nonatomic) NSMutableArray *cameras;
+
 @end

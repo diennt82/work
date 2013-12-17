@@ -1,14 +1,14 @@
 //
-//  CamerasCell.m
+//  GeneralCell.m
 //  BlinkHD_ios
 //
-//  Created by Developer on 12/16/13.
+//  Created by Developer on 12/17/13.
 //  Copyright (c) 2013 Smart Panda Ltd. All rights reserved.
 //
 
-#import "CamerasCell.h"
+#import "GeneralCell.h"
 
-@implementation CamerasCell
+@implementation GeneralCell
 
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
 {
@@ -25,13 +25,12 @@
 
     // Configure the view for the selected state
 }
-- (IBAction)settingsButtonTouchAction:(id)sender {
+- (IBAction)valueChangedTouchAction:(id)sender {
 }
 
 - (void)dealloc {
-    [_snapshotImage release];
-    [_photoItemImage release];
-    [_cameraNameLabel release];
+    [_nameLabel release];
+    [_valueSegmented release];
     [super dealloc];
 }
 @end

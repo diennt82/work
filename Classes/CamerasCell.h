@@ -10,4 +10,8 @@
 
 @interface CamerasCell : UITableViewCell
 
+@property (retain, nonatomic) IBOutlet UIImageView *snapshotImage;
+@property (retain, nonatomic) IBOutlet UIImageView *photoItemImage;
+@property (retain, nonatomic) IBOutlet UILabel *cameraNameLabel;
+
 @end

@@ -154,6 +154,14 @@
 		8B5A5E9D1845A27F0036A9CD /* ME-sun_background.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B5A5E9B1845A27F0036A9CD /* ME-sun_background.png */; };
 		8B66804D1839EEA80041F510 /* NotificationViewController_ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8B66804C1839EEA70041F510 /* NotificationViewController_ipad.xib */; };
 		8B68F5D118066CE500661527 /* PlaybackViewController_ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8B68F5D018066CE500661527 /* PlaybackViewController_ipad.xib */; };
+		8B9112BF18600295004301C5 /* Snapshot.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B9112BE18600295004301C5 /* Snapshot.png */; };
+		8B9112C11860054D004301C5 /* AddBtn.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B9112C01860054D004301C5 /* AddBtn.png */; };
+		8B9112C518600B7C004301C5 /* SettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B9112C318600B7C004301C5 /* SettingsViewController.m */; };
+		8B9112C618600B7C004301C5 /* SettingsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8B9112C418600B7C004301C5 /* SettingsViewController.xib */; };
+		8B9112CA186010F1004301C5 /* GeneralCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B9112C9186010F1004301C5 /* GeneralCell.m */; };
+		8B9112CC18601106004301C5 /* GeneralCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8B9112CB18601106004301C5 /* GeneralCell.xib */; };
+		8B9112D018602884004301C5 /* SensitivityCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B9112CF18602884004301C5 /* SensitivityCell.m */; };
+		8B9112D218602898004301C5 /* SensitivityCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8B9112D118602898004301C5 /* SensitivityCell.xib */; };
 		8B92DC24185ACACA00344530 /* ScheduleInformation.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B92DC23185ACACA00344530 /* ScheduleInformation.m */; };
 		8B93847F1856D42C009C4771 /* InformationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B93847D1856D42C009C4771 /* InformationViewController.m */; };
 		8B9384801856D42C009C4771 /* InformationViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8B93847E1856D42C009C4771 /* InformationViewController.xib */; };
@@ -553,6 +561,17 @@
 		8B5A5E9B1845A27F0036A9CD /* ME-sun_background.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ME-sun_background.png"; sourceTree = "<group>"; };
 		8B66804C1839EEA70041F510 /* NotificationViewController_ipad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = NotificationViewController_ipad.xib; sourceTree = "<group>"; };
 		8B68F5D018066CE500661527 /* PlaybackViewController_ipad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PlaybackViewController_ipad.xib; sourceTree = "<group>"; };
+		8B9112BE18600295004301C5 /* Snapshot.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Snapshot.png; sourceTree = "<group>"; };
+		8B9112C01860054D004301C5 /* AddBtn.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = AddBtn.png; sourceTree = "<group>"; };
+		8B9112C218600B7C004301C5 /* SettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingsViewController.h; sourceTree = "<group>"; };
+		8B9112C318600B7C004301C5 /* SettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingsViewController.m; sourceTree = "<group>"; };
+		8B9112C418600B7C004301C5 /* SettingsViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SettingsViewController.xib; sourceTree = "<group>"; };
+		8B9112C8186010F1004301C5 /* GeneralCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GeneralCell.h; sourceTree = "<group>"; };
+		8B9112C9186010F1004301C5 /* GeneralCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GeneralCell.m; sourceTree = "<group>"; };
+		8B9112CB18601106004301C5 /* GeneralCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = GeneralCell.xib; sourceTree = "<group>"; };
+		8B9112CE18602884004301C5 /* SensitivityCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SensitivityCell.h; sourceTree = "<group>"; };
+		8B9112CF18602884004301C5 /* SensitivityCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SensitivityCell.m; sourceTree = "<group>"; };
+		8B9112D118602898004301C5 /* SensitivityCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SensitivityCell.xib; sourceTree = "<group>"; };
 		8B92DC22185ACACA00344530 /* ScheduleInformation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ScheduleInformation.h; sourceTree = "<group>"; };
 		8B92DC23185ACACA00344530 /* ScheduleInformation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ScheduleInformation.m; sourceTree = "<group>"; };
 		8B93847C1856D42C009C4771 /* InformationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InformationViewController.h; sourceTree = "<group>"; };
@@ -1886,6 +1905,26 @@
 			name = Step_09;
 			sourceTree = "<group>";
 		};
+		8B9112C718601041004301C5 /* General */ = {
+			isa = PBXGroup;
+			children = (
+				8B9112C8186010F1004301C5 /* GeneralCell.h */,
+				8B9112C9186010F1004301C5 /* GeneralCell.m */,
+				8B9112CB18601106004301C5 /* GeneralCell.xib */,
+			);
+			name = General;
+			sourceTree = "<group>";
+		};
+		8B9112CD18602854004301C5 /* Sensitivity */ = {
+			isa = PBXGroup;
+			children = (
+				8B9112CE18602884004301C5 /* SensitivityCell.h */,
+				8B9112CF18602884004301C5 /* SensitivityCell.m */,
+				8B9112D118602898004301C5 /* SensitivityCell.xib */,
+			);
+			name = Sensitivity;
+			sourceTree = "<group>";
+		};
 		8B9899A9185976E300AC3852 /* Camera name */ = {
 			isa = PBXGroup;
 			children = (
@@ -2008,6 +2047,8 @@
 		8B9C7DF1185F08AF0038B3A8 /* New Hubble Image */ = {
 			isa = PBXGroup;
 			children = (
+				8B9112C01860054D004301C5 /* AddBtn.png */,
+				8B9112BE18600295004301C5 /* Snapshot.png */,
 				8B9C7DF2185F08C90038B3A8 /* loader0.png */,
 				8B9C7DF3185F08C90038B3A8 /* loader1.png */,
 				8B9C7DF4185F08C90038B3A8 /* loader2.png */,
@@ -2047,6 +2088,11 @@
 		8B9C7E10185F26250038B3A8 /* Settings */ = {
 			isa = PBXGroup;
 			children = (
+				8B9112CD18602854004301C5 /* Sensitivity */,
+				8B9112C718601041004301C5 /* General */,
+				8B9112C218600B7C004301C5 /* SettingsViewController.h */,
+				8B9112C318600B7C004301C5 /* SettingsViewController.m */,
+				8B9112C418600B7C004301C5 /* SettingsViewController.xib */,
 			);
 			name = Settings;
 			sourceTree = "<group>";
@@ -2333,6 +2379,7 @@
 				38A62E8B15C9137000DEA520 /* bb_vs_mike_on.png in Resources */,
 				38A62E8D15C92BDF00DEA520 /* bb_spk_icon_d.png in Resources */,
 				8BC0A04F1844B61900A5FD52 /* homepage_p1.png in Resources */,
+				8B9112CC18601106004301C5 /* GeneralCell.xib in Resources */,
 				38A62E8F15C93E4700DEA520 /* bb_camera_toolbar.png in Resources */,
 				8B0E1DF11844A0E80080000A /* mestartup000029.png in Resources */,
 				8B9B57DE184F0D9900E58543 /* frame-2_update-iOS7_new.png in Resources */,
@@ -2345,6 +2392,7 @@
 				38A62E9D15CA2A4800DEA520 /* bb_vid_snap_knob.png in Resources */,
 				8BC0A0231844A6EE00A5FD52 /* bb_setup_icon_step_3.png in Resources */,
 				38A62EA015CA2C9300DEA520 /* bb_recording_btn.png in Resources */,
+				8B9112BF18600295004301C5 /* Snapshot.png in Resources */,
 				38A62EA115CA2C9300DEA520 /* bb_cam_btn.png in Resources */,
 				8B278BE8183DC51300A4FF50 /* NotificationSettingsViewController.xib in Resources */,
 				38A62EA315CA2E1100DEA520 /* bb_recording_btn_d.png in Resources */,
@@ -2408,12 +2456,14 @@
 				8B9C7DFD185F09F70038B3A8 /* loading_logo.png in Resources */,
 				8B93848F1856ED73009C4771 /* CameraStngsCell.xib in Resources */,
 				38DE1BE7168AD9F50049E814 /* FWUpgradeView_land.xib in Resources */,
+				8B9112D218602898004301C5 /* SensitivityCell.xib in Resources */,
 				38DE1C50168AEA690049E814 /* AlertSettingViewController_land.xib in Resources */,
 				38DE1BFB168ADA280049E814 /* MBP_FirstPage_ipad.xib in Resources */,
 				38DE1C05168ADA460049E814 /* MBP_LoginOrRegistration_ipad.xib in Resources */,
 				8B0E1DF71844A3BE0080000A /* bb_rec_icon_d.png in Resources */,
 				8B9899CE1859A04F00AC3852 /* slider-default7-handle@2x.png in Resources */,
 				8BC0A01B1844A6A200A5FD52 /* bb_splash_screen_horizontal.png in Resources */,
+				8B9112C11860054D004301C5 /* AddBtn.png in Resources */,
 				8B9B57DF184F0D9900E58543 /* frame-3_update-iOS7_new.png in Resources */,
 				841D567B1834C1E600ACE7A7 /* streamqvga.sdp in Resources */,
 				38DE1BC6168AD57D0049E814 /* DashBoard_ViewController_ipad.xib in Resources */,
@@ -2504,6 +2554,7 @@
 				A1176B74180D1DD9000B7527 /* stream480p.sdp in Resources */,
 				978F090117DEFD670053972F /* no_img_available.jpeg in Resources */,
 				8B0E1DEA1844A0E80080000A /* mestartup000022.png in Resources */,
+				8B9112C618600B7C004301C5 /* SettingsViewController.xib in Resources */,
 				8BC0A0401844AC3600A5FD52 /* circle_buttons1_rt.png in Resources */,
 				978F090317DF06C80053972F /* PlaylistCell.xib in Resources */,
 				8B9AF6A518581D3300AC09C3 /* AddScheduleViewController.xib in Resources */,
@@ -2533,11 +2584,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8B9112C518600B7C004301C5 /* SettingsViewController.m in Sources */,
 				38CA70A715F7669D002CD1C5 /* NSData+Conversion.m in Sources */,
 				38C79E1F15C26270006EE378 /* Reachability.m in Sources */,
 				1D60589B0D05DD56006BFB54 /* main.m in Sources */,
 				1D3623260D0F684500981E51 /* MBP_iosAppDelegate.mm in Sources */,
 				28D7ACF80DDB3853001CB0EB /* MBP_iosViewController.mm in Sources */,
+				8B9112CA186010F1004301C5 /* GeneralCell.m in Sources */,
 				8BA18CAC184870470097D1AF /* DeviceSettingsViewController.m in Sources */,
 				97987CD815468C2E0066C49B /* MBP_FirstPage.m in Sources */,
 				8B9384AF18570567009C4771 /* ValueSettingsViewController.m in Sources */,
@@ -2573,6 +2626,7 @@
 				38C79E2215C26947006EE378 /* Step_10_ViewController.mm in Sources */,
 				38355AE715CB76630045909C /* Account_ViewController.mm in Sources */,
 				38B85E5415CFAA7F00E5A1FA /* Step_07_ViewController.mm in Sources */,
+				8B9112D018602884004301C5 /* SensitivityCell.m in Sources */,
 				38CE2A1315D4FA3800B8F7EC /* ForgotPwdViewController.m in Sources */,
 				3803A85E15FDF15600B4DD97 /* CameraAlert.m in Sources */,
 				380C430016195047001434C0 /* AlertSettingViewController.mm in Sources */,

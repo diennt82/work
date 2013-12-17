@@ -7,8 +7,13 @@
 //
 
 #import "CamerasViewController.h"
+#import <CameraScanner/CameraScanner.h>
+#import "CamerasCell.h"
 
 @interface CamerasViewController ()
+
+@property (retain, nonatomic) IBOutlet UITableViewCell *addCameraCell;
+@property (retain, nonatomic) UIImage *snapshotImg;
 
 @end
 
@@ -32,6 +37,17 @@
  
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
+    
+    CamProfile *camProfile = [[CamProfile alloc] initWithMacAddr:@"34159E8D4F7F"];
+    CamProfile *camProfile1 = [[CamProfile alloc] initWithMacAddr:@"34159E8D4FFF"];
+    
+    self.snapshotImg = [UIImage imageNamed:@"loading_logo.png"];
+    
+    [self.cameras addObject:camProfile];
+    [self.cameras addObject:camProfile1];
+    
+}
+- (IBAction)addCameraButtonTouchAction:(id)sender {
 }
 
 - (void)didReceiveMemoryWarning
@@ -44,20 +60,64 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-#warning Potentially incomplete method implementation.
+    //#warning Potentially incomplete method implementation.
     // Return the number of sections.
-    return 0;
+    return 2;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-#warning Incomplete method implementation.
+    //#warning Incomplete method implementation.
     // Return the number of rows in the section.
-    return 0;
+    if(section == 0)
+    {
+        return 1;
+    }
+    
+    return self.cameras.count;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if (indexPath.section == 1)
+    {
+        return 100;
+    }
+    
+    return 44; // your dynamic height...
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    if (indexPath.section == 0)
+    {
+        return _addCameraCell;
+    }
+    else
+    {
+        static NSString *CellIdentifier = @"CamerasCell";
+        CamerasCell *cell = [self.tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+        
+        NSArray *objects = [[NSBundle mainBundle] loadNibNamed:@"CamerasCell" owner:nil options:nil];
+        
+        for (id curObj in objects)
+        {
+            
+            if([curObj isKindOfClass:[UITableViewCell class]])
+            {
+                cell = (CamerasCell *)curObj;
+                break;
+            }
+        }
+        
+        CamProfile *camProfile = (CamProfile *)[_cameras objectAtIndex:indexPath.row];
+        
+        cell.snapshotImage.image = self.snapshotImg;
+        cell.cameraNameLabel.text = camProfile.name;
+        
+        return cell;
+    }
+    
     static NSString *CellIdentifier = @"Cell";
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     if (cell == nil) {
@@ -108,22 +168,36 @@
 }
 */
 
-/*
 #pragma mark - Table view delegate
+
+- (BOOL)tableView:(UITableView *)tableView shouldHighlightRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if (indexPath.section == 0)
+    {
+        return NO;
+    }
+    
+    return YES;
+}
 
 // In a xib-based application, navigation from a table can be handled in -tableView:didSelectRowAtIndexPath:
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     // Navigation logic may go here, for example:
     // Create the next view controller.
-    <#DetailViewController#> *detailViewController = [[<#DetailViewController#> alloc] initWithNibName:@"<#Nib name#>" bundle:nil];
+    //<#DetailViewController#> *detailViewController = [[<#DetailViewController#> alloc] initWithNibName:@"<#Nib name#>" bundle:nil];
 
     // Pass the selected object to the new view controller.
     
     // Push the view controller.
-    [self.navigationController pushViewController:detailViewController animated:YES];
+   // [self.navigationController pushViewController:detailViewController animated:YES];
+    
+    [tableView deselectRowAtIndexPath:indexPath animated:NO];
 }
  
- */
 
+- (void)dealloc {
+    [_addCameraCell release];
+    [super dealloc];
+}
 @end
