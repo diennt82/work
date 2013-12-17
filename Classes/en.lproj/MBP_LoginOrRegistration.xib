@@ -8,7 +8,6 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="MBP_LoginOrRegistration">
             <connections>
                 <outlet property="forgotPassCell" destination="46" id="73"/>
-                <outlet property="loginTableView" destination="42" id="Lpc-49-cRr"/>
                 <outlet property="password" destination="53" id="58"/>
                 <outlet property="progressLabel" destination="80" id="81"/>
                 <outlet property="progressView" destination="74" id="79"/>

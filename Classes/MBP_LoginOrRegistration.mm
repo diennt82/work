@@ -459,9 +459,29 @@
 
 - (void)textFieldDidBeginEditing:(UITextField *)textField
 {
-    CGRect rect = _loginTableView.frame;
+//    CGRect rect = _loginTableView.frame;
+//    
+//    self.loginTableView.frame = CGRectMake(rect.origin.x, rect.origin.y - 44, rect.size.width, rect.size.height);
+    [self animateTextField: textField up: YES];
+}
+
+- (void)textFieldDidEndEditing:(UITextField *)textField
+{
+    [self animateTextField: textField up: NO];
+}
+
+- (void) animateTextField: (UITextField*) textField up: (BOOL) up
+{
+    const int movementDistance = 80; // tweak as needed
+    const float movementDuration = 0.3f; // tweak as needed
     
-    self.loginTableView.frame = CGRectMake(rect.origin.x, rect.origin.y - 44, rect.size.width, rect.size.height);
+    int movement = (up ? -movementDistance : movementDistance);
+    
+    [UIView beginAnimations: @"anim" context: nil];
+    [UIView setAnimationBeginsFromCurrentState: YES];
+    [UIView setAnimationDuration: movementDuration];
+    self.view.frame = CGRectOffset(self.view.frame, 0, movement);
+    [UIView commitAnimations];
 }
 
 

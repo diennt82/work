@@ -210,6 +210,12 @@
 		8B9C7DFA185F08C90038B3A8 /* loader3.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B9C7DF5185F08C90038B3A8 /* loader3.png */; };
 		8B9C7DFB185F08C90038B3A8 /* loader4.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B9C7DF6185F08C90038B3A8 /* loader4.png */; };
 		8B9C7DFD185F09F70038B3A8 /* loading_logo.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B9C7DFC185F09F70038B3A8 /* loading_logo.png */; };
+		8B9C7E0D185F260A0038B3A8 /* MenuViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B9C7E0B185F260A0038B3A8 /* MenuViewController.m */; };
+		8B9C7E0E185F260A0038B3A8 /* MenuViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8B9C7E0C185F260A0038B3A8 /* MenuViewController.xib */; };
+		8B9C7E15185F268C0038B3A8 /* CamerasViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B9C7E13185F268C0038B3A8 /* CamerasViewController.m */; };
+		8B9C7E16185F268C0038B3A8 /* CamerasViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8B9C7E14185F268C0038B3A8 /* CamerasViewController.xib */; };
+		8B9C7E19185F26B70038B3A8 /* CamerasCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B9C7E18185F26B70038B3A8 /* CamerasCell.m */; };
+		8B9C7E1B185F26D40038B3A8 /* CamerasCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8B9C7E1A185F26D40038B3A8 /* CamerasCell.xib */; };
 		8B9CCBA3183EF8B2007C0F65 /* MelodyViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B9CCBA1183EF8B2007C0F65 /* MelodyViewController.m */; };
 		8B9CCBA4183EF8B2007C0F65 /* MelodyViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8B9CCBA2183EF8B2007C0F65 /* MelodyViewController.xib */; };
 		8BA18CAC184870470097D1AF /* DeviceSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8BA18CAA184870470097D1AF /* DeviceSettingsViewController.m */; };
@@ -615,6 +621,15 @@
 		8B9C7DF5185F08C90038B3A8 /* loader3.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = loader3.png; sourceTree = "<group>"; };
 		8B9C7DF6185F08C90038B3A8 /* loader4.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = loader4.png; sourceTree = "<group>"; };
 		8B9C7DFC185F09F70038B3A8 /* loading_logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = loading_logo.png; sourceTree = "<group>"; };
+		8B9C7E0A185F260A0038B3A8 /* MenuViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MenuViewController.h; sourceTree = "<group>"; };
+		8B9C7E0B185F260A0038B3A8 /* MenuViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MenuViewController.m; sourceTree = "<group>"; };
+		8B9C7E0C185F260A0038B3A8 /* MenuViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MenuViewController.xib; sourceTree = "<group>"; };
+		8B9C7E12185F268C0038B3A8 /* CamerasViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CamerasViewController.h; sourceTree = "<group>"; };
+		8B9C7E13185F268C0038B3A8 /* CamerasViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CamerasViewController.m; sourceTree = "<group>"; };
+		8B9C7E14185F268C0038B3A8 /* CamerasViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CamerasViewController.xib; sourceTree = "<group>"; };
+		8B9C7E17185F26B70038B3A8 /* CamerasCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CamerasCell.h; sourceTree = "<group>"; };
+		8B9C7E18185F26B70038B3A8 /* CamerasCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CamerasCell.m; sourceTree = "<group>"; };
+		8B9C7E1A185F26D40038B3A8 /* CamerasCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CamerasCell.xib; sourceTree = "<group>"; };
 		8B9CCBA0183EF8B2007C0F65 /* MelodyViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MelodyViewController.h; sourceTree = "<group>"; };
 		8B9CCBA1183EF8B2007C0F65 /* MelodyViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MelodyViewController.m; sourceTree = "<group>"; };
 		8B9CCBA2183EF8B2007C0F65 /* MelodyViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MelodyViewController.xib; sourceTree = "<group>"; };
@@ -1469,6 +1484,7 @@
 		080E96DDFE201D6D7F000001 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				8B9C7DFE185F22090038B3A8 /* MenuHubble */,
 				8BA18CA8184870330097D1AF /* DeviceSettings */,
 				8B9CCB9F183EF86C007C0F65 /* MelodyControl */,
 				8B278BE3183DC4BB00A4FF50 /* NotificationSettings */,
@@ -2002,6 +2018,46 @@
 			name = "New Hubble Image";
 			sourceTree = "<group>";
 		};
+		8B9C7DFE185F22090038B3A8 /* MenuHubble */ = {
+			isa = PBXGroup;
+			children = (
+				8B9C7E0F185F261A0038B3A8 /* Cameras */,
+				8B9C7E10185F26250038B3A8 /* Settings */,
+				8B9C7E11185F262D0038B3A8 /* Account */,
+				8B9C7E0A185F260A0038B3A8 /* MenuViewController.h */,
+				8B9C7E0B185F260A0038B3A8 /* MenuViewController.m */,
+				8B9C7E0C185F260A0038B3A8 /* MenuViewController.xib */,
+			);
+			name = MenuHubble;
+			sourceTree = "<group>";
+		};
+		8B9C7E0F185F261A0038B3A8 /* Cameras */ = {
+			isa = PBXGroup;
+			children = (
+				8B9C7E12185F268C0038B3A8 /* CamerasViewController.h */,
+				8B9C7E13185F268C0038B3A8 /* CamerasViewController.m */,
+				8B9C7E14185F268C0038B3A8 /* CamerasViewController.xib */,
+				8B9C7E17185F26B70038B3A8 /* CamerasCell.h */,
+				8B9C7E18185F26B70038B3A8 /* CamerasCell.m */,
+				8B9C7E1A185F26D40038B3A8 /* CamerasCell.xib */,
+			);
+			name = Cameras;
+			sourceTree = "<group>";
+		};
+		8B9C7E10185F26250038B3A8 /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Settings;
+			sourceTree = "<group>";
+		};
+		8B9C7E11185F262D0038B3A8 /* Account */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Account;
+			sourceTree = "<group>";
+		};
 		8B9CCB9F183EF86C007C0F65 /* MelodyControl */ = {
 			isa = PBXGroup;
 			children = (
@@ -2238,6 +2294,7 @@
 				28AD733F0D9D9553002E5188 /* MainWindow.xib in Resources */,
 				97D9A1BD143EB03A000E3533 /* video_error.png in Resources */,
 				97987CCD154687490066C49B /* background.png in Resources */,
+				8B9C7E16185F268C0038B3A8 /* CamerasViewController.xib in Resources */,
 				97987CCF154688110066C49B /* partition_bar.png in Resources */,
 				38DE1C0A168ADA550049E814 /* MBP_LoginOrRegistration.xib in Resources */,
 				974EF72C1552241C008D6B77 /* ios_Settings.png in Resources */,
@@ -2252,6 +2309,7 @@
 				38DE1CA0168AEB6D0049E814 /* Step_06_ViewController.xib in Resources */,
 				8BA18CB2184879A10097D1AF /* DeviceSettingsCell.xib in Resources */,
 				8B9899CD1859A04F00AC3852 /* slider-default7-handle.png in Resources */,
+				8B9C7E0E185F260A0038B3A8 /* MenuViewController.xib in Resources */,
 				38DE1C8C168AEB270049E814 /* Step_08_ViewController.xib in Resources */,
 				38DE1C82168AEB0E0049E814 /* Step_09_ViewController.xib in Resources */,
 				38DE1C78168AEAF30049E814 /* Step_10_ViewController.xib in Resources */,
@@ -2279,6 +2337,7 @@
 				8B0E1DF11844A0E80080000A /* mestartup000029.png in Resources */,
 				8B9B57DE184F0D9900E58543 /* frame-2_update-iOS7_new.png in Resources */,
 				8B9B57E0184F0D9900E58543 /* frame-1_update-iOS7_new.png in Resources */,
+				8B9C7E1B185F26D40038B3A8 /* CamerasCell.xib in Resources */,
 				38A62E9315CA12C000DEA520 /* bb_camera_slider_icon.png in Resources */,
 				38A62E9415CA12C000DEA520 /* bb_video_slider_icon.png in Resources */,
 				38A62E9715CA143200DEA520 /* vid_snap_bg.png in Resources */,
@@ -2484,6 +2543,7 @@
 				8B9384AF18570567009C4771 /* ValueSettingsViewController.m in Sources */,
 				97987DF21546A1630066C49B /* MBP_LoginOrRegistration.mm in Sources */,
 				8BA5C4801818DCC1006B4BB8 /* ZoneViewController.m in Sources */,
+				8B9C7E15185F268C0038B3A8 /* CamerasViewController.m in Sources */,
 				97987E421546AF2C0066C49B /* UserAccount.mm in Sources */,
 				97C49AB0154784F4008B7D03 /* SetupData.m in Sources */,
 				8B9384881856E940009C4771 /* CameraSettingsCell.m in Sources */,
@@ -2509,6 +2569,7 @@
 				38A478FA15C12914008682FE /* Step_08_ViewController.mm in Sources */,
 				38A478FD15C12CF4008682FE /* Step_09_ViewController.mm in Sources */,
 				8B9CCBA3183EF8B2007C0F65 /* MelodyViewController.m in Sources */,
+				8B9C7E0D185F260A0038B3A8 /* MenuViewController.m in Sources */,
 				38C79E2215C26947006EE378 /* Step_10_ViewController.mm in Sources */,
 				38355AE715CB76630045909C /* Account_ViewController.mm in Sources */,
 				38B85E5415CFAA7F00E5A1FA /* Step_07_ViewController.mm in Sources */,
@@ -2538,6 +2599,7 @@
 				978B25C117E1B4AB006FC224 /* BMMenuViewController.mm in Sources */,
 				97735C4417E1CEAA00160DA1 /* MyFrontViewController.m in Sources */,
 				84DEA2BB17E42E3F00567836 /* NotificationViewController.mm in Sources */,
+				8B9C7E19185F26B70038B3A8 /* CamerasCell.m in Sources */,
 				A1E32FAD17E9899800504538 /* H264PlayerListener.mm in Sources */,
 				A1E32FB017E98A4700504538 /* PlaybackListener.mm in Sources */,
 				8B9AF69E1858179900AC09C3 /* ScheduleViewController.m in Sources */,

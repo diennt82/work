@@ -222,55 +222,58 @@
 
 - (void)textFieldDidBeginEditing:(UITextField *)textField
 {
-    int tag = textField.tag;
-    if (tag == 201)
-        return;
-    
-    UIInterfaceOrientation interfaceOrientation = [UIApplication sharedApplication].statusBarOrientation;
-    if ( tag == 202 &&
-          (interfaceOrientation == UIInterfaceOrientationLandscapeLeft ||
-           interfaceOrientation == UIInterfaceOrientationLandscapeRight)
-        )
-    {
-        return;
-    }
-    
-    //Just start Animation when the app is landscape mode
-    UIInterfaceOrientation orientation = [[UIApplication sharedApplication] statusBarOrientation];
-    if (orientation == UIInterfaceOrientationLandscapeLeft ||
-        orientation == UIInterfaceOrientationLandscapeRight)
-    {
-        [self animateTextField: textField up: YES];
-    }
-    
-    if (textField.tag == 202 | textField.tag == 203)
-    {
-        myTable.frame = CGRectMake(0, myTable.frame.origin.y - 44, myTable.frame.size.width, myTable.frame.size.height);
-    }
+//    int tag = textField.tag;
+//    if (tag == 201)
+//        return;
+//    
+//    UIInterfaceOrientation interfaceOrientation = [UIApplication sharedApplication].statusBarOrientation;
+//    if ( tag == 202 &&
+//          (interfaceOrientation == UIInterfaceOrientationLandscapeLeft ||
+//           interfaceOrientation == UIInterfaceOrientationLandscapeRight)
+//        )
+//    {
+//        [self animateTextField: textField up: YES];
+//        return;
+//    }
+//    
+//    //Just start Animation when the app is landscape mode
+//    UIInterfaceOrientation orientation = [[UIApplication sharedApplication] statusBarOrientation];
+//    if (orientation == UIInterfaceOrientationLandscapeLeft ||
+//        orientation == UIInterfaceOrientationLandscapeRight)
+//    {
+//        [self animateTextField: textField up: YES];
+//    }
+//    
+//    if (textField.tag == 202 | textField.tag == 203)
+//    {
+//        myTable.frame = CGRectMake(0, myTable.frame.origin.y - 44, myTable.frame.size.width, myTable.frame.size.height);
+//    }
+    [self animateTextField: textField up: YES];
 }
 
 
 - (void)textFieldDidEndEditing:(UITextField *)textField
 {
-    int tag = textField.tag;
-    if (tag == 201)
-        return;
-    
-    UIInterfaceOrientation interfaceOrientation = [UIApplication sharedApplication].statusBarOrientation;
-    if ( tag == 202 &&
-        (interfaceOrientation == UIInterfaceOrientationLandscapeLeft ||
-         interfaceOrientation == UIInterfaceOrientationLandscapeRight)
-        )
-    {
-        return;
-    }
-
-    UIInterfaceOrientation orientation = [[UIApplication sharedApplication] statusBarOrientation];
-    if (orientation == UIInterfaceOrientationLandscapeLeft ||
-        orientation == UIInterfaceOrientationLandscapeRight)
-    {
-        [self animateTextField: textField up: NO];
-    }
+//    int tag = textField.tag;
+//    if (tag == 201)
+//        return;
+//    
+//    UIInterfaceOrientation interfaceOrientation = [UIApplication sharedApplication].statusBarOrientation;
+//    if ( tag == 202 &&
+//        (interfaceOrientation == UIInterfaceOrientationLandscapeLeft ||
+//         interfaceOrientation == UIInterfaceOrientationLandscapeRight)
+//        )
+//    {
+//        return;
+//    }
+//
+//    UIInterfaceOrientation orientation = [[UIApplication sharedApplication] statusBarOrientation];
+//    if (orientation == UIInterfaceOrientationLandscapeLeft ||
+//        orientation == UIInterfaceOrientationLandscapeRight)
+//    {
+//        [self animateTextField: textField up: NO];
+//    }
+    [self animateTextField: textField up: NO];
 }
 
 
