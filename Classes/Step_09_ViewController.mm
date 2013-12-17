@@ -46,13 +46,16 @@
     
     self.navigationItem.title = NSLocalizedStringWithDefaultValue(@"Create_Account",nil, [NSBundle mainBundle],
                                                                   @"Create Account", nil);
+    // Set up the Cancel button on the left of the navigation bar.
+    self.navigationItem.leftBarButtonItem  = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(step09CancelAction:)] autorelease];
+    assert(self.navigationItem.leftBarButtonItem != nil);
     
     UIBarButtonItem *nextButton = 
     [[UIBarButtonItem alloc] initWithTitle:NSLocalizedStringWithDefaultValue(@"Done",nil, [NSBundle mainBundle],
                                                                              @"Done", nil)
                                      style:UIBarButtonItemStyleBordered 
                                     target:self 
-                                    action:@selector(handleNextButton:)];          
+                                    action:@selector(step09HandleNextButton:)];
     self.navigationItem.rightBarButtonItem = nextButton;
     [nextButton release];
 
@@ -405,7 +408,13 @@
     return [validatedDomain evaluateWithObject:modifiedString];
 }
 
--(void) handleNextButton:(id) sender
+- (void)step09CancelAction:(id)sender
+{
+    [self.delegate sendStatus:LOGIN];
+    [self dismissViewControllerAnimated:YES completion:^{}];
+}
+
+-(void) step09HandleNextButton:(id) sender
 {
     UITextField * _userName = (UITextField *)[self.userName viewWithTag:201];
     UITextField * _userPass = (UITextField *)[self.userPass viewWithTag:202];

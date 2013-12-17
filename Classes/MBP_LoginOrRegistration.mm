@@ -218,8 +218,8 @@
     
 
     // Set up the Cancel button on the left of the navigation bar.
-    self.navigationItem.leftBarButtonItem  = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(cancelAction:)] autorelease];
-    assert(self.navigationItem.leftBarButtonItem != nil);
+//    self.navigationItem.leftBarButtonItem  = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(cancelAction:)] autorelease];
+//    assert(self.navigationItem.leftBarButtonItem != nil);
     self.navigationItem.rightBarButtonItem = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone   target:self action:@selector(doneAction:)] autorelease];
 
     assert(self.navigationItem.rightBarButtonItem != nil);

@@ -14,7 +14,8 @@
 #import "Step_10_ViewController.h"
 
 
-@interface Step_09_ViewController : UIViewController
+
+@interface Step_09_ViewController : UIViewController <StartMonitorDelegate>
 {
     IBOutlet UITableViewCell * userName;
     IBOutlet UITableViewCell * userPass;
@@ -26,6 +27,8 @@
     
      NSString * tmp_user_str,* tmp_pass_str,* tmp_user_email;
 }
+
+@property (nonatomic, assign)  id<ConnectionMethodDelegate> delegate;
 
 @property (nonatomic, assign)   IBOutlet UITableViewCell * userName;
 @property (nonatomic, assign)  IBOutlet UITableViewCell * userPass;

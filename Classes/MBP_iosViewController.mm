@@ -43,7 +43,8 @@
     
 
 
-	self.app_stage = APP_STAGE_INIT;
+	//self.app_stage = APP_STAGE_INIT;
+    self.app_stage = APP_STAGE_LOGGING_IN;
 
     CFBundleRef mainbundle = CFBundleGetMainBundle();
     CFURLRef soundFileURLRef = CFBundleCopyResourceURL(mainbundle, CFSTR("Voicemail"), CFSTR("aif"), NULL);
@@ -160,7 +161,8 @@
         
         [userDefaults setBool:TRUE forKey:_AutoLogin];
         [userDefaults synchronize];
-        
+    }
+    
         self.app_stage = APP_STAGE_LOGGING_IN;
         
         MBP_LoginOrRegistration * loginOrReg;
@@ -180,53 +182,53 @@
         
         //Use navigation controller
         [loginOrReg presentModallyOn:self];
-    }
-    else
-    {
-        //Showing first page here --- NEED to adapt to proper orientation
-        self.app_stage = APP_STAGE_INIT;
-        
-        MBP_FirstPage * firstPage = nil;
-        UIInterfaceOrientation interfaceOrientation = [UIApplication sharedApplication].statusBarOrientation;
-        
-        if (interfaceOrientation == UIInterfaceOrientationLandscapeLeft ||
-            interfaceOrientation == UIInterfaceOrientationLandscapeRight)
-        {
-            if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
-            {
-                firstPage = [[MBP_FirstPage alloc] initWithNibName:@"MBP_FirstPage_ipad"
-                                                            bundle:nil
-                                                  withConnDelegate:self];
-            }
-            else
-            {
-                firstPage = [[MBP_FirstPage alloc] initWithNibName:@"MBP_FirstPage_land"
-                                                            bundle:nil
-                                                  withConnDelegate:self];
-            }
-        }
-        else if (interfaceOrientation == UIInterfaceOrientationPortrait ||
-                 interfaceOrientation == UIInterfaceOrientationPortraitUpsideDown)
-        {
-            if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
-            {
-                firstPage = [[MBP_FirstPage alloc] initWithNibName:@"MBP_FirstPage_ipad"
-                                                            bundle:nil
-                                                  withConnDelegate:self];
-            }
-            else
-            {
-                firstPage = [[MBP_FirstPage alloc] initWithNibName:@"MBP_FirstPage"
-                                                            bundle:nil
-                                                  withConnDelegate:self];
-            }
-        }
-
-        
-        
-        //[self presentModalViewController:firstPage animated:NO];
-        [self presentViewController:firstPage animated:NO completion:^{}];
-    }
+//    }
+//    else
+//    {
+//        //Showing first page here --- NEED to adapt to proper orientation
+//        self.app_stage = APP_STAGE_INIT;
+//        
+//        MBP_FirstPage * firstPage = nil;
+//        UIInterfaceOrientation interfaceOrientation = [UIApplication sharedApplication].statusBarOrientation;
+//        
+//        if (interfaceOrientation == UIInterfaceOrientationLandscapeLeft ||
+//            interfaceOrientation == UIInterfaceOrientationLandscapeRight)
+//        {
+//            if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+//            {
+//                firstPage = [[MBP_FirstPage alloc] initWithNibName:@"MBP_FirstPage_ipad"
+//                                                            bundle:nil
+//                                                  withConnDelegate:self];
+//            }
+//            else
+//            {
+//                firstPage = [[MBP_FirstPage alloc] initWithNibName:@"MBP_FirstPage_land"
+//                                                            bundle:nil
+//                                                  withConnDelegate:self];
+//            }
+//        }
+//        else if (interfaceOrientation == UIInterfaceOrientationPortrait ||
+//                 interfaceOrientation == UIInterfaceOrientationPortraitUpsideDown)
+//        {
+//            if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+//            {
+//                firstPage = [[MBP_FirstPage alloc] initWithNibName:@"MBP_FirstPage_ipad"
+//                                                            bundle:nil
+//                                                  withConnDelegate:self];
+//            }
+//            else
+//            {
+//                firstPage = [[MBP_FirstPage alloc] initWithNibName:@"MBP_FirstPage"
+//                                                            bundle:nil
+//                                                  withConnDelegate:self];
+//            }
+//        }
+//
+//        
+//        
+//        //[self presentModalViewController:firstPage animated:NO];
+//        [self presentViewController:firstPage animated:NO completion:^{}];
+//    }
 #endif
 
 
@@ -543,24 +545,26 @@
                 else
                 {
                     
-                    MBP_InitialSetupViewController *initSeupViewController = nil;
+//                    MBP_InitialSetupViewController *initSeupViewController = nil;
+//                    
+//                    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+//                    {
+//                        
+//                        initSeupViewController = [[MBP_InitialSetupViewController alloc]
+//                                                  initWithNibName:@"MBP_InitialSetupViewController_ipad" bundle:nil];
+//                        
+//                    }
+//                    else
+//                    {   
+//                        initSeupViewController = [[MBP_InitialSetupViewController alloc]
+//                                                  initWithNibName:@"MBP_InitialSetupViewController" bundle:nil];
+//                        
+//                    }
+//                    
+//                    initSeupViewController.delegate = self;
+//                    [initSeupViewController presentModallyOn:self];
                     
-                    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
-                    {
-                        
-                        initSeupViewController = [[MBP_InitialSetupViewController alloc]
-                                                  initWithNibName:@"MBP_InitialSetupViewController_ipad" bundle:nil];
-                        
-                    }
-                    else
-                    {   
-                        initSeupViewController = [[MBP_InitialSetupViewController alloc]
-                                                  initWithNibName:@"MBP_InitialSetupViewController" bundle:nil];
-                        
-                    }
-                    
-                    initSeupViewController.delegate = self;
-                    [initSeupViewController presentModallyOn:self];
+                    [self createAccount];
                     
                 }
 
@@ -720,6 +724,37 @@
 			break;
 	}
 
+}
+
+- (void)createAccount
+{
+    {
+        //20130219- app flow changed : Create account first
+        
+        NSLog(@"Load step 09");
+        
+        //Load the next xib
+        Step_09_ViewController *step09ViewController = nil;
+        
+        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+        {
+            
+            step09ViewController = [[Step_09_ViewController alloc]
+                                    initWithNibName:@"Step_09_ViewController_ipad" bundle:nil];
+        }
+        else
+        {
+            step09ViewController = [[Step_09_ViewController alloc]
+                                    initWithNibName:@"Step_09_ViewController" bundle:nil];
+        }
+        
+        //[self.navigationController pushViewController:step09ViewController animated:NO];
+        step09ViewController.delegate = self;
+        UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:step09ViewController];
+        [self presentViewController:nav animated:YES completion:^{}];
+        
+        [step09ViewController release];
+    }
 }
 
 -(BOOL) rebindCameraResource

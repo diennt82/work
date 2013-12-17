@@ -233,7 +233,8 @@
 
 -(void) showInit
 {
-    [viewController sendStatus:FRONT_PAGE]; 
+    //[viewController sendStatus:FRONT_PAGE];
+    [viewController sendStatus:LOGIN];
 }
 
 

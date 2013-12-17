@@ -188,7 +188,8 @@
 
 - (IBAction)goBackToFirstScreen:(id)sender
 {
-    [self.delegate sendStatus:FRONT_PAGE];
+    //[self.delegate sendStatus:FRONT_PAGE];
+    [self.delegate sendStatus:LOGIN];
 }
 
 -(void) startMonitorCallBack
