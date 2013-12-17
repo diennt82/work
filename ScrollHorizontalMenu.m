@@ -12,7 +12,7 @@
 #define kButtonBaseTag 10000
 #define kLeftOffset 40
 #define kButtonSize 40
-#define kPaddingBetweenButton 40
+#define kPaddingBetweenButton 30
 
 @implementation ScrollHorizontalMenu
 
@@ -48,15 +48,15 @@
     int paddingBetweenButton;
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
     {
-        marginLR = kLeftOffset + 100; //padding left and right = 80
+        marginLR = kLeftOffset + 60; //padding left and right = 100
         xPos = kLeftOffset + 40; //
         buttonWidth = kButtonSize + 20; //60 for iPad
-        paddingBetweenButton = kPaddingBetweenButton  + 25;
+        paddingBetweenButton = kPaddingBetweenButton;
     }
     else{
-        marginLR = kLeftOffset;
-        xPos = kLeftOffset;
-        buttonWidth = kButtonSize;
+        marginLR = kLeftOffset - 20;
+        xPos = kLeftOffset - 20;
+        buttonWidth = kButtonSize - 10;
         paddingBetweenButton = kPaddingBetweenButton;
     }
     

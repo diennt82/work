@@ -12,6 +12,14 @@
                 <outlet property="backBarBtnItem" destination="38" id="40"/>
                 <outlet property="cameraNameBarBtnItem" destination="35" id="42"/>
                 <outlet property="horizMenu" destination="nTa-Ux-yAc" id="LjA-m3-wgi"/>
+                <outlet property="ib_ViewTouchToTalk" destination="0Cv-wD-bGw" id="Lv4-uh-jCJ"/>
+                <outlet property="ib_buttonChangeAction" destination="a87-FB-kFc" id="3qp-8W-gCx"/>
+                <outlet property="ib_buttonTouchToTalk" destination="hJo-ff-gYM" id="eHq-3e-cU6"/>
+                <outlet property="ib_labelRecordVideo" destination="yJw-Ao-mOT" id="RCt-8M-h19"/>
+                <outlet property="ib_labelTouchToTalk" destination="hzo-Tk-4BY" id="DmV-LE-eBQ"/>
+                <outlet property="ib_processRecordOrTakePicture" destination="W9D-nx-A3Q" id="Txd-Mh-4Ks"/>
+                <outlet property="ib_temperature" destination="SMn-Fi-rED" id="8O7-0t-yFB"/>
+                <outlet property="ib_viewRecordTTT" destination="Rxo-oe-xq8" id="Kpf-ky-24R"/>
                 <outlet property="imageViewVideo" destination="4" id="5"/>
                 <outlet property="imgViewDrectionPad" destination="78" id="79"/>
                 <outlet property="pickerHQOptions" destination="75" id="76"/>
@@ -90,26 +98,100 @@
                         </barButtonItem>
                     </items>
                 </toolbar>
-                <imageView userInteractionEnabled="NO" tag="999" contentMode="scaleToFill" image="circle_buttons1_2_d.png" id="78">
+                <imageView userInteractionEnabled="NO" tag="999" contentMode="scaleToFill" image="camera_action_pan_bg.png" id="78">
                     <rect key="frame" x="100" y="360" width="120" height="120"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    <inset key="insetFor6xAndEarlier" minX="0.0" minY="20" maxX="0.0" maxY="-20"/>
+                    <inset key="insetFor6xAndEarlier" minX="0.0" minY="30" maxX="0.0" maxY="-30"/>
                 </imageView>
+                <view contentMode="scaleToFill" id="0Cv-wD-bGw">
+                    <rect key="frame" x="0.0" y="240" width="320" height="240"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <subviews>
+                        <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Hold to Talk" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="hzo-Tk-4BY">
+                            <rect key="frame" x="40" y="161" width="241" height="59"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="25"/>
+                            <color key="textColor" red="0.0" green="0.0" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                            <nil key="highlightedColor"/>
+                        </label>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="hJo-ff-gYM">
+                            <rect key="frame" x="100" y="60" width="120" height="120"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                            <state key="normal" backgroundImage="camera_action_mic.png">
+                                <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                            </state>
+                            <connections>
+                                <action selector="holdToTalk:" destination="-1" eventType="touchDown" id="Bm3-uO-yzE"/>
+                                <action selector="touchUpInsideHoldToTalk:" destination="-1" eventType="touchUpInside" id="Xi8-o6-H38"/>
+                            </connections>
+                        </button>
+                    </subviews>
+                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                    <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
+                    <inset key="insetFor6xAndEarlier" minX="0.0" minY="30" maxX="0.0" maxY="-30"/>
+                </view>
                 <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" hidesWhenStopped="YES" style="whiteLarge" id="87">
                     <rect key="frame" x="142" y="135" width="37" height="37"/>
                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    <inset key="insetFor6xAndEarlier" minX="0.0" minY="20" maxX="0.0" maxY="-20"/>
+                    <inset key="insetFor6xAndEarlier" minX="0.0" minY="30" maxX="0.0" maxY="-30"/>
                     <color key="color" white="1" alpha="1" colorSpace="calibratedWhite"/>
                 </activityIndicatorView>
                 <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" id="nTa-Ux-yAc" customClass="ScrollHorizontalMenu">
-                    <rect key="frame" x="0.0" y="244" width="320" height="41"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    <inset key="insetFor6xAndEarlier" minX="0.0" minY="20" maxX="0.0" maxY="-20"/>
+                    <rect key="frame" x="0.0" y="185" width="320" height="41"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <inset key="insetFor6xAndEarlier" minX="0.0" minY="30" maxX="0.0" maxY="-30"/>
                     <connections>
                         <outlet property="dataSource" destination="-1" id="83M-Pt-tLT"/>
                         <outlet property="itemSelectedDelegate" destination="-1" id="5Dy-i6-vkX"/>
                     </connections>
                 </scrollView>
+                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="21" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="SMn-Fi-rED">
+                    <rect key="frame" x="100" y="300" width="120" height="120"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <inset key="insetFor6xAndEarlier" minX="0.0" minY="30" maxX="0.0" maxY="-30"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="75"/>
+                    <color key="textColor" red="0.0" green="0.0" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <view contentMode="scaleToFill" id="Rxo-oe-xq8">
+                    <rect key="frame" x="0.0" y="240" width="320" height="240"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <subviews>
+                        <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Record Video" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="yJw-Ao-mOT">
+                            <rect key="frame" x="24" y="187" width="273" height="42"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="25"/>
+                            <color key="textColor" red="0.0" green="0.0" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                            <nil key="highlightedColor"/>
+                        </label>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="W9D-nx-A3Q">
+                            <rect key="frame" x="100" y="60" width="120" height="120"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                            <state key="normal" backgroundImage="camera_action_video.png">
+                                <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                            </state>
+                            <connections>
+                                <action selector="processingRecordingOrTakePicture:" destination="-1" eventType="touchUpInside" id="JKk-2z-vZw"/>
+                            </connections>
+                        </button>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="a87-FB-kFc">
+                            <rect key="frame" x="246" y="10" width="54" height="54"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                            <state key="normal" backgroundImage="camera_action_pic_s.png">
+                                <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                            </state>
+                            <connections>
+                                <action selector="changeAction:" destination="-1" eventType="touchUpInside" id="1IN-s0-7TP"/>
+                            </connections>
+                        </button>
+                    </subviews>
+                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                    <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
+                    <inset key="insetFor6xAndEarlier" minX="0.0" minY="30" maxX="0.0" maxY="-30"/>
+                </view>
             </subviews>
             <simulatedStatusBarMetrics key="simulatedStatusBarMetrics"/>
         </view>
@@ -126,7 +208,10 @@
         </tableViewController>
     </objects>
     <resources>
-        <image name="circle_buttons1_2_d.png" width="131" height="131"/>
+        <image name="camera_action_mic.png" width="324" height="324"/>
+        <image name="camera_action_pan_bg.png" width="468" height="468"/>
+        <image name="camera_action_pic_s.png" width="90" height="90"/>
+        <image name="camera_action_video.png" width="324" height="324"/>
         <image name="reveal-icon.png" width="22" height="17"/>
     </resources>
 </document>
