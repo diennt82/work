@@ -47,14 +47,33 @@
     
     self.navigationController.navigationBarHidden = NO;
     
-    UIImage *tmpImg = [UIImage imageNamed:@"Hubble_logo_back.png"];
+    //create the image for your button, and set the frame for its size
+    UIImage *image = [UIImage imageNamed:@"Hubble_logo_back.png"];
+    CGRect frame = CGRectMake(0, 0, image.size.width, image.size.height);
     
-    UIBarButtonItem *backBarBtn = [[UIBarButtonItem alloc] initWithImage:tmpImg
-                                                                   style:UIBarButtonItemStylePlain
-                                                                  target:self action:@selector(cameraBackAction:)];
+    //init a normal UIButton using that image
+    UIButton* button = [[UIButton alloc] initWithFrame:frame];
+    [button setBackgroundImage:image forState:UIControlStateNormal];
+    [button setShowsTouchWhenHighlighted:YES];
     
-    self.navigationItem.leftBarButtonItem = backBarBtn;
-    assert(self.navigationItem.leftBarButtonItem != nil);
+    //set the button to handle clicks - this one calls a method called 'downloadClicked'
+    [button addTarget:self action:@selector(cameraBackAction:) forControlEvents:UIControlEventTouchDown];
+    
+    //finally, create your UIBarButtonItem using that button
+    UIBarButtonItem* barButtonItem = [[UIBarButtonItem alloc] initWithCustomView:button];
+    
+    //then set it.  phew.
+    [self.navigationItem setLeftBarButtonItem:barButtonItem];
+    
+//    UIImage *backButton = [[UIImage imageNamed:@"Hubble_logo_back.png"] resizableImageWithCapInsets:UIEdgeInsetsMake(0, 14, 0, 5)];
+//    
+//    UIBarButtonItem *backBarBtn = [[UIBarButtonItem alloc] initWithImage:backButton
+//                                                                   style:UIBarButtonItemStylePlain
+//                                                                  target:self
+//                                                                  action:@selector(cameraBackAction:)];
+//    
+//    self.navigationItem.leftBarButtonItem = backBarBtn;
+//    assert(self.navigationItem.leftBarButtonItem != nil);
     
     CamProfile *camProfile = [[CamProfile alloc] init];
     camProfile.name = @"Home";

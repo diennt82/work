@@ -32,12 +32,13 @@
     // Do any additional setup after loading the view from its nib.
     
     self.navigationController.navigationBarHidden = NO;
-
-    UIImage *tmpImg = [UIImage imageNamed:@"Hubble_logo_back.png"];
     
-    UIBarButtonItem *backBarBtn = [[UIBarButtonItem alloc] initWithImage:tmpImg
+    UIImage *backButton = [[UIImage imageNamed:@"Hubble_logo_back.png"] resizableImageWithCapInsets:UIEdgeInsetsMake(0, 14, 0, 5)];
+    
+    UIBarButtonItem *backBarBtn = [[UIBarButtonItem alloc] initWithImage:backButton
                                                                    style:UIBarButtonItemStylePlain
-                                                                  target:self action:@selector(menuBackAction:)];
+                                                                  target:self
+                                                                  action:@selector(menuBackAction:)];
     
     self.navigationItem.leftBarButtonItem = backBarBtn;
    // assert(self.navigationController.navigationItem.leftBarButtonItem != nil);
@@ -51,13 +52,13 @@
     //[self.navigationController initWithRootViewController:camerasVC];
     
     SettingsViewController *settingsVC = [[SettingsViewController alloc] init];
-    UINavigationController *nav1 = [[UINavigationController alloc] initWithRootViewController:settingsVC];
+    //UINavigationController *nav1 = [[UINavigationController alloc] initWithRootViewController:settingsVC];
     
     Account_ViewController *accountVC = [[Account_ViewController alloc] init];
     UINavigationController *nav2 = [[UINavigationController alloc] initWithRootViewController:accountVC];
     
     
-    self.viewControllers = [NSArray arrayWithObjects:nav, nav1, nav2, nil];
+    self.viewControllers = [NSArray arrayWithObjects:nav, settingsVC, nav2, nil];
 }
 
 - (void)menuBackAction: (id)sender
