@@ -13,6 +13,8 @@
 
 @interface MenuViewController ()
 
+@property (retain, nonatomic) Account_ViewController *accountVC;
+
 @end
 
 @implementation MenuViewController
@@ -66,15 +68,22 @@
     SettingsViewController *settingsVC = [[SettingsViewController alloc] init];
     //UINavigationController *nav1 = [[UINavigationController alloc] initWithRootViewController:settingsVC];
     
-    Account_ViewController *accountVC = [[Account_ViewController alloc] init];
-    accountVC.mdelegate = self.menuDelegate;
+    self.accountVC = [[Account_ViewController alloc] init];
     
-    NSLog(@"viewDidLoad: %p, %p", self.menuDelegate, accountVC.mdelegate);
+    NSLog(@"viewDidLoad: %p, %p", self.menuDelegate, self.accountVC.mdelegate);
     
-    UINavigationController *nav2 = [[UINavigationController alloc] initWithRootViewController:accountVC];
+    UINavigationController *nav2 = [[UINavigationController alloc] initWithRootViewController:_accountVC];
     
     
     self.viewControllers = [NSArray arrayWithObjects:nav, settingsVC, nav2, nil];
+}
+
+- (void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    
+    self.accountVC.mdelegate = self.menuDelegate;
+    NSLog(@"viewDidAppear: %p, %p", self.menuDelegate, _accountVC.mdelegate);
 }
 
 - (void)menuBackAction: (id)sender

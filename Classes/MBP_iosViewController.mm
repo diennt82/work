@@ -295,6 +295,7 @@
     self.menuVC = [[MenuViewController alloc] initWithNibName:@"MenuViewController"
                                                        bundle:nil
                                              withConnDelegate:self];
+    NSLog(@"startShowingCameraList: %p, %p", self, self.menuVC.menuDelegate);
     
 	NSMutableArray * validChannels = [[NSMutableArray alloc]init ];
 
@@ -313,6 +314,8 @@
     assert(nav != nil);
     
 	[self presentViewController:nav animated:NO completion:^{}];
+    
+    NSLog(@"startShowingCameraList: %p, %p", self, self.menuVC.menuDelegate);
 
     [validChannels release];
 #else
@@ -713,7 +716,7 @@
 		case LOGIN_FAILED_OR_LOGOUT : //back from login -failed Or logout
 			{
                 statusDialogLabel.hidden = YES;
-				[self dismissViewControllerAnimated:NO completion:nil];
+				//[self dismissViewControllerAnimated:NO completion:nil];
                 self.app_stage = APP_STAGE_LOGGING_IN;
                 
                 [self performSelectorInBackground:@selector(logoutAndUnregistration_bg) withObject:nil];

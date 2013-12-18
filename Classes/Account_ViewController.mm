@@ -346,14 +346,8 @@
 -(void) userLogout
 {
     NSLog(@"LOG OUT>>>>");
-    if (mdelegate == nil)
+    if (mdelegate != nil)
     {
-        NSLog(@"Delegate is nill");
-    }
-    else
-    {
-        
-        
         accountInfo.hidden = YES;
         progress.hidden = NO;
         
@@ -364,6 +358,12 @@
         
         
         [mdelegate sendStatus:LOGIN_FAILED_OR_LOGOUT];
+        
+        [self dismissViewControllerAnimated:NO completion:^{}];
+    }
+    else
+    {
+        NSLog(@"Delegate is nill");
     }
 }
 
