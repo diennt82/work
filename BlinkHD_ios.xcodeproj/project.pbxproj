@@ -319,10 +319,7 @@
 		A1176B74180D1DD9000B7527 /* stream480p.sdp in Resources */ = {isa = PBXBuildFile; fileRef = A1176B72180D1DD9000B7527 /* stream480p.sdp */; };
 		A1176B75180D1DD9000B7527 /* stream720p.sdp in Resources */ = {isa = PBXBuildFile; fileRef = A1176B73180D1DD9000B7527 /* stream720p.sdp */; };
 		A11E8C1317E2DB7E00915F84 /* libstdc++.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = A11E8C1217E2DB7D00915F84 /* libstdc++.dylib */; };
-		A126ADF0185EA61B0023639F /* microphone-icon.png in Resources */ = {isa = PBXBuildFile; fileRef = A126ADEF185EA61B0023639F /* microphone-icon.png */; };
-		A126ADF2185EA6580023639F /* zoom_icon.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = A126ADF1185EA6580023639F /* zoom_icon.jpeg */; };
 		A14631C6185C133D00E96969 /* ScrollHorizontalMenu.m in Sources */ = {isa = PBXBuildFile; fileRef = A14631C5185C133D00E96969 /* ScrollHorizontalMenu.m */; };
-		A14631C8185C20CC00E96969 /* MenuBar.png in Resources */ = {isa = PBXBuildFile; fileRef = A14631C7185C20CC00E96969 /* MenuBar.png */; };
 		A15430F31818CA4700337EFE /* libpj-arm-apple-darwin9.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A15430F01818CA4700337EFE /* libpj-arm-apple-darwin9.a */; };
 		A15430F41818CA4700337EFE /* libpjlib-util-arm-apple-darwin9.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A15430F11818CA4700337EFE /* libpjlib-util-arm-apple-darwin9.a */; };
 		A15430F51818CA4700337EFE /* libpjnath-arm-apple-darwin9.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A15430F21818CA4700337EFE /* libpjnath-arm-apple-darwin9.a */; };
@@ -815,11 +812,8 @@
 		A1176B73180D1DD9000B7527 /* stream720p.sdp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = stream720p.sdp; sourceTree = "<group>"; };
 		A11E8C1217E2DB7D00915F84 /* libstdc++.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libstdc++.dylib"; path = "usr/lib/libstdc++.dylib"; sourceTree = SDKROOT; };
 		A123DC9717E9A748006CC6FD /* PlayerCallbackHandler.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PlayerCallbackHandler.h; sourceTree = "<group>"; };
-		A126ADEF185EA61B0023639F /* microphone-icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "microphone-icon.png"; sourceTree = "<group>"; };
-		A126ADF1185EA6580023639F /* zoom_icon.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = zoom_icon.jpeg; sourceTree = "<group>"; };
 		A14631C4185C133D00E96969 /* ScrollHorizontalMenu.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ScrollHorizontalMenu.h; sourceTree = "<group>"; };
 		A14631C5185C133D00E96969 /* ScrollHorizontalMenu.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ScrollHorizontalMenu.m; sourceTree = "<group>"; };
-		A14631C7185C20CC00E96969 /* MenuBar.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = MenuBar.png; sourceTree = "<group>"; };
 		A15430F01818CA4700337EFE /* libpj-arm-apple-darwin9.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libpj-arm-apple-darwin9.a"; path = "../ios-frameworks/pjsip/arm/lib/libpj-arm-apple-darwin9.a"; sourceTree = "<group>"; };
 		A15430F11818CA4700337EFE /* libpjlib-util-arm-apple-darwin9.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libpjlib-util-arm-apple-darwin9.a"; path = "../ios-frameworks/pjsip/arm/lib/libpjlib-util-arm-apple-darwin9.a"; sourceTree = "<group>"; };
 		A15430F21818CA4700337EFE /* libpjnath-arm-apple-darwin9.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libpjnath-arm-apple-darwin9.a"; path = "../ios-frameworks/pjsip/arm/lib/libpjnath-arm-apple-darwin9.a"; sourceTree = "<group>"; };
@@ -2318,9 +2312,6 @@
 		97A07FAD17D5FCFD00653460 /* H264Player */ = {
 			isa = PBXGroup;
 			children = (
-				A126ADF1185EA6580023639F /* zoom_icon.jpeg */,
-				A14631C7185C20CC00E96969 /* MenuBar.png */,
-				A126ADEF185EA61B0023639F /* microphone-icon.png */,
 				A14631C3185C12B600E96969 /* ScrollMenuView */,
 				A1E32FAB17E9899800504538 /* H264PlayerListener.mm */,
 				A1E32FAC17E9899800504538 /* H264PlayerListener.h */,
@@ -2634,7 +2625,6 @@
 				A1E74748185F07AE00A54B29 /* upgrade.png in Resources */,
 				8B9B57F0184F0DB200E58543 /* frame-3_update_new.png in Resources */,
 				974ACB59168055F9005AE4C6 /* ToUViewController_ipad.xib in Resources */,
-				A126ADF0185EA61B0023639F /* microphone-icon.png in Resources */,
 				974ACB7F168079CB005AE4C6 /* MonitorEverywhere_App_ios_Apple.html in Resources */,
 				38DE1C4B168AEA5F0049E814 /* AlertSettingViewController_ipad.xib in Resources */,
 				38DE1C46168AEA530049E814 /* AlertSettingViewController_land_ipad.xib in Resources */,
@@ -2670,7 +2660,6 @@
 				380CB0CA16DC5A9E00290587 /* Step_12_ViewController.xib in Resources */,
 				8BCAE124186068AF00AF870A /* Hubble_logo_back.png in Resources */,
 				8B9384981856F009009C4771 /* vol-min.png in Resources */,
-				A126ADF2185EA6580023639F /* zoom_icon.jpeg in Resources */,
 				380CB0CD16DC5AD500290587 /* Step_12_ViewController_land.xib in Resources */,
 				A1E74751185F07AE00A54B29 /* video_action_video_pressed.png in Resources */,
 				8B9384A718570284009C4771 /* brightness-d.png in Resources */,
@@ -2722,7 +2711,6 @@
 				978B25B617E1B41C006FC224 /* reveal-icon.png in Resources */,
 				978B25B717E1B41C006FC224 /* reveal-icon@2x.png in Resources */,
 				A1E74744185F07AE00A54B29 /* saveday.png in Resources */,
-				A14631C8185C20CC00E96969 /* MenuBar.png in Resources */,
 				978B25C217E1B4AB006FC224 /* BMMenuViewController.xib in Resources */,
 				8BC0A0201844A6EE00A5FD52 /* bb_setup_icon_step_1.png in Resources */,
 				97735C4517E1CEAA00160DA1 /* MyFrontViewController.xib in Resources */,
