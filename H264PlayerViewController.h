@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import <CameraScanner/CameraScanner.h>
+#import <CameraScanner/Util.h>
 #import <H264MediaPlayer/H264MediaPlayer.h>
 #import <MonitorCommunication/MonitorCommunication.h>
 
@@ -24,6 +25,8 @@
 #import "DeviceSettingsViewController.h"
 //for scrollHorizontalMenu
 #import "ScrollHorizontalMenu.h"
+//control panel menu
+#import "AudioOutStreamer.h"
 
 
 #define H264_STREAM_STARTED              1
@@ -54,7 +57,7 @@
 @end
 
 @interface H264PlayerViewController: UIViewController
-<UIPickerViewDelegate, UIPickerViewDataSource, PlaylistDelegate,PlayerCallbackHandler,ScanForCameraNotifier, StunClientDelegate, ZoneViewControlerDeleate, MelodyVCDelegate, UIScrollViewDelegate, ScrollHorizontalMenuDelegate>
+<UIPickerViewDelegate, UIPickerViewDataSource, PlaylistDelegate,PlayerCallbackHandler,ScanForCameraNotifier, StunClientDelegate, ZoneViewControlerDeleate, MelodyVCDelegate, UIScrollViewDelegate, ScrollHorizontalMenuDelegate, AudioOutStreamerDelegate>
 {
     ScrollHorizontalMenu *_horizMenu;
     int _selectedItemMenu;
@@ -92,8 +95,20 @@
     BOOL _isRecordInterface;
     BOOL _isProcessRecording;
     BOOL _isListening;
-//    AudioOutStreamer * audioOut;
+    
+    //processing for hold to talk
+    BOOL ptt_enabled;
+    AudioOutStreamer * audioOut;
+    HttpCommunication * httpComm;
+    
+    //processing for recording
+    int iMaxRecordSize;
+    NSString * iFileName;
 }
+//property for Hold to talk
+@property (nonatomic) BOOL walkieTalkieEnabled;
+//property for processing recording
+@property (nonatomic, retain) NSTimer * recTimer;
 
 @property (nonatomic, retain) IBOutlet ScrollHorizontalMenu *horizMenu;
 @property (nonatomic, assign) int selectedItemMenu;
@@ -137,7 +152,7 @@
 @property (nonatomic, retain) HttpCommunication* httpComm;
 @property (nonatomic, retain) NSMutableArray *playlistArray;
 @property (nonatomic) BOOL h264StreamerIsInStopped;
-@property (nonatomic, retain) HttpCommunication *htppComm;
+
 @property (nonatomic, retain) BMS_JSON_Communication *jsonComm;
 @property (nonatomic) BOOL recordingFlag;
 @property (nonatomic) BOOL disableAutorotateFlag;
