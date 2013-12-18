@@ -6,10 +6,8 @@
 //  Copyright 2012 Smart Panda Ltd. All rights reserved.
 //
 
-#import "Util.h"
-#import "PublicDefine.h"
-#import "AsyncSocket.h"
-#import "PCMPlayer.h"
+#import <CameraScanner/CameraScanner.h>
+#import <H264MediaPlayer/PCMPlayer.h>
 
 #define SOCKET_ID_SEND    200
 

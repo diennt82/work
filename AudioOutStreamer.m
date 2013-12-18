@@ -6,6 +6,8 @@
 //  Copyright 2012 Smart Panda Ltd. All rights reserved.
 //
 
+#define SENDING_SOCKET_TAG 1009
+
 #import "AudioOutStreamer.h"
 
 
