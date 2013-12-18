@@ -836,6 +836,9 @@
                                                         withValue:nil];
     //BLOCKED method
     [account readCameraListAndUpdate];
+    
+    [self dismissViewControllerAnimated:NO completion:^{}];
+    
     NSLog(@"Login success!");
     return;
 }

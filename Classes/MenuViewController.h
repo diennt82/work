@@ -9,9 +9,12 @@
 #import <UIKit/UIKit.h>
 #import "ConnectionMethodDelegate.h"
 
-@interface MenuViewController : UITabBarController <UINavigationControllerDelegate>
+@interface MenuViewController : UITabBarController
 
 @property (nonatomic, assign) id<ConnectionMethodDelegate> menuDelegate;
 @property (nonatomic, retain) NSMutableArray *cameras;
+
+- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
+     withConnDelegate:(id<ConnectionMethodDelegate> ) caller;
 
 @end

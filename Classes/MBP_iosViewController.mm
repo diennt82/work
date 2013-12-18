@@ -292,7 +292,9 @@
 {
 #if 1
     
-    self.menuVC = [[MenuViewController alloc] init];
+    self.menuVC = [[MenuViewController alloc] initWithNibName:@"MenuViewController"
+                                                       bundle:nil
+                                             withConnDelegate:self];
     
 	NSMutableArray * validChannels = [[NSMutableArray alloc]init ];
 
@@ -305,9 +307,10 @@
 	}
 
 	self.menuVC.cameras = validChannels;
-    self.menuVC.menuDelegate = self;
 
     UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:self.menuVC];
+    
+    assert(nav != nil);
     
 	[self presentViewController:nav animated:NO completion:^{}];
 
@@ -736,7 +739,7 @@
             // 1 & 2 work parallely
             
             //Back from login- login success
-            [self dismissViewControllerAnimated:NO completion:^{}];
+            //[self dismissViewControllerAnimated:NO completion:^{}];
             self.progressView.hidden = NO;
 
 

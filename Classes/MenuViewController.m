@@ -26,6 +26,18 @@
     return self;
 }
 
+- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
+     withConnDelegate:(id<ConnectionMethodDelegate> ) caller
+{
+    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
+    if (self) {
+        // Custom initialization
+        self.menuDelegate = caller;
+    }
+    return self;
+    
+}
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -55,6 +67,10 @@
     //UINavigationController *nav1 = [[UINavigationController alloc] initWithRootViewController:settingsVC];
     
     Account_ViewController *accountVC = [[Account_ViewController alloc] init];
+    accountVC.mdelegate = self.menuDelegate;
+    
+    NSLog(@"viewDidLoad: %p, %p", self.menuDelegate, accountVC.mdelegate);
+    
     UINavigationController *nav2 = [[UINavigationController alloc] initWithRootViewController:accountVC];
     
     
