@@ -22,7 +22,8 @@
 #import "ZoneViewController.h"
 #import "MelodyViewController.h"
 #import "DeviceSettingsViewController.h"
-
+//for scrollHorizontalMenu
+#import "ScrollHorizontalMenu.h"
 
 
 #define H264_STREAM_STARTED              1
@@ -53,8 +54,12 @@
 @end
 
 @interface H264PlayerViewController: UIViewController
-<UIPickerViewDelegate, UIPickerViewDataSource, PlaylistDelegate,PlayerCallbackHandler,ScanForCameraNotifier, StunClientDelegate, ZoneViewControlerDeleate, MelodyVCDelegate, UIScrollViewDelegate>
+<UIPickerViewDelegate, UIPickerViewDataSource, PlaylistDelegate,PlayerCallbackHandler,ScanForCameraNotifier, StunClientDelegate, ZoneViewControlerDeleate, MelodyVCDelegate, UIScrollViewDelegate, ScrollHorizontalMenuDelegate>
 {
+    ScrollHorizontalMenu *_horizMenu;
+    int _selectedItemMenu;
+    NSMutableArray *_itemImages;
+    NSMutableArray *_itemSelectedImages;
     MediaPlayer* h264Streamer;
     
     H264PlayerListener * h264StreamerListener;
@@ -84,9 +89,33 @@
 	//NSTimer * probeTimer;
      dispatch_queue_t player_func_queue;
     BOOL _isCameraOffline;
+    BOOL _isRecordInterface;
+    BOOL _isProcessRecording;
+    BOOL _isListening;
+//    AudioOutStreamer * audioOut;
 }
 
+@property (nonatomic, retain) IBOutlet ScrollHorizontalMenu *horizMenu;
+@property (nonatomic, assign) int selectedItemMenu;
 
+//ib for Touch to talk
+@property (retain, nonatomic) IBOutlet UIView *ib_ViewTouchToTalk;
+@property (retain, nonatomic) IBOutlet UIButton *ib_buttonTouchToTalk;
+
+@property (retain, nonatomic) IBOutlet UILabel *ib_labelTouchToTalk;
+
+//ib for recording
+@property (retain, nonatomic) IBOutlet UIView *ib_viewRecordTTT;
+@property (retain, nonatomic) IBOutlet UIButton *ib_processRecordOrTakePicture;
+@property (retain, nonatomic) IBOutlet UIButton *ib_buttonChangeAction;
+
+
+@property (retain, nonatomic) IBOutlet UILabel *ib_labelRecordVideo;
+
+
+@property (retain, nonatomic) IBOutlet UILabel *ib_temperature;
+@property (nonatomic, retain) NSMutableArray *itemImages;
+@property (nonatomic, retain) NSMutableArray *itemSelectedImages;
 @property (nonatomic, retain) NSTimer * alertTimer;
 //Add scrollview to support zoom in and zoom out
 @property (retain, nonatomic) IBOutlet UIScrollView *scrollView;
@@ -155,4 +184,12 @@
 -(void) handleMessage:(int) msg ext1: (int) ext1 ext2:(int) ext2;
 - (void)stopStream;
 - (void)goBackToCameraList;
+
+
+//action for control panel and update bottom view
+- (IBAction)holdToTalk:(id)sender;
+- (IBAction)processingRecordingOrTakePicture:(id)sender;
+- (IBAction)changeAction:(id)sender;
+- (IBAction)touchUpInsideHoldToTalk:(id)sender;
+
 @end

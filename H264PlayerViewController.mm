@@ -35,6 +35,15 @@
 
 #define CAM_IN_VEW @"string_Camera_Mac_Being_Viewed"
 #define HIGH_STATUS_BAR 20;
+
+//define for Control Panel button
+#define INDEX_PAN_TILT      0
+#define INDEX_MICRO         1
+#define INDEX_RECORDING     2
+#define INDEX_MELODY        3
+#define INDEX_TEMP          4
+
+
 @interface H264PlayerViewController ()
 
 
@@ -48,6 +57,10 @@
 @synthesize  alertTimer;
 @synthesize  askForFWUpgradeOnce;
 @synthesize   client = _client;
+@synthesize horizMenu = _horizMenu;
+@synthesize itemImages = _itemImages;
+@synthesize itemSelectedImages = _itemSelectedImages;
+@synthesize selectedItemMenu = _selectedItemMenu;
 
 #pragma mark - View
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
@@ -64,12 +77,21 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
     // only is called in viewDidLoad, make sure it is called once.
-    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
-    {
-        [[NSBundle mainBundle] loadNibNamed:@"H264PlayerViewController_ipad"
-                                      owner:self
-                                    options:nil];
-    }
+    
+    /*
+     //create list image for display horizontal scroll view menu
+     1.Pan, Tilt & Zoom (bb_setting_icon.png)
+     2.Microphone (for two way audio) bb_setting_icon.png
+     3.Take a photo/Record Video ( bb_rec_icon_d.png )
+     4.Lullaby          bb_melody_off_icon.png
+     5.Camera List          bb_camera_slider_icon
+     6.Temperature display        temp_alert
+     */
+    self.itemImages = [NSMutableArray arrayWithObjects:@"video_action_pan.png", @"video_action_mic.png", @"video_action_video.png", @"video_action_music.png", @"video_action_temp.png", nil];
+    self.itemSelectedImages = [NSMutableArray arrayWithObjects:@"video_action_pan_pressed.png", @"video_action_mic_pressed.png", @"video_action_video_pressed.png", @"video_action_music_pressed.png", @"video_action_temp_pressed.png", nil];
+    [self.horizMenu reloadData];
+    self.selectedItemMenu = 0;
+    [self updateBottomView];
 
     // Do any additional setup after loading the view.
 	[[NSNotificationCenter defaultCenter] addObserver: self
@@ -132,7 +154,6 @@
     [self addGesturesPichInAndOut];
     [self updateNavigationBarAndToolBar];
     [self becomeActive];
-
 }
 - (void)addGesturesPichInAndOut
 {
@@ -343,22 +364,6 @@
 {
     if (self.melodyViewController != nil)
     {
-        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
-        {
-            self.melodyViewController.view.frame = CGRectMake(276, 540, 216, 400);
-        }
-        else
-        {
-            if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 7)
-            {
-                self.melodyViewController.view.frame = CGRectMake(52, 244, 216, 236);
-            }
-            else
-            {
-                self.melodyViewController.view.frame = CGRectMake(52, 224, 216, 236);
-            }
-        }
-        
         [self.view addSubview:self.melodyViewController.view];
         [self.view bringSubviewToFront:self.melodyViewController.view];
     }
@@ -1164,6 +1169,7 @@
                                                            selector:@selector(h_directional_change_callback:)
                                                            userInfo:nil
                                                             repeats:YES];
+//    [self setupPtt];
     
 }
 
@@ -1242,7 +1248,7 @@
 //        self.backBarBtnItem.enabled = YES;
         self.imageViewVideo.image = [UIImage imageNamed:@"camera_offline"];
         self.viewCtrlButtons.hidden = YES;
-        self.imgViewDrectionPad.hidden= YES;
+//        self.imgViewDrectionPad.hidden= YES;
         self.viewStopStreamingProgress.hidden = YES;
         
         NSLog(@"Camera maybe not available.");
@@ -3151,6 +3157,36 @@
     
 	if (orientation == UIInterfaceOrientationLandscapeLeft || orientation == UIInterfaceOrientationLandscapeRight)
 	{
+        //load new nib for landscape iPad
+        
+        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+        {
+            [[NSBundle mainBundle] loadNibNamed:@"H264PlayerViewController_land_iPad"
+                                          owner:self
+                                        options:nil];
+
+                self.melodyViewController.view.frame = CGRectMake(808, 434, 216, 241);
+
+
+        }
+        else
+        {
+            [[NSBundle mainBundle] loadNibNamed:@"H264PlayerViewController_land"
+                                          owner:self
+                                        options:nil];
+
+                if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 7)
+                {
+                    self.melodyViewController.view.frame = CGRectMake(320, 60, 159, 204);
+                }
+                else
+                {
+                    self.melodyViewController.view.frame = CGRectMake(320, 60, 159, 204);
+                }
+
+        }
+        
+        
         //landscape mode
         [self.navigationController setNavigationBarHidden:YES];
         if (_segmentControl.selectedSegmentIndex == 0) // Video View
@@ -3168,10 +3204,7 @@
             }
             
         }
-        
-        self.topToolbar.hidden = YES;
-        self.imgViewDrectionPad.hidden = YES;
-        self.viewCtrlButtons.hidden = YES;
+        [self updateBottomView];
         [self.melodyViewController.view removeFromSuperview];
         
         CGFloat imageViewHeight = screenHeight * 9 / 16;
@@ -3201,16 +3234,38 @@
 	}
 	else if (orientation == UIInterfaceOrientationPortrait || orientation == UIInterfaceOrientationPortraitUpsideDown)
 	{
-        //portrait mode
-
+        //load new nib
+        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+        {
+            [[NSBundle mainBundle] loadNibNamed:@"H264PlayerViewController_ipad"
+                                          owner:self
+                                        options:nil];
+            self.melodyViewController.view.frame = CGRectMake(0, 496, 768, 482);
+        }
+        else
+        {
+            [[NSBundle mainBundle] loadNibNamed:@"H264PlayerViewController"
+                                          owner:self
+                                        options:nil];
+            if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 7)
+            {
+                self.melodyViewController.view.frame = CGRectMake(0, 240, screenWidth, screenHeight - 240);
+            }
+            else
+            {
+                self.melodyViewController.view.frame = CGRectMake(0, 240, screenWidth, screenHeight - 240);
+            }
+        }
         
+        //portrait mode
         //[self updateNavigationBarAndToolBar];
+        [self updateBottomView];
         [self.navigationController setNavigationBarHidden:NO];
         [[UIApplication sharedApplication] setStatusBarHidden:NO];
         self.view.backgroundColor = [UIColor whiteColor];
         //self.topToolbar.hidden = NO;
-        self.imgViewDrectionPad.hidden = NO;
         self.viewCtrlButtons.hidden = NO;
+        self.horizMenu.hidden = NO;
         self.viewStopStreamingProgress.hidden = YES;
         
         CGFloat imageViewHeight = screenWidth * 9 / 16;
@@ -3733,6 +3788,128 @@
     [self centerScrollViewContents];
 }
 
+
+#pragma mark -
+#pragma mark HorizMenu Data Source
+- (UIImage *) selectedItemImageForMenu:(ScrollHorizontalMenu *) tabMenu withIndexItem:(NSInteger)index
+{
+    NSString *imageSelected = [self.itemSelectedImages objectAtIndex:index];
+    return [UIImage imageNamed:imageSelected];
+}
+- (UIColor *) backgroundColorForMenu:(ScrollHorizontalMenu *)tabView
+{
+    return [UIColor clearColor];
+}
+
+- (int) numberOfItemsForMenu:(ScrollHorizontalMenu *)tabView
+{
+    return [self.itemImages count];
+}
+
+- (NSString *) horizMenu:(ScrollHorizontalMenu *)horizMenu nameImageForItemAtIndex:(NSUInteger)index
+{
+    return [self.itemImages objectAtIndex:index];
+}
+- (NSString *) horizMenu:(ScrollHorizontalMenu *)horizMenu nameImageSelectedForItemAtIndex:(NSUInteger)index
+{
+    return [self.itemSelectedImages objectAtIndex:index];
+}
+#pragma mark -
+#pragma mark HorizMenu Delegate
+-(void) horizMenu:(ScrollHorizontalMenu *)horizMenu itemSelectedAtIndex:(NSUInteger)index
+{
+    /*
+     //new
+     0. pan/tilt, 
+     1. mic, 
+     2. rec, 
+     3. melody, 
+     4. temp
+     */
+    if (index == INDEX_PAN_TILT) {
+        //implement Pan, Tilt & zoom here
+        _selectedItemMenu = INDEX_PAN_TILT;
+        
+    }
+    else if (index == INDEX_MICRO)
+    {
+        // implement Microphone here
+        _selectedItemMenu = INDEX_MICRO;
+        [self recordingPressAction:nil];
+    }
+    else if (index == INDEX_RECORDING)
+    {
+        //implement take a photo/record video here
+        _selectedItemMenu = INDEX_RECORDING;
+    }
+    else if (index == INDEX_MELODY)
+    {
+        _selectedItemMenu = INDEX_MELODY;
+        [self melodyTouchAction:nil];
+    }
+    else if (index == INDEX_TEMP)
+    {
+        //implement display camera list here
+        _selectedItemMenu = INDEX_TEMP;
+    }
+    else {
+        NSLog(@"Action out of bound");
+    }
+    [self updateBottomView];
+}
+
+- (void)updateBottomView
+{
+    //first hidden all view
+    [self hidenAllBottomView];
+    
+    if (_selectedItemMenu == INDEX_PAN_TILT)
+    {
+        [self.imgViewDrectionPad setHidden:NO];
+    }
+    else if (_selectedItemMenu == INDEX_MICRO)
+    {
+        [self.ib_ViewTouchToTalk setHidden:NO];
+    }
+    else if (_selectedItemMenu == INDEX_RECORDING)
+    {
+        [self.ib_viewRecordTTT setHidden:NO];
+    }
+    else if (_selectedItemMenu == INDEX_MELODY)
+    {
+        [self.melodyViewController.view setHidden:NO];
+    }
+    else if (_selectedItemMenu == INDEX_TEMP)
+    {
+        [self.ib_temperature setHidden:NO];
+    }
+}
+
+- (void)hidenAllBottomView
+{
+    [self.imgViewDrectionPad setHidden:YES];
+    
+    [self.ib_temperature setHidden:YES];
+    [self.ib_temperature setBackgroundColor:[UIColor clearColor]];
+    
+    [self.ib_ViewTouchToTalk setHidden:YES];
+    [self.ib_ViewTouchToTalk setBackgroundColor:[UIColor clearColor]];
+    
+    [self.ib_viewRecordTTT setHidden:YES];
+    [self.ib_viewRecordTTT setBackgroundColor:[UIColor clearColor]];
+    [self.melodyViewController.view setHidden:YES];
+}
+
+- (void)showAllBottomView
+{
+    [self.imgViewDrectionPad setHidden:NO];
+    [self.ib_temperature setHidden:NO];
+    [self.ib_ViewTouchToTalk setHidden:NO];
+    [self.ib_viewRecordTTT setHidden:NO];
+    [self.melodyViewController.view setHidden:NO];
+    [self.scrollView setHidden:NO];
+}
+
 #pragma mark - Memory Release
 
 - (void)didReceiveMemoryWarning
@@ -3777,11 +3954,23 @@
     
     [_melodyButton release];
     [_scrollView release];
+    [_ib_temperature release];
+    [_ib_ViewTouchToTalk release];
+
+    [_ib_labelTouchToTalk release];
+    [_ib_viewRecordTTT release];
+    [_ib_labelRecordVideo release];
+    [_ib_buttonTouchToTalk release];
+    [_ib_processRecordOrTakePicture release];
+    [_ib_buttonChangeAction release];
     [super dealloc];
 }
 - (void)viewWillAppear:(BOOL)animated
 {
     _isCameraOffline = NO;
+    _isRecordInterface  = YES;
+    _isProcessRecording = NO;
+    _isListening = NO;
     [super viewWillAppear:animated];
     [self checkOrientation];
     
@@ -3809,4 +3998,382 @@
     
     [super viewDidUnload];
 }
+#pragma  mark -
+#pragma mark PTT
+-(void) setupPtt
+{
+    
+	UILongPressGestureRecognizer *longPress =
+    [[UILongPressGestureRecognizer alloc] initWithTarget:self
+                                                  action:@selector(longPress:)];
+	longPress.minimumPressDuration = 1.0;
+	[self.ib_buttonTouchToTalk addGestureRecognizer:longPress];
+	[longPress release];
+    
+    //Add another TOUCH DOWN event for this
+    [self.ib_buttonTouchToTalk addTarget:self action:@selector(user_press_down) forControlEvents:UIControlEventTouchDown];
+    [self.ib_buttonTouchToTalk addTarget:self action:@selector(user_release) forControlEvents:UIControlEventTouchUpInside];
+    [self.ib_buttonTouchToTalk addTarget:self action:@selector(user_release) forControlEvents:UIControlEventTouchUpOutside];
+
+    
+}
+
+-(void) user_release
+{
+    
+//    NSLog(@"Detect user cancel PTT & clean up");
+//    if (audioOut != nil)
+//    {
+//        [audioOut disconnectFromAudioSocket];
+//        [audioOut release];
+//    }
+}
+-(void)user_press_down
+{
+    NSLog(@"Create AudioOutStreamer & start recording now");
+//    audioOut = [[AudioOutStreamer alloc] initWithDeviceIp:comm.device_ip
+//                                               andPTTport:self.selected_channel.profile.ptt_port];
+//    [audioOut retain];
+    
+    //Start buffering sound from user at the moment they press down the button
+    //  This is to prevent loss of audio data
+//    [audioOut startRecordingSound];
+}
+
+
+
+
+-(void) longPress:(UILongPressGestureRecognizer*) gest
+{
+    
+//	UIButton * btn = (UIButton *)[gest view];
+//    
+//    
+//	if ([gest state] == UIGestureRecognizerStateBegan)
+//	{
+//		[btn setImage:[UIImage imageNamed:@"bb_vs_mike_off.png"] forState:UIControlStateNormal];
+//        
+//        self.walkieTalkieEnabled = YES;
+//		[self setEnablePtt:YES];
+//        
+//        
+//	}
+//	else if ([gest state] == UIGestureRecognizerStateEnded ||
+//             [gest state] == UIGestureRecognizerStateCancelled)
+//	{
+//        
+//        if ([gest state] == UIGestureRecognizerStateCancelled)
+//        {
+//            NSLog(@"detect cancelling PTT");
+//            
+//        }
+//        
+//		[self setEnablePtt:NO];
+//	}
+    
+    
+}
+
+- (IBAction)holdToTalk:(id)sender {
+    UIImage *imageHoldToTalk = [UIImage imageNamed:@"camera_action_mic.png"];
+    UIImage *imageHoldedToTalk = [UIImage imageNamed:@"camera_action_mic_pressed.png"];
+    [self.ib_buttonTouchToTalk setBackgroundImage:imageHoldToTalk forState:UIControlStateNormal];
+    [self.ib_buttonTouchToTalk setBackgroundImage:imageHoldedToTalk forState:UIControlEventTouchDown];
+    [self.ib_buttonTouchToTalk setBackgroundImage:imageHoldToTalk forState:UIControlEventTouchUpInside];
+    [self.ib_labelTouchToTalk setText:@"Listening"];
+}
+
+- (IBAction)touchUpInsideHoldToTalk:(id)sender {
+    
+    UIImage *imageHoldToTalk = [UIImage imageNamed:@"camera_action_mic.png"];
+    [self.ib_buttonTouchToTalk setBackgroundColor:[UIColor clearColor]];
+    [self.ib_buttonTouchToTalk setBackgroundImage:imageHoldToTalk forState:UIControlStateNormal];
+    [self.ib_buttonTouchToTalk setBackgroundImage:imageHoldToTalk forState:UIControlEventTouchUpInside];
+    [self.ib_labelTouchToTalk setText:@"Hold To Talk"];
+}
+
+- (IBAction)processingRecordingOrTakePicture:(id)sender {
+    UIImage *readyRecord = [UIImage imageNamed:@"camera_action_video.png"];
+    UIImage *readyRecordPressed = [UIImage imageNamed:@"camera_action_video_pressed.png"];
+    UIImage *recordingImage = [UIImage imageNamed:@"camera_action_video_stop.png"];
+    UIImage *recordingPressed = [UIImage imageNamed:@"camera_action_video_stop_pressed.png"];
+    
+    UIImage *takePictureImage = [UIImage imageNamed:@"camera_action_photo.png"];
+    UIImage *takePicturePressed = [UIImage imageNamed:@"camera_action_photo_pressed.png"];
+    
+    NSLog(@"_isRecordInterface is %d", _isRecordInterface);
+    if (_isRecordInterface)
+    {
+        _isProcessRecording = !_isProcessRecording;
+        NSLog(@"_isProcessRecording is %d", _isProcessRecording);
+        if (_isProcessRecording)
+        {
+            //now is interface recording
+            [self.ib_labelRecordVideo setText:@"00:36"];
+            [self.ib_processRecordOrTakePicture setBackgroundImage:recordingImage forState:UIControlStateNormal];
+            [self.ib_processRecordOrTakePicture setBackgroundImage:recordingPressed forState:UIControlEventTouchDown];
+            [self.ib_processRecordOrTakePicture setBackgroundImage:recordingImage forState:UIControlEventTouchUpInside];
+        }
+        else
+        {
+            //here to pause
+            [self.ib_processRecordOrTakePicture setBackgroundImage:readyRecord forState:UIControlStateNormal];
+            [self.ib_processRecordOrTakePicture setBackgroundImage:readyRecordPressed forState:UIControlEventTouchDown];
+            [self.ib_processRecordOrTakePicture setBackgroundImage:readyRecord forState:UIControlEventTouchUpInside];
+            [self.ib_labelRecordVideo setText:@"Record Video"];
+        }
+    }
+    else
+    {
+        //now is for take pictures
+        [self.ib_labelRecordVideo setText:@"Take Picture"];
+        [self.ib_processRecordOrTakePicture setBackgroundImage:takePictureImage forState:UIControlStateNormal];
+        [self.ib_processRecordOrTakePicture setBackgroundImage:takePictureImage forState:UIControlEventTouchUpInside];
+        [self.ib_processRecordOrTakePicture setBackgroundImage:takePicturePressed forState:UIControlEventTouchDown];
+    }
+
+}
+
+- (IBAction)changeAction:(id)sender {
+    //Image for change action
+    UIImage *recordImage = [UIImage imageNamed:@"camera_action_video_s.png"];
+    UIImage *takePictureImage = [UIImage imageNamed:@"camera_action_pic_s.png"];
+    
+    //Image change for processing button
+    UIImage *recordActionImage = [UIImage imageNamed:@"camera_action_video.png"];
+    UIImage *recordActionImagePressed = [UIImage imageNamed:@"camera_action_video_pressed.png"];
+    
+    UIImage *takePicture = [UIImage imageNamed:@"camera_action_photo.png"];
+    UIImage *takePicturePressed = [UIImage imageNamed:@"camera_action_photo_pressed.png"];
+    
+    
+    _isRecordInterface = !_isRecordInterface;
+    if (_isRecordInterface)
+    {
+        [self.ib_processRecordOrTakePicture setBackgroundImage:recordActionImage forState:UIControlStateNormal];
+         [self.ib_processRecordOrTakePicture setBackgroundImage:recordActionImagePressed forState:UIControlEventTouchDown];
+        [self.ib_processRecordOrTakePicture setBackgroundImage:recordActionImage forState:UIControlEventTouchUpInside];
+        [self.ib_buttonChangeAction setBackgroundImage:takePictureImage forState:UIControlStateNormal];
+        [self.ib_labelRecordVideo setText:@"Record Video"];
+    }
+    else
+    {
+        _isProcessRecording = NO;
+        [self.ib_processRecordOrTakePicture setBackgroundImage:takePicture forState:UIControlStateNormal];
+        [self.ib_processRecordOrTakePicture setBackgroundImage:takePicturePressed forState:UIControlEventTouchDown];
+        [self.ib_processRecordOrTakePicture setBackgroundImage:takePicture forState:UIControlEventTouchUpInside];
+        [self.ib_buttonChangeAction setBackgroundImage:recordImage forState:UIControlStateNormal];
+        [self.ib_labelRecordVideo setText:@"Take Picture"];
+    }
+}
+
+
+
+
+#pragma  mark -
+#pragma mark PTT
+/*
+- (void)cleanup
+{
+    
+    [self performSelectorInBackground:@selector(set_Walkie_Talkie_bg:)
+                           withObject:@"0"];
+    
+    [audioOut release];
+    
+    UIButton *pttBtn = (UIButton *)[self.view viewWithTag:PTT_ENGAGE_BTN];
+    
+    [pttBtn setImage:[UIImage imageNamed:@"bb_vs_mike_on.png"] forState:UIControlStateNormal];
+    
+    self.walkieTalkieEnabled = NO;
+    
+    [self tryToShowFullScreen];
+    
+    UIButton * spk = (UIButton*) [self.view viewWithTag:SPK_CONTROL_BTN];
+    if (spk != nil && (self.streamer.disableAudio == TRUE))
+    {
+        //Toggle camera audio when ptt disabled
+        [spk sendActionsForControlEvents:UIControlEventTouchUpInside];
+    }
+}
+
+- (BOOL) setEnablePtt:(BOOL) walkie_talkie_enabled
+{
+    
+    
+	@synchronized (self)
+	{
+		if ( walkie_talkie_enabled == YES)
+		{
+            
+			[self performSelectorInBackground:@selector(set_Walkie_Talkie_bg:)
+                                   withObject:[NSString stringWithFormat:@"%d",walkie_talkie_enabled]];
+            if (audioOut != nil)
+			{
+                [audioOut connectToAudioSocket];
+                audioOut.audioOutStreamerDelegate = self;
+            }
+            else
+            {
+                NSLog(@" NEED to enable audioOut now BUT audioOut = nil!!!");
+                
+            }
+            
+            
+		}
+		else
+		{
+            
+			if (audioOut != nil)
+			{
+				[audioOut disconnectFromAudioSocket];
+			}
+            
+		}
+        
+	}
+	return walkie_talkie_enabled ;
+    
+}
+
+
+- (void) set_Walkie_Talkie_bg: (NSString *) status
+{
+	NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
+    
+	NSString * command = [NSString stringWithFormat:@"%@%@",SET_PTT,status];
+    
+	if(comm != nil)
+	{
+		[comm sendCommandAndBlock:command];
+	}
+    
+	[pool release];
+}
+
+-(void) user_release
+{
+    
+    NSLog(@"Detect user cancel PTT & clean up");
+    if (audioOut != nil)
+    {
+        [audioOut disconnectFromAudioSocket];
+        [audioOut release];
+    }
+}
+-(void)user_press_down
+{
+    NSLog(@"Create AudioOutStreamer & start recording now");
+    audioOut = [[AudioOutStreamer alloc] initWithDeviceIp:comm.device_ip
+                                               andPTTport:self.selected_channel.profile.ptt_port];
+    [audioOut retain];
+    
+    //Start buffering sound from user at the moment they press down the button
+    //  This is to prevent loss of audio data
+    [audioOut startRecordingSound];
+}
+
+
+
+
+-(void) longPress:(UILongPressGestureRecognizer*) gest
+{
+    
+	UIButton * btn = (UIButton *)[gest view];
+    
+    
+	if ([gest state] == UIGestureRecognizerStateBegan)
+	{
+		[btn setImage:[UIImage imageNamed:@"bb_vs_mike_off.png"] forState:UIControlStateNormal];
+        
+        self.walkieTalkieEnabled = YES;
+		[self setEnablePtt:YES];
+        
+        
+	}
+	else if ([gest state] == UIGestureRecognizerStateEnded ||
+             [gest state] == UIGestureRecognizerStateCancelled)
+	{
+        
+        if ([gest state] == UIGestureRecognizerStateCancelled)
+        {
+            NSLog(@"detect cancelling PTT");
+            
+        }
+        
+		[self setEnablePtt:NO];
+	}
+    
+    
+}
+
+-(void) showPttButton
+{
+    if (self.enableControls == FALSE)
+    {
+        //siliently return;
+        return;
+    }
+    
+    
+	pttButton.hidden = NO;
+	[self.view bringSubviewToFront:pttButton];
+    
+    //Disable fullscreen timer
+    if ( (fullScreenTimer != nil) && [fullScreenTimer isValid])
+	{
+		//invalidate the timer ..
+		[fullScreenTimer invalidate];
+		fullScreenTimer = nil;
+	}
+    
+}
+
+
+
+
+-(IBAction)buttonPttPressed:(id)sender
+{
+    if (self.enableControls == FALSE)
+    {
+        //siliently return;
+        return;
+    }
+    
+    
+	if ( (self.selected_channel != nil) &&
+        (  selected_channel.communication_mode == COMM_MODE_STUN      ||
+         selected_channel.communication_mode ==  COMM_MODE_STUN_RELAY2 )
+        )
+	{
+		//Dont support in stun mode
+        
+		return;
+	}
+    
+	UIButton * pttBtn  = (UIButton *) sender;
+	int tag = pttBtn.tag;
+    
+	if (ptt_enabled == FALSE)
+	{
+		ptt_enabled = TRUE;
+		pttBtn.selected = FALSE;
+        
+        
+	}
+    
+    
+    
+    
+    
+	switch (tag)
+	{
+		case PTT_CONTROL_BTN:
+			directionPad.hidden = YES;
+            
+			[self showPttButton];
+			break;
+	}
+}
+ */
 @end

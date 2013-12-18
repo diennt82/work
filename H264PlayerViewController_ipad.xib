@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.iPad.XIB" version="3.0" toolsVersion="4514" systemVersion="12F45" targetRuntime="iOS.CocoaTouch.iPad" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.iPad.XIB" version="3.0" toolsVersion="4514" systemVersion="13A603" targetRuntime="iOS.CocoaTouch.iPad" propertyAccessControl="none">
     <dependencies>
         <deployment defaultVersion="1536" identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3747"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3746"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="H264PlayerViewController">
@@ -11,7 +11,15 @@
                 <outlet property="activityStopStreamingProgress" destination="W2O-R1-p7T" id="eie-Fe-jmF"/>
                 <outlet property="backBarBtnItem" destination="OSN-2y-gyH" id="4eV-bz-uP5"/>
                 <outlet property="cameraNameBarBtnItem" destination="rSX-Xf-gMR" id="him-T0-ynf"/>
-                <outlet property="hqViewButton" destination="ku2-k4-lrp" id="oFA-J8-Jnc"/>
+                <outlet property="horizMenu" destination="YIt-si-GDq" id="s8I-HD-Zj6"/>
+                <outlet property="ib_ViewTouchToTalk" destination="Eac-uq-eTX" id="Wlx-K1-Kwd"/>
+                <outlet property="ib_buttonChangeAction" destination="rgq-Re-BwB" id="XlY-Yh-XV7"/>
+                <outlet property="ib_buttonTouchToTalk" destination="Oy9-YK-1dP" id="6Hb-dt-Wrg"/>
+                <outlet property="ib_labelRecordVideo" destination="9xc-Tf-KYg" id="ggK-dl-DGf"/>
+                <outlet property="ib_labelTouchToTalk" destination="Rnz-fL-63I" id="5Ri-Tv-pQD"/>
+                <outlet property="ib_processRecordOrTakePicture" destination="Zmx-sx-U2g" id="xEX-9r-kSB"/>
+                <outlet property="ib_temperature" destination="CIZ-me-hAc" id="pp0-sV-ftl"/>
+                <outlet property="ib_viewRecordTTT" destination="Gtp-0X-Ae2" id="Z84-qj-cGT"/>
                 <outlet property="imageViewVideo" destination="ewk-Ss-5Zt" id="hm9-FC-hEY"/>
                 <outlet property="imgViewDrectionPad" destination="WPh-TE-Nhn" id="wm3-nT-qIE"/>
                 <outlet property="pickerHQOptions" destination="Vzj-s2-bhG" id="lW3-Y9-wfg"/>
@@ -19,11 +27,8 @@
                 <outlet property="scrollView" destination="xsx-R1-x8v" id="gF2-Cc-0cF"/>
                 <outlet property="segCtrl" destination="R9k-7s-dUb" id="YxY-SO-Hdz"/>
                 <outlet property="topToolbar" destination="LPs-YB-cld" id="uqU-jW-LCV"/>
-                <outlet property="triggerRecordingButton" destination="epJ-n6-Cow" id="5iu-0s-3KX"/>
                 <outlet property="view" destination="KT0-i3-kTw" id="q7Z-xw-GQ3"/>
-                <outlet property="viewCtrlButtons" destination="flZ-zd-nvr" id="vvK-oI-ChB"/>
                 <outlet property="viewStopStreamingProgress" destination="huw-ip-zYb" id="7Om-HI-dp4"/>
-                <outlet property="zoneButton" destination="qaC-Nm-tHI" id="YdX-mF-ve6"/>
             </connections>
         </placeholder>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
@@ -94,103 +99,95 @@
                         </barButtonItem>
                     </items>
                 </toolbar>
-                <imageView userInteractionEnabled="NO" tag="999" contentMode="scaleToFill" image="circle_buttons1_2_d.png" id="WPh-TE-Nhn">
-                    <rect key="frame" x="334" y="820" width="120" height="120"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
-                    <inset key="insetFor6xAndEarlier" minX="0.0" minY="20" maxX="0.0" maxY="-20"/>
-                </imageView>
-                <view contentMode="scaleToFill" id="flZ-zd-nvr" userLabel="Buttons">
-                    <rect key="frame" x="0.0" y="495" width="768" height="44"/>
-                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
-                    <subviews>
-                        <button opaque="NO" tag="700" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="ku2-k4-lrp" userLabel="hq">
-                            <rect key="frame" x="256" y="4" width="37" height="37"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
-                            <state key="normal" image="hq_d.png">
-                                <color key="titleColor" red="0.19607843459999999" green="0.30980393290000002" blue="0.52156865600000002" alpha="1" colorSpace="calibratedRGB"/>
-                                <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                            </state>
-                            <state key="highlighted">
-                                <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                            </state>
-                            <connections>
-                                <action selector="hqPressAction:" destination="-1" eventType="touchUpInside" id="fX2-bo-K8x"/>
-                            </connections>
-                        </button>
-                        <button opaque="NO" tag="705" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="C2z-Bj-SZK" userLabel="i-frame">
-                            <rect key="frame" x="365" y="4" width="37" height="37"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            <fontDescription key="fontDescription" type="system" pointSize="18"/>
-                            <state key="normal" image="i_mode.png">
-                                <color key="titleColor" red="0.1960784314" green="0.30980392159999998" blue="0.52156862749999999" alpha="1" colorSpace="calibratedRGB"/>
-                                <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                            </state>
-                            <state key="highlighted">
-                                <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                            </state>
-                            <connections>
-                                <action selector="iFrameOnlyPressAction:" destination="-1" eventType="touchUpInside" id="1Fd-sU-F9D"/>
-                            </connections>
-                        </button>
-                        <button opaque="NO" tag="701" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="epJ-n6-Cow" userLabel="recording">
-                            <rect key="frame" x="465" y="0.0" width="37" height="45"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
-                            <state key="normal" image="bb_rec_icon_d.png">
-                                <color key="titleColor" red="0.19607843459999999" green="0.30980393290000002" blue="0.52156865600000002" alpha="1" colorSpace="calibratedRGB"/>
-                                <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                            </state>
-                            <state key="disabled" image="bb_ptt_icon_d.png"/>
-                            <state key="selected" image="bb_ptt_icon_d.png"/>
-                            <state key="highlighted">
-                                <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                            </state>
-                            <connections>
-                                <action selector="recordingPressAction:" destination="-1" eventType="touchUpInside" id="Hth-h2-pn3"/>
-                            </connections>
-                        </button>
-                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="qaC-Nm-tHI">
-                            <rect key="frame" x="563" y="0.0" width="45" height="45"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            <state key="normal" image="bb_motion_icon.png">
-                                <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                            </state>
-                            <connections>
-                                <action selector="zoneTouchedAction:" destination="-1" eventType="touchUpInside" id="ry8-98-let"/>
-                            </connections>
-                        </button>
-                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="4Ze-lg-kIk" userLabel="BtnMelody">
-                            <rect key="frame" x="161" y="4" width="40" height="40"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
-                            <state key="normal" image="bb_melody_off_icon.png">
-                                <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                            </state>
-                            <connections>
-                                <action selector="melodyTouchAction:" destination="-1" eventType="touchUpInside" id="Et8-dt-F4O"/>
-                            </connections>
-                        </button>
-                        <button opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="6Ix-IK-lm1" userLabel="Button - Settings">
-                            <rect key="frame" x="680" y="0.0" width="45" height="45"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            <state key="normal" image="bb_setting_icon.png">
-                                <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                            </state>
-                            <connections>
-                                <action selector="settingsTouchAction:" destination="-1" eventType="touchUpInside" id="krR-Rr-p4X"/>
-                            </connections>
-                        </button>
-                    </subviews>
-                    <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
-                    <inset key="insetFor6xAndEarlier" minX="0.0" minY="20" maxX="0.0" maxY="-20"/>
-                </view>
                 <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" hidesWhenStopped="YES" style="whiteLarge" id="YeU-B1-crq">
                     <rect key="frame" x="365" y="261" width="37" height="37"/>
                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                     <inset key="insetFor6xAndEarlier" minX="0.0" minY="20" maxX="0.0" maxY="-20"/>
                     <color key="color" white="1" alpha="1" colorSpace="calibratedWhite"/>
                 </activityIndicatorView>
+                <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" id="YIt-si-GDq" customClass="ScrollHorizontalMenu">
+                    <rect key="frame" x="94" y="406" width="580" height="60"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <inset key="insetFor6xAndEarlier" minX="0.0" minY="20" maxX="0.0" maxY="-20"/>
+                    <connections>
+                        <outlet property="dataSource" destination="-1" id="5KS-B9-Yi6"/>
+                        <outlet property="itemSelectedDelegate" destination="-1" id="deS-9J-Z5y"/>
+                    </connections>
+                </scrollView>
+                <view contentMode="scaleToFill" id="Eac-uq-eTX">
+                    <rect key="frame" x="0.0" y="543" width="768" height="482"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <subviews>
+                        <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Hold to Talk" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="Rnz-fL-63I">
+                            <rect key="frame" x="242" y="375" width="284" height="64"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="30"/>
+                            <color key="textColor" red="0.0" green="0.0" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                            <nil key="highlightedColor"/>
+                        </label>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="Oy9-YK-1dP">
+                            <rect key="frame" x="264" y="88" width="240" height="240"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                            <state key="normal" backgroundImage="camera_action_mic.png">
+                                <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                            </state>
+                            <connections>
+                                <action selector="holdToTalk:" destination="-1" eventType="touchDown" id="KbI-Qs-lIi"/>
+                                <action selector="touchUpInsideHoldToTalk:" destination="-1" eventType="touchUpInside" id="fQR-KE-w2b"/>
+                            </connections>
+                        </button>
+                    </subviews>
+                    <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                </view>
+                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="21" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="CIZ-me-hAc">
+                    <rect key="frame" x="63" y="570" width="641" height="375"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="75"/>
+                    <color key="textColor" red="0.0" green="0.0" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <imageView userInteractionEnabled="NO" tag="999" contentMode="scaleToFill" image="camera_action_pan_bg.png" id="WPh-TE-Nhn">
+                    <rect key="frame" x="264" y="630" width="240" height="240"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
+                    <inset key="insetFor6xAndEarlier" minX="0.0" minY="20" maxX="0.0" maxY="-20"/>
+                </imageView>
+                <view contentMode="scaleToFill" id="Gtp-0X-Ae2">
+                    <rect key="frame" x="0.0" y="543" width="768" height="482"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <subviews>
+                        <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Record Video" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="9xc-Tf-KYg">
+                            <rect key="frame" x="263" y="365" width="243" height="84"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="35"/>
+                            <color key="textColor" red="0.0" green="0.0" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                            <nil key="highlightedColor"/>
+                        </label>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="Zmx-sx-U2g">
+                            <rect key="frame" x="264" y="88" width="240" height="240"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                            <state key="normal" backgroundImage="camera_action_video.png">
+                                <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                            </state>
+                            <connections>
+                                <action selector="processingRecordingOrTakePicture:" destination="-1" eventType="touchUpInside" id="XGd-YG-dVP"/>
+                            </connections>
+                        </button>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="rgq-Re-BwB">
+                            <rect key="frame" x="673" y="26" width="54" height="54"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                            <state key="normal" backgroundImage="camera_action_pic_s.png">
+                                <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                            </state>
+                            <connections>
+                                <action selector="changeAction:" destination="-1" eventType="touchUpInside" id="x59-AL-GIX"/>
+                            </connections>
+                        </button>
+                    </subviews>
+                    <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                </view>
             </subviews>
             <simulatedStatusBarMetrics key="simulatedStatusBarMetrics"/>
         </view>
@@ -207,14 +204,10 @@
         </tableViewController>
     </objects>
     <resources>
-        <image name="bb_melody_off_icon.png" width="74" height="74"/>
-        <image name="bb_motion_icon.png" width="50" height="50"/>
-        <image name="bb_ptt_icon_d.png" width="36" height="52"/>
-        <image name="bb_rec_icon_d.png" width="50" height="50"/>
-        <image name="bb_setting_icon.png" width="50" height="50"/>
-        <image name="circle_buttons1_2_d.png" width="131" height="131"/>
-        <image name="hq_d.png" width="48" height="48"/>
-        <image name="i_mode.png" width="50" height="48"/>
+        <image name="camera_action_mic.png" width="324" height="324"/>
+        <image name="camera_action_pan_bg.png" width="468" height="468"/>
+        <image name="camera_action_pic_s.png" width="90" height="90"/>
+        <image name="camera_action_video.png" width="324" height="324"/>
         <image name="reveal-icon.png" width="22" height="17"/>
     </resources>
 </document>

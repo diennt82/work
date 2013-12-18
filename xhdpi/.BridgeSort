@@ -1,0 +1,21 @@
+<?xml version='1.0' encoding='UTF-8' standalone='yes' ?>
+<dirinfo>
+<files>
+<item key='camera_action_mic_pressed.png20131216142858' />
+<item key='camera_action_mic.png20131216142757' />
+<item key='camera_action_pan_bg.png20131216150153' />
+<item key='camera_action_pan_handle.png20131216150712' />
+<item key='camera_action_pan_knob.png20131216150516' />
+<item key='camera_action_pause.png20131216152945' />
+<item key='camera_action_photo_pressed.png20131216143147' />
+<item key='camera_action_photo.png20131216143137' />
+<item key='camera_action_pic_s.png20131216143253' />
+<item key='camera_action_play.png20131216152928' />
+<item key='camera_action_video_pressed.png20131216143040' />
+<item key='camera_action_video_s.png20131216143313' />
+<item key='camera_action_video_stop_pressed.png20131216143120' />
+<item key='camera_action_video_stop.png20131216143055' />
+<item key='camera_action_video.png20131216143030' />
+<item key='landscape20131216153657' />
+</files>
+</dirinfo>

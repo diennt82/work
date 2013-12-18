@@ -173,19 +173,31 @@
     if (cell == nil) {
         cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
     }
-    
+    [cell setBackgroundColor:[UIColor clearColor]];
     // Configure the cell...
     cell.textLabel.text = (NSString *) [_melodies objectAtIndex:indexPath.row];
+    cell.imageView.image = [UIImage imageNamed:@"camera_action_play.png"];
     cell.accessoryType = UITableViewCellAccessoryNone;
     
     if (indexPath.row == _melodyIndex)
     {
         cell.accessoryType = UITableViewCellAccessoryCheckmark;
+        cell.imageView.image = [UIImage imageNamed:@"camera_action_pause.png"];
     }
     
     return cell;
 }
-
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+    {
+        return 50;
+    }
+    else
+    {
+        return 30;
+    }
+}
 
 - (void)tableView: (UITableView *)tableView didSelectRowAtIndexPath: (NSIndexPath *)indexPath
 {
@@ -204,6 +216,7 @@
 		newCell.accessoryType = UITableViewCellAccessoryCheckmark;
         
 		self.melodyIndex = indexPath.row;
+        [tableView reloadData];
 	}
     
 	UITableViewCell *oldCell = [tableView cellForRowAtIndexPath:oldIndexPath];
