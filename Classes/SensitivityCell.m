@@ -28,6 +28,15 @@
 - (IBAction)valueChangedSwitchAction:(id)sender
 {
     [_sensitivityCellDelegate reportSwitchValue:((UISwitch *)sender).isOn andRowIndex:_rowIndex];
+    
+    if (((UISwitch *)sender).isOn)
+    {
+        self.valueSlider.enabled = YES;
+    }
+    else
+    {
+        self.valueSlider.enabled = NO;
+    }
 }
 
 - (IBAction)valueChangedSlideAction:(id)sender

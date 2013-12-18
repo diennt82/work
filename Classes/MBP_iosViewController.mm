@@ -146,8 +146,8 @@
     
     
 	//hide splash screen page
-     backgroundView.hidden = NO;
-    [self.view bringSubviewToFront:backgroundView];
+     //backgroundView.hidden = NO;
+    //[self.view bringSubviewToFront:backgroundView];
 
 
     //load user/pass

@@ -90,6 +90,20 @@
     return numOfRows[section];
 }
 
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if (indexPath.section == 1)
+    {
+        if (indexPath.row == 1 ||
+            indexPath.row == 2)
+        {
+            return 121;
+        }
+    }
+    
+    return 44;
+}
+
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     switch (indexPath.section)

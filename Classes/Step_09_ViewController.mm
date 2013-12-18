@@ -83,7 +83,10 @@
      
 }
 
-
+- (void)startMonitorCallBack
+{
+    // clear a warning
+}
 
 #pragma mark -
 #pragma mark Rotating
