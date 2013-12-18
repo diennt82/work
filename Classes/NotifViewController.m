@@ -82,12 +82,15 @@
 
 - (IBAction)ignoreTouchAction:(id)sender
 {
-//    [self.navigationController popToRootViewControllerAnimated:NO];
-//    
-//    // Will call dismiss eventually
-//    [_notifDelegate sendStatus:SCAN_BONJOUR_CAMERA];
-//    
-//    [self dismissViewControllerAnimated:YES completion:^{}];
+    [self.navigationController popToRootViewControllerAnimated:NO];
+    
+    // Will call dismiss eventually
+    
+    if (![self.presentedViewController isBeingDismissed]) {
+        [self dismissViewControllerAnimated:YES completion:^{
+            [_notifDelegate sendStatus:SCAN_BONJOUR_CAMERA];
+        }];
+    }
 }
 
 - (void)didReceiveMemoryWarning
