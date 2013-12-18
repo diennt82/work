@@ -2174,6 +2174,7 @@
 		8B9C7E10185F26250038B3A8 /* Settings */ = {
 			isa = PBXGroup;
 			children = (
+				8BEDE2ED1861B73F00D3AE2B /* Disturb */,
 				8B9112CD18602854004301C5 /* Sensitivity */,
 				8B9112C718601041004301C5 /* General */,
 				8B9112C218600B7C004301C5 /* SettingsViewController.h */,
@@ -2260,6 +2261,13 @@
 				382CD25716DDE12200BC8E0C /* Step_07_tableViewCell_ipad.xib */,
 			);
 			name = Step_07;
+			sourceTree = "<group>";
+		};
+		8BEDE2ED1861B73F00D3AE2B /* Disturb */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Disturb;
 			sourceTree = "<group>";
 		};
 		9770CB87143032BC009E69EF /* images */ = {
