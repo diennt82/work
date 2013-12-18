@@ -40,7 +40,7 @@
     // Do any additional setup after loading the view from its nib.
     
     NSString * mel1 = NSLocalizedStringWithDefaultValue(@"melody_I",nil, [NSBundle mainBundle],
-                                                        @"Melody 1", nil);
+                                                        @"Hush Little Baby", nil);
     NSString * mel2 = NSLocalizedStringWithDefaultValue(@"melody_II",nil, [NSBundle mainBundle],
                                                         @"Melody 2", nil);
     NSString * mel3 = NSLocalizedStringWithDefaultValue(@"melody_III",nil, [NSBundle mainBundle],
@@ -50,7 +50,7 @@
     NSString * mel5 = NSLocalizedStringWithDefaultValue(@"melody_V",nil, [NSBundle mainBundle],
                                                         @"Melody 5", nil);
     NSString * mel6 = NSLocalizedStringWithDefaultValue(@"melody_VI",nil, [NSBundle mainBundle],
-                                                        @"Melody 6", nil);
+                                                        @"All Night, all day", nil);
     
     _melodies = [[NSArray alloc] initWithObjects:mel1,mel2,mel3,mel4, mel5, mel6,nil];
     
@@ -168,6 +168,7 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
+    [tableView setBackgroundColor:[UIColor clearColor]];
     static NSString *CellIdentifier = @"Cell";
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     if (cell == nil) {
@@ -181,8 +182,15 @@
     
     if (indexPath.row == _melodyIndex)
     {
-        cell.accessoryType = UITableViewCellAccessoryCheckmark;
-        cell.imageView.image = [UIImage imageNamed:@"camera_action_pause.png"];
+         if (_isOddTouchOnCell)
+         {
+             cell.imageView.image = [UIImage imageNamed:@"camera_action_play.png"];
+         } else {
+             cell.imageView.image = [UIImage imageNamed:@"camera_action_pause.png"];
+         }
+    }
+    else {
+        cell.imageView.image = [UIImage imageNamed:@"camera_action_play.png"];
     }
     
     return cell;
@@ -191,7 +199,7 @@
 {
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
     {
-        return 50;
+        return 110;
     }
     else
     {
@@ -205,9 +213,11 @@
     
 	if (_melodyIndex == indexPath.row)
 	{
+        _isOddTouchOnCell = !_isOddTouchOnCell;
+        [tableView reloadData];
 		return;
 	}
-    
+    _isOddTouchOnCell = NO;
 	NSIndexPath *oldIndexPath = [NSIndexPath indexPathForRow:_melodyIndex inSection:0];
     
 	UITableViewCell *newCell = [tableView cellForRowAtIndexPath:indexPath];

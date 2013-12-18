@@ -43,6 +43,7 @@
 #define INDEX_MELODY        3
 #define INDEX_TEMP          4
 
+#define PTT_ENGAGE_BTN 711
 
 @interface H264PlayerViewController ()
 
@@ -61,7 +62,7 @@
 @synthesize itemImages = _itemImages;
 @synthesize itemSelectedImages = _itemSelectedImages;
 @synthesize selectedItemMenu = _selectedItemMenu;
-
+@synthesize walkieTalkieEnabled;
 #pragma mark - View
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -201,54 +202,30 @@
 - (void) updateNavigationBarAndToolBar
 {
     // change the back button to cancel and add an event handler
-    UIImage *imageBack = [UIImage imageNamed:@"reveal-icon.png"];
-    UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithImage:imageBack style:UIBarButtonItemStyleBordered target:self action:@selector(prepareGoBackToCameraList:)];
+    UIImage *headerLogo = [UIImage imageNamed:@"header_logo.png"];
+    UIImage *headerHubble = [UIImage imageNamed:@"header_hubble.png"];
+    UIBarButtonItem *headerLogoButton = [[UIBarButtonItem alloc] initWithImage:headerLogo style:UIBarButtonItemStyleBordered target:self action:@selector(prepareGoBackToCameraList:)];
+    [headerLogoButton setTintColor:[UIColor colorWithPatternImage:headerLogo]];
+    UIBarButtonItem *headerHubbleButton = [[UIBarButtonItem alloc] initWithImage:headerHubble style:UIBarButtonItemStyleBordered target:self action:nil];
+     [headerHubbleButton setTintColor:[UIColor colorWithPatternImage:headerHubble]];
     
-    
-    self.navigationItem.leftBarButtonItem = backButton;
-    [backButton release];
+    NSArray *actionLeftButtonItems = @[headerLogoButton, headerHubbleButton];
+    self.navigationItem.leftBarButtonItems = actionLeftButtonItems;
+
     
     CamProfile *cp = self.selectedChannel.profile;
+
+    UIBarButtonItem *nowButton = [[UIBarButtonItem alloc] initWithTitle:@"Now" style:UIBarButtonItemStyleBordered target:self action:@selector(nowButtonAciton:)];
+    UIBarButtonItem *earlierButton = [[UIBarButtonItem alloc] initWithTitle:@"Earlier" style:UIBarButtonItemStyleBordered target:self action:@selector(earlierButtonAction:)];
     
+    NSArray *actionRightButtonItems = @[earlierButton, nowButton];
+    self.navigationItem.rightBarButtonItems = actionRightButtonItems;
     
-    // Create and configure the segmented control at right of navigationbar
-    _segmentControl = [[UISegmentedControl alloc]
-                       initWithItems:[NSArray arrayWithObjects:@"Now",
-                                      @"Earlier", nil]];
-    _segmentControl.segmentedControlStyle = UISegmentedControlStyleBar;
-    [_segmentControl addTarget:self action:@selector(segCtrlAction:)
-              forControlEvents:UIControlEventValueChanged];
-    _segmentControl.selectedSegmentIndex = 0;
-    // Create the bar button item for the segmented control
-    UIBarButtonItem *segmentControlItem = [[UIBarButtonItem alloc]
-                                           initWithCustomView:_segmentControl];
-    
-    
-    self.navigationItem.rightBarButtonItem = segmentControlItem;
-    [segmentControlItem release];
     
     if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 7)
     {
-//        [self.navigationController setNavigationBarHidden:NO];
-//        //first remove all
-//        for (UIView *subView in self.navigationController.view.subviews)
-//        {
-//            if ([subView isKindOfClass:[UIToolbar class]])
-//            {
-//                
-//                [subView removeFromSuperview];
-//            }
-//        }
-//        if (self.topToolbar)
-//        {
-//            [self.navigationController.view addSubview:self.topToolbar];
-//            [self.navigationController.view bringSubviewToFront:self.topToolbar];
-//            [self.topToolbar setBarStyle:UIBarStyleDefault];
-//        }
-        
         [self setTitle:cp.name];
         [self.navigationController.navigationBar setBarStyle:UIBarStyleDefault];
-
     }
     else
     {
@@ -257,50 +234,50 @@
     }
 }
 
-#pragma mark - Action
-
-- (IBAction)segCtrlAction:(id)sender {
+- (void)nowButtonAciton:(id)sender
+{
+    //For test
+    return;
+    self.disableAutorotateFlag = FALSE;
     
-//    if (_segmentControl.selectedSegmentIndex == 0) // Live
-//    {
-//        self.disableAutorotateFlag = FALSE;
-//        
-//        self.playlistViewController.tableView.hidden = YES;
-//        
-//        NSLog(@"h264StreamerIsInStopped: %d, h264Streamer==null: %d", _h264StreamerIsInStopped, h264Streamer == NULL);
-//        
-//        if (self.h264StreamerIsInStopped == TRUE &&
-//            h264Streamer == NULL)
-//        {
-//            self.activityIndicator.hidden = NO;
-//            [self.view bringSubviewToFront:self.activityIndicator];
-//            [self.activityIndicator startAnimating];
-//            
-//            [self setupCamera];
-//            self.h264StreamerIsInStopped = FALSE;
-//            
-//            NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-//            [userDefaults setObject:_selectedChannel.profile.mac_address forKey:CAM_IN_VEW];
-//            [userDefaults synchronize];
-//        }
-//        else
-//        {
-//            // Streamer is showing live view
-//        }
-//    }
-//    else if (_segmentControl.selectedSegmentIndex == 1) // Earlier
-//    {
-//        self.disableAutorotateFlag = TRUE;
-//        
-//        [self.view bringSubviewToFront:self.playlistViewController.tableView];
-//        self.playlistViewController.tableView.hidden = NO;
-//        
-//        self.playlistViewController.navController = self.navigationController;
-//        self.playlistViewController.playlistDelegate = self;
-//    }
+    self.playlistViewController.tableView.hidden = YES;
     
-    NSLog(@"self.segCtrl.selectedSegmentIndex = %d", self.segCtrl.selectedSegmentIndex);
+    NSLog(@"h264StreamerIsInStopped: %d, h264Streamer==null: %d", _h264StreamerIsInStopped, h264Streamer == NULL);
+    
+    if (self.h264StreamerIsInStopped == TRUE &&
+        h264Streamer == NULL)
+    {
+        self.activityIndicator.hidden = NO;
+        [self.view bringSubviewToFront:self.activityIndicator];
+        [self.activityIndicator startAnimating];
+        
+        [self setupCamera];
+        self.h264StreamerIsInStopped = FALSE;
+        
+        NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+        [userDefaults setObject:_selectedChannel.profile.mac_address forKey:CAM_IN_VEW];
+        [userDefaults synchronize];
+    }
+    else
+    {
+        // Streamer is showing live view
+    }
 }
+
+- (void)earlierButtonAction:(id)sender
+{
+    //For test UI
+    return;
+    self.disableAutorotateFlag = TRUE;
+    
+    [self.view bringSubviewToFront:self.playlistViewController.tableView];
+    self.playlistViewController.tableView.hidden = NO;
+    
+    self.playlistViewController.navController = self.navigationController;
+    self.playlistViewController.playlistDelegate = self;
+    
+}
+#pragma mark - Action
 - (IBAction)hqPressAction:(id)sender
 {
     self.pickerHQOptions.hidden = NO;
@@ -1169,7 +1146,7 @@
                                                            selector:@selector(h_directional_change_callback:)
                                                            userInfo:nil
                                                             repeats:YES];
-//    [self setupPtt];
+    [self setupPtt];
     
 }
 
@@ -4011,33 +3988,90 @@
 	[longPress release];
     
     //Add another TOUCH DOWN event for this
-    [self.ib_buttonTouchToTalk addTarget:self action:@selector(user_press_down) forControlEvents:UIControlEventTouchDown];
-    [self.ib_buttonTouchToTalk addTarget:self action:@selector(user_release) forControlEvents:UIControlEventTouchUpInside];
-    [self.ib_buttonTouchToTalk addTarget:self action:@selector(user_release) forControlEvents:UIControlEventTouchUpOutside];
-
-    
+//    [self.ib_buttonTouchToTalk addTarget:self action:@selector(user_press_down) forControlEvents:UIControlEventTouchDown];
+//    [self.ib_buttonTouchToTalk addTarget:self action:@selector(user_release) forControlEvents:UIControlEventTouchUpInside];
+//    [self.ib_buttonTouchToTalk addTarget:self action:@selector(user_release) forControlEvents:UIControlEventTouchUpOutside];
 }
 
 -(void) user_release
 {
-    
-//    NSLog(@"Detect user cancel PTT & clean up");
-//    if (audioOut != nil)
-//    {
-//        [audioOut disconnectFromAudioSocket];
-//        [audioOut release];
-//    }
+    NSLog(@"Detect user cancel PTT & clean up");
+    if (audioOut != nil)
+    {
+        [audioOut disconnectFromAudioSocket];
+        [audioOut release];
+    }
 }
+
+
+- (BOOL) setEnablePtt:(BOOL) walkie_talkie_enabled
+{
+    
+    
+    @synchronized (self)
+    {
+        if ( walkie_talkie_enabled == YES)
+        {
+            
+            [self performSelectorInBackground:@selector(set_Walkie_Talkie_bg:)
+                                   withObject:[NSString stringWithFormat:@"%d",walkie_talkie_enabled]];
+            if (audioOut != nil)
+            {
+                [audioOut connectToAudioSocket];
+                audioOut.audioOutStreamerDelegate = self;
+            }
+            else
+            {
+                NSLog(@" NEED to enable audioOut now BUT audioOut = nil!!!");
+                
+            }
+            
+            
+        }
+        else
+        {
+            if (audioOut != nil)
+            {
+                [audioOut disconnectFromAudioSocket];
+            }
+            
+        }
+    }
+    return walkie_talkie_enabled ;
+    
+}
+
+
+- (void) set_Walkie_Talkie_bg: (NSString *) status
+{
+    NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
+    
+    NSString * command = [NSString stringWithFormat:@"%@%@",SET_PTT,status];
+    
+    if(httpComm != nil)
+    {
+        [httpComm sendCommandAndBlock:command];
+    }
+    
+    [pool release];
+}
+
 -(void)user_press_down
 {
+    NSString * device_ip = @"192.168.2.1";//make a default
+	NSInteger device_port = 80;
+    httpComm.device_ip = device_ip;
+    httpComm.device_port = device_port;
+    
+    
     NSLog(@"Create AudioOutStreamer & start recording now");
-//    audioOut = [[AudioOutStreamer alloc] initWithDeviceIp:comm.device_ip
-//                                               andPTTport:self.selected_channel.profile.ptt_port];
-//    [audioOut retain];
+    audioOut = [[AudioOutStreamer alloc] initWithDeviceIp:httpComm.device_ip
+                                               andPTTport:self.selectedChannel.profile.ptt_port];
+    [audioOut retain];
     
     //Start buffering sound from user at the moment they press down the button
     //  This is to prevent loss of audio data
-//    [audioOut startRecordingSound];
+    [audioOut startRecordingSound];
 }
 
 
@@ -4046,41 +4080,43 @@
 -(void) longPress:(UILongPressGestureRecognizer*) gest
 {
     
-//	UIButton * btn = (UIButton *)[gest view];
-//    
-//    
-//	if ([gest state] == UIGestureRecognizerStateBegan)
-//	{
-//		[btn setImage:[UIImage imageNamed:@"bb_vs_mike_off.png"] forState:UIControlStateNormal];
-//        
-//        self.walkieTalkieEnabled = YES;
-//		[self setEnablePtt:YES];
-//        
-//        
-//	}
-//	else if ([gest state] == UIGestureRecognizerStateEnded ||
-//             [gest state] == UIGestureRecognizerStateCancelled)
-//	{
-//        
-//        if ([gest state] == UIGestureRecognizerStateCancelled)
-//        {
-//            NSLog(@"detect cancelling PTT");
-//            
-//        }
-//        
-//		[self setEnablePtt:NO];
-//	}
+    UIButton * btn = (UIButton *)[gest view];
+    
+    
+    if ([gest state] == UIGestureRecognizerStateBegan)
+    {
+        self.walkieTalkieEnabled = YES;
+        [self setEnablePtt:YES];
+        
+        
+    }
+    else if ([gest state] == UIGestureRecognizerStateEnded ||
+             [gest state] == UIGestureRecognizerStateCancelled)
+    {
+        
+        if ([gest state] == UIGestureRecognizerStateCancelled)
+        {
+            NSLog(@"detect cancelling PTT");
+            
+        }
+        
+        [self setEnablePtt:NO];
+    }
     
     
 }
 
 - (IBAction)holdToTalk:(id)sender {
+    //first update UI
     UIImage *imageHoldToTalk = [UIImage imageNamed:@"camera_action_mic.png"];
     UIImage *imageHoldedToTalk = [UIImage imageNamed:@"camera_action_mic_pressed.png"];
     [self.ib_buttonTouchToTalk setBackgroundImage:imageHoldToTalk forState:UIControlStateNormal];
     [self.ib_buttonTouchToTalk setBackgroundImage:imageHoldedToTalk forState:UIControlEventTouchDown];
     [self.ib_buttonTouchToTalk setBackgroundImage:imageHoldToTalk forState:UIControlEventTouchUpInside];
     [self.ib_labelTouchToTalk setText:@"Listening"];
+    
+    //processing for PTT
+    
 }
 
 - (IBAction)touchUpInsideHoldToTalk:(id)sender {
@@ -4090,6 +4126,8 @@
     [self.ib_buttonTouchToTalk setBackgroundImage:imageHoldToTalk forState:UIControlStateNormal];
     [self.ib_buttonTouchToTalk setBackgroundImage:imageHoldToTalk forState:UIControlEventTouchUpInside];
     [self.ib_labelTouchToTalk setText:@"Hold To Talk"];
+    
+    [self user_release];
 }
 
 - (IBAction)processingRecordingOrTakePicture:(id)sender {
@@ -4109,10 +4147,12 @@
         if (_isProcessRecording)
         {
             //now is interface recording
-            [self.ib_labelRecordVideo setText:@"00:36"];
+            [self.ib_labelRecordVideo setText:@"00:00:00"];
             [self.ib_processRecordOrTakePicture setBackgroundImage:recordingImage forState:UIControlStateNormal];
             [self.ib_processRecordOrTakePicture setBackgroundImage:recordingPressed forState:UIControlEventTouchDown];
             [self.ib_processRecordOrTakePicture setBackgroundImage:recordingImage forState:UIControlEventTouchUpInside];
+            //process for recording
+
         }
         else
         {
@@ -4121,6 +4161,8 @@
             [self.ib_processRecordOrTakePicture setBackgroundImage:readyRecordPressed forState:UIControlEventTouchDown];
             [self.ib_processRecordOrTakePicture setBackgroundImage:readyRecord forState:UIControlEventTouchUpInside];
             [self.ib_labelRecordVideo setText:@"Record Video"];
+            //process for stop record
+
         }
     }
     else
@@ -4130,6 +4172,9 @@
         [self.ib_processRecordOrTakePicture setBackgroundImage:takePictureImage forState:UIControlStateNormal];
         [self.ib_processRecordOrTakePicture setBackgroundImage:takePictureImage forState:UIControlEventTouchUpInside];
         [self.ib_processRecordOrTakePicture setBackgroundImage:takePicturePressed forState:UIControlEventTouchDown];
+        
+        //processing for take picture
+        [self processingForTakePicture];
     }
 
 }
@@ -4167,213 +4212,58 @@
     }
 }
 
-
-
-
-#pragma  mark -
-#pragma mark PTT
-/*
-- (void)cleanup
+#pragma mark -
+#pragma mark SnapShot
+- (void)processingForTakePicture
 {
-    
-    [self performSelectorInBackground:@selector(set_Walkie_Talkie_bg:)
-                           withObject:@"0"];
-    
-    [audioOut release];
-    
-    UIButton *pttBtn = (UIButton *)[self.view viewWithTag:PTT_ENGAGE_BTN];
-    
-    [pttBtn setImage:[UIImage imageNamed:@"bb_vs_mike_on.png"] forState:UIControlStateNormal];
-    
-    self.walkieTalkieEnabled = NO;
-    
-    [self tryToShowFullScreen];
-    
-    UIButton * spk = (UIButton*) [self.view viewWithTag:SPK_CONTROL_BTN];
-    if (spk != nil && (self.streamer.disableAudio == TRUE))
-    {
-        //Toggle camera audio when ptt disabled
-        [spk sendActionsForControlEvents:UIControlEventTouchUpInside];
-    }
-}
-
-- (BOOL) setEnablePtt:(BOOL) walkie_talkie_enabled
-{
-    
-    
-	@synchronized (self)
-	{
-		if ( walkie_talkie_enabled == YES)
-		{
-            
-			[self performSelectorInBackground:@selector(set_Walkie_Talkie_bg:)
-                                   withObject:[NSString stringWithFormat:@"%d",walkie_talkie_enabled]];
-            if (audioOut != nil)
-			{
-                [audioOut connectToAudioSocket];
-                audioOut.audioOutStreamerDelegate = self;
-            }
-            else
-            {
-                NSLog(@" NEED to enable audioOut now BUT audioOut = nil!!!");
-                
-            }
-            
-            
-		}
-		else
-		{
-            
-			if (audioOut != nil)
-			{
-				[audioOut disconnectFromAudioSocket];
-			}
-            
-		}
-        
-	}
-	return walkie_talkie_enabled ;
-    
+    [self saveSnapShot:self.imageViewVideo.image];
 }
 
 
-- (void) set_Walkie_Talkie_bg: (NSString *) status
+- (void) saveSnapShot:(UIImage *) image
 {
-	NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
+#if 0
+	NSString *savedImagePath = [Util getSnapshotFileName];
     
-	NSString * command = [NSString stringWithFormat:@"%@%@",SET_PTT,status];
+	/* get it as PNG format */
+	NSData *imageData = UIImagePNGRepresentation(image);
+	[imageData writeToFile:savedImagePath atomically:NO];
+#else
     
-	if(comm != nil)
-	{
-		[comm sendCommandAndBlock:command];
-	}
+	/* save to photo album */
+	UIImageWriteToSavedPhotosAlbum(image,
+                                   self,
+                                   @selector(imageSavedToPhotosAlbum:didFinishSavingWithError:contextInfo:),
+                                   nil);
     
-	[pool release];
+#endif
 }
 
--(void) user_release
-{
-    
-    NSLog(@"Detect user cancel PTT & clean up");
-    if (audioOut != nil)
-    {
-        [audioOut disconnectFromAudioSocket];
-        [audioOut release];
-    }
-}
--(void)user_press_down
-{
-    NSLog(@"Create AudioOutStreamer & start recording now");
-    audioOut = [[AudioOutStreamer alloc] initWithDeviceIp:comm.device_ip
-                                               andPTTport:self.selected_channel.profile.ptt_port];
-    [audioOut retain];
-    
-    //Start buffering sound from user at the moment they press down the button
-    //  This is to prevent loss of audio data
-    [audioOut startRecordingSound];
-}
-
-
-
-
--(void) longPress:(UILongPressGestureRecognizer*) gest
-{
-    
-	UIButton * btn = (UIButton *)[gest view];
-    
-    
-	if ([gest state] == UIGestureRecognizerStateBegan)
+- (void)imageSavedToPhotosAlbum:(UIImage *)image didFinishSavingWithError:(NSError *)error contextInfo:(void *)contextInfo {
+	NSString *message;
+	NSString *title;
+	if (!error)
 	{
-		[btn setImage:[UIImage imageNamed:@"bb_vs_mike_off.png"] forState:UIControlStateNormal];
-        
-        self.walkieTalkieEnabled = YES;
-		[self setEnablePtt:YES];
-        
+		title = @"Snapshot";
+		message = @"Saved to Photo Album";
         
 	}
-	else if ([gest state] == UIGestureRecognizerStateEnded ||
-             [gest state] == UIGestureRecognizerStateCancelled)
+	else
 	{
+		title = @"Error";
+		message = [error description];
+		NSLog(@"Error when writing file to image library: %@", [error localizedDescription]);
+		NSLog(@"Error code %d", [error code]);
         
-        if ([gest state] == UIGestureRecognizerStateCancelled)
-        {
-            NSLog(@"detect cancelling PTT");
-            
-        }
-        
-		[self setEnablePtt:NO];
 	}
-    
+	UIAlertView *_alertInfo = [[UIAlertView alloc]
+                          initWithTitle:title
+                          message:message
+                          delegate:self
+                          cancelButtonTitle:@"OK"
+                          otherButtonTitles:nil];
+	[_alertInfo show];
+	[_alertInfo release];
     
 }
-
--(void) showPttButton
-{
-    if (self.enableControls == FALSE)
-    {
-        //siliently return;
-        return;
-    }
-    
-    
-	pttButton.hidden = NO;
-	[self.view bringSubviewToFront:pttButton];
-    
-    //Disable fullscreen timer
-    if ( (fullScreenTimer != nil) && [fullScreenTimer isValid])
-	{
-		//invalidate the timer ..
-		[fullScreenTimer invalidate];
-		fullScreenTimer = nil;
-	}
-    
-}
-
-
-
-
--(IBAction)buttonPttPressed:(id)sender
-{
-    if (self.enableControls == FALSE)
-    {
-        //siliently return;
-        return;
-    }
-    
-    
-	if ( (self.selected_channel != nil) &&
-        (  selected_channel.communication_mode == COMM_MODE_STUN      ||
-         selected_channel.communication_mode ==  COMM_MODE_STUN_RELAY2 )
-        )
-	{
-		//Dont support in stun mode
-        
-		return;
-	}
-    
-	UIButton * pttBtn  = (UIButton *) sender;
-	int tag = pttBtn.tag;
-    
-	if (ptt_enabled == FALSE)
-	{
-		ptt_enabled = TRUE;
-		pttBtn.selected = FALSE;
-        
-        
-	}
-    
-    
-    
-    
-    
-	switch (tag)
-	{
-		case PTT_CONTROL_BTN:
-			directionPad.hidden = YES;
-            
-			[self showPttButton];
-			break;
-	}
-}
- */
 @end
