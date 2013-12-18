@@ -257,8 +257,8 @@
     {
         
         //init
-//        [_client init];
-//        [_client test_start_async:self];
+        [_client init];
+        [_client test_start_async:self];
     }
     
     
