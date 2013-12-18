@@ -19,6 +19,7 @@
 #import "MBP_iosViewController.h"
 #import "PlayListViewController.h"
 #import "H264PlayerViewController.h"
+#import "NotifViewController.h"
 
 
 @implementation MBP_iosViewController
@@ -292,6 +293,8 @@
 {
 #if 1
     
+    self.menuVC = nil;
+    
     self.menuVC = [[MenuViewController alloc] initWithNibName:@"MenuViewController"
                                                        bundle:nil
                                              withConnDelegate:self];
@@ -313,9 +316,11 @@
     
     assert(nav != nil);
     
+    NSLog(@"startShowingCameraList: %@", self.presentingViewController.description);
+    
 	[self presentViewController:nav animated:NO completion:^{}];
     
-    NSLog(@"startShowingCameraList: %p, %p", self, self.menuVC.menuDelegate);
+    NSLog(@"startShowingCameraList: %p, %p, %@", self, self.menuVC.menuDelegate, self.presentingViewController.description);
 
     [validChannels release];
 #else
@@ -1194,7 +1199,172 @@
 #pragma mark -
 #pragma mark Alertview delegate
 
+#if 1
+- (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex {
+    
+	int tag = alertView.tag ;
+    
+	if (tag == ALERT_PUSH_RECVED_RESCAN_AFTER)
+	{
+		switch(buttonIndex)
+        {
+			case 0:
+                [pushAlert release];
+                pushAlert = nil;
+				break;
+			case 1:
+            {
+				if (_menuVC != nil)
+				{
+					NSLog(@"RESCAN_AFTER close all windows and thread");
+                    
+					NSArray * views = _menuVC.navigationController.viewControllers;
+					NSLog(@"views count = %d",[views count] );
+					if ( [views count] > 1)
+					{
+                        if (views.count > 2)
+                        {
+                            id obj2 = [views objectAtIndex:2];
+                            
+                            if ([obj2 isKindOfClass:[PlaybackViewController class]])
+                            {
+                                PlaybackViewController *playbackViewController = (PlaybackViewController *)obj2;
+                                [playbackViewController stopStream:nil];
+                            }
+                        }
+                        
+                        id obj = [views objectAtIndex:1];
+                        
+                        if ([obj isKindOfClass:[H264PlayerViewController class]])
+                        {
+                            H264PlayerViewController * h264PlayerViewController = (H264PlayerViewController *) obj;
+                            [h264PlayerViewController goBackToCameraList];
+                        }
+					}
+                    
+                    [_menuVC dismissViewControllerAnimated:NO completion:^{}];
+				}
+                
+				//[self dismissViewControllerAnimated:NO completion:nil];
 
+                NotifViewController *notifVC = [[NotifViewController alloc] init];
+
+                @synchronized(self)
+                {
+                    
+                    //Feed in data now
+                    notifVC.cameraMacNoColon = @"34159E8D4F7F";//latestCamAlert.cameraMacNoColon;
+                    notifVC.cameraName  = @"SharedCam8D4F7F";//latestCamAlert.cameraName;
+                    notifVC.alertType   = @"4";//latestCamAlert.alertType;
+                    notifVC.alertVal    = @"20130921064439810";//latestCamAlert.alertVal;
+                    
+                    notifVC.NotifDelegate = self;
+                    
+                    //[latestCamAlert release];
+                    latestCamAlert = nil;
+                }
+                
+                UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:notifVC];
+                
+                [self presentViewController:nav animated:YES completion:^{}];
+                
+                [pushAlert release];
+                pushAlert = nil;
+                
+                NSLog(@"alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex: %p, %p", self, latestCamAlert);
+				break;
+            }
+			default:
+				break;
+                
+		}
+	}
+	else if (tag == ALERT_PUSH_RECVED_RELOGIN_AFTER)
+	{
+		switch(buttonIndex)
+        {
+			case 0:
+				break;
+			case 1:
+                
+				if (_menuVC != nil)
+				{
+					NSLog(@"RELOGIN_AFTER close all windows and thread");
+                    
+					//[dashBoard.navigationController popToRootViewControllerAnimated:NO];
+                    
+					NSArray * views = _menuVC.navigationController.viewControllers;
+					NSLog(@"views count = %d",[views count] );
+					if ( [views count] > 1)
+					{
+						if (views.count > 2)
+                        {
+                            id obj2 = [views objectAtIndex:2];
+                            
+                            if ([obj2 isKindOfClass:[PlaybackViewController class]])
+                            {
+                                PlaybackViewController *playbackViewController = (PlaybackViewController *)obj2;
+                                [playbackViewController stopStream:nil];
+                            }
+                        }
+                        
+                        id obj = [views objectAtIndex:1];
+                        
+                        if ([obj isKindOfClass:[H264PlayerViewController class]])
+                        {
+                            H264PlayerViewController * h264PlayerViewController = (H264PlayerViewController *) obj;
+                            [h264PlayerViewController goBackToCameraList];
+                        }
+					}
+				}
+                
+				//[self dismissModalViewControllerAnimated:NO];
+                [self dismissViewControllerAnimated:NO completion:^{}];
+                
+                
+				[self sendStatus:LOGIN];
+				break;
+			default:
+				break;
+                
+		}
+	}
+    else if (tag == ALERT_PUSH_SERVER_ANNOUNCEMENT)
+    {
+        switch(buttonIndex)
+        {
+			case 0://IGNORE
+				break;
+			case 1://Detail
+            {
+                // Open the web browser now..
+                NSString * url =  ((AlertPrompt*)alertView).otherInfo;
+                
+                
+                if (url != nil)
+                {
+                    if ( [url hasPrefix:@"http://"] != TRUE)
+                    {
+                        url  = [NSString stringWithFormat:@"http://%@", url];
+                    }
+                    
+                    
+                    NSLog(@"final url:%@ ",url);
+                    
+                    NSURL *ns_url = [NSURL URLWithString:url];
+                    
+                    [[UIApplication sharedApplication] openURL:ns_url];
+                }
+                break;
+            }
+            default:
+                break;
+        }
+    }
+    
+}
+
+#else
 - (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex {
     
 	int tag = alertView.tag ;
@@ -1368,7 +1538,7 @@
     }
     
 }
-
+#endif
 
 
 #pragma mark -

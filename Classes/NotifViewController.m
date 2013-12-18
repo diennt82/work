@@ -52,6 +52,20 @@
 
 - (IBAction)goToCameraTouchAction:(id)sender
 {
+    if (sender == self.goToCameraBtn)
+    {
+        //[self.navigationController popToRootViewControllerAnimated:NO];
+        
+        // Will call dismiss eventually
+        
+        if (![self.presentedViewController isBeingDismissed]) {
+            [self dismissViewControllerAnimated:YES completion:^{
+                [_notifDelegate sendStatus:SCAN_BONJOUR_CAMERA];
+            }];
+        }
+        
+        
+    }
 }
 
 - (IBAction)changeSettingsTouchAction:(id)sender
@@ -68,6 +82,12 @@
 
 - (IBAction)ignoreTouchAction:(id)sender
 {
+//    [self.navigationController popToRootViewControllerAnimated:NO];
+//    
+//    // Will call dismiss eventually
+//    [_notifDelegate sendStatus:SCAN_BONJOUR_CAMERA];
+//    
+//    [self dismissViewControllerAnimated:YES completion:^{}];
 }
 
 - (void)didReceiveMemoryWarning
