@@ -7,11 +7,20 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "MenuViewController.h"
+#import "ConnectionMethodDelegate.h"
+//#import "MenuViewController.h"
 
 @interface CamerasViewController : UITableViewController
 
-@property (assign, nonatomic) MenuViewController *parentVC;
+@property (assign, nonatomic) id<ConnectionMethodDelegate> camerasDelegate;
+//@property (assign, nonatomic) MenuViewController *parentVC;
+//@property (assign, nonatomic) UIViewController *parentVC;
 @property (retain, nonatomic) NSMutableArray *camChannels;
+
+- (id)initWithStyle:(UITableViewStyle)style
+           delegate:(id<ConnectionMethodDelegate> )delegate
+           parentVC: (id)parentVC;
+
+- (void)camerasReloadData;
 
 @end

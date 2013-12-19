@@ -1737,7 +1737,8 @@
         {
             NSLog(@"reload CamerasTableView in scan_done");
             // Notify to menuVC
-            
+            NSLog(@"%p, %p, %p", self, self.menuVC, self.menuVC.camerasVC);
+            [self.menuVC.camerasVC camerasReloadData];
         }
         
         if (((CamProfile *)[self.restored_profiles objectAtIndex:*index]).hasUpdateLocalStatus == NO)
@@ -1783,6 +1784,7 @@
 {
 #if 1
     //Notify to MenuVC
+    [self.menuVC.camerasVC camerasReloadData];
 #else
 	//Hide it, since we're done
 	self.progressView.hidden = YES;

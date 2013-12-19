@@ -18,6 +18,8 @@
 
 @property (retain, nonatomic) IBOutlet UITableViewCell *addCameraCell;
 
+@property (assign, nonatomic) MenuViewController *parentVC;
+
 @property (retain, nonatomic) UIImage *snapshotImg;
 @property (nonatomic) BOOL isFirttime;
 
@@ -31,6 +33,20 @@
     if (self) {
         // Custom initialization
         self.title = @"Cameras";
+    }
+    return self;
+}
+
+- (id)initWithStyle:(UITableViewStyle)style
+           delegate:(id<ConnectionMethodDelegate> )delegate
+           parentVC: (id)parentVC
+{
+    self = [super initWithStyle:style];
+    if (self) {
+        // Custom initialization
+        self.title = @"Cameras";
+        self.camerasDelegate = delegate;
+        self.parentVC = (MenuViewController *)parentVC;
     }
     return self;
 }
@@ -75,43 +91,43 @@
 //    self.navigationItem.leftBarButtonItem = backBarBtn;
 //    assert(self.navigationItem.leftBarButtonItem != nil);
     
-    CamProfile *camProfile = [[CamProfile alloc] init];
-    camProfile.name = @"Home";
-     camProfile.mac_address = @"ASASASAS0909";
-    CamChannel *ch1 = [[CamChannel alloc] init];
-    ch1.profile = camProfile;
-    
-    CamProfile *camProfile1 = [[CamProfile alloc] init];
-    camProfile1.name = @"Garden";
-    CamChannel *ch2 = [[CamChannel alloc] init];
-    ch2.profile = camProfile1;
-    
-    self.snapshotImg = [UIImage imageNamed:@"loading_logo.png"];
-    
-    self.camChannels = [NSMutableArray array];
-    
-    [self.camChannels addObject:ch1];
-    [self.camChannels addObject:ch2];
+//    CamProfile *camProfile = [[CamProfile alloc] init];
+//    camProfile.name = @"Home";
+//     camProfile.mac_address = @"ASASASAS0909";
+//    CamChannel *ch1 = [[CamChannel alloc] init];
+//    ch1.profile = camProfile;
+//    
+//    CamProfile *camProfile1 = [[CamProfile alloc] init];
+//    camProfile1.name = @"Garden";
+//    CamChannel *ch2 = [[CamChannel alloc] init];
+//    ch2.profile = camProfile1;
+//    
+//    self.snapshotImg = [UIImage imageNamed:@"loading_logo.png"];
+//    
+//    self.camChannels = [NSMutableArray array];
+//    
+//    [self.camChannels addObject:ch1];
+//    [self.camChannels addObject:ch2];
     
     if (!_isFirttime) //revert
     {
         self.isFirttime = TRUE;
         
-        [CameraAlert clearAllAlertForCamera:camProfile.mac_address];
+        CamChannel *ch = (CamChannel *)[self.camChannels objectAtIndex:0];
+        
+        [CameraAlert clearAllAlertForCamera:ch.profile.mac_address];
         [UIApplication sharedApplication].idleTimerDisabled = YES;
         
         NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-        [userDefaults setObject:camProfile.mac_address forKey:CAM_IN_VEW];
+        [userDefaults setObject:ch.profile.mac_address forKey:CAM_IN_VEW];
         [userDefaults synchronize];
         
         H264PlayerViewController *h264PlayerViewController = [[H264PlayerViewController alloc] init];
         
-        CamChannel *ch = (CamChannel *)[_camChannels objectAtIndex:0];
-        
         h264PlayerViewController.selectedChannel = ch;
         h264PlayerViewController.h264PlayerVCDelegate = self;
         
-        //NSLog(@"%@", self.parentViewController.description);
+        NSLog(@"%@, %@", self.parentViewController.description, self.parentViewController.parentViewController);
         
         //MenuViewController *tabBarController = (MenuViewController *)self.parentViewController;
         
@@ -131,7 +147,7 @@
         
         NSLog(@"addCameraButtonTouchAction: %@", self.parentViewController.description);
         //MenuViewController *tabBarController = (MenuViewController *)self.parentViewController;
-        [self.parentVC.menuDelegate sendStatus:SETUP_CAMERA];//initial setup
+        [self.camerasDelegate sendStatus:SETUP_CAMERA];//initial setup
         
     }
     else
@@ -141,6 +157,11 @@
 }
 
 #pragma mark - Methods
+
+- (void)camerasReloadData
+{
+    [self.tableView reloadData];
+}
 
 - (void) cameraShowDialog:(int) dialogType
 {
@@ -174,6 +195,19 @@
 
 - (void)stopStreamFinished:(CamChannel *)camChannel
 {
+    for (CamChannel *obj in self.camChannels)
+    {
+        if ([obj.profile.mac_address isEqualToString:camChannel.profile.mac_address])
+        {
+            obj.waitingForStreamerToClose = NO;
+        }
+        else
+        {
+            NSLog(@"%@ ->waitingForClose: %d", obj.profile.name, obj.waitingForStreamerToClose);
+        }
+    }
+    
+    [self.tableView reloadData];
 }
 
 #pragma mark - Methods
@@ -194,7 +228,7 @@
     h264PlayerViewController.selectedChannel = ch;
     h264PlayerViewController.h264PlayerVCDelegate = self;
     
-    NSLog(@"%@", self.parentViewController.description);
+    NSLog(@"%p, %p", self.parentVC, self.camerasDelegate);
     
     //MenuViewController *tabBarController = (MenuViewController *)self.parentViewController;
     
@@ -263,6 +297,11 @@
         }
         
         CamChannel *ch = (CamChannel *)[_camChannels objectAtIndex:indexPath.row];
+        
+        if (ch.profile.hasUpdateLocalStatus == TRUE)
+        {
+            NSLog(@"ch.profile.hasUpdateLocalStatus == TRUE");
+        }
         
         CamProfile *camProfile = ch.profile;
         
@@ -355,21 +394,31 @@
     
     CamChannel *ch = (CamChannel *)[_camChannels objectAtIndex:indexPath.row] ;
     
-    [CameraAlert clearAllAlertForCamera:ch.profile.mac_address];
-    [UIApplication sharedApplication].idleTimerDisabled = YES;
+    if (ch != nil &&
+        ch.profile != nil &&
+        ch.waitingForStreamerToClose == NO)
+    {
     
-    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-    [userDefaults setObject:ch.profile.mac_address forKey:CAM_IN_VEW];
-    [userDefaults synchronize];
-    
-    H264PlayerViewController *h264PlayerViewController = [[H264PlayerViewController alloc] init];
-    
-    h264PlayerViewController.selectedChannel = ch;
-    h264PlayerViewController.h264PlayerVCDelegate = self;
-    
-    MenuViewController *tabBarController = (MenuViewController *)self.parentViewController;
-    [tabBarController.navigationController pushViewController:h264PlayerViewController animated:YES];
-    [h264PlayerViewController release];
+        [CameraAlert clearAllAlertForCamera:ch.profile.mac_address];
+        [UIApplication sharedApplication].idleTimerDisabled = YES;
+        
+        NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+        [userDefaults setObject:ch.profile.mac_address forKey:CAM_IN_VEW];
+        [userDefaults synchronize];
+        
+        H264PlayerViewController *h264PlayerViewController = [[H264PlayerViewController alloc] init];
+        
+        h264PlayerViewController.selectedChannel = ch;
+        h264PlayerViewController.h264PlayerVCDelegate = self;
+        
+        //MenuViewController *tabBarController = (MenuViewController *)self.parentViewController;
+        [self.parentVC.navigationController pushViewController:h264PlayerViewController animated:YES];
+        [h264PlayerViewController release];
+    }
+    else
+    {
+        NSLog(@"PLEASE WAIT FOR CAMERA STOP STREAM | something is nil");
+    }
 }
 
 

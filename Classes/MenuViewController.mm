@@ -7,13 +7,13 @@
 //
 
 #import "MenuViewController.h"
-#import "CamerasViewController.h"
 #import "SettingsViewController.h"
 #import "Account_ViewController.h"
 
 @interface MenuViewController ()
 
 @property (retain, nonatomic) Account_ViewController *accountVC;
+
 
 @end
 
@@ -57,11 +57,10 @@
     self.navigationItem.leftBarButtonItem = backBarBtn;
    // assert(self.navigationController.navigationItem.leftBarButtonItem != nil);
     
-    CamerasViewController *camerasVC = [[CamerasViewController alloc] init];
-    camerasVC.parentVC = self;
-     UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:camerasVC];
-    
-    
+    self.camerasVC = [[CamerasViewController alloc] initWithStyle:nil
+                                                         delegate:self.menuDelegate
+                                                         parentVC:self];
+    UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:_camerasVC];
     
     //[self.navigationController initWithRootViewController:camerasVC];
     
@@ -83,6 +82,9 @@
     [super viewDidAppear:animated];
     
     self.accountVC.mdelegate = self.menuDelegate;
+    //self.camerasVC.parentVC = self;
+    self.camerasVC.camChannels = self.cameras;
+    
     NSLog(@"viewDidAppear: %p, %p", self.menuDelegate, _accountVC.mdelegate);
 }
 

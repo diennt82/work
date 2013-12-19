@@ -1117,7 +1117,9 @@
     [self.activityIndicator startAnimating];
     self.viewStopStreamingProgress.hidden = YES;
     
-    [self setupCamera];
+    
+    [self performSelectorInBackground:@selector(waitingScanAndStartSetupCamera_bg) withObject:nil];
+    //[self setupCamera];
     
     //set value default for table view
     self.playlistViewController.tableView.hidden= YES;
@@ -1152,8 +1154,20 @@
 
 #pragma mark - Setup camera
 
+- (void)waitingScanAndStartSetupCamera_bg
+{
+    while (self.selectedChannel.profile.hasUpdateLocalStatus == FALSE)
+    {
+        NSDate * endDate = [NSDate dateWithTimeIntervalSinceNow:0.5];
+        [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode beforeDate:endDate];
+    }
+    
+    [self performSelectorOnMainThread:@selector(setupCamera) withObject:nil waitUntilDone:NO];
+}
+
 - (void)setupCamera
 {
+    
     if (self.httpComm != nil)
     {
         self.httpComm = nil;

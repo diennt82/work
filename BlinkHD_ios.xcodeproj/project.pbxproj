@@ -222,7 +222,7 @@
 		8B9C7DFA185F08C90038B3A8 /* loader3.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B9C7DF5185F08C90038B3A8 /* loader3.png */; };
 		8B9C7DFB185F08C90038B3A8 /* loader4.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B9C7DF6185F08C90038B3A8 /* loader4.png */; };
 		8B9C7DFD185F09F70038B3A8 /* loading_logo.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B9C7DFC185F09F70038B3A8 /* loading_logo.png */; };
-		8B9C7E0D185F260A0038B3A8 /* MenuViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B9C7E0B185F260A0038B3A8 /* MenuViewController.m */; };
+		8B9C7E0D185F260A0038B3A8 /* MenuViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8B9C7E0B185F260A0038B3A8 /* MenuViewController.mm */; };
 		8B9C7E0E185F260A0038B3A8 /* MenuViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8B9C7E0C185F260A0038B3A8 /* MenuViewController.xib */; };
 		8B9C7E15185F268C0038B3A8 /* CamerasViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8B9C7E13185F268C0038B3A8 /* CamerasViewController.mm */; };
 		8B9C7E16185F268C0038B3A8 /* CamerasViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8B9C7E14185F268C0038B3A8 /* CamerasViewController.xib */; };
@@ -680,7 +680,7 @@
 		8B9C7DF6185F08C90038B3A8 /* loader4.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = loader4.png; sourceTree = "<group>"; };
 		8B9C7DFC185F09F70038B3A8 /* loading_logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = loading_logo.png; sourceTree = "<group>"; };
 		8B9C7E0A185F260A0038B3A8 /* MenuViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MenuViewController.h; sourceTree = "<group>"; };
-		8B9C7E0B185F260A0038B3A8 /* MenuViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MenuViewController.m; sourceTree = "<group>"; };
+		8B9C7E0B185F260A0038B3A8 /* MenuViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = MenuViewController.mm; sourceTree = "<group>"; };
 		8B9C7E0C185F260A0038B3A8 /* MenuViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MenuViewController.xib; sourceTree = "<group>"; };
 		8B9C7E12185F268C0038B3A8 /* CamerasViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CamerasViewController.h; sourceTree = "<group>"; };
 		8B9C7E13185F268C0038B3A8 /* CamerasViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = CamerasViewController.mm; sourceTree = "<group>"; };
@@ -2152,7 +2152,7 @@
 				8B9C7E10185F26250038B3A8 /* Settings */,
 				8B9C7E11185F262D0038B3A8 /* Account */,
 				8B9C7E0A185F260A0038B3A8 /* MenuViewController.h */,
-				8B9C7E0B185F260A0038B3A8 /* MenuViewController.m */,
+				8B9C7E0B185F260A0038B3A8 /* MenuViewController.mm */,
 				8B9C7E0C185F260A0038B3A8 /* MenuViewController.xib */,
 			);
 			name = MenuHubble;
@@ -2816,7 +2816,7 @@
 				38A478FA15C12914008682FE /* Step_08_ViewController.mm in Sources */,
 				38A478FD15C12CF4008682FE /* Step_09_ViewController.mm in Sources */,
 				8B9CCBA3183EF8B2007C0F65 /* MelodyViewController.m in Sources */,
-				8B9C7E0D185F260A0038B3A8 /* MenuViewController.m in Sources */,
+				8B9C7E0D185F260A0038B3A8 /* MenuViewController.mm in Sources */,
 				38C79E2215C26947006EE378 /* Step_10_ViewController.mm in Sources */,
 				38355AE715CB76630045909C /* Account_ViewController.mm in Sources */,
 				38B85E5415CFAA7F00E5A1FA /* Step_07_ViewController.mm in Sources */,
