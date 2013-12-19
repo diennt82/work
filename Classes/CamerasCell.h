@@ -8,10 +8,20 @@
 
 #import <UIKit/UIKit.h>
 
+@protocol CamerasCellDelegate <NSObject>
+
+- (void)sendTouchSettingsActionWithRowIndex: (NSInteger) rowIdx;
+
+@end
+
 @interface CamerasCell : UITableViewCell
 
 @property (retain, nonatomic) IBOutlet UIImageView *snapshotImage;
 @property (retain, nonatomic) IBOutlet UIImageView *photoItemImage;
 @property (retain, nonatomic) IBOutlet UILabel *cameraNameLabel;
+
+@property (nonatomic, assign) id<CamerasCellDelegate> camerasCellDelegate;
+
+@property (nonatomic) NSInteger rowIndex;
 
 @end

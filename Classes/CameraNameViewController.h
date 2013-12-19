@@ -7,11 +7,11 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "DeviceSettingsViewController.h"
+#import "MenuCameraViewController.h"
 
 @interface CameraNameViewController : UITableViewController
 
 @property (nonatomic, retain) NSString *cameraName;
-@property (nonatomic, retain) DeviceSettingsViewController *parentVC;
+@property (nonatomic, retain) MenuCameraViewController *parentVC;
 
 @end

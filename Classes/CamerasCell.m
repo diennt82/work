@@ -25,7 +25,9 @@
 
     // Configure the view for the selected state
 }
-- (IBAction)settingsButtonTouchAction:(id)sender {
+- (IBAction)settingsButtonTouchAction:(id)sender
+{
+    [_camerasCellDelegate sendTouchSettingsActionWithRowIndex:_rowIndex];
 }
 
 - (void)dealloc {

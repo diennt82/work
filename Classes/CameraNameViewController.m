@@ -35,6 +35,8 @@
  
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
+    
+    self.cameraName = self.parentVC.camChannel.profile.name;
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -45,7 +47,7 @@
         (3 < cameraName.length && cameraName.length < 20) &&
         [self isCamNameValidated:cameraName])
     {
-        self.parentVC.cameraName = cameraName;
+        self.parentVC.camChannel.profile.name = cameraName;
     }
 }
 

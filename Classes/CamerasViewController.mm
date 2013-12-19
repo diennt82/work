@@ -13,8 +13,9 @@
 #import "CamerasCell.h"
 #import "H264PlayerViewController.h"
 #import "CameraAlert.h"
+#import "MenuCameraViewController.h"
 
-@interface CamerasViewController () <H264PlayerVCDelegate>
+@interface CamerasViewController () <H264PlayerVCDelegate, CamerasCellDelegate>
 
 @property (retain, nonatomic) IBOutlet UITableViewCell *addCameraCell;
 
@@ -161,6 +162,19 @@
     }
 }
 
+#pragma mark - Cameras Cell Delegate
+
+- (void)sendTouchSettingsActionWithRowIndex:(NSInteger)rowIdx
+{
+    MenuCameraViewController *menuCamersVC = [[MenuCameraViewController alloc] init];
+    menuCamersVC.camChannel = (CamChannel *)[self.camChannels objectAtIndex:rowIdx];
+    
+    menuCamersVC.menuCamerasDelegate = self.parentVC.menuDelegate;
+    [self.parentVC.navigationController pushViewController:menuCamersVC animated:YES];
+    
+    [menuCamersVC release];
+}
+
 #pragma mark - Methods
 
 - (void)camerasReloadData
@@ -219,26 +233,30 @@
 
 - (void)cameraBackAction:(id)sender
 {
-    CamChannel *ch = (CamChannel *)[_camChannels objectAtIndex:0];
-    [CameraAlert clearAllAlertForCamera:ch.profile.mac_address];
-    [UIApplication sharedApplication].idleTimerDisabled = YES;
-    
-    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-    [userDefaults setObject:ch.profile.mac_address forKey:CAM_IN_VEW];
-    [userDefaults synchronize];
-    
-    H264PlayerViewController *h264PlayerViewController = [[H264PlayerViewController alloc] init];
- 
-    
-    h264PlayerViewController.selectedChannel = ch;
-    h264PlayerViewController.h264PlayerVCDelegate = self;
-    
-    NSLog(@"%p, %p", self.parentVC, self.camerasDelegate);
-    
-    //MenuViewController *tabBarController = (MenuViewController *)self.parentViewController;
-    
-    [self.parentVC.navigationController pushViewController:h264PlayerViewController animated:YES];
-    [h264PlayerViewController release];
+    if (self.camChannels != nil &&
+        self.camChannels.count > 0)
+    {
+        CamChannel *ch = (CamChannel *)[self.camChannels objectAtIndex:0];
+        
+        [CameraAlert clearAllAlertForCamera:ch.profile.mac_address];
+        [UIApplication sharedApplication].idleTimerDisabled = YES;
+        
+        NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+        [userDefaults setObject:ch.profile.mac_address forKey:CAM_IN_VEW];
+        [userDefaults synchronize];
+        
+        H264PlayerViewController *h264PlayerViewController = [[H264PlayerViewController alloc] init];
+        
+        h264PlayerViewController.selectedChannel = ch;
+        h264PlayerViewController.h264PlayerVCDelegate = self;
+        
+        NSLog(@"%@, %@", self.parentViewController.description, self.parentViewController.parentViewController);
+        
+        //MenuViewController *tabBarController = (MenuViewController *)self.parentViewController;
+        
+        [self.parentVC.navigationController pushViewController:h264PlayerViewController animated:YES];
+        [h264PlayerViewController release];
+    }
 }
 
 - (void)didReceiveMemoryWarning
@@ -300,6 +318,9 @@
                 break;
             }
         }
+        
+        cell.camerasCellDelegate = self;
+        cell.rowIndex = indexPath.row;
         
         CamChannel *ch = (CamChannel *)[_camChannels objectAtIndex:indexPath.row];
         

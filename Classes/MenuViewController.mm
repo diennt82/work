@@ -24,6 +24,7 @@
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
         // Custom initialization
+        self.title = @"Menu";
     }
     return self;
 }
@@ -45,7 +46,7 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
     
-    self.navigationController.navigationBarHidden = NO;
+    self.navigationController.navigationBarHidden = YES;
     
     UIImage *hubbleBack = [UIImage imageNamed:@"Hubble_logo_back.png"];
     
@@ -80,6 +81,7 @@
 
 - (void)viewWillAppear:(BOOL)animated
 {
+    self.navigationController.navigationBarHidden = YES;
     UIImage *hubbleBack = [UIImage imageNamed:@"Hubble_logo_back.png"];
     [self.navigationItem.leftBarButtonItem setTintColor:[UIColor colorWithPatternImage:hubbleBack]];
 }
