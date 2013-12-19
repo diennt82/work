@@ -35,8 +35,14 @@
  
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
+}
+
+- (void)viewDidAppear:(BOOL)animated
+{
+    UITextField *nameTF = (UITextField *) [self.nameCell viewWithTag:59];
     
-    self.cameraName = self.parentVC.camChannel.profile.name;
+    [nameTF becomeFirstResponder];
+    nameTF.clearButtonMode = UITextFieldViewModeWhileEditing;
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -104,11 +110,10 @@
 //    // Configure the cell...
 //    
 //    return cell;
+    
     UITextField *nameTF = (UITextField *) [self.nameCell viewWithTag:59];
     nameTF.text = self.cameraName;
     nameTF.delegate = self;
-    [nameTF becomeFirstResponder];
-    nameTF.clearButtonMode = UITextFieldViewModeWhileEditing;
     
     return _nameCell;
 }

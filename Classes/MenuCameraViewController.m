@@ -250,6 +250,7 @@
         // Pass the selected object to the new view controller.
         
         // Push the view controller.
+        cameraNameViewController.cameraName = self.camChannel.profile.name;
         [self.navigationController pushViewController:cameraNameViewController animated:YES];
         
         [cameraNameViewController release];

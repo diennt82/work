@@ -170,6 +170,7 @@
     menuCamersVC.camChannel = (CamChannel *)[self.camChannels objectAtIndex:rowIdx];
     
     menuCamersVC.menuCamerasDelegate = self.parentVC.menuDelegate;
+    
     [self.parentVC.navigationController pushViewController:menuCamersVC animated:YES];
     
     [menuCamersVC release];
