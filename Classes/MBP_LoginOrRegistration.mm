@@ -505,7 +505,13 @@
                 //signal iosViewController
                 //[delegate sendStatus:SCAN_CAMERA];
                 //Scan using bonjour
-                [delegate sendStatus:SCAN_BONJOUR_CAMERA];
+                
+                NSLog(@"didDismissWithButtonIndex: %p", delegate);
+                
+                [self dismissViewControllerAnimated:YES completion:^{
+                    [delegate sendStatus:SCAN_BONJOUR_CAMERA];
+                }];
+                
                 break;
             }
             default:
@@ -640,8 +646,8 @@
         
         if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
         {
-            forgotPwdController = [[ForgotPwdViewController alloc]
-                                   initWithNibName:@"ForgotPwdViewController_ipad" bundle:nil];
+//            forgotPwdController = [[ForgotPwdViewController alloc]
+//                                   initWithNibName:@"ForgotPwdViewController_ipad" bundle:nil];
 
             
         }

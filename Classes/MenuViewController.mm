@@ -47,12 +47,13 @@
     
     self.navigationController.navigationBarHidden = NO;
     
-    UIImage *backButton = [[UIImage imageNamed:@"Hubble_logo_back.png"] resizableImageWithCapInsets:UIEdgeInsetsMake(0, 14, 0, 5)];
+    UIImage *hubbleBack = [UIImage imageNamed:@"Hubble_logo_back.png"];
     
-    UIBarButtonItem *backBarBtn = [[UIBarButtonItem alloc] initWithImage:backButton
-                                                                   style:UIBarButtonItemStylePlain
-                                                                  target:self
-                                                                  action:@selector(menuBackAction:)];
+    UIBarButtonItem *backBarBtn = [[UIBarButtonItem alloc] initWithImage:hubbleBack
+                                                                           style:UIBarButtonItemStyleBordered
+                                                                          target:self
+                                                                          action:@selector(menuBackAction:)];
+    [backBarBtn setTintColor:[UIColor colorWithPatternImage:hubbleBack]];
     
     self.navigationItem.leftBarButtonItem = backBarBtn;
    // assert(self.navigationController.navigationItem.leftBarButtonItem != nil);

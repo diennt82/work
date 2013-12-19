@@ -113,26 +113,31 @@
     {
         self.isFirttime = TRUE;
         
-        CamChannel *ch = (CamChannel *)[self.camChannels objectAtIndex:0];
+        if (self.camChannels != nil &&
+            self.camChannels.count > 0)
+        {
+            CamChannel *ch = (CamChannel *)[self.camChannels objectAtIndex:0];
+            
+            [CameraAlert clearAllAlertForCamera:ch.profile.mac_address];
+            [UIApplication sharedApplication].idleTimerDisabled = YES;
+            
+            NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+            [userDefaults setObject:ch.profile.mac_address forKey:CAM_IN_VEW];
+            [userDefaults synchronize];
+            
+            H264PlayerViewController *h264PlayerViewController = [[H264PlayerViewController alloc] init];
+            
+            h264PlayerViewController.selectedChannel = ch;
+            h264PlayerViewController.h264PlayerVCDelegate = self;
+            
+            NSLog(@"%@, %@", self.parentViewController.description, self.parentViewController.parentViewController);
+            
+            //MenuViewController *tabBarController = (MenuViewController *)self.parentViewController;
+            
+            [self.parentVC.navigationController pushViewController:h264PlayerViewController animated:YES];
+            [h264PlayerViewController release];
+        }
         
-        [CameraAlert clearAllAlertForCamera:ch.profile.mac_address];
-        [UIApplication sharedApplication].idleTimerDisabled = YES;
-        
-        NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-        [userDefaults setObject:ch.profile.mac_address forKey:CAM_IN_VEW];
-        [userDefaults synchronize];
-        
-        H264PlayerViewController *h264PlayerViewController = [[H264PlayerViewController alloc] init];
-        
-        h264PlayerViewController.selectedChannel = ch;
-        h264PlayerViewController.h264PlayerVCDelegate = self;
-        
-        NSLog(@"%@, %@", self.parentViewController.description, self.parentViewController.parentViewController);
-        
-        //MenuViewController *tabBarController = (MenuViewController *)self.parentViewController;
-        
-        [self.parentVC.navigationController pushViewController:h264PlayerViewController animated:YES];
-        [h264PlayerViewController release];
     }
     
 }
@@ -145,9 +150,9 @@
         [userDefaults setBool:FALSE forKey:FIRST_TIME_SETUP];
         [userDefaults synchronize];
         
-        NSLog(@"addCameraButtonTouchAction: %@", self.parentViewController.description);
+        NSLog(@"addCameraButtonTouchAction: %@", self.camerasDelegate);
         //MenuViewController *tabBarController = (MenuViewController *)self.parentViewController;
-        [self.camerasDelegate sendStatus:SETUP_CAMERA];//initial setup
+        [self.parentVC.menuDelegate sendStatus:SETUP_CAMERA];//initial setup
         
     }
     else
