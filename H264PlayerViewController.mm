@@ -1156,7 +1156,8 @@
 
 - (void)waitingScanAndStartSetupCamera_bg
 {
-    while (self.selectedChannel.profile.hasUpdateLocalStatus == FALSE)
+    while (self.selectedChannel.profile.hasUpdateLocalStatus == FALSE ||
+           self.selectedChannel.waitingForStreamerToClose == TRUE)
     {
         NSDate * endDate = [NSDate dateWithTimeIntervalSinceNow:0.5];
         [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode beforeDate:endDate];
