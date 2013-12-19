@@ -78,6 +78,12 @@
     self.viewControllers = [NSArray arrayWithObjects:nav, settingsVC, nav2, nil];
 }
 
+- (void)viewWillAppear:(BOOL)animated
+{
+    UIImage *hubbleBack = [UIImage imageNamed:@"Hubble_logo_back.png"];
+    [self.navigationItem.leftBarButtonItem setTintColor:[UIColor colorWithPatternImage:hubbleBack]];
+}
+
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
