@@ -2110,6 +2110,28 @@
 
 }
 
+#if 1
+- (void)showNotificationViewController: (NSTimer *)exp
+{
+    //Back from login- login success
+    [self dismissViewControllerAnimated:NO completion:nil];
+    self.progressView.hidden = NO;
+    
+    
+    NotifViewController *notifVC = [[NotifViewController alloc] initWithNibName:@"NotifViewController"
+                                                                          bundle:Nil];
+    
+    notifVC.notifDelegate = self;
+    //Feed in data now
+    notifVC.cameraMacNoColon = self.camAlert.cameraMacNoColon;
+    notifVC.cameraName  = self.camAlert.cameraName;
+    notifVC.alertType   = self.camAlert.alertType;
+    notifVC.alertVal    = self.camAlert.alertVal;
+    
+    [self presentViewController:[[UINavigationController alloc]initWithRootViewController:notifVC] animated:YES completion:^{}];
+}
+#else
+
 - (void)showNotificationViewController: (NSTimer *)exp
 {
     //Back from login- login success
@@ -2141,6 +2163,7 @@
     
     [notif_view presentModallyOn:self];
 }
+#endif
 
 #pragma mark -
 #pragma mark Read Configure data 

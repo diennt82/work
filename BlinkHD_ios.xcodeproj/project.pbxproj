@@ -169,6 +169,23 @@
 		8B91E64018629E9F0041BA9D /* photo_item.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B91E63F18629E9F0041BA9D /* photo_item.png */; };
 		8B91E6541862FE540041BA9D /* MenuCameraViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B91E6521862FE540041BA9D /* MenuCameraViewController.m */; };
 		8B91E6551862FE540041BA9D /* MenuCameraViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8B91E6531862FE540041BA9D /* MenuCameraViewController.xib */; };
+		8B92A08B1863E5DF005923D2 /* TimelineViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B92A0891863E5DF005923D2 /* TimelineViewController.m */; };
+		8B92A08C1863E5DF005923D2 /* TimelineViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8B92A08A1863E5DF005923D2 /* TimelineViewController.xib */; };
+		8B92A0901863E68B005923D2 /* TimelineCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B92A08F1863E68B005923D2 /* TimelineCell.m */; };
+		8B92A0921863E69F005923D2 /* TimelineCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8B92A0911863E69F005923D2 /* TimelineCell.xib */; };
+		8B92A0951863E9DC005923D2 /* TimelineActivityCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B92A0941863E9DC005923D2 /* TimelineActivityCell.m */; };
+		8B92A0971863E9FE005923D2 /* TimelineActivityCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8B92A0961863E9FE005923D2 /* TimelineActivityCell.xib */; };
+		8B92A0991863EBD2005923D2 /* Timeline_snapshot.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B92A0981863EBD2005923D2 /* Timeline_snapshot.png */; };
+		8B92A09C1863ED66005923D2 /* TimelineInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B92A09B1863ED66005923D2 /* TimelineInfo.m */; };
+		8B92A0A11863F655005923D2 /* SavedEventViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B92A09F1863F655005923D2 /* SavedEventViewController.m */; };
+		8B92A0A21863F655005923D2 /* SavedEventViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8B92A0A01863F655005923D2 /* SavedEventViewController.xib */; };
+		8B92A0A61863F69C005923D2 /* SavedEventCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B92A0A51863F69C005923D2 /* SavedEventCell.m */; };
+		8B92A0A81863F6B4005923D2 /* SavedEventCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8B92A0A71863F6B4005923D2 /* SavedEventCell.xib */; };
+		8B92A0AA1863FA0B005923D2 /* time-saved-img.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B92A0A91863FA0B005923D2 /* time-saved-img.png */; };
+		8B92A0AF1863FD13005923D2 /* EarlierViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B92A0AD1863FD13005923D2 /* EarlierViewController.m */; };
+		8B92A0B01863FD13005923D2 /* EarlierViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8B92A0AE1863FD13005923D2 /* EarlierViewController.xib */; };
+		8B92A0B218640926005923D2 /* Timeline_line_.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B92A0B118640926005923D2 /* Timeline_line_.png */; };
+		8B92A0B51864197E005923D2 /* EventInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B92A0B41864197E005923D2 /* EventInfo.m */; };
 		8B92DC24185ACACA00344530 /* ScheduleInformation.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B92DC23185ACACA00344530 /* ScheduleInformation.m */; };
 		8B93847F1856D42C009C4771 /* InformationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B93847D1856D42C009C4771 /* InformationViewController.m */; };
 		8B9384801856D42C009C4771 /* InformationViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8B93847E1856D42C009C4771 /* InformationViewController.xib */; };
@@ -617,6 +634,31 @@
 		8B91E6511862FE540041BA9D /* MenuCameraViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MenuCameraViewController.h; sourceTree = "<group>"; };
 		8B91E6521862FE540041BA9D /* MenuCameraViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MenuCameraViewController.m; sourceTree = "<group>"; };
 		8B91E6531862FE540041BA9D /* MenuCameraViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MenuCameraViewController.xib; sourceTree = "<group>"; };
+		8B92A0881863E5DF005923D2 /* TimelineViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TimelineViewController.h; sourceTree = "<group>"; };
+		8B92A0891863E5DF005923D2 /* TimelineViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TimelineViewController.m; sourceTree = "<group>"; };
+		8B92A08A1863E5DF005923D2 /* TimelineViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TimelineViewController.xib; sourceTree = "<group>"; };
+		8B92A08E1863E68B005923D2 /* TimelineCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TimelineCell.h; sourceTree = "<group>"; };
+		8B92A08F1863E68B005923D2 /* TimelineCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TimelineCell.m; sourceTree = "<group>"; };
+		8B92A0911863E69F005923D2 /* TimelineCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TimelineCell.xib; sourceTree = "<group>"; };
+		8B92A0931863E9DC005923D2 /* TimelineActivityCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TimelineActivityCell.h; sourceTree = "<group>"; };
+		8B92A0941863E9DC005923D2 /* TimelineActivityCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TimelineActivityCell.m; sourceTree = "<group>"; };
+		8B92A0961863E9FE005923D2 /* TimelineActivityCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TimelineActivityCell.xib; sourceTree = "<group>"; };
+		8B92A0981863EBD2005923D2 /* Timeline_snapshot.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Timeline_snapshot.png; sourceTree = "<group>"; };
+		8B92A09A1863ED66005923D2 /* TimelineInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TimelineInfo.h; sourceTree = "<group>"; };
+		8B92A09B1863ED66005923D2 /* TimelineInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TimelineInfo.m; sourceTree = "<group>"; };
+		8B92A09E1863F655005923D2 /* SavedEventViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SavedEventViewController.h; sourceTree = "<group>"; };
+		8B92A09F1863F655005923D2 /* SavedEventViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SavedEventViewController.m; sourceTree = "<group>"; };
+		8B92A0A01863F655005923D2 /* SavedEventViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SavedEventViewController.xib; sourceTree = "<group>"; };
+		8B92A0A41863F69C005923D2 /* SavedEventCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SavedEventCell.h; sourceTree = "<group>"; };
+		8B92A0A51863F69C005923D2 /* SavedEventCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SavedEventCell.m; sourceTree = "<group>"; };
+		8B92A0A71863F6B4005923D2 /* SavedEventCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SavedEventCell.xib; sourceTree = "<group>"; };
+		8B92A0A91863FA0B005923D2 /* time-saved-img.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "time-saved-img.png"; sourceTree = "<group>"; };
+		8B92A0AC1863FD13005923D2 /* EarlierViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EarlierViewController.h; sourceTree = "<group>"; };
+		8B92A0AD1863FD13005923D2 /* EarlierViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EarlierViewController.m; sourceTree = "<group>"; };
+		8B92A0AE1863FD13005923D2 /* EarlierViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EarlierViewController.xib; sourceTree = "<group>"; };
+		8B92A0B118640926005923D2 /* Timeline_line_.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Timeline_line_.png; sourceTree = "<group>"; };
+		8B92A0B31864197E005923D2 /* EventInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EventInfo.h; sourceTree = "<group>"; };
+		8B92A0B41864197E005923D2 /* EventInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EventInfo.m; sourceTree = "<group>"; };
 		8B92DC22185ACACA00344530 /* ScheduleInformation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ScheduleInformation.h; sourceTree = "<group>"; };
 		8B92DC23185ACACA00344530 /* ScheduleInformation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ScheduleInformation.m; sourceTree = "<group>"; };
 		8B93847C1856D42C009C4771 /* InformationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InformationViewController.h; sourceTree = "<group>"; };
@@ -2022,6 +2064,66 @@
 			name = "Camera Settings";
 			sourceTree = "<group>";
 		};
+		8B92A0871863E4D6005923D2 /* Timeline */ = {
+			isa = PBXGroup;
+			children = (
+				8B92A09D1863F637005923D2 /* SavedEvent */,
+				8B92A08D1863E618005923D2 /* Timeline Cell */,
+				8B92A0881863E5DF005923D2 /* TimelineViewController.h */,
+				8B92A0891863E5DF005923D2 /* TimelineViewController.m */,
+				8B92A08A1863E5DF005923D2 /* TimelineViewController.xib */,
+				8B92A09A1863ED66005923D2 /* TimelineInfo.h */,
+				8B92A09B1863ED66005923D2 /* TimelineInfo.m */,
+			);
+			name = Timeline;
+			sourceTree = "<group>";
+		};
+		8B92A08D1863E618005923D2 /* Timeline Cell */ = {
+			isa = PBXGroup;
+			children = (
+				8B92A08E1863E68B005923D2 /* TimelineCell.h */,
+				8B92A08F1863E68B005923D2 /* TimelineCell.m */,
+				8B92A0911863E69F005923D2 /* TimelineCell.xib */,
+				8B92A0931863E9DC005923D2 /* TimelineActivityCell.h */,
+				8B92A0941863E9DC005923D2 /* TimelineActivityCell.m */,
+				8B92A0961863E9FE005923D2 /* TimelineActivityCell.xib */,
+				8B92A0B31864197E005923D2 /* EventInfo.h */,
+				8B92A0B41864197E005923D2 /* EventInfo.m */,
+			);
+			name = "Timeline Cell";
+			sourceTree = "<group>";
+		};
+		8B92A09D1863F637005923D2 /* SavedEvent */ = {
+			isa = PBXGroup;
+			children = (
+				8B92A0A31863F677005923D2 /* SavedCell */,
+				8B92A09E1863F655005923D2 /* SavedEventViewController.h */,
+				8B92A09F1863F655005923D2 /* SavedEventViewController.m */,
+				8B92A0A01863F655005923D2 /* SavedEventViewController.xib */,
+			);
+			name = SavedEvent;
+			sourceTree = "<group>";
+		};
+		8B92A0A31863F677005923D2 /* SavedCell */ = {
+			isa = PBXGroup;
+			children = (
+				8B92A0A41863F69C005923D2 /* SavedEventCell.h */,
+				8B92A0A51863F69C005923D2 /* SavedEventCell.m */,
+				8B92A0A71863F6B4005923D2 /* SavedEventCell.xib */,
+			);
+			name = SavedCell;
+			sourceTree = "<group>";
+		};
+		8B92A0AB1863FCC9005923D2 /* Earlier */ = {
+			isa = PBXGroup;
+			children = (
+				8B92A0AC1863FD13005923D2 /* EarlierViewController.h */,
+				8B92A0AD1863FD13005923D2 /* EarlierViewController.m */,
+				8B92A0AE1863FD13005923D2 /* EarlierViewController.xib */,
+			);
+			name = Earlier;
+			sourceTree = "<group>";
+		};
 		8B9899A9185976E300AC3852 /* Camera name */ = {
 			isa = PBXGroup;
 			children = (
@@ -2144,6 +2246,9 @@
 		8B9C7DF1185F08AF0038B3A8 /* New Hubble Image */ = {
 			isa = PBXGroup;
 			children = (
+				8B92A0B118640926005923D2 /* Timeline_line_.png */,
+				8B92A0A91863FA0B005923D2 /* time-saved-img.png */,
+				8B92A0981863EBD2005923D2 /* Timeline_snapshot.png */,
 				8B91E63F18629E9F0041BA9D /* photo_item.png */,
 				8B91E63D18629E910041BA9D /* Snapshot.png */,
 				8BCAE123186068AF00AF870A /* Hubble_logo_back.png */,
@@ -2345,6 +2450,8 @@
 		97A07FAD17D5FCFD00653460 /* H264Player */ = {
 			isa = PBXGroup;
 			children = (
+				8B92A0AB1863FCC9005923D2 /* Earlier */,
+				8B92A0871863E4D6005923D2 /* Timeline */,
 				A157738C18613EC100DEBD45 /* PanelButtonController */,
 				A14631C3185C12B600E96969 /* ScrollMenuView */,
 				A1E32FAB17E9899800504538 /* H264PlayerListener.mm */,
@@ -2554,6 +2661,7 @@
 				3812F82C15C8BF3600DADFA6 /* bb_snap_icon.png in Resources */,
 				8BC0A03F1844AC3600A5FD52 /* circle_buttons1_lf.png in Resources */,
 				A19778F9181E6C55007C3CA7 /* motion_detection_off_1.png in Resources */,
+				8B92A0AA1863FA0B005923D2 /* time-saved-img.png in Resources */,
 				3812F82D15C8BF3600DADFA6 /* bb_spk_icon.png in Resources */,
 				8BC0A0331844A91900A5FD52 /* splash_screen_portrait.png in Resources */,
 				3812F83915C8C3EE00DADFA6 /* bb_check_list.png in Resources */,
@@ -2561,6 +2669,7 @@
 				3812F83B15C8C49000DADFA6 /* bb_line.png in Resources */,
 				38DE1BD8168AD9B40049E814 /* SongTitleView.xib in Resources */,
 				38A62E8A15C9137000DEA520 /* bb_vs_mike_off.png in Resources */,
+				8B92A0B218640926005923D2 /* Timeline_line_.png in Resources */,
 				38A62E8B15C9137000DEA520 /* bb_vs_mike_on.png in Resources */,
 				38A62E8D15C92BDF00DEA520 /* bb_spk_icon_d.png in Resources */,
 				8BC0A04F1844B61900A5FD52 /* homepage_p1.png in Resources */,
@@ -2593,6 +2702,7 @@
 				8BC0A02C1844A81D00A5FD52 /* homepage_p.png in Resources */,
 				38DE1C96168AEB450049E814 /* Step_07_ViewController.xib in Resources */,
 				38CE2A0C15D4B85E00B8F7EC /* temp_alert_bg.png in Resources */,
+				8B92A08C1863E5DF005923D2 /* TimelineViewController.xib in Resources */,
 				38CE2A0F15D4E07300B8F7EC /* dialog_bg.png in Resources */,
 				38DE1C5A168AEA890049E814 /* ForgotPwdViewController.xib in Resources */,
 				8B9B57EB184F0DB200E58543 /* frame-5_update_new.png in Resources */,
@@ -2615,6 +2725,7 @@
 				8B9112DC1860372D004301C5 /* Hubble-Notif.png in Resources */,
 				8B9384801856D42C009C4771 /* InformationViewController.xib in Resources */,
 				8B9384A318570207009C4771 /* sound-s-d.png in Resources */,
+				8B92A0921863E69F005923D2 /* TimelineCell.xib in Resources */,
 				8B9B57E2184F0D9900E58543 /* frame-6_update-iOS7_new2.png in Resources */,
 				8BC0A0311844A8A500A5FD52 /* camera_offline.png in Resources */,
 				8BC0A0191844A58700A5FD52 /* i_mode.png in Resources */,
@@ -2683,6 +2794,7 @@
 				974ACB7F168079CB005AE4C6 /* MonitorEverywhere_App_ios_Apple.html in Resources */,
 				38DE1C4B168AEA5F0049E814 /* AlertSettingViewController_ipad.xib in Resources */,
 				38DE1C46168AEA530049E814 /* AlertSettingViewController_land_ipad.xib in Resources */,
+				8B92A0991863EBD2005923D2 /* Timeline_snapshot.png in Resources */,
 				97E39E691684416700F1A1DB /* hq_d.png in Resources */,
 				8B9899DE1859AA6A00AC3852 /* slider-default7-trackCrossedOver@2x.png in Resources */,
 				97E39E6A1684416700F1A1DB /* hq.png in Resources */,
@@ -2695,6 +2807,7 @@
 				8BA7F2821851C57200BE0145 /* blink11hd480p.sdp in Resources */,
 				BC3C1ACE16F025B600175AFF /* MBP_MenuViewController_ipad.xib in Resources */,
 				A1E74742185F07AE00A54B29 /* outline_circle.png in Resources */,
+				8B92A0A81863F6B4005923D2 /* SavedEventCell.xib in Resources */,
 				BC3C1AD316F025E300175AFF /* MBP_MenuProgress_portrait_ipad.xib in Resources */,
 				BC3C1AD816F025FF00175AFF /* MBP_MenuProgress_land_ipad.xib in Resources */,
 				381D185D16D4652C00272A8D /* Step_05_tableViewCell_ipad.xib in Resources */,
@@ -2741,6 +2854,7 @@
 				380EB15416FC41D8005BAC7F /* Voicemail.aif in Resources */,
 				8B9CCBA4183EF8B2007C0F65 /* MelodyViewController.xib in Resources */,
 				8BC0A0411844AC3600A5FD52 /* circle_buttons1_up.png in Resources */,
+				8B92A0971863E9FE005923D2 /* TimelineActivityCell.xib in Resources */,
 				8BA5C4811818DCC1006B4BB8 /* ZoneViewController.xib in Resources */,
 				BC3C1B0316F05C0C00175AFF /* Localizable.strings in Resources */,
 				BC5B0FCE1701855600D2C308 /* cameraMenuRouter.plist in Resources */,
@@ -2753,10 +2867,12 @@
 				84FD1DCF1832399E00238089 /* stream720p_10_926_alaw.sdp in Resources */,
 				8B0E1DE91844A0E80080000A /* mestartup000021.png in Resources */,
 				979BC68B17D990F400B3B373 /* H264PlayerViewController.xib in Resources */,
+				8B92A0A21863F655005923D2 /* SavedEventViewController.xib in Resources */,
 				8B9C7DF7185F08C90038B3A8 /* loader0.png in Resources */,
 				979BC69B17D9B97700B3B373 /* PlaybackViewController.xib in Resources */,
 				8B9899E51859C9EA00AC3852 /* DayViewController.xib in Resources */,
 				979BC6A517D9BB9C00B3B373 /* PlayListViewController.xib in Resources */,
+				8B92A0B01863FD13005923D2 /* EarlierViewController.xib in Resources */,
 				A1176B74180D1DD9000B7527 /* stream480p.sdp in Resources */,
 				978F090117DEFD670053972F /* no_img_available.jpeg in Resources */,
 				8B0E1DEA1844A0E80080000A /* mestartup000022.png in Resources */,
@@ -2797,7 +2913,10 @@
 				38CA70A715F7669D002CD1C5 /* NSData+Conversion.m in Sources */,
 				38C79E1F15C26270006EE378 /* Reachability.m in Sources */,
 				1D60589B0D05DD56006BFB54 /* main.m in Sources */,
+				8B92A0901863E68B005923D2 /* TimelineCell.m in Sources */,
+				8B92A0951863E9DC005923D2 /* TimelineActivityCell.m in Sources */,
 				1D3623260D0F684500981E51 /* MBP_iosAppDelegate.mm in Sources */,
+				8B92A0A11863F655005923D2 /* SavedEventViewController.m in Sources */,
 				28D7ACF80DDB3853001CB0EB /* MBP_iosViewController.mm in Sources */,
 				8B9112CA186010F1004301C5 /* GeneralCell.m in Sources */,
 				8BA18CAC184870470097D1AF /* DeviceSettingsViewController.m in Sources */,
@@ -2810,6 +2929,9 @@
 				97987E421546AF2C0066C49B /* UserAccount.mm in Sources */,
 				97C49AB0154784F4008B7D03 /* SetupData.m in Sources */,
 				8B9384881856E940009C4771 /* CameraSettingsCell.m in Sources */,
+				8B92A08B1863E5DF005923D2 /* TimelineViewController.m in Sources */,
+				8B92A0B51864197E005923D2 /* EventInfo.m in Sources */,
+				8B92A09C1863ED66005923D2 /* TimelineInfo.m in Sources */,
 				9719EC5C155C9F30005419FC /* MBP_MenuViewController.mm in Sources */,
 				8B91E6541862FE540041BA9D /* MenuCameraViewController.m in Sources */,
 				97D00812159D9FF500B1D92F /* WifiEntry.m in Sources */,
@@ -2849,10 +2971,12 @@
 				38E3C85C1694033500A13A70 /* AlertPrompt.m in Sources */,
 				380CB0C716DC568500290587 /* Step_12_ViewController.m in Sources */,
 				380CB0D616DC60DC00290587 /* Step_11_ViewController.m in Sources */,
+				8B92A0AF1863FD13005923D2 /* EarlierViewController.m in Sources */,
 				8B9384921856EEFE009C4771 /* SlideSettingsCell.m in Sources */,
 				8B92DC24185ACACA00344530 /* ScheduleInformation.m in Sources */,
 				9704F84117B37CB3005F9868 /* DashBoard_ViewController.mm in Sources */,
 				97F5531517BDD3AF00024017 /* MBPNavController.m in Sources */,
+				8B92A0A61863F69C005923D2 /* SavedEventCell.m in Sources */,
 				97A07FB117D5FD4A00653460 /* H264PlayerViewController.mm in Sources */,
 				979BC69A17D9B97700B3B373 /* PlaybackViewController.mm in Sources */,
 				979BC69E17D9BA6C00B3B373 /* PlaylistCell.m in Sources */,

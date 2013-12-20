@@ -99,7 +99,7 @@
     //processing for hold to talk
     BOOL ptt_enabled;
     AudioOutStreamer * audioOut;
-    HttpCommunication * httpComm;
+    //HttpCommunication * httpComm;
     
     //processing for recording
     int iMaxRecordSize;

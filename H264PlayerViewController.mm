@@ -7,6 +7,7 @@
 //
 
 #import "H264PlayerViewController.h"
+#import "EarlierViewController.h"
 
 
 #define D1 @"480p"
@@ -47,12 +48,14 @@
 
 @interface H264PlayerViewController ()
 
+@property (retain, nonatomic) EarlierViewController *earlierVC;
 
 - (void)centerScrollViewContents;
 - (void)scrollViewDoubleTapped:(UITapGestureRecognizer*)recognizer;
 - (void)scrollViewTwoFingerTapped:(UITapGestureRecognizer*)recognizer;
 
 @end
+
 @implementation H264PlayerViewController
 
 @synthesize  alertTimer;
@@ -63,6 +66,7 @@
 @synthesize itemSelectedImages = _itemSelectedImages;
 @synthesize selectedItemMenu = _selectedItemMenu;
 @synthesize walkieTalkieEnabled;
+
 #pragma mark - View
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -237,10 +241,11 @@
 - (void)nowButtonAciton:(id)sender
 {
     //For test
-    return;
-    self.disableAutorotateFlag = FALSE;
+    //return;
+    //self.disableAutorotateFlag = FALSE;
     
-    self.playlistViewController.tableView.hidden = YES;
+    //self.playlistViewController.tableView.hidden = YES;
+    self.earlierVC.view.hidden = YES;
     
     NSLog(@"h264StreamerIsInStopped: %d, h264Streamer==null: %d", _h264StreamerIsInStopped, h264Streamer == NULL);
     
@@ -251,7 +256,8 @@
         [self.view bringSubviewToFront:self.activityIndicator];
         [self.activityIndicator startAnimating];
         
-        [self setupCamera];
+        //[self setupCamera];
+        [self performSelectorInBackground:@selector(waitingScanAndStartSetupCamera_bg) withObject:nil];
         self.h264StreamerIsInStopped = FALSE;
         
         NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
@@ -267,15 +273,20 @@
 - (void)earlierButtonAction:(id)sender
 {
     //For test UI
-    return;
-    self.disableAutorotateFlag = TRUE;
+    //return;
+    //self.disableAutorotateFlag = TRUE;
+    if (_earlierVC == Nil)
+    {
+        self.earlierVC = [[EarlierViewController alloc] init];
+        [self.view addSubview:_earlierVC.view];
+    }
     
-    [self.view bringSubviewToFront:self.playlistViewController.tableView];
-    self.playlistViewController.tableView.hidden = NO;
+    if (!(_earlierVC.isViewLoaded && self.view.window))
+    {
+        [self.view bringSubviewToFront:_earlierVC.view];
+    }
     
-    self.playlistViewController.navController = self.navigationController;
-    self.playlistViewController.playlistDelegate = self;
-    
+    self.earlierVC.view.hidden = NO;
 }
 #pragma mark - Action
 - (IBAction)hqPressAction:(id)sender
@@ -1105,6 +1116,11 @@
 - (BOOL)hidesBottomBarWhenPushed
 {
     return YES;
+}
+
+- (void)cleanup
+{
+    // Clean a warning
 }
 
 - (void)becomeActive
@@ -4063,9 +4079,9 @@
     
     NSString * command = [NSString stringWithFormat:@"%@%@",SET_PTT,status];
     
-    if(httpComm != nil)
+    if(_httpComm != nil)
     {
-        [httpComm sendCommandAndBlock:command];
+        [_httpComm sendCommandAndBlock:command];
     }
     
     [pool release];
@@ -4075,12 +4091,12 @@
 {
     NSString * device_ip = @"192.168.2.1";//make a default
 	NSInteger device_port = 80;
-    httpComm.device_ip = device_ip;
-    httpComm.device_port = device_port;
+    _httpComm.device_ip = device_ip;
+    _httpComm.device_port = device_port;
     
     
     NSLog(@"Create AudioOutStreamer & start recording now");
-    audioOut = [[AudioOutStreamer alloc] initWithDeviceIp:httpComm.device_ip
+    audioOut = [[AudioOutStreamer alloc] initWithDeviceIp:_httpComm.device_ip
                                                andPTTport:self.selectedChannel.profile.ptt_port];
     [audioOut retain];
     
@@ -4095,7 +4111,7 @@
 -(void) longPress:(UILongPressGestureRecognizer*) gest
 {
     
-    UIButton * btn = (UIButton *)[gest view];
+    //UIButton * btn = (UIButton *)[gest view];
     
     
     if ([gest state] == UIGestureRecognizerStateBegan)
