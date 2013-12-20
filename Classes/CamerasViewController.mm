@@ -82,6 +82,8 @@
     //then set it.  phew.
     [self.navigationItem setLeftBarButtonItem:barButtonItem];
     
+    [barButtonItem release];
+    
 //    UIImage *backButton = [[UIImage imageNamed:@"Hubble_logo_back.png"] resizableImageWithCapInsets:UIEdgeInsetsMake(0, 14, 0, 5)];
 //    
 //    UIBarButtonItem *backBarBtn = [[UIBarButtonItem alloc] initWithImage:backButton

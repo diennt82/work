@@ -34,7 +34,9 @@
     UINavigationController *nav1 = [[UINavigationController alloc] initWithRootViewController:[[SavedEventViewController alloc] init]];
     
     self.viewControllers = [NSArray arrayWithObjects:nav, nav1, nil];
-    
+ 
+    [nav release];
+    [nav1 release];
 }
 
 - (void)didReceiveMemoryWarning

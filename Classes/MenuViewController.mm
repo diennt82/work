@@ -77,6 +77,10 @@
     
     
     self.viewControllers = [NSArray arrayWithObjects:nav, settingsVC, nav2, nil];
+    
+    [nav release];
+    [nav2 release];
+    [settingsVC release];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -106,6 +110,12 @@
 {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+- (void)dealloc
+{
+    [_accountVC release];
+    [super dealloc];
 }
 
 @end

@@ -153,6 +153,8 @@
             
             NSInteger iDate = [[dFormater stringFromDate:date] integerValue];
             
+            [dFormater release];
+            
             EventInfo *oldInfo = (EventInfo *)[_eventArray objectAtIndex:indexPath.row + 1];
             
             NSString *oldDatestr = oldInfo.time_code;
@@ -166,6 +168,8 @@
             
             //CGFloat oldFDate = [[oldDFormater stringFromDate:oldDate] floatValue];
             NSInteger oldIDate = [[oldDFormater stringFromDate:oldDate] integerValue];
+            
+            [oldDFormater release];
             
             NSLog(@"%d", iDate - oldIDate);
             
@@ -217,7 +221,7 @@
         cell.eventLabel.text = info.description;
         
         NSString *datestr = info.time_code;
-        NSDateFormatter *dFormater = [[NSDateFormatter alloc]init];
+        NSDateFormatter *dFormater = [[[NSDateFormatter alloc]init] autorelease];
         
         [dFormater setDateFormat:@"yyyyMMddHHmmss"];
         

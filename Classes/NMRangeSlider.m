@@ -676,4 +676,23 @@ NSUInteger DeviceSystemMajorVersion() {
     [self sendActionsForControlEvents:UIControlEventValueChanged];
 }
 
+- (void)dealloc
+{
+    [_lowerHandleImageNormal release];
+    [_lowerHandleImageHighlighted release];
+    [_upperHandleImageNormal release];
+    [_upperHandleImageHighlighted release];
+    [_trackImage release];
+    //_her than the upper valu
+    [_trackCrossedOverImage release];
+    [_trackBackgroundImage release];
+    
+    [_lowerHandle release];
+    [_upperHandle release];
+    [_track release];
+    [_trackBackground release];
+    
+    [super dealloc];
+}
+
 @end
