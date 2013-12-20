@@ -10,6 +10,7 @@
 #import "TimelineCell.h"
 #import "TimelineActivityCell.h"
 #import "EventInfo.h"
+#import "TimelineButtonCell.h"
 
 @interface TimelineViewController ()
 
@@ -179,7 +180,17 @@
         //return 73;
     }
     
-    return 44;
+    return 60;
+}
+
+- (BOOL)tableView:(UITableView *)tableView shouldHighlightRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if (indexPath.section == 1)
+    {
+        return NO;
+    }
+    
+    return YES;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -221,22 +232,30 @@
     }
     else
     {
-        static NSString *CellIdentifier = @"Cell";
-        UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-        if (cell == nil) {
-            cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
-        }
+        static NSString *CellIdentifier = @"TimelineButtonCell";
+        TimelineButtonCell *cell = [self.tableView dequeueReusableCellWithIdentifier:CellIdentifier];
         
-        // Configure the cell...
+        NSArray *objects = [[NSBundle mainBundle] loadNibNamed:@"TimelineButtonCell" owner:nil options:nil];
+        
+        for (id curObj in objects)
+        {
+            
+            if([curObj isKindOfClass:[UITableViewCell class]])
+            {
+                cell = (TimelineButtonCell *)curObj;
+                break;
+            }
+        }
         
         if (indexPath.row == 0)
         {
-            cell.textLabel.text = @"Save the day";
+            [cell.timelineCellButtn setBackgroundImage:[UIImage imageNamed:@"button_bg.png"] forState:UIControlStateNormal];
+            [cell.timelineCellButtn setTitle:@"Say the Day" forState:UIControlStateNormal];
         }
         else
         {
-            cell.textLabel.text = @"Upgrade to Pr";
-            cell.detailTextLabel.text = @"98-9";
+            [cell.timelineCellButtn setBackgroundImage:[UIImage imageNamed:@"button_bg_1.png"] forState:UIControlStateNormal];
+            [cell.timelineCellButtn setTitle:@"Upgrade to Premium" forState:UIControlStateNormal];
         }
         
         return cell;

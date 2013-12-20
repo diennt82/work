@@ -186,6 +186,10 @@
 		8B92A0B01863FD13005923D2 /* EarlierViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8B92A0AE1863FD13005923D2 /* EarlierViewController.xib */; };
 		8B92A0B218640926005923D2 /* Timeline_line_.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B92A0B118640926005923D2 /* Timeline_line_.png */; };
 		8B92A0B51864197E005923D2 /* EventInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B92A0B41864197E005923D2 /* EventInfo.m */; };
+		8B92A0B818643212005923D2 /* TimelineButtonCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B92A0B718643212005923D2 /* TimelineButtonCell.m */; };
+		8B92A0BA1864322E005923D2 /* TimelineButtonCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8B92A0B91864322E005923D2 /* TimelineButtonCell.xib */; };
+		8B92A0BC186432E9005923D2 /* button_bg.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B92A0BB186432E9005923D2 /* button_bg.png */; };
+		8B92A0BE186436B5005923D2 /* button_bg_1.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B92A0BD186436B5005923D2 /* button_bg_1.png */; };
 		8B92DC24185ACACA00344530 /* ScheduleInformation.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B92DC23185ACACA00344530 /* ScheduleInformation.m */; };
 		8B93847F1856D42C009C4771 /* InformationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B93847D1856D42C009C4771 /* InformationViewController.m */; };
 		8B9384801856D42C009C4771 /* InformationViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8B93847E1856D42C009C4771 /* InformationViewController.xib */; };
@@ -659,6 +663,11 @@
 		8B92A0B118640926005923D2 /* Timeline_line_.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Timeline_line_.png; sourceTree = "<group>"; };
 		8B92A0B31864197E005923D2 /* EventInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EventInfo.h; sourceTree = "<group>"; };
 		8B92A0B41864197E005923D2 /* EventInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EventInfo.m; sourceTree = "<group>"; };
+		8B92A0B618643212005923D2 /* TimelineButtonCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TimelineButtonCell.h; sourceTree = "<group>"; };
+		8B92A0B718643212005923D2 /* TimelineButtonCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TimelineButtonCell.m; sourceTree = "<group>"; };
+		8B92A0B91864322E005923D2 /* TimelineButtonCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TimelineButtonCell.xib; sourceTree = "<group>"; };
+		8B92A0BB186432E9005923D2 /* button_bg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = button_bg.png; sourceTree = "<group>"; };
+		8B92A0BD186436B5005923D2 /* button_bg_1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = button_bg_1.png; sourceTree = "<group>"; };
 		8B92DC22185ACACA00344530 /* ScheduleInformation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ScheduleInformation.h; sourceTree = "<group>"; };
 		8B92DC23185ACACA00344530 /* ScheduleInformation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ScheduleInformation.m; sourceTree = "<group>"; };
 		8B93847C1856D42C009C4771 /* InformationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InformationViewController.h; sourceTree = "<group>"; };
@@ -2089,6 +2098,9 @@
 				8B92A0961863E9FE005923D2 /* TimelineActivityCell.xib */,
 				8B92A0B31864197E005923D2 /* EventInfo.h */,
 				8B92A0B41864197E005923D2 /* EventInfo.m */,
+				8B92A0B618643212005923D2 /* TimelineButtonCell.h */,
+				8B92A0B718643212005923D2 /* TimelineButtonCell.m */,
+				8B92A0B91864322E005923D2 /* TimelineButtonCell.xib */,
 			);
 			name = "Timeline Cell";
 			sourceTree = "<group>";
@@ -2246,6 +2258,8 @@
 		8B9C7DF1185F08AF0038B3A8 /* New Hubble Image */ = {
 			isa = PBXGroup;
 			children = (
+				8B92A0BD186436B5005923D2 /* button_bg_1.png */,
+				8B92A0BB186432E9005923D2 /* button_bg.png */,
 				8B92A0B118640926005923D2 /* Timeline_line_.png */,
 				8B92A0A91863FA0B005923D2 /* time-saved-img.png */,
 				8B92A0981863EBD2005923D2 /* Timeline_snapshot.png */,
@@ -2659,6 +2673,7 @@
 				A15773A2186145DD00DEBD45 /* H264PlayerViewController_land.xib in Resources */,
 				3812F82B15C8BF3600DADFA6 /* bb_ptt_icon.png in Resources */,
 				3812F82C15C8BF3600DADFA6 /* bb_snap_icon.png in Resources */,
+				8B92A0BC186432E9005923D2 /* button_bg.png in Resources */,
 				8BC0A03F1844AC3600A5FD52 /* circle_buttons1_lf.png in Resources */,
 				A19778F9181E6C55007C3CA7 /* motion_detection_off_1.png in Resources */,
 				8B92A0AA1863FA0B005923D2 /* time-saved-img.png in Resources */,
@@ -2825,6 +2840,7 @@
 				BCBD80C116D1D0480007943B /* MBP_InitialSetupViewController_ipad_land.xib in Resources */,
 				8BE896B71845CD4800674E01 /* bb_melody_off_icon.png in Resources */,
 				BCBD80F616D1E25D0007943B /* Step_08_ViewController_land_ipad.xib in Resources */,
+				8B92A0BA1864322E005923D2 /* TimelineButtonCell.xib in Resources */,
 				8B0E1DF81844A3BE0080000A /* bb_rec_icon.png in Resources */,
 				BCA60D6616D23CB3004A361C /* MBP_FirstPage_land.xib in Resources */,
 				380CB0CA16DC5A9E00290587 /* Step_12_ViewController.xib in Resources */,
@@ -2865,6 +2881,7 @@
 				8BC0F0E41845E511008A63A7 /* iTunesArtwork in Resources */,
 				A1E7474E185F07AE00A54B29 /* video_action_pan.png in Resources */,
 				84FD1DCF1832399E00238089 /* stream720p_10_926_alaw.sdp in Resources */,
+				8B92A0BE186436B5005923D2 /* button_bg_1.png in Resources */,
 				8B0E1DE91844A0E80080000A /* mestartup000021.png in Resources */,
 				979BC68B17D990F400B3B373 /* H264PlayerViewController.xib in Resources */,
 				8B92A0A21863F655005923D2 /* SavedEventViewController.xib in Resources */,
@@ -2941,6 +2958,7 @@
 				A1A98E90180BF5AA00C8EBD3 /* StunClient.m in Sources */,
 				972E2B8715A4234300E60A96 /* NSData+Base64.m in Sources */,
 				8BA18CB0184879720097D1AF /* DeviceSettingsCell.m in Sources */,
+				8B92A0B818643212005923D2 /* TimelineButtonCell.m in Sources */,
 				A1A98E8F180BF5AA00C8EBD3 /* client_main.c in Sources */,
 				8B9384841856E613009C4771 /* CameraSettingsViewController.m in Sources */,
 				A14631C6185C133D00E96969 /* ScrollHorizontalMenu.m in Sources */,
