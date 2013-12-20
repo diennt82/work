@@ -234,6 +234,8 @@
 
 - (void)doSignIn :(NSTimer *) exp
 {
+    self.navigationController.navigationBarHidden = YES;
+    
     BMS_JSON_Communication *jsonComm = [[[BMS_JSON_Communication alloc] initWithObject:self
                                                                              Selector:@selector(loginSuccessWithResponse:)
                                                                          FailSelector:@selector(loginFailedWithError:)
@@ -853,6 +855,7 @@
 {
     //reset it here
     _doneButtonPressed = NO;
+    self.navigationController.navigationBarHidden = NO;
     self.navigationItem.leftBarButtonItem.enabled = YES ;
     self.navigationItem.rightBarButtonItem.enabled = YES;
     
@@ -891,6 +894,7 @@
     
     //reset it here
     _doneButtonPressed = NO;
+    self.navigationController.navigationBarHidden = NO;
     self.navigationItem.leftBarButtonItem.enabled = YES ;
     self.navigationItem.rightBarButtonItem.enabled = YES;
     
