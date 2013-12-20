@@ -8,6 +8,8 @@
 
 #import "Account_ViewController.h"
 #import "MBP_iosViewController.h"
+#import "CameraSettingsCell.h"
+
 @interface Account_ViewController ()
 
 @end
@@ -367,15 +369,30 @@
     }
 }
 
-
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return 3;
-}
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    return 1;
+    return 2;
 }
 
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+{
+    if (section == 0)
+    {
+        return 3;
+    }
+    
+    return 2;
+}
+
+- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
+{
+    if (section == 0)
+    {
+        return @"Profile";
+    }
+    
+    return @"Plan";
+}
 
 #define USERNAME_INDEX 0
 #define USEREMAIL_INDEX 1
@@ -385,24 +402,66 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
-    
-    if (indexPath.row == USERNAME_INDEX) {
-        return userNameCell;
-    }
-    
-    
-    if (indexPath.row == USEREMAIL_INDEX)
+    if (indexPath.section == 0)
     {
-        return userEmailCell;
+        if (indexPath.row == USERNAME_INDEX) {
+            return userNameCell;
+        }
+        
+        
+        if (indexPath.row == USEREMAIL_INDEX)
+        {
+            return userEmailCell;
+        }
+        
+        if (indexPath.row == APPVERSION_INDEX)
+        {
+            return versionCell;
+        }
     }
-    
-    if (indexPath.row == APPVERSION_INDEX)
+    else
     {
-        return versionCell;
+        if (indexPath.row == 0)
+        {
+            static NSString *CellIdentifier = @"CameraSettingsCell";
+            CameraSettingsCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+            
+            NSArray *objects = [[NSBundle mainBundle] loadNibNamed:@"CameraSettingsCell" owner:nil options:nil];
+            
+            for (id curObj in objects)
+            {
+                
+                if([curObj isKindOfClass:[UITableViewCell class]])
+                {
+                    cell = (CameraSettingsCell *)curObj;
+                    break;
+                }
+            }
+            
+            cell.nameLabel.text = @"Current Plan";
+            cell.valueLabel.text = @"Free";
+            
+            return cell;
+        }
+        
+    }
+
+    static NSString *CellIdentifier = @"Cell";
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+    if (cell == nil) {
+        cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
     }
     
-    return nil;
+    // Configure the cell...
     
+    cell.textLabel.text = @"Upgrade Plan";
+    
+    return cell;
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
 @end
