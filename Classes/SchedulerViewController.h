@@ -10,4 +10,8 @@
 
 @interface SchedulerViewController : UITableViewController
 
+@property (nonatomic) NSInteger numberOfColumn;
+
+- (void)reloadDataInTableView;
+
 @end

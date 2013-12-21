@@ -13,11 +13,12 @@
 #import "SchedulerCell.h"
 #import "SchedulerViewController.h"
 
-@interface SettingsViewController () <SensitivityCellDelegate>
+@interface SettingsViewController () <SensitivityCellDelegate, SchedulerCellDelegate>
 {
     NSInteger numOfRows[4];
     CGFloat valueSettings[2];
     BOOL valueSwitchs[2];
+    BOOL valueSchedulerSwitchs[1][2];
 }
 
 @property (retain, nonatomic) IBOutlet UITableViewCell *rangeSliderCell;
@@ -65,6 +66,9 @@
         valueSettings[i] = 5;
     }
     
+    valueSchedulerSwitchs[0][0] = FALSE;
+    valueSchedulerSwitchs[0][1] = FALSE;
+    
     valueSwitchs[0] = FALSE;
     valueSwitchs[1] = TRUE;
     
@@ -72,6 +76,29 @@
     self.upperValue = 19.99;
     
     self.schedulerVC = [[SchedulerViewController alloc] init];
+    [self.schedulerVC setContentSizeForViewInPopover:CGSizeMake(UIScreen.mainScreen.bounds.size.width, 320)];
+    
+    if (valueSchedulerSwitchs[0][0] == TRUE)
+    {
+        numOfRows[3] = 3;
+    }
+    else
+    {
+        numOfRows[3] = 2;
+    }
+    
+    if (valueSchedulerSwitchs[0][1] == TRUE)
+    {
+        self.schedulerVC.numberOfColumn = 8;
+    }
+    else if(valueSchedulerSwitchs[0][0] == TRUE)
+    {
+        self.schedulerVC.numberOfColumn = 2;
+    }
+    else
+    {
+        self.schedulerVC.numberOfColumn = 0;
+    }
     
     [self configureLabelSlider];
 }
@@ -176,6 +203,41 @@
     valueSettings[rowIndex] = value;
 }
 
+#pragma mark - Scheduler Delegate
+
+- (void)reportSchedulerSwitchState:(BOOL)state atRow:(NSInteger)rowIdx
+{
+    valueSchedulerSwitchs[rowIdx][0] = state;
+    
+    if (state == TRUE)
+    {
+        numOfRows[3] = 3;
+    }
+    else
+    {
+        numOfRows[3] = 2;
+    }
+    
+    //[self.tableView reloadSections:[NSIndexSet indexSetWithIndex:3] withRowAnimation:UITableViewRowAnimationAutomatic];
+    [self.tableView reloadData];
+}
+
+- (void)reportByDaySwitchState:(BOOL)state atRow:(NSInteger)rowIdx
+{
+    valueSchedulerSwitchs[rowIdx][1] = state;
+    
+    if (state == TRUE)
+    {
+        self.schedulerVC.numberOfColumn = 8;
+    }
+    else
+    {
+        self.schedulerVC.numberOfColumn = 2;
+    }
+    
+    [self.schedulerVC reloadDataInTableView];
+}
+
 #pragma mark - Table view data source
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
@@ -214,11 +276,25 @@
     {
         if (indexPath.row == 2)
         {
-            return 800;
+            return 320;
         }
     }
     
     return 44;
+}
+
+- (BOOL)tableView:(UITableView *)tableView shouldHighlightRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if (indexPath.section == 3)
+    {
+        if (indexPath.row == 1 ||
+            indexPath.row == 2)
+        {
+            return NO;
+        }
+    }
+    
+    return YES;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -419,10 +495,14 @@
                         }
                     }
                     
-                    cell.schedulerSate = TRUE;
-                    cell.byDayState = TRUE;
+                    //cell.schedulerSate = valueSchedulerSwitchs[indexPath.row][0];
+                    //cell.byDayState = valueSchedulerSwitchs[indexPath.row][1];
+                    
+                    [cell.schedulerSwitch setOn:valueSchedulerSwitchs[0][0]];
+                    [cell.byDaySwitch setOn:valueSchedulerSwitchs[0][1]];
                     
                     cell.backgroundColor = [UIColor blackColor];
+                    cell.schedulerCellDelegate = self;
                     
                     return cell;
                 }
@@ -601,7 +681,8 @@
         {
             if (indexPath.row == 0)
             {
-                if (numOfRows[indexPath.section] == 1)
+                if (numOfRows[indexPath.section] == 1 ||
+                    numOfRows[indexPath.section == 2])
                 {
                     numOfRows[indexPath.section] = 3;
                 }

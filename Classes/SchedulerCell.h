@@ -20,8 +20,10 @@
 @property (retain, nonatomic) IBOutlet UISwitch *schedulerSwitch;
 @property (retain, nonatomic) IBOutlet UISwitch *byDaySwitch;
 
+@property (assign, nonatomic) id<SchedulerCellDelegate> schedulerCellDelegate;
+
 @property (nonatomic) NSInteger rowIndex;
-@property (nonatomic) BOOL schedulerSate;
-@property (nonatomic) BOOL byDayState;
+//@property (nonatomic) BOOL schedulerSate;
+//@property (nonatomic) BOOL byDayState;
 
 @end

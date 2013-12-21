@@ -15,10 +15,21 @@
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self) {
         // Initialization code
-        [self.schedulerSwitch setOn:_schedulerSate];
-        [self.byDaySwitch setOn:_byDayState];
+        //[self.schedulerSwitch setOn:_schedulerSate];
+        //[self.byDaySwitch setOn:_byDayState];
     }
     return self;
+}
+- (IBAction)schedulerSwitchValueChangedAtion:(id)sender
+{
+    //self.schedulerSate = !_schedulerSate;
+    [_schedulerCellDelegate reportSchedulerSwitchState:_schedulerSwitch.isOn atRow:_rowIndex];
+}
+
+- (IBAction)byDaySwitchValueChangedAction:(id)sender
+{
+    //self.byDayState = !_byDayState;
+    [_schedulerCellDelegate reportByDaySwitchState:_byDaySwitch.isOn atRow:_rowIndex];
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated

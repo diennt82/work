@@ -31,10 +31,16 @@
                     <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" id="rws-CA-lne">
                         <rect key="frame" x="106" y="6" width="51" height="31"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <connections>
+                            <action selector="schedulerSwitchValueChangedAtion:" destination="q3m-ju-Yen" eventType="valueChanged" id="UVb-Yb-Kbi"/>
+                        </connections>
                     </switch>
                     <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" id="xMd-pU-R4E">
                         <rect key="frame" x="251" y="6" width="51" height="31"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
+                        <connections>
+                            <action selector="byDaySwitchValueChangedAction:" destination="q3m-ju-Yen" eventType="valueChanged" id="FHz-Pd-mcd"/>
+                        </connections>
                     </switch>
                 </subviews>
             </tableViewCellContentView>

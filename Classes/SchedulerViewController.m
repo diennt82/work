@@ -94,6 +94,11 @@
     [self.tableView reloadData];
 }
 
+- (void)reloadDataInTableView
+{
+    [self.tableView reloadData];
+}
+
 #pragma mark - Table view data source
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
@@ -115,7 +120,8 @@
 {
     UIView *tmpView = [[UIView alloc] init];
     
-    for (int i = 0; i < NUM_COL; i++)
+    //for (int i = 0; i < NUM_COL; i++)
+    for (int i = 0; i < _numberOfColumn; i++)
     {
         UIImage *image =[UIImage imageNamed:@"hour-img"];
         UILabel *dayLabel = [[UILabel alloc] initWithFrame:CGRectMake(i * _imageCellWidth, 0, _imageCellWidth, tableView.rowHeight)];
@@ -139,7 +145,8 @@
     }
     
     // Configure the cell...
-    for (int i = 0; i < NUM_COL; i++)
+    //for (int i = 0; i < NUM_COL; i++)
+    for (int i = 0; i < _numberOfColumn; i++)
     {
         if (i > 0)
         {
