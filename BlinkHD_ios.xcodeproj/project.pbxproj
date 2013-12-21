@@ -146,6 +146,14 @@
 		8B0E1DF41844A0E80080000A /* mestartup000032.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B0E1DE71844A0E80080000A /* mestartup000032.png */; };
 		8B0E1DF71844A3BE0080000A /* bb_rec_icon_d.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B0E1DF51844A3BE0080000A /* bb_rec_icon_d.png */; };
 		8B0E1DF81844A3BE0080000A /* bb_rec_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B0E1DF61844A3BE0080000A /* bb_rec_icon.png */; };
+		8B1D544D186581B8008857F0 /* SchedulerCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B1D544C186581B8008857F0 /* SchedulerCell.m */; };
+		8B1D544F186581CD008857F0 /* SchedulerCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8B1D544E186581CD008857F0 /* SchedulerCell.xib */; };
+		8B1D5453186587CB008857F0 /* CellImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B1D5452186587CB008857F0 /* CellImageView.m */; };
+		8B1D545718658903008857F0 /* SchedulerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B1D545518658903008857F0 /* SchedulerViewController.m */; };
+		8B1D545818658903008857F0 /* SchedulerViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8B1D545618658903008857F0 /* SchedulerViewController.xib */; };
+		8B1D545C18658CBC008857F0 /* selected-img.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B1D545918658CBC008857F0 /* selected-img.png */; };
+		8B1D545D18658CBC008857F0 /* hour-img.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B1D545A18658CBC008857F0 /* hour-img.png */; };
+		8B1D545E18658CBC008857F0 /* DotCell.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B1D545B18658CBC008857F0 /* DotCell.png */; };
 		8B278BE7183DC51300A4FF50 /* NotificationSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B278BE5183DC51300A4FF50 /* NotificationSettingsViewController.m */; };
 		8B278BE8183DC51300A4FF50 /* NotificationSettingsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8B278BE6183DC51300A4FF50 /* NotificationSettingsViewController.xib */; };
 		8B278BEB183DC6B500A4FF50 /* NotificationSettingsCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B278BEA183DC6B500A4FF50 /* NotificationSettingsCell.m */; };
@@ -608,6 +616,17 @@
 		8B0E1DE71844A0E80080000A /* mestartup000032.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = mestartup000032.png; sourceTree = "<group>"; };
 		8B0E1DF51844A3BE0080000A /* bb_rec_icon_d.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bb_rec_icon_d.png; sourceTree = "<group>"; };
 		8B0E1DF61844A3BE0080000A /* bb_rec_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bb_rec_icon.png; sourceTree = "<group>"; };
+		8B1D544B186581B8008857F0 /* SchedulerCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SchedulerCell.h; sourceTree = "<group>"; };
+		8B1D544C186581B8008857F0 /* SchedulerCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SchedulerCell.m; sourceTree = "<group>"; };
+		8B1D544E186581CD008857F0 /* SchedulerCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SchedulerCell.xib; sourceTree = "<group>"; };
+		8B1D5451186587CB008857F0 /* CellImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CellImageView.h; sourceTree = "<group>"; };
+		8B1D5452186587CB008857F0 /* CellImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CellImageView.m; sourceTree = "<group>"; };
+		8B1D545418658903008857F0 /* SchedulerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SchedulerViewController.h; sourceTree = "<group>"; };
+		8B1D545518658903008857F0 /* SchedulerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SchedulerViewController.m; sourceTree = "<group>"; };
+		8B1D545618658903008857F0 /* SchedulerViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SchedulerViewController.xib; sourceTree = "<group>"; };
+		8B1D545918658CBC008857F0 /* selected-img.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "selected-img.png"; sourceTree = "<group>"; };
+		8B1D545A18658CBC008857F0 /* hour-img.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "hour-img.png"; sourceTree = "<group>"; };
+		8B1D545B18658CBC008857F0 /* DotCell.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = DotCell.png; sourceTree = "<group>"; };
 		8B278BE4183DC51300A4FF50 /* NotificationSettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NotificationSettingsViewController.h; sourceTree = "<group>"; };
 		8B278BE5183DC51300A4FF50 /* NotificationSettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NotificationSettingsViewController.m; sourceTree = "<group>"; };
 		8B278BE6183DC51300A4FF50 /* NotificationSettingsViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = NotificationSettingsViewController.xib; sourceTree = "<group>"; };
@@ -1944,6 +1963,29 @@
 			name = NotificationView;
 			sourceTree = "<group>";
 		};
+		8B1D544A1865814B008857F0 /* Scheduler */ = {
+			isa = PBXGroup;
+			children = (
+				8B1D545018658702008857F0 /* SchedulerTable */,
+				8B1D544B186581B8008857F0 /* SchedulerCell.h */,
+				8B1D544C186581B8008857F0 /* SchedulerCell.m */,
+				8B1D544E186581CD008857F0 /* SchedulerCell.xib */,
+			);
+			name = Scheduler;
+			sourceTree = "<group>";
+		};
+		8B1D545018658702008857F0 /* SchedulerTable */ = {
+			isa = PBXGroup;
+			children = (
+				8B1D5451186587CB008857F0 /* CellImageView.h */,
+				8B1D5452186587CB008857F0 /* CellImageView.m */,
+				8B1D545418658903008857F0 /* SchedulerViewController.h */,
+				8B1D545518658903008857F0 /* SchedulerViewController.m */,
+				8B1D545618658903008857F0 /* SchedulerViewController.xib */,
+			);
+			name = SchedulerTable;
+			sourceTree = "<group>";
+		};
 		8B278BE3183DC4BB00A4FF50 /* NotificationSettings */ = {
 			isa = PBXGroup;
 			children = (
@@ -2266,6 +2308,9 @@
 		8B9C7DF1185F08AF0038B3A8 /* New Hubble Image */ = {
 			isa = PBXGroup;
 			children = (
+				8B1D545918658CBC008857F0 /* selected-img.png */,
+				8B1D545A18658CBC008857F0 /* hour-img.png */,
+				8B1D545B18658CBC008857F0 /* DotCell.png */,
 				8B92A0BD186436B5005923D2 /* button_bg_1.png */,
 				8B92A0BB186432E9005923D2 /* button_bg.png */,
 				8B92A0B118640926005923D2 /* Timeline_line_.png */,
@@ -2316,6 +2361,7 @@
 		8B9C7E10185F26250038B3A8 /* Settings */ = {
 			isa = PBXGroup;
 			children = (
+				8B1D544A1865814B008857F0 /* Scheduler */,
 				8B91E6501862FD580041BA9D /* Camera Settings */,
 				8BEDE2ED1861B73F00D3AE2B /* Disturb */,
 				8B9112CD18602854004301C5 /* Sensitivity */,
@@ -2690,6 +2736,7 @@
 				3812F83915C8C3EE00DADFA6 /* bb_check_list.png in Resources */,
 				8B9B57EE184F0DB200E58543 /* frame-4-1_update_new.png in Resources */,
 				3812F83B15C8C49000DADFA6 /* bb_line.png in Resources */,
+				8B1D544F186581CD008857F0 /* SchedulerCell.xib in Resources */,
 				38DE1BD8168AD9B40049E814 /* SongTitleView.xib in Resources */,
 				38A62E8A15C9137000DEA520 /* bb_vs_mike_off.png in Resources */,
 				8B92A0B218640926005923D2 /* Timeline_line_.png in Resources */,
@@ -2718,6 +2765,7 @@
 				8B0E1DF01844A0E80080000A /* mestartup000028.png in Resources */,
 				8B0E1DED1844A0E80080000A /* mestartup000025.png in Resources */,
 				A1E74746185F07AE00A54B29 /* timeline_line.png in Resources */,
+				8B1D545C18658CBC008857F0 /* selected-img.png in Resources */,
 				38DE1C41168ADD1C0049E814 /* Account_ViewController.xib in Resources */,
 				8BC0A02F1844A87700A5FD52 /* temp_bg.png in Resources */,
 				8BE896B61845CD4800674E01 /* bb_melody_icon.png in Resources */,
@@ -2747,6 +2795,7 @@
 				8B9AF69F1858179900AC09C3 /* ScheduleViewController.xib in Resources */,
 				8B9112DC1860372D004301C5 /* Hubble-Notif.png in Resources */,
 				8B9384801856D42C009C4771 /* InformationViewController.xib in Resources */,
+				8B1D545818658903008857F0 /* SchedulerViewController.xib in Resources */,
 				8B9384A318570207009C4771 /* sound-s-d.png in Resources */,
 				8B92A0921863E69F005923D2 /* TimelineCell.xib in Resources */,
 				8B9B57E2184F0D9900E58543 /* frame-6_update-iOS7_new2.png in Resources */,
@@ -2775,6 +2824,7 @@
 				8BC0A03C1844AC3600A5FD52 /* circle_buttons1_2_d.png in Resources */,
 				A1E74745185F07AE00A54B29 /* timeline_blue_dot.png in Resources */,
 				38C7DE7A165DDF9E00926EA1 /* Default-568h@2x.png in Resources */,
+				8B1D545D18658CBC008857F0 /* hour-img.png in Resources */,
 				8BC0A0481844B31700A5FD52 /* mbp_icon114x114.png in Resources */,
 				8B9C7DF9185F08C90038B3A8 /* loader2.png in Resources */,
 				A1E74741185F07AE00A54B29 /* menu_selected.png in Resources */,
@@ -2834,6 +2884,7 @@
 				BC3C1AD316F025E300175AFF /* MBP_MenuProgress_portrait_ipad.xib in Resources */,
 				BC3C1AD816F025FF00175AFF /* MBP_MenuProgress_land_ipad.xib in Resources */,
 				381D185D16D4652C00272A8D /* Step_05_tableViewCell_ipad.xib in Resources */,
+				8B1D545E18658CBC008857F0 /* DotCell.png in Resources */,
 				8B91E6551862FE540041BA9D /* MenuCameraViewController.xib in Resources */,
 				BC6E4A0516BFBB9D00B0D630 /* MBP_InitialSetupViewController_land.xib in Resources */,
 				8B9112D81860341C004301C5 /* NotifViewController.xib in Resources */,
@@ -2983,6 +3034,7 @@
 				38A478FD15C12CF4008682FE /* Step_09_ViewController.mm in Sources */,
 				8B9CCBA3183EF8B2007C0F65 /* MelodyViewController.m in Sources */,
 				8B9C7E0D185F260A0038B3A8 /* MenuViewController.mm in Sources */,
+				8B1D545718658903008857F0 /* SchedulerViewController.m in Sources */,
 				38C79E2215C26947006EE378 /* Step_10_ViewController.mm in Sources */,
 				38355AE715CB76630045909C /* Account_ViewController.mm in Sources */,
 				38B85E5415CFAA7F00E5A1FA /* Step_07_ViewController.mm in Sources */,
@@ -2990,7 +3042,9 @@
 				38CE2A1315D4FA3800B8F7EC /* ForgotPwdViewController.m in Sources */,
 				3803A85E15FDF15600B4DD97 /* CameraAlert.m in Sources */,
 				380C430016195047001434C0 /* AlertSettingViewController.mm in Sources */,
+				8B1D5453186587CB008857F0 /* CellImageView.m in Sources */,
 				38A13AF316363147000138EA /* UnderlinedUILabel.m in Sources */,
+				8B1D544D186581B8008857F0 /* SchedulerCell.m in Sources */,
 				97DA238416425FA100EE2528 /* ToUViewController.mm in Sources */,
 				38FC9D7A16717B0300373F25 /* EditCameraCell.mm in Sources */,
 				8B278BEB183DC6B500A4FF50 /* NotificationSettingsCell.m in Sources */,

@@ -10,6 +10,8 @@
 #import "GeneralCell.h"
 #import "SensitivityCell.h"
 #import "NMRangeSlider.h"
+#import "SchedulerCell.h"
+#import "SchedulerViewController.h"
 
 @interface SettingsViewController () <SensitivityCellDelegate>
 {
@@ -26,6 +28,8 @@
 
 @property (nonatomic) CGFloat lowerValue;
 @property (nonatomic) CGFloat upperValue;
+
+@property (retain, nonatomic) SchedulerViewController *schedulerVC;
 
 @end
 
@@ -66,6 +70,8 @@
     
     self.lowerValue = 07.00;
     self.upperValue = 19.99;
+    
+    self.schedulerVC = [[SchedulerViewController alloc] init];
     
     [self configureLabelSlider];
 }
@@ -202,6 +208,13 @@
         if (indexPath.row == 1)
         {
             return 130;
+        }
+    }
+    else if (indexPath.section == 3)
+    {
+        if (indexPath.row == 2)
+        {
+            return 800;
         }
     }
     
@@ -391,30 +404,41 @@
                     break;
                     
                 case 1:
-                case 2:
                 {
-                    static NSString *CellIdentifier = @"GeneralCell";
-                    GeneralCell *cell = [self.tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+                    static NSString *CellIdentifier = @"SchedulerCell";
+                    SchedulerCell *cell = [self.tableView dequeueReusableCellWithIdentifier:CellIdentifier];
                     
-                    NSArray *objects = [[NSBundle mainBundle] loadNibNamed:@"GeneralCell" owner:nil options:nil];
+                    NSArray *objects = [[NSBundle mainBundle] loadNibNamed:@"SchedulerCell" owner:nil options:nil];
                     
                     for (id curObj in objects)
                     {
                         if([curObj isKindOfClass:[UITableViewCell class]])
                         {
-                            cell = (GeneralCell *)curObj;
+                            cell = (SchedulerCell *)curObj;
                             break;
                         }
                     }
                     
-                    if (indexPath.row == 1)
-                    {
-                        cell.nameLabel.text = @"Clock";
+                    cell.schedulerSate = TRUE;
+                    cell.byDayState = TRUE;
+                    
+                    cell.backgroundColor = [UIColor blackColor];
+                    
+                    return cell;
+                }
+                    break;
+                    
+                case 2:
+                {
+                    static NSString *CellIdentifier = @"Cell";
+                    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+                    if (cell == nil) {
+                        cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
                     }
-                    else if (indexPath.row == 2)
-                    {
-                        cell.nameLabel.text = @"Temperature";
-                    }
+                    
+                    // Configure the cell...
+                    [cell.contentView addSubview:_schedulerVC.view];
+                    cell.backgroundColor = [UIColor blackColor];
                     
                     return cell;
                 }
@@ -570,6 +594,30 @@
             
             
             // [tableView reloadSections:[NSIndexSet indexSetWithIndex:indexPath.section] withRowAnimation:UITableViewRowAnimationAutomatic];
+        }
+            break;
+            
+        case 3:
+        {
+            if (indexPath.row == 0)
+            {
+                if (numOfRows[indexPath.section] == 1)
+                {
+                    numOfRows[indexPath.section] = 3;
+                }
+                else
+                {
+                    numOfRows[indexPath.section] = 1;
+                }
+                
+                for (int i = 0; i < 4; i++)
+                {
+                    if (i != indexPath.section)
+                    {
+                        numOfRows[i] = 1;
+                    }
+                }
+            }
         }
             
         default:
