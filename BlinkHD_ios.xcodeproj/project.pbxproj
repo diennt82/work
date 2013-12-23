@@ -198,6 +198,8 @@
 		8B92A0BA1864322E005923D2 /* TimelineButtonCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8B92A0B91864322E005923D2 /* TimelineButtonCell.xib */; };
 		8B92A0BC186432E9005923D2 /* button_bg.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B92A0BB186432E9005923D2 /* button_bg.png */; };
 		8B92A0BE186436B5005923D2 /* button_bg_1.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B92A0BD186436B5005923D2 /* button_bg_1.png */; };
+		8B92C0A71867F4AD00538013 /* enter_pressed.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B92C0A51867F4AD00538013 /* enter_pressed.png */; };
+		8B92C0A81867F4AD00538013 /* enter.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B92C0A61867F4AD00538013 /* enter.png */; };
 		8B92DC24185ACACA00344530 /* ScheduleInformation.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B92DC23185ACACA00344530 /* ScheduleInformation.m */; };
 		8B93847F1856D42C009C4771 /* InformationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B93847D1856D42C009C4771 /* InformationViewController.m */; };
 		8B9384801856D42C009C4771 /* InformationViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8B93847E1856D42C009C4771 /* InformationViewController.xib */; };
@@ -687,6 +689,8 @@
 		8B92A0B91864322E005923D2 /* TimelineButtonCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TimelineButtonCell.xib; sourceTree = "<group>"; };
 		8B92A0BB186432E9005923D2 /* button_bg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = button_bg.png; sourceTree = "<group>"; };
 		8B92A0BD186436B5005923D2 /* button_bg_1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = button_bg_1.png; sourceTree = "<group>"; };
+		8B92C0A51867F4AD00538013 /* enter_pressed.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = enter_pressed.png; sourceTree = "<group>"; };
+		8B92C0A61867F4AD00538013 /* enter.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = enter.png; sourceTree = "<group>"; };
 		8B92DC22185ACACA00344530 /* ScheduleInformation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ScheduleInformation.h; sourceTree = "<group>"; };
 		8B92DC23185ACACA00344530 /* ScheduleInformation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ScheduleInformation.m; sourceTree = "<group>"; };
 		8B93847C1856D42C009C4771 /* InformationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InformationViewController.h; sourceTree = "<group>"; };
@@ -2308,6 +2312,8 @@
 		8B9C7DF1185F08AF0038B3A8 /* New Hubble Image */ = {
 			isa = PBXGroup;
 			children = (
+				8B92C0A51867F4AD00538013 /* enter_pressed.png */,
+				8B92C0A61867F4AD00538013 /* enter.png */,
 				8B1D545918658CBC008857F0 /* selected-img.png */,
 				8B1D545A18658CBC008857F0 /* hour-img.png */,
 				8B1D545B18658CBC008857F0 /* DotCell.png */,
@@ -2878,6 +2884,7 @@
 				8BA8AE881821F3E900DC9E9F /* stream720p_10_926.sdp in Resources */,
 				8B9B57DC184F0D9900E58543 /* frame-4-1_update-iOS7_new.png in Resources */,
 				8BA7F2821851C57200BE0145 /* blink11hd480p.sdp in Resources */,
+				8B92C0A71867F4AD00538013 /* enter_pressed.png in Resources */,
 				BC3C1ACE16F025B600175AFF /* MBP_MenuViewController_ipad.xib in Resources */,
 				A1E74742185F07AE00A54B29 /* outline_circle.png in Resources */,
 				8B92A0A81863F6B4005923D2 /* SavedEventCell.xib in Resources */,
@@ -2892,6 +2899,7 @@
 				8B0E1DF31844A0E80080000A /* mestartup000031.png in Resources */,
 				8BC0A0351844AB8000A5FD52 /* black_background.png in Resources */,
 				BCA1A4E716C26EFB00E7EF56 /* Step_05_ViewController_land.xib in Resources */,
+				8B92C0A81867F4AD00538013 /* enter.png in Resources */,
 				BCA1A4F816C27A7B00E7EF56 /* Step_08_ViewController_land.xib in Resources */,
 				8BE896B31845CB3B00674E01 /* bb_motion_icon.png in Resources */,
 				8B91E63E18629E910041BA9D /* Snapshot.png in Resources */,

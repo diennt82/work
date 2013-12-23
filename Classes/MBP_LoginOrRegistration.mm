@@ -134,7 +134,8 @@
 	}
     else
     {
-        self.navigationItem.rightBarButtonItem.enabled = NO;
+        //self.navigationItem.rightBarButtonItem.enabled = NO;
+        self.enterLoginButton.enabled = NO;
     }
 
 }
@@ -194,6 +195,7 @@
     [temp_user_str release];
     [account release];
     [_loginTableView release];
+    [_enterLoginButton release];
      [super dealloc];
 }
 
@@ -209,27 +211,43 @@
     // Create a navigation controller with us as its root.
     assert(navController != nil);
     
-    if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 7) {
-        // Load resources for iOS 7 or later
-        navController.navigationBar.barStyle = UIBarStyleDefault;
-    } else {
-        navController.navigationBar.barStyle = UIBarStyleBlackOpaque;
-    }
+//    if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 7) {
+//        // Load resources for iOS 7 or later
+//        navController.navigationBar.barStyle = UIBarStyleDefault;
+//    } else {
+//        navController.navigationBar.barStyle = UIBarStyleBlackOpaque;
+//    }
     
 
     // Set up the Cancel button on the left of the navigation bar.
 //    self.navigationItem.leftBarButtonItem  = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(cancelAction:)] autorelease];
 //    assert(self.navigationItem.leftBarButtonItem != nil);
-    self.navigationItem.rightBarButtonItem = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone   target:self action:@selector(doneAction:)] autorelease];
+   // self.navigationItem.rightBarButtonItem = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone   target:self action:@selector(doneAction:)] autorelease];
 
-    assert(self.navigationItem.rightBarButtonItem != nil);
+    //assert(self.navigationItem.rightBarButtonItem != nil);
 
     // Present the navigation controller on the specified parent 
     // view controller.
 
     //[parent presentModalViewController:navController animated:NO];
+    
+    [self.enterLoginButton setBackgroundImage:[UIImage imageNamed:@"enter"] forState:UIControlStateNormal];
+    [self.enterLoginButton setBackgroundImage:[UIImage imageNamed:@"enter_pressed"] forState:UIControlEventTouchUpInside];
         
     [parent presentViewController:navController animated:NO completion:^{}];
+}
+
+- (IBAction)enterLoginTouchAction:(id)sender
+{
+    _doneButtonPressed = YES;
+    [userName resignFirstResponder];
+    [password resignFirstResponder];
+    
+    
+    self.temp_user_str = [NSString stringWithString:userName.text];
+    self.temp_pass_str = [NSString stringWithString:password.text];
+    
+    [self check3GConnectionAndPopup];
 }
 
 - (void)doSignIn :(NSTimer *) exp
@@ -308,8 +326,9 @@
     {
         //Popup now..
         
-        self.navigationItem.leftBarButtonItem.enabled = YES ;
-        self.navigationItem.rightBarButtonItem.enabled = YES;
+        //self.navigationItem.leftBarButtonItem.enabled = YES ;
+        //self.navigationItem.rightBarButtonItem.enabled = YES;
+        self.enterLoginButton.enabled = YES;
         
         NSLog(@"Wifi is not available ");
         self.progressView.hidden = YES;
@@ -347,9 +366,9 @@
                                                            @"Logging in to server..." , nil);
         self.progressView.hidden = NO;
         [self.progressLabel setText:msg];
-        self.navigationItem.leftBarButtonItem.enabled = NO ;
-        self.navigationItem.rightBarButtonItem.enabled = NO;
-        
+        //self.navigationItem.leftBarButtonItem.enabled = NO ;
+        //self.navigationItem.rightBarButtonItem.enabled = NO;
+        self.enterLoginButton.enabled = NO;
         
         
         //Is on WIFI -> proceed
@@ -370,9 +389,10 @@
 
 -(void) viewWillAppear:(BOOL)animated
 {
+    [super viewWillAppear:animated];
     UIInterfaceOrientation interfaceOrientation = [UIApplication sharedApplication].statusBarOrientation;
     [self adjustViewsForOrientations:interfaceOrientation];
-
+    self.navigationController.navigationBarHidden = YES;
 }
 
 #pragma mark -
@@ -386,12 +406,13 @@
 
 -(BOOL)shouldAutorotate
 {
-    return YES;
+    return NO;
 }
 
 -(NSUInteger) supportedInterfaceOrientations
 {
-    return UIInterfaceOrientationMaskAllButUpsideDown;
+    //return UIInterfaceOrientationMaskAllButUpsideDown;
+    return UIInterfaceOrientationMaskPortrait;
 }
 
 -(void) willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
@@ -448,12 +469,14 @@
         if ( ([textField.text length] + [string length] ) >2)
         {
             //enable Done btn
-            self.navigationItem.rightBarButtonItem.enabled = YES;
+            //self.navigationItem.rightBarButtonItem.enabled = YES;
+            self.enterLoginButton.enabled = YES;
         }
         else
         {
             //disable Done btn
-            self.navigationItem.rightBarButtonItem.enabled = NO;
+            //self.navigationItem.rightBarButtonItem.enabled = NO;
+            self.enterLoginButton.enabled = NO;
         }
     }
     return YES;
@@ -539,9 +562,9 @@
                                                                    @"Logging in to server..." , nil);
                 self.progressView.hidden = NO;
                 [self.progressLabel setText:msg];
-                self.navigationItem.leftBarButtonItem.enabled = NO ;
-                self.navigationItem.rightBarButtonItem.enabled = NO;
-                
+                //self.navigationItem.leftBarButtonItem.enabled = NO ;
+                //self.navigationItem.rightBarButtonItem.enabled = NO;
+                self.enterLoginButton.enabled = YES;
                 
                 //signal iosViewController
                 [self doSignIn:nil];
@@ -560,9 +583,9 @@
                                                                    @"Logging in to server..." , nil);
                 self.progressView.hidden = NO;
                 [self.progressLabel setText:msg];
-                self.navigationItem.leftBarButtonItem.enabled = NO ;
-                self.navigationItem.rightBarButtonItem.enabled = NO;
-
+                //self.navigationItem.leftBarButtonItem.enabled = NO ;
+                //self.navigationItem.rightBarButtonItem.enabled = NO;
+                self.enterLoginButton.enabled = NO;
                 
                 //signal iosViewController
                 [self doSignIn:nil];
@@ -763,8 +786,10 @@
     //reset it here
      _doneButtonPressed = NO;
 	
-    self.navigationItem.leftBarButtonItem.enabled = YES ;
-    self.navigationItem.rightBarButtonItem.enabled = YES;
+    //self.navigationItem.leftBarButtonItem.enabled = YES ;
+    //self.navigationItem.rightBarButtonItem.enabled = YES;
+    self.enterLoginButton.enabled = YES;
+    
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     [userDefaults setBool:NO forKey:_OfflineMode];
     [userDefaults synchronize];
@@ -855,9 +880,10 @@
 {
     //reset it here
     _doneButtonPressed = NO;
-    self.navigationController.navigationBarHidden = NO;
-    self.navigationItem.leftBarButtonItem.enabled = YES ;
-    self.navigationItem.rightBarButtonItem.enabled = YES;
+    //self.navigationController.navigationBarHidden = NO;
+    //self.navigationItem.leftBarButtonItem.enabled = YES ;
+    //self.navigationItem.rightBarButtonItem.enabled = YES;
+    self.enterLoginButton.enabled = YES;
     
 	NSLog(@"Loging failed with error code:%@", responseError);
 	
@@ -894,9 +920,10 @@
     
     //reset it here
     _doneButtonPressed = NO;
-    self.navigationController.navigationBarHidden = NO;
-    self.navigationItem.leftBarButtonItem.enabled = YES ;
-    self.navigationItem.rightBarButtonItem.enabled = YES;
+    //self.navigationController.navigationBarHidden = NO;
+    //self.navigationItem.leftBarButtonItem.enabled = YES ;
+    //self.navigationItem.rightBarButtonItem.enabled = YES;
+    self.enterLoginButton.enabled = YES;
     
 	NSLog(@"Loging failed : server unreachable");
 	self.progressView.hidden = YES;

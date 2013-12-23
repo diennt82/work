@@ -83,6 +83,7 @@
 @property (nonatomic,retain) IBOutlet UIView * progressView; 
 @property (nonatomic,retain) IBOutlet UILabel * progressLabel; 
 
+@property (retain, nonatomic) IBOutlet UIButton *enterLoginButton;
 
 @property (nonatomic,retain) IBOutlet UITextField * regUserName;
 @property (nonatomic,retain) IBOutlet UITextField * regUserPass;

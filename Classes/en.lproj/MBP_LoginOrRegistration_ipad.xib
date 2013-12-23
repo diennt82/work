@@ -7,6 +7,7 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="MBP_LoginOrRegistration">
             <connections>
+                <outlet property="enterLoginButton" destination="9Wi-nh-0oz" id="emn-vV-IuX"/>
                 <outlet property="forgotPassCell" destination="8" id="20"/>
                 <outlet property="password" destination="11" id="24"/>
                 <outlet property="progressLabel" destination="15" id="26"/>
@@ -36,15 +37,15 @@
                         <outlet property="delegate" destination="-1" id="29"/>
                     </connections>
                 </tableView>
-                <label opaque="NO" clipsSubviews="YES" contentMode="scaleAspectFill" text="Create new account instead" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="5" customClass="UnderlinedUILabel">
-                    <rect key="frame" x="260" y="901" width="249" height="24"/>
+                <label opaque="NO" clipsSubviews="YES" contentMode="scaleAspectFill" text="Create Account" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="5" customClass="UnderlinedUILabel">
+                    <rect key="frame" x="298" y="901" width="139" height="24"/>
                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <fontDescription key="fontDescription" type="system" pointSize="20"/>
                     <color key="textColor" red="0.1760115592" green="0.40581968839999999" blue="0.66364397320000001" alpha="1" colorSpace="calibratedRGB"/>
                     <nil key="highlightedColor"/>
                 </label>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="6">
-                    <rect key="frame" x="255" y="897" width="259" height="34"/>
+                    <rect key="frame" x="292" y="896" width="150" height="34"/>
                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <fontDescription key="fontDescription" type="boldSystem" size="button"/>
                     <state key="normal">
@@ -56,6 +57,18 @@
                     </state>
                     <connections>
                         <action selector="createNewAccount:" destination="-1" eventType="touchUpInside" id="30"/>
+                    </connections>
+                </button>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="9Wi-nh-0oz">
+                    <rect key="frame" x="186" y="822" width="396" height="67"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <fontDescription key="fontDescription" type="boldSystem" pointSize="16"/>
+                    <state key="normal" title="Enter" backgroundImage="enter.png">
+                        <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                    </state>
+                    <connections>
+                        <action selector="enterLoginTouchAction:" destination="-1" eventType="touchUpInside" id="pvS-S0-BWr"/>
                     </connections>
                 </button>
             </subviews>
@@ -164,6 +177,7 @@
     </objects>
     <resources>
         <image name="dialog_bg.png" width="370" height="370"/>
+        <image name="enter.png" width="396" height="67"/>
         <image name="loading_logo.png" width="270" height="276"/>
     </resources>
 </document>
