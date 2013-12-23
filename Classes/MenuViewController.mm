@@ -90,7 +90,6 @@
     self.navigationController.navigationBarHidden = NO;
     UIImage *hubbleBack = [UIImage imageNamed:@"Hubble_logo_back.png"];
     [self.navigationItem.leftBarButtonItem setTintColor:[UIColor colorWithPatternImage:hubbleBack]];
-    self.title = @"Cameras";
 }
 
 - (void)viewDidAppear:(BOOL)animated

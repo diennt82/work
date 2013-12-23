@@ -112,7 +112,9 @@
 //    [self.camChannels addObject:ch1];
 //    [self.camChannels addObject:ch2];
     
-    
+    UIButton *addBtn = (UIButton *)[_addCameraCell viewWithTag:595];
+    [addBtn setImage:[UIImage imageNamed:@"add_camera"] forState:UIControlStateNormal];
+    [addBtn setImage:[UIImage imageNamed:@"add_camera_pressed"] forState:UIControlEventTouchUpInside];
     
     if (!_isFirttime) //revert
     {

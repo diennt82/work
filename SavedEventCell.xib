@@ -18,7 +18,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="320" height="152"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                     </imageView>
-                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="time-saved-img.png" id="7JU-hm-3w7">
+                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="feed_date.png" id="7JU-hm-3w7">
                         <rect key="frame" x="7" y="108" width="38" height="37"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     </imageView>
@@ -47,6 +47,6 @@
     </objects>
     <resources>
         <image name="Snapshot.png" width="605" height="315"/>
-        <image name="time-saved-img.png" width="50" height="58"/>
+        <image name="feed_date.png" width="36" height="36"/>
     </resources>
 </document>

@@ -334,7 +334,7 @@
                     
                     // Configure the cell...
                     cell.textLabel.text = @"General Settings";
-                    cell.imageView.image = [UIImage imageNamed:@"bb_setting_icon.png"];
+                    cell.imageView.image = [UIImage imageNamed:@"settings_general"];
                     
                     return cell;
                 }
@@ -390,7 +390,7 @@
                     
                     // Configure the cell...
                     cell.textLabel.text = @"Notification Sensitivity";
-                    cell.imageView.image = [UIImage imageNamed:@"bb_setting_icon.png"];
+                    cell.imageView.image = [UIImage imageNamed:@"settings_notification"];
                     
                     return cell;
                 }
@@ -458,7 +458,7 @@
                     
                     // Configure the cell...
                     cell.textLabel.text = @"Do Not Disturb";
-                    cell.imageView.image = [UIImage imageNamed:@"bb_setting_icon.png"];
+                    cell.imageView.image = [UIImage imageNamed:@"settings_donotdisturb"];
                     
                     return cell;
                 }
@@ -492,7 +492,7 @@
                     
                     // Configure the cell...
                     cell.textLabel.text = @"Notification Scheduler";
-                    cell.imageView.image = [UIImage imageNamed:@"bb_setting_icon.png"];
+                    cell.imageView.image = [UIImage imageNamed:@"settings_scheduler"];
                     
                     return cell;
                 }

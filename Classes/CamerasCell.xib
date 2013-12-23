@@ -18,7 +18,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="320" height="169"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     </imageView>
-                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="photo_item.png" id="EgT-5u-yrU">
+                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="camera.png" id="EgT-5u-yrU">
                         <rect key="frame" x="15" y="120" width="41" height="35"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     </imageView>
@@ -32,7 +32,7 @@
                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="2Ui-fe-gH5">
                         <rect key="frame" x="250" y="120" width="50" height="46"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
-                        <state key="normal" image="bb_setting_icon.png">
+                        <state key="normal" image="settings.png">
                             <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                         </state>
                         <connections>
@@ -44,13 +44,14 @@
             <connections>
                 <outlet property="cameraNameLabel" destination="RVD-oq-SXw" id="6U5-OL-Ctr"/>
                 <outlet property="photoItemImage" destination="EgT-5u-yrU" id="TIS-Yd-itJ"/>
+                <outlet property="settingsButton" destination="2Ui-fe-gH5" id="xoT-YF-Pt8"/>
                 <outlet property="snapshotImage" destination="puy-fN-bmZ" id="mlo-ra-l2J"/>
             </connections>
         </tableViewCell>
     </objects>
     <resources>
         <image name="Snapshot.png" width="605" height="315"/>
-        <image name="bb_setting_icon.png" width="50" height="50"/>
-        <image name="photo_item.png" width="47" height="57"/>
+        <image name="camera.png" width="36" height="36"/>
+        <image name="settings.png" width="36" height="36"/>
     </resources>
 </document>

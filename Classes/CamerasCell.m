@@ -15,6 +15,8 @@
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self) {
         // Initialization code
+        [self.settingsButton setImage:[UIImage imageNamed:@"settings"] forState:UIControlStateNormal];
+        [self.settingsButton setImage:[UIImage imageNamed:@"settings_pressed"] forState:UIControlEventTouchUpInside];
     }
     return self;
 }
@@ -34,6 +36,7 @@
     [_snapshotImage release];
     [_photoItemImage release];
     [_cameraNameLabel release];
+    [_settingsButton release];
     [super dealloc];
 }
 @end
