@@ -220,6 +220,7 @@
 		8B92C0EA186832A600538013 /* camera.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B92C0E5186832A600538013 /* camera.png */; };
 		8B92C0EB186832A600538013 /* settings_pressed.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B92C0E6186832A600538013 /* settings_pressed.png */; };
 		8B92C0EC186832A600538013 /* settings.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B92C0E7186832A600538013 /* settings.png */; };
+		8B92C0EE186849C700538013 /* camera_action_pan_bg.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B92C0ED186849C700538013 /* camera_action_pan_bg.png */; };
 		8B92DC24185ACACA00344530 /* ScheduleInformation.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B92DC23185ACACA00344530 /* ScheduleInformation.m */; };
 		8B93847F1856D42C009C4771 /* InformationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B93847D1856D42C009C4771 /* InformationViewController.m */; };
 		8B9384801856D42C009C4771 /* InformationViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8B93847E1856D42C009C4771 /* InformationViewController.xib */; };
@@ -731,6 +732,7 @@
 		8B92C0E5186832A600538013 /* camera.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = camera.png; sourceTree = "<group>"; };
 		8B92C0E6186832A600538013 /* settings_pressed.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = settings_pressed.png; sourceTree = "<group>"; };
 		8B92C0E7186832A600538013 /* settings.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = settings.png; sourceTree = "<group>"; };
+		8B92C0ED186849C700538013 /* camera_action_pan_bg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = camera_action_pan_bg.png; sourceTree = "<group>"; };
 		8B92DC22185ACACA00344530 /* ScheduleInformation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ScheduleInformation.h; sourceTree = "<group>"; };
 		8B92DC23185ACACA00344530 /* ScheduleInformation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ScheduleInformation.m; sourceTree = "<group>"; };
 		8B93847C1856D42C009C4771 /* InformationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InformationViewController.h; sourceTree = "<group>"; };
@@ -2404,6 +2406,7 @@
 				8B92C0D91868315500538013 /* Menu_settings */,
 				8B92C0D61868302200538013 /* Feed_earlier */,
 				8B92C0D518682FC200538013 /* Alert_upgrade */,
+				8B92C0ED186849C700538013 /* camera_action_pan_bg.png */,
 				8B92C0A51867F4AD00538013 /* enter_pressed.png */,
 				8B92C0A61867F4AD00538013 /* enter.png */,
 				8B1D545918658CBC008857F0 /* selected-img.png */,
@@ -2933,6 +2936,7 @@
 				A1E74745185F07AE00A54B29 /* timeline_blue_dot.png in Resources */,
 				38C7DE7A165DDF9E00926EA1 /* Default-568h@2x.png in Resources */,
 				8B1D545D18658CBC008857F0 /* hour-img.png in Resources */,
+				8B92C0EE186849C700538013 /* camera_action_pan_bg.png in Resources */,
 				8BC0A0481844B31700A5FD52 /* mbp_icon114x114.png in Resources */,
 				8B92C0D018682A2100538013 /* alert_play.png in Resources */,
 				8B9C7DF9185F08C90038B3A8 /* loader2.png in Resources */,

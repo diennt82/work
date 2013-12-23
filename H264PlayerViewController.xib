@@ -131,12 +131,6 @@
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
                     <inset key="insetFor6xAndEarlier" minX="0.0" minY="30" maxX="0.0" maxY="-30"/>
                 </view>
-                <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" hidesWhenStopped="YES" style="whiteLarge" id="87">
-                    <rect key="frame" x="142" y="135" width="37" height="37"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    <inset key="insetFor6xAndEarlier" minX="0.0" minY="30" maxX="0.0" maxY="-30"/>
-                    <color key="color" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                </activityIndicatorView>
                 <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" id="nTa-Ux-yAc" customClass="ScrollHorizontalMenu">
                     <rect key="frame" x="0.0" y="185" width="320" height="41"/>
                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -192,6 +186,12 @@
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
                     <inset key="insetFor6xAndEarlier" minX="0.0" minY="30" maxX="0.0" maxY="-30"/>
                 </view>
+                <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" hidesWhenStopped="YES" style="whiteLarge" id="87">
+                    <rect key="frame" x="142" y="135" width="37" height="37"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <inset key="insetFor6xAndEarlier" minX="0.0" minY="30" maxX="0.0" maxY="-30"/>
+                    <color key="color" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                </activityIndicatorView>
             </subviews>
             <simulatedStatusBarMetrics key="simulatedStatusBarMetrics"/>
         </view>
@@ -209,7 +209,7 @@
     </objects>
     <resources>
         <image name="camera_action_mic.png" width="324" height="324"/>
-        <image name="camera_action_pan_bg.png" width="468" height="468"/>
+        <image name="camera_action_pan_bg.png" width="208" height="208"/>
         <image name="camera_action_pic_s.png" width="90" height="90"/>
         <image name="camera_action_video.png" width="324" height="324"/>
         <image name="reveal-icon.png" width="22" height="17"/>

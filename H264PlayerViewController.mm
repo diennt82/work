@@ -1133,6 +1133,7 @@
     
     self.selectedChannel.stopStreaming = NO;
     self.activityIndicator.hidden = NO;
+    self.activityIndicator.color = [UIColor whiteColor];
     [self.view bringSubviewToFront:self.activityIndicator];
     [self.activityIndicator startAnimating];
     self.viewStopStreamingProgress.hidden = YES;
