@@ -9,6 +9,7 @@
 #import "H264PlayerViewController.h"
 #import "EarlierViewController.h"
 
+#define DISABLE_VIEW_RELEASE_FLAG 1
 
 #define D1 @"480p"
 #define HD1 @"720p-10"
@@ -236,6 +237,9 @@
         [self.navigationItem setTitle:cp.name];
         [self.topToolbar setHidden:YES];
     }
+#if DISABLE_VIEW_RELEASE_FLAG
+    self.navigationItem.rightBarButtonItem.enabled = NO;
+#endif
 }
 
 - (void)nowButtonAciton:(id)sender
@@ -3842,13 +3846,21 @@
     else if (index == INDEX_MICRO)
     {
         // implement Microphone here
+#if DISABLE_VIEW_RELEASE_FLAG
+        return; // Disable for release test
+#else
         _selectedItemMenu = INDEX_MICRO;
         [self recordingPressAction:nil];
+#endif
     }
     else if (index == INDEX_RECORDING)
     {
         //implement take a photo/record video here
+#if DISABLE_VIEW_RELEASE_FLAG
+        return; // Disable for release test
+#else
         _selectedItemMenu = INDEX_RECORDING;
+#endif
     }
     else if (index == INDEX_MELODY)
     {
@@ -3857,8 +3869,12 @@
     }
     else if (index == INDEX_TEMP)
     {
+#if DISABLE_VIEW_RELEASE_FLAG
+        return; // Disable for release test
+#else
         //implement display camera list here
         _selectedItemMenu = INDEX_TEMP;
+#endif
     }
     else {
         NSLog(@"Action out of bound");
