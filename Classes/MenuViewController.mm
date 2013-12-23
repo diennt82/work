@@ -6,6 +6,8 @@
 //  Copyright (c) 2013 Smart Panda Ltd. All rights reserved.
 //
 
+#define DISABLE_VIEW_RELEASE_FLAG 1
+
 #import "MenuViewController.h"
 #import "SettingsViewController.h"
 #import "Account_ViewController.h"
@@ -66,7 +68,18 @@
     UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:_camerasVC];
     
     //[self.navigationController initWithRootViewController:camerasVC];
+#if DISABLE_VIEW_RELEASE_FLAG
+    self.accountVC = [[Account_ViewController alloc] init];
     
+    NSLog(@"viewDidLoad: %p, %p", self.menuDelegate, self.accountVC.mdelegate);
+    
+    UINavigationController *nav2 = [[UINavigationController alloc] initWithRootViewController:_accountVC];
+    
+    self.viewControllers = [NSArray arrayWithObjects:nav, nav2, nil];
+    
+    [nav release];
+    [nav2 release];
+#else
     SettingsViewController *settingsVC = [[SettingsViewController alloc] init];
     settingsVC.parentVC = self;
     UINavigationController *nav1 = [[UINavigationController alloc] initWithRootViewController:settingsVC];
@@ -79,10 +92,12 @@
     
     
     self.viewControllers = [NSArray arrayWithObjects:nav, nav1, nav2, nil];
+
     
     [nav release];
     [nav2 release];
     [settingsVC release];
+#endif
 }
 
 - (void)viewWillAppear:(BOOL)animated

@@ -6,6 +6,8 @@
 //  Copyright (c) 2012 Smart Panda Ltd. All rights reserved.
 //
 
+#define DISABLE_VIEW_RELEASE_FLAG 1
+
 #import "Account_ViewController.h"
 #import "MBP_iosViewController.h"
 #import "CameraSettingsCell.h"
@@ -378,7 +380,11 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
+#if DISABLE_VIEW_RELEASE_FLAG
+    return 1;
+#else
     return 2;
+#endif
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
