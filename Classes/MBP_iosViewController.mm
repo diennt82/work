@@ -244,8 +244,8 @@
     UIInterfaceOrientation interfaceOrientation = [UIApplication sharedApplication].statusBarOrientation;
 
     MBP_FirstPage * firstPage = nil;
-    [self.view addSubview:backgroundView];
-    [self.view bringSubviewToFront:backgroundView];
+    //[self.view addSubview:backgroundView];
+    //[self.view bringSubviewToFront:backgroundView];
     
     
     if (interfaceOrientation == UIInterfaceOrientationLandscapeLeft ||
@@ -380,13 +380,13 @@
 - (BOOL) shouldAutorotate
 {
     
-    return YES;
+    return NO;
 }
 
 -(NSUInteger)supportedInterfaceOrientations
 {
-
-    return UIInterfaceOrientationMaskAllButUpsideDown;
+    return UIInterfaceOrientationMaskPortrait;
+    //return UIInterfaceOrientationMaskAllButUpsideDown;
 }
 
 
