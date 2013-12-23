@@ -62,7 +62,7 @@
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     //self.navigationItem.rightBarButtonItem = self.editButtonItem;
     
-    self.navigationController.navigationBarHidden = NO;
+    self.navigationController.navigationBarHidden = YES;
     
     //create the image for your button, and set the frame for its size
     UIImage *image = [UIImage imageNamed:@"Hubble_logo_back.png"];
@@ -112,6 +112,8 @@
 //    [self.camChannels addObject:ch1];
 //    [self.camChannels addObject:ch2];
     
+    
+    
     if (!_isFirttime) //revert
     {
         self.isFirttime = TRUE;
@@ -143,6 +145,13 @@
         
     }
     
+}
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    self.view.frame = CGRectMake(0, 100, self.view.frame.size.width, self.view.frame.size.height);
+    [super viewWillAppear:animated];
+    self.navigationController.navigationBarHidden = YES;
 }
 
 - (IBAction)addCameraButtonTouchAction:(id)sender

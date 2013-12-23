@@ -36,7 +36,52 @@
 {
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
+    
+    [self.playEnventBtn setImage:[UIImage imageNamed:@"alert_play"] forState:UIControlStateNormal];
+    [self.playEnventBtn setImage:[UIImage imageNamed:@"alert_play_pressed"] forState:UIControlEventTouchUpInside];
+    
+    [self layoutImageAndTextForButton:self.playEnventBtn];
+    
+    
+    [self.goToCameraBtn setImage:[UIImage imageNamed:@"alert_camera"] forState:UIControlStateNormal];
+    [self.goToCameraBtn setImage:[UIImage imageNamed:@"alert_camera_pressed"] forState:UIControlEventTouchUpInside];
+    
+    [self layoutImageAndTextForButton:self.goToCameraBtn];
+    
+    [self.changeSettingsBtn setImage:[UIImage imageNamed:@"alert_settings"] forState:UIControlStateNormal];
+    [self.changeSettingsBtn setImage:[UIImage imageNamed:@"alert_settings_pressed"] forState:UIControlEventTouchUpInside];
+    
+    [self layoutImageAndTextForButton:self.changeSettingsBtn];
+    
+    [self.choosePlanBtn setImage:[UIImage imageNamed:@"alert_upgrade"] forState:UIControlStateNormal];
+    [self.choosePlanBtn setImage:[UIImage imageNamed:@"alert_upgrade_pressed"] forState:UIControlEventTouchUpInside];
+    
+    [self layoutImageAndTextForButton:self.choosePlanBtn];
+    
+    [self.learnMoreBtn setImage:[UIImage imageNamed:@"alert_learn"] forState:UIControlStateNormal];
+    [self.learnMoreBtn setImage:[UIImage imageNamed:@"alert_learn_pressed"] forState:UIControlEventTouchUpInside];
+    
+    [self layoutImageAndTextForButton:self.learnMoreBtn];
 }
+
+- (void)layoutImageAndTextForButton: (UIButton *)button
+{
+    // the space between the image and text
+    CGFloat spacing = 6.0;
+    
+    // lower the text and push it left so it appears centered
+    //  below the image
+    CGSize imageSize = button.imageView.frame.size;
+    button.titleEdgeInsets = UIEdgeInsetsMake(
+                                              0.0, - imageSize.width, - (imageSize.height + spacing), 0.0);
+    
+    // raise the image and push it right so it appears centered
+    //  above the text
+    CGSize titleSize = button.titleLabel.frame.size;
+    button.imageEdgeInsets = UIEdgeInsetsMake(
+                                              - (titleSize.height + spacing), 0.0, 0.0, - titleSize.width);
+}
+
 - (IBAction)playEventTouchAction:(id)sender
 {
     self.messageLabel.text = @"You do not have motion detected recording enabled. Please choose an option below";

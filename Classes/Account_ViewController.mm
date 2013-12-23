@@ -9,8 +9,9 @@
 #import "Account_ViewController.h"
 #import "MBP_iosViewController.h"
 #import "CameraSettingsCell.h"
+#import "TimelineButtonCell.h"
 
-@interface Account_ViewController ()
+@interface Account_ViewController () <TimelineButtonCellDelegate>
 
 @end
 
@@ -72,6 +73,8 @@
         [self.navigationController setNavigationBarHidden:YES];
     }
     UIInterfaceOrientation infOrientation = [UIApplication sharedApplication].statusBarOrientation;
+    
+    self.navigationController.navigationBarHidden = YES;
     
 	[self adjustViewsForOrientation:infOrientation];
     [self loadUserData];
@@ -179,6 +182,10 @@
     }
 }
 
+- (void)sendTouchBtnStateWithIndex:(NSInteger)rowIdx
+{
+    [self userLogout];
+}
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
 {
@@ -378,7 +385,7 @@
 {
     if (section == 0)
     {
-        return 3;
+        return 4;
     }
     
     return 2;
@@ -392,6 +399,26 @@
     }
     
     return @"Plan";
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if (indexPath.row == 3)
+    {
+        return 60;
+    }
+    
+    return 44;
+}
+
+- (BOOL)tableView:(UITableView *)tableView shouldHighlightRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if (indexPath.section == 3)
+    {
+        return NO;
+    }
+    
+    return YES;
 }
 
 #define USERNAME_INDEX 0
@@ -417,6 +444,30 @@
         if (indexPath.row == APPVERSION_INDEX)
         {
             return versionCell;
+        }
+        else
+        {
+            static NSString *CellIdentifier = @"TimelineButtonCell";
+            TimelineButtonCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+            
+            NSArray *objects = [[NSBundle mainBundle] loadNibNamed:@"TimelineButtonCell" owner:nil options:nil];
+            
+            for (id curObj in objects)
+            {
+                
+                if([curObj isKindOfClass:[UITableViewCell class]])
+                {
+                    cell = (TimelineButtonCell *)curObj;
+                    break;
+                }
+            }
+                [cell.timelineCellButtn setBackgroundImage:[UIImage imageNamed:@"enter.png"] forState:UIControlStateNormal];
+            [cell.timelineCellButtn setBackgroundImage:[UIImage imageNamed:@"enter_pressed"] forState:UIControlEventTouchUpInside];
+                [cell.timelineCellButtn setTitle:@"Logout" forState:UIControlStateNormal];
+            cell.rowIndex = indexPath.row;
+            cell.timelineBtnDelegate = self;
+            
+            return cell;
         }
     }
     else

@@ -9,8 +9,9 @@
 #import "MenuViewController.h"
 #import "SettingsViewController.h"
 #import "Account_ViewController.h"
+#import "H264PlayerViewController.h"
 
-@interface MenuViewController ()
+@interface MenuViewController () <H264PlayerVCDelegate>
 
 @property (retain, nonatomic) Account_ViewController *accountVC;
 
@@ -46,7 +47,7 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
     
-    self.navigationController.navigationBarHidden = YES;
+    self.navigationController.navigationBarHidden = NO;
     
     UIImage *hubbleBack = [UIImage imageNamed:@"Hubble_logo_back.png"];
     
@@ -67,7 +68,8 @@
     //[self.navigationController initWithRootViewController:camerasVC];
     
     SettingsViewController *settingsVC = [[SettingsViewController alloc] init];
-    //UINavigationController *nav1 = [[UINavigationController alloc] initWithRootViewController:settingsVC];
+    settingsVC.parentVC = self;
+    UINavigationController *nav1 = [[UINavigationController alloc] initWithRootViewController:settingsVC];
     
     self.accountVC = [[Account_ViewController alloc] init];
     
@@ -76,7 +78,7 @@
     UINavigationController *nav2 = [[UINavigationController alloc] initWithRootViewController:_accountVC];
     
     
-    self.viewControllers = [NSArray arrayWithObjects:nav, settingsVC, nav2, nil];
+    self.viewControllers = [NSArray arrayWithObjects:nav, nav1, nav2, nil];
     
     [nav release];
     [nav2 release];
@@ -85,9 +87,10 @@
 
 - (void)viewWillAppear:(BOOL)animated
 {
-    self.navigationController.navigationBarHidden = YES;
+    self.navigationController.navigationBarHidden = NO;
     UIImage *hubbleBack = [UIImage imageNamed:@"Hubble_logo_back.png"];
     [self.navigationItem.leftBarButtonItem setTintColor:[UIColor colorWithPatternImage:hubbleBack]];
+    self.title = @"Cameras";
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -104,6 +107,40 @@
 - (void)menuBackAction: (id)sender
 {
     // Back to Player view. What is camera selected? 0?
+    
+    if (self.cameras != nil &&
+        self.cameras.count > 0)
+    {
+        CamChannel *ch = (CamChannel *)[self.cameras objectAtIndex:0];
+        
+        [CameraAlert clearAllAlertForCamera:ch.profile.mac_address];
+        [UIApplication sharedApplication].idleTimerDisabled = YES;
+        
+        NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+        [userDefaults setObject:ch.profile.mac_address forKey:CAM_IN_VEW];
+        [userDefaults synchronize];
+        
+        H264PlayerViewController *h264PlayerViewController = [[H264PlayerViewController alloc] init];
+        
+        h264PlayerViewController.selectedChannel = ch;
+        h264PlayerViewController.h264PlayerVCDelegate = self;
+        
+        NSLog(@"%@, %@", self.parentViewController.description, self.parentViewController.parentViewController);
+        
+        //MenuViewController *tabBarController = (MenuViewController *)self.parentViewController;
+        
+        [self.navigationController pushViewController:h264PlayerViewController animated:YES];
+        [h264PlayerViewController release];
+    }
+}
+
+- (void)stopStreamFinished:(CamChannel *)camChannel
+{
+}
+
+- (void)tabBar:(UITabBar *)tabBar didSelectItem:(UITabBarItem *)item
+{
+    self.title = item.title;
 }
 
 - (void)didReceiveMemoryWarning

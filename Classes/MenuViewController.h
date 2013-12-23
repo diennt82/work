@@ -10,6 +10,12 @@
 #import "ConnectionMethodDelegate.h"
 #import "CamerasViewController.h"
 
+@protocol MenuViewControllerDelegate <NSObject>
+
+- (void)pushBackToPlayerView;
+
+@end
+
 @interface MenuViewController : UITabBarController
 
 @property (nonatomic, assign) id<ConnectionMethodDelegate> menuDelegate;
