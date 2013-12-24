@@ -6,13 +6,15 @@
 //  Copyright (c) 2013 Smart Panda Ltd. All rights reserved.
 //
 
+#define NUM_MELODY 6
+
 #import "MelodyViewController.h"
 #import <MonitorCommunication/MonitorCommunication.h>
 
 @interface MelodyViewController () <UITableViewDataSource, UITableViewDelegate>
 {
     NSArray* _melodies;
-    BOOL valueMelodiesMap[5];
+    BOOL valueMelodiesMap[6];
 }
 
 @property (retain, nonatomic) IBOutlet UITableView *melodyTableView;
@@ -214,6 +216,14 @@
     if (valueMelodiesMap[indexPath.row] == TRUE)
     {
         _melodyIndex = indexPath.row;
+        
+        for (int i = 0; i < NUM_MELODY; i++)
+        {
+            if (i != indexPath.row)
+            {
+                valueMelodiesMap[i] = FALSE;
+            }
+        }
     }
     else
     {

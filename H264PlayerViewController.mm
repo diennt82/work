@@ -1045,16 +1045,16 @@
 - (void)setMelodyWithIndex:(NSInteger)molodyIndex
 {
     
-    if (molodyIndex == 0)
-    {
-        //set icon off
-        [self.melodyButton setImage:[UIImage imageNamed:@"bb_melody_off_icon.png"] forState:UIControlStateNormal];
-    }
-    else
-    {
-        //set icon on
-        [self.melodyButton setImage:[UIImage imageNamed:@"bb_melody_icon.png"] forState:UIControlStateNormal];
-    }
+//    if (molodyIndex == 0)
+//    {
+//        //set icon off
+//        [self.melodyButton setImage:[UIImage imageNamed:@"bb_melody_off_icon.png"] forState:UIControlStateNormal];
+//    }
+//    else
+//    {
+//        //set icon on
+//        [self.melodyButton setImage:[UIImage imageNamed:@"bb_melody_icon.png"] forState:UIControlStateNormal];
+//    }
 }
 
 #pragma mark - Method
@@ -1151,8 +1151,10 @@
     //set value default for table view
     self.playlistViewController.tableView.hidden= YES;
     // loading earlierlist in background
+#if DISABLE_VIEW_RELEASE_FLAG
+#else
     [self performSelectorInBackground:@selector(loadEarlierList) withObject:nil];
-
+#endif
     
     //Direction stuf
     /* Kick off the two timer for direction sensing */
@@ -3332,6 +3334,9 @@
         }
        
     }
+#if DISABLE_VIEW_RELEASE_FLAG
+    self.playlistViewController.view.hidden = YES;
+#endif
 }
 
 #pragma mark -
