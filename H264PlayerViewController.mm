@@ -50,6 +50,8 @@
 @interface H264PlayerViewController ()
 
 @property (retain, nonatomic) EarlierViewController *earlierVC;
+@property (nonatomic) NSInteger videoWidth;
+@property (nonatomic) NSInteger videoHeight;
 
 - (void)centerScrollViewContents;
 - (void)scrollViewDoubleTapped:(UITapGestureRecognizer*)recognizer;
@@ -159,6 +161,10 @@
     
     [self addGesturesPichInAndOut];
     [self updateNavigationBarAndToolBar];
+    
+    self.videoWidth = 0;
+    self.videoHeight = 0;
+    
     [self becomeActive];
 }
 - (void)addGesturesPichInAndOut
@@ -575,7 +581,7 @@
                 //[self performSelectorInBackground:@selector(getZoneDetection_bg) withObject:nil];
                 [self performSelectorInBackground:@selector(getMelodyValue_bg) withObject:nil];
                 self.imgViewDrectionPad.userInteractionEnabled = YES;
-                self.imgViewDrectionPad.image = [UIImage imageNamed:@"circle_buttons1_2.png"];
+                self.imgViewDrectionPad.image = [UIImage imageNamed:@"camera_action_pan_bg.png"];
 //                NSTimer *getTemperatureTimer = [NSTimer scheduledTimerWithTimeInterval:10 target:self selector:@selector(getCameraTemperature_bg:) userInfo:nil repeats:YES];
 //                [getTemperatureTimer fire];
             }
@@ -1404,6 +1410,8 @@
         }
         
         h264Streamer->setVideoSurface(self.imageViewVideo);
+        self.videoWidth = _imageViewVideo.frame.size.width;
+        self.videoHeight = _imageViewVideo.frame.size.height;
         
         status=  h264Streamer->prepare();
         
@@ -3067,15 +3075,15 @@
 		///TODOO: update image
 		if (translation.y > 0)
 		{
-			[_imgViewDrectionPad setImage:[UIImage imageNamed:@"circle_buttons1_dn.png"]];
+			[_imgViewDrectionPad setImage:[UIImage imageNamed:@"camera_action_pan_bg"]];
 		}
 		else if (translation.y <0)
 		{
-			[_imgViewDrectionPad setImage:[UIImage imageNamed:@"circle_buttons1_up.png"]];
+			[_imgViewDrectionPad setImage:[UIImage imageNamed:@"camera_action_pan_bg"]];
 		}
 		else
 		{
-			[_imgViewDrectionPad setImage:[UIImage imageNamed:@"circle_buttons1_2.png"]];
+			[_imgViewDrectionPad setImage:[UIImage imageNamed:@"camera_action_pan_bg.png"]];
 		}
         
 		if (isBegan)
@@ -3095,15 +3103,15 @@
 		if (translation.x > 0)
 		{
             
-			[_imgViewDrectionPad setImage:[UIImage imageNamed:@"circle_buttons1_rt.png"]];
+			[_imgViewDrectionPad setImage:[UIImage imageNamed:@"camera_action_pan_bg"]];
 		}
 		else if (translation.x < 0){
             
-			[_imgViewDrectionPad setImage:[UIImage imageNamed:@"circle_buttons1_lf.png"]];
+			[_imgViewDrectionPad setImage:[UIImage imageNamed:@"camera_action_pan_bg"]];
 		}
 		else
 		{
-			[_imgViewDrectionPad setImage:[UIImage imageNamed:@"circle_buttons1_2.png"]];
+			[_imgViewDrectionPad setImage:[UIImage imageNamed:@"camera_action_pan_bg.png"]];
 		}
         
 		if (isBegan)
@@ -3155,6 +3163,11 @@
 
 - (void) adjustViewsForOrientation:(UIInterfaceOrientation)orientation
 {
+    if (h264Streamer != NULL)
+    {
+        h264Streamer->setVideoSurface(nil);
+    }
+    
     [self resetZooming];
     CGRect screenBounds = [[UIScreen mainScreen] bounds];
     CGFloat screenWidth = screenBounds.size.width;
@@ -3308,8 +3321,16 @@
     
     if (h264Streamer != NULL)
     {
+        //self.imageViewVideo.image = [UIImage imageNamed:@"add_camera.png"];
         //trigger re-cal of videosize
         h264Streamer->videoSizeChanged();
+        if ((_videoWidth == 0 && _videoHeight == 0) ||
+            ((_videoWidth >= _imageViewVideo.frame.size.width) && (_videoHeight >= _imageViewVideo.frame.size.height)))
+        {
+            h264Streamer->setVideoSurface(self.imageViewVideo);
+            [_activityIndicator stopAnimating];
+        }
+       
     }
 }
 
