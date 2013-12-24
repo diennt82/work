@@ -10,6 +10,7 @@
 #import <CameraScanner/CameraScanner.h>
 #import <MonitorCommunication/MonitorCommunication.h>
 
+#import "define.h"
 #import "Step_12_ViewController.h"
 #import "Step_11_ViewController.h"
 #import "MBP_FirstPage.h"

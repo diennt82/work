@@ -976,6 +976,7 @@
 		A123DC9717E9A748006CC6FD /* PlayerCallbackHandler.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PlayerCallbackHandler.h; sourceTree = "<group>"; };
 		A14631C4185C133D00E96969 /* ScrollHorizontalMenu.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ScrollHorizontalMenu.h; sourceTree = "<group>"; };
 		A14631C5185C133D00E96969 /* ScrollHorizontalMenu.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ScrollHorizontalMenu.m; sourceTree = "<group>"; };
+		A14CA2231869468D00B050EF /* define.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = define.h; sourceTree = "<group>"; };
 		A15430F01818CA4700337EFE /* libpj-arm-apple-darwin9.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libpj-arm-apple-darwin9.a"; path = "../ios-frameworks/pjsip/arm/lib/libpj-arm-apple-darwin9.a"; sourceTree = "<group>"; };
 		A15430F11818CA4700337EFE /* libpjlib-util-arm-apple-darwin9.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libpjlib-util-arm-apple-darwin9.a"; path = "../ios-frameworks/pjsip/arm/lib/libpjlib-util-arm-apple-darwin9.a"; sourceTree = "<group>"; };
 		A15430F21818CA4700337EFE /* libpjnath-arm-apple-darwin9.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libpjnath-arm-apple-darwin9.a"; path = "../ios-frameworks/pjsip/arm/lib/libpjnath-arm-apple-darwin9.a"; sourceTree = "<group>"; };
@@ -1753,6 +1754,9 @@
 				8BA7F27618516EB800BE0145 /* Login|Register */,
 				8B9C7DF0185F06B10038B3A8 /* MBP_iosViewController */,
 				8B92A0BF18644204005923D2 /* AccountVC */,
+				A14CA2221869340E00B050EF /* VerifySetupCameraFail_VC */,
+				A14CA221186933E400B050EF /* StartMonitor_VC */,
+				A14CA2201869330F00B050EF /* SwitchNetWork_VC */,
 				9704F83F17B37CAD005F9868 /* DashBoard_ViewController.h */,
 				9704F84017B37CAF005F9868 /* DashBoard_ViewController.mm */,
 				97F5531417BDD3AF00024017 /* MBPNavController.m */,
@@ -1761,24 +1765,6 @@
 				97987D2C154698100066C49B /* ConnectionMethodDelegate.h */,
 				972E2B8515A4234300E60A96 /* NSData+Base64.m */,
 				972E2B8615A4234300E60A96 /* NSData+Base64.h */,
-				38DE1C8E168AEB270049E814 /* Step_08_ViewController.xib */,
-				BCA1A4F616C27A7A00E7EF56 /* Step_08_ViewController_land.xib */,
-				38DE1C89168AEB1B0049E814 /* Step_08_ViewController_ipad.xib */,
-				BCBD80F416D1E25C0007943B /* Step_08_ViewController_land_ipad.xib */,
-				38A478F815C12912008682FE /* Step_08_ViewController.h */,
-				38A478F915C12913008682FE /* Step_08_ViewController.mm */,
-				380CB0C516DC568500290587 /* Step_12_ViewController.h */,
-				380CB0C616DC568500290587 /* Step_12_ViewController.m */,
-				380CB0C816DC5A9E00290587 /* Step_12_ViewController.xib */,
-				380CB0CB16DC5AD500290587 /* Step_12_ViewController_land.xib */,
-				380CB0CE16DC5B2000290587 /* Step_12_ViewController_ipad.xib */,
-				380CB0D116DC5D8100290587 /* Step_12_ViewController_land_ipad.xib */,
-				380CB0D416DC60DB00290587 /* Step_11_ViewController.h */,
-				380CB0D516DC60DC00290587 /* Step_11_ViewController.m */,
-				380CB0D716DC612000290587 /* Step_11_ViewController.xib */,
-				380CB0DA16DC630400290587 /* Step_11_ViewController_land.xib */,
-				380CB0DD16DC632600290587 /* Step_11_ViewController_ipad.xib */,
-				380CB0E016DC634D00290587 /* Step_11_ViewController_land_ipad.xib */,
 				97DA238116425F9E00EE2528 /* ToUViewController.h */,
 				97DA238216425F9E00EE2528 /* ToUViewController.mm */,
 				97DA238316425F9F00EE2528 /* ToUViewController.xib */,
@@ -1857,6 +1843,7 @@
 				38C7DE79165DDF9E00926EA1 /* Default-568h@2x.png */,
 				38962C7F1769583A0016AE16 /* TestFlight.h */,
 				8B9C7DF1185F08AF0038B3A8 /* New Hubble Image */,
+				A14CA2231869468D00B050EF /* define.h */,
 				3812F82315C8BEC700DADFA6 /* images13 */,
 				080E96DDFE201D6D7F000001 /* Classes */,
 				29B97315FDCFA39411CA2CEA /* Other Sources */,
@@ -2714,6 +2701,7 @@
 			path = ..;
 			sourceTree = "<group>";
 		};
+
 		A1239E831861821F00A25A04 /* HoldToTalk */ = {
 			isa = PBXGroup;
 			children = (
@@ -2738,6 +2726,45 @@
 				A1239E831861821F00A25A04 /* HoldToTalk */,
 			);
 			name = PanelButtonController;
+
+		A14CA2201869330F00B050EF /* SwitchNetWork_VC */ = {
+			isa = PBXGroup;
+			children = (
+				38DE1C8E168AEB270049E814 /* Step_08_ViewController.xib */,
+				BCA1A4F616C27A7A00E7EF56 /* Step_08_ViewController_land.xib */,
+				38DE1C89168AEB1B0049E814 /* Step_08_ViewController_ipad.xib */,
+				BCBD80F416D1E25C0007943B /* Step_08_ViewController_land_ipad.xib */,
+				38A478F815C12912008682FE /* Step_08_ViewController.h */,
+				38A478F915C12913008682FE /* Step_08_ViewController.mm */,
+			);
+			name = SwitchNetWork_VC;
+			sourceTree = "<group>";
+		};
+		A14CA221186933E400B050EF /* StartMonitor_VC */ = {
+			isa = PBXGroup;
+			children = (
+				380CB0C516DC568500290587 /* Step_12_ViewController.h */,
+				380CB0C616DC568500290587 /* Step_12_ViewController.m */,
+				380CB0C816DC5A9E00290587 /* Step_12_ViewController.xib */,
+				380CB0CB16DC5AD500290587 /* Step_12_ViewController_land.xib */,
+				380CB0CE16DC5B2000290587 /* Step_12_ViewController_ipad.xib */,
+				380CB0D116DC5D8100290587 /* Step_12_ViewController_land_ipad.xib */,
+			);
+			name = StartMonitor_VC;
+			sourceTree = "<group>";
+		};
+		A14CA2221869340E00B050EF /* VerifySetupCameraFail_VC */ = {
+			isa = PBXGroup;
+			children = (
+				380CB0D416DC60DB00290587 /* Step_11_ViewController.h */,
+				380CB0D516DC60DC00290587 /* Step_11_ViewController.m */,
+				380CB0D716DC612000290587 /* Step_11_ViewController.xib */,
+				380CB0DA16DC630400290587 /* Step_11_ViewController_land.xib */,
+				380CB0DD16DC632600290587 /* Step_11_ViewController_ipad.xib */,
+				380CB0E016DC634D00290587 /* Step_11_ViewController_land_ipad.xib */,
+			);
+			name = VerifySetupCameraFail_VC;
+
 			sourceTree = "<group>";
 		};
 		A1A98E8A180BF57700C8EBD3 /* PJ_NAT */ = {

@@ -160,7 +160,7 @@
     
     if([self.view respondsToSelector:@selector(setTintColor:)])
     {
-        self.view.tintColor = [UIColor orangeColor];
+        //self.view.tintColor = [UIColor orangeColor];
     }
 }
 

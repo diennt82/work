@@ -19,10 +19,10 @@
 {
     IBOutlet UIView * camName;
     
-    NSString * homeWifiSSID; 
-    NSString * cameraMac; 
+    NSString * homeWifiSSID;
+    NSString * cameraMac;
 	NSString * cameraName;
-     HttpCommunication *  comm; 
+    HttpCommunication *  comm;
 }
 
 

@@ -321,7 +321,16 @@
     [step02ViewController release];
     
 }
-
+- (void)sendCommandCheckStatusCameraToWifi
+{
+    //create a http delegate, send the data thru delegate
+    HttpCommunication  *deviceComm = [[HttpCommunication alloc]init];
+    
+    
+    NSString *deviceCodec = [deviceComm sendCommandAndBlock:GET_STATUS_NETWORK_CAMERA
+                                                withTimeout:5.0];
+    
+}
 - (IBAction)registerCamera:(id)sender
 {
     self.progressView.hidden = NO;
@@ -792,6 +801,9 @@
 
 - (void) addCamSuccessWithResponse:(NSDictionary *)responseData
 {
+#ifdef CONCURRENT_SETUP
+    NSLog(@"Do for concurent mode");
+    
     NSLog(@"addcam response: %@", responseData);
     //[self extractMasterKey:[[responseData objectForKey:@"data"] objectForKey:@"master_key"]];
     self.master_key = [[responseData objectForKey:@"data"] objectForKey:@"master_key"];
@@ -802,7 +814,7 @@
 								   selector:@selector(setStopScanning:)
 								   userInfo:nil
 									repeats:NO];
-
+    
 	// 2 of 3. wait for the camera to reboot completely
 	
 	[NSTimer scheduledTimerWithTimeInterval: 30.0//camera reboot time about 50secs
@@ -810,6 +822,29 @@
 								   selector:@selector(wait_for_camera_to_reboot:)
 								   userInfo:nil
 									repeats:NO];
+    
+#elif BLE_SETUP
+    
+#else
+    NSLog(@"addcam response: %@", responseData);
+    //[self extractMasterKey:[[responseData objectForKey:@"data"] objectForKey:@"master_key"]];
+    self.master_key = [[responseData objectForKey:@"data"] objectForKey:@"master_key"];
+    should_stop_scanning = FALSE;
+    
+    [NSTimer scheduledTimerWithTimeInterval: SCAN_TIMEOUT
+									 target:self
+								   selector:@selector(setStopScanning:)
+								   userInfo:nil
+									repeats:NO];
+    
+	// 2 of 3. wait for the camera to reboot completely
+	
+	[NSTimer scheduledTimerWithTimeInterval: 30.0//camera reboot time about 50secs
+									 target:self
+								   selector:@selector(wait_for_camera_to_reboot:)
+								   userInfo:nil
+									repeats:NO];
+#endif
 }
 
 - (void) addCamFailedWithError:(NSDictionary *) error_response
