@@ -16,7 +16,7 @@
 @end
 
 @interface MelodyViewController : UIViewController {
-    BOOL _isOddTouchOnCell;
+
 }
 
 @property (nonatomic) NSInteger melodyIndex;

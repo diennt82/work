@@ -12,6 +12,7 @@
 @interface MelodyViewController () <UITableViewDataSource, UITableViewDelegate>
 {
     NSArray* _melodies;
+    BOOL valueMelodiesMap[5];
 }
 
 @property (retain, nonatomic) IBOutlet UITableView *melodyTableView;
@@ -20,6 +21,7 @@
 
 
 @property (retain, nonatomic) NSArray* melodies;
+
 @end
 
 @implementation MelodyViewController
@@ -133,6 +135,8 @@
                                                       andApiKey:apiKey];
         [jsonCommunication release];
     }
+    
+    [self.melodyTableView reloadData];
 }
 
 #pragma mark - Action
@@ -177,19 +181,13 @@
     [cell setBackgroundColor:[UIColor clearColor]];
     // Configure the cell...
     cell.textLabel.text = (NSString *) [_melodies objectAtIndex:indexPath.row];
-    cell.imageView.image = [UIImage imageNamed:@"camera_action_play.png"];
-    cell.accessoryType = UITableViewCellAccessoryNone;
     
-    if (indexPath.row == _melodyIndex)
+    if (valueMelodiesMap[indexPath.row] == TRUE)
     {
-         if (_isOddTouchOnCell)
-         {
-             cell.imageView.image = [UIImage imageNamed:@"camera_action_play.png"];
-         } else {
-             cell.imageView.image = [UIImage imageNamed:@"camera_action_pause.png"];
-         }
+        cell.imageView.image = [UIImage imageNamed:@"camera_action_pause.png"];
     }
-    else {
+    else
+    {
         cell.imageView.image = [UIImage imageNamed:@"camera_action_play.png"];
     }
     
@@ -211,31 +209,16 @@
 {
 	[tableView deselectRowAtIndexPath:indexPath animated:NO];
     
-	if (_melodyIndex == indexPath.row)
-	{
-        _isOddTouchOnCell = !_isOddTouchOnCell;
-        [tableView reloadData];
-		return;
-	}
-    _isOddTouchOnCell = NO;
-	NSIndexPath *oldIndexPath = [NSIndexPath indexPathForRow:_melodyIndex inSection:0];
+    valueMelodiesMap[indexPath.row] = !valueMelodiesMap[indexPath.row];
     
-	UITableViewCell *newCell = [tableView cellForRowAtIndexPath:indexPath];
-    
-	if (newCell.accessoryType == UITableViewCellAccessoryNone) {
-		newCell.accessoryType = UITableViewCellAccessoryCheckmark;
-        
-		self.melodyIndex = indexPath.row;
-        [tableView reloadData];
-	}
-    
-	UITableViewCell *oldCell = [tableView cellForRowAtIndexPath:oldIndexPath];
-    
-	if (oldCell.accessoryType == UITableViewCellAccessoryCheckmark) {
-		oldCell.accessoryType = UITableViewCellAccessoryNone;
-        
-	}
-    
+    if (valueMelodiesMap[indexPath.row] == TRUE)
+    {
+        _melodyIndex = indexPath.row;
+    }
+    else
+    {
+        _melodyIndex = -1;
+    }
     
 	[self performSelector:@selector(setMelodyStatus_fg:)
                withObject:[NSNumber numberWithInt:(_melodyIndex + 1)]

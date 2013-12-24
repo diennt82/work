@@ -259,6 +259,8 @@
 		8B9906FF1869817F0054966B /* camera_action_video_s.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B9906FE1869817F0054966B /* camera_action_video_s.png */; };
 		8B9907021869824D0054966B /* camera_action_video_pressed.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B9907001869824D0054966B /* camera_action_video_pressed.png */; };
 		8B9907031869824D0054966B /* camera_action_video.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B9907011869824D0054966B /* camera_action_video.png */; };
+		8B99070618698AA40054966B /* camera_action_pause.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B99070418698AA40054966B /* camera_action_pause.png */; };
+		8B99070718698AA50054966B /* camera_action_play.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B99070518698AA40054966B /* camera_action_play.png */; };
 		8B9AF69E1858179900AC09C3 /* ScheduleViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B9AF69C1858179900AC09C3 /* ScheduleViewController.m */; };
 		8B9AF69F1858179900AC09C3 /* ScheduleViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8B9AF69D1858179900AC09C3 /* ScheduleViewController.xib */; };
 		8B9AF6A418581D3300AC09C3 /* AddScheduleViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B9AF6A218581D3300AC09C3 /* AddScheduleViewController.m */; };
@@ -787,6 +789,8 @@
 		8B9906FE1869817F0054966B /* camera_action_video_s.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = camera_action_video_s.png; sourceTree = "<group>"; };
 		8B9907001869824D0054966B /* camera_action_video_pressed.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = camera_action_video_pressed.png; sourceTree = "<group>"; };
 		8B9907011869824D0054966B /* camera_action_video.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = camera_action_video.png; sourceTree = "<group>"; };
+		8B99070418698AA40054966B /* camera_action_pause.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = camera_action_pause.png; sourceTree = "<group>"; };
+		8B99070518698AA40054966B /* camera_action_play.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = camera_action_play.png; sourceTree = "<group>"; };
 		8B9AF69B1858179900AC09C3 /* ScheduleViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ScheduleViewController.h; sourceTree = "<group>"; };
 		8B9AF69C1858179900AC09C3 /* ScheduleViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ScheduleViewController.m; sourceTree = "<group>"; };
 		8B9AF69D1858179900AC09C3 /* ScheduleViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ScheduleViewController.xib; sourceTree = "<group>"; };
@@ -2322,6 +2326,8 @@
 		8B9906F718697E050054966B /* Camera_action */ = {
 			isa = PBXGroup;
 			children = (
+				8B99070418698AA40054966B /* camera_action_pause.png */,
+				8B99070518698AA40054966B /* camera_action_play.png */,
 				8B9907001869824D0054966B /* camera_action_video_pressed.png */,
 				8B9907011869824D0054966B /* camera_action_video.png */,
 				8B9906FE1869817F0054966B /* camera_action_video_s.png */,
@@ -2878,6 +2884,7 @@
 				8B9112CC18601106004301C5 /* GeneralCell.xib in Resources */,
 				8B9906F918697F940054966B /* camera_action_photo_pressed.png in Resources */,
 				38A62E8F15C93E4700DEA520 /* bb_camera_toolbar.png in Resources */,
+				8B99070718698AA50054966B /* camera_action_play.png in Resources */,
 				8B0E1DF11844A0E80080000A /* mestartup000029.png in Resources */,
 				8B9B57DE184F0D9900E58543 /* frame-2_update-iOS7_new.png in Resources */,
 				8B9B57E0184F0D9900E58543 /* frame-1_update-iOS7_new.png in Resources */,
@@ -3091,6 +3098,7 @@
 				A15431091818DEB800337EFE /* streamvga.sdp in Resources */,
 				8BC0F0E41845E511008A63A7 /* iTunesArtwork in Resources */,
 				A1E7474E185F07AE00A54B29 /* video_action_pan.png in Resources */,
+				8B99070618698AA40054966B /* camera_action_pause.png in Resources */,
 				84FD1DCF1832399E00238089 /* stream720p_10_926_alaw.sdp in Resources */,
 				8B92A0BE186436B5005923D2 /* button_bg_1.png in Resources */,
 				8B0E1DE91844A0E80080000A /* mestartup000021.png in Resources */,
