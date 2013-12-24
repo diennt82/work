@@ -3878,11 +3878,10 @@
     else if (index == INDEX_RECORDING)
     {
         //implement take a photo/record video here
-#if DISABLE_VIEW_RELEASE_FLAG
-        return; // Disable for release test
-#else
+
         _selectedItemMenu = INDEX_RECORDING;
-#endif
+        [self changeAction:_ib_buttonChangeAction];
+
     }
     else if (index == INDEX_MELODY)
     {
@@ -4261,7 +4260,8 @@
     UIImage *takePicturePressed = [UIImage imageNamed:@"camera_action_photo_pressed.png"];
     
     
-    _isRecordInterface = !_isRecordInterface;
+    //_isRecordInterface = !_isRecordInterface;
+    _isRecordInterface = FALSE;
     if (_isRecordInterface)
     {
         [self.ib_processRecordOrTakePicture setBackgroundImage:recordActionImage forState:UIControlStateNormal];
@@ -4279,6 +4279,8 @@
         [self.ib_buttonChangeAction setBackgroundImage:recordImage forState:UIControlStateNormal];
         [self.ib_labelRecordVideo setText:@"Take Picture"];
     }
+    
+    ((UIButton *)sender).enabled = NO;
 }
 
 #pragma mark -

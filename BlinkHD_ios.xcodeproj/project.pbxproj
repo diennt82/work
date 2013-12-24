@@ -253,6 +253,12 @@
 		8B9899E01859AA6A00AC3852 /* slider-default7-track@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B9899DA1859AA6A00AC3852 /* slider-default7-track@2x.png */; };
 		8B9899E41859C9EA00AC3852 /* DayViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B9899E21859C9EA00AC3852 /* DayViewController.m */; };
 		8B9899E51859C9EA00AC3852 /* DayViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8B9899E31859C9EA00AC3852 /* DayViewController.xib */; };
+		8B9906F918697F940054966B /* camera_action_photo_pressed.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B9906F818697F940054966B /* camera_action_photo_pressed.png */; };
+		8B9906FB18697FCC0054966B /* camera_action_photo.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B9906FA18697FCC0054966B /* camera_action_photo.png */; };
+		8B9906FD186980080054966B /* camera_action_pic_s.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B9906FC186980080054966B /* camera_action_pic_s.png */; };
+		8B9906FF1869817F0054966B /* camera_action_video_s.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B9906FE1869817F0054966B /* camera_action_video_s.png */; };
+		8B9907021869824D0054966B /* camera_action_video_pressed.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B9907001869824D0054966B /* camera_action_video_pressed.png */; };
+		8B9907031869824D0054966B /* camera_action_video.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B9907011869824D0054966B /* camera_action_video.png */; };
 		8B9AF69E1858179900AC09C3 /* ScheduleViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B9AF69C1858179900AC09C3 /* ScheduleViewController.m */; };
 		8B9AF69F1858179900AC09C3 /* ScheduleViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8B9AF69D1858179900AC09C3 /* ScheduleViewController.xib */; };
 		8B9AF6A418581D3300AC09C3 /* AddScheduleViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B9AF6A218581D3300AC09C3 /* AddScheduleViewController.m */; };
@@ -775,6 +781,12 @@
 		8B9899E11859C9EA00AC3852 /* DayViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DayViewController.h; sourceTree = "<group>"; };
 		8B9899E21859C9EA00AC3852 /* DayViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DayViewController.m; sourceTree = "<group>"; };
 		8B9899E31859C9EA00AC3852 /* DayViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = DayViewController.xib; sourceTree = "<group>"; };
+		8B9906F818697F940054966B /* camera_action_photo_pressed.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = camera_action_photo_pressed.png; sourceTree = "<group>"; };
+		8B9906FA18697FCC0054966B /* camera_action_photo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = camera_action_photo.png; sourceTree = "<group>"; };
+		8B9906FC186980080054966B /* camera_action_pic_s.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = camera_action_pic_s.png; path = xhdpi/camera_action_pic_s.png; sourceTree = "<group>"; };
+		8B9906FE1869817F0054966B /* camera_action_video_s.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = camera_action_video_s.png; sourceTree = "<group>"; };
+		8B9907001869824D0054966B /* camera_action_video_pressed.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = camera_action_video_pressed.png; sourceTree = "<group>"; };
+		8B9907011869824D0054966B /* camera_action_video.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = camera_action_video.png; sourceTree = "<group>"; };
 		8B9AF69B1858179900AC09C3 /* ScheduleViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ScheduleViewController.h; sourceTree = "<group>"; };
 		8B9AF69C1858179900AC09C3 /* ScheduleViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ScheduleViewController.m; sourceTree = "<group>"; };
 		8B9AF69D1858179900AC09C3 /* ScheduleViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ScheduleViewController.xib; sourceTree = "<group>"; };
@@ -2307,6 +2319,19 @@
 			name = NMRangeSlider;
 			sourceTree = "<group>";
 		};
+		8B9906F718697E050054966B /* Camera_action */ = {
+			isa = PBXGroup;
+			children = (
+				8B9907001869824D0054966B /* camera_action_video_pressed.png */,
+				8B9907011869824D0054966B /* camera_action_video.png */,
+				8B9906FE1869817F0054966B /* camera_action_video_s.png */,
+				8B9906F818697F940054966B /* camera_action_photo_pressed.png */,
+				8B9906FC186980080054966B /* camera_action_pic_s.png */,
+				8B9906FA18697FCC0054966B /* camera_action_photo.png */,
+			);
+			name = Camera_action;
+			sourceTree = "<group>";
+		};
 		8B9AF69A1858177300AC09C3 /* Scheduling */ = {
 			isa = PBXGroup;
 			children = (
@@ -2402,6 +2427,7 @@
 		8B9C7DF1185F08AF0038B3A8 /* New Hubble Image */ = {
 			isa = PBXGroup;
 			children = (
+				8B9906F718697E050054966B /* Camera_action */,
 				8B92C0E21868327C00538013 /* Menu_add_camera */,
 				8B92C0D91868315500538013 /* Menu_settings */,
 				8B92C0D61868302200538013 /* Feed_earlier */,
@@ -2850,6 +2876,7 @@
 				38A62E8D15C92BDF00DEA520 /* bb_spk_icon_d.png in Resources */,
 				8BC0A04F1844B61900A5FD52 /* homepage_p1.png in Resources */,
 				8B9112CC18601106004301C5 /* GeneralCell.xib in Resources */,
+				8B9906F918697F940054966B /* camera_action_photo_pressed.png in Resources */,
 				38A62E8F15C93E4700DEA520 /* bb_camera_toolbar.png in Resources */,
 				8B0E1DF11844A0E80080000A /* mestartup000029.png in Resources */,
 				8B9B57DE184F0D9900E58543 /* frame-2_update-iOS7_new.png in Resources */,
@@ -2950,6 +2977,7 @@
 				38DE1BFB168ADA280049E814 /* MBP_FirstPage_ipad.xib in Resources */,
 				38DE1C05168ADA460049E814 /* MBP_LoginOrRegistration_ipad.xib in Resources */,
 				8B0E1DF71844A3BE0080000A /* bb_rec_icon_d.png in Resources */,
+				8B9907031869824D0054966B /* camera_action_video.png in Resources */,
 				8B9899CE1859A04F00AC3852 /* slider-default7-handle@2x.png in Resources */,
 				8BC0A01B1844A6A200A5FD52 /* bb_splash_screen_horizontal.png in Resources */,
 				8B9112C11860054D004301C5 /* AddBtn.png in Resources */,
@@ -2994,6 +3022,7 @@
 				8BA8AE881821F3E900DC9E9F /* stream720p_10_926.sdp in Resources */,
 				8B9B57DC184F0D9900E58543 /* frame-4-1_update-iOS7_new.png in Resources */,
 				8B92C0DE1868318800538013 /* settings_donotdisturb.png in Resources */,
+				8B9907021869824D0054966B /* camera_action_video_pressed.png in Resources */,
 				8BA7F2821851C57200BE0145 /* blink11hd480p.sdp in Resources */,
 				8B92C0A71867F4AD00538013 /* enter_pressed.png in Resources */,
 				BC3C1ACE16F025B600175AFF /* MBP_MenuViewController_ipad.xib in Resources */,
@@ -3014,6 +3043,7 @@
 				8B92C0A81867F4AD00538013 /* enter.png in Resources */,
 				BCA1A4F816C27A7B00E7EF56 /* Step_08_ViewController_land.xib in Resources */,
 				8BE896B31845CB3B00674E01 /* bb_motion_icon.png in Resources */,
+				8B9906FD186980080054966B /* camera_action_pic_s.png in Resources */,
 				8B91E63E18629E910041BA9D /* Snapshot.png in Resources */,
 				A1E7474B185F07AE00A54B29 /* video_action_music_pressed.png in Resources */,
 				BCBD80C116D1D0480007943B /* MBP_InitialSetupViewController_ipad_land.xib in Resources */,
@@ -3068,6 +3098,7 @@
 				8B92A0A21863F655005923D2 /* SavedEventViewController.xib in Resources */,
 				8B9C7DF7185F08C90038B3A8 /* loader0.png in Resources */,
 				979BC69B17D9B97700B3B373 /* PlaybackViewController.xib in Resources */,
+				8B9906FF1869817F0054966B /* camera_action_video_s.png in Resources */,
 				8B9899E51859C9EA00AC3852 /* DayViewController.xib in Resources */,
 				979BC6A517D9BB9C00B3B373 /* PlayListViewController.xib in Resources */,
 				8B92A0B01863FD13005923D2 /* EarlierViewController.xib in Resources */,
@@ -3097,6 +3128,7 @@
 				8B68F5D118066CE500661527 /* PlaybackViewController_ipad.xib in Resources */,
 				8B93848A1856E97D009C4771 /* CameraSettingsCell.xib in Resources */,
 				A19778FB181E6CAB007C3CA7 /* motion_detection_on.png in Resources */,
+				8B9906FB18697FCC0054966B /* camera_action_photo.png in Resources */,
 				84DEA2BC17E42E3F00567836 /* NotificationViewController.xib in Resources */,
 				A1E74750185F07AE00A54B29 /* video_action_temp.png in Resources */,
 			);
