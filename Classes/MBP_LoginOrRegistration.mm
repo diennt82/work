@@ -669,20 +669,21 @@
         //Load the next xib
         ForgotPwdViewController *forgotPwdController;
         
-        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
-        {
+//        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+//        {
+////            forgotPwdController = [[ForgotPwdViewController alloc]
+////                                   initWithNibName:@"ForgotPwdViewController_ipad" bundle:nil];
+//
+//            
+//        }
+//        else
+//        {
 //            forgotPwdController = [[ForgotPwdViewController alloc]
-//                                   initWithNibName:@"ForgotPwdViewController_ipad" bundle:nil];
-
-            
-        }
-        else
-        {
-            forgotPwdController = [[ForgotPwdViewController alloc]
-                                   initWithNibName:@"ForgotPwdViewController" bundle:nil];
-
-        }
-       
+//                                   initWithNibName:@"ForgotPwdViewController" bundle:nil];
+//
+//        }
+        forgotPwdController = [[ForgotPwdViewController alloc]
+                               initWithNibName:@"ForgotPwdViewController" bundle:nil];
         
         [self.navigationController pushViewController:forgotPwdController animated:NO];    
         [forgotPwdController release];
