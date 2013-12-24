@@ -419,10 +419,6 @@
 
 - (BOOL)tableView:(UITableView *)tableView shouldHighlightRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (indexPath.section == 3)
-    {
-        return NO;
-    }
     
     return YES;
 }
@@ -453,25 +449,15 @@
         }
         else
         {
-            static NSString *CellIdentifier = @"TimelineButtonCell";
-            TimelineButtonCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-            
-            NSArray *objects = [[NSBundle mainBundle] loadNibNamed:@"TimelineButtonCell" owner:nil options:nil];
-            
-            for (id curObj in objects)
-            {
-                
-                if([curObj isKindOfClass:[UITableViewCell class]])
-                {
-                    cell = (TimelineButtonCell *)curObj;
-                    break;
-                }
+            static NSString *CellIdentifier = @"Cell";
+            UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+            if (cell == nil) {
+                cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
             }
-                [cell.timelineCellButtn setBackgroundImage:[UIImage imageNamed:@"enter.png"] forState:UIControlStateNormal];
-            [cell.timelineCellButtn setBackgroundImage:[UIImage imageNamed:@"enter_pressed"] forState:UIControlEventTouchUpInside];
-                [cell.timelineCellButtn setTitle:@"Logout" forState:UIControlStateNormal];
-            cell.rowIndex = indexPath.row;
-            cell.timelineBtnDelegate = self;
+            
+            // Configure the cell...
+            
+            cell.textLabel.text = @"Logout";
             
             return cell;
         }
