@@ -311,6 +311,7 @@
 	}
 
 	self.menuVC.cameras = validChannels;
+    self.menuVC.camerasVC.camChannels = validChannels;
 
     UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:self.menuVC];
     

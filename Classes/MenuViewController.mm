@@ -65,6 +65,7 @@
     self.camerasVC = [[CamerasViewController alloc] initWithStyle:nil
                                                          delegate:self.menuDelegate
                                                          parentVC:self];
+    //self.camerasVC.camChannels = self.cameras;
     UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:_camerasVC];
     
     //[self.navigationController initWithRootViewController:camerasVC];
@@ -105,15 +106,17 @@
     self.navigationController.navigationBarHidden = NO;
     UIImage *hubbleBack = [UIImage imageNamed:@"Hubble_logo_back.png"];
     [self.navigationItem.leftBarButtonItem setTintColor:[UIColor colorWithPatternImage:hubbleBack]];
+    self.accountVC.mdelegate = self.menuDelegate;
+    //self.camerasVC.camChannels = self.cameras;
 }
 
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
     
-    self.accountVC.mdelegate = self.menuDelegate;
+    
     //self.camerasVC.parentVC = self;
-    self.camerasVC.camChannels = self.cameras;
+    
     
     NSLog(@"viewDidAppear: %p, %p", self.menuDelegate, _accountVC.mdelegate);
 }
