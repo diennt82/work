@@ -3880,7 +3880,9 @@
         //implement take a photo/record video here
 
         _selectedItemMenu = INDEX_RECORDING;
+#if DISABLE_VIEW_RELEASE_FLAG
         [self changeAction:_ib_buttonChangeAction];
+#endif
 
     }
     else if (index == INDEX_MELODY)
@@ -4259,9 +4261,12 @@
     UIImage *takePicture = [UIImage imageNamed:@"camera_action_photo.png"];
     UIImage *takePicturePressed = [UIImage imageNamed:@"camera_action_photo_pressed.png"];
     
-    
-    //_isRecordInterface = !_isRecordInterface;
+#if DISABLE_VIEW_RELEASE_FLAG
     _isRecordInterface = FALSE;
+#else
+    _isRecordInterface = !_isRecordInterface;
+#endif
+    
     if (_isRecordInterface)
     {
         [self.ib_processRecordOrTakePicture setBackgroundImage:recordActionImage forState:UIControlStateNormal];
@@ -4279,8 +4284,9 @@
         [self.ib_buttonChangeAction setBackgroundImage:recordImage forState:UIControlStateNormal];
         [self.ib_labelRecordVideo setText:@"Take Picture"];
     }
-    
+#if DISABLE_VIEW_RELEASE_FLAG
     ((UIButton *)sender).enabled = NO;
+#endif
 }
 
 #pragma mark -
