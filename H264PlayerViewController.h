@@ -104,6 +104,9 @@
     //processing for recording
     int iMaxRecordSize;
     NSString * iFileName;
+    
+    //
+    NSTimer * fullScreenTimer;
 }
 //property for Hold to talk
 @property (nonatomic) BOOL walkieTalkieEnabled;
@@ -134,6 +137,7 @@
 @property (nonatomic, retain) NSTimer * alertTimer;
 //Add scrollview to support zoom in and zoom out
 @property (retain, nonatomic) IBOutlet UIScrollView *scrollView;
+@property (retain, nonatomic) IBOutlet UIButton *ib_showMenuControlPanel;
 
 @property (retain, nonatomic) IBOutlet UIView *viewCtrlButtons;
 @property (retain, nonatomic) IBOutlet UIPickerView *pickerHQOptions;
@@ -206,5 +210,6 @@
 - (IBAction)processingRecordingOrTakePicture:(id)sender;
 - (IBAction)changeAction:(id)sender;
 - (IBAction)touchUpInsideHoldToTalk:(id)sender;
+- (IBAction)bt_showMenuControlPanel:(id)sender;
 
 @end

@@ -375,6 +375,8 @@
 		A11E8C1317E2DB7E00915F84 /* libstdc++.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = A11E8C1217E2DB7D00915F84 /* libstdc++.dylib */; };
 		A1239E86186185F200A25A04 /* AudioOutStreamer.m in Sources */ = {isa = PBXBuildFile; fileRef = A1239E85186185F200A25A04 /* AudioOutStreamer.m */; };
 		A14631C6185C133D00E96969 /* ScrollHorizontalMenu.m in Sources */ = {isa = PBXBuildFile; fileRef = A14631C5185C133D00E96969 /* ScrollHorizontalMenu.m */; };
+		A14CA22918696D0800B050EF /* camera_action_play.png in Resources */ = {isa = PBXBuildFile; fileRef = A14CA22818696D0800B050EF /* camera_action_play.png */; };
+		A14CA22B18696D1100B050EF /* camera_action_pause.png in Resources */ = {isa = PBXBuildFile; fileRef = A14CA22A18696D1100B050EF /* camera_action_pause.png */; };
 		A15430F31818CA4700337EFE /* libpj-arm-apple-darwin9.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A15430F01818CA4700337EFE /* libpj-arm-apple-darwin9.a */; };
 		A15430F41818CA4700337EFE /* libpjlib-util-arm-apple-darwin9.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A15430F11818CA4700337EFE /* libpjlib-util-arm-apple-darwin9.a */; };
 		A15430F51818CA4700337EFE /* libpjnath-arm-apple-darwin9.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A15430F21818CA4700337EFE /* libpjnath-arm-apple-darwin9.a */; };
@@ -941,6 +943,8 @@
 		A123DC9717E9A748006CC6FD /* PlayerCallbackHandler.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PlayerCallbackHandler.h; sourceTree = "<group>"; };
 		A14631C4185C133D00E96969 /* ScrollHorizontalMenu.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ScrollHorizontalMenu.h; sourceTree = "<group>"; };
 		A14631C5185C133D00E96969 /* ScrollHorizontalMenu.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ScrollHorizontalMenu.m; sourceTree = "<group>"; };
+		A14CA22818696D0800B050EF /* camera_action_play.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = camera_action_play.png; sourceTree = "<group>"; };
+		A14CA22A18696D1100B050EF /* camera_action_pause.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = camera_action_pause.png; sourceTree = "<group>"; };
 		A15430F01818CA4700337EFE /* libpj-arm-apple-darwin9.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libpj-arm-apple-darwin9.a"; path = "../ios-frameworks/pjsip/arm/lib/libpj-arm-apple-darwin9.a"; sourceTree = "<group>"; };
 		A15430F11818CA4700337EFE /* libpjlib-util-arm-apple-darwin9.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libpjlib-util-arm-apple-darwin9.a"; path = "../ios-frameworks/pjsip/arm/lib/libpjlib-util-arm-apple-darwin9.a"; sourceTree = "<group>"; };
 		A15430F21818CA4700337EFE /* libpjnath-arm-apple-darwin9.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libpjnath-arm-apple-darwin9.a"; path = "../ios-frameworks/pjsip/arm/lib/libpjnath-arm-apple-darwin9.a"; sourceTree = "<group>"; };
@@ -2714,6 +2718,8 @@
 				A1E74739185F07AE00A54B29 /* video_action_video_pressed.png */,
 				A1E7473A185F07AE00A54B29 /* video_action_video.png */,
 				A1E7473B185F07AE00A54B29 /* video_overlay_shadow.png */,
+				A14CA22818696D0800B050EF /* camera_action_play.png */,
+				A14CA22A18696D1100B050EF /* camera_action_pause.png */,
 			);
 			name = UIHome;
 			sourceTree = "<group>";
@@ -2832,6 +2838,7 @@
 				3812F82B15C8BF3600DADFA6 /* bb_ptt_icon.png in Resources */,
 				3812F82C15C8BF3600DADFA6 /* bb_snap_icon.png in Resources */,
 				8B92A0BC186432E9005923D2 /* button_bg.png in Resources */,
+				A14CA22918696D0800B050EF /* camera_action_play.png in Resources */,
 				8BC0A03F1844AC3600A5FD52 /* circle_buttons1_lf.png in Resources */,
 				A19778F9181E6C55007C3CA7 /* motion_detection_off_1.png in Resources */,
 				8B92C0CC18682A2100538013 /* alert_camera.png in Resources */,
@@ -2899,6 +2906,7 @@
 				8BC0A0211844A6EE00A5FD52 /* bb_setup_icon_step_2.png in Resources */,
 				8B9899AE1859771800AC3852 /* CameraNameViewController.xib in Resources */,
 				3809A42C15E49A4B0098BBC0 /* bb_pic_1.png in Resources */,
+				A14CA22B18696D1100B050EF /* camera_action_pause.png in Resources */,
 				8B9384971856F009009C4771 /* vol-max.png in Resources */,
 				8B9384851856E613009C4771 /* CameraSettingsViewController.xib in Resources */,
 				8B0E1DEC1844A0E80080000A /* mestartup000024.png in Resources */,

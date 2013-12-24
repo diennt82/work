@@ -160,6 +160,8 @@
     [self addGesturesPichInAndOut];
     [self updateNavigationBarAndToolBar];
     [self becomeActive];
+    [self showMenuControlPanel];
+    [self tryToHideMenuControlPanel];
 }
 - (void)addGesturesPichInAndOut
 {
@@ -3988,6 +3990,7 @@
     [_ib_buttonTouchToTalk release];
     [_ib_processRecordOrTakePicture release];
     [_ib_buttonChangeAction release];
+    [_ib_showMenuControlPanel release];
     [super dealloc];
 }
 - (void)viewWillAppear:(BOOL)animated
@@ -4178,6 +4181,10 @@
     [self user_release];
 }
 
+- (IBAction)bt_showMenuControlPanel:(id)sender {
+    [self tryToHideMenuControlPanel];
+}
+
 - (IBAction)processingRecordingOrTakePicture:(id)sender {
     UIImage *readyRecord = [UIImage imageNamed:@"camera_action_video.png"];
     UIImage *readyRecordPressed = [UIImage imageNamed:@"camera_action_video_pressed.png"];
@@ -4314,4 +4321,98 @@
 	[_alertInfo release];
     
 }
+
+#pragma mark -
+#pragma mark Hide & Show subfunction
+//-(void) exitSubFunction
+//{
+//	[self.scrollView setHidden:NO];
+////	[self swithVideoAndSnapshotView:NO];
+//    
+//}
+//-(void)hideAllFunction
+//{
+////	[self exitSubFunction];
+//    
+//	directionPad.hidden = YES;
+//	controlButtons.hidden = YES;
+//	zoombarView.hidden = YES;
+//	topToolBar.hidden = YES;
+//    
+//}
+
+- (void) tryToHideMenuControlPanel
+{
+    
+    [self.ib_showMenuControlPanel setHidden:YES];
+	if ( (fullScreenTimer != nil) && [fullScreenTimer isValid])
+	{
+		//invalidate the timer ..
+		[fullScreenTimer invalidate];
+		fullScreenTimer = nil;
+	}
+    
+	fullScreenTimer = [NSTimer scheduledTimerWithTimeInterval:10.0
+                                                       target:self
+                                                     selector:@selector(hideMenuControlPanelNow:)
+                                                     userInfo:nil
+                                                      repeats:NO];
+    
+}
+
+- (void) showJoysticksOnly
+{
+//	directionPad.hidden = NO;
+    
+    
+    if ( (fullScreenTimer != nil) && [fullScreenTimer isValid])
+	{
+		//invalidate the timer ..
+		[fullScreenTimer invalidate];
+		fullScreenTimer = nil;
+	}
+    
+}
+
+
+
+- (void) hideMenuControlPanelNow: (NSTimer*) exp
+{
+    [self.horizMenu setHidden:YES];
+    [self.ib_showMenuControlPanel setHidden:NO];
+}
+
+- (void) showMenuControlPanel
+{
+    [self.horizMenu setHidden:NO];
+}
+
+
+//- (void) showSideMenusAndStatus
+//{
+//	topToolBar.hidden = NO;
+//	directionPad.hidden = NO;
+//	controlButtons.hidden = NO;
+//	zoombarView.hidden = NO;
+//	[self exitSubFunction];
+//    
+//	[self tryToShowFullScreen];
+//    
+//}
+//
+//-(void) toggleFullScreenAndControls
+//{
+//	if ( [controlButtons isHidden] &&
+//        [videoAndSnapshotView isHidden] &&
+//        [directionPad isHidden])
+//	{ //currently fullscreen --> show controls
+//        
+//		[self showSideMenusAndStatus];
+//	}
+//	else
+//	{
+//        
+//		[self hideAllFunction];
+//	}
+//}
 @end
