@@ -10,7 +10,7 @@
 #import "EarlierViewController.h"
 
 #define DISABLE_VIEW_RELEASE_FLAG 1
-#define DELTA_HEIGHT_IMAGE_VIDEO 20
+#define DELTA_HEIGHT_IMAGE_VIDEO 0
 
 #define D1 @"480p"
 #define HD1 @"720p-10"
@@ -171,7 +171,8 @@
     self.imageViewStreamer = [[UIImageView alloc] initWithFrame:CGRectMake(_imageViewVideo.frame.origin.x, _imageViewVideo.frame.origin.y + DELTA_HEIGHT_IMAGE_VIDEO, _imageViewVideo.frame.size.width, _imageViewVideo.frame.size.height)];//  self.imageViewVideo;
     //self.imageViewStreamer.image = [UIImage imageNamed:@"Snapshot"];
     [self.imageViewStreamer setBackgroundColor:[UIColor blackColor]];
-    [self.view addSubview:_imageViewStreamer];
+    //[self.view addSubview:_imageViewStreamer];
+    [self.scrollView insertSubview:_imageViewStreamer aboveSubview:_imageViewVideo];
     //[self.view bringSubviewToFront:_imageViewStreamer];
     NSLog(@"%p, %f, %f, %f, %f", _imageViewStreamer, _imageViewStreamer.frame.origin.x, _imageViewStreamer.frame.origin.y, _imageViewStreamer.frame.size.width, _imageViewStreamer.frame.size.height);
     _imageViewVideo.hidden = YES;
@@ -1125,8 +1126,8 @@
     
     self.h264StreamerIsInStopped = TRUE;
     
-    self.imageViewVideo.backgroundColor = [UIColor blackColor];
-    
+    //self.imageViewVideo.backgroundColor = [UIColor blackColor];
+    self.imageViewStreamer.backgroundColor = [UIColor blackColor];
     if (_selectedChannel.profile.isInLocal == TRUE)
     {
         NSLog(@"Enter Background.. Local ");
@@ -1428,7 +1429,8 @@
         }
         
         //h264Streamer->setVideoSurface(self.imageViewVideo);
-        [self.view addSubview:_imageViewStreamer];
+        //[self.view addSubview:_imageViewStreamer];
+        [self.scrollView insertSubview:_imageViewStreamer aboveSubview:_imageViewVideo];
         //[self.view bringSubviewToFront:_imageViewStreamer];
         h264Streamer->setVideoSurface(_imageViewStreamer);
         self.videoWidth = _imageViewVideo.frame.size.width;
@@ -3343,6 +3345,8 @@
     //self.imageViewStreamer.frame = _imageViewVideo.frame;
     self.imageViewStreamer.frame = CGRectMake(_imageViewVideo.frame.origin.x, _imageViewVideo.frame.origin.y + DELTA_HEIGHT_IMAGE_VIDEO, _imageViewVideo.frame.size.width, _imageViewVideo.frame.size.height);
     self.imageViewVideo.hidden = YES;
+    //[self.view addSubview:_imageViewStreamer];
+    [self.scrollView insertSubview:_imageViewStreamer aboveSubview:_imageViewVideo];
     
     if (h264Streamer != NULL)
     {
@@ -3359,7 +3363,8 @@
     }
     
     NSLog(@"%p, %f, %f, %f, %f", _imageViewStreamer, _imageViewStreamer.frame.origin.x, _imageViewStreamer.frame.origin.y, _imageViewStreamer.frame.size.width, _imageViewStreamer.frame.size.height);
-    [self.view addSubview:_imageViewStreamer];
+    //[self.view addSubview:_imageViewStreamer];
+    //[self.scrollView insertSubview:_imageViewStreamer aboveSubview:_imageViewVideo];
     //[self.view bringSubviewToFront:_imageViewStreamer];
     
 #if DISABLE_VIEW_RELEASE_FLAG
@@ -3794,7 +3799,8 @@
 #pragma mark - Zoom in&out
 - (void)centerScrollViewContents {
     CGSize boundsSize = self.scrollView.bounds.size;
-    CGRect contentsFrame = self.imageViewVideo.frame;
+    //CGRect contentsFrame = self.imageViewVideo.frame;
+    CGRect contentsFrame = _imageViewStreamer.frame;
     
     if (contentsFrame.size.width < boundsSize.width) {
         contentsFrame.origin.x = (boundsSize.width - contentsFrame.size.width) / 2.0f;
@@ -3808,12 +3814,14 @@
         contentsFrame.origin.y = 0.0f;
     }
     
-    self.imageViewVideo.frame = contentsFrame;
+    //self.imageViewVideo.frame = contentsFrame;
+    self.imageViewStreamer.frame = contentsFrame;
 }
 
 - (void)scrollViewDoubleTapped:(UITapGestureRecognizer*)recognizer {
     // Get the location within the image view where we tapped
-    CGPoint pointInView = [recognizer locationInView:self.imageViewVideo];
+    //CGPoint pointInView = [recognizer locationInView:self.imageViewVideo];
+    CGPoint pointInView = [recognizer locationInView:_imageViewStreamer];
     
     // Get a zoom scale that's zoomed in slightly, capped at the maximum zoom scale specified by the scroll view
     CGFloat newZoomScale = self.scrollView.zoomScale * ZOOM_SCALE;
@@ -3847,7 +3855,8 @@
 
 - (UIView*)viewForZoomingInScrollView:(UIScrollView *)scrollView {
     // Return the view that we want to zoom
-    return self.imageViewVideo;
+    //return self.imageViewVideo;
+    return _imageViewStreamer;
 }
 
 - (void)scrollViewDidZoom:(UIScrollView *)scrollView {
@@ -4057,7 +4066,8 @@
     _isProcessRecording = NO;
     _isListening = NO;
     [super viewWillAppear:animated];
-    [self.view addSubview:_imageViewStreamer];
+    //[self.view addSubview:_imageViewStreamer];
+    [self.scrollView insertSubview:_imageViewStreamer aboveSubview:_imageViewVideo];
     [self checkOrientation];
     
 }
@@ -4430,5 +4440,7 @@
 - (void) showMenuControlPanel
 {
     [self.horizMenu setHidden:NO];
+    [self.view addSubview:_horizMenu];
+    [self.view bringSubviewToFront:_horizMenu];
 }
 @end
