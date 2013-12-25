@@ -163,9 +163,10 @@
     [self updateNavigationBarAndToolBar];
     
     self.imageViewStreamer = [[UIImageView alloc] initWithFrame:_imageViewVideo.frame];
+    //[self.imageViewStreamer setContentMode:UIViewContentModeScaleAspectFit];
     [self.imageViewStreamer setBackgroundColor:[UIColor blackColor]];
     [self.scrollView insertSubview:_imageViewStreamer aboveSubview:_imageViewVideo];
-    _imageViewVideo.hidden = YES;
+    //_imageViewVideo.hidden = YES;
     
     [self becomeActive];
     [self showMenuControlPanel];
@@ -488,15 +489,17 @@
             
             
             
-            self.imageViewVideo.frame = CGRectMake(left,
-                                                   top,
-                                                   destWidth, destHeight);
-            //re-set the size 
+//            self.imageViewVideo.frame = CGRectMake(left,
+//                                                   top,
+//                                                   destWidth, destHeight);
+            //re-set the size
 //            if (h264Streamer != NULL)
 //            {
 //                h264Streamer->setVideoSurface(self.imageViewVideo);
 //            }
-            self.imageViewStreamer.frame = _imageViewVideo.frame;
+            self.imageViewStreamer.frame = CGRectMake(left,
+                                                      top,
+                                                      destWidth, destHeight);
 
             break;
         }
@@ -3328,7 +3331,7 @@
 //    self.backBarBtnItem.action = @selector(toggleLeftViewController);
     
     self.imageViewStreamer.frame = _imageViewVideo.frame;
-    self.imageViewVideo.hidden = YES;
+    //self.imageViewVideo.hidden = YES;
     [self.scrollView insertSubview:_imageViewStreamer aboveSubview:_imageViewVideo];
     
     if (h264Streamer != NULL)
