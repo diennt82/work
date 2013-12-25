@@ -10,6 +10,10 @@
 
 @interface Step_09_ViewController ()
 
+@property (retain, nonatomic) IBOutlet UIButton *createButton;
+@property (retain, nonatomic) IBOutlet UIButton *checkboxButton;
+@property (nonatomic) BOOL selectedCheckBox;
+
 @end
 
 @implementation Step_09_ViewController
@@ -35,6 +39,8 @@
     [tmp_user_str release]; 
     [tmp_pass_str release];
     [tmp_user_email release];
+    [_createButton release];
+    [_checkboxButton release];
     [super dealloc];
     
 }
@@ -43,7 +49,17 @@
 {
     [super viewDidLoad];
 	// Do any additional setup after loading the view.
+#if 1
+    self.createButton.enabled = NO;
+    self.navigationController.navigationBarHidden = YES;
     
+    [self.createButton setBackgroundImage:[UIImage imageNamed:@"enter"] forState:UIControlStateNormal];
+    [self.createButton setBackgroundImage:[UIImage imageNamed:@"enter_pressed"] forState:UIControlEventTouchUpInside];
+    
+    [self.checkboxButton setTitle:@"" forState:UIControlStateNormal];
+    [self.checkboxButton setTitle:@"√" forState:UIControlStateSelected];
+    [self.checkboxButton setTitle:@"√" forState:UIControlStateHighlighted];
+#else
     self.navigationItem.title = NSLocalizedStringWithDefaultValue(@"Create_Account",nil, [NSBundle mainBundle],
                                                                   @"Create Account", nil);
     // Set up the Cancel button on the left of the navigation bar.
@@ -61,8 +77,7 @@
 
     
     self.navigationItem.rightBarButtonItem.enabled = NO;
-   
-    
+#endif
 }
 
 - (void)viewDidUnload
@@ -86,6 +101,26 @@
 - (void)startMonitorCallBack
 {
     // clear a warning
+}
+
+- (IBAction)checkboxButtonTouchAction:(id)sender
+{
+    self.selectedCheckBox = !_selectedCheckBox;
+    
+    [((UIButton *)sender) setSelected:_selectedCheckBox];
+    
+    [self validateAllfieldsEnableSignUp];
+}
+
+- (IBAction)createButtonTouchAction:(id)sender
+{
+    [self step09HandleNextButton:sender];
+}
+
+- (IBAction)alreadyAccountButtonTouchAction:(id)sender
+{
+    [self.delegate sendStatus:LOGIN];
+    [self dismissViewControllerAnimated:YES completion:^{}];
 }
 
 #pragma mark -
@@ -291,7 +326,34 @@
     return YES;
 }
 
+#if 1
+-(void) validateAllfieldsEnableSignUp
+{
+    UITextField * _userName = (UITextField *)[userName viewWithTag:201];
+    UITextField * _userPass = (UITextField *)[userPass viewWithTag:202];
+    UITextField * _userCPass =(UITextField *) [userCPass viewWithTag:203];
+    UITextField * _userEmail = (UITextField *)[userEmail viewWithTag:204];
+    
+    if ( (_userName.text.length > 0) &&
+        (_userPass.text.length > 0) &&
+        (_userCPass.text.length > 0) &&
+        (_userEmail.text.length > 0) &&
+        (_selectedCheckBox == TRUE)
+        )
+    {
+        //Enable the "Create" button
+        
+        self.createButton.enabled = YES;
+    }
+    else
+    {
+        //disable the "Create"  button
+        self.createButton.enabled = NO;
+    }
+    
+}
 
+#else
 -(void) validateAllfieldsEnableSignUp
 {
     UITextField * _userName = (UITextField *)[userName viewWithTag:201];
@@ -320,6 +382,7 @@
     
 
 }
+#endif
 
 - (void) animateTextField: (UITextField*) textField up: (BOOL) up
 {

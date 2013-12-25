@@ -259,8 +259,9 @@
 		8B9906FF1869817F0054966B /* camera_action_video_s.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B9906FE1869817F0054966B /* camera_action_video_s.png */; };
 		8B9907021869824D0054966B /* camera_action_video_pressed.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B9907001869824D0054966B /* camera_action_video_pressed.png */; };
 		8B9907031869824D0054966B /* camera_action_video.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B9907011869824D0054966B /* camera_action_video.png */; };
-		8B99C0AF186AA75600DB8AAA /* camera_action_pause.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B99C0AD186AA75600DB8AAA /* camera_action_pause.png */; };
-		8B99C0B0186AA75600DB8AAA /* camera_action_play.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B99C0AE186AA75600DB8AAA /* camera_action_play.png */; };
+		8B99070618698AA40054966B /* camera_action_pause.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B99070418698AA40054966B /* camera_action_pause.png */; };
+		8B99070718698AA50054966B /* camera_action_play.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B99070518698AA40054966B /* camera_action_play.png */; };
+		8B99C0AC186A79B600DB8AAA /* img-checkbox.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B99C0AB186A79B600DB8AAA /* img-checkbox.png */; };
 		8B9AF69E1858179900AC09C3 /* ScheduleViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B9AF69C1858179900AC09C3 /* ScheduleViewController.m */; };
 		8B9AF69F1858179900AC09C3 /* ScheduleViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8B9AF69D1858179900AC09C3 /* ScheduleViewController.xib */; };
 		8B9AF6A418581D3300AC09C3 /* AddScheduleViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B9AF6A218581D3300AC09C3 /* AddScheduleViewController.m */; };
@@ -789,8 +790,9 @@
 		8B9906FE1869817F0054966B /* camera_action_video_s.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = camera_action_video_s.png; sourceTree = "<group>"; };
 		8B9907001869824D0054966B /* camera_action_video_pressed.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = camera_action_video_pressed.png; sourceTree = "<group>"; };
 		8B9907011869824D0054966B /* camera_action_video.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = camera_action_video.png; sourceTree = "<group>"; };
-		8B99C0AD186AA75600DB8AAA /* camera_action_pause.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = camera_action_pause.png; sourceTree = "<group>"; };
-		8B99C0AE186AA75600DB8AAA /* camera_action_play.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = camera_action_play.png; sourceTree = "<group>"; };
+		8B99070418698AA40054966B /* camera_action_pause.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = camera_action_pause.png; sourceTree = "<group>"; };
+		8B99070518698AA40054966B /* camera_action_play.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = camera_action_play.png; sourceTree = "<group>"; };
+		8B99C0AB186A79B600DB8AAA /* img-checkbox.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "img-checkbox.png"; sourceTree = "<group>"; };
 		8B9AF69B1858179900AC09C3 /* ScheduleViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ScheduleViewController.h; sourceTree = "<group>"; };
 		8B9AF69C1858179900AC09C3 /* ScheduleViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ScheduleViewController.m; sourceTree = "<group>"; };
 		8B9AF69D1858179900AC09C3 /* ScheduleViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ScheduleViewController.xib; sourceTree = "<group>"; };
@@ -2433,6 +2435,7 @@
 		8B9C7DF1185F08AF0038B3A8 /* New Hubble Image */ = {
 			isa = PBXGroup;
 			children = (
+				8B99C0AB186A79B600DB8AAA /* img-checkbox.png */,
 				8B9906F718697E050054966B /* Camera_action */,
 				8B92C0E21868327C00538013 /* Menu_add_camera */,
 				8B92C0D91868315500538013 /* Menu_settings */,
@@ -2872,6 +2875,7 @@
 				3812F82D15C8BF3600DADFA6 /* bb_spk_icon.png in Resources */,
 				8BC0A0331844A91900A5FD52 /* splash_screen_portrait.png in Resources */,
 				3812F83915C8C3EE00DADFA6 /* bb_check_list.png in Resources */,
+				8B99C0AC186A79B600DB8AAA /* img-checkbox.png in Resources */,
 				8B9B57EE184F0DB200E58543 /* frame-4-1_update_new.png in Resources */,
 				3812F83B15C8C49000DADFA6 /* bb_line.png in Resources */,
 				8B1D544F186581CD008857F0 /* SchedulerCell.xib in Resources */,
