@@ -458,6 +458,7 @@
             // Configure the cell...
             
             cell.textLabel.text = @"Logout";
+            cell.textLabel.textColor = [UIColor blueColor];
             
             return cell;
         }

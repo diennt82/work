@@ -237,6 +237,17 @@
     [parent presentViewController:navController animated:NO completion:^{}];
 }
 
+- (IBAction)forgorPasswordTouchAction:(id)sender
+{
+    NSLog(@"Load fpwd");
+    //Load the next xib
+    ForgotPwdViewController *forgotPwdController = [[ForgotPwdViewController alloc]
+                           initWithNibName:@"ForgotPwdViewController" bundle:nil];
+    
+    [self.navigationController pushViewController:forgotPwdController animated:NO];
+    [forgotPwdController release];
+}
+
 - (IBAction)enterLoginTouchAction:(id)sender
 {
     _doneButtonPressed = YES;
@@ -614,7 +625,7 @@
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
 
-    return 2; 
+    return 1;
 }
 
 
