@@ -3752,9 +3752,7 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CODE_SIGN_ENTITLEMENTS = "";
-				CODE_SIGN_IDENTITY = "iPhone Developer: steve lee (BVQT22TERJ)";
-				"CODE_SIGN_IDENTITY[sdk=*]" = "iPhone Developer: steve lee (BVQT22TERJ)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: steve lee (BVQT22TERJ)";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Lai Shan Lam (RYP7CC8LQR)";
 				COPY_PHASE_STRIP = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -3796,7 +3794,7 @@
 				);
 				OTHER_LDFLAGS = "-lz";
 				PRODUCT_NAME = "Camera HD";
-				PROVISIONING_PROFILE = "E37E3038-7049-4B83-AC18-D81743EEEE8A";
+				PROVISIONING_PROFILE = "63252B4E-4C53-469E-85D1-9D9A9B1E18DE";
 				SDKROOT = iphoneos6.1;
 				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/../ios-frameworks/pjsip/arm/include/ $(SRCROOT)/../ios-frameworks/pjsip/arm/include/pj/ $(SRCROOT)/../ios-frameworks/pjsip/arm/include/pjnath/";
 				VALID_ARCHS = "armv6 armv7";
@@ -3808,8 +3806,7 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CODE_SIGN_ENTITLEMENTS = "";
-				CODE_SIGN_IDENTITY = "iPhone Developer: steve lee (BVQT22TERJ)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: steve lee (BVQT22TERJ)";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Lai Shan Lam (RYP7CC8LQR)";
 				COPY_PHASE_STRIP = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -3846,8 +3843,7 @@
 				);
 				OTHER_LDFLAGS = "-lz";
 				PRODUCT_NAME = "Camera HD";
-				PROVISIONING_PROFILE = "E37E3038-7049-4B83-AC18-D81743EEEE8A";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "E37E3038-7049-4B83-AC18-D81743EEEE8A";
+				PROVISIONING_PROFILE = "63252B4E-4C53-469E-85D1-9D9A9B1E18DE";
 				SDKROOT = iphoneos6.1;
 				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/../ios-frameworks/pjsip/arm/include/ $(SRCROOT)/../ios-frameworks/pjsip/arm/include/pj/ $(SRCROOT)/../ios-frameworks/pjsip/arm/include/pjnath/";
 				VALIDATE_PRODUCT = YES;
@@ -3884,8 +3880,7 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CODE_SIGN_ENTITLEMENTS = "";
-				CODE_SIGN_IDENTITY = "iPhone Developer: steve lee (BVQT22TERJ)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: steve lee (BVQT22TERJ)";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Lai Shan Lam (RYP7CC8LQR)";
 				COPY_PHASE_STRIP = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -3920,7 +3915,7 @@
 				);
 				OTHER_LDFLAGS = "-lz";
 				PRODUCT_NAME = "Camera HD";
-				PROVISIONING_PROFILE = "E37E3038-7049-4B83-AC18-D81743EEEE8A";
+				PROVISIONING_PROFILE = "63252B4E-4C53-469E-85D1-9D9A9B1E18DE";
 				RAMEWORK_SEARCH_PATHS = "$(inherited) \"$(SRCROOT)\"";
 				SDKROOT = iphoneos6.1;
 				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/../ios-frameworks/pjsip/arm/include/ $(SRCROOT)/../ios-frameworks/pjsip/arm/include/pj/ $(SRCROOT)/../ios-frameworks/pjsip/arm/include/pjnath/";
