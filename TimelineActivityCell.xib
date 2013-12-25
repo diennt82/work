@@ -14,7 +14,7 @@
                 <rect key="frame" x="0.0" y="0.0" width="320" height="196"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Timeline_line_.png" id="G03-mk-Fdg">
+                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="img_timeline_line.png" id="G03-mk-Fdg">
                         <rect key="frame" x="5" y="0.0" width="16" height="196"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" heightSizable="YES"/>
                     </imageView>
@@ -34,6 +34,10 @@
                         <fontDescription key="fontDescription" type="italicSystem" pointSize="15"/>
                         <nil key="highlightedColor"/>
                     </label>
+                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="img_timeline_dot.png" id="obk-aX-t34">
+                        <rect key="frame" x="6" y="22" width="13" height="13"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    </imageView>
                 </subviews>
             </tableViewCellContentView>
             <connections>
@@ -44,7 +48,8 @@
         </tableViewCell>
     </objects>
     <resources>
-        <image name="Timeline_line_.png" width="16" height="417"/>
         <image name="Timeline_snapshot.png" width="520" height="286"/>
+        <image name="img_timeline_dot.png" width="16" height="17"/>
+        <image name="img_timeline_line.png" width="8" height="410"/>
     </resources>
 </document>

@@ -103,7 +103,8 @@
 {
     //#warning Potentially incomplete method implementation.
     // Return the number of sections.
-    return 2;
+    tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+    return 3;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
@@ -112,25 +113,34 @@
     // Return the number of rows in the section.
     if (section == 0)
     {
+        return 1;
+    }
+    else if (section == 1)
+    {
         return _eventArray.count;
     }
     
     return 2;
 }
 
-- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
-{
-    if (section == 0)
-    {
-        return @"All is calm at home \n 09:30pm";
-    }
-    
-    return nil;
-}
+//- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
+//{
+//    if (section == 0)
+//    {
+//        return @"All is calm at home \n 09:30pm";
+//    }
+//    
+//    return nil;
+//}
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (indexPath.section == 0)
+    {
+        return 94;
+    }
+    
+    if (indexPath.section == 1)
     {
         if (indexPath.row == (_eventArray.count - 1))
         {
@@ -178,7 +188,8 @@
                 return 73;
             }
             
-            return iDate - oldIDate;
+            //return iDate - oldIDate;
+            return 197;
         }
         
         //return 73;
@@ -189,7 +200,8 @@
 
 - (BOOL)tableView:(UITableView *)tableView shouldHighlightRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (indexPath.section == 1)
+    if (indexPath.section == 0 ||
+        indexPath.section == 2)
     {
         return NO;
     }
@@ -201,6 +213,27 @@
 {
     if (indexPath.section == 0)
     {
+        static NSString *CellIdentifier = @"TimelineCell";
+        TimelineCell *cell = [self.tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+        
+        NSArray *objects = [[NSBundle mainBundle] loadNibNamed:@"TimelineCell" owner:nil options:nil];
+        
+        for (id curObj in objects)
+        {
+            
+            if([curObj isKindOfClass:[UITableViewCell class]])
+            {
+                cell = (TimelineCell *)curObj;
+                break;
+            }
+        }
+        
+        return cell;
+    }
+    
+    else if (indexPath.section == 1)
+    {
+        
         static NSString *CellIdentifier = @"TimelineActivityCell";
         TimelineActivityCell *cell = [self.tableView dequeueReusableCellWithIdentifier:CellIdentifier];
         
