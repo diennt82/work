@@ -166,6 +166,8 @@
     self.videoHeight = 0;
     
     [self becomeActive];
+    [self showMenuControlPanel];
+    [self tryToHideMenuControlPanel];
 }
 - (void)addGesturesPichInAndOut
 {
@@ -3865,6 +3867,10 @@
      3. melody, 
      4. temp
      */
+    
+    [self UpdateFullScreenTimer];
+    
+    
     if (index == INDEX_PAN_TILT) {
         //implement Pan, Tilt & zoom here
         _selectedItemMenu = INDEX_PAN_TILT;
@@ -4015,6 +4021,7 @@
     [_ib_buttonTouchToTalk release];
     [_ib_processRecordOrTakePicture release];
     [_ib_buttonChangeAction release];
+    [_ib_showMenuControlPanel release];
     [super dealloc];
 }
 - (void)viewWillAppear:(BOOL)animated
@@ -4205,6 +4212,11 @@
     [self user_release];
 }
 
+- (IBAction)bt_showMenuControlPanel:(id)sender {
+//    isShowControlPanel = YES;
+    [self tryToHideMenuControlPanel];
+}
+
 - (IBAction)processingRecordingOrTakePicture:(id)sender {
     UIImage *readyRecord = [UIImage imageNamed:@"camera_action_video.png"];
     UIImage *readyRecordPressed = [UIImage imageNamed:@"camera_action_video_pressed.png"];
@@ -4347,5 +4359,48 @@
 	[_alertInfo show];
 	[_alertInfo release];
     
+}
+
+#pragma mark -
+#pragma mark Hide & Show subfunction
+
+- (void) tryToHideMenuControlPanel
+{
+    
+    [self.ib_showMenuControlPanel setHidden:NO];
+    [self.horizMenu setHidden:NO];
+    [self UpdateFullScreenTimer];
+
+    
+}
+
+- (void) UpdateFullScreenTimer
+{
+    if (fullScreenTimer != nil)
+	{
+		//invalidate the timer ..
+        if ([fullScreenTimer isValid])
+        {
+            [fullScreenTimer invalidate];
+        }
+		fullScreenTimer = nil;
+	}
+	fullScreenTimer = [NSTimer scheduledTimerWithTimeInterval:10.0
+                                                       target:self
+                                                     selector:@selector(hideMenuControlPanelNow:)
+                                                     userInfo:nil
+                                                      repeats:NO];
+}
+
+- (void) hideMenuControlPanelNow: (NSTimer*) exp
+{
+    fullScreenTimer = nil;
+    [self.horizMenu setHidden:YES];
+    [self.ib_showMenuControlPanel setHidden:NO];
+}
+
+- (void) showMenuControlPanel
+{
+    [self.horizMenu setHidden:NO];
 }
 @end
