@@ -1,16 +1,14 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="4514" systemVersion="13A603" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="4514" systemVersion="12F45" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none">
     <dependencies>
         <deployment defaultVersion="1536" identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3746"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3747"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="H264PlayerViewController">
             <connections>
                 <outlet property="activityIndicator" destination="87" id="88"/>
                 <outlet property="activityStopStreamingProgress" destination="90" id="92"/>
-                <outlet property="backBarBtnItem" destination="38" id="40"/>
-                <outlet property="cameraNameBarBtnItem" destination="35" id="42"/>
                 <outlet property="horizMenu" destination="nTa-Ux-yAc" id="LjA-m3-wgi"/>
                 <outlet property="ib_ViewTouchToTalk" destination="0Cv-wD-bGw" id="Lv4-uh-jCJ"/>
                 <outlet property="ib_buttonChangeAction" destination="a87-FB-kFc" id="3qp-8W-gCx"/>
@@ -26,8 +24,6 @@
                 <outlet property="pickerHQOptions" destination="75" id="76"/>
                 <outlet property="playlistViewController" destination="80" id="85"/>
                 <outlet property="scrollView" destination="q8e-SH-sqy" id="DnR-XY-J8P"/>
-                <outlet property="segCtrl" destination="45" id="47"/>
-                <outlet property="topToolbar" destination="7" id="39"/>
                 <outlet property="view" destination="1" id="3"/>
                 <outlet property="viewStopStreamingProgress" destination="89" id="91"/>
             </connections>
@@ -38,11 +34,11 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <view alpha="0.80000001192092896" contentMode="scaleToFill" id="89">
-                    <rect key="frame" x="0.0" y="20" width="320" height="460"/>
+                    <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <subviews>
                         <activityIndicatorView opaque="NO" contentMode="scaleToFill" hidesWhenStopped="YES" animating="YES" style="whiteLarge" id="90">
-                            <rect key="frame" x="142" y="211" width="37" height="37"/>
+                            <rect key="frame" x="142" y="221" width="37" height="37"/>
                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                         </activityIndicatorView>
                     </subviews>
@@ -71,7 +67,6 @@
                         <imageView autoresizesSubviews="NO" userInteractionEnabled="NO" contentMode="scaleToFill" id="4">
                             <rect key="frame" x="0.0" y="0.0" width="320" height="180"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                         </imageView>
                     </subviews>
                 </scrollView>
@@ -85,30 +80,6 @@
                         <action selector="bt_showMenuControlPanel:" destination="-1" eventType="touchDown" id="GrA-kL-67m"/>
                     </connections>
                 </button>
-                <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" barStyle="blackTranslucent" id="7">
-                    <rect key="frame" x="0.0" y="20" width="320" height="44"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    <inset key="insetFor6xAndEarlier" minX="0.0" minY="20" maxX="0.0" maxY="-20"/>
-                    <items>
-                        <barButtonItem image="reveal-icon.png" style="plain" id="38"/>
-                        <barButtonItem style="plain" systemItem="flexibleSpace" id="36"/>
-                        <barButtonItem title="Cam" style="plain" id="35"/>
-                        <barButtonItem style="plain" systemItem="flexibleSpace" id="34"/>
-                        <barButtonItem style="plain" id="46">
-                            <segmentedControl key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="bar" selectedSegmentIndex="0" id="45">
-                                <rect key="frame" x="199" y="7" width="105" height="30"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <segments>
-                                    <segment title="Now"/>
-                                    <segment title="Earlier"/>
-                                </segments>
-                                <connections>
-                                    <action selector="segCtrlAction:" destination="-1" eventType="valueChanged" id="49"/>
-                                </connections>
-                            </segmentedControl>
-                        </barButtonItem>
-                    </items>
-                </toolbar>
                 <imageView userInteractionEnabled="NO" tag="999" contentMode="scaleToFill" image="camera_action_pan_bg.png" id="78">
                     <rect key="frame" x="100" y="360" width="120" height="120"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -222,7 +193,6 @@
         <image name="camera_action_mic.png" width="324" height="324"/>
         <image name="camera_action_pan_bg.png" width="208" height="208"/>
         <image name="camera_action_pic_s.png" width="90" height="90"/>
-        <image name="camera_action_video.png" width="324" height="324"/>
-        <image name="reveal-icon.png" width="22" height="17"/>
+        <image name="camera_action_video.png" width="216" height="216"/>
     </resources>
 </document>

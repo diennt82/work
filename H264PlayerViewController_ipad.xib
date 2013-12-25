@@ -1,16 +1,14 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.iPad.XIB" version="3.0" toolsVersion="4514" systemVersion="13A603" targetRuntime="iOS.CocoaTouch.iPad" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.iPad.XIB" version="3.0" toolsVersion="4514" systemVersion="12F45" targetRuntime="iOS.CocoaTouch.iPad" propertyAccessControl="none">
     <dependencies>
         <deployment defaultVersion="1536" identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3746"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3747"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="H264PlayerViewController">
             <connections>
                 <outlet property="activityIndicator" destination="YeU-B1-crq" id="6iX-zh-tlT"/>
                 <outlet property="activityStopStreamingProgress" destination="W2O-R1-p7T" id="eie-Fe-jmF"/>
-                <outlet property="backBarBtnItem" destination="OSN-2y-gyH" id="4eV-bz-uP5"/>
-                <outlet property="cameraNameBarBtnItem" destination="rSX-Xf-gMR" id="him-T0-ynf"/>
                 <outlet property="horizMenu" destination="YIt-si-GDq" id="s8I-HD-Zj6"/>
                 <outlet property="ib_ViewTouchToTalk" destination="Eac-uq-eTX" id="Wlx-K1-Kwd"/>
                 <outlet property="ib_buttonChangeAction" destination="rgq-Re-BwB" id="XlY-Yh-XV7"/>
@@ -26,8 +24,6 @@
                 <outlet property="pickerHQOptions" destination="Vzj-s2-bhG" id="lW3-Y9-wfg"/>
                 <outlet property="playlistViewController" destination="GC8-4Y-Omk" id="lkJ-6T-Lwg"/>
                 <outlet property="scrollView" destination="xsx-R1-x8v" id="gF2-Cc-0cF"/>
-                <outlet property="segCtrl" destination="R9k-7s-dUb" id="YxY-SO-Hdz"/>
-                <outlet property="topToolbar" destination="LPs-YB-cld" id="uqU-jW-LCV"/>
                 <outlet property="view" destination="KT0-i3-kTw" id="q7Z-xw-GQ3"/>
                 <outlet property="viewStopStreamingProgress" destination="huw-ip-zYb" id="7Om-HI-dp4"/>
             </connections>
@@ -38,7 +34,7 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <view alpha="0.80000001192092896" contentMode="scaleToFill" id="huw-ip-zYb">
-                    <rect key="frame" x="0.0" y="20" width="768" height="1004"/>
+                    <rect key="frame" x="0.0" y="0.0" width="768" height="1024"/>
                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                     <subviews>
                         <activityIndicatorView opaque="NO" contentMode="scaleToFill" hidesWhenStopped="YES" animating="YES" style="whiteLarge" id="W2O-R1-p7T">
@@ -86,30 +82,6 @@
                         <action selector="bt_showMenuControlPanel:" destination="-1" eventType="touchDown" id="MLd-7I-bo3"/>
                     </connections>
                 </button>
-                <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="LPs-YB-cld">
-                    <rect key="frame" x="0.0" y="20" width="768" height="44"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    <inset key="insetFor6xAndEarlier" minX="0.0" minY="20" maxX="0.0" maxY="-20"/>
-                    <items>
-                        <barButtonItem image="reveal-icon.png" style="plain" id="OSN-2y-gyH"/>
-                        <barButtonItem style="plain" systemItem="flexibleSpace" id="GnD-GM-4Np"/>
-                        <barButtonItem style="plain" id="rSX-Xf-gMR"/>
-                        <barButtonItem style="plain" systemItem="flexibleSpace" id="pMI-6n-BRa"/>
-                        <barButtonItem style="plain" id="dL2-36-mBS">
-                            <segmentedControl key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="bar" selectedSegmentIndex="0" id="R9k-7s-dUb">
-                                <rect key="frame" x="647" y="7" width="105" height="30"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <segments>
-                                    <segment title="Now"/>
-                                    <segment title="Earlier"/>
-                                </segments>
-                                <connections>
-                                    <action selector="segCtrlAction:" destination="-1" eventType="valueChanged" id="Z83-b6-Zms"/>
-                                </connections>
-                            </segmentedControl>
-                        </barButtonItem>
-                    </items>
-                </toolbar>
                 <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" id="YIt-si-GDq" customClass="ScrollHorizontalMenu">
                     <rect key="frame" x="94" y="406" width="580" height="60"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -218,7 +190,6 @@
         <image name="camera_action_mic.png" width="324" height="324"/>
         <image name="camera_action_pan_bg.png" width="208" height="208"/>
         <image name="camera_action_pic_s.png" width="90" height="90"/>
-        <image name="camera_action_video.png" width="324" height="324"/>
-        <image name="reveal-icon.png" width="22" height="17"/>
+        <image name="camera_action_video.png" width="216" height="216"/>
     </resources>
 </document>

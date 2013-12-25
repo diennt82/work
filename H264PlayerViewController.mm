@@ -10,7 +10,6 @@
 #import "EarlierViewController.h"
 
 #define DISABLE_VIEW_RELEASE_FLAG 1
-#define DELTA_HEIGHT_IMAGE_VIDEO 0
 
 #define D1 @"480p"
 #define HD1 @"720p-10"
@@ -51,8 +50,6 @@
 @interface H264PlayerViewController ()
 
 @property (retain, nonatomic) EarlierViewController *earlierVC;
-@property (nonatomic) NSInteger videoWidth;
-@property (nonatomic) NSInteger videoHeight;
 
 @property (retain, nonatomic) UIImageView *imageViewStreamer;
 
@@ -165,16 +162,9 @@
     [self addGesturesPichInAndOut];
     [self updateNavigationBarAndToolBar];
     
-    self.videoWidth = 0;
-    self.videoHeight = 0;
-    
-    self.imageViewStreamer = [[UIImageView alloc] initWithFrame:CGRectMake(_imageViewVideo.frame.origin.x, _imageViewVideo.frame.origin.y + DELTA_HEIGHT_IMAGE_VIDEO, _imageViewVideo.frame.size.width, _imageViewVideo.frame.size.height)];//  self.imageViewVideo;
-    //self.imageViewStreamer.image = [UIImage imageNamed:@"Snapshot"];
+    self.imageViewStreamer = [[UIImageView alloc] initWithFrame:_imageViewVideo.frame];
     [self.imageViewStreamer setBackgroundColor:[UIColor blackColor]];
-    //[self.view addSubview:_imageViewStreamer];
     [self.scrollView insertSubview:_imageViewStreamer aboveSubview:_imageViewVideo];
-    //[self.view bringSubviewToFront:_imageViewStreamer];
-    NSLog(@"%p, %f, %f, %f, %f", _imageViewStreamer, _imageViewStreamer.frame.origin.x, _imageViewStreamer.frame.origin.y, _imageViewStreamer.frame.size.width, _imageViewStreamer.frame.size.height);
     _imageViewVideo.hidden = YES;
     
     [self becomeActive];
@@ -506,8 +496,7 @@
 //            {
 //                h264Streamer->setVideoSurface(self.imageViewVideo);
 //            }
-            //self.imageViewStreamer.frame = _imageViewVideo.frame;
-            self.imageViewStreamer.frame = CGRectMake(_imageViewVideo.frame.origin.x, _imageViewVideo.frame.origin.y + DELTA_HEIGHT_IMAGE_VIDEO, _imageViewVideo.frame.size.width, _imageViewVideo.frame.size.height);
+            self.imageViewStreamer.frame = _imageViewVideo.frame;
 
             break;
         }
@@ -1284,7 +1273,7 @@
         [self.activityIndicator stopAnimating];
 //        self.backBarBtnItem.enabled = YES;
         //self.imageViewVideo.image = [UIImage imageNamed:@"camera_offline"];
-        self.imageViewStreamer.image = [UIImage imageNamed:@"Snapshot"];
+        self.imageViewStreamer.image = [UIImage imageNamed:@"ImgNotAvailable"];
         self.viewCtrlButtons.hidden = YES;
 //        self.imgViewDrectionPad.hidden= YES;
         self.viewStopStreamingProgress.hidden = YES;
@@ -1429,12 +1418,8 @@
         }
         
         //h264Streamer->setVideoSurface(self.imageViewVideo);
-        //[self.view addSubview:_imageViewStreamer];
-        [self.scrollView insertSubview:_imageViewStreamer aboveSubview:_imageViewVideo];
-        //[self.view bringSubviewToFront:_imageViewStreamer];
+        //[self.scrollView insertSubview:_imageViewStreamer aboveSubview:_imageViewVideo];
         h264Streamer->setVideoSurface(_imageViewStreamer);
-        self.videoWidth = _imageViewVideo.frame.size.width;
-        self.videoHeight = _imageViewVideo.frame.size.height;
         
         status=  h264Streamer->prepare();
         
@@ -3342,30 +3327,22 @@
 //    self.backBarBtnItem.target = self.stackViewController;
 //    self.backBarBtnItem.action = @selector(toggleLeftViewController);
     
-    //self.imageViewStreamer.frame = _imageViewVideo.frame;
-    self.imageViewStreamer.frame = CGRectMake(_imageViewVideo.frame.origin.x, _imageViewVideo.frame.origin.y + DELTA_HEIGHT_IMAGE_VIDEO, _imageViewVideo.frame.size.width, _imageViewVideo.frame.size.height);
+    self.imageViewStreamer.frame = _imageViewVideo.frame;
     self.imageViewVideo.hidden = YES;
-    //[self.view addSubview:_imageViewStreamer];
     [self.scrollView insertSubview:_imageViewStreamer aboveSubview:_imageViewVideo];
     
     if (h264Streamer != NULL)
     {
         //self.imageViewVideo.image = [UIImage imageNamed:@"add_camera.png"];
         //trigger re-cal of videosize
+        if (h264Streamer->isPlaying())
+        {
+            [self.activityIndicator stopAnimating];
+        }
+        
         h264Streamer->videoSizeChanged();
-//        if ((_videoWidth == 0 && _videoHeight == 0) ||
-//            ((_videoWidth >= _imageViewVideo.frame.size.width) && (_videoHeight >= _imageViewVideo.frame.size.height)))
-//        {
-//            h264Streamer->setVideoSurface(self.imageViewVideo);
-//            [_activityIndicator stopAnimating];
-//        }
        
     }
-    
-    NSLog(@"%p, %f, %f, %f, %f", _imageViewStreamer, _imageViewStreamer.frame.origin.x, _imageViewStreamer.frame.origin.y, _imageViewStreamer.frame.size.width, _imageViewStreamer.frame.size.height);
-    //[self.view addSubview:_imageViewStreamer];
-    //[self.scrollView insertSubview:_imageViewStreamer aboveSubview:_imageViewVideo];
-    //[self.view bringSubviewToFront:_imageViewStreamer];
     
 #if DISABLE_VIEW_RELEASE_FLAG
     self.playlistViewController.view.hidden = YES;
@@ -4017,7 +3994,7 @@
 
 
     [_imageViewVideo release];
-//    [_topToolbar release];
+   [_imageViewStreamer release];
 
     [_progressView release];
 
@@ -4066,8 +4043,7 @@
     _isProcessRecording = NO;
     _isListening = NO;
     [super viewWillAppear:animated];
-    //[self.view addSubview:_imageViewStreamer];
-    [self.scrollView insertSubview:_imageViewStreamer aboveSubview:_imageViewVideo];
+    //[self.scrollView insertSubview:_imageViewStreamer aboveSubview:_imageViewVideo];
     [self checkOrientation];
     
 }
