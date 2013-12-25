@@ -73,10 +73,10 @@
 		userInfo:nil
 		repeats:NO];
 
-    UIInterfaceOrientation interfaceOrientation = [UIApplication sharedApplication].statusBarOrientation;
+    //UIInterfaceOrientation interfaceOrientation = [UIApplication sharedApplication].statusBarOrientation;
 //    [self adjustViewsForOrientations:interfaceOrientation];
     
-    [self start_animation_with_orientation:interfaceOrientation];
+    //[self start_animation_with_orientation:interfaceOrientation];
 
 }
 
@@ -109,8 +109,8 @@
                                         [UIImage imageNamed:@"loader3.png"],
                                         [UIImage imageNamed:@"loader4.png"],
                                         nil];
-    self.splashScreen.animationDuration = 3.5;
-    self.splashScreen.animationRepeatCount = 1;
+    self.splashScreen.animationDuration = 1.5;
+    self.splashScreen.animationRepeatCount = 0;
     
     [_splashScreen startAnimating];
 }
@@ -428,7 +428,9 @@
 {
     [super viewWillAppear:animated];
     
-
+    UIInterfaceOrientation interfaceOrientation = [UIApplication sharedApplication].statusBarOrientation;
+    
+    [self start_animation_with_orientation:interfaceOrientation];
 }
 
 #pragma mark -
