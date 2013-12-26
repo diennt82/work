@@ -54,11 +54,12 @@
     self.navigationController.navigationBarHidden = YES;
     
     [self.createButton setBackgroundImage:[UIImage imageNamed:@"enter"] forState:UIControlStateNormal];
-    [self.createButton setBackgroundImage:[UIImage imageNamed:@"enter_pressed"] forState:UIControlEventTouchUpInside];
+    [self.createButton setBackgroundImage:[UIImage imageNamed:@"enter_pressed"] forState:UIControlEventTouchDown];
     
     [self.checkboxButton setTitle:@"" forState:UIControlStateNormal];
     [self.checkboxButton setTitle:@"√" forState:UIControlStateSelected];
     [self.checkboxButton setTitle:@"√" forState:UIControlStateHighlighted];
+
 #else
     self.navigationItem.title = NSLocalizedStringWithDefaultValue(@"Create_Account",nil, [NSBundle mainBundle],
                                                                   @"Create Account", nil);
@@ -103,11 +104,11 @@
     // clear a warning
 }
 
-- (IBAction)checkboxButtonTouchAction:(id)sender
+- (IBAction)checkboxButtonTouchAction:(UIButton *)sender
 {
     self.selectedCheckBox = !_selectedCheckBox;
     
-    [((UIButton *)sender) setSelected:_selectedCheckBox];
+    [sender setSelected:_selectedCheckBox];
     
     [self validateAllfieldsEnableSignUp];
 }
@@ -134,7 +135,7 @@
 
 -(BOOL)shouldAutorotate
 {
-    return YES;
+    return NO;
 }
 
 -(NSUInteger) supportedInterfaceOrientations
@@ -158,33 +159,6 @@
 -(void) adjustViewsForOrientations: (UIInterfaceOrientation) interfaceOrientation
 {
     
-//DO NOTHING HERE --- 
-    
-    
-    if (interfaceOrientation == UIInterfaceOrientationLandscapeLeft || interfaceOrientation == UIInterfaceOrientationLandscapeRight) {
-        
-        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
-        {
-
-        }
-        else
-        {
-
-        }
-    }
-    else if (interfaceOrientation == UIInterfaceOrientationPortrait || interfaceOrientation == UIInterfaceOrientationPortraitUpsideDown)
-    {
-        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
-        {
-
-            
-        }
-        else
-        {
-            
-        }
-    }
- 
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
