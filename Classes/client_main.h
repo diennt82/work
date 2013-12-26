@@ -19,7 +19,7 @@
 #include <sys/errno.h>
 
 #define STUN_SERVER_SIPGATE "stun.sipgate.net"
-#define STUN_SERVER "stun.hubble.in"
+#define STUN_SERVER "stun1.hubble.in"
 #define STUN_PORT    3478
 
 struct peer
