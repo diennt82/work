@@ -232,8 +232,8 @@
     //[parent presentModalViewController:navController animated:NO];
     
     [self.enterLoginButton setBackgroundImage:[UIImage imageNamed:@"enter"] forState:UIControlStateNormal];
-    [self.enterLoginButton setBackgroundImage:[UIImage imageNamed:@"enter_pressed"] forState:UIControlEventTouchUpInside];
-        
+    [self.enterLoginButton setBackgroundImage:[UIImage imageNamed:@"enter_pressed.png"] forState:UIControlEventTouchDown];
+    
     [parent presentViewController:navController animated:NO completion:^{}];
 }
 
