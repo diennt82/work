@@ -88,14 +88,14 @@
     self.schedulerVC = [[SchedulerViewController alloc] init];
     [self.schedulerVC setContentSizeForViewInPopover:CGSizeMake(UIScreen.mainScreen.bounds.size.width, 320)];
     
-    if (valueSchedulerSwitchs[0][0] == TRUE)
-    {
-        numOfRows[3] = 3;
-    }
-    else
-    {
-        numOfRows[3] = 2;
-    }
+//    if (valueSchedulerSwitchs[0][0] == TRUE)
+//    {
+//        numOfRows[3] = 3;
+//    }
+//    else
+//    {
+//        numOfRows[3] = 2;
+//    }
     
     if (valueSchedulerSwitchs[0][1] == TRUE)
     {
@@ -700,10 +700,16 @@
         {
             if (indexPath.row == 0)
             {
-                if (numOfRows[indexPath.section] == 1 ||
-                    numOfRows[indexPath.section == 2])
+                if (numOfRows[indexPath.section] == 1)
                 {
-                    numOfRows[indexPath.section] = 3;
+                    if (valueSchedulerSwitchs[0][0] == TRUE) // Scheduler on
+                    {
+                        numOfRows[indexPath.section] = 3;
+                    }
+                    else
+                    {
+                        numOfRows[indexPath.section] = 2;
+                    }
                 }
                 else
                 {
@@ -719,6 +725,7 @@
                 }
             }
         }
+            break;
             
         default:
             break;
