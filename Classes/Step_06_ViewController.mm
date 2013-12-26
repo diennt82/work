@@ -7,7 +7,7 @@
 //
 
 #import "Step_06_ViewController.h"
-
+#define TIME_INPUT_PASSWORD_AGAIN   20.0
 @interface Step_06_ViewController () <UITextFieldDelegate>
 
 @property (retain, nonatomic) UITextField *tfSSID;
@@ -19,6 +19,10 @@
 @implementation Step_06_ViewController
 
 @synthesize securityCell, ssidCell, passwordCell, confPasswordCell;
+@synthesize currentStateCamera = _currentStateCamera;
+@synthesize inputPasswordTimer = _inputPasswordTimer;
+@synthesize deviceConf = _deviceConf;
+@synthesize timeOut = _timeOut;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -682,9 +686,9 @@
     
     NSLog(@"SSID: %@   - %@", self.ssid, self.deviceConf.ssid );
     
-    DeviceConfiguration * sent_conf = [[DeviceConfiguration alloc] init];
+//    DeviceConfiguration * sent_conf = [[DeviceConfiguration alloc] init];
     
-    [sent_conf restoreConfigurationData:[Util readDeviceConfiguration]];
+    [_deviceConf restoreConfigurationData:[Util readDeviceConfiguration]];
     
     //create a http delegate, send the data thru delegate
     HttpCommunication  *deviceComm = [[HttpCommunication alloc]init];
@@ -693,28 +697,49 @@
     NSString *deviceCodec = [deviceComm sendCommandAndBlock:GET_CODECS_SUPPORT
                                 withTimeout:5.0];
     
-    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-    [userDefaults setObject:deviceCodec  forKey:CODEC_PREFS];
-    [userDefaults synchronize];
+    [[NSUserDefaults standardUserDefaults] setObject:deviceCodec  forKey:CODEC_PREFS];
+    [[NSUserDefaults standardUserDefaults] synchronize];
     
     
-    [deviceComm sendConfiguration:sent_conf];
+     NSString * device_configuration = [_deviceConf getDeviceConfString];
     
+    
+    NSString * setup_cmd = [NSString stringWithFormat:@"%@%@",
+                            SETUP_HTTP_CMD,device_configuration];
+    
+	NSLog(@"before send: %@", setup_cmd);
+    
+    
+	
+	//NSString * response =
+    [deviceComm sendCommandAndBlock:setup_cmd ];
+    
+    [self getStatusOfCameraToWifi:nil];
+    _timeOut =  [NSTimer scheduledTimerWithTimeInterval: TIME_INPUT_PASSWORD_AGAIN// after 60s if not get successful
+                                                 target:self
+                                               selector:@selector(showDialogPasswordWrong)
+                                               userInfo:nil
+                                                repeats:NO];
     [deviceComm release];
     
-    NSLog(@"Send & reset done");
+    NSLog(@"Don't Send & reset done");
 
     
-    userDefaults = [NSUserDefaults standardUserDefaults];
-    BOOL isFirstTimeSetup = [userDefaults boolForKey:FIRST_TIME_SETUP];
-  
+
+    
+}
+
+- (void)nextStepVerifyPassword
+{
+    BOOL isFirstTimeSetup = [[NSUserDefaults standardUserDefaults] boolForKey:FIRST_TIME_SETUP];
+    
     
     if (isFirstTimeSetup   == TRUE)
     {
-    
         
-            //load step 08
-        NSLog(@"Load step 8"); 
+        
+        //load step 08
+        NSLog(@"Load step 8");
         //Load the next xib
         Step_08_ViewController *step08ViewController = nil;
         
@@ -724,7 +749,7 @@
             step08ViewController = [[Step_08_ViewController alloc]
                                     initWithNibName:@"Step_08_ViewController_ipad" bundle:nil];
             
-
+            
             
         }
         else
@@ -734,11 +759,11 @@
             
             
         }
-
         
         
         
-        step08ViewController.ssid = sent_conf.ssid;
+        
+        step08ViewController.ssid = _deviceConf.ssid;
         [self.navigationController pushViewController:step08ViewController animated:NO];
         
         [step08ViewController release];
@@ -747,16 +772,16 @@
     else
     {
         //load step 10
-        NSLog(@"Add cam... "); 
-        NSLog(@"Load Step 10"); 
+        NSLog(@"Add cam... ");
+        NSLog(@"Load Step 10");
         
-        if (sent_conf.ssid != nil)
+        if (_deviceConf.ssid != nil)
         {
             NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-            [userDefaults setObject:sent_conf.ssid  forKey:HOME_SSID];
+            [userDefaults setObject:_deviceConf.ssid  forKey:HOME_SSID];
             [userDefaults synchronize];
         }
-
+        
         //Load the next xib
         
         Step_10_ViewController *step10ViewController = nil;
@@ -765,31 +790,58 @@
         if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
         {
             
-
+            
             step10ViewController = [[Step_10_ViewController alloc]
                                     initWithNibName:@"Step_10_ViewController_ipad" bundle:nil];
             
         }
         else
         {
-       
+            
             step10ViewController = [[Step_10_ViewController alloc]
                                     initWithNibName:@"Step_10_ViewController" bundle:nil];
             
         }
-
         
         
-        [self.navigationController pushViewController:step10ViewController animated:NO];    
+        
+        [self.navigationController pushViewController:step10ViewController animated:NO];
         [step10ViewController release];
         
         
     }
+}
+- (void)getStatusOfCameraToWifi:(NSTimer *)info
+{
+    //create a http delegate, send the data thru delegate
+    HttpCommunication  *httpCom = [[HttpCommunication alloc]init];
+    NSString *commandGetState = GET_STATE_NETWORK_CAMERA;
+    NSLog(@"command is %@", commandGetState);
+    NSString *state = [httpCom sendCommandAndBlock:commandGetState];
+    if (state != nil && [state length] > 0)
+    {
+        _currentStateCamera = [[state componentsSeparatedByString:@": "] objectAtIndex:1];
+    }
+    else{
+        _currentStateCamera = @"";
+    }
+
+    NSLog(@"_currentStateCamera is %@", _currentStateCamera);
     
-    [sent_conf release];
+    // get state network of camera after 4s
+    _inputPasswordTimer = [NSTimer scheduledTimerWithTimeInterval: 3.0//
+                                     target:self
+                                   selector:@selector(getStatusOfCameraToWifi:)
+                                   userInfo:nil
+                                    repeats:NO];
+    if ([_currentStateCamera isEqualToString:@"CONNECTED"])
+    {
+        [self resetAllTimer];
+        [self nextStepVerifyPassword];
+    }
+    
     
 }
-
 
 - (BOOL) restoreDataIfPossible
 {
@@ -807,6 +859,51 @@
 	return FALSE;
 }
 
+- (void)showDialogPasswordWrong
+{
+    NSLog(@"pass is wrong: %@ ", self.password);
+    _timeOut = nil;
+    NSString * msg_pw_wrong = @"Password input don't correctly, try again";
+    //ERROR condition
+    UIAlertView *_alert = [[UIAlertView alloc]
+                           initWithTitle:@"Confirm Password Failed"
+                           message:msg_pw_wrong
+                           delegate:self
+                           cancelButtonTitle:@"Cancel"
+                           otherButtonTitles:@"Ok", nil];
+    [_alert show];
+    [_alert release];
+}
 
-
+- (void)alertView:(UIAlertView *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex {
+    // the user clicked one of the OK/Cancel buttons
+    if (buttonIndex == 0)
+    {
+        NSLog(@"ok");
+        [self resetAllTimer];
+        [self getStatusOfCameraToWifi:nil];
+        _timeOut =  [NSTimer scheduledTimerWithTimeInterval: TIME_INPUT_PASSWORD_AGAIN// after 60s if not get successful
+                                                     target:self
+                                                   selector:@selector(showDialogPasswordWrong)
+                                                   userInfo:nil
+                                                    repeats:NO];
+    }
+    else
+    {
+        NSLog(@"cancel");
+    }
+}
+- (void)resetAllTimer
+{
+    if (_timeOut != nil)
+    {
+        [_timeOut invalidate];
+        _timeOut = nil;
+    }
+    if (_inputPasswordTimer)
+    {
+        [_inputPasswordTimer invalidate];
+        _inputPasswordTimer = nil;
+    }
+}
 @end

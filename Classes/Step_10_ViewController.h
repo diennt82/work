@@ -58,12 +58,15 @@
     BOOL shouldStopScanning;
     NSTimer * timeOut;
     
+    
 }
 
 @property (nonatomic,assign) IBOutlet UILabel * homeSSID;
 @property (nonatomic, assign) IBOutlet UIView * progressView; 
 @property (nonatomic, assign) IBOutlet UILabel * userNameLabel;
 @property (nonatomic, assign) IBOutlet UILabel * userEmailLabel,  * cameraName;
+
+
 //@property (nonatomic, assign) IBOutlet UIView * setupFailView, *setupCompleteView;
 
 @property (nonatomic, retain) NSString *cameraMac,  *master_key; 

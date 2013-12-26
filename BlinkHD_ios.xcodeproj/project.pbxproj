@@ -75,7 +75,6 @@
 		38B85E4F15CFA4DC00E5A1FA /* Step_07_tableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 38B85E4E15CFA4DC00E5A1FA /* Step_07_tableViewCell.xib */; };
 		38B85E5415CFAA7F00E5A1FA /* Step_07_ViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 38B85E5215CFAA7E00E5A1FA /* Step_07_ViewController.mm */; };
 		38C79E1F15C26270006EE378 /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = 38C79E1D15C25F90006EE378 /* Reachability.m */; };
-		38C79E2215C26947006EE378 /* Step_10_ViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 38C79E2115C26947006EE378 /* Step_10_ViewController.mm */; };
 		38C7A72515CA75AC00564BCA /* camera_online.png in Resources */ = {isa = PBXBuildFile; fileRef = 38C7A72215CA75AC00564BCA /* camera_online.png */; };
 		38C7DE7A165DDF9E00926EA1 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 38C7DE79165DDF9E00926EA1 /* Default-568h@2x.png */; };
 		38CA70A715F7669D002CD1C5 /* NSData+Conversion.m in Sources */ = {isa = PBXBuildFile; fileRef = 38CA70A515F75E53002CD1C5 /* NSData+Conversion.m */; };
@@ -407,6 +406,7 @@
 		A19778ED181E3316007C3CA7 /* ZoneViewController_ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = A19778EC181E3316007C3CA7 /* ZoneViewController_ipad.xib */; };
 		A19778F9181E6C55007C3CA7 /* motion_detection_off_1.png in Resources */ = {isa = PBXBuildFile; fileRef = A19778F7181E6C55007C3CA7 /* motion_detection_off_1.png */; };
 		A19778FB181E6CAB007C3CA7 /* motion_detection_on.png in Resources */ = {isa = PBXBuildFile; fileRef = A19778FA181E6CAB007C3CA7 /* motion_detection_on.png */; };
+		A19E79F6186BDA590007513D /* Step_10_ViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = A19E79F4186BDA590007513D /* Step_10_ViewController.mm */; };
 		A1A98E8F180BF5AA00C8EBD3 /* client_main.c in Sources */ = {isa = PBXBuildFile; fileRef = A1A98E8B180BF5AA00C8EBD3 /* client_main.c */; };
 		A1A98E90180BF5AA00C8EBD3 /* StunClient.m in Sources */ = {isa = PBXBuildFile; fileRef = A1A98E8E180BF5AA00C8EBD3 /* StunClient.m */; };
 		A1E32FAD17E9899800504538 /* H264PlayerListener.mm in Sources */ = {isa = PBXBuildFile; fileRef = A1E32FAB17E9899800504538 /* H264PlayerListener.mm */; };
@@ -544,8 +544,6 @@
 		38B85E5215CFAA7E00E5A1FA /* Step_07_ViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = Step_07_ViewController.mm; sourceTree = "<group>"; };
 		38C79E1C15C25F90006EE378 /* Reachability.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Reachability.h; sourceTree = "<group>"; };
 		38C79E1D15C25F90006EE378 /* Reachability.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Reachability.m; sourceTree = "<group>"; };
-		38C79E2015C26947006EE378 /* Step_10_ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Step_10_ViewController.h; sourceTree = "<group>"; };
-		38C79E2115C26947006EE378 /* Step_10_ViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = Step_10_ViewController.mm; sourceTree = "<group>"; };
 		38C7A72215CA75AC00564BCA /* camera_online.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = camera_online.png; sourceTree = "<group>"; };
 		38C7DE79165DDF9E00926EA1 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
 		38CA70A315F75E15002CD1C5 /* NSData+Conversion.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSData+Conversion.h"; sourceTree = "<group>"; };
@@ -993,6 +991,8 @@
 		A19778EC181E3316007C3CA7 /* ZoneViewController_ipad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ZoneViewController_ipad.xib; sourceTree = "<group>"; };
 		A19778F7181E6C55007C3CA7 /* motion_detection_off_1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = motion_detection_off_1.png; sourceTree = "<group>"; };
 		A19778FA181E6CAB007C3CA7 /* motion_detection_on.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = motion_detection_on.png; sourceTree = "<group>"; };
+		A19E79F4186BDA590007513D /* Step_10_ViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = Step_10_ViewController.mm; sourceTree = "<group>"; };
+		A19E79F5186BDA590007513D /* Step_10_ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Step_10_ViewController.h; sourceTree = "<group>"; };
 		A1A98E8B180BF5AA00C8EBD3 /* client_main.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = client_main.c; sourceTree = "<group>"; };
 		A1A98E8C180BF5AA00C8EBD3 /* client_main.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = client_main.h; sourceTree = "<group>"; };
 		A1A98E8D180BF5AA00C8EBD3 /* StunClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StunClient.h; sourceTree = "<group>"; };
@@ -2577,8 +2577,8 @@
 			children = (
 				38DE1C7A168AEAF30049E814 /* Step_10_ViewController.xib */,
 				38DE1C75168AEAE70049E814 /* Step_10_ViewController_ipad.xib */,
-				38C79E2015C26947006EE378 /* Step_10_ViewController.h */,
-				38C79E2115C26947006EE378 /* Step_10_ViewController.mm */,
+				A19E79F5186BDA590007513D /* Step_10_ViewController.h */,
+				A19E79F4186BDA590007513D /* Step_10_ViewController.mm */,
 			);
 			name = Step_10;
 			sourceTree = "<group>";
@@ -3254,6 +3254,7 @@
 				8B91E6541862FE540041BA9D /* MenuCameraViewController.m in Sources */,
 				97D00812159D9FF500B1D92F /* WifiEntry.m in Sources */,
 				97D0081C159DA24400B1D92F /* WifiListParser.m in Sources */,
+				A19E79F6186BDA590007513D /* Step_10_ViewController.mm in Sources */,
 				8B9899AD1859771800AC3852 /* CameraNameViewController.m in Sources */,
 				8B93848D1856EC58009C4771 /* CameraStngsCell.m in Sources */,
 				A1A98E90180BF5AA00C8EBD3 /* StunClient.m in Sources */,

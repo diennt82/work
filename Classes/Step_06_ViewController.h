@@ -14,16 +14,25 @@
 #import "Step_08_ViewController.h"
 #import "Step_07_ViewController.h"
 
-@interface Step_06_ViewController : UIViewController
+@interface Step_06_ViewController : UIViewController<UIAlertViewDelegate>
 {
     
     IBOutlet UITableViewCell * ssidCell;
     IBOutlet UITableViewCell * securityCell;
     IBOutlet UITableViewCell * passwordCell;
     IBOutlet UITableViewCell * confPasswordCell;
+    //current state of camera
+    NSString *_currentStateCamera;
+    NSTimer *_inputPasswordTimer;
+    DeviceConfiguration *_deviceConf;
+    NSTimer *_timeOut;
     
 }
-
+//
+@property (nonatomic, strong) NSString *currentStateCamera;
+//timeout input password
+@property (nonatomic, strong) NSTimer *inputPasswordTimer;
+@property (nonatomic, strong) NSTimer *timeOut;
 @property (nonatomic, assign) IBOutlet UITableViewCell * ssidCell;
 @property (nonatomic, assign) IBOutlet UITableViewCell * securityCell;
 @property (nonatomic, assign) IBOutlet UITableViewCell * passwordCell;

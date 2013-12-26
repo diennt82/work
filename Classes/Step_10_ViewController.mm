@@ -26,7 +26,6 @@
 @synthesize  timeOut;
 
 
-
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
@@ -49,7 +48,13 @@
     //[cameraName release];
     [super dealloc];
 }
-
+- (void)sendCommandRebootCamera
+{
+    NSLog(@"Send command reset camera");
+    HttpCommunication *comm = [[HttpCommunication alloc]init];
+    NSString * command = RESTART_HTTP_CMD;
+    [comm sendCommandAndBlock:command];
+}
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -91,7 +96,6 @@
     }
     else //not first time --> this is normal add camera sequence..
     {
-        [self startAnimationWithOrientation];
         //Hide back button -- can't go back now..
         self.navigationItem.hidesBackButton = TRUE;
         
@@ -106,11 +110,14 @@
         
         
         [self.view addSubview:self.progressView];
-        self.progressView.hidden = YES;
-        [self.view addSubview:cameraAddedView];
+        self.progressView.hidden = NO;
+
         self.homeSSID.text = homeSsid;
         
-        [NSTimer scheduledTimerWithTimeInterval: 3.0//
+        [self sendCommandRebootCamera];
+        
+        //move this code into getStatusOfCamera
+        [NSTimer scheduledTimerWithTimeInterval: 10.0//
                                          target:self
                                        selector:@selector(checkConnectionToHomeWifi:)
                                        userInfo:nil
@@ -321,16 +328,7 @@
     [step02ViewController release];
     
 }
-- (void)sendCommandCheckStatusCameraToWifi
-{
-    //create a http delegate, send the data thru delegate
-    HttpCommunication  *deviceComm = [[HttpCommunication alloc]init];
-    
-    
-    NSString *deviceCodec = [deviceComm sendCommandAndBlock:GET_STATUS_NETWORK_CAMERA
-                                                withTimeout:5.0];
-    
-}
+
 - (IBAction)registerCamera:(id)sender
 {
     self.progressView.hidden = NO;
@@ -372,6 +370,7 @@
 //                              andFwVersion:fwVersion
 //                               andTimeZone:stringFromDate
 //                                 andApiKey:apiKey];
+    NSLog(@"Mac address and cam name is %@, %@", mac, camName);
 
     //Api
     [jsonComm registerDeviceWithDeviceModelID:@"5"
@@ -408,10 +407,9 @@
     
 }
 
-
-
 - (void) checkConnectionToHomeWifi:(NSTimer *) expired
 {
+
     if (shouldStopScanning == TRUE)
     {
 
@@ -430,7 +428,8 @@
     
     
     
-    NSLog(@"checkConnectionToHomeWifi 03: %@", currentSSID);
+    NSLog(@"check ConnectionToHomeWifi 03: %@", currentSSID);
+        NSLog(@"check ConnectionToHomeWifi : %@ and homeSsid: %@", currentSSID, homeSsid);
 	if ([currentSSID isEqualToString:homeSsid])
 	{
 		//yeah we're connected ... check for ip??
@@ -467,6 +466,11 @@
 		}
 		
 	}
+    else{
+        [self.progressView setHidden:YES];
+        [self startAnimationWithOrientation];
+        [self.view addSubview:cameraAddedView];
+    }
 	   
     //check back later..
     [NSTimer scheduledTimerWithTimeInterval: 3.0//
@@ -474,9 +478,8 @@
                                    selector:@selector(checkConnectionToHomeWifi:)
                                    userInfo:nil
                                     repeats:NO];
-	
-}
 
+}
 
 #pragma mark -
 
@@ -817,7 +820,7 @@
     
 	// 2 of 3. wait for the camera to reboot completely
 	
-	[NSTimer scheduledTimerWithTimeInterval: 30.0//camera reboot time about 50secs
+	[NSTimer scheduledTimerWithTimeInterval: 30.0//camera reboot time about 50secs //change 30 to 3.0
 									 target:self
 								   selector:@selector(wait_for_camera_to_reboot:)
 								   userInfo:nil
@@ -958,10 +961,5 @@
 	}
 	    
 }
-
-
-#pragma mark -
-
-
 
 @end
