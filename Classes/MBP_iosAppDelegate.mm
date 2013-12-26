@@ -6,6 +6,8 @@
 //  Copyright 2011 __MyCompanyName__. All rights reserved.
 //
 
+#define DISABLE_VIEW_RELEASE_FLAG 1
+
 #import "MBP_iosAppDelegate.h"
 
 
@@ -178,7 +180,10 @@
         if ( [application applicationState] == UIApplicationStateActive)
         {
             //App is running now
+#if DISABLE_VIEW_RELEASE_FLAG
+#else
             shouldStoreAlert = [viewController pushNotificationRcvedInForeground: camAlert];
+#endif
             
         }
         

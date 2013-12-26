@@ -2168,6 +2168,13 @@
 			name = HubbleNotifView;
 			sourceTree = "<group>";
 		};
+		8B917274186C04AA007754F3 /* Home */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Home;
+			sourceTree = "<group>";
+		};
 		8B91E6501862FD580041BA9D /* Camera Settings */ = {
 			isa = PBXGroup;
 			children = (
@@ -2440,6 +2447,7 @@
 		8B9C7DF1185F08AF0038B3A8 /* New Hubble Image */ = {
 			isa = PBXGroup;
 			children = (
+				8B917274186C04AA007754F3 /* Home */,
 				8B99C0B1186ABB7900DB8AAA /* ImgNotAvailable.png */,
 				8B99C0AB186A79B600DB8AAA /* img-checkbox.png */,
 				8B9906F718697E050054966B /* Camera_action */,

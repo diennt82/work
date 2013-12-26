@@ -335,6 +335,7 @@
         
         cell.camerasCellDelegate = self;
         cell.rowIndex = indexPath.row;
+        cell.backgroundColor = [UIColor blackColor];
         
         CamChannel *ch = (CamChannel *)[_camChannels objectAtIndex:indexPath.row];
         

@@ -1256,14 +1256,14 @@
                 {
                     
                     //Feed in data now
-                    notifVC.cameraMacNoColon = @"34159E8D4F7F";//latestCamAlert.cameraMacNoColon;
-                    notifVC.cameraName  = @"SharedCam8D4F7F";//latestCamAlert.cameraName;
-                    notifVC.alertType   = @"4";//latestCamAlert.alertType;
-                    notifVC.alertVal    = @"20130921064439810";//latestCamAlert.alertVal;
+                    notifVC.cameraMacNoColon = latestCamAlert.cameraMacNoColon;// @"34159E8D4F7F";//latestCamAlert.cameraMacNoColon;
+                    notifVC.cameraName  = latestCamAlert.cameraName;//@"SharedCam8D4F7F";//latestCamAlert.cameraName;
+                    notifVC.alertType   = latestCamAlert.alertType;//@"4";//latestCamAlert.alertType;
+                    notifVC.alertVal    = latestCamAlert.alertVal;//@"20130921064439810";//latestCamAlert.alertVal;
                     
                     notifVC.NotifDelegate = self;
                     
-                    //[latestCamAlert release];
+                    [latestCamAlert release];
                     latestCamAlert = nil;
                 }
                 
