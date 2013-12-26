@@ -14,9 +14,10 @@
                 <rect key="frame" x="0.0" y="0.0" width="320" height="167"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Snapshot.png" id="puy-fN-bmZ">
+                    <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Snapshot.png" id="puy-fN-bmZ">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="169"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                     </imageView>
                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="camera.png" id="EgT-5u-yrU">
                         <rect key="frame" x="15" y="120" width="41" height="35"/>

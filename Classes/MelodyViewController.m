@@ -169,6 +169,7 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
+    tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
 	return 1;
 }
 
@@ -199,11 +200,11 @@
 {
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
     {
-        return 110;
+        return 60;
     }
     else
     {
-        return 30;
+        return 44;
     }
 }
 
