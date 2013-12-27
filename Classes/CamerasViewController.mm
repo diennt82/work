@@ -19,7 +19,7 @@
 
 @property (retain, nonatomic) IBOutlet UITableViewCell *addCameraCell;
 
-@property (assign, nonatomic) MenuViewController *parentVC;
+//@property (assign, nonatomic) MenuViewController *parentVC;
 
 @property (retain, nonatomic) UIImage *snapshotImg;
 @property (nonatomic) BOOL isFirttime;
@@ -116,42 +116,45 @@
     [addBtn setImage:[UIImage imageNamed:@"add_camera"] forState:UIControlStateNormal];
     [addBtn setImage:[UIImage imageNamed:@"add_camera_pressed"] forState:UIControlEventTouchUpInside];
     
-    if (!_isFirttime) //revert
+    if (UIDevice.currentDevice.systemVersion.floatValue >= 7.0 )
     {
-        self.isFirttime = TRUE;
-        
-        if (self.camChannels != nil &&
-            self.camChannels.count > 0)
+        if (!_isFirttime) //revert
         {
-            CamChannel *ch = (CamChannel *)[self.camChannels objectAtIndex:0];
+            self.isFirttime = TRUE;
             
-            [CameraAlert clearAllAlertForCamera:ch.profile.mac_address];
-            [UIApplication sharedApplication].idleTimerDisabled = YES;
+            if (self.camChannels != nil &&
+                self.camChannels.count > 0)
+            {
+                CamChannel *ch = (CamChannel *)[self.camChannels objectAtIndex:0];
+                
+                [CameraAlert clearAllAlertForCamera:ch.profile.mac_address];
+                [UIApplication sharedApplication].idleTimerDisabled = YES;
+                
+                NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+                [userDefaults setObject:ch.profile.mac_address forKey:CAM_IN_VEW];
+                [userDefaults synchronize];
+                
+                H264PlayerViewController *h264PlayerViewController = [[H264PlayerViewController alloc] init];
+                
+                h264PlayerViewController.selectedChannel = ch;
+                h264PlayerViewController.h264PlayerVCDelegate = self;
+                
+                NSLog(@"%@, %@, %@", self.parentViewController.description, self.parentViewController.parentViewController, ((MenuViewController *)self.parentVC).navigationController);
+                
+                //MenuViewController *tabBarController = (MenuViewController *)self.parentViewController;
+                
+                [((MenuViewController *)self.parentVC).navigationController pushViewController:h264PlayerViewController animated:YES];
+                [h264PlayerViewController release];
+            }
             
-            NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-            [userDefaults setObject:ch.profile.mac_address forKey:CAM_IN_VEW];
-            [userDefaults synchronize];
-            
-            H264PlayerViewController *h264PlayerViewController = [[H264PlayerViewController alloc] init];
-            
-            h264PlayerViewController.selectedChannel = ch;
-            h264PlayerViewController.h264PlayerVCDelegate = self;
-            
-            NSLog(@"%@, %@", self.parentViewController.description, self.parentViewController.parentViewController);
-            
-            //MenuViewController *tabBarController = (MenuViewController *)self.parentViewController;
-            
-            [self.parentVC.navigationController pushViewController:h264PlayerViewController animated:YES];
-            [h264PlayerViewController release];
         }
-        
     }
     
 }
 
 - (void)viewWillAppear:(BOOL)animated
 {
-    self.view.frame = CGRectMake(0, 100, self.view.frame.size.width, self.view.frame.size.height);
+    //self.view.frame = CGRectMake(0, 100, self.view.frame.size.width, self.view.frame.size.height);
     [super viewWillAppear:animated];
     self.navigationController.navigationBarHidden = YES;
 }
@@ -166,7 +169,7 @@
         
         NSLog(@"addCameraButtonTouchAction: %@", self.camerasDelegate);
         //MenuViewController *tabBarController = (MenuViewController *)self.parentViewController;
-        [self.parentVC.menuDelegate sendStatus:SETUP_CAMERA];//initial setup
+        [((MenuViewController *)self.parentVC).menuDelegate sendStatus:SETUP_CAMERA];//initial setup
         
     }
     else
@@ -182,9 +185,9 @@
     MenuCameraViewController *menuCamersVC = [[MenuCameraViewController alloc] init];
     menuCamersVC.camChannel = (CamChannel *)[self.camChannels objectAtIndex:rowIdx];
     
-    menuCamersVC.menuCamerasDelegate = self.parentVC.menuDelegate;
+    menuCamersVC.menuCamerasDelegate = ((MenuViewController *)self.parentVC).menuDelegate;
     
-    [self.parentVC.navigationController pushViewController:menuCamersVC animated:YES];
+    [((MenuViewController *)self.parentVC).navigationController pushViewController:menuCamersVC animated:YES];
     
     [menuCamersVC release];
 }
@@ -268,7 +271,7 @@
         
         //MenuViewController *tabBarController = (MenuViewController *)self.parentViewController;
         
-        [self.parentVC.navigationController pushViewController:h264PlayerViewController animated:YES];
+        [((MenuViewController *)self.parentVC).navigationController pushViewController:h264PlayerViewController animated:YES];
         [h264PlayerViewController release];
     }
 }
@@ -449,7 +452,7 @@
     h264PlayerViewController.h264PlayerVCDelegate = self;
     
     //MenuViewController *tabBarController = (MenuViewController *)self.parentViewController;
-    [self.parentVC.navigationController pushViewController:h264PlayerViewController animated:YES];
+    [((MenuViewController *)self.parentVC).navigationController pushViewController:h264PlayerViewController animated:YES];
     [h264PlayerViewController release];
 }
 

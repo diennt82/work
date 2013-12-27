@@ -13,7 +13,7 @@
 @interface CamerasViewController : UITableViewController
 
 @property (assign, nonatomic) id<ConnectionMethodDelegate> camerasDelegate;
-//@property (assign, nonatomic) MenuViewController *parentVC;
+@property (assign, nonatomic) id parentVC;
 //@property (assign, nonatomic) UIViewController *parentVC;
 @property (retain, nonatomic) NSMutableArray *camChannels;
 

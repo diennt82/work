@@ -122,6 +122,8 @@
     
     self.pickerHQOptions.delegate = self;
     self.pickerHQOptions.dataSource = self;
+    self.pickerHQOptions.hidden = YES;
+    self.pickerHQOptions.userInteractionEnabled = NO;
     
     //self.barBntItemReveal.target = [self stackViewController];
     
@@ -3405,6 +3407,8 @@
     
 #if DISABLE_VIEW_RELEASE_FLAG
     self.playlistViewController.view.hidden = YES;
+    self.pickerHQOptions.hidden = YES;
+    self.pickerHQOptions.userInteractionEnabled = NO;
 #endif
 }
 
