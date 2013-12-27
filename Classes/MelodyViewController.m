@@ -169,21 +169,30 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+    tableView.separatorColor = [UIColor clearColor];
+    [tableView setBackgroundColor:[UIColor clearColor]];
 	return 1;
+}
+
+-(void) tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    cell.textLabel.alpha = 0.4;
+    cell.imageView.alpha = 0.4;
+    cell.accessoryView.alpha = 0.4;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
-    [tableView setBackgroundColor:[UIColor clearColor]];
     static NSString *CellIdentifier = @"Cell";
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     if (cell == nil) {
         cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
     }
-    [cell setBackgroundColor:[UIColor clearColor]];
+    
     // Configure the cell...
     cell.textLabel.text = (NSString *) [_melodies objectAtIndex:indexPath.row];
+    cell.backgroundColor = [UIColor whiteColor];
+    cell.alpha = 0.3f;
     
     if (valueMelodiesMap[indexPath.row] == TRUE)
     {
@@ -196,6 +205,7 @@
     
     return cell;
 }
+
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
