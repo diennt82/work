@@ -3226,11 +3226,6 @@
 
 - (void) adjustViewsForOrientation:(UIInterfaceOrientation)orientation
 {
-//    if (h264Streamer != NULL)
-//    {
-//        h264Streamer->setVideoSurface(nil);
-//    }
-    
     [self resetZooming];
     CGRect screenBounds = [[UIScreen mainScreen] bounds];
     CGFloat screenWidth = screenBounds.size.width;
@@ -3293,7 +3288,8 @@
             }
             
         }
-        [self updateBottomView];
+        //[self updateBottomView];
+        
         [self.melodyViewController.view removeFromSuperview];
         
         CGFloat imageViewHeight = screenHeight * 9 / 16;
@@ -3348,7 +3344,7 @@
         
         //portrait mode
         //[self updateNavigationBarAndToolBar];
-        [self updateBottomView];
+        //[self updateBottomView];
         [self.navigationController setNavigationBarHidden:NO];
         [[UIApplication sharedApplication] setStatusBarHidden:NO];
         self.view.backgroundColor = [UIColor whiteColor];
@@ -3386,9 +3382,12 @@
     //self.imageViewVideo.hidden = YES;
     [self.scrollView insertSubview:_imageViewStreamer aboveSubview:_imageViewVideo];
     
+    [self hideControlMenu];
+    [self.activityIndicator startAnimating];
+    [self.view bringSubviewToFront:_activityIndicator];
+    
     if (h264Streamer != NULL)
     {
-        //self.imageViewVideo.image = [UIImage imageNamed:@"add_camera.png"];
         //trigger re-cal of videosize
         if (h264Streamer->isPlaying())
         {
