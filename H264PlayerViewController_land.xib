@@ -16,7 +16,6 @@
                 <outlet property="ib_labelRecordVideo" destination="FmF-hY-zpf" id="VSj-Ng-OCE"/>
                 <outlet property="ib_labelTouchToTalk" destination="Iqs-XW-DXM" id="Hnn-2v-8sl"/>
                 <outlet property="ib_processRecordOrTakePicture" destination="GnV-0e-uit" id="uwE-Mx-ad9"/>
-                <outlet property="ib_showMenuControlPanel" destination="KHH-Lx-Qzt" id="fYE-TT-MIm"/>
                 <outlet property="ib_temperature" destination="YH6-sq-ZAV" id="prx-2O-QfZ"/>
                 <outlet property="ib_viewRecordTTT" destination="bNK-hA-T2Y" id="H0Z-Eu-Lz5"/>
                 <outlet property="imageViewVideo" destination="kJh-sp-2JE" id="7ha-n9-TOc"/>
@@ -70,16 +69,6 @@
                         </imageView>
                     </subviews>
                 </scrollView>
-                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="KHH-Lx-Qzt">
-                    <rect key="frame" x="0.0" y="0.0" width="580" height="320"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    <state key="normal">
-                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                    </state>
-                    <connections>
-                        <action selector="bt_showMenuControlPanel:" destination="-1" eventType="touchDown" id="oQB-8s-auF"/>
-                    </connections>
-                </button>
                 <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Meo-mp-L42" customClass="ScrollHorizontalMenu">
                     <rect key="frame" x="68" y="264" width="320" height="41"/>
                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>

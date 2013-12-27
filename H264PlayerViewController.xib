@@ -16,7 +16,6 @@
                 <outlet property="ib_labelRecordVideo" destination="yJw-Ao-mOT" id="RCt-8M-h19"/>
                 <outlet property="ib_labelTouchToTalk" destination="hzo-Tk-4BY" id="DmV-LE-eBQ"/>
                 <outlet property="ib_processRecordOrTakePicture" destination="W9D-nx-A3Q" id="Txd-Mh-4Ks"/>
-                <outlet property="ib_showMenuControlPanel" destination="xzC-L3-IhO" id="swV-8a-TlG"/>
                 <outlet property="ib_temperature" destination="SMn-Fi-rED" id="8O7-0t-yFB"/>
                 <outlet property="ib_viewRecordTTT" destination="Rxo-oe-xq8" id="Kpf-ky-24R"/>
                 <outlet property="imageViewVideo" destination="4" id="5"/>
@@ -71,16 +70,6 @@
                         </imageView>
                     </subviews>
                 </scrollView>
-                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="xzC-L3-IhO">
-                    <rect key="frame" x="0.0" y="63" width="324" height="184"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    <state key="normal">
-                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                    </state>
-                    <connections>
-                        <action selector="bt_showMenuControlPanel:" destination="-1" eventType="touchDown" id="GrA-kL-67m"/>
-                    </connections>
-                </button>
                 <imageView userInteractionEnabled="NO" tag="999" contentMode="scaleToFill" image="camera_action_pan_bg.png" id="78">
                     <rect key="frame" x="100" y="360" width="120" height="120"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>

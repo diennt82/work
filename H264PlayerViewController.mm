@@ -50,8 +50,9 @@
 @interface H264PlayerViewController ()
 
 @property (retain, nonatomic) EarlierViewController *earlierVC;
-
 @property (retain, nonatomic) UIImageView *imageViewStreamer;
+@property (nonatomic) BOOL isHorizeShow;
+@property (nonatomic, retain) NSTimer *timerHideMenu;
 
 - (void)centerScrollViewContents;
 - (void)scrollViewDoubleTapped:(UITapGestureRecognizer*)recognizer;
@@ -98,7 +99,7 @@
     self.itemImages = [NSMutableArray arrayWithObjects:@"video_action_pan.png", @"video_action_mic.png", @"video_action_video.png", @"video_action_music.png", @"video_action_temp.png", nil];
     self.itemSelectedImages = [NSMutableArray arrayWithObjects:@"video_action_pan_pressed.png", @"video_action_mic_pressed.png", @"video_action_video_pressed.png", @"video_action_music_pressed.png", @"video_action_temp_pressed.png", nil];
     [self.horizMenu reloadData];
-    self.selectedItemMenu = 0;
+    self.selectedItemMenu = -1;
     [self updateBottomView];
 
     // Do any additional setup after loading the view.
@@ -165,12 +166,19 @@
     self.imageViewStreamer = [[UIImageView alloc] initWithFrame:_imageViewVideo.frame];
     //[self.imageViewStreamer setContentMode:UIViewContentModeScaleAspectFit];
     [self.imageViewStreamer setBackgroundColor:[UIColor blackColor]];
+    
+    UITapGestureRecognizer *singleTap = [[UITapGestureRecognizer alloc] initWithTarget:self
+                                                                                action:@selector(singleTapGestureCaptured:)];
+    [self.imageViewStreamer addGestureRecognizer:singleTap];
+    [singleTap release];
+    [self.imageViewStreamer setUserInteractionEnabled:YES];
+
     [self.scrollView insertSubview:_imageViewStreamer aboveSubview:_imageViewVideo];
-    //_imageViewVideo.hidden = YES;
     
     [self becomeActive];
-    [self showMenuControlPanel];
-    [self tryToHideMenuControlPanel];
+    //[self showMenuControlPanel];
+    //[self tryToHideMenuControlPanel];
+    [self hideControlMenu];
 }
 - (void)addGesturesPichInAndOut
 {
@@ -1066,6 +1074,49 @@
 }
 
 #pragma mark - Method
+
+- (void)singleTapGestureCaptured:(id)sender
+{
+    if (_isHorizeShow == TRUE)
+    {
+        [self hideControlMenu];
+    }
+    else
+    {
+        [self showControlMenu];
+    }
+    
+    //self.isHorizeShow = !_isHorizeShow;
+}
+
+- (void)hideControlMenu
+{
+    self.isHorizeShow = FALSE;
+    self.horizMenu.hidden = YES;
+    
+    [self hidenAllBottomView];
+}
+
+- (void)showControlMenu
+{
+    self.isHorizeShow = TRUE;
+    self.horizMenu.hidden = NO;
+    [self.view bringSubviewToFront:_horizMenu];
+    
+    [self updateBottomView];
+    
+    if (_timerHideMenu != nil)
+    {
+        [self.timerHideMenu invalidate];
+        self.timerHideMenu = nil;
+    }
+    
+    self.timerHideMenu = [NSTimer scheduledTimerWithTimeInterval:10
+                                     target:self
+                                   selector:@selector(hideControlMenu)
+                                   userInfo:nil
+                                    repeats:NO];
+}
 
 - (void)h264_HandleBecomeActive
 {
@@ -2628,6 +2679,7 @@
                        NSDictionary *responseDict = [jsonComm createSessionBlockedWithRegistrationId:mac
                                                                          andClientType:@"BROWSER"
                                                                              andApiKey:apiKey];
+                       NSLog(@"remoteConnectingViaSymmectric: %@", responseDict);
                        if (responseDict != nil)
                        {
                            if ([[responseDict objectForKey:@"status"] intValue] == 200)
@@ -3202,7 +3254,7 @@
                                           owner:self
                                         options:nil];
 
-                self.melodyViewController.view.frame = CGRectMake(808, 434, 216, 241);
+                self.melodyViewController.view.frame = CGRectMake(808, 434, 236, 284);
 
 
         }
@@ -3302,7 +3354,7 @@
         self.view.backgroundColor = [UIColor whiteColor];
         //self.topToolbar.hidden = NO;
         self.viewCtrlButtons.hidden = NO;
-        self.horizMenu.hidden = NO;
+        //self.horizMenu.hidden = NO;
         self.viewStopStreamingProgress.hidden = YES;
         
         CGFloat imageViewHeight = screenWidth * 9 / 16;
@@ -4380,6 +4432,7 @@
 
 #pragma mark -
 #pragma mark Hide & Show subfunction
+
 
 - (void) tryToHideMenuControlPanel
 {

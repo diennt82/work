@@ -16,7 +16,6 @@
                 <outlet property="ib_labelRecordVideo" destination="9xc-Tf-KYg" id="ggK-dl-DGf"/>
                 <outlet property="ib_labelTouchToTalk" destination="Rnz-fL-63I" id="5Ri-Tv-pQD"/>
                 <outlet property="ib_processRecordOrTakePicture" destination="Zmx-sx-U2g" id="xEX-9r-kSB"/>
-                <outlet property="ib_showMenuControlPanel" destination="Z8c-hW-L7O" id="A28-J9-JUU"/>
                 <outlet property="ib_temperature" destination="CIZ-me-hAc" id="pp0-sV-ftl"/>
                 <outlet property="ib_viewRecordTTT" destination="Gtp-0X-Ae2" id="Z84-qj-cGT"/>
                 <outlet property="imageViewVideo" destination="ewk-Ss-5Zt" id="hm9-FC-hEY"/>
@@ -72,17 +71,7 @@
                         </imageView>
                     </subviews>
                 </scrollView>
-                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="Z8c-hW-L7O">
-                    <rect key="frame" x="0.0" y="64" width="768" height="432"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    <state key="normal">
-                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                    </state>
-                    <connections>
-                        <action selector="bt_showMenuControlPanel:" destination="-1" eventType="touchDown" id="MLd-7I-bo3"/>
-                    </connections>
-                </button>
-                <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" id="YIt-si-GDq" customClass="ScrollHorizontalMenu">
+                <scrollView hidden="YES" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" id="YIt-si-GDq" customClass="ScrollHorizontalMenu">
                     <rect key="frame" x="94" y="406" width="580" height="60"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <inset key="insetFor6xAndEarlier" minX="0.0" minY="20" maxX="0.0" maxY="-20"/>
@@ -187,7 +176,7 @@
         </tableViewController>
     </objects>
     <resources>
-        <image name="camera_action_mic.png" width="324" height="324"/>
+        <image name="camera_action_mic.png" width="216" height="216"/>
         <image name="camera_action_pan_bg.png" width="208" height="208"/>
         <image name="camera_action_pic_s.png" width="90" height="90"/>
         <image name="camera_action_video.png" width="216" height="216"/>
