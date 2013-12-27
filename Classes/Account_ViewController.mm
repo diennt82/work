@@ -110,6 +110,12 @@
     
 }
 
+#if 1
+-(void) buildTopToolBar: (NSInteger)width
+{
+}
+#else
+
 -(void) buildTopToolBar: (NSInteger)width
 {
     int screenWidth = width;
@@ -183,6 +189,7 @@
         [self.view addSubview:mtopbar];
     }
 }
+#endif
 
 - (void)sendTouchBtnStateWithIndex:(NSInteger)rowIdx
 {
