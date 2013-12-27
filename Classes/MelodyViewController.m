@@ -176,9 +176,7 @@
 
 -(void) tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    cell.textLabel.alpha = 0.4;
-    cell.imageView.alpha = 0.4;
-    cell.accessoryView.alpha = 0.4;
+    cell.alpha = 0.4;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -192,7 +190,6 @@
     // Configure the cell...
     cell.textLabel.text = (NSString *) [_melodies objectAtIndex:indexPath.row];
     cell.backgroundColor = [UIColor whiteColor];
-    cell.alpha = 0.3f;
     
     if (valueMelodiesMap[indexPath.row] == TRUE)
     {
