@@ -243,6 +243,8 @@
 		8B9384A818570284009C4771 /* brightness-u.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B9384A618570284009C4771 /* brightness-u.png */; };
 		8B9384AF18570567009C4771 /* ValueSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B9384AD18570567009C4771 /* ValueSettingsViewController.m */; };
 		8B9384B018570567009C4771 /* ValueSettingsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8B9384AE18570567009C4771 /* ValueSettingsViewController.xib */; };
+		8B9554CC186D4DF200BB4BDE /* camera_action_pause.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B9554CA186D4DF200BB4BDE /* camera_action_pause.png */; };
+		8B9554CD186D4DF200BB4BDE /* camera_action_play.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B9554CB186D4DF200BB4BDE /* camera_action_play.png */; };
 		8B9899AD1859771800AC3852 /* CameraNameViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B9899AB1859771800AC3852 /* CameraNameViewController.m */; };
 		8B9899AE1859771800AC3852 /* CameraNameViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8B9899AC1859771800AC3852 /* CameraNameViewController.xib */; };
 		8B9899CD1859A04F00AC3852 /* slider-default7-handle.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B9899C91859A04F00AC3852 /* slider-default7-handle.png */; };
@@ -779,6 +781,8 @@
 		8B9384AC18570567009C4771 /* ValueSettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ValueSettingsViewController.h; sourceTree = "<group>"; };
 		8B9384AD18570567009C4771 /* ValueSettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ValueSettingsViewController.m; sourceTree = "<group>"; };
 		8B9384AE18570567009C4771 /* ValueSettingsViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ValueSettingsViewController.xib; sourceTree = "<group>"; };
+		8B9554CA186D4DF200BB4BDE /* camera_action_pause.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = camera_action_pause.png; sourceTree = "<group>"; };
+		8B9554CB186D4DF200BB4BDE /* camera_action_play.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = camera_action_play.png; sourceTree = "<group>"; };
 		8B9899AA1859771800AC3852 /* CameraNameViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CameraNameViewController.h; sourceTree = "<group>"; };
 		8B9899AB1859771800AC3852 /* CameraNameViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CameraNameViewController.m; sourceTree = "<group>"; };
 		8B9899AC1859771800AC3852 /* CameraNameViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CameraNameViewController.xib; sourceTree = "<group>"; };
@@ -2364,6 +2368,8 @@
 		8B9906F718697E050054966B /* Camera_action */ = {
 			isa = PBXGroup;
 			children = (
+				8B9554CA186D4DF200BB4BDE /* camera_action_pause.png */,
+				8B9554CB186D4DF200BB4BDE /* camera_action_play.png */,
 				8B9907001869824D0054966B /* camera_action_video_pressed.png */,
 				8B9907011869824D0054966B /* camera_action_video.png */,
 				8B9906FE1869817F0054966B /* camera_action_video_s.png */,
@@ -3084,6 +3090,7 @@
 				8B1D545E18658CBC008857F0 /* DotCell.png in Resources */,
 				8B91E6551862FE540041BA9D /* MenuCameraViewController.xib in Resources */,
 				BC6E4A0516BFBB9D00B0D630 /* MBP_InitialSetupViewController_land.xib in Resources */,
+				8B9554CD186D4DF200BB4BDE /* camera_action_play.png in Resources */,
 				8B9112D81860341C004301C5 /* NotifViewController.xib in Resources */,
 				8B99C0B2186ABB7900DB8AAA /* ImgNotAvailable.png in Resources */,
 				8B9C7DFB185F08C90038B3A8 /* loader4.png in Resources */,
@@ -3093,6 +3100,7 @@
 				BCA1A4E716C26EFB00E7EF56 /* Step_05_ViewController_land.xib in Resources */,
 				8B92C0A81867F4AD00538013 /* enter.png in Resources */,
 				BCA1A4F816C27A7B00E7EF56 /* Step_08_ViewController_land.xib in Resources */,
+				8B9554CC186D4DF200BB4BDE /* camera_action_pause.png in Resources */,
 				8BE896B31845CB3B00674E01 /* bb_motion_icon.png in Resources */,
 				8B9906FD186980080054966B /* camera_action_pic_s.png in Resources */,
 				8B91E63E18629E910041BA9D /* Snapshot.png in Resources */,
