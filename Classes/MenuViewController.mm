@@ -153,6 +153,16 @@
 
 - (void)stopStreamFinished:(CamChannel *)camChannel
 {
+    if (self.cameras != nil &&
+        self.cameras.count > 0)
+    {
+        CamChannel *ch = (CamChannel *)[self.cameras objectAtIndex:0];
+        
+        if ([ch.profile.mac_address isEqualToString:camChannel.profile.mac_address])
+        {
+            ch.waitingForStreamerToClose = NO;
+        }
+    }
 }
 
 - (void)tabBar:(UITabBar *)tabBar didSelectItem:(UITabBarItem *)item
