@@ -1670,6 +1670,11 @@
         [thisVC.h264PlayerVCDelegate stopStreamFinished: thisVC.selectedChannel];
         thisVC.h264PlayerVCDelegate = nil;
     }
+    else
+    {
+        self.selectedChannel.waitingForStreamerToClose = NO;
+    }
+    
     [thisVC release];
 }
 
