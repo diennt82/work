@@ -108,16 +108,13 @@
     [self.navigationItem.leftBarButtonItem setTintColor:[UIColor colorWithPatternImage:hubbleBack]];
     self.accountVC.mdelegate = self.menuDelegate;
     //self.camerasVC.camChannels = self.cameras;
-    
-    if (UIDevice.currentDevice.systemVersion.floatValue < 7.0 )
+
+    if (!_isFirttime) //revert
     {
-        if (!_isFirttime) //revert
-        {
-            self.isFirttime = TRUE;
-            
-            [self menuBackAction:nil];
-            
-        }
+        self.isFirttime = TRUE;
+        
+        [self menuBackAction:nil];
+        
     }
 }
 

@@ -115,41 +115,6 @@
     UIButton *addBtn = (UIButton *)[_addCameraCell viewWithTag:595];
     [addBtn setImage:[UIImage imageNamed:@"add_camera"] forState:UIControlStateNormal];
     [addBtn setImage:[UIImage imageNamed:@"add_camera_pressed"] forState:UIControlEventTouchUpInside];
-    
-    if (UIDevice.currentDevice.systemVersion.floatValue >= 7.0 )
-    {
-        if (!_isFirttime) //revert
-        {
-            self.isFirttime = TRUE;
-            
-            if (self.camChannels != nil &&
-                self.camChannels.count > 0)
-            {
-                CamChannel *ch = (CamChannel *)[self.camChannels objectAtIndex:0];
-                
-                [CameraAlert clearAllAlertForCamera:ch.profile.mac_address];
-                [UIApplication sharedApplication].idleTimerDisabled = YES;
-                
-                NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-                [userDefaults setObject:ch.profile.mac_address forKey:CAM_IN_VEW];
-                [userDefaults synchronize];
-                
-                H264PlayerViewController *h264PlayerViewController = [[H264PlayerViewController alloc] init];
-                
-                h264PlayerViewController.selectedChannel = ch;
-                h264PlayerViewController.h264PlayerVCDelegate = self;
-                
-                NSLog(@"%@, %@, %@", self.parentViewController.description, self.parentViewController.parentViewController, ((MenuViewController *)self.parentVC).navigationController);
-                
-                //MenuViewController *tabBarController = (MenuViewController *)self.parentViewController;
-                
-                [((MenuViewController *)self.parentVC).navigationController pushViewController:h264PlayerViewController animated:YES];
-                [h264PlayerViewController release];
-            }
-            
-        }
-    }
-    
 }
 
 - (void)viewWillAppear:(BOOL)animated
