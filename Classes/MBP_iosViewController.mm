@@ -21,6 +21,15 @@
 #import "H264PlayerViewController.h"
 #import "NotifViewController.h"
 
+#import "QBAnimationItem.h"
+#import "QBAnimationGroup.h"
+#import "QBAnimationSequence.h"
+
+@interface MBP_iosViewController ()
+{
+    QBAnimationSequence *_sequence;
+}
+@end
 
 @implementation MBP_iosViewController
 
@@ -77,7 +86,16 @@
 //    [self adjustViewsForOrientations:interfaceOrientation];
     
     //[self start_animation_with_orientation:interfaceOrientation];
+    
+    self.splashScreen.image = [UIImage imageNamed:@"loader0.png"];
 
+    QBAnimationItem *item1 = [QBAnimationItem itemWithDuration:0.1 delay:0 options:UIViewAnimationOptionCurveLinear|UIViewAnimationOptionAllowUserInteraction animations:^{
+        _splashScreen.transform = CGAffineTransformRotate(_splashScreen.transform, M_PI/4);
+    }];
+    
+    QBAnimationGroup *group1 = [QBAnimationGroup groupWithItems:@[item1]];
+    
+    _sequence = [[QBAnimationSequence alloc] initWithAnimationGroups:@[group1] repeat:YES];
 }
 
 -(CGRect) deviceFrameWithOrientation:(UIInterfaceOrientation) orientation
@@ -421,6 +439,7 @@
 	[restored_profiles release];
 
     [bonjourThread release];
+    [_sequence release];
 	[super dealloc];
 }
 
@@ -428,9 +447,22 @@
 {
     [super viewWillAppear:animated];
     
-    UIInterfaceOrientation interfaceOrientation = [UIApplication sharedApplication].statusBarOrientation;
+    //UIInterfaceOrientation interfaceOrientation = [UIApplication sharedApplication].statusBarOrientation;
     
-    [self start_animation_with_orientation:interfaceOrientation];
+    //[self start_animation_with_orientation:interfaceOrientation];
+    
+    if (_sequence != nil)
+    {
+        [_sequence start];
+    }
+}
+
+- (void)viewDidDisappear:(BOOL)animated
+{
+    if (_sequence != nil)
+    {
+        [_sequence stop];
+    }
 }
 
 #pragma mark -

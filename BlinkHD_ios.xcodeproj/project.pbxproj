@@ -173,6 +173,9 @@
 		8B9112D81860341C004301C5 /* NotifViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8B9112D61860341C004301C5 /* NotifViewController.xib */; };
 		8B9112DA186036A8004301C5 /* Hubble-Camera.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B9112D9186036A8004301C5 /* Hubble-Camera.png */; };
 		8B9112DC1860372D004301C5 /* Hubble-Notif.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B9112DB1860372D004301C5 /* Hubble-Notif.png */; };
+		8B917285186C45C4007754F3 /* QBAnimationSequence.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B917280186C45C4007754F3 /* QBAnimationSequence.m */; };
+		8B917286186C45C4007754F3 /* QBAnimationGroup.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B917282186C45C4007754F3 /* QBAnimationGroup.m */; };
+		8B917287186C45C4007754F3 /* QBAnimationItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B917284186C45C4007754F3 /* QBAnimationItem.m */; };
 		8B91E63E18629E910041BA9D /* Snapshot.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B91E63D18629E910041BA9D /* Snapshot.png */; };
 		8B91E64018629E9F0041BA9D /* photo_item.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B91E63F18629E9F0041BA9D /* photo_item.png */; };
 		8B91E6541862FE540041BA9D /* MenuCameraViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B91E6521862FE540041BA9D /* MenuCameraViewController.m */; };
@@ -686,6 +689,12 @@
 		8B9112D61860341C004301C5 /* NotifViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = NotifViewController.xib; sourceTree = "<group>"; };
 		8B9112D9186036A8004301C5 /* Hubble-Camera.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Hubble-Camera.png"; sourceTree = "<group>"; };
 		8B9112DB1860372D004301C5 /* Hubble-Notif.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Hubble-Notif.png"; sourceTree = "<group>"; };
+		8B91727F186C45C4007754F3 /* QBAnimationSequence.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QBAnimationSequence.h; sourceTree = "<group>"; };
+		8B917280186C45C4007754F3 /* QBAnimationSequence.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QBAnimationSequence.m; sourceTree = "<group>"; };
+		8B917281186C45C4007754F3 /* QBAnimationGroup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QBAnimationGroup.h; sourceTree = "<group>"; };
+		8B917282186C45C4007754F3 /* QBAnimationGroup.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QBAnimationGroup.m; sourceTree = "<group>"; };
+		8B917283186C45C4007754F3 /* QBAnimationItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QBAnimationItem.h; sourceTree = "<group>"; };
+		8B917284186C45C4007754F3 /* QBAnimationItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QBAnimationItem.m; sourceTree = "<group>"; };
 		8B91E63D18629E910041BA9D /* Snapshot.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Snapshot.png; sourceTree = "<group>"; };
 		8B91E63F18629E9F0041BA9D /* photo_item.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = photo_item.png; sourceTree = "<group>"; };
 		8B91E6511862FE540041BA9D /* MenuCameraViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MenuCameraViewController.h; sourceTree = "<group>"; };
@@ -2175,6 +2184,19 @@
 			name = Home;
 			sourceTree = "<group>";
 		};
+		8B91727E186C45A3007754F3 /* AnimationQB */ = {
+			isa = PBXGroup;
+			children = (
+				8B91727F186C45C4007754F3 /* QBAnimationSequence.h */,
+				8B917280186C45C4007754F3 /* QBAnimationSequence.m */,
+				8B917281186C45C4007754F3 /* QBAnimationGroup.h */,
+				8B917282186C45C4007754F3 /* QBAnimationGroup.m */,
+				8B917283186C45C4007754F3 /* QBAnimationItem.h */,
+				8B917284186C45C4007754F3 /* QBAnimationItem.m */,
+			);
+			name = AnimationQB;
+			sourceTree = "<group>";
+		};
 		8B91E6501862FD580041BA9D /* Camera Settings */ = {
 			isa = PBXGroup;
 			children = (
@@ -2436,6 +2458,7 @@
 		8B9C7DF0185F06B10038B3A8 /* MBP_iosViewController */ = {
 			isa = PBXGroup;
 			children = (
+				8B91727E186C45A3007754F3 /* AnimationQB */,
 				28D7ACF60DDB3853001CB0EB /* MBP_iosViewController.h */,
 				28D7ACF70DDB3853001CB0EB /* MBP_iosViewController.mm */,
 				388396B7168B064500B0D020 /* MBP_iosViewController.xib */,
@@ -3199,6 +3222,7 @@
 				8B9899AD1859771800AC3852 /* CameraNameViewController.m in Sources */,
 				8B93848D1856EC58009C4771 /* CameraStngsCell.m in Sources */,
 				A1A98E90180BF5AA00C8EBD3 /* StunClient.m in Sources */,
+				8B917285186C45C4007754F3 /* QBAnimationSequence.m in Sources */,
 				972E2B8715A4234300E60A96 /* NSData+Base64.m in Sources */,
 				8BA18CB0184879720097D1AF /* DeviceSettingsCell.m in Sources */,
 				8B92A0B818643212005923D2 /* TimelineButtonCell.m in Sources */,
@@ -3219,6 +3243,7 @@
 				8B9CCBA3183EF8B2007C0F65 /* MelodyViewController.m in Sources */,
 				8B9C7E0D185F260A0038B3A8 /* MenuViewController.mm in Sources */,
 				8B1D545718658903008857F0 /* SchedulerViewController.m in Sources */,
+				8B917286186C45C4007754F3 /* QBAnimationGroup.m in Sources */,
 				38C79E2215C26947006EE378 /* Step_10_ViewController.mm in Sources */,
 				38355AE715CB76630045909C /* Account_ViewController.mm in Sources */,
 				38B85E5415CFAA7F00E5A1FA /* Step_07_ViewController.mm in Sources */,
@@ -3229,6 +3254,7 @@
 				8B1D5453186587CB008857F0 /* CellImageView.m in Sources */,
 				38A13AF316363147000138EA /* UnderlinedUILabel.m in Sources */,
 				8B1D544D186581B8008857F0 /* SchedulerCell.m in Sources */,
+				8B917287186C45C4007754F3 /* QBAnimationItem.m in Sources */,
 				97DA238416425FA100EE2528 /* ToUViewController.mm in Sources */,
 				38FC9D7A16717B0300373F25 /* EditCameraCell.mm in Sources */,
 				8B278BEB183DC6B500A4FF50 /* NotificationSettingsCell.m in Sources */,
