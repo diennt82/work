@@ -164,14 +164,16 @@
 #pragma mark TableView delegate
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-	return _melodies.count;
+	//return _melodies.count;
+    return 1;
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    tableView.separatorColor = [UIColor clearColor];
+    //tableView.separatorColor = [UIColor clearColor];
     [tableView setBackgroundColor:[UIColor clearColor]];
-	return 1;
+	//return 1;
+    return _melodies.count;
 }
 
 -(void) tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
@@ -188,10 +190,10 @@
     }
     
     // Configure the cell...
-    cell.textLabel.text = (NSString *) [_melodies objectAtIndex:indexPath.row];
+    cell.textLabel.text = (NSString *) [_melodies objectAtIndex:indexPath.section];
     cell.backgroundColor = [UIColor whiteColor];
     
-    if (valueMelodiesMap[indexPath.row] == TRUE)
+    if (valueMelodiesMap[indexPath.section] == TRUE)
     {
         cell.imageView.image = [UIImage imageNamed:@"camera_action_pause.png"];
     }
@@ -219,15 +221,15 @@
 {
 	[tableView deselectRowAtIndexPath:indexPath animated:NO];
     
-    valueMelodiesMap[indexPath.row] = !valueMelodiesMap[indexPath.row];
+    valueMelodiesMap[indexPath.section] = !valueMelodiesMap[indexPath.section];
     
-    if (valueMelodiesMap[indexPath.row] == TRUE)
+    if (valueMelodiesMap[indexPath.section] == TRUE)
     {
-        _melodyIndex = indexPath.row;
+        _melodyIndex = indexPath.section;
         
         for (int i = 0; i < NUM_MELODY; i++)
         {
-            if (i != indexPath.row)
+            if (i != indexPath.section)
             {
                 valueMelodiesMap[i] = FALSE;
             }
