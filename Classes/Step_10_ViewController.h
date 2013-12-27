@@ -35,6 +35,8 @@
 
 #define ALERT_ADDCAM_SERVER_UNREACH 1
 
+//#define 
+
 @interface Step_10_ViewController : UIViewController
 {
     IBOutlet UIView * progressView; 
@@ -57,6 +59,7 @@
     
     BOOL shouldStopScanning;
     NSTimer * timeOut;
+    NSTimer *timeOutCheckWifiHome;
     
     
 }

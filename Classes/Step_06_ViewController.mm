@@ -624,10 +624,20 @@
 -(void) prepareWifiInfo
 {
     //NOTE: we can do this because we are connecting to camera now 
-    NSString * camera_mac = [CameraPassword fetchBSSIDInfo];
-    //camera_mac = [Util strip_colon_fr_mac:camera_mac]; 
+    NSString * camera_mac= nil;
+
+#ifdef CONCURRENT_SETUP
+    HttpCommunication  *deviceComm = [[HttpCommunication alloc]init];
     
-     self.deviceConf.ssid = self.ssid; 
+    
+    camera_mac = [deviceComm sendCommandAndBlock:GET_MAC_ADDRESS
+                                                withTimeout:5.0];
+    camera_mac = [Util add_colon_to_mac:camera_mac];
+#else
+    camera_mac = [CameraPassword fetchBSSIDInfo];
+#endif
+
+    self.deviceConf.ssid = self.ssid;
     
     //save mac address for used later
 
@@ -862,7 +872,7 @@
 - (void)showDialogPasswordWrong
 {
     NSLog(@"pass is wrong: %@ ", self.password);
-    _timeOut = nil;
+    [self resetAllTimer];
     NSString * msg_pw_wrong = @"Password input don't correctly, try again";
     //ERROR condition
     UIAlertView *_alert = [[UIAlertView alloc]
