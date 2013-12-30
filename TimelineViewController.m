@@ -286,12 +286,14 @@
         
         if (indexPath.row == 0)
         {
-            [cell.timelineCellButtn setBackgroundImage:[UIImage imageNamed:@"button_bg.png"] forState:UIControlStateNormal];
+            [cell.timelineCellButtn setBackgroundImage:[UIImage imageNamed:@"saveday"] forState:UIControlStateNormal];
+            [cell.timelineCellButtn setBackgroundImage:[UIImage imageNamed:@"saveday_pressed"] forState:UIControlEventTouchDown];
             [cell.timelineCellButtn setTitle:@"Say the Day" forState:UIControlStateNormal];
         }
         else
         {
-            [cell.timelineCellButtn setBackgroundImage:[UIImage imageNamed:@"button_bg_1.png"] forState:UIControlStateNormal];
+            [cell.timelineCellButtn setBackgroundImage:[UIImage imageNamed:@"upgrade"] forState:UIControlStateNormal];
+            [cell.timelineCellButtn setBackgroundImage:[UIImage imageNamed:@"upgrade_pressed"] forState:UIControlEventTouchDown];
             [cell.timelineCellButtn setTitle:@"Upgrade to Premium" forState:UIControlStateNormal];
         }
         

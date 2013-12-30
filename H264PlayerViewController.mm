@@ -9,7 +9,7 @@
 #import "H264PlayerViewController.h"
 #import "EarlierViewController.h"
 
-#define DISABLE_VIEW_RELEASE_FLAG 1
+#define DISABLE_VIEW_RELEASE_FLAG 0
 
 #define D1 @"480p"
 #define HD1 @"720p-10"
@@ -3405,10 +3405,11 @@
        
     }
     
-#if DISABLE_VIEW_RELEASE_FLAG
-    self.playlistViewController.view.hidden = YES;
     self.pickerHQOptions.hidden = YES;
     self.pickerHQOptions.userInteractionEnabled = NO;
+    
+#if DISABLE_VIEW_RELEASE_FLAG
+    self.playlistViewController.view.hidden = YES;
 #endif
 }
 
