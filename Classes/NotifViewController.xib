@@ -11,6 +11,7 @@
                 <outlet property="choosePlanBtn" destination="EBb-go-S58" id="sgB-he-Saw"/>
                 <outlet property="goToCameraBtn" destination="owc-9x-Aqf" id="psZ-oi-HFQ"/>
                 <outlet property="ignoreBtn" destination="WmG-HQ-DI1" id="j7t-mh-9ah"/>
+                <outlet property="imageViewSnapshot" destination="334-Co-LGo" id="gfu-T6-T8y"/>
                 <outlet property="learnMoreBtn" destination="RYJ-ck-Qs8" id="3kB-4v-cBW"/>
                 <outlet property="messageLabel" destination="stV-x5-RrI" id="jmW-tZ-WS3"/>
                 <outlet property="playEnventBtn" destination="UoT-cs-5Ba" id="btJ-3u-R2w"/>
@@ -28,7 +29,7 @@
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES" flexibleMaxY="YES"/>
                 </imageView>
                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="There was some movement in the living room.What would you like to do?" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="3" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="stV-x5-RrI">
-                    <rect key="frame" x="23" y="193" width="280" height="73.999999999999986"/>
+                    <rect key="frame" x="23" y="193" width="280" height="74"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES" heightSizable="YES"/>
                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                     <nil key="highlightedColor"/>

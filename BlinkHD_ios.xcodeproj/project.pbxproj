@@ -169,7 +169,7 @@
 		8B9112CC18601106004301C5 /* GeneralCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8B9112CB18601106004301C5 /* GeneralCell.xib */; };
 		8B9112D018602884004301C5 /* SensitivityCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B9112CF18602884004301C5 /* SensitivityCell.m */; };
 		8B9112D218602898004301C5 /* SensitivityCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8B9112D118602898004301C5 /* SensitivityCell.xib */; };
-		8B9112D71860341C004301C5 /* NotifViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B9112D51860341C004301C5 /* NotifViewController.m */; };
+		8B9112D71860341C004301C5 /* NotifViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8B9112D51860341C004301C5 /* NotifViewController.mm */; };
 		8B9112D81860341C004301C5 /* NotifViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8B9112D61860341C004301C5 /* NotifViewController.xib */; };
 		8B9112DA186036A8004301C5 /* Hubble-Camera.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B9112D9186036A8004301C5 /* Hubble-Camera.png */; };
 		8B9112DC1860372D004301C5 /* Hubble-Notif.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B9112DB1860372D004301C5 /* Hubble-Notif.png */; };
@@ -687,7 +687,7 @@
 		8B9112CF18602884004301C5 /* SensitivityCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SensitivityCell.m; sourceTree = "<group>"; };
 		8B9112D118602898004301C5 /* SensitivityCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SensitivityCell.xib; sourceTree = "<group>"; };
 		8B9112D41860341C004301C5 /* NotifViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NotifViewController.h; sourceTree = "<group>"; };
-		8B9112D51860341C004301C5 /* NotifViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NotifViewController.m; sourceTree = "<group>"; };
+		8B9112D51860341C004301C5 /* NotifViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = NotifViewController.mm; sourceTree = "<group>"; };
 		8B9112D61860341C004301C5 /* NotifViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = NotifViewController.xib; sourceTree = "<group>"; };
 		8B9112D9186036A8004301C5 /* Hubble-Camera.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Hubble-Camera.png"; sourceTree = "<group>"; };
 		8B9112DB1860372D004301C5 /* Hubble-Notif.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Hubble-Notif.png"; sourceTree = "<group>"; };
@@ -1730,6 +1730,7 @@
 		080E96DDFE201D6D7F000001 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				8B90BA5A18717F22007BAF09 /* PlayEventVC */,
 				8B9112D3186033B5004301C5 /* HubbleNotifView */,
 				8B9C7DFE185F22090038B3A8 /* MenuHubble */,
 				8BA18CA8184870330097D1AF /* DeviceSettings */,
@@ -2151,6 +2152,13 @@
 			name = Step_09;
 			sourceTree = "<group>";
 		};
+		8B90BA5A18717F22007BAF09 /* PlayEventVC */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = PlayEventVC;
+			sourceTree = "<group>";
+		};
 		8B9112C718601041004301C5 /* General */ = {
 			isa = PBXGroup;
 			children = (
@@ -2175,7 +2183,7 @@
 			isa = PBXGroup;
 			children = (
 				8B9112D41860341C004301C5 /* NotifViewController.h */,
-				8B9112D51860341C004301C5 /* NotifViewController.m */,
+				8B9112D51860341C004301C5 /* NotifViewController.mm */,
 				8B9112D61860341C004301C5 /* NotifViewController.xib */,
 			);
 			name = HubbleNotifView;
@@ -3214,7 +3222,7 @@
 				97987CD815468C2E0066C49B /* MBP_FirstPage.m in Sources */,
 				8B9384AF18570567009C4771 /* ValueSettingsViewController.m in Sources */,
 				97987DF21546A1630066C49B /* MBP_LoginOrRegistration.mm in Sources */,
-				8B9112D71860341C004301C5 /* NotifViewController.m in Sources */,
+				8B9112D71860341C004301C5 /* NotifViewController.mm in Sources */,
 				8BA5C4801818DCC1006B4BB8 /* ZoneViewController.m in Sources */,
 				8B9C7E15185F268C0038B3A8 /* CamerasViewController.mm in Sources */,
 				97987E421546AF2C0066C49B /* UserAccount.mm in Sources */,

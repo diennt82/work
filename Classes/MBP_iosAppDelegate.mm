@@ -6,7 +6,7 @@
 //  Copyright 2011 __MyCompanyName__. All rights reserved.
 //
 
-#define DISABLE_VIEW_RELEASE_FLAG 1
+#define DISABLE_VIEW_RELEASE_FLAG 0
 
 #import "MBP_iosAppDelegate.h"
 
