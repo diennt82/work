@@ -110,26 +110,12 @@
     if (interfaceOrientation == UIInterfaceOrientationLandscapeLeft ||
         interfaceOrientation == UIInterfaceOrientationLandscapeRight)
     {
-        //        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
-        //        {
-        //            [[NSBundle mainBundle] loadNibNamed:@"Step_02_ViewController_land_ipad" owner:self options:nil];
-        //        }
-        //        else
-        //        {
-        //            [[NSBundle mainBundle] loadNibNamed:@"Step_02_ViewController_land" owner:self options:nil];
-        //        }
+
     }
     else if (interfaceOrientation == UIInterfaceOrientationPortrait ||
              interfaceOrientation == UIInterfaceOrientationPortraitUpsideDown)
     {
-        //        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
-        //        {
-        //            [[NSBundle mainBundle] loadNibNamed:@"Step_02_ViewController_ipad" owner:self options:nil];
-        //        }
-        //        else
-        //        {
-        //            [[NSBundle mainBundle] loadNibNamed:@"Step_02_ViewController" owner:self options:nil];
-        //        }
+
     }
 }
 
@@ -161,16 +147,16 @@
 
 - (void)handleNextButtonAction: (id) sender
 {
-    NSLog(@"Load step 3");
+    NSLog(@"Load step Create BLE Connection");
     //Load the next xib
-    Step_03_ViewController *step03ViewController=nil;
+    CreateBLEConnection_VController *step03ViewController=nil;
     
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
     {
-        step03ViewController = [[Step_03_ViewController alloc]initWithNibName:@"Step_03_ViewController_ipad" bundle:nil];
+        step03ViewController = [[CreateBLEConnection_VController alloc]initWithNibName:@"CreateBLEConnection_VController_ipad" bundle:nil];
     } else {
         step03ViewController =
-        [[Step_03_ViewController alloc] initWithNibName:@"Step_03_ViewController"
+        [[CreateBLEConnection_VController alloc] initWithNibName:@"CreateBLEConnection_VController"
                                                  bundle:nil];
     }
     
@@ -208,26 +194,21 @@
         
         NSLog(@"Load step 3");
         //Load the next xib
-        Step_03_ViewController *step03ViewController = nil;
-        
-        
+        CreateBLEConnection_VController *step03ViewController = nil;
         if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
         {
             
             
-            step03ViewController = [[Step_03_ViewController alloc]initWithNibName:@"Step_03_ViewController_ipad" bundle:nil];
+            step03ViewController = [[CreateBLEConnection_VController alloc]initWithNibName:@"CreateBLEConnection_VController_iPad" bundle:nil];
             
         }
         else
         {
-            step03ViewController = [[Step_03_ViewController alloc]
-                                    initWithNibName:@"Step_03_ViewController" bundle:nil];
+            step03ViewController = [[CreateBLEConnection_VController alloc]
+                                    initWithNibName:@"CreateBLEConnection_VController" bundle:nil];
             
         }
-        
-        
-        
-        
+
         
         [self.navigationController pushViewController:step03ViewController animated:NO];
         

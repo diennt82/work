@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "MBP_InitialSetupViewController.h"
-#import "Step_03_ViewController.h"
+#import "CreateBLEConnection_VController.h"
 #import "StartMonitorCallback.h"
 
 @interface GuideAddCamera_ViewController : UIViewController <StartMonitorDelegate>

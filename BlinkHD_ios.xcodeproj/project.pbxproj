@@ -409,6 +409,21 @@
 		A19E79F6186BDA590007513D /* Step_10_ViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = A19E79F4186BDA590007513D /* Step_10_ViewController.mm */; };
 		A1A91A56187159A4000BCF22 /* GuideAddCamera_ViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = A1A91A54187159A4000BCF22 /* GuideAddCamera_ViewController.mm */; };
 		A1A91A5C18715A0A000BCF22 /* GuideAddCamera_ViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = A1A91A5A18715A0A000BCF22 /* GuideAddCamera_ViewController.xib */; };
+		A1A91A69187167F8000BCF22 /* BLEManageConnect.m in Sources */ = {isa = PBXBuildFile; fileRef = A1A91A66187167F8000BCF22 /* BLEManageConnect.m */; };
+		A1A91A6A187167F8000BCF22 /* UARTPeripheral.m in Sources */ = {isa = PBXBuildFile; fileRef = A1A91A68187167F8000BCF22 /* UARTPeripheral.m */; };
+		A1A91A7118716811000BCF22 /* CreateBLEConnection_VController.xib in Resources */ = {isa = PBXBuildFile; fileRef = A1A91A6E18716811000BCF22 /* CreateBLEConnection_VController.xib */; };
+		A1A91A7618716833000BCF22 /* Step_04_ViewController_ipad_ble.xib in Resources */ = {isa = PBXBuildFile; fileRef = A1A91A7218716833000BCF22 /* Step_04_ViewController_ipad_ble.xib */; };
+		A1A91A7718716833000BCF22 /* Step_04_ViewController_ble.mm in Sources */ = {isa = PBXBuildFile; fileRef = A1A91A7418716833000BCF22 /* Step_04_ViewController_ble.mm */; };
+		A1A91A7818716833000BCF22 /* Step_04_ViewController_ble.xib in Resources */ = {isa = PBXBuildFile; fileRef = A1A91A7518716833000BCF22 /* Step_04_ViewController_ble.xib */; };
+		A1A91A7D1871684A000BCF22 /* Step_06_ViewController_ipad_ble.xib in Resources */ = {isa = PBXBuildFile; fileRef = A1A91A791871684A000BCF22 /* Step_06_ViewController_ipad_ble.xib */; };
+		A1A91A7E1871684A000BCF22 /* Step_06_ViewController_ble.mm in Sources */ = {isa = PBXBuildFile; fileRef = A1A91A7B1871684A000BCF22 /* Step_06_ViewController_ble.mm */; };
+		A1A91A7F1871684A000BCF22 /* Step_06_ViewController_ble.xib in Resources */ = {isa = PBXBuildFile; fileRef = A1A91A7C1871684A000BCF22 /* Step_06_ViewController_ble.xib */; };
+		A1A91A8418716865000BCF22 /* Step_10_ViewController_ipad_ble.xib in Resources */ = {isa = PBXBuildFile; fileRef = A1A91A8018716865000BCF22 /* Step_10_ViewController_ipad_ble.xib */; };
+		A1A91A8518716865000BCF22 /* Step_10_ViewController_ble.mm in Sources */ = {isa = PBXBuildFile; fileRef = A1A91A8218716865000BCF22 /* Step_10_ViewController_ble.mm */; };
+		A1A91A8618716865000BCF22 /* Step_10_ViewController_ble.xib in Resources */ = {isa = PBXBuildFile; fileRef = A1A91A8318716865000BCF22 /* Step_10_ViewController_ble.xib */; };
+		A1A91A8A18716909000BCF22 /* CreateBLEConnection_VController.mm in Sources */ = {isa = PBXBuildFile; fileRef = A1A91A8818716909000BCF22 /* CreateBLEConnection_VController.mm */; };
+		A1A91A8D18716E33000BCF22 /* CoreBluetooth.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A1A91A8C18716E33000BCF22 /* CoreBluetooth.framework */; };
+		A1A91A8F187179E4000BCF22 /* refresh.png in Resources */ = {isa = PBXBuildFile; fileRef = A1A91A8E187179E4000BCF22 /* refresh.png */; };
 		A1A98E8F180BF5AA00C8EBD3 /* client_main.c in Sources */ = {isa = PBXBuildFile; fileRef = A1A98E8B180BF5AA00C8EBD3 /* client_main.c */; };
 		A1A98E90180BF5AA00C8EBD3 /* StunClient.m in Sources */ = {isa = PBXBuildFile; fileRef = A1A98E8E180BF5AA00C8EBD3 /* StunClient.m */; };
 		A1E32FAD17E9899800504538 /* H264PlayerListener.mm in Sources */ = {isa = PBXBuildFile; fileRef = A1E32FAB17E9899800504538 /* H264PlayerListener.mm */; };
@@ -998,6 +1013,27 @@
 		A1A91A53187159A4000BCF22 /* GuideAddCamera_ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GuideAddCamera_ViewController.h; sourceTree = "<group>"; };
 		A1A91A54187159A4000BCF22 /* GuideAddCamera_ViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = GuideAddCamera_ViewController.mm; sourceTree = "<group>"; };
 		A1A91A5A18715A0A000BCF22 /* GuideAddCamera_ViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = GuideAddCamera_ViewController.xib; sourceTree = "<group>"; };
+		A1A91A65187167F8000BCF22 /* BLEManageConnect.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BLEManageConnect.h; sourceTree = "<group>"; };
+		A1A91A66187167F8000BCF22 /* BLEManageConnect.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BLEManageConnect.m; sourceTree = "<group>"; };
+		A1A91A67187167F8000BCF22 /* UARTPeripheral.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UARTPeripheral.h; sourceTree = "<group>"; };
+		A1A91A68187167F8000BCF22 /* UARTPeripheral.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UARTPeripheral.m; sourceTree = "<group>"; };
+		A1A91A6E18716811000BCF22 /* CreateBLEConnection_VController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CreateBLEConnection_VController.xib; sourceTree = "<group>"; };
+		A1A91A7218716833000BCF22 /* Step_04_ViewController_ipad_ble.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = Step_04_ViewController_ipad_ble.xib; sourceTree = "<group>"; };
+		A1A91A7318716833000BCF22 /* Step_04_ViewController_ble.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Step_04_ViewController_ble.h; sourceTree = "<group>"; };
+		A1A91A7418716833000BCF22 /* Step_04_ViewController_ble.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = Step_04_ViewController_ble.mm; sourceTree = "<group>"; };
+		A1A91A7518716833000BCF22 /* Step_04_ViewController_ble.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = Step_04_ViewController_ble.xib; sourceTree = "<group>"; };
+		A1A91A791871684A000BCF22 /* Step_06_ViewController_ipad_ble.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = Step_06_ViewController_ipad_ble.xib; sourceTree = "<group>"; };
+		A1A91A7A1871684A000BCF22 /* Step_06_ViewController_ble.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Step_06_ViewController_ble.h; sourceTree = "<group>"; };
+		A1A91A7B1871684A000BCF22 /* Step_06_ViewController_ble.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = Step_06_ViewController_ble.mm; sourceTree = "<group>"; };
+		A1A91A7C1871684A000BCF22 /* Step_06_ViewController_ble.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = Step_06_ViewController_ble.xib; sourceTree = "<group>"; };
+		A1A91A8018716865000BCF22 /* Step_10_ViewController_ipad_ble.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = Step_10_ViewController_ipad_ble.xib; sourceTree = "<group>"; };
+		A1A91A8118716865000BCF22 /* Step_10_ViewController_ble.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Step_10_ViewController_ble.h; sourceTree = "<group>"; };
+		A1A91A8218716865000BCF22 /* Step_10_ViewController_ble.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = Step_10_ViewController_ble.mm; sourceTree = "<group>"; };
+		A1A91A8318716865000BCF22 /* Step_10_ViewController_ble.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = Step_10_ViewController_ble.xib; sourceTree = "<group>"; };
+		A1A91A8718716909000BCF22 /* CreateBLEConnection_VController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CreateBLEConnection_VController.h; sourceTree = "<group>"; };
+		A1A91A8818716909000BCF22 /* CreateBLEConnection_VController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = CreateBLEConnection_VController.mm; sourceTree = "<group>"; };
+		A1A91A8C18716E33000BCF22 /* CoreBluetooth.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreBluetooth.framework; path = System/Library/Frameworks/CoreBluetooth.framework; sourceTree = SDKROOT; };
+		A1A91A8E187179E4000BCF22 /* refresh.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = refresh.png; sourceTree = "<group>"; };
 		A1A98E8B180BF5AA00C8EBD3 /* client_main.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = client_main.c; sourceTree = "<group>"; };
 		A1A98E8C180BF5AA00C8EBD3 /* client_main.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = client_main.h; sourceTree = "<group>"; };
 		A1A98E8D180BF5AA00C8EBD3 /* StunClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StunClient.h; sourceTree = "<group>"; };
@@ -1704,6 +1740,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A1A91A8D18716E33000BCF22 /* CoreBluetooth.framework in Frameworks */,
 				8408F1811833222A00B00188 /* MonitorCommunication.framework in Frameworks */,
 				8BA23841182CBC130022581A /* CameraScanner.framework in Frameworks */,
 				8BA5C47C1818DAAC006B4BB8 /* libcrypto.a in Frameworks */,
@@ -1904,6 +1941,7 @@
 		29B97323FDCFA39411CA2CEA /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				A1A91A8C18716E33000BCF22 /* CoreBluetooth.framework */,
 				8408F1801833222A00B00188 /* MonitorCommunication.framework */,
 				8BA23838182C8E130022581A /* CameraScanner.framework */,
 				A15431041818D14100337EFE /* libGoogleAnalytics_debug.a */,
@@ -2776,11 +2814,39 @@
 		A1A91A5218714D40000BCF22 /* BLE Setup */ = {
 			isa = PBXGroup;
 			children = (
-				A1A91A5A18715A0A000BCF22 /* GuideAddCamera_ViewController.xib */,
+				A1A91A8E187179E4000BCF22 /* refresh.png */,
+				A1A91A64187167E4000BCF22 /* Connection */,
 				A1A91A53187159A4000BCF22 /* GuideAddCamera_ViewController.h */,
 				A1A91A54187159A4000BCF22 /* GuideAddCamera_ViewController.mm */,
+				A1A91A5A18715A0A000BCF22 /* GuideAddCamera_ViewController.xib */,
+				A1A91A8718716909000BCF22 /* CreateBLEConnection_VController.h */,
+				A1A91A8818716909000BCF22 /* CreateBLEConnection_VController.mm */,
+				A1A91A6E18716811000BCF22 /* CreateBLEConnection_VController.xib */,
+				A1A91A7318716833000BCF22 /* Step_04_ViewController_ble.h */,
+				A1A91A7418716833000BCF22 /* Step_04_ViewController_ble.mm */,
+				A1A91A7518716833000BCF22 /* Step_04_ViewController_ble.xib */,
+				A1A91A7218716833000BCF22 /* Step_04_ViewController_ipad_ble.xib */,
+				A1A91A791871684A000BCF22 /* Step_06_ViewController_ipad_ble.xib */,
+				A1A91A7A1871684A000BCF22 /* Step_06_ViewController_ble.h */,
+				A1A91A7B1871684A000BCF22 /* Step_06_ViewController_ble.mm */,
+				A1A91A7C1871684A000BCF22 /* Step_06_ViewController_ble.xib */,
+				A1A91A8018716865000BCF22 /* Step_10_ViewController_ipad_ble.xib */,
+				A1A91A8118716865000BCF22 /* Step_10_ViewController_ble.h */,
+				A1A91A8218716865000BCF22 /* Step_10_ViewController_ble.mm */,
+				A1A91A8318716865000BCF22 /* Step_10_ViewController_ble.xib */,
 			);
 			name = "BLE Setup";
+			sourceTree = "<group>";
+		};
+		A1A91A64187167E4000BCF22 /* Connection */ = {
+			isa = PBXGroup;
+			children = (
+				A1A91A65187167F8000BCF22 /* BLEManageConnect.h */,
+				A1A91A66187167F8000BCF22 /* BLEManageConnect.m */,
+				A1A91A67187167F8000BCF22 /* UARTPeripheral.h */,
+				A1A91A68187167F8000BCF22 /* UARTPeripheral.m */,
+			);
+			name = Connection;
 			sourceTree = "<group>";
 		};
 		A1A98E8A180BF57700C8EBD3 /* PJ_NAT */ = {
@@ -3031,6 +3097,7 @@
 				8B9112DC1860372D004301C5 /* Hubble-Notif.png in Resources */,
 				8B9384801856D42C009C4771 /* InformationViewController.xib in Resources */,
 				8B1D545818658903008857F0 /* SchedulerViewController.xib in Resources */,
+				A1A91A7F1871684A000BCF22 /* Step_06_ViewController_ble.xib in Resources */,
 				8B9384A318570207009C4771 /* sound-s-d.png in Resources */,
 				8B92C0E8186832A600538013 /* add_camera_pressed.png in Resources */,
 				8B92A0921863E69F005923D2 /* TimelineCell.xib in Resources */,
@@ -3044,6 +3111,7 @@
 				A1E74747185F07AE00A54B29 /* upgrade_pressed.png in Resources */,
 				A19778ED181E3316007C3CA7 /* ZoneViewController_ipad.xib in Resources */,
 				38167AC216118DB600B7FA0A /* bb_pic_2.png in Resources */,
+				A1A91A7618716833000BCF22 /* Step_04_ViewController_ipad_ble.xib in Resources */,
 				8B9899DC1859AA6A00AC3852 /* slider-default7-trackBackground@2x.png in Resources */,
 				38DE1C55168AEA770049E814 /* AlertSettingViewController.xib in Resources */,
 				8B9B57E1184F0D9900E58543 /* frame-5_update-iOS7_new.png in Resources */,
@@ -3078,9 +3146,12 @@
 				8B0E1DF71844A3BE0080000A /* bb_rec_icon_d.png in Resources */,
 				8B9907031869824D0054966B /* camera_action_video.png in Resources */,
 				8B9899CE1859A04F00AC3852 /* slider-default7-handle@2x.png in Resources */,
+				A1A91A8618716865000BCF22 /* Step_10_ViewController_ble.xib in Resources */,
+				A1A91A7818716833000BCF22 /* Step_04_ViewController_ble.xib in Resources */,
 				8BC0A01B1844A6A200A5FD52 /* bb_splash_screen_horizontal.png in Resources */,
 				8B9112C11860054D004301C5 /* AddBtn.png in Resources */,
 				8B9B57DF184F0D9900E58543 /* frame-3_update-iOS7_new.png in Resources */,
+				A1A91A8418716865000BCF22 /* Step_10_ViewController_ipad_ble.xib in Resources */,
 				841D567B1834C1E600ACE7A7 /* streamqvga.sdp in Resources */,
 				38DE1BC6168AD57D0049E814 /* DashBoard_ViewController_ipad.xib in Resources */,
 				38699127167055B8009F3E66 /* MainWindow_ipad.xib in Resources */,
@@ -3129,6 +3200,7 @@
 				A1E74742185F07AE00A54B29 /* outline_circle.png in Resources */,
 				8B92A0A81863F6B4005923D2 /* SavedEventCell.xib in Resources */,
 				BC3C1AD316F025E300175AFF /* MBP_MenuProgress_portrait_ipad.xib in Resources */,
+				A1A91A7118716811000BCF22 /* CreateBLEConnection_VController.xib in Resources */,
 				BC3C1AD816F025FF00175AFF /* MBP_MenuProgress_land_ipad.xib in Resources */,
 				381D185D16D4652C00272A8D /* Step_05_tableViewCell_ipad.xib in Resources */,
 				8B1D545E18658CBC008857F0 /* DotCell.png in Resources */,
@@ -3145,6 +3217,7 @@
 				8B92C0A81867F4AD00538013 /* enter.png in Resources */,
 				BCA1A4F816C27A7B00E7EF56 /* Step_08_ViewController_land.xib in Resources */,
 				8B9554CC186D4DF200BB4BDE /* camera_action_pause.png in Resources */,
+				A1A91A8F187179E4000BCF22 /* refresh.png in Resources */,
 				8BE896B31845CB3B00674E01 /* bb_motion_icon.png in Resources */,
 				8B9906FD186980080054966B /* camera_action_pic_s.png in Resources */,
 				8B91E63E18629E910041BA9D /* Snapshot.png in Resources */,
@@ -3210,6 +3283,7 @@
 				8B0E1DEA1844A0E80080000A /* mestartup000022.png in Resources */,
 				8B9112C618600B7C004301C5 /* SettingsViewController.xib in Resources */,
 				8BC0A0401844AC3600A5FD52 /* circle_buttons1_rt.png in Resources */,
+				A1A91A7D1871684A000BCF22 /* Step_06_ViewController_ipad_ble.xib in Resources */,
 				978F090317DF06C80053972F /* PlaylistCell.xib in Resources */,
 				8B9AF6A518581D3300AC09C3 /* AddScheduleViewController.xib in Resources */,
 				8B9899E01859AA6A00AC3852 /* slider-default7-track@2x.png in Resources */,
@@ -3246,6 +3320,7 @@
 			files = (
 				8B9112C518600B7C004301C5 /* SettingsViewController.m in Sources */,
 				38CA70A715F7669D002CD1C5 /* NSData+Conversion.m in Sources */,
+				A1A91A6A187167F8000BCF22 /* UARTPeripheral.m in Sources */,
 				38C79E1F15C26270006EE378 /* Reachability.m in Sources */,
 				1D60589B0D05DD56006BFB54 /* main.m in Sources */,
 				8B92A0901863E68B005923D2 /* TimelineCell.m in Sources */,
@@ -3255,8 +3330,11 @@
 				28D7ACF80DDB3853001CB0EB /* MBP_iosViewController.mm in Sources */,
 				8B9112CA186010F1004301C5 /* GeneralCell.m in Sources */,
 				8BA18CAC184870470097D1AF /* DeviceSettingsViewController.m in Sources */,
+				A1A91A7E1871684A000BCF22 /* Step_06_ViewController_ble.mm in Sources */,
+				A1A91A69187167F8000BCF22 /* BLEManageConnect.m in Sources */,
 				97987CD815468C2E0066C49B /* MBP_FirstPage.m in Sources */,
 				8B9384AF18570567009C4771 /* ValueSettingsViewController.m in Sources */,
+				A1A91A8A18716909000BCF22 /* CreateBLEConnection_VController.mm in Sources */,
 				97987DF21546A1630066C49B /* MBP_LoginOrRegistration.mm in Sources */,
 				8B9112D71860341C004301C5 /* NotifViewController.m in Sources */,
 				8BA5C4801818DCC1006B4BB8 /* ZoneViewController.m in Sources */,
@@ -3316,6 +3394,7 @@
 				380CB0D616DC60DC00290587 /* Step_11_ViewController.m in Sources */,
 				8B92A0AF1863FD13005923D2 /* EarlierViewController.m in Sources */,
 				8B9384921856EEFE009C4771 /* SlideSettingsCell.m in Sources */,
+				A1A91A7718716833000BCF22 /* Step_04_ViewController_ble.mm in Sources */,
 				8B92DC24185ACACA00344530 /* ScheduleInformation.m in Sources */,
 				9704F84117B37CB3005F9868 /* DashBoard_ViewController.mm in Sources */,
 				97F5531517BDD3AF00024017 /* MBPNavController.m in Sources */,
@@ -3326,6 +3405,7 @@
 				979BC69E17D9BA6C00B3B373 /* PlaylistCell.m in Sources */,
 				979BC6A417D9BB9C00B3B373 /* PlayListViewController.mm in Sources */,
 				8B278BE7183DC51300A4FF50 /* NotificationSettingsViewController.m in Sources */,
+				A1A91A8518716865000BCF22 /* Step_10_ViewController_ble.mm in Sources */,
 				979BC6A817D9BCB200B3B373 /* PlaylistInfo.m in Sources */,
 				8B9899E41859C9EA00AC3852 /* DayViewController.m in Sources */,
 				A1239E86186185F200A25A04 /* AudioOutStreamer.m in Sources */,
