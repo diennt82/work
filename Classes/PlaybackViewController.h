@@ -41,6 +41,7 @@
 
 @property (nonatomic, retain) NSString *urlVideo;
 @property (nonatomic) BOOL userWantToBack;
+@property (retain, nonatomic) NSMutableArray *clipsInEvent;
 
 //- (void)stopStream;
 

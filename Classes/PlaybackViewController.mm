@@ -94,8 +94,29 @@
     //self.backBarBtnItem.target = self;
    // self.backBarBtnItem.action = @selector(goBackToPlayList);
     
+    self.urlVideo = clip_info.urlFile;
     
+    if (_clipsInEvent != nil &&
+        _clipsInEvent.count > 0)
+    {
+        for (NSDictionary *clipInfo in _clipsInEvent)
+        {
+            NSString *urlClipString = [clipInfo objectForKey:@"file"];
+            
+            if (urlClipString != nil &&
+                ![urlClipString isEqualToString:@""])
+            {
+                [clips addObject:urlClipString];
+            }
+        }
+    }
+    
+    listener->updateClips(clips);
+    listener->updateFinalClipCount(clips.count);
+    
+#if 0
     clips = [[NSMutableArray alloc]init];
+
     
     //Decide whether or not to start the background polling
     
@@ -130,7 +151,7 @@
         self.urlVideo = self.clip_info.urlFile;
     }
     
-    
+#endif
 
     
 
