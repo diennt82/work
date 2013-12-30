@@ -407,6 +407,8 @@
 		A19778F9181E6C55007C3CA7 /* motion_detection_off_1.png in Resources */ = {isa = PBXBuildFile; fileRef = A19778F7181E6C55007C3CA7 /* motion_detection_off_1.png */; };
 		A19778FB181E6CAB007C3CA7 /* motion_detection_on.png in Resources */ = {isa = PBXBuildFile; fileRef = A19778FA181E6CAB007C3CA7 /* motion_detection_on.png */; };
 		A19E79F6186BDA590007513D /* Step_10_ViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = A19E79F4186BDA590007513D /* Step_10_ViewController.mm */; };
+		A1A91A56187159A4000BCF22 /* GuideAddCamera_ViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = A1A91A54187159A4000BCF22 /* GuideAddCamera_ViewController.mm */; };
+		A1A91A5C18715A0A000BCF22 /* GuideAddCamera_ViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = A1A91A5A18715A0A000BCF22 /* GuideAddCamera_ViewController.xib */; };
 		A1A98E8F180BF5AA00C8EBD3 /* client_main.c in Sources */ = {isa = PBXBuildFile; fileRef = A1A98E8B180BF5AA00C8EBD3 /* client_main.c */; };
 		A1A98E90180BF5AA00C8EBD3 /* StunClient.m in Sources */ = {isa = PBXBuildFile; fileRef = A1A98E8E180BF5AA00C8EBD3 /* StunClient.m */; };
 		A1E32FAD17E9899800504538 /* H264PlayerListener.mm in Sources */ = {isa = PBXBuildFile; fileRef = A1E32FAB17E9899800504538 /* H264PlayerListener.mm */; };
@@ -993,6 +995,9 @@
 		A19778FA181E6CAB007C3CA7 /* motion_detection_on.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = motion_detection_on.png; sourceTree = "<group>"; };
 		A19E79F4186BDA590007513D /* Step_10_ViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = Step_10_ViewController.mm; sourceTree = "<group>"; };
 		A19E79F5186BDA590007513D /* Step_10_ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Step_10_ViewController.h; sourceTree = "<group>"; };
+		A1A91A53187159A4000BCF22 /* GuideAddCamera_ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GuideAddCamera_ViewController.h; sourceTree = "<group>"; };
+		A1A91A54187159A4000BCF22 /* GuideAddCamera_ViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = GuideAddCamera_ViewController.mm; sourceTree = "<group>"; };
+		A1A91A5A18715A0A000BCF22 /* GuideAddCamera_ViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = GuideAddCamera_ViewController.xib; sourceTree = "<group>"; };
 		A1A98E8B180BF5AA00C8EBD3 /* client_main.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = client_main.c; sourceTree = "<group>"; };
 		A1A98E8C180BF5AA00C8EBD3 /* client_main.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = client_main.h; sourceTree = "<group>"; };
 		A1A98E8D180BF5AA00C8EBD3 /* StunClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StunClient.h; sourceTree = "<group>"; };
@@ -1733,6 +1738,7 @@
 			children = (
 				8B9112D3186033B5004301C5 /* HubbleNotifView */,
 				8B9C7DFE185F22090038B3A8 /* MenuHubble */,
+				A1A91A5218714D40000BCF22 /* BLE Setup */,
 				8BA18CA8184870330097D1AF /* DeviceSettings */,
 				8B9CCB9F183EF86C007C0F65 /* MelodyControl */,
 				8B278BE3183DC4BB00A4FF50 /* NotificationSettings */,
@@ -2767,6 +2773,16 @@
 
 			sourceTree = "<group>";
 		};
+		A1A91A5218714D40000BCF22 /* BLE Setup */ = {
+			isa = PBXGroup;
+			children = (
+				A1A91A5A18715A0A000BCF22 /* GuideAddCamera_ViewController.xib */,
+				A1A91A53187159A4000BCF22 /* GuideAddCamera_ViewController.h */,
+				A1A91A54187159A4000BCF22 /* GuideAddCamera_ViewController.mm */,
+			);
+			name = "BLE Setup";
+			sourceTree = "<group>";
+		};
 		A1A98E8A180BF57700C8EBD3 /* PJ_NAT */ = {
 			isa = PBXGroup;
 			children = (
@@ -2946,6 +2962,7 @@
 				8BC0A0331844A91900A5FD52 /* splash_screen_portrait.png in Resources */,
 				3812F83915C8C3EE00DADFA6 /* bb_check_list.png in Resources */,
 				8B99C0AC186A79B600DB8AAA /* img-checkbox.png in Resources */,
+				A1A91A5C18715A0A000BCF22 /* GuideAddCamera_ViewController.xib in Resources */,
 				8B9B57EE184F0DB200E58543 /* frame-4-1_update_new.png in Resources */,
 				3812F83B15C8C49000DADFA6 /* bb_line.png in Resources */,
 				8B1D544F186581CD008857F0 /* SchedulerCell.xib in Resources */,
@@ -3303,6 +3320,7 @@
 				9704F84117B37CB3005F9868 /* DashBoard_ViewController.mm in Sources */,
 				97F5531517BDD3AF00024017 /* MBPNavController.m in Sources */,
 				8B92A0A61863F69C005923D2 /* SavedEventCell.m in Sources */,
+				A1A91A56187159A4000BCF22 /* GuideAddCamera_ViewController.mm in Sources */,
 				97A07FB117D5FD4A00653460 /* H264PlayerViewController.mm in Sources */,
 				979BC69A17D9B97700B3B373 /* PlaybackViewController.mm in Sources */,
 				979BC69E17D9BA6C00B3B373 /* PlaylistCell.m in Sources */,

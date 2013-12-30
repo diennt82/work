@@ -30,7 +30,7 @@
     IBOutlet UITabBarController *tabBarController;
 
     IBOutlet UIView * offlineView;
-    IBOutlet UIView * emptyCameraListView; 
+    IBOutlet UIView * emptyCameraListView;
     IBOutlet UIView * progressView; 
        
     NSArray * listOfChannel; 
@@ -54,6 +54,7 @@
 @property (nonatomic, retain)  UIToolbar *topbar;
 @property (nonatomic) BOOL editModeEnabled; 
 @property (nonatomic) int edittedChannelIndex; 
+@property (retain, nonatomic) IBOutlet UIView *ib_ChooseSetup;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil 
      withConnDelegate:(id<ConnectionMethodDelegate> ) caller;
@@ -72,6 +73,10 @@
 -(IBAction)renameCamera:(id)sender;
 -(IBAction)alertSetting:(id)sender;
 
+//choose method to setup camera
+- (IBAction)bluetoothSetup:(id)sender;
+- (IBAction)wifiSetup:(id)sender;
+- (IBAction)cancelSetup:(id)sender;
 
 - (BOOL) shouldShowEditButton;
 - (BOOL) shouldShowScanButton;

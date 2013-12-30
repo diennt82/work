@@ -16,6 +16,8 @@
 #import "BMMenuViewController.h"
 #import "MyFrontViewController.h"
 #import "NotificationSettingsViewController.h"
+#import "define.h"
+
 @interface DashBoard_ViewController() <H264PlayerVCDelegate>
 
 @end
@@ -58,6 +60,7 @@
 {
     [_topbar release];
     [listOfChannel release];
+    [_ib_ChooseSetup release];
     [super dealloc];
 }
 -(void)removeSubViewOfNavigationController {
@@ -346,7 +349,6 @@
 
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     BOOL isOffline = [userDefaults boolForKey:_OfflineMode];
-
     if (isOffline == YES)
     {
         NSLog(@"OFFLINE OFFLINE OFFLINE");
@@ -466,6 +468,7 @@
 	UIInterfaceOrientation infOrientation = [UIApplication sharedApplication].statusBarOrientation;
 
 	[self adjustViewsForOrientation:infOrientation];
+    [self.ib_ChooseSetup setHidden:YES];
 }
 
 -(BOOL) shouldAutorotate
@@ -521,6 +524,7 @@
                                                    emptyCameraListView.frame.size.width,
                                                    emptyCameraListView.frame.size.height);
         }
+
         [cameraList reloadData];
         
                 
@@ -537,6 +541,7 @@
                                                    emptyCameraListView.frame.size.width,
                                                    emptyCameraListView.frame.size.height);
         }
+        
         
         [cameraList reloadData];
         
@@ -568,6 +573,55 @@
 }
 
 
+
+- (IBAction)bluetoothSetup:(id)sender {
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    
+    [userDefaults setInteger:BLUTOOTH_SETUP forKey:SET_UP_CAMERA];
+    [userDefaults synchronize];
+    
+    
+    if ([listOfChannel count] < MAX_CAM_ALLOWED)
+    {
+        NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+        [userDefaults setBool:FALSE forKey:FIRST_TIME_SETUP];
+        [userDefaults synchronize];
+        
+        [delegate sendStatus:SETUP_CAMERA];//initial setup
+        
+    }
+    else
+    {
+        [self showDialog:DIALOG_CANT_ADD_CAM];
+    }
+    
+}
+
+- (IBAction)wifiSetup:(id)sender {
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    
+    [userDefaults setInteger:WIFI_SETUP forKey:SET_UP_CAMERA];
+    [userDefaults synchronize];
+    
+    if ([listOfChannel count] < MAX_CAM_ALLOWED)
+    {
+        NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+        [userDefaults setBool:FALSE forKey:FIRST_TIME_SETUP];
+        [userDefaults synchronize];
+        
+        [delegate sendStatus:SETUP_CAMERA];//initial setup
+        
+    }
+    else
+    {
+        [self showDialog:DIALOG_CANT_ADD_CAM];
+    }
+    
+}
+
+- (IBAction)cancelSetup:(id)sender {
+    [self.ib_ChooseSetup setHidden:YES];
+}
 
 - (BOOL) shouldShowEditButton
 {
@@ -1070,20 +1124,26 @@
 
 -(IBAction)addCamera:(id)sender
 {
-    
-    if ([listOfChannel count] < MAX_CAM_ALLOWED)
-    {
-        NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-        [userDefaults setBool:FALSE forKey:FIRST_TIME_SETUP];
-        [userDefaults synchronize];
-        
-        [delegate sendStatus:SETUP_CAMERA];//initial setup
-        
-    }
-    else
-    {
-        [self showDialog:DIALOG_CANT_ADD_CAM];
-    }
+    /**
+     *Add view choose method to setup for camera (BLE or concurrentmode)
+     */
+    [emptyCameraListView setHidden:YES];
+    [self.ib_ChooseSetup setHidden:NO];
+    [self.view addSubview:self.ib_ChooseSetup];
+    [self.view bringSubviewToFront:self.ib_ChooseSetup];
+//    if ([listOfChannel count] < MAX_CAM_ALLOWED)
+//    {
+//        NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+//        [userDefaults setBool:FALSE forKey:FIRST_TIME_SETUP];
+//        [userDefaults synchronize];
+//        
+//        [delegate sendStatus:SETUP_CAMERA];//initial setup
+//        
+//    }
+//    else
+//    {
+//        [self showDialog:DIALOG_CANT_ADD_CAM];
+//    }
     
 }
 -(IBAction)checkNow:(id)sender
