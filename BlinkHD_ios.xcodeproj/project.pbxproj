@@ -180,7 +180,7 @@
 		8B91E64018629E9F0041BA9D /* photo_item.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B91E63F18629E9F0041BA9D /* photo_item.png */; };
 		8B91E6541862FE540041BA9D /* MenuCameraViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B91E6521862FE540041BA9D /* MenuCameraViewController.m */; };
 		8B91E6551862FE540041BA9D /* MenuCameraViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8B91E6531862FE540041BA9D /* MenuCameraViewController.xib */; };
-		8B92A08B1863E5DF005923D2 /* TimelineViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B92A0891863E5DF005923D2 /* TimelineViewController.m */; };
+		8B92A08B1863E5DF005923D2 /* TimelineViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8B92A0891863E5DF005923D2 /* TimelineViewController.mm */; };
 		8B92A08C1863E5DF005923D2 /* TimelineViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8B92A08A1863E5DF005923D2 /* TimelineViewController.xib */; };
 		8B92A0901863E68B005923D2 /* TimelineCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B92A08F1863E68B005923D2 /* TimelineCell.m */; };
 		8B92A0921863E69F005923D2 /* TimelineCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8B92A0911863E69F005923D2 /* TimelineCell.xib */; };
@@ -225,6 +225,7 @@
 		8B92C0EC186832A600538013 /* settings.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B92C0E7186832A600538013 /* settings.png */; };
 		8B92C0EE186849C700538013 /* camera_action_pan_bg.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B92C0ED186849C700538013 /* camera_action_pan_bg.png */; };
 		8B92DC24185ACACA00344530 /* ScheduleInformation.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B92DC23185ACACA00344530 /* ScheduleInformation.m */; };
+		8B9376B618729AC900E20756 /* ClipInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B9376B518729AC900E20756 /* ClipInfo.m */; };
 		8B93847F1856D42C009C4771 /* InformationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B93847D1856D42C009C4771 /* InformationViewController.m */; };
 		8B9384801856D42C009C4771 /* InformationViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8B93847E1856D42C009C4771 /* InformationViewController.xib */; };
 		8B9384841856E613009C4771 /* CameraSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B9384821856E613009C4771 /* CameraSettingsViewController.m */; };
@@ -703,7 +704,7 @@
 		8B91E6521862FE540041BA9D /* MenuCameraViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MenuCameraViewController.m; sourceTree = "<group>"; };
 		8B91E6531862FE540041BA9D /* MenuCameraViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MenuCameraViewController.xib; sourceTree = "<group>"; };
 		8B92A0881863E5DF005923D2 /* TimelineViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TimelineViewController.h; sourceTree = "<group>"; };
-		8B92A0891863E5DF005923D2 /* TimelineViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TimelineViewController.m; sourceTree = "<group>"; };
+		8B92A0891863E5DF005923D2 /* TimelineViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = TimelineViewController.mm; sourceTree = "<group>"; };
 		8B92A08A1863E5DF005923D2 /* TimelineViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TimelineViewController.xib; sourceTree = "<group>"; };
 		8B92A08E1863E68B005923D2 /* TimelineCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TimelineCell.h; sourceTree = "<group>"; };
 		8B92A08F1863E68B005923D2 /* TimelineCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TimelineCell.m; sourceTree = "<group>"; };
@@ -757,6 +758,8 @@
 		8B92C0ED186849C700538013 /* camera_action_pan_bg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = camera_action_pan_bg.png; sourceTree = "<group>"; };
 		8B92DC22185ACACA00344530 /* ScheduleInformation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ScheduleInformation.h; sourceTree = "<group>"; };
 		8B92DC23185ACACA00344530 /* ScheduleInformation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ScheduleInformation.m; sourceTree = "<group>"; };
+		8B9376B418729AC900E20756 /* ClipInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ClipInfo.h; sourceTree = "<group>"; };
+		8B9376B518729AC900E20756 /* ClipInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ClipInfo.m; sourceTree = "<group>"; };
 		8B93847C1856D42C009C4771 /* InformationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InformationViewController.h; sourceTree = "<group>"; };
 		8B93847D1856D42C009C4771 /* InformationViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InformationViewController.m; sourceTree = "<group>"; };
 		8B93847E1856D42C009C4771 /* InformationViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = InformationViewController.xib; sourceTree = "<group>"; };
@@ -2225,7 +2228,7 @@
 				8B92A09D1863F637005923D2 /* SavedEvent */,
 				8B92A08D1863E618005923D2 /* Timeline Cell */,
 				8B92A0881863E5DF005923D2 /* TimelineViewController.h */,
-				8B92A0891863E5DF005923D2 /* TimelineViewController.m */,
+				8B92A0891863E5DF005923D2 /* TimelineViewController.mm */,
 				8B92A08A1863E5DF005923D2 /* TimelineViewController.xib */,
 				8B92A09A1863ED66005923D2 /* TimelineInfo.h */,
 				8B92A09B1863ED66005923D2 /* TimelineInfo.m */,
@@ -2247,6 +2250,8 @@
 				8B92A0B618643212005923D2 /* TimelineButtonCell.h */,
 				8B92A0B718643212005923D2 /* TimelineButtonCell.m */,
 				8B92A0B91864322E005923D2 /* TimelineButtonCell.xib */,
+				8B9376B418729AC900E20756 /* ClipInfo.h */,
+				8B9376B518729AC900E20756 /* ClipInfo.m */,
 			);
 			name = "Timeline Cell";
 			sourceTree = "<group>";
@@ -3211,6 +3216,7 @@
 				8B9112C518600B7C004301C5 /* SettingsViewController.m in Sources */,
 				38CA70A715F7669D002CD1C5 /* NSData+Conversion.m in Sources */,
 				38C79E1F15C26270006EE378 /* Reachability.m in Sources */,
+				8B9376B618729AC900E20756 /* ClipInfo.m in Sources */,
 				1D60589B0D05DD56006BFB54 /* main.m in Sources */,
 				8B92A0901863E68B005923D2 /* TimelineCell.m in Sources */,
 				8B92A0951863E9DC005923D2 /* TimelineActivityCell.m in Sources */,
@@ -3228,7 +3234,7 @@
 				97987E421546AF2C0066C49B /* UserAccount.mm in Sources */,
 				97C49AB0154784F4008B7D03 /* SetupData.m in Sources */,
 				8B9384881856E940009C4771 /* CameraSettingsCell.m in Sources */,
-				8B92A08B1863E5DF005923D2 /* TimelineViewController.m in Sources */,
+				8B92A08B1863E5DF005923D2 /* TimelineViewController.mm in Sources */,
 				8B92A0B51864197E005923D2 /* EventInfo.m in Sources */,
 				8B92A09C1863ED66005923D2 /* TimelineInfo.m in Sources */,
 				9719EC5C155C9F30005419FC /* MBP_MenuViewController.mm in Sources */,
