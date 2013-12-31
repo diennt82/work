@@ -7,18 +7,31 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "ClipInfo.h"
 
 @interface EventInfo : NSObject
 
 @property (nonatomic) NSInteger eventID; //35
-@property (retain, nonatomic) NSString *time_code;//: "20131212074200",
-@property (retain, nonatomic) NSString *event_code;//: "01",
-@property (retain, nonatomic) NSString *description;//: "All is quiet",
-@property (retain, nonatomic) NSString *time_zone;//: "+07.00",
-@property (retain, nonatomic) NSString *snaps_url;//: "http://nxcomm-office.no-ip.info/release/events/motion01.jpg"
-@property (retain, nonatomic) NSString *clip_url;//: "http://nxcomm-office.no-ip.info/release/events/cam_clip.flv"
-
-@property (retain, nonatomic) UIImage *snapshotImage;
+@property (retain, nonatomic) NSString *alert;//: 4,
+@property (retain, nonatomic) NSString *value;//: "20131231112818000",
+@property (retain, nonatomic) NSString *alert_name;//: "motion detected",
+@property (retain, nonatomic) NSString *time_stamp;//: "2013-12-31T04:30:15Z",
+@property (retain, nonatomic) ClipInfo *clipInfo;
 @property (nonatomic) NSInteger numberVideo;
 
 @end
+
+
+/*
+ "id": 11078,
+ "alert": 4,
+ "value": "20131231112818000",
+ "alert_name": "motion detected",
+ "time_stamp": "2013-12-31T04:30:15Z",
+ "data": [
+ {
+ "image": "http://s3.amazonaws.com/hubble.wowza.content/642737396B49/snaps/642737396B49_04_20131229180917000.jpg?AWSAccessKeyId=AKIAJNYQ3ONBL7OLSZDA&Expires=1388472420&Signature=YZwYquVvxCuFrwHkMu94EJ6STNQ%3D",
+ "file": "http://s3.amazonaws.com/hubble.wowza.content/642737396B49/clips/642737396B49_04_20131229180917000_00001.flv?AWSAccessKeyId=AKIAJNYQ3ONBL7OLSZDA&Expires=1388472420&Signature=%2FXgeQFF%2BuJXt1fHuJyyif5z%2BYdY%3D",
+ "title":
+ }
+ */

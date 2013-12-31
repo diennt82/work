@@ -37,77 +37,11 @@
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
     
-//    TimelineInfo *info = [[TimelineInfo alloc] init];
-//    info.eventMessage = @"There is activity in livingroom";
-//    info.eventTime = @"Nov 28th 2013";
-//    info.snapshotImage = [UIImage imageNamed:@"Timeline_snapshot.png"];
-//    
-//    TimelineInfo *info1 = [[TimelineInfo alloc] init];
-//    info1.eventMessage = @"There is some loud noise!";
-//    info1.eventTime = @"Dec 10th 2013";
-//    info1.snapshotImage = [UIImage imageNamed:@"Timeline_snapshot.png"];
-//    
-//    TimelineInfo *info2 = [[TimelineInfo alloc] init];
-//    info2.eventMessage = @"It's comfortable 22˚ degree at home";
-//    info2.eventTime = @"Dec 9th 2013";
-//    //info2.snapshotImage = [UIImage imageNamed:@"Timeline_snapshot.png"];
-//    
-//    TimelineInfo *info3 = [[TimelineInfo alloc] init];
-//    info3.eventMessage = @"There is activity in livingroom";
-//    info3.eventTime = @"Dec 18th 2013";
-//    info3.snapshotImage = [UIImage imageNamed:@"Timeline_snapshot.png"];
-    
     EventInfo *info  = [[EventInfo alloc] init];
     info.eventID     = 34;
-    info.time_code   = @"20131212071500";
-    info.event_code  = @"04";
-    info.description = @"There's a lot of movement and noise";
-    info.time_zone   = @"+07.00";
-    info.snaps_url   = @"http://nxcomm-office.no-ip.info/release/events/motion01.jpg";
-    info.clip_url    = @"http://nxcomm-office.no-ip.info/release/events/cam_clip.flv";
-    info.snapshotImage = [UIImage imageNamed:@"Timeline_snapshot.png"];
-    
-    EventInfo *info1  = [[EventInfo alloc] init];
-    info1.eventID     = 33;
-    info1.time_code   = @"20131212071000";
-    info1.event_code  = @"04";
-    info1.description = @"There's a lot of movement and noise";
-    info1.time_zone   = @"+07.00";
-    info1.snaps_url   = @"http://nxcomm-office.no-ip.info/release/events/motion01.jpg";
-    info1.clip_url    = @"http://nxcomm-office.no-ip.info/release/events/cam_clip.flv";
-    info1.snapshotImage = [UIImage imageNamed:@"Timeline_snapshot.png"];
-    
-    EventInfo *info2  = [[EventInfo alloc] init];
-    info2.eventID     = 32;
-    info2.time_code   = @"20131212071500";
-    info2.event_code  = @"04";
-    info2.description = @"There's a lot of movement and noise";
-    info2.time_zone   = @"+07.00";
-    info2.snaps_url   = @"http://nxcomm-office.no-ip.info/release/events/motion01.jpg";
-    info2.clip_url    = @"http://nxcomm-office.no-ip.info/release/events/cam_clip.flv";
-    info2.snapshotImage = [UIImage imageNamed:@"Timeline_snapshot.png"];
-    
-    EventInfo *info3  = [[EventInfo alloc] init];
-    info3.eventID     = 31;
-    info3.time_code   = @"20131212071500";
-    info3.event_code  = @"04";
-    info3.description = @"There's a lot of movement and noise";
-    info3.time_zone   = @"+07.00";
-    info3.snaps_url   = @"http://nxcomm-office.no-ip.info/release/events/motion01.jpg";
-    info3.clip_url    = @"http://nxcomm-office.no-ip.info/release/events/cam_clip.flv";
-    
-    EventInfo *info4  = [[EventInfo alloc] init];
-    info4.eventID     = 30;
-    info4.time_code   = @"20131212071500";
-    info4.event_code  = @"04";
-    info4.description = @"There's a lot of movement and noise";
-    info4.time_zone   = @"+07.00";
-    info4.snaps_url   = @"http://nxcomm-office.no-ip.info/release/events/motion01.jpg";
-    info4.clip_url    = @"http://nxcomm-office.no-ip.info/release/events/cam_clip.flv";
-    info4.snapshotImage = [UIImage imageNamed:@"Timeline_snapshot.png"];
     info.numberVideo  = 9;
     
-    self.eventArray = [NSMutableArray arrayWithObjects:info, info1, info2, info3, info4, nil];
+    //self.eventArray = [NSMutableArray arrayWithObjects:info, info1, info2, info3, info4, nil];
 }
 
 - (void)didReceiveMemoryWarning
@@ -156,7 +90,7 @@
     
     EventInfo *info = (EventInfo *)[_eventArray objectAtIndex:indexPath.row];
     
-    NSString *datestr = info.time_code;
+    NSString *datestr = info.value;
     NSDateFormatter *dFormater = [[NSDateFormatter alloc]init];
     
     [dFormater setDateFormat:@"yyyyMMddHHmmss"];
@@ -167,7 +101,7 @@
     
     cell.timeLabel.text = [dFormater stringFromDate:date];
     cell.placeEventLabel.text = [NSString stringWithFormat:@"Back Yard\n %d Videos", info.numberVideo];
-    cell.snapshotImage.image = info.snapshotImage;
+    cell.snapshotImage.image = info.clipInfo.imgSnapshot;
     
     return cell;
 }

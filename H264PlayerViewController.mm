@@ -8,6 +8,7 @@
 
 #import "H264PlayerViewController.h"
 #import "EarlierViewController.h"
+#import "TimelineViewController.h"
 
 #define DISABLE_VIEW_RELEASE_FLAG 0
 
@@ -47,9 +48,10 @@
 
 #define PTT_ENGAGE_BTN 711
 
-@interface H264PlayerViewController ()
+@interface H264PlayerViewController () <TimelineVCDelegate>
 
 @property (retain, nonatomic) EarlierViewController *earlierVC;
+@property (retain, nonatomic) TimelineViewController *timelineVC;
 @property (retain, nonatomic) UIImageView *imageViewStreamer;
 @property (nonatomic) BOOL isHorizeShow;
 @property (nonatomic, retain) NSTimer *timerHideMenu;
@@ -176,6 +178,11 @@
     [self.imageViewStreamer setUserInteractionEnabled:YES];
 
     [self.scrollView insertSubview:_imageViewStreamer aboveSubview:_imageViewVideo];
+    
+    self.timelineVC = [[TimelineViewController alloc] init];
+    [self.view addSubview:_timelineVC.view];
+    
+    NSLog(@"%f, %f, %f, %f, %d", _timelineVC.view.frame.origin.x, _timelineVC.view.frame.origin.y, _timelineVC.view.frame.size.width, _timelineVC.view.frame.size.height, _timelineVC.view.hidden);
     
     [self becomeActive];
     //[self showMenuControlPanel];
@@ -1046,6 +1053,26 @@
     }
 }
 
+#pragma mark Delegate Timeline
+
+- (void)stopStreamToPlayback
+{
+    self.h264StreamerIsInStopped = TRUE;
+    [self stopPeriodicBeep];
+    [self stopPeriodicPopup];
+    
+    if (self.currentMediaStatus == MEDIA_INFO_HAS_FIRST_IMAGE ||
+        self.currentMediaStatus == MEDIA_PLAYER_STARTED ||
+        (self.currentMediaStatus == 0 && h264Streamer == NULL)) // Media player haven't start yet.
+    {
+        [self stopStream];
+    }
+    else if (h264Streamer != NULL)
+    {
+        h264Streamer->sendInterrupt(); // Assuming h264Streamer stop itself.
+    }
+}
+
 #pragma mark - Delegate Zone view controller
 
 - (void)beginProcessing
@@ -1097,6 +1124,8 @@
     self.horizMenu.hidden = YES;
     
     [self hidenAllBottomView];
+    
+    [self showTimelineView];
 }
 
 - (void)showControlMenu
@@ -1106,6 +1135,8 @@
     [self.view bringSubviewToFront:_horizMenu];
     
     [self updateBottomView];
+    
+    [self hideTimelineView];
     
     if (_timerHideMenu != nil)
     {
@@ -1118,6 +1149,16 @@
                                    selector:@selector(hideControlMenu)
                                    userInfo:nil
                                     repeats:NO];
+}
+
+- (void)hideTimelineView
+{
+    self.timelineVC.view.hidden = YES;
+}
+
+- (void)showTimelineView
+{
+    self.timelineVC.view.hidden = NO;
 }
 
 - (void)h264_HandleBecomeActive
@@ -1214,7 +1255,8 @@
     // loading earlierlist in background
 #if DISABLE_VIEW_RELEASE_FLAG
 #else
-    [self performSelectorInBackground:@selector(loadEarlierList) withObject:nil];
+    //[self performSelectorInBackground:@selector(loadEarlierList) withObject:nil];
+    [self performSelectorInBackground:@selector(loadTimelineEvents_bg) withObject:nil];
 #endif
     
     //Direction stuf
@@ -1740,6 +1782,13 @@
     //[self.activityStopStreamingProgress stopAnimating];
 }
 
+#if 1
+- (void)loadTimelineEvents_bg
+{
+    
+}
+#else
+
 - (void)loadEarlierList
 {
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
@@ -1786,6 +1835,7 @@
         }
     }
 }
+#endif
 
 -(void) getVQ_bg
 {
@@ -3323,6 +3373,8 @@
         } else {
             self.playlistViewController.tableView.frame = CGRectMake(0, 0 + deltaY, screenHeight, tableViewSize.height + 44);
         }
+        
+        [self.timelineVC.view removeFromSuperview];
 	}
 	else if (orientation == UIInterfaceOrientationPortrait || orientation == UIInterfaceOrientationPortraitUpsideDown)
 	{
@@ -3377,6 +3429,9 @@
         self.viewCtrlButtons.frame = CGRectMake(0, imageViewHeight + 44 + deltaY, _viewCtrlButtons.frame.size.width, _viewCtrlButtons.frame.size.height);
         self.viewStopStreamingProgress.frame = CGRectMake((screenWidth - INDICATOR_SIZE)/2, (screenHeight - INDICATOR_SIZE)/2 , INDICATOR_SIZE, INDICATOR_SIZE);
         self.playlistViewController.tableView.frame = CGRectMake(0, 44 + deltaY, tableViewSize.width, tableViewSize.height);
+        self.timelineVC.view.frame = CGRectMake(0, imageViewHeight + deltaY, screenWidth, screenHeight - imageViewHeight);
+        self.timelineVC.view.hidden = NO;
+        [self.view addSubview:_timelineVC.view];
 	}
 
 //    self.backBarBtnItem.target = self;

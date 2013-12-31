@@ -7,9 +7,18 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <CameraScanner/CameraScanner.h>
+
+@protocol TimelineVCDelegate <NSObject>
+
+- (void)stopStreamToPlayback;
+
+@end
 
 @interface TimelineViewController : UITableViewController
 
-@property (nonatomic, retain) NSMutableArray *eventArray;
+@property (nonatomic, assign) id<TimelineVCDelegate> timelineVCDelegate;
+@property (nonatomic, assign) CamChannel *camChannel;
+@property (nonatomic, retain) NSMutableArray *eventArrayTestData;
 
 @end

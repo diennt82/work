@@ -30,6 +30,7 @@
     [_snapshotImage release];
     [_eventLabel release];
     [_eventTimeLabel release];
+    [_activityIndicatorLoading release];
     [super dealloc];
 }
 @end

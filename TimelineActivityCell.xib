@@ -39,9 +39,15 @@
                         <rect key="frame" x="6" y="22" width="12" height="12"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     </imageView>
+                    <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="whiteLarge" id="cWf-21-RYU">
+                        <rect key="frame" x="142" y="114" width="37" height="37"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <color key="color" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                    </activityIndicatorView>
                 </subviews>
             </tableViewCellContentView>
             <connections>
+                <outlet property="activityIndicatorLoading" destination="cWf-21-RYU" id="xEX-oF-crO"/>
                 <outlet property="eventLabel" destination="T3v-2C-ztl" id="l1o-Z1-q38"/>
                 <outlet property="eventTimeLabel" destination="hV4-dy-a3v" id="atx-aP-94b"/>
                 <outlet property="snapshotImage" destination="Nlz-DS-UuQ" id="SXs-Ya-3tO"/>
