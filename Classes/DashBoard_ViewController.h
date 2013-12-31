@@ -23,7 +23,7 @@
 #define  MAX_CAM_ALLOWED 4
 #define ALERT_DEMO_926_TAG 905
 
-@interface DashBoard_ViewController : GAITrackedViewController<UITableViewDataSource, UITableViewDelegate, UINavigationControllerDelegate, UITextFieldDelegate>
+@interface DashBoard_ViewController : GAITrackedViewController<UITableViewDataSource, UITableViewDelegate, UINavigationControllerDelegate, UITextFieldDelegate, UIAlertViewDelegate>
 {
     IBOutlet EditCameraCell *cellView;
     IBOutlet UITableView * cameraList; 
@@ -54,7 +54,6 @@
 @property (nonatomic, retain)  UIToolbar *topbar;
 @property (nonatomic) BOOL editModeEnabled; 
 @property (nonatomic) int edittedChannelIndex; 
-@property (retain, nonatomic) IBOutlet UIView *ib_ChooseSetup;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil 
      withConnDelegate:(id<ConnectionMethodDelegate> ) caller;
@@ -73,10 +72,6 @@
 -(IBAction)renameCamera:(id)sender;
 -(IBAction)alertSetting:(id)sender;
 
-//choose method to setup camera
-- (IBAction)bluetoothSetup:(id)sender;
-- (IBAction)wifiSetup:(id)sender;
-- (IBAction)cancelSetup:(id)sender;
 
 - (BOOL) shouldShowEditButton;
 - (BOOL) shouldShowScanButton;

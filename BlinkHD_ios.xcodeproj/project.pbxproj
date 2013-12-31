@@ -385,6 +385,8 @@
 		97E39E6A1684416700F1A1DB /* hq.png in Resources */ = {isa = PBXBuildFile; fileRef = 97E39E681684416700F1A1DB /* hq.png */; };
 		97E3CC77159D89EE00481854 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 97E3CC76159D89EE00481854 /* AVFoundation.framework */; };
 		97F5531517BDD3AF00024017 /* MBPNavController.m in Sources */ = {isa = PBXBuildFile; fileRef = 97F5531417BDD3AF00024017 /* MBPNavController.m */; };
+		A10D11A418718EDD007A5191 /* DisplayWifiList_VController.mm in Sources */ = {isa = PBXBuildFile; fileRef = A10D11A218718EDD007A5191 /* DisplayWifiList_VController.mm */; };
+		A10D11AE18719018007A5191 /* DisplayWifiList_VController.xib in Resources */ = {isa = PBXBuildFile; fileRef = A10D11AA18719018007A5191 /* DisplayWifiList_VController.xib */; };
 		A1176B74180D1DD9000B7527 /* stream480p.sdp in Resources */ = {isa = PBXBuildFile; fileRef = A1176B72180D1DD9000B7527 /* stream480p.sdp */; };
 		A1176B75180D1DD9000B7527 /* stream720p.sdp in Resources */ = {isa = PBXBuildFile; fileRef = A1176B73180D1DD9000B7527 /* stream720p.sdp */; };
 		A11E8C1317E2DB7E00915F84 /* libstdc++.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = A11E8C1217E2DB7D00915F84 /* libstdc++.dylib */; };
@@ -412,12 +414,12 @@
 		A1A91A69187167F8000BCF22 /* BLEManageConnect.m in Sources */ = {isa = PBXBuildFile; fileRef = A1A91A66187167F8000BCF22 /* BLEManageConnect.m */; };
 		A1A91A6A187167F8000BCF22 /* UARTPeripheral.m in Sources */ = {isa = PBXBuildFile; fileRef = A1A91A68187167F8000BCF22 /* UARTPeripheral.m */; };
 		A1A91A7118716811000BCF22 /* CreateBLEConnection_VController.xib in Resources */ = {isa = PBXBuildFile; fileRef = A1A91A6E18716811000BCF22 /* CreateBLEConnection_VController.xib */; };
-		A1A91A7618716833000BCF22 /* Step_04_ViewController_ipad_ble.xib in Resources */ = {isa = PBXBuildFile; fileRef = A1A91A7218716833000BCF22 /* Step_04_ViewController_ipad_ble.xib */; };
-		A1A91A7718716833000BCF22 /* Step_04_ViewController_ble.mm in Sources */ = {isa = PBXBuildFile; fileRef = A1A91A7418716833000BCF22 /* Step_04_ViewController_ble.mm */; };
-		A1A91A7818716833000BCF22 /* Step_04_ViewController_ble.xib in Resources */ = {isa = PBXBuildFile; fileRef = A1A91A7518716833000BCF22 /* Step_04_ViewController_ble.xib */; };
-		A1A91A7D1871684A000BCF22 /* Step_06_ViewController_ipad_ble.xib in Resources */ = {isa = PBXBuildFile; fileRef = A1A91A791871684A000BCF22 /* Step_06_ViewController_ipad_ble.xib */; };
-		A1A91A7E1871684A000BCF22 /* Step_06_ViewController_ble.mm in Sources */ = {isa = PBXBuildFile; fileRef = A1A91A7B1871684A000BCF22 /* Step_06_ViewController_ble.mm */; };
-		A1A91A7F1871684A000BCF22 /* Step_06_ViewController_ble.xib in Resources */ = {isa = PBXBuildFile; fileRef = A1A91A7C1871684A000BCF22 /* Step_06_ViewController_ble.xib */; };
+		A1A91A7618716833000BCF22 /* EditCamera_VController_iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = A1A91A7218716833000BCF22 /* EditCamera_VController_iPad.xib */; };
+		A1A91A7718716833000BCF22 /* EditCamera_VController.mm in Sources */ = {isa = PBXBuildFile; fileRef = A1A91A7418716833000BCF22 /* EditCamera_VController.mm */; };
+		A1A91A7818716833000BCF22 /* EditCamera_VController.xib in Resources */ = {isa = PBXBuildFile; fileRef = A1A91A7518716833000BCF22 /* EditCamera_VController.xib */; };
+		A1A91A7D1871684A000BCF22 /* NetworkInfoToCamera_VController_iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = A1A91A791871684A000BCF22 /* NetworkInfoToCamera_VController_iPad.xib */; };
+		A1A91A7E1871684A000BCF22 /* NetworkInfoToCamera_VController.mm in Sources */ = {isa = PBXBuildFile; fileRef = A1A91A7B1871684A000BCF22 /* NetworkInfoToCamera_VController.mm */; };
+		A1A91A7F1871684A000BCF22 /* NetworkInfoToCamera_VController.xib in Resources */ = {isa = PBXBuildFile; fileRef = A1A91A7C1871684A000BCF22 /* NetworkInfoToCamera_VController.xib */; };
 		A1A91A8418716865000BCF22 /* Step_10_ViewController_ipad_ble.xib in Resources */ = {isa = PBXBuildFile; fileRef = A1A91A8018716865000BCF22 /* Step_10_ViewController_ipad_ble.xib */; };
 		A1A91A8518716865000BCF22 /* Step_10_ViewController_ble.mm in Sources */ = {isa = PBXBuildFile; fileRef = A1A91A8218716865000BCF22 /* Step_10_ViewController_ble.mm */; };
 		A1A91A8618716865000BCF22 /* Step_10_ViewController_ble.xib in Resources */ = {isa = PBXBuildFile; fileRef = A1A91A8318716865000BCF22 /* Step_10_ViewController_ble.xib */; };
@@ -976,6 +978,9 @@
 		97E39E681684416700F1A1DB /* hq.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = hq.png; sourceTree = "<group>"; };
 		97E3CC76159D89EE00481854 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		97F5531417BDD3AF00024017 /* MBPNavController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MBPNavController.m; sourceTree = "<group>"; };
+		A10D11A118718EDD007A5191 /* DisplayWifiList_VController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DisplayWifiList_VController.h; sourceTree = "<group>"; };
+		A10D11A218718EDD007A5191 /* DisplayWifiList_VController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = DisplayWifiList_VController.mm; sourceTree = "<group>"; };
+		A10D11AA18719018007A5191 /* DisplayWifiList_VController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = DisplayWifiList_VController.xib; sourceTree = "<group>"; };
 		A10EC10C17E0677C00EA4F9D /* libavcodec.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libavcodec.a; path = "../ios-frameworks/ffmpeg/lib/libavcodec.a"; sourceTree = "<group>"; };
 		A10EC10D17E0677C00EA4F9D /* libavdevice.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libavdevice.a; path = "../ios-frameworks/ffmpeg/lib/libavdevice.a"; sourceTree = "<group>"; };
 		A10EC10E17E0677C00EA4F9D /* libavfilter.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libavfilter.a; path = "../ios-frameworks/ffmpeg/lib/libavfilter.a"; sourceTree = "<group>"; };
@@ -1018,14 +1023,14 @@
 		A1A91A67187167F8000BCF22 /* UARTPeripheral.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UARTPeripheral.h; sourceTree = "<group>"; };
 		A1A91A68187167F8000BCF22 /* UARTPeripheral.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UARTPeripheral.m; sourceTree = "<group>"; };
 		A1A91A6E18716811000BCF22 /* CreateBLEConnection_VController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CreateBLEConnection_VController.xib; sourceTree = "<group>"; };
-		A1A91A7218716833000BCF22 /* Step_04_ViewController_ipad_ble.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = Step_04_ViewController_ipad_ble.xib; sourceTree = "<group>"; };
-		A1A91A7318716833000BCF22 /* Step_04_ViewController_ble.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Step_04_ViewController_ble.h; sourceTree = "<group>"; };
-		A1A91A7418716833000BCF22 /* Step_04_ViewController_ble.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = Step_04_ViewController_ble.mm; sourceTree = "<group>"; };
-		A1A91A7518716833000BCF22 /* Step_04_ViewController_ble.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = Step_04_ViewController_ble.xib; sourceTree = "<group>"; };
-		A1A91A791871684A000BCF22 /* Step_06_ViewController_ipad_ble.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = Step_06_ViewController_ipad_ble.xib; sourceTree = "<group>"; };
-		A1A91A7A1871684A000BCF22 /* Step_06_ViewController_ble.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Step_06_ViewController_ble.h; sourceTree = "<group>"; };
-		A1A91A7B1871684A000BCF22 /* Step_06_ViewController_ble.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = Step_06_ViewController_ble.mm; sourceTree = "<group>"; };
-		A1A91A7C1871684A000BCF22 /* Step_06_ViewController_ble.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = Step_06_ViewController_ble.xib; sourceTree = "<group>"; };
+		A1A91A7218716833000BCF22 /* EditCamera_VController_iPad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EditCamera_VController_iPad.xib; sourceTree = "<group>"; };
+		A1A91A7318716833000BCF22 /* EditCamera_VController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EditCamera_VController.h; sourceTree = "<group>"; };
+		A1A91A7418716833000BCF22 /* EditCamera_VController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = EditCamera_VController.mm; sourceTree = "<group>"; };
+		A1A91A7518716833000BCF22 /* EditCamera_VController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EditCamera_VController.xib; sourceTree = "<group>"; };
+		A1A91A791871684A000BCF22 /* NetworkInfoToCamera_VController_iPad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = NetworkInfoToCamera_VController_iPad.xib; sourceTree = "<group>"; };
+		A1A91A7A1871684A000BCF22 /* NetworkInfoToCamera_VController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NetworkInfoToCamera_VController.h; sourceTree = "<group>"; };
+		A1A91A7B1871684A000BCF22 /* NetworkInfoToCamera_VController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = NetworkInfoToCamera_VController.mm; sourceTree = "<group>"; };
+		A1A91A7C1871684A000BCF22 /* NetworkInfoToCamera_VController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = NetworkInfoToCamera_VController.xib; sourceTree = "<group>"; };
 		A1A91A8018716865000BCF22 /* Step_10_ViewController_ipad_ble.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = Step_10_ViewController_ipad_ble.xib; sourceTree = "<group>"; };
 		A1A91A8118716865000BCF22 /* Step_10_ViewController_ble.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Step_10_ViewController_ble.h; sourceTree = "<group>"; };
 		A1A91A8218716865000BCF22 /* Step_10_ViewController_ble.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = Step_10_ViewController_ble.mm; sourceTree = "<group>"; };
@@ -2822,18 +2827,21 @@
 				A1A91A8718716909000BCF22 /* CreateBLEConnection_VController.h */,
 				A1A91A8818716909000BCF22 /* CreateBLEConnection_VController.mm */,
 				A1A91A6E18716811000BCF22 /* CreateBLEConnection_VController.xib */,
-				A1A91A7318716833000BCF22 /* Step_04_ViewController_ble.h */,
-				A1A91A7418716833000BCF22 /* Step_04_ViewController_ble.mm */,
-				A1A91A7518716833000BCF22 /* Step_04_ViewController_ble.xib */,
-				A1A91A7218716833000BCF22 /* Step_04_ViewController_ipad_ble.xib */,
-				A1A91A791871684A000BCF22 /* Step_06_ViewController_ipad_ble.xib */,
-				A1A91A7A1871684A000BCF22 /* Step_06_ViewController_ble.h */,
-				A1A91A7B1871684A000BCF22 /* Step_06_ViewController_ble.mm */,
-				A1A91A7C1871684A000BCF22 /* Step_06_ViewController_ble.xib */,
+				A1A91A7318716833000BCF22 /* EditCamera_VController.h */,
+				A1A91A7418716833000BCF22 /* EditCamera_VController.mm */,
+				A1A91A7518716833000BCF22 /* EditCamera_VController.xib */,
+				A1A91A7218716833000BCF22 /* EditCamera_VController_iPad.xib */,
+				A1A91A7A1871684A000BCF22 /* NetworkInfoToCamera_VController.h */,
+				A1A91A7B1871684A000BCF22 /* NetworkInfoToCamera_VController.mm */,
+				A1A91A7C1871684A000BCF22 /* NetworkInfoToCamera_VController.xib */,
+				A1A91A791871684A000BCF22 /* NetworkInfoToCamera_VController_iPad.xib */,
 				A1A91A8018716865000BCF22 /* Step_10_ViewController_ipad_ble.xib */,
 				A1A91A8118716865000BCF22 /* Step_10_ViewController_ble.h */,
 				A1A91A8218716865000BCF22 /* Step_10_ViewController_ble.mm */,
 				A1A91A8318716865000BCF22 /* Step_10_ViewController_ble.xib */,
+				A10D11A118718EDD007A5191 /* DisplayWifiList_VController.h */,
+				A10D11A218718EDD007A5191 /* DisplayWifiList_VController.mm */,
+				A10D11AA18719018007A5191 /* DisplayWifiList_VController.xib */,
 			);
 			name = "BLE Setup";
 			sourceTree = "<group>";
@@ -3097,7 +3105,7 @@
 				8B9112DC1860372D004301C5 /* Hubble-Notif.png in Resources */,
 				8B9384801856D42C009C4771 /* InformationViewController.xib in Resources */,
 				8B1D545818658903008857F0 /* SchedulerViewController.xib in Resources */,
-				A1A91A7F1871684A000BCF22 /* Step_06_ViewController_ble.xib in Resources */,
+				A1A91A7F1871684A000BCF22 /* NetworkInfoToCamera_VController.xib in Resources */,
 				8B9384A318570207009C4771 /* sound-s-d.png in Resources */,
 				8B92C0E8186832A600538013 /* add_camera_pressed.png in Resources */,
 				8B92A0921863E69F005923D2 /* TimelineCell.xib in Resources */,
@@ -3111,7 +3119,7 @@
 				A1E74747185F07AE00A54B29 /* upgrade_pressed.png in Resources */,
 				A19778ED181E3316007C3CA7 /* ZoneViewController_ipad.xib in Resources */,
 				38167AC216118DB600B7FA0A /* bb_pic_2.png in Resources */,
-				A1A91A7618716833000BCF22 /* Step_04_ViewController_ipad_ble.xib in Resources */,
+				A1A91A7618716833000BCF22 /* EditCamera_VController_iPad.xib in Resources */,
 				8B9899DC1859AA6A00AC3852 /* slider-default7-trackBackground@2x.png in Resources */,
 				38DE1C55168AEA770049E814 /* AlertSettingViewController.xib in Resources */,
 				8B9B57E1184F0D9900E58543 /* frame-5_update-iOS7_new.png in Resources */,
@@ -3147,7 +3155,7 @@
 				8B9907031869824D0054966B /* camera_action_video.png in Resources */,
 				8B9899CE1859A04F00AC3852 /* slider-default7-handle@2x.png in Resources */,
 				A1A91A8618716865000BCF22 /* Step_10_ViewController_ble.xib in Resources */,
-				A1A91A7818716833000BCF22 /* Step_04_ViewController_ble.xib in Resources */,
+				A1A91A7818716833000BCF22 /* EditCamera_VController.xib in Resources */,
 				8BC0A01B1844A6A200A5FD52 /* bb_splash_screen_horizontal.png in Resources */,
 				8B9112C11860054D004301C5 /* AddBtn.png in Resources */,
 				8B9B57DF184F0D9900E58543 /* frame-3_update-iOS7_new.png in Resources */,
@@ -3280,10 +3288,11 @@
 				8B92A0B01863FD13005923D2 /* EarlierViewController.xib in Resources */,
 				A1176B74180D1DD9000B7527 /* stream480p.sdp in Resources */,
 				978F090117DEFD670053972F /* no_img_available.jpeg in Resources */,
+				A10D11AE18719018007A5191 /* DisplayWifiList_VController.xib in Resources */,
 				8B0E1DEA1844A0E80080000A /* mestartup000022.png in Resources */,
 				8B9112C618600B7C004301C5 /* SettingsViewController.xib in Resources */,
 				8BC0A0401844AC3600A5FD52 /* circle_buttons1_rt.png in Resources */,
-				A1A91A7D1871684A000BCF22 /* Step_06_ViewController_ipad_ble.xib in Resources */,
+				A1A91A7D1871684A000BCF22 /* NetworkInfoToCamera_VController_iPad.xib in Resources */,
 				978F090317DF06C80053972F /* PlaylistCell.xib in Resources */,
 				8B9AF6A518581D3300AC09C3 /* AddScheduleViewController.xib in Resources */,
 				8B9899E01859AA6A00AC3852 /* slider-default7-track@2x.png in Resources */,
@@ -3330,7 +3339,7 @@
 				28D7ACF80DDB3853001CB0EB /* MBP_iosViewController.mm in Sources */,
 				8B9112CA186010F1004301C5 /* GeneralCell.m in Sources */,
 				8BA18CAC184870470097D1AF /* DeviceSettingsViewController.m in Sources */,
-				A1A91A7E1871684A000BCF22 /* Step_06_ViewController_ble.mm in Sources */,
+				A1A91A7E1871684A000BCF22 /* NetworkInfoToCamera_VController.mm in Sources */,
 				A1A91A69187167F8000BCF22 /* BLEManageConnect.m in Sources */,
 				97987CD815468C2E0066C49B /* MBP_FirstPage.m in Sources */,
 				8B9384AF18570567009C4771 /* ValueSettingsViewController.m in Sources */,
@@ -3383,6 +3392,7 @@
 				3803A85E15FDF15600B4DD97 /* CameraAlert.m in Sources */,
 				380C430016195047001434C0 /* AlertSettingViewController.mm in Sources */,
 				8B1D5453186587CB008857F0 /* CellImageView.m in Sources */,
+				A10D11A418718EDD007A5191 /* DisplayWifiList_VController.mm in Sources */,
 				38A13AF316363147000138EA /* UnderlinedUILabel.m in Sources */,
 				8B1D544D186581B8008857F0 /* SchedulerCell.m in Sources */,
 				8B917287186C45C4007754F3 /* QBAnimationItem.m in Sources */,
@@ -3394,7 +3404,7 @@
 				380CB0D616DC60DC00290587 /* Step_11_ViewController.m in Sources */,
 				8B92A0AF1863FD13005923D2 /* EarlierViewController.m in Sources */,
 				8B9384921856EEFE009C4771 /* SlideSettingsCell.m in Sources */,
-				A1A91A7718716833000BCF22 /* Step_04_ViewController_ble.mm in Sources */,
+				A1A91A7718716833000BCF22 /* EditCamera_VController.mm in Sources */,
 				8B92DC24185ACACA00344530 /* ScheduleInformation.m in Sources */,
 				9704F84117B37CB3005F9868 /* DashBoard_ViewController.mm in Sources */,
 				97F5531517BDD3AF00024017 /* MBPNavController.m in Sources */,

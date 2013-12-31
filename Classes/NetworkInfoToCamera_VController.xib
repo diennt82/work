@@ -5,7 +5,7 @@
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3746"/>
     </dependencies>
     <objects>
-        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="Step_06_ViewController_ble">
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="NetworkInfoToCamera_VController">
             <connections>
                 <outlet property="confPasswordCell" destination="41" id="45"/>
                 <outlet property="ib_dialogVerifyNetwork" destination="WbL-nC-Q2z" id="z9l-KY-O40"/>

@@ -54,10 +54,24 @@
     HttpCommunication *comm = [[HttpCommunication alloc]init];
     NSString * command = RESTART_HTTP_CMD;
     [comm sendCommandAndBlock:command];
+    [comm release];
 }
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    // Do any additional setup after loading the view.
+	[[NSNotificationCenter defaultCenter] addObserver: self
+                                             selector: @selector(handleEnteredBackground)
+                                                 name: UIApplicationDidEnterBackgroundNotification
+                                               object: nil];
+    
+    // Do any additional setup after loading the view.
+	[[NSNotificationCenter defaultCenter] addObserver: self
+                                             selector: @selector(becomeActive)
+                                                 name: UIApplicationDidBecomeActiveNotification
+                                               object: nil];
+    
     //Keep screen on
     [UIApplication sharedApplication].idleTimerDisabled = YES;
     
@@ -120,6 +134,46 @@
         
     }
         
+}
+
+-(void) handleEnteredBackground
+{
+//    showProgressNextTime = TRUE;
+}
+
+-(void) becomeActive
+{
+//    if (showProgressNextTime)
+//    {
+        NSLog(@"cshow progress 03");
+        [self showProgress:nil];
+//    }
+    
+//    task_cancelled = NO;
+    [self waitingCameraRebootAndForceToWifiHome];
+}
+
+-(void) showProgress:(NSTimer *) exp
+{
+    NSLog(@"show progress ");
+    {
+        if (self.progressView != nil)
+        {
+            NSLog(@"show progress 01 ");
+            self.progressView.hidden = NO;
+            [self.view bringSubviewToFront:self.progressView];
+        }
+    }
+}
+
+- (void) hideProgess
+{
+    NSLog(@"hide progress");
+    if (self.progressView != nil)
+    {
+        self.progressView.hidden = YES;
+    }
+    
 }
 
 - (void)viewDidUnload

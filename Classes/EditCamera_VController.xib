@@ -5,7 +5,7 @@
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3746"/>
     </dependencies>
     <objects>
-        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="Step_04_ViewController_ble">
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="EditCamera_VController">
             <connections>
                 <outlet property="camName" destination="23" id="25"/>
                 <outlet property="statusDialog" destination="u5L-8T-h4I" id="aED-1B-LyR"/>

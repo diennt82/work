@@ -17,7 +17,6 @@
 
 @synthesize  inProgress;
 @synthesize  homeWifiSSID;
-@synthesize bleManagement = _bleManagement;
 @synthesize cameraName = _cameraName;
 @synthesize cameraMac = _cameraMac;
 @synthesize currentBLEList = _currentBLEList;
@@ -48,9 +47,9 @@
     [self.ib_lableStage setText:@"No connect"];
     [self.ib_NextStepAfterReady setEnabled:NO];
     
-    _bleManagement = [BLEManageConnect getInstanceBLE];
-    _bleManagement.delegate = self;
-    [self waiting_for_scan_cameraBLE];
+    [BLEManageConnect getInstanceBLE];
+    [BLEManageConnect getInstanceBLE].delegate = self;
+//    [self waiting_for_scan_cameraBLE];
 }
 
 - (void)waiting_for_scan_cameraBLE
@@ -59,9 +58,10 @@
     [self.ib_Indicator setHidden:NO];
     [self.ib_NextStepAfterReady setEnabled:NO];
     [self.ib_lableStage setText:@"Waiting for scanning BLE!"];
-    [[BLEManageConnect getInstanceBLE] scan];
+    [[BLEManageConnect getInstanceBLE] reScan];
     [BLEManageConnect getInstanceBLE].delegate = self;
-    [NSTimer scheduledTimerWithTimeInterval:3.0 target:self selector:@selector(scanCameraBLEDone) userInfo:nil repeats:NO];
+
+    [NSTimer scheduledTimerWithTimeInterval:4.0 target:self selector:@selector(scanCameraBLEDone) userInfo:nil repeats:NO];
 }
 
 - (void)scanCameraBLEDone
@@ -80,7 +80,7 @@
         CBPeripheral *peripheralSelected =  [_currentBLEList objectAtIndex:0];
         [[BLEManageConnect getInstanceBLE] connectToBLEWithPeripheral:peripheralSelected];
         //Auto to next step to get mac address and version
-        _timerUpdateUI = [NSTimer scheduledTimerWithTimeInterval:5 target:self selector:@selector(updateUIConnection:) userInfo:nil repeats:NO];
+        _timerUpdateUI = [NSTimer scheduledTimerWithTimeInterval:3 target:self selector:@selector(updateUIConnection:) userInfo:nil repeats:NO];
         
     } else
     {
@@ -90,15 +90,21 @@
 }
 - (void)updateUIConnection:(NSTimer *)info
 {
-    _timerUpdateUI = nil;
-    if (_bleManagement == nil) return;
+    if ([BLEManageConnect getInstanceBLE].isOnBLE == NO)
+    {
+//        [self.ib_lableStage setText:@"disconnect, no ready"];
+//        [self.ib_Indicator setHidden:YES];
+        [self waiting_for_scan_cameraBLE];
+        return;
+    }
+    
     [self.ib_Indicator setHidden:NO];
     [self.ib_NextStepAfterReady setEnabled:NO];
-    if (_bleManagement.state == IDLE)
+    if ([BLEManageConnect getInstanceBLE].state == IDLE)
     {
         [self.ib_lableStage setText:@"Waiting for connecting"];
     }
-    else if (_bleManagement.state == CONNECTED)
+    else if ([BLEManageConnect getInstanceBLE].state == CONNECTED)
     {
         //stop timer update
         if (_timerUpdateUI)
@@ -115,6 +121,7 @@
         [self.ib_Indicator setHidden:YES];
         [self.ib_lableStage setText:@"Connected"];
         [self.ib_NextStepAfterReady setEnabled:YES];
+        [self.ib_tableListBLE setExclusiveTouch:NO];
     }
     else
     {
@@ -342,21 +349,21 @@
             
             NSLog(@"Load step 4");
             //Load the next xib
-            Step_04_ViewController_ble *step04ViewController = nil;
+            EditCamera_VController *step04ViewController = nil;
             
             
             
             if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
             {
                 
-                step04ViewController = [[Step_04_ViewController_ble alloc]
-                                        initWithNibName:@"Step_04_ViewController_ble_ipad" bundle:nil];
+                step04ViewController = [[EditCamera_VController alloc]
+                                        initWithNibName:@"EditCamera_VController_iPad" bundle:nil];
                 
             }
             else
             {
-                step04ViewController = [[Step_04_ViewController_ble alloc]
-                                        initWithNibName:@"Step_04_ViewController_ble" bundle:nil];
+                step04ViewController = [[EditCamera_VController alloc]
+                                        initWithNibName:@"EditCamera_VController" bundle:nil];
             }
             step04ViewController.cameraMac = self.cameraMac;
             step04ViewController.cameraName = self.cameraName;
@@ -522,10 +529,13 @@
 {
     CBPeripheral *peripheralSelected =  [[BLEManageConnect getInstanceBLE].listBLEs objectAtIndex:indexPath.row];
     [[BLEManageConnect getInstanceBLE] connectToBLEWithPeripheral:peripheralSelected];
-    _timerUpdateUI  = [NSTimer scheduledTimerWithTimeInterval:2
+    [self.ib_Indicator setHidden:NO];
+    [self.ib_NextStepAfterReady setEnabled:NO];
+    [self.ib_tableListBLE setExclusiveTouch:YES];
+    _timerUpdateUI  = [NSTimer scheduledTimerWithTimeInterval:3.0
                                                        target:self
                                                      selector:@selector(updateUIConnection:)
                                                      userInfo:nil
-                                                      repeats:YES];
+                                                      repeats:NO];
 }
 @end

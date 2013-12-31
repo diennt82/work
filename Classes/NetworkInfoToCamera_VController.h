@@ -15,7 +15,7 @@
 #import "Step_07_ViewController.h"
 #import "BLEManageConnect.h"
 
-@interface Step_06_ViewController_ble : UIViewController<BLEManageConnectDelegate>
+@interface NetworkInfoToCamera_VController : UIViewController<BLEManageConnectDelegate>
 {
     
     IBOutlet UITableViewCell * ssidCell;

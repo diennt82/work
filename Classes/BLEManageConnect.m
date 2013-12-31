@@ -92,10 +92,14 @@
 
 - (void)centralManagerDidUpdateState:(CBCentralManager *)central
 {
-    if (central.state != CBCentralManagerStatePoweredOn) {
+    if (central.state == CBCentralManagerStatePoweredOn) {
         // In a real app, you'd deal with all the states correctly
+        self.isOnBLE = YES;
+        [self scan];
+    } else
+    {
+        NSLog(@"BLE not power on");
         self.isOnBLE = NO;
-        return;
     }
 }
 
@@ -105,17 +109,27 @@
 - (void)scan
 {
 //    scanForPeripheralsWithServices:@[UARTPeripheral.uartServiceUUID]
-    if (_cm != nil)
+    if (_cm.state == CBCentralManagerStatePoweredOn)
+    {
+        NSLog(@"Scanning started");
+        [_cm scanForPeripheralsWithServices:nil options:@{CBCentralManagerScanOptionAllowDuplicatesKey: [NSNumber numberWithBool:NO]}];
+    }
+    else{
+        NSLog(@"can't scan");
+    }
+    [self.listBLEs removeAllObjects];
+    
+}
+
+- (void)reScan
+{
+    if (_cm)
     {
         [_cm release];
         _cm = nil;
+        _cm = [[CBCentralManager alloc] initWithDelegate:self queue:nil];
     }
-    _cm = [[CBCentralManager alloc] initWithDelegate:self queue:nil];
-    [_cm scanForPeripheralsWithServices:nil options:@{CBCentralManagerScanOptionAllowDuplicatesKey: [NSNumber numberWithBool:NO]}];
-    [self.listBLEs removeAllObjects];
-    NSLog(@"Scanning started");
 }
-
 - (void) centralManager:(CBCentralManager *)central didDiscoverPeripheral:(CBPeripheral *)peripheral advertisementData:(NSDictionary *)advertisementData RSSI:(NSNumber *)RSSI
 
 {
@@ -146,8 +160,10 @@
 {
     
     NSLog(@"didDisconnectPeripheral %@", peripheral.name);
+    self.myPeripheral = peripheral;
     self.state = IDLE;
-    if ([self.uartPeripheral.peripheral isEqual:peripheral])
+    self.isOnBLE = NO;
+    if ([self.uartPeripheral.peripheral isEqual:self.myPeripheral])
         
     {
         [self didDisConnect];
@@ -176,7 +192,7 @@
     [_cm stopScan];
     self.myPeripheral = peripheral;
     self.uartPeripheral = [[UARTPeripheral alloc] initWithPeripheral:self.myPeripheral delegate:self];
-    [_cm connectPeripheral:peripheral options:@{CBConnectPeripheralOptionNotifyOnDisconnectionKey: [NSNumber numberWithBool:YES]}];
+    [_cm connectPeripheral:self.myPeripheral options:@{CBConnectPeripheralOptionNotifyOnDisconnectionKey: [NSNumber numberWithBool:YES]}];
 }
 
 @end

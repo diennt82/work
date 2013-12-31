@@ -68,6 +68,7 @@ typedef enum
 + (BLEManageConnect *) getInstanceBLE;
 - (id) init;
 - (void)scan;
+- (void)reScan;
 - (void) didConnect;
 - (void) didDisconnect;
 - (void)connectToBLEWithPeripheral:(CBPeripheral *)peripheral;

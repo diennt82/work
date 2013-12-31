@@ -7,7 +7,7 @@
 //
 
 #import "Step_06_ViewController.h"
-#define TIME_INPUT_PASSWORD_AGAIN   20.0
+#define TIME_INPUT_PASSWORD_AGAIN   60.0
 @interface Step_06_ViewController () <UITextFieldDelegate>
 
 @property (retain, nonatomic) UITextField *tfSSID;
@@ -633,6 +633,7 @@
     camera_mac = [deviceComm sendCommandAndBlock:GET_MAC_ADDRESS
                                                 withTimeout:5.0];
     camera_mac = [Util add_colon_to_mac:camera_mac];
+    [deviceComm release];
 #else
     camera_mac = [CameraPassword fetchBSSIDInfo];
 #endif
@@ -711,7 +712,7 @@
     [[NSUserDefaults standardUserDefaults] synchronize];
     
     
-     NSString * device_configuration = [_deviceConf getDeviceConfString];
+     NSString * device_configuration = [_deviceConf getDeviceEncodedConfString];
     
     
     NSString * setup_cmd = [NSString stringWithFormat:@"%@%@",
@@ -766,13 +767,7 @@
         {
             step08ViewController = [[Step_08_ViewController alloc]
                                     initWithNibName:@"Step_08_ViewController" bundle:nil];
-            
-            
         }
-        
-        
-        
-        
         step08ViewController.ssid = _deviceConf.ssid;
         [self.navigationController pushViewController:step08ViewController animated:NO];
         
@@ -828,6 +823,7 @@
     NSString *commandGetState = GET_STATE_NETWORK_CAMERA;
     NSLog(@"command is %@", commandGetState);
     NSString *state = [httpCom sendCommandAndBlock:commandGetState];
+    [httpCom release];
     if (state != nil && [state length] > 0)
     {
         _currentStateCamera = [[state componentsSeparatedByString:@": "] objectAtIndex:1];
@@ -839,7 +835,7 @@
     NSLog(@"_currentStateCamera is %@", _currentStateCamera);
     
     // get state network of camera after 4s
-    _inputPasswordTimer = [NSTimer scheduledTimerWithTimeInterval: 3.0//
+    _inputPasswordTimer = [NSTimer scheduledTimerWithTimeInterval: 6.0//
                                      target:self
                                    selector:@selector(getStatusOfCameraToWifi:)
                                    userInfo:nil
@@ -902,6 +898,11 @@
     {
         NSLog(@"cancel");
     }
+}
+
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [self resetAllTimer];
 }
 - (void)resetAllTimer
 {

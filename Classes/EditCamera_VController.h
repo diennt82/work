@@ -12,13 +12,13 @@
 
 #import "WifiEntry.h"
 #import "WifiListParser.h"
-#import "Step_05_ViewController.h"
+#import "DisplayWifiList_VController.h"
 #import "UARTPeripheral.h"
 #import "BLEManageConnect.h"
 
 #define CONF_CAM_BTN_TAG 1002
 
-@interface Step_04_ViewController_ble : UIViewController<UITextViewDelegate, BLEManageConnectDelegate>
+@interface EditCamera_VController : UIViewController<UITextViewDelegate, BLEManageConnectDelegate>
 {
     IBOutlet UIView * camName;
     

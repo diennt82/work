@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "MBP_iosViewController.h"
-#import "Step_04_ViewController_ble.h"
+#import "EditCamera_VController.h"
 #import "Step_10_ViewController.h"
 //#import "UARTPeripheral.h"
 #import "BLEManageConnect.h"
@@ -27,7 +27,6 @@
     NSString * homeWifiSSID;
     BOOL showProgressNextTime;
     
-    BLEManageConnect *_bleManagement;
     NSTimer *_timerUpdateUI;
     NSTimer *_getMacAddressTimer;
     NSString *_cameraMac;
@@ -41,7 +40,6 @@
 @property (nonatomic, retain) NSMutableArray *currentBLEList;
 @property (nonatomic, retain) NSString *cameraMac;
 @property (nonatomic, retain) NSString *cameraName;
-@property (nonatomic,retain) BLEManageConnect *bleManagement;
 
 @property (retain, nonatomic) IBOutlet UILabel *ib_lableStage;
 

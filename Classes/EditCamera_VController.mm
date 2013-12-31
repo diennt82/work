@@ -6,13 +6,13 @@
 //  Copyright (c) 2012 Smart Panda Ltd. All rights reserved.
 //
 
-#import "Step_04_ViewController_ble.h"
+#import "EditCamera_VController.h"
 
-@interface Step_04_ViewController_ble ()
+@interface EditCamera_VController ()
 
 @end
 
-@implementation Step_04_ViewController_ble
+@implementation EditCamera_VController
 
 
 @synthesize cameraMac, cameraName;
@@ -390,7 +390,7 @@
     //create dialog process
     [self.statusDialog setHidden:NO];
 
-
+    //after 60s will display for user get list wifi again
     _timeout = [NSTimer scheduledTimerWithTimeInterval:60 target:self selector:@selector(showDialog:) userInfo:nil repeats:NO];
     _getWifiListTimer = [NSTimer scheduledTimerWithTimeInterval:0.1
                                                          target:self
@@ -406,11 +406,9 @@
 {
     [self askForRetry];
 }
-//Double the timeout..
--(void) queryWifiList_2
+
+- (void)resetAllTimer
 {
-    _waitingResponse = NO;
-    _result_received = nil;
     //reset timer
     if (_timeout)
     {
@@ -422,6 +420,14 @@
         [_getWifiListTimer invalidate];
         _getWifiListTimer = nil;
     }
+}
+//Double the timeout..
+-(void) queryWifiList_2
+{
+    _waitingResponse = NO;
+    _result_received = nil;
+    //reset timer
+    [self resetAllTimer];
     //and create it again
     _timeout = [NSTimer scheduledTimerWithTimeInterval:60 target:self selector:@selector(showDialog:) userInfo:nil repeats:NO];
     _getWifiListTimer = [NSTimer scheduledTimerWithTimeInterval:0.1
@@ -542,23 +548,23 @@
     
     NSLog(@"Load step 5");
     //Load the next xib
-    Step_05_ViewController *step05ViewController = nil;
+    DisplayWifiList_VController *step05ViewController = nil;
     
     
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
     {
         
         
-        step05ViewController =  [[Step_05_ViewController alloc]
-                                 initWithNibName:@"Step_05_ViewController_ipad" bundle:nil];
+        step05ViewController =  [[DisplayWifiList_VController alloc]
+                                 initWithNibName:@"DisplayWifiList_VController" bundle:nil];
         
     }
     else
     {
         
         
-        step05ViewController =  [[Step_05_ViewController alloc]
-                                 initWithNibName:@"Step_05_ViewController" bundle:nil];
+        step05ViewController =  [[DisplayWifiList_VController alloc]
+                                 initWithNibName:@"DisplayWifiList_VController" bundle:nil];
         
         
         

@@ -10,9 +10,9 @@
 #define BlinkHD_ios_define_h
 
 #define CONCURRENT_SETUP    1
-#define BLE_SETUP           0
+
 
 #define SET_UP_CAMERA @"SET_UP_CAMERA"
-#define BLUTOOTH_SETUP  1
+#define BLUETOOTH_SETUP  1
 #define WIFI_SETUP      2
 #endif
