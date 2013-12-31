@@ -98,9 +98,13 @@
     
     self.urlVideo = clip_info.urlFile;
     
+    NSLog(@"%@", _clipsInEvent);
+    
     if (_clipsInEvent != nil &&
         _clipsInEvent.count > 0)
     {
+        clips = [NSMutableArray array];
+        
         for (NSDictionary *clipInfo in _clipsInEvent)
         {
             NSString *urlClipString = [clipInfo objectForKey:@"file"];
@@ -109,9 +113,12 @@
                 ![urlClipString isEqualToString:@""])
             {
                 [clips addObject:urlClipString];
+                break;
             }
         }
     }
+    
+    NSLog(@"%@", clips);
     
     listener->updateClips(clips);
     listener->updateFinalClipCount(clips.count);
@@ -502,19 +509,18 @@
     CGFloat screenWidth = screenBounds.size.width;
     CGFloat screenHeight = screenBounds.size.height;
     
-    CGSize activitySize = _activityIndicator.frame.size;
+    //CGSize activitySize = _activityIndicator.frame.size;
     
 	if (orientation == UIInterfaceOrientationLandscapeLeft || orientation == UIInterfaceOrientationLandscapeRight)
 	{
         
-        self.view.backgroundColor = nil;
         [[UIApplication sharedApplication] setStatusBarHidden:YES];
         self.navigationController.navigationBar.hidden = YES;
         
         CGFloat imageViewHeight = screenHeight * 9 / 16;
         CGRect newRect = CGRectMake(0, (screenWidth - imageViewHeight) / 2, screenHeight, imageViewHeight);
         self.imageVideo.frame = newRect;
-        self.activityIndicator.frame = CGRectMake(screenHeight / 2 - activitySize.width / 2, screenWidth / 2 - activitySize.height / 2, activitySize.width, activitySize.height);
+        //self.activityIndicator.frame = CGRectMake(screenHeight / 2 - activitySize.width / 2, screenWidth / 2 - activitySize.height / 2, activitySize.width, activitySize.height);
 	}
 	else if (orientation == UIInterfaceOrientationPortrait || orientation == UIInterfaceOrientationPortraitUpsideDown)
 	{
@@ -526,14 +532,13 @@
         
         [[UIApplication sharedApplication] setStatusBarHidden:NO];
         self.navigationController.navigationBar.hidden = NO;
-        self.view.backgroundColor = [UIColor whiteColor];
         
         CGFloat imageViewHeight = screenWidth * 9 / 16;
         
-        CGRect destRect = CGRectMake(0, 44 + deltaY, screenWidth, imageViewHeight);
+        CGRect destRect = CGRectMake(0, screenHeight / 2 - imageViewHeight / 2, screenWidth, imageViewHeight);
         self.imageVideo.frame = destRect;
         
-        self.activityIndicator.frame = CGRectMake(screenWidth / 2 - activitySize.width / 2, imageViewHeight / 2 - activitySize.height / 2 + 44 + deltaY, activitySize.width, activitySize.height);
+        //self.activityIndicator.frame = CGRectMake(screenWidth / 2 - activitySize.width / 2, imageViewHeight / 2 - activitySize.height / 2, activitySize.width, activitySize.height);
 	}
     
 //    self.backBarBtnItem.target = self;

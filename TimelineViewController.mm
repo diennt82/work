@@ -58,8 +58,8 @@
     info.time_stamp   = @"2013-12-31T04:30:15Z";
     
     ClipInfo *clipInfo = [[ClipInfo alloc] init];
-    clipInfo.urlImage = @"http://s3.amazonaws.com/hubble.wowza.content/642737396B49/snaps/642737396B49_04_20131229180917000.jpg?AWSAccessKeyId=AKIAJNYQ3ONBL7OLSZDA&Expires=1388472420&Signature=YZwYquVvxCuFrwHkMu94EJ6STNQ%3D";
-    clipInfo.urlFile = @"http://s3.amazonaws.com/hubble.wowza.content/642737396B49/clips/642737396B49_04_20131229180917000_00001.flv?AWSAccessKeyId=AKIAJNYQ3ONBL7OLSZDA&Expires=1388472420&Signature=%2FXgeQFF%2BuJXt1fHuJyyif5z%2BYdY%3D";
+    clipInfo.urlImage = @"http://nxcomm-office.no-ip.info/s3/48022A2EFB46/snaps/48022A2EFB46_04_20131031160648000.jpg";
+    clipInfo.urlFile = @"http://nxcomm-office.no-ip.info/s3/48022A2EFB46/clips/48022A2EFB46_04_20131031161118000_00001.flv";
     info.clipInfo = clipInfo;
     [clipInfo release];
     
@@ -71,8 +71,8 @@
     info1.time_stamp   = @"2013-12-31T04:30:15Z";
     
     ClipInfo *clipInfo1 = [[ClipInfo alloc] init];
-    clipInfo1.urlImage = @"http://s3.amazonaws.com/hubble.wowza.content/642737396B49/snaps/642737396B49_04_20131229180917000.jpg?AWSAccessKeyId=AKIAJNYQ3ONBL7OLSZDA&Expires=1388472420&Signature=YZwYquVvxCuFrwHkMu94EJ6STNQ%3D";
-    clipInfo1.urlFile = @"http://s3.amazonaws.com/hubble.wowza.content/642737396B49/clips/642737396B49_04_20131229180917000_00001.flv?AWSAccessKeyId=AKIAJNYQ3ONBL7OLSZDA&Expires=1388472420&Signature=%2FXgeQFF%2BuJXt1fHuJyyif5z%2BYdY%3D";
+    clipInfo1.urlImage = @"http://nxcomm-office.no-ip.info/s3/48022A2EFB46/snaps/	48022A2EFB46_04_20131031160756000.jpg";
+    clipInfo1.urlFile = @"http://nxcomm-office.no-ip.info/s3/48022A2EFB46/clips/48022A2EFB46_04_20131031161118000_00002.flv";
     info1.clipInfo = clipInfo1;
     [clipInfo1 release];
     
@@ -84,8 +84,8 @@
     info2.time_stamp   = @"2013-12-31T04:30:15Z";
     
     ClipInfo *clipInfo2 = [[ClipInfo alloc] init];
-    clipInfo2.urlImage = @"http://s3.amazonaws.com/hubble.wowza.content/642737396B49/snaps/642737396B49_04_20131229180917000.jpg?AWSAccessKeyId=AKIAJNYQ3ONBL7OLSZDA&Expires=1388472420&Signature=YZwYquVvxCuFrwHkMu94EJ6STNQ%3D";
-    clipInfo2.urlFile = @"http://s3.amazonaws.com/hubble.wowza.content/642737396B49/clips/642737396B49_04_20131229180917000_00001.flv?AWSAccessKeyId=AKIAJNYQ3ONBL7OLSZDA&Expires=1388472420&Signature=%2FXgeQFF%2BuJXt1fHuJyyif5z%2BYdY%3D";
+    clipInfo2.urlImage = @"http://nxcomm-office.no-ip.info/s3/48022A2EFB46/snaps/48022A2EFB46_04_20131031161118000.jpg";
+    clipInfo2.urlFile = @"http://nxcomm-office.no-ip.info/s3/48022A2EFB46/clips/48022A2EFB46_04_20131031161118000_00003.flv";
     info2.clipInfo = clipInfo2;
     [clipInfo2 release];
     
@@ -97,20 +97,20 @@
     info3.time_stamp   = @"2013-12-31T04:30:15Z";
     
     ClipInfo *clipInfo3 = [[ClipInfo alloc] init];
-    clipInfo3.urlImage = @"http://s3.amazonaws.com/hubble.wowza.content/642737396B49/snaps/642737396B49_04_20131229180917000.jpg?AWSAccessKeyId=AKIAJNYQ3ONBL7OLSZDA&Expires=1388472420&Signature=YZwYquVvxCuFrwHkMu94EJ6STNQ%3D";
-    clipInfo3.urlFile = @"http://s3.amazonaws.com/hubble.wowza.content/642737396B49/clips/642737396B49_04_20131229180917000_00001.flv?AWSAccessKeyId=AKIAJNYQ3ONBL7OLSZDA&Expires=1388472420&Signature=%2FXgeQFF%2BuJXt1fHuJyyif5z%2BYdY%3D";
+    clipInfo3.urlImage = @"http://nxcomm-office.no-ip.info/s3/48022A2EFB46/snaps/48022A2EFB46_04_20131031162215000.jpg";
+    clipInfo3.urlFile = @"http://nxcomm-office.no-ip.info/s3/48022A2EFB46/clips/48022A2EFB46_04_20131031161118000_00004.flv";
     info3.clipInfo = clipInfo3;
     [clipInfo3 release];
     
     self.events = [NSMutableArray arrayWithObjects:info, info1, info2, info3, nil];
     
     NSDictionary *clip1InEvent = [NSDictionary dictionaryWithObjectsAndKeys:
-                                 @"http://s3.amazonaws.com/hubble.wowza.content/642737396B49/clips/642737396B49_04_20131229180917000_00001.flv?AWSAccessKeyId=AKIAJNYQ3ONBL7OLSZDA&Expires=1388472420&Signature=%2FXgeQFF%2BuJXt1fHuJyyif5z%2BYdY%3D", @"file", nil];
+                                 @"http://nxcomm-office.no-ip.info/s3/48022A2EFB46/clips/48022A2EFB46_04_20131031161118000_00001.flv", @"file", nil];
     
     NSDictionary *clip2InEvent = [NSDictionary dictionaryWithObjectsAndKeys:
-                                 @"http://s3.amazonaws.com/hubble.wowza.content/642737396B49/clips/642737396B49_04_20131229180917000_00002.flv?AWSAccessKeyId=AKIAJNYQ3ONBL7OLSZDA&Expires=1388472420&Signature=69ginkRKEobkg%2BD2Hc7rV%2BapOdY%3D", @"file", nil];
+                                 @"http://nxcomm-office.no-ip.info/s3/48022A2EFB46/clips/48022A2EFB46_04_20131031161118000_00002.flv", @"file", nil];
     NSDictionary *clip3InEvent = [NSDictionary dictionaryWithObjectsAndKeys:
-                                 @"http://s3.amazonaws.com/hubble.wowza.content/642737396B49/clips/642737396B49_04_20131229180917000_00003.flv?AWSAccessKeyId=AKIAJNYQ3ONBL7OLSZDA&Expires=1388472420&Signature=jehklfpD%2B0ERgIlwkHdef%2FtCaZE%3D", @"file", nil];
+                                 @"http://nxcomm-office.no-ip.info/s3/48022A2EFB46/clips/48022A2EFB46_04_20131031161118000_00003.flv", @"file", nil];
     NSArray *clipInEvent1 = [NSArray arrayWithObjects:clip1InEvent, clip2InEvent, clip3InEvent, nil];
     self.clipsInEachEvent = [NSMutableArray arrayWithObjects:clipInEvent1, nil];
 #else
@@ -391,11 +391,13 @@
         
         NSString *datestr = eventInfo.value;
         NSDateFormatter *dFormater = [[NSDateFormatter alloc]init];
-        [dFormater setDateFormat:@"yyyyMMddHHmmss"];
+        [dFormater setDateFormat:@"yyyyMMddHHmmssz"];
+        NSLog(@"%@, %@", [dFormater dateFromString:datestr], datestr);
         NSDate *date = [dFormater dateFromString:datestr]; //2013-12-12 00:42:00 +0000
         dFormater.dateFormat = @"HH:mm";
         
         cell.eventTimeLabel.text = [dFormater stringFromDate:date];
+        NSLog(@"%@", [dFormater stringFromDate:date]);
         [dFormater release];
         
         cell.snapshotImage.image = [UIImage imageNamed:@"no_img_available.jpeg"];
@@ -420,6 +422,7 @@
                                               }
                                               );
                            });
+            dispatch_release(q);
         }
         else
         {
@@ -555,12 +558,12 @@
                     PlaybackViewController *playbackViewController = [[PlaybackViewController alloc] init];
                     
                     playbackViewController.clip_info = clipInfo;
-                    playbackViewController.clipsInEvent = clipsInEvent;
+                    playbackViewController.clipsInEvent = [NSMutableArray arrayWithArray:clipsInEvent];
                     // Pass the selected object to the new view controller.
                     
-                    // Push the view controller.
+                    NSLog(@"Push the view controller.- %@", self.parentViewController);
                     
-                    [self.parentViewController.navigationController pushViewController:playbackViewController animated:YES];
+                    [self.navVC pushViewController:playbackViewController animated:YES];
                     [playbackViewController release];
                 }
                 else

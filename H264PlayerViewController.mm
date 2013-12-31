@@ -181,6 +181,8 @@
     
     self.timelineVC = [[TimelineViewController alloc] init];
     [self.view addSubview:_timelineVC.view];
+    self.timelineVC.timelineVCDelegate = self;
+    self.timelineVC.navVC = self.navigationController;
     
     NSLog(@"%f, %f, %f, %f, %d", _timelineVC.view.frame.origin.x, _timelineVC.view.frame.origin.y, _timelineVC.view.frame.size.width, _timelineVC.view.frame.size.height, _timelineVC.view.hidden);
     
@@ -1381,6 +1383,8 @@
 }
 -(void) startStunStream
 {
+    self.selectedChannel.communication_mode = COMM_MODE_STUN;
+    
     NSDate * timeout;
 
     NSRunLoop * mainloop = [NSRunLoop currentRunLoop];
@@ -1673,7 +1677,7 @@
         if (self.h264PlayerVCDelegate != nil)
         {
             self.selectedChannel.waitingForStreamerToClose = YES;
-            NSLog(@"waiting for close stream from server");
+            NSLog(@"waiting for close STUN stream from server");
         }
         
         H264PlayerViewController *vc = (H264PlayerViewController *)[self retain];
@@ -1708,6 +1712,56 @@
     [jsonComm  sendCommandBlockedWithRegistrationId:mac
                                                          andCommand:cmd_string
                                                           andApiKey:apiKey];
+    H264PlayerViewController *thisVC = (H264PlayerViewController *)vc;
+    if (userWantToCancel == TRUE)
+    {
+        [thisVC.h264PlayerVCDelegate stopStreamFinished: thisVC.selectedChannel];
+        thisVC.h264PlayerVCDelegate = nil;
+    }
+    else
+    {
+        self.selectedChannel.waitingForStreamerToClose = NO;
+    }
+    
+    [thisVC release];
+}
+
+- (void)stopRelayStream
+{
+    if (self.selectedChannel.communication_mode == COMM_MODE_STUN_RELAY2) // Temp solution
+    {
+        if (self.h264PlayerVCDelegate != nil)
+        {
+            self.selectedChannel.waitingForStreamerToClose = YES;
+            NSLog(@"waiting for close RELAY stream from server");
+        }
+        
+        H264PlayerViewController *vc = (H264PlayerViewController *)[self retain];
+        [self performSelectorInBackground:@selector(closeRelayStream_bg:) withObject:vc];
+        
+    }
+}
+
+- (void)closeRelayStream_bg: (id)vc
+{
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    NSString *apiKey = [userDefaults objectForKey:@"PortalApiKey"];
+    NSString *mac = [Util strip_colon_fr_mac:self.selectedChannel.profile.mac_address];
+    
+    
+    BMS_JSON_Communication *jsonComm = [[BMS_JSON_Communication alloc] initWithObject:self
+                                                                              Selector:nil
+                                                                          FailSelector:nil
+                                                                             ServerErr:nil];
+    
+    NSString * cmd_string = @"action=command&command=close_relay_rtmp";
+    
+    //NSDictionary *responseDict =
+    [jsonComm  sendCommandBlockedWithRegistrationId:mac
+                                         andCommand:cmd_string
+                                          andApiKey:apiKey];
+    [jsonComm release];
+    
     H264PlayerViewController *thisVC = (H264PlayerViewController *)vc;
     if (userWantToCancel == TRUE)
     {
@@ -1777,6 +1831,7 @@
         }
         [self  stopStunStream];
         
+        [self stopRelayStream];
     }
 #endif
     //[self.activityStopStreamingProgress stopAnimating];
@@ -2757,6 +2812,7 @@
                                
                                if (userWantToCancel == FALSE)
                                {
+                                   self.selectedChannel.communication_mode = COMM_MODE_STUN_RELAY2;
                                    [self performSelectorOnMainThread:@selector(startStream)
                                                           withObject:nil
                                                        waitUntilDone:NO];
