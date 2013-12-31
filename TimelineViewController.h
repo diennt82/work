@@ -20,5 +20,6 @@
 @property (nonatomic, assign) id<TimelineVCDelegate> timelineVCDelegate;
 @property (nonatomic, assign) CamChannel *camChannel;
 @property (nonatomic, retain) NSMutableArray *eventArrayTestData;
+@property (nonatomic, assign) UINavigationController *navVC;
 
 @end
