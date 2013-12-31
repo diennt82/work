@@ -94,6 +94,8 @@
     //self.backBarBtnItem.target = self;
    // self.backBarBtnItem.action = @selector(goBackToPlayList);
     
+    listener = new PlaybackListener(self);
+    
     self.urlVideo = clip_info.urlFile;
     
     if (_clipsInEvent != nil &&
@@ -103,7 +105,7 @@
         {
             NSString *urlClipString = [clipInfo objectForKey:@"file"];
             
-            if (urlClipString != nil &&
+            if (urlClipString != [NSNull class] &&
                 ![urlClipString isEqualToString:@""])
             {
                 [clips addObject:urlClipString];
