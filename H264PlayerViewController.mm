@@ -55,6 +55,7 @@
 @property (retain, nonatomic) UIImageView *imageViewStreamer;
 @property (nonatomic) BOOL isHorizeShow;
 @property (nonatomic, retain) NSTimer *timerHideMenu;
+@property (nonatomic) BOOL isEarlierView;
 
 - (void)centerScrollViewContents;
 - (void)scrollViewDoubleTapped:(UITapGestureRecognizer*)recognizer;
@@ -278,54 +279,69 @@
 
 - (void)nowButtonAciton:(id)sender
 {
-    //For test
-    //return;
-    //self.disableAutorotateFlag = FALSE;
-    
-    //self.playlistViewController.tableView.hidden = YES;
-    self.earlierVC.view.hidden = YES;
-    
-    NSLog(@"h264StreamerIsInStopped: %d, h264Streamer==null: %d", _h264StreamerIsInStopped, h264Streamer == NULL);
-    
-    if (self.h264StreamerIsInStopped == TRUE &&
-        h264Streamer == NULL)
+    if (_isEarlierView == TRUE)
     {
-        self.activityIndicator.hidden = NO;
-        [self.view bringSubviewToFront:self.activityIndicator];
-        [self.activityIndicator startAnimating];
+        self.isEarlierView = FALSE;
         
-        //[self setupCamera];
-        [self performSelectorInBackground:@selector(waitingScanAndStartSetupCamera_bg) withObject:nil];
-        self.h264StreamerIsInStopped = FALSE;
+        self.earlierVC.view.hidden = YES;
         
-        NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-        [userDefaults setObject:_selectedChannel.profile.mac_address forKey:CAM_IN_VEW];
-        [userDefaults synchronize];
+        NSLog(@"h264StreamerIsInStopped: %d, h264Streamer==null: %d", _h264StreamerIsInStopped, h264Streamer == NULL);
+        
+        if (self.h264StreamerIsInStopped == TRUE &&
+            h264Streamer == NULL)
+        {
+            self.activityIndicator.hidden = NO;
+            [self.view bringSubviewToFront:self.activityIndicator];
+            [self.activityIndicator startAnimating];
+            
+            //[self setupCamera];
+            [self performSelectorInBackground:@selector(waitingScanAndStartSetupCamera_bg) withObject:nil];
+            self.h264StreamerIsInStopped = FALSE;
+            
+            NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+            [userDefaults setObject:_selectedChannel.profile.mac_address forKey:CAM_IN_VEW];
+            [userDefaults synchronize];
+        }
+        else
+        {
+            // Streamer is showing live view
+        }
     }
     else
     {
-        // Streamer is showing live view
+        NSLog(@"Already on NOW view!");
     }
 }
 
 - (void)earlierButtonAction:(id)sender
 {
-    //For test UI
-    //return;
-    //self.disableAutorotateFlag = TRUE;
-    if (_earlierVC == Nil)
+    if (_isEarlierView == FALSE)
     {
-        self.earlierVC = [[EarlierViewController alloc] init];
-        [self.view addSubview:_earlierVC.view];
+        self.isEarlierView = TRUE;
+        
+        if (_earlierVC == Nil)
+        {
+            self.earlierVC = [[EarlierViewController alloc] initWithCamChannel:self.selectedChannel];
+            [self.view addSubview:_earlierVC.view];
+        }
+        
+        if (!(_earlierVC.isViewLoaded &&
+              self.view.window))
+        {
+            [self.view bringSubviewToFront:_earlierVC.view];
+        }
+        
+        self.earlierVC.view.hidden = NO;
+        [self.earlierVC setCamChannel:self.selectedChannel];
+        self.earlierVC.timelineVC.navVC = self.navigationController;
+    }
+    else
+    {
+        NSLog(@"Already on earlier view!");
     }
     
-    if (!(_earlierVC.isViewLoaded && self.view.window))
-    {
-        [self.view bringSubviewToFront:_earlierVC.view];
-    }
-    
-    self.earlierVC.view.hidden = NO;
 }
+
 #pragma mark - Action
 - (IBAction)hqPressAction:(id)sender
 {
@@ -3348,7 +3364,6 @@
     CGFloat screenWidth = screenBounds.size.width;
     CGFloat screenHeight = screenBounds.size.height;
     //CGSize activitySize = _activityIndicator.frame.size;
-    CGSize tableViewSize = _playlistViewController.tableView.frame.size;
     
     NSInteger deltaY = 0;
     if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 7.0)
@@ -3390,21 +3405,6 @@
         
         //landscape mode
         [self.navigationController setNavigationBarHidden:YES];
-        if (_segmentControl.selectedSegmentIndex == 0) // Video View
-        {
-            self.view.backgroundColor = nil;
-            [[UIApplication sharedApplication] setStatusBarHidden:YES];
-        } else {
-            if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 7.0)
-            {
-                [[UIApplication sharedApplication] setStatusBarHidden:YES];
-            }
-            else
-            {
-                [[UIApplication sharedApplication] setStatusBarHidden:NO];
-            }
-            
-        }
         //[self updateBottomView];
         
         [self.melodyViewController.view removeFromSuperview];
@@ -3427,12 +3427,6 @@
         
 
         self.viewStopStreamingProgress.frame = CGRectMake((screenHeight - INDICATOR_SIZE)/2, (screenWidth - INDICATOR_SIZE)/2 , INDICATOR_SIZE, INDICATOR_SIZE);
-        if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 7.0)
-        {
-            self.playlistViewController.tableView.frame = CGRectMake(0, 0, screenHeight, tableViewSize.height + 64);
-        } else {
-            self.playlistViewController.tableView.frame = CGRectMake(0, 0 + deltaY, screenHeight, tableViewSize.height + 44);
-        }
         
         [self.timelineVC.view removeFromSuperview];
 	}
@@ -3462,14 +3456,11 @@
         }
         
         //portrait mode
-        //[self updateNavigationBarAndToolBar];
-        //[self updateBottomView];
+
         [self.navigationController setNavigationBarHidden:NO];
         [[UIApplication sharedApplication] setStatusBarHidden:NO];
         self.view.backgroundColor = [UIColor whiteColor];
-        //self.topToolbar.hidden = NO;
         self.viewCtrlButtons.hidden = NO;
-        //self.horizMenu.hidden = NO;
         self.viewStopStreamingProgress.hidden = YES;
         
         CGFloat imageViewHeight = screenWidth * 9 / 16;
@@ -3488,7 +3479,6 @@
 
         self.viewCtrlButtons.frame = CGRectMake(0, imageViewHeight + 44 + deltaY, _viewCtrlButtons.frame.size.width, _viewCtrlButtons.frame.size.height);
         self.viewStopStreamingProgress.frame = CGRectMake((screenWidth - INDICATOR_SIZE)/2, (screenHeight - INDICATOR_SIZE)/2 , INDICATOR_SIZE, INDICATOR_SIZE);
-        self.playlistViewController.tableView.frame = CGRectMake(0, 44 + deltaY, tableViewSize.width, tableViewSize.height);
         self.timelineVC.view.frame = CGRectMake(0, imageViewHeight + deltaY, screenWidth, screenHeight - imageViewHeight);
         self.timelineVC.view.hidden = NO;
         [self.view addSubview:_timelineVC.view];
@@ -3500,19 +3490,30 @@
 //    self.backBarBtnItem.target = self.stackViewController;
 //    self.backBarBtnItem.action = @selector(toggleLeftViewController);
     
+    self.earlierVC.view.hidden = !_isEarlierView;
+    
+    if (_isEarlierView == TRUE)
+    {
+        [self.view addSubview:_earlierVC.view];
+        [self.view bringSubviewToFront:_earlierVC.view];
+    }
+    
     self.imageViewStreamer.frame = _imageViewVideo.frame;
-    //self.imageViewVideo.hidden = YES;
     [self.scrollView insertSubview:_imageViewStreamer aboveSubview:_imageViewVideo];
     
     [self hideControlMenu];
     [self.activityIndicator startAnimating];
     [self.view bringSubviewToFront:_activityIndicator];
     
+    if (self.selectedChannel.profile.minuteSinceLastComm > 5)
+    {
+        [self.activityIndicator stopAnimating];
+    }
+    
     if (h264Streamer != NULL)
     {
         //trigger re-cal of videosize
-        if (h264Streamer->isPlaying() ||
-            self.selectedChannel.profile.minuteSinceLastComm > 5) // Not available
+        if (h264Streamer->isPlaying()) // Not available
         {
             [self.activityIndicator stopAnimating];
         }
@@ -4233,9 +4234,19 @@
 - (void)viewWillDisappear:(BOOL)animated
 {
     [self.navigationController setNavigationBarHidden:YES];
+    
+    for (id view in self.navigationController.view.subviews)
+    {
+        if ([view isKindOfClass:[UIBarButtonItem class]])
+        {
+            [view removeFromSuperview];
+        }
+    }
+    
     [[UIApplication sharedApplication] setStatusBarHidden:NO];
     [super viewWillDisappear:animated];
 }
+
 - (void)viewDidUnload {
     [self setImageViewVideo:nil];
 //    [self setTopToolbar:nil];
