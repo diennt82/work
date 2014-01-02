@@ -24,7 +24,7 @@
 @property (retain, nonatomic) IBOutlet UIButton *learnMoreBtn;
 
 @property (nonatomic) BOOL eventsListAlready;
-@property (nonatomic, retain) NSMutableArray *events;
+@property (nonatomic, retain) NSDictionary *event;
 @property (nonatomic, retain) NSMutableArray *clipsInEvent;
 @property (nonatomic) BOOL isFreeUser;
 
@@ -117,27 +117,36 @@
 {
     if (!_isFreeUser)
     {
-        if (_events != nil &&
-            _events.count > 1)
+        if (_clipsInEvent != nil &&
+            _clipsInEvent.count > 0)
         {
-            NSDictionary *firsetEvent = [_events objectAtIndex:1];
+            NSString *urlFile = [[_clipsInEvent objectAtIndex:0] objectForKey:@"file"];
             
-            PlaylistInfo *clipInfo = [[PlaylistInfo alloc] init];
-            clipInfo.urlFile = [firsetEvent objectForKey:@"clip_url"];
-            
-            if (clipInfo.urlFile != nil &&
-                ![clipInfo.urlFile isEqualToString:@""])
+            if (urlFile != [NSNull class] &&
+                ![urlFile isEqualToString:@""])
             {
-                PlaybackViewController *playbackVC = [[PlaybackViewController alloc] init];
-                playbackVC.clip_info = clipInfo;
-                playbackVC.clipsInEvent = _clipsInEvent;
+                PlaylistInfo *clipInfo = [[PlaylistInfo alloc] init];
+                clipInfo.urlFile = urlFile;
                 
-                [self.navigationController pushViewController:playbackVC animated:YES];
+                PlaybackViewController *playbackViewController = [[PlaybackViewController alloc] init];
                 
-                [playbackVC release];
+                playbackViewController.clip_info = clipInfo;
+                playbackViewController.clipsInEvent = [NSMutableArray arrayWithArray:_clipsInEvent];
+                // Pass the selected object to the new view controller.
+                
+                NSLog(@"Push the view controller.- %@", self.parentViewController);
+                
+                [self.navigationController pushViewController:playbackViewController animated:YES];
+                [playbackViewController release];
             }
-            
-            [clipInfo release];
+            else
+            {
+                NSLog(@"URL file is not correct");
+            }
+        }
+        else
+        {
+            NSLog(@"There was no clip in event");
         }
     }
     else
@@ -246,12 +255,12 @@
     
 #else
     NSDictionary *responseDict = [jsonComm getListOfEventsBlockedWithRegisterId:_cameraMacNoColon
-                                                                beforeStartTime:@""//@"2013-12-28 20:10:18"
-                                                                      eventCode:@""//event_code // temp
+                                                                beforeStartTime:nil//@"2013-12-28 20:10:18"
+                                                                      eventCode:nil//event_code // temp
                                                                          alerts:@"4"
-                                                                           page:@""
-                                                                         offset:@""
-                                                                           size:@""
+                                                                           page:nil
+                                                                         offset:nil
+                                                                           size:nil
                                                                          apiKey:apiKey];
     if (responseDict != nil)
     {
@@ -260,20 +269,19 @@
             //4 44334C31A004 20130914055827490 2013-09-14T05:59:05+00:00 Camera-31a004
             
             // work
+            NSMutableArray *events = [[responseDict objectForKey:@"data"] objectForKey:@"events"];
             
-            self.events = [NSMutableArray array];
-            self.events = [[responseDict objectForKey:@"data"] objectForKey:@"events"];
-            
-            if (_events != nil &&
-                _events.count > 0)
+            if (events != nil &&
+                events.count > 0)
             {
-                for (NSDictionary *event in _events)
+                for (NSDictionary *event in events)
                 {
                     if ([[[event objectForKey:@"value"] stringValue] isEqualToString:_alertVal])
                     {
                         // is this event
                         
                         self.clipsInEvent = [event objectForKey:@"data"];
+                        self.event = event;
                         
                         if (_clipsInEvent != nil &&
                             _clipsInEvent.count > 0)
