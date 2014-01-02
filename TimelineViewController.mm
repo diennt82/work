@@ -618,9 +618,10 @@
                     playbackViewController.clipsInEvent = [NSMutableArray arrayWithArray:clipsInEvent];
                     // Pass the selected object to the new view controller.
                     
-                    NSLog(@"Push the view controller.- %@", self.parentViewController);
+                    NSLog(@"Push the view controller.- %@", self.navigationController);
                     
                     [self.navVC pushViewController:playbackViewController animated:YES];
+                    
                     [playbackViewController release];
                 }
                 else

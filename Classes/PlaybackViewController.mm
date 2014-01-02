@@ -72,6 +72,7 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+     self.navigationController.navigationBarHidden = NO;
     [self checkOrientation];
 }
 
@@ -80,7 +81,7 @@
     [super viewWillDisappear:animated];
     NSLog(@"viewWillDisappear: ");
     //[self goBackToPlayList];
-    [self stopStream:nil];
+    //[self stopStream:nil]; // This is for what case?
 }
 
 
