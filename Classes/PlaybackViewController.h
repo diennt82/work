@@ -23,7 +23,7 @@
     MediaPlayer *playbackStreamer;
     PlaybackListener * listener; 
     
-    NSMutableArray * clips;
+    //NSMutableArray * clips;
     
     NSString *urlVideo;
     NSString *camera_mac;

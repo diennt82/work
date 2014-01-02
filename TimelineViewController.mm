@@ -6,7 +6,7 @@
 //  Copyright (c) 2013 Smart Panda Ltd. All rights reserved.
 //
 
-#define TEST 1
+#define TEST 0
 
 #import "TimelineViewController.h"
 #import "TimelineCell.h"
@@ -16,12 +16,15 @@
 #import "PlaybackViewController.h"
 #import <MonitorCommunication/MonitorCommunication.h>
 #import "PlaylistInfo.h"
+#import "H264PlayerViewController.h"
 
 @interface TimelineViewController ()
 
 @property (nonatomic, retain) NSMutableArray *events;
 @property (nonatomic, retain) NSMutableArray *clipsInEachEvent;
 @property (nonatomic, retain) NSMutableArray *playlists;
+
+@property (nonatomic) BOOL isEventAlready;
 
 @end
 
@@ -59,7 +62,8 @@
     
     ClipInfo *clipInfo = [[ClipInfo alloc] init];
     clipInfo.urlImage = @"http://nxcomm-office.no-ip.info/s3/48022A2EFB46/snaps/48022A2EFB46_04_20131031160648000.jpg";
-    clipInfo.urlFile = @"http://nxcomm-office.no-ip.info/s3/48022A2EFB46/clips/48022A2EFB46_04_20131031161118000_00001.flv";
+    //clipInfo.urlFile = @"http://nxcomm-office.no-ip.info/s3/cam_clip_480p.flv";
+    clipInfo.urlFile = @"http://s3.amazonaws.com/hubble.wowza.content/642737396B49/clips/642737396B49_04_20131229180917000_00001.flv?AWSAccessKeyId=AKIAJNYQ3ONBL7OLSZDA&Expires=1388636549&Signature=vL8YoVb2bTIgzAZfMTRkadA36uI%3D";
     info.clipInfo = clipInfo;
     [clipInfo release];
     
@@ -71,8 +75,8 @@
     info1.time_stamp   = @"2013-12-31T04:30:15Z";
     
     ClipInfo *clipInfo1 = [[ClipInfo alloc] init];
-    clipInfo1.urlImage = @"http://nxcomm-office.no-ip.info/s3/48022A2EFB46/snaps/	48022A2EFB46_04_20131031160756000.jpg";
-    clipInfo1.urlFile = @"http://nxcomm-office.no-ip.info/s3/48022A2EFB46/clips/48022A2EFB46_04_20131031161118000_00002.flv";
+    clipInfo1.urlImage = @"http://nxcomm-office.no-ip.info/s3/48022A2EFB46/snaps/48022A2EFB46_04_20131031160756000.jpg";
+    clipInfo1.urlFile = @"http://nxcomm-office.no-ip.info/s3/cam_clip_480p.flv";
     info1.clipInfo = clipInfo1;
     [clipInfo1 release];
     
@@ -85,7 +89,7 @@
     
     ClipInfo *clipInfo2 = [[ClipInfo alloc] init];
     clipInfo2.urlImage = @"http://nxcomm-office.no-ip.info/s3/48022A2EFB46/snaps/48022A2EFB46_04_20131031161118000.jpg";
-    clipInfo2.urlFile = @"http://nxcomm-office.no-ip.info/s3/48022A2EFB46/clips/48022A2EFB46_04_20131031161118000_00003.flv";
+    clipInfo2.urlFile = @"http://nxcomm-office.no-ip.info/s3/cam_clip_480p.flv";
     info2.clipInfo = clipInfo2;
     [clipInfo2 release];
     
@@ -105,17 +109,30 @@
     self.events = [NSMutableArray arrayWithObjects:info, info1, info2, info3, nil];
     
     NSDictionary *clip1InEvent = [NSDictionary dictionaryWithObjectsAndKeys:
-                                 @"http://nxcomm-office.no-ip.info/s3/48022A2EFB46/clips/48022A2EFB46_04_20131031161118000_00001.flv", @"file", nil];
+                                 @"http://s3.amazonaws.com/hubble.wowza.content/642737396B49/clips/642737396B49_04_20131229180917000_00001.flv?AWSAccessKeyId=AKIAJNYQ3ONBL7OLSZDA&Expires=1388636549&Signature=vL8YoVb2bTIgzAZfMTRkadA36uI%3D", @"file", nil];
     
     NSDictionary *clip2InEvent = [NSDictionary dictionaryWithObjectsAndKeys:
-                                 @"http://nxcomm-office.no-ip.info/s3/48022A2EFB46/clips/48022A2EFB46_04_20131031161118000_00002.flv", @"file", nil];
+                                 @"http://s3.amazonaws.com/hubble.wowza.content/642737396B49/clips/642737396B49_04_20131229180917000_00004.flv?AWSAccessKeyId=AKIAJNYQ3ONBL7OLSZDA&Expires=1388636549&Signature=mzS2EATWH61uj%2BLd6oKSTNBjZn8%3D", @"file", nil];
     NSDictionary *clip3InEvent = [NSDictionary dictionaryWithObjectsAndKeys:
-                                 @"http://nxcomm-office.no-ip.info/s3/48022A2EFB46/clips/48022A2EFB46_04_20131031161118000_00003.flv", @"file", nil];
+                                 @"http://s3.amazonaws.com/hubble.wowza.content/642737396B49/clips/642737396B49_04_20131229180917000_00005_last.flv?AWSAccessKeyId=AKIAJNYQ3ONBL7OLSZDA&Expires=1388636549&Signature=qEVA9107MClYJhCHxqgUGAHTHq0%3D", @"file", nil];
     NSArray *clipInEvent1 = [NSArray arrayWithObjects:clip1InEvent, clip2InEvent, clip3InEvent, nil];
     self.clipsInEachEvent = [NSMutableArray arrayWithObjects:clipInEvent1, nil];
 #else
-    [self performSelectorInBackground:@selector(getEventsList_bg) withObject:nil];
+    self.camChannel = ((H264PlayerViewController *)_parentVC).selectedChannel;
+    
+    NSLog(@"%@, %@", _camChannel, ((H264PlayerViewController *)_parentVC).selectedChannel);
+    
+    //[self performSelectorInBackground:@selector(getEventsList_bg:) withObject:_camChannel];
 #endif
+}
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    if (_isEventAlready == FALSE)
+    {
+        self.isEventAlready = TRUE;
+        //[self performSelectorInBackground:@selector(getEventsList_bg) withObject:nil];
+    }
 }
 
 - (void)didReceiveMemoryWarning
@@ -124,9 +141,24 @@
     // Dispose of any resources that can be recreated.
 }
 
+#pragma mark - Encoding URL string
+
+-(NSString *)urlEncodeUsingEncoding:(NSStringEncoding)encoding forString: (NSString *)aString {
+	return (NSString *)CFURLCreateStringByAddingPercentEscapes(NULL,
+                                                               (CFStringRef)aString,
+                                                               NULL,
+                                                               (CFStringRef)@"!*'\"();:@=+$,?%#[]% ",
+                                                               CFStringConvertNSStringEncodingToEncoding(encoding));
+}
+
 #pragma mark - Methos
 
-- (void)getEventsList_bg
+- (void)loadEvents: (CamChannel *)camChannel
+{
+    [self performSelectorInBackground:@selector(getEventsList_bg:) withObject:camChannel];
+}
+
+- (void)getEventsList_bg: (CamChannel *)camChannel
 {
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     NSString *apiKey = [userDefaults objectForKey:@"PortalApiKey"];
@@ -138,7 +170,7 @@
                                                                          FailSelector:nil
                                                                             ServerErr:nil];
     
-    NSString *mac = [Util strip_colon_fr_mac:self.camChannel.profile.mac_address];
+    NSString *mac = [Util strip_colon_fr_mac:camChannel.profile.mac_address];
     
     NSDate* currentDate = [NSDate date];
     
@@ -149,16 +181,18 @@
     
     // Get the date time in NSString
     NSString *dateInStringFormated = [dateFormatter stringFromDate:currentDate];
-    NSLog(@"%@", dateInStringFormated);
+    NSLog(@"%@, %@", dateInStringFormated, mac);
     [dateFormatter release];
+    
+    dateInStringFormated = [self urlEncodeUsingEncoding:NSUTF8StringEncoding forString:dateInStringFormated];
     
     NSDictionary *responseDict = [jsonComm getListOfEventsBlockedWithRegisterId:mac
                                                                 beforeStartTime:dateInStringFormated//@"2013-12-28 20:10:18"
-                                                                      eventCode:@""//event_code // temp
+                                                                      eventCode:nil//event_code // temp
                                                                          alerts:@"4"
-                                                                           page:@""
-                                                                         offset:@""
-                                                                           size:@""
+                                                                           page:nil
+                                                                         offset:nil
+                                                                           size:nil
                                                                          apiKey:apiKey];
     if (responseDict != nil)
     {
@@ -189,8 +223,17 @@
                         clipsInEvent.count > 0)
                     {
                         ClipInfo *clipInfo = [[ClipInfo alloc] init];
-                        clipInfo.urlFile = [[clipsInEvent objectAtIndex:0] objectForKey:@"file"];
-                        clipInfo.urlImage = [[clipsInEvent objectAtIndex:0] objectForKey:@"image"];
+                        
+                        if ([[clipsInEvent objectAtIndex:0] objectForKey:@"image"] == [NSNull class])
+                        {
+                            clipInfo.urlFile = nil;
+                        }
+                        else
+                        {
+                            clipInfo.urlFile = [[clipsInEvent objectAtIndex:0] objectForKey:@"image"];
+                        }
+                        
+                        clipInfo.urlImage = [[clipsInEvent objectAtIndex:0] objectForKey:@"file"];
                         
                         eventInfo.clipInfo = clipInfo;
                         [clipInfo release];
@@ -211,7 +254,8 @@
             }
         
             NSLog(@"Number of event: %d", events.count);
-            [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:1] withRowAnimation:UITableViewRowAnimationAutomatic];
+            //[self.tableView reloadSections:[NSIndexSet indexSetWithIndex:1] withRowAnimation:UITableViewRowAnimationAutomatic];
+            [self.tableView reloadData];
         }
         else
         {
@@ -220,13 +264,20 @@
     }
     else
     {
-        NSLog(@"responseDict is nil");
+        NSLog(@"Error- responseDict is nil");
     }
 
 }
 
 - (UIImage *)imageWithUrlString:(NSString *)urlString scaledToSize:(CGSize)newSize
 {
+    if (urlString == [NSNull class] ||
+        urlString == nil ||
+        [urlString isEqualToString:@""])
+    {
+        return [UIImage imageNamed:@"no_img_available.jpeg"];
+    }
+    
 	UIGraphicsBeginImageContext(newSize);
     
 	[[UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:urlString]]] drawInRect:CGRectMake(0, 0, newSize.width, newSize.height)];
@@ -235,6 +286,11 @@
 	UIGraphicsEndImageContext();
     
 	return newImage;
+}
+
+- (void)reloadTableView
+{
+    
 }
 
 #pragma mark - Table view data source
@@ -402,7 +458,8 @@
         
         cell.snapshotImage.image = [UIImage imageNamed:@"no_img_available.jpeg"];
         
-        if (eventInfo.clipInfo.imgSnapshot == nil)
+        if (eventInfo.clipInfo.imgSnapshot == nil &&
+            (eventInfo.clipInfo.urlImage != nil))// && (![eventInfo.clipInfo.urlImage isEqualToString:@""]))
         {
             [cell.activityIndicatorLoading startAnimating];
             
