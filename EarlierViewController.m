@@ -49,6 +49,12 @@
     UINavigationController *nav1 = [[UINavigationController alloc] initWithRootViewController:[[SavedEventViewController alloc] init]];
     
     self.viewControllers = [NSArray arrayWithObjects:_timelineVC, nav1, nil];
+    
+    UITabBarItem *timelineItem = [self.tabBar.items objectAtIndex:0];
+    [timelineItem setImage:[UIImage imageNamed:@"camera.png"]];
+    
+    UITabBarItem *savedItem = [self.tabBar.items objectAtIndex:1];
+    [savedItem setImage:[UIImage imageNamed:@"settings.png"]];
  
     //[nav release];
     [nav1 release];

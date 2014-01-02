@@ -6,7 +6,7 @@
 //  Copyright (c) 2012 Smart Panda Ltd. All rights reserved.
 //
 
-#define DISABLE_VIEW_RELEASE_FLAG 1
+#define DISABLE_VIEW_RELEASE_FLAG 0
 
 #import "Account_ViewController.h"
 #import "MBP_iosViewController.h"

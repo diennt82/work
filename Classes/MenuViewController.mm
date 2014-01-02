@@ -6,7 +6,7 @@
 //  Copyright (c) 2013 Smart Panda Ltd. All rights reserved.
 //
 
-#define DISABLE_VIEW_RELEASE_FLAG 1
+#define DISABLE_VIEW_RELEASE_FLAG 0
 
 #import "MenuViewController.h"
 #import "SettingsViewController.h"
@@ -93,7 +93,15 @@
     
     
     self.viewControllers = [NSArray arrayWithObjects:nav, nav1, nav2, nil];
+    
+    UITabBarItem *camItem = [self.tabBar.items objectAtIndex:0];
+    [camItem setImage:[UIImage imageNamed:@"camera.png"]];
+    
+    UITabBarItem *settingsItem = [self.tabBar.items objectAtIndex:1];
+    [settingsItem setImage:[UIImage imageNamed:@"settings.png"]];
 
+    UITabBarItem *accountItem = [self.tabBar.items objectAtIndex:2];
+    [accountItem setImage:[UIImage imageNamed:@"account_icon.png"]];
     
     [nav release];
     [nav2 release];
