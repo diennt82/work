@@ -19,6 +19,7 @@
 
 
 #define DEFAULT_SSID_PREFIX @"Camera-"
+#define DEFAULT_SSID_HD_PREFIX @"CameraHD-"
 #define DEFAULT_IP_PREFIX @"192.168.2."
 
 
