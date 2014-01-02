@@ -182,9 +182,13 @@
     self.timelineVC = [[TimelineViewController alloc] init];
     [self.view addSubview:_timelineVC.view];
     self.timelineVC.timelineVCDelegate = self;
+    self.timelineVC.camChannel = self.selectedChannel;
     self.timelineVC.navVC = self.navigationController;
+    self.timelineVC.parentVC = self;
     
-    NSLog(@"%f, %f, %f, %f, %d", _timelineVC.view.frame.origin.x, _timelineVC.view.frame.origin.y, _timelineVC.view.frame.size.width, _timelineVC.view.frame.size.height, _timelineVC.view.hidden);
+    [self.timelineVC loadEvents:self.selectedChannel];
+    
+    NSLog(@"%f, %f, %f, %f, %d, %@", _timelineVC.view.frame.origin.x, _timelineVC.view.frame.origin.y, _timelineVC.view.frame.size.width, _timelineVC.view.frame.size.height, _timelineVC.view.hidden, _selectedChannel);
     
     [self becomeActive];
     //[self showMenuControlPanel];
@@ -3507,7 +3511,8 @@
     if (h264Streamer != NULL)
     {
         //trigger re-cal of videosize
-        if (h264Streamer->isPlaying())
+        if (h264Streamer->isPlaying() ||
+            self.selectedChannel.profile.minuteSinceLastComm > 5) // Not available
         {
             [self.activityIndicator stopAnimating];
         }
@@ -3518,9 +3523,10 @@
     
     self.pickerHQOptions.hidden = YES;
     self.pickerHQOptions.userInteractionEnabled = NO;
+    self.playlistViewController.view.hidden = YES;
     
 #if DISABLE_VIEW_RELEASE_FLAG
-    self.playlistViewController.view.hidden = YES;
+    
 #endif
 }
 
@@ -4219,6 +4225,7 @@
     _isListening = NO;
     [super viewWillAppear:animated];
     //[self.scrollView insertSubview:_imageViewStreamer aboveSubview:_imageViewVideo];
+    self.timelineVC.camChannel = self.selectedChannel;
     [self checkOrientation];
     
 }

@@ -12,6 +12,12 @@
 
 #include "PlaybackListener.h"
 
+@interface PlaybackViewController()
+
+@property (nonatomic, retain) NSMutableArray *clips;
+
+@end
+
 @implementation PlaybackViewController
 
 @synthesize camera_mac;
@@ -103,7 +109,7 @@
     if (_clipsInEvent != nil &&
         _clipsInEvent.count > 0)
     {
-        clips = [NSMutableArray array];
+        self.clips = [NSMutableArray array];
         
         for (NSDictionary *clipInfo in _clipsInEvent)
         {
@@ -112,16 +118,16 @@
             if (urlClipString != [NSNull class] &&
                 ![urlClipString isEqualToString:@""])
             {
-                [clips addObject:urlClipString];
-                break;
+                [self.clips addObject:urlClipString];
+               // break;
             }
         }
     }
     
-    NSLog(@"%@", clips);
+    NSLog(@"%@", self.clips);
     
-    listener->updateClips(clips);
-    listener->updateFinalClipCount(clips.count);
+    listener->updateClips(_clips);
+    listener->updateFinalClipCount(_clips.count);
     
 #if 0
     clips = [[NSMutableArray alloc]init];
@@ -226,7 +232,7 @@
                     
                     //check if the clip is in our private array
                     BOOL found = FALSE;
-                    for ( NSString * one_clip in clips)
+                    for ( NSString * one_clip in _clips)
                     {
                         NSLog(@"one clip: *%@*", one_clip);
                         NSLog(@"playlistInfo.url: *%@*", playlistInfo.urlFile);
@@ -241,8 +247,8 @@
                     if (found == FALSE)
                     {
                         //add the clip
-                        [clips addObject:playlistInfo.urlFile];
-                        NSLog(@"clips: %@", clips);
+                        [_clips addObject:playlistInfo.urlFile];
+                        NSLog(@"clips: %@", _clips);
                     }
                     
                     
@@ -254,7 +260,7 @@
                     
                 }
                 
-                NSLog(@"there is %d in playlist", [clips count]);
+                NSLog(@"there is %d in playlist", [_clips count]);
             }
             
         }
@@ -262,7 +268,7 @@
     
     if (got_last_clip == TRUE)
     {
-        listener->updateFinalClipCount([clips count]);
+        listener->updateFinalClipCount([_clips count]);
 
     }
     else
@@ -275,7 +281,7 @@
                                                         userInfo:clip_info repeats:NO];
     }
     
-    listener->updateClips(clips);
+    listener->updateClips(_clips);
     
 }
 
@@ -564,7 +570,7 @@
 
     [_activityIndicator release];
     [clip_info release];
-    [clips release];
+    [_clips release];
     [super dealloc];
 }
 
