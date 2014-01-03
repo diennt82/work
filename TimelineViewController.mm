@@ -24,6 +24,7 @@
 @property (nonatomic, retain) NSMutableArray *clipsInEachEvent;
 @property (nonatomic, retain) NSMutableArray *playlists;
 @property (nonatomic, retain) NSString *stringIntelligentMessage;
+@property (nonatomic, retain) NSString *stringCurrentDate;
 
 @property (nonatomic) BOOL isEventAlready;
 
@@ -185,6 +186,10 @@
     // Get the date time in NSString
     NSString *dateInStringFormated = [dateFormatter stringFromDate:currentDate];
     NSLog(@"%@, %@", dateInStringFormated, mac);
+    
+    dateFormatter.dateFormat = @"HH:mm";
+    self.stringCurrentDate = [dateFormatter stringFromDate:currentDate];
+    
     [dateFormatter release];
     
     dateInStringFormated = [self urlEncodeUsingEncoding:NSUTF8StringEncoding forString:dateInStringFormated];
@@ -213,6 +218,8 @@
             self.events = [NSMutableArray array];
             //self.events = [[responseDict objectForKey:@"data"] objectForKey:@"events"];
             NSArray *events = [[responseDict objectForKey:@"data"] objectForKey:@"events"];
+            NSInteger numberOfMovement = 0;
+            NSInteger numberOfVOX = 0;
             
             if (events != nil &&
                 events.count > 0)
@@ -224,6 +231,27 @@
                     EventInfo *eventInfo = [[EventInfo alloc] init];
                     eventInfo.alert_name = [event objectForKey:@"alert_name"];
                     eventInfo.value      = [event objectForKey:@"value"];
+                    
+                    NSDateFormatter *dateFormater = [[NSDateFormatter alloc]init];
+                    
+                    [dateFormater setDateFormat:@"yyyyMMddHHmmss"];
+                    
+                    NSDate *eventDate = [dateFormater dateFromString:eventInfo.value]; //2013-12-12 00:42:00 +0000
+                    [dateFormater release];
+                    
+                    NSTimeInterval diff = [currentDate timeIntervalSinceDate:eventDate];
+                    
+                    if (diff / 60 <= 20)
+                    {
+                        if ([[event objectForKey:@"alert"] isEqualToString:@"4"])
+                        {
+                            numberOfMovement++;
+                        }
+                        else if ([[event objectForKey:@"alert"] isEqualToString:@"1"])
+                        {
+                            numberOfVOX++;
+                        }
+                    }
                     
                     NSArray *clipsInEvent = [event objectForKey:@"data"];
                     
@@ -246,10 +274,47 @@
                     
                     [self.clipsInEachEvent addObject:clipsInEvent];
                 }
+                
+                if (numberOfVOX >= 4)
+                {
+                    if (numberOfMovement >= 4)
+                    {
+                        self.stringIntelligentMessage = @"There has been a lot of noise/movement";
+                    }
+                    else if(numberOfMovement >= 2)
+                    {
+                        self.stringIntelligentMessage = @"There has been a lot of noise and some movement";
+                    }
+                    else if(numberOfMovement == 1)
+                    {
+                        self.stringIntelligentMessage = @"There has been a lot of noise and little movement";
+                    }
+                }
+                else// if (numberOfVOX >= 0)
+                {
+                    if (numberOfMovement >= 4)
+                    {
+                        self.stringIntelligentMessage = @"There has been a lot of movement";
+                    }
+                    else if(numberOfMovement >= 2)
+                    {
+                        self.stringIntelligentMessage = @"There has been some movement";
+                    }
+                    else if(numberOfMovement == 1)
+                    {
+                        self.stringIntelligentMessage = @"There has been a little movement";
+                    }
+                    else
+                    {
+                        self.stringIntelligentMessage = @"All is calm";
+                    }
+                }
+                
             }
             else
             {
                 NSLog(@"Events empty!");
+                self.stringIntelligentMessage = @"All is calm";
             }
         
             NSLog(@"Number of event: %d", events.count);
@@ -259,13 +324,14 @@
         else
         {
             NSLog(@"Response status != 200");
+            self.stringIntelligentMessage = @"All is calm";
         }
     }
     else
     {
         NSLog(@"Error- responseDict is nil");
+        self.stringIntelligentMessage = @"All is calm";
     }
-
 }
 
 - (UIImage *)imageWithUrlString:(NSString *)urlString scaledToSize:(CGSize)newSize
@@ -417,6 +483,9 @@
                 break;
             }
         }
+        
+        cell.eventLabel.text = self.stringIntelligentMessage;
+        cell.eventDetailLabel.text = self.stringCurrentDate;
         
         return cell;
     }
