@@ -84,11 +84,11 @@
     
     [barButtonItem release];
     
-    self.snapshotImages = [NSArray arrayWithObjects:@"bridge", @"desk", @"garden", @"mountain", nil];
+    self.snapshotImages = [NSArray arrayWithObjects:@"mountain", @"garden", @"desk", @"bridge", nil];
     
     UIButton *addBtn = (UIButton *)[_addCameraCell viewWithTag:595];
     [addBtn setImage:[UIImage imageNamed:@"add_camera"] forState:UIControlStateNormal];
-    [addBtn setImage:[UIImage imageNamed:@"add_camera_pressed"] forState:UIControlEventTouchUpInside];
+    [addBtn setImage:[UIImage imageNamed:@"add_camera_pressed"] forState:UIControlEventTouchDown];
 }
 
 - (void)viewWillAppear:(BOOL)animated
