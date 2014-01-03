@@ -116,7 +116,7 @@
         {
             NSString *urlClipString = [clipInfo objectForKey:@"file"];
             
-            if (urlClipString != [NSNull class] &&
+            if (![urlClipString isEqual:[NSNull null]] &&
                 ![urlClipString isEqualToString:@""])
             {
                 [self.clips addObject:urlClipString];

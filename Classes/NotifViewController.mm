@@ -122,7 +122,7 @@
         {
             NSString *urlFile = [[_clipsInEvent objectAtIndex:0] objectForKey:@"file"];
             
-            if (urlFile != [NSNull class] &&
+            if (![urlFile isEqual:[NSNull null]] &&
                 ![urlFile isEqualToString:@""])
             {
                 PlaylistInfo *clipInfo = [[PlaylistInfo alloc] init];
@@ -232,7 +232,7 @@
         {
             NSString *urlString = [[_events objectAtIndex:0] objectForKey:@"snaps_url"];
             
-            if (urlString != [NSNull class])
+            if (urlString != [NSNull NULL])
             {
                 UIImage *tmpImage = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:urlString]]];
                 
@@ -288,7 +288,7 @@
                         {
                             NSString *urlImgString = [[_clipsInEvent objectAtIndex:0] objectForKey:@"image"];
                             
-                            if (urlImgString != [NSNull class])
+                            if (![urlImgString isEqual:[NSNull null]])
                             {
                                 UIImage *tmpImage = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:urlImgString]]];
                                 

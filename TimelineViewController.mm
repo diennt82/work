@@ -23,6 +23,7 @@
 @property (nonatomic, retain) NSMutableArray *events;
 @property (nonatomic, retain) NSMutableArray *clipsInEachEvent;
 @property (nonatomic, retain) NSMutableArray *playlists;
+@property (nonatomic, retain) NSString *stringIntelligentMessage;
 
 @property (nonatomic) BOOL isEventAlready;
 
@@ -123,6 +124,8 @@
     NSLog(@"%@, %@", _camChannel, ((H264PlayerViewController *)_parentVC).selectedChannel);
     
     //[self performSelectorInBackground:@selector(getEventsList_bg:) withObject:_camChannel];
+    
+    self.stringIntelligentMessage = @"All is calm";
 #endif
 }
 
@@ -186,14 +189,19 @@
     
     dateInStringFormated = [self urlEncodeUsingEncoding:NSUTF8StringEncoding forString:dateInStringFormated];
     
+    NSString *alertsString = @"1,2,3,4";
+    alertsString = [self urlEncodeUsingEncoding:NSUTF8StringEncoding forString:alertsString];
+    
     NSDictionary *responseDict = [jsonComm getListOfEventsBlockedWithRegisterId:mac
                                                                 beforeStartTime:dateInStringFormated//@"2013-12-28 20:10:18"
                                                                       eventCode:nil//event_code // temp
-                                                                         alerts:@"4"
+                                                                         alerts:alertsString
                                                                            page:nil
                                                                          offset:nil
                                                                            size:nil
                                                                          apiKey:apiKey];
+    [jsonComm release];
+    
     if (responseDict != nil)
     {
         if ([[responseDict objectForKey:@"status"] integerValue] == 200)
@@ -219,20 +227,10 @@
                     
                     NSArray *clipsInEvent = [event objectForKey:@"data"];
                     
-                    if (clipsInEvent != nil &&
-                        clipsInEvent.count > 0)
+                    if (![clipsInEvent isEqual:[NSNull null]])
                     {
                         ClipInfo *clipInfo = [[ClipInfo alloc] init];
-                        
-                        if ([[clipsInEvent objectAtIndex:0] objectForKey:@"image"] == [NSNull class])
-                        {
-                            clipInfo.urlFile = nil;
-                        }
-                        else
-                        {
-                            clipInfo.urlFile = [[clipsInEvent objectAtIndex:0] objectForKey:@"image"];
-                        }
-                        
+                        clipInfo.urlFile = [[clipsInEvent objectAtIndex:0] objectForKey:@"image"];
                         clipInfo.urlImage = [[clipsInEvent objectAtIndex:0] objectForKey:@"file"];
                         
                         eventInfo.clipInfo = clipInfo;
@@ -244,6 +242,7 @@
                     }
                     
                     [self.events addObject:eventInfo];
+                    [eventInfo release];
                     
                     [self.clipsInEachEvent addObject:clipsInEvent];
                 }
@@ -271,8 +270,7 @@
 
 - (UIImage *)imageWithUrlString:(NSString *)urlString scaledToSize:(CGSize)newSize
 {
-    if (urlString == [NSNull class] ||
-        urlString == nil ||
+    if ([urlString isEqual:[NSNull null]] ||
         [urlString isEqualToString:@""])
     {
         return [UIImage imageNamed:@"no_img_available.jpeg"];
@@ -448,12 +446,12 @@
         NSString *datestr = eventInfo.value;
         NSDateFormatter *dFormater = [[NSDateFormatter alloc]init];
         [dFormater setDateFormat:@"yyyyMMddHHmmssz"];
-        NSLog(@"%@, %@", [dFormater dateFromString:datestr], datestr);
+        //NSLog(@"%@, %@", [dFormater dateFromString:datestr], datestr);
         NSDate *date = [dFormater dateFromString:datestr]; //2013-12-12 00:42:00 +0000
         dFormater.dateFormat = @"HH:mm";
         
         cell.eventTimeLabel.text = [dFormater stringFromDate:date];
-        NSLog(@"%@", [dFormater stringFromDate:date]);
+        //NSLog(@"%@", [dFormater stringFromDate:date]);
         [dFormater release];
         
         cell.snapshotImage.image = [UIImage imageNamed:@"no_img_available.jpeg"];
@@ -595,12 +593,11 @@
         {
             NSArray *clipsInEvent = [_clipsInEachEvent objectAtIndex:indexPath.row];
             
-            if (clipsInEvent != nil &&
-                clipsInEvent.count > 0)
+            if (![clipsInEvent isEqual:[NSNull null]])
             {
                 NSString *urlFile = [[clipsInEvent objectAtIndex:0] objectForKey:@"file"];
                 
-                if (urlFile != [NSNull class] &&
+                if (![urlFile isEqual:[NSNull null]] &&
                     ![urlFile isEqualToString:@""])
                 {
                     if (self.timelineVCDelegate != nil)
