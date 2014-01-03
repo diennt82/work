@@ -252,6 +252,7 @@
 		8B96916418765F6900FB15B8 /* bridge.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B96916018765F6900FB15B8 /* bridge.png */; };
 		8B96916518765F6900FB15B8 /* mountain.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B96916118765F6900FB15B8 /* mountain.png */; };
 		8B9691671876640E00FB15B8 /* garden.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B9691661876640E00FB15B8 /* garden.png */; };
+		8B9691691876678C00FB15B8 /* img_timeline_w_dot.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B9691681876678C00FB15B8 /* img_timeline_w_dot.png */; };
 		8B9899AD1859771800AC3852 /* CameraNameViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B9899AB1859771800AC3852 /* CameraNameViewController.m */; };
 		8B9899AE1859771800AC3852 /* CameraNameViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8B9899AC1859771800AC3852 /* CameraNameViewController.xib */; };
 		8B9899CD1859A04F00AC3852 /* slider-default7-handle.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B9899C91859A04F00AC3852 /* slider-default7-handle.png */; };
@@ -275,7 +276,6 @@
 		8B99C0B2186ABB7900DB8AAA /* ImgNotAvailable.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B99C0B1186ABB7900DB8AAA /* ImgNotAvailable.png */; };
 		8B99C0B5186AEAD200DB8AAA /* img_timeline_line.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B99C0B3186AEAD200DB8AAA /* img_timeline_line.png */; };
 		8B99C0B6186AEAD200DB8AAA /* img_timeline_dot.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B99C0B4186AEAD200DB8AAA /* img_timeline_dot.png */; };
-		8B99C0BA186AF11A00DB8AAA /* img_timeline_w_dot.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B99C0B9186AF11A00DB8AAA /* img_timeline_w_dot.png */; };
 		8B9AF69E1858179900AC09C3 /* ScheduleViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B9AF69C1858179900AC09C3 /* ScheduleViewController.m */; };
 		8B9AF69F1858179900AC09C3 /* ScheduleViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8B9AF69D1858179900AC09C3 /* ScheduleViewController.xib */; };
 		8B9AF6A418581D3300AC09C3 /* AddScheduleViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B9AF6A218581D3300AC09C3 /* AddScheduleViewController.m */; };
@@ -817,6 +817,7 @@
 		8B96916018765F6900FB15B8 /* bridge.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bridge.png; sourceTree = "<group>"; };
 		8B96916118765F6900FB15B8 /* mountain.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = mountain.png; sourceTree = "<group>"; };
 		8B9691661876640E00FB15B8 /* garden.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = garden.png; sourceTree = "<group>"; };
+		8B9691681876678C00FB15B8 /* img_timeline_w_dot.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = img_timeline_w_dot.png; sourceTree = "<group>"; };
 		8B9899AA1859771800AC3852 /* CameraNameViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CameraNameViewController.h; sourceTree = "<group>"; };
 		8B9899AB1859771800AC3852 /* CameraNameViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CameraNameViewController.m; sourceTree = "<group>"; };
 		8B9899AC1859771800AC3852 /* CameraNameViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CameraNameViewController.xib; sourceTree = "<group>"; };
@@ -843,7 +844,6 @@
 		8B99C0B1186ABB7900DB8AAA /* ImgNotAvailable.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ImgNotAvailable.png; sourceTree = "<group>"; };
 		8B99C0B3186AEAD200DB8AAA /* img_timeline_line.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = img_timeline_line.png; sourceTree = "<group>"; };
 		8B99C0B4186AEAD200DB8AAA /* img_timeline_dot.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = img_timeline_dot.png; sourceTree = "<group>"; };
-		8B99C0B9186AF11A00DB8AAA /* img_timeline_w_dot.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = img_timeline_w_dot.png; sourceTree = "<group>"; };
 		8B9AF69B1858179900AC09C3 /* ScheduleViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ScheduleViewController.h; sourceTree = "<group>"; };
 		8B9AF69C1858179900AC09C3 /* ScheduleViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ScheduleViewController.m; sourceTree = "<group>"; };
 		8B9AF69D1858179900AC09C3 /* ScheduleViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ScheduleViewController.xib; sourceTree = "<group>"; };
@@ -2370,7 +2370,7 @@
 		8B92C0D61868302200538013 /* Feed_earlier */ = {
 			isa = PBXGroup;
 			children = (
-				8B99C0B9186AF11A00DB8AAA /* img_timeline_w_dot.png */,
+				8B9691681876678C00FB15B8 /* img_timeline_w_dot.png */,
 				8B99C0B3186AEAD200DB8AAA /* img_timeline_line.png */,
 				8B99C0B4186AEAD200DB8AAA /* img_timeline_dot.png */,
 				8B92C0D71868303700538013 /* feed_date.png */,
@@ -3152,6 +3152,7 @@
 				8B1D545818658903008857F0 /* SchedulerViewController.xib in Resources */,
 				8B9384A318570207009C4771 /* sound-s-d.png in Resources */,
 				8B92C0E8186832A600538013 /* add_camera_pressed.png in Resources */,
+				8B9691691876678C00FB15B8 /* img_timeline_w_dot.png in Resources */,
 				8B92A0921863E69F005923D2 /* TimelineCell.xib in Resources */,
 				8B9B57E2184F0D9900E58543 /* frame-6_update-iOS7_new2.png in Resources */,
 				8BC0A0311844A8A500A5FD52 /* camera_offline.png in Resources */,
@@ -3248,7 +3249,6 @@
 				8B9907021869824D0054966B /* camera_action_video_pressed.png in Resources */,
 				8BA7F2821851C57200BE0145 /* blink11hd480p.sdp in Resources */,
 				8B92C0A71867F4AD00538013 /* enter_pressed.png in Resources */,
-				8B99C0BA186AF11A00DB8AAA /* img_timeline_w_dot.png in Resources */,
 				BC3C1ACE16F025B600175AFF /* MBP_MenuViewController_ipad.xib in Resources */,
 				A1E74742185F07AE00A54B29 /* outline_circle.png in Resources */,
 				8B92A0A81863F6B4005923D2 /* SavedEventCell.xib in Resources */,
