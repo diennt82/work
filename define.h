@@ -15,4 +15,10 @@
 #define SET_UP_CAMERA @"SET_UP_CAMERA"
 #define BLUETOOTH_SETUP  1
 #define WIFI_SETUP      2
+
+
+
+
+//
+#define CAMERA_NAME_MAX 20
 #endif

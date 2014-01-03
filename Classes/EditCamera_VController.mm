@@ -291,7 +291,7 @@
     
     
     
-    if ([cameraName_text length] < 3 || [cameraName_text length] > 15 )
+    if ([cameraName_text length] < 3 || [cameraName_text length] > CAMERA_NAME_MAX )
     {
         NSString * title = NSLocalizedStringWithDefaultValue(@"Invalid_Camera_Name", nil, [NSBundle mainBundle],
                                                              @"Invalid Camera Name", nil);

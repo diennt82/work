@@ -148,6 +148,11 @@
 
 }
 
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [self resetAllTimer];
+}
+
 #pragma mark -
 #pragma mark UITextFieldDelegate
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
@@ -878,6 +883,7 @@
 - (void)showDialogPasswordWrong
 {
     NSLog(@"pass is wrong: %@ ", self.password);
+    _timeOut = nil;
     [self resetAllTimer];
     [self.progressView setHidden:YES];
     NSString * msg_pw_wrong = @"Password input don't correctly, try again";

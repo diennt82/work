@@ -248,10 +248,6 @@
 
 - (IBAction)handleButtonPress:(id)sender
 {
-    
-    [self.progressView setHidden:NO];
-    [self.view addSubview:self.progressView];
-    [self.view bringSubviewToFront:self.progressView];
     int tag = ((UIButton*)sender).tag; 
     
     NSString * cameraName_text = @"";
@@ -271,7 +267,7 @@
     
     [camName resignFirstResponder];
     
-    if ([cameraName_text length] < 3 || [cameraName_text length] > 15 )
+    if ([cameraName_text length] < 3 || [cameraName_text length] > CAMERA_NAME_MAX )
     {
         NSString * title = NSLocalizedStringWithDefaultValue(@"Invalid_Camera_Name", nil, [NSBundle mainBundle],
                                                              @"Invalid Camera Name", nil);
@@ -314,7 +310,11 @@
     }
     else if (tag == CONF_CAM_BTN_TAG)
     {
+        //show progress view
 
+        [self.progressView setHidden:NO];
+        [self.view addSubview:self.progressView];
+        [self.view bringSubviewToFront:self.progressView];
         
         NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
         [userDefaults setObject:cameraName_text forKey:@"CameraName"];
