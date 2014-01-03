@@ -25,6 +25,7 @@
     HttpCommunication *  comm;
 }
 
+@property (retain, nonatomic) IBOutlet UIView *progressView;
 
 @property (nonatomic, retain) NSString * cameraMac, * cameraName;
 

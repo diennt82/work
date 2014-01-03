@@ -11,6 +11,10 @@
 //#import "MenuViewController.h"
 
 @interface CamerasViewController : UITableViewController
+{
+    //member to dismiss when disDisAppearView
+    UIAlertView *_alertChooseConfig;
+}
 
 @property (assign, nonatomic) id<ConnectionMethodDelegate> camerasDelegate;
 @property (assign, nonatomic) id parentVC;

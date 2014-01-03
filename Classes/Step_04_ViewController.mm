@@ -53,7 +53,8 @@
         ((UITextView *)camName).text = self.cameraName;
         
     }
-
+    
+    [self.progressView setHidden:YES];
     
 
     
@@ -81,6 +82,11 @@
 
 - (void)handleNextBtnTouchAction: (id)sender
 {
+    //show dialog processView
+    [self.view addSubview:self.progressView];
+    [self.view bringSubviewToFront:self.progressView];
+    [self.progressView setHidden:NO];
+    
     NSString * cameraName_text = @"";
     
     if ([camName isMemberOfClass:[UITextView class]] )
@@ -92,6 +98,8 @@
     {
         cameraName_text =((UITextField *)camName).text;
     }
+    
+    [camName resignFirstResponder];
     
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     [userDefaults setObject:cameraName_text forKey:@"CameraName"];
@@ -213,6 +221,7 @@
 
     [cameraName release];
    [cameraMac release];
+    [_progressView release];
     [super dealloc];
 }
 
@@ -239,6 +248,10 @@
 
 - (IBAction)handleButtonPress:(id)sender
 {
+    
+    [self.progressView setHidden:NO];
+    [self.view addSubview:self.progressView];
+    [self.view bringSubviewToFront:self.progressView];
     int tag = ((UIButton*)sender).tag; 
     
     NSString * cameraName_text = @"";
@@ -256,7 +269,7 @@
         cameraName_text =((UITextField *)camName).text;
     }
     
-    
+    [camName resignFirstResponder];
     
     if ([cameraName_text length] < 3 || [cameraName_text length] > 15 )
     {
@@ -432,7 +445,9 @@
 -(void) setWifiResult:(NSArray *) wifiList
 {
     NSLog(@"GOT WIFI RESULT: numentries: %d", wifiList.count); 
-    
+    //hide progressView
+    [self.progressView removeFromSuperview];
+    [self.progressView setHidden:YES];
    
     
     

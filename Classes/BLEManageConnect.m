@@ -189,6 +189,7 @@
  */
 - (void)connectToBLEWithPeripheral:(CBPeripheral *)peripheral
 {
+    NSLog(@"Connect to BLE with name is %@", peripheral.name);
     [_cm stopScan];
     self.myPeripheral = peripheral;
     self.uartPeripheral = [[UARTPeripheral alloc] initWithPeripheral:self.myPeripheral delegate:self];

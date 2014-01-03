@@ -26,8 +26,11 @@
     NSTimer *_inputPasswordTimer;
     DeviceConfiguration *_deviceConf;
     NSTimer *_timeOut;
+    HttpCommunication  *_httpComWithDevice;
     
 }
+@property (nonatomic, strong) HttpCommunication  *httpComWithDevice;
+@property (retain, nonatomic) IBOutlet UIView *progressView;
 //
 @property (nonatomic, strong) NSString *currentStateCamera;
 //timeout input password

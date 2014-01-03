@@ -23,6 +23,7 @@
 @synthesize inputPasswordTimer = _inputPasswordTimer;
 @synthesize deviceConf = _deviceConf;
 @synthesize timeOut = _timeOut;
+@synthesize httpComWithDevice = _httpComWithDevice;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -42,13 +43,18 @@
     [_security release];
     [_password release];
     [_deviceConf release];
+    [_progressView release];
     [super dealloc];
 }
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    //create Httpcommunication to inter-communication with device
+    _httpComWithDevice = [[HttpCommunication alloc]init];
 	// Do any additional setup after loading the view.
     
+    [self.progressView setHidden:YES];
     self.navigationItem.title = NSLocalizedStringWithDefaultValue(@"Enter_Network_Information",nil, [NSBundle mainBundle],
                                                                   @"Enter Network Information" , nil);
     
@@ -118,6 +124,13 @@
 {
     [super viewDidUnload];
     // Release any retained subviews of the main view.
+    [self resetAllTimer];
+    
+    if (_httpComWithDevice)
+    {
+        [_httpComWithDevice release];
+        _httpComWithDevice = nil;
+    }
 }
 
 -(void) viewWillAppear:(BOOL)animated
@@ -458,11 +471,17 @@
 
 -(void) handleNextButton:(id) sender
 {
+    //create progressView for process verify network
+    [self.view addSubview:self.progressView];
+    [self.progressView setHidden:NO];
     //check if password is ok?
     UITextField  * pass = (UITextField*)[self.passwordCell viewWithTag:200];
     UITextField  * confpass = (UITextField*)[self.confPasswordCell viewWithTag:201];
     UITextField * my_ssid = (UITextField*) [self.ssidCell viewWithTag:202];
     
+    [pass resignFirstResponder];
+    [confpass resignFirstResponder];
+    [my_ssid resignFirstResponder];
     NSLog(@"pass : %@ vs %@  ssid: %@", pass.text, confpass.text, my_ssid.text);
 
     if (self.isOtherNetwork == TRUE)
@@ -627,13 +646,9 @@
     NSString * camera_mac= nil;
 
 #ifdef CONCURRENT_SETUP
-    HttpCommunication  *deviceComm = [[HttpCommunication alloc]init];
-    
-    
-    camera_mac = [deviceComm sendCommandAndBlock:GET_MAC_ADDRESS
+    camera_mac = [_httpComWithDevice sendCommandAndBlock:GET_MAC_ADDRESS
                                                 withTimeout:5.0];
     camera_mac = [Util add_colon_to_mac:camera_mac];
-    [deviceComm release];
 #else
     camera_mac = [CameraPassword fetchBSSIDInfo];
 #endif
@@ -701,11 +716,8 @@
     
     [_deviceConf restoreConfigurationData:[Util readDeviceConfiguration]];
     
-    //create a http delegate, send the data thru delegate
-    HttpCommunication  *deviceComm = [[HttpCommunication alloc]init];
     
-    
-    NSString *deviceCodec = [deviceComm sendCommandAndBlock:GET_CODECS_SUPPORT
+    NSString *deviceCodec = [_httpComWithDevice sendCommandAndBlock:GET_CODECS_SUPPORT
                                 withTimeout:5.0];
     
     [[NSUserDefaults standardUserDefaults] setObject:deviceCodec  forKey:CODEC_PREFS];
@@ -723,7 +735,7 @@
     
 	
 	//NSString * response =
-    [deviceComm sendCommandAndBlock:setup_cmd ];
+    [_httpComWithDevice sendCommandAndBlock:setup_cmd ];
     
     [self getStatusOfCameraToWifi:nil];
     _timeOut =  [NSTimer scheduledTimerWithTimeInterval: TIME_INPUT_PASSWORD_AGAIN// after 60s if not get successful
@@ -731,7 +743,6 @@
                                                selector:@selector(showDialogPasswordWrong)
                                                userInfo:nil
                                                 repeats:NO];
-    [deviceComm release];
     
     NSLog(@"Don't Send & reset done");
 
@@ -818,12 +829,9 @@
 }
 - (void)getStatusOfCameraToWifi:(NSTimer *)info
 {
-    //create a http delegate, send the data thru delegate
-    HttpCommunication  *httpCom = [[HttpCommunication alloc]init];
     NSString *commandGetState = GET_STATE_NETWORK_CAMERA;
     NSLog(@"command is %@", commandGetState);
-    NSString *state = [httpCom sendCommandAndBlock:commandGetState];
-    [httpCom release];
+    NSString *state = [_httpComWithDevice sendCommandAndBlock:commandGetState];
     if (state != nil && [state length] > 0)
     {
         _currentStateCamera = [[state componentsSeparatedByString:@": "] objectAtIndex:1];
@@ -835,7 +843,7 @@
     NSLog(@"_currentStateCamera is %@", _currentStateCamera);
     
     // get state network of camera after 4s
-    _inputPasswordTimer = [NSTimer scheduledTimerWithTimeInterval: 6.0//
+    _inputPasswordTimer = [NSTimer scheduledTimerWithTimeInterval: 5.5//
                                      target:self
                                    selector:@selector(getStatusOfCameraToWifi:)
                                    userInfo:nil
@@ -844,6 +852,8 @@
     {
         [self resetAllTimer];
         [self nextStepVerifyPassword];
+        [self.progressView removeFromSuperview];
+        [self.progressView setHidden:YES];
     }
     
     
@@ -869,6 +879,7 @@
 {
     NSLog(@"pass is wrong: %@ ", self.password);
     [self resetAllTimer];
+    [self.progressView setHidden:YES];
     NSString * msg_pw_wrong = @"Password input don't correctly, try again";
     //ERROR condition
     UIAlertView *_alert = [[UIAlertView alloc]
@@ -900,10 +911,6 @@
     }
 }
 
-- (void)viewWillDisappear:(BOOL)animated
-{
-    [self resetAllTimer];
-}
 - (void)resetAllTimer
 {
     if (_timeOut != nil)

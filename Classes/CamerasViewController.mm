@@ -124,16 +124,26 @@
     self.navigationController.navigationBarHidden = YES;
 }
 
+- (void)viewWillDisappear:(BOOL)animated
+{
+    
+    //Dismiss alertView in case interrupt : lock key, home key, phone call
+    if (_alertChooseConfig)
+    {
+        [_alertChooseConfig dismissWithClickedButtonIndex:0 animated:NO];
+        [_alertChooseConfig release];
+    }
+}
+
 - (void)showDialogChooseConfigCamera
 {
-    UIAlertView *alert = [[UIAlertView alloc]
+    _alertChooseConfig = [[UIAlertView alloc]
                           initWithTitle:@"Please select"
                           message:@"BLE to config camera through bluetooth.\nWifi to config camera through wifi."
                           delegate:self
                           cancelButtonTitle:@"Cancel"
                           otherButtonTitles:@"BLE", @"Wifi", nil];
-    [alert show];
-    [alert release];
+    [_alertChooseConfig show];
 }
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
