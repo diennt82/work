@@ -125,12 +125,6 @@
     [super viewDidUnload];
     // Release any retained subviews of the main view.
     [self resetAllTimer];
-    
-    if (_httpComWithDevice)
-    {
-        [_httpComWithDevice release];
-        _httpComWithDevice = nil;
-    }
 }
 
 -(void) viewWillAppear:(BOOL)animated
@@ -742,12 +736,16 @@
 	//NSString * response =
     [_httpComWithDevice sendCommandAndBlock:setup_cmd ];
     
-    [self getStatusOfCameraToWifi:nil];
-    _timeOut =  [NSTimer scheduledTimerWithTimeInterval: TIME_INPUT_PASSWORD_AGAIN// after 60s if not get successful
-                                                 target:self
-                                               selector:@selector(showDialogPasswordWrong)
-                                               userInfo:nil
-                                                repeats:NO];
+    [NSTimer scheduledTimerWithTimeInterval: 5.0//
+                                     target:self
+                                   selector:@selector(getStatusOfCameraToWifi:)
+                                   userInfo:nil
+                                    repeats:NO];
+//    _timeOut =  [NSTimer scheduledTimerWithTimeInterval: TIME_INPUT_PASSWORD_AGAIN// after 60s if not get successful
+//                                                 target:self
+//                                               selector:@selector(showDialogPasswordWrong)
+//                                               userInfo:nil
+//                                                repeats:NO];
     
     NSLog(@"Don't Send & reset done");
 
@@ -834,9 +832,10 @@
 }
 - (void)getStatusOfCameraToWifi:(NSTimer *)info
 {
+//    NSString * currentSSID = [CameraPassword fetchSSIDInfo];
     NSString *commandGetState = GET_STATE_NETWORK_CAMERA;
     NSLog(@"command is %@", commandGetState);
-    NSString *state = [_httpComWithDevice sendCommandAndBlock:commandGetState];
+    NSString *state = [_httpComWithDevice sendCommandAndBlock:commandGetState withTimeout:20.0];
     if (state != nil && [state length] > 0)
     {
         _currentStateCamera = [[state componentsSeparatedByString:@": "] objectAtIndex:1];
@@ -847,12 +846,6 @@
 
     NSLog(@"_currentStateCamera is %@", _currentStateCamera);
     
-    // get state network of camera after 4s
-    _inputPasswordTimer = [NSTimer scheduledTimerWithTimeInterval: 5.5//
-                                     target:self
-                                   selector:@selector(getStatusOfCameraToWifi:)
-                                   userInfo:nil
-                                    repeats:NO];
     if ([_currentStateCamera isEqualToString:@"CONNECTED"])
     {
         [self resetAllTimer];
@@ -860,8 +853,15 @@
         [self.progressView removeFromSuperview];
         [self.progressView setHidden:YES];
     }
-    
-    
+    else{
+        // get state network of camera after 4s
+        _inputPasswordTimer = [NSTimer scheduledTimerWithTimeInterval: 2.0//
+                                                               target:self
+                                                             selector:@selector(getStatusOfCameraToWifi:)
+                                                             userInfo:nil
+                                                              repeats:NO];
+    }
+
 }
 
 - (BOOL) restoreDataIfPossible
