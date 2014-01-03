@@ -289,6 +289,10 @@
                     {
                         self.stringIntelligentMessage = @"There has been a lot of noise and little movement";
                     }
+                    else
+                    {
+                        self.stringIntelligentMessage = @"There has been a lot of noise";
+                    }
                 }
                 else// if (numberOfVOX >= 0)
                 {
@@ -306,7 +310,18 @@
                     }
                     else
                     {
-                        self.stringIntelligentMessage = @"All is calm";
+                        if (numberOfVOX >= 2)
+                        {
+                            self.stringIntelligentMessage = @"There has been some noise";
+                        }
+                        else if (numberOfVOX >= 1)
+                        {
+                            self.stringIntelligentMessage = @"There has been a little noise";
+                        }
+                        else
+                        {
+                            self.stringIntelligentMessage = @"All is calm";
+                        }
                     }
                 }
                 
@@ -318,7 +333,12 @@
             }
         
             NSLog(@"Number of event: %d", events.count);
-            //[self.tableView reloadSections:[NSIndexSet indexSetWithIndex:1] withRowAnimation:UITableViewRowAnimationAutomatic];
+            
+            if (self.camChannel.profile.minuteSinceLastComm > 5)
+            {
+                self.stringIntelligentMessage = [NSString stringWithFormat:@"Monitor is offline since %@", self.camChannel.profile.last_comm];
+            }
+            
             [self.tableView reloadData];
         }
         else
