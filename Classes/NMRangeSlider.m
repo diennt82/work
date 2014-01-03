@@ -260,7 +260,7 @@ NSUInteger DeviceSystemMajorVersion() {
             
             UIImage* image = [UIImage imageNamed:@"slider-default7-track"];
             image = [image resizableImageWithCapInsets:UIEdgeInsetsMake(0.0, 2.0, 0.0, 2.0)];
-            image = [image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+            //image = [image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
             _trackImage = image;
         }
     }

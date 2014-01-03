@@ -23,14 +23,14 @@
 #define  MAX_CAM_ALLOWED 4
 #define ALERT_DEMO_926_TAG 905
 
-@interface DashBoard_ViewController : GAITrackedViewController<UITableViewDataSource, UITableViewDelegate, UINavigationControllerDelegate, UITextFieldDelegate>
+@interface DashBoard_ViewController : GAITrackedViewController<UITableViewDataSource, UITableViewDelegate, UINavigationControllerDelegate, UITextFieldDelegate, UIAlertViewDelegate>
 {
     IBOutlet EditCameraCell *cellView;
     IBOutlet UITableView * cameraList; 
     IBOutlet UITabBarController *tabBarController;
 
     IBOutlet UIView * offlineView;
-    IBOutlet UIView * emptyCameraListView; 
+    IBOutlet UIView * emptyCameraListView;
     IBOutlet UIView * progressView; 
        
     NSArray * listOfChannel; 

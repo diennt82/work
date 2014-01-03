@@ -8,14 +8,14 @@
 
 #define TAG_IMAGE_VIEW_ANIMATION 595
 
-#import "Step_10_ViewController.h"
+#import "Step_10_ViewController_ble.h"
 #import "StartMonitorCallback.h"
 
-@interface Step_10_ViewController ()
+@interface Step_10_ViewController_ble ()
 
 @end
 
-@implementation Step_10_ViewController
+@implementation Step_10_ViewController_ble
 
 @synthesize  userNameLabel, userEmailLabel,progressView ;
 @synthesize  cameraMac, master_key; 
@@ -24,6 +24,7 @@
 @synthesize  homeSSID;
 @synthesize  shouldStopScanning;
 @synthesize  timeOut;
+
 
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
@@ -48,30 +49,10 @@
     //[cameraName release];
     [super dealloc];
 }
-- (void)sendCommandRebootCamera
-{
-    NSLog(@"Send command reset camera");
-    HttpCommunication *comm = [[HttpCommunication alloc]init];
-    NSString * command = RESTART_HTTP_CMD;
-    [comm sendCommandAndBlock:command];
-    [comm release];
-}
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
-    // Do any additional setup after loading the view.
-	[[NSNotificationCenter defaultCenter] addObserver: self
-                                             selector: @selector(handleEnteredBackground)
-                                                 name: UIApplicationDidEnterBackgroundNotification
-                                               object: nil];
-    
-    // Do any additional setup after loading the view.
-	[[NSNotificationCenter defaultCenter] addObserver: self
-                                             selector: @selector(becomeActive)
-                                                 name: UIApplicationDidBecomeActiveNotification
-                                               object: nil];
-    
     //Keep screen on
     [UIApplication sharedApplication].idleTimerDisabled = YES;
     
@@ -110,6 +91,7 @@
     }
     else //not first time --> this is normal add camera sequence..
     {
+        [self startAnimationWithOrientation];
         //Hide back button -- can't go back now..
         self.navigationItem.hidesBackButton = TRUE;
         
@@ -124,56 +106,38 @@
         
         
         [self.view addSubview:self.progressView];
-        self.progressView.hidden = NO;
-
-        self.homeSSID.text = homeSsid;
-        
-        
-        //First add camera
-        [self registerCamera:nil];
-        
-    }
-        
-}
-
--(void) handleEnteredBackground
-{
-//    showProgressNextTime = TRUE;
-}
-
--(void) becomeActive
-{
-//    if (showProgressNextTime)
-//    {
-        NSLog(@"cshow progress 03");
-        [self showProgress:nil];
-//    }
-    
-//    task_cancelled = NO;
-    [self waitingCameraRebootAndForceToWifiHome];
-}
-
--(void) showProgress:(NSTimer *) exp
-{
-    NSLog(@"show progress ");
-    {
-        if (self.progressView != nil)
-        {
-            NSLog(@"show progress 01 ");
-            self.progressView.hidden = NO;
-            [self.view bringSubviewToFront:self.progressView];
-        }
-    }
-}
-
-- (void) hideProgess
-{
-    NSLog(@"hide progress");
-    if (self.progressView != nil)
-    {
         self.progressView.hidden = YES;
+        [self.view addSubview:cameraAddedView];
+        self.homeSSID.text = homeSsid;
+#if 0
+        [NSTimer scheduledTimerWithTimeInterval: 3.0//
+                                         target:self
+                                       selector:@selector(checkConnectionToHomeWifi:)
+                                       userInfo:nil
+                                        repeats:NO];
+
+        
+        
+        
+      
+        shouldStopScanning = FALSE;
+        
+        timeOut = [NSTimer scheduledTimerWithTimeInterval:2*60.0
+                                                   target:self
+                                                 selector:@selector(homeWifiScanTimeout:)
+                                                 userInfo:nil
+                                                  repeats:NO];
+        
+#endif
+        
+        
+        //CameraTest: try to search for camera now..
+        [self registerCamera:nil];
+
+        
+        
     }
-    
+        
 }
 
 - (void)viewDidUnload
@@ -404,7 +368,6 @@
 //                              andFwVersion:fwVersion
 //                               andTimeZone:stringFromDate
 //                                 andApiKey:apiKey];
-    NSLog(@"Mac address and cam name is %@, %@", mac, camName);
 
     //Api
     [jsonComm registerDeviceWithDeviceModelID:@"5"
@@ -441,8 +404,20 @@
     
 }
 
+
+
 - (void) checkConnectionToHomeWifi:(NSTimer *) expired
 {
+    if (shouldStopScanning == TRUE)
+    {
+
+        //Now we are not connecting to any wifi??
+        self.errorCode = @"Not connecting to any wifi";
+        [self setupFailed];
+        return;
+    }
+    
+    
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     NSString * homeSsid = (NSString *) [userDefaults objectForKey:HOME_SSID];
 	
@@ -450,21 +425,8 @@
     NSString * currentSSID = [CameraPassword fetchSSIDInfo];
     
     
-    NSNumber * retry_count =  (NSNumber *) expired.userInfo;
     
-    if ([retry_count intValue] <= 0)
-    {
-        // ..
-        [self connectToWifiHomeByHand];
-        return;
-    }
-    
-    
-    
-    
-    
-    NSLog(@"check ConnectionToHomeWifi 03: %@", currentSSID);
-        NSLog(@"check ConnectionToHomeWifi : %@ and homeSsid: %@", currentSSID, homeSsid);
+    NSLog(@"checkConnectionToHomeWifi 03: %@", currentSSID);
 	if ([currentSSID isEqualToString:homeSsid])
 	{
 		//yeah we're connected ... check for ip??
@@ -475,125 +437,51 @@
 		
 		if (![own isEqualToString:@""])
 		{
-            
+			
             if (timeOut != nil && [timeOut isValid])
             {
                 [timeOut invalidate];
-                
+                //[timeOut release];
+                timeOut = nil;
             }
             
+            should_retry_silently = TRUE;
             
-            [self wait_for_camera_to_reboot:nil];
+            //CameraTest: try to search for camera now..
+            [self registerCamera:nil];
             
-            //Timer ticky 5min - for camera reboot and scan camera
-            timeOut = [NSTimer scheduledTimerWithTimeInterval:5*60.0
-                                                       target:self
-                                                     selector:@selector(homeWifiScanTimeout:)
-                                                     userInfo:nil
-                                                      repeats:NO];
             
-            return;
+            
+            //check back later..
+            [NSTimer scheduledTimerWithTimeInterval: 4.0//
+                                             target:self
+                                           selector:@selector(silentRetryTimeout:)
+                                           userInfo:nil
+                                            repeats:NO];
+            
+			return;
 		}
 		
 	}
-    
+	   
+    //check back later..
+    [NSTimer scheduledTimerWithTimeInterval: 3.0//
+                                     target:self
+                                   selector:@selector(checkConnectionToHomeWifi:)
+                                   userInfo:nil
+                                    repeats:NO];
 	
-    retry_count = [[NSNumber alloc] initWithUnsignedInt:[retry_count intValue] -1 ];
-    
-    //check back later..
-    [NSTimer scheduledTimerWithTimeInterval: 3.0//
-                                     target:self
-                                   selector:@selector(checkConnectionToHomeWifi:)
-                                   userInfo:retry_count
-                                    repeats:NO];
-
 }
 
-- (void)connectToWifiHomeByHand
-{
-    [self.progressView setHidden:YES];
-    [self startAnimationWithOrientation];
-    [self.view addSubview:cameraAddedView];
-    
-    
-    /* TODO
-     - Do nothing UNTIL user go out and go into the app again 
-     - Start timer to check [checkConnectionToHomeWifi]
-     
-      */
-    
-    
 
-}
-
-- (void)sendMasterKeyToDevice
-{
-
-    HttpCommunication *comm = [[HttpCommunication alloc]init];
-    comm.device_ip = @"192.168.2.1";
-    
-    NSString * set_mkey = SET_MASTER_KEY;
-    NSString * response;
-    set_mkey =[set_mkey stringByAppendingString:self.master_key];
-    
-    response = [comm sendCommandAndBlock:set_mkey];
-    
-    if (response == nil)
-    {
-        NSLog(@"can't send master key, camera is not fully up");
-    }
-    else
-    {
-        NSLog(@"response: %@", response);
-        
-        if ([response hasPrefix:@"set_master_key: 0"])
-        {
-            ///done
-            NSLog(@"sending master key done");
-            [self sendCommandRebootCamera];
-            
-       
-
-            [self waitingCameraRebootAndForceToWifiHome];
-        }
-        
-    }
-    
-    [comm release];
-
-}
-
-- (void)waitingCameraRebootAndForceToWifiHome
-{
-    //time out to force is 2s
-    [self.progressView setHidden:NO];
-    
-
-    //Set timer - repeated = YES
-    //    expired -> checkConnectionToHomeWifi:
-    //     ...
-    //     .. counter ---
-    //      counter = 0 -> Repeat  = NO ;
-
-    //retry for 20x3 = 60 sec
-    NSNumber * retry_count = [[NSNumber alloc] initWithInt:20];
-    //check back later..
-    [NSTimer scheduledTimerWithTimeInterval: 3.0//
-                                     target:self
-                                   selector:@selector(checkConnectionToHomeWifi:)
-                                   userInfo:retry_count
-                                    repeats:NO];
-    
-
-}
 #pragma mark -
 
 
 -(void) setStopScanning:(NSTimer *) exp
 {
     should_stop_scanning = TRUE;
+    
 }
-
 - (void) wait_for_camera_to_reboot:(NSTimer *)exp
 {
 
@@ -615,7 +503,8 @@
 	{
 		scanner =[[ScanForCamera alloc]init];
 	}
-	[scanner scan_for_device:self.cameraMac];
+    NSString *addColonToMac = [Util add_colon_to_mac:[self.cameraMac uppercaseString]];
+	[scanner scan_for_device:addColonToMac];
 	
 	
 	
@@ -650,22 +539,78 @@
 			{
 				
 				cp = [result objectAtIndex:i];
-				if ([cp.mac_address isEqualToString:[self.cameraMac uppercaseString]])
+				if ([cp.mac_address isEqualToString:[Util add_colon_to_mac:[self.cameraMac uppercaseString]]])
 				{
 					NSLog(@"camera %@ is up in home network with ip:%@",cp.mac_address, cp.ip_address); 
 					
 					found = TRUE;
 					break; 
 				}
+                else
+                {
+                    NSLog(@"Does not match : %@ vs %@",cp.mac_address,[Util add_colon_to_mac:[self.cameraMac uppercaseString]]  );
+                }
 				
 			}
 			
 			//3 of 3. send the master key to device 
 			if (found == TRUE)
 			{
-                [self setupCompleted];
-                return;
-            }
+				HttpCommunication *comm = [[HttpCommunication alloc]init];
+				comm.device_ip = cp.ip_address;
+
+				NSString * set_mkey = SET_MASTER_KEY;
+				NSString * response;
+				set_mkey =[set_mkey stringByAppendingString:self.master_key];
+				BOOL master_key_sent = FALSE; 
+				int retries = 10; 
+				do 
+				{
+					response = [comm sendCommandAndBlock:set_mkey];
+					
+					if (response == nil)
+					{
+						NSLog(@"can't send master key, camera is not fully up");
+                        [[[GAI sharedInstance] defaultTracker] trackEventWithCategory:@"Add Cameras"
+                                                                           withAction:@"Get MasterKey"
+                                                                            withLabel:@"Add MasterKey Failed Cause respond is nil"
+                                                                            withValue:nil];
+					}
+					else
+                    {
+						NSLog(@"response: %@", response);
+                        if ([response hasPrefix:@"set_master_key: 0"])
+                        {
+                            ///done
+                            master_key_sent = TRUE;
+                            NSLog(@"sending master key done");
+                            
+                            break;
+                        }
+						
+					}
+                    
+					
+					//sleep for sometime and retry 
+					[NSThread sleepForTimeInterval:2];
+					
+				} while (retries -- >0);
+
+                if (master_key_sent == TRUE)
+                {
+                    ///done
+                    NSLog(@"sending master key done");
+                    [self setupCompleted];
+                }
+               
+				[comm release];
+				
+				return; 
+			}
+			else //if not found
+			{
+				                
+			}
             
 		}
 		else //result = nil
@@ -720,7 +665,6 @@
     if ( localIp != nil)
     {
         NSLog(@"Found a local ip: %@", localIp);
-#if 0
         HttpCommunication *comm = [[HttpCommunication alloc]init];
         comm.device_ip = localIp;
         
@@ -751,9 +695,7 @@
         }
         
         [comm release];
-#endif
-        [self setupCompleted];
-        return TRUE;
+        
     }
     
     return FALSE;
@@ -761,7 +703,6 @@
 
 - (void) setupCompleted
 {
-    [self.progressView setHidden:YES];
     //Load step 12
     NSLog(@"Load step 12");
     
@@ -861,28 +802,40 @@
 
 - (void) addCamSuccessWithResponse:(NSDictionary *)responseData
 {
-#ifdef CONCURRENT_SETUP
-    NSLog(@"Do for concurent mode");
-    
     NSLog(@"addcam response: %@", responseData);
     //[self extractMasterKey:[[responseData objectForKey:@"data"] objectForKey:@"master_key"]];
     self.master_key = [[responseData objectForKey:@"data"] objectForKey:@"master_key"];
-//    should_stop_scanning = FALSE;
-//	
-//    [NSTimer scheduledTimerWithTimeInterval: SCAN_TIMEOUT
-//									 target:self
-//								   selector:@selector(setStopScanning:)
-//								   userInfo:nil
-//									repeats:NO];
+    should_stop_scanning = FALSE;
     
-    //send master key to device
-    [self sendMasterKeyToDevice];
-    
-#elif BLE_SETUP
-    
-#else
 
+#ifdef BLE_SETUP_CONCURRENT_MODE
+    [NSTimer scheduledTimerWithTimeInterval: SCAN_TIMEOUT
+									 target:self
+								   selector:@selector(setStopScanning:)
+								   userInfo:nil
+									repeats:NO];
+    
+	// 2 of 3. wait for the camera to reboot completely
+    [NSTimer scheduledTimerWithTimeInterval: 10.0//camera reboot time about 50secs
+									 target:self
+								   selector:@selector(wait_for_camera_to_reboot:)
+								   userInfo:nil
+									repeats:NO];
+#else
+    [NSTimer scheduledTimerWithTimeInterval: SCAN_TIMEOUT
+									 target:self
+								   selector:@selector(setStopScanning:)
+								   userInfo:nil
+									repeats:NO];
+    
+	// 2 of 3. wait for the camera to reboot completely
+    [NSTimer scheduledTimerWithTimeInterval: 30.0//camera reboot time about 50secs
+									 target:self
+								   selector:@selector(wait_for_camera_to_reboot:)
+								   userInfo:nil
+									repeats:NO];
 #endif
+
 }
 
 - (void) addCamFailedWithError:(NSDictionary *) error_response
@@ -996,5 +949,10 @@
 	}
 	    
 }
+
+
+#pragma mark -
+
+
 
 @end

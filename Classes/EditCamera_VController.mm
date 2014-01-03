@@ -6,15 +6,19 @@
 //  Copyright (c) 2012 Smart Panda Ltd. All rights reserved.
 //
 
-#import "Step_04_ViewController.h"
+#import "EditCamera_VController.h"
 
-@interface Step_04_ViewController ()
+@interface EditCamera_VController ()
 
 @end
 
-@implementation Step_04_ViewController
+@implementation EditCamera_VController
+
 
 @synthesize cameraMac, cameraName;
+@synthesize alertView = _alertView;
+@synthesize result_received = _result_received;
+
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
@@ -46,7 +50,7 @@
                                     action:@selector(handleNextBtnTouchAction:)];
     self.navigationItem.rightBarButtonItem = nextButton;
     [nextButton release];
-
+    
     if ([camName isMemberOfClass:[UITextView class]] )
     {
         NSLog(@"Cast to UI TextView");
@@ -54,20 +58,34 @@
         
     }
     
-    [self.progressView setHidden:YES];
     
-
+    
     
     if ([camName isMemberOfClass:[UITextField class]] )
     {
-        NSLog(@"Cast to UI Textfield"); 
+        NSLog(@"Cast to UI Textfield");
         ((UITextField *)camName).text = self.cameraName;
-
+        
     }
     
     
 }
 
+- (void)showAlertViewWithMessage:(NSString *)message
+{
+    
+    _alertView = [[UIAlertView alloc] initWithTitle:nil message:message delegate:nil cancelButtonTitle:nil otherButtonTitles:nil];
+    [_alertView show];
+    [self.alertView setBackgroundColor:[UIColor blackColor]];
+    if(_alertView != nil) {
+        UIActivityIndicatorView *indicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
+        
+        indicator.center = CGPointMake(_alertView.bounds.size.width/2, _alertView.bounds.size.height-45);
+        [indicator startAnimating];
+        [_alertView addSubview:indicator];
+        [indicator release];
+    }
+}
 - (void)viewDidUnload
 {
     [super viewDidUnload];
@@ -76,17 +94,26 @@
 
 -(void) viewWillAppear:(BOOL)animated
 {
+    _waitingResponse = NO;
     UIInterfaceOrientation interfaceOrientation = [UIApplication sharedApplication].statusBarOrientation;
     [self adjustViewsForOrientations:interfaceOrientation];
 }
 
+- (void)viewWillDisappear:(BOOL)animated
+{
+//    if(_timeout)
+//    {
+//        [_timeout invalidate];
+//        _timeout = nil;
+//    }
+//    if (_getWifiListTimer)
+//    {
+//        [_getWifiListTimer invalidate];
+//        _getWifiListTimer = nil;
+//    }
+}
 - (void)handleNextBtnTouchAction: (id)sender
 {
-    //show dialog processView
-    [self.view addSubview:self.progressView];
-    [self.view bringSubviewToFront:self.progressView];
-    [self.progressView setHidden:NO];
-    
     NSString * cameraName_text = @"";
     
     if ([camName isMemberOfClass:[UITextView class]] )
@@ -98,8 +125,6 @@
     {
         cameraName_text =((UITextField *)camName).text;
     }
-    
-    [camName resignFirstResponder];
     
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     [userDefaults setObject:cameraName_text forKey:@"CameraName"];
@@ -142,7 +167,7 @@
 
 -(void) adjustViewsForOrientations: (UIInterfaceOrientation) interfaceOrientation
 {
-     NSString * tempName = @"";
+    NSString * tempName = @"";
     
     if ([camName isMemberOfClass:[UITextView class]] )
     {
@@ -150,60 +175,60 @@
         tempName = ((UITextView *)camName).text;
         
     }
-     
+    
     if ([camName isMemberOfClass:[UITextField class]] )
     {
-
+        
         tempName = ((UITextField *)camName).text ;
         
     }
     
-   
+    
     
     if (interfaceOrientation == UIInterfaceOrientationLandscapeLeft ||
         interfaceOrientation == UIInterfaceOrientationLandscapeRight)
     {
-//        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
-//        {
-//            [[NSBundle mainBundle] loadNibNamed:@"Step_04_ViewController_land_ipad" owner:self options:nil];
-//        }
-//        else
-//        {
-//            [[NSBundle mainBundle] loadNibNamed:@"Step_04_ViewController_land" owner:self options:nil];
-//            
-//            
-//        }
+        //        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+        //        {
+        //            [[NSBundle mainBundle] loadNibNamed:@"Step_04_ViewController_land_ipad" owner:self options:nil];
+        //        }
+        //        else
+        //        {
+        //            [[NSBundle mainBundle] loadNibNamed:@"Step_04_ViewController_land" owner:self options:nil];
+        //
+        //
+        //        }
     }
     else if (interfaceOrientation == UIInterfaceOrientationPortrait ||
              interfaceOrientation == UIInterfaceOrientationPortraitUpsideDown)
     {
-//        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
-//        {
-//            [[NSBundle mainBundle] loadNibNamed:@"Step_04_ViewController_ipad" owner:self options:nil];
-//        }
-//        else
-//        {
-//            [[NSBundle mainBundle] loadNibNamed:@"Step_04_ViewController" owner:self options:nil];
-//        }
+        //        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+        //        {
+        //            [[NSBundle mainBundle] loadNibNamed:@"Step_04_ViewController_ipad" owner:self options:nil];
+        //        }
+        //        else
+        //        {
+        //            [[NSBundle mainBundle] loadNibNamed:@"Step_04_ViewController" owner:self options:nil];
+        //        }
     }
     
     
     
     if ([camName isMemberOfClass:[UITextView class]] )
     {
-
-       
+        
+        
         ((UITextView *)camName).text  = tempName;
         
     }
     
     if ([camName isMemberOfClass:[UITextField class]] )
     {
-
+        
         ((UITextField *)camName).text = tempName ;
     }
     
-
+    
     
 }
 #pragma mark -
@@ -218,10 +243,9 @@
 
 -(void) dealloc
 {
-
+    
     [cameraName release];
-   [cameraMac release];
-    [_progressView release];
+    [cameraMac release];
     [super dealloc];
 }
 
@@ -230,8 +254,8 @@
 {
     
     NSString * validString = @"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890. '_-";
-
-
+    
+    
     
     for (int i = 0; i < cameraNames.length; i ++)
     {
@@ -240,19 +264,15 @@
             return NO;
         }
     }
-
+    
     
     return YES;
-
+    
 }
 
 - (IBAction)handleButtonPress:(id)sender
 {
-    
-    [self.progressView setHidden:NO];
-    [self.view addSubview:self.progressView];
-    [self.view bringSubviewToFront:self.progressView];
-    int tag = ((UIButton*)sender).tag; 
+    int tag = ((UIButton*)sender).tag;
     
     NSString * cameraName_text = @"";
     
@@ -269,7 +289,7 @@
         cameraName_text =((UITextField *)camName).text;
     }
     
-    [camName resignFirstResponder];
+    
     
     if ([cameraName_text length] < 3 || [cameraName_text length] > 15 )
     {
@@ -281,13 +301,13 @@
         
         NSString * ok = NSLocalizedStringWithDefaultValue(@"Ok",nil, [NSBundle mainBundle],
                                                           @"Ok", nil);
-            
+        
         
         UIAlertView * alert = [[UIAlertView alloc] initWithTitle:title
-                                                    message:msg
-                                                    delegate:self
-                                                    cancelButtonTitle:ok
-                                                    otherButtonTitles:nil];
+                                                         message:msg
+                                                        delegate:self
+                                               cancelButtonTitle:ok
+                                               otherButtonTitles:nil];
         
         [alert show];
         [alert release];
@@ -295,26 +315,26 @@
     else if (![self isCameraNameValidated:cameraName_text])
     {       NSString * title = NSLocalizedStringWithDefaultValue(@"Invalid_Camera_Name", nil, [NSBundle mainBundle],
                                                                  @"Invalid Camera Name", nil);
-            
-            NSString * msg = NSLocalizedStringWithDefaultValue(@"Invalid_Camera_Name_msg2", nil, [NSBundle mainBundle],
-                                                               @"Camera name is invalid. Please enter [0-9],[a-Z], space, dot, hyphen, underscore & single quote only.", nil);
-            
-            NSString * ok = NSLocalizedStringWithDefaultValue(@"Ok",nil, [NSBundle mainBundle],
-                                                              @"Ok", nil);
-            
-            
-            UIAlertView * alert = [[UIAlertView alloc] initWithTitle:title
-                                                             message:msg
-                                                            delegate:self
-                                                   cancelButtonTitle:ok
-                                                   otherButtonTitles:nil];
-            
-            [alert show];
-            [alert release];
+        
+        NSString * msg = NSLocalizedStringWithDefaultValue(@"Invalid_Camera_Name_msg2", nil, [NSBundle mainBundle],
+                                                           @"Camera name is invalid. Please enter [0-9],[a-Z], space, dot, hyphen, underscore & single quote only.", nil);
+        
+        NSString * ok = NSLocalizedStringWithDefaultValue(@"Ok",nil, [NSBundle mainBundle],
+                                                          @"Ok", nil);
+        
+        
+        UIAlertView * alert = [[UIAlertView alloc] initWithTitle:title
+                                                         message:msg
+                                                        delegate:self
+                                               cancelButtonTitle:ok
+                                               otherButtonTitles:nil];
+        
+        [alert show];
+        [alert release];
     }
     else if (tag == CONF_CAM_BTN_TAG)
     {
-
+        
         
         NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
         [userDefaults setObject:cameraName_text forKey:@"CameraName"];
@@ -327,45 +347,98 @@
         
         
         /*20121129: phung skip authentication */
-        
         [self queryWifiList];
-
+        
     }
 }
 
+- (void)sendCommandGetWifiList:(NSTimer *) info
+{
+    if (_waitingResponse)
+        return;
+    if (self.result_received != nil && [self.result_received length] > 0)
+    {
+        if(_timeout)
+        {
+            [_timeout invalidate];
+            _timeout = nil;
+        }
+        if (_getWifiListTimer)
+        {
+            [_getWifiListTimer invalidate];
+            _getWifiListTimer = nil;
+        }
+        return;
+    }
+    //retry sending get wifi
+    NSLog(@"Check [BLEManageConnect getInstanceBLE] is %@", [BLEManageConnect getInstanceBLE]);
+    [BLEManageConnect getInstanceBLE].delegate = self;
+    [[BLEManageConnect getInstanceBLE].uartPeripheral writeString:GET_ROUTER_LIST];
+    _waitingResponse = YES;
+    NSDate * date;
+    while ([BLEManageConnect getInstanceBLE].uartPeripheral.isBusy)
+    {
+        date = [NSDate dateWithTimeInterval:1.5 sinceDate:[NSDate date]];
+        
+        [[NSRunLoop currentRunLoop] runUntilDate:date];
+    }
+    
+}
 
 -(void) queryWifiList
 {
-    NSData * router_list_raw; 
-       
-    
-    router_list_raw = [comm sendCommandAndBlock_raw:GET_ROUTER_LIST];
-    
-    if (router_list_raw != nil)
-    {
-        WifiListParser * routerListParser = nil;
-        routerListParser = [[WifiListParser alloc]init];
-        
-        [routerListParser parseData:router_list_raw
-                       whenDoneCall:@selector(setWifiResult:)
-                             target:self];
-    }
-    else
-    {
-        NSLog(@"GOT NULL wifi list from camera");
-        [self askForRetry]; 
-    }
+    //create dialog process
+    [self.statusDialog setHidden:NO];
+
+    //after 60s will display for user get list wifi again
+    _timeout = [NSTimer scheduledTimerWithTimeInterval:60 target:self selector:@selector(showDialog:) userInfo:nil repeats:NO];
+    _getWifiListTimer = [NSTimer scheduledTimerWithTimeInterval:0.1
+                                                         target:self
+                                                       selector:@selector(sendCommandGetWifiList:)
+                                                       userInfo:nil
+                                                        repeats:YES];
+
+
+
 }
 
+- (void) showDialog:(NSTimer *)timer
+{
+    [self askForRetry];
+}
 
-//Double the timeout.. 
+- (void)resetAllTimer
+{
+    //reset timer
+    if (_timeout)
+    {
+        [_timeout invalidate];
+        _timeout = nil;
+    }
+    if (_getWifiListTimer)
+    {
+        [_getWifiListTimer invalidate];
+        _getWifiListTimer = nil;
+    }
+}
+//Double the timeout..
 -(void) queryWifiList_2
 {
+    _waitingResponse = NO;
+    _result_received = nil;
+    //reset timer
+    [self resetAllTimer];
+    //and create it again
+    _timeout = [NSTimer scheduledTimerWithTimeInterval:60 target:self selector:@selector(showDialog:) userInfo:nil repeats:NO];
+    _getWifiListTimer = [NSTimer scheduledTimerWithTimeInterval:0.1
+                                                         target:self
+                                                       selector:@selector(sendCommandGetWifiList:)
+                                                       userInfo:nil
+                                                        repeats:YES];
+    
+#if 0
     NSData * router_list_raw;
-    
-    
     router_list_raw = [comm sendCommandAndBlock_raw:GET_ROUTER_LIST withTimeout:2*DEFAULT_TIME_OUT];
-    
     if (router_list_raw != nil)
     {
         WifiListParser * routerListParser = nil;
@@ -380,6 +453,7 @@
         NSLog(@"GOT NULL wifi list from camera");
         [self askForRetry];
     }
+#endif
 }
 
 #define ALERT_ASK_FOR_RETRY_WIFI 1
@@ -389,15 +463,15 @@
     
     NSString * msg = NSLocalizedStringWithDefaultValue(@"Fail_to_communicate_with_camera",nil, [NSBundle mainBundle],
                                                        @"Fail to communicate with camera. Retry?", nil);
- 
+    
     
     NSString * cancel = NSLocalizedStringWithDefaultValue(@"Cancel",nil, [NSBundle mainBundle],
                                                           @"Cancel", nil);
     
     NSString * retry = NSLocalizedStringWithDefaultValue(@"Retry",nil, [NSBundle mainBundle],
-                                                      @"Retry", nil);
+                                                         @"Retry", nil);
     
-
+    
     
     UIAlertView *_myAlert = nil ;
     _myAlert = [[UIAlertView alloc] initWithTitle:msg
@@ -432,7 +506,7 @@
                 
                 //retry ..
                 [self queryWifiList_2];
-
+                
                 break;
                 
         }
@@ -441,23 +515,26 @@
     
 }
 
-
+- (void)errorCallback: (NSError *)error
+{
+    NSLog(@"error return is %@", error);
+    [self queryWifiList_2];
+}
 -(void) setWifiResult:(NSArray *) wifiList
 {
-    NSLog(@"GOT WIFI RESULT: numentries: %d", wifiList.count); 
-    //hide progressView
-    [self.progressView removeFromSuperview];
-    [self.progressView setHidden:YES];
-   
+    [self.statusDialog setHidden:YES];
+    NSLog(@"GOT WIFI RESULT: numentries: %d", wifiList.count);
+    
+    
     
     
 #if 1
-     WifiEntry * entry; 
+    WifiEntry * entry;
     
     
     for (int i =0; i< wifiList.count; i++)
     {
-        entry = [wifiList objectAtIndex:i]; 
+        entry = [wifiList objectAtIndex:i];
         
         
         NSLog(@"entry %d : %@",i, entry.ssid_w_quote);
@@ -465,29 +542,29 @@
         NSLog(@"entry %d : %@",i, entry.auth_mode);
         NSLog(@"entry %d : %@",i, entry.quality);
     }
-#endif 
+#endif
     
     
     
-    NSLog(@"Load step 5"); 
+    NSLog(@"Load step 5");
     //Load the next xib
-    Step_05_ViewController *step05ViewController = nil; 
+    DisplayWifiList_VController *step05ViewController = nil;
     
     
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
     {
         
         
-        step05ViewController =  [[Step_05_ViewController alloc]
-                                 initWithNibName:@"Step_05_ViewController_ipad" bundle:nil];
+        step05ViewController =  [[DisplayWifiList_VController alloc]
+                                 initWithNibName:@"DisplayWifiList_VController" bundle:nil];
         
     }
     else
     {
         
         
-        step05ViewController =  [[Step_05_ViewController alloc]
-                                 initWithNibName:@"Step_05_ViewController" bundle:nil];
+        step05ViewController =  [[DisplayWifiList_VController alloc]
+                                 initWithNibName:@"DisplayWifiList_VController" bundle:nil];
         
         
         
@@ -512,6 +589,55 @@
     return NO;
 }
 
+
+
+- (void) didReceiveData:(NSString *)string
+{
+    self.result_received = string;
+    _waitingResponse = NO;
+    NSLog(@"Data Receiving router list is %@", string);
+    {
+        //processing data receive wifi list
+        
+        if (string !=nil && [string length] > 0)
+        {
+            NSData *router_list_raw = [string dataUsingEncoding:NSUTF8StringEncoding];
+            
+            if (router_list_raw != nil)
+            {
+                WifiListParser * routerListParser = nil;
+                routerListParser = [[WifiListParser alloc]init];
+                
+//                [routerListParser parseData:router_list_raw
+//                               whenDoneCall:@selector(setWifiResult:)
+//                                     target:self];
+                [routerListParser parseData:router_list_raw
+                               whenDoneCall:@selector(setWifiResult:)
+                              whenErrorCall:@selector(errorCallback:)
+                                     target:self];
+            }
+            else
+            {
+                NSLog(@"GOT NULL wifi list from camera");
+                [self askForRetry];
+            }
+        }
+        
+    }
+}
+
+- (void) onReceiveDataError:(int)error_code forCommand:(NSString *)commandToCamera
+{
+    NSLog(@"error_code is %d and command is %@**************", error_code, commandToCamera);
+}
+#pragma mark - CBCentralManagerDelegate
+- (void) centralManagerDidUpdateState:(CBCentralManager *)central
+{
+    if (central.state == CBCentralManagerStatePoweredOn)
+    {
+        
+    }
+}
 
 
 @end

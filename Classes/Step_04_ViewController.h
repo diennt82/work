@@ -19,12 +19,13 @@
 {
     IBOutlet UIView * camName;
     
-    NSString * homeWifiSSID; 
-    NSString * cameraMac; 
+    NSString * homeWifiSSID;
+    NSString * cameraMac;
 	NSString * cameraName;
-     HttpCommunication *  comm; 
+    HttpCommunication *  comm;
 }
 
+@property (retain, nonatomic) IBOutlet UIView *progressView;
 
 @property (nonatomic, retain) NSString * cameraMac, * cameraName;
 

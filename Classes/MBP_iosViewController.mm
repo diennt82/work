@@ -20,6 +20,7 @@
 #import "PlayListViewController.h"
 #import "H264PlayerViewController.h"
 #import "NotifViewController.h"
+#import "GuideAddCamera_ViewController.h"
 
 #import "QBAnimationItem.h"
 #import "QBAnimationGroup.h"
@@ -587,55 +588,48 @@
                 
                 NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
                 BOOL isFirstTimeSetup = [userDefaults boolForKey:FIRST_TIME_SETUP];
-                if (isFirstTimeSetup ==FALSE)
-                {
 
-                    //Normal add cam sequence
-                    //Load the next xib
-                    Step_02_ViewController *step02ViewController = nil;
-                    
-                    
-                    
-                    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+                    if (isFirstTimeSetup == FALSE)
                     {
-                        step02ViewController = [[Step_02_ViewController alloc]
-                                                initWithNibName:@"Step_02_ViewController_ipad" bundle:nil];
+                        //Guild screen to setup camera
+                        NSInteger getValue = [userDefaults integerForKey:SET_UP_CAMERA];
+                        if (getValue == 1)
+                        {
+                            //Blutooth setup
+                            GuideAddCamera_ViewController *guideAddCame = [[GuideAddCamera_ViewController alloc]
+                                                                           initWithNibName:@"GuideAddCamera_ViewController" bundle:nil];
+                            guideAddCame.delegate = self;
+                            [guideAddCame presentModallyOn:self];
+                        }
+                        else
+                        {
+                            //Concurrent setup
+                            //Normal add cam sequence
+                            //Load the next xib
+                            Step_02_ViewController *step02ViewController = nil;
+                            
+                            
+                            
+                            if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+                            {
+                                step02ViewController = [[Step_02_ViewController alloc]
+                                                        initWithNibName:@"Step_02_ViewController_ipad" bundle:nil];
+                            }
+                            else
+                            {
+                                step02ViewController = [[Step_02_ViewController alloc]
+                                                        initWithNibName:@"Step_02_ViewController" bundle:nil];
+                            }
+                            
+                            step02ViewController.delegate = self;
+                            [step02ViewController presentModallyOn:self];
+                        }
+
                     }
                     else
                     {
-                        
-                        step02ViewController = [[Step_02_ViewController alloc]
-                                                initWithNibName:@"Step_02_ViewController" bundle:nil];
+                        [self createAccount];
                     }
-                    
-                    step02ViewController.delegate = self;
-                    [step02ViewController presentModallyOn:self];
-                }
-                else
-                {
-                    
-//                    MBP_InitialSetupViewController *initSeupViewController = nil;
-//                    
-//                    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
-//                    {
-//                        
-//                        initSeupViewController = [[MBP_InitialSetupViewController alloc]
-//                                                  initWithNibName:@"MBP_InitialSetupViewController_ipad" bundle:nil];
-//                        
-//                    }
-//                    else
-//                    {   
-//                        initSeupViewController = [[MBP_InitialSetupViewController alloc]
-//                                                  initWithNibName:@"MBP_InitialSetupViewController" bundle:nil];
-//                        
-//                    }
-//                    
-//                    initSeupViewController.delegate = self;
-//                    [initSeupViewController presentModallyOn:self];
-                    
-                    [self createAccount];
-                    
-                }
 
 				break;
 			}

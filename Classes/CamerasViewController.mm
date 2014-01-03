@@ -124,23 +124,86 @@
     self.navigationController.navigationBarHidden = YES;
 }
 
-- (IBAction)addCameraButtonTouchAction:(id)sender
+- (void)viewWillDisappear:(BOOL)animated
 {
-    if (_camChannels.count < MAX_CAM_ALLOWED)
+    
+    //Dismiss alertView in case interrupt : lock key, home key, phone call
+    if (_alertChooseConfig)
     {
-        NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-        [userDefaults setBool:FALSE forKey:FIRST_TIME_SETUP];
+        [_alertChooseConfig dismissWithClickedButtonIndex:0 animated:NO];
+        [_alertChooseConfig release];
+    }
+}
+
+- (void)showDialogChooseConfigCamera
+{
+    _alertChooseConfig = [[UIAlertView alloc]
+                          initWithTitle:@"Please select"
+                          message:@"BLE to config camera through bluetooth.\nWifi to config camera through wifi."
+                          delegate:self
+                          cancelButtonTitle:@"Cancel"
+                          otherButtonTitles:@"BLE", @"Wifi", nil];
+    [_alertChooseConfig show];
+}
+
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
+    
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    if (buttonIndex == 0) {
+        //Cancel button pressed
+    }
+    else if (buttonIndex == 1) {
+        //BLE button pressed
+        [userDefaults setInteger:BLUETOOTH_SETUP forKey:SET_UP_CAMERA];
         [userDefaults synchronize];
         
-        NSLog(@"addCameraButtonTouchAction: %@", self.camerasDelegate);
-        //MenuViewController *tabBarController = (MenuViewController *)self.parentViewController;
-        [((MenuViewController *)self.parentVC).menuDelegate sendStatus:SETUP_CAMERA];//initial setup
+        if (_camChannels.count < MAX_CAM_ALLOWED)
+        {
+            NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+            [userDefaults setBool:FALSE forKey:FIRST_TIME_SETUP];
+            [userDefaults synchronize];
+            
+            NSLog(@"addCameraButtonTouchAction: %@", self.camerasDelegate);
+            //MenuViewController *tabBarController = (MenuViewController *)self.parentViewController;
+            [((MenuViewController *)self.parentVC).menuDelegate sendStatus:SETUP_CAMERA];//initial setup
+            
+        }
+        else
+        {
+            [self cameraShowDialog:DIALOG_CANT_ADD_CAM];
+        }
         
     }
-    else
-    {
-        [self cameraShowDialog:DIALOG_CANT_ADD_CAM];
+    else if (buttonIndex == 2) {
+        //Wifi button pressed
+        NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+        
+        [userDefaults setInteger:WIFI_SETUP forKey:SET_UP_CAMERA];
+        [userDefaults synchronize];
+        
+        if (_camChannels.count < MAX_CAM_ALLOWED)
+        {
+            NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+            [userDefaults setBool:FALSE forKey:FIRST_TIME_SETUP];
+            [userDefaults synchronize];
+            
+            NSLog(@"addCameraButtonTouchAction: %@", self.camerasDelegate);
+            //MenuViewController *tabBarController = (MenuViewController *)self.parentViewController;
+            [((MenuViewController *)self.parentVC).menuDelegate sendStatus:SETUP_CAMERA];//initial setup
+            
+        }
+        else
+        {
+            [self cameraShowDialog:DIALOG_CANT_ADD_CAM];
+        }
     }
+}
+
+
+- (IBAction)addCameraButtonTouchAction:(id)sender
+{
+    //show dialog for user choose method to config for camera
+    [self showDialogChooseConfigCamera];
 }
 
 #pragma mark - Cameras Cell Delegate

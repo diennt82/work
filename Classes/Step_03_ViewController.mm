@@ -341,7 +341,7 @@
     
     
     NSLog(@"checkConnectionToCamera 03: %@", currentSSID);
-	if ([currentSSID hasPrefix:DEFAULT_SSID_PREFIX])
+	if ([currentSSID hasPrefix:DEFAULT_SSID_PREFIX] || [currentSSID hasPrefix:DEFAULT_SSID_HD_PREFIX])
 	{
 		//yeah we're connected ... check for ip??
 		

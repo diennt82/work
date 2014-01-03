@@ -12,7 +12,7 @@
 @implementation WifiListParser
 
 @synthesize wifiLists;
-
+@synthesize isErrorParser  =_isErrorParser;
 
 -(void) dealloc
 {
@@ -50,7 +50,18 @@
     [xmlParser parse];
 #endif
 }
-
+- (void)parseData:(NSData *) xmlWifiList whenDoneCall:(SEL) _parserCallback whenErrorCall:(SEL) _parserErrorCallback target:(id) obj
+{
+    _callback = _parserCallback;
+    caller = obj;
+    _callbackError = _parserErrorCallback;
+	xmlParser = [[NSXMLParser alloc] initWithData:xmlWifiList];
+	[xmlParser setDelegate:self];
+    [xmlParser setShouldProcessNamespaces:NO];
+    [xmlParser setShouldReportNamespacePrefixes:NO];
+    [xmlParser setShouldResolveExternalEntities:NO];
+    [xmlParser parse];
+}
 #pragma mark -
 #pragma mark NSXMLParserDelegate methods
 
@@ -73,11 +84,17 @@
 - (void)parserDidStartDocument:(NSXMLParser *)parser
 {
     NSLog(@"Document started");
+    self.isErrorParser = YES;
 }
 
 - (void)parser:(NSXMLParser *)parser parseErrorOccurred:(NSError *)parseError
 {
     NSLog(@"Error: %@", [parseError localizedDescription]);
+    if (_callbackError != nil)
+    {
+        [caller performSelector:_callbackError withObject:parseError];
+    }
+    self.isErrorParser = NO;
 }
 
 - (void)parser:(NSXMLParser *)parser didStartElement:(NSString *)elementName
@@ -266,8 +283,11 @@
     if (_callback != nil)
     {
         [caller performSelector:_callback withObject:wifiLists];
-    }   
+    }
 }
 
-
+- (BOOL)checkStatusParserXML
+{
+    return self.isErrorParser;
+}
 @end

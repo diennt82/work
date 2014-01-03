@@ -10,11 +10,11 @@
 #import <CameraScanner/CameraScanner.h>
 #import <MonitorCommunication/MonitorCommunication.h>
 
-#import "define.h"
 #import "Step_12_ViewController.h"
 #import "Step_11_ViewController.h"
 #import "MBP_FirstPage.h"
-#import "Step_02_ViewController.h"
+#import "GuideAddCamera_ViewController.h"
+#include "config.h"
 
 @class ScanForCamera;
 
@@ -31,13 +31,11 @@
 //Master_key=BC0B87B2832B67FF58F11749F19C4915D4B876C2505D9CC7D0D06F79653C8B11
 #define MASTER_KEY @"Master_key="
 
-#define SCAN_TIMEOUT 5*60 //5 mins
+#define SCAN_TIMEOUT 60//5*60 //5 mins
 
 #define ALERT_ADDCAM_SERVER_UNREACH 1
 
-//#define 
-
-@interface Step_10_ViewController : UIViewController
+@interface Step_10_ViewController_ble : UIViewController
 {
     IBOutlet UIView * progressView; 
     IBOutlet UILabel * userNameLabel;
@@ -59,8 +57,6 @@
     
     BOOL shouldStopScanning;
     NSTimer * timeOut;
-    NSTimer *timeOutCheckWifiHome;
-    
     
 }
 
@@ -68,8 +64,6 @@
 @property (nonatomic, assign) IBOutlet UIView * progressView; 
 @property (nonatomic, assign) IBOutlet UILabel * userNameLabel;
 @property (nonatomic, assign) IBOutlet UILabel * userEmailLabel,  * cameraName;
-
-
 //@property (nonatomic, assign) IBOutlet UIView * setupFailView, *setupCompleteView;
 
 @property (nonatomic, retain) NSString *cameraMac,  *master_key; 

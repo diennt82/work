@@ -13,29 +13,21 @@
 #import "Util.h"
 #import "Step_08_ViewController.h"
 #import "Step_07_ViewController.h"
+#import "BLEManageConnect.h"
 
-@interface Step_06_ViewController : UIViewController<UIAlertViewDelegate>
+@interface NetworkInfoToCamera_VController : UIViewController<BLEManageConnectDelegate>
 {
     
     IBOutlet UITableViewCell * ssidCell;
     IBOutlet UITableViewCell * securityCell;
     IBOutlet UITableViewCell * passwordCell;
     IBOutlet UITableViewCell * confPasswordCell;
-    //current state of camera
-    NSString *_currentStateCamera;
-    NSTimer *_inputPasswordTimer;
-    DeviceConfiguration *_deviceConf;
-    NSTimer *_timeOut;
-    HttpCommunication  *_httpComWithDevice;
+    NSTimer *_statusNetworkTimer;
+    NSString *_statusNetworkCamString;
     
 }
-@property (nonatomic, strong) HttpCommunication  *httpComWithDevice;
-@property (retain, nonatomic) IBOutlet UIView *progressView;
-//
-@property (nonatomic, strong) NSString *currentStateCamera;
-//timeout input password
-@property (nonatomic, strong) NSTimer *inputPasswordTimer;
-@property (nonatomic, strong) NSTimer *timeOut;
+
+@property (retain, nonatomic) IBOutlet UIView *ib_dialogVerifyNetwork;
 @property (nonatomic, assign) IBOutlet UITableViewCell * ssidCell;
 @property (nonatomic, assign) IBOutlet UITableViewCell * securityCell;
 @property (nonatomic, assign) IBOutlet UITableViewCell * passwordCell;
