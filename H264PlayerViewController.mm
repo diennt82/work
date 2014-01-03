@@ -3487,7 +3487,7 @@
 
         self.viewCtrlButtons.frame = CGRectMake(0, imageViewHeight + 44 + deltaY, _viewCtrlButtons.frame.size.width, _viewCtrlButtons.frame.size.height);
         self.viewStopStreamingProgress.frame = CGRectMake((screenWidth - INDICATOR_SIZE)/2, (screenHeight - INDICATOR_SIZE)/2 , INDICATOR_SIZE, INDICATOR_SIZE);
-        self.timelineVC.view.frame = CGRectMake(0, imageViewHeight + deltaY, screenWidth, screenHeight - imageViewHeight);
+        self.timelineVC.view.frame = CGRectMake(0, imageViewHeight + deltaY + 64, screenWidth, screenHeight - imageViewHeight);
         self.timelineVC.view.hidden = NO;
         [self.view addSubview:_timelineVC.view];
 	}
