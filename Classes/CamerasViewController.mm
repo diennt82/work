@@ -19,7 +19,7 @@
 
 @property (retain, nonatomic) IBOutlet UITableViewCell *addCameraCell;
 
-//@property (assign, nonatomic) MenuViewController *parentVC;
+@property (retain, nonatomic) NSArray *snapshotImages;
 
 @property (retain, nonatomic) UIImage *snapshotImg;
 @property (nonatomic) BOOL isFirttime;
@@ -84,33 +84,7 @@
     
     [barButtonItem release];
     
-//    UIImage *backButton = [[UIImage imageNamed:@"Hubble_logo_back.png"] resizableImageWithCapInsets:UIEdgeInsetsMake(0, 14, 0, 5)];
-//    
-//    UIBarButtonItem *backBarBtn = [[UIBarButtonItem alloc] initWithImage:backButton
-//                                                                   style:UIBarButtonItemStylePlain
-//                                                                  target:self
-//                                                                  action:@selector(cameraBackAction:)];
-//    
-//    self.navigationItem.leftBarButtonItem = backBarBtn;
-//    assert(self.navigationItem.leftBarButtonItem != nil);
-    
-//    CamProfile *camProfile = [[CamProfile alloc] init];
-//    camProfile.name = @"Home";
-//     camProfile.mac_address = @"ASASASAS0909";
-//    CamChannel *ch1 = [[CamChannel alloc] init];
-//    ch1.profile = camProfile;
-//    
-//    CamProfile *camProfile1 = [[CamProfile alloc] init];
-//    camProfile1.name = @"Garden";
-//    CamChannel *ch2 = [[CamChannel alloc] init];
-//    ch2.profile = camProfile1;
-//    
-//    self.snapshotImg = [UIImage imageNamed:@"loading_logo.png"];
-//    
-//    self.camChannels = [NSMutableArray array];
-//    
-//    [self.camChannels addObject:ch1];
-//    [self.camChannels addObject:ch2];
+    self.snapshotImages = [NSArray arrayWithObjects:@"bridge", @"desk", @"garden", @"mountain", nil];
     
     UIButton *addBtn = (UIButton *)[_addCameraCell viewWithTag:595];
     [addBtn setImage:[UIImage imageNamed:@"add_camera"] forState:UIControlStateNormal];
@@ -367,6 +341,7 @@
         cell.camerasCellDelegate = self;
         cell.rowIndex = indexPath.row;
         cell.backgroundColor = [UIColor blackColor];
+        cell.snapshotImage.image = [UIImage imageNamed:[_snapshotImages objectAtIndex:indexPath.row]];
         
         CamChannel *ch = (CamChannel *)[_camChannels objectAtIndex:indexPath.row];
         

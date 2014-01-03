@@ -248,6 +248,10 @@
 		8B9384B018570567009C4771 /* ValueSettingsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8B9384AE18570567009C4771 /* ValueSettingsViewController.xib */; };
 		8B9554CC186D4DF200BB4BDE /* camera_action_pause.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B9554CA186D4DF200BB4BDE /* camera_action_pause.png */; };
 		8B9554CD186D4DF200BB4BDE /* camera_action_play.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B9554CB186D4DF200BB4BDE /* camera_action_play.png */; };
+		8B96916218765F6900FB15B8 /* desk.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B96915E18765F6900FB15B8 /* desk.png */; };
+		8B96916418765F6900FB15B8 /* bridge.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B96916018765F6900FB15B8 /* bridge.png */; };
+		8B96916518765F6900FB15B8 /* mountain.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B96916118765F6900FB15B8 /* mountain.png */; };
+		8B9691671876640E00FB15B8 /* garden.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B9691661876640E00FB15B8 /* garden.png */; };
 		8B9899AD1859771800AC3852 /* CameraNameViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B9899AB1859771800AC3852 /* CameraNameViewController.m */; };
 		8B9899AE1859771800AC3852 /* CameraNameViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8B9899AC1859771800AC3852 /* CameraNameViewController.xib */; };
 		8B9899CD1859A04F00AC3852 /* slider-default7-handle.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B9899C91859A04F00AC3852 /* slider-default7-handle.png */; };
@@ -809,6 +813,10 @@
 		8B9384AE18570567009C4771 /* ValueSettingsViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ValueSettingsViewController.xib; sourceTree = "<group>"; };
 		8B9554CA186D4DF200BB4BDE /* camera_action_pause.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = camera_action_pause.png; sourceTree = "<group>"; };
 		8B9554CB186D4DF200BB4BDE /* camera_action_play.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = camera_action_play.png; sourceTree = "<group>"; };
+		8B96915E18765F6900FB15B8 /* desk.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = desk.png; sourceTree = "<group>"; };
+		8B96916018765F6900FB15B8 /* bridge.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bridge.png; sourceTree = "<group>"; };
+		8B96916118765F6900FB15B8 /* mountain.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = mountain.png; sourceTree = "<group>"; };
+		8B9691661876640E00FB15B8 /* garden.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = garden.png; sourceTree = "<group>"; };
 		8B9899AA1859771800AC3852 /* CameraNameViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CameraNameViewController.h; sourceTree = "<group>"; };
 		8B9899AB1859771800AC3852 /* CameraNameViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CameraNameViewController.m; sourceTree = "<group>"; };
 		8B9899AC1859771800AC3852 /* CameraNameViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CameraNameViewController.xib; sourceTree = "<group>"; };
@@ -2393,6 +2401,17 @@
 			name = Menu_add_camera;
 			sourceTree = "<group>";
 		};
+		8B96915D18765F5300FB15B8 /* TempSnapshot */ = {
+			isa = PBXGroup;
+			children = (
+				8B9691661876640E00FB15B8 /* garden.png */,
+				8B96915E18765F6900FB15B8 /* desk.png */,
+				8B96916018765F6900FB15B8 /* bridge.png */,
+				8B96916118765F6900FB15B8 /* mountain.png */,
+			);
+			name = TempSnapshot;
+			sourceTree = "<group>";
+		};
 		8B9899A9185976E300AC3852 /* Camera name */ = {
 			isa = PBXGroup;
 			children = (
@@ -2531,6 +2550,7 @@
 		8B9C7DF1185F08AF0038B3A8 /* New Hubble Image */ = {
 			isa = PBXGroup;
 			children = (
+				8B96915D18765F5300FB15B8 /* TempSnapshot */,
 				8B917274186C04AA007754F3 /* Home */,
 				8B99C0B1186ABB7900DB8AAA /* ImgNotAvailable.png */,
 				8B99C0AB186A79B600DB8AAA /* img-checkbox.png */,
@@ -3071,6 +3091,7 @@
 				8B9906F918697F940054966B /* camera_action_photo_pressed.png in Resources */,
 				38A62E8F15C93E4700DEA520 /* bb_camera_toolbar.png in Resources */,
 				8B0E1DF11844A0E80080000A /* mestartup000029.png in Resources */,
+				8B96916518765F6900FB15B8 /* mountain.png in Resources */,
 				8B5C25F21872DDBC00D9DF8F /* camera_action_mic.png in Resources */,
 				8B99C0B5186AEAD200DB8AAA /* img_timeline_line.png in Resources */,
 				8B9B57DE184F0D9900E58543 /* frame-2_update-iOS7_new.png in Resources */,
@@ -3103,6 +3124,7 @@
 				8BC0A02C1844A81D00A5FD52 /* homepage_p.png in Resources */,
 				38DE1C96168AEB450049E814 /* Step_07_ViewController.xib in Resources */,
 				8B92C0E9186832A600538013 /* add_camera.png in Resources */,
+				8B96916218765F6900FB15B8 /* desk.png in Resources */,
 				38CE2A0C15D4B85E00B8F7EC /* temp_alert_bg.png in Resources */,
 				8B92A08C1863E5DF005923D2 /* TimelineViewController.xib in Resources */,
 				38CE2A0F15D4E07300B8F7EC /* dialog_bg.png in Resources */,
@@ -3194,6 +3216,7 @@
 				8B92C0EC186832A600538013 /* settings.png in Resources */,
 				38DE1CA5168AEB800049E814 /* Step_05_ViewController_ipad.xib in Resources */,
 				38DE1C9B168AEB510049E814 /* Step_06_ViewController_ipad.xib in Resources */,
+				8B96916418765F6900FB15B8 /* bridge.png in Resources */,
 				8BC0A0471844B31700A5FD52 /* mbp_icon72x72.png in Resources */,
 				38DE1C91168AEB370049E814 /* Step_07_ViewController_ipad.xib in Resources */,
 				38DE1C87168AEB1B0049E814 /* Step_08_ViewController_ipad.xib in Resources */,
@@ -3207,6 +3230,7 @@
 				974ACB59168055F9005AE4C6 /* ToUViewController_ipad.xib in Resources */,
 				974ACB7F168079CB005AE4C6 /* MonitorEverywhere_App_ios_Apple.html in Resources */,
 				38DE1C4B168AEA5F0049E814 /* AlertSettingViewController_ipad.xib in Resources */,
+				8B9691671876640E00FB15B8 /* garden.png in Resources */,
 				38DE1C46168AEA530049E814 /* AlertSettingViewController_land_ipad.xib in Resources */,
 				8B92C0CB18682A2100538013 /* alert_camera_pressed.png in Resources */,
 				8B92A0991863EBD2005923D2 /* Timeline_snapshot.png in Resources */,
@@ -4701,7 +4725,7 @@
 				);
 				OTHER_LDFLAGS = "-lz";
 				PRODUCT_NAME = "Camera HD";
-				PROVISIONING_PROFILE = "9C88128E-F814-4942-BDF2-1257FA862A77";
+				PROVISIONING_PROFILE = "42490300-F52F-42B4-B7B0-81E74C7B3A70";
 				SDKROOT = iphoneos7.0;
 				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/../ios-frameworks/pjsip/arm/include/ $(SRCROOT)/../ios-frameworks/pjsip/arm/include/pj/ $(SRCROOT)/../ios-frameworks/pjsip/arm/include/pjnath/";
 				VALID_ARCHS = "armv6 armv7";
@@ -4750,7 +4774,7 @@
 				);
 				OTHER_LDFLAGS = "-lz";
 				PRODUCT_NAME = "Camera HD";
-				PROVISIONING_PROFILE = "9C88128E-F814-4942-BDF2-1257FA862A77";
+				PROVISIONING_PROFILE = "42490300-F52F-42B4-B7B0-81E74C7B3A70";
 				SDKROOT = iphoneos7.0;
 				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/../ios-frameworks/pjsip/arm/include/ $(SRCROOT)/../ios-frameworks/pjsip/arm/include/pj/ $(SRCROOT)/../ios-frameworks/pjsip/arm/include/pjnath/";
 				VALIDATE_PRODUCT = YES;
@@ -4761,7 +4785,7 @@
 		9770CB6914302E3D009E69EF /* Distribute */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Lai Shan Lam (RYP7CC8LQR)";
 				GCC_C_LANGUAGE_STANDARD = c99;
 				GCC_VERSION = "";
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
@@ -4774,7 +4798,7 @@
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
 				OTHER_LDFLAGS = "";
 				PRODUCT_NAME = "Camera HD";
-				PROVISIONING_PROFILE = "B67E7012-4C54-41CE-AD89-67D112730DDF";
+				PROVISIONING_PROFILE = "42490300-F52F-42B4-B7B0-81E74C7B3A70";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				USER_HEADER_SEARCH_PATHS = "\"$(SRCROOT)/external_include\"/**";
@@ -4822,7 +4846,7 @@
 				);
 				OTHER_LDFLAGS = "-lz";
 				PRODUCT_NAME = "Camera HD";
-				PROVISIONING_PROFILE = "9C88128E-F814-4942-BDF2-1257FA862A77";
+				PROVISIONING_PROFILE = "42490300-F52F-42B4-B7B0-81E74C7B3A70";
 				RAMEWORK_SEARCH_PATHS = "$(inherited) \"$(SRCROOT)\"";
 				SDKROOT = iphoneos7.0;
 				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/../ios-frameworks/pjsip/arm/include/ $(SRCROOT)/../ios-frameworks/pjsip/arm/include/pj/ $(SRCROOT)/../ios-frameworks/pjsip/arm/include/pjnath/";
@@ -4834,7 +4858,7 @@
 		C01FCF4F08A954540054247B /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Lai Shan Lam (RYP7CC8LQR)";
 				GCC_C_LANGUAGE_STANDARD = c99;
 				GCC_VERSION = "";
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
@@ -4846,7 +4870,7 @@
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = "";
 				PRODUCT_NAME = "Camera HD";
-				PROVISIONING_PROFILE = "B67E7012-4C54-41CE-AD89-67D112730DDF";
+				PROVISIONING_PROFILE = "42490300-F52F-42B4-B7B0-81E74C7B3A70";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				USER_HEADER_SEARCH_PATHS = "\"$(SRCROOT)/external_include\"/**";
@@ -4857,7 +4881,7 @@
 		C01FCF5008A954540054247B /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Lai Shan Lam (RYP7CC8LQR)";
 				GCC_C_LANGUAGE_STANDARD = c99;
 				GCC_VERSION = "";
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
@@ -4870,7 +4894,7 @@
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
 				OTHER_LDFLAGS = "";
 				PRODUCT_NAME = "Camera HD";
-				PROVISIONING_PROFILE = "B67E7012-4C54-41CE-AD89-67D112730DDF";
+				PROVISIONING_PROFILE = "42490300-F52F-42B4-B7B0-81E74C7B3A70";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				USER_HEADER_SEARCH_PATHS = "\"$(SRCROOT)/external_include\"/**";
