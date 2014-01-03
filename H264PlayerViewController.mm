@@ -243,14 +243,22 @@
 {
     // change the back button to cancel and add an event handler
     UIImage *headerLogo = [UIImage imageNamed:@"header_logo.png"];
-    UIImage *headerHubble = [UIImage imageNamed:@"header_hubble.png"];
     UIBarButtonItem *headerLogoButton = [[UIBarButtonItem alloc] initWithImage:headerLogo style:UIBarButtonItemStyleBordered target:self action:@selector(prepareGoBackToCameraList:)];
     [headerLogoButton setTintColor:[UIColor colorWithPatternImage:headerLogo]];
-    UIBarButtonItem *headerHubbleButton = [[UIBarButtonItem alloc] initWithImage:headerHubble style:UIBarButtonItemStyleBordered target:self action:nil];
-     [headerHubbleButton setTintColor:[UIColor colorWithPatternImage:headerHubble]];
     
-    NSArray *actionLeftButtonItems = @[headerLogoButton, headerHubbleButton];
-    self.navigationItem.leftBarButtonItems = actionLeftButtonItems;
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+    {
+        UIImage *headerHubble = [UIImage imageNamed:@"header_hubble.png"];
+        UIBarButtonItem *headerHubbleButton = [[UIBarButtonItem alloc] initWithImage:headerHubble style:UIBarButtonItemStyleBordered target:self action:nil];
+        [headerHubbleButton setTintColor:[UIColor colorWithPatternImage:headerHubble]];
+        
+        NSArray *actionLeftButtonItems = @[headerLogoButton, headerHubbleButton];
+        self.navigationItem.leftBarButtonItems = actionLeftButtonItems;
+    }
+    else
+    {
+        self.navigationItem.leftBarButtonItem = headerLogoButton;
+    }
 
     
     CamProfile *cp = self.selectedChannel.profile;
