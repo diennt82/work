@@ -180,7 +180,7 @@
 
     [self.scrollView insertSubview:_imageViewStreamer aboveSubview:_imageViewVideo];
     
-    if (self.selectedChannel.profile.modelID == 5) // CameraHD
+    if (self.selectedChannel.profile.modelID != 6) // CameraHD
     {
         self.timelineVC = [[TimelineViewController alloc] init];
         [self.view addSubview:_timelineVC.view];
@@ -1419,6 +1419,7 @@
         self.viewCtrlButtons.hidden = YES;
 //        self.imgViewDrectionPad.hidden= YES;
         self.viewStopStreamingProgress.hidden = YES;
+        self.horizMenu.userInteractionEnabled = NO;
         
         NSLog(@"Camera maybe not available.");
     }
