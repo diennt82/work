@@ -3101,6 +3101,18 @@
 
 - (void) updateVerticalDirection_end:(int)dir inStep: (uint) step
 {
+    if (_timerHideMenu != nil)
+    {
+        [self.timerHideMenu invalidate];
+        self.timerHideMenu = nil;
+    }
+    
+    self.timerHideMenu = [NSTimer scheduledTimerWithTimeInterval:10
+                                                          target:self
+                                                        selector:@selector(hideControlMenu)
+                                                        userInfo:nil
+                                                         repeats:NO];
+    
 	@synchronized(_imgViewDrectionPad)
 	{
 		currentDirUD = DIRECTION_V_NON;
@@ -3117,6 +3129,12 @@
 
 - (void)updateHorizontalDirection_begin:(int)dir inStep: (uint) step
 {
+    if (_timerHideMenu != nil)
+    {
+        [self.timerHideMenu invalidate];
+        self.timerHideMenu = nil;
+    }
+    
 	unsigned int newDirection = 0;
     
 	if (dir == 0)
@@ -3538,6 +3556,7 @@
     if (self.selectedChannel.profile.minuteSinceLastComm > 5)
     {
         [self.activityIndicator stopAnimating];
+        self.horizMenu.userInteractionEnabled = NO;
     }
     
     if (h264Streamer != NULL)
