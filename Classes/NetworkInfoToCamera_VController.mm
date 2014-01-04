@@ -700,7 +700,7 @@
     //    }
     else if ([string hasPrefix:RESTART_HTTP_CMD])
     {
-        
+        NSLog(@"Finishing RESTART_HTTP_CMD");
     }
     
 }
@@ -734,11 +734,20 @@
     [BLEManageConnect getInstanceBLE].delegate = self;
     [[BLEManageConnect getInstanceBLE].uartPeripheral writeString:RESTART_HTTP_CMD];
     NSDate * date;
-    while ([BLEManageConnect getInstanceBLE].uartPeripheral.isBusy)
+    
+    
+    if ([BLEManageConnect getInstanceBLE].uartPeripheral.isBusy  )
     {
-        date = [NSDate dateWithTimeInterval:1.0 sinceDate:[NSDate date]];
+        
+        date = [NSDate dateWithTimeInterval:10.0 sinceDate:[NSDate date]];
         
         [[NSRunLoop currentRunLoop] runUntilDate:date];
+        
+        if([BLEManageConnect getInstanceBLE].uartPeripheral.isBusy  )
+        {
+            NSLog(@"BLE still busy, camera may have already rebooted. Moving on..");
+        }
+        
     }
 }
 - (void)sendCommandHTTPSetup
@@ -821,15 +830,15 @@
     Step_10_ViewController_ble *step10ViewController = nil;
     
     
-    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
-    {
-        
-        
-        step10ViewController = [[Step_10_ViewController_ble alloc]
-                                initWithNibName:@"Step_10_ViewController_ble_ipad" bundle:nil];
-        
-    }
-    else
+//    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+//    {
+//        
+//        
+//        step10ViewController = [[Step_10_ViewController_ble alloc]
+//                                initWithNibName:@"Step_10_ViewController_ble_ipad" bundle:nil];
+//        
+//    }
+//    else
     {
         
         step10ViewController = [[Step_10_ViewController_ble alloc]

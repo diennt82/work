@@ -123,6 +123,7 @@
 
 - (void)reScan
 {
+    [self.uartPeripheral didDisconnect];
     if (_cm)
     {
         [_cm release];
@@ -153,6 +154,17 @@
     
 }
 
+-(void) disconnect
+{
+    
+    if ([_uartPeripheral.peripheral isConnected])
+    {
+        [[BLEManageConnect getInstanceBLE].cm cancelPeripheralConnection:_uartPeripheral.peripheral];
+    }
+
+    
+}
+
 /** Once the disconnection happens, we need to clean up our local copy of the peripheral
  */
 - (void) centralManager:(CBCentralManager *)central didDisconnectPeripheral:(CBPeripheral *)peripheral error:(NSError *)error
@@ -163,9 +175,12 @@
     self.myPeripheral = peripheral;
     self.state = IDLE;
     self.isOnBLE = NO;
+
+    
     if ([self.uartPeripheral.peripheral isEqual:self.myPeripheral])
         
     {
+        [self.uartPeripheral didDisconnect];
         [self didDisConnect];
     }
 }

@@ -95,6 +95,7 @@
 -(void) viewWillAppear:(BOOL)animated
 {
     _waitingResponse = NO;
+    _result_received = nil;
     UIInterfaceOrientation interfaceOrientation = [UIApplication sharedApplication].statusBarOrientation;
     [self adjustViewsForOrientations:interfaceOrientation];
 }
@@ -130,10 +131,6 @@
     [userDefaults setObject:cameraName_text forKey:@"CameraName"];
     [userDefaults synchronize];
     
-    
-    comm = [[HttpCommunication alloc]init];
-    comm.device_ip = @"192.168.2.1";//here camera is still in directmode
-    comm.device_port = 80;
     
     
     /*20121129: phung skip authentication */
@@ -341,10 +338,6 @@
         [userDefaults synchronize];
         
         
-        comm = [[HttpCommunication alloc]init];
-        comm.device_ip = @"192.168.2.1";//here camera is still in directmode
-        comm.device_port = 80;
-        
         
         /*20121129: phung skip authentication */
         [self queryWifiList];
@@ -354,16 +347,19 @@
 
 - (void)sendCommandGetWifiList:(NSTimer *) info
 {
-    if (_waitingResponse)
+    if (_waitingResponse == YES)
+    {
         return;
+    }
+    
     if (self.result_received != nil && [self.result_received length] > 0)
     {
-        if(_timeout)
+        if(_timeout && [_timeout isValid])
         {
             [_timeout invalidate];
             _timeout = nil;
         }
-        if (_getWifiListTimer)
+        if (_getWifiListTimer && [_getWifiListTimer isValid])
         {
             [_getWifiListTimer invalidate];
             _getWifiListTimer = nil;
@@ -410,12 +406,12 @@
 - (void)resetAllTimer
 {
     //reset timer
-    if (_timeout)
+    if (_timeout && [_timeout isValid])
     {
         [_timeout invalidate];
         _timeout = nil;
     }
-    if (_getWifiListTimer)
+    if (_getWifiListTimer && [_getWifiListTimer isValid])
     {
         [_getWifiListTimer invalidate];
         _getWifiListTimer = nil;
@@ -551,15 +547,15 @@
     DisplayWifiList_VController *step05ViewController = nil;
     
     
-    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
-    {
-        
-        
-        step05ViewController =  [[DisplayWifiList_VController alloc]
-                                 initWithNibName:@"DisplayWifiList_VController" bundle:nil];
-        
-    }
-    else
+//    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+//    {
+//        
+//        
+//        step05ViewController =  [[DisplayWifiList_VController alloc]
+//                                 initWithNibName:@"DisplayWifiList_VController" bundle:nil];
+//        
+//    }
+//    else
     {
         
         

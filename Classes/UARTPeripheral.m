@@ -68,12 +68,18 @@
     rx_buff = [[NSMutableData alloc] init];
     
     
-    NSLog(@"Did start service discovery.");
+   
 }
 
 - (void) didDisconnect
 {
+    // Clear data/ busy flag
     
+    sequence = SEQUENCE_MIN;
+    [rx_buff setLength: 0];
+    self.isBusy = NO;
+    
+     NSLog(@"UART PERI: didDisconnect");
 }
 
 -(void) retryOldCommand:(NSString *) string
@@ -175,6 +181,31 @@
         }
     }
     NSLog(@"Finish writing");
+    
+}
+
+
+
+
+- (ble_response_t) flush
+{
+    
+    
+    if (self.isBusy == TRUE)
+    {
+        
+        return WRITE_ERROR_OTHER_TRANSACTION_IN_PLACE;
+    }
+    
+    self.isBusy = TRUE;
+    retry_count =  0;
+    
+    
+    //Purposely send empty command to flush the system
+    [self retryOldCommand:@""];
+    
+    
+    return WRITE_SUCCESS;
     
 }
 
@@ -436,11 +467,11 @@
                 
                 if (retry_count -- > 0)
                 {
-                
-               [ NSTimer scheduledTimerWithTimeInterval:1.0
-                                                 target:self
-                                               selector:@selector(retryNow:)
-                                               userInfo:commandToCamera repeats:NO];
+                    
+                    [ NSTimer scheduledTimerWithTimeInterval:1.0
+                                                      target:self
+                                                    selector:@selector(retryNow:)
+                                                    userInfo:commandToCamera repeats:NO];
                 }
                 else
                 {

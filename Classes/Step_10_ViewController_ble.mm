@@ -703,19 +703,23 @@
 
 - (void) setupCompleted
 {
+    //Disconnect BLE
+    NSLog(@"Disconnect BLE ");
+    [[BLEManageConnect getInstanceBLE] disconnect];
+    
     //Load step 12
     NSLog(@"Load step 12");
     
     //Load the next xib
     Step_12_ViewController *step12ViewController = nil;
     
-    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
-    {
-        
-        step12ViewController = [[Step_12_ViewController alloc]
-                                initWithNibName:@"Step_12_ViewController_ipad" bundle:nil];
-    }
-    else
+//    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+//    {
+//        
+//        step12ViewController = [[Step_12_ViewController alloc]
+//                                initWithNibName:@"Step_12_ViewController_ipad" bundle:nil];
+//    }
+//    else
     {
         step12ViewController = [[Step_12_ViewController alloc]
                                 initWithNibName:@"Step_12_ViewController" bundle:nil];
@@ -728,6 +732,10 @@
 
 - (void)  setupFailed
 {
+    //Disconnect BLE
+    NSLog(@"Disconnect BLE ");
+    [[BLEManageConnect getInstanceBLE] disconnect];
+    
  	NSLog(@"Setup has failed - remove cam on server");
 	// send a command to remove camera
 	NSString *mac = [Util strip_colon_fr_mac:self.cameraMac];

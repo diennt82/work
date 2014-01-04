@@ -53,7 +53,7 @@ typedef enum response_ {
 
 - (ble_response_t) writeString:(NSString *) string;
 
-
+- (ble_response_t) flush;
 - (void) didConnect;
 - (void) didDisconnect;
 @end
