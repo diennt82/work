@@ -180,16 +180,19 @@
 
     [self.scrollView insertSubview:_imageViewStreamer aboveSubview:_imageViewVideo];
     
-    self.timelineVC = [[TimelineViewController alloc] init];
-    [self.view addSubview:_timelineVC.view];
-    self.timelineVC.timelineVCDelegate = self;
-    self.timelineVC.camChannel = self.selectedChannel;
-    self.timelineVC.navVC = self.navigationController;
-    self.timelineVC.parentVC = self;
+    if (self.selectedChannel.profile.modelID == 5) // CameraHD
+    {
+        self.timelineVC = [[TimelineViewController alloc] init];
+        [self.view addSubview:_timelineVC.view];
+        self.timelineVC.timelineVCDelegate = self;
+        self.timelineVC.camChannel = self.selectedChannel;
+        self.timelineVC.navVC = self.navigationController;
+        self.timelineVC.parentVC = self;
+        
+        [self.timelineVC loadEvents:self.selectedChannel];
+    }
     
-    [self.timelineVC loadEvents:self.selectedChannel];
-    
-    NSLog(@"%f, %f, %f, %f, %d, %@", _timelineVC.view.frame.origin.x, _timelineVC.view.frame.origin.y, _timelineVC.view.frame.size.width, _timelineVC.view.frame.size.height, _timelineVC.view.hidden, _selectedChannel);
+    NSLog(@"Model of Camera is: %d", self.selectedChannel.profile.modelID);
     
     [self becomeActive];
     //[self showMenuControlPanel];
@@ -265,6 +268,11 @@
 
     UIBarButtonItem *nowButton = [[UIBarButtonItem alloc] initWithTitle:@"Now" style:UIBarButtonItemStyleBordered target:self action:@selector(nowButtonAciton:)];
     UIBarButtonItem *earlierButton = [[UIBarButtonItem alloc] initWithTitle:@"Earlier" style:UIBarButtonItemStyleBordered target:self action:@selector(earlierButtonAction:)];
+    
+    if (self.selectedChannel.profile.modelID == 6) // SharedCam
+    {
+        earlierButton.enabled = NO;
+    }
     
     NSArray *actionRightButtonItems = @[earlierButton, nowButton];
     self.navigationItem.rightBarButtonItems = actionRightButtonItems;
@@ -1183,12 +1191,18 @@
 
 - (void)hideTimelineView
 {
-    self.timelineVC.view.hidden = YES;
+    if (_timelineVC != nil)
+    {
+        self.timelineVC.view.hidden = YES;
+    }
 }
 
 - (void)showTimelineView
 {
-    self.timelineVC.view.hidden = NO;
+    if (_timelineVC != nil)
+    {
+        self.timelineVC.view.hidden = NO;
+    }
 }
 
 - (void)h264_HandleBecomeActive
@@ -3436,7 +3450,10 @@
 
         self.viewStopStreamingProgress.frame = CGRectMake((screenHeight - INDICATOR_SIZE)/2, (screenWidth - INDICATOR_SIZE)/2 , INDICATOR_SIZE, INDICATOR_SIZE);
         
-        [self.timelineVC.view removeFromSuperview];
+        if (_timelineVC != nil)
+        {
+            [self.timelineVC.view removeFromSuperview];
+        }
 	}
 	else if (orientation == UIInterfaceOrientationPortrait || orientation == UIInterfaceOrientationPortraitUpsideDown)
 	{
@@ -3487,9 +3504,13 @@
 
         self.viewCtrlButtons.frame = CGRectMake(0, imageViewHeight + 44 + deltaY, _viewCtrlButtons.frame.size.width, _viewCtrlButtons.frame.size.height);
         self.viewStopStreamingProgress.frame = CGRectMake((screenWidth - INDICATOR_SIZE)/2, (screenHeight - INDICATOR_SIZE)/2 , INDICATOR_SIZE, INDICATOR_SIZE);
-        self.timelineVC.view.frame = CGRectMake(0, imageViewHeight + deltaY + 64, screenWidth, screenHeight - imageViewHeight);
-        self.timelineVC.view.hidden = NO;
-        [self.view addSubview:_timelineVC.view];
+        
+        if (_timelineVC != nil)
+        {
+            self.timelineVC.view.frame = CGRectMake(0, imageViewHeight + deltaY + 64, screenWidth, screenHeight - imageViewHeight);
+            self.timelineVC.view.hidden = NO;
+            [self.view addSubview:_timelineVC.view];
+        }
 	}
 
 //    self.backBarBtnItem.target = self;
@@ -4234,7 +4255,11 @@
     _isListening = NO;
     [super viewWillAppear:animated];
     //[self.scrollView insertSubview:_imageViewStreamer aboveSubview:_imageViewVideo];
-    self.timelineVC.camChannel = self.selectedChannel;
+    if (_timelineVC != nil)
+    {
+        self.timelineVC.camChannel = self.selectedChannel;
+    }
+    
     [self checkOrientation];
     
 }

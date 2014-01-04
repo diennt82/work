@@ -246,8 +246,9 @@
 	{
         NSString *deviceID = [camEntry objectForKey:@"id"];
         NSString * camName = [camEntry objectForKey:@"name"];
-        NSString * camMac = [camEntry objectForKey:@"registration_id"];
-        NSLog(@"camMac = %@", camMac);
+        NSString * camMac  = [camEntry objectForKey:@"registration_id"];
+        NSInteger modelID  = [[camEntry objectForKey:@"device_model_id"] integerValue];
+        NSLog(@" Log -device_model_id: %d, camMac: %@", modelID, camMac);
         if ([camMac length] != 12 )
         {
             camMac = @"00:00:00:00:00:00";
@@ -271,6 +272,7 @@
         CamProfile *cp = [[[CamProfile alloc]initWithMacAddr:camMac] autorelease];
 
         cp.camProfileID = [deviceID integerValue];
+        cp.modelID = modelID;
         cp.last_comm = updatedAt;
         cp.name = camName;
         
