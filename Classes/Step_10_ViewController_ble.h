@@ -12,7 +12,6 @@
 
 #import "Step_12_ViewController.h"
 #import "Step_11_ViewController.h"
-#import "MBP_FirstPage.h"
 #import "GuideAddCamera_ViewController.h"
 #include "config.h"
 

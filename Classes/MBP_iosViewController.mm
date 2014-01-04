@@ -15,7 +15,6 @@
 #import <CameraScanner/CameraScanner.h>
 #import <MonitorCommunication/MonitorCommunication.h>
 
-#import "MBP_FirstPage.h"
 #import "MBP_iosViewController.h"
 #import "PlayListViewController.h"
 #import "H264PlayerViewController.h"
@@ -257,51 +256,6 @@
 
 - (void)wakeup_display_first_page:(NSTimer*) timer_exp
 {
-    
-	self.app_stage = APP_STAGE_INIT;
-    
-    UIInterfaceOrientation interfaceOrientation = [UIApplication sharedApplication].statusBarOrientation;
-
-    MBP_FirstPage * firstPage = nil;
-    //[self.view addSubview:backgroundView];
-    //[self.view bringSubviewToFront:backgroundView];
-    
-    
-    if (interfaceOrientation == UIInterfaceOrientationLandscapeLeft ||
-        interfaceOrientation == UIInterfaceOrientationLandscapeRight)
-    {
-        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
-        {
-            firstPage = [[MBP_FirstPage alloc] initWithNibName:@"MBP_FirstPage_ipad"
-                                                        bundle:nil
-                                              withConnDelegate:self];
-        }
-        else
-        {
-            firstPage = [[MBP_FirstPage alloc] initWithNibName:@"MBP_FirstPage_land"
-                                                        bundle:nil
-                                              withConnDelegate:self];
-        }    }
-    else if (interfaceOrientation == UIInterfaceOrientationPortrait ||
-             interfaceOrientation == UIInterfaceOrientationPortraitUpsideDown)
-    {
-        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
-        {
-            firstPage = [[MBP_FirstPage alloc] initWithNibName:@"MBP_FirstPage_ipad"
-                                                        bundle:nil
-                                              withConnDelegate:self];
-        }
-        else
-        {
-            firstPage = [[MBP_FirstPage alloc] initWithNibName:@"MBP_FirstPage"
-                                                        bundle:nil
-                                              withConnDelegate:self];
-        }
-    }
-    
-
-    //[self presentModalViewController:firstPage animated:NO];
-    [self presentViewController:firstPage animated:NO completion:^{}];
     
 }
 

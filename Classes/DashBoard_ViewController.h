@@ -8,7 +8,6 @@
 
 #import <UIKit/UIKit.h>
 #import <CameraScanner/CameraScanner.h>
-#import "MBP_FirstPage.h"
 #import "ConnectionMethodDelegate.h"
 #import "Account_ViewController.h"
 #import "AlertSettingViewController.h"

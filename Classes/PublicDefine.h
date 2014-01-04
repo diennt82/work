@@ -112,6 +112,8 @@
  - enable this flag to read wifi and battery info */
 #define WIFI_AND_BATTERY_IN_VIDEO_DATA 1
 
+// Move from FirstPage
+#define FIRST_TIME_SETUP @"_first_time_setup"
 
 #if 0
 
