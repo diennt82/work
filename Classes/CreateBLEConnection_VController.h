@@ -28,10 +28,12 @@
     BOOL showProgressNextTime;
     
     NSTimer *_timerUpdateUI;
+    NSTimer *_timeOutWaitingConnectBLE;
     NSTimer *_getMacAddressTimer;
     NSString *_cameraMac;
     NSString *_cameraName;
     NSMutableArray *_currentBLEList;
+    
 }
 @property (retain, nonatomic) IBOutlet UIButton *ib_RefreshBLE;
 

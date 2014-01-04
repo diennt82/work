@@ -229,14 +229,14 @@
         //Load the next xib
         NetworkInfoToCamera_VController *step06ViewController = nil;
         
-        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
-        {
-            
-            step06ViewController = [[NetworkInfoToCamera_VController alloc]
-                                    initWithNibName:@"NetworkInfoToCamera_VController_iPad" bundle:nil];
-            
-        }
-        else
+//        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+//        {
+//            
+//            step06ViewController = [[NetworkInfoToCamera_VController alloc]
+//                                    initWithNibName:@"NetworkInfoToCamera_VController_iPad" bundle:nil];
+//            
+//        }
+//        else
         {
             
             step06ViewController = [[NetworkInfoToCamera_VController alloc]

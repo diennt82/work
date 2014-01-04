@@ -397,6 +397,7 @@
 		A1ABF1C7187538740014FCB4 /* DisplayWifiList_VController.xib in Resources */ = {isa = PBXBuildFile; fileRef = A1ABF1C5187538740014FCB4 /* DisplayWifiList_VController.xib */; };
 		A1ABF1C9187539000014FCB4 /* refresh.png in Resources */ = {isa = PBXBuildFile; fileRef = A1ABF1C8187539000014FCB4 /* refresh.png */; };
 		A1ABF1CC18753C240014FCB4 /* CoreBluetooth.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A1ABF1CB18753C240014FCB4 /* CoreBluetooth.framework */; };
+		A1AC286F1877A1F0000A866D /* CreateBLEConnection_VController_iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = A1AC286E1877A1F0000A866D /* CreateBLEConnection_VController_iPad.xib */; };
 		A1E32FAD17E9899800504538 /* H264PlayerListener.mm in Sources */ = {isa = PBXBuildFile; fileRef = A1E32FAB17E9899800504538 /* H264PlayerListener.mm */; };
 		A1E32FB017E98A4700504538 /* PlaybackListener.mm in Sources */ = {isa = PBXBuildFile; fileRef = A1E32FAE17E98A4700504538 /* PlaybackListener.mm */; };
 		A1E7473C185F07AE00A54B29 /* feed_video_bg.png in Resources */ = {isa = PBXBuildFile; fileRef = A1E74724185F07AE00A54B29 /* feed_video_bg.png */; };
@@ -978,6 +979,7 @@
 		A1ABF1C8187539000014FCB4 /* refresh.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = refresh.png; sourceTree = "<group>"; };
 		A1ABF1CA187539A80014FCB4 /* define.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = define.h; sourceTree = "<group>"; };
 		A1ABF1CB18753C240014FCB4 /* CoreBluetooth.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreBluetooth.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS7.0.sdk/System/Library/Frameworks/CoreBluetooth.framework; sourceTree = DEVELOPER_DIR; };
+		A1AC286E1877A1F0000A866D /* CreateBLEConnection_VController_iPad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CreateBLEConnection_VController_iPad.xib; sourceTree = "<group>"; };
 		A1E32FAB17E9899800504538 /* H264PlayerListener.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = H264PlayerListener.mm; sourceTree = "<group>"; };
 		A1E32FAC17E9899800504538 /* H264PlayerListener.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = H264PlayerListener.h; sourceTree = "<group>"; };
 		A1E32FAE17E98A4700504538 /* PlaybackListener.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = PlaybackListener.mm; sourceTree = "<group>"; };
@@ -2721,6 +2723,7 @@
 				A1ABF1B7187538280014FCB4 /* CreateBLEConnection_VController.h */,
 				A1ABF1B8187538280014FCB4 /* CreateBLEConnection_VController.mm */,
 				A1ABF1B9187538280014FCB4 /* CreateBLEConnection_VController.xib */,
+				A1AC286E1877A1F0000A866D /* CreateBLEConnection_VController_iPad.xib */,
 				A1ABF1BC187538550014FCB4 /* EditCamera_VController_iPad.xib */,
 				A1ABF1BD187538550014FCB4 /* EditCamera_VController.xib */,
 				A1ABF1BE187538550014FCB4 /* EditCamera_VController.h */,
@@ -2950,6 +2953,8 @@
 				38DE1C41168ADD1C0049E814 /* Account_ViewController.xib in Resources */,
 				8BC0A02F1844A87700A5FD52 /* temp_bg.png in Resources */,
 				38B85E4F15CFA4DC00E5A1FA /* Step_07_tableViewCell.xib in Resources */,
+				A1AC286F1877A1F0000A866D /* CreateBLEConnection_VController_iPad.xib in Resources */,
+				8BC0A02C1844A81D00A5FD52 /* homepage_p.png in Resources */,
 				38DE1C96168AEB450049E814 /* Step_07_ViewController.xib in Resources */,
 				8B92C0E9186832A600538013 /* add_camera.png in Resources */,
 				8B96916218765F6900FB15B8 /* desk.png in Resources */,
@@ -4413,8 +4418,7 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CODE_SIGN_ENTITLEMENTS = "";
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Lai Shan Lam (RYP7CC8LQR)";
 				COPY_PHASE_STRIP = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -4456,7 +4460,7 @@
 				);
 				OTHER_LDFLAGS = "-lz";
 				PRODUCT_NAME = "Camera HD";
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "00E9AF8F-AB93-4D92-83D3-A506E3831FDC";
 				SDKROOT = iphoneos7.0;
 				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/../ios-frameworks/pjsip/arm/include/ $(SRCROOT)/../ios-frameworks/pjsip/arm/include/pj/ $(SRCROOT)/../ios-frameworks/pjsip/arm/include/pjnath/";
 				VALID_ARCHS = "armv6 armv7";
@@ -4468,8 +4472,7 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CODE_SIGN_ENTITLEMENTS = "";
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Lai Shan Lam (RYP7CC8LQR)";
 				COPY_PHASE_STRIP = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -4506,7 +4509,7 @@
 				);
 				OTHER_LDFLAGS = "-lz";
 				PRODUCT_NAME = "Camera HD";
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "00E9AF8F-AB93-4D92-83D3-A506E3831FDC";
 				SDKROOT = iphoneos7.0;
 				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/../ios-frameworks/pjsip/arm/include/ $(SRCROOT)/../ios-frameworks/pjsip/arm/include/pj/ $(SRCROOT)/../ios-frameworks/pjsip/arm/include/pjnath/";
 				VALIDATE_PRODUCT = YES;
@@ -4530,7 +4533,7 @@
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
 				OTHER_LDFLAGS = "";
 				PRODUCT_NAME = "Camera HD";
-				PROVISIONING_PROFILE = "42490300-F52F-42B4-B7B0-81E74C7B3A70";
+				PROVISIONING_PROFILE = "00E9AF8F-AB93-4D92-83D3-A506E3831FDC";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				USER_HEADER_SEARCH_PATHS = "\"$(SRCROOT)/external_include\"/**";
@@ -4543,8 +4546,7 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CODE_SIGN_ENTITLEMENTS = "";
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Lai Shan Lam (RYP7CC8LQR)";
 				COPY_PHASE_STRIP = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -4579,7 +4581,7 @@
 				);
 				OTHER_LDFLAGS = "-lz";
 				PRODUCT_NAME = "Camera HD";
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "00E9AF8F-AB93-4D92-83D3-A506E3831FDC";
 				RAMEWORK_SEARCH_PATHS = "$(inherited) \"$(SRCROOT)\"";
 				SDKROOT = iphoneos7.0;
 				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/../ios-frameworks/pjsip/arm/include/ $(SRCROOT)/../ios-frameworks/pjsip/arm/include/pj/ $(SRCROOT)/../ios-frameworks/pjsip/arm/include/pjnath/";
@@ -4603,7 +4605,7 @@
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = "";
 				PRODUCT_NAME = "Camera HD";
-				PROVISIONING_PROFILE = "42490300-F52F-42B4-B7B0-81E74C7B3A70";
+				PROVISIONING_PROFILE = "00E9AF8F-AB93-4D92-83D3-A506E3831FDC";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				USER_HEADER_SEARCH_PATHS = "\"$(SRCROOT)/external_include\"/**";
@@ -4627,7 +4629,7 @@
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
 				OTHER_LDFLAGS = "";
 				PRODUCT_NAME = "Camera HD";
-				PROVISIONING_PROFILE = "42490300-F52F-42B4-B7B0-81E74C7B3A70";
+				PROVISIONING_PROFILE = "00E9AF8F-AB93-4D92-83D3-A506E3831FDC";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				USER_HEADER_SEARCH_PATHS = "\"$(SRCROOT)/external_include\"/**";

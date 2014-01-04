@@ -69,8 +69,13 @@ typedef enum
 - (id) init;
 - (void)scan;
 - (void)reScan;
+-(void) disconnect;
+- (void)connectToBLEWithPeripheral:(CBPeripheral *)peripheral;
+
+
 - (void) didConnect;
 - (void) didDisconnect;
-- (void)connectToBLEWithPeripheral:(CBPeripheral *)peripheral;
+
+
 @end
 

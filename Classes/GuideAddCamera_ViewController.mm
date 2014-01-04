@@ -151,10 +151,11 @@
     //Load the next xib
     CreateBLEConnection_VController *step03ViewController=nil;
     
-    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+//    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+//    {
+//        step03ViewController = [[CreateBLEConnection_VController alloc]initWithNibName:@"CreateBLEConnection_VController_ipad" bundle:nil];
+//    } else
     {
-        step03ViewController = [[CreateBLEConnection_VController alloc]initWithNibName:@"CreateBLEConnection_VController_ipad" bundle:nil];
-    } else {
         step03ViewController =
         [[CreateBLEConnection_VController alloc] initWithNibName:@"CreateBLEConnection_VController"
                                                  bundle:nil];
@@ -195,14 +196,14 @@
         NSLog(@"Load step 3");
         //Load the next xib
         CreateBLEConnection_VController *step03ViewController = nil;
-        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
-        {
-            
-            
-            step03ViewController = [[CreateBLEConnection_VController alloc]initWithNibName:@"CreateBLEConnection_VController_iPad" bundle:nil];
-            
-        }
-        else
+//        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+//        {
+//            
+//            
+//            step03ViewController = [[CreateBLEConnection_VController alloc]initWithNibName:@"CreateBLEConnection_VController_iPad" bundle:nil];
+//            
+//        }
+//        else
         {
             step03ViewController = [[CreateBLEConnection_VController alloc]
                                     initWithNibName:@"CreateBLEConnection_VController" bundle:nil];

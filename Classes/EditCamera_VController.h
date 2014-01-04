@@ -25,7 +25,7 @@
     NSString * homeWifiSSID; 
     NSString * cameraMac; 
 	NSString * cameraName;
-     HttpCommunication *  comm;
+
     UIAlertView *_alertView;
     BOOL _isShowingProcess;
     NSString *_result_received;
