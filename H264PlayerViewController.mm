@@ -3101,18 +3101,6 @@
 
 - (void) updateVerticalDirection_end:(int)dir inStep: (uint) step
 {
-    if (_timerHideMenu != nil)
-    {
-        [self.timerHideMenu invalidate];
-        self.timerHideMenu = nil;
-    }
-    
-    self.timerHideMenu = [NSTimer scheduledTimerWithTimeInterval:10
-                                                          target:self
-                                                        selector:@selector(hideControlMenu)
-                                                        userInfo:nil
-                                                         repeats:NO];
-    
 	@synchronized(_imgViewDrectionPad)
 	{
 		currentDirUD = DIRECTION_V_NON;
@@ -3202,7 +3190,12 @@
     {
         if(touch.view.tag == 999)
         {
-            //NSLog(@"ok");
+            if (_timerHideMenu != nil)
+            {
+                [self.timerHideMenu invalidate];
+                self.timerHideMenu = nil;
+            }
+            
             CGPoint location = [touch locationInView:touch.view];
             [self touchEventAt:location phase:touch.phase];
         }
@@ -3217,7 +3210,17 @@
     {
         if(touch.view.tag == 999)
         {
-            //NSLog(@"ok");
+            if (_timerHideMenu != nil)
+            {
+                [self.timerHideMenu invalidate];
+                self.timerHideMenu = nil;
+            }
+            
+            self.timerHideMenu = [NSTimer scheduledTimerWithTimeInterval:10
+                                                                  target:self
+                                                                selector:@selector(hideControlMenu)
+                                                                userInfo:nil
+                                                                 repeats:NO];
             CGPoint location = [touch locationInView:touch.view];
             [self touchEventAt:location phase:touch.phase];
         }
