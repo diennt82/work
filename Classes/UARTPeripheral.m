@@ -59,8 +59,11 @@
     return self;
 }
 
+
+
 - (void) didConnect
 {
+
     [_peripheral discoverServices:@[self.class.uartServiceUUID, self.class.deviceInformationServiceUUID]];
     
     sequence = SEQUENCE_MIN;
@@ -78,6 +81,7 @@
     sequence = SEQUENCE_MIN;
     [rx_buff setLength: 0];
     self.isBusy = NO;
+
     
      NSLog(@"UART PERI: didDisconnect");
 }
@@ -189,7 +193,7 @@
 
 - (ble_response_t) flush
 {
-    
+//    if (self.)
     
     if (self.isBusy == TRUE)
     {
@@ -198,11 +202,12 @@
     }
     
     self.isBusy = TRUE;
+    self.isFlushing = TRUE; 
     retry_count =  0;
     
     
     //Purposely send empty command to flush the system
-    [self retryOldCommand:@""];
+    [self retryOldCommand:@"01234567890123456"];
     
     
     return WRITE_SUCCESS;
@@ -291,6 +296,13 @@
             [self.peripheral readValueForCharacteristic:c];
         }
     }
+    
+    NSLog(@"Found TX & RX characteristic");
+    if (self.delegate != nil)
+    {
+        [self.delegate readyToTxRx];
+    }
+    
 }
 
 -(int) checkBuffer:(NSData *) data_buff forSequence:(int) seq
@@ -398,7 +410,7 @@
         int sequence_index = [self checkBuffer:rx_buff forSequence:sequence];
         int total_data_len = [rx_buff length];
         
-        if (sequence_index != -1  && (sequence_index +3) <= total_data_len) //we found the start of new sequence
+        if (sequence_index != -1  && (sequence_index +3) < total_data_len) //we found the start of new sequence
         {
             
             //Need to check if we have rcved enough bytes
@@ -438,7 +450,7 @@
                     
                     
                     read_error = READ_SUCCESS;
-                    
+                    self.isFlushing = FALSE;
                     self.isBusy = FALSE;
                 }
                 else
@@ -477,12 +489,26 @@
                 {
                     NSLog(@"ERROR: 0-len issue, no more retry, returning");
                     self.isBusy = FALSE;
+                     self.isFlushing = FALSE;
                     
                     [self.delegate onReceiveDataError:read_error forCommand:commandToCamera];
                 }
 
             }
             
+        }
+        else
+        {
+            if ((sequence_index +3) >= total_data_len)
+            {
+                 if (self.isFlushing == TRUE)
+                 {
+                     NSLog(@"FLUSHING.. Not found sequence or Len error ... ignore   ");
+                     self.isBusy = FALSE;
+                     self.isFlushing = FALSE;
+                 }
+            }
+            NSLog(@"Not found sequence or Len error  ");
         }
         
     }

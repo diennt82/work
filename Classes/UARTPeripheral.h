@@ -16,6 +16,7 @@
 
 @optional
 - (void) didReadHardwareRevisionString:(NSString *) string;
+-(void) readyToTxRx;
 @end
 
 #define SEQUENCE_MAX 0x7f
@@ -40,12 +41,13 @@ typedef enum response_ {
     NSMutableData  * rx_buff;
     NSString * commandToCamera;
     ble_response_t read_error;
-    int retry_count; 
+    int retry_count;
+    
     
 }
 @property (nonatomic, retain) CBPeripheral *peripheral;
 @property (assign) id<UARTPeripheralDelegate> delegate;
-@property BOOL isBusy;
+@property BOOL isBusy, isFlushing;
 
 + (CBUUID *) uartServiceUUID;
 

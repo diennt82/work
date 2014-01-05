@@ -34,9 +34,9 @@
 + (BLEManageConnect *) getInstanceBLE
 {
     static BLEManageConnect *_sharedInstance = nil;
-
+    
     static dispatch_once_t oncePredicate;
-
+    
     dispatch_once(&oncePredicate, ^{
         _sharedInstance = [[BLEManageConnect alloc] init];
     });
@@ -57,15 +57,7 @@
     return self;
 }
 
-- (void) didReceiveData:(NSString *) string
-{
-    [self.delegate didReceiveData:string];
-}
 
-- (void) didReceiveRawData:(NSData *)data
-{
-    
-}
 
 - (void) onReceiveDataError:(int)error_code forCommand:(NSString *)commandToCamera
 {
@@ -88,27 +80,15 @@
     return _uartPeripheral;
 }
 
-#pragma mark - CBCentralManagerDelegate
-
-- (void)centralManagerDidUpdateState:(CBCentralManager *)central
-{
-    if (central.state == CBCentralManagerStatePoweredOn) {
-        // In a real app, you'd deal with all the states correctly
-        self.isOnBLE = YES;
-        [self scan];
-    } else
-    {
-        NSLog(@"BLE not power on");
-        self.isOnBLE = NO;
-    }
-}
 
 
 /** Scan for peripherals - specifically for our service's 128bit CBUUID
  */
 - (void)scan
 {
-//    scanForPeripheralsWithServices:@[UARTPeripheral.uartServiceUUID]
+    scanMode = SCAN_FOR_ANY_DEVICE;
+    
+    //    scanForPeripheralsWithServices:@[UARTPeripheral.uartServiceUUID]
     if (_cm.state == CBCentralManagerStatePoweredOn)
     {
         NSLog(@"Scanning started");
@@ -131,26 +111,19 @@
         _cm = [[CBCentralManager alloc] initWithDelegate:self queue:nil];
     }
 }
-- (void) centralManager:(CBCentralManager *)central didDiscoverPeripheral:(CBPeripheral *)peripheral advertisementData:(NSDictionary *)advertisementData RSSI:(NSNumber *)RSSI
 
+
+
+-(void) reScanForPeripheral:(CBUUID *) dev_service_id
 {
-    NSLog(@"Did discover peripheral name %@ and peripheral is %@", peripheral.name, peripheral);
-    if (![self.listBLEs containsObject:peripheral])
-    {
-        [self.listBLEs addObject:peripheral];
-        [self.delegate didReceiveBLEList:self.listBLEs];
-    }
-}
-- (void) centralManager:(CBCentralManager *)central didConnectPeripheral:(CBPeripheral *)peripheral
-{
-    NSLog(@"Did connect peripheral %@", peripheral.name);
-    //Ready or connected
-    self.state = CONNECTED;
-    if ([_uartPeripheral.peripheral isEqual:peripheral])
-    {
-        [_uartPeripheral didConnect];
-        
-    }
+    //TODO: Check? Whether BLE service id is different for each device OR the same for All Device
+    
+    //HACK!!!
+    self.isOnBLE = YES;
+    scanMode = SCAN_FOR_SINGLE_DEVICE;
+    
+    [_cm scanForPeripheralsWithServices:@[dev_service_id]
+                                options:@{CBCentralManagerScanOptionAllowDuplicatesKey: [NSNumber numberWithBool:NO]}];
     
 }
 
@@ -161,9 +134,126 @@
     {
         [[BLEManageConnect getInstanceBLE].cm cancelPeripheralConnection:_uartPeripheral.peripheral];
     }
-
+    
     
 }
+
+
++ (ConnectionState)checkStatusConnectBLE
+{
+    return [BLEManageConnect getInstanceBLE].state;
+}
+
+
+
+/**
+ * Call this when select a BLE in table to connect
+ */
+- (void)connectToBLEWithPeripheral:(CBPeripheral *)peripheral
+{
+    NSLog(@"Connect to BLE with name is %@", peripheral.name);
+    [_cm stopScan];
+    self.myPeripheral = peripheral;
+    self.uartPeripheral = [[UARTPeripheral alloc] initWithPeripheral:self.myPeripheral delegate:self];
+    [_cm connectPeripheral:self.myPeripheral options:@{CBConnectPeripheralOptionNotifyOnDisconnectionKey: [NSNumber numberWithBool:YES]}];
+}
+
+
+
+#pragma mark - Callbacks
+
+- (void) didReceiveData:(NSString *) string
+{
+    [self.delegate didReceiveData:string];
+}
+
+- (void) didReceiveRawData:(NSData *)data
+{
+    
+}
+
+-(void) readyToTxRx
+{
+    //Ready or connected
+    self.state = CONNECTED;
+    
+    //TODO: pass the correct service id
+    [self.delegate didConnectToBle:nil];
+}
+
+
+- (void)didDisConnect
+{
+    NSLog(@"Disconnect peripheral %@", self.uartPeripheral.peripheral.name);
+    if ([_uartPeripheral.peripheral isConnected])
+    {
+        [[BLEManageConnect getInstanceBLE].cm cancelPeripheralConnection:_uartPeripheral.peripheral];
+    }
+}
+
+
+#pragma mark - CBCentralManagerDelegate
+
+- (void)centralManagerDidUpdateState:(CBCentralManager *)central
+{
+    if (central.state == CBCentralManagerStatePoweredOn) {
+        // In a real app, you'd deal with all the states correctly
+        NSLog(@"BLE IS ON ");
+        self.isOnBLE = YES;
+        [self scan];
+    }
+    else
+    {
+        NSLog(@"BLE not power on");
+        self.isOnBLE = NO;
+    }
+}
+
+
+- (void) centralManager:(CBCentralManager *)central didDiscoverPeripheral:(CBPeripheral *)peripheral advertisementData:(NSDictionary *)advertisementData RSSI:(NSNumber *)RSSI
+
+{
+    
+    
+    if (scanMode == SCAN_FOR_ANY_DEVICE)
+    {
+        NSLog(@"Did discover peripheral name %@ and peripheral is %@", peripheral.name, peripheral);
+        
+        if (![self.listBLEs containsObject:peripheral])
+        {
+            [self.listBLEs addObject:peripheral];
+            [self.delegate didReceiveBLEList:self.listBLEs];
+        }
+    }
+    else if ( scanMode == SCAN_FOR_SINGLE_DEVICE)
+    {
+        
+        NSLog(@"Did discover Single device :  name %@ and peripheral is %@", peripheral.name, peripheral);
+        NSLog(@"Connect again!!");
+        
+        //called if found that service id?
+        [self connectToBLEWithPeripheral:peripheral];
+        
+    }
+}
+- (void) centralManager:(CBCentralManager *)central didConnectPeripheral:(CBPeripheral *)peripheral
+{
+    NSLog(@"Did connect peripheral %@", peripheral.name);
+  
+    if ([_uartPeripheral.peripheral isEqual:peripheral])
+    {
+        [_uartPeripheral didConnect];
+        
+    }
+  
+    
+   
+    
+}
+
+
+
+
 
 /** Once the disconnection happens, we need to clean up our local copy of the peripheral
  */
@@ -175,7 +265,7 @@
     self.myPeripheral = peripheral;
     self.state = IDLE;
     self.isOnBLE = NO;
-
+    
     
     if ([self.uartPeripheral.peripheral isEqual:self.myPeripheral])
         
@@ -185,31 +275,7 @@
     }
 }
 
-+ (ConnectionState)checkStatusConnectBLE
-{
-    return [BLEManageConnect getInstanceBLE].state;
-}
 
-- (void)didDisConnect
-{
-    NSLog(@"Disconnect peripheral %@", self.uartPeripheral.peripheral.name);
-    if ([_uartPeripheral.peripheral isConnected])
-    {
-        [[BLEManageConnect getInstanceBLE].cm cancelPeripheralConnection:_uartPeripheral.peripheral];
-    }
-}
-
-/** 
- * Call this when select a BLE in table to connect
- */
-- (void)connectToBLEWithPeripheral:(CBPeripheral *)peripheral
-{
-    NSLog(@"Connect to BLE with name is %@", peripheral.name);
-    [_cm stopScan];
-    self.myPeripheral = peripheral;
-    self.uartPeripheral = [[UARTPeripheral alloc] initWithPeripheral:self.myPeripheral delegate:self];
-    [_cm connectPeripheral:self.myPeripheral options:@{CBConnectPeripheralOptionNotifyOnDisconnectionKey: [NSNumber numberWithBool:YES]}];
-}
 
 @end
 

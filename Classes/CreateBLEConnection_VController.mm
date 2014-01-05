@@ -46,9 +46,14 @@
     _currentBLEList = [[NSMutableArray alloc] init];
     [self.ib_lableStage setText:@"No connect"];
     [self.ib_NextStepAfterReady setEnabled:NO];
-    [BLEManageConnect getInstanceBLE].uartPeripheral.isBusy = NO;
+    
+    //Start first scan automatically
     [BLEManageConnect getInstanceBLE];
+    
     [BLEManageConnect getInstanceBLE].delegate = self;
+    
+   [NSTimer scheduledTimerWithTimeInterval:3.0 target:self selector:@selector(scanCameraBLEDone) userInfo:nil repeats:NO];
+
 }
 
 - (void)waiting_for_scan_cameraBLE
@@ -57,10 +62,11 @@
     [self.ib_Indicator setHidden:NO];
     [self.ib_NextStepAfterReady setEnabled:NO];
     [self.ib_lableStage setText:@"Waiting for scanning BLE!"];
-    [[BLEManageConnect getInstanceBLE] reScan];
     [BLEManageConnect getInstanceBLE].delegate = self;
-
-    [NSTimer scheduledTimerWithTimeInterval:3.0 target:self selector:@selector(scanCameraBLEDone) userInfo:nil repeats:NO];
+    [[BLEManageConnect getInstanceBLE] reScan];
+    
+    
+   
 }
 
 - (void)scanCameraBLEDone
@@ -69,7 +75,7 @@
     [self.ib_Indicator setHidden:YES];
     if ([_currentBLEList count] == 0)
     {
-        [self.ib_lableStage setText:@"No found!"];
+        [self.ib_lableStage setText:@"No BLE device found!"];
     } else if ([_currentBLEList count] == 1)
     {
         //Update UI
@@ -78,26 +84,33 @@
         //Auto connect to BLE
         CBPeripheral *peripheralSelected =  [_currentBLEList objectAtIndex:0];
         [[BLEManageConnect getInstanceBLE] connectToBLEWithPeripheral:peripheralSelected];
-        //Auto to next step to get mac address and version
-        _timerUpdateUI = [NSTimer scheduledTimerWithTimeInterval:3.0 target:self selector:@selector(updateUIConnection:) userInfo:nil repeats:NO];
         
-    } else
-    {
-        [self.ib_lableStage setText:@"Scan done, please select to connect."];
+        
+        //        //Auto to next step to get mac address and version
+        //        _timerUpdateUI = [NSTimer scheduledTimerWithTimeInterval:3.0 target:self selector:@selector(updateUIConnection:) userInfo:nil repeats:NO];
+        
     }
+    else
+    {
+        [self.ib_lableStage setText:@"Scan done, please select one device to connect."];
+    }
+//    [self updateUIConnection:nil];
     
 }
 - (void)dismissIndicator
 {
+    _timeOutWaitingConnectBLE = nil;
     [self.ib_Indicator setHidden:YES];
     [self.ib_lableStage setText:@"Can't connect to BLE, please press refresh button"];
 }
 - (void)updateUIConnection:(NSTimer *)info
 {
-    _timeOutWaitingConnectBLE = [NSTimer scheduledTimerWithTimeInterval:25 target:self selector:@selector(dismissIndicator) userInfo:nil repeats:NO];
+    _timeOutWaitingConnectBLE = [NSTimer scheduledTimerWithTimeInterval:30.0 target:self selector:@selector(dismissIndicator) userInfo:nil repeats:NO];
     if ([BLEManageConnect getInstanceBLE].isOnBLE == NO)
     {
-        [self waiting_for_scan_cameraBLE];
+        // [self waiting_for_scan_cameraBLE];
+        NSLog(@"updateUIConnection: BLEManageConnect isOnBLE = NO!!!");
+        [self dismissIndicator];
         return;
     }
     
@@ -116,11 +129,11 @@
             _timerUpdateUI = nil;
         }
         //found 1 BLE, auto connect
-//        if ([_currentBLEList count] == 1)
-//        {
+        //        if ([_currentBLEList count] == 1)
+        //        {
         [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(nextStepConnected:) userInfo:nil repeats:NO];
         return;
-//        }
+        //        }
         //Auto to next step to get mac address and version
         [self.ib_Indicator setHidden:YES];
         [self.ib_lableStage setText:@"Connected"];
@@ -129,7 +142,7 @@
     }
     else
     {
-        [self.ib_lableStage setText:@"disconnect, no ready"];
+        [self.ib_lableStage setText:@"disconnect, not ready"];
     }
 }
 - (void)viewDidUnload
@@ -300,6 +313,9 @@
     [self.ib_RefreshBLE setEnabled:NO];
     [self.ib_NextStepAfterReady setEnabled:NO];
     [self waiting_for_scan_cameraBLE];
+    
+    
+    [NSTimer scheduledTimerWithTimeInterval:3.0 target:self selector:@selector(scanCameraBLEDone) userInfo:nil repeats:NO];
 }
 
 -(void) setupFailedFWCheck
@@ -317,7 +333,19 @@
     
 }
 
-#pragma mark - UARTPeripheralDelegate
+#pragma mark - BLEManageConnectDelegate
+
+- (void) didConnectToBle:(CBUUID*) service_id
+{
+    NSLog(@"BLE device connected - performSelector now");
+    
+    
+    [self performSelectorOnMainThread:@selector(updateUIConnection:) withObject:nil
+                        waitUntilDone:NO  ];
+    
+    
+    
+}
 - (void) onReceiveDataError:(int)error_code forCommand:(NSString *)commandToCamera
 {
     
@@ -332,49 +360,49 @@
         //sucucessfull when writing version
         //diss miss statusDialog
         NSLog(@"get version successfull is %@", fw_version);
-
-
-            NSRange colonRange = [fw_version rangeOfString:@": "];
+        
+        
+        NSRange colonRange = [fw_version rangeOfString:@": "];
+        
+        if (colonRange.location != NSNotFound)
+        {
+            NSString *fwVersion = [[fw_version componentsSeparatedByString:@": "] objectAtIndex:1];
             
-            if (colonRange.location != NSNotFound)
-            {
-                NSString *fwVersion = [[fw_version componentsSeparatedByString:@": "] objectAtIndex:1];
-                
-                if ([fwVersion isEqualToString:@"-1"])
-                    fwVersion = @"01_007_02";
-                
-                NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-                
-                
-                [userDefaults setObject:fwVersion forKey:@"FW_VERSION"];
-                //[userDefaults setObject:model forKey:@"MODEL"];
-                [userDefaults synchronize];
-            }
+            if ([fwVersion isEqualToString:@"-1"])
+                fwVersion = @"01_007_02";
             
-            NSLog(@"Load step 4");
-            //Load the next xib
-            EditCamera_VController *step04ViewController = nil;
+            NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
             
             
-            
-//            if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
-//            {
-//                
-//                step04ViewController = [[EditCamera_VController alloc]
-//                                        initWithNibName:@"EditCamera_VController_iPad" bundle:nil];
-//                
-//            }
-//            else
-            {
-                step04ViewController = [[EditCamera_VController alloc]
-                                        initWithNibName:@"EditCamera_VController" bundle:nil];
-            }
-            step04ViewController.cameraMac = self.cameraMac;
-            step04ViewController.cameraName = self.cameraName;
-            [self.navigationController pushViewController:step04ViewController animated:NO];
-            
-            [step04ViewController release];
- 
+            [userDefaults setObject:fwVersion forKey:@"FW_VERSION"];
+            //[userDefaults setObject:model forKey:@"MODEL"];
+            [userDefaults synchronize];
+        }
+        
+        NSLog(@"Load step 4");
+        //Load the next xib
+        EditCamera_VController *step04ViewController = nil;
+        
+        
+        
+        //            if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+        //            {
+        //
+        //                step04ViewController = [[EditCamera_VController alloc]
+        //                                        initWithNibName:@"EditCamera_VController_iPad" bundle:nil];
+        //
+        //            }
+        //            else
+        {
+            step04ViewController = [[EditCamera_VController alloc]
+                                    initWithNibName:@"EditCamera_VController" bundle:nil];
+        }
+        step04ViewController.cameraMac = self.cameraMac;
+        step04ViewController.cameraName = self.cameraName;
+        [self.navigationController pushViewController:step04ViewController animated:NO];
+        
+        [step04ViewController release];
+        
         
         [[NSNotificationCenter defaultCenter] removeObserver:self];
     }
@@ -428,7 +456,7 @@
 }
 -(void) moveToNextStep
 {
- 
+    
     //First time enter, try to flush BLE buffer
     
     
@@ -437,63 +465,75 @@
     
     // FLUSH ---
     [BLEManageConnect getInstanceBLE].delegate = self;
-    [[BLEManageConnect getInstanceBLE].uartPeripheral  flush];
-     NSLog(@" flush done ");
-    NSDate * date;
-    while ([BLEManageConnect getInstanceBLE].uartPeripheral.isBusy)
+    
+    if ([BLEManageConnect getInstanceBLE].isOnBLE)
     {
-        date = [NSDate dateWithTimeInterval:1.5 sinceDate:[NSDate date]];
         
-        [[NSRunLoop currentRunLoop] runUntilDate:date];
-    }
-   
-    
-    
-    [self sendCommandGetMacAddress:nil];
-    [self sendCommandGetVersion];
-//    [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(sendCommandGetVersion) userInfo:nil repeats:NO];
-}
-
-- (void)sendCommandGetMacAddress:(NSTimer *)info
-{
-    NSLog(@"now, Send command get mac address");
-    if ([BLEManageConnect getInstanceBLE].isOnBLE == NO)
-        return;
-    //first get version of camera
-    [BLEManageConnect getInstanceBLE].delegate = self;
-    if (true)
-    {
-        [[BLEManageConnect getInstanceBLE].uartPeripheral writeString:GET_MAC_ADDRESS];
+        [[BLEManageConnect getInstanceBLE].uartPeripheral  flush];
+        
+        NSLog(@" flush done ");
         NSDate * date;
         while ([BLEManageConnect getInstanceBLE].uartPeripheral.isBusy)
         {
+             NSLog(@"send flush :  wait for result ");
             date = [NSDate dateWithTimeInterval:1.5 sinceDate:[NSDate date]];
             
             [[NSRunLoop currentRunLoop] runUntilDate:date];
         }
+        
+        
+        if ( [self sendCommandGetMacAddress:nil])
+        {
+            
+            [self sendCommandGetVersion];
+        }
     }
-    else {
-        
-        NSString * msg = nil;
-        NSString * ok = NSLocalizedStringWithDefaultValue(@"Ok",nil, [NSBundle mainBundle],
-                                                          @"Ok", nil);
-        
-        UIAlertView *alert;
-        msg = @"Disconnect to BLE, plesea try to connect again.";
-        alert = [[UIAlertView alloc]
-                 initWithTitle:@""
-                 message:msg
-                 delegate:self
-                 cancelButtonTitle:ok
-                 otherButtonTitles:nil];
-        
-        
-        alert.tag = TAG_TRY_CONNECT_BLE;
-        
-        [alert show];
-        [alert release];
-        
+    else
+    {
+    
+        [self dismissIndicator];
     }
+        //    [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(sendCommandGetVersion) userInfo:nil repeats:NO];
+}
+
+- (BOOL)sendCommandGetMacAddress:(NSTimer *)info
+{
+    NSLog(@"now, Send command get mac address");
+    if ([BLEManageConnect getInstanceBLE].isOnBLE == NO)
+    {
+        NSLog(@"moveToNextStep:  BLE disconnected - calling rescan after 2sec ");
+        
+        NSDate * date;
+        date = [NSDate dateWithTimeInterval:2.0 sinceDate:[NSDate date]];
+        [[NSRunLoop currentRunLoop] runUntilDate:date];
+
+        
+        [[BLEManageConnect getInstanceBLE] reScanForPeripheral:[UARTPeripheral uartServiceUUID]];
+        
+        return FALSE;
+    }
+    
+    
+    //first get version of camera
+    [BLEManageConnect getInstanceBLE].delegate = self;
+    
+    
+    [[BLEManageConnect getInstanceBLE].uartPeripheral writeString:GET_MAC_ADDRESS];
+    NSDate * date;
+    while ([BLEManageConnect getInstanceBLE].uartPeripheral.isBusy)
+    {
+        
+         NSLog(@"sendCommandGetMacAddress:  wait for result ");
+        
+        
+        date = [NSDate dateWithTimeInterval:1.5 sinceDate:[NSDate date]];
+        
+        [[NSRunLoop currentRunLoop] runUntilDate:date];
+    }
+    
+    return TRUE;
+    
+    
 }
 - (void)viewWillDisappear:(BOOL)animated
 {
@@ -529,6 +569,12 @@
     _currentBLEList = bleLists;
     [self.ib_tableListBLE reloadData];
 }
+
+
+#pragma mark - TableView Delegate
+
+
+
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     return [_currentBLEList count];
@@ -555,10 +601,12 @@
     [self.ib_Indicator setHidden:NO];
     [self.ib_NextStepAfterReady setEnabled:NO];
     [self.ib_tableListBLE setExclusiveTouch:YES];
-    _timerUpdateUI  = [NSTimer scheduledTimerWithTimeInterval:3.0
-                                                       target:self
-                                                     selector:@selector(updateUIConnection:)
-                                                     userInfo:nil
-                                                      repeats:NO];
+    
+    
+    //    _timerUpdateUI  = [NSTimer scheduledTimerWithTimeInterval:3.0
+    //                                                       target:self
+    //                                                     selector:@selector(updateUIConnection:)
+    //                                                     userInfo:nil
+    //                                                      repeats:NO];
 }
 @end

@@ -31,13 +31,19 @@ typedef enum
 #import "UARTPeripheral.h"
 @protocol BLEManageConnectDelegate
 @required
+
 - (void) didReceiveData:(NSString *) string;
+
 @optional
+- (void) didConnectToBle:(CBUUID*) service_id ;
 - (void) onReceiveDataError:(int)error_code forCommand:(NSString *)commandToCamera;
 - (void) didReceiveBLEList:(NSMutableArray *) bleLists;
 @end
 
 
+
+#define SCAN_FOR_ANY_DEVICE 1
+#define SCAN_FOR_SINGLE_DEVICE 2
 @interface BLEManageConnect : NSObject <CBCentralManagerDelegate, UARTPeripheralDelegate>
 
 {
@@ -51,6 +57,8 @@ typedef enum
     BOOL _isOnBLE;
     CBPeripheral *_myPeripheral;
     NSMutableArray *_listBLEs;
+  
+    int scanMode;
     
 }
 @property (retain, nonatomic) CBCentralManager *cm;
@@ -71,7 +79,7 @@ typedef enum
 - (void)reScan;
 -(void) disconnect;
 - (void)connectToBLEWithPeripheral:(CBPeripheral *)peripheral;
-
+-(void) reScanForPeripheral:(CBUUID *) dev_service_id;
 
 - (void) didConnect;
 - (void) didDisconnect;
