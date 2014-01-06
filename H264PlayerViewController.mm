@@ -248,21 +248,13 @@
     UIImage *headerLogo = [UIImage imageNamed:@"header_logo.png"];
     UIBarButtonItem *headerLogoButton = [[UIBarButtonItem alloc] initWithImage:headerLogo style:UIBarButtonItemStyleBordered target:self action:@selector(prepareGoBackToCameraList:)];
     [headerLogoButton setTintColor:[UIColor colorWithPatternImage:headerLogo]];
-    
-    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
-    {
-        UIImage *headerHubble = [UIImage imageNamed:@"header_hubble.png"];
-        UIBarButtonItem *headerHubbleButton = [[UIBarButtonItem alloc] initWithImage:headerHubble style:UIBarButtonItemStyleBordered target:self action:nil];
-        [headerHubbleButton setTintColor:[UIColor colorWithPatternImage:headerHubble]];
-        
-        NSArray *actionLeftButtonItems = @[headerLogoButton, headerHubbleButton];
-        self.navigationItem.leftBarButtonItems = actionLeftButtonItems;
-    }
-    else
-    {
-        self.navigationItem.leftBarButtonItem = headerLogoButton;
-    }
 
+    UIImage *headerHubble = [UIImage imageNamed:@"header_hubble.png"];
+    UIBarButtonItem *headerHubbleButton = [[UIBarButtonItem alloc] initWithImage:headerHubble style:UIBarButtonItemStyleBordered target:self action:nil];
+    [headerHubbleButton setTintColor:[UIColor colorWithPatternImage:headerHubble]];
+    
+    NSArray *actionLeftButtonItems = @[headerLogoButton, headerHubbleButton];
+    self.navigationItem.leftBarButtonItems = actionLeftButtonItems;
     
     CamProfile *cp = self.selectedChannel.profile;
 
@@ -277,16 +269,18 @@
     NSArray *actionRightButtonItems = @[earlierButton, nowButton];
     self.navigationItem.rightBarButtonItems = actionRightButtonItems;
     
-    
-    if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 7)
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
     {
-        [self setTitle:cp.name];
-        [self.navigationController.navigationBar setBarStyle:UIBarStyleDefault];
-    }
-    else
-    {
-        [self.navigationItem setTitle:cp.name];
-        [self.topToolbar setHidden:YES];
+        if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 7)
+        {
+            [self setTitle:cp.name];
+            [self.navigationController.navigationBar setBarStyle:UIBarStyleDefault];
+        }
+        else
+        {
+            [self.navigationItem setTitle:cp.name];
+            [self.topToolbar setHidden:YES];
+        }
     }
 #if DISABLE_VIEW_RELEASE_FLAG
     self.navigationItem.rightBarButtonItem.enabled = NO;
