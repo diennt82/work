@@ -16,6 +16,7 @@ typedef enum
 {
     IDLE = 0,
     SCANNING,
+    CONNECTING, 
     CONNECTED,
     DISCONNECTED,
 } ConnectionState;

@@ -92,6 +92,10 @@
 {
     scanMode = SCAN_FOR_ANY_DEVICE;
     
+    if (_cm)
+    {
+        [_cm stopScan];
+    }
     //    scanForPeripheralsWithServices:@[UARTPeripheral.uartServiceUUID]
     if (_cm.state == CBCentralManagerStatePoweredOn)
     {
@@ -157,7 +161,7 @@
 {
     NSLog(@"Connect to BLE with name is %@", peripheral.name);
     
-   
+    self.state = CONNECTING;
 
     
     self.uartPeripheral = [[UARTPeripheral alloc] initWithPeripheral:peripheral delegate:self];
@@ -272,8 +276,13 @@
 }
 
 
-
-
+- (void)centralManager:(CBCentralManager *)central didFailToConnectPeripheral:(CBPeripheral *)peripheral error:(NSError *)error
+{
+    NSLog(@" FailToConnectPeripheral %@ with error: %@", peripheral.name , error);
+    
+    self.state = DISCONNECTED;
+    
+}
 
 /** Once the disconnection happens, we need to clean up our local copy of the peripheral
  */

@@ -31,7 +31,43 @@
     }
     return self;
 }
+- (void)viewWillDisappear:(BOOL)animated
+{
+	NSArray *viewControllers = self.navigationController.viewControllers;
+	if ([viewControllers indexOfObject:self] == NSNotFound)
+    {
+		// View is disappearing because it was popped from the stack
+		NSLog(@"View controller was popped --- We are closing down..task_cancelled = YES");
+        
+		//task_cancelled = YES;
+        [[NSNotificationCenter defaultCenter] removeObserver:self];
+	}
+    
+    task_cancelled = YES;
+    
+}
 
+- (void)viewWillAppear:(BOOL)animated
+{
+    [self.ib_lableStage setText:@"Scanning for BLE..."];
+    [self.ib_RefreshBLE setEnabled:NO];
+    
+    [self clearDataBLEConnection];
+    
+    if (_currentBLEList)
+    {
+        [_currentBLEList removeAllObjects];
+    }
+    [self.ib_tableListBLE reloadData];
+
+    
+    [BLEManageConnect getInstanceBLE].delegate = self;
+    [[BLEManageConnect getInstanceBLE] scan];
+    
+    [NSTimer scheduledTimerWithTimeInterval:5.0 target:self selector:@selector(scanCameraBLEDone) userInfo:nil repeats:NO];
+
+
+}
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -45,24 +81,19 @@
     
     
     _currentBLEList = [[NSMutableArray alloc] init];
-    [self.ib_lableStage setText:@"Scanning for BLE..."];
-    
-    
-    [self.ib_RefreshBLE setEnabled:NO];
-    
-    //Start first scan automatically
-    [BLEManageConnect getInstanceBLE];
-    
-    [BLEManageConnect getInstanceBLE].delegate = self;
-    
-    
-    [NSTimer scheduledTimerWithTimeInterval:5.0 target:self selector:@selector(scanCameraBLEDone) userInfo:nil repeats:NO];
     
 }
 
 
 - (void)scanCameraBLEDone
 {
+    
+    if (task_cancelled == TRUE)
+    {
+       
+        return;
+    }
+    
     if ([_currentBLEList count] == 0) //NO camera found
     {
         // [self.ib_lableStage setText:@"No BLE device found!"];
@@ -71,6 +102,7 @@
         
         
         NSLog(@"No BLE device found! schedule next check ");
+        
         [NSTimer scheduledTimerWithTimeInterval:5.0
                                          target:self
                                        selector:@selector(scanCameraBLEDone)
@@ -81,18 +113,21 @@
     }
     else if ([_currentBLEList count] == 1) //found 1 within first 5 sec. Grab it now.
     {
-        [self.ib_RefreshBLE setEnabled:NO];
+        [self.ib_RefreshBLE setEnabled:YES];
         [self.ib_Indicator setHidden:YES];
         
+         [[BLEManageConnect getInstanceBLE].cm stopScan];
+        
         //Update UI
-        [self.ib_lableStage setText:@"Trying to connect to camera ..."];
-       
+        [self.ib_lableStage setText:@"Select a device to connect"];
         
-        //Auto connect to BLE
-        CBPeripheral *peripheralSelected =  [_currentBLEList objectAtIndex:0];
-        [[BLEManageConnect getInstanceBLE].cm stopScan];
         
-        [[BLEManageConnect getInstanceBLE] connectToBLEWithPeripheral:peripheralSelected];
+        // Don't Auto connect to BLE
+        //
+        //        CBPeripheral *peripheralSelected =  [_currentBLEList objectAtIndex:0];
+        //        [[BLEManageConnect getInstanceBLE].cm stopScan];
+        //
+        //        [[BLEManageConnect getInstanceBLE] connectToBLEWithPeripheral:peripheralSelected];
         
     }
     else //More than 2 camera in  5sec
@@ -102,7 +137,7 @@
         
         [[BLEManageConnect getInstanceBLE].cm stopScan];
         
-        [self.ib_lableStage setText:@"Select one device to connect."];
+        [self.ib_lableStage setText:@"Select a device to connect."];
         
         
         
@@ -123,7 +158,7 @@
 {
     
     ////???? Do i need this
-    _timeOutWaitingConnectBLE = [NSTimer scheduledTimerWithTimeInterval:30.0 target:self selector:@selector(dismissIndicator) userInfo:nil repeats:NO];
+//    _timeOutWaitingConnectBLE = [NSTimer scheduledTimerWithTimeInterval:30.0 target:self selector:@selector(dismissIndicator) userInfo:nil repeats:NO];
     
     [self.ib_Indicator setHidden:NO];
     
@@ -355,7 +390,7 @@
     
     
     
-   // [self dismissIndicator];
+    // [self dismissIndicator];
     
     
     
@@ -432,26 +467,23 @@
             [userDefaults synchronize];
         }
         
-        NSLog(@"Load step 4");
+        NSLog(@"Load step 40");
         //Load the next xib
         EditCamera_VController *step04ViewController = nil;
         
         
         
-        //            if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
-        //            {
-        //
-        //                step04ViewController = [[EditCamera_VController alloc]
-        //                                        initWithNibName:@"EditCamera_VController_iPad" bundle:nil];
-        //
-        //            }
-        //            else
+        
         {
             step04ViewController = [[EditCamera_VController alloc]
                                     initWithNibName:@"EditCamera_VController" bundle:nil];
         }
         step04ViewController.cameraMac = self.cameraMac;
         step04ViewController.cameraName = self.cameraName;
+        
+        /* pop this vc first, i don't want to go back to this, go back to the first screen */
+        [self.navigationController popViewControllerAnimated:NO];
+        NSLog(@"Load step 41");
         [self.navigationController pushViewController:step04ViewController animated:NO];
         
         [step04ViewController release];
@@ -586,24 +618,7 @@
     
     
 }
-- (void)viewWillDisappear:(BOOL)animated
-{
-	NSArray *viewControllers = self.navigationController.viewControllers;
-	if ([viewControllers indexOfObject:self] == NSNotFound)
-    {
-		// View is disappearing because it was popped from the stack
-		NSLog(@"View controller was popped --- We are closing down..task_cancelled = YES");
-        
-		task_cancelled = YES;
-        [[NSNotificationCenter defaultCenter] removeObserver:self];
-	}
-    
-}
 
-- (void)viewWillAppear:(BOOL)animated
-{
-    [self refreshCamBLE:nil];
-}
 - (void)clearDataBLEConnection
 {
     [[BLEManageConnect getInstanceBLE].listBLEs removeAllObjects];
@@ -643,10 +658,24 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if ([_currentBLEList count] == 1)
+    
+    
+    [tableView deselectRowAtIndexPath:indexPath animated:NO];
+    
+    //stop scanning
+    [[BLEManageConnect getInstanceBLE].cm stopScan];
+    
+    
+    [self.ib_RefreshBLE setEnabled:NO];
+
+    
+    if ([BLEManageConnect getInstanceBLE].state == CONNECTING )
     {
+        NSLog(@"BLE is connecting... return.");
         return;
     }
+    
+    
     CBPeripheral *peripheralSelected =  [[BLEManageConnect getInstanceBLE].listBLEs objectAtIndex:indexPath.row];
     [[BLEManageConnect getInstanceBLE] connectToBLEWithPeripheral:peripheralSelected];
     [self.ib_Indicator setHidden:NO];
