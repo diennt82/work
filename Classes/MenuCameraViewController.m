@@ -125,26 +125,34 @@
 
 #pragma  mark - Alert Delegate
 
-- (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex {
-	
-	int tag = alertView.tag ;
-	
-	if (tag == ALERT_REMOVE_CAM_LOCAL)
-	{
-		if (buttonIndex == 1)
-		{
-			[self removeLocalCamera];
-		}
-	}
-	else if (tag == ALERT_REMOVE_CAM_REMOTE)
-	{
-		
-		if (buttonIndex == 1)
-		{
-			[self removeRemoteCamera];
-		}
-		
-	}
+- (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex
+{
+    if (buttonIndex == 1)
+    {
+        UIActivityIndicatorView *activityIndicator =
+        [[UIActivityIndicatorView alloc] initWithFrame:CGRectMake(0, 0, 20, 20)];
+        UIBarButtonItem * barButton =
+        [[UIBarButtonItem alloc] initWithCustomView:activityIndicator];
+        
+        // Set to Left or Right
+        [[self navigationItem] setRightBarButtonItem:barButton];
+        
+        [barButton release];
+        [activityIndicator startAnimating];
+        self.navigationItem.rightBarButtonItem.enabled = NO;
+        self.navigationItem.backBarButtonItem.enabled = NO;
+        
+        int tag = alertView.tag ;
+        
+        if (tag == ALERT_REMOVE_CAM_LOCAL)
+        {
+            [self removeLocalCamera];
+        }
+        else if (tag == ALERT_REMOVE_CAM_REMOTE)
+        {
+            [self removeRemoteCamera];
+        }
+    }
 }
 
 -(void) removeLocalCamera
