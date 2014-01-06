@@ -66,6 +66,20 @@
 
 - (void)removeAction: (id)sender
 {
+    UIActivityIndicatorView *activityIndicator =
+    [[UIActivityIndicatorView alloc] initWithFrame:CGRectMake(0, 0, 20, 20)];
+    UIBarButtonItem * barButton =
+    [[UIBarButtonItem alloc] initWithCustomView:activityIndicator];
+    
+    // Set to Left or Right
+    [[self navigationItem] setRightBarButtonItem:barButton];
+    
+    [barButton release];
+    [activityIndicator startAnimating];
+    self.navigationItem.rightBarButtonItem.enabled = NO;
+    self.navigationItem.backBarButtonItem.enabled = NO;
+    self.view.userInteractionEnabled = NO;
+    
     [self  showDialog:ALERT_REMOVE_CAM];
 }
 
@@ -129,19 +143,7 @@
 {
     if (buttonIndex == 1)
     {
-        UIActivityIndicatorView *activityIndicator =
-        [[UIActivityIndicatorView alloc] initWithFrame:CGRectMake(0, 0, 20, 20)];
-        UIBarButtonItem * barButton =
-        [[UIBarButtonItem alloc] initWithCustomView:activityIndicator];
         
-        // Set to Left or Right
-        [[self navigationItem] setRightBarButtonItem:barButton];
-        
-        [barButton release];
-        [activityIndicator startAnimating];
-        self.navigationItem.rightBarButtonItem.enabled = NO;
-        self.navigationItem.backBarButtonItem.enabled = NO;
-        self.view.userInteractionEnabled = NO;
         
         int tag = alertView.tag ;
         
@@ -153,6 +155,17 @@
         {
             [self removeRemoteCamera];
         }
+    }
+    else
+    {
+        self.navigationItem.rightBarButtonItem.enabled = YES;
+        self.navigationItem.backBarButtonItem.enabled = YES;
+        self.view.userInteractionEnabled = YES;
+        
+        self.navigationItem.rightBarButtonItem = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemTrash
+                                                                                                target:self
+                                                                                                action:@selector(removeAction:)] autorelease];
+        assert(self.navigationItem.rightBarButtonItem != nil);
     }
 }
 
