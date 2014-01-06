@@ -209,6 +209,7 @@
 
 - (void)loadEvents: (CamChannel *)camChannel
 {
+    self.camChannel = camChannel;
     [self performSelectorInBackground:@selector(getEventsList_bg:) withObject:camChannel];
 }
 
