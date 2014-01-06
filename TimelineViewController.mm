@@ -18,7 +18,7 @@
 #import "PlaylistInfo.h"
 #import "H264PlayerViewController.h"
 
-@interface TimelineViewController ()
+@interface TimelineViewController () <UIScrollViewDelegate>
 
 @property (nonatomic, retain) NSMutableArray *events;
 @property (nonatomic, retain) NSMutableArray *clipsInEachEvent;
@@ -27,6 +27,8 @@
 @property (nonatomic, retain) NSString *stringCurrentDate;
 
 @property (nonatomic) BOOL isEventAlready;
+@property (nonatomic) BOOL isLoading;
+@property (nonatomic, retain) NSTimer *timerRefreshData;
 
 @end
 
@@ -126,17 +128,13 @@
     
     //[self performSelectorInBackground:@selector(getEventsList_bg:) withObject:_camChannel];
     
-    self.stringIntelligentMessage = @"All is calm";
+    self.stringIntelligentMessage = @"Loading...";
+    self.isLoading = TRUE;
 #endif
 }
 
 - (void)viewWillAppear:(BOOL)animated
 {
-    if (_isEventAlready == FALSE)
-    {
-        self.isEventAlready = TRUE;
-        //[self performSelectorInBackground:@selector(getEventsList_bg) withObject:nil];
-    }
 }
 
 - (void)didReceiveMemoryWarning
@@ -155,7 +153,25 @@
                                                                CFStringConvertNSStringEncodingToEncoding(encoding));
 }
 
-#pragma mark - Methos
+#pragma mark - Method
+
+- (void)refreshEvents
+{
+    NSLog(@"Timeline - refreshEvents - isLoading: %d", _isLoading);
+    
+    if (_isLoading == FALSE)
+    {
+        self.isLoading = TRUE;
+        self.isEventAlready = FALSE;
+        self.events = nil;
+        self.stringIntelligentMessage = @"Loading...";
+        
+        [self.tableView reloadData];
+        
+        [self loadEvents:self.camChannel];
+    }
+    
+}
 
 - (void)loadEvents: (CamChannel *)camChannel
 {
@@ -231,12 +247,13 @@
                     EventInfo *eventInfo = [[EventInfo alloc] init];
                     eventInfo.alert_name = [event objectForKey:@"alert_name"];
                     eventInfo.value      = [event objectForKey:@"value"];
+                    eventInfo.time_stamp = [event objectForKey:@"time_stamp"];
                     
-                    NSDateFormatter *dateFormater = [[NSDateFormatter alloc]init];
+                    NSDateFormatter *dateFormater = [[NSDateFormatter alloc] init];
                     
-                    [dateFormater setDateFormat:@"yyyyMMddHHmmss"];
-                    
-                    NSDate *eventDate = [dateFormater dateFromString:eventInfo.value]; //2013-12-12 00:42:00 +0000
+                    //[dateFormater setDateFormat:@"yyyyMMddHHmmss"];
+                    [dateFormater setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss'Z'"];
+                    NSDate *eventDate = [dateFormater dateFromString:eventInfo.time_stamp]; //2013-12-31 07:38:35 +0000
                     [dateFormater release];
                     
                     NSTimeInterval diff = [currentDate timeIntervalSinceDate:eventDate];
@@ -336,22 +353,42 @@
             
             if (self.camChannel.profile.minuteSinceLastComm > 5)
             {
-                self.stringIntelligentMessage = [NSString stringWithFormat:@"Monitor is offline since %@", self.camChannel.profile.last_comm];
+                NSDateFormatter *dateFormater = [[NSDateFormatter alloc] init];
+                
+                //[dateFormater setDateFormat:@"yyyyMMddHHmmss"];
+                [dateFormater setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss'Z'"];
+                NSDate *updateDate = [dateFormater dateFromString:self.camChannel.profile.last_comm]; //2013-12-31 07:38:35 +0000
+                [dateFormater release];
+                
+                self.stringIntelligentMessage = [NSString stringWithFormat:@"Monitor is offline since %@", updateDate];
             }
-            
-            [self.tableView reloadData];
         }
         else
         {
             NSLog(@"Response status != 200");
-            self.stringIntelligentMessage = @"All is calm";
+            self.stringIntelligentMessage = @"Get Timeline data error";
         }
     }
     else
     {
         NSLog(@"Error- responseDict is nil");
-        self.stringIntelligentMessage = @"All is calm";
+        self.stringIntelligentMessage = @"Get data timeout error";
     }
+    self.isEventAlready = TRUE;
+    self.isLoading = FALSE;
+    [self.tableView reloadData];
+    
+    if (self.timerRefreshData != nil)
+    {
+        [self.timerRefreshData invalidate];
+        self.timerRefreshData = nil;
+    }
+    
+    self.timerRefreshData = [NSTimer scheduledTimerWithTimeInterval:60
+                                                             target:self
+                                                           selector:@selector(refreshEvents)
+                                                           userInfo:nil
+                                                            repeats:NO];
 }
 
 - (UIImage *)imageWithUrlString:(NSString *)urlString scaledToSize:(CGSize)newSize
@@ -377,6 +414,16 @@
     
 }
 
+#pragma mark - Scroll view delegate
+
+- (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate
+{
+    if (scrollView.contentOffset.y < -64.0f)
+    {
+        [self refreshEvents];
+    }
+}
+
 #pragma mark - Table view data source
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
@@ -384,6 +431,17 @@
     //#warning Potentially incomplete method implementation.
     // Return the number of sections.
     tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+    
+    if (_isEventAlready == FALSE)
+    {
+        return 1;
+    }
+    else if (_events == nil ||
+             _events.count == 0)
+    {
+        return 1;
+    }
+    
     return 3;
 }
 
@@ -487,6 +545,50 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    if (_isEventAlready == FALSE)
+    {
+        static NSString *CellIdentifier = @"Cell";
+        UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+        if (cell == nil) {
+            cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
+        }
+        
+        // Configure the cell...
+        cell.textLabel.text = self.stringIntelligentMessage;
+        
+        UIActivityIndicatorView *spinner = [[UIActivityIndicatorView alloc]
+                                            initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+        
+        // Spacer is a 1x1 transparent png
+        UIImage *spacer = [UIImage imageNamed:@"spacer"];
+        
+        UIGraphicsBeginImageContext(spinner.frame.size);
+        
+        [spacer drawInRect:CGRectMake(0, 0, spinner.frame.size.width, spinner.frame.size.height)];
+        UIImage* resizedSpacer = UIGraphicsGetImageFromCurrentImageContext();
+        
+        UIGraphicsEndImageContext();
+        cell.imageView.image = resizedSpacer;
+        [cell.imageView addSubview:spinner];
+        [spinner startAnimating];
+        
+        return cell;
+    }
+    else if (_events == nil ||
+             _events.count == 0)
+    {
+        static NSString *CellIdentifier = @"Cell";
+        UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+        if (cell == nil) {
+            cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
+        }
+        
+        // Configure the cell...
+        cell.textLabel.text = self.stringIntelligentMessage;
+        
+        return cell;
+    }
+    
     if (indexPath.section == 0)
     {
         static NSString *CellIdentifier = @"TimelineCell";
@@ -532,16 +634,14 @@
         
         cell.eventLabel.text = eventInfo.alert_name;
         
-        NSString *datestr = eventInfo.value;
-        NSDateFormatter *dFormater = [[NSDateFormatter alloc]init];
-        [dFormater setDateFormat:@"yyyyMMddHHmmssz"];
-        //NSLog(@"%@, %@", [dFormater dateFromString:datestr], datestr);
-        NSDate *date = [dFormater dateFromString:datestr]; //2013-12-12 00:42:00 +0000
-        dFormater.dateFormat = @"HH:mm";
+        NSDateFormatter *dateFormater = [[NSDateFormatter alloc] init];
+        [dateFormater setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss'Z'"];
+        NSDate *eventDate = [dateFormater dateFromString:eventInfo.time_stamp]; //2013-12-31 07:38:35 +0000
+        dateFormater.dateFormat = @"HH:mm";
         
-        cell.eventTimeLabel.text = [dFormater stringFromDate:date];
+        cell.eventTimeLabel.text = [dateFormater stringFromDate:eventDate];
+        [dateFormater release];
         //NSLog(@"%@", [dFormater stringFromDate:date]);
-        [dFormater release];
         
         cell.snapshotImage.image = [UIImage imageNamed:@"no_img_available.jpeg"];
         
