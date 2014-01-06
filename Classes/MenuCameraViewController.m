@@ -141,6 +141,7 @@
         [activityIndicator startAnimating];
         self.navigationItem.rightBarButtonItem.enabled = NO;
         self.navigationItem.backBarButtonItem.enabled = NO;
+        self.view.userInteractionEnabled = NO;
         
         int tag = alertView.tag ;
         
