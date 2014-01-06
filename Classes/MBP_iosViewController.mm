@@ -275,11 +275,14 @@
     
 	NSMutableArray * validChannels = [[NSMutableArray alloc]init ];
 
-	for (int i =0 ; i< [channel_array count]; i++)
+	for (int i = channel_array.count - 1 ; i > -1; i--)
 	{
 		CamChannel * ch = [channel_array objectAtIndex:i];
-		if (ch.profile != nil)
+		
+        if (ch.profile != nil)
+        {
 			[validChannels addObject:[channel_array objectAtIndex:i]];
+        }
 
 	}
 
@@ -1557,7 +1560,7 @@
         }
         else
         {
-            nextCameraToScanIndex = 0;
+            nextCameraToScanIndex = self.restored_profiles.count - 1;
             [self scan_next_camera:self.restored_profiles index:nextCameraToScanIndex];
             
         }
@@ -1625,7 +1628,7 @@
 - (void)scan_done:(NSArray *) _scan_results
 {
     //limit value of nextCameraToScanIndex
-    if (nextCameraToScanIndex > ([self.restored_profiles count] - 1))
+    if (nextCameraToScanIndex < 0)
         return;
      CamProfile * cp =(CamProfile *) [self.restored_profiles objectAtIndex:nextCameraToScanIndex];
     //scan Done. read scan result
@@ -1664,14 +1667,14 @@
     }
 
     NSLog(@"cam:%@ -is in Local:%d -fw:%@", cp.mac_address, cp.isInLocal, cp.fw_version);
-    ++ nextCameraToScanIndex;
+    --nextCameraToScanIndex;
     [self scanNextIndex:&nextCameraToScanIndex]; // Sync results of ipserver & bonjour
 }
 
 - (void) scanNextIndex: (int *) index
 {
     // Stop scanning
-    if (*index == [self.restored_profiles count])
+    if (*index == -1)
     {
         NSLog(@"Scan done with ipserver");
 //        [self startShowingCameraList];
@@ -1714,7 +1717,7 @@
     }
     // this camera at index has not been scanned
 #if 1
-    else if (*index < [self.restored_profiles count])
+    else if (*index > -1)
     {
         if (self.menuVC != nil)
         {
@@ -1733,7 +1736,7 @@
         {
             NSLog(@"This camera at index has been scanned");
             
-            ++(*index);
+            --(*index);
             [self scanNextIndex:index];
         }
     }
