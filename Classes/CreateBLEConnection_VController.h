@@ -16,7 +16,7 @@
 #define OPEN_WIFI_BTN_TAG 1001
 #define ALERT_FWCHECK_FAILED 2
 #define TAG_TRY_CONNECT_BLE 3
-#define VERSION_18_037 @"get_version: 18_037"
+
 #define TAG_IMAGE_ANIMATION 599
 
 @interface CreateBLEConnection_VController : UIViewController<BLEManageConnectDelegate, UITableViewDelegate, UITableViewDataSource>
@@ -27,7 +27,7 @@
     NSString * homeWifiSSID;
     BOOL showProgressNextTime;
     
-    NSTimer *_timerUpdateUI;
+
     NSTimer *_timeOutWaitingConnectBLE;
     NSTimer *_getMacAddressTimer;
     NSString *_cameraMac;
@@ -45,10 +45,8 @@
 
 @property (retain, nonatomic) IBOutlet UILabel *ib_lableStage;
 
-//next button
-@property (retain, nonatomic) IBOutlet UIButton *ib_NextStepAfterReady;
 
-@property (retain, nonatomic) NSTimer *timerUpdateUI;
+
 @property (nonatomic, retain) UIView * inProgress;
 @property (nonatomic, retain) NSString *homeWifiSSID;
 
@@ -56,8 +54,7 @@
 -(void) showProgress:(NSTimer *) exp;
 - (void) checkConnectionToCamera:(NSTimer *) expired;
 -(void) moveToNextStep;
-//action user
-- (IBAction)nextStepConnected:(id)sender;
+
 - (IBAction)refreshCamBLE:(id)sender;
 
 @end

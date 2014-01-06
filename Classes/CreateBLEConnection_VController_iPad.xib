@@ -1,14 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.iPad.XIB" version="3.0" toolsVersion="4514" systemVersion="13A603" targetRuntime="iOS.CocoaTouch.iPad" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.iPad.XIB" version="3.0" toolsVersion="4514" systemVersion="12F45" targetRuntime="iOS.CocoaTouch.iPad" propertyAccessControl="none">
     <dependencies>
         <deployment defaultVersion="1536" identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3746"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3747"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="CreateBLEConnection_VController">
             <connections>
                 <outlet property="ib_Indicator" destination="KhP-oe-VNB" id="mFL-v5-dRj"/>
-                <outlet property="ib_NextStepAfterReady" destination="pVr-fC-egH" id="0jX-1f-gJN"/>
                 <outlet property="ib_RefreshBLE" destination="JVT-d5-oCp" id="EuD-uS-SRj"/>
                 <outlet property="ib_lableStage" destination="qKa-0X-x9b" id="Fkh-mn-OCF"/>
                 <outlet property="ib_tableListBLE" destination="vzQ-XQ-44e" id="eoH-tL-Tje"/>
@@ -36,18 +35,6 @@
                         <outlet property="delegate" destination="-1" id="Fs5-WV-UwZ"/>
                     </connections>
                 </tableView>
-                <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="pVr-fC-egH">
-                    <rect key="frame" x="224" y="956" width="320" height="65"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
-                    <fontDescription key="fontDescription" type="system" pointSize="20"/>
-                    <state key="normal" title="Next">
-                        <color key="titleColor" red="0.0" green="0.0" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                    </state>
-                    <connections>
-                        <action selector="nextStepConnected:" destination="-1" eventType="touchUpInside" id="vXN-6j-lhC"/>
-                    </connections>
-                </button>
                 <activityIndicatorView opaque="NO" contentMode="scaleToFill" animating="YES" style="whiteLarge" id="KhP-oe-VNB">
                     <rect key="frame" x="364" y="494" width="37" height="37"/>
                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>

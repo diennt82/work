@@ -17,6 +17,7 @@ typedef enum
     IDLE = 0,
     SCANNING,
     CONNECTED,
+    DISCONNECTED,
 } ConnectionState;
 
 
@@ -83,7 +84,7 @@ typedef enum
 -(void) reScanForPeripheral:(CBUUID *) dev_service_id;
 
 - (void) didConnect;
-- (void) didDisconnect;
+//- (void) didDisconnect;
 
 
 @end

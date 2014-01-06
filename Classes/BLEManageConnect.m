@@ -62,7 +62,11 @@
 - (void) onReceiveDataError:(int)error_code forCommand:(NSString *)commandToCamera
 {
     NSLog(@"Error code is %d and command  %@***************************", error_code, commandToCamera);
-    [self.delegate onReceiveDataError:error_code forCommand:commandToCamera];
+    if (self.delegate != nil)
+    {
+        [self.delegate onReceiveDataError:error_code forCommand:commandToCamera];
+    }
+    
 }
 -(void) dealloc
 {
@@ -152,10 +156,14 @@
 - (void)connectToBLEWithPeripheral:(CBPeripheral *)peripheral
 {
     NSLog(@"Connect to BLE with name is %@", peripheral.name);
-    [_cm stopScan];
-    self.myPeripheral = peripheral;
-    self.uartPeripheral = [[UARTPeripheral alloc] initWithPeripheral:self.myPeripheral delegate:self];
-    [_cm connectPeripheral:self.myPeripheral options:@{CBConnectPeripheralOptionNotifyOnDisconnectionKey: [NSNumber numberWithBool:YES]}];
+    
+   
+
+    
+    self.uartPeripheral = [[UARTPeripheral alloc] initWithPeripheral:peripheral delegate:self];
+    
+    [_cm connectPeripheral:self.uartPeripheral.peripheral
+                   options:@{CBConnectPeripheralOptionNotifyOnDisconnectionKey: [NSNumber numberWithBool:YES]}];
 }
 
 
@@ -164,7 +172,10 @@
 
 - (void) didReceiveData:(NSString *) string
 {
-    [self.delegate didReceiveData:string];
+    if (self.delegate != nil)
+    {
+        [self.delegate didReceiveData:string];
+    }
 }
 
 - (void) didReceiveRawData:(NSData *)data
@@ -177,11 +188,18 @@
     //Ready or connected
     self.state = CONNECTED;
     
-    //TODO: pass the correct service id
-    [self.delegate  didConnectToBle:nil];
+    // pass the correct service id
+    
+    if (self.delegate != nil)
+    {
+        [self.delegate  didConnectToBle:nil];
+
+    }
+
    
 }
 
+#if 0
 
 - (void)didDisConnect
 {
@@ -192,6 +210,7 @@
     }
 }
 
+#endif
 
 #pragma mark - CBCentralManagerDelegate
 
@@ -223,7 +242,11 @@
         if (![self.listBLEs containsObject:peripheral])
         {
             [self.listBLEs addObject:peripheral];
-            [self.delegate didReceiveBLEList:self.listBLEs];
+            
+             if (self.delegate != nil)
+             {
+                 [  self.delegate didReceiveBLEList:self.listBLEs];
+             }
         }
     }
     else if ( scanMode == SCAN_FOR_SINGLE_DEVICE)
@@ -246,10 +269,6 @@
         [_uartPeripheral didConnect];
         
     }
-  
-    
-   
-    
 }
 
 
@@ -262,25 +281,23 @@
 
 {
     
-    NSLog(@"didDisconnectPeripheral %@", peripheral.name);
-    self.myPeripheral = peripheral;
-    self.state = IDLE;
+    NSLog(@"didDisconnectPeripheral %@ with error: %@", peripheral.name , error);
+  
+    self.state = DISCONNECTED;
     self.isOnBLE = NO;
     
-    [self.delegate bleDisconnected];
+    if (self.delegate != nil)
+    {
+        [self.delegate bleDisconnected];
+    }
+    
    
     
-    
-    if ([self.uartPeripheral.peripheral isEqual:self.myPeripheral])
+    if ([self.uartPeripheral.peripheral isEqual:peripheral])
         
     {
-        
-        
         [self.uartPeripheral didDisconnect];
-        [self didDisConnect];
-        
-        
-        
+        [self disconnect];
     }
 }
 
