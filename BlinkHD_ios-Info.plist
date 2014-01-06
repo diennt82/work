@@ -13,6 +13,9 @@
 		<string>mbp_icon114x114</string>
 		<string>mbp_icon57x57.png</string>
 		<string>mbp_icon72x72.png</string>
+		<string>mbp_icon76x76.png</string>
+		<string>mbp_icon120x120.png</string>
+		<string>mbp_icon152x152.png</string>
 	</array>
 	<key>CFBundleIconFiles~ipad</key>
 	<array>
@@ -30,7 +33,7 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>02.03.01</string>
+	<string>02.03.02</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
