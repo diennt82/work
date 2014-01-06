@@ -33,22 +33,34 @@
 }
 - (void)viewWillDisappear:(BOOL)animated
 {
-	NSArray *viewControllers = self.navigationController.viewControllers;
-	if ([viewControllers indexOfObject:self] == NSNotFound)
-    {
+    
+    NSArray *viewControllers = self.navigationController.viewControllers;
+	if ([viewControllers indexOfObject:self] == NSNotFound) {
 		// View is disappearing because it was popped from the stack
 		NSLog(@"View controller was popped --- We are closing down..task_cancelled = YES");
         
-		//task_cancelled = YES;
+	
         [[NSNotificationCenter defaultCenter] removeObserver:self];
 	}
+    else
+    {
+        
+    }
     
+    
+    
+    
+	   
     task_cancelled = YES;
     
 }
 
+
+
 - (void)viewWillAppear:(BOOL)animated
 {
+    
+   
     [self.ib_lableStage setText:@"Scanning for BLE..."];
     [self.ib_RefreshBLE setEnabled:NO];
     
@@ -64,7 +76,13 @@
     [BLEManageConnect getInstanceBLE].delegate = self;
     [[BLEManageConnect getInstanceBLE] scan];
     
-    [NSTimer scheduledTimerWithTimeInterval:5.0 target:self selector:@selector(scanCameraBLEDone) userInfo:nil repeats:NO];
+    
+    task_cancelled = NO;
+    [NSTimer scheduledTimerWithTimeInterval:5.0
+                                      target:self
+                                   selector:@selector(scanCameraBLEDone)
+                                   userInfo:nil
+                                    repeats:NO];
 
 
 }
@@ -81,6 +99,8 @@
     
     
     _currentBLEList = [[NSMutableArray alloc] init];
+    
+    
     
 }
 
@@ -115,13 +135,14 @@
     {
         [self.ib_RefreshBLE setEnabled:YES];
         [self.ib_Indicator setHidden:YES];
+        [self.ib_tableListBLE setHidden:NO];
         
          [[BLEManageConnect getInstanceBLE].cm stopScan];
         
         //Update UI
         [self.ib_lableStage setText:@"Select a device to connect"];
         
-        
+        [self.ib_tableListBLE reloadData];
         // Don't Auto connect to BLE
         //
         //        CBPeripheral *peripheralSelected =  [_currentBLEList objectAtIndex:0];
@@ -134,11 +155,12 @@
     {
         [self.ib_RefreshBLE setEnabled:YES];
         [self.ib_Indicator setHidden:YES];
+                [self.ib_tableListBLE setHidden:NO]; 
         
         [[BLEManageConnect getInstanceBLE].cm stopScan];
         
         [self.ib_lableStage setText:@"Select a device to connect."];
-        
+        [self.ib_tableListBLE reloadData];
         
         
     }
@@ -339,32 +361,13 @@
     [NSTimer scheduledTimerWithTimeInterval:5.0 target:self selector:@selector(scanCameraBLEDone) userInfo:nil repeats:NO];
 }
 
--(void) setupFailedFWCheck
-{
-    NSLog(@"setupFailedFWCheck has failed ");
-    //Go back to the beginning
-    [UIApplication sharedApplication].idleTimerDisabled=  NO;
-    [self.navigationController popToRootViewControllerAnimated:NO];
-}
-
-
-
-- (void) checkConnectionToCamera:(NSTimer *) expired
-{
-    
-}
 
 #pragma mark - BLEManageConnectDelegate
 
 -(void) bleDisconnected
 {
-    NSLog(@"BLE device is DISCONNECTED - ABORT EVERYTHING ");
+    NSLog(@"BLE device is DISCONNECTED - Reconnect  ");
     
-    if ([_timeOutWaitingConnectBLE isValid])
-    {
-        [_timeOutWaitingConnectBLE invalidate];
-        
-    }
     
 #if 0
     NSString * msg =  @"Camera (ble) is disconnected abruptly, please retry adding camera again";
@@ -393,8 +396,14 @@
     // [self dismissIndicator];
     
     
+    NSDate * date;
+    date = [NSDate dateWithTimeInterval:2.0 sinceDate:[NSDate date]];
+    [[NSRunLoop currentRunLoop] runUntilDate:date];
     
     
+    [[BLEManageConnect getInstanceBLE] reScanForPeripheral:[UARTPeripheral uartServiceUUID]];
+
+
     
 #endif
     
@@ -481,8 +490,8 @@
         step04ViewController.cameraMac = self.cameraMac;
         step04ViewController.cameraName = self.cameraName;
         
-        /* pop this vc first, i don't want to go back to this, go back to the first screen */
-        [self.navigationController popViewControllerAnimated:NO];
+       
+        
         NSLog(@"Load step 41");
         [self.navigationController pushViewController:step04ViewController animated:NO];
         
@@ -561,7 +570,7 @@
 
 - (void)sendCommandGetVersion
 {
-    if ([BLEManageConnect getInstanceBLE].isOnBLE == NO)
+    if ([BLEManageConnect getInstanceBLE].state != CONNECTED)
         return;
     
     NSLog(@"Now, send command get version");
@@ -582,16 +591,10 @@
 - (BOOL)sendCommandGetMacAddress:(NSTimer *)info
 {
     NSLog(@"now, Send command get mac address");
-    if ([BLEManageConnect getInstanceBLE].isOnBLE == NO)
+    if ([BLEManageConnect getInstanceBLE].state != CONNECTED)
     {
-        NSLog(@"moveToNextStep:  BLE disconnected - calling rescan after 2sec ");
+        NSLog(@"sendCommandGetMacAddress:  BLE disconnected - ");
         
-        NSDate * date;
-        date = [NSDate dateWithTimeInterval:2.0 sinceDate:[NSDate date]];
-        [[NSRunLoop currentRunLoop] runUntilDate:date];
-        
-        
-        [[BLEManageConnect getInstanceBLE] reScanForPeripheral:[UARTPeripheral uartServiceUUID]];
         
         return FALSE;
     }
@@ -629,7 +632,7 @@
 - (void) didReceiveBLEList:(NSMutableArray *)bleLists
 {
     _currentBLEList = bleLists;
-    [self.ib_tableListBLE reloadData];
+    
 }
 
 
@@ -681,6 +684,9 @@
     [self.ib_Indicator setHidden:NO];
     
     [self.ib_tableListBLE setExclusiveTouch:YES];
+    
+    [self.ib_tableListBLE setHidden:YES];
+
     
     
     
