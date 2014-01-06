@@ -143,6 +143,15 @@
     // Dispose of any resources that can be recreated.
 }
 
+- (void)dealloc
+{
+    [_events release];
+    [_clipsInEachEvent release];
+    [_playlists release];
+    _timerRefreshData = nil;
+    [super dealloc];
+}
+
 #pragma mark - Encoding URL string
 
 -(NSString *)urlEncodeUsingEncoding:(NSStringEncoding)encoding forString: (NSString *)aString {
@@ -155,12 +164,33 @@
 
 #pragma mark - Method
 
-- (void)refreshEvents
+- (void)createRefreshTimer
+{
+    if (self.timerRefreshData != nil)
+    {
+        [self.timerRefreshData invalidate];
+        self.timerRefreshData = nil;
+    }
+    
+    self.timerRefreshData = [NSTimer scheduledTimerWithTimeInterval:60
+                                                             target:self
+                                                           selector:@selector(refreshEvents:)
+                                                           userInfo:nil
+                                                            repeats:NO];
+}
+
+- (void)refreshEvents: (NSTimer *)timer
 {
     NSLog(@"Timeline - refreshEvents - isLoading: %d", _isLoading);
     
     if (_isLoading == FALSE)
     {
+        if (self.timerRefreshData != nil)
+        {
+            [self.timerRefreshData invalidate];
+            self.timerRefreshData = nil;
+        }
+        
         self.isLoading = TRUE;
         self.isEventAlready = FALSE;
         self.events = nil;
@@ -378,17 +408,7 @@
     self.isLoading = FALSE;
     [self.tableView reloadData];
     
-    if (self.timerRefreshData != nil)
-    {
-        [self.timerRefreshData invalidate];
-        self.timerRefreshData = nil;
-    }
-    
-    self.timerRefreshData = [NSTimer scheduledTimerWithTimeInterval:60
-                                                             target:self
-                                                           selector:@selector(refreshEvents)
-                                                           userInfo:nil
-                                                            repeats:NO];
+    [self performSelectorOnMainThread:@selector(createRefreshTimer) withObject:nil waitUntilDone:NO];
 }
 
 - (UIImage *)imageWithUrlString:(NSString *)urlString scaledToSize:(CGSize)newSize
@@ -420,7 +440,7 @@
 {
     if (scrollView.contentOffset.y < -64.0f)
     {
-        [self refreshEvents];
+        [self refreshEvents:nil];
     }
 }
 
@@ -638,6 +658,7 @@
         [dateFormater setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss'Z'"];
         NSDate *eventDate = [dateFormater dateFromString:eventInfo.time_stamp]; //2013-12-31 07:38:35 +0000
         dateFormater.dateFormat = @"HH:mm";
+        [dateFormater setTimeZone:[NSTimeZone timeZoneForSecondsFromGMT:0]];
         
         cell.eventTimeLabel.text = [dateFormater stringFromDate:eventDate];
         [dateFormater release];
