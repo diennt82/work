@@ -2917,7 +2917,7 @@
             
 		case DIRECTION_V_DN	:
             
-			duty_cycle = IRABOT_DUTYCYCLE_MAX +0.1;
+			duty_cycle = IRABOT_DUTYCYCLE_MAX;// +0.1;
 			dir_str= MOVE_DOWN;
 			dir_str = [NSString stringWithFormat:@"%@%.1f", dir_str, duty_cycle];
             

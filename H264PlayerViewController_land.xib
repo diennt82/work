@@ -153,7 +153,7 @@
                     <inset key="insetFor6xAndEarlier" minX="0.0" minY="30" maxX="0.0" maxY="-30"/>
                 </view>
                 <imageView multipleTouchEnabled="YES" tag="999" contentMode="scaleToFill" fixedFrame="YES" image="camera_action_pan_bg.png" translatesAutoresizingMaskIntoConstraints="NO" id="ENJ-kB-zlZ">
-                    <rect key="frame" x="379" y="204" width="95" height="95"/>
+                    <rect key="frame" x="330" y="150" width="140" height="140"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <inset key="insetFor6xAndEarlier" minX="0.0" minY="30" maxX="0.0" maxY="-30"/>
                 </imageView>

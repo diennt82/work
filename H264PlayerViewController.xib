@@ -71,7 +71,7 @@
                     </subviews>
                 </scrollView>
                 <imageView multipleTouchEnabled="YES" tag="999" contentMode="scaleToFill" image="camera_action_pan_bg.png" id="78">
-                    <rect key="frame" x="100" y="360" width="120" height="120"/>
+                    <rect key="frame" x="80" y="300" width="160" height="160"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <inset key="insetFor6xAndEarlier" minX="0.0" minY="30" maxX="0.0" maxY="-30"/>
                 </imageView>
