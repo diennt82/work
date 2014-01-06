@@ -178,7 +178,8 @@
     self.state = CONNECTED;
     
     //TODO: pass the correct service id
-    [self.delegate didConnectToBle:nil];
+    [self.delegate  didConnectToBle:nil];
+   
 }
 
 
@@ -266,12 +267,20 @@
     self.state = IDLE;
     self.isOnBLE = NO;
     
+    [self.delegate bleDisconnected];
+   
+    
     
     if ([self.uartPeripheral.peripheral isEqual:self.myPeripheral])
         
     {
+        
+        
         [self.uartPeripheral didDisconnect];
         [self didDisConnect];
+        
+        
+        
     }
 }
 

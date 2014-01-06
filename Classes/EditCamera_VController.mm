@@ -387,7 +387,7 @@
     [self.statusDialog setHidden:NO];
 
     //after 60s will display for user get list wifi again
-    _timeout = [NSTimer scheduledTimerWithTimeInterval:60 target:self selector:@selector(showDialog:) userInfo:nil repeats:NO];
+    _timeout = [NSTimer scheduledTimerWithTimeInterval:3*60.0 target:self selector:@selector(showDialog:) userInfo:nil repeats:NO];
     _getWifiListTimer = [NSTimer scheduledTimerWithTimeInterval:0.1
                                                          target:self
                                                        selector:@selector(sendCommandGetWifiList:)
@@ -423,9 +423,9 @@
     _waitingResponse = NO;
     _result_received = nil;
     //reset timer
-    [self resetAllTimer];
+//    [self resetAllTimer];
     //and create it again
-    _timeout = [NSTimer scheduledTimerWithTimeInterval:60 target:self selector:@selector(showDialog:) userInfo:nil repeats:NO];
+    _timeout = [NSTimer scheduledTimerWithTimeInterval:6*60.0 target:self selector:@selector(showDialog:) userInfo:nil repeats:NO];
     _getWifiListTimer = [NSTimer scheduledTimerWithTimeInterval:0.1
                                                          target:self
                                                        selector:@selector(sendCommandGetWifiList:)
@@ -456,7 +456,7 @@
 
 - (void) askForRetry
 {
-    
+//    [[BLEManageConnect getInstanceBLE] disconnect];
     NSString * msg = NSLocalizedStringWithDefaultValue(@"Fail_to_communicate_with_camera",nil, [NSBundle mainBundle],
                                                        @"Fail to communicate with camera. Retry?", nil);
     
@@ -586,7 +586,11 @@
 }
 
 
-
+#pragma mark - BLEManageConnectDelegate
+-(void) bleDisconnected
+{
+    
+}
 - (void) didReceiveData:(NSString *)string
 {
     self.result_received = string;
@@ -634,6 +638,7 @@
         
     }
 }
+
 
 
 @end

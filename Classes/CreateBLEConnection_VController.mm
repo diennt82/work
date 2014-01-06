@@ -43,6 +43,7 @@
                                      target:nil
                                      action:nil] autorelease];
     
+       
     _currentBLEList = [[NSMutableArray alloc] init];
     [self.ib_lableStage setText:@"No connect"];
     [self.ib_NextStepAfterReady setEnabled:NO];
@@ -51,6 +52,7 @@
     [BLEManageConnect getInstanceBLE];
     
     [BLEManageConnect getInstanceBLE].delegate = self;
+    
     
    [NSTimer scheduledTimerWithTimeInterval:3.0 target:self selector:@selector(scanCameraBLEDone) userInfo:nil repeats:NO];
 
@@ -129,16 +131,13 @@
             _timerUpdateUI = nil;
         }
         //found 1 BLE, auto connect
-        //        if ([_currentBLEList count] == 1)
-        //        {
         [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(nextStepConnected:) userInfo:nil repeats:NO];
         return;
-        //        }
         //Auto to next step to get mac address and version
         [self.ib_Indicator setHidden:YES];
         [self.ib_lableStage setText:@"Connected"];
         [self.ib_NextStepAfterReady setEnabled:YES];
-        [self.ib_tableListBLE setExclusiveTouch:NO];
+        [self.ib_tableListBLE setExclusiveTouch:YES];
     }
     else
     {
@@ -334,6 +333,70 @@
 }
 
 #pragma mark - BLEManageConnectDelegate
+
+-(void) bleDisconnected
+{
+    NSLog(@"BLE device is DISCONNECTED - ABORT EVERYTHING ");
+
+    if ([_timeOutWaitingConnectBLE isValid])
+    {
+        [_timeOutWaitingConnectBLE invalidate];
+        
+    }
+
+#if 0
+    NSString * msg =  @"Camera (ble) is disconnected abruptly, please retry adding camera again";
+    
+    
+    
+    NSString * ok = NSLocalizedStringWithDefaultValue(@"Ok",nil, [NSBundle mainBundle],
+                                                         @"Ok", nil);
+    
+    
+    
+    UIAlertView *_myAlert = nil ;
+    _myAlert = [[UIAlertView alloc] initWithTitle:@"Error"
+                                          message:msg
+                                         delegate:self
+                                cancelButtonTitle:ok
+                                otherButtonTitles:nil];
+    
+    _myAlert.tag = 1;
+    _myAlert.delegate = self;
+    //dialog.
+#else
+    
+    
+    
+    [self dismissIndicator];
+    
+    
+#endif
+    
+
+    
+    
+}
+
+
+
+- (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex {
+    
+    if (alertView.tag == 1)
+    {
+        switch(buttonIndex) {
+            case 0:
+                
+                [self.navigationController popToRootViewControllerAnimated:NO];
+                
+                break;
+                
+        }
+        
+    }
+    
+}
+
 
 - (void) didConnectToBle:(CBUUID*) service_id
 {
@@ -596,6 +659,10 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    if ([_currentBLEList count] == 1)
+    {
+        return;
+    }
     CBPeripheral *peripheralSelected =  [[BLEManageConnect getInstanceBLE].listBLEs objectAtIndex:indexPath.row];
     [[BLEManageConnect getInstanceBLE] connectToBLEWithPeripheral:peripheralSelected];
     [self.ib_Indicator setHidden:NO];

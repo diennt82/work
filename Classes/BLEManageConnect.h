@@ -31,13 +31,14 @@ typedef enum
 #import "UARTPeripheral.h"
 @protocol BLEManageConnectDelegate
 @required
-
 - (void) didReceiveData:(NSString *) string;
+
 
 @optional
 - (void) didConnectToBle:(CBUUID*) service_id ;
 - (void) onReceiveDataError:(int)error_code forCommand:(NSString *)commandToCamera;
 - (void) didReceiveBLEList:(NSMutableArray *) bleLists;
+- (void) bleDisconnected;
 @end
 
 

@@ -57,16 +57,20 @@
     
     self.navigationItem.title = @"Direction to connect";
     
-    //Setup now but this button will only be seen when go to the NEXT controller
-    self.navigationItem.backBarButtonItem =
-    [[[UIBarButtonItem alloc] initWithTitle:NSLocalizedStringWithDefaultValue(@"Back",nil, [NSBundle mainBundle],
-                                                                              @"Back", nil)
-                                      style:UIBarButtonItemStyleBordered
-                                     target:nil
-                                     action:nil] autorelease];
+//    //Setup now but this button will only be seen when go to the NEXT controller
+//    self.navigationItem.backBarButtonItem =
+//    [[[UIBarButtonItem alloc] initWithTitle:NSLocalizedStringWithDefaultValue(@"Back",nil, [NSBundle mainBundle],
+//                                                                              @"Back", nil)
+//                                      style:UIBarButtonItemStyleBordered
+//                                     target:nil
+//                                     action:nil] autorelease];
     
     //Hide back button -- can't go back now..
     self.navigationItem.hidesBackButton = TRUE;
+
+    
+    
+    
 }
 
 - (void)viewDidUnload

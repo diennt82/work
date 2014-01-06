@@ -670,6 +670,12 @@
     
 }
 
+#pragma mark - BLEManageConnectDelegate
+-(void) bleDisconnected
+{
+    
+}
+
 - (void)didReceiveData:(NSString *)string
 {
     NSLog(@"Data Receiving is %@", string);
