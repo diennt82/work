@@ -148,6 +148,10 @@
     [_events release];
     [_clipsInEachEvent release];
     [_playlists release];
+    if (_timerRefreshData != nil)
+    {
+        [_timerRefreshData invalidate];
+    }
     _timerRefreshData = nil;
     [super dealloc];
 }
