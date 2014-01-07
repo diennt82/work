@@ -3551,16 +3551,20 @@
     [self.activityIndicator startAnimating];
     [self.view bringSubviewToFront:_activityIndicator];
     
-    if (self.selectedChannel.profile.minuteSinceLastComm > 5)
+    if (self.selectedChannel.profile.minuteSinceLastComm > 5) // Not available
     {
-        [self.activityIndicator stopAnimating];
-        self.horizMenu.userInteractionEnabled = NO;
+        if (self.selectedChannel.profile.hasUpdateLocalStatus == TRUE)
+        {
+            [self.activityIndicator stopAnimating];
+            self.horizMenu.userInteractionEnabled = NO;
+        }
     }
     
     if (h264Streamer != NULL)
     {
         //trigger re-cal of videosize
-        if (h264Streamer->isPlaying()) // Not available
+        if (h264Streamer->isPlaying() &&
+            _currentMediaStatus == MEDIA_INFO_HAS_FIRST_IMAGE)
         {
             [self.activityIndicator stopAnimating];
         }
@@ -4263,6 +4267,10 @@
     [_ib_processRecordOrTakePicture release];
     [_ib_buttonChangeAction release];
     [_ib_showMenuControlPanel release];
+    
+    [_timelineVC release];
+    [_earlierVC release];
+    
     [super dealloc];
 }
 - (void)viewWillAppear:(BOOL)animated

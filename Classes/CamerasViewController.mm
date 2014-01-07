@@ -345,10 +345,10 @@
         
         CamChannel *ch = (CamChannel *)[_camChannels objectAtIndex:indexPath.row];
         
-        if (ch.profile.hasUpdateLocalStatus == TRUE)
-        {
-            NSLog(@"ch.profile.hasUpdateLocalStatus == TRUE");
-        }
+//        if (ch.profile.hasUpdateLocalStatus == TRUE)
+//        {
+//            NSLog(@"ch.profile.hasUpdateLocalStatus == TRUE");
+//        }
         
         CamProfile *camProfile = ch.profile;
         
