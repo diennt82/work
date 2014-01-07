@@ -82,20 +82,46 @@
 		userInfo:nil
 		repeats:NO];
 
-    //UIInterfaceOrientation interfaceOrientation = [UIApplication sharedApplication].statusBarOrientation;
+    UIInterfaceOrientation interfaceOrientation = [UIApplication sharedApplication].statusBarOrientation;
 //    [self adjustViewsForOrientations:interfaceOrientation];
     
-    //[self start_animation_with_orientation:interfaceOrientation];
+    [self start_animation_with_orientation:interfaceOrientation];
     
-    self.splashScreen.image = [UIImage imageNamed:@"loader0.png"];
+    self.splashScreen.image = [UIImage imageNamed:@"loader_0.png"];
 
-    QBAnimationItem *item1 = [QBAnimationItem itemWithDuration:0.1 delay:0 options:UIViewAnimationOptionCurveLinear|UIViewAnimationOptionAllowUserInteraction animations:^{
-        _splashScreen.transform = CGAffineTransformRotate(_splashScreen.transform, M_PI/4);
-    }];
+//    QBAnimationItem *item1 = [QBAnimationItem itemWithDuration:0.1 delay:0 options:UIViewAnimationOptionCurveLinear|UIViewAnimationOptionAllowUserInteraction animations:^{
+//        _splashScreen.transform = CGAffineTransformRotate(_splashScreen.transform, M_PI/4);
+//    }];
+//    
+//    QBAnimationGroup *group1 = [QBAnimationGroup groupWithItems:@[item1]];
+//    
+//    _sequence = [[QBAnimationSequence alloc] initWithAnimationGroups:@[group1] repeat:YES];
+}
+
+-(void) viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
     
-    QBAnimationGroup *group1 = [QBAnimationGroup groupWithItems:@[item1]];
-    
-    _sequence = [[QBAnimationSequence alloc] initWithAnimationGroups:@[group1] repeat:YES];
+    //    if (_sequence != nil)
+    //    {
+    //        [_sequence start];
+    //    }
+    if (_splashScreen != nil)
+    {
+        [_splashScreen startAnimating];
+    }
+}
+
+- (void)viewDidDisappear:(BOOL)animated
+{
+    //    if (_sequence != nil)
+    //    {
+    //        [_sequence stop];
+    //    }
+    if (_splashScreen != nil)
+    {
+        [_splashScreen stopAnimating];
+    }
 }
 
 -(CGRect) deviceFrameWithOrientation:(UIInterfaceOrientation) orientation
@@ -121,16 +147,17 @@
 {
 
     self.splashScreen.animationImages =[NSArray arrayWithObjects:
-                                        [UIImage imageNamed:@"loader0.png"],
-                                        [UIImage imageNamed:@"loader1.png"],
-                                        [UIImage imageNamed:@"loader2.png"],
-                                        [UIImage imageNamed:@"loader3.png"],
-                                        [UIImage imageNamed:@"loader4.png"],
+                                        [UIImage imageNamed:@"loader_0.png"],
+                                        [UIImage imageNamed:@"loader_1.png"],
+                                        [UIImage imageNamed:@"loader_2.png"],
+                                        [UIImage imageNamed:@"loader_3.png"],
+                                        [UIImage imageNamed:@"loader_4.png"],
+                                        [UIImage imageNamed:@"loader_5.png"],
                                         nil];
     self.splashScreen.animationDuration = 1.5;
     self.splashScreen.animationRepeatCount = 0;
     
-    [_splashScreen startAnimating];
+//    [_splashScreen startAnimating];
 }
 
 
@@ -182,72 +209,26 @@
         [userDefaults synchronize];
     }
     
-        self.app_stage = APP_STAGE_LOGGING_IN;
-        
-        MBP_LoginOrRegistration * loginOrReg;
-        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
-        {
-            loginOrReg = [[MBP_LoginOrRegistration alloc] initWithNibName:@"MBP_LoginOrRegistration_ipad"
-                                                        bundle:nil
-                                              withConnDelegate:self];
-        }
-        else
-        {
-            loginOrReg = [[MBP_LoginOrRegistration alloc]
-                          initWithNibName:@"MBP_LoginOrRegistration"
-                                                        bundle:nil
-                                              withConnDelegate:self];
-        }
-        
-        //Use navigation controller
-        [loginOrReg presentModallyOn:self];
-//    }
-//    else
-//    {
-//        //Showing first page here --- NEED to adapt to proper orientation
-//        self.app_stage = APP_STAGE_INIT;
-//        
-//        MBP_FirstPage * firstPage = nil;
-//        UIInterfaceOrientation interfaceOrientation = [UIApplication sharedApplication].statusBarOrientation;
-//        
-//        if (interfaceOrientation == UIInterfaceOrientationLandscapeLeft ||
-//            interfaceOrientation == UIInterfaceOrientationLandscapeRight)
-//        {
-//            if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
-//            {
-//                firstPage = [[MBP_FirstPage alloc] initWithNibName:@"MBP_FirstPage_ipad"
-//                                                            bundle:nil
-//                                                  withConnDelegate:self];
-//            }
-//            else
-//            {
-//                firstPage = [[MBP_FirstPage alloc] initWithNibName:@"MBP_FirstPage_land"
-//                                                            bundle:nil
-//                                                  withConnDelegate:self];
-//            }
-//        }
-//        else if (interfaceOrientation == UIInterfaceOrientationPortrait ||
-//                 interfaceOrientation == UIInterfaceOrientationPortraitUpsideDown)
-//        {
-//            if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
-//            {
-//                firstPage = [[MBP_FirstPage alloc] initWithNibName:@"MBP_FirstPage_ipad"
-//                                                            bundle:nil
-//                                                  withConnDelegate:self];
-//            }
-//            else
-//            {
-//                firstPage = [[MBP_FirstPage alloc] initWithNibName:@"MBP_FirstPage"
-//                                                            bundle:nil
-//                                                  withConnDelegate:self];
-//            }
-//        }
-//
-//        
-//        
-//        //[self presentModalViewController:firstPage animated:NO];
-//        [self presentViewController:firstPage animated:NO completion:^{}];
-//    }
+    self.app_stage = APP_STAGE_LOGGING_IN;
+    
+    MBP_LoginOrRegistration * loginOrReg;
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+    {
+        loginOrReg = [[MBP_LoginOrRegistration alloc] initWithNibName:@"MBP_LoginOrRegistration_ipad"
+                                                               bundle:nil
+                                                     withConnDelegate:self];
+    }
+    else
+    {
+        loginOrReg = [[MBP_LoginOrRegistration alloc]
+                      initWithNibName:@"MBP_LoginOrRegistration"
+                      bundle:nil
+                      withConnDelegate:self];
+    }
+    
+    //Use navigation controller
+    [loginOrReg presentModallyOn:self];
+
 #endif
 
 
@@ -399,28 +380,6 @@
     [bonjourThread release];
     [_sequence release];
 	[super dealloc];
-}
-
--(void) viewWillAppear:(BOOL)animated
-{
-    [super viewWillAppear:animated];
-    
-    //UIInterfaceOrientation interfaceOrientation = [UIApplication sharedApplication].statusBarOrientation;
-    
-    //[self start_animation_with_orientation:interfaceOrientation];
-    
-    if (_sequence != nil)
-    {
-        [_sequence start];
-    }
-}
-
-- (void)viewDidDisappear:(BOOL)animated
-{
-    if (_sequence != nil)
-    {
-        [_sequence stop];
-    }
 }
 
 #pragma mark -
