@@ -41,7 +41,6 @@
     // Do any additional setup after loading the view from its nib.
     
     self.timelineVC = [[TimelineViewController alloc] init];
-    //timelineVC.camChannel = self.camChannel;
     
     //NSLog(@"%@, %@", timelineVC.camChannel, _camChannel);
     
@@ -70,6 +69,7 @@
         
         [_timelineVC loadEvents:_camChannel];
         self.timelineVC.navVC = _nav;
+        self.timelineVC.tableView.contentInset = UIEdgeInsetsMake(64, 0, 44, 0);
     }
 }
 

@@ -3523,8 +3523,9 @@
         
         if (_timelineVC != nil)
         {
-            self.timelineVC.view.frame = CGRectMake(0, imageViewHeight + deltaY + 64, screenWidth, screenHeight - imageViewHeight);
+            self.timelineVC.view.frame = CGRectMake(0, imageViewHeight + deltaY + 64, screenWidth, screenHeight - imageViewHeight - 100);
             self.timelineVC.view.hidden = NO;
+            self.timelineVC.tableView.contentInset = UIEdgeInsetsMake(0, 0, 80, 0);
             [self.view addSubview:_timelineVC.view];
         }
 	}

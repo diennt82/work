@@ -130,6 +130,7 @@
     
     self.stringIntelligentMessage = @"Loading...";
     self.isLoading = TRUE;
+    //self.tableView.scrollIndicatorInsets = UIEdgeInsetsMake(64, 0, 44, 0);
 #endif
 }
 
