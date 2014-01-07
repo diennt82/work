@@ -741,7 +741,7 @@
         {
             [cell.timelineCellButtn setBackgroundImage:[UIImage imageNamed:@"saveday"] forState:UIControlStateNormal];
             [cell.timelineCellButtn setBackgroundImage:[UIImage imageNamed:@"saveday_pressed"] forState:UIControlEventTouchDown];
-            [cell.timelineCellButtn setTitle:@"Say the Day" forState:UIControlStateNormal];
+            [cell.timelineCellButtn setTitle:@"Save the Day" forState:UIControlStateNormal];
         }
         else
         {
