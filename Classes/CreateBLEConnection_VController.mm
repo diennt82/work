@@ -538,7 +538,7 @@
     // FLUSH ---
     [BLEManageConnect getInstanceBLE].delegate = self;
     
-    if ([BLEManageConnect getInstanceBLE].isOnBLE)
+    if ([BLEManageConnect getInstanceBLE].state == CONNECTED)
     {
         
         [[BLEManageConnect getInstanceBLE].uartPeripheral  flush];
