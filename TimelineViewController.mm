@@ -177,7 +177,7 @@
         self.timerRefreshData = nil;
     }
     
-    self.timerRefreshData = [NSTimer scheduledTimerWithTimeInterval:60
+    self.timerRefreshData = [NSTimer scheduledTimerWithTimeInterval:60*10
                                                              target:self
                                                            selector:@selector(refreshEvents:)
                                                            userInfo:nil
@@ -600,8 +600,7 @@
         
         return cell;
     }
-    else if (_events == nil ||
-             _events.count == 0)
+    else if (_events == nil)
     {
         static NSString *CellIdentifier = @"Cell";
         UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
