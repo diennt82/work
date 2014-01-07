@@ -19,6 +19,7 @@
 
 @interface MenuCameraViewController () <UIAlertViewDelegate>
 
+@property (retain, nonatomic) IBOutlet UIView *viewProgress;
 @end
 
 @implementation MenuCameraViewController
@@ -68,6 +69,7 @@
 {
     UIActivityIndicatorView *activityIndicator =
     [[UIActivityIndicatorView alloc] initWithFrame:CGRectMake(0, 0, 20, 20)];
+    activityIndicator.color = [UIColor blackColor];
     UIBarButtonItem * barButton =
     [[UIBarButtonItem alloc] initWithCustomView:activityIndicator];
     
@@ -77,8 +79,12 @@
     [barButton release];
     [activityIndicator startAnimating];
     self.navigationItem.rightBarButtonItem.enabled = NO;
-    self.navigationItem.backBarButtonItem.enabled = NO;
+    self.navigationItem.hidesBackButton = YES;
     self.view.userInteractionEnabled = NO;
+    
+    self.viewProgress.frame = UIScreen.mainScreen.bounds;
+    [self.view addSubview:_viewProgress];
+    [self.view bringSubviewToFront:_viewProgress];
     
     [self  showDialog:ALERT_REMOVE_CAM];
 }
@@ -157,8 +163,10 @@
     }
     else
     {
+        [self.viewProgress removeFromSuperview];
+        
         self.navigationItem.rightBarButtonItem.enabled = YES;
-        self.navigationItem.backBarButtonItem.enabled = YES;
+        self.navigationItem.hidesBackButton = NO;
         self.view.userInteractionEnabled = YES;
         
         self.navigationItem.rightBarButtonItem = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemTrash
@@ -313,4 +321,8 @@
     [_menuCamerasDelegate sendStatus:AFTER_DEL_RELOGIN];
 }
 
+- (void)dealloc {
+    [_viewProgress release];
+    [super dealloc];
+}
 @end
