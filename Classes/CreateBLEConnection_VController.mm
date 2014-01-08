@@ -73,8 +73,8 @@
     [self.ib_tableListBLE reloadData];
 
     
-    [BLEManageConnect getInstanceBLE].delegate = self;
-    [[BLEManageConnect getInstanceBLE] scan];
+    [BLEConnectionManager getInstanceBLE].delegate = self;
+    [[BLEConnectionManager getInstanceBLE] scan];
     
     
     task_cancelled = NO;
@@ -137,7 +137,7 @@
         [self.ib_Indicator setHidden:YES];
         [self.ib_tableListBLE setHidden:NO];
         
-         [[BLEManageConnect getInstanceBLE].cm stopScan];
+         [[BLEConnectionManager getInstanceBLE].cm stopScan];
         
         //Update UI
         [self.ib_lableStage setText:@"Select a device to connect"];
@@ -146,9 +146,9 @@
         // Don't Auto connect to BLE
         //
         //        CBPeripheral *peripheralSelected =  [_currentBLEList objectAtIndex:0];
-        //        [[BLEManageConnect getInstanceBLE].cm stopScan];
+        //        [[BLEConnectionManager getInstanceBLE].cm stopScan];
         //
-        //        [[BLEManageConnect getInstanceBLE] connectToBLEWithPeripheral:peripheralSelected];
+        //        [[BLEConnectionManager getInstanceBLE] connectToBLEWithPeripheral:peripheralSelected];
         
     }
     else //More than 2 camera in  5sec
@@ -157,7 +157,7 @@
         [self.ib_Indicator setHidden:YES];
                 [self.ib_tableListBLE setHidden:NO]; 
         
-        [[BLEManageConnect getInstanceBLE].cm stopScan];
+        [[BLEConnectionManager getInstanceBLE].cm stopScan];
         
         [self.ib_lableStage setText:@"Select a device to connect."];
         [self.ib_tableListBLE reloadData];
@@ -184,7 +184,7 @@
     
     [self.ib_Indicator setHidden:NO];
     
-    if ([BLEManageConnect getInstanceBLE].state == CONNECTED)
+    if ([BLEConnectionManager getInstanceBLE].state == CONNECTED)
     {
         
         /* Start sending commands now */
@@ -194,7 +194,7 @@
     }
     else
     {
-        NSLog(@"updateUIConnection : BLE state is %d, not CONNECTED", [BLEManageConnect getInstanceBLE].state);
+        NSLog(@"updateUIConnection : BLE state is %d, not CONNECTED", [BLEConnectionManager getInstanceBLE].state);
     }
 }
 - (void)viewDidUnload
@@ -354,15 +354,15 @@
     [self.ib_Indicator setHidden:NO];
     
     [self.ib_lableStage setText:@"Scanning for BLE..."];
-    [BLEManageConnect getInstanceBLE].delegate = self;
-    [[BLEManageConnect getInstanceBLE] reScan];
+    [BLEConnectionManager getInstanceBLE].delegate = self;
+    [[BLEConnectionManager getInstanceBLE] reScan];
     
     
     [NSTimer scheduledTimerWithTimeInterval:5.0 target:self selector:@selector(scanCameraBLEDone) userInfo:nil repeats:NO];
 }
 
 
-#pragma mark - BLEManageConnectDelegate
+#pragma mark - BLEConnectionManagerDelegate
 
 -(void) bleDisconnected
 {
@@ -401,7 +401,7 @@
     [[NSRunLoop currentRunLoop] runUntilDate:date];
     
     
-    [[BLEManageConnect getInstanceBLE] reScanForPeripheral:[UARTPeripheral uartServiceUUID]];
+    [[BLEConnectionManager getInstanceBLE] reScanForPeripheral:[UARTPeripheral uartServiceUUID]];
 
 
     
@@ -513,8 +513,8 @@
             if ([macAddress isEqualToString:@"000000000000"])
             {
                 //first get mac address of camera
-                [BLEManageConnect getInstanceBLE].delegate = self;
-                [[BLEManageConnect getInstanceBLE].uartPeripheral writeString:GET_MAC_ADDRESS];
+                [BLEConnectionManager getInstanceBLE].delegate = self;
+                [[BLEConnectionManager getInstanceBLE].uartPeripheral writeString:GET_MAC_ADDRESS];
                 return;
             }
             self.cameraMac = fw_version;
@@ -536,16 +536,16 @@
     [self.ib_lableStage setText:@"Getting info from camera"];
     
     // FLUSH ---
-    [BLEManageConnect getInstanceBLE].delegate = self;
+    [BLEConnectionManager getInstanceBLE].delegate = self;
     
-    if ([BLEManageConnect getInstanceBLE].state == CONNECTED)
+    if ([BLEConnectionManager getInstanceBLE].state == CONNECTED)
     {
         
-        [[BLEManageConnect getInstanceBLE].uartPeripheral  flush];
+        [[BLEConnectionManager getInstanceBLE].uartPeripheral  flush];
         
         NSLog(@" flush done ");
         NSDate * date;
-        while ([BLEManageConnect getInstanceBLE].uartPeripheral.isBusy)
+        while ([BLEConnectionManager getInstanceBLE].uartPeripheral.isBusy)
         {
             NSLog(@"send flush :  wait for result ");
             date = [NSDate dateWithTimeInterval:1.5 sinceDate:[NSDate date]];
@@ -570,16 +570,18 @@
 
 - (void)sendCommandGetVersion
 {
-    if ([BLEManageConnect getInstanceBLE].state != CONNECTED)
+    if ([BLEConnectionManager getInstanceBLE].state != CONNECTED)
+    {
         return;
+    }
     
     NSLog(@"Now, send command get version");
     //first get mac address of camera
-    [BLEManageConnect getInstanceBLE].delegate = self;
-    [[BLEManageConnect getInstanceBLE].uartPeripheral writeString:GET_VERSION];
+    [BLEConnectionManager getInstanceBLE].delegate = self;
+    [[BLEConnectionManager getInstanceBLE].uartPeripheral writeString:GET_VERSION];
     
     NSDate * date;
-    while ([BLEManageConnect getInstanceBLE].uartPeripheral.isBusy)
+    while ([BLEConnectionManager getInstanceBLE].uartPeripheral.isBusy)
     {
         date = [NSDate dateWithTimeInterval:1.5 sinceDate:[NSDate date]];
         
@@ -591,7 +593,7 @@
 - (BOOL)sendCommandGetMacAddress:(NSTimer *)info
 {
     NSLog(@"now, Send command get mac address");
-    if ([BLEManageConnect getInstanceBLE].state != CONNECTED)
+    if ([BLEConnectionManager getInstanceBLE].state != CONNECTED)
     {
         NSLog(@"sendCommandGetMacAddress:  BLE disconnected - ");
         
@@ -601,12 +603,12 @@
     
     
     //first get version of camera
-    [BLEManageConnect getInstanceBLE].delegate = self;
+    [BLEConnectionManager getInstanceBLE].delegate = self;
     
     
-    [[BLEManageConnect getInstanceBLE].uartPeripheral writeString:GET_MAC_ADDRESS];
+    [[BLEConnectionManager getInstanceBLE].uartPeripheral writeString:GET_MAC_ADDRESS];
     NSDate * date;
-    while ([BLEManageConnect getInstanceBLE].uartPeripheral.isBusy)
+    while ([BLEConnectionManager getInstanceBLE].uartPeripheral.isBusy)
     {
         
         NSLog(@"sendCommandGetMacAddress:  wait for result ");
@@ -624,9 +626,9 @@
 
 - (void)clearDataBLEConnection
 {
-    [[BLEManageConnect getInstanceBLE].listBLEs removeAllObjects];
-    [[BLEManageConnect getInstanceBLE].cm stopScan];
-    [BLEManageConnect getInstanceBLE].state = IDLE;
+    [[BLEConnectionManager getInstanceBLE].listBLEs removeAllObjects];
+    [[BLEConnectionManager getInstanceBLE].cm stopScan];
+    [BLEConnectionManager getInstanceBLE].state = IDLE;
 }
 
 - (void) didReceiveBLEList:(NSMutableArray *)bleLists
@@ -666,21 +668,21 @@
     [tableView deselectRowAtIndexPath:indexPath animated:NO];
     
     //stop scanning
-    [[BLEManageConnect getInstanceBLE].cm stopScan];
+    [[BLEConnectionManager getInstanceBLE].cm stopScan];
     
     
     [self.ib_RefreshBLE setEnabled:NO];
 
     
-    if ([BLEManageConnect getInstanceBLE].state == CONNECTING )
+    if ([BLEConnectionManager getInstanceBLE].state == CONNECTING )
     {
         NSLog(@"BLE is connecting... return.");
         return;
     }
     
     
-    CBPeripheral *peripheralSelected =  [[BLEManageConnect getInstanceBLE].listBLEs objectAtIndex:indexPath.row];
-    [[BLEManageConnect getInstanceBLE] connectToBLEWithPeripheral:peripheralSelected];
+    CBPeripheral *peripheralSelected =  [[BLEConnectionManager getInstanceBLE].listBLEs objectAtIndex:indexPath.row];
+    [[BLEConnectionManager getInstanceBLE] connectToBLEWithPeripheral:peripheralSelected];
     [self.ib_Indicator setHidden:NO];
     
     [self.ib_tableListBLE setExclusiveTouch:YES];

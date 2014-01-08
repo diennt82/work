@@ -11,7 +11,7 @@
 #import "EditCamera_VController.h"
 #import "Step_10_ViewController.h"
 //#import "UARTPeripheral.h"
-#import "BLEManageConnect.h"
+#import "BLEConnectionManager.h"
 
 #define OPEN_WIFI_BTN_TAG 1001
 #define ALERT_FWCHECK_FAILED 2
@@ -19,7 +19,7 @@
 
 #define TAG_IMAGE_ANIMATION 599
 
-@interface CreateBLEConnection_VController : UIViewController<BLEManageConnectDelegate, UITableViewDelegate, UITableViewDataSource>
+@interface CreateBLEConnection_VController : UIViewController<BLEConnectionManagerDelegate, UITableViewDelegate, UITableViewDataSource>
 {
     IBOutlet UIView * inProgress;
     

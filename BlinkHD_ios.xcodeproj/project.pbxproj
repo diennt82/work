@@ -379,7 +379,7 @@
 		A1A98E8F180BF5AA00C8EBD3 /* client_main.c in Sources */ = {isa = PBXBuildFile; fileRef = A1A98E8B180BF5AA00C8EBD3 /* client_main.c */; };
 		A1A98E90180BF5AA00C8EBD3 /* StunClient.m in Sources */ = {isa = PBXBuildFile; fileRef = A1A98E8E180BF5AA00C8EBD3 /* StunClient.m */; };
 		A1ABF1A2187537170014FCB4 /* UARTPeripheral.m in Sources */ = {isa = PBXBuildFile; fileRef = A1ABF19F187537170014FCB4 /* UARTPeripheral.m */; };
-		A1ABF1A3187537170014FCB4 /* BLEManageConnect.m in Sources */ = {isa = PBXBuildFile; fileRef = A1ABF1A1187537170014FCB4 /* BLEManageConnect.m */; };
+		A1ABF1A3187537170014FCB4 /* BLEConnectionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = A1ABF1A1187537170014FCB4 /* BLEConnectionManager.m */; };
 		A1ABF1A8187537AD0014FCB4 /* NetworkInfoToCamera_VController_iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = A1ABF1A4187537AD0014FCB4 /* NetworkInfoToCamera_VController_iPad.xib */; };
 		A1ABF1A9187537AD0014FCB4 /* NetworkInfoToCamera_VController.mm in Sources */ = {isa = PBXBuildFile; fileRef = A1ABF1A6187537AD0014FCB4 /* NetworkInfoToCamera_VController.mm */; };
 		A1ABF1AA187537AD0014FCB4 /* NetworkInfoToCamera_VController.xib in Resources */ = {isa = PBXBuildFile; fileRef = A1ABF1A7187537AD0014FCB4 /* NetworkInfoToCamera_VController.xib */; };
@@ -953,8 +953,8 @@
 		A1A98E8E180BF5AA00C8EBD3 /* StunClient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StunClient.m; sourceTree = "<group>"; };
 		A1ABF19E187537170014FCB4 /* UARTPeripheral.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UARTPeripheral.h; sourceTree = "<group>"; };
 		A1ABF19F187537170014FCB4 /* UARTPeripheral.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UARTPeripheral.m; sourceTree = "<group>"; };
-		A1ABF1A0187537170014FCB4 /* BLEManageConnect.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BLEManageConnect.h; sourceTree = "<group>"; };
-		A1ABF1A1187537170014FCB4 /* BLEManageConnect.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BLEManageConnect.m; sourceTree = "<group>"; };
+		A1ABF1A0187537170014FCB4 /* BLEConnectionManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BLEConnectionManager.h; sourceTree = "<group>"; };
+		A1ABF1A1187537170014FCB4 /* BLEConnectionManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BLEConnectionManager.m; sourceTree = "<group>"; };
 		A1ABF1A4187537AD0014FCB4 /* NetworkInfoToCamera_VController_iPad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = NetworkInfoToCamera_VController_iPad.xib; sourceTree = "<group>"; };
 		A1ABF1A5187537AD0014FCB4 /* NetworkInfoToCamera_VController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NetworkInfoToCamera_VController.h; sourceTree = "<group>"; };
 		A1ABF1A6187537AD0014FCB4 /* NetworkInfoToCamera_VController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = NetworkInfoToCamera_VController.mm; sourceTree = "<group>"; };
@@ -2748,8 +2748,8 @@
 			children = (
 				A1ABF19E187537170014FCB4 /* UARTPeripheral.h */,
 				A1ABF19F187537170014FCB4 /* UARTPeripheral.m */,
-				A1ABF1A0187537170014FCB4 /* BLEManageConnect.h */,
-				A1ABF1A1187537170014FCB4 /* BLEManageConnect.m */,
+				A1ABF1A0187537170014FCB4 /* BLEConnectionManager.h */,
+				A1ABF1A1187537170014FCB4 /* BLEConnectionManager.m */,
 			);
 			name = Connection;
 			sourceTree = "<group>";
@@ -3232,7 +3232,7 @@
 				38A478F715C115C3008682FE /* Step_06_ViewController.mm in Sources */,
 				A1ABF1B5187538050014FCB4 /* GuideAddCamera_ViewController.mm in Sources */,
 				38A478FA15C12914008682FE /* Step_08_ViewController.mm in Sources */,
-				A1ABF1A3187537170014FCB4 /* BLEManageConnect.m in Sources */,
+				A1ABF1A3187537170014FCB4 /* BLEConnectionManager.m in Sources */,
 				38A478FD15C12CF4008682FE /* Step_09_ViewController.mm in Sources */,
 				8B9CCBA3183EF8B2007C0F65 /* MelodyViewController.m in Sources */,
 				8B9C7E0D185F260A0038B3A8 /* MenuViewController.mm in Sources */,
@@ -4459,7 +4459,7 @@
 				);
 				OTHER_LDFLAGS = "-lz";
 				PRODUCT_NAME = "Camera HD";
-				PROVISIONING_PROFILE = "0B748AE8-01E3-4803-95D1-297DD2CB9C7D";
+				PROVISIONING_PROFILE = "00E9AF8F-AB93-4D92-83D3-A506E3831FDC";
 				SDKROOT = iphoneos7.0;
 				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/../ios-frameworks/pjsip/arm/include/ $(SRCROOT)/../ios-frameworks/pjsip/arm/include/pj/ $(SRCROOT)/../ios-frameworks/pjsip/arm/include/pjnath/";
 				VALID_ARCHS = "armv6 armv7";
@@ -4508,7 +4508,7 @@
 				);
 				OTHER_LDFLAGS = "-lz";
 				PRODUCT_NAME = "Camera HD";
-				PROVISIONING_PROFILE = "0B748AE8-01E3-4803-95D1-297DD2CB9C7D";
+				PROVISIONING_PROFILE = "00E9AF8F-AB93-4D92-83D3-A506E3831FDC";
 				SDKROOT = iphoneos7.0;
 				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/../ios-frameworks/pjsip/arm/include/ $(SRCROOT)/../ios-frameworks/pjsip/arm/include/pj/ $(SRCROOT)/../ios-frameworks/pjsip/arm/include/pjnath/";
 				VALIDATE_PRODUCT = YES;
@@ -4580,7 +4580,7 @@
 				);
 				OTHER_LDFLAGS = "-lz";
 				PRODUCT_NAME = "Camera HD";
-				PROVISIONING_PROFILE = "0B748AE8-01E3-4803-95D1-297DD2CB9C7D";
+				PROVISIONING_PROFILE = "00E9AF8F-AB93-4D92-83D3-A506E3831FDC";
 				RAMEWORK_SEARCH_PATHS = "$(inherited) \"$(SRCROOT)\"";
 				SDKROOT = iphoneos7.0;
 				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/../ios-frameworks/pjsip/arm/include/ $(SRCROOT)/../ios-frameworks/pjsip/arm/include/pj/ $(SRCROOT)/../ios-frameworks/pjsip/arm/include/pjnath/";

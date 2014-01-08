@@ -7,7 +7,10 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="DisplayWifiList_VController">
             <connections>
+                <outlet property="ib_Indicator" destination="pgG-2U-fTb" id="LdU-c2-DN1"/>
+                <outlet property="ib_LabelState" destination="06w-GA-hOp" id="G4u-3L-gzs"/>
                 <outlet property="mTableView" destination="13" id="25"/>
+                <outlet property="refreshWifiList" destination="VQs-F5-tYc" id="wL9-1b-Xbj"/>
                 <outlet property="view" destination="3" id="16"/>
             </connections>
         </placeholder>
@@ -17,7 +20,7 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <tableView clipsSubviews="YES" tag="11" contentMode="scaleToFill" bounces="NO" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="13">
-                    <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
+                    <rect key="frame" x="0.0" y="36" width="320" height="444"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                     <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                     <connections>
@@ -25,10 +28,42 @@
                         <outlet property="delegate" destination="-1" id="18"/>
                     </connections>
                 </tableView>
+                <view hidden="YES" clipsSubviews="YES" contentMode="scaleToFill" id="pgG-2U-fTb" userLabel="Status Dialog">
+                    <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
+                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                    <subviews>
+                        <activityIndicatorView opaque="NO" contentMode="scaleToFill" animating="YES" style="whiteLarge" id="2M1-iz-G3a">
+                            <rect key="frame" x="146" y="278" width="37" height="37"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
+                            <color key="color" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                        </activityIndicatorView>
+                        <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Please wait to verify network" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" minimumFontSize="10" id="06w-GA-hOp">
+                            <rect key="frame" x="0.0" y="183" width="320" height="48"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="20"/>
+                            <color key="textColor" red="0.0" green="0.0" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                            <nil key="highlightedColor"/>
+                        </label>
+                    </subviews>
+                    <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                </view>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="VQs-F5-tYc">
+                    <rect key="frame" x="18" y="65" width="58" height="58"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <state key="normal" backgroundImage="refresh.png">
+                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                    </state>
+                    <connections>
+                        <action selector="performRefreshWifiList:" destination="-1" eventType="touchUpInside" id="hBe-aM-ZoY"/>
+                    </connections>
+                </button>
             </subviews>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
             <simulatedStatusBarMetrics key="simulatedStatusBarMetrics"/>
             <inset key="insetFor6xAndEarlier" minX="0.0" minY="-64" maxX="0.0" maxY="64"/>
         </view>
     </objects>
+    <resources>
+        <image name="refresh.png" width="128" height="128"/>
+    </resources>
 </document>

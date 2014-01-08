@@ -14,11 +14,11 @@
 #import "WifiListParser.h"
 #import "DisplayWifiList_VController.h"
 #import "UARTPeripheral.h"
-#import "BLEManageConnect.h"
+#import "BLEConnectionManager.h"
 
 #define CONF_CAM_BTN_TAG 1002
 
-@interface EditCamera_VController : UIViewController<UITextViewDelegate, BLEManageConnectDelegate>
+@interface EditCamera_VController : UIViewController<UITextViewDelegate>
 {
     IBOutlet UIView * camName;
     
@@ -28,25 +28,9 @@
 
     UIAlertView *_alertView;
     BOOL _isShowingProcess;
-    NSString *_result_received;
-    NSTimer *_timeout;
-    NSTimer *_getWifiListTimer;
-    BOOL _waitingResponse;
 }
-@property (nonatomic, retain) NSTimer *timeout;
-@property (nonatomic, retain) NSTimer *getWifiListTimer;
-
-//string received from delegate
-@property (nonatomic, retain) NSString *result_received;
 @property (nonatomic, retain) UIAlertView *alertView;
 @property (nonatomic, retain) NSString * cameraMac, * cameraName;
-@property (nonatomic, retain) IBOutlet UIView *statusDialog;
-@property (nonatomic, retain) IBOutlet UILabel *statusLable;
 
 - (IBAction)handleButtonPress:(id)sender;
--(void) queryWifiList;
-
-
-//callback
--(void) setWifiResult:(NSArray *) wifiList;
 @end

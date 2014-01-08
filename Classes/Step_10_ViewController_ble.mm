@@ -705,7 +705,7 @@
 {
     //Disconnect BLE
     NSLog(@"Disconnect BLE ");
-    [[BLEManageConnect getInstanceBLE] disconnect];
+    [[BLEConnectionManager getInstanceBLE] disconnect];
     
     //Load step 12
     NSLog(@"Load step 12");
@@ -734,7 +734,7 @@
 {
     //Disconnect BLE
     NSLog(@"Disconnect BLE ");
-    [[BLEManageConnect getInstanceBLE] disconnect];
+    [[BLEConnectionManager getInstanceBLE] disconnect];
     
  	NSLog(@"Setup has failed - remove cam on server");
 	// send a command to remove camera
