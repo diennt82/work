@@ -97,11 +97,12 @@
     [self adjustViewsForOrientations:interfaceOrientation];
 }
 
-
 - (void)viewWillDisappear:(BOOL)animated
 {
     NSLog(@"viewWillDisappear of DisplayWifiList_VController");
     [self hideIndicator];
+    //remove delegate
+    [BLEConnectionManager getInstanceBLE].delegate = nil;
 }
 
 -(void) filterCameraList

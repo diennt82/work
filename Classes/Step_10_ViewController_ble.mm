@@ -152,6 +152,12 @@
     [self adjustViewsForOrientations:interfaceOrientation];
 }
 
+- (void)viewWillDisappear:(BOOL)animated
+{
+    //remove delegate
+    [BLEConnectionManager getInstanceBLE].delegate = nil;
+}
+
 - (void)startAnimationWithOrientation
 {
     UIImageView *animationView =  (UIImageView *)[cameraAddedView viewWithTag:TAG_IMAGE_VIEW_ANIMATION];

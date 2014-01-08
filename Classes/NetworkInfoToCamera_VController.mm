@@ -56,7 +56,7 @@
                                       style:UIBarButtonItemStyleBordered
                                      target:nil
                                      action:nil] autorelease];
-    
+    self.navigationItem.hidesBackButton = YES;
     
     
     
@@ -117,6 +117,12 @@
     [self setIb_dialogVerifyNetwork:nil];
     [super viewDidUnload];
     // Release any retained subviews of the main view.
+}
+
+- (void)viewWillDisappear:(BOOL)animated
+{
+    //remove delegate
+    [BLEConnectionManager getInstanceBLE].delegate = nil;
 }
 
 -(void) viewWillAppear:(BOOL)animated

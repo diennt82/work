@@ -53,6 +53,9 @@
 	   
     task_cancelled = YES;
     
+    //remove delegate
+    [BLEConnectionManager getInstanceBLE].delegate = nil;
+    
 }
 
 
