@@ -15,16 +15,7 @@
     NSMutableArray * _listOfWifi;
     IBOutlet UITableViewCell * cellView;
     IBOutlet UITableView * mTableView;
-    NSTimer *_timeout;
-    NSTimer *_getWifiListTimer;
-    NSString *_result_received;
-    BOOL _waitingResponse;    
 }
-
-@property (nonatomic, retain) NSTimer *timeout;
-@property (nonatomic, retain) NSTimer *getWifiListTimer;
-//string received from delegate
-@property (nonatomic, retain) NSString *result_received;
 
 @property (nonatomic, retain) NSMutableArray * listOfWifi;
 @property (retain, nonatomic) IBOutlet UIView *ib_Indicator;

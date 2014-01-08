@@ -316,21 +316,21 @@
         NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
         [userDefaults setObject:cameraName_text forKey:@"CameraName"];
         [userDefaults synchronize];
-        
+        // Show screen wifi list
         [self showScreenGetWifiList];
     }
 }
 
 - (void)showScreenGetWifiList
 {
-    NSLog(@"Load step 5");
+    NSLog(@"Load screen display wifi list");
     //Load the next xib
-    DisplayWifiList_VController *step05ViewController = nil;
-    step05ViewController =  [[DisplayWifiList_VController alloc]
+    DisplayWifiList_VController *wifiListVController = nil;
+    wifiListVController =  [[DisplayWifiList_VController alloc]
                              initWithNibName:@"DisplayWifiList_VController" bundle:nil];
-    [self.navigationController pushViewController:step05ViewController animated:NO];
+    [self.navigationController pushViewController:wifiListVController animated:NO];
     
-    [step05ViewController release];
+    [wifiListVController release];
 }
 - (BOOL)textFieldShouldReturn:(UITextField *)textField {
     
