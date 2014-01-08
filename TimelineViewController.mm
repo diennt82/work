@@ -408,6 +408,7 @@
                 df_local.dateFormat = @"yyyy-MM-dd HH:mm:ss";
                 
                 self.stringIntelligentMessage = [NSString stringWithFormat:@"Monitor is offline since %@", [df_local stringFromDate:updateDate]];
+                [df_local release];
             }
         }
         else
@@ -425,7 +426,10 @@
     self.isLoading = FALSE;
     [self.tableView reloadData];
     
-    [self performSelectorOnMainThread:@selector(createRefreshTimer) withObject:nil waitUntilDone:NO];
+    if (responseDict == nil)
+    {
+        [self performSelectorOnMainThread:@selector(createRefreshTimer) withObject:nil waitUntilDone:NO];
+    }
 }
 
 - (UIImage *)imageWithUrlString:(NSString *)urlString scaledToSize:(CGSize)newSize
