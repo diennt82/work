@@ -106,6 +106,7 @@
     {
         [_alertChooseConfig dismissWithClickedButtonIndex:0 animated:NO];
         [_alertChooseConfig release];
+        _alertChooseConfig = nil;
     }
 }
 
@@ -125,6 +126,8 @@
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     if (buttonIndex == 0) {
         //Cancel button pressed
+        [_alertChooseConfig dismissWithClickedButtonIndex:0 animated:NO];
+        _alertChooseConfig = nil;
     }
     else if (buttonIndex == 1) {
         //BLE button pressed
