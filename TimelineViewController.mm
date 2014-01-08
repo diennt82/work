@@ -228,19 +228,27 @@
     
     NSString *mac = [Util strip_colon_fr_mac:camChannel.profile.mac_address];
     
+    /*//////////
+    NSString * yourJSONString = @"2014-01-08T03:29:29Z";
+    NSDateFormatter* dF = [[NSDateFormatter alloc] init];
+    [dF setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss'Z'"];
+    [dF setTimeZone:[NSTimeZone timeZoneForSecondsFromGMT:0]];
+    NSDate * currentDate = [dF dateFromString:yourJSONString];
+    //////////*/
+    
     NSDate* currentDate = [NSDate date];
     
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
     
     // Set the dateFormatter format
-    [dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
-    
-    // Get the date time in NSString
-    NSString *dateInStringFormated = [dateFormatter stringFromDate:currentDate];
-    NSLog(@"%@, %@", dateInStringFormated, mac);
-    
     dateFormatter.dateFormat = @"HH:mm";
     self.stringCurrentDate = [dateFormatter stringFromDate:currentDate];
+    
+    // Get the date time in NSString
+    [dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+    [dateFormatter setTimeZone:[NSTimeZone timeZoneWithName:@"UTC"]];
+    NSString *dateInStringFormated = [dateFormatter stringFromDate:currentDate];
+    NSLog(@"%@, %@", dateInStringFormated, _stringCurrentDate);
     
     [dateFormatter release];
     
@@ -285,22 +293,21 @@
                     eventInfo.value      = [event objectForKey:@"value"];
                     eventInfo.time_stamp = [event objectForKey:@"time_stamp"];
                     
-                    NSDateFormatter *dateFormater = [[NSDateFormatter alloc] init];
-                    
-                    //[dateFormater setDateFormat:@"yyyyMMddHHmmss"];
-                    [dateFormater setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss'Z'"];
-                    NSDate *eventDate = [dateFormater dateFromString:eventInfo.time_stamp]; //2013-12-31 07:38:35 +0000
-                    [dateFormater release];
+                    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+                    [dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss'Z'"];
+                    [dateFormatter setTimeZone:[NSTimeZone timeZoneForSecondsFromGMT:0]];
+                    NSDate *eventDate = [dateFormatter dateFromString:eventInfo.time_stamp]; //2013-12-31 07:38:35 +0000
+                    [dateFormatter release];
                     
                     NSTimeInterval diff = [currentDate timeIntervalSinceDate:eventDate];
                     
                     if (diff / 60 <= 20)
                     {
-                        if ([[event objectForKey:@"alert"] isEqualToString:@"4"])
+                        if ([[[event objectForKey:@"alert"] stringValue] isEqualToString:@"4"])
                         {
                             numberOfMovement++;
                         }
-                        else if ([[event objectForKey:@"alert"] isEqualToString:@"1"])
+                        else if ([[[event objectForKey:@"alert"] stringValue] isEqualToString:@"1"])
                         {
                             numberOfVOX++;
                         }
@@ -387,16 +394,20 @@
         
             NSLog(@"Number of event: %d", events.count);
             
-            if (self.camChannel.profile.minuteSinceLastComm > 5)
+            if (self.camChannel.profile.isInLocal == FALSE &&
+                self.camChannel.profile.minuteSinceLastComm > 5)
             {
                 NSDateFormatter *dateFormater = [[NSDateFormatter alloc] init];
-                
-                //[dateFormater setDateFormat:@"yyyyMMddHHmmss"];
                 [dateFormater setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss'Z'"];
+                [dateFormater setTimeZone:[NSTimeZone timeZoneForSecondsFromGMT:0]];
                 NSDate *updateDate = [dateFormater dateFromString:self.camChannel.profile.last_comm]; //2013-12-31 07:38:35 +0000
                 [dateFormater release];
                 
-                self.stringIntelligentMessage = [NSString stringWithFormat:@"Monitor is offline since %@", updateDate];
+                NSDateFormatter* df_local = [[NSDateFormatter alloc] init];
+                [df_local setTimeZone:[NSTimeZone localTimeZone]];
+                df_local.dateFormat = @"yyyy-MM-dd HH:mm:ss";
+                
+                self.stringIntelligentMessage = [NSString stringWithFormat:@"Monitor is offline since %@", [df_local stringFromDate:updateDate]];
             }
         }
         else
@@ -661,13 +672,19 @@
         
         NSDateFormatter *dateFormater = [[NSDateFormatter alloc] init];
         [dateFormater setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss'Z'"];
-        NSDate *eventDate = [dateFormater dateFromString:eventInfo.time_stamp]; //2013-12-31 07:38:35 +0000
-        dateFormater.dateFormat = @"HH:mm";
         [dateFormater setTimeZone:[NSTimeZone timeZoneForSecondsFromGMT:0]];
-        
-        cell.eventTimeLabel.text = [dateFormater stringFromDate:eventDate];
+        NSDate *eventDate = [dateFormater dateFromString:eventInfo.time_stamp]; //2013-12-31 07:38:35 +0000
         [dateFormater release];
-        //NSLog(@"%@", [dFormater stringFromDate:date]);
+        
+        NSDateFormatter* df_local = [[NSDateFormatter alloc] init];
+        [df_local setTimeZone:[NSTimeZone localTimeZone]];
+        df_local.dateFormat = @"HH:mm";
+        
+        cell.eventTimeLabel.text = [df_local stringFromDate:eventDate];
+        [df_local release];
+        
+        //NSLog(@"%@, %@", [dateFormater stringFromDate:eventDate], [NSTimeZone localTimeZone]);
+        
         
         cell.snapshotImage.image = [UIImage imageNamed:@"no_img_available.jpeg"];
         
