@@ -3551,7 +3551,8 @@
     [self.activityIndicator startAnimating];
     [self.view bringSubviewToFront:_activityIndicator];
     
-    if (self.selectedChannel.profile.minuteSinceLastComm > 5) // Not available
+    if (self.selectedChannel.profile.isInLocal == FALSE &&
+        self.selectedChannel.profile.minuteSinceLastComm > 5) // Not available
     {
         if (self.selectedChannel.profile.hasUpdateLocalStatus == TRUE)
         {
