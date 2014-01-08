@@ -514,7 +514,7 @@
             {
                 //first get mac address of camera
                 [BLEConnectionManager getInstanceBLE].delegate = self;
-                [[BLEConnectionManager getInstanceBLE].uartPeripheral writeString:GET_MAC_ADDRESS];
+                [[BLEConnectionManager getInstanceBLE].uartPeripheral writeString:GET_MAC_ADDRESS withTimeOut:SHORT_TIME_OUT_SEND_COMMAND];
                 return;
             }
             self.cameraMac = fw_version;
@@ -578,7 +578,7 @@
     NSLog(@"Now, send command get version");
     //first get mac address of camera
     [BLEConnectionManager getInstanceBLE].delegate = self;
-    [[BLEConnectionManager getInstanceBLE].uartPeripheral writeString:GET_VERSION];
+    [[BLEConnectionManager getInstanceBLE].uartPeripheral writeString:GET_VERSION withTimeOut:SHORT_TIME_OUT_SEND_COMMAND];
     
     NSDate * date;
     while ([BLEConnectionManager getInstanceBLE].uartPeripheral.isBusy)
@@ -606,7 +606,7 @@
     [BLEConnectionManager getInstanceBLE].delegate = self;
     
     
-    [[BLEConnectionManager getInstanceBLE].uartPeripheral writeString:GET_MAC_ADDRESS];
+    [[BLEConnectionManager getInstanceBLE].uartPeripheral writeString:GET_MAC_ADDRESS withTimeOut:SHORT_TIME_OUT_SEND_COMMAND];
     NSDate * date;
     while ([BLEConnectionManager getInstanceBLE].uartPeripheral.isBusy)
     {

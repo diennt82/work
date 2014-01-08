@@ -30,7 +30,8 @@ typedef enum response_ {
     
     READ_SUCCESS = 100,
     READ_ERROR_ZERO_LEN = 101,
-    READ_ON_GOING = 102
+    READ_ON_GOING = 102,
+    READ_TIME_OUT = 103
     
 } ble_response_t;
 
@@ -42,6 +43,7 @@ typedef enum response_ {
     NSString * commandToCamera;
     ble_response_t read_error;
     int retry_count;
+    NSTimer *_timeOutCommand;
     
     
 }
@@ -54,7 +56,7 @@ typedef enum response_ {
 - (UARTPeripheral *) initWithPeripheral:(CBPeripheral*)peripheral delegate:(id<UARTPeripheralDelegate>) delegate;
 
 - (ble_response_t) writeString:(NSString *) string;
-
+- (ble_response_t) writeString:(NSString *) string withTimeOut:(NSTimeInterval) time;
 - (ble_response_t) flush;
 - (void) didConnect;
 - (void) didDisconnect;

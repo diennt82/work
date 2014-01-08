@@ -51,6 +51,7 @@
                                      target:nil
                                      action:nil] autorelease];
     
+    self.navigationItem.hidesBackButton=YES;
     //
     [BLEConnectionManager getInstanceBLE].delegate = self;
     _listOfWifi = [[NSMutableArray alloc] init];
@@ -89,6 +90,7 @@
 
 -(void) viewWillAppear:(BOOL)animated
 {
+    self.navigationItem.hidesBackButton=YES;
     //delay .1s to display new screen
     [NSTimer scheduledTimerWithTimeInterval:0.1 target:self selector:@selector(queryWifiList) userInfo:nil repeats:NO];
     UIInterfaceOrientation interfaceOrientation = [UIApplication sharedApplication].statusBarOrientation;
@@ -338,6 +340,9 @@
 }
 
 - (IBAction)performRefreshWifiList:(id)sender {
+    
+    //hide button back of navigation controller
+    self.navigationItem.hidesBackButton = YES;
     //disable button refresh
     [self.refreshWifiList setEnabled:NO];
     
@@ -358,7 +363,8 @@
     /**
      * handle timeout: catch from uart and display time out at delegate returned.
      */
-    [self sendCommandGetWifiList];
+    //deday send command to camera BLE 1s.
+    [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(sendCommandGetWifiList) userInfo:nil repeats:NO];
 }
 
 - (void)sendCommandGetWifiList
@@ -372,7 +378,7 @@
     //retry sending get wifi
     NSLog(@"Send command get routers list, now!!!");
     [BLEConnectionManager getInstanceBLE].delegate = self;
-    [[BLEConnectionManager getInstanceBLE].uartPeripheral writeString:GET_ROUTER_LIST];
+    [[BLEConnectionManager getInstanceBLE].uartPeripheral writeString:GET_ROUTER_LIST withTimeOut:LONG_TIME_OUT_SEND_COMMAND];
     NSDate * date;
     while ([BLEConnectionManager getInstanceBLE].uartPeripheral.isBusy)
     {
@@ -473,9 +479,8 @@
     }
 }
 
--(void) bleDisconnected
+- (void)reconnectBLE
 {
-    NSLog(@"BLE device is DISCONNECTED - Reconnect after 2s ");
     NSDate * date;
     date = [NSDate dateWithTimeInterval:2.0 sinceDate:[NSDate date]];
     [[NSRunLoop currentRunLoop] runUntilDate:date];
@@ -483,6 +488,12 @@
     //[NSTimer scheduledTimerWithTimeInterval:TIME_OUT_RECONNECT_BLE target:self selector:@selector(dialogFailConnection:) userInfo:nil repeats:NO];
     [BLEConnectionManager getInstanceBLE].delegate = self;
     [[BLEConnectionManager getInstanceBLE] reScanForPeripheral:[UARTPeripheral uartServiceUUID]];
+}
+
+-(void) bleDisconnected
+{
+    NSLog(@"BLE device is DISCONNECTED - Reconnect after 2s ");
+    [self reconnectBLE];
 }
 
 - (void) didConnectToBle:(CBUUID*) service_id
@@ -498,6 +509,8 @@
 }
 -(void) setWifiResult:(NSArray *) wifiList
 {
+    //show back button
+    self.navigationItem.hidesBackButton = NO;
     //enable button refresh
     [self.refreshWifiList setEnabled:YES];
     //hide indicarot

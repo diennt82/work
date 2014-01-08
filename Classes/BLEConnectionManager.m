@@ -57,17 +57,6 @@
     return self;
 }
 
-
-
-- (void) onReceiveDataError:(int)error_code forCommand:(NSString *)commandToCamera
-{
-    NSLog(@"Error code is %d and command  %@***************************", error_code, commandToCamera);
-    if (self.delegate != nil)
-    {
-        [self.delegate onReceiveDataError:error_code forCommand:commandToCamera];
-    }
-    
-}
 -(void) dealloc
 {
     [_myPeripheral release];
@@ -185,6 +174,24 @@
 - (void) didReceiveRawData:(NSData *)data
 {
     
+}
+
+- (void) onReceiveDataError:(int)error_code forCommand:(NSString *)commandToCamera
+{
+    NSLog(@"Error code is %d and command  %@***************************", error_code, commandToCamera);
+   
+    if (error_code == READ_TIME_OUT)
+    {
+        [self disconnect];
+    }
+    else
+    {
+        
+        if (self.delegate != nil)
+        {
+            [self.delegate onReceiveDataError:error_code forCommand:commandToCamera];
+        }
+    }
 }
 
 -(void) readyToTxRx

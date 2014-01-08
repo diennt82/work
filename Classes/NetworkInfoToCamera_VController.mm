@@ -765,7 +765,7 @@
 {
     NSLog(@"Send RESTART Command, now");
     [BLEConnectionManager getInstanceBLE].delegate = self;
-    [[BLEConnectionManager getInstanceBLE].uartPeripheral writeString:RESTART_HTTP_CMD];
+    [[BLEConnectionManager getInstanceBLE].uartPeripheral writeString:RESTART_HTTP_CMD withTimeOut:SHORT_TIME_OUT_SEND_COMMAND];
     NSDate * date;
     
     
@@ -804,7 +804,7 @@
     //send cmd to Device
     
     [BLEConnectionManager getInstanceBLE].delegate = self;
-    [[BLEConnectionManager getInstanceBLE].uartPeripheral writeString:cmmd];
+    [[BLEConnectionManager getInstanceBLE].uartPeripheral writeString:cmmd withTimeOut:SHORT_TIME_OUT_SEND_COMMAND];
     [sent_conf release];
     NSDate * date;
     while ([BLEConnectionManager getInstanceBLE].uartPeripheral.isBusy)
@@ -827,7 +827,7 @@
     }
     
     [BLEConnectionManager getInstanceBLE].delegate = self;
-    [[BLEConnectionManager getInstanceBLE].uartPeripheral writeString:GET_CODECS_SUPPORT];
+    [[BLEConnectionManager getInstanceBLE].uartPeripheral writeString:GET_CODECS_SUPPORT withTimeOut:SHORT_TIME_OUT_SEND_COMMAND];
     NSDate * date;
     while ([BLEConnectionManager getInstanceBLE].uartPeripheral.isBusy)
     {
