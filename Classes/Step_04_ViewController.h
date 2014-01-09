@@ -22,7 +22,6 @@
     NSString * homeWifiSSID;
     NSString * cameraMac;
 	NSString * cameraName;
-    HttpCommunication *  comm;
 }
 
 @property (retain, nonatomic) IBOutlet UIView *progressView;

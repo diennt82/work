@@ -51,10 +51,9 @@
 - (void)sendCommandRebootCamera
 {
     NSLog(@"Send command reset camera");
-    HttpCommunication *comm = [[HttpCommunication alloc]init];
+//    HttpCommunication *comm = [[HttpCommunication alloc]init];
     NSString * command = RESTART_HTTP_CMD;
-    [comm sendCommandAndBlock:command];
-    [comm release];
+    [[HttpCom instance].comWithDevice sendCommandAndBlock:command];
 }
 - (void)viewDidLoad
 {
@@ -528,15 +527,11 @@
 
 - (void)sendMasterKeyToDevice
 {
-
-    HttpCommunication *comm = [[HttpCommunication alloc]init];
-    comm.device_ip = @"192.168.2.1";
-    
     NSString * set_mkey = SET_MASTER_KEY;
     NSString * response;
     set_mkey =[set_mkey stringByAppendingString:self.master_key];
     
-    response = [comm sendCommandAndBlock:set_mkey];
+    response = [[HttpCom instance].comWithDevice sendCommandAndBlock:set_mkey];
     
     if (response == nil)
     {
@@ -558,8 +553,6 @@
         }
         
     }
-    
-    [comm release];
 
 }
 

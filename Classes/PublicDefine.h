@@ -20,10 +20,14 @@
 
 #define DEFAULT_SSID_PREFIX @"Camera-"
 #define DEFAULT_SSID_HD_PREFIX @"CameraHD-"
+
+//define default IP
 #define DEFAULT_IP_PREFIX @"192.168.2."
+#define DEFAULT_IP_PREFIX_CAMERA_C89    @"192.168.193."
 
 
 #define DEFAULT_BM_IP @"192.168.2.1"
+#define DEFAULT_BM_IP_CAMERA_C89    @"192.168.193.1"
 #define DEFAULT_BM_PORT 80
 #define DEFAULT_AIBALL_SERVER @"http://192.168.2.1:80"
 //#define DEFAULT_AIBALL_SERVER @"http://192.168.1.107:80"

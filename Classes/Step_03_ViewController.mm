@@ -349,10 +349,25 @@
 		NSString * own = @"";
 		[MBP_iosViewController getBroadcastAddress:&bc AndOwnIp:&own];
 		
-		if ([own hasPrefix:DEFAULT_IP_PREFIX])
+        NSLog(@"Check mac address is %@ and Ip address is %@", bc, own);
+		if ([own hasPrefix:DEFAULT_IP_PREFIX]  || [own hasPrefix:DEFAULT_IP_PREFIX_CAMERA_C89])
 		{
-			
-            
+			//set default ip first, will use later for all
+            if ([own hasPrefix:DEFAULT_IP_PREFIX_CAMERA_C89])
+            {
+                NSLog(@"Set default ip for camera c89 %@", own);
+                [[HttpCom instance].comWithDevice setDevice_ip:DEFAULT_BM_IP_CAMERA_C89];
+            }
+            else if ([own hasPrefix:DEFAULT_IP_PREFIX])
+            {
+                NSLog(@"Set default ip for camera %@", own);
+                [[HttpCom instance].comWithDevice setDevice_ip:DEFAULT_BM_IP];
+            }
+            else
+            {
+                NSLog(@"Set default ip for camera %@", own);
+                [[HttpCom instance].comWithDevice setDevice_ip:DEFAULT_BM_IP];
+            }
 			//remember the mac address .. very important
 			self.cameraMac = [CameraPassword fetchBSSIDInfo];
 			self.cameraName = currentSSID;
@@ -386,10 +401,8 @@
 
 -(void) moveToNextStep
 {
-    HttpCommunication * comm = [[HttpCommunication alloc] init];
     
-    NSString * fw_version = [comm sendCommandAndBlock:GET_VERSION];
-    [comm release];
+    NSString * fw_version = [[HttpCom instance].comWithDevice sendCommandAndBlock:GET_VERSION];
     
     NSLog(@"Step_03 - moveToNextStep -->fw_version: %@", fw_version);
     

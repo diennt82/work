@@ -23,7 +23,6 @@
 @synthesize inputPasswordTimer = _inputPasswordTimer;
 @synthesize deviceConf = _deviceConf;
 @synthesize timeOut = _timeOut;
-@synthesize httpComWithDevice = _httpComWithDevice;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -49,9 +48,6 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
-    //create Httpcommunication to inter-communication with device
-    _httpComWithDevice = [[HttpCommunication alloc]init];
 	// Do any additional setup after loading the view.
     
     [self.progressView setHidden:YES];
@@ -645,7 +641,7 @@
     NSString * camera_mac= nil;
 
 #ifdef CONCURRENT_SETUP
-    camera_mac = [_httpComWithDevice sendCommandAndBlock:GET_MAC_ADDRESS
+    camera_mac = [[HttpCom instance].comWithDevice sendCommandAndBlock:GET_MAC_ADDRESS
                                                 withTimeout:5.0];
     camera_mac = [Util add_colon_to_mac:camera_mac];
 #else
@@ -716,7 +712,7 @@
     [_deviceConf restoreConfigurationData:[Util readDeviceConfiguration]];
     
     
-    NSString *deviceCodec = [_httpComWithDevice sendCommandAndBlock:GET_CODECS_SUPPORT
+    NSString *deviceCodec = [[HttpCom instance].comWithDevice sendCommandAndBlock:GET_CODECS_SUPPORT
                                 withTimeout:5.0];
     
     [[NSUserDefaults standardUserDefaults] setObject:deviceCodec  forKey:CODEC_PREFS];
@@ -734,7 +730,7 @@
     
 	
 	//NSString * response =
-    [_httpComWithDevice sendCommandAndBlock:setup_cmd ];
+    [[HttpCom instance].comWithDevice sendCommandAndBlock:setup_cmd ];
     
     [NSTimer scheduledTimerWithTimeInterval: 5.0//
                                      target:self
@@ -835,7 +831,7 @@
 //    NSString * currentSSID = [CameraPassword fetchSSIDInfo];
     NSString *commandGetState = GET_STATE_NETWORK_CAMERA;
     NSLog(@"command is %@", commandGetState);
-    NSString *state = [_httpComWithDevice sendCommandAndBlock:commandGetState withTimeout:20.0];
+    NSString *state = [[HttpCom instance].comWithDevice sendCommandAndBlock:commandGetState withTimeout:20.0];
     if (state != nil && [state length] > 0)
     {
         _currentStateCamera = [[state componentsSeparatedByString:@": "] objectAtIndex:1];

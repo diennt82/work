@@ -105,12 +105,6 @@
     [userDefaults setObject:cameraName_text forKey:@"CameraName"];
     [userDefaults synchronize];
     
-    
-    comm = [[HttpCommunication alloc]init];
-    comm.device_ip = @"192.168.2.1";//here camera is still in directmode
-    comm.device_port = 80;
-    
-    
     /*20121129: phung skip authentication */
     
     [self queryWifiList];
@@ -320,12 +314,6 @@
         [userDefaults setObject:cameraName_text forKey:@"CameraName"];
         [userDefaults synchronize];
         
-        
-        comm = [[HttpCommunication alloc]init];
-        comm.device_ip = @"192.168.2.1";//here camera is still in directmode
-        comm.device_port = 80;
-        
-        
         /*20121129: phung skip authentication */
         
         [self queryWifiList];
@@ -339,7 +327,7 @@
     NSData * router_list_raw; 
        
     
-    router_list_raw = [comm sendCommandAndBlock_raw:GET_ROUTER_LIST];
+    router_list_raw = [[HttpCom instance].comWithDevice sendCommandAndBlock_raw:GET_ROUTER_LIST];
     
     if (router_list_raw != nil)
     {
@@ -364,7 +352,7 @@
     NSData * router_list_raw;
     
     
-    router_list_raw = [comm sendCommandAndBlock_raw:GET_ROUTER_LIST withTimeout:2*DEFAULT_TIME_OUT];
+    router_list_raw = [[HttpCom instance].comWithDevice sendCommandAndBlock_raw:GET_ROUTER_LIST withTimeout:2*DEFAULT_TIME_OUT];
     
     if (router_list_raw != nil)
     {
