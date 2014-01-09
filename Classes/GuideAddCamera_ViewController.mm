@@ -67,6 +67,7 @@
     
     //Hide back button -- can't go back now..
     self.navigationItem.hidesBackButton = TRUE;
+    self.navigationController.navigationBarHidden = NO;
 
     
     
