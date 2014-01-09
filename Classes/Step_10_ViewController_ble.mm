@@ -152,6 +152,12 @@
     [self adjustViewsForOrientations:interfaceOrientation];
 }
 
+- (void)viewWillDisappear:(BOOL)animated
+{
+    //remove delegate
+    [BLEConnectionManager getInstanceBLE].delegate = nil;
+}
+
 - (void)startAnimationWithOrientation
 {
     UIImageView *animationView =  (UIImageView *)[cameraAddedView viewWithTag:TAG_IMAGE_VIEW_ANIMATION];
@@ -705,7 +711,7 @@
 {
     //Disconnect BLE
     NSLog(@"Disconnect BLE ");
-    [[BLEManageConnect getInstanceBLE] disconnect];
+    [[BLEConnectionManager getInstanceBLE] disconnect];
     
     //Load step 12
     NSLog(@"Load step 12");
@@ -734,7 +740,7 @@
 {
     //Disconnect BLE
     NSLog(@"Disconnect BLE ");
-    [[BLEManageConnect getInstanceBLE] disconnect];
+    [[BLEConnectionManager getInstanceBLE] disconnect];
     
  	NSLog(@"Setup has failed - remove cam on server");
 	// send a command to remove camera

@@ -15,9 +15,8 @@
 @implementation DisplayWifiList_VController
 
 
-@synthesize listOfWifi;
+@synthesize listOfWifi = _listOfWifi;
 @synthesize cellView;
-
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -32,7 +31,10 @@
 -(void) dealloc
 {
     
-    [listOfWifi release];
+    [_listOfWifi release];
+    [_refreshWifiList release];
+    [_ib_Indicator release];
+    [_ib_LabelState release];
     [super dealloc];
 }
 - (void)viewDidLoad
@@ -49,13 +51,24 @@
                                      target:nil
                                      action:nil] autorelease];
     
+    self.navigationItem.hidesBackButton=YES;
+    //
+    [BLEConnectionManager getInstanceBLE].delegate = self;
+    _listOfWifi = [[NSMutableArray alloc] init];
     
-    if (listOfWifi == nil )
-    {
-        NSLog(@"EMPTY LIST WIFI");
-    }
+    //show process view to get wifi list
+    [self showIndicator];
+    //set text
+    NSString *waitingGetWifiText = NSLocalizedStringWithDefaultValue(@"waiting_get_wifi_list",nil, [NSBundle mainBundle],
+                                                              @"Waiting for get wifi list..." , nil);
     
-    //Create an entry for "Other.."
+    [self.ib_LabelState setText:waitingGetWifiText];
+//    [self queryWifiList];
+    
+}
+
+- (void)addOtherWifi
+{
     WifiEntry * other = [[WifiEntry alloc]initWithSSID:@"\"Other Network\""];
     other.bssid = @"Other";
     other.auth_mode = @"None";
@@ -69,7 +82,6 @@
     
     [other release];
 }
-
 - (void)viewDidUnload
 {
     [super viewDidUnload];
@@ -78,17 +90,28 @@
 
 -(void) viewWillAppear:(BOOL)animated
 {
+    self.navigationItem.hidesBackButton=YES;
+    //delay .1s to display new screen
+    [NSTimer scheduledTimerWithTimeInterval:0.1 target:self selector:@selector(queryWifiList) userInfo:nil repeats:NO];
     UIInterfaceOrientation interfaceOrientation = [UIApplication sharedApplication].statusBarOrientation;
     [self adjustViewsForOrientations:interfaceOrientation];
+}
+
+- (void)viewWillDisappear:(BOOL)animated
+{
+    NSLog(@"viewWillDisappear of DisplayWifiList_VController");
+    [self hideIndicator];
+    //remove delegate
+    [BLEConnectionManager getInstanceBLE].delegate = nil;
 }
 
 -(void) filterCameraList
 {
     NSMutableArray * wifiList = [[NSMutableArray alloc] init];
     
-    for (int i = 0; i < [listOfWifi count]; i++)
+    for (int i = 0; i < [_listOfWifi count]; i++)
     {
-        WifiEntry * wifi = [listOfWifi objectAtIndex:i];
+        WifiEntry * wifi = [_listOfWifi objectAtIndex:i];
         //        NSLog(@"SSID Wifi -------------------->%@", wifi.ssid_w_quote);
         if (![wifi.ssid_w_quote hasPrefix:@"\"Camera-"] && ![wifi.ssid_w_quote isEqualToString:@"\"\""])
         {
@@ -184,7 +207,7 @@
 {
     int tag = tableView.tag;
     if (tag == 11)
-        return [listOfWifi count];
+        return [_listOfWifi count];
     return 0;
     
 }
@@ -204,7 +227,7 @@
     }
     
     // Configure the cell...
-    WifiEntry *entry = [listOfWifi objectAtIndex:indexPath.row];
+    WifiEntry *entry = [_listOfWifi objectAtIndex:indexPath.row];
     cell.textLabel.text = entry.ssid_w_quote;
     cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     
@@ -222,12 +245,12 @@
     {
         int idx=indexPath.row;
         
-        WifiEntry *entry = [listOfWifi objectAtIndex:idx];
+        WifiEntry *entry = [_listOfWifi objectAtIndex:idx];
         
         //load step 06
         NSLog(@"Load step 6: Input network info");
         //Load the next xib
-        NetworkInfoToCamera_VController *step06ViewController = nil;
+        NetworkInfoToCamera_VController *netWorkInfoViewController = nil;
         
 //        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
 //        {
@@ -239,7 +262,7 @@
 //        else
         {
             
-            step06ViewController = [[NetworkInfoToCamera_VController alloc]
+            netWorkInfoViewController = [[NetworkInfoToCamera_VController alloc]
                                     initWithNibName:@"NetworkInfoToCamera_VController" bundle:nil];
             
             
@@ -252,18 +275,18 @@
         NSRange noQoute = NSMakeRange(1, [entry.ssid_w_quote length]-2);
         if ([[entry.ssid_w_quote substringWithRange:noQoute] isEqualToString:@"Other Network"])
         {
-            step06ViewController.isOtherNetwork = TRUE;
+            netWorkInfoViewController.isOtherNetwork = TRUE;
         }
         else
         {
-            step06ViewController.isOtherNetwork = FALSE;
+            netWorkInfoViewController.isOtherNetwork = FALSE;
         }
-        step06ViewController.ssid = [entry.ssid_w_quote substringWithRange:noQoute];
-        step06ViewController.security = entry.auth_mode;
+        netWorkInfoViewController.ssid = [entry.ssid_w_quote substringWithRange:noQoute];
+        netWorkInfoViewController.security = entry.auth_mode;
         
-        [self.navigationController pushViewController:step06ViewController animated:NO];
+        [self.navigationController pushViewController:netWorkInfoViewController animated:NO];
         
-        [step06ViewController release];
+        [netWorkInfoViewController release];
         
     }
     
@@ -274,5 +297,248 @@
 {
     
 }
+- (void)showIndicator
+{
+    [self.view bringSubviewToFront:self.ib_Indicator];
+    [self.ib_Indicator setHidden:NO];
+}
 
+- (void)hideIndicator
+{
+    [self.ib_Indicator setHidden:YES];
+}
+
+- (void) askForRetry
+{
+    //    [[BLEConnectionManager getInstanceBLE] disconnect];
+    NSString * msg = NSLocalizedStringWithDefaultValue(@"Fail_to_communicate_with_camera",nil, [NSBundle mainBundle],
+                                                       @"Fail to communicate with camera. Retry?", nil);
+    
+    
+    NSString * cancel = NSLocalizedStringWithDefaultValue(@"Cancel",nil, [NSBundle mainBundle],
+                                                          @"Cancel", nil);
+    
+    NSString * retry = NSLocalizedStringWithDefaultValue(@"Retry",nil, [NSBundle mainBundle],
+                                                         @"Retry", nil);
+    
+    
+    
+    UIAlertView *_myAlert = nil ;
+    _myAlert = [[UIAlertView alloc] initWithTitle:msg
+                                          message:@""
+                                         delegate:self
+                                cancelButtonTitle:cancel
+                                otherButtonTitles:retry,nil];
+    
+    _myAlert.tag = ALERT_ASK_FOR_RETRY_WIFI_TAG;
+    _myAlert.delegate = self;
+    
+    CGAffineTransform myTransform = CGAffineTransformMakeTranslation(0.0, 0.0);
+    [_myAlert setTransform:myTransform];
+    [_myAlert show];
+    [_myAlert release];
+    
+}
+
+- (IBAction)performRefreshWifiList:(id)sender {
+    
+    //hide button back of navigation controller
+    self.navigationItem.hidesBackButton = YES;
+    //disable button refresh
+    [self.refreshWifiList setEnabled:NO];
+    
+    //clear list wifi
+    [self.listOfWifi removeAllObjects];
+    // reload tableview
+    [mTableView reloadData];
+    
+    [self showIndicator];
+    [BLEConnectionManager getInstanceBLE].delegate = self;
+    [self queryWifiList];
+}
+
+-(void) queryWifiList
+{
+    //after 60s will display for user get list wifi again
+    //_timeout = [NSTimer scheduledTimerWithTimeInterval:3*60.0 target:self selector:@selector(showDialog:) userInfo:nil repeats:NO];
+    /**
+     * handle timeout: catch from uart and display time out at delegate returned.
+     */
+    //deday send command to camera BLE 1s.
+    [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(sendCommandGetWifiList) userInfo:nil repeats:NO];
+}
+
+- (void)sendCommandGetWifiList
+{
+    //check state BLE
+    if ([BLEConnectionManager getInstanceBLE].state != CONNECTED)
+    {
+        NSLog(@"BLE disconnected, can't sendCommandGetWifiList!!!!");
+        return;
+    }
+    //retry sending get wifi
+    NSLog(@"Send command get routers list, now!!!");
+    [BLEConnectionManager getInstanceBLE].delegate = self;
+    [[BLEConnectionManager getInstanceBLE].uartPeripheral writeString:GET_ROUTER_LIST withTimeOut:LONG_TIME_OUT_SEND_COMMAND];
+    NSDate * date;
+    while ([BLEConnectionManager getInstanceBLE].uartPeripheral.isBusy)
+    {
+        date = [NSDate dateWithTimeInterval:1.5 sinceDate:[NSDate date]];
+        
+        [[NSRunLoop currentRunLoop] runUntilDate:date];
+    }    
+}
+
+- (void)dialogFailConnection:(NSTimer *)timer
+{
+    if ([BLEConnectionManager getInstanceBLE].state == CONNECTED)
+    {
+        //Check after TIME_OUT_RECONNECT_BLE seconds, if connected retrun
+        return;
+    }
+    //show info
+    NSString * msg =  @"Camera (ble) is disconnected abruptly, please retry adding camera again";
+    
+    
+    
+    NSString * ok = NSLocalizedStringWithDefaultValue(@"Ok",nil, [NSBundle mainBundle],
+                                                      @"Ok", nil);
+    
+    
+    
+    UIAlertView *_myAlert = nil ;
+    _myAlert = [[UIAlertView alloc] initWithTitle:@"Error"
+                                          message:msg
+                                         delegate:self
+                                cancelButtonTitle:ok
+                                otherButtonTitles:nil];
+    
+    _myAlert.tag = RETRY_CONNECTION_BLE_FAIL_TAG;
+    _myAlert.delegate = self;
+}
+
+- (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex
+{
+    if (alertView.tag == ALERT_ASK_FOR_RETRY_WIFI_TAG)
+    {
+        switch(buttonIndex) {
+            case 0:
+                //TODO: Go back to camera detection screen
+                
+                break;
+            case 1:
+                NSLog(@"OK button pressed");
+                
+                //retry ..
+                [self queryWifiList];
+                
+                break;
+                
+        }
+        
+    }
+    if (alertView.tag == RETRY_CONNECTION_BLE_FAIL_TAG)
+    {
+        [self.navigationController popToRootViewControllerAnimated:NO];
+    }
+}
+
+#pragma mark - BLEConnectionManagerDelegate
+
+- (void) didReceiveData:(NSString *)string
+{
+    NSLog(@"Data Receiving router list is %@", string);
+    {
+        //processing data receive wifi list
+        
+        if (string !=nil && [string length] > 0)
+        {
+            NSData *router_list_raw = [string dataUsingEncoding:NSUTF8StringEncoding];
+            
+            if (router_list_raw != nil)
+            {
+                WifiListParser * routerListParser = nil;
+                routerListParser = [[WifiListParser alloc]init];
+                
+                [routerListParser parseData:router_list_raw
+                               whenDoneCall:@selector(setWifiResult:)
+                              whenErrorCall:@selector(errorCallback:)
+                                     target:self];
+            }
+            else
+            {
+                NSLog(@"GOT NULL wifi list from camera");
+                [self queryWifiList];
+            }
+        }
+        else
+        {
+            //string received is nil
+            [self queryWifiList];
+        }
+        
+    }
+}
+
+- (void)reconnectBLE
+{
+    NSDate * date;
+    date = [NSDate dateWithTimeInterval:2.0 sinceDate:[NSDate date]];
+    [[NSRunLoop currentRunLoop] runUntilDate:date];
+    
+    //[NSTimer scheduledTimerWithTimeInterval:TIME_OUT_RECONNECT_BLE target:self selector:@selector(dialogFailConnection:) userInfo:nil repeats:NO];
+    [BLEConnectionManager getInstanceBLE].delegate = self;
+    [[BLEConnectionManager getInstanceBLE] reScanForPeripheral:[UARTPeripheral uartServiceUUID]];
+}
+
+-(void) bleDisconnected
+{
+    NSLog(@"BLE device is DISCONNECTED - Reconnect after 2s ");
+    [self reconnectBLE];
+}
+
+- (void) didConnectToBle:(CBUUID*) service_id
+{
+    NSLog(@"BLE device connected again(DisplayWifiList_VController)");
+    [self queryWifiList];
+}
+
+- (void)errorCallback: (NSError *)error
+{
+    NSLog(@"error return is %@", error);
+    [self queryWifiList];
+}
+-(void) setWifiResult:(NSArray *) wifiList
+{
+    //show back button
+    self.navigationItem.hidesBackButton = NO;
+    //enable button refresh
+    [self.refreshWifiList setEnabled:YES];
+    //hide indicarot
+    [self hideIndicator];
+    
+    NSLog(@"GOT WIFI RESULT: numentries: %d", wifiList.count);
+    self.listOfWifi = [NSMutableArray arrayWithArray:wifiList];
+    [self addOtherWifi];
+    WifiEntry * entry;
+    NSLog(@"List wifi after refreshing is:");
+    for (int i =0; i< wifiList.count; i++)
+    {
+        entry = [wifiList objectAtIndex:i];
+        NSLog(@"entry %d : %@",i, entry.ssid_w_quote);
+        NSLog(@"entry %d : %@",i, entry.bssid);
+        NSLog(@"entry %d : %@",i, entry.auth_mode);
+        NSLog(@"entry %d : %@",i, entry.quality);
+    }
+    
+    //filter Camera list
+    [self filterCameraList];
+    
+    [mTableView reloadData];
+}
+
+- (void) showDialog:(NSTimer *)timer
+{
+    [self askForRetry];
+}
 @end

@@ -8,8 +8,6 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="EditCamera_VController">
             <connections>
                 <outlet property="camName" destination="23" id="25"/>
-                <outlet property="statusDialog" destination="u5L-8T-h4I" id="aED-1B-LyR"/>
-                <outlet property="statusLable" destination="U4w-H2-XHc" id="kQB-i5-u7R"/>
                 <outlet property="view" destination="3" id="20"/>
             </connections>
         </placeholder>
@@ -57,25 +55,6 @@
                         <outlet property="delegate" destination="-1" id="24"/>
                     </connections>
                 </textView>
-                <view hidden="YES" clipsSubviews="YES" contentMode="scaleToFill" id="u5L-8T-h4I" userLabel="Status Dialog">
-                    <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
-                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                    <subviews>
-                        <activityIndicatorView opaque="NO" contentMode="scaleToFill" animating="YES" style="whiteLarge" id="uNC-It-63t">
-                            <rect key="frame" x="142" y="235" width="37" height="37"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
-                            <color key="color" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                        </activityIndicatorView>
-                        <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Getting wifi list. Please wait..." textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" minimumFontSize="10" id="U4w-H2-XHc">
-                            <rect key="frame" x="0.0" y="145" width="320" height="48"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
-                            <fontDescription key="fontDescription" type="system" pointSize="20"/>
-                            <color key="textColor" red="0.0" green="0.0" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                            <nil key="highlightedColor"/>
-                        </label>
-                    </subviews>
-                    <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
-                </view>
             </subviews>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
             <simulatedStatusBarMetrics key="simulatedStatusBarMetrics"/>

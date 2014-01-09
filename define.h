@@ -19,6 +19,15 @@
 
 
 
-//
+//timeout
 #define CAMERA_NAME_MAX 20
+#define TIME_OUT_RECONNECT_BLE  30.0
+#define SHORT_TIME_OUT_SEND_COMMAND     10.0
+#define LONG_TIME_OUT_SEND_COMMAND     30.0
+
+
+
+//Define TAG
+#define ALERT_ASK_FOR_RETRY_WIFI_TAG    1
+#define RETRY_CONNECTION_BLE_FAIL_TAG   2
 #endif

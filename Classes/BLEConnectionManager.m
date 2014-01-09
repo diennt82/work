@@ -1,6 +1,6 @@
 //
 
-//  BLEManageConnect.m
+//  BLEConnectionManager.m
 
 //  BlinkHD_ios
 
@@ -14,11 +14,11 @@
 
 
 
-#import "BLEManageConnect.h"
+#import "BLEConnectionManager.h"
 
 
 
-@implementation BLEManageConnect
+@implementation BLEConnectionManager
 
 @synthesize cm = _cm;
 
@@ -31,14 +31,14 @@
 @synthesize delegate = _delegate;
 
 
-+ (BLEManageConnect *) getInstanceBLE
++ (BLEConnectionManager *) getInstanceBLE
 {
-    static BLEManageConnect *_sharedInstance = nil;
+    static BLEConnectionManager *_sharedInstance = nil;
     
     static dispatch_once_t oncePredicate;
     
     dispatch_once(&oncePredicate, ^{
-        _sharedInstance = [[BLEManageConnect alloc] init];
+        _sharedInstance = [[BLEConnectionManager alloc] init];
     });
     return _sharedInstance;
 }
@@ -57,17 +57,6 @@
     return self;
 }
 
-
-
-- (void) onReceiveDataError:(int)error_code forCommand:(NSString *)commandToCamera
-{
-    NSLog(@"Error code is %d and command  %@***************************", error_code, commandToCamera);
-    if (self.delegate != nil)
-    {
-        [self.delegate onReceiveDataError:error_code forCommand:commandToCamera];
-    }
-    
-}
 -(void) dealloc
 {
     [_myPeripheral release];
@@ -140,7 +129,7 @@
     
     if ([_uartPeripheral.peripheral isConnected])
     {
-        [[BLEManageConnect getInstanceBLE].cm cancelPeripheralConnection:_uartPeripheral.peripheral];
+        [[BLEConnectionManager getInstanceBLE].cm cancelPeripheralConnection:_uartPeripheral.peripheral];
     }
     
     
@@ -149,7 +138,7 @@
 
 + (ConnectionState)checkStatusConnectBLE
 {
-    return [BLEManageConnect getInstanceBLE].state;
+    return [BLEConnectionManager getInstanceBLE].state;
 }
 
 
@@ -187,6 +176,24 @@
     
 }
 
+- (void) onReceiveDataError:(int)error_code forCommand:(NSString *)commandToCamera
+{
+    NSLog(@"Error code is %d and command  %@***************************", error_code, commandToCamera);
+   
+    if (error_code == READ_TIME_OUT)
+    {
+        [self disconnect];
+    }
+    else
+    {
+        
+        if (self.delegate != nil)
+        {
+            [self.delegate onReceiveDataError:error_code forCommand:commandToCamera];
+        }
+    }
+}
+
 -(void) readyToTxRx
 {
     //Ready or connected
@@ -210,7 +217,7 @@
     NSLog(@"Disconnect peripheral %@", self.uartPeripheral.peripheral.name);
     if ([_uartPeripheral.peripheral isConnected])
     {
-        [[BLEManageConnect getInstanceBLE].cm cancelPeripheralConnection:_uartPeripheral.peripheral];
+        [[BLEConnectionManager getInstanceBLE].cm cancelPeripheralConnection:_uartPeripheral.peripheral];
     }
 }
 

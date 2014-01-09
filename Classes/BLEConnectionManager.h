@@ -1,6 +1,6 @@
 //
 
-//  BLEManageConnect.h
+//  BLEConnectionManager.h
 
 //  BlinkHD_ios
 
@@ -31,7 +31,7 @@ typedef enum
 
 #import <Foundation/Foundation.h>
 #import "UARTPeripheral.h"
-@protocol BLEManageConnectDelegate
+@protocol BLEConnectionManagerDelegate
 @required
 - (void) didReceiveData:(NSString *) string;
 
@@ -47,7 +47,7 @@ typedef enum
 
 #define SCAN_FOR_ANY_DEVICE 1
 #define SCAN_FOR_SINGLE_DEVICE 2
-@interface BLEManageConnect : NSObject <CBCentralManagerDelegate, UARTPeripheralDelegate>
+@interface BLEConnectionManager : NSObject <CBCentralManagerDelegate, UARTPeripheralDelegate>
 
 {
     
@@ -73,10 +73,10 @@ typedef enum
 @property (retain, nonatomic) UARTPeripheral *uartPeripheral;
 
 @property (nonatomic,assign) BOOL isOnBLE;
-@property (assign) id<BLEManageConnectDelegate> delegate;
+@property (assign) id<BLEConnectionManagerDelegate> delegate;
 
 + (ConnectionState)checkStatusConnectBLE;
-+ (BLEManageConnect *) getInstanceBLE;
++ (BLEConnectionManager *) getInstanceBLE;
 - (id) init;
 - (void)scan;
 - (void)reScan;

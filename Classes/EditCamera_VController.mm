@@ -17,7 +17,6 @@
 
 @synthesize cameraMac, cameraName;
 @synthesize alertView = _alertView;
-@synthesize result_received = _result_received;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -67,8 +66,6 @@
         ((UITextField *)camName).text = self.cameraName;
         
     }
-    
-    
 }
 
 - (void)showAlertViewWithMessage:(NSString *)message
@@ -94,25 +91,16 @@
 
 -(void) viewWillAppear:(BOOL)animated
 {
-    _waitingResponse = NO;
-    _result_received = nil;
     UIInterfaceOrientation interfaceOrientation = [UIApplication sharedApplication].statusBarOrientation;
     [self adjustViewsForOrientations:interfaceOrientation];
 }
 
 - (void)viewWillDisappear:(BOOL)animated
 {
-//    if(_timeout)
-//    {
-//        [_timeout invalidate];
-//        _timeout = nil;
-//    }
-//    if (_getWifiListTimer)
-//    {
-//        [_getWifiListTimer invalidate];
-//        _getWifiListTimer = nil;
-//    }
+    //remove delegate
+    [BLEConnectionManager getInstanceBLE].delegate = nil;
 }
+
 - (void)handleNextBtnTouchAction: (id)sender
 {
     NSString * cameraName_text = @"";
@@ -133,9 +121,7 @@
     
     
     
-    /*20121129: phung skip authentication */
-    
-    [self queryWifiList];
+    [self showScreenGetWifiList];
 }
 
 #pragma mark -
@@ -336,309 +322,27 @@
         NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
         [userDefaults setObject:cameraName_text forKey:@"CameraName"];
         [userDefaults synchronize];
-        
-        
-        
-        /*20121129: phung skip authentication */
-        [self queryWifiList];
-        
+        // Show screen wifi list
+        [self showScreenGetWifiList];
     }
 }
 
-- (void)sendCommandGetWifiList:(NSTimer *) info
+- (void)showScreenGetWifiList
 {
-    if (_waitingResponse == YES)
-    {
-        return;
-    }
-    
-    if (self.result_received != nil && [self.result_received length] > 0)
-    {
-        if(_timeout && [_timeout isValid])
-        {
-            [_timeout invalidate];
-            _timeout = nil;
-        }
-        if (_getWifiListTimer && [_getWifiListTimer isValid])
-        {
-            [_getWifiListTimer invalidate];
-            _getWifiListTimer = nil;
-        }
-        return;
-    }
-    //retry sending get wifi
-    NSLog(@"Check [BLEManageConnect getInstanceBLE] is %@", [BLEManageConnect getInstanceBLE]);
-    [BLEManageConnect getInstanceBLE].delegate = self;
-    [[BLEManageConnect getInstanceBLE].uartPeripheral writeString:GET_ROUTER_LIST];
-    _waitingResponse = YES;
-    NSDate * date;
-    while ([BLEManageConnect getInstanceBLE].uartPeripheral.isBusy)
-    {
-        date = [NSDate dateWithTimeInterval:1.5 sinceDate:[NSDate date]];
-        
-        [[NSRunLoop currentRunLoop] runUntilDate:date];
-    }
-    
-}
-
--(void) queryWifiList
-{
-    //create dialog process
-    [self.statusDialog setHidden:NO];
-
-    //after 60s will display for user get list wifi again
-    _timeout = [NSTimer scheduledTimerWithTimeInterval:3*60.0 target:self selector:@selector(showDialog:) userInfo:nil repeats:NO];
-    _getWifiListTimer = [NSTimer scheduledTimerWithTimeInterval:0.1
-                                                         target:self
-                                                       selector:@selector(sendCommandGetWifiList:)
-                                                       userInfo:nil
-                                                        repeats:YES];
-
-
-
-}
-
-- (void) showDialog:(NSTimer *)timer
-{
-    [self askForRetry];
-}
-
-- (void)resetAllTimer
-{
-    //reset timer
-    if (_timeout && [_timeout isValid])
-    {
-        [_timeout invalidate];
-        _timeout = nil;
-    }
-    if (_getWifiListTimer && [_getWifiListTimer isValid])
-    {
-        [_getWifiListTimer invalidate];
-        _getWifiListTimer = nil;
-    }
-}
-//Double the timeout..
--(void) queryWifiList_2
-{
-    _waitingResponse = NO;
-    _result_received = nil;
-    //reset timer
-//    [self resetAllTimer];
-    //and create it again
-    _timeout = [NSTimer scheduledTimerWithTimeInterval:6*60.0 target:self selector:@selector(showDialog:) userInfo:nil repeats:NO];
-    _getWifiListTimer = [NSTimer scheduledTimerWithTimeInterval:0.1
-                                                         target:self
-                                                       selector:@selector(sendCommandGetWifiList:)
-                                                       userInfo:nil
-                                                        repeats:YES];
-    
-#if 0
-    NSData * router_list_raw;
-    router_list_raw = [comm sendCommandAndBlock_raw:GET_ROUTER_LIST withTimeout:2*DEFAULT_TIME_OUT];
-    if (router_list_raw != nil)
-    {
-        WifiListParser * routerListParser = nil;
-        routerListParser = [[WifiListParser alloc]init];
-        
-        [routerListParser parseData:router_list_raw
-                       whenDoneCall:@selector(setWifiResult:)
-                             target:self];
-    }
-    else
-    {
-        NSLog(@"GOT NULL wifi list from camera");
-        [self askForRetry];
-    }
-#endif
-}
-
-#define ALERT_ASK_FOR_RETRY_WIFI 1
-
-- (void) askForRetry
-{
-//    [[BLEManageConnect getInstanceBLE] disconnect];
-    NSString * msg = NSLocalizedStringWithDefaultValue(@"Fail_to_communicate_with_camera",nil, [NSBundle mainBundle],
-                                                       @"Fail to communicate with camera. Retry?", nil);
-    
-    
-    NSString * cancel = NSLocalizedStringWithDefaultValue(@"Cancel",nil, [NSBundle mainBundle],
-                                                          @"Cancel", nil);
-    
-    NSString * retry = NSLocalizedStringWithDefaultValue(@"Retry",nil, [NSBundle mainBundle],
-                                                         @"Retry", nil);
-    
-    
-    
-    UIAlertView *_myAlert = nil ;
-    _myAlert = [[UIAlertView alloc] initWithTitle:msg
-                                          message:@""
-                                         delegate:self
-                                cancelButtonTitle:cancel
-                                otherButtonTitles:retry,nil];
-    
-    _myAlert.tag = ALERT_ASK_FOR_RETRY_WIFI;
-    _myAlert.delegate = self;
-    
-    CGAffineTransform myTransform = CGAffineTransformMakeTranslation(0.0, 0.0);
-    [_myAlert setTransform:myTransform];
-    [_myAlert show];
-    [_myAlert release];
-    
-}
-
-- (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex {
-    
-    if (alertView.tag == ALERT_ASK_FOR_RETRY_WIFI)
-    {
-        switch(buttonIndex) {
-            case 0:
-                
-                //TODO: Go back to camera detection screen
-                
-                
-                break;
-            case 1:
-                NSLog(@"OK button pressed");
-                
-                //retry ..
-                [self queryWifiList_2];
-                
-                break;
-                
-        }
-        
-    }
-    
-}
-
-- (void)errorCallback: (NSError *)error
-{
-    NSLog(@"error return is %@", error);
-    [self queryWifiList_2];
-}
--(void) setWifiResult:(NSArray *) wifiList
-{
-    [self.statusDialog setHidden:YES];
-    NSLog(@"GOT WIFI RESULT: numentries: %d", wifiList.count);
-    
-    
-    
-    
-#if 1
-    WifiEntry * entry;
-    
-    
-    for (int i =0; i< wifiList.count; i++)
-    {
-        entry = [wifiList objectAtIndex:i];
-        
-        
-        NSLog(@"entry %d : %@",i, entry.ssid_w_quote);
-        NSLog(@"entry %d : %@",i, entry.bssid);
-        NSLog(@"entry %d : %@",i, entry.auth_mode);
-        NSLog(@"entry %d : %@",i, entry.quality);
-    }
-#endif
-    
-    
-    
-    NSLog(@"Load step 5");
+    NSLog(@"Load screen display wifi list");
     //Load the next xib
-    DisplayWifiList_VController *step05ViewController = nil;
+    DisplayWifiList_VController *wifiListVController = nil;
+    wifiListVController =  [[DisplayWifiList_VController alloc]
+                             initWithNibName:@"DisplayWifiList_VController" bundle:nil];
+    [self.navigationController pushViewController:wifiListVController animated:NO];
     
-    
-//    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
-//    {
-//        
-//        
-//        step05ViewController =  [[DisplayWifiList_VController alloc]
-//                                 initWithNibName:@"DisplayWifiList_VController" bundle:nil];
-//        
-//    }
-//    else
-    {
-        
-        
-        step05ViewController =  [[DisplayWifiList_VController alloc]
-                                 initWithNibName:@"DisplayWifiList_VController" bundle:nil];
-        
-        
-        
-    }
-    
-    
-    
-    step05ViewController.listOfWifi = [[[NSMutableArray alloc]initWithArray:wifiList] autorelease];
-    
-    [self.navigationController pushViewController:step05ViewController animated:NO];
-    
-    [step05ViewController release];
-    
-    
+    [wifiListVController release];
 }
-
-
 - (BOOL)textFieldShouldReturn:(UITextField *)textField {
     
     [textField resignFirstResponder];
     
     return NO;
 }
-
-
-#pragma mark - BLEManageConnectDelegate
--(void) bleDisconnected
-{
-    
-}
-- (void) didReceiveData:(NSString *)string
-{
-    self.result_received = string;
-    _waitingResponse = NO;
-    NSLog(@"Data Receiving router list is %@", string);
-    {
-        //processing data receive wifi list
-        
-        if (string !=nil && [string length] > 0)
-        {
-            NSData *router_list_raw = [string dataUsingEncoding:NSUTF8StringEncoding];
-            
-            if (router_list_raw != nil)
-            {
-                WifiListParser * routerListParser = nil;
-                routerListParser = [[WifiListParser alloc]init];
-                
-//                [routerListParser parseData:router_list_raw
-//                               whenDoneCall:@selector(setWifiResult:)
-//                                     target:self];
-                [routerListParser parseData:router_list_raw
-                               whenDoneCall:@selector(setWifiResult:)
-                              whenErrorCall:@selector(errorCallback:)
-                                     target:self];
-            }
-            else
-            {
-                NSLog(@"GOT NULL wifi list from camera");
-                [self askForRetry];
-            }
-        }
-        
-    }
-}
-
-- (void) onReceiveDataError:(int)error_code forCommand:(NSString *)commandToCamera
-{
-    NSLog(@"error_code is %d and command is %@**************", error_code, commandToCamera);
-}
-#pragma mark - CBCentralManagerDelegate
-- (void) centralManagerDidUpdateState:(CBCentralManager *)central
-{
-    if (central.state == CBCentralManagerStatePoweredOn)
-    {
-        
-    }
-}
-
-
 
 @end

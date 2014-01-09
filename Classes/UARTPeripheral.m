@@ -239,6 +239,42 @@
     
 }
 
+- (ble_response_t) writeString:(NSString *) string withTimeOut:(NSTimeInterval) time
+{
+    
+    _timeOutCommand = [NSTimer scheduledTimerWithTimeInterval:time
+                                     target:self
+                                   selector:@selector(receiveDataTimeOut:)
+                                   userInfo:nil
+                                    repeats:NO];
+    
+    if (self.isBusy == TRUE)
+    {
+        
+        return WRITE_ERROR_OTHER_TRANSACTION_IN_PLACE;
+    }
+    
+    self.isBusy = TRUE;
+    
+    //Retry 10 times only if we hit the 0-len issue;
+    retry_count =  10;
+    
+    
+    [self retryOldCommand:string];
+    
+    
+    return WRITE_SUCCESS;
+    
+}
+
+-(void) receiveDataTimeOut:(NSTimer *) timer
+{
+    _timeOutCommand = nil;
+    self.isBusy = FALSE;
+    retry_count = -1;
+    [self.delegate onReceiveDataError:READ_TIME_OUT forCommand:commandToCamera];
+    
+}
 - (void) writeRawData:(NSData *) data
 {
     
@@ -439,6 +475,13 @@
                     
                     
                     NSString *string = [NSString stringWithUTF8String:[result_str bytes] ];
+                    
+                    //invalidate time out
+                    if (_timeOutCommand && [_timeOutCommand isValid])
+                    {
+                        [_timeOutCommand invalidate];
+                        _timeOutCommand = nil;
+                    }
                     [self.delegate didReceiveData:string];
                     
                     //cut this string away
@@ -490,6 +533,13 @@
                     NSLog(@"ERROR: 0-len issue, no more retry, returning");
                     self.isBusy = FALSE;
                      self.isFlushing = FALSE;
+                    
+                    //invalidate time out
+                    if (_timeOutCommand && [_timeOutCommand isValid])
+                    {
+                        [_timeOutCommand invalidate];
+                        _timeOutCommand = nil;
+                    }
                     
                     [self.delegate onReceiveDataError:read_error forCommand:commandToCamera];
                 }
