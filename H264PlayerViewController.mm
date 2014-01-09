@@ -141,11 +141,11 @@
     
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
     {
-        self.zoneViewController = [[[ZoneViewController alloc] initWithNibName:@"ZoneViewController_ipad" bundle:[NSBundle mainBundle]] autorelease];
+        self.zoneViewController = [[[ZoneViewController alloc] initWithNibName:@"ZoneViewController_ipad" bundle:nil] autorelease];
     }
     else
     {
-        self.zoneViewController = [[[ZoneViewController alloc] initWithNibName:@"ZoneViewController" bundle:[NSBundle mainBundle]] autorelease];
+        self.zoneViewController = [[[ZoneViewController alloc] initWithNibName:@"ZoneViewController" bundle:nil] autorelease];
 
     }
     
@@ -154,7 +154,7 @@
     
     self.zoneButton.enabled = NO;
     
-    self.melodyViewController = [[[MelodyViewController alloc] initWithNibName:@"MelodyViewController" bundle:[NSBundle mainBundle]] autorelease];
+    self.melodyViewController = [[[MelodyViewController alloc] initWithNibName:@"MelodyViewController" bundle:nil] autorelease];
     
     self.melodyViewController.selectedChannel = self.selectedChannel;
     self.melodyViewController.melodyVcDelegate = self;
@@ -4114,7 +4114,7 @@
      4. temp
      */
     
-    [self UpdateFullScreenTimer];
+    //[self UpdateFullScreenTimer];
     
     
     if (index == INDEX_PAN_TILT) {
