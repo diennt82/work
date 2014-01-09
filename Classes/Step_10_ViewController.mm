@@ -188,6 +188,18 @@
     [self adjustViewsForOrientations:interfaceOrientation];
 }
 
+- (void)viewWillDisappear:(BOOL)animated
+{
+    
+    //Dismiss alertView in case interrupt : lock key, home key, phone call
+    if (_alertChooseConfig)
+    {
+        [_alertChooseConfig dismissWithClickedButtonIndex:0 animated:NO];
+        [_alertChooseConfig release];
+        _alertChooseConfig = nil;
+    }
+}
+
 - (void)startAnimationWithOrientation
 {
     UIImageView *animationView =  (UIImageView *)[cameraAddedView viewWithTag:TAG_IMAGE_VIEW_ANIMATION];
@@ -325,42 +337,100 @@
 
 }
 
+- (void)showDialogChooseConfigCamera
+{
+    NSString *selectPlease = NSLocalizedStringWithDefaultValue(@"please_select",nil, [NSBundle mainBundle],
+                                                               @"Please select", nil);
+    NSString *message = NSLocalizedStringWithDefaultValue(@"guide_choose_config",nil, [NSBundle mainBundle],
+                                                          @"BLE to config camera through bluetooth.\nWifi to config camera through wifi.", nil);
+    NSString *cancelText = NSLocalizedStringWithDefaultValue(@"Cancel",nil, [NSBundle mainBundle],
+                                                             @"Cancel", nil);
+    NSString *BLEText = NSLocalizedStringWithDefaultValue(@"BLE",nil, [NSBundle mainBundle],
+                                                          @"BLE", nil);
+    NSString *wifiText = NSLocalizedStringWithDefaultValue(@"Wifi",nil, [NSBundle mainBundle],
+                                                           @"Wifi", nil);
+    
+    _alertChooseConfig = [[UIAlertView alloc]
+                          initWithTitle:selectPlease
+                          message:message
+                          delegate:self
+                          cancelButtonTitle:cancelText
+                          otherButtonTitles:BLEText, wifiText, nil];
+    [_alertChooseConfig show];
+}
+
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
+    
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    if (buttonIndex == 0) {
+        //Cancel button pressed
+        [_alertChooseConfig dismissWithClickedButtonIndex:0 animated:NO];
+        _alertChooseConfig = nil;
+    }
+    else if (buttonIndex == 1) {
+        //BLE button pressed
+        //NO longer first time
+        NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+        [userDefaults setBool:FALSE forKey:FIRST_TIME_SETUP];
+        [userDefaults synchronize];
+        
+        NSLog(@"load step BLE setup ");
+        
+        //Load the next xib
+        GuideAddCamera_ViewController *guideAddCame = nil;
+        {
+            guideAddCame = [[GuideAddCamera_ViewController alloc]
+                                    initWithNibName:@"GuideAddCamera_ViewController" bundle:nil];
+        }
+        
+        //Copy from initViewController the delegate which is pointing to MBP_iosViewcontroller. Support cancel button
+        MBP_InitialSetupViewController * vc = (MBP_InitialSetupViewController *) [[self.navigationController viewControllers] objectAtIndex:0];
+        guideAddCame.delegate = vc.delegate;
+        
+        [self.navigationController pushViewController:guideAddCame animated:NO];
+        
+        [guideAddCame release];
+        
+        
+    }
+    else if (buttonIndex == 2) {
+        //Wifi button pressed
+        //NO longer first time
+        NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+        [userDefaults setBool:FALSE forKey:FIRST_TIME_SETUP];
+        [userDefaults synchronize];
+        
+        NSLog(@"load step Wifi setup: concurrent ");
+        
+        //Load the next xib
+        Step_02_ViewController *step02ViewController = nil;
+        
+        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+        {
+            step02ViewController = [[Step_02_ViewController alloc]
+                                    initWithNibName:@"Step_02_ViewController_ipad" bundle:nil];
+        }
+        else
+        {
+            step02ViewController = [[Step_02_ViewController alloc]
+                                    initWithNibName:@"Step_02_ViewController" bundle:nil];
+        }
+        
+        //Copy from initViewController the delegate which is pointing to MBP_iosViewcontroller. Support cancel button
+        MBP_InitialSetupViewController * vc = (MBP_InitialSetupViewController *) [[self.navigationController viewControllers] objectAtIndex:0];
+        step02ViewController.delegate = vc.delegate;
+        
+        [self.navigationController pushViewController:step02ViewController animated:NO];
+        
+        [step02ViewController release];
+    }
+}
 #pragma  mark -
 #pragma mark button handlers
 
 -(IBAction) startConfigureCamera:(id)sender
 {
-   
-    
-    //NO longer first time
-    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-    [userDefaults setBool:FALSE forKey:FIRST_TIME_SETUP];
-    [userDefaults synchronize];
-    
-    NSLog(@"load step 2 ");
-    
-    //Load the next xib
-    Step_02_ViewController *step02ViewController = nil;
- 
-    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
-    {
-        step02ViewController = [[Step_02_ViewController alloc]
-                                initWithNibName:@"Step_02_ViewController_ipad" bundle:nil];
-    }
-    else
-    {
-        step02ViewController = [[Step_02_ViewController alloc]
-                                initWithNibName:@"Step_02_ViewController" bundle:nil];
-    }
-    
-    //Copy from initViewController the delegate which is pointing to MBP_iosViewcontroller. Support cancel button
-    MBP_InitialSetupViewController * vc = (MBP_InitialSetupViewController *) [[self.navigationController viewControllers] objectAtIndex:0];
-    step02ViewController.delegate = vc.delegate;
-    
-    [self.navigationController pushViewController:step02ViewController animated:NO];
-    
-    [step02ViewController release];
-    
+    [self showDialogChooseConfigCamera];
 }
 
 - (IBAction)registerCamera:(id)sender

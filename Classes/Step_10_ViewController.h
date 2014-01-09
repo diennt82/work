@@ -14,6 +14,7 @@
 #import "Step_12_ViewController.h"
 #import "Step_11_ViewController.h"
 #import "Step_02_ViewController.h"
+#import "GuideAddCamera_ViewController.h"
 
 @class ScanForCamera;
 
@@ -60,6 +61,8 @@
     NSTimer * timeOut;
     NSTimer *timeOutCheckWifiHome;
     
+    //member to dismiss when disDisAppearView
+    UIAlertView *_alertChooseConfig;    
     
 }
 

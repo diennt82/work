@@ -112,12 +112,23 @@
 
 - (void)showDialogChooseConfigCamera
 {
+    NSString *selectPlease = NSLocalizedStringWithDefaultValue(@"please_select",nil, [NSBundle mainBundle],
+                                                                                           @"Please select", nil);
+    NSString *message = NSLocalizedStringWithDefaultValue(@"guide_choose_config",nil, [NSBundle mainBundle],
+                                                                                      @"BLE to config camera through bluetooth.\nWifi to config camera through wifi.", nil);
+    NSString *cancelText = NSLocalizedStringWithDefaultValue(@"Cancel",nil, [NSBundle mainBundle],
+                                                             @"Cancel", nil);
+    NSString *BLEText = NSLocalizedStringWithDefaultValue(@"BLE",nil, [NSBundle mainBundle],
+                                                          @"BLE", nil);
+    NSString *wifiText = NSLocalizedStringWithDefaultValue(@"Wifi",nil, [NSBundle mainBundle],
+                                                           @"Wifi", nil);
+    
     _alertChooseConfig = [[UIAlertView alloc]
-                          initWithTitle:@"Please select"
-                          message:@"BLE to config camera through bluetooth.\nWifi to config camera through wifi."
+                          initWithTitle:selectPlease
+                          message:message
                           delegate:self
-                          cancelButtonTitle:@"Cancel"
-                          otherButtonTitles:@"BLE", @"Wifi", nil];
+                          cancelButtonTitle:cancelText
+                          otherButtonTitles:BLEText, wifiText, nil];
     [_alertChooseConfig show];
 }
 

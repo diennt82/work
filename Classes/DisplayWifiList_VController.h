@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "WifiEntry.h"
 #import "NetworkInfoToCamera_VController.h"
+#import "BLEConnectionManager.h"
 
 @interface DisplayWifiList_VController : UIViewController<UIAlertViewDelegate, BLEConnectionManagerDelegate>
 {
