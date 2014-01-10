@@ -24,6 +24,7 @@
 #import "QBAnimationItem.h"
 #import "QBAnimationGroup.h"
 #import "QBAnimationSequence.h"
+#import "Step09ViewController.h"
 
 @interface MBP_iosViewController ()
 {
@@ -76,11 +77,11 @@
 
 
 	//go Back to main menu
-//	[NSTimer scheduledTimerWithTimeInterval:4
-//		target:self
-//		selector:@selector(wakeup_display_login:)
-//		userInfo:nil
-//		repeats:NO];
+	[NSTimer scheduledTimerWithTimeInterval:4
+		target:self
+		selector:@selector(wakeup_display_login:)
+		userInfo:nil
+		repeats:NO];
 
     UIInterfaceOrientation interfaceOrientation = [UIApplication sharedApplication].statusBarOrientation;
 //    [self adjustViewsForOrientations:interfaceOrientation];
@@ -713,26 +714,14 @@
         NSLog(@"Load step 09");
         
         //Load the next xib
-        Step_09_ViewController *step09ViewController = nil;
-        
-        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
-        {
-            
-            step09ViewController = [[Step_09_ViewController alloc]
-                                    initWithNibName:@"Step_09_ViewController_ipad" bundle:nil];
-        }
-        else
-        {
-            step09ViewController = [[Step_09_ViewController alloc]
-                                    initWithNibName:@"Step_09_ViewController" bundle:nil];
-        }
+        Step09ViewController *step09VC = [[Step09ViewController alloc] init];
         
         //[self.navigationController pushViewController:step09ViewController animated:NO];
-        step09ViewController.delegate = self;
-        UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:step09ViewController];
+        step09VC.delegate = self;
+        UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:step09VC];
         [self presentViewController:nav animated:YES completion:^{}];
         
-        [step09ViewController release];
+        [step09VC release];
     }
 }
 

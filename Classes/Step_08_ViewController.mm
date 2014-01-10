@@ -7,6 +7,7 @@
 //
 
 #import "Step_08_ViewController.h"
+#import "Step09ViewController.h"
 
 @interface Step_08_ViewController ()
 
@@ -146,31 +147,11 @@
     
     
     //Load the next xib
-    Step_09_ViewController *step09ViewController = nil;
-    
-    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
-    {
-        
-        step09ViewController = [[Step_09_ViewController alloc]
-                                initWithNibName:@"Step_09_ViewController_ipad" bundle:nil];
-        
-        
-    }
-    else
-    {
-      
-        
-        step09ViewController = [[Step_09_ViewController alloc]
-                                initWithNibName:@"Step_09_ViewController" bundle:nil];
-        
-        
-    }
+    Step09ViewController *step09VC = [[Step09ViewController alloc] init];
 
-
-    [self.navigationController pushViewController:step09ViewController animated:NO];
+    [self.navigationController pushViewController:step09VC animated:NO];
     
-    [step09ViewController release];
-    
+    [step09VC release];
 }
 
 
