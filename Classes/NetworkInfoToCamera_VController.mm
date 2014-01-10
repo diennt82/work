@@ -56,7 +56,7 @@
                                       style:UIBarButtonItemStyleBordered
                                      target:nil
                                      action:nil] autorelease];
-    self.navigationItem.hidesBackButton = YES;
+    self.navigationItem.hidesBackButton = NO;
     
     
     
@@ -463,7 +463,6 @@
 
 -(void) handleNextButton:(id) sender
 {
-    [self.ib_dialogVerifyNetwork setHidden:NO];
     //check if password is ok?
     UITextField  * pass = (UITextField*)[self.passwordCell viewWithTag:200];
     UITextField  * confpass = (UITextField*)[self.confPasswordCell viewWithTag:201];
@@ -845,6 +844,9 @@
 }
 -(void)sendWifiInfoToCamera
 {
+    // should be show dialog here, make sure user input username and password
+    [self.ib_dialogVerifyNetwork setHidden:NO];
+    
     [self prepareWifiInfo];
     
     //Save and send

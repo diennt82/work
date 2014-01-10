@@ -90,7 +90,6 @@
 
 -(void) viewWillAppear:(BOOL)animated
 {
-    self.navigationItem.hidesBackButton=YES;
     //delay .1s to display new screen
     [NSTimer scheduledTimerWithTimeInterval:0.1 target:self selector:@selector(queryWifiList) userInfo:nil repeats:NO];
     UIInterfaceOrientation interfaceOrientation = [UIApplication sharedApplication].statusBarOrientation;
