@@ -89,7 +89,9 @@
     {
         WifiEntry * wifi = [listOfWifi objectAtIndex:i];
 //        NSLog(@"SSID Wifi -------------------->%@", wifi.ssid_w_quote);
-        if (![wifi.ssid_w_quote hasPrefix:@"\"Camera-"] && ![wifi.ssid_w_quote isEqualToString:@"\"\""])
+        if (![wifi.ssid_w_quote hasPrefix:@"\"Camera-"] &&
+            ![wifi.ssid_w_quote isEqualToString:@"\"\""] &&
+            ![wifi.ssid_w_quote hasPrefix:@"\"CameraHD-"])
         {
             [wifiList addObject:wifi];
             

@@ -10,6 +10,8 @@
 #import "MBP_iosViewController.h"
 #import "Step_04_ViewController.h"
 #import "Step_10_ViewController.h"
+#import "HttpCom.h"
+
 
 #define OPEN_WIFI_BTN_TAG 1001
 #define ALERT_FWCHECK_FAILED 2
