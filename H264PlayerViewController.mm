@@ -1157,7 +1157,7 @@
     
     [self hidenAllBottomView];
     
-    [self showTimelineView];
+    //[self showTimelineView];
 }
 
 - (void)showControlMenu
