@@ -208,7 +208,7 @@
 }
 
 
--(void) forceLogin
+-(void) forceLogin: (BOOL)autoLogin
 {
     
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
@@ -495,7 +495,7 @@
         }
         else
         {
-            [self forceLogin];
+            [self forceLogin:TRUE];
         }
     }
     else if (viewController.app_stage ==  APP_STAGE_SETUP)
@@ -504,7 +504,8 @@
     }
     else
     {
-        [self performSelectorOnMainThread:@selector(showInit) withObject:nil waitUntilDone:YES];
+        //[self performSelectorOnMainThread:@selector(showInit) withObject:nil waitUntilDone:YES];
+        [self forceLogin:FALSE];
     }
 
 }

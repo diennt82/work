@@ -76,11 +76,11 @@
 
 
 	//go Back to main menu
-	[NSTimer scheduledTimerWithTimeInterval:4
-		target:self
-		selector:@selector(wakeup_display_login:)
-		userInfo:nil
-		repeats:NO];
+//	[NSTimer scheduledTimerWithTimeInterval:4
+//		target:self
+//		selector:@selector(wakeup_display_login:)
+//		userInfo:nil
+//		repeats:NO];
 
     UIInterfaceOrientation interfaceOrientation = [UIApplication sharedApplication].statusBarOrientation;
 //    [self adjustViewsForOrientations:interfaceOrientation];
