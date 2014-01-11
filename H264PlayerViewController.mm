@@ -56,6 +56,7 @@
 @property (nonatomic) BOOL isHorizeShow;
 @property (nonatomic, retain) NSTimer *timerHideMenu;
 @property (nonatomic) BOOL isEarlierView;
+@property (nonatomic) NSInteger numberOfSTUNError;
 
 - (void)centerScrollViewContents;
 - (void)scrollViewDoubleTapped:(UITapGestureRecognizer*)recognizer;
@@ -509,10 +510,7 @@
                 
                 // so need to adjust the origin
                 left = self.imageViewVideo.frame.origin.x;
-                top = 0;
-                
-                
-                
+                top = 0;  
             }
             else
             {
@@ -673,12 +671,14 @@
         {
             self.currentMediaStatus = msg;
             
-    		NSLog(@"Timeout While streaming  OR server DIED ");
+    		NSLog(@"Timeout While streaming  OR server DIED - userWantToCancel: %d", userWantToCancel);
             
     		//mHandler.dispatchMessage(Message.obtain(mHandler, Streamer.MSG_VIDEO_STREAM_HAS_STOPPED_UNEXPECTEDLY));
             
-            NSLog(@"userWantToCancel: %d", userWantToCancel);
-    		
+            if (self.selectedChannel.communication_mode == COMM_MODE_STUN)
+            {
+                self.numberOfSTUNError++;
+            }
             
             if (userWantToCancel == TRUE)
             {
@@ -1348,10 +1348,7 @@
 
         self.selectedChannel.stream_url = nil;
     }
-    
-    
-    
-    
+
     self.httpComm = [[[HttpCommunication alloc]init] autorelease];
     self.httpComm.device_ip = self.selectedChannel.profile.ip_address;
     self.httpComm.device_port = self.selectedChannel.profile.port;
@@ -1433,9 +1430,6 @@
         [self.client sendAudioProbesToIp: self.selectedChannel.profile.camera_mapped_address
                                  andPort:self.selectedChannel.profile.camera_stun_audio_port];
         [NSThread sleepForTimeInterval:0.3];
-        
-        
-        
         
         [self.client sendVideoProbesToIp: self.selectedChannel.profile.camera_mapped_address
                                  andPort:self.selectedChannel.profile.camera_stun_video_port];
@@ -1562,12 +1556,8 @@
         
         status=  h264Streamer->prepare();
         
-       
-        
         if (status != NO_ERROR) // NOT OK
         {
-            
-           
             break;
         }
         
@@ -1585,10 +1575,6 @@
     }
     while (false);
     
-    
-    
-    
-    
     if (status == NO_ERROR)
     {
         [self handleMessage:MEDIA_PLAYER_STARTED
@@ -1597,15 +1583,10 @@
     }
     else
     {
-        
-        
         //Consider it's down and perform necessary action ..
         [self handleMessage:MEDIA_ERROR_SERVER_DIED
                        ext1:0
                        ext2:0];
-        
-        
-        
     }
 }
 
@@ -1704,23 +1685,28 @@
         self.probeTimer = nil;
     }
     
-    if ( (self.selectedChannel != nil)  &&
-         (self.selectedChannel.profile.camera_mapped_address != nil) &&
-         (self.selectedChannel.profile.camera_stun_audio_port != 0) &&
-         (self.selectedChannel.profile.camera_stun_video_port != 0)
-        )
-    { // Make sure we are connecting via STUN
-        
-        if (self.h264PlayerVCDelegate != nil)
-        {
-            self.selectedChannel.waitingForStreamerToClose = YES;
-            NSLog(@"waiting for close STUN stream from server");
+    if (self.selectedChannel.communication_mode == COMM_MODE_STUN)
+    {
+        if ( (self.selectedChannel != nil)  &&
+            (self.selectedChannel.profile.camera_mapped_address != nil) &&
+            (self.selectedChannel.profile.camera_stun_audio_port != 0) &&
+            (self.selectedChannel.profile.camera_stun_video_port != 0)
+            )
+        { // Make sure we are connecting via STUN
+            
+            if (self.h264PlayerVCDelegate != nil)
+            {
+                self.selectedChannel.waitingForStreamerToClose = YES;
+                NSLog(@"waiting for close STUN stream from server");
+            }
+            
+            H264PlayerViewController *vc = (H264PlayerViewController *)[self retain];
+            [self performSelectorInBackground:@selector(closeStunStream_bg:) withObject:vc];
+            
         }
-        
-        H264PlayerViewController *vc = (H264PlayerViewController *)[self retain];
-        [self performSelectorInBackground:@selector(closeStunStream_bg:) withObject:vc];
-        
     }
+    
+    
     if (_client != nil)
     {
         [_client shutdown];
@@ -2615,7 +2601,7 @@
                                NSString *body = [[[responseDict objectForKey: @"data"] objectForKey: @"device_response"] objectForKey: @"body"];
                                //"get_session_key: error=200,port1=37171&port2=47608&ip=115.77.250.193,mode=p2p_stun_rtsp"
                                
-                                NSLog(@"Respone - camera response : %@", body);
+                                NSLog(@"Respone - camera response : %@, Number of STUN error: %d", body, _numberOfSTUNError);
                                if (body != nil )
                                {
                                    NSArray * tokens = [body componentsSeparatedByString:@","];
@@ -2623,26 +2609,53 @@
 
                                    if ( [[tokens objectAtIndex:0] hasSuffix:@"error=200"]) //roughly check for "error=200"
                                    {
-                                       
-                                       
-                                       NSString * ports_ip = [tokens objectAtIndex:1];
-                                       
-                                       NSArray * token1s = [ports_ip componentsSeparatedByString:@"&"];
-                                       NSString * port1_str = [token1s objectAtIndex:0];
-                                       NSString * port2_str = [token1s objectAtIndex:1];
-                                       NSString * cam_ip = [token1s objectAtIndex:2];
-                                       
-                                       
-                                       
-                                       self.selectedChannel.profile.camera_mapped_address = [[cam_ip componentsSeparatedByString:@"="] objectAtIndex:1];
-                                       self.selectedChannel.profile.camera_stun_audio_port = [(NSString *)[[port1_str componentsSeparatedByString:@"="] objectAtIndex:1] intValue];
-                                       self.selectedChannel.profile.camera_stun_video_port =[(NSString *)[[port2_str componentsSeparatedByString:@"="] objectAtIndex:1] intValue];
-                                       
-                                       if (userWantToCancel == FALSE)
+                                       if (_numberOfSTUNError >= 5) // Switch to RELAY because STUN try probe & failed many times
                                        {
-                                           [self performSelectorOnMainThread:@selector(startStunStream)
-                                                                  withObject:nil
-                                                               waitUntilDone:NO];
+                                           NSLog(@"Switch to RELAY - Number of STUN error: %d", _numberOfSTUNError);
+                                           
+                                           /* close current session  before continue*/
+                                           cmd_string = @"action=command&command=close_p2p_rtsp_stun";
+                                           
+                                           //responseDict =
+                                           [jsonComm  sendCommandBlockedWithRegistrationId:mac
+                                                                                andCommand:cmd_string
+                                                                                 andApiKey:apiKey];
+                                           
+                                           if (userWantToCancel == FALSE)
+                                           {
+                                               self.numberOfSTUNError = 0;
+                                               
+                                               //[self handleMessage:H264_SWITCHING_TO_RELAY_SERVER ext1:0 ext2:0];
+                                               NSArray * args = [NSArray arrayWithObjects:
+                                                                 [NSNumber numberWithInt:H264_SWITCHING_TO_RELAY_SERVER],nil];
+                                               
+                                               //relay
+                                               [self performSelectorOnMainThread:@selector(handleMessageOnMainThread:)
+                                                                      withObject:args
+                                                                   waitUntilDone:NO];
+                                           }
+                                       }
+                                       else
+                                       {
+                                           NSString * ports_ip = [tokens objectAtIndex:1];
+                                           
+                                           NSArray * token1s = [ports_ip componentsSeparatedByString:@"&"];
+                                           NSString * port1_str = [token1s objectAtIndex:0];
+                                           NSString * port2_str = [token1s objectAtIndex:1];
+                                           NSString * cam_ip = [token1s objectAtIndex:2];
+                                           
+                                           
+                                           
+                                           self.selectedChannel.profile.camera_mapped_address = [[cam_ip componentsSeparatedByString:@"="] objectAtIndex:1];
+                                           self.selectedChannel.profile.camera_stun_audio_port = [(NSString *)[[port1_str componentsSeparatedByString:@"="] objectAtIndex:1] intValue];
+                                           self.selectedChannel.profile.camera_stun_video_port =[(NSString *)[[port2_str componentsSeparatedByString:@"="] objectAtIndex:1] intValue];
+                                           
+                                           if (userWantToCancel == FALSE)
+                                           {
+                                               [self performSelectorOnMainThread:@selector(startStunStream)
+                                                                      withObject:nil
+                                                                   waitUntilDone:NO];
+                                           }
                                        }
                                    }
                                    else
