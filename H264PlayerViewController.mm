@@ -580,6 +580,11 @@
             
             self.currentMediaStatus = msg;
             
+            if (self.selectedChannel.communication_mode == COMM_MODE_STUN)
+            {
+                self.numberOfSTUNError = 0;
+            }
+            
             self.activityIndicator.hidden = YES;
             [self.activityIndicator stopAnimating];
             
