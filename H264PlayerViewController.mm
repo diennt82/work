@@ -9,6 +9,7 @@
 #import "H264PlayerViewController.h"
 #import "EarlierViewController.h"
 #import "TimelineViewController.h"
+#import <CoreText/CTStringAttributes.h>
 
 #define DISABLE_VIEW_RELEASE_FLAG 0
 
@@ -642,8 +643,12 @@
                 [self performSelectorInBackground:@selector(getMelodyValue_bg) withObject:nil];
                 self.imgViewDrectionPad.userInteractionEnabled = YES;
                 self.imgViewDrectionPad.image = [UIImage imageNamed:@"camera_action_pan_bg.png"];
-//                NSTimer *getTemperatureTimer = [NSTimer scheduledTimerWithTimeInterval:10 target:self selector:@selector(getCameraTemperature_bg:) userInfo:nil repeats:YES];
-//                [getTemperatureTimer fire];
+                NSTimer *getTemperatureTimer = [NSTimer scheduledTimerWithTimeInterval:10
+                                                                                target:self
+                                                                              selector:@selector(getCameraTemperature_bg:)
+                                                                              userInfo:nil
+                                                                               repeats:YES];
+                [getTemperatureTimer fire];
             }
         }
             break;
@@ -2402,7 +2407,7 @@
         httpCommunication.device_ip = self.selectedChannel.profile.ip_address;
         httpCommunication.device_port = self.selectedChannel.profile.port;
         
-        NSData *responseData = [httpCommunication sendCommandAndBlock_raw:@"get_temperature"];
+        NSData *responseData = [httpCommunication sendCommandAndBlock_raw:@"value_temperature"]; // value_temperature: 29.2
         
         [httpCommunication release];
         
@@ -2424,7 +2429,7 @@
         NSString *apiKey = [userDefaults objectForKey:@"PortalApiKey"];
         
         NSDictionary *responseDict = [jsonCommunication sendCommandBlockedWithRegistrationId:mac
-                                                                                  andCommand:@"action=command&command=get_temperature"
+                                                                                  andCommand:@"action=command&command=value_temperature"
                                                                                    andApiKey:apiKey];
         [jsonCommunication release];
         
@@ -2433,12 +2438,12 @@
             NSInteger status = [[responseDict objectForKey:@"status"] intValue];
             if (status == 200)
             {
-                responseString = [[[responseDict objectForKey:@"data"] objectForKey:@"device_response"] objectForKey:@"body"];
+                responseString = [[[responseDict objectForKey:@"data"] objectForKey:@"device_response"] objectForKey:@"body"]; // value_temperature: 29.2
             }
         }
     }
     
-    NSLog(@"getCameraTemperature_bg: %@", responseString);
+    NSLog(@"Reponse - getCameraTemperature_bg: %@", responseString);
     
     if (![responseString isEqualToString:@""])
     {
@@ -2462,6 +2467,11 @@
 - (void)setTemperatureState_Fg: (NSString *)temperature
 {
     // Update UI
+    NSMutableAttributedString *attrString = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"%d°c", (int)roundf([temperature floatValue])]];
+    
+    [attrString addAttribute:(id)kCTSuperscriptAttributeName value:@"1" range:NSMakeRange(3,1)];
+    self.ib_temperature.attributedText = attrString;
+    [attrString release];
 }
 
 #pragma mark -
