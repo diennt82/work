@@ -19,7 +19,7 @@
 
 @interface AudioOutStreamer : NSObject  {
 	AsyncSocket * sendingSocket; 
-	NSMutableData * pcm_data;
+	NSMutableData * _pcm_data;
 	PCMPlayer * pcmPlayer; 
 	NSTimer * voice_data_timer; 
 	
@@ -28,7 +28,7 @@
     BOOL hasStartRecordingSound; 
 }
 
-
+@property (nonatomic, strong) NSMutableData *pcm_data;
 @property (nonatomic, retain) PCMPlayer * pcmPlayer;
 @property (nonatomic) NSInteger bufferLength;
 @property (nonatomic, assign) id<AudioOutStreamerDelegate> audioOutStreamerDelegate;

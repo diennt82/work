@@ -77,6 +77,7 @@
 @synthesize itemSelectedImages = _itemSelectedImages;
 @synthesize selectedItemMenu = _selectedItemMenu;
 @synthesize walkieTalkieEnabled;
+@synthesize httpComm = _httpComm;
 
 #pragma mark - View
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
@@ -202,6 +203,25 @@
     //[self showMenuControlPanel];
     //[self tryToHideMenuControlPanel];
     [self hideControlMenu];
+    
+    NSLog(@"Check selectedChannel is %@ and ip of deviece is %@", self.selectedChannel, self.selectedChannel.profile.ip_address);
+    [self setupHttpPort];
+    [self setupPtt];
+    
+}
+
+- (void) setupHttpPort
+{
+    NSLog(@"Self.selcetedChangel is %@",self.selectedChannel);
+    _httpComm = [[HttpCommunication alloc] init];
+    
+    NSString* ip = self.selectedChannel.profile.ip_address;
+	int port = self.selectedChannel.profile.port;
+    _httpComm.device_ip  = ip;
+    _httpComm.device_port = port;
+    
+    //init the ptt port to default
+    self.selectedChannel.profile.ptt_port = IRABOT_AUDIO_RECORDING_PORT;
 }
 - (void)addGesturesPichInAndOut
 {
@@ -1280,10 +1300,6 @@
     return YES;
 }
 
-- (void)cleanup
-{
-    // Clean a warning
-}
 
 - (void)becomeActive
 {
@@ -1330,7 +1346,6 @@
                                                            selector:@selector(h_directional_change_callback:)
                                                            userInfo:nil
                                                             repeats:YES];
-    [self setupPtt];
     
     self.imageViewHandle.hidden = YES;
     self.imageViewKnob.center = self.imgViewDrectionPad.center;
@@ -1354,20 +1369,20 @@
 - (void)setupCamera
 {
     
-    if (self.httpComm != nil)
-    {
-        self.httpComm = nil;
-    }
+//    if (self.httpComm != nil)
+//    {
+//        self.httpComm = nil;
+//    }
     if (self.selectedChannel.stream_url != nil)
     {
 
         self.selectedChannel.stream_url = nil;
     }
+    _httpComm.device_ip = self.selectedChannel.profile.ip_address;
+    _httpComm.device_port = self.selectedChannel.profile.port;
 
-    self.httpComm = [[[HttpCommunication alloc]init] autorelease];
-    self.httpComm.device_ip = self.selectedChannel.profile.ip_address;
-    self.httpComm.device_port = self.selectedChannel.profile.port;
     
+    NSLog(@"device_ip is %@ and device_port is %d", self.selectedChannel.profile.ip_address, self.selectedChannel.profile.port);
     //Support remote UPNP video as well
     if (self.selectedChannel.profile.isInLocal == TRUE)
     {
@@ -1935,11 +1950,11 @@
     
     if (self.selectedChannel.profile.isInLocal )
 	{
-        HttpCommunication *httpCommunication = [[[HttpCommunication alloc] init] autorelease];
-        httpCommunication.device_ip = self.selectedChannel.profile.ip_address;
-        httpCommunication.device_port = self.selectedChannel.profile.port;
+//        HttpCommunication *httpCommunication = [[[HttpCommunication alloc] init] autorelease];
+        _httpComm.device_ip = self.selectedChannel.profile.ip_address;
+        _httpComm.device_port = self.selectedChannel.profile.port;
         
-        NSData *responseData = [httpCommunication sendCommandAndBlock_raw:@"get_resolution"];
+        NSData *responseData = [_httpComm sendCommandAndBlock_raw:@"get_resolution"];
         
         if (responseData != nil)
         {
@@ -2010,11 +2025,11 @@
     
     if (self.selectedChannel.profile .isInLocal == TRUE)
     {
-        HttpCommunication *httpCommunication = [[[HttpCommunication alloc] init] autorelease];
-        httpCommunication.device_ip = self.selectedChannel.profile.ip_address;
-        httpCommunication.device_port = self.selectedChannel.profile.port;
+//        HttpCommunication *httpCommunication = [[[HttpCommunication alloc] init] autorelease];
+        _httpComm.device_ip = self.selectedChannel.profile.ip_address;
+        _httpComm.device_port = self.selectedChannel.profile.port;
         
-        NSData *responseData = [httpCommunication sendCommandAndBlock_raw:@"get_recording_stat"];
+        NSData *responseData = [_httpComm sendCommandAndBlock_raw:@"get_recording_stat"];
         
         if (responseData != nil)
         {
@@ -2079,11 +2094,11 @@
     
     if (self.selectedChannel.profile .isInLocal == TRUE)
     {
-        HttpCommunication *httpCommunication = [[[HttpCommunication alloc] init] autorelease];
-        httpCommunication.device_ip = self.selectedChannel.profile.ip_address;
-        httpCommunication.device_port = self.selectedChannel.profile.port;
+//        HttpCommunication *httpCommunication = [[[HttpCommunication alloc] init] autorelease];
+        _httpComm.device_ip = self.selectedChannel.profile.ip_address;
+        _httpComm.device_port = self.selectedChannel.profile.port;
         
-        NSData *responseData = [httpCommunication sendCommandAndBlock_raw:[NSString stringWithFormat:@"set_recording_stat&mode=%@", modeRecording]];
+        NSData *responseData = [_httpComm sendCommandAndBlock_raw:[NSString stringWithFormat:@"set_recording_stat&mode=%@", modeRecording]];
         
         if (responseData != nil)
         {
@@ -2167,11 +2182,11 @@
     
     if (self.selectedChannel.profile .isInLocal == TRUE)
     {
-        HttpCommunication *httpCommunication = [[[HttpCommunication alloc] init] autorelease];
-        httpCommunication.device_ip = self.selectedChannel.profile.ip_address;
-        httpCommunication.device_port = self.selectedChannel.profile.port;
+//        HttpCommunication *httpCommunication = [[[HttpCommunication alloc] init] autorelease];
+        _httpComm.device_ip = self.selectedChannel.profile.ip_address;
+//        httpCommunication.device_port = self.selectedChannel.profile.port;
         
-        NSData *responseData = [httpCommunication sendCommandAndBlock_raw:@"get_motion_area"];
+        NSData *responseData = [_httpComm sendCommandAndBlock_raw:@"get_motion_area"];
         
         if (responseData != nil)
         {
@@ -2299,13 +2314,13 @@
     
     if (self.selectedChannel.profile .isInLocal == TRUE)
     {
-        HttpCommunication *httpCommunication = [[HttpCommunication alloc] init];
-        httpCommunication.device_ip = self.selectedChannel.profile.ip_address;
-        httpCommunication.device_port = self.selectedChannel.profile.port;
+//        HttpCommunication *httpCommunication = [[HttpCommunication alloc] init];
+//        httpCommunication.device_ip = self.selectedChannel.profile.ip_address;
+//        httpCommunication.device_port = self.selectedChannel.profile.port;
         
-        NSData *responseData = [httpCommunication sendCommandAndBlock_raw:@"value_melody"];
-        
-        [httpCommunication release];
+        _httpComm.device_ip = self.selectedChannel.profile.ip_address;
+        _httpComm.device_port = 80;
+        NSData *responseData = [_httpComm sendCommandAndBlock_raw:@"value_melody"];
         
         if (responseData != nil)
         {
@@ -2407,13 +2422,11 @@
     
     if (self.selectedChannel.profile .isInLocal == TRUE)
     {
-        HttpCommunication *httpCommunication = [[HttpCommunication alloc] init];
-        httpCommunication.device_ip = self.selectedChannel.profile.ip_address;
-        httpCommunication.device_port = self.selectedChannel.profile.port;
-        
-        NSData *responseData = [httpCommunication sendCommandAndBlock_raw:@"value_temperature"]; // value_temperature: 29.2
-        
-        [httpCommunication release];
+
+        _httpComm.device_ip = self.selectedChannel.profile.ip_address;
+        _httpComm.device_port = self.selectedChannel.profile.port;
+        NSData *responseData = [_httpComm sendCommandAndBlock_raw:@"get_temperature"];
+
         
         if (responseData != nil)
         {
@@ -2756,11 +2769,11 @@
                            
                            if (self.selectedChannel.profile.isInLocal )
                            {
-                               HttpCommunication *httpCommunication = [[[HttpCommunication alloc] init] autorelease];
-                               httpCommunication.device_ip = self.selectedChannel.profile.ip_address;
-                               httpCommunication.device_port = self.selectedChannel.profile.port;
+//                               HttpCommunication *httpCommunication = [[[HttpCommunication alloc] init] autorelease];
+                               _httpComm.device_ip = self.selectedChannel.profile.ip_address;
+                               _httpComm.device_port = self.selectedChannel.profile.port;
                                
-                               NSData *responseData = [httpCommunication sendCommandAndBlock_raw:@"get_resolution"];
+                               NSData *responseData = [_httpComm sendCommandAndBlock_raw:@"get_resolution"];
                                
                                if (responseData != nil)
                                {
@@ -3085,15 +3098,15 @@
 	{
         if (_selectedChannel.profile.isInLocal)
 		{
-            HttpCommunication *httpCommunication = [[[HttpCommunication alloc] init] autorelease];
-            httpCommunication.device_ip = _selectedChannel.profile.ip_address;
-            httpCommunication.device_port = _selectedChannel.profile.port;
+//            HttpCommunication *httpCommunication = [[[HttpCommunication alloc] init] autorelease];
+            _httpComm.device_ip = _selectedChannel.profile.ip_address;
+            _httpComm.device_port = _selectedChannel.profile.port;
             
             //Non block send-
             NSLog(@"device_ip: %@, device_port: %d", _selectedChannel.profile.ip_address, _selectedChannel.profile.port);
             
-            [httpCommunication sendCommand:dir_str];
-            //[httpCommunication sendCommandAndBlock:dir_str];
+            [_httpComm sendCommand:dir_str];
+            //[_httpComm sendCommandAndBlock:dir_str];
 		}
 		else if(_selectedChannel.profile.minuteSinceLastComm <= 5)
 		{
@@ -3166,11 +3179,11 @@
 	{
         if (_selectedChannel.profile.isInLocal)
         {
-            HttpCommunication *httpCommunication = [[[HttpCommunication alloc] init] autorelease];
-            httpCommunication.device_ip = _selectedChannel.profile.ip_address;
-            httpCommunication.device_port = _selectedChannel.profile.port;
+//            _httpComm *_httpComm = [[[HttpCommunication alloc] init] autorelease];
+            _httpComm.device_ip = _selectedChannel.profile.ip_address;
+            _httpComm.device_port = _selectedChannel.profile.port;
 				//Non block send-
-				[httpCommunication sendCommand:dir_str];
+				[_httpComm sendCommand:dir_str];
                 
                 //[httpCommunication sendCommandAndBlock:dir_str];
 		}
@@ -3838,11 +3851,11 @@
     
     if (  self.selectedChannel.profile.isInLocal == TRUE)
 	{
-        HttpCommunication *httpCommunication = [[[HttpCommunication alloc] init] autorelease];
-        httpCommunication.device_ip = self.selectedChannel.profile.ip_address;
-        httpCommunication.device_port = self.selectedChannel.profile.port;
+//        HttpCommunication *httpCommunication = [[[HttpCommunication alloc] init] autorelease];
+        _httpComm.device_ip = self.selectedChannel.profile.ip_address;
+        _httpComm.device_port = self.selectedChannel.profile.port;
         
-        NSData *responseData = [httpCommunication sendCommandAndBlock_raw:[NSString stringWithFormat:@"set_resolution&mode=%@", modeVideo]];
+        NSData *responseData = [_httpComm sendCommandAndBlock_raw:[NSString stringWithFormat:@"set_resolution&mode=%@", modeVideo]];
         
         if (responseData != nil)
         {
@@ -4473,6 +4486,7 @@
     }
     
     [self checkOrientation];
+    [self setupPtt];
     
 }
 
@@ -4510,6 +4524,24 @@
 }
 #pragma  mark -
 #pragma mark PTT
+
+- (void)cleanup
+{
+    
+    [self performSelectorInBackground:@selector(set_Walkie_Talkie_bg:)
+                           withObject:@"0"];
+    
+    [_audioOut release];
+    _audioOut = nil;
+    
+//    UIButton *pttBtn = (UIButton *)[self.view viewWithTag:PTT_ENGAGE_BTN];
+//    
+//    [self.ib_buttonTouchToTalk setImage:[UIImage imageNamed:@"bb_vs_mike_on.png"] forState:UIControlStateNormal];
+    
+    self.walkieTalkieEnabled = NO;
+    
+}
+
 -(void) setupPtt
 {
     
@@ -4520,19 +4552,21 @@
 	[self.ib_buttonTouchToTalk addGestureRecognizer:longPress];
 	[longPress release];
     
-    //Add another TOUCH DOWN event for this
-//    [self.ib_buttonTouchToTalk addTarget:self action:@selector(user_press_down) forControlEvents:UIControlEventTouchDown];
-//    [self.ib_buttonTouchToTalk addTarget:self action:@selector(user_release) forControlEvents:UIControlEventTouchUpInside];
-//    [self.ib_buttonTouchToTalk addTarget:self action:@selector(user_release) forControlEvents:UIControlEventTouchUpOutside];
+    [self.ib_buttonTouchToTalk addTarget:self action:@selector(holdToTalk:) forControlEvents:UIControlEventTouchDown];
+    [self.ib_buttonTouchToTalk addTarget:self action:@selector(userReleaseHoldToTalk) forControlEvents:UIControlEventTouchUpInside];
+    [self.ib_buttonTouchToTalk addTarget:self action:@selector(userReleaseHoldToTalk) forControlEvents:UIControlEventTouchUpOutside];
+    
 }
 
--(void) user_release
+-(void)userReleaseHoldToTalk
 {
+
     NSLog(@"Detect user cancel PTT & clean up");
-    if (audioOut != nil)
+    if (_audioOut != nil)
     {
-        [audioOut disconnectFromAudioSocket];
-        [audioOut release];
+        [_audioOut disconnectFromAudioSocket];
+        [_audioOut release];
+        _audioOut = nil;
     }
 }
 
@@ -4548,24 +4582,24 @@
             
             [self performSelectorInBackground:@selector(set_Walkie_Talkie_bg:)
                                    withObject:[NSString stringWithFormat:@"%d",walkie_talkie_enabled]];
-            if (audioOut != nil)
+            if (_audioOut != nil)
             {
-                [audioOut connectToAudioSocket];
-                audioOut.audioOutStreamerDelegate = self;
+                NSLog(@"Connect to Audio Soccket in setEnablePtt function");
+                [_audioOut connectToAudioSocket];
+                _audioOut.audioOutStreamerDelegate = self;
             }
             else
             {
                 NSLog(@" NEED to enable audioOut now BUT audioOut = nil!!!");
-                
             }
-            
-            
         }
         else
         {
-            if (audioOut != nil)
+            if (_audioOut != nil)
             {
-                [audioOut disconnectFromAudioSocket];
+                NSLog(@"disconnect to audio socket###");
+                [_audioOut disconnectFromAudioSocket];
+                [self touchUpInsideHoldToTalk];
             }
             
         }
@@ -4581,6 +4615,12 @@
     
     NSString * command = [NSString stringWithFormat:@"%@%@",SET_PTT,status];
     
+    NSLog(@"Command send to camera is %@", command);
+    
+    //set port default for send command
+    
+    _httpComm.device_port = 80;
+
     if(_httpComm != nil)
     {
         [_httpComm sendCommandAndBlock:command];
@@ -4589,22 +4629,17 @@
     [pool release];
 }
 
--(void)user_press_down
+-(void)processingHoldToTalk
 {
-    NSString * device_ip = @"192.168.2.1";//make a default
-	NSInteger device_port = 80;
-    _httpComm.device_ip = device_ip;
-    _httpComm.device_port = device_port;
-    
-    
     NSLog(@"Create AudioOutStreamer & start recording now");
-    audioOut = [[AudioOutStreamer alloc] initWithDeviceIp:_httpComm.device_ip
-                                               andPTTport:self.selectedChannel.profile.ptt_port];
-    [audioOut retain];
-    
+    NSLog(@"Port push to talk is %d, actually is %d",self.selectedChannel.profile.ptt_port,IRABOT_AUDIO_RECORDING_PORT );
+    NSLog(@"Device iP is %@", _httpComm.device_ip);
+    _audioOut = [[AudioOutStreamer alloc] initWithDeviceIp:_httpComm.device_ip
+                                               andPTTport:self.selectedChannel.profile.ptt_port];  //IRABOT_AUDIO_RECORDING_PORT
+    [_audioOut retain];
     //Start buffering sound from user at the moment they press down the button
     //  This is to prevent loss of audio data
-    [audioOut startRecordingSound];
+    [_audioOut startRecordingSound];
 }
 
 
@@ -4612,21 +4647,20 @@
 
 -(void) longPress:(UILongPressGestureRecognizer*) gest
 {
-    
-    //UIButton * btn = (UIButton *)[gest view];
-    
-    
+    NSLog(@"Long press on hold to talk");
     if ([gest state] == UIGestureRecognizerStateBegan)
     {
+        NSLog(@"UIGestureRecognizerStateBegan on hold to talk");
         self.walkieTalkieEnabled = YES;
         [self setEnablePtt:YES];
-        
+        UIImage *imageHoldedToTalk = [UIImage imageNamed:@"camera_action_mic_pressed.png"];
+        [self.ib_buttonTouchToTalk setBackgroundImage:imageHoldedToTalk forState:UIControlEventTouchDown];
         
     }
     else if ([gest state] == UIGestureRecognizerStateEnded ||
              [gest state] == UIGestureRecognizerStateCancelled)
     {
-        
+        NSLog(@"UIGestureRecognizerStateEnded on hold to talk");
         if ([gest state] == UIGestureRecognizerStateCancelled)
         {
             NSLog(@"detect cancelling PTT");
@@ -4639,7 +4673,7 @@
     
 }
 
-- (IBAction)holdToTalk:(id)sender {
+- (void)holdToTalk:(id)sender {
     //first update UI
     UIImage *imageHoldToTalk = [UIImage imageNamed:@"camera_action_mic.png"];
     UIImage *imageHoldedToTalk = [UIImage imageNamed:@"camera_action_mic_pressed.png"];
@@ -4649,18 +4683,18 @@
     [self.ib_labelTouchToTalk setText:@"Listening"];
     
     //processing for PTT
-    
+    [self processingHoldToTalk];
 }
 
-- (IBAction)touchUpInsideHoldToTalk:(id)sender {
-    
+- (void)touchUpInsideHoldToTalk {
+    //update UI
     UIImage *imageHoldToTalk = [UIImage imageNamed:@"camera_action_mic.png"];
     [self.ib_buttonTouchToTalk setBackgroundColor:[UIColor clearColor]];
     [self.ib_buttonTouchToTalk setBackgroundImage:imageHoldToTalk forState:UIControlStateNormal];
     [self.ib_buttonTouchToTalk setBackgroundImage:imageHoldToTalk forState:UIControlEventTouchUpInside];
     [self.ib_labelTouchToTalk setText:@"Hold To Talk"];
-    
-    [self user_release];
+    //user touch up inside and outside
+
 }
 
 - (IBAction)bt_showMenuControlPanel:(id)sender {

@@ -12,7 +12,8 @@
 
 
 @implementation AudioOutStreamer
-@synthesize pcmPlayer; 
+@synthesize pcmPlayer;
+@synthesize pcm_data = _pcm_data;
 
 
 -(id) initWithDeviceIp:(NSString *) ip andPTTport: (int) port
@@ -38,12 +39,15 @@
     {
         if (self.pcmPlayer == nil)
         {
+            NSLog(@"Start recording!!!.******");
             /* Start the player to playback & record */
             self.pcmPlayer = [[PCMPlayer alloc] init];
-            pcm_data = [[NSMutableData alloc] init];
+            _pcm_data = [[NSMutableData alloc] init];
             
             [self.pcmPlayer Play:TRUE];//initialize
+            NSLog(@"Check self.pcmPlayer is %@", self.pcmPlayer);
             [[self.pcmPlayer player] setPlay_now:FALSE];//disable playback
+            NSLog(@"check self.pcmPlayer.recorder %@", self.pcmPlayer.recorder);
             [self.pcmPlayer.recorder startRecord];
             
             hasStartRecordingSound = TRUE;
@@ -119,9 +123,9 @@
             sendingSocket = nil;
         }
         
-        if(pcm_data != nil) {
-            [pcm_data release];
-            pcm_data = nil;
+        if(_pcm_data != nil) {
+            [_pcm_data release];
+            _pcm_data = nil;
         }
         
         [timer invalidate];
@@ -133,10 +137,9 @@
 {
 	
 	/* read 2kb everytime */
-	self.bufferLength = [self.pcmPlayer.recorder.inMemoryAudioFile readBytesPCM:pcm_data
+	self.bufferLength = [self.pcmPlayer.recorder.inMemoryAudioFile readBytesPCM:_pcm_data
 											withLength:2*1024]; //2*1024
-	
-	[sendingSocket writeData:pcm_data withTimeout:2 tag:SENDING_SOCKET_TAG];
+	[sendingSocket writeData:_pcm_data withTimeout:2 tag:SENDING_SOCKET_TAG];
 	
 }
 
@@ -147,7 +150,7 @@
 - (void)onSocket:(AsyncSocket *)sock didConnectToHost:(NSString *)host port:(UInt16)port
 {
 
-	
+	NSLog(@"didConnectToHost Finished");
 	//if(port == IRABOT_AUDIO_RECORDING_PORT)
 	{
 

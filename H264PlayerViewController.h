@@ -98,8 +98,8 @@
     
     //processing for hold to talk
     BOOL ptt_enabled;
-    AudioOutStreamer * audioOut;
-    //HttpCommunication * httpComm;
+    AudioOutStreamer * _audioOut;
+    HttpCommunication * _httpComm;
     
     //processing for recording
     int iMaxRecordSize;
@@ -206,10 +206,10 @@
 
 
 //action for control panel and update bottom view
-- (IBAction)holdToTalk:(id)sender;
+//- (IBAction)holdToTalk:(id)sender;
 - (IBAction)processingRecordingOrTakePicture:(id)sender;
 - (IBAction)changeAction:(id)sender;
-- (IBAction)touchUpInsideHoldToTalk:(id)sender;
+//- (IBAction)touchUpInsideHoldToTalk:(id)sender;
 - (IBAction)bt_showMenuControlPanel:(id)sender;
 
 @end
