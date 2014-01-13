@@ -3743,8 +3743,7 @@
     if (h264Streamer != NULL)
     {
         //trigger re-cal of videosize
-        if (h264Streamer->isPlaying() &&
-            _currentMediaStatus == MEDIA_INFO_HAS_FIRST_IMAGE)
+        if (h264Streamer->isPlaying())
         {
             [self.activityIndicator stopAnimating];
         }
