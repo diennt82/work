@@ -51,6 +51,8 @@
 
 @interface H264PlayerViewController () <TimelineVCDelegate>
 
+@property (retain, nonatomic) IBOutlet UIImageView *imageViewHandle;
+@property (retain, nonatomic) IBOutlet UIImageView *imageViewKnob;
 @property (retain, nonatomic) EarlierViewController *earlierVC;
 @property (retain, nonatomic) TimelineViewController *timelineVC;
 @property (retain, nonatomic) UIImageView *imageViewStreamer;
@@ -1330,6 +1332,9 @@
                                                             repeats:YES];
     [self setupPtt];
     
+    self.imageViewHandle.hidden = YES;
+    self.imageViewKnob.center = self.imgViewDrectionPad.center;
+    self.imageViewHandle.center = self.imgViewDrectionPad.center;
 }
 
 #pragma mark - Setup camera
@@ -1415,10 +1420,9 @@
         self.activityIndicator.hidden = YES;
         [self.activityIndicator stopAnimating];
 //        self.backBarBtnItem.enabled = YES;
-        //self.imageViewVideo.image = [UIImage imageNamed:@"camera_offline"];
         self.imageViewStreamer.image = [UIImage imageNamed:@"ImgNotAvailable"];
         self.viewCtrlButtons.hidden = YES;
-//        self.imgViewDrectionPad.hidden= YES;
+        self.imgViewDrectionPad.hidden= YES;
         self.viewStopStreamingProgress.hidden = YES;
         self.horizMenu.userInteractionEnabled = NO;
         
@@ -2392,11 +2396,11 @@
 
 - (void)getCameraTemperature_bg: (NSTimer *)timer
 {
-//    if (userWantToCancel == TRUE ||
-//        self.h264StreamerIsInStopped == TRUE)
+    if (userWantToCancel == TRUE ||
+        self.h264StreamerIsInStopped == TRUE)
     {
         [timer invalidate];
-        //return;
+        return;
     }
     
     NSString *responseString = @"";
@@ -2468,13 +2472,14 @@
 {
     // Update UI
     
-    NSString *stringTemperature = [NSString stringWithFormat:@"%d°c", (int)roundf([temperature floatValue])];
+    NSString *stringTemperature = [NSString stringWithFormat:@"%d˚c", (int)roundf([temperature floatValue])];
     
     NSMutableAttributedString *attrString = [[NSMutableAttributedString alloc] initWithString:stringTemperature];
     
-    [attrString addAttribute:(id)kCTSuperscriptAttributeName value:@"1" range:NSMakeRange(stringTemperature.length - 1, 1)];
-    UIFont *smallFont = [UIFont systemFontOfSize:35.0f];
+    UIFont *smallFont = [UIFont systemFontOfSize:40.0f];
     [attrString addAttribute:NSFontAttributeName value:(smallFont) range:NSMakeRange(stringTemperature.length - 1, 1)];
+    [attrString addAttribute:(id)kCTSuperscriptAttributeName value:@"1" range:NSMakeRange(stringTemperature.length - 1, 1)];
+
     self.ib_temperature.attributedText = attrString;
     [attrString release];
 }
@@ -2911,6 +2916,123 @@
 #pragma mark -
 #pragma mark - DirectionPad
 
+- (void)updateKnobUI: (NSInteger )direction
+{
+    CGFloat transformX = 0;
+    CGFloat transformY = 0;
+    
+    switch (direction)
+    {
+        case DIRECTION_H_NON:
+        case DIRECTION_V_NON:
+            
+            //self.imageViewKnob.center = _imgViewDrectionPad.center;
+            //self.imageViewKnob.transform = CGAffineTransformMakeTranslation(_imgViewDrectionPad.center.x - sizeKnob, _imgViewDrectionPad.center.y - sizeKnob);
+            transformX = 0;
+            transformY = 0;
+            break;
+            
+        case DIRECTION_H_LF:
+        {
+            transformX =  - _imageViewKnob.frame.size.width;
+            transformY = 0;
+        }
+            break;
+            
+        case DIRECTION_H_RT:
+        {
+            transformX = _imageViewKnob.frame.size.width;
+            transformY = 0;
+        }
+            break;
+            
+        case DIRECTION_V_DN:
+        {
+            transformX = 0;
+            transformY = _imageViewKnob.frame.size.width;
+        }
+            break;
+            
+        case DIRECTION_V_UP:
+        {
+            transformX = 0;
+            transformY = - _imageViewKnob.frame.size.width;
+        }
+            break;
+            
+        default:
+            break;
+    }
+    
+    self.imageViewKnob.transform = CGAffineTransformMakeTranslation(transformX, transformY);
+    
+    //NSLog(@"%f, %f", transformX, transformY);
+}
+
+- (void)updateHandleUI: (NSInteger)direction
+{
+    CGFloat transformX = 0;
+    CGFloat transformY = 0;
+    CGFloat angleRotation = 0;
+    
+    switch (direction)
+    {
+        case DIRECTION_H_NON:
+        case DIRECTION_V_NON:
+            
+            transformX = 0;
+            transformY = 0;
+            
+            self.imageViewHandle.hidden = YES;
+            angleRotation = 0;
+            break;
+            
+        case DIRECTION_H_LF:
+        {
+            self.imageViewHandle.hidden = NO;
+            transformX =  - _imageViewHandle.frame.size.height / 2;
+            transformY = 0;
+            angleRotation = -M_PI_2;
+
+        }
+            break;
+            
+        case DIRECTION_H_RT:
+        {
+            self.imageViewHandle.hidden = NO;
+            transformX = _imageViewHandle.frame.size.height / 2;
+            transformY = 0;
+            angleRotation = M_PI_2;
+        }
+            break;
+            
+        case DIRECTION_V_DN:
+        {
+            self.imageViewHandle.hidden = NO;
+            transformX = 0;
+            transformY = _imageViewHandle.frame.size.height / 2;
+            angleRotation = 0;
+        }
+            break;
+            
+        case DIRECTION_V_UP:
+        {
+            self.imageViewHandle.hidden = NO;
+            transformX = 0;
+            transformY = - _imageViewHandle.frame.size.height / 2;
+            angleRotation = 0;
+        }
+            break;
+            
+        default:
+            break;
+    }
+
+    self.imageViewHandle.transform = CGAffineTransformRotate(CGAffineTransformMakeTranslation(transformX, transformY), angleRotation);
+    
+    //NSLog(@"%f, %f", transformX, transformY);
+}
+
 /* Periodically called every 200ms */
 - (void) v_directional_change_callback:(NSTimer *) timer_exp
 {
@@ -3093,6 +3215,9 @@
 	@synchronized(_imgViewDrectionPad)
 	{
 		currentDirUD = newDirection;
+        
+        [self updateKnobUI:currentDirUD]; // Update ui for Knob & Handle
+        [self updateHandleUI:currentDirUD];
 	}
     
 	//Adjust the fire date to now
@@ -3123,6 +3248,9 @@
 	@synchronized(_imgViewDrectionPad)
 	{
 		currentDirUD = newDirection;
+        
+        [self updateKnobUI:currentDirUD];
+        [self updateHandleUI:currentDirUD];
 	}
 }
 
@@ -3131,6 +3259,9 @@
 	@synchronized(_imgViewDrectionPad)
 	{
 		currentDirUD = DIRECTION_V_NON;
+        
+        [self updateKnobUI:DIRECTION_V_NON];
+        [self updateHandleUI:DIRECTION_V_NON];
 	}
 }
 
@@ -3139,6 +3270,9 @@
 	@synchronized(_imgViewDrectionPad)
 	{
 		currentDirLR = DIRECTION_H_NON;
+        
+        [self updateKnobUI:DIRECTION_H_NON];
+        [self updateHandleUI:DIRECTION_H_NON];
 	}
 }
 
@@ -3171,6 +3305,9 @@
 	@synchronized(_imgViewDrectionPad)
 	{
 		currentDirLR= newDirection;
+        
+        [self updateKnobUI:currentDirLR];
+        [self updateHandleUI:currentDirLR];
 	}
     
 	//Adjust the fire date to now
@@ -3201,6 +3338,9 @@
 	@synchronized(_imgViewDrectionPad)
 	{
 		currentDirLR = newDirection;
+        
+        [self updateKnobUI:currentDirLR];
+        [self updateHandleUI:currentDirLR];
 	}
 }
 
@@ -3554,6 +3694,7 @@
         self.viewCtrlButtons.frame = CGRectMake(0, imageViewHeight + 44 + deltaY, _viewCtrlButtons.frame.size.width, _viewCtrlButtons.frame.size.height);
         self.viewStopStreamingProgress.frame = CGRectMake((screenWidth - INDICATOR_SIZE)/2, (screenHeight - INDICATOR_SIZE)/2 , INDICATOR_SIZE, INDICATOR_SIZE);
         
+        // Control display for TimelineVC
         if (_timelineVC != nil)
         {
             self.timelineVC.view.frame = CGRectMake(0, imageViewHeight + deltaY + 64, screenWidth, screenHeight - imageViewHeight - 100);
@@ -3562,6 +3703,11 @@
             [self.view addSubview:_timelineVC.view];
         }
 	}
+    
+    // Set position for Image Knob & Handle
+    self.imageViewKnob.center = _imgViewDrectionPad.center;
+    self.imageViewHandle.center = _imgViewDrectionPad.center;
+    self.imageViewHandle.hidden = YES;
 
 //    self.backBarBtnItem.target = self;
 //    self.backBarBtnItem.action = @selector(prepareGoBackToCameraList:);
@@ -4203,6 +4349,9 @@
     if (_selectedItemMenu == INDEX_PAN_TILT)
     {
         [self.imgViewDrectionPad setHidden:NO];
+        self.imageViewKnob.hidden = NO;
+        self.imageViewKnob.center = _imgViewDrectionPad.center;
+        self.imageViewHandle.center = _imgViewDrectionPad.center;
     }
     else if (_selectedItemMenu == INDEX_MICRO)
     {
@@ -4225,6 +4374,8 @@
 - (void)hidenAllBottomView
 {
     [self.imgViewDrectionPad setHidden:YES];
+    self.imageViewKnob.hidden = YES;
+    self.imageViewHandle.hidden = YES;
     
     [self.ib_temperature setHidden:YES];
     [self.ib_temperature setBackgroundColor:[UIColor clearColor]];
@@ -4305,6 +4456,8 @@
     [_timelineVC release];
     [_earlierVC release];
     
+    [_imageViewHandle release];
+    [_imageViewKnob release];
     [super dealloc];
 }
 - (void)viewWillAppear:(BOOL)animated
