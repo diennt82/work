@@ -2392,11 +2392,11 @@
 
 - (void)getCameraTemperature_bg: (NSTimer *)timer
 {
-    if (userWantToCancel == TRUE ||
-        self.h264StreamerIsInStopped == TRUE)
+//    if (userWantToCancel == TRUE ||
+//        self.h264StreamerIsInStopped == TRUE)
     {
         [timer invalidate];
-        return;
+        //return;
     }
     
     NSString *responseString = @"";
@@ -2467,9 +2467,14 @@
 - (void)setTemperatureState_Fg: (NSString *)temperature
 {
     // Update UI
-    NSMutableAttributedString *attrString = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"%d°c", (int)roundf([temperature floatValue])]];
     
-    [attrString addAttribute:(id)kCTSuperscriptAttributeName value:@"1" range:NSMakeRange(3,1)];
+    NSString *stringTemperature = [NSString stringWithFormat:@"%d°c", (int)roundf([temperature floatValue])];
+    
+    NSMutableAttributedString *attrString = [[NSMutableAttributedString alloc] initWithString:stringTemperature];
+    
+    [attrString addAttribute:(id)kCTSuperscriptAttributeName value:@"1" range:NSMakeRange(stringTemperature.length - 1, 1)];
+    UIFont *smallFont = [UIFont systemFontOfSize:35.0f];
+    [attrString addAttribute:NSFontAttributeName value:(smallFont) range:NSMakeRange(stringTemperature.length - 1, 1)];
     self.ib_temperature.attributedText = attrString;
     [attrString release];
 }
