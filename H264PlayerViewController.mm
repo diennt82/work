@@ -9,6 +9,7 @@
 #import "H264PlayerViewController.h"
 #import "EarlierViewController.h"
 #import "TimelineViewController.h"
+#import <CoreText/CTStringAttributes.h>
 
 #define DISABLE_VIEW_RELEASE_FLAG 0
 
@@ -50,12 +51,15 @@
 
 @interface H264PlayerViewController () <TimelineVCDelegate>
 
+@property (retain, nonatomic) IBOutlet UIImageView *imageViewHandle;
+@property (retain, nonatomic) IBOutlet UIImageView *imageViewKnob;
 @property (retain, nonatomic) EarlierViewController *earlierVC;
 @property (retain, nonatomic) TimelineViewController *timelineVC;
 @property (retain, nonatomic) UIImageView *imageViewStreamer;
 @property (nonatomic) BOOL isHorizeShow;
 @property (nonatomic, retain) NSTimer *timerHideMenu;
 @property (nonatomic) BOOL isEarlierView;
+@property (nonatomic) NSInteger numberOfSTUNError;
 
 - (void)centerScrollViewContents;
 - (void)scrollViewDoubleTapped:(UITapGestureRecognizer*)recognizer;
@@ -509,10 +513,7 @@
                 
                 // so need to adjust the origin
                 left = self.imageViewVideo.frame.origin.x;
-                top = 0;
-                
-                
-                
+                top = 0;  
             }
             else
             {
@@ -582,6 +583,11 @@
             
             self.currentMediaStatus = msg;
             
+            if (self.selectedChannel.communication_mode == COMM_MODE_STUN)
+            {
+                self.numberOfSTUNError = 0;
+            }
+            
             self.activityIndicator.hidden = YES;
             [self.activityIndicator stopAnimating];
             
@@ -639,8 +645,12 @@
                 [self performSelectorInBackground:@selector(getMelodyValue_bg) withObject:nil];
                 self.imgViewDrectionPad.userInteractionEnabled = YES;
                 self.imgViewDrectionPad.image = [UIImage imageNamed:@"camera_action_pan_bg.png"];
-//                NSTimer *getTemperatureTimer = [NSTimer scheduledTimerWithTimeInterval:10 target:self selector:@selector(getCameraTemperature_bg:) userInfo:nil repeats:YES];
-//                [getTemperatureTimer fire];
+                NSTimer *getTemperatureTimer = [NSTimer scheduledTimerWithTimeInterval:10
+                                                                                target:self
+                                                                              selector:@selector(getCameraTemperature_bg:)
+                                                                              userInfo:nil
+                                                                               repeats:YES];
+                [getTemperatureTimer fire];
             }
         }
             break;
@@ -673,12 +683,14 @@
         {
             self.currentMediaStatus = msg;
             
-    		NSLog(@"Timeout While streaming  OR server DIED ");
+    		NSLog(@"Timeout While streaming  OR server DIED - userWantToCancel: %d", userWantToCancel);
             
     		//mHandler.dispatchMessage(Message.obtain(mHandler, Streamer.MSG_VIDEO_STREAM_HAS_STOPPED_UNEXPECTEDLY));
             
-            NSLog(@"userWantToCancel: %d", userWantToCancel);
-    		
+            if (self.selectedChannel.communication_mode == COMM_MODE_STUN)
+            {
+                self.numberOfSTUNError++;
+            }
             
             if (userWantToCancel == TRUE)
             {
@@ -1320,6 +1332,9 @@
                                                             repeats:YES];
     [self setupPtt];
     
+    self.imageViewHandle.hidden = YES;
+    self.imageViewKnob.center = self.imgViewDrectionPad.center;
+    self.imageViewHandle.center = self.imgViewDrectionPad.center;
 }
 
 #pragma mark - Setup camera
@@ -1348,10 +1363,7 @@
 
         self.selectedChannel.stream_url = nil;
     }
-    
-    
-    
-    
+
     self.httpComm = [[[HttpCommunication alloc]init] autorelease];
     self.httpComm.device_ip = self.selectedChannel.profile.ip_address;
     self.httpComm.device_port = self.selectedChannel.profile.port;
@@ -1408,10 +1420,9 @@
         self.activityIndicator.hidden = YES;
         [self.activityIndicator stopAnimating];
 //        self.backBarBtnItem.enabled = YES;
-        //self.imageViewVideo.image = [UIImage imageNamed:@"camera_offline"];
         self.imageViewStreamer.image = [UIImage imageNamed:@"ImgNotAvailable"];
         self.viewCtrlButtons.hidden = YES;
-//        self.imgViewDrectionPad.hidden= YES;
+        self.imgViewDrectionPad.hidden= YES;
         self.viewStopStreamingProgress.hidden = YES;
         self.horizMenu.userInteractionEnabled = NO;
         
@@ -1433,9 +1444,6 @@
         [self.client sendAudioProbesToIp: self.selectedChannel.profile.camera_mapped_address
                                  andPort:self.selectedChannel.profile.camera_stun_audio_port];
         [NSThread sleepForTimeInterval:0.3];
-        
-        
-        
         
         [self.client sendVideoProbesToIp: self.selectedChannel.profile.camera_mapped_address
                                  andPort:self.selectedChannel.profile.camera_stun_video_port];
@@ -1562,12 +1570,8 @@
         
         status=  h264Streamer->prepare();
         
-       
-        
         if (status != NO_ERROR) // NOT OK
         {
-            
-           
             break;
         }
         
@@ -1585,10 +1589,6 @@
     }
     while (false);
     
-    
-    
-    
-    
     if (status == NO_ERROR)
     {
         [self handleMessage:MEDIA_PLAYER_STARTED
@@ -1597,15 +1597,10 @@
     }
     else
     {
-        
-        
         //Consider it's down and perform necessary action ..
         [self handleMessage:MEDIA_ERROR_SERVER_DIED
                        ext1:0
                        ext2:0];
-        
-        
-        
     }
 }
 
@@ -1704,23 +1699,28 @@
         self.probeTimer = nil;
     }
     
-    if ( (self.selectedChannel != nil)  &&
-         (self.selectedChannel.profile.camera_mapped_address != nil) &&
-         (self.selectedChannel.profile.camera_stun_audio_port != 0) &&
-         (self.selectedChannel.profile.camera_stun_video_port != 0)
-        )
-    { // Make sure we are connecting via STUN
-        
-        if (self.h264PlayerVCDelegate != nil)
-        {
-            self.selectedChannel.waitingForStreamerToClose = YES;
-            NSLog(@"waiting for close STUN stream from server");
+    if (self.selectedChannel.communication_mode == COMM_MODE_STUN)
+    {
+        if ( (self.selectedChannel != nil)  &&
+            (self.selectedChannel.profile.camera_mapped_address != nil) &&
+            (self.selectedChannel.profile.camera_stun_audio_port != 0) &&
+            (self.selectedChannel.profile.camera_stun_video_port != 0)
+            )
+        { // Make sure we are connecting via STUN
+            
+            if (self.h264PlayerVCDelegate != nil)
+            {
+                self.selectedChannel.waitingForStreamerToClose = YES;
+                NSLog(@"waiting for close STUN stream from server");
+            }
+            
+            H264PlayerViewController *vc = (H264PlayerViewController *)[self retain];
+            [self performSelectorInBackground:@selector(closeStunStream_bg:) withObject:vc];
+            
         }
-        
-        H264PlayerViewController *vc = (H264PlayerViewController *)[self retain];
-        [self performSelectorInBackground:@selector(closeStunStream_bg:) withObject:vc];
-        
     }
+    
+    
     if (_client != nil)
     {
         [_client shutdown];
@@ -2411,7 +2411,7 @@
         httpCommunication.device_ip = self.selectedChannel.profile.ip_address;
         httpCommunication.device_port = self.selectedChannel.profile.port;
         
-        NSData *responseData = [httpCommunication sendCommandAndBlock_raw:@"get_temperature"];
+        NSData *responseData = [httpCommunication sendCommandAndBlock_raw:@"value_temperature"]; // value_temperature: 29.2
         
         [httpCommunication release];
         
@@ -2433,7 +2433,7 @@
         NSString *apiKey = [userDefaults objectForKey:@"PortalApiKey"];
         
         NSDictionary *responseDict = [jsonCommunication sendCommandBlockedWithRegistrationId:mac
-                                                                                  andCommand:@"action=command&command=get_temperature"
+                                                                                  andCommand:@"action=command&command=value_temperature"
                                                                                    andApiKey:apiKey];
         [jsonCommunication release];
         
@@ -2442,12 +2442,12 @@
             NSInteger status = [[responseDict objectForKey:@"status"] intValue];
             if (status == 200)
             {
-                responseString = [[[responseDict objectForKey:@"data"] objectForKey:@"device_response"] objectForKey:@"body"];
+                responseString = [[[responseDict objectForKey:@"data"] objectForKey:@"device_response"] objectForKey:@"body"]; // value_temperature: 29.2
             }
         }
     }
     
-    NSLog(@"getCameraTemperature_bg: %@", responseString);
+    NSLog(@"Reponse - getCameraTemperature_bg: %@", responseString);
     
     if (![responseString isEqualToString:@""])
     {
@@ -2471,6 +2471,17 @@
 - (void)setTemperatureState_Fg: (NSString *)temperature
 {
     // Update UI
+    
+    NSString *stringTemperature = [NSString stringWithFormat:@"%d˚c", (int)roundf([temperature floatValue])];
+    
+    NSMutableAttributedString *attrString = [[NSMutableAttributedString alloc] initWithString:stringTemperature];
+    
+    UIFont *smallFont = [UIFont systemFontOfSize:40.0f];
+    [attrString addAttribute:NSFontAttributeName value:(smallFont) range:NSMakeRange(stringTemperature.length - 1, 1)];
+    [attrString addAttribute:(id)kCTSuperscriptAttributeName value:@"1" range:NSMakeRange(stringTemperature.length - 1, 1)];
+
+    self.ib_temperature.attributedText = attrString;
+    [attrString release];
 }
 
 #pragma mark -
@@ -2615,7 +2626,7 @@
                                NSString *body = [[[responseDict objectForKey: @"data"] objectForKey: @"device_response"] objectForKey: @"body"];
                                //"get_session_key: error=200,port1=37171&port2=47608&ip=115.77.250.193,mode=p2p_stun_rtsp"
                                
-                                NSLog(@"Respone - camera response : %@", body);
+                                NSLog(@"Respone - camera response : %@, Number of STUN error: %d", body, _numberOfSTUNError);
                                if (body != nil )
                                {
                                    NSArray * tokens = [body componentsSeparatedByString:@","];
@@ -2623,26 +2634,53 @@
 
                                    if ( [[tokens objectAtIndex:0] hasSuffix:@"error=200"]) //roughly check for "error=200"
                                    {
-                                       
-                                       
-                                       NSString * ports_ip = [tokens objectAtIndex:1];
-                                       
-                                       NSArray * token1s = [ports_ip componentsSeparatedByString:@"&"];
-                                       NSString * port1_str = [token1s objectAtIndex:0];
-                                       NSString * port2_str = [token1s objectAtIndex:1];
-                                       NSString * cam_ip = [token1s objectAtIndex:2];
-                                       
-                                       
-                                       
-                                       self.selectedChannel.profile.camera_mapped_address = [[cam_ip componentsSeparatedByString:@"="] objectAtIndex:1];
-                                       self.selectedChannel.profile.camera_stun_audio_port = [(NSString *)[[port1_str componentsSeparatedByString:@"="] objectAtIndex:1] intValue];
-                                       self.selectedChannel.profile.camera_stun_video_port =[(NSString *)[[port2_str componentsSeparatedByString:@"="] objectAtIndex:1] intValue];
-                                       
-                                       if (userWantToCancel == FALSE)
+                                       if (_numberOfSTUNError >= 5) // Switch to RELAY because STUN try probe & failed many times
                                        {
-                                           [self performSelectorOnMainThread:@selector(startStunStream)
-                                                                  withObject:nil
-                                                               waitUntilDone:NO];
+                                           NSLog(@"Switch to RELAY - Number of STUN error: %d", _numberOfSTUNError);
+                                           
+                                           /* close current session  before continue*/
+                                           cmd_string = @"action=command&command=close_p2p_rtsp_stun";
+                                           
+                                           //responseDict =
+                                           [jsonComm  sendCommandBlockedWithRegistrationId:mac
+                                                                                andCommand:cmd_string
+                                                                                 andApiKey:apiKey];
+                                           
+                                           if (userWantToCancel == FALSE)
+                                           {
+                                               self.numberOfSTUNError = 0;
+                                               
+                                               //[self handleMessage:H264_SWITCHING_TO_RELAY_SERVER ext1:0 ext2:0];
+                                               NSArray * args = [NSArray arrayWithObjects:
+                                                                 [NSNumber numberWithInt:H264_SWITCHING_TO_RELAY_SERVER],nil];
+                                               
+                                               //relay
+                                               [self performSelectorOnMainThread:@selector(handleMessageOnMainThread:)
+                                                                      withObject:args
+                                                                   waitUntilDone:NO];
+                                           }
+                                       }
+                                       else
+                                       {
+                                           NSString * ports_ip = [tokens objectAtIndex:1];
+                                           
+                                           NSArray * token1s = [ports_ip componentsSeparatedByString:@"&"];
+                                           NSString * port1_str = [token1s objectAtIndex:0];
+                                           NSString * port2_str = [token1s objectAtIndex:1];
+                                           NSString * cam_ip = [token1s objectAtIndex:2];
+                                           
+                                           
+                                           
+                                           self.selectedChannel.profile.camera_mapped_address = [[cam_ip componentsSeparatedByString:@"="] objectAtIndex:1];
+                                           self.selectedChannel.profile.camera_stun_audio_port = [(NSString *)[[port1_str componentsSeparatedByString:@"="] objectAtIndex:1] intValue];
+                                           self.selectedChannel.profile.camera_stun_video_port =[(NSString *)[[port2_str componentsSeparatedByString:@"="] objectAtIndex:1] intValue];
+                                           
+                                           if (userWantToCancel == FALSE)
+                                           {
+                                               [self performSelectorOnMainThread:@selector(startStunStream)
+                                                                      withObject:nil
+                                                                   waitUntilDone:NO];
+                                           }
                                        }
                                    }
                                    else
@@ -2878,6 +2916,123 @@
 #pragma mark -
 #pragma mark - DirectionPad
 
+- (void)updateKnobUI: (NSInteger )direction
+{
+    CGFloat transformX = 0;
+    CGFloat transformY = 0;
+    
+    switch (direction)
+    {
+        case DIRECTION_H_NON:
+        case DIRECTION_V_NON:
+            
+            //self.imageViewKnob.center = _imgViewDrectionPad.center;
+            //self.imageViewKnob.transform = CGAffineTransformMakeTranslation(_imgViewDrectionPad.center.x - sizeKnob, _imgViewDrectionPad.center.y - sizeKnob);
+            transformX = 0;
+            transformY = 0;
+            break;
+            
+        case DIRECTION_H_LF:
+        {
+            transformX =  - _imageViewKnob.frame.size.width;
+            transformY = 0;
+        }
+            break;
+            
+        case DIRECTION_H_RT:
+        {
+            transformX = _imageViewKnob.frame.size.width;
+            transformY = 0;
+        }
+            break;
+            
+        case DIRECTION_V_DN:
+        {
+            transformX = 0;
+            transformY = _imageViewKnob.frame.size.width;
+        }
+            break;
+            
+        case DIRECTION_V_UP:
+        {
+            transformX = 0;
+            transformY = - _imageViewKnob.frame.size.width;
+        }
+            break;
+            
+        default:
+            break;
+    }
+    
+    self.imageViewKnob.transform = CGAffineTransformMakeTranslation(transformX, transformY);
+    
+    //NSLog(@"%f, %f", transformX, transformY);
+}
+
+- (void)updateHandleUI: (NSInteger)direction
+{
+    CGFloat transformX = 0;
+    CGFloat transformY = 0;
+    CGFloat angleRotation = 0;
+    
+    switch (direction)
+    {
+        case DIRECTION_H_NON:
+        case DIRECTION_V_NON:
+            
+            transformX = 0;
+            transformY = 0;
+            
+            self.imageViewHandle.hidden = YES;
+            angleRotation = 0;
+            break;
+            
+        case DIRECTION_H_LF:
+        {
+            self.imageViewHandle.hidden = NO;
+            transformX =  - _imageViewHandle.frame.size.height / 2;
+            transformY = 0;
+            angleRotation = -M_PI_2;
+
+        }
+            break;
+            
+        case DIRECTION_H_RT:
+        {
+            self.imageViewHandle.hidden = NO;
+            transformX = _imageViewHandle.frame.size.height / 2;
+            transformY = 0;
+            angleRotation = M_PI_2;
+        }
+            break;
+            
+        case DIRECTION_V_DN:
+        {
+            self.imageViewHandle.hidden = NO;
+            transformX = 0;
+            transformY = _imageViewHandle.frame.size.height / 2;
+            angleRotation = 0;
+        }
+            break;
+            
+        case DIRECTION_V_UP:
+        {
+            self.imageViewHandle.hidden = NO;
+            transformX = 0;
+            transformY = - _imageViewHandle.frame.size.height / 2;
+            angleRotation = 0;
+        }
+            break;
+            
+        default:
+            break;
+    }
+
+    self.imageViewHandle.transform = CGAffineTransformRotate(CGAffineTransformMakeTranslation(transformX, transformY), angleRotation);
+    
+    //NSLog(@"%f, %f", transformX, transformY);
+}
+
 /* Periodically called every 200ms */
 - (void) v_directional_change_callback:(NSTimer *) timer_exp
 {
@@ -3060,6 +3215,9 @@
 	@synchronized(_imgViewDrectionPad)
 	{
 		currentDirUD = newDirection;
+        
+        [self updateKnobUI:currentDirUD]; // Update ui for Knob & Handle
+        [self updateHandleUI:currentDirUD];
 	}
     
 	//Adjust the fire date to now
@@ -3090,6 +3248,9 @@
 	@synchronized(_imgViewDrectionPad)
 	{
 		currentDirUD = newDirection;
+        
+        [self updateKnobUI:currentDirUD];
+        [self updateHandleUI:currentDirUD];
 	}
 }
 
@@ -3098,6 +3259,9 @@
 	@synchronized(_imgViewDrectionPad)
 	{
 		currentDirUD = DIRECTION_V_NON;
+        
+        [self updateKnobUI:DIRECTION_V_NON];
+        [self updateHandleUI:DIRECTION_V_NON];
 	}
 }
 
@@ -3106,6 +3270,9 @@
 	@synchronized(_imgViewDrectionPad)
 	{
 		currentDirLR = DIRECTION_H_NON;
+        
+        [self updateKnobUI:DIRECTION_H_NON];
+        [self updateHandleUI:DIRECTION_H_NON];
 	}
 }
 
@@ -3138,6 +3305,9 @@
 	@synchronized(_imgViewDrectionPad)
 	{
 		currentDirLR= newDirection;
+        
+        [self updateKnobUI:currentDirLR];
+        [self updateHandleUI:currentDirLR];
 	}
     
 	//Adjust the fire date to now
@@ -3168,6 +3338,9 @@
 	@synchronized(_imgViewDrectionPad)
 	{
 		currentDirLR = newDirection;
+        
+        [self updateKnobUI:currentDirLR];
+        [self updateHandleUI:currentDirLR];
 	}
 }
 
@@ -3521,6 +3694,7 @@
         self.viewCtrlButtons.frame = CGRectMake(0, imageViewHeight + 44 + deltaY, _viewCtrlButtons.frame.size.width, _viewCtrlButtons.frame.size.height);
         self.viewStopStreamingProgress.frame = CGRectMake((screenWidth - INDICATOR_SIZE)/2, (screenHeight - INDICATOR_SIZE)/2 , INDICATOR_SIZE, INDICATOR_SIZE);
         
+        // Control display for TimelineVC
         if (_timelineVC != nil)
         {
             self.timelineVC.view.frame = CGRectMake(0, imageViewHeight + deltaY + 64, screenWidth, screenHeight - imageViewHeight - 100);
@@ -3529,6 +3703,11 @@
             [self.view addSubview:_timelineVC.view];
         }
 	}
+    
+    // Set position for Image Knob & Handle
+    self.imageViewKnob.center = _imgViewDrectionPad.center;
+    self.imageViewHandle.center = _imgViewDrectionPad.center;
+    self.imageViewHandle.hidden = YES;
 
 //    self.backBarBtnItem.target = self;
 //    self.backBarBtnItem.action = @selector(prepareGoBackToCameraList:);
@@ -3564,8 +3743,7 @@
     if (h264Streamer != NULL)
     {
         //trigger re-cal of videosize
-        if (h264Streamer->isPlaying() &&
-            _currentMediaStatus == MEDIA_INFO_HAS_FIRST_IMAGE)
+        if (h264Streamer->isPlaying())
         {
             [self.activityIndicator stopAnimating];
         }
@@ -4170,6 +4348,9 @@
     if (_selectedItemMenu == INDEX_PAN_TILT)
     {
         [self.imgViewDrectionPad setHidden:NO];
+        self.imageViewKnob.hidden = NO;
+        self.imageViewKnob.center = _imgViewDrectionPad.center;
+        self.imageViewHandle.center = _imgViewDrectionPad.center;
     }
     else if (_selectedItemMenu == INDEX_MICRO)
     {
@@ -4192,6 +4373,8 @@
 - (void)hidenAllBottomView
 {
     [self.imgViewDrectionPad setHidden:YES];
+    self.imageViewKnob.hidden = YES;
+    self.imageViewHandle.hidden = YES;
     
     [self.ib_temperature setHidden:YES];
     [self.ib_temperature setBackgroundColor:[UIColor clearColor]];
@@ -4272,6 +4455,8 @@
     [_timelineVC release];
     [_earlierVC release];
     
+    [_imageViewHandle release];
+    [_imageViewKnob release];
     [super dealloc];
 }
 - (void)viewWillAppear:(BOOL)animated

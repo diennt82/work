@@ -228,11 +228,14 @@
 		8B95843D1877DF400055BCE3 /* mbp_icon120x120.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B95843C1877DF400055BCE3 /* mbp_icon120x120.png */; };
 		8B95843F1877DF4D0055BCE3 /* mbp_icon152x152.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B95843E1877DF4D0055BCE3 /* mbp_icon152x152.png */; };
 		8B9584431877FFA40055BCE3 /* Hubble_logo_back.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B9584421877FFA40055BCE3 /* Hubble_logo_back.png */; };
+		8B9640B218811106000C388E /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8B9640B118811106000C388E /* CoreText.framework */; };
 		8B96916218765F6900FB15B8 /* desk.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B96915E18765F6900FB15B8 /* desk.png */; };
 		8B96916418765F6900FB15B8 /* bridge.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B96916018765F6900FB15B8 /* bridge.png */; };
 		8B96916518765F6900FB15B8 /* mountain.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B96916118765F6900FB15B8 /* mountain.png */; };
 		8B9691671876640E00FB15B8 /* garden.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B9691661876640E00FB15B8 /* garden.png */; };
 		8B9691691876678C00FB15B8 /* img_timeline_w_dot.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B9691681876678C00FB15B8 /* img_timeline_w_dot.png */; };
+		8B97EDCB1883C35F00C1BAF2 /* camera_action_pan_handle.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B97EDC91883C35F00C1BAF2 /* camera_action_pan_handle.png */; };
+		8B97EDCC1883C35F00C1BAF2 /* camera_action_pan_knob.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B97EDCA1883C35F00C1BAF2 /* camera_action_pan_knob.png */; };
 		8B9899AD1859771800AC3852 /* CameraNameViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B9899AB1859771800AC3852 /* CameraNameViewController.m */; };
 		8B9899AE1859771800AC3852 /* CameraNameViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8B9899AC1859771800AC3852 /* CameraNameViewController.xib */; };
 		8B9899CD1859A04F00AC3852 /* slider-default7-handle.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B9899C91859A04F00AC3852 /* slider-default7-handle.png */; };
@@ -754,11 +757,14 @@
 		8B95843C1877DF400055BCE3 /* mbp_icon120x120.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = mbp_icon120x120.png; sourceTree = "<group>"; };
 		8B95843E1877DF4D0055BCE3 /* mbp_icon152x152.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = mbp_icon152x152.png; sourceTree = "<group>"; };
 		8B9584421877FFA40055BCE3 /* Hubble_logo_back.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Hubble_logo_back.png; sourceTree = "<group>"; };
+		8B9640B118811106000C388E /* CoreText.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreText.framework; path = System/Library/Frameworks/CoreText.framework; sourceTree = SDKROOT; };
 		8B96915E18765F6900FB15B8 /* desk.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = desk.png; sourceTree = "<group>"; };
 		8B96916018765F6900FB15B8 /* bridge.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bridge.png; sourceTree = "<group>"; };
 		8B96916118765F6900FB15B8 /* mountain.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = mountain.png; sourceTree = "<group>"; };
 		8B9691661876640E00FB15B8 /* garden.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = garden.png; sourceTree = "<group>"; };
 		8B9691681876678C00FB15B8 /* img_timeline_w_dot.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = img_timeline_w_dot.png; sourceTree = "<group>"; };
+		8B97EDC91883C35F00C1BAF2 /* camera_action_pan_handle.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = camera_action_pan_handle.png; sourceTree = "<group>"; };
+		8B97EDCA1883C35F00C1BAF2 /* camera_action_pan_knob.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = camera_action_pan_knob.png; sourceTree = "<group>"; };
 		8B9899AA1859771800AC3852 /* CameraNameViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CameraNameViewController.h; sourceTree = "<group>"; };
 		8B9899AB1859771800AC3852 /* CameraNameViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CameraNameViewController.m; sourceTree = "<group>"; };
 		8B9899AC1859771800AC3852 /* CameraNameViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CameraNameViewController.xib; sourceTree = "<group>"; };
@@ -1622,6 +1628,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8B9640B218811106000C388E /* CoreText.framework in Frameworks */,
 				A1ABF1CC18753C240014FCB4 /* CoreBluetooth.framework in Frameworks */,
 				8408F1811833222A00B00188 /* MonitorCommunication.framework in Frameworks */,
 				8BA23841182CBC130022581A /* CameraScanner.framework in Frameworks */,
@@ -1819,6 +1826,7 @@
 		29B97323FDCFA39411CA2CEA /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				8B9640B118811106000C388E /* CoreText.framework */,
 				A1ABF1CB18753C240014FCB4 /* CoreBluetooth.framework */,
 				8408F1801833222A00B00188 /* MonitorCommunication.framework */,
 				8BA23838182C8E130022581A /* CameraScanner.framework */,
@@ -2077,6 +2085,8 @@
 		8B917274186C04AA007754F3 /* Home */ = {
 			isa = PBXGroup;
 			children = (
+				8B97EDC91883C35F00C1BAF2 /* camera_action_pan_handle.png */,
+				8B97EDCA1883C35F00C1BAF2 /* camera_action_pan_knob.png */,
 				8B5C25F11872DDBC00D9DF8F /* camera_action_mic.png */,
 				8B5C25EF1872D33500D9DF8F /* feed_video_mix_bg.png */,
 			);
@@ -2991,6 +3001,7 @@
 				8B92A0921863E69F005923D2 /* TimelineCell.xib in Resources */,
 				8B9B57E2184F0D9900E58543 /* frame-6_update-iOS7_new2.png in Resources */,
 				3803A87A1602D44100B4DD97 /* temp_alert.png in Resources */,
+				8B97EDCC1883C35F00C1BAF2 /* camera_action_pan_knob.png in Resources */,
 				3803A87B1602D44100B4DD97 /* voice_alert.png in Resources */,
 				A15773A818615D3F00DEBD45 /* header_logo.png in Resources */,
 				8B9384941856EF13009C4771 /* SlideSettingsCell.xib in Resources */,
@@ -3130,6 +3141,7 @@
 				8B92A0971863E9FE005923D2 /* TimelineActivityCell.xib in Resources */,
 				8BA5C4811818DCC1006B4BB8 /* ZoneViewController.xib in Resources */,
 				BC3C1B0316F05C0C00175AFF /* Localizable.strings in Resources */,
+				8B97EDCB1883C35F00C1BAF2 /* camera_action_pan_handle.png in Resources */,
 				BC5B0FCE1701855600D2C308 /* cameraMenuRouter.plist in Resources */,
 				8B66804D1839EEA80041F510 /* NotificationViewController_ipad.xib in Resources */,
 				8B909B85187BE2F800F8A450 /* loader_1.png in Resources */,
