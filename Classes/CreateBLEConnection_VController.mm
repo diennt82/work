@@ -89,20 +89,51 @@
 
 
 }
+
+- (void) handleBack:(id)sender
+{
+    _isBackPress = YES;
+    ConnectionState stateConnectBLE = [BLEConnectionManager getInstanceBLE].state;
+    if ( stateConnectBLE != CONNECTED)
+    {
+        //in state : SCANNING OR IDLE
+        _isBackPress = NO;
+        [[BLEConnectionManager getInstanceBLE] stopScanBLE];
+        [self.navigationController popToRootViewControllerAnimated:YES];
+    }
+    else
+    {
+        //In State CONNECTED
+        //wait for return from delegate,
+        //handle it on bleDisconnected
+        //disconnect to BLE
+        [[BLEConnectionManager getInstanceBLE] disconnect];
+    }
+}
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
     self.navigationItem.title = @"Connect to camera BLE";
-    self.navigationItem.backBarButtonItem =
-    [[[UIBarButtonItem alloc] initWithTitle:NSLocalizedStringWithDefaultValue(@"Back",nil, [NSBundle mainBundle],
-                                                                              @"Back", nil)
-                                      style:UIBarButtonItemStyleBordered
-                                     target:nil
-                                     action:nil] autorelease];
+//    self.navigationItem.backBarButtonItem =
+//    [[[UIBarButtonItem alloc] initWithTitle:NSLocalizedStringWithDefaultValue(@"Back",nil, [NSBundle mainBundle],
+//                                                                              @"Back", nil)
+//                                      style:UIBarButtonItemStyleBordered
+//                                     target:nil
+//                                     action:nil] autorelease];
     
     
     _currentBLEList = [[NSMutableArray alloc] init];
     
+    
+    //Override back button of Navigation controller
+    UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithTitle:@"Back"
+                                                                   style:UIBarButtonItemStyleBordered
+                                                                  target:self
+                                                                  action:@selector(handleBack:)];
+    
+    self.navigationItem.leftBarButtonItem = backButton;
+    [backButton release];
     
     
 }
@@ -369,8 +400,6 @@
 
 -(void) bleDisconnected
 {
-    NSLog(@"BLE device is DISCONNECTED - Reconnect  ");
-    
     
 #if 0
     NSString * msg =  @"Camera (ble) is disconnected abruptly, please retry adding camera again";
@@ -398,16 +427,21 @@
     
     // [self dismissIndicator];
     
-    
-    NSDate * date;
-    date = [NSDate dateWithTimeInterval:2.0 sinceDate:[NSDate date]];
-    [[NSRunLoop currentRunLoop] runUntilDate:date];
-    
-    
-    [[BLEConnectionManager getInstanceBLE] reScanForPeripheral:[UARTPeripheral uartServiceUUID]];
-
-
-    
+    if (!_isBackPress)
+    {
+        //if button back don't press
+        NSLog(@"BLE device is DISCONNECTED - Reconnect  ");
+        NSDate * date;
+        date = [NSDate dateWithTimeInterval:2.0 sinceDate:[NSDate date]];
+        [[NSRunLoop currentRunLoop] runUntilDate:date];
+        
+        
+        [[BLEConnectionManager getInstanceBLE] reScanForPeripheral:[UARTPeripheral uartServiceUUID]];
+    }
+    else
+    {
+        //do nothing
+    }
 #endif
     
     
@@ -544,7 +578,7 @@
     if ([BLEConnectionManager getInstanceBLE].state == CONNECTED)
     {
         
-        [[BLEConnectionManager getInstanceBLE].uartPeripheral  flush];
+        [[BLEConnectionManager getInstanceBLE].uartPeripheral  flush:20.0];
         
         NSLog(@" flush done ");
         NSDate * date;

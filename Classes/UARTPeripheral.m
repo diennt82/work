@@ -189,12 +189,36 @@
 }
 
 
-
-
 - (ble_response_t) flush
 {
-//    if (self.)
+    if (self.isBusy == TRUE)
+    {
+        
+        return WRITE_ERROR_OTHER_TRANSACTION_IN_PLACE;
+    }
     
+    self.isBusy = TRUE;
+    self.isFlushing = TRUE;
+    retry_count =  0;
+    
+    
+    //Purposely send empty command to flush the system
+    [self retryOldCommand:@"01234567890123456"];
+    
+    
+    return WRITE_SUCCESS;
+    
+}
+
+
+- (ble_response_t) flush:(NSTimeInterval)time
+{
+//    if (self.)
+    _timeOutCommand = [NSTimer scheduledTimerWithTimeInterval:time
+                                                       target:self
+                                                     selector:@selector(receiveDataTimeOut:)
+                                                     userInfo:nil
+                                                      repeats:NO];
     if (self.isBusy == TRUE)
     {
         
@@ -272,7 +296,10 @@
     _timeOutCommand = nil;
     self.isBusy = FALSE;
     retry_count = -1;
-    [self.delegate onReceiveDataError:READ_TIME_OUT forCommand:commandToCamera];
+    if (self.delegate)
+    {
+        [self.delegate onReceiveDataError:READ_TIME_OUT forCommand:commandToCamera];
+    }
     
 }
 - (void) writeRawData:(NSData *) data

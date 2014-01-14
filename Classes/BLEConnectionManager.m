@@ -109,7 +109,11 @@
     }
 }
 
-
+- (void)stopScanBLE
+{
+    NSLog(@"Stop scanning!!");
+    [self.cm stopScan];
+}
 
 -(void) reScanForPeripheral:(CBUUID *) dev_service_id
 {

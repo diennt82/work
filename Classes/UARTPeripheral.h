@@ -58,6 +58,7 @@ typedef enum response_ {
 - (ble_response_t) writeString:(NSString *) string;
 - (ble_response_t) writeString:(NSString *) string withTimeOut:(NSTimeInterval) time;
 - (ble_response_t) flush;
+- (ble_response_t) flush:(NSTimeInterval) time;
 - (void) didConnect;
 - (void) didDisconnect;
 @end

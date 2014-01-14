@@ -33,7 +33,7 @@
     NSString *_cameraMac;
     NSString *_cameraName;
     NSMutableArray *_currentBLEList;
-    
+    BOOL _isBackPress;
 }
 @property (retain, nonatomic) IBOutlet UIButton *ib_RefreshBLE;
 
