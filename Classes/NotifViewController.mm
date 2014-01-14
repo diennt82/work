@@ -22,6 +22,7 @@
 @property (retain, nonatomic) IBOutlet UIButton *ignoreBtn;
 @property (retain, nonatomic) IBOutlet UIButton *choosePlanBtn;
 @property (retain, nonatomic) IBOutlet UIButton *learnMoreBtn;
+@property (retain, nonatomic) IBOutlet UIActivityIndicatorView *activityIndicatorViewLoading;
 
 @property (nonatomic) BOOL eventsListAlready;
 @property (nonatomic, retain) NSDictionary *event;
@@ -78,6 +79,7 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    self.navigationController.navigationBarHidden = YES;
     
     if (_eventsListAlready == FALSE)
     {
@@ -117,7 +119,7 @@
 {
     if (!_isFreeUser)
     {
-        if (_clipsInEvent != nil &&
+        if (![_clipsInEvent isEqual:[NSNull null]] &&
             _clipsInEvent.count > 0)
         {
             NSString *urlFile = [[_clipsInEvent objectAtIndex:0] objectForKey:@"file"];
@@ -205,6 +207,16 @@
     }
 }
 
+#pragma mark - Encoding URL string
+
+-(NSString *)urlEncodeUsingEncoding:(NSStringEncoding)encoding forString: (NSString *)aString {
+	return (NSString *)CFURLCreateStringByAddingPercentEscapes(NULL,
+                                                               (CFStringRef)aString,
+                                                               NULL,
+                                                               (CFStringRef)@"!*'\"();:@=+$,?%#[]% ",
+                                                               CFStringConvertNSStringEncodingToEncoding(encoding));
+}
+
 #pragma mark - Methods
 
 - (void)getEventSnapshot_bg
@@ -213,55 +225,26 @@
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     NSString *apiKey = [userDefaults objectForKey:@"PortalApiKey"];
     
-    NSString * event_code = [NSString stringWithFormat:@"0%@_%@", self.alertType, self.alertVal];
+    NSString *alertsString = @"1,2,3,4";
+    alertsString = [self urlEncodeUsingEncoding:NSUTF8StringEncoding forString:alertsString];
     
     BMS_JSON_Communication *jsonComm = [[BMS_JSON_Communication alloc] initWithObject:self
                                                                              Selector:nil
                                                                          FailSelector:nil
                                                                             ServerErr:nil];
-#if 0
-    NSDictionary *responseDict = [jsonComm getEventsFromURLString:@"http://nxcomm-office.no-ip.info/release/events/event_template4.txt"];
-    NSLog(@"getLatestEventSnapshot_bg-responseDict: %@", responseDict);
-    
-    if (responseDict != nil)
-    {
-        self.events = [responseDict objectForKey:@"events"];
-        
-        if (_events != nil &&
-            _events.count > 1)
-        {
-            NSString *urlString = [[_events objectAtIndex:0] objectForKey:@"snaps_url"];
-            
-            if (urlString != [NSNull NULL])
-            {
-                UIImage *tmpImage = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:urlString]]];
-                
-                if (tmpImage != NULL)
-                {
-                    [self.imageViewSnapshot performSelectorOnMainThread:@selector(setImage:) withObject:tmpImage waitUntilDone:NO];
-                }
-            }
-            
-            else
-            {
-                NSLog(@"Image snapshot url is null. Use default");
-            }
-        }
-        else
-        {
-            NSLog(@"Events empty!");
-        }
-    }
-    
-#else
+
     NSDictionary *responseDict = [jsonComm getListOfEventsBlockedWithRegisterId:_cameraMacNoColon
                                                                 beforeStartTime:nil//@"2013-12-28 20:10:18"
                                                                       eventCode:nil//event_code // temp
-                                                                         alerts:@"4"
+                                                                         alerts:alertsString
                                                                            page:nil
                                                                          offset:nil
                                                                            size:nil
                                                                          apiKey:apiKey];
+    [jsonComm release];
+    
+    //NSLog(@"Notif - responseDict: %@", responseDict);
+    
     if (responseDict != nil)
     {
         if ([[responseDict objectForKey:@"status"] integerValue] == 200)
@@ -276,25 +259,29 @@
             {
                 for (NSDictionary *event in events)
                 {
-                    if ([[[event objectForKey:@"value"] stringValue] isEqualToString:_alertVal])
+                    //if ([[event objectForKey:@"value"] isEqual:_alertVal])
+                    if ([[NSString stringWithFormat:@"%@", [event objectForKey:@"value"]] isEqualToString:_alertVal])
                     {
-                        // is this event
-                        
+                        // This is the event. Get clips in this event
                         self.clipsInEvent = [event objectForKey:@"data"];
                         self.event = event;
                         
-                        if (_clipsInEvent != nil &&
+                        if (![_clipsInEvent isEqual:[NSNull null]] &&
                             _clipsInEvent.count > 0)
                         {
+                            // Get snapshot of event
                             NSString *urlImgString = [[_clipsInEvent objectAtIndex:0] objectForKey:@"image"];
                             
-                            if (![urlImgString isEqual:[NSNull null]])
+                            if (![urlImgString isEqual:[NSNull null]]
+                                && ![urlImgString isEqualToString:@""])
                             {
                                 UIImage *tmpImage = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:urlImgString]]];
                                 
                                 if (tmpImage != NULL)
                                 {
-                                    [self.imageViewSnapshot performSelectorOnMainThread:@selector(setImage:) withObject:tmpImage waitUntilDone:NO];
+                                    [self.imageViewSnapshot performSelectorOnMainThread:@selector(setImage:)
+                                                                             withObject:tmpImage
+                                                                          waitUntilDone:NO];
                                 }
                             }
                             
@@ -310,15 +297,12 @@
                         
                         break;
                     }
-                }
-                
-                
+                }    
             }
             else
             {
                 NSLog(@"Events empty!");
             }
-            
         }
         else
         {
@@ -330,8 +314,14 @@
         NSLog(@"responseDict is nil");
     }
     
-#endif
+    [self.activityIndicatorViewLoading stopAnimating];
     
+    if (_imageViewSnapshot.image == nil) // No snapshot image from server
+    {
+        [self.imageViewSnapshot performSelectorOnMainThread:@selector(setImage:)
+                                                 withObject:[UIImage imageNamed:@"loading_logo.png"]
+                                              waitUntilDone:NO];
+    }
 }
 
 - (void)didReceiveMemoryWarning
@@ -350,6 +340,7 @@
     [_messageLabel release];
     [_timeLabel release];
     [_imageViewSnapshot release];
+    [_activityIndicatorViewLoading release];
     [super dealloc];
 }
 @end
