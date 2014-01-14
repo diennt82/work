@@ -199,14 +199,14 @@
           autorelease]
          show];
     }
-    else if (([tfPass.text length] < 3) ||
+    else if (([tfPass.text length] < 8) ||
              ([tfPass.text length] > 12) )
     {
         //error
         title = NSLocalizedStringWithDefaultValue(@"Create_Account_Failed",nil, [NSBundle mainBundle],
                                                   @"Create Account Failed" , nil);
         msg = NSLocalizedStringWithDefaultValue(@"Create_Account_Failed_msg1",nil, [NSBundle mainBundle],
-                                                @"Password has to be between 3-12 characters" , nil);
+                                                @"Password has to be between 8-12 characters" , nil);
         //ERROR condition
         UIAlertView *_alert = [[UIAlertView alloc]
                                initWithTitle:title
