@@ -299,6 +299,7 @@
     NSLog(@"uuidString: %@", uuidString);
     
     NSString *applicationName = NSBundle.mainBundle.infoDictionary  [@"CFBundleDisplayName"];
+    applicationName = [applicationName stringByAppendingFormat:@"-%@", [UIDevice currentDevice].name];
     NSLog(@"Application name: %@", applicationName);
     
     NSString *swVersion = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
