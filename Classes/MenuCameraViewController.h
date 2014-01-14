@@ -11,6 +11,9 @@
 #import "ConnectionMethodDelegate.h"
 
 @interface MenuCameraViewController : UITableViewController
+{
+    NSString *_fwVersion;
+}
 
 @property (nonatomic, retain) CamChannel *camChannel;
 
