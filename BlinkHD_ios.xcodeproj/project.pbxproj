@@ -153,6 +153,7 @@
 		8B917285186C45C4007754F3 /* QBAnimationSequence.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B917280186C45C4007754F3 /* QBAnimationSequence.m */; };
 		8B917286186C45C4007754F3 /* QBAnimationGroup.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B917282186C45C4007754F3 /* QBAnimationGroup.m */; };
 		8B917287186C45C4007754F3 /* QBAnimationItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B917284186C45C4007754F3 /* QBAnimationItem.m */; };
+		8B9178D01884F2040039445B /* no_img_available.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B9178CF1884F2040039445B /* no_img_available.png */; };
 		8B91E63E18629E910041BA9D /* Snapshot.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B91E63D18629E910041BA9D /* Snapshot.png */; };
 		8B91E64018629E9F0041BA9D /* photo_item.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B91E63F18629E9F0041BA9D /* photo_item.png */; };
 		8B91E6541862FE540041BA9D /* MenuCameraViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B91E6521862FE540041BA9D /* MenuCameraViewController.m */; };
@@ -334,7 +335,6 @@
 		978B25BD17E1B43E006FC224 /* MTStackViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 978B25BB17E1B43E006FC224 /* MTStackViewController.m */; };
 		978B25C117E1B4AB006FC224 /* BMMenuViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 978B25BF17E1B4AB006FC224 /* BMMenuViewController.mm */; };
 		978B25C217E1B4AB006FC224 /* BMMenuViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 978B25C017E1B4AB006FC224 /* BMMenuViewController.xib */; };
-		978F090117DEFD670053972F /* no_img_available.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = 978F090017DEFD650053972F /* no_img_available.jpeg */; };
 		978F090317DF06C80053972F /* PlaylistCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 978F090217DF06C70053972F /* PlaylistCell.xib */; };
 		9792B9AF17E2D1F6009C9F5D /* H264PlayerViewController_ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9792B9AE17E2D1F6009C9F5D /* H264PlayerViewController_ipad.xib */; };
 		97987CCF154688110066C49B /* partition_bar.png in Resources */ = {isa = PBXBuildFile; fileRef = 97987CCE154688110066C49B /* partition_bar.png */; };
@@ -664,6 +664,7 @@
 		8B917282186C45C4007754F3 /* QBAnimationGroup.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QBAnimationGroup.m; sourceTree = "<group>"; };
 		8B917283186C45C4007754F3 /* QBAnimationItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QBAnimationItem.h; sourceTree = "<group>"; };
 		8B917284186C45C4007754F3 /* QBAnimationItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QBAnimationItem.m; sourceTree = "<group>"; };
+		8B9178CF1884F2040039445B /* no_img_available.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = no_img_available.png; sourceTree = "<group>"; };
 		8B91E63D18629E910041BA9D /* Snapshot.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Snapshot.png; sourceTree = "<group>"; };
 		8B91E63F18629E9F0041BA9D /* photo_item.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = photo_item.png; sourceTree = "<group>"; };
 		8B91E6511862FE540041BA9D /* MenuCameraViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MenuCameraViewController.h; sourceTree = "<group>"; };
@@ -886,7 +887,6 @@
 		978B25BE17E1B4AB006FC224 /* BMMenuViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BMMenuViewController.h; sourceTree = "<group>"; };
 		978B25BF17E1B4AB006FC224 /* BMMenuViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = BMMenuViewController.mm; sourceTree = "<group>"; };
 		978B25C017E1B4AB006FC224 /* BMMenuViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = BMMenuViewController.xib; sourceTree = "<group>"; };
-		978F090017DEFD650053972F /* no_img_available.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = no_img_available.jpeg; sourceTree = "<group>"; };
 		978F090217DF06C70053972F /* PlaylistCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PlaylistCell.xib; sourceTree = "<group>"; };
 		9792B9AE17E2D1F6009C9F5D /* H264PlayerViewController_ipad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = H264PlayerViewController_ipad.xib; sourceTree = "<group>"; };
 		97987CCE154688110066C49B /* partition_bar.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = partition_bar.png; sourceTree = "<group>"; };
@@ -1887,7 +1887,6 @@
 				8BE896B21845CB3B00674E01 /* bb_motion_icon.png */,
 				978B25B417E1B41C006FC224 /* reveal-icon.png */,
 				978B25B517E1B41C006FC224 /* reveal-icon@2x.png */,
-				978F090017DEFD650053972F /* no_img_available.jpeg */,
 				97E39E671684416700F1A1DB /* hq_d.png */,
 				97E39E681684416700F1A1DB /* hq.png */,
 				38167AC116118DB600B7FA0A /* bb_pic_2.png */,
@@ -2259,6 +2258,7 @@
 		8B96915D18765F5300FB15B8 /* TempSnapshot */ = {
 			isa = PBXGroup;
 			children = (
+				8B9178CF1884F2040039445B /* no_img_available.png */,
 				8B9691661876640E00FB15B8 /* garden.png */,
 				8B96915E18765F6900FB15B8 /* desk.png */,
 				8B96916018765F6900FB15B8 /* bridge.png */,
@@ -2921,6 +2921,7 @@
 				A1E7473E185F07AE00A54B29 /* feed_video_stop.png in Resources */,
 				3812F82515C8BF0600DADFA6 /* bb_setting_icon.png in Resources */,
 				A15773A2186145DD00DEBD45 /* H264PlayerViewController_land.xib in Resources */,
+				8B9178D01884F2040039445B /* no_img_available.png in Resources */,
 				8B92A0BC186432E9005923D2 /* button_bg.png in Resources */,
 				8BC0A03F1844AC3600A5FD52 /* circle_buttons1_lf.png in Resources */,
 				A19778F9181E6C55007C3CA7 /* motion_detection_off_1.png in Resources */,
@@ -3160,7 +3161,6 @@
 				979BC6A517D9BB9C00B3B373 /* PlayListViewController.xib in Resources */,
 				8B92A0B01863FD13005923D2 /* EarlierViewController.xib in Resources */,
 				A1176B74180D1DD9000B7527 /* stream480p.sdp in Resources */,
-				978F090117DEFD670053972F /* no_img_available.jpeg in Resources */,
 				8B9112C618600B7C004301C5 /* SettingsViewController.xib in Resources */,
 				8BC0A0401844AC3600A5FD52 /* circle_buttons1_rt.png in Resources */,
 				978F090317DF06C80053972F /* PlaylistCell.xib in Resources */,
@@ -4437,7 +4437,7 @@
 				);
 				OTHER_LDFLAGS = "-lz";
 				PRODUCT_NAME = "Camera HD";
-				PROVISIONING_PROFILE = "36A98145-8A75-4512-979E-D21EE67560DC";
+				PROVISIONING_PROFILE = "00E9AF8F-AB93-4D92-83D3-A506E3831FDC";
 				SDKROOT = iphoneos7.0;
 				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/../ios-frameworks/pjsip/arm/include/ $(SRCROOT)/../ios-frameworks/pjsip/arm/include/pj/ $(SRCROOT)/../ios-frameworks/pjsip/arm/include/pjnath/";
 				VALID_ARCHS = "armv6 armv7";
@@ -4486,7 +4486,7 @@
 				);
 				OTHER_LDFLAGS = "-lz";
 				PRODUCT_NAME = "Camera HD";
-				PROVISIONING_PROFILE = "36A98145-8A75-4512-979E-D21EE67560DC";
+				PROVISIONING_PROFILE = "00E9AF8F-AB93-4D92-83D3-A506E3831FDC";
 				SDKROOT = iphoneos7.0;
 				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/../ios-frameworks/pjsip/arm/include/ $(SRCROOT)/../ios-frameworks/pjsip/arm/include/pj/ $(SRCROOT)/../ios-frameworks/pjsip/arm/include/pjnath/";
 				VALIDATE_PRODUCT = YES;
@@ -4558,7 +4558,7 @@
 				);
 				OTHER_LDFLAGS = "-lz";
 				PRODUCT_NAME = "Camera HD";
-				PROVISIONING_PROFILE = "36A98145-8A75-4512-979E-D21EE67560DC";
+				PROVISIONING_PROFILE = "00E9AF8F-AB93-4D92-83D3-A506E3831FDC";
 				RAMEWORK_SEARCH_PATHS = "$(inherited) \"$(SRCROOT)\"";
 				SDKROOT = iphoneos7.0;
 				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/../ios-frameworks/pjsip/arm/include/ $(SRCROOT)/../ios-frameworks/pjsip/arm/include/pj/ $(SRCROOT)/../ios-frameworks/pjsip/arm/include/pjnath/";
