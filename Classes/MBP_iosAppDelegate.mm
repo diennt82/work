@@ -158,7 +158,7 @@
         }
         
         int rcvTimeStamp = [[NSDate date] timeIntervalSince1970];
-        CameraAlert * camAlert = [[[CameraAlert alloc]initWithTimeStamp1:rcvTimeStamp] autorelease];
+        CameraAlert * camAlert = [[CameraAlert alloc]initWithTimeStamp1:rcvTimeStamp];// autorelease];
         //set other values
         camAlert.cameraMacNoColon = str3;
         
