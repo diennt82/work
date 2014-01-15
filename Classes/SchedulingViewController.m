@@ -267,14 +267,14 @@
 {
     //UICollectionViewCell *cell = [collectionView cellForItemAtIndexPath:indexPath];
     //cell.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"selected-img"]];
-    valueMap[indexPath.section][indexPath.item] = TRUE;
+    valueMap[indexPath.section - 1][indexPath.item] = TRUE;
 }
 
 - (void)collectionView:(UICollectionView *)collectionView didDeselectItemAtIndexPath:(NSIndexPath *)indexPath
 {
     //UICollectionViewCell *cell = [collectionView cellForItemAtIndexPath:indexPath];
     //cell.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"DotCell"]];
-    valueMap[indexPath.section][indexPath.item] = FALSE;
+    valueMap[indexPath.section - 1][indexPath.item] = FALSE;
 }
 
 #pragma mark – UICollectionViewDelegateFlowLayout

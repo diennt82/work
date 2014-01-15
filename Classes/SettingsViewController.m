@@ -90,6 +90,8 @@
     self.schedulerVC = [[SchedulerViewController alloc] init];
     [self.schedulerVC setContentSizeForViewInPopover:CGSizeMake(UIScreen.mainScreen.bounds.size.width, 320)];
     self.schedulingVC = [[SchedulingViewController alloc] init];
+    //self.schedulingVC.view.frame = CGRectMake(0, 0, UIScreen.mainScreen.bounds.size.width, 320);
+    [self.schedulingVC setContentSizeForViewInPopover:CGSizeMake(UIScreen.mainScreen.bounds.size.width, 220)];
     
 //    if (valueSchedulerSwitchs[0][0] == TRUE)
 //    {
