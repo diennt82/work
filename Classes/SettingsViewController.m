@@ -12,6 +12,7 @@
 #import "NMRangeSlider.h"
 #import "SchedulerCell.h"
 #import "SchedulerViewController.h"
+#import "SchedulingViewController.h"
 
 @interface SettingsViewController () <SensitivityCellDelegate, SchedulerCellDelegate>
 {
@@ -31,6 +32,7 @@
 @property (nonatomic) CGFloat upperValue;
 
 @property (retain, nonatomic) SchedulerViewController *schedulerVC;
+@property (retain, nonatomic) SchedulingViewController *schedulingVC;
 
 @end
 
@@ -87,6 +89,7 @@
     
     self.schedulerVC = [[SchedulerViewController alloc] init];
     [self.schedulerVC setContentSizeForViewInPopover:CGSizeMake(UIScreen.mainScreen.bounds.size.width, 320)];
+    self.schedulingVC = [[SchedulingViewController alloc] init];
     
 //    if (valueSchedulerSwitchs[0][0] == TRUE)
 //    {
@@ -245,16 +248,19 @@
 {
     valueSchedulerSwitchs[rowIdx][1] = state;
     
-    if (state == TRUE)
-    {
-        self.schedulerVC.numberOfColumn = 8;
-    }
-    else
-    {
-        self.schedulerVC.numberOfColumn = 2;
-    }
+//    if (state == TRUE)
+//    {
+//        self.schedulerVC.numberOfColumn = 8;
+//    }
+//    else
+//    {
+//        self.schedulerVC.numberOfColumn = 2;
+//    }
+//    
+//    [self.schedulerVC reloadDataInTableView];
+    self.schedulingVC.everydayFlag = state;
     
-    [self.schedulerVC reloadDataInTableView];
+    [self.schedulingVC.collectionViewMap reloadData];
 }
 
 #pragma mark - Table view data source
@@ -536,7 +542,8 @@
                     }
                     
                     // Configure the cell...
-                    [cell.contentView addSubview:_schedulerVC.view];
+                    //[cell.contentView addSubview:_schedulerVC.view];
+                    [cell.contentView addSubview:_schedulingVC.view];
                     cell.backgroundColor = [UIColor blackColor];
                     
                     return cell;
