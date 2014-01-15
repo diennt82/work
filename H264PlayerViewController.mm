@@ -77,7 +77,7 @@
 @synthesize itemSelectedImages = _itemSelectedImages;
 @synthesize selectedItemMenu = _selectedItemMenu;
 @synthesize walkieTalkieEnabled;
-
+static int fps = 0;
 #pragma mark - View
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -482,6 +482,12 @@
     
     switch (msg)
     {
+        case MEDIA_INFO_FRAMERATE_VIDEO:
+        {
+            fps = ext1;
+            [self addingLabelInfosForDebug];
+            break;
+        }
         case MEDIA_INFO_VIDEO_SIZE:
         {
             NSLog(@"video size: %d x %d", ext1, ext2);
@@ -1383,6 +1389,7 @@
         [self performSelector:@selector(startStream)
                    withObject:nil
                    afterDelay:0.1];
+        _viewVideoIn = @"Local";
 
     }
     else if (self.selectedChannel.profile.minuteSinceLastComm <= 5)
@@ -2551,7 +2558,8 @@
                        
                        if (isBehindSymmetricNat == TRUE) // USE RELAY
                        {
-                           
+                           NSLog(@"USE RELAY TO VIEW***********************");
+                           _viewVideoIn = @"RELAY";
                            responseDict = [jsonComm createSessionBlockedWithRegistrationId:mac
                                                                              andClientType:@"BROWSER"
                                                                                  andApiKey:apiKey];
@@ -2605,7 +2613,8 @@
                        {
                            
                            //Set port1, port2
-                           
+                           NSLog(@"USE RTSP/STUN TO VIEW***********************");
+                           _viewVideoIn = @"STUN";
                            if ([self.client create_stun_forwarder:self.selectedChannel] != 0 )
                            {
                                //TODO: Handle error
@@ -4461,6 +4470,8 @@
 }
 - (void)viewWillAppear:(BOOL)animated
 {
+    //init data for debug
+    [self initFirstData];
     _isCameraOffline = NO;
     _isRecordInterface  = YES;
     _isProcessRecording = NO;
@@ -4476,6 +4487,11 @@
     
 }
 
+- (void)initFirstData
+{
+    _viewVideoIn = nil;
+    fps = 0;
+}
 - (void)viewWillDisappear:(BOOL)animated
 {
     [self.navigationController setNavigationBarHidden:YES];
@@ -4857,5 +4873,52 @@
     [self.horizMenu setHidden:NO];
     [self.view addSubview:_horizMenu];
     [self.view bringSubviewToFront:_horizMenu];
+}
+
+
+//
+- (void)addingLabelInfosForDebug
+{
+    if (_viewVideoIn == nil)
+    {
+        return;
+    }
+    //remove all subviews
+    NSArray *viewsToRemove = [self.imageViewStreamer subviews];
+    for (UIView *v in viewsToRemove) {
+        [v removeFromSuperview];
+    }
+    
+    //and then add it again
+    float popUpWidth = 200;
+    NSInteger popUpHeight = 50;
+    
+    //Add label
+    UILabel *label;
+    label = [[UILabel alloc] initWithFrame:CGRectMake(0,30,popUpWidth,popUpHeight)];
+    
+    NSString *resultView = [NSString stringWithFormat:@"View through: %@", _viewVideoIn];
+    label.text = resultView;
+    label.backgroundColor = [UIColor clearColor];
+    label.textColor = [UIColor redColor];
+    
+    
+    //FPS
+    UILabel *fpsLabel;
+    fpsLabel = [[UILabel alloc] initWithFrame:CGRectMake(0,70,popUpWidth,popUpHeight)];
+    NSString *fpsView = [NSString stringWithFormat:@"FPS: %d", fps];
+    fpsLabel.text = fpsView;
+    fpsLabel.backgroundColor = [UIColor clearColor];
+    fpsLabel.textColor = [UIColor redColor];
+    
+    //Add label to view
+    [self.imageViewStreamer addSubview:label];
+    [self.imageViewStreamer bringSubviewToFront:label];
+    [self.imageViewStreamer addSubview:fpsLabel];
+    [self.imageViewStreamer bringSubviewToFront:fpsLabel];
+    [label release];
+    [fpsLabel release];
+    label = nil;
+    fpsLabel = nil;
 }
 @end
