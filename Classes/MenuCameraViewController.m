@@ -48,6 +48,8 @@
                                                                                             target:self
                                                                                             action:@selector(removeAction:)] autorelease];
     assert(self.navigationItem.rightBarButtonItem != nil);
+    _fwVersion = NSLocalizedStringWithDefaultValue(@"firmware_version",nil, [NSBundle mainBundle],
+                                                   @"Firmware version", nil);
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -219,7 +221,7 @@
 {
     //#warning Incomplete method implementation.
     // Return the number of rows in the section.
-    return 2;
+    return 3;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -247,7 +249,7 @@
         
         return cell;
     }
-    else
+    else if (indexPath.row == 1)
     {
         static NSString *CellIdentifier = @"Cell";
         UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
@@ -257,6 +259,30 @@
         
         // Configure the cell...
         cell.textLabel.text = @"Change Image";
+        
+        return cell;
+    }
+    else
+    {
+        // display firm ware version
+        static NSString *CellIdentifier = @"CameraSettingsCell";
+        CameraSettingsCell *cell = [self.tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+        
+        NSArray *objects = [[NSBundle mainBundle] loadNibNamed:@"CameraSettingsCell" owner:nil options:nil];
+        
+        for (id curObj in objects)
+        {
+            
+            if([curObj isKindOfClass:[UITableViewCell class]])
+            {
+                cell = (CameraSettingsCell *)curObj;
+                break;
+            }
+        }
+        
+        
+        cell.nameLabel.text = _fwVersion;
+        cell.valueLabel.text = self.camChannel.profile.fw_version;
         
         return cell;
     }
