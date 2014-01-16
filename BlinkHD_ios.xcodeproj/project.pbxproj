@@ -297,6 +297,7 @@
 		8BA18CB2184879A10097D1AF /* DeviceSettingsCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8BA18CB1184879A10097D1AF /* DeviceSettingsCell.xib */; };
 		8BA23841182CBC130022581A /* CameraScanner.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8BA23838182C8E130022581A /* CameraScanner.framework */; };
 		8BA3725118878A5D009FA465 /* hubble_s.png in Resources */ = {isa = PBXBuildFile; fileRef = 8BA3725018878A5D009FA465 /* hubble_s.png */; };
+		8BA372581887C5EA009FA465 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8BA372571887C5EA009FA465 /* CoreData.framework */; };
 		8BA5C47C1818DAAC006B4BB8 /* libcrypto.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A15430FC1818D08A00337EFE /* libcrypto.a */; };
 		8BA5C4801818DCC1006B4BB8 /* ZoneViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8BA5C47E1818DCC1006B4BB8 /* ZoneViewController.m */; };
 		8BA5C4811818DCC1006B4BB8 /* ZoneViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8BA5C47F1818DCC1006B4BB8 /* ZoneViewController.xib */; };
@@ -437,7 +438,6 @@
 		BC3C1B0316F05C0C00175AFF /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = BC3C1B0516F05C0C00175AFF /* Localizable.strings */; };
 		BC5B0FCE1701855600D2C308 /* cameraMenuRouter.plist in Resources */ = {isa = PBXBuildFile; fileRef = BC5B0FCD1701855600D2C308 /* cameraMenuRouter.plist */; };
 		BC6E4A0516BFBB9D00B0D630 /* MBP_InitialSetupViewController_land.xib in Resources */ = {isa = PBXBuildFile; fileRef = BC6E4A0316BFBB9D00B0D630 /* MBP_InitialSetupViewController_land.xib */; };
-		BC883A6D1798EB81001D02D8 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BC883A6C1798EB81001D02D8 /* CoreData.framework */; };
 		BCA1A4E716C26EFB00E7EF56 /* Step_05_ViewController_land.xib in Resources */ = {isa = PBXBuildFile; fileRef = BCA1A4E516C26EFB00E7EF56 /* Step_05_ViewController_land.xib */; };
 		BCA1A4F816C27A7B00E7EF56 /* Step_08_ViewController_land.xib in Resources */ = {isa = PBXBuildFile; fileRef = BCA1A4F616C27A7A00E7EF56 /* Step_08_ViewController_land.xib */; };
 		BCBD80C116D1D0480007943B /* MBP_InitialSetupViewController_ipad_land.xib in Resources */ = {isa = PBXBuildFile; fileRef = BCBD80BF16D1D0480007943B /* MBP_InitialSetupViewController_ipad_land.xib */; };
@@ -842,6 +842,7 @@
 		8BA18CB1184879A10097D1AF /* DeviceSettingsCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = DeviceSettingsCell.xib; sourceTree = "<group>"; };
 		8BA23838182C8E130022581A /* CameraScanner.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CameraScanner.framework; path = "../ios-frameworks/CameraScanner.framework"; sourceTree = "<group>"; };
 		8BA3725018878A5D009FA465 /* hubble_s.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = hubble_s.png; sourceTree = "<group>"; };
+		8BA372571887C5EA009FA465 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		8BA5C47D1818DCC1006B4BB8 /* ZoneViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZoneViewController.h; sourceTree = "<group>"; };
 		8BA5C47E1818DCC1006B4BB8 /* ZoneViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZoneViewController.m; sourceTree = "<group>"; };
 		8BA5C47F1818DCC1006B4BB8 /* ZoneViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ZoneViewController.xib; sourceTree = "<group>"; };
@@ -1219,7 +1220,6 @@
 		BC5B101C17018F2A00D2C308 /* sv */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = sv; path = sv.lproj/MBP_MenuViewController.xib; sourceTree = "<group>"; };
 		BC5B101D17018F2B00D2C308 /* sv */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sv; path = sv.lproj/Localizable.strings; sourceTree = "<group>"; };
 		BC6E4A0416BFBB9D00B0D630 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/MBP_InitialSetupViewController_land.xib; sourceTree = "<group>"; };
-		BC883A6C1798EB81001D02D8 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		BC89DB7B1703EB3A00BED0CE /* de */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = de; path = de.lproj/MBP_InitialSetupViewController.xib; sourceTree = "<group>"; };
 		BC89DB7C1703EB3A00BED0CE /* de */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = de; path = de.lproj/MBP_InitialSetupViewController_land.xib; sourceTree = "<group>"; };
 		BC89DB7D1703EB3B00BED0CE /* de */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = de; path = de.lproj/MBP_InitialSetupViewController_ipad.xib; sourceTree = "<group>"; };
@@ -1636,6 +1636,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8BA372581887C5EA009FA465 /* CoreData.framework in Frameworks */,
 				8B9640B218811106000C388E /* CoreText.framework in Frameworks */,
 				A1ABF1CC18753C240014FCB4 /* CoreBluetooth.framework in Frameworks */,
 				8408F1811833222A00B00188 /* MonitorCommunication.framework in Frameworks */,
@@ -1651,7 +1652,6 @@
 				A15430F51818CA4700337EFE /* libpjnath-arm-apple-darwin9.a in Frameworks */,
 				A15430FB1818CFD500337EFE /* H264MediaPlayer.framework in Frameworks */,
 				A11E8C1317E2DB7E00915F84 /* libstdc++.dylib in Frameworks */,
-				BC883A6D1798EB81001D02D8 /* CoreData.framework in Frameworks */,
 				38962C831769587E0016AE16 /* libz.dylib in Frameworks */,
 				3803A86215FF42ED00B4DD97 /* libsqlite3.dylib in Frameworks */,
 				1D60589F0D05DD5A006BFB54 /* Foundation.framework in Frameworks */,
@@ -1699,6 +1699,7 @@
 				A1ABF198187535B90014FCB4 /* VerifySetupCameraFail_VC */,
 				A1ABF199187535F10014FCB4 /* StartMonitor_VController */,
 				A1ABF19B1875365F0014FCB4 /* SwitchNetwork_VController */,
+				8BA372561887C4B1009FA465 /* AppDelegate */,
 				9704F83F17B37CAD005F9868 /* DashBoard_ViewController.h */,
 				9704F84017B37CAF005F9868 /* DashBoard_ViewController.mm */,
 				97F5531417BDD3AF00024017 /* MBPNavController.m */,
@@ -1745,8 +1746,6 @@
 				BC3C1ADA16F025FF00175AFF /* MBP_MenuProgress_land_ipad.xib */,
 				3825A4B7166F05C500520872 /* MBPNavController.h */,
 				3851C3B716D5CD03007D3781 /* StartMonitorCallback.h */,
-				1D3623240D0F684500981E51 /* MBP_iosAppDelegate.h */,
-				1D3623250D0F684500981E51 /* MBP_iosAppDelegate.mm */,
 				38DE1BEE168ADA050049E814 /* FWUpgradeView.xib */,
 				38DE1BE9168AD9F50049E814 /* FWUpgradeView_land.xib */,
 				38DE1BDA168AD9B40049E814 /* SongTitleView.xib */,
@@ -1773,9 +1772,6 @@
 		29B97314FDCFA39411CA2CEA /* CustomTemplate */ = {
 			isa = PBXGroup;
 			children = (
-				A11E8C1217E2DB7D00915F84 /* libstdc++.dylib */,
-				BC883A6C1798EB81001D02D8 /* CoreData.framework */,
-				38962C821769587E0016AE16 /* libz.dylib */,
 				38C7DE79165DDF9E00926EA1 /* Default-568h@2x.png */,
 				38962C7F1769583A0016AE16 /* TestFlight.h */,
 				A1ABF1CA187539A80014FCB4 /* define.h */,
@@ -1834,6 +1830,9 @@
 		29B97323FDCFA39411CA2CEA /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				A11E8C1217E2DB7D00915F84 /* libstdc++.dylib */,
+				38962C821769587E0016AE16 /* libz.dylib */,
+				8BA372571887C5EA009FA465 /* CoreData.framework */,
 				8B9640B118811106000C388E /* CoreText.framework */,
 				A1ABF1CB18753C240014FCB4 /* CoreBluetooth.framework */,
 				8408F1801833222A00B00188 /* MonitorCommunication.framework */,
@@ -1889,9 +1888,6 @@
 				8BC0A0391844AC3600A5FD52 /* circle_buttons1_lf.png */,
 				8BC0A03A1844AC3600A5FD52 /* circle_buttons1_rt.png */,
 				8BC0A03B1844AC3600A5FD52 /* circle_buttons1_up.png */,
-				8BC0A0421844B31700A5FD52 /* mbp_icon57x57.png */,
-				8BC0A0441844B31700A5FD52 /* mbp_icon114x114.png */,
-				8BC0A0451844B31700A5FD52 /* mbp_icon144x144.png */,
 				8BE896B21845CB3B00674E01 /* bb_motion_icon.png */,
 				978B25B417E1B41C006FC224 /* reveal-icon.png */,
 				978B25B517E1B41C006FC224 /* reveal-icon@2x.png */,
@@ -2269,6 +2265,9 @@
 		8B9584371877DF110055BCE3 /* Icons */ = {
 			isa = PBXGroup;
 			children = (
+				8BC0A0421844B31700A5FD52 /* mbp_icon57x57.png */,
+				8BC0A0441844B31700A5FD52 /* mbp_icon114x114.png */,
+				8BC0A0451844B31700A5FD52 /* mbp_icon144x144.png */,
 				8B9584381877DF1D0055BCE3 /* mbp_icon72x72.png */,
 				8B95843A1877DF2F0055BCE3 /* mbp_icon76x76.png */,
 				8B95843C1877DF400055BCE3 /* mbp_icon120x120.png */,
@@ -2543,6 +2542,15 @@
 				38C79E2115C26947006EE378 /* Step_10_ViewController.mm */,
 			);
 			name = Step_10;
+			sourceTree = "<group>";
+		};
+		8BA372561887C4B1009FA465 /* AppDelegate */ = {
+			isa = PBXGroup;
+			children = (
+				1D3623240D0F684500981E51 /* MBP_iosAppDelegate.h */,
+				1D3623250D0F684500981E51 /* MBP_iosAppDelegate.mm */,
+			);
+			name = AppDelegate;
 			sourceTree = "<group>";
 		};
 		8BA7F27618516EB800BE0145 /* Login|Register */ = {
