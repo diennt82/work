@@ -171,7 +171,7 @@ static int fps = 0;
     UIButton *iFrameBtn = (UIButton *)[self.viewCtrlButtons viewWithTag:705];
     iFrameBtn.enabled = NO;
     
-    [self addGesturesPichInAndOut];
+
     [self updateNavigationBarAndToolBar];
     
     self.imageViewStreamer = [[UIImageView alloc] initWithFrame:_imageViewVideo.frame];
@@ -180,11 +180,14 @@ static int fps = 0;
     
     UITapGestureRecognizer *singleTap = [[UITapGestureRecognizer alloc] initWithTarget:self
                                                                                 action:@selector(singleTapGestureCaptured:)];
+    singleTap.numberOfTapsRequired = 1;
+    singleTap.numberOfTouchesRequired = 1;
     [self.imageViewStreamer addGestureRecognizer:singleTap];
     [singleTap release];
+    
     [self.imageViewStreamer setUserInteractionEnabled:YES];
 
-    [self.scrollView insertSubview:_imageViewStreamer aboveSubview:_imageViewVideo];
+
     
     if (self.selectedChannel.profile.modelID != 6) // CameraHD
     {
@@ -226,6 +229,9 @@ static int fps = 0;
 }
 - (void)addGesturesPichInAndOut
 {
+    
+    [self.scrollView insertSubview:_imageViewStreamer aboveSubview:_imageViewVideo];
+    [self.imageViewStreamer setUserInteractionEnabled:YES];
     //set background for scrollView
     [self.scrollView setBackgroundColor:[UIColor clearColor]];
     //processing for pinch gestures
@@ -234,18 +240,38 @@ static int fps = 0;
     self.scrollView.minimumZoomScale = MINIMUM_ZOOMING_SCALE;
     [self centerScrollViewContents];
     [self resetZooming];
+    
+    
+    
     //Add action for touch
     UITapGestureRecognizer *doubleTapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(scrollViewDoubleTapped:)];
     doubleTapRecognizer.numberOfTapsRequired = 2;
     doubleTapRecognizer.numberOfTouchesRequired = 1;
-    [self.scrollView addGestureRecognizer:doubleTapRecognizer];
+    [self.imageViewStreamer addGestureRecognizer:doubleTapRecognizer];
+    [doubleTapRecognizer release];
     
     UITapGestureRecognizer *twoFingerTapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(scrollViewTwoFingerTapped:)];
     twoFingerTapRecognizer.numberOfTapsRequired = 1;
     twoFingerTapRecognizer.numberOfTouchesRequired = 2;
-    [self.scrollView addGestureRecognizer:twoFingerTapRecognizer];
+    [self.imageViewStreamer addGestureRecognizer:twoFingerTapRecognizer];
+    [twoFingerTapRecognizer release];
 }
 
+/**
+ remove gestures touch when at portrait
+ */
+- (void)removeGestureRecognizerAtPortraitMode
+{
+    for(UIGestureRecognizer *gesture in [self.imageViewStreamer gestureRecognizers]]))
+    {
+        if([gesture isKindOfClass:[UITapGestureRecognizer class]])
+        {
+            if (gesture.numberOfTapsRequired == 2 || gesture.numberOfTouchesRequired == 2)
+            {
+                    [self.imageViewStreamer removeGestureRecognizer:gesture];
+            }
+        }
+}
 /*
  setTitle for iOS7, purpose to change color for text, iOS6 default color is white
  */
@@ -1181,6 +1207,7 @@ static int fps = 0;
 
 - (void)singleTapGestureCaptured:(id)sender
 {
+    NSLog(@"Single tap singleTapGestureCaptured");
     if (_isHorizeShow == TRUE)
     {
         [self hideControlMenu];
@@ -3612,7 +3639,7 @@ static int fps = 0;
 	if (orientation == UIInterfaceOrientationLandscapeLeft || orientation == UIInterfaceOrientationLandscapeRight)
 	{
         //load new nib for landscape iPad
-        
+        [self addGesturesPichInAndOut];
         if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
         {
             [[NSBundle mainBundle] loadNibNamed:@"H264PlayerViewController_land_iPad"
@@ -3674,6 +3701,8 @@ static int fps = 0;
 	else if (orientation == UIInterfaceOrientationPortrait || orientation == UIInterfaceOrientationPortraitUpsideDown)
 	{
         //load new nib
+        //remove pinch in, out (zoom for portrait)
+        [self removeGestureRecognizerAtPortraitMode];
         if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
         {
             [[NSBundle mainBundle] loadNibNamed:@"H264PlayerViewController_ipad"
@@ -4228,6 +4257,7 @@ static int fps = 0;
 }
 
 - (void)scrollViewDoubleTapped:(UITapGestureRecognizer*)recognizer {
+    NSLog(@"double tap scrollViewDoubleTapped");
     // Get the location within the image view where we tapped
     //CGPoint pointInView = [recognizer locationInView:self.imageViewVideo];
     CGPoint pointInView = [recognizer locationInView:_imageViewStreamer];
@@ -4250,6 +4280,7 @@ static int fps = 0;
 }
 
 - (void)scrollViewTwoFingerTapped:(UITapGestureRecognizer*)recognizer {
+    NSLog(@"Two finger tap scrollViewTwoFingerTapped");
     // Zoom out slightly, capping at the minimum zoom scale specified by the scroll view
     CGFloat newZoomScale = self.scrollView.zoomScale / ZOOM_SCALE;
     newZoomScale = MAX(newZoomScale, self.scrollView.minimumZoomScale);
@@ -4265,7 +4296,7 @@ static int fps = 0;
 - (UIView*)viewForZoomingInScrollView:(UIScrollView *)scrollView {
     // Return the view that we want to zoom
     //return self.imageViewVideo;
-    return _imageViewStreamer;
+    return self.imageViewStreamer;
 }
 
 - (void)scrollViewDidZoom:(UIScrollView *)scrollView {
