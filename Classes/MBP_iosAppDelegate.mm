@@ -158,7 +158,7 @@
         }
         
         int rcvTimeStamp = [[NSDate date] timeIntervalSince1970];
-        CameraAlert * camAlert = [[[CameraAlert alloc]initWithTimeStamp1:rcvTimeStamp] autorelease];
+        CameraAlert * camAlert = [[CameraAlert alloc]initWithTimeStamp1:rcvTimeStamp];// autorelease];
         //set other values
         camAlert.cameraMacNoColon = str3;
         
@@ -299,6 +299,7 @@
     NSLog(@"uuidString: %@", uuidString);
     
     NSString *applicationName = NSBundle.mainBundle.infoDictionary  [@"CFBundleDisplayName"];
+    applicationName = [applicationName stringByAppendingFormat:@"-%@", [UIDevice currentDevice].name];
     NSLog(@"Application name: %@", applicationName);
     
     NSString *swVersion = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
