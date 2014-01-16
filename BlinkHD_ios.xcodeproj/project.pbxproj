@@ -296,6 +296,7 @@
 		8BA18CB0184879720097D1AF /* DeviceSettingsCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 8BA18CAF184879720097D1AF /* DeviceSettingsCell.m */; };
 		8BA18CB2184879A10097D1AF /* DeviceSettingsCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8BA18CB1184879A10097D1AF /* DeviceSettingsCell.xib */; };
 		8BA23841182CBC130022581A /* CameraScanner.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8BA23838182C8E130022581A /* CameraScanner.framework */; };
+		8BA3725118878A5D009FA465 /* hubble_s.png in Resources */ = {isa = PBXBuildFile; fileRef = 8BA3725018878A5D009FA465 /* hubble_s.png */; };
 		8BA5C47C1818DAAC006B4BB8 /* libcrypto.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A15430FC1818D08A00337EFE /* libcrypto.a */; };
 		8BA5C4801818DCC1006B4BB8 /* ZoneViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8BA5C47E1818DCC1006B4BB8 /* ZoneViewController.m */; };
 		8BA5C4811818DCC1006B4BB8 /* ZoneViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8BA5C47F1818DCC1006B4BB8 /* ZoneViewController.xib */; };
@@ -380,8 +381,6 @@
 		A15431091818DEB800337EFE /* streamvga.sdp in Resources */ = {isa = PBXBuildFile; fileRef = A15431081818DEB800337EFE /* streamvga.sdp */; };
 		A15773A1186145DD00DEBD45 /* H264PlayerViewController_land_iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = A157739F186145DD00DEBD45 /* H264PlayerViewController_land_iPad.xib */; };
 		A15773A2186145DD00DEBD45 /* H264PlayerViewController_land.xib in Resources */ = {isa = PBXBuildFile; fileRef = A15773A0186145DD00DEBD45 /* H264PlayerViewController_land.xib */; };
-		A15773A718615D3F00DEBD45 /* header_hubble.png in Resources */ = {isa = PBXBuildFile; fileRef = A15773A518615D3F00DEBD45 /* header_hubble.png */; };
-		A15773A818615D3F00DEBD45 /* header_logo.png in Resources */ = {isa = PBXBuildFile; fileRef = A15773A618615D3F00DEBD45 /* header_logo.png */; };
 		A19778ED181E3316007C3CA7 /* ZoneViewController_ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = A19778EC181E3316007C3CA7 /* ZoneViewController_ipad.xib */; };
 		A19778F9181E6C55007C3CA7 /* motion_detection_off_1.png in Resources */ = {isa = PBXBuildFile; fileRef = A19778F7181E6C55007C3CA7 /* motion_detection_off_1.png */; };
 		A19778FB181E6CAB007C3CA7 /* motion_detection_on.png in Resources */ = {isa = PBXBuildFile; fileRef = A19778FA181E6CAB007C3CA7 /* motion_detection_on.png */; };
@@ -842,6 +841,7 @@
 		8BA18CAF184879720097D1AF /* DeviceSettingsCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DeviceSettingsCell.m; sourceTree = "<group>"; };
 		8BA18CB1184879A10097D1AF /* DeviceSettingsCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = DeviceSettingsCell.xib; sourceTree = "<group>"; };
 		8BA23838182C8E130022581A /* CameraScanner.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CameraScanner.framework; path = "../ios-frameworks/CameraScanner.framework"; sourceTree = "<group>"; };
+		8BA3725018878A5D009FA465 /* hubble_s.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = hubble_s.png; sourceTree = "<group>"; };
 		8BA5C47D1818DCC1006B4BB8 /* ZoneViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZoneViewController.h; sourceTree = "<group>"; };
 		8BA5C47E1818DCC1006B4BB8 /* ZoneViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZoneViewController.m; sourceTree = "<group>"; };
 		8BA5C47F1818DCC1006B4BB8 /* ZoneViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ZoneViewController.xib; sourceTree = "<group>"; };
@@ -963,8 +963,6 @@
 		A15431081818DEB800337EFE /* streamvga.sdp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = streamvga.sdp; sourceTree = "<group>"; };
 		A157739F186145DD00DEBD45 /* H264PlayerViewController_land_iPad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = H264PlayerViewController_land_iPad.xib; sourceTree = "<group>"; };
 		A15773A0186145DD00DEBD45 /* H264PlayerViewController_land.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = H264PlayerViewController_land.xib; sourceTree = "<group>"; };
-		A15773A518615D3F00DEBD45 /* header_hubble.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = header_hubble.png; sourceTree = "<group>"; };
-		A15773A618615D3F00DEBD45 /* header_logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = header_logo.png; sourceTree = "<group>"; };
 		A19778EC181E3316007C3CA7 /* ZoneViewController_ipad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ZoneViewController_ipad.xib; sourceTree = "<group>"; };
 		A19778F7181E6C55007C3CA7 /* motion_detection_off_1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = motion_detection_off_1.png; sourceTree = "<group>"; };
 		A19778FA181E6CAB007C3CA7 /* motion_detection_on.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = motion_detection_on.png; sourceTree = "<group>"; };
@@ -2806,8 +2804,7 @@
 		A1E74723185F075800A54B29 /* UIHome */ = {
 			isa = PBXGroup;
 			children = (
-				A15773A518615D3F00DEBD45 /* header_hubble.png */,
-				A15773A618615D3F00DEBD45 /* header_logo.png */,
+				8BA3725018878A5D009FA465 /* hubble_s.png */,
 				A1E74724185F07AE00A54B29 /* feed_video_bg.png */,
 				A1E74725185F07AE00A54B29 /* feed_video_play.png */,
 				A1E74726185F07AE00A54B29 /* feed_video_stop.png */,
@@ -2939,6 +2936,7 @@
 				38A478F415C02674008682FE /* Step_05_tableViewCell.xib in Resources */,
 				8B92C0D318682A2100538013 /* alert_upgrade_pressed.png in Resources */,
 				8B9B57ED184F0DB200E58543 /* frame-1_update_new.png in Resources */,
+				8BA3725118878A5D009FA465 /* hubble_s.png in Resources */,
 				38DE1BCC168AD9500049E814 /* DashBoard_camView.xib in Resources */,
 				A1E74743185F07AE00A54B29 /* saveday_pressed.png in Resources */,
 				A1ABF1B1187537D10014FCB4 /* Step_10_ViewController_ipad_ble.xib in Resources */,
@@ -3029,7 +3027,6 @@
 				3803A87A1602D44100B4DD97 /* temp_alert.png in Resources */,
 				8B97EDCC1883C35F00C1BAF2 /* camera_action_pan_knob.png in Resources */,
 				3803A87B1602D44100B4DD97 /* voice_alert.png in Resources */,
-				A15773A818615D3F00DEBD45 /* header_logo.png in Resources */,
 				8B9384941856EF13009C4771 /* SlideSettingsCell.xib in Resources */,
 				A1E74747185F07AE00A54B29 /* upgrade_pressed.png in Resources */,
 				A1ABF1AA187537AD0014FCB4 /* NetworkInfoToCamera_VController.xib in Resources */,
@@ -3203,7 +3200,6 @@
 				97735C4517E1CEAA00160DA1 /* MyFrontViewController.xib in Resources */,
 				8B92C0E01868318800538013 /* settings_notification.png in Resources */,
 				9792B9AF17E2D1F6009C9F5D /* H264PlayerViewController_ipad.xib in Resources */,
-				A15773A718615D3F00DEBD45 /* header_hubble.png in Resources */,
 				8BC0F0E51845E511008A63A7 /* iTunesArtwork@2x in Resources */,
 				8B9384B018570567009C4771 /* ValueSettingsViewController.xib in Resources */,
 				8B9899DF1859AA6A00AC3852 /* slider-default7-track.png in Resources */,
