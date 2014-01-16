@@ -318,8 +318,8 @@
                     if (![clipsInEvent isEqual:[NSNull null]])
                     {
                         ClipInfo *clipInfo = [[ClipInfo alloc] init];
-                        clipInfo.urlFile = [[clipsInEvent objectAtIndex:0] objectForKey:@"image"];
-                        clipInfo.urlImage = [[clipsInEvent objectAtIndex:0] objectForKey:@"file"];
+                        clipInfo.urlImage = [[clipsInEvent objectAtIndex:0] objectForKey:@"image"];
+                        clipInfo.urlFile = [[clipsInEvent objectAtIndex:0] objectForKey:@"file"];
                         
                         eventInfo.clipInfo = clipInfo;
                         [clipInfo release];
@@ -434,10 +434,12 @@
 
 - (UIImage *)imageWithUrlString:(NSString *)urlString scaledToSize:(CGSize)newSize
 {
+    //NSLog(@"Get image: %@", urlString);
+    
     if ([urlString isEqual:[NSNull null]] ||
         [urlString isEqualToString:@""])
     {
-        return [UIImage imageNamed:@"no_img_available.jpeg"];
+        return [UIImage imageNamed:@"no_img_available"];
     }
     
 	UIGraphicsBeginImageContext(newSize);
@@ -690,7 +692,7 @@
         //NSLog(@"%@, %@", [dateFormater stringFromDate:eventDate], [NSTimeZone localTimeZone]);
         
         
-        cell.snapshotImage.image = [UIImage imageNamed:@"no_img_available.jpeg"];
+        cell.snapshotImage.image = [UIImage imageNamed:@"no_img_available"];
         
         if (eventInfo.clipInfo.imgSnapshot == nil &&
             (eventInfo.clipInfo.urlImage != nil))// && (![eventInfo.clipInfo.urlImage isEqualToString:@""]))
@@ -717,7 +719,8 @@
         }
         else
         {
-            NSLog(@"playlistInfo.imgSnapshot already");
+            NSLog(@"TableView -playlistInfo.imgSnapshot already");
+            
             cell.snapshotImage.image = eventInfo.clipInfo.imgSnapshot;
             cell.activityIndicatorLoading.hidden = YES;
         }
