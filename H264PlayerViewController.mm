@@ -1389,7 +1389,7 @@ static int fps = 0;
         [self performSelector:@selector(startStream)
                    withObject:nil
                    afterDelay:0.1];
-        _viewVideoIn = @"Local";
+        _viewVideoIn = @"L";
 
     }
     else if (self.selectedChannel.profile.minuteSinceLastComm <= 5)
@@ -2559,7 +2559,7 @@ static int fps = 0;
                        if (isBehindSymmetricNat == TRUE) // USE RELAY
                        {
                            NSLog(@"USE RELAY TO VIEW***********************");
-                           _viewVideoIn = @"RELAY";
+                           _viewVideoIn = @"R";
                            responseDict = [jsonComm createSessionBlockedWithRegistrationId:mac
                                                                              andClientType:@"BROWSER"
                                                                                  andApiKey:apiKey];
@@ -2614,7 +2614,7 @@ static int fps = 0;
                            
                            //Set port1, port2
                            NSLog(@"USE RTSP/STUN TO VIEW***********************");
-                           _viewVideoIn = @"STUN";
+                           _viewVideoIn = @"S";
                            if ([self.client create_stun_forwarder:self.selectedChannel] != 0 )
                            {
                                //TODO: Handle error
@@ -4888,37 +4888,24 @@ static int fps = 0;
     for (UIView *v in viewsToRemove) {
         [v removeFromSuperview];
     }
+    //Infos debug
+    UILabel *infosLabel;
+    UIImage *bg_image = [UIImage imageNamed:@"temp_bg.png"];
+    NSInteger widthImage = bg_image.size.width;
     
-    //and then add it again
-    float popUpWidth = 200;
-    NSInteger popUpHeight = 50;
+    infosLabel = [[UILabel alloc] initWithFrame:CGRectMake(self.imageViewStreamer.frame.size.width - widthImage ,20, widthImage, bg_image.size.height)];
     
-    //Add label
-    UILabel *label;
-    label = [[UILabel alloc] initWithFrame:CGRectMake(0,30,popUpWidth,popUpHeight)];
-    
-    NSString *resultView = [NSString stringWithFormat:@"View through: %@", _viewVideoIn];
-    label.text = resultView;
-    label.backgroundColor = [UIColor clearColor];
-    label.textColor = [UIColor redColor];
-    
-    
-    //FPS
-    UILabel *fpsLabel;
-    fpsLabel = [[UILabel alloc] initWithFrame:CGRectMake(0,70,popUpWidth,popUpHeight)];
-    NSString *fpsView = [NSString stringWithFormat:@"FPS: %d", fps];
-    fpsLabel.text = fpsView;
-    fpsLabel.backgroundColor = [UIColor clearColor];
-    fpsLabel.textColor = [UIColor redColor];
+    UIColor *bg_Color = [UIColor colorWithPatternImage:bg_image];
+    [infosLabel setBackgroundColor:bg_Color];
+    NSString *fpsView = [NSString stringWithFormat:@"%@ %d", _viewVideoIn, fps];
+    infosLabel.textAlignment = NSTextAlignmentCenter;
+    infosLabel.text = fpsView;
+    infosLabel.textColor = [UIColor whiteColor];
     
     //Add label to view
-    [self.imageViewStreamer addSubview:label];
-    [self.imageViewStreamer bringSubviewToFront:label];
-    [self.imageViewStreamer addSubview:fpsLabel];
-    [self.imageViewStreamer bringSubviewToFront:fpsLabel];
-    [label release];
-    [fpsLabel release];
-    label = nil;
-    fpsLabel = nil;
+    [self.imageViewStreamer addSubview:infosLabel];
+    [self.imageViewStreamer bringSubviewToFront:infosLabel];
+    [infosLabel release];
+    infosLabel = nil;
 }
 @end
