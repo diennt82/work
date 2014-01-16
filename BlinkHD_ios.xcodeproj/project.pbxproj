@@ -202,6 +202,10 @@
 		8B92C0EB186832A600538013 /* settings_pressed.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B92C0E6186832A600538013 /* settings_pressed.png */; };
 		8B92C0EC186832A600538013 /* settings.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B92C0E7186832A600538013 /* settings.png */; };
 		8B92C0EE186849C700538013 /* camera_action_pan_bg.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B92C0ED186849C700538013 /* camera_action_pan_bg.png */; };
+		8B92D45518865F0400120BCE /* SchedulingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B92D45318865F0400120BCE /* SchedulingViewController.m */; };
+		8B92D45618865F0400120BCE /* SchedulingViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8B92D45418865F0400120BCE /* SchedulingViewController.xib */; };
+		8B92D45918865F3600120BCE /* SchedulingCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B92D45818865F3600120BCE /* SchedulingCell.m */; };
+		8B92D45B18865F4C00120BCE /* SchedulingCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8B92D45A18865F4C00120BCE /* SchedulingCell.xib */; };
 		8B92DC24185ACACA00344530 /* ScheduleInformation.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B92DC23185ACACA00344530 /* ScheduleInformation.m */; };
 		8B9376B618729AC900E20756 /* ClipInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B9376B518729AC900E20756 /* ClipInfo.m */; };
 		8B93847F1856D42C009C4771 /* InformationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B93847D1856D42C009C4771 /* InformationViewController.m */; };
@@ -723,6 +727,12 @@
 		8B92C0E6186832A600538013 /* settings_pressed.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = settings_pressed.png; sourceTree = "<group>"; };
 		8B92C0E7186832A600538013 /* settings.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = settings.png; sourceTree = "<group>"; };
 		8B92C0ED186849C700538013 /* camera_action_pan_bg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = camera_action_pan_bg.png; sourceTree = "<group>"; };
+		8B92D45218865F0400120BCE /* SchedulingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SchedulingViewController.h; sourceTree = "<group>"; };
+		8B92D45318865F0400120BCE /* SchedulingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SchedulingViewController.m; sourceTree = "<group>"; };
+		8B92D45418865F0400120BCE /* SchedulingViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SchedulingViewController.xib; sourceTree = "<group>"; };
+		8B92D45718865F3600120BCE /* SchedulingCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SchedulingCell.h; sourceTree = "<group>"; };
+		8B92D45818865F3600120BCE /* SchedulingCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SchedulingCell.m; sourceTree = "<group>"; };
+		8B92D45A18865F4C00120BCE /* SchedulingCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SchedulingCell.xib; sourceTree = "<group>"; };
 		8B92DC22185ACACA00344530 /* ScheduleInformation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ScheduleInformation.h; sourceTree = "<group>"; };
 		8B92DC23185ACACA00344530 /* ScheduleInformation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ScheduleInformation.m; sourceTree = "<group>"; };
 		8B9376B418729AC900E20756 /* ClipInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ClipInfo.h; sourceTree = "<group>"; };
@@ -1927,6 +1937,7 @@
 		8B1D544A1865814B008857F0 /* Scheduler */ = {
 			isa = PBXGroup;
 			children = (
+				8B92D45118865D9E00120BCE /* SchedulerView */,
 				8B1D545018658702008857F0 /* SchedulerTable */,
 				8B1D544B186581B8008857F0 /* SchedulerCell.h */,
 				8B1D544C186581B8008857F0 /* SchedulerCell.m */,
@@ -2242,6 +2253,19 @@
 				8B92C0E7186832A600538013 /* settings.png */,
 			);
 			name = Menu_add_camera;
+			sourceTree = "<group>";
+		};
+		8B92D45118865D9E00120BCE /* SchedulerView */ = {
+			isa = PBXGroup;
+			children = (
+				8B92D45218865F0400120BCE /* SchedulingViewController.h */,
+				8B92D45318865F0400120BCE /* SchedulingViewController.m */,
+				8B92D45418865F0400120BCE /* SchedulingViewController.xib */,
+				8B92D45718865F3600120BCE /* SchedulingCell.h */,
+				8B92D45818865F3600120BCE /* SchedulingCell.m */,
+				8B92D45A18865F4C00120BCE /* SchedulingCell.xib */,
+			);
+			name = SchedulerView;
 			sourceTree = "<group>";
 		};
 		8B9584371877DF110055BCE3 /* Icons */ = {
@@ -2906,6 +2930,7 @@
 				8B92C0EA186832A600538013 /* camera.png in Resources */,
 				8B91E64018629E9F0041BA9D /* photo_item.png in Resources */,
 				8BA18CB2184879A10097D1AF /* DeviceSettingsCell.xib in Resources */,
+				8B92D45B18865F4C00120BCE /* SchedulingCell.xib in Resources */,
 				8B9899CD1859A04F00AC3852 /* slider-default7-handle.png in Resources */,
 				8B9C7E0E185F260A0038B3A8 /* MenuViewController.xib in Resources */,
 				38DE1C8C168AEB270049E814 /* Step_08_ViewController.xib in Resources */,
@@ -3128,6 +3153,7 @@
 				8B9B57EA184F0DB200E58543 /* frame-6_update_new.png in Resources */,
 				8BC0A03D1844AC3600A5FD52 /* circle_buttons1_2.png in Resources */,
 				380CB0D916DC612000290587 /* Step_11_ViewController.xib in Resources */,
+				8B92D45618865F0400120BCE /* SchedulingViewController.xib in Resources */,
 				8B92C0CE18682A2100538013 /* alert_learn.png in Resources */,
 				380CB0DC16DC630400290587 /* Step_11_ViewController_land.xib in Resources */,
 				A1E7474D185F07AE00A54B29 /* video_action_pan_pressed.png in Resources */,
@@ -3243,6 +3269,7 @@
 				38A478DC15BE4BFA008682FE /* Step_03_ViewController.mm in Sources */,
 				8B9AF6A418581D3300AC09C3 /* AddScheduleViewController.m in Sources */,
 				38A478E815BE82E0008682FE /* Step_04_ViewController.mm in Sources */,
+				8B92D45918865F3600120BCE /* SchedulingCell.m in Sources */,
 				8B9899CF1859A04F00AC3852 /* NMRangeSlider.m in Sources */,
 				38A478F015C0015F008682FE /* Step_05_ViewController.mm in Sources */,
 				38A478F715C115C3008682FE /* Step_06_ViewController.mm in Sources */,
@@ -3285,6 +3312,7 @@
 				A1ABF1AF187537D10014FCB4 /* Step_10_ViewController_ble.mm in Sources */,
 				979BC6A417D9BB9C00B3B373 /* PlayListViewController.mm in Sources */,
 				8B278BE7183DC51300A4FF50 /* NotificationSettingsViewController.m in Sources */,
+				8B92D45518865F0400120BCE /* SchedulingViewController.m in Sources */,
 				979BC6A817D9BCB200B3B373 /* PlaylistInfo.m in Sources */,
 				8B9899E41859C9EA00AC3852 /* DayViewController.m in Sources */,
 				A1239E86186185F200A25A04 /* AudioOutStreamer.m in Sources */,
@@ -4395,7 +4423,7 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CODE_SIGN_ENTITLEMENTS = "";
-				CODE_SIGN_IDENTITY = "";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Lai Shan Lam (RYP7CC8LQR)";
 				COPY_PHASE_STRIP = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -4437,7 +4465,7 @@
 				);
 				OTHER_LDFLAGS = "-lz";
 				PRODUCT_NAME = "Camera HD";
-				PROVISIONING_PROFILE = "00E9AF8F-AB93-4D92-83D3-A506E3831FDC";
+				PROVISIONING_PROFILE = "E86C234B-DD93-4BF3-8B31-FF000E468C9F";
 				SDKROOT = iphoneos7.0;
 				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/../ios-frameworks/pjsip/arm/include/ $(SRCROOT)/../ios-frameworks/pjsip/arm/include/pj/ $(SRCROOT)/../ios-frameworks/pjsip/arm/include/pjnath/";
 				VALID_ARCHS = "armv6 armv7";
@@ -4449,7 +4477,7 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CODE_SIGN_ENTITLEMENTS = "";
-				CODE_SIGN_IDENTITY = "";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Lai Shan Lam (RYP7CC8LQR)";
 				COPY_PHASE_STRIP = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -4486,7 +4514,7 @@
 				);
 				OTHER_LDFLAGS = "-lz";
 				PRODUCT_NAME = "Camera HD";
-				PROVISIONING_PROFILE = "00E9AF8F-AB93-4D92-83D3-A506E3831FDC";
+				PROVISIONING_PROFILE = "E86C234B-DD93-4BF3-8B31-FF000E468C9F";
 				SDKROOT = iphoneos7.0;
 				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/../ios-frameworks/pjsip/arm/include/ $(SRCROOT)/../ios-frameworks/pjsip/arm/include/pj/ $(SRCROOT)/../ios-frameworks/pjsip/arm/include/pjnath/";
 				VALIDATE_PRODUCT = YES;
@@ -4497,7 +4525,7 @@
 		9770CB6914302E3D009E69EF /* Distribute */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CODE_SIGN_IDENTITY = "";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Lai Shan Lam (RYP7CC8LQR)";
 				GCC_C_LANGUAGE_STANDARD = c99;
 				GCC_VERSION = "";
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
@@ -4510,7 +4538,7 @@
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
 				OTHER_LDFLAGS = "";
 				PRODUCT_NAME = "Camera HD";
-				PROVISIONING_PROFILE = "00E9AF8F-AB93-4D92-83D3-A506E3831FDC";
+				PROVISIONING_PROFILE = "E86C234B-DD93-4BF3-8B31-FF000E468C9F";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				USER_HEADER_SEARCH_PATHS = "\"$(SRCROOT)/external_include\"/**";
@@ -4523,7 +4551,7 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CODE_SIGN_ENTITLEMENTS = "";
-				CODE_SIGN_IDENTITY = "";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Lai Shan Lam (RYP7CC8LQR)";
 				COPY_PHASE_STRIP = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -4558,7 +4586,7 @@
 				);
 				OTHER_LDFLAGS = "-lz";
 				PRODUCT_NAME = "Camera HD";
-				PROVISIONING_PROFILE = "00E9AF8F-AB93-4D92-83D3-A506E3831FDC";
+				PROVISIONING_PROFILE = "E86C234B-DD93-4BF3-8B31-FF000E468C9F";
 				RAMEWORK_SEARCH_PATHS = "$(inherited) \"$(SRCROOT)\"";
 				SDKROOT = iphoneos7.0;
 				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/../ios-frameworks/pjsip/arm/include/ $(SRCROOT)/../ios-frameworks/pjsip/arm/include/pj/ $(SRCROOT)/../ios-frameworks/pjsip/arm/include/pjnath/";
@@ -4570,7 +4598,7 @@
 		C01FCF4F08A954540054247B /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CODE_SIGN_IDENTITY = "";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Lai Shan Lam (RYP7CC8LQR)";
 				GCC_C_LANGUAGE_STANDARD = c99;
 				GCC_VERSION = "";
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
@@ -4582,7 +4610,7 @@
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = "";
 				PRODUCT_NAME = "Camera HD";
-				PROVISIONING_PROFILE = "00E9AF8F-AB93-4D92-83D3-A506E3831FDC";
+				PROVISIONING_PROFILE = "E86C234B-DD93-4BF3-8B31-FF000E468C9F";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				USER_HEADER_SEARCH_PATHS = "\"$(SRCROOT)/external_include\"/**";
@@ -4593,7 +4621,7 @@
 		C01FCF5008A954540054247B /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CODE_SIGN_IDENTITY = "";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Lai Shan Lam (RYP7CC8LQR)";
 				GCC_C_LANGUAGE_STANDARD = c99;
 				GCC_VERSION = "";
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
@@ -4606,7 +4634,7 @@
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
 				OTHER_LDFLAGS = "";
 				PRODUCT_NAME = "Camera HD";
-				PROVISIONING_PROFILE = "00E9AF8F-AB93-4D92-83D3-A506E3831FDC";
+				PROVISIONING_PROFILE = "E86C234B-DD93-4BF3-8B31-FF000E468C9F";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				USER_HEADER_SEARCH_PATHS = "\"$(SRCROOT)/external_include\"/**";
