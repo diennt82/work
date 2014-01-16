@@ -270,21 +270,23 @@ static int fps = 0;
 - (void) updateNavigationBarAndToolBar
 {
     // change the back button to cancel and add an event handler
-    UIImage *headerLogo = [UIImage imageNamed:@"header_logo.png"];
-    UIBarButtonItem *headerLogoButton = [[UIBarButtonItem alloc] initWithImage:headerLogo style:UIBarButtonItemStyleBordered target:self action:@selector(prepareGoBackToCameraList:)];
+    UIImage *headerLogo = [UIImage imageNamed:@"hubble_s"];
+    UIBarButtonItem *headerLogoButton = [[UIBarButtonItem alloc] initWithImage:headerLogo
+                                                                         style:UIBarButtonItemStylePlain
+                                                                        target:self
+                                                                        action:@selector(prepareGoBackToCameraList:)];
     [headerLogoButton setTintColor:[UIColor colorWithPatternImage:headerLogo]];
 
-    UIImage *headerHubble = [UIImage imageNamed:@"header_hubble.png"];
-    UIBarButtonItem *headerHubbleButton = [[UIBarButtonItem alloc] initWithImage:headerHubble style:UIBarButtonItemStyleBordered target:self action:nil];
-    [headerHubbleButton setTintColor:[UIColor colorWithPatternImage:headerHubble]];
-    
-    NSArray *actionLeftButtonItems = @[headerLogoButton, headerHubbleButton];
-    self.navigationItem.leftBarButtonItems = actionLeftButtonItems;
-    
-    CamProfile *cp = self.selectedChannel.profile;
+    self.navigationItem.leftBarButtonItem = headerLogoButton;
 
-    UIBarButtonItem *nowButton = [[UIBarButtonItem alloc] initWithTitle:@"Now" style:UIBarButtonItemStyleBordered target:self action:@selector(nowButtonAciton:)];
-    UIBarButtonItem *earlierButton = [[UIBarButtonItem alloc] initWithTitle:@"Earlier" style:UIBarButtonItemStyleBordered target:self action:@selector(earlierButtonAction:)];
+    UIBarButtonItem *nowButton = [[UIBarButtonItem alloc] initWithTitle:@"Now"
+                                                                  style:UIBarButtonItemStylePlain
+                                                                 target:self
+                                                                 action:@selector(nowButtonAciton:)];
+    UIBarButtonItem *earlierButton = [[UIBarButtonItem alloc] initWithTitle:@"Earlier"
+                                                                      style:UIBarButtonItemStylePlain
+                                                                     target:self
+                                                                     action:@selector(earlierButtonAction:)];
     
     if (self.selectedChannel.profile.modelID == 6) // SharedCam
     {
@@ -296,6 +298,8 @@ static int fps = 0;
     
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
     {
+        CamProfile *cp = self.selectedChannel.profile;
+        
         if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 7)
         {
             [self setTitle:cp.name];
