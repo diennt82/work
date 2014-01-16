@@ -3625,22 +3625,22 @@ static int fps = 0;
                                           owner:self
                                         options:nil];
 
-                if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 7)
-                {
-                    self.melodyViewController.view.frame = CGRectMake(320, 60, 159, 204);
-                }
-                else
-                {
-                    self.melodyViewController.view.frame = CGRectMake(320, 60, 159, 204);
-                }
+            if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 7)
+            {
+                self.melodyViewController.view.frame = CGRectMake(340, 60, 159, 204);
+            }
+            else
+            {
+                self.melodyViewController.view.frame = CGRectMake(320, 60, 159, 204);
+            }
 
         }
         
         
         //landscape mode
         [self.navigationController setNavigationBarHidden:YES];
-        //[self updateBottomView];
         
+        // I don't know why remove it.
         [self.melodyViewController.view removeFromSuperview];
         
         CGFloat imageViewHeight = screenHeight * 9 / 16;
@@ -3682,14 +3682,7 @@ static int fps = 0;
             [[NSBundle mainBundle] loadNibNamed:@"H264PlayerViewController"
                                           owner:self
                                         options:nil];
-            if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 7)
-            {
-                self.melodyViewController.view.frame = CGRectMake(0, 240, screenWidth, screenHeight - 240);
-            }
-            else
-            {
-                self.melodyViewController.view.frame = CGRectMake(0, 240, screenWidth, screenHeight - 240);
-            }
+            self.melodyViewController.view.frame = CGRectMake(0, 240, screenWidth, screenHeight - 240);
         }
         
         //portrait mode

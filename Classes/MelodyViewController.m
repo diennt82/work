@@ -43,20 +43,27 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
     
-    NSString * mel1 = NSLocalizedStringWithDefaultValue(@"melody_I",nil, [NSBundle mainBundle],
-                                                        @"Hush Little Baby", nil);
-    NSString * mel2 = NSLocalizedStringWithDefaultValue(@"melody_II",nil, [NSBundle mainBundle],
-                                                        @"Melody 2", nil);
+    NSString * mel1 = NSLocalizedStringWithDefaultValue(@"melody_I",  nil, [NSBundle mainBundle],
+                                                        @"Melody 1",  nil);
+    NSString * mel2 = NSLocalizedStringWithDefaultValue(@"melody_II", nil, [NSBundle mainBundle],
+                                                        @"Melody 2",  nil);
     NSString * mel3 = NSLocalizedStringWithDefaultValue(@"melody_III",nil, [NSBundle mainBundle],
-                                                        @"Melody 3", nil);
-    NSString * mel4 = NSLocalizedStringWithDefaultValue(@"melody_IV",nil, [NSBundle mainBundle],
-                                                        @"Melody 4", nil);
-    NSString * mel5 = NSLocalizedStringWithDefaultValue(@"melody_V",nil, [NSBundle mainBundle],
-                                                        @"Melody 5", nil);
-    NSString * mel6 = NSLocalizedStringWithDefaultValue(@"melody_VI",nil, [NSBundle mainBundle],
-                                                        @"All Night, all day", nil);
-    
-    _melodies = [[NSArray alloc] initWithObjects:mel1,mel2,mel3,mel4, mel5, mel6,nil];
+                                                        @"Melody 3",  nil);
+    NSString * mel4 = NSLocalizedStringWithDefaultValue(@"melody_IV", nil, [NSBundle mainBundle],
+                                                        @"Melody 4",  nil);
+    NSString * mel5 = NSLocalizedStringWithDefaultValue(@"melody_V",  nil, [NSBundle mainBundle],
+                                                        @"Melody 5",  nil);
+    if (self.selectedChannel.profile.modelID == 6) // SharedCam
+    {
+        NSString * mel6 = NSLocalizedStringWithDefaultValue(@"melody_VI", nil, [NSBundle mainBundle],
+                                                            @"All Melodies", nil);
+        //All Melodies
+        self.melodies = [[NSArray alloc] initWithObjects:mel1,mel2,mel3,mel4, mel5, mel6,nil];
+    }
+    else // Expect CameraHD
+    {
+        self.melodies = [[NSArray alloc] initWithObjects:mel1,mel2,mel3,mel4, mel5,nil];
+    }
     
     self.melodyTableView.delegate = self;
     self.melodyTableView.dataSource = self;
@@ -227,7 +234,7 @@
     {
         _melodyIndex = indexPath.section;
         
-        for (int i = 0; i < NUM_MELODY; i++)
+        for (int i = 0; i < _melodies.count; i++)
         {
             if (i != indexPath.section)
             {
