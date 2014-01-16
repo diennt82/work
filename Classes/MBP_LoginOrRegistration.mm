@@ -793,24 +793,22 @@
 
 #pragma mark -
 #pragma mark Login Callbacks
-- (void) loginSuccessWithResponse:(NSDictionary*) responseData
+- (void) loginSuccessWithResponse:(NSDictionary *)responseDict
 {
     //reset it here
      _doneButtonPressed = NO;
-	
-    //self.navigationItem.leftBarButtonItem.enabled = YES ;
-    //self.navigationItem.rightBarButtonItem.enabled = YES;
     self.enterLoginButton.enabled = YES;
     
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     [userDefaults setBool:NO forKey:_OfflineMode];
     [userDefaults synchronize];
     
-	if (responseData) {
-        NSInteger statusCode = [[responseData objectForKey:@"status"] intValue];
+	if (responseDict) {
+        NSInteger statusCode = [[responseDict objectForKey:@"status"] intValue];
+        
         if (statusCode == 200) // success
         {
-            self.apiKey = [[responseData objectForKey:@"data"] objectForKey:@"authentication_token"];
+            self.apiKey = [[responseDict objectForKey:@"data"] objectForKey:@"authentication_token"];
             
             // Get user info (email)
             BMS_JSON_Communication *jsonComm = [[[BMS_JSON_Communication alloc] initWithObject:self
@@ -818,10 +816,41 @@
                                                                                  FailSelector:@selector(getUserInfoFailedWithResponse:)
                                                                                     ServerErr:@selector(getUserInfoFailedServerUnreachable)] autorelease];
             [jsonComm getUserInfoWithApiKey:self.apiKey];
+            
+            //Store user/pass for later use
+            
+            [userDefaults setObject:self.temp_user_str forKey:@"PortalUsername"];
+            [userDefaults setObject:self.temp_pass_str forKey:@"PortalPassword"];
+            [userDefaults setObject:self.apiKey forKey:@"PortalApiKey"];
+            
+            [userDefaults synchronize];
+            
+            //MOVE on now ..
+            
+            //Register for push
+            
+            // Let the device know we want to receive push notifications
+            [[UIApplication sharedApplication] registerForRemoteNotificationTypes:
+             (UIRemoteNotificationType) (UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeAlert)];
+            
+            account = [[UserAccount alloc] initWithUser:self.temp_user_str
+                                                andPass:self.temp_pass_str
+                                              andApiKey:self.apiKey
+                                            andListener:delegate];
+            [[[GAI sharedInstance] defaultTracker] trackEventWithCategory:@"Login"
+                                                               withAction:@"Login Success"
+                                                                withLabel:@"Login success"
+                                                                withValue:nil];
+            //BLOCKED method
+            [account readCameraListAndUpdate];
+            
+            [self dismissViewControllerAnimated:NO completion:^{}];
+            
+            NSLog(@"Login success!");
         }
         else
         {
-            NSLog(@"Invalid response: %@", responseData);
+            NSLog(@"Invalid response: %@", responseDict);
             //ERROR condition
             self.progressView.hidden = YES;
             
@@ -850,42 +879,10 @@
             
         }
     }
-			
-	//Store user/pass for later use
-	
-	[userDefaults setObject:self.temp_user_str forKey:@"PortalUsername"];
-	[userDefaults setObject:self.temp_pass_str forKey:@"PortalPassword"];
-    [userDefaults setObject:self.apiKey forKey:@"PortalApiKey"];
-
-	[userDefaults synchronize];
-	
-	//MOVE on now .. 
-    
-       
-    
-    //REGister for push 
-   
-    
-    // Let the device know we want to receive push notifications
-	[[UIApplication sharedApplication] registerForRemoteNotificationTypes:
-     (UIRemoteNotificationType) (UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeAlert)];
-       
-    
-    account = [[UserAccount alloc] initWithUser:self.temp_user_str
-                                        andPass:self.temp_pass_str
-                                      andApiKey:self.apiKey
-                                    andListener:delegate];
-    [[[GAI sharedInstance] defaultTracker] trackEventWithCategory:@"Login"
-                                                       withAction:@"Login Success"
-                                                        withLabel:@"Login success"
-                                                        withValue:nil];
-    //BLOCKED method
-    [account readCameraListAndUpdate];
-    
-    [self dismissViewControllerAnimated:NO completion:^{}];
-    
-    NSLog(@"Login success!");
-    return;
+    else
+    {
+        NSLog(@"Error - loginSuccessWithResponse: reponseDict = nil");
+    }
 }
 
 - (void) loginFailedWithError:(NSDictionary *) responseError
