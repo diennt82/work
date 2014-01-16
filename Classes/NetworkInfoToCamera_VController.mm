@@ -256,6 +256,11 @@
     
     
     //Resign all keyboard...
+    [self hideAllKeyboard];
+}
+
+- (void)hideAllKeyboard
+{
     UITextField * textField = nil;
     
     textField = (UITextField *) [self.view viewWithTag:200];
@@ -275,9 +280,7 @@
     {
         [textField resignFirstResponder];
     }
-    
 }
-
 
 #pragma  mark -
 #pragma mark Table View delegate & datasource
@@ -844,6 +847,10 @@
 }
 -(void)sendWifiInfoToCamera
 {
+    //will hide keyboard
+    [self hideAllKeyboard];
+    //should hide back in navigation bar
+    self.navigationItem.hidesBackButton = YES;
     // should be show dialog here, make sure user input username and password
     [self.ib_dialogVerifyNetwork setHidden:NO];
     

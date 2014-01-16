@@ -80,6 +80,7 @@ typedef enum
 - (id) init;
 - (void)scan;
 - (void)reScan;
+- (void)stopScanBLE;
 -(void) disconnect;
 - (void)connectToBLEWithPeripheral:(CBPeripheral *)peripheral;
 -(void) reScanForPeripheral:(CBUUID *) dev_service_id;
