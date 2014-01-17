@@ -301,7 +301,7 @@
         }
          
         //cp.codecs = codec;
-        cp.fw_version = fwVersion;
+        cp.fw_version     = fwVersion;
         cp.registrationID = registrationID;
 
         [camList addObject:cp];
