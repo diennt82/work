@@ -409,6 +409,8 @@
                 
                 self.stringIntelligentMessage = [NSString stringWithFormat:@"Monitor is offline since %@", [df_local stringFromDate:updateDate]];
                 [df_local release];
+                
+                self.stringCurrentDate = @"";
             }
         }
         else
