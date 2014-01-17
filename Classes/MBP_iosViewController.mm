@@ -1912,8 +1912,8 @@
 
 
 
-		//NSLog(@"%d %s %s %s %s\n", i, if_names[i], hw_addrs[i], ip_names[i], 
-		// broadcast_addrs[i]);
+		NSLog(@"%d %s %s %s %s\n", i, if_names[i], hw_addrs[i], ip_names[i],
+		 broadcast_addrs[i]);
 
 		log = [log stringByAppendingFormat:@"%d %s %s %s %s\n", i, if_names[i], hw_addrs[i], ip_names[i], 
 		    broadcast_addrs[i]];
