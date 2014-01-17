@@ -60,6 +60,7 @@
 @property (nonatomic, retain) NSTimer *timerHideMenu;
 @property (nonatomic) BOOL isEarlierView;
 @property (nonatomic) NSInteger numberOfSTUNError;
+@property (nonatomic, retain) NSString *stringTemperature;
 
 - (void)centerScrollViewContents;
 - (void)scrollViewDoubleTapped:(UITapGestureRecognizer*)recognizer;
@@ -676,12 +677,13 @@ static int fps = 0;
                 [self performSelectorInBackground:@selector(getMelodyValue_bg) withObject:nil];
                 self.imgViewDrectionPad.userInteractionEnabled = YES;
                 self.imgViewDrectionPad.image = [UIImage imageNamed:@"camera_action_pan_bg.png"];
-                NSTimer *getTemperatureTimer = [NSTimer scheduledTimerWithTimeInterval:10
-                                                                                target:self
-                                                                              selector:@selector(getCameraTemperature_bg:)
-                                                                              userInfo:nil
-                                                                               repeats:YES];
-                [getTemperatureTimer fire];
+//                NSTimer *getTemperatureTimer = [NSTimer scheduledTimerWithTimeInterval:10
+//                                                                                target:self
+//                                                                              selector:@selector(getCameraTemperature_bg:)
+//                                                                              userInfo:nil
+//                                                                               repeats:YES];
+//                [getTemperatureTimer fire];
+                [self performSelectorInBackground:@selector(getCameraTemperature_bg:) withObject:nil];
             }
         }
             break;
@@ -2421,12 +2423,11 @@ static int fps = 0;
 
 #pragma mark - Temperature
 
-- (void)getCameraTemperature_bg: (NSTimer *)timer
+- (void)getCameraTemperature_bg: (id)sender
 {
     if (userWantToCancel == TRUE ||
         self.h264StreamerIsInStopped == TRUE)
     {
-        [timer invalidate];
         return;
     }
     
@@ -2437,9 +2438,8 @@ static int fps = 0;
 
         _httpComm.device_ip = self.selectedChannel.profile.ip_address;
         _httpComm.device_port = self.selectedChannel.profile.port;
-        NSData *responseData = [_httpComm sendCommandAndBlock_raw:@"get_temperature"];
+        NSData *responseData = [_httpComm sendCommandAndBlock_raw:@"value_temperature"];
 
-        
         if (responseData != nil)
         {
             responseString = [[[NSString alloc] initWithData:responseData encoding: NSUTF8StringEncoding] autorelease];
@@ -2480,11 +2480,21 @@ static int fps = 0;
         
         if (tmpRange.location != NSNotFound)
         {
-            NSString *temperature = [responseString substringFromIndex:tmpRange.location + 2];
+            NSArray *arrayBody = [responseString componentsSeparatedByString:@": "];
             
-            [self performSelectorOnMainThread:@selector(setTemperatureState_Fg:)
-                                       withObject:temperature
+            if (arrayBody != nil &&
+                arrayBody.count == 2)
+            {
+                self.stringTemperature = [arrayBody objectAtIndex:1];
+                
+                [self performSelectorOnMainThread:@selector(setTemperatureState_Fg:)
+                                       withObject:_stringTemperature
                                     waitUntilDone:NO];
+            }
+            else
+            {
+                NSLog(@"Error - Command is not found or wrong format: %@", responseString);
+            }
         }
     }
     else
@@ -3745,6 +3755,7 @@ static int fps = 0;
     
     self.imageViewStreamer.frame = _imageViewVideo.frame;
     [self.scrollView insertSubview:_imageViewStreamer aboveSubview:_imageViewVideo];
+    [self setTemperatureState_Fg:_stringTemperature];
     
     [self hideControlMenu];
     [self.activityIndicator startAnimating];
