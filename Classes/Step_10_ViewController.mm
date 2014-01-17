@@ -83,7 +83,7 @@
     self.userEmailLabel.text = (NSString *) [userDefaults objectForKey:@"PortalUseremail"];
     
     self.cameraMac = (NSString *) [userDefaults objectForKey:@"CameraMacWithQuote"];
-    
+    self.stringUDID = [userDefaults stringForKey:CAMERA_UDID];
     
     if (self.progressView == nil)
     {
@@ -608,7 +608,8 @@
 {
     NSString * set_mkey = SET_MASTER_KEY;
     NSString * response;
-    set_mkey =[set_mkey stringByAppendingString:self.master_key];
+    //set_mkey =[set_mkey stringByAppendingString:self.master_key];
+    set_mkey =[set_mkey stringByAppendingString:_stringAuth_token];
     
     response = [[HttpCom instance].comWithDevice sendCommandAndBlock:set_mkey];
     
@@ -861,7 +862,7 @@
 {
  	NSLog(@"Setup has failed - remove cam on server");
 	// send a command to remove camera
-	NSString *mac = [Util strip_colon_fr_mac:self.cameraMac];
+	//NSString *mac = [Util strip_colon_fr_mac:self.cameraMac];
 	
     BMS_JSON_Communication *jsonComm = [[[BMS_JSON_Communication alloc] initWithObject:self
                                                                              Selector:@selector(removeCamSuccessWithResponse:)
@@ -869,7 +870,8 @@
                                                                             ServerErr:@selector(removeCamFailedServerUnreachable)] autorelease];
     
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-    [jsonComm deleteDeviceWithRegistrationId:mac andApiKey:[userDefaults objectForKey:@"PortalApiKey"]];
+    [jsonComm deleteDeviceWithRegistrationId:_stringUDID
+                                   andApiKey:[userDefaults objectForKey:@"PortalApiKey"]];
     
     //Load step 11
     NSLog(@"Load step 11");
@@ -934,11 +936,11 @@
 - (void) addCamSuccessWithResponse:(NSDictionary *)responseData
 {
 #ifdef CONCURRENT_SETUP
-    NSLog(@"Do for concurent mode");
-    
-    NSLog(@"addcam response: %@", responseData);
+    NSLog(@"Do for concurent modep - addcam response: %@", responseData);
+
     //[self extractMasterKey:[[responseData objectForKey:@"data"] objectForKey:@"master_key"]];
-    self.master_key = [[responseData objectForKey:@"data"] objectForKey:@"master_key"];
+    //self.master_key = [[responseData objectForKey:@"data"] objectForKey:@"master_key"];
+    self.stringAuth_token = [[responseData objectForKey:@"data"] objectForKey:@"auth_token"];
 //    should_stop_scanning = FALSE;
 //	
 //    [NSTimer scheduledTimerWithTimeInterval: SCAN_TIMEOUT
@@ -960,7 +962,7 @@
 - (void) addCamFailedWithError:(NSDictionary *) error_response
 {
     if (error_response == nil) {
-        NSLog(@"error_response = nil");
+        NSLog(@"Error - error_response = nil");
         return;
     }
     NSLog(@"addcam failed with error code:%d", [[error_response objectForKey:@"status"] intValue]);
@@ -1019,13 +1021,11 @@
         [alert show];
         [alert release];
     }
-
-	
 }
 
 -(void) removeCamSuccessWithResponse:(NSDictionary *)responseData
 {
-	NSLog(@"removeCam success");
+	NSLog(@"Log - removeCam success");
 	
 	//[delegate sendStatus:5 ];
 	
@@ -1033,12 +1033,12 @@
 
 -(void) removeCamFailedWithError:(NSDictionary *)error_response
 {
-	NSLog(@"removeCam failed Server error: %@", [error_response objectForKey:@"message"]);
+	NSLog(@"Log - removeCam failed Server error: %@", [error_response objectForKey:@"message"]);
 }
 
 -(void) removeCamFailedServerUnreachable
 {
-	NSLog(@"server unreachable");
+	NSLog(@"Log - server unreachable");
 }
 
 #pragma mark - 
