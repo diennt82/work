@@ -437,11 +437,11 @@
     self.progressView.hidden = NO;
     [self.view bringSubviewToFront:self.progressView];
     
-    
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
         
-    NSString *apiKey = [userDefaults objectForKey:@"PortalApiKey"];
+    NSString *apiKey    = [userDefaults objectForKey:@"PortalApiKey"];
     NSString *fwVersion = [userDefaults objectForKey:@"FW_VERSION"];
+    NSString *udid      = [userDefaults objectForKey:CAMERA_UDID];
     
     //NSLog(@"-----fwVersion = %@, ,model = %@", fwVersion, model);
     
@@ -461,18 +461,26 @@
                                                                              Selector:@selector(addCamSuccessWithResponse:)
                                                                          FailSelector:@selector(addCamFailedWithError:)
                                                                             ServerErr:@selector(addCamFailedServerUnreachable)] autorelease];
-    NSString * mac = [Util strip_colon_fr_mac:self.cameraMac];
-    NSString * camName = (NSString *) [userDefaults objectForKey:@"CameraName"];
+    //NSString *mac = [Util strip_colon_fr_mac:self.cameraMac];
+    NSString *camName = (NSString *) [userDefaults objectForKey:@"CameraName"];
     
-//    //DEMO.SM.COM
-//    [jsonComm registerDeviceWithDeviceName:camName
-//                                  andRegId:mac
-//                             andDeviceType:@"Camera"
-//                                  andModel:@"blink1_hd"
-//                                   andMode:@"upnp"
-//                              andFwVersion:fwVersion
-//                               andTimeZone:stringFromDate
-//                                 andApiKey:apiKey];
+#if 1
+    [jsonComm registerDeviceWithDeviceName:camName
+                         andRegistrationID:udid
+                                   andMode:@"upnp" // Need somethings more usefully
+                              andFwVersion:fwVersion
+                               andTimeZone:stringFromDate
+                                 andApiKey:apiKey];
+#else
+    //DEMO.SM.COM
+    [jsonComm registerDeviceWithDeviceName:camName
+                                  andRegId:mac
+                             andDeviceType:@"Camera"
+                                  andModel:@"blink1_hd"
+                                   andMode:@"upnp"
+                              andFwVersion:fwVersion
+                               andTimeZone:stringFromDate
+                                 andApiKey:apiKey];
     NSLog(@"Mac address and cam name is %@, %@", mac, camName);
 
     //Api
@@ -484,7 +492,8 @@
                                   andTimeZone:stringFromDate
                           andSubscriptionType:@"tier1"
                                     andApiKey:apiKey];
-
+    
+#endif
 }
 
 #pragma  mark -

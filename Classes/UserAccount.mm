@@ -256,7 +256,7 @@
         
         NSInteger deviceID = [[camEntry objectForKey:@"id"] integerValue];
         NSString *camName  = [camEntry objectForKey:@"name"];
-        
+        NSString *registrationID = [camEntry objectForKey:@"registration_id"];
         NSString *camMac   = [[camEntry objectForKey:@"registration_id"] substringWithRange:NSMakeRange(6, 12)];
         NSInteger modelID  = [[camEntry objectForKey:@"device_model_id"] integerValue];
         
@@ -302,10 +302,11 @@
          
         //cp.codecs = codec;
         cp.fw_version = fwVersion;
+        cp.registrationID = registrationID;
 
         [camList addObject:cp];
         
-        NSLog(@"Log - device_model_id: %d, camMac: %@, Fw: %@, local_ip: %@", modelID, camMac, fwVersion, localIp);
+        NSLog(@"Log - device_model_id: %d, camMac: %@, Fw: %@, local_ip: %@, reg: %@", modelID, camMac, fwVersion, localIp, registrationID);
 	}
 	
 	return camList;
