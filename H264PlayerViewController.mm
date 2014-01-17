@@ -178,6 +178,8 @@ static int fps = 0;
     //[self.imageViewStreamer setContentMode:UIViewContentModeScaleAspectFit];
     [self.imageViewStreamer setBackgroundColor:[UIColor blackColor]];
     
+    [self addGesturesPichInAndOut];
+    
     UITapGestureRecognizer *singleTap = [[UITapGestureRecognizer alloc] initWithTarget:self
                                                                                 action:@selector(singleTapGestureCaptured:)];
     singleTap.numberOfTapsRequired = 1;
@@ -232,6 +234,7 @@ static int fps = 0;
     
     [self.scrollView insertSubview:_imageViewStreamer aboveSubview:_imageViewVideo];
     [self.imageViewStreamer setUserInteractionEnabled:YES];
+    [self.scrollView setUserInteractionEnabled:YES];
     //set background for scrollView
     [self.scrollView setBackgroundColor:[UIColor clearColor]];
     //processing for pinch gestures
@@ -262,15 +265,15 @@ static int fps = 0;
  */
 - (void)removeGestureRecognizerAtPortraitMode
 {
-    for(UIGestureRecognizer *gesture in [self.imageViewStreamer gestureRecognizers]]))
-    {
-        if([gesture isKindOfClass:[UITapGestureRecognizer class]])
-        {
-            if (gesture.numberOfTapsRequired == 2 || gesture.numberOfTouchesRequired == 2)
-            {
-                    [self.imageViewStreamer removeGestureRecognizer:gesture];
-            }
-        }
+//    for(UIGestureRecognizer *gesture in [self.imageViewStreamer gestureRecognizers]]))
+//    {
+//        if([gesture isKindOfClass:[UITapGestureRecognizer class]])
+//        {
+//            if (gesture.numberOfTapsRequired == 2 || gesture.numberOfTouchesRequired == 2)
+//            {
+//                    [self.imageViewStreamer removeGestureRecognizer:gesture];
+//            }
+//        }
 }
 /*
  setTitle for iOS7, purpose to change color for text, iOS6 default color is white
@@ -3639,7 +3642,7 @@ static int fps = 0;
 	if (orientation == UIInterfaceOrientationLandscapeLeft || orientation == UIInterfaceOrientationLandscapeRight)
 	{
         //load new nib for landscape iPad
-        [self addGesturesPichInAndOut];
+//        [self addGesturesPichInAndOut];
         if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
         {
             [[NSBundle mainBundle] loadNibNamed:@"H264PlayerViewController_land_iPad"
@@ -3681,13 +3684,13 @@ static int fps = 0;
         
         if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
         {
-            self.scrollView.contentSize = CGSizeMake(screenWidth, CONTENT_SIZE_W_PORTRAIT_IPAD);
+//            self.scrollView.contentSize = CGSizeMake(screenWidth, CONTENT_SIZE_W_PORTRAIT_IPAD);
             self.activityIndicator.frame = CGRectMake((screenHeight - INDICATOR_SIZE)/2, (screenWidth - INDICATOR_SIZE)/2 , INDICATOR_SIZE, INDICATOR_SIZE);
             
         }
         else
         {
-            self.scrollView.contentSize = CGSizeMake(screenWidth, CONTENT_SIZE_W_PORTRAIT);
+//            self.scrollView.contentSize = CGSizeMake(screenWidth, CONTENT_SIZE_W_PORTRAIT);
         }
         
 
@@ -3732,12 +3735,12 @@ static int fps = 0;
         self.imageViewVideo.frame = CGRectMake(0, 0, screenWidth, imageViewHeight);
         if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
         {
-            self.scrollView.contentSize = CGSizeMake(CONTENT_SIZE_W_PORTRAIT_IPAD, CONTENT_SIZE_H_PORTRAIT_IPAD);
+//            self.scrollView.contentSize = CGSizeMake(CONTENT_SIZE_W_PORTRAIT_IPAD, CONTENT_SIZE_H_PORTRAIT_IPAD);
             self.activityIndicator.frame = CGRectMake((screenWidth - INDICATOR_SIZE)/2, imageViewHeight/2 + 44 + deltaY , INDICATOR_SIZE, INDICATOR_SIZE);
         }
         else
         {
-            self.scrollView.contentSize = CGSizeMake(CONTENT_SIZE_W_PORTRAIT, CONTENT_SIZE_H_PORTRAIT);
+//            self.scrollView.contentSize = CGSizeMake(CONTENT_SIZE_W_PORTRAIT, CONTENT_SIZE_H_PORTRAIT);
         }
 
         self.viewCtrlButtons.frame = CGRectMake(0, imageViewHeight + 44 + deltaY, _viewCtrlButtons.frame.size.width, _viewCtrlButtons.frame.size.height);
@@ -3804,7 +3807,7 @@ static int fps = 0;
     self.pickerHQOptions.hidden = YES;
     self.pickerHQOptions.userInteractionEnabled = NO;
     self.playlistViewController.view.hidden = YES;
-    
+    [self addGesturesPichInAndOut];
 #if DISABLE_VIEW_RELEASE_FLAG
     
 #endif
@@ -4512,13 +4515,16 @@ static int fps = 0;
 }
 - (void)viewWillAppear:(BOOL)animated
 {
+
+    [super viewWillAppear:animated];
     //init data for debug
     [self initFirstData];
+
     _isCameraOffline = NO;
     _isRecordInterface  = YES;
     _isProcessRecording = NO;
     _isListening = NO;
-    [super viewWillAppear:animated];
+
     //[self.scrollView insertSubview:_imageViewStreamer aboveSubview:_imageViewVideo];
     if (_timelineVC != nil)
     {
@@ -4526,8 +4532,22 @@ static int fps = 0;
     }
     
     [self checkOrientation];
+
     [self setupPtt];
     
+
+    [self.imageViewStreamer setUserInteractionEnabled:YES];
+    [self.scrollView setUserInteractionEnabled:YES];
+    //set background for scrollView
+    [self.scrollView setBackgroundColor:[UIColor clearColor]];
+    //processing for pinch gestures
+    self.scrollView.delegate = self;
+    self.scrollView.maximumZoomScale = MAXIMUM_ZOOMING_SCALE;
+    self.scrollView.minimumZoomScale = MINIMUM_ZOOMING_SCALE;
+    [self centerScrollViewContents];
+    [self resetZooming];
+    self.scrollView.contentSize = CGSizeMake(5000, 5000);
+
 }
 
 - (void)initFirstData
