@@ -7,6 +7,7 @@
 //
 
 #import "CreateBLEConnection_VController.h"
+#import "PublicDefine.h"
 
 @interface CreateBLEConnection_VController ()
 
@@ -553,7 +554,7 @@
         NSLog(@"Get UDID successfully - udid: %@", stringUDID);
         
         self.cameraMac = [stringUDID substringWithRange:NSMakeRange(6, 12)];
-        NSString *cameraNameFinal = [NSString stringWithFormat:@"Camera-%@", [_cameraMac substringFromIndex:6]];
+        NSString *cameraNameFinal = [NSString stringWithFormat:@"%@%@", DEFAULT_SSID_HD_PREFIX, [_cameraMac substringFromIndex:6]];
         self.cameraName = cameraNameFinal;
         
         NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
@@ -581,7 +582,7 @@
                 return;
             }
             self.cameraMac = stringResponse;
-            NSString *cameraNameFinal = [NSString stringWithFormat:@"Camera-%@", [stringResponse substringFromIndex:6]];
+            NSString *cameraNameFinal = [NSString stringWithFormat:@"%@%@", DEFAULT_SSID_HD_PREFIX, [stringResponse substringFromIndex:6]];
             self.cameraName = cameraNameFinal;
             
             NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
