@@ -202,10 +202,12 @@
                                                                           FailSelector:@selector(removeCamFailedWithError:)
                                                                              ServerErr:@selector(removeCamFailedServerUnreachable)] autorelease];
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-    NSString *mac = [Util strip_colon_fr_mac:_camChannel.profile.mac_address];
-    NSLog(@"mac_address = %@", mac);
+    //NSString *mac = [Util strip_colon_fr_mac:_camChannel.profile.mac_address];
+    //NSLog(@"mac_address = %@", mac);
     
-    [jsonComm deleteDeviceWithRegistrationId:mac andApiKey:[userDefaults objectForKey:@"PortalApiKey"]];
+    
+    
+    //[jsonComm deleteDeviceWithRegistrationId:mac andApiKey:[userDefaults objectForKey:@"PortalApiKey"]];
 }
 
 #pragma mark - Table view data source

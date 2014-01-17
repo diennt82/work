@@ -140,3 +140,5 @@
 #endif //0
 
 #endif /* PUBLICDEFINE_H_ */
+
+#define CAMERA_UDID @"udid"

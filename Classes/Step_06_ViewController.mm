@@ -639,10 +639,14 @@
 {
     //NOTE: we can do this because we are connecting to camera now 
     NSString * camera_mac= nil;
+    NSString *stringUDID = @"";
 
 #ifdef CONCURRENT_SETUP
-    camera_mac = [[HttpCom instance].comWithDevice sendCommandAndBlock:GET_MAC_ADDRESS
+    stringUDID = [[HttpCom instance].comWithDevice sendCommandAndBlock:GET_UDID
                                                 withTimeout:5.0];
+    //01008344334C32B0A0VFFRBSVA
+    camera_mac = [stringUDID substringWithRange:NSMakeRange(6, 12)];
+    
     camera_mac = [Util add_colon_to_mac:camera_mac];
 #else
     camera_mac = [CameraPassword fetchBSSIDInfo];
@@ -654,6 +658,7 @@
 
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     [userDefaults setObject:camera_mac forKey:@"CameraMacWithQuote"];
+    [userDefaults setObject:stringUDID forKey:CAMERA_UDID];
     [userDefaults synchronize]; 
     
 
@@ -718,21 +723,18 @@
     [[NSUserDefaults standardUserDefaults] setObject:deviceCodec  forKey:CODEC_PREFS];
     [[NSUserDefaults standardUserDefaults] synchronize];
     
-    
      NSString * device_configuration = [_deviceConf getDeviceEncodedConfString];
     
     
     NSString * setup_cmd = [NSString stringWithFormat:@"%@%@",
                             SETUP_HTTP_CMD,device_configuration];
     
-	NSLog(@"before send: %@", setup_cmd);
+	NSLog(@"Log - before send: %@", setup_cmd);
     
-    
-	
 	//NSString * response =
     [[HttpCom instance].comWithDevice sendCommandAndBlock:setup_cmd ];
     
-    [NSTimer scheduledTimerWithTimeInterval: 5.0//
+    [NSTimer scheduledTimerWithTimeInterval:5.0//
                                      target:self
                                    selector:@selector(getStatusOfCameraToWifi:)
                                    userInfo:nil
@@ -744,10 +746,6 @@
 //                                                repeats:NO];
     
     NSLog(@"Don't Send & reset done");
-
-    
-
-    
 }
 
 - (void)nextStepVerifyPassword
