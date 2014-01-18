@@ -273,26 +273,29 @@
 
     [jsonComm loginWithLogin:self.temp_user_str andPassword:self.temp_pass_str];
     
-    
-    
-    if (_client == nil)
+    NSLog(@"Log - Do sign in - STUN: %d", [[NSUserDefaults standardUserDefaults] boolForKey:@"enable_stun"]);
+
+    if ([[NSUserDefaults standardUserDefaults] boolForKey:@"enable_stun"] == FALSE)
     {
-        _client = [StunClient alloc]; //init];
-        
-        
+        NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+        [userDefaults setInteger:TYPE_SYMMETRIC_NAT forKey:APP_IS_ON_SYMMETRIC_NAT];
+        [userDefaults synchronize];
     }
-    
-    
-    //If we have not checked -- then start checking, else just skip this step
-    if ( [_client isCheckingForSymmetrictNat]  == FALSE )
+    else
     {
+        if (_client == nil)
+        {
+            _client = [StunClient alloc]; //init];
+        }
         
-        //init
-        [_client init];
-        [_client test_start_async:self];
+        //If we have not checked -- then start checking, else just skip this step
+        if ( [_client isCheckingForSymmetrictNat]  == FALSE )
+        {
+            //init
+            [_client init];
+            [_client test_start_async:self];
+        }
     }
-    
-    
 }
 
 -(BOOL) isCurrentConnection3G

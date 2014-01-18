@@ -60,6 +60,8 @@
                                                           nil]
                                                 forState:UIControlStateNormal];
     [[UILabel appearanceWhenContainedIn:[UITableViewHeaderFooterView class], nil] setFont:[UIFont fontWithName:@"HelveticaNeue-Light" size:17]];
+    // Check condition use STUN or not
+    [self registerDefaultsFromSettingsBundle];
     
     [window setRootViewController:viewController];
     [window makeKeyAndVisible];
@@ -76,14 +78,9 @@
 	NSLog(@"Log location: %@",logPath);
 #endif
     
-    
-    
     [CameraAlert reloadBlankTableIfNeeded];
-    
-    
-    
-    //check the server name file
 
+    // Check the server name file
     
     NSError *error;
     NSString * serverFile = [cachesDirectory stringByAppendingPathComponent:@"server.txt"];
@@ -104,8 +101,34 @@
         //[BMS_JSON_Communication setServerInput:@"https://dev-api.hubble.in/v1"];
         [BMS_JSON_Communication setServerInput:@"https://api.hubble.in/v1"];
     }
-
+    
     return YES;
+}
+
+- (void)registerDefaultsFromSettingsBundle
+{
+    NSString *settingsBundle = [[NSBundle mainBundle] pathForResource:@"Settings" ofType:@"bundle"];
+    if(!settingsBundle)
+    {
+        //NSLog(@"Could not find Settings.bundle");
+        return;
+    }
+    
+    NSDictionary *settings = [NSDictionary dictionaryWithContentsOfFile:[settingsBundle stringByAppendingPathComponent:@"Root.plist"]];
+    NSArray *preferences = [settings objectForKey:@"PreferenceSpecifiers"];
+    
+    NSMutableDictionary *defaultsToRegister = [[NSMutableDictionary alloc] initWithCapacity:[preferences count]];
+    for(NSDictionary *prefSpecification in preferences)
+    {
+        NSString *key = [prefSpecification objectForKey:@"Key"];
+        if(key)
+        {
+            [defaultsToRegister setObject:[prefSpecification objectForKey:@"DefaultValue"] forKey:key];
+        }
+    }
+    
+    [[NSUserDefaults standardUserDefaults] registerDefaults:defaultsToRegister];
+    [defaultsToRegister release];
 }
 
 - (NSURL *)applicationDocumentsDirectory {
@@ -325,7 +348,7 @@
                                                                       andNotificationType:@"apns"
                                                                            andDeviceToken:devTokenStr
                                                                                 andApiKey:apiKey];
-    NSLog(@"push status = %d", [[responseRegNotifn objectForKey:@"status"] intValue]);
+    NSLog(@"Log - push status = %d", [[responseRegNotifn objectForKey:@"status"] intValue]);
      
 }
 

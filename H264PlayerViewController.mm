@@ -241,6 +241,7 @@ double _ticks = 0;
     [self.horizMenu reloadData];
     self.selectedItemMenu = -1;
     [self updateBottomView];
+    NSLog(@"Model of Camera is: %d, STUN: %d", self.selectedChannel.profile.modelID, [[NSUserDefaults standardUserDefaults] boolForKey:@"enable_stun"]);
     
     [self becomeActive];
     [self hideControlMenu];
@@ -1049,7 +1050,7 @@ double _ticks = 0;
     		break;
         }
     		
-        case H264_SWITCHING_TO_RELAY_SERVER:// just update the dialog
+        case H264_SWITCHING_TO_RELAY_SERVER:
         {
             NSLog(@"switching to relay server");
             
@@ -1679,7 +1680,6 @@ double _ticks = 0;
                 
             }
         }
-
     }
     else
     {
