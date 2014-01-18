@@ -1413,31 +1413,38 @@ static int fps = 0;
     }
     else if (self.selectedChannel.profile.minuteSinceLastComm <= 5)
     {
-        NSLog(@"created a remote streamer ");
-        if (_client == nil)
-        {
-            _client = [[StunClient alloc] init];
-        }
-        
-        
         NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-        int symmetric_nat_status = [userDefaults integerForKey:APP_IS_ON_SYMMETRIC_NAT];
-
+        NSLog(@"Log - created a remote streamer: %@", [userDefaults objectForKey:@"enabled_stun"]);
         
-        //For any reason it fails to check earlier, we try checking now.
-        if (symmetric_nat_status == TYPE_UNKNOWN)
+        // This value is setup on Account view
+        if([userDefaults boolForKey:@"enabled_stun"] == FALSE)
         {
-            //Non Blocking call
-            [self.client test_start_async:self];
+            // Force APP_IS_ON_SYMMETRIC_NAT to use RELAY mode
+            [self symmetric_check_result:TRUE];
         }
         else
         {
-            //call direct the callback
+            if (_client == nil)
+            {
+                _client = [[StunClient alloc] init];
+            }
             
-            [self symmetric_check_result: (symmetric_nat_status == TYPE_SYMMETRIC_NAT)];
+            int symmetric_nat_status = [userDefaults integerForKey:APP_IS_ON_SYMMETRIC_NAT];
             
+            //For any reason it fails to check earlier, we try checking now.
+            if (symmetric_nat_status == TYPE_UNKNOWN)
+            {
+                //Non Blocking call
+                [self.client test_start_async:self];
+            }
+            else
+            {
+                //call direct the callback
+                
+                [self symmetric_check_result: (symmetric_nat_status == TYPE_SYMMETRIC_NAT)];
+                
+            }
         }
-        
 
     }
     else
@@ -2579,10 +2586,13 @@ static int fps = 0;
 {
     NSInteger result = (isBehindSymmetricNat == TRUE)?TYPE_SYMMETRIC_NAT:TYPE_NON_SYMMETRIC_NAT;
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-    [userDefaults setInteger:result forKey:APP_IS_ON_SYMMETRIC_NAT];
-    [userDefaults synchronize];
     
-    
+    if ([userDefaults boolForKey:@"enabled_stun"] == TRUE)
+    {
+        [userDefaults setInteger:result forKey:APP_IS_ON_SYMMETRIC_NAT];
+        [userDefaults synchronize];
+    }
+
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0),
                    ^{
                        NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
@@ -2687,7 +2697,7 @@ static int fps = 0;
 
                                    if ( [[tokens objectAtIndex:0] hasSuffix:@"error=200"]) //roughly check for "error=200"
                                    {
-                                       if (_numberOfSTUNError >= 5) // Switch to RELAY because STUN try probe & failed many times
+                                       if (_numberOfSTUNError >= 3) // Switch to RELAY because STUN try probe & failed many times
                                        {
                                            NSLog(@"Switch to RELAY - Number of STUN error: %d", _numberOfSTUNError);
                                            
