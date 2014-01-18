@@ -61,6 +61,8 @@
 @property (nonatomic) BOOL isEarlierView;
 @property (nonatomic) NSInteger numberOfSTUNError;
 @property (nonatomic, retain) NSString *stringTemperature;
+//@property (nonatomic, retain) NSTimer *timerGetTemperature;
+@property (nonatomic) BOOL existTimerTemperature;
 
 - (void)centerScrollViewContents;
 - (void)scrollViewDoubleTapped:(UITapGestureRecognizer*)recognizer;
@@ -210,6 +212,7 @@ static int fps = 0;
     [self setupHttpPort];
     [self setupPtt];
     
+    self.stringTemperature = @"0";
 }
 
 - (void) setupHttpPort
@@ -1381,14 +1384,8 @@ static int fps = 0;
 
 - (void)setupCamera
 {
-    
-//    if (self.httpComm != nil)
-//    {
-//        self.httpComm = nil;
-//    }
     if (self.selectedChannel.stream_url != nil)
     {
-
         self.selectedChannel.stream_url = nil;
     }
     _httpComm.device_ip = self.selectedChannel.profile.ip_address;
@@ -2425,12 +2422,6 @@ static int fps = 0;
 
 - (void)getCameraTemperature_bg: (id)sender
 {
-    if (userWantToCancel == TRUE ||
-        self.h264StreamerIsInStopped == TRUE)
-    {
-        return;
-    }
-    
     NSString *responseString = @"";
     
     if (self.selectedChannel.profile .isInLocal == TRUE)
@@ -2474,7 +2465,9 @@ static int fps = 0;
     
     NSLog(@"Reponse - getCameraTemperature_bg: %@", responseString);
     
-    if (![responseString isEqualToString:@""])
+    if (![responseString isEqualToString:@""]   && // Get temperature failed!
+        ![responseString isEqualToString:@"NA"] && // Received temperature wrong format
+        ![responseString hasSuffix:@"null"])       // Received temperature {status code} null
     {
         NSRange tmpRange = [responseString rangeOfString:@": "];
         
@@ -2493,13 +2486,36 @@ static int fps = 0;
             }
             else
             {
-                NSLog(@"Error - Command is not found or wrong format: %@", responseString);
+                //NSLog(@"Error - Command is not found or wrong format: %@", responseString);
             }
+        }
+        else
+        {
+            //NSLog(@"Error - Command is not found or wrong format: %@", responseString);
         }
     }
     else
     {
         // Do nothings | reset UI
+        //NSLog(@"Error - Command is not found or wrong format: %@", responseString);
+    }
+    
+    // Make sure Update temperature once after that check condition
+    if (sender != nil &&
+        [sender isKindOfClass:[NSTimer class]])
+    {
+        if (self.ib_temperature.hidden == YES || // Label tmperature was hidden
+            userWantToCancel == TRUE ||          // Back out
+            self.h264StreamerIsInStopped == TRUE)
+        {
+            [((NSTimer *)sender) invalidate];
+            sender = nil;
+            self.existTimerTemperature = FALSE;
+            
+            NSLog(@"Log - Invalidate Timer get temperature");
+            
+            return;
+        }
     }
 }
 
@@ -4398,6 +4414,18 @@ static int fps = 0;
     else if (_selectedItemMenu == INDEX_TEMP)
     {
         [self.ib_temperature setHidden:NO];
+        
+        if (_existTimerTemperature == FALSE)
+        {
+            self.existTimerTemperature = TRUE;
+            NSLog(@"Log - Create Timer to get Temperature");
+            
+            [NSTimer scheduledTimerWithTimeInterval:10
+                                             target:self
+                                           selector:@selector(getCameraTemperature_bg:)
+                                           userInfo:nil
+                                            repeats:YES];
+        }
     }
 }
 
