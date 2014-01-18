@@ -110,6 +110,9 @@
     
     //for debug
     NSString *_viewVideoIn;
+    
+    //display time when recording
+    NSTimer *_timerRecording;
 }
 //property for Hold to talk
 @property (nonatomic) BOOL walkieTalkieEnabled;

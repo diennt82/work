@@ -80,6 +80,7 @@
 @synthesize httpComm = _httpComm;
 
 static int fps = 0;
+double _ticks = 0;
 #pragma mark - View
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -4487,6 +4488,7 @@ static int fps = 0;
     _isRecordInterface  = YES;
     _isProcessRecording = NO;
     _isListening = NO;
+    _ticks = 0.0;
     [super viewWillAppear:animated];
     //[self.scrollView insertSubview:_imageViewStreamer aboveSubview:_imageViewVideo];
     if (_timelineVC != nil)
@@ -4515,6 +4517,8 @@ static int fps = 0;
             [view removeFromSuperview];
         }
     }
+    
+    [self stopTimerRecoring];
     
     [[UIApplication sharedApplication] setStatusBarHidden:NO];
     [super viewWillDisappear:animated];
@@ -4737,7 +4741,10 @@ static int fps = 0;
             [self.ib_processRecordOrTakePicture setBackgroundImage:recordingImage forState:UIControlStateNormal];
             [self.ib_processRecordOrTakePicture setBackgroundImage:recordingPressed forState:UIControlEventTouchDown];
             [self.ib_processRecordOrTakePicture setBackgroundImage:recordingImage forState:UIControlEventTouchUpInside];
-            //process for recording
+            //processing for recording
+            
+            //display time to recording
+            _timerRecording = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(timerTick:) userInfo:nil repeats:YES];
 
         }
         else
@@ -4746,9 +4753,15 @@ static int fps = 0;
             [self.ib_processRecordOrTakePicture setBackgroundImage:readyRecord forState:UIControlStateNormal];
             [self.ib_processRecordOrTakePicture setBackgroundImage:readyRecordPressed forState:UIControlEventTouchDown];
             [self.ib_processRecordOrTakePicture setBackgroundImage:readyRecord forState:UIControlEventTouchUpInside];
+            
+            //processing for stopping record
+            /*
+             TODO: save if have
+             */
+            
+            //stop timer display
+            [self stopTimerRecoring];
             [self.ib_labelRecordVideo setText:@"Record Video"];
-            //process for stop record
-
         }
     }
     else
@@ -4777,11 +4790,11 @@ static int fps = 0;
     UIImage *takePicture = [UIImage imageNamed:@"camera_action_photo.png"];
     UIImage *takePicturePressed = [UIImage imageNamed:@"camera_action_photo_pressed.png"];
     
-#if DISABLE_VIEW_RELEASE_FLAG
-    _isRecordInterface = FALSE;
-#else
+//#if DISABLE_VIEW_RELEASE_FLAG
+//    _isRecordInterface = FALSE;
+//#else
     _isRecordInterface = !_isRecordInterface;
-#endif
+//#endif
     
     if (_isRecordInterface)
     {
@@ -4793,16 +4806,66 @@ static int fps = 0;
     }
     else
     {
-        _isProcessRecording = NO;
-        [self.ib_processRecordOrTakePicture setBackgroundImage:takePicture forState:UIControlStateNormal];
-        [self.ib_processRecordOrTakePicture setBackgroundImage:takePicturePressed forState:UIControlEventTouchDown];
-        [self.ib_processRecordOrTakePicture setBackgroundImage:takePicture forState:UIControlEventTouchUpInside];
-        [self.ib_buttonChangeAction setBackgroundImage:recordImage forState:UIControlStateNormal];
-        [self.ib_labelRecordVideo setText:@"Take Picture"];
+        //now is interface take picture
+        if (_isProcessRecording)
+        {
+            //but,we are recording
+            [self.ib_processRecordOrTakePicture setBackgroundImage:takePicture forState:UIControlStateNormal];
+            [self.ib_processRecordOrTakePicture setBackgroundImage:takePicturePressed forState:UIControlEventTouchDown];
+            [self.ib_processRecordOrTakePicture setBackgroundImage:takePicture forState:UIControlEventTouchUpInside];
+            
+            [self.ib_buttonChangeAction setBackgroundColor:[UIColor clearColor]];
+            [self.ib_buttonChangeAction setTitle:self.ib_labelRecordVideo.text forState:UIControlStateNormal];
+            [self.ib_buttonChangeAction setBackgroundImage:recordImage forState:UIControlStateNormal];
+            [self.ib_labelRecordVideo setText:@"Take Picture"];
+            
+        }
+        else
+        {
+            //not recording
+            [self.ib_processRecordOrTakePicture setBackgroundImage:takePicture forState:UIControlStateNormal];
+            [self.ib_processRecordOrTakePicture setBackgroundImage:takePicturePressed forState:UIControlEventTouchDown];
+            [self.ib_processRecordOrTakePicture setBackgroundImage:takePicture forState:UIControlEventTouchUpInside];
+            
+            [self.ib_buttonChangeAction setTitle:@"" forState:UIControlStateNormal];
+            
+            [self.ib_buttonChangeAction setBackgroundImage:recordImage forState:UIControlStateNormal];
+            [self.ib_labelRecordVideo setText:@"Take Picture"];
+        }
+        
     }
 #if DISABLE_VIEW_RELEASE_FLAG
     ((UIButton *)sender).enabled = NO;
 #endif
+}
+
+#pragma mark -
+#pragma mark display timer recording
+- (void)timerTick:(NSTimer *)timer
+{
+    _ticks += 1.0;
+    double seconds = fmod(_ticks, 60.0);
+    double minutes = fmod(trunc(_ticks / 60.0), 60.0);
+    double hours = trunc(_ticks / 3600.0);
+    
+    if (!_isRecordInterface && _isProcessRecording)
+    {
+        self.ib_labelRecordVideo.text = @"Take Picture";
+    }
+    else
+    {
+        self.ib_labelRecordVideo.text = [NSString stringWithFormat:@"%02.0f:%02.0f:%02.0f", hours, minutes, seconds];
+    }
+    
+}
+- (void)stopTimerRecoring
+{
+    _ticks = 0;
+    if (_timerRecording && [_timerRecording isValid])
+    {
+        [_timerRecording invalidate];
+        _timerRecording = nil;
+    }
 }
 
 #pragma mark -
