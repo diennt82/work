@@ -1414,7 +1414,7 @@ static int fps = 0;
     else if (self.selectedChannel.profile.minuteSinceLastComm <= 5)
     {
         NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-        NSLog(@"Log - created a remote streamer: %@", [userDefaults objectForKey:@"enabled_stun"]);
+        NSLog(@"Log - created a remote streamer - {enabled_stun}: %@", [userDefaults objectForKey:@"enabled_stun"]);
         
         // This value is setup on Account view
         if([userDefaults boolForKey:@"enabled_stun"] == FALSE)
@@ -2636,6 +2636,8 @@ static int fps = 0;
                                    {
                                        self.selectedChannel.stream_url = urlResponse;
                                    }
+                                   
+                                   self.selectedChannel.communication_mode = COMM_MODE_STUN_RELAY2;
                                    
                                    [self performSelectorOnMainThread:@selector(startStream)
                                                           withObject:nil
