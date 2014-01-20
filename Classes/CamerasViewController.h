@@ -13,7 +13,7 @@
 @interface CamerasViewController : UITableViewController
 {
     //member to dismiss when disDisAppearView
-    UIAlertView *_alertChooseConfig;
+    //UIAlertView *_alertChooseConfig;
 }
 
 @property (assign, nonatomic) id<ConnectionMethodDelegate> camerasDelegate;

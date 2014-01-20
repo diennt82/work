@@ -15,13 +15,12 @@
 #import "CameraAlert.h"
 #import "MenuCameraViewController.h"
 
-@interface CamerasViewController () <H264PlayerVCDelegate, CamerasCellDelegate>
+@interface CamerasViewController () <H264PlayerVCDelegate, CamerasCellDelegate, UIAlertViewDelegate>
 
 @property (retain, nonatomic) IBOutlet UITableViewCell *addCameraCell;
 
 @property (retain, nonatomic) NSArray *snapshotImages;
-
-@property (retain, nonatomic) UIImage *snapshotImg;
+@property (retain, nonatomic) UIAlertView *alertChooseConfig;
 @property (nonatomic) BOOL isFirttime;
 
 @end
@@ -100,7 +99,6 @@
 
 - (void)viewWillDisappear:(BOOL)animated
 {
-    
     //Dismiss alertView in case interrupt : lock key, home key, phone call
     if (_alertChooseConfig)
     {
@@ -108,6 +106,8 @@
         [_alertChooseConfig release];
         _alertChooseConfig = nil;
     }
+    
+    [super viewWillDisappear:animated];
 }
 
 - (void)showDialogChooseConfigCamera
@@ -131,6 +131,63 @@
                           otherButtonTitles:BLEText, wifiText, nil];
     [_alertChooseConfig show];
 }
+
+#if 1
+- (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex
+{
+    if (buttonIndex == 0) {
+        //Cancel button pressed
+        [_alertChooseConfig dismissWithClickedButtonIndex:0 animated:NO];
+        _alertChooseConfig = nil;
+    }
+    else if (buttonIndex == 1) {
+        NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+        //BLE button pressed
+        [userDefaults setInteger:BLUETOOTH_SETUP forKey:SET_UP_CAMERA];
+        [userDefaults synchronize];
+        
+        if (_camChannels.count < MAX_CAM_ALLOWED)
+        {
+            NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+            [userDefaults setBool:FALSE forKey:FIRST_TIME_SETUP];
+            [userDefaults synchronize];
+            
+            NSLog(@"CameraSVC - addCameraButtonTouchAction - delegate: %@", self.camerasDelegate);
+            //MenuViewController *tabBarController = (MenuViewController *)self.parentViewController;
+            [((MenuViewController *)self.parentVC).menuDelegate sendStatus:SETUP_CAMERA];//initial setup
+            
+        }
+        else
+        {
+            [self cameraShowDialog:DIALOG_CANT_ADD_CAM];
+        }
+        
+    }
+    else if (buttonIndex == 2) {
+        //Wifi button pressed
+        NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+        
+        [userDefaults setInteger:WIFI_SETUP forKey:SET_UP_CAMERA];
+        [userDefaults synchronize];
+        
+        if (_camChannels.count < MAX_CAM_ALLOWED)
+        {
+            NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+            [userDefaults setBool:FALSE forKey:FIRST_TIME_SETUP];
+            [userDefaults synchronize];
+            
+            NSLog(@"addCameraButtonTouchAction: %@", self.camerasDelegate);
+            //MenuViewController *tabBarController = (MenuViewController *)self.parentViewController;
+            [((MenuViewController *)self.parentVC).menuDelegate sendStatus:SETUP_CAMERA];//initial setup
+            
+        }
+        else
+        {
+            [self cameraShowDialog:DIALOG_CANT_ADD_CAM];
+        }
+    }
+}
+#else
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
     
@@ -186,7 +243,7 @@
         }
     }
 }
-
+#endif
 
 - (IBAction)addCameraButtonTouchAction:(id)sender
 {
@@ -477,6 +534,7 @@
 - (void)dealloc {
     [_camChannels release];
     [_addCameraCell release];
+    [_alertChooseConfig release];
     [super dealloc];
 }
 @end

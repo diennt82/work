@@ -791,9 +791,6 @@
                 cp.hasUpdateLocalStatus = TRUE;
             }
             
-            
-            
-            
             [self finish_scanning];
         }
         else
