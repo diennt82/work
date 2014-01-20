@@ -13,6 +13,7 @@
                 <outlet property="ib_ViewTouchToTalk" destination="0Cv-wD-bGw" id="Lv4-uh-jCJ"/>
                 <outlet property="ib_buttonChangeAction" destination="a87-FB-kFc" id="3qp-8W-gCx"/>
                 <outlet property="ib_buttonTouchToTalk" destination="hJo-ff-gYM" id="eHq-3e-cU6"/>
+                <outlet property="ib_changeToMainRecording" destination="mlu-Gl-5qe" id="Qpr-r3-kIH"/>
                 <outlet property="ib_labelRecordVideo" destination="yJw-Ao-mOT" id="RCt-8M-h19"/>
                 <outlet property="ib_labelTouchToTalk" destination="hzo-Tk-4BY" id="DmV-LE-eBQ"/>
                 <outlet property="ib_processRecordOrTakePicture" destination="W9D-nx-A3Q" id="Txd-Mh-4Ks"/>
@@ -157,6 +158,18 @@
                             </state>
                             <connections>
                                 <action selector="changeAction:" destination="-1" eventType="touchUpInside" id="1IN-s0-7TP"/>
+                            </connections>
+                        </button>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="mlu-Gl-5qe">
+                            <rect key="frame" x="238" y="10" width="79" height="54"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                            <state key="normal">
+                                <color key="titleColor" red="1" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                            </state>
+                            <connections>
+                                <action selector="changeToMainRecording:" destination="-1" eventType="touchUpInside" id="Ljw-dA-kIj"/>
                             </connections>
                         </button>
                     </subviews>
