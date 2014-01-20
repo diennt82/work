@@ -19,5 +19,6 @@
 @property (nonatomic, retain)     NSString * alertVal;
 @property (nonatomic, retain)     NSString * alertTime;
 @property (nonatomic, retain)     NSString * server_url;
+@property (nonatomic, retain)     NSString * registrationID;
 
 @end

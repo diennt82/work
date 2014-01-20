@@ -6,8 +6,6 @@
 //  Copyright 2011 __MyCompanyName__. All rights reserved.
 //
 
-#define DISABLE_VIEW_RELEASE_FLAG 0
-
 #import "MBP_iosAppDelegate.h"
 
 
@@ -54,10 +52,7 @@
 	
 	
 #if TARGET_IPHONE_SIMULATOR == 0
-	
-	
-	
-	
+
 	NSString *logPath = [cachesDirectory stringByAppendingPathComponent:@"application.log"];
 	
 	freopen([logPath cStringUsingEncoding:NSASCIIStringEncoding], "a+", stderr);
@@ -124,16 +119,12 @@
 
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo
 {
-    NSLog(@"didReceiveRemoteNotification");
+    NSLog(@"AppDelegate - didReceiveRemoteNotification: %@", userInfo);
     //clear status notification 
     [[UIApplication sharedApplication] setApplicationIconBadgeNumber:1];
     [[UIApplication sharedApplication] setApplicationIconBadgeNumber:0];
     [[UIApplication sharedApplication] cancelAllLocalNotifications];
-        
-   
-    
-    
-    
+
     if (userInfo)
     {
         NSString * str2 = (NSString *) [userInfo objectForKey:@"alert"]; 
@@ -142,15 +133,17 @@
         NSString * str5 = (NSString *) [userInfo objectForKey:@"time"]; 
         NSString * str6 = (NSString *) [userInfo objectForKey:@"cameraname"];
         NSString * str7 = (NSString *) [userInfo objectForKey:@"url"];
+        NSString * str8 = (NSString *) [userInfo objectForKey:@"registration_id"];
         
         //4 44334C31A004 20130914055827490 2013-09-14T05:59:05+00:00 Camera-31a004
-        NSLog(@"%@ %@ %@ %@ %@",  str2, str3, str4 , str5, str6);  
+        //NSLog(@"%@ %@ %@ %@ %@ %@",  str2, str3, str4 , str5, str6, str8);
         
         if (str2 == nil ||
             str3 == nil ||
             str4 == nil ||
             str5 == nil ||
-            str6 == nil )
+            str6 == nil ||
+            str8 == nil)
         {
             NSLog(@"NIL info.. silencely return"); 
             return; 
@@ -165,6 +158,7 @@
         camAlert.alertType = str2;
         camAlert.alertTime =str5;
         camAlert.alertVal = str4;
+        camAlert.registrationID = str8;
         
         if (str7 != nil)
         {
@@ -179,27 +173,23 @@
         if ( [application applicationState] == UIApplicationStateActive)
         {
             //App is running now
-#if DISABLE_VIEW_RELEASE_FLAG
-#else
             shouldStoreAlert = [viewController pushNotificationRcvedInForeground: camAlert];
-#endif
-            
+        }
+        else if ( [application applicationState] == UIApplicationStateInactive)
+        {
+            NSLog(@"UIApplicationStateInactive");
+            //[self performSelectorOnMainThread:@selector(forceLogin) withObject:nil waitUntilDone:YES];
+            [self performSelectorOnMainThread:@selector(activateNotificationViewController:) withObject:camAlert waitUntilDone:YES];
+        }
+        else
+        {
+            // TODO: handle exception
         }
         
-       
         if (shouldStoreAlert && [CameraAlert insertAlertForCamera:camAlert] == TRUE)
         {
             NSLog(@"Alert inserted successfully");
          }
-    
-        
-        if ( [application applicationState] == UIApplicationStateInactive)
-        {
-            
-            NSLog(@"UIApplicationStateInactive"); 
-            //[self performSelectorOnMainThread:@selector(forceLogin) withObject:nil waitUntilDone:YES];
-            [self performSelectorOnMainThread:@selector(activateNotificationViewController:) withObject:camAlert waitUntilDone:YES];
-        }
         
         //[camAlert release]; camAlert leak memory but I can't release it.
     }

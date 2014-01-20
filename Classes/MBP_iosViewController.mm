@@ -879,25 +879,14 @@
     // IF this is just a server announcement - Dont do anything -
     if ([self isServerAnnouncement:camAlert])
     {
-        
-        
-        
         NSString * ignore = NSLocalizedStringWithDefaultValue(@"close",nil, [NSBundle mainBundle],
                                                               @"Close", nil);
         
         NSString * details = NSLocalizedStringWithDefaultValue(@"detail",nil, [NSBundle mainBundle],
                                                               @"Detail", nil);
-        
 
-        
         NSString * msg = camAlert.alertVal;
-        
-        
-        
-        
 
-        
-        
         pushAlert = [[AlertPrompt alloc]
                      initWithTitle:camAlert.cameraName
                      message:msg
@@ -910,12 +899,8 @@
         
         [self playSound];
         [pushAlert show];
-        
-        
-        
-        
+
         return FALSE ;
-        
     }
     
     //Check if we should popup
@@ -941,7 +926,8 @@
         return FALSE;
     }
     
-    if (latestCamAlert != nil && [latestCamAlert.cameraMacNoColon  isEqualToString:camAlert.cameraMacNoColon])
+    if (latestCamAlert != nil &&
+        [latestCamAlert.cameraMacNoColon  isEqualToString:camAlert.cameraMacNoColon])
     {
         NSLog(@"Same cam alert is currenlty stored.");
         
@@ -966,16 +952,10 @@
              return FALSE;
         }
     }
-    
-      
 
-    
-    
     NSString * msg = NSLocalizedStringWithDefaultValue(@"Sound_detected",nil, [NSBundle mainBundle],
                                                        @"Sound detected", nil);
-    
-    
-    
+
     if ( [camAlert.alertType isEqualToString:ALERT_TYPE_TEMP_HI]  )
     {
         msg =NSLocalizedStringWithDefaultValue( @"Temperature_too_high",nil, [NSBundle mainBundle],
@@ -1008,10 +988,7 @@
         
         [pushAlert release];
     }
-    
-    
-    
-    
+
     pushAlert = [[UIAlertView alloc]
                  initWithTitle:camAlert.cameraName
                  message:msg
@@ -1047,27 +1024,15 @@
         
     }
     
-    
     [self playSound];
     
     [pushAlert show];
-    
-    
-    
 
 	return TRUE;
-
 }
-
-
 
 -(void) playSound
 {
-	
-    
-	//NSLog(@"Play the B");
-    
-    
 	//201201011 This is needed to play the system sound on top of audio from camera
 	UInt32 sessionCategory = kAudioSessionCategory_AmbientSound;    // 1
 	AudioSessionSetProperty (
@@ -1085,9 +1050,6 @@
     {
         AudioServicesPlayAlertSound(soundFileObject);
     }
-    
-    
-    
 }
 
 -(void) logoutAndUnregistration_bg
@@ -1188,6 +1150,7 @@
                     notifVC.cameraName  = latestCamAlert.cameraName;//@"SharedCam8D4F7F";//latestCamAlert.cameraName;
                     notifVC.alertType   = latestCamAlert.alertType;//@"4";//latestCamAlert.alertType;
                     notifVC.alertVal    = latestCamAlert.alertVal;//@"20130921064439810";//latestCamAlert.alertVal;
+                    notifVC.registrationID = latestCamAlert.registrationID;
                     
                     notifVC.NotifDelegate = self;
                     
@@ -2048,16 +2011,16 @@
     [self dismissViewControllerAnimated:NO completion:nil];
     self.progressView.hidden = NO;
     
-    
     NotifViewController *notifVC = [[NotifViewController alloc] initWithNibName:@"NotifViewController"
                                                                           bundle:Nil];
     
     notifVC.notifDelegate = self;
     //Feed in data now
     notifVC.cameraMacNoColon = self.camAlert.cameraMacNoColon;
-    notifVC.cameraName  = self.camAlert.cameraName;
-    notifVC.alertType   = self.camAlert.alertType;
-    notifVC.alertVal    = self.camAlert.alertVal;
+    notifVC.cameraName       = self.camAlert.cameraName;
+    notifVC.alertType        = self.camAlert.alertType;
+    notifVC.alertVal         = self.camAlert.alertVal;
+    notifVC.registrationID   = self.camAlert.registrationID;
     
     [self presentViewController:[[UINavigationController alloc]initWithRootViewController:notifVC] animated:YES completion:^{}];
 }
