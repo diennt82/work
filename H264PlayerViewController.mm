@@ -1780,8 +1780,7 @@ static int fps = 0;
 {
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     NSString *apiKey = [userDefaults objectForKey:@"PortalApiKey"];
-    NSString *mac = [Util strip_colon_fr_mac:self.selectedChannel.profile.mac_address];
-    
+    //NSString *mac = [Util strip_colon_fr_mac:self.selectedChannel.profile.mac_address];
     
     BMS_JSON_Communication *jsonComm = [[[BMS_JSON_Communication alloc] initWithObject:self
                                                                               Selector:nil
@@ -1791,9 +1790,9 @@ static int fps = 0;
     NSString * cmd_string = @"action=command&command=close_p2p_rtsp_stun";
     
     //NSDictionary *responseDict =
-    [jsonComm  sendCommandBlockedWithRegistrationId:mac
-                                                         andCommand:cmd_string
-                                                          andApiKey:apiKey];
+    [jsonComm  sendCommandBlockedWithRegistrationId:self.selectedChannel.profile.registrationID
+                                         andCommand:cmd_string
+                                          andApiKey:apiKey];
     H264PlayerViewController *thisVC = (H264PlayerViewController *)vc;
     if (userWantToCancel == TRUE)
     {
@@ -1828,8 +1827,7 @@ static int fps = 0;
 {
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     NSString *apiKey = [userDefaults objectForKey:@"PortalApiKey"];
-    NSString *mac = [Util strip_colon_fr_mac:self.selectedChannel.profile.mac_address];
-    
+    //NSString *mac = [Util strip_colon_fr_mac:self.selectedChannel.profile.mac_address];
     
     BMS_JSON_Communication *jsonComm = [[BMS_JSON_Communication alloc] initWithObject:self
                                                                               Selector:nil
@@ -1839,7 +1837,7 @@ static int fps = 0;
     NSString * cmd_string = @"action=command&command=close_relay_rtmp";
     
     //NSDictionary *responseDict =
-    [jsonComm  sendCommandBlockedWithRegistrationId:mac
+    [jsonComm  sendCommandBlockedWithRegistrationId:self.selectedChannel.profile.registrationID
                                          andCommand:cmd_string
                                           andApiKey:apiKey];
     [jsonComm release];
@@ -1997,18 +1995,18 @@ static int fps = 0;
 	{
         NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
         
-        NSString *mac = [Util strip_colon_fr_mac:self.selectedChannel.profile.mac_address];
+        //NSString *mac = [Util strip_colon_fr_mac:self.selectedChannel.profile.mac_address];
         NSString *apiKey = [userDefaults objectForKey:@"PortalApiKey"];
-        NSLog(@"mac %@, apikey %@", mac, apiKey);
+        NSLog(@"Log - registrationID %@, apikey %@", self.selectedChannel.profile.registrationID, apiKey);
         
 		BMS_JSON_Communication *jsonCommunication = [[[BMS_JSON_Communication alloc] initWithObject:self
                                                                Selector:nil
                                                            FailSelector:nil
                                                               ServerErr:nil] autorelease];
         
-        NSDictionary *responseDict = [jsonCommunication sendCommandBlockedWithRegistrationId:mac
-                                                               andCommand:[NSString stringWithFormat:@"action=command&command=get_resolution"]
-                                                                andApiKey:apiKey];
+        NSDictionary *responseDict = [jsonCommunication sendCommandBlockedWithRegistrationId:self.selectedChannel.profile.registrationID
+                                                                                  andCommand:[NSString stringWithFormat:@"action=command&command=get_resolution"]
+                                                                                   andApiKey:apiKey];
         if (responseDict != nil)
         {
             
@@ -2078,10 +2076,10 @@ static int fps = 0;
         
         NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
         
-        NSString *mac = [Util strip_colon_fr_mac:self.selectedChannel.profile.mac_address];
+        //NSString *mac = [Util strip_colon_fr_mac:self.selectedChannel.profile.mac_address];
         NSString *apiKey = [userDefaults objectForKey:@"PortalApiKey"];
         
-        NSDictionary *responseDict = [jsonCommunication sendCommandBlockedWithRegistrationId:mac
+        NSDictionary *responseDict = [jsonCommunication sendCommandBlockedWithRegistrationId:self.selectedChannel.profile.registrationID
                                                                                   andCommand:@"action=command&command=get_recording_stat"
                                                                                    andApiKey:apiKey];
         if (responseDict != nil)
@@ -2147,10 +2145,10 @@ static int fps = 0;
         
         NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
         
-        NSString *mac = [Util strip_colon_fr_mac:self.selectedChannel.profile.mac_address];
+        //NSString *mac = [Util strip_colon_fr_mac:self.selectedChannel.profile.mac_address];
         NSString *apiKey = [userDefaults objectForKey:@"PortalApiKey"];
         
-        NSDictionary *responseDict = [jsonCommunication sendCommandBlockedWithRegistrationId:mac
+        NSDictionary *responseDict = [jsonCommunication sendCommandBlockedWithRegistrationId:self.selectedChannel.profile.registrationID
                                                                                   andCommand:[NSString stringWithFormat:@"action=command&command=set_recording_stat&mode=%@", modeRecording]
                                                                                    andApiKey:apiKey];
         if (responseDict != nil)
@@ -2235,10 +2233,10 @@ static int fps = 0;
         
         NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
         
-        NSString *mac = [Util strip_colon_fr_mac:self.selectedChannel.profile.mac_address];
+        //NSString *mac = [Util strip_colon_fr_mac:self.selectedChannel.profile.mac_address];
         NSString *apiKey = [userDefaults objectForKey:@"PortalApiKey"];
         
-        NSDictionary *responseDict = [jsonCommunication sendCommandBlockedWithRegistrationId:mac
+        NSDictionary *responseDict = [jsonCommunication sendCommandBlockedWithRegistrationId:self.selectedChannel.profile.registrationID
                                                                                   andCommand:@"action=command&command=get_motion_area"
                                                                                    andApiKey:apiKey];
         if (responseDict != nil)
@@ -2366,10 +2364,10 @@ static int fps = 0;
         
         NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
         
-        NSString *mac = [Util strip_colon_fr_mac:self.selectedChannel.profile.mac_address];
+        //NSString *mac = [Util strip_colon_fr_mac:self.selectedChannel.profile.mac_address];
         NSString *apiKey = [userDefaults objectForKey:@"PortalApiKey"];
         
-        NSDictionary *responseDict = [jsonCommunication sendCommandBlockedWithRegistrationId:mac
+        NSDictionary *responseDict = [jsonCommunication sendCommandBlockedWithRegistrationId:self.selectedChannel.profile.registrationID
                                                                                   andCommand:@"action=command&command=value_melody"
                                                                                    andApiKey:apiKey];
         if (responseDict != nil)
@@ -2464,10 +2462,10 @@ static int fps = 0;
         
         NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
         
-        NSString *mac = [Util strip_colon_fr_mac:self.selectedChannel.profile.mac_address];
+        //NSString *mac = [Util strip_colon_fr_mac:self.selectedChannel.profile.mac_address];
         NSString *apiKey = [userDefaults objectForKey:@"PortalApiKey"];
         
-        NSDictionary *responseDict = [jsonCommunication sendCommandBlockedWithRegistrationId:mac
+        NSDictionary *responseDict = [jsonCommunication sendCommandBlockedWithRegistrationId:self.selectedChannel.profile.registrationID
                                                                                   andCommand:@"action=command&command=value_temperature"
                                                                                    andApiKey:apiKey];
         [jsonCommunication release];
@@ -2609,10 +2607,8 @@ static int fps = 0;
                    ^{
                        NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
                        NSString *apiKey = [userDefaults objectForKey:@"PortalApiKey"];
-                       NSString *mac = [Util strip_colon_fr_mac:self.selectedChannel.profile.mac_address];
-                       
-                       
-                       
+                       //NSString *mac = [Util strip_colon_fr_mac:self.selectedChannel.profile.mac_address];
+                       NSString *stringUDID = self.selectedChannel.profile.registrationID;
                        
                        BMS_JSON_Communication *jsonComm = [[[BMS_JSON_Communication alloc] initWithObject:self
                                                                                                  Selector:nil
@@ -2626,7 +2622,7 @@ static int fps = 0;
                        {
                            NSLog(@"USE RELAY TO VIEW***********************");
                            _viewVideoIn = @"R";
-                           responseDict = [jsonComm createSessionBlockedWithRegistrationId:mac
+                           responseDict = [jsonComm createSessionBlockedWithRegistrationId:stringUDID
                                                                              andClientType:@"BROWSER"
                                                                                  andApiKey:apiKey];
                            if (responseDict != nil)
@@ -2692,7 +2688,7 @@ static int fps = 0;
                                                     self.selectedChannel.local_stun_video_port,
                                                     self.selectedChannel.public_ip];
                            
-                           responseDict =  [jsonComm  sendCommandBlockedWithRegistrationId:mac
+                           responseDict =  [jsonComm  sendCommandBlockedWithRegistrationId:stringUDID
                                                                                 andCommand:cmd_string
                                                                                  andApiKey:apiKey];
                            
@@ -2719,7 +2715,7 @@ static int fps = 0;
                                            cmd_string = @"action=command&command=close_p2p_rtsp_stun";
                                            
                                            //responseDict =
-                                           [jsonComm  sendCommandBlockedWithRegistrationId:mac
+                                           [jsonComm  sendCommandBlockedWithRegistrationId:stringUDID
                                                                                 andCommand:cmd_string
                                                                                  andApiKey:apiKey];
                                            
@@ -2769,9 +2765,9 @@ static int fps = 0;
                                        cmd_string = @"action=command&command=close_p2p_rtsp_stun";
                                        
                                        //responseDict =
-                                       [jsonComm  sendCommandBlockedWithRegistrationId:mac
-                                                                                            andCommand:cmd_string
-                                                                                             andApiKey:apiKey];
+                                       [jsonComm  sendCommandBlockedWithRegistrationId:stringUDID
+                                                                            andCommand:cmd_string
+                                                                             andApiKey:apiKey];
                                        
                                        if (userWantToCancel == FALSE)
                                        {
@@ -2812,12 +2808,7 @@ static int fps = 0;
                                                    waitUntilDone:NO];
                            }
                        }
-                       
-                       
-                       
-                       
-                      
-                       
+    
                    }
                    
                    
@@ -2850,16 +2841,17 @@ static int fps = 0;
                            {
                                NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
                                
-                               NSString *mac = [Util strip_colon_fr_mac:self.selectedChannel.profile.mac_address];
+                               //NSString *mac = [Util strip_colon_fr_mac:self.selectedChannel.profile.mac_address];
+                               NSString *stringUDID = self.selectedChannel.profile.registrationID;
                                NSString *apiKey = [userDefaults objectForKey:@"PortalApiKey"];
-                               NSLog(@"mac %@, apikey %@", mac, apiKey);
+                               NSLog(@"Log - registrationID: %@, apikey: %@", stringUDID, apiKey);
                                
                                BMS_JSON_Communication *jsonCommunication = [[[BMS_JSON_Communication alloc] initWithObject:self
                                                                                                                   Selector:nil
                                                                                                               FailSelector:nil
                                                                                                                  ServerErr:nil] autorelease];
                                
-                               NSDictionary *responseDict = [jsonCommunication sendCommandBlockedWithRegistrationId:mac
+                               NSDictionary *responseDict = [jsonCommunication sendCommandBlockedWithRegistrationId:stringUDID
                                                                                                          andCommand:[NSString stringWithFormat:@"action=command&command=get_resolution"]
                                                                                                           andApiKey:apiKey];
                                if (responseDict != nil)
@@ -2934,13 +2926,14 @@ static int fps = 0;
                    ^{
                        NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
                        NSString *apiKey = [userDefaults objectForKey:@"PortalApiKey"];
-                       NSString *mac = [Util strip_colon_fr_mac:self.selectedChannel.profile.mac_address];
+                       //NSString *mac = [Util strip_colon_fr_mac:self.selectedChannel.profile.mac_address];
+                       NSString *stringUDID = self.selectedChannel.profile.registrationID;
                        
                        BMS_JSON_Communication *jsonComm = [[[BMS_JSON_Communication alloc] initWithObject:self
                                                                                                  Selector:nil
                                                                                              FailSelector:nil
                                                                                                 ServerErr:nil] autorelease];
-                       NSDictionary *responseDict = [jsonComm createSessionBlockedWithRegistrationId:mac
+                       NSDictionary *responseDict = [jsonComm createSessionBlockedWithRegistrationId:stringUDID
                                                                          andClientType:@"BROWSER"
                                                                              andApiKey:apiKey];
                        NSLog(@"remoteConnectingViaSymmectric: %@", responseDict);
@@ -3174,7 +3167,7 @@ static int fps = 0;
 		}
 		else if(_selectedChannel.profile.minuteSinceLastComm <= 5)
 		{
-            NSString *mac = [Util strip_colon_fr_mac:_selectedChannel.profile.mac_address];
+            //NSString *mac = [Util strip_colon_fr_mac:_selectedChannel.profile.mac_address];
             NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
             NSString *apiKey = [userDefaults objectForKey:@"PortalApiKey"];
             
@@ -3182,7 +3175,7 @@ static int fps = 0;
                                                                Selector:nil
                                                            FailSelector:nil
                                                               ServerErr:nil] autorelease];
-            NSDictionary *responseDict = [jsonCommunication sendCommandBlockedWithRegistrationId:mac
+            NSDictionary *responseDict = [jsonCommunication sendCommandBlockedWithRegistrationId:self.selectedChannel.profile.registrationID
                                                                               andCommand:[NSString stringWithFormat:@"action=command&command=%@", dir_str]
                                                                                andApiKey:apiKey];
             NSLog(@"send_UD_dir_to_rabot status: %d", [[responseDict objectForKey:@"status"] intValue]);
@@ -3253,7 +3246,7 @@ static int fps = 0;
 		}
 		else if ( _selectedChannel.profile.minuteSinceLastComm <= 5)
 		{
-            NSString *mac = [Util strip_colon_fr_mac:_selectedChannel.profile.mac_address];
+            //NSString *mac = [Util strip_colon_fr_mac:_selectedChannel.profile.mac_address];
             NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
             NSString *apiKey = [userDefaults objectForKey:@"PortalApiKey"];
             
@@ -3261,7 +3254,7 @@ static int fps = 0;
                                                               Selector:nil
                                                           FailSelector:nil
                                                              ServerErr:nil] autorelease];
-            NSDictionary *responseDict = [jsonCommunication sendCommandBlockedWithRegistrationId:mac
+            NSDictionary *responseDict = [jsonCommunication sendCommandBlockedWithRegistrationId:self.selectedChannel.profile.registrationID
                                                                               andCommand:[NSString stringWithFormat:@"action=command&command=%@", dir_str]
                                                                                andApiKey:apiKey];
             NSLog(@"send_LR_dir_to_rabot status: %d", [[responseDict objectForKey:@"status"] intValue]);
@@ -3902,7 +3895,7 @@ static int fps = 0;
             break;
     }
     
-    NSString *mac = [Util strip_colon_fr_mac:self.selectedChannel.profile.mac_address];
+    //NSString *mac = [Util strip_colon_fr_mac:self.selectedChannel.profile.mac_address];
     NSString *apiKey = [userDefaults objectForKey:@"PortalApiKey"];
     
     NSString *bodyKey = @"";
@@ -3930,7 +3923,7 @@ static int fps = 0;
                                                           FailSelector:nil
                                                              ServerErr:nil] autorelease];
         
-        NSDictionary *responseDict = [self.jsonComm sendCommandBlockedWithRegistrationId:mac
+        NSDictionary *responseDict = [self.jsonComm sendCommandBlockedWithRegistrationId:self.selectedChannel.profile.registrationID
                                                                               andCommand:[NSString stringWithFormat:@"action=command&command=set_resolution&mode=%@", modeVideo]
                                                                                andApiKey:apiKey];
         NSLog(@"setVQ_bg %@", responseDict);

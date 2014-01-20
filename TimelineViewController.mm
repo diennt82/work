@@ -226,7 +226,7 @@
                                                                          FailSelector:nil
                                                                             ServerErr:nil];
     
-    NSString *mac = [Util strip_colon_fr_mac:camChannel.profile.mac_address];
+    //NSString *mac = [Util strip_colon_fr_mac:camChannel.profile.mac_address];
     
     /*//////////
     NSString * yourJSONString = @"2014-01-08T03:29:29Z";
@@ -257,7 +257,7 @@
     NSString *alertsString = @"1,2,3,4";
     alertsString = [self urlEncodeUsingEncoding:NSUTF8StringEncoding forString:alertsString];
     
-    NSDictionary *responseDict = [jsonComm getListOfEventsBlockedWithRegisterId:mac
+    NSDictionary *responseDict = [jsonComm getListOfEventsBlockedWithRegisterId:camChannel.profile.registrationID
                                                                 beforeStartTime:dateInStringFormated//@"2013-12-28 20:10:18"
                                                                       eventCode:nil//event_code // temp
                                                                          alerts:alertsString
