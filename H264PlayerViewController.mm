@@ -507,12 +507,14 @@ static int fps = 0;
     
     switch (msg)
     {
+#ifdef SHOW_DEBUG_INFO
         case MEDIA_INFO_FRAMERATE_VIDEO:
         {
             fps = ext1;
             [self addingLabelInfosForDebug];
             break;
         }
+#endif
         case MEDIA_INFO_VIDEO_SIZE:
         {
             NSLog(@"video size: %d x %d", ext1, ext2);
@@ -1409,7 +1411,9 @@ static int fps = 0;
         [self performSelector:@selector(startStream)
                    withObject:nil
                    afterDelay:0.1];
+#ifdef SHOW_DEBUG_INFO
         _viewVideoIn = @"L";
+#endif
 
     }
     else if (self.selectedChannel.profile.minuteSinceLastComm <= 5)
@@ -2577,7 +2581,9 @@ static int fps = 0;
                        if (isBehindSymmetricNat == TRUE) // USE RELAY
                        {
                            NSLog(@"USE RELAY TO VIEW***********************");
+#ifdef SHOW_DEBUG_INFO
                            _viewVideoIn = @"R";
+#endif
                            responseDict = [jsonComm createSessionBlockedWithRegistrationId:mac
                                                                              andClientType:@"BROWSER"
                                                                                  andApiKey:apiKey];
@@ -2631,8 +2637,10 @@ static int fps = 0;
                        {
                            
                            //Set port1, port2
-                           NSLog(@"USE RTSP/STUN TO VIEW***********************");
+                           NSLog(@"TRY TO USE RTSP/STUN TO VIEW***********************");
+#ifdef SHOW_DEBUG_INFO
                            _viewVideoIn = @"S";
+#endif
                            if ([self.client create_stun_forwarder:self.selectedChannel] != 0 )
                            {
                                //TODO: Handle error
@@ -2680,7 +2688,9 @@ static int fps = 0;
                                                //[self handleMessage:H264_SWITCHING_TO_RELAY_SERVER ext1:0 ext2:0];
                                                NSArray * args = [NSArray arrayWithObjects:
                                                                  [NSNumber numberWithInt:H264_SWITCHING_TO_RELAY_SERVER],nil];
-                                               
+#ifdef SHOW_DEBUG_INFO
+                                               _viewVideoIn = @"R";
+#endif
                                                //relay
                                                [self performSelectorOnMainThread:@selector(handleMessageOnMainThread:)
                                                                       withObject:args
@@ -2704,6 +2714,9 @@ static int fps = 0;
                                            
                                            if (userWantToCancel == FALSE)
                                            {
+#ifdef SHOW_DEBUG_INFO
+                                               _viewVideoIn = @"S";
+#endif
                                                [self performSelectorOnMainThread:@selector(startStunStream)
                                                                       withObject:nil
                                                                    waitUntilDone:NO];
@@ -2725,6 +2738,9 @@ static int fps = 0;
                                        
                                        if (userWantToCancel == FALSE)
                                        {
+#ifdef SHOW_DEBUG_INFO
+                                           _viewVideoIn = @"R";
+#endif
                                            NSArray * args = [NSArray arrayWithObjects:
                                                              [NSNumber numberWithInt:H264_SWITCHING_TO_RELAY_SERVER],nil];
                                            
@@ -4482,7 +4498,9 @@ static int fps = 0;
 - (void)viewWillAppear:(BOOL)animated
 {
     //init data for debug
+#ifdef SHOW_DEBUG_INFO
     [self initFirstData];
+#endif
     _isCameraOffline = NO;
     _isRecordInterface  = YES;
     _isProcessRecording = NO;
@@ -4498,12 +4516,14 @@ static int fps = 0;
     [self setupPtt];
     
 }
-
+#ifdef SHOW_DEBUG_INFO
 - (void)initFirstData
 {
     _viewVideoIn = nil;
     fps = 0;
 }
+#endif
+
 - (void)viewWillDisappear:(BOOL)animated
 {
     [self.navigationController setNavigationBarHidden:YES];
@@ -4909,6 +4929,7 @@ static int fps = 0;
 
 
 //
+#ifdef SHOW_DEBUG_INFO
 - (void)addingLabelInfosForDebug
 {
     if (_viewVideoIn == nil)
@@ -4940,4 +4961,5 @@ static int fps = 0;
     [infosLabel release];
     infosLabel = nil;
 }
+#endif
 @end
