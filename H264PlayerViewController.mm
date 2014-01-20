@@ -1379,7 +1379,19 @@ static int fps = 0;
         [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode beforeDate:endDate];
     }
     
-    [self performSelectorOnMainThread:@selector(setupCamera) withObject:nil waitUntilDone:NO];
+    // Make sure Camera is available (minuteSinceLastComm == 1)
+    if (self.selectedChannel.profile.isInLocal == FALSE &&
+        self.selectedChannel.profile.minuteSinceLastComm <= 5)
+    {
+        // Scan Camera again
+        NSLog(@"H264PlayerVC - Scan for missing camera: %@", self.selectedChannel.profile.ip_address);
+        [self performSelectorOnMainThread:@selector(scan_for_missing_camera) withObject:nil waitUntilDone:NO];
+    }
+    else
+    {
+        // Camera in Local
+        [self performSelectorOnMainThread:@selector(setupCamera) withObject:nil waitUntilDone:NO];
+    }
 }
 
 - (void)setupCamera
@@ -1558,10 +1570,10 @@ static int fps = 0;
 	NSString * streamingSSID = [CameraPassword fetchSSIDInfo];
 	if (streamingSSID == nil)
 	{
-		NSLog(@"error: streamingSSID is nil before streaming");
+		NSLog(@"Error: streamingSSID is nil before streaming");
 	}
     
-	NSLog(@"current SSID is: %@", streamingSSID);
+	NSLog(@"Current SSID is: %@", streamingSSID);
     
     
 	//Store some of the info for used in menu  --
@@ -4034,14 +4046,6 @@ static int fps = 0;
         {
             //Restart streaming..
             NSLog(@"Re-start streaming for : %@", self.selectedChannel.profile.mac_address);
-            
-            
-//            if (_client != nil)
-//            {
-//                [_client shutdown];
-//                [_client release];
-//            }
-            
             
             [NSTimer scheduledTimerWithTimeInterval:0.1
                                              target:self
