@@ -26,6 +26,8 @@
 #import "QBAnimationSequence.h"
 #import "Step09ViewController.h"
 
+#import "AlertPrompt.h"
+
 @interface MBP_iosViewController ()
 {
     QBAnimationSequence *_sequence;
