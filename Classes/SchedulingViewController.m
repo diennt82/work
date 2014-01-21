@@ -51,9 +51,17 @@
     [gestureRecognizer setMaximumNumberOfTouches:1];
     
     //self.everydayFlag = TRUE;
-    
-    self.cellSize = UIScreen.mainScreen.bounds.size.width / 8;
-    self.cellSizeMax = UIScreen.mainScreen.bounds.size.width - _cellSize;
+    if ([[UIDevice currentDevice].systemVersion floatValue] < 7.0f &&
+        UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone)
+    {
+        self.cellSize = UIScreen.mainScreen.bounds.size.width / 9;
+        self.cellSizeMax = UIScreen.mainScreen.bounds.size.width - _cellSize * 2;
+    }
+    else
+    {
+        self.cellSize = UIScreen.mainScreen.bounds.size.width / 8;
+        self.cellSizeMax = UIScreen.mainScreen.bounds.size.width - _cellSize;
+    }
     
 //    for (int row = 0; row < 25; row++) {
 //        for (int col = 0; col < 8; col++) {

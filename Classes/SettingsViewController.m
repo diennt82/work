@@ -343,6 +343,7 @@
                     // Configure the cell...
                     cell.textLabel.text = @"General Settings";
                     cell.imageView.image = [UIImage imageNamed:@"settings_general"];
+                    cell.backgroundColor = [UIColor whiteColor];
                     
                     return cell;
                 }
@@ -401,6 +402,7 @@
                     // Configure the cell...
                     cell.textLabel.text = @"Notification Sensitivity";
                     cell.imageView.image = [UIImage imageNamed:@"settings_notification"];
+                    cell.backgroundColor = [UIColor whiteColor];
                     
                     return cell;
                 }
@@ -469,6 +471,7 @@
                     // Configure the cell...
                     cell.textLabel.text = @"Do Not Disturb";
                     cell.imageView.image = [UIImage imageNamed:@"settings_donotdisturb"];
+                    cell.backgroundColor = [UIColor whiteColor];
                     
                     return cell;
                 }
@@ -503,6 +506,7 @@
                     // Configure the cell...
                     cell.textLabel.text = @"Notification Scheduler";
                     cell.imageView.image = [UIImage imageNamed:@"settings_scheduler"];
+                    cell.backgroundColor = [UIColor whiteColor];
                     
                     return cell;
                 }
