@@ -13,9 +13,9 @@
 
 #define DISABLE_VIEW_RELEASE_FLAG 0
 
-#define D1 @"480p"
-#define HD1 @"720p-10"
-#define HD15 @"720p-15"
+#define MODEL_SHARED_CAM @"0036"
+#define MODEL_CONCURRENT @"0066"
+#define MODEL_BLE        @"0083" //0836 {UAP | BLE}
 
 #define DIRECTION_V_NON  0x01
 #define DIRECTION_V_UP   0x02
@@ -198,7 +198,8 @@ double _ticks = 0;
 
 
     
-    if (self.selectedChannel.profile.modelID != 6) // CameraHD
+    //if (self.selectedChannel.profile.modelID != 6) // CameraHD
+    if (![self isSharedCam:self.selectedChannel.profile.registrationID]) // CameraHD
     {
         self.timelineVC = [[TimelineViewController alloc] init];
         [self.view addSubview:_timelineVC.view];
@@ -210,7 +211,7 @@ double _ticks = 0;
         [self.timelineVC loadEvents:self.selectedChannel];
     }
     
-    NSLog(@"Model of Camera is: %d", self.selectedChannel.profile.modelID);
+    //NSLog(@"Model of Camera is: %d", self.selectedChannel.profile.modelID);
     
     [self becomeActive];
     //[self showMenuControlPanel];
@@ -326,7 +327,8 @@ double _ticks = 0;
                                                                      target:self
                                                                      action:@selector(earlierButtonAction:)];
     
-    if (self.selectedChannel.profile.modelID == 6) // SharedCam
+    //if (self.selectedChannel.profile.modelID == 6) // SharedCam
+    if ([self isSharedCam:self.selectedChannel.profile.registrationID]) // SharedCam
     {
         earlierButton.enabled = NO;
     }
@@ -1219,6 +1221,22 @@ double _ticks = 0;
 }
 
 #pragma mark - Method
+
+- (BOOL)isSharedCam: (NSString *)regID
+{
+    if (regID != nil)
+    {
+        if (regID.length == 26)
+        {
+            if ([[regID substringWithRange:NSMakeRange(2, 4)] isEqualToString:MODEL_SHARED_CAM])
+            {
+                return TRUE;
+            }
+        }
+    }
+    
+    return FALSE;
+}
 
 - (void)singleTapGestureCaptured:(id)sender
 {

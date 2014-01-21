@@ -53,7 +53,8 @@
                                                         @"Melody 4",  nil);
     NSString * mel5 = NSLocalizedStringWithDefaultValue(@"melody_V",  nil, [NSBundle mainBundle],
                                                         @"Melody 5",  nil);
-    if (self.selectedChannel.profile.modelID == 6) // SharedCam
+    //if (self.selectedChannel.profile.modelID == 6) // SharedCam
+    if ([self isSharedCam:self.selectedChannel.profile.registrationID]) // SharedCam
     {
         NSString * mel6 = NSLocalizedStringWithDefaultValue(@"melody_VI", nil, [NSBundle mainBundle],
                                                             @"All Melodies", nil);
@@ -67,6 +68,22 @@
     
     self.melodyTableView.delegate = self;
     self.melodyTableView.dataSource = self;
+}
+
+- (BOOL)isSharedCam: (NSString *)regID
+{
+    if (regID != nil)
+    {
+        if (regID.length == 26)
+        {
+            if ([[regID substringWithRange:NSMakeRange(2, 4)] isEqualToString:@"0036"])
+            {
+                return TRUE;
+            }
+        }
+    }
+    
+    return FALSE;
 }
 
 - (void)didReceiveMemoryWarning
