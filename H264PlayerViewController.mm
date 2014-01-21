@@ -3603,7 +3603,13 @@ double _ticks = 0;
 
 - (void) adjustViewsForOrientation:(UIInterfaceOrientation)orientation
 {
-    _syncPortraitAndLandscape = YES;
+    if (_isProcessRecording)
+    {
+        _syncPortraitAndLandscape = YES;
+    }
+    else{
+        _syncPortraitAndLandscape = NO;
+    }
     [self resetZooming];
     CGRect screenBounds = [[UIScreen mainScreen] bounds];
     CGFloat screenWidth = screenBounds.size.width;
@@ -4735,7 +4741,6 @@ double _ticks = 0;
 
 - (IBAction)changeToMainRecording:(id)sender {
     //change to main recording here
-    _isRecordInterface = NO;
     [self changeAction:nil];
 }
 
@@ -4781,6 +4786,7 @@ double _ticks = 0;
             //stop timer display
             [self stopTimerRecoring];
             [self.ib_labelRecordVideo setText:@"Record Video"];
+            _syncPortraitAndLandscape = NO;
 
             //processing for stopping record
             /*
@@ -4802,6 +4808,7 @@ double _ticks = 0;
             [self.view bringSubviewToFront:self.ib_changeToMainRecording];
         }
         else{
+            _syncPortraitAndLandscape = NO;
             [self.ib_buttonChangeAction setHidden:NO];
             [self.view bringSubviewToFront:self.ib_buttonChangeAction];
         }
@@ -4833,7 +4840,10 @@ double _ticks = 0;
 //    _isRecordInterface = FALSE;
 //#else
     if (!_syncPortraitAndLandscape)
-    _isRecordInterface = !_isRecordInterface;
+    {
+        _isRecordInterface = !_isRecordInterface;
+    }
+    
 //#endif
     
     [self.ib_labelRecordVideo setTextColor:[UIColor blueColor]];
@@ -4863,6 +4873,7 @@ double _ticks = 0;
             [self.ib_processRecordOrTakePicture setBackgroundImage:recordActionImage forState:UIControlEventTouchUpInside];
             [self.ib_labelRecordVideo setTextColor:[UIColor blueColor]];
             [self.ib_labelRecordVideo setText:@"Record Video"];
+            _syncPortraitAndLandscape = NO;
         }
     }
     else
