@@ -15,7 +15,7 @@
 #import "Step_11_ViewController.h"
 #import "Step_02_ViewController.h"
 #import "GuideAddCamera_ViewController.h"
-
+#import "ConnectionMethodDelegate.h"
 @class ScanForCamera;
 
 #define HOME_SSID @"home_ssid"
@@ -64,6 +64,7 @@
     //member to dismiss when disDisAppearView
     UIAlertView *_alertChooseConfig;    
     
+    id<ConnectionMethodDelegate> delegate;
 }
 
 @property (nonatomic,assign) IBOutlet UILabel * homeSSID;
@@ -71,7 +72,7 @@
 @property (nonatomic, assign) IBOutlet UILabel * userNameLabel;
 @property (nonatomic, assign) IBOutlet UILabel * userEmailLabel,  * cameraName;
 
-
+@property (nonatomic, assign)  id<ConnectionMethodDelegate> delegate;
 //@property (nonatomic, assign) IBOutlet UIView * setupFailView, *setupCompleteView;
 
 @property (nonatomic, retain) NSString *cameraMac,  *master_key; 
