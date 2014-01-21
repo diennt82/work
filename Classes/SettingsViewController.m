@@ -372,6 +372,8 @@
                     else if (indexPath.row == 2)
                     {
                         cell.nameLabel.text = @"Temperature";
+                        [cell.valueSegmented setTitle:@"°C" forSegmentAtIndex:0];
+                        [cell.valueSegmented setTitle:@"°F" forSegmentAtIndex:1];
                     }
                     cell.backgroundColor = [UIColor blackColor];
                     return cell;
