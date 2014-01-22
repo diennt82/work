@@ -177,7 +177,7 @@
 
 -(void) getCamListFailure:(NSDictionary *)error_response
 {
-    NSLog(@"Loging failed with error code:%d", [[error_response objectForKey:@"status"] intValue]);
+    NSLog(@"UserAccount - getCamListFailure with error code:%d", [[error_response objectForKey:@"status"] intValue]);
     NSString * msg = NSLocalizedStringWithDefaultValue(@"Get_Camera_list_Error",nil, [NSBundle mainBundle],
                                                        @"Get Camera list Error", nil);
     
@@ -202,7 +202,7 @@
 
 - (void)getCamListServerUnreachable
 {
-	NSLog(@"Loging failed : server unreachable");
+	NSLog(@"UserAccount - getCamListServerUnreachable");
     NSString * msg = NSLocalizedStringWithDefaultValue(@"Get_Camera_list_Error",nil, [NSBundle mainBundle],
                                                        @"Get Camera list Error", nil);
     

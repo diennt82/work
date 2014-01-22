@@ -66,6 +66,7 @@
 @property (nonatomic, retain) NSString *stringTemperature;
 //@property (nonatomic, retain) NSTimer *timerGetTemperature;
 @property (nonatomic) BOOL existTimerTemperature;
+@property (nonatomic) BOOL cameraIsNotAvailable;
 
 - (void)centerScrollViewContents;
 - (void)scrollViewDoubleTapped:(UITapGestureRecognizer*)recognizer;
@@ -1241,15 +1242,24 @@ double _ticks = 0;
 - (void)singleTapGestureCaptured:(id)sender
 {
     NSLog(@"Single tap singleTapGestureCaptured");
-    if (_isHorizeShow == TRUE)
+
+    // Make sure Camera is NOT available
+    if (self.selectedChannel.profile.isInLocal == FALSE &&
+        self.selectedChannel.profile.minuteSinceLastComm > 5)
     {
-        [self hideControlMenu];
+        [self recheckStateOfCamera];
     }
     else
     {
-        [self showControlMenu];
+        if (_isHorizeShow == TRUE)
+        {
+            [self hideControlMenu];
+        }
+        else
+        {
+            [self showControlMenu];
+        }
     }
-    
     //self.isHorizeShow = !_isHorizeShow;
 }
 
@@ -1451,6 +1461,8 @@ double _ticks = 0;
 
 - (void)setupCamera
 {
+    //self.cameraIsNotAvailable = FALSE;
+    
     if (self.selectedChannel.stream_url != nil)
     {
         self.selectedChannel.stream_url = nil;
@@ -1522,15 +1534,58 @@ double _ticks = 0;
         self.activityIndicator.hidden = YES;
         [self.activityIndicator stopAnimating];
 //        self.backBarBtnItem.enabled = YES;
-        self.imageViewStreamer.image = [UIImage imageNamed:@"ImgNotAvailable"];
+        //self.imageViewStreamer.image = [UIImage imageNamed:@"ImgNotAvailable"];
         self.viewCtrlButtons.hidden = YES;
         self.imgViewDrectionPad.hidden= YES;
         self.viewStopStreamingProgress.hidden = YES;
         self.horizMenu.userInteractionEnabled = NO;
         
-        NSLog(@"Camera maybe not available.");
+        NSLog(@"SetupCamera - Camera is NOT available.");
+        
+        //TODO: Create a refresh item to refresh state of this camera refresh
+        UIImage *imgRefresh = [UIImage imageNamed:@"refresh"];
+        self.imageViewStreamer.frame = CGRectMake(0, 0, imgRefresh.size.width, imgRefresh.size.height);
+        self.imageViewStreamer.image = imgRefresh;
+        self.imageViewStreamer.center = _imageViewVideo.center;
+        //self.cameraIsNotAvailable = TRUE;
     }
 }
+
+- (void)recheckStateOfCamera
+{
+    //self.cameraIsNotAvailable = FALSE;
+    //[self.imageViewStreamer performSelectorOnMainThread:@selector(setImage:) withObject:nil waitUntilDone:NO];
+    self.imageViewStreamer.image = nil;
+    
+    self.activityIndicator.hidden = NO;
+    //[self.view performSelectorOnMainThread:@selector(bringSubviewToFront:) withObject:_activityIndicator waitUntilDone:NO];
+    //[self.activityIndicator performSelectorOnMainThread:@selector(startAnimating) withObject:nil waitUntilDone:NO];
+    [self.view bringSubviewToFront:_activityIndicator];
+    [self.activityIndicator startAnimating];
+    
+    self.selectedChannel.profile.hasUpdateLocalStatus = FALSE;
+    
+    [self performSelectorInBackground:@selector(checkAvailableStateOfCamera:)
+                           withObject:self.selectedChannel.profile.registrationID];
+    
+    while (self.selectedChannel.profile.hasUpdateLocalStatus == FALSE)
+    {
+        NSDate * endDate = [NSDate dateWithTimeIntervalSinceNow:0.5];
+        [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode beforeDate:endDate];
+    }
+    
+    if (_cameraIsNotAvailable == TRUE)
+    {
+        //[self performSelectorOnMainThread:@selector(setupCamera) withObject:nil waitUntilDone:NO];
+        [self setupCamera];
+    }
+    else
+    {
+        //[self performSelectorOnMainThread:@selector(becomeActive) withObject:nil waitUntilDone:NO];
+        [self becomeActive];
+    }
+}
+
 -(void) startStunStream
 {
     self.selectedChannel.communication_mode = COMM_MODE_STUN;
@@ -5261,5 +5316,53 @@ double _ticks = 0;
     [infosLabel release];
     infosLabel = nil;
 }
+
 #endif
+
+- (BOOL)checkAvailableStateOfCamera: (NSString *)regID
+{
+    BMS_JSON_Communication *jsonComm = [[BMS_JSON_Communication alloc] initWithObject:self
+                                                                             Selector:nil
+                                                                         FailSelector:nil
+                                                                            ServerErr:nil];
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    NSString *apiKey = [userDefaults objectForKey:@"PortalApiKey"];
+    NSDictionary *responseDict = [jsonComm checkDeviceIsAvailableBlockedWithRegistrationId:regID andApiKey:apiKey];
+    [jsonComm release];
+    
+    if (responseDict != nil)
+    {
+        if ([[responseDict objectForKey:@"status"] integerValue] == 200)
+        {
+            if ([[[responseDict objectForKey:@"data"] objectForKey:@"is_available"] boolValue] == TRUE)
+            {
+                NSLog(@"Check Available - Camera is AVAILABLE");
+                self.cameraIsNotAvailable = FALSE;
+                return TRUE;
+            }
+            else
+            {
+                NSLog(@"Check Available - Camera is NOT available");
+            }
+        }
+        else
+        {
+            NSLog(@"Result isn't expected");
+        }
+    }
+    else
+    {
+        NSLog(@"Empty results of device list from server OR response error");
+    }
+    
+    self.selectedChannel.profile.hasUpdateLocalStatus = TRUE;
+    self.cameraIsNotAvailable = TRUE;
+    return FALSE;
+}
+
+
+
+
+
+
 @end
