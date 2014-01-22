@@ -198,14 +198,14 @@
 -(void) removeRemoteCamera
 {
     BMS_JSON_Communication *jsonComm = [[[BMS_JSON_Communication alloc] initWithObject:self
-                                                                              Selector:@selector(removeCamSuccessWithResponse:)
-                                                                          FailSelector:@selector(removeCamFailedWithError:)
-                                                                             ServerErr:@selector(removeCamFailedServerUnreachable)] autorelease];
+                                                                              Selector:@selector(removeCameraSuccessWithResponse:)
+                                                                          FailSelector:@selector(removeCameraFailedWithError:)
+                                                                             ServerErr:@selector(removeCameraFailedServerUnreachable)] autorelease];
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-    NSString *mac = [Util strip_colon_fr_mac:_camChannel.profile.mac_address];
-    NSLog(@"mac_address = %@", mac);
+    //NSString *mac = [Util strip_colon_fr_mac:_camChannel.profile.mac_address];
     
-    [jsonComm deleteDeviceWithRegistrationId:mac andApiKey:[userDefaults objectForKey:@"PortalApiKey"]];
+    [jsonComm deleteDeviceWithRegistrationId:_camChannel.profile.registrationID
+                                   andApiKey:[userDefaults objectForKey:@"PortalApiKey"]];
 }
 
 #pragma mark - Table view data source
@@ -315,7 +315,7 @@
 
 #pragma BMS_JSON delegate
 
-- (void) removeCamSuccessWithResponse:(NSDictionary *)responseData
+- (void) removeCameraSuccessWithResponse:(NSDictionary *)responseData
 {
 	NSLog(@"removeCam success-- fatality");
     
@@ -326,7 +326,7 @@
     [_menuCamerasDelegate sendStatus:AFTER_DEL_RELOGIN];
 }
 
-- (void) removeCamFailedWithError:(NSDictionary *)errorResponse
+- (void) removeCameraFailedWithError:(NSDictionary *)errorResponse
 {
 	NSLog(@"removeCam failed errorcode:");
     //[self forceRelogin];
@@ -336,7 +336,7 @@
     [_menuCamerasDelegate sendStatus:AFTER_DEL_RELOGIN];
 }
 
--(void) removeCamFailedServerUnreachable
+-(void) removeCameraFailedServerUnreachable
 {
 	NSLog(@"server unreachable");
     //[self forceRelogin];

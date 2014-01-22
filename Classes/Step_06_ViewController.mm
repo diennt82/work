@@ -639,11 +639,27 @@
 {
     //NOTE: we can do this because we are connecting to camera now 
     NSString * camera_mac= nil;
+    NSString *stringUDID = @"";
 
 #ifdef CONCURRENT_SETUP
-    camera_mac = [[HttpCom instance].comWithDevice sendCommandAndBlock:GET_MAC_ADDRESS
+    stringUDID = [[HttpCom instance].comWithDevice sendCommandAndBlock:GET_UDID
                                                 withTimeout:5.0];
-    camera_mac = [Util add_colon_to_mac:camera_mac];
+    //get_udid: 01008344334C32B0A0VFFRBSVA
+    NSRange range = [stringUDID rangeOfString:@": "];
+    
+    if (range.location != NSNotFound)
+    {
+        //01008344334C32B0A0VFFRBSVA
+        stringUDID = [stringUDID substringFromIndex:range.location + 2];
+        camera_mac = [stringUDID substringWithRange:NSMakeRange(6, 12)];
+        
+        camera_mac = [Util add_colon_to_mac:camera_mac];
+    }
+    else
+    {
+        NSLog(@"Error - Received UDID wrong format - UDID: %@", stringUDID);
+    }
+    
 #else
     camera_mac = [CameraPassword fetchBSSIDInfo];
 #endif
@@ -654,6 +670,7 @@
 
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     [userDefaults setObject:camera_mac forKey:@"CameraMacWithQuote"];
+    [userDefaults setObject:stringUDID forKey:CAMERA_UDID];
     [userDefaults synchronize]; 
     
 
@@ -675,17 +692,19 @@
         self.deviceConf.securityMode= @"OPEN";
     }
    
+    NSLog(@"Log - udid: %@, %@", stringUDID, camera_mac);
     
     self.deviceConf.key = self.password; 
     
     self.deviceConf.usrName = BASIC_AUTH_DEFAULT_USER;
-    NSLog(@"02 cam password is : %@", [CameraPassword getPasswordForCam:camera_mac]);
-    NSString* camPass = [CameraPassword getPasswordForCam:camera_mac]; 
+    
+    NSString* camPass = [CameraPassword getPasswordForCam:camera_mac];
+    NSLog(@"Log - 02 cam password is : %@", camPass);
     
     if (camPass == nil ) //// default pass
     {
         camPass = @"000000";
-        NSLog(@"02 cam password is default: %@", camPass);
+        NSLog(@"Log - 02 cam password is default: %@", camPass);
     }
     
     
@@ -718,21 +737,18 @@
     [[NSUserDefaults standardUserDefaults] setObject:deviceCodec  forKey:CODEC_PREFS];
     [[NSUserDefaults standardUserDefaults] synchronize];
     
-    
      NSString * device_configuration = [_deviceConf getDeviceEncodedConfString];
     
     
     NSString * setup_cmd = [NSString stringWithFormat:@"%@%@",
                             SETUP_HTTP_CMD,device_configuration];
     
-	NSLog(@"before send: %@", setup_cmd);
+	NSLog(@"Log - before send: %@", setup_cmd);
     
-    
-	
 	//NSString * response =
     [[HttpCom instance].comWithDevice sendCommandAndBlock:setup_cmd ];
     
-    [NSTimer scheduledTimerWithTimeInterval: 5.0//
+    [NSTimer scheduledTimerWithTimeInterval:5.0//
                                      target:self
                                    selector:@selector(getStatusOfCameraToWifi:)
                                    userInfo:nil
@@ -744,10 +760,6 @@
 //                                                repeats:NO];
     
     NSLog(@"Don't Send & reset done");
-
-    
-
-    
 }
 
 - (void)nextStepVerifyPassword
@@ -830,8 +842,9 @@
 {
 //    NSString * currentSSID = [CameraPassword fetchSSIDInfo];
     NSString *commandGetState = GET_STATE_NETWORK_CAMERA;
-    NSLog(@"command is %@", commandGetState);
+    NSLog(@"Log - command is %@", commandGetState);
     NSString *state = [[HttpCom instance].comWithDevice sendCommandAndBlock:commandGetState withTimeout:20.0];
+    
     if (state != nil && [state length] > 0)
     {
         _currentStateCamera = [[state componentsSeparatedByString:@": "] objectAtIndex:1];

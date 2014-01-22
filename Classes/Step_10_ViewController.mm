@@ -83,7 +83,7 @@
     self.userEmailLabel.text = (NSString *) [userDefaults objectForKey:@"PortalUseremail"];
     
     self.cameraMac = (NSString *) [userDefaults objectForKey:@"CameraMacWithQuote"];
-    
+    self.stringUDID = [userDefaults stringForKey:CAMERA_UDID];
     
     if (self.progressView == nil)
     {
@@ -437,11 +437,11 @@
     self.progressView.hidden = NO;
     [self.view bringSubviewToFront:self.progressView];
     
-    
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
         
-    NSString *apiKey = [userDefaults objectForKey:@"PortalApiKey"];
+    NSString *apiKey    = [userDefaults objectForKey:@"PortalApiKey"];
     NSString *fwVersion = [userDefaults objectForKey:@"FW_VERSION"];
+    NSString *udid      = [userDefaults objectForKey:CAMERA_UDID];
     
     //NSLog(@"-----fwVersion = %@, ,model = %@", fwVersion, model);
     
@@ -461,18 +461,26 @@
                                                                              Selector:@selector(addCamSuccessWithResponse:)
                                                                          FailSelector:@selector(addCamFailedWithError:)
                                                                             ServerErr:@selector(addCamFailedServerUnreachable)] autorelease];
-    NSString * mac = [Util strip_colon_fr_mac:self.cameraMac];
-    NSString * camName = (NSString *) [userDefaults objectForKey:@"CameraName"];
+    //NSString *mac = [Util strip_colon_fr_mac:self.cameraMac];
+    NSString *camName = (NSString *) [userDefaults objectForKey:@"CameraName"];
     
-//    //DEMO.SM.COM
-//    [jsonComm registerDeviceWithDeviceName:camName
-//                                  andRegId:mac
-//                             andDeviceType:@"Camera"
-//                                  andModel:@"blink1_hd"
-//                                   andMode:@"upnp"
-//                              andFwVersion:fwVersion
-//                               andTimeZone:stringFromDate
-//                                 andApiKey:apiKey];
+#if 1
+    [jsonComm registerDeviceWithDeviceName:camName
+                         andRegistrationID:udid
+                                   andMode:@"upnp" // Need somethings more usefully
+                              andFwVersion:fwVersion
+                               andTimeZone:stringFromDate
+                                 andApiKey:apiKey];
+#else
+    //DEMO.SM.COM
+    [jsonComm registerDeviceWithDeviceName:camName
+                                  andRegId:mac
+                             andDeviceType:@"Camera"
+                                  andModel:@"blink1_hd"
+                                   andMode:@"upnp"
+                              andFwVersion:fwVersion
+                               andTimeZone:stringFromDate
+                                 andApiKey:apiKey];
     NSLog(@"Mac address and cam name is %@, %@", mac, camName);
 
     //Api
@@ -484,7 +492,8 @@
                                   andTimeZone:stringFromDate
                           andSubscriptionType:@"tier1"
                                     andApiKey:apiKey];
-
+    
+#endif
 }
 
 #pragma  mark -
@@ -599,7 +608,8 @@
 {
     NSString * set_mkey = SET_MASTER_KEY;
     NSString * response;
-    set_mkey =[set_mkey stringByAppendingString:self.master_key];
+    //set_mkey =[set_mkey stringByAppendingString:self.master_key];
+    set_mkey =[set_mkey stringByAppendingString:_stringAuth_token];
     
     response = [[HttpCom instance].comWithDevice sendCommandAndBlock:set_mkey];
     
@@ -852,7 +862,7 @@
 {
  	NSLog(@"Setup has failed - remove cam on server");
 	// send a command to remove camera
-	NSString *mac = [Util strip_colon_fr_mac:self.cameraMac];
+	//NSString *mac = [Util strip_colon_fr_mac:self.cameraMac];
 	
     BMS_JSON_Communication *jsonComm = [[[BMS_JSON_Communication alloc] initWithObject:self
                                                                              Selector:@selector(removeCamSuccessWithResponse:)
@@ -860,7 +870,8 @@
                                                                             ServerErr:@selector(removeCamFailedServerUnreachable)] autorelease];
     
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-    [jsonComm deleteDeviceWithRegistrationId:mac andApiKey:[userDefaults objectForKey:@"PortalApiKey"]];
+    [jsonComm deleteDeviceWithRegistrationId:_stringUDID
+                                   andApiKey:[userDefaults objectForKey:@"PortalApiKey"]];
     
     //Load step 11
     NSLog(@"Load step 11");
@@ -925,11 +936,11 @@
 - (void) addCamSuccessWithResponse:(NSDictionary *)responseData
 {
 #ifdef CONCURRENT_SETUP
-    NSLog(@"Do for concurent mode");
-    
-    NSLog(@"addcam response: %@", responseData);
+    NSLog(@"Do for concurent modep - addcam response: %@", responseData);
+
     //[self extractMasterKey:[[responseData objectForKey:@"data"] objectForKey:@"master_key"]];
-    self.master_key = [[responseData objectForKey:@"data"] objectForKey:@"master_key"];
+    //self.master_key = [[responseData objectForKey:@"data"] objectForKey:@"master_key"];
+    self.stringAuth_token = [[responseData objectForKey:@"data"] objectForKey:@"auth_token"];
 //    should_stop_scanning = FALSE;
 //	
 //    [NSTimer scheduledTimerWithTimeInterval: SCAN_TIMEOUT
@@ -951,7 +962,7 @@
 - (void) addCamFailedWithError:(NSDictionary *) error_response
 {
     if (error_response == nil) {
-        NSLog(@"error_response = nil");
+        NSLog(@"Error - error_response = nil");
         return;
     }
     NSLog(@"addcam failed with error code:%d", [[error_response objectForKey:@"status"] intValue]);
@@ -1010,13 +1021,11 @@
         [alert show];
         [alert release];
     }
-
-	
 }
 
 -(void) removeCamSuccessWithResponse:(NSDictionary *)responseData
 {
-	NSLog(@"removeCam success");
+	NSLog(@"Log - removeCam success");
 	
 	//[delegate sendStatus:5 ];
 	
@@ -1024,12 +1033,12 @@
 
 -(void) removeCamFailedWithError:(NSDictionary *)error_response
 {
-	NSLog(@"removeCam failed Server error: %@", [error_response objectForKey:@"message"]);
+	NSLog(@"Log - removeCam failed Server error: %@", [error_response objectForKey:@"message"]);
 }
 
 -(void) removeCamFailedServerUnreachable
 {
-	NSLog(@"server unreachable");
+	NSLog(@"Log - server unreachable");
 }
 
 #pragma mark - 

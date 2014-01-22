@@ -78,6 +78,8 @@
 @property (nonatomic, retain) NSTimer * timeOut;
 @property (nonatomic) BOOL shouldStopScanning;
 @property (nonatomic, assign) NSString * errorCode;
+@property (nonatomic, retain) NSString *stringUDID;
+@property (nonatomic, retain) NSString *stringAuth_token;
 
 -(IBAction) startConfigureCamera:(id)sender;
 

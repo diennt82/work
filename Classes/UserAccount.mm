@@ -85,11 +85,13 @@
 -(void) readCameraListAndUpdate
 {
     self.jsonComm = [[BMS_JSON_Communication alloc] initWithObject:self
-                                                          Selector:@selector(getCamListSuccess:)
-                                                      FailSelector:@selector(getCamListFailure:)
-                                                         ServerErr:@selector(getCamListServerUnreachable)];
+                                                          Selector:nil
+                                                      FailSelector:nil
+                                                         ServerErr:nil];
+    
     NSUserDefaults *userDefaluts = [NSUserDefaults standardUserDefaults];
-    NSDictionary *responseDict = [NSDictionary dictionaryWithDictionary:[self.jsonComm getAllDevicesBlockedWithApiKey:[userDefaluts objectForKey:@"PortalApiKey"]]];
+    NSDictionary *responseDict = [self.jsonComm getAllDevicesBlockedWithApiKey:[userDefaluts objectForKey:@"PortalApiKey"]];
+    
     if (responseDict != nil)
     {
         [self getCamListSuccess:responseDict];
@@ -107,55 +109,64 @@
 
 
 
--(void) getCamListSuccess:(NSDictionary *)responseData
+-(void) getCamListSuccess:(NSDictionary *)responseDict
 {
-    if (responseData) {
-        NSLog(@"responseData.count = %d", responseData.count);
-    }
+    if (responseDict) {
+        NSLog(@"responseDict.count = %d", responseDict.count);
     
-    NSInteger status = [[responseData objectForKey:@"status"] intValue];
-    
-    if (status == 200)
-    {
-        NSArray *dataArr = [NSArray arrayWithArray:[responseData objectForKey:@"data"]];
+        NSInteger status = [[responseDict objectForKey:@"status"] intValue];
         
-        NSMutableArray *camProfiles = nil;
-        
-        if (dataArr.count > 0) {
-            //[camProfiles = [NSMutableArray alloc] init];
-            camProfiles = [self parse_camera_list:dataArr];
-            NSLog(@"camlist5 count: %d", dataArr.count);
-        }
-
-        [self sync_online_and_offline_data:camProfiles];
-        
-        if (delegate != nil)
+        if (status == 200)
         {
-            [delegate sendStatus:SCAN_BONJOUR_CAMERA];
+            NSArray *dataArr = [responseDict objectForKey:@"data"];
+            
+            NSMutableArray *camProfiles = nil;
+            
+            if (![dataArr isEqual:[NSNull null]] &&
+                dataArr.count > 0)
+            {
+                camProfiles = [self parse_camera_list:dataArr];
+                NSLog(@"Log - camlist6 count: %d", dataArr.count);
+            }
+            
+            [self sync_online_and_offline_data:camProfiles];
+            
+            if (delegate != nil)
+            {
+                [delegate sendStatus:SCAN_BONJOUR_CAMERA];
+            }
+            else
+            {
+                NSLog(@"Error - delegate = nil");
+            }
+        }
+        else
+        {
+            NSLog(@"Error - body content status: %d", status);
+            NSString * msg = NSLocalizedStringWithDefaultValue(@"Get_Camera_list_Error",nil, [NSBundle mainBundle],
+                                                               @"Get Camera list Error", nil);
+            
+            NSString * msg1 = NSLocalizedStringWithDefaultValue(@"Get_Camera_list_Error_msg",nil, [NSBundle mainBundle],
+                                                                @"Server error: Invalid response", nil);
+            
+            NSString * ok = NSLocalizedStringWithDefaultValue(@"Ok",nil, [NSBundle mainBundle],
+                                                              @"Ok", nil);
+            //ERROR condition
+            UIAlertView *alert = [[UIAlertView alloc]
+                                  initWithTitle:msg
+                                  message:msg1
+                                  delegate:self
+                                  cancelButtonTitle:ok
+                                  otherButtonTitles:nil];
+            [alert show];
+            [alert release];
+            
+            [delegate sendStatus:LOGIN_FAILED_OR_LOGOUT];
         }
     }
     else
     {
-        NSLog(@"body content status = %d", status);
-        NSString * msg = NSLocalizedStringWithDefaultValue(@"Get_Camera_list_Error",nil, [NSBundle mainBundle],
-                                                           @"Get Camera list Error", nil);
-        
-        NSString * msg1 = NSLocalizedStringWithDefaultValue(@"Get_Camera_list_Error_msg",nil, [NSBundle mainBundle],
-                                                            @"Server error: Invalid response", nil);
-        
-        NSString * ok = NSLocalizedStringWithDefaultValue(@"Ok",nil, [NSBundle mainBundle],
-                                                          @"Ok", nil);
-        //ERROR condition
-        UIAlertView *alert = [[UIAlertView alloc]
-                              initWithTitle:msg
-                              message:msg1
-                              delegate:self
-                              cancelButtonTitle:ok
-                              otherButtonTitles:nil];
-        [alert show];
-        [alert release];
-        
-        [delegate sendStatus:LOGIN_FAILED_OR_LOGOUT];
+        NSLog(@"Error - getCamListSuccess - responseDict = nil");
     }
 }
 
@@ -236,19 +247,19 @@
 
 - (NSMutableArray *)parse_camera_list:(NSArray *)dataArr
 {
-    if (dataArr) {
-        NSLog(@"dataArr.count = %d", dataArr.count);
-    }
-    
     NSMutableArray *camList = [[[NSMutableArray alloc] init] autorelease];
     
     for (NSDictionary *camEntry in dataArr)
 	{
-        NSString *deviceID = [camEntry objectForKey:@"id"];
-        NSString * camName = [camEntry objectForKey:@"name"];
-        NSString * camMac  = [camEntry objectForKey:@"registration_id"];
+        // Assuming: registration_id = 01008344334C32B0A0VFFRBSVA
+        // --> mac address: 44334C32B0A0
+        
+        NSInteger deviceID = [[camEntry objectForKey:@"id"] integerValue];
+        NSString *camName  = [camEntry objectForKey:@"name"];
+        NSString *registrationID = [camEntry objectForKey:@"registration_id"];
+        NSString *camMac   = [[camEntry objectForKey:@"registration_id"] substringWithRange:NSMakeRange(6, 12)];
         NSInteger modelID  = [[camEntry objectForKey:@"device_model_id"] integerValue];
-        NSLog(@" Log -device_model_id: %d, camMac: %@", modelID, camMac);
+        
         if ([camMac length] != 12 )
         {
             camMac = @"00:00:00:00:00:00";
@@ -257,24 +268,17 @@
             camMac = [Util add_colon_to_mac:camMac];
         }
         
-//			NSString * last_comm = [cam_entry_tokens objectAtIndex:2];
-//			last_comm = [last_comm substringFromIndex:[LAST_COMM length]];
-        
-        NSString *updatedAt = [camEntry objectForKey:@"updated_at"];
-        
-        NSString * localIp = [[camEntry objectForKey:@"device_location"] objectForKey:@"local_ip"];
-        
-        NSString * isAvailable = [camEntry objectForKey:@"is_available"];
-        //NSString * codec = nil;
-        //NSString * str;
-        NSString * fwVersion = [[camEntry objectForKey:@"device_firmware"] objectForKey:@"version"];
+        NSString *updatedAt     = [camEntry objectForKey:@"updated_at"];
+        NSString *localIp       = [[camEntry objectForKey:@"device_location"] objectForKey:@"local_ip"];
+        NSString *isAvailable   = [camEntry objectForKey:@"is_available"];
+        NSString *fwVersion     = [camEntry objectForKey:@"firmware_version"];
         
         CamProfile *cp = [[[CamProfile alloc]initWithMacAddr:camMac] autorelease];
 
-        cp.camProfileID = [deviceID integerValue];
-        cp.modelID = modelID;
-        cp.last_comm = updatedAt;
-        cp.name = camName;
+        cp.camProfileID = deviceID;
+        cp.modelID      = modelID;
+        cp.last_comm    = updatedAt;
+        cp.name         = camName;
         
         if([isAvailable intValue] == 1)
         {
@@ -282,8 +286,7 @@
         } else {
             cp.minuteSinceLastComm = 24*60;
         }
-        
-        NSLog(@"local ip %@", localIp);
+
         if ([localIp isEqual:[NSNull null]])
         {
             NSLog(@"garbage ip");
@@ -298,11 +301,12 @@
         }
          
         //cp.codecs = codec;
-        cp.fw_version = fwVersion;
-        
-        NSLog(@" Fw:%@", fwVersion);
+        cp.fw_version     = fwVersion;
+        cp.registrationID = registrationID;
 
         [camList addObject:cp];
+        
+        NSLog(@"Log - device_model_id: %d, camMac: %@, Fw: %@, local_ip: %@, reg: %@", modelID, camMac, fwVersion, localIp, registrationID);
 	}
 	
 	return camList;
@@ -310,16 +314,14 @@
 
 - (void)sync_online_and_offline_data:(NSMutableArray *) online_profiles
 {
-    //NSLog(@"aaaaaaaa");
     SetupData *offline_data = [[[SetupData alloc] init] autorelease];
 	
 	if ([offline_data restore_session_data] == TRUE)
 	{
-        NSLog(@"has offline data ");
+        NSLog(@"Has offline data ");
 	}
 	else
     {
-		//
 		NSLog(@"No offline data ");
 	}
     
@@ -350,8 +352,7 @@
 	NSMutableArray * offline_profiles = online_profiles;
     
 	offline_data.configured_cams = online_profiles;
-	
-	
+
 	//rebinding
 	if (offline_data.configured_cams != nil &&
 		offline_data.channels != nil)
@@ -359,7 +360,7 @@
 		NSMutableArray * channels = offline_data.channels;
 		CamChannel * ch;
 		CamProfile * cp;
-		for (int i =0; i<[channels count]; i++)
+		for (int i = 0; i<[channels count]; i++)
 		{
 			ch = [channels objectAtIndex:i];
 			[ch reset];
@@ -384,13 +385,9 @@
 				}
 			}
 		}
-		
-		
-		
 	}
 	else {
 		NSLog(@"offline data: channels = nil or profile = nil");
-		
 		
 		NSMutableArray *channels = [[[NSMutableArray alloc]init] autorelease];
 
@@ -407,11 +404,8 @@
 			}
 			
 			[channels addObject:ch];
-			
-			
 		}
-		
-		
+
 		offline_data.channels = channels;
 		
 	}

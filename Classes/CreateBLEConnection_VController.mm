@@ -7,6 +7,7 @@
 //
 
 #import "CreateBLEConnection_VController.h"
+#import "PublicDefine.h"
 
 @interface CreateBLEConnection_VController ()
 
@@ -31,6 +32,7 @@
     }
     return self;
 }
+
 - (void)viewWillDisappear:(BOOL)animated
 {
     
@@ -138,6 +140,14 @@
     
 }
 
+- (void)checkConnectionToCamera:(NSTimer *)expired // just clear waring
+{
+    if (expired != nil)
+    {
+        [expired invalidate];
+        expired = nil;
+    }
+}
 
 - (void)scanCameraBLEDone
 {
@@ -484,23 +494,23 @@
 {
     
 }
-- (void) didReceiveData:(NSString *)fw_version
+- (void) didReceiveData:(NSString *)stringResponse
 {
-    NSLog(@"Receive string %@", fw_version);
-    NSInteger lengMacAddress = [fw_version length];
-    if ([fw_version hasPrefix:GET_VERSION])
+    NSLog(@"Receive string %@", stringResponse);
+    
+    if ([stringResponse hasPrefix:GET_VERSION])
     {
         [self.ib_Indicator setHidden:YES];
         //sucucessfull when writing version
         //diss miss statusDialog
-        NSLog(@"get version successfull is %@", fw_version);
+        NSLog(@"get version successfull is %@", stringResponse);
         
         
-        NSRange colonRange = [fw_version rangeOfString:@": "];
+        NSRange colonRange = [stringResponse rangeOfString:@": "];
         
         if (colonRange.location != NSNotFound)
         {
-            NSString *fwVersion = [[fw_version componentsSeparatedByString:@": "] objectAtIndex:1];
+            NSString *fwVersion = [[stringResponse componentsSeparatedByString:@": "] objectAtIndex:1];
             
             if ([fwVersion isEqualToString:@"-1"])
                 fwVersion = @"01_007_02";
@@ -537,12 +547,29 @@
         
         [[NSNotificationCenter defaultCenter] removeObserver:self];
     }
-    else
+    else if ([stringResponse hasPrefix:GET_UDID])
+    {
+        //get_udid: 01008344334C32B0A0VFFRBSVA
+        NSString *stringUDID = [stringResponse substringFromIndex:GET_UDID.length + 2];
+        NSLog(@"Get UDID successfully - udid: %@", stringUDID);
+        
+        self.cameraMac = [stringUDID substringWithRange:NSMakeRange(6, 12)];
+        NSString *cameraNameFinal = [NSString stringWithFormat:@"%@%@", DEFAULT_SSID_HD_PREFIX, [_cameraMac substringFromIndex:6]];
+        self.cameraName = cameraNameFinal;
+        
+        NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+        
+        [userDefaults setObject:self.cameraMac forKey:@"CameraMacSave"];
+        [userDefaults setObject:stringUDID forKey:CAMERA_UDID];
+        [userDefaults synchronize];
+#if 0
+        NSInteger lengMacAddress = [stringResponse length];
+        
         if (lengMacAddress == 12)
         {
             //receive data mac address
             NSLog(@"Get mac address successfull");
-            NSString *macAddress = fw_version;
+            NSString *macAddress = stringResponse;
             
             //processing for get mac address
             //mac address 44334C7E0C8A
@@ -551,11 +578,11 @@
             {
                 //first get mac address of camera
                 [BLEConnectionManager getInstanceBLE].delegate = self;
-                [[BLEConnectionManager getInstanceBLE].uartPeripheral writeString:GET_MAC_ADDRESS withTimeOut:SHORT_TIME_OUT_SEND_COMMAND];
+                [[BLEConnectionManager getInstanceBLE].uartPeripheral writeString:GET_UDID withTimeOut:SHORT_TIME_OUT_SEND_COMMAND];
                 return;
             }
-            self.cameraMac = fw_version;
-            NSString *cameraNameFinal = [NSString stringWithFormat:@"Camera-%@", [fw_version substringFromIndex:6]];
+            self.cameraMac = stringResponse;
+            NSString *cameraNameFinal = [NSString stringWithFormat:@"%@%@", DEFAULT_SSID_HD_PREFIX, [stringResponse substringFromIndex:6]];
             self.cameraName = cameraNameFinal;
             
             NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
@@ -564,6 +591,8 @@
             //[userDefaults setObject:model forKey:@"MODEL"];
             [userDefaults synchronize];
         }
+#endif
+    }
 }
 -(void) moveToNextStep
 {
@@ -643,7 +672,8 @@
     [BLEConnectionManager getInstanceBLE].delegate = self;
     
     
-    [[BLEConnectionManager getInstanceBLE].uartPeripheral writeString:GET_MAC_ADDRESS withTimeOut:SHORT_TIME_OUT_SEND_COMMAND];
+    //[[BLEConnectionManager getInstanceBLE].uartPeripheral writeString:GET_MAC_ADDRESS withTimeOut:SHORT_TIME_OUT_SEND_COMMAND];
+    [[BLEConnectionManager getInstanceBLE].uartPeripheral writeString:GET_UDID withTimeOut:SHORT_TIME_OUT_SEND_COMMAND];
     NSDate * date;
     while ([BLEConnectionManager getInstanceBLE].uartPeripheral.isBusy)
     {

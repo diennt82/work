@@ -139,7 +139,10 @@
 
 #endif //0
 
+
 //for debug purpose (see FPS and View in Stun/relay/local
 #define SHOW_DEBUG_INFO
 
 #endif /* PUBLICDEFINE_H_ */
+
+#define CAMERA_UDID @"udid"

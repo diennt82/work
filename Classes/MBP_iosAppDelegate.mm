@@ -105,14 +105,13 @@
         
         [BMS_JSON_Communication setServerInput:serverString];
         //[BMS_JSON_Communication setServerInput:@"http://api.simplimonitor.com/v1"];
-        //
          NSLog(@"1 New server is %@", serverString);
     }
     else
     {
         NSLog(@"Use default server");
         
-        [BMS_JSON_Communication setServerInput:@"http://api.hubble.in/v1"];
+        [BMS_JSON_Communication setServerInput:@"https://dev-api.hubble.in/v1"];
     }
 
     return YES;
