@@ -111,6 +111,8 @@
     //for debug
     NSString *_viewVideoIn;
 #endif
+    //display time when recording
+    NSTimer *_timerRecording;
 }
 //property for Hold to talk
 @property (nonatomic) BOOL walkieTalkieEnabled;
@@ -130,6 +132,9 @@
 @property (retain, nonatomic) IBOutlet UIView *ib_viewRecordTTT;
 @property (retain, nonatomic) IBOutlet UIButton *ib_processRecordOrTakePicture;
 @property (retain, nonatomic) IBOutlet UIButton *ib_buttonChangeAction;
+//button for replacing image take picture when recording
+@property (retain, nonatomic) IBOutlet UIButton *ib_changeToMainRecording;
+
 
 
 @property (retain, nonatomic) IBOutlet UILabel *ib_labelRecordVideo;
@@ -215,5 +220,6 @@
 - (IBAction)changeAction:(id)sender;
 //- (IBAction)touchUpInsideHoldToTalk:(id)sender;
 - (IBAction)bt_showMenuControlPanel:(id)sender;
+- (IBAction)changeToMainRecording:(id)sender;
 
 @end
