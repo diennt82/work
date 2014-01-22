@@ -4097,6 +4097,8 @@ double _ticks = 0;
             {
                 //FOUND - copy ip address.
                 cp.ip_address = cp1.ip_address;
+                cp.isInLocal  = TRUE;
+                cp.port       = cp1.port;
                 found = TRUE;
                 break;
             }

@@ -200,7 +200,7 @@
 @property (retain, nonatomic) IBOutlet UISegmentedControl *segCtrl;
 @property (retain, nonatomic) UISegmentedControl *segmentControl;
 
-@property (nonatomic, retain) CamChannel *selectedChannel;
+@property (nonatomic, assign) CamChannel *selectedChannel;
 
 
 
