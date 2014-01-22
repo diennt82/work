@@ -107,9 +107,10 @@
     
     //
     NSTimer * fullScreenTimer;
-    
+#ifdef SHOW_DEBUG_INFO
     //for debug
     NSString *_viewVideoIn;
+#endif
 }
 //property for Hold to talk
 @property (nonatomic) BOOL walkieTalkieEnabled;
