@@ -233,7 +233,7 @@
                                                                          FailSelector:nil
                                                                             ServerErr:nil];
 
-    NSDictionary *responseDict = [jsonComm getListOfEventsBlockedWithRegisterId:_cameraMacNoColon
+    NSDictionary *responseDict = [jsonComm getListOfEventsBlockedWithRegisterId:_registrationID
                                                                 beforeStartTime:nil//@"2013-12-28 20:10:18"
                                                                       eventCode:nil//event_code // temp
                                                                          alerts:alertsString

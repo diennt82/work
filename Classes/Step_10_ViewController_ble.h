@@ -30,8 +30,6 @@
 //Master_key=BC0B87B2832B67FF58F11749F19C4915D4B876C2505D9CC7D0D06F79653C8B11
 #define MASTER_KEY @"Master_key="
 
-#define SCAN_TIMEOUT 60//5*60 //5 mins
-
 #define ALERT_ADDCAM_SERVER_UNREACH 1
 
 @interface Step_10_ViewController_ble : UIViewController

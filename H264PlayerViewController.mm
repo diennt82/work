@@ -63,6 +63,9 @@
 @property (nonatomic, retain) NSTimer *timerHideMenu;
 @property (nonatomic) BOOL isEarlierView;
 @property (nonatomic) NSInteger numberOfSTUNError;
+@property (nonatomic, retain) NSString *stringTemperature;
+//@property (nonatomic, retain) NSTimer *timerGetTemperature;
+@property (nonatomic) BOOL existTimerTemperature;
 
 - (void)centerScrollViewContents;
 - (void)scrollViewDoubleTapped:(UITapGestureRecognizer*)recognizer;
@@ -218,6 +221,7 @@ double _ticks = 0;
     [self setupHttpPort];
     [self setupPtt];
     
+    self.stringTemperature = @"0";
 }
 
 - (void) setupHttpPort
@@ -713,12 +717,13 @@ double _ticks = 0;
                 [self performSelectorInBackground:@selector(getMelodyValue_bg) withObject:nil];
                 self.imgViewDrectionPad.userInteractionEnabled = YES;
                 self.imgViewDrectionPad.image = [UIImage imageNamed:@"camera_action_pan_bg.png"];
-                NSTimer *getTemperatureTimer = [NSTimer scheduledTimerWithTimeInterval:10
-                                                                                target:self
-                                                                              selector:@selector(getCameraTemperature_bg:)
-                                                                              userInfo:nil
-                                                                               repeats:YES];
-                [getTemperatureTimer fire];
+//                NSTimer *getTemperatureTimer = [NSTimer scheduledTimerWithTimeInterval:10
+//                                                                                target:self
+//                                                                              selector:@selector(getCameraTemperature_bg:)
+//                                                                              userInfo:nil
+//                                                                               repeats:YES];
+//                [getTemperatureTimer fire];
+                [self performSelectorInBackground:@selector(getCameraTemperature_bg:) withObject:nil];
             }
         }
             break;
@@ -1412,19 +1417,25 @@ double _ticks = 0;
         [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode beforeDate:endDate];
     }
     
-    [self performSelectorOnMainThread:@selector(setupCamera) withObject:nil waitUntilDone:NO];
+    // Make sure Camera is available (minuteSinceLastComm == 1)
+    if (self.selectedChannel.profile.isInLocal == FALSE &&
+        self.selectedChannel.profile.minuteSinceLastComm <= 5)
+    {
+        // Scan Camera again
+        NSLog(@"H264PlayerVC - Scan for missing camera: %@", self.selectedChannel.profile.ip_address);
+        [self performSelectorOnMainThread:@selector(scan_for_missing_camera) withObject:nil waitUntilDone:NO];
+    }
+    else
+    {
+        // Camera in Local
+        [self performSelectorOnMainThread:@selector(setupCamera) withObject:nil waitUntilDone:NO];
+    }
 }
 
 - (void)setupCamera
 {
-    
-//    if (self.httpComm != nil)
-//    {
-//        self.httpComm = nil;
-//    }
     if (self.selectedChannel.stream_url != nil)
     {
-
         self.selectedChannel.stream_url = nil;
     }
     _httpComm.device_ip = self.selectedChannel.profile.ip_address;
@@ -1454,31 +1465,38 @@ double _ticks = 0;
     }
     else if (self.selectedChannel.profile.minuteSinceLastComm <= 5)
     {
-        NSLog(@"created a remote streamer ");
-        if (_client == nil)
-        {
-            _client = [[StunClient alloc] init];
-        }
-        
-        
         NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-        int symmetric_nat_status = [userDefaults integerForKey:APP_IS_ON_SYMMETRIC_NAT];
-
+        NSLog(@"Log - created a remote streamer - {enabled_stun}: %@", [userDefaults objectForKey:@"enabled_stun"]);
         
-        //For any reason it fails to check earlier, we try checking now.
-        if (symmetric_nat_status == TYPE_UNKNOWN)
+        // This value is setup on Account view
+        if([userDefaults boolForKey:@"enabled_stun"] == FALSE)
         {
-            //Non Blocking call
-            [self.client test_start_async:self];
+            // Force APP_IS_ON_SYMMETRIC_NAT to use RELAY mode
+            [self symmetric_check_result:TRUE];
         }
         else
         {
-            //call direct the callback
+            if (_client == nil)
+            {
+                _client = [[StunClient alloc] init];
+            }
             
-            [self symmetric_check_result: (symmetric_nat_status == TYPE_SYMMETRIC_NAT)];
+            int symmetric_nat_status = [userDefaults integerForKey:APP_IS_ON_SYMMETRIC_NAT];
             
+            //For any reason it fails to check earlier, we try checking now.
+            if (symmetric_nat_status == TYPE_UNKNOWN)
+            {
+                //Non Blocking call
+                [self.client test_start_async:self];
+            }
+            else
+            {
+                //call direct the callback
+                
+                [self symmetric_check_result: (symmetric_nat_status == TYPE_SYMMETRIC_NAT)];
+                
+            }
         }
-        
 
     }
     else
@@ -1592,10 +1610,10 @@ double _ticks = 0;
 	NSString * streamingSSID = [CameraPassword fetchSSIDInfo];
 	if (streamingSSID == nil)
 	{
-		NSLog(@"error: streamingSSID is nil before streaming");
+		NSLog(@"Error: streamingSSID is nil before streaming");
 	}
     
-	NSLog(@"current SSID is: %@", streamingSSID);
+	NSLog(@"Current SSID is: %@", streamingSSID);
     
     
 	//Store some of the info for used in menu  --
@@ -1802,8 +1820,7 @@ double _ticks = 0;
 {
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     NSString *apiKey = [userDefaults objectForKey:@"PortalApiKey"];
-    NSString *mac = [Util strip_colon_fr_mac:self.selectedChannel.profile.mac_address];
-    
+    //NSString *mac = [Util strip_colon_fr_mac:self.selectedChannel.profile.mac_address];
     
     BMS_JSON_Communication *jsonComm = [[[BMS_JSON_Communication alloc] initWithObject:self
                                                                               Selector:nil
@@ -1813,9 +1830,9 @@ double _ticks = 0;
     NSString * cmd_string = @"action=command&command=close_p2p_rtsp_stun";
     
     //NSDictionary *responseDict =
-    [jsonComm  sendCommandBlockedWithRegistrationId:mac
-                                                         andCommand:cmd_string
-                                                          andApiKey:apiKey];
+    [jsonComm  sendCommandBlockedWithRegistrationId:self.selectedChannel.profile.registrationID
+                                         andCommand:cmd_string
+                                          andApiKey:apiKey];
     H264PlayerViewController *thisVC = (H264PlayerViewController *)vc;
     if (userWantToCancel == TRUE)
     {
@@ -1850,8 +1867,7 @@ double _ticks = 0;
 {
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     NSString *apiKey = [userDefaults objectForKey:@"PortalApiKey"];
-    NSString *mac = [Util strip_colon_fr_mac:self.selectedChannel.profile.mac_address];
-    
+    //NSString *mac = [Util strip_colon_fr_mac:self.selectedChannel.profile.mac_address];
     
     BMS_JSON_Communication *jsonComm = [[BMS_JSON_Communication alloc] initWithObject:self
                                                                               Selector:nil
@@ -1861,7 +1877,7 @@ double _ticks = 0;
     NSString * cmd_string = @"action=command&command=close_relay_rtmp";
     
     //NSDictionary *responseDict =
-    [jsonComm  sendCommandBlockedWithRegistrationId:mac
+    [jsonComm  sendCommandBlockedWithRegistrationId:self.selectedChannel.profile.registrationID
                                          andCommand:cmd_string
                                           andApiKey:apiKey];
     [jsonComm release];
@@ -2019,18 +2035,18 @@ double _ticks = 0;
 	{
         NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
         
-        NSString *mac = [Util strip_colon_fr_mac:self.selectedChannel.profile.mac_address];
+        //NSString *mac = [Util strip_colon_fr_mac:self.selectedChannel.profile.mac_address];
         NSString *apiKey = [userDefaults objectForKey:@"PortalApiKey"];
-        NSLog(@"mac %@, apikey %@", mac, apiKey);
+        NSLog(@"Log - registrationID %@, apikey %@", self.selectedChannel.profile.registrationID, apiKey);
         
 		BMS_JSON_Communication *jsonCommunication = [[[BMS_JSON_Communication alloc] initWithObject:self
                                                                Selector:nil
                                                            FailSelector:nil
                                                               ServerErr:nil] autorelease];
         
-        NSDictionary *responseDict = [jsonCommunication sendCommandBlockedWithRegistrationId:mac
-                                                               andCommand:[NSString stringWithFormat:@"action=command&command=get_resolution"]
-                                                                andApiKey:apiKey];
+        NSDictionary *responseDict = [jsonCommunication sendCommandBlockedWithRegistrationId:self.selectedChannel.profile.registrationID
+                                                                                  andCommand:[NSString stringWithFormat:@"action=command&command=get_resolution"]
+                                                                                   andApiKey:apiKey];
         if (responseDict != nil)
         {
             
@@ -2100,10 +2116,10 @@ double _ticks = 0;
         
         NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
         
-        NSString *mac = [Util strip_colon_fr_mac:self.selectedChannel.profile.mac_address];
+        //NSString *mac = [Util strip_colon_fr_mac:self.selectedChannel.profile.mac_address];
         NSString *apiKey = [userDefaults objectForKey:@"PortalApiKey"];
         
-        NSDictionary *responseDict = [jsonCommunication sendCommandBlockedWithRegistrationId:mac
+        NSDictionary *responseDict = [jsonCommunication sendCommandBlockedWithRegistrationId:self.selectedChannel.profile.registrationID
                                                                                   andCommand:@"action=command&command=get_recording_stat"
                                                                                    andApiKey:apiKey];
         if (responseDict != nil)
@@ -2169,10 +2185,10 @@ double _ticks = 0;
         
         NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
         
-        NSString *mac = [Util strip_colon_fr_mac:self.selectedChannel.profile.mac_address];
+        //NSString *mac = [Util strip_colon_fr_mac:self.selectedChannel.profile.mac_address];
         NSString *apiKey = [userDefaults objectForKey:@"PortalApiKey"];
         
-        NSDictionary *responseDict = [jsonCommunication sendCommandBlockedWithRegistrationId:mac
+        NSDictionary *responseDict = [jsonCommunication sendCommandBlockedWithRegistrationId:self.selectedChannel.profile.registrationID
                                                                                   andCommand:[NSString stringWithFormat:@"action=command&command=set_recording_stat&mode=%@", modeRecording]
                                                                                    andApiKey:apiKey];
         if (responseDict != nil)
@@ -2257,10 +2273,10 @@ double _ticks = 0;
         
         NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
         
-        NSString *mac = [Util strip_colon_fr_mac:self.selectedChannel.profile.mac_address];
+        //NSString *mac = [Util strip_colon_fr_mac:self.selectedChannel.profile.mac_address];
         NSString *apiKey = [userDefaults objectForKey:@"PortalApiKey"];
         
-        NSDictionary *responseDict = [jsonCommunication sendCommandBlockedWithRegistrationId:mac
+        NSDictionary *responseDict = [jsonCommunication sendCommandBlockedWithRegistrationId:self.selectedChannel.profile.registrationID
                                                                                   andCommand:@"action=command&command=get_motion_area"
                                                                                    andApiKey:apiKey];
         if (responseDict != nil)
@@ -2388,10 +2404,10 @@ double _ticks = 0;
         
         NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
         
-        NSString *mac = [Util strip_colon_fr_mac:self.selectedChannel.profile.mac_address];
+        //NSString *mac = [Util strip_colon_fr_mac:self.selectedChannel.profile.mac_address];
         NSString *apiKey = [userDefaults objectForKey:@"PortalApiKey"];
         
-        NSDictionary *responseDict = [jsonCommunication sendCommandBlockedWithRegistrationId:mac
+        NSDictionary *responseDict = [jsonCommunication sendCommandBlockedWithRegistrationId:self.selectedChannel.profile.registrationID
                                                                                   andCommand:@"action=command&command=value_melody"
                                                                                    andApiKey:apiKey];
         if (responseDict != nil)
@@ -2461,15 +2477,8 @@ double _ticks = 0;
 
 #pragma mark - Temperature
 
-- (void)getCameraTemperature_bg: (NSTimer *)timer
+- (void)getCameraTemperature_bg: (id)sender
 {
-    if (userWantToCancel == TRUE ||
-        self.h264StreamerIsInStopped == TRUE)
-    {
-        [timer invalidate];
-        return;
-    }
-    
     NSString *responseString = @"";
     
     if (self.selectedChannel.profile .isInLocal == TRUE)
@@ -2477,9 +2486,8 @@ double _ticks = 0;
 
         _httpComm.device_ip = self.selectedChannel.profile.ip_address;
         _httpComm.device_port = self.selectedChannel.profile.port;
-        NSData *responseData = [_httpComm sendCommandAndBlock_raw:@"get_temperature"];
+        NSData *responseData = [_httpComm sendCommandAndBlock_raw:@"value_temperature"];
 
-        
         if (responseData != nil)
         {
             responseString = [[[NSString alloc] initWithData:responseData encoding: NSUTF8StringEncoding] autorelease];
@@ -2494,10 +2502,10 @@ double _ticks = 0;
         
         NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
         
-        NSString *mac = [Util strip_colon_fr_mac:self.selectedChannel.profile.mac_address];
+        //NSString *mac = [Util strip_colon_fr_mac:self.selectedChannel.profile.mac_address];
         NSString *apiKey = [userDefaults objectForKey:@"PortalApiKey"];
         
-        NSDictionary *responseDict = [jsonCommunication sendCommandBlockedWithRegistrationId:mac
+        NSDictionary *responseDict = [jsonCommunication sendCommandBlockedWithRegistrationId:self.selectedChannel.profile.registrationID
                                                                                   andCommand:@"action=command&command=value_temperature"
                                                                                    andApiKey:apiKey];
         [jsonCommunication release];
@@ -2514,22 +2522,57 @@ double _ticks = 0;
     
     NSLog(@"Reponse - getCameraTemperature_bg: %@", responseString);
     
-    if (![responseString isEqualToString:@""])
+    if (![responseString isEqualToString:@""]   && // Get temperature failed!
+        ![responseString isEqualToString:@"NA"] && // Received temperature wrong format
+        ![responseString hasSuffix:@"null"])       // Received temperature {status code} null
     {
         NSRange tmpRange = [responseString rangeOfString:@": "];
         
         if (tmpRange.location != NSNotFound)
         {
-            NSString *temperature = [responseString substringFromIndex:tmpRange.location + 2];
+            NSArray *arrayBody = [responseString componentsSeparatedByString:@": "];
             
-            [self performSelectorOnMainThread:@selector(setTemperatureState_Fg:)
-                                       withObject:temperature
+            if (arrayBody != nil &&
+                arrayBody.count == 2)
+            {
+                self.stringTemperature = [arrayBody objectAtIndex:1];
+                
+                [self performSelectorOnMainThread:@selector(setTemperatureState_Fg:)
+                                       withObject:_stringTemperature
                                     waitUntilDone:NO];
+            }
+            else
+            {
+                //NSLog(@"Error - Command is not found or wrong format: %@", responseString);
+            }
+        }
+        else
+        {
+            //NSLog(@"Error - Command is not found or wrong format: %@", responseString);
         }
     }
     else
     {
         // Do nothings | reset UI
+        //NSLog(@"Error - Command is not found or wrong format: %@", responseString);
+    }
+    
+    // Make sure Update temperature once after that check condition
+    if (sender != nil &&
+        [sender isKindOfClass:[NSTimer class]])
+    {
+        if (self.ib_temperature.hidden == YES || // Label tmperature was hidden
+            userWantToCancel == TRUE ||          // Back out
+            self.h264StreamerIsInStopped == TRUE)
+        {
+            [((NSTimer *)sender) invalidate];
+            sender = nil;
+            self.existTimerTemperature = FALSE;
+            
+            NSLog(@"Log - Invalidate Timer get temperature");
+            
+            return;
+        }
     }
 }
 
@@ -2593,18 +2636,19 @@ double _ticks = 0;
 {
     NSInteger result = (isBehindSymmetricNat == TRUE)?TYPE_SYMMETRIC_NAT:TYPE_NON_SYMMETRIC_NAT;
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-    [userDefaults setInteger:result forKey:APP_IS_ON_SYMMETRIC_NAT];
-    [userDefaults synchronize];
     
-    
+    if ([userDefaults boolForKey:@"enabled_stun"] == TRUE)
+    {
+        [userDefaults setInteger:result forKey:APP_IS_ON_SYMMETRIC_NAT];
+        [userDefaults synchronize];
+    }
+
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0),
                    ^{
                        NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
                        NSString *apiKey = [userDefaults objectForKey:@"PortalApiKey"];
-                       NSString *mac = [Util strip_colon_fr_mac:self.selectedChannel.profile.mac_address];
-                       
-                       
-                       
+                       //NSString *mac = [Util strip_colon_fr_mac:self.selectedChannel.profile.mac_address];
+                       NSString *stringUDID = self.selectedChannel.profile.registrationID;
                        
                        BMS_JSON_Communication *jsonComm = [[[BMS_JSON_Communication alloc] initWithObject:self
                                                                                                  Selector:nil
@@ -2620,7 +2664,8 @@ double _ticks = 0;
 #ifdef SHOW_DEBUG_INFO
                            _viewVideoIn = @"R";
 #endif
-                           responseDict = [jsonComm createSessionBlockedWithRegistrationId:mac
+                           //responseDict = [jsonComm createSessionBlockedWithRegistrationId:mac
+                           responseDict = [jsonComm createSessionBlockedWithRegistrationId:stringUDID
                                                                              andClientType:@"BROWSER"
                                                                                  andApiKey:apiKey];
                            if (responseDict != nil)
@@ -2642,6 +2687,8 @@ double _ticks = 0;
                                    {
                                        self.selectedChannel.stream_url = urlResponse;
                                    }
+                                   
+                                   self.selectedChannel.communication_mode = COMM_MODE_STUN_RELAY2;
                                    
                                    [self performSelectorOnMainThread:@selector(startStream)
                                                           withObject:nil
@@ -2686,7 +2733,7 @@ double _ticks = 0;
                                                     self.selectedChannel.local_stun_video_port,
                                                     self.selectedChannel.public_ip];
                            
-                           responseDict =  [jsonComm  sendCommandBlockedWithRegistrationId:mac
+                           responseDict =  [jsonComm  sendCommandBlockedWithRegistrationId:stringUDID
                                                                                 andCommand:cmd_string
                                                                                  andApiKey:apiKey];
                            
@@ -2705,7 +2752,7 @@ double _ticks = 0;
 
                                    if ( [[tokens objectAtIndex:0] hasSuffix:@"error=200"]) //roughly check for "error=200"
                                    {
-                                       if (_numberOfSTUNError >= 5) // Switch to RELAY because STUN try probe & failed many times
+                                       if (_numberOfSTUNError >= 3) // Switch to RELAY because STUN try probe & failed many times
                                        {
                                            NSLog(@"Switch to RELAY - Number of STUN error: %d", _numberOfSTUNError);
                                            
@@ -2713,7 +2760,7 @@ double _ticks = 0;
                                            cmd_string = @"action=command&command=close_p2p_rtsp_stun";
                                            
                                            //responseDict =
-                                           [jsonComm  sendCommandBlockedWithRegistrationId:mac
+                                           [jsonComm  sendCommandBlockedWithRegistrationId:stringUDID
                                                                                 andCommand:cmd_string
                                                                                  andApiKey:apiKey];
                                            
@@ -2768,9 +2815,9 @@ double _ticks = 0;
                                        cmd_string = @"action=command&command=close_p2p_rtsp_stun";
                                        
                                        //responseDict =
-                                       [jsonComm  sendCommandBlockedWithRegistrationId:mac
-                                                                                            andCommand:cmd_string
-                                                                                             andApiKey:apiKey];
+                                       [jsonComm  sendCommandBlockedWithRegistrationId:stringUDID
+                                                                            andCommand:cmd_string
+                                                                             andApiKey:apiKey];
                                        
                                        if (userWantToCancel == FALSE)
                                        {
@@ -2814,12 +2861,7 @@ double _ticks = 0;
                                                    waitUntilDone:NO];
                            }
                        }
-                       
-                       
-                       
-                       
-                      
-                       
+    
                    }
                    
                    
@@ -2852,16 +2894,17 @@ double _ticks = 0;
                            {
                                NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
                                
-                               NSString *mac = [Util strip_colon_fr_mac:self.selectedChannel.profile.mac_address];
+                               //NSString *mac = [Util strip_colon_fr_mac:self.selectedChannel.profile.mac_address];
+                               NSString *stringUDID = self.selectedChannel.profile.registrationID;
                                NSString *apiKey = [userDefaults objectForKey:@"PortalApiKey"];
-                               NSLog(@"mac %@, apikey %@", mac, apiKey);
+                               NSLog(@"Log - registrationID: %@, apikey: %@", stringUDID, apiKey);
                                
                                BMS_JSON_Communication *jsonCommunication = [[[BMS_JSON_Communication alloc] initWithObject:self
                                                                                                                   Selector:nil
                                                                                                               FailSelector:nil
                                                                                                                  ServerErr:nil] autorelease];
                                
-                               NSDictionary *responseDict = [jsonCommunication sendCommandBlockedWithRegistrationId:mac
+                               NSDictionary *responseDict = [jsonCommunication sendCommandBlockedWithRegistrationId:stringUDID
                                                                                                          andCommand:[NSString stringWithFormat:@"action=command&command=get_resolution"]
                                                                                                           andApiKey:apiKey];
                                if (responseDict != nil)
@@ -2936,13 +2979,14 @@ double _ticks = 0;
                    ^{
                        NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
                        NSString *apiKey = [userDefaults objectForKey:@"PortalApiKey"];
-                       NSString *mac = [Util strip_colon_fr_mac:self.selectedChannel.profile.mac_address];
+                       //NSString *mac = [Util strip_colon_fr_mac:self.selectedChannel.profile.mac_address];
+                       NSString *stringUDID = self.selectedChannel.profile.registrationID;
                        
                        BMS_JSON_Communication *jsonComm = [[[BMS_JSON_Communication alloc] initWithObject:self
                                                                                                  Selector:nil
                                                                                              FailSelector:nil
                                                                                                 ServerErr:nil] autorelease];
-                       NSDictionary *responseDict = [jsonComm createSessionBlockedWithRegistrationId:mac
+                       NSDictionary *responseDict = [jsonComm createSessionBlockedWithRegistrationId:stringUDID
                                                                          andClientType:@"BROWSER"
                                                                              andApiKey:apiKey];
                        NSLog(@"remoteConnectingViaSymmectric: %@", responseDict);
@@ -3176,7 +3220,7 @@ double _ticks = 0;
 		}
 		else if(_selectedChannel.profile.minuteSinceLastComm <= 5)
 		{
-            NSString *mac = [Util strip_colon_fr_mac:_selectedChannel.profile.mac_address];
+            //NSString *mac = [Util strip_colon_fr_mac:_selectedChannel.profile.mac_address];
             NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
             NSString *apiKey = [userDefaults objectForKey:@"PortalApiKey"];
             
@@ -3184,7 +3228,7 @@ double _ticks = 0;
                                                                Selector:nil
                                                            FailSelector:nil
                                                               ServerErr:nil] autorelease];
-            NSDictionary *responseDict = [jsonCommunication sendCommandBlockedWithRegistrationId:mac
+            NSDictionary *responseDict = [jsonCommunication sendCommandBlockedWithRegistrationId:self.selectedChannel.profile.registrationID
                                                                               andCommand:[NSString stringWithFormat:@"action=command&command=%@", dir_str]
                                                                                andApiKey:apiKey];
             NSLog(@"send_UD_dir_to_rabot status: %d", [[responseDict objectForKey:@"status"] intValue]);
@@ -3255,7 +3299,7 @@ double _ticks = 0;
 		}
 		else if ( _selectedChannel.profile.minuteSinceLastComm <= 5)
 		{
-            NSString *mac = [Util strip_colon_fr_mac:_selectedChannel.profile.mac_address];
+            //NSString *mac = [Util strip_colon_fr_mac:_selectedChannel.profile.mac_address];
             NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
             NSString *apiKey = [userDefaults objectForKey:@"PortalApiKey"];
             
@@ -3263,7 +3307,7 @@ double _ticks = 0;
                                                               Selector:nil
                                                           FailSelector:nil
                                                              ServerErr:nil] autorelease];
-            NSDictionary *responseDict = [jsonCommunication sendCommandBlockedWithRegistrationId:mac
+            NSDictionary *responseDict = [jsonCommunication sendCommandBlockedWithRegistrationId:self.selectedChannel.profile.registrationID
                                                                               andCommand:[NSString stringWithFormat:@"action=command&command=%@", dir_str]
                                                                                andApiKey:apiKey];
             NSLog(@"send_LR_dir_to_rabot status: %d", [[responseDict objectForKey:@"status"] intValue]);
@@ -3802,6 +3846,7 @@ double _ticks = 0;
     
     self.imageViewStreamer.frame = _imageViewVideo.frame;
     [self.scrollView insertSubview:_imageViewStreamer aboveSubview:_imageViewVideo];
+    [self setTemperatureState_Fg:_stringTemperature];
     
     [self hideControlMenu];
     [self.activityIndicator startAnimating];
@@ -3907,7 +3952,7 @@ double _ticks = 0;
             break;
     }
     
-    NSString *mac = [Util strip_colon_fr_mac:self.selectedChannel.profile.mac_address];
+    //NSString *mac = [Util strip_colon_fr_mac:self.selectedChannel.profile.mac_address];
     NSString *apiKey = [userDefaults objectForKey:@"PortalApiKey"];
     
     NSString *bodyKey = @"";
@@ -3935,7 +3980,7 @@ double _ticks = 0;
                                                           FailSelector:nil
                                                              ServerErr:nil] autorelease];
         
-        NSDictionary *responseDict = [self.jsonComm sendCommandBlockedWithRegistrationId:mac
+        NSDictionary *responseDict = [self.jsonComm sendCommandBlockedWithRegistrationId:self.selectedChannel.profile.registrationID
                                                                               andCommand:[NSString stringWithFormat:@"action=command&command=set_resolution&mode=%@", modeVideo]
                                                                                andApiKey:apiKey];
         NSLog(@"setVQ_bg %@", responseDict);
@@ -4051,14 +4096,6 @@ double _ticks = 0;
         {
             //Restart streaming..
             NSLog(@"Re-start streaming for : %@", self.selectedChannel.profile.mac_address);
-            
-            
-//            if (_client != nil)
-//            {
-//                [_client shutdown];
-//                [_client release];
-//            }
-            
             
             [NSTimer scheduledTimerWithTimeInterval:0.1
                                              target:self
@@ -4445,6 +4482,18 @@ double _ticks = 0;
     else if (_selectedItemMenu == INDEX_TEMP)
     {
         [self.ib_temperature setHidden:NO];
+        
+        if (_existTimerTemperature == FALSE)
+        {
+            self.existTimerTemperature = TRUE;
+            NSLog(@"Log - Create Timer to get Temperature");
+            
+            [NSTimer scheduledTimerWithTimeInterval:10
+                                             target:self
+                                           selector:@selector(getCameraTemperature_bg:)
+                                           userInfo:nil
+                                            repeats:YES];
+        }
     }
 }
 

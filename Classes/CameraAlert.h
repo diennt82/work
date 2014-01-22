@@ -33,7 +33,8 @@
 @property (nonatomic, retain)     NSString * alertType; 
 @property (nonatomic, retain)     NSString * alertVal; 
 @property (nonatomic, retain)     NSString * alertTime;
-@property (nonatomic, retain)     NSString * server_url; 
+@property (nonatomic, retain)     NSString * server_url;
+@property (nonatomic, retain)     NSString * registrationID;
 
 
 -(id) initWithTimeStamp:(NSInteger) timeStamp database:(sqlite3 *) db; 

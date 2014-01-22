@@ -136,10 +136,10 @@
         
         NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
         
-        NSString *mac = [Util strip_colon_fr_mac:self.selectedChannel.profile.mac_address];
+        //NSString *mac = [Util strip_colon_fr_mac:self.selectedChannel.profile.mac_address];
         NSString *apiKey = [userDefaults objectForKey:@"PortalApiKey"];
         
-        [jsonCommunication sendCommandBlockedWithRegistrationId:mac
+        [jsonCommunication sendCommandBlockedWithRegistrationId:self.selectedChannel.profile.registrationID
                                                      andCommand:[NSString stringWithFormat:@"action=command&command=%@", command]
                                                       andApiKey:apiKey];
         [jsonCommunication release];

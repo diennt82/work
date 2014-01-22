@@ -50,6 +50,7 @@
 
 #define DEFAULT_MAX_RECORD_SIZE 50
 
+#define SCAN_TIMEOUT 60//5*60 //5 mins
 
 //#define AIBALL_QUERY_REQUEST_STRING   @"Mot-Cam QUERY   *               192.168.3.125  "
 #define AIBALL_QUERY_REQUEST_STRING   @"Mot-Cam QUERY   *               "
@@ -139,10 +140,10 @@
 
 #endif //0
 
-
 //for debug purpose (see FPS and View in Stun/relay/local
 #define SHOW_DEBUG_INFO
 
 #endif /* PUBLICDEFINE_H_ */
 
 #define CAMERA_UDID @"udid"
+

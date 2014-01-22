@@ -21,7 +21,7 @@
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                 </imageView>
-                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="loader0.png" id="09L-cS-9uC">
+                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="loader_0.png" id="09L-cS-9uC">
                     <rect key="frame" x="367" y="877" width="35" height="35"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
@@ -39,7 +39,7 @@
         </view>
     </objects>
     <resources>
-        <image name="loader0.png" width="48" height="48"/>
+        <image name="loader_0.png" width="32" height="32"/>
         <image name="loading_logo.png" width="270" height="276"/>
     </resources>
 </document>

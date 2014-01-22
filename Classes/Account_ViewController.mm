@@ -12,8 +12,11 @@
 #import "MBP_iosViewController.h"
 #import "CameraSettingsCell.h"
 #import "TimelineButtonCell.h"
+#import "NotificationSettingsCell.h"
 
-@interface Account_ViewController () <TimelineButtonCellDelegate>
+@interface Account_ViewController () <TimelineButtonCellDelegate, NotifSettingsCellDelegate>
+
+@property (nonatomic) BOOL enabledSTUN;
 
 @end
 
@@ -43,10 +46,11 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
     
-    
     [self loadUserData];
-    
-    
+    self.enabledSTUN = FALSE;
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    [userDefaults setBool:_enabledSTUN forKey:@"enabled_stun"];
+    [userDefaults synchronize];
 }
 
 - (void)viewDidUnload
@@ -385,12 +389,24 @@
     }
 }
 
+#pragma mark - Notification cell delegate
+
+- (void)reportSwitchValue:(BOOL)value andRowIndex:(NSInteger)rowIndex
+{
+    self.enabledSTUN = value;
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    [userDefaults setBool:_enabledSTUN forKey:@"enabled_stun"];
+    [userDefaults synchronize];
+}
+
+#pragma mark - Table view delegate & data source
+
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
 #if DISABLE_VIEW_RELEASE_FLAG
     return 1;
 #else
-    return 2;
+    return 3;
 #endif
 }
 
@@ -400,8 +416,12 @@
     {
         return 4;
     }
+    else if (section == 1)
+    {
+        return 2;
+    }
     
-    return 2;
+    return 1;
 }
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
@@ -410,8 +430,12 @@
     {
         return @"Profile";
     }
+    else if (section == 1)
+    {
+        return @"Plan";
+    }
     
-    return @"Plan";
+    return @"Remote stream mode";
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -426,6 +450,10 @@
 
 - (BOOL)tableView:(UITableView *)tableView shouldHighlightRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    if (indexPath.section == 2)
+    {
+        return NO;
+    }
     
     return YES;
 }
@@ -433,7 +461,6 @@
 #define USERNAME_INDEX 0
 #define USEREMAIL_INDEX 1
 #define APPVERSION_INDEX 2
-
 
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -470,7 +497,7 @@
             return cell;
         }
     }
-    else
+    else if(indexPath.section == 1)
     {
         if (indexPath.row == 0)
         {
@@ -494,20 +521,45 @@
             
             return cell;
         }
+        else
+        {
+            static NSString *CellIdentifier = @"Cell";
+            UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+            if (cell == nil) {
+                cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
+            }
+            
+            // Configure the cell...
+            
+            cell.textLabel.text = @"Upgrade Plan";
+            
+            return cell;
+        }
+    }
+    else
+    {
+        //NotificationSettingsCell
+        static NSString *CellIdentifier = @"NotificationSettingsCell";
+        NotificationSettingsCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
         
+        NSArray *objects = [[NSBundle mainBundle] loadNibNamed:@"NotificationSettingsCell" owner:nil options:nil];
+        
+        for (id curObj in objects)
+        {
+            
+            if([curObj isKindOfClass:[UITableViewCell class]])
+            {
+                cell = (NotificationSettingsCell *)curObj;
+                break;
+            }
+        }
+        
+        cell.notifSettingsDelegate = self;
+        cell.settingsLabel.text = @"Enable STUN";
+        [cell.settingSwitch setOn:_enabledSTUN];
+        
+        return cell;
     }
-
-    static NSString *CellIdentifier = @"Cell";
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-    if (cell == nil) {
-        cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
-    }
-    
-    // Configure the cell...
-    
-    cell.textLabel.text = @"Upgrade Plan";
-    
-    return cell;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
