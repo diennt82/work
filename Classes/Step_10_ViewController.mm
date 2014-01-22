@@ -24,6 +24,7 @@
 @synthesize  homeSSID;
 @synthesize  shouldStopScanning;
 @synthesize  timeOut;
+@synthesize delegate;
 
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
@@ -366,62 +367,29 @@
         [_alertChooseConfig dismissWithClickedButtonIndex:0 animated:NO];
         _alertChooseConfig = nil;
     }
-    else if (buttonIndex == 1) {
+    else if (buttonIndex == BLUETOOTH_SETUP) {
         //BLE button pressed
         //NO longer first time
-        NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
         [userDefaults setBool:FALSE forKey:FIRST_TIME_SETUP];
         [userDefaults synchronize];
         
         NSLog(@"load step BLE setup ");
         
-        //Load the next xib
-        GuideAddCamera_ViewController *guideAddCame = nil;
-        {
-            guideAddCame = [[GuideAddCamera_ViewController alloc]
-                                    initWithNibName:@"GuideAddCamera_ViewController" bundle:nil];
-        }
-        
-        //Copy from initViewController the delegate which is pointing to MBP_iosViewcontroller. Support cancel button
-        MBP_InitialSetupViewController * vc = (MBP_InitialSetupViewController *) [[self.navigationController viewControllers] objectAtIndex:0];
-        guideAddCame.delegate = vc.delegate;
-        
-        [self.navigationController pushViewController:guideAddCame animated:NO];
-        
-        [guideAddCame release];
-        
-        
+        [userDefaults setInteger:BLUETOOTH_SETUP forKey:SET_UP_CAMERA];
+        [userDefaults synchronize];
+        [self.delegate sendStatus:SETUP_CAMERA];
     }
-    else if (buttonIndex == 2) {
+    else if (buttonIndex == WIFI_SETUP) {
         //Wifi button pressed
         //NO longer first time
-        NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
         [userDefaults setBool:FALSE forKey:FIRST_TIME_SETUP];
         [userDefaults synchronize];
         
         NSLog(@"load step Wifi setup: concurrent ");
         
-        //Load the next xib
-        Step_02_ViewController *step02ViewController = nil;
-        
-        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
-        {
-            step02ViewController = [[Step_02_ViewController alloc]
-                                    initWithNibName:@"Step_02_ViewController_ipad" bundle:nil];
-        }
-        else
-        {
-            step02ViewController = [[Step_02_ViewController alloc]
-                                    initWithNibName:@"Step_02_ViewController" bundle:nil];
-        }
-        
-        //Copy from initViewController the delegate which is pointing to MBP_iosViewcontroller. Support cancel button
-        MBP_InitialSetupViewController * vc = (MBP_InitialSetupViewController *) [[self.navigationController viewControllers] objectAtIndex:0];
-        step02ViewController.delegate = vc.delegate;
-        
-        [self.navigationController pushViewController:step02ViewController animated:NO];
-        
-        [step02ViewController release];
+        [userDefaults setInteger:WIFI_SETUP forKey:SET_UP_CAMERA];
+        [userDefaults synchronize];
+        [self.delegate sendStatus:SETUP_CAMERA];
     }
 }
 #pragma  mark -
