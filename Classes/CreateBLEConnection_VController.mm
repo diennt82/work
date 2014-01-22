@@ -101,6 +101,7 @@
         //in state : SCANNING OR IDLE
         _isBackPress = NO;
         [[BLEConnectionManager getInstanceBLE] stopScanBLE];
+        [BLEConnectionManager getInstanceBLE].delegate = nil;
         [self.navigationController popToRootViewControllerAnimated:YES];
     }
     else
@@ -109,6 +110,7 @@
         //wait for return from delegate,
         //handle it on bleDisconnected
         //disconnect to BLE
+        [BLEConnectionManager getInstanceBLE].delegate = nil;
         [[BLEConnectionManager getInstanceBLE] disconnect];
     }
 }

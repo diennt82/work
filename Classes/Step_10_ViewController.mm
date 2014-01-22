@@ -442,6 +442,15 @@
     NSString *apiKey    = [userDefaults objectForKey:@"PortalApiKey"];
     NSString *fwVersion = [userDefaults objectForKey:@"FW_VERSION"];
     NSString *udid      = [userDefaults objectForKey:CAMERA_UDID];
+    /*
+     hack code for device 0066 which return UUID is wrong
+     */
+    NSString *udidOfFocus66Hack = @"01006644334C7E0C8AXHRRBOLC";
+    if ([udid isEqualToString:@"01008344334C7E0C8AXHRRBOLC"])
+    {
+        udid = udidOfFocus66Hack;
+    }
+    
     
     //NSLog(@"-----fwVersion = %@, ,model = %@", fwVersion, model);
     
