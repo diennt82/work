@@ -1435,8 +1435,8 @@ double _ticks = 0;
     }
     
     // Make sure Camera is available (minuteSinceLastComm == 1)
-    if (self.selectedChannel.profile.isInLocal == FALSE &&
-        self.selectedChannel.profile.minuteSinceLastComm <= 5)
+    if (self.selectedChannel.profile.isInLocal == FALSE)// &&
+        //self.selectedChannel.profile.minuteSinceLastComm <= 5)
     {
         // Scan Camera again
         NSLog(@"H264PlayerVC - Scan for missing camera: %@", self.selectedChannel.profile.ip_address);
@@ -4072,6 +4072,50 @@ double _ticks = 0;
     
 }
 
+#if 1
+- (void)scan_done:(NSArray *)_scan_results
+{
+    BOOL found = FALSE;
+    
+    if (_scan_results.count > 0)
+    {
+        //confirm the mac address
+        CamProfile * cp = self.selectedChannel.profile;
+        
+        for (int j = 0; j < [_scan_results count]; j++)
+        {
+            CamProfile * cp1 = (CamProfile *) [_scan_results objectAtIndex:j];
+            
+            if ( [cp.mac_address isEqualToString:cp1.mac_address])
+            {
+                //FOUND - copy ip address.
+                cp.ip_address = cp1.ip_address;
+                cp.isInLocal  = TRUE;
+                cp.port       = cp1.port;
+                found = TRUE;
+                break;
+            }
+        }
+    }
+    
+    if (found || self.selectedChannel.profile.isInLocal == FALSE)
+    {
+        //Restart streaming..
+        NSLog(@"Re-start streaming for : %@", self.selectedChannel.profile.mac_address);
+        
+        [NSTimer scheduledTimerWithTimeInterval:0.1
+                                         target:self
+                                       selector:@selector(setupCamera)
+                                       userInfo:nil
+                                        repeats:NO];
+    }
+    else
+    {
+        NSLog(@"Not found this Camera in Local wifi -> Re-scan");
+        [self scan_for_missing_camera];
+    }
+}
+#else
 
 - (void)scan_done:(NSArray *) _scan_results
 {
@@ -4125,6 +4169,8 @@ double _ticks = 0;
     }
     
 }
+#endif
+
 #pragma mark -
 
 #pragma mark Alertview delegate
