@@ -589,7 +589,15 @@
 				[loginOrReg presentModallyOn:self];
 				break;
 			}
+#if 1
+        case SCAN_CAMERA:
+        {
+			
+        }
+			break;
+#else
 		case SCAN_CAMERA:
+        {
 			//may be offline mode
             NSLog(@"start scanning"); 
             statusDialogLabel.hidden = NO;
@@ -603,8 +611,9 @@
 			//Back from login- login success 
 			[self dismissViewControllerAnimated:NO completion:nil];
 			self.progressView.hidden = NO;
-
-			break; 
+        }
+			break;
+#endif
 		case AFTER_ADD_RELOGIN:
 			{
 				NSLog(@" back from adding cam. relogin -- to get the new cam data");
@@ -676,6 +685,7 @@
 			
 				break;
 			}
+            
         case SCAN_BONJOUR_CAMERA :
         {
             /*
@@ -702,6 +712,14 @@
             
             break;
         }
+            
+        case SHOW_CAMERA_LIST:
+        {
+            self.app_stage = APP_STAGE_LOGGED_IN;
+            isRebinded = [self rebindCameraResource];
+            [self performSelectorOnMainThread:@selector(startShowingCameraList) withObject:nil waitUntilDone:NO];
+        }
+            break;
 		default:
 			break;
 	}

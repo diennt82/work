@@ -145,6 +145,7 @@
         self.cameras.count > 0)
     {
         CamChannel *ch = (CamChannel *)[self.cameras objectAtIndex:0];
+        ch.profile.isSelected = TRUE;
         
         [CameraAlert clearAllAlertForCamera:ch.profile.mac_address];
         [UIApplication sharedApplication].idleTimerDisabled = YES;

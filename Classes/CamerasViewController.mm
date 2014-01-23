@@ -511,7 +511,7 @@
     }
     
     CamChannel *ch = (CamChannel *)[_camChannels objectAtIndex:indexPath.row] ;
-    
+    ch.profile.isSelected = TRUE;
     
     [CameraAlert clearAllAlertForCamera:ch.profile.mac_address];
     [UIApplication sharedApplication].idleTimerDisabled = YES;

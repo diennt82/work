@@ -133,7 +133,8 @@
             
             if (delegate != nil)
             {
-                [delegate sendStatus:SCAN_BONJOUR_CAMERA];
+                //[delegate sendStatus:SCAN_BONJOUR_CAMERA];
+                [delegate sendStatus:SHOW_CAMERA_LIST];
             }
             else
             {

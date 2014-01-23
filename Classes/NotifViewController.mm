@@ -174,7 +174,8 @@
         
         if (![self.presentedViewController isBeingDismissed]) {
             [self dismissViewControllerAnimated:YES completion:^{
-                [_notifDelegate sendStatus:SCAN_BONJOUR_CAMERA];
+                //[_notifDelegate sendStatus:SCAN_BONJOUR_CAMERA];
+                [_notifDelegate sendStatus:SHOW_CAMERA_LIST];
             }];
         }
         
@@ -202,7 +203,8 @@
     
     if (![self.presentedViewController isBeingDismissed]) {
         [self dismissViewControllerAnimated:YES completion:^{
-            [_notifDelegate sendStatus:SCAN_BONJOUR_CAMERA];
+            //[_notifDelegate sendStatus:SCAN_BONJOUR_CAMERA];
+            [_notifDelegate sendStatus:SHOW_CAMERA_LIST];
         }];
     }
 }

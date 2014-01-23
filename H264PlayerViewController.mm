@@ -1393,9 +1393,10 @@ double _ticks = 0;
     [self.activityIndicator startAnimating];
     self.viewStopStreamingProgress.hidden = YES;
     
+    //[self scanCamera];
     
-    [self performSelectorInBackground:@selector(waitingScanAndStartSetupCamera_bg) withObject:nil];
-    //[self setupCamera];
+    //[self performSelectorInBackground:@selector(waitingScanAndStartSetupCamera_bg) withObject:nil];
+    [self checkAndSetupCamera];
     
     //set value default for table view
     self.playlistViewController.tableView.hidden= YES;
@@ -1435,10 +1436,26 @@ double _ticks = 0;
 
 #pragma mark - Setup camera
 
+- (void)checkAndSetupCamera
+{
+    // Camera is NOT available!
+    if (self.selectedChannel.profile.isInLocal == FALSE &&
+        self.selectedChannel.profile.minuteSinceLastComm > 5)
+    {
+        [self setupCamera];
+    }
+    else
+    {
+        // Camera is AVAILABLE
+        [self performSelectorInBackground:@selector(scanCamera) withObject:nil];
+    }
+}
+
 - (void)waitingScanAndStartSetupCamera_bg
 {
-    while (self.selectedChannel.profile.hasUpdateLocalStatus == FALSE ||
-           self.selectedChannel.waitingForStreamerToClose == TRUE)
+    while ((self.selectedChannel.profile.hasUpdateLocalStatus == FALSE ||
+           self.selectedChannel.waitingForStreamerToClose == TRUE) &&
+           userWantToCancel == FALSE)
     {
         NSDate * endDate = [NSDate dateWithTimeIntervalSinceNow:0.5];
         [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode beforeDate:endDate];
@@ -1808,6 +1825,8 @@ double _ticks = 0;
     
     [[NSNotificationCenter defaultCenter] removeObserver:self];
     [UIApplication sharedApplication].idleTimerDisabled = NO;
+    
+    self.selectedChannel.profile.isSelected = FALSE;
     
     [self.navigationController popToRootViewControllerAnimated:NO];
 }
@@ -5361,7 +5380,12 @@ double _ticks = 0;
 }
 
 
-
+- (void)scanCamera
+{
+    
+    // San done
+    [self setupCamera];
+}
 
 
 

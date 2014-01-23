@@ -23,6 +23,8 @@
 #define LOGIN_FAILED_OR_LOGOUT  8
 #define SCAN_BONJOUR_CAMERA     9
 
+#define SHOW_CAMERA_LIST        10
+
 @protocol ConnectionMethodDelegate
 - (void)sendStatus:(int) status;
 @end

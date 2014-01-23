@@ -545,7 +545,8 @@
                 NSLog(@"didDismissWithButtonIndex: %p", delegate);
                 
                 [self dismissViewControllerAnimated:YES completion:^{
-                    [delegate sendStatus:SCAN_BONJOUR_CAMERA];
+                    //[delegate sendStatus:SCAN_BONJOUR_CAMERA];
+                    [delegate sendStatus:SHOW_CAMERA_LIST];
                 }];
                 
                 break;
