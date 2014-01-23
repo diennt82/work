@@ -4122,6 +4122,8 @@ double _ticks = 0;
 {
     BOOL found = FALSE;
     
+ self.selectedChannel.profile.isInLocal  = NO; 
+    
     if (_scan_results.count > 0)
     {
         //confirm the mac address
@@ -4176,23 +4178,13 @@ double _ticks = 0;
     _bonjourList = nil;
     self.selectedChannel.profile.hasUpdateLocalStatus = YES;
     
-    if (found || // Found on Local wifi
-        self.selectedChannel.profile.isInLocal == FALSE) // Remote camera
-    {
-        //Restart streaming..
-        NSLog(@"Start streaming for : %@", self.selectedChannel.profile.mac_address);
-        
-        [NSTimer scheduledTimerWithTimeInterval:0.1
+
+ [NSTimer scheduledTimerWithTimeInterval:0.1
                                          target:self
                                        selector:@selector(setupCamera)
                                        userInfo:nil
                                         repeats:NO];
-    }
-    else // Camera on Local wifi & Not found
-    {
-        NSLog(@"Not found this Camera in Local wifi -> Re-scan");
-        [self scan_for_missing_camera];
-    }
+
 }
 #else
 
@@ -5404,8 +5396,7 @@ double _ticks = 0;
         [self startScanningWithIpServer];
     }
 
-    // San done
-    //[self setupCamera];
+    
 }
 
 -(BOOL) isCurrentConnection3G
@@ -5482,8 +5473,7 @@ double _ticks = 0;
             {
                 ScanForCamera *cameraScanner = [[ScanForCamera alloc] initWithNotifier:self];
                 [cameraScanner scan_for_device:self.selectedChannel.profile.mac_address];
-                //Can't call release because app is crashed, will fix later
-                //[scanner release];
+                
                 
             } /* skipScan = false*/
         }
