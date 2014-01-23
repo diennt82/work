@@ -217,11 +217,12 @@
 
 - (void)finishStoreCameraListData:(NSMutableArray *)camProfiles
 {
-    [self rebindCamerasResource];
-    
-    [self updateCameraList];
-    
-    self.camerasVC.camChannels = _cameras;
+    if ([self rebindCamerasResource] == TRUE)
+    {
+        [self updateCameraList];
+        
+        self.camerasVC.camChannels = _cameras;
+    }
     
     self.camerasVC.waitingForUpdateData = NO;
     [self.camerasVC.tableView performSelectorInBackground:@selector(reloadData)

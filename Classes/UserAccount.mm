@@ -98,7 +98,8 @@
     }
     else
     {
-        [self getCamListServerUnreachable] ;
+        [self getCamListServerUnreachable];
+        NSLog(@"Error - getCamListSuccess - responseDict = nil");
     }
 }
 
@@ -111,66 +112,67 @@
 
 -(void) getCamListSuccess:(NSDictionary *)responseDict
 {
-    if (responseDict) {
-        NSLog(@"responseDict.count = %d", responseDict.count);
+    NSLog(@"responseDict.count = %d", responseDict.count);
     
-        NSInteger status = [[responseDict objectForKey:@"status"] intValue];
+    NSInteger status = [[responseDict objectForKey:@"status"] intValue];
+    
+    if (status == 200)
+    {
+        NSArray *dataArr = [responseDict objectForKey:@"data"];
         
-        if (status == 200)
+        NSMutableArray *camProfiles = nil;
+        
+        if (![dataArr isEqual:[NSNull null]] &&
+            dataArr.count > 0)
         {
-            NSArray *dataArr = [responseDict objectForKey:@"data"];
-            
-            NSMutableArray *camProfiles = nil;
-            
-            if (![dataArr isEqual:[NSNull null]] &&
-                dataArr.count > 0)
-            {
-                camProfiles = [self parse_camera_list:dataArr];
-                NSLog(@"Log - camlist6 count: %d", dataArr.count);
-            }
-            
-            [self sync_online_and_offline_data:camProfiles];
-            
-            if (delegate != nil)
-            {
-                [delegate sendStatus:SCAN_BONJOUR_CAMERA];
-            }
-            else if (_userAccountDelegate != nil) // MenuViewController update camera list
-            {
-                [_userAccountDelegate finishStoreCameraListData:camProfiles];
-            }
-            else
-            {
-                NSLog(@"Error - delegate = nil");
-            }
+            camProfiles = [self parse_camera_list:dataArr];
+            NSLog(@"Log - camlist6 count: %d", dataArr.count);
+        }
+        
+        [self sync_online_and_offline_data:camProfiles];
+        
+        if (delegate != nil)
+        {
+            [delegate sendStatus:SCAN_BONJOUR_CAMERA];
+        }
+        else if (_userAccountDelegate != nil) // MenuViewController update camera list
+        {
+            [_userAccountDelegate finishStoreCameraListData:camProfiles];
         }
         else
         {
-            NSLog(@"Error - body content status: %d", status);
-            NSString * msg = NSLocalizedStringWithDefaultValue(@"Get_Camera_list_Error",nil, [NSBundle mainBundle],
-                                                               @"Get Camera list Error", nil);
-            
-            NSString * msg1 = NSLocalizedStringWithDefaultValue(@"Get_Camera_list_Error_msg",nil, [NSBundle mainBundle],
-                                                                @"Server error: Invalid response", nil);
-            
-            NSString * ok = NSLocalizedStringWithDefaultValue(@"Ok",nil, [NSBundle mainBundle],
-                                                              @"Ok", nil);
-            //ERROR condition
-            UIAlertView *alert = [[UIAlertView alloc]
-                                  initWithTitle:msg
-                                  message:msg1
-                                  delegate:self
-                                  cancelButtonTitle:ok
-                                  otherButtonTitles:nil];
-            [alert show];
-            [alert release];
-            
-            [delegate sendStatus:LOGIN_FAILED_OR_LOGOUT];
+            NSLog(@"Error - delegate = nil");
         }
     }
     else
     {
-        NSLog(@"Error - getCamListSuccess - responseDict = nil");
+        NSLog(@"Error - body content status: %d", status);
+        NSString * msg = NSLocalizedStringWithDefaultValue(@"Get_Camera_list_Error",nil, [NSBundle mainBundle],
+                                                           @"Get Camera list Error", nil);
+        
+        NSString * msg1 = NSLocalizedStringWithDefaultValue(@"Get_Camera_list_Error_msg",nil, [NSBundle mainBundle],
+                                                            @"Server error: Invalid response", nil);
+        
+        NSString * ok = NSLocalizedStringWithDefaultValue(@"Ok",nil, [NSBundle mainBundle],
+                                                          @"Ok", nil);
+        //ERROR condition
+        UIAlertView *alert = [[UIAlertView alloc]
+                              initWithTitle:msg
+                              message:msg1
+                              delegate:self
+                              cancelButtonTitle:ok
+                              otherButtonTitles:nil];
+        [alert show];
+        [alert release];
+        
+        if (delegate != nil)
+        {
+            [delegate sendStatus:LOGIN_FAILED_OR_LOGOUT];
+        }
+        else if (_userAccountDelegate != nil) // MenuViewController update camera list
+        {
+            [_userAccountDelegate finishStoreCameraListData:nil];
+        }
     }
 }
 
@@ -227,7 +229,14 @@
 	[alert show];
 	[alert release];
 	
-	[delegate sendStatus:LOGIN_FAILED_OR_LOGOUT];
+    if (delegate != nil)
+    {
+        [delegate sendStatus:LOGIN_FAILED_OR_LOGOUT];
+    }
+    else if (_userAccountDelegate != nil)
+	{
+        [_userAccountDelegate finishStoreCameraListData:nil];
+    }
 }
 
 
