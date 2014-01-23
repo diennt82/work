@@ -72,6 +72,7 @@
 @property (nonatomic) BOOL cameraIsNotAvailable;
 @property (nonatomic, retain) NSThread *threadBonjour;
 @property (nonatomic, retain) NSMutableArray *bonjourList;
+@property (nonatomic) BOOL scanAgain;
 
 - (void)centerScrollViewContents;
 - (void)scrollViewDoubleTapped:(UITapGestureRecognizer*)recognizer;
@@ -4105,6 +4106,8 @@ double _ticks = 0;
 
 - (void) scan_for_missing_camera
 {
+    self.scanAgain = TRUE;
+    
     if (userWantToCancel == TRUE)
     {
         return;
@@ -4117,108 +4120,33 @@ double _ticks = 0;
     
 }
 
-#if 1
 - (void)scan_done:(NSArray *)_scan_results
 {
-    BOOL found = FALSE;
-    
- self.selectedChannel.profile.isInLocal  = NO; 
-    
-    if (_scan_results.count > 0)
+    // Scan for Local camera if it is disconnected
+    if (_scanAgain == TRUE)
     {
-        //confirm the mac address
-        CamProfile * cp = self.selectedChannel.profile;
-        
-        for (int j = 0; j < [_scan_results count]; j++)
-        {
-            CamProfile * cp1 = (CamProfile *) [_scan_results objectAtIndex:j];
-            
-            if ( [cp.mac_address isEqualToString:cp1.mac_address])
-            {
-                //FOUND - copy ip address.
-                cp.ip_address = cp1.ip_address;
-                cp.isInLocal  = TRUE;
-                cp.port       = cp1.port;
-                found         = TRUE;
-                break;
-            }
-        }
-    }
-    
-    NSLog(@"Scan done with ipserver");
-    NSDate * endDate = [NSDate dateWithTimeIntervalSinceNow:0.5];
-    
-    while (_threadBonjour != nil && [_threadBonjour isExecuting])
-    {
-        [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode beforeDate:endDate];
-    }
-    
-    NSLog(@"\nH264=================================\nSCAN DONE - IPSERVER SYNC BONJOUR\nCamProfile: %@\nbonjourList: %@\n=================================\n", self.selectedChannel.profile, _bonjourList);
-    
-    if(_bonjourList && _bonjourList.count > 0 &&
-       found == FALSE) // If Cameara is NOT found on ip-sever
-    {
-        for (CamProfile * cam in _bonjourList)
-        {
-            if ([self.selectedChannel.profile.mac_address isEqualToString:cam.mac_address])
-            {
-                NSLog(@"H264 Camera is on Bonjour -mac: %@, -port: %d", self.selectedChannel.profile.mac_address, cam.port);
-                
-                self.selectedChannel.profile.ip_address = cam.ip_address;
-                self.selectedChannel.profile.isInLocal  = YES;
-                self.selectedChannel.profile.port       = cam.port;
-                found                                   = TRUE;
-                
-                break;
-            }
-        }
-    }
-
-    [_bonjourList release];
-    _bonjourList = nil;
-    self.selectedChannel.profile.hasUpdateLocalStatus = YES;
-    
-
- [NSTimer scheduledTimerWithTimeInterval:0.1
-                                         target:self
-                                       selector:@selector(setupCamera)
-                                       userInfo:nil
-                                        repeats:NO];
-
-}
-#else
-
-- (void)scan_done:(NSArray *) _scan_results
-{
-	//Sync
-    
-    if ([_scan_results count] ==0 )
-    {
-        //empty result... rescan
-        NSLog(@"Empty result-> Re- scan");
-        [self scan_for_missing_camera];
-        
-    }
-    else
-    {
-        //confirm the mac address
-        CamProfile * cp = self.selectedChannel.profile;
         BOOL found = FALSE;
-        for (int j = 0; j < [_scan_results count]; j++)
+        
+        if (_scan_results.count > 0)
         {
-            CamProfile * cp1 = (CamProfile *) [_scan_results objectAtIndex:j];
+            //confirm the mac address
+            CamProfile * cp = self.selectedChannel.profile;
             
-            if ( [cp.mac_address isEqualToString:cp1.mac_address])
+            for (int j = 0; j < [_scan_results count]; j++)
             {
-                //FOUND - copy ip address.
-                cp.ip_address = cp1.ip_address;
-                cp.isInLocal  = TRUE;
-                cp.port       = cp1.port;
-                found = TRUE;
-                break;
+                CamProfile * cp1 = (CamProfile *) [_scan_results objectAtIndex:j];
+                
+                if ( [cp.mac_address isEqualToString:cp1.mac_address])
+                {
+                    //FOUND - copy ip address.
+                    cp.ip_address = cp1.ip_address;
+                    cp.isInLocal  = TRUE;
+                    cp.port       = cp1.port;
+                    found = TRUE;
+                    break;
+                }
             }
         }
-        
         
         if (!found)
         {
@@ -4238,9 +4166,74 @@ double _ticks = 0;
                                             repeats:NO];
         }
     }
-    
+    else // This is scan for camera when viewDidLoad
+    {
+        BOOL found = FALSE;
+        
+        self.selectedChannel.profile.isInLocal  = NO;
+        
+        if (_scan_results.count > 0)
+        {
+            //confirm the mac address
+            CamProfile * cp = self.selectedChannel.profile;
+            
+            for (int j = 0; j < [_scan_results count]; j++)
+            {
+                CamProfile * cp1 = (CamProfile *) [_scan_results objectAtIndex:j];
+                
+                if ( [cp.mac_address isEqualToString:cp1.mac_address])
+                {
+                    //FOUND - copy ip address.
+                    cp.ip_address = cp1.ip_address;
+                    cp.isInLocal  = TRUE;
+                    cp.port       = cp1.port;
+                    found         = TRUE;
+                    break;
+                }
+            }
+        }
+        
+        NSLog(@"Scan done with ipserver");
+        NSDate * endDate = [NSDate dateWithTimeIntervalSinceNow:0.5];
+        
+        while (_threadBonjour != nil && [_threadBonjour isExecuting])
+        {
+            [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode beforeDate:endDate];
+        }
+        
+        NSLog(@"\nH264=================================\nSCAN DONE - IPSERVER SYNC BONJOUR\nCamProfile: %@\nbonjourList: %@\n=================================\n", self.selectedChannel.profile, _bonjourList);
+        
+        if(_bonjourList && _bonjourList.count > 0 &&
+           found == FALSE) // If Cameara is NOT found on ip-sever
+        {
+            for (CamProfile * cam in _bonjourList)
+            {
+                if ([self.selectedChannel.profile.mac_address isEqualToString:cam.mac_address])
+                {
+                    NSLog(@"H264 Camera is on Bonjour -mac: %@, -port: %d", self.selectedChannel.profile.mac_address, cam.port);
+                    
+                    self.selectedChannel.profile.ip_address = cam.ip_address;
+                    self.selectedChannel.profile.isInLocal  = YES;
+                    self.selectedChannel.profile.port       = cam.port;
+                    found                                   = TRUE;
+                    
+                    break;
+                }
+            }
+        }
+        
+        [_bonjourList release];
+        _bonjourList = nil;
+        self.selectedChannel.profile.hasUpdateLocalStatus = YES;
+        
+        
+        [NSTimer scheduledTimerWithTimeInterval:0.1
+                                         target:self
+                                       selector:@selector(setupCamera)
+                                       userInfo:nil
+                                        repeats:NO];
+    }
 }
-#endif
 
 #pragma mark -
 
