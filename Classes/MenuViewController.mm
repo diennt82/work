@@ -144,19 +144,34 @@
     if (self.cameras != nil &&
         self.cameras.count > 0)
     {
-        CamChannel *ch = (CamChannel *)[self.cameras objectAtIndex:0];
-        ch.profile.isSelected = TRUE;
+        CamChannel *camChannel = nil;
+        NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+        NSString *regID = [userDefaults stringForKey:@"REG_ID"];
         
-        [CameraAlert clearAllAlertForCamera:ch.profile.mac_address];
+        for (CamChannel *ch in _cameras)
+        {
+            if ([ch.profile.registrationID isEqualToString:regID])
+            {
+                camChannel = ch;
+                break;
+            }
+        }
+        
+        if (camChannel == nil)
+        {
+            camChannel = (CamChannel *)[self.cameras objectAtIndex:0];
+            [userDefaults setObject:camChannel.profile.registrationID forKey:@"REG_ID"];
+        }
+        
+        [CameraAlert clearAllAlertForCamera:camChannel.profile.mac_address];
         [UIApplication sharedApplication].idleTimerDisabled = YES;
         
-        NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-        [userDefaults setObject:ch.profile.mac_address forKey:CAM_IN_VEW];
+        [userDefaults setObject:camChannel.profile.mac_address forKey:CAM_IN_VEW];
         [userDefaults synchronize];
         
         H264PlayerViewController *h264PlayerViewController = [[H264PlayerViewController alloc] init];
         
-        h264PlayerViewController.selectedChannel = ch;
+        h264PlayerViewController.selectedChannel = camChannel;
         h264PlayerViewController.h264PlayerVCDelegate = self;
         
         NSLog(@"%@, %@", self.parentViewController.description, self.parentViewController.parentViewController);
