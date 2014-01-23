@@ -251,7 +251,6 @@ double _ticks = 0;
     self.scrollView.minimumZoomScale = MINIMUM_ZOOMING_SCALE;
     [self centerScrollViewContents];
     [self resetZooming];
-    self.scrollView.contentSize = CGSizeMake(5000, 5000);
     
     
     
@@ -4617,19 +4616,6 @@ double _ticks = 0;
 
     [self setupPtt];
     
-
-//    [self.imageViewStreamer setUserInteractionEnabled:YES];
-//    [self.scrollView setUserInteractionEnabled:YES];
-//    //set background for scrollView
-//    [self.scrollView setBackgroundColor:[UIColor clearColor]];
-//    //processing for pinch gestures
-//    self.scrollView.delegate = self;
-//    self.scrollView.maximumZoomScale = MAXIMUM_ZOOMING_SCALE;
-//    self.scrollView.minimumZoomScale = MINIMUM_ZOOMING_SCALE;
-//    [self centerScrollViewContents];
-//    [self resetZooming];
-//    self.scrollView.contentSize = CGSizeMake(5000, 5000);
-
 }
 #ifdef SHOW_DEBUG_INFO
 - (void)initFirstData
@@ -5075,6 +5061,7 @@ double _ticks = 0;
 #pragma mark SnapShot
 - (void)processingForTakePicture
 {
+    [self.ib_processRecordOrTakePicture setEnabled:NO];
     //[self saveSnapShot:self.imageViewVideo.image];
     [self saveSnapShot:_imageViewStreamer.image];
 }
@@ -5100,6 +5087,7 @@ double _ticks = 0;
 }
 
 - (void)imageSavedToPhotosAlbum:(UIImage *)image didFinishSavingWithError:(NSError *)error contextInfo:(void *)contextInfo {
+    [self.ib_processRecordOrTakePicture setEnabled:YES];
 	NSString *message;
 	NSString *title;
 	if (!error)
