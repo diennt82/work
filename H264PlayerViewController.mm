@@ -3940,6 +3940,9 @@ double _ticks = 0;
     self.pickerHQOptions.hidden = YES;
     self.pickerHQOptions.userInteractionEnabled = NO;
     self.playlistViewController.view.hidden = YES;
+    
+    //
+        [self setupPtt];
 #if DISABLE_VIEW_RELEASE_FLAG
     
 #endif
@@ -4536,7 +4539,8 @@ double _ticks = 0;
      4. temp
      */
     
-    //[self UpdateFullScreenTimer];
+    //show when user selecte one item inner control panel
+    [self showControlMenu];
     
     
     if (index == INDEX_PAN_TILT) {
@@ -4743,9 +4747,6 @@ double _ticks = 0;
     }
     
     [self checkOrientation];
-
-    [self setupPtt];
-    
 }
 #ifdef SHOW_DEBUG_INFO
 - (void)initFirstData
@@ -4915,6 +4916,9 @@ double _ticks = 0;
 -(void) longPress:(UILongPressGestureRecognizer*) gest
 {
     NSLog(@"Long press on hold to talk");
+    //turn off timer hide control panel or alway show control panel
+    [self showControlMenu];
+    
     if ([gest state] == UIGestureRecognizerStateBegan)
     {
         NSLog(@"UIGestureRecognizerStateBegan on hold to talk");

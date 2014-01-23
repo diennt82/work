@@ -107,10 +107,6 @@
                             <state key="normal" backgroundImage="camera_action_mic.png">
                                 <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                             </state>
-                            <connections>
-                                <action selector="holdToTalk:" destination="-1" eventType="touchDown" id="0en-DL-MLM"/>
-                                <action selector="touchUpInsideHoldToTalk:" destination="-1" eventType="touchUpInside" id="eOl-vn-mXu"/>
-                            </connections>
                         </button>
                     </subviews>
                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
