@@ -11,6 +11,9 @@
 #import "TimelineViewController.h"
 #import <CoreText/CTStringAttributes.h>
 
+#import <CFNetwork/CFNetwork.h>
+#include <ifaddrs.h>
+
 #define DISABLE_VIEW_RELEASE_FLAG 0
 
 #define MODEL_SHARED_CAM @"0036"
@@ -49,7 +52,7 @@
 
 #define PTT_ENGAGE_BTN 711
 
-@interface H264PlayerViewController () <TimelineVCDelegate>
+@interface H264PlayerViewController () <TimelineVCDelegate, BonjourDelegate>
 {
     BOOL _syncPortraitAndLandscape;
 }
@@ -67,6 +70,8 @@
 //@property (nonatomic, retain) NSTimer *timerGetTemperature;
 @property (nonatomic) BOOL existTimerTemperature;
 @property (nonatomic) BOOL cameraIsNotAvailable;
+@property (nonatomic, retain) NSThread *threadBonjour;
+@property (nonatomic, retain) NSMutableArray *bonjourList;
 
 - (void)centerScrollViewContents;
 - (void)scrollViewDoubleTapped:(UITapGestureRecognizer*)recognizer;
@@ -1393,10 +1398,17 @@ double _ticks = 0;
     [self.activityIndicator startAnimating];
     self.viewStopStreamingProgress.hidden = YES;
     
-    //[self scanCamera];
-    
-    //[self performSelectorInBackground:@selector(waitingScanAndStartSetupCamera_bg) withObject:nil];
-    [self checkAndSetupCamera];
+    // Camera is NOT available
+    if (self.selectedChannel.profile.minuteSinceLastComm > 5 &&
+        self.selectedChannel.profile.isInLocal == FALSE)
+    {
+        [self setupCamera];
+    }
+    else
+    {
+        // Camera is AVAILABLE
+        [self scanCamera];
+    }
     
     //set value default for table view
     self.playlistViewController.tableView.hidden= YES;
@@ -1436,50 +1448,8 @@ double _ticks = 0;
 
 #pragma mark - Setup camera
 
-- (void)checkAndSetupCamera
-{
-    // Camera is NOT available!
-    if (self.selectedChannel.profile.isInLocal == FALSE &&
-        self.selectedChannel.profile.minuteSinceLastComm > 5)
-    {
-        [self setupCamera];
-    }
-    else
-    {
-        // Camera is AVAILABLE
-        [self performSelectorInBackground:@selector(scanCamera) withObject:nil];
-    }
-}
-
-- (void)waitingScanAndStartSetupCamera_bg
-{
-    while ((self.selectedChannel.profile.hasUpdateLocalStatus == FALSE ||
-           self.selectedChannel.waitingForStreamerToClose == TRUE) &&
-           userWantToCancel == FALSE)
-    {
-        NSDate * endDate = [NSDate dateWithTimeIntervalSinceNow:0.5];
-        [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode beforeDate:endDate];
-    }
-    
-    // Make sure Camera is available (minuteSinceLastComm == 1)
-    if (self.selectedChannel.profile.isInLocal == FALSE)// &&
-        //self.selectedChannel.profile.minuteSinceLastComm <= 5)
-    {
-        // Scan Camera again
-        NSLog(@"H264PlayerVC - Scan for missing camera: %@", self.selectedChannel.profile.ip_address);
-        [self performSelectorOnMainThread:@selector(scan_for_missing_camera) withObject:nil waitUntilDone:NO];
-    }
-    else
-    {
-        // Camera in Local
-        [self performSelectorOnMainThread:@selector(setupCamera) withObject:nil waitUntilDone:NO];
-    }
-}
-
 - (void)setupCamera
 {
-    //self.cameraIsNotAvailable = FALSE;
-    
     if (self.selectedChannel.stream_url != nil)
     {
         self.selectedChannel.stream_url = nil;
@@ -1547,6 +1517,7 @@ double _ticks = 0;
     }
     else
     {
+        self.selectedChannel.profile.hasUpdateLocalStatus = TRUE;
         _isCameraOffline = YES;
         self.activityIndicator.hidden = YES;
         [self.activityIndicator stopAnimating];
@@ -4166,16 +4137,50 @@ double _ticks = 0;
                 cp.ip_address = cp1.ip_address;
                 cp.isInLocal  = TRUE;
                 cp.port       = cp1.port;
-                found = TRUE;
+                found         = TRUE;
                 break;
             }
         }
     }
     
-    if (found || self.selectedChannel.profile.isInLocal == FALSE)
+    NSLog(@"Scan done with ipserver");
+    NSDate * endDate = [NSDate dateWithTimeIntervalSinceNow:0.5];
+    
+    while (_threadBonjour != nil && [_threadBonjour isExecuting])
+    {
+        [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode beforeDate:endDate];
+    }
+    
+    NSLog(@"\nH264=================================\nSCAN DONE - IPSERVER SYNC BONJOUR\nCamProfile: %@\nbonjourList: %@\n=================================\n", self.selectedChannel.profile, _bonjourList);
+    
+    if(_bonjourList && _bonjourList.count > 0 &&
+       found == FALSE) // If Cameara is NOT found on ip-sever
+    {
+        for (CamProfile * cam in _bonjourList)
+        {
+            if ([self.selectedChannel.profile.mac_address isEqualToString:cam.mac_address])
+            {
+                NSLog(@"H264 Camera is on Bonjour -mac: %@, -port: %d", self.selectedChannel.profile.mac_address, cam.port);
+                
+                self.selectedChannel.profile.ip_address = cam.ip_address;
+                self.selectedChannel.profile.isInLocal  = YES;
+                self.selectedChannel.profile.port       = cam.port;
+                found                                   = TRUE;
+                
+                break;
+            }
+        }
+    }
+
+    [_bonjourList release];
+    _bonjourList = nil;
+    self.selectedChannel.profile.hasUpdateLocalStatus = YES;
+    
+    if (found || // Found on Local wifi
+        self.selectedChannel.profile.isInLocal == FALSE) // Remote camera
     {
         //Restart streaming..
-        NSLog(@"Re-start streaming for : %@", self.selectedChannel.profile.mac_address);
+        NSLog(@"Start streaming for : %@", self.selectedChannel.profile.mac_address);
         
         [NSTimer scheduledTimerWithTimeInterval:0.1
                                          target:self
@@ -4183,7 +4188,7 @@ double _ticks = 0;
                                        userInfo:nil
                                         repeats:NO];
     }
-    else
+    else // Camera on Local wifi & Not found
     {
         NSLog(@"Not found this Camera in Local wifi -> Re-scan");
         [self scan_for_missing_camera];
@@ -5379,14 +5384,210 @@ double _ticks = 0;
     return FALSE;
 }
 
+#pragma mark - New flow
 
 - (void)scanCamera
 {
-    
+    if ( [self isCurrentConnection3G])
+    {
+        NSLog(@" Connection over 3G --> Skip scanning all together");
+        
+        self.selectedChannel.profile.isInLocal = FALSE;
+        self.selectedChannel.profile.hasUpdateLocalStatus = TRUE;
+        
+        [self setupCamera];
+    }
+    else
+    {
+        
+        [self startScanningWithBonjour];
+        [self startScanningWithIpServer];
+    }
+
     // San done
-    [self setupCamera];
+    //[self setupCamera];
 }
 
+-(BOOL) isCurrentConnection3G
+{
+    Reachability *reachability = [Reachability reachabilityForInternetConnection];
+    [reachability startNotifier];
+    
+    if ([reachability currentReachabilityStatus] == ReachableViaWWAN)
+    {
+        //3G
+        return TRUE;
+    }
+    
+    return FALSE;
+}
+
+- (void)startScanningWithBonjour
+{
+    self.threadBonjour = [[NSThread alloc] initWithTarget:self
+                                                      selector:@selector(scanWithBonjour)
+                                                        object:nil];
+    [_threadBonjour start];
+}
+
+-(void) scanWithBonjour
+{
+    @autoreleasepool
+    {
+        // When use autoreleseapool, no need to call autorelease.
+        Bonjour *bonjour = [[Bonjour alloc] initSetupWith:[NSMutableArray arrayWithObject:self.selectedChannel.profile]];
+        [bonjour setDelegate:self];
+        
+        [bonjour startScanLocalWiFi];
+        
+        NSDate * endDate = [NSDate dateWithTimeIntervalSinceNow:0.5];
+        
+        while (bonjour.isSearching)
+        {
+            [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode beforeDate:endDate];
+        }
+        
+        self.bonjourList = [NSMutableArray arrayWithArray:bonjour.cameraList];
+    }
+    
+    [NSThread exit];
+}
+
+- (void)startScanningWithIpServer
+{
+    NSMutableArray * finalResult = [[NSMutableArray alloc] init];
+    
+    if (self.selectedChannel.profile != nil &&
+        self.selectedChannel.profile.mac_address != nil)
+    {
+        //Check if we are in the same network as the camera.. IF so
+        // Try to scan .. otherwise... no point ..
+        //20121130: phung: incase the ip address is not valid... also try to scan ..
+        if (self.selectedChannel.profile.ip_address == nil ||
+            [self isInTheSameNetworkAsCamera:self.selectedChannel.profile ])
+        {
+            BOOL skipScan = [self isCurrentIpAddressValid:self.selectedChannel.profile];
+            
+            if (skipScan)
+            {
+                self.selectedChannel.profile.port = 80;
+                //Dont need to scan.. call scan_done directly
+                [finalResult addObject:self.selectedChannel.profile];
+                
+                [self performSelector:@selector(scan_done:)
+                           withObject:finalResult afterDelay:0.1];
+                
+            }
+            else // NEED to do local scan
+            {
+                ScanForCamera *cameraScanner = [[ScanForCamera alloc] initWithNotifier:self];
+                [cameraScanner scan_for_device:self.selectedChannel.profile.mac_address];
+                //Can't call release because app is crashed, will fix later
+                //[scanner release];
+                
+            } /* skipScan = false*/
+        }
+        else
+        {
+            //Skip scanning too and assume we don't get any result
+            [self performSelector:@selector(scan_done:)
+                       withObject:nil afterDelay:0.1];
+        }
+    }
+    
+    [finalResult release];
+}
+
+-(BOOL) isInTheSameNetworkAsCamera :(CamProfile *) cp
+{
+    long ip = 0, ownip =0 ;
+    long netMask = 0 ;
+	struct ifaddrs *ifa = NULL, *ifList;
+    
+    NSString * bc = @"";
+	NSString * own = @"";
+	[MBP_iosViewController getBroadcastAddress:&bc AndOwnIp:&own ipasLong:&ownip];
+
+    getifaddrs(&ifList); // should check for errors
+    
+    for (ifa = ifList; ifa != NULL; ifa = ifa->ifa_next) {
+        if (ifa->ifa_netmask != NULL)
+        {
+            ip = (( struct sockaddr_in *)ifa->ifa_addr)->sin_addr.s_addr;
+            if (ip == ownip)
+            {
+                netMask = (( struct sockaddr_in *)ifa->ifa_netmask)->sin_addr.s_addr;
+                
+                break;
+            }
+        }
+    }
+    
+    freeifaddrs(ifList); // clean up after yourself
+    
+    if (netMask ==0 || ip ==0)
+    {
+        return FALSE;
+    }
+    
+    long camera_ip =0 ;
+    if (cp != nil &&
+        cp.ip_address != nil)
+    {
+        NSArray * tokens = [cp.ip_address componentsSeparatedByString:@"."];
+        if ([tokens count] != 4)
+        {
+            //sth is wrong
+            return FALSE;
+        }
+        
+        camera_ip = [tokens[0] integerValue] |
+        ([tokens[1] integerValue] << 8) |
+        ([tokens[2] integerValue] << 16) |
+        ([tokens[3] integerValue] << 24) ;
+
+        if ( (camera_ip & netMask) == (ip & netMask))
+        {
+            NSLog(@"H264 - Camera is in same subnet");
+            return TRUE;
+        }
+    }
+    
+    return FALSE;
+}
+
+-(BOOL) isCurrentIpAddressValid :(CamProfile *) cp
+{
+    if (cp != nil &&
+        cp.ip_address != nil)
+    {
+        HttpCommunication * dev_com = [[HttpCommunication alloc] init];
+        
+        dev_com.device_ip = cp.ip_address;
+        
+        NSString * mac = [dev_com sendCommandAndBlock:GET_MAC_ADDRESS withTimeout:3.0];
+        
+        [dev_com release];
+        
+        if (mac != nil && mac.length == 12)
+        {
+            mac = [Util add_colon_to_mac:mac];
+
+            if([mac isEqualToString:cp.mac_address])
+            {
+                return TRUE;
+            }
+        }
+    }
+    
+    return FALSE;
+}
+
+#pragma mark - Bonjour delegate
+
+- (void)bonjourReturnCameraListAvailable:(NSMutableArray *)cameraList
+{
+}
 
 
 @end
