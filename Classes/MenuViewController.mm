@@ -12,11 +12,14 @@
 #import "SettingsViewController.h"
 #import "Account_ViewController.h"
 #import "H264PlayerViewController.h"
+#import "UserAccount.h"
 
-@interface MenuViewController () <H264PlayerVCDelegate>
+@interface MenuViewController () <H264PlayerVCDelegate, UserAccountDelegate>
 
 @property (retain, nonatomic) Account_ViewController *accountVC;
 @property (nonatomic) BOOL isFirttime;
+@property (nonatomic, retain) NSMutableArray *restoredProfiles;
+@property (nonatomic, retain) NSMutableArray *arrayChannel;
 
 @end
 
@@ -124,6 +127,14 @@
         [self menuBackAction:nil];
         
     }
+    else
+    {
+        self.camerasVC.waitingForUpdateData = TRUE;
+        [self.camerasVC.tableView reloadData];
+        [self performSelectorInBackground:@selector(recreateAccount)
+                               withObject:nil];
+        
+    }
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -200,6 +211,107 @@
 - (void)tabBar:(UITabBar *)tabBar didSelectItem:(UITabBarItem *)item
 {
     self.title = item.title;
+}
+
+#pragma mark - Update Camera list
+
+- (void)recreateAccount
+{
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    NSString *username  = [userDefaults stringForKey:@"PortalUsername"];
+    NSString *userEmail = [userDefaults stringForKey:@"PortalUseremail"];
+    NSString *apiKey    = [userDefaults stringForKey:@"PortalApiKey"];
+    UserAccount *account = [[UserAccount alloc] initWithUser:username
+                                                     andPass:userEmail
+                                                   andApiKey:apiKey
+                                                 andListener:nil];
+    account.userAccountDelegate = self;
+    [account readCameraListAndUpdate];
+    
+    [account release];
+}
+
+- (void)finishStoreCameraListData:(NSMutableArray *)camProfiles
+{
+    if ([self rebindCamerasResource] == TRUE)
+    {
+        [self updateCameraList];
+        
+        self.camerasVC.camChannels = _cameras;
+    }
+    
+    self.camerasVC.waitingForUpdateData = NO;
+    [self.camerasVC.tableView performSelectorInBackground:@selector(reloadData)
+                                               withObject:nil];
+}
+
+- (void)updateCameraList
+{
+    NSMutableArray * validChannels = [[NSMutableArray alloc] init];
+    
+    for (int i = _arrayChannel.count - 1 ; i > -1; i--)
+	{
+		CamChannel * ch = [_arrayChannel objectAtIndex:i];
+		
+        if (ch.profile != nil)
+        {
+			[validChannels addObject:[_arrayChannel objectAtIndex:i]];
+        }
+	}
+    
+	self.cameras = validChannels;
+}
+
+- (BOOL)rebindCamerasResource
+{
+    BOOL restore_successful = [self restoreConfigData];
+    
+    if (restore_successful == YES)
+    {
+        for (int i = 0; i< [_arrayChannel count]; i++)
+        {
+            CamChannel* ch = (CamChannel*) [_arrayChannel objectAtIndex:i];
+            
+            if ( ch.profile != nil)
+            {
+                for (int j = 0; j < _restoredProfiles.count; j++)
+                {
+                    CamProfile * cp = (CamProfile *) [_restoredProfiles objectAtIndex:j];
+                    
+                    if ( !cp.isSelected)
+                    {
+                        //Re-bind camera - channel
+                        [ch setCamProfile:cp];
+                        cp.isSelected = TRUE;
+                        [cp setChannel:ch];
+                        break;
+                    }
+                }
+            }
+            else {
+                
+                //NSLog(@"channel profile = nil");
+            }
+        }
+    }
+    
+    return restore_successful;
+}
+
+- (BOOL) restoreConfigData
+{
+	SetupData * savedData = [[SetupData alloc]init];
+    
+	if ([savedData restore_session_data] ==TRUE)
+	{
+		//NSLog(@"restored data done");
+		self.arrayChannel = savedData.channels;
+		self.restoredProfiles = savedData.configured_cams;
+	}
+    
+    [savedData release];
+    
+	return TRUE;
 }
 
 - (void)didReceiveMemoryWarning

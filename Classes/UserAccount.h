@@ -14,6 +14,12 @@
 #import "SetupData.h"
 #import "ConnectionMethodDelegate.h"
 
+@protocol UserAccountDelegate <NSObject>
+
+- (void)finishStoreCameraListData: (NSMutableArray *)arrayCamProfile;
+
+@end
+
 @interface UserAccount : NSObject
 {
 
@@ -26,6 +32,7 @@
 @property (nonatomic,retain) NSString * userName, * userPass;
 
 @property (nonatomic, retain) NSString *apiKey;
+@property (nonatomic, assign) id<UserAccountDelegate> userAccountDelegate;
 
 - (id) initWithUser:(NSString *)user andPass:(NSString *)pass andApiKey: (NSString *)apiKey andListener:(id <ConnectionMethodDelegate>) d;
 
