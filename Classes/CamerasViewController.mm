@@ -512,11 +512,11 @@
     
     CamChannel *ch = (CamChannel *)[_camChannels objectAtIndex:indexPath.row] ;
     
-    
     [CameraAlert clearAllAlertForCamera:ch.profile.mac_address];
     [UIApplication sharedApplication].idleTimerDisabled = YES;
     
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    [userDefaults setObject:ch.profile.registrationID forKey:@"REG_ID"];
     [userDefaults setObject:ch.profile.mac_address forKey:CAM_IN_VEW];
     [userDefaults synchronize];
     
