@@ -16,6 +16,7 @@
 @protocol MenuViewControllerDelegate <NSObject>
 
 - (void)pushBackToPlayerView;
+- (void)finisGetCameraList;
 
 @end
 

@@ -361,6 +361,10 @@
 {
     //#warning Potentially incomplete method implementation.
     // Return the number of sections.
+    if (_waitingForUpdateData == TRUE)
+    {
+        return 1;
+    }
     return 2;
 }
 
@@ -390,7 +394,39 @@
 {
     if (indexPath.section == 0)
     {
-        return _addCameraCell;
+        if (_waitingForUpdateData == TRUE)
+        {
+            static NSString *CellIdentifier = @"Cell";
+            UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+            if (cell == nil) {
+                cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
+            }
+            
+            // Configure the cell...
+            cell.textLabel.text = @"Loading...";
+            
+            UIActivityIndicatorView *spinner = [[UIActivityIndicatorView alloc]
+                                                initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+            
+            // Spacer is a 1x1 transparent png
+            UIImage *spacer = [UIImage imageNamed:@"spacer"];
+            
+            UIGraphicsBeginImageContext(spinner.frame.size);
+            
+            [spacer drawInRect:CGRectMake(0, 0, spinner.frame.size.width, spinner.frame.size.height)];
+            UIImage* resizedSpacer = UIGraphicsGetImageFromCurrentImageContext();
+            
+            UIGraphicsEndImageContext();
+            cell.imageView.image = resizedSpacer;
+            [cell.imageView addSubview:spinner];
+            [spinner startAnimating];
+            
+            return cell;
+        }
+        else
+        {
+            return _addCameraCell;
+        }
     }
     else
     {

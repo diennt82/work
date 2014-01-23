@@ -135,6 +135,10 @@
             {
                 [delegate sendStatus:SCAN_BONJOUR_CAMERA];
             }
+            else if (_userAccountDelegate != nil) // MenuViewController update camera list
+            {
+                [_userAccountDelegate finishStoreCameraListData:camProfiles];
+            }
             else
             {
                 NSLog(@"Error - delegate = nil");

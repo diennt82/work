@@ -18,7 +18,7 @@
 
 @property (assign, nonatomic) id<ConnectionMethodDelegate> camerasDelegate;
 @property (assign, nonatomic) id parentVC;
-//@property (assign, nonatomic) UIViewController *parentVC;
+@property (nonatomic) BOOL waitingForUpdateData;
 @property (retain, nonatomic) NSMutableArray *camChannels;
 
 - (id)initWithStyle:(UITableViewStyle)style

@@ -49,7 +49,7 @@
 
 @synthesize app_stage;
 
-- (void) initialize 
+- (void) initialize
 {
 	self.toTakeSnapShot = NO;
 	self.recordInProgress = NO;
