@@ -1565,13 +1565,11 @@ double _ticks = 0;
     
     if (_cameraIsNotAvailable == TRUE)
     {
-        //[self performSelectorOnMainThread:@selector(setupCamera) withObject:nil waitUntilDone:NO];
         [self setupCamera];
     }
     else
     {
-        //[self performSelectorOnMainThread:@selector(becomeActive) withObject:nil waitUntilDone:NO];
-        [self becomeActive];
+        [self scanCamera];
     }
 }
 
@@ -5350,6 +5348,8 @@ double _ticks = 0;
             if ([[[responseDict objectForKey:@"data"] objectForKey:@"is_available"] boolValue] == TRUE)
             {
                 NSLog(@"Check Available - Camera is AVAILABLE");
+                self.selectedChannel.profile.minuteSinceLastComm = 1;
+                self.selectedChannel.profile.hasUpdateLocalStatus = TRUE;
                 self.cameraIsNotAvailable = FALSE;
                 return TRUE;
             }
@@ -5369,6 +5369,7 @@ double _ticks = 0;
     }
     
     self.selectedChannel.profile.hasUpdateLocalStatus = TRUE;
+    self.selectedChannel.profile.minuteSinceLastComm = 10;
     self.cameraIsNotAvailable = TRUE;
     return FALSE;
 }
