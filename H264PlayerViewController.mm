@@ -732,6 +732,7 @@ double _ticks = 0;
 //                                                                               repeats:YES];
 //                [getTemperatureTimer fire];
                 [self performSelectorInBackground:@selector(getCameraTemperature_bg:) withObject:nil];
+                self.horizMenu.userInteractionEnabled = YES;
             }
         }
             break;
