@@ -18,7 +18,7 @@
 
 #define CONF_CAM_BTN_TAG 1002
 
-@interface EditCamera_VController : UIViewController<UITextViewDelegate>
+@interface EditCamera_VController : UIViewController<UITextViewDelegate, BLEConnectionManagerDelegate>
 {
     IBOutlet UIView * camName;
     
@@ -28,6 +28,7 @@
 
     UIAlertView *_alertView;
     BOOL _isShowingProcess;
+    NSString *_auth_token;
 }
 @property (nonatomic, retain) UIAlertView *alertView;
 @property (nonatomic, retain) NSString * cameraMac, * cameraName;

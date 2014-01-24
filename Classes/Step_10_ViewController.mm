@@ -911,28 +911,11 @@
 
 - (void) addCamSuccessWithResponse:(NSDictionary *)responseData
 {
-#ifdef CONCURRENT_SETUP
     NSLog(@"Do for concurent modep - addcam response: %@", responseData);
-
-    //[self extractMasterKey:[[responseData objectForKey:@"data"] objectForKey:@"master_key"]];
-    //self.master_key = [[responseData objectForKey:@"data"] objectForKey:@"master_key"];
     self.stringAuth_token = [[responseData objectForKey:@"data"] objectForKey:@"auth_token"];
-//    should_stop_scanning = FALSE;
-//	
-//    [NSTimer scheduledTimerWithTimeInterval: SCAN_TIMEOUT
-//									 target:self
-//								   selector:@selector(setStopScanning:)
-//								   userInfo:nil
-//									repeats:NO];
-    
     //send master key to device
     [self sendMasterKeyToDevice];
-    
-#elif BLE_SETUP
-    
-#else
 
-#endif
 }
 
 - (void) addCamFailedWithError:(NSDictionary *) error_response

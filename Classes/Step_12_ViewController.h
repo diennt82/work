@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "StartMonitorCallback.h"
 #import "GAI.h"
+#import "PublicDefine.h"
 
 @interface Step_12_ViewController : UIViewController
 {

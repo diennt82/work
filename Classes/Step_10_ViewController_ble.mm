@@ -106,33 +106,29 @@
         
         
         [self.view addSubview:self.progressView];
-        self.progressView.hidden = YES;
         [self.view addSubview:cameraAddedView];
         self.homeSSID.text = homeSsid;
-#if 0
-        [NSTimer scheduledTimerWithTimeInterval: 3.0//
-                                         target:self
-                                       selector:@selector(checkConnectionToHomeWifi:)
-                                       userInfo:nil
-                                        repeats:NO];
 
         
         
-        
-      
-        shouldStopScanning = FALSE;
-        
-        timeOut = [NSTimer scheduledTimerWithTimeInterval:2*60.0
-                                                   target:self
-                                                 selector:@selector(homeWifiScanTimeout:)
-                                                 userInfo:nil
-                                                  repeats:NO];
-        
-#endif
-        
+        self.progressView.hidden = NO;
+        [self.view bringSubviewToFront:self.progressView];
         
         //CameraTest: try to search for camera now..
-        [self registerCamera:nil];
+
+        [NSTimer scheduledTimerWithTimeInterval: SCAN_CAM_TIMEOUT_BLE
+                                         target:self
+                                       selector:@selector(setStopScanning:)
+                                       userInfo:nil
+                                        repeats:NO];
+        
+        // 2 of 3. wait for the camera to reboot completely
+        [NSTimer scheduledTimerWithTimeInterval: 15.0//camera reboot time about 50secs
+                                         target:self
+                                       selector:@selector(wait_for_camera_to_reboot:)
+                                       userInfo:nil
+                                        repeats:NO];
+        
 
         
         
@@ -333,68 +329,6 @@
     
 }
 
-- (IBAction)registerCamera:(id)sender
-{
-    self.progressView.hidden = NO;
-    [self.view bringSubviewToFront:self.progressView];
-    
-    
-    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-        
-    NSString *apiKey    = [userDefaults objectForKey:@"PortalApiKey"];
-    NSString *fwVersion = [userDefaults objectForKey:@"FW_VERSION"];
-    NSString *udid      = [userDefaults objectForKey:CAMERA_UDID];
-    
-    //NSLog(@"-----fwVersion = %@, ,model = %@", fwVersion, model);
-    
-    NSDate *now = [NSDate date];
-    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-    [formatter setDateFormat:@"ZZZ"];
-    
-    NSMutableString *stringFromDate = [NSMutableString stringWithString:[formatter stringFromDate:now]];
-    
-    [stringFromDate insertString:@"." atIndex:3];
-    
-    NSLog(@"%@", stringFromDate);
-    
-    [formatter release];
-    
-    BMS_JSON_Communication *jsonComm = [[[BMS_JSON_Communication alloc] initWithObject:self
-                                                                             Selector:@selector(addCamSuccessWithResponse:)
-                                                                         FailSelector:@selector(addCamFailedWithError:)
-                                                                            ServerErr:@selector(addCamFailedServerUnreachable)] autorelease];
-
-    NSString * camName = (NSString *) [userDefaults objectForKey:@"CameraName"];
-#if 1
-    [jsonComm registerDeviceWithDeviceName:camName
-                         andRegistrationID:udid
-                                   andMode:@"upnp" // Need somethings more usefully
-                              andFwVersion:fwVersion
-                               andTimeZone:stringFromDate
-                                 andApiKey:apiKey];
-#else
-//    //DEMO.SM.COM
-//    [jsonComm registerDeviceWithDeviceName:camName
-//                                  andRegId:mac
-//                             andDeviceType:@"Camera"
-//                                  andModel:@"blink1_hd"
-//                                   andMode:@"upnp"
-//                              andFwVersion:fwVersion
-//                               andTimeZone:stringFromDate
-//                                 andApiKey:apiKey];
-
-    //Api
-    [jsonComm registerDeviceWithDeviceModelID:@"5"
-                                      andName:camName
-                            andRegistrationID:mac
-                                      andMode:@"upnp"
-                                 andFwVersion:fwVersion
-                                  andTimeZone:stringFromDate
-                          andSubscriptionType:@"tier1"
-                                    andApiKey:apiKey];
-#endif
-}
-
 #pragma  mark -
 #pragma mark Timer callbacks
 -(void) silentRetryTimeout:(NSTimer *) expired
@@ -567,66 +501,17 @@
 				
 			}
 			
-			//3 of 3. send the master key to device 
+			//3 of 3. send the master key to device
 			if (found == TRUE)
-			{
-				HttpCommunication *comm = [[HttpCommunication alloc]init];
-				comm.device_ip = cp.ip_address;
-
-				NSString * set_mkey = SET_MASTER_KEY;
-				NSString * response;
-				//set_mkey =[set_mkey stringByAppendingString:self.master_key];
-                set_mkey =[set_mkey stringByAppendingString:_stringAuth_token];
-				BOOL master_key_sent = FALSE; 
-				int retries = 10; 
-				do 
-				{
-					response = [comm sendCommandAndBlock:set_mkey];
-					
-					if (response == nil)
-					{
-						NSLog(@"can't send master key, camera is not fully up");
-                        [[[GAI sharedInstance] defaultTracker] trackEventWithCategory:@"Add Cameras"
-                                                                           withAction:@"Get MasterKey"
-                                                                            withLabel:@"Add MasterKey Failed Cause respond is nil"
-                                                                            withValue:nil];
-					}
-					else
-                    {
-						NSLog(@"response: %@", response);
-                        if ([response hasPrefix:@"set_master_key: 0"])
-                        {
-                            ///done
-                            master_key_sent = TRUE;
-                            NSLog(@"sending master key done");
-                            
-                            break;
-                        }
-						
-					}
-                    
-					
-					//sleep for sometime and retry 
-					[NSThread sleepForTimeInterval:2];
-					
-				} while (retries -- >0);
-
-                if (master_key_sent == TRUE)
-                {
-                    ///done
-                    NSLog(@"sending master key done");
-                    [self setupCompleted];
-                }
-               
-				[comm release];
-				
-				return; 
+			{                    ///done
+                NSLog(@"sending master key done");
+                [self setupCompleted];
+				return;
 			}
 			else //if not found
 			{
-				                
+                
 			}
-            
 		}
 		else //result = nil
 		{
@@ -821,114 +706,6 @@
 }
 
 
-
-#pragma mark -
-#pragma mark  Callbacks
-
-- (void) addCamSuccessWithResponse:(NSDictionary *)responseData
-{
-    NSLog(@"addcam response: %@", responseData);
-    //[self extractMasterKey:[[responseData objectForKey:@"data"] objectForKey:@"master_key"]];
-    //self.master_key = [[responseData objectForKey:@"data"] objectForKey:@"master_key"];
-    self.stringAuth_token = [[responseData objectForKey:@"data"] objectForKey:@"auth_token"];
-    should_stop_scanning = FALSE;
-    
-
-#ifdef BLE_SETUP_CONCURRENT_MODE
-    [NSTimer scheduledTimerWithTimeInterval: SCAN_TIMEOUT
-									 target:self
-								   selector:@selector(setStopScanning:)
-								   userInfo:nil
-									repeats:NO];
-    
-	// 2 of 3. wait for the camera to reboot completely
-    [NSTimer scheduledTimerWithTimeInterval: 10.0//camera reboot time about 50secs
-									 target:self
-								   selector:@selector(wait_for_camera_to_reboot:)
-								   userInfo:nil
-									repeats:NO];
-#else
-    [NSTimer scheduledTimerWithTimeInterval: SCAN_TIMEOUT
-									 target:self
-								   selector:@selector(setStopScanning:)
-								   userInfo:nil
-									repeats:NO];
-    
-	// 2 of 3. wait for the camera to reboot completely
-    [NSTimer scheduledTimerWithTimeInterval: 30.0//camera reboot time about 50secs
-									 target:self
-								   selector:@selector(wait_for_camera_to_reboot:)
-								   userInfo:nil
-									repeats:NO];
-#endif
-
-}
-
-- (void) addCamFailedWithError:(NSDictionary *) error_response
-{
-    if (error_response == nil) {
-        NSLog(@"error_response = nil");
-        return;
-    }
-    NSLog(@"addcam failed with error code:%d", [[error_response objectForKey:@"status"] intValue]);
-    
-    NSString * msg = NSLocalizedStringWithDefaultValue(@"Server_error_" ,nil, [NSBundle mainBundle],
-                                                       @"Server error: %@" , nil);
-    NSString * ok = NSLocalizedStringWithDefaultValue(@"Ok",nil, [NSBundle mainBundle],
-                                                      @"Ok", nil);
-    
-	//ERROR condition
-	UIAlertView *alert = [[UIAlertView alloc]
-						  initWithTitle:NSLocalizedStringWithDefaultValue(@"AddCam_Error" ,nil, [NSBundle mainBundle],
-                                                                          @"AddCam Error" , nil)
-						  message:[error_response objectForKey:@"message"]
-						  delegate:self
-						  cancelButtonTitle:ok
-						  otherButtonTitles:nil];
-	[alert show];
-	[alert release];
-    self.errorCode = msg;
-    [self  setupFailed];
-    
-	return;
-}
-
-- (void) addCamFailedServerUnreachable
-{
-	NSLog(@"addcam failed : server unreachable");
-	
-    if (should_retry_silently == TRUE)
-    {
-        NSLog(@"addcam failed : Retry without popup");
-        [self registerCamera:nil];
-    }
-    else
-    {
-        
-        NSString * msg = NSLocalizedStringWithDefaultValue(@"addcam_error_1" ,nil, [NSBundle mainBundle],
-                                                           @"The device is not able to connect to the server. Please check the WIFI and the internet. Go to WIFI setting to confirm device is connected to intended router", nil);
-        NSString * cancel = NSLocalizedStringWithDefaultValue(@"Cancel",nil, [NSBundle mainBundle],
-                                                              @"Cancel", nil);
-        
-        NSString * retry = NSLocalizedStringWithDefaultValue(@"Retry",nil, [NSBundle mainBundle],
-                                                             @"Retry", nil);
-        //ERROR condition
-        UIAlertView *alert = [[UIAlertView alloc]
-                              initWithTitle:NSLocalizedStringWithDefaultValue(@"AddCam_Error" ,nil, [NSBundle mainBundle],
-                                                                              @"AddCam Error" , nil)
-                              message:msg
-                              delegate:self
-                              cancelButtonTitle:cancel
-                              otherButtonTitles:retry, nil];
-        alert.delegate = self;
-        alert.tag = ALERT_ADDCAM_SERVER_UNREACH;
-        
-        [alert show];
-        [alert release];
-    }
-
-	
-}
 
 -(void) removeCamSuccessWithResponse:(NSDictionary *)responseData
 {

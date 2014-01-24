@@ -46,7 +46,7 @@
                                                                               @"Next", nil)
                                      style:UIBarButtonItemStylePlain
                                     target:self
-                                    action:@selector(handleNextBtnTouchAction:)];
+                                    action:@selector(handleButtonPress:)];
     self.navigationItem.rightBarButtonItem = nextButton;
     [nextButton release];
     
@@ -99,29 +99,6 @@
 {
     //remove delegate
     [BLEConnectionManager getInstanceBLE].delegate = nil;
-}
-
-- (void)handleNextBtnTouchAction: (id)sender
-{
-    NSString * cameraName_text = @"";
-    
-    if ([camName isMemberOfClass:[UITextView class]] )
-    {
-        cameraName_text =((UITextView *)camName).text  ;
-    }
-    
-    if ([camName isMemberOfClass:[UITextField class]] )
-    {
-        cameraName_text =((UITextField *)camName).text;
-    }
-    
-    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-    [userDefaults setObject:cameraName_text forKey:@"CameraName"];
-    [userDefaults synchronize];
-    
-    
-    
-    [self showScreenGetWifiList];
 }
 
 #pragma mark -
@@ -255,8 +232,6 @@
 
 - (IBAction)handleButtonPress:(id)sender
 {
-    int tag = ((UIButton*)sender).tag;
-    
     NSString * cameraName_text = @"";
     
     if ([camName isMemberOfClass:[UITextView class]] )
@@ -296,7 +271,8 @@
         [alert release];
     }
     else if (![self isCameraNameValidated:cameraName_text])
-    {       NSString * title = NSLocalizedStringWithDefaultValue(@"Invalid_Camera_Name", nil, [NSBundle mainBundle],
+    {
+        NSString * title = NSLocalizedStringWithDefaultValue(@"Invalid_Camera_Name", nil, [NSBundle mainBundle],
                                                                  @"Invalid Camera Name", nil);
         
         NSString * msg = NSLocalizedStringWithDefaultValue(@"Invalid_Camera_Name_msg2", nil, [NSBundle mainBundle],
@@ -315,15 +291,17 @@
         [alert show];
         [alert release];
     }
-    else if (tag == CONF_CAM_BTN_TAG)
+    else
     {
         
         
         NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
         [userDefaults setObject:cameraName_text forKey:@"CameraName"];
         [userDefaults synchronize];
-        // Show screen wifi list
-        [self showScreenGetWifiList];
+        
+        //
+        [self registerCamera:nil];
+
     }
 }
 
@@ -343,6 +321,193 @@
     [textField resignFirstResponder];
     
     return NO;
+}
+
+#pragma mark -
+#pragma mark  Callbacks
+
+- (void) addCamSuccessWithResponse:(NSDictionary *)responseData
+{
+    NSLog(@"addcam response: %@", responseData);
+    _auth_token = [[responseData objectForKey:@"data"] objectForKey:@"auth_token"];
+    /*
+     TODO:
+     - send auto_token to camera
+     */
+    [self sendCommandAuth_TokenToCamera];
+    [self showScreenGetWifiList];
+
+}
+
+- (void)sendCommandAuth_TokenToCamera
+{
+    NSString * set_mkey = SET_MASTER_KEY;
+    set_mkey =[set_mkey stringByAppendingString:_auth_token];
+    
+    if ([BLEConnectionManager getInstanceBLE].state != CONNECTED)
+    {
+        return;
+    }
+    
+    NSLog(@"Now, send command Authentication token");
+    //first get mac address of camera
+    [BLEConnectionManager getInstanceBLE].delegate = self;
+    [[BLEConnectionManager getInstanceBLE].uartPeripheral writeString:set_mkey withTimeOut:30.0];
+    
+    NSDate * date;
+    while ([BLEConnectionManager getInstanceBLE].uartPeripheral.isBusy)
+    {
+        date = [NSDate dateWithTimeInterval:1.5 sinceDate:[NSDate date]];
+        
+        [[NSRunLoop currentRunLoop] runUntilDate:date];
+    }
+    
+    
+}
+- (void) addCamFailedWithError:(NSDictionary *) error_response
+{
+    if (error_response == nil) {
+        NSLog(@"error_response = nil");
+        return;
+    }
+    NSLog(@"addcam failed with error code:%d", [[error_response objectForKey:@"status"] intValue]);
+    
+    NSString * msg = NSLocalizedStringWithDefaultValue(@"Server_error_" ,nil, [NSBundle mainBundle],
+                                                       @"Server error: %@" , nil);
+    NSString * ok = NSLocalizedStringWithDefaultValue(@"Ok",nil, [NSBundle mainBundle],
+                                                      @"Ok", nil);
+    
+	//ERROR condition
+    
+    //TODO: display alert retry registerCame
+    
+	UIAlertView *alert = [[UIAlertView alloc]
+						  initWithTitle:NSLocalizedStringWithDefaultValue(@"AddCam_Error" ,nil, [NSBundle mainBundle],
+                                                                          @"AddCam Error" , nil)
+						  message:[error_response objectForKey:@"message"]
+						  delegate:self
+						  cancelButtonTitle:ok
+						  otherButtonTitles:nil];
+	[alert show];
+	[alert release];
+	return;
+}
+
+- (void) addCamFailedServerUnreachable
+{
+	NSLog(@"addcam failed : server unreachable");
+
+
+        
+    NSString * msg = NSLocalizedStringWithDefaultValue(@"addcam_error_1" ,nil, [NSBundle mainBundle],
+                                                       @"The device is not able to connect to the server. Please check the WIFI and the internet. Go to WIFI setting to confirm device is connected to intended router", nil);
+    NSString * cancel = NSLocalizedStringWithDefaultValue(@"Cancel",nil, [NSBundle mainBundle],
+                                                          @"Cancel", nil);
+    
+    NSString * retry = NSLocalizedStringWithDefaultValue(@"Retry",nil, [NSBundle mainBundle],
+                                                         @"Retry", nil);
+    //ERROR condition
+    UIAlertView *alert = [[UIAlertView alloc]
+                          initWithTitle:NSLocalizedStringWithDefaultValue(@"AddCam_Error" ,nil, [NSBundle mainBundle],
+                                                                          @"AddCam Error" , nil)
+                          message:msg
+                          delegate:self
+                          cancelButtonTitle:cancel
+                          otherButtonTitles:retry, nil];
+    alert.delegate = self;
+    
+    [alert show];
+    [alert release];
+
+    //Todo: handle retry
+	
+}
+
+
+
+- (IBAction)registerCamera:(id)sender
+{
+//    self.progressView.hidden = NO;
+//    [self.view bringSubviewToFront:self.progressView];
+    
+    
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    
+    NSString *apiKey    = [userDefaults objectForKey:@"PortalApiKey"];
+    NSString *fwVersion = [userDefaults objectForKey:@"FW_VERSION"];
+    NSString *udid      = [userDefaults objectForKey:CAMERA_UDID];
+    
+    //NSLog(@"-----fwVersion = %@, ,model = %@", fwVersion, model);
+    
+    NSDate *now = [NSDate date];
+    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+    [formatter setDateFormat:@"ZZZ"];
+    
+    NSMutableString *stringFromDate = [NSMutableString stringWithString:[formatter stringFromDate:now]];
+    
+    [stringFromDate insertString:@"." atIndex:3];
+    
+    NSLog(@"%@", stringFromDate);
+    
+    [formatter release];
+    
+    BMS_JSON_Communication *jsonComm = [[[BMS_JSON_Communication alloc] initWithObject:self
+                                                                              Selector:@selector(addCamSuccessWithResponse:)
+                                                                          FailSelector:@selector(addCamFailedWithError:)
+                                                                             ServerErr:@selector(addCamFailedServerUnreachable)] autorelease];
+    
+    NSString * camName = (NSString *) [userDefaults objectForKey:@"CameraName"];
+    [jsonComm registerDeviceWithDeviceName:camName
+                         andRegistrationID:udid
+                                   andMode:@"upnp" // Need somethings more usefully
+                              andFwVersion:fwVersion
+                               andTimeZone:stringFromDate
+                                 andApiKey:apiKey];
+}
+
+#pragma mark - BLEConnectionManagerDelegate
+
+- (void) didReceiveData:(NSString *)string
+{
+    NSLog(@"response set authen token is %@", string);
+    
+    if (string == nil || [string length] == 0)
+    {
+        NSLog(@"can't send master key, camera is not fully up");
+    }
+    else
+    {
+        if ([string hasPrefix:@"set_master_key: 0"])
+        {
+            ///done
+            NSLog(@"sending master key done");
+        }
+        
+    }
+    
+
+}
+
+
+
+#pragma mark -
+#pragma mark AlertView delegate
+
+
+
+- (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex
+{
+    switch(buttonIndex) {
+        case 0: // Cancel
+            
+            break;
+        case 1: // Retry
+            [self registerCamera:nil];
+            break;
+        default:
+            break;
+    }
+
 }
 
 @end
