@@ -199,11 +199,16 @@
     if (self.cameras != nil &&
         self.cameras.count > 0)
     {
-        CamChannel *ch = (CamChannel *)[self.cameras objectAtIndex:0];
-        
-        if ([ch.profile.mac_address isEqualToString:camChannel.profile.mac_address])
+        for (CamChannel *obj in _cameras)
         {
-            ch.waitingForStreamerToClose = NO;
+            if ([obj.profile.mac_address isEqualToString:camChannel.profile.mac_address])
+            {
+                obj.waitingForStreamerToClose = NO;
+            }
+            else
+            {
+                NSLog(@"%@ ->waitingForClose: %d", obj.profile.name, obj.waitingForStreamerToClose);
+            }
         }
     }
 }
