@@ -31,5 +31,24 @@
 #define ALERT_ASK_FOR_RETRY_WIFI_TAG    1
 #define RETRY_CONNECTION_BLE_FAIL_TAG   2
 
+//define font
+#define PN_REGULAR_FONT   ProximaNova-Regular.otf
+
+//ProximaNova-Black.otf
+//ProximaNova-Bold.otf
+//ProximaNova-BoldIt.otf
+//ProximaNova-Extrabold.otf
+//ProximaNova-Light.otf
+//ProximaNova-LightItalic.otf
+//ProximaNova-Regular.otf
+//ProximaNova-RegularItalic.otf
+//ProximaNova-Semibold.otf
+
+
+
+
 //define color
+#define TIMER_COLOR         ff3504
+#define RECORD_VIDEO_COLOR  00acf7
+
 #endif
