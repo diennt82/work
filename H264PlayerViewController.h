@@ -28,6 +28,9 @@
 //control panel menu
 #import "AudioOutStreamer.h"
 
+#import "UIFont+Hubble.h"
+#import "UIColor+Hubble.h"
+
 
 #define H264_STREAM_STARTED              1
 #define H264_STREAM_STOPPED_UNEXPECTEDLY 2

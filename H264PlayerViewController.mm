@@ -111,6 +111,23 @@ double _ticks = 0;
     
     [self.ib_buttonChangeAction setHidden:NO];
     [self.view bringSubviewToFront:self.ib_buttonChangeAction];
+    /*
+     //create list image for display horizontal scroll view menu
+     1.Pan, Tilt & Zoom (bb_setting_icon.png)
+     2.Microphone (for two way audio) bb_setting_icon.png
+     3.Take a photo/Record Video ( bb_rec_icon_d.png )
+     4.Lullaby          bb_melody_off_icon.png
+     5.Camera List          bb_camera_slider_icon
+     6.Temperature display        temp_alert
+     */
+    self.itemImages = [NSMutableArray arrayWithObjects:@"video_action_pan.png", @"video_action_mic.png", @"video_action_video.png", @"video_action_music.png", @"video_action_temp.png", nil];
+    self.itemSelectedImages = [NSMutableArray arrayWithObjects:@"video_action_pan_pressed.png", @"video_action_mic_pressed.png", @"video_action_video_pressed.png", @"video_action_music_pressed.png", @"video_action_temp_pressed.png", nil];
+    [self.horizMenu reloadData];
+    self.selectedItemMenu = -1;
+    [self updateBottomView];
+    
+    //setup Font
+    [self applyFont];
 
     // Do any additional setup after loading the view.
 	[[NSNotificationCenter defaultCenter] addObserver: self
@@ -236,6 +253,14 @@ double _ticks = 0;
     [self setupPtt];
     
     self.stringTemperature = @"0";
+}
+
+- (void)applyFont
+{
+    UIFont *font = [UIFont applyHubbleFontName:@"ProximaNova-Regular" withSize:46];
+    [self.ib_labelTouchToTalk setFont:font];
+    UIColor *color = [UIColor colorFromHexString:@"00acf7"];
+    self.ib_labelTouchToTalk.textColor = color;
 }
 
 - (void) setupHttpPort
@@ -2648,6 +2673,7 @@ double _ticks = 0;
     NSMutableAttributedString *attrString = [[NSMutableAttributedString alloc] initWithString:stringTemperature];
     
     UIFont *smallFont = [UIFont systemFontOfSize:40.0f];
+    
     [attrString addAttribute:NSFontAttributeName value:(smallFont) range:NSMakeRange(stringTemperature.length - 1, 1)];
     [attrString addAttribute:(id)kCTSuperscriptAttributeName value:@"1" range:NSMakeRange(stringTemperature.length - 1, 1)];
 
@@ -4825,7 +4851,6 @@ double _ticks = 0;
 
 -(void) setupPtt
 {
-    
 	UILongPressGestureRecognizer *longPress =
     [[UILongPressGestureRecognizer alloc] initWithTarget:self
                                                   action:@selector(longPress:)];

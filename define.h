@@ -30,4 +30,6 @@
 //Define TAG
 #define ALERT_ASK_FOR_RETRY_WIFI_TAG    1
 #define RETRY_CONNECTION_BLE_FAIL_TAG   2
+
+//define color
 #endif

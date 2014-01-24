@@ -397,6 +397,18 @@
 		A1ABF1C9187539000014FCB4 /* refresh.png in Resources */ = {isa = PBXBuildFile; fileRef = A1ABF1C8187539000014FCB4 /* refresh.png */; };
 		A1ABF1CC18753C240014FCB4 /* CoreBluetooth.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A1ABF1CB18753C240014FCB4 /* CoreBluetooth.framework */; };
 		A1AC286F1877A1F0000A866D /* CreateBLEConnection_VController_iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = A1AC286E1877A1F0000A866D /* CreateBLEConnection_VController_iPad.xib */; };
+		A1AC857C189126A6002A8CCD /* UIFont+Hubble.m in Sources */ = {isa = PBXBuildFile; fileRef = A1AC857B189126A6002A8CCD /* UIFont+Hubble.m */; };
+		A1AC858818912859002A8CCD /* ProximaNova-Black.otf in Resources */ = {isa = PBXBuildFile; fileRef = A1AC857E18912859002A8CCD /* ProximaNova-Black.otf */; };
+		A1AC858918912859002A8CCD /* ProximaNova-Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = A1AC857F18912859002A8CCD /* ProximaNova-Bold.otf */; };
+		A1AC858A18912859002A8CCD /* ProximaNova-BoldIt.otf in Resources */ = {isa = PBXBuildFile; fileRef = A1AC858018912859002A8CCD /* ProximaNova-BoldIt.otf */; };
+		A1AC858B18912859002A8CCD /* ProximaNova-Extrabold.otf in Resources */ = {isa = PBXBuildFile; fileRef = A1AC858118912859002A8CCD /* ProximaNova-Extrabold.otf */; };
+		A1AC858C18912859002A8CCD /* ProximaNova-Light.otf in Resources */ = {isa = PBXBuildFile; fileRef = A1AC858218912859002A8CCD /* ProximaNova-Light.otf */; };
+		A1AC858D18912859002A8CCD /* ProximaNova-LightItalic.otf in Resources */ = {isa = PBXBuildFile; fileRef = A1AC858318912859002A8CCD /* ProximaNova-LightItalic.otf */; };
+		A1AC858E18912859002A8CCD /* ProximaNova-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = A1AC858418912859002A8CCD /* ProximaNova-Regular.otf */; };
+		A1AC858F18912859002A8CCD /* ProximaNova-RegularItalic.otf in Resources */ = {isa = PBXBuildFile; fileRef = A1AC858518912859002A8CCD /* ProximaNova-RegularItalic.otf */; };
+		A1AC859018912859002A8CCD /* ProximaNova-Semibold.otf in Resources */ = {isa = PBXBuildFile; fileRef = A1AC858618912859002A8CCD /* ProximaNova-Semibold.otf */; };
+		A1AC859118912859002A8CCD /* ProximaNova-SemiboldItalic.otf in Resources */ = {isa = PBXBuildFile; fileRef = A1AC858718912859002A8CCD /* ProximaNova-SemiboldItalic.otf */; };
+		A1AC859518913014002A8CCD /* UIColor+Hubble.m in Sources */ = {isa = PBXBuildFile; fileRef = A1AC859418913014002A8CCD /* UIColor+Hubble.m */; };
 		A1E32FAD17E9899800504538 /* H264PlayerListener.mm in Sources */ = {isa = PBXBuildFile; fileRef = A1E32FAB17E9899800504538 /* H264PlayerListener.mm */; };
 		A1E32FB017E98A4700504538 /* PlaybackListener.mm in Sources */ = {isa = PBXBuildFile; fileRef = A1E32FAE17E98A4700504538 /* PlaybackListener.mm */; };
 		A1E7473C185F07AE00A54B29 /* feed_video_bg.png in Resources */ = {isa = PBXBuildFile; fileRef = A1E74724185F07AE00A54B29 /* feed_video_bg.png */; };
@@ -964,6 +976,20 @@
 		A1ABF1CA187539A80014FCB4 /* define.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = define.h; sourceTree = "<group>"; };
 		A1ABF1CB18753C240014FCB4 /* CoreBluetooth.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreBluetooth.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS7.0.sdk/System/Library/Frameworks/CoreBluetooth.framework; sourceTree = DEVELOPER_DIR; };
 		A1AC286E1877A1F0000A866D /* CreateBLEConnection_VController_iPad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CreateBLEConnection_VController_iPad.xib; sourceTree = "<group>"; };
+		A1AC857A189126A6002A8CCD /* UIFont+Hubble.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIFont+Hubble.h"; sourceTree = "<group>"; };
+		A1AC857B189126A6002A8CCD /* UIFont+Hubble.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIFont+Hubble.m"; sourceTree = "<group>"; };
+		A1AC857E18912859002A8CCD /* ProximaNova-Black.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "ProximaNova-Black.otf"; sourceTree = "<group>"; };
+		A1AC857F18912859002A8CCD /* ProximaNova-Bold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "ProximaNova-Bold.otf"; sourceTree = "<group>"; };
+		A1AC858018912859002A8CCD /* ProximaNova-BoldIt.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "ProximaNova-BoldIt.otf"; sourceTree = "<group>"; };
+		A1AC858118912859002A8CCD /* ProximaNova-Extrabold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "ProximaNova-Extrabold.otf"; sourceTree = "<group>"; };
+		A1AC858218912859002A8CCD /* ProximaNova-Light.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "ProximaNova-Light.otf"; sourceTree = "<group>"; };
+		A1AC858318912859002A8CCD /* ProximaNova-LightItalic.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "ProximaNova-LightItalic.otf"; sourceTree = "<group>"; };
+		A1AC858418912859002A8CCD /* ProximaNova-Regular.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "ProximaNova-Regular.otf"; sourceTree = "<group>"; };
+		A1AC858518912859002A8CCD /* ProximaNova-RegularItalic.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "ProximaNova-RegularItalic.otf"; sourceTree = "<group>"; };
+		A1AC858618912859002A8CCD /* ProximaNova-Semibold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "ProximaNova-Semibold.otf"; sourceTree = "<group>"; };
+		A1AC858718912859002A8CCD /* ProximaNova-SemiboldItalic.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "ProximaNova-SemiboldItalic.otf"; sourceTree = "<group>"; };
+		A1AC859318913014002A8CCD /* UIColor+Hubble.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIColor+Hubble.h"; sourceTree = "<group>"; };
+		A1AC859418913014002A8CCD /* UIColor+Hubble.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+Hubble.m"; sourceTree = "<group>"; };
 		A1E32FAB17E9899800504538 /* H264PlayerListener.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = H264PlayerListener.mm; sourceTree = "<group>"; };
 		A1E32FAC17E9899800504538 /* H264PlayerListener.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = H264PlayerListener.h; sourceTree = "<group>"; };
 		A1E32FAE17E98A4700504538 /* PlaybackListener.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = PlaybackListener.mm; sourceTree = "<group>"; };
@@ -1535,6 +1561,8 @@
 		080E96DDFE201D6D7F000001 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				A1AC859218912FFC002A8CCD /* Color */,
+				A1AC857318912574002A8CCD /* Fonts */,
 				A118C19C187E4643009176F5 /* HttpCommunication_Model */,
 				A1ABF19C187536A00014FCB4 /* BLE Setup */,
 				8B90BA5A18717F22007BAF09 /* PlayEventVC */,
@@ -1625,6 +1653,7 @@
 				38962C7F1769583A0016AE16 /* TestFlight.h */,
 				A1ABF1CA187539A80014FCB4 /* define.h */,
 				8B9C7DF1185F08AF0038B3A8 /* New Hubble Image */,
+				A1AC857D18912820002A8CCD /* Fontsource */,
 				3812F82315C8BEC700DADFA6 /* images13 */,
 				080E96DDFE201D6D7F000001 /* Classes */,
 				29B97315FDCFA39411CA2CEA /* Other Sources */,
@@ -2647,6 +2676,41 @@
 			name = Connection;
 			sourceTree = "<group>";
 		};
+		A1AC857318912574002A8CCD /* Fonts */ = {
+			isa = PBXGroup;
+			children = (
+				A1AC857A189126A6002A8CCD /* UIFont+Hubble.h */,
+				A1AC857B189126A6002A8CCD /* UIFont+Hubble.m */,
+			);
+			name = Fonts;
+			sourceTree = "<group>";
+		};
+		A1AC857D18912820002A8CCD /* Fontsource */ = {
+			isa = PBXGroup;
+			children = (
+				A1AC857E18912859002A8CCD /* ProximaNova-Black.otf */,
+				A1AC857F18912859002A8CCD /* ProximaNova-Bold.otf */,
+				A1AC858018912859002A8CCD /* ProximaNova-BoldIt.otf */,
+				A1AC858118912859002A8CCD /* ProximaNova-Extrabold.otf */,
+				A1AC858218912859002A8CCD /* ProximaNova-Light.otf */,
+				A1AC858318912859002A8CCD /* ProximaNova-LightItalic.otf */,
+				A1AC858418912859002A8CCD /* ProximaNova-Regular.otf */,
+				A1AC858518912859002A8CCD /* ProximaNova-RegularItalic.otf */,
+				A1AC858618912859002A8CCD /* ProximaNova-Semibold.otf */,
+				A1AC858718912859002A8CCD /* ProximaNova-SemiboldItalic.otf */,
+			);
+			name = Fontsource;
+			sourceTree = "<group>";
+		};
+		A1AC859218912FFC002A8CCD /* Color */ = {
+			isa = PBXGroup;
+			children = (
+				A1AC859318913014002A8CCD /* UIColor+Hubble.h */,
+				A1AC859418913014002A8CCD /* UIColor+Hubble.m */,
+			);
+			name = Color;
+			sourceTree = "<group>";
+		};
 		A1E07DC01814DA1200AE0566 /* Zone Detection */ = {
 			isa = PBXGroup;
 			children = (
@@ -2767,6 +2831,7 @@
 				A15773A1186145DD00DEBD45 /* H264PlayerViewController_land_iPad.xib in Resources */,
 				8B9C7E16185F268C0038B3A8 /* CamerasViewController.xib in Resources */,
 				A1E7474F185F07AE00A54B29 /* video_action_temp_pressed.png in Resources */,
+				A1AC858F18912859002A8CCD /* ProximaNova-RegularItalic.otf in Resources */,
 				A1E74749185F07AE00A54B29 /* video_action_mic_pressed.png in Resources */,
 				97987CCF154688110066C49B /* partition_bar.png in Resources */,
 				38DE1C0A168ADA550049E814 /* MBP_LoginOrRegistration.xib in Resources */,
@@ -2787,6 +2852,7 @@
 				8BA18CB2184879A10097D1AF /* DeviceSettingsCell.xib in Resources */,
 				8B92D45B18865F4C00120BCE /* SchedulingCell.xib in Resources */,
 				8B9899CD1859A04F00AC3852 /* slider-default7-handle.png in Resources */,
+				A1AC859018912859002A8CCD /* ProximaNova-Semibold.otf in Resources */,
 				8B9C7E0E185F260A0038B3A8 /* MenuViewController.xib in Resources */,
 				38DE1C8C168AEB270049E814 /* Step_08_ViewController.xib in Resources */,
 				38DE1C78168AEAF30049E814 /* Step_10_ViewController.xib in Resources */,
@@ -2798,6 +2864,7 @@
 				A1ABF1B1187537D10014FCB4 /* Step_10_ViewController_ipad_ble.xib in Resources */,
 				A1E74753185F07AE00A54B29 /* video_overlay_shadow.png in Resources */,
 				A1E7473E185F07AE00A54B29 /* feed_video_stop.png in Resources */,
+				A1AC858C18912859002A8CCD /* ProximaNova-Light.otf in Resources */,
 				3812F82515C8BF0600DADFA6 /* bb_setting_icon.png in Resources */,
 				A15773A2186145DD00DEBD45 /* H264PlayerViewController_land.xib in Resources */,
 				8B9178D01884F2040039445B /* no_img_available.png in Resources */,
@@ -2832,10 +2899,13 @@
 				38A62E9715CA143200DEA520 /* vid_snap_bg.png in Resources */,
 				8B909B84187BE2F800F8A450 /* loader_0.png in Resources */,
 				A1176B75180D1DD9000B7527 /* stream720p.sdp in Resources */,
+				A1AC859118912859002A8CCD /* ProximaNova-SemiboldItalic.otf in Resources */,
 				38A62E9D15CA2A4800DEA520 /* bb_vid_snap_knob.png in Resources */,
+				A1AC858A18912859002A8CCD /* ProximaNova-BoldIt.otf in Resources */,
 				8BC0A0231844A6EE00A5FD52 /* bb_setup_icon_step_3.png in Resources */,
 				38A62EA015CA2C9300DEA520 /* bb_recording_btn.png in Resources */,
 				8B92C0CD18682A2100538013 /* alert_learn_pressed.png in Resources */,
+				A1AC858B18912859002A8CCD /* ProximaNova-Extrabold.otf in Resources */,
 				38A62EA115CA2C9300DEA520 /* bb_cam_btn.png in Resources */,
 				8B92C0E11868318800538013 /* settings_scheduler.png in Resources */,
 				8B278BE8183DC51300A4FF50 /* NotificationSettingsViewController.xib in Resources */,
@@ -2877,6 +2947,7 @@
 				8B1D545818658903008857F0 /* SchedulerViewController.xib in Resources */,
 				8B9384A318570207009C4771 /* sound-s-d.png in Resources */,
 				8B92C0E8186832A600538013 /* add_camera_pressed.png in Resources */,
+				A1AC858E18912859002A8CCD /* ProximaNova-Regular.otf in Resources */,
 				8B9691691876678C00FB15B8 /* img_timeline_w_dot.png in Resources */,
 				8B92A0921863E69F005923D2 /* TimelineCell.xib in Resources */,
 				8B9B57E2184F0D9900E58543 /* frame-6_update-iOS7_new2.png in Resources */,
@@ -2967,6 +3038,7 @@
 				8B5C25F01872D33500D9DF8F /* feed_video_mix_bg.png in Resources */,
 				381D185D16D4652C00272A8D /* Step_05_tableViewCell_ipad.xib in Resources */,
 				8B1D545E18658CBC008857F0 /* DotCell.png in Resources */,
+				A1AC858818912859002A8CCD /* ProximaNova-Black.otf in Resources */,
 				8B91E6551862FE540041BA9D /* MenuCameraViewController.xib in Resources */,
 				BC6E4A0516BFBB9D00B0D630 /* MBP_InitialSetupViewController_land.xib in Resources */,
 				8B9554CD186D4DF200BB4BDE /* camera_action_play.png in Resources */,
@@ -2986,6 +3058,7 @@
 				BCBD80C116D1D0480007943B /* MBP_InitialSetupViewController_ipad_land.xib in Resources */,
 				BCBD80F616D1E25D0007943B /* Step_08_ViewController_land_ipad.xib in Resources */,
 				8B92A0BA1864322E005923D2 /* TimelineButtonCell.xib in Resources */,
+				A1AC858918912859002A8CCD /* ProximaNova-Bold.otf in Resources */,
 				380CB0CA16DC5A9E00290587 /* Step_12_ViewController.xib in Resources */,
 				8B9384981856F009009C4771 /* vol-min.png in Resources */,
 				380CB0CD16DC5AD500290587 /* Step_12_ViewController_land.xib in Resources */,
@@ -3005,6 +3078,7 @@
 				380CB0DC16DC630400290587 /* Step_11_ViewController_land.xib in Resources */,
 				A1E7474D185F07AE00A54B29 /* video_action_pan_pressed.png in Resources */,
 				380CB0DF16DC632700290587 /* Step_11_ViewController_ipad.xib in Resources */,
+				A1AC858D18912859002A8CCD /* ProximaNova-LightItalic.otf in Resources */,
 				380CB0E216DC634D00290587 /* Step_11_ViewController_land_ipad.xib in Resources */,
 				382CD25816DDE12200BC8E0C /* Step_07_tableViewCell_ipad.xib in Resources */,
 				8BA7F2831851C57200BE0145 /* blink11hd720p.sdp in Resources */,
@@ -3080,6 +3154,7 @@
 				8B92A0951863E9DC005923D2 /* TimelineActivityCell.m in Sources */,
 				1D3623260D0F684500981E51 /* MBP_iosAppDelegate.mm in Sources */,
 				8B92A0A11863F655005923D2 /* SavedEventViewController.m in Sources */,
+				A1AC857C189126A6002A8CCD /* UIFont+Hubble.m in Sources */,
 				A1ABF1C6187538740014FCB4 /* DisplayWifiList_VController.mm in Sources */,
 				28D7ACF80DDB3853001CB0EB /* MBP_iosViewController.mm in Sources */,
 				8B9112CA186010F1004301C5 /* GeneralCell.m in Sources */,
@@ -3120,6 +3195,7 @@
 				38A478F015C0015F008682FE /* Step_05_ViewController.mm in Sources */,
 				38A478F715C115C3008682FE /* Step_06_ViewController.mm in Sources */,
 				A1ABF1B5187538050014FCB4 /* GuideAddCamera_ViewController.mm in Sources */,
+				A1AC859518913014002A8CCD /* UIColor+Hubble.m in Sources */,
 				38A478FA15C12914008682FE /* Step_08_ViewController.mm in Sources */,
 				A1ABF1A3187537170014FCB4 /* BLEConnectionManager.m in Sources */,
 				8B9CCBA3183EF8B2007C0F65 /* MelodyViewController.m in Sources */,
