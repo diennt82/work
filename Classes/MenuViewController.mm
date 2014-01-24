@@ -129,6 +129,7 @@
     }
     else
     {
+        self.navigationItem.leftBarButtonItem.enabled = NO;
         self.camerasVC.waitingForUpdateData = TRUE;
         [self.camerasVC.tableView reloadData];
         [self performSelectorInBackground:@selector(recreateAccount)
@@ -248,6 +249,7 @@
     self.camerasVC.waitingForUpdateData = NO;
     [self.camerasVC.tableView performSelectorInBackground:@selector(reloadData)
                                                withObject:nil];
+    self.navigationItem.leftBarButtonItem.enabled = YES;
 }
 
 - (void)updateCameraList
