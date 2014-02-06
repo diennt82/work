@@ -106,7 +106,8 @@
     {
         NSLog(@"Use default server");
         
-        [BMS_JSON_Communication setServerInput:@"https://dev-api.hubble.in/v1"];
+        //[BMS_JSON_Communication setServerInput:@"https://dev-api.hubble.in/v1"];
+        [BMS_JSON_Communication setServerInput:@"https://api.hubble.in/v1"];
     }
 
     return YES;
