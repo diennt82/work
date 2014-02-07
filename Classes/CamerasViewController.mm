@@ -132,7 +132,6 @@
     [_alertChooseConfig show];
 }
 
-#if 1
 - (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex
 {
     if (buttonIndex == 0) {
@@ -187,63 +186,6 @@
         }
     }
 }
-#else
-
-- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
-    
-    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-    if (buttonIndex == 0) {
-        //Cancel button pressed
-        [_alertChooseConfig dismissWithClickedButtonIndex:0 animated:NO];
-        _alertChooseConfig = nil;
-    }
-    else if (buttonIndex == 1) {
-        //BLE button pressed
-        [userDefaults setInteger:BLUETOOTH_SETUP forKey:SET_UP_CAMERA];
-        [userDefaults synchronize];
-        
-        if (_camChannels.count < MAX_CAM_ALLOWED)
-        {
-            NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-            [userDefaults setBool:FALSE forKey:FIRST_TIME_SETUP];
-            [userDefaults synchronize];
-            
-            NSLog(@"addCameraButtonTouchAction: %@", self.camerasDelegate);
-            //MenuViewController *tabBarController = (MenuViewController *)self.parentViewController;
-            [((MenuViewController *)self.parentVC).menuDelegate sendStatus:SETUP_CAMERA];//initial setup
-            
-        }
-        else
-        {
-            [self cameraShowDialog:DIALOG_CANT_ADD_CAM];
-        }
-        
-    }
-    else if (buttonIndex == 2) {
-        //Wifi button pressed
-        NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-        
-        [userDefaults setInteger:WIFI_SETUP forKey:SET_UP_CAMERA];
-        [userDefaults synchronize];
-        
-        if (_camChannels.count < MAX_CAM_ALLOWED)
-        {
-            NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-            [userDefaults setBool:FALSE forKey:FIRST_TIME_SETUP];
-            [userDefaults synchronize];
-            
-            NSLog(@"addCameraButtonTouchAction: %@", self.camerasDelegate);
-            //MenuViewController *tabBarController = (MenuViewController *)self.parentViewController;
-            [((MenuViewController *)self.parentVC).menuDelegate sendStatus:SETUP_CAMERA];//initial setup
-            
-        }
-        else
-        {
-            [self cameraShowDialog:DIALOG_CANT_ADD_CAM];
-        }
-    }
-}
-#endif
 
 - (IBAction)addCameraButtonTouchAction:(id)sender
 {
@@ -432,12 +374,10 @@
     {
         static NSString *CellIdentifier = @"CamerasCell";
         CamerasCell *cell = [self.tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-        
         NSArray *objects = [[NSBundle mainBundle] loadNibNamed:@"CamerasCell" owner:nil options:nil];
         
         for (id curObj in objects)
         {
-            
             if([curObj isKindOfClass:[UITableViewCell class]])
             {
                 cell = (CamerasCell *)curObj;
@@ -451,69 +391,22 @@
         cell.snapshotImage.image = [UIImage imageNamed:[_snapshotImages objectAtIndex:indexPath.row]];
         
         CamChannel *ch = (CamChannel *)[_camChannels objectAtIndex:indexPath.row];
+        cell.cameraNameLabel.text = ch.profile.name;
         
-//        if (ch.profile.hasUpdateLocalStatus == TRUE)
-//        {
-//            NSLog(@"ch.profile.hasUpdateLocalStatus == TRUE");
-//        }
-        
-        CamProfile *camProfile = ch.profile;
-        
-        //cell.snapshotImage.image = self.snapshotImg;
-        cell.cameraNameLabel.text = camProfile.name;
+        // Camera is NOT available
+        if (ch.profile.isInLocal == FALSE &&
+            ch.profile.minuteSinceLastComm > 5)
+        {
+            cell.cameraNameLabel.textColor = [UIColor redColor];
+        }
+        else
+        {
+            cell.cameraNameLabel.textColor = [UIColor whiteColor];
+        }
         
         return cell;
     }
-    
-//    static NSString *CellIdentifier = @"Cell";
-//    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-//    if (cell == nil) {
-//        cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
-//    }
-//    
-//    // Configure the cell...
-//    
-//    return cell;
 }
-
-/*
-// Override to support conditional editing of the table view.
-- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    // Return NO if you do not want the specified item to be editable.
-    return YES;
-}
-*/
-
-/*
-// Override to support editing the table view.
-- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    if (editingStyle == UITableViewCellEditingStyleDelete) {
-        // Delete the row from the data source
-        [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
-    }   
-    else if (editingStyle == UITableViewCellEditingStyleInsert) {
-        // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-    }   
-}
-*/
-
-/*
-// Override to support rearranging the table view.
-- (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath
-{
-}
-*/
-
-/*
-// Override to support conditional rearranging of the table view.
-- (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    // Return NO if you do not want the item to be re-orderable.
-    return YES;
-}
-*/
 
 #pragma mark - Table view delegate
 
@@ -566,7 +459,6 @@
     [((MenuViewController *)self.parentVC).navigationController pushViewController:h264PlayerViewController animated:YES];
     [h264PlayerViewController release];
 }
-
 
 - (void)dealloc {
     [_camChannels release];
