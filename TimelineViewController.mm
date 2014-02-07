@@ -720,12 +720,10 @@
             {
                 [cell.activityIndicatorLoading startAnimating];
                 
-                CGSize newSize = CGSizeMake(269, 103);
-                
                 dispatch_queue_t q = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0ul);
                 dispatch_async(q,
                                ^{
-                                   eventInfo.clipInfo.imgSnapshot = [self imageWithUrlString:eventInfo.clipInfo.urlImage scaledToSize:newSize];
+                                   eventInfo.clipInfo.imgSnapshot = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:eventInfo.clipInfo.urlImage]]];
                                    
                                    dispatch_async(dispatch_get_main_queue(),
                                                   ^{
