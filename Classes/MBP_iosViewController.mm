@@ -589,13 +589,7 @@
 				[loginOrReg presentModallyOn:self];
 				break;
 			}
-#if 1
-        case SCAN_CAMERA:
-        {
-			
-        }
-			break;
-#else
+
 		case SCAN_CAMERA:
         {
 			//may be offline mode
@@ -613,7 +607,7 @@
 			self.progressView.hidden = NO;
         }
 			break;
-#endif
+
 		case AFTER_ADD_RELOGIN:
 			{
 				NSLog(@" back from adding cam. relogin -- to get the new cam data");
