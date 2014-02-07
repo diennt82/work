@@ -518,15 +518,16 @@
     {
         EventInfo *eventInfo = (EventInfo *)[_events objectAtIndex:indexPath.row];
         
-        // Sound detected
-        if (eventInfo.alert == 1)
+        // Motion detected
+        if (eventInfo.alert == 4)
+        {
+            return 197;  //TODO: Match with design document
+        }
+        // Sound, temperature, & another detected
+        else if (eventInfo.alert == 1 ||
+                 eventInfo.alert == 2)
         {
             return 77;
-        }
-        // Motion detected
-        else if (eventInfo.alert == 4)
-        {
-            return 197; //TODO: Match with design document
         }
         
         return 197;// modify later
@@ -707,13 +708,9 @@
         
         //NSLog(@"%@, %@", [dateFormater stringFromDate:eventDate], [NSTimeZone localTimeZone]);
         
-        // Sound detected
-        if (eventInfo.alert == 1)
-        {
-            cell.snapshotImage.hidden = YES;
-        }
+        
         // Motion detected
-        else
+        if (eventInfo.alert == 4)
         {
             cell.snapshotImage.hidden = NO;
             cell.snapshotImage.image = [UIImage imageNamed:@"no_img_available"];
@@ -748,6 +745,11 @@
                 cell.snapshotImage.image = eventInfo.clipInfo.imgSnapshot;
                 cell.activityIndicatorLoading.hidden = YES;
             }
+        }
+        // Sound, Temperature, & another detected
+        else
+        {
+            cell.snapshotImage.hidden = YES;
         }
         
 #else// Test data
