@@ -292,6 +292,7 @@
                     eventInfo.alert_name = [event objectForKey:@"alert_name"];
                     eventInfo.value      = [event objectForKey:@"value"];
                     eventInfo.time_stamp = [event objectForKey:@"time_stamp"];
+                    eventInfo.alert      = [[event objectForKey:@"alert"] integerValue];
                     
                     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
                     [dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss'Z'"];
@@ -303,11 +304,11 @@
                     
                     if (diff / 60 <= 20)
                     {
-                        if ([[[event objectForKey:@"alert"] stringValue] isEqualToString:@"4"])
+                        if (eventInfo.alert == 4)
                         {
                             numberOfMovement++;
                         }
-                        else if ([[[event objectForKey:@"alert"] stringValue] isEqualToString:@"1"])
+                        else if (eventInfo.alert == 1)
                         {
                             numberOfVOX++;
                         }
@@ -515,6 +516,19 @@
 #if 1
     if (indexPath.section == 1)
     {
+        EventInfo *eventInfo = (EventInfo *)[_events objectAtIndex:indexPath.row];
+        
+        // Sound detected
+        if (eventInfo.alert == 1)
+        {
+            return 77;
+        }
+        // Motion detected
+        else if (eventInfo.alert == 4)
+        {
+            return 197; //TODO: Match with design document
+        }
+        
         return 197;// modify later
     }
 #else
@@ -693,38 +707,47 @@
         
         //NSLog(@"%@, %@", [dateFormater stringFromDate:eventDate], [NSTimeZone localTimeZone]);
         
-        
-        cell.snapshotImage.image = [UIImage imageNamed:@"no_img_available"];
-        
-        if (eventInfo.clipInfo.imgSnapshot == nil &&
-            (eventInfo.clipInfo.urlImage != nil))// && (![eventInfo.clipInfo.urlImage isEqualToString:@""]))
+        // Sound detected
+        if (eventInfo.alert == 1)
         {
-            [cell.activityIndicatorLoading startAnimating];
-            
-            CGSize newSize = CGSizeMake(269, 103);
-            
-            dispatch_queue_t q = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0ul);
-            dispatch_async(q,
-                           ^{
-                               eventInfo.clipInfo.imgSnapshot = [self imageWithUrlString:eventInfo.clipInfo.urlImage scaledToSize:newSize];
-                               
-                               dispatch_async(dispatch_get_main_queue(),
-                                              ^{
-                                                  //NSLog(@"img = %@", img);
-                                                  cell.snapshotImage.image = eventInfo.clipInfo.imgSnapshot;
-                                                  [cell.activityIndicatorLoading stopAnimating];
-                                                  cell.activityIndicatorLoading.hidden = YES;
-                                              }
-                                              );
-                           });
-            dispatch_release(q);
+            cell.snapshotImage.hidden = YES;
         }
+        // Motion detected
         else
         {
-            NSLog(@"TableView -playlistInfo.imgSnapshot already");
+            cell.snapshotImage.hidden = NO;
+            cell.snapshotImage.image = [UIImage imageNamed:@"no_img_available"];
             
-            cell.snapshotImage.image = eventInfo.clipInfo.imgSnapshot;
-            cell.activityIndicatorLoading.hidden = YES;
+            if (eventInfo.clipInfo.imgSnapshot == nil &&
+                (eventInfo.clipInfo.urlImage != nil))// && (![eventInfo.clipInfo.urlImage isEqualToString:@""]))
+            {
+                [cell.activityIndicatorLoading startAnimating];
+                
+                CGSize newSize = CGSizeMake(269, 103);
+                
+                dispatch_queue_t q = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0ul);
+                dispatch_async(q,
+                               ^{
+                                   eventInfo.clipInfo.imgSnapshot = [self imageWithUrlString:eventInfo.clipInfo.urlImage scaledToSize:newSize];
+                                   
+                                   dispatch_async(dispatch_get_main_queue(),
+                                                  ^{
+                                                      //NSLog(@"img = %@", img);
+                                                      cell.snapshotImage.image = eventInfo.clipInfo.imgSnapshot;
+                                                      [cell.activityIndicatorLoading stopAnimating];
+                                                      cell.activityIndicatorLoading.hidden = YES;
+                                                  }
+                                                  );
+                               });
+                dispatch_release(q);
+            }
+            else
+            {
+                NSLog(@"TableView -playlistInfo.imgSnapshot already");
+                
+                cell.snapshotImage.image = eventInfo.clipInfo.imgSnapshot;
+                cell.activityIndicatorLoading.hidden = YES;
+            }
         }
         
 #else// Test data

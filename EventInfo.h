@@ -12,7 +12,7 @@
 @interface EventInfo : NSObject
 
 @property (nonatomic) NSInteger eventID; //35
-@property (retain, nonatomic) NSString *alert;//: 4,
+@property (nonatomic) NSInteger alert;//: 4,
 @property (retain, nonatomic) NSString *value;//: "20131231112818000",
 @property (retain, nonatomic) NSString *alert_name;//: "motion detected",
 @property (retain, nonatomic) NSString *time_stamp;//: "2013-12-31T04:30:15Z",
