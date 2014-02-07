@@ -111,20 +111,6 @@ double _ticks = 0;
     
     [self.ib_buttonChangeAction setHidden:NO];
     [self.view bringSubviewToFront:self.ib_buttonChangeAction];
-    /*
-     //create list image for display horizontal scroll view menu
-     1.Pan, Tilt & Zoom (bb_setting_icon.png)
-     2.Microphone (for two way audio) bb_setting_icon.png
-     3.Take a photo/Record Video ( bb_rec_icon_d.png )
-     4.Lullaby          bb_melody_off_icon.png
-     5.Camera List          bb_camera_slider_icon
-     6.Temperature display        temp_alert
-     */
-    self.itemImages = [NSMutableArray arrayWithObjects:@"video_action_pan.png", @"video_action_mic.png", @"video_action_video.png", @"video_action_music.png", @"video_action_temp.png", nil];
-    self.itemSelectedImages = [NSMutableArray arrayWithObjects:@"video_action_pan_pressed.png", @"video_action_mic_pressed.png", @"video_action_video_pressed.png", @"video_action_music_pressed.png", @"video_action_temp_pressed.png", nil];
-    [self.horizMenu reloadData];
-    self.selectedItemMenu = -1;
-    [self updateBottomView];
 
     // Do any additional setup after loading the view.
 	[[NSNotificationCenter defaultCenter] addObserver: self
@@ -217,11 +203,32 @@ double _ticks = 0;
         [self.timelineVC loadEvents:self.selectedChannel];
     }
     
-    //NSLog(@"Model of Camera is: %d", self.selectedChannel.profile.modelID);
+    /*
+     //create list image for display horizontal scroll view menu
+     1.Pan, Tilt & Zoom (bb_setting_icon.png)
+     2.Microphone (for two way audio) bb_setting_icon.png
+     3.Take a photo/Record Video ( bb_rec_icon_d.png )
+     4.Lullaby          bb_melody_off_icon.png
+     5.Camera List          bb_camera_slider_icon
+     6.Temperature display        temp_alert
+     */
+    
+    if (_isSharedCam == TRUE)
+    {
+        self.itemImages = [NSMutableArray arrayWithObjects:@"video_action_pan.png", @"video_action_video.png", @"video_action_music.png", nil];
+        self.itemSelectedImages = [NSMutableArray arrayWithObjects:@"video_action_pan_pressed.png", @"video_action_video_pressed.png", @"video_action_music_pressed.png", nil];
+    }
+    else
+    {
+        self.itemImages = [NSMutableArray arrayWithObjects:@"video_action_pan.png", @"video_action_mic.png", @"video_action_video.png", @"video_action_music.png", @"video_action_temp.png", nil];
+        self.itemSelectedImages = [NSMutableArray arrayWithObjects:@"video_action_pan_pressed.png", @"video_action_mic_pressed.png", @"video_action_video_pressed.png", @"video_action_music_pressed.png", @"video_action_temp_pressed.png", nil];
+    }
+    
+    [self.horizMenu reloadData];
+    self.selectedItemMenu = -1;
+    [self updateBottomView];
     
     [self becomeActive];
-    //[self showMenuControlPanel];
-    //[self tryToHideMenuControlPanel];
     [self hideControlMenu];
     
     NSLog(@"Check selectedChannel is %@ and ip of deviece is %@", self.selectedChannel, self.selectedChannel.profile.ip_address);
@@ -4493,11 +4500,13 @@ double _ticks = 0;
 
 #pragma mark -
 #pragma mark HorizMenu Data Source
+
 - (UIImage *) selectedItemImageForMenu:(ScrollHorizontalMenu *) tabMenu withIndexItem:(NSInteger)index
 {
     NSString *imageSelected = [self.itemSelectedImages objectAtIndex:index];
     return [UIImage imageNamed:imageSelected];
 }
+
 - (UIColor *) backgroundColorForMenu:(ScrollHorizontalMenu *)tabView
 {
     return [UIColor clearColor];
@@ -4516,6 +4525,7 @@ double _ticks = 0;
 {
     return [self.itemSelectedImages objectAtIndex:index];
 }
+
 #pragma mark -
 #pragma mark HorizMenu Delegate
 -(void) horizMenu:(ScrollHorizontalMenu *)horizMenu itemSelectedAtIndex:(NSUInteger)index
@@ -4532,50 +4542,60 @@ double _ticks = 0;
     //show when user selecte one item inner control panel
     [self showControlMenu];
     
-    if (index == INDEX_PAN_TILT)
+    if (_isSharedCam == TRUE)
     {
-        //implement Pan, Tilt & zoom here
-        _selectedItemMenu = INDEX_PAN_TILT;
-    }
-    else if (index == INDEX_MICRO)
-    {
-        // implement Microphone here
-        if (_isSharedCam == TRUE)
+        // If this is SharedCam then the horimenu has 3 items. It is not match with define INDEX_...
+        switch (index)
         {
-            return; // Disable for SharedCam
-        }
-        else
-        {
-            _selectedItemMenu = INDEX_MICRO;
-            [self recordingPressAction:nil];
-        }
-    }
-    else if (index == INDEX_RECORDING)
-    {
-        //implement take a photo/record video here
-
-        _selectedItemMenu = INDEX_RECORDING;
-    }
-    else if (index == INDEX_MELODY)
-    {
-        _selectedItemMenu = INDEX_MELODY;
-        [self melodyTouchAction:nil];
-    }
-    else if (index == INDEX_TEMP)
-    {
-        if (_isSharedCam == TRUE)
-        {
-            return; // Disable for SharedCam
-        }
-        else
-        {
-            //implement display Temperature
-            _selectedItemMenu = INDEX_TEMP;
+            case 0:
+                self.selectedItemMenu = INDEX_PAN_TILT;
+                break;
+                
+            case 1:
+                self.selectedItemMenu = INDEX_RECORDING;
+                break;
+                
+            case 2:
+                self.selectedItemMenu = INDEX_MELODY;
+                [self melodyTouchAction:nil];
+                break;
+                
+            default:
+                break;
         }
     }
     else
     {
-        NSLog(@"Action out of bound");
+        if (index == INDEX_PAN_TILT)
+        {
+            //implement Pan, Tilt & zoom here
+            _selectedItemMenu = INDEX_PAN_TILT;
+        }
+        else if (index == INDEX_MICRO)
+        {
+            // implement Microphone here
+            _selectedItemMenu = INDEX_MICRO;
+            [self recordingPressAction:nil];
+        }
+        else if (index == INDEX_RECORDING)
+        {
+            //implement take a photo/record video here
+            _selectedItemMenu = INDEX_RECORDING;
+        }
+        else if (index == INDEX_MELODY)
+        {
+            _selectedItemMenu = INDEX_MELODY;
+            [self melodyTouchAction:nil];
+        }
+        else if (index == INDEX_TEMP)
+        {
+            //implement display Temperature
+            _selectedItemMenu = INDEX_TEMP;
+        }
+        else
+        {
+            NSLog(@"Action out of bound");
+        }
     }
     
     [self updateBottomView];
