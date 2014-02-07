@@ -14,8 +14,6 @@
 #import <CFNetwork/CFNetwork.h>
 #include <ifaddrs.h>
 
-#define DISABLE_VIEW_RELEASE_FLAG 0
-
 #define MODEL_SHARED_CAM @"0036"
 #define MODEL_CONCURRENT @"0066"
 #define MODEL_BLE        @"0083" //0836 {UAP | BLE}
@@ -73,6 +71,7 @@
 @property (nonatomic, retain) NSThread *threadBonjour;
 @property (nonatomic, retain) NSMutableArray *bonjourList;
 @property (nonatomic) BOOL scanAgain;
+@property (nonatomic) BOOL isSharedCam;
 
 - (void)centerScrollViewContents;
 - (void)scrollViewDoubleTapped:(UITapGestureRecognizer*)recognizer;
@@ -358,9 +357,6 @@ double _ticks = 0;
             [self.topToolbar setHidden:YES];
         }
     }
-#if DISABLE_VIEW_RELEASE_FLAG
-    self.navigationItem.rightBarButtonItem.enabled = NO;
-#endif
 }
 
 - (void)nowButtonAciton:(id)sender
@@ -725,13 +721,12 @@ double _ticks = 0;
                 [self performSelectorInBackground:@selector(getMelodyValue_bg) withObject:nil];
                 self.imgViewDrectionPad.userInteractionEnabled = YES;
                 self.imgViewDrectionPad.image = [UIImage imageNamed:@"camera_action_pan_bg.png"];
-//                NSTimer *getTemperatureTimer = [NSTimer scheduledTimerWithTimeInterval:10
-//                                                                                target:self
-//                                                                              selector:@selector(getCameraTemperature_bg:)
-//                                                                              userInfo:nil
-//                                                                               repeats:YES];
-//                [getTemperatureTimer fire];
-                [self performSelectorInBackground:@selector(getCameraTemperature_bg:) withObject:nil];
+                
+                if (_isSharedCam == FALSE)
+                {
+                    [self performSelectorInBackground:@selector(getCameraTemperature_bg:) withObject:nil];
+                }
+                
                 self.horizMenu.userInteractionEnabled = YES;
             }
         }
@@ -1238,11 +1233,13 @@ double _ticks = 0;
         {
             if ([[regID substringWithRange:NSMakeRange(2, 4)] isEqualToString:MODEL_SHARED_CAM])
             {
+                self.isSharedCam = TRUE;
                 return TRUE;
             }
         }
     }
     
+    self.isSharedCam = FALSE;
     return FALSE;
 }
 
@@ -1415,11 +1412,8 @@ double _ticks = 0;
     //set value default for table view
     self.playlistViewController.tableView.hidden= YES;
     // loading earlierlist in background
-#if DISABLE_VIEW_RELEASE_FLAG
-#else
     //[self performSelectorInBackground:@selector(loadEarlierList) withObject:nil];
-    [self performSelectorInBackground:@selector(loadTimelineEvents_bg) withObject:nil];
-#endif
+    //[self performSelectorInBackground:@selector(loadTimelineEvents_bg) withObject:nil];
     
     //Direction stuf
     /* Kick off the two timer for direction sensing */
@@ -3941,10 +3935,7 @@ double _ticks = 0;
     self.playlistViewController.view.hidden = YES;
     
     //
-        [self setupPtt];
-#if DISABLE_VIEW_RELEASE_FLAG
-    
-#endif
+    [self setupPtt];
 }
 
 #pragma mark -
@@ -4541,31 +4532,29 @@ double _ticks = 0;
     //show when user selecte one item inner control panel
     [self showControlMenu];
     
-    
-    if (index == INDEX_PAN_TILT) {
+    if (index == INDEX_PAN_TILT)
+    {
         //implement Pan, Tilt & zoom here
         _selectedItemMenu = INDEX_PAN_TILT;
-        
     }
     else if (index == INDEX_MICRO)
     {
         // implement Microphone here
-#if DISABLE_VIEW_RELEASE_FLAG
-        return; // Disable for release test
-#else
-        _selectedItemMenu = INDEX_MICRO;
-        [self recordingPressAction:nil];
-#endif
+        if (_isSharedCam == TRUE)
+        {
+            return; // Disable for SharedCam
+        }
+        else
+        {
+            _selectedItemMenu = INDEX_MICRO;
+            [self recordingPressAction:nil];
+        }
     }
     else if (index == INDEX_RECORDING)
     {
         //implement take a photo/record video here
 
         _selectedItemMenu = INDEX_RECORDING;
-#if DISABLE_VIEW_RELEASE_FLAG
-        [self changeAction:_ib_buttonChangeAction];
-#endif
-
     }
     else if (index == INDEX_MELODY)
     {
@@ -4574,16 +4563,21 @@ double _ticks = 0;
     }
     else if (index == INDEX_TEMP)
     {
-#if DISABLE_VIEW_RELEASE_FLAG
-        return; // Disable for release test
-#else
-        //implement display camera list here
-        _selectedItemMenu = INDEX_TEMP;
-#endif
+        if (_isSharedCam == TRUE)
+        {
+            return; // Disable for SharedCam
+        }
+        else
+        {
+            //implement display Temperature
+            _selectedItemMenu = INDEX_TEMP;
+        }
     }
-    else {
+    else
+    {
         NSLog(@"Action out of bound");
     }
+    
     [self updateBottomView];
 }
 
@@ -5137,9 +5131,6 @@ double _ticks = 0;
         }
         
     }
-#if DISABLE_VIEW_RELEASE_FLAG
-    ((UIButton *)sender).enabled = NO;
-#endif
 }
 
 #pragma mark -
