@@ -1565,10 +1565,6 @@
 				A1ABF199187535F10014FCB4 /* StartMonitor_VController */,
 				A1ABF19B1875365F0014FCB4 /* SwitchNetwork_VController */,
 				8BA372561887C4B1009FA465 /* AppDelegate */,
-
-				9704F83F17B37CAD005F9868 /* DashBoard_ViewController.h */,
-				9704F84017B37CAF005F9868 /* DashBoard_ViewController.mm */,
-
 				97F5531417BDD3AF00024017 /* MBPNavController.m */,
 				97987D40154698A10066C49B /* SetupHttpDelegate.h */,
 				9770CD67143071DA009E69EF /* PublicDefine.h */,
@@ -4123,7 +4119,7 @@
 				);
 				OTHER_LDFLAGS = "-lz";
 				PRODUCT_NAME = "Camera HD";
-				PROVISIONING_PROFILE = "23B859A5-EEA9-4C86-A69E-5C00B353FC3B";
+				PROVISIONING_PROFILE = "6296209A-5435-47A4-8372-20B2C8251B4C";
 				SDKROOT = iphoneos7.0;
 				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/../ios-frameworks/pjsip/arm/include/ $(SRCROOT)/../ios-frameworks/pjsip/arm/include/pj/ $(SRCROOT)/../ios-frameworks/pjsip/arm/include/pjnath/";
 				VALID_ARCHS = "armv6 armv7";
@@ -4172,7 +4168,7 @@
 				);
 				OTHER_LDFLAGS = "-lz";
 				PRODUCT_NAME = "Camera HD";
-				PROVISIONING_PROFILE = "23B859A5-EEA9-4C86-A69E-5C00B353FC3B";
+				PROVISIONING_PROFILE = "6296209A-5435-47A4-8372-20B2C8251B4C";
 				SDKROOT = iphoneos7.0;
 				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/../ios-frameworks/pjsip/arm/include/ $(SRCROOT)/../ios-frameworks/pjsip/arm/include/pj/ $(SRCROOT)/../ios-frameworks/pjsip/arm/include/pjnath/";
 				VALIDATE_PRODUCT = YES;
@@ -4196,7 +4192,7 @@
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
 				OTHER_LDFLAGS = "";
 				PRODUCT_NAME = "Camera HD";
-				PROVISIONING_PROFILE = "23B859A5-EEA9-4C86-A69E-5C00B353FC3B";
+				PROVISIONING_PROFILE = "6296209A-5435-47A4-8372-20B2C8251B4C";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				USER_HEADER_SEARCH_PATHS = "\"$(SRCROOT)/external_include\"/**";
@@ -4244,7 +4240,7 @@
 				);
 				OTHER_LDFLAGS = "-lz";
 				PRODUCT_NAME = "Camera HD";
-				PROVISIONING_PROFILE = "23B859A5-EEA9-4C86-A69E-5C00B353FC3B";
+				PROVISIONING_PROFILE = "6296209A-5435-47A4-8372-20B2C8251B4C";
 				RAMEWORK_SEARCH_PATHS = "$(inherited) \"$(SRCROOT)\"";
 				SDKROOT = iphoneos7.0;
 				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/../ios-frameworks/pjsip/arm/include/ $(SRCROOT)/../ios-frameworks/pjsip/arm/include/pj/ $(SRCROOT)/../ios-frameworks/pjsip/arm/include/pjnath/";
@@ -4268,7 +4264,7 @@
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = "";
 				PRODUCT_NAME = "Camera HD";
-				PROVISIONING_PROFILE = "23B859A5-EEA9-4C86-A69E-5C00B353FC3B";
+				PROVISIONING_PROFILE = "6296209A-5435-47A4-8372-20B2C8251B4C";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				USER_HEADER_SEARCH_PATHS = "\"$(SRCROOT)/external_include\"/**";
@@ -4292,7 +4288,7 @@
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
 				OTHER_LDFLAGS = "";
 				PRODUCT_NAME = "Camera HD";
-				PROVISIONING_PROFILE = "23B859A5-EEA9-4C86-A69E-5C00B353FC3B";
+				PROVISIONING_PROFILE = "6296209A-5435-47A4-8372-20B2C8251B4C";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				USER_HEADER_SEARCH_PATHS = "\"$(SRCROOT)/external_include\"/**";

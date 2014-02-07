@@ -14,8 +14,6 @@
 #import <CFNetwork/CFNetwork.h>
 #include <ifaddrs.h>
 
-#define DISABLE_VIEW_RELEASE_FLAG 0
-
 #define MODEL_SHARED_CAM @"0036"
 #define MODEL_CONCURRENT @"0066"
 #define MODEL_BLE        @"0083" //0836 {UAP | BLE}
@@ -73,6 +71,7 @@
 @property (nonatomic, retain) NSThread *threadBonjour;
 @property (nonatomic, retain) NSMutableArray *bonjourList;
 @property (nonatomic) BOOL scanAgain;
+@property (nonatomic) BOOL isSharedCam;
 
 - (void)centerScrollViewContents;
 - (void)scrollViewDoubleTapped:(UITapGestureRecognizer*)recognizer;
@@ -112,20 +111,6 @@ double _ticks = 0;
     
     [self.ib_buttonChangeAction setHidden:NO];
     [self.view bringSubviewToFront:self.ib_buttonChangeAction];
-    /*
-     //create list image for display horizontal scroll view menu
-     1.Pan, Tilt & Zoom (bb_setting_icon.png)
-     2.Microphone (for two way audio) bb_setting_icon.png
-     3.Take a photo/Record Video ( bb_rec_icon_d.png )
-     4.Lullaby          bb_melody_off_icon.png
-     5.Camera List          bb_camera_slider_icon
-     6.Temperature display        temp_alert
-     */
-    self.itemImages = [NSMutableArray arrayWithObjects:@"video_action_pan.png", @"video_action_mic.png", @"video_action_video.png", @"video_action_music.png", @"video_action_temp.png", nil];
-    self.itemSelectedImages = [NSMutableArray arrayWithObjects:@"video_action_pan_pressed.png", @"video_action_mic_pressed.png", @"video_action_video_pressed.png", @"video_action_music_pressed.png", @"video_action_temp_pressed.png", nil];
-    [self.horizMenu reloadData];
-    self.selectedItemMenu = -1;
-    [self updateBottomView];
 
     // Do any additional setup after loading the view.
 	[[NSNotificationCenter defaultCenter] addObserver: self
@@ -218,11 +203,32 @@ double _ticks = 0;
         [self.timelineVC loadEvents:self.selectedChannel];
     }
     
-    //NSLog(@"Model of Camera is: %d", self.selectedChannel.profile.modelID);
+    /*
+     //create list image for display horizontal scroll view menu
+     1.Pan, Tilt & Zoom (bb_setting_icon.png)
+     2.Microphone (for two way audio) bb_setting_icon.png
+     3.Take a photo/Record Video ( bb_rec_icon_d.png )
+     4.Lullaby          bb_melody_off_icon.png
+     5.Camera List          bb_camera_slider_icon
+     6.Temperature display        temp_alert
+     */
+    
+    if (_isSharedCam == TRUE)
+    {
+        self.itemImages = [NSMutableArray arrayWithObjects:@"video_action_pan.png", @"video_action_video.png", @"video_action_music.png", nil];
+        self.itemSelectedImages = [NSMutableArray arrayWithObjects:@"video_action_pan_pressed.png", @"video_action_video_pressed.png", @"video_action_music_pressed.png", nil];
+    }
+    else
+    {
+        self.itemImages = [NSMutableArray arrayWithObjects:@"video_action_pan.png", @"video_action_mic.png", @"video_action_video.png", @"video_action_music.png", @"video_action_temp.png", nil];
+        self.itemSelectedImages = [NSMutableArray arrayWithObjects:@"video_action_pan_pressed.png", @"video_action_mic_pressed.png", @"video_action_video_pressed.png", @"video_action_music_pressed.png", @"video_action_temp_pressed.png", nil];
+    }
+    
+    [self.horizMenu reloadData];
+    self.selectedItemMenu = -1;
+    [self updateBottomView];
     
     [self becomeActive];
-    //[self showMenuControlPanel];
-    //[self tryToHideMenuControlPanel];
     [self hideControlMenu];
     
     NSLog(@"Check selectedChannel is %@ and ip of deviece is %@", self.selectedChannel, self.selectedChannel.profile.ip_address);
@@ -358,9 +364,6 @@ double _ticks = 0;
             [self.topToolbar setHidden:YES];
         }
     }
-#if DISABLE_VIEW_RELEASE_FLAG
-    self.navigationItem.rightBarButtonItem.enabled = NO;
-#endif
 }
 
 - (void)nowButtonAciton:(id)sender
@@ -725,13 +728,12 @@ double _ticks = 0;
                 [self performSelectorInBackground:@selector(getMelodyValue_bg) withObject:nil];
                 self.imgViewDrectionPad.userInteractionEnabled = YES;
                 self.imgViewDrectionPad.image = [UIImage imageNamed:@"camera_action_pan_bg.png"];
-//                NSTimer *getTemperatureTimer = [NSTimer scheduledTimerWithTimeInterval:10
-//                                                                                target:self
-//                                                                              selector:@selector(getCameraTemperature_bg:)
-//                                                                              userInfo:nil
-//                                                                               repeats:YES];
-//                [getTemperatureTimer fire];
-                [self performSelectorInBackground:@selector(getCameraTemperature_bg:) withObject:nil];
+                
+                if (_isSharedCam == FALSE)
+                {
+                    [self performSelectorInBackground:@selector(getCameraTemperature_bg:) withObject:nil];
+                }
+                
                 self.horizMenu.userInteractionEnabled = YES;
             }
         }
@@ -1238,11 +1240,13 @@ double _ticks = 0;
         {
             if ([[regID substringWithRange:NSMakeRange(2, 4)] isEqualToString:MODEL_SHARED_CAM])
             {
+                self.isSharedCam = TRUE;
                 return TRUE;
             }
         }
     }
     
+    self.isSharedCam = FALSE;
     return FALSE;
 }
 
@@ -1415,11 +1419,8 @@ double _ticks = 0;
     //set value default for table view
     self.playlistViewController.tableView.hidden= YES;
     // loading earlierlist in background
-#if DISABLE_VIEW_RELEASE_FLAG
-#else
     //[self performSelectorInBackground:@selector(loadEarlierList) withObject:nil];
-    [self performSelectorInBackground:@selector(loadTimelineEvents_bg) withObject:nil];
-#endif
+    //[self performSelectorInBackground:@selector(loadTimelineEvents_bg) withObject:nil];
     
     //Direction stuf
     /* Kick off the two timer for direction sensing */
@@ -3941,10 +3942,7 @@ double _ticks = 0;
     self.playlistViewController.view.hidden = YES;
     
     //
-        [self setupPtt];
-#if DISABLE_VIEW_RELEASE_FLAG
-    
-#endif
+    [self setupPtt];
 }
 
 #pragma mark -
@@ -4502,11 +4500,13 @@ double _ticks = 0;
 
 #pragma mark -
 #pragma mark HorizMenu Data Source
+
 - (UIImage *) selectedItemImageForMenu:(ScrollHorizontalMenu *) tabMenu withIndexItem:(NSInteger)index
 {
     NSString *imageSelected = [self.itemSelectedImages objectAtIndex:index];
     return [UIImage imageNamed:imageSelected];
 }
+
 - (UIColor *) backgroundColorForMenu:(ScrollHorizontalMenu *)tabView
 {
     return [UIColor clearColor];
@@ -4525,6 +4525,7 @@ double _ticks = 0;
 {
     return [self.itemSelectedImages objectAtIndex:index];
 }
+
 #pragma mark -
 #pragma mark HorizMenu Delegate
 -(void) horizMenu:(ScrollHorizontalMenu *)horizMenu itemSelectedAtIndex:(NSUInteger)index
@@ -4541,49 +4542,62 @@ double _ticks = 0;
     //show when user selecte one item inner control panel
     [self showControlMenu];
     
+    if (_isSharedCam == TRUE)
+    {
+        // If this is SharedCam then the horimenu has 3 items. It is not match with define INDEX_...
+        switch (index)
+        {
+            case 0:
+                self.selectedItemMenu = INDEX_PAN_TILT;
+                break;
+                
+            case 1:
+                self.selectedItemMenu = INDEX_RECORDING;
+                break;
+                
+            case 2:
+                self.selectedItemMenu = INDEX_MELODY;
+                [self melodyTouchAction:nil];
+                break;
+                
+            default:
+                break;
+        }
+    }
+    else
+    {
+        if (index == INDEX_PAN_TILT)
+        {
+            //implement Pan, Tilt & zoom here
+            _selectedItemMenu = INDEX_PAN_TILT;
+        }
+        else if (index == INDEX_MICRO)
+        {
+            // implement Microphone here
+            _selectedItemMenu = INDEX_MICRO;
+            [self recordingPressAction:nil];
+        }
+        else if (index == INDEX_RECORDING)
+        {
+            //implement take a photo/record video here
+            _selectedItemMenu = INDEX_RECORDING;
+        }
+        else if (index == INDEX_MELODY)
+        {
+            _selectedItemMenu = INDEX_MELODY;
+            [self melodyTouchAction:nil];
+        }
+        else if (index == INDEX_TEMP)
+        {
+            //implement display Temperature
+            _selectedItemMenu = INDEX_TEMP;
+        }
+        else
+        {
+            NSLog(@"Action out of bound");
+        }
+    }
     
-    if (index == INDEX_PAN_TILT) {
-        //implement Pan, Tilt & zoom here
-        _selectedItemMenu = INDEX_PAN_TILT;
-        
-    }
-    else if (index == INDEX_MICRO)
-    {
-        // implement Microphone here
-#if DISABLE_VIEW_RELEASE_FLAG
-        return; // Disable for release test
-#else
-        _selectedItemMenu = INDEX_MICRO;
-        [self recordingPressAction:nil];
-#endif
-    }
-    else if (index == INDEX_RECORDING)
-    {
-        //implement take a photo/record video here
-
-        _selectedItemMenu = INDEX_RECORDING;
-#if DISABLE_VIEW_RELEASE_FLAG
-        [self changeAction:_ib_buttonChangeAction];
-#endif
-
-    }
-    else if (index == INDEX_MELODY)
-    {
-        _selectedItemMenu = INDEX_MELODY;
-        [self melodyTouchAction:nil];
-    }
-    else if (index == INDEX_TEMP)
-    {
-#if DISABLE_VIEW_RELEASE_FLAG
-        return; // Disable for release test
-#else
-        //implement display camera list here
-        _selectedItemMenu = INDEX_TEMP;
-#endif
-    }
-    else {
-        NSLog(@"Action out of bound");
-    }
     [self updateBottomView];
 }
 
@@ -5137,9 +5151,6 @@ double _ticks = 0;
         }
         
     }
-#if DISABLE_VIEW_RELEASE_FLAG
-    ((UIButton *)sender).enabled = NO;
-#endif
 }
 
 #pragma mark -

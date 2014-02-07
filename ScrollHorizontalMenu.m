@@ -45,23 +45,28 @@
     int tag = kButtonBaseTag;
     int xPos, marginLR;
     int buttonWidth;
-    int paddingBetweenButton;
+    
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
     {
         marginLR = kLeftOffset + 60; //padding left and right = 100
         xPos = kLeftOffset + 40; //
         buttonWidth = kButtonSize + 20; //60 for iPad
-        paddingBetweenButton = kPaddingBetweenButton;
     }
-    else{
+    else
+    {
         marginLR = kLeftOffset - 20;
         xPos = kLeftOffset - 20;
         buttonWidth = kButtonSize - 10;
-        paddingBetweenButton = kPaddingBetweenButton;
     }
     
+    // This is SharedCam, the menu has 3 items
+    if (_itemCount == 3)
+    {
+        // Make items is center menu.
+        xPos += (buttonWidth * 2 + kPaddingBetweenButton - 10 - buttonWidth / 2);
+    }
     
-    for(int i = 0 ; i < self.itemCount; i ++)
+    for(int i = 0 ; i < self.itemCount; i++)
     {
         NSString *imageName = [dataSource horizMenu:self nameImageForItemAtIndex:i];
         NSString *imageSelected = [dataSource horizMenu:self nameImageSelectedForItemAtIndex:i];
@@ -74,16 +79,17 @@
         customButton.tag = tag++;
         [customButton addTarget:self action:@selector(buttonTapped:) forControlEvents:UIControlEventTouchUpInside];
         customButton.frame = CGRectMake(xPos, 0, buttonWidth, buttonWidth);
+        
         xPos += buttonWidth;
-        xPos += paddingBetweenButton;
+        xPos += kPaddingBetweenButton;
         [self addSubview:customButton];
     }
+    
     xPos += marginLR;
     
     self.contentSize = CGSizeMake(xPos, buttonWidth);
     [self layoutSubviews];
 }
-
 
 -(void) setSelectedIndex:(int) index animated:(BOOL) animated
 {
@@ -100,14 +106,17 @@
     for(int i = 0; i < self.itemCount; i++)
     {
         UIButton *thisButton = (UIButton*) [self viewWithTag:i + kButtonBaseTag];
+        
         if(i + kButtonBaseTag == button.tag)
         {
             thisButton.selected = YES;
         }
-        
         else
+        {
             thisButton.selected = NO;
+        }
     }
+    
     [self.itemSelectedDelegate horizMenu:self itemSelectedAtIndex:button.tag - kButtonBaseTag];
 }
 
