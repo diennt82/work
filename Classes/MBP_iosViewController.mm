@@ -25,6 +25,7 @@
 #import "QBAnimationGroup.h"
 #import "QBAnimationSequence.h"
 #import "Step09ViewController.h"
+#import "LoginViewController.h"
 
 #import "AlertPrompt.h"
 
@@ -213,7 +214,9 @@
     }
     
     self.app_stage = APP_STAGE_LOGGING_IN;
-    
+#if 1
+    [self show_login_or_reg:nil];
+#else
     MBP_LoginOrRegistration * loginOrReg;
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
     {
@@ -231,7 +234,7 @@
     
     //Use navigation controller
     [loginOrReg presentModallyOn:self];
-
+#endif
 #endif
 
 
@@ -565,7 +568,9 @@
 				[userDefaults setBool:TRUE forKey:_AutoLogin];
 				[userDefaults synchronize];
 
-                
+#if 1
+                [self show_login_or_reg:nil];
+#else
                 MBP_LoginOrRegistration * loginOrReg;
                 if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
                 {
@@ -587,6 +592,7 @@
 
 				//Use navigation controller 
 				[loginOrReg presentModallyOn:self];
+#endif
 				break;
 			}
 
@@ -1988,7 +1994,25 @@
 #pragma mark SetupHTTPDelegate --- NOT USED --- check ..
 
 
+#if 1
+-(void) show_login_or_reg:(NSTimer*) exp
+{
+    
+	NSLog(@"show_login...");
+    
+    self.app_stage = APP_STAGE_LOGGING_IN;
+    
+    LoginViewController *loginVC = [[LoginViewController alloc] initWithNibName:@"LoginViewController"
+                                                                         bundle:Nil
+                                                                       delegate:self];
+    
+    UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:loginVC];
 
+    [loginVC release];
+    [self presentViewController:nav animated:YES completion:^{}];
+    //[nav release];
+}
+#else
 -(void) show_login_or_reg:(NSTimer*) exp
 {
 
@@ -2017,6 +2041,7 @@
 	[loginOrReg presentModallyOn:self];
 
 }
+#endif
 
 #if 1
 - (void)showNotificationViewController: (NSTimer *)exp
