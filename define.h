@@ -9,6 +9,11 @@
 #ifndef BlinkHD_ios_define_h
 #define BlinkHD_ios_define_h
 
+
+
+//define macro
+#define isiPhone5  ([[UIScreen mainScreen] bounds].size.height == 568)?YES:NO
+#define isiPhone4  ([[UIScreen mainScreen] bounds].size.height == 480)?YES:NO
 #define CONCURRENT_SETUP    1
 
 
@@ -32,17 +37,17 @@
 #define RETRY_CONNECTION_BLE_FAIL_TAG   2
 
 //define font
-#define PN_REGULAR_FONT   ProximaNova-Regular.otf
+#define PN_REGULAR_FONT             @"ProximaNova-Regular"
+#define PN_REGULAR_ITALIC_FONT      @"ProximaNova-RegularItalic"
+#define PN_BLACK_FONT               @"ProximaNova-Black"
+#define PN_BOLD_FONT                @"ProximaNova-Bold"
+#define PN_BOLD_IT_FONT             @"ProximaNova-BoldIt"
+#define PN_EXTRA_BOLD_FONT          @"ProximaNova-Extrabold"
+#define PN_LIGHT_FONT               @"ProximaNova-Light"
+#define PN_LIGHT_ITALIC_FONT        @"ProximaNova-LightItalic"
+#define PN_SEMIBOLD_FONT            @"ProximaNova-Semibold"
+#define PN_SEMIBOLD_ITALIC_FONT     @"ProximaNova-SemiboldItalic"
 
-//ProximaNova-Black.otf
-//ProximaNova-Bold.otf
-//ProximaNova-BoldIt.otf
-//ProximaNova-Extrabold.otf
-//ProximaNova-Light.otf
-//ProximaNova-LightItalic.otf
-//ProximaNova-Regular.otf
-//ProximaNova-RegularItalic.otf
-//ProximaNova-Semibold.otf
 
 
 

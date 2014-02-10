@@ -9,6 +9,5 @@
 #import <UIKit/UIKit.h>
 
 @interface UIFont (Hubble)
-//+ (id)applyHubbleFontDefaultWithSize:(CGFloat)size;
 + (id)applyHubbleFontName:(NSString *)font withSize:(CGFloat)size;
 @end

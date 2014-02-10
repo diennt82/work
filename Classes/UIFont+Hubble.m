@@ -10,10 +10,6 @@
 
 @implementation UIFont (Hubble)
 
-//+ (id)applyHubbleFontDefaultWithSize:(CGFloat)size
-//{
-//    return [UIFont fontWithName:<#(NSString *)#> size:<#(CGFloat)#>]
-//}
 + (id)applyHubbleFontName:(NSString *)font withSize:(CGFloat)size
 {
     return [UIFont fontWithName:font size:size];

@@ -11,5 +11,8 @@
 @interface UIColor (Hubble)
 
 + (UIColor *)colorFromHexString:(NSString *)hexString;
-
++ (UIColor *)holdToTalkTextColor;
++ (UIColor *)listeningTextColor;
++ (UIColor *)recordingTextColor;
++ (UIColor *)temperatureTextColor;
 @end

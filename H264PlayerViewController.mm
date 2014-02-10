@@ -257,10 +257,43 @@ double _ticks = 0;
 
 - (void)applyFont
 {
-    UIFont *font = [UIFont applyHubbleFontName:@"ProximaNova-Regular" withSize:46];
-    [self.ib_labelTouchToTalk setFont:font];
-    UIColor *color = [UIColor colorFromHexString:@"00acf7"];
-    self.ib_labelTouchToTalk.textColor = color;
+    if (isiPhone5)
+    {
+        //for holdtotalk
+        UIFont *font = [UIFont applyHubbleFontName:PN_REGULAR_FONT withSize:19];
+        [self.ib_labelTouchToTalk setFont:font];
+        UIColor *color = [UIColor holdToTalkTextColor];
+        self.ib_labelTouchToTalk.textColor = color;
+        //for recordingText
+        [self.ib_labelRecordVideo setFont:font];
+        self.ib_labelRecordVideo.textColor = [UIColor recordingTextColor];
+    }
+    else if (isiPhone4)
+    {
+        //for holdtotalk
+        UIFont *font = [UIFont applyHubbleFontName:PN_REGULAR_FONT withSize:17];
+        [self.ib_labelTouchToTalk setFont:font];
+        UIColor *color = [UIColor holdToTalkTextColor];
+        self.ib_labelTouchToTalk.textColor = color;
+        
+        //recording text
+        [self.ib_labelRecordVideo setFont:font];
+        self.ib_labelRecordVideo.textColor = [UIColor recordingTextColor];
+        
+    }
+    else
+    {
+        //iPad
+        //for holdtotalk
+        UIFont *font = [UIFont applyHubbleFontName:PN_REGULAR_FONT withSize:50];
+        [self.ib_labelTouchToTalk setFont:font];
+        UIColor *color = [UIColor holdToTalkTextColor];
+        self.ib_labelTouchToTalk.textColor = color;
+        
+        //recording text
+        [self.ib_labelRecordVideo setFont:font];
+        self.ib_labelRecordVideo.textColor = [UIColor recordingTextColor];
+    }
 }
 
 - (void) setupHttpPort
@@ -2666,19 +2699,52 @@ double _ticks = 0;
 
 - (void)setTemperatureState_Fg: (NSString *)temperature
 {
-    // Update UI
     
-    NSString *stringTemperature = [NSString stringWithFormat:@"%d˚c", (int)roundf([temperature floatValue])];
+    // Update UI
+    // start
+    NSString *stringTemperature = [NSString stringWithFormat:@"%d˚C", (int)roundf([temperature floatValue])];
     
     NSMutableAttributedString *attrString = [[NSMutableAttributedString alloc] initWithString:stringTemperature];
-    
-    UIFont *smallFont = [UIFont systemFontOfSize:40.0f];
-    
-    [attrString addAttribute:NSFontAttributeName value:(smallFont) range:NSMakeRange(stringTemperature.length - 1, 1)];
-    [attrString addAttribute:(id)kCTSuperscriptAttributeName value:@"1" range:NSMakeRange(stringTemperature.length - 1, 1)];
-
+    UIColor *color = [UIColor temperatureTextColor];
+    if (isiPhone5)
+    {
+        UIFont *degreeFont = [UIFont applyHubbleFontName:PN_LIGHT_FONT withSize:35];
+        UIFont *temperatureFont = [UIFont applyHubbleFontName:PN_LIGHT_FONT withSize:135];
+        
+        NSLog(@"stringTemperature.length is %d", stringTemperature.length);
+        [attrString addAttribute: NSForegroundColorAttributeName
+                          value: color
+                          range: NSMakeRange(0,stringTemperature.length - 1)];
+        [attrString addAttribute:NSFontAttributeName value:temperatureFont range:NSMakeRange(0, stringTemperature.length - 2)];
+        [attrString addAttribute:NSFontAttributeName value:degreeFont range:NSMakeRange(stringTemperature.length - 2, 2)];
+        
+        [attrString addAttribute:NSFontAttributeName value:degreeFont range:NSMakeRange(stringTemperature.length - 2, 2)];
+        [attrString addAttribute:(id)kCTSuperscriptAttributeName value:@"1" range:NSMakeRange(stringTemperature.length - 2, 2)];
+        
+    }
+    else if (isiPhone4)
+    {
+        UIFont *degreeFont = [UIFont applyHubbleFontName:PN_LIGHT_FONT withSize:30];
+        UIFont *temperatureFont = [UIFont applyHubbleFontName:PN_LIGHT_FONT withSize:125];
+        
+        [attrString addAttribute: NSForegroundColorAttributeName
+                          value: color
+                          range: NSMakeRange(0,stringTemperature.length)];
+        [attrString addAttribute:NSFontAttributeName value:temperatureFont range:NSMakeRange(0, stringTemperature.length - 2)];
+        [attrString addAttribute:NSFontAttributeName value:degreeFont range:NSMakeRange(stringTemperature.length - 2, 2)];
+    }
+    else
+    {
+        UIFont *smallFont = [UIFont systemFontOfSize:40.0f];
+        
+        [attrString addAttribute:NSFontAttributeName value:(smallFont) range:NSMakeRange(stringTemperature.length - 1, 1)];
+        [attrString addAttribute:(id)kCTSuperscriptAttributeName value:@"1" range:NSMakeRange(stringTemperature.length - 1, 1)];
+        
+    }
     self.ib_temperature.attributedText = attrString;
+    self.ib_temperature.textColor = color;
     [attrString release];
+    
 }
 
 #pragma mark -
@@ -4989,6 +5055,8 @@ double _ticks = 0;
     [self.ib_buttonTouchToTalk setBackgroundImage:imageHoldToTalk forState:UIControlStateNormal];
     [self.ib_buttonTouchToTalk setBackgroundImage:imageHoldedToTalk forState:UIControlEventTouchDown];
     [self.ib_buttonTouchToTalk setBackgroundImage:imageHoldToTalk forState:UIControlEventTouchUpInside];
+    UIFont *font = [UIFont applyHubbleFontName:PN_REGULAR_FONT withSize:19];
+    [self.ib_labelTouchToTalk setFont:font];
     [self.ib_labelTouchToTalk setText:@"Listening"];
     
     //processing for PTT
@@ -5001,6 +5069,8 @@ double _ticks = 0;
     [self.ib_buttonTouchToTalk setBackgroundColor:[UIColor clearColor]];
     [self.ib_buttonTouchToTalk setBackgroundImage:imageHoldToTalk forState:UIControlStateNormal];
     [self.ib_buttonTouchToTalk setBackgroundImage:imageHoldToTalk forState:UIControlEventTouchUpInside];
+    UIFont *font = [UIFont applyHubbleFontName:PN_REGULAR_FONT withSize:17];
+    [self.ib_labelTouchToTalk setFont:font];
     [self.ib_labelTouchToTalk setText:@"Hold To Talk"];
     //user touch up inside and outside
 

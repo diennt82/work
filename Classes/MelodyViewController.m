@@ -10,6 +10,7 @@
 
 #import "MelodyViewController.h"
 #import <MonitorCommunication/MonitorCommunication.h>
+#import "define.h"
 
 @interface MelodyViewController () <UITableViewDataSource, UITableViewDelegate>
 {
@@ -217,12 +218,18 @@
     cell.textLabel.text = (NSString *) [_melodies objectAtIndex:indexPath.section];
     cell.backgroundColor = [UIColor whiteColor];
     
+    //update font
+    cell.textLabel.textColor = [UIColor blackColor];
     if (valueMelodiesMap[indexPath.section] == TRUE)
     {
+        UIFont *font = [UIFont applyHubbleFontName:PN_SEMIBOLD_FONT withSize:17];
+        cell.textLabel.font = font;
         cell.imageView.image = [UIImage imageNamed:@"camera_action_pause.png"];
     }
     else
     {
+        UIFont *font = [UIFont applyHubbleFontName:PN_REGULAR_FONT withSize:17];
+        cell.textLabel.font = font;
         cell.imageView.image = [UIImage imageNamed:@"camera_action_play.png"];
     }
     
