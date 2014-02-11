@@ -7,6 +7,7 @@
 //
 
 #import "UIColor+Hubble.h"
+#import "define.h"
 
 @implementation UIColor (Hubble)
 
@@ -21,21 +22,21 @@
 
 + (UIColor *)holdToTalkTextColor
 {
-    return [UIColor colorWithRed:0 green:172 blue:247 alpha:1];
+    return Rgb2UIColor(0, 172, 247);
 }
 
 + (UIColor *)listeningTextColor
 {
-    return [UIColor colorWithRed:0 green:172 blue:247 alpha:1];
+    return Rgb2UIColor(0, 172, 247);
 }
 
 + (UIColor *)recordingTextColor
 {
-    return [UIColor colorWithRed:255 green:53 blue:4 alpha:1];
+    return Rgb2UIColor(255, 53, 4);
 }
 
 + (UIColor *)temperatureTextColor
 {
-    return [UIColor colorWithRed:0 green:172 blue:247 alpha:1];
+    return Rgb2UIColor(0, 172, 247);
 }
 @end

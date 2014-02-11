@@ -11,9 +11,10 @@
 
 #define kButtonBaseTag 10000
 #define kLeftOffset 40
+#define kLeftOffset_iPhone 8
 #define kButtonSize 40
 #define kPaddingBetweenButton 30
-
+#define kButtonSize_iPhone 36
 @implementation ScrollHorizontalMenu
 
 @synthesize imageMenu = _imageMenu;
@@ -45,6 +46,7 @@
     int tag = kButtonBaseTag;
     int xPos, marginLR;
     int buttonWidth;
+    NSInteger paddingBetweenButton;
     
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
     {
@@ -54,9 +56,10 @@
     }
     else
     {
-        marginLR = kLeftOffset - 20;
-        xPos = kLeftOffset - 20;
-        buttonWidth = kButtonSize - 10;
+        marginLR = kLeftOffset_iPhone;
+        xPos = kLeftOffset_iPhone;
+        buttonWidth = kButtonSize_iPhone;
+        paddingBetweenButton = 14;
     }
     
     // This is SharedCam, the menu has 3 items
