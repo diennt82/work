@@ -48,8 +48,8 @@
     [self.btnCreate setBackgroundImage:[UIImage imageNamed:@"enter_pressed"] forState:UIControlEventTouchDown];
     
     [self.btnCheckbox setImage:[UIImage imageNamed:@"checkbox"] forState:UIControlStateNormal];
-    [self.btnCreate setImage:[UIImage imageNamed:@"checkbox_active"] forState:UIControlStateSelected];
-    [self.btnCreate setImage:[UIImage imageNamed:@"checkbox_active"] forState:UIControlStateHighlighted];
+    [self.btnCheckbox setImage:[UIImage imageNamed:@"checkbox_active"] forState:UIControlStateSelected];
+    [self.btnCheckbox setImage:[UIImage imageNamed:@"checkbox_active"] forState:UIControlStateHighlighted];
     
     self.tfEmail.delegate = self;
     self.tfPassword.delegate = self;

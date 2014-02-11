@@ -408,6 +408,8 @@
             // Configure the cell...
             
             cell.textLabel.text = @"Upgrade Plan";
+            cell.textLabel.font = [UIFont fontWithName:@"ProximaNova-Semibold" size:17];
+            cell.textLabel.textColor = [UIColor colorWithRed:128/255 green:128/255 blue:128/255 alpha:1];
             
             return cell;
         }
@@ -432,6 +434,8 @@
         
         cell.notifSettingsDelegate = self;
         cell.settingsLabel.text = @"Enable STUN";
+        cell.textLabel.font = [UIFont fontWithName:@"ProximaNova-Semibold" size:17];
+        cell.textLabel.textColor = [UIColor colorWithRed:128/255 green:128/255 blue:128/255 alpha:1];
         [cell.settingSwitch setOn:_enabledSTUN];
         
         return cell;
