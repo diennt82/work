@@ -16,6 +16,7 @@
 
 @interface Account_ViewController () <TimelineButtonCellDelegate, NotifSettingsCellDelegate>
 
+@property (retain, nonatomic) IBOutlet UITableViewCell *tableViewCellChangePassword;
 @property (nonatomic) BOOL enabledSTUN;
 
 @end
@@ -39,6 +40,7 @@
 -(void) dealloc
 {
     [mtopbar release];
+    [_tableViewCellChangePassword release];
     [super dealloc];
 }
 - (void)viewDidLoad
@@ -92,19 +94,13 @@
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
 	
 	//can be user email or user name here --
-	NSString * user_name = (NSString *) [userDefaults objectForKey:@"PortalUsername"];
 	NSString * user_email = (NSString *) [userDefaults objectForKey:@"PortalUseremail"];
     
-    
-    UITextField * _user = (UITextField *) [userNameCell viewWithTag:1];
-    _user.text = user_name;
-    _user =  (UITextField *) [userEmailCell viewWithTag:1];
+    UITextField * _user  =  (UITextField *) [userEmailCell viewWithTag:1];
     _user.text = user_email;
     
     UITextField * _version = (UITextField *) [versionCell viewWithTag:1];
     
-    //NSString * msg = NSLocalizedStringWithDefaultValue(@"version",nil, [NSBundle mainBundle],
-    //                                                 @"Version %@" , nil);
     NSString *version = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
     
     //version = [NSString stringWithFormat:msg,version];
@@ -338,22 +334,23 @@
     return YES;
 }
 
-#define USERNAME_INDEX 0
-#define USEREMAIL_INDEX 1
-#define APPVERSION_INDEX 2
+#define USEREMAIL_INDEX     0
+#define CHANGE_PASS_INDEX   1
+#define APPVERSION_INDEX    2
 
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
     if (indexPath.section == 0)
     {
-        if (indexPath.row == USERNAME_INDEX) {
-            return userNameCell;
-        }
-        
         if (indexPath.row == USEREMAIL_INDEX)
         {
             return userEmailCell;
+        }
+        
+        if (indexPath.row == CHANGE_PASS_INDEX)
+        {
+            return _tableViewCellChangePassword;
         }
         
         if (indexPath.row == APPVERSION_INDEX)

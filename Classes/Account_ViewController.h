@@ -12,7 +12,7 @@
 
 @interface Account_ViewController : UIViewController
 {
-    IBOutlet UITableViewCell * userNameCell,  * userEmailCell,
+    IBOutlet UITableViewCell * userEmailCell,
           * versionCell;
     UIToolbar * mtopbar;
     IBOutlet UITableView * accountInfo;
