@@ -263,6 +263,12 @@
 		8B99C0B5186AEAD200DB8AAA /* img_timeline_line.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B99C0B3186AEAD200DB8AAA /* img_timeline_line.png */; };
 		8B99C0B6186AEAD200DB8AAA /* img_timeline_dot.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B99C0B4186AEAD200DB8AAA /* img_timeline_dot.png */; };
 		8B9ABB6518A9F8EF0079F4A3 /* UIFont+IBCustomFonts.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B9ABB6418A9F8EF0079F4A3 /* UIFont+IBCustomFonts.m */; };
+		8B9ABB6A18A9FDEC0079F4A3 /* RegistrationViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8B9ABB6818A9FDEC0079F4A3 /* RegistrationViewController.mm */; };
+		8B9ABB6B18A9FDEC0079F4A3 /* RegistrationViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8B9ABB6918A9FDEC0079F4A3 /* RegistrationViewController.xib */; };
+		8B9ABB7018AA01D80079F4A3 /* checkbox_active.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B9ABB6C18AA01D80079F4A3 /* checkbox_active.png */; };
+		8B9ABB7118AA01D80079F4A3 /* checkbox_active@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B9ABB6D18AA01D80079F4A3 /* checkbox_active@2x.png */; };
+		8B9ABB7218AA01D80079F4A3 /* checkbox.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B9ABB6E18AA01D80079F4A3 /* checkbox.png */; };
+		8B9ABB7318AA01D80079F4A3 /* checkbox@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B9ABB6F18AA01D80079F4A3 /* checkbox@2x.png */; };
 		8B9AF69E1858179900AC09C3 /* ScheduleViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B9AF69C1858179900AC09C3 /* ScheduleViewController.m */; };
 		8B9AF69F1858179900AC09C3 /* ScheduleViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8B9AF69D1858179900AC09C3 /* ScheduleViewController.xib */; };
 		8B9AF6A418581D3300AC09C3 /* AddScheduleViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B9AF6A218581D3300AC09C3 /* AddScheduleViewController.m */; };
@@ -797,6 +803,13 @@
 		8B99C0B3186AEAD200DB8AAA /* img_timeline_line.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = img_timeline_line.png; sourceTree = "<group>"; };
 		8B99C0B4186AEAD200DB8AAA /* img_timeline_dot.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = img_timeline_dot.png; sourceTree = "<group>"; };
 		8B9ABB6418A9F8EF0079F4A3 /* UIFont+IBCustomFonts.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIFont+IBCustomFonts.m"; sourceTree = "<group>"; };
+		8B9ABB6718A9FDEC0079F4A3 /* RegistrationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RegistrationViewController.h; sourceTree = "<group>"; };
+		8B9ABB6818A9FDEC0079F4A3 /* RegistrationViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = RegistrationViewController.mm; sourceTree = "<group>"; };
+		8B9ABB6918A9FDEC0079F4A3 /* RegistrationViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = RegistrationViewController.xib; sourceTree = "<group>"; };
+		8B9ABB6C18AA01D80079F4A3 /* checkbox_active.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = checkbox_active.png; sourceTree = "<group>"; };
+		8B9ABB6D18AA01D80079F4A3 /* checkbox_active@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "checkbox_active@2x.png"; sourceTree = "<group>"; };
+		8B9ABB6E18AA01D80079F4A3 /* checkbox.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = checkbox.png; sourceTree = "<group>"; };
+		8B9ABB6F18AA01D80079F4A3 /* checkbox@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "checkbox@2x.png"; sourceTree = "<group>"; };
 		8B9AF69B1858179900AC09C3 /* ScheduleViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ScheduleViewController.h; sourceTree = "<group>"; };
 		8B9AF69C1858179900AC09C3 /* ScheduleViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ScheduleViewController.m; sourceTree = "<group>"; };
 		8B9AF69D1858179900AC09C3 /* ScheduleViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ScheduleViewController.xib; sourceTree = "<group>"; };
@@ -1578,6 +1591,7 @@
 		080E96DDFE201D6D7F000001 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				8B9ABB6618A9FDBB0079F4A3 /* RegistrationVC */,
 				A1AC859218912FFC002A8CCD /* Color */,
 				A1AC857318912574002A8CCD /* Fonts */,
 				8B9633A718A8AA70008A9579 /* LoginViewController */,
@@ -2193,6 +2207,10 @@
 				8B9633B518A8B0C0008A9579 /* enter@2x.png */,
 				8B9633AE18A8AD02008A9579 /* login_line.png */,
 				8B9633AF18A8AD02008A9579 /* login_line@2x.png */,
+				8B9ABB6C18AA01D80079F4A3 /* checkbox_active.png */,
+				8B9ABB6D18AA01D80079F4A3 /* checkbox_active@2x.png */,
+				8B9ABB6E18AA01D80079F4A3 /* checkbox.png */,
+				8B9ABB6F18AA01D80079F4A3 /* checkbox@2x.png */,
 			);
 			name = Launch;
 			sourceTree = "<group>";
@@ -2252,6 +2270,16 @@
 				8B9906FA18697FCC0054966B /* camera_action_photo.png */,
 			);
 			name = Camera_action;
+			sourceTree = "<group>";
+		};
+		8B9ABB6618A9FDBB0079F4A3 /* RegistrationVC */ = {
+			isa = PBXGroup;
+			children = (
+				8B9ABB6718A9FDEC0079F4A3 /* RegistrationViewController.h */,
+				8B9ABB6818A9FDEC0079F4A3 /* RegistrationViewController.mm */,
+				8B9ABB6918A9FDEC0079F4A3 /* RegistrationViewController.xib */,
+			);
+			name = RegistrationVC;
 			sourceTree = "<group>";
 		};
 		8B9AF69A1858177300AC09C3 /* Scheduling */ = {
@@ -2927,6 +2955,7 @@
 				38DE1BD8168AD9B40049E814 /* SongTitleView.xib in Resources */,
 				8B92A0B218640926005923D2 /* Timeline_line_.png in Resources */,
 				38A62E8D15C92BDF00DEA520 /* bb_spk_icon_d.png in Resources */,
+				8B9ABB7018AA01D80079F4A3 /* checkbox_active.png in Resources */,
 				8B9112CC18601106004301C5 /* GeneralCell.xib in Resources */,
 				A1ABF1A8187537AD0014FCB4 /* NetworkInfoToCamera_VController_iPad.xib in Resources */,
 				8B9906F918697F940054966B /* camera_action_photo_pressed.png in Resources */,
@@ -3024,6 +3053,7 @@
 				8B92C0EE186849C700538013 /* camera_action_pan_bg.png in Resources */,
 				8BC0A0481844B31700A5FD52 /* mbp_icon114x114.png in Resources */,
 				8B92C0D018682A2100538013 /* alert_play.png in Resources */,
+				8B9ABB7218AA01D80079F4A3 /* checkbox.png in Resources */,
 				A1E74741185F07AE00A54B29 /* menu_selected.png in Resources */,
 				8B9899DB1859AA6A00AC3852 /* slider-default7-trackBackground.png in Resources */,
 				8B93848F1856ED73009C4771 /* CameraStngsCell.xib in Resources */,
@@ -3075,6 +3105,7 @@
 				8BA8AE881821F3E900DC9E9F /* stream720p_10_926.sdp in Resources */,
 				8B9B57DC184F0D9900E58543 /* frame-4-1_update-iOS7_new.png in Resources */,
 				8B92C0DE1868318800538013 /* settings_donotdisturb.png in Resources */,
+				8B9ABB7118AA01D80079F4A3 /* checkbox_active@2x.png in Resources */,
 				8B9907021869824D0054966B /* camera_action_video_pressed.png in Resources */,
 				8B9633B818A8B0C0008A9579 /* enter.png in Resources */,
 				8BA7F2821851C57200BE0145 /* blink11hd480p.sdp in Resources */,
@@ -3168,8 +3199,10 @@
 				978B25B717E1B41C006FC224 /* reveal-icon@2x.png in Resources */,
 				A1E74744185F07AE00A54B29 /* saveday.png in Resources */,
 				978B25C217E1B4AB006FC224 /* BMMenuViewController.xib in Resources */,
+				8B9ABB6B18A9FDEC0079F4A3 /* RegistrationViewController.xib in Resources */,
 				8B95843D1877DF400055BCE3 /* mbp_icon120x120.png in Resources */,
 				8BC0A0201844A6EE00A5FD52 /* bb_setup_icon_step_1.png in Resources */,
+				8B9ABB7318AA01D80079F4A3 /* checkbox@2x.png in Resources */,
 				97735C4517E1CEAA00160DA1 /* MyFrontViewController.xib in Resources */,
 				8B92C0E01868318800538013 /* settings_notification.png in Resources */,
 				9792B9AF17E2D1F6009C9F5D /* H264PlayerViewController_ipad.xib in Resources */,
@@ -3289,6 +3322,7 @@
 				978B25BC17E1B43E006FC224 /* MTStackDefaultContainerView.m in Sources */,
 				978B25BD17E1B43E006FC224 /* MTStackViewController.m in Sources */,
 				978B25C117E1B4AB006FC224 /* BMMenuViewController.mm in Sources */,
+				8B9ABB6A18A9FDEC0079F4A3 /* RegistrationViewController.mm in Sources */,
 				97735C4417E1CEAA00160DA1 /* MyFrontViewController.m in Sources */,
 				84DEA2BB17E42E3F00567836 /* NotificationViewController.mm in Sources */,
 				8B9C7E19185F26B70038B3A8 /* CamerasCell.m in Sources */,
