@@ -18,6 +18,8 @@
                 <outlet property="playEnventBtn" destination="UoT-cs-5Ba" id="btJ-3u-R2w"/>
                 <outlet property="timeLabel" destination="h1x-TK-aX4" id="wyR-CN-Ewy"/>
                 <outlet property="view" destination="1" id="3"/>
+                <outlet property="viewBehide" destination="8OT-kN-CAL" id="IxU-9I-19x"/>
+                <outlet property="viewFront" destination="6Mq-7w-ZnJ" id="ty8-0z-csf"/>
             </connections>
         </placeholder>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
@@ -101,7 +103,7 @@
                     </subviews>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                 </view>
-                <view contentMode="scaleToFill" id="8OT-kN-CAL">
+                <view hidden="YES" contentMode="scaleToFill" id="8OT-kN-CAL">
                     <rect key="frame" x="91" y="374" width="147" height="109"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <subviews>

@@ -23,6 +23,8 @@
 @property (retain, nonatomic) IBOutlet UIButton *choosePlanBtn;
 @property (retain, nonatomic) IBOutlet UIButton *learnMoreBtn;
 @property (retain, nonatomic) IBOutlet UIActivityIndicatorView *activityIndicatorViewLoading;
+@property (retain, nonatomic) IBOutlet UIView *viewFront;
+@property (retain, nonatomic) IBOutlet UIView *viewBehide;
 
 @property (nonatomic) BOOL eventsListAlready;
 @property (nonatomic, retain) NSDictionary *event;
@@ -154,13 +156,9 @@
     else
     {
         self.messageLabel.text = @"You do not have motion detected recording enabled. Please choose an option below";
-        self.timeLabel.hidden = YES;
-        self.playEnventBtn.hidden = YES;
-        self.goToCameraBtn.hidden = YES;
-        self.changeSettingsBtn.hidden = YES;
+        self.viewFront.hidden = YES;
         
-        self.choosePlanBtn.hidden = NO;
-        self.learnMoreBtn.hidden = NO;
+        self.viewBehide.hidden = NO;
     }
 }
 
@@ -343,6 +341,8 @@
     [_timeLabel release];
     [_imageViewSnapshot release];
     [_activityIndicatorViewLoading release];
+    [_viewFront release];
+    [_viewBehide release];
     [super dealloc];
 }
 @end
