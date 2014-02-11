@@ -83,35 +83,26 @@ ProximaNova-SemiboldItalic.otf</string>
     
     <key>IBCustomFonts</key>
 	<dict>
-        <key>HelveticaNeue-CondensedBlack</key>
+		<key>HelveticaNeue-CondensedBlack</key>
 		<string>ProximaNova-Black</string>
-        
-        <key>HelveticaNeue-Bold</key>
+		<key>HelveticaNeue-Bold</key>
 		<string>ProximaNova-Bold</string>
-        
-        <key>HelveticaNeue-BoldItalic</key>
+		<key>HelveticaNeue-BoldItalic</key>
 		<string>ProximaNova-BoldIt</string>
-        
-        <key>HelveticaNeue-Light</key>
+		<key>HelveticaNeue-Light</key>
 		<string>ProximaNova-Light</string>
-
-		<key>HelveticaNeue-MediumItalic</key>
-		<string>ProximaNova-RegularItalic</string>
-        
-        <key>HelveticaNeue-Thin</key>
-		<string>ProximaNova-Semibold</string>
-        
-        <key>HelveticaNeue-ThinItalic</key>
-		<string>ProximaNova-SemiboldItalic</string>
-        
-        <key>HelveticaNeue-CondensedBold</key>
-		<string>ProximaNova-Extrabold</string>
-        
-        <key>Helvetica-Light</key>
-		<string>ProximaNova-LightItalic</string>
-        
-        <key>Helvetica</key>
+		<key>HelveticaNeue</key>
 		<string>ProximaNova-Regular</string>
+		<key>HelveticaNeue-Thin</key>
+		<string>ProximaNova-Semibold</string>
+		<key>Avenir-Heavy</key>
+		<string>ProximaNova-SemiboldIt</string>
+		<key>HelveticaNeue-CondensedBold</key>
+		<string>ProximaNova-Extrabld</string>
+		<key>HelveticaNeue-MediumItalic</key>
+		<string>ProximaNova-RegularIt</string>
+		<key>Helvetica-Light</key>
+		<string>ProximaNova-LightIt</string>
 	</dict>
 </dict>
 </plist>

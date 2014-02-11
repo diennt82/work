@@ -44,6 +44,9 @@
     //Add testflight app token - For remote login & crash reporting
     //[TestFlight takeOff:@"4574de50-f54d-4414-a803-fc460426c915"];
     
+    NSArray *names = [UIFont fontNamesForFamilyName:@"Proxima Nova"];
+    NSLog(@"names: %@",names);
+    
     [window setRootViewController:viewController];
     [window makeKeyAndVisible];
     
