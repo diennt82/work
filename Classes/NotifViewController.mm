@@ -50,28 +50,28 @@
     [self.playEnventBtn setImage:[UIImage imageNamed:@"alert_play"] forState:UIControlStateNormal];
     [self.playEnventBtn setImage:[UIImage imageNamed:@"alert_play_pressed"] forState:UIControlEventTouchDown];
     
-    [self layoutImageAndTextForButton:self.playEnventBtn];
+    //[self layoutImageAndTextForButton:self.playEnventBtn];
     
     
     [self.goToCameraBtn setImage:[UIImage imageNamed:@"alert_camera"] forState:UIControlStateNormal];
     [self.goToCameraBtn setImage:[UIImage imageNamed:@"alert_camera_pressed"] forState:UIControlEventTouchDown];
     
-    [self layoutImageAndTextForButton:self.goToCameraBtn];
+    //[self layoutImageAndTextForButton:self.goToCameraBtn];
     
     [self.changeSettingsBtn setImage:[UIImage imageNamed:@"alert_settings"] forState:UIControlStateNormal];
     [self.changeSettingsBtn setImage:[UIImage imageNamed:@"alert_settings_pressed"] forState:UIControlEventTouchDown];
     
-    [self layoutImageAndTextForButton:self.changeSettingsBtn];
+    //[self layoutImageAndTextForButton:self.changeSettingsBtn];
     
     [self.choosePlanBtn setImage:[UIImage imageNamed:@"alert_upgrade"] forState:UIControlStateNormal];
     [self.choosePlanBtn setImage:[UIImage imageNamed:@"alert_upgrade_pressed"] forState:UIControlEventTouchDown];
     
-    [self layoutImageAndTextForButton:self.choosePlanBtn];
+    //[self layoutImageAndTextForButton:self.choosePlanBtn];
     
     [self.learnMoreBtn setImage:[UIImage imageNamed:@"alert_learn"] forState:UIControlStateNormal];
     [self.learnMoreBtn setImage:[UIImage imageNamed:@"alert_learn_pressed"] forState:UIControlEventTouchDown];
     
-    [self layoutImageAndTextForButton:self.learnMoreBtn];
+    //[self layoutImageAndTextForButton:self.learnMoreBtn];
     
     self.isFreeUser = NO; // Registered User
 }
