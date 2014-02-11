@@ -262,6 +262,7 @@
 		8B99C0B2186ABB7900DB8AAA /* ImgNotAvailable.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B99C0B1186ABB7900DB8AAA /* ImgNotAvailable.png */; };
 		8B99C0B5186AEAD200DB8AAA /* img_timeline_line.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B99C0B3186AEAD200DB8AAA /* img_timeline_line.png */; };
 		8B99C0B6186AEAD200DB8AAA /* img_timeline_dot.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B99C0B4186AEAD200DB8AAA /* img_timeline_dot.png */; };
+		8B9ABB6518A9F8EF0079F4A3 /* UIFont+IBCustomFonts.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B9ABB6418A9F8EF0079F4A3 /* UIFont+IBCustomFonts.m */; };
 		8B9AF69E1858179900AC09C3 /* ScheduleViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B9AF69C1858179900AC09C3 /* ScheduleViewController.m */; };
 		8B9AF69F1858179900AC09C3 /* ScheduleViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8B9AF69D1858179900AC09C3 /* ScheduleViewController.xib */; };
 		8B9AF6A418581D3300AC09C3 /* AddScheduleViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B9AF6A218581D3300AC09C3 /* AddScheduleViewController.m */; };
@@ -795,6 +796,7 @@
 		8B99C0B1186ABB7900DB8AAA /* ImgNotAvailable.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ImgNotAvailable.png; sourceTree = "<group>"; };
 		8B99C0B3186AEAD200DB8AAA /* img_timeline_line.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = img_timeline_line.png; sourceTree = "<group>"; };
 		8B99C0B4186AEAD200DB8AAA /* img_timeline_dot.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = img_timeline_dot.png; sourceTree = "<group>"; };
+		8B9ABB6418A9F8EF0079F4A3 /* UIFont+IBCustomFonts.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIFont+IBCustomFonts.m"; sourceTree = "<group>"; };
 		8B9AF69B1858179900AC09C3 /* ScheduleViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ScheduleViewController.h; sourceTree = "<group>"; };
 		8B9AF69C1858179900AC09C3 /* ScheduleViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ScheduleViewController.m; sourceTree = "<group>"; };
 		8B9AF69D1858179900AC09C3 /* ScheduleViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ScheduleViewController.xib; sourceTree = "<group>"; };
@@ -2727,6 +2729,7 @@
 		A1AC857D18912820002A8CCD /* Fontsource */ = {
 			isa = PBXGroup;
 			children = (
+				8B9ABB6418A9F8EF0079F4A3 /* UIFont+IBCustomFonts.m */,
 				A1AC857E18912859002A8CCD /* ProximaNova-Black.otf */,
 				A1AC857F18912859002A8CCD /* ProximaNova-Bold.otf */,
 				A1AC858018912859002A8CCD /* ProximaNova-BoldIt.otf */,
@@ -3198,6 +3201,7 @@
 				8B92A0901863E68B005923D2 /* TimelineCell.m in Sources */,
 				8B92A0951863E9DC005923D2 /* TimelineActivityCell.m in Sources */,
 				1D3623260D0F684500981E51 /* MBP_iosAppDelegate.mm in Sources */,
+				8B9ABB6518A9F8EF0079F4A3 /* UIFont+IBCustomFonts.m in Sources */,
 				8B92A0A11863F655005923D2 /* SavedEventViewController.m in Sources */,
 				A1AC857C189126A6002A8CCD /* UIFont+Hubble.m in Sources */,
 				A1ABF1C6187538740014FCB4 /* DisplayWifiList_VController.mm in Sources */,

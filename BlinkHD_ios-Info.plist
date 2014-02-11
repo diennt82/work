@@ -80,5 +80,38 @@ ProximaNova-SemiboldItalic.otf</string>
 		<string>ProximaNova-Semibold.otf</string>
 		<string>ProximaNova-SemiboldItalic.otf</string>
 	</array>
+    
+    <key>IBCustomFonts</key>
+	<dict>
+        <key>HelveticaNeue-CondensedBlack</key>
+		<string>ProximaNova-Black</string>
+        
+        <key>HelveticaNeue-Bold</key>
+		<string>ProximaNova-Bold</string>
+        
+        <key>HelveticaNeue-BoldItalic</key>
+		<string>ProximaNova-BoldIt</string>
+        
+        <key>HelveticaNeue-Light</key>
+		<string>ProximaNova-Light</string>
+
+		<key>HelveticaNeue-MediumItalic</key>
+		<string>ProximaNova-RegularItalic</string>
+        
+        <key>HelveticaNeue-Thin</key>
+		<string>ProximaNova-Semibold</string>
+        
+        <key>HelveticaNeue-ThinItalic</key>
+		<string>ProximaNova-SemiboldItalic</string>
+        
+        <key>HelveticaNeue-CondensedBold</key>
+		<string>ProximaNova-Extrabold</string>
+        
+        <key>Helvetica-Light</key>
+		<string>ProximaNova-LightItalic</string>
+        
+        <key>Helvetica</key>
+		<string>ProximaNova-Regular</string>
+	</dict>
 </dict>
 </plist>
