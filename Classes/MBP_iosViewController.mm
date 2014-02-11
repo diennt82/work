@@ -24,7 +24,8 @@
 #import "QBAnimationItem.h"
 #import "QBAnimationGroup.h"
 #import "QBAnimationSequence.h"
-#import "Step09ViewController.h"
+//#import "Step09ViewController.h"
+#import "RegistrationViewController.h"
 #import "LoginViewController.h"
 
 #import "AlertPrompt.h"
@@ -728,6 +729,14 @@
 
 - (void)createAccount
 {
+#if 1
+    NSLog(@"MBP_iosVC - Load RegistrationVC");
+    RegistrationViewController *registrationVC = [[RegistrationViewController alloc] init];
+    registrationVC.delegate = self;
+    UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:registrationVC];
+    [self presentViewController:nav animated:YES completion:^{}];
+    [registrationVC release];
+#else
     {
         //20130219- app flow changed : Create account first
         
@@ -743,6 +752,7 @@
         
         [step09VC release];
     }
+#endif
 }
 
 -(BOOL) rebindCameraResource

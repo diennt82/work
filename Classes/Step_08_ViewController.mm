@@ -7,7 +7,8 @@
 //
 
 #import "Step_08_ViewController.h"
-#import "Step09ViewController.h"
+//#import "Step09ViewController.h"
+#import "RegistrationViewController.h"
 
 @interface Step_08_ViewController ()
 
@@ -138,20 +139,25 @@
 
 -(IBAction)handleButtonPress:(id)sender
 {    
-    NSLog(@"Load step 09");
+    NSLog(@"Step_08 - Load RegistrationVC");
     
     if (timeOut != nil && [timeOut isValid])
     {
         [timeOut invalidate];
     }
     
+    // Load RegistrationVC
+    
+    RegistrationViewController *registrationVC = [[RegistrationViewController alloc] init];
+    [self.navigationController pushViewController:registrationVC animated:NO];
+    [registrationVC release];
     
     //Load the next xib
-    Step09ViewController *step09VC = [[Step09ViewController alloc] init];
-
-    [self.navigationController pushViewController:step09VC animated:NO];
-    
-    [step09VC release];
+//    Step09ViewController *step09VC = [[Step09ViewController alloc] init];
+//
+//    [self.navigationController pushViewController:step09VC animated:NO];
+//    
+//    [step09VC release];
 }
 
 

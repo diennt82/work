@@ -7,7 +7,8 @@
 //
 
 #import "MBP_InitialSetupViewController.h"
-#import "Step09ViewController.h"
+//#import "Step09ViewController.h"
+#import "RegistrationViewController.h"
 #define USE_FILE_XIB_LANDSCAPE_FOR_INIT 0
 @interface MBP_InitialSetupViewController ()
 
@@ -289,6 +290,12 @@
     }
     else
     {
+#if 1
+        NSLog(@"MBP_InitialSetupVC - Load RegistrationVC");
+        RegistrationViewController *registrationVC = [[RegistrationViewController alloc] init];
+        [self.navigationController pushViewController:registrationVC animated:NO];
+        [registrationVC release];
+#else
         //20130219- app flow changed : Create account first
         
         NSLog(@"Load step 09");
@@ -299,6 +306,7 @@
         [self.navigationController pushViewController:step09ViewController animated:NO];
         
         [step09ViewController release];
+#endif
     }
 }
 
