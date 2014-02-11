@@ -13,7 +13,8 @@
 #import "CamerasCell.h"
 #import "H264PlayerViewController.h"
 #import "CameraAlert.h"
-#import "MenuCameraViewController.h"
+//#import "MenuCameraViewController.h"
+#import "CameraMenuViewController.h"
 
 @interface CamerasViewController () <H264PlayerVCDelegate, CamerasCellDelegate, UIAlertViewDelegate>
 
@@ -197,6 +198,15 @@
 
 - (void)sendTouchSettingsActionWithRowIndex:(NSInteger)rowIdx
 {
+#if 1
+    CameraMenuViewController *cameraMenuCV = [[CameraMenuViewController alloc] init];
+    cameraMenuCV.camChannel = (CamChannel *)[self.camChannels objectAtIndex:rowIdx];
+    cameraMenuCV.cameraMenuDelegate = ((MenuViewController *)self.parentVC).menuDelegate;
+    
+    [((MenuViewController *)self.parentVC).navigationController pushViewController:cameraMenuCV animated:YES];
+    
+    [cameraMenuCV release];
+#else
     MenuCameraViewController *menuCamersVC = [[MenuCameraViewController alloc] init];
     menuCamersVC.camChannel = (CamChannel *)[self.camChannels objectAtIndex:rowIdx];
     
@@ -205,6 +215,7 @@
     [((MenuViewController *)self.parentVC).navigationController pushViewController:menuCamersVC animated:YES];
     
     [menuCamersVC release];
+#endif
 }
 
 #pragma mark - Methods

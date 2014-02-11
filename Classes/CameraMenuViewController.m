@@ -299,7 +299,7 @@
 	//[self.navigationController popViewControllerAnimated:YES];
     [self.navigationController popToRootViewControllerAnimated:YES];
     
-    [_menuCamerasDelegate sendStatus:AFTER_DEL_RELOGIN];
+    [_cameraMenuDelegate sendStatus:AFTER_DEL_RELOGIN];
 }
 
 - (void) removeCameraFailedWithError:(NSDictionary *)errorResponse
@@ -307,7 +307,7 @@
 	NSLog(@"CameraMenuVC - removeCam failed errorcode:");
     [self.navigationController popToRootViewControllerAnimated:YES];
     
-    [_menuCamerasDelegate sendStatus:AFTER_DEL_RELOGIN];
+    [_cameraMenuDelegate sendStatus:AFTER_DEL_RELOGIN];
 }
 
 -(void) removeCameraFailedServerUnreachable
@@ -318,7 +318,7 @@
     
     [self.navigationController popToRootViewControllerAnimated:YES];
     
-    [_menuCamerasDelegate sendStatus:AFTER_DEL_RELOGIN];
+    [_cameraMenuDelegate sendStatus:AFTER_DEL_RELOGIN];
 }
 
 - (void)didReceiveMemoryWarning
