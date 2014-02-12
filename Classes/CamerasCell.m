@@ -15,8 +15,8 @@
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self) {
         // Initialization code
-        [self.settingsButton setImage:[UIImage imageNamed:@"settings"] forState:UIControlStateNormal];
-        [self.settingsButton setImage:[UIImage imageNamed:@"settings_pressed"] forState:UIControlEventTouchUpInside];
+        [self.settingsButton setImage:[UIImage imageNamed:@"menu_settings"] forState:UIControlStateNormal];
+        [self.settingsButton setImage:[UIImage imageNamed:@"menu_settings_pressed"] forState:UIControlEventTouchUpInside];
     }
     return self;
 }

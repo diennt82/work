@@ -65,7 +65,7 @@
     self.navigationController.navigationBarHidden = YES;
     
     //create the image for your button, and set the frame for its size
-    UIImage *image = [UIImage imageNamed:@"Hubble_logo_back.png"];
+    UIImage *image = [UIImage imageNamed:@"Hubble_logo_back"];
     CGRect frame = CGRectMake(0, 0, image.size.width, image.size.height);
     
     //init a normal UIButton using that image
@@ -337,10 +337,10 @@
 {
     if (indexPath.section == 1)
     {
-        return 168;
+        return 190;
     }
     
-    return 44; // your dynamic height...
+    return 40; // your dynamic height...
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
