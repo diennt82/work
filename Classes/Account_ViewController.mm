@@ -6,8 +6,6 @@
 //  Copyright (c) 2012 Smart Panda Ltd. All rights reserved.
 //
 
-#define DISABLE_VIEW_RELEASE_FLAG 0
-
 #import "Account_ViewController.h"
 #import "MBP_iosViewController.h"
 #import "CameraSettingsCell.h"
@@ -279,11 +277,7 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-#if DISABLE_VIEW_RELEASE_FLAG
-    return 1;
-#else
     return 3;
-#endif
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
@@ -332,6 +326,30 @@
     }
     
     return YES;
+}
+
+- (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    for (id obj in cell.contentView.subviews)
+    {
+        if ([obj isKindOfClass:[UIView class]] &&
+            ((UIView *)obj).tag == 905)
+        {
+            [obj removeFromSuperview];
+            break;
+        }
+    }
+    
+    UIView *lineView = [[[UIView alloc] initWithFrame:CGRectMake(0, cell.contentView.frame.size.height - 1.0, cell.contentView.frame.size.width, 1)] autorelease];
+    if (indexPath.row == 3)
+    {
+        lineView.frame = CGRectMake(0, 59, cell.contentView.frame.size.width, 1);
+    }
+    
+    lineView.backgroundColor = [UIColor colorWithRed:195/255.0 green:195/255.0 blue:195/255.0 alpha:1];
+    lineView.tag = 905;
+    [cell.contentView addSubview:lineView];
+    cell.backgroundColor = [UIColor colorWithRed:249/255.0 green:249/255.0 blue:249/255.0 alpha:1];
 }
 
 #define USEREMAIL_INDEX     0
@@ -428,7 +446,7 @@
         cell.notifSettingsDelegate = self;
         cell.settingsLabel.text = @"Enable STUN";
         cell.textLabel.font = [UIFont fontWithName:@"HelveticaNeue-Thin" size:17];
-        cell.textLabel.textColor = [UIColor colorWithRed:128/255 green:128/255 blue:128/255 alpha:1];
+        cell.textLabel.textColor = [UIColor colorWithRed:128/255.0 green:128/255.0 blue:128/255.0 alpha:1];
         [cell.settingSwitch setOn:_enabledSTUN];
         
         return cell;
