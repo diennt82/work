@@ -54,12 +54,11 @@
     
     self.navigationController.navigationBarHidden = NO;
     
-    UIImage *hubbleBack = [UIImage imageNamed:@"Hubble_logo_back.png"];
-    
+    UIImage *hubbleBack = [UIImage imageNamed:@"Hubble_logo_back"];
     UIBarButtonItem *backBarBtn = [[UIBarButtonItem alloc] initWithImage:hubbleBack
-                                                                           style:UIBarButtonItemStyleBordered
-                                                                          target:self
-                                                                          action:@selector(menuBackAction:)];
+                                                                   style:UIBarButtonItemStyleBordered
+                                                                  target:self
+                                                                  action:@selector(menuBackAction:)];
     [backBarBtn setTintColor:[UIColor colorWithPatternImage:hubbleBack]];
     
     self.navigationItem.leftBarButtonItem = backBarBtn;
@@ -115,7 +114,8 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     self.navigationController.navigationBarHidden = NO;
-    UIImage *hubbleBack = [UIImage imageNamed:@"Hubble_logo_back.png"];
+    
+    UIImage *hubbleBack = [UIImage imageNamed:@"Hubble_logo_back"];
     [self.navigationItem.leftBarButtonItem setTintColor:[UIColor colorWithPatternImage:hubbleBack]];
     self.accountVC.mdelegate = self.menuDelegate;
     //self.camerasVC.camChannels = self.cameras;
@@ -125,7 +125,7 @@
         self.isFirttime = TRUE;
         
         [self menuBackAction:nil];
-        
+        [self removeNavigationBarBottomLine];
     }
     else
     {
@@ -138,15 +138,19 @@
     }
 }
 
-- (void)viewDidAppear:(BOOL)animated
+- (void)removeNavigationBarBottomLine
 {
-    [super viewDidAppear:animated];
-    
-    
-    //self.camerasVC.parentVC = self;
-    
-    
-    NSLog(@"viewDidAppear: %p, %p", self.menuDelegate, _accountVC.mdelegate);
+    for (UIView *parentView in self.navigationController.navigationBar.subviews)
+    {
+        for (UIView *childView in parentView.subviews)
+        {
+            if ([childView isKindOfClass:[UIImageView class]])
+            {
+                [childView removeFromSuperview];
+                return;
+            }
+        }
+    }
 }
 
 - (void)menuBackAction: (id)sender

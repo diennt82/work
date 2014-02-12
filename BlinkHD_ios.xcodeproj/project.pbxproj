@@ -226,7 +226,7 @@
 		8B9637CB18AB15F9007B2D4F /* menu_settings.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B9637BD18AB15F9007B2D4F /* menu_settings.png */; };
 		8B9637CC18AB15F9007B2D4F /* menu_settings@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B9637BE18AB15F9007B2D4F /* menu_settings@2x.png */; };
 		8B9637CF18AB23C0007B2D4F /* Hubble_logo_back.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B9637CD18AB23C0007B2D4F /* Hubble_logo_back.png */; };
-		8B9637D018AB23C0007B2D4F /* Hubble_logo_back@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B9637CE18AB23C0007B2D4F /* Hubble_logo_back@2x.png */; };
+		8B963A4918AB8A60007B2D4F /* Hubble_logo_back@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B963A4818AB8A60007B2D4F /* Hubble_logo_back@2x.png */; };
 		8B9640B218811106000C388E /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8B9640B118811106000C388E /* CoreText.framework */; };
 		8B96916218765F6900FB15B8 /* desk.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B96915E18765F6900FB15B8 /* desk.png */; };
 		8B96916418765F6900FB15B8 /* bridge.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B96916018765F6900FB15B8 /* bridge.png */; };
@@ -839,7 +839,7 @@
 		8B9637BD18AB15F9007B2D4F /* menu_settings.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = menu_settings.png; sourceTree = "<group>"; };
 		8B9637BE18AB15F9007B2D4F /* menu_settings@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "menu_settings@2x.png"; sourceTree = "<group>"; };
 		8B9637CD18AB23C0007B2D4F /* Hubble_logo_back.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Hubble_logo_back.png; sourceTree = "<group>"; };
-		8B9637CE18AB23C0007B2D4F /* Hubble_logo_back@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Hubble_logo_back@2x.png"; sourceTree = "<group>"; };
+		8B963A4818AB8A60007B2D4F /* Hubble_logo_back@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Hubble_logo_back@2x.png"; sourceTree = "<group>"; };
 		8B9640B118811106000C388E /* CoreText.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreText.framework; path = System/Library/Frameworks/CoreText.framework; sourceTree = SDKROOT; };
 		8B96915E18765F6900FB15B8 /* desk.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = desk.png; sourceTree = "<group>"; };
 		8B96916018765F6900FB15B8 /* bridge.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bridge.png; sourceTree = "<group>"; };
@@ -2346,7 +2346,7 @@
 				8B9637BD18AB15F9007B2D4F /* menu_settings.png */,
 				8B9637BE18AB15F9007B2D4F /* menu_settings@2x.png */,
 				8B9637CD18AB23C0007B2D4F /* Hubble_logo_back.png */,
-				8B9637CE18AB23C0007B2D4F /* Hubble_logo_back@2x.png */,
+				8B963A4818AB8A60007B2D4F /* Hubble_logo_back@2x.png */,
 			);
 			name = MenuAddCamera;
 			sourceTree = "<group>";
@@ -3264,7 +3264,6 @@
 				8B9633BC18A8E0E6008A9579 /* launch_logo.png in Resources */,
 				38A62EA115CA2C9300DEA520 /* bb_cam_btn.png in Resources */,
 				8B9ABBA718AA1CA70079F4A3 /* alert_learn@2x.png in Resources */,
-				8B9637D018AB23C0007B2D4F /* Hubble_logo_back@2x.png in Resources */,
 				8B278BE8183DC51300A4FF50 /* NotificationSettingsViewController.xib in Resources */,
 				38A62EA315CA2E1100DEA520 /* bb_recording_btn_d.png in Resources */,
 				8B9ABC0F18AA2B840079F4A3 /* settings_temp_f.png in Resources */,
@@ -3418,6 +3417,7 @@
 				A1ABF1B6187538050014FCB4 /* GuideAddCamera_ViewController.xib in Resources */,
 				8BA8AE881821F3E900DC9E9F /* stream720p_10_926.sdp in Resources */,
 				8B9ABC0718AA2B840079F4A3 /* settings_switch_off.png in Resources */,
+				8B963A4918AB8A60007B2D4F /* Hubble_logo_back@2x.png in Resources */,
 				8B9B57DC184F0D9900E58543 /* frame-4-1_update-iOS7_new.png in Resources */,
 				8B9ABB7118AA01D80079F4A3 /* checkbox_active@2x.png in Resources */,
 				8B9907021869824D0054966B /* camera_action_video_pressed.png in Resources */,

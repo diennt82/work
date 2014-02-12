@@ -758,6 +758,17 @@
                 else
                 {
                     numOfRows[indexPath.section] = 1;
+                    
+                    UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
+                    
+                    for (id obj in cell.contentView.subviews)
+                    {
+                        if ([obj isKindOfClass:[SchedulerViewController class]])
+                        {
+                            [obj removeFromSuperview];
+                            break;
+                        }
+                    }
                 }
                 
                 for (int i = 0; i < 4; i++)
