@@ -281,11 +281,14 @@ double _ticks = 0;
 {
     UIFont *font;
     UIColor *color;
+    float marginBottomText, marginBottomButton;
     if (isiPhone5)
     {
         //for holdtotalk
         font = [UIFont applyHubbleFontName:PN_REGULAR_FONT withSize:19];
         color = [UIColor holdToTalkTextColor];
+        marginBottomText = 21.0f;
+        marginBottomButton = 40.5f;
 
     }
     else if (isiPhone4)
@@ -293,6 +296,8 @@ double _ticks = 0;
         //for holdtotalk
         font = [UIFont applyHubbleFontName:PN_REGULAR_FONT withSize:17];
         color = [UIColor holdToTalkTextColor];
+        marginBottomText = 12.5f;
+        marginBottomButton = 24.0f;
     }
     else
     {
@@ -300,6 +305,8 @@ double _ticks = 0;
         //for holdtotalk
         font = [UIFont applyHubbleFontName:PN_REGULAR_FONT withSize:50];
         color = [UIColor holdToTalkTextColor];
+        marginBottomText = 12.5f * 2;
+        marginBottomButton = 24.0f * 2;
     }
     
     
@@ -316,20 +323,34 @@ double _ticks = 0;
     }
     
     //update position text recording
-//    NSString *textString = self.ib_labelRecordVideo.text;
-//    CGSize textSize = [textString sizeWithFont:font];
-//    float deltaY = (self.ib_labelRecordVideo.bounds.size.height - textSize.height)/2.0;
-//    float alignY = screenHeight - PADDING_BOTTOM_TEXT - deltaY - self.ib_viewRecordTTT.bounds.origin.y;
-//    [self.ib_labelRecordVideo setFrame:CGRectMake(0, alignY,self.ib_labelRecordVideo.bounds.size.width, self.ib_labelRecordVideo.bounds.size.height )];
-//    
-//    //update position text hold to talk
-//    
-//    NSString *holdTTString = self.ib_labelTouchToTalk.text;
-//    CGSize holdTTSize = [holdTTString sizeWithFont:font];
-//    float deltaY1 = (self.ib_labelRecordVideo.bounds.size.height - holdTTSize.height)/2.0;
-//    float alignY1 = screenHeight - PADDING_BOTTOM_TEXT - deltaY1 - self.ib_ViewTouchToTalk.bounds.origin.y;
-//    [self.ib_labelTouchToTalk setFrame:CGRectMake(0, alignY1,self.ib_labelTouchToTalk.bounds.size.width, self.ib_labelTouchToTalk.bounds.size.height )];
+    NSString *recordingString = self.ib_labelRecordVideo.text;
+    CGSize recordingSize = [recordingString sizeWithFont:font];
+    CGSize labelRecordSize = self.ib_labelRecordVideo.bounds.size;
+    CGSize viewRecordSize = self.ib_viewRecordTTT.bounds.size;
     
+    float deltaY = (labelRecordSize.height + recordingSize.height)/2.0;
+    float alignY = (screenHeight - 240) - marginBottomText - deltaY;
+    [self.ib_labelRecordVideo setCenter:CGPointMake(screenWidth/2, alignY)];
+    
+    //update position text hold to talk
+    CGPoint position = self.ib_viewRecordTTT.bounds.origin;
+    NSString *holdTTString = self.ib_labelTouchToTalk.text;
+    CGSize holdTTSize = [holdTTString sizeWithFont:font];
+    CGSize labelTouchToTalkSize = self.ib_labelTouchToTalk.bounds.size;
+    CGSize viewTouchToTalkSize = self.ib_ViewTouchToTalk.bounds.size;
+    
+    float deltaY1 = (labelTouchToTalkSize.height + holdTTSize.height)/2.0;
+    float alignY1 = (screenHeight - 240) - marginBottomText - deltaY1;
+    [self.ib_labelTouchToTalk setCenter:CGPointMake(screenWidth/2, alignY1)];
+    
+    // update position button
+    //hold to talk
+    CGSize holdTTButtonSize = self.ib_buttonTouchToTalk.bounds.size;
+    float alignYButton = screenHeight - 240 - marginBottomButton - holdTTButtonSize.height;
+    [self.ib_buttonTouchToTalk setCenter:CGPointMake(screenWidth/2, alignYButton)];
+    [self.ib_processRecordOrTakePicture setCenter:CGPointMake(screenWidth/2, alignYButton)];
+    
+    [_imgViewDrectionPad setCenter:CGPointMake(screenWidth/2, alignYButton + 240)];
 }
 
 - (void) setupHttpPort
@@ -2769,16 +2790,13 @@ double _ticks = 0;
     }
     
     [degreeCelsius setFont:degreeFont];
+    [self.ib_temperature setFrame:CGRectMake(0, 240, screenWidth, screenHeight - 240)];
     [self.ib_temperature setFont:temperatureFont];
     [self.ib_temperature setTextColor:[UIColor temperatureTextColor]];
     [self.ib_temperature setText:stringTemperature];
     CGSize stringBoundingBox = [stringTemperature sizeWithFont:temperatureFont];
     CGSize degreeCelBoundingBox = [degreeCel sizeWithFont:degreeFont];
     
-//    CGRect screenBound = [[UIScreen mainScreen] bounds];
-//    CGSize screenSize = screenBound.size;
-//    CGFloat screenWidth = screenSize.width;
-//    CGFloat screenHeight = screenSize.height;
     
     CGFloat widthString = stringBoundingBox.width;
     CGFloat heightString = stringBoundingBox.height;
