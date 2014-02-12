@@ -321,7 +321,7 @@
         return 60;
     }
     
-    return 44;
+    return 45;
 }
 
 - (BOOL)tableView:(UITableView *)tableView shouldHighlightRowAtIndexPath:(NSIndexPath *)indexPath
@@ -375,41 +375,34 @@
     }
     else if(indexPath.section == 1)
     {
+        static NSString *CellIdentifier = @"CameraSettingsCell";
+        CameraSettingsCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+        
+        NSArray *objects = [[NSBundle mainBundle] loadNibNamed:@"CameraSettingsCell" owner:nil options:nil];
+        
+        for (id curObj in objects)
+        {
+            
+            if([curObj isKindOfClass:[UITableViewCell class]])
+            {
+                cell = (CameraSettingsCell *)curObj;
+                break;
+            }
+        }
+        
         if (indexPath.row == 0)
         {
-            static NSString *CellIdentifier = @"CameraSettingsCell";
-            CameraSettingsCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-            
-            NSArray *objects = [[NSBundle mainBundle] loadNibNamed:@"CameraSettingsCell" owner:nil options:nil];
-            
-            for (id curObj in objects)
-            {
-                
-                if([curObj isKindOfClass:[UITableViewCell class]])
-                {
-                    cell = (CameraSettingsCell *)curObj;
-                    break;
-                }
-            }
-            
             cell.nameLabel.text = @"Current Plan";
             cell.valueLabel.text = @"Free";
+            cell.valueLabel.hidden = NO;
             
             return cell;
         }
         else
         {
-            static NSString *CellIdentifier = @"Cell";
-            UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-            if (cell == nil) {
-                cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
-            }
-            
-            // Configure the cell...
-            
-            cell.textLabel.text = @"Upgrade Plan";
-            cell.textLabel.font = [UIFont fontWithName:@"HelveticaNeue-Thin" size:17];
-            cell.textLabel.textColor = [UIColor colorWithRed:128/255 green:128/255 blue:128/255 alpha:1];
+            cell.nameLabel.text = @"Upgrade Plan";
+            cell.valueLabel.text = nil;
+            cell.valueLabel.hidden = YES;
             
             return cell;
         }
