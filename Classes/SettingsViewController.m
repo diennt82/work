@@ -271,10 +271,7 @@
 {
     //#warning Potentially incomplete method implementation.
     // Return the number of sections.
-    if ([tableView respondsToSelector:@selector(setSeparatorColor:)]) {
-        [tableView setSeparatorColor:[UIColor colorWithRed:195/255 green:195/255 blue:195/255 alpha:1]];
-    }
-    
+    tableView.sectionHeaderHeight = 0;
     return 4;
 }
 
@@ -326,6 +323,27 @@
     }
     
     return YES;
+}
+
+- (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section
+{
+    UIView *footerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, tableView.bounds.size.width, 1)];
+        [footerView setBackgroundColor:[UIColor colorWithRed:195/255.0 green:195/255.0 blue:195/255.0 alpha:1]];
+    return footerView;
+}
+
+- (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if (indexPath.row == 0)
+    {
+        //cell.
+        cell.textLabel.font = [UIFont fontWithName:@"HelveticaNeue-Thin" size:18];
+        cell.textLabel.textColor = [UIColor colorWithRed:(128/255.0) green:(128/255.0) blue:(128/255.0) alpha:1];
+    }
+}
+
+-(CGFloat)tableView:(UITableView *)tableView heightHeaderInSection:(NSInteger)section{
+    return 0;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -407,8 +425,6 @@
                     
                     // Configure the cell...
                     cell.textLabel.text = @"Notification Sensitivity";
-                    cell.textLabel.font = [UIFont fontWithName:@"HelveticaNeue-Thin" size:18];
-                    cell.textLabel.textColor = [UIColor colorWithRed:128/255 green:128/255 blue:128/255 alpha:1];
                     cell.imageView.image = [UIImage imageNamed:@"sensitivity"];
                     cell.backgroundColor = [UIColor whiteColor];
                     
@@ -478,8 +494,6 @@
                     
                     // Configure the cell...
                     cell.textLabel.text = @"Do Not Disturb";
-                    cell.textLabel.font = [UIFont fontWithName:@"HelveticaNeue-Thin" size:18];
-                    cell.textLabel.textColor = [UIColor colorWithRed:128/255 green:128/255 blue:128/255 alpha:1];
                     cell.imageView.image = [UIImage imageNamed:@"do_not_disturb"];
                     cell.backgroundColor = [UIColor whiteColor];
                     
@@ -515,8 +529,6 @@
                     
                     // Configure the cell...
                     cell.textLabel.text = @"Notification Scheduler";
-                    cell.textLabel.font = [UIFont fontWithName:@"HelveticaNeue-Thin" size:18];
-                    cell.textLabel.textColor = [UIColor colorWithRed:128/255 green:128/255 blue:128/255 alpha:1];
                     cell.imageView.image = [UIImage imageNamed:@"scheduler"];
                     cell.backgroundColor = [UIColor whiteColor];
                     
