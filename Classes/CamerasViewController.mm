@@ -314,6 +314,11 @@
 {
     //#warning Potentially incomplete method implementation.
     // Return the number of sections.
+    
+    if ([tableView respondsToSelector:@selector(setSeparatorInset:)]) {
+        [tableView setSeparatorInset:UIEdgeInsetsZero];
+    }
+    
     if (_waitingForUpdateData == TRUE)
     {
         return 1;

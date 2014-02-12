@@ -271,6 +271,10 @@
 {
     //#warning Potentially incomplete method implementation.
     // Return the number of sections.
+    if ([tableView respondsToSelector:@selector(setSeparatorColor:)]) {
+        [tableView setSeparatorColor:[UIColor colorWithRed:195/255 green:195/255 blue:195/255 alpha:1]];
+    }
+    
     return 4;
 }
 
@@ -307,7 +311,7 @@
         }
     }
     
-    return 44;
+    return 55;
 }
 
 - (BOOL)tableView:(UITableView *)tableView shouldHighlightRowAtIndexPath:(NSIndexPath *)indexPath
@@ -342,7 +346,9 @@
                     
                     // Configure the cell...
                     cell.textLabel.text = @"General Settings";
-                    cell.imageView.image = [UIImage imageNamed:@"settings_general"];
+                    cell.textLabel.font = [UIFont fontWithName:@"HelveticaNeue-Thin" size:18];
+                    cell.textLabel.textColor = [UIColor colorWithRed:128/255 green:128/255 blue:128/255 alpha:1];
+                    cell.imageView.image = [UIImage imageNamed:@"general"];
                     cell.backgroundColor = [UIColor whiteColor];
                     
                     return cell;
@@ -401,7 +407,9 @@
                     
                     // Configure the cell...
                     cell.textLabel.text = @"Notification Sensitivity";
-                    cell.imageView.image = [UIImage imageNamed:@"settings_notification"];
+                    cell.textLabel.font = [UIFont fontWithName:@"HelveticaNeue-Thin" size:18];
+                    cell.textLabel.textColor = [UIColor colorWithRed:128/255 green:128/255 blue:128/255 alpha:1];
+                    cell.imageView.image = [UIImage imageNamed:@"sensitivity"];
                     cell.backgroundColor = [UIColor whiteColor];
                     
                     return cell;
@@ -470,7 +478,9 @@
                     
                     // Configure the cell...
                     cell.textLabel.text = @"Do Not Disturb";
-                    cell.imageView.image = [UIImage imageNamed:@"settings_donotdisturb"];
+                    cell.textLabel.font = [UIFont fontWithName:@"HelveticaNeue-Thin" size:18];
+                    cell.textLabel.textColor = [UIColor colorWithRed:128/255 green:128/255 blue:128/255 alpha:1];
+                    cell.imageView.image = [UIImage imageNamed:@"do_not_disturb"];
                     cell.backgroundColor = [UIColor whiteColor];
                     
                     return cell;
@@ -505,7 +515,9 @@
                     
                     // Configure the cell...
                     cell.textLabel.text = @"Notification Scheduler";
-                    cell.imageView.image = [UIImage imageNamed:@"settings_scheduler"];
+                    cell.textLabel.font = [UIFont fontWithName:@"HelveticaNeue-Thin" size:18];
+                    cell.textLabel.textColor = [UIColor colorWithRed:128/255 green:128/255 blue:128/255 alpha:1];
+                    cell.imageView.image = [UIImage imageNamed:@"scheduler"];
                     cell.backgroundColor = [UIColor whiteColor];
                     
                     return cell;

@@ -170,10 +170,6 @@
 		8B92A0BC186432E9005923D2 /* button_bg.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B92A0BB186432E9005923D2 /* button_bg.png */; };
 		8B92A0BE186436B5005923D2 /* button_bg_1.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B92A0BD186436B5005923D2 /* button_bg_1.png */; };
 		8B92C0D81868303700538013 /* feed_date.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B92C0D71868303700538013 /* feed_date.png */; };
-		8B92C0DE1868318800538013 /* settings_donotdisturb.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B92C0DA1868318800538013 /* settings_donotdisturb.png */; };
-		8B92C0DF1868318800538013 /* settings_general.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B92C0DB1868318800538013 /* settings_general.png */; };
-		8B92C0E01868318800538013 /* settings_notification.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B92C0DC1868318800538013 /* settings_notification.png */; };
-		8B92C0E11868318800538013 /* settings_scheduler.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B92C0DD1868318800538013 /* settings_scheduler.png */; };
 		8B92C0EE186849C700538013 /* camera_action_pan_bg.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B92C0ED186849C700538013 /* camera_action_pan_bg.png */; };
 		8B92D45518865F0400120BCE /* SchedulingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B92D45318865F0400120BCE /* SchedulingViewController.m */; };
 		8B92D45618865F0400120BCE /* SchedulingViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8B92D45418865F0400120BCE /* SchedulingViewController.xib */; };
@@ -776,10 +772,6 @@
 		8B92A0BB186432E9005923D2 /* button_bg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = button_bg.png; sourceTree = "<group>"; };
 		8B92A0BD186436B5005923D2 /* button_bg_1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = button_bg_1.png; sourceTree = "<group>"; };
 		8B92C0D71868303700538013 /* feed_date.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = feed_date.png; sourceTree = "<group>"; };
-		8B92C0DA1868318800538013 /* settings_donotdisturb.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = settings_donotdisturb.png; sourceTree = "<group>"; };
-		8B92C0DB1868318800538013 /* settings_general.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = settings_general.png; sourceTree = "<group>"; };
-		8B92C0DC1868318800538013 /* settings_notification.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = settings_notification.png; sourceTree = "<group>"; };
-		8B92C0DD1868318800538013 /* settings_scheduler.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = settings_scheduler.png; sourceTree = "<group>"; };
 		8B92C0ED186849C700538013 /* camera_action_pan_bg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = camera_action_pan_bg.png; sourceTree = "<group>"; };
 		8B92D45218865F0400120BCE /* SchedulingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SchedulingViewController.h; sourceTree = "<group>"; };
 		8B92D45318865F0400120BCE /* SchedulingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SchedulingViewController.m; sourceTree = "<group>"; };
@@ -2280,17 +2272,6 @@
 			name = Feed_earlier;
 			sourceTree = "<group>";
 		};
-		8B92C0D91868315500538013 /* Menu_settings */ = {
-			isa = PBXGroup;
-			children = (
-				8B92C0DA1868318800538013 /* settings_donotdisturb.png */,
-				8B92C0DB1868318800538013 /* settings_general.png */,
-				8B92C0DC1868318800538013 /* settings_notification.png */,
-				8B92C0DD1868318800538013 /* settings_scheduler.png */,
-			);
-			name = Menu_settings;
-			sourceTree = "<group>";
-		};
 		8B92D45118865D9E00120BCE /* SchedulerView */ = {
 			isa = PBXGroup;
 			children = (
@@ -2669,7 +2650,6 @@
 				8B99C0B1186ABB7900DB8AAA /* ImgNotAvailable.png */,
 				8B99C0AB186A79B600DB8AAA /* img-checkbox.png */,
 				8B9906F718697E050054966B /* Camera_action */,
-				8B92C0D91868315500538013 /* Menu_settings */,
 				8B92C0D61868302200538013 /* Feed_earlier */,
 				8B92C0ED186849C700538013 /* camera_action_pan_bg.png */,
 				8B1D545918658CBC008857F0 /* selected-img.png */,
@@ -3238,7 +3218,6 @@
 				8BC0A03F1844AC3600A5FD52 /* circle_buttons1_lf.png in Resources */,
 				A19778F9181E6C55007C3CA7 /* motion_detection_off_1.png in Resources */,
 				8B9ABBEE18AA2B840079F4A3 /* dont_disturb_circle@2x.png in Resources */,
-				8B92C0DF1868318800538013 /* settings_general.png in Resources */,
 				8B92A0AA1863FA0B005923D2 /* time-saved-img.png in Resources */,
 				3812F82D15C8BF3600DADFA6 /* bb_spk_icon.png in Resources */,
 				3812F83915C8C3EE00DADFA6 /* bb_check_list.png in Resources */,
@@ -3286,7 +3265,6 @@
 				38A62EA115CA2C9300DEA520 /* bb_cam_btn.png in Resources */,
 				8B9ABBA718AA1CA70079F4A3 /* alert_learn@2x.png in Resources */,
 				8B9637D018AB23C0007B2D4F /* Hubble_logo_back@2x.png in Resources */,
-				8B92C0E11868318800538013 /* settings_scheduler.png in Resources */,
 				8B278BE8183DC51300A4FF50 /* NotificationSettingsViewController.xib in Resources */,
 				38A62EA315CA2E1100DEA520 /* bb_recording_btn_d.png in Resources */,
 				8B9ABC0F18AA2B840079F4A3 /* settings_temp_f.png in Resources */,
@@ -3441,7 +3419,6 @@
 				8BA8AE881821F3E900DC9E9F /* stream720p_10_926.sdp in Resources */,
 				8B9ABC0718AA2B840079F4A3 /* settings_switch_off.png in Resources */,
 				8B9B57DC184F0D9900E58543 /* frame-4-1_update-iOS7_new.png in Resources */,
-				8B92C0DE1868318800538013 /* settings_donotdisturb.png in Resources */,
 				8B9ABB7118AA01D80079F4A3 /* checkbox_active@2x.png in Resources */,
 				8B9907021869824D0054966B /* camera_action_video_pressed.png in Resources */,
 				8B9633B818A8B0C0008A9579 /* enter.png in Resources */,
@@ -3563,7 +3540,6 @@
 				8B9ABB7318AA01D80079F4A3 /* checkbox@2x.png in Resources */,
 				8B9ABB8818AA196B0079F4A3 /* alert_settings_pressed@5.png in Resources */,
 				97735C4517E1CEAA00160DA1 /* MyFrontViewController.xib in Resources */,
-				8B92C0E01868318800538013 /* settings_notification.png in Resources */,
 				9792B9AF17E2D1F6009C9F5D /* H264PlayerViewController_ipad.xib in Resources */,
 				8B9ABC0418AA2B840079F4A3 /* settings_line@2x.png in Resources */,
 				8BC0F0E51845E511008A63A7 /* iTunesArtwork@2x in Resources */,

@@ -236,6 +236,8 @@
         
         // Configure the cell...
         cell.textLabel.text = @"Change Image";
+        cell.textLabel.font = [UIFont fontWithName:@"HelveticaNeue-Thin" size:17];
+        cell.textLabel.textColor = [UIColor colorWithRed:128/255 green:128/255 blue:128/255 alpha:1];
         
         return cell;
     }
