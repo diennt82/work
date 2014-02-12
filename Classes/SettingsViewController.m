@@ -272,6 +272,7 @@
     //#warning Potentially incomplete method implementation.
     // Return the number of sections.
     tableView.sectionHeaderHeight = 0;
+    tableView.sectionFooterHeight = 0.5f;
     return 4;
 }
 
@@ -327,7 +328,7 @@
 
 - (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section
 {
-    UIView *footerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, tableView.bounds.size.width, 1)];
+    UIView *footerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, tableView.bounds.size.width, 0.5f)];
         [footerView setBackgroundColor:[UIColor colorWithRed:195/255.0 green:195/255.0 blue:195/255.0 alpha:1]];
     return footerView;
 }
@@ -344,6 +345,10 @@
 
 -(CGFloat)tableView:(UITableView *)tableView heightHeaderInSection:(NSInteger)section{
     return 0;
+}
+
+-(CGFloat)tableView:(UITableView *)tableView heightFooterInSection:(NSInteger)section{
+    return 0.5f;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath

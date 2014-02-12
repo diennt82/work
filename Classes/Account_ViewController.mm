@@ -340,10 +340,10 @@
         }
     }
     
-    UIView *lineView = [[[UIView alloc] initWithFrame:CGRectMake(0, cell.contentView.frame.size.height - 1.0, cell.contentView.frame.size.width, 1)] autorelease];
+    UIView *lineView = [[[UIView alloc] initWithFrame:CGRectMake(0, cell.contentView.frame.size.height - 0.5f, cell.contentView.frame.size.width, 0.5f)] autorelease];
     if (indexPath.row == 3)
     {
-        lineView.frame = CGRectMake(0, 59, cell.contentView.frame.size.width, 1);
+        lineView.frame = CGRectMake(0, 59.5f, cell.contentView.frame.size.width, 0.5f);
     }
     
     lineView.backgroundColor = [UIColor colorWithRed:195/255.0 green:195/255.0 blue:195/255.0 alpha:1];
