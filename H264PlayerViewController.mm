@@ -54,6 +54,7 @@
 {
     BOOL _syncPortraitAndLandscape;
     NSInteger screenWidth,screenHeight;
+    UIBarButtonItem *nowButton, *earlierButton;
 }
 
 @property (retain, nonatomic) IBOutlet UIImageView *imageViewHandle;
@@ -446,15 +447,23 @@ double _ticks = 0;
 
     self.navigationItem.leftBarButtonItem = headerLogoButton;
 
-    UIBarButtonItem *nowButton = [[UIBarButtonItem alloc] initWithTitle:@"Now"
+    nowButton = [[UIBarButtonItem alloc] initWithTitle:@"Now"
                                                                   style:UIBarButtonItemStylePlain
                                                                  target:self
                                                                  action:@selector(nowButtonAciton:)];
-    UIBarButtonItem *earlierButton = [[UIBarButtonItem alloc] initWithTitle:@"Earlier"
+    earlierButton = [[UIBarButtonItem alloc] initWithTitle:@"Earlier"
                                                                       style:UIBarButtonItemStylePlain
                                                                      target:self
                                                                      action:@selector(earlierButtonAction:)];
     
+    [nowButton setTitleTextAttributes:@{
+                                        UITextAttributeFont: [UIFont fontWithName:PN_SEMIBOLD_FONT size:17.0],
+                                        UITextAttributeTextColor: [UIColor barItemSelectedColor]
+                                        } forState:UIControlStateNormal];
+    [earlierButton setTitleTextAttributes:@{
+                                            UITextAttributeFont: [UIFont fontWithName:PN_LIGHT_FONT size:17.0],
+                                            UITextAttributeTextColor: [UIColor barItemSelectedColor]
+                                            } forState:UIControlStateNormal];
     //if (self.selectedChannel.profile.modelID == 6) // SharedCam
     if ([self isSharedCam:self.selectedChannel.profile.registrationID]) // SharedCam
     {
@@ -483,6 +492,15 @@ double _ticks = 0;
 
 - (void)nowButtonAciton:(id)sender
 {
+    [nowButton setTitleTextAttributes:@{
+                                        UITextAttributeFont: [UIFont fontWithName:PN_SEMIBOLD_FONT size:17.0],
+                                        UITextAttributeTextColor: [UIColor barItemSelectedColor]
+                                        } forState:UIControlStateNormal];
+    [earlierButton setTitleTextAttributes:@{
+                                            UITextAttributeFont: [UIFont fontWithName:PN_LIGHT_FONT size:17.0],
+                                            UITextAttributeTextColor: [UIColor barItemSelectedColor]
+                                            } forState:UIControlStateNormal];
+    
     if (_isEarlierView == TRUE)
     {
         self.isEarlierView = FALSE;
@@ -519,6 +537,16 @@ double _ticks = 0;
 
 - (void)earlierButtonAction:(id)sender
 {
+    
+    [nowButton setTitleTextAttributes:@{
+                                        UITextAttributeFont: [UIFont fontWithName:PN_LIGHT_FONT size:17.0],
+                                        UITextAttributeTextColor: [UIColor barItemSelectedColor]
+                                        } forState:UIControlStateNormal];
+    [earlierButton setTitleTextAttributes:@{
+                                            UITextAttributeFont: [UIFont fontWithName:PN_SEMIBOLD_FONT size:17.0],
+                                            UITextAttributeTextColor: [UIColor barItemSelectedColor]
+                                            } forState:UIControlStateNormal];
+    
     if (_isEarlierView == FALSE)
     {
         self.isEarlierView = TRUE;
@@ -2803,7 +2831,7 @@ double _ticks = 0;
     CGFloat alignX = (screenWidth + widthString)/2 - degreeCelBoundingBox.width/2 + 5;
     [degreeCelsius setFrame:CGRectMake(alignX, height_Tem/2 - heightString/2 + 10, degreeCelBoundingBox.width, degreeCelBoundingBox.height)];
     [self.ib_temperature addSubview:degreeCelsius];
-    
+    [degreeCelsius release];
 }
 
 #pragma mark -

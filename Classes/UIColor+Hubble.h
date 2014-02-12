@@ -15,4 +15,6 @@
 + (UIColor *)listeningTextColor;
 + (UIColor *)recordingTextColor;
 + (UIColor *)temperatureTextColor;
++ (UIColor *)barItemSelectedColor;
++ (UIColor *)timeLineColor;
 @end

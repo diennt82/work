@@ -39,4 +39,14 @@
 {
     return Rgb2UIColor(0, 172, 247);
 }
+
++ (UIColor *)barItemSelectedColor
+{
+    return Rgb2UIColor(16, 16, 16);
+}
+
++ (UIColor *)timeLineColor
+{
+    return Rgb2UIColor(223, 223, 223);
+}
 @end

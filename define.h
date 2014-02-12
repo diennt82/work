@@ -66,4 +66,9 @@
 
 #define PADDING_BOTTOM_IMAGE 40.5f
 
+//define for melody
+#define HEIGHT_CELL_TABLE_IPHONE                   48
+#define MARGIN_LEFT_BUTTON_CELL_TABLE_IPHONE       10
+#define MARGIN_LEFT_TEXT_CELL_TABLE_IPHONE         47
+
 #endif

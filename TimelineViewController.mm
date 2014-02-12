@@ -17,6 +17,7 @@
 #import <MonitorCommunication/MonitorCommunication.h>
 #import "PlaylistInfo.h"
 #import "H264PlayerViewController.h"
+#import "TimeLinePremiumCell.h"
 
 @interface TimelineViewController () <UIScrollViewDelegate>
 
@@ -488,23 +489,31 @@
         return 1;
     }
     
-    return 3;
+    return 4;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     //#warning Incomplete method implementation.
     // Return the number of rows in the section.
-    if (section == 0)
-    {
-        return 1;
-    }
-    else if (section == 1)
+
+    if (section == 1)
     {
         return _events.count;
     }
-    
-    return 2;
+    else
+    {
+        return 1;
+    }
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+{
+    if (section == 3 || section == 2)
+    {
+        return 15;
+    }
+    return 0;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -605,6 +614,8 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    UIFont *boldFont = [UIFont applyHubbleFontName:PN_BOLD_FONT withSize:20];
+    UIFont *semiBoldFont = [UIFont applyHubbleFontName:PN_SEMIBOLD_FONT withSize:12];
     if (_isEventAlready == FALSE)
     {
         static NSString *CellIdentifier = @"Cell";
@@ -769,7 +780,7 @@
 #endif
         return cell;
     }
-    else
+    else if (indexPath.section == 2)
     {
         static NSString *CellIdentifier = @"TimelineButtonCell";
         TimelineButtonCell *cell = [self.tableView dequeueReusableCellWithIdentifier:CellIdentifier];
@@ -785,19 +796,33 @@
                 break;
             }
         }
+        [cell.timelineCellButtn setBackgroundImage:[UIImage imageNamed:@"saveday"] forState:UIControlStateNormal];
+        [cell.timelineCellButtn setBackgroundImage:[UIImage imageNamed:@"saveday_pressed"] forState:UIControlEventTouchDown];
+        [cell.timelineCellButtn setTitle:@"Save the Day" forState:UIControlStateNormal];
+        [cell.timelineCellButtn.titleLabel setFont:boldFont];
+        return cell;
+
+    }
+    else
+    {
+        static NSString *CellIdentifier = @"TimeLinePremiumCell";
+        TimeLinePremiumCell *cell = [self.tableView dequeueReusableCellWithIdentifier:CellIdentifier];
         
-        if (indexPath.row == 0)
+        NSArray *objects = [[NSBundle mainBundle] loadNibNamed:@"TimeLinePremiumCell" owner:nil options:nil];
+        
+        for (id curObj in objects)
         {
-            [cell.timelineCellButtn setBackgroundImage:[UIImage imageNamed:@"saveday"] forState:UIControlStateNormal];
-            [cell.timelineCellButtn setBackgroundImage:[UIImage imageNamed:@"saveday_pressed"] forState:UIControlEventTouchDown];
-            [cell.timelineCellButtn setTitle:@"Save the Day" forState:UIControlStateNormal];
+            
+            if([curObj isKindOfClass:[UITableViewCell class]])
+            {
+                cell = (TimeLinePremiumCell *)curObj;
+                break;
+            }
         }
-        else
-        {
-            [cell.timelineCellButtn setBackgroundImage:[UIImage imageNamed:@"upgrade"] forState:UIControlStateNormal];
-            [cell.timelineCellButtn setBackgroundImage:[UIImage imageNamed:@"upgrade_pressed"] forState:UIControlEventTouchDown];
-            [cell.timelineCellButtn setTitle:@"Upgrade to Premium" forState:UIControlStateNormal];
-        }
+        [cell.ib_labelDayPremium setFont:semiBoldFont];
+        [cell.ib_labelPremium setFont:boldFont];
+        cell.ib_labelPremium.textColor = [UIColor whiteColor];
+        cell.ib_labelDayPremium.textColor = [UIColor whiteColor];
         
         return cell;
     }
