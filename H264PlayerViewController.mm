@@ -4090,6 +4090,7 @@ double _ticks = 0;
     
     //
     [self setupPtt];
+    [self applyFont];
 }
 
 #pragma mark -
