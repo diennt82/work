@@ -201,9 +201,12 @@
 #if 1
     CameraMenuViewController *cameraMenuCV = [[CameraMenuViewController alloc] init];
     cameraMenuCV.camChannel = (CamChannel *)[self.camChannels objectAtIndex:rowIdx];
-    cameraMenuCV.cameraMenuDelegate = ((MenuViewController *)self.parentVC).menuDelegate;
     
-    [((MenuViewController *)self.parentVC).navigationController pushViewController:cameraMenuCV animated:YES];
+    MenuViewController *menuVC = (MenuViewController *)self.parentVC;
+    
+    cameraMenuCV.cameraMenuDelegate = menuVC.menuDelegate;
+    menuVC.navigationItem.title = @"Menu";
+    [menuVC.navigationController pushViewController:cameraMenuCV animated:YES];
     
     [cameraMenuCV release];
 #else

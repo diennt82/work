@@ -118,7 +118,8 @@
     UIImage *hubbleBack = [UIImage imageNamed:@"Hubble_logo_back"];
     [self.navigationItem.leftBarButtonItem setTintColor:[UIColor colorWithPatternImage:hubbleBack]];
     self.accountVC.mdelegate = self.menuDelegate;
-    //self.camerasVC.camChannels = self.cameras;
+    self.title = @"Cameras";
+    self.navigationItem.title = @"Cameras";
 
     if (!_isFirttime) //revert
     {
@@ -144,7 +145,8 @@
     {
         for (UIView *childView in parentView.subviews)
         {
-            if ([childView isKindOfClass:[UIImageView class]])
+            if ([childView isKindOfClass:[UIImageView class]] &&
+                childView.bounds.size.height <= 1)
             {
                 [childView removeFromSuperview];
                 return;

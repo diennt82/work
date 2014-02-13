@@ -47,6 +47,13 @@
     NSArray *names = [UIFont fontNamesForFamilyName:@"Proxima Nova"];
     NSLog(@"names: %@",names);
     
+    [[UINavigationBar appearance] setTintColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"back"]]];
+    [[UIBarButtonItem appearance] setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys:
+                                                          [UIColor blackColor], NSForegroundColorAttributeName,
+                                                          [UIFont fontWithName:@"HelveticaNeue-Light" size:17], NSFontAttributeName,
+                                                          nil]
+                                                forState:UIControlStateNormal];
+    
     [window setRootViewController:viewController];
     [window makeKeyAndVisible];
     
@@ -69,29 +76,7 @@
     
     
     //check the server name file
-    
-//    NSString *path = [[self applicationDocumentsDirectory].path
-//                      stringByAppendingPathComponent:@"server.txt"];
-//    NSString *contentFile = [NSString stringWithContentsOfFile:path encoding:NSUTF8StringEncoding error:NULL];
-//    
-//    if (contentFile != nil)
-//    {
-//        NSArray *allLines = [contentFile componentsSeparatedByString:@"\n"];
-//        NSString *serverString = [allLines objectAtIndex:0];
-//        
-//        NSMutableString *stringT = [[NSMutableString alloc] init];
-//        [stringT appendString:serverString];
-//        @synchronized(self)
-//        {
-//            [BMS_JSON_Communication setServerInput:stringT];
-//        }
-//        [stringT release];
-//        NSLog(@"1 New server is %@", serverString);
-//    }
-//    else
-//    {
-//        NSLog(@"Use default server");
-//    }
+
     
     NSError *error;
     NSString * serverFile = [cachesDirectory stringByAppendingPathComponent:@"server.txt"];
