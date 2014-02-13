@@ -1,0 +1,49 @@
+<?xml version='1.0' encoding='UTF-8' standalone='yes' ?>
+<dirinfo>
+<files>
+<item key='feed_video_play.png20140130141707' />
+<item key='feed_video_play@2x.png20140130140826' />
+<item key='feed_video_stop.png20140130141712' />
+<item key='feed_video_stop@2x.png20140130140837' />
+<item key='home_video_overlay.png20140130134622' />
+<item key='home_video_overlay@2x.png20140130134237' />
+<item key='hubble_logo.png20140130134815' />
+<item key='hubble_logo@2x.png20140130134755' />
+<item key='hubble_logo2.png20140130140501' />
+<item key='hubble_logo2@2x.png20140130140445' />
+<item key='video_action_mic_pressed.png20140130133815' />
+<item key='video_action_mic_pressed@2x.png20140130123248' />
+<item key='video_action_mic.png20140130133806' />
+<item key='video_action_mic@2x.png20140130123237' />
+<item key='video_action_music_pressed.png20140130133720' />
+<item key='video_action_music_pressed@2x.png20140130123155' />
+<item key='video_action_music.png20140130133714' />
+<item key='video_action_music@2x.png20140130123145' />
+<item key='video_action_pan_pressed.png20140130133834' />
+<item key='video_action_pan_pressed@2x.png20140130123307' />
+<item key='video_action_pan.png20140130133826' />
+<item key='video_action_pan@2x.png20140130123258' />
+<item key='video_action_temp_pressed.png20140130133702' />
+<item key='video_action_temp_pressed@2x.png20140130123132' />
+<item key='video_action_temp.png20140130133651' />
+<item key='video_action_temp@2x.png20140130123121' />
+<item key='video_action_video_pressed.png20140130133757' />
+<item key='video_action_video_pressed@2x.png20140130123223' />
+<item key='video_action_video.png20140130133748' />
+<item key='video_action_video@2x.png20140130123208' />
+<item key='outline_circle.png20140130143900' />
+<item key='outline_circle@2x.png20140130143823' />
+<item key='save_pressed.png20140130142422' />
+<item key='save_pressed@2x.png20140130142355' />
+<item key='save.png20140130142416' />
+<item key='save@2x.png20140130142339' />
+<item key='timeline_blue_dot.png20140130143841' />
+<item key='timeline_blue_dot@2x.png20140130143818' />
+<item key='timeline_line.png20140130143937' />
+<item key='timeline_line@2x.png20140130143827' />
+<item key='upgrade_pressed.png20140130142658' />
+<item key='upgrade_pressed@2x.png20140130142323' />
+<item key='upgrade.png20140130142651' />
+<item key='upgrade@2x.png20140130142313' />
+</files>
+</dirinfo>
