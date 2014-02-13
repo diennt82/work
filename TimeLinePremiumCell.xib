@@ -15,7 +15,7 @@
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="upgrade.png" translatesAutoresizingMaskIntoConstraints="NO" id="UqQ-6c-ncF">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="59"/>
+                        <rect key="frame" x="12" y="0.0" width="296" height="59"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                     </imageView>
                     <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Upgrade to Premium" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fVi-Yz-HgO">
@@ -40,6 +40,6 @@
         </tableViewCell>
     </objects>
     <resources>
-        <image name="upgrade.png" width="664" height="110"/>
+        <image name="upgrade.png" width="295" height="55"/>
     </resources>
 </document>

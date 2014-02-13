@@ -33,6 +33,7 @@
     [_eventTimeLabel release];
     [_activityIndicatorLoading release];
     [_lineImage release];
+    [_feedImageVideo release];
     [super dealloc];
 }
 @end

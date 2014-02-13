@@ -47,6 +47,10 @@
 
 + (UIColor *)timeLineColor
 {
+    return Rgb2UIColor(16, 16, 16);
+}
++ (UIColor *)timeLineLineColor
+{
     return Rgb2UIColor(223, 223, 223);
 }
 @end

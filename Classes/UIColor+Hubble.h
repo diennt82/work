@@ -17,4 +17,5 @@
 + (UIColor *)temperatureTextColor;
 + (UIColor *)barItemSelectedColor;
 + (UIColor *)timeLineColor;
++ (UIColor *)timeLineLineColor;
 @end
