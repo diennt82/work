@@ -747,6 +747,7 @@
         // Motion detected
         if (eventInfo.alert == 4)
         {
+            [cell.feedImageVideo setHidden:NO];
             cell.snapshotImage.hidden = NO;
             cell.snapshotImage.image = [UIImage imageNamed:@"no_img_available"];
             
@@ -783,11 +784,9 @@
         else
         {
             cell.snapshotImage.hidden = YES;
-            CGRect screenBound = [[UIScreen mainScreen] bounds];
-            CGSize screenSize = screenBound.size;
             //update indicator
-            [cell.feedImageVideo setCenter:CGPointMake(screenSize.width/2, 47)];
-            [cell.activityIndicatorLoading setCenter:CGPointMake(screenSize.width/2, 50)];
+            [cell.feedImageVideo setHidden:YES];
+            [cell.activityIndicatorLoading setHidden:YES];
         }
         
 #else// Test data

@@ -125,21 +125,6 @@ double _ticks = 0;
     }
     [self.ib_buttonChangeAction setHidden:NO];
     [self.view bringSubviewToFront:self.ib_buttonChangeAction];
-    /*
-     //create list image for display horizontal scroll view menu
-     1.Pan, Tilt & Zoom (bb_setting_icon.png)
-     2.Microphone (for two way audio) bb_setting_icon.png
-     3.Take a photo/Record Video ( bb_rec_icon_d.png )
-     4.Lullaby          bb_melody_off_icon.png
-     5.Camera List          bb_camera_slider_icon
-     6.Temperature display        temp_alert
-     */
-    self.itemImages = [NSMutableArray arrayWithObjects:@"video_action_pan.png", @"video_action_mic.png", @"video_action_video.png", @"video_action_music.png", @"video_action_temp.png", nil];
-    self.itemSelectedImages = [NSMutableArray arrayWithObjects:@"video_action_pan_pressed.png", @"video_action_mic_pressed.png", @"video_action_video_pressed.png", @"video_action_music_pressed.png", @"video_action_temp_pressed.png", nil];
-    [self.horizMenu reloadData];
-    self.selectedItemMenu = -1;
-    [self updateBottomView];
-    
     [self.ib_labelRecordVideo setText:@"Record Video"];
     [self.ib_labelTouchToTalk setText:@"Hold To Talk"];
     //setup Font
