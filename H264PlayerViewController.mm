@@ -327,18 +327,18 @@ double _ticks = 0;
     NSString *recordingString = self.ib_labelRecordVideo.text;
     CGSize recordingSize = [recordingString sizeWithFont:font];
     CGSize labelRecordSize = self.ib_labelRecordVideo.bounds.size;
-    CGSize viewRecordSize = self.ib_viewRecordTTT.bounds.size;
+    //CGSize viewRecordSize = self.ib_viewRecordTTT.bounds.size;
     
     float deltaY = (labelRecordSize.height + recordingSize.height)/2.0;
     float alignY = (screenHeight - 240) - marginBottomText - deltaY;
     [self.ib_labelRecordVideo setCenter:CGPointMake(screenWidth/2, alignY)];
     
     //update position text hold to talk
-    CGPoint position = self.ib_viewRecordTTT.bounds.origin;
+    //CGPoint position = self.ib_viewRecordTTT.bounds.origin;
     NSString *holdTTString = self.ib_labelTouchToTalk.text;
     CGSize holdTTSize = [holdTTString sizeWithFont:font];
     CGSize labelTouchToTalkSize = self.ib_labelTouchToTalk.bounds.size;
-    CGSize viewTouchToTalkSize = self.ib_ViewTouchToTalk.bounds.size;
+    //CGSize viewTouchToTalkSize = self.ib_ViewTouchToTalk.bounds.size;
     
     float deltaY1 = (labelTouchToTalkSize.height + holdTTSize.height)/2.0;
     float alignY1 = (screenHeight - 240) - marginBottomText - deltaY1;
@@ -643,16 +643,6 @@ double _ticks = 0;
     }
 }
 
-- (IBAction)settingsTouchAction:(id)sender
-{
-    DeviceSettingsViewController *deviceSettings = [[DeviceSettingsViewController alloc] init];
-    deviceSettings.camChannel = self.selectedChannel;
-    UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:deviceSettings];
-    [deviceSettings release];
-    [self presentViewController:nav animated:YES completion:^{}];
-    [nav release];
-}
-
 - (IBAction)barBntItemRevealAction:(id)sender
 {
 //    UIBarButtonItem *revealIcon = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"reveal-icon"]
@@ -660,11 +650,6 @@ double _ticks = 0;
 //                                                                 target:[self stackViewController]
 //                                                                 action:@selector(toggleLeftViewController)];
     //[self.stackViewController toggleLeftViewController];
-}
-
-- (void)preToggleLeftViewController
-{
-    [self.stackViewController toggleLeftViewController];
 }
 
 #pragma mark - Delegate Stream callback

@@ -15,14 +15,12 @@
 #import "PlaylistInfo.h"
 #import "PlaybackViewController.h"
 #import "PlaylistCell.h"
-#import "MTStackViewController.h"
 #import "PlayListViewController.h"
 #import "H264PlayerListener.h"
 #import "PlayerCallbackHandler.h"
 #import "MBP_LoginOrRegistration.h"
 #import "ZoneViewController.h"
 #import "MelodyViewController.h"
-#import "DeviceSettingsViewController.h"
 //for scrollHorizontalMenu
 #import "ScrollHorizontalMenu.h"
 //control panel menu

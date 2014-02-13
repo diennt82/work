@@ -372,8 +372,8 @@
     }
     NSLog(@"addcam failed with error code:%d", [[error_response objectForKey:@"status"] intValue]);
     
-    NSString * msg = NSLocalizedStringWithDefaultValue(@"Server_error_" ,nil, [NSBundle mainBundle],
-                                                       @"Server error: %@" , nil);
+//    NSString * msg = NSLocalizedStringWithDefaultValue(@"Server_error_" ,nil, [NSBundle mainBundle],
+//                                                       @"Server error: %@" , nil);
     NSString * ok = NSLocalizedStringWithDefaultValue(@"Ok",nil, [NSBundle mainBundle],
                                                       @"Ok", nil);
     
@@ -456,8 +456,8 @@
                                                                           FailSelector:@selector(addCamFailedWithError:)
                                                                              ServerErr:@selector(addCamFailedServerUnreachable)] autorelease];
     
-    NSString * camName = (NSString *) [userDefaults objectForKey:@"CameraName"];
-    [jsonComm registerDeviceWithDeviceName:camName
+    NSString *stringCameraName = (NSString *) [userDefaults objectForKey:@"CameraName"];
+    [jsonComm registerDeviceWithDeviceName:stringCameraName
                          andRegistrationID:udid
                                    andMode:@"upnp" // Need somethings more usefully
                               andFwVersion:fwVersion

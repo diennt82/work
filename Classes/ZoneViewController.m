@@ -83,7 +83,7 @@
 /* zoneStrings [ "00","11","01"..] */
 -(void) parseZoneStrings:(NSArray * )zoneStrings
 {
-    self.oldZoneArray = [NSArray arrayWithArray:zoneStrings];
+    self.oldZoneArray = [NSMutableArray arrayWithArray:zoneStrings];
     
     
     int row_col, row, col;
@@ -316,7 +316,7 @@
             if ([[tokens objectAtIndex:1] isEqualToString:@"0"])
             {
                //We save the new changes.
-                self.oldZoneArray=[NSArray arrayWithArray:zoneStrings];
+                self.oldZoneArray=[NSMutableArray arrayWithArray:zoneStrings];
                
 
             }

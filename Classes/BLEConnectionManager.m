@@ -321,7 +321,10 @@
     }
 }
 
-
+// Just Clean a warning!
+- (void) didConnect
+{
+}
 
 @end
 

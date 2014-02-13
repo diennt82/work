@@ -753,6 +753,10 @@
 	    
 }
 
+//Just Clean a warning!
+-(IBAction)registerCamera:(id)sender
+{
+}
 
 #pragma mark -
 
