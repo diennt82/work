@@ -600,7 +600,18 @@
 		A118C19F187E4756009176F5 /* HttpCom.m in Sources */ = {isa = PBXBuildFile; fileRef = A118C19E187E4756009176F5 /* HttpCom.m */; };
 		A11E8C1317E2DB7E00915F84 /* libstdc++.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = A11E8C1217E2DB7D00915F84 /* libstdc++.dylib */; };
 		A1239E86186185F200A25A04 /* AudioOutStreamer.m in Sources */ = {isa = PBXBuildFile; fileRef = A1239E85186185F200A25A04 /* AudioOutStreamer.m */; };
+		A130725918AC667F001C6A60 /* upgrade_pressed.png in Resources */ = {isa = PBXBuildFile; fileRef = A130725518AC667F001C6A60 /* upgrade_pressed.png */; };
+		A130725A18AC667F001C6A60 /* upgrade_pressed@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A130725618AC667F001C6A60 /* upgrade_pressed@2x.png */; };
+		A130725B18AC667F001C6A60 /* upgrade.png in Resources */ = {isa = PBXBuildFile; fileRef = A130725718AC667F001C6A60 /* upgrade.png */; };
+		A130725C18AC667F001C6A60 /* upgrade@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A130725818AC667F001C6A60 /* upgrade@2x.png */; };
+		A130726118AC66D3001C6A60 /* timeline_blue_dot.png in Resources */ = {isa = PBXBuildFile; fileRef = A130725D18AC66D3001C6A60 /* timeline_blue_dot.png */; };
+		A130726218AC66D3001C6A60 /* timeline_blue_dot@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A130725E18AC66D3001C6A60 /* timeline_blue_dot@2x.png */; };
+		A130726318AC66D3001C6A60 /* timeline_line.png in Resources */ = {isa = PBXBuildFile; fileRef = A130725F18AC66D3001C6A60 /* timeline_line.png */; };
+		A130726418AC66D3001C6A60 /* timeline_line@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A130726018AC66D3001C6A60 /* timeline_line@2x.png */; };
+		A130726618AC6A29001C6A60 /* outline_circle@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A130726518AC6A29001C6A60 /* outline_circle@2x.png */; };
 		A14631C6185C133D00E96969 /* ScrollHorizontalMenu.m in Sources */ = {isa = PBXBuildFile; fileRef = A14631C5185C133D00E96969 /* ScrollHorizontalMenu.m */; };
+		A15110D718AB7D4600E116E1 /* TimeLinePremiumCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A15110D618AB7D4600E116E1 /* TimeLinePremiumCell.m */; };
+		A15110DD18AB7D9800E116E1 /* TimeLinePremiumCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = A15110DC18AB7D9800E116E1 /* TimeLinePremiumCell.xib */; };
 		A15430F31818CA4700337EFE /* libpj-arm-apple-darwin9.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A15430F01818CA4700337EFE /* libpj-arm-apple-darwin9.a */; };
 		A15430F41818CA4700337EFE /* libpjlib-util-arm-apple-darwin9.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A15430F11818CA4700337EFE /* libpjlib-util-arm-apple-darwin9.a */; };
 		A15430F51818CA4700337EFE /* libpjnath-arm-apple-darwin9.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A15430F21818CA4700337EFE /* libpjnath-arm-apple-darwin9.a */; };
@@ -1387,8 +1398,20 @@
 		A1239E84186185F200A25A04 /* AudioOutStreamer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AudioOutStreamer.h; sourceTree = "<group>"; };
 		A1239E85186185F200A25A04 /* AudioOutStreamer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AudioOutStreamer.m; sourceTree = "<group>"; };
 		A123DC9717E9A748006CC6FD /* PlayerCallbackHandler.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PlayerCallbackHandler.h; sourceTree = "<group>"; };
+		A130725518AC667F001C6A60 /* upgrade_pressed.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = upgrade_pressed.png; sourceTree = "<group>"; };
+		A130725618AC667F001C6A60 /* upgrade_pressed@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "upgrade_pressed@2x.png"; sourceTree = "<group>"; };
+		A130725718AC667F001C6A60 /* upgrade.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = upgrade.png; sourceTree = "<group>"; };
+		A130725818AC667F001C6A60 /* upgrade@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "upgrade@2x.png"; sourceTree = "<group>"; };
+		A130725D18AC66D3001C6A60 /* timeline_blue_dot.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = timeline_blue_dot.png; sourceTree = "<group>"; };
+		A130725E18AC66D3001C6A60 /* timeline_blue_dot@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "timeline_blue_dot@2x.png"; sourceTree = "<group>"; };
+		A130725F18AC66D3001C6A60 /* timeline_line.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = timeline_line.png; sourceTree = "<group>"; };
+		A130726018AC66D3001C6A60 /* timeline_line@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "timeline_line@2x.png"; sourceTree = "<group>"; };
+		A130726518AC6A29001C6A60 /* outline_circle@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "outline_circle@2x.png"; sourceTree = "<group>"; };
 		A14631C4185C133D00E96969 /* ScrollHorizontalMenu.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ScrollHorizontalMenu.h; sourceTree = "<group>"; };
 		A14631C5185C133D00E96969 /* ScrollHorizontalMenu.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ScrollHorizontalMenu.m; sourceTree = "<group>"; };
+		A15110D518AB7D4600E116E1 /* TimeLinePremiumCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TimeLinePremiumCell.h; sourceTree = "<group>"; };
+		A15110D618AB7D4600E116E1 /* TimeLinePremiumCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TimeLinePremiumCell.m; sourceTree = "<group>"; };
+		A15110DC18AB7D9800E116E1 /* TimeLinePremiumCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TimeLinePremiumCell.xib; sourceTree = "<group>"; };
 		A15430F01818CA4700337EFE /* libpj-arm-apple-darwin9.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libpj-arm-apple-darwin9.a"; path = "../ios-frameworks/pjsip/arm/lib/libpj-arm-apple-darwin9.a"; sourceTree = "<group>"; };
 		A15430F11818CA4700337EFE /* libpjlib-util-arm-apple-darwin9.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libpjlib-util-arm-apple-darwin9.a"; path = "../ios-frameworks/pjsip/arm/lib/libpjlib-util-arm-apple-darwin9.a"; sourceTree = "<group>"; };
 		A15430F21818CA4700337EFE /* libpjnath-arm-apple-darwin9.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libpjnath-arm-apple-darwin9.a"; path = "../ios-frameworks/pjsip/arm/lib/libpjnath-arm-apple-darwin9.a"; sourceTree = "<group>"; };
@@ -2853,6 +2876,9 @@
 				8B92A0B618643212005923D2 /* TimelineButtonCell.h */,
 				8B92A0B718643212005923D2 /* TimelineButtonCell.m */,
 				8B92A0B91864322E005923D2 /* TimelineButtonCell.xib */,
+				A15110D518AB7D4600E116E1 /* TimeLinePremiumCell.h */,
+				A15110D618AB7D4600E116E1 /* TimeLinePremiumCell.m */,
+				A15110DC18AB7D9800E116E1 /* TimeLinePremiumCell.xib */,
 				8B9376B418729AC900E20756 /* ClipInfo.h */,
 				8B9376B518729AC900E20756 /* ClipInfo.m */,
 			);
@@ -3696,6 +3722,7 @@
 				38B85E4F15CFA4DC00E5A1FA /* Step_07_tableViewCell.xib in Resources */,
 				8B88C94E18ACB0CE00B074E5 /* settings_line.png in Resources */,
 				8B88C90018ACB0CE00B074E5 /* upgrade@2x.png in Resources */,
+				A15110DD18AB7D9800E116E1 /* TimeLinePremiumCell.xib in Resources */,
 				A1AC286F1877A1F0000A866D /* CreateBLEConnection_VController_iPad.xib in Resources */,
 				38DE1C96168AEB450049E814 /* Step_07_ViewController.xib in Resources */,
 				8B88C92618ACB0CE00B074E5 /* splash@2x.png in Resources */,
@@ -4131,6 +4158,7 @@
 				38A478D015BD64F9008682FE /* MBP_InitialSetupViewController.mm in Sources */,
 				8B93847F1856D42C009C4771 /* InformationViewController.m in Sources */,
 				38A478D915BE484B008682FE /* Step_02_ViewController.mm in Sources */,
+				A15110D718AB7D4600E116E1 /* TimeLinePremiumCell.m in Sources */,
 				38A478DC15BE4BFA008682FE /* Step_03_ViewController.mm in Sources */,
 				8B9AF6A418581D3300AC09C3 /* AddScheduleViewController.m in Sources */,
 				38A478E815BE82E0008682FE /* Step_04_ViewController.mm in Sources */,
@@ -5099,8 +5127,8 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CODE_SIGN_ENTITLEMENTS = "";
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Lai Shan Lam (RYP7CC8LQR)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Lai Shan Lam (RYP7CC8LQR)";
 				COPY_PHASE_STRIP = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -5142,7 +5170,7 @@
 				);
 				OTHER_LDFLAGS = "-lz";
 				PRODUCT_NAME = "Camera HD";
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "23B859A5-EEA9-4C86-A69E-5C00B353FC3B";
 				SDKROOT = iphoneos7.0;
 				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/../ios-frameworks/pjsip/arm/include/ $(SRCROOT)/../ios-frameworks/pjsip/arm/include/pj/ $(SRCROOT)/../ios-frameworks/pjsip/arm/include/pjnath/";
 				VALID_ARCHS = "armv6 armv7";
@@ -5154,8 +5182,8 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CODE_SIGN_ENTITLEMENTS = "";
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Lai Shan Lam (RYP7CC8LQR)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Lai Shan Lam (RYP7CC8LQR)";
 				COPY_PHASE_STRIP = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -5192,7 +5220,7 @@
 				);
 				OTHER_LDFLAGS = "-lz";
 				PRODUCT_NAME = "Camera HD";
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "23B859A5-EEA9-4C86-A69E-5C00B353FC3B";
 				SDKROOT = iphoneos7.0;
 				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/../ios-frameworks/pjsip/arm/include/ $(SRCROOT)/../ios-frameworks/pjsip/arm/include/pj/ $(SRCROOT)/../ios-frameworks/pjsip/arm/include/pjnath/";
 				VALIDATE_PRODUCT = YES;
@@ -5216,7 +5244,7 @@
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
 				OTHER_LDFLAGS = "";
 				PRODUCT_NAME = "Camera HD";
-				PROVISIONING_PROFILE = "6296209A-5435-47A4-8372-20B2C8251B4C";
+				PROVISIONING_PROFILE = "23B859A5-EEA9-4C86-A69E-5C00B353FC3B";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				USER_HEADER_SEARCH_PATHS = "\"$(SRCROOT)/external_include\"/**";
@@ -5229,8 +5257,8 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CODE_SIGN_ENTITLEMENTS = "";
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Lai Shan Lam (RYP7CC8LQR)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Lai Shan Lam (RYP7CC8LQR)";
 				COPY_PHASE_STRIP = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -5265,7 +5293,7 @@
 				);
 				OTHER_LDFLAGS = "-lz";
 				PRODUCT_NAME = "Camera HD";
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "23B859A5-EEA9-4C86-A69E-5C00B353FC3B";
 				RAMEWORK_SEARCH_PATHS = "$(inherited) \"$(SRCROOT)\"";
 				SDKROOT = iphoneos7.0;
 				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/../ios-frameworks/pjsip/arm/include/ $(SRCROOT)/../ios-frameworks/pjsip/arm/include/pj/ $(SRCROOT)/../ios-frameworks/pjsip/arm/include/pjnath/";
@@ -5289,7 +5317,7 @@
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = "";
 				PRODUCT_NAME = "Camera HD";
-				PROVISIONING_PROFILE = "6296209A-5435-47A4-8372-20B2C8251B4C";
+				PROVISIONING_PROFILE = "23B859A5-EEA9-4C86-A69E-5C00B353FC3B";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				USER_HEADER_SEARCH_PATHS = "\"$(SRCROOT)/external_include\"/**";
@@ -5313,7 +5341,7 @@
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
 				OTHER_LDFLAGS = "";
 				PRODUCT_NAME = "Camera HD";
-				PROVISIONING_PROFILE = "6296209A-5435-47A4-8372-20B2C8251B4C";
+				PROVISIONING_PROFILE = "23B859A5-EEA9-4C86-A69E-5C00B353FC3B";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				USER_HEADER_SEARCH_PATHS = "\"$(SRCROOT)/external_include\"/**";

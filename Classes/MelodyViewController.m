@@ -16,6 +16,7 @@
 {
     NSArray* _melodies;
     BOOL valueMelodiesMap[6];
+    UIFont *semiBoldFont, *regularFont;
 }
 
 @property (retain, nonatomic) IBOutlet UITableView *melodyTableView;
@@ -69,8 +70,28 @@
     
     self.melodyTableView.delegate = self;
     self.melodyTableView.dataSource = self;
+    [self loadFont];
 }
 
+- (void)loadFont
+{
+    if (isiPhone5)
+    {
+        semiBoldFont = [UIFont applyHubbleFontName:PN_SEMIBOLD_FONT withSize:19];
+        regularFont = [UIFont applyHubbleFontName:PN_REGULAR_FONT withSize:19];
+    }
+    else if (isiPhone4)
+    {
+        semiBoldFont = [UIFont applyHubbleFontName:PN_SEMIBOLD_FONT withSize:17];
+        regularFont = [UIFont applyHubbleFontName:PN_REGULAR_FONT withSize:17];
+    }
+    else
+    {
+        //maybe iPad
+        semiBoldFont = [UIFont applyHubbleFontName:PN_SEMIBOLD_FONT withSize:30];
+        regularFont = [UIFont applyHubbleFontName:PN_REGULAR_FONT withSize:30];
+    }
+}
 - (BOOL)isSharedCam: (NSString *)regID
 {
     if (regID != nil)
@@ -222,14 +243,12 @@
     cell.textLabel.textColor = [UIColor blackColor];
     if (valueMelodiesMap[indexPath.section] == TRUE)
     {
-        UIFont *font = [UIFont applyHubbleFontName:PN_SEMIBOLD_FONT withSize:17];
-        cell.textLabel.font = font;
+        cell.textLabel.font = semiBoldFont;
         cell.imageView.image = [UIImage imageNamed:@"camera_action_pause.png"];
     }
     else
     {
-        UIFont *font = [UIFont applyHubbleFontName:PN_REGULAR_FONT withSize:17];
-        cell.textLabel.font = font;
+        cell.textLabel.font = regularFont;
         cell.imageView.image = [UIImage imageNamed:@"camera_action_play.png"];
     }
     
@@ -244,7 +263,7 @@
     }
     else
     {
-        return 44;
+        return HEIGHT_CELL_TABLE_IPHONE;
     }
 }
 

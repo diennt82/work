@@ -12,6 +12,8 @@
 @property (retain, nonatomic) IBOutlet UIImageView *snapshotImage;
 @property (retain, nonatomic) IBOutlet UILabel *eventLabel;
 @property (retain, nonatomic) IBOutlet UILabel *eventTimeLabel;
+@property (retain, nonatomic) IBOutlet UIImageView *feedImageVideo;
 @property (retain, nonatomic) IBOutlet UIActivityIndicatorView *activityIndicatorLoading;
+@property (retain, nonatomic) IBOutlet UIImageView *lineImage;
 
 @end

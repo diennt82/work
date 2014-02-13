@@ -10,7 +10,7 @@
 #import "EarlierViewController.h"
 #import "TimelineViewController.h"
 #import <CoreText/CTStringAttributes.h>
-
+#import "define.h"
 #import <CFNetwork/CFNetwork.h>
 #include <ifaddrs.h>
 
@@ -53,6 +53,8 @@
 @interface H264PlayerViewController () <TimelineVCDelegate, BonjourDelegate>
 {
     BOOL _syncPortraitAndLandscape;
+    NSInteger screenWidth,screenHeight;
+    UIBarButtonItem *nowButton, *earlierButton;
 }
 
 @property (retain, nonatomic) IBOutlet UIImageView *imageViewHandle;
@@ -109,6 +111,18 @@ double _ticks = 0;
     // Do any additional setup after loading the view from its nib.
     // only is called in viewDidLoad, make sure it is called once.
     
+    CGRect screenBound = [[UIScreen mainScreen] bounds];
+    CGSize screenSize = screenBound.size;
+    screenWidth = screenSize.width;
+    screenHeight = screenSize.height;
+    
+    if (IS_RETINA)
+    {
+        NSLog(@"Retina");
+    } else
+    {
+        NSLog(@"Non Retina");
+    }
     [self.ib_buttonChangeAction setHidden:NO];
     [self.view bringSubviewToFront:self.ib_buttonChangeAction];
     /*
@@ -126,8 +140,11 @@ double _ticks = 0;
     self.selectedItemMenu = -1;
     [self updateBottomView];
     
+    [self.ib_labelRecordVideo setText:@"Record Video"];
+    [self.ib_labelTouchToTalk setText:@"Hold To Talk"];
     //setup Font
     [self applyFont];
+    [self updatePositionBetweenView];
 
     // Do any additional setup after loading the view.
 	[[NSNotificationCenter defaultCenter] addObserver: self
@@ -255,45 +272,86 @@ double _ticks = 0;
     self.stringTemperature = @"0";
 }
 
+- (void)updatePositionBetweenView
+{
+    
+//    [self.ib_labelTouchToTalk setFrame:CGPointMake(0, screenHeight - PADDING_BOTTOM_TEXT - )];
+//    [self.ib_labelRecordVideo setFrame:CGPointMake(0, screenHeight- PADDING_BOTTOM_TEXT)];
+}
 - (void)applyFont
 {
+    UIFont *font;
+    UIColor *color;
+    float marginBottomText, marginBottomButton;
     if (isiPhone5)
     {
         //for holdtotalk
-        UIFont *font = [UIFont applyHubbleFontName:PN_REGULAR_FONT withSize:19];
-        [self.ib_labelTouchToTalk setFont:font];
-        UIColor *color = [UIColor holdToTalkTextColor];
-        self.ib_labelTouchToTalk.textColor = color;
-        //for recordingText
-        [self.ib_labelRecordVideo setFont:font];
-        self.ib_labelRecordVideo.textColor = [UIColor recordingTextColor];
+        font = [UIFont applyHubbleFontName:PN_REGULAR_FONT withSize:19];
+        color = [UIColor holdToTalkTextColor];
+        marginBottomText = 21.0f;
+        marginBottomButton = 40.5f;
+
     }
     else if (isiPhone4)
     {
         //for holdtotalk
-        UIFont *font = [UIFont applyHubbleFontName:PN_REGULAR_FONT withSize:17];
-        [self.ib_labelTouchToTalk setFont:font];
-        UIColor *color = [UIColor holdToTalkTextColor];
-        self.ib_labelTouchToTalk.textColor = color;
-        
-        //recording text
-        [self.ib_labelRecordVideo setFont:font];
-        self.ib_labelRecordVideo.textColor = [UIColor recordingTextColor];
-        
+        font = [UIFont applyHubbleFontName:PN_REGULAR_FONT withSize:17];
+        color = [UIColor holdToTalkTextColor];
+        marginBottomText = 12.5f;
+        marginBottomButton = 24.0f;
     }
     else
     {
         //iPad
         //for holdtotalk
-        UIFont *font = [UIFont applyHubbleFontName:PN_REGULAR_FONT withSize:50];
-        [self.ib_labelTouchToTalk setFont:font];
-        UIColor *color = [UIColor holdToTalkTextColor];
-        self.ib_labelTouchToTalk.textColor = color;
-        
-        //recording text
-        [self.ib_labelRecordVideo setFont:font];
-        self.ib_labelRecordVideo.textColor = [UIColor recordingTextColor];
+        font = [UIFont applyHubbleFontName:PN_REGULAR_FONT withSize:50];
+        color = [UIColor holdToTalkTextColor];
+        marginBottomText = 12.5f * 2;
+        marginBottomButton = 24.0f * 2;
     }
+    
+    
+    [self.ib_labelTouchToTalk setFont:font];
+    self.ib_labelTouchToTalk.textColor = color;
+    //for recordingText
+    [self.ib_labelRecordVideo setFont:font];
+    if (_isRecordInterface && _isProcessRecording)
+    {
+        self.ib_labelRecordVideo.textColor = [UIColor recordingTextColor];
+    } else
+    {
+        self.ib_labelRecordVideo.textColor = [UIColor holdToTalkTextColor];
+    }
+    
+    //update position text recording
+    NSString *recordingString = self.ib_labelRecordVideo.text;
+    CGSize recordingSize = [recordingString sizeWithFont:font];
+    CGSize labelRecordSize = self.ib_labelRecordVideo.bounds.size;
+    CGSize viewRecordSize = self.ib_viewRecordTTT.bounds.size;
+    
+    float deltaY = (labelRecordSize.height + recordingSize.height)/2.0;
+    float alignY = (screenHeight - 240) - marginBottomText - deltaY;
+    [self.ib_labelRecordVideo setCenter:CGPointMake(screenWidth/2, alignY)];
+    
+    //update position text hold to talk
+    CGPoint position = self.ib_viewRecordTTT.bounds.origin;
+    NSString *holdTTString = self.ib_labelTouchToTalk.text;
+    CGSize holdTTSize = [holdTTString sizeWithFont:font];
+    CGSize labelTouchToTalkSize = self.ib_labelTouchToTalk.bounds.size;
+    CGSize viewTouchToTalkSize = self.ib_ViewTouchToTalk.bounds.size;
+    
+    float deltaY1 = (labelTouchToTalkSize.height + holdTTSize.height)/2.0;
+    float alignY1 = (screenHeight - 240) - marginBottomText - deltaY1;
+    [self.ib_labelTouchToTalk setCenter:CGPointMake(screenWidth/2, alignY1)];
+    
+    // update position button
+    //hold to talk
+    CGSize holdTTButtonSize = self.ib_buttonTouchToTalk.bounds.size;
+    float alignYButton = screenHeight - 240 - marginBottomButton - holdTTButtonSize.height;
+    [self.ib_buttonTouchToTalk setCenter:CGPointMake(screenWidth/2, alignYButton)];
+    [self.ib_processRecordOrTakePicture setCenter:CGPointMake(screenWidth/2, alignYButton)];
+    
+    [_imgViewDrectionPad setCenter:CGPointMake(screenWidth/2, alignYButton + 240)];
 }
 
 - (void) setupHttpPort
@@ -389,15 +447,23 @@ double _ticks = 0;
 
     self.navigationItem.leftBarButtonItem = headerLogoButton;
 
-    UIBarButtonItem *nowButton = [[UIBarButtonItem alloc] initWithTitle:@"Now"
+    nowButton = [[UIBarButtonItem alloc] initWithTitle:@"Now"
                                                                   style:UIBarButtonItemStylePlain
                                                                  target:self
                                                                  action:@selector(nowButtonAciton:)];
-    UIBarButtonItem *earlierButton = [[UIBarButtonItem alloc] initWithTitle:@"Earlier"
+    earlierButton = [[UIBarButtonItem alloc] initWithTitle:@"Earlier"
                                                                       style:UIBarButtonItemStylePlain
                                                                      target:self
                                                                      action:@selector(earlierButtonAction:)];
     
+    [nowButton setTitleTextAttributes:@{
+                                        UITextAttributeFont: [UIFont fontWithName:PN_SEMIBOLD_FONT size:17.0],
+                                        UITextAttributeTextColor: [UIColor barItemSelectedColor]
+                                        } forState:UIControlStateNormal];
+    [earlierButton setTitleTextAttributes:@{
+                                            UITextAttributeFont: [UIFont fontWithName:PN_LIGHT_FONT size:17.0],
+                                            UITextAttributeTextColor: [UIColor barItemSelectedColor]
+                                            } forState:UIControlStateNormal];
     //if (self.selectedChannel.profile.modelID == 6) // SharedCam
     if ([self isSharedCam:self.selectedChannel.profile.registrationID]) // SharedCam
     {
@@ -426,6 +492,15 @@ double _ticks = 0;
 
 - (void)nowButtonAciton:(id)sender
 {
+    [nowButton setTitleTextAttributes:@{
+                                        UITextAttributeFont: [UIFont fontWithName:PN_SEMIBOLD_FONT size:17.0],
+                                        UITextAttributeTextColor: [UIColor barItemSelectedColor]
+                                        } forState:UIControlStateNormal];
+    [earlierButton setTitleTextAttributes:@{
+                                            UITextAttributeFont: [UIFont fontWithName:PN_LIGHT_FONT size:17.0],
+                                            UITextAttributeTextColor: [UIColor barItemSelectedColor]
+                                            } forState:UIControlStateNormal];
+    
     if (_isEarlierView == TRUE)
     {
         self.isEarlierView = FALSE;
@@ -462,6 +537,16 @@ double _ticks = 0;
 
 - (void)earlierButtonAction:(id)sender
 {
+    
+    [nowButton setTitleTextAttributes:@{
+                                        UITextAttributeFont: [UIFont fontWithName:PN_LIGHT_FONT size:17.0],
+                                        UITextAttributeTextColor: [UIColor barItemSelectedColor]
+                                        } forState:UIControlStateNormal];
+    [earlierButton setTitleTextAttributes:@{
+                                            UITextAttributeFont: [UIFont fontWithName:PN_SEMIBOLD_FONT size:17.0],
+                                            UITextAttributeTextColor: [UIColor barItemSelectedColor]
+                                            } forState:UIControlStateNormal];
+    
     if (_isEarlierView == FALSE)
     {
         self.isEarlierView = TRUE;
@@ -2699,52 +2784,54 @@ double _ticks = 0;
 
 - (void)setTemperatureState_Fg: (NSString *)temperature
 {
-    
     // Update UI
     // start
-    NSString *stringTemperature = [NSString stringWithFormat:@"%d˚C", (int)roundf([temperature floatValue])];
+    [self.ib_temperature.subviews makeObjectsPerformSelector: @selector(removeFromSuperview)];
+    NSString *stringTemperature = [NSString stringWithFormat:@"%d", (int)roundf([temperature floatValue])];
     
-    NSMutableAttributedString *attrString = [[NSMutableAttributedString alloc] initWithString:stringTemperature];
-    UIColor *color = [UIColor temperatureTextColor];
+    UILabel *degreeCelsius = [[UILabel alloc] init];
+    degreeCelsius.backgroundColor=[UIColor clearColor];
+    degreeCelsius.textColor=[UIColor temperatureTextColor];
+    degreeCelsius.textAlignment = NSTextAlignmentLeft;
+    NSString *degreeCel = @"°C";
+    degreeCelsius.text= degreeCel;
+    
+
+    float height_Tem = self.ib_temperature.bounds.size.height;
+    UIFont *degreeFont;
+    UIFont *temperatureFont;
     if (isiPhone5)
     {
-        UIFont *degreeFont = [UIFont applyHubbleFontName:PN_LIGHT_FONT withSize:35];
-        UIFont *temperatureFont = [UIFont applyHubbleFontName:PN_LIGHT_FONT withSize:135];
-        
-        NSLog(@"stringTemperature.length is %d", stringTemperature.length);
-        [attrString addAttribute: NSForegroundColorAttributeName
-                          value: color
-                          range: NSMakeRange(0,stringTemperature.length - 1)];
-        [attrString addAttribute:NSFontAttributeName value:temperatureFont range:NSMakeRange(0, stringTemperature.length - 2)];
-        [attrString addAttribute:NSFontAttributeName value:degreeFont range:NSMakeRange(stringTemperature.length - 2, 2)];
-        
-        [attrString addAttribute:NSFontAttributeName value:degreeFont range:NSMakeRange(stringTemperature.length - 2, 2)];
-        [attrString addAttribute:(id)kCTSuperscriptAttributeName value:@"1" range:NSMakeRange(stringTemperature.length - 2, 2)];
-        
+        degreeFont = [UIFont applyHubbleFontName:PN_LIGHT_FONT withSize:35];
+        temperatureFont = [UIFont applyHubbleFontName:PN_LIGHT_FONT withSize:135];
+
     }
     else if (isiPhone4)
     {
-        UIFont *degreeFont = [UIFont applyHubbleFontName:PN_LIGHT_FONT withSize:30];
-        UIFont *temperatureFont = [UIFont applyHubbleFontName:PN_LIGHT_FONT withSize:125];
-        
-        [attrString addAttribute: NSForegroundColorAttributeName
-                          value: color
-                          range: NSMakeRange(0,stringTemperature.length)];
-        [attrString addAttribute:NSFontAttributeName value:temperatureFont range:NSMakeRange(0, stringTemperature.length - 2)];
-        [attrString addAttribute:NSFontAttributeName value:degreeFont range:NSMakeRange(stringTemperature.length - 2, 2)];
+        degreeFont = [UIFont applyHubbleFontName:PN_LIGHT_FONT withSize:30];
+        temperatureFont = [UIFont applyHubbleFontName:PN_LIGHT_FONT withSize:125];
     }
     else
     {
-        UIFont *smallFont = [UIFont systemFontOfSize:40.0f];
-        
-        [attrString addAttribute:NSFontAttributeName value:(smallFont) range:NSMakeRange(stringTemperature.length - 1, 1)];
-        [attrString addAttribute:(id)kCTSuperscriptAttributeName value:@"1" range:NSMakeRange(stringTemperature.length - 1, 1)];
-        
+        degreeFont = [UIFont applyHubbleFontName:PN_LIGHT_FONT withSize:50];
+        temperatureFont = [UIFont applyHubbleFontName:PN_LIGHT_FONT withSize:200];
     }
-    self.ib_temperature.attributedText = attrString;
-    self.ib_temperature.textColor = color;
-    [attrString release];
     
+    [degreeCelsius setFont:degreeFont];
+    [self.ib_temperature setFrame:CGRectMake(0, 240, screenWidth, screenHeight - 240)];
+    [self.ib_temperature setFont:temperatureFont];
+    [self.ib_temperature setTextColor:[UIColor temperatureTextColor]];
+    [self.ib_temperature setText:stringTemperature];
+    CGSize stringBoundingBox = [stringTemperature sizeWithFont:temperatureFont];
+    CGSize degreeCelBoundingBox = [degreeCel sizeWithFont:degreeFont];
+    
+    
+    CGFloat widthString = stringBoundingBox.width;
+    CGFloat heightString = stringBoundingBox.height;
+    CGFloat alignX = (screenWidth + widthString)/2 - degreeCelBoundingBox.width/2 + 5;
+    [degreeCelsius setFrame:CGRectMake(alignX, height_Tem/2 - heightString/2 + 10, degreeCelBoundingBox.width, degreeCelBoundingBox.height)];
+    [self.ib_temperature addSubview:degreeCelsius];
+    [degreeCelsius release];
 }
 
 #pragma mark -
@@ -3856,10 +3943,6 @@ double _ticks = 0;
         _syncPortraitAndLandscape = NO;
     }
     [self resetZooming];
-    CGRect screenBounds = [[UIScreen mainScreen] bounds];
-    CGFloat screenWidth = screenBounds.size.width;
-    CGFloat screenHeight = screenBounds.size.height;
-    //CGSize activitySize = _activityIndicator.frame.size;
     
     NSInteger deltaY = 0;
     if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 7.0)
@@ -4035,6 +4118,7 @@ double _ticks = 0;
     
     //
     [self setupPtt];
+    [self applyFont];
 }
 
 #pragma mark -
@@ -4691,6 +4775,7 @@ double _ticks = 0;
     }
     
     [self updateBottomView];
+    [self applyFont];
 }
 
 - (void)updateBottomView
@@ -4833,7 +4918,11 @@ double _ticks = 0;
 }
 - (void)viewWillAppear:(BOOL)animated
 {
-
+    CGRect screenBound = [[UIScreen mainScreen] bounds];
+    CGSize screenSize = screenBound.size;
+    screenWidth = screenSize.width;
+    screenHeight = screenSize.height;
+    
     [super viewWillAppear:animated];
     //init data for debug
 #ifdef SHOW_DEBUG_INFO
@@ -5055,9 +5144,9 @@ double _ticks = 0;
     [self.ib_buttonTouchToTalk setBackgroundImage:imageHoldToTalk forState:UIControlStateNormal];
     [self.ib_buttonTouchToTalk setBackgroundImage:imageHoldedToTalk forState:UIControlEventTouchDown];
     [self.ib_buttonTouchToTalk setBackgroundImage:imageHoldToTalk forState:UIControlEventTouchUpInside];
-    UIFont *font = [UIFont applyHubbleFontName:PN_REGULAR_FONT withSize:19];
-    [self.ib_labelTouchToTalk setFont:font];
+
     [self.ib_labelTouchToTalk setText:@"Listening"];
+    [self applyFont];
     
     //processing for PTT
     [self processingHoldToTalk];
@@ -5069,9 +5158,9 @@ double _ticks = 0;
     [self.ib_buttonTouchToTalk setBackgroundColor:[UIColor clearColor]];
     [self.ib_buttonTouchToTalk setBackgroundImage:imageHoldToTalk forState:UIControlStateNormal];
     [self.ib_buttonTouchToTalk setBackgroundImage:imageHoldToTalk forState:UIControlEventTouchUpInside];
-    UIFont *font = [UIFont applyHubbleFontName:PN_REGULAR_FONT withSize:17];
-    [self.ib_labelTouchToTalk setFont:font];
+
     [self.ib_labelTouchToTalk setText:@"Hold To Talk"];
+    [self applyFont];
     //user touch up inside and outside
 
 }
@@ -5103,7 +5192,6 @@ double _ticks = 0;
         if (_isProcessRecording)
         {
             //now is interface recording
-            [self.ib_labelRecordVideo setTextColor:[UIColor redColor]];
             [self.ib_labelRecordVideo setText:@"00:00:00"];
             [self.ib_processRecordOrTakePicture setBackgroundImage:recordingImage forState:UIControlStateNormal];
             [self.ib_processRecordOrTakePicture setBackgroundImage:recordingPressed forState:UIControlEventTouchDown];
@@ -5124,7 +5212,6 @@ double _ticks = 0;
             [self.ib_processRecordOrTakePicture setBackgroundImage:readyRecord forState:UIControlStateNormal];
             [self.ib_processRecordOrTakePicture setBackgroundImage:readyRecordPressed forState:UIControlEventTouchDown];
             [self.ib_processRecordOrTakePicture setBackgroundImage:readyRecord forState:UIControlEventTouchUpInside];
-            [self.ib_labelRecordVideo setTextColor:[UIColor blueColor]];
             //stop timer display
             [self stopTimerRecoring];
             [self.ib_labelRecordVideo setText:@"Record Video"];
@@ -5161,6 +5248,7 @@ double _ticks = 0;
             [self processingForTakePicture];
         }
     }
+    [self applyFont];
 
 }
 
@@ -5188,7 +5276,6 @@ double _ticks = 0;
     
 //#endif
     
-    [self.ib_labelRecordVideo setTextColor:[UIColor blueColor]];
     if (_isRecordInterface)
     {
         
@@ -5204,7 +5291,6 @@ double _ticks = 0;
         {
             //but,we are recording
             [self.ib_processRecordOrTakePicture setBackgroundImage:stopRecordingImage forState:UIControlStateNormal];
-            [self.ib_labelRecordVideo setTextColor:[UIColor redColor]];
             [self.ib_labelRecordVideo setText:@""];
         }
         else
@@ -5213,7 +5299,6 @@ double _ticks = 0;
             [self.ib_processRecordOrTakePicture setBackgroundImage:recordActionImage forState:UIControlStateNormal];
             [self.ib_processRecordOrTakePicture setBackgroundImage:recordActionImagePressed forState:UIControlEventTouchDown];
             [self.ib_processRecordOrTakePicture setBackgroundImage:recordActionImage forState:UIControlEventTouchUpInside];
-            [self.ib_labelRecordVideo setTextColor:[UIColor blueColor]];
             [self.ib_labelRecordVideo setText:@"Record Video"];
             _syncPortraitAndLandscape = NO;
         }
@@ -5246,6 +5331,7 @@ double _ticks = 0;
         }
         
     }
+    [self applyFont];
 }
 
 #pragma mark -

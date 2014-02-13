@@ -1,21 +1,20 @@
 //
-//  TimelineActivityCell.m
+//  TimeLinePremiumCell.m
 //  BlinkHD_ios
 //
-//  Created by Developer on 12/20/13.
-//  Copyright (c) 2013 Smart Panda Ltd. All rights reserved.
+//  Created by Jason Lee on 12/2/14.
+//  Copyright (c) 2014 Smart Panda Ltd. All rights reserved.
 //
 
-#import "TimelineActivityCell.h"
+#import "TimeLinePremiumCell.h"
 
-@implementation TimelineActivityCell
+@implementation TimeLinePremiumCell
 
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
 {
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self) {
         // Initialization code
-
     }
     return self;
 }
@@ -28,12 +27,9 @@
 }
 
 - (void)dealloc {
-    [_snapshotImage release];
-    [_eventLabel release];
-    [_eventTimeLabel release];
-    [_activityIndicatorLoading release];
-    [_lineImage release];
-    [_feedImageVideo release];
+    [_timelineImagePremium release];
+    [_ib_labelPremium release];
+    [_ib_labelDayPremium release];
     [super dealloc];
 }
 @end

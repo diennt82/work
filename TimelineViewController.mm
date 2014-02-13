@@ -17,6 +17,7 @@
 #import <MonitorCommunication/MonitorCommunication.h>
 #import "PlaylistInfo.h"
 #import "H264PlayerViewController.h"
+#import "TimeLinePremiumCell.h"
 
 @interface TimelineViewController () <UIScrollViewDelegate>
 
@@ -132,8 +133,19 @@
     self.isLoading = TRUE;
     //self.tableView.scrollIndicatorInsets = UIEdgeInsetsMake(64, 0, 44, 0);
 #endif
+    
 }
 
+//- (void)applyFontTimeLine
+//{
+//    xxxx
+//    UIFont *lightLargeFont = [UIFont applyHubbleFontName:PN_LIGHT_FONT withSize:27];
+//    UIFont *lightSmall14Font = [UIFont applyHubbleFontName:PN_LIGHT_FONT withSize:14];
+//    UIFont *lightSmall13Font = [UIFont applyHubbleFontName:PN_LIGHT_FONT withSize:13];
+//    UIFont *regularMediumFont = [UIFont applyHubbleFontName:PN_REGULAR_FONT withSize:16];
+////    UIColor *timeLineColor = [UIColor timeLineColor];
+//    
+//}
 - (void)viewWillAppear:(BOOL)animated
 {
 }
@@ -488,30 +500,49 @@
         return 1;
     }
     
-    return 3;
+    return 4;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     //#warning Incomplete method implementation.
     // Return the number of rows in the section.
-    if (section == 0)
-    {
-        return 1;
-    }
-    else if (section == 1)
+
+    if (section == 1)
     {
         return _events.count;
     }
-    
-    return 2;
+    else
+    {
+        return 1;
+    }
 }
 
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+{
+    if (section == 3)
+    {
+        return 15;
+    } else if (section == 2)
+    {
+        return 8;
+    }
+    return 0;
+}
+
+- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
+{
+    UIView* headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, tableView.frame.size.width, 30)];
+    
+    // 2. Set a custom background color and a border
+    headerView.backgroundColor = [UIColor clearColor];
+    return  headerView;
+}
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (indexPath.section == 0)
     {
-        return 94;
+        return 92;
     }
 #if 1
     if (indexPath.section == 1)
@@ -521,7 +552,7 @@
         // Motion detected
         if (eventInfo.alert == 4)
         {
-            return 197;  //TODO: Match with design document
+            return 212;  //TODO: Match with design document
         }
         // Sound, temperature, & another detected
         else if (eventInfo.alert == 1 ||
@@ -530,7 +561,7 @@
             return 77;
         }
         
-        return 197;// modify later
+        return 212;// modify 197
     }
 #else
     if (indexPath.section == 1)
@@ -605,6 +636,7 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
+
     if (_isEventAlready == FALSE)
     {
         static NSString *CellIdentifier = @"Cell";
@@ -664,9 +696,12 @@
                 break;
             }
         }
-        
+        [cell.eventLabel setFont:[UIFont lightLarge27Font]];
+        [cell.detailTextLabel setFont:[UIFont lightSmall14Font]];
         cell.eventLabel.text = self.stringIntelligentMessage;
         cell.eventDetailLabel.text = self.stringCurrentDate;
+        [cell.eventLabel setTextColor:[UIColor timeLineColor]];
+        [cell.eventDetailLabel setTextColor:[UIColor timeLineColor]];
         
         return cell;
     }
@@ -748,6 +783,11 @@
         else
         {
             cell.snapshotImage.hidden = YES;
+            CGRect screenBound = [[UIScreen mainScreen] bounds];
+            CGSize screenSize = screenBound.size;
+            //update indicator
+            [cell.feedImageVideo setCenter:CGPointMake(screenSize.width/2, 47)];
+            [cell.activityIndicatorLoading setCenter:CGPointMake(screenSize.width/2, 50)];
         }
         
 #else// Test data
@@ -767,9 +807,13 @@
         cell.eventTimeLabel.text = [dFormater stringFromDate:date];
         cell.snapshotImage.image = info.snapshotImage;
 #endif
+        [cell.eventLabel setFont:[UIFont regularMediumFont]];
+        [cell.eventLabel setTextColor:[UIColor timeLineColor]];
+        [cell.eventTimeLabel setFont:[UIFont lightSmall13Font]];
+        [cell.eventTimeLabel setTextColor:[UIColor timeLineColor]];
         return cell;
     }
-    else
+    else if (indexPath.section == 2)
     {
         static NSString *CellIdentifier = @"TimelineButtonCell";
         TimelineButtonCell *cell = [self.tableView dequeueReusableCellWithIdentifier:CellIdentifier];
@@ -785,19 +829,33 @@
                 break;
             }
         }
+        [cell.timelineCellButtn setBackgroundImage:[UIImage imageNamed:@"saveday"] forState:UIControlStateNormal];
+        [cell.timelineCellButtn setBackgroundImage:[UIImage imageNamed:@"saveday_pressed"] forState:UIControlEventTouchDown];
+        [cell.timelineCellButtn setTitle:@"Save the Day" forState:UIControlStateNormal];
+        [cell.timelineCellButtn.titleLabel setFont:[UIFont bold20Font]];
+        return cell;
+
+    }
+    else
+    {
+        static NSString *CellIdentifier = @"TimeLinePremiumCell";
+        TimeLinePremiumCell *cell = [self.tableView dequeueReusableCellWithIdentifier:CellIdentifier];
         
-        if (indexPath.row == 0)
+        NSArray *objects = [[NSBundle mainBundle] loadNibNamed:@"TimeLinePremiumCell" owner:nil options:nil];
+        
+        for (id curObj in objects)
         {
-            [cell.timelineCellButtn setBackgroundImage:[UIImage imageNamed:@"saveday"] forState:UIControlStateNormal];
-            [cell.timelineCellButtn setBackgroundImage:[UIImage imageNamed:@"saveday_pressed"] forState:UIControlEventTouchDown];
-            [cell.timelineCellButtn setTitle:@"Save the Day" forState:UIControlStateNormal];
+            
+            if([curObj isKindOfClass:[UITableViewCell class]])
+            {
+                cell = (TimeLinePremiumCell *)curObj;
+                break;
+            }
         }
-        else
-        {
-            [cell.timelineCellButtn setBackgroundImage:[UIImage imageNamed:@"upgrade"] forState:UIControlStateNormal];
-            [cell.timelineCellButtn setBackgroundImage:[UIImage imageNamed:@"upgrade_pressed"] forState:UIControlEventTouchDown];
-            [cell.timelineCellButtn setTitle:@"Upgrade to Premium" forState:UIControlStateNormal];
-        }
+        [cell.ib_labelDayPremium setFont:[UIFont semiBold12Font]];
+        [cell.ib_labelPremium setFont:[UIFont bold20Font]];
+        cell.ib_labelPremium.textColor = [UIColor whiteColor];
+        cell.ib_labelDayPremium.textColor = [UIColor whiteColor];
         
         return cell;
     }

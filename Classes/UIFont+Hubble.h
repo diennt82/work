@@ -10,4 +10,11 @@
 
 @interface UIFont (Hubble)
 + (id)applyHubbleFontName:(NSString *)font withSize:(CGFloat)size;
+
++ (UIFont *)lightLarge27Font;
++ (UIFont *)lightSmall14Font;
++ (UIFont *)lightSmall13Font;
++ (UIFont *)regularMediumFont;
++ (UIFont *)bold20Font;
++ (UIFont *)semiBold12Font;
 @end
