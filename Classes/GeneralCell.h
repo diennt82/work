@@ -8,8 +8,22 @@
 
 #import <UIKit/UIKit.h>
 
+@protocol GeneralCellDelegate <NSObject>
+
+- (void)clockValueChanged: (BOOL)is12hr;
+- (void)temperatureValueChanged: (BOOL)isFahrenheit;
+
+@end
+
 @interface GeneralCell : UITableViewCell
 
-@property (retain, nonatomic) IBOutlet UILabel *nameLabel;
-@property (retain, nonatomic) IBOutlet UISegmentedControl *valueSegmented;
+@property (retain, nonatomic) IBOutlet UILabel *labelClock;
+@property (retain, nonatomic) IBOutlet UIButton *btnClock;
+@property (retain, nonatomic) IBOutlet UILabel *labelTemperature;
+@property (retain, nonatomic) IBOutlet UIButton *btnTemperature;
+
+@property (assign, nonatomic) id<GeneralCellDelegate> generalCellDelegate;
+@property (nonatomic) BOOL is12hr;
+@property (nonatomic) BOOL isFahrenheit;
+
 @end

@@ -286,7 +286,15 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (indexPath.section == 1)
+    if (indexPath.section == 0)
+    {
+        if (indexPath.row == 1)
+        {
+            return 120;
+        }
+    }
+    
+    else if (indexPath.section == 1)
     {
         if (indexPath.row == 1 ||
             indexPath.row == 2)
@@ -314,13 +322,9 @@
 
 - (BOOL)tableView:(UITableView *)tableView shouldHighlightRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (indexPath.section == 3)
+    if (indexPath.row > 0)
     {
-        if (indexPath.row == 1 ||
-            indexPath.row == 2)
-        {
-            return NO;
-        }
+        return NO;
     }
     
     return YES;
@@ -340,6 +344,11 @@
         //cell.
         cell.textLabel.font = [UIFont fontWithName:@"HelveticaNeue-Thin" size:18];
         cell.textLabel.textColor = [UIColor colorWithRed:(128/255.0) green:(128/255.0) blue:(128/255.0) alpha:1];
+    }
+    else if(indexPath.row == 1 &&
+            indexPath.section == 0)
+    {
+        cell.backgroundColor = [UIColor colorWithRed:43/255.0 green:50/255.0 blue:56/255.0 alpha:1];
     }
 }
 
@@ -369,8 +378,6 @@
                     
                     // Configure the cell...
                     cell.textLabel.text = @"General Settings";
-                    cell.textLabel.font = [UIFont fontWithName:@"HelveticaNeue-Thin" size:18];
-                    cell.textLabel.textColor = [UIColor colorWithRed:128/255 green:128/255 blue:128/255 alpha:1];
                     cell.imageView.image = [UIImage imageNamed:@"general"];
                     cell.backgroundColor = [UIColor whiteColor];
                     
@@ -379,7 +386,6 @@
                     break;
                     
                 case 1:
-                case 2:
                 {
                     static NSString *CellIdentifier = @"GeneralCell";
                     GeneralCell *cell = [self.tableView dequeueReusableCellWithIdentifier:CellIdentifier];
@@ -394,23 +400,23 @@
                             break;
                         }
                     }
-                    
-                    if (indexPath.row == 1)
-                    {
-                        cell.nameLabel.text = @"Clock";
-                    }
-                    else if (indexPath.row == 2)
-                    {
-                        cell.nameLabel.text = @"Temperature";
-                        [cell.valueSegmented setTitle:@"°C" forSegmentAtIndex:0];
-                        [cell.valueSegmented setTitle:@"°F" forSegmentAtIndex:1];
-                    }
-                    cell.backgroundColor = [UIColor blackColor];
+
                     return cell;
                 }
                     break;
                     
-                default:
+                default: // Expect: this case doesn't happen
+                {
+                    static NSString *CellIdentifier = @"Cell";
+                    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+                    if (cell == nil) {
+                        cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
+                    }
+                    
+                    // Configure the cell...
+                    
+                    return cell;
+                }
                     break;
             }
         }
@@ -480,6 +486,17 @@
                     break;
                     
                 default:
+                {
+                    static NSString *CellIdentifier = @"Cell";
+                    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+                    if (cell == nil) {
+                        cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
+                    }
+                    
+                    // Configure the cell...
+                    
+                    return cell;
+                }
                     break;
             }
         }
@@ -515,6 +532,17 @@
                     break;
                     
                 default:
+                {
+                    static NSString *CellIdentifier = @"Cell";
+                    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+                    if (cell == nil) {
+                        cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
+                    }
+                    
+                    // Configure the cell...
+                    
+                    return cell;
+                }
                     break;
             }
         }
@@ -588,12 +616,34 @@
                     break;
                     
                 default:
+                {
+                    static NSString *CellIdentifier = @"Cell";
+                    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+                    if (cell == nil) {
+                        cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
+                    }
+                    
+                    // Configure the cell...
+                    
+                    return cell;
+                }
                     break;
             }
         }
             break;
             
         default:
+        {
+            static NSString *CellIdentifier = @"Cell";
+            UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+            if (cell == nil) {
+                cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
+            }
+            
+            // Configure the cell...
+            
+            return cell;
+        }
             break;
     }
     
@@ -607,45 +657,6 @@
     
     return cell;
 }
-
-/*
-// Override to support conditional editing of the table view.
-- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    // Return NO if you do not want the specified item to be editable.
-    return YES;
-}
-*/
-
-/*
-// Override to support editing the table view.
-- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    if (editingStyle == UITableViewCellEditingStyleDelete) {
-        // Delete the row from the data source
-        [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
-    }   
-    else if (editingStyle == UITableViewCellEditingStyleInsert) {
-        // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-    }   
-}
-*/
-
-/*
-// Override to support rearranging the table view.
-- (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath
-{
-}
-*/
-
-/*
-// Override to support conditional rearranging of the table view.
-- (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    // Return NO if you do not want the item to be re-orderable.
-    return YES;
-}
-*/
 
 #pragma mark - Table view delegate
 
@@ -669,7 +680,7 @@
             {
                 if (numOfRows[indexPath.section] == 1)
                 {
-                    numOfRows[indexPath.section] = 3;
+                    numOfRows[indexPath.section] = 2;
                 }
                 else
                 {
