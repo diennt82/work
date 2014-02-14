@@ -201,6 +201,22 @@
     return 3;
 }
 
+- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
+{
+    return @"General";
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if (self.camChannel.profile.name.length > 10 &&
+        indexPath.row == 0)
+    {
+        return 66;
+    }
+    
+    return 45;
+}
+
 - (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
 {
     cell.backgroundColor = [UIColor colorWithRed:249/255.0 green:249/255.0 blue:249/255.0 alpha:1];
@@ -208,7 +224,8 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (indexPath.row == 0)
+    if (indexPath.row == 0 ||
+        indexPath.row == 2)
     {
         static NSString *CellIdentifier = @"CameraSettingsCell";
         CameraSettingsCell *cell = [self.tableViewSettings dequeueReusableCellWithIdentifier:CellIdentifier];
@@ -225,13 +242,26 @@
             }
         }
         
-        
-        cell.nameLabel.text = @"Name";
-        cell.valueLabel.text = self.camChannel.profile.name;
+        if (indexPath.row == 0)
+        {
+            if (self.camChannel.profile.name.length > 10)
+            {
+                cell.valueLabel.frame = CGRectMake(cell.valueLabel.frame.origin.x, cell.valueLabel.frame.origin.y, cell.valueLabel.frame.size.width, cell.valueLabel.frame.size.height * 2);
+                cell.nameLabel.frame = CGRectMake(cell.nameLabel.frame.origin.x, cell.valueLabel.center.y - cell.nameLabel.frame.size.height / 2, cell.nameLabel.frame.size.width, cell.nameLabel.frame.size.height);
+            }
+            
+            cell.nameLabel.text = @"Name";
+            cell.valueLabel.text = self.camChannel.profile.name;
+        }
+        else
+        {
+            cell.nameLabel.text = _stringFW_Version;
+            cell.valueLabel.text = self.camChannel.profile.fw_version;
+        }
         
         return cell;
     }
-    else if (indexPath.row == 1)
+    else // indexPath.row == 1
     {
         static NSString *CellIdentifier = @"Cell";
         UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
@@ -243,30 +273,6 @@
         cell.textLabel.text = @"Change Image";
         cell.textLabel.font = [UIFont fontWithName:@"HelveticaNeue-Thin" size:17];
         cell.textLabel.textColor = [UIColor colorWithRed:128/255.0 green:128/255.0 blue:128/255.0 alpha:1];
-        
-        return cell;
-    }
-    else
-    {
-        // display firm ware version
-        static NSString *CellIdentifier = @"CameraSettingsCell";
-        CameraSettingsCell *cell = [self.tableViewSettings dequeueReusableCellWithIdentifier:CellIdentifier];
-        
-        NSArray *objects = [[NSBundle mainBundle] loadNibNamed:@"CameraSettingsCell" owner:nil options:nil];
-        
-        for (id curObj in objects)
-        {
-            
-            if([curObj isKindOfClass:[UITableViewCell class]])
-            {
-                cell = (CameraSettingsCell *)curObj;
-                break;
-            }
-        }
-        
-        
-        cell.nameLabel.text = _stringFW_Version;
-        cell.valueLabel.text = self.camChannel.profile.fw_version;
         
         return cell;
     }
