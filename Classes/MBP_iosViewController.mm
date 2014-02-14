@@ -92,7 +92,7 @@
     
     [self start_animation_with_orientation:interfaceOrientation];
     
-    self.splashScreen.image = [UIImage imageNamed:@"loader_0.png"];
+    self.splashScreen.image = [UIImage imageNamed:@"loader_a"];
 
 //    QBAnimationItem *item1 = [QBAnimationItem itemWithDuration:0.1 delay:0 options:UIViewAnimationOptionCurveLinear|UIViewAnimationOptionAllowUserInteraction animations:^{
 //        _splashScreen.transform = CGAffineTransformRotate(_splashScreen.transform, M_PI/4);
@@ -152,12 +152,12 @@
 {
 
     self.splashScreen.animationImages =[NSArray arrayWithObjects:
-                                        [UIImage imageNamed:@"loader_0.png"],
-                                        [UIImage imageNamed:@"loader_1.png"],
-                                        [UIImage imageNamed:@"loader_2.png"],
-                                        [UIImage imageNamed:@"loader_3.png"],
-                                        [UIImage imageNamed:@"loader_4.png"],
-                                        [UIImage imageNamed:@"loader_5.png"],
+                                        [UIImage imageNamed:@"loader_a"],
+                                        [UIImage imageNamed:@"loader_b"],
+                                        [UIImage imageNamed:@"loader_c"],
+                                        [UIImage imageNamed:@"loader_d"],
+                                        [UIImage imageNamed:@"loader_e"],
+                                        [UIImage imageNamed:@"loader_f"],
                                         nil];
     self.splashScreen.animationDuration = 1.5;
     self.splashScreen.animationRepeatCount = 0;
@@ -247,13 +247,8 @@
     
 }
 
-
-
-
 -(void) startShowingCameraList
 {
-#if 1
-    
     self.menuVC = nil;
     
     self.menuVC = [[MenuViewController alloc] initWithNibName:@"MenuViewController"
@@ -280,52 +275,11 @@
     UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:self.menuVC];
     
     assert(nav != nil);
-    
-    NSLog(@"startShowingCameraList: %@", self.presentingViewController.description);
-    
 	[self presentViewController:nav animated:NO completion:^{}];
     
-    NSLog(@"startShowingCameraList: %p, %p, %@", self, self.menuVC.menuDelegate, self.presentingViewController.description);
+    NSLog(@"MBP_iosVC - startShowingCameraList: %p, %p, %@", self, self.menuVC.menuDelegate, self.presentingViewController.description);
 
     [validChannels release];
-#else
-    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
-    {
-        NSLog(@"Load IPad");
-        
-        dashBoard = [[DashBoard_ViewController alloc] initWithNibName:@"DashBoard_ViewController_ipad"
-                                                               bundle:nil
-                                                     withConnDelegate:self];
-    }
-    else
-    {
-        NSLog(@"Load IPhne");
-
-        dashBoard = [[DashBoard_ViewController alloc] initWithNibName:@"DashBoard_ViewController"
-                                                               bundle:nil
-                                                     withConnDelegate:self];
-    }
-
-
-	
-
-
-	NSMutableArray * validChannels = [[NSMutableArray alloc]init ];
-
-	for (int i =0 ; i< [channel_array count]; i++)
-	{
-		CamChannel * ch = [channel_array objectAtIndex:i]; 
-		if (ch.profile != nil)
-			[validChannels addObject:[channel_array objectAtIndex:i]]; 
-
-	}
-    
-	dashBoard.listOfChannel = validChannels;
-
-	[dashBoard presentModallyOn:self];
-
-    [validChannels release];
-#endif
 }
 
 
@@ -335,12 +289,9 @@
   */
  - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
 
-	return YES;
+	return NO;
 
 }
-
-
-
 
 - (BOOL) shouldAutorotate
 {
@@ -353,12 +304,6 @@
     return UIInterfaceOrientationMaskPortrait;
     //return UIInterfaceOrientationMaskAllButUpsideDown;
 }
-
-
-
-
-
-
 
 - (void)didReceiveMemoryWarning {
 	// Releases the view if it doesn't have a superview.
@@ -387,105 +332,6 @@
     [bonjourThread release];
     [_sequence release];
 	[super dealloc];
-}
-
-#pragma mark -
-#pragma mark Rotating
-
-
-
--(void) willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
-{
-    [self adjustViewsForOrientations:toInterfaceOrientation];
-}
-
--(void) adjustViewsForOrientations: (UIInterfaceOrientation) interfaceOrientation
-{
-    
-    
-    if (interfaceOrientation == UIInterfaceOrientationLandscapeLeft ||
-        interfaceOrientation == UIInterfaceOrientationLandscapeRight)
-    {
-        
-        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
-        {
-            //[[NSBundle mainBundle] loadNibNamed:@"MBP_iosViewController_land_ipad" owner:self options:nil];
-            
-//            UIImageView * splashScreen = (UIImageView*) [self.view viewWithTag:11];
-//            
-//            UIImage * landscapeImage = [UIImage imageNamed:@"bb_splash_screen_horizontal.png"];
-//            
-//            [splashScreen setImage:landscapeImage];
-            
-        }
-        else
-        {
-            
-            
-//            UIImageView * splashScreen = (UIImageView*) [self.view viewWithTag:11];
-//            
-//            UIImage * landscapeImage = [UIImage imageNamed:@"bb_splash_screen_horizontal.png"];
-//            
-//            [splashScreen setImage:landscapeImage];
-
-#if 0
-            BOOL statusHidden = statusDialogLabel.hidden;
-            
-            [[NSBundle mainBundle] loadNibNamed:@"MBP_iosViewController_land" owner:self options:nil];
-            
-    
-            statusDialogLabel.hidden = statusHidden;
-            
-            
-            CGAffineTransform transform = CGAffineTransformMakeRotation(-M_PI_2);
-            if (interfaceOrientation == UIInterfaceOrientationLandscapeRight)
-            {
-                transform = CGAffineTransformMakeRotation(M_PI_2);
-            }
-            
-            self.view.transform = transform;
-            
-            self.view.frame = CGRectMake(0,0,  self.view.frame.size.height,self.view.frame.size.width);
-#endif 
-            
-        }
-        
-       
-        
-    }
-    else if (interfaceOrientation == UIInterfaceOrientationPortrait ||
-             interfaceOrientation == UIInterfaceOrientationPortraitUpsideDown)
-    {
-        
-        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
-            //[[NSBundle mainBundle] loadNibNamed:@"MBP_iosViewController_ipad" owner:self options:nil];
-            
-//            UIImageView * splashScreen = (UIImageView*) [self.view viewWithTag:11];
-//            
-//            UIImage * landscapeImage = [UIImage imageNamed:@"splash_screen_portrait.png"];
-//            
-//            [splashScreen setImage:landscapeImage];
-
-        }
-        else
-        {
-            
-//            UIImageView * splashScreen = (UIImageView*) [self.view viewWithTag:11];
-//            
-//            UIImage * landscapeImage = [UIImage imageNamed:@"splash_screen_portrait.png"];
-//            
-//            [splashScreen setImage:landscapeImage];
-            
-#if 0
-            BOOL statusHidden = statusDialogLabel.hidden;
-            [[NSBundle mainBundle] loadNibNamed:@"MBP_iosViewController" owner:self options:nil];
-            
-            statusDialogLabel.hidden = statusHidden;
-#endif
-        }
-    }
-    
-   
 }
 
 #pragma mark -
@@ -2007,7 +1853,6 @@
 #if 1
 -(void) show_login_or_reg:(NSTimer*) exp
 {
-    
 	NSLog(@"show_login...");
     
     self.app_stage = APP_STAGE_LOGGING_IN;
