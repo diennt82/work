@@ -13,6 +13,6 @@
 @interface CameraNameViewController : UITableViewController
 
 @property (nonatomic, retain) NSString *cameraName;
-@property (nonatomic, retain) CameraMenuViewController *parentVC;
+@property (nonatomic, assign) CameraMenuViewController *parentVC;
 
 @end

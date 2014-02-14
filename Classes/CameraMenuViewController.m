@@ -296,6 +296,7 @@
         
         // Push the view controller.
         cameraNameViewController.cameraName = self.camChannel.profile.name;
+        cameraNameViewController.parentVC = self;
         [self.navigationController pushViewController:cameraNameViewController animated:YES];
         
         [cameraNameViewController release];
