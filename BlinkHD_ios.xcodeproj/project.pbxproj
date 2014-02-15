@@ -2044,6 +2044,7 @@
 				A1ABF199187535F10014FCB4 /* StartMonitor_VController */,
 				A1ABF19B1875365F0014FCB4 /* SwitchNetwork_VController */,
 				8BA372561887C4B1009FA465 /* AppDelegate */,
+				8B962B8E18AF0BBE005A0A85 /* ForgotPwdVC */,
 				97F5531417BDD3AF00024017 /* MBPNavController.m */,
 				97987D40154698A10066C49B /* SetupHttpDelegate.h */,
 				9770CD67143071DA009E69EF /* PublicDefine.h */,
@@ -2060,10 +2061,6 @@
 				97D0081B159DA24400B1D92F /* WifiListParser.m */,
 				38C79E1C15C25F90006EE378 /* Reachability.h */,
 				38C79E1D15C25F90006EE378 /* Reachability.m */,
-				38CE2A1015D4FA3600B8F7EC /* ForgotPwdViewController.h */,
-				38CE2A1115D4FA3700B8F7EC /* ForgotPwdViewController.m */,
-				38DE1C5C168AEA890049E814 /* ForgotPwdViewController.xib */,
-				BC3C1AC716F0257000175AFF /* ForgotPwdViewController_ipad.xib */,
 				38CA70A315F75E15002CD1C5 /* NSData+Conversion.h */,
 				38CA70A515F75E53002CD1C5 /* NSData+Conversion.m */,
 				3803A85C15FDF15600B4DD97 /* CameraAlert.h */,
@@ -2974,6 +2971,17 @@
 				8B95843E1877DF4D0055BCE3 /* mbp_icon152x152.png */,
 			);
 			name = Icons;
+			sourceTree = "<group>";
+		};
+		8B962B8E18AF0BBE005A0A85 /* ForgotPwdVC */ = {
+			isa = PBXGroup;
+			children = (
+				38CE2A1015D4FA3600B8F7EC /* ForgotPwdViewController.h */,
+				38CE2A1115D4FA3700B8F7EC /* ForgotPwdViewController.m */,
+				38DE1C5C168AEA890049E814 /* ForgotPwdViewController.xib */,
+				BC3C1AC716F0257000175AFF /* ForgotPwdViewController_ipad.xib */,
+			);
+			name = ForgotPwdVC;
 			sourceTree = "<group>";
 		};
 		8B9633A718A8AA70008A9579 /* LoginViewController */ = {

@@ -11,29 +11,25 @@
 
 @interface ForgotPwdViewController ()
 
+@property (nonatomic, retain)  NSString *userEmail;
+
 @end
 
 @implementation ForgotPwdViewController
-
-
-@synthesize userEmail;
-
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
         // Custom initialization
-        
-        userEmail = @""; 
     }
     return self;
 }
 -(void) dealloc
 {
-    //[  userEmail release];
     [super dealloc];
 }
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -41,7 +37,6 @@
     
     self.navigationItem.title =  NSLocalizedStringWithDefaultValue(@"Forgot_Password",nil, [NSBundle mainBundle],
                                                                    @"Forgot Password", nil);
-    
     
     UIBarButtonItem *nextButton = 
     [[UIBarButtonItem alloc] initWithTitle: NSLocalizedStringWithDefaultValue(@"Next",nil, [NSBundle mainBundle],
@@ -52,18 +47,15 @@
     self.navigationItem.rightBarButtonItem = nextButton;
     [nextButton release];
     
-    userEmailTF.placeholder = @"User id";
-    
     passwordLinkSent.hidden = YES;
     [self.view addSubview:passwordLinkSent];
-    
-    
 }
 
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
     self.navigationController.navigationBarHidden = NO;
+    [userEmailTF becomeFirstResponder];
 }
 
 - (void)viewDidUnload
@@ -82,8 +74,7 @@
 
 -(BOOL) shouldAutorotate
 {
-    return YES;
-    
+    return NO;
 }
 
 
@@ -98,16 +89,16 @@
     
     //NSString * ok = NSLocalizedStringWithDefaultValue(@"Ok",nil, [NSBundle mainBundle],
     //                                                  @"Ok", nil);
-    userEmail= userEmailTF.text ;
+    self.userEmail = userEmailTF.text ;
     
     self.navigationItem.leftBarButtonItem.enabled = NO ;
     self.navigationItem.rightBarButtonItem.enabled = NO;
     
     BMS_JSON_Communication *jsonComm = [[[BMS_JSON_Communication alloc] initWithObject:self
-                                                                             Selector:@selector(resetSuccessWithResponse:)
-                                                                         FailSelector:@selector(resetFailedWithError:)
-                                                                            ServerErr:@selector(resetFailedServerUnreachable)] autorelease];
-    [jsonComm resetPasswordWithUserID:userEmail];
+                                                                             Selector:@selector(forgotSuccessWithResponse:)
+                                                                         FailSelector:@selector(forgotFailedWithError:)
+                                                                            ServerErr:@selector(forgotFailedServerUnreachable)] autorelease];
+    [jsonComm forgotPasswordWithLogin:_userEmail];
 }
 
 -(void) handleLoginButton:(id) sender
@@ -122,7 +113,7 @@
 	return NO;
 }
 
--(void) resetSuccessWithResponse:(NSDictionary *)responseData
+-(void) forgotSuccessWithResponse:(NSDictionary *)responseData
 {
     passwordLinkSent.hidden  = NO;
     [self.view bringSubviewToFront:passwordLinkSent];
@@ -130,25 +121,25 @@
     self.navigationItem.rightBarButtonItem.enabled = YES;
     [self.navigationItem setHidesBackButton:YES];
     
-    toEmail.text  = userEmail;
+    toEmail.text  = _userEmail;
     NSString * msg = NSLocalizedStringWithDefaultValue(@"Login" ,nil, [NSBundle mainBundle],
                                                        @"Login" , nil);
     
-    UIBarButtonItem *nextButton =
+    UIBarButtonItem *loginButton =
     [[UIBarButtonItem alloc] initWithTitle:msg
                                      style:UIBarButtonItemStylePlain
                                     target:self
                                     action:@selector(handleLoginButton:)];
-    self.navigationItem.rightBarButtonItem = nextButton;
-    [nextButton release];
+    self.navigationItem.rightBarButtonItem = loginButton;
+    [loginButton release];
 }
 
-- (void) resetFailedWithError:(NSDictionary *)errorResponse
+- (void) forgotFailedWithError:(NSDictionary *)errorResponse
 {
     self.navigationItem.leftBarButtonItem.enabled = YES ;
     self.navigationItem.rightBarButtonItem.enabled = YES;
     
-	NSLog(@"ResetPass failed with error code:%d", [[errorResponse objectForKey:@"status"] intValue]);
+	NSLog(@"ForgotPwdVC -  forgotFailedWithError code: %d", [[errorResponse objectForKey:@"status"] intValue]);
     
     NSString * msg1 = NSLocalizedStringWithDefaultValue(@"Reset_Password_Error",nil, [NSBundle mainBundle],
                                                         @"Reset Password Error" , nil);
@@ -169,13 +160,13 @@
      show];
 }
 
-- (void) resetFailedServerUnreachable
+- (void) forgotFailedServerUnreachable
 {
     
     self.navigationItem.leftBarButtonItem.enabled = YES ;
     self.navigationItem.rightBarButtonItem.enabled = YES;
     
-	NSLog(@"Reset pass failed : server unreachable");
+	NSLog(@"ForgotPwdVC -  forgotFailedServerUnreachable");
 
     NSString * msg1 = NSLocalizedStringWithDefaultValue(@"Reset_Password_Error",nil, [NSBundle mainBundle],
                                                         @"Reset Password Error" , nil);
@@ -195,7 +186,6 @@
 
 	[alert show];
 	[alert release];
-	
 }
 
 

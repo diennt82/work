@@ -13,10 +13,6 @@
     IBOutlet UIView * passwordLinkSent; 
     IBOutlet UILabel * toEmail; 
     IBOutlet UITextField * userEmailTF; 
-    
-    NSString * userEmail; 
 }
-
-@property (nonatomic, retain)  NSString * userEmail; 
 
 @end
