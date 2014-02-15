@@ -33,7 +33,7 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>03.02.2</string>
+	<string>03.03</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
@@ -80,8 +80,7 @@ ProximaNova-SemiboldItalic.otf</string>
 		<string>ProximaNova-Semibold.otf</string>
 		<string>ProximaNova-SemiboldItalic.otf</string>
 	</array>
-    
-    <key>IBCustomFonts</key>
+	<key>IBCustomFonts</key>
 	<dict>
 		<key>HelveticaNeue-CondensedBlack</key>
 		<string>ProximaNova-Black</string>

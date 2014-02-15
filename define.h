@@ -10,6 +10,9 @@
 #define BlinkHD_ios_define_h
 
 
+//get screen size
+#define SCREEN_WIDTH [[UIScreen mainScreen] bounds].size.width
+#define SCREEN_HEIGHT [[UIScreen mainScreen] bounds].size.height
 
 //define macro
 #define isiPhone5  ([[UIScreen mainScreen] bounds].size.height == 568)?YES:NO
@@ -71,4 +74,5 @@
 #define MARGIN_LEFT_BUTTON_CELL_TABLE_IPHONE       10
 #define MARGIN_LEFT_TEXT_CELL_TABLE_IPHONE         47
 
+#define ALIGN_TOP_OF_TIME_LINE 18
 #endif

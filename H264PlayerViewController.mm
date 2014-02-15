@@ -53,7 +53,6 @@
 @interface H264PlayerViewController () <TimelineVCDelegate, BonjourDelegate>
 {
     BOOL _syncPortraitAndLandscape;
-    NSInteger screenWidth,screenHeight;
     UIBarButtonItem *nowButton, *earlierButton;
 }
 
@@ -110,12 +109,7 @@ double _ticks = 0;
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
     // only is called in viewDidLoad, make sure it is called once.
-    
-    CGRect screenBound = [[UIScreen mainScreen] bounds];
-    CGSize screenSize = screenBound.size;
-    screenWidth = screenSize.width;
-    screenHeight = screenSize.height;
-    
+
     if (IS_RETINA)
     {
         NSLog(@"Retina");
@@ -267,14 +261,15 @@ double _ticks = 0;
 {
     UIFont *font;
     UIColor *color;
-    float marginBottomText, marginBottomButton;
+    float marginBottomText, marginBottomButton, positionYOfBottomView;
     if (isiPhone5)
     {
         //for holdtotalk
         font = [UIFont applyHubbleFontName:PN_REGULAR_FONT withSize:19];
         color = [UIColor holdToTalkTextColor];
-        marginBottomText = 21.0f;
-        marginBottomButton = 40.5f;
+        marginBottomText = 42;
+        marginBottomButton = 81;
+        positionYOfBottomView = 255;
 
     }
     else if (isiPhone4)
@@ -282,8 +277,9 @@ double _ticks = 0;
         //for holdtotalk
         font = [UIFont applyHubbleFontName:PN_REGULAR_FONT withSize:17];
         color = [UIColor holdToTalkTextColor];
-        marginBottomText = 12.5f;
-        marginBottomButton = 24.0f;
+        marginBottomText = 25.0f;
+        marginBottomButton = 48.0f;
+        positionYOfBottomView = 255;
     }
     else
     {
@@ -291,8 +287,9 @@ double _ticks = 0;
         //for holdtotalk
         font = [UIFont applyHubbleFontName:PN_REGULAR_FONT withSize:50];
         color = [UIColor holdToTalkTextColor];
-        marginBottomText = 12.5f * 2;
-        marginBottomButton = 24.0f * 2;
+        marginBottomText = 42.0f * 2;
+        marginBottomButton = 81.0f * 2;
+        positionYOfBottomView = 543.0f;
     }
     
     
@@ -309,34 +306,35 @@ double _ticks = 0;
     }
     
     //update position text recording
+    CGPoint localPoint = self.ib_viewRecordTTT.frame.origin;
+    
     NSString *recordingString = self.ib_labelRecordVideo.text;
     CGSize recordingSize = [recordingString sizeWithFont:font];
-    CGSize labelRecordSize = self.ib_labelRecordVideo.bounds.size;
-    //CGSize viewRecordSize = self.ib_viewRecordTTT.bounds.size;
-    
-    float deltaY = (labelRecordSize.height + recordingSize.height)/2.0;
-    float alignY = (screenHeight - 240) - marginBottomText - deltaY;
-    [self.ib_labelRecordVideo setCenter:CGPointMake(screenWidth/2, alignY)];
+
+    float alignY = (SCREEN_HEIGHT - localPoint.y) - marginBottomText + self.ib_labelRecordVideo.bounds.size.height/2 - 3*recordingSize.height/2;
+    [self.ib_labelRecordVideo setCenter:CGPointMake(SCREEN_WIDTH/2, alignY)];
     
     //update position text hold to talk
     //CGPoint position = self.ib_viewRecordTTT.bounds.origin;
     NSString *holdTTString = self.ib_labelTouchToTalk.text;
     CGSize holdTTSize = [holdTTString sizeWithFont:font];
     CGSize labelTouchToTalkSize = self.ib_labelTouchToTalk.bounds.size;
-    //CGSize viewTouchToTalkSize = self.ib_ViewTouchToTalk.bounds.size;
     
-    float deltaY1 = (labelTouchToTalkSize.height + holdTTSize.height)/2.0;
-    float alignY1 = (screenHeight - 240) - marginBottomText - deltaY1;
-    [self.ib_labelTouchToTalk setCenter:CGPointMake(screenWidth/2, alignY1)];
+//    float deltaY1 = (labelTouchToTalkSize.height + holdTTSize.height)/2.0;
+    float alignY1 = (SCREEN_HEIGHT - positionYOfBottomView) - marginBottomText - holdTTSize.height + labelTouchToTalkSize.height/2 - holdTTSize.height/2;
+    [self.ib_labelTouchToTalk setCenter:CGPointMake(SCREEN_WIDTH/2, alignY1)];
     
     // update position button
     //hold to talk
     CGSize holdTTButtonSize = self.ib_buttonTouchToTalk.bounds.size;
-    float alignYButton = screenHeight - 240 - marginBottomButton - holdTTButtonSize.height;
-    [self.ib_buttonTouchToTalk setCenter:CGPointMake(screenWidth/2, alignYButton)];
-    [self.ib_processRecordOrTakePicture setCenter:CGPointMake(screenWidth/2, alignYButton)];
-    
-    [_imgViewDrectionPad setCenter:CGPointMake(screenWidth/2, alignYButton + 240)];
+    CGSize directionPadSize = self.imgViewDrectionPad.bounds.size;
+    float alignXButton = SCREEN_WIDTH/2- holdTTButtonSize.width/2;
+    float alignXButtonDirectionPad = SCREEN_WIDTH/2- directionPadSize.width/2;
+    float alignYButton = SCREEN_HEIGHT - localPoint.y - marginBottomButton - holdTTButtonSize.height;
+    float alignYButtonDirectionPad = (SCREEN_HEIGHT - localPoint.y - directionPadSize.height)/2;
+    [self.ib_buttonTouchToTalk setFrame:CGRectMake(alignXButton, alignYButton, holdTTButtonSize.width, holdTTButtonSize.height)];
+    [self.ib_processRecordOrTakePicture setFrame:CGRectMake(alignXButton, alignYButton, holdTTButtonSize.width, holdTTButtonSize.height)];
+    [_imgViewDrectionPad setFrame:CGRectMake(alignXButtonDirectionPad, alignYButtonDirectionPad + localPoint.y, directionPadSize.width, directionPadSize.height)];
 }
 
 - (void) setupHttpPort
@@ -420,18 +418,46 @@ double _ticks = 0;
     [titleView sizeToFit];
 }
 
-- (void) updateNavigationBarAndToolBar
+-(void)addHubbleLogo_Back
 {
     // change the back button to cancel and add an event handler
-    UIImage *headerLogo = [UIImage imageNamed:@"hubble_s"];
+    UIImage *headerLogo = [UIImage imageNamed:@"hubble_logo"];
+    
+    //create UIBarbutton item virtual, and set clearColor for it
+    //To hide bar button for navigation, and add new button
     UIBarButtonItem *headerLogoButton = [[UIBarButtonItem alloc] initWithImage:headerLogo
                                                                          style:UIBarButtonItemStylePlain
                                                                         target:self
                                                                         action:@selector(prepareGoBackToCameraList:)];
-    [headerLogoButton setTintColor:[UIColor colorWithPatternImage:headerLogo]];
-
+    [headerLogoButton setTintColor:[UIColor clearColor]];
+    
     self.navigationItem.leftBarButtonItem = headerLogoButton;
-
+    
+    //update position of button hubble_back
+    UIButton *aButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    [aButton setImage:headerLogo forState:UIControlStateNormal];
+    if (isiPhone5)
+    {
+        aButton.frame = CGRectMake(8.0,27.0,headerLogo.size.width,headerLogo.size.height);
+    }
+    else if (isiPhone4)
+    {
+        aButton.frame = CGRectMake(8.0,0.0,headerLogo.size.width,headerLogo.size.height);
+    }
+    else
+    {
+        aButton.frame = CGRectMake(8.0,27.0,headerLogo.size.width,headerLogo.size.height);
+    }
+    
+    [aButton setContentMode:UIViewContentModeScaleAspectFit];
+    [aButton addTarget:self action:@selector(prepareGoBackToCameraList:) forControlEvents:UIControlEventTouchUpInside];
+    aButton.tag = 11;
+    [self.navigationController.view addSubview:aButton];
+    
+}
+- (void) updateNavigationBarAndToolBar
+{
+    
     nowButton = [[UIBarButtonItem alloc] initWithTitle:@"Now"
                                                                   style:UIBarButtonItemStylePlain
                                                                  target:self
@@ -1487,7 +1513,7 @@ double _ticks = 0;
     
     self.h264StreamerIsInStopped = TRUE;
     
-    //self.imageViewVideo.backgroundColor = [UIColor blackColor];
+    self.imageViewVideo.backgroundColor = [UIColor blackColor];
     self.imageViewStreamer.backgroundColor = [UIColor blackColor];
     if (_selectedChannel.profile.isInLocal == TRUE)
     {
@@ -2766,10 +2792,9 @@ double _ticks = 0;
     NSString *degreeCel = @"°C";
     degreeCelsius.text= degreeCel;
     
-
-    float height_Tem = self.ib_temperature.bounds.size.height;
     UIFont *degreeFont;
     UIFont *temperatureFont;
+    float positionYOfBottomView = self.ib_temperature.frame.origin.y;//240.0f;
     if (isiPhone5)
     {
         degreeFont = [UIFont applyHubbleFontName:PN_LIGHT_FONT withSize:35];
@@ -2785,10 +2810,11 @@ double _ticks = 0;
     {
         degreeFont = [UIFont applyHubbleFontName:PN_LIGHT_FONT withSize:50];
         temperatureFont = [UIFont applyHubbleFontName:PN_LIGHT_FONT withSize:200];
+        positionYOfBottomView = 543.0f;
     }
     
     [degreeCelsius setFont:degreeFont];
-    [self.ib_temperature setFrame:CGRectMake(0, 240, screenWidth, screenHeight - 240)];
+    [self.ib_temperature setFrame:CGRectMake(0, positionYOfBottomView, SCREEN_WIDTH, SCREEN_HEIGHT - positionYOfBottomView)];
     [self.ib_temperature setFont:temperatureFont];
     [self.ib_temperature setTextColor:[UIColor temperatureTextColor]];
     [self.ib_temperature setText:stringTemperature];
@@ -2798,8 +2824,9 @@ double _ticks = 0;
     
     CGFloat widthString = stringBoundingBox.width;
     CGFloat heightString = stringBoundingBox.height;
-    CGFloat alignX = (screenWidth + widthString)/2 - degreeCelBoundingBox.width/2 + 5;
-    [degreeCelsius setFrame:CGRectMake(alignX, height_Tem/2 - heightString/2 + 10, degreeCelBoundingBox.width, degreeCelBoundingBox.height)];
+    CGFloat alignX = (SCREEN_WIDTH + widthString)/2 - degreeCelBoundingBox.width/2 + 8;
+    CGFloat alignYCel = (SCREEN_HEIGHT - positionYOfBottomView)/2 - heightString/2 + 10;
+    [degreeCelsius setFrame:CGRectMake(alignX, alignYCel, degreeCelBoundingBox.width, degreeCelBoundingBox.height)];
     [self.ib_temperature addSubview:degreeCelsius];
     [degreeCelsius release];
 }
@@ -3817,15 +3844,15 @@ double _ticks = 0;
 		///TODOO: update image
 		if (translation.y > 0)
 		{
-			[_imgViewDrectionPad setImage:[UIImage imageNamed:@"camera_action_pan_bg"]];
+			[_imgViewDrectionPad setImage:[UIImage imageNamed:@"camera_action_pan_bg@5"]];
 		}
 		else if (translation.y <0)
 		{
-			[_imgViewDrectionPad setImage:[UIImage imageNamed:@"camera_action_pan_bg"]];
+			[_imgViewDrectionPad setImage:[UIImage imageNamed:@"camera_action_pan_bg@5"]];
 		}
 		else
 		{
-			[_imgViewDrectionPad setImage:[UIImage imageNamed:@"camera_action_pan_bg.png"]];
+			[_imgViewDrectionPad setImage:[UIImage imageNamed:@"camera_action_pan_bg@5"]];
 		}
         
 		if (isBegan)
@@ -3953,18 +3980,17 @@ double _ticks = 0;
         
         //landscape mode
         [self.navigationController setNavigationBarHidden:YES];
-        
         // I don't know why remove it.
         [self.melodyViewController.view removeFromSuperview];
         
-        CGFloat imageViewHeight = screenHeight * 9 / 16;
-        CGRect newRect = CGRectMake(0, (screenWidth - imageViewHeight) / 2, screenHeight, imageViewHeight);
-        self.imageViewVideo.frame = CGRectMake(0, 0, screenHeight, imageViewHeight);
+        CGFloat imageViewHeight = SCREEN_HEIGHT * 9 / 16;
+        CGRect newRect = CGRectMake(0, (SCREEN_WIDTH - imageViewHeight) / 2, SCREEN_HEIGHT, imageViewHeight);
+        self.imageViewVideo.frame = CGRectMake(0, 0, SCREEN_HEIGHT, imageViewHeight);
         self.scrollView.frame = newRect;
         
         if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
         {
-            self.activityIndicator.frame = CGRectMake((screenHeight - INDICATOR_SIZE)/2, (screenWidth - INDICATOR_SIZE)/2 , INDICATOR_SIZE, INDICATOR_SIZE);
+            self.activityIndicator.frame = CGRectMake((SCREEN_HEIGHT - INDICATOR_SIZE)/2, (SCREEN_WIDTH - INDICATOR_SIZE)/2 , INDICATOR_SIZE, INDICATOR_SIZE);
             
         }
         else
@@ -3972,13 +3998,21 @@ double _ticks = 0;
         }
         
 
-        self.viewStopStreamingProgress.frame = CGRectMake((screenHeight - INDICATOR_SIZE)/2, (screenWidth - INDICATOR_SIZE)/2 , INDICATOR_SIZE, INDICATOR_SIZE);
+        self.viewStopStreamingProgress.frame = CGRectMake((SCREEN_HEIGHT - INDICATOR_SIZE)/2, (SCREEN_WIDTH - INDICATOR_SIZE)/2 , INDICATOR_SIZE, INDICATOR_SIZE);
         
         if (_timelineVC != nil)
         {
             [self.timelineVC.view removeFromSuperview];
         }
         [self addGesturesPichInAndOut];
+        
+        //remove add hubble button at landscape
+        for (UIView *view in self.navigationController.view.subviews) { // instead of self.view you can use your main view
+            if ([view isKindOfClass:[UIButton class]] && view.tag == 11) {
+                UIButton *btn = (UIButton *)view;
+                [btn removeFromSuperview];
+            }
+        }
 	}
 	else if (orientation == UIInterfaceOrientationPortrait || orientation == UIInterfaceOrientationPortraitUpsideDown)
 	{
@@ -3997,7 +4031,7 @@ double _ticks = 0;
             [[NSBundle mainBundle] loadNibNamed:@"H264PlayerViewController"
                                           owner:self
                                         options:nil];
-            self.melodyViewController.view.frame = CGRectMake(0, 240, screenWidth, screenHeight - 240);
+            self.melodyViewController.view.frame = CGRectMake(0, 240, SCREEN_WIDTH, SCREEN_HEIGHT - 240);
         }
         
         //portrait mode
@@ -4008,29 +4042,34 @@ double _ticks = 0;
         self.viewCtrlButtons.hidden = NO;
         self.viewStopStreamingProgress.hidden = YES;
         
-        CGFloat imageViewHeight = screenWidth * 9 / 16;
-        CGRect destRect = CGRectMake(0, 44 + deltaY, screenWidth, imageViewHeight);
+        CGFloat imageViewHeight = SCREEN_WIDTH * 9 / 16;
+        CGRect destRect = CGRectMake(0, 44 + deltaY, SCREEN_WIDTH, imageViewHeight);
         self.scrollView.frame = destRect;
-        self.imageViewVideo.frame = CGRectMake(0, 0, screenWidth, imageViewHeight);
+        self.imageViewVideo.frame = CGRectMake(0, 0, SCREEN_WIDTH, imageViewHeight);
         if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
         {
-            self.activityIndicator.frame = CGRectMake((screenWidth - INDICATOR_SIZE)/2, imageViewHeight/2 + 44 + deltaY , INDICATOR_SIZE, INDICATOR_SIZE);
+            self.activityIndicator.frame = CGRectMake((SCREEN_WIDTH - INDICATOR_SIZE)/2, imageViewHeight/2 + 44 + deltaY , INDICATOR_SIZE, INDICATOR_SIZE);
         }
         else
         {
         }
 
         self.viewCtrlButtons.frame = CGRectMake(0, imageViewHeight + 44 + deltaY, _viewCtrlButtons.frame.size.width, _viewCtrlButtons.frame.size.height);
-        self.viewStopStreamingProgress.frame = CGRectMake((screenWidth - INDICATOR_SIZE)/2, (screenHeight - INDICATOR_SIZE)/2 , INDICATOR_SIZE, INDICATOR_SIZE);
+        self.viewStopStreamingProgress.frame = CGRectMake((SCREEN_WIDTH - INDICATOR_SIZE)/2, (SCREEN_HEIGHT - INDICATOR_SIZE)/2 , INDICATOR_SIZE, INDICATOR_SIZE);
         
         // Control display for TimelineVC
         if (_timelineVC != nil)
         {
-            self.timelineVC.view.frame = CGRectMake(0, imageViewHeight + deltaY + 64, screenWidth, screenHeight - imageViewHeight - 100);
+            CGFloat alignYTimeLine = self.ib_ViewTouchToTalk.frame.origin.y;
+            self.timelineVC.view.frame = CGRectMake(0, alignYTimeLine, SCREEN_WIDTH, SCREEN_HEIGHT - self.ib_ViewTouchToTalk.frame.origin.y);
+            self.timelineVC.tableView.frame = CGRectMake(0, alignYTimeLine, SCREEN_WIDTH, SCREEN_HEIGHT - self.ib_ViewTouchToTalk.frame.origin.y);
             self.timelineVC.view.hidden = NO;
-            self.timelineVC.tableView.contentInset = UIEdgeInsetsMake(0, 0, 80, 0);
+            self.timelineVC.tableView.contentInset = UIEdgeInsetsMake(0, 0, 200, 0);
             [self.view addSubview:_timelineVC.view];
         }
+        
+        //add hubble_logo_back
+        [self addHubbleLogo_Back];
 	}
     
     // Set position for Image Knob & Handle
@@ -4888,11 +4927,6 @@ double _ticks = 0;
 }
 - (void)viewWillAppear:(BOOL)animated
 {
-    CGRect screenBound = [[UIScreen mainScreen] bounds];
-    CGSize screenSize = screenBound.size;
-    screenWidth = screenSize.width;
-    screenHeight = screenSize.height;
-    
     [super viewWillAppear:animated];
     //init data for debug
 #ifdef SHOW_DEBUG_INFO
@@ -5087,7 +5121,16 @@ double _ticks = 0;
         NSLog(@"UIGestureRecognizerStateBegan on hold to talk");
         self.walkieTalkieEnabled = YES;
         [self setEnablePtt:YES];
-        UIImage *imageHoldedToTalk = [UIImage imageNamed:@"camera_action_mic_pressed.png"];
+        UIImage *imageHoldedToTalk;
+        if (isiPhone4)
+        {
+            imageHoldedToTalk = [UIImage imageNamed:@"camera_action_mic_pressed.png"];
+        }
+        else
+        {
+            imageHoldedToTalk = [UIImage imageNamed:@"camera_action_mic_pressed@5.png"];
+        }
+        
         [self.ib_buttonTouchToTalk setBackgroundImage:imageHoldedToTalk forState:UIControlEventTouchDown];
         
     }
@@ -5109,8 +5152,17 @@ double _ticks = 0;
 
 - (void)holdToTalk:(id)sender {
     //first update UI
-    UIImage *imageHoldToTalk = [UIImage imageNamed:@"camera_action_mic.png"];
-    UIImage *imageHoldedToTalk = [UIImage imageNamed:@"camera_action_mic_pressed.png"];
+    UIImage *imageHoldToTalk, *imageHoldedToTalk;
+    if (isiPhone4)
+    {
+        imageHoldToTalk = [UIImage imageNamed:@"camera_action_mic.png"];
+        imageHoldedToTalk = [UIImage imageNamed:@"camera_action_mic_pressed.png"];
+    }
+    else
+    {
+        imageHoldToTalk = [UIImage imageNamed:@"camera_action_mic@5.png"];
+        imageHoldedToTalk = [UIImage imageNamed:@"camera_action_mic_pressed@5.png"];
+    }
     [self.ib_buttonTouchToTalk setBackgroundImage:imageHoldToTalk forState:UIControlStateNormal];
     [self.ib_buttonTouchToTalk setBackgroundImage:imageHoldedToTalk forState:UIControlEventTouchDown];
     [self.ib_buttonTouchToTalk setBackgroundImage:imageHoldToTalk forState:UIControlEventTouchUpInside];
@@ -5124,7 +5176,16 @@ double _ticks = 0;
 
 - (void)touchUpInsideHoldToTalk {
     //update UI
-    UIImage *imageHoldToTalk = [UIImage imageNamed:@"camera_action_mic.png"];
+    UIImage *imageHoldToTalk;
+    
+    if (isiPhone4)
+    {
+        imageHoldToTalk = [UIImage imageNamed:@"camera_action_mic.png"];
+    }
+    else
+    {
+        imageHoldToTalk = [UIImage imageNamed:@"camera_action_mic@5.png"];
+    }
     [self.ib_buttonTouchToTalk setBackgroundColor:[UIColor clearColor]];
     [self.ib_buttonTouchToTalk setBackgroundImage:imageHoldToTalk forState:UIControlStateNormal];
     [self.ib_buttonTouchToTalk setBackgroundImage:imageHoldToTalk forState:UIControlEventTouchUpInside];
@@ -5146,13 +5207,37 @@ double _ticks = 0;
 }
 
 - (IBAction)processingRecordingOrTakePicture:(id)sender {
-    UIImage *readyRecord = [UIImage imageNamed:@"camera_action_video.png"];
-    UIImage *readyRecordPressed = [UIImage imageNamed:@"camera_action_video_pressed.png"];
-    UIImage *recordingImage = [UIImage imageNamed:@"camera_action_video_stop.png"];
-    UIImage *recordingPressed = [UIImage imageNamed:@"camera_action_video_stop_pressed.png"];
-    
-    UIImage *takePictureImage = [UIImage imageNamed:@"camera_action_photo.png"];
-    UIImage *takePicturePressed = [UIImage imageNamed:@"camera_action_photo_pressed.png"];
+    UIImage *readyRecord, *readyRecordPressed;
+    UIImage *recordingPressed, *recordingImage;
+    UIImage *takePictureImage, *takePicturePressed;
+    if (isiPhone5)
+    {
+        readyRecord = [UIImage imageNamed:@"camera_action_video@5.png"];
+        readyRecordPressed = [UIImage imageNamed:@"camera_action_video_pressed@5.png"];
+        recordingImage = [UIImage imageNamed:@"camera_action_video_stop@5.png"];
+        recordingPressed = [UIImage imageNamed:@"camera_action_video_stop_pressed@5.png"];
+        
+        takePictureImage = [UIImage imageNamed:@"camera_action_photo@5.png"];
+        takePicturePressed = [UIImage imageNamed:@"camera_action_photo_pressed@5.png"];
+    } else if (isiPhone4)
+    {
+        readyRecord = [UIImage imageNamed:@"camera_action_video.png"];
+        readyRecordPressed = [UIImage imageNamed:@"camera_action_video_pressed.png"];
+        recordingImage = [UIImage imageNamed:@"camera_action_video_stop.png"];
+        recordingPressed = [UIImage imageNamed:@"camera_action_video_stop_pressed.png"];
+        
+        takePictureImage = [UIImage imageNamed:@"camera_action_photo.png"];
+        takePicturePressed = [UIImage imageNamed:@"camera_action_photo_pressed.png"];
+    } else
+    {
+        readyRecord = [UIImage imageNamed:@"camera_action_video@5.png"];
+        readyRecordPressed = [UIImage imageNamed:@"camera_action_video_pressed@5.png"];
+        recordingImage = [UIImage imageNamed:@"camera_action_video_stop@5.png"];
+        recordingPressed = [UIImage imageNamed:@"camera_action_video_stop_pressed@5.png"];
+        
+        takePictureImage = [UIImage imageNamed:@"camera_action_photo@5.png"];
+        takePicturePressed = [UIImage imageNamed:@"camera_action_photo_pressed@5.png"];
+    }
     
     NSLog(@"_isRecordInterface is %d", _isRecordInterface);
     if (_isRecordInterface)
@@ -5223,19 +5308,50 @@ double _ticks = 0;
 }
 
 - (IBAction)changeAction:(id)sender {
-    //Image for change action
-    UIImage *recordImage = [UIImage imageNamed:@"camera_action_video_s.png"];
-    UIImage *takePictureImage = [UIImage imageNamed:@"camera_action_pic_s.png"];
-    
-    //Image change for processing button
-    UIImage *recordActionImage = [UIImage imageNamed:@"camera_action_video.png"];
-    UIImage *recordActionImagePressed = [UIImage imageNamed:@"camera_action_video_pressed.png"];
-    
-    UIImage *takePicture = [UIImage imageNamed:@"camera_action_photo.png"];
-    UIImage *takePicturePressed = [UIImage imageNamed:@"camera_action_photo_pressed.png"];
-    
-    UIImage *stopRecordingImage = [UIImage imageNamed:@"camera_action_video_stop.png"];
-//    UIImage *stopRecordingPressed = [UIImage imageNamed:@"camera_action_video_stop_pressed.png"];
+    UIImage * recordImageSmall, *recordImageSmallPressed;
+    UIImage *takePictureSmall, *takePictureSmallPressed;
+    UIImage *recordImage, *recordImagePressed;
+    UIImage *takePicture, *takePicturePressed;
+    UIImage *stopRecordingImage, *stopRecordingPressed;
+    if (isiPhone5)
+    {
+        //Image change for processing button
+        recordImageSmall = [UIImage imageNamed:@"video_grey@5.png"];
+        recordImageSmallPressed = [UIImage imageNamed:@"video_grey_pressed@5.png"];
+        
+        recordImage = [UIImage imageNamed:@"camera_action_video@5.png"];
+        recordImagePressed = [UIImage imageNamed:@"camera_action_video_pressed@5.png"];
+        
+        takePicture = [UIImage imageNamed:@"camera_action_photo@5.png"];
+        takePicturePressed = [UIImage imageNamed:@"camera_action_photo_pressed@5.png"];
+        
+        takePictureSmall = [UIImage imageNamed:@"photo_grey@5.png"];
+        takePictureSmallPressed = [UIImage imageNamed:@"photo_grey_pressed@5.png"];
+        
+        stopRecordingImage = [UIImage imageNamed:@"camera_action_video_stop@5.png"];
+        stopRecordingPressed = [UIImage imageNamed:@"camera_action_video_stop_pressed@5.png"];
+    } else if (isiPhone4)
+    {
+        recordImage = [UIImage imageNamed:@"camera_action_video.png"];
+        recordImagePressed = [UIImage imageNamed:@"camera_action_video_pressed.png"];
+        
+        takePicture = [UIImage imageNamed:@"camera_action_photo.png"];
+        takePicturePressed = [UIImage imageNamed:@"camera_action_photo_pressed.png"];
+        
+        stopRecordingImage = [UIImage imageNamed:@"camera_action_video_stop@5.png"];
+        stopRecordingPressed = [UIImage imageNamed:@"camera_action_video_stop_pressed.png"];
+    }
+    else
+    {
+        recordImage = [UIImage imageNamed:@"camera_action_video@5.png"];
+        recordImagePressed = [UIImage imageNamed:@"camera_action_video_pressed@5.png"];
+        
+        takePicture = [UIImage imageNamed:@"camera_action_photo@5.png"];
+        takePicturePressed = [UIImage imageNamed:@"camera_action_photo_pressed@5.png"];
+        
+        stopRecordingImage = [UIImage imageNamed:@"camera_action_video_stop@5.png"];
+        stopRecordingPressed = [UIImage imageNamed:@"camera_action_video_stop_pressed@5.png"];
+    }
 //#if DISABLE_VIEW_RELEASE_FLAG
 //    _isRecordInterface = FALSE;
 //#else
@@ -5254,8 +5370,8 @@ double _ticks = 0;
         [self.ib_buttonChangeAction setHidden:NO];
         [self.view bringSubviewToFront:self.ib_buttonChangeAction];
         //set image display
-        [self.ib_buttonChangeAction setBackgroundImage:takePictureImage forState:UIControlStateNormal];
-        
+        [self.ib_buttonChangeAction setBackgroundImage:takePictureSmall forState:UIControlStateNormal];
+        [self.ib_buttonChangeAction setBackgroundImage:takePictureSmallPressed forState:UIControlStateSelected];
         //now is interface take picture
         if (_isProcessRecording)
         {
@@ -5266,9 +5382,9 @@ double _ticks = 0;
         else
         {
             //not recording
-            [self.ib_processRecordOrTakePicture setBackgroundImage:recordActionImage forState:UIControlStateNormal];
-            [self.ib_processRecordOrTakePicture setBackgroundImage:recordActionImagePressed forState:UIControlEventTouchDown];
-            [self.ib_processRecordOrTakePicture setBackgroundImage:recordActionImage forState:UIControlEventTouchUpInside];
+            [self.ib_processRecordOrTakePicture setBackgroundImage:recordImage forState:UIControlStateNormal];
+            [self.ib_processRecordOrTakePicture setBackgroundImage:recordImagePressed forState:UIControlEventTouchDown];
+            [self.ib_processRecordOrTakePicture setBackgroundImage:recordImage forState:UIControlEventTouchUpInside];
             [self.ib_labelRecordVideo setText:@"Record Video"];
             _syncPortraitAndLandscape = NO;
         }
@@ -5295,7 +5411,8 @@ double _ticks = 0;
             [self.ib_changeToMainRecording setHidden:YES];
             [self.ib_buttonChangeAction setHidden:NO];
             [self.view bringSubviewToFront:self.ib_buttonChangeAction];
-            [self.ib_buttonChangeAction setBackgroundImage:recordImage forState:UIControlStateNormal];
+            [self.ib_buttonChangeAction setBackgroundImage:recordImageSmall forState:UIControlStateNormal];
+            [self.ib_buttonChangeAction setBackgroundImage:recordImageSmallPressed forState:UIControlStateNormal];
             [self.ib_labelRecordVideo setText:@"Take Picture"];
             _syncPortraitAndLandscape = NO;
         }
@@ -5312,7 +5429,7 @@ double _ticks = 0;
     double seconds = fmod(_ticks, 60.0);
     double minutes = fmod(trunc(_ticks / 60.0), 60.0);
     double hours = trunc(_ticks / 3600.0);
-    NSString *timeToDisplay = [NSString stringWithFormat:@"%02.0f:%02.0f:%02.0f", hours, minutes, seconds];
+    NSString *timeToDisplay = [NSString stringWithFormat:@"%02.0f:%02.0f:%02.0f",hours, minutes, seconds];
 
     if (_isRecordInterface && _isProcessRecording)
     {

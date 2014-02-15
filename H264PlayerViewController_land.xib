@@ -200,11 +200,11 @@
         </tableViewController>
     </objects>
     <resources>
-        <image name="camera_action_mic.png" width="216" height="216"/>
-        <image name="camera_action_pan_bg.png" width="208" height="208"/>
-        <image name="camera_action_pan_handle.png" width="12" height="54"/>
-        <image name="camera_action_pan_knob.png" width="66" height="66"/>
+        <image name="camera_action_mic.png" width="130" height="130"/>
+        <image name="camera_action_pan_bg.png" width="185" height="185"/>
+        <image name="camera_action_pan_handle.png" width="6" height="33"/>
+        <image name="camera_action_pan_knob.png" width="35" height="35"/>
         <image name="camera_action_pic_s.png" width="90" height="90"/>
-        <image name="camera_action_video.png" width="216" height="216"/>
+        <image name="camera_action_video.png" width="130" height="130"/>
     </resources>
 </document>
