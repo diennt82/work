@@ -59,11 +59,8 @@
     return self;
 }
 
-
-
 - (void) didConnect
 {
-
     [_peripheral discoverServices:@[self.class.uartServiceUUID, self.class.deviceInformationServiceUUID]];
     
     sequence = SEQUENCE_MIN;
@@ -71,19 +68,18 @@
     rx_buff = [[NSMutableData alloc] init];
     
     
-   
+    NSLog(@"Did start service discovery.");
 }
 
 - (void) didDisconnect
 {
-    // Clear data/ busy flag
     
     sequence = SEQUENCE_MIN;
     [rx_buff setLength: 0];
     self.isBusy = NO;
-
     
-     NSLog(@"UART PERI: didDisconnect");
+    
+    NSLog(@"UART PERI: didDisconnect");
 }
 
 -(void) retryOldCommand:(NSString *) string
@@ -94,7 +90,7 @@
     [rx_buff setLength:0]; // clear all backlog
     read_error = READ_ON_GOING;
     
-#if 1
+#if 0
     
     if (sequence >= 0x7f)
         sequence = SEQUENCE_MIN;
@@ -112,12 +108,19 @@
     
 #else
     
-    NSData *data = [NSData dataWithBytes:string.UTF8String length:string.length];
+    NSMutableData * data = [[NSMutableData alloc]init];
+    [data appendBytes:string.UTF8String length:string.length];
+    
+    unsigned char null_char  [] = {0x00};
+    
+    [data appendBytes:(const void *)null_char length:1];
+    NSLog(@"data is: %@", data);
 #endif
     
     if ( [data length] > 20)
     {
         
+#if 0
         int numberOfLf = ([data length] + 10)/20;
         
         int new_len = [data length] - 3 + numberOfLf ;
@@ -128,7 +131,7 @@
         NSRange len_range = NSMakeRange(0, 3);
         
         [data replaceBytesInRange:len_range withBytes:len length:3];
-        
+#endif
         
         int remain_len = [data length];
         int data_idx = 0;
@@ -213,7 +216,7 @@
 
 - (ble_response_t) flush:(NSTimeInterval)time
 {
-//    if (self.)
+    //    if (self.)
     _timeOutCommand = [NSTimer scheduledTimerWithTimeInterval:time
                                                        target:self
                                                      selector:@selector(receiveDataTimeOut:)
@@ -226,7 +229,7 @@
     }
     
     self.isBusy = TRUE;
-    self.isFlushing = TRUE; 
+    self.isFlushing = TRUE;
     retry_count =  0;
     
     
@@ -242,7 +245,7 @@
 
 - (ble_response_t) writeString:(NSString *) string
 {
-
+    
     
     if (self.isBusy == TRUE)
     {
@@ -267,10 +270,10 @@
 {
     
     _timeOutCommand = [NSTimer scheduledTimerWithTimeInterval:time
-                                     target:self
-                                   selector:@selector(receiveDataTimeOut:)
-                                   userInfo:nil
-                                    repeats:NO];
+                                                       target:self
+                                                     selector:@selector(receiveDataTimeOut:)
+                                                     userInfo:nil
+                                                      repeats:NO];
     
     if (self.isBusy == TRUE)
     {
@@ -360,12 +363,40 @@
         }
     }
     
+    
     NSLog(@"Found TX & RX characteristic");
     if (self.delegate != nil)
     {
         [self.delegate readyToTxRx];
     }
     
+}
+
+-(int) checkBufferForNullChar:(NSData*) data_buff
+{
+    
+    BOOL found  = FALSE;
+    
+    //find the 1 00
+    int i;
+    char * data_ptr =(char * ) [data_buff bytes];
+    for ( i=0 ; i < [data_buff length]; i++)
+    {
+        if ( data_ptr[i] ==0x01) //0x00
+        {
+            found = TRUE;
+            break;
+        }
+        
+    }
+    
+    
+    if (found == FALSE)
+    {
+        i = -1;
+    }
+    
+    return i;
 }
 
 -(int) checkBuffer:(NSData *) data_buff forSequence:(int) seq
@@ -437,6 +468,32 @@
 }
 
 
+-(int) checkBufferFor02char:(NSData *) data_buff
+{
+    int last_index = -1;
+    
+
+    
+    //find the 1 00
+    int i;
+    char * data_ptr =(char * ) [data_buff bytes];
+    for ( i=0 ; i < [data_buff length]; i++)
+    {
+        if ( data_ptr[i] ==0x02)
+        {
+            last_index = i;
+        }
+        else
+        {
+            break;
+        }
+
+    }
+    
+    
+    return last_index;
+}
+
 
 - (void) peripheral:(CBPeripheral *)peripheral didUpdateValueForCharacteristic:(CBCharacteristic *)characteristic error:(NSError *)error
 {
@@ -467,13 +524,64 @@
         
         [rx_buff appendBytes:[[characteristic value] bytes] length: [characteristic value].length -1];
         
+        
+        /* Find the end 0x00 char */
+        
+        int sequence_index = [self checkBufferForNullChar:rx_buff];
+        
+#if 0
+        //For Step debug
+        sequence_index = rx_buff.length-1;
+#endif
+        if (sequence_index  != -1)
+        {
+            NSLog(@"Found 0x00");
 
+            int padding_index =[self checkBufferFor02char:rx_buff] ;
+
+            //take the sub range starting from the latest index of 0x02 -
+            NSRange range = NSMakeRange(padding_index+1, sequence_index-(padding_index+1));
+            NSData *result_str = [rx_buff subdataWithRange:range];
+            
+            NSLog(@"Got enough data : %d",[result_str length]);
+            
+            
+            NSString *string = [NSString stringWithUTF8String:[result_str bytes] ];
+            //invalidate time out
+            if (_timeOutCommand && [_timeOutCommand isValid])
+            {
+                [_timeOutCommand invalidate];
+                _timeOutCommand = nil;
+            }
+            
+            
+            [self.delegate didReceiveData:string];
+            
+            //cut this string away
+            range = NSMakeRange(0, sequence_index+1);
+            [rx_buff replaceBytesInRange:range
+                               withBytes:NULL
+                                  length:0];
+            
+            
+            
+            read_error = READ_SUCCESS;
+            
+            self.isBusy = FALSE;
+            
+            
+        }
+        else
+        {
+            NSLog(@"Not enough data  yet");
+            //Do nothing
+        }
         
-        
-        int sequence_index = [self checkBuffer:rx_buff forSequence:sequence];
+#if 0
+        // int sequence_index = [self checkBuffer:rx_buff forSequence:sequence];
         int total_data_len = [rx_buff length];
         
-        if (sequence_index != -1  && (sequence_index +3) < total_data_len) //we found the start of new sequence
+        if (sequence_index != -1  && (sequence_index +3) <= total_data_len) //we found the start of new sequence
         {
             
             //Need to check if we have rcved enough bytes
@@ -482,7 +590,7 @@
             len_ptr =  (( unsigned char *)[rx_buff bytes] )+ sequence_index +1;
             int len =  (len_ptr[0] << 8) + len_ptr[1];
             
-           
+            
             
             NSLog(@"data len is : %d ", len );
             
@@ -516,7 +624,7 @@
                     [rx_buff replaceBytesInRange:range
                                        withBytes:NULL
                                           length:0];
-
+                    
                     
                     
                     read_error = READ_SUCCESS;
@@ -559,7 +667,7 @@
                 {
                     NSLog(@"ERROR: 0-len issue, no more retry, returning");
                     self.isBusy = FALSE;
-                     self.isFlushing = FALSE;
+                    self.isFlushing = FALSE;
                     
                     //invalidate time out
                     if (_timeOutCommand && [_timeOutCommand isValid])
@@ -570,7 +678,7 @@
                     
                     [self.delegate onReceiveDataError:read_error forCommand:commandToCamera];
                 }
-
+                
             }
             
         }
@@ -578,16 +686,16 @@
         {
             if ((sequence_index +3) >= total_data_len)
             {
-                 if (self.isFlushing == TRUE)
-                 {
-                     NSLog(@"FLUSHING.. Not found sequence or Len error ... ignore   ");
-                     self.isBusy = FALSE;
-                     self.isFlushing = FALSE;
-                 }
+                if (self.isFlushing == TRUE)
+                {
+                    NSLog(@"FLUSHING.. Not found sequence or Len error ... ignore   ");
+                    self.isBusy = FALSE;
+                    self.isFlushing = FALSE;
+                }
             }
             NSLog(@"Not found sequence or Len error  ");
         }
-        
+#endif
     }
     else if ([characteristic.UUID isEqual:self.class.hardwareRevisionStringUUID])
     {
@@ -606,14 +714,14 @@
 //Return the last write error  ONLY valid if the isBusy is False
 -(ble_response_t) getTransactionError
 {
-    return read_error; 
+    return read_error;
 }
 
 -(void)retryNow:(NSTimer * ) expired
 {
     NSString * camera_cmd =  (NSString *)expired.userInfo;
     
-     NSLog(@"retrying: %@ >>>>>>>>>>>>> NOW >>>> " , commandToCamera);
+    NSLog(@"retrying: %@ >>>>>>>>>>>>> NOW >>>> " , commandToCamera);
     [self retryOldCommand:camera_cmd];
     
 }

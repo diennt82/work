@@ -52,7 +52,7 @@
     
     if ([camName isMemberOfClass:[UITextView class]] )
     {
-        NSLog(@"Cast to UI TextView");
+
         ((UITextView *)camName).text = self.cameraName;
         
     }
@@ -62,7 +62,7 @@
     
     if ([camName isMemberOfClass:[UITextField class]] )
     {
-        NSLog(@"Cast to UI Textfield");
+
         ((UITextField *)camName).text = self.cameraName;
         
     }
@@ -141,35 +141,6 @@
         
         tempName = ((UITextField *)camName).text ;
         
-    }
-    
-    
-    
-    if (interfaceOrientation == UIInterfaceOrientationLandscapeLeft ||
-        interfaceOrientation == UIInterfaceOrientationLandscapeRight)
-    {
-        //        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
-        //        {
-        //            [[NSBundle mainBundle] loadNibNamed:@"Step_04_ViewController_land_ipad" owner:self options:nil];
-        //        }
-        //        else
-        //        {
-        //            [[NSBundle mainBundle] loadNibNamed:@"Step_04_ViewController_land" owner:self options:nil];
-        //
-        //
-        //        }
-    }
-    else if (interfaceOrientation == UIInterfaceOrientationPortrait ||
-             interfaceOrientation == UIInterfaceOrientationPortraitUpsideDown)
-    {
-        //        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
-        //        {
-        //            [[NSBundle mainBundle] loadNibNamed:@"Step_04_ViewController_ipad" owner:self options:nil];
-        //        }
-        //        else
-        //        {
-        //            [[NSBundle mainBundle] loadNibNamed:@"Step_04_ViewController" owner:self options:nil];
-        //        }
     }
     
     

@@ -499,8 +499,41 @@
 - (void) didReceiveData:(NSString *)stringResponse
 {
     NSLog(@"Receive string %@", stringResponse);
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     
-    if ([stringResponse hasPrefix:GET_VERSION])
+    if (stringResponse == nil)
+    {
+        //check which step it is
+        NSString * udid = [userDefaults objectForKey:CAMERA_UDID];
+        NSString *  version = [userDefaults objectForKey:@"FW_VERSION"];
+        if (udid != nil)
+        {
+            if (version !=  nil)
+            {
+                NSLog(@"Receive nil string from no where.");
+                return;
+            }
+            else
+            {
+                //Retry GetVersion
+                [self sendCommandGetVersion];
+            }
+        }
+        else
+        {
+            //Retry Camera UDID & version 
+            if ( [self sendCommandGetMacAddress:nil])
+            {
+                
+                [self sendCommandGetVersion];
+            }
+        }
+        
+    }
+    
+
+    
+    if ([stringResponse rangeOfString:GET_VERSION].location != NSNotFound)
     {
         [self.ib_Indicator setHidden:YES];
         //sucucessfull when writing version
@@ -529,17 +562,13 @@
         //Load the next xib
         EditCamera_VController *step04ViewController = nil;
         
+        step04ViewController = [[EditCamera_VController alloc]
+                                initWithNibName:@"EditCamera_VController" bundle:nil];
         
-        
-        
-        {
-            step04ViewController = [[EditCamera_VController alloc]
-                                    initWithNibName:@"EditCamera_VController" bundle:nil];
-        }
         step04ViewController.cameraMac = self.cameraMac;
         step04ViewController.cameraName = self.cameraName;
         
-       
+        
         
         NSLog(@"Load step 41");
         [self.navigationController pushViewController:step04ViewController animated:NO];
@@ -549,7 +578,7 @@
         
         [[NSNotificationCenter defaultCenter] removeObserver:self];
     }
-    else if ([stringResponse hasPrefix:GET_UDID])
+    else if (  [stringResponse rangeOfString:GET_UDID].location != NSNotFound)
     {
         //get_udid: 01008344334C32B0A0VFFRBSVA
         NSString *stringUDID = [stringResponse substringFromIndex:GET_UDID.length + 2];
@@ -564,37 +593,9 @@
         [userDefaults setObject:self.cameraMac forKey:@"CameraMacSave"];
         [userDefaults setObject:stringUDID forKey:CAMERA_UDID];
         [userDefaults synchronize];
-#if 0
-        NSInteger lengMacAddress = [stringResponse length];
-        
-        if (lengMacAddress == 12)
-        {
-            //receive data mac address
-            NSLog(@"Get mac address successfull");
-            NSString *macAddress = stringResponse;
-            
-            //processing for get mac address
-            //mac address 44334C7E0C8A
-            //try again send command version
-            if ([macAddress isEqualToString:@"000000000000"])
-            {
-                //first get mac address of camera
-                [BLEConnectionManager getInstanceBLE].delegate = self;
-                [[BLEConnectionManager getInstanceBLE].uartPeripheral writeString:GET_UDID withTimeOut:SHORT_TIME_OUT_SEND_COMMAND];
-                return;
-            }
-            self.cameraMac = stringResponse;
-            NSString *cameraNameFinal = [NSString stringWithFormat:@"%@%@", DEFAULT_SSID_HD_PREFIX, [stringResponse substringFromIndex:6]];
-            self.cameraName = cameraNameFinal;
-            
-            NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-            
-            [userDefaults setObject:self.cameraMac forKey:@"CameraMacSave"];
-            //[userDefaults setObject:model forKey:@"MODEL"];
-            [userDefaults synchronize];
-        }
-#endif
     }
+    
+    
 }
 -(void) moveToNextStep
 {
@@ -615,11 +616,20 @@
         NSDate * date;
         while ([BLEConnectionManager getInstanceBLE].uartPeripheral.isBusy)
         {
-            NSLog(@"send flush :  wait for result ");
+
             date = [NSDate dateWithTimeInterval:1.5 sinceDate:[NSDate date]];
             
             [[NSRunLoop currentRunLoop] runUntilDate:date];
         }
+        
+        
+        
+        NSLog(@"Clear Udid");
+
+        NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+        [userDefaults removeObjectForKey:CAMERA_UDID];
+        [userDefaults synchronize];
+
         
         
         if ( [self sendCommandGetMacAddress:nil])
