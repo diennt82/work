@@ -1379,7 +1379,7 @@
 		97DA238116425F9E00EE2528 /* ToUViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ToUViewController.h; sourceTree = "<group>"; };
 		97DA238216425F9E00EE2528 /* ToUViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = ToUViewController.mm; sourceTree = "<group>"; };
 		97DA238316425F9F00EE2528 /* ToUViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ToUViewController.xib; sourceTree = "<group>"; };
-		97DC55BF14BAFAAD00AA4911 /* Camera HD.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Camera HD.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		97DC55BF14BAFAAD00AA4911 /* Hubble.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Hubble.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		97E3CC76159D89EE00481854 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		97F5531417BDD3AF00024017 /* MBPNavController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MBPNavController.m; sourceTree = "<group>"; };
 		A10EC10C17E0677C00EA4F9D /* libavcodec.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libavcodec.a; path = "../ios-frameworks/ffmpeg/lib/libavcodec.a"; sourceTree = "<group>"; };
@@ -2087,7 +2087,7 @@
 		19C28FACFE9D520D11CA2CBB /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				97DC55BF14BAFAAD00AA4911 /* Camera HD.app */,
+				97DC55BF14BAFAAD00AA4911 /* Hubble.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -3534,7 +3534,7 @@
 			);
 			name = "Camera HD";
 			productName = MBP_ios;
-			productReference = 97DC55BF14BAFAAD00AA4911 /* Camera HD.app */;
+			productReference = 97DC55BF14BAFAAD00AA4911 /* Hubble.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -5187,7 +5187,7 @@
 					"-DPJ_BUILT_WITH_XCODE=1",
 				);
 				OTHER_LDFLAGS = "-lz";
-				PRODUCT_NAME = "Camera HD";
+				PRODUCT_NAME = Hubble;
 				PROVISIONING_PROFILE = "6296209A-5435-47A4-8372-20B2C8251B4C";
 				SDKROOT = iphoneos7.0;
 				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/../ios-frameworks/pjsip/arm/include/ $(SRCROOT)/../ios-frameworks/pjsip/arm/include/pj/ $(SRCROOT)/../ios-frameworks/pjsip/arm/include/pjnath/";
@@ -5237,7 +5237,7 @@
 					"-DPJ_BUILT_WITH_XCODE=1",
 				);
 				OTHER_LDFLAGS = "-lz";
-				PRODUCT_NAME = "Camera HD";
+				PRODUCT_NAME = Hubble;
 				PROVISIONING_PROFILE = "6296209A-5435-47A4-8372-20B2C8251B4C";
 				SDKROOT = iphoneos7.0;
 				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/../ios-frameworks/pjsip/arm/include/ $(SRCROOT)/../ios-frameworks/pjsip/arm/include/pj/ $(SRCROOT)/../ios-frameworks/pjsip/arm/include/pjnath/";
@@ -5261,7 +5261,7 @@
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
 				OTHER_LDFLAGS = "";
-				PRODUCT_NAME = "Camera HD";
+				PRODUCT_NAME = Hubble;
 				PROVISIONING_PROFILE = "6296209A-5435-47A4-8372-20B2C8251B4C";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -5310,7 +5310,7 @@
 					"-DPJ_BUILT_WITH_XCODE=1",
 				);
 				OTHER_LDFLAGS = "-lz";
-				PRODUCT_NAME = "Camera HD";
+				PRODUCT_NAME = Hubble;
 				PROVISIONING_PROFILE = "6296209A-5435-47A4-8372-20B2C8251B4C";
 				RAMEWORK_SEARCH_PATHS = "$(inherited) \"$(SRCROOT)\"";
 				SDKROOT = iphoneos7.0;
@@ -5334,7 +5334,7 @@
 				MACH_O_TYPE = mh_execute;
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = "";
-				PRODUCT_NAME = "Camera HD";
+				PRODUCT_NAME = Hubble;
 				PROVISIONING_PROFILE = "6296209A-5435-47A4-8372-20B2C8251B4C";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -5358,7 +5358,7 @@
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
 				OTHER_LDFLAGS = "";
-				PRODUCT_NAME = "Camera HD";
+				PRODUCT_NAME = Hubble;
 				PROVISIONING_PROFILE = "6296209A-5435-47A4-8372-20B2C8251B4C";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
