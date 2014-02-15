@@ -194,7 +194,8 @@
     {
         //Register user ...
         self.stringEmail     = _tfEmail.text;
-        self.stringUsername  = [_stringEmail substringToIndex:[_stringEmail rangeOfString:@"@"].location];
+        //self.stringUsername  = [_stringEmail substringToIndex:[_stringEmail rangeOfString:@"@"].location];
+        self.stringUsername = [_stringEmail stringByReplacingOccurrencesOfString:@"@" withString:@"_"];
         self.stringPassword  = _tfPassword.text;
         self.stringCPassword  = _tfConfirmPassword.text;
 
