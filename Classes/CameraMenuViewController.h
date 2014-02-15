@@ -13,6 +13,6 @@
 @interface CameraMenuViewController : UIViewController
 
 @property (nonatomic, assign) id<ConnectionMethodDelegate> cameraMenuDelegate;
-@property (nonatomic, retain) CamChannel *camChannel;
+@property (nonatomic, assign) CamChannel *camChannel;
 
 @end

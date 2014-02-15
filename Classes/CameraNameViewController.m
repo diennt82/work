@@ -7,10 +7,13 @@
 //
 
 #import "CameraNameViewController.h"
+#import "define.h"
+#import <MonitorCommunication/MonitorCommunication.h>
 
-@interface CameraNameViewController () <UITextFieldDelegate>
+@interface CameraNameViewController () <UITextFieldDelegate, UIAlertViewDelegate>
 
 @property (retain, nonatomic) IBOutlet UITableViewCell *nameCell;
+@property (retain, nonatomic) IBOutlet UIView *viewPorgress;
 
 @end
 
@@ -35,6 +38,12 @@
  
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
+    
+    UIBarButtonItem *doneBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone
+                                                                                       target:self
+                                                                                       action:@selector(doneAction:)];
+    self.navigationItem.rightBarButtonItem = doneBarButtonItem;
+    self.navigationItem.rightBarButtonItem.enabled = NO;
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -45,20 +54,64 @@
     nameTF.clearButtonMode = UITextFieldViewModeWhileEditing;
 }
 
-- (void)viewWillDisappear:(BOOL)animated
+- (void)doneAction: (id)sender
 {
+    self.navigationItem.rightBarButtonItem.enabled = NO;
+    self.navigationItem.hidesBackButton = YES;
+    [self.view addSubview:_viewPorgress];
+    [self.view bringSubviewToFront:_viewPorgress];
     NSString *cameraName = ((UITextField *)[self.nameCell viewWithTag:59]).text;
     
-    if (cameraName != nil &&
-        (3 < cameraName.length && cameraName.length < 20) &&
-        [self isCamNameValidated:cameraName])
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    NSString *apiKey = [userDefaults stringForKey:@"PortalApiKey"];
+    
+    BMS_JSON_Communication *jsonComm = [[BMS_JSON_Communication alloc] initWithObject:self
+                                                                             Selector:nil
+                                                                         FailSelector:nil
+                                                                            ServerErr:nil];
+    NSDictionary *responseDict = [jsonComm updateDeviceBasicInfoBlockedWithRegistrationId:self.parentVC.camChannel.profile.registrationID
+                                                                               deviceName:cameraName
+                                                                                 timeZone:nil
+                                                                                     mode:nil
+                                                                          firmwareVersion:nil
+                                                                                andApiKey:apiKey];
+    if (responseDict != nil)
     {
-        self.parentVC.camChannel.profile.name = cameraName;
+        if ([[responseDict objectForKey:@"status"] integerValue] == 200)
+        {
+            self.parentVC.camChannel.profile.name = cameraName;
+            [self.navigationController popViewControllerAnimated:YES];
+        }
+        else
+        {
+            NSLog(@"CameraNameVC - Change cameraname failed!");
+            
+            [[[[UIAlertView alloc] initWithTitle:@"Change Camera Name"
+                                       message:[responseDict objectForKey:@"message"]
+                                      delegate:self
+                             cancelButtonTitle:nil
+                               otherButtonTitles:@"OK", nil] autorelease] show];
+        }
+    }
+    else
+    {
+        NSLog(@"CameraNameVC - doneAction - responseDict == nil");
+        
+        [[[[UIAlertView alloc] initWithTitle:@"Change Camera Name"
+                                     message:@"Server Error"
+                                    delegate:self
+                           cancelButtonTitle:nil
+                           otherButtonTitles:@"OK", nil] autorelease] show];
     }
 }
 
 -(BOOL) isCamNameValidated:(NSString *) cameraNames
 {
+    if (cameraNames.length < 3 ||
+        CAMERA_NAME_MAX < cameraNames.length)
+    {
+        return FALSE;
+    }
     
     NSString * regex = @"[a-zA-Z0-9._-]+";
     NSPredicate * validatedName = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", regex];
@@ -73,12 +126,36 @@
     // Dispose of any resources that can be recreated.
 }
 
+#pragma mark - Alert dialog delegat
+
+- (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex
+{
+    self.navigationItem.hidesBackButton = NO;
+    [_viewPorgress removeFromSuperview];
+}
+
 #pragma mark - Text field delegate
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField
 {
 	[textField resignFirstResponder];
-    [textField becomeFirstResponder];
+    //[textField becomeFirstResponder];
+    
+    return YES;
+}
+
+- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
+{
+    NSString *nameString = [NSString stringWithFormat:@"%@%@", textField.text, string];
+    
+    if ([self isCamNameValidated:nameString])
+    {
+        self.navigationItem.rightBarButtonItem.enabled = YES;
+    }
+    else
+    {
+        self.navigationItem.rightBarButtonItem.enabled = NO;
+    }
     
     return YES;
 }
@@ -182,6 +259,7 @@
 
 - (void)dealloc {
     [_nameCell release];
+    [_viewPorgress release];
     [super dealloc];
 }
 @end
