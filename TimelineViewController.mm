@@ -828,8 +828,8 @@
                 break;
             }
         }
-        [cell.timelineCellButtn setBackgroundImage:[UIImage imageNamed:@"saveday"] forState:UIControlStateNormal];
-        [cell.timelineCellButtn setBackgroundImage:[UIImage imageNamed:@"saveday_pressed"] forState:UIControlEventTouchDown];
+        [cell.timelineCellButtn setBackgroundImage:[UIImage imageNamed:@"save"] forState:UIControlStateNormal];
+        [cell.timelineCellButtn setBackgroundImage:[UIImage imageNamed:@"save_pressed"] forState:UIControlEventTouchDown];
         [cell.timelineCellButtn setTitle:@"Save the Day" forState:UIControlStateNormal];
         [cell.timelineCellButtn.titleLabel setFont:[UIFont bold20Font]];
         return cell;

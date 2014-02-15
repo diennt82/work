@@ -100,7 +100,7 @@
     [camItem setImage:[UIImage imageNamed:@"camera.png"]];
     
     UITabBarItem *settingsItem = [self.tabBar.items objectAtIndex:1];
-    [settingsItem setImage:[UIImage imageNamed:@"settings.png"]];
+    [settingsItem setImage:[UIImage imageNamed:@"general"]];
 
     UITabBarItem *accountItem = [self.tabBar.items objectAtIndex:2];
     [accountItem setImage:[UIImage imageNamed:@"account_icon.png"]];
