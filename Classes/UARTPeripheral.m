@@ -523,18 +523,26 @@
         
         int endblock_index =[[characteristic value] length]-1 ;
         
-        for (int i =0 ; i < [[characteristic value] length]-1 ; i ++)
+        for (int i =0 ; i < [[characteristic value] length]-2 ; i ++)
         {
-            if (rcv_data[i] == 0x03)
+            if (rcv_data[i] == 0x03 && rcv_data[i+1] == 0x00)
             {
                 endblock_index = i;
-                 NSLog(@"0x03 at  %d" ,  i);
+                 NSLog(@"0x03 0x00 at  %d" ,  i);
                 break;
             }
             
         }
         
         [rx_buff appendBytes:[[characteristic value] bytes] length: endblock_index  /*[characteristic value].length -1 */];
+        
+        /*  if the 0x0300 is in the middle, we still have some extra bytes  */
+        if (endblock_index  < [[characteristic value] length]-2)
+        {
+            NSLog(@"after 0x03 0x00 there is  %d" ,  [characteristic value].length -1 -2 - endblock_index);
+            [rx_buff appendBytes:[[characteristic value] bytes]+endblock_index+2 length:(  [characteristic value].length -1 -2 - endblock_index )];
+        }
+
         
 
         /* Find the end 0x01 char */
