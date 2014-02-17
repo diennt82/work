@@ -54,6 +54,7 @@
 {
     BOOL _syncPortraitAndLandscape;
     UIBarButtonItem *nowButton, *earlierButton;
+    BOOL isLandScapeMode;//cheat to display correctly timeline bottom
 }
 
 @property (retain, nonatomic) IBOutlet UIImageView *imageViewHandle;
@@ -548,7 +549,6 @@ double _ticks = 0;
 
 - (void)earlierButtonAction:(id)sender
 {
-    
     [nowButton setTitleTextAttributes:@{
                                         UITextAttributeFont: [UIFont fontWithName:PN_LIGHT_FONT size:17.0],
                                         UITextAttributeTextColor: [UIColor barItemSelectedColor]
@@ -866,7 +866,14 @@ double _ticks = 0;
                 //[self performSelectorInBackground:@selector(getZoneDetection_bg) withObject:nil];
                 [self performSelectorInBackground:@selector(getMelodyValue_bg) withObject:nil];
                 self.imgViewDrectionPad.userInteractionEnabled = YES;
-                self.imgViewDrectionPad.image = [UIImage imageNamed:@"camera_action_pan_bg.png"];
+                if (isiPhone4)
+                {
+                    self.imgViewDrectionPad.image = [UIImage imageNamed:@"camera_action_pan_bg.png"];
+                }
+                else
+                {
+                    self.imgViewDrectionPad.image = [UIImage imageNamed:@"camera_action_pan_bg@5.png"];
+                }
                 
                 if (_isSharedCam == FALSE)
                 {
@@ -3949,6 +3956,7 @@ double _ticks = 0;
     
 	if (orientation == UIInterfaceOrientationLandscapeLeft || orientation == UIInterfaceOrientationLandscapeRight)
 	{
+        isLandScapeMode = YES;
         //load new nib for landscape iPad
         if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
         {
@@ -4063,10 +4071,18 @@ double _ticks = 0;
         {
             CGFloat alignYTimeLine = self.ib_ViewTouchToTalk.frame.origin.y;
             self.timelineVC.view.frame = CGRectMake(0, alignYTimeLine, SCREEN_WIDTH, SCREEN_HEIGHT - self.ib_ViewTouchToTalk.frame.origin.y);
-            self.timelineVC.tableView.frame = CGRectMake(0, alignYTimeLine, SCREEN_WIDTH, SCREEN_HEIGHT - self.ib_ViewTouchToTalk.frame.origin.y);
+//            self.timelineVC.tableView.frame = CGRectMake(0, alignYTimeLine, SCREEN_WIDTH, SCREEN_HEIGHT - self.ib_ViewTouchToTalk.frame.origin.y);
             self.timelineVC.view.hidden = NO;
-            self.timelineVC.tableView.contentInset = UIEdgeInsetsMake(0, 0, 200, 0);
             [self.view addSubview:_timelineVC.view];
+            if (isLandScapeMode)
+            {
+                self.timelineVC.tableView.contentInset = UIEdgeInsetsMake(0, 0, 275, 0);
+                isLandScapeMode = NO;
+            }
+            else
+            {
+                self.timelineVC.tableView.contentInset = UIEdgeInsetsMake(0, 0, 30, 0);
+            }
         }
         
         //add hubble_logo_back
