@@ -521,11 +521,23 @@
         }
         NSLog(@"Raw:  %@" ,  log);
         
+        int endblock_index =[[characteristic value] length]-1 ;
         
-        [rx_buff appendBytes:[[characteristic value] bytes] length: [characteristic value].length -1];
+        for (int i =0 ; i < [[characteristic value] length]-1 ; i ++)
+        {
+            if (rcv_data[i] == 0x03)
+            {
+                endblock_index = i;
+                 NSLog(@"0x03 at  %d" ,  i);
+                break;
+            }
+            
+        }
         
+        [rx_buff appendBytes:[[characteristic value] bytes] length: endblock_index  /*[characteristic value].length -1 */];
         
-        /* Find the end 0x00 char */
+
+        /* Find the end 0x01 char */
         
         int sequence_index = [self checkBufferForNullChar:rx_buff];
         

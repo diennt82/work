@@ -5189,7 +5189,7 @@
 					"$(SRCROOT)/../ios-frameworks/pjsip/arm/lib",
 					"$(SRCROOT)/../ios-frameworks",
 				);
-				ONLY_ACTIVE_ARCH = YES;
+				ONLY_ACTIVE_ARCH = NO;
 				OTHER_CFLAGS = (
 					"-DPJ_IS_BIG_ENDIAN=0",
 					"-DPJ_IS_LITTLE_ENDIAN=1",
