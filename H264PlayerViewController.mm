@@ -3844,15 +3844,15 @@ double _ticks = 0;
 		///TODOO: update image
 		if (translation.y > 0)
 		{
-			[_imgViewDrectionPad setImage:[UIImage imageNamed:@"camera_action_pan_bg@5"]];
+			[_imgViewDrectionPad setImage:[UIImage imageCameraActionPan]];
 		}
 		else if (translation.y <0)
 		{
-			[_imgViewDrectionPad setImage:[UIImage imageNamed:@"camera_action_pan_bg@5"]];
+			[_imgViewDrectionPad setImage:[UIImage imageCameraActionPan]];
 		}
 		else
 		{
-			[_imgViewDrectionPad setImage:[UIImage imageNamed:@"camera_action_pan_bg@5"]];
+			[_imgViewDrectionPad setImage:[UIImage imageCameraActionPan]];
 		}
         
 		if (isBegan)
@@ -3872,15 +3872,15 @@ double _ticks = 0;
 		if (translation.x > 0)
 		{
             
-			[_imgViewDrectionPad setImage:[UIImage imageNamed:@"camera_action_pan_bg"]];
+			[_imgViewDrectionPad setImage:[UIImage imageCameraActionPan]];
 		}
 		else if (translation.x < 0){
             
-			[_imgViewDrectionPad setImage:[UIImage imageNamed:@"camera_action_pan_bg"]];
+			[_imgViewDrectionPad setImage:[UIImage imageCameraActionPan]];
 		}
 		else
 		{
-			[_imgViewDrectionPad setImage:[UIImage imageNamed:@"camera_action_pan_bg.png"]];
+			[_imgViewDrectionPad setImage:[UIImage imageCameraActionPan]];
 		}
         
 		if (isBegan)
@@ -4024,7 +4024,8 @@ double _ticks = 0;
             [[NSBundle mainBundle] loadNibNamed:@"H264PlayerViewController_ipad"
                                           owner:self
                                         options:nil];
-            self.melodyViewController.view.frame = CGRectMake(0, 496, 768, 482);
+//            self.melodyViewController.view.frame = CGRectMake(0, 496, 768, 482);
+            self.melodyViewController.view.frame = CGRectMake(0, self.ib_ViewTouchToTalk.frame.origin.y, SCREEN_WIDTH, SCREEN_HEIGHT - self.ib_ViewTouchToTalk.frame.origin.y);
         }
         else
         {
@@ -5152,20 +5153,9 @@ double _ticks = 0;
 
 - (void)holdToTalk:(id)sender {
     //first update UI
-    UIImage *imageHoldToTalk, *imageHoldedToTalk;
-    if (isiPhone4)
-    {
-        imageHoldToTalk = [UIImage imageNamed:@"camera_action_mic.png"];
-        imageHoldedToTalk = [UIImage imageNamed:@"camera_action_mic_pressed.png"];
-    }
-    else
-    {
-        imageHoldToTalk = [UIImage imageNamed:@"camera_action_mic@5.png"];
-        imageHoldedToTalk = [UIImage imageNamed:@"camera_action_mic_pressed@5.png"];
-    }
-    [self.ib_buttonTouchToTalk setBackgroundImage:imageHoldToTalk forState:UIControlStateNormal];
-    [self.ib_buttonTouchToTalk setBackgroundImage:imageHoldedToTalk forState:UIControlEventTouchDown];
-    [self.ib_buttonTouchToTalk setBackgroundImage:imageHoldToTalk forState:UIControlEventTouchUpInside];
+    [self.ib_buttonTouchToTalk setBackgroundImage:[UIImage imageMic] forState:UIControlStateNormal];
+    [self.ib_buttonTouchToTalk setBackgroundImage:[UIImage imageMicPressed] forState:UIControlEventTouchDown];
+    [self.ib_buttonTouchToTalk setBackgroundImage:[UIImage imageMic] forState:UIControlEventTouchUpInside];
 
     [self.ib_labelTouchToTalk setText:@"Listening"];
     [self applyFont];
@@ -5176,19 +5166,9 @@ double _ticks = 0;
 
 - (void)touchUpInsideHoldToTalk {
     //update UI
-    UIImage *imageHoldToTalk;
-    
-    if (isiPhone4)
-    {
-        imageHoldToTalk = [UIImage imageNamed:@"camera_action_mic.png"];
-    }
-    else
-    {
-        imageHoldToTalk = [UIImage imageNamed:@"camera_action_mic@5.png"];
-    }
     [self.ib_buttonTouchToTalk setBackgroundColor:[UIColor clearColor]];
-    [self.ib_buttonTouchToTalk setBackgroundImage:imageHoldToTalk forState:UIControlStateNormal];
-    [self.ib_buttonTouchToTalk setBackgroundImage:imageHoldToTalk forState:UIControlEventTouchUpInside];
+    [self.ib_buttonTouchToTalk setBackgroundImage:[UIImage imageMic] forState:UIControlStateNormal];
+    [self.ib_buttonTouchToTalk setBackgroundImage:[UIImage imageMic] forState:UIControlEventTouchUpInside];
 
     [self.ib_labelTouchToTalk setText:@"Hold To Talk"];
     [self applyFont];
@@ -5248,9 +5228,9 @@ double _ticks = 0;
         {
             //now is interface recording
             [self.ib_labelRecordVideo setText:@"00:00:00"];
-            [self.ib_processRecordOrTakePicture setBackgroundImage:recordingImage forState:UIControlStateNormal];
-            [self.ib_processRecordOrTakePicture setBackgroundImage:recordingPressed forState:UIControlEventTouchDown];
-            [self.ib_processRecordOrTakePicture setBackgroundImage:recordingImage forState:UIControlEventTouchUpInside];
+            [self.ib_processRecordOrTakePicture setBackgroundImage:[UIImage imageVideoStop] forState:UIControlStateNormal];
+            [self.ib_processRecordOrTakePicture setBackgroundImage:[UIImage imageVideoStopPressed] forState:UIControlEventTouchDown];
+            [self.ib_processRecordOrTakePicture setBackgroundImage:[UIImage imageVideoStop] forState:UIControlEventTouchUpInside];
             //display time to recording
             if (!_syncPortraitAndLandscape)
             {
@@ -5264,9 +5244,9 @@ double _ticks = 0;
         else
         {
             //here to pause
-            [self.ib_processRecordOrTakePicture setBackgroundImage:readyRecord forState:UIControlStateNormal];
-            [self.ib_processRecordOrTakePicture setBackgroundImage:readyRecordPressed forState:UIControlEventTouchDown];
-            [self.ib_processRecordOrTakePicture setBackgroundImage:readyRecord forState:UIControlEventTouchUpInside];
+            [self.ib_processRecordOrTakePicture setBackgroundImage:[UIImage imageRecordVideo] forState:UIControlStateNormal];
+            [self.ib_processRecordOrTakePicture setBackgroundImage:[UIImage imageRecordVideoPressed] forState:UIControlEventTouchDown];
+            [self.ib_processRecordOrTakePicture setBackgroundImage:[UIImage imageRecordVideo] forState:UIControlEventTouchUpInside];
             //stop timer display
             [self stopTimerRecoring];
             [self.ib_labelRecordVideo setText:@"Record Video"];
@@ -5283,9 +5263,9 @@ double _ticks = 0;
     {
         //now is for take pictures
         [self.ib_labelRecordVideo setText:@"Take Picture"];
-        [self.ib_processRecordOrTakePicture setBackgroundImage:takePictureImage forState:UIControlStateNormal];
-        [self.ib_processRecordOrTakePicture setBackgroundImage:takePictureImage forState:UIControlEventTouchUpInside];
-        [self.ib_processRecordOrTakePicture setBackgroundImage:takePicturePressed forState:UIControlEventTouchDown];
+        [self.ib_processRecordOrTakePicture setBackgroundImage:[UIImage imageTakePhoto] forState:UIControlStateNormal];
+        [self.ib_processRecordOrTakePicture setBackgroundImage:[UIImage imageTakePhoto] forState:UIControlEventTouchUpInside];
+        [self.ib_processRecordOrTakePicture setBackgroundImage:[UIImage imageTakePhotoPressed] forState:UIControlEventTouchDown];
         if (_isProcessRecording)
         {
             [self.ib_changeToMainRecording setHidden:NO];
@@ -5308,50 +5288,6 @@ double _ticks = 0;
 }
 
 - (IBAction)changeAction:(id)sender {
-    UIImage * recordImageSmall, *recordImageSmallPressed;
-    UIImage *takePictureSmall, *takePictureSmallPressed;
-    UIImage *recordImage, *recordImagePressed;
-    UIImage *takePicture, *takePicturePressed;
-    UIImage *stopRecordingImage, *stopRecordingPressed;
-    if (isiPhone5)
-    {
-        //Image change for processing button
-        recordImageSmall = [UIImage imageNamed:@"video_grey@5.png"];
-        recordImageSmallPressed = [UIImage imageNamed:@"video_grey_pressed@5.png"];
-        
-        recordImage = [UIImage imageNamed:@"camera_action_video@5.png"];
-        recordImagePressed = [UIImage imageNamed:@"camera_action_video_pressed@5.png"];
-        
-        takePicture = [UIImage imageNamed:@"camera_action_photo@5.png"];
-        takePicturePressed = [UIImage imageNamed:@"camera_action_photo_pressed@5.png"];
-        
-        takePictureSmall = [UIImage imageNamed:@"photo_grey@5.png"];
-        takePictureSmallPressed = [UIImage imageNamed:@"photo_grey_pressed@5.png"];
-        
-        stopRecordingImage = [UIImage imageNamed:@"camera_action_video_stop@5.png"];
-        stopRecordingPressed = [UIImage imageNamed:@"camera_action_video_stop_pressed@5.png"];
-    } else if (isiPhone4)
-    {
-        recordImage = [UIImage imageNamed:@"camera_action_video.png"];
-        recordImagePressed = [UIImage imageNamed:@"camera_action_video_pressed.png"];
-        
-        takePicture = [UIImage imageNamed:@"camera_action_photo.png"];
-        takePicturePressed = [UIImage imageNamed:@"camera_action_photo_pressed.png"];
-        
-        stopRecordingImage = [UIImage imageNamed:@"camera_action_video_stop@5.png"];
-        stopRecordingPressed = [UIImage imageNamed:@"camera_action_video_stop_pressed.png"];
-    }
-    else
-    {
-        recordImage = [UIImage imageNamed:@"camera_action_video@5.png"];
-        recordImagePressed = [UIImage imageNamed:@"camera_action_video_pressed@5.png"];
-        
-        takePicture = [UIImage imageNamed:@"camera_action_photo@5.png"];
-        takePicturePressed = [UIImage imageNamed:@"camera_action_photo_pressed@5.png"];
-        
-        stopRecordingImage = [UIImage imageNamed:@"camera_action_video_stop@5.png"];
-        stopRecordingPressed = [UIImage imageNamed:@"camera_action_video_stop_pressed@5.png"];
-    }
 //#if DISABLE_VIEW_RELEASE_FLAG
 //    _isRecordInterface = FALSE;
 //#else
@@ -5370,21 +5306,21 @@ double _ticks = 0;
         [self.ib_buttonChangeAction setHidden:NO];
         [self.view bringSubviewToFront:self.ib_buttonChangeAction];
         //set image display
-        [self.ib_buttonChangeAction setBackgroundImage:takePictureSmall forState:UIControlStateNormal];
-        [self.ib_buttonChangeAction setBackgroundImage:takePictureSmallPressed forState:UIControlStateSelected];
+        [self.ib_buttonChangeAction setBackgroundImage:[UIImage imagePhotoGrey] forState:UIControlStateNormal];
+        [self.ib_buttonChangeAction setBackgroundImage:[UIImage imagePhotoGreyPressed] forState:UIControlStateSelected];
         //now is interface take picture
         if (_isProcessRecording)
         {
             //but,we are recording
-            [self.ib_processRecordOrTakePicture setBackgroundImage:stopRecordingImage forState:UIControlStateNormal];
+            [self.ib_processRecordOrTakePicture setBackgroundImage:[UIImage imageVideoStop] forState:UIControlStateNormal];
             [self.ib_labelRecordVideo setText:@""];
         }
         else
         {
             //not recording
-            [self.ib_processRecordOrTakePicture setBackgroundImage:recordImage forState:UIControlStateNormal];
-            [self.ib_processRecordOrTakePicture setBackgroundImage:recordImagePressed forState:UIControlEventTouchDown];
-            [self.ib_processRecordOrTakePicture setBackgroundImage:recordImage forState:UIControlEventTouchUpInside];
+            [self.ib_processRecordOrTakePicture setBackgroundImage:[UIImage imageRecordVideo] forState:UIControlStateNormal];
+            [self.ib_processRecordOrTakePicture setBackgroundImage:[UIImage imageRecordVideoPressed] forState:UIControlEventTouchDown];
+            [self.ib_processRecordOrTakePicture setBackgroundImage:[UIImage imageRecordVideo] forState:UIControlEventTouchUpInside];
             [self.ib_labelRecordVideo setText:@"Record Video"];
             _syncPortraitAndLandscape = NO;
         }
@@ -5392,9 +5328,9 @@ double _ticks = 0;
     else
     {
         //now is interface take picture
-        [self.ib_processRecordOrTakePicture setBackgroundImage:takePicture forState:UIControlStateNormal];
-        [self.ib_processRecordOrTakePicture setBackgroundImage:takePicturePressed forState:UIControlEventTouchDown];
-        [self.ib_processRecordOrTakePicture setBackgroundImage:takePicture forState:UIControlEventTouchUpInside];
+        [self.ib_processRecordOrTakePicture setBackgroundImage:[UIImage imageTakePhoto] forState:UIControlStateNormal];
+        [self.ib_processRecordOrTakePicture setBackgroundImage:[UIImage imageTakePhotoPressed] forState:UIControlEventTouchDown];
+        [self.ib_processRecordOrTakePicture setBackgroundImage:[UIImage imageTakePhoto] forState:UIControlEventTouchUpInside];
         
         if (_isProcessRecording)
         {
@@ -5411,8 +5347,8 @@ double _ticks = 0;
             [self.ib_changeToMainRecording setHidden:YES];
             [self.ib_buttonChangeAction setHidden:NO];
             [self.view bringSubviewToFront:self.ib_buttonChangeAction];
-            [self.ib_buttonChangeAction setBackgroundImage:recordImageSmall forState:UIControlStateNormal];
-            [self.ib_buttonChangeAction setBackgroundImage:recordImageSmallPressed forState:UIControlStateNormal];
+            [self.ib_buttonChangeAction setBackgroundImage:[UIImage imageVideoGrey] forState:UIControlStateNormal];
+            [self.ib_buttonChangeAction setBackgroundImage:[UIImage imageVideoGreyPressed] forState:UIControlStateNormal];
             [self.ib_labelRecordVideo setText:@"Take Picture"];
             _syncPortraitAndLandscape = NO;
         }

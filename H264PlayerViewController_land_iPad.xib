@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.iPad.XIB" version="3.0" toolsVersion="4514" systemVersion="12F45" targetRuntime="iOS.CocoaTouch.iPad" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.iPad.XIB" version="3.0" toolsVersion="4514" systemVersion="13A603" targetRuntime="iOS.CocoaTouch.iPad" propertyAccessControl="none">
     <dependencies>
         <deployment defaultVersion="1536" identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3747"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3746"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="H264PlayerViewController">
@@ -196,11 +196,11 @@
         </view>
     </objects>
     <resources>
-        <image name="camera_action_mic.png" width="216" height="216"/>
-        <image name="camera_action_pan_bg.png" width="208" height="208"/>
-        <image name="camera_action_pan_handle.png" width="12" height="54"/>
-        <image name="camera_action_pan_knob.png" width="66" height="66"/>
+        <image name="camera_action_mic.png" width="130" height="130"/>
+        <image name="camera_action_pan_bg.png" width="185" height="185"/>
+        <image name="camera_action_pan_handle.png" width="6" height="33"/>
+        <image name="camera_action_pan_knob.png" width="35" height="35"/>
         <image name="camera_action_pic_s.png" width="90" height="90"/>
-        <image name="camera_action_video.png" width="216" height="216"/>
+        <image name="camera_action_video.png" width="130" height="130"/>
     </resources>
 </document>

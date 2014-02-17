@@ -111,7 +111,7 @@
                     <nil key="highlightedColor"/>
                 </label>
                 <imageView multipleTouchEnabled="YES" tag="999" contentMode="scaleAspectFit" image="camera_action_pan_bg.png" id="WPh-TE-Nhn">
-                    <rect key="frame" x="264" y="630" width="240" height="240"/>
+                    <rect key="frame" x="264" y="630" width="300" height="300"/>
                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                     <inset key="insetFor6xAndEarlier" minX="0.0" minY="20" maxX="0.0" maxY="-20"/>
                 </imageView>
@@ -146,10 +146,10 @@
                             </connections>
                         </button>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="rgq-Re-BwB">
-                            <rect key="frame" x="673" y="-6" width="75" height="75"/>
+                            <rect key="frame" x="654" y="10" width="100" height="66"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <fontDescription key="fontDescription" type="system" pointSize="15"/>
-                            <state key="normal" backgroundImage="camera_action_pic_s.png">
+                            <state key="normal" backgroundImage="photo_grey.png">
                                 <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                             </state>
                             <connections>
@@ -157,7 +157,7 @@
                             </connections>
                         </button>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="cPl-az-Y0W">
-                            <rect key="frame" x="607" y="-6" width="145" height="75"/>
+                            <rect key="frame" x="596" y="8" width="158" height="102"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <fontDescription key="fontDescription" type="system" pointSize="21"/>
                             <state key="normal">
@@ -193,11 +193,11 @@
         </tableViewController>
     </objects>
     <resources>
-        <image name="camera_action_mic.png" width="216" height="216"/>
-        <image name="camera_action_pan_bg.png" width="208" height="208"/>
-        <image name="camera_action_pan_handle.png" width="12" height="54"/>
-        <image name="camera_action_pan_knob.png" width="66" height="66"/>
-        <image name="camera_action_pic_s.png" width="90" height="90"/>
-        <image name="camera_action_video.png" width="216" height="216"/>
+        <image name="camera_action_mic.png" width="130" height="130"/>
+        <image name="camera_action_pan_bg.png" width="185" height="185"/>
+        <image name="camera_action_pan_handle.png" width="6" height="33"/>
+        <image name="camera_action_pan_knob.png" width="35" height="35"/>
+        <image name="camera_action_video.png" width="130" height="130"/>
+        <image name="photo_grey.png" width="32" height="19"/>
     </resources>
 </document>

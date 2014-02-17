@@ -28,6 +28,7 @@
 
 #import "UIFont+Hubble.h"
 #import "UIColor+Hubble.h"
+#import "UIImage+Hubble.h"
 
 
 #define H264_STREAM_STARTED              1
