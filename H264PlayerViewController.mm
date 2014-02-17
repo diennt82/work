@@ -548,7 +548,6 @@ double _ticks = 0;
 
 - (void)earlierButtonAction:(id)sender
 {
-    
     [nowButton setTitleTextAttributes:@{
                                         UITextAttributeFont: [UIFont fontWithName:PN_LIGHT_FONT size:17.0],
                                         UITextAttributeTextColor: [UIColor barItemSelectedColor]
@@ -866,7 +865,14 @@ double _ticks = 0;
                 //[self performSelectorInBackground:@selector(getZoneDetection_bg) withObject:nil];
                 [self performSelectorInBackground:@selector(getMelodyValue_bg) withObject:nil];
                 self.imgViewDrectionPad.userInteractionEnabled = YES;
-                self.imgViewDrectionPad.image = [UIImage imageNamed:@"camera_action_pan_bg.png"];
+                if (isiPhone4)
+                {
+                    self.imgViewDrectionPad.image = [UIImage imageNamed:@"camera_action_pan_bg.png"];
+                }
+                else
+                {
+                    self.imgViewDrectionPad.image = [UIImage imageNamed:@"camera_action_pan_bg@5.png"];
+                }
                 
                 if (_isSharedCam == FALSE)
                 {
@@ -4060,11 +4066,11 @@ double _ticks = 0;
         // Control display for TimelineVC
         if (_timelineVC != nil)
         {
-            CGFloat alignYTimeLine = self.ib_ViewTouchToTalk.frame.origin.y;
+            CGFloat alignYTimeLine = self.ib_ViewTouchToTalk.frame.origin.y + ALIGN_TOP_OF_TIME_LINE;
             self.timelineVC.view.frame = CGRectMake(0, alignYTimeLine, SCREEN_WIDTH, SCREEN_HEIGHT - self.ib_ViewTouchToTalk.frame.origin.y);
-            self.timelineVC.tableView.frame = CGRectMake(0, alignYTimeLine, SCREEN_WIDTH, SCREEN_HEIGHT - self.ib_ViewTouchToTalk.frame.origin.y);
+//            self.timelineVC.tableView.frame = CGRectMake(0, alignYTimeLine, SCREEN_WIDTH, SCREEN_HEIGHT - self.ib_ViewTouchToTalk.frame.origin.y);
             self.timelineVC.view.hidden = NO;
-            self.timelineVC.tableView.contentInset = UIEdgeInsetsMake(0, 0, 200, 0);
+            self.timelineVC.tableView.contentInset = UIEdgeInsetsMake(0, 0, 64, 0);
             [self.view addSubview:_timelineVC.view];
         }
         
@@ -5313,7 +5319,26 @@ double _ticks = 0;
     UIImage *recordImage, *recordImagePressed;
     UIImage *takePicture, *takePicturePressed;
     UIImage *stopRecordingImage, *stopRecordingPressed;
-    if (isiPhone5)
+
+    if (isiPhone4)
+    {
+        //Image change for processing button
+        recordImageSmall = [UIImage imageNamed:@"video_grey.png"];
+        recordImageSmallPressed = [UIImage imageNamed:@"video_grey_pressed.png"];
+        
+        recordImage = [UIImage imageNamed:@"camera_action_video.png"];
+        recordImagePressed = [UIImage imageNamed:@"camera_action_video_pressed.png"];
+        
+        takePicture = [UIImage imageNamed:@"camera_action_photo.png"];
+        takePicturePressed = [UIImage imageNamed:@"camera_action_photo_pressed.png"];
+        
+        takePictureSmall = [UIImage imageNamed:@"photo_grey.png"];
+        takePictureSmallPressed = [UIImage imageNamed:@"photo_grey_pressed.png"];
+        
+        stopRecordingImage = [UIImage imageNamed:@"camera_action_video_stop.png"];
+        stopRecordingPressed = [UIImage imageNamed:@"camera_action_video_stop_pressed.png"];
+    }
+    else
     {
         //Image change for processing button
         recordImageSmall = [UIImage imageNamed:@"video_grey@5.png"];
@@ -5327,27 +5352,6 @@ double _ticks = 0;
         
         takePictureSmall = [UIImage imageNamed:@"photo_grey@5.png"];
         takePictureSmallPressed = [UIImage imageNamed:@"photo_grey_pressed@5.png"];
-        
-        stopRecordingImage = [UIImage imageNamed:@"camera_action_video_stop@5.png"];
-        stopRecordingPressed = [UIImage imageNamed:@"camera_action_video_stop_pressed@5.png"];
-    } else if (isiPhone4)
-    {
-        recordImage = [UIImage imageNamed:@"camera_action_video.png"];
-        recordImagePressed = [UIImage imageNamed:@"camera_action_video_pressed.png"];
-        
-        takePicture = [UIImage imageNamed:@"camera_action_photo.png"];
-        takePicturePressed = [UIImage imageNamed:@"camera_action_photo_pressed.png"];
-        
-        stopRecordingImage = [UIImage imageNamed:@"camera_action_video_stop@5.png"];
-        stopRecordingPressed = [UIImage imageNamed:@"camera_action_video_stop_pressed.png"];
-    }
-    else
-    {
-        recordImage = [UIImage imageNamed:@"camera_action_video@5.png"];
-        recordImagePressed = [UIImage imageNamed:@"camera_action_video_pressed@5.png"];
-        
-        takePicture = [UIImage imageNamed:@"camera_action_photo@5.png"];
-        takePicturePressed = [UIImage imageNamed:@"camera_action_photo_pressed@5.png"];
         
         stopRecordingImage = [UIImage imageNamed:@"camera_action_video_stop@5.png"];
         stopRecordingPressed = [UIImage imageNamed:@"camera_action_video_stop_pressed@5.png"];

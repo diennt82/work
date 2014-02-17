@@ -542,7 +542,7 @@
 {
     if (indexPath.section == 0)
     {
-        return 92;
+        return 77;
     }
 #if 1
     if (indexPath.section == 1)

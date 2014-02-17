@@ -8,6 +8,7 @@
 
 #import "EarlierViewController.h"
 #import "SavedEventViewController.h"
+#import "define.h"
 
 @interface EarlierViewController ()
 
@@ -69,7 +70,13 @@
         
         [_timelineVC loadEvents:_camChannel];
         self.timelineVC.navVC = _nav;
-        self.timelineVC.tableView.contentInset = UIEdgeInsetsMake(64, 0, 44, 0);
+        if ((isiPhone4 && isiPhone5))
+        {
+            self.timelineVC.tableView.contentInset = UIEdgeInsetsMake(64, 0, 44, 0);
+        } else
+        {
+            self.timelineVC.tableView.contentInset = UIEdgeInsetsMake(64, 0, 64, 0);
+        }
     }
 }
 
