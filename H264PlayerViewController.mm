@@ -54,6 +54,7 @@
 {
     BOOL _syncPortraitAndLandscape;
     UIBarButtonItem *nowButton, *earlierButton;
+    BOOL isLandScapeMode;//cheat to display correctly timeline bottom
 }
 
 @property (retain, nonatomic) IBOutlet UIImageView *imageViewHandle;
@@ -3955,6 +3956,7 @@ double _ticks = 0;
     
 	if (orientation == UIInterfaceOrientationLandscapeLeft || orientation == UIInterfaceOrientationLandscapeRight)
 	{
+        isLandScapeMode = YES;
         //load new nib for landscape iPad
         if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
         {
@@ -4066,12 +4068,20 @@ double _ticks = 0;
         // Control display for TimelineVC
         if (_timelineVC != nil)
         {
-            CGFloat alignYTimeLine = self.ib_ViewTouchToTalk.frame.origin.y + ALIGN_TOP_OF_TIME_LINE;
+            CGFloat alignYTimeLine = self.ib_ViewTouchToTalk.frame.origin.y;
             self.timelineVC.view.frame = CGRectMake(0, alignYTimeLine, SCREEN_WIDTH, SCREEN_HEIGHT - self.ib_ViewTouchToTalk.frame.origin.y);
 //            self.timelineVC.tableView.frame = CGRectMake(0, alignYTimeLine, SCREEN_WIDTH, SCREEN_HEIGHT - self.ib_ViewTouchToTalk.frame.origin.y);
             self.timelineVC.view.hidden = NO;
-            self.timelineVC.tableView.contentInset = UIEdgeInsetsMake(0, 0, 64, 0);
             [self.view addSubview:_timelineVC.view];
+            if (isLandScapeMode)
+            {
+                self.timelineVC.tableView.contentInset = UIEdgeInsetsMake(0, 0, 275, 0);
+                isLandScapeMode = NO;
+            }
+            else
+            {
+                self.timelineVC.tableView.contentInset = UIEdgeInsetsMake(0, 0, 30, 0);
+            }
         }
         
         //add hubble_logo_back

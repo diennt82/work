@@ -70,7 +70,7 @@
         
         [_timelineVC loadEvents:_camChannel];
         self.timelineVC.navVC = _nav;
-        if ((isiPhone4 && isiPhone5))
+        if ((isiPhone4 || isiPhone5))
         {
             self.timelineVC.tableView.contentInset = UIEdgeInsetsMake(64, 0, 44, 0);
         } else
