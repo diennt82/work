@@ -431,7 +431,8 @@
 
 - (BOOL)tableView:(UITableView *)tableView shouldHighlightRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (indexPath.section == 0)
+    if (indexPath.section == 0 &&
+        tableView.numberOfSections == 1)
     {
         return NO;
     }
@@ -455,28 +456,30 @@
     
     if (indexPath.section == 0)
     {
-        return;
+        [self addCameraButtonTouchAction:nil];
     }
-    
-    CamChannel *ch = (CamChannel *)[_camChannels objectAtIndex:indexPath.row];
-    ch.profile.isSelected = TRUE;
-    
-    [CameraAlert clearAllAlertForCamera:ch.profile.mac_address];
-    [UIApplication sharedApplication].idleTimerDisabled = YES;
-    
-    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-    [userDefaults setObject:ch.profile.registrationID forKey:@"REG_ID"];
-    [userDefaults setObject:ch.profile.mac_address forKey:CAM_IN_VEW];
-    [userDefaults synchronize];
-    
-    H264PlayerViewController *h264PlayerViewController = [[H264PlayerViewController alloc] init];
-    
-    h264PlayerViewController.selectedChannel = ch;
-    h264PlayerViewController.h264PlayerVCDelegate = self;
-    
-    //MenuViewController *tabBarController = (MenuViewController *)self.parentViewController;
-    [((MenuViewController *)self.parentVC).navigationController pushViewController:h264PlayerViewController animated:YES];
-    [h264PlayerViewController release];
+    else
+    {
+        CamChannel *ch = (CamChannel *)[_camChannels objectAtIndex:indexPath.row];
+        ch.profile.isSelected = TRUE;
+        
+        [CameraAlert clearAllAlertForCamera:ch.profile.mac_address];
+        [UIApplication sharedApplication].idleTimerDisabled = YES;
+        
+        NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+        [userDefaults setObject:ch.profile.registrationID forKey:@"REG_ID"];
+        [userDefaults setObject:ch.profile.mac_address forKey:CAM_IN_VEW];
+        [userDefaults synchronize];
+        
+        H264PlayerViewController *h264PlayerViewController = [[H264PlayerViewController alloc] init];
+        
+        h264PlayerViewController.selectedChannel = ch;
+        h264PlayerViewController.h264PlayerVCDelegate = self;
+        
+        //MenuViewController *tabBarController = (MenuViewController *)self.parentViewController;
+        [((MenuViewController *)self.parentVC).navigationController pushViewController:h264PlayerViewController animated:YES];
+        [h264PlayerViewController release];
+    }
 }
 
 - (void)dealloc {
