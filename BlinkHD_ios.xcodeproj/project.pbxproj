@@ -607,6 +607,7 @@
 		A118C19F187E4756009176F5 /* HttpCom.m in Sources */ = {isa = PBXBuildFile; fileRef = A118C19E187E4756009176F5 /* HttpCom.m */; };
 		A11E8C1317E2DB7E00915F84 /* libstdc++.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = A11E8C1217E2DB7D00915F84 /* libstdc++.dylib */; };
 		A1239E86186185F200A25A04 /* AudioOutStreamer.m in Sources */ = {isa = PBXBuildFile; fileRef = A1239E85186185F200A25A04 /* AudioOutStreamer.m */; };
+		A12A9D8A18B1DF4C004987F2 /* UIImage+Hubble.m in Sources */ = {isa = PBXBuildFile; fileRef = A12A9D8918B1DF4C004987F2 /* UIImage+Hubble.m */; };
 		A14631C6185C133D00E96969 /* ScrollHorizontalMenu.m in Sources */ = {isa = PBXBuildFile; fileRef = A14631C5185C133D00E96969 /* ScrollHorizontalMenu.m */; };
 		A15110D718AB7D4600E116E1 /* TimeLinePremiumCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A15110D618AB7D4600E116E1 /* TimeLinePremiumCell.m */; };
 		A15110DD18AB7D9800E116E1 /* TimeLinePremiumCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = A15110DC18AB7D9800E116E1 /* TimeLinePremiumCell.xib */; };
@@ -1397,6 +1398,8 @@
 		A1239E84186185F200A25A04 /* AudioOutStreamer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AudioOutStreamer.h; sourceTree = "<group>"; };
 		A1239E85186185F200A25A04 /* AudioOutStreamer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AudioOutStreamer.m; sourceTree = "<group>"; };
 		A123DC9717E9A748006CC6FD /* PlayerCallbackHandler.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PlayerCallbackHandler.h; sourceTree = "<group>"; };
+		A12A9D8818B1DF4B004987F2 /* UIImage+Hubble.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+Hubble.h"; sourceTree = "<group>"; };
+		A12A9D8918B1DF4C004987F2 /* UIImage+Hubble.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+Hubble.m"; sourceTree = "<group>"; };
 		A14631C4185C133D00E96969 /* ScrollHorizontalMenu.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ScrollHorizontalMenu.h; sourceTree = "<group>"; };
 		A14631C5185C133D00E96969 /* ScrollHorizontalMenu.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ScrollHorizontalMenu.m; sourceTree = "<group>"; };
 		A15110D518AB7D4600E116E1 /* TimeLinePremiumCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TimeLinePremiumCell.h; sourceTree = "<group>"; };
@@ -2011,6 +2014,7 @@
 		080E96DDFE201D6D7F000001 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				A12A9D8B18B1DF5D004987F2 /* ImageManagement */,
 				8B9ABB6618A9FDBB0079F4A3 /* RegistrationVC */,
 				A1AC859218912FFC002A8CCD /* Color */,
 				A1AC857318912574002A8CCD /* Fonts */,
@@ -3359,6 +3363,15 @@
 			name = HoldToTalk;
 			sourceTree = "<group>";
 		};
+		A12A9D8B18B1DF5D004987F2 /* ImageManagement */ = {
+			isa = PBXGroup;
+			children = (
+				A12A9D8818B1DF4B004987F2 /* UIImage+Hubble.h */,
+				A12A9D8918B1DF4C004987F2 /* UIImage+Hubble.m */,
+			);
+			name = ImageManagement;
+			sourceTree = "<group>";
+		};
 		A14631C3185C12B600E96969 /* ScrollMenuView */ = {
 			isa = PBXGroup;
 			children = (
@@ -4214,6 +4227,7 @@
 				8B278BEB183DC6B500A4FF50 /* NotificationSettingsCell.m in Sources */,
 				38E3C85C1694033500A13A70 /* AlertPrompt.m in Sources */,
 				380CB0C716DC568500290587 /* Step_12_ViewController.m in Sources */,
+				A12A9D8A18B1DF4C004987F2 /* UIImage+Hubble.m in Sources */,
 				8B9ABBB818AA2AC30079F4A3 /* CameraMenuViewController.m in Sources */,
 				380CB0D616DC60DC00290587 /* Step_11_ViewController.m in Sources */,
 				8B92A0AF1863FD13005923D2 /* EarlierViewController.m in Sources */,
@@ -5146,6 +5160,7 @@
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CODE_SIGN_ENTITLEMENTS = "";
 				CODE_SIGN_IDENTITY = "iPhone Developer: Lai Shan Lam (RYP7CC8LQR)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -5187,7 +5202,7 @@
 				);
 				OTHER_LDFLAGS = "-lz";
 				PRODUCT_NAME = Hubble;
-				PROVISIONING_PROFILE = "6296209A-5435-47A4-8372-20B2C8251B4C";
+				PROVISIONING_PROFILE = "DD06C93E-E102-4B6D-8C7C-C0F1A3517F10";
 				SDKROOT = iphoneos7.0;
 				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/../ios-frameworks/pjsip/arm/include/ $(SRCROOT)/../ios-frameworks/pjsip/arm/include/pj/ $(SRCROOT)/../ios-frameworks/pjsip/arm/include/pjnath/";
 				VALID_ARCHS = "armv6 armv7";
@@ -5200,6 +5215,7 @@
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CODE_SIGN_ENTITLEMENTS = "";
 				CODE_SIGN_IDENTITY = "iPhone Developer: Lai Shan Lam (RYP7CC8LQR)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -5236,7 +5252,7 @@
 				);
 				OTHER_LDFLAGS = "-lz";
 				PRODUCT_NAME = Hubble;
-				PROVISIONING_PROFILE = "6296209A-5435-47A4-8372-20B2C8251B4C";
+				PROVISIONING_PROFILE = "DD06C93E-E102-4B6D-8C7C-C0F1A3517F10";
 				SDKROOT = iphoneos7.0;
 				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/../ios-frameworks/pjsip/arm/include/ $(SRCROOT)/../ios-frameworks/pjsip/arm/include/pj/ $(SRCROOT)/../ios-frameworks/pjsip/arm/include/pjnath/";
 				VALIDATE_PRODUCT = YES;
@@ -5274,6 +5290,7 @@
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CODE_SIGN_ENTITLEMENTS = "";
 				CODE_SIGN_IDENTITY = "iPhone Developer: Lai Shan Lam (RYP7CC8LQR)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -5308,7 +5325,7 @@
 				);
 				OTHER_LDFLAGS = "-lz";
 				PRODUCT_NAME = Hubble;
-				PROVISIONING_PROFILE = "6296209A-5435-47A4-8372-20B2C8251B4C";
+				PROVISIONING_PROFILE = "DD06C93E-E102-4B6D-8C7C-C0F1A3517F10";
 				RAMEWORK_SEARCH_PATHS = "$(inherited) \"$(SRCROOT)\"";
 				SDKROOT = iphoneos7.0;
 				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/../ios-frameworks/pjsip/arm/include/ $(SRCROOT)/../ios-frameworks/pjsip/arm/include/pj/ $(SRCROOT)/../ios-frameworks/pjsip/arm/include/pjnath/";
