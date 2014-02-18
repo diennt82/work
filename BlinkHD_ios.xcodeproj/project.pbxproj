@@ -427,6 +427,8 @@
 		8B29A08718AF500A00D36BE5 /* video_progress_bg@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B299F5118AF500900D36BE5 /* video_progress_bg@2x.png */; };
 		8B29A08818AF500A00D36BE5 /* video_progress_green.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B299F5218AF500900D36BE5 /* video_progress_green.png */; };
 		8B29A08918AF500A00D36BE5 /* video_progress_green@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B299F5318AF500900D36BE5 /* video_progress_green@2x.png */; };
+		8B53659318B34DA80018671F /* SensitivityTemperatureCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B53659218B34DA80018671F /* SensitivityTemperatureCell.m */; };
+		8B53659518B34DCA0018671F /* SensitivityTemperatureCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8B53659418B34DCA0018671F /* SensitivityTemperatureCell.xib */; };
 		8B66804D1839EEA80041F510 /* NotificationViewController_ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8B66804C1839EEA70041F510 /* NotificationViewController_ipad.xib */; };
 		8B68F5D118066CE500661527 /* PlaybackViewController_ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8B68F5D018066CE500661527 /* PlaybackViewController_ipad.xib */; };
 		8B88C98718ACBA3000B074E5 /* Hubble_logo_back.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B88C98518ACBA3000B074E5 /* Hubble_logo_back.png */; };
@@ -1148,6 +1150,9 @@
 		8B299F5118AF500900D36BE5 /* video_progress_bg@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "video_progress_bg@2x.png"; sourceTree = "<group>"; };
 		8B299F5218AF500900D36BE5 /* video_progress_green.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = video_progress_green.png; sourceTree = "<group>"; };
 		8B299F5318AF500900D36BE5 /* video_progress_green@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "video_progress_green@2x.png"; sourceTree = "<group>"; };
+		8B53659118B34DA80018671F /* SensitivityTemperatureCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SensitivityTemperatureCell.h; sourceTree = "<group>"; };
+		8B53659218B34DA80018671F /* SensitivityTemperatureCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SensitivityTemperatureCell.m; sourceTree = "<group>"; };
+		8B53659418B34DCA0018671F /* SensitivityTemperatureCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SensitivityTemperatureCell.xib; sourceTree = "<group>"; };
 		8B66804C1839EEA70041F510 /* NotificationViewController_ipad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = NotificationViewController_ipad.xib; sourceTree = "<group>"; };
 		8B68F5D018066CE500661527 /* PlaybackViewController_ipad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PlaybackViewController_ipad.xib; sourceTree = "<group>"; };
 		8B88C98518ACBA3000B074E5 /* Hubble_logo_back.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Hubble_logo_back.png; sourceTree = "<group>"; };
@@ -2731,6 +2736,16 @@
 			name = Step_03;
 			sourceTree = "<group>";
 		};
+		8B53659018B34D590018671F /* Temperature */ = {
+			isa = PBXGroup;
+			children = (
+				8B53659118B34DA80018671F /* SensitivityTemperatureCell.h */,
+				8B53659218B34DA80018671F /* SensitivityTemperatureCell.m */,
+				8B53659418B34DCA0018671F /* SensitivityTemperatureCell.xib */,
+			);
+			name = Temperature;
+			sourceTree = "<group>";
+		};
 		8B5FB3E618505C6600A74E06 /* Step_04 */ = {
 			isa = PBXGroup;
 			children = (
@@ -2829,6 +2844,7 @@
 		8B9112CD18602854004301C5 /* Sensitivity */ = {
 			isa = PBXGroup;
 			children = (
+				8B53659018B34D590018671F /* Temperature */,
 				8B9112CE18602884004301C5 /* SensitivityCell.h */,
 				8B9112CF18602884004301C5 /* SensitivityCell.m */,
 				8B9112D118602898004301C5 /* SensitivityCell.xib */,
@@ -4104,6 +4120,7 @@
 				979BC6A517D9BB9C00B3B373 /* PlayListViewController.xib in Resources */,
 				8B92A0B01863FD13005923D2 /* EarlierViewController.xib in Resources */,
 				8B299FA418AF500900D36BE5 /* camera_action_pan_bg@2x.png in Resources */,
+				8B53659518B34DCA0018671F /* SensitivityTemperatureCell.xib in Resources */,
 				A1176B74180D1DD9000B7527 /* stream480p.sdp in Resources */,
 				8B9112C618600B7C004301C5 /* SettingsViewController.xib in Resources */,
 				8B299FF418AF500900D36BE5 /* timeline_blue_dot.png in Resources */,
@@ -4165,6 +4182,7 @@
 				A1ABF1C6187538740014FCB4 /* DisplayWifiList_VController.mm in Sources */,
 				28D7ACF80DDB3853001CB0EB /* MBP_iosViewController.mm in Sources */,
 				8B9112CA186010F1004301C5 /* GeneralCell.m in Sources */,
+				8B53659318B34DA80018671F /* SensitivityTemperatureCell.m in Sources */,
 				8B9384AF18570567009C4771 /* ValueSettingsViewController.m in Sources */,
 				97987DF21546A1630066C49B /* MBP_LoginOrRegistration.mm in Sources */,
 				8B9633AB18A8AAA2008A9579 /* LoginViewController.m in Sources */,
@@ -5202,7 +5220,7 @@
 				);
 				OTHER_LDFLAGS = "-lz";
 				PRODUCT_NAME = Hubble;
-				PROVISIONING_PROFILE = "DD06C93E-E102-4B6D-8C7C-C0F1A3517F10";
+				PROVISIONING_PROFILE = "6296209A-5435-47A4-8372-20B2C8251B4C";
 				SDKROOT = iphoneos7.0;
 				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/../ios-frameworks/pjsip/arm/include/ $(SRCROOT)/../ios-frameworks/pjsip/arm/include/pj/ $(SRCROOT)/../ios-frameworks/pjsip/arm/include/pjnath/";
 				VALID_ARCHS = "armv6 armv7";
@@ -5252,7 +5270,7 @@
 				);
 				OTHER_LDFLAGS = "-lz";
 				PRODUCT_NAME = Hubble;
-				PROVISIONING_PROFILE = "DD06C93E-E102-4B6D-8C7C-C0F1A3517F10";
+				PROVISIONING_PROFILE = "6296209A-5435-47A4-8372-20B2C8251B4C";
 				SDKROOT = iphoneos7.0;
 				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/../ios-frameworks/pjsip/arm/include/ $(SRCROOT)/../ios-frameworks/pjsip/arm/include/pj/ $(SRCROOT)/../ios-frameworks/pjsip/arm/include/pjnath/";
 				VALIDATE_PRODUCT = YES;
@@ -5325,7 +5343,7 @@
 				);
 				OTHER_LDFLAGS = "-lz";
 				PRODUCT_NAME = Hubble;
-				PROVISIONING_PROFILE = "DD06C93E-E102-4B6D-8C7C-C0F1A3517F10";
+				PROVISIONING_PROFILE = "6296209A-5435-47A4-8372-20B2C8251B4C";
 				RAMEWORK_SEARCH_PATHS = "$(inherited) \"$(SRCROOT)\"";
 				SDKROOT = iphoneos7.0;
 				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/../ios-frameworks/pjsip/arm/include/ $(SRCROOT)/../ios-frameworks/pjsip/arm/include/pj/ $(SRCROOT)/../ios-frameworks/pjsip/arm/include/pjnath/";

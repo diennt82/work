@@ -10,8 +10,8 @@
 
 @protocol SensitivityCellDelegate <NSObject>
 
-- (void)reportChangedSliderValue: (CGFloat)value andRowIndex: (NSInteger) rowIndex;
 - (void)reportSwitchValue: (BOOL)value andRowIndex: (NSInteger) rowIndex;
+- (void)reportChangedSettingsValue: (NSInteger )value atRow: (NSInteger )rowIndx;
 
 @end
 
@@ -23,4 +23,7 @@
 
 @property (nonatomic) NSInteger rowIndex;
 @property (assign, nonatomic) id<SensitivityCellDelegate> sensitivityCellDelegate;
+@property (nonatomic) NSInteger settingsValue;
+@property (nonatomic) BOOL switchValue;
+
 @end

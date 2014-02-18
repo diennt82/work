@@ -13,11 +13,12 @@
 #import "SchedulerCell.h"
 #import "SchedulerViewController.h"
 #import "SchedulingViewController.h"
+#import "SensitivityTemperatureCell.h"
 
 @interface SettingsViewController () <SensitivityCellDelegate, SchedulerCellDelegate>
 {
     NSInteger numOfRows[4];
-    CGFloat valueSettings[2];
+    NSInteger valueSettings[2];
     BOOL valueSwitchs[2];
     BOOL valueSchedulerSwitchs[1][2];
 }
@@ -73,10 +74,8 @@
         numOfRows[i] = 1;
     }
     
-    for (int i = 0; i < 2; i++)
-    {
-        valueSettings[i] = 5;
-    }
+    valueSettings[0] = 0;
+    valueSettings[1] = 1;
     
     valueSchedulerSwitchs[0][0] = FALSE;
     valueSchedulerSwitchs[0][1] = FALSE;
@@ -222,9 +221,9 @@
     valueSwitchs[rowIndex] = value;
 }
 
-- (void)reportChangedSliderValue:(CGFloat)value andRowIndex:(NSInteger)rowIndex
+- (void)reportChangedSettingsValue:(NSInteger)value atRow:(NSInteger)rowIndx
 {
-    valueSettings[rowIndex] = value;
+    valueSettings[rowIndx] = value;
 }
 
 #pragma mark - Scheduler Delegate
@@ -293,13 +292,17 @@
             return 120;
         }
     }
-    
     else if (indexPath.section == 1)
     {
         if (indexPath.row == 1 ||
             indexPath.row == 2)
         {
-            return 121;
+            return 120;
+        }
+        
+        if (indexPath.row == 3)
+        {
+            return 227;
         }
     }
     else if(indexPath.section == 2)
@@ -339,16 +342,34 @@
 
 - (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    for (id obj in cell.contentView.subviews)
+    {
+        if ([obj isKindOfClass:[UIView class]] &&
+            ((UIView *)obj).tag == 905)
+        {
+            [obj removeFromSuperview];
+            break;
+        }
+    }
+    
     if (indexPath.row == 0)
     {
         //cell.
         cell.textLabel.font = [UIFont fontWithName:@"HelveticaNeue-Thin" size:18];
         cell.textLabel.textColor = [UIColor colorWithRed:(128/255.0) green:(128/255.0) blue:(128/255.0) alpha:1];
     }
-    else if(indexPath.row == 1 &&
-            indexPath.section == 0)
+    else if (indexPath.section == 0 || indexPath.section == 1)
     {
-        cell.backgroundColor = [UIColor colorWithRed:43/255.0 green:50/255.0 blue:56/255.0 alpha:1];
+        cell.backgroundColor = [UIColor colorWithRed:43/255.f green:50/255.f blue:56/255.f alpha:1];
+        
+        if (indexPath.section == 1)
+        {
+            UIView *lineView = [[[UIView alloc] initWithFrame:CGRectMake(0, cell.contentView.frame.size.height - 0.5f, cell.contentView.frame.size.width, 0.5f)] autorelease];
+            
+            lineView.backgroundColor = [UIColor colorWithRed:195/255.f green:195/255.f blue:195/255.f alpha:1];
+            lineView.tag = 905;
+            [cell.contentView addSubview:lineView];
+        }
     }
 }
 
@@ -462,24 +483,42 @@
                     }
                     
                     cell.sensitivityCellDelegate = self;
-                    cell.rowIndex = indexPath.row;
-                    cell.valueSlider.value = valueSettings[indexPath.row];
-                    [cell.valueSwitch setOn:valueSwitchs[indexPath.row]];
+                    cell.rowIndex = indexPath.row - 1;
+                    cell.settingsValue = valueSettings[indexPath.row - 1];
+                    cell.switchValue = valueSwitchs[indexPath.row - 1];
                     
                     if (indexPath.row == 1)
                     {
                         cell.nameLabel.text = @"Motion";
-                        [cell.valueSlider setMinimumValueImage:[UIImage imageNamed:@"brightness-d"]];
-                        [cell.valueSlider setMaximumValueImage:[UIImage imageNamed:@"brightness-u"]];
                     }
                     else
                     {
                         cell.nameLabel.text = @"Sound";
-                        [cell.valueSlider setMinimumValueImage:[UIImage imageNamed:@"sound-s-d"]];
-                        [cell.valueSlider setMaximumValueImage:[UIImage imageNamed:@"sound-s-u"]];
                     }
                     
-                    cell.backgroundColor = [UIColor blackColor];
+                    return cell;
+                }
+                    break;
+                    
+                case 3:
+                {
+                    static NSString *CellIdentifier = @"SensitivityTemperatureCell";
+                    SensitivityTemperatureCell *cell = [self.tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+                    
+                    NSArray *objects = [[NSBundle mainBundle] loadNibNamed:@"SensitivityTemperatureCell" owner:nil options:nil];
+                    
+                    for (id curObj in objects)
+                    {
+                        if([curObj isKindOfClass:[SensitivityTemperatureCell class]])
+                        {
+                            cell = (SensitivityTemperatureCell *)curObj;
+                            break;
+                        }
+                    }
+                    
+                    cell.isSwitchOnLeft = YES;
+                    cell.isSwitchOnRight = NO;
+                    cell.tempValueRight = 20.f;
                     
                     return cell;
                 }
@@ -703,7 +742,7 @@
             {
                 if (numOfRows[indexPath.section] == 1)
                 {
-                    numOfRows[indexPath.section] = 3;
+                    numOfRows[indexPath.section] = 4;
                 }
                 else
                 {
