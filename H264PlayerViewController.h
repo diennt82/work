@@ -149,7 +149,6 @@
 //Add scrollview to support zoom in and zoom out
 @property (retain, nonatomic) IBOutlet UIScrollView *scrollView;
 @property (retain, nonatomic) IBOutlet UIButton *ib_showMenuControlPanel;
-
 @property (retain, nonatomic) IBOutlet UIView *viewCtrlButtons;
 @property (retain, nonatomic) IBOutlet UIPickerView *pickerHQOptions;
 @property (retain, nonatomic) IBOutlet UIButton *melodyButton;
