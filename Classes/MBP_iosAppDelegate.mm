@@ -48,11 +48,18 @@
     NSLog(@"names: %@",names);
     
     [[UINavigationBar appearance] setTintColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"back"]]];
+    
+    [[UINavigationBar appearance] setTitleTextAttributes: @{
+                                                            NSForegroundColorAttributeName: [UIColor colorWithRed:16/255.f green:16/255.f blue:16/255.f alpha:1],
+                                                            NSFontAttributeName: [UIFont fontWithName:@"HelveticaNeue-Thin" size:17.f]
+                                                            }];
+    
     [[UIBarButtonItem appearance] setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys:
                                                           [UIColor blackColor], NSForegroundColorAttributeName,
                                                           [UIFont fontWithName:@"HelveticaNeue-Light" size:17], NSFontAttributeName,
                                                           nil]
                                                 forState:UIControlStateNormal];
+    [[UILabel appearanceWhenContainedIn:[UITableViewHeaderFooterView class], nil] setFont:[UIFont fontWithName:@"HelveticaNeue-Light" size:17]];
     
     [window setRootViewController:viewController];
     [window makeKeyAndVisible];

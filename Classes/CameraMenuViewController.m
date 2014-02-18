@@ -45,10 +45,12 @@
     self.tableViewSettings.delegate = self;
     self.tableViewSettings.dataSource = self;
     
-    [self.btnRmoveCamera setBackgroundImage:[UIImage imageNamed:@"remove_camera"] forState:UIControlStateNormal];
-    [self.btnRmoveCamera setBackgroundImage:[UIImage imageNamed:@"remove_camera_pressed"] forState:UIControlEventTouchDown];
+    [self.btnRmoveCamera setBackgroundImage:[UIImage imageNamed:@"remove_camera"]
+                                   forState:UIControlStateNormal];
+    [self.btnRmoveCamera setBackgroundImage:[UIImage imageNamed:@"remove_camera_pressed"]
+                                   forState:UIControlEventTouchDown];
     
-    self.stringFW_Version = NSLocalizedStringWithDefaultValue(@"firmware_version",nil, [NSBundle mainBundle],
+    self.stringFW_Version = NSLocalizedStringWithDefaultValue(@"firmware_version", nil, [NSBundle mainBundle],
                                                    @"Firmware version", nil);
 }
 
@@ -57,7 +59,9 @@
     [super viewWillAppear:animated];
     self.navigationController.navigationBarHidden = NO;
     
-    [self.tableViewSettings reloadRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:0 inSection:0]] withRowAnimation:UITableViewRowAnimationAutomatic];
+    [self.tableViewSettings reloadRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:0
+                                                                                               inSection:0]]
+                                  withRowAnimation:UITableViewRowAnimationAutomatic];
 }
 
 - (IBAction)btnRemoveCameraTouchUpInsideAction:(id)sender
@@ -75,9 +79,9 @@
 
 - (void) showDialog:(int) dialogType
 {
-    NSString * ok = NSLocalizedStringWithDefaultValue(@"Ok",nil, [NSBundle mainBundle],
+    NSString * ok = NSLocalizedStringWithDefaultValue(@"Ok", nil, [NSBundle mainBundle],
                                                       @"Ok", nil);
-    NSString * cancel = NSLocalizedStringWithDefaultValue(@"Cancel",nil, [NSBundle mainBundle],
+    NSString * cancel = NSLocalizedStringWithDefaultValue(@"Cancel", nil, [NSBundle mainBundle],
                                                           @"Cancel", nil);
     
 	switch (dialogType) {
@@ -88,7 +92,7 @@
             
             if (deviceInLocal)
             {
-                NSString * msg = NSLocalizedStringWithDefaultValue(@"Confirm_remove_cam_local",nil, [NSBundle mainBundle],
+                NSString * msg = NSLocalizedStringWithDefaultValue(@"Confirm_remove_cam_local", nil, [NSBundle mainBundle],
                                                                    @"Please confirm that you want to remove this camera from your account. This action will also reset the camera to setup mode.", nil);
                 UIAlertView *alert = [[UIAlertView alloc]
                                       initWithTitle:@""
@@ -309,30 +313,32 @@
 {
 	NSLog(@"CameraMenuVC- removeCam success-- fatality");
     
-    //[self forceRelogin];
-	//[self.navigationController popViewControllerAnimated:YES];
-    [self.navigationController popToRootViewControllerAnimated:YES];
-    
-    [_cameraMenuDelegate sendStatus:AFTER_DEL_RELOGIN];
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 - (void) removeCameraFailedWithError:(NSDictionary *)errorResponse
 {
 	NSLog(@"CameraMenuVC - removeCam failed errorcode:");
-    [self.navigationController popToRootViewControllerAnimated:YES];
     
-    [_cameraMenuDelegate sendStatus:AFTER_DEL_RELOGIN];
+    [[[[UIAlertView alloc] initWithTitle:@"Remove Camera"
+                                 message:[errorResponse objectForKey:@"message"]
+                                delegate:self
+                       cancelButtonTitle:nil
+                       otherButtonTitles:@"OK",
+       nil] autorelease] show];
+    
 }
 
 -(void) removeCameraFailedServerUnreachable
 {
 	NSLog(@"CameraMenuVC - removeCam server unreachable");
-    //[self forceRelogin];
-    //[self.navigationController popViewControllerAnimated:YES];
     
-    [self.navigationController popToRootViewControllerAnimated:YES];
-    
-    [_cameraMenuDelegate sendStatus:AFTER_DEL_RELOGIN];
+    [[[[UIAlertView alloc] initWithTitle:@"Remove Camera"
+                                 message:@"Server is unreachable"
+                                delegate:self
+                       cancelButtonTitle:nil
+                       otherButtonTitles:@"OK",
+       nil] autorelease] show];
 }
 
 - (void)didReceiveMemoryWarning
