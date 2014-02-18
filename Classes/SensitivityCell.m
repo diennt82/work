@@ -6,7 +6,18 @@
 //  Copyright (c) 2013 Smart Panda Ltd. All rights reserved.
 //
 
+#define NUMBER_CIRCLE 5
+#define ALIGNMENT_LR 40
+
 #import "SensitivityCell.h"
+@interface SensitivityCell()
+
+@property (retain, nonatomic) IBOutlet UIImageView *imageViewCircleWhite;
+@property (retain, nonatomic) IBOutlet UIButton *btnSwitch;
+
+@property (retain, nonatomic) NSArray *imageViewCircleArray;
+
+@end
 
 @implementation SensitivityCell
 
@@ -15,7 +26,7 @@
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self) {
         // Initialization code
-        self.backgroundColor = [UIColor blackColor];
+        //self.backgroundColor = [UIColor blackColor];
     }
     return self;
 }
@@ -26,31 +37,78 @@
 
     // Configure the view for the selected state
 }
-- (IBAction)valueChangedSwitchAction:(id)sender
+
+- (void)drawRect:(CGRect)rect
 {
-    [_sensitivityCellDelegate reportSwitchValue:((UISwitch *)sender).isOn andRowIndex:_rowIndex];
+    [self.btnSwitch setImage:[UIImage imageNamed:@"settings_switch_off"] forState:UIControlStateNormal];
+    [self.btnSwitch setImage:[UIImage imageNamed:@"settings_switch_on"] forState:UIControlStateSelected];
+    [self.btnSwitch setImage:[UIImage imageNamed:@"settings_switch_on"] forState:UIControlStateHighlighted];
     
-    if (((UISwitch *)sender).isOn)
+    self.btnSwitch.selected = _switchValue;
+    
+    UIImageView *imageViewCone = (UIImageView *)[self viewWithTag:508];
+    
+    if (_rowIndex == 0)
     {
-        self.valueSlider.enabled = YES;
+        imageViewCone.hidden = NO;
     }
     else
     {
-        self.valueSlider.enabled = NO;
+        imageViewCone.hidden = YES;
     }
+    
+    self.imageViewCircleArray = [NSArray arrayWithObjects:[self viewWithTag:500], [self viewWithTag:501], [self viewWithTag:502], nil];
+    
+    UIImageView *imageViewLine = (UIImageView *)[self viewWithTag:509];
+    
+    UIImageView *imageView3 = (UIImageView *)[self viewWithTag:503];
+    imageView3.center = CGPointMake(imageView3.center.x, imageViewLine.center.y);
+    
+    UIImageView *imageView4 = (UIImageView *)[self viewWithTag:504];
+    imageView4.center = CGPointMake(imageView4.center.x, imageViewLine.center.y);
+    
+    for (UIImageView *imageView in _imageViewCircleArray)
+    {
+        imageView.userInteractionEnabled = _switchValue;
+        imageView.center = CGPointMake(imageView.center.x, imageViewLine.center.y);
+        UITapGestureRecognizer *tapGesture = [[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(singleTap:)] autorelease];
+        [imageView addGestureRecognizer:tapGesture];
+    }
+    
+    self.imageViewCircleWhite.center = ((UIImageView *)_imageViewCircleArray[_settingsValue]).center;
 }
 
-- (IBAction)valueChangedSlideAction:(id)sender
+- (void)singleTap: (UITapGestureRecognizer *)recognizer
 {
-    UISlider *aSlider = (UISlider *)sender;
+    NSInteger tempValue = recognizer.view.tag % 500;
     
-    [_sensitivityCellDelegate reportChangedSliderValue: aSlider.value andRowIndex: self.rowIndex];
+    if (_settingsValue != tempValue)
+    {
+        self.imageViewCircleWhite.transform = CGAffineTransformMakeTranslation(recognizer.view.center.x - _imageViewCircleWhite.center.x, 0);
+        self.settingsValue = tempValue;
+        
+        [_sensitivityCellDelegate reportChangedSettingsValue:_settingsValue atRow:_rowIndex];
+    }
+}
+- (IBAction)btnSwitchTouchUpInsideAction:(UIButton *)sender
+{
+    self.switchValue = !_switchValue;
+    sender.selected = _switchValue;
+    
+    for (UIImageView *imageView in _imageViewCircleArray)
+    {
+        imageView.userInteractionEnabled = _switchValue;
+    }
+    
+    [_sensitivityCellDelegate reportSwitchValue:_switchValue andRowIndex:_rowIndex];
 }
 
 - (void)dealloc {
     [_nameLabel release];
     [_valueSlider release];
     [_valueSwitch release];
+    [_imageViewCircleWhite release];
+    [_btnSwitch release];
     [super dealloc];
 }
 @end
