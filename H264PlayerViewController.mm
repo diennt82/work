@@ -263,6 +263,7 @@ double _ticks = 0;
     UIFont *font;
     UIColor *color;
     float marginBottomText, marginBottomButton, positionYOfBottomView;
+
     if (isiPhone5)
     {
         //for holdtotalk
@@ -271,7 +272,7 @@ double _ticks = 0;
         marginBottomText = 42;
         marginBottomButton = 81;
         positionYOfBottomView = 255;
-
+        
     }
     else if (isiPhone4)
     {
@@ -280,7 +281,7 @@ double _ticks = 0;
         color = [UIColor holdToTalkTextColor];
         marginBottomText = 25.0f;
         marginBottomButton = 48.0f;
-        positionYOfBottomView = 255;
+        positionYOfBottomView = self.ib_viewRecordTTT.frame.origin.y;
     }
     else
     {
@@ -292,7 +293,7 @@ double _ticks = 0;
         marginBottomButton = 81.0f * 2;
         positionYOfBottomView = 543.0f;
     }
-    
+
     
     [self.ib_labelTouchToTalk setFont:font];
     self.ib_labelTouchToTalk.textColor = color;
@@ -308,12 +309,12 @@ double _ticks = 0;
     
     //update position text recording
     CGPoint localPoint = self.ib_viewRecordTTT.frame.origin;
-    
+    CGPoint localPointTTT = self.ib_ViewTouchToTalk.frame.origin;
     NSString *recordingString = self.ib_labelRecordVideo.text;
     CGSize recordingSize = [recordingString sizeWithFont:font];
 
     float alignY = (SCREEN_HEIGHT - localPoint.y) - marginBottomText + self.ib_labelRecordVideo.bounds.size.height/2 - 3*recordingSize.height/2;
-    [self.ib_labelRecordVideo setCenter:CGPointMake(SCREEN_WIDTH/2, alignY)];
+
     
     //update position text hold to talk
     //CGPoint position = self.ib_viewRecordTTT.bounds.origin;
@@ -323,7 +324,17 @@ double _ticks = 0;
     
 //    float deltaY1 = (labelTouchToTalkSize.height + holdTTSize.height)/2.0;
     float alignY1 = (SCREEN_HEIGHT - positionYOfBottomView) - marginBottomText - holdTTSize.height + labelTouchToTalkSize.height/2 - holdTTSize.height/2;
-    [self.ib_labelTouchToTalk setCenter:CGPointMake(SCREEN_WIDTH/2, alignY1)];
+    if (isiOS7AndAbove)
+    {
+        [self.ib_labelRecordVideo setCenter:CGPointMake(SCREEN_WIDTH/2, alignY)];
+        [self.ib_labelTouchToTalk setCenter:CGPointMake(SCREEN_WIDTH/2, alignY1)];
+    }
+    else
+    {
+        [self.ib_labelRecordVideo setCenter:CGPointMake(SCREEN_WIDTH/2, alignY - 64)];
+        [self.ib_labelTouchToTalk setCenter:CGPointMake(SCREEN_WIDTH/2, alignY1 - 64)];
+    }
+
     
     // update position button
     //hold to talk
@@ -333,6 +344,11 @@ double _ticks = 0;
     float alignXButtonDirectionPad = SCREEN_WIDTH/2- directionPadSize.width/2;
     float alignYButton = SCREEN_HEIGHT - localPoint.y - marginBottomButton - holdTTButtonSize.height;
     float alignYButtonDirectionPad = (SCREEN_HEIGHT - localPoint.y - directionPadSize.height)/2;
+    if (!isiOS7AndAbove)
+    {
+        alignYButton = alignYButton - 64;
+        alignYButtonDirectionPad = alignYButtonDirectionPad - 44 - 64;
+    }
     [self.ib_buttonTouchToTalk setFrame:CGRectMake(alignXButton, alignYButton, holdTTButtonSize.width, holdTTButtonSize.height)];
     [self.ib_processRecordOrTakePicture setFrame:CGRectMake(alignXButton, alignYButton, holdTTButtonSize.width, holdTTButtonSize.height)];
     [_imgViewDrectionPad setFrame:CGRectMake(alignXButtonDirectionPad, alignYButtonDirectionPad + localPoint.y, directionPadSize.width, directionPadSize.height)];
@@ -430,31 +446,32 @@ double _ticks = 0;
                                                                          style:UIBarButtonItemStylePlain
                                                                         target:self
                                                                         action:@selector(prepareGoBackToCameraList:)];
-    [headerLogoButton setTintColor:[UIColor clearColor]];
-    
     self.navigationItem.leftBarButtonItem = headerLogoButton;
     
-    //update position of button hubble_back
-    UIButton *aButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    [aButton setImage:headerLogo forState:UIControlStateNormal];
-    if (isiPhone5)
+    if (isiOS7AndAbove)
     {
-        aButton.frame = CGRectMake(8.0,27.0,headerLogo.size.width,headerLogo.size.height);
+        [headerLogoButton setTintColor:[UIColor clearColor]];
+        //update position of button hubble_back
+        UIButton *aButton = [UIButton buttonWithType:UIButtonTypeCustom];
+        [aButton setImage:headerLogo forState:UIControlStateNormal];
+        if (isiPhone5)
+        {
+            aButton.frame = CGRectMake(8.0,27.0,headerLogo.size.width,headerLogo.size.height);
+        }
+        else if (isiPhone4)
+        {
+            aButton.frame = CGRectMake(8.0,0.0,headerLogo.size.width,headerLogo.size.height);
+        }
+        else
+        {
+            aButton.frame = CGRectMake(8.0,27.0,headerLogo.size.width,headerLogo.size.height);
+        }
+        
+        [aButton setContentMode:UIViewContentModeScaleAspectFit];
+        [aButton addTarget:self action:@selector(prepareGoBackToCameraList:) forControlEvents:UIControlEventTouchUpInside];
+        aButton.tag = 11;
+        [self.navigationController.view addSubview:aButton];
     }
-    else if (isiPhone4)
-    {
-        aButton.frame = CGRectMake(8.0,0.0,headerLogo.size.width,headerLogo.size.height);
-    }
-    else
-    {
-        aButton.frame = CGRectMake(8.0,27.0,headerLogo.size.width,headerLogo.size.height);
-    }
-    
-    [aButton setContentMode:UIViewContentModeScaleAspectFit];
-    [aButton addTarget:self action:@selector(prepareGoBackToCameraList:) forControlEvents:UIControlEventTouchUpInside];
-    aButton.tag = 11;
-    [self.navigationController.view addSubview:aButton];
-    
 }
 - (void) updateNavigationBarAndToolBar
 {
@@ -2802,6 +2819,8 @@ double _ticks = 0;
     UIFont *degreeFont;
     UIFont *temperatureFont;
     float positionYOfBottomView = self.ib_temperature.frame.origin.y;//240.0f;
+    if (!isiOS7AndAbove)
+        positionYOfBottomView = positionYOfBottomView - 44;
     if (isiPhone5)
     {
         degreeFont = [UIFont applyHubbleFontName:PN_LIGHT_FONT withSize:35];
@@ -3949,7 +3968,7 @@ double _ticks = 0;
     [self resetZooming];
     
     NSInteger deltaY = 0;
-    if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 7.0)
+    if (isiOS7AndAbove)
     {
         deltaY = HIGH_STATUS_BAR;
     }
@@ -4032,15 +4051,12 @@ double _ticks = 0;
             [[NSBundle mainBundle] loadNibNamed:@"H264PlayerViewController_ipad"
                                           owner:self
                                         options:nil];
-//            self.melodyViewController.view.frame = CGRectMake(0, 496, 768, 482);
-            self.melodyViewController.view.frame = CGRectMake(0, self.ib_ViewTouchToTalk.frame.origin.y, SCREEN_WIDTH, SCREEN_HEIGHT - self.ib_ViewTouchToTalk.frame.origin.y);
         }
         else
         {
             [[NSBundle mainBundle] loadNibNamed:@"H264PlayerViewController"
                                           owner:self
                                         options:nil];
-            self.melodyViewController.view.frame = CGRectMake(0, 240, SCREEN_WIDTH, SCREEN_HEIGHT - 240);
         }
         
         //portrait mode
@@ -4052,9 +4068,68 @@ double _ticks = 0;
         self.viewStopStreamingProgress.hidden = YES;
         
         CGFloat imageViewHeight = SCREEN_WIDTH * 9 / 16;
-        CGRect destRect = CGRectMake(0, 44 + deltaY, SCREEN_WIDTH, imageViewHeight);
-        self.scrollView.frame = destRect;
-        self.imageViewVideo.frame = CGRectMake(0, 0, SCREEN_WIDTH, imageViewHeight);
+        
+        if (isiOS7AndAbove)
+        {
+            CGRect destRect = CGRectMake(0, 44 + deltaY, SCREEN_WIDTH, imageViewHeight);
+            self.scrollView.frame = destRect;
+            self.imageViewVideo.frame = CGRectMake(0, 0, SCREEN_WIDTH, imageViewHeight);
+            self.viewCtrlButtons.frame = CGRectMake(0, imageViewHeight + 44 + deltaY, _viewCtrlButtons.frame.size.width, _viewCtrlButtons.frame.size.height);
+            self.melodyViewController.view.frame = CGRectMake(0, self.ib_ViewTouchToTalk.frame.origin.y, SCREEN_WIDTH, SCREEN_HEIGHT - self.ib_ViewTouchToTalk.frame.origin.y);
+            
+            
+            // Control display for TimelineVC
+            if (_timelineVC != nil)
+            {
+                CGFloat alignYTimeLine = self.ib_ViewTouchToTalk.frame.origin.y;
+                self.timelineVC.view.frame = CGRectMake(0, alignYTimeLine, SCREEN_WIDTH, SCREEN_HEIGHT - self.ib_ViewTouchToTalk.frame.origin.y);
+                self.timelineVC.view.hidden = NO;
+                [self.view addSubview:_timelineVC.view];
+                if (isLandScapeMode)
+                {
+                    self.timelineVC.tableView.contentInset = UIEdgeInsetsMake(0, 0, 275, 0);
+                    isLandScapeMode = NO;
+                }
+                else
+                {
+                    self.timelineVC.tableView.contentInset = UIEdgeInsetsMake(0, 0, 30, 0);
+                }
+            }
+            
+        }
+        else
+        {
+            CGRect destRect = CGRectMake(0, deltaY, SCREEN_WIDTH, imageViewHeight);
+            self.scrollView.frame = destRect;
+            self.imageViewVideo.frame = CGRectMake(0, -44, SCREEN_WIDTH, imageViewHeight);
+            self.viewCtrlButtons.frame = CGRectMake(0, imageViewHeight + deltaY, _viewCtrlButtons.frame.size.width, _viewCtrlButtons.frame.size.height);
+            self.melodyViewController.view.frame = CGRectMake(0, self.ib_ViewTouchToTalk.frame.origin.y - 30 - 44, SCREEN_WIDTH, SCREEN_HEIGHT - self.ib_ViewTouchToTalk.frame.origin.y);
+            
+            
+            // Control display for TimelineVC
+            if (_timelineVC != nil)
+            {
+                CGFloat alignYTimeLine = self.ib_ViewTouchToTalk.frame.origin.y - 64;
+
+                if (isLandScapeMode)
+                {
+                    self.timelineVC.view.frame = CGRectMake(0, alignYTimeLine, SCREEN_WIDTH, SCREEN_HEIGHT - alignYTimeLine);
+                    self.timelineVC.view.hidden = NO;
+                    [self.view addSubview:_timelineVC.view];
+                    self.timelineVC.tableView.contentInset = UIEdgeInsetsMake(0, 0, 250, 0);
+                    isLandScapeMode = NO;
+                }
+                else
+                {
+                    self.timelineVC.view.frame = CGRectMake(0, alignYTimeLine, SCREEN_WIDTH, SCREEN_HEIGHT - alignYTimeLine + 64);
+                    self.timelineVC.view.hidden = NO;
+                    [self.view addSubview:_timelineVC.view];
+                    self.timelineVC.tableView.contentInset = UIEdgeInsetsMake(0, 0, 0, 0);
+                }
+            }
+            
+        }
+
         if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
         {
             self.activityIndicator.frame = CGRectMake((SCREEN_WIDTH - INDICATOR_SIZE)/2, imageViewHeight/2 + 44 + deltaY , INDICATOR_SIZE, INDICATOR_SIZE);
@@ -4062,31 +4137,11 @@ double _ticks = 0;
         else
         {
         }
-
-        self.viewCtrlButtons.frame = CGRectMake(0, imageViewHeight + 44 + deltaY, _viewCtrlButtons.frame.size.width, _viewCtrlButtons.frame.size.height);
         self.viewStopStreamingProgress.frame = CGRectMake((SCREEN_WIDTH - INDICATOR_SIZE)/2, (SCREEN_HEIGHT - INDICATOR_SIZE)/2 , INDICATOR_SIZE, INDICATOR_SIZE);
-        
-        // Control display for TimelineVC
-        if (_timelineVC != nil)
-        {
-            CGFloat alignYTimeLine = self.ib_ViewTouchToTalk.frame.origin.y;
-            self.timelineVC.view.frame = CGRectMake(0, alignYTimeLine, SCREEN_WIDTH, SCREEN_HEIGHT - self.ib_ViewTouchToTalk.frame.origin.y);
-//            self.timelineVC.tableView.frame = CGRectMake(0, alignYTimeLine, SCREEN_WIDTH, SCREEN_HEIGHT - self.ib_ViewTouchToTalk.frame.origin.y);
-            self.timelineVC.view.hidden = NO;
-            [self.view addSubview:_timelineVC.view];
-            if (isLandScapeMode)
-            {
-                self.timelineVC.tableView.contentInset = UIEdgeInsetsMake(0, 0, 275, 0);
-                isLandScapeMode = NO;
-            }
-            else
-            {
-                self.timelineVC.tableView.contentInset = UIEdgeInsetsMake(0, 0, 30, 0);
-            }
-        }
         
         //add hubble_logo_back
         [self addHubbleLogo_Back];
+
 	}
     
     // Set position for Image Knob & Handle
@@ -5386,6 +5441,7 @@ double _ticks = 0;
     if (_isRecordInterface && _isProcessRecording)
     {
         self.ib_labelRecordVideo.text = timeToDisplay;
+        [self applyFont];
     }
     else
     {

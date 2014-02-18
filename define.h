@@ -15,6 +15,7 @@
 #define SCREEN_HEIGHT [[UIScreen mainScreen] bounds].size.height
 
 //define macro
+#define isiOS7AndAbove ([[[UIDevice currentDevice] systemVersion] floatValue] >= 7.0)?YES:NO
 #define isiPhone5  ([[UIScreen mainScreen] bounds].size.height == 568)?YES:NO
 #define isiPhone4  ([[UIScreen mainScreen] bounds].size.height == 480)?YES:NO
 
