@@ -263,36 +263,43 @@ double _ticks = 0;
     UIFont *font;
     UIColor *color;
     float marginBottomText, marginBottomButton, positionYOfBottomView;
-    if (isiPhone5)
+    if (!isiOS7AndAbove)
     {
-        //for holdtotalk
-        font = [UIFont applyHubbleFontName:PN_REGULAR_FONT withSize:19];
-        color = [UIColor holdToTalkTextColor];
-        marginBottomText = 42;
-        marginBottomButton = 81;
-        positionYOfBottomView = 255;
-
-    }
-    else if (isiPhone4)
+        marginBottomText = 25.0f  + 44;
+        marginBottomButton = 48.0f + 44;
+        positionYOfBottomView = 255 - 44;
+    } else
     {
-        //for holdtotalk
-        font = [UIFont applyHubbleFontName:PN_REGULAR_FONT withSize:17];
-        color = [UIColor holdToTalkTextColor];
-        marginBottomText = 25.0f;
-        marginBottomButton = 48.0f;
-        positionYOfBottomView = 255;
+        if (isiPhone5)
+        {
+            //for holdtotalk
+            font = [UIFont applyHubbleFontName:PN_REGULAR_FONT withSize:19];
+            color = [UIColor holdToTalkTextColor];
+            marginBottomText = 42;
+            marginBottomButton = 81;
+            positionYOfBottomView = 255;
+            
+        }
+        else if (isiPhone4)
+        {
+            //for holdtotalk
+            font = [UIFont applyHubbleFontName:PN_REGULAR_FONT withSize:17];
+            color = [UIColor holdToTalkTextColor];
+            marginBottomText = 25.0f;
+            marginBottomButton = 48.0f;
+            positionYOfBottomView = 255;
+        }
+        else
+        {
+            //iPad
+            //for holdtotalk
+            font = [UIFont applyHubbleFontName:PN_REGULAR_FONT withSize:50];
+            color = [UIColor holdToTalkTextColor];
+            marginBottomText = 42.0f * 2;
+            marginBottomButton = 81.0f * 2;
+            positionYOfBottomView = 543.0f;
+        }
     }
-    else
-    {
-        //iPad
-        //for holdtotalk
-        font = [UIFont applyHubbleFontName:PN_REGULAR_FONT withSize:50];
-        color = [UIColor holdToTalkTextColor];
-        marginBottomText = 42.0f * 2;
-        marginBottomButton = 81.0f * 2;
-        positionYOfBottomView = 543.0f;
-    }
-    
     
     [self.ib_labelTouchToTalk setFont:font];
     self.ib_labelTouchToTalk.textColor = color;
@@ -333,6 +340,11 @@ double _ticks = 0;
     float alignXButtonDirectionPad = SCREEN_WIDTH/2- directionPadSize.width/2;
     float alignYButton = SCREEN_HEIGHT - localPoint.y - marginBottomButton - holdTTButtonSize.height;
     float alignYButtonDirectionPad = (SCREEN_HEIGHT - localPoint.y - directionPadSize.height)/2;
+    if (!isiOS7AndAbove)
+    {
+        alignYButton = alignYButton - 44;
+        alignYButtonDirectionPad = alignYButtonDirectionPad - 44;
+    }
     [self.ib_buttonTouchToTalk setFrame:CGRectMake(alignXButton, alignYButton, holdTTButtonSize.width, holdTTButtonSize.height)];
     [self.ib_processRecordOrTakePicture setFrame:CGRectMake(alignXButton, alignYButton, holdTTButtonSize.width, holdTTButtonSize.height)];
     [_imgViewDrectionPad setFrame:CGRectMake(alignXButtonDirectionPad, alignYButtonDirectionPad + localPoint.y, directionPadSize.width, directionPadSize.height)];
@@ -3949,7 +3961,7 @@ double _ticks = 0;
     [self resetZooming];
     
     NSInteger deltaY = 0;
-    if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 7.0)
+    if (isiOS7AndAbove)
     {
         deltaY = HIGH_STATUS_BAR;
     }
