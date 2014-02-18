@@ -13,6 +13,7 @@
 #import "SchedulerCell.h"
 #import "SchedulerViewController.h"
 #import "SchedulingViewController.h"
+#import "SensitivityTemperatureCell.h"
 
 @interface SettingsViewController () <SensitivityCellDelegate, SchedulerCellDelegate>
 {
@@ -298,6 +299,11 @@
         {
             return 120;
         }
+        
+        if (indexPath.row == 3)
+        {
+            return 227;
+        }
     }
     else if(indexPath.section == 2)
     {
@@ -489,6 +495,30 @@
                     {
                         cell.nameLabel.text = @"Sound";
                     }
+                    
+                    return cell;
+                }
+                    break;
+                    
+                case 3:
+                {
+                    static NSString *CellIdentifier = @"SensitivityTemperatureCell";
+                    SensitivityTemperatureCell *cell = [self.tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+                    
+                    NSArray *objects = [[NSBundle mainBundle] loadNibNamed:@"SensitivityTemperatureCell" owner:nil options:nil];
+                    
+                    for (id curObj in objects)
+                    {
+                        if([curObj isKindOfClass:[SensitivityTemperatureCell class]])
+                        {
+                            cell = (SensitivityTemperatureCell *)curObj;
+                            break;
+                        }
+                    }
+                    
+                    cell.isSwitchOnLeft = YES;
+                    cell.isSwitchOnRight = NO;
+                    cell.tempValueRight = 20.f;
                     
                     return cell;
                 }
@@ -712,7 +742,7 @@
             {
                 if (numOfRows[indexPath.section] == 1)
                 {
-                    numOfRows[indexPath.section] = 3;
+                    numOfRows[indexPath.section] = 4;
                 }
                 else
                 {
