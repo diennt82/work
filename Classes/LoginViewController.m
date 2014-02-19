@@ -81,7 +81,7 @@
 	//load user/pass
 	NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
 	//can be user email or user name here --
-	NSString * old_usr = (NSString *) [userDefaults objectForKey:@"PortalUsername"];
+	NSString * old_usr = (NSString *) [userDefaults objectForKey:@"PortalUseremail"];
 	NSString * old_pass = (NSString *) [userDefaults objectForKey:@"PortalPassword"];
     self.stringUserEmail  = (NSString*) [userDefaults objectForKey:@"PortalUseremail"];
     
@@ -114,12 +114,18 @@
         }
         else
         {
+            NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+            [userDefaults removeObjectForKey:@"string_Camera_Mac_Being_Viewed"];
+            [userDefaults synchronize];
             self.viewProgress.hidden = YES;
             NSLog(@" NO LOGIN");
         }
 	}
     else
     {
+        NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+        [userDefaults removeObjectForKey:@"string_Camera_Mac_Being_Viewed"];
+        [userDefaults synchronize];
         self.viewProgress.hidden = YES;
         self.buttonEnter.enabled = NO;
     }
@@ -166,8 +172,7 @@
 - (IBAction)buttnEnterTouchUpInsideAction:(id)sender
 {
     self.buttonEnterPressedFlag = YES;
-    [self.tfEmail resignFirstResponder];
-    [self.tfPassword resignFirstResponder];
+    [self.view endEditing:YES];
     
     
     self.stringUsername = [NSString stringWithString:_tfEmail.text];

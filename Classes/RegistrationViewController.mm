@@ -18,6 +18,7 @@
 @property (retain, nonatomic) IBOutlet UITextField *tfConfirmPassword;
 @property (retain, nonatomic) IBOutlet UIButton *btnCheckbox;
 @property (retain, nonatomic) IBOutlet UIButton *btnCreate;
+@property (retain, nonatomic) IBOutlet UIView *viewProgress;
 
 @property (retain, nonatomic) NSString *stringUsername;
 @property (retain, nonatomic) NSString *stringPassword;
@@ -54,6 +55,20 @@
     self.tfEmail.delegate = self;
     self.tfPassword.delegate = self;
     self.tfConfirmPassword.delegate =self;
+}
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+    {
+        UIButton *btnCheckbox = (UIButton *)[self.view viewWithTag:501];
+        
+        btnCheckbox.frame = CGRectMake(_btnCreate.frame.origin.x - 6, btnCheckbox.frame.origin.y, btnCheckbox.frame.size.width, btnCheckbox.frame.size.height);
+        UILabel *lblTermServices = (UILabel *)[self.view viewWithTag:502];
+        lblTermServices.frame = CGRectMake(btnCheckbox.frame.origin.x + btnCheckbox.frame.size.width, lblTermServices.frame.origin.y, lblTermServices.frame.size.width, lblTermServices.frame.size.height);
+    }
 }
 
 #pragma mark - Action
@@ -97,8 +112,15 @@
 
 - (void)animateTextField: (UITextField *)textField withUp:(BOOL) up
 {
-    const int movementDistance = 80; // tweak as needed
+    //const int movementDistance = 80; // tweak as needed
     const float movementDuration = 0.3f; // tweak as needed
+    
+    NSInteger movementDistance = 216; // tweak as needed
+    
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+    {
+        movementDistance = 230;
+    }
     
     int movement = (up ? -movementDistance : movementDistance);
     
@@ -192,19 +214,20 @@
     }
     else //Good info now..
     {
+        [self.view endEditing:YES];
+        [self.view addSubview:_viewProgress];
         //Register user ...
-        self.stringEmail     = _tfEmail.text;
-        //self.stringUsername  = [_stringEmail substringToIndex:[_stringEmail rangeOfString:@"@"].location];
-        self.stringUsername = [_stringEmail stringByReplacingOccurrencesOfString:@"@" withString:@"_"];
-        self.stringPassword  = _tfPassword.text;
+        self.stringEmail      = _tfEmail.text;
+        self.stringUsername   = [_stringEmail stringByReplacingOccurrencesOfString:@"@" withString:@"_"];
+        self.stringPassword   = _tfPassword.text;
         self.stringCPassword  = _tfConfirmPassword.text;
 
         NSLog(@"RegistrationVC - Start registration");
         
         BMS_JSON_Communication *jsonComm = [[[BMS_JSON_Communication alloc] initWithObject:self
-                                                                                  Selector:@selector(regSuccessWithResponse:)
-                                                                              FailSelector:@selector(regFailedWithError:)
-                                                                                 ServerErr:@selector(regFailedServerUnreachable)] autorelease];
+                                                                                  Selector:@selector(registerSuccessWithResponse:)
+                                                                              FailSelector:@selector(registerFailedWithError:)
+                                                                                 ServerErr:@selector(registerFailedServerUnreachable)] autorelease];
         [jsonComm registerAccountWithUsername:_stringUsername
                                      andEmail:_stringEmail
                                   andPassword:_stringPassword
@@ -221,6 +244,12 @@
     }
     
     NSArray * array = [email componentsSeparatedByString:@"@"];
+    
+    if (array.count > 2) //qwe@uyt.uyt@dd - Too many @ characters
+    {
+        return NO;
+    }
+    
     NSString * domain = [array objectAtIndex:1];
     NSLog(@"Domain is : %@",domain);
     
@@ -288,8 +317,10 @@
 
 #pragma mark - JSON call back
 
-- (void) regSuccessWithResponse:(NSDictionary *) responseData
+- (void)registerSuccessWithResponse:(NSDictionary *)responseData
 {
+    [self.viewProgress removeFromSuperview];
+    
     //Store user/pass for later use
 	NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     
@@ -321,8 +352,10 @@
     [step10ViewController release];
 }
 
-- (void) regFailedWithError:(NSDictionary *) error_response
+- (void)registerFailedWithError:(NSDictionary *)error_response
 {
+    [self.viewProgress removeFromSuperview];
+    
     NSString * ok = NSLocalizedStringWithDefaultValue(@"Ok",nil, [NSBundle mainBundle],
                                                       @"Ok", nil);
     NSString * title = NSLocalizedStringWithDefaultValue(@"Create_Account_Failed",nil, [NSBundle mainBundle],
@@ -337,9 +370,9 @@
     [_alert release];
 }
 
-- (void) regFailedServerUnreachable
+- (void)registerFailedServerUnreachable
 {
-	NSLog(@"register failed : server unreachable");
+    [self.viewProgress removeFromSuperview];
 	
     NSString * msg1 = NSLocalizedStringWithDefaultValue(@"Registration_Error",nil, [NSBundle mainBundle],
                                                         @"Registration Error" , nil);
@@ -373,6 +406,7 @@
     [_tfConfirmPassword release];
     [_btnCheckbox release];
     [_btnCreate release];
+    [_viewProgress release];
     [super dealloc];
 }
 @end

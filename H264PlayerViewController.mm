@@ -1963,7 +1963,7 @@ double _ticks = 0;
     
     self.selectedChannel.profile.isSelected = FALSE;
     
-    [self.navigationController popToRootViewControllerAnimated:NO];
+    [self.navigationController popToRootViewControllerAnimated:YES];
 }
 
 -(void) cleanUpDirectionTimers
