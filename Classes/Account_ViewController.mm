@@ -16,6 +16,7 @@
 
 @property (retain, nonatomic) IBOutlet UITableViewCell *tableViewCellChangePassword;
 @property (nonatomic) BOOL enabledSTUN;
+@property (nonatomic) NSInteger screenWidth;
 
 @end
 
@@ -46,11 +47,14 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
     
-    [self loadUserData];
-    self.enabledSTUN = FALSE;
-    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-    [userDefaults setBool:_enabledSTUN forKey:@"enabled_stun"];
-    [userDefaults synchronize];
+    //[self loadUserData];
+    self.screenWidth = [UIScreen mainScreen].bounds.size.width;
+    if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 7)
+    {
+        UILabel *lblVersion = (UILabel *)[self.view viewWithTag:559];
+        lblVersion.frame = CGRectMake(lblVersion.frame.origin.x, lblVersion.frame.origin.y - 44, lblVersion.frame.size.width, lblVersion.frame.size.height);
+        lblVersion.text = [NSString stringWithFormat:@"hubble v%@", [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"]];
+    }
 }
 
 - (void)viewDidUnload
@@ -73,16 +77,12 @@
     [super viewWillAppear:animated];
     
     NSLog(@"AccountVC -viewWillAppear --");
-    if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 7) {
-        [self.navigationController setNavigationBarHidden:NO];
-    } else {
-        [self.navigationController setNavigationBarHidden:YES];
-    }
-    UIInterfaceOrientation infOrientation = [UIApplication sharedApplication].statusBarOrientation;
+    
+    //UIInterfaceOrientation infOrientation = [UIApplication sharedApplication].statusBarOrientation;
     
     self.navigationController.navigationBarHidden = YES;
     
-	[self adjustViewsForOrientation:infOrientation];
+	//[self adjustViewsForOrientation:infOrientation];
     [self loadUserData];
     
 }
@@ -97,12 +97,12 @@
     UITextField * _user  =  (UITextField *) [userEmailCell viewWithTag:1];
     _user.text = user_email;
     
-    UITextField * _version = (UITextField *) [versionCell viewWithTag:1];
+    //UITextField * _version = (UITextField *) [versionCell viewWithTag:1];
     
-    NSString *version = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
+    //NSString *version = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
     
     //version = [NSString stringWithFormat:msg,version];
-    _version.text = version;
+   // _version.text = version;
 }
 
 #if 1
@@ -277,14 +277,14 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    return 3;
+    return 2;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     if (section == 0)
     {
-        return 4;
+        return 3;
     }
     else if (section == 1)
     {
@@ -310,22 +310,17 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (indexPath.row == 3)
-    {
-        return 60;
-    }
-    
     return 45;
 }
 
 - (BOOL)tableView:(UITableView *)tableView shouldHighlightRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (indexPath.section == 2)
+    if (indexPath.section == 0 && indexPath.row == 2)
     {
-        return NO;
+        return YES;
     }
     
-    return YES;
+    return NO;
 }
 
 - (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
@@ -340,10 +335,11 @@
         }
     }
     
-    UIView *lineView = [[[UIView alloc] initWithFrame:CGRectMake(0, cell.contentView.frame.size.height - 0.5f, cell.contentView.frame.size.width, 0.5f)] autorelease];
+    UIView *lineView = [[[UIView alloc] initWithFrame:CGRectMake(0, cell.contentView.frame.size.height - 0.5f, _screenWidth, 0.5f)] autorelease];
     if (indexPath.row == 3)
     {
-        lineView.frame = CGRectMake(0, 59.5f, cell.contentView.frame.size.width, 0.5f);
+        cell.textLabel.font = [UIFont fontWithName:@"HelveticaNeue-Thin" size:17];
+        cell.textLabel.textColor = [UIColor colorWithRed:(128/255.0) green:(128/255.0) blue:(128/255.0) alpha:1];
     }
     
     lineView.backgroundColor = [UIColor colorWithRed:195/255.0 green:195/255.0 blue:195/255.0 alpha:1];
@@ -370,11 +366,6 @@
         {
             return _tableViewCellChangePassword;
         }
-        
-        if (indexPath.row == APPVERSION_INDEX)
-        {
-            return versionCell;
-        }
         else
         {
             static NSString *CellIdentifier = @"Cell";
@@ -386,7 +377,6 @@
             // Configure the cell...
             
             cell.textLabel.text = @"Logout";
-            cell.textLabel.textColor = [UIColor blueColor];
             
             return cell;
         }
@@ -457,7 +447,8 @@
 {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
-    if (indexPath.row == 3)
+    if (indexPath.section == 0 &&
+        indexPath.row == 2)
     {
         [self userLogout];
     }
