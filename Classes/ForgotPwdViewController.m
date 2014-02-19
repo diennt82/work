@@ -58,6 +58,12 @@
     [userEmailTF becomeFirstResponder];
 }
 
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [userEmailTF resignFirstResponder];
+    [super viewWillDisappear:animated];
+}
+
 - (void)viewDidUnload
 {
     [super viewDidUnload];
