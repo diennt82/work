@@ -7,7 +7,7 @@
 //
 
 #import "ScrollHorizontalMenu.h"
-
+#import "define.h"
 
 #define kButtonBaseTag 10000
 #define kLeftOffset 40
@@ -31,10 +31,10 @@
     self.alwaysBounceVertical = NO;
     self.showsHorizontalScrollIndicator = NO;
     self.showsVerticalScrollIndicator = NO;
-    [self reloadData];
+    [self reloadData:NO];
 }
 
--(void) reloadData
+-(void) reloadData:(BOOL)isLand
 {
     NSArray *viewsToRemove = [self subviews];
 	for (UIView *v in viewsToRemove) {
@@ -48,18 +48,27 @@
     int buttonWidth;
     NSInteger paddingBetweenButton;
     
-    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+    if (isLand)
     {
-        marginLR = kLeftOffset + 60; //padding left and right = 100
-        xPos = kLeftOffset + 40; //
-        buttonWidth = kButtonSize + 20; //60 for iPad
-    }
-    else
-    {
-        marginLR = kLeftOffset_iPhone;
-        xPos = kLeftOffset_iPhone;
+        marginLR = 0;
+        xPos = 0;
         buttonWidth = kButtonSize_iPhone;
-        paddingBetweenButton = 14;
+        paddingBetweenButton = kPaddingBetweenButton - 5;
+    } else
+    {
+        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+        {
+            marginLR = kLeftOffset + 60; //padding left and right = 100
+            xPos = kLeftOffset + 40; //
+            buttonWidth = kButtonSize + 20; //60 for iPad
+        }
+        else
+        {
+            marginLR = kLeftOffset_iPhone;
+            xPos = kLeftOffset_iPhone;
+            buttonWidth = kButtonSize_iPhone;
+            paddingBetweenButton = kPaddingBetweenButton;
+        }
     }
     
     // This is SharedCam, the menu has 3 items
@@ -84,7 +93,7 @@
         customButton.frame = CGRectMake(xPos, 0, buttonWidth, buttonWidth);
         
         xPos += buttonWidth;
-        xPos += kPaddingBetweenButton;
+        xPos += paddingBetweenButton;
         [self addSubview:customButton];
     }
     
@@ -123,6 +132,11 @@
     [self.itemSelectedDelegate horizMenu:self itemSelectedAtIndex:button.tag - kButtonBaseTag];
 }
 
+- (void) willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
+{
+	NSLog(@"abc");
+    
+}
 
 - (void)dealloc
 {

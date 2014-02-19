@@ -16,10 +16,10 @@
 
 @end
 
-@interface MelodyViewController : UIViewController {
-
+@interface MelodyViewController : UIViewController <UITableViewDataSource, UITableViewDelegate> {
+    UITableView *_melodyTableView;
 }
-
+@property (retain, nonatomic) IBOutlet UITableView *melodyTableView;
 @property (nonatomic) NSInteger melodyIndex;
 @property (retain, nonatomic) CamChannel *selectedChannel;
 @property (nonatomic, assign) id<MelodyVCDelegate> melodyVcDelegate;

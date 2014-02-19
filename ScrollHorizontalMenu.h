@@ -34,13 +34,12 @@
     id <ScrollHorizontalMenuDataSource> dataSource;
     id <ScrollHorizontalMenuDelegate> itemSelectedDelegate;
 }
-
 @property (nonatomic, retain) NSMutableArray *imageMenu;
 @property (nonatomic, retain) UIImage *selectedImage;
 @property (nonatomic, assign) IBOutlet id <ScrollHorizontalMenuDelegate> itemSelectedDelegate;
 @property (nonatomic, retain) IBOutlet id <ScrollHorizontalMenuDataSource> dataSource;
 @property (nonatomic, assign) int itemCount;
 
--(void) reloadData;
+-(void) reloadData:(BOOL)isLand;
 -(void) setSelectedIndex:(int) index animated:(BOOL) animated;
 @end

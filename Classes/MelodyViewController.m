@@ -12,14 +12,13 @@
 #import <MonitorCommunication/MonitorCommunication.h>
 #import "define.h"
 
-@interface MelodyViewController () <UITableViewDataSource, UITableViewDelegate>
+@interface MelodyViewController ()
 {
     NSArray* _melodies;
     BOOL valueMelodiesMap[6];
     UIFont *semiBoldFont, *regularFont;
 }
 
-@property (retain, nonatomic) IBOutlet UITableView *melodyTableView;
 @property (retain, nonatomic) IBOutlet UIBarButtonItem *melodyTitle;
 @property (retain, nonatomic) IBOutlet UISwitch *musicSwitch;
 
@@ -257,6 +256,10 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    if (isPhoneLandscapeMode)
+    {
+        return 33;
+    }
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
     {
         return 60;
