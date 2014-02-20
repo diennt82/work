@@ -30,6 +30,7 @@
 @property (nonatomic) BOOL isEventAlready;
 @property (nonatomic) BOOL isLoading;
 @property (nonatomic, retain) NSTimer *timerRefreshData;
+@property (nonatomic) BOOL is12hr;
 
 @end
 
@@ -131,6 +132,7 @@
     
     self.stringIntelligentMessage = @"Loading...";
     self.isLoading = TRUE;
+    self.is12hr = [[NSUserDefaults standardUserDefaults] boolForKey:@"IS_12_HR"];
     //self.tableView.scrollIndicatorInsets = UIEdgeInsetsMake(64, 0, 44, 0);
 #endif
     
@@ -253,7 +255,15 @@
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
     
     // Set the dateFormatter format
-    dateFormatter.dateFormat = @"HH:mm";
+    
+    if (_is12hr)
+    {
+        dateFormatter.dateFormat = @"HH:mm a";
+    }
+    else
+    {
+        dateFormatter.dateFormat = @"HH:mm";
+    }
     self.stringCurrentDate = [dateFormatter stringFromDate:currentDate];
     
     // Get the date time in NSString
@@ -418,7 +428,15 @@
                 
                 NSDateFormatter* df_local = [[NSDateFormatter alloc] init];
                 [df_local setTimeZone:[NSTimeZone localTimeZone]];
-                df_local.dateFormat = @"yyyy-MM-dd HH:mm:ss";
+                
+                if (_is12hr)
+                {
+                    df_local.dateFormat = @"yyyy-MM-dd HH:mm:ss a";
+                }
+                else
+                {
+                    df_local.dateFormat = @"yyyy-MM-dd HH:mm:ss";
+                }
                 
                 self.stringIntelligentMessage = [NSString stringWithFormat:@"Monitor is offline since %@", [df_local stringFromDate:updateDate]];
                 [df_local release];
@@ -736,9 +754,18 @@
         
         NSDateFormatter* df_local = [[NSDateFormatter alloc] init];
         [df_local setTimeZone:[NSTimeZone localTimeZone]];
-        df_local.dateFormat = @"HH:mm";
+        
+        if (_is12hr)
+        {
+            df_local.dateFormat = @"hh:mm a";
+        }
+        else
+        {
+            df_local.dateFormat = @"HH:mm";
+        }
         
         cell.eventTimeLabel.text = [df_local stringFromDate:eventDate];
+        
         [df_local release];
         
         //NSLog(@"%@, %@", [dateFormater stringFromDate:eventDate], [NSTimeZone localTimeZone]);

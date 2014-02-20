@@ -75,8 +75,8 @@
         numOfRows[i] = 1;
     }
     
-    valueGeneralSettings[0] = FALSE;
-    valueGeneralSettings[1] = FALSE;
+    valueGeneralSettings[0] = [[NSUserDefaults standardUserDefaults] boolForKey:@"IS_12_HR"];
+    valueGeneralSettings[1] = [[NSUserDefaults standardUserDefaults] boolForKey:@"IS_FAHRENHEIT"];
     
     valueSettings[0] = 0;
     valueSettings[1] = 1;
@@ -223,11 +223,18 @@
 - (void)clockValueChanged:(BOOL)is12hr
 {
     valueGeneralSettings[0] = is12hr;
+    
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    [userDefaults setBool:is12hr forKey:@"IS_12_HR"];
+    [userDefaults synchronize];
 }
 
 - (void)temperatureValueChanged:(BOOL)isFahrenheit
 {
     valueGeneralSettings[1] = isFahrenheit;
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    [userDefaults setBool:isFahrenheit forKey:@"IS_FAHRENHEIT"];
+    [userDefaults synchronize];
 }
 
 #pragma mark - Sensitivity deletate

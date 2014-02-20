@@ -74,6 +74,7 @@
 @property (nonatomic, retain) NSMutableArray *bonjourList;
 @property (nonatomic) BOOL scanAgain;
 @property (nonatomic) BOOL isSharedCam;
+@property (nonatomic) BOOL isFahrenheit;
 
 - (void)centerScrollViewContents;
 - (void)scrollViewDoubleTapped:(UITapGestureRecognizer*)recognizer;
@@ -242,6 +243,8 @@ double _ticks = 0;
     self.selectedItemMenu = -1;
     [self updateBottomView];
     
+    self.isFahrenheit = [[NSUserDefaults standardUserDefaults] boolForKey:@"IS_FAHRENHEIT"];
+    
     [self becomeActive];
     [self hideControlMenu];
     
@@ -309,7 +312,7 @@ double _ticks = 0;
     
     //update position text recording
     CGPoint localPoint = self.ib_viewRecordTTT.frame.origin;
-    CGPoint localPointTTT = self.ib_ViewTouchToTalk.frame.origin;
+    //CGPoint localPointTTT = self.ib_ViewTouchToTalk.frame.origin;
     NSString *recordingString = self.ib_labelRecordVideo.text;
     CGSize recordingSize = [recordingString sizeWithFont:font];
 
@@ -2807,13 +2810,22 @@ double _ticks = 0;
     // Update UI
     // start
     [self.ib_temperature.subviews makeObjectsPerformSelector: @selector(removeFromSuperview)];
-    NSString *stringTemperature = [NSString stringWithFormat:@"%d", (int)roundf([temperature floatValue])];
     
     UILabel *degreeCelsius = [[UILabel alloc] init];
     degreeCelsius.backgroundColor=[UIColor clearColor];
     degreeCelsius.textColor=[UIColor temperatureTextColor];
     degreeCelsius.textAlignment = NSTextAlignmentLeft;
     NSString *degreeCel = @"°C";
+    
+    CGFloat tempValue = [temperature floatValue];
+    
+    if (_isFahrenheit)
+    {
+        tempValue = (tempValue * 9 / 5.f) + 32;
+        degreeCel = @"°F";
+    }
+    
+    NSString *stringTemperature = [NSString stringWithFormat:@"%ld", lroundf(tempValue)];
     degreeCelsius.text= degreeCel;
     
     UIFont *degreeFont;
