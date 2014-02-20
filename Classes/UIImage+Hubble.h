@@ -24,4 +24,9 @@
 + (UIImage *)imageTakePhotoPressed;
 + (UIImage *)imageVideoStop;
 + (UIImage *)imageVideoStopPressed;
++ (UIImage *)imageCameraActionPlay;
++ (UIImage *)imageCameraActionPlayPressed;
++ (UIImage *)imageCameraActionPause;
++ (UIImage *)imageCameraActionPausePressed;
+
 @end

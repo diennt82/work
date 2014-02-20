@@ -2877,7 +2877,7 @@ double _ticks = 0;
         
         
         CGFloat widthString = stringBoundingBox.width;
-        CGFloat alignX = (self.ib_temperature.bounds.size.width + widthString)/2 + 3;
+        CGFloat alignX = (self.ib_temperature.bounds.size.width + widthString)/2;
         [degreeCelsius setFrame:CGRectMake(alignX, 5, degreeCelBoundingBox.width, degreeCelBoundingBox.height)];
         [self.ib_temperature addSubview:degreeCelsius];
         

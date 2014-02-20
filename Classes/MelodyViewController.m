@@ -236,19 +236,21 @@
     
     // Configure the cell...
     cell.textLabel.text = (NSString *) [_melodies objectAtIndex:indexPath.section];
-    cell.backgroundColor = [UIColor whiteColor];
+    cell.backgroundColor = [UIColor clearColor];
     
     //update font
     cell.textLabel.textColor = [UIColor blackColor];
     if (valueMelodiesMap[indexPath.section] == TRUE)
     {
         cell.textLabel.font = semiBoldFont;
-        cell.imageView.image = [UIImage imageNamed:@"camera_action_pause.png"];
+//        cell.imageView.image = [UIImage imageNamed:@"camera_action_pause.png"];
+        cell.imageView.image = [UIImage imageCameraActionPause];
     }
     else
     {
         cell.textLabel.font = regularFont;
-        cell.imageView.image = [UIImage imageNamed:@"camera_action_play.png"];
+//        cell.imageView.image = [UIImage imageNamed:@"camera_action_play.png"];
+        cell.imageView.image = [UIImage imageCameraActionPlay];
     }
     
     return cell;

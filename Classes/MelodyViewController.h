@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 #import <CameraScanner/CameraScanner.h>
 #import "UIFont+Hubble.h"
+#import "UIImage+Hubble.h"
 
 @protocol MelodyVCDelegate <NSObject>
 

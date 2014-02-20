@@ -235,7 +235,7 @@
     }
     else
     {
-        return [UIImage imageNamed:@"camera_action_play@5"];
+        return [UIImage imageNamed:@"camera_action_play"];
     }
 }
 
@@ -251,7 +251,7 @@
     }
     else
     {
-        return [UIImage imageNamed:@"camera_action_play_pressed@5"];
+        return [UIImage imageNamed:@"camera_action_play_pressed"];
     }
 }
 
@@ -267,7 +267,7 @@
     }
     else
     {
-        return [UIImage imageNamed:@"camera_action_pause@5"];
+        return [UIImage imageNamed:@"camera_action_pause"];
     }
 }
 
@@ -283,7 +283,7 @@
     }
     else
     {
-        return [UIImage imageNamed:@"camera_action_pause_pressed@5"];
+        return [UIImage imageNamed:@"camera_action_pause_pressed"];
     }
 }
 @end
