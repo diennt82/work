@@ -175,10 +175,10 @@ double _ticks = 0;
     
     self.zoneButton.enabled = NO;
     
-    self.melodyViewController = [[[MelodyViewController alloc] initWithNibName:@"MelodyViewController" bundle:nil] autorelease];
-    
-    self.melodyViewController.selectedChannel = self.selectedChannel;
-    self.melodyViewController.melodyVcDelegate = self;
+//    self.melodyViewController = [[[MelodyViewController alloc] initWithNibName:@"MelodyViewController" bundle:nil] autorelease];
+//    
+//    self.melodyViewController.selectedChannel = self.selectedChannel;
+//    self.melodyViewController.melodyVcDelegate = self;
     self.melodyButton.enabled = NO;
     
     self.hqViewButton.enabled = NO;
@@ -4059,6 +4059,12 @@ double _ticks = 0;
             [[NSBundle mainBundle] loadNibNamed:@"H264PlayerViewController_land"
                                           owner:self
                                         options:nil];
+            
+            self.melodyViewController = [[[MelodyViewController alloc] initWithNibName:@"MelodyViewController_land" bundle:nil] autorelease];
+            
+            self.melodyViewController.selectedChannel = self.selectedChannel;
+            self.melodyViewController.melodyVcDelegate = self;
+            
 
             if (isiOS7AndAbove)
             {
@@ -4071,7 +4077,6 @@ double _ticks = 0;
 
         }
         
-        [self.melodyViewController.melodyTableView reloadData];
         //landscape mode
         //hide navigation bar
         [self.navigationController setNavigationBarHidden:YES];
@@ -4131,6 +4136,11 @@ double _ticks = 0;
         
         //portrait mode
 
+        self.melodyViewController = [[[MelodyViewController alloc] initWithNibName:@"MelodyViewController" bundle:nil] autorelease];
+        
+        self.melodyViewController.selectedChannel = self.selectedChannel;
+        self.melodyViewController.melodyVcDelegate = self;
+        
         [self.navigationController setNavigationBarHidden:NO];
         [[UIApplication sharedApplication] setStatusBarHidden:NO];
         self.view.backgroundColor = [UIColor whiteColor];
@@ -4145,9 +4155,9 @@ double _ticks = 0;
             self.scrollView.frame = destRect;
             self.imageViewVideo.frame = CGRectMake(0, 0, SCREEN_WIDTH, imageViewHeight);
             self.viewCtrlButtons.frame = CGRectMake(0, imageViewHeight + 44 + deltaY, _viewCtrlButtons.frame.size.width, _viewCtrlButtons.frame.size.height);
-            self.melodyViewController.view.frame = CGRectMake(0, self.ib_ViewTouchToTalk.frame.origin.y, SCREEN_WIDTH, SCREEN_HEIGHT - self.ib_ViewTouchToTalk.frame.origin.y);
+            self.melodyViewController.view.frame = CGRectMake(0, self.ib_ViewTouchToTalk.frame.origin.y - 5, SCREEN_WIDTH, SCREEN_HEIGHT - self.ib_ViewTouchToTalk.frame.origin.y);
             
-            [self.melodyViewController.melodyTableView reloadData];
+//            [self.melodyViewController.melodyTableView reloadData];
             // Control display for TimelineVC
             if (_timelineVC != nil)
             {
@@ -4211,7 +4221,8 @@ double _ticks = 0;
         _isLandScapeMode = NO;
 
 	}
-    
+    [self.melodyViewController.melodyTableView setNeedsLayout];
+    [self.melodyViewController.melodyTableView setNeedsDisplay];
     // Set position for Image Knob & Handle
     self.imageViewKnob.center = _imgViewDrectionPad.center;
     self.imageViewHandle.center = _imgViewDrectionPad.center;
@@ -4268,6 +4279,7 @@ double _ticks = 0;
     //
     [self setupPtt];
     [self applyFont];
+    
 }
 
 #pragma mark -

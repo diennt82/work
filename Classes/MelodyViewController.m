@@ -228,36 +228,72 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
-    static NSString *CellIdentifier = @"Cell";
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-    if (cell == nil) {
-        cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
-    }
-    
-    // Configure the cell...
-    cell.textLabel.text = (NSString *) [_melodies objectAtIndex:indexPath.section];
-    cell.backgroundColor = [UIColor clearColor];
-    
-    //update font
-    cell.textLabel.textColor = [UIColor blackColor];
-    if (valueMelodiesMap[indexPath.section] == TRUE)
+
+    UITableViewCell *cell = nil;
+    if (isPhoneLandscapeMode)
     {
-        cell.textLabel.font = semiBoldFont;
-//        cell.imageView.image = [UIImage imageNamed:@"camera_action_pause.png"];
-        cell.imageView.image = [UIImage imageCameraActionPause];
+        static NSString *CellIdentifier = @"MelodyCellId_land";
+        
+        cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+        if (cell == nil) {
+            [[NSBundle mainBundle] loadNibNamed:@"CellMelody_land" owner:self options:nil];
+            cell = cellMelody_land;
+            cellMelody_land = nil;
+        }
+        cell.backgroundColor = [UIColor cellMelodyColor];
+        
+        // Configure the cell...
+        ((CellMelody *)cell).labelCellMelody.text = (NSString *) [_melodies objectAtIndex:indexPath.section];
+        
+        
+        //update font
+        ((CellMelody *)cell).labelCellMelody.textColor = [UIColor blackColor];
+        if (valueMelodiesMap[indexPath.section] == TRUE)
+        {
+            ((CellMelody *)cell).labelCellMelody.font = semiBoldFont;
+            ((CellMelody *)cell).imageCellMelody.image = [UIImage imageNamed:@"camera_action_pause.png"];;
+        }
+        else
+        {
+            ((CellMelody *)cell).labelCellMelody.font = regularFont;
+            ((CellMelody *)cell).imageCellMelody.image = [UIImage imageNamed:@"camera_action_play.png"];
+        }
     }
     else
     {
-        cell.textLabel.font = regularFont;
-//        cell.imageView.image = [UIImage imageNamed:@"camera_action_play.png"];
-        cell.imageView.image = [UIImage imageCameraActionPlay];
+        static NSString *CellIdentifier = @"MelodyCellId";
+        
+        cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+        if (cell == nil) {
+            [[NSBundle mainBundle] loadNibNamed:@"CellMelody" owner:self options:nil];
+            cell = cellMelody;
+            cellMelody = nil;
+        }
+        cell.backgroundColor = [UIColor clearColor];
+        // Configure the cell...
+        ((CellMelody *)cell).labelCellMelody.text = (NSString *) [_melodies objectAtIndex:indexPath.section];
+        
+        
+        //update font
+        ((CellMelody *)cell).labelCellMelody.textColor = [UIColor blackColor];
+        if (valueMelodiesMap[indexPath.section] == TRUE)
+        {
+            ((CellMelody *)cell).labelCellMelody.font = semiBoldFont;
+            ((CellMelody *)cell).imageCellMelody.image = [UIImage imageNamed:@"camera_action_pause.png"];;
+        }
+        else
+        {
+            ((CellMelody *)cell).labelCellMelody.font = regularFont;
+            ((CellMelody *)cell).imageCellMelody.image = [UIImage imageNamed:@"camera_action_play.png"];
+        }
     }
     
-    return cell;
+    return cell ;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
+
     if (isPhoneLandscapeMode)
     {
         return 33;

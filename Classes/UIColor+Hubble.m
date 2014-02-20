@@ -53,4 +53,9 @@
 {
     return Rgb2UIColor(223, 223, 223);
 }
+
++ (UIColor *)cellMelodyColor
+{
+    return Rgb2UIColor(208, 209, 203);
+}
 @end
