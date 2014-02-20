@@ -1649,10 +1649,10 @@ double _ticks = 0;
     else if (self.selectedChannel.profile.minuteSinceLastComm <= 5)
     {
         NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-        NSLog(@"Log - created a remote streamer - {enabled_stun}: %@", [userDefaults objectForKey:@"enabled_stun"]);
+        NSLog(@"Log - created a remote streamer - {enable_stun}: %@", [userDefaults objectForKey:@"enable_stun"]);
         
         // This value is setup on Account view
-        if([userDefaults boolForKey:@"enabled_stun"] == FALSE)
+        if([userDefaults boolForKey:@"enable_stun"] == FALSE)
         {
             // Force APP_IS_ON_SYMMETRIC_NAT to use RELAY mode
             [self symmetric_check_result:TRUE];

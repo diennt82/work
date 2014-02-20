@@ -469,6 +469,7 @@
     NSLog(@"viewController.app_stage: %d", viewController.app_stage);
     
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    [userDefaults synchronize];
 	viewController.app_stage = [userDefaults integerForKey:@"ApplicationStage"];
     
     NSString * camInView = (NSString*)[userDefaults objectForKey:CAM_IN_VEW];
