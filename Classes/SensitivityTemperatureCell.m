@@ -92,6 +92,7 @@
 - (IBAction)btnTypeTempTouchUpInsideAction:(UIButton *)sender
 {
     self.isFahrenheit = !_isFahrenheit;
+    sender.selected = _isFahrenheit;
     
     if (_isFahrenheit)
     {

@@ -15,9 +15,10 @@
 #import "SchedulingViewController.h"
 #import "SensitivityTemperatureCell.h"
 
-@interface SettingsViewController () <SensitivityCellDelegate, SchedulerCellDelegate>
+@interface SettingsViewController () <SensitivityCellDelegate, SchedulerCellDelegate, GeneralCellDelegate>
 {
     NSInteger numOfRows[4];
+    BOOL valueGeneralSettings[2];
     NSInteger valueSettings[2];
     BOOL valueSwitchs[2];
     BOOL valueSchedulerSwitchs[1][2];
@@ -73,6 +74,9 @@
     {
         numOfRows[i] = 1;
     }
+    
+    valueGeneralSettings[0] = FALSE;
+    valueGeneralSettings[1] = FALSE;
     
     valueSettings[0] = 0;
     valueSettings[1] = 1;
@@ -212,6 +216,18 @@
     {
         self.labelSlider.enabled = NO;
     }
+}
+
+#pragma mark - GeneralCell delegate
+
+- (void)clockValueChanged:(BOOL)is12hr
+{
+    valueGeneralSettings[0] = is12hr;
+}
+
+- (void)temperatureValueChanged:(BOOL)isFahrenheit
+{
+    valueGeneralSettings[1] = isFahrenheit;
 }
 
 #pragma mark - Sensitivity deletate
@@ -421,6 +437,10 @@
                             break;
                         }
                     }
+                    
+                    cell.is12hr = valueGeneralSettings[0];
+                    cell.isFahrenheit = valueGeneralSettings[1];
+                    cell.generalCellDelegate = self;
 
                     return cell;
                 }
