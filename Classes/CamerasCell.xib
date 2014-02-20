@@ -19,7 +19,11 @@
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                         <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                     </imageView>
-                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="camera.png" id="EgT-5u-yrU">
+                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="home_video_overlay.png" id="SPp-Mh-451">
+                        <rect key="frame" x="0.0" y="135" width="320" height="55"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    </imageView>
+                    <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="camera.png" id="EgT-5u-yrU">
                         <rect key="frame" x="8" y="153" width="27" height="27"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     </imageView>
@@ -54,6 +58,7 @@
     <resources>
         <image name="Snapshot.png" width="320" height="190"/>
         <image name="camera.png" width="27" height="27"/>
+        <image name="home_video_overlay.png" width="320" height="55"/>
         <image name="menu_settings.png" width="27" height="27"/>
     </resources>
 </document>
