@@ -228,14 +228,20 @@
 						  otherButtonTitles:nil];
 	[alert show];
 	[alert release];
-	
-    if (delegate != nil)
+    
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+	BOOL isOffline = [userDefaults boolForKey:_OfflineMode];
+    
+    if (!isOffline)
     {
-        [delegate sendStatus:LOGIN_FAILED_OR_LOGOUT];
-    }
-    else if (_userAccountDelegate != nil)
-	{
-        [_userAccountDelegate finishStoreCameraListData:nil];
+        if (delegate != nil)
+        {
+            [delegate sendStatus:LOGIN_FAILED_OR_LOGOUT];
+        }
+        else if (_userAccountDelegate != nil)
+        {
+            [_userAccountDelegate finishStoreCameraListData:nil];
+        }
     }
 }
 

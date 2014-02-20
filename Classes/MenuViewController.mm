@@ -130,12 +130,17 @@
     }
     else
     {
-        self.navigationItem.leftBarButtonItem.enabled = NO;
-        self.camerasVC.waitingForUpdateData = TRUE;
-        [self.camerasVC.tableView reloadData];
-        [self performSelectorInBackground:@selector(recreateAccount)
-                               withObject:nil];
+        NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+        BOOL isOffline = [userDefaults boolForKey:_OfflineMode];
         
+        if (!isOffline)
+        {
+            self.navigationItem.leftBarButtonItem.enabled = NO;
+            self.camerasVC.waitingForUpdateData = TRUE;
+            [self.camerasVC.tableView reloadData];
+            [self performSelectorInBackground:@selector(recreateAccount)
+                                   withObject:nil];
+        }
     }
 }
 

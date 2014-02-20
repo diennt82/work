@@ -49,12 +49,14 @@
     
     //[self loadUserData];
     self.screenWidth = [UIScreen mainScreen].bounds.size.width;
+    UILabel *lblVersion = (UILabel *)[self.view viewWithTag:559];
+    
     if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 7)
     {
-        UILabel *lblVersion = (UILabel *)[self.view viewWithTag:559];
         lblVersion.frame = CGRectMake(lblVersion.frame.origin.x, lblVersion.frame.origin.y - 44, lblVersion.frame.size.width, lblVersion.frame.size.height);
-        lblVersion.text = [NSString stringWithFormat:@"hubble v%@", [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"]];
     }
+    
+    lblVersion.text = [NSString stringWithFormat:@"hubble v%@", [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"]];
 }
 
 - (void)viewDidUnload
