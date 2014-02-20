@@ -2902,7 +2902,7 @@ double _ticks = 0;
     NSInteger result = (isBehindSymmetricNat == TRUE)?TYPE_SYMMETRIC_NAT:TYPE_NON_SYMMETRIC_NAT;
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     
-    if ([userDefaults boolForKey:@"enabled_stun"] == TRUE)
+    if ([userDefaults boolForKey:@"enable_stun"] == TRUE)
     {
         [userDefaults setInteger:result forKey:APP_IS_ON_SYMMETRIC_NAT];
         [userDefaults synchronize];
