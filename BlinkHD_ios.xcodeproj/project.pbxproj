@@ -498,6 +498,7 @@
 		8B9384A818570284009C4771 /* brightness-u.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B9384A618570284009C4771 /* brightness-u.png */; };
 		8B9384AF18570567009C4771 /* ValueSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B9384AD18570567009C4771 /* ValueSettingsViewController.m */; };
 		8B9384B018570567009C4771 /* ValueSettingsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8B9384AE18570567009C4771 /* ValueSettingsViewController.xib */; };
+		8B94979B18B5E67C004FBDE1 /* SensitivityInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B94979A18B5E67C004FBDE1 /* SensitivityInfo.m */; };
 		8B9584391877DF1D0055BCE3 /* mbp_icon72x72.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B9584381877DF1D0055BCE3 /* mbp_icon72x72.png */; };
 		8B95843B1877DF2F0055BCE3 /* mbp_icon76x76.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B95843A1877DF2F0055BCE3 /* mbp_icon76x76.png */; };
 		8B95843D1877DF400055BCE3 /* mbp_icon120x120.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B95843C1877DF400055BCE3 /* mbp_icon120x120.png */; };
@@ -1249,6 +1250,8 @@
 		8B9384AC18570567009C4771 /* ValueSettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ValueSettingsViewController.h; sourceTree = "<group>"; };
 		8B9384AD18570567009C4771 /* ValueSettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ValueSettingsViewController.m; sourceTree = "<group>"; };
 		8B9384AE18570567009C4771 /* ValueSettingsViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ValueSettingsViewController.xib; sourceTree = "<group>"; };
+		8B94979918B5E67C004FBDE1 /* SensitivityInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SensitivityInfo.h; sourceTree = "<group>"; };
+		8B94979A18B5E67C004FBDE1 /* SensitivityInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SensitivityInfo.m; sourceTree = "<group>"; };
 		8B9584381877DF1D0055BCE3 /* mbp_icon72x72.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = mbp_icon72x72.png; sourceTree = "<group>"; };
 		8B95843A1877DF2F0055BCE3 /* mbp_icon76x76.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = mbp_icon76x76.png; sourceTree = "<group>"; };
 		8B95843C1877DF400055BCE3 /* mbp_icon120x120.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = mbp_icon120x120.png; sourceTree = "<group>"; };
@@ -2848,6 +2851,8 @@
 				8B9112CE18602884004301C5 /* SensitivityCell.h */,
 				8B9112CF18602884004301C5 /* SensitivityCell.m */,
 				8B9112D118602898004301C5 /* SensitivityCell.xib */,
+				8B94979918B5E67C004FBDE1 /* SensitivityInfo.h */,
+				8B94979A18B5E67C004FBDE1 /* SensitivityInfo.m */,
 			);
 			name = Sensitivity;
 			sourceTree = "<group>";
@@ -4210,6 +4215,7 @@
 				8B9384841856E613009C4771 /* CameraSettingsViewController.m in Sources */,
 				A14631C6185C133D00E96969 /* ScrollHorizontalMenu.m in Sources */,
 				38A478D015BD64F9008682FE /* MBP_InitialSetupViewController.mm in Sources */,
+				8B94979B18B5E67C004FBDE1 /* SensitivityInfo.m in Sources */,
 				8B93847F1856D42C009C4771 /* InformationViewController.m in Sources */,
 				38A478D915BE484B008682FE /* Step_02_ViewController.mm in Sources */,
 				A15110D718AB7D4600E116E1 /* TimeLinePremiumCell.m in Sources */,

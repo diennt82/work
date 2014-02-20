@@ -14,13 +14,15 @@
 #import "SchedulerViewController.h"
 #import "SchedulingViewController.h"
 #import "SensitivityTemperatureCell.h"
+#import "SensitivityInfo.h"
 
-@interface SettingsViewController () <SensitivityCellDelegate, SchedulerCellDelegate, GeneralCellDelegate>
+@interface SettingsViewController () <SensitivityCellDelegate, SchedulerCellDelegate, GeneralCellDelegate, SensitivityTemperaureCellDelegate>
 {
     NSInteger numOfRows[4];
     BOOL valueGeneralSettings[2];
     NSInteger valueSettings[2];
     BOOL valueSwitchs[2];
+    
     BOOL valueSchedulerSwitchs[1][2];
 }
 
@@ -29,6 +31,8 @@
 @property (retain, nonatomic) IBOutlet UISwitch *valueSwitchInCell;
 @property (retain, nonatomic) IBOutlet UILabel *lowerLabel;
 @property (retain, nonatomic) IBOutlet UILabel *upperLabel;
+
+@property (retain, nonatomic) SensitivityInfo *sensitivityInfo;
 
 @property (nonatomic) CGFloat lowerValue;
 @property (nonatomic) CGFloat upperValue;
@@ -86,6 +90,13 @@
     
     valueSwitchs[0] = FALSE;
     valueSwitchs[1] = TRUE;
+    
+    self.sensitivityInfo = [[SensitivityInfo alloc] init];
+    self.sensitivityInfo.tempIsFahrenheit = FALSE;
+    self.sensitivityInfo.tempLowValue = 15.f;
+    self.sensitivityInfo.tempLowOn = YES;
+    self.sensitivityInfo.tempHighValue = 25.f;
+    self.sensitivityInfo.tempHighOn = NO;
     
     self.lowerValue = 07.00;
     self.upperValue = 19.99;
@@ -247,6 +258,35 @@
 - (void)reportChangedSettingsValue:(NSInteger)value atRow:(NSInteger)rowIndx
 {
     valueSettings[rowIndx] = value;
+}
+
+#pragma  mark - Sensitivity temperature cell delegate
+
+- (void)valueChangedTypeTemperaure:(BOOL)isFahrenheit
+{
+    self.sensitivityInfo.tempIsFahrenheit = isFahrenheit;
+}
+
+- (void)valueChangedTempLowValue:(NSInteger)tempValue
+{
+    self.sensitivityInfo.tempLowValue = tempValue;
+    NSLog(@"%d", tempValue);
+}
+
+- (void)valueChangedTempLowOn:(BOOL)isOn
+{
+    self.sensitivityInfo.tempLowOn = isOn;
+}
+
+- (void)valueChangedTempHighValue:(NSInteger)tempValue
+{
+    self.sensitivityInfo.tempHighValue = tempValue;
+    NSLog(@"%d", tempValue);
+}
+
+- (void)valueChangedTempHighOn:(BOOL)isOn
+{
+    self.sensitivityInfo.tempHighOn = isOn;
 }
 
 #pragma mark - Scheduler Delegate
@@ -543,9 +583,12 @@
                         }
                     }
                     
-                    cell.isSwitchOnLeft = YES;
-                    cell.isSwitchOnRight = NO;
-                    cell.tempValueRight = 20.f;
+                    cell.isFahrenheit = _sensitivityInfo.tempIsFahrenheit;
+                    cell.isSwitchOnLeft = _sensitivityInfo.tempLowOn;
+                    cell.isSwitchOnRight = _sensitivityInfo.tempHighOn;
+                    cell.tempValueLeft = _sensitivityInfo.tempLowValue;
+                    cell.tempValueRight = _sensitivityInfo.tempHighValue;
+                    cell.sensitivityTempCellDelegate = self;
                     
                     return cell;
                 }

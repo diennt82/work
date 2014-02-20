@@ -6,6 +6,11 @@
 //  Copyright (c) 2014 Smart Panda Ltd. All rights reserved.
 //
 
+#define TEMP_LOW_MIN 10
+#define TEMP_LOW_MAX 18
+#define TEMP_HIGH_MIN 25
+#define TEMP_HIGH_MAX 33
+
 #import "SensitivityTemperatureCell.h"
 
 @interface SensitivityTemperatureCell()
@@ -22,6 +27,11 @@
 @property (retain, nonatomic) IBOutlet UIButton *btnPlusLeft;
 @property (retain, nonatomic) IBOutlet UIButton *btnMinusRight;
 @property (retain, nonatomic) IBOutlet UIButton *btnPlusRight;
+
+@property (nonatomic) BOOL isStopTouching;
+@property (nonatomic, retain) NSTimer *timerTempLowValueChanged;
+@property (nonatomic, retain) NSTimer *timerTempHighValueChanged;
+
 @end
 
 @implementation SensitivityTemperatureCell
@@ -115,32 +125,148 @@
     
     self.lblTempValueLeft.text = [NSString stringWithFormat:@"%ld", lroundf(_tempValueLeft)];
     self.lblTemperatureValueRight.text = [NSString stringWithFormat:@"%ld", lroundf(_tempValueRight)];
+    
+    [_sensitivityTempCellDelegate valueChangedTypeTemperaure:_isFahrenheit];
 }
 
 - (IBAction)btnMinusLeftTouchUpInsideAction:(id)sender
 {
-    self.tempValueLeft--;
+    NSInteger tempLowMin = TEMP_LOW_MIN;
     
-    self.lblTempValueLeft.text = [NSString stringWithFormat:@"%ld", lroundf(_tempValueLeft)];
+    if (_isFahrenheit)
+    {
+        tempLowMin = (TEMP_LOW_MIN * 9 / 5.f) + 32;
+    }
+    
+    if (_tempValueLeft > tempLowMin)
+    {
+        self.tempValueLeft--;
+        self.lblTempValueLeft.text = [NSString stringWithFormat:@"%ld", lroundf(_tempValueLeft)];
+    }
+    else
+    {
+        NSLog(@"SensivityTemperature too low, LOW is not supported!");
+    }
+
+    if (_timerTempLowValueChanged != nil)
+    {
+        [_timerTempLowValueChanged invalidate];
+        self.timerTempLowValueChanged = nil;
+    }
+    
+    self.timerTempLowValueChanged  =  [NSTimer scheduledTimerWithTimeInterval:3
+                                                                       target:self
+                                                                     selector:@selector(reportTempLowValueChanged:)
+                                                                     userInfo:nil
+                                                                      repeats:NO];
 }
+
+
 
 - (IBAction)btnPlusLeftTouchUpInsideAction:(id)sender
 {
-    self.tempValueLeft++;
+    NSInteger tempHighMax = TEMP_LOW_MAX;
     
-    self.lblTempValueLeft.text = [NSString stringWithFormat:@"%ld", lroundf(_tempValueLeft)];
+    if (_isFahrenheit)
+    {
+        tempHighMax = (TEMP_LOW_MAX * 9 / 5.f) + 32;
+    }
+    
+    if (_tempValueLeft < tempHighMax)
+    {
+        self.tempValueLeft++;
+        self.lblTempValueLeft.text = [NSString stringWithFormat:@"%ld", lroundf(_tempValueLeft)];
+    }
+    else
+    {
+        NSLog(@"SensivityTemperature too high, LOW is not supported!");
+    }
+    
+    if (_timerTempLowValueChanged != nil)
+    {
+        [_timerTempLowValueChanged invalidate];
+        self.timerTempLowValueChanged = nil;
+    }
+    
+    self.timerTempLowValueChanged  =  [NSTimer scheduledTimerWithTimeInterval:3
+                                                                       target:self
+                                                                     selector:@selector(reportTempLowValueChanged:)
+                                                                     userInfo:nil
+                                                                      repeats:NO];
+}
+
+- (void)reportTempLowValueChanged: (NSTimer *)timer
+{
+    [_sensitivityTempCellDelegate valueChangedTempLowValue:_tempValueLeft];
 }
 
 - (IBAction)btnMinusRightTouchUpInsideAction:(id)sender
 {
-    self.tempValueRight--;
-    self.lblTemperatureValueRight.text = [NSString stringWithFormat:@"%ld", lroundf(_tempValueRight)];
+    NSInteger temHighMin = TEMP_HIGH_MIN;
+    
+    if (_isFahrenheit)
+    {
+        temHighMin = (TEMP_HIGH_MIN * 9 / 5.f) + 32;
+    }
+    
+    if (_tempValueRight > temHighMin)
+    {
+        self.tempValueRight--;
+        self.lblTemperatureValueRight.text = [NSString stringWithFormat:@"%ld", lroundf(_tempValueRight)];
+    }
+    else
+    {
+        NSLog(@"SensivityTemperature too low, HIGH is not supported!");
+    }
+    
+    if (_timerTempHighValueChanged != nil)
+    {
+        [_timerTempHighValueChanged invalidate];
+        self.timerTempHighValueChanged = nil;
+    }
+    
+    self.timerTempHighValueChanged = [NSTimer scheduledTimerWithTimeInterval:3
+                                                                      target:self
+                                                                    selector:@selector(reportTempHighValueChanged:)
+                                                                    userInfo:nil
+                                                                     repeats:NO];
 }
 
 - (IBAction)btnPlusRightTouchUpInsideAction:(id)sender
 {
-    self.tempValueRight++;
-    self.lblTemperatureValueRight.text = [NSString stringWithFormat:@"%ld", lroundf(_tempValueRight)];
+    NSInteger temHighMax = TEMP_HIGH_MAX;
+    
+    if (_isFahrenheit)
+    {
+        temHighMax = (TEMP_HIGH_MAX * 9 / 5.f) + 32;
+    }
+    
+    if (_tempValueRight < temHighMax)
+    {
+        self.tempValueRight++;
+        self.lblTemperatureValueRight.text = [NSString stringWithFormat:@"%ld", lroundf(_tempValueRight)];
+    }
+    else
+    {
+        NSLog(@"SensivityTemperature too high, HIGH is not supported!");
+    }
+    
+    if (_timerTempHighValueChanged != nil)
+    {
+        [_timerTempHighValueChanged invalidate];
+        self.timerTempHighValueChanged = nil;
+    }
+    
+    self.timerTempHighValueChanged = [NSTimer scheduledTimerWithTimeInterval:3
+                                                                      target:self
+                                                                    selector:@selector(reportTempHighValueChanged:)
+                                                                    userInfo:nil
+                                                                     repeats:NO];
+}
+
+- (void)reportTempHighValueChanged: (NSTimer *)timer
+{
+    [_sensitivityTempCellDelegate valueChangedTempHighValue:_tempValueRight];
 }
 
 - (IBAction)btnSwtichLeftTouchUpInsideAction:(UIButton *)sender
@@ -151,6 +277,8 @@
     
     self.btnMinusLeft.enabled = _isSwitchOnLeft;
     self.btnPlusLeft.enabled = _isSwitchOnLeft;
+    
+    [_sensitivityTempCellDelegate valueChangedTempLowOn:_isSwitchOnLeft];
 }
 
 - (IBAction)btnSwitchRightTouchUpInsideAction:(UIButton *)sender
@@ -159,6 +287,8 @@
     sender.selected = _isSwitchOnRight;
     self.btnMinusRight.enabled = _isSwitchOnRight;
     self.btnPlusRight.enabled = _isSwitchOnRight;
+    
+    [_sensitivityTempCellDelegate valueChangedTempHighOn:_isSwitchOnRight];
 }
 
 - (void)dealloc {

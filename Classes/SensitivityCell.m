@@ -67,6 +67,9 @@
     UIImageView *imageView4 = (UIImageView *)[self viewWithTag:504];
     imageView4.center = CGPointMake(imageView4.center.x, imageViewLine.center.y);
     
+    imageView3.hidden = YES;
+    imageView4.hidden = YES;
+    
     for (UIImageView *imageView in _imageViewCircleArray)
     {
         imageView.userInteractionEnabled = _switchValue;
