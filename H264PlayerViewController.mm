@@ -250,6 +250,12 @@ double _ticks = 0;
     [self setupPtt];
     
     self.stringTemperature = @"0";
+    
+    ///add button to change degree
+//    [ib_switchDegree setFrame:CGRectMake(0, self.ib_temperature.frame.origin.y, self.ib_temperature.bounds.size.width, self.ib_temperature.bounds.size.height)];
+
+    //end add button to change
+    [ib_switchDegree setHidden:YES];
 }
 
 - (void)updatePositionBetweenView
@@ -2842,12 +2848,27 @@ double _ticks = 0;
     // start
     [self.ib_temperature.subviews makeObjectsPerformSelector: @selector(removeFromSuperview)];
     NSString *stringTemperature = [NSString stringWithFormat:@"%d", (int)roundf([temperature floatValue])];
+    _degreeCString = stringTemperature;
+    
+    float celsius = [_degreeCString floatValue];
+    NSInteger degreeF = (celsius*(9/5)) + 32;
+    _degreeFString = [NSString stringWithFormat:@"%d", degreeF];
     
     UILabel *degreeCelsius = [[UILabel alloc] init];
     degreeCelsius.backgroundColor=[UIColor clearColor];
     degreeCelsius.textColor=[UIColor temperatureTextColor];
     degreeCelsius.textAlignment = NSTextAlignmentLeft;
-    NSString *degreeCel = @"°C";
+    NSString *degreeCel;
+    if (_isDegreeFDisplay)
+    {
+        degreeCel = @"°F";
+        stringTemperature = _degreeFString;
+    }
+    else
+    {
+        degreeCel = @"°C";
+        stringTemperature = _degreeCString;
+    }
     degreeCelsius.text= degreeCel;
     
     UIFont *degreeFont;
@@ -2906,6 +2927,8 @@ double _ticks = 0;
         [self.ib_temperature setFrame:CGRectMake(0, positionYOfBottomView, SCREEN_WIDTH, SCREEN_HEIGHT - positionYOfBottomView)];
         [self.ib_temperature setFont:temperatureFont];
         [self.ib_temperature setTextColor:[UIColor temperatureTextColor]];
+        
+        //need update text for C or F
         [self.ib_temperature setText:stringTemperature];
         CGSize stringBoundingBox = [stringTemperature sizeWithFont:temperatureFont];
         CGSize degreeCelBoundingBox = [degreeCel sizeWithFont:degreeFont];
@@ -4943,7 +4966,6 @@ double _ticks = 0;
 {
     //first hidden all view
     [self hidenAllBottomView];
-    
     if (_selectedItemMenu == INDEX_PAN_TILT)
     {
         [self.imgViewDrectionPad setHidden:NO];
@@ -4966,12 +4988,12 @@ double _ticks = 0;
     else if (_selectedItemMenu == INDEX_TEMP)
     {
         [self.ib_temperature setHidden:NO];
+        [ib_switchDegree setHidden:NO];
         
         if (_existTimerTemperature == FALSE)
         {
             self.existTimerTemperature = TRUE;
             NSLog(@"Log - Create Timer to get Temperature");
-            
             [NSTimer scheduledTimerWithTimeInterval:10
                                              target:self
                                            selector:@selector(getCameraTemperature_bg:)
@@ -5069,6 +5091,7 @@ double _ticks = 0;
     [_imageViewHandle release];
     [_imageViewKnob release];
     [_ib_changeToMainRecording release];
+    [ib_switchDegree release];
     [super dealloc];
 }
 //At first time, we set to FALSE after call checkOrientation()
@@ -5335,6 +5358,11 @@ double _ticks = 0;
 - (IBAction)changeToMainRecording:(id)sender {
     //change to main recording here
     [self changeAction:nil];
+}
+
+- (IBAction)switchDegreePressed:(id)sender {
+    _isDegreeFDisplay = !_isDegreeFDisplay;
+    [self setTemperatureState_Fg:_stringTemperature];
 }
 
 - (IBAction)processingRecordingOrTakePicture:(id)sender {
@@ -5912,6 +5940,5 @@ double _ticks = 0;
 - (void)bonjourReturnCameraListAvailable:(NSMutableArray *)cameraList
 {
 }
-
 
 @end

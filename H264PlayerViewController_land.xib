@@ -17,6 +17,7 @@
                 <outlet property="ib_labelRecordVideo" destination="FmF-hY-zpf" id="VSj-Ng-OCE"/>
                 <outlet property="ib_labelTouchToTalk" destination="Iqs-XW-DXM" id="Hnn-2v-8sl"/>
                 <outlet property="ib_processRecordOrTakePicture" destination="GnV-0e-uit" id="uwE-Mx-ad9"/>
+                <outlet property="ib_switchDegree" destination="u8v-Jo-Lal" id="tHH-9z-Mmm"/>
                 <outlet property="ib_temperature" destination="YH6-sq-ZAV" id="prx-2O-QfZ"/>
                 <outlet property="ib_viewRecordTTT" destination="bNK-hA-T2Y" id="H0Z-Eu-Lz5"/>
                 <outlet property="imageViewHandle" destination="tTk-Ge-jnd" id="1vT-Aa-RmU"/>
@@ -73,6 +74,17 @@
                     <color key="textColor" red="0.0" green="0.0" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                     <nil key="highlightedColor"/>
                 </label>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="u8v-Jo-Lal">
+                    <rect key="frame" x="391" y="212" width="80" height="108"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                    <state key="normal">
+                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                    </state>
+                    <connections>
+                        <action selector="switchDegreePressed:" destination="-1" eventType="touchUpInside" id="MBE-7z-jkP"/>
+                    </connections>
+                </button>
                 <view contentMode="scaleToFill" id="WJv-oB-VFG">
                     <rect key="frame" x="349" y="0.0" width="80" height="80"/>
                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
