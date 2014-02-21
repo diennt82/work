@@ -222,7 +222,7 @@ double _ticks = 0;
     [self.horizMenu reloadData:NO];
     NSLog(@"Model of Camera is: %d, STUN: %d", self.selectedChannel.profile.modelID, [[NSUserDefaults standardUserDefaults] boolForKey:@"enable_stun"]);
     
-    self.isFahrenheit = [[NSUserDefaults standardUserDefaults] boolForKey:@"IS_FAHRENHEIT"];
+    _isDegreeFDisplay = [[NSUserDefaults standardUserDefaults] boolForKey:@"IS_FAHRENHEIT"];
     
     if ([self.selectedChannel.profile isNotAvailable])
     {
@@ -5100,6 +5100,11 @@ double _ticks = 0;
 
 - (IBAction)switchDegreePressed:(id)sender {
     _isDegreeFDisplay = !_isDegreeFDisplay;
+    
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    [userDefaults setBool:_isDegreeFDisplay forKey:@"IS_FAHRENHEIT"];
+    [userDefaults synchronize];
+    
     [self setTemperatureState_Fg:_stringTemperature];
 }
 
