@@ -596,6 +596,7 @@ double _ticks = 0;
         if (_earlierVC == Nil)
         {
             self.earlierVC = [[EarlierViewController alloc] initWithCamChannel:self.selectedChannel];
+            self.earlierVC.view.frame = CGRectMake(0, 0, 320, 568);
             [self.view addSubview:_earlierVC.view];
         }
         
