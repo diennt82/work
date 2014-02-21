@@ -42,6 +42,7 @@
 #define HIGH_STATUS_BAR 20;
 
 //define for Control Panel button
+#define INDEX_NO_SELECT     -1
 #define INDEX_PAN_TILT      0
 #define INDEX_MICRO         1
 #define INDEX_RECORDING     2
@@ -119,6 +120,7 @@ double _ticks = 0;
     {
         NSLog(@"Non Retina");
     }
+    _selectedItemMenu = INDEX_NO_SELECT;
     [self.ib_buttonChangeAction setHidden:NO];
     [self.view bringSubviewToFront:self.ib_buttonChangeAction];
     [self.ib_labelRecordVideo setText:@"Record Video"];
@@ -240,8 +242,6 @@ double _ticks = 0;
     }
     
     [self.horizMenu reloadData:NO];
-    self.selectedItemMenu = -1;
-    [self updateBottomView];
     NSLog(@"Model of Camera is: %d, STUN: %d", self.selectedChannel.profile.modelID, [[NSUserDefaults standardUserDefaults] boolForKey:@"enable_stun"]);
     
     self.isFahrenheit = [[NSUserDefaults standardUserDefaults] boolForKey:@"IS_FAHRENHEIT"];
@@ -1496,8 +1496,6 @@ double _ticks = 0;
     self.isHorizeShow = TRUE;
     self.horizMenu.hidden = NO;
     [self.view bringSubviewToFront:_horizMenu];
-    
-    [self updateBottomView];
     
 //    [self hideTimelineView];
     
@@ -2899,7 +2897,7 @@ double _ticks = 0;
         float xPosTemperature = SCREEN_HEIGHT - self.ib_temperature.bounds.size.width - 40 + (self.ib_temperature.bounds.size.width - stringBoundingBox.width)/2;
         float yPosTemperature = SCREEN_WIDTH - 20 - stringBoundingBox.height;
         [self.ib_temperature setFrame:CGRectMake(xPosTemperature, yPosTemperature, self.ib_temperature.bounds.size.width, self.ib_temperature.bounds.size.height)];
-        
+        [ib_switchDegree setFrame:CGRectMake(xPosTemperature, yPosTemperature, self.ib_temperature.bounds.size.width, self.ib_temperature.bounds.size.height)];
         
         CGFloat widthString = stringBoundingBox.width;
         CGFloat alignX = (self.ib_temperature.bounds.size.width + widthString)/2;
@@ -2929,6 +2927,7 @@ double _ticks = 0;
         
         [degreeCelsius setFont:degreeFont];
         [self.ib_temperature setFrame:CGRectMake(0, positionYOfBottomView, SCREEN_WIDTH, SCREEN_HEIGHT - positionYOfBottomView)];
+        [ib_switchDegree setFrame:CGRectMake(0, positionYOfBottomView, SCREEN_WIDTH, SCREEN_HEIGHT - positionYOfBottomView)];
         [self.ib_temperature setFont:temperatureFont];
         [self.ib_temperature setTextColor:[UIColor temperatureTextColor]];
         
@@ -4186,10 +4185,13 @@ double _ticks = 0;
             
 //            [self.melodyViewController.melodyTableView reloadData];
             // Control display for TimelineVC
-            if (_timelineVC != nil)
+            if (_timelineVC != nil && _isFirstLoad)
             {
                 CGFloat alignYTimeLine = self.ib_ViewTouchToTalk.frame.origin.y;
                 self.timelineVC.view.frame = CGRectMake(0, alignYTimeLine, SCREEN_WIDTH, SCREEN_HEIGHT - self.ib_ViewTouchToTalk.frame.origin.y);
+                
+                //don't show timeline after switch from land to port
+                
                 self.timelineVC.view.hidden = NO;
                 [self.view addSubview:_timelineVC.view];
                 if (_isLandScapeMode)
@@ -4213,7 +4215,7 @@ double _ticks = 0;
             
             
             // Control display for TimelineVC
-            if (_timelineVC != nil)
+            if (_timelineVC != nil && _isFirstLoad)
             {
                 CGFloat alignYTimeLine = self.ib_ViewTouchToTalk.frame.origin.y - 64;
 
@@ -4242,18 +4244,16 @@ double _ticks = 0;
         {
         }
         self.viewStopStreamingProgress.frame = CGRectMake((SCREEN_WIDTH - INDICATOR_SIZE)/2, (SCREEN_HEIGHT - INDICATOR_SIZE)/2 , INDICATOR_SIZE, INDICATOR_SIZE);
-        
+        [self showControlMenu];
         //add hubble_logo_back
         [self addHubbleLogo_Back];
         _isLandScapeMode = NO;
+        _isFirstLoad = NO;
 
 	}
     [self.melodyViewController.melodyTableView setNeedsLayout];
     [self.melodyViewController.melodyTableView setNeedsDisplay];
-    // Set position for Image Knob & Handle
-    self.imageViewKnob.center = _imgViewDrectionPad.center;
-    self.imageViewHandle.center = _imgViewDrectionPad.center;
-    self.imageViewHandle.hidden = YES;
+
 
 //    self.backBarBtnItem.target = self;
 //    self.backBarBtnItem.action = @selector(prepareGoBackToCameraList:);
@@ -4306,6 +4306,8 @@ double _ticks = 0;
     //
     [self setupPtt];
     [self applyFont];
+    [self hidenAllBottomView];
+    [self updateBottomView];
     
 }
 
@@ -4989,22 +4991,60 @@ double _ticks = 0;
     else if (_selectedItemMenu == INDEX_MELODY)
     {
         [self.melodyViewController.view setHidden:NO];
+        if (_isLandScapeMode)
+        {
+            if (isiOS7AndAbove)
+            {
+                self.melodyViewController.view.frame = CGRectMake(393, 78, 175, 165);
+            }
+            else
+            {
+                self.melodyViewController.view.frame = CGRectMake(320, 60, 159, 204);
+            }
+        }
+        else
+        {
+            if (isiOS7AndAbove)
+            {
+
+                self.melodyViewController.view.frame = CGRectMake(0, self.ib_ViewTouchToTalk.frame.origin.y - 5, SCREEN_WIDTH, SCREEN_HEIGHT - self.ib_ViewTouchToTalk.frame.origin.y);
+                
+
+                
+            }
+            else
+            {
+                self.melodyViewController.view.frame = CGRectMake(0, self.ib_ViewTouchToTalk.frame.origin.y - 30 - 44, SCREEN_WIDTH, SCREEN_HEIGHT - self.ib_ViewTouchToTalk.frame.origin.y);
+          
+            }
+
+            
+        }
+        [self.melodyViewController.melodyTableView setNeedsLayout];
+        [self.melodyViewController.melodyTableView setNeedsDisplay];
     }
     else if (_selectedItemMenu == INDEX_TEMP)
     {
         [self.ib_temperature setHidden:NO];
         [ib_switchDegree setHidden:NO];
+        [self.view bringSubviewToFront:ib_switchDegree];
         
         if (_existTimerTemperature == FALSE)
         {
             self.existTimerTemperature = TRUE;
             NSLog(@"Log - Create Timer to get Temperature");
+            //should call it first and then update later
+            [self setTemperatureState_Fg:_stringTemperature];
             [NSTimer scheduledTimerWithTimeInterval:10
                                              target:self
                                            selector:@selector(getCameraTemperature_bg:)
                                            userInfo:nil
                                             repeats:YES];
         }
+    }
+    else
+    {
+        [self hidenAllBottomView];
     }
 }
 
@@ -5107,6 +5147,7 @@ double _ticks = 0;
 }
 - (void)viewWillAppear:(BOOL)animated
 {
+    _isFirstLoad = YES;
     [super viewWillAppear:animated];
     //init data for debug
 #ifdef SHOW_DEBUG_INFO

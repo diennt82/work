@@ -121,6 +121,7 @@
     BOOL _isDegreeFDisplay;
 
     IBOutlet UIButton *ib_switchDegree;
+    BOOL _isFirstLoad;
 }
 //property for Hold to talk
 @property (nonatomic) BOOL walkieTalkieEnabled;
