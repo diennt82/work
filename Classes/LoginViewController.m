@@ -63,7 +63,12 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
     
-    
+    if (UIScreen.mainScreen.bounds.size.height < 568)
+    {
+        [[NSBundle mainBundle] loadNibNamed:@"LoginViewController_35"
+                                      owner:self
+                                    options:nil];
+    }
     
     [self.view addSubview:self.viewProgress];
     self.stringUserEmail = @"";
@@ -141,6 +146,8 @@
         UIButton *btnForgotPassword = (UIButton *)[self.view viewWithTag:955];
         btnForgotPassword.frame = CGRectMake(_buttonEnter.frame.origin.x, btnForgotPassword.frame.origin.y, btnForgotPassword.frame.size.width, btnForgotPassword.frame.size.height);
     }
+    
+    
 }
 
 -(void) viewDidAppear:(BOOL)animated
@@ -364,6 +371,10 @@
         movementDistance = 264;
     }
     
+    if (UIScreen.mainScreen.bounds.size.height < 568)
+    {
+        movementDistance = 200;
+    }
     //const float movementDuration = 0.3f; // tweak as needed
     
     int movement = (up ? -movementDistance : movementDistance);
