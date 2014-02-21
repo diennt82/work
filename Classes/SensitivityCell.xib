@@ -85,8 +85,8 @@
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                     </imageView>
-                    <imageView userInteractionEnabled="NO" tag="508" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="cone.png" id="ULh-dH-Bv0">
-                        <rect key="frame" x="20" y="-3" width="20" height="14"/>
+                    <imageView userInteractionEnabled="NO" tag="508" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="settings_white_arrow.png" id="ULh-dH-Bv0">
+                        <rect key="frame" x="20" y="0.0" width="10" height="6"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     </imageView>
                 </subviews>
@@ -100,10 +100,10 @@
         </tableViewCell>
     </objects>
     <resources>
-        <image name="cone.png" width="20" height="14"/>
         <image name="settings_circle.png" width="6" height="6"/>
         <image name="settings_circle_white.png" width="20" height="20"/>
         <image name="settings_line.png" width="295" height="2"/>
         <image name="settings_switch_off.png" width="50" height="27"/>
+        <image name="settings_white_arrow.png" width="10" height="6"/>
     </resources>
 </document>

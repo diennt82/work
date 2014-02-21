@@ -6,6 +6,8 @@
 //  Copyright (c) 2014 Smart Panda Ltd. All rights reserved.
 //
 
+#define MOVEMENT_DURATION 0.3 //movementDuration
+
 #define _AutoLogin @"shouldAutoLoginIfPossible"
 #define _Use3G @"use3GToConnect"
 #define _OfflineMode @"offlineMode"
@@ -60,6 +62,9 @@
 {
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
+    
+    
+    
     [self.view addSubview:self.viewProgress];
     self.stringUserEmail = @"";
     self.stringPassword  = @"";
@@ -76,7 +81,7 @@
 	//load user/pass
 	NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
 	//can be user email or user name here --
-	NSString * old_usr = (NSString *) [userDefaults objectForKey:@"PortalUsername"];
+	NSString * old_usr = (NSString *) [userDefaults objectForKey:@"PortalUseremail"];
 	NSString * old_pass = (NSString *) [userDefaults objectForKey:@"PortalPassword"];
     self.stringUserEmail  = (NSString*) [userDefaults objectForKey:@"PortalUseremail"];
     
@@ -109,12 +114,18 @@
         }
         else
         {
+            NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+            [userDefaults removeObjectForKey:@"string_Camera_Mac_Being_Viewed"];
+            [userDefaults synchronize];
             self.viewProgress.hidden = YES;
             NSLog(@" NO LOGIN");
         }
 	}
     else
     {
+        NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+        [userDefaults removeObjectForKey:@"string_Camera_Mac_Being_Viewed"];
+        [userDefaults synchronize];
         self.viewProgress.hidden = YES;
         self.buttonEnter.enabled = NO;
     }
@@ -124,6 +135,13 @@
 {
     [super viewWillAppear:animated];
     self.navigationController.navigationBarHidden = YES;
+    [self.view resignFirstResponder];
+    
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+    {
+        UIButton *btnForgotPassword = (UIButton *)[self.view viewWithTag:955];
+        btnForgotPassword.frame = CGRectMake(_buttonEnter.frame.origin.x, btnForgotPassword.frame.origin.y, btnForgotPassword.frame.size.width, btnForgotPassword.frame.size.height);
+    }
 }
 
 -(void) viewDidAppear:(BOOL)animated
@@ -154,8 +172,7 @@
 - (IBAction)buttnEnterTouchUpInsideAction:(id)sender
 {
     self.buttonEnterPressedFlag = YES;
-    [self.tfEmail resignFirstResponder];
-    [self.tfPassword resignFirstResponder];
+    [self.view endEditing:YES];
     
     
     self.stringUsername = [NSString stringWithString:_tfEmail.text];
@@ -334,14 +351,20 @@
 
 - (void) animateTextField: (UITextField*) textField up: (BOOL) up
 {
-    const int movementDistance = 80; // tweak as needed
-    const float movementDuration = 0.3f; // tweak as needed
+    NSInteger movementDistance = 216; // tweak as needed
+    
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+    {
+        movementDistance = 264;
+    }
+    
+    //const float movementDuration = 0.3f; // tweak as needed
     
     int movement = (up ? -movementDistance : movementDistance);
     
     [UIView beginAnimations: @"anim" context: nil];
     [UIView setAnimationBeginsFromCurrentState: YES];
-    [UIView setAnimationDuration: movementDuration];
+    [UIView setAnimationDuration: MOVEMENT_DURATION];
     self.view.frame = CGRectOffset(self.view.frame, 0, movement);
     [UIView commitAnimations];
 }

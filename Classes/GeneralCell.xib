@@ -32,8 +32,8 @@
                             <action selector="btnClockTouchUpInsideAction:" destination="TJY-BF-j03" eventType="touchUpInside" id="eBI-kG-7Lv"/>
                         </connections>
                     </button>
-                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="cone.png" id="q1d-AL-xPd">
-                        <rect key="frame" x="17" y="-3" width="20" height="14"/>
+                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="settings_white_arrow.png" id="q1d-AL-xPd">
+                        <rect key="frame" x="20" y="0.0" width="10" height="6"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     </imageView>
                     <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Temperature" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="dSb-KJ-cPx">
@@ -66,8 +66,8 @@
         </tableViewCell>
     </objects>
     <resources>
-        <image name="cone.png" width="20" height="14"/>
         <image name="settings_hr_24.png" width="75" height="27"/>
         <image name="settings_temp_c.png" width="75" height="27"/>
+        <image name="settings_white_arrow.png" width="10" height="6"/>
     </resources>
 </document>

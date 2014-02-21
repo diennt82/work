@@ -8,6 +8,16 @@
 
 #import <UIKit/UIKit.h>
 
+@protocol SensitivityTemperaureCellDelegate <NSObject>
+
+- (void)valueChangedTypeTemperaure: (BOOL) isFahrenheit;
+- (void)valueChangedTempLowValue: (NSInteger) tempValue;
+- (void)valueChangedTempHighValue: (NSInteger) tempValue;
+- (void)valueChangedTempLowOn: (BOOL)isOn;
+- (void)valueChangedTempHighOn: (BOOL)isOn;
+
+@end
+
 @interface SensitivityTemperatureCell : UITableViewCell
 
 @property (nonatomic) BOOL isFahrenheit;
@@ -16,5 +26,7 @@
 
 @property (nonatomic) BOOL isSwitchOnLeft;
 @property (nonatomic) BOOL isSwitchOnRight;
+
+@property (nonatomic, assign) id<SensitivityTemperaureCellDelegate> sensitivityTempCellDelegate;
 
 @end
