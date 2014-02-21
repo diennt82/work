@@ -152,8 +152,45 @@
     NSString * ok = NSLocalizedStringWithDefaultValue(@"Ok",nil, [NSBundle mainBundle],
                                                       @"Ok", nil);
     NSString * title = nil;
+    
+    NSString * regex = @"[a-zA-Z0-9._-]+";
+    NSPredicate * validatedUsername = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", regex];
+    BOOL isValidateUsername = [validatedUsername evaluateWithObject:_tfUsername.text];
 
-    if (([_tfPassword.text length] < 8) ||
+    //UserName at least 5 chars and at most 20 characters
+    if ([_tfUsername.text length] < 5 || 20 < [_tfUsername.text length])
+    {
+        //error
+        title = NSLocalizedStringWithDefaultValue(@"Create_Account_Failed",nil, [NSBundle mainBundle],
+                                                  @"Create Account Failed" , nil);
+        msg = NSLocalizedStringWithDefaultValue(@"Create_Account_Failed_msg",nil, [NSBundle mainBundle],
+                                                @"User name has to be between 5-20 characters" , nil);
+        //ERROR condition
+        UIAlertView *_alert = [[UIAlertView alloc]
+                               initWithTitle:title
+                               message:msg
+                               delegate:self
+                               cancelButtonTitle:ok
+                               otherButtonTitles:nil];
+        [_alert show];
+        [_alert release];
+    }
+    else if (!isValidateUsername)
+    {
+        title = NSLocalizedStringWithDefaultValue(@"Create_Account_Failed",nil, [NSBundle mainBundle],
+                                                  @"Create Account Failed" , nil);
+        msg = NSLocalizedStringWithDefaultValue(@"Create_Account_Failed_msg5", nil, [NSBundle mainBundle],
+                                                @"Username should not contain special characters except for - _ and ."  , nil);
+        
+        //ERROR condition
+        [[[[UIAlertView alloc] initWithTitle:title message:msg
+                                    delegate:self
+                           cancelButtonTitle:ok
+                           otherButtonTitles:nil]
+          autorelease]
+         show];
+    }
+    else if (([_tfPassword.text length] < 8) ||
              ([_tfPassword.text length] > 12) )
     {
         //error
