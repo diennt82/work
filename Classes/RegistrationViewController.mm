@@ -12,6 +12,8 @@
 #import "Step_10_ViewController.h"
 
 @interface RegistrationViewController () <UITextFieldDelegate>
+    
+    @property (retain, nonatomic) IBOutlet UITextField *tfUsername;
 
 @property (retain, nonatomic) IBOutlet UITextField *tfEmail;
 @property (retain, nonatomic) IBOutlet UITextField *tfPassword;
@@ -59,6 +61,7 @@
     [self.btnCheckbox setImage:[UIImage imageNamed:@"checkbox_active"] forState:UIControlStateSelected];
     [self.btnCheckbox setImage:[UIImage imageNamed:@"checkbox_active"] forState:UIControlStateHighlighted];
     
+    self.tfUsername.delegate = self;
     self.tfEmail.delegate = self;
     self.tfPassword.delegate = self;
     self.tfConfirmPassword.delegate =self;
@@ -131,7 +134,7 @@
     
     if (UIScreen.mainScreen.bounds.size.height < 568)
     {
-        movementDistance = 190;
+        movementDistance = 155;
     }
     
     int movement = (up ? -movementDistance : movementDistance);
@@ -229,8 +232,8 @@
         [self.view endEditing:YES];
         [self.view addSubview:_viewProgress];
         //Register user ...
+        self.stringUsername   = _tfUsername.text;
         self.stringEmail      = _tfEmail.text;
-        self.stringUsername   = [_stringEmail stringByReplacingOccurrencesOfString:@"@" withString:@"_"];
         self.stringPassword   = _tfPassword.text;
         self.stringCPassword  = _tfConfirmPassword.text;
 
@@ -419,6 +422,7 @@
     [_btnCheckbox release];
     [_btnCreate release];
     [_viewProgress release];
+    [_tfUsername release];
     [super dealloc];
 }
 @end
