@@ -345,9 +345,6 @@
 		case SETUP_CAMERA: 
 			{
 
-				
-                
-                
 				[self dismissViewControllerAnimated:NO completion:nil];
 
 
@@ -415,31 +412,8 @@
 				[userDefaults setBool:TRUE forKey:_AutoLogin];
 				[userDefaults synchronize];
 
-#if 1
+
                 [self show_login_or_reg:nil];
-#else
-                MBP_LoginOrRegistration * loginOrReg;
-                if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
-                {
-                    loginOrReg = [[MBP_LoginOrRegistration alloc] initWithNibName:@"MBP_LoginOrRegistration_ipad"
-                                                                           bundle:nil
-                                                                 withConnDelegate:self];
-                }
-                else
-                {
-                    loginOrReg = [[MBP_LoginOrRegistration alloc]
-                                  initWithNibName:@"MBP_LoginOrRegistration"
-                                  bundle:nil
-                                  withConnDelegate:self];
-                }
-
-
-				
-
-
-				//Use navigation controller 
-				[loginOrReg presentModallyOn:self];
-#endif
 				break;
 			}
 
@@ -930,6 +904,7 @@
 
 -(void) logoutAndUnregistration_bg
 {
+#if  !TARGET_IPHONE_SIMULATOR
     NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
     
     NSLog(@"De-Register push with both parties: APNs and BMS ");
@@ -963,6 +938,7 @@
                         waitUntilDone:NO];
     
 	[pool release];
+#endif
 }
 
 #pragma mark -
@@ -1850,7 +1826,7 @@
 #pragma mark SetupHTTPDelegate --- NOT USED --- check ..
 
 
-#if 1
+
 -(void) show_login_or_reg:(NSTimer*) exp
 {
 	NSLog(@"show_login...");
@@ -1867,36 +1843,6 @@
     [self presentViewController:nav animated:YES completion:^{}];
     //[nav release];
 }
-#else
--(void) show_login_or_reg:(NSTimer*) exp
-{
-
-	NSLog(@"show_login..."); 
-
-    self.app_stage = APP_STAGE_LOGGING_IN;
-
-    MBP_LoginOrRegistration * loginOrReg;
-    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
-    {
-        loginOrReg = [[MBP_LoginOrRegistration alloc] initWithNibName:@"MBP_LoginOrRegistration_ipad"
-                                                               bundle:nil
-                                                     withConnDelegate:self];
-    }
-    else
-    {
-        loginOrReg = [[MBP_LoginOrRegistration alloc]
-                      initWithNibName:@"MBP_LoginOrRegistration"
-                      bundle:nil
-                      withConnDelegate:self];
-    }
-
-
-
-	//Use navigation controller
-	[loginOrReg presentModallyOn:self];
-
-}
-#endif
 
 #if 1
 - (void)showNotificationViewController: (NSTimer *)exp

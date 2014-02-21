@@ -828,15 +828,16 @@
             [userDefaults setObject:self.apiKey forKey:@"PortalApiKey"];
             
             [userDefaults synchronize];
+           
             
-            //MOVE on now ..
             
             //Register for push
-            
+             NSLog(@"Login success! 1");
             // Let the device know we want to receive push notifications
             [[UIApplication sharedApplication] registerForRemoteNotificationTypes:
              (UIRemoteNotificationType) (UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeAlert)];
             
+             NSLog(@"Login success! 2");
             account = [[UserAccount alloc] initWithUser:self.temp_user_str
                                                 andPass:self.temp_pass_str
                                               andApiKey:self.apiKey
@@ -850,7 +851,7 @@
             
             [self dismissViewControllerAnimated:NO completion:^{}];
             
-            NSLog(@"Login success!");
+            NSLog(@"Login success! 3");
         }
         else
         {

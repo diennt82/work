@@ -297,6 +297,7 @@
     
     [jsonComm loginWithLogin:_stringUsername andPassword:_stringPassword];
     
+    NSLog(@"start logging"); 
     if (_client == nil)
     {
         _client = [StunClient alloc]; //init];
