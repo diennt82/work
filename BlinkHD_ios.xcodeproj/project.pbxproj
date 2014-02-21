@@ -103,6 +103,11 @@
 		841D567B1834C1E600ACE7A7 /* streamqvga.sdp in Resources */ = {isa = PBXBuildFile; fileRef = 841D567A1834C1E600ACE7A7 /* streamqvga.sdp */; };
 		84DEA2BB17E42E3F00567836 /* NotificationViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 84DEA2B917E42E3F00567836 /* NotificationViewController.mm */; };
 		84DEA2BC17E42E3F00567836 /* NotificationViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 84DEA2BA17E42E3F00567836 /* NotificationViewController.xib */; };
+		84E9D1CB18B728A000468918 /* libpj-arm-apple-darwin9.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 84E9D1C818B728A000468918 /* libpj-arm-apple-darwin9.a */; };
+		84E9D1CC18B728A000468918 /* libpjlib-util-arm-apple-darwin9.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 84E9D1C918B728A000468918 /* libpjlib-util-arm-apple-darwin9.a */; };
+		84E9D1CD18B728A000468918 /* libpjnath-arm-apple-darwin9.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 84E9D1CA18B728A000468918 /* libpjnath-arm-apple-darwin9.a */; };
+		84E9D1CE18B7294200468918 /* libGoogleAnalytics_debug.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A15431041818D14100337EFE /* libGoogleAnalytics_debug.a */; };
+		84E9D1CF18B7294200468918 /* libGoogleAnalytics.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A15431051818D14100337EFE /* libGoogleAnalytics.a */; };
 		84F27EC118AE10750000CA7A /* UARTPeripheral.m in Sources */ = {isa = PBXBuildFile; fileRef = 84F27EC018AE10750000CA7A /* UARTPeripheral.m */; };
 		84FD1DCF1832399E00238089 /* stream720p_10_926_alaw.sdp in Resources */ = {isa = PBXBuildFile; fileRef = 84FD1DCE1832399E00238089 /* stream720p_10_926_alaw.sdp */; };
 		8B1D544D186581B8008857F0 /* SchedulerCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B1D544C186581B8008857F0 /* SchedulerCell.m */; };
@@ -616,14 +621,9 @@
 		A14631C6185C133D00E96969 /* ScrollHorizontalMenu.m in Sources */ = {isa = PBXBuildFile; fileRef = A14631C5185C133D00E96969 /* ScrollHorizontalMenu.m */; };
 		A15110D718AB7D4600E116E1 /* TimeLinePremiumCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A15110D618AB7D4600E116E1 /* TimeLinePremiumCell.m */; };
 		A15110DD18AB7D9800E116E1 /* TimeLinePremiumCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = A15110DC18AB7D9800E116E1 /* TimeLinePremiumCell.xib */; };
-		A15430F31818CA4700337EFE /* libpj-arm-apple-darwin9.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A15430F01818CA4700337EFE /* libpj-arm-apple-darwin9.a */; };
-		A15430F41818CA4700337EFE /* libpjlib-util-arm-apple-darwin9.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A15430F11818CA4700337EFE /* libpjlib-util-arm-apple-darwin9.a */; };
-		A15430F51818CA4700337EFE /* libpjnath-arm-apple-darwin9.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A15430F21818CA4700337EFE /* libpjnath-arm-apple-darwin9.a */; };
 		A15430FB1818CFD500337EFE /* H264MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A15430FA1818CFD500337EFE /* H264MediaPlayer.framework */; };
 		A15430FF1818D08A00337EFE /* libTestFlight.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A15430FD1818D08A00337EFE /* libTestFlight.a */; };
 		A15431011818D10200337EFE /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9770CDF7143076DD009E69EF /* AudioToolbox.framework */; };
-		A15431061818D14100337EFE /* libGoogleAnalytics_debug.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A15431041818D14100337EFE /* libGoogleAnalytics_debug.a */; };
-		A15431071818D14100337EFE /* libGoogleAnalytics.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A15431051818D14100337EFE /* libGoogleAnalytics.a */; };
 		A15431091818DEB800337EFE /* streamvga.sdp in Resources */ = {isa = PBXBuildFile; fileRef = A15431081818DEB800337EFE /* streamvga.sdp */; };
 		A15773A1186145DD00DEBD45 /* H264PlayerViewController_land_iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = A157739F186145DD00DEBD45 /* H264PlayerViewController_land_iPad.xib */; };
 		A15773A2186145DD00DEBD45 /* H264PlayerViewController_land.xib in Resources */ = {isa = PBXBuildFile; fileRef = A15773A0186145DD00DEBD45 /* H264PlayerViewController_land.xib */; };
@@ -827,6 +827,9 @@
 		84DEA2B817E42E3F00567836 /* NotificationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NotificationViewController.h; sourceTree = "<group>"; };
 		84DEA2B917E42E3F00567836 /* NotificationViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = NotificationViewController.mm; sourceTree = "<group>"; };
 		84DEA2BA17E42E3F00567836 /* NotificationViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = NotificationViewController.xib; sourceTree = "<group>"; };
+		84E9D1C818B728A000468918 /* libpj-arm-apple-darwin9.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libpj-arm-apple-darwin9.a"; path = "../ios-frameworks/pjsip/dist-uarch/lib/libpj-arm-apple-darwin9.a"; sourceTree = "<group>"; };
+		84E9D1C918B728A000468918 /* libpjlib-util-arm-apple-darwin9.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libpjlib-util-arm-apple-darwin9.a"; path = "../ios-frameworks/pjsip/dist-uarch/lib/libpjlib-util-arm-apple-darwin9.a"; sourceTree = "<group>"; };
+		84E9D1CA18B728A000468918 /* libpjnath-arm-apple-darwin9.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libpjnath-arm-apple-darwin9.a"; path = "../ios-frameworks/pjsip/dist-uarch/lib/libpjnath-arm-apple-darwin9.a"; sourceTree = "<group>"; };
 		84F27EC018AE10750000CA7A /* UARTPeripheral.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UARTPeripheral.m; sourceTree = "<group>"; };
 		84FD1DCE1832399E00238089 /* stream720p_10_926_alaw.sdp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = stream720p_10_926_alaw.sdp; sourceTree = "<group>"; };
 		8B1D544B186581B8008857F0 /* SchedulerCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SchedulerCell.h; sourceTree = "<group>"; };
@@ -1420,9 +1423,6 @@
 		A15110D518AB7D4600E116E1 /* TimeLinePremiumCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TimeLinePremiumCell.h; sourceTree = "<group>"; };
 		A15110D618AB7D4600E116E1 /* TimeLinePremiumCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TimeLinePremiumCell.m; sourceTree = "<group>"; };
 		A15110DC18AB7D9800E116E1 /* TimeLinePremiumCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TimeLinePremiumCell.xib; sourceTree = "<group>"; };
-		A15430F01818CA4700337EFE /* libpj-arm-apple-darwin9.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libpj-arm-apple-darwin9.a"; path = "../ios-frameworks/pjsip/arm/lib/libpj-arm-apple-darwin9.a"; sourceTree = "<group>"; };
-		A15430F11818CA4700337EFE /* libpjlib-util-arm-apple-darwin9.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libpjlib-util-arm-apple-darwin9.a"; path = "../ios-frameworks/pjsip/arm/lib/libpjlib-util-arm-apple-darwin9.a"; sourceTree = "<group>"; };
-		A15430F21818CA4700337EFE /* libpjnath-arm-apple-darwin9.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libpjnath-arm-apple-darwin9.a"; path = "../ios-frameworks/pjsip/arm/lib/libpjnath-arm-apple-darwin9.a"; sourceTree = "<group>"; };
 		A15430FA1818CFD500337EFE /* H264MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = H264MediaPlayer.framework; path = "../ios-frameworks/H264MediaPlayer.framework"; sourceTree = "<group>"; };
 		A15430FC1818D08A00337EFE /* libcrypto.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libcrypto.a; path = "../ios-frameworks/libcrypto.a"; sourceTree = "<group>"; };
 		A15430FD1818D08A00337EFE /* libTestFlight.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libTestFlight.a; path = "../ios-frameworks/libTestFlight.a"; sourceTree = "<group>"; };
@@ -1999,20 +1999,20 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				84E9D1CE18B7294200468918 /* libGoogleAnalytics_debug.a in Frameworks */,
+				84E9D1CF18B7294200468918 /* libGoogleAnalytics.a in Frameworks */,
+				84E9D1CB18B728A000468918 /* libpj-arm-apple-darwin9.a in Frameworks */,
+				84E9D1CC18B728A000468918 /* libpjlib-util-arm-apple-darwin9.a in Frameworks */,
+				84E9D1CD18B728A000468918 /* libpjnath-arm-apple-darwin9.a in Frameworks */,
 				8BA372581887C5EA009FA465 /* CoreData.framework in Frameworks */,
 				8B9640B218811106000C388E /* CoreText.framework in Frameworks */,
 				A1ABF1CC18753C240014FCB4 /* CoreBluetooth.framework in Frameworks */,
 				8408F1811833222A00B00188 /* MonitorCommunication.framework in Frameworks */,
 				8BA23841182CBC130022581A /* CameraScanner.framework in Frameworks */,
 				8BA5C47C1818DAAC006B4BB8 /* libcrypto.a in Frameworks */,
-				A15431061818D14100337EFE /* libGoogleAnalytics_debug.a in Frameworks */,
-				A15431071818D14100337EFE /* libGoogleAnalytics.a in Frameworks */,
 				A15431011818D10200337EFE /* AudioToolbox.framework in Frameworks */,
 				9770CDF2143076CD009E69EF /* CoreAudio.framework in Frameworks */,
 				A15430FF1818D08A00337EFE /* libTestFlight.a in Frameworks */,
-				A15430F31818CA4700337EFE /* libpj-arm-apple-darwin9.a in Frameworks */,
-				A15430F41818CA4700337EFE /* libpjlib-util-arm-apple-darwin9.a in Frameworks */,
-				A15430F51818CA4700337EFE /* libpjnath-arm-apple-darwin9.a in Frameworks */,
 				A15430FB1818CFD500337EFE /* H264MediaPlayer.framework in Frameworks */,
 				A11E8C1317E2DB7E00915F84 /* libstdc++.dylib in Frameworks */,
 				38962C831769587E0016AE16 /* libz.dylib in Frameworks */,
@@ -2164,6 +2164,9 @@
 		29B97323FDCFA39411CA2CEA /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				84E9D1C818B728A000468918 /* libpj-arm-apple-darwin9.a */,
+				84E9D1C918B728A000468918 /* libpjlib-util-arm-apple-darwin9.a */,
+				84E9D1CA18B728A000468918 /* libpjnath-arm-apple-darwin9.a */,
 				A11E8C1217E2DB7D00915F84 /* libstdc++.dylib */,
 				38962C821769587E0016AE16 /* libz.dylib */,
 				8BA372571887C5EA009FA465 /* CoreData.framework */,
@@ -2176,9 +2179,6 @@
 				A15430FC1818D08A00337EFE /* libcrypto.a */,
 				A15430FD1818D08A00337EFE /* libTestFlight.a */,
 				A15430FA1818CFD500337EFE /* H264MediaPlayer.framework */,
-				A15430F01818CA4700337EFE /* libpj-arm-apple-darwin9.a */,
-				A15430F11818CA4700337EFE /* libpjlib-util-arm-apple-darwin9.a */,
-				A15430F21818CA4700337EFE /* libpjnath-arm-apple-darwin9.a */,
 				A10EC10C17E0677C00EA4F9D /* libavcodec.a */,
 				A10EC10D17E0677C00EA4F9D /* libavdevice.a */,
 				A10EC10E17E0677C00EA4F9D /* libavfilter.a */,
@@ -5240,8 +5240,8 @@
 					"$(SRCROOT)/../ios-frameworks/ffmpeg/lib",
 					"$(SRCROOT)/../ios-frameworks/udt",
 					"$(SRCROOT)/../ios-frameworks/Google\\ Analytics\\ Library",
-					"$(SRCROOT)/../ios-frameworks/pjsip/arm/lib",
 					"$(SRCROOT)/../ios-frameworks",
+					"$(SRCROOT)/../ios-frameworks/pjsip/dist-uarch/lib",
 				);
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_CFLAGS = (
@@ -5294,7 +5294,7 @@
 					"$(SRCROOT)/../ios-frameworks/ffmpeg/lib",
 					"$(SRCROOT)/../ios-frameworks/udt",
 					"$(SRCROOT)/../ios-frameworks/Google\\ Analytics\\ Library",
-					"$(SRCROOT)/../ios-frameworks/pjsip/arm/lib",
+					"$(SRCROOT)/../ios-frameworks/pjsip/dist-uarch/lib",
 					"$(SRCROOT)/../ios-frameworks",
 				);
 				ONLY_ACTIVE_ARCH = NO;
@@ -5366,8 +5366,8 @@
 					"$(SRCROOT)/../ios-frameworks/H264Player.lib",
 					"$(SRCROOT)/../ios-frameworks/ffmpeg/lib",
 					"$(SRCROOT)/../ios-frameworks/udt",
-					"$(SRCROOT)/../ios-frameworks/Google\\ Analytics\\ Library",
-					"$(SRCROOT)/../ios-frameworks/pjsip/arm/lib",
+					"$(SRCROOT)/../ios-frameworks/Google\\\\\\ Analytics\\\\\\ Library",
+					"$(SRCROOT)/../ios-frameworks/pjsip/dist-uarch/lib",
 					"$(SRCROOT)/../ios-frameworks",
 				);
 				ONLY_ACTIVE_ARCH = NO;
