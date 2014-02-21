@@ -633,6 +633,9 @@
 		A18635F118B6F43F00CB5CDA /* CellMelody.m in Sources */ = {isa = PBXBuildFile; fileRef = A18635ED18B6F43F00CB5CDA /* CellMelody.m */; };
 		A18635F218B6F43F00CB5CDA /* CellMelody.xib in Resources */ = {isa = PBXBuildFile; fileRef = A18635EE18B6F43F00CB5CDA /* CellMelody.xib */; };
 		A18635F318B6F43F00CB5CDA /* MelodyViewController_land.xib in Resources */ = {isa = PBXBuildFile; fileRef = A18635EF18B6F43F00CB5CDA /* MelodyViewController_land.xib */; };
+		A18635F518B74BF400CB5CDA /* CellMelody_Portrait_iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = A18635F418B74BF400CB5CDA /* CellMelody_Portrait_iPad.xib */; };
+		A18635F918B74DBB00CB5CDA /* MelodyViewController_iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = A18635F818B74DBB00CB5CDA /* MelodyViewController_iPad.xib */; };
+		A18635FB18B7527000CB5CDA /* EarlierViewController_iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = A18635FA18B7527000CB5CDA /* EarlierViewController_iPad.xib */; };
 		A19778ED181E3316007C3CA7 /* ZoneViewController_ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = A19778EC181E3316007C3CA7 /* ZoneViewController_ipad.xib */; };
 		A19778F9181E6C55007C3CA7 /* motion_detection_off_1.png in Resources */ = {isa = PBXBuildFile; fileRef = A19778F7181E6C55007C3CA7 /* motion_detection_off_1.png */; };
 		A19778FB181E6CAB007C3CA7 /* motion_detection_on.png in Resources */ = {isa = PBXBuildFile; fileRef = A19778FA181E6CAB007C3CA7 /* motion_detection_on.png */; };
@@ -1440,6 +1443,9 @@
 		A18635ED18B6F43F00CB5CDA /* CellMelody.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CellMelody.m; sourceTree = "<group>"; };
 		A18635EE18B6F43F00CB5CDA /* CellMelody.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CellMelody.xib; sourceTree = "<group>"; };
 		A18635EF18B6F43F00CB5CDA /* MelodyViewController_land.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MelodyViewController_land.xib; sourceTree = "<group>"; };
+		A18635F418B74BF400CB5CDA /* CellMelody_Portrait_iPad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CellMelody_Portrait_iPad.xib; sourceTree = "<group>"; };
+		A18635F818B74DBB00CB5CDA /* MelodyViewController_iPad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MelodyViewController_iPad.xib; sourceTree = "<group>"; };
+		A18635FA18B7527000CB5CDA /* EarlierViewController_iPad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EarlierViewController_iPad.xib; sourceTree = "<group>"; };
 		A19778EC181E3316007C3CA7 /* ZoneViewController_ipad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ZoneViewController_ipad.xib; sourceTree = "<group>"; };
 		A19778F7181E6C55007C3CA7 /* motion_detection_off_1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = motion_detection_off_1.png; sourceTree = "<group>"; };
 		A19778FA181E6CAB007C3CA7 /* motion_detection_on.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = motion_detection_on.png; sourceTree = "<group>"; };
@@ -2970,6 +2976,7 @@
 				8B92A0AC1863FD13005923D2 /* EarlierViewController.h */,
 				8B92A0AD1863FD13005923D2 /* EarlierViewController.m */,
 				8B92A0AE1863FD13005923D2 /* EarlierViewController.xib */,
+				A18635FA18B7527000CB5CDA /* EarlierViewController_iPad.xib */,
 			);
 			name = Earlier;
 			sourceTree = "<group>";
@@ -3268,14 +3275,16 @@
 		8B9CCB9F183EF86C007C0F65 /* MelodyControl */ = {
 			isa = PBXGroup;
 			children = (
-				A18635EF18B6F43F00CB5CDA /* MelodyViewController_land.xib */,
 				8B9CCBA0183EF8B2007C0F65 /* MelodyViewController.h */,
 				8B9CCBA1183EF8B2007C0F65 /* MelodyViewController.m */,
 				8B9CCBA2183EF8B2007C0F65 /* MelodyViewController.xib */,
+				A18635F818B74DBB00CB5CDA /* MelodyViewController_iPad.xib */,
+				A18635EF18B6F43F00CB5CDA /* MelodyViewController_land.xib */,
 				A18635EC18B6F43F00CB5CDA /* CellMelody.h */,
 				A18635ED18B6F43F00CB5CDA /* CellMelody.m */,
 				A18635EE18B6F43F00CB5CDA /* CellMelody.xib */,
 				A18635EB18B6F43F00CB5CDA /* CellMelody_land.xib */,
+				A18635F418B74BF400CB5CDA /* CellMelody_Portrait_iPad.xib */,
 			);
 			name = MelodyControl;
 			sourceTree = "<group>";
@@ -3699,6 +3708,7 @@
 				8B299F5F18AF500900D36BE5 /* alert_play_pressed.png in Resources */,
 				8B9C7E0E185F260A0038B3A8 /* MenuViewController.xib in Resources */,
 				A18635F318B6F43F00CB5CDA /* MelodyViewController_land.xib in Resources */,
+				A18635F518B74BF400CB5CDA /* CellMelody_Portrait_iPad.xib in Resources */,
 				8B29A04018AF500900D36BE5 /* dont_disturb_handle@2x.png in Resources */,
 				8B299FE118AF500900D36BE5 /* tab_inactive.png in Resources */,
 				38DE1C8C168AEB270049E814 /* Step_08_ViewController.xib in Resources */,
@@ -3988,6 +3998,7 @@
 				8B909B88187BE2F800F8A450 /* loader_4.png in Resources */,
 				38DE1CB9168AEBAF0049E814 /* Step_03_ViewController_ipad.xib in Resources */,
 				8B299FDE18AF500900D36BE5 /* feed_date@2x.png in Resources */,
+				A18635FB18B7527000CB5CDA /* EarlierViewController_iPad.xib in Resources */,
 				8B299F5B18AF500900D36BE5 /* alert_learn_pressed.png in Resources */,
 				38DE1CAF168AEB970049E814 /* Step_04_ViewController_ipad.xib in Resources */,
 				38DE1CA5168AEB800049E814 /* Step_05_ViewController_ipad.xib in Resources */,
@@ -4021,6 +4032,7 @@
 				8B299FA818AF500900D36BE5 /* camera_action_pan_knob@2x.png in Resources */,
 				8B29A03018AF500900D36BE5 /* add_camera_pressed@2x.png in Resources */,
 				8B9899DE1859AA6A00AC3852 /* slider-default7-trackCrossedOver@2x.png in Resources */,
+				A18635F918B74DBB00CB5CDA /* MelodyViewController_iPad.xib in Resources */,
 				8B299F6718AF500900D36BE5 /* alert_upgrade_pressed.png in Resources */,
 				388396B9168B064500B0D020 /* MBP_iosViewController.xib in Resources */,
 				8BC0A0221844A6EE00A5FD52 /* bb_setup_icon_step_3_eye.png in Resources */,

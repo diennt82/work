@@ -23,6 +23,7 @@
     UITableView *_melodyTableView;
     IBOutlet UITableViewCell * cellMelody;
     IBOutlet UITableViewCell * cellMelody_land;
+    IBOutlet UITableViewCell * cellMelody_iPad;
 }
 @property (retain, nonatomic) IBOutlet UITableView *melodyTableView;
 @property (nonatomic) NSInteger melodyIndex;

@@ -236,7 +236,6 @@ double _ticks = 0;
 }
 - (void)applyFont
 {
- 
     
     if (_isLandScapeMode)
     {
@@ -255,11 +254,18 @@ double _ticks = 0;
         float alignXTTT = SCREEN_HEIGHT - 30 - holdTTButtonSize.width;
         float alignYTTT = SCREEN_WIDTH - 30 - holdTTButtonSize.height;
         
-        if (!isiOS7AndAbove)
+
+        if (isiPhone4 || isiPhone5)
         {
-            alignYTTT = alignYTTT - 64;
-            alignYButtonRecord = alignYButtonRecord - 64;
-            alignYButtonDirectionPad = alignYButtonDirectionPad - 64;
+            alignYTTT = alignYTTT;
+            alignYButtonRecord = alignYButtonRecord;
+            alignYButtonDirectionPad = alignYButtonDirectionPad;
+        }
+        else
+        {
+            alignYTTT = alignYTTT - 94;
+            alignYButtonRecord = alignYButtonRecord - 94;
+            alignYButtonDirectionPad = alignYButtonDirectionPad - 94;
         }
         
         [self.ib_ViewTouchToTalk setFrame:CGRectMake(alignXTTT, alignYTTT, holdTTButtonSize.width, holdTTButtonSize.height)];
@@ -2546,22 +2552,64 @@ double _ticks = 0;
         positionYOfBottomView = positionYOfBottomView - 44;
     if (_isLandScapeMode)
     {
+        
         degreeCelsius.backgroundColor=[UIColor clearColor];
         degreeCelsius.textColor=[UIColor whiteColor];
+        float xPosTemperature;
+        float yPosTemperature;
+        CGSize stringBoundingBox;;
+        CGSize degreeCelBoundingBox;
+        if (isiPhone5)
+        {
+            degreeFont = [UIFont applyHubbleFontName:PN_LIGHT_FONT withSize:13];
+            temperatureFont = [UIFont applyHubbleFontName:PN_LIGHT_FONT withSize:53];
+            
+            [degreeCelsius setFont:degreeFont];
+            [self.ib_temperature setFont:temperatureFont];
+            [self.ib_temperature setTextColor:[UIColor whiteColor]];
+            [self.ib_temperature setText:stringTemperature];
+            
+            stringBoundingBox = [stringTemperature sizeWithFont:temperatureFont];
+            degreeCelBoundingBox = [degreeCel sizeWithFont:degreeFont];
+            
+            xPosTemperature = SCREEN_HEIGHT - self.ib_temperature.bounds.size.width - 40 + (self.ib_temperature.bounds.size.width - stringBoundingBox.width)/2;
+            yPosTemperature = SCREEN_WIDTH - 20 - stringBoundingBox.height;
+            
+            
+        }
+        else if (isiPhone4)
+        {
+            degreeFont = [UIFont applyHubbleFontName:PN_LIGHT_FONT withSize:13];
+            temperatureFont = [UIFont applyHubbleFontName:PN_LIGHT_FONT withSize:53];
+            [degreeCelsius setFont:degreeFont];
+            [self.ib_temperature setFont:temperatureFont];
+            [self.ib_temperature setTextColor:[UIColor whiteColor]];
+            [self.ib_temperature setText:stringTemperature];
+            
+            stringBoundingBox = [stringTemperature sizeWithFont:temperatureFont];
+            degreeCelBoundingBox = [degreeCel sizeWithFont:degreeFont];
+            
+            xPosTemperature = SCREEN_HEIGHT - self.ib_temperature.bounds.size.width - 40 + (self.ib_temperature.bounds.size.width - stringBoundingBox.width)/2;
+            yPosTemperature = SCREEN_WIDTH - 20 - stringBoundingBox.height;
+        }
+        else
+        {
+            degreeFont = [UIFont applyHubbleFontName:PN_LIGHT_FONT withSize:30];
+            temperatureFont = [UIFont applyHubbleFontName:PN_LIGHT_FONT withSize:100];
+            positionYOfBottomView = self.ib_temperature.frame.origin.y;
+            [degreeCelsius setFont:degreeFont];
+            [self.ib_temperature setFont:temperatureFont];
+            [self.ib_temperature setTextColor:[UIColor whiteColor]];
+            [self.ib_temperature setText:stringTemperature];
+            
+            stringBoundingBox = [stringTemperature sizeWithFont:temperatureFont];
+            degreeCelBoundingBox = [degreeCel sizeWithFont:degreeFont];
+            
+            xPosTemperature = SCREEN_HEIGHT - self.ib_temperature.bounds.size.width - 40 + (self.ib_temperature.bounds.size.width - stringBoundingBox.width)/2;
+            yPosTemperature = SCREEN_WIDTH - 92 - stringBoundingBox.height;
+        }
         
-        degreeFont = [UIFont applyHubbleFontName:PN_LIGHT_FONT withSize:13];
-        temperatureFont = [UIFont applyHubbleFontName:PN_LIGHT_FONT withSize:53];
-        
-        [degreeCelsius setFont:degreeFont];
-        [self.ib_temperature setFont:temperatureFont];
-        [self.ib_temperature setTextColor:[UIColor whiteColor]];
-        [self.ib_temperature setText:stringTemperature];
-        
-        CGSize stringBoundingBox = [stringTemperature sizeWithFont:temperatureFont];
-        CGSize degreeCelBoundingBox = [degreeCel sizeWithFont:degreeFont];
-        
-        float xPosTemperature = SCREEN_HEIGHT - self.ib_temperature.bounds.size.width - 40 + (self.ib_temperature.bounds.size.width - stringBoundingBox.width)/2;
-        float yPosTemperature = SCREEN_WIDTH - 20 - stringBoundingBox.height;
+
         [self.ib_temperature setFrame:CGRectMake(xPosTemperature, yPosTemperature, self.ib_temperature.bounds.size.width, self.ib_temperature.bounds.size.height)];
         [ib_switchDegree setFrame:CGRectMake(xPosTemperature, yPosTemperature, self.ib_temperature.bounds.size.width, self.ib_temperature.bounds.size.height)];
         
@@ -3742,7 +3790,8 @@ double _ticks = 0;
                                           owner:self
                                         options:nil];
 
-                self.melodyViewController.view.frame = CGRectMake(808, 434, 236, 284);
+            self.melodyViewController = [[[MelodyViewController alloc] initWithNibName:@"MelodyViewController_land" bundle:nil] autorelease];
+            [_earlierVC.view setFrame:CGRectMake(0, 0, SCREEN_HEIGHT, SCREEN_WIDTH)];
 
 
         }
@@ -3809,17 +3858,18 @@ double _ticks = 0;
             [[NSBundle mainBundle] loadNibNamed:@"H264PlayerViewController_ipad"
                                           owner:self
                                         options:nil];
+            self.melodyViewController = [[[MelodyViewController alloc] initWithNibName:@"MelodyViewController_iPad" bundle:nil] autorelease];
+            [_earlierVC.view setFrame:CGRectMake(0, 64, SCREEN_WIDTH, SCREEN_HEIGHT)];
         }
         else
         {
             [[NSBundle mainBundle] loadNibNamed:@"H264PlayerViewController"
                                           owner:self
                                         options:nil];
+            self.melodyViewController = [[[MelodyViewController alloc] initWithNibName:@"MelodyViewController" bundle:nil] autorelease];
         }
         
         //portrait mode
-
-        self.melodyViewController = [[[MelodyViewController alloc] initWithNibName:@"MelodyViewController" bundle:nil] autorelease];
         
         self.melodyViewController.selectedChannel = self.selectedChannel;
         self.melodyViewController.melodyVcDelegate = self;
@@ -3906,13 +3956,7 @@ double _ticks = 0;
     self.imageViewHandle.center = _imgViewDrectionPad.center;
     self.imageViewHandle.hidden = YES;
     
-    self.earlierVC.view.hidden = !_isEarlierView;
-    
-    if (_isEarlierView == TRUE)
-    {
-        [self.view addSubview:_earlierVC.view];
-        [self.view bringSubviewToFront:_earlierVC.view];
-    }
+
     
     self.imageViewStreamer.frame = _imageViewVideo.frame;
     [self.scrollView insertSubview:_imageViewStreamer aboveSubview:_imageViewVideo];
@@ -3953,6 +3997,15 @@ double _ticks = 0;
     {
         [_activityIndicator removeFromSuperview];
     }
+    //Earlier must at bottom of land, and port
+    self.earlierVC.view.hidden = !_isEarlierView;
+    
+    if (_isEarlierView == TRUE)
+    {
+        [self.view addSubview:_earlierVC.view];
+        [self.view bringSubviewToFront:_earlierVC.view];
+    }
+
 }
 
 
@@ -4468,6 +4521,9 @@ double _ticks = 0;
     [self hidenAllBottomView];
     if (_selectedItemMenu == INDEX_PAN_TILT)
     {
+        [self.view bringSubviewToFront:_imgViewDrectionPad];
+        [self.view bringSubviewToFront:_imageViewKnob];
+        [self.view bringSubviewToFront:_imageViewHandle];
         [self.imgViewDrectionPad setHidden:NO];
         self.imageViewKnob.hidden = NO;
         self.imageViewKnob.center = _imgViewDrectionPad.center;
@@ -4475,10 +4531,12 @@ double _ticks = 0;
     }
     else if (_selectedItemMenu == INDEX_MICRO)
     {
+        [self.view bringSubviewToFront:self.ib_ViewTouchToTalk];
         [self.ib_ViewTouchToTalk setHidden:NO];
     }
     else if (_selectedItemMenu == INDEX_RECORDING)
     {
+        [self.view bringSubviewToFront:self.ib_viewRecordTTT];
         [self.ib_viewRecordTTT setHidden:NO];
     }
     else if (_selectedItemMenu == INDEX_MELODY)
@@ -4486,14 +4544,22 @@ double _ticks = 0;
         [self.melodyViewController.view setHidden:NO];
         if (_isLandScapeMode)
         {
-            if (isiOS7AndAbove)
+            if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
             {
-                self.melodyViewController.view.frame = CGRectMake(393, 78, 175, 165);
-            }
-            else
+                self.melodyViewController.view.frame = CGRectMake(SCREEN_HEIGHT - 236, SCREEN_WIDTH - 400, 236, 165);
+            } else
             {
-                self.melodyViewController.view.frame = CGRectMake(320, 60, 159, 204);
+                if (isiPhone4)
+                {
+                    self.melodyViewController.view.frame = CGRectMake(SCREEN_HEIGHT - 159, 65, 159, 204);
+                }
+                else
+                {
+                    self.melodyViewController.view.frame = CGRectMake(393, 78, 175, 165);
+                    
+                }
             }
+
         }
         else
         {
