@@ -1486,7 +1486,7 @@ double _ticks = 0;
     self.isHorizeShow = FALSE;
     self.horizMenu.hidden = YES;
     
-    [self hidenAllBottomView];
+//    [self hidenAllBottomView];
     
     //[self showTimelineView];
 }
@@ -1499,7 +1499,7 @@ double _ticks = 0;
     
     [self updateBottomView];
     
-    [self hideTimelineView];
+//    [self hideTimelineView];
     
     if (_timerHideMenu != nil)
     {
@@ -4964,6 +4964,7 @@ double _ticks = 0;
     
     [self updateBottomView];
     [self applyFont];
+    [self hideTimelineView];
 }
 
 - (void)updateBottomView

@@ -498,8 +498,8 @@
 		8B9384A818570284009C4771 /* brightness-u.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B9384A618570284009C4771 /* brightness-u.png */; };
 		8B9384AF18570567009C4771 /* ValueSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B9384AD18570567009C4771 /* ValueSettingsViewController.m */; };
 		8B9384B018570567009C4771 /* ValueSettingsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8B9384AE18570567009C4771 /* ValueSettingsViewController.xib */; };
-		8B94BD73188A42530002E804 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 8B94BD72188A42530002E804 /* Settings.bundle */; };
 		8B94979B18B5E67C004FBDE1 /* SensitivityInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B94979A18B5E67C004FBDE1 /* SensitivityInfo.m */; };
+		8B94BD73188A42530002E804 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 8B94BD72188A42530002E804 /* Settings.bundle */; };
 		8B9584391877DF1D0055BCE3 /* mbp_icon72x72.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B9584381877DF1D0055BCE3 /* mbp_icon72x72.png */; };
 		8B95843B1877DF2F0055BCE3 /* mbp_icon76x76.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B95843A1877DF2F0055BCE3 /* mbp_icon76x76.png */; };
 		8B95843D1877DF400055BCE3 /* mbp_icon120x120.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B95843C1877DF400055BCE3 /* mbp_icon120x120.png */; };
@@ -627,6 +627,10 @@
 		A15431091818DEB800337EFE /* streamvga.sdp in Resources */ = {isa = PBXBuildFile; fileRef = A15431081818DEB800337EFE /* streamvga.sdp */; };
 		A15773A1186145DD00DEBD45 /* H264PlayerViewController_land_iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = A157739F186145DD00DEBD45 /* H264PlayerViewController_land_iPad.xib */; };
 		A15773A2186145DD00DEBD45 /* H264PlayerViewController_land.xib in Resources */ = {isa = PBXBuildFile; fileRef = A15773A0186145DD00DEBD45 /* H264PlayerViewController_land.xib */; };
+		A18635F018B6F43F00CB5CDA /* CellMelody_land.xib in Resources */ = {isa = PBXBuildFile; fileRef = A18635EB18B6F43F00CB5CDA /* CellMelody_land.xib */; };
+		A18635F118B6F43F00CB5CDA /* CellMelody.m in Sources */ = {isa = PBXBuildFile; fileRef = A18635ED18B6F43F00CB5CDA /* CellMelody.m */; };
+		A18635F218B6F43F00CB5CDA /* CellMelody.xib in Resources */ = {isa = PBXBuildFile; fileRef = A18635EE18B6F43F00CB5CDA /* CellMelody.xib */; };
+		A18635F318B6F43F00CB5CDA /* MelodyViewController_land.xib in Resources */ = {isa = PBXBuildFile; fileRef = A18635EF18B6F43F00CB5CDA /* MelodyViewController_land.xib */; };
 		A19778ED181E3316007C3CA7 /* ZoneViewController_ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = A19778EC181E3316007C3CA7 /* ZoneViewController_ipad.xib */; };
 		A19778F9181E6C55007C3CA7 /* motion_detection_off_1.png in Resources */ = {isa = PBXBuildFile; fileRef = A19778F7181E6C55007C3CA7 /* motion_detection_off_1.png */; };
 		A19778FB181E6CAB007C3CA7 /* motion_detection_on.png in Resources */ = {isa = PBXBuildFile; fileRef = A19778FA181E6CAB007C3CA7 /* motion_detection_on.png */; };
@@ -1251,9 +1255,9 @@
 		8B9384AC18570567009C4771 /* ValueSettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ValueSettingsViewController.h; sourceTree = "<group>"; };
 		8B9384AD18570567009C4771 /* ValueSettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ValueSettingsViewController.m; sourceTree = "<group>"; };
 		8B9384AE18570567009C4771 /* ValueSettingsViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ValueSettingsViewController.xib; sourceTree = "<group>"; };
-		8B94BD72188A42530002E804 /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
 		8B94979918B5E67C004FBDE1 /* SensitivityInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SensitivityInfo.h; sourceTree = "<group>"; };
 		8B94979A18B5E67C004FBDE1 /* SensitivityInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SensitivityInfo.m; sourceTree = "<group>"; };
+		8B94BD72188A42530002E804 /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
 		8B9584381877DF1D0055BCE3 /* mbp_icon72x72.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = mbp_icon72x72.png; sourceTree = "<group>"; };
 		8B95843A1877DF2F0055BCE3 /* mbp_icon76x76.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = mbp_icon76x76.png; sourceTree = "<group>"; };
 		8B95843C1877DF400055BCE3 /* mbp_icon120x120.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = mbp_icon120x120.png; sourceTree = "<group>"; };
@@ -1427,6 +1431,11 @@
 		A15431081818DEB800337EFE /* streamvga.sdp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = streamvga.sdp; sourceTree = "<group>"; };
 		A157739F186145DD00DEBD45 /* H264PlayerViewController_land_iPad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = H264PlayerViewController_land_iPad.xib; sourceTree = "<group>"; };
 		A15773A0186145DD00DEBD45 /* H264PlayerViewController_land.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = H264PlayerViewController_land.xib; sourceTree = "<group>"; };
+		A18635EB18B6F43F00CB5CDA /* CellMelody_land.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CellMelody_land.xib; sourceTree = "<group>"; };
+		A18635EC18B6F43F00CB5CDA /* CellMelody.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CellMelody.h; sourceTree = "<group>"; };
+		A18635ED18B6F43F00CB5CDA /* CellMelody.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CellMelody.m; sourceTree = "<group>"; };
+		A18635EE18B6F43F00CB5CDA /* CellMelody.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CellMelody.xib; sourceTree = "<group>"; };
+		A18635EF18B6F43F00CB5CDA /* MelodyViewController_land.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MelodyViewController_land.xib; sourceTree = "<group>"; };
 		A19778EC181E3316007C3CA7 /* ZoneViewController_ipad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ZoneViewController_ipad.xib; sourceTree = "<group>"; };
 		A19778F7181E6C55007C3CA7 /* motion_detection_off_1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = motion_detection_off_1.png; sourceTree = "<group>"; };
 		A19778FA181E6CAB007C3CA7 /* motion_detection_on.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = motion_detection_on.png; sourceTree = "<group>"; };
@@ -3253,9 +3262,14 @@
 		8B9CCB9F183EF86C007C0F65 /* MelodyControl */ = {
 			isa = PBXGroup;
 			children = (
+				A18635EF18B6F43F00CB5CDA /* MelodyViewController_land.xib */,
 				8B9CCBA0183EF8B2007C0F65 /* MelodyViewController.h */,
 				8B9CCBA1183EF8B2007C0F65 /* MelodyViewController.m */,
 				8B9CCBA2183EF8B2007C0F65 /* MelodyViewController.xib */,
+				A18635EC18B6F43F00CB5CDA /* CellMelody.h */,
+				A18635ED18B6F43F00CB5CDA /* CellMelody.m */,
+				A18635EE18B6F43F00CB5CDA /* CellMelody.xib */,
+				A18635EB18B6F43F00CB5CDA /* CellMelody_land.xib */,
 			);
 			name = MelodyControl;
 			sourceTree = "<group>";
@@ -3677,6 +3691,7 @@
 				8B29A03418AF500900D36BE5 /* back_pressed@2x.png in Resources */,
 				8B299F5F18AF500900D36BE5 /* alert_play_pressed.png in Resources */,
 				8B9C7E0E185F260A0038B3A8 /* MenuViewController.xib in Resources */,
+				A18635F318B6F43F00CB5CDA /* MelodyViewController_land.xib in Resources */,
 				8B29A04018AF500900D36BE5 /* dont_disturb_handle@2x.png in Resources */,
 				8B299FE118AF500900D36BE5 /* tab_inactive.png in Resources */,
 				38DE1C8C168AEB270049E814 /* Step_08_ViewController.xib in Resources */,
@@ -3694,6 +3709,7 @@
 				A1ABF1B1187537D10014FCB4 /* Step_10_ViewController_ipad_ble.xib in Resources */,
 				A1AC858C18912859002A8CCD /* ProximaNova-Light.otf in Resources */,
 				A15773A2186145DD00DEBD45 /* H264PlayerViewController_land.xib in Resources */,
+				A18635F018B6F43F00CB5CDA /* CellMelody_land.xib in Resources */,
 				8B9178D01884F2040039445B /* no_img_available.png in Resources */,
 				A19778F9181E6C55007C3CA7 /* motion_detection_off_1.png in Resources */,
 				8B299F9B18AF500900D36BE5 /* camera_action_listening.png in Resources */,
@@ -4056,6 +4072,7 @@
 				380CB0CA16DC5A9E00290587 /* Step_12_ViewController.xib in Resources */,
 				8B9384981856F009009C4771 /* vol-min.png in Resources */,
 				380CB0CD16DC5AD500290587 /* Step_12_ViewController_land.xib in Resources */,
+				A18635F218B6F43F00CB5CDA /* CellMelody.xib in Resources */,
 				A1ABF1BB187538280014FCB4 /* CreateBLEConnection_VController.xib in Resources */,
 				8B29A07718AF500A00D36BE5 /* video_overlay_bg.png in Resources */,
 				8B299FA718AF500900D36BE5 /* camera_action_pan_knob.png in Resources */,
@@ -4269,6 +4286,7 @@
 				8B92A0AF1863FD13005923D2 /* EarlierViewController.m in Sources */,
 				8B9384921856EEFE009C4771 /* SlideSettingsCell.m in Sources */,
 				8B92DC24185ACACA00344530 /* ScheduleInformation.m in Sources */,
+				A18635F118B6F43F00CB5CDA /* CellMelody.m in Sources */,
 				97F5531517BDD3AF00024017 /* MBPNavController.m in Sources */,
 				8B92A0A61863F69C005923D2 /* SavedEventCell.m in Sources */,
 				97A07FB117D5FD4A00653460 /* H264PlayerViewController.mm in Sources */,
@@ -5195,7 +5213,7 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CODE_SIGN_ENTITLEMENTS = "";
-				CODE_SIGN_IDENTITY = "iPhone Developer: Lai Shan Lam (RYP7CC8LQR)";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -5238,7 +5256,7 @@
 				);
 				OTHER_LDFLAGS = "-lz";
 				PRODUCT_NAME = Hubble;
-				PROVISIONING_PROFILE = "6296209A-5435-47A4-8372-20B2C8251B4C";
+				PROVISIONING_PROFILE = "";
 				SDKROOT = iphoneos7.0;
 				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/../ios-frameworks/pjsip/arm/include/ $(SRCROOT)/../ios-frameworks/pjsip/arm/include/pj/ $(SRCROOT)/../ios-frameworks/pjsip/arm/include/pjnath/";
 				VALID_ARCHS = "armv6 armv7";
@@ -5250,7 +5268,7 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CODE_SIGN_ENTITLEMENTS = "";
-				CODE_SIGN_IDENTITY = "iPhone Developer: Lai Shan Lam (RYP7CC8LQR)";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = YES;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -5288,7 +5306,7 @@
 				);
 				OTHER_LDFLAGS = "-lz";
 				PRODUCT_NAME = Hubble;
-				PROVISIONING_PROFILE = "6296209A-5435-47A4-8372-20B2C8251B4C";
+				PROVISIONING_PROFILE = "";
 				SDKROOT = iphoneos7.0;
 				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/../ios-frameworks/pjsip/arm/include/ $(SRCROOT)/../ios-frameworks/pjsip/arm/include/pj/ $(SRCROOT)/../ios-frameworks/pjsip/arm/include/pjnath/";
 				VALIDATE_PRODUCT = YES;
@@ -5325,7 +5343,7 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CODE_SIGN_ENTITLEMENTS = "";
-				CODE_SIGN_IDENTITY = "iPhone Developer: Lai Shan Lam (RYP7CC8LQR)";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = YES;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -5361,7 +5379,7 @@
 				);
 				OTHER_LDFLAGS = "-lz";
 				PRODUCT_NAME = Hubble;
-				PROVISIONING_PROFILE = "6296209A-5435-47A4-8372-20B2C8251B4C";
+				PROVISIONING_PROFILE = "";
 				RAMEWORK_SEARCH_PATHS = "$(inherited) \"$(SRCROOT)\"";
 				SDKROOT = iphoneos7.0;
 				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/../ios-frameworks/pjsip/arm/include/ $(SRCROOT)/../ios-frameworks/pjsip/arm/include/pj/ $(SRCROOT)/../ios-frameworks/pjsip/arm/include/pjnath/";
