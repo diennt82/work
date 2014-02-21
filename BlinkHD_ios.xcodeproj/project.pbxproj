@@ -562,6 +562,7 @@
 		8B9CCBA3183EF8B2007C0F65 /* MelodyViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B9CCBA1183EF8B2007C0F65 /* MelodyViewController.m */; };
 		8B9CCBA4183EF8B2007C0F65 /* MelodyViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8B9CCBA2183EF8B2007C0F65 /* MelodyViewController.xib */; };
 		8BA17EFA18B7399100129FE7 /* LoginViewController_35.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8BA17EF918B7399100129FE7 /* LoginViewController_35.xib */; };
+		8BA17EFC18B73E2400129FE7 /* RegistrationViewController_35.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8BA17EFB18B73E2400129FE7 /* RegistrationViewController_35.xib */; };
 		8BA18CB0184879720097D1AF /* DeviceSettingsCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 8BA18CAF184879720097D1AF /* DeviceSettingsCell.m */; };
 		8BA18CB2184879A10097D1AF /* DeviceSettingsCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8BA18CB1184879A10097D1AF /* DeviceSettingsCell.xib */; };
 		8BA23841182CBC130022581A /* CameraScanner.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8BA23838182C8E130022581A /* CameraScanner.framework */; };
@@ -1331,6 +1332,7 @@
 		8B9CCBA1183EF8B2007C0F65 /* MelodyViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MelodyViewController.m; sourceTree = "<group>"; };
 		8B9CCBA2183EF8B2007C0F65 /* MelodyViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MelodyViewController.xib; sourceTree = "<group>"; };
 		8BA17EF918B7399100129FE7 /* LoginViewController_35.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LoginViewController_35.xib; sourceTree = "<group>"; };
+		8BA17EFB18B73E2400129FE7 /* RegistrationViewController_35.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = RegistrationViewController_35.xib; sourceTree = "<group>"; };
 		8BA18CAE184879720097D1AF /* DeviceSettingsCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DeviceSettingsCell.h; sourceTree = "<group>"; };
 		8BA18CAF184879720097D1AF /* DeviceSettingsCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DeviceSettingsCell.m; sourceTree = "<group>"; };
 		8BA18CB1184879A10097D1AF /* DeviceSettingsCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = DeviceSettingsCell.xib; sourceTree = "<group>"; };
@@ -3087,6 +3089,7 @@
 				8B9ABB6718A9FDEC0079F4A3 /* RegistrationViewController.h */,
 				8B9ABB6818A9FDEC0079F4A3 /* RegistrationViewController.mm */,
 				8B9ABB6918A9FDEC0079F4A3 /* RegistrationViewController.xib */,
+				8BA17EFB18B73E2400129FE7 /* RegistrationViewController_35.xib */,
 			);
 			name = RegistrationVC;
 			sourceTree = "<group>";
@@ -3866,6 +3869,7 @@
 				8B29A05618AF500A00D36BE5 /* settings_seperator@2x.png in Resources */,
 				8B9899AE1859771800AC3852 /* CameraNameViewController.xib in Resources */,
 				8B29A00D18AF500900D36BE5 /* video_action_video@2x.png in Resources */,
+				8BA17EFC18B73E2400129FE7 /* RegistrationViewController_35.xib in Resources */,
 				3809A42C15E49A4B0098BBC0 /* bb_pic_1.png in Resources */,
 				8B29A04B18AF500A00D36BE5 /* settings_circle.png in Resources */,
 				8B29A03A18AF500900D36BE5 /* menu_settings_pressed@2x.png in Resources */,

@@ -42,6 +42,13 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
     
+    if (UIScreen.mainScreen.bounds.size.height < 568)
+    {
+        [[NSBundle mainBundle] loadNibNamed:@"RegistrationViewController_35"
+                                      owner:self
+                                    options:nil];
+    }
+    
     self.navigationController.navigationBarHidden = YES;
     self.btnCreate.enabled = NO;
     
@@ -120,6 +127,11 @@
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
     {
         movementDistance = 230;
+    }
+    
+    if (UIScreen.mainScreen.bounds.size.height < 568)
+    {
+        movementDistance = 190;
     }
     
     int movement = (up ? -movementDistance : movementDistance);
