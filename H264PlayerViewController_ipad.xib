@@ -23,7 +23,6 @@
                 <outlet property="imageViewKnob" destination="6n1-YN-i58" id="d88-pC-Oqs"/>
                 <outlet property="imageViewVideo" destination="ewk-Ss-5Zt" id="hm9-FC-hEY"/>
                 <outlet property="imgViewDrectionPad" destination="WPh-TE-Nhn" id="wm3-nT-qIE"/>
-                <outlet property="playlistViewController" destination="GC8-4Y-Omk" id="lkJ-6T-Lwg"/>
                 <outlet property="scrollView" destination="xsx-R1-x8v" id="gF2-Cc-0cF"/>
                 <outlet property="view" destination="KT0-i3-kTw" id="q7Z-xw-GQ3"/>
                 <outlet property="viewStopStreamingProgress" destination="huw-ip-zYb" id="7Om-HI-dp4"/>
@@ -164,14 +163,6 @@
             </subviews>
             <simulatedStatusBarMetrics key="simulatedStatusBarMetrics"/>
         </view>
-        <tableViewController id="GC8-4Y-Omk" customClass="PlayListViewController">
-            <extendedEdge key="edgesForExtendedLayout"/>
-            <simulatedStatusBarMetrics key="simulatedStatusBarMetrics" statusBarStyle="blackOpaque"/>
-            <nil key="simulatedTopBarMetrics"/>
-            <nil key="simulatedBottomBarMetrics"/>
-            <simulatedOrientationMetrics key="simulatedOrientationMetrics"/>
-            <nil key="simulatedDestinationMetrics"/>
-        </tableViewController>
     </objects>
     <resources>
         <image name="camera_action_mic.png" width="130" height="130"/>

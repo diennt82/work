@@ -151,28 +151,6 @@ double _ticks = 0;
     AudioServicesCreateSystemSoundID(soundFileURLRef, &soundFileObject);
     
     CFRelease(soundFileURLRef);
-    
-    //TODO: check if IPAD -> load IPAD
-    
-    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
-    {
-        self.zoneViewController = [[[ZoneViewController alloc] initWithNibName:@"ZoneViewController_ipad" bundle:nil] autorelease];
-    }
-    else
-    {
-        self.zoneViewController = [[[ZoneViewController alloc] initWithNibName:@"ZoneViewController" bundle:nil] autorelease];
-    }
-    
-    self.zoneViewController.selectedChannel = self.selectedChannel;
-    self.zoneViewController.zoneVCDelegate = self;
-    
-    self.zoneButton.enabled = NO;
-    self.melodyButton.enabled = NO;
-    
-    self.hqViewButton.enabled = NO;
-    self.triggerRecordingButton.enabled = NO;
-    UIButton *iFrameBtn = (UIButton *)[self.viewCtrlButtons viewWithTag:705];
-    iFrameBtn.enabled = NO;
 
     [self updateNavigationBarAndToolBar];
     
@@ -673,20 +651,6 @@ double _ticks = 0;
     
     [self performSelectorInBackground:@selector(setTriggerRecording_bg:)
                            withObject:modeRecording];
-}
-- (IBAction)zoneTouchedAction:(id)sender
-{
-    if (self.zoneViewController != nil)
-    {
-        
-//        [self.navigationController  pushViewController:self.zoneViewController
-//                                              animated:NO];
-        [self.view addSubview:self.zoneViewController.view];
-        
-        [self.view bringSubviewToFront:self.zoneViewController.view];
-        
-    }
-   
 }
 
 - (IBAction)melodyTouchAction:(id)sender
@@ -1386,17 +1350,6 @@ double _ticks = 0;
 #pragma mak - Delegate Melody
 - (void)setMelodyWithIndex:(NSInteger)molodyIndex
 {
-    
-//    if (molodyIndex == 0)
-//    {
-//        //set icon off
-//        [self.melodyButton setImage:[UIImage imageNamed:@"bb_melody_off_icon.png"] forState:UIControlStateNormal];
-//    }
-//    else
-//    {
-//        //set icon on
-//        [self.melodyButton setImage:[UIImage imageNamed:@"bb_melody_icon.png"] forState:UIControlStateNormal];
-//    }
 }
 
 #pragma mark - Method
@@ -1664,9 +1617,6 @@ double _ticks = 0;
         _isCameraOffline = YES;
         self.activityIndicator.hidden = YES;
         [self.activityIndicator stopAnimating];
-//        self.backBarBtnItem.enabled = YES;
-        //self.imageViewStreamer.image = [UIImage imageNamed:@"ImgNotAvailable"];
-        self.viewCtrlButtons.hidden = YES;
         self.imgViewDrectionPad.hidden= YES;
         self.viewStopStreamingProgress.hidden = YES;
         self.horizMenu.userInteractionEnabled = NO;
@@ -2223,16 +2173,6 @@ double _ticks = 0;
 
 - (void)setVQForground: (NSString *)modeVideo
 {
-    if ([modeVideo isEqualToString:@"480p"]) // ok
-    {
-        [self.hqViewButton setImage:[UIImage imageNamed:@"hq_d.png" ]
-                           forState:UIControlStateNormal];
-    }
-    else if([modeVideo isEqualToString:@"720p_10"] || [modeVideo isEqualToString:@"720p_15"])
-    {
-        [self.hqViewButton setImage:[UIImage imageNamed:@"hq.png" ]
-                           forState:UIControlStateNormal];
-    }
 }
 
 - (void)getTriggerRecording_bg
@@ -2375,151 +2315,6 @@ double _ticks = 0;
 
 -(void) setTriggerRecording_fg: (NSString *)modeRecording
 {
-            
-    if ([modeRecording isEqualToString:@"on"])
-    {
-        self.recordingFlag = TRUE;
-        [self.triggerRecordingButton setImage:[UIImage imageNamed:@"bb_rec_icon.png" ]
-                                     forState:UIControlStateNormal];
-    }
-    else if([modeRecording isEqualToString:@"off"])
-    {
-        self.recordingFlag = FALSE;
-        [self.triggerRecordingButton setImage:[UIImage imageNamed:@"bb_rec_icon_d.png" ]
-                                     forState:UIControlStateNormal];
-    }
-}
-
-#pragma mark - Zone Detection
-
-- (void)getZoneDetection_bg
-{
-    NSString *responseString = @"";
-    
-    if (self.selectedChannel.profile .isInLocal == TRUE)
-    {
-//        HttpCommunication *httpCommunication = [[[HttpCommunication alloc] init] autorelease];
-        _httpComm.device_ip = self.selectedChannel.profile.ip_address;
-//        httpCommunication.device_port = self.selectedChannel.profile.port;
-        
-        NSData *responseData = [_httpComm sendCommandAndBlock_raw:@"get_motion_area"];
-        
-        if (responseData != nil)
-        {
-            
-            responseString = [[[NSString alloc] initWithData:responseData encoding: NSUTF8StringEncoding] autorelease];
-            
-            NSLog(@"getZoneDetection_bg response string: %@", responseString);
-        }
-    }
-    else
-    {
-        BMS_JSON_Communication *jsonCommunication = [[[BMS_JSON_Communication alloc] initWithObject:self
-                                                                                           Selector:nil
-                                                                                       FailSelector:nil
-                                                                                          ServerErr:nil] autorelease];
-        
-        NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-        
-        //NSString *mac = [Util strip_colon_fr_mac:self.selectedChannel.profile.mac_address];
-        NSString *apiKey = [userDefaults objectForKey:@"PortalApiKey"];
-        
-        NSDictionary *responseDict = [jsonCommunication sendCommandBlockedWithRegistrationId:self.selectedChannel.profile.registrationID
-                                                                                  andCommand:@"action=command&command=get_motion_area"
-                                                                                   andApiKey:apiKey];
-        if (responseDict != nil)
-        {
-            NSInteger status = [[responseDict objectForKey:@"status"] intValue];
-            if (status == 200)
-            {
-                responseString = [[[responseDict objectForKey:@"data"] objectForKey:@"device_response"] objectForKey:@"body"];
-            }
-        }
-    }
-    
-    if (![responseString isEqualToString:@""])
-    {
-        NSRange tmpRange = [responseString rangeOfString:@"="];
-        
-        if (tmpRange.location != NSNotFound)
-        {
-            NSArray * tokens = [responseString componentsSeparatedByString:@"="];
-            
-            if (tokens.count > 1 )
-            {
-                NSString *zoneString = [tokens lastObject];
-                
-                if ([zoneString isEqualToString:@""])
-                {
-                    NSLog(@" NO zone being set");
-                    
-                    NSArray *zoneArr = [NSArray array];
-                    
-                    [self performSelectorOnMainThread:@selector(setZoneDetection_fg:)
-                                           withObject:zoneArr
-                                        waitUntilDone:NO];
-                    
-                }
-                else
-                {
-                    NSRange range = [zoneString rangeOfString:@","];
-                    
-                    NSArray *zoneArr;// = [NSArray array];
-                    
-                    if (range.location != NSNotFound)
-                    {
-                        zoneArr = [NSArray arrayWithArray: [zoneString componentsSeparatedByString:@","]];
-                        
-                        NSLog(@"getZoneDetection_bg: %@", zoneArr);
-                    }
-                    else
-                    {
-                        zoneArr = [NSArray arrayWithObject:zoneString];
-                    }
-                    
-                    [self performSelectorOnMainThread:@selector(setZoneDetection_fg:)
-                                           withObject:zoneArr
-                                        waitUntilDone:NO];
-                }
-            }
-        }
-    }
-    else
-    {
-        self.zoneButton.enabled = YES;
-    }
-    
-    //get_motion_area: grid=AxB,zone=00,11
-}
-
-- (void)setZoneDetection_fg: (NSArray *)zoneArray
-{
-    if (self.zoneViewController != nil)
-    {
-        [self.zoneViewController parseZoneStrings:zoneArray];
-    }
-    else
-    {
-        //create new
-        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
-        {
-            self.zoneViewController = [[[ZoneViewController alloc] initWithNibName:@"ZoneViewController_ipad" bundle:[NSBundle mainBundle]] autorelease];
-        }
-        else
-        {
-            self.zoneViewController = [[[ZoneViewController alloc] initWithNibName:@"ZoneViewController" bundle:[NSBundle mainBundle]] autorelease];
-            
-        }
-        
-        self.zoneViewController.selectedChannel = self.selectedChannel;
-        self.zoneViewController.zoneVCDelegate = self;
-        
-    }
-    
-    [self.zoneViewController parseZoneStrings:zoneArray];
-    
-    
-    self.zoneButton.enabled = YES;
 }
 
 #pragma mark - Melody Control
@@ -2590,24 +2385,12 @@ double _ticks = 0;
     }
     else
     {
-        self.melodyButton.enabled = YES;
     }
 }
 
 - (void)setMelodyState_Fg: (NSString *)melodyIndex
 {
     int melody_index  = [melodyIndex intValue];
-    
-    if (melody_index == 0)
-    {
-        //set icon off
-        [self.melodyButton setImage:[UIImage imageNamed:@"bb_melody_off_icon.png"] forState:UIControlStateNormal];
-    }
-    else
-    {
-        //set icon on
-        [self.melodyButton setImage:[UIImage imageNamed:@"bb_melody_icon.png"] forState:UIControlStateNormal];
-    }
     
     if (self.melodyViewController == nil)
     {
@@ -2619,8 +2402,6 @@ double _ticks = 0;
     }
     
     [self.melodyViewController setMelodyState_fg:melody_index];
-    
-    self.melodyButton.enabled = YES;
 }
 
 #pragma mark - Temperature
@@ -4042,7 +3823,6 @@ double _ticks = 0;
         [self.navigationController setNavigationBarHidden:NO];
         [[UIApplication sharedApplication] setStatusBarHidden:NO];
         self.view.backgroundColor = [UIColor whiteColor];
-        self.viewCtrlButtons.hidden = NO;
         self.viewStopStreamingProgress.hidden = YES;
         [self.horizMenu reloadData:NO];
         CGFloat imageViewHeight = SCREEN_WIDTH * 9 / 16;
@@ -4052,7 +3832,6 @@ double _ticks = 0;
             CGRect destRect = CGRectMake(0, 44 + deltaY, SCREEN_WIDTH, imageViewHeight);
             self.scrollView.frame = destRect;
             self.imageViewVideo.frame = CGRectMake(0, 0, SCREEN_WIDTH, imageViewHeight);
-            self.viewCtrlButtons.frame = CGRectMake(0, imageViewHeight + 44 + deltaY, _viewCtrlButtons.frame.size.width, _viewCtrlButtons.frame.size.height);
             self.melodyViewController.view.frame = CGRectMake(0, self.ib_ViewTouchToTalk.frame.origin.y - 5, SCREEN_WIDTH, SCREEN_HEIGHT - self.ib_ViewTouchToTalk.frame.origin.y);
             
 //            [self.melodyViewController.melodyTableView reloadData];
@@ -4082,7 +3861,6 @@ double _ticks = 0;
             CGRect destRect = CGRectMake(0, deltaY, SCREEN_WIDTH, imageViewHeight);
             self.scrollView.frame = destRect;
             self.imageViewVideo.frame = CGRectMake(0, -44, SCREEN_WIDTH, imageViewHeight);
-            self.viewCtrlButtons.frame = CGRectMake(0, imageViewHeight + deltaY, _viewCtrlButtons.frame.size.width, _viewCtrlButtons.frame.size.height);
             self.melodyViewController.view.frame = CGRectMake(0, self.ib_ViewTouchToTalk.frame.origin.y - 30 - 44, SCREEN_WIDTH, SCREEN_HEIGHT - self.ib_ViewTouchToTalk.frame.origin.y);
             
             
@@ -4800,20 +4578,14 @@ double _ticks = 0;
     [_httpComm release];
     
     [_barBntItemReveal release];
-    [_viewCtrlButtons release];
-    [_hqViewButton release];
-    [_triggerRecordingButton release];
     [_imgViewDrectionPad release];
     [send_UD_dir_req_timer invalidate];
     [send_LR_dir_req_timer invalidate];
     [_activityIndicator release];
     [_viewStopStreamingProgress release];
     [_activityStopStreamingProgress release];
-    [_zoneViewController release];
-    [_zoneButton release];
     [_probeTimer release];
     
-    [_melodyButton release];
     [_scrollView release];
     [_ib_temperature release];
     [_ib_ViewTouchToTalk release];
@@ -4824,7 +4596,6 @@ double _ticks = 0;
     [_ib_buttonTouchToTalk release];
     [_ib_processRecordOrTakePicture release];
     [_ib_buttonChangeAction release];
-    [_ib_showMenuControlPanel release];
     
     [_timelineVC release];
     [_earlierVC release];
@@ -5360,12 +5131,8 @@ double _ticks = 0;
 
 - (void) tryToHideMenuControlPanel
 {
-    
-    [self.ib_showMenuControlPanel setHidden:NO];
     [self.horizMenu setHidden:NO];
     [self UpdateFullScreenTimer];
-
-    
 }
 
 - (void) UpdateFullScreenTimer
@@ -5390,7 +5157,6 @@ double _ticks = 0;
 {
     fullScreenTimer = nil;
     [self.horizMenu setHidden:YES];
-    [self.ib_showMenuControlPanel setHidden:NO];
 }
 
 - (void) showMenuControlPanel

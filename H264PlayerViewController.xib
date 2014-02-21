@@ -24,7 +24,6 @@
                 <outlet property="imageViewKnob" destination="8Ba-wt-YMO" id="k37-0i-iqz"/>
                 <outlet property="imageViewVideo" destination="4" id="5"/>
                 <outlet property="imgViewDrectionPad" destination="78" id="79"/>
-                <outlet property="playlistViewController" destination="80" id="85"/>
                 <outlet property="scrollView" destination="q8e-SH-sqy" id="DnR-XY-J8P"/>
                 <outlet property="view" destination="1" id="3"/>
                 <outlet property="viewStopStreamingProgress" destination="89" id="91"/>
@@ -183,14 +182,6 @@
             <simulatedStatusBarMetrics key="simulatedStatusBarMetrics"/>
             <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
         </view>
-        <tableViewController id="80" customClass="PlayListViewController">
-            <extendedEdge key="edgesForExtendedLayout"/>
-            <simulatedStatusBarMetrics key="simulatedStatusBarMetrics"/>
-            <nil key="simulatedTopBarMetrics"/>
-            <nil key="simulatedBottomBarMetrics"/>
-            <simulatedOrientationMetrics key="simulatedOrientationMetrics"/>
-            <nil key="simulatedDestinationMetrics"/>
-        </tableViewController>
     </objects>
     <resources>
         <image name="camera_action_mic@5.png" width="300" height="300"/>

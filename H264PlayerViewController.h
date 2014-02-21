@@ -15,11 +15,9 @@
 #import "PlaylistInfo.h"
 #import "PlaybackViewController.h"
 #import "PlaylistCell.h"
-#import "PlayListViewController.h"
 #import "H264PlayerListener.h"
 #import "PlayerCallbackHandler.h"
 #import "MBP_LoginOrRegistration.h"
-#import "ZoneViewController.h"
 #import "MelodyViewController.h"
 //for scrollHorizontalMenu
 #import "ScrollHorizontalMenu.h"
@@ -59,7 +57,7 @@
 @end
 
 @interface H264PlayerViewController: UIViewController
-<PlayerCallbackHandler,ScanForCameraNotifier, StunClientDelegate, ZoneViewControlerDeleate, MelodyVCDelegate, UIScrollViewDelegate, ScrollHorizontalMenuDelegate, AudioOutStreamerDelegate>
+<PlayerCallbackHandler, ScanForCameraNotifier, StunClientDelegate, MelodyVCDelegate, UIScrollViewDelegate, ScrollHorizontalMenuDelegate, AudioOutStreamerDelegate>
 {
     ScrollHorizontalMenu *_horizMenu;
     int _selectedItemMenu;
@@ -155,17 +153,10 @@
 @property (nonatomic, retain) NSTimer * alertTimer;
 //Add scrollview to support zoom in and zoom out
 @property (retain, nonatomic) IBOutlet UIScrollView *scrollView;
-@property (retain, nonatomic) IBOutlet UIButton *ib_showMenuControlPanel;
-@property (retain, nonatomic) IBOutlet UIView *viewCtrlButtons;
-@property (retain, nonatomic) IBOutlet UIButton *melodyButton;
-@property (retain, nonatomic) IBOutlet UIButton *hqViewButton;
-@property (retain, nonatomic) IBOutlet UIButton *triggerRecordingButton;
 @property (retain, nonatomic) IBOutlet UIImageView *imgViewDrectionPad;
-@property (retain, nonatomic) IBOutlet PlayListViewController *playlistViewController;
 @property (retain, nonatomic) IBOutlet UIActivityIndicatorView *activityIndicator;
 @property (retain, nonatomic) IBOutlet UIView *viewStopStreamingProgress;
 @property (retain, nonatomic) IBOutlet UIActivityIndicatorView *activityStopStreamingProgress;
-@property (retain, nonatomic) IBOutlet UIButton *zoneButton;
 
 @property (retain, nonatomic) IBOutlet UIBarButtonItem *barBntItemReveal;
 
@@ -180,7 +171,6 @@
 @property (nonatomic) int currentMediaStatus;
 @property (nonatomic) BOOL iFrameOnlyFlag;
 @property (nonatomic,retain) StunClient * client; 
-@property (nonatomic, retain)  IBOutlet ZoneViewController *zoneViewController;
 @property (nonatomic, retain) NSTimer * probeTimer;
 @property (nonatomic, assign) id<H264PlayerVCDelegate> h264PlayerVCDelegate;
 @property (nonatomic, retain) MelodyViewController *melodyViewController;
