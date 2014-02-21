@@ -157,7 +157,7 @@ double _ticks = 0;
     self.imageViewStreamer = [[UIImageView alloc] initWithFrame:_imageViewVideo.frame];
     //[self.imageViewStreamer setContentMode:UIViewContentModeScaleAspectFit];
     [self.imageViewStreamer setBackgroundColor:[UIColor blackColor]];
-    
+
     UITapGestureRecognizer *singleTap = [[UITapGestureRecognizer alloc] initWithTarget:self
                                                                                 action:@selector(singleTapGestureCaptured:)];
     singleTap.numberOfTapsRequired = 1;
@@ -193,8 +193,8 @@ double _ticks = 0;
     }
     else
     {
-        self.itemImages = [NSMutableArray arrayWithObjects:@"video_action_pan.png", @"video_action_video.png", @"video_action_music.png", nil];
-        self.itemSelectedImages = [NSMutableArray arrayWithObjects:@"video_action_pan_pressed.png", @"video_action_video_pressed.png", @"video_action_music_pressed.png", nil];
+        self.itemImages = [NSMutableArray arrayWithObjects:@"video_action_pan.png", @"video_action_video.png", @"video_action_music.png", @"video_action_temp.png", nil];
+        self.itemSelectedImages = [NSMutableArray arrayWithObjects:@"video_action_pan_pressed.png", @"video_action_video_pressed.png", @"video_action_music_pressed.png", @"video_action_temp_pressed.png", nil];
     }
     
     [self.horizMenu reloadData:NO];
@@ -1359,10 +1359,10 @@ double _ticks = 0;
     NSLog(@"Single tap singleTapGestureCaptured");
 
     // Make sure Camera is NOT available
-    if (self.selectedChannel.profile.isInLocal == FALSE &&
-        self.selectedChannel.profile.minuteSinceLastComm > 5)
+    if ([self.selectedChannel.profile isNotAvailable])
     {
-        [self recheckStateOfCamera];
+        return;
+        //[self recheckStateOfCamera];
     }
     else
     {
@@ -1427,23 +1427,23 @@ double _ticks = 0;
 
 - (void)h264_HandleBecomeActive
 {
-        
-        if (userWantToCancel == TRUE)
-        {
-            return;
-        }
-        
-        self.h264StreamerIsInStopped = FALSE;
-        
-        if(_selectedChannel.profile.isInLocal == TRUE)
-        {
-            NSLog(@"Become ACTIVE _  .. Local ");
-            [self becomeActive];
-        }
-        else if ( _selectedChannel.profile.minuteSinceLastComm <= 5) // Remote
-        {
-            [self becomeActive];
-        }
+    
+    if (userWantToCancel == TRUE)
+    {
+        return;
+    }
+    
+    self.h264StreamerIsInStopped = FALSE;
+    
+    if(_selectedChannel.profile.isInLocal == TRUE)
+    {
+        NSLog(@"Become ACTIVE _  .. Local ");
+        [self becomeActive];
+    }
+    else if ( _selectedChannel.profile.minuteSinceLastComm <= 5) // Remote
+    {
+        [self becomeActive];
+    }
 }
 
 - (void)h264_HandleEnteredBackground
@@ -1505,8 +1505,7 @@ double _ticks = 0;
     self.viewStopStreamingProgress.hidden = YES;
     
     // Camera is NOT available
-    if (self.selectedChannel.profile.minuteSinceLastComm > 5 &&
-        self.selectedChannel.profile.isInLocal == FALSE)
+    if ([self.selectedChannel.profile isNotAvailable])
     {
         [self setupCamera];
     }
@@ -1624,7 +1623,7 @@ double _ticks = 0;
         NSLog(@"SetupCamera - Camera is NOT available.");
         
         //TODO: Create a refresh item to refresh state of this camera refresh
-        UIImage *imgRefresh = [UIImage imageNamed:@"refresh"];
+        UIImage *imgRefresh = [UIImage imageNamed:@"ImgNotAvailable"];
         self.imageViewStreamer.frame = CGRectMake(0, 0, imgRefresh.size.width, imgRefresh.size.height);
         self.imageViewStreamer.image = imgRefresh;
         self.imageViewStreamer.center = _imageViewVideo.center;
@@ -4409,6 +4408,10 @@ double _ticks = 0;
             case 2:
                 self.selectedItemMenu = INDEX_MELODY;
                 [self melodyTouchAction:nil];
+                break;
+                
+            case 3:
+                self.selectedItemMenu = INDEX_TEMP;
                 break;
                 
             default:

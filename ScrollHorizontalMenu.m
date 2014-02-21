@@ -71,11 +71,11 @@
         }
     }
     
-    // This is SharedCam, the menu has 3 items
-    if (_itemCount == 3)
+    // This is SharedCam, the menu has 4 items
+    if (_itemCount == 4)
     {
         // Make items is center menu.
-        xPos += (buttonWidth * 2 + kPaddingBetweenButton - 10 - buttonWidth / 2);
+        xPos += (buttonWidth * 2 - 10 - buttonWidth / 2);
     }
     
     for(int i = 0 ; i < self.itemCount; i++)
