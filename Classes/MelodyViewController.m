@@ -221,10 +221,17 @@
     return _melodies.count;
 }
 
-//-(void) tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
-//{
-//    cell.alpha = 1.0; //0.4;
-//}
+-(void) tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if (isPhoneLandscapeMode)
+    {
+        cell.alpha = 0.6; //0.6;
+    } else
+    {
+        cell.alpha = 1.0; //1.0;
+    }
+    
+}
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
@@ -261,14 +268,28 @@
     }
     else
     {
-        static NSString *CellIdentifier = @"MelodyCellId";
-        
-        cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-        if (cell == nil) {
-            [[NSBundle mainBundle] loadNibNamed:@"CellMelody" owner:self options:nil];
-            cell = cellMelody;
-            cellMelody = nil;
+        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+        {
+            static NSString *CellIdentifier = @"MelodyCellId_iPad";
+            
+            cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+            if (cell == nil) {
+                [[NSBundle mainBundle] loadNibNamed:@"CellMelody_Portrait_iPad" owner:self options:nil];
+                cell = cellMelody_iPad;
+                cellMelody_iPad = nil;
+            }
+        } else
+        {
+            static NSString *CellIdentifier = @"MelodyCellId";
+            
+            cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+            if (cell == nil) {
+                [[NSBundle mainBundle] loadNibNamed:@"CellMelody" owner:self options:nil];
+                cell = cellMelody;
+                cellMelody = nil;
+            }
         }
+
         cell.backgroundColor = [UIColor clearColor];
         // Configure the cell...
         ((CellMelody *)cell).labelCellMelody.text = (NSString *) [_melodies objectAtIndex:indexPath.section];
@@ -279,12 +300,12 @@
         if (valueMelodiesMap[indexPath.section] == TRUE)
         {
             ((CellMelody *)cell).labelCellMelody.font = semiBoldFont;
-            ((CellMelody *)cell).imageCellMelody.image = [UIImage imageNamed:@"camera_action_pause.png"];;
+            ((CellMelody *)cell).imageCellMelody.image = [UIImage imageCameraActionPause];;
         }
         else
         {
             ((CellMelody *)cell).labelCellMelody.font = regularFont;
-            ((CellMelody *)cell).imageCellMelody.image = [UIImage imageNamed:@"camera_action_play.png"];
+            ((CellMelody *)cell).imageCellMelody.image = [UIImage imageCameraActionPlay];
         }
     }
     
@@ -300,7 +321,7 @@
     }
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
     {
-        return 60;
+        return 88;
     }
     else
     {

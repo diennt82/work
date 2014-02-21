@@ -50,17 +50,36 @@
     
     if (isLand)
     {
-        marginLR = 0;
-        xPos = 0;
-        buttonWidth = kButtonSize_iPhone;
-        paddingBetweenButton = kPaddingBetweenButton - 5;
+        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+        {
+            marginLR = kLeftOffset + 60; //padding left and right = 100
+            xPos = 0; //
+            buttonWidth = 60; //60 for iPad
+            paddingBetweenButton = 65;
+        }
+        else if (isiPhone4)
+        {
+            marginLR = 0;
+            xPos = 0;
+            buttonWidth = kButtonSize_iPhone - 2;
+            paddingBetweenButton = kPaddingBetweenButton - 6;
+        }
+        else
+        {
+            marginLR = 0;
+            xPos = 0;
+            buttonWidth = kButtonSize_iPhone;
+            paddingBetweenButton = kPaddingBetweenButton - 5;
+        }
+        
     } else
     {
         if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
         {
-            marginLR = kLeftOffset + 60; //padding left and right = 100
-            xPos = kLeftOffset + 40; //
-            buttonWidth = kButtonSize + 20; //60 for iPad
+            marginLR = 100; //padding left and right = 100
+            xPos = 30; //
+            buttonWidth = 60; //60 for iPad
+            paddingBetweenButton = 50;
         }
         else
         {
