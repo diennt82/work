@@ -904,7 +904,6 @@
 
 -(void) logoutAndUnregistration_bg
 {
-///#if  !TARGET_IPHONE_SIMULATOR
     NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
     
     NSLog(@"De-Register push with both parties: APNs and BMS ");
@@ -938,7 +937,6 @@
                         waitUntilDone:NO];
     
 	[pool release];
-//#endif
 }
 
 #pragma mark -

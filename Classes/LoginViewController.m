@@ -86,7 +86,7 @@
 	//load user/pass
 	NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
 	//can be user email or user name here --
-	NSString * old_usr = (NSString *) [userDefaults objectForKey:@"PortalUseremail"];
+	NSString * old_usr = (NSString *) [userDefaults objectForKey:@"PortalUsername"];
 	NSString * old_pass = (NSString *) [userDefaults objectForKey:@"PortalPassword"];
     self.stringUserEmail  = (NSString*) [userDefaults objectForKey:@"PortalUseremail"];
     

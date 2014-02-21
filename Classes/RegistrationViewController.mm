@@ -12,6 +12,8 @@
 #import "Step_10_ViewController.h"
 
 @interface RegistrationViewController () <UITextFieldDelegate>
+    
+    @property (retain, nonatomic) IBOutlet UITextField *tfUsername;
 
 @property (retain, nonatomic) IBOutlet UITextField *tfEmail;
 @property (retain, nonatomic) IBOutlet UITextField *tfPassword;
@@ -59,6 +61,7 @@
     [self.btnCheckbox setImage:[UIImage imageNamed:@"checkbox_active"] forState:UIControlStateSelected];
     [self.btnCheckbox setImage:[UIImage imageNamed:@"checkbox_active"] forState:UIControlStateHighlighted];
     
+    self.tfUsername.delegate = self;
     self.tfEmail.delegate = self;
     self.tfPassword.delegate = self;
     self.tfConfirmPassword.delegate =self;
@@ -131,7 +134,7 @@
     
     if (UIScreen.mainScreen.bounds.size.height < 568)
     {
-        movementDistance = 190;
+        movementDistance = 155;
     }
     
     int movement = (up ? -movementDistance : movementDistance);
@@ -149,8 +152,45 @@
     NSString * ok = NSLocalizedStringWithDefaultValue(@"Ok",nil, [NSBundle mainBundle],
                                                       @"Ok", nil);
     NSString * title = nil;
+    
+    NSString * regex = @"[a-zA-Z0-9._-]+";
+    NSPredicate * validatedUsername = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", regex];
+    BOOL isValidateUsername = [validatedUsername evaluateWithObject:_tfUsername.text];
 
-    if (([_tfPassword.text length] < 8) ||
+    //UserName at least 5 chars and at most 20 characters
+    if ([_tfUsername.text length] < 5 || 20 < [_tfUsername.text length])
+    {
+        //error
+        title = NSLocalizedStringWithDefaultValue(@"Create_Account_Failed",nil, [NSBundle mainBundle],
+                                                  @"Create Account Failed" , nil);
+        msg = NSLocalizedStringWithDefaultValue(@"Create_Account_Failed_msg",nil, [NSBundle mainBundle],
+                                                @"User name has to be between 5-20 characters" , nil);
+        //ERROR condition
+        UIAlertView *_alert = [[UIAlertView alloc]
+                               initWithTitle:title
+                               message:msg
+                               delegate:self
+                               cancelButtonTitle:ok
+                               otherButtonTitles:nil];
+        [_alert show];
+        [_alert release];
+    }
+    else if (!isValidateUsername)
+    {
+        title = NSLocalizedStringWithDefaultValue(@"Create_Account_Failed",nil, [NSBundle mainBundle],
+                                                  @"Create Account Failed" , nil);
+        msg = NSLocalizedStringWithDefaultValue(@"Create_Account_Failed_msg5", nil, [NSBundle mainBundle],
+                                                @"Username should not contain special characters except for - _ and ."  , nil);
+        
+        //ERROR condition
+        [[[[UIAlertView alloc] initWithTitle:title message:msg
+                                    delegate:self
+                           cancelButtonTitle:ok
+                           otherButtonTitles:nil]
+          autorelease]
+         show];
+    }
+    else if (([_tfPassword.text length] < 8) ||
              ([_tfPassword.text length] > 12) )
     {
         //error
@@ -229,8 +269,8 @@
         [self.view endEditing:YES];
         [self.view addSubview:_viewProgress];
         //Register user ...
+        self.stringUsername   = _tfUsername.text;
         self.stringEmail      = _tfEmail.text;
-        self.stringUsername   = [_stringEmail stringByReplacingOccurrencesOfString:@"@" withString:@"_"];
         self.stringPassword   = _tfPassword.text;
         self.stringCPassword  = _tfConfirmPassword.text;
 
@@ -419,6 +459,7 @@
     [_btnCheckbox release];
     [_btnCreate release];
     [_viewProgress release];
+    [_tfUsername release];
     [super dealloc];
 }
 @end
