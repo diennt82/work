@@ -470,7 +470,7 @@ double _ticks = 0;
         }
         else if (isiPhone4)
         {
-            aButton.frame = CGRectMake(8.0,0.0,headerLogo.size.width,headerLogo.size.height);
+            aButton.frame = CGRectMake(8.0, 27,headerLogo.size.width,headerLogo.size.height);
         }
         else
         {
@@ -490,27 +490,31 @@ double _ticks = 0;
                                                                   style:UIBarButtonItemStylePlain
                                                                  target:self
                                                                  action:@selector(nowButtonAciton:)];
-    earlierButton = [[UIBarButtonItem alloc] initWithTitle:@"Earlier"
-                                                                      style:UIBarButtonItemStylePlain
-                                                                     target:self
-                                                                     action:@selector(earlierButtonAction:)];
-    
     [nowButton setTitleTextAttributes:@{
                                         UITextAttributeFont: [UIFont fontWithName:PN_SEMIBOLD_FONT size:17.0],
                                         UITextAttributeTextColor: [UIColor barItemSelectedColor]
                                         } forState:UIControlStateNormal];
-    [earlierButton setTitleTextAttributes:@{
-                                            UITextAttributeFont: [UIFont fontWithName:PN_LIGHT_FONT size:17.0],
-                                            UITextAttributeTextColor: [UIColor barItemSelectedColor]
-                                            } forState:UIControlStateNormal];
-    
-    if ([self.selectedChannel.profile isSharedCam]) // SharedCam
+
+    if (![self.selectedChannel.profile isSharedCam]) // SharedCam
     {
-        earlierButton.enabled = NO;
+        earlierButton = [[UIBarButtonItem alloc] initWithTitle:@"Earlier"
+                                                         style:UIBarButtonItemStylePlain
+                                                        target:self
+                                                        action:@selector(earlierButtonAction:)];
+        [earlierButton setTitleTextAttributes:@{
+                                                UITextAttributeFont: [UIFont fontWithName:PN_LIGHT_FONT size:17.0],
+                                                UITextAttributeTextColor: [UIColor barItemSelectedColor]
+                                                } forState:UIControlStateNormal];
+        NSArray *actionRightButtonItems = @[earlierButton, nowButton];
+        self.navigationItem.rightBarButtonItems = actionRightButtonItems;
+    }
+    else
+    {
+        self.navigationItem.rightBarButtonItem = nowButton;
     }
     
-    NSArray *actionRightButtonItems = @[earlierButton, nowButton];
-    self.navigationItem.rightBarButtonItems = actionRightButtonItems;
+    //NSArray *actionRightButtonItems = @[earlierButton, nowButton];
+    //self.navigationItem.rightBarButtonItems = actionRightButtonItems;
     
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
     {
