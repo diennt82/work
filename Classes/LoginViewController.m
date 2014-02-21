@@ -135,7 +135,6 @@
 {
     [super viewWillAppear:animated];
     self.navigationController.navigationBarHidden = YES;
-    [self.view resignFirstResponder];
     
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
     {
@@ -148,6 +147,12 @@
 {
     [super viewDidAppear:animated];
     //[[[GAI sharedInstance] defaultTracker] sendView:@"Login Screen"];
+}
+
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [self.view endEditing:YES];
+    [super viewWillDisappear:animated];
 }
 
 - (void)didReceiveMemoryWarning
