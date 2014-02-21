@@ -186,6 +186,12 @@
             [userDefaults setObject:camChannel.profile.registrationID forKey:@"REG_ID"];
         }
         
+        if ([camChannel.profile isNotAvailable] &&
+            [camChannel.profile isSharedCam])
+        {
+            return;
+        }
+        
         [CameraAlert clearAllAlertForCamera:camChannel.profile.mac_address];
         [UIApplication sharedApplication].idleTimerDisabled = YES;
         

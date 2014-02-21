@@ -59,7 +59,7 @@
 @end
 
 @interface H264PlayerViewController: UIViewController
-<UIPickerViewDelegate, UIPickerViewDataSource, PlaylistDelegate,PlayerCallbackHandler,ScanForCameraNotifier, StunClientDelegate, ZoneViewControlerDeleate, MelodyVCDelegate, UIScrollViewDelegate, ScrollHorizontalMenuDelegate, AudioOutStreamerDelegate>
+<PlaylistDelegate,PlayerCallbackHandler,ScanForCameraNotifier, StunClientDelegate, ZoneViewControlerDeleate, MelodyVCDelegate, UIScrollViewDelegate, ScrollHorizontalMenuDelegate, AudioOutStreamerDelegate>
 {
     ScrollHorizontalMenu *_horizMenu;
     int _selectedItemMenu;
@@ -157,7 +157,6 @@
 @property (retain, nonatomic) IBOutlet UIScrollView *scrollView;
 @property (retain, nonatomic) IBOutlet UIButton *ib_showMenuControlPanel;
 @property (retain, nonatomic) IBOutlet UIView *viewCtrlButtons;
-@property (retain, nonatomic) IBOutlet UIPickerView *pickerHQOptions;
 @property (retain, nonatomic) IBOutlet UIButton *melodyButton;
 @property (retain, nonatomic) IBOutlet UIButton *hqViewButton;
 @property (retain, nonatomic) IBOutlet UIButton *triggerRecordingButton;
@@ -171,7 +170,6 @@
 @property (retain, nonatomic) IBOutlet UIBarButtonItem *barBntItemReveal;
 
 @property (nonatomic, retain) HttpCommunication* httpComm;
-@property (nonatomic, retain) NSMutableArray *playlistArray;
 @property (nonatomic) BOOL h264StreamerIsInStopped;
 
 @property (nonatomic, retain) BMS_JSON_Communication *jsonComm;
@@ -204,9 +202,6 @@
 @property (retain, nonatomic) IBOutlet UIBarButtonItem *backBarBtnItem;
 @property (retain, nonatomic) IBOutlet UIBarButtonItem *cameraNameBarBtnItem;
 @property (retain, nonatomic) IBOutlet UIView *progressView;
-
-@property (retain, nonatomic) IBOutlet UISegmentedControl *segCtrl;
-@property (retain, nonatomic) UISegmentedControl *segmentControl;
 
 @property (nonatomic, assign) CamChannel *selectedChannel;
 

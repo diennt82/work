@@ -74,7 +74,6 @@
 @property (nonatomic, retain) NSThread *threadBonjour;
 @property (nonatomic, retain) NSMutableArray *bonjourList;
 @property (nonatomic) BOOL scanAgain;
-@property (nonatomic) BOOL isSharedCam;
 @property (nonatomic) BOOL isFahrenheit;
 
 - (void)centerScrollViewContents;
@@ -147,14 +146,6 @@ double _ticks = 0;
                                                  name: UIApplicationDidBecomeActiveNotification
                                                object: nil];
     
-    self.pickerHQOptions.delegate = self;
-    self.pickerHQOptions.dataSource = self;
-    self.pickerHQOptions.hidden = YES;
-    self.pickerHQOptions.userInteractionEnabled = NO;
-    
-    //self.barBntItemReveal.target = [self stackViewController];
-    
-    
     CFBundleRef mainbundle = CFBundleGetMainBundle();
     CFURLRef soundFileURLRef = CFBundleCopyResourceURL(mainbundle, CFSTR("beep"), CFSTR("wav"), NULL);
     AudioServicesCreateSystemSoundID(soundFileURLRef, &soundFileObject);
@@ -170,25 +161,18 @@ double _ticks = 0;
     else
     {
         self.zoneViewController = [[[ZoneViewController alloc] initWithNibName:@"ZoneViewController" bundle:nil] autorelease];
-
     }
     
     self.zoneViewController.selectedChannel = self.selectedChannel;
     self.zoneViewController.zoneVCDelegate = self;
     
     self.zoneButton.enabled = NO;
-    
-//    self.melodyViewController = [[[MelodyViewController alloc] initWithNibName:@"MelodyViewController" bundle:nil] autorelease];
-//    
-//    self.melodyViewController.selectedChannel = self.selectedChannel;
-//    self.melodyViewController.melodyVcDelegate = self;
     self.melodyButton.enabled = NO;
     
     self.hqViewButton.enabled = NO;
     self.triggerRecordingButton.enabled = NO;
     UIButton *iFrameBtn = (UIButton *)[self.viewCtrlButtons viewWithTag:705];
     iFrameBtn.enabled = NO;
-    
 
     [self updateNavigationBarAndToolBar];
     
@@ -205,21 +189,6 @@ double _ticks = 0;
     
     [self.imageViewStreamer setUserInteractionEnabled:YES];
 
-
-    
-    //if (self.selectedChannel.profile.modelID != 6) // CameraHD
-    if (![self isSharedCam:self.selectedChannel.profile.registrationID]) // CameraHD
-    {
-        self.timelineVC = [[TimelineViewController alloc] init];
-        [self.view addSubview:_timelineVC.view];
-        self.timelineVC.timelineVCDelegate = self;
-        self.timelineVC.camChannel = self.selectedChannel;
-        self.timelineVC.navVC = self.navigationController;
-        self.timelineVC.parentVC = self;
-        
-        [self.timelineVC loadEvents:self.selectedChannel];
-    }
-    
     /*
      //create list image for display horizontal scroll view menu
      1.Pan, Tilt & Zoom (bb_setting_icon.png)
@@ -230,15 +199,24 @@ double _ticks = 0;
      6.Temperature display        temp_alert
      */
     
-    if (_isSharedCam == TRUE)
+    if (![self.selectedChannel.profile isSharedCam]) // CameraHD
     {
-        self.itemImages = [NSMutableArray arrayWithObjects:@"video_action_pan.png", @"video_action_video.png", @"video_action_music.png", nil];
-        self.itemSelectedImages = [NSMutableArray arrayWithObjects:@"video_action_pan_pressed.png", @"video_action_video_pressed.png", @"video_action_music_pressed.png", nil];
+        self.timelineVC = [[TimelineViewController alloc] init];
+        [self.view addSubview:_timelineVC.view];
+        self.timelineVC.timelineVCDelegate = self;
+        self.timelineVC.camChannel = self.selectedChannel;
+        self.timelineVC.navVC = self.navigationController;
+        self.timelineVC.parentVC = self;
+        
+        [self.timelineVC loadEvents:self.selectedChannel];
+        
+        self.itemImages = [NSMutableArray arrayWithObjects:@"video_action_pan.png", @"video_action_mic.png", @"video_action_video.png", @"video_action_music.png", @"video_action_temp.png", nil];
+        self.itemSelectedImages = [NSMutableArray arrayWithObjects:@"video_action_pan_pressed.png", @"video_action_mic_pressed.png", @"video_action_video_pressed.png", @"video_action_music_pressed.png", @"video_action_temp_pressed.png", nil];
     }
     else
     {
-        self.itemImages = [NSMutableArray arrayWithObjects:@"video_action_pan.png", @"video_action_mic.png", @"video_action_video.png", @"video_action_music.png", @"video_action_temp.png", nil];
-        self.itemSelectedImages = [NSMutableArray arrayWithObjects:@"video_action_pan_pressed.png", @"video_action_mic_pressed.png", @"video_action_video_pressed.png", @"video_action_music_pressed.png", @"video_action_temp_pressed.png", nil];
+        self.itemImages = [NSMutableArray arrayWithObjects:@"video_action_pan.png", @"video_action_video.png", @"video_action_music.png", nil];
+        self.itemSelectedImages = [NSMutableArray arrayWithObjects:@"video_action_pan_pressed.png", @"video_action_video_pressed.png", @"video_action_music_pressed.png", nil];
     }
     
     [self.horizMenu reloadData:NO];
@@ -246,7 +224,17 @@ double _ticks = 0;
     
     self.isFahrenheit = [[NSUserDefaults standardUserDefaults] boolForKey:@"IS_FAHRENHEIT"];
     
-    [self becomeActive];
+    if ([self.selectedChannel.profile isNotAvailable])
+    {
+        nowButton.enabled = NO;
+        [_activityIndicator removeFromSuperview];
+        [self earlierButtonAction:earlierButton];
+    }
+    else
+    {
+        [self becomeActive];
+    }
+    
     [self hideControlMenu];
     
     NSLog(@"Check selectedChannel is %@ and ip of deviece is %@", self.selectedChannel, self.selectedChannel.profile.ip_address);
@@ -537,8 +525,8 @@ double _ticks = 0;
                                             UITextAttributeFont: [UIFont fontWithName:PN_LIGHT_FONT size:17.0],
                                             UITextAttributeTextColor: [UIColor barItemSelectedColor]
                                             } forState:UIControlStateNormal];
-    //if (self.selectedChannel.profile.modelID == 6) // SharedCam
-    if ([self isSharedCam:self.selectedChannel.profile.registrationID]) // SharedCam
+    
+    if ([self.selectedChannel.profile isSharedCam]) // SharedCam
     {
         earlierButton.enabled = NO;
     }
@@ -647,11 +635,6 @@ double _ticks = 0;
 }
 
 #pragma mark - Action
-- (IBAction)hqPressAction:(id)sender
-{
-    self.pickerHQOptions.hidden = NO;
-    [self.view bringSubviewToFront:self.pickerHQOptions];
-}
 
 - (IBAction)iFrameOnlyPressAction:(id)sender
 {
@@ -936,7 +919,7 @@ double _ticks = 0;
                     self.imgViewDrectionPad.image = [UIImage imageNamed:@"camera_action_pan_bg@5.png"];
                 }
                 
-                if (_isSharedCam == FALSE)
+                if ([self.selectedChannel.profile isSharedCam] == FALSE) // CameraHD
                 {
                     [self performSelectorInBackground:@selector(getCameraTemperature_bg:) withObject:nil];
                 }
@@ -1367,27 +1350,6 @@ double _ticks = 0;
 #endif
 }
 
-
-#pragma mark - Delegate Playlist
-
-- (void)stopStreamWhenPushPlayback
-{
-    self.h264StreamerIsInStopped = TRUE;
-    [self stopPeriodicBeep];
-    [self stopPeriodicPopup];
-    
-    if (self.currentMediaStatus == MEDIA_INFO_HAS_FIRST_IMAGE ||
-        self.currentMediaStatus == MEDIA_PLAYER_STARTED ||
-        (self.currentMediaStatus == 0 && h264Streamer == NULL)) // Media player haven't start yet.
-    {
-        [self stopStream];
-    }
-    else if (h264Streamer != NULL)
-    {
-        h264Streamer->sendInterrupt(); // Assuming h264Streamer stop itself.
-    }
-}
-
 #pragma mark Delegate Timeline
 
 - (void)stopStreamToPlayback
@@ -1438,24 +1400,6 @@ double _ticks = 0;
 }
 
 #pragma mark - Method
-
-- (BOOL)isSharedCam: (NSString *)regID
-{
-    if (regID != nil)
-    {
-        if (regID.length == 26)
-        {
-            if ([[regID substringWithRange:NSMakeRange(2, 4)] isEqualToString:MODEL_SHARED_CAM])
-            {
-                self.isSharedCam = TRUE;
-                return TRUE;
-            }
-        }
-    }
-    
-    self.isSharedCam = FALSE;
-    return FALSE;
-}
 
 - (void)singleTapGestureCaptured:(id)sender
 {
@@ -1600,8 +1544,6 @@ double _ticks = 0;
 
 - (void)becomeActive
 {
-    self.pickerHQOptions.hidden = YES;
-    
     self.selectedChannel.stopStreaming = NO;
     self.activityIndicator.hidden = NO;
     self.activityIndicator.color = [UIColor whiteColor];
@@ -1620,12 +1562,6 @@ double _ticks = 0;
         // Camera is AVAILABLE
         [self scanCamera];
     }
-    
-    //set value default for table view
-    self.playlistViewController.tableView.hidden= YES;
-    // loading earlierlist in background
-    //[self performSelectorInBackground:@selector(loadEarlierList) withObject:nil];
-    //[self performSelectorInBackground:@selector(loadTimelineEvents_bg) withObject:nil];
     
     //Direction stuf
     /* Kick off the two timer for direction sensing */
@@ -2223,61 +2159,6 @@ double _ticks = 0;
 #endif
     //[self.activityStopStreamingProgress stopAnimating];
 }
-
-#if 1
-- (void)loadTimelineEvents_bg
-{
-    
-}
-#else
-
-- (void)loadEarlierList
-{
-    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-    
-//    BMS_JSON_Communication *jsonComm = [[BMS_JSON_Communication alloc] initWithObject:self
-//                                                                             Selector:@selector(getPlaylistSuccessWithResponse:)
-//                                                                         FailSelector:@selector(getPlaylistFailedWithResponse:)
-//                                                                            ServerErr:@selector(getPlaylistUnreachableSetver)];
-    BMS_JSON_Communication *jsonComm = [[[BMS_JSON_Communication alloc] initWithObject:self
-                                                                             Selector:nil
-                                                                         FailSelector:nil
-                                                                            ServerErr:nil] autorelease];
-    NSString *mac = [Util strip_colon_fr_mac:self.selectedChannel.profile.mac_address];
-    NSString *apiKey = [userDefaults objectForKey:@"PortalApiKey"];
-    
-//    [jsonComm getAllRecordedFilesWithRegistrationId:mac
-//                                           andEvent:@"04"
-//                                          andApiKey:apiKey];
-    NSDictionary *responseDict = [jsonComm getAllRecordedFilesBlockedWithRegistrationId:mac
-                                                  andEvent:@"04"
-                                                 andApiKey:apiKey];
-    if (responseDict != nil)
-    {
-        if ([[responseDict objectForKey:@"status"] intValue] == 200)
-        {
-            NSArray *eventArr = [[responseDict objectForKey:@"data"] objectForKey:@"events"];
-            
-            self.playlistViewController.playlistArray = [NSMutableArray array];
-            
-            for (NSDictionary *playlist in eventArr) {
-                NSDictionary *clipInfo = [[playlist objectForKey:@"playlist"] objectAtIndex:0];
-                
-                PlaylistInfo *playlistInfo = [[[PlaylistInfo alloc] init] autorelease];
-                playlistInfo.mac_addr = mac;
-                playlistInfo.urlImage = [clipInfo objectForKey:@"image"];
-                playlistInfo.titleString = [clipInfo objectForKey:@"title"];
-                playlistInfo.urlFile = [clipInfo objectForKey:@"file"];
-                
-                [self.playlistViewController.playlistArray addObject:playlistInfo];
-            }
-            
-            [self.playlistViewController.tableView reloadData];
-            NSLog(@"reloadData %d", self.playlistViewController.playlistArray.count);
-        }
-    }
-}
-#endif
 
 -(void) getVQ_bg
 {
@@ -4115,16 +3996,6 @@ double _ticks = 0;
         CGRect newRect = CGRectMake(0, (SCREEN_WIDTH - imageViewHeight) / 2, SCREEN_HEIGHT, imageViewHeight);
         self.imageViewVideo.frame = CGRectMake(0, 0, SCREEN_HEIGHT, imageViewHeight);
         self.scrollView.frame = newRect;
-        
-        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
-        {
-            self.activityIndicator.frame = CGRectMake((SCREEN_HEIGHT - INDICATOR_SIZE)/2, (SCREEN_WIDTH - INDICATOR_SIZE)/2 , INDICATOR_SIZE, INDICATOR_SIZE);
-            
-        }
-        else
-        {
-        }
-        
 
         self.viewStopStreamingProgress.frame = CGRectMake((SCREEN_HEIGHT - INDICATOR_SIZE)/2, (SCREEN_WIDTH - INDICATOR_SIZE)/2 , INDICATOR_SIZE, INDICATOR_SIZE);
         
@@ -4132,6 +4003,7 @@ double _ticks = 0;
         {
             [self.timelineVC.view removeFromSuperview];
         }
+        
         [self addGesturesPichInAndOut];
         
         //remove add hubble button at landscape
@@ -4236,13 +4108,6 @@ double _ticks = 0;
             }            
         }
 
-        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
-        {
-            self.activityIndicator.frame = CGRectMake((SCREEN_WIDTH - INDICATOR_SIZE)/2, imageViewHeight/2 + 44 + deltaY , INDICATOR_SIZE, INDICATOR_SIZE);
-        }
-        else
-        {
-        }
         self.viewStopStreamingProgress.frame = CGRectMake((SCREEN_WIDTH - INDICATOR_SIZE)/2, (SCREEN_HEIGHT - INDICATOR_SIZE)/2 , INDICATOR_SIZE, INDICATOR_SIZE);
         [self showControlMenu];
         //add hubble_logo_back
@@ -4251,15 +4116,13 @@ double _ticks = 0;
         _isFirstLoad = NO;
 
 	}
+    
     [self.melodyViewController.melodyTableView setNeedsLayout];
     [self.melodyViewController.melodyTableView setNeedsDisplay];
-
-
-//    self.backBarBtnItem.target = self;
-//    self.backBarBtnItem.action = @selector(prepareGoBackToCameraList:);
-// SLIDE MENU
-//    self.backBarBtnItem.target = self.stackViewController;
-//    self.backBarBtnItem.action = @selector(toggleLeftViewController);
+    // Set position for Image Knob & Handle
+    self.imageViewKnob.center = _imgViewDrectionPad.center;
+    self.imageViewHandle.center = _imgViewDrectionPad.center;
+    self.imageViewHandle.hidden = YES;
     
     self.earlierVC.view.hidden = !_isEarlierView;
     
@@ -4296,12 +4159,7 @@ double _ticks = 0;
         }
         
         h264Streamer->videoSizeChanged();
-       
     }
-    
-    self.pickerHQOptions.hidden = YES;
-    self.pickerHQOptions.userInteractionEnabled = NO;
-    self.playlistViewController.view.hidden = YES;
     
     //
     [self setupPtt];
@@ -4309,160 +4167,9 @@ double _ticks = 0;
     [self hidenAllBottomView];
     [self updateBottomView];
     
-}
-
-#pragma mark -
-#pragma mark PickerView DataSource
-
-- (NSInteger)numberOfComponentsInPickerView:(UIPickerView *)pickerView
-{
-    return 1;
-}
-- (NSInteger)pickerView:(UIPickerView *)pickerView numberOfRowsInComponent:(NSInteger)component
-{
-    return 3;
-}
-- (NSString *)pickerView:(UIPickerView *)pickerView
-             titleForRow:(NSInteger)row
-            forComponent:(NSInteger)component
-{
-    NSString *textRow = @"";
-    switch (row)
+    if ([self.selectedChannel.profile isNotAvailable])
     {
-        case 0:
-            textRow = @"D1";
-            break;
-        case 1:
-            textRow = @"HD 1 Mbps";
-            break;
-        case 2:
-            textRow = @"HD 1.5 Mbps";
-            break;
-            
-        default:
-            break;
-    }
-    return textRow;
-} 
-
-
-#pragma mark -
-#pragma mark PickerView Delegate
-- (void)pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row
-      inComponent:(NSInteger)component
-{
-    // send command here
-    pickerView.hidden = YES;
-    
-    [self performSelectorInBackground:@selector(setVQ_bg:)
-                           withObject:[NSNumber numberWithInt:row]];
-}
-
-- (void)setVQ_bg:(NSNumber *) row
-{
-    
-    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-    
-	//int videoQ =[userDefaults integerForKey:@"int_VideoQuality"];
-    
-    NSString *modeVideo = @"";
-    switch ([row intValue])
-    {
-        case 0:
-            modeVideo = @"480p";
-            break;
-        case 1:
-            modeVideo = @"720p_10";
-            break;
-        case 2:
-            modeVideo = @"720p_15";
-            break;
-        default:
-            break;
-    }
-    
-    //NSString *mac = [Util strip_colon_fr_mac:self.selectedChannel.profile.mac_address];
-    NSString *apiKey = [userDefaults objectForKey:@"PortalApiKey"];
-    
-    NSString *bodyKey = @"";
-    
-    if (  self.selectedChannel.profile.isInLocal == TRUE)
-	{
-//        HttpCommunication *httpCommunication = [[[HttpCommunication alloc] init] autorelease];
-        _httpComm.device_ip = self.selectedChannel.profile.ip_address;
-        _httpComm.device_port = self.selectedChannel.profile.port;
-        
-        NSData *responseData = [_httpComm sendCommandAndBlock_raw:[NSString stringWithFormat:@"set_resolution&mode=%@", modeVideo]];
-        
-        if (responseData != nil)
-        {
-            bodyKey = [[[NSString alloc] initWithData:responseData encoding: NSUTF8StringEncoding] autorelease];
-            
-            NSLog(@"setVQ_bg response string: %@", bodyKey);
-        }
-	}
-	else if(self.selectedChannel.profile.minuteSinceLastComm <= 5) // remote
-	{
-        
-        self.jsonComm = [[[BMS_JSON_Communication alloc] initWithObject:self
-                                                              Selector:nil
-                                                          FailSelector:nil
-                                                             ServerErr:nil] autorelease];
-        
-        NSDictionary *responseDict = [self.jsonComm sendCommandBlockedWithRegistrationId:self.selectedChannel.profile.registrationID
-                                                                              andCommand:[NSString stringWithFormat:@"action=command&command=set_resolution&mode=%@", modeVideo]
-                                                                               andApiKey:apiKey];
-        NSLog(@"setVQ_bg %@", responseDict);
-        
-        if (responseDict != nil)
-        {
-            NSInteger status = [[responseDict objectForKey:@"status"] intValue];
-            if (status == 200)
-            {
-                bodyKey = [[[responseDict objectForKey:@"data"] objectForKey:@"device_response"] objectForKey:@"body"];
-            }
-            else
-            {
-                NSLog(@"set resolution: status = %d", [[responseDict objectForKey:@"stats"] intValue]);
-            }
-        }
-	}
-    
-    if (![bodyKey isEqualToString:@""])
-    {
-        NSArray * tokens = [bodyKey componentsSeparatedByString:@": "];
-        if ([tokens count] >=2 )
-        {
-            NSString *resultCode = [tokens objectAtIndex:1];
-            
-            if ([resultCode isEqualToString:@"0"]) // whatever this is the result app receive after send command
-            {
-                [self performSelectorOnMainThread:@selector(setVQ_fg:)
-                                       withObject:row waitUntilDone:NO];
-            }
-            else
-            {
-                NSLog(@"setVQ_bg failed! Contact fw team or server team");
-            }
-        }
-    }
-}
-
--(void) setVQ_fg: (NSNumber *)row
-{
-    switch ([row intValue])
-    {
-        case 0:
-            [self.hqViewButton setImage:[UIImage imageNamed:@"hq_d.png" ]
-                               forState:UIControlStateNormal];
-            break;
-        case 1:
-        case 2:
-            [self.hqViewButton setImage:[UIImage imageNamed:@"hq.png" ]
-                               forState:UIControlStateNormal];
-            break;
-        default:
-            break;
+        [_activityIndicator removeFromSuperview];
     }
 }
 
@@ -4908,7 +4615,7 @@ double _ticks = 0;
     //show when user selecte one item inner control panel
     [self showControlMenu];
     
-    if (_isSharedCam == TRUE)
+    if ([self.selectedChannel.profile isSharedCam] == TRUE)
     {
         // If this is SharedCam then the horimenu has 3 items. It is not match with define INDEX_...
         switch (index)
@@ -5084,32 +4791,21 @@ double _ticks = 0;
 }
 
 - (void)dealloc {
-    
-    //[self.client shutdown];
-
-
     [_imageViewVideo release];
-   [_imageViewStreamer release];
-
-    [_progressView release];
-
-    [_segmentControl release];
-    //[_tableViewPlaylist release];
+    [_imageViewStreamer release];
     
-
+    [_progressView release];
+    
     [_selectedChannel release];
-    [_playlistArray release];
     [_httpComm release];
     
     [_barBntItemReveal release];
     [_viewCtrlButtons release];
-    [_pickerHQOptions release];
     [_hqViewButton release];
     [_triggerRecordingButton release];
     [_imgViewDrectionPad release];
     [send_UD_dir_req_timer invalidate];
     [send_LR_dir_req_timer invalidate];
-    [_playlistViewController release];
     [_activityIndicator release];
     [_viewStopStreamingProgress release];
     [_activityStopStreamingProgress release];
@@ -5121,7 +4817,7 @@ double _ticks = 0;
     [_scrollView release];
     [_ib_temperature release];
     [_ib_ViewTouchToTalk release];
-
+    
     [_ib_labelTouchToTalk release];
     [_ib_viewRecordTTT release];
     [_ib_labelRecordVideo release];
@@ -5199,12 +4895,8 @@ double _ticks = 0;
     [self setBackBarBtnItem:nil];
     [self setProgressView:nil];
     [self setCameraNameBarBtnItem:nil];
-    [self setSegCtrl:nil];
-    //[self setTableViewPlaylist:nil];
-    
 
     [self setSelectedChannel:nil];
-    [self setPlaylistArray:nil];
     [self setHttpComm:nil];
     
     [super viewDidUnload];

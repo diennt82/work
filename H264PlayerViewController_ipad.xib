@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.iPad.XIB" version="3.0" toolsVersion="4514" systemVersion="13A603" targetRuntime="iOS.CocoaTouch.iPad" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.iPad.XIB" version="3.0" toolsVersion="4514" systemVersion="12F45" targetRuntime="iOS.CocoaTouch.iPad" propertyAccessControl="none">
     <dependencies>
         <deployment defaultVersion="1536" identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3746"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3747"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="H264PlayerViewController">
@@ -23,7 +23,6 @@
                 <outlet property="imageViewKnob" destination="6n1-YN-i58" id="d88-pC-Oqs"/>
                 <outlet property="imageViewVideo" destination="ewk-Ss-5Zt" id="hm9-FC-hEY"/>
                 <outlet property="imgViewDrectionPad" destination="WPh-TE-Nhn" id="wm3-nT-qIE"/>
-                <outlet property="pickerHQOptions" destination="Vzj-s2-bhG" id="lW3-Y9-wfg"/>
                 <outlet property="playlistViewController" destination="GC8-4Y-Omk" id="lkJ-6T-Lwg"/>
                 <outlet property="scrollView" destination="xsx-R1-x8v" id="gF2-Cc-0cF"/>
                 <outlet property="view" destination="KT0-i3-kTw" id="q7Z-xw-GQ3"/>
@@ -47,21 +46,6 @@
                     <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                     <inset key="insetFor6xAndEarlier" minX="0.0" minY="20" maxX="0.0" maxY="-20"/>
                 </view>
-                <pickerView contentMode="scaleToFill" id="Vzj-s2-bhG">
-                    <rect key="frame" x="80" y="64" width="608" height="216"/>
-                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
-                    <inset key="insetFor6xAndEarlier" minX="0.0" minY="20" maxX="0.0" maxY="-20"/>
-                </pickerView>
-                <tableView hidden="YES" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" separatorStyle="default" rowHeight="68" sectionHeaderHeight="22" sectionFooterHeight="22" id="V8H-gl-p8h">
-                    <rect key="frame" x="0.0" y="64" width="768" height="950"/>
-                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                    <inset key="insetFor6xAndEarlier" minX="0.0" minY="20" maxX="0.0" maxY="-20"/>
-                    <connections>
-                        <outlet property="dataSource" destination="GC8-4Y-Omk" id="4Kd-fJ-3JK"/>
-                        <outlet property="delegate" destination="GC8-4Y-Omk" id="M4D-Cj-sDs"/>
-                    </connections>
-                </tableView>
                 <scrollView autoresizesSubviews="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" id="xsx-R1-x8v">
                     <rect key="frame" x="0.0" y="64" width="768" height="432"/>
                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
@@ -187,9 +171,6 @@
             <nil key="simulatedBottomBarMetrics"/>
             <simulatedOrientationMetrics key="simulatedOrientationMetrics"/>
             <nil key="simulatedDestinationMetrics"/>
-            <connections>
-                <outlet property="view" destination="V8H-gl-p8h" id="OF2-ts-TpP"/>
-            </connections>
         </tableViewController>
     </objects>
     <resources>
