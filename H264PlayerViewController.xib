@@ -17,6 +17,7 @@
                 <outlet property="ib_labelRecordVideo" destination="yJw-Ao-mOT" id="RCt-8M-h19"/>
                 <outlet property="ib_labelTouchToTalk" destination="hzo-Tk-4BY" id="DmV-LE-eBQ"/>
                 <outlet property="ib_processRecordOrTakePicture" destination="W9D-nx-A3Q" id="Txd-Mh-4Ks"/>
+                <outlet property="ib_switchDegree" destination="9xB-eU-NWr" id="IaO-7Q-Hj9"/>
                 <outlet property="ib_temperature" destination="SMn-Fi-rED" id="8O7-0t-yFB"/>
                 <outlet property="ib_viewRecordTTT" destination="Rxo-oe-xq8" id="Kpf-ky-24R"/>
                 <outlet property="imageViewHandle" destination="4Wa-1c-6NC" id="LuM-Zo-7w2"/>
@@ -80,15 +81,43 @@
                     <inset key="insetFor6xAndEarlier" minX="0.0" minY="30" maxX="0.0" maxY="-30"/>
                 </imageView>
                 <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="camera_action_pan_handle.png" id="4Wa-1c-6NC">
-                    <rect key="frame" x="136" y="216" width="30" height="30"/>
+                    <rect key="frame" x="136" y="216" width="7" height="34"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                 </imageView>
                 <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="camera_action_pan_knob.png" id="8Ba-wt-YMO">
-                    <rect key="frame" x="136" y="216" width="30" height="30"/>
+                    <rect key="frame" x="136" y="216" width="40" height="40"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                 </imageView>
+                <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" id="nTa-Ux-yAc" customClass="ScrollHorizontalMenu">
+                    <rect key="frame" x="0.0" y="185" width="320" height="41"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <inset key="insetFor6xAndEarlier" minX="0.0" minY="54" maxX="0.0" maxY="-54"/>
+                    <connections>
+                        <outlet property="dataSource" destination="-1" id="83M-Pt-tLT"/>
+                        <outlet property="itemSelectedDelegate" destination="-1" id="5Dy-i6-vkX"/>
+                    </connections>
+                </scrollView>
+                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="21" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="SMn-Fi-rED">
+                    <rect key="frame" x="0.0" y="254" width="320" height="314"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <inset key="insetFor6xAndEarlier" minX="0.0" minY="30" maxX="0.0" maxY="-30"/>
+                    <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="49"/>
+                    <color key="textColor" red="0.0" green="0.0" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="9xB-eU-NWr">
+                    <rect key="frame" x="0.0" y="254" width="320" height="314"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                    <state key="normal">
+                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                    </state>
+                    <connections>
+                        <action selector="switchDegreePressed:" destination="-1" eventType="touchUpInside" id="BIl-li-cbD"/>
+                    </connections>
+                </button>
                 <view contentMode="scaleToFill" id="0Cv-wD-bGw">
-                    <rect key="frame" x="0.0" y="256" width="320" height="314"/>
+                    <rect key="frame" x="0.0" y="250" width="320" height="314"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <subviews>
                         <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Hold to Talk" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="hzo-Tk-4BY">
@@ -109,25 +138,8 @@
                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
                 </view>
-                <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" id="nTa-Ux-yAc" customClass="ScrollHorizontalMenu">
-                    <rect key="frame" x="0.0" y="185" width="320" height="41"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    <inset key="insetFor6xAndEarlier" minX="0.0" minY="54" maxX="0.0" maxY="-54"/>
-                    <connections>
-                        <outlet property="dataSource" destination="-1" id="83M-Pt-tLT"/>
-                        <outlet property="itemSelectedDelegate" destination="-1" id="5Dy-i6-vkX"/>
-                    </connections>
-                </scrollView>
-                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="21" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="SMn-Fi-rED">
-                    <rect key="frame" x="0.0" y="254" width="320" height="240"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    <inset key="insetFor6xAndEarlier" minX="0.0" minY="30" maxX="0.0" maxY="-30"/>
-                    <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="49"/>
-                    <color key="textColor" red="0.0" green="0.0" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                    <nil key="highlightedColor"/>
-                </label>
                 <view contentMode="scaleToFill" id="Rxo-oe-xq8">
-                    <rect key="frame" x="0.0" y="258" width="320" height="314"/>
+                    <rect key="frame" x="0.0" y="250" width="320" height="314"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <subviews>
                         <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Record Video" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="yJw-Ao-mOT">

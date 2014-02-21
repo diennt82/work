@@ -18,4 +18,5 @@
 + (UIColor *)barItemSelectedColor;
 + (UIColor *)timeLineColor;
 + (UIColor *)timeLineLineColor;
++ (UIColor *)cellMelodyColor;
 @end

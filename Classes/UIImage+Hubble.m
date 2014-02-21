@@ -13,6 +13,11 @@
 
 + (UIImage *) imageCameraActionPan
 {
+    if (isPhoneLandscapeMode)
+    {
+        return [UIImage imageNamed:@"camera_action_pan_bg"];
+    }
+    
     if (isiPhone4)
     {
         return [UIImage imageNamed:@"camera_action_pan_bg"];
@@ -25,6 +30,11 @@
 
 + (UIImage *)imageMic
 {
+    if (isPhoneLandscapeMode)
+    {
+        return [UIImage imageNamed:@"camera_action_mic_land"];
+    }
+    
     if (isiPhone4)
     {
         return [UIImage imageNamed:@"camera_action_mic"];
@@ -37,6 +47,11 @@
 
 + (UIImage *)imageMicPressed
 {
+    if (isPhoneLandscapeMode)
+    {
+        return [UIImage imageNamed:@"camera_action_mic_pressed_land"];
+    }
+    
     if (isiPhone4)
     {
         return [UIImage imageNamed:@"camera_action_mic_pressed.png"];
@@ -49,6 +64,10 @@
 
 + (UIImage *)imageVideoGrey
 {
+    if (isPhoneLandscapeMode)
+    {
+        return [UIImage imageNamed:@"video_grey_land.png"];
+    }
     if (isiPhone4)
     {
         return [UIImage imageNamed:@"video_grey.png"];
@@ -60,6 +79,10 @@
 }
 + (UIImage *)imageVideoGreyPressed
 {
+    if (isPhoneLandscapeMode)
+    {
+        return [UIImage imageNamed:@"video_grey_pressed_land"];
+    }
     if (isiPhone4)
     {
         return [UIImage imageNamed:@"video_grey_pressed.png"];
@@ -71,6 +94,11 @@
 }
 + (UIImage *)imagePhotoGrey
 {
+    if (isPhoneLandscapeMode)
+    {
+        return [UIImage imageNamed:@"photo_grey_land"];
+    }
+    
     if (isiPhone4)
     {
         return [UIImage imageNamed:@"photo_grey.png"];
@@ -82,6 +110,11 @@
 }
 + (UIImage *)imagePhotoGreyPressed
 {
+    if (isPhoneLandscapeMode)
+    {
+        return [UIImage imageNamed:@"photo_grey_pressed_land.png"];
+    }
+    
     if (isiPhone4)
     {
         return [UIImage imageNamed:@"photo_grey_pressed.png"];
@@ -94,6 +127,11 @@
 
 + (UIImage *)imageRecordVideo
 {
+    if (isPhoneLandscapeMode)
+    {
+        return [UIImage imageNamed:@"camera_action_video_land"];
+    }
+    
     if (isiPhone4)
     {
         return [UIImage imageNamed:@"camera_action_video.png"];
@@ -105,6 +143,10 @@
 }
 + (UIImage *)imageRecordVideoPressed
 {
+    if (isPhoneLandscapeMode)
+    {
+        return [UIImage imageNamed:@"camera_action_video_pressed_land"];
+    }
     if (isiPhone4)
     {
         return [UIImage imageNamed:@"camera_action_video_pressed.png"];
@@ -118,6 +160,11 @@
 
 + (UIImage *)imageTakePhoto
 {
+    if (isPhoneLandscapeMode)
+    {
+        return [UIImage imageNamed:@"camera_action_photo_land"];
+    }
+    
     if (isiPhone4)
     {
         return [UIImage imageNamed:@"camera_action_photo.png"];
@@ -129,6 +176,11 @@
 }
 + (UIImage *)imageTakePhotoPressed
 {
+    if (isPhoneLandscapeMode)
+    {
+        return [UIImage imageNamed:@"camera_action_photo_pressed_land"];
+    }
+    
     if (isiPhone4)
     {
         return [UIImage imageNamed:@"camera_action_photo_pressed.png"];
@@ -140,6 +192,10 @@
 }
 + (UIImage *)imageVideoStop
 {
+    if (isPhoneLandscapeMode)
+    {
+        return [UIImage imageNamed:@"camera_action_video_stop_land"];
+    }
     if (isiPhone4)
     {
         return [UIImage imageNamed:@"camera_action_video_stop.png"];
@@ -152,6 +208,10 @@
 
 + (UIImage *)imageVideoStopPressed
 {
+    if (isPhoneLandscapeMode)
+    {
+        return [UIImage imageNamed:@"camera_action_video_stop_pressed_land"];
+    }
     if (isiPhone4)
     {
         return [UIImage imageNamed:@"camera_action_video_stop_pressed.png"];
@@ -162,4 +222,68 @@
     }
 }
 
+//20140219
++ (UIImage *)imageCameraActionPlay
+{
+    if (isPhoneLandscapeMode)
+    {
+        return [UIImage imageNamed:@"camera_action_play_land"];
+    }
+    if (isiPhone4)
+    {
+        return [UIImage imageNamed:@"camera_action_play"];
+    }
+    else
+    {
+        return [UIImage imageNamed:@"camera_action_play@5"];
+    }
+}
+
++ (UIImage *)imageCameraActionPlayPressed
+{
+    if (isPhoneLandscapeMode)
+    {
+        return [UIImage imageNamed:@"camera_action_play_pressed_land"];
+    }
+    if (isiPhone4)
+    {
+        return [UIImage imageNamed:@"camera_action_play_pressed"];
+    }
+    else
+    {
+        return [UIImage imageNamed:@"camera_action_play_pressed@5"];
+    }
+}
+
++ (UIImage *)imageCameraActionPause
+{
+    if (isPhoneLandscapeMode)
+    {
+        return [UIImage imageNamed:@"camera_action_pause_land"];
+    }
+    if (isiPhone4)
+    {
+        return [UIImage imageNamed:@"camera_action_pause"];
+    }
+    else
+    {
+        return [UIImage imageNamed:@"camera_action_pause@5"];
+    }
+}
+
++ (UIImage *)imageCameraActionPausePressed
+{
+    if (isPhoneLandscapeMode)
+    {
+        return [UIImage imageNamed:@"camera_action_pause_pressed_land"];
+    }
+    if (isiPhone4)
+    {
+        return [UIImage imageNamed:@"camera_action_pause_pressed"];
+    }
+    else
+    {
+        return [UIImage imageNamed:@"camera_action_pause_pressed@5"];
+    }
+}
 @end

@@ -9,6 +9,9 @@
 #import <UIKit/UIKit.h>
 #import <CameraScanner/CameraScanner.h>
 #import "UIFont+Hubble.h"
+#import "UIImage+Hubble.h"
+#import "CellMelody.h"
+#import "UIColor+Hubble.h"
 
 @protocol MelodyVCDelegate <NSObject>
 
@@ -16,14 +19,15 @@
 
 @end
 
-@interface MelodyViewController : UIViewController {
-
+@interface MelodyViewController : UIViewController <UITableViewDataSource, UITableViewDelegate> {
+    UITableView *_melodyTableView;
+    IBOutlet UITableViewCell * cellMelody;
+    IBOutlet UITableViewCell * cellMelody_land;
 }
-
+@property (retain, nonatomic) IBOutlet UITableView *melodyTableView;
 @property (nonatomic) NSInteger melodyIndex;
 @property (retain, nonatomic) CamChannel *selectedChannel;
 @property (nonatomic, assign) id<MelodyVCDelegate> melodyVcDelegate;
-
 - (void)setMelodyState_fg: (NSInteger )melodyIndex;
 
 @end

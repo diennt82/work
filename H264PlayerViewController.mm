@@ -54,7 +54,7 @@
 {
     BOOL _syncPortraitAndLandscape;
     UIBarButtonItem *nowButton, *earlierButton;
-    BOOL isLandScapeMode;//cheat to display correctly timeline bottom
+    BOOL _isLandScapeMode;//cheat to display correctly timeline bottom
 }
 
 @property (retain, nonatomic) IBOutlet UIImageView *imageViewHandle;
@@ -176,10 +176,10 @@ double _ticks = 0;
     
     self.zoneButton.enabled = NO;
     
-    self.melodyViewController = [[[MelodyViewController alloc] initWithNibName:@"MelodyViewController" bundle:nil] autorelease];
-    
-    self.melodyViewController.selectedChannel = self.selectedChannel;
-    self.melodyViewController.melodyVcDelegate = self;
+//    self.melodyViewController = [[[MelodyViewController alloc] initWithNibName:@"MelodyViewController" bundle:nil] autorelease];
+//    
+//    self.melodyViewController.selectedChannel = self.selectedChannel;
+//    self.melodyViewController.melodyVcDelegate = self;
     self.melodyButton.enabled = NO;
     
     self.hqViewButton.enabled = NO;
@@ -239,7 +239,7 @@ double _ticks = 0;
         self.itemSelectedImages = [NSMutableArray arrayWithObjects:@"video_action_pan_pressed.png", @"video_action_mic_pressed.png", @"video_action_video_pressed.png", @"video_action_music_pressed.png", @"video_action_temp_pressed.png", nil];
     }
     
-    [self.horizMenu reloadData];
+    [self.horizMenu reloadData:NO];
     self.selectedItemMenu = -1;
     [self updateBottomView];
     NSLog(@"Model of Camera is: %d, STUN: %d", self.selectedChannel.profile.modelID, [[NSUserDefaults standardUserDefaults] boolForKey:@"enable_stun"]);
@@ -254,6 +254,12 @@ double _ticks = 0;
     [self setupPtt];
     
     self.stringTemperature = @"0";
+    
+    ///add button to change degree
+//    [ib_switchDegree setFrame:CGRectMake(0, self.ib_temperature.frame.origin.y, self.ib_temperature.bounds.size.width, self.ib_temperature.bounds.size.height)];
+
+    //end add button to change
+    [ib_switchDegree setHidden:YES];
 }
 
 - (void)updatePositionBetweenView
@@ -264,98 +270,132 @@ double _ticks = 0;
 }
 - (void)applyFont
 {
-    UIFont *font;
-    UIColor *color;
-    float marginBottomText, marginBottomButton, positionYOfBottomView;
-
-    if (isiPhone5)
+ 
+    
+    if (_isLandScapeMode)
     {
-        //for holdtotalk
-        font = [UIFont applyHubbleFontName:PN_REGULAR_FONT withSize:19];
-        color = [UIColor holdToTalkTextColor];
-        marginBottomText = 42;
-        marginBottomButton = 81;
-        positionYOfBottomView = 255;
+        //update position text recording
+        // update position button
+        //hold to talk (size = 75, bottom align = 30
+        CGSize holdTTButtonSize = self.ib_buttonTouchToTalk.bounds.size;
+        CGSize viewRecordSize = self.ib_viewRecordTTT.bounds.size;
+        CGSize directionPadSize = self.imgViewDrectionPad.bounds.size;
+        
+        float alignXButtonRecord = SCREEN_HEIGHT - 15 - self.ib_viewRecordTTT.bounds.size.width;
+        float alignXButtonDirectionPad = SCREEN_HEIGHT - directionPadSize.width - 10;
+        float alignYButtonRecord = SCREEN_WIDTH - viewRecordSize.height;
+        float alignYButtonDirectionPad = (SCREEN_WIDTH - 10 - directionPadSize.height);
+        //margin TTT
+        float alignXTTT = SCREEN_HEIGHT - 30 - holdTTButtonSize.width;
+        float alignYTTT = SCREEN_WIDTH - 30 - holdTTButtonSize.height;
+        
+        if (!isiOS7AndAbove)
+        {
+            alignYTTT = alignYTTT - 64;
+            alignYButtonRecord = alignYButtonRecord - 64;
+            alignYButtonDirectionPad = alignYButtonDirectionPad - 64;
+        }
+        
+        [self.ib_ViewTouchToTalk setFrame:CGRectMake(alignXTTT, alignYTTT, holdTTButtonSize.width, holdTTButtonSize.height)];
+        
+        [self.ib_viewRecordTTT setFrame:CGRectMake(alignXButtonRecord, alignYButtonRecord, viewRecordSize.width, viewRecordSize.height)];
+        [_imgViewDrectionPad setFrame:CGRectMake(alignXButtonDirectionPad, alignYButtonDirectionPad, directionPadSize.width, directionPadSize.height)];
+        
         
     }
-    else if (isiPhone4)
-    {
-        //for holdtotalk
-        font = [UIFont applyHubbleFontName:PN_REGULAR_FONT withSize:17];
-        color = [UIColor holdToTalkTextColor];
-        marginBottomText = 25.0f;
-        marginBottomButton = 48.0f;
-        positionYOfBottomView = self.ib_viewRecordTTT.frame.origin.y;
-    }
     else
     {
-        //iPad
-        //for holdtotalk
-        font = [UIFont applyHubbleFontName:PN_REGULAR_FONT withSize:50];
-        color = [UIColor holdToTalkTextColor];
-        marginBottomText = 42.0f * 2;
-        marginBottomButton = 81.0f * 2;
-        positionYOfBottomView = 543.0f;
+        UIFont *font;
+        UIColor *color;
+        float marginBottomText, marginBottomButton, positionYOfBottomView;
+        
+        if (isiPhone5)
+        {
+            //for holdtotalk
+            font = [UIFont applyHubbleFontName:PN_REGULAR_FONT withSize:19];
+            color = [UIColor holdToTalkTextColor];
+            marginBottomText = 42;
+            marginBottomButton = 81;
+            positionYOfBottomView = 255;
+            
+        }
+        else if (isiPhone4)
+        {
+            //for holdtotalk
+            font = [UIFont applyHubbleFontName:PN_REGULAR_FONT withSize:17];
+            color = [UIColor holdToTalkTextColor];
+            marginBottomText = 25.0f;
+            marginBottomButton = 48.0f;
+            positionYOfBottomView = self.ib_viewRecordTTT.frame.origin.y;
+        }
+        else
+        {
+            //iPad
+            //for holdtotalk
+            font = [UIFont applyHubbleFontName:PN_REGULAR_FONT withSize:50];
+            color = [UIColor holdToTalkTextColor];
+            marginBottomText = 42.0f * 2;
+            marginBottomButton = 81.0f * 2;
+            positionYOfBottomView = 543.0f;
+        }
+        
+        
+        [self.ib_labelTouchToTalk setFont:font];
+        self.ib_labelTouchToTalk.textColor = color;
+        //for recordingText
+        [self.ib_labelRecordVideo setFont:font];
+        if (_isRecordInterface && _isProcessRecording)
+        {
+            self.ib_labelRecordVideo.textColor = [UIColor recordingTextColor];
+        } else
+        {
+            self.ib_labelRecordVideo.textColor = [UIColor holdToTalkTextColor];
+        }
+        //update position text recording
+        CGPoint localPoint = self.ib_viewRecordTTT.frame.origin;
+        NSString *recordingString = self.ib_labelRecordVideo.text;
+        CGSize recordingSize = [recordingString sizeWithFont:font];
+        
+        float alignY = (SCREEN_HEIGHT - localPoint.y) - marginBottomText + self.ib_labelRecordVideo.bounds.size.height/2 - 3*recordingSize.height/2;
+        
+        
+        //update position text hold to talk
+        //CGPoint position = self.ib_viewRecordTTT.bounds.origin;
+        NSString *holdTTString = self.ib_labelTouchToTalk.text;
+        CGSize holdTTSize = [holdTTString sizeWithFont:font];
+        CGSize labelTouchToTalkSize = self.ib_labelTouchToTalk.bounds.size;
+        
+        //    float deltaY1 = (labelTouchToTalkSize.height + holdTTSize.height)/2.0;
+        float alignY1 = (SCREEN_HEIGHT - positionYOfBottomView) - marginBottomText - holdTTSize.height + labelTouchToTalkSize.height/2 - holdTTSize.height/2;
+        if (isiOS7AndAbove)
+        {
+            [self.ib_labelRecordVideo setCenter:CGPointMake(SCREEN_WIDTH/2, alignY)];
+            [self.ib_labelTouchToTalk setCenter:CGPointMake(SCREEN_WIDTH/2, alignY1)];
+        }
+        else
+        {
+            [self.ib_labelRecordVideo setCenter:CGPointMake(SCREEN_WIDTH/2, alignY - 64)];
+            [self.ib_labelTouchToTalk setCenter:CGPointMake(SCREEN_WIDTH/2, alignY1 - 64)];
+        }
+        
+        
+        // update position button
+        //hold to talk
+        CGSize holdTTButtonSize = self.ib_buttonTouchToTalk.bounds.size;
+        CGSize directionPadSize = self.imgViewDrectionPad.bounds.size;
+        float alignXButton = SCREEN_WIDTH/2- holdTTButtonSize.width/2;
+        float alignXButtonDirectionPad = SCREEN_WIDTH/2- directionPadSize.width/2;
+        float alignYButton = SCREEN_HEIGHT - localPoint.y - marginBottomButton - holdTTButtonSize.height;
+        float alignYButtonDirectionPad = (SCREEN_HEIGHT - localPoint.y - directionPadSize.height)/2;
+        if (!isiOS7AndAbove)
+        {
+            alignYButton = alignYButton - 64;
+            alignYButtonDirectionPad = alignYButtonDirectionPad - 44 - 64;
+        }
+        [self.ib_buttonTouchToTalk setFrame:CGRectMake(alignXButton, alignYButton, holdTTButtonSize.width, holdTTButtonSize.height)];
+        [self.ib_processRecordOrTakePicture setFrame:CGRectMake(alignXButton, alignYButton, holdTTButtonSize.width, holdTTButtonSize.height)];
+        [_imgViewDrectionPad setFrame:CGRectMake(alignXButtonDirectionPad, alignYButtonDirectionPad + localPoint.y, directionPadSize.width, directionPadSize.height)];
     }
-
-    
-    [self.ib_labelTouchToTalk setFont:font];
-    self.ib_labelTouchToTalk.textColor = color;
-    //for recordingText
-    [self.ib_labelRecordVideo setFont:font];
-    if (_isRecordInterface && _isProcessRecording)
-    {
-        self.ib_labelRecordVideo.textColor = [UIColor recordingTextColor];
-    } else
-    {
-        self.ib_labelRecordVideo.textColor = [UIColor holdToTalkTextColor];
-    }
-    
-    //update position text recording
-    CGPoint localPoint = self.ib_viewRecordTTT.frame.origin;
-    //CGPoint localPointTTT = self.ib_ViewTouchToTalk.frame.origin;
-    NSString *recordingString = self.ib_labelRecordVideo.text;
-    CGSize recordingSize = [recordingString sizeWithFont:font];
-
-    float alignY = (SCREEN_HEIGHT - localPoint.y) - marginBottomText + self.ib_labelRecordVideo.bounds.size.height/2 - 3*recordingSize.height/2;
-
-    
-    //update position text hold to talk
-    //CGPoint position = self.ib_viewRecordTTT.bounds.origin;
-    NSString *holdTTString = self.ib_labelTouchToTalk.text;
-    CGSize holdTTSize = [holdTTString sizeWithFont:font];
-    CGSize labelTouchToTalkSize = self.ib_labelTouchToTalk.bounds.size;
-    
-//    float deltaY1 = (labelTouchToTalkSize.height + holdTTSize.height)/2.0;
-    float alignY1 = (SCREEN_HEIGHT - positionYOfBottomView) - marginBottomText - holdTTSize.height + labelTouchToTalkSize.height/2 - holdTTSize.height/2;
-    if (isiOS7AndAbove)
-    {
-        [self.ib_labelRecordVideo setCenter:CGPointMake(SCREEN_WIDTH/2, alignY)];
-        [self.ib_labelTouchToTalk setCenter:CGPointMake(SCREEN_WIDTH/2, alignY1)];
-    }
-    else
-    {
-        [self.ib_labelRecordVideo setCenter:CGPointMake(SCREEN_WIDTH/2, alignY - 64)];
-        [self.ib_labelTouchToTalk setCenter:CGPointMake(SCREEN_WIDTH/2, alignY1 - 64)];
-    }
-
-    
-    // update position button
-    //hold to talk
-    CGSize holdTTButtonSize = self.ib_buttonTouchToTalk.bounds.size;
-    CGSize directionPadSize = self.imgViewDrectionPad.bounds.size;
-    float alignXButton = SCREEN_WIDTH/2- holdTTButtonSize.width/2;
-    float alignXButtonDirectionPad = SCREEN_WIDTH/2- directionPadSize.width/2;
-    float alignYButton = SCREEN_HEIGHT - localPoint.y - marginBottomButton - holdTTButtonSize.height;
-    float alignYButtonDirectionPad = (SCREEN_HEIGHT - localPoint.y - directionPadSize.height)/2;
-    if (!isiOS7AndAbove)
-    {
-        alignYButton = alignYButton - 64;
-        alignYButtonDirectionPad = alignYButtonDirectionPad - 44 - 64;
-    }
-    [self.ib_buttonTouchToTalk setFrame:CGRectMake(alignXButton, alignYButton, holdTTButtonSize.width, holdTTButtonSize.height)];
-    [self.ib_processRecordOrTakePicture setFrame:CGRectMake(alignXButton, alignYButton, holdTTButtonSize.width, holdTTButtonSize.height)];
-    [_imgViewDrectionPad setFrame:CGRectMake(alignXButtonDirectionPad, alignYButtonDirectionPad + localPoint.y, directionPadSize.width, directionPadSize.height)];
 }
 
 - (void) setupHttpPort
@@ -2810,22 +2850,29 @@ double _ticks = 0;
     // Update UI
     // start
     [self.ib_temperature.subviews makeObjectsPerformSelector: @selector(removeFromSuperview)];
+    NSString *stringTemperature = [NSString stringWithFormat:@"%d", (int)roundf([temperature floatValue])];
+    _degreeCString = stringTemperature;
+    
+    float celsius = [_degreeCString floatValue];
+    NSInteger degreeF = (celsius*(9/5)) + 32;
+    _degreeFString = [NSString stringWithFormat:@"%d", degreeF];
     
     UILabel *degreeCelsius = [[UILabel alloc] init];
     degreeCelsius.backgroundColor=[UIColor clearColor];
     degreeCelsius.textColor=[UIColor temperatureTextColor];
     degreeCelsius.textAlignment = NSTextAlignmentLeft;
-    NSString *degreeCel = @"°C";
-    
-    CGFloat tempValue = [temperature floatValue];
-    
-    if (_isFahrenheit)
+
+    NSString *degreeCel;
+    if (_isDegreeFDisplay)
     {
-        tempValue = (tempValue * 9 / 5.f) + 32;
         degreeCel = @"°F";
+        stringTemperature = _degreeFString;
     }
-    
-    NSString *stringTemperature = [NSString stringWithFormat:@"%ld", lroundf(tempValue)];
+    else
+    {
+        degreeCel = @"°C";
+        stringTemperature = _degreeCString;
+    }
     degreeCelsius.text= degreeCel;
     
     UIFont *degreeFont;
@@ -2833,39 +2880,74 @@ double _ticks = 0;
     float positionYOfBottomView = self.ib_temperature.frame.origin.y;//240.0f;
     if (!isiOS7AndAbove)
         positionYOfBottomView = positionYOfBottomView - 44;
-    if (isiPhone5)
+    if (_isLandScapeMode)
     {
-        degreeFont = [UIFont applyHubbleFontName:PN_LIGHT_FONT withSize:35];
-        temperatureFont = [UIFont applyHubbleFontName:PN_LIGHT_FONT withSize:135];
-
-    }
-    else if (isiPhone4)
-    {
-        degreeFont = [UIFont applyHubbleFontName:PN_LIGHT_FONT withSize:30];
-        temperatureFont = [UIFont applyHubbleFontName:PN_LIGHT_FONT withSize:125];
+        degreeCelsius.backgroundColor=[UIColor clearColor];
+        degreeCelsius.textColor=[UIColor whiteColor];
+        
+        degreeFont = [UIFont applyHubbleFontName:PN_LIGHT_FONT withSize:13];
+        temperatureFont = [UIFont applyHubbleFontName:PN_LIGHT_FONT withSize:53];
+        
+        [degreeCelsius setFont:degreeFont];
+        [self.ib_temperature setFont:temperatureFont];
+        [self.ib_temperature setTextColor:[UIColor whiteColor]];
+        [self.ib_temperature setText:stringTemperature];
+        
+        CGSize stringBoundingBox = [stringTemperature sizeWithFont:temperatureFont];
+        CGSize degreeCelBoundingBox = [degreeCel sizeWithFont:degreeFont];
+        
+        float xPosTemperature = SCREEN_HEIGHT - self.ib_temperature.bounds.size.width - 40 + (self.ib_temperature.bounds.size.width - stringBoundingBox.width)/2;
+        float yPosTemperature = SCREEN_WIDTH - 20 - stringBoundingBox.height;
+        [self.ib_temperature setFrame:CGRectMake(xPosTemperature, yPosTemperature, self.ib_temperature.bounds.size.width, self.ib_temperature.bounds.size.height)];
+        
+        
+        CGFloat widthString = stringBoundingBox.width;
+        CGFloat alignX = (self.ib_temperature.bounds.size.width + widthString)/2;
+        [degreeCelsius setFrame:CGRectMake(alignX, 5, degreeCelBoundingBox.width, degreeCelBoundingBox.height)];
+        [self.ib_temperature addSubview:degreeCelsius];
+        
     }
     else
     {
-        degreeFont = [UIFont applyHubbleFontName:PN_LIGHT_FONT withSize:50];
-        temperatureFont = [UIFont applyHubbleFontName:PN_LIGHT_FONT withSize:200];
-        positionYOfBottomView = 543.0f;
+        if (isiPhone5)
+        {
+            degreeFont = [UIFont applyHubbleFontName:PN_LIGHT_FONT withSize:35];
+            temperatureFont = [UIFont applyHubbleFontName:PN_LIGHT_FONT withSize:135];
+            
+        }
+        else if (isiPhone4)
+        {
+            degreeFont = [UIFont applyHubbleFontName:PN_LIGHT_FONT withSize:30];
+            temperatureFont = [UIFont applyHubbleFontName:PN_LIGHT_FONT withSize:125];
+        }
+        else
+        {
+            degreeFont = [UIFont applyHubbleFontName:PN_LIGHT_FONT withSize:50];
+            temperatureFont = [UIFont applyHubbleFontName:PN_LIGHT_FONT withSize:200];
+            positionYOfBottomView = 543.0f;
+        }
+        
+        [degreeCelsius setFont:degreeFont];
+        [self.ib_temperature setFrame:CGRectMake(0, positionYOfBottomView, SCREEN_WIDTH, SCREEN_HEIGHT - positionYOfBottomView)];
+        [self.ib_temperature setFont:temperatureFont];
+        [self.ib_temperature setTextColor:[UIColor temperatureTextColor]];
+        
+        //need update text for C or F
+        [self.ib_temperature setText:stringTemperature];
+        CGSize stringBoundingBox = [stringTemperature sizeWithFont:temperatureFont];
+        CGSize degreeCelBoundingBox = [degreeCel sizeWithFont:degreeFont];
+        
+        
+        CGFloat widthString = stringBoundingBox.width;
+        CGFloat heightString = stringBoundingBox.height;
+        CGFloat alignX = (SCREEN_WIDTH + widthString)/2 - degreeCelBoundingBox.width/2 + 8;
+        CGFloat alignYCel = (SCREEN_HEIGHT - positionYOfBottomView)/2 - heightString/2 + 10;
+        [degreeCelsius setFrame:CGRectMake(alignX, alignYCel, degreeCelBoundingBox.width, degreeCelBoundingBox.height)];
+        [self.ib_temperature addSubview:degreeCelsius];
+        
     }
     
-    [degreeCelsius setFont:degreeFont];
-    [self.ib_temperature setFrame:CGRectMake(0, positionYOfBottomView, SCREEN_WIDTH, SCREEN_HEIGHT - positionYOfBottomView)];
-    [self.ib_temperature setFont:temperatureFont];
-    [self.ib_temperature setTextColor:[UIColor temperatureTextColor]];
-    [self.ib_temperature setText:stringTemperature];
-    CGSize stringBoundingBox = [stringTemperature sizeWithFont:temperatureFont];
-    CGSize degreeCelBoundingBox = [degreeCel sizeWithFont:degreeFont];
-    
-    
-    CGFloat widthString = stringBoundingBox.width;
-    CGFloat heightString = stringBoundingBox.height;
-    CGFloat alignX = (SCREEN_WIDTH + widthString)/2 - degreeCelBoundingBox.width/2 + 8;
-    CGFloat alignYCel = (SCREEN_HEIGHT - positionYOfBottomView)/2 - heightString/2 + 10;
-    [degreeCelsius setFrame:CGRectMake(alignX, alignYCel, degreeCelBoundingBox.width, degreeCelBoundingBox.height)];
-    [self.ib_temperature addSubview:degreeCelsius];
+
     [degreeCelsius release];
 }
 
@@ -3958,7 +4040,7 @@ double _ticks = 0;
 
 -(void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation
 {
-
+    [self applyFont];
 }
 
 -(void) checkOrientation
@@ -3987,7 +4069,7 @@ double _ticks = 0;
     
 	if (orientation == UIInterfaceOrientationLandscapeLeft || orientation == UIInterfaceOrientationLandscapeRight)
 	{
-        isLandScapeMode = YES;
+        _isLandScapeMode = YES;
         //load new nib for landscape iPad
         if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
         {
@@ -4004,10 +4086,16 @@ double _ticks = 0;
             [[NSBundle mainBundle] loadNibNamed:@"H264PlayerViewController_land"
                                           owner:self
                                         options:nil];
+            
+            self.melodyViewController = [[[MelodyViewController alloc] initWithNibName:@"MelodyViewController_land" bundle:nil] autorelease];
+            
+            self.melodyViewController.selectedChannel = self.selectedChannel;
+            self.melodyViewController.melodyVcDelegate = self;
+            
 
-            if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 7)
+            if (isiOS7AndAbove)
             {
-                self.melodyViewController.view.frame = CGRectMake(340, 60, 159, 204);
+                self.melodyViewController.view.frame = CGRectMake(393, 78, 175, 165);
             }
             else
             {
@@ -4016,9 +4104,11 @@ double _ticks = 0;
 
         }
         
-        
         //landscape mode
+        //hide navigation bar
         [self.navigationController setNavigationBarHidden:YES];
+        [UIApplication sharedApplication].statusBarHidden = YES;
+        [self.horizMenu reloadData:YES];
         // I don't know why remove it.
         [self.melodyViewController.view removeFromSuperview];
         
@@ -4073,12 +4163,17 @@ double _ticks = 0;
         
         //portrait mode
 
+        self.melodyViewController = [[[MelodyViewController alloc] initWithNibName:@"MelodyViewController" bundle:nil] autorelease];
+        
+        self.melodyViewController.selectedChannel = self.selectedChannel;
+        self.melodyViewController.melodyVcDelegate = self;
+        
         [self.navigationController setNavigationBarHidden:NO];
         [[UIApplication sharedApplication] setStatusBarHidden:NO];
         self.view.backgroundColor = [UIColor whiteColor];
         self.viewCtrlButtons.hidden = NO;
         self.viewStopStreamingProgress.hidden = YES;
-        
+        [self.horizMenu reloadData:NO];
         CGFloat imageViewHeight = SCREEN_WIDTH * 9 / 16;
         
         if (isiOS7AndAbove)
@@ -4087,9 +4182,9 @@ double _ticks = 0;
             self.scrollView.frame = destRect;
             self.imageViewVideo.frame = CGRectMake(0, 0, SCREEN_WIDTH, imageViewHeight);
             self.viewCtrlButtons.frame = CGRectMake(0, imageViewHeight + 44 + deltaY, _viewCtrlButtons.frame.size.width, _viewCtrlButtons.frame.size.height);
-            self.melodyViewController.view.frame = CGRectMake(0, self.ib_ViewTouchToTalk.frame.origin.y, SCREEN_WIDTH, SCREEN_HEIGHT - self.ib_ViewTouchToTalk.frame.origin.y);
+            self.melodyViewController.view.frame = CGRectMake(0, self.ib_ViewTouchToTalk.frame.origin.y - 5, SCREEN_WIDTH, SCREEN_HEIGHT - self.ib_ViewTouchToTalk.frame.origin.y);
             
-            
+//            [self.melodyViewController.melodyTableView reloadData];
             // Control display for TimelineVC
             if (_timelineVC != nil)
             {
@@ -4097,10 +4192,9 @@ double _ticks = 0;
                 self.timelineVC.view.frame = CGRectMake(0, alignYTimeLine, SCREEN_WIDTH, SCREEN_HEIGHT - self.ib_ViewTouchToTalk.frame.origin.y);
                 self.timelineVC.view.hidden = NO;
                 [self.view addSubview:_timelineVC.view];
-                if (isLandScapeMode)
+                if (_isLandScapeMode)
                 {
                     self.timelineVC.tableView.contentInset = UIEdgeInsetsMake(0, 0, 275, 0);
-                    isLandScapeMode = NO;
                 }
                 else
                 {
@@ -4123,13 +4217,12 @@ double _ticks = 0;
             {
                 CGFloat alignYTimeLine = self.ib_ViewTouchToTalk.frame.origin.y - 64;
 
-                if (isLandScapeMode)
+                if (_isLandScapeMode)
                 {
                     self.timelineVC.view.frame = CGRectMake(0, alignYTimeLine, SCREEN_WIDTH, SCREEN_HEIGHT - alignYTimeLine);
                     self.timelineVC.view.hidden = NO;
                     [self.view addSubview:_timelineVC.view];
                     self.timelineVC.tableView.contentInset = UIEdgeInsetsMake(0, 0, 250, 0);
-                    isLandScapeMode = NO;
                 }
                 else
                 {
@@ -4138,8 +4231,7 @@ double _ticks = 0;
                     [self.view addSubview:_timelineVC.view];
                     self.timelineVC.tableView.contentInset = UIEdgeInsetsMake(0, 0, 0, 0);
                 }
-            }
-            
+            }            
         }
 
         if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
@@ -4153,9 +4245,11 @@ double _ticks = 0;
         
         //add hubble_logo_back
         [self addHubbleLogo_Back];
+        _isLandScapeMode = NO;
 
 	}
-    
+    [self.melodyViewController.melodyTableView setNeedsLayout];
+    [self.melodyViewController.melodyTableView setNeedsDisplay];
     // Set position for Image Knob & Handle
     self.imageViewKnob.center = _imgViewDrectionPad.center;
     self.imageViewHandle.center = _imgViewDrectionPad.center;
@@ -4212,6 +4306,7 @@ double _ticks = 0;
     //
     [self setupPtt];
     [self applyFont];
+    
 }
 
 #pragma mark -
@@ -4875,7 +4970,6 @@ double _ticks = 0;
 {
     //first hidden all view
     [self hidenAllBottomView];
-    
     if (_selectedItemMenu == INDEX_PAN_TILT)
     {
         [self.imgViewDrectionPad setHidden:NO];
@@ -4898,12 +4992,12 @@ double _ticks = 0;
     else if (_selectedItemMenu == INDEX_TEMP)
     {
         [self.ib_temperature setHidden:NO];
+        [ib_switchDegree setHidden:NO];
         
         if (_existTimerTemperature == FALSE)
         {
             self.existTimerTemperature = TRUE;
             NSLog(@"Log - Create Timer to get Temperature");
-            
             [NSTimer scheduledTimerWithTimeInterval:10
                                              target:self
                                            selector:@selector(getCameraTemperature_bg:)
@@ -5001,6 +5095,7 @@ double _ticks = 0;
     [_imageViewHandle release];
     [_imageViewKnob release];
     [_ib_changeToMainRecording release];
+    [ib_switchDegree release];
     [super dealloc];
 }
 //At first time, we set to FALSE after call checkOrientation()
@@ -5269,38 +5364,12 @@ double _ticks = 0;
     [self changeAction:nil];
 }
 
+- (IBAction)switchDegreePressed:(id)sender {
+    _isDegreeFDisplay = !_isDegreeFDisplay;
+    [self setTemperatureState_Fg:_stringTemperature];
+}
+
 - (IBAction)processingRecordingOrTakePicture:(id)sender {
-    UIImage *readyRecord, *readyRecordPressed;
-    UIImage *recordingPressed, *recordingImage;
-    UIImage *takePictureImage, *takePicturePressed;
-    if (isiPhone5)
-    {
-        readyRecord = [UIImage imageNamed:@"camera_action_video@5.png"];
-        readyRecordPressed = [UIImage imageNamed:@"camera_action_video_pressed@5.png"];
-        recordingImage = [UIImage imageNamed:@"camera_action_video_stop@5.png"];
-        recordingPressed = [UIImage imageNamed:@"camera_action_video_stop_pressed@5.png"];
-        
-        takePictureImage = [UIImage imageNamed:@"camera_action_photo@5.png"];
-        takePicturePressed = [UIImage imageNamed:@"camera_action_photo_pressed@5.png"];
-    } else if (isiPhone4)
-    {
-        readyRecord = [UIImage imageNamed:@"camera_action_video.png"];
-        readyRecordPressed = [UIImage imageNamed:@"camera_action_video_pressed.png"];
-        recordingImage = [UIImage imageNamed:@"camera_action_video_stop.png"];
-        recordingPressed = [UIImage imageNamed:@"camera_action_video_stop_pressed.png"];
-        
-        takePictureImage = [UIImage imageNamed:@"camera_action_photo.png"];
-        takePicturePressed = [UIImage imageNamed:@"camera_action_photo_pressed.png"];
-    } else
-    {
-        readyRecord = [UIImage imageNamed:@"camera_action_video@5.png"];
-        readyRecordPressed = [UIImage imageNamed:@"camera_action_video_pressed@5.png"];
-        recordingImage = [UIImage imageNamed:@"camera_action_video_stop@5.png"];
-        recordingPressed = [UIImage imageNamed:@"camera_action_video_stop_pressed@5.png"];
-        
-        takePictureImage = [UIImage imageNamed:@"camera_action_photo@5.png"];
-        takePicturePressed = [UIImage imageNamed:@"camera_action_photo_pressed@5.png"];
-    }
     
     NSLog(@"_isRecordInterface is %d", _isRecordInterface);
     if (_isRecordInterface)
@@ -5383,7 +5452,6 @@ double _ticks = 0;
     
     if (_isRecordInterface)
     {
-        
         //bring to front of view
         [self.ib_changeToMainRecording setHidden:YES];
         [self.ib_buttonChangeAction setHidden:NO];
@@ -5431,7 +5499,7 @@ double _ticks = 0;
             [self.ib_buttonChangeAction setHidden:NO];
             [self.view bringSubviewToFront:self.ib_buttonChangeAction];
             [self.ib_buttonChangeAction setBackgroundImage:[UIImage imageVideoGrey] forState:UIControlStateNormal];
-            [self.ib_buttonChangeAction setBackgroundImage:[UIImage imageVideoGreyPressed] forState:UIControlStateNormal];
+            [self.ib_buttonChangeAction setBackgroundImage:[UIImage imageVideoGreyPressed] forState:UIControlStateSelected];
             [self.ib_labelRecordVideo setText:@"Take Picture"];
             _syncPortraitAndLandscape = NO;
         }
@@ -5876,6 +5944,5 @@ double _ticks = 0;
 - (void)bonjourReturnCameraListAvailable:(NSMutableArray *)cameraList
 {
 }
-
 
 @end

@@ -115,6 +115,12 @@
 #endif
     //display time when recording
     NSTimer *_timerRecording;
+    //degreeC
+    NSString *_degreeCString;
+    NSString *_degreeFString;
+    BOOL _isDegreeFDisplay;
+
+    IBOutlet UIButton *ib_switchDegree;
 }
 //property for Hold to talk
 @property (nonatomic) BOOL walkieTalkieEnabled;
@@ -222,5 +228,6 @@
 //- (IBAction)touchUpInsideHoldToTalk:(id)sender;
 - (IBAction)bt_showMenuControlPanel:(id)sender;
 - (IBAction)changeToMainRecording:(id)sender;
+- (IBAction)switchDegreePressed:(id)sender;
 
 @end
