@@ -75,7 +75,7 @@
     if (_itemCount == 4)
     {
         // Make items is center menu.
-        xPos += (buttonWidth * 2 - 10 - buttonWidth / 2);
+        xPos += buttonWidth;
     }
     
     for(int i = 0 ; i < self.itemCount; i++)
