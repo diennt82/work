@@ -714,6 +714,13 @@
                 break;
             }
         }
+        
+        if (_stringIntelligentMessage.length > 24)
+        {
+            cell.eventLabel.frame = CGRectMake(cell.eventLabel.frame.origin.x, cell.eventLabel.frame.origin.y, cell.eventLabel.frame.size.width, cell.eventLabel.frame.size.height * 2);
+            cell.eventDetailLabel.frame = CGRectMake(cell.eventDetailLabel.frame.origin.x, cell.eventLabel.center.y + cell.eventLabel.frame.size.height / 2, cell.eventDetailLabel.frame.size.width, cell.eventDetailLabel.frame.size.height);
+        }
+        
         [cell.eventLabel setFont:[UIFont lightLarge27Font]];
         [cell.detailTextLabel setFont:[UIFont lightSmall14Font]];
         cell.eventLabel.text = self.stringIntelligentMessage;
