@@ -500,11 +500,13 @@
             //MOVE on now ..
             
             //Register for push
-            
+            NSLog(@"Login success! 1");
+#if !TARGET_IPHONE_SIMULATOR
             // Let the device know we want to receive push notifications
             [[UIApplication sharedApplication] registerForRemoteNotificationTypes:
              (UIRemoteNotificationType) (UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeAlert)];
-            
+#endif 
+             NSLog(@"Login success! 2");
             UserAccount *account = [[UserAccount alloc] initWithUser:_stringUsername
                                                              andPass:_stringPassword
                                                            andApiKey:apiKey
@@ -520,7 +522,7 @@
             
             [self dismissViewControllerAnimated:NO completion:^{}];
             
-            NSLog(@"Login success!");
+            NSLog(@"Login success! 3");
         }
         else
         {
