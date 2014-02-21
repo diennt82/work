@@ -904,7 +904,20 @@
 
 -(void) logoutAndUnregistration_bg
 {
-#if  !TARGET_IPHONE_SIMULATOR
+#if  TARGET_IPHONE_SIMULATOR
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+
+    //REmove password and registration id
+    [userDefaults removeObjectForKey:@"PortalPassword"];
+    [userDefaults removeObjectForKey:_push_dev_token];
+    
+    [userDefaults synchronize];
+    
+    
+    [self performSelectorOnMainThread:@selector(show_login_or_reg:)
+                           withObject:nil
+                        waitUntilDone:NO];
+#else
     NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
     
     NSLog(@"De-Register push with both parties: APNs and BMS ");
