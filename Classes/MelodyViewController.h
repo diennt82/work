@@ -30,5 +30,6 @@
 @property (retain, nonatomic) CamChannel *selectedChannel;
 @property (nonatomic, assign) id<MelodyVCDelegate> melodyVcDelegate;
 - (void)setMelodyState_fg: (NSInteger )melodyIndex;
+- (void)updateUIMelody:(NSInteger)playingIndex;
 
 @end

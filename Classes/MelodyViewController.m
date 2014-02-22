@@ -205,6 +205,13 @@
     }
 }
 
+- (void)updateUIMelody:(NSInteger)playingIndex
+{
+    if (playingIndex == -1)
+        return;
+    valueMelodiesMap[playingIndex] = YES;
+    [self.melodyTableView reloadData];
+}
 
 #pragma mark TableView delegate
 

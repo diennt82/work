@@ -883,7 +883,7 @@ double _ticks = 0;
                 //[self performSelectorInBackground:@selector(getVQ_bg) withObject:nil];
                 //[self performSelectorInBackground:@selector(getTriggerRecording_bg) withObject:nil];
                 //[self performSelectorInBackground:@selector(getZoneDetection_bg) withObject:nil];
-                [self performSelectorInBackground:@selector(getMelodyValue_bg) withObject:nil];
+                //[self performSelectorInBackground:@selector(getMelodyValue_bg) withObject:nil];
                 self.imgViewDrectionPad.userInteractionEnabled = YES;
                 if (isiPhone4)
                 {
@@ -2400,18 +2400,9 @@ double _ticks = 0;
 
 - (void)setMelodyState_Fg: (NSString *)melodyIndex
 {
-    int melody_index  = [melodyIndex intValue];
+    NSInteger melody_index  = [melodyIndex intValue] - 1;
     
-    if (self.melodyViewController == nil)
-    {
-        //create new
-        self.melodyViewController = [[[MelodyViewController alloc] initWithNibName:@"MelodyViewController" bundle:[NSBundle mainBundle]] autorelease];
-        
-        self.melodyViewController.selectedChannel = self.selectedChannel;
-        self.melodyViewController.melodyVcDelegate = self;
-    }
-    
-    [self.melodyViewController setMelodyState_fg:melody_index];
+    [self.melodyViewController updateUIMelody:melody_index];
 }
 
 #pragma mark - Temperature
@@ -4579,8 +4570,15 @@ double _ticks = 0;
 
             
         }
+        
+        /*
+         TODO:need get status of laluby and update on UI.
+         when landscape or portrait display correctly
+         */
+        [self performSelectorInBackground:@selector(getMelodyValue_bg) withObject:nil];
         [self.melodyViewController.melodyTableView setNeedsLayout];
         [self.melodyViewController.melodyTableView setNeedsDisplay];
+        
     }
     else if (_selectedItemMenu == INDEX_TEMP)
     {
