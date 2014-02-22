@@ -125,7 +125,7 @@
     //const int movementDistance = 80; // tweak as needed
     const float movementDuration = 0.3f; // tweak as needed
     
-    NSInteger movementDistance = 216; // tweak as needed
+    NSInteger movementDistance = 180; // tweak as needed
     
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
     {
