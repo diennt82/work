@@ -605,12 +605,8 @@ double _ticks = 0;
             self.earlierVC.view.frame = CGRectMake(0, 0, 320, 568);
             [self.view addSubview:_earlierVC.view];
         }
-        
-        if (!(_earlierVC.isViewLoaded &&
-              self.view.window))
-        {
-            [self.view bringSubviewToFront:_earlierVC.view];
-        }
+        [self.view bringSubviewToFront:_earlierVC.view];
+
         
         self.earlierVC.view.hidden = NO;
         [self.earlierVC setCamChannel:self.selectedChannel];
