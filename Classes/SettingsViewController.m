@@ -15,8 +15,10 @@
 #import "SchedulingViewController.h"
 #import "SensitivityTemperatureCell.h"
 #import "SensitivityInfo.h"
+#import "MenuViewController.h"
 
 #import <MonitorCommunication/MonitorCommunication.h>
+#import <CameraScanner/CameraScanner.h>
 
 @interface SettingsViewController () <SensitivityCellDelegate, SchedulerCellDelegate, GeneralCellDelegate, SensitivityTemperaureCellDelegate>
 {
@@ -40,6 +42,7 @@
 @property (nonatomic) BOOL isLoading;
 @property (nonatomic) BOOL isExistSensitivityData;
 @property (nonatomic, retain) NSString *sensitivityMessage;
+@property (nonatomic, assign) CamChannel *selectedCamChannel;
 
 @property (nonatomic) CGFloat lowerValue;
 @property (nonatomic) CGFloat upperValue;
@@ -146,6 +149,25 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    
+    MenuViewController *menuVC = (MenuViewController *)self.parentVC;
+    
+    if (menuVC.cameras != nil &&
+        menuVC.cameras.count > 0)
+    {
+        for (CamChannel *ch in menuVC.cameras)
+        {
+            if ([ch.profile.registrationID isEqualToString:[[NSUserDefaults standardUserDefaults] stringForKey:@"REG_ID"]])
+            {
+                self.selectedCamChannel = ch;
+                break;
+            }
+        }
+    }
+    else
+    {
+        self.selectedCamChannel = nil;
+    }
     
     valueGeneralSettings[1] = [[NSUserDefaults standardUserDefaults] boolForKey:@"IS_FAHRENHEIT"];
 }
@@ -406,7 +428,9 @@
 
 - (BOOL)tableView:(UITableView *)tableView shouldHighlightRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (indexPath.row > 0)
+    if (indexPath.row > 0 ||
+        (indexPath.row == 0 && indexPath.section > 0 && (self.selectedCamChannel == nil ||
+                                                         [self.selectedCamChannel.profile isSharedCam])))
     {
         return NO;
     }
