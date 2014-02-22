@@ -129,7 +129,7 @@
     
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
     {
-        movementDistance = 230;
+        movementDistance = 190;
     }
     
     if (UIScreen.mainScreen.bounds.size.height < 568)
