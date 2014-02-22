@@ -10,6 +10,9 @@
 	<string>${EXECUTABLE_NAME}</string>
 	<key>CFBundleIconFiles</key>
 	<array>
+		<string>Icon-Small-40</string>
+		<string>Icon-Small</string>
+		<string>Icon</string>
 		<string>mbp_icon114x114</string>
 		<string>mbp_icon57x57.png</string>
 		<string>mbp_icon72x72.png</string>
@@ -19,6 +22,11 @@
 	</array>
 	<key>CFBundleIconFiles~ipad</key>
 	<array>
+		<string>Icon-Small</string>
+		<string>Icon</string>
+		<string>Icon-Small-40</string>
+		<string>mbp_icon152x152</string>
+		<string>mbp_icon76x76</string>
 		<string>mbp_icon144x144</string>
 		<string>mbp_icon114x114</string>
 		<string>mbp_icon57x57.png</string>
@@ -38,26 +46,35 @@
 	<string>????</string>
 	<key>CFBundleVersion</key>
 	<string>6</string>
+	<key>IBCustomFonts</key>
+	<dict>
+		<key>Avenir-Heavy</key>
+		<string>ProximaNova-SemiboldIt</string>
+		<key>Helvetica-Light</key>
+		<string>ProximaNova-LightIt</string>
+		<key>HelveticaNeue</key>
+		<string>ProximaNova-Regular</string>
+		<key>HelveticaNeue-Bold</key>
+		<string>ProximaNova-Bold</string>
+		<key>HelveticaNeue-BoldItalic</key>
+		<string>ProximaNova-BoldIt</string>
+		<key>HelveticaNeue-CondensedBlack</key>
+		<string>ProximaNova-Black</string>
+		<key>HelveticaNeue-CondensedBold</key>
+		<string>ProximaNova-Extrabld</string>
+		<key>HelveticaNeue-Light</key>
+		<string>ProximaNova-Light</string>
+		<key>HelveticaNeue-MediumItalic</key>
+		<string>ProximaNova-RegularIt</string>
+		<key>HelveticaNeue-Thin</key>
+		<string>ProximaNova-Semibold</string>
+	</dict>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSMainNibFile</key>
 	<string>MainWindow</string>
 	<key>NSMainNibFile~ipad</key>
 	<string>MainWindow_ipad</string>
-	<key>UIApplicationExitsOnSuspend</key>
-	<false/>
-	<key>UIBackgroundModes</key>
-	<array>
-		<string>audio</string>
-	</array>
-	<key>UIFileSharingEnabled</key>
-	<true/>
-	<key>UIPrerenderedIcon</key>
-	<true/>
-	<key>UIViewControllerBasedStatusBarAppearance</key>
-	<false/>
-	<key>UIStatusBarHidden</key>
-	<false/>
 	<key>UIAppFonts</key>
 	<array>
 		<string>ProximaNova-Black.otf
@@ -80,28 +97,21 @@ ProximaNova-SemiboldItalic.otf</string>
 		<string>ProximaNova-Semibold.otf</string>
 		<string>ProximaNova-SemiboldItalic.otf</string>
 	</array>
-	<key>IBCustomFonts</key>
-	<dict>
-		<key>HelveticaNeue-CondensedBlack</key>
-		<string>ProximaNova-Black</string>
-		<key>HelveticaNeue-Bold</key>
-		<string>ProximaNova-Bold</string>
-		<key>HelveticaNeue-BoldItalic</key>
-		<string>ProximaNova-BoldIt</string>
-		<key>HelveticaNeue-Light</key>
-		<string>ProximaNova-Light</string>
-		<key>HelveticaNeue</key>
-		<string>ProximaNova-Regular</string>
-		<key>HelveticaNeue-Thin</key>
-		<string>ProximaNova-Semibold</string>
-		<key>Avenir-Heavy</key>
-		<string>ProximaNova-SemiboldIt</string>
-		<key>HelveticaNeue-CondensedBold</key>
-		<string>ProximaNova-Extrabld</string>
-		<key>HelveticaNeue-MediumItalic</key>
-		<string>ProximaNova-RegularIt</string>
-		<key>Helvetica-Light</key>
-		<string>ProximaNova-LightIt</string>
-	</dict>
+	<key>UIApplicationExitsOnSuspend</key>
+	<false/>
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>audio</string>
+	</array>
+	<key>UIFileSharingEnabled</key>
+	<true/>
+	<key>UILaunchImageFile</key>
+	<string>Default</string>
+	<key>UIPrerenderedIcon</key>
+	<true/>
+	<key>UIStatusBarHidden</key>
+	<false/>
+	<key>UIViewControllerBasedStatusBarAppearance</key>
+	<false/>
 </dict>
 </plist>
