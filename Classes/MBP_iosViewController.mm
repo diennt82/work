@@ -215,27 +215,10 @@
     }
     
     self.app_stage = APP_STAGE_LOGGING_IN;
-#if 1
-    [self show_login_or_reg:nil];
-#else
-    MBP_LoginOrRegistration * loginOrReg;
-    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
-    {
-        loginOrReg = [[MBP_LoginOrRegistration alloc] initWithNibName:@"MBP_LoginOrRegistration_ipad"
-                                                               bundle:nil
-                                                     withConnDelegate:self];
-    }
-    else
-    {
-        loginOrReg = [[MBP_LoginOrRegistration alloc]
-                      initWithNibName:@"MBP_LoginOrRegistration"
-                      bundle:nil
-                      withConnDelegate:self];
-    }
     
-    //Use navigation controller
-    [loginOrReg presentModallyOn:self];
-#endif
+    NSLog(@"MBP_iosVC - show LoginVC from viewDidLoad after 4s");
+    
+    [self show_login_or_reg:nil];
 #endif
 
 
