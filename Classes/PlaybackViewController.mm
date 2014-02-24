@@ -47,7 +47,7 @@
                                     options:nil];
     }
     
-    self.navigationController.navigationBarHidden = NO;
+    self.navigationController.navigationBarHidden = YES;
     
     self.activityIndicator.hidden = NO;
     [self.activityIndicator startAnimating];
@@ -316,6 +316,10 @@
     [self startStream];
 }
 
+- (IBAction)closePlayBack:(id)sender {
+    [self goBackToPlayList];
+}
+
 -(void) startStream
 {
     
@@ -331,6 +335,8 @@
     status_t status = !NO_ERROR;
     
     NSString * url = self.urlVideo;
+    
+    NSLog(@"Now is player video from server with URL*********** is %@", url);
 
     
     status = playbackStreamer->setDataSource([url UTF8String]);
@@ -402,7 +408,7 @@
         [self.list_refresher invalidate];
     }
     
-    [self.navigationController popViewControllerAnimated:YES];
+    [self.navigationController dismissViewControllerAnimated:YES completion:nil];
     
 }
 
@@ -572,6 +578,15 @@
     [_activityIndicator release];
     [clip_info release];
     [_clips release];
+    [_ib_closePlayBack release];
+    [_ib_playPlayBack release];
+    [_ib_sliderPlayBack release];
+    [_ib_timerPlayBack release];
+    [_ib_zoomingPlayBack release];
+    [_ib_viewOverlayVideo release];
+    [_ib_delete release];
+    [_ib_download release];
+    [_ib_share release];
     [super dealloc];
 }
 

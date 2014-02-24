@@ -33,6 +33,18 @@
 @property (retain, nonatomic) IBOutlet UIImageView *imageVideo;
 @property (retain, nonatomic) IBOutlet UIActivityIndicatorView *activityIndicator;
 
+@property (retain, nonatomic) IBOutlet UIButton *ib_closePlayBack;
+@property (retain, nonatomic) IBOutlet UIButton *ib_playPlayBack;
+@property (retain, nonatomic) IBOutlet UISlider *ib_sliderPlayBack;
+@property (retain, nonatomic) IBOutlet UILabel *ib_timerPlayBack;
+@property (retain, nonatomic) IBOutlet UIButton *ib_zoomingPlayBack;
+
+//for delete, download and share
+@property (retain, nonatomic) IBOutlet UIView *ib_viewOverlayVideo;
+@property (retain, nonatomic) IBOutlet UIButton *ib_delete;
+@property (retain, nonatomic) IBOutlet UIButton *ib_download;
+@property (retain, nonatomic) IBOutlet UIButton *ib_share;
+
 
 @property (nonatomic, retain)  NSTimer * list_refresher; 
 @property (nonatomic, retain) PlaylistInfo * clip_info;
@@ -48,5 +60,6 @@
 
 - (IBAction)stopStream:(id) sender;
 - (IBAction)startStream:(id) sender;
+- (IBAction)closePlayBack:(id)sender;
 
 @end
