@@ -10,6 +10,7 @@
 #import <MonitorCommunication/MonitorCommunication.h>
 #import "Reachability.h"
 #import "Step_10_ViewController.h"
+#import "UserAccount.h"
 
 @interface RegistrationViewController () <UITextFieldDelegate>
     
@@ -78,6 +79,7 @@
         btnCheckbox.frame = CGRectMake(_btnCreate.frame.origin.x - 6, btnCheckbox.frame.origin.y, btnCheckbox.frame.size.width, btnCheckbox.frame.size.height);
         UILabel *lblTermServices = (UILabel *)[self.view viewWithTag:502];
         lblTermServices.frame = CGRectMake(btnCheckbox.frame.origin.x + btnCheckbox.frame.size.width, lblTermServices.frame.origin.y, lblTermServices.frame.size.width, lblTermServices.frame.size.height);
+        self.viewProgress.frame = CGRectMake(0, 0, UIScreen.mainScreen.bounds.size.width, UIScreen.mainScreen.bounds.size.height);
     }
 }
 
@@ -105,7 +107,8 @@
 
 -(void) validateAllFieldsAndEnableSignUp
 {
-    if ((_tfEmail.text.length > 0) &&
+    if ((_tfUsername.text.length > 0) &&
+        (_tfEmail.text.length > 0) &&
         (_tfPassword.text.length     > 0) &&
         (_tfConfirmPassword.text.length    > 0) &&
         (_btnCheckbox.selected      == TRUE)
@@ -352,7 +355,11 @@
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField
 {
-    if (textField == _tfEmail)
+    if (textField == _tfUsername)
+    {
+        [_tfEmail becomeFirstResponder];
+    }
+    else if (textField == _tfEmail)
     {
         [_tfPassword becomeFirstResponder];
     }
@@ -383,6 +390,14 @@
     [userDefaults setObject:[[responseData objectForKey:@"data"] objectForKey:@"authentication_token"]
                      forKey:@"PortalApiKey"];
     [userDefaults synchronize];
+    
+    UserAccount *account = [[UserAccount alloc] initWithUser:_stringUsername
+                                                    password:_stringPassword
+                                                      apiKey:[userDefaults stringForKey:@"PortalApiKey"]
+                                                    listener:nil];
+    [account sync_online_and_offline_data:nil];
+    [account release];
+    
 #if 1
     [self dismissViewControllerAnimated:NO completion:^{
         [self.delegate sendStatus:SHOW_CAMERA_LIST];
