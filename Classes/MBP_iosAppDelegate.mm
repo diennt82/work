@@ -63,6 +63,20 @@
     // Check condition use STUN or not
     [self registerDefaultsFromSettingsBundle];
     
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+	NSInteger app_stage = [userDefaults integerForKey:@"ApplicationStage"];
+    
+    /*
+     * User kill app when SETUP camera
+     */
+    
+    if (app_stage == 4)
+    {
+        viewController.app_stage = 3;
+        [userDefaults setInteger:viewController.app_stage forKey:@"ApplicationStage"];
+        [userDefaults synchronize];
+    }
+    
     [window setRootViewController:viewController];
     [window makeKeyAndVisible];
     
@@ -374,16 +388,20 @@
      If your application supports background execution, called instead of applicationWillTerminate: when the user quits.
      */
 	
-	NSLog(@"Enter background "); 
+	NSLog(@"Enter background: %d", viewController.app_stage);
 
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
 	[userDefaults setInteger:viewController.app_stage forKey:@"ApplicationStage"];
     [userDefaults synchronize];
     
-//    if (viewController.app_stage == APP_STAGE_LOGGED_IN)
-//    {
-//        [viewController sendStatus:BACK_FRM_MENU_NOLOAD];
-//    }
+    if ([userDefaults objectForKey:CAM_IN_VEW] != nil)
+    {
+        NSLog(@"A camera is in view. Do nothing");
+    }
+    else if (viewController.app_stage == APP_STAGE_LOGGED_IN)
+    {
+        [viewController sendStatus:BACK_FRM_MENU_NOLOAD];
+    }
 }
 
 
@@ -547,6 +565,8 @@
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     [userDefaults removeObjectForKey:CAM_IN_VEW];
     [userDefaults synchronize];
+    
+    NSLog(@"applicationWillTerminate");
 }
 
 /*A bit mask of the UIInterfaceOrientation constants that indicate the orientations to use for the view controllers.*/

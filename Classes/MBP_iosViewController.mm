@@ -475,10 +475,12 @@
 				NSLog(@"Back from menu");
                 statusDialogLabel.hidden = YES;
 				//[self dismissViewControllerAnimated:NO completion:nil];
-				//[self.streamer startStreaming];
                 
-
-
+                if (self.presentedViewController)
+                {
+                    [self dismissViewControllerAnimated:NO completion:^{}];
+                }
+                
 				break;
 			}
 		case  FRONT_PAGE:

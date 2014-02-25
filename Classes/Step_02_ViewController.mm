@@ -199,8 +199,10 @@
 
 -(void) startMonitorCallBack
 {
-    NSLog(@"LOGINING... ");
-    [self.delegate sendStatus:2];//login];
+    [self dismissViewControllerAnimated:NO completion:^{
+        NSLog(@"LOGINING... ");
+        [self.delegate sendStatus:2];//login];
+    }];
 }
 
 
