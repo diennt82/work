@@ -154,8 +154,10 @@
             
             NSLog(@"CameraSVC - addCameraButtonTouchAction - delegate: %@", self.camerasDelegate);
             //MenuViewController *tabBarController = (MenuViewController *)self.parentViewController;
-            [((MenuViewController *)self.parentVC).menuDelegate sendStatus:SETUP_CAMERA];//initial setup
             
+            [self dismissViewControllerAnimated:NO completion:^{
+                [((MenuViewController *)self.parentVC).menuDelegate sendStatus:SETUP_CAMERA];//initial setup
+            }];
         }
         else
         {

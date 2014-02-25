@@ -289,7 +289,7 @@
 
 - (void)centralManager:(CBCentralManager *)central didFailToConnectPeripheral:(CBPeripheral *)peripheral error:(NSError *)error
 {
-    NSLog(@" FailToConnectPeripheral %@ with error: %@", peripheral.name , error);
+    NSLog(@" FailToConnectPeripheral %@ with error: %@", peripheral.name , error.description);
     
     self.state = DISCONNECTED;
     
@@ -301,7 +301,7 @@
 
 {
     
-    NSLog(@"didDisconnectPeripheral %@ with error: %@", peripheral.name , error);
+    NSLog(@"didDisconnectPeripheral %@ with error: %@", peripheral.name , error.description);
   
     self.state = DISCONNECTED;
     self.isOnBLE = NO;

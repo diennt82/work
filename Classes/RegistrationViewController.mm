@@ -96,8 +96,9 @@
 
 - (IBAction)btnAlreadyTouchUpInsideAction:(id)sender
 {
-    [self.delegate sendStatus:LOGIN];
-    [self dismissViewControllerAnimated:YES completion:^{}];
+    [self dismissViewControllerAnimated:YES completion:^{
+        [self.delegate sendStatus:LOGIN];
+    }];
 }
 
 #pragma mark - Methods
@@ -382,6 +383,11 @@
     [userDefaults setObject:[[responseData objectForKey:@"data"] objectForKey:@"authentication_token"]
                      forKey:@"PortalApiKey"];
     [userDefaults synchronize];
+#if 1
+    [self dismissViewControllerAnimated:NO completion:^{
+        [self.delegate sendStatus:SHOW_CAMERA_LIST];
+    }];
+#else
     //Load step 10
     NSLog(@"Load Step 10");
     //Load the next xib
@@ -402,6 +408,7 @@
     step10ViewController.delegate = self.delegate;
     [self.navigationController pushViewController:step10ViewController animated:NO];
     [step10ViewController release];
+#endif
 }
 
 - (void)registerFailedWithError:(NSDictionary *)error_response

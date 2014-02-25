@@ -74,8 +74,7 @@
 
 	[super viewDidLoad];
 
-    
-    //self.view.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+    //self.navigationController.navigationBarHidden = YES;
 
 	[self initialize];
 
@@ -193,7 +192,22 @@
     
     [self presentViewController:playbackViewController animated:NO  completion:nil];
 #else
+#if 1
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     
+    if ([userDefaults boolForKey:_AutoLogin])
+    {
+        NSLog(@"Auto login from AppDelegate. Do nothing");
+    }
+    else
+    {
+        self.app_stage = APP_STAGE_LOGGING_IN;
+        NSLog(@"MBP_iosVC - show LoginVC from viewDidLoad after 4s");
+        
+        [self show_login_or_reg:nil];
+    }
+    
+#else
     
 	//hide splash screen page
      //backgroundView.hidden = NO;
@@ -220,6 +234,7 @@
     
     [self show_login_or_reg:nil];
 #endif
+#endif
 
 
 }
@@ -232,12 +247,15 @@
 
 -(void) startShowingCameraList
 {
-    self.menuVC = nil;
+    if (_menuVC)
+    {
+        [_menuVC release];
+        self.menuVC = nil;
+    }
     
     self.menuVC = [[MenuViewController alloc] initWithNibName:@"MenuViewController"
                                                        bundle:nil
                                              withConnDelegate:self];
-    NSLog(@"startShowingCameraList: %p, %p", self, self.menuVC.menuDelegate);
     
 	NSMutableArray * validChannels = [[NSMutableArray alloc]init ];
 
@@ -256,6 +274,7 @@
     self.menuVC.camerasVC.camChannels = validChannels;
 
     UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:self.menuVC];
+    [_menuVC release];
     
     assert(nav != nil);
 	[self presentViewController:nav animated:NO completion:^{}];
@@ -323,83 +342,82 @@
 /**** Main program switching point is here *****/ 
 - (void)sendStatus:(int) method
 {
+	switch (method)
+    {
+		case SETUP_CAMERA:
+        {
+            NSLog(@">>> SETUP ");
+            self.app_stage = APP_STAGE_SETUP;
+            
+            NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+            BOOL isFirstTimeSetup = [userDefaults boolForKey:FIRST_TIME_SETUP];
+            
+            if (isFirstTimeSetup == FALSE)
+            {
+                //Guild screen to setup camera
+                NSInteger getValue = [userDefaults integerForKey:SET_UP_CAMERA];
+                if (getValue == 1)
+                {
+                    //Blutooth setup
+                    GuideAddCamera_ViewController *guideAddCame = [[GuideAddCamera_ViewController alloc]
+                                                                   initWithNibName:@"GuideAddCamera_ViewController" bundle:nil];
+                    guideAddCame.delegate = self;
+                    [guideAddCame presentModallyOn:self];
+                }
+                else
+                {
+                    //Concurrent setup
+                    //Normal add cam sequence
+                    //Load the next xib
+                    Step_02_ViewController *step02ViewController = nil;
 
-	switch (method) {
-		case SETUP_CAMERA: 
-			{
-
-				[self dismissViewControllerAnimated:NO completion:nil];
-
-
-                NSLog(@">>> SETUP ");
-                self.app_stage = APP_STAGE_SETUP;
-
-                
-                NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-                BOOL isFirstTimeSetup = [userDefaults boolForKey:FIRST_TIME_SETUP];
-
-                    if (isFirstTimeSetup == FALSE)
+                    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
                     {
-                        //Guild screen to setup camera
-                        NSInteger getValue = [userDefaults integerForKey:SET_UP_CAMERA];
-                        if (getValue == 1)
-                        {
-                            //Blutooth setup
-                            GuideAddCamera_ViewController *guideAddCame = [[GuideAddCamera_ViewController alloc]
-                                                                           initWithNibName:@"GuideAddCamera_ViewController" bundle:nil];
-                            guideAddCame.delegate = self;
-                            [guideAddCame presentModallyOn:self];
-                        }
-                        else
-                        {
-                            //Concurrent setup
-                            //Normal add cam sequence
-                            //Load the next xib
-                            Step_02_ViewController *step02ViewController = nil;
-                            
-                            
-                            
-                            if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
-                            {
-                                step02ViewController = [[Step_02_ViewController alloc]
-                                                        initWithNibName:@"Step_02_ViewController_ipad" bundle:nil];
-                            }
-                            else
-                            {
-                                step02ViewController = [[Step_02_ViewController alloc]
-                                                        initWithNibName:@"Step_02_ViewController" bundle:nil];
-                            }
-                            
-                            step02ViewController.delegate = self;
-                            [step02ViewController presentModallyOn:self];
-                        }
-
+                        step02ViewController = [[Step_02_ViewController alloc]
+                                                initWithNibName:@"Step_02_ViewController_ipad" bundle:nil];
                     }
                     else
                     {
-                        [self createAccount];
+                        step02ViewController = [[Step_02_ViewController alloc]
+                                                initWithNibName:@"Step_02_ViewController" bundle:nil];
                     }
-
-				break;
-			}
+                    
+                    step02ViewController.delegate = self;
+                    //[step02ViewController presentModallyOn:self];
+                    UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:step02ViewController];
+                    //[self presentViewController:nav animated:NO completion:^{}];
+                    
+                    if (self.presentedViewController) {
+                        [self dismissViewControllerAnimated:YES completion:^{
+                            [self presentViewController:nav animated:NO completion:nil];
+                        }];
+                    } else {
+                        [self presentViewController:nav animated:NO completion:nil];
+                    }
+                }
+            }
+            else
+            {
+                [self createAccount];
+            }
+        }
+            break;
+            
 		case LOGIN: //GOTO ROUTER mode - Login
-			{
-				//NSLog(@">>> Login "); 
-
-				[self dismissViewControllerAnimated:NO completion:nil];
-                
-                self.app_stage = APP_STAGE_LOGGING_IN;
-                
-				NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-
-				[userDefaults setBool:TRUE forKey:_AutoLogin];
-				[userDefaults synchronize];
-
-
-                [self show_login_or_reg:nil];
-				break;
-			}
-
+        {
+            //NSLog(@">>> Login ");
+            self.app_stage = APP_STAGE_LOGGING_IN;
+            
+            NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+            
+            [userDefaults setBool:TRUE forKey:_AutoLogin];
+            [userDefaults synchronize];
+            
+            
+            [self show_login_or_reg:nil];
+        }
+            break;
+            
 		case SCAN_CAMERA:
         {
 			//may be offline mode
@@ -426,8 +444,6 @@
 				[userDefaults setBool:TRUE forKey:_AutoLogin];
 				[userDefaults synchronize];
 
-
-
 				[NSTimer scheduledTimerWithTimeInterval:0.01
 					target:self
 					selector:@selector(show_login_or_reg:)
@@ -440,7 +456,7 @@
 			{
 
                 statusDialogLabel.hidden = YES;
-				[self dismissViewControllerAnimated:NO completion:nil];
+				//[self dismissViewControllerAnimated:NO completion:nil];
                 
 				NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
 				[userDefaults setBool:TRUE forKey:_AutoLogin];
@@ -458,7 +474,7 @@
 			{
 				NSLog(@"Back from menu");
                 statusDialogLabel.hidden = YES;
-				[self dismissViewControllerAnimated:NO completion:nil];
+				//[self dismissViewControllerAnimated:NO completion:nil];
 				//[self.streamer startStreaming];
                 
 
@@ -538,6 +554,7 @@
     registrationVC.delegate = self;
     UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:registrationVC];
     [self presentViewController:nav animated:YES completion:^{}];
+    //[self.navigationController presentViewController:registrationVC animated:YES completion:^{}];
     [registrationVC release];
 #else
     {
@@ -1836,8 +1853,14 @@
     UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:loginVC];
 
     [loginVC release];
-    [self presentViewController:nav animated:YES completion:^{}];
-    //[nav release];
+    //[self presentViewController:nav animated:YES completion:^{}];
+    if (self.presentedViewController) {
+        [self dismissViewControllerAnimated:YES completion:^{
+            [self presentViewController:nav animated:NO completion:nil];
+        }];
+    } else {
+        [self presentViewController:nav animated:NO completion:nil];
+    }
 }
 
 #if 1

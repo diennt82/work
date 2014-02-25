@@ -242,19 +242,25 @@
 {
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     NSString *username  = [userDefaults stringForKey:@"PortalUsername"];
-    NSString *userEmail = [userDefaults stringForKey:@"PortalUseremail"];
+    //NSString *userEmail = [userDefaults stringForKey:@"PortalUseremail"];
     NSString *apiKey    = [userDefaults stringForKey:@"PortalApiKey"];
+//    UserAccount *account = [[UserAccount alloc] initWithUser:username
+//                                                     andPass:userEmail
+//                                                   andApiKey:apiKey
+//                                                 andListener:nil];
+//    account.userAccountDelegate = self;
     UserAccount *account = [[UserAccount alloc] initWithUser:username
-                                                     andPass:userEmail
-                                                   andApiKey:apiKey
-                                                 andListener:nil];
-    account.userAccountDelegate = self;
+                                                    password:nil
+                                                      apiKey:apiKey
+                                                    listener:self];
     [account readCameraListAndUpdate];
     
     [account release];
 }
 
-- (void)finishStoreCameraListData:(NSMutableArray *)camProfiles
+#pragma mark - UserAccount delegate
+
+- (void)finishStoreCameraListData:(NSMutableArray *)camProfiles success:(BOOL)success
 {
     if ([self rebindCamerasResource] == TRUE)
     {

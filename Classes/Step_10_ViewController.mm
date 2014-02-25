@@ -377,7 +377,13 @@
         
         [userDefaults setInteger:BLUETOOTH_SETUP forKey:SET_UP_CAMERA];
         [userDefaults synchronize];
-        [self.delegate sendStatus:SETUP_CAMERA];
+        
+        //[self.navigationController popToRootViewControllerAnimated:NO];
+        [self dismissViewControllerAnimated:NO completion:^{
+            [self.delegate sendStatus:SETUP_CAMERA];
+        }];
+        
+        
     }
     else if (buttonIndex == WIFI_SETUP) {
         //Wifi button pressed
@@ -389,7 +395,11 @@
         
         [userDefaults setInteger:WIFI_SETUP forKey:SET_UP_CAMERA];
         [userDefaults synchronize];
-        [self.delegate sendStatus:SETUP_CAMERA];
+        //[self.delegate sendStatus:SETUP_CAMERA];
+        //[self.navigationController popToRootViewControllerAnimated:NO];
+        [self dismissViewControllerAnimated:NO completion:^{
+            [self.delegate sendStatus:SETUP_CAMERA];
+        }];
     }
 }
 #pragma  mark -
@@ -757,10 +767,14 @@
     NSString * userPass = (NSString *) [userDefaults objectForKey:@"PortalPassword"];
     NSString * userApiKey = (NSString *) [userDefaults objectForKey:@"PortalApiKey"];
     
+//    UserAccount *account = [[UserAccount alloc] initWithUser:userEmail
+//                                                     andPass:userPass
+//                                                   andApiKey:userApiKey
+//                                                 andListener:nil];
     UserAccount *account = [[UserAccount alloc] initWithUser:userEmail
-                                                     andPass:userPass
-                                                   andApiKey:userApiKey
-                                                 andListener:nil];
+                                                    password:userPass
+                                                      apiKey:userApiKey
+                                                    listener:nil];
     
     NSString *localIp = [account query_cam_ip_online: self.cameraMac];
     
@@ -903,8 +917,6 @@
 	return ; 
 	
 }
-
-
 
 #pragma mark -
 #pragma mark  Callbacks

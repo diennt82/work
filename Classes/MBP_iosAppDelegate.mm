@@ -380,10 +380,10 @@
 	[userDefaults setInteger:viewController.app_stage forKey:@"ApplicationStage"];
     [userDefaults synchronize];
     
-    if (viewController.app_stage == APP_STAGE_LOGGED_IN)
-    {
-        [viewController sendStatus:BACK_FRM_MENU_NOLOAD];
-    }
+//    if (viewController.app_stage == APP_STAGE_LOGGED_IN)
+//    {
+//        [viewController sendStatus:BACK_FRM_MENU_NOLOAD];
+//    }
 }
 
 
@@ -456,9 +456,13 @@
     [userDefaults synchronize]; // Synchnize to get setting from System settings
 	viewController.app_stage = [userDefaults integerForKey:@"ApplicationStage"];
     
-    NSLog(@"MBP_iosVC - viewController.app_stage: %d", viewController.app_stage);
+    NSLog(@"MBP_iosAppDelegate - viewController.app_stage: %d", viewController.app_stage);
     
-    if (viewController.app_stage == APP_STAGE_LOGGED_IN)
+    if ([userDefaults objectForKey:CAM_IN_VEW] != nil)
+    {
+        NSLog(@"A camera is in view. Do nothing");
+    }
+    else if (viewController.app_stage == APP_STAGE_LOGGED_IN)
     {
         //20121114: phung: Need to force relogin, because while app in background many things can happen
         //   1. Wifi loss --> offline mode
@@ -477,13 +481,13 @@
         }
     }
 #else
-    NSLog(@"MBP_iosVC - viewController.app_stage: %d", viewController.app_stage);
+    NSLog(@"MBP_iosAppDelegate - viewController.app_stage: %d", viewController.app_stage);
     
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     [userDefaults synchronize];
 	viewController.app_stage = [userDefaults integerForKey:@"ApplicationStage"];
     
-    NSLog(@"MBP_iosVC - viewController.app_stage: %d", viewController.app_stage);
+    NSLog(@"MBP_iosAppDelegate - viewController.app_stage: %d", viewController.app_stage);
     
     NSString * camInView = (NSString*)[userDefaults objectForKey:CAM_IN_VEW];
     
@@ -540,6 +544,9 @@
      Called when the application is about to terminate.
      See also applicationDidEnterBackground:.
      */
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    [userDefaults removeObjectForKey:CAM_IN_VEW];
+    [userDefaults synchronize];
 }
 
 /*A bit mask of the UIInterfaceOrientation constants that indicate the orientations to use for the view controllers.*/

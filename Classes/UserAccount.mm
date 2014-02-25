@@ -12,13 +12,14 @@
 @interface UserAccount()
 
 @property (nonatomic, retain) BMS_JSON_Communication *jsonComm;
+@property (nonatomic, assign) id<UserAccountDelegate> delegate;
 
 @end
 
 @implementation UserAccount
 
 @synthesize   userName,userPass;
-@synthesize delegate;
+//@synthesize delegate;
 
 - (id) initWithUser:(NSString *)user andPass:(NSString *)pass andApiKey: (NSString *)apiKey andListener:(id <ConnectionMethodDelegate>) d
 {
@@ -26,7 +27,25 @@
 	self.userName = user;
 	self.userPass = pass;
     self.apiKey = apiKey;
-	self.delegate = d;
+	//self.delegate = d;
+    
+	return self;
+}
+
+- (id)initWithUser:(NSString *)user
+          password:(NSString *)pass
+            apiKey:(NSString *)apiKey
+          listener:(id<UserAccountDelegate> ) d
+{
+    self = [super init];
+    
+    if (self)
+    {
+        self.userName = user;
+        self.userPass = pass;
+        self.apiKey = apiKey;
+        self.delegate = d;
+    }
     
 	return self;
 }
@@ -131,14 +150,17 @@
         
         [self sync_online_and_offline_data:camProfiles];
         
-        if (delegate != nil)
+        //if (delegate != nil)
+        if (_delegate != nil)
         {
-            [delegate sendStatus:SHOW_CAMERA_LIST];
+            //[delegate sendStatus:SHOW_CAMERA_LIST];
+            [_delegate finishStoreCameraListData:camProfiles success:TRUE];
         }
-        else if (_userAccountDelegate != nil) // MenuViewController update camera list
-        {
-            [_userAccountDelegate finishStoreCameraListData:camProfiles];
-        }
+        //else if (_userAccountDelegate != nil) // MenuViewController update camera list
+//        {
+//            [_userAccountDelegate finishStoreCameraListData:camProfiles];
+//            //self.userAccountDelegate = nil;
+//        }
         else
         {
             NSLog(@"Error - delegate = nil");
@@ -165,13 +187,17 @@
         [alert show];
         [alert release];
         
-        if (delegate != nil)
+//        if (delegate != nil)
+//        {
+//            [delegate sendStatus:LOGIN_FAILED_OR_LOGOUT];
+//        }
+//        else if (_userAccountDelegate != nil) // MenuViewController update camera list
+//        {
+//            [_userAccountDelegate finishStoreCameraListData:nil];
+//        }
+        if (_delegate)
         {
-            [delegate sendStatus:LOGIN_FAILED_OR_LOGOUT];
-        }
-        else if (_userAccountDelegate != nil) // MenuViewController update camera list
-        {
-            [_userAccountDelegate finishStoreCameraListData:nil];
+            [_delegate finishStoreCameraListData:nil success:FALSE];
         }
     }
 }
@@ -202,7 +228,12 @@
 	[alert show];
 	[alert release];
 	
-	[delegate sendStatus:LOGIN_FAILED_OR_LOGOUT];
+	//[delegate sendStatus:LOGIN_FAILED_OR_LOGOUT];
+    if (_delegate)
+    {
+        [_delegate finishStoreCameraListData:nil success:FALSE];
+    }
+    
 	return;
 }
 
@@ -234,13 +265,18 @@
     
     if (!isOffline)
     {
-        if (delegate != nil)
+//        if (delegate != nil)
+//        {
+//            [delegate sendStatus:LOGIN_FAILED_OR_LOGOUT];
+//        }
+//        else if (_userAccountDelegate != nil)
+//        {
+//            [_userAccountDelegate finishStoreCameraListData:nil];
+//        }
+        if (_delegate)
         {
-            [delegate sendStatus:LOGIN_FAILED_OR_LOGOUT];
-        }
-        else if (_userAccountDelegate != nil)
-        {
-            [_userAccountDelegate finishStoreCameraListData:nil];
+            [_delegate finishStoreCameraListData:nil
+                                         success:FALSE];
         }
     }
 }

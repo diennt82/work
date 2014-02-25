@@ -184,7 +184,11 @@
 -(IBAction)handleBackButton:(id)sender
 {
     //simply relogin
-    [self.delegate sendStatus:AFTER_DEL_RELOGIN];//rescan
+    //[self.delegate sendStatus:AFTER_DEL_RELOGIN];//rescan
+    
+    [self dismissViewControllerAnimated:NO completion:^{
+        [self.delegate sendStatus:AFTER_DEL_RELOGIN];
+    }];
 }
 
 - (IBAction)goBackToFirstScreen:(id)sender

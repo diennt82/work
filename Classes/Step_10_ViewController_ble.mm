@@ -553,10 +553,14 @@
     NSString * userPass   = (NSString *) [userDefaults objectForKey:@"PortalPassword"];
     NSString * userApiKey = (NSString *) [userDefaults objectForKey:@"PortalApiKey"];
     
+//    UserAccount *account = [[UserAccount alloc] initWithUser:userEmail
+//                                                     andPass:userPass
+//                                                   andApiKey:userApiKey
+//                                                 andListener:nil];
     UserAccount *account = [[UserAccount alloc] initWithUser:userEmail
-                                                     andPass:userPass
-                                                   andApiKey:userApiKey
-                                                 andListener:nil];
+                                                    password:userPass
+                                                      apiKey:userApiKey
+                                                    listener:nil];
     
     NSString *localIp = [account query_cam_ip_online: self.cameraMac];
     

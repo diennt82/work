@@ -21,7 +21,7 @@
 #import <MonitorCommunication/MonitorCommunication.h>
 
 
-@interface LoginViewController ()  <UITextFieldDelegate, StunClientDelegate>
+@interface LoginViewController ()  <UITextFieldDelegate, StunClientDelegate, UserAccountDelegate>
 
 @property (retain, nonatomic) IBOutlet UIView *viewProgress;
 @property (retain, nonatomic) IBOutlet UITextField *tfEmail;
@@ -168,6 +168,25 @@
     // Dispose of any resources that can be recreated.
 }
 
+#pragma mark - UserAccount delegate
+
+- (void)finishStoreCameraListData:(NSMutableArray *)arrayCamProfile success:(BOOL)success
+{
+    [self dismissViewControllerAnimated:NO completion:
+     ^{
+         
+         if (success)
+         {
+             [_delegate sendStatus:SHOW_CAMERA_LIST];
+         }
+         else
+         {
+             [_delegate sendStatus:LOGIN_FAILED_OR_LOGOUT];
+         }
+        
+    }];
+}
+
 #pragma mark - Action
 
 - (IBAction)buttonForgotPasswordTouchUpInsideAction:(id)sender
@@ -200,7 +219,11 @@
     [userDefaults setBool:TRUE forKey:FIRST_TIME_SETUP];
     [userDefaults synchronize];
     
-    [_delegate sendStatus:1];
+    [self dismissViewControllerAnimated:NO completion:
+     ^{
+         [_delegate sendStatus:SETUP_CAMERA];
+     }];
+    
 }
 
 #pragma mark - PJNATH Callbacks
@@ -507,10 +530,17 @@
              (UIRemoteNotificationType) (UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeAlert)];
 #endif 
              NSLog(@"Login success! 2");
+//            UserAccount *account = [[UserAccount alloc] initWithUser:_stringUsername
+//                                                             andPass:_stringPassword
+//                                                           andApiKey:apiKey
+//                                                         andListener:_delegate];
+//            account.uaLoginDelegate = self;
+
             UserAccount *account = [[UserAccount alloc] initWithUser:_stringUsername
-                                                             andPass:_stringPassword
-                                                           andApiKey:apiKey
-                                                         andListener:_delegate];
+                                                            password:_stringPassword
+                                                              apiKey:apiKey
+                                                            listener:self];
+
             
 //            [[[GAI sharedInstance] defaultTracker] trackEventWithCategory:@"Login"
 //                                                               withAction:@"Login Success"
@@ -520,7 +550,7 @@
             [account readCameraListAndUpdate];
             [account release];
             
-            [self dismissViewControllerAnimated:NO completion:^{}];
+            //[self dismissViewControllerAnimated:NO completion:^{}];
             
             NSLog(@"Login success! 3");
         }
