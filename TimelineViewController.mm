@@ -150,6 +150,9 @@
 //}
 - (void)viewWillAppear:(BOOL)animated
 {
+    [super viewWillAppear:animated];
+    
+    NSLog(@"TimelineViewController: %@", NSStringFromCGRect(self.view.frame));
 }
 
 - (void)didReceiveMemoryWarning

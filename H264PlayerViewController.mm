@@ -165,7 +165,7 @@ double _ticks = 0;
     [self.imageViewStreamer addGestureRecognizer:singleTap];
     [singleTap release];
     
-    [self.imageViewStreamer setUserInteractionEnabled:YES];
+    [self.imageViewStreamer setUserInteractionEnabled:NO];
 
     /*
      //create list image for display horizontal scroll view menu
@@ -177,16 +177,19 @@ double _ticks = 0;
      6.Temperature display        temp_alert
      */
     
-    if (![self.selectedChannel.profile isSharedCam]) // CameraHD
+    if (![self.selectedChannel.profile isSharedCam])// CameraHD
     {
-        self.timelineVC = [[TimelineViewController alloc] init];
-        [self.view addSubview:_timelineVC.view];
-        self.timelineVC.timelineVCDelegate = self;
-        self.timelineVC.camChannel = self.selectedChannel;
-        self.timelineVC.navVC = self.navigationController;
-        self.timelineVC.parentVC = self;
-        
-        [self.timelineVC loadEvents:self.selectedChannel];
+        if (![self.selectedChannel.profile isNotAvailable]) // AVAILABLE
+        {
+            self.timelineVC = [[TimelineViewController alloc] init];
+            [self.view addSubview:_timelineVC.view];
+            self.timelineVC.timelineVCDelegate = self;
+            self.timelineVC.camChannel = self.selectedChannel;
+            self.timelineVC.navVC = self.navigationController;
+            self.timelineVC.parentVC = self;
+            
+            [self.timelineVC loadEvents:self.selectedChannel];
+        }
         
         self.itemImages = [NSMutableArray arrayWithObjects:@"video_action_pan.png", @"video_action_mic.png", @"video_action_video.png", @"video_action_music.png", @"video_action_temp.png", nil];
         self.itemSelectedImages = [NSMutableArray arrayWithObjects:@"video_action_pan_pressed.png", @"video_action_mic_pressed.png", @"video_action_video_pressed.png", @"video_action_music_pressed.png", @"video_action_temp_pressed.png", nil];
@@ -566,7 +569,7 @@ double _ticks = 0;
             [self.activityIndicator startAnimating];
             
             //[self setupCamera];
-            [self performSelectorInBackground:@selector(waitingScanAndStartSetupCamera_bg) withObject:nil];
+            [self performSelectorInBackground:@selector(setupCamera) withObject:nil];
             self.h264StreamerIsInStopped = FALSE;
             
             NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
@@ -602,11 +605,10 @@ double _ticks = 0;
         if (_earlierVC == Nil)
         {
             self.earlierVC = [[EarlierViewController alloc] initWithCamChannel:self.selectedChannel];
-            self.earlierVC.view.frame = CGRectMake(0, 0, 320, 568);
-            [self.view addSubview:_earlierVC.view];
         }
+        
+        [self.view addSubview:_earlierVC.view];
         [self.view bringSubviewToFront:_earlierVC.view];
-
         
         self.earlierVC.view.hidden = NO;
         [self.earlierVC setCamChannel:self.selectedChannel];
@@ -696,7 +698,7 @@ double _ticks = 0;
 {
     
     NSNumber *numberMsg =(NSNumber *) [args objectAtIndex:0];
-   
+    
     int ext1 = -1, ext2=-1;
     int msg = [numberMsg integerValue];
     
@@ -750,7 +752,7 @@ double _ticks = 0;
                 
                 // so need to adjust the origin
                 left = self.imageViewVideo.frame.origin.x;
-                top = 0;  
+                top = 0;
             }
             else
             {
@@ -770,24 +772,24 @@ double _ticks = 0;
                 }
                 
                 top = 0;
-
+                
             }
-             NSLog(@"video adjusted size: %f x %f", destWidth, destHeight);
+            NSLog(@"video adjusted size: %f x %f", destWidth, destHeight);
             
             
             
-//            self.imageViewVideo.frame = CGRectMake(left,
-//                                                   top,
-//                                                   destWidth, destHeight);
+            //            self.imageViewVideo.frame = CGRectMake(left,
+            //                                                   top,
+            //                                                   destWidth, destHeight);
             //re-set the size
-//            if (h264Streamer != NULL)
-//            {
-//                h264Streamer->setVideoSurface(self.imageViewVideo);
-//            }
+            //            if (h264Streamer != NULL)
+            //            {
+            //                h264Streamer->setVideoSurface(self.imageViewVideo);
+            //            }
             self.imageViewStreamer.frame = CGRectMake(left,
                                                       top,
                                                       destWidth, destHeight);
-
+            
             break;
         }
         case MEDIA_INFO_BITRATE_BPS:
@@ -834,7 +836,7 @@ double _ticks = 0;
                 self.probeTimer = nil;
             }
             
-//            self.backBarBtnItem.enabled = YES;
+            //            self.backBarBtnItem.enabled = YES;
             
             
             [self stopPeriodicPopup];
@@ -880,20 +882,19 @@ double _ticks = 0;
                 //[self performSelectorInBackground:@selector(getTriggerRecording_bg) withObject:nil];
                 //[self performSelectorInBackground:@selector(getZoneDetection_bg) withObject:nil];
                 //[self performSelectorInBackground:@selector(getMelodyValue_bg) withObject:nil];
+                self.imageViewStreamer.userInteractionEnabled = YES;
                 self.imgViewDrectionPad.userInteractionEnabled = YES;
+                
                 if (isiPhone4)
                 {
-                    self.imgViewDrectionPad.image = [UIImage imageNamed:@"camera_action_pan_bg.png"];
+                    self.imgViewDrectionPad.image = [UIImage imageNamed:@"camera_action_pan_bg"];
                 }
                 else
                 {
                     self.imgViewDrectionPad.image = [UIImage imageNamed:@"camera_action_pan_bg@5.png"];
                 }
                 
-                if ([self.selectedChannel.profile isSharedCam] == FALSE) // CameraHD
-                {
-                    [self performSelectorInBackground:@selector(getCameraTemperature_bg:) withObject:nil];
-                }
+                [self performSelectorInBackground:@selector(getCameraTemperature_bg:) withObject:nil];
                 
                 self.horizMenu.userInteractionEnabled = YES;
             }
@@ -943,7 +944,7 @@ double _ticks = 0;
                 NSLog(@"*[MEDIA_ERROR_TIMEOUT_WHILE_STREAMING] *** USER want to cancel **.. cancel after .1 sec...");
                 self.selectedChannel.stopStreaming = TRUE;
                 
-                                
+                
                 [self performSelector:@selector(goBackToCameraList)
                            withObject:nil
                            afterDelay:0.1];
@@ -1127,14 +1128,14 @@ double _ticks = 0;
                                                                 withLabel:@"Can't connect to network"
                                                                 withValue:nil];
             
-
+            
             msg = [NSString stringWithFormat:@"%@ (%d)", msg, self.selected_channel.remoteConnectionError];
             if (self.streamer != nil)
             {
                 msg = [NSString stringWithFormat:@"%@(%d)",msg,
                        self.streamer.latest_connection_error ];
             }
-
+            
             
             
             if (self.alertTimer != nil && [self.alertTimer isValid])
@@ -1260,7 +1261,7 @@ double _ticks = 0;
         }
         case REMOTE_STREAM_STOPPED:
         {
-
+            
             
             if ( streamer.communication_mode == COMM_MODE_STUN )
             {
@@ -1288,7 +1289,7 @@ double _ticks = 0;
                 }
             }
             
-
+            
             
             break;
         }
@@ -3846,7 +3847,7 @@ double _ticks = 0;
                                           owner:self
                                         options:nil];
             self.melodyViewController = [[[MelodyViewController alloc] initWithNibName:@"MelodyViewController_iPad" bundle:nil] autorelease];
-            [_earlierVC.view setFrame:CGRectMake(0, 64, SCREEN_WIDTH, SCREEN_HEIGHT)];
+            [_earlierVC.view setFrame:CGRectMake(0, 64, SCREEN_WIDTH, SCREEN_HEIGHT - 64)];
         }
         else
         {
@@ -3880,7 +3881,15 @@ double _ticks = 0;
             if (_timelineVC != nil && _isFirstLoad)
             {
                 CGFloat alignYTimeLine = self.ib_ViewTouchToTalk.frame.origin.y;
-                self.timelineVC.view.frame = CGRectMake(0, alignYTimeLine, SCREEN_WIDTH, SCREEN_HEIGHT - self.ib_ViewTouchToTalk.frame.origin.y);
+                
+                if (isiPhone4) // This condition check size of screen. Not iPhone4 or other
+                {
+                    self.timelineVC.view.frame = CGRectMake(0, alignYTimeLine, SCREEN_WIDTH, SCREEN_HEIGHT - self.ib_ViewTouchToTalk.frame.origin.y + 64);
+                }
+                else
+                {
+                    self.timelineVC.view.frame = CGRectMake(0, alignYTimeLine, SCREEN_WIDTH, SCREEN_HEIGHT - self.ib_ViewTouchToTalk.frame.origin.y);
+                }
                 
                 //don't show timeline after switch from land to port
                 
@@ -3919,7 +3928,7 @@ double _ticks = 0;
                 }
                 else
                 {
-                    self.timelineVC.view.frame = CGRectMake(0, alignYTimeLine, SCREEN_WIDTH, SCREEN_HEIGHT - alignYTimeLine + 64);
+                    self.timelineVC.view.frame = CGRectMake(0, alignYTimeLine, SCREEN_WIDTH, SCREEN_HEIGHT - alignYTimeLine);
                     self.timelineVC.view.hidden = NO;
                     [self.view addSubview:_timelineVC.view];
                     self.timelineVC.tableView.contentInset = UIEdgeInsetsMake(0, 0, 0, 0);

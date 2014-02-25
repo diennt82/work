@@ -41,6 +41,13 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
     
+//    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+//    {
+//        [[NSBundle mainBundle] loadNibNamed:@"EarlierViewController_iPad"
+//                                      owner:self
+//                                    options:nil];
+//    }
+    
     self.timelineVC = [[TimelineViewController alloc] init];
     
     //NSLog(@"%@, %@", timelineVC.camChannel, _camChannel);
@@ -63,10 +70,15 @@
 
 - (void)viewWillAppear:(BOOL)animated
 {
-    NSLog(@"%@", _camChannel);
+    //NSLog(@"EarlierViewController: %@", NSStringFromCGRect(self.view.frame));
     
     if (_isDidLoad == FALSE)
     {
+        if ([self.camChannel.profile isNotAvailable])
+        {
+            self.view.frame = CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
+        }
+        
         self.isDidLoad = TRUE;
         
         [_timelineVC loadEvents:_camChannel];
