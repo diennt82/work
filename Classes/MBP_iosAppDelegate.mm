@@ -74,8 +74,14 @@
     {
         viewController.app_stage = 3;
         [userDefaults setInteger:viewController.app_stage forKey:@"ApplicationStage"];
-        [userDefaults synchronize];
     }
+    
+    /*
+     * User kill app when app in view a Camera
+     */
+    
+    [userDefaults removeObjectForKey:CAM_IN_VEW];
+    [userDefaults synchronize];
     
     [window setRootViewController:viewController];
     [window makeKeyAndVisible];
