@@ -11,7 +11,13 @@
 #import <MonitorCommunication/MonitorCommunication.h>
 
 #include "PlaybackListener.h"
+#import "define.h"
 
+
+#define START 0
+#define END   100
+#define HEIGHT_BG_CONTROL 45
+#define HEIGHT_SLIDER_DEFAULT   33
 @interface PlaybackViewController()
 
 @property (nonatomic, retain) NSMutableArray *clips;
@@ -39,360 +45,88 @@
 {
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
+    [self applyFont];
     
-    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+    [self.ib_viewOverlayVideo setHidden:YES];
+    
+//    NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"http://movies.apple.com/media/us/mac/getamac/2009/apple-mvp-biohazard_suit-us-20090419_480x272.mov"]];
+    NSString *urlString = clip_info.urlFile;
+    NSURL *convertToURL = [NSURL URLWithString:urlString];
+    
+        NSLog(@"***********************convertToURL is %@", convertToURL);
+    self.urlVideo = convertToURL;
+    if (self.urlVideo)
     {
-        [[NSBundle mainBundle] loadNibNamed:@"PlaybackViewController_ipad"
-                                      owner:self
-                                    options:nil];
+        if ([self.urlVideo scheme])	// sanity check on the URL
+        {
+            /* Play the movie with the specified URL. */
+            [self playMovieStream:self.urlVideo];
+        }
     }
-    
-    self.navigationController.navigationBarHidden = YES;
-    
-    self.activityIndicator.hidden = NO;
-    [self.activityIndicator startAnimating];
-    
-    NSString * msg = NSLocalizedStringWithDefaultValue(@"Back",nil, [NSBundle mainBundle],
-                                                       @"Back", nil);
-    
-    backBarBtnItem = [[[UIBarButtonItem alloc] initWithTitle:msg
-                                      style:UIBarButtonItemStyleBordered
-                                     target:self
-                                     action:@selector(goBackToPlayList)] autorelease];
-    
-	self.navigationItem.leftBarButtonItem = backBarBtnItem;
-    self.navigationItem.leftBarButtonItem.tintColor = nil;
-    self.navigationItem.leftBarButtonItem.enabled = NO;
-    
-    self.navigationItem.title = @"Camera";
-    
-    [self becomeActive];
+}
+
+-(void)applyFont
+{
+    [self.ib_timerPlayBack setFont:[UIFont lightSmall13Font]];
+    self.ib_timerPlayBack.textColor = [UIColor textTimerPlayBackColor];
+}
+
+- (BOOL)prefersStatusBarHidden {
+    return YES;
 }
 
 - (void)viewWillAppear:(BOOL)animated
 {
-    [super viewWillAppear:animated];
-     self.navigationController.navigationBarHidden = NO;
+    [[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:UIStatusBarAnimationNone];
+    [self.navigationController.navigationBar setHidden:YES];
+    //Here is show indicator
+    self.activityIndicator.hidden = NO;
+    [self.activityIndicator startAnimating];
     [self checkOrientation];
 }
+
 
 -(void) viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
     NSLog(@"viewWillDisappear: ");
     //[self goBackToPlayList];
-    //[self stopStream:nil]; // This is for what case?
+    
 }
 
 
+#pragma mark -
 
-- (void)becomeActive
+- (void)didReceiveMemoryWarning
 {
-    
-    playbackStreamer = NULL;
-    
-    
-    //CamProfile *cp = self.selectedChannel.profile;
-    
-    //Set camera name
-    //self.cameraNameBarBtnItem.title = cp.name;
-    
-    //set Button handler
-    //self.backBarBtnItem.target = self;
-   // self.backBarBtnItem.action = @selector(goBackToPlayList);
-    
-    listener = new PlaybackListener(self);
-    
-    self.urlVideo = clip_info.urlFile;
-    
-    NSLog(@"%@", _clipsInEvent);
-    
-    if (_clipsInEvent != nil &&
-        _clipsInEvent.count > 0)
-    {
-        self.clips = [NSMutableArray array];
-        
-        for (NSDictionary *clipInfo in _clipsInEvent)
-        {
-            NSString *urlClipString = [clipInfo objectForKey:@"file"];
-            
-            if (![urlClipString isEqual:[NSNull null]] &&
-                ![urlClipString isEqualToString:@""])
-            {
-                [self.clips addObject:urlClipString];
-               // break;
-            }
-        }
-    }
-    
-    NSLog(@"%@", self.clips);
-    
-    listener->updateClips(_clips);
-    listener->updateFinalClipCount(_clips.count);
-    
-#if 0
-    clips = [[NSMutableArray alloc]init];
-
-    
-    //Decide whether or not to start the background polling
-    
-    if (self.clip_info != nil )
-    {
-        
-        listener = new PlaybackListener(self);
-        
-        
-        if ([self.clip_info isLastClip])
-        {
-            //Only one clip & it is the last
-            NSLog(@"this is the olny clip do not poll");
-            
-            [clips addObject:clip_info.urlFile];
-            listener->updateClips(clips);
-            listener->updateFinalClipCount(1);
-        }
-        else
-        {
-            
-            
-            // It is not the last clip - scheduling querying of clips
-            self.list_refresher = [NSTimer scheduledTimerWithTimeInterval:10.0
-                                                              target:self
-                                                            selector:@selector(getCameraPlaylistForEvent:)
-                                                            userInfo:clip_info repeats:NO];
-            NSLog(@"[----- self.list_refresher: %p", self.list_refresher);
-        }
-        
-        
-        self.urlVideo = self.clip_info.urlFile;
-    }
-    
-#endif
-
-    
-
-    [self performSelector:@selector(startStream)
-               withObject:nil
-               afterDelay:0.1];
+    [super didReceiveMemoryWarning];
+    // Dispose of any resources that can be recreated.
 }
 
-#pragma mark - Poll camera events
-
--(void) getCameraPlaylistForEvent:(NSTimer *) clipTimer
-{
-    PlaylistInfo *first_clip = [clipTimer userInfo];
+- (void)dealloc {
     
-    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    [imageVideo release];
     
-    BMS_JSON_Communication *jsonComm = [[[BMS_JSON_Communication alloc] initWithObject:self
-                                                                             Selector:@selector(getPlaylistSuccessWithResponse:)
-                                                                         FailSelector:@selector(getPlaylistFailedWithResponse:)
-                                                                            ServerErr:@selector(getPlaylistUnreachableSetver)]
-                                        autorelease];
-    NSString *mac = first_clip.mac_addr;
+    [_list_refresher release];
     
-    NSString *apiKey = [userDefaults objectForKey:@"PortalApiKey"];
-    
-    NSString * event_timecode = [NSString stringWithFormat:@"0%@_%@", [first_clip getAlertType], [first_clip getAlertVal]];
-    
-    [jsonComm getAllRecordedFilesWithRegistrationId:mac
-                                           andEvent:event_timecode
-                                          andApiKey:apiKey];
-    
-   
-
+    [_activityIndicator release];
+    [clip_info release];
+    [_clips release];
+    [_ib_closePlayBack release];
+    [_ib_playPlayBack release];
+    [_ib_sliderPlayBack release];
+    [_ib_timerPlayBack release];
+    [_ib_zoomingPlayBack release];
+    [_ib_viewOverlayVideo release];
+    [_ib_delete release];
+    [_ib_download release];
+    [_ib_share release];
+    [_ib_viewControlPlayer release];
+    [_ib_myOverlay release];
+    [super dealloc];
 }
 
 
-- (void)getPlaylistSuccessWithResponse: (NSDictionary *)responseDict
-{
-    BOOL got_last_clip = FALSE;
-    
-    if (responseDict != nil)
-    {
-        if ([[responseDict objectForKey:@"status"] intValue] == 200)
-        {
-            NSArray *eventArr = [[responseDict objectForKey:@"data"] objectForKey:@"events"];
-            
-            NSLog(@"play list: %@ ",responseDict);
-            
-            if (eventArr.count > 0)
-            {
-                NSArray *playlist = [[eventArr objectAtIndex:0] objectForKey:@"playlist"];
-                
-                for (NSDictionary *clipInfo in playlist) {
-                    //NSDictionary *clipInfo = [[playlist objectForKey:@"playlist"] objectAtIndex:0];
-                    
-                    PlaylistInfo *playlistInfo = [[[PlaylistInfo alloc] init]autorelease];
-                    playlistInfo.mac_addr = clip_info.mac_addr;
-                    
-                    playlistInfo.urlImage = [clipInfo objectForKey:@"image"];
-                    playlistInfo.titleString = [clipInfo objectForKey:@"title"];
-                    playlistInfo.urlFile = [clipInfo objectForKey:@"file"];
-                    
-                    
-                    //check if the clip is in our private array
-                    BOOL found = FALSE;
-                    for ( NSString * one_clip in _clips)
-                    {
-                        NSLog(@"one clip: *%@*", one_clip);
-                        NSLog(@"playlistInfo.url: *%@*", playlistInfo.urlFile);
-                        
-                        if ([playlistInfo containsClip:one_clip])
-                        {
-                            found = TRUE;
-                            break;
-                        }
-                    }
-                    
-                    if (found == FALSE)
-                    {
-                        //add the clip
-                        [_clips addObject:playlistInfo.urlFile];
-                        NSLog(@"clips: %@", _clips);
-                    }
-                    
-                    
-                    if ([playlistInfo isLastClip])
-                    {
-                        NSLog(@"This is last");
-                        got_last_clip = TRUE;
-                    }
-                    
-                }
-                
-                NSLog(@"there is %d in playlist", [_clips count]);
-            }
-            
-        }
-    }
-    
-    if (got_last_clip == TRUE)
-    {
-        listener->updateFinalClipCount([_clips count]);
-
-    }
-    else
-    {
-        
-        
-        self.list_refresher = [NSTimer scheduledTimerWithTimeInterval:10.0
-                                                          target:self
-                                                        selector:@selector(getCameraPlaylistForEvent:)
-                                                        userInfo:clip_info repeats:NO];
-    }
-    
-    listener->updateClips(_clips);
-    
-}
-
-- (void)getPlaylistFailedWithResponse: (NSDictionary *)responseDict
-{
-    NSLog(@"getPlaylistFailedWithResponse");
-    self.list_refresher = [NSTimer scheduledTimerWithTimeInterval:10.0
-                                                      target:self
-                                                    selector:@selector(getCameraPlaylistForEvent:)
-                                                    userInfo:clip_info repeats:NO];
-
-}
-
-- (void)getPlaylistUnreachableSetver
-{
-    NSLog(@"getPlaylistUnreachableSetver");
-    self.list_refresher = [NSTimer scheduledTimerWithTimeInterval:10.0
-                                                      target:self
-                                                    selector:@selector(getCameraPlaylistForEvent:)
-                                                    userInfo:clip_info repeats:NO];
-
-}
-
-
-
-
-#pragma mark - Play Video
-
--(IBAction)startStream  :(id)sender
-{
-    [self startStream];
-}
-
-- (IBAction)closePlayBack:(id)sender {
-    [self goBackToPlayList];
-}
-
--(void) startStream
-{
-    
-    
-    playbackStreamer = new MediaPlayer(true);
-    playbackStreamer->setListener(listener);
-    
-    [self performSelectorInBackground:@selector(startStream_bg) withObject:nil];
-}
-
-- (void)startStream_bg
-{
-    status_t status = !NO_ERROR;
-    
-    NSString * url = self.urlVideo;
-    
-    NSLog(@"Now is player video from server with URL*********** is %@", url);
-
-    
-    status = playbackStreamer->setDataSource([url UTF8String]);
-    printf("setDataSource return: %d\n", status);
-    
-    if (status != NO_ERROR) // NOT OK
-    {
-        
-        printf("setDataSource error: %d\n", status);
-        [self handleMessage:MEDIA_ERROR_SERVER_DIED
-                       ext1:0
-                       ext2:0];
-        return;
-    }
-    
-    playbackStreamer->setVideoSurface(self.imageVideo);
-    
-    NSLog(@"Prepare the player");
-    
-    status=  playbackStreamer->prepare();
-    
-    printf("prepare return: %d\n", status);
-    if (status != NO_ERROR) // NOT OK
-    {
-        
-        printf("prepare() error: %d\n", status);
-        exit(1);
-    }
-    
-    self.activityIndicator.hidden = YES;
-    [self.activityIndicator stopAnimating];
-    
-    self.navigationItem.leftBarButtonItem.tintColor = [UIColor blueColor];
-    self.navigationItem.leftBarButtonItem.enabled = YES;
-    // Play anyhow
-    
-    status=  playbackStreamer->start();
-    
-    printf("start() return: %d\n", status);
-    if (status != NO_ERROR) // NOT OK
-    {
-        
-        printf("start() error: %d\n", status);
-        [self handleMessage:MEDIA_ERROR_SERVER_DIED
-                       ext1:0
-                       ext2:0];
-        return;
-    }
-    
-    if (status == NO_ERROR)
-    {
-        [self handleMessage:MEDIA_PLAYER_STARTED
-                       ext1:0
-                       ext2:0];
-    }
-}
 
 - (void)goBackToPlayList
 {
@@ -408,68 +142,7 @@
         [self.list_refresher invalidate];
     }
     
-    [self.navigationController dismissViewControllerAnimated:YES completion:nil];
-    
-}
-
-- (IBAction)stopStream:(id) sender
-{
-    NSLog(@"Stop stream start ");
-
-    if (playbackStreamer != NULL)
-    {
-        NSLog(@"Stop stream playbackStreamer != NULL");
-        if(playbackStreamer->isPlaying())
-        {
-            playbackStreamer->suspend();
-            playbackStreamer->stop();
-            delete playbackStreamer;
-            playbackStreamer = NULL;
-        }
-        else // set Data source failed!
-        {
-            playbackStreamer->suspend();
-            playbackStreamer->stop();
-            delete playbackStreamer;
-            playbackStreamer = NULL;
-            
-        }
-    }
-    
-  
-    //20130919:phung : delete here will crash !!! don't know why
-
-//    if (listener != NULL)
-//    {
-//      delete listener;
-//    }
-
-    
-    NSLog(@"Stop stream end");
-    
-}
-
-
--(void) handleMessage:(int) msg ext1: (int) ext1 ext2:(int) ext2
-{
-    
-    switch (msg)
-    {
-        case MEDIA_ERROR_SERVER_DIED:
-        case MEDIA_PLAYBACK_COMPLETE:
-            //DONE Playback
-            //clean up
-            NSLog(@"Got playback complete>>>>  OUT ");
-            if (self.userWantToBack == FALSE)
-            {
-                [self goBackToPlayList];
-            }
-            
-            break;
-            
-        default:
-            break;
-    }
+    [self dismissViewControllerAnimated:YES completion:nil];
     
 }
 
@@ -482,7 +155,7 @@
 
 -(NSUInteger)supportedInterfaceOrientations
 {
-    return (UIInterfaceOrientationMaskLandscapeLeft | UIInterfaceOrientationMaskLandscapeRight);
+    return UIInterfaceOrientationMaskAll;
 }
 
 - (void) willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
@@ -518,76 +191,356 @@
 
 - (void) adjustViewsForOrientation:(UIInterfaceOrientation)orientation
 {
-    CGRect screenBounds = [[UIScreen mainScreen] bounds];
-    CGFloat screenWidth = screenBounds.size.width;
-    CGFloat screenHeight = screenBounds.size.height;
-    
-    //CGSize activitySize = _activityIndicator.frame.size;
-    
 	if (orientation == UIInterfaceOrientationLandscapeLeft || orientation == UIInterfaceOrientationLandscapeRight)
 	{
+//        xxxxxx
         
-        [[UIApplication sharedApplication] setStatusBarHidden:YES];
-        self.navigationController.navigationBar.hidden = YES;
-        
-        CGFloat imageViewHeight = screenHeight * 9 / 16;
-        CGRect newRect = CGRectMake(0, (screenWidth - imageViewHeight) / 2, screenHeight, imageViewHeight);
-        self.imageVideo.frame = newRect;
-        //self.activityIndicator.frame = CGRectMake(screenHeight / 2 - activitySize.width / 2, screenWidth / 2 - activitySize.height / 2, activitySize.width, activitySize.height);
+        if (isiPhone5 || isiPhone4)
+        {
+            [self.player.view setFrame:CGRectMake(0, 0, SCREEN_HEIGHT, SCREEN_WIDTH)];
+            [self.ib_viewControlPlayer setFrame:CGRectMake(0, SCREEN_WIDTH - HEIGHT_BG_CONTROL, SCREEN_HEIGHT, HEIGHT_BG_CONTROL)];
+            [self.ib_sliderPlayBack setFrame:CGRectMake(40, 5, 840/2, HEIGHT_SLIDER_DEFAULT)];
+            [self.ib_closePlayBack setFrame:CGRectMake(10, 10, 33, 33)];
+            [self.ib_closePlayBack setBackgroundImage:[UIImage imageVideoFullScreenClose] forState:UIControlStateNormal];
+        }
+
 	}
 	else if (orientation == UIInterfaceOrientationPortrait || orientation == UIInterfaceOrientationPortraitUpsideDown)
 	{
-        NSInteger deltaY = 0;
-        if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 7.0)
+        if (isiPhone5 || isiPhone4)
         {
-            deltaY = 20;
+            [self.player.view setFrame:CGRectMake(0, 194, SCREEN_WIDTH, 180)];
+            [self.ib_viewControlPlayer setFrame:CGRectMake(0, SCREEN_HEIGHT - HEIGHT_BG_CONTROL, SCREEN_WIDTH, HEIGHT_BG_CONTROL)];
+            //width of slider is 390/2;
+            [self.ib_sliderPlayBack setFrame:CGRectMake(40, 5, 364/2, HEIGHT_SLIDER_DEFAULT)];
+            [self.ib_closePlayBack setFrame:CGRectMake(15, 15, 17, 17)];
+            [self.ib_closePlayBack setBackgroundImage:[UIImage imageVerticalVideoClose] forState:UIControlStateNormal];
         }
-        
-        [[UIApplication sharedApplication] setStatusBarHidden:NO];
-        self.navigationController.navigationBar.hidden = NO;
-        
-        CGFloat imageViewHeight = screenWidth * 9 / 16;
-        
-        CGRect destRect = CGRectMake(0, screenHeight / 2 - imageViewHeight / 2, screenWidth, imageViewHeight);
-        self.imageVideo.frame = destRect;
-        
-        //self.activityIndicator.frame = CGRectMake(screenWidth / 2 - activitySize.width / 2, imageViewHeight / 2 - activitySize.height / 2, activitySize.width, activitySize.height);
 	}
-    
-//    self.backBarBtnItem.target = self;
-//    self.backBarBtnItem.action = @selector(goBackToCameraList);
-    // SLIDE MENU
-    //    self.backBarBtnItem.target = self.stackViewController;
-    //    self.backBarBtnItem.action = @selector(toggleLeftViewController);
+
 }
 
-#pragma mark -
-
-- (void)didReceiveMemoryWarning
+/* Called soon after the Play Movie button is pressed to play the streaming movie. */
+-(void)playMovieStream:(NSURL *)movieFileURL
 {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
+    MPMovieSourceType movieSourceType = MPMovieSourceTypeUnknown;
+    /* If we have a streaming url then specify the movie source type. */
+//    if ([[movieFileURL pathExtension] compare:@"mov" options:NSCaseInsensitiveSearch] == NSOrderedSame)
+//    {
+        movieSourceType = MPMovieSourceTypeStreaming;
+//    }
+    [self createAndPlayMovieForURL:movieFileURL sourceType:movieSourceType];
 }
 
-- (void)dealloc {
-
-    [imageVideo release];
+/* Load and play the specified movie url with the given file type. */
+-(void)createAndPlayMovieForURL:(NSURL *)movieURL sourceType:(MPMovieSourceType)sourceType
+{
+    [self createAndConfigurePlayerWithURL:movieURL sourceType:sourceType];
     
-    [_list_refresher release];
+    /* Play the movie! */
+    [[self player] prepareToPlay];
+}
 
-    [_activityIndicator release];
-    [clip_info release];
-    [_clips release];
-    [_ib_closePlayBack release];
-    [_ib_playPlayBack release];
-    [_ib_sliderPlayBack release];
-    [_ib_timerPlayBack release];
-    [_ib_zoomingPlayBack release];
-    [_ib_viewOverlayVideo release];
-    [_ib_delete release];
-    [_ib_download release];
-    [_ib_share release];
-    [super dealloc];
+
+#pragma mark Create and Play Movie URL
+
+/*
+ Create a MPMoviePlayerController movie object for the specified URL and add movie notification
+ observers. Configure the movie object for the source type, scaling mode, control style, background
+ color, background image, repeat mode and AirPlay mode. Add the view containing the movie content and
+ controls to the existing view hierarchy.
+ */
+-(void)createAndConfigurePlayerWithURL:(NSURL *)movieURL sourceType:(MPMovieSourceType)sourceType
+{
+    /* Create a new movie player object. */
+    MPMoviePlayerController *player = [[MPMoviePlayerController alloc] initWithContentURL:movieURL];
+    
+    if (player)
+    {
+        /* Save the movie object. */
+        [self setPlayer:player];
+        
+        /* Register the current object as an observer for the movie
+         notifications. */
+        [self installMovieNotificationObservers];
+        
+        /* If you specify the movie type before playing the movie it can result
+         in faster load times. */
+        [player setMovieSourceType:sourceType];
+        
+        /* Specify the URL that points to the movie file. */
+        [player setContentURL:movieURL];
+        
+        /* Apply the user movie preference settings to the movie player object. */
+        [self applyUserSettingsToMoviePlayer];
+    }
+}
+#pragma mark Movie Settings
+
+/* Apply user movie preference settings (these are set from the Settings: iPhone Settings->Movie Player)
+ for scaling mode, control style, background color, repeat mode, application audio session, background
+ image and AirPlay mode.
+ */
+-(void)applyUserSettingsToMoviePlayer
+{
+    MPMoviePlayerController *player = [self player];
+    if (player)
+    {
+        self.player.controlStyle = MPMovieControlStyleNone;
+        self.player.fullscreen = YES;
+        self.player.shouldAutoplay = YES;
+        self.player.movieSourceType = MPMovieSourceTypeStreaming;
+    }
+}
+
+#pragma mark Movie Notification Handlers
+
+/*  Notification called when the movie finished playing. */
+- (void) moviePlayBackDidFinish:(NSNotification*)notification
+{
+    NSError *error = [[notification userInfo] objectForKey:@"error"];
+    
+    if (error) {
+        
+        NSLog(@"Did finish with error: %@", error);
+        
+    }
+    [self closePlayBack:nil];
+}
+
+/* Handle movie load state changes. */
+- (void)loadStateDidChange:(NSNotification *)notification
+{
+	MPMoviePlayerController *player = notification.object;
+	MPMovieLoadState loadState = player.loadState;
+    
+
+}
+
+/* Called when the movie playback state has changed. */
+- (void) moviePlayBackStateDidChange:(NSNotification*)notification
+{
+	MPMoviePlayerController *player = notification.object;
+    
+
+}
+
+/* Notifies observers of a change in the prepared-to-play state of an object
+ conforming to the MPMediaPlayback protocol. */
+- (void) mediaIsPreparedToPlayDidChange:(NSNotification*)notification
+{
+    //hide
+    self.activityIndicator.hidden = YES;
+    [self.activityIndicator stopAnimating];
+    [self.player play];
+    
+    self.player.view.frame = CGRectMake(0, 190,320,180);
+	// Add an overlay view on top of the movie view
+    [self.view addSubview:self.player.view];
+    [self.view addSubview:self.ib_myOverlay];
+    
+    self.ib_sliderPlayBack.minimumValue = START;
+    self.ib_sliderPlayBack.maximumValue = END;
+    
+    //    UIImage *ball = [UIImage imageNamed:@"player-handle"];
+    //    [self.slider setThumbImage:ball forState:UIControlStateNormal];
+    //    [self.slider setThumbImage:ball forState:UIControlStateHighlighted];
+//    [self.ib_sliderPlayBack setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageVideoProgressBG]]];
+    [self.ib_sliderPlayBack setMinimumTrackTintColor:[UIColor colorWithPatternImage:[UIImage imageVideoProgressGreen]]];
+    
+    [self watcher];
+}
+
+#pragma mark Install Movie Notifications
+
+/* Register observers for the various movie object notifications. */
+-(void)installMovieNotificationObservers
+{
+    MPMoviePlayerController *player = [self player];
+    
+	[[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(loadStateDidChange:)
+                                                 name:MPMoviePlayerLoadStateDidChangeNotification
+                                               object:player];
+    
+	[[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(moviePlayBackDidFinish:)
+                                                 name:MPMoviePlayerPlaybackDidFinishNotification
+                                               object:player];
+    
+	[[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(mediaIsPreparedToPlayDidChange:)
+                                                 name:MPMediaPlaybackIsPreparedToPlayDidChangeNotification
+                                               object:player];
+    
+	[[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(moviePlayBackStateDidChange:)
+                                                 name:MPMoviePlayerPlaybackStateDidChangeNotification
+                                               object:player];
+}
+
+#pragma mark Remove Movie Notification Handlers
+
+/* Remove the movie notification observers from the movie object. */
+-(void)removeMovieNotificationHandlers
+{
+    MPMoviePlayerController *player = [self player];
+    
+    [[NSNotificationCenter defaultCenter]removeObserver:self name:MPMoviePlayerLoadStateDidChangeNotification object:player];
+    [[NSNotificationCenter defaultCenter]removeObserver:self name:MPMoviePlayerPlaybackDidFinishNotification object:player];
+    [[NSNotificationCenter defaultCenter]removeObserver:self name:MPMediaPlaybackIsPreparedToPlayDidChangeNotification object:player];
+    [[NSNotificationCenter defaultCenter]removeObserver:self name:MPMoviePlayerPlaybackStateDidChangeNotification object:player];
+}
+
+/* Delete the movie player object, and remove the movie notification observers. */
+-(void)deletePlayerAndNotificationObservers
+{
+    [self removeMovieNotificationHandlers];
+    [self setPlayer:nil];
+}
+
+
+
+
+
+
+
+
+#pragma mark Add Button Control
+-(void)watcher{
+    
+    if([[NSString stringWithFormat:@"%f", self.player.currentPlaybackTime] isEqualToString:@"nan"])
+        
+    {
+        
+        NSLog(@"Sorry,video can't be played");
+        
+        //[self showAlertError:@"Sorry,video can't be played"];
+        
+        return;
+        
+    }
+    
+    float currentTime = self.player.currentPlaybackTime;
+    
+    
+    
+    self.ib_timerPlayBack.textAlignment = NSTextAlignmentCenter;
+    
+    self.ib_timerPlayBack.text = [self timeFormat:currentTime];
+    
+    [self performSelector:@selector(watcher) withObject:nil afterDelay:0.5];//to update the value each 0.5 seconds
+    
+    
+    
+    float rate = (END - START) / self.player.duration;
+    
+    NSLog(@" _CC_ %f = , %f =",rate,currentTime);
+    
+    self.ib_sliderPlayBack.value = rate * currentTime;
+    
+    
+    
+    
+    
+}
+- (NSString *) timeFormat: (float) seconds {
+    
+    int minutes = seconds / 60;
+    
+    int sec = fabs(round((int)seconds % 60));
+    
+    NSString *cm = minutes <= 9 ? @"0": @"";
+    
+    NSString *cs = sec <= 9 ? @"0": @"";
+    
+    return [NSString stringWithFormat:@"%@%i:%@%i",cm, minutes, cs, sec];
+    
+}
+
+
+- (IBAction)onTimeSliderChange:(id)sender {
+    NSLog(@"_Value__Changed__");
+    
+    float rate = self.player.duration / (END - START);
+    
+    float _time =  rate * self.ib_sliderPlayBack.value;
+    
+    self.player.currentPlaybackTime = _time;//totalVideoTime / END;
+    
+    float currentTime = self.player.currentPlaybackTime;
+    
+    self.ib_timerPlayBack.text = [self timeFormat:currentTime];
+}
+
+- (IBAction)closePlayBack:(id)sender {
+    
+    [self.player stop];
+    
+    [NSObject cancelPreviousPerformRequestsWithTarget:self
+                                             selector:@selector(watcher)
+                                               object:nil];
+    
+	[self.player.view removeFromSuperview];
+    
+	[self.ib_myOverlay removeFromSuperview];
+    
+    [self deletePlayerAndNotificationObservers];
+    
+    [self goBackToPlayList];
+    
+}
+
+- (IBAction)playVideo:(id)sender {
+//    [self playMovieStream:url];
+    NSLog(@"self.player.playbackState is %d", self.player.playbackState);
+    
+    if(self.player.playbackState == MPMoviePlaybackStatePlaying)
+        
+    {
+        
+        NSLog(@"Yes Playing");
+        
+        [self.ib_playPlayBack setImage:[UIImage imageVideoPlay] forState:UIControlStateNormal];
+        
+        [self.player pause];
+        
+    }
+    
+//    else if (self.player.playbackState  == MPMoviePlaybackStatePaused)
+//
+//        
+//    {
+//        
+//        NSLog(@"Not Playing");
+//        
+//        [self.player play];
+//        
+//        [self.ib_playPlayBack setImage:[UIImage imageVideoPause] forState:UIControlStateNormal];
+//        
+//        [self watcher];
+//        
+//    }
+//    else if (self.player.playbackState == MPMoviePlaybackStateStopped)
+//    {
+//        [self.ib_viewOverlayVideo setHidden:YES];
+//        
+//        [self playMovieStream:self.urlVideo];
+//    }
+    else
+    {
+        NSLog(@"Not Playing");
+        
+        [self.player play];
+        
+        [self.ib_playPlayBack setImage:[UIImage imageVideoPause] forState:UIControlStateNormal];
+        
+        [self watcher];
+    }
+    [self checkOrientation];
+}
+
+- (IBAction)minimizeVideo:(id)sender {
 }
 
 @end

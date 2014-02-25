@@ -11,6 +11,10 @@
 #import "PlaylistInfo.h"
 #import "PlaybackListener.h"
 #import "PlayerCallbackHandler.h"
+#import <MediaPlayer/MediaPlayer.h>
+#import "UIImage+Hubble.h"
+#import "UIFont+Hubble.h"
+#import "UIColor+Hubble.h"
 
 @interface PlaybackViewController : UIViewController<PlayerCallbackHandler>
 
@@ -25,7 +29,7 @@
     
     //NSMutableArray * clips;
     
-    NSString *urlVideo;
+    NSURL *urlVideo;
     NSString *camera_mac;
     
 }
@@ -33,11 +37,14 @@
 @property (retain, nonatomic) IBOutlet UIImageView *imageVideo;
 @property (retain, nonatomic) IBOutlet UIActivityIndicatorView *activityIndicator;
 
+@property (retain, nonatomic) IBOutlet UIView *ib_viewControlPlayer;
 @property (retain, nonatomic) IBOutlet UIButton *ib_closePlayBack;
 @property (retain, nonatomic) IBOutlet UIButton *ib_playPlayBack;
 @property (retain, nonatomic) IBOutlet UISlider *ib_sliderPlayBack;
 @property (retain, nonatomic) IBOutlet UILabel *ib_timerPlayBack;
 @property (retain, nonatomic) IBOutlet UIButton *ib_zoomingPlayBack;
+
+@property (retain, nonatomic) IBOutlet UIView *ib_myOverlay;
 
 //for delete, download and share
 @property (retain, nonatomic) IBOutlet UIView *ib_viewOverlayVideo;
@@ -51,15 +58,22 @@
 
 @property (nonatomic, retain) NSString *camera_mac;
 
-@property (nonatomic, retain) NSString *urlVideo;
+@property (nonatomic, retain) NSURL *urlVideo;
 @property (nonatomic) BOOL userWantToBack;
 @property (retain, nonatomic) NSMutableArray *clipsInEvent;
 
+
+//MPPlayer
+@property (strong,retain) MPMoviePlayerController *player;
 //- (void)stopStream;
 
+- (IBAction)onTimeSliderChange:(id)sender;
 
 - (IBAction)stopStream:(id) sender;
 - (IBAction)startStream:(id) sender;
 - (IBAction)closePlayBack:(id)sender;
+- (IBAction)playVideo:(id)sender;
+- (IBAction)minimizeVideo:(id)sender;
+
 
 @end

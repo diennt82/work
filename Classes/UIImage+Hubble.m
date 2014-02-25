@@ -286,4 +286,42 @@
         return [UIImage imageNamed:@"camera_action_pause_pressed@5"];
     }
 }
+
+//For playback
++ (UIImage *)imageVideoPlay
+{
+    return [UIImage imageNamed:@"video_play"];
+}
+
++ (UIImage *)imageVideoPause
+{
+    return [UIImage imageNamed:@"video_pause"];
+}
+
++ (UIImage *)imageVerticalVideoClose
+{
+    return [UIImage imageNamed:@"vertcal_video_close"];
+}
+
++ (UIImage *)imageVerticalVideoClosePressed
+{
+    return [UIImage imageNamed:@"vertcal_video_close_pressed"];
+}
++ (UIImage *)imageVideoFullScreenClose
+{
+    return [UIImage imageNamed:@"video_fullscreen_close"];
+}
++ (UIImage *)imageVideoFullScreenClosePressed
+{
+    return [UIImage imageNamed:@"video_fullscreen_close_pressed"];
+}
+
++ (UIImage *)imageVideoProgressBG
+{
+    return [UIImage imageNamed:@"video_progress_bg"];
+}
++ (UIImage *)imageVideoProgressGreen
+{
+    return [UIImage imageNamed:@"video_progress_green"];
+}
 @end

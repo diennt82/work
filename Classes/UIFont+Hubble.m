@@ -46,4 +46,8 @@
     return [UIFont applyHubbleFontName:PN_SEMIBOLD_FONT withSize:12];
 }
 
++ (UIFont *)regular11Font
+{
+    return [UIFont applyHubbleFontName:PN_REGULAR_FONT withSize:11];
+}
 @end

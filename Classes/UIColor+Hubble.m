@@ -58,4 +58,14 @@
 {
     return Rgb2UIColor(208, 209, 203);
 }
+
++ (UIColor *)textTimerPlayBackColor
+{
+    return Rgb2UIColor(217, 217, 217);
+}
+
++ (UIColor *)textForFinishPlayBackColor
+{
+    return Rgb2UIColor(255, 255, 255);
+}
 @end
