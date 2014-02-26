@@ -167,74 +167,21 @@ double _ticks = 0;
     [singleTap release];
     
     [self.imageViewStreamer setUserInteractionEnabled:YES];
-
-    /*
-     //create list image for display horizontal scroll view menu
-     1.Pan, Tilt & Zoom (bb_setting_icon.png)
-     2.Microphone (for two way audio) bb_setting_icon.png
-     3.Take a photo/Record Video ( bb_rec_icon_d.png )
-     4.Lullaby          bb_melody_off_icon.png
-     5.Camera List          bb_camera_slider_icon
-     6.Temperature display        temp_alert
-     */
     self.cameraModel = [self.selectedChannel.profile getModel];
+    [self initHorizeMenu: _cameraModel];
+
+    if (![_cameraModel isEqualToString:CP_MODEL_SHARED_CAM]) // CameraHD
+    {
+        self.timelineVC = [[TimelineViewController alloc] init];
+        [self.view addSubview:_timelineVC.view];
+        self.timelineVC.timelineVCDelegate = self;
+        self.timelineVC.camChannel = self.selectedChannel;
+        self.timelineVC.navVC = self.navigationController;
+        self.timelineVC.parentVC = self;
+        
+        [self.timelineVC loadEvents:self.selectedChannel];
+    }
     
-#if 1
-    if ([_cameraModel isEqualToString:CP_MODEL_SHARED_CAM])
-    {
-        self.itemImages = [NSMutableArray arrayWithObjects:@"video_action_pan.png", @"video_action_video.png", @"video_action_music.png", @"video_action_temp.png", nil];
-        self.itemSelectedImages = [NSMutableArray arrayWithObjects:@"video_action_pan_pressed.png", @"video_action_video_pressed.png", @"video_action_music_pressed.png", @"video_action_temp_pressed.png", nil];
-    }
-    else if ([_cameraModel isEqualToString:CP_MODEL_CONCURRENT])
-    {
-        self.timelineVC = [[TimelineViewController alloc] init];
-        [self.view addSubview:_timelineVC.view];
-        self.timelineVC.timelineVCDelegate = self;
-        self.timelineVC.camChannel = self.selectedChannel;
-        self.timelineVC.navVC = self.navigationController;
-        self.timelineVC.parentVC = self;
-        
-        [self.timelineVC loadEvents:self.selectedChannel];
-        
-        self.itemImages = [NSMutableArray arrayWithObjects:@"video_action_mic.png", @"video_action_video.png", @"video_action_music.png", @"video_action_temp.png", nil];
-        self.itemSelectedImages = [NSMutableArray arrayWithObjects:@"video_action_mic_pressed.png", @"video_action_video_pressed.png", @"video_action_music_pressed.png", @"video_action_temp_pressed.png", nil];
-    }
-    else //if ([_cameraModel isEqualToString:CP_MODEL_BLE])
-    {
-        self.timelineVC = [[TimelineViewController alloc] init];
-        [self.view addSubview:_timelineVC.view];
-        self.timelineVC.timelineVCDelegate = self;
-        self.timelineVC.camChannel = self.selectedChannel;
-        self.timelineVC.navVC = self.navigationController;
-        self.timelineVC.parentVC = self;
-        
-        [self.timelineVC loadEvents:self.selectedChannel];
-        
-        self.itemImages = [NSMutableArray arrayWithObjects:@"video_action_pan.png", @"video_action_mic.png", @"video_action_video.png", @"video_action_music.png", @"video_action_temp.png", nil];
-        self.itemSelectedImages = [NSMutableArray arrayWithObjects:@"video_action_pan_pressed.png", @"video_action_mic_pressed.png", @"video_action_video_pressed.png", @"video_action_music_pressed.png", @"video_action_temp_pressed.png", nil];
-    }
-#else
-    if (![self.selectedChannel.profile isSharedCam]) // CameraHD
-    {
-        self.timelineVC = [[TimelineViewController alloc] init];
-        [self.view addSubview:_timelineVC.view];
-        self.timelineVC.timelineVCDelegate = self;
-        self.timelineVC.camChannel = self.selectedChannel;
-        self.timelineVC.navVC = self.navigationController;
-        self.timelineVC.parentVC = self;
-        
-        [self.timelineVC loadEvents:self.selectedChannel];
-        
-        self.itemImages = [NSMutableArray arrayWithObjects:@"video_action_pan.png", @"video_action_mic.png", @"video_action_video.png", @"video_action_music.png", @"video_action_temp.png", nil];
-        self.itemSelectedImages = [NSMutableArray arrayWithObjects:@"video_action_pan_pressed.png", @"video_action_mic_pressed.png", @"video_action_video_pressed.png", @"video_action_music_pressed.png", @"video_action_temp_pressed.png", nil];
-    }
-    else
-    {
-        self.itemImages = [NSMutableArray arrayWithObjects:@"video_action_pan.png", @"video_action_video.png", @"video_action_music.png", @"video_action_temp.png", nil];
-        self.itemSelectedImages = [NSMutableArray arrayWithObjects:@"video_action_pan_pressed.png", @"video_action_video_pressed.png", @"video_action_music_pressed.png", @"video_action_temp_pressed.png", nil];
-    }
-#endif
-    [self.horizMenu reloadData:NO];
     NSLog(@"Model of Camera is: %d, STUN: %d", self.selectedChannel.profile.modelID, [[NSUserDefaults standardUserDefaults] boolForKey:@"enable_stun"]);
     
     _isDegreeFDisplay = [[NSUserDefaults standardUserDefaults] boolForKey:@"IS_FAHRENHEIT"];
@@ -4433,6 +4380,37 @@ double _ticks = 0;
 #pragma mark -
 #pragma mark HorizMenu Data Source
 
+- (void)initHorizeMenu:(NSString *)camerModel
+{
+    /*
+     //create list image for display horizontal scroll view menu
+     1.Pan, Tilt & Zoom (bb_setting_icon.png)
+     2.Microphone (for two way audio) bb_setting_icon.png
+     3.Take a photo/Record Video ( bb_rec_icon_d.png )
+     4.Lullaby          bb_melody_off_icon.png
+     5.Camera List          bb_camera_slider_icon
+     6.Temperature display        temp_alert
+     */
+
+    if ([_cameraModel isEqualToString:CP_MODEL_SHARED_CAM])
+    {
+        self.itemImages = [NSMutableArray arrayWithObjects:@"video_action_pan.png", @"video_action_video.png", @"video_action_music.png", @"video_action_temp.png", nil];
+        self.itemSelectedImages = [NSMutableArray arrayWithObjects:@"video_action_pan_pressed.png", @"video_action_video_pressed.png", @"video_action_music_pressed.png", @"video_action_temp_pressed.png", nil];
+    }
+    else if ([_cameraModel isEqualToString:CP_MODEL_CONCURRENT])
+    {
+        self.itemImages = [NSMutableArray arrayWithObjects:@"video_action_mic.png", @"video_action_video.png", @"video_action_music.png", @"video_action_temp.png", nil];
+        self.itemSelectedImages = [NSMutableArray arrayWithObjects:@"video_action_mic_pressed.png", @"video_action_video_pressed.png", @"video_action_music_pressed.png", @"video_action_temp_pressed.png", nil];
+    }
+    else //if ([_cameraModel isEqualToString:CP_MODEL_BLE])
+    {
+        self.itemImages = [NSMutableArray arrayWithObjects:@"video_action_pan.png", @"video_action_mic.png", @"video_action_video.png", @"video_action_music.png", @"video_action_temp.png", nil];
+        self.itemSelectedImages = [NSMutableArray arrayWithObjects:@"video_action_pan_pressed.png", @"video_action_mic_pressed.png", @"video_action_video_pressed.png", @"video_action_music_pressed.png", @"video_action_temp_pressed.png", nil];
+    }
+    
+    [self.horizMenu reloadData:NO];
+}
+
 - (UIImage *) selectedItemImageForMenu:(ScrollHorizontalMenu *) tabMenu withIndexItem:(NSInteger)index
 {
     NSString *imageSelected = [self.itemSelectedImages objectAtIndex:index];
@@ -4473,7 +4451,7 @@ double _ticks = 0;
     
     //show when user selecte one item inner control panel
     [self showControlMenu];
-#if 1
+    
     if ([_cameraModel isEqualToString:CP_MODEL_SHARED_CAM])
     {
         switch (index)
@@ -4555,67 +4533,7 @@ double _ticks = 0;
                 break;
         }
     }
-#else
-    if ([self.selectedChannel.profile isSharedCam] == TRUE)
-    {
-        // If this is SharedCam then the horimenu has 3 items. It is not match with define INDEX_...
-        switch (index)
-        {
-            case 0:
-                self.selectedItemMenu = INDEX_PAN_TILT;
-                break;
-                
-            case 1:
-                self.selectedItemMenu = INDEX_RECORDING;
-                break;
-                
-            case 2:
-                self.selectedItemMenu = INDEX_MELODY;
-                [self melodyTouchAction:nil];
-                break;
-                
-            case 3:
-                self.selectedItemMenu = INDEX_TEMP;
-                break;
-                
-            default:
-                break;
-        }
-    }
-    else
-    {
-        if (index == INDEX_PAN_TILT)
-        {
-            //implement Pan, Tilt & zoom here
-            _selectedItemMenu = INDEX_PAN_TILT;
-        }
-        else if (index == INDEX_MICRO)
-        {
-            // implement Microphone here
-            _selectedItemMenu = INDEX_MICRO;
-            [self recordingPressAction:nil];
-        }
-        else if (index == INDEX_RECORDING)
-        {
-            //implement take a photo/record video here
-            _selectedItemMenu = INDEX_RECORDING;
-        }
-        else if (index == INDEX_MELODY)
-        {
-            _selectedItemMenu = INDEX_MELODY;
-            [self melodyTouchAction:nil];
-        }
-        else if (index == INDEX_TEMP)
-        {
-            //implement display Temperature
-            _selectedItemMenu = INDEX_TEMP;
-        }
-        else
-        {
-            NSLog(@"Action out of bound");
-        }
-    }
-#endif
+    
     [self updateBottomView];
     [self applyFont];
     [self hideTimelineView];
