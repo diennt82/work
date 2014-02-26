@@ -11,7 +11,6 @@
 #import "PlaylistInfo.h"
 #import "PlaybackListener.h"
 #import "PlayerCallbackHandler.h"
-#import <MediaPlayer/MediaPlayer.h>
 #import "UIImage+Hubble.h"
 #import "UIFont+Hubble.h"
 #import "UIColor+Hubble.h"
@@ -24,16 +23,15 @@
     IBOutlet UIBarButtonItem *backBarBtnItem;
     IBOutlet UIView *progressView;
     
-    MediaPlayer *playbackStreamer;
+    MediaPlayer *_playbackStreamer;
     PlaybackListener * listener; 
     
     //NSMutableArray * clips;
     
-    NSURL *urlVideo;
+    NSString *urlVideo;
     NSString *camera_mac;
     
 }
-
 @property (retain, nonatomic) IBOutlet UIImageView *imageVideo;
 @property (retain, nonatomic) IBOutlet UIActivityIndicatorView *activityIndicator;
 
@@ -58,13 +56,11 @@
 
 @property (nonatomic, retain) NSString *camera_mac;
 
-@property (nonatomic, retain) NSURL *urlVideo;
+@property (nonatomic, retain) NSString *urlVideo;
 @property (nonatomic) BOOL userWantToBack;
 @property (retain, nonatomic) NSMutableArray *clipsInEvent;
 
 
-//MPPlayer
-@property (strong,retain) MPMoviePlayerController *player;
 //- (void)stopStream;
 
 - (IBAction)onTimeSliderChange:(id)sender;

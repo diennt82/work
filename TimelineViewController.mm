@@ -941,50 +941,7 @@
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     // Navigation logic may go here, for example:
     // Create the next view controller.
-    //xxxxxx
     if (indexPath.section == 1)
-    {
-        NSArray *clipsInEvent = [_clipsInEachEvent objectAtIndex:indexPath.row];
-        NSLog(@"*******************CLIP INFO in Event is %@", clipsInEvent);
-        if (![clipsInEvent isEqual:[NSNull null]])
-        {
-            NSString *urlFile = [[clipsInEvent objectAtIndex:0] objectForKey:@"file"];
-
-//        NSString *urlFile = @"http://devimages.apple.com/iphone/samples/bipbop/gear1/prog_index.m3u8";
-        
-
-            if (![urlFile isEqualToString:@""])
-            {
-                if (self.timelineVCDelegate != nil)
-                {
-                    [self.timelineVCDelegate stopStreamToPlayback];
-                    self.timelineVCDelegate = nil;
-                }
-                
-                PlaylistInfo *clipInfo = [[PlaylistInfo alloc] init];
-                clipInfo.urlFile = urlFile;
-                
-                PlaybackViewController *playbackViewController = [[PlaybackViewController alloc] init];
-                
-                playbackViewController.clip_info = clipInfo;
-                //            playbackViewController.clipsInEvent = [NSMutableArray arrayWithArray:clipsInEvent];
-                // Pass the selected object to the new view controller.
-                
-                NSLog(@"Push the view controller.- %@", self.navigationController);
-                
-                NSLog(@"Push the view controller of navVC.- %@", self.navVC);
-                
-                //                    [self.navVC pushViewController:playbackViewController animated:YES];
-                //present view controller to view overal screen
-                [self.navVC presentViewController:playbackViewController animated:YES completion:nil];
-                
-                [playbackViewController release];
-            }
-
-        }
-
-    }
-    else if (indexPath.section == 1)
     {
         if (_clipsInEachEvent != nil &&
             _clipsInEachEvent.count > 0)
@@ -994,7 +951,6 @@
             if (![clipsInEvent isEqual:[NSNull null]])
             {
                 NSString *urlFile = [[clipsInEvent objectAtIndex:0] objectForKey:@"file"];
-                
                 if (![urlFile isEqual:[NSNull null]] &&
                     ![urlFile isEqualToString:@""])
                 {
@@ -1017,7 +973,7 @@
                     
                     NSLog(@"Push the view controller of navVC.- %@", self.navVC);
                     
-//                    [self.navVC pushViewController:playbackViewController animated:YES];
+                    //                    [self.navVC pushViewController:playbackViewController animated:YES];
                     //present view controller to view overal screen
                     [self.navVC presentViewController:playbackViewController animated:YES completion:nil];
                     
