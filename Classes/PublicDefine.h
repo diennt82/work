@@ -64,8 +64,8 @@
 
 
 /* Movement motor duty cycle max*/
-#define IRABOT_DUTYCYCLE_MAX    1.0
-#define IRABOT_DUTYCYCLE_LR_MAX 1.0
+#define IRABOT_DUTYCYCLE_MAX    0.1
+#define IRABOT_DUTYCYCLE_LR_MAX 0.1
 
 
 /* Movement command http req timeout */
