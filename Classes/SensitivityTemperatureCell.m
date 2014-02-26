@@ -197,7 +197,14 @@
 
 - (void)reportTempLowValueChanged: (NSTimer *)timer
 {
-    [_sensitivityTempCellDelegate valueChangedTempLowValue:_tempValueLeft];
+    NSInteger tempLowValue = _tempValueLeft;
+    
+    if (_isFahrenheit)
+    {
+        tempLowValue = (tempLowValue - 32) * 5/9.f; // Convert to °C
+    }
+    
+    [_sensitivityTempCellDelegate valueChangedTempLowValue:tempLowValue];
 }
 
 - (IBAction)btnMinusRightTouchUpInsideAction:(id)sender
@@ -266,7 +273,14 @@
 
 - (void)reportTempHighValueChanged: (NSTimer *)timer
 {
-    [_sensitivityTempCellDelegate valueChangedTempHighValue:_tempValueRight];
+    NSInteger tempHiValue = _tempValueRight;
+    
+    if (_isFahrenheit)
+    {
+        tempHiValue = (tempHiValue - 32) * 5/9.f; // Convert to °C
+    }
+    
+    [_sensitivityTempCellDelegate valueChangedTempHighValue:tempHiValue];
 }
 
 - (IBAction)btnSwtichLeftTouchUpInsideAction:(UIButton *)sender

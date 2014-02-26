@@ -6,6 +6,14 @@
 //  Copyright (c) 2013 Smart Panda Ltd. All rights reserved.
 //
 
+#define SENSITIVITY_MOTION_LOW      10
+#define SENSITIVITY_MOTION_MEDIUM   50
+#define SENSITIVITY_MOTION_HI       90
+
+#define SENSITIVITY_SOUND_LOW       80
+#define SENSITIVITY_SOUND_MEDIUM    70
+#define SENSITIVITY_SOUND_HI        25
+
 #import "SettingsViewController.h"
 #import "GeneralCell.h"
 #import "SensitivityCell.h"
@@ -37,12 +45,13 @@
 @property (retain, nonatomic) IBOutlet UILabel *upperLabel;
 
 @property (retain, nonatomic) SensitivityInfo *sensitivityInfo;
-@property (nonatomic) BOOL isFirstTime;
 @property (nonatomic, retain) NSString *selectedReg;
 @property (nonatomic) BOOL isLoading;
 @property (nonatomic) BOOL isExistSensitivityData;
 @property (nonatomic, retain) NSString *sensitivityMessage;
 @property (nonatomic, assign) CamChannel *selectedCamChannel;
+@property (nonatomic, retain) BMS_JSON_Communication *jsonComm;
+@property (nonatomic, assign) NSString *apiKey;
 
 @property (nonatomic) CGFloat lowerValue;
 @property (nonatomic) CGFloat upperValue;
@@ -72,7 +81,6 @@
     // self.clearsSelectionOnViewWillAppear = NO;
  
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-    self.isFirstTime = TRUE;
     UIImage *hubbleBack = [UIImage imageNamed:@"Hubble_logo_back.png"];
     
     UIBarButtonItem *backBarBtn = [[UIBarButtonItem alloc] initWithImage:hubbleBack
@@ -90,8 +98,11 @@
         numOfRows[i] = 1;
     }
     
-    valueGeneralSettings[0] = [[NSUserDefaults standardUserDefaults] boolForKey:@"IS_12_HR"];
-    valueGeneralSettings[1] = [[NSUserDefaults standardUserDefaults] boolForKey:@"IS_FAHRENHEIT"];
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    
+    valueGeneralSettings[0] = [userDefaults boolForKey:@"IS_12_HR"];
+    valueGeneralSettings[1] = [userDefaults boolForKey:@"IS_FAHRENHEIT"];
+    self.apiKey             = [userDefaults stringForKey:@"PortalApiKey"];
     
     valueSettings[0] = 0;
     valueSettings[1] = 1;
@@ -103,11 +114,23 @@
     valueSwitchs[1] = TRUE;
     
     self.sensitivityInfo = [[SensitivityInfo alloc] init];
+    
+    self.sensitivityInfo.motionOn = TRUE;
+    self.sensitivityInfo.motionValue = 0;
+    
+    self.sensitivityInfo.soundOn = FALSE;
+    self.sensitivityInfo.soundValue = 1;
+    
     self.sensitivityInfo.tempIsFahrenheit = FALSE;
     self.sensitivityInfo.tempLowValue = 15.f;
     self.sensitivityInfo.tempLowOn = YES;
     self.sensitivityInfo.tempHighValue = 25.f;
     self.sensitivityInfo.tempHighOn = NO;
+    
+    self.jsonComm = [[BMS_JSON_Communication alloc] initWithObject:self
+                                                          Selector:nil
+                                                      FailSelector:nil
+                                                         ServerErr:nil];
     
     self.lowerValue = 07.00;
     self.upperValue = 19.99;
@@ -152,6 +175,8 @@
     
     MenuViewController *menuVC = (MenuViewController *)self.parentVC;
     
+    BOOL shouldReloadData = FALSE;
+    
     if (menuVC.cameras != nil &&
         menuVC.cameras.count > 0)
     {
@@ -159,6 +184,13 @@
         {
             if ([ch.profile.registrationID isEqualToString:[[NSUserDefaults standardUserDefaults] stringForKey:@"REG_ID"]])
             {
+                if (![_selectedCamChannel.profile.registrationID isEqualToString:ch.profile.registrationID])
+                {
+                    self.isExistSensitivityData = FALSE;
+                    numOfRows[1] = 1;
+                    shouldReloadData = TRUE;
+                }
+                
                 self.selectedCamChannel = ch;
                 break;
             }
@@ -170,6 +202,11 @@
     }
     
     valueGeneralSettings[1] = [[NSUserDefaults standardUserDefaults] boolForKey:@"IS_FAHRENHEIT"];
+    
+    if (shouldReloadData)
+    {
+        [self.tableView reloadData];
+    }
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -292,54 +329,94 @@
 
 - (void)reportSwitchValue:(BOOL)value andRowIndex:(NSInteger)rowIndex
 {
-    valueSwitchs[rowIndex] = value;
+    //valueSwitchs[rowIndex] = value;
     
-    NSString *cmd = @"";
+    NSString *cmd = @"action=command&command=";
     
     if (rowIndex == 0) // Motion
     {
         if (value)
         {
-            cmd = @"set_motion_area&grid=1x1&zone=00"; // Enable
+            cmd = [cmd stringByAppendingString:@"set_motion_area&grid=1x1&zone=00"]; // Enable
         }
         else
         {
-            cmd = @"set_motion_area&grid=1x1&zone="; // Disable
+            cmd = [cmd stringByAppendingString:@"set_motion_area&grid=1x1&zone="]; // Disable
         }
+        
+        self.sensitivityInfo.motionOn = value;
     }
     else // Sound
     {
         if (value)
         {
-            cmd = @"action=command&command=vox_enable"; // Enable
+            cmd = [cmd stringByAppendingString:@"vox_enable"]; // Enable
         }
         else
         {
-            cmd = @"action=command&command=vox_disable"; // Disable
+            cmd = [cmd stringByAppendingString:@"vox_disable"]; // Disable
         }
+        
+        self.sensitivityInfo.soundOn = value;
     }
     
-    self.selectedReg = [[NSUserDefaults standardUserDefaults] stringForKey:@"REG"];
-    NSString *apiKey = [[NSUserDefaults standardUserDefaults] stringForKey:@"PortalApiKey"];
-    
-    BMS_JSON_Communication *jsonComm = [[BMS_JSON_Communication alloc] initWithObject:self
-                                                                             Selector:nil
-                                                                         FailSelector:nil
-                                                                            ServerErr:nil];
-    NSDictionary *responseDict = [jsonComm sendCommandBlockedWithRegistrationId:_selectedReg
-                                                                     andCommand:@"action=command&command=device_setting"
-                                                                      andApiKey:apiKey];
-    [jsonComm release];
+    [self performSelectorInBackground:@selector(sendToServerTheCommand:) withObject:cmd];
 }
 
 - (void)reportChangedSettingsValue:(NSInteger)value atRow:(NSInteger)rowIndx
 {
-    valueSettings[rowIndx] = value;
+    //valueSettings[rowIndx] = value;
+    NSString *cmd = @"action=command&command=";
+    
+    if (rowIndx == 0) // Motion
+    {
+        NSInteger motionValue = SENSITIVITY_MOTION_LOW;
+        
+        if (value == 0)
+        {
+            motionValue = SENSITIVITY_MOTION_LOW;
+        }
+        else if(value == 1)
+        {
+            motionValue = SENSITIVITY_MOTION_MEDIUM;
+        }
+        else // value = 2
+        {
+            motionValue = SENSITIVITY_MOTION_HI;
+        }
+        
+        cmd = [cmd stringByAppendingFormat:@"set_motion_sensitivity&setup=%d", motionValue];
+        
+        self.sensitivityInfo.motionValue = value;
+    }
+    else // Sound
+    {
+        NSInteger soundValue = SENSITIVITY_SOUND_LOW;
+        
+        if (value == 0)
+        {
+            soundValue = SENSITIVITY_SOUND_LOW;
+        }
+        else if(value == 1)
+        {
+            soundValue = SENSITIVITY_SOUND_MEDIUM;
+        }
+        else // value = 2
+        {
+            soundValue = SENSITIVITY_SOUND_HI;
+        }
+        
+        cmd = [cmd stringByAppendingFormat:@"vox_set_threshold&value=%d", soundValue];
+        
+        self.sensitivityInfo.soundOn = value;
+    }
+    
+    [self performSelectorInBackground:@selector(sendToServerTheCommand:) withObject:cmd];
 }
 
 #pragma  mark - Sensitivity temperature cell delegate
 
-- (void)valueChangedTypeTemperaure:(BOOL)isFahrenheit
+- (void)valueChangedTypeTemperaure:(BOOL)isFahrenheit // NOT need to receive
 {
     self.sensitivityInfo.tempIsFahrenheit = isFahrenheit;
 }
@@ -347,23 +424,36 @@
 - (void)valueChangedTempLowValue:(NSInteger)tempValue
 {
     self.sensitivityInfo.tempLowValue = tempValue;
+    NSString *cmd = [NSString stringWithFormat:@"action=command&command=set_temp_lo_threshold&value=%d", tempValue];
+    
+    [self performSelectorInBackground:@selector(sendToServerTheCommand:) withObject:cmd];
+    
     NSLog(@"%d", tempValue);
 }
 
 - (void)valueChangedTempLowOn:(BOOL)isOn
 {
     self.sensitivityInfo.tempLowOn = isOn;
+    NSString *cmd = [NSString stringWithFormat:@"action=command&command=set_temp_lo_enable&value=%d", isOn];
+    
+    [self performSelectorInBackground:@selector(sendToServerTheCommand:) withObject:cmd];
 }
 
 - (void)valueChangedTempHighValue:(NSInteger)tempValue
 {
     self.sensitivityInfo.tempHighValue = tempValue;
+    NSString *cmd = [NSString stringWithFormat:@"action=command&command=set_temp_hi_threshold&value=%d", tempValue];
+    
+    [self performSelectorInBackground:@selector(sendToServerTheCommand:) withObject:cmd];
     NSLog(@"%d", tempValue);
 }
 
 - (void)valueChangedTempHighOn:(BOOL)isOn
 {
     self.sensitivityInfo.tempHighOn = isOn;
+    NSString *cmd = [NSString stringWithFormat:@"action=command&command=set_temp_hi_enable&value=%d", isOn];
+    
+    [self performSelectorInBackground:@selector(sendToServerTheCommand:) withObject:cmd];
 }
 
 #pragma mark - Scheduler Delegate
@@ -404,6 +494,33 @@
     [self.schedulingVC.collectionViewMap reloadData];
 }
 
+#pragma mark - BMS_JSON Comm
+
+- (void)sendToServerTheCommand:(NSString *) command
+{
+    if (_jsonComm == nil)
+    {
+        self.jsonComm = [[BMS_JSON_Communication alloc] initWithObject:self
+                                                              Selector:nil
+                                                          FailSelector:nil
+                                                             ServerErr:nil];
+    }
+    
+    NSDictionary *responseDict = [_jsonComm sendCommandBlockedWithRegistrationId:self.selectedCamChannel.profile.registrationID
+                                                                      andCommand:command
+                                                                       andApiKey:_apiKey];
+    //NSLog(@"SettingsVC - sendCommand: %@, response: %@", command, responseDict);
+    
+    if (responseDict)
+    {
+        NSLog(@"SettingsVC - sendCommand successfully: %@, status: %@", command, [responseDict objectForKey:@"status"]);
+    }
+    else
+    {
+        NSLog(@"SettingsVC - sendCommand failed responseDict = nil: %@", command);
+    }
+}
+
 #pragma mark - Table view data source
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
@@ -434,6 +551,11 @@
     }
     else if (indexPath.section == 1)
     {
+        if (numOfRows[indexPath.section] == 2 && indexPath.row == 1)
+        {
+            return 55;
+        }
+        
         if (indexPath.row == 1 ||
             indexPath.row == 2)
         {
@@ -465,9 +587,17 @@
 
 - (BOOL)tableView:(UITableView *)tableView shouldHighlightRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    if (indexPath.section == 1 &&
+        numOfRows[indexPath.section] == 2 &&
+        indexPath.row == 1)
+    {
+        return YES;
+    }
+    
     if (indexPath.row > 0 ||
         (indexPath.row == 0 && indexPath.section > 0 && (self.selectedCamChannel == nil ||
-                                                         [self.selectedCamChannel.profile isSharedCam])))
+                                                         [self.selectedCamChannel.profile isSharedCam] ||
+                                                         [self.selectedCamChannel.profile isNotAvailable])))
     {
         return NO;
     }
@@ -643,6 +773,10 @@
                             [cell.imageView addSubview:spinner];
                             [spinner startAnimating];
                         }
+                        else
+                        {
+                            cell.imageView.image = [UIImage imageNamed:@"refresh"];
+                        }
                         
                         return cell;
                     }
@@ -665,16 +799,18 @@
                         
                         cell.sensitivityCellDelegate = self;
                         cell.rowIndex = indexPath.row - 1;
-                        cell.settingsValue = valueSettings[indexPath.row - 1];
-                        cell.switchValue = valueSwitchs[indexPath.row - 1];
                         
                         if (indexPath.row == 1)
                         {
                             cell.nameLabel.text = @"Motion";
+                            cell.switchValue   = _sensitivityInfo.motionOn;
+                            cell.settingsValue = _sensitivityInfo.motionValue;
                         }
                         else
                         {
                             cell.nameLabel.text = @"Sound";
+                            cell.switchValue   = _sensitivityInfo.soundOn;
+                            cell.settingsValue = _sensitivityInfo.soundValue;
                         }
                         
                         return cell;
@@ -698,11 +834,11 @@
                         }
                     }
                     
-                    cell.isFahrenheit = _sensitivityInfo.tempIsFahrenheit;
-                    cell.isSwitchOnLeft = _sensitivityInfo.tempLowOn;
+                    cell.isFahrenheit    = _sensitivityInfo.tempIsFahrenheit;
+                    cell.isSwitchOnLeft  = _sensitivityInfo.tempLowOn;
                     cell.isSwitchOnRight = _sensitivityInfo.tempHighOn;
-                    cell.tempValueLeft = _sensitivityInfo.tempLowValue;
-                    cell.tempValueRight = _sensitivityInfo.tempHighValue;
+                    cell.tempValueLeft   = _sensitivityInfo.tempLowValue;
+                    cell.tempValueRight  = _sensitivityInfo.tempHighValue;
                     cell.sensitivityTempCellDelegate = self;
                     
                     return cell;
@@ -927,13 +1063,13 @@
             {
                 if (numOfRows[indexPath.section] == 1)
                 {
-//                    if (!_isExistSensitivityData)
-//                    {
-//                        numOfRows[indexPath.section] = 2;
-//                        self.sensitivityMessage = @"Loading...";
-//                        self.isLoading = TRUE;
-//                    }
-//                    else
+                    if (!_isExistSensitivityData)
+                    {
+                        numOfRows[indexPath.section] = 2;
+                        self.sensitivityMessage = @"Loading...";
+                        self.isLoading = TRUE;
+                    }
+                    else
                     {
                         numOfRows[indexPath.section] = 4;
                     }
@@ -951,7 +1087,14 @@
                     }
                 }
             }
-            
+            else if (indexPath.row == 1)
+            {
+                if (numOfRows[indexPath.section] == 2 && _isLoading == FALSE)
+                {
+                    self.sensitivityMessage = @"Loading...";
+                    self.isLoading = TRUE;
+                }
+            }
             
            // [tableView reloadSections:[NSIndexSet indexSetWithIndex:indexPath.section] withRowAnimation:UITableViewRowAnimationAutomatic];
         }
@@ -1032,7 +1175,9 @@
     
     [tableView reloadData];
     
-    if (indexPath.section == 1 && indexPath.row == 0 && _isLoading == TRUE)
+    if (indexPath.section == 1 &&
+        (indexPath.row == 0 || indexPath.row == 1) &&
+        _isLoading == TRUE)
     {
         [self performSelectorInBackground:@selector(getSensitivityInfoFromServer:) withObject:indexPath];
     }
@@ -1040,17 +1185,20 @@
 
 - (void)getSensitivityInfoFromServer: (NSIndexPath *)indexPath
 {
-    self.selectedReg = [[NSUserDefaults standardUserDefaults] stringForKey:@"REG"];
-    NSString *apiKey = [[NSUserDefaults standardUserDefaults] stringForKey:@"PortalApiKey"];
+    //self.selectedReg = [[NSUserDefaults standardUserDefaults] stringForKey:@"REG"];
+    //NSString *apiKey = [[NSUserDefaults standardUserDefaults] stringForKey:@"PortalApiKey"];
     
-    BMS_JSON_Communication *jsonComm = [[BMS_JSON_Communication alloc] initWithObject:self
-                                                                             Selector:nil
-                                                                         FailSelector:nil
-                                                                            ServerErr:nil];
-    NSDictionary *responseDict = [jsonComm sendCommandBlockedWithRegistrationId:_selectedReg
-                                                                     andCommand:@"action=command&command=device_setting"
-                                                                      andApiKey:apiKey];
-    [jsonComm release];
+    if (_jsonComm == nil)
+    {
+        self.jsonComm = [[BMS_JSON_Communication alloc] initWithObject:self
+                                                              Selector:nil
+                                                          FailSelector:nil
+                                                             ServerErr:nil];
+    }
+    
+    NSDictionary *responseDict = [_jsonComm sendCommandBlockedWithRegistrationId:self.selectedCamChannel.profile.registrationID
+                                                                      andCommand:@"action=command&command=device_setting"
+                                                                       andApiKey:_apiKey];
     
     self.isLoading = FALSE;
     
@@ -1064,6 +1212,7 @@
             
             if ([body hasPrefix:@"error"])
             {
+                numOfRows[indexPath.section] = 2;
                 self.sensitivityMessage = body;
             }
             else
@@ -1073,20 +1222,48 @@
                 if (range.location != NSNotFound)
                 {
                     NSString *settingsValue = [body substringFromIndex:range.location + 2];
-                    NSArray *settingsArray = [settingsValue componentsSeparatedByString:@","];
+                    NSMutableArray *settingsArray = (NSMutableArray *)[settingsValue componentsSeparatedByString:@","];
                     
-                    for (NSString *obj in settingsArray)
+                    for (int i = 0; i < settingsArray.count; ++i)
                     {
-                        obj = [obj substringFromIndex:3];
+                        settingsArray[i] = [settingsArray[i] substringFromIndex:3];
                     }
                     
-                    self.sensitivityInfo.motionOn = [settingsArray[0] boolValue];
-                    self.sensitivityInfo.motionValue = [settingsArray[1] integerValue];
-                    self.sensitivityInfo.soundOn = [settingsArray[2] boolValue];
-                    self.sensitivityInfo.soundValue = [settingsArray[3] integerValue];
-                    self.sensitivityInfo.tempLowOn = [settingsArray[5] boolValue];
-                    self.sensitivityInfo.tempHighOn = [settingsArray[4] boolValue];
-                    self.sensitivityInfo.tempLowValue = [settingsArray[7] integerValue];
+                    self.sensitivityInfo.motionOn      = [settingsArray[0] integerValue];
+                    NSLog(@"%@, %d", settingsArray[0], [settingsArray[0] integerValue]);
+                    
+                    if ([settingsArray[1] integerValue] <= 10)
+                    {
+                        self.sensitivityInfo.motionValue = 0;
+                    }
+                    else if (10 < [settingsArray[1] integerValue] && [settingsArray[1] integerValue] <= 50)
+                    {
+                        self.sensitivityInfo.motionValue = 1;
+                    }
+                    else
+                    {
+                        self.sensitivityInfo.motionValue = 2;
+                    }
+                    
+                    self.sensitivityInfo.soundOn       = [settingsArray[2] boolValue];
+                    
+                    if (80 <= [settingsArray[3] integerValue])
+                    {
+                        self.sensitivityInfo.soundValue = 0;
+                    }
+                    else if (70 <= [settingsArray[3] integerValue] && [settingsArray[3] integerValue] < 80)
+                    {
+                        self.sensitivityInfo.soundValue = 1;
+                    }
+                    else
+                    {
+                        self.sensitivityInfo.soundValue = 2;
+                    }
+                    
+                    self.sensitivityInfo.tempLowOn     = [settingsArray[5] boolValue];
+                    self.sensitivityInfo.tempHighOn    = [settingsArray[4] boolValue];
+                    
+                    self.sensitivityInfo.tempLowValue  = [settingsArray[7] integerValue];
                     self.sensitivityInfo.tempHighValue = [settingsArray[6] integerValue];
                     
                     numOfRows[indexPath.section] = 4;
@@ -1095,27 +1272,38 @@
                 else
                 {
                     numOfRows[indexPath.section] = 2;
-                    self.sensitivityMessage = @"Load Sensitivity Settings error!";
+                    self.sensitivityMessage = @"Error -Load Sensitivity Settings!";
                 }
             }
         }
         else
         {
             numOfRows[indexPath.section] = 2;
-            self.sensitivityMessage = @"Load Sensitivity Settings error!";
+            self.sensitivityMessage = @"Error -Load Sensitivity Settings error!";
         }
     }
     else
     {
         numOfRows[indexPath.section] = 2;
-        self.sensitivityMessage = @"Load Sensitivity Settings error!";
+        self.sensitivityMessage = @"Error -Load Sensitivity Settings error!";
     }
     
-    [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:indexPath.section] withRowAnimation:UITableViewRowAnimationAutomatic];
+    if (_isExistSensitivityData)
+    {
+        [self.tableView reloadData];
+    }
+    else
+    {
+        [self.tableView beginUpdates];
+        [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:indexPath.section] withRowAnimation:UITableViewRowAnimationAutomatic];
+        //[self.tableView reloadData];
+        [self.tableView endUpdates];
+    }
 }
 
 - (void)dealloc {
     [_valueSwitchInCell release];
+    [_jsonComm release];
     [super dealloc];
 }
 @end

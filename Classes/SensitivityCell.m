@@ -108,7 +108,6 @@
 
 - (void)dealloc {
     [_nameLabel release];
-    [_valueSlider release];
     [_valueSwitch release];
     [_imageViewCircleWhite release];
     [_btnSwitch release];
