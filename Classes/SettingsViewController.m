@@ -293,6 +293,43 @@
 - (void)reportSwitchValue:(BOOL)value andRowIndex:(NSInteger)rowIndex
 {
     valueSwitchs[rowIndex] = value;
+    
+    NSString *cmd = @"";
+    
+    if (rowIndex == 0) // Motion
+    {
+        if (value)
+        {
+            cmd = @"set_motion_area&grid=1x1&zone=00"; // Enable
+        }
+        else
+        {
+            cmd = @"set_motion_area&grid=1x1&zone="; // Disable
+        }
+    }
+    else // Sound
+    {
+        if (value)
+        {
+            cmd = @"action=command&command=vox_enable"; // Enable
+        }
+        else
+        {
+            cmd = @"action=command&command=vox_disable"; // Disable
+        }
+    }
+    
+    self.selectedReg = [[NSUserDefaults standardUserDefaults] stringForKey:@"REG"];
+    NSString *apiKey = [[NSUserDefaults standardUserDefaults] stringForKey:@"PortalApiKey"];
+    
+    BMS_JSON_Communication *jsonComm = [[BMS_JSON_Communication alloc] initWithObject:self
+                                                                             Selector:nil
+                                                                         FailSelector:nil
+                                                                            ServerErr:nil];
+    NSDictionary *responseDict = [jsonComm sendCommandBlockedWithRegistrationId:_selectedReg
+                                                                     andCommand:@"action=command&command=device_setting"
+                                                                      andApiKey:apiKey];
+    [jsonComm release];
 }
 
 - (void)reportChangedSettingsValue:(NSInteger)value atRow:(NSInteger)rowIndx
@@ -467,7 +504,8 @@
     {
         cell.backgroundColor = [UIColor colorWithRed:43/255.f green:50/255.f blue:56/255.f alpha:1];
         
-        if (indexPath.section == 1)
+        if (indexPath.section == 1 &&
+            numOfRows[indexPath.section] == 4)
         {
             UIView *lineView = [[[UIView alloc] initWithFrame:CGRectMake(0, cell.contentView.frame.size.height - 0.5f, cell.contentView.frame.size.width, 0.5f)] autorelease];
             
@@ -576,7 +614,7 @@
                 case 1:
                 case 2:
                 {
-                    if (_isLoading || numOfRows[indexPath.section] == 2)
+                    if (numOfRows[indexPath.section] == 2)
                     {
                         static NSString *CellIdentifier = @"Cell";
                         UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
@@ -587,21 +625,24 @@
                         // Configure the cell...
                         cell.textLabel.text = _sensitivityMessage;
                         
-                        UIActivityIndicatorView *spinner = [[UIActivityIndicatorView alloc]
-                                                            initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
-                        
-                        // Spacer is a 1x1 transparent png
-                        UIImage *spacer = [UIImage imageNamed:@"spacer"];
-                        
-                        UIGraphicsBeginImageContext(spinner.frame.size);
-                        
-                        [spacer drawInRect:CGRectMake(0, 0, spinner.frame.size.width, spinner.frame.size.height)];
-                        UIImage* resizedSpacer = UIGraphicsGetImageFromCurrentImageContext();
-                        
-                        UIGraphicsEndImageContext();
-                        cell.imageView.image = resizedSpacer;
-                        [cell.imageView addSubview:spinner];
-                        [spinner startAnimating];
+                        if (_isLoading)
+                        {
+                            UIActivityIndicatorView *spinner = [[UIActivityIndicatorView alloc]
+                                                                initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+                            
+                            // Spacer is a 1x1 transparent png
+                            UIImage *spacer = [UIImage imageNamed:@"spacer"];
+                            
+                            UIGraphicsBeginImageContext(spinner.frame.size);
+                            
+                            [spacer drawInRect:CGRectMake(0, 0, spinner.frame.size.width, spinner.frame.size.height)];
+                            UIImage* resizedSpacer = UIGraphicsGetImageFromCurrentImageContext();
+                            
+                            UIGraphicsEndImageContext();
+                            cell.imageView.image = resizedSpacer;
+                            [cell.imageView addSubview:spinner];
+                            [spinner startAnimating];
+                        }
                         
                         return cell;
                     }
@@ -886,12 +927,13 @@
             {
                 if (numOfRows[indexPath.section] == 1)
                 {
-                    if (!_isExistSensitivityData)
-                    {
-                        numOfRows[indexPath.section] = 2;
-                        self.isLoading = TRUE;
-                    }
-                    else
+//                    if (!_isExistSensitivityData)
+//                    {
+//                        numOfRows[indexPath.section] = 2;
+//                        self.sensitivityMessage = @"Loading...";
+//                        self.isLoading = TRUE;
+//                    }
+//                    else
                     {
                         numOfRows[indexPath.section] = 4;
                     }
@@ -992,11 +1034,11 @@
     
     if (indexPath.section == 1 && indexPath.row == 0 && _isLoading == TRUE)
     {
-         [self getSensitivityInfoFromServer: indexPath.section];
+        [self performSelectorInBackground:@selector(getSensitivityInfoFromServer:) withObject:indexPath];
     }
 }
 
-- (void)getSensitivityInfoFromServer: (NSInteger) section
+- (void)getSensitivityInfoFromServer: (NSIndexPath *)indexPath
 {
     self.selectedReg = [[NSUserDefaults standardUserDefaults] stringForKey:@"REG"];
     NSString *apiKey = [[NSUserDefaults standardUserDefaults] stringForKey:@"PortalApiKey"];
@@ -1047,24 +1089,29 @@
                     self.sensitivityInfo.tempLowValue = [settingsArray[7] integerValue];
                     self.sensitivityInfo.tempHighValue = [settingsArray[6] integerValue];
                     
-                    numOfRows[section] = 4;
+                    numOfRows[indexPath.section] = 4;
                     self.isExistSensitivityData = TRUE;
+                }
+                else
+                {
+                    numOfRows[indexPath.section] = 2;
+                    self.sensitivityMessage = @"Load Sensitivity Settings error!";
                 }
             }
         }
         else
         {
-            numOfRows[section] = 2;
+            numOfRows[indexPath.section] = 2;
             self.sensitivityMessage = @"Load Sensitivity Settings error!";
         }
     }
     else
     {
-        numOfRows[section] = 2;
+        numOfRows[indexPath.section] = 2;
         self.sensitivityMessage = @"Load Sensitivity Settings error!";
     }
     
-    [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:section] withRowAnimation:UITableViewRowAnimationAutomatic];
+    [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:indexPath.section] withRowAnimation:UITableViewRowAnimationAutomatic];
 }
 
 - (void)dealloc {
