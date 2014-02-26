@@ -75,6 +75,7 @@
 @property (nonatomic, retain) NSMutableArray *bonjourList;
 @property (nonatomic) BOOL scanAgain;
 @property (nonatomic) BOOL isFahrenheit;
+@property (nonatomic, retain) NSString *cameraModel;
 
 - (void)centerScrollViewContents;
 - (void)scrollViewDoubleTapped:(UITapGestureRecognizer*)recognizer;
@@ -176,7 +177,43 @@ double _ticks = 0;
      5.Camera List          bb_camera_slider_icon
      6.Temperature display        temp_alert
      */
+    self.cameraModel = [self.selectedChannel.profile getModel];
     
+#if 1
+    if ([_cameraModel isEqualToString:CP_MODEL_SHARED_CAM])
+    {
+        self.itemImages = [NSMutableArray arrayWithObjects:@"video_action_pan.png", @"video_action_video.png", @"video_action_music.png", @"video_action_temp.png", nil];
+        self.itemSelectedImages = [NSMutableArray arrayWithObjects:@"video_action_pan_pressed.png", @"video_action_video_pressed.png", @"video_action_music_pressed.png", @"video_action_temp_pressed.png", nil];
+    }
+    else if ([_cameraModel isEqualToString:CP_MODEL_CONCURRENT])
+    {
+        self.timelineVC = [[TimelineViewController alloc] init];
+        [self.view addSubview:_timelineVC.view];
+        self.timelineVC.timelineVCDelegate = self;
+        self.timelineVC.camChannel = self.selectedChannel;
+        self.timelineVC.navVC = self.navigationController;
+        self.timelineVC.parentVC = self;
+        
+        [self.timelineVC loadEvents:self.selectedChannel];
+        
+        self.itemImages = [NSMutableArray arrayWithObjects:@"video_action_mic.png", @"video_action_video.png", @"video_action_music.png", @"video_action_temp.png", nil];
+        self.itemSelectedImages = [NSMutableArray arrayWithObjects:@"video_action_mic_pressed.png", @"video_action_video_pressed.png", @"video_action_music_pressed.png", @"video_action_temp_pressed.png", nil];
+    }
+    else //if ([_cameraModel isEqualToString:CP_MODEL_BLE])
+    {
+        self.timelineVC = [[TimelineViewController alloc] init];
+        [self.view addSubview:_timelineVC.view];
+        self.timelineVC.timelineVCDelegate = self;
+        self.timelineVC.camChannel = self.selectedChannel;
+        self.timelineVC.navVC = self.navigationController;
+        self.timelineVC.parentVC = self;
+        
+        [self.timelineVC loadEvents:self.selectedChannel];
+        
+        self.itemImages = [NSMutableArray arrayWithObjects:@"video_action_pan.png", @"video_action_mic.png", @"video_action_video.png", @"video_action_music.png", @"video_action_temp.png", nil];
+        self.itemSelectedImages = [NSMutableArray arrayWithObjects:@"video_action_pan_pressed.png", @"video_action_mic_pressed.png", @"video_action_video_pressed.png", @"video_action_music_pressed.png", @"video_action_temp_pressed.png", nil];
+    }
+#else
     if (![self.selectedChannel.profile isSharedCam]) // CameraHD
     {
         self.timelineVC = [[TimelineViewController alloc] init];
@@ -196,7 +233,7 @@ double _ticks = 0;
         self.itemImages = [NSMutableArray arrayWithObjects:@"video_action_pan.png", @"video_action_video.png", @"video_action_music.png", @"video_action_temp.png", nil];
         self.itemSelectedImages = [NSMutableArray arrayWithObjects:@"video_action_pan_pressed.png", @"video_action_video_pressed.png", @"video_action_music_pressed.png", @"video_action_temp_pressed.png", nil];
     }
-    
+#endif
     [self.horizMenu reloadData:NO];
     NSLog(@"Model of Camera is: %d, STUN: %d", self.selectedChannel.profile.modelID, [[NSUserDefaults standardUserDefaults] boolForKey:@"enable_stun"]);
     
@@ -4436,7 +4473,89 @@ double _ticks = 0;
     
     //show when user selecte one item inner control panel
     [self showControlMenu];
-    
+#if 1
+    if ([_cameraModel isEqualToString:CP_MODEL_SHARED_CAM])
+    {
+        switch (index)
+        {
+            case 0:
+                self.selectedItemMenu = INDEX_PAN_TILT;
+                break;
+                
+            case 1:
+                self.selectedItemMenu = INDEX_RECORDING;
+                break;
+                
+            case 2:
+                self.selectedItemMenu = INDEX_MELODY;
+                [self melodyTouchAction:nil];
+                break;
+                
+            case 3:
+                self.selectedItemMenu = INDEX_TEMP;
+                break;
+                
+            default:
+                break;
+        }
+    }
+    else if ([_cameraModel isEqualToString:CP_MODEL_CONCURRENT])
+    {
+        switch (index)
+        {
+            case 0:
+                self.selectedItemMenu = INDEX_MICRO;
+                break;
+                
+            case 1:
+                self.selectedItemMenu = INDEX_RECORDING;
+                break;
+                
+            case 2:
+                self.selectedItemMenu = INDEX_MELODY;
+                [self melodyTouchAction:nil];
+                break;
+                
+            case 3:
+                self.selectedItemMenu = INDEX_TEMP;
+                break;
+                
+            default:
+                break;
+        }
+    }
+    else// if ([_cameraModel isEqualToString:CP_MODEL_BLE])
+    {
+        switch (index)
+        {
+            case INDEX_PAN_TILT:
+                self.selectedItemMenu = INDEX_PAN_TILT;
+                break;
+                
+            case INDEX_MICRO:
+                self.selectedItemMenu = INDEX_MICRO;
+                 [self recordingPressAction:nil];
+                break;
+                
+            case INDEX_RECORDING:
+                self.selectedItemMenu = INDEX_RECORDING;
+                break;
+                
+            case INDEX_MELODY:
+                self.selectedItemMenu = INDEX_MELODY;
+                [self melodyTouchAction:nil];
+                break;
+                
+            case INDEX_TEMP:
+                self.selectedItemMenu = INDEX_TEMP;
+                break;
+                
+            default:
+                NSLog(@"Action out of bound");
+                break;
+        }
+    }
+#else
     if ([self.selectedChannel.profile isSharedCam] == TRUE)
     {
         // If this is SharedCam then the horimenu has 3 items. It is not match with define INDEX_...
@@ -4496,7 +4615,7 @@ double _ticks = 0;
             NSLog(@"Action out of bound");
         }
     }
-    
+#endif
     [self updateBottomView];
     [self applyFont];
     [self hideTimelineView];
