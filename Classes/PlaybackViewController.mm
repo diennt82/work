@@ -32,7 +32,7 @@
 
 @synthesize  imageVideo, urlVideo;//, topToolbar,backBarBtnItem, progressView;
 
-
+@synthesize clips;
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
@@ -56,11 +56,14 @@
 {
     listener = new PlaybackListener(self);
     self.urlVideo = clip_info.urlFile;
-//    self.urlVideo = @"http://nxcomm:2013nxcomm@nxcomm-office.no-ip.info/release/events/cam_clip.flv"; //xxx
-    self.urlVideo = @"http://movies.apple.com/media/us/mac/getamac/2009/apple-mvp-biohazard_suit-us-20090419_480x272.mov";
+    //self.urlVideo = @"http://nxcomm:2013nxcomm@nxcomm-office.no-ip.info/release/events/cam_clip.flv";
+    
 //    self.urlVideo = @"http://nxcomm:2013nxcomm@nxcomm-office.no-ip.info/app_release/sub_clips/48022A2CAC31_04_20130917065256730_00001.flv";
     NSLog(@"self.urlVideo is %@", self.urlVideo);
-    NSLog(@"%@", _clipsInEvent);
+    
+    
+    
+    
     if (_clipsInEvent != nil &&
         _clipsInEvent.count > 0)
     {
@@ -75,9 +78,25 @@
             }
         }
     }
-    NSLog(@"%@", self.clips);
-    listener->updateClips(_clips);
-    listener->updateFinalClipCount(_clips.count);
+    
+#if 0 // TEST Multiple clips
+    if (self.clips == nil)
+    {
+        //hardcode some data for test now:
+        
+        self.clips = [NSMutableArray arrayWithObjects:
+                  @"http://nxcomm:2013nxcomm@nxcomm-office.no-ip.info/app_release/sub_clips/48022A2CAC31_04_20130917065256730_00001.flv",
+                  @"http://nxcomm:2013nxcomm@nxcomm-office.no-ip.info/app_release/sub_clips/48022A2CAC31_04_20130917065256730_00002.flv",
+                  @"http://nxcomm:2013nxcomm@nxcomm-office.no-ip.info/app_release/sub_clips/48022A2CAC31_04_20130917065256730_00003.flv",
+                  @"http://nxcomm:2013nxcomm@nxcomm-office.no-ip.info/app_release/sub_clips/48022A2CAC31_04_20130917065256730_00004.flv",
+                  @"http://nxcomm:2013nxcomm@nxcomm-office.no-ip.info/app_release/sub_clips/48022A2CAC31_04_20130917065256730_00005_last.flv", nil];
+        
+    }
+#endif
+    
+    
+    listener->updateClips(self.clips);
+    listener->updateFinalClipCount(self.clips.count);
 #if 0
     clips = [[NSMutableArray alloc]init];
     //Decide whether or not to start the background polling
@@ -270,6 +289,8 @@
             
             _playbackStreamer->setListener(nil);
             
+            
+                        
             delete _playbackStreamer;
             
             _playbackStreamer = NULL;
@@ -341,7 +362,7 @@
     
     [_activityIndicator release];
     [clip_info release];
-    [_clips release];
+    [clips release];
     [_ib_closePlayBack release];
     [_ib_playPlayBack release];
     [_ib_sliderPlayBack release];
@@ -466,35 +487,29 @@
 }
 
 #pragma mark Add Button Control
--(void)watcher{
-
-    //    float currentTime = self.player.currentPlaybackTime;
+-(void)watcher
+{
     int currentTime;
+    int duration;
     if (_playbackStreamer == NULL)
     {
         return;
     }
     _playbackStreamer->getCurrentPosition(&currentTime);
-    
-    NSLog(@"currentTime is %d", currentTime);
+     _playbackStreamer -> getDuration(&duration);
     
     self.ib_timerPlayBack.textAlignment = NSTextAlignmentCenter;
-    
     self.ib_timerPlayBack.text = [self timeFormat:(float)(currentTime/1000)];
     
-//    [self performSelector:@selector(watcher) withObject:nil afterDelay:0.5];//to update the value each 0.5 seconds
-    [NSTimer scheduledTimerWithTimeInterval:0.5 target:self selector:@selector(watcher) userInfo:nil repeats:NO];
-
-    int duration;
-    _playbackStreamer -> getDuration(&duration);
-    NSLog(@"duration $$$$$$$$$$$$$$ is %d", duration);
+    
     float rate = (float)((END - START) / duration);
-    
-    NSLog(@" _CC_ %f = , %d =",rate,currentTime);
-    
-    NSLog(@"rate * currentTime is %f", rate * currentTime);
-    
     self.ib_sliderPlayBack.value = (float)(rate * currentTime)/100;
+    
+    [NSTimer scheduledTimerWithTimeInterval:0.5
+                                     target:self
+                                   selector:@selector(watcher)
+                                   userInfo:nil
+                                    repeats:NO];
 
 }
 - (NSString *) timeFormat: (float) seconds {

@@ -180,26 +180,6 @@
 - (void)wakeup_display_login:(NSTimer*) timer_exp
 {
 
-
-    
-#if 0
-    NSLog(@">>> DBG PLAYER  ");
-    PlaybackViewController *playbackViewController = [[PlaybackViewController alloc] init];
-    //playbackViewController.urlVideo = @"http://nxcomm:2009nxcomm@nxcomm-office.no-ip.info/app_release/sub_clips/48022A2CAC31_04_20130917065256730_00001.flv";
-    
-    playbackViewController.urlVideo = @"http://s3.amazonaws.com/sm.wowza.content/48022A2CAC31/clips/48022A2CAC31_04_20130918083756010_00001_last.flv?AWSAccessKeyId=AKIAIDBFDZTAR2EB4KPQ&Expires=1379501535&Signature=m%2FGcG%2BOh8wlwXcWqkiw%2BztAqAn8%3D"; 
-    
-    //[playbackViewController autorelease];
-    
-    [self presentViewController:playbackViewController animated:NO  completion:nil];
-#else
-    
-    
-	//hide splash screen page
-     //backgroundView.hidden = NO;
-    //[self.view bringSubviewToFront:backgroundView];
-
-
     //load user/pass
 	NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
 	
@@ -214,30 +194,14 @@
         [userDefaults synchronize];
     }
     
-    self.app_stage = APP_STAGE_LOGGING_IN;
-#if 1
-    [self show_login_or_reg:nil];
-#else
-    MBP_LoginOrRegistration * loginOrReg;
-    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
-    {
-        loginOrReg = [[MBP_LoginOrRegistration alloc] initWithNibName:@"MBP_LoginOrRegistration_ipad"
-                                                               bundle:nil
-                                                     withConnDelegate:self];
-    }
-    else
-    {
-        loginOrReg = [[MBP_LoginOrRegistration alloc]
-                      initWithNibName:@"MBP_LoginOrRegistration"
-                      bundle:nil
-                      withConnDelegate:self];
-    }
     
-    //Use navigation controller
-    [loginOrReg presentModallyOn:self];
-#endif
-#endif
-
+    if ( self.app_stage !=APP_STAGE_LOGGING_IN)
+    {
+        NSLog(@"wakeup_display_login --> call show_login_or_reg 2nd times");
+        self.app_stage = APP_STAGE_LOGGING_IN;
+        
+        [self show_login_or_reg:nil];
+    }
 
 }
 
@@ -1842,22 +1806,31 @@
 
 -(void) show_login_or_reg:(NSTimer*) exp
 {
-	NSLog(@"show_login...");
+	NSLog(@"show_login... & Test Player ");
     
     self.app_stage = APP_STAGE_LOGGING_IN;
+    
+#if 0 //DBG DBG DBG
+    PlaybackViewController *playbackViewController = [[PlaybackViewController alloc] init];
+    UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:playbackViewController];
+    [playbackViewController release];
+    [self presentViewController:nav animated:YES completion:^{}];
+#else
     
     LoginViewController *loginVC = [[LoginViewController alloc] initWithNibName:@"LoginViewController"
                                                                          bundle:Nil
                                                                        delegate:self];
-    
     UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:loginVC];
-
-    [loginVC release];
+     [loginVC release];
     [self presentViewController:nav animated:YES completion:^{}];
+    
+#endif
+   
+    
     //[nav release];
 }
 
-#if 1
+
 - (void)showNotificationViewController: (NSTimer *)exp
 {
     //Back from login- login success
@@ -1877,40 +1850,8 @@
     
     [self presentViewController:[[UINavigationController alloc]initWithRootViewController:notifVC] animated:YES completion:^{}];
 }
-#else
 
-- (void)showNotificationViewController: (NSTimer *)exp
-{
-    //Back from login- login success
-    [self dismissViewControllerAnimated:NO completion:nil];
-    self.progressView.hidden = NO;
-    
-    
-    NotificationViewController * notif_view;
-    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
-    {
-        notif_view = [[NotificationViewController alloc]
-                      initWithNibName:@"NotificationViewController_ipad" bundle:nil];
-    }
-    else
-    {
-        notif_view = [[NotificationViewController alloc]
-                      initWithNibName:@"NotificationViewController" bundle:nil];
-    }
 
-    
-
-    
-    notif_view.delegate = self;
-    //Feed in data now
-    notif_view.cameraMacNoColon = _camAlert.cameraMacNoColon;
-    notif_view.cameraName  = _camAlert.cameraName;
-    notif_view.alertType   = _camAlert.alertType;
-    notif_view.alertVal    = _camAlert.alertVal;
-    
-    [notif_view presentModallyOn:self];
-}
-#endif
 
 #pragma mark -
 #pragma mark Read Configure data 
