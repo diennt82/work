@@ -27,6 +27,7 @@
 #import "UIFont+Hubble.h"
 #import "UIColor+Hubble.h"
 #import "UIImage+Hubble.h"
+#import "EarlierNavigationController.h"
 
 
 #define H264_STREAM_STARTED              1
@@ -120,6 +121,7 @@
 
     IBOutlet UIButton *ib_switchDegree;
     BOOL _isFirstLoad;
+    EarlierNavigationController *earlierNavi;
 }
 //property for Hold to talk
 @property (nonatomic) BOOL walkieTalkieEnabled;

@@ -261,7 +261,6 @@
 	for (int i = channel_array.count - 1 ; i > -1; i--)
 	{
 		CamChannel * ch = [channel_array objectAtIndex:i];
-		
         if (ch.profile != nil)
         {
 			[validChannels addObject:[channel_array objectAtIndex:i]];
@@ -272,8 +271,8 @@
 	self.menuVC.cameras = validChannels;
     self.menuVC.camerasVC.camChannels = validChannels;
 
-    UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:self.menuVC];
-    
+//    sendStatus *nav = [[UINavigationController alloc] initWithRootViewController:self.menuVC];
+    EarlierNavigationController *nav = [[EarlierNavigationController alloc] initWithRootViewController:self.menuVC];
     assert(nav != nil);
 	[self presentViewController:nav animated:NO completion:^{}];
     
@@ -346,7 +345,6 @@
 			{
 
 				[self dismissViewControllerAnimated:NO completion:nil];
-
 
                 NSLog(@">>> SETUP ");
                 self.app_stage = APP_STAGE_SETUP;

@@ -1,19 +1,19 @@
 //
-//  MBPNavController.m
-//  MBP_ios
+//  EarlierNavigationController.m
+//  BlinkHD_ios
 //
-//  Created by NxComm on 12/5/12.
-//  Copyright (c) 2012 Smart Panda Ltd. All rights reserved.
+//  Created by Jason Lee on 28/2/14.
+//  Copyright (c) 2014 Smart Panda Ltd. All rights reserved.
 //
 
-#import "MBPNavController.h"
+#import "EarlierNavigationController.h"
 
-@interface MBPNavController ()
+@interface EarlierNavigationController ()
 
 @end
 
-@implementation MBPNavController
-
+@implementation EarlierNavigationController
+@synthesize isEarlierView = _isEarlierView;
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
@@ -26,6 +26,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    _isEarlierView = NO;
 	// Do any additional setup after loading the view.
 }
 
@@ -34,7 +35,6 @@
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
-
 
 
 - (BOOL) shouldAutorotate
@@ -49,9 +49,14 @@
 
 -(NSUInteger)supportedInterfaceOrientations
 {
+    
+    if (_isEarlierView)
+    {
+        return UIInterfaceOrientationMaskPortrait;
+    }
+    
     return UIInterfaceOrientationMaskAllButUpsideDown;
+    
 }
-
-
 
 @end

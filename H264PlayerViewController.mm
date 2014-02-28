@@ -56,6 +56,7 @@
     BOOL _syncPortraitAndLandscape;
     UIBarButtonItem *nowButton, *earlierButton;
     BOOL _isLandScapeMode;//cheat to display correctly timeline bottom
+    BOOL _wantToShowTimeLine;
 }
 
 @property (retain, nonatomic) IBOutlet UIImageView *imageViewHandle;
@@ -112,6 +113,10 @@ double _ticks = 0;
     // Do any additional setup after loading the view from its nib.
     // only is called in viewDidLoad, make sure it is called once.
 
+    
+    // update navi
+    earlierNavi = [[EarlierNavigationController alloc] init];
+    earlierNavi.isEarlierView = NO;
     if (IS_RETINA)
     {
         NSLog(@"Retina");
@@ -206,7 +211,8 @@ double _ticks = 0;
     {
         nowButton.enabled = NO;
         [_activityIndicator removeFromSuperview];
-        [self earlierButtonAction:earlierButton];
+        [self earlierButtonAction:nil];
+        return;
     }
     else
     {
@@ -350,7 +356,6 @@ double _ticks = 0;
             [self.ib_labelTouchToTalk setCenter:CGPointMake(SCREEN_WIDTH/2, alignY1 - 64)];
         }
         
-        
         // update position button
         //hold to talk
         CGSize holdTTButtonSize = self.ib_buttonTouchToTalk.bounds.size;
@@ -463,7 +468,6 @@ double _ticks = 0;
                                                                         target:self
                                                                         action:@selector(prepareGoBackToCameraList:)];
     self.navigationItem.leftBarButtonItem = headerLogoButton;
-    
     if (isiOS7AndAbove)
     {
         [headerLogoButton setTintColor:[UIColor clearColor]];
@@ -541,6 +545,7 @@ double _ticks = 0;
 
 - (void)nowButtonAciton:(id)sender
 {
+    earlierNavi.isEarlierView = NO;
     [nowButton setTitleTextAttributes:@{
                                         UITextAttributeFont: [UIFont fontWithName:PN_SEMIBOLD_FONT size:17.0],
                                         UITextAttributeTextColor: [UIColor barItemSelectedColor]
@@ -549,43 +554,42 @@ double _ticks = 0;
                                             UITextAttributeFont: [UIFont fontWithName:PN_LIGHT_FONT size:17.0],
                                             UITextAttributeTextColor: [UIColor barItemSelectedColor]
                                             } forState:UIControlStateNormal];
-    
-    if (_isEarlierView == TRUE)
+    if (_wantToShowTimeLine)
     {
-        self.isEarlierView = FALSE;
+        [self showTimelineView];
+        _wantToShowTimeLine = NO;
+    }
+    _earlierVC.view.hidden = YES;
+    
+    NSLog(@"h264StreamerIsInStopped: %d, h264Streamer==null: %d", _h264StreamerIsInStopped, h264Streamer == NULL);
+    
+    if (self.h264StreamerIsInStopped == TRUE &&
+        h264Streamer == NULL)
+    {
+        self.activityIndicator.hidden = NO;
+        [self.view bringSubviewToFront:self.activityIndicator];
+        [self.activityIndicator startAnimating];
         
-        self.earlierVC.view.hidden = YES;
+        //[self setupCamera];
+        [self performSelectorInBackground:@selector(waitingScanAndStartSetupCamera_bg) withObject:nil];
+        self.h264StreamerIsInStopped = FALSE;
         
-        NSLog(@"h264StreamerIsInStopped: %d, h264Streamer==null: %d", _h264StreamerIsInStopped, h264Streamer == NULL);
-        
-        if (self.h264StreamerIsInStopped == TRUE &&
-            h264Streamer == NULL)
-        {
-            self.activityIndicator.hidden = NO;
-            [self.view bringSubviewToFront:self.activityIndicator];
-            [self.activityIndicator startAnimating];
-            
-            //[self setupCamera];
-            [self performSelectorInBackground:@selector(waitingScanAndStartSetupCamera_bg) withObject:nil];
-            self.h264StreamerIsInStopped = FALSE;
-            
-            NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-            [userDefaults setObject:_selectedChannel.profile.mac_address forKey:CAM_IN_VEW];
-            [userDefaults synchronize];
-        }
-        else
-        {
-            // Streamer is showing live view
-        }
+        NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+        [userDefaults setObject:_selectedChannel.profile.mac_address forKey:CAM_IN_VEW];
+        [userDefaults synchronize];
     }
     else
     {
-        NSLog(@"Already on NOW view!");
+        // Streamer is showing live view
     }
+
 }
 
 - (void)earlierButtonAction:(id)sender
 {
+    
+    ///xxxxx
+    earlierNavi.isEarlierView = YES;
     [nowButton setTitleTextAttributes:@{
                                         UITextAttributeFont: [UIFont fontWithName:PN_LIGHT_FONT size:17.0],
                                         UITextAttributeTextColor: [UIColor barItemSelectedColor]
@@ -594,29 +598,15 @@ double _ticks = 0;
                                             UITextAttributeFont: [UIFont fontWithName:PN_SEMIBOLD_FONT size:17.0],
                                             UITextAttributeTextColor: [UIColor barItemSelectedColor]
                                             } forState:UIControlStateNormal];
+    _wantToShowTimeLine = YES;
+    _earlierVC = [[EarlierViewController alloc] initWithCamChannel:self.selectedChannel];
+    _earlierVC.view.frame = CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
+    [self.view addSubview:_earlierVC.view];
     
-    if (_isEarlierView == FALSE)
-    {
-        self.isEarlierView = TRUE;
-        
-        if (_earlierVC == Nil)
-        {
-            self.earlierVC = [[EarlierViewController alloc] initWithCamChannel:self.selectedChannel];
-            self.earlierVC.view.frame = CGRectMake(0, 0, 320, 568);
-            [self.view addSubview:_earlierVC.view];
-        }
-        [self.view bringSubviewToFront:_earlierVC.view];
-
-        
-        self.earlierVC.view.hidden = NO;
-        [self.earlierVC setCamChannel:self.selectedChannel];
-        self.earlierVC.timelineVC.navVC = self.navigationController;
-    }
-    else
-    {
-        NSLog(@"Already on earlier view!");
-    }
-    
+    _earlierVC.view.hidden = NO;
+    [self.view bringSubviewToFront:_earlierVC.view];
+    [_earlierVC setCamChannel:self.selectedChannel];
+    _earlierVC.timelineVC.navVC = earlierNavi;
 }
 
 #pragma mark - Action
@@ -1426,9 +1416,13 @@ double _ticks = 0;
 
 - (void)showTimelineView
 {
+    //reset selected menu;
+    _selectedItemMenu = -1;
+    
     if (_timelineVC != nil)
     {
         self.timelineVC.view.hidden = NO;
+        [self.view bringSubviewToFront:self.timelineVC.view];
     }
 }
 
@@ -2122,7 +2116,6 @@ double _ticks = 0;
     
     if (self.selectedChannel.profile.isInLocal )
 	{
-//        HttpCommunication *httpCommunication = [[[HttpCommunication alloc] init] autorelease];
         _httpComm.device_ip = self.selectedChannel.profile.ip_address;
         _httpComm.device_port = self.selectedChannel.profile.port;
         
@@ -2187,7 +2180,6 @@ double _ticks = 0;
     
     if (self.selectedChannel.profile .isInLocal == TRUE)
     {
-//        HttpCommunication *httpCommunication = [[[HttpCommunication alloc] init] autorelease];
         _httpComm.device_ip = self.selectedChannel.profile.ip_address;
         _httpComm.device_port = self.selectedChannel.profile.port;
         
@@ -2256,7 +2248,6 @@ double _ticks = 0;
     
     if (self.selectedChannel.profile .isInLocal == TRUE)
     {
-//        HttpCommunication *httpCommunication = [[[HttpCommunication alloc] init] autorelease];
         _httpComm.device_ip = self.selectedChannel.profile.ip_address;
         _httpComm.device_port = self.selectedChannel.profile.port;
         
@@ -3720,7 +3711,7 @@ double _ticks = 0;
 - (BOOL)shouldAutorotate
 {
     
-    if (userWantToCancel == TRUE)
+    if (userWantToCancel == TRUE || _wantToShowTimeLine)
     {
         return NO;
     }
@@ -3730,12 +3721,23 @@ double _ticks = 0;
 
 -(NSUInteger)supportedInterfaceOrientations
 {
-    return (UIInterfaceOrientationMaskLandscapeLeft | UIInterfaceOrientationMaskLandscapeRight);
+    if (_wantToShowTimeLine)
+    {
+        return UIInterfaceOrientationMaskPortrait;
+    }
+    return UIInterfaceOrientationMaskAll;
 }
 
 - (void) willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
 {
-	[self adjustViewsForOrientation:toInterfaceOrientation];
+    if (_wantToShowTimeLine) //don't call adjustViews for Earlier
+    {
+        return;
+    }
+    else
+    {
+        [self adjustViewsForOrientation:toInterfaceOrientation];
+    }
 }
 
 -(void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation
@@ -3745,6 +3747,14 @@ double _ticks = 0;
 
 -(void) checkOrientation
 {
+    if ([self.selectedChannel.profile isNotAvailable])  //CameraOfline for HD
+    {
+        [self.navigationController setNavigationBarHidden:NO];
+        [[UIApplication sharedApplication] setStatusBarHidden:NO];
+        [self addHubbleLogo_Back];
+        return;
+    }
+    
 	UIInterfaceOrientation infOrientation = [UIApplication sharedApplication].statusBarOrientation;
     
 	[self adjustViewsForOrientation:infOrientation];
@@ -3756,12 +3766,14 @@ double _ticks = 0;
     {
         _syncPortraitAndLandscape = YES;
     }
-    else{
+    else
+    {
         _syncPortraitAndLandscape = NO;
     }
     [self resetZooming];
     
     NSInteger deltaY = 0;
+    
     if (isiOS7AndAbove)
     {
         deltaY = HIGH_STATUS_BAR;
@@ -3804,7 +3816,6 @@ double _ticks = 0;
             }
 
         }
-        
         //landscape mode
         //hide navigation bar
         [self.navigationController setNavigationBarHidden:YES];
@@ -3854,8 +3865,8 @@ double _ticks = 0;
                                           owner:self
                                         options:nil];
             self.melodyViewController = [[[MelodyViewController alloc] initWithNibName:@"MelodyViewController" bundle:nil] autorelease];
+            
         }
-        
         //portrait mode
         
         self.melodyViewController.selectedChannel = self.selectedChannel;
@@ -3875,15 +3886,13 @@ double _ticks = 0;
             self.imageViewVideo.frame = CGRectMake(0, 0, SCREEN_WIDTH, imageViewHeight);
             self.melodyViewController.view.frame = CGRectMake(0, self.ib_ViewTouchToTalk.frame.origin.y - 5, SCREEN_WIDTH, SCREEN_HEIGHT - self.ib_ViewTouchToTalk.frame.origin.y);
             
-//            [self.melodyViewController.melodyTableView reloadData];
             // Control display for TimelineVC
-            if (_timelineVC != nil && _isFirstLoad)
+
+            if (_timelineVC != nil)
             {
                 CGFloat alignYTimeLine = self.ib_ViewTouchToTalk.frame.origin.y;
-                self.timelineVC.view.frame = CGRectMake(0, alignYTimeLine, SCREEN_WIDTH, SCREEN_HEIGHT - self.ib_ViewTouchToTalk.frame.origin.y);
-                
-                //don't show timeline after switch from land to port
-                
+                _timelineVC.view.frame = CGRectMake(0, alignYTimeLine, SCREEN_HEIGHT, SCREEN_HEIGHT - self.ib_ViewTouchToTalk.frame.origin.y);
+                _timelineVC.tableView.contentSize = CGSizeMake(SCREEN_WIDTH, SCREEN_HEIGHT);
                 self.timelineVC.view.hidden = NO;
                 [self.view addSubview:_timelineVC.view];
                 if (_isLandScapeMode)
@@ -3906,7 +3915,7 @@ double _ticks = 0;
             
             
             // Control display for TimelineVC
-            if (_timelineVC != nil && _isFirstLoad)
+            if (_timelineVC != nil)
             {
                 CGFloat alignYTimeLine = self.ib_ViewTouchToTalk.frame.origin.y - 64;
 
@@ -3926,30 +3935,32 @@ double _ticks = 0;
                 }
             }            
         }
-
+        
         self.viewStopStreamingProgress.frame = CGRectMake((SCREEN_WIDTH - INDICATOR_SIZE)/2, (SCREEN_HEIGHT - INDICATOR_SIZE)/2 , INDICATOR_SIZE, INDICATOR_SIZE);
         [self showControlMenu];
         //add hubble_logo_back
         [self addHubbleLogo_Back];
         _isLandScapeMode = NO;
-        _isFirstLoad = NO;
-
-	}
-    
+	}// end of portrait
     [self.melodyViewController.melodyTableView setNeedsLayout];
     [self.melodyViewController.melodyTableView setNeedsDisplay];
-    // Set position for Image Knob & Handle
-    self.imageViewKnob.center = _imgViewDrectionPad.center;
-    self.imageViewHandle.center = _imgViewDrectionPad.center;
-    self.imageViewHandle.hidden = YES;
     
-
+    if ([self.selectedChannel.profile isNotAvailable])
+    {
+        [_activityIndicator removeFromSuperview];
+    }
+//    
+//    // Set position for Image Knob & Handle
+//    self.imageViewKnob.center = _imgViewDrectionPad.center;
+//    self.imageViewHandle.center = _imgViewDrectionPad.center;
+//    self.imageViewHandle.hidden = YES;
+//    
     
     self.imageViewStreamer.frame = _imageViewVideo.frame;
     [self.scrollView insertSubview:_imageViewStreamer aboveSubview:_imageViewVideo];
     [self setTemperatureState_Fg:_stringTemperature];
     
-    [self hideControlMenu];
+    
     [self.activityIndicator startAnimating];
     [self.view bringSubviewToFront:_activityIndicator];
     
@@ -3973,26 +3984,20 @@ double _ticks = 0;
         
         h264Streamer->videoSizeChanged();
     }
-    
-    //
     [self setupPtt];
     [self applyFont];
+    [self hideControlMenu];
     [self hidenAllBottomView];
     [self updateBottomView];
-    
-    if ([self.selectedChannel.profile isNotAvailable])
-    {
-        [_activityIndicator removeFromSuperview];
-    }
     //Earlier must at bottom of land, and port
-    self.earlierVC.view.hidden = !_isEarlierView;
-    
-    if (_isEarlierView == TRUE)
+    if (_isFirstLoad || _wantToShowTimeLine)
     {
-        [self.view addSubview:_earlierVC.view];
-        [self.view bringSubviewToFront:_earlierVC.view];
+        [self showTimelineView];
     }
-
+    else
+    {
+        [self hideTimelineView];
+    }
 }
 
 
@@ -4437,6 +4442,9 @@ double _ticks = 0;
     //show when user selecte one item inner control panel
     [self showControlMenu];
     
+    _wantToShowTimeLine = NO;
+    _isFirstLoad = NO;
+    
     if ([self.selectedChannel.profile isSharedCam] == TRUE)
     {
         // If this is SharedCam then the horimenu has 3 items. It is not match with define INDEX_...
@@ -4504,6 +4512,11 @@ double _ticks = 0;
 
 - (void)updateBottomView
 {
+    if (_wantToShowTimeLine)
+    {
+        //don't need to update bottom view when show timeline
+        return;
+    }
     //first hidden all view
     [self hidenAllBottomView];
     if (_selectedItemMenu == INDEX_PAN_TILT)
@@ -4672,6 +4685,7 @@ double _ticks = 0;
     [_imageViewKnob release];
     [_ib_changeToMainRecording release];
     [ib_switchDegree release];
+    [earlierNavi release];
     [super dealloc];
 }
 //At first time, we set to FALSE after call checkOrientation()
