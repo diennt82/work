@@ -101,7 +101,9 @@
     [CameraAlert reloadBlankTableIfNeeded];
 
     // Check the server name file
-    
+#if 1
+    [BMS_JSON_Communication setServerInput:[[NSUserDefaults standardUserDefaults] stringForKey:@"name_server"]];
+#else
     NSError *error;
     NSString * serverFile = [cachesDirectory stringByAppendingPathComponent:@"server.txt"];
     NSString* content = [NSString stringWithContentsOfFile:serverFile encoding:NSUTF8StringEncoding error:&error];
@@ -121,7 +123,7 @@
         //[BMS_JSON_Communication setServerInput:@"https://dev-api.hubble.in/v1"];
         [BMS_JSON_Communication setServerInput:@"https://api.hubble.in/v1"];
     }
-    
+#endif
     return YES;
 }
 
@@ -509,6 +511,7 @@
     
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     [userDefaults synchronize];
+    [BMS_JSON_Communication setServerInput:[[NSUserDefaults standardUserDefaults] stringForKey:@"name_server"]];
 	viewController.app_stage = [userDefaults integerForKey:@"ApplicationStage"];
     
     NSLog(@"MBP_iosAppDelegate - viewController.app_stage: %d", viewController.app_stage);
