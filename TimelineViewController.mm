@@ -150,6 +150,9 @@
 //}
 - (void)viewWillAppear:(BOOL)animated
 {
+    [super viewWillAppear:animated];
+    
+    NSLog(@"TimelineViewController: %@", NSStringFromCGRect(self.view.frame));
 }
 
 - (void)didReceiveMemoryWarning
@@ -567,14 +570,19 @@
     {
         EventInfo *eventInfo = (EventInfo *)[_events objectAtIndex:indexPath.row];
         
-        // Motion detected
+        /*
+         * 1: Sound
+         * 2: hi-temperature
+         * 3: low-temperature
+         * 4: Motion
+         */
         if (eventInfo.alert == 4)
         {
             return 212;  //TODO: Match with design document
         }
-        // Sound, temperature, & another detected
         else if (eventInfo.alert == 1 ||
-                 eventInfo.alert == 2)
+                 eventInfo.alert == 2 ||
+                 eventInfo.alert == 3)
         {
             return 77;
         }
