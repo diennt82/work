@@ -8,6 +8,11 @@
 
 #import "Step_12_ViewController.h"
 
+@interface Step_12_ViewController()
+@property (retain, nonatomic) IBOutlet UIButton *btnWatchLiveCamera;
+
+@end
+
 @implementation Step_12_ViewController
 
 @synthesize cameraName;
@@ -17,6 +22,25 @@
     [super viewDidLoad];
     
     self.navigationItem.hidesBackButton = YES;
+#if 1
+    CGAffineTransform transform = CGAffineTransformMakeScale(1.0f, 4.0f);
+    [self.view viewWithTag:501].transform = transform;
+    
+    UIImage *hubbleLogoBack = [UIImage imageNamed:@"Hubble_back_text"];
+    UIBarButtonItem *barBtnHubble = [[UIBarButtonItem alloc] initWithImage:hubbleLogoBack
+                                                                     style:UIBarButtonItemStyleBordered
+                                                                    target:self
+                                                                    action:@selector(hubbleItemAction:)];
+    [barBtnHubble setTintColor:[UIColor colorWithPatternImage:hubbleLogoBack]];
+    
+    self.navigationItem.leftBarButtonItem = barBtnHubble;
+    
+    [self.btnWatchLiveCamera setBackgroundImage:[UIImage imageNamed:@"green_btn"] forState:UIControlStateNormal];
+    [self.btnWatchLiveCamera setBackgroundImage:[UIImage imageNamed:@"green_btn_pressed"] forState:UIControlEventTouchDown];
+    
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    self.cameraName.text =  (NSString *) [userDefaults objectForKey:@"CameraName"];
+#else
     
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     self.cameraName.text =  (NSString *) [userDefaults objectForKey:@"CameraName"];
@@ -27,6 +51,7 @@
     
     UIInterfaceOrientation interfaceOrientation = [UIApplication sharedApplication].statusBarOrientation;
     [self adjustViewsForOrientations:interfaceOrientation];
+#endif
 }
 
 
@@ -130,4 +155,8 @@
                                                        withValue:nil];
 }
 
+- (void)dealloc {
+    [_btnWatchLiveCamera release];
+    [super dealloc];
+}
 @end

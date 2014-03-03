@@ -37,7 +37,6 @@
 
 @interface Step_10_ViewController : UIViewController
 {
-    IBOutlet UIView * progressView; 
     IBOutlet UILabel * userNameLabel;
     IBOutlet UILabel * userEmailLabel;
     
@@ -65,8 +64,7 @@
     id<ConnectionMethodDelegate> delegate;
 }
 
-@property (nonatomic,assign) IBOutlet UILabel * homeSSID;
-@property (nonatomic, assign) IBOutlet UIView * progressView; 
+@property (nonatomic,assign) IBOutlet UILabel * homeSSID; 
 @property (nonatomic, assign) IBOutlet UILabel * userNameLabel;
 @property (nonatomic, assign) IBOutlet UILabel * userEmailLabel,  * cameraName;
 

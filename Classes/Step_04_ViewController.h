@@ -16,9 +16,7 @@
 #define CONF_CAM_BTN_TAG 1002
 
 @interface Step_04_ViewController : UIViewController<UITextViewDelegate>
-{
-    IBOutlet UIView * camName;
-    
+{    
     NSString * homeWifiSSID;
     NSString * cameraMac;
 	NSString * cameraName;

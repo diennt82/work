@@ -51,6 +51,22 @@
 	// Do any additional setup after loading the view.
     
     [self.progressView setHidden:YES];
+#if 1
+    CGAffineTransform transform = CGAffineTransformMakeScale(1.0f, 4.0f);
+    [self.view viewWithTag:501].transform = transform;
+    [self.progressView viewWithTag:501].transform = transform;
+    
+    self.navigationItem.hidesBackButton = YES;
+    
+    UIImage *hubbleLogoBack = [UIImage imageNamed:@"Hubble_back_text"];
+    UIBarButtonItem *barBtnHubble = [[UIBarButtonItem alloc] initWithImage:hubbleLogoBack
+                                                                     style:UIBarButtonItemStyleBordered
+                                                                    target:self
+                                                                    action:@selector(hubbleItemAction:)];
+    [barBtnHubble setTintColor:[UIColor colorWithPatternImage:hubbleLogoBack]];
+    
+    self.navigationItem.leftBarButtonItem = barBtnHubble;
+#else
     self.navigationItem.title = NSLocalizedStringWithDefaultValue(@"Enter_Network_Information",nil, [NSBundle mainBundle],
                                                                   @"Enter Network Information" , nil);
     
@@ -60,8 +76,17 @@
                                       style:UIBarButtonItemStyleBordered
                                      target:nil
                                      action:nil] autorelease];
+#endif
     
-    
+    UIImageView *imageView = (UIImageView *)[_progressView viewWithTag:595];
+    imageView.animationImages =[NSArray arrayWithObjects:
+                      [UIImage imageNamed:@"setup_camera_c1"],
+                      [UIImage imageNamed:@"setup_camera_c2"],
+                      [UIImage imageNamed:@"setup_camera_c3"],
+                      [UIImage imageNamed:@"setup_camera_c4"],
+                      nil];
+    imageView.animationDuration = 1.5;
+    imageView.animationRepeatCount = 0;
     
     
     if (self.ssid == nil)
@@ -141,6 +166,12 @@
 - (void)viewWillDisappear:(BOOL)animated
 {
     [self resetAllTimer];
+}
+
+#pragma mark - Actions
+- (void)hubbleItemAction:(id)sender
+{
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 #pragma mark -
@@ -468,6 +499,11 @@
 {
     //create progressView for process verify network
     [self.view addSubview:self.progressView];
+    
+    UIImageView *imageView = (UIImageView *)[_progressView viewWithTag:595];
+    
+    [imageView startAnimating];
+    
     [self.progressView setHidden:NO];
     //check if password is ok?
     UITextField  * pass = (UITextField*)[self.passwordCell viewWithTag:200];

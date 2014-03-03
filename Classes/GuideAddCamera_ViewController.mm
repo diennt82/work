@@ -187,8 +187,12 @@
 
 -(void) startMonitorCallBack
 {
+#if 1 // New flow: Show Camera list after Add a new Camera
+    [self.delegate sendStatus:SHOW_CAMERA_LIST];
+#else // Old flow: Re-login after Add a new Camera
     NSLog(@"LOGINING... ");
     [self.delegate sendStatus:2];//login];
+#endif
 }
 
 

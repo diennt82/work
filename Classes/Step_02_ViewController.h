@@ -22,9 +22,7 @@
 @property (nonatomic, assign)  id<ConnectionMethodDelegate> delegate;
 
 - (IBAction)handleButtonPress:(id)sender;
--(IBAction)handleBackButton:(id)sender;
 - (IBAction)goBackToFirstScreen:(id)sender;
-
 
 
 - (void)presentModallyOn:(UIViewController *)parent;

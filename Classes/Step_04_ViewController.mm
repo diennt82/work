@@ -8,8 +8,10 @@
 
 #import "Step_04_ViewController.h"
 
-@interface Step_04_ViewController ()
+@interface Step_04_ViewController () <UITextFieldDelegate>
 
+@property (retain, nonatomic) IBOutlet UITextField *tfCamName;
+@property (retain, nonatomic) IBOutlet UIButton *btnContinue;
 @end
 
 @implementation Step_04_ViewController
@@ -28,6 +30,27 @@
 {
     [super viewDidLoad];
 	// Do any additional setup after loading the view.
+    
+    CGAffineTransform transform = CGAffineTransformMakeScale(1.0f, 4.0f);
+    [self.view viewWithTag:501].transform = transform;
+#if 1
+    self.navigationItem.hidesBackButton = YES;
+    
+    UIImage *hubbleLogoBack = [UIImage imageNamed:@"Hubble_back_text"];
+    UIBarButtonItem *barBtnHubble = [[UIBarButtonItem alloc] initWithImage:hubbleLogoBack
+                                                                     style:UIBarButtonItemStyleBordered
+                                                                    target:self
+                                                                    action:@selector(hubbleItemAction:)];
+    [barBtnHubble setTintColor:[UIColor colorWithPatternImage:hubbleLogoBack]];
+    
+    self.navigationItem.leftBarButtonItem = barBtnHubble;
+    
+    [self.btnContinue setBackgroundImage:[UIImage imageNamed:@"green_btn"] forState:UIControlStateNormal];
+    [self.btnContinue setBackgroundImage:[UIImage imageNamed:@"green_btn_pressed"] forState:UIControlEventTouchDown];
+    
+    self.tfCamName.delegate = self;
+    self.tfCamName.text = self.cameraName;
+#else
     self.navigationItem.title = NSLocalizedStringWithDefaultValue(@"Camera_Detected",nil, [NSBundle mainBundle],
                                                                   @"Camera Detected" , nil);
     
@@ -65,7 +88,7 @@
 
     }
     
-    
+#endif
 }
 
 - (void)viewDidUnload
@@ -80,6 +103,13 @@
     [self adjustViewsForOrientations:interfaceOrientation];
 }
 
+#pragma mark - Actions
+
+- (void)hubbleItemAction:(id)sender
+{
+    [self.navigationController popViewControllerAnimated:YES];
+}
+
 - (void)handleNextBtnTouchAction: (id)sender
 {
     //show dialog processView
@@ -87,19 +117,9 @@
     [self.view bringSubviewToFront:self.progressView];
     [self.progressView setHidden:NO];
     
-    NSString * cameraName_text = @"";
+    NSString * cameraName_text = _tfCamName.text;
     
-    if ([camName isMemberOfClass:[UITextView class]] )
-    {
-        cameraName_text =((UITextView *)camName).text  ;
-    }
-    
-    if ([camName isMemberOfClass:[UITextField class]] )
-    {
-        cameraName_text =((UITextField *)camName).text;
-    }
-    
-    [camName resignFirstResponder];
+    [_tfCamName resignFirstResponder];
     
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     [userDefaults setObject:cameraName_text forKey:@"CameraName"];
@@ -136,6 +156,7 @@
 
 -(void) adjustViewsForOrientations: (UIInterfaceOrientation) interfaceOrientation
 {
+#if 0
      NSString * tempName = @"";
     
     if ([camName isMemberOfClass:[UITextView class]] )
@@ -197,7 +218,7 @@
         ((UITextField *)camName).text = tempName ;
     }
     
-
+#endif
     
 }
 #pragma mark -
@@ -216,17 +237,16 @@
     [cameraName release];
    [cameraMac release];
     [_progressView release];
+    [_btnContinue release];
+    [_tfCamName release];
     [super dealloc];
 }
 
 
 -(BOOL) isCameraNameValidated:(NSString *) cameraNames
 {
-    
     NSString * validString = @"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890. '_-";
 
-
-    
     for (int i = 0; i < cameraNames.length; i ++)
     {
         NSRange range = [validString rangeOfString:[NSString stringWithFormat:@"%c",[cameraNames characterAtIndex:i]]];
@@ -235,33 +255,19 @@
         }
     }
 
-    
     return YES;
-
 }
 
 - (IBAction)handleButtonPress:(id)sender
 {
     int tag = ((UIButton*)sender).tag; 
     
-    NSString * cameraName_text = @"";
+    NSString * cameraName_text = _tfCamName.text;
     
-    if ([camName isMemberOfClass:[UITextView class]] )
-    {
-        
-        cameraName_text =((UITextView *)camName).text  ;
-        
-    }
-    
-    if ([camName isMemberOfClass:[UITextField class]] )
-    {
-        
-        cameraName_text =((UITextField *)camName).text;
-    }
-    
-    [camName resignFirstResponder];
+    [_tfCamName resignFirstResponder];
     
     if ([cameraName_text length] < 3 || [cameraName_text length] > CAMERA_NAME_MAX )
+    //if(0)
     {
         NSString * title = NSLocalizedStringWithDefaultValue(@"Invalid_Camera_Name", nil, [NSBundle mainBundle],
                                                              @"Invalid Camera Name", nil);
@@ -316,11 +322,10 @@
         
         /*20121129: phung skip authentication */
         
-        [self queryWifiList];
+        [self performSelectorInBackground:@selector(queryWifiList) withObject:nil];
 
     }
 }
-
 
 -(void) queryWifiList
 {
@@ -492,6 +497,39 @@
     
 }
 
+- (void)textFieldDidBeginEditing:(UITextField *)textField
+{
+    [self animateTextField: textField up: YES];
+}
+
+- (void)textFieldDidEndEditing:(UITextField *)textField
+{
+    [self animateTextField: textField up: NO];
+}
+
+- (void) animateTextField: (UITextField*) textField up: (BOOL) up
+{
+    NSInteger movementDistance = 216; // tweak as needed
+    
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+    {
+        movementDistance = 264;
+    }
+    
+    if (UIScreen.mainScreen.bounds.size.height < 568)
+    {
+        movementDistance = 200;
+    }
+    const float movementDuration = 0.3f; // tweak as needed
+    
+    int movement = (up ? -movementDistance : movementDistance);
+    
+    [UIView beginAnimations: @"anim" context: nil];
+    [UIView setAnimationBeginsFromCurrentState: YES];
+    [UIView setAnimationDuration: movementDuration];
+    self.view.frame = CGRectOffset(self.view.frame, 0, movement);
+    [UIView commitAnimations];
+}
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField {
     
@@ -499,7 +537,6 @@
     
     return NO;
 }
-
 
 
 @end

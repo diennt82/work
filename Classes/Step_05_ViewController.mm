@@ -7,9 +7,13 @@
 //
 
 #import "Step_05_ViewController.h"
+#import "Step05Cell.h"
 
 @interface Step_05_ViewController ()
+@property (retain, nonatomic) IBOutlet UIButton *btnContinue;
+@property (retain, nonatomic) IBOutlet UITableViewCell *cellOtherNetwork;
 
+@property (retain, nonatomic) WifiEntry *selectedWifiEntry;
 @end
 
 @implementation Step_05_ViewController
@@ -32,12 +36,32 @@
 {
 
     [listOfWifi release];
+    [_cellOtherNetwork release];
+    [_btnContinue release];
     [super dealloc];
 }
 - (void)viewDidLoad
 {
     [super viewDidLoad];
 	// Do any additional setup after loading the view.
+#if 1
+    CGAffineTransform transform = CGAffineTransformMakeScale(1.0f, 4.0f);
+    [self.view viewWithTag:501].transform = transform;
+    
+    self.navigationItem.hidesBackButton = YES;
+    
+    UIImage *hubbleLogoBack = [UIImage imageNamed:@"Hubble_back_text"];
+    UIBarButtonItem *barBtnHubble = [[UIBarButtonItem alloc] initWithImage:hubbleLogoBack
+                                                                     style:UIBarButtonItemStyleBordered
+                                                                    target:self
+                                                                    action:@selector(hubbleItemAction:)];
+    [barBtnHubble setTintColor:[UIColor colorWithPatternImage:hubbleLogoBack]];
+    
+    self.navigationItem.leftBarButtonItem = barBtnHubble;
+    
+    [self.btnContinue setBackgroundImage:[UIImage imageNamed:@"green_btn"] forState:UIControlStateNormal];
+    [self.btnContinue setBackgroundImage:[UIImage imageNamed:@"green_btn_pressed"] forState:UIControlEventTouchDown];
+#else
     self.navigationItem.title = NSLocalizedStringWithDefaultValue(@"Configure_Camera",nil, [NSBundle mainBundle],
                                                                   @"Configure Camera" , nil);
     
@@ -47,7 +71,7 @@
                                       style:UIBarButtonItemStyleBordered
                                      target:nil
                                      action:nil] autorelease];
-   
+#endif
     
     if (listOfWifi == nil )
     {
@@ -69,16 +93,16 @@
     [other release];
 }
 
-- (void)viewDidUnload
-{
-    [super viewDidUnload];
-    // Release any retained subviews of the main view.
-}
-
 -(void) viewWillAppear:(BOOL)animated
 {
     UIInterfaceOrientation interfaceOrientation = [UIApplication sharedApplication].statusBarOrientation;
     [self adjustViewsForOrientations:interfaceOrientation];
+}
+
+- (void)viewDidUnload
+{
+    [super viewDidUnload];
+    // Release any retained subviews of the main view.
 }
 
 -(void) filterCameraList
@@ -102,6 +126,44 @@
     self.listOfWifi = wifiList;
     [wifiList release];
 }
+
+#pragma mark - Actions
+- (void)hubbleItemAction:(id)sender
+{
+    [self.navigationController popViewControllerAnimated:YES];
+}
+
+- (IBAction)btnContinueTouchUpInsideAction:(id)sender
+{
+    NSLog(@"Load step 6");
+    //Load the next xib
+    Step_06_ViewController *step06ViewController = nil;
+    
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+    {
+        step06ViewController = [[Step_06_ViewController alloc]
+                                initWithNibName:@"Step_06_ViewController_ipad" bundle:nil];
+    }
+    else
+    {
+        step06ViewController = [[Step_06_ViewController alloc]
+                                initWithNibName:@"Step_06_ViewController" bundle:nil];
+    }
+
+    NSRange noQoute = NSMakeRange(1, _selectedWifiEntry.ssid_w_quote.length - 2);
+    
+    NSString *wifiName = [_selectedWifiEntry.ssid_w_quote substringWithRange:noQoute];
+    
+    step06ViewController.isOtherNetwork = [wifiName isEqualToString:@"Other Network"];
+    
+    step06ViewController.ssid = wifiName;
+    step06ViewController.security = _selectedWifiEntry.auth_mode;
+    
+    [self.navigationController pushViewController:step06ViewController animated:NO];
+    
+    [step06ViewController release];
+}
+
 
 #pragma mark -
 #pragma mark Rotating
@@ -174,30 +236,51 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    int tag = tableView.tag; 
-    if (tag == 11)
-        return 1; 
-   
-    return 0; 
+    return 1;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    int tag = tableView.tag; 
-    if (tag == 11)
-        return [listOfWifi count];
-    return 0; 
-
+    return listOfWifi.count;
 }
 
-- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
-{
-    NSString *sectionName = @"Select the wifi connection that your camera can use";
-
-    return sectionName;
-}
+//- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
+//{
+//    NSString *sectionName = @"Select the wifi connection that your camera can use";
+//
+//    return sectionName;
+//}
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+#if 1
+    if (indexPath.row < listOfWifi.count - 1)
+    {
+        static NSString *CellIdentifier = @"Step05Cell";
+        Step05Cell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+        
+        NSArray *objects = [[NSBundle mainBundle] loadNibNamed:@"Step05Cell" owner:nil options:nil];
+        
+        for (id curObj in objects)
+        {
+            if ([curObj isKindOfClass:[Step05Cell class]])
+            {
+                cell = (Step05Cell *)curObj;
+                break;
+            }
+        }
+        
+        WifiEntry *entry = [listOfWifi objectAtIndex:indexPath.row];
+        cell.lblName.text = [entry.ssid_w_quote substringWithRange:NSMakeRange(1, entry.ssid_w_quote.length - 2)]; // Remove " & "
+        
+        return cell;
+    }
+    else
+    {
+        return _cellOtherNetwork;
+    }
+    
+#else
+    
 #if 1
     static NSString *CellIdentifier = @"Cell";
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
@@ -251,12 +334,15 @@
     
     return cell;
 #endif
+#endif
 }
 
 - (void)tableView: (UITableView *)tableView didSelectRowAtIndexPath: (NSIndexPath *)indexPath
 {
-    
-    [tableView deselectRowAtIndexPath:[tableView indexPathForSelectedRow] 
+#if 1
+    self.selectedWifiEntry = (WifiEntry *)[listOfWifi objectAtIndex:indexPath.row];
+#else
+    [tableView deselectRowAtIndexPath:[tableView indexPathForSelectedRow]
                              animated:NO];
 
      int tag = tableView.tag; 
@@ -308,7 +394,7 @@
         [step06ViewController release];
 
     }
-    
+#endif
 }
 #pragma mark -
 

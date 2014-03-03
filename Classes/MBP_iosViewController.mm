@@ -277,7 +277,16 @@
     [_menuVC release];
     
     assert(nav != nil);
-	[self presentViewController:nav animated:NO completion:^{}];
+    
+    if (self.presentedViewController) {
+        [self dismissViewControllerAnimated:YES completion:^{
+            [self presentViewController:nav animated:NO completion:nil];
+        }];
+    } else {
+        [self presentViewController:nav animated:NO completion:nil];
+    }
+    
+	//[self presentViewController:nav animated:NO completion:^{}];
     
     NSLog(@"MBP_iosVC - startShowingCameraList: %p, %p, %@", self, self.menuVC.menuDelegate, self.presentingViewController.description);
 
@@ -386,6 +395,7 @@
                     //[step02ViewController presentModallyOn:self];
                     UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:step02ViewController];
                     //[self presentViewController:nav animated:NO completion:^{}];
+                    [step02ViewController release];
                     
                     if (self.presentedViewController) {
                         [self dismissViewControllerAnimated:YES completion:^{

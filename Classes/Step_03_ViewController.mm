@@ -9,9 +9,11 @@
 #define TAG_IMAGE_ANIMATION 599
 
 #import "Step_03_ViewController.h"
+#import "UIBarButtonItem+Custom.h"
 
 @interface Step_03_ViewController ()
 
+@property (retain, nonatomic) IBOutlet UIScrollView *scrollViewGuide;
 @end
 
 @implementation Step_03_ViewController
@@ -30,65 +32,62 @@
     return self;
 }
 
-
-- (void)viewWillDisappear:(BOOL)animated {
-	NSArray *viewControllers = self.navigationController.viewControllers;
-	if ([viewControllers indexOfObject:self] == NSNotFound) {
-		// View is disappearing because it was popped from the stack
-		NSLog(@"View controller was popped --- We are closing down..task_cancelled = YES");
-        
-		task_cancelled = YES;
-        [[NSNotificationCenter defaultCenter] removeObserver:self];
-	}
-}
-
 - (void)viewDidLoad
 {
     [super viewDidLoad];
 	// Do any additional setup after loading the view.
+#if 1
+    self.navigationItem.hidesBackButton = YES;
+    
+    UIImage *hubbleLogoBack = [UIImage imageNamed:@"Hubble_back_text"];
+    UIBarButtonItem *barBtnHubble = [[UIBarButtonItem alloc] initWithImage:hubbleLogoBack
+                                                                     style:UIBarButtonItemStylePlain
+                                                                    target:self
+                                                                    action:@selector(hubbleItemAction:)];
+    [barBtnHubble setTintColor:[UIColor colorWithPatternImage:hubbleLogoBack]];
+    
+    self.navigationItem.leftBarButtonItem = barBtnHubble;
+    
+    CGAffineTransform transform = CGAffineTransformMakeScale(1.0f, 4.0f);
+    [self.view viewWithTag:501].transform = transform;
+    [inProgress viewWithTag:501].transform = transform;
+    
+    UIImageView *imageView  = (UIImageView *)[self.inProgress viewWithTag:575];
+    imageView.animationImages = @[[UIImage imageNamed:@"setup_camera_c1"],
+                                  [UIImage imageNamed:@"setup_camera_c2"],
+                                  [UIImage imageNamed:@"setup_camera_c3"],
+                                  [UIImage imageNamed:@"setup_camera_c4"]];
+    imageView.animationDuration = 1.5f;
+    imageView.animationRepeatCount = 0;
+    
+    [self.scrollViewGuide setContentSize:CGSizeMake(320, 1181)];
+#else
     self.navigationItem.title =  NSLocalizedStringWithDefaultValue(@"Detect_Camera",nil, [NSBundle mainBundle],
                                                                    @"Detect Camera", nil);
-    
-    
-    
+
     self.navigationItem.backBarButtonItem =
     [[[UIBarButtonItem alloc] initWithTitle:NSLocalizedStringWithDefaultValue(@"Back",nil, [NSBundle mainBundle],
                                                                               @"Back", nil)
                                       style:UIBarButtonItemStyleBordered
                                      target:nil
                                      action:nil] autorelease];
-    
+
     [self startAnimationWithOrientation];
-    
+#endif
     self.homeWifiSSID = [CameraPassword fetchSSIDInfo];
-    
     
     NSLog(@"homeWifiSSID: %@", self.homeWifiSSID);
     
-    
-    
-	
-    
     [self.view addSubview:self.inProgress];
     self.inProgress.hidden = YES;
-    
-    
-    // NSLog(@"Open wifi aaaaaaa");
-    //Open wifi
-    //[[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"prefs:root=WIFI"]];
-    
-}
-
-- (void)viewDidUnload
-{
-    [super viewDidUnload];
-    // Release any retained subviews of the main view.
-    
 }
 
 - (void) viewWillAppear:(BOOL)animated
 {
     // Do any additional setup after loading the view.
+    
+    [super viewWillAppear:animated];
+    
 	[[NSNotificationCenter defaultCenter] addObserver: self
                                              selector: @selector(handleEnteredBackground)
                                                  name: UIApplicationDidEnterBackgroundNotification
@@ -102,6 +101,35 @@
     
     UIInterfaceOrientation orientation = [UIApplication sharedApplication].statusBarOrientation;
     [self adjustViewsForOrientations:orientation];
+}
+
+- (void)viewWillDisappear:(BOOL)animated {
+	NSArray *viewControllers = self.navigationController.viewControllers;
+	if ([viewControllers indexOfObject:self] == NSNotFound) {
+		// View is disappearing because it was popped from the stack
+		NSLog(@"View controller was popped --- We are closing down..task_cancelled = YES");
+        
+		task_cancelled = YES;
+        [[NSNotificationCenter defaultCenter] removeObserver:self];
+	}
+}
+
+- (void)viewDidUnload
+{
+    [super viewDidUnload];
+    // Release any retained subviews of the main view.
+}
+
+#pragma mark - Actions
+
+- (void)hubbleItemAction:(id)sender
+{
+    [self.navigationController popViewControllerAnimated:YES];
+}
+
+- (void)Step04Action:(id)sender
+{
+    [self.navigationController pushViewController:[[Step_04_ViewController alloc] init] animated:YES];
 }
 
 #pragma mark _ Method Animation
@@ -224,6 +252,7 @@
     [inProgress release];
     [cameraName release];
     [cameraMac release];
+    [_scrollViewGuide release];
     [super dealloc];
 }
 
@@ -270,16 +299,11 @@
         {
             NSLog(@"show progress 01 ");
             self.inProgress.hidden = NO;
+            UIImageView *imageView  = (UIImageView *)[self.inProgress viewWithTag:575];
+            [imageView startAnimating];
             [self.view bringSubviewToFront:self.inProgress];
-            
-            
         }
-        
-        
     }
-    
-    
-    
 }
 
 - (void) hideProgess
@@ -287,6 +311,8 @@
     NSLog(@"hide progress");
     if (self.inProgress != nil)
     {
+        UIImageView *imageView  = (UIImageView *)[self.inProgress viewWithTag:575];
+        [imageView stopAnimating];
         self.inProgress.hidden = YES;
     }
     

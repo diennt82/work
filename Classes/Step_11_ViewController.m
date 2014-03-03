@@ -10,6 +10,7 @@
 
 @interface Step_11_ViewController ()
 
+@property (retain, nonatomic) IBOutlet UIButton *btnTestCamera;
 @end
 
 @implementation Step_11_ViewController
@@ -27,7 +28,24 @@
 {
     [super viewDidLoad];
     self.navigationItem.hidesBackButton = YES;
+#if 1
+    CGAffineTransform transform = CGAffineTransformMakeScale(1.0f, 4.0f);
+    [self.view viewWithTag:501].transform = transform;
     
+    self.navigationItem.hidesBackButton = YES;
+    
+    UIImage *hubbleLogoBack = [UIImage imageNamed:@"Hubble_back_text"];
+    UIBarButtonItem *barBtnHubble = [[UIBarButtonItem alloc] initWithImage:hubbleLogoBack
+                                                                     style:UIBarButtonItemStyleBordered
+                                                                    target:self
+                                                                    action:@selector(hubbleItemAction:)];
+    [barBtnHubble setTintColor:[UIColor colorWithPatternImage:hubbleLogoBack]];
+    
+    self.navigationItem.leftBarButtonItem = barBtnHubble;
+    
+    [self.btnTestCamera setBackgroundImage:[UIImage imageNamed:@"green_btn"] forState:UIControlStateNormal];
+    [self.btnTestCamera setBackgroundImage:[UIImage imageNamed:@"green_btn_pressed"] forState:UIControlEventTouchDown];
+#else
 	// Do any additional setup after loading the view.
     self.navigationItem.title = NSLocalizedStringWithDefaultValue( @"Add_Camera_Failed",nil, [NSBundle mainBundle],
                                                                   @"Add Camera Failed" , nil);
@@ -35,6 +53,7 @@
     
     UIInterfaceOrientation interfaceOrientation = [UIApplication sharedApplication].statusBarOrientation;
     [self adjustViewsForOrientations:interfaceOrientation];
+#endif
 }
 
 - (void)didReceiveMemoryWarning
@@ -130,4 +149,8 @@
 
 
 
+- (void)dealloc {
+    [_btnTestCamera release];
+    [super dealloc];
+}
 @end

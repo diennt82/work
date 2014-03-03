@@ -92,6 +92,7 @@
                     cp.ip_address != nil )
                 {
                     localIp = cp.ip_address;
+                    [self sync_online_and_offline_data:cam_profiles];
                     break;
                 }
             }

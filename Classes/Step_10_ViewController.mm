@@ -13,11 +13,14 @@
 
 @interface Step_10_ViewController ()
 
+@property (nonatomic, assign) IBOutlet UIView * progressView;
+@property (retain, nonatomic) UserAccount *userAccount;
+
 @end
 
 @implementation Step_10_ViewController
 
-@synthesize  userNameLabel, userEmailLabel,progressView ;
+@synthesize  userNameLabel, userEmailLabel;
 @synthesize  cameraMac, master_key; 
 @synthesize  cameraName;
 
@@ -39,7 +42,7 @@
 -(void) dealloc
 {
 
-    //[userNameLabel release];
+    [_userAccount release];
     //[userEmailLabel release];
     //[progressView release]; 
     [cameraMac release];
@@ -112,18 +115,42 @@
     {
         //Hide back button -- can't go back now..
         self.navigationItem.hidesBackButton = TRUE;
+#if 1
+        CGAffineTransform transform = CGAffineTransformMakeScale(1.0f, 4.0f);
+        [self.view viewWithTag:501].transform = transform;
+        [self.progressView viewWithTag:501].transform = transform;
         
+        self.navigationItem.hidesBackButton = YES;
+        
+        UIImage *hubbleLogoBack = [UIImage imageNamed:@"Hubble_back_text"];
+        UIBarButtonItem *barBtnHubble = [[UIBarButtonItem alloc] initWithImage:hubbleLogoBack
+                                                                         style:UIBarButtonItemStyleBordered
+                                                                        target:self
+                                                                        action:@selector(hubbleItemAction:)];
+        [barBtnHubble setTintColor:[UIColor colorWithPatternImage:hubbleLogoBack]];
+        
+        self.navigationItem.leftBarButtonItem = barBtnHubble;
+#else
         self.navigationItem.title =NSLocalizedStringWithDefaultValue(@"Camera_Configured",nil, [NSBundle mainBundle],
                                                                      @"Camera Configured" , nil);
-
+#endif
         NSLog(@"Normal Add cam sequence" );
         
         NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
         NSString * homeSsid = (NSString *) [userDefaults objectForKey:HOME_SSID];
         
-        
+        UIImageView *imageView = (UIImageView *)[_progressView viewWithTag:595];
+        imageView.animationImages =[NSArray arrayWithObjects:
+                                    [UIImage imageNamed:@"setup_camera_c1"],
+                                    [UIImage imageNamed:@"setup_camera_c2"],
+                                    [UIImage imageNamed:@"setup_camera_c3"],
+                                    [UIImage imageNamed:@"setup_camera_c4"],
+                                    nil];
+        imageView.animationDuration = 1.5;
+        imageView.animationRepeatCount = 0;
         
         [self.view addSubview:self.progressView];
+        [imageView startAnimating];
         self.progressView.hidden = NO;
 
         self.homeSSID.text = homeSsid;
@@ -198,6 +225,12 @@
         [_alertChooseConfig release];
         _alertChooseConfig = nil;
     }
+}
+
+#pragma mark - Actions
+- (void)hubbleItemAction:(id)sender
+{
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 - (void)startAnimationWithOrientation
@@ -767,18 +800,15 @@
     NSString * userPass = (NSString *) [userDefaults objectForKey:@"PortalPassword"];
     NSString * userApiKey = (NSString *) [userDefaults objectForKey:@"PortalApiKey"];
     
-//    UserAccount *account = [[UserAccount alloc] initWithUser:userEmail
-//                                                     andPass:userPass
-//                                                   andApiKey:userApiKey
-//                                                 andListener:nil];
-    UserAccount *account = [[UserAccount alloc] initWithUser:userEmail
+    if (_userAccount == nil)
+    {
+        self.userAccount = [[UserAccount alloc] initWithUser:userEmail
                                                     password:userPass
                                                       apiKey:userApiKey
                                                     listener:nil];
+    }
     
-    NSString *localIp = [account query_cam_ip_online: self.cameraMac];
-    
-    [account release];
+    NSString *localIp = [_userAccount query_cam_ip_online: self.cameraMac];
     
     if ( localIp != nil)
     {
