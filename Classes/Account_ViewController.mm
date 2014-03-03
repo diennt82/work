@@ -56,7 +56,7 @@
         lblVersion.frame = CGRectMake(lblVersion.frame.origin.x, lblVersion.frame.origin.y - 44, lblVersion.frame.size.width, lblVersion.frame.size.height);
     }
     
-    lblVersion.text = [NSString stringWithFormat:@"hubble v%@", [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"]];
+    lblVersion.text = [NSString stringWithFormat:@"hubble home v%@", [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"]];
 }
 
 - (void)viewDidUnload
