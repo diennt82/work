@@ -19,4 +19,6 @@
 + (UIColor *)timeLineColor;
 + (UIColor *)timeLineLineColor;
 + (UIColor *)cellMelodyColor;
++ (UIColor *)textTimerPlayBackColor;
++ (UIColor *)textForFinishPlayBackColor;
 @end

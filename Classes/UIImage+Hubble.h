@@ -28,5 +28,13 @@
 + (UIImage *)imageCameraActionPlayPressed;
 + (UIImage *)imageCameraActionPause;
 + (UIImage *)imageCameraActionPausePressed;
-
+//for playback
++ (UIImage *)imageVideoPlay;
++ (UIImage *)imageVideoPause;
++ (UIImage *)imageVerticalVideoClose;
++ (UIImage *)imageVerticalVideoClosePressed;
++ (UIImage *)imageVideoFullScreenClose;
++ (UIImage *)imageVideoFullScreenClosePressed;
++ (UIImage *)imageVideoProgressBG;
++ (UIImage *)imageVideoProgressGreen;
 @end

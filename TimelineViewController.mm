@@ -955,11 +955,10 @@
             _clipsInEachEvent.count > 0)
         {
             NSArray *clipsInEvent = [_clipsInEachEvent objectAtIndex:indexPath.row];
-            
+            NSLog(@"*******************CLIP INFO in Event is %@", clipsInEvent);
             if (![clipsInEvent isEqual:[NSNull null]])
             {
                 NSString *urlFile = [[clipsInEvent objectAtIndex:0] objectForKey:@"file"];
-                
                 if (![urlFile isEqual:[NSNull null]] &&
                     ![urlFile isEqualToString:@""])
                 {
@@ -980,7 +979,11 @@
                     
                     NSLog(@"Push the view controller.- %@", self.navigationController);
                     
-                    [self.navVC pushViewController:playbackViewController animated:YES];
+                    NSLog(@"Push the view controller of navVC.- %@", self.navVC);
+                    
+                    //                    [self.navVC pushViewController:playbackViewController animated:YES];
+                    //present view controller to view overal screen
+                    [self.navVC presentViewController:playbackViewController animated:YES completion:nil];
                     
                     [playbackViewController release];
                 }

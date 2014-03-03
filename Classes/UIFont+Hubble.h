@@ -17,4 +17,5 @@
 + (UIFont *)regularMediumFont;
 + (UIFont *)bold20Font;
 + (UIFont *)semiBold12Font;
++ (UIFont *)regular11Font;
 @end

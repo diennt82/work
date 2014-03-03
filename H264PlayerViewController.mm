@@ -127,7 +127,6 @@ double _ticks = 0;
     [self.ib_labelTouchToTalk setText:@"Hold To Talk"];
     //setup Font
     [self applyFont];
-    [self updatePositionBetweenView];
 
     // Do any additional setup after loading the view.
 	[[NSNotificationCenter defaultCenter] addObserver: self
@@ -204,20 +203,10 @@ double _ticks = 0;
     [self setupPtt];
     
     self.stringTemperature = @"0";
-    
-    ///add button to change degree
-//    [ib_switchDegree setFrame:CGRectMake(0, self.ib_temperature.frame.origin.y, self.ib_temperature.bounds.size.width, self.ib_temperature.bounds.size.height)];
-
     //end add button to change
     [ib_switchDegree setHidden:YES];
 }
 
-- (void)updatePositionBetweenView
-{
-    
-//    [self.ib_labelTouchToTalk setFrame:CGPointMake(0, screenHeight - PADDING_BOTTOM_TEXT - )];
-//    [self.ib_labelRecordVideo setFrame:CGPointMake(0, screenHeight- PADDING_BOTTOM_TEXT)];
-}
 - (void)applyFont
 {
     
@@ -503,9 +492,6 @@ double _ticks = 0;
         self.navigationItem.rightBarButtonItem = nowButton;
     }
     
-    //NSArray *actionRightButtonItems = @[earlierButton, nowButton];
-    //self.navigationItem.rightBarButtonItems = actionRightButtonItems;
-    
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
     {
         CamProfile *cp = self.selectedChannel.profile;
@@ -602,6 +588,10 @@ double _ticks = 0;
     
 }
 
+- (void)waitingScanAndStartSetupCamera_bg
+{
+    NSLog(@"need implement later");
+}
 #pragma mark - Action
 
 - (IBAction)iFrameOnlyPressAction:(id)sender
