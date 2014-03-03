@@ -133,6 +133,9 @@
     self.stringIntelligentMessage = @"Loading...";
     self.isLoading = TRUE;
     self.is12hr = [[NSUserDefaults standardUserDefaults] boolForKey:@"IS_12_HR"];
+    
+    [[UIApplication sharedApplication] setStatusBarOrientation:UIDeviceOrientationPortrait animated:NO];
+
     //self.tableView.scrollIndicatorInsets = UIEdgeInsetsMake(64, 0, 44, 0);
 #endif
     
@@ -244,7 +247,6 @@
                                                                             ServerErr:nil];
     
     //NSString *mac = [Util strip_colon_fr_mac:camChannel.profile.mac_address];
-    
     /*//////////
     NSString * yourJSONString = @"2014-01-08T03:29:29Z";
     NSDateFormatter* dF = [[NSDateFormatter alloc] init];
@@ -561,12 +563,7 @@
 }
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (indexPath.section == 0)
-    {
-        return 77;
-    }
-#if 1
-    if (indexPath.section == 1)
+    if (isPhoneLandscapeMode)
     {
         EventInfo *eventInfo = (EventInfo *)[_events objectAtIndex:indexPath.row];
         
@@ -578,75 +575,116 @@
          */
         if (eventInfo.alert == 4)
         {
-            return 212;  //TODO: Match with design document
+            return 77;
         }
         else if (eventInfo.alert == 1 ||
                  eventInfo.alert == 2 ||
                  eventInfo.alert == 3)
         {
-            return 77;
-        }
-        
-        return 212;// modify 197
-    }
-#else
-    if (indexPath.section == 1)
-    {
-        if (indexPath.row == (_eventArray.count - 1))
-        {
-            return 197;
-        }
-        else
-        {
-            EventInfo *info = (EventInfo *)[_eventArray objectAtIndex:indexPath.row];
+            EventInfo *eventInfo = (EventInfo *)[_events objectAtIndex:indexPath.row];
             
-            NSString *datestr = info.time_code;
-            NSDateFormatter *dFormater = [[NSDateFormatter alloc]init];
-            
-            [dFormater setDateFormat:@"yyyyMMddHHmmss"];
-            
-            NSDate *date = [dFormater dateFromString:datestr]; //2013-12-12 00:42:00 +0000
-            
-            dFormater.dateFormat = @"HHmm";
-            
-            //CGFloat fDate = [[dFormater stringFromDate:date] floatValue];
-            
-            NSInteger iDate = [[dFormater stringFromDate:date] integerValue];
-            
-            [dFormater release];
-            
-            EventInfo *oldInfo = (EventInfo *)[_eventArray objectAtIndex:indexPath.row + 1];
-            
-            NSString *oldDatestr = oldInfo.time_code;
-            NSDateFormatter *oldDFormater = [[NSDateFormatter alloc]init];
-            
-            [oldDFormater setDateFormat:@"yyyyMMddHHmmss"];
-            
-            NSDate *oldDate = [oldDFormater dateFromString:oldDatestr]; //2013-12-12 00:42:00 +0000
-            
-            oldDFormater.dateFormat = @"HHmm";
-            
-            //CGFloat oldFDate = [[oldDFormater stringFromDate:oldDate] floatValue];
-            NSInteger oldIDate = [[oldDFormater stringFromDate:oldDate] integerValue];
-            
-            [oldDFormater release];
-            
-            NSLog(@"%d", iDate - oldIDate);
-            
-            if (iDate - oldIDate < 70)
+            // Motion detected
+            if (eventInfo.alert == 4)
             {
-                return 73;
+                return 212;  //TODO: Match with design document
+            }
+            // Sound, temperature, & another detected
+            else if (eventInfo.alert == 1 ||
+                     eventInfo.alert == 2)
+            {
+                return 77;
             }
             
-            //return iDate - oldIDate;
-            return 197;
+            return 212;// modify 197
         }
         
-        //return 73;
+        return 60;
     }
+    else
+    {
+        if (indexPath.section == 0)
+        {
+            return 77;
+        }
+#if 1
+        if (indexPath.section == 1)
+        {
+            EventInfo *eventInfo = (EventInfo *)[_events objectAtIndex:indexPath.row];
+            
+            // Motion detected
+            if (eventInfo.alert == 4)
+            {
+                return 212;  //TODO: Match with design document
+            }
+            // Sound, temperature, & another detected
+            else if (eventInfo.alert == 1 ||
+                     eventInfo.alert == 2)
+            {
+                return 77;
+            }
+            
+            return 212;// modify 197
+        }
+#else
+        if (indexPath.section == 1)
+        {
+            if (indexPath.row == (_eventArray.count - 1))
+            {
+                return 197;
+            }
+            else
+            {
+                EventInfo *info = (EventInfo *)[_eventArray objectAtIndex:indexPath.row];
+                
+                NSString *datestr = info.time_code;
+                NSDateFormatter *dFormater = [[NSDateFormatter alloc]init];
+                
+                [dFormater setDateFormat:@"yyyyMMddHHmmss"];
+                
+                NSDate *date = [dFormater dateFromString:datestr]; //2013-12-12 00:42:00 +0000
+                
+                dFormater.dateFormat = @"HHmm";
+                
+                //CGFloat fDate = [[dFormater stringFromDate:date] floatValue];
+                
+                NSInteger iDate = [[dFormater stringFromDate:date] integerValue];
+                
+                [dFormater release];
+                
+                EventInfo *oldInfo = (EventInfo *)[_eventArray objectAtIndex:indexPath.row + 1];
+                
+                NSString *oldDatestr = oldInfo.time_code;
+                NSDateFormatter *oldDFormater = [[NSDateFormatter alloc]init];
+                
+                [oldDFormater setDateFormat:@"yyyyMMddHHmmss"];
+                
+                NSDate *oldDate = [oldDFormater dateFromString:oldDatestr]; //2013-12-12 00:42:00 +0000
+                
+                oldDFormater.dateFormat = @"HHmm";
+                
+                //CGFloat oldFDate = [[oldDFormater stringFromDate:oldDate] floatValue];
+                NSInteger oldIDate = [[oldDFormater stringFromDate:oldDate] integerValue];
+                
+                [oldDFormater release];
+                
+                NSLog(@"%d", iDate - oldIDate);
+                
+                if (iDate - oldIDate < 70)
+                {
+                    return 73;
+                }
+                
+                //return iDate - oldIDate;
+                return 197;
+            }
+            
+            //return 73;
+        }
 #endif
-    
-    return 60;
+        
+        return 60;
+    }
+
 }
 
 - (BOOL)tableView:(UITableView *)tableView shouldHighlightRowAtIndexPath:(NSIndexPath *)indexPath

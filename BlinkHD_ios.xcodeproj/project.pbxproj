@@ -699,6 +699,8 @@
 		A15431091818DEB800337EFE /* streamvga.sdp in Resources */ = {isa = PBXBuildFile; fileRef = A15431081818DEB800337EFE /* streamvga.sdp */; };
 		A15773A1186145DD00DEBD45 /* H264PlayerViewController_land_iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = A157739F186145DD00DEBD45 /* H264PlayerViewController_land_iPad.xib */; };
 		A15773A2186145DD00DEBD45 /* H264PlayerViewController_land.xib in Resources */ = {isa = PBXBuildFile; fileRef = A15773A0186145DD00DEBD45 /* H264PlayerViewController_land.xib */; };
+		A160B4DC18BF091600739B53 /* TimelineViewController_iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = A160B4DB18BF091500739B53 /* TimelineViewController_iPad.xib */; };
+		A160B4DF18C0360800739B53 /* EarlierNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = A160B4DE18C0360800739B53 /* EarlierNavigationController.m */; };
 		A18635F018B6F43F00CB5CDA /* CellMelody_land.xib in Resources */ = {isa = PBXBuildFile; fileRef = A18635EB18B6F43F00CB5CDA /* CellMelody_land.xib */; };
 		A18635F118B6F43F00CB5CDA /* CellMelody.m in Sources */ = {isa = PBXBuildFile; fileRef = A18635ED18B6F43F00CB5CDA /* CellMelody.m */; };
 		A18635F218B6F43F00CB5CDA /* CellMelody.xib in Resources */ = {isa = PBXBuildFile; fileRef = A18635EE18B6F43F00CB5CDA /* CellMelody.xib */; };
@@ -1581,6 +1583,9 @@
 		A15431081818DEB800337EFE /* streamvga.sdp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = streamvga.sdp; sourceTree = "<group>"; };
 		A157739F186145DD00DEBD45 /* H264PlayerViewController_land_iPad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = H264PlayerViewController_land_iPad.xib; sourceTree = "<group>"; };
 		A15773A0186145DD00DEBD45 /* H264PlayerViewController_land.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = H264PlayerViewController_land.xib; sourceTree = "<group>"; };
+		A160B4DB18BF091500739B53 /* TimelineViewController_iPad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TimelineViewController_iPad.xib; sourceTree = "<group>"; };
+		A160B4DD18C0360800739B53 /* EarlierNavigationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EarlierNavigationController.h; path = ../EarlierNavigationController.h; sourceTree = "<group>"; };
+		A160B4DE18C0360800739B53 /* EarlierNavigationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = EarlierNavigationController.m; path = ../EarlierNavigationController.m; sourceTree = "<group>"; };
 		A18635EB18B6F43F00CB5CDA /* CellMelody_land.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CellMelody_land.xib; sourceTree = "<group>"; };
 		A18635EC18B6F43F00CB5CDA /* CellMelody.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CellMelody.h; sourceTree = "<group>"; };
 		A18635ED18B6F43F00CB5CDA /* CellMelody.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CellMelody.m; sourceTree = "<group>"; };
@@ -2189,6 +2194,8 @@
 			isa = PBXGroup;
 			children = (
 				8B97A3BD18BEE5E8008A38E1 /* UIBarButtonAddition */,
+				A160B4DD18C0360800739B53 /* EarlierNavigationController.h */,
+				A160B4DE18C0360800739B53 /* EarlierNavigationController.m */,
 				A12A9D8B18B1DF5D004987F2 /* ImageManagement */,
 				8B9ABB6618A9FDBB0079F4A3 /* RegistrationVC */,
 				A1AC859218912FFC002A8CCD /* Color */,
@@ -3073,6 +3080,7 @@
 				8B92A08A1863E5DF005923D2 /* TimelineViewController.xib */,
 				8B92A09A1863ED66005923D2 /* TimelineInfo.h */,
 				8B92A09B1863ED66005923D2 /* TimelineInfo.m */,
+				A160B4DB18BF091500739B53 /* TimelineViewController_iPad.xib */,
 			);
 			name = Timeline;
 			sourceTree = "<group>";
@@ -4204,6 +4212,7 @@
 				8B29A00B18AF500900D36BE5 /* video_action_temp_pressed@2x.png in Resources */,
 				8B299F6818AF500900D36BE5 /* alert_upgrade_pressed@2x.png in Resources */,
 				8B29A01218AF500900D36BE5 /* checkbox_active.png in Resources */,
+				A160B4DC18BF091600739B53 /* TimelineViewController_iPad.xib in Resources */,
 				8B29A01018AF500900D36BE5 /* checkbox.png in Resources */,
 				8B29A07418AF500A00D36BE5 /* video_fullscreen_close@2x.png in Resources */,
 				8B9899DC1859AA6A00AC3852 /* slider-default7-trackBackground@2x.png in Resources */,
@@ -4629,6 +4638,7 @@
 				8B92A0A61863F69C005923D2 /* SavedEventCell.m in Sources */,
 				97A07FB117D5FD4A00653460 /* H264PlayerViewController.mm in Sources */,
 				979BC69A17D9B97700B3B373 /* PlaybackViewController.mm in Sources */,
+				A160B4DF18C0360800739B53 /* EarlierNavigationController.m in Sources */,
 				979BC69E17D9BA6C00B3B373 /* PlaylistCell.m in Sources */,
 				8B97A3C018BEE628008A38E1 /* UIBarButtonItem+Custom.m in Sources */,
 				A1ABF1AF187537D10014FCB4 /* Step_10_ViewController_ble.mm in Sources */,

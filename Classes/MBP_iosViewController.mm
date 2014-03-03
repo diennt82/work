@@ -255,7 +255,6 @@
 	for (int i = channel_array.count - 1 ; i > -1; i--)
 	{
 		CamChannel * ch = [channel_array objectAtIndex:i];
-		
         if (ch.profile != nil)
         {
 			[validChannels addObject:[channel_array objectAtIndex:i]];
@@ -266,9 +265,9 @@
 	self.menuVC.cameras = validChannels;
     self.menuVC.camerasVC.camChannels = validChannels;
 
-    UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:self.menuVC];
+//    sendStatus *nav = [[UINavigationController alloc] initWithRootViewController:self.menuVC];
+    EarlierNavigationController *nav = [[EarlierNavigationController alloc] initWithRootViewController:self.menuVC];
     [_menuVC release];
-    
     assert(nav != nil);
     
     if (self.presentedViewController) {
@@ -372,7 +371,7 @@
                     //Normal add cam sequence
                     //Load the next xib
                     Step_02_ViewController *step02ViewController = nil;
-
+                    
                     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
                     {
                         step02ViewController = [[Step_02_ViewController alloc]
