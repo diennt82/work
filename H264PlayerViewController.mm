@@ -3790,10 +3790,6 @@ double _ticks = 0;
                                         options:nil];
             
             self.melodyViewController = [[[MelodyViewController alloc] initWithNibName:@"MelodyViewController_land" bundle:nil] autorelease];
-            
-            self.melodyViewController.selectedChannel = self.selectedChannel;
-            self.melodyViewController.melodyVcDelegate = self;
-            
 
             if (isiOS7AndAbove)
             {
@@ -3805,6 +3801,9 @@ double _ticks = 0;
             }
 
         }
+        
+        self.melodyViewController.selectedChannel = self.selectedChannel;
+        self.melodyViewController.melodyVcDelegate = self;
         //landscape mode
         //hide navigation bar
         [self.navigationController setNavigationBarHidden:YES];
