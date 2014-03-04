@@ -8,10 +8,11 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="PlaybackViewController">
             <connections>
                 <outlet property="activityIndicator" destination="dQT-sH-akC" id="vGN-zu-Xhn"/>
+                <outlet property="ib_bg_top_player" destination="Jty-OI-EWS" id="F90-tp-J8r"/>
                 <outlet property="ib_closePlayBack" destination="VVD-9J-VFG" id="ldQ-yf-1o3"/>
                 <outlet property="ib_delete" destination="Ajf-r8-w8g" id="c7M-8P-odX"/>
                 <outlet property="ib_download" destination="mUW-Pm-6Ti" id="73t-Fh-oSf"/>
-                <outlet property="ib_myOverlay" destination="1" id="jVa-Km-yYX"/>
+                <outlet property="ib_myOverlay" destination="1" id="a7f-xy-aiC"/>
                 <outlet property="ib_playPlayBack" destination="XVB-g3-BPb" id="r4v-k4-gxq"/>
                 <outlet property="ib_share" destination="jk6-Ml-nwF" id="4cz-oB-Je1"/>
                 <outlet property="ib_sliderPlayBack" destination="ACI-Hg-Dbr" id="6R4-Vp-T7s"/>
@@ -24,12 +25,18 @@
             </connections>
         </placeholder>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
-        <view contentMode="scaleToFill" id="1">
+        <view autoresizesSubviews="NO" contentMode="scaleToFill" id="1">
             <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
+                <imageView userInteractionEnabled="NO" alpha="0.5" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="vertcal_video_player_Bg.png" id="Jty-OI-EWS">
+                    <rect key="frame" x="0.0" y="0.0" width="320" height="45"/>
+                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                    <color key="tintColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                </imageView>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="VVD-9J-VFG">
-                    <rect key="frame" x="15" y="13" width="15" height="18"/>
+                    <rect key="frame" x="7" y="3" width="38" height="40"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <fontDescription key="fontDescription" type="system" pointSize="15"/>
                     <state key="normal" image="vertcal_video_close.png">
@@ -39,34 +46,44 @@
                         <action selector="closePlayBack:" destination="-1" eventType="touchUpInside" id="Ug5-hG-4JQ"/>
                     </connections>
                 </button>
-                <view alpha="0.29999999999999999" contentMode="scaleToFill" id="Dex-ec-XYU">
+                <view autoresizesSubviews="NO" contentMode="scaleToFill" id="Dex-ec-XYU">
                     <rect key="frame" x="39" y="239" width="240" height="90"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <subviews>
-                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="video_overlay_bg.png" id="L3V-NC-4WR">
-                            <rect key="frame" x="0.0" y="2" width="240" height="174"/>
+                        <imageView userInteractionEnabled="NO" alpha="0.5" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="video_overlay_bg.png" id="L3V-NC-4WR">
+                            <rect key="frame" x="0.0" y="2" width="240" height="90"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                            <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                         </imageView>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="Ajf-r8-w8g">
-                            <rect key="frame" x="33" y="20" width="25" height="25"/>
+                            <rect key="frame" x="22" y="14" width="49" height="39"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <state key="normal" image="video_overlay_del.png">
                                 <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                             </state>
+                            <connections>
+                                <action selector="deleteVideo:" destination="-1" eventType="touchUpInside" id="qLl-q2-Rs1"/>
+                            </connections>
                         </button>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="mUW-Pm-6Ti">
-                            <rect key="frame" x="84" y="19" width="80" height="25"/>
+                            <rect key="frame" x="84" y="19" width="74" height="34"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <state key="normal" image="video_overlay_download.png">
                                 <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                             </state>
+                            <connections>
+                                <action selector="downloadVideo:" destination="-1" eventType="touchUpInside" id="E68-l9-hmG"/>
+                            </connections>
                         </button>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="jk6-Ml-nwF">
-                            <rect key="frame" x="186" y="19" width="25" height="25"/>
+                            <rect key="frame" x="172" y="16" width="59" height="40"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <state key="normal" image="video_overlay_share.png">
                                 <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                             </state>
+                            <connections>
+                                <action selector="shareVideo:" destination="-1" eventType="touchUpInside" id="zwH-RH-HEg"/>
+                            </connections>
                         </button>
                         <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Delete" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="jKC-zZ-6pQ">
                             <rect key="frame" x="22" y="60" width="49" height="21"/>
@@ -90,18 +107,21 @@
                             <nil key="highlightedColor"/>
                         </label>
                     </subviews>
-                    <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                    <color key="tintColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                 </view>
                 <view contentMode="scaleToFill" id="1Nr-KT-t7X">
                     <rect key="frame" x="0.0" y="435" width="320" height="45"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <subviews>
-                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="video_player_bg.png" id="Gua-hi-Cny">
+                        <imageView userInteractionEnabled="NO" alpha="0.5" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="vertcal_video_player_Bg.png" id="Gua-hi-Cny">
                             <rect key="frame" x="0.0" y="0.0" width="320" height="45"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                            <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                            <color key="tintColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                         </imageView>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="XVB-g3-BPb">
-                            <rect key="frame" x="12" y="11" width="22" height="22"/>
+                            <rect key="frame" x="3" y="0.0" width="42" height="41"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                             <state key="normal" image="video_pause.png">
                                 <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
@@ -126,7 +146,7 @@
                             <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         </label>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="DyU-m3-yUY">
-                            <rect key="frame" x="288" y="11" width="21" height="21"/>
+                            <rect key="frame" x="277" y="0.0" width="42" height="43"/>
                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                             <fontDescription key="fontDescription" type="system" pointSize="15"/>
                             <state key="normal" image="maximize.png">
@@ -138,9 +158,11 @@
                         </button>
                     </subviews>
                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                    <color key="tintColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                 </view>
             </subviews>
             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+            <color key="tintColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
             <simulatedStatusBarMetrics key="simulatedStatusBarMetrics"/>
             <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
         </view>
@@ -148,10 +170,11 @@
             <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <subviews>
-                <imageView hidden="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" id="In5-MW-x5z">
+                <imageView userInteractionEnabled="NO" alpha="0.5" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="video_player_bg.png" id="In5-MW-x5z">
                     <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                    <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                    <color key="tintColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                 </imageView>
                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" id="ZNw-nc-lw5">
                     <rect key="frame" x="0.0" y="194" width="320" height="180"/>
@@ -166,13 +189,14 @@
                     <color key="color" red="0.96862745100000003" green="0.96862745100000003" blue="0.96862745100000003" alpha="1" colorSpace="calibratedRGB"/>
                 </activityIndicatorView>
             </subviews>
-            <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+            <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
             <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
         </view>
     </objects>
     <resources>
         <image name="maximize.png" width="21" height="21"/>
         <image name="vertcal_video_close.png" width="15" height="15"/>
+        <image name="vertcal_video_player_Bg.png" width="320" height="45"/>
         <image name="video_overlay_bg.png" width="240" height="90"/>
         <image name="video_overlay_del.png" width="25" height="25"/>
         <image name="video_overlay_download.png" width="25" height="25"/>

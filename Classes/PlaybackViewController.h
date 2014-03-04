@@ -14,6 +14,7 @@
 #import "UIImage+Hubble.h"
 #import "UIFont+Hubble.h"
 #import "UIColor+Hubble.h"
+#import "EarlierNavigationController.h"
 
 @interface PlaybackViewController : UIViewController<PlayerCallbackHandler>
 
@@ -30,10 +31,17 @@
     
     NSString *urlVideo;
     NSString *camera_mac;
+
+    EarlierNavigationController *_navController;
+    BOOL _isSwitchingWhenPress;
+    BOOL _isClickedOnZooming;
+    BOOL _isHorizeShow;
     
 }
+@property (nonatomic, retain) EarlierNavigationController *navController;
 @property (retain, nonatomic) IBOutlet UIImageView *imageVideo;
 @property (retain, nonatomic) IBOutlet UIActivityIndicatorView *activityIndicator;
+@property (retain, nonatomic) IBOutlet UIImageView *ib_bg_top_player;
 
 @property (retain, nonatomic) IBOutlet UIView *ib_viewControlPlayer;
 @property (retain, nonatomic) IBOutlet UIButton *ib_closePlayBack;
@@ -59,7 +67,7 @@
 @property (nonatomic, retain) NSString *urlVideo;
 @property (nonatomic) BOOL userWantToBack;
 @property (retain, nonatomic) NSMutableArray *clipsInEvent;
-
+@property (nonatomic, retain) NSTimer *timerHideMenu;
 
 //- (void)stopStream;
 
@@ -70,6 +78,9 @@
 - (IBAction)closePlayBack:(id)sender;
 - (IBAction)playVideo:(id)sender;
 - (IBAction)minimizeVideo:(id)sender;
+- (IBAction)deleteVideo:(id)sender;
+- (IBAction)downloadVideo:(id)sender;
+- (IBAction)shareVideo:(id)sender;
 
 
 @end
