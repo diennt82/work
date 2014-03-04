@@ -88,8 +88,9 @@
     UINavigationController *nav1 = [[UINavigationController alloc] initWithRootViewController:settingsVC];
     
     self.accountVC = [[Account_ViewController alloc] init];
+    self.accountVC.parentVC = self;
     
-    NSLog(@"viewDidLoad: %p, %p", self.menuDelegate, self.accountVC.mdelegate);
+    NSLog(@"MenuVC - viewDidLoad: %p, %p", self.menuDelegate, self.accountVC.parentVC);
     
     UINavigationController *nav2 = [[UINavigationController alloc] initWithRootViewController:_accountVC];
     
@@ -118,7 +119,6 @@
     
     UIImage *hubbleBack = [UIImage imageNamed:@"Hubble_logo_back"];
     [self.navigationItem.leftBarButtonItem setTintColor:[UIColor colorWithPatternImage:hubbleBack]];
-    self.accountVC.mdelegate = self.menuDelegate;
     self.title = @"Cameras";
     self.navigationItem.title = @"Cameras";
 
@@ -137,6 +137,7 @@
         if (!isOffline)
         {
             self.navigationItem.leftBarButtonItem.enabled = NO;
+             [[self.tabBar.items objectAtIndex:1] setEnabled:NO];
             self.camerasVC.waitingForUpdateData = TRUE;
             [self.camerasVC.tableView reloadData];
             [self performSelectorInBackground:@selector(recreateAccount)
