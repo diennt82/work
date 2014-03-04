@@ -97,10 +97,11 @@
     self.viewControllers = [NSArray arrayWithObjects:nav, nav1, nav2, nil];
     
     UITabBarItem *camItem = [self.tabBar.items objectAtIndex:0];
-    [camItem setImage:[UIImage imageNamed:@"camera.png"]];
+    [camItem setImage:[UIImage imageNamed:@"camera"]];
     
     UITabBarItem *settingsItem = [self.tabBar.items objectAtIndex:1];
-    [settingsItem setImage:[UIImage imageNamed:@"general"]];
+    [settingsItem setImage:[UIImage imageNamed:@"menu_settings"]];
+    settingsItem.enabled = NO;
 
     UITabBarItem *accountItem = [self.tabBar.items objectAtIndex:2];
     [accountItem setImage:[UIImage imageNamed:@"account_icon.png"]];
@@ -209,10 +210,6 @@
         [self.navigationController pushViewController:h264PlayerViewController animated:YES];
         [h264PlayerViewController release];
     }
-    else
-    {
-        self.navigationItem.leftBarButtonItem = NO;
-    }
 }
 
 - (void)stopStreamFinished:(CamChannel *)camChannel
@@ -272,6 +269,7 @@
     if (self.cameras != nil &&
         self.cameras.count > 0)
     {
+        [[self.tabBar.items objectAtIndex:1] setEnabled:YES];
         self.navigationItem.leftBarButtonItem.enabled = YES;
     }
 }
