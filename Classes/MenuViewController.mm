@@ -62,7 +62,7 @@
     [backBarBtn setTintColor:[UIColor colorWithPatternImage:hubbleBack]];
     
     self.navigationItem.leftBarButtonItem = backBarBtn;
-   // assert(self.navigationController.navigationItem.leftBarButtonItem != nil);
+    self.navigationItem.leftBarButtonItem.enabled = NO;
     
     self.camerasVC = [[CamerasViewController alloc] initWithStyle:nil
                                                          delegate:self.menuDelegate
@@ -189,6 +189,7 @@
         if ([camChannel.profile isNotAvailable] &&
             [camChannel.profile isSharedCam])
         {
+            self.navigationItem.leftBarButtonItem.enabled = YES;
             return;
         }
         
@@ -204,11 +205,13 @@
         h264PlayerViewController.h264PlayerVCDelegate = self;
         
         NSLog(@"%@, %@", self.parentViewController.description, self.parentViewController.parentViewController);
-        
-        //MenuViewController *tabBarController = (MenuViewController *)self.parentViewController;
-        
+
         [self.navigationController pushViewController:h264PlayerViewController animated:YES];
         [h264PlayerViewController release];
+    }
+    else
+    {
+        self.navigationItem.leftBarButtonItem = NO;
     }
 }
 
@@ -242,13 +245,7 @@
 {
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     NSString *username  = [userDefaults stringForKey:@"PortalUsername"];
-    //NSString *userEmail = [userDefaults stringForKey:@"PortalUseremail"];
     NSString *apiKey    = [userDefaults stringForKey:@"PortalApiKey"];
-//    UserAccount *account = [[UserAccount alloc] initWithUser:username
-//                                                     andPass:userEmail
-//                                                   andApiKey:apiKey
-//                                                 andListener:nil];
-//    account.userAccountDelegate = self;
     UserAccount *account = [[UserAccount alloc] initWithUser:username
                                                     password:nil
                                                       apiKey:apiKey
@@ -272,12 +269,16 @@
     self.camerasVC.waitingForUpdateData = NO;
     [self.camerasVC.tableView performSelectorInBackground:@selector(reloadData)
                                                withObject:nil];
-    self.navigationItem.leftBarButtonItem.enabled = YES;
+    if (self.cameras != nil &&
+        self.cameras.count > 0)
+    {
+        self.navigationItem.leftBarButtonItem.enabled = YES;
+    }
 }
 
 - (void)updateCameraList
 {
-    NSMutableArray * validChannels = [[NSMutableArray alloc] init];
+    NSMutableArray *validChannels = [[NSMutableArray alloc] init];
     
     for (int i = _arrayChannel.count - 1 ; i > -1; i--)
 	{
@@ -290,6 +291,8 @@
 	}
     
 	self.cameras = validChannels;
+    
+    [validChannels release];
 }
 
 - (BOOL)rebindCamerasResource
