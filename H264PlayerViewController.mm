@@ -5612,10 +5612,19 @@ double _ticks = 0;
             {
                 _timerRecording = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(timerTick:) userInfo:nil repeats:YES];
             }
-            //processing for recording
+           
             /*
-             TODO: start recording
+             start recording
              */
+            
+            if (h264Streamer != nil)
+            {
+                NSString * url  = [Util getRecordFileName];
+                url = [url stringByReplacingOccurrencesOfString:@".avi" withString:@".flv"];
+                
+                h264Streamer->startRecord([url UTF8String]);
+            }
+            
         }
         else
         {
@@ -5629,9 +5638,12 @@ double _ticks = 0;
             _syncPortraitAndLandscape = NO;
 
             //processing for stopping record
-            /*
-             TODO: save if have here.
+            /*save if have here.
              */
+            if (h264Streamer != nil)
+            {
+                h264Streamer->stopRecord();
+            }
 
         }
     }
