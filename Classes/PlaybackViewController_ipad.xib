@@ -17,7 +17,7 @@
                 <outlet property="ib_sliderPlayBack" destination="MMi-se-o4O" id="it8-G8-y42"/>
                 <outlet property="ib_timerPlayBack" destination="bUh-RA-SFf" id="mfo-z9-Xj9"/>
                 <outlet property="ib_viewControlPlayer" destination="G1e-eW-6ty" id="pYn-z6-alB"/>
-                <outlet property="ib_viewOverlayVideo" destination="1c4-xF-z2g" id="Smo-8E-8qi"/>
+                <outlet property="ib_viewOverlayVideo" destination="36M-Re-HzQ" id="R5f-fE-ym9"/>
                 <outlet property="ib_zoomingPlayBack" destination="K2P-JU-AgX" id="1ut-aD-Onu"/>
                 <outlet property="imageVideo" destination="ZH2-YF-E2o" id="zkR-49-iWz"/>
                 <outlet property="view" destination="8W2-Oc-oAa" id="Hic-BQ-bqV"/>
@@ -29,7 +29,7 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="IiG-Ag-o2G">
-                    <rect key="frame" x="20" y="26" width="40" height="40"/>
+                    <rect key="frame" x="20" y="20" width="69" height="46"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <fontDescription key="fontDescription" type="system" pointSize="15"/>
                     <state key="normal" image="vertcal_video_close.png">
@@ -41,7 +41,7 @@
                 </button>
                 <view contentMode="scaleToFill" id="36M-Re-HzQ">
                     <rect key="frame" x="260" y="464" width="248" height="97"/>
-                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                     <subviews>
                         <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="video_overlay_bg.png" id="1c4-xF-z2g">
                             <rect key="frame" x="0.0" y="0.0" width="248" height="97"/>
@@ -53,6 +53,9 @@
                             <state key="normal" image="video_overlay_del.png">
                                 <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                             </state>
+                            <connections>
+                                <action selector="deleteVideo:" destination="-1" eventType="touchUpInside" id="EFV-WR-Lfu"/>
+                            </connections>
                         </button>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="xFE-NI-5yN">
                             <rect key="frame" x="84" y="19" width="80" height="25"/>
@@ -60,6 +63,9 @@
                             <state key="normal" image="video_overlay_download.png">
                                 <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                             </state>
+                            <connections>
+                                <action selector="downloadVideo:" destination="-1" eventType="touchUpInside" id="N07-9e-vAG"/>
+                            </connections>
                         </button>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="3Ed-xj-h65">
                             <rect key="frame" x="186" y="19" width="25" height="25"/>
@@ -67,6 +73,9 @@
                             <state key="normal" image="video_overlay_share.png">
                                 <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                             </state>
+                            <connections>
+                                <action selector="shareVideo:" destination="-1" eventType="touchUpInside" id="ZRB-PS-Bpu"/>
+                            </connections>
                         </button>
                         <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Delete" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="fAd-Al-sM4">
                             <rect key="frame" x="22" y="60" width="49" height="21"/>
@@ -140,7 +149,7 @@
                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                 </view>
             </subviews>
-            <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
             <simulatedStatusBarMetrics key="simulatedStatusBarMetrics"/>
             <simulatedScreenMetrics key="simulatedDestinationMetrics"/>
         </view>
@@ -148,6 +157,10 @@
             <rect key="frame" x="0.0" y="0.0" width="768" height="1024"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <subviews>
+                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="video_player_bg.png" id="nfm-fx-rhG">
+                    <rect key="frame" x="0.0" y="0.0" width="768" height="1024"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                </imageView>
                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" id="ZH2-YF-E2o">
                     <rect key="frame" x="0.0" y="286" width="768" height="432"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>

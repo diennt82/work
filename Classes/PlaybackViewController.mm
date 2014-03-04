@@ -45,6 +45,14 @@
 {
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
+    //load new nib for landscape iPad
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+    {
+        [[NSBundle mainBundle] loadNibNamed:@"PlaybackViewController_ipad"
+                                      owner:self
+                                    options:nil];
+    }
+    
     [self applyFont];
     [self.ib_viewOverlayVideo setHidden:YES];
     
