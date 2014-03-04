@@ -854,6 +854,10 @@
     // should be show dialog here, make sure user input username and password
     [self.ib_dialogVerifyNetwork setHidden:NO];
     
+    //and then disable user interaction
+    [self.view setUserInteractionEnabled:NO];
+    [self.navigationController.navigationBar setUserInteractionEnabled:NO];
+    
     [self prepareWifiInfo];
     
     //Save and send
@@ -868,6 +872,8 @@
         {
             [self sendCommandRestartSystem];
             [self showNextScreen];
+            [self.view setUserInteractionEnabled:YES];
+            [self.navigationController.navigationBar setUserInteractionEnabled:YES];
         }
     }
     else
