@@ -27,7 +27,7 @@
     MediaPlayer *_playbackStreamer;
     PlaybackListener * listener; 
     
-    //NSMutableArray * clips;
+    NSMutableArray * _clips;
     
     NSString *urlVideo;
     NSString *camera_mac;
@@ -38,6 +38,7 @@
     BOOL _isHorizeShow;
     
 }
+@property (nonatomic, retain) NSMutableArray *clips;
 @property (nonatomic, retain) EarlierNavigationController *navController;
 @property (retain, nonatomic) IBOutlet UIImageView *imageVideo;
 @property (retain, nonatomic) IBOutlet UIActivityIndicatorView *activityIndicator;
@@ -59,7 +60,7 @@
 @property (retain, nonatomic) IBOutlet UIButton *ib_share;
 
 
-@property (nonatomic, retain)  NSTimer * list_refresher; 
+@property (nonatomic, retain)  NSTimer * list_refresher;
 @property (nonatomic, retain) PlaylistInfo * clip_info;
 
 @property (nonatomic, retain) NSString *camera_mac;
