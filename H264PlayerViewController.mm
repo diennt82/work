@@ -3882,19 +3882,30 @@ double _ticks = 0;
                 
                 if (isiPhone4) // This condition check size of screen. Not iPhone4 or other
                 {
-                    self.timelineVC.view.frame = CGRectMake(0, alignYTimeLine, SCREEN_WIDTH, SCREEN_HEIGHT - self.ib_ViewTouchToTalk.frame.origin.y + 64);
+                    self.timelineVC.view.frame = CGRectMake(0, alignYTimeLine, SCREEN_HEIGHT, SCREEN_HEIGHT - self.ib_ViewTouchToTalk.frame.origin.y + 64);
                 }
                 else
                 {
-                    self.timelineVC.view.frame = CGRectMake(0, alignYTimeLine, SCREEN_WIDTH, SCREEN_HEIGHT - self.ib_ViewTouchToTalk.frame.origin.y);
+                    self.timelineVC.view.frame = CGRectMake(0, alignYTimeLine, SCREEN_HEIGHT, SCREEN_HEIGHT - self.ib_ViewTouchToTalk.frame.origin.y);
                 }
                 
+                _timelineVC.tableView.contentSize = CGSizeMake(SCREEN_WIDTH, SCREEN_HEIGHT);
                 //don't show timeline after switch from land to port
                 self.timelineVC.view.hidden = NO;
                 [self.view addSubview:_timelineVC.view];
                 if (_isLandScapeMode)
                 {
-                    self.timelineVC.tableView.contentInset = UIEdgeInsetsMake(0, 0, 275, 0);
+                    if (isiPhone4 || isiPhone5)
+                    {
+                        //iPhone
+                        self.timelineVC.tableView.contentInset = UIEdgeInsetsMake(0, 0, 275, 0);
+                    }
+                    else
+                    {
+                        //iPad
+                        self.timelineVC.tableView.contentInset = UIEdgeInsetsMake(0, 0, 50, 0);
+                    }
+                    
                 }
                 else
                 {
