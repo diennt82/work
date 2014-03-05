@@ -43,12 +43,25 @@
     [_password release];
     [_deviceConf release];
     [_progressView release];
+    [_infoSelectCameView release];
     [super dealloc];
 }
 - (void)viewDidLoad
 {
     [super viewDidLoad];
 	// Do any additional setup after loading the view.
+    
+    [[NSNotificationCenter defaultCenter] addObserver: self
+                                             selector: @selector(handleEnteredBackground)
+                                                 name: UIApplicationDidEnterBackgroundNotification
+                                               object: nil];
+
+    
+    // Do any additional setup after loading the view.
+    [[NSNotificationCenter defaultCenter] addObserver: self
+                                             selector: @selector(becomeActive)
+                                                 name: UIApplicationDidBecomeActiveNotification
+                                               object: nil];
     
     [self.progressView setHidden:YES];
 #if 1
@@ -139,6 +152,10 @@
     }
     self.tfPassword = (UITextField *)[self.passwordCell viewWithTag:200];
     self.tfConfirmPass = (UITextField *)[self.confPasswordCell viewWithTag:201];
+    
+    //addsubview
+    [self.view addSubview:self.infoSelectCameView];
+    [self.infoSelectCameView setHidden:YES];
 }
 
 - (void)viewDidUnload
@@ -160,11 +177,13 @@
     {
         _sec.text = self.security; 
     }
+    _isUserMakeConnect = NO;
 
 }
 
 - (void)viewWillDisappear:(BOOL)animated
 {
+    _task_cancelled = YES;
     [self resetAllTimer];
 }
 
@@ -750,6 +769,10 @@
 
 -(void)sendWifiInfoToCamera
 {
+    //and then disable user interaction
+    [self.view setUserInteractionEnabled:NO];
+    [self.navigationController.navigationBar setUserInteractionEnabled:NO];
+    
     [self prepareWifiInfo]; 
     
     //Save and send 
@@ -784,18 +807,77 @@
 	//NSString * response =
     [[HttpCom instance].comWithDevice sendCommandAndBlock:setup_cmd ];
     
-    [NSTimer scheduledTimerWithTimeInterval:5.0//
+    
+    //Should check connect to camera here(after send command setup http)
+    [NSTimer scheduledTimerWithTimeInterval: 10.0//wait 10s and then check app connect to camera
                                      target:self
-                                   selector:@selector(getStatusOfCameraToWifi:)
+                                   selector:@selector(checkAppConnectToCamera)
                                    userInfo:nil
                                     repeats:NO];
+ 
+}
+
+- (void)checkAppConnectToCamera
+{
+    if ([self isAppConnectedToCamera])
+    {
+        NSLog(@"App connected with camera, waiting for get status, if connected, go next");
+        [self.progressView setHidden:NO];
+        [self.view bringSubviewToFront:self.progressView];
+        [NSTimer scheduledTimerWithTimeInterval:1.0//
+                                         target:self
+                                       selector:@selector(getStatusOfCameraToWifi:)
+                                       userInfo:nil
+                                        repeats:NO];
+        return;
+    }
+    else if (!_isUserMakeConnect)
+    {
+        //TODO: show prompt to user select network camera again and handle next
+        [self.progressView setHidden:YES];
+        [self.infoSelectCameView setHidden:NO];
+        [self.view bringSubviewToFront:self.infoSelectCameView];
+        
+    }
+    else
+    {
+        [self.infoSelectCameView removeFromSuperview];
+        [self.view bringSubviewToFront:self.progressView];
+        [self.progressView setHidden:NO];
+    }
 //    _timeOut =  [NSTimer scheduledTimerWithTimeInterval: TIME_INPUT_PASSWORD_AGAIN// after 60s if not get successful
 //                                                 target:self
 //                                               selector:@selector(showDialogPasswordWrong)
 //                                               userInfo:nil
 //                                                repeats:NO];
+
+    if (_task_cancelled)
+    {
+        
+    }
+    else
+    {
+        [NSTimer scheduledTimerWithTimeInterval: 3//
+                                         target:self
+                                       selector:@selector(checkAppConnectToCamera)
+                                       userInfo:nil
+                                        repeats:NO];
+        
+        NSLog(@"Don't Send & reset done");
+    }
+}
+
+-(void) becomeActive
+{
+    _task_cancelled = YES;
+    _isUserMakeConnect = YES;
+    NSLog(@"getstatusOfCamera again");
+    [self checkAppConnectToCamera];
+}
+
+-(void)handleEnteredBackground
+{
     
-    NSLog(@"Don't Send & reset done");
 }
 
 - (void)nextStepVerifyPassword
@@ -874,6 +956,8 @@
         
     }
 }
+
+
 - (void)getStatusOfCameraToWifi:(NSTimer *)info
 {
 //    NSString * currentSSID = [CameraPassword fetchSSIDInfo];
@@ -889,13 +973,12 @@
         _currentStateCamera = @"";
     }
 
-    NSLog(@"_currentStateCamera is %@", _currentStateCamera);
-    
     if ([_currentStateCamera isEqualToString:@"CONNECTED"])
     {
         [self resetAllTimer];
         [self nextStepVerifyPassword];
         [self.progressView removeFromSuperview];
+        [self.infoSelectCameView removeFromSuperview];
         [self.progressView setHidden:YES];
     }
     else{
@@ -909,6 +992,15 @@
 
 }
 
+- (BOOL)isAppConnectedToCamera
+{
+    NSString * currentSSID = [CameraPassword fetchSSIDInfo];
+    
+    NSLog(@"currentSSID is %@", currentSSID);
+    if ([currentSSID hasPrefix:@"Camera"])
+        return YES;
+    return NO;
+}
 - (BOOL) restoreDataIfPossible
 {
 	

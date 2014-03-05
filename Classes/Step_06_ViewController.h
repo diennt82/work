@@ -25,10 +25,13 @@
     NSTimer *_inputPasswordTimer;
     DeviceConfiguration *_deviceConf;
     NSTimer *_timeOut;
+    BOOL _isUserMakeConnect;
+    BOOL _task_cancelled;
     
 }
 @property (retain, nonatomic) IBOutlet UIView *progressView;
 //
+@property (retain, nonatomic) IBOutlet UIView *infoSelectCameView;
 @property (nonatomic, strong) NSString *currentStateCamera;
 //timeout input password
 @property (nonatomic, strong) NSTimer *inputPasswordTimer;
