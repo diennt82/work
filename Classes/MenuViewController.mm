@@ -133,7 +133,9 @@
         NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
         BOOL isOffline = [userDefaults boolForKey:_OfflineMode];
         
-        if (!isOffline)
+        if (!isOffline &&
+            !self.camerasVC.waitingForUpdateData &&
+            !_notUpdateCameras)
         {
             self.navigationItem.leftBarButtonItem.enabled = NO;
             self.camerasVC.waitingForUpdateData = TRUE;

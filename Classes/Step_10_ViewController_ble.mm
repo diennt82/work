@@ -91,6 +91,18 @@
     }
     else //not first time --> this is normal add camera sequence..
     {
+#if 1
+        self.navigationItem.hidesBackButton = YES;
+        
+        UIImage *hubbleLogoBack = [UIImage imageNamed:@"Hubble_back_text"];
+        UIBarButtonItem *barBtnHubble = [[UIBarButtonItem alloc] initWithImage:hubbleLogoBack
+                                                                         style:UIBarButtonItemStyleBordered
+                                                                        target:self
+                                                                        action:@selector(hubbleItemAction:)];
+        [barBtnHubble setTintColor:[UIColor colorWithPatternImage:hubbleLogoBack]];
+        
+        self.navigationItem.leftBarButtonItem = barBtnHubble;
+#else
         [self startAnimationWithOrientation];
         //Hide back button -- can't go back now..
         self.navigationItem.hidesBackButton = TRUE;
@@ -109,8 +121,19 @@
         [self.view addSubview:cameraAddedView];
         self.homeSSID.text = homeSsid;
 
+#endif
+        UIImageView *imageView = (UIImageView *)[self.progressView viewWithTag:595];
+        imageView.animationImages =[NSArray arrayWithObjects:
+                                    [UIImage imageNamed:@"setup_camera_c1"],
+                                    [UIImage imageNamed:@"setup_camera_c2"],
+                                    [UIImage imageNamed:@"setup_camera_c3"],
+                                    [UIImage imageNamed:@"setup_camera_c4"],
+                                    nil];
+        imageView.animationDuration = 1.5;
+        imageView.animationRepeatCount = 0;
         
-        
+        [self.view addSubview:self.progressView];
+        [imageView startAnimating];
         self.progressView.hidden = NO;
         [self.view bringSubviewToFront:self.progressView];
         
@@ -128,12 +151,7 @@
                                        selector:@selector(wait_for_camera_to_reboot:)
                                        userInfo:nil
                                         repeats:NO];
-        
-
-        
-        
     }
-        
 }
 
 - (void)viewDidUnload
@@ -144,14 +162,20 @@
 
 -(void) viewWillAppear:(BOOL)animated
 {
-    UIInterfaceOrientation interfaceOrientation = [UIApplication sharedApplication].statusBarOrientation;
-    [self adjustViewsForOrientations:interfaceOrientation];
+    [super viewWillAppear:animated];
+//    UIInterfaceOrientation interfaceOrientation = [UIApplication sharedApplication].statusBarOrientation;
+//    [self adjustViewsForOrientations:interfaceOrientation];
 }
 
 - (void)viewWillDisappear:(BOOL)animated
 {
     //remove delegate
     [BLEConnectionManager getInstanceBLE].delegate = nil;
+}
+
+- (void)hubbleItemAction: (id)sender
+{
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 - (void)startAnimationWithOrientation

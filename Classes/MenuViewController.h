@@ -25,6 +25,7 @@
 @property (nonatomic, assign) id<ConnectionMethodDelegate> menuDelegate;
 @property (nonatomic, retain) NSMutableArray *cameras;
 @property (retain, nonatomic) CamerasViewController* camerasVC;
+@property (nonatomic) BOOL notUpdateCameras;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
      withConnDelegate:(id<ConnectionMethodDelegate> ) caller;

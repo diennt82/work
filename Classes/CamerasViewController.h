@@ -10,13 +10,15 @@
 #import "ConnectionMethodDelegate.h"
 //#import "MenuViewController.h"
 
-@interface CamerasViewController : UITableViewController
-{
-    //member to dismiss when disDisAppearView
-    //UIAlertView *_alertChooseConfig;
-}
+@protocol CamerasVCDelegate <NSObject>
 
-@property (assign, nonatomic) id<ConnectionMethodDelegate> camerasDelegate;
+- (void)sendActionCommand;
+
+@end
+
+@interface CamerasViewController : UITableViewController
+
+@property (assign, nonatomic) id<CamerasVCDelegate> camerasVCDelegate;
 @property (assign, nonatomic) id parentVC;
 @property (nonatomic) BOOL waitingForUpdateData;
 @property (retain, nonatomic) NSMutableArray *camChannels;

@@ -20,6 +20,7 @@
 }
 
 @property (nonatomic, assign)  id<ConnectionMethodDelegate> delegate;
+@property (nonatomic) NSInteger cameraType;
 
 - (IBAction)handleButtonPress:(id)sender;
 - (IBAction)goBackToFirstScreen:(id)sender;
