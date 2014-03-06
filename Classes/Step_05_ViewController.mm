@@ -61,6 +61,7 @@
     
     [self.btnContinue setBackgroundImage:[UIImage imageNamed:@"green_btn"] forState:UIControlStateNormal];
     [self.btnContinue setBackgroundImage:[UIImage imageNamed:@"green_btn_pressed"] forState:UIControlEventTouchDown];
+    self.btnContinue.enabled = NO;
 #else
     self.navigationItem.title = NSLocalizedStringWithDefaultValue(@"Configure_Camera",nil, [NSBundle mainBundle],
                                                                   @"Configure Camera" , nil);
@@ -340,6 +341,7 @@
 - (void)tableView: (UITableView *)tableView didSelectRowAtIndexPath: (NSIndexPath *)indexPath
 {
 #if 1
+    self.btnContinue.enabled = YES;
     self.selectedWifiEntry = (WifiEntry *)[listOfWifi objectAtIndex:indexPath.row];
 #else
     [tableView deselectRowAtIndexPath:[tableView indexPathForSelectedRow]

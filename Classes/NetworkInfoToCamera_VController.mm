@@ -69,6 +69,7 @@
                                 nil];
     imageView.animationDuration = 1.5;
     imageView.animationRepeatCount = 0;
+    [imageView startAnimating];
     
     if (self.ssid == nil)
     {

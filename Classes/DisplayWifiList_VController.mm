@@ -67,6 +67,7 @@
     
     [self.btnContinue setBackgroundImage:[UIImage imageNamed:@"green_btn"] forState:UIControlStateNormal];
     [self.btnContinue setBackgroundImage:[UIImage imageNamed:@"green_btn_pressed"] forState:UIControlEventTouchDown];
+    self.btnContinue.enabled = NO;
     
     [BLEConnectionManager getInstanceBLE].delegate = self;
     _listOfWifi = [[NSMutableArray alloc] init];
@@ -263,6 +264,7 @@
 - (void)tableView: (UITableView *)tableView didSelectRowAtIndexPath: (NSIndexPath *)indexPath
 {
 #if 1
+    self.btnContinue.enabled = YES;
     self.selectedWifiEntry = (WifiEntry *)[_listOfWifi objectAtIndex:indexPath.row];
 #else
     [tableView deselectRowAtIndexPath:[tableView indexPathForSelectedRow]
@@ -539,7 +541,7 @@
 -(void) setWifiResult:(NSArray *) wifiList
 {
     //show back button
-    self.navigationItem.hidesBackButton = NO;
+    self.navigationItem.hidesBackButton = YES;
     //enable button refresh
     [self.refreshWifiList setEnabled:YES];
     //hide indicarot
