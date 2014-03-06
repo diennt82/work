@@ -30,6 +30,7 @@
     
 }
 @property (retain, nonatomic) IBOutlet UIView *progressView;
+@property (retain, nonatomic) IBOutlet UIScrollView *scrollViewGuide;
 //
 @property (retain, nonatomic) IBOutlet UIView *infoSelectCameView;
 @property (nonatomic, strong) NSString *currentStateCamera;

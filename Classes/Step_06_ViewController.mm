@@ -44,6 +44,7 @@
     [_deviceConf release];
     [_progressView release];
     [_infoSelectCameView release];
+    [_scrollViewGuide release];
     [super dealloc];
 }
 - (void)viewDidLoad
@@ -156,6 +157,8 @@
     //addsubview
     [self.view addSubview:self.infoSelectCameView];
     [self.infoSelectCameView setHidden:YES];
+    
+    [self.scrollViewGuide setContentSize:CGSizeMake(320, 1181)];
 }
 
 - (void)viewDidUnload
