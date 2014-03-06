@@ -574,7 +574,6 @@ double _ticks = 0;
 - (void)earlierButtonAction:(id)sender
 {
     
-    ///xxxxx
     earlierNavi.isEarlierView = YES;
     [nowButton setTitleTextAttributes:@{
                                         UITextAttributeFont: [UIFont fontWithName:PN_LIGHT_FONT size:17.0],
@@ -4588,6 +4587,14 @@ double _ticks = 0;
     {
         [self.view bringSubviewToFront:self.ib_viewRecordTTT];
         [self.ib_viewRecordTTT setHidden:NO];
+        
+        //check if is share cam, up UI
+        if ([_cameraModel isEqualToString:CP_MODEL_SHARED_CAM])
+        {
+            _isRecordInterface = YES;
+            [self changeAction:nil];
+            [self.ib_buttonChangeAction setEnabled:NO];
+        }
     }
     else if (_selectedItemMenu == INDEX_MELODY)
     {
