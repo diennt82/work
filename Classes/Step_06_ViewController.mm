@@ -773,7 +773,6 @@
 -(void)sendWifiInfoToCamera
 {
     //and then disable user interaction
-    [self.view setUserInteractionEnabled:NO];
     [self.navigationController.navigationBar setUserInteractionEnabled:NO];
     
     [self prepareWifiInfo]; 
