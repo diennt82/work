@@ -689,6 +689,8 @@
 		A11E8C1317E2DB7E00915F84 /* libstdc++.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = A11E8C1217E2DB7D00915F84 /* libstdc++.dylib */; };
 		A120548318BC3AAD00557C1A /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A120548218BC3AAD00557C1A /* MediaPlayer.framework */; };
 		A1239E86186185F200A25A04 /* AudioOutStreamer.m in Sources */ = {isa = PBXBuildFile; fileRef = A1239E85186185F200A25A04 /* AudioOutStreamer.m */; };
+		A127FD2D18C8126F00D16638 /* detect_camera_5.png in Resources */ = {isa = PBXBuildFile; fileRef = A127FD2C18C8126F00D16638 /* detect_camera_5.png */; };
+		A127FD2F18C8129F00D16638 /* detect_camera_5@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A127FD2E18C8129F00D16638 /* detect_camera_5@2x.png */; };
 		A12A9D8A18B1DF4C004987F2 /* UIImage+Hubble.m in Sources */ = {isa = PBXBuildFile; fileRef = A12A9D8918B1DF4C004987F2 /* UIImage+Hubble.m */; };
 		A14631C6185C133D00E96969 /* ScrollHorizontalMenu.m in Sources */ = {isa = PBXBuildFile; fileRef = A14631C5185C133D00E96969 /* ScrollHorizontalMenu.m */; };
 		A15110D718AB7D4600E116E1 /* TimeLinePremiumCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A15110D618AB7D4600E116E1 /* TimeLinePremiumCell.m */; };
@@ -1568,6 +1570,8 @@
 		A1239E84186185F200A25A04 /* AudioOutStreamer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AudioOutStreamer.h; sourceTree = "<group>"; };
 		A1239E85186185F200A25A04 /* AudioOutStreamer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AudioOutStreamer.m; sourceTree = "<group>"; };
 		A123DC9717E9A748006CC6FD /* PlayerCallbackHandler.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PlayerCallbackHandler.h; sourceTree = "<group>"; };
+		A127FD2C18C8126F00D16638 /* detect_camera_5.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = detect_camera_5.png; sourceTree = "<group>"; };
+		A127FD2E18C8129F00D16638 /* detect_camera_5@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "detect_camera_5@2x.png"; sourceTree = "<group>"; };
 		A12A9D8818B1DF4B004987F2 /* UIImage+Hubble.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+Hubble.h"; sourceTree = "<group>"; };
 		A12A9D8918B1DF4C004987F2 /* UIImage+Hubble.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+Hubble.m"; sourceTree = "<group>"; };
 		A14631C4185C133D00E96969 /* ScrollHorizontalMenu.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ScrollHorizontalMenu.h; sourceTree = "<group>"; };
@@ -3289,6 +3293,8 @@
 				8B95144F18C071DF00C1D06A /* detect_camera_3@2x.png */,
 				8B95145018C071DF00C1D06A /* detect_camera_4.png */,
 				8B95145118C071DF00C1D06A /* detect_camera_4@2x.png */,
+				A127FD2C18C8126F00D16638 /* detect_camera_5.png */,
+				A127FD2E18C8129F00D16638 /* detect_camera_5@2x.png */,
 				8B999C5D18BDFE4400B0D8EF /* green_btn.png */,
 				8B999C5E18BDFE4500B0D8EF /* green_btn@2x.png */,
 				8B999C5F18BDFE4500B0D8EF /* green_btn_pressed.png */,
@@ -4213,6 +4219,7 @@
 				8B299F6818AF500900D36BE5 /* alert_upgrade_pressed@2x.png in Resources */,
 				8B29A01218AF500900D36BE5 /* checkbox_active.png in Resources */,
 				A160B4DC18BF091600739B53 /* TimelineViewController_iPad.xib in Resources */,
+				A127FD2D18C8126F00D16638 /* detect_camera_5.png in Resources */,
 				8B29A01018AF500900D36BE5 /* checkbox.png in Resources */,
 				8B29A07418AF500A00D36BE5 /* video_fullscreen_close@2x.png in Resources */,
 				8B9899DC1859AA6A00AC3852 /* slider-default7-trackBackground@2x.png in Resources */,
@@ -4286,6 +4293,7 @@
 				8B29A00618AF500900D36BE5 /* video_action_pan_pressed.png in Resources */,
 				8B299F5818AF500900D36BE5 /* alert_camera_pressed@2x.png in Resources */,
 				38DE1C3C168ADD110049E814 /* Account_ViewController_ipad.xib in Resources */,
+				A127FD2F18C8129F00D16638 /* detect_camera_5@2x.png in Resources */,
 				38DE1CD5168AFBCF0049E814 /* MBP_InitialSetupViewController_ipad.xib in Resources */,
 				8B299F7518AF500900D36BE5 /* camera_action_listening_pressed_land.png in Resources */,
 				38DE1CCB168AFBAA0049E814 /* Step_02_ViewController_ipad.xib in Resources */,

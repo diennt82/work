@@ -63,7 +63,10 @@
     
     id<ConnectionMethodDelegate> delegate;
 }
+@property (retain, nonatomic) IBOutlet UIView *ib_viewGuild;
 
+@property (retain, nonatomic) IBOutlet UIScrollView *ib_scollViewGuide;
+@property (retain, nonatomic) IBOutlet UIButton *ib_resumeSetup;
 @property (nonatomic,assign) IBOutlet UILabel * homeSSID; 
 @property (nonatomic, assign) IBOutlet UILabel * userNameLabel;
 @property (nonatomic, assign) IBOutlet UILabel * userEmailLabel,  * cameraName;
@@ -86,6 +89,7 @@
 - (void) checkScanResult: (NSTimer *) expired;
 
 - (void) setupCompleted;
+- (IBAction)resumeSetupAction:(id)sender;
 
 
 - (void)  setupFailed;
