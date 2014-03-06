@@ -68,7 +68,7 @@
     
 #if 1
 
-    [self.ib_scollViewGuide setContentSize:CGSizeMake(320, 1405)];
+    [self.ib_scollViewGuide setContentSize:CGSizeMake(320, 1401)];
 
 #endif
     // Do any additional setup after loading the view.

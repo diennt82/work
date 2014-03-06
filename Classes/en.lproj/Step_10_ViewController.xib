@@ -153,7 +153,7 @@
             <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
         </view>
         <view contentMode="scaleToFill" id="VO0-zj-eKX">
-            <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+            <rect key="frame" x="0.0" y="0.0" width="320" height="1500"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <subviews>
                 <progressView opaque="NO" tag="501" contentMode="scaleToFill" verticalHuggingPriority="750" progress="0.84999999999999987" progressImage="setup_progress_blue.png" trackImage="setup_progress_grey.png" id="WSo-WR-5gL">
@@ -161,7 +161,7 @@
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                 </progressView>
                 <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" id="bu3-Pi-rng">
-                    <rect key="frame" x="0.0" y="77" width="320" height="491"/>
+                    <rect key="frame" x="0.0" y="77" width="320" height="1401"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                     <subviews>
                         <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Wrong Wi-Fi Network" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="D03-Xk-OGl">
@@ -233,7 +233,7 @@
                             <color key="textColor" red="0.10980392160000001" green="0.50196078430000002" blue="0.95294117649999999" alpha="1" colorSpace="calibratedRGB"/>
                             <nil key="highlightedColor"/>
                         </label>
-                        <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="detect_camera_4.png" id="tM3-aG-04w">
+                        <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="detect_camera_5.png" id="tM3-aG-04w">
                             <rect key="frame" x="23" y="963" width="275" height="170"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         </imageView>
@@ -262,7 +262,6 @@
                 </scrollView>
             </subviews>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
-            <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
         </view>
     </objects>
     <resources>
@@ -270,7 +269,7 @@
         <image name="detect_camera_1.png" width="275" height="170"/>
         <image name="detect_camera_2.png" width="275" height="170"/>
         <image name="detect_camera_3.png" width="275" height="170"/>
-        <image name="detect_camera_4.png" width="275" height="170"/>
+        <image name="detect_camera_5.png" width="275" height="170"/>
         <image name="green_btn.png" width="295" height="50"/>
         <image name="setup_camera_c4.png" width="100" height="110"/>
         <image name="setup_progress_blue.png" width="8" height="8"/>
