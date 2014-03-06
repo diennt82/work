@@ -2491,7 +2491,8 @@ double _ticks = 0;
     _degreeCString = stringTemperature;
     
     float celsius = [_degreeCString floatValue];
-    NSInteger degreeF = (celsius*(9/5)) + 32;
+    float changeToFloat = (celsius * 9.0)/5.0;
+    NSInteger degreeF = (round(changeToFloat)) + 32;
     _degreeFString = [NSString stringWithFormat:@"%d", degreeF];
     
     UILabel *degreeCelsius = [[UILabel alloc] init];
