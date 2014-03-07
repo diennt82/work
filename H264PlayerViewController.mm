@@ -2092,7 +2092,7 @@ double _ticks = 0;
         }
         [self  stopStunStream];
         
-        [self stopRelayStream];
+        //[self stopRelayStream];
     }
 #endif
     //[self.activityStopStreamingProgress stopAnimating];
