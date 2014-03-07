@@ -368,7 +368,7 @@ double _ticks = 0;
 {
     
     [self.scrollView insertSubview:_imageViewStreamer aboveSubview:_imageViewVideo];
-    [self.imageViewStreamer setUserInteractionEnabled:YES];
+    //[self.imageViewStreamer setUserInteractionEnabled:YES];
     [self.scrollView setUserInteractionEnabled:YES];
     //set background for scrollView
     [self.scrollView setBackgroundColor:[UIColor clearColor]];
