@@ -681,7 +681,7 @@
     //      counter = 0 -> Repeat  = NO ;
 
     //retry for 20x3 = 60 sec
-    NSNumber * retry_count = [[NSNumber alloc] initWithInt:20];
+    NSNumber * retry_count = [[NSNumber alloc] initWithInt:7];//change to 7 is 21s
     //check back later..
     [NSTimer scheduledTimerWithTimeInterval: 3.0//
                                      target:self

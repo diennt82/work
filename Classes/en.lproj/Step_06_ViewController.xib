@@ -8,7 +8,7 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="Step_06_ViewController">
             <connections>
                 <outlet property="confPasswordCell" destination="41" id="45"/>
-                <outlet property="infoSelectCameView" destination="Qxn-or-QKK" id="krv-iF-8gn"/>
+                <outlet property="infoSelectCameView" destination="Qxn-or-QKK" id="Nj8-qo-P2g"/>
                 <outlet property="passwordCell" destination="36" id="46"/>
                 <outlet property="progressView" destination="nSw-Db-ssL" id="PEM-u2-NeE"/>
                 <outlet property="scrollViewGuide" destination="fUx-oY-EgV" id="p8G-bG-ikx"/>
@@ -183,7 +183,7 @@
             <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
             <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
         </view>
-        <view contentMode="top" id="Qxn-or-QKK">
+        <view multipleTouchEnabled="YES" contentMode="top" id="Qxn-or-QKK">
             <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
             <subviews>
@@ -270,7 +270,7 @@
                         </button>
                     </subviews>
                     <connections>
-                        <outlet property="delegate" destination="-1" id="IS1-Jc-kxO"/>
+                        <outlet property="delegate" destination="-1" id="O7L-RZ-nO8"/>
                     </connections>
                 </scrollView>
             </subviews>
