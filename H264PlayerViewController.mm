@@ -51,6 +51,8 @@
 
 #define PTT_ENGAGE_BTN 711
 
+#define TAG_ALERT_VIEW_REMOTE_TIME_OUT 559
+
 @interface H264PlayerViewController () <TimelineVCDelegate, BonjourDelegate>
 {
     BOOL _syncPortraitAndLandscape;
@@ -77,6 +79,7 @@
 @property (nonatomic) BOOL scanAgain;
 @property (nonatomic) BOOL isFahrenheit;
 @property (nonatomic, retain) NSString *cameraModel;
+@property (nonatomic, retain) NSTimer *timerRemoteStreamTimeOut;
 
 - (void)centerScrollViewContents;
 - (void)scrollViewDoubleTapped:(UITapGestureRecognizer*)recognizer;
@@ -170,7 +173,7 @@ double _ticks = 0;
     [self.imageViewStreamer addGestureRecognizer:singleTap];
     [singleTap release];
     
-    [self.imageViewStreamer setUserInteractionEnabled:YES];
+    self.imageViewStreamer.userInteractionEnabled = NO;
     self.cameraModel = [self.selectedChannel.profile getModel];
     [self initHorizeMenu: _cameraModel];
 
@@ -752,21 +755,10 @@ double _ticks = 0;
                 
             }
             NSLog(@"video adjusted size: %f x %f", destWidth, destHeight);
-            
-            
-            
-            //            self.imageViewVideo.frame = CGRectMake(left,
-            //                                                   top,
-            //                                                   destWidth, destHeight);
-            //re-set the size
-            //            if (h264Streamer != NULL)
-            //            {
-            //                h264Streamer->setVideoSurface(self.imageViewVideo);
-            //            }
+
             self.imageViewStreamer.frame = CGRectMake(left,
                                                       top,
                                                       destWidth, destHeight);
-            
             break;
         }
         case MEDIA_INFO_BITRATE_BPS:
@@ -853,11 +845,20 @@ double _ticks = 0;
                                                                        withAction:@"Start Stream Success"
                                                                         withLabel:@"Start Stream Success"
                                                                         withValue:nil];
+                    if (_timerRemoteStreamTimeOut != nil)
+                    {
+                        [self.timerRemoteStreamTimeOut invalidate];
+                        self.timerRemoteStreamTimeOut = nil;
+                    }
+                    
+                    self.timerRemoteStreamTimeOut = [NSTimer scheduledTimerWithTimeInterval:5*60
+                                                                                     target:self
+                                                                                   selector:@selector(showDialogAndStopStream:)
+                                                                                   userInfo:nil
+                                                                                    repeats:NO];
                 }
                 
-                //[self performSelectorInBackground:@selector(getVQ_bg) withObject:nil];
                 //[self performSelectorInBackground:@selector(getTriggerRecording_bg) withObject:nil];
-                //[self performSelectorInBackground:@selector(getZoneDetection_bg) withObject:nil];
                 //[self performSelectorInBackground:@selector(getMelodyValue_bg) withObject:nil];
                 self.imageViewStreamer.userInteractionEnabled = YES;
                 self.imgViewDrectionPad.userInteractionEnabled = YES;
@@ -1535,6 +1536,9 @@ double _ticks = 0;
 
 - (void)setupCamera
 {
+    self.activityIndicator.hidden = NO;
+    [self.activityIndicator startAnimating];
+    
     if (self.selectedChannel.stream_url != nil)
     {
         self.selectedChannel.stream_url = nil;
@@ -1881,6 +1885,31 @@ double _ticks = 0;
     [self.navigationController popToRootViewControllerAnimated:YES];
 }
 
+- (void)goBackToCamerasRemoteStreamTimeOut
+{
+    self.viewStopStreamingProgress.hidden = NO;
+    [self.view bringSubviewToFront:self.viewStopStreamingProgress];
+    
+    self.activityIndicator.hidden = YES;
+    [self.activityIndicator stopAnimating];
+    
+    NSLog(@"self.currentMediaStatus: %d", self.currentMediaStatus);
+    
+    userWantToCancel = TRUE;
+    self.selectedChannel.stopStreaming = TRUE;
+    
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    [userDefaults removeObjectForKey:CAM_IN_VEW];
+    [userDefaults synchronize];
+    
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+    [UIApplication sharedApplication].idleTimerDisabled = NO;
+    
+    self.selectedChannel.profile.isSelected = FALSE;
+    
+    [self.navigationController popToRootViewControllerAnimated:YES];
+}
+
 -(void) cleanUpDirectionTimers
 {
     
@@ -2086,10 +2115,27 @@ double _ticks = 0;
 
         
         [self cleanUpDirectionTimers];
+        
         if (scanner != nil)
         {
             [scanner cancel];
         }
+        
+        if (_timerRemoteStreamTimeOut != nil)
+        {
+            [self.timerRemoteStreamTimeOut invalidate];
+            self.timerRemoteStreamTimeOut = nil;
+        }
+        
+        self.imageViewStreamer.userInteractionEnabled = NO;
+        
+        if (_isHorizeShow == TRUE)
+        {
+            [self hideControlMenu];
+        }
+        
+        [self hidenAllBottomView];
+        
         [self  stopStunStream];
         
         //[self stopRelayStream];
@@ -2097,6 +2143,23 @@ double _ticks = 0;
 #endif
     //[self.activityStopStreamingProgress stopAnimating];
 }
+
+- (void)showDialogAndStopStream: (id)sender // Timer
+{
+    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Remote Stream"
+                                                         message:@"The Camera has been viewed for about 5 minutes. Do you want to continue?"
+                                                        delegate:self
+                                               cancelButtonTitle:@"View other camera"
+                                               otherButtonTitles:@"Yes", nil];
+    alertView.tag = TAG_ALERT_VIEW_REMOTE_TIME_OUT;
+    
+    [alertView show];
+    [alertView release];
+    
+    [self stopStream];
+}
+
+#pragma mark - VQ
 
 -(void) getVQ_bg
 {
@@ -4147,7 +4210,6 @@ double _ticks = 0;
 
 #pragma mark Alertview delegate
 
-
 - (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex
 {
 	
@@ -4215,6 +4277,22 @@ double _ticks = 0;
 		[alert release];
 		alert = nil;
 	}
+    else if (tag == TAG_ALERT_VIEW_REMOTE_TIME_OUT)
+    {
+        switch (buttonIndex)
+        {
+            case 0: // View other camera
+                [self goBackToCamerasRemoteStreamTimeOut];
+                break;
+                
+            case 1: // Continue view --> restart stream
+                [self setupCamera];
+                break;
+                
+            default:
+                break;
+        }
+    }
 	
 }
 
