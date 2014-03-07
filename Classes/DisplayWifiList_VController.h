@@ -15,7 +15,7 @@
 {
     NSMutableArray * _listOfWifi;
     IBOutlet UITableViewCell * cellView;
-    IBOutlet UITableView * mTableView;
+    //IBOutlet UITableView * mTableView;
 }
 
 @property (nonatomic, retain) NSMutableArray * listOfWifi;

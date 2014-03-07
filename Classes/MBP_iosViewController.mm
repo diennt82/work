@@ -355,6 +355,7 @@
             
             if (isFirstTimeSetup == FALSE)
             {
+#if 0
                 //Guild screen to setup camera
                 NSInteger getValue = [userDefaults integerForKey:SET_UP_CAMERA];
                 if (getValue == 1)
@@ -366,6 +367,7 @@
                     [guideAddCame presentModallyOn:self];
                 }
                 else
+#endif
                 {
                     //Concurrent setup
                     //Normal add cam sequence
@@ -384,6 +386,7 @@
                     }
                     
                     step02ViewController.delegate = self;
+                    step02ViewController.cameraType = [userDefaults integerForKey:SET_UP_CAMERA];
                     //[step02ViewController presentModallyOn:self];
                     UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:step02ViewController];
                     //[self presentViewController:nav animated:NO completion:^{}];

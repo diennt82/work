@@ -20,7 +20,7 @@
 
 @interface EditCamera_VController : UIViewController<UITextViewDelegate, BLEConnectionManagerDelegate>
 {
-    IBOutlet UIView * camName;
+    //IBOutlet UIView * camName;
     
     NSString * homeWifiSSID; 
     NSString * cameraMac; 
@@ -33,5 +33,5 @@
 @property (nonatomic, retain) UIAlertView *alertView;
 @property (nonatomic, retain) NSString * cameraMac, * cameraName;
 
-- (IBAction)handleButtonPress:(id)sender;
+//- (IBAction)handleButtonPress:(id)sender;
 @end

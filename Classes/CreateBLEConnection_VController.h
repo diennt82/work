@@ -35,6 +35,7 @@
     NSMutableArray *_currentBLEList;
     BOOL _isBackPress;
 }
+
 @property (retain, nonatomic) IBOutlet UIButton *ib_RefreshBLE;
 
 @property (retain, nonatomic) IBOutlet UIActivityIndicatorView *ib_Indicator;

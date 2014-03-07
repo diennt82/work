@@ -134,7 +134,9 @@
         NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
         BOOL isOffline = [userDefaults boolForKey:_OfflineMode];
         
-        if (!isOffline)
+        if (!isOffline &&
+            !self.camerasVC.waitingForUpdateData &&
+            !_notUpdateCameras)
         {
             self.navigationItem.leftBarButtonItem.enabled = NO;
              [[self.tabBar.items objectAtIndex:1] setEnabled:NO];

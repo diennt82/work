@@ -11,6 +11,7 @@
 
 @interface NetworkInfoToCamera_VController () <UITextFieldDelegate>
 
+@property (retain, nonatomic) IBOutlet UIView *viewProgress;
 @property (retain, nonatomic) UITextField *tfSSID;
 @property (retain, nonatomic) UITextField *tfPassword;
 @property (retain, nonatomic) UITextField *tfConfirmPass;
@@ -40,6 +41,7 @@
     [_password release];
     [_deviceConf release];
     [_ib_dialogVerifyNetwork release];
+    [_viewProgress release];
     [super dealloc];
 }
 - (void)viewDidLoad
@@ -58,7 +60,16 @@
                                      action:nil] autorelease];
     self.navigationItem.hidesBackButton = NO;
     
-    
+    UIImageView *imageView = (UIImageView *)[_viewProgress viewWithTag:595];
+    imageView.animationImages =[NSArray arrayWithObjects:
+                                [UIImage imageNamed:@"setup_camera_c1"],
+                                [UIImage imageNamed:@"setup_camera_c2"],
+                                [UIImage imageNamed:@"setup_camera_c3"],
+                                [UIImage imageNamed:@"setup_camera_c4"],
+                                nil];
+    imageView.animationDuration = 1.5;
+    imageView.animationRepeatCount = 0;
+    [imageView startAnimating];
     
     if (self.ssid == nil)
     {
@@ -852,7 +863,9 @@
     //should hide back in navigation bar
     self.navigationItem.hidesBackButton = YES;
     // should be show dialog here, make sure user input username and password
-    [self.ib_dialogVerifyNetwork setHidden:NO];
+    //[self.ib_dialogVerifyNetwork setHidden:NO];
+    [self.view addSubview:_viewProgress];
+    [self.view bringSubviewToFront:_viewProgress];
     
     //and then disable user interaction
     [self.view setUserInteractionEnabled:NO];
@@ -894,7 +907,8 @@
     //load step 10
     NSLog(@"Add cam... ");
     NSLog(@"Load Step 10");
-    [self.ib_dialogVerifyNetwork setHidden:YES];
+    //[self.ib_dialogVerifyNetwork setHidden:YES];
+    [_viewProgress removeFromSuperview];
     if (sent_conf.ssid != nil)
     {
         NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];

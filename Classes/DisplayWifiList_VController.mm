@@ -7,8 +7,16 @@
 //
 
 #import "DisplayWifiList_VController.h"
+#import "Step05Cell.h"
 
 @interface DisplayWifiList_VController ()
+
+@property (retain, nonatomic) IBOutlet UITableViewCell *cellOtherNetwork;
+@property (retain, nonatomic) IBOutlet UIButton *btnContinue;
+@property (retain, nonatomic) IBOutlet UITableView *mTableView;
+@property (retain, nonatomic) IBOutlet UIView *viewProgress;
+
+@property (retain, nonatomic) WifiEntry *selectedWifiEntry;
 
 @end
 
@@ -35,12 +43,50 @@
     [_refreshWifiList release];
     [_ib_Indicator release];
     [_ib_LabelState release];
+    [_cellOtherNetwork release];
+    [_btnContinue release];
+    [_mTableView release];
+    [_viewProgress release];
     [super dealloc];
 }
 - (void)viewDidLoad
 {
     [super viewDidLoad];
 	// Do any additional setup after loading the view.
+#if 1
+    self.navigationItem.hidesBackButton = YES;
+    
+    UIImage *hubbleLogoBack = [UIImage imageNamed:@"Hubble_back_text"];
+    UIBarButtonItem *barBtnHubble = [[UIBarButtonItem alloc] initWithImage:hubbleLogoBack
+                                                                     style:UIBarButtonItemStyleBordered
+                                                                    target:self
+                                                                    action:@selector(hubbleItemAction:)];
+    [barBtnHubble setTintColor:[UIColor colorWithPatternImage:hubbleLogoBack]];
+    
+    self.navigationItem.leftBarButtonItem = barBtnHubble;
+    
+    [self.btnContinue setBackgroundImage:[UIImage imageNamed:@"green_btn"] forState:UIControlStateNormal];
+    [self.btnContinue setBackgroundImage:[UIImage imageNamed:@"green_btn_pressed"] forState:UIControlEventTouchDown];
+    self.btnContinue.enabled = NO;
+    
+    [BLEConnectionManager getInstanceBLE].delegate = self;
+    _listOfWifi = [[NSMutableArray alloc] init];
+    
+    UIImageView *imageView = (UIImageView *)[_viewProgress viewWithTag:585];
+    imageView.animationImages = @[[UIImage imageNamed:@"loader_a"],
+                                  [UIImage imageNamed:@"loader_b"],
+                                  [UIImage imageNamed:@"loader_c"],
+                                  [UIImage imageNamed:@"loader_d"],
+                                  [UIImage imageNamed:@"loader_e"],
+                                  [UIImage imageNamed:@"loader_f"]];
+    imageView.animationRepeatCount = 0;
+    imageView.animationDuration = 1.5f;
+    
+    [imageView startAnimating];
+    
+    [self.view addSubview:_viewProgress];
+    [self.view bringSubviewToFront:_viewProgress];
+#else
     self.navigationItem.title = NSLocalizedStringWithDefaultValue(@"Configure_Camera",nil, [NSBundle mainBundle],
                                                                   @"Configure Camera" , nil);
     
@@ -64,7 +110,60 @@
     
     [self.ib_LabelState setText:waitingGetWifiText];
 //    [self queryWifiList];
+#endif
+}
+
+-(void) viewWillAppear:(BOOL)animated
+{
+    //delay .1s to display new screen
+    [super viewWillAppear:animated];
+    [NSTimer scheduledTimerWithTimeInterval:0.1 target:self selector:@selector(queryWifiList) userInfo:nil repeats:NO];
+}
+
+- (void)viewWillDisappear:(BOOL)animated
+{
+    NSLog(@"viewWillDisappear of DisplayWifiList_VController");
+    //[self hideIndicator];
+    [_viewProgress removeFromSuperview];
+    //remove delegate
+    [BLEConnectionManager getInstanceBLE].delegate = nil;
     
+    [super viewWillDisappear:animated];
+}
+
+- (void)viewDidUnload
+{
+    [super viewDidUnload];
+    // Release any retained subviews of the main view.
+}
+
+#pragma mark - Actions
+
+- (IBAction)btnContinueTouchUpInsideAction:(id)sender
+{
+    NSLog(@"Load step 6: Input network info");
+    //Load the next xib
+    NetworkInfoToCamera_VController *netWorkInfoViewController = [[NetworkInfoToCamera_VController alloc] initWithNibName:@"NetworkInfoToCamera_VController" bundle:nil];
+    
+    NSRange noQoute = NSMakeRange(1, _selectedWifiEntry.ssid_w_quote.length - 2);
+    
+    NSString *wifiName = [_selectedWifiEntry.ssid_w_quote substringWithRange:noQoute];
+    
+    netWorkInfoViewController.isOtherNetwork = [wifiName isEqualToString:@"Other Network"];
+    
+    netWorkInfoViewController.ssid = wifiName;
+    netWorkInfoViewController.security = _selectedWifiEntry.auth_mode;
+    
+    [self.navigationController pushViewController:netWorkInfoViewController animated:NO];
+    
+    [netWorkInfoViewController release];
+}
+
+#pragma mark - Methods
+
+- (void)hubbleItemAction: (id)sender
+{
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 - (void)addOtherWifi
@@ -81,27 +180,6 @@
     [self filterCameraList];
     
     [other release];
-}
-- (void)viewDidUnload
-{
-    [super viewDidUnload];
-    // Release any retained subviews of the main view.
-}
-
--(void) viewWillAppear:(BOOL)animated
-{
-    //delay .1s to display new screen
-    [NSTimer scheduledTimerWithTimeInterval:0.1 target:self selector:@selector(queryWifiList) userInfo:nil repeats:NO];
-    UIInterfaceOrientation interfaceOrientation = [UIApplication sharedApplication].statusBarOrientation;
-    [self adjustViewsForOrientations:interfaceOrientation];
-}
-
-- (void)viewWillDisappear:(BOOL)animated
-{
-    NSLog(@"viewWillDisappear of DisplayWifiList_VController");
-    [self hideIndicator];
-    //remove delegate
-    [BLEConnectionManager getInstanceBLE].delegate = nil;
 }
 
 -(void) filterCameraList
@@ -127,100 +205,47 @@
 }
 
 #pragma mark -
-#pragma mark Rotating
-- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
-{
-    return   ((interfaceOrientation == UIInterfaceOrientationPortrait) ||
-              (interfaceOrientation == UIInterfaceOrientationLandscapeLeft) ||
-              (interfaceOrientation == UIInterfaceOrientationLandscapeRight));
-}
-
--(BOOL)shouldAutorotate
-{
-    return YES;
-}
-
--(NSUInteger) supportedInterfaceOrientations
-{
-    return UIInterfaceOrientationMaskAllButUpsideDown;
-}
-
--(void) willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
-{
-    [self adjustViewsForOrientations:toInterfaceOrientation];
-}
-
--(void) adjustViewsForOrientations: (UIInterfaceOrientation) interfaceOrientation
-{
-    if (interfaceOrientation == UIInterfaceOrientationLandscapeLeft ||
-        interfaceOrientation == UIInterfaceOrientationLandscapeRight)
-    {
-        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
-        {
-            
-            
-            
-            
-        }
-        else
-        {
-            //[[NSBundle mainBundle] loadNibNamed:@"Step_05_ViewController_land" owner:self options:nil];
-        }
-        //        mTableView.frame = CGRectMake(mTableView.frame.origin.x,
-        //                                      mTableView.frame.origin.y,
-        //                                      mTableView.frame.size.width,
-        //                                      //550);
-        //                                      UIScreen.mainScreen.bounds.size.width - mTableView.frame.origin.y - 84);
-    }
-    else if (interfaceOrientation == UIInterfaceOrientationPortrait ||
-             interfaceOrientation == UIInterfaceOrientationPortraitUpsideDown)
-    {
-        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
-        {
-            
-        }
-        else
-        {
-            //[[NSBundle mainBundle] loadNibNamed:@"Step_05_ViewController" owner:self options:nil];
-        }
-        
-        //        mTableView.frame = CGRectMake(mTableView.frame.origin.x,
-        //                                      mTableView.frame.origin.y,
-        //                                      mTableView.frame.size.width,
-        //                                      //500);
-        //                                      UIScreen.mainScreen.bounds.size.height - mTableView.frame.origin.y - 84);
-    }
-}
-
-#pragma mark -
 #pragma mark Table view delegates & datasource
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    int tag = tableView.tag;
-    if (tag == 11)
-        return 1;
-    
-    return 0;
+    return 1;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    int tag = tableView.tag;
-    if (tag == 11)
-        return [_listOfWifi count];
-    return 0;
-    
+    return _listOfWifi.count;
 }
 
-- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSString *sectionName = @"Select the wifi connection that your camera can use";
-    
-    return sectionName;
-}
-
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+#if 1
+    if (indexPath.row < _listOfWifi.count - 1)
+    {
+        static NSString *CellIdentifier = @"Step05Cell";
+        Step05Cell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+        
+        NSArray *objects = [[NSBundle mainBundle] loadNibNamed:@"Step05Cell" owner:nil options:nil];
+        
+        for (id curObj in objects)
+        {
+            if ([curObj isKindOfClass:[Step05Cell class]])
+            {
+                cell = (Step05Cell *)curObj;
+                break;
+            }
+        }
+        
+        WifiEntry *entry = [_listOfWifi objectAtIndex:indexPath.row];
+        cell.lblName.text = [entry.ssid_w_quote substringWithRange:NSMakeRange(1, entry.ssid_w_quote.length - 2)]; // Remove " & "
+        
+        return cell;
+    }
+    else
+    {
+        return _cellOtherNetwork;
+    }
+#else
     static NSString *CellIdentifier = @"Cell";
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     if (cell == nil) {
@@ -233,11 +258,15 @@
     cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     
     return cell;
+#endif
 }
 
 - (void)tableView: (UITableView *)tableView didSelectRowAtIndexPath: (NSIndexPath *)indexPath
 {
-    
+#if 1
+    self.btnContinue.enabled = YES;
+    self.selectedWifiEntry = (WifiEntry *)[_listOfWifi objectAtIndex:indexPath.row];
+#else
     [tableView deselectRowAtIndexPath:[tableView indexPathForSelectedRow]
                              animated:NO];
     
@@ -290,7 +319,7 @@
         [netWorkInfoViewController release];
         
     }
-    
+#endif
 }
 #pragma mark -
 
@@ -351,7 +380,7 @@
     //clear list wifi
     [self.listOfWifi removeAllObjects];
     // reload tableview
-    [mTableView reloadData];
+    [_mTableView reloadData];
     
     [self showIndicator];
     [BLEConnectionManager getInstanceBLE].delegate = self;
@@ -512,11 +541,12 @@
 -(void) setWifiResult:(NSArray *) wifiList
 {
     //show back button
-    self.navigationItem.hidesBackButton = NO;
+    self.navigationItem.hidesBackButton = YES;
     //enable button refresh
     [self.refreshWifiList setEnabled:YES];
     //hide indicarot
-    [self hideIndicator];
+    //[self hideIndicator];
+    [_viewProgress removeFromSuperview];
     
     NSLog(@"GOT WIFI RESULT: numentries: %d", wifiList.count);
     self.listOfWifi = [NSMutableArray arrayWithArray:wifiList];
@@ -535,7 +565,7 @@
     //filter Camera list
     [self filterCameraList];
     
-    [mTableView reloadData];
+    [_mTableView reloadData];
 }
 
 - (void) showDialog:(NSTimer *)timer

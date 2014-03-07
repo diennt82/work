@@ -8,11 +8,13 @@
 
 #import "Step_02_ViewController.h"
 #import "UIBarButtonItem+Custom.h"
+#import "PAIRInstructionViewController.h"
 
 
 @interface Step_02_ViewController ()
 
 @property (retain, nonatomic) IBOutlet UIButton *btnContinue;
+
 @end
 
 @implementation Step_02_ViewController
@@ -121,22 +123,36 @@
 
 - (IBAction)btnContinueTouchUpInsideAction:(id)sender
 {
-    NSLog(@"Load step 3");
     //Load the next xib
-    Step_03_ViewController *step03ViewController=nil;
     
-    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+    if (_cameraType == BLUETOOTH_SETUP)
     {
-        step03ViewController = [[Step_03_ViewController alloc]initWithNibName:@"Step_03_ViewController_ipad" bundle:nil];
-    } else {
-        step03ViewController =
-        [[Step_03_ViewController alloc] initWithNibName:@"Step_03_ViewController"
-                                                 bundle:nil];
+        NSLog(@"Load step 2.5 PAIR Instruction vc");
+        //Load the next xib
+        PAIRInstructionViewController *pairInstructionVC = [[PAIRInstructionViewController alloc] init];
+        [self.navigationController pushViewController:pairInstructionVC animated:YES];
+        [pairInstructionVC release];
     }
-    
-    [self.navigationController pushViewController:step03ViewController animated:YES];
-    
-    [step03ViewController release];
+    else
+    {
+        NSLog(@"Load step 3 Concurrent");
+        Step_03_ViewController *step03ViewController = nil;
+        
+        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+        {
+            step03ViewController = [[Step_03_ViewController alloc] initWithNibName:@"Step_03_ViewController_ipad" bundle:nil];
+        }
+        else
+        {
+            step03ViewController =
+            [[Step_03_ViewController alloc] initWithNibName:@"Step_03_ViewController"
+                                                     bundle:nil];
+        }
+        
+        [self.navigationController pushViewController:step03ViewController animated:YES];
+        
+        [step03ViewController release];
+    }
 }
 
 - (IBAction)goBackToFirstScreen:(id)sender
