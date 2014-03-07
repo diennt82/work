@@ -506,6 +506,11 @@
             [self forceLogin:TRUE];
         }
     }
+    else if (viewController.app_stage == APP_STAGE_LOGGING_IN)
+    {
+        [userDefaults setBool:FALSE forKey:_AutoLogin];
+        [userDefaults synchronize];
+    }
 #else
     NSLog(@"MBP_iosAppDelegate - viewController.app_stage: %d", viewController.app_stage);
     
