@@ -9,7 +9,8 @@
 #import "Step_05_ViewController.h"
 #import "Step05Cell.h"
 
-@interface Step_05_ViewController ()
+@interface Step_05_ViewController () <UIAlertViewDelegate>
+
 @property (retain, nonatomic) IBOutlet UIButton *btnContinue;
 @property (retain, nonatomic) IBOutlet UITableViewCell *cellOtherNetwork;
 
@@ -136,6 +137,24 @@
 
 - (IBAction)btnContinueTouchUpInsideAction:(id)sender
 {
+    //NSString * homeSsid = (NSString *) [userDefaults objectForKey:HOME_SSID];
+    NSRange noQoute = NSMakeRange(1, _selectedWifiEntry.ssid_w_quote.length - 2);
+    
+    NSString *wifiName = [_selectedWifiEntry.ssid_w_quote substringWithRange:noQoute];
+    NSString *homeWifi = [[NSUserDefaults standardUserDefaults] stringForKey:HOME_SSID];
+    
+    if ([wifiName isEqualToString:homeWifi])
+    {
+        [self moveToNextStep];
+    }
+    else
+    {
+        [self showDialogToConfirm:homeWifi selectedWifi:wifiName];
+    }
+}
+
+- (void)moveToNextStep
+{
     NSLog(@"Load step 6");
     //Load the next xib
     Step_06_ViewController *step06ViewController = nil;
@@ -150,9 +169,9 @@
         step06ViewController = [[Step_06_ViewController alloc]
                                 initWithNibName:@"Step_06_ViewController" bundle:nil];
     }
-
-    NSRange noQoute = NSMakeRange(1, _selectedWifiEntry.ssid_w_quote.length - 2);
     
+    NSRange noQoute = NSMakeRange(1, _selectedWifiEntry.ssid_w_quote.length - 2);
+
     NSString *wifiName = [_selectedWifiEntry.ssid_w_quote substringWithRange:noQoute];
     
     step06ViewController.isOtherNetwork = [wifiName isEqualToString:@"Other Network"];
@@ -165,6 +184,29 @@
     [step06ViewController release];
 }
 
+- (void)showDialogToConfirm: (NSString *)homeWifi selectedWifi: (NSString *)selectedWifi
+{
+    NSString * msg = [NSString stringWithFormat:@"You have selected wifi %@ which is not the same as your Home wifi, %@. If you choose to continue, there will more steps to setup your camera. Do you want to proceed?", selectedWifi, homeWifi];
+    
+    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Notice"
+                                                        message:msg
+                                                       delegate:self
+                                              cancelButtonTitle:@"Cancel"
+                                              otherButtonTitles:@"Continue", nil];
+    alertView.tag = 555;
+    [alertView show];
+    [alertView release];
+}
+
+#pragma mark - Alert view delegate
+
+- (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex  // after animation
+{
+    if (buttonIndex == 1) // Continue
+    {
+        [self moveToNextStep];
+    }
+}
 
 #pragma mark -
 #pragma mark Rotating

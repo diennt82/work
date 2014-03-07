@@ -78,6 +78,10 @@
     
     NSLog(@"homeWifiSSID: %@", self.homeWifiSSID);
     
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    [userDefaults setObject:self.homeWifiSSID forKey:HOME_SSID];
+    [userDefaults synchronize];
+    
     [self.view addSubview:self.inProgress];
     self.inProgress.hidden = YES;
 }

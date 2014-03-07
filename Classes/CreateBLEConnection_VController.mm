@@ -75,6 +75,12 @@
     [self.view bringSubviewToFront:_viewProgress];
     
     [imageView startAnimating];
+    self.homeWifiSSID = [CameraPassword fetchSSIDInfo];
+    NSLog(@"homeWifiSSID: %@", self.homeWifiSSID);
+    
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    [userDefaults setObject:self.homeWifiSSID forKey:HOME_SSID];
+    [userDefaults synchronize];
 #else
     self.navigationItem.title = @"Connect to camera BLE";
 //    self.navigationItem.backBarButtonItem =
