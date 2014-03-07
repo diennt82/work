@@ -124,10 +124,6 @@
         //Hide back button -- can't go back now..
         self.navigationItem.hidesBackButton = TRUE;
 #if 1
-        CGAffineTransform transform = CGAffineTransformMakeScale(1.0f, 4.0f);
-        [self.view viewWithTag:501].transform = transform;
-        [self.progressView viewWithTag:501].transform = transform;
-        
         self.navigationItem.hidesBackButton = YES;
         
         UIImage *hubbleLogoBack = [UIImage imageNamed:@"Hubble_back_text"];
