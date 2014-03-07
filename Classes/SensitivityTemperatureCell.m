@@ -110,8 +110,8 @@
         self.lblTypeTempRight.text = @"°F";
         
         //fahrenheit = ((Celsius * 9 )/5) + 32;
-        self.tempValueLeft = (_tempValueLeft * 9 / 5.f) + 32;
-        self.tempValueRight = (_tempValueRight * 9 / 5.f) + 32;
+        self.tempValueLeft = (round(_tempValueLeft * 9.f / 5.f)) + 32;
+        self.tempValueRight = (round(_tempValueRight * 9.f / 5.f)) + 32;
     }
     else
     {
@@ -119,8 +119,8 @@
         self.lblTypeTempRight.text = @"°C";
         
         //celsius = (5/9) * (fahrenheit-32)
-        self.tempValueLeft = (_tempValueLeft - 32) * 5/9.f;
-        self.tempValueRight = (_tempValueRight - 32) * 5/9.f;
+        self.tempValueLeft = round((_tempValueLeft - 32) * 5/9.f);
+        self.tempValueRight = round((_tempValueRight - 32) * 5/9.f);
     }
     
     self.lblTempValueLeft.text = [NSString stringWithFormat:@"%ld", lroundf(_tempValueLeft)];
@@ -135,7 +135,7 @@
     
     if (_isFahrenheit)
     {
-        tempLowMin = (TEMP_LOW_MIN * 9 / 5.f) + 32;
+        tempLowMin = (round(TEMP_LOW_MIN * 9.f / 5.f)) + 32;
     }
     
     if (_tempValueLeft > tempLowMin)
@@ -169,7 +169,7 @@
     
     if (_isFahrenheit)
     {
-        tempHighMax = (TEMP_LOW_MAX * 9 / 5.f) + 32;
+        tempHighMax = (round(TEMP_LOW_MAX * 9.f / 5.f)) + 32;
     }
     
     if (_tempValueLeft < tempHighMax)
@@ -201,7 +201,7 @@
     
     if (_isFahrenheit)
     {
-        tempLowValue = (tempLowValue - 32) * 5/9.f; // Convert to °C
+        tempLowValue = round((tempLowValue - 32) * 5.f/9.f); // Convert to °C
     }
     
     [_sensitivityTempCellDelegate valueChangedTempLowValue:tempLowValue];
@@ -213,7 +213,7 @@
     
     if (_isFahrenheit)
     {
-        temHighMin = (TEMP_HIGH_MIN * 9 / 5.f) + 32;
+        temHighMin = (round(TEMP_HIGH_MIN * 9 / 5.f)) + 32;
     }
     
     if (_tempValueRight > temHighMin)
@@ -245,7 +245,7 @@
     
     if (_isFahrenheit)
     {
-        temHighMax = (TEMP_HIGH_MAX * 9 / 5.f) + 32;
+        temHighMax = (round(TEMP_HIGH_MAX * 9.f / 5.f)) + 32;
     }
     
     if (_tempValueRight < temHighMax)
@@ -277,7 +277,7 @@
     
     if (_isFahrenheit)
     {
-        tempHiValue = (tempHiValue - 32) * 5/9.f; // Convert to °C
+        tempHiValue = round((tempHiValue - 32) * 5.f/9.f); // Convert to °C
     }
     
     [_sensitivityTempCellDelegate valueChangedTempHighValue:tempHiValue];

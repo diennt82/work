@@ -317,7 +317,7 @@ double _ticks = 0;
         CGSize labelTouchToTalkSize = self.ib_labelTouchToTalk.bounds.size;
         
         //    float deltaY1 = (labelTouchToTalkSize.height + holdTTSize.height)/2.0;
-        float alignY1 = (SCREEN_HEIGHT - positionYOfBottomView) - marginBottomText - holdTTSize.height + labelTouchToTalkSize.height/2 - holdTTSize.height/2;
+        float alignY1 = (SCREEN_HEIGHT - localPoint.y) - marginBottomText + labelTouchToTalkSize.height/2 - 3*holdTTSize.height/2;
         if (isiOS7AndAbove)
         {
             [self.ib_labelRecordVideo setCenter:CGPointMake(SCREEN_WIDTH/2, alignY)];
@@ -2490,7 +2490,8 @@ double _ticks = 0;
     _degreeCString = stringTemperature;
     
     float celsius = [_degreeCString floatValue];
-    NSInteger degreeF = (celsius*(9/5)) + 32;
+    float changeToFloat = (celsius * 9.0)/5.0;
+    NSInteger degreeF = (round(changeToFloat)) + 32;
     _degreeFString = [NSString stringWithFormat:@"%d", degreeF];
     
     UILabel *degreeCelsius = [[UILabel alloc] init];
