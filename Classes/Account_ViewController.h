@@ -7,21 +7,17 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "ConnectionMethodDelegate.h"
 #import "CameraAlert.h"
 
 @interface Account_ViewController : UIViewController
 {
     IBOutlet UITableViewCell * userEmailCell,
           * versionCell;
-    UIToolbar * mtopbar;
     IBOutlet UITableView * accountInfo;
-    id<ConnectionMethodDelegate> mdelegate;
     
     IBOutlet UIActivityIndicatorView * progress;
-    
 }
-@property (nonatomic, retain)  UIToolbar *  mtopbar;
-@property (nonatomic, assign) id<ConnectionMethodDelegate> mdelegate;
+
+@property (nonatomic, assign) id parentVC;
 
 @end

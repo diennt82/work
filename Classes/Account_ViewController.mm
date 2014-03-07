@@ -7,23 +7,17 @@
 //
 
 #import "Account_ViewController.h"
-#import "MBP_iosViewController.h"
 #import "CameraSettingsCell.h"
-#import "TimelineButtonCell.h"
-#import "NotificationSettingsCell.h"
+#import "MenuViewController.h"
 
-@interface Account_ViewController () <TimelineButtonCellDelegate, NotifSettingsCellDelegate>
+@interface Account_ViewController ()
 
 @property (retain, nonatomic) IBOutlet UITableViewCell *tableViewCellChangePassword;
-@property (nonatomic) BOOL enabledSTUN;
 @property (nonatomic) NSInteger screenWidth;
 
 @end
 
 @implementation Account_ViewController
-
-@synthesize  mdelegate;
-@synthesize  mtopbar;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -36,12 +30,13 @@
     }
     return self;
 }
+
 -(void) dealloc
 {
-    [mtopbar release];
     [_tableViewCellChangePassword release];
     [super dealloc];
 }
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -56,7 +51,7 @@
         lblVersion.frame = CGRectMake(lblVersion.frame.origin.x, lblVersion.frame.origin.y - 44, lblVersion.frame.size.width, lblVersion.frame.size.height);
     }
     
-    lblVersion.text = [NSString stringWithFormat:@"hubble home v%@", [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"]];
+    lblVersion.text = [NSString stringWithFormat:@"Hubble Home v%@", [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"]];
 }
 
 - (void)viewDidUnload
@@ -65,6 +60,7 @@
     // Release any retained subviews of the main view.
     // e.g. self.myOutlet = nil;
 }
+
 -(void)removeSubViewOfNavigationController {
     for (UIView *subView in self.navigationController.view.subviews)
     {
@@ -74,19 +70,14 @@
         }
     }
 }
+
 -(void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    
     NSLog(@"AccountVC -viewWillAppear --");
     
-    //UIInterfaceOrientation infOrientation = [UIApplication sharedApplication].statusBarOrientation;
-    
     self.navigationController.navigationBarHidden = YES;
-    
-	//[self adjustViewsForOrientation:infOrientation];
     [self loadUserData];
-    
 }
 
 -(void)loadUserData
@@ -98,181 +89,27 @@
     
     UITextField * _user  =  (UITextField *) [userEmailCell viewWithTag:1];
     _user.text = user_email;
-    
-    //UITextField * _version = (UITextField *) [versionCell viewWithTag:1];
-    
-    //NSString *version = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
-    
-    //version = [NSString stringWithFormat:msg,version];
-   // _version.text = version;
 }
-
-#if 1
--(void) buildTopToolBar: (NSInteger)width
-{
-}
-#else
-
--(void) buildTopToolBar: (NSInteger)width
-{
-    int screenWidth = width;
-    
-    if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 7) {
-        // Load resources for iOS 7 or later
-        [self removeSubViewOfNavigationController];
-        mtopbar = [[UIToolbar alloc]initWithFrame:CGRectMake(0, 20, screenWidth, 44)];
-    } else {
-        // Load resources for iOS 6.1 or earlier
-        mtopbar = [[UIToolbar alloc]initWithFrame:CGRectMake(0, 0, screenWidth, 44)];
-        mtopbar.barStyle = UIBarStyleBlackOpaque;
-    }
-    // create an array for the buttons
-    NSMutableArray* buttons = [[NSMutableArray alloc] initWithCapacity:3];
-    
-    
-    // create a spacer between the buttons
-    UIBarButtonItem *spacer = [[UIBarButtonItem alloc]
-                               initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace
-                               target:nil
-                               action:nil];
-    [buttons addObject:spacer];
-    [spacer release];
-    
-    
-    NSString * msg  = NSLocalizedStringWithDefaultValue(@"Account",nil, [NSBundle mainBundle],
-                                                        @"Account" , nil);
-    
-    //Label
-    UIBarButtonItem *label = [[UIBarButtonItem alloc]
-                              init];
-    label.style = UIBarButtonItemStylePlain;
-    label.title =msg;
-    [buttons addObject:label];
-    [label release];
-    
-    
-    // create a spacer between the buttons
-    spacer = [[UIBarButtonItem alloc]
-              initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace
-              target:nil
-              action:nil];
-    [buttons addObject:spacer];
-    [spacer release];
-    
-    
-    msg  = NSLocalizedStringWithDefaultValue(@"Logout",nil, [NSBundle mainBundle],
-                                             @"Logout" , nil);
-    
-    // create a standard delete button with the trash icon
-    UIBarButtonItem *logoutButton = [[UIBarButtonItem alloc]
-                                     initWithTitle:msg
-                                     style:UIBarButtonItemStyleBordered
-                                     target:self
-                                     action:@selector(userLogout)];
-    
-    [buttons addObject:logoutButton];
-    [logoutButton release];
-    
-    // put the buttons in the toolbar and release them
-    [mtopbar setItems:buttons animated:NO];
-    [buttons release];
-    
-    if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 7) {
-        [self.navigationController.view addSubview:mtopbar];
-    } else {
-//        [mtopbar setAutoresizingMask: (UIViewAutoresizingFlexibleWidth|
-//                                       UIViewAutoresizingFlexibleLeftMargin|
-//                                       UIViewAutoresizingFlexibleRightMargin) ];
-        [self.view addSubview:mtopbar];
-    }
-}
-#endif
 
 - (void)sendTouchBtnStateWithIndex:(NSInteger)rowIdx
 {
     [self userLogout];
 }
 
-- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
-{
-    return   ((interfaceOrientation == UIInterfaceOrientationPortrait) ||
-              (interfaceOrientation == UIInterfaceOrientationLandscapeLeft) ||
-              (interfaceOrientation == UIInterfaceOrientationLandscapeRight));
-}
-
-
--(BOOL) shouldAutorotate
-{
-    return YES ;
-}
-
--(NSUInteger)supportedInterfaceOrientations
-{
-    return UIInterfaceOrientationMaskAllButUpsideDown;
-}
-
-- (void) willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
-{
-    
-    [self adjustViewsForOrientation:toInterfaceOrientation];
-}
-
--(void ) didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation
-{
-    [self loadUserData];
-    //    [self adjustViewsForOrientation:fromInterfaceOrientation];
-    // [accountInfo reloadData];
-}
--(void) adjustViewsForOrientation:(UIInterfaceOrientation) orientation
-{
-    if (orientation == UIInterfaceOrientationLandscapeLeft || orientation == UIInterfaceOrientationLandscapeRight)
-	{
-        //since at this time.. the orientation is still NOT CHANGED so need to use the OTHER size
-        int screenWidth = [UIScreen mainScreen].bounds.size.height  ;//480
-        NSLog(@"screenWidth is  %d", screenWidth);
-        //            mtopbar.frame = CGRectMake(0, 0, screenWidth, mtopbar.frame.size.height);
-        [self buildTopToolBar:screenWidth];
-    }
-    else if (orientation == UIInterfaceOrientationPortrait || orientation == UIInterfaceOrientationPortraitUpsideDown)
-	{
-        //since at this time.. the orientation is still NOT CHANGED so need to use the OTHER size
-        int screenWidth = [UIScreen mainScreen].bounds.size.width  ;//320
-        [self buildTopToolBar:screenWidth];
-    }
-}
-
 -(void) userLogout
 {
     NSLog(@"LOG OUT>>>>");
-    if (mdelegate != nil)
+    
+    MenuViewController *tabBarController = (MenuViewController *)self.parentVC;
+    
+    accountInfo.hidden = YES;
+    progress.hidden = NO;
+    [CameraAlert clearAllAlerts];
+    
+    [tabBarController dismissViewControllerAnimated:NO completion:^
     {
-        accountInfo.hidden = YES;
-        progress.hidden = NO;
-        
-        //User logout --
-        // 1 . Clear all alert
-        [CameraAlert clearAllAlerts];
-        //TODO: 2 . Clear offline data
-        
-        
-        [mdelegate sendStatus:LOGIN_FAILED_OR_LOGOUT];
-        
-        [self dismissViewControllerAnimated:NO completion:^{}];
-    }
-    else
-    {
-        NSLog(@"Delegate is nill");
-    }
-}
-
-#pragma mark - Notification cell delegate
-
-- (void)reportSwitchValue:(BOOL)value andRowIndex:(NSInteger)rowIndex
-{
-    self.enabledSTUN = value;
-    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-    [userDefaults setBool:_enabledSTUN forKey:@"enabled_stun"];
-    [userDefaults synchronize];
+        [tabBarController.menuDelegate sendStatus:LOGIN_FAILED_OR_LOGOUT];
+    }];
 }
 
 #pragma mark - Table view delegate & data source
@@ -288,12 +125,10 @@
     {
         return 3;
     }
-    else if (section == 1)
+    else
     {
         return 2;
     }
-    
-    return 1;
 }
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
@@ -302,12 +137,10 @@
     {
         return @"Profile";
     }
-    else if (section == 1)
+    else
     {
         return @"Plan";
     }
-    
-    return @"Remote stream mode";
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -383,7 +216,7 @@
             return cell;
         }
     }
-    else if(indexPath.section == 1)
+    else
     {
         static NSString *CellIdentifier = @"CameraSettingsCell";
         CameraSettingsCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
@@ -392,7 +225,6 @@
         
         for (id curObj in objects)
         {
-            
             if([curObj isKindOfClass:[UITableViewCell class]])
             {
                 cell = (CameraSettingsCell *)curObj;
@@ -416,32 +248,6 @@
             
             return cell;
         }
-    }
-    else
-    {
-        //NotificationSettingsCell
-        static NSString *CellIdentifier = @"NotificationSettingsCell";
-        NotificationSettingsCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-        
-        NSArray *objects = [[NSBundle mainBundle] loadNibNamed:@"NotificationSettingsCell" owner:nil options:nil];
-        
-        for (id curObj in objects)
-        {
-            
-            if([curObj isKindOfClass:[UITableViewCell class]])
-            {
-                cell = (NotificationSettingsCell *)curObj;
-                break;
-            }
-        }
-        
-        cell.notifSettingsDelegate = self;
-        cell.settingsLabel.text = @"Enable STUN";
-        cell.textLabel.font = [UIFont fontWithName:@"HelveticaNeue-Thin" size:17];
-        cell.textLabel.textColor = [UIColor colorWithRed:128/255.0 green:128/255.0 blue:128/255.0 alpha:1];
-        [cell.settingSwitch setOn:_enabledSTUN];
-        
-        return cell;
     }
 }
 

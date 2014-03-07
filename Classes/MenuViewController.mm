@@ -62,7 +62,7 @@
     [backBarBtn setTintColor:[UIColor colorWithPatternImage:hubbleBack]];
     
     self.navigationItem.leftBarButtonItem = backBarBtn;
-   // assert(self.navigationController.navigationItem.leftBarButtonItem != nil);
+    self.navigationItem.leftBarButtonItem.enabled = NO;
     
     self.camerasVC = [[CamerasViewController alloc] initWithStyle:nil
                                                          delegate:self.menuDelegate
@@ -88,8 +88,9 @@
     UINavigationController *nav1 = [[UINavigationController alloc] initWithRootViewController:settingsVC];
     
     self.accountVC = [[Account_ViewController alloc] init];
+    self.accountVC.parentVC = self;
     
-    NSLog(@"viewDidLoad: %p, %p", self.menuDelegate, self.accountVC.mdelegate);
+    NSLog(@"MenuVC - viewDidLoad: %p, %p", self.menuDelegate, self.accountVC.parentVC);
     
     UINavigationController *nav2 = [[UINavigationController alloc] initWithRootViewController:_accountVC];
     
@@ -97,10 +98,11 @@
     self.viewControllers = [NSArray arrayWithObjects:nav, nav1, nav2, nil];
     
     UITabBarItem *camItem = [self.tabBar.items objectAtIndex:0];
-    [camItem setImage:[UIImage imageNamed:@"camera.png"]];
+    [camItem setImage:[UIImage imageNamed:@"camera"]];
     
     UITabBarItem *settingsItem = [self.tabBar.items objectAtIndex:1];
-    [settingsItem setImage:[UIImage imageNamed:@"general"]];
+    [settingsItem setImage:[UIImage imageNamed:@"menu_settings"]];
+    settingsItem.enabled = NO;
 
     UITabBarItem *accountItem = [self.tabBar.items objectAtIndex:2];
     [accountItem setImage:[UIImage imageNamed:@"account_icon.png"]];
@@ -117,7 +119,6 @@
     
     UIImage *hubbleBack = [UIImage imageNamed:@"Hubble_logo_back"];
     [self.navigationItem.leftBarButtonItem setTintColor:[UIColor colorWithPatternImage:hubbleBack]];
-    self.accountVC.mdelegate = self.menuDelegate;
     self.title = @"Cameras";
     self.navigationItem.title = @"Cameras";
 
@@ -136,6 +137,7 @@
         if (!isOffline)
         {
             self.navigationItem.leftBarButtonItem.enabled = NO;
+             [[self.tabBar.items objectAtIndex:1] setEnabled:NO];
             self.camerasVC.waitingForUpdateData = TRUE;
             [self.camerasVC.tableView reloadData];
             [self performSelectorInBackground:@selector(recreateAccount)
@@ -189,6 +191,7 @@
         if ([camChannel.profile isNotAvailable] &&
             [camChannel.profile isSharedCam])
         {
+            self.navigationItem.leftBarButtonItem.enabled = YES;
             return;
         }
         
@@ -204,9 +207,7 @@
         h264PlayerViewController.h264PlayerVCDelegate = self;
         
         NSLog(@"%@, %@", self.parentViewController.description, self.parentViewController.parentViewController);
-        
-        //MenuViewController *tabBarController = (MenuViewController *)self.parentViewController;
-        
+
         [self.navigationController pushViewController:h264PlayerViewController animated:YES];
         [h264PlayerViewController release];
     }
@@ -242,13 +243,7 @@
 {
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     NSString *username  = [userDefaults stringForKey:@"PortalUsername"];
-    //NSString *userEmail = [userDefaults stringForKey:@"PortalUseremail"];
     NSString *apiKey    = [userDefaults stringForKey:@"PortalApiKey"];
-//    UserAccount *account = [[UserAccount alloc] initWithUser:username
-//                                                     andPass:userEmail
-//                                                   andApiKey:apiKey
-//                                                 andListener:nil];
-//    account.userAccountDelegate = self;
     UserAccount *account = [[UserAccount alloc] initWithUser:username
                                                     password:nil
                                                       apiKey:apiKey
@@ -272,12 +267,17 @@
     self.camerasVC.waitingForUpdateData = NO;
     [self.camerasVC.tableView performSelectorInBackground:@selector(reloadData)
                                                withObject:nil];
-    self.navigationItem.leftBarButtonItem.enabled = YES;
+    if (self.cameras != nil &&
+        self.cameras.count > 0)
+    {
+        [[self.tabBar.items objectAtIndex:1] setEnabled:YES];
+        self.navigationItem.leftBarButtonItem.enabled = YES;
+    }
 }
 
 - (void)updateCameraList
 {
-    NSMutableArray * validChannels = [[NSMutableArray alloc] init];
+    NSMutableArray *validChannels = [[NSMutableArray alloc] init];
     
     for (int i = _arrayChannel.count - 1 ; i > -1; i--)
 	{
@@ -290,6 +290,8 @@
 	}
     
 	self.cameras = validChannels;
+    
+    [validChannels release];
 }
 
 - (BOOL)rebindCamerasResource
