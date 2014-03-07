@@ -50,6 +50,9 @@
 
     
     //[cameraName release];
+    [_ib_scollViewGuide release];
+    [_ib_viewGuild release];
+    [_ib_resumeSetup release];
     [super dealloc];
 }
 - (void)sendCommandRebootCamera
@@ -63,6 +66,11 @@
 {
     [super viewDidLoad];
     
+#if 1
+
+    [self.ib_scollViewGuide setContentSize:CGSizeMake(320, 1401)];
+
+#endif
     // Do any additional setup after loading the view.
 	[[NSNotificationCenter defaultCenter] addObserver: self
                                              selector: @selector(handleEnteredBackground)
@@ -609,9 +617,14 @@
 - (void)connectToWifiHomeByHand
 {
     [self.progressView setHidden:YES];
+#if 1
+    [self.view addSubview:self.ib_viewGuild];
+    
+#else
+    
     [self startAnimationWithOrientation];
     [self.view addSubview:cameraAddedView];
-    
+#endif
     
     /* TODO
      - Do nothing UNTIL user go out and go into the app again 
@@ -876,6 +889,9 @@
     [self.navigationController pushViewController:step12ViewController animated:NO];
     
     [step12ViewController release];
+}
+
+- (IBAction)resumeSetupAction:(id)sender {
 }
 
 - (void)  setupFailed
