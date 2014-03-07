@@ -88,6 +88,12 @@
 	//can be user email or user name here --
 	NSString * old_usr = (NSString *) [userDefaults objectForKey:@"PortalUsername"];
 	NSString * old_pass = (NSString *) [userDefaults objectForKey:@"PortalPassword"];
+    
+    if ([userDefaults boolForKey:_AutoLogin] == FALSE)
+    {
+        old_pass = @"";
+    }
+    
     self.stringUserEmail  = (NSString*) [userDefaults objectForKey:@"PortalUseremail"];
     
     /* Reset SYM NAT status here */

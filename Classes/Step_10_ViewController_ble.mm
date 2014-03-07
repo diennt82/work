@@ -13,6 +13,8 @@
 
 @interface Step_10_ViewController_ble ()
 
+@property (nonatomic, retain) UserAccount *userAccount;
+
 @end
 
 @implementation Step_10_ViewController_ble
@@ -46,7 +48,7 @@
     [master_key release];
 
     
-    //[cameraName release];
+    [_userAccount release];
     [super dealloc];
 }
 
@@ -529,8 +531,8 @@
 			if (found == TRUE)
 			{                    ///done
                 NSLog(@"sending master key done");
-                [self setupCompleted];
-				return;
+                //[self setupCompleted]; Follow the new Flow, this is not need to do
+				//return;
 			}
 			else //if not found
 			{
@@ -581,14 +583,15 @@
 //                                                     andPass:userPass
 //                                                   andApiKey:userApiKey
 //                                                 andListener:nil];
-    UserAccount *account = [[UserAccount alloc] initWithUser:userEmail
+    if (_userAccount == nil)
+    {
+        self.userAccount = [[UserAccount alloc] initWithUser:userEmail
                                                     password:userPass
                                                       apiKey:userApiKey
                                                     listener:nil];
+    }
     
-    NSString *localIp = [account query_cam_ip_online: self.cameraMac];
-    
-    [account release];
+    NSString *localIp = [_userAccount query_cam_ip_online: self.cameraMac];
     
     if ( localIp != nil)
     {

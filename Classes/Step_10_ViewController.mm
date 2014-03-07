@@ -764,8 +764,8 @@
 			//3 of 3. send the master key to device 
 			if (found == TRUE)
 			{
-                [self setupCompleted];
-                return;
+                //[self setupCompleted]; // Follow the new Flow, this is not need to do
+                //return;
             }
             
 		}
