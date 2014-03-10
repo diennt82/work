@@ -12,6 +12,7 @@
 @interface DisplayWifiList_VController () <UIAlertViewDelegate>
 
 @property (retain, nonatomic) IBOutlet UITableViewCell *cellOtherNetwork;
+@property (retain, nonatomic) IBOutlet UITableViewCell *cellRefresh;
 @property (retain, nonatomic) IBOutlet UIButton *btnContinue;
 @property (retain, nonatomic) IBOutlet UITableView *mTableView;
 @property (retain, nonatomic) IBOutlet UIView *viewProgress;
@@ -40,13 +41,14 @@
 {
     
     [_listOfWifi release];
-    [_refreshWifiList release];
+    //[_refreshWifiList release];
     [_ib_Indicator release];
     [_ib_LabelState release];
     [_cellOtherNetwork release];
     [_btnContinue release];
     [_mTableView release];
     [_viewProgress release];
+    [_cellRefresh release];
     [super dealloc];
 }
 - (void)viewDidLoad
@@ -84,8 +86,7 @@
     
     [imageView startAnimating];
     
-    [self.view addSubview:_viewProgress];
-    [self.view bringSubviewToFront:_viewProgress];
+    [self showIndicator];
 #else
     self.navigationItem.title = NSLocalizedStringWithDefaultValue(@"Configure_Camera",nil, [NSBundle mainBundle],
                                                                   @"Configure Camera" , nil);
@@ -123,8 +124,8 @@
 - (void)viewWillDisappear:(BOOL)animated
 {
     NSLog(@"viewWillDisappear of DisplayWifiList_VController");
-    //[self hideIndicator];
-    [_viewProgress removeFromSuperview];
+    [self hideIndicator];
+    //[_viewProgress removeFromSuperview];
     //remove delegate
     [BLEConnectionManager getInstanceBLE].delegate = nil;
     
@@ -161,6 +162,22 @@
 - (void)hubbleItemAction: (id)sender
 {
     [self.navigationController popViewControllerAnimated:YES];
+}
+
+- (void)refreshWifiList
+{
+    //hide button back of navigation controller
+    self.navigationItem.leftBarButtonItem.enabled = NO;
+    
+    //clear list wifi
+    [self.listOfWifi removeAllObjects];
+    // reload tableview
+    //[_mTableView reloadData];
+    
+    [self showIndicator];
+    
+    [BLEConnectionManager getInstanceBLE].delegate = self;
+    [self queryWifiList];
 }
 
 - (void)addOtherWifi
@@ -275,41 +292,53 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    return 1;
+    return 2;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
+    if (section == 1)
+    {
+        return 1;
+    }
+    
     return _listOfWifi.count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
 #if 1
-    if (indexPath.row < _listOfWifi.count - 1)
+    if (indexPath.section == 0)
     {
-        static NSString *CellIdentifier = @"Step05Cell";
-        Step05Cell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-        
-        NSArray *objects = [[NSBundle mainBundle] loadNibNamed:@"Step05Cell" owner:nil options:nil];
-        
-        for (id curObj in objects)
+        if (indexPath.row < _listOfWifi.count - 1)
         {
-            if ([curObj isKindOfClass:[Step05Cell class]])
+            static NSString *CellIdentifier = @"Step05Cell";
+            Step05Cell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+            
+            NSArray *objects = [[NSBundle mainBundle] loadNibNamed:@"Step05Cell" owner:nil options:nil];
+            
+            for (id curObj in objects)
             {
-                cell = (Step05Cell *)curObj;
-                break;
+                if ([curObj isKindOfClass:[Step05Cell class]])
+                {
+                    cell = (Step05Cell *)curObj;
+                    break;
+                }
             }
+            
+            WifiEntry *entry = [_listOfWifi objectAtIndex:indexPath.row];
+            cell.lblName.text = [entry.ssid_w_quote substringWithRange:NSMakeRange(1, entry.ssid_w_quote.length - 2)]; // Remove " & "
+            
+            return cell;
         }
-        
-        WifiEntry *entry = [_listOfWifi objectAtIndex:indexPath.row];
-        cell.lblName.text = [entry.ssid_w_quote substringWithRange:NSMakeRange(1, entry.ssid_w_quote.length - 2)]; // Remove " & "
-        
-        return cell;
+        else
+        {
+            return _cellOtherNetwork;
+        }
     }
     else
     {
-        return _cellOtherNetwork;
+        return _cellRefresh;
     }
 #else
     static NSString *CellIdentifier = @"Cell";
@@ -330,8 +359,15 @@
 - (void)tableView: (UITableView *)tableView didSelectRowAtIndexPath: (NSIndexPath *)indexPath
 {
 #if 1
-    self.btnContinue.enabled = YES;
-    self.selectedWifiEntry = (WifiEntry *)[_listOfWifi objectAtIndex:indexPath.row];
+    if (indexPath.section == 0)
+    {
+        self.btnContinue.enabled = YES;
+        self.selectedWifiEntry = (WifiEntry *)[_listOfWifi objectAtIndex:indexPath.row];
+    }
+    else
+    {
+        [self refreshWifiList];
+    }
 #else
     [tableView deselectRowAtIndexPath:[tableView indexPathForSelectedRow]
                              animated:NO];
@@ -395,13 +431,16 @@
 }
 - (void)showIndicator
 {
-    [self.view bringSubviewToFront:self.ib_Indicator];
-    [self.ib_Indicator setHidden:NO];
+//    [self.view bringSubviewToFront:self.ib_Indicator];
+//    [self.ib_Indicator setHidden:NO];
+    [self.view addSubview:_viewProgress];
+    [self.view bringSubviewToFront:_viewProgress];
 }
 
 - (void)hideIndicator
 {
-    [self.ib_Indicator setHidden:YES];
+    //[self.ib_Indicator setHidden:YES];
+    [_viewProgress removeFromSuperview];
 }
 
 - (void) askForRetry
@@ -441,7 +480,7 @@
     //hide button back of navigation controller
     self.navigationItem.hidesBackButton = YES;
     //disable button refresh
-    [self.refreshWifiList setEnabled:NO];
+    //[self.refreshWifiList setEnabled:NO];
     
     //clear list wifi
     [self.listOfWifi removeAllObjects];
@@ -581,12 +620,13 @@
 -(void) setWifiResult:(NSArray *) wifiList
 {
     //show back button
-    self.navigationItem.hidesBackButton = YES;
+    //self.navigationItem.hidesBackButton = YES;
+    self.navigationItem.leftBarButtonItem.enabled = YES;
     //enable button refresh
-    [self.refreshWifiList setEnabled:YES];
+    //[self.refreshWifiList setEnabled:YES];
     //hide indicarot
     //[self hideIndicator];
-    [_viewProgress removeFromSuperview];
+    //[_viewProgress removeFromSuperview];
     
     NSLog(@"GOT WIFI RESULT: numentries: %d", wifiList.count);
     self.listOfWifi = [NSMutableArray arrayWithArray:wifiList];
@@ -606,6 +646,8 @@
     [self filterCameraList];
     
     [_mTableView reloadData];
+    
+    [self hideIndicator];
 }
 
 - (void) showDialog:(NSTimer *)timer

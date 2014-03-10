@@ -578,11 +578,7 @@
     NSString * userEmail  = (NSString *) [userDefaults objectForKey:@"PortalUseremail"];
     NSString * userPass   = (NSString *) [userDefaults objectForKey:@"PortalPassword"];
     NSString * userApiKey = (NSString *) [userDefaults objectForKey:@"PortalApiKey"];
-    
-//    UserAccount *account = [[UserAccount alloc] initWithUser:userEmail
-//                                                     andPass:userPass
-//                                                   andApiKey:userApiKey
-//                                                 andListener:nil];
+
     if (_userAccount == nil)
     {
         self.userAccount = [[UserAccount alloc] initWithUser:userEmail
@@ -596,38 +592,9 @@
     if ( localIp != nil)
     {
         NSLog(@"Found a local ip: %@", localIp);
-        HttpCommunication *comm = [[HttpCommunication alloc]init];
-        comm.device_ip = localIp;
         
-        NSString * set_mkey = SET_MASTER_KEY;
-        NSString * response;
-        //set_mkey =[set_mkey stringByAppendingString:self.master_key];
-        set_mkey =[set_mkey stringByAppendingString:_stringAuth_token];
-        
-        response = [comm sendCommandAndBlock:set_mkey];
-        
-        if (response == nil)
-        {
-            NSLog(@"can't send master key, camera is not fully up");
-        }
-        else
-        {
-            NSLog(@"response: %@", response);
-            
-            if ([response hasPrefix:@"set_master_key: 0"])
-            {
-                ///done
-                NSLog(@"sending master key done");
-                
-                [comm release];
-                [self setupCompleted];
-                return TRUE;
-            }
-            
-        }
-        
-        [comm release];
-        
+        [self setupCompleted];
+        return TRUE;
     }
     
     return FALSE;

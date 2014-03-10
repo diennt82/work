@@ -139,8 +139,10 @@
 -(void) viewWillAppear:(BOOL)animated
 {
     
-    UIInterfaceOrientation interfaceOrientation = [UIApplication sharedApplication].statusBarOrientation;
-    [self adjustViewsForOrientations:interfaceOrientation];
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+    {
+        self.viewProgress.frame = CGRectMake(0, 0, UIScreen.mainScreen.bounds.size.width, UIScreen.mainScreen.bounds.size.height);
+    }
     
     NSLog(@"update security type");
     UITextField * _sec = (UITextField *) [self.securityCell viewWithTag:1];
@@ -648,11 +650,9 @@
     self.deviceConf.ssid = self.ssid;
     
     //save mac address for used later
-    [userDefaults setObject:camera_mac forKey:@"CameraMacWithQuote"];
+    [userDefaults setObject: [Util add_colon_to_mac:camera_mac] forKey:@"CameraMacWithQuote"];
     [userDefaults synchronize];
     
-    NSString *CameraMacWithQuote = [userDefaults objectForKey:@"CameraMacWithQuote"];
-    NSLog(@"Check CameraMacWithQuote is %@", CameraMacWithQuote);
     self.deviceConf.addressMode = @"DHCP";
     
     if ([self.security isEqualToString:@"wep"])

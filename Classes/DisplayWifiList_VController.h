@@ -22,7 +22,7 @@
 @property (retain, nonatomic) IBOutlet UIView *ib_Indicator;
 @property (retain, nonatomic) IBOutlet UILabel *ib_LabelState;
 
-@property (retain, nonatomic) IBOutlet UIButton *refreshWifiList;
+//@property (retain, nonatomic) IBOutlet UIButton *refreshWifiList;
 
 @property (nonatomic, assign) IBOutlet UITableViewCell *cellView;
 
