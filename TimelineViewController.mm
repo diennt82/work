@@ -978,7 +978,19 @@
     return YES;
 }
 */
-
+- (void)showDialogToConfirm
+{
+    NSString * msg = [NSString stringWithFormat:@"Video clip is not ready, please try again later."];
+    
+    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Notice"
+                                                        message:msg
+                                                       delegate:self
+                                              cancelButtonTitle:@"Cancel"
+                                              otherButtonTitles:nil, nil];
+    alertView.tag = 555;
+    [alertView show];
+    [alertView release];
+}
 #pragma mark - Table view delegate
 
 // In a xib-based application, navigation from a table can be handled in -tableView:didSelectRowAtIndexPath:
@@ -1054,6 +1066,7 @@
                 else
                 {
                     NSLog(@"URL file is not correct");
+                    [self showDialogToConfirm];
                 }
             }
             else
@@ -1063,7 +1076,6 @@
         }
     }
 #endif
-
 }
 
 @end
