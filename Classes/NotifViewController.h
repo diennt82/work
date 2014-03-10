@@ -8,8 +8,12 @@
 
 #import <UIKit/UIKit.h>
 #import "ConnectionMethodDelegate.h"
+#import <MonitorCommunication/MonitorCommunication.h>
 
-@interface NotifViewController : UIViewController
+@interface NotifViewController : UIViewController{
+
+    BMS_JSON_Communication *jsonComm;
+}
 
 @property(nonatomic, retain) id <ConnectionMethodDelegate> notifDelegate;
 

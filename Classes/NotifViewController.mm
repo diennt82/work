@@ -7,7 +7,6 @@
 //
 
 #import "NotifViewController.h"
-#import <MonitorCommunication/MonitorCommunication.h>
 #import "PlaybackViewController.h"
 #import "PlaylistInfo.h"
 
@@ -76,6 +75,13 @@
     //[self layoutImageAndTextForButton:self.learnMoreBtn];
     
     self.isFreeUser = NO; // Registered User
+    [_playEnventBtn setEnabled:NO];
+    
+    jsonComm = [[BMS_JSON_Communication alloc] initWithObject:self
+                                                                             Selector:nil
+                                                                         FailSelector:nil
+                                                                            ServerErr:nil];
+    
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -88,12 +94,11 @@
         //load events from server
         // 1. Load latest snapshot event & events list
         [self performSelectorInBackground:@selector(getEventSnapshot_bg) withObject:nil];
-        
         self.eventsListAlready = TRUE;
     }
     else
     {
-        //
+        //do nothing
     }
 }
 
@@ -113,6 +118,19 @@
     CGSize titleSize = button.titleLabel.frame.size;
     button.imageEdgeInsets = UIEdgeInsetsMake(
                                               - (titleSize.height + spacing), 0.0, 0.0, - titleSize.width);
+}
+
+- (void)showDialogToConfirm
+{
+    NSString * msg = [NSString stringWithFormat:@"Video clip is not ready, please try again later."];
+    
+    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Notice"
+                                                        message:msg
+                                                       delegate:self
+                                              cancelButtonTitle:@"Cancel"
+                                              otherButtonTitles:nil, nil];
+    [alertView show];
+    [alertView release];
 }
 
 #pragma mark - Action
@@ -146,6 +164,7 @@
             else
             {
                 NSLog(@"URL file is not correct");
+                [self showDialogToConfirm];
             }
         }
         else
@@ -164,6 +183,8 @@
 
 - (IBAction)goToCameraTouchAction:(id)sender
 {
+    [self cancelTaskDoInBackground];
+    
     if (sender == self.goToCameraBtn)
     {
         //[self.navigationController popToRootViewControllerAnimated:NO];
@@ -183,14 +204,17 @@
 
 - (IBAction)changeSettingsTouchAction:(id)sender
 {
+    [self cancelTaskDoInBackground];
 }
 
 - (IBAction)choosePlanTouchAction:(id)sender
 {
+    [self cancelTaskDoInBackground];
 }
 
 - (IBAction)leranMoreTouchAction:(id)sender
 {
+    [self cancelTaskDoInBackground];
 }
 
 - (IBAction)ignoreTouchAction:(id)sender
@@ -222,28 +246,24 @@
 - (void)getEventSnapshot_bg
 {
     //2013-12-20 20:10:18 (yyyy-MM-dd HH:mm:ss).
+    // eventcode: 44334C7FA03C_04_20140310101412000
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     NSString *apiKey = [userDefaults objectForKey:@"PortalApiKey"];
     
     NSString *alertsString = @"1,2,3,4";
     alertsString = [self urlEncodeUsingEncoding:NSUTF8StringEncoding forString:alertsString];
-    
-    BMS_JSON_Communication *jsonComm = [[BMS_JSON_Communication alloc] initWithObject:self
-                                                                             Selector:nil
-                                                                         FailSelector:nil
-                                                                            ServerErr:nil];
 
+    NSString *event_timecode = [NSString stringWithFormat:@"%@_0%@_%@", self.cameraMacNoColon, self.alertType, self.alertVal];
     NSDictionary *responseDict = [jsonComm getListOfEventsBlockedWithRegisterId:_registrationID
                                                                 beforeStartTime:nil//@"2013-12-28 20:10:18"
-                                                                      eventCode:nil//event_code // temp
-                                                                         alerts:alertsString
+                                                                      eventCode:event_timecode//event_code // temp
+                                                                         alerts:nil
                                                                            page:nil
                                                                          offset:nil
                                                                            size:nil
                                                                          apiKey:apiKey];
-    [jsonComm release];
     
-    //NSLog(@"Notif - responseDict: %@", responseDict);
+    NSLog(@"Notif - responseDict: %@", responseDict);
     
     if (responseDict != nil)
     {
@@ -322,8 +342,30 @@
                                                  withObject:[UIImage imageNamed:@"loading_logo.png"]
                                               waitUntilDone:NO];
     }
+ 
+    
+    NSString *urlFile = [[_clipsInEvent objectAtIndex:0] objectForKey:@"file"];
+    
+    if ([urlFile isEqual:[NSNull null]] ||
+        [urlFile isEqualToString:@""] || urlFile == nil)
+    {
+        [self performSelectorInBackground:@selector(getEventSnapshot_bg) withObject:nil];
+    }
+    else
+    {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self cancelTaskDoInBackground];
+            NSLog(@"url is %@", urlFile);
+            [_playEnventBtn setEnabled:YES];
+        });
+    }
+    
 }
 
+- (void)cancelTaskDoInBackground
+{
+    [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(getEventSnapshot_bg) object:nil];
+}
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
@@ -343,6 +385,7 @@
     [_activityIndicatorViewLoading release];
     [_viewFront release];
     [_viewBehide release];
+    [jsonComm release];
     [super dealloc];
 }
 @end

@@ -987,7 +987,6 @@
                                                        delegate:self
                                               cancelButtonTitle:@"Cancel"
                                               otherButtonTitles:nil, nil];
-    alertView.tag = 555;
     [alertView show];
     [alertView release];
 }

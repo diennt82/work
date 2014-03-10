@@ -131,21 +131,9 @@
     
 //    self.urlVideo = @"http://nxcomm:2013nxcomm@nxcomm-office.no-ip.info/app_release/sub_clips/48022A2CAC31_04_20130917065256730_00001.flv";
 
-    if (_clipsInEvent != nil &&
-        _clipsInEvent.count > 0)
-    {
-        _clips = [[NSMutableArray alloc]init];
-        for (NSDictionary *clipInfo in _clipsInEvent)
-        {
-            NSString *urlClipString = [clipInfo objectForKey:@"file"];
-            if (![urlClipString isEqual:[NSNull null]] &&
-                ![urlClipString isEqualToString:@""])
-            {
-                [self.clips addObject:urlClipString];
-            }
-        }
-    }
+
 #if 0 // TEST Multiple clips
+    self.urlVideo = @"http://nxcomm:2013nxcomm@nxcomm-office.no-ip.info/app_release/sub_clips/48022A2CAC31_04_20130917065256730_00001.flv";
     [self.clips removeAllObjects];
     self.clips = nil;
     if (self.clips == nil)
@@ -159,6 +147,21 @@
                   @"http://nxcomm:2013nxcomm@nxcomm-office.no-ip.info/app_release/sub_clips/48022A2CAC31_04_20130917065256730_00004.flv",
                   @"http://nxcomm:2013nxcomm@nxcomm-office.no-ip.info/app_release/sub_clips/48022A2CAC31_04_20130917065256730_00005_last.flv", nil];
         
+    }
+#else
+    if (_clipsInEvent != nil &&
+        _clipsInEvent.count > 0)
+    {
+        _clips = [[NSMutableArray alloc]init];
+        for (NSDictionary *clipInfo in _clipsInEvent)
+        {
+            NSString *urlClipString = [clipInfo objectForKey:@"file"];
+            if (![urlClipString isEqual:[NSNull null]] &&
+                ![urlClipString isEqualToString:@""])
+            {
+                [self.clips addObject:urlClipString];
+            }
+        }
     }
 #endif
     
