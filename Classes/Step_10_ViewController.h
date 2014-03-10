@@ -14,11 +14,9 @@
 #import "Step_12_ViewController.h"
 #import "Step_11_ViewController.h"
 #import "Step_02_ViewController.h"
-#import "GuideAddCamera_ViewController.h"
 #import "ConnectionMethodDelegate.h"
-@class ScanForCamera;
 
-#define HOME_SSID @"home_ssid"
+@class ScanForCamera;
 
 
 #define SEND_CONF_SUCCESS 1

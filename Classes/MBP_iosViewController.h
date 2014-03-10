@@ -13,10 +13,8 @@
 #import <Foundation/NSRunLoop.h>
 #import <CameraScanner/CameraScanner.h>
 
-#import "MBP_InitialSetupViewController.h"
 #import "PublicDefine.h"
 #import "ConnectionMethodDelegate.h"
-#import "MBP_LoginOrRegistration.h"
 #import "CameraAlert.h"
 #import "NotificationViewController.h"
 #import "MenuViewController.h"
@@ -46,9 +44,7 @@
 #define ALERT_PUSH_SERVER_ANNOUNCEMENT  203
 
 
-#define _streamingSSID  @"string_Streaming_SSID"
 #define _triggeredByVox @"bool_Vox_Trigger"
-#define CAM_IN_VEW      @"string_Camera_Mac_Being_Viewed"
 
 
 #define APP_STAGE_INIT          1

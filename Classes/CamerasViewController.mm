@@ -15,7 +15,7 @@
 #import "CamerasCell.h"
 #import "H264PlayerViewController.h"
 #import "CameraAlert.h"
-//#import "MenuCameraViewController.h"
+#import "MenuViewController.h"
 #import "CameraMenuViewController.h"
 #import "AddCameraViewController.h"
 

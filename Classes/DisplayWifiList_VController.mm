@@ -8,6 +8,8 @@
 
 #import "DisplayWifiList_VController.h"
 #import "Step05Cell.h"
+#import "define.h"
+#import "WifiListParser.h"
 
 @interface DisplayWifiList_VController () <UIAlertViewDelegate>
 

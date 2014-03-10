@@ -7,6 +7,8 @@
 //
 
 #import "MBP_iosAppDelegate.h"
+#import "PublicDefine.h"
+#import "SetupData.h"
 
 
 @implementation MBP_iosAppDelegate

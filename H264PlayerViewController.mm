@@ -13,7 +13,10 @@
 #import "define.h"
 #import <CFNetwork/CFNetwork.h>
 #include <ifaddrs.h>
+#import <GAI.h>
 
+#import "Reachability.h"
+#import "MBP_iosViewController.h"
 #define MODEL_SHARED_CAM @"0036"
 #define MODEL_CONCURRENT @"0066"
 #define MODEL_BLE        @"0083" //0836 {UAP | BLE}
@@ -52,6 +55,9 @@
 #define PTT_ENGAGE_BTN 711
 
 #define TAG_ALERT_VIEW_REMOTE_TIME_OUT 559
+
+#define _streamingSSID  @"string_Streaming_SSID"
+#define _is_Loggedin @"bool_isLoggedIn"
 
 @interface H264PlayerViewController () <TimelineVCDelegate, BonjourDelegate>
 {

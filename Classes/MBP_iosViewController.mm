@@ -6,7 +6,8 @@
 //  Copyright 2011 __MyCompanyName__. All rights reserved.
 //
 
-
+#define ALERT_GENERIC_SERVER_INFO @"0"
+#define _push_dev_token @"PUSH_NOTIFICATION_DEVICE_TOKEN"
 
 #import <CFNetwork/CFNetwork.h>
 #include <ifaddrs.h>
@@ -19,14 +20,16 @@
 #import "PlayListViewController.h"
 #import "H264PlayerViewController.h"
 #import "NotifViewController.h"
-#import "GuideAddCamera_ViewController.h"
 
 #import "QBAnimationItem.h"
 #import "QBAnimationGroup.h"
 #import "QBAnimationSequence.h"
-//#import "Step09ViewController.h"
+#import "Step_02_ViewController.h"
 #import "RegistrationViewController.h"
 #import "LoginViewController.h"
+#import "define.h"
+#import "Reachability.h"
+#import "SetupData.h"
 
 #import "AlertPrompt.h"
 
