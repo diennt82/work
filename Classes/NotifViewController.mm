@@ -88,6 +88,7 @@
 {
     [super viewWillAppear:animated];
     self.navigationController.navigationBarHidden = YES;
+    _isBackgroundTaskRunning = YES;
     
     if (_eventsListAlready == FALSE)
     {
@@ -149,11 +150,15 @@
             {
                 PlaylistInfo *clipInfo = [[PlaylistInfo alloc] init];
                 clipInfo.urlFile = urlFile;
+                clipInfo.mac_addr = _cameraMacNoColon;
+                clipInfo.alertType = _alertType;
+                clipInfo.alertVal = _alertVal;
+                clipInfo.registrationID = _registrationID;
                 
                 PlaybackViewController *playbackViewController = [[PlaybackViewController alloc] init];
                 
                 playbackViewController.clip_info = clipInfo;
-                playbackViewController.clipsInEvent = [NSMutableArray arrayWithArray:_clipsInEvent];
+                
                 // Pass the selected object to the new view controller.
                 
                 NSLog(@"Push the view controller.- %@", self.parentViewController);
@@ -346,8 +351,8 @@
     
     NSString *urlFile = [[_clipsInEvent objectAtIndex:0] objectForKey:@"file"];
     
-    if ([urlFile isEqual:[NSNull null]] ||
-        [urlFile isEqualToString:@""] || urlFile == nil)
+    if (([urlFile isEqual:[NSNull null]] ||
+        [urlFile isEqualToString:@""] || urlFile == nil) && _isBackgroundTaskRunning)
     {
         [self performSelectorInBackground:@selector(getEventSnapshot_bg) withObject:nil];
     }
@@ -364,6 +369,7 @@
 
 - (void)cancelTaskDoInBackground
 {
+    _isBackgroundTaskRunning = NO;
     [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(getEventSnapshot_bg) object:nil];
 }
 - (void)didReceiveMemoryWarning

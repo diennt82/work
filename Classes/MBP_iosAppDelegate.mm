@@ -174,7 +174,7 @@
         NSString * str5 = (NSString *) [userInfo objectForKey:@"time"]; 
         NSString * str6 = (NSString *) [userInfo objectForKey:@"cameraname"];
         NSString * str7 = (NSString *) [userInfo objectForKey:@"url"];
-        NSString * str8 = (NSString *) [userInfo objectForKey:@"registration_id"];
+
         
         //4 44334C31A004 20130914055827490 2013-09-14T05:59:05+00:00 Camera-31a004
         //NSLog(@"%@ %@ %@ %@ %@ %@",  str2, str3, str4 , str5, str6, str8);
@@ -183,8 +183,7 @@
             str3 == nil ||
             str4 == nil ||
             str5 == nil ||
-            str6 == nil ||
-            str8 == nil)
+            str6 == nil)
         {
             NSLog(@"NIL info.. silencely return"); 
             return; 
@@ -193,13 +192,13 @@
         int rcvTimeStamp = [[NSDate date] timeIntervalSince1970];
         CameraAlert * camAlert = [[CameraAlert alloc]initWithTimeStamp1:rcvTimeStamp];// autorelease];
         //set other values
-        camAlert.cameraMacNoColon = str3;
+        camAlert.cameraMacNoColon = [str3 substringWithRange:NSMakeRange(6, 12)];
         
         camAlert.cameraName = str6;
         camAlert.alertType = str2;
         camAlert.alertTime =str5;
         camAlert.alertVal = str4;
-        camAlert.registrationID = str8;
+        camAlert.registrationID = str3;
         
         if (str7 != nil)
         {

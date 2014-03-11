@@ -108,7 +108,7 @@
     _isHorizeShow = YES;
     [self.ib_viewOverlayVideo setHidden:NO];
     [self.view bringSubviewToFront:self.ib_viewOverlayVideo];
-    
+    [self.view bringSubviewToFront:self.ib_closePlayBack];
     if (_timerHideMenu != nil)
     {
         [self.timerHideMenu invalidate];
@@ -125,15 +125,13 @@
 #pragma mark - PLAY VIDEO
 - (void)becomeActive
 {
-    listener = new PlaybackListener(self);
-    self.urlVideo = clip_info.urlFile;
-//    self.urlVideo = @"http://nxcomm:2013nxcomm@nxcomm-office.no-ip.info/release/events/cam_clip.flv";
     
-//    self.urlVideo = @"http://nxcomm:2013nxcomm@nxcomm-office.no-ip.info/app_release/sub_clips/48022A2CAC31_04_20130917065256730_00001.flv";
-
-
 #if 0 // TEST Multiple clips
     self.urlVideo = @"http://nxcomm:2013nxcomm@nxcomm-office.no-ip.info/app_release/sub_clips/48022A2CAC31_04_20130917065256730_00001.flv";
+    //    self.urlVideo = @"http://nxcomm:2013nxcomm@nxcomm-office.no-ip.info/release/events/cam_clip.flv";
+    
+    //    self.urlVideo = @"http://nxcomm:2013nxcomm@nxcomm-office.no-ip.info/app_release/sub_clips/48022A2CAC31_04_20130917065256730_00001.flv";
+
     [self.clips removeAllObjects];
     self.clips = nil;
     if (self.clips == nil)
@@ -148,27 +146,12 @@
                   @"http://nxcomm:2013nxcomm@nxcomm-office.no-ip.info/app_release/sub_clips/48022A2CAC31_04_20130917065256730_00005_last.flv", nil];
         
     }
-#else
-    if (_clipsInEvent != nil &&
-        _clipsInEvent.count > 0)
-    {
-        _clips = [[NSMutableArray alloc]init];
-        for (NSDictionary *clipInfo in _clipsInEvent)
-        {
-            NSString *urlClipString = [clipInfo objectForKey:@"file"];
-            if (![urlClipString isEqual:[NSNull null]] &&
-                ![urlClipString isEqualToString:@""])
-            {
-                [self.clips addObject:urlClipString];
-            }
-        }
-    }
-#endif
-    
     
     listener->updateClips(self.clips);
     listener->updateFinalClipCount(self.clips.count);
-#if 0
+#endif
+
+    
     _clips = [[NSMutableArray alloc]init];
     //Decide whether or not to start the background polling
     if (self.clip_info != nil )
@@ -183,9 +166,9 @@
             listener->updateFinalClipCount(1);
         }
         else
-         {
+        {
             // It is not the last clip - scheduling querying of clips
-             NSLog(@"clip_info is %@", clip_info);
+            NSLog(@"clip_info is %@", clip_info);
             self.list_refresher = [NSTimer scheduledTimerWithTimeInterval:10.0
                                    
                                                                    target:self
@@ -198,9 +181,8 @@
             
         }
         self.urlVideo = self.clip_info.urlFile;
-        
     }
-#endif
+    
     [self performSelector:@selector(startStream)
      
                withObject:nil
@@ -721,29 +703,33 @@
 
 -(void) getCameraPlaylistForEvent:(NSTimer *) clipTimer
 {
-    PlaylistInfo *first_clip = [clipTimer userInfo];
-    
+
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+
+    BMS_JSON_Communication *jsonComm = [[BMS_JSON_Communication alloc] initWithObject:self
+                                                     Selector:nil
+                                                 FailSelector:nil
+                                                    ServerErr:nil];
     
-    BMS_JSON_Communication *jsonComm = [[[BMS_JSON_Communication alloc] initWithObject:self
-                                                                              Selector:@selector(getPlaylistSuccessWithResponse:)
-                                                                          FailSelector:@selector(getPlaylistFailedWithResponse:)
-                                                                             ServerErr:@selector(getPlaylistUnreachableSetver)]
-                                        autorelease];
-    NSString *mac = first_clip.mac_addr;
+    NSString *mac = clip_info.mac_addr;
     
     NSString *apiKey = [userDefaults objectForKey:@"PortalApiKey"];
     
-    NSString * event_timecode = [NSString stringWithFormat:@"0%@_%@", [first_clip getAlertType], [first_clip getAlertVal]];
-    
-    [jsonComm getAllRecordedFilesWithRegistrationId:mac
-                                           andEvent:event_timecode
-                                          andApiKey:apiKey];
+    NSString * event_timecode = [NSString stringWithFormat:@"%@_0%@_%@", mac,clip_info.alertType, clip_info.alertVal];
     
     
+    NSDictionary * responseDic = [jsonComm getListOfEventsBlockedWithRegisterId:clip_info.registrationID
+                                                                beforeStartTime:nil//@"2013-12-28 20:10:18"
+                                                                      eventCode:event_timecode//event_code // temp
+                                                                         alerts:nil
+                                                                           page:nil
+                                                                         offset:nil
+                                                                           size:nil
+                                                                         apiKey:apiKey];
+    
+    [self getPlaylistSuccessWithResponse:responseDic];
     
 }
-
 
 - (void)getPlaylistSuccessWithResponse: (NSDictionary *)responseDict
 {
@@ -756,21 +742,17 @@
             NSArray *eventArr = [[responseDict objectForKey:@"data"] objectForKey:@"events"];
             
             NSLog(@"play list: %@ ",responseDict);
-            
             if (eventArr.count > 0)
             {
-                NSArray *playlist = [[eventArr objectAtIndex:0] objectForKey:@"playlist"];
+                NSArray *clipInEvents = [[eventArr objectAtIndex:0] objectForKey:@"data"];
                 
-                for (NSDictionary *clipInfo in playlist) {
-                    //NSDictionary *clipInfo = [[playlist objectForKey:@"playlist"] objectAtIndex:0];
-                    
+                for (NSDictionary *clipInfo in clipInEvents) {
                     PlaylistInfo *playlistInfo = [[[PlaylistInfo alloc] init]autorelease];
                     playlistInfo.mac_addr = clip_info.mac_addr;
                     
                     playlistInfo.urlImage = [clipInfo objectForKey:@"image"];
                     playlistInfo.titleString = [clipInfo objectForKey:@"title"];
                     playlistInfo.urlFile = [clipInfo objectForKey:@"file"];
-                    
                     
                     //check if the clip is in our private array
                     BOOL found = FALSE;

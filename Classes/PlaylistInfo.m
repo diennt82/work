@@ -10,7 +10,8 @@
 
 @implementation PlaylistInfo
 
-@synthesize urlImage, mac_addr;
+@synthesize urlImage, mac_addr, alertType, alertVal;
+@synthesize registrationID;
 
 
 -(NSDate *) getTimeCode
