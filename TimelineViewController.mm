@@ -141,16 +141,6 @@
     
 }
 
-//- (void)applyFontTimeLine
-//{
-//    xxxx
-//    UIFont *lightLargeFont = [UIFont applyHubbleFontName:PN_LIGHT_FONT withSize:27];
-//    UIFont *lightSmall14Font = [UIFont applyHubbleFontName:PN_LIGHT_FONT withSize:14];
-//    UIFont *lightSmall13Font = [UIFont applyHubbleFontName:PN_LIGHT_FONT withSize:13];
-//    UIFont *regularMediumFont = [UIFont applyHubbleFontName:PN_REGULAR_FONT withSize:16];
-////    UIColor *timeLineColor = [UIColor timeLineColor];
-//    
-//}
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
@@ -245,16 +235,7 @@
                                                                              Selector:nil
                                                                          FailSelector:nil
                                                                             ServerErr:nil];
-    
-    //NSString *mac = [Util strip_colon_fr_mac:camChannel.profile.mac_address];
-    /*//////////
-    NSString * yourJSONString = @"2014-01-08T03:29:29Z";
-    NSDateFormatter* dF = [[NSDateFormatter alloc] init];
-    [dF setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss'Z'"];
-    [dF setTimeZone:[NSTimeZone timeZoneForSecondsFromGMT:0]];
-    NSDate * currentDate = [dF dateFromString:yourJSONString];
-    //////////*/
-    
+
     NSDate* currentDate = [NSDate date];
     
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
@@ -1043,20 +1024,22 @@
                         self.timelineVCDelegate = nil;
                     }
                     
+                    EventInfo *eventInfoItem = [[EventInfo alloc] init];
+                    eventInfoItem = [self.events objectAtIndex:indexPath.row];
+                    
                     PlaylistInfo *clipInfo = [[PlaylistInfo alloc] init];
                     clipInfo.urlFile = urlFile;
+                    NSString *alertString = [NSString stringWithFormat:@"%d", eventInfoItem.alert];
+                    clipInfo.alertType = alertString;
+                    clipInfo.alertVal = eventInfoItem.value;
+                    clipInfo.mac_addr = [Util strip_colon_fr_mac:self.camChannel.profile.mac_address];
                     
+                    clipInfo.registrationID = self.camChannel.profile.registrationID;
                     PlaybackViewController *playbackViewController = [[PlaybackViewController alloc] init];
                     
                     playbackViewController.clip_info = clipInfo;
-                    playbackViewController.clipsInEvent = [NSMutableArray arrayWithArray:clipsInEvent];
-                    // Pass the selected object to the new view controller.
-                    
-                    NSLog(@"Push the view controller.- %@", self.navigationController);
-                    
                     NSLog(@"Push the view controller of navVC.- %@", self.navVC);
                     
-                    //                    [self.navVC pushViewController:playbackViewController animated:YES];
                     //present view controller to view overal screen
                     [self.navVC presentViewController:playbackViewController animated:YES completion:nil];
                     

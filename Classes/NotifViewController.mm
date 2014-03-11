@@ -158,7 +158,7 @@
                 PlaybackViewController *playbackViewController = [[PlaybackViewController alloc] init];
                 
                 playbackViewController.clip_info = clipInfo;
-                
+                [clipInfo release];
                 // Pass the selected object to the new view controller.
                 
                 NSLog(@"Push the view controller.- %@", self.parentViewController);
