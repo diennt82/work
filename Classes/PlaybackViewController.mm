@@ -75,6 +75,9 @@
     singleTap.numberOfTouchesRequired = 1;
     [self.view addGestureRecognizer:singleTap];
     
+    //hide navigation controller
+    [self.navigationController setHidesBottomBarWhenPushed:YES];
+    
 }
 
 #pragma mark - Hide&Show Control
@@ -128,28 +131,19 @@
     
 #if 0 // TEST Multiple clips
     self.urlVideo = @"http://nxcomm:2013nxcomm@nxcomm-office.no-ip.info/app_release/sub_clips/48022A2CAC31_04_20130917065256730_00001.flv";
-    //    self.urlVideo = @"http://nxcomm:2013nxcomm@nxcomm-office.no-ip.info/release/events/cam_clip.flv";
-    
-    //    self.urlVideo = @"http://nxcomm:2013nxcomm@nxcomm-office.no-ip.info/app_release/sub_clips/48022A2CAC31_04_20130917065256730_00001.flv";
-
-    [self.clips removeAllObjects];
-    self.clips = nil;
-    if (self.clips == nil)
-    {
+    listener = new PlaybackListener(self);
         //hardcode some data for test now:
-        _clips = [[NSMutableArray alloc]init];
+    self.clips = nil;
+    self.clips = [[NSMutableArray alloc] init];
         self.clips = [NSMutableArray arrayWithObjects:
                   @"http://nxcomm:2013nxcomm@nxcomm-office.no-ip.info/app_release/sub_clips/48022A2CAC31_04_20130917065256730_00001.flv",
                   @"http://nxcomm:2013nxcomm@nxcomm-office.no-ip.info/app_release/sub_clips/48022A2CAC31_04_20130917065256730_00002.flv",
                   @"http://nxcomm:2013nxcomm@nxcomm-office.no-ip.info/app_release/sub_clips/48022A2CAC31_04_20130917065256730_00003.flv",
                   @"http://nxcomm:2013nxcomm@nxcomm-office.no-ip.info/app_release/sub_clips/48022A2CAC31_04_20130917065256730_00004.flv",
                   @"http://nxcomm:2013nxcomm@nxcomm-office.no-ip.info/app_release/sub_clips/48022A2CAC31_04_20130917065256730_00005_last.flv", nil];
-        
-    }
-    
     listener->updateClips(self.clips);
     listener->updateFinalClipCount(self.clips.count);
-#endif
+#else
 
     
     _clips = [[NSMutableArray alloc]init];
@@ -182,6 +176,8 @@
         }
         self.urlVideo = self.clip_info.urlFile;
     }
+#endif
+    
     
     [self performSelector:@selector(startStream)
      
@@ -219,6 +215,8 @@
         [self.imageVideo setAlpha:1];
         [self.activityIndicator setHidden:YES];
         [self.view addSubview:self.ib_myOverlay];
+        [self.ib_closePlayBack setFrame:CGRectMake(15, 15, 20, 20)];
+        [self.ib_closePlayBack setBackgroundImage:[UIImage imageVerticalVideoClose] forState:UIControlStateNormal];
         [self.ib_sliderPlayBack setMinimumTrackTintColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"video_progress_green"]]];
         [self watcher];
     });
@@ -550,7 +548,7 @@
         [self.ib_viewControlPlayer setFrame:CGRectMake(0 + deltaX, SCREEN_HEIGHT - HEIGHT_BG_CONTROL + deltaY, SCREEN_WIDTH, HEIGHT_BG_CONTROL)];
         //width of slider is 390/2;
         [self.ib_sliderPlayBack setFrame:CGRectMake(40, 5, 364/2, HEIGHT_SLIDER_DEFAULT)];
-        [self.ib_closePlayBack setFrame:CGRectMake(15 + deltaX, 15 + deltaY, 17, 17)];
+        [self.ib_closePlayBack setFrame:CGRectMake(15 + deltaX, 15 + deltaY, 20, 20)];
         [self.ib_closePlayBack setBackgroundImage:[UIImage imageVerticalVideoClose] forState:UIControlStateNormal];
         [self.ib_viewOverlayVideo setFrame:CGRectMake(39 + deltaX, 239 + deltaY, 240, 90)];
     }
