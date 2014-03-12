@@ -53,6 +53,8 @@
 
 #define TAG_ALERT_VIEW_REMOTE_TIME_OUT 559
 
+#define TEST_REMOTE_TALKBACK 1 // TODO: DELETE
+
 @interface H264PlayerViewController () <TimelineVCDelegate, BonjourDelegate>
 {
     BOOL _syncPortraitAndLandscape;
@@ -63,6 +65,7 @@
 
 @property (retain, nonatomic) IBOutlet UIImageView *imageViewHandle;
 @property (retain, nonatomic) IBOutlet UIImageView *imageViewKnob;
+
 @property (retain, nonatomic) EarlierViewController *earlierVC;
 @property (retain, nonatomic) TimelineViewController *timelineVC;
 @property (retain, nonatomic) UIImageView *imageViewStreamer;
@@ -80,6 +83,13 @@
 @property (nonatomic) BOOL isFahrenheit;
 @property (nonatomic, retain) NSString *cameraModel;
 @property (nonatomic, retain) NSTimer *timerRemoteStreamTimeOut;
+@property (nonatomic, retain) NSString *apiKey;
+
+@property (nonatomic, retain) NSString *sessionKey;
+@property (nonatomic, retain) NSString *streamID;
+@property (nonatomic, retain) NSString *relayServerIP;
+@property (nonatomic) NSInteger relayServerPort;
+@property (nonatomic) BOOL wantsCancelRemoteTalkback;
 
 - (void)centerScrollViewContents;
 - (void)scrollViewDoubleTapped:(UITapGestureRecognizer*)recognizer;
@@ -173,8 +183,16 @@ double _ticks = 0;
     [self.imageViewStreamer addGestureRecognizer:singleTap];
     [singleTap release];
     
+#if TEST_REMOTE_TALKBACK
+    // TODO: Testing -- delete
+    self.imageViewStreamer.userInteractionEnabled = YES;
+#else
     self.imageViewStreamer.userInteractionEnabled = NO;
+#endif
+
     self.cameraModel = [self.selectedChannel.profile getModel];
+
+    self.apiKey = [[NSUserDefaults standardUserDefaults] stringForKey:@"PortalApiKey"];
     [self initHorizeMenu: _cameraModel];
 
     if (![_cameraModel isEqualToString:CP_MODEL_SHARED_CAM]) // CameraHD
@@ -188,7 +206,7 @@ double _ticks = 0;
         
         [self.timelineVC loadEvents:self.selectedChannel];
     }
-    
+
     NSLog(@"Model of Camera is: %d, STUN: %d", self.selectedChannel.profile.modelID, [[NSUserDefaults standardUserDefaults] boolForKey:@"enable_stun"]);
     
     _isDegreeFDisplay = [[NSUserDefaults standardUserDefaults] boolForKey:@"IS_FAHRENHEIT"];
@@ -197,23 +215,25 @@ double _ticks = 0;
     {
         nowButton.enabled = NO;
         [_activityIndicator removeFromSuperview];
-        [self earlierButtonAction:nil];
+        //[self earlierButtonAction:nil];
+        self.imageViewStreamer.userInteractionEnabled = YES;
+        self.horizMenu.userInteractionEnabled = YES;
         return;
     }
     else
     {
         [self becomeActive];
+        
+        [self hideControlMenu];
+        
+        NSLog(@"Check selectedChannel is %@ and ip of deviece is %@", self.selectedChannel, self.selectedChannel.profile.ip_address);
+        [self setupHttpPort];
+        [self setupPtt];
+        
+        self.stringTemperature = @"0";
+        //end add button to change
+        [ib_switchDegree setHidden:YES];
     }
-    
-    [self hideControlMenu];
-    
-    NSLog(@"Check selectedChannel is %@ and ip of deviece is %@", self.selectedChannel, self.selectedChannel.profile.ip_address);
-    [self setupHttpPort];
-    [self setupPtt];
-    
-    self.stringTemperature = @"0";
-    //end add button to change
-    [ib_switchDegree setHidden:YES];
 }
 
 - (void)applyFont
@@ -1560,9 +1580,9 @@ double _ticks = 0;
 #endif
         
         //self.progressView.hidden = YES;
-        [self performSelector:@selector(startStream)
-                   withObject:nil
-                   afterDelay:0.1];
+//        [self performSelector:@selector(startStream)
+//                   withObject:nil
+//                   afterDelay:0.1];
 #ifdef SHOW_DEBUG_INFO
         _viewVideoIn = @"L";
 #endif
@@ -1611,7 +1631,8 @@ double _ticks = 0;
         [self.activityIndicator stopAnimating];
         self.imgViewDrectionPad.hidden= YES;
         self.viewStopStreamingProgress.hidden = YES;
-        self.horizMenu.userInteractionEnabled = NO;
+        self.horizMenu.userInteractionEnabled = YES;
+        self.imageViewStreamer.userInteractionEnabled = YES;
         
         NSLog(@"SetupCamera - Camera is NOT available.");
         
@@ -1709,6 +1730,8 @@ double _ticks = 0;
 
 -(void) startStream
 {
+#if TEST_REMOTE_TALKBACK //TODO: DELETE
+#else
     self.h264StreamerIsInStopped = FALSE;
     
     
@@ -1742,7 +1765,7 @@ double _ticks = 0;
         [self startStream_bg];
     });
 #endif
-    
+#endif
 }
 
 - (void)startStream_bg
@@ -4906,19 +4929,36 @@ double _ticks = 0;
 
 - (void)cleanup
 {
+#if TEST_REMOTE_TALKBACK
+    NSString *sessionKey = @"565550516C434E2D756D744C4A7A3977445A7750724838747538327143464330";
+    NSString *streamID = @"365137545751";
     
-    [self performSelectorInBackground:@selector(set_Walkie_Talkie_bg:)
-                           withObject:@"0"];
+    NSString *url = @"http://23.22.154.88/devices/stop_talk_back";
+    
+    NSDictionary *resDict = [self workWithServer:url sessionKey:sessionKey streamID:streamID];
+    
+    NSLog(@"%@", resDict);
+    
+    [_audioOut release];
+    _audioOut = nil;
+#else
+    
+    if (self.selectedChannel.profile.isInLocal)
+    {
+        [self performSelectorInBackground:@selector(set_Walkie_Talkie_bg:)
+                               withObject:@"0"];
+    }
+    else
+    {
+        [self performSelectorInBackground:@selector(closeRemoteTalkback)
+                               withObject:nil];
+    }
     
     [_audioOut release];
     _audioOut = nil;
     
-//    UIButton *pttBtn = (UIButton *)[self.view viewWithTag:PTT_ENGAGE_BTN];
-//    
-//    [self.ib_buttonTouchToTalk setImage:[UIImage imageNamed:@"bb_vs_mike_on.png"] forState:UIControlStateNormal];
-    
     self.walkieTalkieEnabled = NO;
-    
+#endif
 }
 
 -(void) setupPtt
@@ -4938,26 +4978,39 @@ double _ticks = 0;
 
 -(void)userReleaseHoldToTalk
 {
-
+#if TEST_REMOTE_TALKBACK // Testing
     NSLog(@"Detect user cancel PTT & clean up");
+    
     if (_audioOut != nil)
     {
         [_audioOut disconnectFromAudioSocket];
         [_audioOut release];
         _audioOut = nil;
     }
+#else
+    
+    // Remote and Local is the same
+    
+    NSLog(@"Detect user cancel PTT & clean up");
+    self.wantsCancelRemoteTalkback = TRUE;
+    
+    if (_audioOut != nil)
+    {
+        [_audioOut disconnectFromAudioSocket];
+        [_audioOut release];
+        _audioOut = nil;
+    }
+
+#endif
 }
 
 
 - (BOOL) setEnablePtt:(BOOL) walkie_talkie_enabled
 {
-    
-    
     @synchronized (self)
     {
         if ( walkie_talkie_enabled == YES)
         {
-            
             [self performSelectorInBackground:@selector(set_Walkie_Talkie_bg:)
                                    withObject:[NSString stringWithFormat:@"%d",walkie_talkie_enabled]];
             if (_audioOut != nil)
@@ -4982,8 +5035,8 @@ double _ticks = 0;
             
         }
     }
-    return walkie_talkie_enabled ;
     
+    return walkie_talkie_enabled ;
 }
 
 
@@ -4991,7 +5044,7 @@ double _ticks = 0;
 {
     NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
     
-    NSString * command = [NSString stringWithFormat:@"%@%@",SET_PTT,status];
+    NSString * command = [NSString stringWithFormat:@"%@%@", SET_PTT, status];
     
     NSLog(@"Command send to camera is %@", command);
     
@@ -5007,21 +5060,18 @@ double _ticks = 0;
     [pool release];
 }
 
--(void)processingHoldToTalk
+-(void)processingHoldToTalk // Just init AudioOutStreamer
 {
     NSLog(@"Create AudioOutStreamer & start recording now");
     NSLog(@"Port push to talk is %d, actually is %d",self.selectedChannel.profile.ptt_port,IRABOT_AUDIO_RECORDING_PORT );
     NSLog(@"Device iP is %@", _httpComm.device_ip);
     _audioOut = [[AudioOutStreamer alloc] initWithDeviceIp:_httpComm.device_ip
-                                               andPTTport:self.selectedChannel.profile.ptt_port];  //IRABOT_AUDIO_RECORDING_PORT
+                                                andPTTport:self.selectedChannel.profile.ptt_port];  //IRABOT_AUDIO_RECORDING_PORT
     [_audioOut retain];
     //Start buffering sound from user at the moment they press down the button
     //  This is to prevent loss of audio data
     [_audioOut startRecordingSound];
 }
-
-
-
 
 -(void) longPress:(UILongPressGestureRecognizer*) gest
 {
@@ -5033,8 +5083,23 @@ double _ticks = 0;
     {
         NSLog(@"UIGestureRecognizerStateBegan on hold to talk");
         self.walkieTalkieEnabled = YES;
-        [self setEnablePtt:YES];
+#if TEST_REMOTE_TALKBACK //Testing
+        // call enabled remote PTT function
+        
+        [self performSelectorInBackground:@selector(enableRemotePTT:) withObject:[NSNumber numberWithBool:YES]];
+#else
+        if (self.selectedChannel.profile.isInLocal)
+        {
+            [self setEnablePtt:YES];
+        }
+        else
+        {
+            self.wantsCancelRemoteTalkback = FALSE;
+            [self performSelectorInBackground:@selector(enableRemotePTT:) withObject:[NSNumber numberWithBool:YES]];
+        }
+#endif
         UIImage *imageHoldedToTalk;
+        
         if (isiPhone4)
         {
             imageHoldedToTalk = [UIImage imageNamed:@"camera_action_mic_pressed.png"];
@@ -5056,8 +5121,20 @@ double _ticks = 0;
             NSLog(@"detect cancelling PTT");
             
         }
-        
-        [self setEnablePtt:NO];
+#if TEST_REMOTE_TALKBACK // Tesging
+        [self performSelectorInBackground:@selector(enableRemotePTT:) withObject:[NSNumber numberWithBool:NO]];
+#else
+        if (self.selectedChannel.profile.isInLocal)
+        {
+            [self setEnablePtt:NO];
+        }
+        else
+        {
+            self.wantsCancelRemoteTalkback = TRUE;
+            [self performSelectorInBackground:@selector(enableRemotePTT:)
+                                   withObject:[NSNumber numberWithBool:NO]];
+        }
+#endif
     }
     
     
@@ -5073,7 +5150,19 @@ double _ticks = 0;
     [self applyFont];
     
     //processing for PTT
-    [self processingHoldToTalk];
+#if TEST_REMOTE_TALKBACK
+    [self processHoldToTalkRemote];
+#else
+    
+    if (self.selectedChannel.profile.isInLocal)
+    {
+        [self processingHoldToTalk];
+    }
+    else // Remote
+    {
+        // Init AudioOutStream in enableRemotePTT: function
+    }
+#endif
 }
 
 - (void)touchUpInsideHoldToTalk {
@@ -5087,6 +5176,288 @@ double _ticks = 0;
     //user touch up inside and outside
 
 }
+
+// Talk back remote
+
+- (void)enableRemotePTT: (NSNumber *)walkieTalkieEnabledFlag
+{
+#if TEST_REMOTE_TALKBACK // Testing
+    if ([walkieTalkieEnabledFlag boolValue] == NO)
+    {
+        if (_audioOut != nil)
+        {
+            NSLog(@"disconnect to audio socket###");
+            [_audioOut disconnectFromAudioSocket];
+            [self touchUpInsideHoldToTalk];
+        }
+    }
+    else
+    {
+        NSString *regID = @"01008344334C32B05FIFFRBSVA";
+        NSString *apiKey = @"sk9PuT3h4uErjTPtjoaV";
+
+        [BMS_JSON_Communication setServerInput:@"https://dev-api.hubble.in:443/v1"];
+        BMS_JSON_Communication *jsonComm = [[BMS_JSON_Communication alloc] initWithObject:self
+                                                                                 Selector:Nil
+                                                                             FailSelector:nil
+                                                                                ServerErr:nil];
+        NSDictionary *responseDict = [jsonComm createTalkbackSessionBlockedWithRegistrationId:regID
+                                                                                       apiKey:apiKey];
+        
+        NSLog(@"%@", responseDict);
+        
+        [BMS_JSON_Communication setServerInput:@"https://api.hubble.in/v1"];
+        
+        if (responseDict != nil)
+        {
+            NSString *sessionKey = @"565550516C434E2D756D744C4A7A3977445A7750724838747538327143464330";
+            NSString *streamID = @"365137545751";
+            
+            //        if ([[responseDict objectForKey:@"status"] integerValue] == 200)
+            //        {
+            //            sessionKey = [[responseDict objectForKey:@"data"] objectForKey:@"session_key"];
+            //            streamID = [[responseDict objectForKey:@"data"] objectForKey:@"stream_id"];
+            //        }
+            
+            NSString *url = @"http://23.22.154.88/devices/start_talk_back";
+            
+            NSDictionary *resDict = [self workWithServer:url sessionKey:sessionKey streamID:streamID];
+            
+            NSLog(@"%@", resDict);
+            
+            // Assuming successfully
+            NSMutableData *data = [[NSMutableData alloc] init];
+            
+            Byte header[3];
+            header[0] = 1;
+            header[1] = 79;
+            header[2] = 1;
+            
+            //NSString *streamID = @"365137545751";
+            //NSString *sessionKey = @"565550516C434E2D756D744C4A7A3977445A7750724838747538327143464330";
+            
+            NSString *handshake = [streamID stringByAppendingString:sessionKey];
+            [data appendBytes:header length:3];
+            
+            const char *charHandshake = [handshake UTF8String];
+            [data appendBytes:charHandshake length:strlen(charHandshake)];
+            
+            NSLog(@"H264VC -enableRemotePTT: %@, ---%lu", data, (unsigned long)data.length);
+            
+            _audioOut.dataRequest = data;
+            [_audioOut performSelectorOnMainThread:@selector(connectToAudioSocket) withObject:nil waitUntilDone:NO];
+            _audioOut.audioOutStreamerDelegate = self;
+            //}
+        }
+    }
+#else
+        if ([walkieTalkieEnabledFlag boolValue] == NO)
+        {
+            if (_audioOut != nil)
+            {
+                NSLog(@"disconnect to audio socket###");
+                [_audioOut disconnectFromAudioSocket];
+                [self touchUpInsideHoldToTalk];
+            }
+        }
+        else
+        {
+            //[BMS_JSON_Communication setServerInput:@"https://dev-api.hubble.in:443/v1"];
+            NSString *regId = self.selectedChannel.profile.registrationID;
+            
+            BMS_JSON_Communication *jsonComm = [[BMS_JSON_Communication alloc] initWithObject:self
+                                                                                     Selector:Nil
+                                                                                 FailSelector:nil
+                                                                                    ServerErr:nil];
+            NSDictionary *responseDict = [jsonComm createTalkbackSessionBlockedWithRegistrationId:regId
+                                                                                           apiKey:_apiKey];
+            
+            if (responseDict != nil)
+            {
+                if (_wantsCancelRemoteTalkback)
+                {
+                    // Stop process now.
+                    NSLog(@"\nWANTS CANCEL REMOTE TALKBACK\n");
+                    return;
+                }
+                
+                if ([[responseDict objectForKey:@"status"] integerValue] == 200)
+                {
+                    self.sessionKey = [[responseDict objectForKey:@"data"] stringForKey:@"session_key"];
+                    self.streamID = [[responseDict objectForKey:@"data"] stringForKey:@"stream_id"];
+                }
+                
+                if (_sessionKey == nil)
+                {
+                    NSLog(@"Request session key failed!");
+                    return;
+                }
+                
+                NSString *cmd = [NSString stringWithFormat:@"￼action=command&command=start_talk_back&session_key=%@&%@", _sessionKey, _streamID];
+                
+                NSDictionary *resDict = [jsonComm sendCommandBlockedWithRegistrationId:regId andCommand:cmd andApiKey:_apiKey];
+                
+                if (resDict != nil)
+                {
+                    if (_wantsCancelRemoteTalkback)
+                    {
+                        // Stop process now.
+                        NSLog(@"\nWANTS CANCEL REMOTE TALKBACK\n");
+                        return;
+                    }
+                    
+                    if ([[resDict objectForKey:@"status"] integerValue] == 200)
+                    {
+                        self.relayServerIP = [[[resDict objectForKey:@"data"] objectForKey:@"device_response"] stringForKey:@"relay_server_ip"];
+                        self.relayServerPort = [[[[resDict objectForKey:@"data"] objectForKey:@"device_response"] objectForKey:@"relay_server_port"] integerValue];
+                        
+                        // Connect to server at serverIP & port above
+                        [self processHoldToTalkRemote];
+                    }
+                    else
+                    {
+                        NSLog(@"H264 - enableRemotePTT -resDict: %@", resDict);
+                    }
+                }
+                else
+                {
+                    NSLog(@"H264 - enableRemotePTT resDict = nil");
+                }
+            }
+            else
+            {
+                NSLog(@"H264 - enableRemotePTT responseDict = nil");
+            }
+        }
+#endif
+}
+
+-(void)processHoldToTalkRemote
+{
+#if TEST_REMOTE_TALKBACK // Testing
+    self.relayServerIP = @"23.22.154.88";
+    self.relayServerPort = 25000;
+    
+    NSLog(@"Create AudioOutStreamer & start recording now");
+    NSLog(@"PTT remote -IP: %@,  Port: %d", _relayServerIP, _relayServerPort);
+    
+    _audioOut = [[AudioOutStreamer alloc] initWithDeviceIp:_relayServerIP
+                                                andPTTport:_relayServerPort];
+    _audioOut.isInLocal = FALSE;
+    [_audioOut retain];
+    //Start buffering sound from user at the moment they press down the button
+    //  This is to prevent loss of audio data
+    [_audioOut startRecordingSound];
+#else
+    NSLog(@"Create AudioOutStreamer & start recording now");
+    NSLog(@"PTT remote -IP: %@,  Port: %d", _relayServerIP, _relayServerPort);
+    
+    _audioOut = [[AudioOutStreamer alloc] initWithDeviceIp:_relayServerIP
+                                                andPTTport:_relayServerPort];
+    _audioOut.isInLocal = FALSE;
+    [_audioOut retain];
+    //Start buffering sound from user at the moment they press down the button
+    //  This is to prevent loss of audio data
+    [_audioOut startRecordingSound];
+    
+    /*
+     * Init request data for handshake
+     */
+    
+    NSMutableData *data = [[NSMutableData alloc] init];
+    
+    Byte header[3];
+    header[0] = 1;
+    header[1] = 79;
+    header[2] = 1;
+    
+    NSString *handshake = [_streamID stringByAppendingString:_sessionKey];
+    [data appendBytes:header length:3];
+    
+    const char *charHandshake = [handshake UTF8String];
+    [data appendBytes:charHandshake length:strlen(charHandshake)];
+    
+    NSLog(@"H264VC -enableRemotePTT: %@, ---%lu", data, (unsigned long)data.length);
+    
+    _audioOut.dataRequest = data;
+    
+    [data release];
+    
+    [_audioOut performSelectorOnMainThread:@selector(connectToAudioSocket) withObject:nil waitUntilDone:NO];
+    _audioOut.audioOutStreamerDelegate = self;
+#endif
+}
+
+- (void)closeRemoteTalkback
+{
+#if TEST_REMOTE_TALKBACK // Testing
+    NSString *sessionKey = @"565550516C434E2D756D744C4A7A3977445A7750724838747538327143464330";
+    NSString *streamID = @"365137545751";
+    
+    NSString *url = @"http://23.22.154.88/devices/stop_talk_back";
+    
+    NSDictionary *resDict = [self workWithServer:url sessionKey:sessionKey streamID:streamID];
+    
+    NSLog(@"%@", resDict);
+#else
+    BMS_JSON_Communication *jsonComm = [[BMS_JSON_Communication alloc] initWithObject:self
+                                                                             Selector:nil
+                                                                         FailSelector:nil
+                                                                            ServerErr:nil];
+    NSString *cmd = @"Close remote talk back or something like that";
+    [jsonComm sendCommandBlockedWithRegistrationId:self.selectedChannel.profile.registrationID andCommand:cmd andApiKey:_apiKey];
+#endif
+}
+
+- (NSDictionary *)workWithServer: (NSString *)url sessionKey: (NSString *)sessionKey streamID: (NSString *)streamID
+{
+    NSString *requestString = url;
+    
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL: [NSURL URLWithString:requestString]];
+    request.timeoutInterval = 30;
+    
+    //Specify that it will be a POST request
+    request.HTTPMethod = @"POST";
+    
+    // This is how we set header fields
+    [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
+    
+    // Convert your data and set your request's HTTPBody properties
+    //{"id":"265","notification_type":"apns", "registration_id":"dadafafafafafaaf"}
+    
+    //NSString *sessionKey = @"565550516C434E2D756D744C4A7A3977445A7750724838747538327143464330";
+    
+    NSDictionary *jsonDictInfo = [NSDictionary dictionaryWithObjectsAndKeys:
+                                  sessionKey, @"session_key",
+                                  streamID, @"stream_id",
+                                  nil];
+    NSLog(@"jsonDict = %@", jsonDictInfo);
+    // convert to data
+    NSData *requestBodyData = [NSJSONSerialization dataWithJSONObject:jsonDictInfo
+                                                              options:NSJSONWritingPrettyPrinted
+                                                                error:nil];
+    request.HTTPBody = requestBodyData;
+    
+    NSURLResponse *response;
+    
+    NSData *dataReply = [NSURLConnection sendSynchronousRequest:request
+                                      returningResponse:&response
+                                                  error:nil];
+    
+    if (dataReply == nil)
+    {
+        return nil;
+    }
+    else
+    {
+        return [NSDictionary dictionaryWithDictionary:[NSJSONSerialization JSONObjectWithData:dataReply
+                                                                                      options:kNilOptions
+                                                                                        error:nil]];
+    }
+}
+
+
+#pragma mark - Bottom menu
 
 - (IBAction)bt_showMenuControlPanel:(id)sender {
 //    isShowControlPanel = YES;

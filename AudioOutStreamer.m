@@ -7,9 +7,17 @@
 //
 
 #define SENDING_SOCKET_TAG 1009
+#define REMOTE_TIMEOUT 30
 
 #import "AudioOutStreamer.h"
 
+@interface AudioOutStreamer()
+
+@property (retain, nonatomic) NSFileManager *fileManager;
+@property (retain, nonatomic) NSFileHandle *fileHandle;
+@property (retain, nonatomic) NSString *sentPath;
+
+@end
 
 @implementation AudioOutStreamer
 @synthesize pcmPlayer;
@@ -29,7 +37,8 @@
 -(void) dealloc
 {
     [pcmPlayer release];
-    
+    [_fileManager release];
+    [_fileHandle release];
     [super dealloc]; 
 }
 
@@ -61,7 +70,7 @@
 {
 	if (hasStartRecordingSound == FALSE)
     {
-        [self startRecordingSound];
+        //[self startRecordingSound];
     }
 	sendingSocket = [[AsyncSocket alloc] initWithDelegate:self];
 	[sendingSocket setUserData:SOCKET_ID_SEND];
@@ -74,7 +83,14 @@
     NSLog(@"pTT to: %@:%d",device_ip, port);
     
 	//Non-blocking connect
-	[sendingSocket connectToHost:ip onPort:port withTimeout:5 error:nil];
+    if (_isInLocal)
+    {
+        [sendingSocket connectToHost:ip onPort:port withTimeout:5 error:nil];
+    }
+	else
+    {
+        [sendingSocket connectToHost:ip onPort:port withTimeout:REMOTE_TIMEOUT error:nil];
+    }
 }
 
 - (void) disconnectFromAudioSocket
@@ -130,6 +146,11 @@
         
         [timer invalidate];
         [self.audioOutStreamerDelegate cleanup];
+        
+        if (_fileHandle != nil)
+        {
+            [_fileHandle closeFile];
+        }
     }
 }
 
@@ -141,17 +162,49 @@
 											withLength:2*1024]; //2*1024
 	[sendingSocket writeData:_pcm_data withTimeout:2 tag:SENDING_SOCKET_TAG];
 	
+    //NSLog(@"AudioOutStreamer - sendAudioPacket: %@", _pcm_data);
+    
+    if (!_isInLocal)
+    {
+        if (_sentPath == nil)
+        {
+            NSString *cachesDirectory = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
+            self.sentPath = [cachesDirectory stringByAppendingPathComponent:@"sent_data.bat"];
+        }
+        
+        if (_fileManager == nil)
+        {
+            self.fileManager = [NSFileManager defaultManager];
+            
+            [_fileManager removeItemAtPath:_sentPath error:nil];
+        }
+        
+        if ([_fileManager fileExistsAtPath:_sentPath] == NO)
+        {
+            NSLog (@"File not found");
+            [_fileManager createFileAtPath:_sentPath contents:nil attributes:nil];
+        }
+        
+        if (_fileHandle == nil)
+        {
+            self.fileHandle = [NSFileHandle fileHandleForWritingAtPath:_sentPath];
+        }
+        
+        [_fileHandle seekToEndOfFile];
+        
+        [_fileHandle writeData:_pcm_data];
+    }
 }
 
 
 
-#pragma mark TCP socket delegate funcs 
+#pragma mark TCP socket delegate funcs
 
 - (void)onSocket:(AsyncSocket *)sock didConnectToHost:(NSString *)host port:(UInt16)port
 {
 
 	NSLog(@"didConnectToHost Finished");
-	//if(port == IRABOT_AUDIO_RECORDING_PORT)
+	if(_isInLocal)
 	{
 
 		//Start sending the first 2Kb of data per 0.128 sec
@@ -161,12 +214,16 @@
 														  userInfo:nil
 														   repeats:YES];
 	}
-
+    else
+    {
+        // Start handshake
+        [sendingSocket writeData:_dataRequest withTimeout:REMOTE_TIMEOUT tag:SENDING_SOCKET_TAG];
+    }
 	
 }
 - (void)onSocket:(AsyncSocket *)sock willDisconnectWithError:(NSError *)err
 {
-	NSLog(@"AudioOutStreamer- connection failed with error:%d:%@" , 
+	NSLog(@"AudioOutStreamer- connection failed with error: %@, : %d, : %@", [sock unreadData],
 		  [err code], err);
     UIAlertView *_alert = [[UIAlertView alloc]
                            initWithTitle:@"Initializing Push-to-talk failed"
@@ -180,14 +237,47 @@
 
 - (void)onSocketDidDisconnect:(AsyncSocket *)sock
 {
-	
 	if ( sendingSocket != nil && [sendingSocket isConnected] == NO)
 	{
 		[self disconnectFromAudioSocket];
 	}
-
 }
 
+- (void)onSocket:(AsyncSocket *)sock didWriteDataWithTag:(long)tag
+{
+    // Waitint for get handshake response
+    [sendingSocket readDataToLength:7 withTimeout:REMOTE_TIMEOUT tag:SENDING_SOCKET_TAG];
+}
 
+- (void)onSocket:(AsyncSocket *)sock didReadData:(NSData *)data withTag:(long)tag
+{
+    // Get handshake response
+    NSLog(@"TAG: %ld, data: %@", tag, data);
+    
+    const unsigned char bytes[] = {01, 07, 00, 00, 00, 00, 00};
+    NSData *expectedData = [NSData dataWithBytes:bytes length:sizeof(bytes)];
+    NSLog(@"%@", expectedData);
+    
+    const unsigned char bytes2[] = {01, 07, 00, 02, 00, 00, 00};
+    NSData *unexpectedData = [NSData dataWithBytes:bytes2 length:sizeof(bytes2)];
+    NSLog(@"%@", unexpectedData);
+    
+    if ([data isEqualToData:expectedData])
+    {
+        NSLog(@"Equal Expected data");
+        
+        voice_data_timer = [NSTimer scheduledTimerWithTimeInterval: 0.125//0.04
+                                                            target:self
+                                                          selector:@selector(sendAudioPacket:)
+                                                          userInfo:nil
+                                                           repeats:YES];
+    }
+    
+    if ([data isEqualToData:unexpectedData])
+    {
+        NSLog(@"Equal Unexpected data");
+    }
+    
+}
 
 @end
