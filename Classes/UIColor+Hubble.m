@@ -68,4 +68,9 @@
 {
     return Rgb2UIColor(255, 255, 255);
 }
+
++ (UIColor *)doNotDisturbCellBGColor
+{
+    return Rgb2UIColor(43, 50, 56);
+}
 @end

@@ -324,4 +324,14 @@
 {
     return [UIImage imageNamed:@"video_progress_green"];
 }
+
+
++ (UIImage *)imageSwitchOn
+{
+    return [UIImage imageNamed:@"settings_switch_on.png"];
+}
++ (UIImage *)imageSwitchOff
+{
+    return [UIImage imageNamed:@"settings_switch_off.png"];
+}
 @end

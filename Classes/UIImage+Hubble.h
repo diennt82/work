@@ -37,4 +37,8 @@
 + (UIImage *)imageVideoFullScreenClosePressed;
 + (UIImage *)imageVideoProgressBG;
 + (UIImage *)imageVideoProgressGreen;
+//switch-on and off
++ (UIImage *)imageSwitchOn;
++ (UIImage *)imageSwitchOff;
+
 @end

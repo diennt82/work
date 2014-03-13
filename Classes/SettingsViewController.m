@@ -22,6 +22,7 @@
 #import "SchedulerViewController.h"
 #import "SchedulingViewController.h"
 #import "SensitivityTemperatureCell.h"
+#import "DoNotDisturbCell.h"
 #import "SensitivityInfo.h"
 #import "MenuViewController.h"
 
@@ -569,10 +570,17 @@
     }
     else if(indexPath.section == 2)
     {
+        //height for do not disturb
+        //xxx
         if (indexPath.row == 1)
         {
-            return 130;
+            return 303;
         }
+        else
+        {
+            return 55;
+        }
+        
     }
     else if (indexPath.section == 3)
     {
@@ -883,24 +891,31 @@
                 }
                     break;
                     
-                case 1:
-                case 2:
-                {
-                    self.rangeSliderCell.backgroundColor = [UIColor blackColor];
-                    return _rangeSliderCell;
-                }
-                    break;
-                    
+//                case 1:
+//                case 2:
+//                {
+//                    self.rangeSliderCell.backgroundColor = [UIColor blackColor];
+//                    return _rangeSliderCell;
+//                }
+//                    break;
+                    //xxxx
                 default:
                 {
-                    static NSString *CellIdentifier = @"Cell";
-                    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-                    if (cell == nil) {
-                        cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
+                    static NSString *CellIdentifier = @"DoNotDisturbID";
+                    DoNotDisturbCell *cell = [self.tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+                    if (cell == nil)
+                    {
+                        NSArray *objects = [[NSBundle mainBundle] loadNibNamed:@"DoNotDisturbCell" owner:nil options:nil];
+                        
+                        for (id curObj in objects)
+                        {
+                            if([curObj isKindOfClass:[UITableViewCell class]])
+                            {
+                                cell = (DoNotDisturbCell *)curObj;
+                                break;
+                            }
+                        }
                     }
-                    
-                    // Configure the cell...
-                    
                     return cell;
                 }
                     break;
@@ -1102,6 +1117,7 @@
             
         case 2:
         {
+            //Do not disturb
             if (indexPath.row == 0)
             {
                 if (numOfRows[indexPath.section] == 1)
@@ -1113,15 +1129,14 @@
                     numOfRows[indexPath.section] = 1;
                 }
                 
-                for (int i = 0; i < 4; i++)
-                {
-                    if (i != indexPath.section)
-                    {
-                        numOfRows[i] = 1;
-                    }
-                }
+//                for (int i = 0; i < 4; i++)
+//                {
+//                    if (i != indexPath.section)
+//                    {
+//                        numOfRows[i] = 1;
+//                    }
+//                }//xxx
             }
-            
             
             // [tableView reloadSections:[NSIndexSet indexSetWithIndex:indexPath.section] withRowAnimation:UITableViewRowAnimationAutomatic];
         }

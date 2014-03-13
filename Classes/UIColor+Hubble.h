@@ -21,4 +21,5 @@
 + (UIColor *)cellMelodyColor;
 + (UIColor *)textTimerPlayBackColor;
 + (UIColor *)textForFinishPlayBackColor;
++ (UIColor *)doNotDisturbCellBGColor;
 @end

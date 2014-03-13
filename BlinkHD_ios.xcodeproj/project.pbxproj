@@ -713,6 +713,9 @@
 		A120548318BC3AAD00557C1A /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A120548218BC3AAD00557C1A /* MediaPlayer.framework */; };
 		A1239E86186185F200A25A04 /* AudioOutStreamer.m in Sources */ = {isa = PBXBuildFile; fileRef = A1239E85186185F200A25A04 /* AudioOutStreamer.m */; };
 		A12A9D8A18B1DF4C004987F2 /* UIImage+Hubble.m in Sources */ = {isa = PBXBuildFile; fileRef = A12A9D8918B1DF4C004987F2 /* UIImage+Hubble.m */; };
+		A13AD81018D008110009F0E5 /* DoNotDisturbCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A13AD80F18D008110009F0E5 /* DoNotDisturbCell.m */; };
+		A13AD81218D008490009F0E5 /* DoNotDisturbCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = A13AD81118D008490009F0E5 /* DoNotDisturbCell.xib */; };
+		A13AD83D18D0691E0009F0E5 /* UICircularSlider.m in Sources */ = {isa = PBXBuildFile; fileRef = A13AD83C18D0691E0009F0E5 /* UICircularSlider.m */; };
 		A14631C6185C133D00E96969 /* ScrollHorizontalMenu.m in Sources */ = {isa = PBXBuildFile; fileRef = A14631C5185C133D00E96969 /* ScrollHorizontalMenu.m */; };
 		A15110D718AB7D4600E116E1 /* TimeLinePremiumCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A15110D618AB7D4600E116E1 /* TimeLinePremiumCell.m */; };
 		A15110DD18AB7D9800E116E1 /* TimeLinePremiumCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = A15110DC18AB7D9800E116E1 /* TimeLinePremiumCell.xib */; };
@@ -1621,6 +1624,11 @@
 		A123DC9717E9A748006CC6FD /* PlayerCallbackHandler.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PlayerCallbackHandler.h; sourceTree = "<group>"; };
 		A12A9D8818B1DF4B004987F2 /* UIImage+Hubble.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+Hubble.h"; sourceTree = "<group>"; };
 		A12A9D8918B1DF4C004987F2 /* UIImage+Hubble.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+Hubble.m"; sourceTree = "<group>"; };
+		A13AD80E18D008110009F0E5 /* DoNotDisturbCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DoNotDisturbCell.h; sourceTree = "<group>"; };
+		A13AD80F18D008110009F0E5 /* DoNotDisturbCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DoNotDisturbCell.m; sourceTree = "<group>"; };
+		A13AD81118D008490009F0E5 /* DoNotDisturbCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = DoNotDisturbCell.xib; sourceTree = "<group>"; };
+		A13AD83B18D0691E0009F0E5 /* UICircularSlider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UICircularSlider.h; sourceTree = "<group>"; };
+		A13AD83C18D0691E0009F0E5 /* UICircularSlider.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UICircularSlider.m; sourceTree = "<group>"; };
 		A14631C4185C133D00E96969 /* ScrollHorizontalMenu.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ScrollHorizontalMenu.h; sourceTree = "<group>"; };
 		A14631C5185C133D00E96969 /* ScrollHorizontalMenu.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ScrollHorizontalMenu.m; sourceTree = "<group>"; };
 		A15110D518AB7D4600E116E1 /* TimeLinePremiumCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TimeLinePremiumCell.h; sourceTree = "<group>"; };
@@ -3750,6 +3758,11 @@
 		8BEDE2ED1861B73F00D3AE2B /* Disturb */ = {
 			isa = PBXGroup;
 			children = (
+				A13AD83B18D0691E0009F0E5 /* UICircularSlider.h */,
+				A13AD83C18D0691E0009F0E5 /* UICircularSlider.m */,
+				A13AD80E18D008110009F0E5 /* DoNotDisturbCell.h */,
+				A13AD80F18D008110009F0E5 /* DoNotDisturbCell.m */,
+				A13AD81118D008490009F0E5 /* DoNotDisturbCell.xib */,
 			);
 			name = Disturb;
 			sourceTree = "<group>";
@@ -4665,6 +4678,7 @@
 				8B29A06218AF500A00D36BE5 /* settings_temp_switch_bg@2x.png in Resources */,
 				8B99DB9318B8759A0009612A /* Default-568h@2x.png in Resources */,
 				8B299F9A18AF500900D36BE5 /* video_grey_land@2x.png in Resources */,
+				A13AD81218D008490009F0E5 /* DoNotDisturbCell.xib in Resources */,
 				8B29A08818AF500A00D36BE5 /* video_progress_green.png in Resources */,
 				8B9ABB6B18A9FDEC0079F4A3 /* RegistrationViewController.xib in Resources */,
 				8BC0A0201844A6EE00A5FD52 /* bb_setup_icon_step_1.png in Resources */,
@@ -4718,7 +4732,9 @@
 				8B53659318B34DA80018671F /* SensitivityTemperatureCell.m in Sources */,
 				8B9384AF18570567009C4771 /* ValueSettingsViewController.m in Sources */,
 				97987DF21546A1630066C49B /* MBP_LoginOrRegistration.mm in Sources */,
+				A13AD81018D008110009F0E5 /* DoNotDisturbCell.m in Sources */,
 				8B9633AB18A8AAA2008A9579 /* LoginViewController.m in Sources */,
+				A13AD83D18D0691E0009F0E5 /* UICircularSlider.m in Sources */,
 				8B9112D71860341C004301C5 /* NotifViewController.mm in Sources */,
 				8BA5C4801818DCC1006B4BB8 /* ZoneViewController.m in Sources */,
 				8B9C7E15185F268C0038B3A8 /* CamerasViewController.mm in Sources */,
