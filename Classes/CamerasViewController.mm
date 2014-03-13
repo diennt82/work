@@ -360,14 +360,23 @@
         cell.cameraNameLabel.text = ch.profile.name;
         
         // Camera is NOT available
-        if (ch.profile.isInLocal == FALSE &&
-            ch.profile.minuteSinceLastComm > 5)
+        if ([ch.profile isNotAvailable])
         {
             cell.cameraNameLabel.textColor = [UIColor redColor];
         }
         else
         {
-            cell.cameraNameLabel.textColor = [UIColor whiteColor];
+            NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+            NSString *regID = [userDefaults stringForKey:@"REG_ID"];
+            
+            if ([ch.profile.registrationID isEqualToString:regID])
+            {
+                cell.cameraNameLabel.textColor = [UIColor colorWithRed:19/255.f green:154/255.f blue:244/255.f alpha:1];
+            }
+            else
+            {
+                cell.cameraNameLabel.textColor = [UIColor whiteColor];
+            }
         }
         
         return cell;
