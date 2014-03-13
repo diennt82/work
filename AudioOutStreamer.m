@@ -9,6 +9,9 @@
 #define SENDING_SOCKET_TAG 1009
 #define REMOTE_TIMEOUT 30
 
+#define TALKBACK_REMOTE_IP @"23.22.154.88"
+#define TALKBACK_REMOTE_PORT 25000
+
 #import "AudioOutStreamer.h"
 
 @interface AudioOutStreamer()
@@ -26,12 +29,36 @@
 
 -(id) initWithDeviceIp:(NSString *) ip andPTTport: (int) port
 {
-	[super init];
-	device_ip = [NSString stringWithString:ip];
-	device_port = port; 
-	
-    hasStartRecordingSound = FALSE;
+	self = [super init];
+    if (self)
+    {
+        device_ip = [NSString stringWithString:ip];
+        device_port = port;
+        
+        hasStartRecordingSound = FALSE;
+        self.isInLocal = TRUE;
+    }
+    
 	return self; 
+}
+
+- (id)initWithRemoteMode
+{
+    self = [super init];
+    
+    if (self)
+    {
+        device_ip   = TALKBACK_REMOTE_IP;
+        device_port = TALKBACK_REMOTE_PORT;
+        
+        hasStartRecordingSound = FALSE;
+        self.isInLocal = FALSE;
+        
+        NSLog(@"Create AudioOutStreamer & start recording now");
+        NSLog(@"PTT remote -IP: %@,  Port: %d", device_ip, device_port);
+    }
+    
+    return self;
 }
 
 -(void) dealloc

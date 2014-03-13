@@ -39,8 +39,9 @@
 
 -(id) initWithDeviceIp:(NSString *) ip andPTTport: (int) port;
 
-- (void) connectToAudioSocket;
+- (id)initWithRemoteMode;
 
+- (void) connectToAudioSocket;
 
 - (void) disconnectFromAudioSocket;
 
