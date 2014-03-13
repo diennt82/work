@@ -132,7 +132,10 @@
     
 }
 
-
+-(void) query_stream_mode_for_cam:(CamProfile *) cp
+{
+    
+}
 
 -(void) getCamListSuccess:(NSDictionary *)responseDict
 {
@@ -155,17 +158,10 @@
         
         [self sync_online_and_offline_data:camProfiles];
         
-        //if (delegate != nil)
         if (_delegate != nil)
         {
-            //[delegate sendStatus:SHOW_CAMERA_LIST];
             [_delegate finishStoreCameraListData:camProfiles success:TRUE];
         }
-        //else if (_userAccountDelegate != nil) // MenuViewController update camera list
-//        {
-//            [_userAccountDelegate finishStoreCameraListData:camProfiles];
-//            //self.userAccountDelegate = nil;
-//        }
         else
         {
             NSLog(@"Error - delegate = nil");
@@ -186,30 +182,17 @@
         UIAlertView *alert = [[UIAlertView alloc]
                               initWithTitle:msg
                               message:msg1
-                              delegate:self
+                              delegate:nil
                               cancelButtonTitle:ok
                               otherButtonTitles:nil];
         [alert show];
         [alert release];
-        
-//        if (delegate != nil)
-//        {
-//            [delegate sendStatus:LOGIN_FAILED_OR_LOGOUT];
-//        }
-//        else if (_userAccountDelegate != nil) // MenuViewController update camera list
-//        {
-//            [_userAccountDelegate finishStoreCameraListData:nil];
-//        }
+
         if (_delegate)
         {
             [_delegate finishStoreCameraListData:nil success:FALSE];
         }
     }
-}
-
--(void) query_stream_mode_for_cam:(CamProfile *) cp
-{
-    
 }
 
 -(void) getCamListFailure:(NSDictionary *)error_response
@@ -227,19 +210,16 @@
 	UIAlertView *alert = [[UIAlertView alloc]
 						  initWithTitle:msg
 						  message:[NSString stringWithFormat:msg1, [error_response objectForKey:@"message"]]
-						  delegate:self
+						  delegate:nil
 						  cancelButtonTitle:ok
 						  otherButtonTitles:nil];
 	[alert show];
 	[alert release];
 	
-	//[delegate sendStatus:LOGIN_FAILED_OR_LOGOUT];
     if (_delegate)
     {
         [_delegate finishStoreCameraListData:nil success:FALSE];
     }
-    
-	return;
 }
 
 - (void)getCamListServerUnreachable
@@ -259,7 +239,7 @@
 	UIAlertView *alert = [[UIAlertView alloc]
 						  initWithTitle:msg
 						  message:msg1
-						  delegate:self
+						  delegate:nil
 						  cancelButtonTitle:ok
 						  otherButtonTitles:nil];
 	[alert show];
@@ -270,14 +250,6 @@
     
     if (!isOffline)
     {
-//        if (delegate != nil)
-//        {
-//            [delegate sendStatus:LOGIN_FAILED_OR_LOGOUT];
-//        }
-//        else if (_userAccountDelegate != nil)
-//        {
-//            [_userAccountDelegate finishStoreCameraListData:nil];
-//        }
         if (_delegate)
         {
             [_delegate finishStoreCameraListData:nil
