@@ -24,6 +24,7 @@
                 <outlet property="imageViewKnob" destination="Ztn-sM-vLp" id="7D0-8g-REv"/>
                 <outlet property="imageViewVideo" destination="kJh-sp-2JE" id="7ha-n9-TOc"/>
                 <outlet property="imgViewDrectionPad" destination="ENJ-kB-zlZ" id="DZ2-Yu-icH"/>
+                <outlet property="lblCameraName" destination="J0i-nH-kuT" id="4Ou-wY-Egh"/>
                 <outlet property="scrollView" destination="yil-Y6-pAr" id="JJ6-WZ-Bpo"/>
                 <outlet property="view" destination="cB4-IZ-gnu" id="UUn-mn-hKr"/>
                 <outlet property="viewStopStreamingProgress" destination="Fh4-Wy-03S" id="N5q-G3-0Ta"/>
@@ -55,6 +56,13 @@
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                         </imageView>
+                        <label hidden="YES" opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="J0i-nH-kuT">
+                            <rect key="frame" x="0.0" y="0.0" width="200" height="21"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="17"/>
+                            <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            <nil key="highlightedColor"/>
+                        </label>
                     </subviews>
                 </scrollView>
                 <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" id="Meo-mp-L42" customClass="ScrollHorizontalMenu">

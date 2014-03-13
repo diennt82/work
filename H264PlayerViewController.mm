@@ -63,6 +63,8 @@
 
 @property (retain, nonatomic) IBOutlet UIImageView *imageViewHandle;
 @property (retain, nonatomic) IBOutlet UIImageView *imageViewKnob;
+@property (retain, nonatomic) IBOutlet UILabel *lblCameraName;
+
 @property (retain, nonatomic) EarlierViewController *earlierVC;
 @property (retain, nonatomic) TimelineViewController *timelineVC;
 @property (retain, nonatomic) UIImageView *imageViewStreamer;
@@ -1354,10 +1356,13 @@ double _ticks = 0;
     {
         if (_isHorizeShow == TRUE)
         {
+            self.lblCameraName.hidden = YES;
             [self hideControlMenu];
         }
         else
         {
+            self.lblCameraName.text = self.selectedChannel.profile.name;
+            self.lblCameraName.hidden = NO;
             [self showControlMenu];
         }
     }
@@ -4833,6 +4838,7 @@ double _ticks = 0;
     [_ib_changeToMainRecording release];
     [ib_switchDegree release];
     [earlierNavi release];
+    [_lblCameraName release];
     [super dealloc];
 }
 //At first time, we set to FALSE after call checkOrientation()
