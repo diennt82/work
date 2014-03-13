@@ -152,6 +152,8 @@
     [super viewWillDisappear:animated];
 }
 
+
+
 #pragma mark - Actions
 
 - (IBAction)btnConnectTouchUpInsideAction:(id)sender
@@ -389,12 +391,19 @@
         [self.ib_lableStage setText:@"Select a device to connect"];
         
         [self.ib_tableListBLE reloadData];
-        // Don't Auto connect to BLE
-        //
-        //        CBPeripheral *peripheralSelected =  [_currentBLEList objectAtIndex:0];
-        //        [[BLEConnectionManager getInstanceBLE].cm stopScan];
-        //
-        //        [[BLEConnectionManager getInstanceBLE] connectToBLEWithPeripheral:peripheralSelected];
+       
+        //Auto connect
+        {
+            self.btnConnect.enabled = YES;
+            self.selectedPeripheral = (CBPeripheral *)[[BLEConnectionManager getInstanceBLE].listBLEs objectAtIndex:0];
+            
+            [[BLEConnectionManager getInstanceBLE] connectToBLEWithPeripheral:_selectedPeripheral];
+            
+            [self createHubbleAlertView];
+            
+            
+        }
+        
         
     }
     else //More than 2 camera in  5sec
