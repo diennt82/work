@@ -15,6 +15,7 @@
 #import "CameraSettingsCell.h"
 #import "CameraNameViewController.h"
 #import <MonitorCommunication/MonitorCommunication.h>
+#import "ChangeImageViewController.h"
 
 @interface CameraMenuViewController () <UITableViewDataSource, UITableViewDelegate>
 
@@ -58,6 +59,7 @@
 {
     [super viewWillAppear:animated];
     self.navigationController.navigationBarHidden = NO;
+    [self.navigationController.view setUserInteractionEnabled:YES];
     
     [self.tableViewSettings reloadRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:0
                                                                                                inSection:0]]
@@ -302,9 +304,23 @@
         cameraNameViewController.cameraName = self.camChannel.profile.name;
         cameraNameViewController.parentVC = self;
         [self.navigationController pushViewController:cameraNameViewController animated:YES];
-        
         [cameraNameViewController release];
     }
+    else if (indexPath.row == 1)
+    {
+        //change Image
+        ChangeImageViewController *changeImageVC = [[ChangeImageViewController alloc] initWithNibName:@"ChangeImageViewController" bundle:nil];
+        [UIView transitionWithView:self.view
+                          duration:1.0
+                           options:UIViewAnimationOptionTransitionFlipFromBottom
+                        animations:^{
+                            [self.view addSubview:changeImageVC.view];
+                        }
+                        completion:NULL];
+        
+        
+    }
+    
 }
 
 #pragma BMS_JSON delegate
