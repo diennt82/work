@@ -461,6 +461,7 @@
 		8B91E63E18629E910041BA9D /* Snapshot.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B91E63D18629E910041BA9D /* Snapshot.png */; };
 		8B91E6541862FE540041BA9D /* MenuCameraViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B91E6521862FE540041BA9D /* MenuCameraViewController.m */; };
 		8B91E6551862FE540041BA9D /* MenuCameraViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8B91E6531862FE540041BA9D /* MenuCameraViewController.xib */; };
+		8B9283E918D2D2CD00D60EDA /* AudioOutStreamRemote.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B9283E818D2D2CD00D60EDA /* AudioOutStreamRemote.m */; };
 		8B92A08B1863E5DF005923D2 /* TimelineViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8B92A0891863E5DF005923D2 /* TimelineViewController.mm */; };
 		8B92A08C1863E5DF005923D2 /* TimelineViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8B92A08A1863E5DF005923D2 /* TimelineViewController.xib */; };
 		8B92A0901863E68B005923D2 /* TimelineCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B92A08F1863E68B005923D2 /* TimelineCell.m */; };
@@ -1298,6 +1299,8 @@
 		8B91E6511862FE540041BA9D /* MenuCameraViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MenuCameraViewController.h; sourceTree = "<group>"; };
 		8B91E6521862FE540041BA9D /* MenuCameraViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MenuCameraViewController.m; sourceTree = "<group>"; };
 		8B91E6531862FE540041BA9D /* MenuCameraViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MenuCameraViewController.xib; sourceTree = "<group>"; };
+		8B9283E718D2D2CD00D60EDA /* AudioOutStreamRemote.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AudioOutStreamRemote.h; sourceTree = "<group>"; };
+		8B9283E818D2D2CD00D60EDA /* AudioOutStreamRemote.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AudioOutStreamRemote.m; sourceTree = "<group>"; };
 		8B92A0881863E5DF005923D2 /* TimelineViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TimelineViewController.h; sourceTree = "<group>"; };
 		8B92A0891863E5DF005923D2 /* TimelineViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = TimelineViewController.mm; sourceTree = "<group>"; };
 		8B92A08A1863E5DF005923D2 /* TimelineViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TimelineViewController.xib; sourceTree = "<group>"; };
@@ -3124,6 +3127,15 @@
 			name = "Camera Settings";
 			sourceTree = "<group>";
 		};
+		8B9283E618D2D25800D60EDA /* TalkbackRemote */ = {
+			isa = PBXGroup;
+			children = (
+				8B9283E718D2D2CD00D60EDA /* AudioOutStreamRemote.h */,
+				8B9283E818D2D2CD00D60EDA /* AudioOutStreamRemote.m */,
+			);
+			name = TalkbackRemote;
+			sourceTree = "<group>";
+		};
 		8B92A0871863E4D6005923D2 /* Timeline */ = {
 			isa = PBXGroup;
 			children = (
@@ -3836,6 +3848,7 @@
 		A157738C18613EC100DEBD45 /* PanelButtonController */ = {
 			isa = PBXGroup;
 			children = (
+				8B9283E618D2D25800D60EDA /* TalkbackRemote */,
 				A1239E831861821F00A25A04 /* HoldToTalk */,
 			);
 			name = PanelButtonController;
@@ -4781,6 +4794,7 @@
 				A1ABF1BA187538280014FCB4 /* CreateBLEConnection_VController.mm in Sources */,
 				8B278BEB183DC6B500A4FF50 /* NotificationSettingsCell.m in Sources */,
 				38E3C85C1694033500A13A70 /* AlertPrompt.m in Sources */,
+				8B9283E918D2D2CD00D60EDA /* AudioOutStreamRemote.m in Sources */,
 				380CB0C716DC568500290587 /* Step_12_ViewController.m in Sources */,
 				A12A9D8A18B1DF4C004987F2 /* UIImage+Hubble.m in Sources */,
 				8B9ABBB818AA2AC30079F4A3 /* CameraMenuViewController.m in Sources */,
