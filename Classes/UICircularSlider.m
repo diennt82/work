@@ -182,14 +182,33 @@
     
     [self addTarget:self action:@selector(updateProgress:) forControlEvents:UIControlEventValueChanged];
     
-    [self setEnabled:NO];
+    [self setUserInteractionEnabled:NO];
+    
 
 }
-
-- (void)updateProcess: (UICircularSlider *) sender
+#pragma mark - Timer to udpate text
+- (void)updateProgress: (UICircularSlider *) sender
 {
     [self setValue:self.value];
 }
+
+- (void)updateLabel:(id)sender{
+    NSInteger value = (int)round(self.value);
+	if((int)self.value == 0 || self.value > 180 || !self.userInteractionEnabled){
+		[self killTimer];
+	}
+	self.textField.text = [self timeFormat:value];
+    value = value -1;
+	self.value = value;
+}
+
+- (void)killTimer{
+	if(_timer){
+		[_timer invalidate];
+		_timer = nil;
+	}
+}
+
 - (NSString *) timeFormat: (int) minutes {
     
     if (minutes < 60)
@@ -212,6 +231,7 @@
 
     
 }
+
 /** @name Drawing methods */
 #pragma mark - Drawing methods
 #define kLineWidth 10.0
@@ -295,7 +315,6 @@
 			//[self.minimumTrackTintColor setStroke];//used will leak, don't understand
             [Rgb2UIColor(96,170,243) setStroke];
 			self.thumbCenterPoint = [self drawCircularTrack:self.value atPoint:middlePoint withRadius:radius inContext:context];
-            NSLog(@"value to draw is %f", self.value);
 			break;
 	}
 	[Rgb2UIColor(223, 237, 244) setFill];
@@ -318,6 +337,7 @@ int finalAngle;
 	CGPoint tapLocation = [panGestureRecognizer locationInView:self];
 	switch (panGestureRecognizer.state) {
 		case UIGestureRecognizerStateChanged: {
+            [self killTimer];
 			CGFloat radius = [self sliderRadius];
 			CGPoint sliderCenter = CGPointMake(self.bounds.size.width/2, self.bounds.size.height/2);
 			CGPoint sliderStartPoint = CGPointMake(sliderCenter.x, sliderCenter.y + radius);
@@ -341,12 +361,12 @@ int finalAngle;
                 {
                     finalAngle = 360;
                     isReachLimit = true;
-                    NSLog(@"reach to limit 360");
+                    //NSLog(@"reach to limit 360");
                 }
                 else if (previousSweepAngle < 10 && storeAngle > 180)
                 {
                     finalAngle = 0;
-                    NSLog(@"reach to limit zero");
+                    //NSLog(@"reach to limit zero");
                 }
                 else
                 {
@@ -356,7 +376,7 @@ int finalAngle;
             }
             else
             {
-                NSLog(@"Normal sweep");
+                //NSLog(@"Normal sweep");
                 if (storeAngle + 10 > previousSweepAngle)
                 {
                     finalAngle = storeAngle;
@@ -370,6 +390,15 @@ int finalAngle;
 			break;
 		}
         case UIGestureRecognizerStateEnded:
+            if (self.userInteractionEnabled)
+            {
+                //timer to update after one minutes
+                _timer = [NSTimer scheduledTimerWithTimeInterval:60.0
+                                                          target:self
+                                                        selector:@selector(updateLabel:)
+                                                        userInfo:nil
+                                                         repeats:YES ];
+            }
             if (!self.isContinuous) {
                 [self sendActionsForControlEvents:UIControlEventValueChanged];
             }

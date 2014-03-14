@@ -41,14 +41,13 @@ BOOL _isEnableDoNotDisturb = NO;
     if (_isEnableDoNotDisturb)
     {
         [self.ib_enableDoNotDisturb setImage:[UIImage imageSwitchOn] forState:UIControlStateNormal];
-        [self.ib_circleSliderCustom setEnabled:YES];
+        [self.ib_circleSliderCustom setUserInteractionEnabled:YES];
     }
     else
     {
         [self.ib_enableDoNotDisturb setImage:[UIImage imageSwitchOff] forState:UIControlStateNormal];
-        [self.ib_circleSliderCustom setEnabled:NO];
+        [self.ib_circleSliderCustom setUserInteractionEnabled:NO];
     }
 }
-
 
 @end
