@@ -10,6 +10,7 @@
 //
 
 #import "UICircularSlider.h"
+#import "UIFont+Hubble.h"
 
 @interface UICircularSlider()
 #define Rgb2UIColor(r, g, b)  [UIColor colorWithRed:((r) / 255.0) green:((g) / 255.0) blue:((b) / 255.0) alpha:1.0]
@@ -132,8 +133,8 @@
     //Add label
     //Define the Font
 
-    UIFont *font = [UIFont systemFontOfSize:75];
-    UIFont *font1 = [UIFont systemFontOfSize:23];
+    UIFont *font = [UIFont lightLarge75Font];
+    UIFont *font1 = [UIFont regularMedium23Font];
     //Calculate font size needed to display 3 numbers
     NSString *str = @"0000";
     NSString *minites = @"minutes";
@@ -180,8 +181,8 @@
 	[self addGestureRecognizer:panGestureRecognizer];
     
     [self addTarget:self action:@selector(updateProgress:) forControlEvents:UIControlEventValueChanged];
-//    [self addTarget:self action:@selector(sliderTouchedDown:) forControlEvents:UIControlEventTouchDown];
-
+    
+    [self setEnabled:NO];
 
 }
 
@@ -307,6 +308,9 @@
 	CGRect thumbTouchRect = CGRectMake(self.thumbCenterPoint.x - kThumbRadius, self.thumbCenterPoint.y - kThumbRadius, kThumbRadius*2, kThumbRadius*2);
 	return CGRectContainsPoint(thumbTouchRect, point);
 }
+BOOL isReachLimit = NO;
+int previousSweepAngle, storeAngle;
+int finalAngle;
 
 /** @name UIGestureRecognizer management methods */
 #pragma mark - UIGestureRecognizer management methods
@@ -318,15 +322,51 @@
 			CGPoint sliderCenter = CGPointMake(self.bounds.size.width/2, self.bounds.size.height/2);
 			CGPoint sliderStartPoint = CGPointMake(sliderCenter.x, sliderCenter.y + radius);
 			CGFloat angle = angleBetweenThreePoints(sliderCenter, sliderStartPoint, tapLocation);
-			NSLog(@"angle in degree is %f", ToDeg(angle));
-			if (angle < 0) {
-				angle = -angle;
-			}
-			else {
-				angle = 2*M_PI - angle;
-			}
-			
-			self.value = translateValueFromSourceIntervalToDestinationInterval(angle, 0, 2*M_PI, self.minimumValue, self.maximumValue);
+            NSInteger angleDegree = ToDeg(angle);
+            
+            if (angleDegree < 0) {
+                angleDegree = -angleDegree;
+            }
+            else {
+                angleDegree = 360 - angleDegree;
+            }
+            
+            storeAngle = angleDegree;
+            
+            
+            if (!isReachLimit)
+            {
+                
+                if (previousSweepAngle > 350 && storeAngle < 10)
+                {
+                    finalAngle = 360;
+                    isReachLimit = true;
+                    NSLog(@"reach to limit 360");
+                }
+                else if (previousSweepAngle < 10 && storeAngle > 180)
+                {
+                    finalAngle = 0;
+                    NSLog(@"reach to limit zero");
+                }
+                else
+                {
+                    finalAngle = storeAngle;
+                    previousSweepAngle = storeAngle;
+                }
+            }
+            else
+            {
+                NSLog(@"Normal sweep");
+                if (storeAngle + 10 > previousSweepAngle)
+                {
+                    finalAngle = storeAngle;
+                    isReachLimit = false;
+                    previousSweepAngle = storeAngle;
+                }
+            }
+            
+            //check limit when slider to right value 0 minutes
+			self.value = translateValueFromSourceIntervalToDestinationInterval(ToRad(finalAngle), 0, 2*M_PI, self.minimumValue, self.maximumValue);
 			break;
 		}
         case UIGestureRecognizerStateEnded:
@@ -344,6 +384,7 @@
 			break;
 	}
 }
+
 - (void)tapGestureHappened:(UITapGestureRecognizer *)tapGestureRecognizer {
 	if (tapGestureRecognizer.state == UIGestureRecognizerStateEnded) {
 		CGPoint tapLocation = [tapGestureRecognizer locationInView:self];

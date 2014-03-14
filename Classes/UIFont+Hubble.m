@@ -21,6 +21,11 @@
     return [UIFont applyHubbleFontName:PN_LIGHT_FONT withSize:27];
 }
 
++ (UIFont *)lightLarge75Font
+{
+    return [UIFont applyHubbleFontName:PN_LIGHT_FONT withSize:75];
+}
+
 + (UIFont *)lightSmall14Font
 {
     return [UIFont applyHubbleFontName:PN_LIGHT_FONT withSize:14];
@@ -34,6 +39,11 @@
 + (UIFont *)regularMediumFont
 {
     return [UIFont applyHubbleFontName:PN_REGULAR_FONT withSize:16];
+}
+
++ (UIFont *)regularMedium23Font
+{
+    return [UIFont applyHubbleFontName:PN_REGULAR_FONT withSize:23];
 }
 
 + (UIFont *)bold20Font
