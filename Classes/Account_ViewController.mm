@@ -9,6 +9,7 @@
 #import "Account_ViewController.h"
 #import "CameraSettingsCell.h"
 #import "MenuViewController.h"
+#import <MonitorCommunication/MonitorCommunication.h>
 
 @interface Account_ViewController ()
 
@@ -150,7 +151,7 @@
 
 - (BOOL)tableView:(UITableView *)tableView shouldHighlightRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (indexPath.section == 0 && indexPath.row == 2)
+    if (indexPath.section == 0 && (indexPath.row == 2 || indexPath.row == 1))
     {
         return YES;
     }
@@ -255,11 +256,95 @@
 {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
-    if (indexPath.section == 0 &&
-        indexPath.row == 2)
+    if (indexPath.section == 0)
     {
-        [self userLogout];
+        if (indexPath.row == CHANGE_PASS_INDEX)
+        {
+            // change password
+            [self showDialogChangePassword];
+            
+        }
+        else if (indexPath.row == 2)
+        {
+            //log out
+            [self userLogout];
+        }
+        
     }
 }
+
+- (void)showDialogChangePassword
+{
+    
+    UIAlertView *av = [[UIAlertView alloc] initWithTitle:@"Change Password" message:nil delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"OK", nil];
+    [av setAlertViewStyle:UIAlertViewStyleLoginAndPasswordInput];
+    
+    // Alert style customization
+    [[av textFieldAtIndex:1] setSecureTextEntry:NO];
+    [[av textFieldAtIndex:0] setPlaceholder:@"new password"];
+    [[av textFieldAtIndex:1] setPlaceholder:@"confirm password"];
+    [av show];
+    [av release];
+}
+
+-(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex{
+    
+    if (buttonIndex == 1)
+    {
+        //OK
+        NSLog(@"1 %@", [alertView textFieldAtIndex:0].text);
+        NSLog(@"2 %@", [alertView textFieldAtIndex:1].text);
+        _newPass = [alertView textFieldAtIndex:0].text;
+        _newPassConfirm = [alertView textFieldAtIndex:1].text;
+        [self doChangePassword];
+        
+        
+    }
+}
+
+- (void)doChangePassword
+{
+    
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    NSString *apiKey = [userDefaults stringForKey:@"PortalApiKey"];
+    
+    BMS_JSON_Communication *jsonComm = [[[BMS_JSON_Communication alloc] initWithObject:self
+                                                                              Selector:@selector(registerSuccessWithResponse:)
+                                                                          FailSelector:@selector(registerFailedWithError:)
+                                                                             ServerErr:@selector(registerFailedServerUnreachable)] autorelease];
+    [jsonComm changePasswordWithNewPassword:_newPass andPasswordConfirm:_newPassConfirm andApiKey:apiKey];
+    [jsonComm release];
+}
+
+#pragma mark - JSON call back
+
+- (void)registerSuccessWithResponse:(NSDictionary *)responseData
+{
+    [[[[UIAlertView alloc] initWithTitle:@"Change Password"
+                                 message:@"Successful"
+                                delegate:self
+                       cancelButtonTitle:nil
+                       otherButtonTitles:@"OK", nil] autorelease] show];
+
+}
+
+- (void)registerFailedWithError:(NSDictionary *)error_response
+{
+    [[[[UIAlertView alloc] initWithTitle:@"Change Password"
+                                 message:@"Fail"
+                                delegate:self
+                       cancelButtonTitle:nil
+                       otherButtonTitles:@"OK", nil] autorelease] show];
+}
+
+- (void)registerFailedServerUnreachable
+{
+    [[[[UIAlertView alloc] initWithTitle:@"Change Password"
+                                 message:@"Fail"
+                                delegate:self
+                       cancelButtonTitle:nil
+                       otherButtonTitles:@"OK", nil] autorelease] show];
+}
+
 
 @end
