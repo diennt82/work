@@ -131,11 +131,12 @@
 		[self.pcmPlayer Stop];
 	}
 
-	[NSTimer scheduledTimerWithTimeInterval:0.5f
-                                      target:self
-                                    selector:@selector(disconnectSocket:)
-                                    userInfo:nil
-                                     repeats:YES];
+//	[NSTimer scheduledTimerWithTimeInterval:0.5f
+//                                      target:self
+//                                    selector:@selector(disconnectSocket:)
+//                                    userInfo:nil
+//                                     repeats:YES];
+    [self disconnectSocket:nil];
 }
 
 - (void)disconnectSocket: (NSTimer *)timer
@@ -172,13 +173,15 @@
         }
         
         [timer invalidate];
-        [self.audioOutStreamerDelegate cleanup];
+        //[self.audioOutStreamerDelegate cleanup];
         
         if (_fileHandle != nil)
         {
             [_fileHandle closeFile];
         }
     }
+    
+    [self.audioOutStreamerDelegate cleanup];
 }
 
 - (void) sendAudioPacket:(NSTimer *) timer_exp
