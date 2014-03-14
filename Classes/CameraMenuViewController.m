@@ -15,6 +15,7 @@
 #import "CameraSettingsCell.h"
 #import "CameraNameViewController.h"
 #import <MonitorCommunication/MonitorCommunication.h>
+#import "define.h"
 
 @interface CameraMenuViewController () <UITableViewDataSource, UITableViewDelegate>
 
@@ -27,7 +28,7 @@
 @end
 
 @implementation CameraMenuViewController
-
+@synthesize cameraName = _cameraName;
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
@@ -293,20 +294,112 @@
     
     if (indexPath.row == 0)
     {
-        CameraNameViewController *cameraNameViewController = [[CameraNameViewController alloc] initWithNibName:@"CameraNameViewController"
-                                                                                                        bundle:nil];
+        _cameraName = self.camChannel.profile.name;
+        _alertView = [[UIAlertView alloc] init];
+        [_alertView setDelegate:self];
+        [_alertView setTitle:@"Change Camera Name"];
+        [_alertView setMessage:@"Enter the new camera location"];
+        _alertView.alertViewStyle = UIAlertViewStylePlainTextInput;
         
-        // Pass the selected object to the new view controller.
-        
-        // Push the view controller.
-        cameraNameViewController.cameraName = self.camChannel.profile.name;
-        cameraNameViewController.parentVC = self;
-        [self.navigationController pushViewController:cameraNameViewController animated:YES];
-        
-        [cameraNameViewController release];
+        //get text of textField
+        UITextField *textField = [_alertView textFieldAtIndex:0];
+        [textField setText:_cameraName];
+        textField.keyboardType = UIKeyboardTypeNumberPad;
+        [_alertView addButtonWithTitle:@"Cancel"];
+        [_alertView addButtonWithTitle:@"OK"];
+        _alertView.tag = 5;
+        [_alertView show];
+        [_alertView release];
     }
 }
 
+#pragma mark - UIAlertViewDelegate
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
+    
+    
+    if (buttonIndex == 1)
+    {
+        _cameraNewName = (NSString *)([alertView textFieldAtIndex:0].text);
+        NSLog(@"new Camera name is %@", _cameraNewName);
+        
+        if ([self isCamNameValidated:_cameraNewName])
+        {
+            [alertView dismissWithClickedButtonIndex:0 animated:NO];
+            [self doneAction:nil];
+        }
+    }
+}
+
+- (void)doneAction: (id)sender
+{
+    self.navigationItem.rightBarButtonItem.enabled = NO;
+    self.navigationItem.hidesBackButton = YES;
+
+    [self.viewPorgress setHidden:NO];
+    [self.view addSubview:_viewPorgress];
+    [self.view bringSubviewToFront:_viewPorgress];
+    
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    NSString *apiKey = [userDefaults stringForKey:@"PortalApiKey"];
+    
+    BMS_JSON_Communication *jsonComm = [[BMS_JSON_Communication alloc] initWithObject:self
+                                                                             Selector:nil
+                                                                         FailSelector:nil
+                                                                            ServerErr:nil];
+    NSDictionary *responseDict = [jsonComm updateDeviceBasicInfoBlockedWithRegistrationId:self.camChannel.profile.registrationID
+                                                                               deviceName:_cameraNewName
+                                                                                 timeZone:nil
+                                                                                     mode:nil
+                                                                          firmwareVersion:nil
+                                                                                andApiKey:apiKey];
+    [jsonComm release];
+    NSLog(@"responseDict when change name is %@", responseDict);
+    if (responseDict != nil)
+    {
+        if ([[responseDict objectForKey:@"status"] integerValue] == 200)
+        {
+            self.camChannel.profile.name = _cameraNewName;
+            [self.viewPorgress setHidden:YES];
+            self.navigationItem.hidesBackButton = NO;
+            [self.tableViewSettings reloadData];
+        }
+        else
+        {
+            NSLog(@"CameraNameVC - Change cameraname failed!");
+            
+            [[[[UIAlertView alloc] initWithTitle:@"Change Camera Name"
+                                         message:[responseDict objectForKey:@"message"]
+                                        delegate:self
+                               cancelButtonTitle:nil
+                               otherButtonTitles:@"OK", nil] autorelease] show];
+        }
+    }
+    else
+    {
+        NSLog(@"CameraNameVC - doneAction - responseDict == nil");
+        
+        [[[[UIAlertView alloc] initWithTitle:@"Change Camera Name"
+                                     message:@"Server Error"
+                                    delegate:self
+                           cancelButtonTitle:nil
+                           otherButtonTitles:@"OK", nil] autorelease] show];
+    }
+}
+
+-(BOOL) isCamNameValidated:(NSString *) cameraNames
+{
+    if (cameraNames.length < 3 ||
+        CAMERA_NAME_MAX < cameraNames.length)
+    {
+        return FALSE;
+    }
+    
+    NSString * regex = @"[a-zA-Z0-9._-]+";
+    NSPredicate * validatedName = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", regex];
+    BOOL isValidatedName = [validatedName evaluateWithObject:cameraNames];
+    
+    return isValidatedName;
+}
 #pragma BMS_JSON delegate
 
 - (void) removeCameraSuccessWithResponse:(NSDictionary *)responseData
@@ -351,6 +444,7 @@
     [_tableViewSettings release];
     [_btnRmoveCamera release];
     [_viewProgress release];
+    [_viewPorgress release];
     [super dealloc];
 }
 @end
