@@ -177,6 +177,8 @@ double _ticks = 0;
     self.cameraModel = [self.selectedChannel.profile getModel];
     [self initHorizeMenu: _cameraModel];
 
+    //set text name for camera name
+    [self.ib_lbCameraName setText:self.selectedChannel.profile.name];
     if (![_cameraModel isEqualToString:CP_MODEL_SHARED_CAM]) // CameraHD
     {
         self.timelineVC = [[TimelineViewController alloc] init];
@@ -1085,22 +1087,25 @@ double _ticks = 0;
 
 - (void)hideControlMenu
 {
-    self.isHorizeShow = FALSE;
-    self.horizMenu.hidden = YES;
-    
-//    [self hidenAllBottomView];
-    
-    //[self showTimelineView];
+    static NSTimeInterval animationDuration = 0.3;
+    [UIView animateWithDuration:animationDuration animations:^{
+        self.isHorizeShow = FALSE;
+        self.horizMenu.hidden = YES;
+        [self.ib_lbCameraName setHidden:YES];
+    }];
 }
 
 - (void)showControlMenu
 {
-    self.isHorizeShow = TRUE;
-    self.horizMenu.hidden = NO;
-    [self.view bringSubviewToFront:_horizMenu];
     
-//    [self hideTimelineView];
-    
+    static NSTimeInterval animationDuration = 0.3;
+    [UIView animateWithDuration:animationDuration animations:^{
+        self.isHorizeShow = TRUE;
+        self.horizMenu.hidden = NO;
+        [self.view bringSubviewToFront:_horizMenu];
+        [self.ib_lbCameraName setHidden:NO];
+    }];
+
     if (_timerHideMenu != nil)
     {
         [self.timerHideMenu invalidate];
@@ -4502,6 +4507,7 @@ double _ticks = 0;
     [earlierNavi release];
     [_customIndicator release];
     [_ib_lbCameraNotAccessible release];
+    [_ib_lbCameraName release];
     [super dealloc];
 }
 //At first time, we set to FALSE after call checkOrientation()
@@ -5056,15 +5062,23 @@ double _ticks = 0;
 
 - (void) hideMenuControlPanelNow: (NSTimer*) exp
 {
-    fullScreenTimer = nil;
-    [self.horizMenu setHidden:YES];
+    
+    static NSTimeInterval animationDuration = 0.3;
+    [UIView animateWithDuration:animationDuration animations:^{
+        fullScreenTimer = nil;
+        [self.horizMenu setHidden:YES];
+        [self.ib_lbCameraName setHidden:YES];
+    }];
 }
 
 - (void) showMenuControlPanel
 {
-    [self.horizMenu setHidden:NO];
-    [self.view addSubview:_horizMenu];
-    [self.view bringSubviewToFront:_horizMenu];
+    static NSTimeInterval animationDuration = 0.3;
+    [UIView animateWithDuration:animationDuration animations:^{
+        [self.horizMenu setHidden:NO];
+        [self.view addSubview:_horizMenu];
+        [self.view bringSubviewToFront:_horizMenu];
+    }];
 }
 
 
@@ -5384,6 +5398,7 @@ double _ticks = 0;
         [self.customIndicator stopAnimating];
         [self.customIndicator setHidden:YES];
         [self.ib_lbCameraNotAccessible setHidden:YES];
+        [self.ib_lbCameraName setText:self.selectedChannel.profile.name];
         if (_timerNotAccessible && [_timerNotAccessible isValid])
         {
             [_timerNotAccessible invalidate];

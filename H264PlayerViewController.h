@@ -166,6 +166,7 @@
 @property (retain, nonatomic) IBOutlet UIActivityIndicatorView *activityStopStreamingProgress;
 @property (retain, nonatomic) IBOutlet UIImageView *customIndicator;
 @property (retain, nonatomic) IBOutlet UILabel *ib_lbCameraNotAccessible;
+@property (retain, nonatomic) IBOutlet UILabel *ib_lbCameraName;
 
 @property (retain, nonatomic) IBOutlet UIBarButtonItem *barBntItemReveal;
 

@@ -17,6 +17,7 @@
                 <outlet property="ib_changeToMainRecording" destination="19u-Y0-9Ah" id="foQ-Sd-lbO"/>
                 <outlet property="ib_labelRecordVideo" destination="3LL-xX-3qj" id="Kpj-te-6za"/>
                 <outlet property="ib_labelTouchToTalk" destination="dN9-DT-qb0" id="Ul3-CN-vlp"/>
+                <outlet property="ib_lbCameraName" destination="l1s-KV-aCs" id="Ltq-we-Jo2"/>
                 <outlet property="ib_lbCameraNotAccessible" destination="LFJ-X3-0i4" id="0Z3-ia-EqH"/>
                 <outlet property="ib_processRecordOrTakePicture" destination="N11-5t-78m" id="ZYQ-Ed-P0M"/>
                 <outlet property="ib_switchDegree" destination="fwE-e7-ABl" id="Dge-TX-Gtb"/>
@@ -183,6 +184,13 @@
                     <rect key="frame" x="428" y="336" width="168" height="32"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                    <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="l1s-KV-aCs">
+                    <rect key="frame" x="10" y="20" width="343" height="39"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="20"/>
                     <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     <nil key="highlightedColor"/>
                 </label>
