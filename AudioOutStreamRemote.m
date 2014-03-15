@@ -360,6 +360,17 @@
         [sendingSocket release];
         sendingSocket = nil;
     }
+    
+    self.isDisconnected = TRUE;
+    self.isHandshakeSuccess = FALSE;
+    
+    if (_fileHandle != nil)
+    {
+        [_fileHandle closeFile];
+        _fileHandle = nil;
+    }
+    
+    [_audioOutStreamRemoteDelegate closeTalkbackSession];
 }
 
 @end

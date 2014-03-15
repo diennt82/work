@@ -33,13 +33,7 @@
 @property (nonatomic) NSInteger bufferLength;
 @property (nonatomic, assign) id<AudioOutStreamerDelegate> audioOutStreamerDelegate;
 
-@property (nonatomic, retain) NSMutableData *dataRequest;
-
-@property (nonatomic) BOOL isInLocal;
-
 -(id) initWithDeviceIp:(NSString *) ip andPTTport: (int) port;
-
-- (id)initWithRemoteMode;
 
 - (void) connectToAudioSocket;
 

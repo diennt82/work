@@ -54,7 +54,7 @@
 
 #define TAG_ALERT_VIEW_REMOTE_TIME_OUT 559
 
-#define TEST_REMOTE_TALKBACK 1 // TODO: DELETE
+#define TEST_REMOTE_TALKBACK 0 // TODO: DELETE
 #define SESSION_KEY @"SESSION_KEY"
 #define STREAM_ID   @"STREAM_ID"
 
@@ -1585,9 +1585,9 @@ double _ticks = 0;
 #endif
         
         //self.progressView.hidden = YES;
-//        [self performSelector:@selector(startStream)
-//                   withObject:nil
-//                   afterDelay:0.1];
+        [self performSelector:@selector(startStream)
+                   withObject:nil
+                   afterDelay:0.1];
 #ifdef SHOW_DEBUG_INFO
         _viewVideoIn = @"L";
 #endif
@@ -1627,8 +1627,10 @@ double _ticks = 0;
                 
             }
         }
-        
-        [self getTalkbackSessionKey];
+        if (_sessionKey == nil)
+        {
+            [self getTalkbackSessionKey];
+        }
     }
     else
     {
@@ -1875,6 +1877,11 @@ double _ticks = 0;
     userWantToCancel = TRUE;
     self.selectedChannel.stopStreaming = TRUE;
     
+    if (_audioOutStreamRemote)
+    {
+        [self performSelectorInBackground:@selector(closeRemoteTalkback) withObject:nil];
+    }
+    
     if (self.currentMediaStatus == MEDIA_INFO_HAS_FIRST_IMAGE ||
         self.currentMediaStatus == MEDIA_PLAYER_STARTED       ||
         (self.currentMediaStatus == 0 && h264Streamer == NULL)) // Media player haven't start yet.
@@ -1891,8 +1898,6 @@ double _ticks = 0;
     {
         [self goBackToCameraList];
     }
-    
-    
 }
 
 - (void)goBackToCameraList
@@ -4937,30 +4942,13 @@ double _ticks = 0;
 
 - (void)cleanup
 {
-#if TEST_REMOTE_TALKBACK
-//    [self performSelectorInBackground:@selector(closeRemoteTalkback)
-//                           withObject:nil];
-//    
-//    [_audioOut release];
-//    _audioOut = nil;
-#else
-    
-    if (self.selectedChannel.profile.isInLocal)
-    {
-        [self performSelectorInBackground:@selector(set_Walkie_Talkie_bg:)
-                               withObject:@"0"];
-    }
-    else
-    {
-        [self performSelectorInBackground:@selector(closeRemoteTalkback)
-                               withObject:nil];
-    }
+    [self performSelectorInBackground:@selector(set_Walkie_Talkie_bg:)
+                           withObject:@"0"];
     
     [_audioOut release];
     _audioOut = nil;
     
     self.walkieTalkieEnabled = NO;
-#endif
 }
 
 -(void) setupPtt
@@ -5002,10 +4990,10 @@ double _ticks = 0;
     }
     else
     {
-        self.wantsCancelRemoteTalkback = TRUE;
         if (_audioOutStreamRemote != nil)
         {
-            [_audioOutStreamRemote stopRecordingSound];
+            //[_audioOutStreamRemote stopRecordingSound];
+            [_audioOutStreamRemote performSelectorOnMainThread:@selector(stopRecordingSound) withObject:nil waitUntilDone:NO];
         }
     }
 #endif
@@ -5092,6 +5080,7 @@ double _ticks = 0;
         // call enabled remote PTT function
         
         [self performSelectorInBackground:@selector(enableRemotePTT:) withObject:[NSNumber numberWithBool:YES]];
+        self.wantsCancelRemoteTalkback = FALSE;
 #else
         if (self.selectedChannel.profile.isInLocal)
         {
@@ -5128,6 +5117,7 @@ double _ticks = 0;
         }
 #if TEST_REMOTE_TALKBACK // Tesging
         [self performSelectorInBackground:@selector(enableRemotePTT:) withObject:[NSNumber numberWithBool:NO]];
+        self.wantsCancelRemoteTalkback = TRUE;
 #else
         if (self.selectedChannel.profile.isInLocal)
         {
@@ -5208,14 +5198,16 @@ double _ticks = 0;
             self.sessionKey = [[responseDict objectForKey:@"data"] objectForKey:@"session_key"];
             self.streamID = [[responseDict objectForKey:@"data"] objectForKey:@"stream_id"];
             
-            [userDefault setObject:_sessionKey forKey:@"SESSION_KEY"];
-            [userDefault setObject:_streamID forKey:@"STREAM_ID"];
+            [userDefault setObject:_sessionKey forKey:SESSION_KEY];
+            [userDefault setObject:_streamID forKey:STREAM_ID];
             
             [userDefault synchronize];
         }
         else
         {
             NSLog(@"Resquest session key failed: %@", [responseDict objectForKey:@"message"]);
+            self.sessionKey = @"";
+            self.streamID = @"";
         }
     }
 }
@@ -5325,7 +5317,10 @@ double _ticks = 0;
     
     if ([[resDict objectForKey:@"status"] integerValue] == 200)
     {
-        [self getTalkbackSessionKey];
+        if (userWantToCancel == FALSE)
+        {
+            [self getTalkbackSessionKey];
+        }
     }
 }
 
@@ -5371,6 +5366,11 @@ double _ticks = 0;
 
 - (void)retryTalkbackRemote
 {
+    if (userWantToCancel || _wantsCancelRemoteTalkback)
+    {
+        return;
+    }
+    
     [self getTalkbackSessionKey];
     // Re-enable Remote PTT
     [self enableRemotePTT:[NSNumber numberWithBool:YES]];
