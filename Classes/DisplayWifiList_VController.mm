@@ -499,6 +499,7 @@
     /**
      * handle timeout: catch from uart and display time out at delegate returned.
      */
+    
     //deday send command to camera BLE 1s.
     [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(sendCommandGetWifiList) userInfo:nil repeats:NO];
 }
@@ -518,7 +519,7 @@
     NSDate * date;
     while ([BLEConnectionManager getInstanceBLE].uartPeripheral.isBusy)
     {
-        date = [NSDate dateWithTimeInterval:1.5 sinceDate:[NSDate date]];
+        date = [NSDate dateWithTimeInterval:0.5 sinceDate:[NSDate date]];
         
         [[NSRunLoop currentRunLoop] runUntilDate:date];
     }    

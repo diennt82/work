@@ -14,6 +14,14 @@
 #import "Step_07_ViewController.h"
 #import "BLEConnectionManager.h"
 
+
+#define INIT 0
+#define SENT_CODEC_SUPPORT  1
+#define SENT_WIFI  2
+#define CHECKING_WIFI   3
+
+
+
 @interface NetworkInfoToCamera_VController : UIViewController<UIAlertViewDelegate, BLEConnectionManagerDelegate>
 {
     
@@ -23,7 +31,8 @@
     IBOutlet UITableViewCell * confPasswordCell;
     NSTimer *_statusNetworkTimer;
     NSString *_statusNetworkCamString;
-    
+    int stage;
+
 }
 
 @property (retain, nonatomic) IBOutlet UIView *ib_dialogVerifyNetwork;
