@@ -15,6 +15,7 @@
 @protocol AudioOutStreamRemoteDelegate <NSObject>
 
 - (void)closeTalkbackSession;
+- (void)reportHadshakeFaild;
 
 @end
 
@@ -23,7 +24,6 @@
 	AsyncSocket * sendingSocket;
 	NSMutableData * _pcm_data;
 	PCMPlayer * pcmPlayer;
-	NSTimer * voice_data_timer;
 	
 	NSString * device_ip;
 	int device_port;
@@ -42,10 +42,12 @@
 
 - (id)initWithRemoteMode;
 
-- (void) connectToAudioSocket;
+- (void)connectToAudioSocket;
 
-- (void) startRecordingSound;
+- (void)startRecordingSound;
 - (void)stopRecordingSound;
-- (void)startSendData;
+- (void)startSendingData;
+- (void)startHandshaking;
+- (void)disconnectFromAudioSocket;
 
 @end

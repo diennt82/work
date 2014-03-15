@@ -51,6 +51,7 @@
     [pcmPlayer release];
     [_fileManager release];
     [_fileHandle release];
+    [sendingSocket release];
     [super dealloc];
 }
 
@@ -107,7 +108,7 @@
 	
 	/* read 2kb everytime */
 	self.bufferLength = [self.pcmPlayer.recorder.inMemoryAudioFile readBytesPCM:_pcm_data
-                                                                     withLength:2*1024]; //2*1024
+                                                                     withLength:4*1024]; //2*1024
 	[sendingSocket writeData:_pcm_data withTimeout:2 tag:SENDING_SOCKET_TAG];
 	
     //NSLog(@"AudioOutStreamer - sendAudioPacket: %@", _pcm_data);
@@ -139,6 +140,13 @@
     [_fileHandle seekToEndOfFile];
     
     [_fileHandle writeData:_pcm_data];
+    
+    if (self.pcmPlayer == nil && _bufferLength == 0)
+    {
+        [timer_exp invalidate];
+        timer_exp = nil;
+    }
+    
 }
 
 
@@ -150,12 +158,22 @@
 	NSLog(@"didConnectToHost Finished");
         // Start handshake
     self.isDisconnected = FALSE;
-    [sendingSocket writeData:_dataRequest withTimeout:REMOTE_TIMEOUT tag:SENDING_SOCKET_TAG];
+//    [sendingSocket writeData:_dataRequest withTimeout:REMOTE_TIMEOUT tag:SENDING_SOCKET_TAG];
+//    [sendingSocket readDataToLength:7 withTimeout:REMOTE_TIMEOUT tag:SENDING_SOCKET_TAG];
+    [self startHandshaking];
 }
+
 - (void)onSocket:(AsyncSocket *)sock willDisconnectWithError:(NSError *)err
 {
     self.isDisconnected = TRUE;
     self.isHandshakeSuccess = FALSE;
+    
+    if (_fileHandle != nil)
+    {
+        [_fileHandle closeFile];
+        _fileHandle = nil;
+    }
+    
 	NSLog(@"AudioOutStreamer- connection failed with error: %@, : %d, : %@", [sock unreadData],
 		  [err code], err);
     UIAlertView *_alert = [[UIAlertView alloc]
@@ -173,13 +191,15 @@
 	if ( sendingSocket != nil && [sendingSocket isConnected] == NO)
 	{
 		[self stopRecordingSound];
+        [_audioOutStreamRemoteDelegate closeTalkbackSession];
 	}
 }
 
 - (void)onSocket:(AsyncSocket *)sock didWriteDataWithTag:(long)tag
 {
     // Waiting for get handshake response
-    [sendingSocket readDataToLength:7 withTimeout:REMOTE_TIMEOUT tag:SENDING_SOCKET_TAG];
+    //[sendingSocket readDataToLength:7 withTimeout:REMOTE_TIMEOUT tag:SENDING_SOCKET_TAG];
+    NSLog(@"didWriteDataWithTag");
 }
 
 - (void)onSocket:(AsyncSocket *)sock didReadData:(NSData *)data withTag:(long)tag
@@ -200,7 +220,7 @@
         NSLog(@"Equal Expected data");
         self.isHandshakeSuccess = TRUE;
         
-        voice_data_timer = [NSTimer scheduledTimerWithTimeInterval: 0.125//0.04
+        [NSTimer scheduledTimerWithTimeInterval: 0.125//0.04
                                                             target:self
                                                           selector:@selector(sendAudioPacket:)
                                                           userInfo:nil
@@ -211,6 +231,8 @@
     {
         NSLog(@"Equal Unexpected data");
         [self stopRecordingSound];
+        //[_audioOutStreamRemoteDelegate closeTalkbackSession];
+        [_audioOutStreamRemoteDelegate reportHadshakeFaild];
         self.isHandshakeSuccess = FALSE;
         NSLog(@"AudioOutStreamRemote - handshake failed with error");
         
@@ -223,6 +245,17 @@
         [_alert show];
         [_alert release];
     }
+}
+
+#pragma mark - Methods
+
+- (void)startHandshaking
+{
+    NSLog(@"Start handshaking: %d", _dataRequest.length);// Start handshaking
+    self.isDisconnected = FALSE;
+    [sendingSocket writeData:_dataRequest withTimeout:REMOTE_TIMEOUT tag:SENDING_SOCKET_TAG];
+    [sendingSocket readDataToLength:7 withTimeout:REMOTE_TIMEOUT tag:SENDING_SOCKET_TAG];
+
 }
 
 - (void)stopRecordingSound
@@ -245,18 +278,14 @@
 
 - (void)cleanDataUp: (NSTimer *)timer
 {
+    NSLog(@"-- clean data up ....");
+    
     if (self.bufferLength == 0)
     {
         [self.pcmPlayer release];
         self.pcmPlayer = nil;
         
         [self.pcmPlayer.recorder.inMemoryAudioFile flush];
-        
-        if (voice_data_timer != nil)
-        {
-            [voice_data_timer invalidate];
-            voice_data_timer = nil;
-        }
         
         if(_pcm_data != nil) {
             [_pcm_data release];
@@ -265,24 +294,16 @@
         
         [timer invalidate];
         
-        if (_fileHandle != nil)
-        {
-            [_fileHandle closeFile];
-        }
+        
+        NSLog(@"\nClean data up successfully.\n");
     }
 }
 
-- (void)startSendData
+- (void)startSendingData
 {
     NSLog(@"Start send data");
     
-    if (voice_data_timer != nil)
-    {
-        [voice_data_timer invalidate];
-        voice_data_timer = nil;
-    }
-    
-    voice_data_timer = [NSTimer scheduledTimerWithTimeInterval: 0.125//0.04
+    [NSTimer scheduledTimerWithTimeInterval: 0.125//0.04
                                                         target:self
                                                       selector:@selector(sendAudioPacket:)
                                                       userInfo:nil

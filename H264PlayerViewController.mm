@@ -4984,7 +4984,8 @@ double _ticks = 0;
     //self.wantsCancelRemoteTalkback = TRUE;
     if (_audioOutStreamRemote != nil)
     {
-        [_audioOutStreamRemote stopRecordingSound];
+        //[_audioOutStreamRemote stopRecordingSound];
+        [_audioOutStreamRemote performSelectorOnMainThread:@selector(stopRecordingSound) withObject:nil waitUntilDone:NO];
     }
 #else
     if (self.selectedChannel.profile.isInLocal)
@@ -5203,14 +5204,26 @@ double _ticks = 0;
         
         if ([[responseDict objectForKey:@"status"] integerValue] == 200)
         {
-            [userDefault setObject:[[responseDict objectForKey:@"data"] objectForKey:@"session_key"] forKey:@"SESSION_KEY"];
-            [userDefault setObject:[[responseDict objectForKey:@"data"] objectForKey:@"stream_id"] forKey:@"STREAM_ID"];
+            self.sessionKey = [[responseDict objectForKey:@"data"] objectForKey:@"session_key"];
+            self.streamID = [[responseDict objectForKey:@"data"] objectForKey:@"stream_id"];
+            
+            [userDefault setObject:_sessionKey forKey:@"SESSION_KEY"];
+            [userDefault setObject:_streamID forKey:@"STREAM_ID"];
             
             [userDefault synchronize];
         }
         else
         {
+//            {
+//                code = 5002;
+//                message = "Validation failed: Registration has already been taken";
+//                "more_info" = "http://monitoreverywhere.com/errors/5002";
+//                status = 422;
+//            }
+//            self.sessionKey = [userDefault objectForKey:@"SESSION_KEY"];
+//            self.streamID = [userDefault objectForKey:@"STREAM_ID"];
             NSLog(@"Resquest session key failed: %@", [responseDict objectForKey:@"message"]);
+            //self.wantsCancelRemoteTalkback = TRUE;
         }
     }
 }
@@ -5237,7 +5250,8 @@ double _ticks = 0;
     {
         if (_audioOutStreamRemote != nil)
         {
-            [_audioOutStreamRemote stopRecordingSound];
+            //[_audioOutStreamRemote stopRecordingSound];
+            [_audioOutStreamRemote performSelectorOnMainThread:@selector(stopRecordingSound) withObject:nil waitUntilDone:NO];
             [self touchUpInsideHoldToTalk];
         }
     }
@@ -5245,7 +5259,10 @@ double _ticks = 0;
     {
         if (_audioOutStreamRemote.isHandshakeSuccess)
         {
-            [_audioOutStreamRemote startSendData];
+            // Re-send data
+            //[_audioOutStreamRemote startHandshaking];
+            [_audioOutStreamRemote performSelectorOnMainThread:@selector(startSendingData) withObject:nil waitUntilDone:NO];
+            //[_audioOutStreamRemote performSelectorOnMainThread:@selector(startHandshaking) withObject:nil waitUntilDone:NO];
         }
         else
         {
@@ -5258,13 +5275,6 @@ double _ticks = 0;
             NSDictionary *resDict = [self workWithServer:url sessionKey:_sessionKey streamID:_streamID];
             
             NSLog(@"%@", resDict);
-            
-            if (_wantsCancelRemoteTalkback)
-            {
-                // Stop process now.
-                NSLog(@"\nWANTS CANCEL REMOTE TALKBACK\n");
-                return;
-            }
             
             if (resDict != Nil)
             {
@@ -5295,11 +5305,17 @@ double _ticks = 0;
                 else
                 {
                     NSLog(@"Send cmd start_talk_back failed!");
+//                    self.sessionKey = nil;
+//                    self.streamID = nil;
+                    //[self getTalkbackSessionKey];
                 }
             }
             else
             {
                 NSLog(@"Response Dict from camera - resDict = nil");
+//                self.sessionKey = nil;
+//                self.streamID = nil;
+                //[self getTalkbackSessionKey];
             }
         }
     }
@@ -5312,6 +5328,13 @@ double _ticks = 0;
     NSDictionary *resDict = [self workWithServer:url sessionKey:_sessionKey streamID:_streamID];
     
     NSLog(@"%@", resDict);
+    
+    if ([[resDict objectForKey:@"status"] integerValue] == 200)
+    {
+//        self.sessionKey = nil;
+//        self.streamID = nil;
+        [self getTalkbackSessionKey];
+    }
 }
 
 - (NSDictionary *)workWithServer: (NSString *)url sessionKey: (NSString *)sessionKey streamID: (NSString *)streamID
@@ -5327,24 +5350,6 @@ double _ticks = 0;
     // This is how we set header fields
     [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
     
-#if 0 // requestBodyData is empty
-    
-    // Convert your data and set your request's HTTPBody properties
-    //{"id":"265","notification_type":"apns", "registration_id":"dadafafafafafaaf"}
-    
-    //NSString *sessionKey = @"565550516C434E2D756D744C4A7A3977445A7750724838747538327143464330";
-    
-    NSDictionary *jsonDictInfo = [NSDictionary dictionaryWithObjectsAndKeys:
-                                  sessionKey, @"session_key",
-                                  streamID, @"stream_id",
-                                  nil];
-    NSLog(@"jsonDict = %@", jsonDictInfo);
-    // convert to data
-    NSData *requestBodyData = [NSJSONSerialization dataWithJSONObject:jsonDictInfo
-                                                              options:NSJSONWritingPrettyPrinted
-                                                                error:nil];
-    request.HTTPBody = requestBodyData;
-#endif
     NSURLResponse *response;
     
     NSLog(@"H264 - workWithServer - url: %@", requestString);
@@ -5369,7 +5374,16 @@ double _ticks = 0;
 
 - (void)closeTalkbackSession
 {
-    [self closeRemoteTalkback];
+    //[self closeRemoteTalkback];
+    [self performSelectorInBackground:@selector(closeRemoteTalkback) withObject:nil];
+    //[self performSelectorInBackground:@selector(getTalkbackSessionKey) withObject:nil];
+}
+
+- (void)reportHadshakeFaild
+{
+    [self getTalkbackSessionKey];
+    // Re-enable Remote PTT
+    [self enableRemotePTT:[NSNumber numberWithBool:YES]];
 }
 
 #pragma mark - Bottom menu
