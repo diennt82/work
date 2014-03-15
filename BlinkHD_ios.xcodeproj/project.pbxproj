@@ -767,6 +767,7 @@
 		A1AC859018912859002A8CCD /* ProximaNova-Semibold.otf in Resources */ = {isa = PBXBuildFile; fileRef = A1AC858618912859002A8CCD /* ProximaNova-Semibold.otf */; };
 		A1AC859118912859002A8CCD /* ProximaNova-SemiboldItalic.otf in Resources */ = {isa = PBXBuildFile; fileRef = A1AC858718912859002A8CCD /* ProximaNova-SemiboldItalic.otf */; };
 		A1AC859518913014002A8CCD /* UIColor+Hubble.m in Sources */ = {isa = PBXBuildFile; fileRef = A1AC859418913014002A8CCD /* UIColor+Hubble.m */; };
+		A1DEC68418D43CCB00EE29C8 /* info.png in Resources */ = {isa = PBXBuildFile; fileRef = A1DEC68318D43CCB00EE29C8 /* info.png */; };
 		A1E32FAD17E9899800504538 /* H264PlayerListener.mm in Sources */ = {isa = PBXBuildFile; fileRef = A1E32FAB17E9899800504538 /* H264PlayerListener.mm */; };
 		A1E32FB017E98A4700504538 /* PlaybackListener.mm in Sources */ = {isa = PBXBuildFile; fileRef = A1E32FAE17E98A4700504538 /* PlaybackListener.mm */; };
 		A1F3921718BB519F0048AD63 /* PlaybackViewController_land.xib in Resources */ = {isa = PBXBuildFile; fileRef = A1F3921618BB519F0048AD63 /* PlaybackViewController_land.xib */; };
@@ -1694,6 +1695,7 @@
 		A1AC858718912859002A8CCD /* ProximaNova-SemiboldItalic.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "ProximaNova-SemiboldItalic.otf"; sourceTree = "<group>"; };
 		A1AC859318913014002A8CCD /* UIColor+Hubble.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIColor+Hubble.h"; sourceTree = "<group>"; };
 		A1AC859418913014002A8CCD /* UIColor+Hubble.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+Hubble.m"; sourceTree = "<group>"; };
+		A1DEC68318D43CCB00EE29C8 /* info.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = info.png; sourceTree = "<group>"; };
 		A1E32FAB17E9899800504538 /* H264PlayerListener.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = H264PlayerListener.mm; sourceTree = "<group>"; };
 		A1E32FAC17E9899800504538 /* H264PlayerListener.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = H264PlayerListener.h; sourceTree = "<group>"; };
 		A1E32FAE17E98A4700504538 /* PlaybackListener.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = PlaybackListener.mm; sourceTree = "<group>"; };
@@ -2515,6 +2517,7 @@
 		8B299E0E18AF500800D36BE5 /* asset */ = {
 			isa = PBXGroup;
 			children = (
+				A1DEC68318D43CCB00EE29C8 /* info.png */,
 				8B299E0F18AF500800D36BE5 /* alert_upgrade */,
 				8B299E3118AF500800D36BE5 /* camera_action */,
 				8B299EA018AF500900D36BE5 /* feed_earlier */,
@@ -4438,6 +4441,7 @@
 				8B299FEB18AF500900D36BE5 /* hubble_logo2.png in Resources */,
 				8B29A06518AF500A00D36BE5 /* settings_white_arrow.png in Resources */,
 				8B299FBF18AF500900D36BE5 /* photo_grey.png in Resources */,
+				A1DEC68418D43CCB00EE29C8 /* info.png in Resources */,
 				8B299FA518AF500900D36BE5 /* camera_action_pan_handle.png in Resources */,
 				8B29A00718AF500900D36BE5 /* video_action_pan_pressed@2x.png in Resources */,
 				8B299FD618AF500900D36BE5 /* camera_action_video_pressed@5.png in Resources */,

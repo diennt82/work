@@ -4508,6 +4508,9 @@ double _ticks = 0;
     [_customIndicator release];
     [_ib_lbCameraNotAccessible release];
     [_ib_lbCameraName release];
+    [_ib_btShowDebugInfo release];
+    [_ib_btViewIn release];
+    [_ib_btResolInfo release];
     [super dealloc];
 }
 //At first time, we set to FALSE after call checkOrientation()
@@ -4520,7 +4523,7 @@ double _ticks = 0;
 {
     //alway show custom indicator, when view appear
     _isShowCustomIndicator = YES;
-    
+    _isShowDebugInfo = NO;
     _isFirstLoad = YES;
     [super viewWillAppear:animated];
     //init data for debug
@@ -4784,6 +4787,10 @@ double _ticks = 0;
     [userDefaults synchronize];
     
     [self setTemperatureState_Fg:_stringTemperature];
+}
+
+- (IBAction)showInfoDebug:(id)sender {
+    _isShowDebugInfo = !_isShowDebugInfo;
 }
 
 - (IBAction)processingRecordingOrTakePicture:(id)sender {
@@ -5086,34 +5093,47 @@ double _ticks = 0;
 #ifdef SHOW_DEBUG_INFO
 - (void)addingLabelInfosForDebug
 {
-    if (_viewVideoIn == nil)
+//    if (_viewVideoIn == nil)
+//    {
+//        return;
+//    }
+//    //remove all subviews
+//    NSArray *viewsToRemove = [self.imageViewStreamer subviews];
+//    for (UIView *v in viewsToRemove) {
+//        [v removeFromSuperview];
+//    }
+//    //Infos debug
+//    UILabel *infosLabel;
+//    UIImage *bg_image = [UIImage imageNamed:@"temp_bg.png"];
+//    NSInteger widthImage = bg_image.size.width;
+//    
+//    infosLabel = [[UILabel alloc] initWithFrame:CGRectMake(self.imageViewStreamer.frame.size.width - widthImage ,20, widthImage, bg_image.size.height)];
+//    
+//    UIColor *bg_Color = [UIColor colorWithPatternImage:bg_image];
+//    [infosLabel setBackgroundColor:bg_Color];
+//    NSString *fpsView = [NSString stringWithFormat:@"%@ %d", _viewVideoIn, fps];
+//    infosLabel.textAlignment = NSTextAlignmentCenter;
+//    infosLabel.text = fpsView;
+//    infosLabel.textColor = [UIColor whiteColor];
+//    
+//    //Add label to view
+//    [self.imageViewStreamer addSubview:infosLabel];
+//    [self.imageViewStreamer bringSubviewToFront:infosLabel];
+//    [infosLabel release];
+//    infosLabel = nil;
+    if (_isShowDebugInfo)
     {
-        return;
+        [self.ib_btResolInfo setHidden:NO];
+        [self.ib_btViewIn setHidden:NO];
+        [self.ib_btViewIn setTitle:[NSString stringWithFormat:@"%@ %d", _viewVideoIn, fps] forState:UIControlStateNormal];
+        [self.ib_btResolInfo setTitle:@"" forState:UIControlStateNormal];
     }
-    //remove all subviews
-    NSArray *viewsToRemove = [self.imageViewStreamer subviews];
-    for (UIView *v in viewsToRemove) {
-        [v removeFromSuperview];
+    else
+    {
+        [self.ib_btResolInfo setHidden:YES];
+        [self.ib_btViewIn setHidden:YES];
     }
-    //Infos debug
-    UILabel *infosLabel;
-    UIImage *bg_image = [UIImage imageNamed:@"temp_bg.png"];
-    NSInteger widthImage = bg_image.size.width;
-    
-    infosLabel = [[UILabel alloc] initWithFrame:CGRectMake(self.imageViewStreamer.frame.size.width - widthImage ,20, widthImage, bg_image.size.height)];
-    
-    UIColor *bg_Color = [UIColor colorWithPatternImage:bg_image];
-    [infosLabel setBackgroundColor:bg_Color];
-    NSString *fpsView = [NSString stringWithFormat:@"%@ %d", _viewVideoIn, fps];
-    infosLabel.textAlignment = NSTextAlignmentCenter;
-    infosLabel.text = fpsView;
-    infosLabel.textColor = [UIColor whiteColor];
-    
-    //Add label to view
-    [self.imageViewStreamer addSubview:infosLabel];
-    [self.imageViewStreamer bringSubviewToFront:infosLabel];
-    [infosLabel release];
-    infosLabel = nil;
+
 }
 
 #endif
@@ -5399,6 +5419,8 @@ double _ticks = 0;
         [self.customIndicator setHidden:YES];
         [self.ib_lbCameraNotAccessible setHidden:YES];
         [self.ib_lbCameraName setText:self.selectedChannel.profile.name];
+//        [self.view bringSubviewToFront:self.ib_btShowDebugInfo];
+
         if (_timerNotAccessible && [_timerNotAccessible isValid])
         {
             [_timerNotAccessible invalidate];

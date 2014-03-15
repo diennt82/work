@@ -12,6 +12,9 @@
                 <outlet property="customIndicator" destination="lYe-kn-40s" id="NcO-oH-O9u"/>
                 <outlet property="horizMenu" destination="nTa-Ux-yAc" id="LjA-m3-wgi"/>
                 <outlet property="ib_ViewTouchToTalk" destination="0Cv-wD-bGw" id="Lv4-uh-jCJ"/>
+                <outlet property="ib_btResolInfo" destination="QnB-LR-Xxx" id="RNf-bP-Zeq"/>
+                <outlet property="ib_btShowDebugInfo" destination="cZ8-Qy-b4y" id="bsG-G4-FMF"/>
+                <outlet property="ib_btViewIn" destination="udr-s4-aNV" id="jdw-P7-XOE"/>
                 <outlet property="ib_buttonChangeAction" destination="a87-FB-kFc" id="3qp-8W-gCx"/>
                 <outlet property="ib_buttonTouchToTalk" destination="hJo-ff-gYM" id="eHq-3e-cU6"/>
                 <outlet property="ib_changeToMainRecording" destination="mlu-Gl-5qe" id="Qpr-r3-kIH"/>
@@ -199,6 +202,38 @@
                     <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     <nil key="highlightedColor"/>
                 </label>
+                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="info.png" id="JHn-EF-vkt">
+                    <rect key="frame" x="10" y="220" width="18" height="21"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                </imageView>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="cZ8-Qy-b4y">
+                    <rect key="frame" x="0.0" y="209" width="43" height="42"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <state key="normal">
+                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                    </state>
+                    <connections>
+                        <action selector="showInfoDebug:" destination="-1" eventType="touchUpInside" id="wtC-gZ-E0F"/>
+                    </connections>
+                </button>
+                <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="udr-s4-aNV">
+                    <rect key="frame" x="230" y="68" width="88" height="30"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                    <state key="normal" backgroundImage="temp_bg.png">
+                        <color key="titleColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                    </state>
+                </button>
+                <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="QnB-LR-Xxx">
+                    <rect key="frame" x="230" y="100" width="88" height="30"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                    <state key="normal" backgroundImage="temp_bg.png">
+                        <color key="titleColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                    </state>
+                </button>
             </subviews>
             <simulatedStatusBarMetrics key="simulatedStatusBarMetrics"/>
             <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
@@ -210,7 +245,9 @@
         <image name="camera_action_pan_handle.png" width="6" height="33"/>
         <image name="camera_action_pan_knob.png" width="35" height="35"/>
         <image name="camera_action_video@5.png" width="300" height="300"/>
+        <image name="info.png" width="128" height="128"/>
         <image name="loader_a.png" width="30" height="30"/>
         <image name="photo_grey@5.png" width="64" height="38"/>
+        <image name="temp_bg.png" width="85" height="37"/>
     </resources>
 </document>

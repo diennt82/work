@@ -125,6 +125,9 @@
     
     //check to show custom indicator
     BOOL _isShowCustomIndicator;
+    
+    //check to show info for debug
+    BOOL _isShowDebugInfo;
     //timer display text Camera is not accessible
     NSTimer *_timerNotAccessible;
 }
@@ -167,6 +170,10 @@
 @property (retain, nonatomic) IBOutlet UIImageView *customIndicator;
 @property (retain, nonatomic) IBOutlet UILabel *ib_lbCameraNotAccessible;
 @property (retain, nonatomic) IBOutlet UILabel *ib_lbCameraName;
+@property (retain, nonatomic) IBOutlet UIButton *ib_btShowDebugInfo;
+@property (retain, nonatomic) IBOutlet UIButton *ib_btViewIn;
+@property (retain, nonatomic) IBOutlet UIButton *ib_btResolInfo;
+
 
 @property (retain, nonatomic) IBOutlet UIBarButtonItem *barBntItemReveal;
 
@@ -225,5 +232,6 @@
 - (IBAction)bt_showMenuControlPanel:(id)sender;
 - (IBAction)changeToMainRecording:(id)sender;
 - (IBAction)switchDegreePressed:(id)sender;
+- (IBAction)showInfoDebug:(id)sender;
 
 @end
