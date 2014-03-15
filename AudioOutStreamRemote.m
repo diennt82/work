@@ -20,6 +20,9 @@
 @property (retain, nonatomic) NSFileHandle *fileHandle;
 @property (retain, nonatomic) NSString *sentPath;
 
+@property (nonatomic) BOOL disconnectTimeout;
+@property (nonatomic, retain) NSTimer *timerDisconnectTimeout;
+
 @end
 
 @implementation AudioOutStreamRemote
@@ -174,8 +177,22 @@
         _fileHandle = nil;
     }
     
-	NSLog(@"AudioOutStreamer- connection failed with error: %@, : %d, : %@", [sock unreadData],
-		  [err code], err);
+	NSLog(@"AudioOutStreamer- connection failed with error: %@, : %d, : %@, : %d", [sock unreadData],
+		  [err code], err, _disconnectTimeout);
+    
+    if (_disconnectTimeout)
+    {
+        return;
+    }
+    else
+    {
+        if (_timerDisconnectTimeout)
+        {
+            [_timerDisconnectTimeout invalidate];
+            self.timerDisconnectTimeout = nil;
+        }
+    }
+    
     UIAlertView *_alert = [[UIAlertView alloc]
                            initWithTitle:@"Initializing Push-to-talk failed"
                            message:err.localizedDescription
@@ -230,9 +247,9 @@
     if ([data isEqualToData:unexpectedData])
     {
         NSLog(@"Equal Unexpected data");
-        [self stopRecordingSound];
+        //[self stopRecordingSound];
         //[_audioOutStreamRemoteDelegate closeTalkbackSession];
-        [_audioOutStreamRemoteDelegate reportHadshakeFaild];
+        [_audioOutStreamRemoteDelegate reportHandshakeFaild];
         self.isHandshakeSuccess = FALSE;
         NSLog(@"AudioOutStreamRemote - handshake failed with error");
         
@@ -268,6 +285,25 @@
 		[self.pcmPlayer Stop];
 	}
     
+    if (_timerDisconnectTimeout)
+    {
+        [_timerDisconnectTimeout invalidate];
+        self.timerDisconnectTimeout = nil;
+    }
+    if (sendingSocket != nil)
+    {
+        if ([sendingSocket isConnected] == YES)
+        {
+            NSLog(@"\n Create disconnect timer");
+            
+            self.timerDisconnectTimeout = [NSTimer scheduledTimerWithTimeInterval:4.5*60
+                                                                           target:self
+                                                                         selector:@selector(disconnectFromAudioSocket)
+                                                                         userInfo:nil
+                                                                          repeats:NO];
+        }
+    }
+    
 	[NSTimer scheduledTimerWithTimeInterval:0.5f
                                      target:self
                                    selector:@selector(cleanDataUp:)
@@ -294,8 +330,7 @@
         
         [timer invalidate];
         
-        
-        NSLog(@"\nClean data up successfully.\n");
+        NSLog(@"\nClean data up successfully.");
     }
 }
 
@@ -308,6 +343,23 @@
                                                       selector:@selector(sendAudioPacket:)
                                                       userInfo:nil
                                                        repeats:YES];
+}
+
+- (void)disconnectFromAudioSocket
+{
+    self.disconnectTimeout = TRUE;
+    
+    if (sendingSocket != nil)
+    {
+        if ([sendingSocket isConnected] == YES)
+        {
+            [sendingSocket setDelegate:nil];
+            [sendingSocket disconnect];
+        }
+        
+        [sendingSocket release];
+        sendingSocket = nil;
+    }
 }
 
 @end

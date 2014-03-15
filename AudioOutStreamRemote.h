@@ -15,7 +15,7 @@
 @protocol AudioOutStreamRemoteDelegate <NSObject>
 
 - (void)closeTalkbackSession;
-- (void)reportHadshakeFaild;
+- (void)reportHandshakeFaild;
 
 @end
 
