@@ -122,6 +122,11 @@
     IBOutlet UIButton *ib_switchDegree;
     BOOL _isFirstLoad;
     EarlierNavigationController *earlierNavi;
+    
+    //check to show custom indicator
+    BOOL _isShowCustomIndicator;
+    //timer display text Camera is not accessible
+    NSTimer *_timerNotAccessible;
 }
 //property for Hold to talk
 @property (nonatomic) BOOL walkieTalkieEnabled;
@@ -159,6 +164,8 @@
 @property (retain, nonatomic) IBOutlet UIActivityIndicatorView *activityIndicator;
 @property (retain, nonatomic) IBOutlet UIView *viewStopStreamingProgress;
 @property (retain, nonatomic) IBOutlet UIActivityIndicatorView *activityStopStreamingProgress;
+@property (retain, nonatomic) IBOutlet UIImageView *customIndicator;
+@property (retain, nonatomic) IBOutlet UILabel *ib_lbCameraNotAccessible;
 
 @property (retain, nonatomic) IBOutlet UIBarButtonItem *barBntItemReveal;
 

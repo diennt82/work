@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="4514" systemVersion="12F45" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="5053" systemVersion="13C64" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none">
     <dependencies>
         <deployment defaultVersion="1536" identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3747"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3733"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="H264PlayerViewController">
             <connections>
                 <outlet property="activityIndicator" destination="A9Z-og-cX4" id="TaZ-U8-Zbe"/>
                 <outlet property="activityStopStreamingProgress" destination="pLL-JR-pvR" id="Jp8-RI-qp1"/>
+                <outlet property="customIndicator" destination="yns-Yb-cgQ" id="p59-vt-qne"/>
                 <outlet property="horizMenu" destination="Meo-mp-L42" id="GEV-Ih-WZ1"/>
                 <outlet property="ib_ViewTouchToTalk" destination="WJv-oB-VFG" id="4Ti-Be-A6e"/>
                 <outlet property="ib_buttonChangeAction" destination="pcV-76-Dz1" id="1yp-0R-Gwg"/>
@@ -16,6 +17,7 @@
                 <outlet property="ib_changeToMainRecording" destination="FXt-9j-j8f" id="rVX-mz-IfK"/>
                 <outlet property="ib_labelRecordVideo" destination="FmF-hY-zpf" id="VSj-Ng-OCE"/>
                 <outlet property="ib_labelTouchToTalk" destination="Iqs-XW-DXM" id="Hnn-2v-8sl"/>
+                <outlet property="ib_lbCameraNotAccessible" destination="bDd-Pe-fXC" id="seQ-dp-jQP"/>
                 <outlet property="ib_processRecordOrTakePicture" destination="GnV-0e-uit" id="uwE-Mx-ad9"/>
                 <outlet property="ib_switchDegree" destination="u8v-Jo-Lal" id="tHH-9z-Mmm"/>
                 <outlet property="ib_temperature" destination="YH6-sq-ZAV" id="prx-2O-QfZ"/>
@@ -176,6 +178,17 @@
                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
                 </view>
+                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="loader_a.png" id="yns-Yb-cgQ">
+                    <rect key="frame" x="220" y="140" width="40" height="40"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
+                </imageView>
+                <label hidden="YES" opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Camera is not accessible" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="bDd-Pe-fXC">
+                    <rect key="frame" x="156" y="115" width="168" height="32"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                    <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    <nil key="highlightedColor"/>
+                </label>
             </subviews>
             <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
             <simulatedStatusBarMetrics key="simulatedStatusBarMetrics"/>
@@ -188,6 +201,7 @@
         <image name="camera_action_pan_handle.png" width="6" height="33"/>
         <image name="camera_action_pan_knob.png" width="35" height="35"/>
         <image name="camera_action_video_land.png" width="80" height="80"/>
+        <image name="loader_a.png" width="30" height="30"/>
         <image name="photo_grey_land.png" width="30" height="19"/>
     </resources>
 </document>

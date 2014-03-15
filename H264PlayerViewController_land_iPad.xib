@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.iPad.XIB" version="3.0" toolsVersion="4514" systemVersion="12F45" targetRuntime="iOS.CocoaTouch.iPad" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.iPad.XIB" version="3.0" toolsVersion="5053" systemVersion="13C64" targetRuntime="iOS.CocoaTouch.iPad" propertyAccessControl="none">
     <dependencies>
         <deployment defaultVersion="1536" identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3747"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3733"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="H264PlayerViewController">
             <connections>
                 <outlet property="activityIndicator" destination="dcy-ii-kbn" id="T4H-nP-FoF"/>
                 <outlet property="activityStopStreamingProgress" destination="vBK-pC-VxX" id="piL-a5-2BP"/>
+                <outlet property="customIndicator" destination="Csm-gN-pH3" id="ANm-cK-kVq"/>
                 <outlet property="horizMenu" destination="ftH-qh-QfZ" id="JdE-S9-yCk"/>
                 <outlet property="ib_ViewTouchToTalk" destination="2Nr-tN-W6C" id="wAW-Ms-mzf"/>
                 <outlet property="ib_buttonChangeAction" destination="BX4-hy-z0K" id="ni3-A3-Kla"/>
@@ -16,6 +17,7 @@
                 <outlet property="ib_changeToMainRecording" destination="19u-Y0-9Ah" id="foQ-Sd-lbO"/>
                 <outlet property="ib_labelRecordVideo" destination="3LL-xX-3qj" id="Kpj-te-6za"/>
                 <outlet property="ib_labelTouchToTalk" destination="dN9-DT-qb0" id="Ul3-CN-vlp"/>
+                <outlet property="ib_lbCameraNotAccessible" destination="LFJ-X3-0i4" id="0Z3-ia-EqH"/>
                 <outlet property="ib_processRecordOrTakePicture" destination="N11-5t-78m" id="ZYQ-Ed-P0M"/>
                 <outlet property="ib_switchDegree" destination="fwE-e7-ABl" id="Dge-TX-Gtb"/>
                 <outlet property="ib_temperature" destination="IAv-zf-rhC" id="VTr-kK-kTx"/>
@@ -173,6 +175,17 @@
                     <inset key="insetFor6xAndEarlier" minX="0.0" minY="20" maxX="0.0" maxY="-20"/>
                     <color key="color" white="1" alpha="1" colorSpace="calibratedWhite"/>
                 </activityIndicatorView>
+                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="loader_a.png" id="Csm-gN-pH3">
+                    <rect key="frame" x="492" y="364" width="40" height="40"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
+                </imageView>
+                <label hidden="YES" opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Camera is not accessible" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="LFJ-X3-0i4">
+                    <rect key="frame" x="428" y="336" width="168" height="32"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                    <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    <nil key="highlightedColor"/>
+                </label>
             </subviews>
             <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
             <simulatedStatusBarMetrics key="simulatedStatusBarMetrics"/>
@@ -185,6 +198,7 @@
         <image name="camera_action_pan_handle.png" width="6" height="33"/>
         <image name="camera_action_pan_knob.png" width="35" height="35"/>
         <image name="camera_action_video.png" width="130" height="130"/>
+        <image name="loader_a.png" width="30" height="30"/>
         <image name="photo_grey_land.png" width="30" height="19"/>
     </resources>
 </document>
