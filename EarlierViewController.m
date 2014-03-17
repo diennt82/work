@@ -53,7 +53,8 @@
     //NSLog(@"%@, %@", timelineVC.camChannel, _camChannel);
     
     //UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:_timelineVC];
-    UINavigationController *nav1 = [[UINavigationController alloc] initWithRootViewController:[[SavedEventViewController alloc] init]];
+    SavedEventViewController *savedViewController = [[SavedEventViewController alloc] initWithNibName:@"SavedEventViewController" bundle:nil];
+    UINavigationController *nav1 = [[UINavigationController alloc] initWithRootViewController:savedViewController];
     
     self.viewControllers = [NSArray arrayWithObjects:_timelineVC, nav1, nil];
     
