@@ -11,6 +11,8 @@
 #define ALERT_REMOVE_CAM_LOCAL 6
 #define ALERT_REMOVE_CAM_REMOTE 7
 
+#define ALERT_RENAME_CAMERA 8
+
 #import "CameraMenuViewController.h"
 #import "CameraSettingsCell.h"
 #import "CameraNameViewController.h"
@@ -138,27 +140,43 @@
 
 - (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex
 {
-    if (buttonIndex == 1)
+    if (alertView.tag == ALERT_RENAME_CAMERA)
     {
-        
-        int tag = alertView.tag ;
-        
-        if (tag == ALERT_REMOVE_CAM_LOCAL)
+        if (buttonIndex == 1)
         {
-            [self removeLocalCamera];
-        }
-        else if (tag == ALERT_REMOVE_CAM_REMOTE)
-        {
-            [self removeRemoteCamera];
+            _cameraNewName = (NSString *)([alertView textFieldAtIndex:0].text);
+            NSLog(@"new Camera name is %@", _cameraNewName);
+            
+            if ([self isCamNameValidated:_cameraNewName])
+            {
+                [alertView dismissWithClickedButtonIndex:0 animated:NO];
+                [self doneAction:nil];
+            }
         }
     }
     else
     {
-        self.viewProgress.hidden = YES;
-        
-        self.navigationItem.hidesBackButton = NO;
-        self.view.userInteractionEnabled = YES;
-        self.btnRmoveCamera.enabled = YES;
+        if (buttonIndex == 1)
+        {
+            int tag = alertView.tag ;
+            
+            if (tag == ALERT_REMOVE_CAM_LOCAL)
+            {
+                [self removeLocalCamera];
+            }
+            else if (tag == ALERT_REMOVE_CAM_REMOTE)
+            {
+                [self removeRemoteCamera];
+            }
+        }
+        else
+        {
+            self.viewProgress.hidden = YES;
+            
+            self.navigationItem.hidesBackButton = NO;
+            self.view.userInteractionEnabled = YES;
+            self.btnRmoveCamera.enabled = YES;
+        }
     }
 }
 
@@ -309,7 +327,7 @@
         textField.keyboardType = UIKeyboardTypeNumberPad;
         [_alertView addButtonWithTitle:@"Cancel"];
         [_alertView addButtonWithTitle:@"OK"];
-        _alertView.tag = 5;
+        _alertView.tag = ALERT_RENAME_CAMERA;
         [_alertView show];
         [_alertView release];
     }
@@ -329,22 +347,22 @@
     }
 }
 
-#pragma mark - UIAlertViewDelegate
-- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
-    
-    
-    if (buttonIndex == 1)
-    {
-        _cameraNewName = (NSString *)([alertView textFieldAtIndex:0].text);
-        NSLog(@"new Camera name is %@", _cameraNewName);
-        
-        if ([self isCamNameValidated:_cameraNewName])
-        {
-            [alertView dismissWithClickedButtonIndex:0 animated:NO];
-            [self doneAction:nil];
-        }
-    }
-}
+//#pragma mark - UIAlertViewDelegate
+//- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
+//    
+//    
+//    if (buttonIndex == 1)
+//    {
+//        _cameraNewName = (NSString *)([alertView textFieldAtIndex:0].text);
+//        NSLog(@"new Camera name is %@", _cameraNewName);
+//        
+//        if ([self isCamNameValidated:_cameraNewName])
+//        {
+//            [alertView dismissWithClickedButtonIndex:0 animated:NO];
+//            [self doneAction:nil];
+//        }
+//    }
+//}
 
 - (void)doneAction: (id)sender
 {
