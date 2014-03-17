@@ -37,7 +37,6 @@
 
 - (void) connectToAudioSocket;
 
-
 - (void) disconnectFromAudioSocket;
 
 - (void) sendAudioPacket:(NSTimer *) timer_exp;

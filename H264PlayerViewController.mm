@@ -14,6 +14,7 @@
 #import <CFNetwork/CFNetwork.h>
 #include <ifaddrs.h>
 #import <GAI.h>
+#import "AudioOutStreamRemote.h"
 
 #import "Reachability.h"
 #import "MBP_iosViewController.h"
@@ -58,8 +59,11 @@
 
 #define _streamingSSID  @"string_Streaming_SSID"
 #define _is_Loggedin @"bool_isLoggedIn"
+#define TEST_REMOTE_TALKBACK 0 // TODO: DELETE
+#define SESSION_KEY @"SESSION_KEY"
+#define STREAM_ID   @"STREAM_ID"
 
-@interface H264PlayerViewController () <TimelineVCDelegate, BonjourDelegate>
+@interface H264PlayerViewController () <TimelineVCDelegate, BonjourDelegate, AudioOutStreamRemoteDelegate>
 {
     BOOL _syncPortraitAndLandscape;
     UIBarButtonItem *nowButton, *earlierButton;
@@ -87,6 +91,12 @@
 @property (nonatomic) BOOL isFahrenheit;
 @property (nonatomic, retain) NSString *cameraModel;
 @property (nonatomic, retain) NSTimer *timerRemoteStreamTimeOut;
+@property (nonatomic, retain) NSString *apiKey;
+
+@property (nonatomic, retain) NSString *sessionKey;
+@property (nonatomic, retain) NSString *streamID;
+@property (nonatomic) BOOL wantsCancelRemoteTalkback;
+@property (nonatomic, retain) AudioOutStreamRemote *audioOutStreamRemote;
 
 - (void)centerScrollViewContents;
 - (void)scrollViewDoubleTapped:(UITapGestureRecognizer*)recognizer;
@@ -180,8 +190,18 @@ double _ticks = 0;
     [self.imageViewStreamer addGestureRecognizer:singleTap];
     [singleTap release];
     
+    self.apiKey = [[NSUserDefaults standardUserDefaults] stringForKey:@"PortalApiKey"];
+    
+#if TEST_REMOTE_TALKBACK
+    // TODO: Testing -- delete
+    self.imageViewStreamer.userInteractionEnabled = YES;
+    [self getTalkbackSessionKey];
+#else
     self.imageViewStreamer.userInteractionEnabled = NO;
+#endif
+
     self.cameraModel = [self.selectedChannel.profile getModel];
+
     [self initHorizeMenu: _cameraModel];
 
     //set text name for camera name
@@ -197,7 +217,7 @@ double _ticks = 0;
         
         [self.timelineVC loadEvents:self.selectedChannel];
     }
-    
+
     NSLog(@"Model of Camera is: %d, STUN: %d", self.selectedChannel.profile.modelID, [[NSUserDefaults standardUserDefaults] boolForKey:@"enable_stun"]);
     
     _isDegreeFDisplay = [[NSUserDefaults standardUserDefaults] boolForKey:@"IS_FAHRENHEIT"];
@@ -212,17 +232,18 @@ double _ticks = 0;
     else
     {
         [self becomeActive];
+        
+        [self hideControlMenu];
+        
+        NSLog(@"Check selectedChannel is %@ and ip of deviece is %@", self.selectedChannel, self.selectedChannel.profile.ip_address);
+        
+        [self setupHttpPort];
+        [self setupPtt];
+        
+        self.stringTemperature = @"0";
+        //end add button to change
+        [ib_switchDegree setHidden:YES];
     }
-    
-    [self hideControlMenu];
-    
-    NSLog(@"Check selectedChannel is %@ and ip of deviece is %@", self.selectedChannel, self.selectedChannel.profile.ip_address);
-    [self setupHttpPort];
-    [self setupPtt];
-    
-    self.stringTemperature = @"0";
-    //end add button to change
-    [ib_switchDegree setHidden:YES];
 }
 
 - (void)applyFont
@@ -670,7 +691,10 @@ double _ticks = 0;
 
 - (void)handleMessageOnMainThread: (NSArray * )args
 {
+#if TEST_REMOTE_TALKBACK
+#else
     [self displayCustomIndicator];
+
     NSNumber *numberMsg =(NSNumber *) [args objectAtIndex:0];
     
     int ext1 = -1, ext2=-1;
@@ -1027,6 +1051,261 @@ double _ticks = 0;
         default:
             break;
     }
+#endif
+    
+#if 0
+    switch (status) {
+        case STREAM_STARTED:
+        {
+            self.enableControls = TRUE;
+            progressView.hidden = YES;
+            
+            [self stopPeriodicPopup];
+            
+            
+            if (userWantToCancel == TRUE)
+            {
+                
+                NSLog(@"*[STREAM_STARTED] *** USER want to cancel **.. cancel after .1 sec...");
+                self.selected_channel.stopStreaming = TRUE;
+                [self performSelector:@selector(goBackToCameraList)
+                           withObject:nil
+                           afterDelay:0.1];
+            }
+            else
+            {
+                if ( self.selected_channel.profile.isInLocal && (self.askForFWUpgradeOnce == YES))
+                {
+                    [self performSelectorInBackground:@selector(checkIfUpgradeIsPossible) withObject:nil];
+                    self.askForFWUpgradeOnce = NO;
+                }
+                
+                //NSLog(@"Got STREAM_STARTED") ;
+                
+                if ( self.selected_channel.profile.isInLocal == NO)
+                {
+                    
+                    
+                    
+                    [[[GAI sharedInstance] defaultTracker] trackEventWithCategory:@"View Camera Remote"
+                                                                       withAction:@"Start Stream Success"
+                                                                        withLabel:@"Start Stream Success"
+                                                                        withValue:nil];
+                }
+            }
+            break;
+        }
+		case STREAM_STOPPED:
+            
+			break;
+		case STREAM_STOPPED_UNEXPECTEDLY:
+        {
+            [UIApplication sharedApplication].idleTimerDisabled=  NO;
+            
+            break;
+        }
+		case REMOTE_STREAM_STOPPED_UNEXPECTEDLY:
+        {
+            
+            NSString * msg = NSLocalizedStringWithDefaultValue(@"network_lost_link",nil, [NSBundle mainBundle],
+                                                               @"Camera disconnected due to network connectivity problem. Trying to reconnect...", nil);
+            [[[GAI sharedInstance] defaultTracker] trackEventWithCategory:@"View Remote Camera"
+                                                               withAction:@"Connect to Cam Failed"
+                                                                withLabel:@"Can't connect to network"
+                                                                withValue:nil];
+            
+            
+            msg = [NSString stringWithFormat:@"%@ (%d)", msg, self.selected_channel.remoteConnectionError];
+            if (self.streamer != nil)
+            {
+                msg = [NSString stringWithFormat:@"%@(%d)",msg,
+                       self.streamer.latest_connection_error ];
+            }
+            
+            
+            
+            if (self.alertTimer != nil && [self.alertTimer isValid])
+            {
+                //some periodic is running dont care
+                NSLog(@"some periodic is running dont care");
+            }
+            else
+            {
+                
+                self.alertTimer = [NSTimer scheduledTimerWithTimeInterval:5.0
+                                                                   target:self
+                                                                 selector:@selector(periodicPopup:)
+                                                                 userInfo:msg
+                                                                  repeats:YES];
+                [self.alertTimer fire] ;//fire once now
+                
+            }
+            
+            //Stop stream - clean up all resources
+            [self.streamer stopStreaming];
+            
+            //nil all comm object
+            self.scomm = nil; //STUN
+            self.comm = nil;// UPNP/local
+            
+            [NSTimer scheduledTimerWithTimeInterval:1.0
+                                             target:self
+                                           selector:@selector(startCameraConnection:)
+                                           userInfo:nil
+                                            repeats:NO];
+            
+            break;
+        }
+		case STREAM_RESTARTED:
+			break;
+        case REMOTE_STREAM_CANT_CONNECT_FIRST_TIME:
+        {
+            //Stop stream - clean up all resources
+            [self.streamer stopStreaming];
+            self.selected_channel.stopStreaming = TRUE;
+            
+            //simply popup and ask to retry and show camera list
+            NSString * msg = NSLocalizedStringWithDefaultValue(@"cant_start_stream",nil, [NSBundle mainBundle],
+                                                               @"Can't start video stream, the Monitor is busy, try again later." , nil);
+            msg = [NSString stringWithFormat:@"%@ (%d)", msg, self.selected_channel.remoteConnectionError];
+            
+            if (self.selected_channel.remoteConnectionError == REQUEST_TIMEOUT)
+            {
+                msg = NSLocalizedStringWithDefaultValue(@"cant_start_stream2",nil, [NSBundle mainBundle],
+                                                        @"Server request timeout, try again later", nil);
+                
+                
+            }
+            
+            NSString * ok = NSLocalizedStringWithDefaultValue(@"Ok",nil, [NSBundle mainBundle],
+                                                              @"Ok", nil);
+            UIAlertView *_alert = [[UIAlertView alloc]
+                                   initWithTitle:@""
+                                   message:msg
+                                   delegate:self
+                                   cancelButtonTitle:ok
+                                   otherButtonTitles:nil];
+            _alert.tag = REMOTE_VIDEO_CANT_START ;
+            [_alert show];
+            [_alert release];
+            
+            [[[GAI sharedInstance] defaultTracker] trackEventWithCategory:@"View Remote Camera"
+                                                               withAction:@"Connect to Cam Failed"
+                                                                withLabel:@"Can't connect to network"
+                                                                withValue:nil];
+            
+            
+            break;
+        }
+        case REMOTE_STREAM_SSKEY_MISMATCH:
+        {
+            //Stop stream - clean up all resources
+            [self.streamer stopStreaming];
+            self.selected_channel.stopStreaming = TRUE;
+            
+            //simply popup and ask to retry and show camera list
+            NSString * msg = NSLocalizedStringWithDefaultValue(@"cant_start_stream_01",nil, [NSBundle mainBundle],
+                                                               @"The session key on camera is mis-matched. Please reset the camera and add the camera again.(%d)" , nil);
+            msg = [NSString stringWithFormat:msg, self.streamer.latest_connection_error];
+            
+            NSString * ok = NSLocalizedStringWithDefaultValue(@"Ok",nil, [NSBundle mainBundle],
+                                                              @"Ok", nil);
+            UIAlertView *_alert = [[UIAlertView alloc]
+                                   initWithTitle:@""
+                                   message:msg
+                                   delegate:self
+                                   cancelButtonTitle:ok
+                                   otherButtonTitles:nil];
+            _alert.tag = REMOTE_SSKEY_MISMATCH ;
+            [_alert show];
+            [_alert release];
+            [[[GAI sharedInstance] defaultTracker] trackEventWithCategory:@"View Remote Camera"
+                                                               withAction:@"Connect to Cam Failed"
+                                                                withLabel:@"SESSION KEY MISMATCH"
+                                                                withValue:nil];
+            break;
+        }
+        case SWITCHING_TO_RELAY_SERVER:// just update the dialog
+        {
+            
+            //change the message being shown on progress bar -- NEED to take of rotation
+            
+            if (progressView != nil)
+            {
+                UITextView * message = (UITextView *)[progressView viewWithTag:155] ;//textview
+                NSString * msg = NSLocalizedStringWithDefaultValue(@"udt_relay_connect",nil, [NSBundle mainBundle],
+                                                                   @"Connecting through relay... please wait..." , nil);
+                message.text = msg;
+                
+            }
+            
+            
+            
+            
+            
+            break;
+        }
+        case REMOTE_STREAM_STOPPED:
+        {
+            
+            
+            if ( streamer.communication_mode == COMM_MODE_STUN )
+            {
+                if (self.scomm != nil)
+                {
+                    
+                    NSLog(@"Send close session");
+                    [self.scomm sendCloseSessionThruBMS:self.selected_channel.profile.mac_address
+                                             AndChannel:self.selected_channel.channID
+                                               forRelay:NO];
+                }
+            }
+            if (streamer.communication_mode == COMM_MODE_STUN_RELAY2)
+                
+                
+            {
+                
+                if (self.scomm != nil)
+                {
+                    
+                    NSLog(@"Send close relay session");
+                    [self.scomm sendCloseSessionThruBMS:self.selected_channel.profile.mac_address
+                                             AndChannel:self.selected_channel.channID
+                                               forRelay:YES];
+                }
+            }
+            
+            
+            
+            break;
+        }
+        case  SWITCHING_TO_RELAY2_SERVER: //do the switching..
+        {
+            
+            if ([self.selected_channel.profile isNewerThan08_038])
+            {
+                
+                
+                
+                //close pcm player as well.. we don't need it any longer
+                //  Will open again once the relay2 is up
+                [streamer stopStreaming:TRUE];
+                
+                if (scanner != nil)
+                {
+                    [scanner cancel];
+                }
+                [self.selected_channel abortViewTimer];
+                
+                NSLog(@"FW version is newer thang 08_038 ->NEW -RELAY");
+                [self switchToRelay2ForNonSymmetricNatApp];
+            }
+            
+        }
+		default:
+			break;
+	}
+#endif
 }
 
 #pragma mark Delegate Timeline
@@ -1094,12 +1373,15 @@ double _ticks = 0;
 
 - (void)hideControlMenu
 {
+#if TEST_REMOTE_TALKBACK
+#else
     static NSTimeInterval animationDuration = 0.3;
     [UIView animateWithDuration:animationDuration animations:^{
         self.isHorizeShow = FALSE;
         self.horizMenu.hidden = YES;
         [self.ib_lbCameraName setHidden:YES];
     }];
+#endif
 }
 
 - (void)showControlMenu
@@ -1328,6 +1610,10 @@ double _ticks = 0;
                 
             }
         }
+        if (_sessionKey == nil)
+        {
+            [self getTalkbackSessionKey];
+        }
     }
     else
     {
@@ -1337,7 +1623,8 @@ double _ticks = 0;
         _isShowCustomIndicator = NO;
         self.imgViewDrectionPad.hidden= YES;
         self.viewStopStreamingProgress.hidden = YES;
-        self.horizMenu.userInteractionEnabled = NO;
+        self.horizMenu.userInteractionEnabled = YES;
+        self.imageViewStreamer.userInteractionEnabled = YES;
         
         NSLog(@"SetupCamera - Camera is NOT available.");
         
@@ -1403,6 +1690,8 @@ double _ticks = 0;
 
 -(void) startStream
 {
+#if TEST_REMOTE_TALKBACK //TODO: DELETE
+#else
     self.h264StreamerIsInStopped = FALSE;
     
     if (userWantToCancel== TRUE)
@@ -1434,7 +1723,7 @@ double _ticks = 0;
         [self startStream_bg];
     });
 #endif
-    
+#endif
 }
 
 - (void)startStream_bg
@@ -1537,6 +1826,11 @@ double _ticks = 0;
     userWantToCancel = TRUE;
     self.selectedChannel.stopStreaming = TRUE;
     
+    if (_audioOutStreamRemote)
+    {
+        [self performSelectorInBackground:@selector(closeRemoteTalkback) withObject:nil];
+    }
+    
     if (self.currentMediaStatus == MEDIA_INFO_HAS_FIRST_IMAGE ||
         self.currentMediaStatus == MEDIA_PLAYER_STARTED       ||
         (self.currentMediaStatus == 0 && h264Streamer == NULL)) // Media player haven't start yet.
@@ -1553,8 +1847,6 @@ double _ticks = 0;
     {
         [self goBackToCameraList];
     }
-    
-    
 }
 
 - (void)goBackToCameraList
@@ -4035,7 +4327,10 @@ double _ticks = 0;
              otherButtonTitles:nil];
     
 	alert.tag = LOCAL_VIDEO_STOPPED_UNEXPECTEDLY;
+#if TEST_REMOTE_TALKBACK
+#else
 	[alert show];
+#endif
     
 	[alert retain];
 }
@@ -4449,8 +4744,11 @@ double _ticks = 0;
     [self.ib_temperature setHidden:YES];
     [self.ib_temperature setBackgroundColor:[UIColor clearColor]];
     
+#if TEST_REMOTE_TALKBACK
+#else
     [self.ib_ViewTouchToTalk setHidden:YES];
     [self.ib_ViewTouchToTalk setBackgroundColor:[UIColor clearColor]];
+#endif
     
     [self.ib_viewRecordTTT setHidden:YES];
     [self.ib_viewRecordTTT setBackgroundColor:[UIColor clearColor]];
@@ -4518,6 +4816,7 @@ double _ticks = 0;
     [_ib_btShowDebugInfo release];
     [_ib_btViewIn release];
     [_ib_btResolInfo release];
+    [_audioOutStreamRemote release];
     [super dealloc];
 }
 //At first time, we set to FALSE after call checkOrientation()
@@ -4594,19 +4893,13 @@ double _ticks = 0;
 
 - (void)cleanup
 {
-    
     [self performSelectorInBackground:@selector(set_Walkie_Talkie_bg:)
                            withObject:@"0"];
     
     [_audioOut release];
     _audioOut = nil;
     
-//    UIButton *pttBtn = (UIButton *)[self.view viewWithTag:PTT_ENGAGE_BTN];
-//    
-//    [self.ib_buttonTouchToTalk setImage:[UIImage imageNamed:@"bb_vs_mike_on.png"] forState:UIControlStateNormal];
-    
     self.walkieTalkieEnabled = NO;
-    
 }
 
 -(void) setupPtt
@@ -4626,26 +4919,43 @@ double _ticks = 0;
 
 -(void)userReleaseHoldToTalk
 {
-
-    NSLog(@"Detect user cancel PTT & clean up");
-    if (_audioOut != nil)
+#if TEST_REMOTE_TALKBACK
+    //self.wantsCancelRemoteTalkback = TRUE;
+    if (_audioOutStreamRemote != nil)
     {
-        [_audioOut disconnectFromAudioSocket];
-        [_audioOut release];
-        _audioOut = nil;
+        //[_audioOutStreamRemote stopRecordingSound];
+        [_audioOutStreamRemote performSelectorOnMainThread:@selector(stopRecordingSound) withObject:nil waitUntilDone:NO];
     }
+#else
+    if (self.selectedChannel.profile.isInLocal)
+    {
+        // Remote and Local is the same
+        NSLog(@"Detect user cancel PTT & clean up");
+        
+        if (_audioOut != nil)
+        {
+            [_audioOut disconnectFromAudioSocket];
+            [_audioOut release];
+            _audioOut = nil;
+        }
+    }
+    else
+    {
+        if (_audioOutStreamRemote != nil)
+        {
+            //[_audioOutStreamRemote stopRecordingSound];
+            [_audioOutStreamRemote performSelectorOnMainThread:@selector(stopRecordingSound) withObject:nil waitUntilDone:NO];
+        }
+    }
+#endif
 }
-
 
 - (BOOL) setEnablePtt:(BOOL) walkie_talkie_enabled
 {
-    
-    
     @synchronized (self)
     {
         if ( walkie_talkie_enabled == YES)
         {
-            
             [self performSelectorInBackground:@selector(set_Walkie_Talkie_bg:)
                                    withObject:[NSString stringWithFormat:@"%d",walkie_talkie_enabled]];
             if (_audioOut != nil)
@@ -4670,8 +4980,8 @@ double _ticks = 0;
             
         }
     }
-    return walkie_talkie_enabled ;
     
+    return walkie_talkie_enabled ;
 }
 
 
@@ -4679,7 +4989,7 @@ double _ticks = 0;
 {
     NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
     
-    NSString * command = [NSString stringWithFormat:@"%@%@",SET_PTT,status];
+    NSString * command = [NSString stringWithFormat:@"%@%@", SET_PTT, status];
     
     NSLog(@"Command send to camera is %@", command);
     
@@ -4695,21 +5005,17 @@ double _ticks = 0;
     [pool release];
 }
 
--(void)processingHoldToTalk
+-(void)processingHoldToTalk // Just init AudioOutStreamer
 {
-    NSLog(@"Create AudioOutStreamer & start recording now");
     NSLog(@"Port push to talk is %d, actually is %d",self.selectedChannel.profile.ptt_port,IRABOT_AUDIO_RECORDING_PORT );
     NSLog(@"Device iP is %@", _httpComm.device_ip);
     _audioOut = [[AudioOutStreamer alloc] initWithDeviceIp:_httpComm.device_ip
-                                               andPTTport:self.selectedChannel.profile.ptt_port];  //IRABOT_AUDIO_RECORDING_PORT
+                                                andPTTport:self.selectedChannel.profile.ptt_port];  //IRABOT_AUDIO_RECORDING_PORT
     [_audioOut retain];
     //Start buffering sound from user at the moment they press down the button
     //  This is to prevent loss of audio data
     [_audioOut startRecordingSound];
 }
-
-
-
 
 -(void) longPress:(UILongPressGestureRecognizer*) gest
 {
@@ -4721,8 +5027,24 @@ double _ticks = 0;
     {
         NSLog(@"UIGestureRecognizerStateBegan on hold to talk");
         self.walkieTalkieEnabled = YES;
-        [self setEnablePtt:YES];
+#if TEST_REMOTE_TALKBACK //Testing
+        // call enabled remote PTT function
+        
+        [self performSelectorInBackground:@selector(enableRemotePTT:) withObject:[NSNumber numberWithBool:YES]];
+        self.wantsCancelRemoteTalkback = FALSE;
+#else
+        if (self.selectedChannel.profile.isInLocal)
+        {
+            [self setEnablePtt:YES];
+        }
+        else
+        {
+            self.wantsCancelRemoteTalkback = FALSE;
+            [self performSelectorInBackground:@selector(enableRemotePTT:) withObject:[NSNumber numberWithBool:YES]];
+        }
+#endif
         UIImage *imageHoldedToTalk;
+        
         if (isiPhone4)
         {
             imageHoldedToTalk = [UIImage imageNamed:@"camera_action_mic_pressed.png"];
@@ -4744,8 +5066,21 @@ double _ticks = 0;
             NSLog(@"detect cancelling PTT");
             
         }
-        
-        [self setEnablePtt:NO];
+#if TEST_REMOTE_TALKBACK // Tesging
+        [self performSelectorInBackground:@selector(enableRemotePTT:) withObject:[NSNumber numberWithBool:NO]];
+        self.wantsCancelRemoteTalkback = TRUE;
+#else
+        if (self.selectedChannel.profile.isInLocal)
+        {
+            [self setEnablePtt:NO];
+        }
+        else
+        {
+            self.wantsCancelRemoteTalkback = TRUE;
+            [self performSelectorInBackground:@selector(enableRemotePTT:)
+                                   withObject:[NSNumber numberWithBool:NO]];
+        }
+#endif
     }
     
     
@@ -4759,9 +5094,19 @@ double _ticks = 0;
 
     [self.ib_labelTouchToTalk setText:@"Listening"];
     [self applyFont];
-    
+#if TEST_REMOTE_TALKBACK
+    [self processingHoldToTalkRemote];
+#else
     //processing for PTT
-    [self processingHoldToTalk];
+    if (self.selectedChannel.profile.isInLocal)
+    {
+        [self processingHoldToTalk];
+    }
+    else
+    {
+        [self processingHoldToTalkRemote];
+    }
+#endif
 }
 
 - (void)touchUpInsideHoldToTalk {
@@ -4773,8 +5118,223 @@ double _ticks = 0;
     [self.ib_labelTouchToTalk setText:@"Hold To Talk"];
     [self applyFont];
     //user touch up inside and outside
-
 }
+
+// Talk back remote
+
+- (void)getTalkbackSessionKey
+{
+    // STEP 1
+    //[BMS_JSON_Communication setServerInput:@"https://dev-api.hubble.in:443/v1"];
+    BMS_JSON_Communication *jsonComm = [[BMS_JSON_Communication alloc] initWithObject:self
+                                                                             Selector:Nil
+                                                                         FailSelector:nil
+                                                                            ServerErr:nil];
+    
+    NSString *regID = self.selectedChannel.profile.registrationID;
+    
+    NSDictionary *responseDict = [jsonComm createTalkbackSessionBlockedWithRegistrationId:regID
+                                                                                   apiKey:_apiKey];
+    NSLog(@"%@", responseDict);
+    [jsonComm release];
+    
+    //[BMS_JSON_Communication setServerInput:@"https://api.hubble.in/v1"];
+    
+    if (responseDict != nil)
+    {
+        NSUserDefaults *userDefault = [NSUserDefaults standardUserDefaults];
+        
+        if ([[responseDict objectForKey:@"status"] integerValue] == 200)
+        {
+            self.sessionKey = [[responseDict objectForKey:@"data"] objectForKey:@"session_key"];
+            self.streamID = [[responseDict objectForKey:@"data"] objectForKey:@"stream_id"];
+            
+            [userDefault setObject:_sessionKey forKey:SESSION_KEY];
+            [userDefault setObject:_streamID forKey:STREAM_ID];
+            
+            [userDefault synchronize];
+        }
+        else
+        {
+            NSLog(@"Resquest session key failed: %@", [responseDict objectForKey:@"message"]);
+            self.sessionKey = @"";
+            self.streamID = @"";
+        }
+    }
+}
+
+- (void)processingHoldToTalkRemote
+{
+    if (_audioOutStreamRemote == nil)
+    {
+        self.audioOutStreamRemote = [[AudioOutStreamRemote alloc] initWithRemoteMode];
+        
+        [_audioOutStreamRemote retain];
+        //Start buffering sound from user at the moment they press down the button
+        //  This is to prevent loss of audio data
+    }
+    
+    [_audioOutStreamRemote startRecordingSound];
+}
+
+- (void)enableRemotePTT: (NSNumber *)walkieTalkieEnabledFlag
+{
+    NSLog(@"H264VC - enableRemotePTT: %@", walkieTalkieEnabledFlag);
+    
+    if ([walkieTalkieEnabledFlag boolValue] == NO)
+    {
+        if (_audioOutStreamRemote != nil)
+        {
+            //[_audioOutStreamRemote stopRecordingSound];
+            [_audioOutStreamRemote performSelectorOnMainThread:@selector(stopRecordingSound) withObject:nil waitUntilDone:NO];
+            [self touchUpInsideHoldToTalk];
+        }
+    }
+    else
+    {
+        if (_audioOutStreamRemote.isHandshakeSuccess)
+        {
+            // STEP 3 -- Re-send data
+            [_audioOutStreamRemote performSelectorOnMainThread:@selector(startSendingData) withObject:nil waitUntilDone:NO];
+        }
+        else
+        {
+            // STEP 2
+            NSUserDefaults *userDefault = [NSUserDefaults standardUserDefaults];
+            self.sessionKey = [userDefault objectForKey:@"SESSION_KEY"];
+            self.streamID = [userDefault objectForKey:@"STREAM_ID"];
+            
+            NSString *url = @"http://23.22.154.88/devices/start_talk_back";
+            
+            NSDictionary *resDict = [self workWithServer:url sessionKey:_sessionKey streamID:_streamID];
+            
+            NSLog(@"%@", resDict);
+            
+            if (resDict != Nil)
+            {
+                if ([[resDict objectForKey:@"status"] integerValue] == 200)
+                {
+                    NSMutableData *data = [[NSMutableData alloc] init];
+                    
+                    Byte header[3];// = {1, 79, 1};
+                    header[0] = 1;
+                    header[1] = 79;
+                    header[2] = 1;
+                    
+                    NSString *handshake = [_streamID stringByAppendingString:_sessionKey];
+                    [data appendBytes:header length:3];
+                    
+                    const char *charHandshake = [handshake UTF8String];
+                    [data appendBytes:charHandshake length:strlen(charHandshake)];
+                    
+                    NSLog(@"H264VC -enableRemotePTT: %@, ---%lu, ---%d", data, (unsigned long)data.length, _audioOutStreamRemote.isDisconnected);
+                    
+                    _audioOutStreamRemote.dataRequest = data;
+                    
+                    [data release];
+                    
+                    if (!_audioOutStreamRemote.isDisconnected)
+                    {
+                        [_audioOutStreamRemote performSelectorOnMainThread:@selector(startHandshaking) withObject:nil waitUntilDone:NO];
+                    }
+                    else
+                    {
+                        [_audioOutStreamRemote performSelectorOnMainThread:@selector(connectToAudioSocket) withObject:nil waitUntilDone:NO];
+                    }
+                    _audioOutStreamRemote.audioOutStreamRemoteDelegate = self;
+                }
+                else
+                {
+                    NSLog(@"Send cmd start_talk_back failed! Retry...");
+                    [self retryTalkbackRemote];
+                }
+            }
+            else
+            {
+                NSLog(@"Response Dict from camera - resDict = nil! Retry...");
+                [self retryTalkbackRemote];
+            }
+        }
+    }
+}
+
+- (void)closeRemoteTalkback
+{
+    NSString *url = @"http://23.22.154.88/devices/stop_talk_back";
+    
+    NSDictionary *resDict = [self workWithServer:url sessionKey:_sessionKey streamID:_streamID];
+    
+    NSLog(@"%@", resDict);
+    
+    if ([[resDict objectForKey:@"status"] integerValue] == 200)
+    {
+        if (userWantToCancel == FALSE)
+        {
+            [self getTalkbackSessionKey];
+        }
+    }
+}
+
+- (NSDictionary *)workWithServer: (NSString *)url sessionKey: (NSString *)sessionKey streamID: (NSString *)streamID
+{
+    NSString *requestString = [url stringByAppendingFormat:@"?session_key=%@&stream_id=%@", sessionKey, streamID];
+    
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL: [NSURL URLWithString:requestString]];
+    request.timeoutInterval = 30;
+    
+    //Specify that it will be a POST request
+    request.HTTPMethod = @"POST";
+    
+    // This is how we set header fields
+    [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
+    
+    NSURLResponse *response;
+    
+    NSLog(@"H264 - workWithServer - url: %@", requestString);
+    
+    NSData *dataReply = [NSURLConnection sendSynchronousRequest:request
+                                      returningResponse:&response
+                                                  error:nil];
+    
+    if (dataReply == nil)
+    {
+        return nil;
+    }
+    else
+    {
+        return [NSDictionary dictionaryWithDictionary:[NSJSONSerialization JSONObjectWithData:dataReply
+                                                                                      options:kNilOptions
+                                                                                        error:nil]];
+    }
+}
+
+#pragma mark - Audio out stream remote delete
+
+- (void)closeTalkbackSession
+{
+    [self performSelectorInBackground:@selector(closeRemoteTalkback) withObject:nil];
+}
+
+- (void)retryTalkbackRemote
+{
+    if (userWantToCancel || _wantsCancelRemoteTalkback)
+    {
+        return;
+    }
+    
+    [self getTalkbackSessionKey];
+    // Re-enable Remote PTT
+    [self enableRemotePTT:[NSNumber numberWithBool:YES]];
+}
+
+- (void)reportHandshakeFaild
+{
+    NSLog(@"Report handshake failed! Retry...");
+    
+    [self retryTalkbackRemote];
+}
+
+#pragma mark - Bottom menu
 
 - (IBAction)bt_showMenuControlPanel:(id)sender {
 //    isShowControlPanel = YES;

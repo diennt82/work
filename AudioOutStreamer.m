@@ -10,6 +10,9 @@
 
 #import "AudioOutStreamer.h"
 
+@interface AudioOutStreamer()
+
+@end
 
 @implementation AudioOutStreamer
 @synthesize pcmPlayer;
@@ -18,18 +21,21 @@
 
 -(id) initWithDeviceIp:(NSString *) ip andPTTport: (int) port
 {
-	[super init];
-	device_ip = [NSString stringWithString:ip];
-	device_port = port; 
-	
-    hasStartRecordingSound = FALSE;
+	self = [super init];
+    if (self)
+    {
+        device_ip = [NSString stringWithString:ip];
+        device_port = port;
+        
+        hasStartRecordingSound = FALSE;
+    }
+    
 	return self; 
 }
 
 -(void) dealloc
 {
     [pcmPlayer release];
-    
     [super dealloc]; 
 }
 
@@ -74,7 +80,7 @@
     NSLog(@"pTT to: %@:%d",device_ip, port);
     
 	//Non-blocking connect
-	[sendingSocket connectToHost:ip onPort:port withTimeout:5 error:nil];
+    [sendingSocket connectToHost:ip onPort:port withTimeout:5 error:nil];
 }
 
 - (void) disconnectFromAudioSocket
@@ -93,6 +99,7 @@
                                     selector:@selector(disconnectSocket:)
                                     userInfo:nil
                                      repeats:YES];
+    //[self disconnectSocket:nil];
 }
 
 - (void)disconnectSocket: (NSTimer *)timer
@@ -131,6 +138,8 @@
         [timer invalidate];
         [self.audioOutStreamerDelegate cleanup];
     }
+    
+    //[self.audioOutStreamerDelegate cleanup];
 }
 
 - (void) sendAudioPacket:(NSTimer *) timer_exp
@@ -138,35 +147,29 @@
 	
 	/* read 2kb everytime */
 	self.bufferLength = [self.pcmPlayer.recorder.inMemoryAudioFile readBytesPCM:_pcm_data
-											withLength:2*1024]; //2*1024
+											withLength:3*1024]; //2*1024
 	[sendingSocket writeData:_pcm_data withTimeout:2 tag:SENDING_SOCKET_TAG];
-	
 }
 
 
 
-#pragma mark TCP socket delegate funcs 
+#pragma mark TCP socket delegate funcs
 
 - (void)onSocket:(AsyncSocket *)sock didConnectToHost:(NSString *)host port:(UInt16)port
 {
 
 	NSLog(@"didConnectToHost Finished");
-	//if(port == IRABOT_AUDIO_RECORDING_PORT)
-	{
-
-		//Start sending the first 2Kb of data per 0.128 sec
-		voice_data_timer = [NSTimer scheduledTimerWithTimeInterval: 0.125//0.04 
-															target:self
-														  selector:@selector(sendAudioPacket:)
-														  userInfo:nil
-														   repeats:YES];
-	}
-
-	
+    
+    //Start sending the first 2Kb of data per 0.128 sec
+    voice_data_timer = [NSTimer scheduledTimerWithTimeInterval: 0.125//0.04
+                                                        target:self
+                                                      selector:@selector(sendAudioPacket:)
+                                                      userInfo:nil
+                                                       repeats:YES];
 }
 - (void)onSocket:(AsyncSocket *)sock willDisconnectWithError:(NSError *)err
 {
-	NSLog(@"AudioOutStreamer- connection failed with error:%d:%@" , 
+	NSLog(@"AudioOutStreamer- connection failed with error: %@, : %d, : %@", [sock unreadData],
 		  [err code], err);
     UIAlertView *_alert = [[UIAlertView alloc]
                            initWithTitle:@"Initializing Push-to-talk failed"
@@ -180,14 +183,10 @@
 
 - (void)onSocketDidDisconnect:(AsyncSocket *)sock
 {
-	
 	if ( sendingSocket != nil && [sendingSocket isConnected] == NO)
 	{
 		[self disconnectFromAudioSocket];
 	}
-
 }
-
-
 
 @end
