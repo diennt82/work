@@ -54,7 +54,7 @@
 
 #define TAG_ALERT_VIEW_REMOTE_TIME_OUT 559
 
-#define TEST_REMOTE_TALKBACK 0 // TODO: DELETE
+#define TEST_REMOTE_TALKBACK 1 // TODO: DELETE
 #define SESSION_KEY @"SESSION_KEY"
 #define STREAM_ID   @"STREAM_ID"
 
@@ -699,6 +699,8 @@ double _ticks = 0;
 
 - (void)handleMessageOnMainThread: (NSArray * )args
 {
+#if TEST_REMOTE_TALKBACK
+#else
     
     NSNumber *numberMsg =(NSNumber *) [args objectAtIndex:0];
     
@@ -1066,7 +1068,7 @@ double _ticks = 0;
     }
     
     
-    
+#endif
     
 #if 0
     switch (status) {
@@ -1389,12 +1391,15 @@ double _ticks = 0;
 
 - (void)hideControlMenu
 {
+#if TEST_REMOTE_TALKBACK
+#else
     self.isHorizeShow = FALSE;
     self.horizMenu.hidden = YES;
     
 //    [self hidenAllBottomView];
     
     //[self showTimelineView];
+#endif
 }
 
 - (void)showControlMenu
@@ -4806,8 +4811,11 @@ double _ticks = 0;
     [self.ib_temperature setHidden:YES];
     [self.ib_temperature setBackgroundColor:[UIColor clearColor]];
     
+#if TEST_REMOTE_TALKBACK
+#else
     [self.ib_ViewTouchToTalk setHidden:YES];
     [self.ib_ViewTouchToTalk setBackgroundColor:[UIColor clearColor]];
+#endif
     
     [self.ib_viewRecordTTT setHidden:YES];
     [self.ib_viewRecordTTT setBackgroundColor:[UIColor clearColor]];
