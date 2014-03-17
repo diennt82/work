@@ -675,6 +675,7 @@
 		A13AD81018D008110009F0E5 /* DoNotDisturbCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A13AD80F18D008110009F0E5 /* DoNotDisturbCell.m */; };
 		A13AD81218D008490009F0E5 /* DoNotDisturbCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = A13AD81118D008490009F0E5 /* DoNotDisturbCell.xib */; };
 		A13AD83D18D0691E0009F0E5 /* UICircularSlider.m in Sources */ = {isa = PBXBuildFile; fileRef = A13AD83C18D0691E0009F0E5 /* UICircularSlider.m */; };
+		A1382CA218D6D222006D99A2 /* MHTabBarController.m in Sources */ = {isa = PBXBuildFile; fileRef = A1382CA118D6D222006D99A2 /* MHTabBarController.m */; };
 		A14631C6185C133D00E96969 /* ScrollHorizontalMenu.m in Sources */ = {isa = PBXBuildFile; fileRef = A14631C5185C133D00E96969 /* ScrollHorizontalMenu.m */; };
 		A15110D718AB7D4600E116E1 /* TimeLinePremiumCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A15110D618AB7D4600E116E1 /* TimeLinePremiumCell.m */; };
 		A15110DD18AB7D9800E116E1 /* TimeLinePremiumCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = A15110DC18AB7D9800E116E1 /* TimeLinePremiumCell.xib */; };
@@ -1536,6 +1537,8 @@
 		A13AD81118D008490009F0E5 /* DoNotDisturbCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = DoNotDisturbCell.xib; sourceTree = "<group>"; };
 		A13AD83B18D0691E0009F0E5 /* UICircularSlider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UICircularSlider.h; sourceTree = "<group>"; };
 		A13AD83C18D0691E0009F0E5 /* UICircularSlider.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UICircularSlider.m; sourceTree = "<group>"; };
+		A1382CA018D6D222006D99A2 /* MHTabBarController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MHTabBarController.h; sourceTree = "<group>"; };
+		A1382CA118D6D222006D99A2 /* MHTabBarController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MHTabBarController.m; sourceTree = "<group>"; };
 		A14631C4185C133D00E96969 /* ScrollHorizontalMenu.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ScrollHorizontalMenu.h; sourceTree = "<group>"; };
 		A14631C5185C133D00E96969 /* ScrollHorizontalMenu.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ScrollHorizontalMenu.m; sourceTree = "<group>"; };
 		A15110D518AB7D4600E116E1 /* TimeLinePremiumCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TimeLinePremiumCell.h; sourceTree = "<group>"; };
@@ -2051,6 +2054,7 @@
 		080E96DDFE201D6D7F000001 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				A1382C9F18D6D210006D99A2 /* CustomTabBarController */,
 				8B977C9B18C70BB300A61115 /* ProgressViewCustom */,
 				8B97A3BD18BEE5E8008A38E1 /* UIBarButtonAddition */,
 				A160B4DD18C0360800739B53 /* EarlierNavigationController.h */,
@@ -3549,6 +3553,15 @@
 			name = ImageManagement;
 			sourceTree = "<group>";
 		};
+		A1382C9F18D6D210006D99A2 /* CustomTabBarController */ = {
+			isa = PBXGroup;
+			children = (
+				A1382CA018D6D222006D99A2 /* MHTabBarController.h */,
+				A1382CA118D6D222006D99A2 /* MHTabBarController.m */,
+			);
+			name = CustomTabBarController;
+			sourceTree = "<group>";
+		};
 		A14631C3185C12B600E96969 /* ScrollMenuView */ = {
 			isa = PBXGroup;
 			children = (
@@ -4448,6 +4461,7 @@
 				38355AE715CB76630045909C /* Account_ViewController.mm in Sources */,
 				A1ABF1A9187537AD0014FCB4 /* NetworkInfoToCamera_VController.mm in Sources */,
 				38B85E5415CFAA7F00E5A1FA /* Step_07_ViewController.mm in Sources */,
+				A1382CA218D6D222006D99A2 /* MHTabBarController.m in Sources */,
 				8B9112D018602884004301C5 /* SensitivityCell.m in Sources */,
 				38CE2A1315D4FA3800B8F7EC /* ForgotPwdViewController.m in Sources */,
 				3803A85E15FDF15600B4DD97 /* CameraAlert.m in Sources */,

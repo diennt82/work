@@ -22,4 +22,8 @@
 + (UIColor *)textTimerPlayBackColor;
 + (UIColor *)textForFinishPlayBackColor;
 + (UIColor *)doNotDisturbCellBGColor;
++ (UIColor *)selectButtonBackgroundColor;
++ (UIColor *)deSelectButtonBackgroundColor;
++ (UIColor *)deSelectButtonBackgroundTextColor;
+
 @end

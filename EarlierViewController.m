@@ -47,26 +47,23 @@
 //                                      owner:self
 //                                    options:nil];
 //    }
+    self.navigationController.navigationBarHidden = YES;
     
     self.timelineVC = [[TimelineViewController alloc] init];
-    
-    //NSLog(@"%@, %@", timelineVC.camChannel, _camChannel);
-    
-    //UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:_timelineVC];
     SavedEventViewController *savedViewController = [[SavedEventViewController alloc] initWithNibName:@"SavedEventViewController" bundle:nil];
-    UINavigationController *nav1 = [[UINavigationController alloc] initWithRootViewController:savedViewController];
+    [_timelineVC setTitle:@"Timeline"];
+    [savedViewController setTitle:@"Saved"];
+    NSArray *viewControllers = @[_timelineVC, savedViewController];
+   
     
-    self.viewControllers = [NSArray arrayWithObjects:_timelineVC, nav1, nil];
+    MHTabBarController *tabBarController = [[MHTabBarController alloc] init];
     
-    UITabBarItem *timelineItem = [self.tabBar.items objectAtIndex:0];
-    [timelineItem setImage:[UIImage imageNamed:@"camera.png"]];
+	tabBarController.delegate = self;
+	tabBarController.viewControllers = viewControllers;
     
-    UITabBarItem *savedItem = [self.tabBar.items objectAtIndex:1];
-    [savedItem setImage:[UIImage imageNamed:@"general"]];
- 
+    [self.view addSubview:tabBarController.view];
     
-    //[nav release];
-    [nav1 release];
+    
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -86,10 +83,10 @@
         self.timelineVC.navVC = _nav;
         if ((isiPhone4 || isiPhone5))
         {
-            self.timelineVC.tableView.contentInset = UIEdgeInsetsMake(64, 0, 44, 0);
+            self.timelineVC.tableView.contentInset = UIEdgeInsetsMake(5, 0, 44, 0);
         } else
         {
-            self.timelineVC.tableView.contentInset = UIEdgeInsetsMake(64, 0, 64, 0);
+            self.timelineVC.tableView.contentInset = UIEdgeInsetsMake(5, 0, 64, 0);
         }
     }
 }
@@ -105,5 +102,23 @@
     [_timelineVC release];
     [super dealloc];
 }
+
+
+#pragma mark - Custom tab bar delegate
+- (BOOL)mh_tabBarController:(MHTabBarController *)tabBarController shouldSelectViewController:(UIViewController *)viewController atIndex:(NSUInteger)index
+{
+	NSLog(@"mh_tabBarController %@ shouldSelectViewController %@ at index %u", tabBarController, viewController, index);
+    
+	// Uncomment this to prevent "Tab 3" from being selected.
+	//return (index != 2);
+    
+	return YES;
+}
+
+- (void)mh_tabBarController:(MHTabBarController *)tabBarController didSelectViewController:(UIViewController *)viewController atIndex:(NSUInteger)index
+{
+	NSLog(@"mh_tabBarController %@ didSelectViewController %@ at index %u", tabBarController, viewController, index);
+}
+
 
 @end

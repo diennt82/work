@@ -8,10 +8,10 @@
 
 #import <UIKit/UIKit.h>
 #import <CameraScanner/CameraScanner.h>
-
+#import "MHTabBarController.h"
 #import "TimelineViewController.h"
 
-@interface EarlierViewController : UITabBarController
+@interface EarlierViewController : UIViewController<MHTabBarControllerDelegate>
 
 @property (nonatomic, retain) TimelineViewController *timelineVC;
 @property (nonatomic, assign) CamChannel *camChannel;

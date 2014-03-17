@@ -11,9 +11,20 @@
 
 @implementation UIFont (Hubble)
 
+
 + (id)applyHubbleFontName:(NSString *)font withSize:(CGFloat)size
 {
     return [UIFont fontWithName:font size:size];
+}
+
++ (UIFont *)semiBold17Font
+{
+    return [UIFont applyHubbleFontName:PN_SEMIBOLD_FONT withSize:17];
+}
+
++ (UIFont *)regular14Font
+{
+    return [UIFont applyHubbleFontName:PN_REGULAR_FONT withSize:14];
 }
 
 + (UIFont *)lightLarge27Font
@@ -59,5 +70,9 @@
 + (UIFont *)regular11Font
 {
     return [UIFont applyHubbleFontName:PN_REGULAR_FONT withSize:11];
+}
++ (UIFont *)regular17Font
+{
+    return [UIFont applyHubbleFontName:PN_REGULAR_FONT withSize:17];
 }
 @end
