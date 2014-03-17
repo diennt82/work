@@ -219,9 +219,7 @@ double _ticks = 0;
     {
         nowButton.enabled = NO;
         [_activityIndicator removeFromSuperview];
-        //[self earlierButtonAction:nil];
-        self.imageViewStreamer.userInteractionEnabled = YES;
-        self.horizMenu.userInteractionEnabled = YES;
+        [self earlierButtonAction:nil];
         return;
     }
     else
@@ -4391,7 +4389,10 @@ double _ticks = 0;
              otherButtonTitles:nil];
     
 	alert.tag = LOCAL_VIDEO_STOPPED_UNEXPECTEDLY;
+#if TEST_REMOTE_TALKBACK
+#else
 	[alert show];
+#endif
     
 	[alert retain];
 }
