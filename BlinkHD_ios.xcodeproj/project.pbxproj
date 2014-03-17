@@ -706,6 +706,8 @@
 		97DA238516425FA100EE2528 /* ToUViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 97DA238316425F9F00EE2528 /* ToUViewController.xib */; };
 		97E3CC77159D89EE00481854 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 97E3CC76159D89EE00481854 /* AVFoundation.framework */; };
 		97F5531517BDD3AF00024017 /* MBPNavController.m in Sources */ = {isa = PBXBuildFile; fileRef = 97F5531417BDD3AF00024017 /* MBPNavController.m */; };
+		A10E6BBE18D2F13E00B10EDD /* ChangeImageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A10E6BBC18D2F13E00B10EDD /* ChangeImageViewController.m */; };
+		A10E6BBF18D2F13E00B10EDD /* ChangeImageViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = A10E6BBD18D2F13E00B10EDD /* ChangeImageViewController.xib */; };
 		A1176B74180D1DD9000B7527 /* stream480p.sdp in Resources */ = {isa = PBXBuildFile; fileRef = A1176B72180D1DD9000B7527 /* stream480p.sdp */; };
 		A1176B75180D1DD9000B7527 /* stream720p.sdp in Resources */ = {isa = PBXBuildFile; fileRef = A1176B73180D1DD9000B7527 /* stream720p.sdp */; };
 		A118C19F187E4756009176F5 /* HttpCom.m in Sources */ = {isa = PBXBuildFile; fileRef = A118C19E187E4756009176F5 /* HttpCom.m */; };
@@ -1606,6 +1608,9 @@
 		97DC55BF14BAFAAD00AA4911 /* HubbleHome.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HubbleHome.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		97E3CC76159D89EE00481854 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		97F5531417BDD3AF00024017 /* MBPNavController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MBPNavController.m; sourceTree = "<group>"; };
+		A10E6BBB18D2F13E00B10EDD /* ChangeImageViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChangeImageViewController.h; sourceTree = "<group>"; };
+		A10E6BBC18D2F13E00B10EDD /* ChangeImageViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChangeImageViewController.m; sourceTree = "<group>"; };
+		A10E6BBD18D2F13E00B10EDD /* ChangeImageViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ChangeImageViewController.xib; sourceTree = "<group>"; };
 		A10EC10C17E0677C00EA4F9D /* libavcodec.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libavcodec.a; path = "../ios-frameworks/ffmpeg/lib/libavcodec.a"; sourceTree = "<group>"; };
 		A10EC10D17E0677C00EA4F9D /* libavdevice.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libavdevice.a; path = "../ios-frameworks/ffmpeg/lib/libavdevice.a"; sourceTree = "<group>"; };
 		A10EC10E17E0677C00EA4F9D /* libavfilter.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libavfilter.a; path = "../ios-frameworks/ffmpeg/lib/libavfilter.a"; sourceTree = "<group>"; };
@@ -3482,6 +3487,9 @@
 		8B9ABBB418AA2A990079F4A3 /* Camera Menu */ = {
 			isa = PBXGroup;
 			children = (
+				A10E6BBB18D2F13E00B10EDD /* ChangeImageViewController.h */,
+				A10E6BBC18D2F13E00B10EDD /* ChangeImageViewController.m */,
+				A10E6BBD18D2F13E00B10EDD /* ChangeImageViewController.xib */,
 				8B9ABBB518AA2AC30079F4A3 /* CameraMenuViewController.h */,
 				8B9ABBB618AA2AC30079F4A3 /* CameraMenuViewController.m */,
 				8B9ABBB718AA2AC30079F4A3 /* CameraMenuViewController.xib */,
@@ -4230,6 +4238,7 @@
 				8B29A03D18AF500900D36BE5 /* dont_disturb_circle.png in Resources */,
 				8B299F6918AF500900D36BE5 /* alert_camera@5.png in Resources */,
 				A1176B75180D1DD9000B7527 /* stream720p.sdp in Resources */,
+				A10E6BBF18D2F13E00B10EDD /* ChangeImageViewController.xib in Resources */,
 				8B29A06318AF500A00D36BE5 /* settings_temp_switch_top.png in Resources */,
 				A1AC859118912859002A8CCD /* ProximaNova-SemiboldItalic.otf in Resources */,
 				38A62E9D15CA2A4800DEA520 /* bb_vid_snap_knob.png in Resources */,
@@ -4718,6 +4727,7 @@
 				A118C19F187E4756009176F5 /* HttpCom.m in Sources */,
 				38CA70A715F7669D002CD1C5 /* NSData+Conversion.m in Sources */,
 				38C79E1F15C26270006EE378 /* Reachability.m in Sources */,
+				A10E6BBE18D2F13E00B10EDD /* ChangeImageViewController.m in Sources */,
 				8B9376B618729AC900E20756 /* ClipInfo.m in Sources */,
 				1D60589B0D05DD56006BFB54 /* main.m in Sources */,
 				8B92A0901863E68B005923D2 /* TimelineCell.m in Sources */,

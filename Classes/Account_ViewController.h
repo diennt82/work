@@ -16,6 +16,9 @@
     IBOutlet UITableView * accountInfo;
     
     IBOutlet UIActivityIndicatorView * progress;
+    
+    NSString *_newPass;
+    NSString *_newPassConfirm;
 }
 
 @property (nonatomic, assign) id parentVC;
