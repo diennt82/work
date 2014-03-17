@@ -18,6 +18,9 @@
 @property (nonatomic, retain) NSString *titleString;
 @property (nonatomic, retain) NSString *urlFile;
 @property (nonatomic, retain) UIImage *imgSnapshot;
+@property (nonatomic, retain) NSString *alertType;
+@property (nonatomic, retain) NSString *alertVal;
+@property (nonatomic, retain) NSString *registrationID;
 
 -(NSDate *) getTimeCode;
 -(BOOL) isLastClip;

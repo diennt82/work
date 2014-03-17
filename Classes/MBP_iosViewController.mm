@@ -1859,7 +1859,11 @@
     [playbackViewController release];
     [self presentViewController:nav animated:YES completion:^{}];
 #else
-    
+    //Cheat code for debugging
+#if 0 //DBG DBG DBG for Push notification
+    [self showNotificationViewController:nil];
+    return;
+#endif
     LoginViewController *loginVC = [[LoginViewController alloc] initWithNibName:@"LoginViewController"
                                                                          bundle:Nil
                                                                        delegate:self];
@@ -1889,11 +1893,27 @@
     
     notifVC.notifDelegate = self;
     //Feed in data now
+#if 0
+//    notifVC.cameraMacNoColon = @"44334C7FA03C";
+//    notifVC.cameraName       = @"CameraHD-00667fa03c";
+//    notifVC.alertType        = @"4";
+//    notifVC.alertVal         = @"20140310091019000";
+//    notifVC.registrationID   = @"01006644334C7FA03CXJYRBQBO";
+    
+    
+    notifVC.cameraMacNoColon = @"44334C7FA03C";
+    notifVC.cameraName       = @"CameraHD-00667fa03c";
+    notifVC.alertType        = @"4";
+    notifVC.alertVal         = @"20140310091019000";
+    notifVC.registrationID   = @"01006644334C7FA03CXJYRBQBO";
+    
+#else
     notifVC.cameraMacNoColon = self.camAlert.cameraMacNoColon;
     notifVC.cameraName       = self.camAlert.cameraName;
     notifVC.alertType        = self.camAlert.alertType;
     notifVC.alertVal         = self.camAlert.alertVal;
     notifVC.registrationID   = self.camAlert.registrationID;
+#endif
     
     [self presentViewController:[[UINavigationController alloc]initWithRootViewController:notifVC] animated:YES completion:^{}];
 }
