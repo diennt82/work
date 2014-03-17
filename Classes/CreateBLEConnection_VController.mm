@@ -83,12 +83,12 @@
     [userDefaults synchronize];
 #else
     self.navigationItem.title = @"Connect to camera BLE";
-//    self.navigationItem.backBarButtonItem =
-//    [[[UIBarButtonItem alloc] initWithTitle:NSLocalizedStringWithDefaultValue(@"Back",nil, [NSBundle mainBundle],
-//                                                                              @"Back", nil)
-//                                      style:UIBarButtonItemStyleBordered
-//                                     target:nil
-//                                     action:nil] autorelease];
+    //    self.navigationItem.backBarButtonItem =
+    //    [[[UIBarButtonItem alloc] initWithTitle:NSLocalizedStringWithDefaultValue(@"Back",nil, [NSBundle mainBundle],
+    //                                                                              @"Back", nil)
+    //                                      style:UIBarButtonItemStyleBordered
+    //                                     target:nil
+    //                                     action:nil] autorelease];
     
     
     _currentBLEList = [[NSMutableArray alloc] init];
@@ -165,7 +165,7 @@
         NSLog(@"BLE is connecting... return.");
         return;
     }
-
+    
     NSLog(@"btnConnectTouchUpInsideAction: %@", self.selectedPeripheral);
     
     [[BLEConnectionManager getInstanceBLE] connectToBLEWithPeripheral:_selectedPeripheral];
@@ -179,10 +179,10 @@
 {
     // Here we need to pass a full frame
     
-//    if (_alertView == nil)
-//    {
-//        self.alertView = [[CustomIOS7AlertView alloc] init];
-//    }
+    //    if (_alertView == nil)
+    //    {
+    //        self.alertView = [[CustomIOS7AlertView alloc] init];
+    //    }
     
     CustomIOS7AlertView *alertView = [[CustomIOS7AlertView alloc] init];
     
@@ -350,21 +350,12 @@
     
     if (task_cancelled == TRUE)
     {
-       
+        
         return;
     }
     
     if ([_currentBLEList count] == 0) //NO camera found
     {
-#if 1
-//        [self.view addSubview:_viewProgress];
-//        [self.view bringSubviewToFront:_viewProgress];
-#else
-        // [self.ib_lableStage setText:@"No BLE device found!"];
-        [self.ib_RefreshBLE setEnabled:NO];
-        [self.ib_Indicator setHidden:NO];
-#endif
-        
         NSLog(@"No BLE device found! schedule next check ");
         
         [NSTimer scheduledTimerWithTimeInterval:5.0
@@ -385,17 +376,36 @@
         [self.ib_tableListBLE setHidden:NO];
 #endif
         
-         [[BLEConnectionManager getInstanceBLE].cm stopScan];
+        [[BLEConnectionManager getInstanceBLE].cm stopScan];
         
         //Update UI
         [self.ib_lableStage setText:@"Select a device to connect"];
         
         [self.ib_tableListBLE reloadData];
-       
-        //Auto connect
+        
+        
+        
+        //Auto Connect to BLE peripheral name starts with "MBP83... "
+        //peripheral.name
+        int index = -1;
+        CBPeripheral * peri;
+        for (int i =0; i < [BLEConnectionManager getInstanceBLE].listBLEs.count; i++ )
         {
+            peri = (CBPeripheral *)[[BLEConnectionManager getInstanceBLE].listBLEs objectAtIndex:0];
+            if ([peri.name hasPrefix:@"MBP83"])
+            {
+                index  =  i;
+                break;
+            }
+        }
+        
+        
+        //Auto connect
+        if (index != -1)
+        {
+            NSLog(@"Found 1 MBP83, connect now");
             self.btnConnect.enabled = YES;
-            self.selectedPeripheral = (CBPeripheral *)[[BLEConnectionManager getInstanceBLE].listBLEs objectAtIndex:0];
+            self.selectedPeripheral = (CBPeripheral *)[[BLEConnectionManager getInstanceBLE].listBLEs objectAtIndex:index];
             
             [[BLEConnectionManager getInstanceBLE] connectToBLEWithPeripheral:_selectedPeripheral];
             
@@ -403,26 +413,22 @@
             
             
         }
+        else
+        {
+            NSLog(@"Not found any MBP83, scheduel next check");
+            
+            [NSTimer scheduledTimerWithTimeInterval:5.0
+                                             target:self
+                                           selector:@selector(scanCameraBLEDone)
+                                           userInfo:nil
+                                            repeats:NO];
+            
+
+        }
         
         
-    }
-    else //More than 2 camera in  5sec
-    {
-#if 1
-        //[self.viewProgress removeFromSuperview];
-        [[BLEConnectionManager getInstanceBLE].cm stopScan];
-        [self.ib_tableListBLE reloadData];
-#else
-        [self.ib_RefreshBLE setEnabled:YES];
-        [self.ib_Indicator setHidden:YES];
-                [self.ib_tableListBLE setHidden:NO]; 
         
-        [[BLEConnectionManager getInstanceBLE].cm stopScan];
         
-        [self.ib_lableStage setText:@"Select a device to connect."];
-        [self.ib_tableListBLE reloadData];
-        
-#endif
     }
     
 }
@@ -444,10 +450,10 @@
 {
     
     ////???? Do i need this
-//    _timeOutWaitingConnectBLE = [NSTimer scheduledTimerWithTimeInterval:30.0 target:self selector:@selector(dismissIndicator) userInfo:nil repeats:NO];
+    //    _timeOutWaitingConnectBLE = [NSTimer scheduledTimerWithTimeInterval:30.0 target:self selector:@selector(dismissIndicator) userInfo:nil repeats:NO];
 #if 1
-//    [self.view addSubview:_viewProgress];
-//    [self.view bringSubviewToFront:_viewProgress];
+    //    [self.view addSubview:_viewProgress];
+    //    [self.view bringSubviewToFront:_viewProgress];
 #else
     [self.ib_Indicator setHidden:NO];
 #endif
@@ -466,9 +472,9 @@
 }
 - (void)viewDidUnload
 {
-//    [self setIb_tableListBLE:nil];
-//    [self setIb_Indicator:nil];
-//    [self setIb_RefreshBLE:nil];
+    //    [self setIb_tableListBLE:nil];
+    //    [self setIb_Indicator:nil];
+    //    [self setIb_RefreshBLE:nil];
     [super viewDidUnload];
     // Release any retained subviews of the main view.
     
@@ -646,7 +652,7 @@
         }
         else
         {
-            //Retry Camera UDID & version 
+            //Retry Camera UDID & version
             if ( [self sendCommandGetMacAddress:nil])
             {
                 
@@ -656,12 +662,12 @@
         
     }
     
-
+    
     
     if ([stringResponse rangeOfString:GET_VERSION].location != NSNotFound)
     {
 #if 1
-    
+        
         [self customIOS7dialogButtonTouchUpInside:_alertView clickedButtonAtIndex:0];
 #else
         [self.ib_Indicator setHidden:YES];
@@ -687,8 +693,8 @@
             //[userDefaults setObject:model forKey:@"MODEL"];
             [userDefaults synchronize];
         }
-
-
+        
+        
         NSLog(@"Load step 40");
         //Load the next xib
         EditCamera_VController *step04ViewController = nil;
@@ -705,7 +711,7 @@
         [self.navigationController pushViewController:step04ViewController animated:NO];
         
         [step04ViewController release];
-
+        
         
         [[NSNotificationCenter defaultCenter] removeObserver:self];
     }
@@ -732,8 +738,8 @@
     
     //First time enter, try to flush BLE buffer
 #if 1
-//    [self.view addSubview:_viewProgress];
-//    [self.view bringSubviewToFront:_viewProgress];
+    //    [self.view addSubview:_viewProgress];
+    //    [self.view bringSubviewToFront:_viewProgress];
 #else
     [self.ib_Indicator setHidden:NO];
 #endif
@@ -745,24 +751,24 @@
     if ([BLEConnectionManager getInstanceBLE].state == CONNECTED)
     {
         
-//        [[BLEConnectionManager getInstanceBLE].uartPeripheral  flush:20.0];
-//        
-//        NSLog(@" flush done ");
-//        NSDate * date;
-//        while ([BLEConnectionManager getInstanceBLE].uartPeripheral.isBusy)
-//        {
-//
-//            date = [NSDate dateWithTimeInterval:1.5 sinceDate:[NSDate date]];
-//            
-//            [[NSRunLoop currentRunLoop] runUntilDate:date];
-//        }
+        //        [[BLEConnectionManager getInstanceBLE].uartPeripheral  flush:20.0];
+        //
+        //        NSLog(@" flush done ");
+        //        NSDate * date;
+        //        while ([BLEConnectionManager getInstanceBLE].uartPeripheral.isBusy)
+        //        {
+        //
+        //            date = [NSDate dateWithTimeInterval:1.5 sinceDate:[NSDate date]];
+        //
+        //            [[NSRunLoop currentRunLoop] runUntilDate:date];
+        //        }
         
         NSLog(@"Clear Udid");
-
+        
         NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
         [userDefaults removeObjectForKey:CAMERA_UDID];
         [userDefaults synchronize];
-
+        
         if ( [self sendCommandGetMacAddress:nil])
         {
             
@@ -811,7 +817,7 @@
     
     //first get version of camera
     [BLEConnectionManager getInstanceBLE].delegate = self;
-   
+    
     
     [[BLEConnectionManager getInstanceBLE].uartPeripheral writeString:GET_UDID withTimeOut:SHORT_TIME_OUT_SEND_COMMAND];
     NSDate * date;
@@ -902,7 +908,7 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-
+    
     if (indexPath.section == 1 && indexPath.row == 0)
     {
         [self refreshCamBLE:nil];
@@ -912,7 +918,7 @@
         self.btnConnect.enabled = YES;
         self.selectedPeripheral = (CBPeripheral *)[[BLEConnectionManager getInstanceBLE].listBLEs objectAtIndex:indexPath.row];
     }
-
+    
 }
 
 @end

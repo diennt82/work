@@ -499,6 +499,33 @@
 }
 
 
+- (void) onReceiveDataError:(int)error_code forCommand:(NSString *)commandToCamera
+{
+    
+}
+- (void) didConnectToBle:(CBUUID*) service_id
+{
+    NSLog(@"BLE device connected again( EditCamera)");
+
+    [self sendCommandAuth_TokenToCamera];
+}
+
+-(void) bleDisconnected
+{
+    NSLog(@"EDITCAM : BLE device is DISCONNECTED - Reconnect after 2s ");
+    
+    NSDate * date;
+    date = [NSDate dateWithTimeInterval:2.0 sinceDate:[NSDate date]];
+    [[NSRunLoop currentRunLoop] runUntilDate:date];
+    
+    //    [NSTimer scheduledTimerWithTimeInterval:TIME_OUT_RECONNECT_BLE target:self selector:@selector(dialogFailConnection:) userInfo:nil repeats:NO];
+    
+    
+    [BLEConnectionManager getInstanceBLE].delegate = self;
+    [[BLEConnectionManager getInstanceBLE] reScanForPeripheral:[UARTPeripheral uartServiceUUID]];
+    
+}
+
 
 #pragma mark -
 #pragma mark AlertView delegate
