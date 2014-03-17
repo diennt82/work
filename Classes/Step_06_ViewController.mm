@@ -7,7 +7,11 @@
 //
 
 #import "Step_06_ViewController.h"
+#import "HttpCom.h"
+#import "Step_10_ViewController.h"
+
 #define TIME_INPUT_PASSWORD_AGAIN   60.0
+
 @interface Step_06_ViewController () <UITextFieldDelegate>
 
 @property (retain, nonatomic) UITextField *tfSSID;

@@ -10,6 +10,9 @@
 
 #import "Step_10_ViewController_ble.h"
 #import "StartMonitorCallback.h"
+#import "UserAccount.h"
+#import "BLEConnectionManager.h"
+#import "MBP_iosViewController.h"
 
 @interface Step_10_ViewController_ble ()
 
@@ -323,7 +326,7 @@
 -(IBAction) startConfigureCamera:(id)sender
 {
    
-    
+#if 0
     //NO longer first time
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     [userDefaults setBool:FALSE forKey:FIRST_TIME_SETUP];
@@ -352,7 +355,7 @@
     [self.navigationController pushViewController:step02ViewController animated:NO];
     
     [step02ViewController release];
-    
+#endif
 }
 
 #pragma  mark -

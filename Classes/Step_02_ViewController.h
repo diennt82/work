@@ -8,9 +8,8 @@
 
 #import <UIKit/UIKit.h>
 
-#import "MBP_InitialSetupViewController.h"
-#import "Step_03_ViewController.h"
 #import "StartMonitorCallback.h"
+#import "ConnectionMethodDelegate.h"
 
 @interface Step_02_ViewController : UIViewController <StartMonitorDelegate>
 {

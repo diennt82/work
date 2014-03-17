@@ -75,7 +75,6 @@
 - (IBAction)onTimeSliderChange:(id)sender;
 
 - (IBAction)stopStream:(id) sender;
-- (IBAction)startStream:(id) sender;
 - (IBAction)closePlayBack:(id)sender;
 - (IBAction)playVideo:(id)sender;
 - (IBAction)minimizeVideo:(id)sender;

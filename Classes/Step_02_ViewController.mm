@@ -7,8 +7,10 @@
 //
 
 #import "Step_02_ViewController.h"
+#import "Step_03_ViewController.h"
 #import "UIBarButtonItem+Custom.h"
 #import "PAIRInstructionViewController.h"
+#import "MBPNavController.h"
 
 
 @interface Step_02_ViewController ()
@@ -172,9 +174,9 @@
 
 - (IBAction)handleButtonPress:(id)sender
 {
-    int tag = ((UIButton*)sender).tag;
+    //int tag = ((UIButton*)sender).tag;
     
-    if (tag == CONTINUE_BTN_TAG)
+    //if (tag == CONTINUE_BTN_TAG)
     {
         
 #if 1

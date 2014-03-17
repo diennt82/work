@@ -18,6 +18,7 @@
 #import "PlaylistInfo.h"
 #import "H264PlayerViewController.h"
 #import "TimeLinePremiumCell.h"
+#import "define.h"
 
 @interface TimelineViewController () <UIScrollViewDelegate>
 

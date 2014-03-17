@@ -10,6 +10,9 @@
 
 #import "Step_10_ViewController.h"
 #import "StartMonitorCallback.h"
+#import "UserAccount.h"
+#import "HttpCom.h"
+#import "MBP_iosViewController.h"
 
 @interface Step_10_ViewController ()
 

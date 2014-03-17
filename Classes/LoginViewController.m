@@ -8,9 +8,7 @@
 
 #define MOVEMENT_DURATION 0.3 //movementDuration
 
-#define _AutoLogin @"shouldAutoLoginIfPossible"
 #define _Use3G @"use3GToConnect"
-#define _OfflineMode @"offlineMode"
 
 #import "LoginViewController.h"
 #import "StunClient.h"

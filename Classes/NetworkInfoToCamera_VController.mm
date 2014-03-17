@@ -8,6 +8,7 @@
 
 #import "NetworkInfoToCamera_VController.h"
 #import "Step_10_ViewController_ble.h"
+#import "define.h"
 
 @interface NetworkInfoToCamera_VController () <UITextFieldDelegate>
 

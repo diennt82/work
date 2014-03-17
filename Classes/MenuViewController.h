@@ -7,7 +7,6 @@
 //
 
 #define DIALOG_CANT_ADD_CAM 955 //
-#define _is_Loggedin @"bool_isLoggedIn"
 
 #import <UIKit/UIKit.h>
 #import "ConnectionMethodDelegate.h"

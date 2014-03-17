@@ -143,7 +143,24 @@
 //for debug purpose (see FPS and View in Stun/relay/local
 #define SHOW_DEBUG_INFO
 
+#define CAMERA_UDID @"udid"
+
+#define HOME_SSID @"home_ssid"
+
+#define _OfflineMode @"offlineMode"
+#define _AutoLogin @"shouldAutoLoginIfPossible"
+
+#define CAM_IN_VEW      @"string_Camera_Mac_Being_Viewed"
+
+// Alert type
+#define ALERT_GENERIC_SERVER_INFO @"0"
+#define  ALERT_TYPE_SOUND    @"1"
+#define  ALERT_TYPE_TEMP_HI  @"2"
+#define  ALERT_TYPE_TEMP_LO @"3"
+#define  ALERT_TYPE_MOTION @"4"
+
 #endif /* PUBLICDEFINE_H_ */
 
-#define CAMERA_UDID @"udid"
+
+
 

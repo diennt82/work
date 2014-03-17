@@ -7,6 +7,8 @@
 //
 
 #import "Step_04_ViewController.h"
+#import "define.h"
+#import "HttpCom.h"
 
 @interface Step_04_ViewController () <UITextFieldDelegate>
 

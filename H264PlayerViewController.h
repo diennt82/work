@@ -11,13 +11,13 @@
 #import <CameraScanner/Util.h>
 #import <H264MediaPlayer/H264MediaPlayer.h>
 #import <MonitorCommunication/MonitorCommunication.h>
+#import <AudioToolbox/AudioToolbox.h>
 
 #import "PlaylistInfo.h"
 #import "PlaybackViewController.h"
 #import "PlaylistCell.h"
 #import "H264PlayerListener.h"
 #import "PlayerCallbackHandler.h"
-#import "MBP_LoginOrRegistration.h"
 #import "MelodyViewController.h"
 //for scrollHorizontalMenu
 #import "ScrollHorizontalMenu.h"
@@ -28,6 +28,7 @@
 #import "UIColor+Hubble.h"
 #import "UIImage+Hubble.h"
 #import "EarlierNavigationController.h"
+#import "StunClient.h"
 
 
 #define H264_STREAM_STARTED              1
