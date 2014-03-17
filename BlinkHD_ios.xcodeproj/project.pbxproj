@@ -102,11 +102,11 @@
 		841D567B1834C1E600ACE7A7 /* streamqvga.sdp in Resources */ = {isa = PBXBuildFile; fileRef = 841D567A1834C1E600ACE7A7 /* streamqvga.sdp */; };
 		84DEA2BB17E42E3F00567836 /* NotificationViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 84DEA2B917E42E3F00567836 /* NotificationViewController.mm */; };
 		84DEA2BC17E42E3F00567836 /* NotificationViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 84DEA2BA17E42E3F00567836 /* NotificationViewController.xib */; };
+		84DF024E18D479E10038F87C /* libGoogleAnalytics_debug.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A15431041818D14100337EFE /* libGoogleAnalytics_debug.a */; };
+		84DF024F18D479E10038F87C /* libGoogleAnalytics.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A15431051818D14100337EFE /* libGoogleAnalytics.a */; };
 		84E9D1CB18B728A000468918 /* libpj-arm-apple-darwin9.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 84E9D1C818B728A000468918 /* libpj-arm-apple-darwin9.a */; };
 		84E9D1CC18B728A000468918 /* libpjlib-util-arm-apple-darwin9.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 84E9D1C918B728A000468918 /* libpjlib-util-arm-apple-darwin9.a */; };
 		84E9D1CD18B728A000468918 /* libpjnath-arm-apple-darwin9.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 84E9D1CA18B728A000468918 /* libpjnath-arm-apple-darwin9.a */; };
-		84E9D1CE18B7294200468918 /* libGoogleAnalytics_debug.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A15431041818D14100337EFE /* libGoogleAnalytics_debug.a */; };
-		84E9D1CF18B7294200468918 /* libGoogleAnalytics.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A15431051818D14100337EFE /* libGoogleAnalytics.a */; };
 		84F27EC118AE10750000CA7A /* UARTPeripheral.m in Sources */ = {isa = PBXBuildFile; fileRef = 84F27EC018AE10750000CA7A /* UARTPeripheral.m */; };
 		84FD1DCF1832399E00238089 /* stream720p_10_926_alaw.sdp in Resources */ = {isa = PBXBuildFile; fileRef = 84FD1DCE1832399E00238089 /* stream720p_10_926_alaw.sdp */; };
 		8B1D544D186581B8008857F0 /* SchedulerCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B1D544C186581B8008857F0 /* SchedulerCell.m */; };
@@ -2209,10 +2209,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				84DF024E18D479E10038F87C /* libGoogleAnalytics_debug.a in Frameworks */,
+				84DF024F18D479E10038F87C /* libGoogleAnalytics.a in Frameworks */,
 				8B9CE1FD18C8384C00B1B7F9 /* QuartzCore.framework in Frameworks */,
 				A120548318BC3AAD00557C1A /* MediaPlayer.framework in Frameworks */,
-				84E9D1CE18B7294200468918 /* libGoogleAnalytics_debug.a in Frameworks */,
-				84E9D1CF18B7294200468918 /* libGoogleAnalytics.a in Frameworks */,
 				84E9D1CB18B728A000468918 /* libpj-arm-apple-darwin9.a in Frameworks */,
 				84E9D1CC18B728A000468918 /* libpjlib-util-arm-apple-darwin9.a in Frameworks */,
 				84E9D1CD18B728A000468918 /* libpjnath-arm-apple-darwin9.a in Frameworks */,
@@ -5720,8 +5720,7 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CODE_SIGN_ENTITLEMENTS = "";
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Lai Shan Lam (RYP7CC8LQR)";
 				COPY_PHASE_STRIP = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -5746,9 +5745,10 @@
 					"$(SRCROOT)/../ios-frameworks/H264Player.lib",
 					"$(SRCROOT)/../ios-frameworks/ffmpeg/lib",
 					"$(SRCROOT)/../ios-frameworks/udt",
-					"$(SRCROOT)/../ios-frameworks/Google\\ Analytics\\ Library",
+					"$(SRCROOT)/../ios-frameworks/Google\\\\\\ Analytics\\\\\\ Library",
 					"$(SRCROOT)/../ios-frameworks",
 					"$(SRCROOT)/../ios-frameworks/pjsip/dist-uarch/lib",
+					"/Users/admin/work/ios-frameworks/Google\\ Analytics\\ Library",
 				);
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_CFLAGS = (
@@ -5763,7 +5763,7 @@
 				);
 				OTHER_LDFLAGS = "-lz";
 				PRODUCT_NAME = HubbleHome;
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "DD06C93E-E102-4B6D-8C7C-C0F1A3517F10";
 				SDKROOT = iphoneos7.0;
 				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/../ios-frameworks/pjsip/arm/include/ $(SRCROOT)/../ios-frameworks/pjsip/arm/include/pj/ $(SRCROOT)/../ios-frameworks/pjsip/arm/include/pjnath/";
 				VALID_ARCHS = "armv6 armv7";
@@ -5775,8 +5775,7 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CODE_SIGN_ENTITLEMENTS = "";
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Lai Shan Lam (RYP7CC8LQR)";
 				COPY_PHASE_STRIP = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -5800,9 +5799,10 @@
 					"$(SRCROOT)/../ios-frameworks/H264Player.lib",
 					"$(SRCROOT)/../ios-frameworks/ffmpeg/lib",
 					"$(SRCROOT)/../ios-frameworks/udt",
-					"$(SRCROOT)/../ios-frameworks/Google\\ Analytics\\ Library",
+					"$(SRCROOT)/../ios-frameworks/Google\\\\\\ Analytics\\\\\\ Library",
 					"$(SRCROOT)/../ios-frameworks/pjsip/dist-uarch/lib",
 					"$(SRCROOT)/../ios-frameworks",
+					"/Users/admin/work/ios-frameworks/Google\\ Analytics\\ Library",
 				);
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_CFLAGS = (
@@ -5813,7 +5813,7 @@
 				);
 				OTHER_LDFLAGS = "-lz";
 				PRODUCT_NAME = HubbleHome;
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "DD06C93E-E102-4B6D-8C7C-C0F1A3517F10";
 				SDKROOT = iphoneos7.0;
 				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/../ios-frameworks/pjsip/arm/include/ $(SRCROOT)/../ios-frameworks/pjsip/arm/include/pj/ $(SRCROOT)/../ios-frameworks/pjsip/arm/include/pjnath/";
 				VALIDATE_PRODUCT = YES;
@@ -5850,8 +5850,7 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CODE_SIGN_ENTITLEMENTS = "";
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Lai Shan Lam (RYP7CC8LQR)";
 				COPY_PHASE_STRIP = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -5873,9 +5872,10 @@
 					"$(SRCROOT)/../ios-frameworks/H264Player.lib",
 					"$(SRCROOT)/../ios-frameworks/ffmpeg/lib",
 					"$(SRCROOT)/../ios-frameworks/udt",
-					"$(SRCROOT)/../ios-frameworks/Google\\\\\\ Analytics\\\\\\ Library",
+					"$(SRCROOT)/../ios-frameworks/Google\\\\\\\\\\\\\\ Analytics\\\\\\\\\\\\\\ Library",
 					"$(SRCROOT)/../ios-frameworks/pjsip/dist-uarch/lib",
 					"$(SRCROOT)/../ios-frameworks",
+					"/Users/admin/work/ios-frameworks/Google\\ Analytics\\ Library",
 				);
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_CFLAGS = (
@@ -5886,7 +5886,7 @@
 				);
 				OTHER_LDFLAGS = "-lz";
 				PRODUCT_NAME = HubbleHome;
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "DD06C93E-E102-4B6D-8C7C-C0F1A3517F10";
 				RAMEWORK_SEARCH_PATHS = "$(inherited) \"$(SRCROOT)\"";
 				SDKROOT = iphoneos7.0;
 				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/../ios-frameworks/pjsip/arm/include/ $(SRCROOT)/../ios-frameworks/pjsip/arm/include/pj/ $(SRCROOT)/../ios-frameworks/pjsip/arm/include/pjnath/";
