@@ -1,21 +1,27 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="4514" systemVersion="13A603" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="5053" systemVersion="13C64" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none">
     <dependencies>
         <deployment version="1792" defaultVersion="1536" identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3746"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3733"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="H264PlayerViewController">
             <connections>
                 <outlet property="activityIndicator" destination="87" id="88"/>
                 <outlet property="activityStopStreamingProgress" destination="90" id="92"/>
+                <outlet property="customIndicator" destination="lYe-kn-40s" id="NcO-oH-O9u"/>
                 <outlet property="horizMenu" destination="nTa-Ux-yAc" id="LjA-m3-wgi"/>
                 <outlet property="ib_ViewTouchToTalk" destination="0Cv-wD-bGw" id="Lv4-uh-jCJ"/>
+                <outlet property="ib_btResolInfo" destination="QnB-LR-Xxx" id="RNf-bP-Zeq"/>
+                <outlet property="ib_btShowDebugInfo" destination="cZ8-Qy-b4y" id="bsG-G4-FMF"/>
+                <outlet property="ib_btViewIn" destination="udr-s4-aNV" id="jdw-P7-XOE"/>
                 <outlet property="ib_buttonChangeAction" destination="a87-FB-kFc" id="3qp-8W-gCx"/>
                 <outlet property="ib_buttonTouchToTalk" destination="hJo-ff-gYM" id="eHq-3e-cU6"/>
                 <outlet property="ib_changeToMainRecording" destination="mlu-Gl-5qe" id="Qpr-r3-kIH"/>
                 <outlet property="ib_labelRecordVideo" destination="yJw-Ao-mOT" id="RCt-8M-h19"/>
                 <outlet property="ib_labelTouchToTalk" destination="hzo-Tk-4BY" id="DmV-LE-eBQ"/>
+                <outlet property="ib_lbCameraName" destination="qA2-dz-rIn" id="6MH-gl-pvH"/>
+                <outlet property="ib_lbCameraNotAccessible" destination="mBz-E2-gyQ" id="UqX-qR-ETL"/>
                 <outlet property="ib_processRecordOrTakePicture" destination="W9D-nx-A3Q" id="Txd-Mh-4Ks"/>
                 <outlet property="ib_switchDegree" destination="9xB-eU-NWr" id="IaO-7Q-Hj9"/>
                 <outlet property="ib_temperature" destination="SMn-Fi-rED" id="8O7-0t-yFB"/>
@@ -178,6 +184,56 @@
                     <inset key="insetFor6xAndEarlier" minX="0.0" minY="30" maxX="0.0" maxY="-30"/>
                     <color key="color" white="1" alpha="1" colorSpace="calibratedWhite"/>
                 </activityIndicatorView>
+                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="loader_a.png" id="lYe-kn-40s">
+                    <rect key="frame" x="142" y="135" width="40" height="40"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
+                </imageView>
+                <label hidden="YES" opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Camera is not accessible" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="mBz-E2-gyQ">
+                    <rect key="frame" x="76" y="109" width="168" height="32"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                    <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="qA2-dz-rIn">
+                    <rect key="frame" x="2" y="72" width="200" height="21"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                    <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="info.png" id="JHn-EF-vkt">
+                    <rect key="frame" x="10" y="220" width="18" height="21"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                </imageView>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="cZ8-Qy-b4y">
+                    <rect key="frame" x="0.0" y="209" width="43" height="42"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <state key="normal">
+                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                    </state>
+                    <connections>
+                        <action selector="showInfoDebug:" destination="-1" eventType="touchUpInside" id="wtC-gZ-E0F"/>
+                    </connections>
+                </button>
+                <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="udr-s4-aNV">
+                    <rect key="frame" x="230" y="68" width="88" height="30"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                    <state key="normal" backgroundImage="temp_bg.png">
+                        <color key="titleColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                    </state>
+                </button>
+                <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="QnB-LR-Xxx">
+                    <rect key="frame" x="230" y="100" width="88" height="30"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                    <state key="normal" backgroundImage="temp_bg.png">
+                        <color key="titleColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                    </state>
+                </button>
             </subviews>
             <simulatedStatusBarMetrics key="simulatedStatusBarMetrics"/>
             <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
@@ -189,6 +245,9 @@
         <image name="camera_action_pan_handle.png" width="6" height="33"/>
         <image name="camera_action_pan_knob.png" width="35" height="35"/>
         <image name="camera_action_video@5.png" width="300" height="300"/>
+        <image name="info.png" width="128" height="128"/>
+        <image name="loader_a.png" width="30" height="30"/>
         <image name="photo_grey@5.png" width="64" height="38"/>
+        <image name="temp_bg.png" width="85" height="37"/>
     </resources>
 </document>

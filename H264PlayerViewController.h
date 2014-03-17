@@ -122,6 +122,14 @@
     IBOutlet UIButton *ib_switchDegree;
     BOOL _isFirstLoad;
     EarlierNavigationController *earlierNavi;
+    
+    //check to show custom indicator
+    BOOL _isShowCustomIndicator;
+    
+    //check to show info for debug
+    BOOL _isShowDebugInfo;
+    //timer display text Camera is not accessible
+    NSTimer *_timerNotAccessible;
 }
 //property for Hold to talk
 @property (nonatomic) BOOL walkieTalkieEnabled;
@@ -159,6 +167,13 @@
 @property (retain, nonatomic) IBOutlet UIActivityIndicatorView *activityIndicator;
 @property (retain, nonatomic) IBOutlet UIView *viewStopStreamingProgress;
 @property (retain, nonatomic) IBOutlet UIActivityIndicatorView *activityStopStreamingProgress;
+@property (retain, nonatomic) IBOutlet UIImageView *customIndicator;
+@property (retain, nonatomic) IBOutlet UILabel *ib_lbCameraNotAccessible;
+@property (retain, nonatomic) IBOutlet UILabel *ib_lbCameraName;
+@property (retain, nonatomic) IBOutlet UIButton *ib_btShowDebugInfo;
+@property (retain, nonatomic) IBOutlet UIButton *ib_btViewIn;
+@property (retain, nonatomic) IBOutlet UIButton *ib_btResolInfo;
+
 
 @property (retain, nonatomic) IBOutlet UIBarButtonItem *barBntItemReveal;
 
@@ -217,5 +232,6 @@
 - (IBAction)bt_showMenuControlPanel:(id)sender;
 - (IBAction)changeToMainRecording:(id)sender;
 - (IBAction)switchDegreePressed:(id)sender;
+- (IBAction)showInfoDebug:(id)sender;
 
 @end
