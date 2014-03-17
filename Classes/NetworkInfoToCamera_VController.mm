@@ -694,14 +694,18 @@
 
 -(void) bleDisconnected
 {
-    NSLog(@"BLE device is DISCONNECTED - Reconnect after 2s ");
+    NSLog(@"NWINFO : BLE device is DISCONNECTED - Reconnect after 2s ");
     
     NSDate * date;
     date = [NSDate dateWithTimeInterval:2.0 sinceDate:[NSDate date]];
     [[NSRunLoop currentRunLoop] runUntilDate:date];
     
-    [NSTimer scheduledTimerWithTimeInterval:TIME_OUT_RECONNECT_BLE target:self selector:@selector(dialogFailConnection:) userInfo:nil repeats:NO];
+//    [NSTimer scheduledTimerWithTimeInterval:TIME_OUT_RECONNECT_BLE target:self selector:@selector(dialogFailConnection:) userInfo:nil repeats:NO];
+
+    
+    [BLEConnectionManager getInstanceBLE].delegate = self;
     [[BLEConnectionManager getInstanceBLE] reScanForPeripheral:[UARTPeripheral uartServiceUUID]];
+    
 }
 
 - (void)dialogFailConnection:(NSTimer *)timer
@@ -742,10 +746,29 @@
 }
 
 
+
 - (void) didConnectToBle:(CBUUID*) service_id
 {
-    NSLog(@"BLE device connected - now,perform sendWifiInfoToCamera again");
-    [self sendWifiInfoToCamera];
+    NSLog(@"BLE device connected - now, last stage:%d",stage);
+    
+    switch (stage)
+    {
+        case SENT_WIFI:
+        case CHECKING_WIFI:
+            NSLog(@"checking wifi status");
+            [self readWifiStatusOfCamera:nil];
+            break;
+            
+        case SENT_CODEC_SUPPORT:
+            
+        case INIT:
+            NSLog(@"start over!!");
+            [self sendWifiInfoToCamera];
+            break;
+    }
+    
+    
+    
 }
 - (void) onReceiveDataError:(int)error_code forCommand:(NSString *)commandToCamera
 {
@@ -770,13 +793,87 @@
         [userDefaults setObject:deviceCodec  forKey:CODEC_PREFS];
         [userDefaults synchronize];
     }
-    else if ([string hasPrefix:SETUP_HTTP_CMD])
+    else if ([string hasPrefix:@"setup_wireless_save" ])
     {
         NSLog(@"Finishing SETUP_HTTP_COMMAND");
+    }
+    else if ([string hasPrefix:GET_STATE_NETWORK_CAMERA])
+    {
+        
+        NSLog(@"Recv: %@", string);
+        NSString *state = string;
+        NSString *_currentStateCamera;
+        if (state != nil && [state length] > 0)
+        {
+            _currentStateCamera = [[state componentsSeparatedByString:@": "] objectAtIndex:1];
+        }
+        else{
+            _currentStateCamera = @"";
+        }
+        
+        if ([_currentStateCamera isEqualToString:@"CONNECTED"])
+        {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                //CONNECTED... Move on now..
+                [self sendCommandRestartSystem];
+                
+                [self showNextScreen];
+                [self.view setUserInteractionEnabled:YES];
+                [self.navigationController.navigationBar setUserInteractionEnabled:YES];
+                
+            });
+            
+            
+            
+        }
+        //        else if ([_currentStateCamera isEqualToString:@"DISCONNECTED"])
+        //        {
+        //            //Handle Wrong password!!!!
+        //            //XXX:
+        //
+        //
+        //        }
+        else
+        {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                // get state network of camera after 4s
+                [NSTimer scheduledTimerWithTimeInterval: 2.0//
+                                                 target:self
+                                               selector:@selector(readWifiStatusOfCamera:)
+                                               userInfo:nil
+                                                repeats:NO];
+                
+            });
+            
+        }
+        
+        
     }
     else if ([string hasPrefix:RESTART_HTTP_CMD])
     {
         NSLog(@"Finishing RESTART_HTTP_CMD");
+    }
+    else
+    {
+        NSLog(@"Receive un-expected data, Try to findout what to do next?");
+        
+        switch (stage)
+        {
+            case SENT_WIFI:
+            case CHECKING_WIFI:
+                NSLog(@"checking wifi status");
+                [self readWifiStatusOfCamera:nil];
+                break;
+                
+            case SENT_CODEC_SUPPORT:
+                
+            case INIT:
+                NSLog(@"start over!!");
+                [self sendWifiInfoToCamera];
+                break;
+        }
+        
+        
     }
     
 }
@@ -792,7 +889,7 @@
     if ([BLEConnectionManager getInstanceBLE].uartPeripheral.isBusy  )
     {
         
-        date = [NSDate dateWithTimeInterval:10.0 sinceDate:[NSDate date]];
+        date = [NSDate dateWithTimeInterval:1.5 sinceDate:[NSDate date]];
         
         [[NSRunLoop currentRunLoop] runUntilDate:date];
         
@@ -833,6 +930,12 @@
         
         [[NSRunLoop currentRunLoop] runUntilDate:date];
     }
+    
+    NSLog(@"After sending Save Wireless wait for 3sec");
+    date = [NSDate dateWithTimeInterval:3 sinceDate:[NSDate date]];
+    [[NSRunLoop currentRunLoop] runUntilDate:date];
+    
+    
     return TRUE;
 }
 
@@ -840,11 +943,11 @@
 {
     
     NSLog(@"now, Send command get code support!!!!");
-    if ([BLEConnectionManager getInstanceBLE].state != CONNECTED)
-    {
-        NSLog(@"sendCommandCodecSupport:  BLE disconnected - ");
-        return FALSE;
-    }
+//    if ([BLEConnectionManager getInstanceBLE].state != CONNECTED)
+//    {
+//        NSLog(@"sendCommandCodecSupport:  BLE disconnected - ");
+//        return FALSE;
+//    }
     
     [BLEConnectionManager getInstanceBLE].delegate = self;
     [[BLEConnectionManager getInstanceBLE].uartPeripheral writeString:GET_CODECS_SUPPORT withTimeOut:SHORT_TIME_OUT_SEND_COMMAND];
@@ -855,6 +958,7 @@
         
         [[NSRunLoop currentRunLoop] runUntilDate:date];
     }
+    
     return TRUE;
 }
 -(void)sendWifiInfoToCamera
@@ -877,23 +981,64 @@
     //Save and send
     if ( [_deviceConf isDataReadyForStoring])
     {
-        NSLog(@"ok to save ");
         [Util writeDeviceConfigurationData:[_deviceConf getWritableConfiguration]];
     }
+    
+    
+    
+    
+    
+    stage = INIT;
+    
+    
     if ([self sendCommandCodecSupport])
     {
+        
+        stage = SENT_CODEC_SUPPORT;
+        
+        
         if ([self sendCommandHTTPSetup])
         {
-            [self sendCommandRestartSystem];
-            [self showNextScreen];
-            [self.view setUserInteractionEnabled:YES];
-            [self.navigationController.navigationBar setUserInteractionEnabled:YES];
+            stage = SENT_WIFI;
+            
+            [self readWifiStatusOfCamera:nil];
+            
         }
     }
     else
     {
         //BLE disconnected, will retry connect
     }
+}
+
+-(void) readWifiStatusOfCamera:(NSTimer *) exp
+{
+    
+    
+    NSLog(@"now,readWifiStatusOfCamera");
+    if ([BLEConnectionManager getInstanceBLE].state != CONNECTED)
+    {
+        NSLog(@"!!!!!! sendCommandCodecSupport:  BLE disconnected - ");
+        return ;
+    }
+    
+    [BLEConnectionManager getInstanceBLE].delegate = self;
+    [[BLEConnectionManager getInstanceBLE].uartPeripheral writeString:GET_STATE_NETWORK_CAMERA withTimeOut:LONG_TIME_OUT_SEND_COMMAND];
+    
+    NSLog(@"Finished sending: %@",GET_STATE_NETWORK_CAMERA);
+    
+    stage = CHECKING_WIFI;
+    
+    NSDate * date;
+    while ([BLEConnectionManager getInstanceBLE].uartPeripheral.isBusy)
+    {
+        date = [NSDate dateWithTimeInterval:1.5 sinceDate:[NSDate date]];
+        
+        [[NSRunLoop currentRunLoop] runUntilDate:date];
+    }
+    
+    return ;
+    
 }
 
 - (void) showNextScreen
@@ -906,7 +1051,7 @@
     [sent_conf restoreConfigurationData:[Util readDeviceConfiguration]];
     
     //load step 10
-    NSLog(@"Add cam... ");
+    
     NSLog(@"Load Step 10");
     //[self.ib_dialogVerifyNetwork setHidden:YES];
     [_viewProgress removeFromSuperview];
@@ -922,15 +1067,15 @@
     Step_10_ViewController_ble *step10ViewController = nil;
     
     
-//    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
-//    {
-//        
-//        
-//        step10ViewController = [[Step_10_ViewController_ble alloc]
-//                                initWithNibName:@"Step_10_ViewController_ble_ipad" bundle:nil];
-//        
-//    }
-//    else
+    //    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+    //    {
+    //
+    //
+    //        step10ViewController = [[Step_10_ViewController_ble alloc]
+    //                                initWithNibName:@"Step_10_ViewController_ble_ipad" bundle:nil];
+    //
+    //    }
+    //    else
     {
         
         step10ViewController = [[Step_10_ViewController_ble alloc]
@@ -943,8 +1088,6 @@
     [self.navigationController pushViewController:step10ViewController animated:NO];
     [step10ViewController release];
     
-    
-    
     [sent_conf release];
 }
 
@@ -955,7 +1098,7 @@
 	if ( saved_data != nil)
 	{
 		[self.deviceConf restoreConfigurationData:saved_data];
-		//populate the fields with stored data 		
+		//populate the fields with stored data
 		return TRUE;
 	}
     

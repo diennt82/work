@@ -44,12 +44,13 @@ typedef enum response_ {
     ble_response_t read_error;
     int retry_count;
     NSTimer *_timeOutCommand;
-    
+    NSTimer * hello_timer;
     
 }
 @property (nonatomic, retain) CBPeripheral *peripheral;
 @property (assign) id<UARTPeripheralDelegate> delegate;
-@property BOOL isBusy, isFlushing;
+@property BOOL isBusy, isFlushing, isDisconnected;
+@property (nonatomic) NSTimer * hello_timer; 
 
 + (CBUUID *) uartServiceUUID;
 

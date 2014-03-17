@@ -22,6 +22,7 @@
 @synthesize uartService = _uartService;
 @synthesize rxCharacteristic = _rxCharacteristic;
 @synthesize txCharacteristic = _txCharacteristic;
+@synthesize hello_timer, isDisconnected;
 
 + (CBUUID *) uartServiceUUID
 {
@@ -68,7 +69,8 @@
     rx_buff = [[NSMutableData alloc] init];
     
     
-    NSLog(@"Did start service discovery.");
+    isDisconnected = NO;
+    NSLog(@"Did start service discovery. start timer");
 }
 
 - (void) didDisconnect
@@ -78,8 +80,14 @@
     [rx_buff setLength: 0];
     self.isBusy = NO;
     
+    if (self.hello_timer != nil && [self.hello_timer isValid])
+    {
+        [self.hello_timer invalidate];
+        self.hello_timer = nil;
+    }
+    self.isDisconnected = YES;
     
-    NSLog(@"UART PERI: didDisconnect");
+    NSLog(@"UART PERI: didDisconnect, stop timer ");
 }
 
 -(void) retryOldCommand:(NSString *) string
@@ -90,23 +98,6 @@
     [rx_buff setLength:0]; // clear all backlog
     read_error = READ_ON_GOING;
     
-#if 0
-    
-    if (sequence >= 0x7f)
-        sequence = SEQUENCE_MIN;
-    
-    char len[] = {0,0,0};
-    len[0] = sequence;
-    len[1] = (string.length & 0xFF00) >> 8;
-    len[2] = string.length & 0x00FF;
-    
-    
-    
-    NSMutableData * data = [[NSMutableData alloc]initWithBytes:len length:3];
-    
-    [data appendBytes:string.UTF8String length:string.length];
-    
-#else
     
     NSMutableData * data = [[NSMutableData alloc]init];
     [data appendBytes:string.UTF8String length:string.length];
@@ -115,23 +106,11 @@
     
     [data appendBytes:(const void *)null_char length:1];
     NSLog(@"data is: %@", data);
-#endif
+
     
     if ( [data length] > 20)
     {
         
-#if 0
-        int numberOfLf = ([data length] + 10)/20;
-        
-        int new_len = [data length] - 3 + numberOfLf ;
-        
-        len[0] = sequence;
-        len[1] = (new_len & 0xFF00) >> 8;
-        len[2] = (new_len & 0x00FF);
-        NSRange len_range = NSMakeRange(0, 3);
-        
-        [data replaceBytesInRange:len_range withBytes:len length:3];
-#endif
         
         int remain_len = [data length];
         int data_idx = 0;
@@ -243,6 +222,34 @@
 
 
 
+
+- (void) send_hello:(NSTimer *) exp
+{
+
+    
+    self.hello_timer = nil ;
+    
+    
+    if (self.isBusy == TRUE)
+    {
+        
+    
+    }
+    else
+    {
+        self.isBusy = TRUE;
+        self.isFlushing = TRUE;
+        retry_count =  0;
+        
+        
+        //Purposely send empty command to flush the system
+        [self retryOldCommand:@"hello_hello"];
+        
+    }
+    return ;
+    
+}
+
 - (ble_response_t) writeString:(NSString *) string
 {
     
@@ -268,6 +275,38 @@
 
 - (ble_response_t) writeString:(NSString *) string withTimeOut:(NSTimeInterval) time
 {
+    
+    
+    if (self.hello_timer !=  nil && [self.hello_timer isValid])
+    {
+        [self.hello_timer invalidate];
+        self.hello_timer = nil;
+    }
+    
+    //Here it could be sending the hello... so what we can do is wait for this to be over..
+    // UI thread may be blocked
+    if (self.isBusy == TRUE)
+    {
+        
+        NSLog(@"wait for a while ");
+        
+        NSDate * date;
+        while (self.isBusy == TRUE)
+        {
+            date = [NSDate dateWithTimeInterval:0.5 sinceDate:[NSDate date]];
+            
+            [[NSRunLoop currentRunLoop] runUntilDate:date];
+        }
+        
+        
+        if (self.isDisconnected == YES)
+        {
+            NSLog(@"after waiting.. now disconnected ");
+            return -1;
+        }
+        
+        
+    }
     
     _timeOutCommand = [NSTimer scheduledTimerWithTimeInterval:time
                                                        target:self
@@ -494,6 +533,39 @@
     return last_index;
 }
 
+// ff ff 00 57
+-(int) checkBufferForSpecialSequence:(NSData *) data_buff
+{
+    int last_index = -1;
+    
+    if ([data_buff length] < 4)
+    {
+        return last_index;
+        
+    }
+    
+    //find the 1 00
+    int i;
+    unsigned char * data_ptr =(unsigned char * ) [data_buff bytes];
+    for ( i=0 ; i < [data_buff length]-3; i++)
+    {
+        if ( data_ptr[i] ==0xff &&
+             data_ptr[i+1] == 0xff &&
+             data_ptr[i+2]  ==  0x00 &&
+             data_ptr[i+3]  == 0x57)
+        {
+            last_index = i;
+            break;
+        }
+        else
+        {
+        }
+        
+    }
+    
+    
+    return last_index;
+}
 
 - (void) peripheral:(CBPeripheral *)peripheral didUpdateValueForCharacteristic:(CBCharacteristic *)characteristic error:(NSError *)error
 {
@@ -543,6 +615,26 @@
             [rx_buff appendBytes:[[characteristic value] bytes]+endblock_index+2 length:(  [characteristic value].length -1 -2 - endblock_index )];
         }
 
+        int garbage_seq_index = [self checkBufferForSpecialSequence:rx_buff];
+        if (garbage_seq_index != -1)
+        {
+#if 0
+            NSLog(@">>> found some garbage code.. cut it away");
+            NSRange range1 = NSMakeRange(garbage_seq_index,4);
+            
+            //remove some bytes..
+            [rx_buff replaceBytesInRange:range1
+                               withBytes:NULL
+                                  length:0];
+#else 
+            // Force disconnect BLE
+            NSLog(@">>> found some garbage code.. Disconnect BLE!!");
+            [self receiveDataTimeOut:nil];
+            
+            return;
+#endif
+        }
+
         
 
         /* Find the end 0x01 char */
@@ -555,12 +647,15 @@
 #endif
         if (sequence_index  != -1)
         {
-            NSLog(@"Found 0x00");
-
+         
+           
             int padding_index =[self checkBufferFor02char:rx_buff] ;
-
             //take the sub range starting from the latest index of 0x02 -
             NSRange range = NSMakeRange(padding_index+1, sequence_index-(padding_index+1));
+
+            
+          
+            
             NSData *result_str = [rx_buff subdataWithRange:range];
             
             NSLog(@"Got enough data : %d",[result_str length]);
@@ -588,8 +683,17 @@
             read_error = READ_SUCCESS;
             
             self.isBusy = FALSE;
+           
+#if 0
+            NSLog(@"start hello timer");
             
-            
+            self.hello_timer  =  [NSTimer scheduledTimerWithTimeInterval:7.0
+                                                             target:self
+                                                           selector:@selector(send_hello:)
+                                                           userInfo:nil
+                                                            repeats:NO];
+#endif
+
         }
         else
         {

@@ -931,38 +931,6 @@
     [step11ViewController release];
 }
 
-//Oblivion
--(void) extractMasterKey:(NSString*) raw
-{
-	NSArray * token_list;
-	NSString * m_str; 
-	//self.master_key = nil;
-	token_list = [raw componentsSeparatedByString:@"<br>"];
-	
-	m_str = [token_list objectAtIndex:1];
-	if ([m_str hasPrefix:MASTER_KEY])
-	{
-		NSRange m_range = {[MASTER_KEY length], 64};
-		self.master_key = [NSString stringWithString:[m_str substringWithRange:m_range]];
-		
-		if ([self.master_key length] != 64)
-		{
-			NSLog(@"ERROR master key len is %d: %@", master_key.length , master_key);
-            [[[GAI sharedInstance] defaultTracker] trackEventWithCategory:@"Add Cameras"
-                                                               withAction:@"Get MasterKey"
-                                                                withLabel:@"Add MasterKey Failed Cause error with masterKey length"
-                                                                withValue:nil];
-		}
-		else {
-			NSLog(@"Master key is %@",  master_key);
-		}
-        
-	}
-	
-	return ; 
-	
-}
-
 #pragma mark -
 #pragma mark  Callbacks
 

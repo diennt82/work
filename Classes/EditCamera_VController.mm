@@ -360,12 +360,12 @@
     NSLog(@"Now, send command Authentication token");
     //first get mac address of camera
     [BLEConnectionManager getInstanceBLE].delegate = self;
-    [[BLEConnectionManager getInstanceBLE].uartPeripheral writeString:set_mkey withTimeOut:30.0];
+    [[BLEConnectionManager getInstanceBLE].uartPeripheral writeString:set_mkey withTimeOut:SHORT_TIME_OUT_SEND_COMMAND];
     
     NSDate * date;
     while ([BLEConnectionManager getInstanceBLE].uartPeripheral.isBusy)
     {
-        date = [NSDate dateWithTimeInterval:1.5 sinceDate:[NSDate date]];
+        date = [NSDate dateWithTimeInterval:0.5 sinceDate:[NSDate date]];
         
         [[NSRunLoop currentRunLoop] runUntilDate:date];
     }

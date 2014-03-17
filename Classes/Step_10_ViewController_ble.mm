@@ -151,7 +151,7 @@
                                         repeats:NO];
         
         // 2 of 3. wait for the camera to reboot completely
-        [NSTimer scheduledTimerWithTimeInterval: 15.0//camera reboot time about 50secs
+        [NSTimer scheduledTimerWithTimeInterval: 5.0//camera reboot time about 50secs
                                          target:self
                                        selector:@selector(wait_for_camera_to_reboot:)
                                        userInfo:nil
@@ -672,38 +672,6 @@
     [self.navigationController pushViewController:step11ViewController animated:NO];
     
     [step11ViewController release];
-}
-
-//Oblivion
--(void) extractMasterKey:(NSString*) raw
-{
-	NSArray * token_list;
-	NSString * m_str; 
-	//self.master_key = nil;
-	token_list = [raw componentsSeparatedByString:@"<br>"];
-	
-	m_str = [token_list objectAtIndex:1];
-	if ([m_str hasPrefix:MASTER_KEY])
-	{
-		NSRange m_range = {[MASTER_KEY length], 64};
-		self.master_key = [NSString stringWithString:[m_str substringWithRange:m_range]];
-		
-		if ([self.master_key length] != 64)
-		{
-			NSLog(@"ERROR master key len is %d: %@", master_key.length , master_key);
-            [[[GAI sharedInstance] defaultTracker] trackEventWithCategory:@"Add Cameras"
-                                                               withAction:@"Get MasterKey"
-                                                                withLabel:@"Add MasterKey Failed Cause error with masterKey length"
-                                                                withValue:nil];
-		}
-		else {
-			NSLog(@"Master key is %@",  master_key);
-		}
-        
-	}
-	
-	return ; 
-	
 }
 
 
