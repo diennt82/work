@@ -138,13 +138,6 @@ double _ticks = 0;
     // update navi
     earlierNavi = [[EarlierNavigationController alloc] init];
     earlierNavi.isEarlierView = NO;
-    if (IS_RETINA)
-    {
-        NSLog(@"Retina");
-    } else
-    {
-        NSLog(@"Non Retina");
-    }
     _selectedItemMenu = INDEX_NO_SELECT;
     [self.ib_buttonChangeAction setHidden:NO];
     [self.view bringSubviewToFront:self.ib_buttonChangeAction];
@@ -221,7 +214,7 @@ double _ticks = 0;
     NSLog(@"Model of Camera is: %d, STUN: %d", self.selectedChannel.profile.modelID, [[NSUserDefaults standardUserDefaults] boolForKey:@"enable_stun"]);
     
     _isDegreeFDisplay = [[NSUserDefaults standardUserDefaults] boolForKey:@"IS_FAHRENHEIT"];
-    
+    _resolution = @"";
     if ([self.selectedChannel.profile isNotAvailable])
     {
         nowButton.enabled = NO;
@@ -231,6 +224,7 @@ double _ticks = 0;
     }
     else
     {
+        [self getVQ_bg];
         [self becomeActive];
         
         [self hideControlMenu];
@@ -2208,6 +2202,9 @@ double _ticks = 0;
 
 - (void)setVQForground: (NSString *)modeVideo
 {
+    //modelVideo example is "720p_926"
+    _resolution = [NSString stringWithFormat:@"%@x%@", [modeVideo substringToIndex:3], [modeVideo substringFromIndex:5]];
+    [self.ib_btResolInfo setTitle:_resolution forState:UIControlStateNormal];
 }
 
 - (void)getTriggerRecording_bg
@@ -4042,6 +4039,8 @@ double _ticks = 0;
     {
         [self hideTimelineView];
     }
+    [self.ib_btResolInfo setTitle:_resolution forState:UIControlStateNormal];
+    
 }
 
 
@@ -5597,40 +5596,11 @@ double _ticks = 0;
 #ifdef SHOW_DEBUG_INFO
 - (void)addingLabelInfosForDebug
 {
-//    if (_viewVideoIn == nil)
-//    {
-//        return;
-//    }
-//    //remove all subviews
-//    NSArray *viewsToRemove = [self.imageViewStreamer subviews];
-//    for (UIView *v in viewsToRemove) {
-//        [v removeFromSuperview];
-//    }
-//    //Infos debug
-//    UILabel *infosLabel;
-//    UIImage *bg_image = [UIImage imageNamed:@"temp_bg.png"];
-//    NSInteger widthImage = bg_image.size.width;
-//    
-//    infosLabel = [[UILabel alloc] initWithFrame:CGRectMake(self.imageViewStreamer.frame.size.width - widthImage ,20, widthImage, bg_image.size.height)];
-//    
-//    UIColor *bg_Color = [UIColor colorWithPatternImage:bg_image];
-//    [infosLabel setBackgroundColor:bg_Color];
-//    NSString *fpsView = [NSString stringWithFormat:@"%@ %d", _viewVideoIn, fps];
-//    infosLabel.textAlignment = NSTextAlignmentCenter;
-//    infosLabel.text = fpsView;
-//    infosLabel.textColor = [UIColor whiteColor];
-//    
-//    //Add label to view
-//    [self.imageViewStreamer addSubview:infosLabel];
-//    [self.imageViewStreamer bringSubviewToFront:infosLabel];
-//    [infosLabel release];
-//    infosLabel = nil;
     if (_isShowDebugInfo)
     {
         [self.ib_btResolInfo setHidden:NO];
         [self.ib_btViewIn setHidden:NO];
         [self.ib_btViewIn setTitle:[NSString stringWithFormat:@"%@ %d", _viewVideoIn, fps] forState:UIControlStateNormal];
-        [self.ib_btResolInfo setTitle:@"" forState:UIControlStateNormal];
     }
     else
     {
@@ -5915,7 +5885,14 @@ double _ticks = 0;
         UIInterfaceOrientation interfaceOrientation = [UIApplication sharedApplication].statusBarOrientation;
         [self start_animation_with_orientation:interfaceOrientation];
         self.customIndicator.image = [UIImage imageNamed:@"loader_a"];
-        _timerNotAccessible = [NSTimer scheduledTimerWithTimeInterval:30.0 target:self selector:@selector(displayTextNotAccessible) userInfo:nil repeats:NO];
+        if (_timerNotAccessible && [_timerNotAccessible isValid])
+        {
+            //do nothing
+        }
+        else
+        {
+            _timerNotAccessible = [NSTimer scheduledTimerWithTimeInterval:15.0 target:self selector:@selector(displayTextNotAccessible) userInfo:nil repeats:NO];
+        }
     }
     else
     {
@@ -5923,8 +5900,6 @@ double _ticks = 0;
         [self.customIndicator setHidden:YES];
         [self.ib_lbCameraNotAccessible setHidden:YES];
         [self.ib_lbCameraName setText:self.selectedChannel.profile.name];
-//        [self.view bringSubviewToFront:self.ib_btShowDebugInfo];
-
         if (_timerNotAccessible && [_timerNotAccessible isValid])
         {
             [_timerNotAccessible invalidate];
@@ -5935,6 +5910,7 @@ double _ticks = 0;
 
 - (void)displayTextNotAccessible
 {
+    _timerNotAccessible = nil;
     [self.ib_lbCameraNotAccessible setHidden:NO];
 }
 

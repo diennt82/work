@@ -55,6 +55,8 @@
 + (UIFont *)regularMedium23Font
 {
     return [UIFont applyHubbleFontName:PN_REGULAR_FONT withSize:23];
+}
+
 + (UIFont *)regular20Font
 {
     return [UIFont applyHubbleFontName:PN_REGULAR_FONT withSize:20];

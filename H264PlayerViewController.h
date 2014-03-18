@@ -131,6 +131,7 @@
     BOOL _isShowDebugInfo;
     //timer display text Camera is not accessible
     NSTimer *_timerNotAccessible;
+    NSString *_resolution;
 }
 //property for Hold to talk
 @property (nonatomic) BOOL walkieTalkieEnabled;

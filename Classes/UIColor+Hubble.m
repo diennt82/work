@@ -72,11 +72,13 @@
 + (UIColor *)doNotDisturbCellBGColor
 {
     return Rgb2UIColor(43, 50, 56);
+}
 
 + (UIColor *)selectButtonBackgroundColor
 {
     return Rgb2UIColor(96, 170, 243);
 }
+
 + (UIColor *)deSelectButtonBackgroundColor
 {
     return Rgb2UIColor(232, 232, 232);
