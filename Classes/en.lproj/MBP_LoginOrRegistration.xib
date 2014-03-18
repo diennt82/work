@@ -196,6 +196,6 @@
     <resources>
         <image name="dialog_bg.png" width="370" height="370"/>
         <image name="enter.png" width="270" height="50"/>
-        <image name="loading_logo.png" width="270" height="276"/>
+        <image name="loading_logo.png" width="175" height="175"/>
     </resources>
 </document>

@@ -29,7 +29,7 @@
                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                 </imageView>
                 <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" scrollEnabled="NO" style="grouped" separatorStyle="default" showsSelectionImmediatelyOnTouchBegin="NO" rowHeight="44" sectionHeaderHeight="1" sectionFooterHeight="1" id="4">
-                    <rect key="frame" x="87" y="585.00000083732289" width="594" height="146"/>
+                    <rect key="frame" x="87" y="585.00000201026205" width="594" height="146"/>
                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" heightSizable="YES"/>
                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                     <color key="tintColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
@@ -186,6 +186,6 @@
     <resources>
         <image name="dialog_bg.png" width="370" height="370"/>
         <image name="enter.png" width="270" height="50"/>
-        <image name="loading_logo.png" width="270" height="276"/>
+        <image name="loading_logo.png" width="175" height="175"/>
     </resources>
 </document>
