@@ -250,6 +250,7 @@
 - (IBAction)goBackToFirstScreen:(id)sender
 {
     //[self.delegate sendStatus:FRONT_PAGE];
+    NSLog(@"THE THING IS HAPPENING! - goBackToFirstScreen");
     [self.delegate sendStatus:LOGIN];
 }
 

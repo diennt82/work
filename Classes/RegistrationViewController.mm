@@ -99,7 +99,7 @@
 - (IBAction)btnAlreadyTouchUpInsideAction:(id)sender
 {
     [self dismissViewControllerAnimated:YES completion:^{
-        [self.delegate sendStatus:LOGIN];
+        [self.delegate sendStatus:LOGIN_WITHOUT_REGISTRATION];
     }];
 }
 

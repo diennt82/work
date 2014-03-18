@@ -413,7 +413,6 @@
             
 		case LOGIN: //GOTO ROUTER mode - Login
         {
-            NSLog(@"Case 22 - condition 1");
             self.app_stage = APP_STAGE_LOGGING_IN;
             
             NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
@@ -421,6 +420,14 @@
             [userDefaults setBool:TRUE forKey:_AutoLogin];
             [userDefaults synchronize];
             
+            
+            [self show_login_or_reg:nil];
+        }
+            break;
+            
+        case LOGIN_WITHOUT_REGISTRATION: // User moving from Registration page to Login page without having registered
+        {
+//            self.app_stage = APP_STAGE_LOGGING_IN;
             
             [self show_login_or_reg:nil];
         }
@@ -447,7 +454,6 @@
 		case AFTER_ADD_RELOGIN:
 			{
 				NSLog(@" back from adding cam. relogin -- to get the new cam data");
-                NSLog(@"Case 22 - condition 2");
 				NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
 				[userDefaults setBool:TRUE forKey:_AutoLogin];
 				[userDefaults synchronize];
