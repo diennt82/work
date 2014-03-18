@@ -96,6 +96,7 @@
 {
     [super viewWillAppear:animated];
     self.navigationController.navigationBarHidden = YES;
+    self.tableView.contentInset = UIEdgeInsetsMake(30, 0, 64, 0);
 }
 
 - (void)viewWillDisappear:(BOOL)animated
