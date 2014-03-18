@@ -12,6 +12,9 @@
 #import "TimelineViewController.h"
 
 @interface EarlierViewController : UIViewController<MHTabBarControllerDelegate>
+{
+    MHTabBarController *_tabBarController;
+}
 
 @property (nonatomic, retain) TimelineViewController *timelineVC;
 @property (nonatomic, assign) CamChannel *camChannel;

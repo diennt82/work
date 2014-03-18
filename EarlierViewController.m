@@ -56,13 +56,12 @@
     NSArray *viewControllers = @[_timelineVC, savedViewController];
    
     
-    MHTabBarController *tabBarController = [[MHTabBarController alloc] init];
+    _tabBarController = [[MHTabBarController alloc] init];
     
-	tabBarController.delegate = self;
-	tabBarController.viewControllers = viewControllers;
+	_tabBarController.delegate = self;
+	_tabBarController.viewControllers = viewControllers;
     
-    [self.view addSubview:tabBarController.view];
-    
+    [self.view addSubview:_tabBarController.view];
     
 }
 
@@ -100,6 +99,7 @@
 - (void)dealloc
 {
     [_timelineVC release];
+    [_tabBarController release];
     [super dealloc];
 }
 

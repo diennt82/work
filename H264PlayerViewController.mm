@@ -559,7 +559,7 @@ double _ticks = 0;
     _earlierVC.view.hidden = YES;
     
     NSLog(@"h264StreamerIsInStopped: %d, h264Streamer==null: %d", _h264StreamerIsInStopped, h264Streamer == NULL);
-    
+    [self.view bringSubviewToFront:self.imageViewVideo];
     if (self.h264StreamerIsInStopped == TRUE &&
         h264Streamer == NULL)
     {
