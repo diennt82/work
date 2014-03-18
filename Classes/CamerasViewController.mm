@@ -12,16 +12,13 @@
 
 #import "CamerasViewController.h"
 #import <CameraScanner/CameraScanner.h>
-#import "CamerasCell.h"
+#import "CamerasCollectionViewCell.h"
 #import "H264PlayerViewController.h"
 #import "CameraAlert.h"
-//#import "MenuCameraViewController.h"
 #import "CameraMenuViewController.h"
 #import "AddCameraViewController.h"
 
 @interface CamerasViewController () <H264PlayerVCDelegate, CamerasCellDelegate, UIAlertViewDelegate, AddCameraVCDelegate>
-
-@property (retain, nonatomic) IBOutlet UITableViewCell *addCameraCell;
 
 @property (retain, nonatomic) NSArray *snapshotImages;
 @property (nonatomic) BOOL isFirttime;
@@ -30,21 +27,20 @@
 
 @implementation CamerasViewController
 
-- (id)initWithStyle:(UITableViewStyle)style
-{
-    self = [super initWithStyle:style];
-    if (self) {
-        // Custom initialization
-        self.title = @"Cameras";
-    }
-    return self;
-}
-
-- (id)initWithStyle:(UITableViewStyle)style
-           delegate:(id<ConnectionMethodDelegate> )delegate
+//- (id)initWithStyle:(UITableViewStyle)style
+//{
+//    self = [super initWithStyle:style];
+//    if (self) {
+//        // Custom initialization
+//        self.title = @"Cameras";
+//    }
+//    return self;
+//}
+//
+- (id)initWithDelegate:(id<ConnectionMethodDelegate> )delegate
            parentVC: (id)parentVC
 {
-    self = [super initWithStyle:style];
+    self = [super init];
     if (self) {
         // Custom initialization
         self.title = @"Cameras";
@@ -87,9 +83,11 @@
 #endif
     self.snapshotImages = [NSArray arrayWithObjects:@"mountain", @"garden", @"desk", @"bridge", nil];
     
-    UIButton *addBtn = (UIButton *)[_addCameraCell viewWithTag:595];
-    [addBtn setImage:[UIImage imageNamed:@"add_camera"] forState:UIControlStateNormal];
-    [addBtn setImage:[UIImage imageNamed:@"add_camera_pressed"] forState:UIControlEventTouchDown];
+    [camerasCollectionView registerNib:[UINib nibWithNibName:@"CamerasCell" bundle:nil] forCellWithReuseIdentifier:@"CamerasCell"];
+    
+//    UIButton *addBtn = (UIButton *)[_addCameraCell viewWithTag:595];
+//    [addBtn setImage:[UIImage imageNamed:@"add_camera"] forState:UIControlStateNormal];
+//    [addBtn setImage:[UIImage imageNamed:@"add_camera_pressed"] forState:UIControlEventTouchDown];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -97,6 +95,8 @@
     //self.view.frame = CGRectMake(0, 100, self.view.frame.size.width, self.view.frame.size.height);
     [super viewWillAppear:animated];
     self.navigationController.navigationBarHidden = YES;
+    
+    [camerasCollectionView reloadData];
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -172,7 +172,7 @@
 
 - (void)camerasReloadData
 {
-    [self.tableView reloadData];
+    [camerasCollectionView reloadData];
 }
 
 - (void) cameraShowDialog:(int) dialogType
@@ -219,7 +219,7 @@
         }
     }
     
-    [self.tableView reloadData];
+    [camerasCollectionView reloadData];
 }
 
 #pragma mark - Methods
@@ -258,178 +258,274 @@
     // Dispose of any resources that can be recreated.
 }
 
-#pragma mark - Table view data source
+//#pragma mark - Table view data source
+//
+//- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
+//{
+//    //#warning Potentially incomplete method implementation.
+//    // Return the number of sections.
+//    
+//    if ([tableView respondsToSelector:@selector(setSeparatorInset:)]) {
+//        [tableView setSeparatorInset:UIEdgeInsetsZero];
+//    }
+//    
+//    if (_waitingForUpdateData == TRUE)
+//    {
+//        return 1;
+//    }
+//    return 2;
+//}
 
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
+//- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+//{
+//    //#warning Incomplete method implementation.
+//    // Return the number of rows in the section.
+//    if(section == 1)
+//    {
+//        return self.camChannels.count;
+//    }
+//    
+//    return 1;
+//}
+
+//- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+//{
+//    if (indexPath.section == 1)
+//    {
+//        return 190;
+//    }
+//    
+//    return 40; // your dynamic height...
+//}
+
+//- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+//{
+//    if (indexPath.section == 0)
+//    {
+//        if (_waitingForUpdateData == TRUE)
+//        {
+//            static NSString *CellIdentifier = @"Cell";
+//            UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+//            if (cell == nil) {
+//                cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
+//            }
+//            
+//            // Configure the cell...
+//            cell.textLabel.text = @"Loading...";
+//            
+//            UIActivityIndicatorView *spinner = [[UIActivityIndicatorView alloc]
+//                                                initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+//            
+//            // Spacer is a 1x1 transparent png
+//            UIImage *spacer = [UIImage imageNamed:@"spacer"];
+//            
+//            UIGraphicsBeginImageContext(spinner.frame.size);
+//            
+//            [spacer drawInRect:CGRectMake(0, 0, spinner.frame.size.width, spinner.frame.size.height)];
+//            UIImage* resizedSpacer = UIGraphicsGetImageFromCurrentImageContext();
+//            
+//            UIGraphicsEndImageContext();
+//            cell.imageView.image = resizedSpacer;
+//            [cell.imageView addSubview:spinner];
+//            [spinner startAnimating];
+//            
+//            return cell;
+//        }
+//        else
+//        {
+//            return _addCameraCell;
+//        }
+//    }
+//    else
+//    {
+//        static NSString *CellIdentifier = @"CamerasCell";
+//        CamerasCell *cell = [self.tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+//        NSArray *objects = [[NSBundle mainBundle] loadNibNamed:@"CamerasCell" owner:nil options:nil];
+//        
+//        for (id curObj in objects)
+//        {
+//            if([curObj isKindOfClass:[UITableViewCell class]])
+//            {
+//                cell = (CamerasCell *)curObj;
+//                break;
+//            }
+//        }
+//        
+//        cell.camerasCellDelegate = self;
+//        cell.rowIndex = indexPath.row;
+//        cell.backgroundColor = [UIColor blackColor];
+//        cell.snapshotImage.image = [UIImage imageNamed:[self.snapshotImages objectAtIndex:indexPath.row]];
+//        
+//        CamChannel *ch = (CamChannel *)[_camChannels objectAtIndex:indexPath.row];
+//        cell.cameraNameLabel.text = ch.profile.name;
+//        
+//        // Camera is NOT available
+//        if (ch.profile.isInLocal == FALSE &&
+//            ch.profile.minuteSinceLastComm > 5)
+//        {
+//            cell.cameraNameLabel.textColor = [UIColor redColor];
+//        }
+//        else
+//        {
+//            cell.cameraNameLabel.textColor = [UIColor whiteColor];
+//        }
+//        
+//        return cell;
+//    }
+//}
+
+//#pragma mark - Table view delegate
+//
+//- (BOOL)tableView:(UITableView *)tableView shouldHighlightRowAtIndexPath:(NSIndexPath *)indexPath
+//{
+//    if (indexPath.section == 0 &&
+//        tableView.numberOfSections == 1)
+//    {
+//        return NO;
+//    }
+//    
+//    return YES;
+//}
+
+//// In a xib-based application, navigation from a table can be handled in -tableView:didSelectRowAtIndexPath:
+//- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+//{
+//    [tableView deselectRowAtIndexPath:indexPath animated:NO];
+//    
+//    if (indexPath.section == 0)
+//    {
+//        [self addCameraButtonTouchAction:nil];
+//    }
+//    else
+//    {
+//        CamChannel *ch = (CamChannel *)[_camChannels objectAtIndex:indexPath.row];
+//        
+//        if ([ch.profile isNotAvailable] &&
+//            [ch.profile isSharedCam])
+//        {
+//            return;
+//        }
+//        
+//        ch.profile.isSelected = TRUE;
+//        
+//        [CameraAlert clearAllAlertForCamera:ch.profile.mac_address];
+//        [UIApplication sharedApplication].idleTimerDisabled = YES;
+//        
+//        NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+//        [userDefaults setObject:ch.profile.registrationID forKey:@"REG_ID"];
+//        [userDefaults setObject:ch.profile.mac_address forKey:CAM_IN_VEW];
+//        [userDefaults synchronize];
+//        
+//        H264PlayerViewController *h264PlayerViewController = [[H264PlayerViewController alloc] init];
+//        
+//        h264PlayerViewController.selectedChannel = ch;
+//        h264PlayerViewController.h264PlayerVCDelegate = self;
+//        
+//        //MenuViewController *tabBarController = (MenuViewController *)self.parentViewController;
+//        [((MenuViewController *)self.parentVC).navigationController pushViewController:h264PlayerViewController animated:YES];
+//        [h264PlayerViewController release];
+//    }
+//}
+
+- (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
 {
-    //#warning Potentially incomplete method implementation.
-    // Return the number of sections.
-    
-    if ([tableView respondsToSelector:@selector(setSeparatorInset:)]) {
-        [tableView setSeparatorInset:UIEdgeInsetsZero];
-    }
-    
-    if (_waitingForUpdateData == TRUE)
-    {
-        return 1;
-    }
-    return 2;
+    return self.camChannels.count;
 }
 
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+// The cell that is returned must be retrieved from a call to -dequeueReusableCellWithReuseIdentifier:forIndexPath:
+- (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    //#warning Incomplete method implementation.
-    // Return the number of rows in the section.
-    if(section == 1)
-    {
-        return self.camChannels.count;
-    }
+    CamerasCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"CamerasCell" forIndexPath:indexPath];
+//    NSArray *objects = [[NSBundle mainBundle] loadNibNamed:@"CamerasCell" owner:nil options:nil];
+//    
+//    for (id curObj in objects)
+//    {
+//        if([curObj isKindOfClass:[UITableViewCell class]])
+//        {
+//            cell = (CamerasCell *)curObj;
+//            break;
+//        }
+//    }
     
-    return 1;
-}
-
-- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    if (indexPath.section == 1)
-    {
-        return 190;
-    }
+    cell.camerasCellDelegate = self;
+    cell.rowIndex = indexPath.row;
+    cell.backgroundColor = [UIColor blackColor];
+    cell.snapshotImage.image = [UIImage imageNamed:[self.snapshotImages objectAtIndex:indexPath.row]];
     
-    return 40; // your dynamic height...
-}
-
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    if (indexPath.section == 0)
+    CamChannel *ch = (CamChannel *)[_camChannels objectAtIndex:indexPath.row];
+    cell.cameraNameLabel.text = ch.profile.name;
+    
+    // Camera is NOT available
+    if (ch.profile.isInLocal == FALSE &&
+        ch.profile.minuteSinceLastComm > 5)
     {
-        if (_waitingForUpdateData == TRUE)
-        {
-            static NSString *CellIdentifier = @"Cell";
-            UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-            if (cell == nil) {
-                cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
-            }
-            
-            // Configure the cell...
-            cell.textLabel.text = @"Loading...";
-            
-            UIActivityIndicatorView *spinner = [[UIActivityIndicatorView alloc]
-                                                initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
-            
-            // Spacer is a 1x1 transparent png
-            UIImage *spacer = [UIImage imageNamed:@"spacer"];
-            
-            UIGraphicsBeginImageContext(spinner.frame.size);
-            
-            [spacer drawInRect:CGRectMake(0, 0, spinner.frame.size.width, spinner.frame.size.height)];
-            UIImage* resizedSpacer = UIGraphicsGetImageFromCurrentImageContext();
-            
-            UIGraphicsEndImageContext();
-            cell.imageView.image = resizedSpacer;
-            [cell.imageView addSubview:spinner];
-            [spinner startAnimating];
-            
-            return cell;
-        }
-        else
-        {
-            return _addCameraCell;
-        }
+        cell.cameraNameLabel.textColor = [UIColor redColor];
     }
     else
     {
-        static NSString *CellIdentifier = @"CamerasCell";
-        CamerasCell *cell = [self.tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-        NSArray *objects = [[NSBundle mainBundle] loadNibNamed:@"CamerasCell" owner:nil options:nil];
-        
-        for (id curObj in objects)
-        {
-            if([curObj isKindOfClass:[UITableViewCell class]])
-            {
-                cell = (CamerasCell *)curObj;
-                break;
-            }
-        }
-        
-        cell.camerasCellDelegate = self;
-        cell.rowIndex = indexPath.row;
-        cell.backgroundColor = [UIColor blackColor];
-        cell.snapshotImage.image = [UIImage imageNamed:[self.snapshotImages objectAtIndex:indexPath.row]];
-        
-        CamChannel *ch = (CamChannel *)[_camChannels objectAtIndex:indexPath.row];
-        cell.cameraNameLabel.text = ch.profile.name;
-        
-        // Camera is NOT available
-        if (ch.profile.isInLocal == FALSE &&
-            ch.profile.minuteSinceLastComm > 5)
-        {
-            cell.cameraNameLabel.textColor = [UIColor redColor];
-        }
-        else
-        {
-            cell.cameraNameLabel.textColor = [UIColor whiteColor];
-        }
-        
-        return cell;
-    }
-}
-
-#pragma mark - Table view delegate
-
-- (BOOL)tableView:(UITableView *)tableView shouldHighlightRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    if (indexPath.section == 0 &&
-        tableView.numberOfSections == 1)
-    {
-        return NO;
+        cell.cameraNameLabel.textColor = [UIColor whiteColor];
     }
     
+    return cell;
+
+}
+
+- (BOOL)collectionView:(UICollectionView *)collectionView shouldHighlightItemAtIndexPath:(NSIndexPath *)indexPath
+{
     return YES;
 }
-
-// In a xib-based application, navigation from a table can be handled in -tableView:didSelectRowAtIndexPath:
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+- (void)collectionView:(UICollectionView *)collectionView didHighlightItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    [tableView deselectRowAtIndexPath:indexPath animated:NO];
     
-    if (indexPath.section == 0)
+}
+- (void)collectionView:(UICollectionView *)collectionView didUnhighlightItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    
+}
+- (BOOL)collectionView:(UICollectionView *)collectionView shouldSelectItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    return YES;
+}
+- (BOOL)collectionView:(UICollectionView *)collectionView shouldDeselectItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    return YES;
+}
+- (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    CamChannel *ch = (CamChannel *)[_camChannels objectAtIndex:indexPath.row];
+    
+    if ([ch.profile isNotAvailable] &&
+        [ch.profile isSharedCam])
     {
-        [self addCameraButtonTouchAction:nil];
+        return;
     }
-    else
-    {
-        CamChannel *ch = (CamChannel *)[_camChannels objectAtIndex:indexPath.row];
-        
-        if ([ch.profile isNotAvailable] &&
-            [ch.profile isSharedCam])
-        {
-            return;
-        }
-        
-        ch.profile.isSelected = TRUE;
-        
-        [CameraAlert clearAllAlertForCamera:ch.profile.mac_address];
-        [UIApplication sharedApplication].idleTimerDisabled = YES;
-        
-        NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-        [userDefaults setObject:ch.profile.registrationID forKey:@"REG_ID"];
-        [userDefaults setObject:ch.profile.mac_address forKey:CAM_IN_VEW];
-        [userDefaults synchronize];
-        
-        H264PlayerViewController *h264PlayerViewController = [[H264PlayerViewController alloc] init];
-        
-        h264PlayerViewController.selectedChannel = ch;
-        h264PlayerViewController.h264PlayerVCDelegate = self;
-        
-        //MenuViewController *tabBarController = (MenuViewController *)self.parentViewController;
-        [((MenuViewController *)self.parentVC).navigationController pushViewController:h264PlayerViewController animated:YES];
-        [h264PlayerViewController release];
-    }
+    
+    ch.profile.isSelected = TRUE;
+    
+    [CameraAlert clearAllAlertForCamera:ch.profile.mac_address];
+    [UIApplication sharedApplication].idleTimerDisabled = YES;
+    
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    [userDefaults setObject:ch.profile.registrationID forKey:@"REG_ID"];
+    [userDefaults setObject:ch.profile.mac_address forKey:CAM_IN_VEW];
+    [userDefaults synchronize];
+    
+    H264PlayerViewController *h264PlayerViewController = [[H264PlayerViewController alloc] init];
+    
+    h264PlayerViewController.selectedChannel = ch;
+    h264PlayerViewController.h264PlayerVCDelegate = self;
+    
+    //MenuViewController *tabBarController = (MenuViewController *)self.parentViewController;
+    [((MenuViewController *)self.parentVC).navigationController pushViewController:h264PlayerViewController animated:YES];
+    [h264PlayerViewController release];
+}
+- (void)collectionView:(UICollectionView *)collectionView didDeselectItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    
 }
 
 - (void)dealloc {
     [_camChannels release];
-    [_addCameraCell release];
     [super dealloc];
 }
 @end

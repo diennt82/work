@@ -64,8 +64,7 @@
     self.navigationItem.leftBarButtonItem = backBarBtn;
     self.navigationItem.leftBarButtonItem.enabled = NO;
     
-    self.camerasVC = [[CamerasViewController alloc] initWithStyle:nil
-                                                         delegate:self.menuDelegate
+    self.camerasVC = [[CamerasViewController alloc] initWithDelegate:self.menuDelegate
                                                          parentVC:self];
     //self.camerasVC.camChannels = self.cameras;
     UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:_camerasVC];
@@ -141,7 +140,7 @@
             self.navigationItem.leftBarButtonItem.enabled = NO;
              [[self.tabBar.items objectAtIndex:1] setEnabled:NO];
             self.camerasVC.waitingForUpdateData = TRUE;
-            [self.camerasVC.tableView reloadData];
+            [self.camerasVC camerasReloadData];
             [self performSelectorInBackground:@selector(recreateAccount)
                                    withObject:nil];
         }
@@ -267,7 +266,7 @@
     }
     
     self.camerasVC.waitingForUpdateData = NO;
-    [self.camerasVC.tableView performSelectorInBackground:@selector(reloadData)
+    [self.camerasVC performSelectorInBackground:@selector(camerasReloadData)
                                                withObject:nil];
     if (self.cameras != nil &&
         self.cameras.count > 0)

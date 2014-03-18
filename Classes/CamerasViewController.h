@@ -16,15 +16,17 @@
 
 @end
 
-@interface CamerasViewController : UIViewController <UICollectionViewDelegate>
+@interface CamerasViewController : UIViewController <UICollectionViewDelegate, UICollectionViewDataSource>
+{
+    IBOutlet UICollectionView *camerasCollectionView;
+}
 
 @property (assign, nonatomic) id<CamerasVCDelegate> camerasVCDelegate;
 @property (assign, nonatomic) id parentVC;
 @property (nonatomic) BOOL waitingForUpdateData;
 @property (retain, nonatomic) NSMutableArray *camChannels;
 
-- (id)initWithStyle:(UITableViewStyle)style
-           delegate:(id<ConnectionMethodDelegate> )delegate
+- (id)initWithDelegate:(id<ConnectionMethodDelegate> )delegate
            parentVC: (id)parentVC;
 
 - (void)camerasReloadData;

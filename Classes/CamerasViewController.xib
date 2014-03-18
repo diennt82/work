@@ -7,51 +7,45 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="CamerasViewController">
             <connections>
-                <outlet property="addCameraCell" destination="ZdE-71-xbb" id="yo9-kA-A8G"/>
-                <outlet property="view" destination="4" id="5"/>
+                <outlet property="camerasCollectionView" destination="99c-XY-Yc9" id="hcq-Qc-b2x"/>
+                <outlet property="view" destination="PAK-Bt-HIP" id="Aqw-rE-DKd"/>
             </connections>
         </placeholder>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
-        <tableView opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" bouncesZoom="NO" style="grouped" separatorStyle="none" rowHeight="40" sectionHeaderHeight="1" sectionFooterHeight="1" id="4">
+        <view contentMode="scaleToFill" id="PAK-Bt-HIP">
             <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
-            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-            <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <subviews>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="Rbx-EX-Lg4">
+                    <rect key="frame" x="0.0" y="64" width="320" height="40"/>
+                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                    <color key="backgroundColor" red="0.81255702549999997" green="0.21886405110000001" blue="0.045050182479999999" alpha="1" colorSpace="calibratedRGB"/>
+                    <state key="normal" title="Button">
+                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                    </state>
+                </button>
+                <collectionView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" minimumZoomScale="0.0" maximumZoomScale="0.0" dataMode="none" id="99c-XY-Yc9">
+                    <rect key="frame" x="0.0" y="104" width="320" height="464"/>
+                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                    <inset key="contentInset" minX="20" minY="20" maxX="20" maxY="20"/>
+                    <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="20" minimumInteritemSpacing="20" id="J7i-20-tqY">
+                        <size key="itemSize" width="320" height="190"/>
+                        <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                        <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                        <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                    </collectionViewFlowLayout>
+                    <cells/>
+                    <connections>
+                        <outlet property="dataSource" destination="-1" id="RFr-cD-uDA"/>
+                        <outlet property="delegate" destination="-1" id="G7f-hh-fse"/>
+                    </connections>
+                </collectionView>
+            </subviews>
+            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+            <simulatedStatusBarMetrics key="simulatedStatusBarMetrics"/>
+            <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
             <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
-            <inset key="contentInset" minX="0.0" minY="10" maxX="0.0" maxY="0.0"/>
-            <connections>
-                <outlet property="dataSource" destination="-1" id="6"/>
-                <outlet property="delegate" destination="-1" id="7"/>
-            </connections>
-        </tableView>
-        <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" rowHeight="40" id="ZdE-71-xbb">
-            <rect key="frame" x="0.0" y="0.0" width="320" height="40"/>
-            <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
-            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="ZdE-71-xbb" id="7RT-SZ-6ka">
-                <rect key="frame" x="0.0" y="0.0" width="320" height="39"/>
-                <autoresizingMask key="autoresizingMask"/>
-                <subviews>
-                    <button opaque="NO" tag="595" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="Xi7-MN-ShQ">
-                        <rect key="frame" x="8" y="6" width="27" height="27"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                        <state key="normal" image="add_camera.png">
-                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                        </state>
-                        <connections>
-                            <action selector="addCameraButtonTouchAction:" destination="-1" eventType="touchUpInside" id="ejQ-dG-LnD"/>
-                        </connections>
-                    </button>
-                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Add Camera" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="Ywf-Ug-kH5">
-                        <rect key="frame" x="40" y="6" width="260" height="27"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                        <fontDescription key="fontDescription" name="HelveticaNeue-Thin" family="Helvetica Neue" pointSize="17"/>
-                        <color key="textColor" red="0.0" green="0.67450980392156867" blue="0.96862745098039216" alpha="1" colorSpace="calibratedRGB"/>
-                        <nil key="highlightedColor"/>
-                    </label>
-                </subviews>
-            </tableViewCellContentView>
-        </tableViewCell>
+        </view>
     </objects>
-    <resources>
-        <image name="add_camera.png" width="27" height="27"/>
-    </resources>
 </document>
