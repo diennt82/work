@@ -699,7 +699,8 @@ double _ticks = 0;
         case MEDIA_INFO_FRAMERATE_VIDEO:
         {
             fps = ext1;
-            [self addingLabelInfosForDebug];
+            // lozange
+//            [self addingLabelInfosForDebug];
             break;
         }
 #endif

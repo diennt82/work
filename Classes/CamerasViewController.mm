@@ -354,7 +354,7 @@
         cell.camerasCellDelegate = self;
         cell.rowIndex = indexPath.row;
         cell.backgroundColor = [UIColor blackColor];
-        cell.snapshotImage.image = [UIImage imageNamed:[_snapshotImages objectAtIndex:indexPath.row]];
+        cell.snapshotImage.image = [UIImage imageNamed:[self.snapshotImages objectAtIndex:indexPath.row]];
         
         CamChannel *ch = (CamChannel *)[_camChannels objectAtIndex:indexPath.row];
         cell.cameraNameLabel.text = ch.profile.name;

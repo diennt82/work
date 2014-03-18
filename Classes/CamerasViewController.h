@@ -16,7 +16,7 @@
 
 @end
 
-@interface CamerasViewController : UITableViewController
+@interface CamerasViewController : UIViewController <UICollectionViewDelegate>
 
 @property (assign, nonatomic) id<CamerasVCDelegate> camerasVCDelegate;
 @property (assign, nonatomic) id parentVC;
