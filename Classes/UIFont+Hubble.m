@@ -55,11 +55,29 @@
 + (UIFont *)regularMedium23Font
 {
     return [UIFont applyHubbleFontName:PN_REGULAR_FONT withSize:23];
++ (UIFont *)regular20Font
+{
+    return [UIFont applyHubbleFontName:PN_REGULAR_FONT withSize:20];
 }
 
 + (UIFont *)bold20Font
 {
     return [UIFont applyHubbleFontName:PN_BOLD_FONT withSize:20];
+}
+
++ (UIFont *)regular18Font
+{
+    return [UIFont applyHubbleFontName:PN_REGULAR_FONT withSize:18];
+}
+
++ (UIFont *)bold18Font
+{
+    return [UIFont applyHubbleFontName:PN_BOLD_FONT withSize:18];
+}
+
++ (UIFont *)bold14Font
+{
+    return [UIFont applyHubbleFontName:PN_BOLD_FONT withSize:14];
 }
 
 + (UIFont *)semiBold12Font

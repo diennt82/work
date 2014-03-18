@@ -94,7 +94,6 @@
 
 - (void)viewWillAppear:(BOOL)animated
 {
-    //self.view.frame = CGRectMake(0, 100, self.view.frame.size.width, self.view.frame.size.height);
     [super viewWillAppear:animated];
     self.navigationController.navigationBarHidden = YES;
 }

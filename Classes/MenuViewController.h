@@ -11,15 +11,20 @@
 #import <UIKit/UIKit.h>
 #import "ConnectionMethodDelegate.h"
 #import "CamerasViewController.h"
+#import "SettingsViewController.h"
 
 @protocol MenuViewControllerDelegate <NSObject>
 
 - (void)pushBackToPlayerView;
 - (void)finisGetCameraList;
 
+
 @end
 
-@interface MenuViewController : UITabBarController
+@interface MenuViewController : UIViewController
+{
+    SettingsViewController *_settingsVC;
+}
 
 @property (nonatomic, assign) id<ConnectionMethodDelegate> menuDelegate;
 @property (nonatomic, retain) NSMutableArray *cameras;
