@@ -5236,8 +5236,7 @@
 					"$(SRCROOT)/../ios-frameworks/udt",
 					"$(SRCROOT)/../ios-frameworks",
 					"$(SRCROOT)/../ios-frameworks/pjsip/dist-uarch/lib",
-					"/Users/developer/work/ios-frameworks/GoogleAnalyticsLibrary",
-					"/Users/admin/work/ios-frameworks/GoogleAnalyticsLibrary",
+					"$(SRCROOT)/../ios-frameworks/GoogleAnalyticsLibrary",
 				);
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_CFLAGS = (
@@ -5291,8 +5290,6 @@
 					"$(SRCROOT)/../ios-frameworks/pjsip/dist-uarch/lib",
 					"$(SRCROOT)/../ios-frameworks",
 					"$(SRCROOT)/../ios-frameworks/GoogleAnalyticsLibrary",
-					"/Users/admin/work/ios-frameworks/GoogleAnalyticsLibrary",
-					"/Users/developer/work/ios-frameworks/GoogleAnalyticsLibrary",
 				);
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_CFLAGS = (
@@ -5364,8 +5361,7 @@
 					"$(SRCROOT)/../ios-frameworks/udt",
 					"$(SRCROOT)/../ios-frameworks/pjsip/dist-uarch/lib",
 					"$(SRCROOT)/../ios-frameworks",
-					"/Users/developer/work/ios-frameworks/GoogleAnalyticsLibrary",
-					"/Users/admin/work/ios-frameworks/GoogleAnalyticsLibrary",
+					"$(SRCROOT)/../ios-frameworks/GoogleAnalyticsLibrary",
 				);
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_CFLAGS = (
