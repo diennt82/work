@@ -60,6 +60,7 @@
 @interface H264PlayerViewController: UIViewController
 <PlayerCallbackHandler, ScanForCameraNotifier, StunClientDelegate, MelodyVCDelegate, UIScrollViewDelegate, ScrollHorizontalMenuDelegate, AudioOutStreamerDelegate>
 {
+    
     ScrollHorizontalMenu *_horizMenu;
     int _selectedItemMenu;
     NSMutableArray *_itemImages;
@@ -75,10 +76,8 @@
     
     SystemSoundID soundFileObject;
     
-    
     BOOL userWantToCancel;
     BOOL askForFWUpgradeOnce;
-    
     
     int currentDirUD, lastDirUD;
 	int delay_update_lastDir_count;
@@ -130,6 +129,7 @@
 
 @property (nonatomic, retain) IBOutlet ScrollHorizontalMenu *horizMenu;
 @property (nonatomic, assign) int selectedItemMenu;
+@property (nonatomic, assign) int lastSelectedItemMenu;
 
 //ib for Touch to talk
 @property (retain, nonatomic) IBOutlet UIView *ib_ViewTouchToTalk;
@@ -143,8 +143,6 @@
 @property (retain, nonatomic) IBOutlet UIButton *ib_buttonChangeAction;
 //button for replacing image take picture when recording
 @property (retain, nonatomic) IBOutlet UIButton *ib_changeToMainRecording;
-
-
 
 @property (retain, nonatomic) IBOutlet UILabel *ib_labelRecordVideo;
 

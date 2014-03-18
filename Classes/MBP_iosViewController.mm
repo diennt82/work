@@ -179,6 +179,7 @@
 - (void)wakeup_display_login:(NSTimer*) timer_exp
 {    
 #if 0
+    NSLog(@"Case 22 - #if 0");
     NSLog(@">>> DBG PLAYER  ");
     PlaybackViewController *playbackViewController = [[PlaybackViewController alloc] init];
     //playbackViewController.urlVideo = @"http://nxcomm:2009nxcomm@nxcomm-office.no-ip.info/app_release/sub_clips/48022A2CAC31_04_20130917065256730_00001.flv";
@@ -190,6 +191,8 @@
     [self presentViewController:playbackViewController animated:NO  completion:nil];
 #else
 #if 1
+    NSLog(@"Case 22 - #if 1");
+    
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     
     if ([userDefaults boolForKey:_AutoLogin])
@@ -205,7 +208,7 @@
     }
     
 #else
-    
+    NSLog(@"Case 22 - #if else");
 	//hide splash screen page
      //backgroundView.hidden = NO;
     //[self.view bringSubviewToFront:backgroundView];
@@ -410,7 +413,7 @@
             
 		case LOGIN: //GOTO ROUTER mode - Login
         {
-            //NSLog(@">>> Login ");
+            NSLog(@"Case 22 - condition 1");
             self.app_stage = APP_STAGE_LOGGING_IN;
             
             NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
@@ -444,7 +447,7 @@
 		case AFTER_ADD_RELOGIN:
 			{
 				NSLog(@" back from adding cam. relogin -- to get the new cam data");
-
+                NSLog(@"Case 22 - condition 2");
 				NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
 				[userDefaults setBool:TRUE forKey:_AutoLogin];
 				[userDefaults synchronize];
@@ -459,7 +462,7 @@
 			}
 		case AFTER_DEL_RELOGIN: //Just remove camera, currently in CameraMenu page 
 			{
-
+                NSLog(@"Case 22 - condition 3");
                 statusDialogLabel.hidden = YES;
 				//[self dismissViewControllerAnimated:NO completion:nil];
                 

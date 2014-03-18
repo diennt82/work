@@ -523,7 +523,9 @@
         return 1;
     }
     
-    return 4;
+//    return 4; -- uncomment to re-add "Save the Day" and "Upgrade to Premium" buttons
+    
+    return 2;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
@@ -779,7 +781,6 @@
     
     else if (indexPath.section == 1)
     {
-        
         static NSString *CellIdentifier = @"TimelineActivityCell";
         TimelineActivityCell *cell = [self.tableView dequeueReusableCellWithIdentifier:CellIdentifier];
         
@@ -787,7 +788,6 @@
         
         for (id curObj in objects)
         {
-            
             if([curObj isKindOfClass:[UITableViewCell class]])
             {
                 cell = (TimelineActivityCell *)curObj;
@@ -796,6 +796,8 @@
         }
 #if 1
         EventInfo *eventInfo = (EventInfo *)[_events objectAtIndex:indexPath.row];
+        
+        
         
         cell.eventLabel.text = eventInfo.alert_name;
         
@@ -867,6 +869,11 @@
             //update indicator
             [cell.feedImageVideo setHidden:YES];
             [cell.activityIndicatorLoading setHidden:YES];
+        }
+        
+        if (eventInfo.alert == 1)
+        {
+            [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
         }
         
 #else// Test data

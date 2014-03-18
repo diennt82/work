@@ -96,6 +96,7 @@
 @synthesize itemImages = _itemImages;
 @synthesize itemSelectedImages = _itemSelectedImages;
 @synthesize selectedItemMenu = _selectedItemMenu;
+@synthesize lastSelectedItemMenu = _lastSelectedItemMenu;
 @synthesize walkieTalkieEnabled;
 @synthesize httpComm = _httpComm;
 
@@ -129,6 +130,7 @@ double _ticks = 0;
         NSLog(@"Non Retina");
     }
     _selectedItemMenu = INDEX_NO_SELECT;
+    _lastSelectedItemMenu = INDEX_NO_SELECT;
     [self.ib_buttonChangeAction setHidden:NO];
     [self.view bringSubviewToFront:self.ib_buttonChangeAction];
     [self.ib_labelRecordVideo setText:@"Record Video"];
@@ -1406,7 +1408,8 @@ double _ticks = 0;
 - (void)showTimelineView
 {
     //reset selected menu;
-    _selectedItemMenu = -1;
+    _selectedItemMenu = INDEX_NO_SELECT;
+    _lastSelectedItemMenu = INDEX_NO_SELECT;
     
     if (_timelineVC != nil)
     {
@@ -4556,9 +4559,19 @@ double _ticks = 0;
      4. temp
      */
     
+    if (_lastSelectedItemMenu == index)
+    {
+        [self showTimelineView];
+        return;
+    }
+    else
+    {
+        _lastSelectedItemMenu = index;
+    }
+    
     //show when user selecte one item inner control panel
     [self showControlMenu];
-    
+        
     _wantToShowTimeLine = NO;
     _isFirstLoad = NO;
     
