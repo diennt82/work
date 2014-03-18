@@ -338,13 +338,10 @@
     NSLog(@"addcam response: %@", responseData);
     _auth_token = [[responseData objectForKey:@"data"] objectForKey:@"auth_token"];
     /*
-     TODO:
-     - send auto_token to camera
+         - send auto_token to camera
      */
     [self sendCommandAuth_TokenToCamera];
-    [_viewProgress removeFromSuperview];
-    [self showScreenGetWifiList];
-
+   
 }
 
 - (void)sendCommandAuth_TokenToCamera
@@ -490,7 +487,16 @@
         if ([string hasPrefix:@"set_master_key: 0"])
         {
             ///done
-            NSLog(@"sending master key done");
+            NSLog(@"sending master key done, move on..");
+            
+            dispatch_async(dispatch_get_main_queue(),
+                           ^{
+                               [_viewProgress removeFromSuperview];
+                               [self showScreenGetWifiList];
+                           });
+            
+           
+
         }
         
     }

@@ -78,6 +78,7 @@ typedef enum
 + (ConnectionState)checkStatusConnectBLE;
 + (BLEConnectionManager *) getInstanceBLE;
 - (id) init;
+- (void) reinit;
 - (void)scan;
 - (void)reScan;
 - (void)stopScanBLE;

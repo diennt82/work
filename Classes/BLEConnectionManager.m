@@ -42,6 +42,11 @@
     });
     return _sharedInstance;
 }
+-(void ) reinit
+{
+    [_cm release];
+    _cm = [[CBCentralManager alloc] initWithDelegate:self queue:nil];
+}
 
 -(id) init
 
@@ -214,19 +219,6 @@
    
 }
 
-#if 0
-
-- (void)didDisConnect
-{
-    NSLog(@"Disconnect peripheral %@", self.uartPeripheral.peripheral.name);
-    if ([_uartPeripheral.peripheral isConnected])
-    {
-        [[BLEConnectionManager getInstanceBLE].cm cancelPeripheralConnection:_uartPeripheral.peripheral];
-    }
-}
-
-#endif
-
 #pragma mark - CBCentralManagerDelegate
 
 - (void)centralManagerDidUpdateState:(CBCentralManager *)central
@@ -235,7 +227,12 @@
         // In a real app, you'd deal with all the states correctly
         NSLog(@"BLE IS ON ");
         self.isOnBLE = YES;
+        
+        
+        
         [self scan];
+        
+        
     }
     else
     {

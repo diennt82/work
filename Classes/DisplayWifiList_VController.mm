@@ -360,7 +360,7 @@
 
 - (void)tableView: (UITableView *)tableView didSelectRowAtIndexPath: (NSIndexPath *)indexPath
 {
-#if 1
+
     if (indexPath.section == 0)
     {
         self.btnContinue.enabled = YES;
@@ -370,67 +370,12 @@
     {
         [self refreshWifiList];
     }
-#else
-    [tableView deselectRowAtIndexPath:[tableView indexPathForSelectedRow]
-                             animated:NO];
-    
-    int tag = tableView.tag;
-    if (tag == 11)
-    {
-        int idx=indexPath.row;
-        
-        WifiEntry *entry = [_listOfWifi objectAtIndex:idx];
-        
-        //load step 06
-        NSLog(@"Load step 6: Input network info");
-        //Load the next xib
-        NetworkInfoToCamera_VController *netWorkInfoViewController = nil;
-        
-//        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
-//        {
-//            
-//            step06ViewController = [[NetworkInfoToCamera_VController alloc]
-//                                    initWithNibName:@"NetworkInfoToCamera_VController_iPad" bundle:nil];
-//            
-//        }
-//        else
-        {
-            
-            netWorkInfoViewController = [[NetworkInfoToCamera_VController alloc]
-                                    initWithNibName:@"NetworkInfoToCamera_VController" bundle:nil];
-            
-            
-        }
-        
-        
-        
-        
-        
-        NSRange noQoute = NSMakeRange(1, [entry.ssid_w_quote length]-2);
-        if ([[entry.ssid_w_quote substringWithRange:noQoute] isEqualToString:@"Other Network"])
-        {
-            netWorkInfoViewController.isOtherNetwork = TRUE;
-        }
-        else
-        {
-            netWorkInfoViewController.isOtherNetwork = FALSE;
-        }
-        netWorkInfoViewController.ssid = [entry.ssid_w_quote substringWithRange:noQoute];
-        netWorkInfoViewController.security = entry.auth_mode;
-        
-        [self.navigationController pushViewController:netWorkInfoViewController animated:NO];
-        
-        [netWorkInfoViewController release];
-        
-    }
-#endif
+
+  
 }
 #pragma mark -
 
--(void) handleButtonPressed:(id) sender
-{
-    
-}
+
 - (void)showIndicator
 {
 //    [self.view bringSubviewToFront:self.ib_Indicator];

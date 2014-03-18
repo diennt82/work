@@ -366,7 +366,7 @@
         
         //Check again
     }
-    else if ([_currentBLEList count] == 1) //found 1 within first 5 sec. Grab it now.
+    else if ([_currentBLEList count] >= 1) //found 1 within first 5 sec. Grab it now.
     {
 #if 1
         [self.viewProgress removeFromSuperview];

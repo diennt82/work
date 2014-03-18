@@ -85,6 +85,13 @@
         [self.hello_timer invalidate];
         self.hello_timer = nil;
     }
+    //invalidate time out
+    if (_timeOutCommand && [_timeOutCommand isValid])
+    {
+        [_timeOutCommand invalidate];
+        _timeOutCommand = nil;
+    }
+
     self.isDisconnected = YES;
     
     NSLog(@"UART PERI: didDisconnect, stop timer ");
@@ -684,7 +691,7 @@
             
             self.isBusy = FALSE;
            
-#if 0
+#if 1
             NSLog(@"start hello timer");
             
             self.hello_timer  =  [NSTimer scheduledTimerWithTimeInterval:7.0
@@ -701,125 +708,6 @@
             //Do nothing
         }
         
-#if 0
-        // int sequence_index = [self checkBuffer:rx_buff forSequence:sequence];
-        int total_data_len = [rx_buff length];
-        
-        if (sequence_index != -1  && (sequence_index +3) <= total_data_len) //we found the start of new sequence
-        {
-            
-            //Need to check if we have rcved enough bytes
-            unsigned char * len_ptr;
-            
-            len_ptr =  (( unsigned char *)[rx_buff bytes] )+ sequence_index +1;
-            int len =  (len_ptr[0] << 8) + len_ptr[1];
-            
-            
-            
-            NSLog(@"data len is : %d ", len );
-            
-            NSLog(@"data start:%d len is : %d total: %d" ,  sequence_index, len, total_data_len);
-            
-            if (len >  0)
-            {
-                
-                
-                if ( (len + sequence_index + 3)  <=   total_data_len)
-                {
-                    //we do have enough data
-                    NSRange range = NSMakeRange(sequence_index + 3, len);
-                    NSData *result_str = [rx_buff subdataWithRange:range];
-                    
-                    NSLog(@"Got enough data : %d",[result_str length]);
-                    
-                    
-                    NSString *string = [NSString stringWithUTF8String:[result_str bytes] ];
-                    
-                    //invalidate time out
-                    if (_timeOutCommand && [_timeOutCommand isValid])
-                    {
-                        [_timeOutCommand invalidate];
-                        _timeOutCommand = nil;
-                    }
-                    [self.delegate didReceiveData:string];
-                    
-                    //cut this string away
-                    range = NSMakeRange(0, len + sequence_index + 3);
-                    [rx_buff replaceBytesInRange:range
-                                       withBytes:NULL
-                                          length:0];
-                    
-                    
-                    
-                    read_error = READ_SUCCESS;
-                    self.isFlushing = FALSE;
-                    self.isBusy = FALSE;
-                }
-                else
-                {
-                    NSLog(@"Not enough data  yet");
-                    //Do nothing
-                }
-                
-            }
-            else
-            {
-                
-                // clean up & Retry
-                NSLog(@"Before clean up : %d throw %d", [rx_buff length], len + sequence_index + 3);
-                //cut this string away
-                NSRange range ;
-                range = NSMakeRange(0, len + sequence_index + 1);
-                [rx_buff replaceBytesInRange:range
-                                   withBytes:NULL
-                                      length:0];
-                
-                NSLog(@"after clean up : %d", [rx_buff length]);
-                
-                read_error = READ_ERROR_ZERO_LEN;
-                //retry
-                
-                if (retry_count -- > 0)
-                {
-                    
-                    [ NSTimer scheduledTimerWithTimeInterval:1.0
-                                                      target:self
-                                                    selector:@selector(retryNow:)
-                                                    userInfo:commandToCamera repeats:NO];
-                }
-                else
-                {
-                    NSLog(@"ERROR: 0-len issue, no more retry, returning");
-                    self.isBusy = FALSE;
-                    self.isFlushing = FALSE;
-                    
-                    //invalidate time out
-                    if (_timeOutCommand && [_timeOutCommand isValid])
-                    {
-                        [_timeOutCommand invalidate];
-                        _timeOutCommand = nil;
-                    }
-                    
-                    [self.delegate onReceiveDataError:read_error forCommand:commandToCamera];
-                }
-                
-            }
-            
-        }
-        else
-        {
-            if ((sequence_index +3) >= total_data_len)
-            {
-                if (self.isFlushing == TRUE)
-                {
-                    NSLog(@"FLUSHING.. Not found sequence or Len error ... ignore   ");
-                    self.isBusy = FALSE;
-                    self.isFlushing = FALSE;
-                }
-            }
-            NSLog(@"Not found sequence or Len error  ");
-        }
-#endif
     }
     else if ([characteristic.UUID isEqual:self.class.hardwareRevisionStringUUID])
     {

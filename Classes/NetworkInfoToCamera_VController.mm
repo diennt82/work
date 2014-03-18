@@ -122,6 +122,7 @@
     }
     self.tfPassword = (UITextField *)[self.passwordCell viewWithTag:200];
     self.tfConfirmPass = (UITextField *)[self.confPasswordCell viewWithTag:201];
+    [BLEConnectionManager getInstanceBLE].delegate = self;
 }
 
 - (void)viewDidUnload
@@ -692,6 +693,16 @@
 
 #pragma mark - BLEConnectionManagerDelegate
 
+
+- (void) didReceiveBLEList:(NSMutableArray *)bleLists
+{
+        NSLog(@"NWINFO : rescan completed ");
+   CBPeripheral * ble_uart = (CBPeripheral *)[[BLEConnectionManager getInstanceBLE].listBLEs objectAtIndex:0];
+    
+    [[BLEConnectionManager getInstanceBLE] connectToBLEWithPeripheral:ble_uart];
+}
+
+
 -(void) bleDisconnected
 {
     NSLog(@"NWINFO : BLE device is DISCONNECTED - Reconnect after 2s ");
@@ -704,6 +715,8 @@
 
     
     [BLEConnectionManager getInstanceBLE].delegate = self;
+    //[[BLEConnectionManager getInstanceBLE] reinit];
+    
     [[BLEConnectionManager getInstanceBLE] reScanForPeripheral:[UARTPeripheral uartServiceUUID]];
     
 }
@@ -943,11 +956,11 @@
 {
     
     NSLog(@"now, Send command get code support!!!!");
-//    if ([BLEConnectionManager getInstanceBLE].state != CONNECTED)
-//    {
-//        NSLog(@"sendCommandCodecSupport:  BLE disconnected - ");
-//        return FALSE;
-//    }
+    if ([BLEConnectionManager getInstanceBLE].state != CONNECTED)
+    {
+        NSLog(@"sendCommandCodecSupport:  BLE disconnected - ");
+        return FALSE;
+    }
     
     [BLEConnectionManager getInstanceBLE].delegate = self;
     [[BLEConnectionManager getInstanceBLE].uartPeripheral writeString:GET_CODECS_SUPPORT withTimeOut:SHORT_TIME_OUT_SEND_COMMAND];
