@@ -45,7 +45,8 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-#if 1
+    
+    
     self.navigationItem.hidesBackButton = YES;
     
     UIImage *hubbleLogoBack = [UIImage imageNamed:@"Hubble_back_text"];
@@ -81,29 +82,6 @@
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     [userDefaults setObject:self.homeWifiSSID forKey:HOME_SSID];
     [userDefaults synchronize];
-#else
-    self.navigationItem.title = @"Connect to camera BLE";
-    //    self.navigationItem.backBarButtonItem =
-    //    [[[UIBarButtonItem alloc] initWithTitle:NSLocalizedStringWithDefaultValue(@"Back",nil, [NSBundle mainBundle],
-    //                                                                              @"Back", nil)
-    //                                      style:UIBarButtonItemStyleBordered
-    //                                     target:nil
-    //                                     action:nil] autorelease];
-    
-    
-    _currentBLEList = [[NSMutableArray alloc] init];
-    
-    
-    //Override back button of Navigation controller
-    UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithTitle:@"Back"
-                                                                   style:UIBarButtonItemStyleBordered
-                                                                  target:self
-                                                                  action:@selector(handleBack:)];
-    
-    self.navigationItem.leftBarButtonItem = backButton;
-    [backButton release];
-    
-#endif
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -268,7 +246,7 @@
     }
 }
 
-#if 1
+
 - (IBAction)refreshCamBLE:(id)sender
 {
     
@@ -289,29 +267,7 @@
     [NSTimer scheduledTimerWithTimeInterval:5.0 target:self selector:@selector(scanCameraBLEDone) userInfo:nil repeats:NO];
 }
 
-#else
-- (IBAction)refreshCamBLE:(id)sender {
-    
-    [self clearDataBLEConnection];
-    
-    if (_currentBLEList)
-    {
-        [_currentBLEList removeAllObjects];
-    }
-    [self.ib_tableListBLE reloadData];
-    
-    
-    [self.ib_RefreshBLE setEnabled:NO];
-    [self.ib_Indicator setHidden:NO];
-    
-    [self.ib_lableStage setText:@"Scanning for BLE..."];
-    [BLEConnectionManager getInstanceBLE].delegate = self;
-    [[BLEConnectionManager getInstanceBLE] reScan];
-    
-    
-    [NSTimer scheduledTimerWithTimeInterval:5.0 target:self selector:@selector(scanCameraBLEDone) userInfo:nil repeats:NO];
-}
-#endif
+
 
 - (void) handleBack:(id)sender
 {
@@ -368,76 +324,37 @@
     }
     else
     {
+        //NOTE: The list is filtered while scanning, only known devices are shown here
         
-         [[BLEConnectionManager getInstanceBLE].cm stopScan];
+        [[BLEConnectionManager getInstanceBLE].cm stopScan];
         
-        //Auto Connect to BLE peripheral name starts with "MBP83... "
-        //peripheral.name
-        int last_index = -1;
-        int known_device_count = 0;
-        CBPeripheral * peri;
-        for (int i =0; i < [BLEConnectionManager getInstanceBLE].listBLEs.count; i++ )
+        if ([_currentBLEList count] ==1) //connect directly
         {
-            peri = (CBPeripheral *)[[BLEConnectionManager getInstanceBLE].listBLEs objectAtIndex:0];
-            if ([peri.name hasPrefix:@"MBP83"] ||
-                [peri.name hasPrefix:@"CameraHD-0083"] ||
-                [peri.name hasPrefix:@"CameraHD-0836"]  ||
-                [peri.name hasPrefix:@"CameraHD-0854"] ||
-                [peri.name hasPrefix:@"CameraHD-0085"])
-            {
-                last_index  =  i;
-                known_device_count ++;
-                
-            }
-        }
-        
-        
-        //If found only 1 known devices -> Auto connect
-        if ( known_device_count ==1 &&
-            last_index != -1 )
-        {
-            NSLog(@"Found 1 %@, connect now",peri.name );
-           
-            
             //Update UI
             [self.viewProgress removeFromSuperview];
             [self.ib_lableStage setText:@"Select a device to connect"];
             [self.ib_tableListBLE reloadData];
             
             self.btnConnect.enabled = YES;
-            self.selectedPeripheral = (CBPeripheral *)[[BLEConnectionManager getInstanceBLE].listBLEs objectAtIndex:last_index];
+            self.selectedPeripheral = (CBPeripheral *)[_currentBLEList objectAtIndex:0];
+            NSLog(@"Found 1 %@, connect now",self.selectedPeripheral.name );
             
             [[BLEConnectionManager getInstanceBLE] connectToBLEWithPeripheral:_selectedPeripheral];
             
             [self createHubbleAlertView];
-            
-            
         }
-        else if (known_device_count >1 ) // more than 1 valid devices
+        else //more than 2
         {
             NSLog(@"Found more than 1 valid devices -> Show lists");
-
+            
             //Update UI
             [self.viewProgress removeFromSuperview];
+            
             [self.ib_lableStage setText:@"Select a device to connect"];
             
             [self.ib_tableListBLE reloadData];
             self.btnConnect.enabled = YES;
-            
-            
-        }
-        else // Found no valid device
-        {
-            NSLog(@"Not found any MBP83/CameraHD-0083xxxxxx / CameraHD-0836xxxxxx / CameraHD-0854xxxxxx / CameraHD-0085xxxxxx, schedule next check");
-            
-            [[BLEConnectionManager getInstanceBLE] scan];
-            [NSTimer scheduledTimerWithTimeInterval:5.0
-                                             target:self
-                                           selector:@selector(scanCameraBLEDone)
-                                           userInfo:nil
-                                            repeats:NO];
-            
-            
+
         }
         
         
@@ -877,7 +794,7 @@
 }
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-#if 1
+    
     if (indexPath.section == 0)
     {
         static NSString *CellIdentifier = @"BLEConnectionCell";
@@ -903,19 +820,7 @@
     {
         return _searchAgainCell;
     }
-#else
-    static NSString *CellIdentifier = @"Cell";
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-    if (cell == nil) {
-        cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
-        
-        cell.selectionStyle = UITableViewCellSelectionStyleGray;
-    }
-    CBPeripheral *peripheral = [_currentBLEList objectAtIndex:indexPath.row];
-    cell.textLabel.text = peripheral.name;
     
-    return cell;
-#endif
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath

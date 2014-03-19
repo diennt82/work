@@ -249,16 +249,25 @@
     
     if (scanMode == SCAN_FOR_ANY_DEVICE)
     {
-        NSLog(@"Did discover peripheral name %@ and peripheral is %@", peripheral.name, peripheral);
         
-        if (![self.listBLEs containsObject:peripheral])
+        
+        if ([peripheral.name hasPrefix:@"MBP83"] ||
+            [peripheral.name hasPrefix:@"CameraHD-0083"] ||
+            [peripheral.name hasPrefix:@"CameraHD-0836"]  ||
+            [peripheral.name hasPrefix:@"CameraHD-0854"] ||
+            [peripheral.name hasPrefix:@"CameraHD-0085"])
         {
-            [self.listBLEs addObject:peripheral];
-            
-             if (self.delegate != nil)
-             {
-                 [  self.delegate didReceiveBLEList:self.listBLEs];
-             }
+            NSLog(@"Did discover peripheral name %@ and peripheral is %@", peripheral.name, peripheral);
+
+            if (![self.listBLEs containsObject:peripheral])
+            {
+                [self.listBLEs addObject:peripheral];
+                
+                if (self.delegate != nil)
+                {
+                    [  self.delegate didReceiveBLEList:self.listBLEs];
+                }
+            }
         }
     }
     else if ( scanMode == SCAN_FOR_SINGLE_DEVICE)
