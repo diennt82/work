@@ -5114,11 +5114,19 @@ double _ticks = 0;
     [self.ib_buttonTouchToTalk setBackgroundColor:[UIColor clearColor]];
     [self.ib_buttonTouchToTalk setBackgroundImage:[UIImage imageMic] forState:UIControlStateNormal];
     [self.ib_buttonTouchToTalk setBackgroundImage:[UIImage imageMic] forState:UIControlEventTouchUpInside];
-
-    //[self.ib_labelTouchToTalk setText:@"Hold To Talk"];
+    
+    if (self.selectedChannel.profile.isInLocal)
+    {
+        [self.ib_labelTouchToTalk setText:@"Hold To Talk"];
+    }
+    else
+    {
+        //self.walkieTalkieEnabled = NO;
+        self.ib_buttonTouchToTalk.enabled = YES;
+        [self.ib_labelTouchToTalk setText:@"Touch to Talk"];
+    }
     [self applyFont];
-    //self.walkieTalkieEnabled = NO;
-    self.ib_buttonTouchToTalk.enabled = YES;
+    
     //user touch up inside and outside
 }
 
@@ -5191,7 +5199,7 @@ double _ticks = 0;
             //[_audioOutStreamRemote stopRecordingSound];
             [_audioOutStreamRemote performSelectorOnMainThread:@selector(stopRecordingSound) withObject:nil waitUntilDone:NO];
             [self touchUpInsideHoldToTalk];
-            [self.ib_labelTouchToTalk setText:@"Touch to talk"];
+            //[self.ib_labelTouchToTalk setText:@"Touch to talk"];
         }
     }
     else
@@ -5342,6 +5350,9 @@ double _ticks = 0;
     [self performSelectorInBackground:@selector(closeRemoteTalkback) withObject:nil];
     [self touchUpInsideHoldToTalk];
     [self.ib_labelTouchToTalk setText:@"Touch to talk"];
+    
+    self.walkieTalkieEnabled = NO;
+    [self enableRemotePTT:[NSNumber numberWithBool:NO]];
 }
 
 - (void)retryTalkbackRemote
