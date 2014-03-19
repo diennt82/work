@@ -61,13 +61,7 @@
     [_ib_resumeSetup release];
     [super dealloc];
 }
-- (void)sendCommandRebootCamera
-{
-    NSLog(@"Send command reset camera");
-//    HttpCommunication *comm = [[HttpCommunication alloc]init];
-    NSString * command = RESTART_HTTP_CMD;
-    [[HttpCom instance].comWithDevice sendCommandAndBlock:command];
-}
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -201,6 +195,17 @@
             [self.view bringSubviewToFront:self.progressView];
         }
     }
+}
+
+- (void)sendCommandRebootCamera
+{
+    NSLog(@"Send command reset camera");
+    //    HttpCommunication *comm = [[HttpCommunication alloc]init];
+    NSString * command = RESTART_HTTP_CMD;
+    
+    NSLog(@"[HttpCom instance]: %p", [HttpCom instance]);
+    
+    [[HttpCom instance].comWithDevice sendCommandAndBlock:command];
 }
 
 - (void) hideProgess
@@ -726,7 +731,8 @@
             
        
 
-            [self waitingCameraRebootAndForceToWifiHome];
+            //[self waitingCameraRebootAndForceToWifiHome];
+            [self performSelectorOnMainThread:@selector(waitingCameraRebootAndForceToWifiHome) withObject:nil waitUntilDone:NO];
         }
         
     }
