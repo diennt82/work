@@ -85,10 +85,10 @@
         self.timelineVC.navVC = _nav;
         if ((isiPhone4 || isiPhone5))
         {
-            self.timelineVC.tableView.contentInset = UIEdgeInsetsMake(64, 0, 44, 0);
+            self.timelineVC.tableView.contentInset = UIEdgeInsetsMake(84, 0, 44, 0);
         } else
         {
-            self.timelineVC.tableView.contentInset = UIEdgeInsetsMake(64, 0, 64, 0);
+            self.timelineVC.tableView.contentInset = UIEdgeInsetsMake(84, 0, 64, 0);
         }
     }
 }

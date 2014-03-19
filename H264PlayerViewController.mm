@@ -181,6 +181,9 @@ double _ticks = 0;
 
     if (![_cameraModel isEqualToString:CP_MODEL_SHARED_CAM]) // CameraHD
     {
+        UIView *test = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 20)];
+        [self.view addSubview:test];
+        
         self.timelineVC = [[TimelineViewController alloc] init];
         [self.view addSubview:_timelineVC.view];
         self.timelineVC.timelineVCDelegate = self;
