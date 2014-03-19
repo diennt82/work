@@ -462,7 +462,7 @@
     //retry sending get wifi
     NSLog(@"Send command get routers list, now!!!");
     [BLEConnectionManager getInstanceBLE].delegate = self;
-    [[BLEConnectionManager getInstanceBLE].uartPeripheral writeString:GET_ROUTER_LIST withTimeOut:LONG_TIME_OUT_SEND_COMMAND];
+    [[BLEConnectionManager getInstanceBLE].uartPeripheral writeString:GET_ROUTER_LIST2 withTimeOut:LONG_TIME_OUT_SEND_COMMAND];
     NSDate * date;
     while ([BLEConnectionManager getInstanceBLE].uartPeripheral.isBusy)
     {

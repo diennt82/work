@@ -334,7 +334,7 @@
     NSData * router_list_raw; 
        
     
-    router_list_raw = [[HttpCom instance].comWithDevice sendCommandAndBlock_raw:GET_ROUTER_LIST];
+    router_list_raw = [[HttpCom instance].comWithDevice sendCommandAndBlock_raw:GET_ROUTER_LIST2];
     
     if (router_list_raw != nil)
     {
@@ -359,7 +359,7 @@
     NSData * router_list_raw;
     
     
-    router_list_raw = [[HttpCom instance].comWithDevice sendCommandAndBlock_raw:GET_ROUTER_LIST withTimeout:2*DEFAULT_TIME_OUT];
+    router_list_raw = [[HttpCom instance].comWithDevice sendCommandAndBlock_raw:GET_ROUTER_LIST2 withTimeout:2*DEFAULT_TIME_OUT];
     
     if (router_list_raw != nil)
     {

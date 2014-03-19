@@ -65,6 +65,7 @@
 #pragma mark -
 #pragma mark NSXMLParserDelegate methods
 
+#if 0
 //Element Name:
 #define WIFI_LIST_VERSION @"wifi_list"
 #define WIFI_LIST_VERSION_ATT @"version"
@@ -79,6 +80,23 @@
 #define WIFI_ENTRY_NOISE_LEVEL @"noise_level"
 #define WIFI_ENTRY_CHANNEL @"channel"
 
+#else 
+//Element Name:
+#define WIFI_LIST_VERSION @"wl"
+#define WIFI_LIST_VERSION_ATT @"v"
+
+#define NUM_ENTRY @"n"
+#define WIFI_ENTRY @"w"
+#define WIFI_ENTRY_SSID @"s"
+#define WIFI_ENTRY_BSSID @"b"
+#define WIFI_ENTRY_AUTH_MODE @"a"
+#define WIFI_ENTRY_QUALITY @"q"
+#define WIFI_ENTRY_SIGNAL_LEVEL @"si"
+#define WIFI_ENTRY_NOISE_LEVEL @"nl"
+#define WIFI_ENTRY_CHANNEL @"ch"
+
+
+#endif
 
 
 - (void)parserDidStartDocument:(NSXMLParser *)parser
