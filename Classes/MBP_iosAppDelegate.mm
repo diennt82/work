@@ -27,6 +27,15 @@
         - Add Google Analytics Delegates to this project.
      */
     
+    // Handle launching from a notification
+    UILocalNotification *locationNotification = [launchOptions objectForKey:UIApplicationLaunchOptionsLocalNotificationKey];
+    if (locationNotification) {
+        // Set icon badge number to zero
+        application.applicationIconBadgeNumber = 0;
+    }
+
+    
+    
     // Optional: automatically send uncaught exceptions to Google Analytics.
     [GAI sharedInstance].trackUncaughtExceptions = YES;
     // Optional: set Google Analytics dispatch interval to e.g. 20 seconds.
@@ -226,6 +235,11 @@
         else
         {
             // TODO: handle exception
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:str6
+                                                            message:str2
+                                                           delegate:self cancelButtonTitle:@"OK"
+                                                  otherButtonTitles:nil];
+            [alert show];
         }
         
         if (shouldStoreAlert && [CameraAlert insertAlertForCamera:camAlert] == TRUE)
@@ -236,6 +250,20 @@
         //[camAlert release]; camAlert leak memory but I can't release it.
     }
 
+}
+
+- (void)application:(UIApplication *)application didReceiveLocalNotification:(UILocalNotification *)notification
+{
+    UIApplicationState state = [application applicationState];
+    if (state == UIApplicationStateActive) {
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Do not disturb"
+                                                        message:notification.alertBody
+                                                       delegate:self cancelButtonTitle:@"OK"
+                                              otherButtonTitles:nil];
+        [alert show];
+    }
+    // Set icon badge number to zero
+    application.applicationIconBadgeNumber = 0;
 }
 
 

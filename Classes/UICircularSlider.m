@@ -392,6 +392,23 @@ int finalAngle;
         case UIGestureRecognizerStateEnded:
             if (self.userInteractionEnabled)
             {
+                NSInteger timeValue = (int)round(self.value);
+
+                if (timeValue>0)
+                {
+                    //disable
+                    [[UIApplication sharedApplication] unregisterForRemoteNotifications];
+                }
+                else
+                {
+                    //disable
+                    [[UIApplication sharedApplication] registerForRemoteNotificationTypes:(UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeSound)];
+                }
+                [self cancelAllLocalNotification];
+                /*Check todo
+                 1. create local notification, from now
+                 */
+                [self registerLocalNotification];
                 //timer to update after one minutes
                 _timer = [NSTimer scheduledTimerWithTimeInterval:60.0
                                                           target:self
@@ -399,6 +416,7 @@ int finalAngle;
                                                         userInfo:nil
                                                          repeats:YES ];
             }
+            
             if (!self.isContinuous) {
                 [self sendActionsForControlEvents:UIControlEventValueChanged];
             }
@@ -413,7 +431,35 @@ int finalAngle;
 			break;
 	}
 }
-
+- (void)cancelAllLocalNotification
+{
+    [[UIApplication sharedApplication] cancelAllLocalNotifications];
+}
+- (void)registerLocalNotification
+{
+    // Get the current date
+    NSTimeInterval nowInterval = [[NSDate date] timeIntervalSince1970];
+    NSLog(@"picker Date is %f", nowInterval);
+    
+    //get value of slider currently
+    NSTimeInterval timeRemider = (NSTimeInterval)round(self.value) * 60;
+    NSTimeInterval nextDateTime = nowInterval + timeRemider;
+    NSLog(@"nextDay Date is %f", nextDateTime);
+    // Schedule the notification
+    NSDate *fireDateNotification = [NSDate dateWithTimeIntervalSince1970:nextDateTime];
+    UILocalNotification* localNotification = [[UILocalNotification alloc] init];
+    localNotification.fireDate = fireDateNotification;
+    localNotification.alertBody = @"Out of time, let push notification";
+    localNotification.alertAction = @"Let push notification from camera";
+    localNotification.timeZone = [NSTimeZone defaultTimeZone];
+    localNotification.applicationIconBadgeNumber = [[UIApplication sharedApplication] applicationIconBadgeNumber] + 1;
+    
+    [[UIApplication sharedApplication] scheduleLocalNotification:localNotification];
+    
+    //
+//    [[NSNotificationCenter defaultCenter] postNotificationName:@"reloadData" object:self];
+    [localNotification release];
+}
 - (void)tapGestureHappened:(UITapGestureRecognizer *)tapGestureRecognizer {
 	if (tapGestureRecognizer.state == UIGestureRecognizerStateEnded) {
 		CGPoint tapLocation = [tapGestureRecognizer locationInView:self];
