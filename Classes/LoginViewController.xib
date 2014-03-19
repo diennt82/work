@@ -21,7 +21,7 @@
             <subviews>
                 <view contentMode="scaleToFill" id="BcU-5a-4Pf">
                     <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
-                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES" heightSizable="YES" flexibleMaxY="YES"/>
+                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                     <subviews>
                         <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="launch_logo.png" id="2se-Xb-ZFc">
                             <rect key="frame" x="73" y="43" width="175" height="175"/>

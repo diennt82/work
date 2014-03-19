@@ -638,7 +638,7 @@
             numOfRows[indexPath.section] == 4)
         {
             UIView *lineView = [[[UIView alloc] initWithFrame:CGRectMake(0, cell.contentView.frame.size.height - 0.5f, cell.contentView.frame.size.width, 0.5f)] autorelease];
-            
+            [lineView setAutoresizingMask:UIViewAutoresizingFlexibleWidth];
             lineView.backgroundColor = [UIColor colorWithRed:195/255.f green:195/255.f blue:195/255.f alpha:1];
             lineView.tag = 905;
             [cell.contentView addSubview:lineView];
