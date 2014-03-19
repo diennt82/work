@@ -38,13 +38,21 @@
 BOOL _isEnableDoNotDisturb = NO;
 - (IBAction)didEnableDisturb:(id)sender {
     _isEnableDoNotDisturb = !_isEnableDoNotDisturb;
+    
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    [userDefaults setBool:_isEnableDoNotDisturb forKey:@"DoNotDisturb"];
+    
     if (_isEnableDoNotDisturb)
     {
+        //enable
+        [[UIApplication sharedApplication] unregisterForRemoteNotifications];
         [self.ib_enableDoNotDisturb setImage:[UIImage imageSwitchOn] forState:UIControlStateNormal];
         [self.ib_circleSliderCustom setUserInteractionEnabled:YES];
     }
     else
     {
+        //disable
+        [[UIApplication sharedApplication] registerForRemoteNotificationTypes:(UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeSound)];
         [self.ib_enableDoNotDisturb setImage:[UIImage imageSwitchOff] forState:UIControlStateNormal];
         [self.ib_circleSliderCustom setUserInteractionEnabled:NO];
     }

@@ -1129,13 +1129,13 @@
                     numOfRows[indexPath.section] = 1;
                 }
                 
-//                for (int i = 0; i < 4; i++)
-//                {
-//                    if (i != indexPath.section)
-//                    {
-//                        numOfRows[i] = 1;
-//                    }
-//                }//xxx
+                for (int i = 0; i < 4; i++)
+                {
+                    if (i != indexPath.section)
+                    {
+                        numOfRows[i] = 1;
+                    }
+                }
             }
             
             // [tableView reloadSections:[NSIndexSet indexSetWithIndex:indexPath.section] withRowAnimation:UITableViewRowAnimationAutomatic];
