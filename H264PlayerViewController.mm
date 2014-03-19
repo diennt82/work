@@ -16,7 +16,7 @@
 #import <GAI.h>
 #import "AudioOutStreamRemote.h"
 
-#import "Reachability.h"
+//#import "Reachability.h"
 #import "MBP_iosViewController.h"
 #define MODEL_SHARED_CAM @"0036"
 #define MODEL_CONCURRENT @"0066"

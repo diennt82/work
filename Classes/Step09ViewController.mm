@@ -17,7 +17,7 @@
 #define TAG_EMAIL    204
 
 #import "Step09ViewController.h"
-#import "Reachability.h"
+//#import "Reachability.h"
 #import "Step_10_ViewController.h"
 #import <MonitorCommunication/MonitorCommunication.h>
 

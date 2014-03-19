@@ -28,7 +28,7 @@
 #import "RegistrationViewController.h"
 #import "LoginViewController.h"
 #import "define.h"
-#import "Reachability.h"
+//#import "Reachability.h"
 #import "SetupData.h"
 
 #import "AlertPrompt.h"

@@ -6,13 +6,16 @@
 //  Copyright (c) 2012 Smart Panda Ltd. All rights reserved.
 //
 
-#define TAG_IMAGE_VIEW_ANIMATION 595
 
 #import "Step_10_ViewController.h"
 #import "StartMonitorCallback.h"
 #import "UserAccount.h"
 #import "HttpCom.h"
 #import "MBP_iosViewController.h"
+
+#define TAG_IMAGE_VIEW_ANIMATION 595
+#define PROXY_HOST @"192.168.193.1"
+#define PROXY_PORT 8888
 
 @interface Step_10_ViewController ()
 
@@ -454,7 +457,9 @@
 {
     self.progressView.hidden = NO;
     [self.view bringSubviewToFront:self.progressView];
-    
+#if 1
+    [self performSelectorInBackground:@selector(registerCameraWithProxy) withObject:nil];
+#else
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
         
     NSString *apiKey    = [userDefaults objectForKey:@"PortalApiKey"];
@@ -482,7 +487,7 @@
     NSLog(@"%@", stringFromDate);
     
     [formatter release];
-    
+
     BMS_JSON_Communication *jsonComm = [[[BMS_JSON_Communication alloc] initWithObject:self
                                                                              Selector:@selector(addCamSuccessWithResponse:)
                                                                          FailSelector:@selector(addCamFailedWithError:)
@@ -490,14 +495,14 @@
     //NSString *mac = [Util strip_colon_fr_mac:self.cameraMac];
     NSString *camName = (NSString *) [userDefaults objectForKey:@"CameraName"];
     
-#if 1
+
     [jsonComm registerDeviceWithDeviceName:camName
                          andRegistrationID:udid
                                    andMode:@"upnp" // Need somethings more usefully
                               andFwVersion:fwVersion
                                andTimeZone:stringFromDate
                                  andApiKey:apiKey];
-#else
+
     //DEMO.SM.COM
     [jsonComm registerDeviceWithDeviceName:camName
                                   andRegId:mac
@@ -520,6 +525,67 @@
                                     andApiKey:apiKey];
     
 #endif
+}
+
+- (void)registerCameraWithProxy
+{
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    
+    NSString *apiKey    = [userDefaults objectForKey:@"PortalApiKey"];
+    NSString *fwVersion = [userDefaults objectForKey:@"FW_VERSION"];
+    NSString *udid      = [userDefaults objectForKey:CAMERA_UDID];
+    /*
+     hack code for device 0066 which return UUID is wrong
+     */
+    NSString *udidOfFocus66Hack = @"01006644334C7E0C8AXHRRBOLC";
+    if ([udid isEqualToString:@"01008344334C7E0C8AXHRRBOLC"])
+    {
+        udid = udidOfFocus66Hack;
+    }
+    
+    //NSLog(@"-----fwVersion = %@, ,model = %@", fwVersion, model);
+    
+    NSDate *now = [NSDate date];
+    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+    [formatter setDateFormat:@"ZZZ"];
+    
+    NSMutableString *stringFromDate = [NSMutableString stringWithString:[formatter stringFromDate:now]];
+    
+    [stringFromDate insertString:@"." atIndex:3];
+    
+    NSLog(@"%@", stringFromDate);
+    
+    [formatter release];
+    
+    BMS_JSON_Communication *jsonComm = [[BMS_JSON_Communication alloc] initWithObject:self
+                                                                             Selector:nil
+                                                                         FailSelector:nil
+                                                                            ServerErr:nil];
+    NSString *camName = (NSString *) [userDefaults objectForKey:@"CameraName"];
+    NSDictionary *responseDict = [jsonComm registerDeviceBlockedWithProxyHost:PROXY_HOST
+                                                                    proxyPort:PROXY_PORT
+                                                                   deviceName:camName
+                                                               registrationID:udid
+                                                                         mode:@"upnp"
+                                                                    fwVersion:fwVersion
+                                                                     timeZone:stringFromDate
+                                                                    andApiKey:apiKey];
+
+    if (responseDict)
+    {
+        if ([[responseDict objectForKey:@"status"] integerValue] == 200)
+        {
+            [self addCamSuccessWithResponse:responseDict];
+        }
+        else
+        {
+            [self addCamFailedWithError:responseDict];
+        }
+    }
+    else
+    {
+        [self addCamFailedServerUnreachable];
+    }
 }
 
 #pragma  mark -

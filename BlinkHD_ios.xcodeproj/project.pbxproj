@@ -57,7 +57,6 @@
 		38AC741815D91A2400618188 /* scan_camera_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 38AC741715D91A2400618188 /* scan_camera_icon.png */; };
 		38B85E4F15CFA4DC00E5A1FA /* Step_07_tableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 38B85E4E15CFA4DC00E5A1FA /* Step_07_tableViewCell.xib */; };
 		38B85E5415CFAA7F00E5A1FA /* Step_07_ViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 38B85E5215CFAA7E00E5A1FA /* Step_07_ViewController.mm */; };
-		38C79E1F15C26270006EE378 /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = 38C79E1D15C25F90006EE378 /* Reachability.m */; };
 		38C79E2215C26947006EE378 /* Step_10_ViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 38C79E2115C26947006EE378 /* Step_10_ViewController.mm */; };
 		38CA70A715F7669D002CD1C5 /* NSData+Conversion.m in Sources */ = {isa = PBXBuildFile; fileRef = 38CA70A515F75E53002CD1C5 /* NSData+Conversion.m */; };
 		38CE2A0C15D4B85E00B8F7EC /* temp_alert_bg.png in Resources */ = {isa = PBXBuildFile; fileRef = 38CE2A0A15D4B85E00B8F7EC /* temp_alert_bg.png */; };
@@ -426,6 +425,7 @@
 		8B73057918D6D05A00D079B0 /* libGoogleAnalytics.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8B73057718D6D05A00D079B0 /* libGoogleAnalytics.a */; };
 		8B88C98718ACBA3000B074E5 /* Hubble_logo_back.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B88C98518ACBA3000B074E5 /* Hubble_logo_back.png */; };
 		8B88C98818ACBA3000B074E5 /* Hubble_logo_back@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B88C98618ACBA3000B074E5 /* Hubble_logo_back@2x.png */; };
+		8B900FD718D85AFF0031C457 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8B900FD618D85AFF0031C457 /* MobileCoreServices.framework */; };
 		8B9112C518600B7C004301C5 /* SettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B9112C318600B7C004301C5 /* SettingsViewController.m */; };
 		8B9112C618600B7C004301C5 /* SettingsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8B9112C418600B7C004301C5 /* SettingsViewController.xib */; };
 		8B9112CA186010F1004301C5 /* GeneralCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B9112C9186010F1004301C5 /* GeneralCell.m */; };
@@ -810,8 +810,6 @@
 		38B85E4E15CFA4DC00E5A1FA /* Step_07_tableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = Step_07_tableViewCell.xib; sourceTree = "<group>"; };
 		38B85E5115CFAA7E00E5A1FA /* Step_07_ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Step_07_ViewController.h; sourceTree = "<group>"; };
 		38B85E5215CFAA7E00E5A1FA /* Step_07_ViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = Step_07_ViewController.mm; sourceTree = "<group>"; };
-		38C79E1C15C25F90006EE378 /* Reachability.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Reachability.h; sourceTree = "<group>"; };
-		38C79E1D15C25F90006EE378 /* Reachability.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Reachability.m; sourceTree = "<group>"; };
 		38C79E2015C26947006EE378 /* Step_10_ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Step_10_ViewController.h; sourceTree = "<group>"; };
 		38C79E2115C26947006EE378 /* Step_10_ViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = Step_10_ViewController.mm; sourceTree = "<group>"; };
 		38CA70A315F75E15002CD1C5 /* NSData+Conversion.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSData+Conversion.h"; sourceTree = "<group>"; };
@@ -1205,6 +1203,7 @@
 		8B73057718D6D05A00D079B0 /* libGoogleAnalytics.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libGoogleAnalytics.a; path = "../ios-frameworks/GoogleAnalyticsLibrary/libGoogleAnalytics.a"; sourceTree = "<group>"; };
 		8B88C98518ACBA3000B074E5 /* Hubble_logo_back.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Hubble_logo_back.png; sourceTree = "<group>"; };
 		8B88C98618ACBA3000B074E5 /* Hubble_logo_back@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Hubble_logo_back@2x.png"; sourceTree = "<group>"; };
+		8B900FD618D85AFF0031C457 /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
 		8B9112C218600B7C004301C5 /* SettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingsViewController.h; sourceTree = "<group>"; };
 		8B9112C318600B7C004301C5 /* SettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingsViewController.m; sourceTree = "<group>"; };
 		8B9112C418600B7C004301C5 /* SettingsViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SettingsViewController.xib; sourceTree = "<group>"; };
@@ -2014,6 +2013,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8B900FD718D85AFF0031C457 /* MobileCoreServices.framework in Frameworks */,
 				8B73057818D6D05A00D079B0 /* libGoogleAnalytics_debug.a in Frameworks */,
 				8B73057918D6D05A00D079B0 /* libGoogleAnalytics.a in Frameworks */,
 				8B9CE1FD18C8384C00B1B7F9 /* QuartzCore.framework in Frameworks */,
@@ -2102,8 +2102,6 @@
 				97D00811159D9FF500B1D92F /* WifiEntry.m */,
 				97D0081A159DA24400B1D92F /* WifiListParser.h */,
 				97D0081B159DA24400B1D92F /* WifiListParser.m */,
-				38C79E1C15C25F90006EE378 /* Reachability.h */,
-				38C79E1D15C25F90006EE378 /* Reachability.m */,
 				38CA70A315F75E15002CD1C5 /* NSData+Conversion.h */,
 				38CA70A515F75E53002CD1C5 /* NSData+Conversion.m */,
 				3803A85C15FDF15600B4DD97 /* CameraAlert.h */,
@@ -2179,6 +2177,7 @@
 		29B97323FDCFA39411CA2CEA /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				8B900FD618D85AFF0031C457 /* MobileCoreServices.framework */,
 				8B73057618D6D05A00D079B0 /* libGoogleAnalytics_debug.a */,
 				8B73057718D6D05A00D079B0 /* libGoogleAnalytics.a */,
 				8B9CE1FC18C8384C00B1B7F9 /* QuartzCore.framework */,
@@ -4382,7 +4381,6 @@
 				8B9112C518600B7C004301C5 /* SettingsViewController.m in Sources */,
 				A118C19F187E4756009176F5 /* HttpCom.m in Sources */,
 				38CA70A715F7669D002CD1C5 /* NSData+Conversion.m in Sources */,
-				38C79E1F15C26270006EE378 /* Reachability.m in Sources */,
 				A10E6BBE18D2F13E00B10EDD /* ChangeImageViewController.m in Sources */,
 				8B9376B618729AC900E20756 /* ClipInfo.m in Sources */,
 				1D60589B0D05DD56006BFB54 /* main.m in Sources */,
