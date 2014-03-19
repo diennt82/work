@@ -62,6 +62,12 @@
 {
     @synchronized(self)
     {
+        if (_timerDisconnectTimeout)
+        {
+            [_timerDisconnectTimeout invalidate];
+            self.timerDisconnectTimeout = nil;
+        }
+        
         if (self.pcmPlayer == nil)
         {
             NSLog(@"Start recording!!!.******");
@@ -217,6 +223,16 @@
     // Waiting for get handshake response
     //[sendingSocket readDataToLength:7 withTimeout:REMOTE_TIMEOUT tag:SENDING_SOCKET_TAG];
     NSLog(@"didWriteDataWithTag");
+    
+    if (_isHandshakeSuccess)
+    {
+        if (self.pcmPlayer == nil && _bufferLength == 0)
+        {
+            return;
+        }
+        
+        //[self sendAudioPacket:nil];
+    }
 }
 
 - (void)onSocket:(AsyncSocket *)sock didReadData:(NSData *)data withTag:(long)tag
@@ -242,6 +258,7 @@
                                                           selector:@selector(sendAudioPacket:)
                                                           userInfo:nil
                                                            repeats:YES];
+        //[self sendAudioPacket:nil];
     }
     
     if ([data isEqualToData:unexpectedData])
@@ -249,7 +266,7 @@
         NSLog(@"Equal Unexpected data");
         //[self stopRecordingSound];
         //[_audioOutStreamRemoteDelegate closeTalkbackSession];
-        [_audioOutStreamRemoteDelegate reportHandshakeFaild];
+        
         self.isHandshakeSuccess = FALSE;
         NSLog(@"AudioOutStreamRemote - handshake failed with error");
         
@@ -262,6 +279,8 @@
         [_alert show];
         [_alert release];
     }
+    
+    [_audioOutStreamRemoteDelegate reportHandshakeFaild:!_isHandshakeSuccess];
 }
 
 #pragma mark - Methods
@@ -343,6 +362,7 @@
                                                       selector:@selector(sendAudioPacket:)
                                                       userInfo:nil
                                                        repeats:YES];
+    //[self sendAudioPacket:nil];
 }
 
 - (void)disconnectFromAudioSocket
