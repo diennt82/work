@@ -366,46 +366,46 @@
         
         //Check again
     }
-    else if ([_currentBLEList count] >= 1) //found 1 within first 5 sec. Grab it now.
+    else
     {
-#if 1
-        [self.viewProgress removeFromSuperview];
-#else
-        [self.ib_RefreshBLE setEnabled:YES];
-        [self.ib_Indicator setHidden:YES];
-        [self.ib_tableListBLE setHidden:NO];
-#endif
         
-        [[BLEConnectionManager getInstanceBLE].cm stopScan];
-        
-        //Update UI
-        [self.ib_lableStage setText:@"Select a device to connect"];
-        
-        [self.ib_tableListBLE reloadData];
-        
-        
+         [[BLEConnectionManager getInstanceBLE].cm stopScan];
         
         //Auto Connect to BLE peripheral name starts with "MBP83... "
         //peripheral.name
-        int index = -1;
+        int last_index = -1;
+        int known_device_count = 0;
         CBPeripheral * peri;
         for (int i =0; i < [BLEConnectionManager getInstanceBLE].listBLEs.count; i++ )
         {
             peri = (CBPeripheral *)[[BLEConnectionManager getInstanceBLE].listBLEs objectAtIndex:0];
-            if ([peri.name hasPrefix:@"MBP83"])
+            if ([peri.name hasPrefix:@"MBP83"] ||
+                [peri.name hasPrefix:@"CameraHD-0083"] ||
+                [peri.name hasPrefix:@"CameraHD-0836"]  ||
+                [peri.name hasPrefix:@"CameraHD-0854"] ||
+                [peri.name hasPrefix:@"CameraHD-0085"])
             {
-                index  =  i;
-                break;
+                last_index  =  i;
+                known_device_count ++;
+                
             }
         }
         
         
-        //Auto connect
-        if (index != -1)
+        //If found only 1 known devices -> Auto connect
+        if ( known_device_count ==1 &&
+            last_index != -1 )
         {
-            NSLog(@"Found 1 MBP83, connect now");
+            NSLog(@"Found 1 %@, connect now",peri.name );
+           
+            
+            //Update UI
+            [self.viewProgress removeFromSuperview];
+            [self.ib_lableStage setText:@"Select a device to connect"];
+            [self.ib_tableListBLE reloadData];
+            
             self.btnConnect.enabled = YES;
-            self.selectedPeripheral = (CBPeripheral *)[[BLEConnectionManager getInstanceBLE].listBLEs objectAtIndex:index];
+            self.selectedPeripheral = (CBPeripheral *)[[BLEConnectionManager getInstanceBLE].listBLEs objectAtIndex:last_index];
             
             [[BLEConnectionManager getInstanceBLE] connectToBLEWithPeripheral:_selectedPeripheral];
             
@@ -413,20 +413,32 @@
             
             
         }
-        else
+        else if (known_device_count >1 ) // more than 1 valid devices
         {
-            NSLog(@"Not found any MBP83, scheduel next check");
+            NSLog(@"Found more than 1 valid devices -> Show lists");
+
+            //Update UI
+            [self.viewProgress removeFromSuperview];
+            [self.ib_lableStage setText:@"Select a device to connect"];
             
+            [self.ib_tableListBLE reloadData];
+            self.btnConnect.enabled = YES;
+            
+            
+        }
+        else // Found no valid device
+        {
+            NSLog(@"Not found any MBP83/CameraHD-0083xxxxxx / CameraHD-0836xxxxxx / CameraHD-0854xxxxxx / CameraHD-0085xxxxxx, schedule next check");
+            
+            [[BLEConnectionManager getInstanceBLE] scan];
             [NSTimer scheduledTimerWithTimeInterval:5.0
                                              target:self
                                            selector:@selector(scanCameraBLEDone)
                                            userInfo:nil
                                             repeats:NO];
             
-
+            
         }
-        
-        
         
         
     }
