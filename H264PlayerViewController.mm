@@ -492,6 +492,8 @@ double _ticks = 0;
                                                          style:UIBarButtonItemStylePlain
                                                         target:self
                                                         action:@selector(earlierButtonAction:)];
+        NSLog(@"Doing the thing!");
+//        [earlierButton setImageInsets:UIEdgeInsetsMake(0, 50, 0, 0)]; NOT WORKING!
         [earlierButton setTitleTextAttributes:@{
                                                 UITextAttributeFont: [UIFont fontWithName:PN_LIGHT_FONT size:17.0],
                                                 UITextAttributeTextColor: [UIColor barItemSelectedColor]
