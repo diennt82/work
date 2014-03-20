@@ -774,6 +774,7 @@
         cell.eventLabel.text = self.stringIntelligentMessage;
         cell.eventDetailLabel.text = self.stringCurrentDate;
         [cell.eventLabel setTextColor:[UIColor timeLineColor]];
+        [cell.eventDetailLabel setFont:[UIFont lightSmall14Font]];
         [cell.eventDetailLabel setTextColor:[UIColor timeLineColor]];
         
         return cell;

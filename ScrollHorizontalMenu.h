@@ -23,6 +23,7 @@
 @protocol ScrollHorizontalMenuDelegate <NSObject>
 @required
 - (void)horizMenu:(ScrollHorizontalMenu *) horizMenu itemSelectedAtIndex:(NSUInteger) index;
+- (void)clearHorizonMenu;
 @end
 
 @interface ScrollHorizontalMenu : UIScrollView {
@@ -39,6 +40,7 @@
 @property (nonatomic, assign) IBOutlet id <ScrollHorizontalMenuDelegate> itemSelectedDelegate;
 @property (nonatomic, retain) IBOutlet id <ScrollHorizontalMenuDataSource> dataSource;
 @property (nonatomic, assign) int itemCount;
+@property (nonatomic, retain) UIButton *lastItemSelected;
 
 -(void) reloadData:(BOOL)isLand;
 -(void) setSelectedIndex:(int) index animated:(BOOL) animated;

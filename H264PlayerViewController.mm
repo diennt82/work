@@ -96,7 +96,6 @@
 @synthesize itemImages = _itemImages;
 @synthesize itemSelectedImages = _itemSelectedImages;
 @synthesize selectedItemMenu = _selectedItemMenu;
-@synthesize lastSelectedItemMenu = _lastSelectedItemMenu;
 @synthesize walkieTalkieEnabled;
 @synthesize httpComm = _httpComm;
 
@@ -130,7 +129,6 @@ double _ticks = 0;
         NSLog(@"Non Retina");
     }
     _selectedItemMenu = INDEX_NO_SELECT;
-    _lastSelectedItemMenu = INDEX_NO_SELECT;
     [self.ib_buttonChangeAction setHidden:NO];
     [self.view bringSubviewToFront:self.ib_buttonChangeAction];
     [self.ib_labelRecordVideo setText:@"Record Video"];
@@ -488,12 +486,10 @@ double _ticks = 0;
 
     if (![self.selectedChannel.profile isSharedCam]) // SharedCam
     {
-        earlierButton = [[UIBarButtonItem alloc] initWithTitle:@"Earlier"
+        earlierButton = [[UIBarButtonItem alloc] initWithTitle:@"      Earlier"
                                                          style:UIBarButtonItemStylePlain
                                                         target:self
                                                         action:@selector(earlierButtonAction:)];
-        NSLog(@"Doing the thing!");
-//        [earlierButton setImageInsets:UIEdgeInsetsMake(0, 50, 0, 0)]; NOT WORKING!
         [earlierButton setTitleTextAttributes:@{
                                                 UITextAttributeFont: [UIFont fontWithName:PN_LIGHT_FONT size:17.0],
                                                 UITextAttributeTextColor: [UIColor barItemSelectedColor]
@@ -1415,7 +1411,6 @@ double _ticks = 0;
 {
     //reset selected menu;
     _selectedItemMenu = INDEX_NO_SELECT;
-    _lastSelectedItemMenu = INDEX_NO_SELECT;
     
     if (_timelineVC != nil)
     {
@@ -4565,16 +4560,6 @@ double _ticks = 0;
      4. temp
      */
     
-    if (_lastSelectedItemMenu == index)
-    {
-        [self showTimelineView];
-        return;
-    }
-    else
-    {
-        _lastSelectedItemMenu = index;
-    }
-    
     //show when user selecte one item inner control panel
     [self showControlMenu];
         
@@ -4666,6 +4651,13 @@ double _ticks = 0;
     [self updateBottomView];
     [self applyFont];
     [self hideTimelineView];
+}
+
+- (void) clearHorizonMenu
+{
+//    [self hidenAllBottomView];
+    NSLog(@"Showing timeline");
+    [self showTimelineView];
 }
 
 - (void)updateBottomView

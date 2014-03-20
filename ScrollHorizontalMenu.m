@@ -22,6 +22,7 @@
 @synthesize itemSelectedDelegate;
 @synthesize dataSource;
 @synthesize itemCount = _itemCount;
+@synthesize lastItemSelected = _lastItemSelected;
 
 -(void) awakeFromNib
 {
@@ -136,11 +137,23 @@
     
     for(int i = 0; i < self.itemCount; i++)
     {
+        NSLog(@"i = %i", i);
         UIButton *thisButton = (UIButton*) [self viewWithTag:i + kButtonBaseTag];
         
         if(i + kButtonBaseTag == button.tag)
         {
+            if (_lastItemSelected == thisButton)
+            {
+                [self clearButtons];
+                _lastItemSelected = NULL;
+                
+                [self.itemSelectedDelegate clearHorizonMenu];
+                
+                return;
+            }
+            
             thisButton.selected = YES;
+            _lastItemSelected = thisButton;
         }
         else
         {
@@ -151,10 +164,19 @@
     [self.itemSelectedDelegate horizMenu:self itemSelectedAtIndex:button.tag - kButtonBaseTag];
 }
 
+- (void) clearButtons
+{
+    for(int i = 0; i < self.itemCount; i++)
+    {
+        UIButton *thisButton = (UIButton*) [self viewWithTag:i + kButtonBaseTag];
+        
+        thisButton.selected = NO;
+    }
+}
+
 - (void) willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
 {
 	NSLog(@"abc");
-    
 }
 
 - (void)dealloc
