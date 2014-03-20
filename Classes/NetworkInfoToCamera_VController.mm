@@ -682,7 +682,7 @@
     
     if (camPass == nil ) //// default pass
     {
-        camPass = @"000000";
+        camPass = @"00000000";
         NSLog(@"02 cam password is default: %@", camPass);
     }
     

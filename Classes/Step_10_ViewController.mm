@@ -6,7 +6,6 @@
 //  Copyright (c) 2012 Smart Panda Ltd. All rights reserved.
 //
 
-#define TAG_IMAGE_VIEW_ANIMATION 595
 
 #import "Step_10_ViewController.h"
 #import "StartMonitorCallback.h"
@@ -14,7 +13,11 @@
 #import "HttpCom.h"
 #import "MBP_iosViewController.h"
 
-@interface Step_10_ViewController ()
+#define TAG_IMAGE_VIEW_ANIMATION 595
+#define PROXY_HOST @"192.168.193.1"
+#define PROXY_PORT 8888
+
+@interface Step_10_ViewController () <UIAlertViewDelegate>
 
 @property (nonatomic, assign) IBOutlet UIView * progressView;
 @property (retain, nonatomic) UserAccount *userAccount;
@@ -44,41 +47,24 @@
 
 -(void) dealloc
 {
-
     [_userAccount release];
     //[userEmailLabel release];
     //[progressView release]; 
     [cameraMac release];
     [master_key release];
 
-    
     //[cameraName release];
     [_ib_scollViewGuide release];
     [_ib_viewGuild release];
     [_ib_resumeSetup release];
     [super dealloc];
 }
-- (void)sendCommandRebootCamera
-{
-    NSLog(@"Send command reset camera");
-//    HttpCommunication *comm = [[HttpCommunication alloc]init];
-    NSString * command = RESTART_HTTP_CMD;
-    [[HttpCom instance].comWithDevice sendCommandAndBlock:command];
-}
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
     
-#if 1
-
     [self.ib_scollViewGuide setContentSize:CGSizeMake(320, 1401)];
-
-#endif
-    // Do any additional setup after loading the view.
-	[[NSNotificationCenter defaultCenter] addObserver: self
-                                             selector: @selector(handleEnteredBackground)
-                                                 name: UIApplicationDidEnterBackgroundNotification
-                                               object: nil];
     
     // Do any additional setup after loading the view.
 	[[NSNotificationCenter defaultCenter] addObserver: self
@@ -119,14 +105,11 @@
         
         [self.view addSubview:self.progressView];
         self.progressView.hidden = YES;
-        
-        
     }
     else //not first time --> this is normal add camera sequence..
     {
         //Hide back button -- can't go back now..
         self.navigationItem.hidesBackButton = TRUE;
-#if 1
         self.navigationItem.hidesBackButton = YES;
         
         UIImage *hubbleLogoBack = [UIImage imageNamed:@"Hubble_back_text"];
@@ -137,10 +120,7 @@
         [barBtnHubble setTintColor:[UIColor colorWithPatternImage:hubbleLogoBack]];
         
         self.navigationItem.leftBarButtonItem = barBtnHubble;
-#else
-        self.navigationItem.title =NSLocalizedStringWithDefaultValue(@"Camera_Configured",nil, [NSBundle mainBundle],
-                                                                     @"Camera Configured" , nil);
-#endif
+
         NSLog(@"Normal Add cam sequence" );
         
         NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
@@ -162,26 +142,15 @@
 
         self.homeSSID.text = homeSsid;
         
-        
         //First add camera
         [self registerCamera:nil];
-        
     }
-        
-}
-
--(void) handleEnteredBackground
-{
-//    showProgressNextTime = TRUE;
 }
 
 -(void) becomeActive
 {
-//    if (showProgressNextTime)
-//    {
-        NSLog(@"cshow progress 03");
-        [self showProgress:nil];
-//    }
+    NSLog(@"cshow progress 03");
+    [self showProgress:nil];
     
 //    task_cancelled = NO;
     [self waitingCameraRebootAndForceToWifiHome];
@@ -190,14 +159,23 @@
 -(void) showProgress:(NSTimer *) exp
 {
     NSLog(@"show progress ");
+    if (self.progressView != nil)
     {
-        if (self.progressView != nil)
-        {
-            NSLog(@"show progress 01 ");
-            self.progressView.hidden = NO;
-            [self.view bringSubviewToFront:self.progressView];
-        }
+        NSLog(@"show progress 01 ");
+        self.progressView.hidden = NO;
+        [self.view bringSubviewToFront:self.progressView];
     }
+}
+
+- (void)sendCommandRebootCamera
+{
+    NSLog(@"Send command reset camera");
+    //    HttpCommunication *comm = [[HttpCommunication alloc]init];
+    NSString * command = RESTART_HTTP_CMD;
+    
+    NSLog(@"[HttpCom instance]: %p", [HttpCom instance]);
+    
+    [[HttpCom instance].comWithDevice sendCommandAndBlock:command];
 }
 
 - (void) hideProgess
@@ -207,7 +185,6 @@
     {
         self.progressView.hidden = YES;
     }
-    
 }
 
 - (void)viewDidUnload
@@ -216,15 +193,8 @@
     // Release any retained subviews of the main view.
 }
 
--(void) viewWillAppear:(BOOL)animated
-{
-    UIInterfaceOrientation interfaceOrientation = [UIApplication sharedApplication].statusBarOrientation;
-    [self adjustViewsForOrientations:interfaceOrientation];
-}
-
 - (void)viewWillDisappear:(BOOL)animated
 {
-    
     //Dismiss alertView in case interrupt : lock key, home key, phone call
     if (_alertChooseConfig)
     {
@@ -238,143 +208,6 @@
 - (void)hubbleItemAction:(id)sender
 {
     [self.navigationController popViewControllerAnimated:YES];
-}
-
-- (void)startAnimationWithOrientation
-{
-    UIImageView *animationView =  (UIImageView *)[cameraAddedView viewWithTag:TAG_IMAGE_VIEW_ANIMATION];
-    //UIImageView *animationView = [[UIImageView alloc ] initWithFrame:deviceScreen];
-    
-    [animationView setContentMode:UIViewContentModeScaleAspectFit];
-    
-    if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 7.0)
-    {
-        animationView.animationImages =[NSArray arrayWithObjects:
-                                        [UIImage imageNamed:@"frame-1_update-iOS7_new"],
-                                        [UIImage imageNamed:@"frame-2_update-iOS7_new"],
-                                        [UIImage imageNamed:@"frame-3_update-iOS7_new"],
-                                        [UIImage imageNamed:@"frame-4-2_update-iOS7_new"],
-                                        [UIImage imageNamed:@"frame-5_update-iOS7_new"],
-                                        [UIImage imageNamed:@"frame-6_update-iOS7_new2"],
-                                        nil];
-        NSLog(@"ios 7");
-    }
-    
-    else
-    {
-        animationView.animationImages =[NSArray arrayWithObjects:
-                                        [UIImage imageNamed:@"frame-1_update_new"],
-                                        [UIImage imageNamed:@"frame-2_update_new"],
-                                        [UIImage imageNamed:@"frame-3_update_new"],
-                                        [UIImage imageNamed:@"frame-4-2_update_new"],
-                                        [UIImage imageNamed:@"frame-5_update_new"],
-                                        [UIImage imageNamed:@"frame-6_update_new"],
-                                        nil];
-        NSLog(@"ios < 7");
-    }
-    
-    animationView.animationDuration = 18;
-    animationView.animationRepeatCount = 0;
-    
-    [cameraAddedView bringSubviewToFront:animationView];
-    
-    [animationView startAnimating];
-}
-
-#pragma mark -
-#pragma mark Rotating
-- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
-{
-    return   ((interfaceOrientation == UIInterfaceOrientationPortrait) ||
-              (interfaceOrientation == UIInterfaceOrientationLandscapeLeft) ||
-              (interfaceOrientation == UIInterfaceOrientationLandscapeRight));
-}
-
--(BOOL)shouldAutorotate
-{
-    return YES;
-}
-
--(NSUInteger) supportedInterfaceOrientations
-{
-    return UIInterfaceOrientationMaskAllButUpsideDown;
-}
-
--(void) willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
-{
-    [self adjustViewsForOrientations:toInterfaceOrientation];
-}
-
--(void) adjustViewsForOrientations: (UIInterfaceOrientation) interfaceOrientation
-{
-#if 0
-    
-    if (interfaceOrientation == UIInterfaceOrientationLandscapeLeft || interfaceOrientation == UIInterfaceOrientationLandscapeRight)
-    {
-        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
-        {
-            //[[NSBundle mainBundle] loadNibNamed:@"Step_10_ViewController_land_ipad" owner:self options:nil];
-        }
-        else
-        {
-           // [[NSBundle mainBundle] loadNibNamed:@"Step_10_ViewController_land" owner:self options:nil];
-        }
-    }
-    else if (interfaceOrientation == UIInterfaceOrientationPortrait || interfaceOrientation == UIInterfaceOrientationPortraitUpsideDown)
-    {
-        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
-        {
-           // [[NSBundle mainBundle] loadNibNamed:@"Step_10_ViewController_ipad" owner:self options:nil];
-        }
-        else
-        {
-           // [[NSBundle mainBundle] loadNibNamed:@"Step_10_ViewController" owner:self options:nil];
-            
-        }
-    }
-    
-
-    
-    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-    
-    BOOL firstime = [userDefaults boolForKey:FIRST_TIME_SETUP];
-  
-    
-    //can be user email or user name here --
-    self.userNameLabel.text = (NSString *) [userDefaults objectForKey:@"PortalUsername"];
-    self.userEmailLabel.text = (NSString *) [userDefaults objectForKey:@"PortalUseremail"];
-    
-     //Hide back button -- can't go back now..
-    self.navigationItem.hidesBackButton = YES;
-    
-    //Check to see which path we should go
-    if (firstime == TRUE)
-    {
-        // Do any additional setup after loading the view.
-        
-        self.navigationItem.title =NSLocalizedStringWithDefaultValue(@"Account_Created",nil, [NSBundle mainBundle],
-                                                                     @"Account Created" , nil);
-        
-        
-        
-        
-        
-    }
-    else //not first time --> this is normal add camera sequence..
-    {
-       
-        self.navigationItem.title =NSLocalizedStringWithDefaultValue(@"Camera_Configured",nil, [NSBundle mainBundle],
-                                                                     @"Camera Configured" , nil);
-        
-        [self.view addSubview:self.progressView];
-        //self.progressView.hidden = hidden;
-        [self.view addSubview:cameraAddedView];
-        NSString * homeSsid = (NSString *) [userDefaults objectForKey:HOME_SSID];
-        self.homeSSID.text = homeSsid;
-        
-    }
-#endif
-
 }
 
 - (void)showDialogChooseConfigCamera
@@ -399,6 +232,7 @@
     [_alertChooseConfig show];
 }
 
+#if 0
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
     
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
@@ -442,6 +276,8 @@
         }];
     }
 }
+#endif
+
 #pragma  mark -
 #pragma mark button handlers
 
@@ -454,7 +290,9 @@
 {
     self.progressView.hidden = NO;
     [self.view bringSubviewToFront:self.progressView];
-    
+#if 1
+    [self performSelectorInBackground:@selector(registerCameraWithProxy) withObject:nil];
+#else
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
         
     NSString *apiKey    = [userDefaults objectForKey:@"PortalApiKey"];
@@ -482,7 +320,7 @@
     NSLog(@"%@", stringFromDate);
     
     [formatter release];
-    
+
     BMS_JSON_Communication *jsonComm = [[[BMS_JSON_Communication alloc] initWithObject:self
                                                                              Selector:@selector(addCamSuccessWithResponse:)
                                                                          FailSelector:@selector(addCamFailedWithError:)
@@ -490,14 +328,14 @@
     //NSString *mac = [Util strip_colon_fr_mac:self.cameraMac];
     NSString *camName = (NSString *) [userDefaults objectForKey:@"CameraName"];
     
-#if 1
+
     [jsonComm registerDeviceWithDeviceName:camName
                          andRegistrationID:udid
                                    andMode:@"upnp" // Need somethings more usefully
                               andFwVersion:fwVersion
                                andTimeZone:stringFromDate
                                  andApiKey:apiKey];
-#else
+
     //DEMO.SM.COM
     [jsonComm registerDeviceWithDeviceName:camName
                                   andRegId:mac
@@ -522,16 +360,77 @@
 #endif
 }
 
+- (void)registerCameraWithProxy
+{
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    
+    NSString *apiKey    = [userDefaults objectForKey:@"PortalApiKey"];
+    NSString *fwVersion = [userDefaults objectForKey:@"FW_VERSION"];
+    NSString *udid      = [userDefaults objectForKey:CAMERA_UDID];
+    /*
+     hack code for device 0066 which return UUID is wrong
+     */
+    NSString *udidOfFocus66Hack = @"01006644334C7E0C8AXHRRBOLC";
+    
+    if ([udid isEqualToString:@"01008344334C7E0C8AXHRRBOLC"])
+    {
+        udid = udidOfFocus66Hack;
+    }
+    
+    //NSLog(@"-----fwVersion = %@, ,model = %@", fwVersion, model);
+    
+    NSDate *now = [NSDate date];
+    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+    [formatter setDateFormat:@"ZZZ"];
+    
+    NSMutableString *stringFromDate = [NSMutableString stringWithString:[formatter stringFromDate:now]];
+    
+    [stringFromDate insertString:@"." atIndex:3];
+    
+    NSLog(@"%@", stringFromDate);
+    
+    [formatter release];
+    
+    BMS_JSON_Communication *jsonComm = [[BMS_JSON_Communication alloc] initWithObject:self
+                                                                             Selector:nil
+                                                                         FailSelector:nil
+                                                                            ServerErr:nil];
+    NSString *camName = (NSString *) [userDefaults objectForKey:@"CameraName"];
+    NSDictionary *responseDict = [jsonComm registerDeviceBlockedWithProxyHost:PROXY_HOST
+                                                                    proxyPort:PROXY_PORT
+                                                                   deviceName:camName
+                                                               registrationID:udid
+                                                                         mode:@"upnp"
+                                                                    fwVersion:fwVersion
+                                                                     timeZone:stringFromDate
+                                                                    andApiKey:apiKey];
+    [jsonComm release];
+
+    if (responseDict)
+    {
+        if ([[responseDict objectForKey:@"status"] integerValue] == 200)
+        {
+            [self addCamSuccessWithResponse:responseDict];
+        }
+        else
+        {
+            [self addCamFailedWithError:responseDict];
+        }
+    }
+    else
+    {
+        [self addCamFailedServerUnreachable];
+    }
+}
+
 #pragma  mark -
 #pragma mark Timer callbacks
 -(void) silentRetryTimeout:(NSTimer *) expired
 {
-    
     //TIMEOUT --
     should_retry_silently = FALSE; 
     
 }
-
 
 -(void) homeWifiScanTimeout: (NSTimer *) expired
 {
@@ -542,7 +441,6 @@
     NSLog(@" Timeout while trying to search for Home Wifi: %@", homeSsid);
     
     shouldStopScanning = TRUE;
-    
 }
 
 - (void) checkConnectionToHomeWifi:(NSTimer *) expired
@@ -563,10 +461,6 @@
         return;
     }
     
-    
-    
-    
-    
     NSLog(@"check ConnectionToHomeWifi 03: %@", currentSSID);
         NSLog(@"check ConnectionToHomeWifi : %@ and homeSsid: %@", currentSSID, homeSsid);
 	if ([currentSSID isEqualToString:homeSsid])
@@ -585,7 +479,6 @@
                 [timeOut invalidate];
                 
             }
-            
             
             [self wait_for_camera_to_reboot:nil];
             
@@ -630,9 +523,6 @@
      - Start timer to check [checkConnectionToHomeWifi]
      
       */
-    
-    
-
 }
 
 - (void)sendMasterKeyToDevice
@@ -657,14 +547,11 @@
             ///done
             NSLog(@"sending master key done");
             [self sendCommandRebootCamera];
-            
-       
 
-            [self waitingCameraRebootAndForceToWifiHome];
+            //[self waitingCameraRebootAndForceToWifiHome];
+            [self performSelectorOnMainThread:@selector(waitingCameraRebootAndForceToWifiHome) withObject:nil waitUntilDone:NO];
         }
-        
     }
-
 }
 
 - (void)waitingCameraRebootAndForceToWifiHome
@@ -700,8 +587,6 @@
 
 - (void) wait_for_camera_to_reboot:(NSTimer *)exp
 {
-
-    
     if (should_stop_scanning == TRUE)
     {
         should_stop_scanning = FALSE;
@@ -732,16 +617,14 @@
 
 - (void) checkScanResult: (NSTimer *) expired
 {
-	
-	
 	if (scanner == nil)
 	{
 		NSLog(@"ERROR : scan = nil, don't reschedule");
 		return; 
 	}
 	
-	
-	NSArray * result ; 
+	NSArray * result ;
+    
 	if ([scanner getResults:&result])
 	{
 		NSLog(@"Got some result, check if there is this camera that we are waiting for ");
@@ -936,7 +819,7 @@
 
 - (void) addCamSuccessWithResponse:(NSDictionary *)responseData
 {
-    NSLog(@"Do for concurent modep - addcam response: %@", responseData);
+    NSLog(@"Do for concurent modep - addcam response");
     self.stringAuth_token = [[responseData objectForKey:@"data"] objectForKey:@"auth_token"];
     //send master key to device
     [self sendMasterKeyToDevice];
@@ -949,6 +832,7 @@
         NSLog(@"Error - error_response = nil");
         return;
     }
+    
     NSLog(@"addcam failed with error code:%d", [[error_response objectForKey:@"status"] intValue]);
     
     NSString * msg = NSLocalizedStringWithDefaultValue(@"Server_error_" ,nil, [NSBundle mainBundle],
@@ -1026,9 +910,7 @@
 }
 
 #pragma mark - 
-#pragma mark AlertView delegate 
-
-
+#pragma mark AlertView delegate
 
 - (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex
 {

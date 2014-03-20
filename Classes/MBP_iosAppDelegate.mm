@@ -507,7 +507,7 @@
             [self forceLogin:TRUE];
         }
     }
-    else if (viewController.app_stage == APP_STAGE_LOGGING_IN)
+    else if (viewController.app_stage == APP_STAGE_LOGGING_IN || viewController.app_stage == APP_STAGE_INIT)
     {
         [userDefaults setBool:FALSE forKey:_AutoLogin];
         [userDefaults synchronize];
