@@ -26,7 +26,7 @@
 
 @property (nonatomic, assign) IBOutlet UITableViewCell *cellView;
 
--(IBAction) handleButtonPressed:(id) sender;
+//-(IBAction) handleButtonPressed:(id) sender;
 - (IBAction)performRefreshWifiList:(id)sender;
 
 @end

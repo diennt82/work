@@ -373,26 +373,24 @@
 {
     NSData * router_list_raw;
     
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     
-    router_list_raw = [[HttpCom instance].comWithDevice sendCommandAndBlock_raw:GET_ROUTER_LIST2 withTimeout:2*DEFAULT_TIME_OUT];
-    
-    //NSLog(@"%@", [[NSString alloc] initWithData:router_list_raw encoding:NSUTF8StringEncoding]);
-    
-    NSString *routerList = [[NSString alloc] initWithData:router_list_raw encoding:NSUTF8StringEncoding];
-    
-    // NSLog(@"%@", routerList);// 404: Not Found!
-    WifiListParser * routerListParser = nil;
+    NSString *fwVersion = [userDefaults stringForKey:@"FW_VERSION"]; // 01.12.58
     
     BOOL newCmdFlag = TRUE;
     
-    if (router_list_raw)
+    if ([fwVersion isEqualToString:@"01.12.58"])
     {
-        if ([routerList hasPrefix:@"404: Not Found!"])
-        {
-            router_list_raw = [[HttpCom instance].comWithDevice sendCommandAndBlock_raw:GET_ROUTER_LIST];
-            newCmdFlag = FALSE;
-        }
+        router_list_raw = [[HttpCom instance].comWithDevice sendCommandAndBlock_raw:GET_ROUTER_LIST2 withTimeout:2*DEFAULT_TIME_OUT];
     }
+    else
+    {
+        router_list_raw = [[HttpCom instance].comWithDevice sendCommandAndBlock_raw:GET_ROUTER_LIST withTimeout:2*DEFAULT_TIME_OUT];
+        newCmdFlag = FALSE;
+    }
+    
+    // NSLog(@"%@", routerList);// 404: Not Found!
+    WifiListParser * routerListParser = nil;
     
     if (router_list_raw != nil)
     {

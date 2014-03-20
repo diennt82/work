@@ -20,6 +20,7 @@
 @property (retain, nonatomic) IBOutlet UIView *viewProgress;
 
 @property (retain, nonatomic) WifiEntry *selectedWifiEntry;
+@property (nonatomic) BOOL newCmdFlag;
 
 @end
 
@@ -72,6 +73,7 @@
     [self.btnContinue setBackgroundImage:[UIImage imageNamed:@"green_btn"] forState:UIControlStateNormal];
     [self.btnContinue setBackgroundImage:[UIImage imageNamed:@"green_btn_pressed"] forState:UIControlEventTouchDown];
     self.btnContinue.enabled = NO;
+    self.newCmdFlag = TRUE;
     
     [BLEConnectionManager getInstanceBLE].delegate = self;
     _listOfWifi = [[NSMutableArray alloc] init];
@@ -462,7 +464,23 @@
     //retry sending get wifi
     NSLog(@"Send command get routers list, now!!!");
     [BLEConnectionManager getInstanceBLE].delegate = self;
-    [[BLEConnectionManager getInstanceBLE].uartPeripheral writeString:GET_ROUTER_LIST2 withTimeOut:LONG_TIME_OUT_SEND_COMMAND];
+    
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    
+    NSString *fwVersion = [userDefaults stringForKey:@"FW_VERSION"]; // 01.12.58
+    
+    if ([fwVersion isEqualToString:@"01.12.58"])
+    {
+        self.newCmdFlag = TRUE;
+        [[BLEConnectionManager getInstanceBLE].uartPeripheral writeString:GET_ROUTER_LIST2 withTimeOut:LONG_TIME_OUT_SEND_COMMAND];
+    }
+    else
+    {
+        self.newCmdFlag = FALSE;
+        [[BLEConnectionManager getInstanceBLE].uartPeripheral writeString:GET_ROUTER_LIST withTimeOut:LONG_TIME_OUT_SEND_COMMAND];
+    }
+    
+    
     NSDate * date;
     while ([BLEConnectionManager getInstanceBLE].uartPeripheral.isBusy)
     {
@@ -515,7 +533,7 @@
             if (router_list_raw != nil)
             {
                 WifiListParser * routerListParser = nil;
-                routerListParser = [[WifiListParser alloc]init];
+                routerListParser = [[WifiListParser alloc] initWithNewCmdFlag:_newCmdFlag];
                 
                 [routerListParser parseData:router_list_raw
                                whenDoneCall:@selector(setWifiResult:)
