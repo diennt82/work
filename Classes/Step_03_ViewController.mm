@@ -14,11 +14,13 @@
 @interface Step_03_ViewController ()
 
 @property (retain, nonatomic) IBOutlet UIScrollView *scrollViewGuide;
+@property (retain, nonatomic) IBOutlet UIView *inProgress;
+
+
 @end
 
 @implementation Step_03_ViewController
 
-@synthesize  inProgress;
 @synthesize   cameraMac,  cameraName, homeWifiSSID;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
@@ -50,7 +52,7 @@
     
     CGAffineTransform transform = CGAffineTransformMakeScale(1.0f, 4.0f);
     [self.view viewWithTag:501].transform = transform;
-    [inProgress viewWithTag:501].transform = transform;
+    [_inProgress viewWithTag:501].transform = transform;
     
     UIImageView *imageView  = (UIImageView *)[self.inProgress viewWithTag:575];
     imageView.animationImages = @[[UIImage imageNamed:@"setup_camera_c1"],
@@ -102,9 +104,6 @@
                                              selector: @selector(becomeActive)
                                                  name: UIApplicationDidBecomeActiveNotification
                                                object: nil];
-    
-    UIInterfaceOrientation orientation = [UIApplication sharedApplication].statusBarOrientation;
-    [self adjustViewsForOrientations:orientation];
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -136,131 +135,17 @@
     [self.navigationController pushViewController:[[Step_04_ViewController alloc] init] animated:YES];
 }
 
-#pragma mark _ Method Animation
-
-- (void)startAnimationWithOrientation
-{
-    UIImageView *animationView =  (UIImageView *)[self.view viewWithTag:TAG_IMAGE_ANIMATION];
-    
-    [animationView setContentMode:UIViewContentModeScaleAspectFit];
-    
-    if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 7.0)
-    {
-        animationView.animationImages =[NSArray arrayWithObjects:
-                                        [UIImage imageNamed:@"frame-1_update-iOS7_new"],
-                                        [UIImage imageNamed:@"frame-2_update-iOS7_new"],
-                                        [UIImage imageNamed:@"frame-3_update-iOS7_new"],
-                                        [UIImage imageNamed:@"frame-4-1_update-iOS7_new"],
-                                        [UIImage imageNamed:@"frame-5_update-iOS7_new"],
-                                        [UIImage imageNamed:@"frame-6_update-iOS7_new2"],
-                                        nil];
-        NSLog(@"ios 7");
-    }
-    
-    else
-    {
-        animationView.animationImages =[NSArray arrayWithObjects:
-                                        [UIImage imageNamed:@"frame-1_update_new"],
-                                        [UIImage imageNamed:@"frame-2_update_new"],
-                                        [UIImage imageNamed:@"frame-3_update_new"],
-                                        [UIImage imageNamed:@"frame-4-1_update_new"],
-                                        [UIImage imageNamed:@"frame-5_update_new"],
-                                        [UIImage imageNamed:@"frame-6_update_new"],
-                                        nil];
-        NSLog(@"ios < 7");
-    }
-    
-    animationView.animationDuration = 18;
-    animationView.animationRepeatCount = 0;
-    
-    [self.view bringSubviewToFront:animationView];
-    
-    [animationView startAnimating];
-}
-
-#pragma mark -
-#pragma mark Rotating
-- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
-{
-    return   ((interfaceOrientation == UIInterfaceOrientationPortrait) ||
-              (interfaceOrientation == UIInterfaceOrientationLandscapeLeft) ||
-              (interfaceOrientation == UIInterfaceOrientationLandscapeRight));}
-
--(BOOL)shouldAutorotate
-{
-    return YES;
-}
-
--(NSUInteger) supportedInterfaceOrientations
-{
-    return UIInterfaceOrientationMaskAllButUpsideDown;
-}
-
--(void) willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
-{
-    [self adjustViewsForOrientations:toInterfaceOrientation];
-}
-
--(void) adjustViewsForOrientations: (UIInterfaceOrientation) interfaceOrientation
-{
-//    if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 7) {
-        // Load resources for iOS 7 or later
-        if (interfaceOrientation == UIInterfaceOrientationLandscapeLeft ||
-            interfaceOrientation == UIInterfaceOrientationLandscapeRight)
-        {
-            if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
-            {
-                //[[NSBundle mainBundle] loadNibNamed:@"Step_03_ViewController_land_ipad" owner:self options:nil];
-            }
-            else
-            {
-                BOOL hidden = self.inProgress.hidden;
-                [self.inProgress removeFromSuperview];
-                
-                
-                //[[NSBundle mainBundle] loadNibNamed:@"Step_03_ViewController_land" owner:self options:nil];
-                
-                [self.view addSubview:self.inProgress];
-                self.inProgress.hidden = hidden;
-                
-            }
-        }
-        else if (interfaceOrientation == UIInterfaceOrientationPortrait ||
-                 interfaceOrientation == UIInterfaceOrientationPortraitUpsideDown)
-        {
-            if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
-            {
-                //[[NSBundle mainBundle] loadNibNamed:@"Step_03_ViewController_ipad" owner:self options:nil];
-            }
-            else
-            {
-                BOOL hidden = self.inProgress.hidden;
-                [self.inProgress removeFromSuperview];
-                
-                
-                //[[NSBundle mainBundle] loadNibNamed:@"Step_03_ViewController" owner:self options:nil];
-                [self.view addSubview:self.inProgress];
-                self.inProgress.hidden = hidden;
-                
-                
-            }
-        }
-        
-//    }
-}
 #pragma mark -
 
 -(void) dealloc
 {
     [homeWifiSSID release];
-    [inProgress release];
     [cameraName release];
     [cameraMac release];
     [_scrollViewGuide release];
+    [_inProgress release];
     [super dealloc];
 }
-
-
 
 - (IBAction)handleButtonPress:(id)sender
 {
@@ -273,7 +158,6 @@
         //Open wifi
         [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"prefs:root=WIFI"]];
     }
-    
 }
 
 -(void) handleEnteredBackground
@@ -319,13 +203,10 @@
         [imageView stopAnimating];
         self.inProgress.hidden = YES;
     }
-    
 }
-
 
 - (void) checkConnectionToCamera:(NSTimer *) expired
 {
-	
 	
 #if TARGET_IPHONE_SIMULATOR != 1
     
@@ -354,9 +235,6 @@
     
     NSLog(@"checkConnectionToCamera 01");
 #endif
-	
-    
-    
     
 	NSString * currentSSID = [CameraPassword fetchSSIDInfo];
     
@@ -367,8 +245,6 @@
         
     }
 #endif
-    
-    
     
     NSLog(@"checkConnectionToCamera 03: %@", currentSSID);
 	if ([currentSSID hasPrefix:DEFAULT_SSID_PREFIX] || [currentSSID hasPrefix:DEFAULT_SSID_HD_PREFIX])
@@ -409,9 +285,7 @@
 			[self moveToNextStep];
 			return;
 		}
-		
 	}
-	
 	
 	if (task_cancelled == YES)
 	{
@@ -535,11 +409,8 @@
 #pragma mark -
 #pragma mark AlertView delegate
 
-
-
 - (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex
 {
-    
 	int tag = alertView.tag;
     
     if (tag == ALERT_FWCHECK_FAILED)
@@ -548,11 +419,6 @@
         
         [self setupFailedFWCheck];
     }
-    
 }
-
-
-#pragma mark -
-
 
 @end

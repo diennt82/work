@@ -36,6 +36,7 @@
     }
     return self;
 }
+
 -(void) dealloc
 {
     [_tfSSID release];
@@ -51,6 +52,7 @@
     [_scrollViewGuide release];
     [super dealloc];
 }
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -335,7 +337,6 @@
     {
         [textField resignFirstResponder];
     }
-    
 }
 
 
@@ -364,14 +365,12 @@
             {
                 UITextField *tfSsid  = (UITextField*) [ssidCell viewWithTag:202];
                 
-                
                 [tfSsid setUserInteractionEnabled:TRUE];
             }
             return ssidCell;
         }
         else if (indexPath.section == SEC_SECTION)
         {
-            
             if (indexPath.row == SEC_INDEX) {
                 return securityCell;
             }
@@ -383,13 +382,10 @@
             {
                 return confPasswordCell;
             }
-            
         }
-
     }
         
     return nil;
-   
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
@@ -414,9 +410,9 @@
         }
     }
    
-   
     return 1;
 }
+
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
     int tag = tableView.tag;
@@ -429,27 +425,21 @@
     return 0; 
 }
 
-
-
 - (void)tableView: (UITableView *)tableView didSelectRowAtIndexPath: (NSIndexPath *)indexPath 
 {
-    
     [tableView deselectRowAtIndexPath:[tableView indexPathForSelectedRow] 
                              animated:NO];
     
     if ([self.ssid isEqualToString:@"Other Network"])
     {
-    
         if (indexPath.section == SEC_SECTION)
         {
             if (indexPath.row == SEC_INDEX) 
             {
                 [self changeSecurityType];
-                
             }
         }
     }
-    
     
     if (indexPath.section == SSID_SECTION)
     {
@@ -460,29 +450,21 @@
             [tfSsid setUserInteractionEnabled:TRUE];
             [tfSsid becomeFirstResponder];
         }
-
     }
     else if (indexPath.section == SEC_SECTION)
     {
-        
-        
         if (indexPath.row == PASSWORD_INDEX)
         {
             UITextField * txtField = (UITextField*) [passwordCell viewWithTag:200];
             [txtField becomeFirstResponder];
-
-        }
-        if (indexPath.row == CONFPASSWORD_INDEX)
-        {
-            
-            UITextField * txtField = (UITextField*) [confPasswordCell viewWithTag:201];
-            [txtField becomeFirstResponder];
-
         }
         
+        if (indexPath.row == CONFPASSWORD_INDEX)
+        {
+            UITextField * txtField = (UITextField*) [confPasswordCell viewWithTag:201];
+            [txtField becomeFirstResponder];
+        }
     }
-
-    
 }
 
 #pragma  mark -
@@ -516,10 +498,7 @@
     [self.navigationController pushViewController:step07ViewController animated:NO];
     
     [step07ViewController release];
-    
 }
-
-
 
 -(void) handleNextButton:(id) sender
 {
@@ -532,8 +511,8 @@
     
     [self.progressView setHidden:NO];
     //check if password is ok?
-    UITextField  * pass = (UITextField*)[self.passwordCell viewWithTag:200];
-    UITextField  * confpass = (UITextField*)[self.confPasswordCell viewWithTag:201];
+    UITextField * pass = (UITextField*)[self.passwordCell viewWithTag:200];
+    UITextField * confpass = (UITextField*)[self.confPasswordCell viewWithTag:201];
     UITextField * my_ssid = (UITextField*) [self.ssidCell viewWithTag:202];
     
     [pass resignFirstResponder];
@@ -543,7 +522,6 @@
 
     if (self.isOtherNetwork == TRUE)
     {
-        
         if ([my_ssid.text length] == 0)
         {
             //error
@@ -568,11 +546,11 @@
     if ([self.security isEqualToString:@"open"])
     {
         //cont
-        [self sendWifiInfoToCamera ];
+        self.navigationItem.leftBarButtonItem.enabled = NO; // Disable go back
+        [self sendWifiInfoToCamera];
     }
     else 
     {
-        
         if ( ([pass.text length] == 0 ) ||
             ( [confpass.text length] ==0 ) ||
             (![pass.text isEqualToString:confpass.text]))
@@ -595,15 +573,13 @@
         else
         {
             //cont
+            self.navigationItem.leftBarButtonItem.enabled = NO; // Disable go back
             self.password = [NSString stringWithString:[pass text]];
             NSLog(@"password is : %@", self.password);
             [self sendWifiInfoToCamera ];
-            
         }
     }
 }
-
-
 
 - (void)textFieldDidBeginEditing:(UITextField *)textField
 {
@@ -614,7 +590,6 @@
     }
 }
 
-
 - (void)textFieldDidEndEditing:(UITextField *)textField
 {
     
@@ -623,7 +598,6 @@
         
         [self animateTextField: textField up: NO];
     }
-
 }
 
 - (void) animateTextField: (UITextField*) textField up: (BOOL) up
@@ -769,9 +743,7 @@
         NSLog(@"Log - 02 cam password is default: %@", camPass);
     }
     
-    
     self.deviceConf.passWd = camPass;
-    
 }
 
 -(void)sendWifiInfoToCamera
@@ -810,9 +782,10 @@
     
 	NSLog(@"Log - before send: %@", setup_cmd);
     
-	//NSString * response =
+	NSString * response =
     [[HttpCom instance].comWithDevice sendCommandAndBlock:setup_cmd ];
     
+    NSLog(@"Step_06VC - after send cmd - response is: %@", response);
     
     //Should check connect to camera here(after send command setup http)
     [NSTimer scheduledTimerWithTimeInterval: 10.0//wait 10s and then check app connect to camera
@@ -843,7 +816,6 @@
         [self.progressView setHidden:YES];
         [self.infoSelectCameView setHidden:NO];
         [self.view bringSubviewToFront:self.infoSelectCameView];
-        
     }
     else
     {
@@ -889,12 +861,9 @@
 - (void)nextStepVerifyPassword
 {
     BOOL isFirstTimeSetup = [[NSUserDefaults standardUserDefaults] boolForKey:FIRST_TIME_SETUP];
-    
-    
+
     if (isFirstTimeSetup   == TRUE)
     {
-        
-        
         //load step 08
         NSLog(@"Load step 8");
         //Load the next xib
@@ -906,8 +875,6 @@
             step08ViewController = [[Step_08_ViewController alloc]
                                     initWithNibName:@"Step_08_ViewController_ipad" bundle:nil];
             
-            
-            
         }
         else
         {
@@ -918,7 +885,6 @@
         [self.navigationController pushViewController:step08ViewController animated:NO];
         
         [step08ViewController release];
-        
     }
     else
     {
@@ -944,25 +910,18 @@
             
             step10ViewController = [[Step_10_ViewController alloc]
                                     initWithNibName:@"Step_10_ViewController_ipad" bundle:nil];
-            
         }
         else
         {
             
             step10ViewController = [[Step_10_ViewController alloc]
                                     initWithNibName:@"Step_10_ViewController" bundle:nil];
-            
         }
-        
-        
         
         [self.navigationController pushViewController:step10ViewController animated:NO];
         [step10ViewController release];
-        
-        
     }
 }
-
 
 - (void)getStatusOfCameraToWifi:(NSTimer *)info
 {
@@ -995,7 +954,6 @@
                                                              userInfo:nil
                                                               repeats:NO];
     }
-
 }
 
 - (BOOL)isAppConnectedToCamera
@@ -1007,10 +965,9 @@
         return YES;
     return NO;
 }
+
 - (BOOL) restoreDataIfPossible
 {
-	
-	
 	NSDictionary * saved_data = [Util readDeviceConfiguration];
 	
 	if ( saved_data != nil) 
@@ -1073,4 +1030,6 @@
         _inputPasswordTimer = nil;
     }
 }
+
+
 @end

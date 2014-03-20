@@ -7,7 +7,7 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="Step_03_ViewController">
             <connections>
-                <outlet property="inProgress" destination="4" id="53"/>
+                <outlet property="inProgress" destination="4" id="LXj-bv-fT0"/>
                 <outlet property="scrollViewGuide" destination="mc2-dD-BXI" id="9E7-mp-EVA"/>
                 <outlet property="view" destination="3" id="54"/>
             </connections>

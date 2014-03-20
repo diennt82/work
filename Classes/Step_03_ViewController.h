@@ -20,8 +20,6 @@
 
 @interface Step_03_ViewController : UIViewController
 {
-    IBOutlet UIView * inProgress; 
-    
     BOOL task_cancelled;
     NSString * homeWifiSSID; 
 	NSString * cameraMac; 
@@ -32,7 +30,6 @@
 
 }
 
-@property (nonatomic, retain) UIView * inProgress; 
 @property (nonatomic, retain) NSString * cameraMac, * cameraName, * homeWifiSSID;
 
 - (IBAction)handleButtonPress:(id)sender;
