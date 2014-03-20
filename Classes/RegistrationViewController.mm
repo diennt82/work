@@ -8,7 +8,7 @@
 
 #import "RegistrationViewController.h"
 #import <MonitorCommunication/MonitorCommunication.h>
-#import "Reachability.h"
+//#import "Reachability.h"
 #import "Step_10_ViewController.h"
 #import "UserAccount.h"
 

@@ -12,7 +12,7 @@
 
 #import "LoginViewController.h"
 #import "StunClient.h"
-#import "Reachability.h"
+//#import "Reachability.h"
 #import "ForgotPwdViewController.h"
 #import "UserAccount.h"
 #import "PublicDefine.h"
