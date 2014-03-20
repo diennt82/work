@@ -58,6 +58,7 @@
 -(void) viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    self.navigationItem.leftBarButtonItem.enabled = NO;
 }
 
 #pragma mark -
