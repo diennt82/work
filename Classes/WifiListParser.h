@@ -27,6 +27,8 @@
 @property (nonatomic, retain) NSMutableArray * wifiLists; 
 @property (nonatomic, assign) BOOL isErrorParser;
 
+- (id)initWithNewCmdFlag: (BOOL)flag;
+
 - (void)parseData:(NSData *) xmlWifiList whenDoneCall:(SEL) _parserCallback target:(id) obj;
 
 - (void)parseData:(NSData *) xmlWifiList whenDoneCall:(SEL) _parserCallback whenErrorCall:(SEL) _parserErrorCallback target:(id) obj;

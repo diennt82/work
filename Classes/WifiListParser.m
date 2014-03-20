@@ -8,11 +8,66 @@
 
 #import "WifiListParser.h"
 
+#define WIFI_CMD @"%@"
+
+NSString *WIFI_LIST_VERSION  = @"wifi_list";
+NSString * WIFI_LIST_VERSION_ATT  = @"version";
+
+NSString * NUM_ENTRY  = @"num_entries";
+NSString * WIFI_ENTRY = @"wifi";
+NSString * WIFI_ENTRY_SSID = @"ssid";
+NSString * WIFI_ENTRY_BSSID = @"bssid";
+NSString * WIFI_ENTRY_AUTH_MODE = @"auth_mode";
+NSString * WIFI_ENTRY_QUALITY = @"quality";
+NSString * WIFI_ENTRY_SIGNAL_LEVEL = @"signal_level";
+NSString * WIFI_ENTRY_NOISE_LEVEL = @"noise_level";
+NSString * WIFI_ENTRY_CHANNEL = @"channel";
 
 @implementation WifiListParser
 
 @synthesize wifiLists;
 @synthesize isErrorParser  =_isErrorParser;
+
+- (id)initWithNewCmdFlag: (BOOL)flag
+{
+    self = [super init];
+    
+    if (self)
+    {
+        if (flag)
+        {
+            WIFI_LIST_VERSION  = @"wl";
+            WIFI_LIST_VERSION_ATT = @"v";
+            
+            NUM_ENTRY = @"n";
+            WIFI_ENTRY = @"w";
+            WIFI_ENTRY_SSID = @"s";
+            WIFI_ENTRY_BSSID = @"b";
+            WIFI_ENTRY_AUTH_MODE = @"a";
+            WIFI_ENTRY_QUALITY = @"q";
+            WIFI_ENTRY_SIGNAL_LEVEL = @"si";
+            WIFI_ENTRY_NOISE_LEVEL = @"nl";
+            WIFI_ENTRY_CHANNEL = @"ch";
+        }
+        else
+        {
+            WIFI_LIST_VERSION  = @"wifi_list";
+            WIFI_LIST_VERSION_ATT  = @"version";
+            
+            NUM_ENTRY  = @"num_entries";
+            WIFI_ENTRY = @"wifi";
+            WIFI_ENTRY_SSID = @"ssid";
+            WIFI_ENTRY_BSSID = @"bssid";
+            WIFI_ENTRY_AUTH_MODE = @"auth_mode";
+            WIFI_ENTRY_QUALITY = @"quality";
+           WIFI_ENTRY_SIGNAL_LEVEL = @"signal_level";
+            WIFI_ENTRY_NOISE_LEVEL = @"noise_level";
+            WIFI_ENTRY_CHANNEL = @"channel";
+        }
+    }
+    
+    return self;
+}
 
 -(void) dealloc
 {
@@ -80,7 +135,7 @@
 #define WIFI_ENTRY_NOISE_LEVEL @"noise_level"
 #define WIFI_ENTRY_CHANNEL @"channel"
 
-#else 
+//#else
 //Element Name:
 #define WIFI_LIST_VERSION @"wl"
 #define WIFI_LIST_VERSION_ATT @"v"

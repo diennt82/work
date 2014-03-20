@@ -336,10 +336,25 @@
     
     router_list_raw = [[HttpCom instance].comWithDevice sendCommandAndBlock_raw:GET_ROUTER_LIST2];
     
+    NSString *routerList = [[NSString alloc] initWithData:router_list_raw encoding:NSUTF8StringEncoding];
+    
+   // NSLog(@"%@", routerList);// 404: Not Found!
+    WifiListParser * routerListParser = nil;
+    
+    BOOL newCmdFlag = TRUE;
+    
+    if (router_list_raw)
+    {
+        if ([routerList hasPrefix:@"404: Not Found!"])
+        {
+            router_list_raw = [[HttpCom instance].comWithDevice sendCommandAndBlock_raw:GET_ROUTER_LIST];
+            newCmdFlag = FALSE;
+        }
+    }
+    
     if (router_list_raw != nil)
     {
-        WifiListParser * routerListParser = nil;
-        routerListParser = [[WifiListParser alloc]init];
+        routerListParser = [[WifiListParser alloc]initWithNewCmdFlag:newCmdFlag];
         
         [routerListParser parseData:router_list_raw
                        whenDoneCall:@selector(setWifiResult:)
@@ -361,10 +376,27 @@
     
     router_list_raw = [[HttpCom instance].comWithDevice sendCommandAndBlock_raw:GET_ROUTER_LIST2 withTimeout:2*DEFAULT_TIME_OUT];
     
+    //NSLog(@"%@", [[NSString alloc] initWithData:router_list_raw encoding:NSUTF8StringEncoding]);
+    
+    NSString *routerList = [[NSString alloc] initWithData:router_list_raw encoding:NSUTF8StringEncoding];
+    
+    // NSLog(@"%@", routerList);// 404: Not Found!
+    WifiListParser * routerListParser = nil;
+    
+    BOOL newCmdFlag = TRUE;
+    
+    if (router_list_raw)
+    {
+        if ([routerList hasPrefix:@"404: Not Found!"])
+        {
+            router_list_raw = [[HttpCom instance].comWithDevice sendCommandAndBlock_raw:GET_ROUTER_LIST];
+            newCmdFlag = FALSE;
+        }
+    }
+    
     if (router_list_raw != nil)
     {
-        WifiListParser * routerListParser = nil;
-        routerListParser = [[WifiListParser alloc]init];
+        routerListParser = [[WifiListParser alloc]initWithNewCmdFlag:newCmdFlag];
         
         [routerListParser parseData:router_list_raw
                        whenDoneCall:@selector(setWifiResult:)

@@ -11,7 +11,7 @@
 #import <CameraScanner/CameraScanner.h>
 
 #import "WifiEntry.h"
-#import "WifiListParser.h"
+//#import "WifiListParser.h"
 #import "DisplayWifiList_VController.h"
 #import "UARTPeripheral.h"
 #import "BLEConnectionManager.h"
