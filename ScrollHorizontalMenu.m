@@ -137,7 +137,6 @@
     
     for(int i = 0; i < self.itemCount; i++)
     {
-        NSLog(@"i = %i", i);
         UIButton *thisButton = (UIButton*) [self viewWithTag:i + kButtonBaseTag];
         
         if(i + kButtonBaseTag == button.tag)

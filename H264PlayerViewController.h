@@ -140,6 +140,9 @@
 @property (retain, nonatomic) IBOutlet UIView *ib_viewRecordTTT;
 @property (retain, nonatomic) IBOutlet UIButton *ib_processRecordOrTakePicture;
 @property (retain, nonatomic) IBOutlet UIButton *ib_buttonChangeAction;
+@property (nonatomic, assign) CGFloat defaultY;
+@property (nonatomic, assign) BOOL defaultSet;
+
 //button for replacing image take picture when recording
 @property (retain, nonatomic) IBOutlet UIButton *ib_changeToMainRecording;
 
