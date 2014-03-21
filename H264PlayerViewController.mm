@@ -868,7 +868,7 @@ double _ticks = 0;
                         self.timerRemoteStreamTimeOut = nil;
                     }
                     
-                    self.timerRemoteStreamTimeOut = [NSTimer scheduledTimerWithTimeInterval:5*60
+                    self.timerRemoteStreamTimeOut = [NSTimer scheduledTimerWithTimeInterval:5*60.0
                                                                                      target:self
                                                                                    selector:@selector(showDialogAndStopStream:)
                                                                                    userInfo:nil
@@ -1547,6 +1547,8 @@ double _ticks = 0;
 
 - (void)setupCamera
 {
+    _isShowCustomIndicator = YES;
+    [self displayCustomIndicator];
     if (self.selectedChannel.stream_url != nil)
     {
         self.selectedChannel.stream_url = nil;
@@ -4177,95 +4179,30 @@ double _ticks = 0;
     }
 }
 
-//#pragma mark -
-//
-//#pragma mark Alertview delegate
-//
-//- (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex
-//{
-//	
-//	int tag = alertView.tag;
-//	
-//	if (tag == LOCAL_VIDEO_STOPPED_UNEXPECTEDLY)
-//	{
-//		switch(buttonIndex) {
-//			case 0: //Stop monitoring
-//            {
-//                [self.activityIndicator stopAnimating];
-//                self.viewStopStreamingProgress.hidden = NO;
-//                [self.view bringSubviewToFront:self.viewStopStreamingProgress];
-//                
-//                userWantToCancel =TRUE;
-//                [self stopPeriodicPopup];
-//                
-//                
-//                /*
-//                 
-//                 If cancel is pressed while setup streamming, the setup will failed and  MEDIA_ERROR_SERVER_DIED
-//                 will be sent to handler. Provided that userWantToCancel = TRUE, handler will set
-//                    self.selectedChannel.stopStreaming = TRUE;
-//                    & Call  [self goBackToCameraList]   
-//                 
-//                 
-//                 if cancel is press when the player is about to play (stream started but not display (or maybe is displaying)) 
-//                 1) MEDIA_PLAYER_STARTED is not sent. Thus when it's sent, Handler will check for (userWantToCancel =TRUE) and do accordingly
-//                 2) MEDIA_PLAYER_STARTED is ALREADY sent But no first Image yet, i.e. MEDIA_INFO_HAS_FIRST_IMAGE is not sent
-//                          When MEDIA_INFO_HAS_FIRST_IMAGE is sent, the closing will be handled
-//                 3) MEDIA_INFO_HAS_FIRST_IMAGE is sent. This popup would already be dissmissed by then. 
-//                          But for some reasons, if user is able to press the Cancel during this time.
-//                 
-//                 
-//                 
-//                 Thus, no need to explicityly call  " self.selectedChannel.stopStreaming = TRUE & [self goBackToCameraList]" here.
-//                 
-//                 What needs to be done is to send a signal to interrupt the player.
-//                 
-//                 
-//                 */
-//                NSLog(@"[--- h264Streamer: %p]", h264Streamer);
-//                
-//                if (h264Streamer != NULL)
-//                {
-//                    h264Streamer->sendInterrupt();
-//                }
-//                else // if this happen, the activity rotates forever (by right: go back to camera list)
-//                {
-//                    NSArray * args = [NSArray arrayWithObjects:
-//                                      [NSNumber numberWithInt:MEDIA_ERROR_SERVER_DIED],nil];
-//                    [self performSelectorOnMainThread:@selector(handleMessageOnMainThread:)
-//                                           withObject:args
-//                                        waitUntilDone:NO];
-//                }
-//                
-//                
-//                break;
-//            }
-//			case 1: //continue -- streamer is connecting so we dont do anything here.
-//				break;
-//			default:
-//				break;
-//		}
-//		[alert release];
-//		alert = nil;
-//	}
-//    else if (tag == TAG_ALERT_VIEW_REMOTE_TIME_OUT)
-//    {
-//        switch (buttonIndex)
-//        {
-//            case 0: // View other camera
-//                [self goBackToCamerasRemoteStreamTimeOut];
-//                break;
-//                
-//            case 1: // Continue view --> restart stream
-//                [self setupCamera];
-//                break;
-//                
-//            default:
-//                break;
-//        }
-//    }
-//	
-//}
+#pragma mark -
+
+#pragma mark Alertview delegate
+
+- (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex
+{
+	int tag = alertView.tag;
+    if (tag == TAG_ALERT_VIEW_REMOTE_TIME_OUT)
+    {
+        switch (buttonIndex)
+        {
+            case 0: // View other camera
+                [self goBackToCamerasRemoteStreamTimeOut];
+                break;
+                
+            case 1: // Continue view --> restart stream
+                [self setupCamera];
+                break;
+                
+            default:
+                break;
+        }
+    }
+}
 
 #pragma mark -
 #pragma mark Beeping
