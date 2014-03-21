@@ -141,6 +141,7 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     self.navigationController.navigationBarHidden = NO;
+    self.navigationItem.title = @"";
     [self selectMenuCamera];
     
 //    self.camerasVC.tableView.frame = CGRectMake(0, 30, self.view.frame.size.width, self.view.frame.size.height - 30);

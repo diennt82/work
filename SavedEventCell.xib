@@ -16,7 +16,7 @@
                 <subviews>
                     <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Snapshot.png" id="U6a-tD-wQA">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="189"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     </imageView>
                     <view alpha="0.25000000000000006" contentMode="scaleToFill" id="XOJ-Nj-yeq">
                         <rect key="frame" x="0.0" y="139" width="320" height="50"/>

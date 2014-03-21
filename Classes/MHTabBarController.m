@@ -23,6 +23,7 @@
 #import "MHTabBarController.h"
 #import "UIColor+Hubble.h"
 #import "UIFont+Hubble.h"
+#import "define.h"
 
 static const NSInteger TagOffset = 1000;
 
@@ -107,11 +108,11 @@ static const NSInteger TagOffset = 1000;
 		button.titleLabel.font = [UIFont regular17Font];
 //		button.titleLabel.shadowOffset = CGSizeMake(0.0f, 1.0f);
         
-		UIOffset offset = viewController.tabBarItem.titlePositionAdjustment;
-		button.titleEdgeInsets = UIEdgeInsetsMake(offset.vertical, offset.horizontal, 0.0f, 0.0f);
-		button.imageEdgeInsets = viewController.tabBarItem.imageInsets;
-		[button setTitle:viewController.tabBarItem.title forState:UIControlStateNormal];
-		[button setImage:viewController.tabBarItem.image forState:UIControlStateNormal];
+//		UIOffset offset = viewController.tabBarItem.titlePositionAdjustment;
+//		button.titleEdgeInsets = UIEdgeInsetsMake(offset.vertical, offset.horizontal, 0.0f, 0.0f);
+//		button.imageEdgeInsets = viewController.tabBarItem.imageInsets;
+		[button setTitle:viewController.title forState:UIControlStateNormal];
+//		[button setImage:viewController.tabBarItem.image forState:UIControlStateNormal];
         
 		[button addTarget:self action:@selector(tabButtonPressed:) forControlEvents:UIControlEventTouchDown];
         
@@ -135,7 +136,7 @@ static const NSInteger TagOffset = 1000;
 	NSUInteger index = 0;
 	NSUInteger count = [self.viewControllers count];
     
-	CGRect rect = CGRectMake(0.0f, 0.0f, floorf(self.view.bounds.size.width / count), self.tabBarHeight);
+	CGRect rect = CGRectMake(0.0f, 0.0f, SCREEN_WIDTH/2, self.tabBarHeight);
     
 	indicatorImageView.hidden = YES;
     
@@ -143,7 +144,7 @@ static const NSInteger TagOffset = 1000;
 	for (UIButton *button in buttons)
 	{
 		if (index == count - 1)
-			rect.size.width = self.view.bounds.size.width - rect.origin.x;
+			rect.size.width = SCREEN_WIDTH/2;
         
 		button.frame = rect;
 		rect.origin.x += rect.size.width;

@@ -542,6 +542,8 @@ double _ticks = 0;
 
 - (void)nowButtonAciton:(id)sender
 {
+    [nowButton setEnabled:NO];
+    [earlierButton setEnabled:YES];
     earlierNavi.isEarlierView = NO;
     [nowButton setTitleTextAttributes:@{
                                         UITextAttributeFont: [UIFont fontWithName:PN_SEMIBOLD_FONT size:17.0],
@@ -585,7 +587,9 @@ double _ticks = 0;
 
 - (void)earlierButtonAction:(id)sender
 {
-    
+    [earlierButton setEnabled:NO];
+    [nowButton setEnabled:YES];
+    [self.customIndicator setHidden:YES];
     earlierNavi.isEarlierView = YES;
     [nowButton setTitleTextAttributes:@{
                                         UITextAttributeFont: [UIFont fontWithName:PN_LIGHT_FONT size:17.0],
