@@ -25,11 +25,15 @@
     IBOutlet UITableViewCell * cellMelody_land;
     IBOutlet UITableViewCell * cellMelody_iPad;
 }
+
 @property (retain, nonatomic) IBOutlet UITableView *melodyTableView;
 @property (nonatomic) NSInteger melodyIndex;
 @property (retain, nonatomic) CamChannel *selectedChannel;
 @property (nonatomic, assign) id<MelodyVCDelegate> melodyVcDelegate;
+@property (nonatomic, assign) CGFloat cellHeight;
+
 - (void)setMelodyState_fg: (NSInteger )melodyIndex;
 - (void)updateUIMelody:(NSInteger)playingIndex;
+- (void) updateHeightRestrictions:(CGFloat) height;
 
 @end

@@ -258,7 +258,8 @@
     NSDate* currentDate = [NSDate date];
     
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-    
+    [dateFormatter setTimeZone:[NSTimeZone localTimeZone]];
+
     // Set the dateFormatter format
     
     if (_is12hr)

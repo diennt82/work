@@ -28,7 +28,10 @@
 @end
 
 @implementation MelodyViewController
+
 @synthesize melodies = _melodies;
+@synthesize cellHeight = _cellHeight;
+
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
@@ -70,6 +73,27 @@
     self.melodyTableView.delegate = self;
     self.melodyTableView.dataSource = self;
     [self loadFont];
+}
+
+- (void) updateHeightRestrictions:(CGFloat) height
+{
+    int numberOfMelodies = 5;
+    
+    if (self.melodies.count < numberOfMelodies)
+    {
+        numberOfMelodies = self.melodies.count;
+    }
+    
+    CGFloat newRowHeight = height / numberOfMelodies;
+    
+    NSLog(@"View Height: %f", height);
+    NSLog(@"New row height: %f", newRowHeight);
+    
+    [self.melodyTableView setRowHeight:newRowHeight];
+    
+    _cellHeight = newRowHeight;
+    
+    [self.melodyTableView reloadData];
 }
 
 - (void)loadFont
@@ -328,7 +352,14 @@
     }
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
     {
-        return 88;
+        if (_cellHeight)
+        {
+            return _cellHeight;
+        }
+        else
+        {
+            return 88;
+        }
     }
     else
     {

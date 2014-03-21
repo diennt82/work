@@ -4766,6 +4766,8 @@ double _ticks = 0;
             if (isiOS7AndAbove)
             {
                 self.melodyViewController.view.frame = CGRectMake(0, self.ib_ViewTouchToTalk.frame.origin.y - 5, SCREEN_WIDTH, self.ib_ViewTouchToTalk.frame.size.height);
+                [self.melodyViewController updateHeightRestrictions:self.ib_ViewTouchToTalk.frame.size.height];
+//                self.melodyViewController
             }
             else
             {
