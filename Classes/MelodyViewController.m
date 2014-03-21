@@ -86,9 +86,6 @@
     
     CGFloat newRowHeight = height / numberOfMelodies;
     
-    NSLog(@"View Height: %f", height);
-    NSLog(@"New row height: %f", newRowHeight);
-    
     [self.melodyTableView setRowHeight:newRowHeight];
     
     _cellHeight = newRowHeight;

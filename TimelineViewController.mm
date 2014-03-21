@@ -254,8 +254,8 @@
     [dF setTimeZone:[NSTimeZone timeZoneForSecondsFromGMT:0]];
     NSDate * currentDate = [dF dateFromString:yourJSONString];
     //////////*/
-    
-    NSDate* currentDate = [NSDate date];
+
+    NSDate *currentDate = [NSDate date];
     
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
     [dateFormatter setTimeZone:[NSTimeZone localTimeZone]];
@@ -264,7 +264,7 @@
     
     if (_is12hr)
     {
-        dateFormatter.dateFormat = @"HH:mm a";
+        dateFormatter.dateFormat = @"hh:mm a";
     }
     else
     {
@@ -276,7 +276,6 @@
     [dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
     [dateFormatter setTimeZone:[NSTimeZone timeZoneWithName:@"UTC"]];
     NSString *dateInStringFormated = [dateFormatter stringFromDate:currentDate];
-    NSLog(@"%@, %@", dateInStringFormated, _stringCurrentDate);
     
     [dateFormatter release];
     
@@ -420,8 +419,6 @@
                 NSLog(@"Events empty!");
                 self.stringIntelligentMessage = @"All is calm";
             }
-        
-            NSLog(@"Number of event: %d", events.count);
             
             if (self.camChannel.profile.isInLocal == FALSE &&
                 self.camChannel.profile.minuteSinceLastComm > 5)
@@ -774,6 +771,7 @@
         [cell.detailTextLabel setFont:[UIFont lightSmall14Font]];
         cell.eventLabel.text = self.stringIntelligentMessage;
         cell.eventDetailLabel.text = self.stringCurrentDate;
+        NSLog(@"current date string - right prior to printing: %@", self.stringCurrentDate);
         [cell.eventLabel setTextColor:[UIColor timeLineColor]];
         [cell.eventDetailLabel setFont:[UIFont lightSmall14Font]];
         [cell.eventDetailLabel setTextColor:[UIColor timeLineColor]];
@@ -809,6 +807,8 @@
         NSDate *eventDate = [dateFormater dateFromString:eventInfo.time_stamp]; //2013-12-31 07:38:35 +0000
         [dateFormater release];
         
+        NSLog(@"date from event: %@", eventDate);
+        
         NSDateFormatter* df_local = [[NSDateFormatter alloc] init];
         [df_local setTimeZone:[NSTimeZone localTimeZone]];
         
@@ -822,7 +822,7 @@
         }
         
         cell.eventTimeLabel.text = [df_local stringFromDate:eventDate];
-        
+        NSLog(@"date from event, after formatting: %@", cell.eventTimeLabel.text);
         [df_local release];
         
         //NSLog(@"%@, %@", [dateFormater stringFromDate:eventDate], [NSTimeZone localTimeZone]);
