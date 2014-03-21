@@ -59,7 +59,7 @@
 
 #define _streamingSSID  @"string_Streaming_SSID"
 #define _is_Loggedin @"bool_isLoggedIn"
-#define TEST_REMOTE_TALKBACK 1 // TODO: DELETE
+#define TEST_REMOTE_TALKBACK 0 // TODO: DELETE
 #define SESSION_KEY @"SESSION_KEY"
 #define STREAM_ID   @"STREAM_ID"
 
@@ -4888,32 +4888,25 @@ double _ticks = 0;
 -(void) setupPtt
 {
     
-        UILongPressGestureRecognizer *longPress =
-        [[UILongPressGestureRecognizer alloc] initWithTarget:self
-                                                      action:@selector(longPress:)];
-        longPress.minimumPressDuration = 1.0;
-        [self.ib_buttonTouchToTalk addGestureRecognizer:longPress];
-        [longPress release];
+    UILongPressGestureRecognizer *longPress =
+    [[UILongPressGestureRecognizer alloc] initWithTarget:self
+                                                  action:@selector(longPress:)];
+    longPress.minimumPressDuration = 1.0;
+    [self.ib_buttonTouchToTalk addGestureRecognizer:longPress];
+    [longPress release];
     
     [self.ib_buttonTouchToTalk addTarget:self action:@selector(holdToTalk:) forControlEvents:UIControlEventTouchDown];
     [self.ib_buttonTouchToTalk addTarget:self action:@selector(userReleaseHoldToTalk) forControlEvents:UIControlEventTouchUpInside];
     [self.ib_buttonTouchToTalk addTarget:self action:@selector(userReleaseHoldToTalk) forControlEvents:UIControlEventTouchUpOutside];
-    
 }
 
 /*
- * if in Remote mode this method means TouchUpInside action
+ * If in Remote mode this method means TouchUpInside action
  */
 
 -(void)userReleaseHoldToTalk
 {
 #if TEST_REMOTE_TALKBACK
-    //self.wantsCancelRemoteTalkback = TRUE;
-//    if (_audioOutStreamRemote != nil)
-//    {
-//        //[_audioOutStreamRemote stopRecordingSound];
-//        [_audioOutStreamRemote performSelectorOnMainThread:@selector(stopRecordingSound) withObject:nil waitUntilDone:NO];
-//    }
     self.walkieTalkieEnabled = !self.walkieTalkieEnabled;
     self.ib_buttonTouchToTalk.enabled = !self.walkieTalkieEnabled;
     
@@ -4935,13 +4928,10 @@ double _ticks = 0;
     else
     {
         self.walkieTalkieEnabled = !self.walkieTalkieEnabled;
+        self.ib_buttonTouchToTalk.enabled = !self.walkieTalkieEnabled;
         
-        [self performSelectorInBackground:@selector(enableRemotePTT:) withObject:[NSNumber numberWithBool:self.walkieTalkieEnabled]];
-//        if (_audioOutStreamRemote != nil)
-//        {
-//            //[_audioOutStreamRemote stopRecordingSound];
-//            [_audioOutStreamRemote performSelectorOnMainThread:@selector(stopRecordingSound) withObject:nil waitUntilDone:NO];
-//        }
+        [self performSelectorInBackground:@selector(enableRemotePTT:)
+                               withObject:[NSNumber numberWithBool:self.walkieTalkieEnabled]];
     }
 #endif
 }
@@ -4973,13 +4963,11 @@ double _ticks = 0;
                 [_audioOut disconnectFromAudioSocket];
                 [self touchUpInsideHoldToTalk];
             }
-            
         }
     }
     
     return walkie_talkie_enabled ;
 }
-
 
 - (void) set_Walkie_Talkie_bg: (NSString *) status
 {
@@ -5027,22 +5015,9 @@ double _ticks = 0;
         {
             NSLog(@"UIGestureRecognizerStateBegan on hold to talk");
             self.walkieTalkieEnabled = YES;
-#if TEST_REMOTE_TALKBACK //Testing
-            // call enabled remote PTT function
             
-            [self performSelectorInBackground:@selector(enableRemotePTT:) withObject:[NSNumber numberWithBool:YES]];
-            self.wantsCancelRemoteTalkback = FALSE;
-#else
-            if (self.selectedChannel.profile.isInLocal)
-            {
-                [self setEnablePtt:YES];
-            }
-            else
-            {
-                self.wantsCancelRemoteTalkback = FALSE;
-                [self performSelectorInBackground:@selector(enableRemotePTT:) withObject:[NSNumber numberWithBool:YES]];
-            }
-#endif
+            [self setEnablePtt:YES];
+            
             UIImage *imageHoldedToTalk;
             
             if (isiPhone4)
@@ -5066,21 +5041,8 @@ double _ticks = 0;
                 NSLog(@"detect cancelling PTT");
                 
             }
-#if TEST_REMOTE_TALKBACK // Tesging
-            [self performSelectorInBackground:@selector(enableRemotePTT:) withObject:[NSNumber numberWithBool:NO]];
-            self.wantsCancelRemoteTalkback = TRUE;
-#else
-            if (self.selectedChannel.profile.isInLocal)
-            {
-                [self setEnablePtt:NO];
-            }
-            else
-            {
-                self.wantsCancelRemoteTalkback = TRUE;
-                [self performSelectorInBackground:@selector(enableRemotePTT:)
-                                       withObject:[NSNumber numberWithBool:NO]];
-            }
-#endif
+            
+            [self setEnablePtt:NO];
         }
     }
 #endif
@@ -5095,16 +5057,11 @@ double _ticks = 0;
     [self.ib_labelTouchToTalk setText:@"Listening"];
     [self applyFont];
 #if TEST_REMOTE_TALKBACK
-    //[self processingHoldToTalkRemote];
 #else
     //processing for PTT
     if (self.selectedChannel.profile.isInLocal)
     {
         [self processingHoldToTalk];
-    }
-    else
-    {
-        [self processingHoldToTalkRemote];
     }
 #endif
 }
@@ -5115,19 +5072,23 @@ double _ticks = 0;
     [self.ib_buttonTouchToTalk setBackgroundImage:[UIImage imageMic] forState:UIControlStateNormal];
     [self.ib_buttonTouchToTalk setBackgroundImage:[UIImage imageMic] forState:UIControlEventTouchUpInside];
     
+#if TEST_REMOTE_TALKBACK
+    self.ib_buttonTouchToTalk.enabled = YES;
+    [self.ib_labelTouchToTalk setText:@"Touch to Talk"];
+#else
     if (self.selectedChannel.profile.isInLocal)
     {
         [self.ib_labelTouchToTalk setText:@"Hold To Talk"];
     }
     else
     {
-        //self.walkieTalkieEnabled = NO;
         self.ib_buttonTouchToTalk.enabled = YES;
         [self.ib_labelTouchToTalk setText:@"Touch to Talk"];
     }
     [self applyFont];
     
     //user touch up inside and outside
+#endif
 }
 
 // Talk back remote
@@ -5196,10 +5157,8 @@ double _ticks = 0;
     {
         if (_audioOutStreamRemote != nil)
         {
-            //[_audioOutStreamRemote stopRecordingSound];
             [_audioOutStreamRemote performSelectorOnMainThread:@selector(stopRecordingSound) withObject:nil waitUntilDone:NO];
             [self touchUpInsideHoldToTalk];
-            //[self.ib_labelTouchToTalk setText:@"Touch to talk"];
         }
     }
     else
@@ -5300,14 +5259,6 @@ double _ticks = 0;
     NSDictionary *resDict = [self workWithServer:url sessionKey:_sessionKey streamID:_streamID];
     
     NSLog(@"%@", resDict);
-    
-    if ([[resDict objectForKey:@"status"] integerValue] == 200)
-    {
-//        if (userWantToCancel == FALSE)
-//        {
-//            [self getTalkbackSessionKey];
-//        }
-    }
 }
 
 - (NSDictionary *)workWithServer: (NSString *)url sessionKey: (NSString *)sessionKey streamID: (NSString *)streamID
@@ -5359,17 +5310,18 @@ double _ticks = 0;
 {
     if (userWantToCancel || !self.walkieTalkieEnabled)
     {
-        //[self touchUpInsideHoldToTalk];
         return;
     }
     
-    //[self getTalkbackSessionKey];
     // Re-enable Remote PTT
     [self enableRemotePTT:[NSNumber numberWithBool:YES]];
 }
 
 - (void)reportHandshakeFaild:(BOOL)isFailed
 {
+    // Enable for user cancel PTT
+    self.ib_buttonTouchToTalk.enabled = YES;
+    
     /*
      * 1: Handshake failed!
      * 2: Handshake successfully.
@@ -5386,8 +5338,6 @@ double _ticks = 0;
     {
         self.ib_labelTouchToTalk.text = @"Listening";
     }
-    
-    self.ib_buttonTouchToTalk.enabled = YES; // Enable for user cancel PTT
 }
 
 #pragma mark - Bottom menu
