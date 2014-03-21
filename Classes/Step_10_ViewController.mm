@@ -290,9 +290,20 @@
 {
     self.progressView.hidden = NO;
     [self.view bringSubviewToFront:self.progressView];
-#if 1
-    [self performSelectorInBackground:@selector(registerCameraWithProxy) withObject:nil];
-#else
+    
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    NSString *fwVersion = [userDefaults stringForKey:@"FW_VERSION"]; // 01.12.58
+    
+    if ([fwVersion compare:FW_MILESTONE] >= NSOrderedSame) // fw >= FW_MILESTONE
+    {
+        [self performSelectorInBackground:@selector(registerCameraWithProxy) withObject:nil];
+    }
+    else
+    {
+        [self registerCameraWithoutProxy];
+    }
+    
+#if 0
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
         
     NSString *apiKey    = [userDefaults objectForKey:@"PortalApiKey"];
@@ -358,6 +369,52 @@
                                     andApiKey:apiKey];
     
 #endif
+}
+    
+- (void)registerCameraWithoutProxy
+{
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    
+    NSString *apiKey    = [userDefaults objectForKey:@"PortalApiKey"];
+    NSString *fwVersion = [userDefaults objectForKey:@"FW_VERSION"];
+    NSString *udid      = [userDefaults objectForKey:CAMERA_UDID];
+    /*
+     hack code for device 0066 which return UUID is wrong
+     */
+    NSString *udidOfFocus66Hack = @"01006644334C7E0C8AXHRRBOLC";
+    if ([udid isEqualToString:@"01008344334C7E0C8AXHRRBOLC"])
+    {
+        udid = udidOfFocus66Hack;
+    }
+    
+    //NSLog(@"-----fwVersion = %@, ,model = %@", fwVersion, model);
+    
+    NSDate *now = [NSDate date];
+    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+    [formatter setDateFormat:@"ZZZ"];
+    
+    NSMutableString *stringFromDate = [NSMutableString stringWithString:[formatter stringFromDate:now]];
+    
+    [stringFromDate insertString:@"." atIndex:3];
+    
+    NSLog(@"%@", stringFromDate);
+    
+    [formatter release];
+    
+    BMS_JSON_Communication *jsonComm = [[[BMS_JSON_Communication alloc] initWithObject:self
+                                                                              Selector:@selector(addCamSuccessWithResponse:)
+                                                                          FailSelector:@selector(addCamFailedWithError:)
+                                                                             ServerErr:@selector(addCamFailedServerUnreachable)] autorelease];
+    //NSString *mac = [Util strip_colon_fr_mac:self.cameraMac];
+    NSString *camName = (NSString *) [userDefaults objectForKey:@"CameraName"];
+    
+    
+    [jsonComm registerDeviceWithDeviceName:camName
+                         andRegistrationID:udid
+                                   andMode:@"upnp" // Need somethings more usefully
+                              andFwVersion:fwVersion
+                               andTimeZone:stringFromDate
+                                 andApiKey:apiKey];
 }
 
 - (void)registerCameraWithProxy

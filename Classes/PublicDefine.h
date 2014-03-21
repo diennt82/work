@@ -152,6 +152,8 @@
 
 #define CAM_IN_VEW      @"string_Camera_Mac_Being_Viewed"
 
+#define FW_MILESTONE @"01.12.58"
+
 // Alert type
 #define ALERT_GENERIC_SERVER_INFO @"0"
 #define  ALERT_TYPE_SOUND    @"1"
