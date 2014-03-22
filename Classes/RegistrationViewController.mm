@@ -51,6 +51,12 @@
                                       owner:self
                                     options:nil];
     }
+    else if (UIScreen.mainScreen.bounds.size.height > 568)
+    {
+        [[NSBundle mainBundle] loadNibNamed:@"RegistrationViewController_ipad"
+                                      owner:self
+                                    options:nil];
+    }
     
     self.navigationController.navigationBarHidden = YES;
     self.btnCreate.enabled = NO;

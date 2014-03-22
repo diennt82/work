@@ -19,6 +19,7 @@
 #import "UserAccount.h"
 #import "PublicDefine.h"
 #import <MonitorCommunication/MonitorCommunication.h>
+#import "define.h"
 
 
 @interface LoginViewController ()  <UITextFieldDelegate, StunClientDelegate, UserAccountDelegate>
@@ -66,6 +67,12 @@
     if (UIScreen.mainScreen.bounds.size.height < 568)
     {
         [[NSBundle mainBundle] loadNibNamed:@"LoginViewController_35"
+                                      owner:self
+                                    options:nil];
+    }
+    else if (UIScreen.mainScreen.bounds.size.height > 568)
+    {
+        [[NSBundle mainBundle] loadNibNamed:@"LoginViewController_ipad"
                                       owner:self
                                     options:nil];
     }

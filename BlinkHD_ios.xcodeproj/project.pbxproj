@@ -98,6 +98,8 @@
 		38DE1CD5168AFBCF0049E814 /* MBP_InitialSetupViewController_ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 38DE1CD7168AFBCF0049E814 /* MBP_InitialSetupViewController_ipad.xib */; };
 		38DE1CDA168AFBE00049E814 /* MBP_InitialSetupViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 38DE1CDC168AFBE00049E814 /* MBP_InitialSetupViewController.xib */; };
 		38E3C85C1694033500A13A70 /* AlertPrompt.m in Sources */ = {isa = PBXBuildFile; fileRef = 38E3C85B1694033500A13A70 /* AlertPrompt.m */; };
+		66C40EDE18DD0356004AE1B8 /* LoginViewController_ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 66C40EDD18DD0356004AE1B8 /* LoginViewController_ipad.xib */; };
+		66C40EE018DD102E004AE1B8 /* RegistrationViewController_ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 66C40EDF18DD102E004AE1B8 /* RegistrationViewController_ipad.xib */; };
 		66F9AE0818D8DE8400E116BE /* CamerasCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 66F9AE0718D8DE8400E116BE /* CamerasCollectionViewCell.m */; };
 		8408F1811833222A00B00188 /* MonitorCommunication.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8408F1801833222A00B00188 /* MonitorCommunication.framework */; };
 		841D567B1834C1E600ACE7A7 /* streamqvga.sdp in Resources */ = {isa = PBXBuildFile; fileRef = 841D567A1834C1E600ACE7A7 /* streamqvga.sdp */; };
@@ -923,6 +925,8 @@
 		38DE1CDE168AFBE60049E814 /* fr */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = fr; path = fr.lproj/MBP_InitialSetupViewController.xib; sourceTree = "<group>"; };
 		38E3C85A1694033500A13A70 /* AlertPrompt.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AlertPrompt.h; sourceTree = "<group>"; };
 		38E3C85B1694033500A13A70 /* AlertPrompt.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AlertPrompt.m; sourceTree = "<group>"; };
+		66C40EDD18DD0356004AE1B8 /* LoginViewController_ipad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LoginViewController_ipad.xib; sourceTree = "<group>"; };
+		66C40EDF18DD102E004AE1B8 /* RegistrationViewController_ipad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = RegistrationViewController_ipad.xib; sourceTree = "<group>"; };
 		66F9AE0618D8DE8400E116BE /* CamerasCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CamerasCollectionViewCell.h; sourceTree = "<group>"; };
 		66F9AE0718D8DE8400E116BE /* CamerasCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CamerasCollectionViewCell.m; sourceTree = "<group>"; };
 		8408F1801833222A00B00188 /* MonitorCommunication.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MonitorCommunication.framework; path = "../ios-frameworks/MonitorCommunication.framework"; sourceTree = "<group>"; };
@@ -3372,6 +3376,7 @@
 				8B9633A918A8AAA2008A9579 /* LoginViewController.m */,
 				8B9633AA18A8AAA2008A9579 /* LoginViewController.xib */,
 				8BA17EF918B7399100129FE7 /* LoginViewController_35.xib */,
+				66C40EDD18DD0356004AE1B8 /* LoginViewController_ipad.xib */,
 			);
 			name = LoginViewController;
 			sourceTree = "<group>";
@@ -3470,6 +3475,7 @@
 				8B9ABB6818A9FDEC0079F4A3 /* RegistrationViewController.mm */,
 				8B9ABB6918A9FDEC0079F4A3 /* RegistrationViewController.xib */,
 				8BA17EFB18B73E2400129FE7 /* RegistrationViewController_35.xib */,
+				66C40EDF18DD102E004AE1B8 /* RegistrationViewController_ipad.xib */,
 			);
 			name = RegistrationVC;
 			sourceTree = "<group>";
@@ -4150,6 +4156,7 @@
 				8B29A05518AF500A00D36BE5 /* settings_seperator.png in Resources */,
 				8B95079118C9960D006D4945 /* blue_btn@2x.png in Resources */,
 				8B29A00A18AF500900D36BE5 /* video_action_temp_pressed.png in Resources */,
+				66C40EE018DD102E004AE1B8 /* RegistrationViewController_ipad.xib in Resources */,
 				8B9507B418C9960D006D4945 /* setup_camera_medium.png in Resources */,
 				8B29A01818AF500900D36BE5 /* launch_logo.png in Resources */,
 				8B299F7F18AF500900D36BE5 /* camera_action_pan_knob_shadow_land.png in Resources */,
@@ -4682,6 +4689,7 @@
 				8B299FE618AF500900D36BE5 /* feed_video_stop.png in Resources */,
 				8B29A04818AF500A00D36BE5 /* scheduler@2x.png in Resources */,
 				8B9899DF1859AA6A00AC3852 /* slider-default7-track.png in Resources */,
+				66C40EDE18DD0356004AE1B8 /* LoginViewController_ipad.xib in Resources */,
 				8B95078E18C9960D006D4945 /* setup_camera_c4.png in Resources */,
 				8B29A02718AF500900D36BE5 /* loader_iphone@2x.png in Resources */,
 				8B29A07818AF500A00D36BE5 /* video_overlay_bg@2x.png in Resources */,
