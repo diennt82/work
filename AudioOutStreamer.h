@@ -36,9 +36,7 @@
 -(id) initWithDeviceIp:(NSString *) ip andPTTport: (int) port;
 
 - (void) connectToAudioSocket;
-
 - (void) disconnectFromAudioSocket;
-
 - (void) sendAudioPacket:(NSTimer *) timer_exp;
 - (void) startRecordingSound;
 

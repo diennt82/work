@@ -16,20 +16,21 @@
 
 - (void)closeTalkbackSession;
 - (void)reportHandshakeFaild:(BOOL)isFailed;
+- (void)didDisconnecteSocket;
 
 @end
 
 @interface AudioOutStreamRemote : NSObject
 {
-	AsyncSocket * sendingSocket;
+	//AsyncSocket * sendingSocket;
 	NSMutableData * _pcm_data;
 	PCMPlayer * pcmPlayer;
 	
-	NSString * device_ip;
-	int device_port;
     BOOL hasStartRecordingSound;
 }
 
+@property (nonatomic, retain) NSString * relayServerIP;
+@property (nonatomic) NSInteger relayServerPort;
 @property (nonatomic, strong) NSMutableData *pcm_data;
 @property (nonatomic, retain) PCMPlayer * pcmPlayer;
 @property (nonatomic) NSInteger bufferLength;
@@ -41,13 +42,8 @@
 @property (nonatomic) BOOL isHandshakeSuccess;
 
 - (id)initWithRemoteMode;
-
 - (void)connectToAudioSocket;
-
 - (void)startRecordingSound;
-- (void)stopRecordingSound;
-- (void)startSendingData;
-- (void)startHandshaking;
 - (void)disconnectFromAudioSocket;
 
 @end
