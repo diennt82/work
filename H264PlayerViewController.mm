@@ -4554,17 +4554,18 @@ double _ticks = 0;
                 break;
         }
     }
-    
+    [self hideTimelineView];
     [self updateBottomView];
     [self applyFont];
-    [self hideTimelineView];
 }
 
 - (void)updateBottomView
 {
-    if (_wantToShowTimeLine)
+    if (_wantToShowTimeLine || self.horizMenu.isAllButtonDeselected)
     {
         //don't need to update bottom view when show timeline
+        [self hidenAllBottomView];
+        [self showTimelineView];
         return;
     }
     //first hidden all view
@@ -4668,7 +4669,10 @@ double _ticks = 0;
     }
     else
     {
+        //first hide all bottom view
         [self hidenAllBottomView];
+        //and then display time line
+        [self showTimelineView];
     }
 }
 
