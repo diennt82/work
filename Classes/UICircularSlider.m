@@ -11,6 +11,7 @@
 
 #import "UICircularSlider.h"
 #import "UIFont+Hubble.h"
+#import "define.h"
 
 @interface UICircularSlider()
 #define Rgb2UIColor(r, g, b)  [UIColor colorWithRed:((r) / 255.0) green:((g) / 255.0) blue:((b) / 255.0) alpha:1.0]
@@ -184,7 +185,36 @@
     
     [self setUserInteractionEnabled:NO];
     
+    [[NSNotificationCenter defaultCenter] addObserver: self
+                                             selector: @selector(handleEnteredBackground)
+                                                 name: UIApplicationDidEnterBackgroundNotification
+                                               object: nil];
+    
+    // Do any additional setup after loading the view.
+	[[NSNotificationCenter defaultCenter] addObserver: self
+                                             selector: @selector(becomeActive)
+                                                 name: UIApplicationDidBecomeActiveNotification
+                                               object: nil];
+    
 
+}
+
+-(void) handleEnteredBackground
+{
+    //save value to handle later
+    NSTimeInterval nowInterval = [[NSDate date] timeIntervalSince1970];
+    
+}
+
+-(void) becomeActive
+{
+    //load from save value and update UI
+    [self updateCustomSlider];
+}
+
+- (void)updateCustomSlider
+{
+    self.value = 90;
 }
 #pragma mark - Timer to udpate text
 - (void)updateProgress: (UICircularSlider *) sender
@@ -192,7 +222,7 @@
     [self setValue:self.value];
 }
 
-- (void)updateLabel:(id)sender{
+- (void)updateLabel:(NSTimer *)exp{
     NSInteger value = (int)round(self.value);
 	if((int)self.value == 0 || self.value > 180 || !self.userInteractionEnabled){
 		[self killTimer];
@@ -203,7 +233,7 @@
 }
 
 - (void)killTimer{
-	if(_timer){
+	if(_timer && [_timer isValid]){
 		[_timer invalidate];
 		_timer = nil;
 	}
@@ -390,6 +420,10 @@ int finalAngle;
 			break;
 		}
         case UIGestureRecognizerStateEnded:
+            
+            /**
+             When is needed to register local notification
+             */
             if (self.userInteractionEnabled)
             {
                 NSInteger timeValue = (int)round(self.value);
@@ -410,11 +444,7 @@ int finalAngle;
                  */
                 [self registerLocalNotification];
                 //timer to update after one minutes
-                _timer = [NSTimer scheduledTimerWithTimeInterval:60.0
-                                                          target:self
-                                                        selector:@selector(updateLabel:)
-                                                        userInfo:nil
-                                                         repeats:YES ];
+                [self startTimerUpdateLabel];
             }
             
             if (!self.isContinuous) {
@@ -431,6 +461,16 @@ int finalAngle;
 			break;
 	}
 }
+
+- (void)startTimerUpdateLabel
+{
+    [self killTimer];
+    _timer = [NSTimer scheduledTimerWithTimeInterval:60.0
+                                              target:self
+                                            selector:@selector(updateLabel:)
+                                            userInfo:nil
+                                             repeats:YES ];
+}
 - (void)cancelAllLocalNotification
 {
     [[UIApplication sharedApplication] cancelAllLocalNotifications];
@@ -444,7 +484,13 @@ int finalAngle;
     //get value of slider currently
     NSTimeInterval timeRemider = (NSTimeInterval)round(self.value) * 60;
     NSTimeInterval nextDateTime = nowInterval + timeRemider;
-    NSLog(@"nextDay Date is %f", nextDateTime);
+    NSLog(@"nextDay Date is %f and time to store is %d", nextDateTime, (int)nextDateTime);
+    
+    //save time to exp to call expire later
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    [userDefaults setInteger:(int)nextDateTime forKey:TIME_TO_EXPIRED];
+    [userDefaults synchronize];
+   
     // Schedule the notification
     NSDate *fireDateNotification = [NSDate dateWithTimeIntervalSince1970:nextDateTime];
     UILocalNotification* localNotification = [[UILocalNotification alloc] init];

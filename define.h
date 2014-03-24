@@ -79,4 +79,8 @@
 #define MARGIN_LEFT_TEXT_CELL_TABLE_IPHONE         47
 
 #define ALIGN_TOP_OF_TIME_LINE 18
+#define ENABLE_DO_NOT_DISTURB   @"EnableDoNotDisturb"
+#define TIME_TO_EXPIRED         @"TimeToExpire"
+
+
 #endif
