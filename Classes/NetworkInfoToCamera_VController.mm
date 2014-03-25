@@ -105,28 +105,6 @@
     self.navigationItem.rightBarButtonItem.enabled = NO;
     [nextButton release];
     
-    /* initialize transient object here */
-	self.deviceConf = [[[DeviceConfiguration alloc] init] autorelease];
-	
-    if (![self restoreDataIfPossible] )
-	{
-        /*
-         * 1. Check deviceConf.ssid vs self.ssid
-         * 2. check sec type : OPEN , WeP, wpa
-         * 3. If ( =)  -> prefill pass- deviceConf.key  to  password/conf password text field
-         */
-        
-        if ([self.deviceConf.ssid isEqualToString:self.ssid] &&
-            ([self.security isEqualToString:@"wep"] || [self.security isEqualToString:@"wpa"]))
-        {
-            self.tfPassword.text = self.deviceConf.key;
-            self.tfConfirmPass.text = self.deviceConf.key;
-        }
-        
-		//Try to read the ssid from preference:
-        self.deviceConf.ssid = self.ssid;
-    }
-    
     self.tfSSID = (UITextField *)[self.ssidCell viewWithTag:202];
     if (self.tfSSID.text.length > 0) {
         self.navigationItem.rightBarButtonItem .enabled = YES;
@@ -134,6 +112,33 @@
     }
     self.tfPassword = (UITextField *)[self.passwordCell viewWithTag:200];
     self.tfConfirmPass = (UITextField *)[self.confPasswordCell viewWithTag:201];
+    
+    /* initialize transient object here */
+	self.deviceConf = [[[DeviceConfiguration alloc] init] autorelease];
+	
+    if (![self restoreDataIfPossible] )
+	{
+		//Try to read the ssid from preference:
+        self.deviceConf.ssid = self.ssid;
+    }
+    else
+    {
+        /*
+         * 1. Check deviceConf.ssid vs self.ssid
+         * 2. check sec type : OPEN , WeP, wpa
+         * 3. If ( =)  -> prefill pass- deviceConf.key  to  password/conf password text field
+         */
+        
+        NSLog(@"NetworkInfoToCamera_VController - viewDidLoad - deviceConf.ssid: %@, - self.ssid: %@, - self.security: %@", self.deviceConf.ssid, self.ssid, self.security);
+        
+        if ([self.deviceConf.ssid isEqualToString:self.ssid] &&
+            ([self.security isEqualToString:@"wep"] || [self.security isEqualToString:@"wpa"]))
+        {
+            self.tfPassword.text = self.deviceConf.key;
+            self.tfConfirmPass.text = self.deviceConf.key;
+        }
+    }
+    
     [BLEConnectionManager getInstanceBLE].delegate = self;
 }
 
