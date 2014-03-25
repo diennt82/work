@@ -93,6 +93,7 @@ typedef enum {
  */
 @property (nonatomic) UICircularSliderStyle sliderStyle;
 
+- (void)startTimerUpdateLabel;
 @end
 
 
