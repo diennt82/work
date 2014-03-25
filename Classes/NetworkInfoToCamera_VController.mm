@@ -108,9 +108,21 @@
     /* initialize transient object here */
 	self.deviceConf = [[[DeviceConfiguration alloc] init] autorelease];
 	
-	
     if (![self restoreDataIfPossible] )
 	{
+        /*
+         * 1. Check deviceConf.ssid vs self.ssid
+         * 2. check sec type : OPEN , WeP, wpa
+         * 3. If ( =)  -> prefill pass- deviceConf.key  to  password/conf password text field
+         */
+        
+        if ([self.deviceConf.ssid isEqualToString:self.ssid] &&
+            ([self.security isEqualToString:@"wep"] || [self.security isEqualToString:@"wpa"]))
+        {
+            self.tfPassword.text = self.deviceConf.key;
+            self.tfConfirmPass.text = self.deviceConf.key;
+        }
+        
 		//Try to read the ssid from preference:
         self.deviceConf.ssid = self.ssid;
     }
@@ -543,7 +555,7 @@
         {
             //cont
             self.password = [NSString stringWithString:[pass text]];
-            NSLog(@"password is : %@", self.password);
+            //NSLog(@"password is : %@", self.password);
             [self sendWifiInfoToCamera ];
             
         }
