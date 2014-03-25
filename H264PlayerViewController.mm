@@ -69,6 +69,7 @@
     UIBarButtonItem *nowButton, *earlierButton;
     BOOL _isLandScapeMode;//cheat to display correctly timeline bottom
     BOOL _wantToShowTimeLine;
+    BOOL _hideCustomIndicatorAndTextNotAccessble;
 }
 
 @property (retain, nonatomic) IBOutlet UIImageView *imageViewHandle;
@@ -134,7 +135,7 @@ double _ticks = 0;
     // Do any additional setup after loading the view from its nib.
     // only is called in viewDidLoad, make sure it is called once.
 
-    
+    _hideCustomIndicatorAndTextNotAccessble = NO;
     // update navi
     earlierNavi = [[EarlierNavigationController alloc] init];
     earlierNavi.isEarlierView = NO;
@@ -542,6 +543,7 @@ double _ticks = 0;
 
 - (void)nowButtonAciton:(id)sender
 {
+    _hideCustomIndicatorAndTextNotAccessble = NO;
     [nowButton setEnabled:NO];
     [earlierButton setEnabled:YES];
     earlierNavi.isEarlierView = NO;
@@ -587,6 +589,7 @@ double _ticks = 0;
 
 - (void)earlierButtonAction:(id)sender
 {
+    _hideCustomIndicatorAndTextNotAccessble = YES;
     [earlierButton setEnabled:NO];
     [nowButton setEnabled:YES];
     [self.customIndicator setHidden:YES];
@@ -5882,7 +5885,7 @@ double _ticks = 0;
 
 - (void)displayCustomIndicator
 {
-    if (_isShowCustomIndicator)
+    if (_isShowCustomIndicator && !_hideCustomIndicatorAndTextNotAccessble)
     {
         [self.customIndicator setHidden:NO];
         [self.view bringSubviewToFront:self.customIndicator];
@@ -5914,6 +5917,10 @@ double _ticks = 0;
 
 - (void)displayTextNotAccessible
 {
+    if (_hideCustomIndicatorAndTextNotAccessble)
+    {
+        return;
+    }
     _timerNotAccessible = nil;
     [self.ib_lbCameraNotAccessible setHidden:NO];
 }
