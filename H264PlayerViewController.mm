@@ -460,7 +460,7 @@ double _ticks = 0;
 -(void)addHubbleLogo_Back
 {
     // change the back button to cancel and add an event handler
-    UIImage *headerLogo = [UIImage imageNamed:@"hubble_logo"];
+    UIImage *headerLogo = [UIImage imageNamed:@"Hubble_back_text"];
     
     //create UIBarbutton item virtual, and set clearColor for it
     //To hide bar button for navigation, and add new button

@@ -371,7 +371,7 @@
             
             if ([ch.profile.registrationID isEqualToString:regID])
             {
-                cell.cameraNameLabel.textColor = [UIColor colorWithRed:19/255.f green:154/255.f blue:244/255.f alpha:1];
+                cell.cameraNameLabel.textColor = [UIColor greenColor];
             }
             else
             {
