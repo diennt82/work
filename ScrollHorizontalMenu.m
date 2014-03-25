@@ -22,9 +22,11 @@
 @synthesize itemSelectedDelegate;
 @synthesize dataSource;
 @synthesize itemCount = _itemCount;
+@synthesize isAllButtonDeselected = _isAllButtonDeselected;
 
 -(void) awakeFromNib
 {
+    currentTappedButtonIndex = -1;
     self.bounces = YES;
     self.scrollEnabled = YES;
     self.alwaysBounceHorizontal = YES;
@@ -106,7 +108,6 @@
         
         [customButton setBackgroundImage:[UIImage imageNamed:imageName] forState:UIControlStateNormal];
         [customButton setBackgroundImage:[UIImage imageNamed:imageSelected] forState:UIControlStateSelected];
-        
         customButton.tag = tag++;
         [customButton addTarget:self action:@selector(buttonTapped:) forControlEvents:UIControlEventTouchUpInside];
         customButton.frame = CGRectMake(xPos, 0, buttonWidth, buttonWidth);
@@ -140,7 +141,29 @@
         
         if(i + kButtonBaseTag == button.tag)
         {
-            thisButton.selected = YES;
+            _isOddTapButton = !_isOddTapButton;
+            //select one button
+            if (currentTappedButtonIndex == i)
+            {
+                //select continue;
+                if (_isOddTapButton)
+                {
+                    thisButton.selected = YES;
+                    _isAllButtonDeselected = NO;
+                }
+                else
+                {
+                    _isAllButtonDeselected = YES;
+                    thisButton.selected = NO;
+                }
+                
+            } else
+            {
+                _isAllButtonDeselected = NO;
+                _isOddTapButton = YES;
+                thisButton.selected = YES;
+            }
+            currentTappedButtonIndex = i;
         }
         else
         {
