@@ -225,7 +225,7 @@ double _ticks = 0;
     }
     else
     {
-        [self getVQ_bg];
+//        [self getVQ_bg];
         [self becomeActive];
         
         [self hideControlMenu];
@@ -723,6 +723,9 @@ double _ticks = 0;
         case MEDIA_INFO_VIDEO_SIZE:
         {
             NSLog(@"video size: %d x %d", ext1, ext2);
+            
+            _resolution = [NSString stringWithFormat:@"%dx%d", ext1, ext2];
+            [self.ib_btResolInfo setTitle:_resolution forState:UIControlStateNormal];
             float top =0 , left =0;
             float destWidth;
             float destHeight;
@@ -4046,7 +4049,7 @@ double _ticks = 0;
     {
         [self hideTimelineView];
     }
-    [self.ib_btResolInfo setTitle:_resolution forState:UIControlStateNormal];
+    [self addingLabelInfosForDebug];
     
 }
 
