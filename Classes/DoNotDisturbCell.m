@@ -40,7 +40,8 @@
         [[UIApplication sharedApplication] unregisterForRemoteNotifications];
         [self.ib_enableDoNotDisturb setImage:[UIImage imageSwitchOn] forState:UIControlStateNormal];
         [self.ib_circleSliderCustom setUserInteractionEnabled:YES];
-        self.ib_circleSliderCustom.value = [self updateValueCustomSlider];        
+        self.ib_circleSliderCustom.value = [self updateValueCustomSlider];
+        [self.ib_circleSliderCustom startTimerUpdateLabel];
     }
     else
     {
@@ -48,17 +49,14 @@
         [[UIApplication sharedApplication] registerForRemoteNotificationTypes:(UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeAlert)];
         [self.ib_enableDoNotDisturb setImage:[UIImage imageSwitchOff] forState:UIControlStateNormal];
         [self.ib_circleSliderCustom setUserInteractionEnabled:NO];
-        [self.ib_circleSliderCustom startTimerUpdateLabel];
     }
 }
 
 - (NSInteger)updateValueCustomSlider
 {
     NSInteger nowInterval = (NSInteger)[[NSDate date] timeIntervalSince1970];
-    NSLog(@"time current is %d", nowInterval);
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     NSInteger timeExpire = [userDefaults integerForKey:TIME_TO_EXPIRED];
-    NSLog(@"time expire is %d", timeExpire);
     NSInteger deltaTime = nowInterval - timeExpire;
     if (deltaTime >= 0)
     {
