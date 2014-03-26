@@ -40,13 +40,6 @@
 {
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
-    
-//    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
-//    {
-//        [[NSBundle mainBundle] loadNibNamed:@"EarlierViewController_iPad"
-//                                      owner:self
-//                                    options:nil];
-//    }
     self.navigationController.navigationBarHidden = YES;
     
     self.timelineVC = [[TimelineViewController alloc] init];
@@ -63,21 +56,14 @@
     
     [self.view addSubview:_tabBarController.view];
     
-}
-
-- (void)viewWillAppear:(BOOL)animated
-{
-    //NSLog(@"EarlierViewController: %@", NSStringFromCGRect(self.view.frame));
-    
+    //load event for timeline
     if (_isDidLoad == FALSE)
     {
         if ([self.camChannel.profile isNotAvailable])
         {
             self.view.frame = CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
         }
-        
         self.isDidLoad = TRUE;
-        
         [_timelineVC loadEvents:_camChannel];
         self.timelineVC.navVC = _nav;
         if ((isiPhone4 || isiPhone5))
@@ -89,7 +75,6 @@
         }
     }
 }
-
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];

@@ -58,73 +58,7 @@
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
 
     self.navigationController.navigationBarHidden = YES;
-#if TEST
-    
-    EventInfo *info  = [[EventInfo alloc] init];
-    info.eventID     = 34;
-    info.alert   = @"4";
-    info.value  = @"20131231112818000";
-    info.alert_name = @"There's a lot of movement and noise";
-    info.time_stamp   = @"2013-12-31T04:30:15Z";
-    
-    ClipInfo *clipInfo = [[ClipInfo alloc] init];
-    clipInfo.urlImage = @"http://nxcomm-office.no-ip.info/s3/48022A2EFB46/snaps/48022A2EFB46_04_20131031160648000.jpg";
-    //clipInfo.urlFile = @"http://nxcomm-office.no-ip.info/s3/cam_clip_480p.flv";
-    clipInfo.urlFile = @"http://s3.amazonaws.com/hubble.wowza.content/642737396B49/clips/642737396B49_04_20131229180917000_00001.flv?AWSAccessKeyId=AKIAJNYQ3ONBL7OLSZDA&Expires=1388636549&Signature=vL8YoVb2bTIgzAZfMTRkadA36uI%3D";
-    info.clipInfo = clipInfo;
-    [clipInfo release];
-    
-    EventInfo *info1  = [[EventInfo alloc] init];
-    info1.eventID     = 33;
-    info1.alert   = @"4";
-    info1.value  = @"20131220112818000";
-    info1.alert_name = @"There's a lot of movement and noise";
-    info1.time_stamp   = @"2013-12-31T04:30:15Z";
-    
-    ClipInfo *clipInfo1 = [[ClipInfo alloc] init];
-    clipInfo1.urlImage = @"http://nxcomm-office.no-ip.info/s3/48022A2EFB46/snaps/48022A2EFB46_04_20131031160756000.jpg";
-    clipInfo1.urlFile = @"http://nxcomm-office.no-ip.info/s3/cam_clip_480p.flv";
-    info1.clipInfo = clipInfo1;
-    [clipInfo1 release];
-    
-    EventInfo *info2  = [[EventInfo alloc] init];
-    info2.eventID     = 32;
-    info2.alert   = @"4";
-    info2.value  = @"20131231112818000";
-    info2.alert_name = @"There's a lot of movement and noise";
-    info2.time_stamp   = @"2013-12-31T04:30:15Z";
-    
-    ClipInfo *clipInfo2 = [[ClipInfo alloc] init];
-    clipInfo2.urlImage = @"http://nxcomm-office.no-ip.info/s3/48022A2EFB46/snaps/48022A2EFB46_04_20131031161118000.jpg";
-    clipInfo2.urlFile = @"http://nxcomm-office.no-ip.info/s3/cam_clip_480p.flv";
-    info2.clipInfo = clipInfo2;
-    [clipInfo2 release];
-    
-    EventInfo *info3  = [[EventInfo alloc] init];
-    info3.eventID     = 30;
-    info3.alert   = @"4";
-    info3.value  = @"20131211112818000";
-    info3.alert_name = @"Motion detected";
-    info3.time_stamp   = @"2013-12-31T04:30:15Z";
-    
-    ClipInfo *clipInfo3 = [[ClipInfo alloc] init];
-    clipInfo3.urlImage = @"http://nxcomm-office.no-ip.info/s3/48022A2EFB46/snaps/48022A2EFB46_04_20131031162215000.jpg";
-    clipInfo3.urlFile = @"http://nxcomm-office.no-ip.info/s3/48022A2EFB46/clips/48022A2EFB46_04_20131031161118000_00004.flv";
-    info3.clipInfo = clipInfo3;
-    [clipInfo3 release];
-    
-    self.events = [NSMutableArray arrayWithObjects:info, info1, info2, info3, nil];
-    
-    NSDictionary *clip1InEvent = [NSDictionary dictionaryWithObjectsAndKeys:
-                                 @"http://s3.amazonaws.com/hubble.wowza.content/642737396B49/clips/642737396B49_04_20131229180917000_00001.flv?AWSAccessKeyId=AKIAJNYQ3ONBL7OLSZDA&Expires=1388636549&Signature=vL8YoVb2bTIgzAZfMTRkadA36uI%3D", @"file", nil];
-    
-    NSDictionary *clip2InEvent = [NSDictionary dictionaryWithObjectsAndKeys:
-                                 @"http://s3.amazonaws.com/hubble.wowza.content/642737396B49/clips/642737396B49_04_20131229180917000_00004.flv?AWSAccessKeyId=AKIAJNYQ3ONBL7OLSZDA&Expires=1388636549&Signature=mzS2EATWH61uj%2BLd6oKSTNBjZn8%3D", @"file", nil];
-    NSDictionary *clip3InEvent = [NSDictionary dictionaryWithObjectsAndKeys:
-                                 @"http://s3.amazonaws.com/hubble.wowza.content/642737396B49/clips/642737396B49_04_20131229180917000_00005_last.flv?AWSAccessKeyId=AKIAJNYQ3ONBL7OLSZDA&Expires=1388636549&Signature=qEVA9107MClYJhCHxqgUGAHTHq0%3D", @"file", nil];
-    NSArray *clipInEvent1 = [NSArray arrayWithObjects:clip1InEvent, clip2InEvent, clip3InEvent, nil];
-    self.clipsInEachEvent = [NSMutableArray arrayWithObjects:clipInEvent1, nil];
-#else
+
     self.camChannel = ((H264PlayerViewController *)_parentVC).selectedChannel;
     
     NSLog(@"%@, %@", _camChannel, ((H264PlayerViewController *)_parentVC).selectedChannel);
@@ -138,7 +72,6 @@
     [[UIApplication sharedApplication] setStatusBarOrientation:UIDeviceOrientationPortrait animated:NO];
 
     //self.tableView.scrollIndicatorInsets = UIEdgeInsetsMake(64, 0, 44, 0);
-#endif
     
 }
 
@@ -444,8 +377,11 @@
     }
     self.isEventAlready = TRUE;
     self.isLoading = FALSE;
-    [self.tableView reloadData];
     
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self.tableView reloadData];
+    });
+
     if (responseDict == nil)
     {
         [self performSelectorOnMainThread:@selector(createRefreshTimer) withObject:nil waitUntilDone:NO];
