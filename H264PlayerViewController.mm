@@ -4980,7 +4980,7 @@ double _ticks = 0;
 
 -(void) longPress:(UILongPressGestureRecognizer*) gest
 {
-    NSLog(@"Long press on hold to talk");
+    //NSLog(@"Long press on hold to talk");
     //turn off timer hide control panel or alway show control panel
     [self showControlMenu];
     
