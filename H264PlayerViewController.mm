@@ -193,12 +193,11 @@ double _ticks = 0;
 #else
     self.imageViewStreamer.userInteractionEnabled = NO;
 #endif
-
+    self.cameraModel = [self.selectedChannel.profile getModel];
     [self initHorizeMenu: _cameraModel];
 
     //set text name for camera name
     [self.ib_lbCameraName setText:self.selectedChannel.profile.name];
-    self.cameraModel = [self.selectedChannel.profile getModel];
     
 
     NSLog(@"Model of Camera is: %d, STUN: %d", self.selectedChannel.profile.modelID, [[NSUserDefaults standardUserDefaults] boolForKey:@"enable_stun"]);
