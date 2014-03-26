@@ -1092,6 +1092,7 @@
                 else
                 {
                     numOfRows[indexPath.section] = 1;
+                    self.isExistSensitivityData = FALSE;
                 }
                 
                 for (int i = 0; i < 4; i++)
