@@ -216,29 +216,8 @@ double _ticks = 0;
     
     _isDegreeFDisplay = [[NSUserDefaults standardUserDefaults] boolForKey:@"IS_FAHRENHEIT"];
     _resolution = @"";
-    if ([self.selectedChannel.profile isNotAvailable])
-    {
-        nowButton.enabled = NO;
-        [_activityIndicator removeFromSuperview];
-        [self earlierButtonAction:nil];
-        return;
-    }
-    else
-    {
-//        [self getVQ_bg];
-        [self becomeActive];
-        
-        [self hideControlMenu];
-        
-        NSLog(@"Check selectedChannel is %@ and ip of deviece is %@", self.selectedChannel, self.selectedChannel.profile.ip_address);
-        
-        [self setupHttpPort];
-        [self setupPtt];
-        
-        self.stringTemperature = @"0";
-        //end add button to change
-        [ib_switchDegree setHidden:YES];
-    }
+    
+    [self becomeActive];
 }
 
 - (void)applyFont
@@ -1504,21 +1483,42 @@ double _ticks = 0;
 
 - (void)becomeActive
 {
-    self.selectedChannel.stopStreaming = NO;
-
-    [self displayCustomIndicator];
-    self.viewStopStreamingProgress.hidden = YES;
-    
-    // Camera is NOT available
     if ([self.selectedChannel.profile isNotAvailable])
     {
-        [self setupCamera];
+        nowButton.enabled = NO;
+        [_activityIndicator removeFromSuperview];
+        [self earlierButtonAction:nil];
+        return;
     }
     else
     {
-        // Camera is AVAILABLE
+        self.selectedChannel.stopStreaming = NO;
+        [self displayCustomIndicator];
+        self.viewStopStreamingProgress.hidden = YES;
         [self scanCamera];
+        
+        [self hideControlMenu];
+        
+        NSLog(@"Check selectedChannel is %@ and ip of deviece is %@", self.selectedChannel, self.selectedChannel.profile.ip_address);
+        
+        [self setupHttpPort];
+        [self setupPtt];
+        
+        self.stringTemperature = @"0";
+        //end add button to change
+        [ib_switchDegree setHidden:YES];
     }
+
+    self.imageViewHandle.hidden = YES;
+    self.imageViewKnob.center = self.imgViewDrectionPad.center;
+    self.imageViewHandle.center = self.imgViewDrectionPad.center;
+}
+
+- (void)createMonvementControlTimer
+{
+    [self cleanUpDirectionTimers];
+    
+    NSLog(@"H264VC - createMonvementControlTimer");
     
     //Direction stuf
     /* Kick off the two timer for direction sensing */
@@ -1541,16 +1541,42 @@ double _ticks = 0;
                                                            selector:@selector(h_directional_change_callback:)
                                                            userInfo:nil
                                                             repeats:YES];
-    
-    self.imageViewHandle.hidden = YES;
-    self.imageViewKnob.center = self.imgViewDrectionPad.center;
-    self.imageViewHandle.center = self.imgViewDrectionPad.center;
 }
 
 #pragma mark - Setup camera
 
 - (void)setupCamera
 {
+#if 0
+    /*
+     * This case never happens
+     */
+    
+    if ([self.selectedChannel.profile isNotAvailable])
+    {
+        self.selectedChannel.profile.hasUpdateLocalStatus = TRUE;
+        _isCameraOffline = YES;
+        
+        _isShowCustomIndicator = NO;
+        self.imgViewDrectionPad.hidden= YES;
+        self.viewStopStreamingProgress.hidden = YES;
+        self.horizMenu.userInteractionEnabled = YES;
+        self.imageViewStreamer.userInteractionEnabled = YES;
+        
+        NSLog(@"SetupCamera - Camera is NOT available.");
+        
+        //TODO: Create a refresh item to refresh state of this camera refresh
+        UIImage *imgRefresh = [UIImage imageNamed:@"ImgNotAvailable"];
+        self.imageViewStreamer.frame = CGRectMake(0, 0, imgRefresh.size.width, imgRefresh.size.height);
+        self.imageViewStreamer.image = imgRefresh;
+        self.imageViewStreamer.center = _imageViewVideo.center;
+        //self.cameraIsNotAvailable = TRUE;
+    }
+    else
+    {
+#endif
+    [self createMonvementControlTimer];
+    
     _isShowCustomIndicator = YES;
     [self displayCustomIndicator];
     if (self.selectedChannel.stream_url != nil)
@@ -1559,7 +1585,7 @@ double _ticks = 0;
     }
     _httpComm.device_ip = self.selectedChannel.profile.ip_address;
     _httpComm.device_port = self.selectedChannel.profile.port;
-
+    
     
     NSLog(@"device_ip is %@ and device_port is %d", self.selectedChannel.profile.ip_address, self.selectedChannel.profile.port);
     //Support remote UPNP video as well
@@ -1569,7 +1595,7 @@ double _ticks = 0;
         self.selectedChannel.stream_url = [NSString stringWithFormat:@"rtsp://user:pass@%@:6667/blinkhd", self.selectedChannel.profile.ip_address];
         
 #if 0
-      
+        
         self.selectedChannel.stream_url = @"rtsp://user:pass@%@:6667/blinkhd";
 #endif
         
@@ -1580,7 +1606,7 @@ double _ticks = 0;
 #ifdef SHOW_DEBUG_INFO
         _viewVideoIn = @"L";
 #endif
-
+        
     }
     else if (self.selectedChannel.profile.minuteSinceLastComm <= 5)
     {
@@ -1616,44 +1642,19 @@ double _ticks = 0;
                 
             }
         }
-        if (_sessionKey == nil)
-        {
-            [self getTalkbackSessionKey];
-        }
     }
-    else
-    {
-        self.selectedChannel.profile.hasUpdateLocalStatus = TRUE;
-        _isCameraOffline = YES;
-
-        _isShowCustomIndicator = NO;
-        self.imgViewDrectionPad.hidden= YES;
-        self.viewStopStreamingProgress.hidden = YES;
-        self.horizMenu.userInteractionEnabled = YES;
-        self.imageViewStreamer.userInteractionEnabled = YES;
-        
-        NSLog(@"SetupCamera - Camera is NOT available.");
-        
-        //TODO: Create a refresh item to refresh state of this camera refresh
-        UIImage *imgRefresh = [UIImage imageNamed:@"ImgNotAvailable"];
-        self.imageViewStreamer.frame = CGRectMake(0, 0, imgRefresh.size.width, imgRefresh.size.height);
-        self.imageViewStreamer.image = imgRefresh;
-        self.imageViewStreamer.center = _imageViewVideo.center;
-        //self.cameraIsNotAvailable = TRUE;
-    }
+    //    }
 }
 
 
 -(void) startStunStream
 {
     self.selectedChannel.communication_mode = COMM_MODE_STUN;
-    
     NSDate * timeout;
-
     NSRunLoop * mainloop = [NSRunLoop currentRunLoop];
+    
     do
     {
-        
         //send probes
         
         [self.client sendAudioProbesToIp: self.selectedChannel.profile.camera_mapped_address
@@ -2496,6 +2497,15 @@ double _ticks = 0;
                 arrayBody.count == 2)
             {
                 self.stringTemperature = [arrayBody objectAtIndex:1];
+                
+                /*
+                 * If back, Need not to update UI
+                 */
+                
+                if (userWantToCancel == TRUE)
+                {
+                    return;
+                }
                 
                 [self performSelectorOnMainThread:@selector(setTemperatureState_Fg:)
                                        withObject:_stringTemperature
