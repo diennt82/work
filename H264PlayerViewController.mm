@@ -199,38 +199,12 @@ double _ticks = 0;
     //set text name for camera name
     [self.ib_lbCameraName setText:self.selectedChannel.profile.name];
     self.cameraModel = [self.selectedChannel.profile getModel];
-    if (![_cameraModel isEqualToString:CP_MODEL_SHARED_CAM]) // CameraHD
-    {
-        self.timelineVC = [[TimelineViewController alloc] init];
-        [self.view addSubview:_timelineVC.view];
-        self.timelineVC.timelineVCDelegate = self;
-        self.timelineVC.camChannel = self.selectedChannel;
-        self.timelineVC.navVC = self.navigationController;
-        self.timelineVC.parentVC = self;
-        
-        [self.timelineVC loadEvents:self.selectedChannel];
-    }
+    
 
     NSLog(@"Model of Camera is: %d, STUN: %d", self.selectedChannel.profile.modelID, [[NSUserDefaults standardUserDefaults] boolForKey:@"enable_stun"]);
     _isDegreeFDisplay = [[NSUserDefaults standardUserDefaults] boolForKey:@"IS_FAHRENHEIT"];
     _resolution = @"";
-    if ([self.selectedChannel.profile isNotAvailable])
-    {
-        nowButton.enabled = NO;
-        [_activityIndicator removeFromSuperview];
-        [self earlierButtonAction:nil];
-    }
-    else
-    {
-        [self becomeActive];
-        [self hideControlMenu];
-        NSLog(@"Check selectedChannel is %@ and ip of deviece is %@", self.selectedChannel, self.selectedChannel.profile.ip_address);
-        [self setupHttpPort];
-        [self setupPtt];
-        self.stringTemperature = @"0";
-        //end add button to change
-        [ib_switchDegree setHidden:YES];
-    }
+    [self becomeActive];
 }
 
 - (void)applyFont
@@ -1508,6 +1482,18 @@ double _ticks = 0;
     }
     else
     {
+        if (![_cameraModel isEqualToString:CP_MODEL_SHARED_CAM]) // CameraHD
+        {
+            self.timelineVC = [[TimelineViewController alloc] init];
+            [self.view addSubview:_timelineVC.view];
+            self.timelineVC.timelineVCDelegate = self;
+            self.timelineVC.camChannel = self.selectedChannel;
+            self.timelineVC.navVC = self.navigationController;
+            self.timelineVC.parentVC = self;
+            
+            [self.timelineVC loadEvents:self.selectedChannel];
+        }
+        
         self.selectedChannel.stopStreaming = NO;
         [self displayCustomIndicator];
         self.viewStopStreamingProgress.hidden = YES;
