@@ -99,6 +99,14 @@
         xPos += buttonWidth;
     }
     
+    // This is SharedCam and this shared cam is connected via MACOS
+    if (_itemCount == 2)
+    {
+        // Make items is center menu.
+        xPos += 2.5*buttonWidth;
+    }
+    
+    
     for(int i = 0 ; i < self.itemCount; i++)
     {
         NSString *imageName = [dataSource horizMenu:self nameImageForItemAtIndex:i];
