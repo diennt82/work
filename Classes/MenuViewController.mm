@@ -71,9 +71,11 @@
     self.camerasVC = [[CamerasViewController alloc] initWithStyle:nil
                                                          delegate:self.menuDelegate
                                                          parentVC:self];
-    //self.camerasVC.camChannels = self.cameras;
-    
-    //[self.navigationController initWithRootViewController:camerasVC];
+    if (_cameras)
+    {
+        self.camerasVC.camChannels = self.cameras;
+    }
+
 #if DISABLE_VIEW_RELEASE_FLAG
     self.accountVC = [[Account_ViewController alloc] init];
     
