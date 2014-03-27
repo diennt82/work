@@ -9,9 +9,6 @@
 #define SENDING_SOCKET_TAG 1009
 #define REMOTE_TIMEOUT 30
 
-#define TALKBACK_REMOTE_IP @"23.22.154.88"
-#define TALKBACK_REMOTE_PORT 25000
-
 #import "AudioOutStreamRemote.h"
 
 @interface AudioOutStreamRemote()
@@ -35,9 +32,6 @@
     
     if (self)
     {
-        self.relayServerIP   = TALKBACK_REMOTE_IP;
-        self.relayServerPort = TALKBACK_REMOTE_PORT;
-        
         hasStartRecordingSound = FALSE;
         self.isDisconnected = TRUE;
         

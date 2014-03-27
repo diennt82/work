@@ -98,6 +98,7 @@
 @property (nonatomic, retain) NSString *streamID;
 @property (nonatomic) BOOL wantsCancelRemoteTalkback;
 @property (nonatomic, retain) AudioOutStreamRemote *audioOutStreamRemote;
+@property (nonatomic, retain) NSString *talkbackRemoteServer;
 
 - (void)centerScrollViewContents;
 - (void)scrollViewDoubleTapped:(UITapGestureRecognizer*)recognizer;
@@ -185,7 +186,9 @@ double _ticks = 0;
     [self.imageViewStreamer addGestureRecognizer:singleTap];
     [singleTap release];
     
-    self.apiKey = [[NSUserDefaults standardUserDefaults] stringForKey:@"PortalApiKey"];
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    
+    self.apiKey = [userDefaults stringForKey:@"PortalApiKey"];
     
 #if TEST_REMOTE_TALKBACK
     // TODO: Testing -- delete
@@ -200,9 +203,15 @@ double _ticks = 0;
     [self.ib_lbCameraName setText:self.selectedChannel.profile.name];
     
 
-    NSLog(@"Model of Camera is: %d, STUN: %d", self.selectedChannel.profile.modelID, [[NSUserDefaults standardUserDefaults] boolForKey:@"enable_stun"]);
-    _isDegreeFDisplay = [[NSUserDefaults standardUserDefaults] boolForKey:@"IS_FAHRENHEIT"];
+    NSLog(@"Model of Camera is: %d, STUN: %d", self.selectedChannel.profile.modelID, [userDefaults boolForKey:@"enable_stun"]);
+    _isDegreeFDisplay = [userDefaults boolForKey:@"IS_FAHRENHEIT"];
     _resolution = @"";
+    
+    NSString *serverInput = [userDefaults stringForKey:@"name_server"];
+    serverInput = [serverInput substringToIndex:serverInput.length - 3];
+    self.talkbackRemoteServer = [serverInput stringByReplacingOccurrencesOfString:@"api" withString:@"talkback"];
+    self.talkbackRemoteServer = [_talkbackRemoteServer stringByReplacingOccurrencesOfString:@"https" withString:@"http"];
+    
     [self becomeActive];
 }
 
@@ -1815,6 +1824,7 @@ double _ticks = 0;
     if (_audioOutStreamRemote)
     {
         [self performSelectorInBackground:@selector(closeRemoteTalkback) withObject:nil];
+        [_audioOutStreamRemote disconnectFromAudioSocket];
     }
     
     if (self.currentMediaStatus == MEDIA_INFO_HAS_FIRST_IMAGE ||
@@ -4965,7 +4975,6 @@ double _ticks = 0;
 #else
     if (self.selectedChannel.profile.isInLocal)
     {
-        NSLog(@"Long press on hold to talk");
         //turn off timer hide control panel or alway show control panel
         [self showControlMenu];
         
@@ -5051,7 +5060,7 @@ double _ticks = 0;
 
 // Talk back remote
 
-- (BOOL)getTalkbackSessionKey
+- (NSInteger )getTalkbackSessionKey
 {
     // STEP 1
     //[BMS_JSON_Communication setServerInput:@"https://dev-api.hubble.in:443/v1"];
@@ -5082,15 +5091,23 @@ double _ticks = 0;
             [userDefault setObject:_streamID forKey:STREAM_ID];
             [userDefault synchronize];
             
-            return TRUE;
+            return 200;
         }
         else
         {
             NSLog(@"Resquest session key failed: %@", [responseDict objectForKey:@"message"]);
+            
+            if ([[responseDict objectForKey:@"status"] integerValue] == 404)
+            {
+                self.ib_buttonTouchToTalk.enabled = NO;
+                self.ib_labelTouchToTalk.text = @"Not support!";
+                
+                return 404;
+            }
         }
     }
     
-    return FALSE;
+    return 500;
 }
 
 - (void)processingHoldToTalkRemote
@@ -5133,14 +5150,18 @@ double _ticks = 0;
         else
         {
             // STEP 1
-            BOOL sessionKeySuccess = [self getTalkbackSessionKey];
+            NSInteger statusCode = [self getTalkbackSessionKey];
             
-            if (sessionKeySuccess == FALSE)
+            NSLog(@"H264VC - enableRemotePTT - [self getTalkbackSessionKey]: %d", statusCode);
+            
+            if (statusCode == 404)
             {
-                NSUserDefaults *userDefault = [NSUserDefaults standardUserDefaults];
-                self.sessionKey = [userDefault objectForKey:@"SESSION_KEY"];
-                self.streamID = [userDefault objectForKey:@"STREAM_ID"];
+                return;
             }
+            
+            NSUserDefaults *userDefault = [NSUserDefaults standardUserDefaults];
+            self.sessionKey = [userDefault objectForKey:SESSION_KEY];
+            self.streamID = [userDefault objectForKey:STREAM_ID];
             
             if (_sessionKey == nil)
             {
@@ -5150,7 +5171,7 @@ double _ticks = 0;
             {
                 // STEP 2
                 
-                NSString *url = @"http://23.22.154.88/devices/start_talk_back";
+                NSString *url = [NSString stringWithFormat: @"%@/devices/start_talk_back", _talkbackRemoteServer];
                 
                 NSDictionary *resDict = [self workWithServer:url sessionKey:_sessionKey streamID:_streamID];
                 
@@ -5183,12 +5204,16 @@ double _ticks = 0;
                         {
                             _audioOutStreamRemote.relayServerIP = relayServerIP;
                             _audioOutStreamRemote.relayServerPort = [relayServerPort integerValue];
+                            
+                            [_audioOutStreamRemote performSelectorOnMainThread:@selector(connectToAudioSocket) withObject:nil waitUntilDone:NO];
+                            _audioOutStreamRemote.audioOutStreamRemoteDelegate = self;
+                        }
+                        else
+                        {
+                            NSLog(@"H264VC - enableRemotePTT - relayServerIP = nil | relayServerPort = nil {0}");
                         }
                         
                         NSLog(@"H264VC -enableRemotePTT - data: %@, -length: %lu, -ip: %@, -port: %d", data, (unsigned long)data.length, _audioOutStreamRemote.relayServerIP, _audioOutStreamRemote.relayServerPort);
-                        
-                        [_audioOutStreamRemote performSelectorOnMainThread:@selector(connectToAudioSocket) withObject:nil waitUntilDone:NO];
-                        _audioOutStreamRemote.audioOutStreamRemoteDelegate = self;
                     }
                     else
                     {
@@ -5208,7 +5233,7 @@ double _ticks = 0;
 
 - (void)closeRemoteTalkback
 {
-    NSString *url = @"http://23.22.154.88/devices/stop_talk_back";
+    NSString *url = [NSString stringWithFormat: @"%@/devices/stop_talk_back", _talkbackRemoteServer];
     
     NSDictionary *resDict = [self workWithServer:url sessionKey:_sessionKey streamID:_streamID];
     
