@@ -1714,6 +1714,11 @@ double _ticks = 0;
     
     while (h264Streamer != NULL)
     {
+        if (userWantToCancel== TRUE)
+        {
+            return;
+        }
+        
         NSDate * endDate = [NSDate dateWithTimeIntervalSinceNow:0.5];
         [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode beforeDate:endDate];
     }
@@ -1766,6 +1771,7 @@ double _ticks = 0;
     
     NSString * url = self.selectedChannel.stream_url;
     NSLog(@"startStream_bg url = %@", url);
+    
     do
     {
         if (url == nil)
@@ -1799,8 +1805,6 @@ double _ticks = 0;
        
         if (status != NO_ERROR) // NOT OK
         {
-            
-            
             break;
         }
     }
@@ -2372,7 +2376,7 @@ double _ticks = 0;
 //        httpCommunication.device_port = self.selectedChannel.profile.port;
         
         _httpComm.device_ip = self.selectedChannel.profile.ip_address;
-        _httpComm.device_port = 80;
+        _httpComm.device_port = self.selectedChannel.profile.port;
         NSData *responseData = [_httpComm sendCommandAndBlock_raw:@"value_melody"];
         
         if (responseData != nil)
@@ -2382,10 +2386,10 @@ double _ticks = 0;
     }
     else
     {
-        BMS_JSON_Communication *jsonCommunication = [[[BMS_JSON_Communication alloc] initWithObject:self
+        BMS_JSON_Communication *jsonCommunication = [[BMS_JSON_Communication alloc] initWithObject:self
                                                                                            Selector:nil
                                                                                        FailSelector:nil
-                                                                                          ServerErr:nil] autorelease];
+                                                                                          ServerErr:nil];
         
         NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
         
@@ -2395,6 +2399,8 @@ double _ticks = 0;
         NSDictionary *responseDict = [jsonCommunication sendCommandBlockedWithRegistrationId:self.selectedChannel.profile.registrationID
                                                                                   andCommand:@"action=command&command=value_melody"
                                                                                    andApiKey:apiKey];
+        [jsonCommunication release];
+        
         if (responseDict != nil)
         {
             NSInteger status = [[responseDict objectForKey:@"status"] intValue];
@@ -2418,10 +2424,13 @@ double _ticks = 0;
             if (tokens.count > 1 )
             {
                 NSString *melodyIndex = [tokens lastObject];
-                    
-                [self performSelectorOnMainThread:@selector(setMelodyState_Fg:)
-                                       withObject:melodyIndex
-                                    waitUntilDone:NO];
+
+                if (userWantToCancel == FALSE)
+                {
+                    [self performSelectorOnMainThread:@selector(setMelodyState_Fg:)
+                                           withObject:melodyIndex
+                                        waitUntilDone:NO];
+                }
             }
         }
     }
@@ -2727,10 +2736,6 @@ double _ticks = 0;
                                  andPort:self.selectedChannel.profile.camera_stun_audio_port];
         timeout = [NSDate dateWithTimeIntervalSinceNow:0.5];
         [mainloop runUntilDate:timeout];
-        
-        
-        
-        
     }
 }
 
@@ -4160,9 +4165,17 @@ double _ticks = 0;
         NSLog(@"Scan done with ipserver");
         NSDate * endDate = [NSDate dateWithTimeIntervalSinceNow:0.5];
         
-        while (_threadBonjour != nil && [_threadBonjour isExecuting])
+        while (_threadBonjour != nil &&
+               [_threadBonjour isExecuting] )
         {
-            [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode beforeDate:endDate];
+            if (userWantToCancel)
+            {
+                [_threadBonjour cancel];
+            }
+            else
+            {
+                [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode beforeDate:endDate];
+            }
         }
         
         NSLog(@"\nH264=================================\nSCAN DONE - IPSERVER SYNC BONJOUR\nCamProfile: %@\nbonjourList: %@\n=================================\n", self.selectedChannel.profile, _bonjourList);

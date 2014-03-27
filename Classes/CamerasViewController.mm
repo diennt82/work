@@ -121,7 +121,7 @@
         
         AddCameraViewController *addCameraVC = [[AddCameraViewController alloc] init];
         addCameraVC.delegate = self;
-        
+        tabBarController.navigationController.navigationBarHidden = YES;
         [self presentViewController:addCameraVC animated:YES completion:^{}];
     }
 }
@@ -165,6 +165,10 @@
         [tabBarController dismissViewControllerAnimated:NO completion:^{
             [tabBarController.menuDelegate sendStatus:SETUP_CAMERA]; //initial setup
         }];
+    }
+    else
+    {
+        tabBarController.navigationController.navigationBarHidden = NO;
     }
 }
 
@@ -367,7 +371,7 @@
         else
         {
             NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-            NSString *regID = [userDefaults stringForKey:@"REG_ID"];
+            NSString *regID = [userDefaults stringForKey:REG_ID];
             
             if ([ch.profile.registrationID isEqualToString:regID])
             {
@@ -421,7 +425,7 @@
         [UIApplication sharedApplication].idleTimerDisabled = YES;
         
         NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-        [userDefaults setObject:ch.profile.registrationID forKey:@"REG_ID"];
+        [userDefaults setObject:ch.profile.registrationID forKey:REG_ID];
         [userDefaults setObject:ch.profile.mac_address forKey:CAM_IN_VEW];
         [userDefaults synchronize];
         

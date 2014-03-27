@@ -154,6 +154,8 @@
 
 #define FW_MILESTONE @"01.12.58"
 
+#define REG_ID @"RegistrationID"
+
 // Alert type
 #define ALERT_GENERIC_SERVER_INFO @"0"
 #define  ALERT_TYPE_SOUND    @"1"

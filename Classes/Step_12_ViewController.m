@@ -139,7 +139,7 @@
     
     NSLog(@"registrationID is %@  bLEEEEEEEEEEEEEEEE&&&&&&&&&&", registrationID);
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-    [userDefaults setObject:registrationID forKey:@"REG_ID"];
+    [userDefaults setObject:registrationID forKey:REG_ID];
     [userDefaults synchronize];
     
     // Disable Keep screen on

@@ -25,6 +25,7 @@
 #import "DoNotDisturbCell.h"
 #import "SensitivityInfo.h"
 #import "MenuViewController.h"
+#import "PublicDefine.h"
 
 #import <MonitorCommunication/MonitorCommunication.h>
 #import <CameraScanner/CameraScanner.h>
@@ -53,6 +54,7 @@
 @property (nonatomic, assign) CamChannel *selectedCamChannel;
 @property (nonatomic, retain) BMS_JSON_Communication *jsonComm;
 @property (nonatomic, assign) NSString *apiKey;
+@property (nonatomic) NSInteger numberOfSections;
 
 @property (nonatomic) CGFloat lowerValue;
 @property (nonatomic) CGFloat upperValue;
@@ -183,16 +185,24 @@
     {
         for (CamChannel *ch in menuVC.cameras)
         {
-            if ([ch.profile.registrationID isEqualToString:[[NSUserDefaults standardUserDefaults] stringForKey:@"REG_ID"]])
+            if ([ch.profile.registrationID isEqualToString:[[NSUserDefaults standardUserDefaults] stringForKey:REG_ID]])
             {
-                if (![_selectedCamChannel.profile.registrationID isEqualToString:ch.profile.registrationID])
+                self.isExistSensitivityData = FALSE;
+                numOfRows[1] = 1;
+                shouldReloadData = TRUE;
+                self.selectedCamChannel = ch;
+                
+                if (self.selectedCamChannel == nil ||
+                     [self.selectedCamChannel.profile isSharedCam] ||
+                     [self.selectedCamChannel.profile isNotAvailable])
                 {
-                    self.isExistSensitivityData = FALSE;
-                    numOfRows[1] = 1;
-                    shouldReloadData = TRUE;
+                    self.numberOfSections = 1;
+                }
+                else
+                {
+                    self.numberOfSections = 4;
                 }
                 
-                self.selectedCamChannel = ch;
                 break;
             }
         }
@@ -530,7 +540,7 @@
     // Return the number of sections.
     tableView.sectionHeaderHeight = 0;
     tableView.sectionFooterHeight = 0.5f;
-    return 4;
+    return _numberOfSections;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
