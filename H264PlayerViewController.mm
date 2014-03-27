@@ -1548,38 +1548,11 @@ double _ticks = 0;
 
 - (void)setupCamera
 {
-#if 0
-    /*
-     * This case never happens
-     */
-    
-    if ([self.selectedChannel.profile isNotAvailable])
-    {
-        self.selectedChannel.profile.hasUpdateLocalStatus = TRUE;
-        _isCameraOffline = YES;
-        
-        _isShowCustomIndicator = NO;
-        self.imgViewDrectionPad.hidden= YES;
-        self.viewStopStreamingProgress.hidden = YES;
-        self.horizMenu.userInteractionEnabled = YES;
-        self.imageViewStreamer.userInteractionEnabled = YES;
-        
-        NSLog(@"SetupCamera - Camera is NOT available.");
-        
-        //TODO: Create a refresh item to refresh state of this camera refresh
-        UIImage *imgRefresh = [UIImage imageNamed:@"ImgNotAvailable"];
-        self.imageViewStreamer.frame = CGRectMake(0, 0, imgRefresh.size.width, imgRefresh.size.height);
-        self.imageViewStreamer.image = imgRefresh;
-        self.imageViewStreamer.center = _imageViewVideo.center;
-        //self.cameraIsNotAvailable = TRUE;
-    }
-    else
-    {
-#endif
     [self createMonvementControlTimer];
     
     _isShowCustomIndicator = YES;
     [self displayCustomIndicator];
+    
     if (self.selectedChannel.stream_url != nil)
     {
         self.selectedChannel.stream_url = nil;
@@ -1648,25 +1621,8 @@ double _ticks = 0;
     }
     else
     {
-        self.selectedChannel.profile.hasUpdateLocalStatus = TRUE;
-        _isCameraOffline = YES;
-
-        _isShowCustomIndicator = NO;
-        self.imgViewDrectionPad.hidden= YES;
-        self.viewStopStreamingProgress.hidden = YES;
-        self.horizMenu.userInteractionEnabled = YES;
-        self.imageViewStreamer.userInteractionEnabled = YES;
-        
-        NSLog(@"SetupCamera - Camera is NOT available.");
-        
-        //TODO: Create a refresh item to refresh state of this camera refresh
-        UIImage *imgRefresh = [UIImage imageNamed:@"ImgNotAvailable"];
-        self.imageViewStreamer.frame = CGRectMake(0, 0, imgRefresh.size.width, imgRefresh.size.height);
-        self.imageViewStreamer.image = imgRefresh;
-        self.imageViewStreamer.center = _imageViewVideo.center;
-        //self.cameraIsNotAvailable = TRUE;
+        NSLog(@"Unknown Exception!");
     }
-    //    }
 }
 
 
