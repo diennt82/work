@@ -31,7 +31,6 @@
 @synthesize  cameraName;
 
 @synthesize  homeSSID;
-@synthesize  shouldStopScanning;
 @synthesize  timeOut;
 @synthesize delegate;
 
@@ -232,52 +231,6 @@
     [_alertChooseConfig show];
 }
 
-#if 0
-- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
-    
-    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-    if (buttonIndex == 0) {
-        //Cancel button pressed
-        [_alertChooseConfig dismissWithClickedButtonIndex:0 animated:NO];
-        _alertChooseConfig = nil;
-    }
-    else if (buttonIndex == BLUETOOTH_SETUP) {
-        //BLE button pressed
-        //NO longer first time
-        [userDefaults setBool:FALSE forKey:FIRST_TIME_SETUP];
-        [userDefaults synchronize];
-        
-        NSLog(@"load step BLE setup ");
-        
-        [userDefaults setInteger:BLUETOOTH_SETUP forKey:SET_UP_CAMERA];
-        [userDefaults synchronize];
-        
-        //[self.navigationController popToRootViewControllerAnimated:NO];
-        [self dismissViewControllerAnimated:NO completion:^{
-            [self.delegate sendStatus:SETUP_CAMERA];
-        }];
-        
-        
-    }
-    else if (buttonIndex == WIFI_SETUP) {
-        //Wifi button pressed
-        //NO longer first time
-        [userDefaults setBool:FALSE forKey:FIRST_TIME_SETUP];
-        [userDefaults synchronize];
-        
-        NSLog(@"load step Wifi setup: concurrent ");
-        
-        [userDefaults setInteger:WIFI_SETUP forKey:SET_UP_CAMERA];
-        [userDefaults synchronize];
-        //[self.delegate sendStatus:SETUP_CAMERA];
-        //[self.navigationController popToRootViewControllerAnimated:NO];
-        [self dismissViewControllerAnimated:NO completion:^{
-            [self.delegate sendStatus:SETUP_CAMERA];
-        }];
-    }
-}
-#endif
-
 #pragma  mark -
 #pragma mark button handlers
 
@@ -302,73 +255,6 @@
     {
         [self registerCameraWithoutProxy];
     }
-    
-#if 0
-    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-        
-    NSString *apiKey    = [userDefaults objectForKey:@"PortalApiKey"];
-    NSString *fwVersion = [userDefaults objectForKey:@"FW_VERSION"];
-    NSString *udid      = [userDefaults objectForKey:CAMERA_UDID];
-    /*
-     hack code for device 0066 which return UUID is wrong
-     */
-    NSString *udidOfFocus66Hack = @"01006644334C7E0C8AXHRRBOLC";
-    if ([udid isEqualToString:@"01008344334C7E0C8AXHRRBOLC"])
-    {
-        udid = udidOfFocus66Hack;
-    }
-    
-    //NSLog(@"-----fwVersion = %@, ,model = %@", fwVersion, model);
-    
-    NSDate *now = [NSDate date];
-    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-    [formatter setDateFormat:@"ZZZ"];
-    
-    NSMutableString *stringFromDate = [NSMutableString stringWithString:[formatter stringFromDate:now]];
-    
-    [stringFromDate insertString:@"." atIndex:3];
-    
-    NSLog(@"%@", stringFromDate);
-    
-    [formatter release];
-
-    BMS_JSON_Communication *jsonComm = [[[BMS_JSON_Communication alloc] initWithObject:self
-                                                                             Selector:@selector(addCamSuccessWithResponse:)
-                                                                         FailSelector:@selector(addCamFailedWithError:)
-                                                                            ServerErr:@selector(addCamFailedServerUnreachable)] autorelease];
-    //NSString *mac = [Util strip_colon_fr_mac:self.cameraMac];
-    NSString *camName = (NSString *) [userDefaults objectForKey:@"CameraName"];
-    
-
-    [jsonComm registerDeviceWithDeviceName:camName
-                         andRegistrationID:udid
-                                   andMode:@"upnp" // Need somethings more usefully
-                              andFwVersion:fwVersion
-                               andTimeZone:stringFromDate
-                                 andApiKey:apiKey];
-
-    //DEMO.SM.COM
-    [jsonComm registerDeviceWithDeviceName:camName
-                                  andRegId:mac
-                             andDeviceType:@"Camera"
-                                  andModel:@"blink1_hd"
-                                   andMode:@"upnp"
-                              andFwVersion:fwVersion
-                               andTimeZone:stringFromDate
-                                 andApiKey:apiKey];
-    NSLog(@"Mac address and cam name is %@, %@", mac, camName);
-
-    //Api
-    [jsonComm registerDeviceWithDeviceModelID:@"5"
-                                      andName:camName
-                            andRegistrationID:mac
-                                      andMode:@"upnp"
-                                 andFwVersion:fwVersion
-                                  andTimeZone:stringFromDate
-                          andSubscriptionType:@"tier1"
-                                    andApiKey:apiKey];
-    
-#endif
 }
     
 - (void)registerCameraWithoutProxy
@@ -382,8 +268,10 @@
      hack code for device 0066 which return UUID is wrong
      */
     NSString *udidOfFocus66Hack = @"01006644334C7E0C8AXHRRBOLC";
+    
     if ([udid isEqualToString:@"01008344334C7E0C8AXHRRBOLC"])
     {
+        NSLog(@"Step_10VC - registerCameraWithoutProxy - HACK_CODE for UDID");
         udid = udidOfFocus66Hack;
     }
     
@@ -431,6 +319,7 @@
     
     if ([udid isEqualToString:@"01008344334C7E0C8AXHRRBOLC"])
     {
+        NSLog(@"Step_10VC - registerCameraWithProxy - HACK_CODE for UDID");
         udid = udidOfFocus66Hack;
     }
     
@@ -497,10 +386,10 @@
 
     NSLog(@" Timeout while trying to search for Home Wifi: %@", homeSsid);
     
-    shouldStopScanning = TRUE;
+    [self setStopScanning:Nil];
 }
 
-- (void) checkConnectionToHomeWifi:(NSTimer *) expired
+- (void) step10CheckConnectionToHomeWifi:(NSTimer *) expired
 {
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     NSString * homeSsid = (NSString *) [userDefaults objectForKey:HOME_SSID];
@@ -557,7 +446,7 @@
     //check back later..
     [NSTimer scheduledTimerWithTimeInterval: 3.0//
                                      target:self
-                                   selector:@selector(checkConnectionToHomeWifi:)
+                                   selector:@selector(step10CheckConnectionToHomeWifi:)
                                    userInfo:retry_count
                                     repeats:NO];
 
@@ -577,7 +466,7 @@
     
     /* TODO
      - Do nothing UNTIL user go out and go into the app again 
-     - Start timer to check [checkConnectionToHomeWifi]
+     - Start timer to check [step10CheckConnectionToHomeWifi]
      
       */
 }
@@ -618,7 +507,7 @@
     
 
     //Set timer - repeated = YES
-    //    expired -> checkConnectionToHomeWifi:
+    //    expired -> step10CheckConnectionToHomeWifi:
     //     ...
     //     .. counter ---
     //      counter = 0 -> Repeat  = NO ;
@@ -628,7 +517,7 @@
     //check back later..
     [NSTimer scheduledTimerWithTimeInterval: 3.0//
                                      target:self
-                                   selector:@selector(checkConnectionToHomeWifi:)
+                                   selector:@selector(step10CheckConnectionToHomeWifi:)
                                    userInfo:retry_count
                                     repeats:NO];
     
@@ -647,14 +536,14 @@
     if (should_stop_scanning == TRUE)
     {
         should_stop_scanning = FALSE;
-        NSLog(@" stop scanning now.. should be 4 mins");
+        NSLog(@"Step_10VC - stop scanning now.. should be 4 mins");
         self.errorCode = @"Time Out";
 		[self setupFailed];
 		return ;
     }
     else
     {
-        NSLog(@"Continue scan..."); 
+        NSLog(@"Step_10VC - Continue scan...");
     }
 
 	if (scanner == nil)

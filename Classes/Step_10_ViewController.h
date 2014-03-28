@@ -52,7 +52,6 @@
     
     BOOL should_retry_silently ;
     
-    BOOL shouldStopScanning;
     NSTimer * timeOut;
     NSTimer *timeOutCheckWifiHome;
     
