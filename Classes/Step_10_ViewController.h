@@ -52,7 +52,7 @@
     
     BOOL should_retry_silently ;
     
-    BOOL shouldStopScanning;
+//    BOOL shouldStopScanning;
     NSTimer * timeOut;
     NSTimer *timeOutCheckWifiHome;
     
@@ -74,7 +74,7 @@
 
 @property (nonatomic, retain) NSString *cameraMac,  *master_key; 
 @property (nonatomic, retain) NSTimer * timeOut;
-@property (nonatomic) BOOL shouldStopScanning;
+//@property (nonatomic) BOOL shouldStopScanning;
 @property (nonatomic, assign) NSString * errorCode;
 @property (nonatomic, retain) NSString *stringUDID;
 @property (nonatomic, retain) NSString *stringAuth_token;
