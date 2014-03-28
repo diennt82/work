@@ -71,9 +71,11 @@
     self.camerasVC = [[CamerasViewController alloc] initWithStyle:nil
                                                          delegate:self.menuDelegate
                                                          parentVC:self];
-    //self.camerasVC.camChannels = self.cameras;
-    
-    //[self.navigationController initWithRootViewController:camerasVC];
+    if (_cameras)
+    {
+        self.camerasVC.camChannels = self.cameras;
+    }
+
 #if DISABLE_VIEW_RELEASE_FLAG
     self.accountVC = [[Account_ViewController alloc] init];
     
@@ -103,8 +105,11 @@
     settingsBarButton = [[UIBarButtonItem alloc] initWithTitle:@"Settings" style:UIBarButtonItemStylePlain target:self action:@selector(selectSettings)];
     accountBarButton = [[UIBarButtonItem alloc] initWithTitle:@"Account" style:UIBarButtonItemStylePlain target:self action:@selector(selectAccountSetting)];
     
-    NSArray *actionButtonItems = @[accountBarButton, settingsBarButton, cameraBarButton];
-    self.navigationItem.rightBarButtonItems = actionButtonItems;
+    //NSArray *actionButtonItems = @[accountBarButton, settingsBarButton, cameraBarButton];
+    //self.navigationItem.rightBarButtonItems = @[accountBarButton, settingsBarButton, cameraBarButton];
+    //[self.navigationItem.rightBarButtonItems[1] setEnabled:NO];
+    
+    self.navigationItem.leftBarButtonItem.enabled = YES;
 #endif
 }
 
@@ -167,7 +172,8 @@
             !_notUpdateCameras)
         {
             self.navigationItem.leftBarButtonItem.enabled = NO;
-//             [[self.tabBar.items objectAtIndex:1] setEnabled:NO];
+            [self.navigationItem.rightBarButtonItems[1] setEnabled:NO];
+            //[self.navigationItem.rightBarButtonItems[1] setHidden:YES];
             self.camerasVC.waitingForUpdateData = TRUE;
             [self.camerasVC.tableView reloadData];
             [self performSelectorInBackground:@selector(recreateAccount)
@@ -199,9 +205,11 @@
     if (self.cameras != nil &&
         self.cameras.count > 0)
     {
+        self.navigationItem.rightBarButtonItems = @[accountBarButton, settingsBarButton, cameraBarButton];
+        
         CamChannel *camChannel = nil;
         NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-        NSString *regID = [userDefaults stringForKey:@"REG_ID"];
+        NSString *regID = [userDefaults stringForKey:REG_ID];
         
         for (CamChannel *ch in _cameras)
         {
@@ -215,13 +223,13 @@
         if (camChannel == nil)
         {
             camChannel = (CamChannel *)[self.cameras objectAtIndex:0];
-            [userDefaults setObject:camChannel.profile.registrationID forKey:@"REG_ID"];
+            [userDefaults setObject:camChannel.profile.registrationID forKey:REG_ID];
         }
         
         if ([camChannel.profile isNotAvailable] &&
             [camChannel.profile isSharedCam])
         {
-            self.navigationItem.leftBarButtonItem.enabled = YES;
+            NSLog(@"MenuVC - menuBackAction - Selected camera is NOT available & is SHARED_CAM");
             return;
         }
         
@@ -240,6 +248,10 @@
 
         [self.navigationController pushViewController:h264PlayerViewController animated:YES];
         [h264PlayerViewController release];
+    }
+    else
+    {
+        self.navigationItem.rightBarButtonItems = @[accountBarButton, cameraBarButton];
     }
 }
 
@@ -300,8 +312,14 @@
     if (self.cameras != nil &&
         self.cameras.count > 0)
     {
-//        [[self.tabBar.items objectAtIndex:1] setEnabled:YES];
+        [self.navigationItem.rightBarButtonItems[1] setEnabled:YES];
+        //[self.navigationItem.rightBarButtonItems[1] setHidden:NO];
+        self.navigationItem.rightBarButtonItems = @[accountBarButton, settingsBarButton, cameraBarButton];
         self.navigationItem.leftBarButtonItem.enabled = YES;
+    }
+    else
+    {
+        self.navigationItem.rightBarButtonItems = @[accountBarButton, cameraBarButton];
     }
 }
 

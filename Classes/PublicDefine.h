@@ -156,6 +156,7 @@
 
 #define FW_VERSION @"firmware_version"
 #define CAMERA_SSID @"camera_ssid"
+#define REG_ID @"RegistrationID"
 
 // Alert type
 #define ALERT_GENERIC_SERVER_INFO @"0"
