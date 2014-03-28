@@ -18,7 +18,7 @@
 
 #define CONF_CAM_BTN_TAG 1002
 
-@interface EditCamera_VController : UIViewController<UITextViewDelegate, BLEConnectionManagerDelegate>
+@interface EditCamera_VController : UIViewController<BLEConnectionManagerDelegate>
 {
     //IBOutlet UIView * camName;
     

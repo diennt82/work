@@ -466,7 +466,7 @@
     [BLEConnectionManager getInstanceBLE].delegate = self;
 
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-    NSString *fwVersion = [userDefaults stringForKey:@"FW_VERSION"]; // 01.12.58
+    NSString *fwVersion = [userDefaults stringForKey:FW_VERSION]; // 01.12.58
     
     
     if ([fwVersion compare:FW_MILESTONE] >= NSOrderedSame) // fw >= FW_MILESTONE

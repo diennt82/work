@@ -10,7 +10,7 @@
 #import "define.h"
 #import "HttpCom.h"
 
-@interface Step_04_ViewController () <UITextFieldDelegate>
+@interface Step_04_ViewController () <UITextFieldDelegate, UIAlertViewDelegate>
 
 @property (retain, nonatomic) IBOutlet UITextField *tfCamName;
 @property (retain, nonatomic) IBOutlet UIButton *btnContinue;
@@ -35,7 +35,6 @@
     
     CGAffineTransform transform = CGAffineTransformMakeScale(1.0f, 4.0f);
     [self.view viewWithTag:501].transform = transform;
-#if 1
     self.navigationItem.hidesBackButton = YES;
     
     UIImage *hubbleLogoBack = [UIImage imageNamed:@"Hubble_back_text"];
@@ -52,57 +51,12 @@
     
     self.tfCamName.delegate = self;
     self.tfCamName.text = self.cameraName;
-#else
-    self.navigationItem.title = NSLocalizedStringWithDefaultValue(@"Camera_Detected",nil, [NSBundle mainBundle],
-                                                                  @"Camera Detected" , nil);
-    
-    self.navigationItem.backBarButtonItem =
-    [[[UIBarButtonItem alloc] initWithTitle:NSLocalizedStringWithDefaultValue(@"Back",nil, [NSBundle mainBundle],
-                                                                              @"Back" , nil)
-                                      style:UIBarButtonItemStyleBordered
-                                     target:nil
-                                     action:nil] autorelease];
-    
-    UIBarButtonItem *nextButton =
-    [[UIBarButtonItem alloc] initWithTitle: NSLocalizedStringWithDefaultValue(@"Next",nil, [NSBundle mainBundle],
-                                                                              @"Next", nil)
-                                     style:UIBarButtonItemStylePlain
-                                    target:self
-                                    action:@selector(handleNextBtnTouchAction:)];
-    self.navigationItem.rightBarButtonItem = nextButton;
-    [nextButton release];
-
-    if ([camName isMemberOfClass:[UITextView class]] )
-    {
-        NSLog(@"Cast to UI TextView");
-        ((UITextView *)camName).text = self.cameraName;
-        
-    }
-    
-    [self.progressView setHidden:YES];
-    
-
-    
-    if ([camName isMemberOfClass:[UITextField class]] )
-    {
-        NSLog(@"Cast to UI Textfield"); 
-        ((UITextField *)camName).text = self.cameraName;
-
-    }
-    
-#endif
 }
 
 - (void)viewDidUnload
 {
     [super viewDidUnload];
     // Release any retained subviews of the main view.
-}
-
--(void) viewWillAppear:(BOOL)animated
-{
-    UIInterfaceOrientation interfaceOrientation = [UIApplication sharedApplication].statusBarOrientation;
-    [self adjustViewsForOrientations:interfaceOrientation];
 }
 
 #pragma mark - Actions
@@ -132,105 +86,58 @@
     [self queryWifiList];
 }
 
-#pragma mark -
-#pragma mark Rotating
-- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
-{
-    return   ((interfaceOrientation == UIInterfaceOrientationPortrait) ||
-              (interfaceOrientation == UIInterfaceOrientationLandscapeLeft) ||
-              (interfaceOrientation == UIInterfaceOrientationLandscapeRight));
-}
+#pragma mark - Text field delegate
 
--(BOOL)shouldAutorotate
+- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
 {
+    if ([string isEqualToString:@"\n"])
+    {
+        [textField resignFirstResponder];
+    }
+    
     return YES;
 }
 
--(NSUInteger) supportedInterfaceOrientations
+- (void)textFieldDidBeginEditing:(UITextField *)textField
 {
-    return UIInterfaceOrientationMaskAllButUpsideDown;
+    [self animateTextField: textField up: YES];
 }
 
--(void) willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
+- (void)textFieldDidEndEditing:(UITextField *)textField
 {
-    [self adjustViewsForOrientations:toInterfaceOrientation];
+    [self animateTextField: textField up: NO];
 }
 
--(void) adjustViewsForOrientations: (UIInterfaceOrientation) interfaceOrientation
+- (void) animateTextField: (UITextField*) textField up: (BOOL) up
 {
-#if 0
-     NSString * tempName = @"";
+    NSInteger movementDistance = 216; // tweak as needed
     
-    if ([camName isMemberOfClass:[UITextView class]] )
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
     {
-        
-        tempName = ((UITextView *)camName).text;
-        
-    }
-     
-    if ([camName isMemberOfClass:[UITextField class]] )
-    {
-
-        tempName = ((UITextField *)camName).text ;
-        
+        movementDistance = 264;
     }
     
-   
-    
-    if (interfaceOrientation == UIInterfaceOrientationLandscapeLeft ||
-        interfaceOrientation == UIInterfaceOrientationLandscapeRight)
+    if (UIScreen.mainScreen.bounds.size.height < 568)
     {
-//        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
-//        {
-//            [[NSBundle mainBundle] loadNibNamed:@"Step_04_ViewController_land_ipad" owner:self options:nil];
-//        }
-//        else
-//        {
-//            [[NSBundle mainBundle] loadNibNamed:@"Step_04_ViewController_land" owner:self options:nil];
-//            
-//            
-//        }
-    }
-    else if (interfaceOrientation == UIInterfaceOrientationPortrait ||
-             interfaceOrientation == UIInterfaceOrientationPortraitUpsideDown)
-    {
-//        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
-//        {
-//            [[NSBundle mainBundle] loadNibNamed:@"Step_04_ViewController_ipad" owner:self options:nil];
-//        }
-//        else
-//        {
-//            [[NSBundle mainBundle] loadNibNamed:@"Step_04_ViewController" owner:self options:nil];
-//        }
+        movementDistance = 200;
     }
     
+    const float movementDuration = 0.3f; // tweak as needed
     
+    int movement = (up ? -movementDistance : movementDistance);
     
-    if ([camName isMemberOfClass:[UITextView class]] )
-    {
-
-       
-        ((UITextView *)camName).text  = tempName;
-        
-    }
-    
-    if ([camName isMemberOfClass:[UITextField class]] )
-    {
-
-        ((UITextField *)camName).text = tempName ;
-    }
-    
-#endif
-    
+    [UIView beginAnimations: @"anim" context: nil];
+    [UIView setAnimationBeginsFromCurrentState: YES];
+    [UIView setAnimationDuration: movementDuration];
+    self.view.frame = CGRectOffset(self.view.frame, 0, movement);
+    [UIView commitAnimations];
 }
-#pragma mark -
-- (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text
-{
-    if ([text isEqualToString:@"\n"])
-    {
-        [textView resignFirstResponder];
-    }
-    return YES;
+
+- (BOOL)textFieldShouldReturn:(UITextField *)textField {
+    
+    [textField resignFirstResponder];
+    
+    return NO;
 }
 
 -(void) dealloc
@@ -269,7 +176,6 @@
     [_tfCamName resignFirstResponder];
     
     if ([cameraName_text length] < 3 || [cameraName_text length] > CAMERA_NAME_MAX )
-    //if(0)
     {
         NSString * title = NSLocalizedStringWithDefaultValue(@"Invalid_Camera_Name", nil, [NSBundle mainBundle],
                                                              @"Invalid Camera Name", nil);
@@ -333,7 +239,7 @@
 {
     NSData * router_list_raw;
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-    NSString *fwVersion = [userDefaults stringForKey:@"FW_VERSION"]; // 01.12.58
+    NSString *fwVersion = [userDefaults stringForKey:FW_VERSION]; // 01.12.58
     
     BOOL newCmdFlag = TRUE;
     
@@ -371,7 +277,7 @@
 {
     NSData * router_list_raw;
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-    NSString *fwVersion = [userDefaults stringForKey:@"FW_VERSION"]; // 01.12.58
+    NSString *fwVersion = [userDefaults stringForKey:FW_VERSION]; // 01.12.58
     
     BOOL newCmdFlag = TRUE;
     
@@ -437,6 +343,8 @@
     
 }
 
+#pragma mark - Alert view delegate
+
 - (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex {
     
     if (alertView.tag == ALERT_ASK_FOR_RETRY_WIFI)
@@ -446,20 +354,16 @@
                 
                 //TODO: Go back to camera detection screen
                 
-                
                 break;
             case 1:
                 NSLog(@"OK button pressed");
                 
                 //retry ..
                 [self queryWifiList_2];
-
-                break;
                 
+                break;
         }
-        
     }
-    
 }
 
 
@@ -494,77 +398,25 @@
     //Load the next xib
     Step_05_ViewController *step05ViewController = nil; 
     
-    
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
     {
-        
-        
         step05ViewController =  [[Step_05_ViewController alloc]
                                  initWithNibName:@"Step_05_ViewController_ipad" bundle:nil];
-        
     }
     else
     {
-        
-        
         step05ViewController =  [[Step_05_ViewController alloc]
                                  initWithNibName:@"Step_05_ViewController" bundle:nil];
-        
-        
-        
     }
-    
-    
     
     step05ViewController.listOfWifi = [[[NSMutableArray alloc]initWithArray:wifiList] autorelease];
     
     [self.navigationController pushViewController:step05ViewController animated:NO];
     
     [step05ViewController release];
-    
-    
 }
 
-- (void)textFieldDidBeginEditing:(UITextField *)textField
-{
-    [self animateTextField: textField up: YES];
-}
 
-- (void)textFieldDidEndEditing:(UITextField *)textField
-{
-    [self animateTextField: textField up: NO];
-}
-
-- (void) animateTextField: (UITextField*) textField up: (BOOL) up
-{
-    NSInteger movementDistance = 216; // tweak as needed
-    
-    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
-    {
-        movementDistance = 264;
-    }
-    
-    if (UIScreen.mainScreen.bounds.size.height < 568)
-    {
-        movementDistance = 200;
-    }
-    const float movementDuration = 0.3f; // tweak as needed
-    
-    int movement = (up ? -movementDistance : movementDistance);
-    
-    [UIView beginAnimations: @"anim" context: nil];
-    [UIView setAnimationBeginsFromCurrentState: YES];
-    [UIView setAnimationDuration: movementDuration];
-    self.view.frame = CGRectOffset(self.view.frame, 0, movement);
-    [UIView commitAnimations];
-}
-
-- (BOOL)textFieldShouldReturn:(UITextField *)textField {
-    
-    [textField resignFirstResponder];
-    
-    return NO;
-}
 
 
 @end

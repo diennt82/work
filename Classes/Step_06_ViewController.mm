@@ -220,6 +220,7 @@
 
 #pragma mark -
 #pragma mark UITextFieldDelegate
+
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
     
     if (textField.tag == 202) { // SSID
@@ -876,6 +877,8 @@
 
 - (void)nextStepVerifyPassword
 {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+    
     BOOL isFirstTimeSetup = [[NSUserDefaults standardUserDefaults] boolForKey:FIRST_TIME_SETUP];
 
     if (isFirstTimeSetup   == TRUE)
@@ -950,7 +953,8 @@
     {
         _currentStateCamera = [[state componentsSeparatedByString:@": "] objectAtIndex:1];
     }
-    else{
+    else
+    {
         _currentStateCamera = @"";
     }
 
@@ -962,23 +966,42 @@
         [self.infoSelectCameView removeFromSuperview];
         [self.progressView setHidden:YES];
     }
-    else{
-        // get state network of camera after 4s
-        _inputPasswordTimer = [NSTimer scheduledTimerWithTimeInterval: 2.0//
-                                                               target:self
-                                                             selector:@selector(getStatusOfCameraToWifi:)
-                                                             userInfo:nil
-                                                              repeats:NO];
+    else
+    {
+        /*
+         * Need to checkout current ssid here!
+         */
+        
+        if (![self isAppConnectedToCamera])
+        {
+            NSLog(@"Step_06VC - current ssid is not a camera ssid");
+            [self.infoSelectCameView setHidden:NO];
+            [self.view bringSubviewToFront:self.infoSelectCameView];
+        }
+        else
+        {
+            // get state network of camera after 4s
+            _inputPasswordTimer = [NSTimer scheduledTimerWithTimeInterval: 2.0//
+                                                                   target:self
+                                                                 selector:@selector(getStatusOfCameraToWifi:)
+                                                                 userInfo:nil
+                                                                  repeats:NO];
+        }
     }
 }
 
 - (BOOL)isAppConnectedToCamera
 {
-    NSString * currentSSID = [CameraPassword fetchSSIDInfo];
+    NSString *currentSSID = [CameraPassword fetchSSIDInfo];
+    NSString *cameraSSID = [[NSUserDefaults standardUserDefaults] stringForKey:CAMERA_SSID]; //CameraHD-00667fa037
     
-    NSLog(@"currentSSID is %@", currentSSID);
-    if ([currentSSID hasPrefix:@"Camera"])
+    NSLog(@"Step_06_VC - currentSSID: %@, - cameraWiFi: %@", currentSSID, cameraSSID);
+    
+    if ([currentSSID isEqualToString:cameraSSID])
+    {
         return YES;
+    }
+
     return NO;
 }
 

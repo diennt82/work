@@ -245,7 +245,7 @@
     [self.view bringSubviewToFront:self.progressView];
     
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-    NSString *fwVersion = [userDefaults stringForKey:@"FW_VERSION"]; // 01.12.58
+    NSString *fwVersion = [userDefaults stringForKey:FW_VERSION]; // 01.12.58
     
     if ([fwVersion compare:FW_MILESTONE] >= NSOrderedSame) // fw >= FW_MILESTONE
     {
@@ -255,6 +255,7 @@
     {
         [self registerCameraWithoutProxy];
     }
+
 }
     
 - (void)registerCameraWithoutProxy
@@ -262,7 +263,7 @@
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     
     NSString *apiKey    = [userDefaults objectForKey:@"PortalApiKey"];
-    NSString *fwVersion = [userDefaults objectForKey:@"FW_VERSION"];
+    NSString *fwVersion = [userDefaults objectForKey:FW_VERSION];
     NSString *udid      = [userDefaults objectForKey:CAMERA_UDID];
     /*
      hack code for device 0066 which return UUID is wrong
@@ -310,7 +311,7 @@
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     
     NSString *apiKey    = [userDefaults objectForKey:@"PortalApiKey"];
-    NSString *fwVersion = [userDefaults objectForKey:@"FW_VERSION"];
+    NSString *fwVersion = [userDefaults objectForKey:FW_VERSION];
     NSString *udid      = [userDefaults objectForKey:CAMERA_UDID];
     /*
      hack code for device 0066 which return UUID is wrong

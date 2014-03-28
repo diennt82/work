@@ -154,6 +154,9 @@
 
 #define FW_MILESTONE @"01.12.58"
 
+#define FW_VERSION @"firmware_version"
+#define CAMERA_SSID @"camera_ssid"
+
 // Alert type
 #define ALERT_GENERIC_SERVER_INFO @"0"
 #define  ALERT_TYPE_SOUND    @"1"
