@@ -405,7 +405,7 @@
     {
         [NSTimer scheduledTimerWithTimeInterval: 3.0//
                                          target:self
-                                       selector:@selector(checkConnectionToHomeWifi:)
+                                       selector:@selector(step10CheckConnectionToHomeWifi:)
                                        userInfo:nil
                                         repeats:NO];
     }
@@ -434,7 +434,7 @@
     {
         [NSTimer scheduledTimerWithTimeInterval: 3.0//
                                          target:self
-                                       selector:@selector(checkConnectionToHomeWifi:)
+                                       selector:@selector(step10CheckConnectionToHomeWifi:)
                                        userInfo:nil
                                         repeats:NO];
         
@@ -446,16 +446,6 @@
                                              selector:@selector(homeWifiScanTimeout:)
                                              userInfo:nil
                                               repeats:NO];
-    
-
-    //check back later..
-    [NSTimer scheduledTimerWithTimeInterval: 3.0//
-                                     target:self
-                                   selector:@selector(step10CheckConnectionToHomeWifi:)
-                                   userInfo:retry_count
-                                    repeats:NO];
-
-
 }
 
 - (void)connectToWifiHomeByHand
@@ -471,7 +461,7 @@
     [self showProgress:nil];
     [NSTimer scheduledTimerWithTimeInterval: 3.0//
                                      target:self
-                                   selector:@selector(checkConnectionToHomeWifi:)
+                                   selector:@selector(step10CheckConnectionToHomeWifi:)
                                    userInfo:nil
                                     repeats:NO];
 }
@@ -508,10 +498,11 @@
     [self showProgress:nil];
     //After sending reboot camera commmand
     //check connection to wifi home after 3 seconds
-    [NSTimer scheduledTimerWithTimeInterval: 3.0//
+    [NSTimer scheduledTimerWithTimeInterval:3
                                      target:self
-                                   selector:@selector(checkConnectionToHomeWifi:)
+                                   selector:@selector(step10CheckConnectionToHomeWifi:)
                                    userInfo:nil
+                                    repeats:NO];
     
 }
 #pragma mark -
