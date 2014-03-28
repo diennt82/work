@@ -165,6 +165,7 @@
     _alertView = [[UIAlertView alloc] initWithTitle:nil message:message delegate:nil cancelButtonTitle:nil otherButtonTitles:nil];
     [_alertView show];
     [self.alertView setBackgroundColor:[UIColor blackColor]];
+    
     if(_alertView != nil) {
         UIActivityIndicatorView *indicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
         
@@ -176,12 +177,14 @@
 }
 
 #pragma mark - Text field delegate
-- (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text
+
+- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
 {
-    if ([text isEqualToString:@"\n"])
+    if ([string isEqualToString:@"\n"])
     {
-        [textView resignFirstResponder];
+        [textField resignFirstResponder];
     }
+    
     return YES;
 }
 
@@ -441,7 +444,7 @@
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     
     NSString *apiKey    = [userDefaults objectForKey:@"PortalApiKey"];
-    NSString *fwVersion = [userDefaults objectForKey:@"FW_VERSION"];
+    NSString *fwVersion = [userDefaults objectForKey:FW_VERSION];
     NSString *udid      = [userDefaults objectForKey:CAMERA_UDID];
     
     //NSLog(@"-----fwVersion = %@, ,model = %@", fwVersion, model);

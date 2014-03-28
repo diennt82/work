@@ -170,7 +170,8 @@
     if (showProgressNextTime)
     {
         NSLog(@"cshow progress 03");
-        [self showProgress:nil];
+        //[self showProgress:nil];
+        [self performSelectorOnMainThread:@selector(showProgress:) withObject:nil waitUntilDone:NO];
     }
     
     task_cancelled = NO;
@@ -363,8 +364,8 @@
             NSString *fwVersion = [[fw_version componentsSeparatedByString:@": "] objectAtIndex:1];
             
             NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-            [userDefaults setObject:fwVersion forKey:@"FW_VERSION"];
-            //[userDefaults setObject:model forKey:@"MODEL"];
+            [userDefaults setObject:fwVersion forKey:FW_VERSION];
+            [userDefaults setObject:self.cameraName forKey:CAMERA_SSID];
             [userDefaults synchronize];
         }
         

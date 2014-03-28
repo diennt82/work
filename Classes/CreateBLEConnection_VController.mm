@@ -361,6 +361,7 @@
     }
     
 }
+
 - (void)dismissIndicator
 {
     _timeOutWaitingConnectBLE = nil;
@@ -565,7 +566,8 @@
     {
         //check which step it is
         NSString * udid = [userDefaults objectForKey:CAMERA_UDID];
-        NSString *  version = [userDefaults objectForKey:@"FW_VERSION"];
+        NSString *  version = [userDefaults objectForKey:FW_VERSION];
+        
         if (udid != nil)
         {
             if (version !=  nil)
@@ -603,8 +605,7 @@
 #endif
         //sucucessfull when writing version
         //diss miss statusDialog
-        NSLog(@"get version successfull is %@", stringResponse);
-        
+        NSLog(@"CreateBLEConnection_VC -get version successfull is %@", stringResponse);
         
         NSRange colonRange = [stringResponse rangeOfString:@": "];
         
@@ -618,13 +619,13 @@
             NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
             
             
-            [userDefaults setObject:fwVersion forKey:@"FW_VERSION"];
-            //[userDefaults setObject:model forKey:@"MODEL"];
+            [userDefaults setObject:fwVersion forKey:FW_VERSION];
+            [userDefaults setObject:self.cameraName forKey:CAMERA_SSID];
             [userDefaults synchronize];
         }
         
         
-        NSLog(@"Load step 40");
+        NSLog(@"Load step 40 - EditCamera_VC");
         //Load the next xib
         EditCamera_VController *step04ViewController = nil;
         
@@ -634,13 +635,10 @@
         step04ViewController.cameraMac = self.cameraMac;
         step04ViewController.cameraName = self.cameraName;
         
-        
-        
-        NSLog(@"Load step 41");
+        NSLog(@"Load step 41 - EditCamera_VC");
         [self.navigationController pushViewController:step04ViewController animated:NO];
         
         [step04ViewController release];
-        
         
         [[NSNotificationCenter defaultCenter] removeObserver:self];
     }
