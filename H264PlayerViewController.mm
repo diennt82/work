@@ -70,6 +70,8 @@
     BOOL _isLandScapeMode;//cheat to display correctly timeline bottom
     BOOL _wantToShowTimeLine;
     BOOL _hideCustomIndicatorAndTextNotAccessble;
+    //check if shared cam is connected to macOS
+    NSString *_sharedCamConnectedTo;
 }
 
 @property (retain, nonatomic) IBOutlet UIImageView *imageViewHandle;
@@ -99,7 +101,7 @@
 @property (nonatomic) BOOL wantsCancelRemoteTalkback;
 @property (nonatomic, retain) AudioOutStreamRemote *audioOutStreamRemote;
 @property (nonatomic, retain) NSString *talkbackRemoteServer;
-
+@property (nonatomic, strong) NSString *sharedCamConnectedTo;
 - (void)centerScrollViewContents;
 - (void)scrollViewDoubleTapped:(UITapGestureRecognizer*)recognizer;
 - (void)scrollViewTwoFingerTapped:(UITapGestureRecognizer*)recognizer;
@@ -117,6 +119,7 @@
 @synthesize selectedItemMenu = _selectedItemMenu;
 @synthesize walkieTalkieEnabled;
 @synthesize httpComm = _httpComm;
+@synthesize sharedCamConnectedTo = _sharedCamConnectedTo;
 
 static int fps = 0;
 double _ticks = 0;
@@ -196,6 +199,7 @@ double _ticks = 0;
 #else
     self.imageViewStreamer.userInteractionEnabled = NO;
 #endif
+    _sharedCamConnectedTo = [[NSString alloc] init];
     self.cameraModel = [self.selectedChannel.profile getModel];
     [self initHorizeMenu: _cameraModel];
 
@@ -1522,6 +1526,60 @@ double _ticks = 0;
     self.imageViewHandle.hidden = YES;
     self.imageViewKnob.center = self.imgViewDrectionPad.center;
     self.imageViewHandle.center = self.imgViewDrectionPad.center;
+}
+
+#pragma mark - Shared Cam
+-(void)queryToKnowSharedCamOnMacOSOrWin
+{
+    NSString *bodyKey = @"";
+    
+    if (self.selectedChannel.profile.isInLocal )
+	{
+        _httpComm.device_ip = self.selectedChannel.profile.ip_address;
+        _httpComm.device_port = self.selectedChannel.profile.port;
+        
+        NSString *response = [_httpComm sendCommandAndBlock:@"get_running_os"];
+        if (response != nil)
+        {
+            self.sharedCamConnectedTo = [[response componentsSeparatedByString:@": "] objectAtIndex:1];
+        }
+	}
+	else if(self.selectedChannel.profile.minuteSinceLastComm <= 5) // Remote
+	{
+        NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+        
+        NSString *apiKey = [userDefaults objectForKey:@"PortalApiKey"];
+		BMS_JSON_Communication *jsonCommunication = [[[BMS_JSON_Communication alloc] initWithObject:self
+                                                                                           Selector:nil
+                                                                                       FailSelector:nil
+                                                                                          ServerErr:nil] autorelease];
+        
+        NSDictionary *responseDict = [jsonCommunication sendCommandBlockedWithRegistrationId:self.selectedChannel.profile.registrationID
+                                                                                  andCommand:[NSString stringWithFormat:@"action=command&command=get_running_os"]
+                                                                                   andApiKey:apiKey];
+        if (responseDict != nil)
+        {
+            NSInteger status = [[responseDict objectForKey:@"status"] intValue];
+            if (status == 200)
+            {
+                bodyKey = [[[responseDict objectForKey:@"data"] objectForKey:@"device_response"] objectForKey:@"body"];
+            }
+        }
+        if (![bodyKey isEqualToString:@""])
+        {
+            NSArray * tokens = [bodyKey componentsSeparatedByString:@": "];
+            if ([tokens count] >=2 )
+            {
+                self.sharedCamConnectedTo = [tokens objectAtIndex:1];//return MacOS|Window
+            }
+        }
+        else
+        {
+            //default is connected to window.
+            _sharedCamConnectedTo = @"Unknown";
+        }
+        
+	}
 }
 
 - (void)createMonvementControlTimer
@@ -4433,8 +4491,18 @@ double _ticks = 0;
 
     if ([_cameraModel isEqualToString:CP_MODEL_SHARED_CAM])
     {
-        self.itemImages = [NSMutableArray arrayWithObjects:@"video_action_pan.png", @"video_action_video.png", @"video_action_music.png", @"video_action_temp.png", nil];
-        self.itemSelectedImages = [NSMutableArray arrayWithObjects:@"video_action_pan_pressed.png", @"video_action_video_pressed.png", @"video_action_music_pressed.png", @"video_action_temp_pressed.png", nil];
+        //query command to check shared cam is connected to mac or window
+        [self queryToKnowSharedCamOnMacOSOrWin];
+        if ([_sharedCamConnectedTo isEqualToString:@"MACOS"])
+        {
+            self.itemImages = [NSMutableArray arrayWithObjects:@"video_action_video.png", @"video_action_temp.png", nil];
+            self.itemSelectedImages = [NSMutableArray arrayWithObjects:@"video_action_video_pressed.png", @"video_action_temp_pressed.png", nil];
+        }
+        else
+        {
+            self.itemImages = [NSMutableArray arrayWithObjects:@"video_action_pan.png", @"video_action_video.png", @"video_action_music.png", @"video_action_temp.png", nil];
+            self.itemSelectedImages = [NSMutableArray arrayWithObjects:@"video_action_pan_pressed.png", @"video_action_video_pressed.png", @"video_action_music_pressed.png", @"video_action_temp_pressed.png", nil];
+        }
     }
     else if ([_cameraModel isEqualToString:CP_MODEL_CONCURRENT])
     {
@@ -4496,27 +4564,44 @@ double _ticks = 0;
     
     if ([_cameraModel isEqualToString:CP_MODEL_SHARED_CAM])
     {
-        switch (index)
+        if ([_sharedCamConnectedTo isEqualToString:@"MACOS"])
         {
-            case 0:
-                self.selectedItemMenu = INDEX_PAN_TILT;
-                break;
-                
-            case 1:
+            if (index == 0)
+            {
                 self.selectedItemMenu = INDEX_RECORDING;
-                break;
-                
-            case 2:
-                self.selectedItemMenu = INDEX_MELODY;
-                [self melodyTouchAction:nil];
-                break;
-                
-            case 3:
+            }
+            else if (index == 1)
+            {
                 self.selectedItemMenu = INDEX_TEMP;
-                break;
-                
-            default:
-                break;
+            }
+            else
+            {
+                //do nothing
+            }
+        } else
+        {
+            switch (index)
+            {
+                case 0:
+                    self.selectedItemMenu = INDEX_PAN_TILT;
+                    break;
+                    
+                case 1:
+                    self.selectedItemMenu = INDEX_RECORDING;
+                    break;
+                    
+                case 2:
+                    self.selectedItemMenu = INDEX_MELODY;
+                    [self melodyTouchAction:nil];
+                    break;
+                    
+                case 3:
+                    self.selectedItemMenu = INDEX_TEMP;
+                    break;
+                    
+                default:
+                    break;
+            }
         }
     }
     else if ([_cameraModel isEqualToString:CP_MODEL_CONCURRENT])
@@ -4779,6 +4864,7 @@ double _ticks = 0;
     [_ib_btViewIn release];
     [_ib_btResolInfo release];
     [_audioOutStreamRemote release];
+    [_sharedCamConnectedTo release];
     [super dealloc];
 }
 //At first time, we set to FALSE after call checkOrientation()
