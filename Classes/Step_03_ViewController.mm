@@ -238,15 +238,6 @@
 #endif
     
 	NSString * currentSSID = [CameraPassword fetchSSIDInfo];
-    
-#if 0 //Dont show any progress
-    {
-        NSLog(@"cshow progress 02");
-        [self showProgress:nil];
-        
-    }
-#endif
-    
     NSLog(@"checkConnectionToCamera 03: %@", currentSSID);
 	if ([currentSSID hasPrefix:DEFAULT_SSID_PREFIX] || [currentSSID hasPrefix:DEFAULT_SSID_HD_PREFIX])
 	{
@@ -310,20 +301,7 @@
     NSString * fw_version = [[HttpCom instance].comWithDevice sendCommandAndBlock:GET_VERSION];
     
     NSLog(@"Step_03 - moveToNextStep -->fw_version: %@", fw_version);
-    
-//    NSString *model = [comm sendCommandAndBlock:GET_MODEL];
-//    
-//    model = [[model componentsSeparatedByString:@": "] objectAtIndex:1];
-//    if ([model isEqualToString:@"-1"]) { // tmp ceamera
-//        model = @"blink1_hd";
-//    }
-//    
-//    if ([model isEqualToString:@"blinkhd"]) { // real blinkhd camera
-//        model = @"blink1_hd";
-//    }
-//    
-//    NSLog(@"model = %@", model);
-    
+
     if ( fw_version != nil                   &&
         [fw_version isEqualToString:VERSION_18_037]
         )

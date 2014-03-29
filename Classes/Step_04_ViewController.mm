@@ -181,7 +181,7 @@
                                                              @"Invalid Camera Name", nil);
         
         NSString * msg = NSLocalizedStringWithDefaultValue(@"Invalid_Camera_Name_msg", nil, [NSBundle mainBundle],
-                                                           @"Camera Name has to be between 3-15 characters", nil);
+                                                           @"Camera Name has to be between 3-20 characters", nil);
         
         NSString * ok = NSLocalizedStringWithDefaultValue(@"Ok",nil, [NSBundle mainBundle],
                                                           @"Ok", nil);

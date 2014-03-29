@@ -49,7 +49,7 @@
     
     self.navigationItem.hidesBackButton = YES;
     
-    UIImage *hubbleLogoBack = [UIImage imageNamed:@"Hubble_back_text"];
+    UIImage *hubbleLogoBack = [UIImage imageNamed:@"hubble_logo"];
     UIBarButtonItem *barBtnHubble = [[UIBarButtonItem alloc] initWithImage:hubbleLogoBack
                                                                      style:UIBarButtonItemStylePlain
                                                                     target:self

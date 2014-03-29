@@ -75,7 +75,7 @@
     {
         NSArray *dataArr = [responseDict objectForKey:@"data"];
         
-        NSLog(@"camlist4: %@", dataArr);
+        //NSLog(@"camlist4: %@", dataArr);
         
         NSMutableArray * cam_profiles;
         CamProfile *cp;
@@ -338,7 +338,7 @@
 
         [camList addObject:cp];
         
-        NSLog(@"Log - device_model_id: %d, camMac: %@, Fw: %@, local_ip: %@, reg: %@", modelID, camMac, fwVersion, localIp, registrationID);
+        NSLog(@"Log - device_model_id: %d, camMac: %@, Fw: %@, local_ip: %@, reg: %@ and isAvailable: %@", modelID, camMac, fwVersion, localIp, registrationID, isAvailable);
 	}
 	
 	return camList;

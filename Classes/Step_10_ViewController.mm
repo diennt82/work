@@ -399,10 +399,12 @@
     
     if (currentSSID !=nil && ![currentSSID isEqualToString:wifiCameraSetup] && ![currentSSID isEqualToString:homeSsid])
     {
+        NSLog(@"Display infos for user select wifi home");
         [self connectToWifiHomeByHand];
     }
     else if ([currentSSID isEqualToString:wifiCameraSetup])
     {
+        NSLog(@"Now, still connected to wifiOf Camera, continue check");
         [NSTimer scheduledTimerWithTimeInterval: 3.0//
                                          target:self
                                        selector:@selector(step10CheckConnectionToHomeWifi:)
@@ -412,7 +414,7 @@
     else if ([currentSSID isEqualToString:homeSsid])
     {
         //app is already connect to wifi home.
-        
+        NSLog(@"Yeah, already connected to wifi home");
         //yeah we're connected ... check for ip??
 		[self.ib_viewGuild setHidden:YES];
         [self showProgress:nil];
@@ -428,6 +430,15 @@
                 
             }
             [self wait_for_camera_to_reboot:nil];
+        }
+        else
+        {
+            NSLog(@"Dont get IP from wifi home");
+            [NSTimer scheduledTimerWithTimeInterval: 3.0//
+                                             target:self
+                                           selector:@selector(step10CheckConnectionToHomeWifi:)
+                                           userInfo:nil
+                                            repeats:NO];
         }
     }
     else if (currentSSID == nil)

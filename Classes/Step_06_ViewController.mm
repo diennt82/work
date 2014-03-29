@@ -71,7 +71,6 @@
                                                object: nil];
     
     [self.progressView setHidden:YES];
-#if 1
     CGAffineTransform transform = CGAffineTransformMakeScale(1.0f, 4.0f);
     [self.view viewWithTag:501].transform = transform;
     [self.progressView viewWithTag:501].transform = transform;
@@ -86,17 +85,6 @@
     [barBtnHubble setTintColor:[UIColor colorWithPatternImage:hubbleLogoBack]];
     
     self.navigationItem.leftBarButtonItem = barBtnHubble;
-#else
-    self.navigationItem.title = NSLocalizedStringWithDefaultValue(@"Enter_Network_Information",nil, [NSBundle mainBundle],
-                                                                  @"Enter Network Information" , nil);
-    
-    self.navigationItem.backBarButtonItem =
-    [[[UIBarButtonItem alloc] initWithTitle: NSLocalizedStringWithDefaultValue(@"Back",nil, [NSBundle mainBundle],
-                                                                               @"Back" , nil)
-                                      style:UIBarButtonItemStyleBordered
-                                     target:nil
-                                     action:nil] autorelease];
-#endif
     
     UIImageView *imageView = (UIImageView *)[_progressView viewWithTag:595];
     imageView.animationImages =[NSArray arrayWithObjects:
@@ -107,7 +95,6 @@
                       nil];
     imageView.animationDuration = 1.5;
     imageView.animationRepeatCount = 0;
-    
     
     if (self.ssid == nil)
     {
@@ -805,56 +792,56 @@
     NSLog(@"Step_06VC - after send cmd - response is: %@", response);
     
     //Should check connect to camera here(after send command setup http)
-    [NSTimer scheduledTimerWithTimeInterval: 10.0//wait 10s and then check app connect to camera
+    //Check app is already connected to camera which is setup or not, call once
+    [NSTimer scheduledTimerWithTimeInterval: 3.0//wait 10s and then check app connect to camera
                                      target:self
-                                   selector:@selector(checkAppConnectToCamera)
+                                   selector:@selector(checkAppConnectToCameraAtStep03)
                                    userInfo:nil
                                     repeats:NO];
  
 }
 
-- (void)checkAppConnectToCamera
+- (void)checkAppConnectToCameraAtStep03
 {
+    [self.view bringSubviewToFront:self.progressView];
+    [self.progressView setHidden:NO];
+    NSString *currentSSID = [CameraPassword fetchSSIDInfo];
+    NSLog(@"check App Connect To Camera At Step03 after sending wifi info");
     if ([self isAppConnectedToCamera])
     {
-        NSLog(@"App connected with camera, waiting for get status, if connected, go next");
+        NSLog(@"App connected with camera, waiting for get status...");
         [self.progressView setHidden:NO];
         [self.view bringSubviewToFront:self.progressView];
-        [NSTimer scheduledTimerWithTimeInterval:1.0//
+        [self getStatusOfCameraToWifi:nil];
+        return;
+    }
+    else if (currentSSID == nil)
+    {
+        [NSTimer scheduledTimerWithTimeInterval: 3//
                                          target:self
-                                       selector:@selector(getStatusOfCameraToWifi:)
+                                       selector:@selector(checkAppConnectToCameraAtStep03)
                                        userInfo:nil
                                         repeats:NO];
         return;
     }
-    else if (!_isUserMakeConnect)
+    else
     {
         //TODO: show prompt to user select network camera again and handle next
         [self.progressView setHidden:YES];
         [self.infoSelectCameView setHidden:NO];
         [self.view bringSubviewToFront:self.infoSelectCameView];
+        return;
     }
-    else
-    {
-        [self.infoSelectCameView removeFromSuperview];
-        [self.view bringSubviewToFront:self.progressView];
-        [self.progressView setHidden:NO];
-    }
-//    _timeOut =  [NSTimer scheduledTimerWithTimeInterval: TIME_INPUT_PASSWORD_AGAIN// after 60s if not get successful
-//                                                 target:self
-//                                               selector:@selector(showDialogPasswordWrong)
-//                                               userInfo:nil
-//                                                repeats:NO];
 
     if (_task_cancelled)
     {
-        
+        //handle when user press back
     }
     else
     {
         [NSTimer scheduledTimerWithTimeInterval: 3//
                                          target:self
-                                       selector:@selector(checkAppConnectToCamera)
+                                       selector:@selector(checkAppConnectToCameraAtStep03)
                                        userInfo:nil
                                         repeats:NO];
         
@@ -864,10 +851,14 @@
 
 -(void) becomeActive
 {
-    _task_cancelled = YES;
-    _isUserMakeConnect = YES;
+    //_task_cancelled = YES; //don't need
+    //_isUserMakeConnect = YES; //don't need
     NSLog(@"getstatusOfCamera again");
-    [self checkAppConnectToCamera];
+    [NSTimer scheduledTimerWithTimeInterval:0.5
+                                     target:self
+                                   selector:@selector(checkAppConnectToCameraAtStep03)
+                                   userInfo:nil
+                                    repeats:NO];
 }
 
 -(void)handleEnteredBackground
@@ -960,6 +951,7 @@
 
     if ([_currentStateCamera isEqualToString:@"CONNECTED"])
     {
+        [[NSNotificationCenter defaultCenter] removeObserver:self];
         [self resetAllTimer];
         [self nextStepVerifyPassword];
         [self.progressView removeFromSuperview];
