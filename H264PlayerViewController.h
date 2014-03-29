@@ -124,9 +124,6 @@
     BOOL _isFirstLoad;
     EarlierNavigationController *earlierNavi;
     
-    //check to show custom indicator
-    BOOL _isShowCustomIndicator;
-    
     //check to show info for debug
     BOOL _isShowDebugInfo;
     //timer display text Camera is not accessible
