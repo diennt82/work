@@ -81,21 +81,8 @@
     [super viewDidLoad];
 
     // Uncomment the following line to preserve selection between presentations.
-    // self.clearsSelectionOnViewWillAppear = NO;
-#if 0
-    // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-    UIImage *hubbleBack = [UIImage imageNamed:@"Hubble_logo_back.png"];
+    self.clearsSelectionOnViewWillAppear = NO;
     
-    UIBarButtonItem *backBarBtn = [[UIBarButtonItem alloc] initWithImage:hubbleBack
-                                                                   style:UIBarButtonItemStyleBordered
-                                                                  target:self
-                                                                  action:@selector(settingsBackAction:)];
-    [backBarBtn setTintColor:[UIColor colorWithPatternImage:hubbleBack]];
-    
-    self.navigationItem.leftBarButtonItem = backBarBtn;
-   // assert(self.navigationController.navigationItem.leftBarButtonItem != nil);
-    // self.navigationItem.rightBarButtonItem = self.editButtonItem;
-#endif
     for (int i = 0; i < 4; i++)
     {
         numOfRows[i] = 1;

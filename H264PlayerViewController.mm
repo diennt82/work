@@ -437,40 +437,24 @@ double _ticks = 0;
 
 -(void)addHubbleLogo_Back
 {
-    // change the back button to cancel and add an event handler
-    UIImage *headerLogo = [UIImage imageNamed:@"Hubble_back_text"];
+    UIImage *image = [UIImage imageNamed:@"Hubble_back_text"];
+    CGRect frame = CGRectMake(0, 0, image.size.width, image.size.height);
     
-    //create UIBarbutton item virtual, and set clearColor for it
-    //To hide bar button for navigation, and add new button
-    UIBarButtonItem *headerLogoButton = [[UIBarButtonItem alloc] initWithImage:headerLogo
-                                                                         style:UIBarButtonItemStylePlain
-                                                                        target:self
-                                                                        action:@selector(prepareGoBackToCameraList:)];
-    self.navigationItem.leftBarButtonItem = headerLogoButton;
-    if (isiOS7AndAbove)
-    {
-        [headerLogoButton setTintColor:[UIColor clearColor]];
-        //update position of button hubble_back
-        UIButton *aButton = [UIButton buttonWithType:UIButtonTypeCustom];
-        [aButton setImage:headerLogo forState:UIControlStateNormal];
-        if (isiPhone5)
-        {
-            aButton.frame = CGRectMake(8.0,27.0,headerLogo.size.width,headerLogo.size.height);
-        }
-        else if (isiPhone4)
-        {
-            aButton.frame = CGRectMake(8.0, 27,headerLogo.size.width,headerLogo.size.height);
-        }
-        else
-        {
-            aButton.frame = CGRectMake(8.0,27.0,headerLogo.size.width,headerLogo.size.height);
-        }
-        
-        [aButton setContentMode:UIViewContentModeScaleAspectFit];
-        [aButton addTarget:self action:@selector(prepareGoBackToCameraList:) forControlEvents:UIControlEventTouchUpInside];
-        aButton.tag = 11;
-        [self.navigationController.view addSubview:aButton];
-    }
+    //init a normal UIButton using that image
+    UIButton* button = [[UIButton alloc] initWithFrame:frame];
+    [button setBackgroundImage:image forState:UIControlStateNormal];
+    [button setShowsTouchWhenHighlighted:YES];
+    
+    //set the button to handle clicks - this one calls a method called 'downloadClicked'
+    [button addTarget:self action:@selector(prepareGoBackToCameraList:) forControlEvents:UIControlEventTouchUpInside];
+    
+    //finally, create your UIBarButtonItem using that button
+    UIBarButtonItem* barButtonItem = [[UIBarButtonItem alloc] initWithCustomView:button];
+    
+    //then set it.  phew.
+    [self.navigationItem setLeftBarButtonItem:barButtonItem];
+    
+    [barButtonItem release];
 }
 - (void) updateNavigationBarAndToolBar
 {
@@ -1879,6 +1863,7 @@ double _ticks = 0;
     _isShowCustomIndicator = NO;
     
     NSLog(@"self.currentMediaStatus: %d", self.currentMediaStatus);
+    self.navigationItem.leftBarButtonItem.enabled = NO;
     
     userWantToCancel = TRUE;
     self.selectedChannel.stopStreaming = TRUE;

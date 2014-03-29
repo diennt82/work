@@ -951,7 +951,6 @@
 
     if ([_currentStateCamera isEqualToString:@"CONNECTED"])
     {
-        [[NSNotificationCenter defaultCenter] removeObserver:self];
         [self resetAllTimer];
         [self nextStepVerifyPassword];
         [self.progressView removeFromSuperview];

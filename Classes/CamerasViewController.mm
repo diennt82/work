@@ -122,6 +122,7 @@
         AddCameraViewController *addCameraVC = [[AddCameraViewController alloc] init];
         addCameraVC.delegate = self;
         tabBarController.navigationController.navigationBarHidden = YES;
+        self.navigationItem.leftBarButtonItem.enabled = NO;
         [self presentViewController:addCameraVC animated:YES completion:^{}];
     }
 }
