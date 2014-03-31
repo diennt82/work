@@ -21,9 +21,6 @@
 #import "H264PlayerViewController.h"
 #import "NotifViewController.h"
 
-#import "QBAnimationItem.h"
-#import "QBAnimationGroup.h"
-#import "QBAnimationSequence.h"
 #import "Step_02_ViewController.h"
 #import "RegistrationViewController.h"
 #import "LoginViewController.h"
@@ -34,9 +31,7 @@
 #import "AlertPrompt.h"
 
 @interface MBP_iosViewController ()
-{
-    QBAnimationSequence *_sequence;
-}
+
 @end
 
 @implementation MBP_iosViewController
@@ -58,9 +53,6 @@
 {
 	self.toTakeSnapShot = NO;
 	self.recordInProgress = NO;
-    
-
-
 	//self.app_stage = APP_STAGE_INIT;
     self.app_stage = APP_STAGE_LOGGING_IN;
 
@@ -83,7 +75,7 @@
 
 
 	//go Back to main menu
-	[NSTimer scheduledTimerWithTimeInterval:4
+	[NSTimer scheduledTimerWithTimeInterval:3
 		target:self
 		selector:@selector(wakeup_display_login:)
 		userInfo:nil
@@ -95,24 +87,12 @@
     [self start_animation_with_orientation:interfaceOrientation];
     
     self.splashScreen.image = [UIImage imageNamed:@"loader_a"];
-
-//    QBAnimationItem *item1 = [QBAnimationItem itemWithDuration:0.1 delay:0 options:UIViewAnimationOptionCurveLinear|UIViewAnimationOptionAllowUserInteraction animations:^{
-//        _splashScreen.transform = CGAffineTransformRotate(_splashScreen.transform, M_PI/4);
-//    }];
-//    
-//    QBAnimationGroup *group1 = [QBAnimationGroup groupWithItems:@[item1]];
-//    
-//    _sequence = [[QBAnimationSequence alloc] initWithAnimationGroups:@[group1] repeat:YES];
 }
 
 -(void) viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    
-    //    if (_sequence != nil)
-    //    {
-    //        [_sequence start];
-    //    }
+
     if (_splashScreen != nil)
     {
         [_splashScreen startAnimating];
@@ -121,10 +101,6 @@
 
 - (void)viewDidDisappear:(BOOL)animated
 {
-    //    if (_sequence != nil)
-    //    {
-    //        [_sequence stop];
-    //    }
     if (_splashScreen != nil)
     {
         [_splashScreen stopAnimating];
@@ -336,7 +312,6 @@
 	[restored_profiles release];
 
     [bonjourThread release];
-    [_sequence release];
 	[super dealloc];
 }
 
@@ -346,6 +321,8 @@
 /**** Main program switching point is here *****/ 
 - (void)sendStatus:(int) method
 {
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    
 	switch (method)
     {
 		case SETUP_CAMERA:
@@ -353,55 +330,37 @@
             NSLog(@">>> SETUP ");
             self.app_stage = APP_STAGE_SETUP;
             
-            NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
             BOOL isFirstTimeSetup = [userDefaults boolForKey:FIRST_TIME_SETUP];
             
             if (isFirstTimeSetup == FALSE)
             {
-#if 0
-                //Guild screen to setup camera
-                NSInteger getValue = [userDefaults integerForKey:SET_UP_CAMERA];
-                if (getValue == 1)
+                //Normal add cam sequence
+                //Load the next xib
+                Step_02_ViewController *step02ViewController = nil;
+                
+                if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
                 {
-                    //Blutooth setup
-                    GuideAddCamera_ViewController *guideAddCame = [[GuideAddCamera_ViewController alloc]
-                                                                   initWithNibName:@"GuideAddCamera_ViewController" bundle:nil];
-                    guideAddCame.delegate = self;
-                    [guideAddCame presentModallyOn:self];
+                    step02ViewController = [[Step_02_ViewController alloc]
+                                            initWithNibName:@"Step_02_ViewController_ipad" bundle:nil];
                 }
                 else
-#endif
                 {
-                    //Concurrent setup
-                    //Normal add cam sequence
-                    //Load the next xib
-                    Step_02_ViewController *step02ViewController = nil;
-                    
-                    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
-                    {
-                        step02ViewController = [[Step_02_ViewController alloc]
-                                                initWithNibName:@"Step_02_ViewController_ipad" bundle:nil];
-                    }
-                    else
-                    {
-                        step02ViewController = [[Step_02_ViewController alloc]
-                                                initWithNibName:@"Step_02_ViewController" bundle:nil];
-                    }
-                    
-                    step02ViewController.delegate = self;
-                    step02ViewController.cameraType = [userDefaults integerForKey:SET_UP_CAMERA];
-                    //[step02ViewController presentModallyOn:self];
-                    UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:step02ViewController];
-                    //[self presentViewController:nav animated:NO completion:^{}];
-                    [step02ViewController release];
-                    
-                    if (self.presentedViewController) {
-                        [self dismissViewControllerAnimated:YES completion:^{
-                            [self presentViewController:nav animated:NO completion:nil];
-                        }];
-                    } else {
+                    step02ViewController = [[Step_02_ViewController alloc]
+                                            initWithNibName:@"Step_02_ViewController" bundle:nil];
+                }
+                
+                step02ViewController.delegate = self;
+                step02ViewController.cameraType = [userDefaults integerForKey:SET_UP_CAMERA];
+                UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:step02ViewController];
+                //[self presentViewController:nav animated:NO completion:^{}];
+                [step02ViewController release];
+                
+                if (self.presentedViewController) {
+                    [self dismissViewControllerAnimated:YES completion:^{
                         [self presentViewController:nav animated:NO completion:nil];
-                    }
+                    }];
+                } else {
+                    [self presentViewController:nav animated:NO completion:nil];
                 }
             }
             else
@@ -415,8 +374,6 @@
         {
             //NSLog(@">>> Login ");
             self.app_stage = APP_STAGE_LOGGING_IN;
-            
-            NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
             
             [userDefaults setBool:TRUE forKey:_AutoLogin];
             [userDefaults synchronize];
@@ -448,7 +405,6 @@
 			{
 				NSLog(@" back from adding cam. relogin -- to get the new cam data");
 
-				NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
 				[userDefaults setBool:TRUE forKey:_AutoLogin];
 				[userDefaults synchronize];
 
@@ -464,9 +420,7 @@
 			{
 
                 statusDialogLabel.hidden = YES;
-				//[self dismissViewControllerAnimated:NO completion:nil];
-                
-				NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+
 				[userDefaults setBool:TRUE forKey:_AutoLogin];
 				[userDefaults synchronize];
 
@@ -491,20 +445,18 @@
                 
 				break;
 			}
-		case  FRONT_PAGE:
+            
+		case  LOGGING_IN:
 			{
-				NSLog(@" display first page ");
-                statusDialogLabel.hidden = YES;
-                [self dismissViewControllerAnimated:NO completion:nil];
-        
-                [NSTimer scheduledTimerWithTimeInterval:0.01
-                                                 target:self
-                                               selector:@selector(wakeup_display_first_page:)
-                                               userInfo:nil
-                                                repeats:NO];
+				self.app_stage = APP_STAGE_LOGGING_IN;
 
-				break;
+                [userDefaults setBool:FALSE forKey:_AutoLogin];
+                [userDefaults synchronize];
+                
+                [self show_login_or_reg:nil];
 			}
+            break;
+            
 		case LOGIN_FAILED_OR_LOGOUT : //back from login -failed Or logout
 			{
                 statusDialogLabel.hidden = YES;
@@ -558,7 +510,6 @@
 
 - (void)createAccount
 {
-#if 1
     NSLog(@"MBP_iosVC - Load RegistrationVC");
     RegistrationViewController *registrationVC = [[RegistrationViewController alloc] init];
     registrationVC.delegate = self;
@@ -566,23 +517,6 @@
     [self presentViewController:nav animated:YES completion:^{}];
     //[self.navigationController presentViewController:registrationVC animated:YES completion:^{}];
     [registrationVC release];
-#else
-    {
-        //20130219- app flow changed : Create account first
-        
-        NSLog(@"Load step 09");
-        
-        //Load the next xib
-        Step09ViewController *step09VC = [[Step09ViewController alloc] init];
-        
-        //[self.navigationController pushViewController:step09ViewController animated:NO];
-        step09VC.delegate = self;
-        UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:step09VC];
-        [self presentViewController:nav animated:YES completion:^{}];
-        
-        [step09VC release];
-    }
-#endif
 }
 
 -(BOOL) rebindCameraResource
@@ -713,11 +647,8 @@
 
 	}
 
-
 	return FALSE; 
 }
-
-
 
 
 -(BOOL) isServerAnnouncement: (CameraAlert *) camAlert
@@ -727,8 +658,6 @@
         
         return TRUE;
     }
-    
-    
     
     return FALSE;
 }
@@ -914,62 +843,61 @@
 
 -(void) logoutAndUnregistration_bg
 {
+    @autoreleasepool
+    {
 #if  TARGET_IPHONE_SIMULATOR
-    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-
-    //REmove password and registration id
-    [userDefaults removeObjectForKey:@"PortalPassword"];
-    [userDefaults removeObjectForKey:_push_dev_token];
-    
-    [userDefaults synchronize];
-    
-    
-    [self performSelectorOnMainThread:@selector(show_login_or_reg:)
-                           withObject:nil
-                        waitUntilDone:NO];
+        NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+        
+        //REmove password and registration id
+        [userDefaults removeObjectForKey:@"PortalPassword"];
+        [userDefaults removeObjectForKey:_push_dev_token];
+        
+        [userDefaults synchronize];
+        
+        
+        [self performSelectorOnMainThread:@selector(show_login_or_reg:)
+                               withObject:nil
+                            waitUntilDone:NO];
 #else
-    NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
-    
-    NSLog(@"De-Register push with both parties: APNs and BMS ");
-    
-	NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-    NSString *apiKey = [userDefaults objectForKey:@"PortalApiKey"];
-    NSString *appId = [userDefaults objectForKey:@"APP_ID"];
-    
-    //REmove password and registration id
-    [userDefaults removeObjectForKey:@"PortalPassword"];
-    [userDefaults removeObjectForKey:_push_dev_token];
-    
-    [userDefaults synchronize];
-    
-    // Let the device know we want to receive push notifications
-    [[UIApplication sharedApplication] unregisterForRemoteNotifications];
-    
-    BMS_JSON_Communication *jsonComm = [[[BMS_JSON_Communication alloc] initWithObject:self
-                                                                             Selector:nil
-                                                                         FailSelector:nil
-                                                                            ServerErr:nil] autorelease];
-    
-    NSDictionary *responseDict = [jsonComm deleteAppBlockedWithAppId:appId
-                                                           andApiKey:apiKey];
-    NSLog(@"logout --> delete app status = %d", [[responseDict objectForKey:@"status"] intValue]);
-    
-    [NSThread sleepForTimeInterval:0.10];
-    
-    [self performSelectorOnMainThread:@selector(show_login_or_reg:)
-                           withObject:nil
-                        waitUntilDone:NO];
-    
-	[pool release];
+        
+        NSLog(@"De-Register push with both parties: APNs and BMS ");
+        
+        NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+        NSString *apiKey = [userDefaults objectForKey:@"PortalApiKey"];
+        NSString *appId = [userDefaults objectForKey:@"APP_ID"];
+        
+        //REmove password and registration id
+        [userDefaults removeObjectForKey:@"PortalPassword"];
+        [userDefaults removeObjectForKey:_push_dev_token];
+        
+        [userDefaults synchronize];
+        
+        // Let the device know we want to receive push notifications
+        [[UIApplication sharedApplication] unregisterForRemoteNotifications];
+        
+        BMS_JSON_Communication *jsonComm = [[[BMS_JSON_Communication alloc] initWithObject:self
+                                                                                  Selector:nil
+                                                                              FailSelector:nil
+                                                                                 ServerErr:nil] autorelease];
+        
+        NSDictionary *responseDict = [jsonComm deleteAppBlockedWithAppId:appId
+                                                               andApiKey:apiKey];
+        NSLog(@"logout --> delete app status = %d", [[responseDict objectForKey:@"status"] intValue]);
+        
+        [NSThread sleepForTimeInterval:0.10];
+        
+        [self performSelectorOnMainThread:@selector(show_login_or_reg:)
+                               withObject:nil
+                            waitUntilDone:NO];
 #endif
+    }
 }
 
 #pragma mark -
 #pragma mark Alertview delegate
 
-#if 1
-- (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex {
-    
+- (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex
+{
 	int tag = alertView.tag ;
     
 	if (tag == ALERT_PUSH_RECVED_RESCAN_AFTER)
@@ -1130,187 +1058,7 @@
                 break;
         }
     }
-    
 }
-
-#else
-- (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex {
-    
-	int tag = alertView.tag ;
-    
-	if (tag == ALERT_PUSH_RECVED_RESCAN_AFTER)
-	{
-		switch(buttonIndex)
-        {
-			case 0:
-                [pushAlert release];
-                pushAlert = nil;
-				break;
-			case 1:
-            {
-				if (dashBoard != nil)
-				{
-					NSLog(@"RESCAN_AFTER close all windows and thread");
-                    
-					NSArray * views = dashBoard.navigationController.viewControllers;
-					NSLog(@"views count = %d",[views count] );
-					if ( [views count] > 1)
-					{
-                        if (views.count > 2)
-                        {
-                            id obj2 = [views objectAtIndex:2];
-                            
-                            if ([obj2 isKindOfClass:[PlaybackViewController class]])
-                            {
-                                PlaybackViewController *playbackViewController = (PlaybackViewController *)obj2;
-                                [playbackViewController stopStream:nil];
-                            }
-                        }
-                        
-                        id obj = [views objectAtIndex:1];
-                        
-                        if ([obj isKindOfClass:[H264PlayerViewController class]])
-                        {
-                            H264PlayerViewController * h264PlayerViewController = (H264PlayerViewController *) obj;
-                            [h264PlayerViewController goBackToCameraList];
-                        }
-					}
-				}
-                
-				[self dismissViewControllerAnimated:NO completion:nil];
-                
-#if 0
-				NSLog(@"Re-scan ");
-				[self sendStatus:3];
-                
-#endif
-                NotificationViewController * notif_view;
-                if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
-                {
-                    notif_view = [[[NotificationViewController alloc]
-                                   initWithNibName:@"NotificationViewController_ipad" bundle:nil]autorelease];
-                }
-                else
-                {
-                    notif_view = [[[NotificationViewController alloc]
-                                   initWithNibName:@"NotificationViewController" bundle:nil]autorelease];
-                }
-
-                
-                
-                @synchronized(self)
-                {
-                    //Feed in data now
-                    notif_view.cameraMacNoColon = latestCamAlert.cameraMacNoColon;
-                    notif_view.cameraName  = latestCamAlert.cameraName;
-                    notif_view.alertType   = latestCamAlert.alertType;
-                    notif_view.alertVal    = latestCamAlert.alertVal;
-                    
-                    notif_view.delegate = self;
-                    
-                    [latestCamAlert release];
-                    latestCamAlert = nil;
-                }
-                
-                [notif_view presentModallyOn:self];
-                
-                [pushAlert release];
-                pushAlert = nil;
-				break;
-            }
-			default:
-				break;
-                
-		}
-	}
-	else if (tag == ALERT_PUSH_RECVED_RELOGIN_AFTER)
-	{
-		switch(buttonIndex)
-        {
-			case 0:
-				break;
-			case 1:
-                
-				if (dashBoard != nil)
-				{
-					NSLog(@"RELOGIN_AFTER close all windows and thread");
-                    
-					//[dashBoard.navigationController popToRootViewControllerAnimated:NO];
-                    
-					NSArray * views = dashBoard.navigationController.viewControllers;
-					NSLog(@"views count = %d",[views count] );
-					if ( [views count] > 1)
-					{
-						if (views.count > 2)
-                        {
-                            id obj2 = [views objectAtIndex:2];
-                            
-                            if ([obj2 isKindOfClass:[PlaybackViewController class]])
-                            {
-                                PlaybackViewController *playbackViewController = (PlaybackViewController *)obj2;
-                                [playbackViewController stopStream:nil];
-                            }
-                        }
-                        
-                        id obj = [views objectAtIndex:1];
-                        
-                        if ([obj isKindOfClass:[H264PlayerViewController class]])
-                        {
-                            H264PlayerViewController * h264PlayerViewController = (H264PlayerViewController *) obj;
-                            [h264PlayerViewController goBackToCameraList];
-                        }
-					}
-				}
-                
-				//[self dismissModalViewControllerAnimated:NO];
-                [self dismissViewControllerAnimated:NO completion:^{}];
-                
-                
-				[self sendStatus:2];
-				break;
-			default:
-				break;
-                
-		}
-	}
-    else if (tag == ALERT_PUSH_SERVER_ANNOUNCEMENT)
-    {
-        switch(buttonIndex)
-        {
-			case 0://IGNORE
-				break;
-			case 1://Detail
-            {
-                // Open the web browser now..
-                NSString * url =  ((AlertPrompt*)alertView).otherInfo;
-                
-                
-                if (url != nil)
-                {
-                    if ( [url hasPrefix:@"http://"] != TRUE)
-                    {
-                        url  = [NSString stringWithFormat:@"http://%@", url];
-                    }
-                    
-                    
-                    NSLog(@"final url:%@ ",url);
-                    
-                    NSURL *ns_url = [NSURL URLWithString:url];
-                    
-                    [[UIApplication sharedApplication] openURL:ns_url];
-                }
-                break;
-            }
-            default:
-                break;
-        }
-    }
-    
-}
-#endif
-
-
-#pragma mark -
 
 
 #pragma mark -
@@ -1335,10 +1083,6 @@
                 cp.isInLocal = FALSE;
                 cp.hasUpdateLocalStatus = TRUE;
             }
-            
-            
-            
-            
             [self finish_scanning];
         }
         else
@@ -1347,8 +1091,6 @@
             [self scan_next_camera:self.restored_profiles index:nextCameraToScanIndex];
             
         }
-        
-        
       
         [self performSelectorOnMainThread:@selector(startShowingCameraList) withObject:nil waitUntilDone:NO];
     }
@@ -1401,8 +1143,6 @@
             [self performSelector:@selector(scan_done:)
                        withObject:nil afterDelay:0.1];
         }
-        
-        
     }
     
     [finalResult release];
@@ -1567,7 +1307,6 @@
         //[dashBoard setupTopBarForEditMode:dashBoard.editModeEnabled];
         
         [dashBoard.cameraList reloadData];
-        
     }
 #endif
 }
@@ -1635,14 +1374,10 @@
     }
     
     return FALSE;
-    
 }
 
 -(BOOL) isCurrentIpAddressValid :(CamProfile *) cp
 {
-    
-    
-    
     if (cp != nil &&
         cp.ip_address != nil)
     {
@@ -1703,13 +1438,7 @@
     
 }
 
-
 #pragma mark -
-
-
-
-
-
 
 + (void)getBroadcastAddress:(NSString **) bcast AndOwnIp:(NSString**) ownip
 {
@@ -1777,6 +1506,7 @@
 	
 	return ;
 }
+
 + (void)getBroadcastAddress:(NSString **) bcast AndOwnIp:(NSString**) ownip ipasLong:(long *) _ownip
 {
     
@@ -1815,8 +1545,6 @@
             *_ownip = ip_addrs[i];
 		}
         
-        
-        
 		//NSLog(@"%d %s %s %s %s\n", i, if_names[i], hw_addrs[i], ip_names[i],
 		// broadcast_addrs[i]);
         
@@ -1847,8 +1575,6 @@
 
 #pragma mark -
 #pragma mark SetupHTTPDelegate --- NOT USED --- check ..
-
-
 
 -(void) show_login_or_reg:(NSTimer*) exp
 {
@@ -1922,12 +1648,8 @@
 }
 
 
-
 #pragma mark -
-#pragma mark Read Configure data 
-
-
-
+#pragma mark Read Configure data
 
 - (BOOL) restoreConfigData
 {

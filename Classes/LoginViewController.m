@@ -69,7 +69,6 @@
     }
     
     [self.view addSubview:self.viewProgress];
-    self.stringUserEmail = @"";
     self.stringPassword  = @"";
     
     [self.buttonEnter setBackgroundImage:[UIImage imageNamed:@"enter"]
@@ -83,60 +82,48 @@
     
 	//load user/pass
 	NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    
 	//can be user email or user name here --
 	NSString * old_usr = (NSString *) [userDefaults objectForKey:@"PortalUsername"];
 	NSString * old_pass = (NSString *) [userDefaults objectForKey:@"PortalPassword"];
-    
-    if ([userDefaults boolForKey:_AutoLogin] == FALSE)
-    {
-        old_pass = @"";
-    }
-    
     self.stringUserEmail  = (NSString*) [userDefaults objectForKey:@"PortalUseremail"];
+    BOOL shouldAutoLogin = [userDefaults boolForKey:_AutoLogin];
     
     /* Reset SYM NAT status here */
     [userDefaults setInteger:TYPE_UNKNOWN forKey:APP_IS_ON_SYMMETRIC_NAT];
     [userDefaults synchronize];
     
-	if (old_usr != nil)
-	{
-		[self.tfEmail setText:old_usr];
-		
-		if (old_pass != nil)
-		{
-			[self.tfPassword setText:old_pass];
-		}
-	}
-	
-    if ((old_usr != nil) && (old_pass != nil))
+    if (old_usr != nil)
     {
         self.stringUsername = [NSString stringWithString:old_usr];
-        self.stringPassword = [NSString stringWithString:old_pass];
-        self.viewProgress.hidden = NO;
-
-        BOOL shouldAutoLogin = [userDefaults boolForKey:_AutoLogin];
+        self.tfEmail.text = old_usr;
         
-        if (shouldAutoLogin == TRUE	)
+        if (shouldAutoLogin &&
+            old_pass != nil)
         {
+            self.stringPassword = [NSString stringWithString:old_pass];
+            self.viewProgress.hidden = NO;
+            self.tfPassword.text = old_pass;
+            
             self.buttonEnterPressedFlag = YES;
             [self check3GConnectionAndPopup];
         }
         else
         {
-            NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-            [userDefaults removeObjectForKey:@"string_Camera_Mac_Being_Viewed"];
+            [userDefaults removeObjectForKey:CAM_IN_VEW];
             [userDefaults synchronize];
             self.viewProgress.hidden = YES;
-            NSLog(@" NO LOGIN");
+            self.buttonEnter.enabled = NO;
+             NSLog(@" NO LOGIN");
         }
-	}
+    }
     else
     {
-        NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-        [userDefaults removeObjectForKey:@"string_Camera_Mac_Being_Viewed"];
+        [userDefaults removeObjectForKey:CAM_IN_VEW];
         [userDefaults synchronize];
         self.viewProgress.hidden = YES;
         self.buttonEnter.enabled = NO;
+        NSLog(@"LoginVC - No login");
     }
 }
 
@@ -150,8 +137,6 @@
         UIButton *btnForgotPassword = (UIButton *)[self.view viewWithTag:955];
         btnForgotPassword.frame = CGRectMake(_buttonEnter.frame.origin.x, btnForgotPassword.frame.origin.y, btnForgotPassword.frame.size.width, btnForgotPassword.frame.size.height);
     }
-    
-    
 }
 
 -(void) viewDidAppear:(BOOL)animated
