@@ -15,8 +15,8 @@
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self) {
         // Initialization code
-        [self.settingsButton setImage:[UIImage imageNamed:@"menu_settings"] forState:UIControlStateNormal];
-        [self.settingsButton setImage:[UIImage imageNamed:@"menu_settings_pressed"] forState:UIControlEventTouchUpInside];
+        [self.settingsButton setImage:[UIImage imageNamed:@"camera_settings"] forState:UIControlStateNormal];
+        [self.settingsButton setImage:[UIImage imageNamed:@"camera_settings_pressed"] forState:UIControlEventTouchUpInside];
     }
     return self;
 }
@@ -36,8 +36,11 @@
 - (void)dealloc {
     [_snapshotImage release];
     [_photoItemImage release];
-    [_cameraNameLabel release];
+    [_ibCameraNameLabel release];
     [_settingsButton release];
+    [_ibIconStatusCamera release];
+    [_ibTextStatusCamera release];
+    [_ibBGColorCameraSelected release];
     [super dealloc];
 }
 @end

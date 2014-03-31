@@ -26,4 +26,8 @@
 + (UIColor *)deSelectButtonBackgroundColor;
 + (UIColor *)deSelectButtonBackgroundTextColor;
 
+
++ (UIColor *)deSelectedAddCameraTextColor;
++ (UIColor *)deSelectedBuyCameraTextColor;
+
 @end

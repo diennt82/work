@@ -16,9 +16,13 @@
 
 @interface CamerasCell : UITableViewCell
 
+@property (retain, nonatomic) IBOutlet UIView *ibBGColorCameraSelected;
 @property (retain, nonatomic) IBOutlet UIImageView *snapshotImage;
+@property (retain, nonatomic) IBOutlet UIImageView *ibIconStatusCamera;
+@property (retain, nonatomic) IBOutlet UILabel *ibTextStatusCamera;
+
 @property (retain, nonatomic) IBOutlet UIImageView *photoItemImage;
-@property (retain, nonatomic) IBOutlet UILabel *cameraNameLabel;
+@property (retain, nonatomic) IBOutlet UILabel *ibCameraNameLabel;
 @property (retain, nonatomic) IBOutlet UIButton *settingsButton;
 
 @property (nonatomic, assign) id<CamerasCellDelegate> camerasCellDelegate;

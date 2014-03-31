@@ -88,4 +88,13 @@
 {
     return Rgb2UIColor(147, 147, 147);
 }
+
++ (UIColor *)deSelectedAddCameraTextColor
+{
+    return Rgb2UIColor(128, 203, 235);
+}
++ (UIColor *)deSelectedBuyCameraTextColor
+{
+    return Rgb2UIColor(172, 227, 128);
+}
 @end

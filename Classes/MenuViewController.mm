@@ -68,9 +68,8 @@
     self.navigationItem.leftBarButtonItem = backBarBtn;
     self.navigationItem.leftBarButtonItem.enabled = NO;
     
-    self.camerasVC = [[CamerasViewController alloc] initWithStyle:nil
-                                                         delegate:self.menuDelegate
-                                                         parentVC:self];
+    self.camerasVC = [[CamerasViewController alloc]initWithNibName:@"CamerasViewController" bundle:nil delegate:self.menuDelegate parentVC:self];
+    
     if (_cameras)
     {
         self.camerasVC.camChannels = self.cameras;
@@ -150,7 +149,7 @@
     [self selectMenuCamera];
     
 //    self.camerasVC.tableView.frame = CGRectMake(0, 30, self.view.frame.size.width, self.view.frame.size.height - 30);
-    self.camerasVC.tableView.contentInset = UIEdgeInsetsMake(30, 0, 64, 0);
+    self.camerasVC.ibTableListCamera.contentInset = UIEdgeInsetsMake(30, 0, 64, 0);
     
     UIImage *hubbleBack = [UIImage imageNamed:@"Hubble_logo_back"];
     [self.navigationItem.leftBarButtonItem setTintColor:[UIColor colorWithPatternImage:hubbleBack]];
@@ -175,7 +174,7 @@
             [self.navigationItem.rightBarButtonItems[1] setEnabled:NO];
             //[self.navigationItem.rightBarButtonItems[1] setHidden:YES];
             self.camerasVC.waitingForUpdateData = TRUE;
-            [self.camerasVC.tableView reloadData];
+            [self.camerasVC.ibTableListCamera reloadData];
             [self performSelectorInBackground:@selector(recreateAccount)
                                    withObject:nil];
         }
@@ -307,7 +306,7 @@
     }
     
     self.camerasVC.waitingForUpdateData = NO;
-    [self.camerasVC.tableView performSelectorInBackground:@selector(reloadData)
+    [self.camerasVC.ibTableListCamera performSelectorInBackground:@selector(reloadData)
                                                withObject:nil];
     if (self.cameras != nil &&
         self.cameras.count > 0)

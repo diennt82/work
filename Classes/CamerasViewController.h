@@ -16,16 +16,21 @@
 
 @end
 
-@interface CamerasViewController : UITableViewController
+@interface CamerasViewController : UIViewController<UITableViewDataSource, UITableViewDelegate>
 
 @property (assign, nonatomic) id<CamerasVCDelegate> camerasVCDelegate;
 @property (assign, nonatomic) id parentVC;
 @property (nonatomic) BOOL waitingForUpdateData;
 @property (retain, nonatomic) NSMutableArray *camChannels;
+@property (retain, nonatomic) IBOutlet UITableView *ibTableListCamera;
 
 - (id)initWithStyle:(UITableViewStyle)style
            delegate:(id<ConnectionMethodDelegate> )delegate
            parentVC: (id)parentVC;
+
+- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
+             delegate:(id<ConnectionMethodDelegate> )delegate
+             parentVC: (id)parentVC;
 
 - (void)camerasReloadData;
 
