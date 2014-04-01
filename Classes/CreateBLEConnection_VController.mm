@@ -649,8 +649,20 @@
         NSLog(@"Get UDID successfully - udid: %@", stringUDID);
         
         self.cameraMac = [stringUDID substringWithRange:NSMakeRange(6, 12)];
-        NSString *cameraNameFinal = [NSString stringWithFormat:@"%@%@%@", DEFAULT_SSID_HD_PREFIX, [stringUDID substringWithRange:NSMakeRange(2, 4)], [_cameraMac substringFromIndex:6]];
-        self.cameraName = cameraNameFinal;
+        
+        /*
+         * Make sure a valid camera name.
+         */
+
+        if (_selectedPeripheral != nil && _selectedPeripheral.name != nil)
+        {
+            self.cameraName = _selectedPeripheral.name;
+        }
+        else
+        {
+            NSString *cameraNameFinal = [NSString stringWithFormat:@"%@%@%@", DEFAULT_SSID_HD_PREFIX, [stringUDID substringWithRange:NSMakeRange(2, 4)], [_cameraMac substringFromIndex:6]];
+            self.cameraName = cameraNameFinal;
+        }
         
         NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
         

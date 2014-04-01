@@ -30,6 +30,15 @@
 @synthesize isOnBLE = _isOnBLE;
 @synthesize delegate = _delegate;
 
+static BLEConnectionManager *sharedMyManager = nil;
+
++ (BLEConnectionManager *)sharedManager {
+    @synchronized(self) {
+        if(sharedMyManager == nil)
+            sharedMyManager = [[super allocWithZone:NULL] init];
+    }
+    return sharedMyManager;
+}
 
 + (BLEConnectionManager *) getInstanceBLE
 {

@@ -394,7 +394,7 @@
 						  initWithTitle:NSLocalizedStringWithDefaultValue(@"AddCam_Error" ,nil, [NSBundle mainBundle],
                                                                           @"AddCam Error" , nil)
 						  message:[error_response objectForKey:@"message"]
-						  delegate:self
+						  delegate:nil
 						  cancelButtonTitle:ok
 						  otherButtonTitles:nil];
 	[alert show];
@@ -425,6 +425,7 @@
                           cancelButtonTitle:cancel
                           otherButtonTitles:retry, nil];
     alert.delegate = self;
+    alert.tag = ALERT_ASK_FOR_RETRY;
     
     [alert show];
     [alert release];
@@ -501,7 +502,27 @@
            
 
         }
-        
+        else if ([string hasPrefix:@"set_master_key: -1"])
+        {
+            NSString * cancel = NSLocalizedStringWithDefaultValue(@"Cancel",nil, [NSBundle mainBundle],
+                                                                  @"Cancel", nil);
+            
+            NSString * retry = NSLocalizedStringWithDefaultValue(@"Retry",nil, [NSBundle mainBundle],
+                                                                 @"Retry", nil);
+            
+            UIAlertView *alert = [[UIAlertView alloc]
+                                  initWithTitle:NSLocalizedStringWithDefaultValue(@"AddCam_Error" ,nil, [NSBundle mainBundle],
+                                                                                  @"AddCam Error" , nil)
+                                  message:@"Set master return -1"
+                                  delegate:self
+                                  cancelButtonTitle:cancel
+                                  otherButtonTitles:retry, nil];
+            alert.delegate = self;
+            alert.tag = ALERT_ASK_FOR_RETRY;
+            
+            [alert show];
+            [alert release];
+        }
     }
     
 
@@ -543,19 +564,22 @@
 
 - (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex
 {
-    switch(buttonIndex) {
-        case 0: // Cancel
-            
-            break;
-        case 1: // Retry
-            [self.view addSubview:_viewProgress];
-            [self.view bringSubviewToFront:_viewProgress];
-            [self registerCamera:nil];
-            break;
-        default:
-            break;
+    if (alertView.tag == ALERT_ASK_FOR_RETRY)
+    {
+        switch(buttonIndex)
+        {
+            case 0: // Cancel
+                
+                break;
+            case 1: // Retry
+                [self.view addSubview:_viewProgress];
+                [self.view bringSubviewToFront:_viewProgress];
+                [self registerCamera:nil];
+                break;
+            default:
+                break;
+        }
     }
-
 }
 
 @end

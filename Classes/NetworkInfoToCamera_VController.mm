@@ -45,6 +45,7 @@
     [_viewProgress release];
     [super dealloc];
 }
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -106,12 +107,17 @@
     [nextButton release];
     
     self.tfSSID = (UITextField *)[self.ssidCell viewWithTag:202];
-    if (self.tfSSID.text.length > 0) {
+    if (self.tfSSID.text.length > 0)
+    {
         self.navigationItem.rightBarButtonItem .enabled = YES;
         self.navigationItem.rightBarButtonItem.tintColor = [UIColor blueColor];
     }
+    
     self.tfPassword = (UITextField *)[self.passwordCell viewWithTag:200];
+    self.tfPassword.delegate = self;
+    
     self.tfConfirmPass = (UITextField *)[self.confPasswordCell viewWithTag:201];
+    self.tfConfirmPass.delegate = self;
     
     /* initialize transient object here */
 	self.deviceConf = [[[DeviceConfiguration alloc] init] autorelease];
@@ -153,10 +159,13 @@
 {
     //remove delegate
     [BLEConnectionManager getInstanceBLE].delegate = nil;
+    
+    [super viewWillDisappear:animated];
 }
 
 -(void) viewWillAppear:(BOOL)animated
 {
+    [super viewWillAppear:animated];
     
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
     {
@@ -169,11 +178,11 @@
     {
         _sec.text = self.security;
     }
-    
 }
 
 #pragma mark -
 #pragma mark UITextFieldDelegate
+
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
     
     if (textField.tag == 202) { // SSID
@@ -247,48 +256,68 @@
     return YES;
 }
 
-#pragma mark -
-#pragma mark Rotating
-- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
+- (void)textFieldDidBeginEditing:(UITextField *)textField
 {
-    return   ((interfaceOrientation == UIInterfaceOrientationPortrait) ||
-              (interfaceOrientation == UIInterfaceOrientationLandscapeLeft) ||
-              (interfaceOrientation == UIInterfaceOrientationLandscapeRight));
+    if (textField.tag !=202 ) // Dont move if it's the SSID name
+    {
+        [self animateTextField: textField up: YES];
+    }
 }
 
--(BOOL)shouldAutorotate
+- (void)textFieldDidEndEditing:(UITextField *)textField
 {
+    if (textField.tag !=202 ) // Dont move if it's the SSID name
+    {
+        [self animateTextField: textField up: NO];
+    }
+}
+
+- (void) animateTextField: (UITextField*) textField up: (BOOL) up
+{
+    int movementDistance = 80; // tweak as needed
+    
+    const float movementDuration = 0.3f; // tweak as needed
+    
+    UIInterfaceOrientation interfaceOrientation = [UIApplication sharedApplication].statusBarOrientation;
+    
+    
+    if (textField.tag ==201 &&
+        (interfaceOrientation == UIInterfaceOrientationLandscapeLeft ||
+         interfaceOrientation == UIInterfaceOrientationLandscapeRight)
+        ) //Confirm Password cell
+    {
+        movementDistance+= 40;
+    }
+    
+    
+    int movement = (up ? -movementDistance : movementDistance);
+    
+    [UIView beginAnimations: @"anim" context: nil];
+    [UIView setAnimationBeginsFromCurrentState: YES];
+    [UIView setAnimationDuration: movementDuration];
+    self.view.frame = CGRectOffset(self.view.frame, 0, movement);
+    [UIView commitAnimations];
+}
+
+- (BOOL)textFieldShouldReturn:(UITextField *)textField {
+    
+    if (textField.tag == 200) //password
+    {
+        self.password = textField.text;
+        [self.tfConfirmPass becomeFirstResponder];
+    }
+    else if (textField.tag ==201) //conf password
+    {
+        [textField resignFirstResponder];
+    }
+    else
+    {
+        [textField resignFirstResponder];
+        
+        return NO;
+    }
+    
     return YES;
-}
-
--(NSUInteger) supportedInterfaceOrientations
-{
-    return UIInterfaceOrientationMaskAllButUpsideDown;
-}
-
--(void) willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
-{
-    [self adjustViewsForOrientations:toInterfaceOrientation];
-}
-
--(void) adjustViewsForOrientations: (UIInterfaceOrientation) interfaceOrientation
-{
-#if 0
-    if (interfaceOrientation == UIInterfaceOrientationLandscapeLeft ||
-        interfaceOrientation == UIInterfaceOrientationLandscapeRight)
-    {
-        
-    }
-    else if (interfaceOrientation == UIInterfaceOrientationPortrait ||
-             interfaceOrientation == UIInterfaceOrientationPortraitUpsideDown)
-    {
-        
-    }
-#endif
-    
-    
-    //Resign all keyboard...
-    [self hideAllKeyboard];
 }
 
 - (void)hideAllKeyboard
@@ -339,7 +368,6 @@
             {
                 UITextField *tfSsid  = (UITextField*) [ssidCell viewWithTag:202];
                 
-                
                 [tfSsid setUserInteractionEnabled:TRUE];
             }
             return ssidCell;
@@ -358,13 +386,10 @@
             {
                 return confPasswordCell;
             }
-            
         }
-        
     }
     
     return nil;
-    
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
@@ -403,7 +428,6 @@
     
     return 0;
 }
-
 
 
 - (void)tableView: (UITableView *)tableView didSelectRowAtIndexPath: (NSIndexPath *)indexPath
@@ -445,19 +469,13 @@
         {
             UITextField * txtField = (UITextField*) [passwordCell viewWithTag:200];
             [txtField becomeFirstResponder];
-            
         }
         if (indexPath.row == CONFPASSWORD_INDEX)
         {
-            
             UITextField * txtField = (UITextField*) [confPasswordCell viewWithTag:201];
             [txtField becomeFirstResponder];
-            
         }
-        
     }
-    
-    
 }
 
 #pragma  mark -
@@ -562,103 +580,8 @@
             self.password = [NSString stringWithString:[pass text]];
             //NSLog(@"password is : %@", self.password);
             [self sendWifiInfoToCamera ];
-            
         }
     }
-}
-
-
-
-- (void)textFieldDidBeginEditing:(UITextField *)textField
-{
-    if (textField.tag !=202 ) // Dont move if it's the SSID name
-    {
-        
-        [self animateTextField: textField up: YES];
-    }
-}
-
-
-- (void)textFieldDidEndEditing:(UITextField *)textField
-{
-    
-    if (textField.tag !=202 ) // Dont move if it's the SSID name
-    {
-        
-        [self animateTextField: textField up: NO];
-    }
-    
-}
-
-- (void) animateTextField: (UITextField*) textField up: (BOOL) up
-{
-    int movementDistance = 80; // tweak as needed
-    
-    const float movementDuration = 0.3f; // tweak as needed
-    
-    UIInterfaceOrientation interfaceOrientation = [UIApplication sharedApplication].statusBarOrientation;
-    
-    
-    if (textField.tag ==201 &&
-        (interfaceOrientation == UIInterfaceOrientationLandscapeLeft ||
-         interfaceOrientation == UIInterfaceOrientationLandscapeRight)
-        ) //Confirm Password cell
-    {
-        movementDistance+= 40;
-    }
-    
-    
-    int movement = (up ? -movementDistance : movementDistance);
-    
-    [UIView beginAnimations: @"anim" context: nil];
-    [UIView setAnimationBeginsFromCurrentState: YES];
-    [UIView setAnimationDuration: movementDuration];
-    self.view.frame = CGRectOffset(self.view.frame, 0, movement);
-    [UIView commitAnimations];
-}
-
-- (BOOL)textFieldShouldReturn:(UITextField *)textField {
-    
-    if (textField.tag == 200) //password
-    {
-        self.password = textField.text;
-        [textField resignFirstResponder];
-        return NO;
-    }
-    else if (textField.tag ==201) //conf password
-    {
-#if 0
-        NSString * confpass = textField.text;
-        if (![confpass isEqualToString:self.password])
-        {
-            
-            NSLog(@"pass not match: %@ vs %@", confpass, self.password);
-            
-            NSString * msg_fail = NSLocalizedStringWithDefaultValue(@"Confirm_Pass_Fail", nil, [NSBundle mainBundle], @"Le mot de passe ne correspond pas. S'il vous plaît, saisir à nouveau !", nil);
-            //ERROR condition
-            UIAlertView *_alert = [[UIAlertView alloc]
-                                   initWithTitle:@"Confirm Password Failed"
-                                   message:msg_fail
-                                   delegate:self
-                                   cancelButtonTitle:@"OK"
-                                   otherButtonTitles:nil];
-            [_alert show];
-            [_alert release];
-        }
-#endif
-        [textField resignFirstResponder];
-        
-        return NO;
-        
-    }
-    else
-    {
-        [textField resignFirstResponder];
-        
-        return NO;
-    }
-    
-    return YES;
 }
 
 -(void) prepareWifiInfo
@@ -684,12 +607,11 @@
     else if( [self.security isEqualToString:@"wpa"])
     {
         self.deviceConf.securityMode = @"WPA-PSK/WPA2-PSK";
-        
     }
-    else {
+    else
+    {
         self.deviceConf.securityMode= @"OPEN";
     }
-    
     
     self.deviceConf.key = self.password;
     
@@ -703,13 +625,10 @@
         NSLog(@"02 cam password is default: %@", camPass);
     }
     
-    
     self.deviceConf.passWd = camPass;
-    
 }
 
 #pragma mark - BLEConnectionManagerDelegate
-
 
 - (void) didReceiveBLEList:(NSMutableArray *)bleLists
 {
@@ -722,7 +641,7 @@
 
 -(void) bleDisconnected
 {
-    NSLog(@"NWINFO : BLE device is DISCONNECTED - Reconnect after 2s ");
+    NSLog(@"NWINFO : BLE device is DISCONNECTED - Reconnect after 2s - state: %d", stage);
     
     NSDate * date;
     date = [NSDate dateWithTimeInterval:2.0 sinceDate:[NSDate date]];
@@ -735,7 +654,6 @@
     //[[BLEConnectionManager getInstanceBLE] reinit];
     
     [[BLEConnectionManager getInstanceBLE] reScanForPeripheral:[UARTPeripheral uartServiceUUID]];
-    
 }
 
 - (void)dialogFailConnection:(NSTimer *)timer
@@ -764,6 +682,7 @@
     
     _myAlert.tag = RETRY_CONNECTION_BLE_FAIL_TAG;
     _myAlert.delegate = self;
+    [_myAlert release];
 }
 
 
@@ -775,11 +694,9 @@
     }
 }
 
-
-
 - (void) didConnectToBle:(CBUUID*) service_id
 {
-    NSLog(@"BLE device connected - now, last stage:%d",stage);
+    NSLog(@"BLE device connected - now, last stage: %d", stage);
     
     switch (stage)
     {
@@ -789,55 +706,42 @@
             [self readWifiStatusOfCamera:nil];
             break;
             
-        case SENT_CODEC_SUPPORT:
-            
         case INIT:
             NSLog(@"start over!!");
             [self sendWifiInfoToCamera];
             break;
     }
-    
-    
-    
 }
+
 - (void) onReceiveDataError:(int)error_code forCommand:(NSString *)commandToCamera
 {
-    
+    NSLog(@"NetworkInfo - onReceiveDataError: %d, cmd: %@", error_code, commandToCamera);
 }
 
 - (void)didReceiveData:(NSString *)string
 {
-    NSLog(@"Data Receiving is %@", string);
-    NSLog(@"String response at Step06 is %@", string);
+    NSLog(@"NetworkInfoToCameraVC - didReceiveData: %@", string);
     
-    if ([string hasPrefix:GET_CODECS_SUPPORT])
+    if ([string hasPrefix:@"setup_wireless_save" ])
     {
-        NSLog(@"Finishing get codec suppport");
-        if ([string isEqualToString:@"get_codecs_support: -1"])
-        {
-            string = @"get_codecs_support: mgpec";
-        }
+        stage = SENT_WIFI;
         
-        NSString *deviceCodec = string;
-        NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-        [userDefaults setObject:deviceCodec  forKey:CODEC_PREFS];
-        [userDefaults synchronize];
-    }
-    else if ([string hasPrefix:@"setup_wireless_save" ])
-    {
         NSLog(@"Finishing SETUP_HTTP_COMMAND");
     }
     else if ([string hasPrefix:GET_STATE_NETWORK_CAMERA])
     {
+        stage = CHECKING_WIFI;
         
         NSLog(@"Recv: %@", string);
         NSString *state = string;
         NSString *_currentStateCamera;
+     
         if (state != nil && [state length] > 0)
         {
             _currentStateCamera = [[state componentsSeparatedByString:@": "] objectAtIndex:1];
         }
-        else{
+        else
+        {
             _currentStateCamera = @"";
         }
         
@@ -852,17 +756,7 @@
                 [self.navigationController.navigationBar setUserInteractionEnabled:YES];
                 
             });
-            
-            
-            
         }
-        //        else if ([_currentStateCamera isEqualToString:@"DISCONNECTED"])
-        //        {
-        //            //Handle Wrong password!!!!
-        //            //XXX:
-        //
-        //
-        //        }
         else
         {
             dispatch_async(dispatch_get_main_queue(), ^{
@@ -895,8 +789,6 @@
                 [self readWifiStatusOfCamera:nil];
                 break;
                 
-            case SENT_CODEC_SUPPORT:
-                
             case INIT:
                 NSLog(@"start over!!");
                 [self sendWifiInfoToCamera];
@@ -908,6 +800,8 @@
     
 }
 
+#pragma mark - Methods
+
 - (void)sendCommandRestartSystem
 {
     NSLog(@"Send RESTART Command, now");
@@ -915,10 +809,8 @@
     [[BLEConnectionManager getInstanceBLE].uartPeripheral writeString:RESTART_HTTP_CMD withTimeOut:SHORT_TIME_OUT_SEND_COMMAND];
     NSDate * date;
     
-    
     if ([BLEConnectionManager getInstanceBLE].uartPeripheral.isBusy  )
     {
-        
         date = [NSDate dateWithTimeInterval:1.5 sinceDate:[NSDate date]];
         
         [[NSRunLoop currentRunLoop] runUntilDate:date];
@@ -927,16 +819,15 @@
         {
             NSLog(@"BLE still busy, camera may have already rebooted. Moving on..");
         }
-        
     }
 }
+
 - (BOOL)sendCommandHTTPSetup
 {
-    
     NSLog(@"Send command SETUP HTTP Command, now");
     if ([BLEConnectionManager getInstanceBLE].state != CONNECTED)
     {
-        NSLog(@"sendCommandHTTPSetup:  BLE disconnected - ");
+        NSLog(@"sendCommandHTTPSetup:  BLE disconnected - stage: %d", stage);
         return FALSE;
     }
     
@@ -961,7 +852,7 @@
         [[NSRunLoop currentRunLoop] runUntilDate:date];
     }
     
-    NSLog(@"After sending Save Wireless wait for 3sec");
+    NSLog(@"After sending Save Wireless wait for 3sec, after that - return TRUE");
     date = [NSDate dateWithTimeInterval:3 sinceDate:[NSDate date]];
     [[NSRunLoop currentRunLoop] runUntilDate:date];
     
@@ -971,7 +862,6 @@
 
 - (BOOL)sendCommandCodecSupport
 {
-    
     NSLog(@"now, Send command get code support!!!!");
     if ([BLEConnectionManager getInstanceBLE].state != CONNECTED)
     {
@@ -991,10 +881,12 @@
     
     return TRUE;
 }
+
 -(void)sendWifiInfoToCamera
 {
+    [self.view endEditing:YES];
     //will hide keyboard
-    [self hideAllKeyboard];
+    //[self hideAllKeyboard];
     //should hide back in navigation bar
     self.navigationItem.hidesBackButton = YES;
     // should be show dialog here, make sure user input username and password
@@ -1013,42 +905,30 @@
     {
         [Util writeDeviceConfigurationData:[_deviceConf getWritableConfiguration]];
     }
-    
-    
-    
-    
-    
+
     stage = INIT;
+
+    [BLEConnectionManager getInstanceBLE].delegate = self;
     
-    
-    if ([self sendCommandCodecSupport])
+    if ([self sendCommandHTTPSetup])
     {
+        /*
+         * Move cmd below to didReceiveData: delegate
+         */
         
-        stage = SENT_CODEC_SUPPORT;
+        //stage = SENT_WIFI;
         
-        
-        if ([self sendCommandHTTPSetup])
-        {
-            stage = SENT_WIFI;
-            
-            [self readWifiStatusOfCamera:nil];
-            
-        }
-    }
-    else
-    {
-        //BLE disconnected, will retry connect
+        [self readWifiStatusOfCamera:nil];
     }
 }
 
 -(void) readWifiStatusOfCamera:(NSTimer *) exp
 {
-    
-    
     NSLog(@"now,readWifiStatusOfCamera");
+    
     if ([BLEConnectionManager getInstanceBLE].state != CONNECTED)
     {
-        NSLog(@"!!!!!! sendCommandCodecSupport:  BLE disconnected - ");
+        NSLog(@"NITC_VC - readWifiStatusOfCamera - BLE disconnected - stage: %d", stage);
         return ;
     }
     
@@ -1057,7 +937,11 @@
     
     NSLog(@"Finished sending: %@",GET_STATE_NETWORK_CAMERA);
     
-    stage = CHECKING_WIFI;
+    
+    /*
+     * Move cmd below to didReceiveData: delegate
+     */
+    //stage = CHECKING_WIFI;
     
     NSDate * date;
     while ([BLEConnectionManager getInstanceBLE].uartPeripheral.isBusy)
@@ -1066,15 +950,12 @@
         
         [[NSRunLoop currentRunLoop] runUntilDate:date];
     }
-    
-    return ;
-    
 }
 
 - (void) showNextScreen
 {
     
-    NSLog(@"SSID: %@   - %@", self.ssid, self.deviceConf.ssid );
+    NSLog(@"NetworkInfo - SSID: %@   - %@", self.ssid, self.deviceConf.ssid );
     
     DeviceConfiguration * sent_conf = [[DeviceConfiguration alloc] init];
     
@@ -1094,26 +975,8 @@
     
     //Load the next xib
     
-    Step_10_ViewController_ble *step10ViewController = nil;
-    
-    
-    //    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
-    //    {
-    //
-    //
-    //        step10ViewController = [[Step_10_ViewController_ble alloc]
-    //                                initWithNibName:@"Step_10_ViewController_ble_ipad" bundle:nil];
-    //
-    //    }
-    //    else
-    {
-        
-        step10ViewController = [[Step_10_ViewController_ble alloc]
+    Step_10_ViewController_ble *step10ViewController = [[Step_10_ViewController_ble alloc]
                                 initWithNibName:@"Step_10_ViewController_ble" bundle:nil];
-        
-    }
-    
-    
     
     [self.navigationController pushViewController:step10ViewController animated:NO];
     [step10ViewController release];
