@@ -15,6 +15,8 @@
 @property (retain, nonatomic) IBOutlet UITextField *tfCamName;
 @property (retain, nonatomic) IBOutlet UIButton *btnContinue;
 @property (retain, nonatomic) IBOutlet UIView *viewProgress;
+
+@property (retain, nonatomic) NSString *authToken;
 @end
 
 @implementation EditCamera_VController
@@ -339,7 +341,7 @@
 - (void) addCamSuccessWithResponse:(NSDictionary *)responseData
 {
     NSLog(@"addcam response: %@", responseData);
-    _auth_token = [[responseData objectForKey:@"data"] objectForKey:@"auth_token"];
+    self.authToken = [[responseData objectForKey:@"data"] objectForKey:@"auth_token"];
     /*
          - send auto_token to camera
      */
@@ -350,7 +352,7 @@
 - (void)sendCommandAuth_TokenToCamera
 {
     NSString * set_mkey = SET_MASTER_KEY;
-    set_mkey =[set_mkey stringByAppendingString:_auth_token];
+    set_mkey =[set_mkey stringByAppendingString:_authToken];
     
     if ([BLEConnectionManager getInstanceBLE].state != CONNECTED)
     {
