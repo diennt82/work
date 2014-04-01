@@ -40,6 +40,7 @@
 
 - (IBAction)addCameraButtonTouchAction:(id)sender;
 - (IBAction)buyCameraButtonTouchAction:(id)sender;
+- (IBAction)addCameraButtonTouchDownAction:(id)sender;
 @property (retain, nonatomic) NSArray *snapshotImages;
 @property (nonatomic) BOOL isFirttime;
 
@@ -110,6 +111,9 @@
 
 - (IBAction)addCameraButtonTouchAction:(id)sender
 {
+    [self.ibBGAddCamera setImage:[UIImage imageNamed:@"add_camera_btn"]];
+    [self.ibIconAddCamera setImage:[UIImage imageNamed:@"add_camera"]];
+    [self.ibTextAddCamera setTextColor:[UIColor whiteColor]];
     if (_camChannels.count > MAX_CAM_ALLOWED)
     {
         [self cameraShowDialog:DIALOG_CANT_ADD_CAM];
@@ -128,6 +132,12 @@
 }
 
 - (IBAction)buyCameraButtonTouchAction:(id)sender {
+}
+
+- (IBAction)addCameraButtonTouchDownAction:(id)sender {
+    [self.ibBGAddCamera setImage:[UIImage imageNamed:@"add_camera_btn_pressed"]];
+    [self.ibIconAddCamera setImage:[UIImage imageNamed:@"add_camera_pressed"]];
+    [self.ibTextAddCamera setTextColor:[UIColor deSelectedAddCameraTextColor]];
 }
 
 #pragma mark - Cameras Cell Delegate
@@ -355,6 +365,20 @@
         
         CamChannel *ch = (CamChannel *)[_camChannels objectAtIndex:indexPath.row];
         cell.ibCameraNameLabel.text = ch.profile.name;
+        NSString *boundCameraName = ch.profile.name;
+        CGSize size = [boundCameraName sizeWithFont:[UIFont fontWithName:PN_SEMIBOLD_FONT size:18]];
+        if (size.width > 154)
+        {
+            [cell.ibCameraNameLabel setFrame:CGRectMake(165, 0, 154, 30)];
+            [cell.ibCameraNameLabel setFont:[UIFont fontWithName:PN_SEMIBOLD_FONT size:15]];
+            [cell.ibCameraNameLabel setNumberOfLines:2];
+        }
+        else
+        {
+            [cell.ibCameraNameLabel setFrame:CGRectMake(165, 15, 154, 18)];
+            [cell.ibCameraNameLabel setFont:[UIFont fontWithName:PN_SEMIBOLD_FONT size:15]];
+            [cell.ibCameraNameLabel setNumberOfLines:1];
+        }
         
         // Camera is NOT available
         if ([ch.profile isNotAvailable])
@@ -372,7 +396,7 @@
             
             if ([ch.profile.registrationID isEqualToString:regID])
             {
-                [cell.ibBGColorCameraSelected setBackgroundColor:[UIColor blueColor]];
+                [cell.ibBGColorCameraSelected setBackgroundColor:[UIColor selectCameraItemColor]];
             }
             else
             {

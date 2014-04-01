@@ -29,5 +29,7 @@
 
 + (UIColor *)deSelectedAddCameraTextColor;
 + (UIColor *)deSelectedBuyCameraTextColor;
++ (UIColor *)selectCameraItemColor;
+
 
 @end

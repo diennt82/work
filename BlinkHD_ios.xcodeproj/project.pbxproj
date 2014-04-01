@@ -672,6 +672,8 @@
 		A120548318BC3AAD00557C1A /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A120548218BC3AAD00557C1A /* MediaPlayer.framework */; };
 		A1239E86186185F200A25A04 /* AudioOutStreamer.m in Sources */ = {isa = PBXBuildFile; fileRef = A1239E85186185F200A25A04 /* AudioOutStreamer.m */; };
 		A12A9D8A18B1DF4C004987F2 /* UIImage+Hubble.m in Sources */ = {isa = PBXBuildFile; fileRef = A12A9D8918B1DF4C004987F2 /* UIImage+Hubble.m */; };
+		A1322D0A18EA6FE60019E525 /* add_camera_btn_pressed.png in Resources */ = {isa = PBXBuildFile; fileRef = A1322D0818EA6FE60019E525 /* add_camera_btn_pressed.png */; };
+		A1322D0B18EA6FE60019E525 /* add_camera_btn_pressed@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A1322D0918EA6FE60019E525 /* add_camera_btn_pressed@2x.png */; };
 		A1382CA218D6D222006D99A2 /* MHTabBarController.m in Sources */ = {isa = PBXBuildFile; fileRef = A1382CA118D6D222006D99A2 /* MHTabBarController.m */; };
 		A13AD81018D008110009F0E5 /* DoNotDisturbCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A13AD80F18D008110009F0E5 /* DoNotDisturbCell.m */; };
 		A13AD81218D008490009F0E5 /* DoNotDisturbCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = A13AD81118D008490009F0E5 /* DoNotDisturbCell.xib */; };
@@ -1570,6 +1572,8 @@
 		A123DC9717E9A748006CC6FD /* PlayerCallbackHandler.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PlayerCallbackHandler.h; sourceTree = "<group>"; };
 		A12A9D8818B1DF4B004987F2 /* UIImage+Hubble.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+Hubble.h"; sourceTree = "<group>"; };
 		A12A9D8918B1DF4C004987F2 /* UIImage+Hubble.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+Hubble.m"; sourceTree = "<group>"; };
+		A1322D0818EA6FE60019E525 /* add_camera_btn_pressed.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = add_camera_btn_pressed.png; sourceTree = "<group>"; };
+		A1322D0918EA6FE60019E525 /* add_camera_btn_pressed@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "add_camera_btn_pressed@2x.png"; sourceTree = "<group>"; };
 		A1382CA018D6D222006D99A2 /* MHTabBarController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MHTabBarController.h; sourceTree = "<group>"; };
 		A1382CA118D6D222006D99A2 /* MHTabBarController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MHTabBarController.m; sourceTree = "<group>"; };
 		A13AD80E18D008110009F0E5 /* DoNotDisturbCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DoNotDisturbCell.h; sourceTree = "<group>"; };
@@ -2706,6 +2710,10 @@
 				8B299EF618AF500900D36BE5 /* add_camera@2x.png */,
 				8B299EF718AF500900D36BE5 /* add_camera_pressed.png */,
 				8B299EF818AF500900D36BE5 /* add_camera_pressed@2x.png */,
+				A1B1E7A018E9135800F076B6 /* add_camera_btn.png */,
+				A1B1E7A118E9135800F076B6 /* add_camera_btn@2x.png */,
+				A1322D0818EA6FE60019E525 /* add_camera_btn_pressed.png */,
+				A1322D0918EA6FE60019E525 /* add_camera_btn_pressed@2x.png */,
 				8B299EF918AF500900D36BE5 /* back.png */,
 				8B299EFA18AF500900D36BE5 /* back@2x.png */,
 				8B299EFB18AF500900D36BE5 /* back_pressed.png */,
@@ -2716,8 +2724,6 @@
 				8B299F0018AF500900D36BE5 /* menu_settings@2x.png */,
 				8B299F0118AF500900D36BE5 /* menu_settings_pressed.png */,
 				8B299F0218AF500900D36BE5 /* menu_settings_pressed@2x.png */,
-				A1B1E7A018E9135800F076B6 /* add_camera_btn.png */,
-				A1B1E7A118E9135800F076B6 /* add_camera_btn@2x.png */,
 				A1B1E7A218E9135800F076B6 /* add_camera_pressed.png */,
 				A1B1E7A318E9135800F076B6 /* add_camera_pressed@2x.png */,
 				A1B1E7A418E9135800F076B6 /* add_camera.png */,
@@ -4165,6 +4171,7 @@
 				8B29A01F18AF500900D36BE5 /* loader_c@2x.png in Resources */,
 				8B29A08318AF500A00D36BE5 /* video_player_bg.png in Resources */,
 				8B29A04C18AF500A00D36BE5 /* settings_circle@2x.png in Resources */,
+				A1322D0A18EA6FE60019E525 /* add_camera_btn_pressed.png in Resources */,
 				8B9384851856E613009C4771 /* CameraSettingsViewController.xib in Resources */,
 				8B9AF69F1858179900AC09C3 /* ScheduleViewController.xib in Resources */,
 				8B9112DC1860372D004301C5 /* Hubble-Notif.png in Resources */,
@@ -4332,6 +4339,7 @@
 				8BA8AE881821F3E900DC9E9F /* stream720p_10_926.sdp in Resources */,
 				8B299F7718AF500900D36BE5 /* camera_action_mic_land.png in Resources */,
 				8B299F9818AF500900D36BE5 /* photo_grey_land@2x.png in Resources */,
+				A1322D0B18EA6FE60019E525 /* add_camera_btn_pressed@2x.png in Resources */,
 				8B299F5E18AF500900D36BE5 /* alert_play@2x.png in Resources */,
 				8BA7F2821851C57200BE0145 /* blink11hd480p.sdp in Resources */,
 				8B29A06D18AF500A00D36BE5 /* vertcal_video_close.png in Resources */,

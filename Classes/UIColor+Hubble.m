@@ -97,4 +97,8 @@
 {
     return Rgb2UIColor(172, 227, 128);
 }
++ (UIColor *)selectCameraItemColor
+{
+    return Rgb2UIColor(96, 170, 244);
+}
 @end
