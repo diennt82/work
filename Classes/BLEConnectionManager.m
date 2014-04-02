@@ -51,6 +51,7 @@ static BLEConnectionManager *sharedMyManager = nil;
     });
     return _sharedInstance;
 }
+
 -(void ) reinit
 {
     [_cm release];
@@ -68,6 +69,7 @@ static BLEConnectionManager *sharedMyManager = nil;
         _uartPeripheral = [[UARTPeripheral alloc] initWithPeripheral:nil delegate:self];
         _cm = [[CBCentralManager alloc] initWithDelegate:self queue:nil];
     }
+    
     return self;
 }
 
@@ -87,8 +89,6 @@ static BLEConnectionManager *sharedMyManager = nil;
     return _uartPeripheral;
 }
 
-
-
 /** Scan for peripherals - specifically for our service's 128bit CBUUID
  */
 - (void)scan
@@ -105,11 +105,12 @@ static BLEConnectionManager *sharedMyManager = nil;
         NSLog(@"Scanning started");
         [_cm scanForPeripheralsWithServices:nil options:@{CBCentralManagerScanOptionAllowDuplicatesKey: [NSNumber numberWithBool:NO]}];
     }
-    else{
+    else
+    {
         NSLog(@"can't scan");
     }
-    [self.listBLEs removeAllObjects];
     
+    [self.listBLEs removeAllObjects];
 }
 
 - (void)reScan
@@ -139,27 +140,20 @@ static BLEConnectionManager *sharedMyManager = nil;
     
     [_cm scanForPeripheralsWithServices:@[dev_service_id]
                                 options:@{CBCentralManagerScanOptionAllowDuplicatesKey: [NSNumber numberWithBool:NO]}];
-    
 }
 
 -(void) disconnect
 {
-    
     if ([_uartPeripheral.peripheral isConnected])
     {
         [[BLEConnectionManager getInstanceBLE].cm cancelPeripheralConnection:_uartPeripheral.peripheral];
     }
-    
-    
 }
-
 
 + (ConnectionState)checkStatusConnectBLE
 {
     return [BLEConnectionManager getInstanceBLE].state;
 }
-
-
 
 /**
  * Call this when select a BLE in table to connect
@@ -169,15 +163,12 @@ static BLEConnectionManager *sharedMyManager = nil;
     NSLog(@"Connect to BLE with name is %@", peripheral.name);
     
     self.state = CONNECTING;
-
     
     self.uartPeripheral = [[UARTPeripheral alloc] initWithPeripheral:peripheral delegate:self];
     
     [_cm connectPeripheral:self.uartPeripheral.peripheral
                    options:@{CBConnectPeripheralOptionNotifyOnDisconnectionKey: [NSNumber numberWithBool:YES]}];
 }
-
-
 
 #pragma mark - Callbacks
 
@@ -191,7 +182,7 @@ static BLEConnectionManager *sharedMyManager = nil;
 
 - (void) didReceiveRawData:(NSData *)data
 {
-    
+    NSLog(@"BLEManager - didReceiveRawData: %@", data);
 }
 
 - (void) onReceiveDataError:(int)error_code forCommand:(NSString *)commandToCamera
@@ -204,7 +195,6 @@ static BLEConnectionManager *sharedMyManager = nil;
     }
     else
     {
-        
         if (self.delegate != nil)
         {
             [self.delegate onReceiveDataError:error_code forCommand:commandToCamera];
@@ -222,10 +212,7 @@ static BLEConnectionManager *sharedMyManager = nil;
     if (self.delegate != nil)
     {
         [self.delegate  didConnectToBle:nil];
-
     }
-
-   
 }
 
 #pragma mark - CBCentralManagerDelegate
@@ -236,12 +223,7 @@ static BLEConnectionManager *sharedMyManager = nil;
         // In a real app, you'd deal with all the states correctly
         NSLog(@"BLE IS ON ");
         self.isOnBLE = YES;
-        
-        
-        
         [self scan];
-        
-        
     }
     else
     {
@@ -250,16 +232,10 @@ static BLEConnectionManager *sharedMyManager = nil;
     }
 }
 
-
 - (void) centralManager:(CBCentralManager *)central didDiscoverPeripheral:(CBPeripheral *)peripheral advertisementData:(NSDictionary *)advertisementData RSSI:(NSNumber *)RSSI
-
 {
-    
-    
     if (scanMode == SCAN_FOR_ANY_DEVICE)
     {
-        
-        
         if ([peripheral.name hasPrefix:@"MBP83"] ||
             [peripheral.name hasPrefix:@"CameraHD-0083"] ||
             [peripheral.name hasPrefix:@"CameraHD-0836"]  ||
@@ -276,20 +252,31 @@ static BLEConnectionManager *sharedMyManager = nil;
                 {
                     [  self.delegate didReceiveBLEList:self.listBLEs];
                 }
+                else
+                {
+                    NSLog(@"BLE manager - didDiscoverPeripheral - self.delegate == nil");
+                }
+            }
+            else
+            {
+                NSLog(@"BLE manager - didDiscoverPeripheral - list contains peripheral");
             }
         }
     }
     else if ( scanMode == SCAN_FOR_SINGLE_DEVICE)
     {
-        
         NSLog(@"Did discover Single device :  name %@ and peripheral is %@", peripheral.name, peripheral);
         NSLog(@"Connect again!!");
         
         //called if found that service id?
         [self connectToBLEWithPeripheral:peripheral];
-        
+    }
+    else
+    {
+        NSLog(@"BLE manager - didDiscoverPeripheral - scanMode: %d", scanMode);
     }
 }
+
 - (void) centralManager:(CBCentralManager *)central didConnectPeripheral:(CBPeripheral *)peripheral
 {
     NSLog(@"Did connect peripheral %@", peripheral.name);
@@ -297,25 +284,20 @@ static BLEConnectionManager *sharedMyManager = nil;
     if ([_uartPeripheral.peripheral isEqual:peripheral])
     {
         [_uartPeripheral didConnect];
-        
     }
 }
-
 
 - (void)centralManager:(CBCentralManager *)central didFailToConnectPeripheral:(CBPeripheral *)peripheral error:(NSError *)error
 {
     NSLog(@" FailToConnectPeripheral %@ with error: %@", peripheral.name , error.description);
     
     self.state = DISCONNECTED;
-    
 }
 
 /** Once the disconnection happens, we need to clean up our local copy of the peripheral
  */
 - (void) centralManager:(CBCentralManager *)central didDisconnectPeripheral:(CBPeripheral *)peripheral error:(NSError *)error
-
 {
-    
     NSLog(@"didDisconnectPeripheral %@ with error: %@", peripheral.name , error.description);
   
     self.state = DISCONNECTED;
@@ -325,8 +307,6 @@ static BLEConnectionManager *sharedMyManager = nil;
     {
         [self.delegate bleDisconnected];
     }
-    
-   
     
     if ([self.uartPeripheral.peripheral isEqual:peripheral])
         

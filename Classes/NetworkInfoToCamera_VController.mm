@@ -722,11 +722,14 @@
 {
     NSLog(@"NetworkInfoToCameraVC - didReceiveData: %@", string);
     
-    if ([string hasPrefix:@"setup_wireless_save" ])
+    if ([string hasPrefix:@"setup_wireless_save"])
     {
         stage = SENT_WIFI;
         
         NSLog(@"Finishing SETUP_HTTP_COMMAND");
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self readWifiStatusOfCamera:nil];
+        });
     }
     else if ([string hasPrefix:GET_STATE_NETWORK_CAMERA])
     {
@@ -918,7 +921,7 @@
         
         //stage = SENT_WIFI;
         
-        [self readWifiStatusOfCamera:nil];
+        //[self readWifiStatusOfCamera:nil];
     }
 }
 
@@ -949,6 +952,8 @@
         date = [NSDate dateWithTimeInterval:1.5 sinceDate:[NSDate date]];
         
         [[NSRunLoop currentRunLoop] runUntilDate:date];
+        
+        NSLog(@"NetworkInfo_VC - readWifiStatusOfCamera BLE isBusy");
     }
 }
 
