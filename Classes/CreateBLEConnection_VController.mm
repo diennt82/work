@@ -12,6 +12,7 @@
 #import "CustomIOS7AlertView.h"
 
 #define BTN_CONTINUE_TAG 599
+#define BLE_TIMEOUT_PROCESS 5*60
 
 @interface CreateBLEConnection_VController () <CustomIOS7AlertViewDelegate>
 
@@ -23,6 +24,7 @@
 @property (retain, nonatomic) CBPeripheral *selectedPeripheral;
 @property (retain, nonatomic) CustomIOS7AlertView *alertView;
 @property (retain, nonatomic) NSTimer *timerTimeoutConnectBLE;
+@property (retain, nonatomic) NSTimer *timerScanCameraBLEDone;
 @property (nonatomic) BOOL shouldTimeoutProcessing;
 @property (nonatomic, retain) UIButton *btnContinue;
 @property (nonatomic) BOOL rescanFlag;
@@ -98,6 +100,11 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+    {
+        self.viewError.frame = CGRectMake(0, 0, UIScreen.mainScreen.bounds.size.width, UIScreen.mainScreen.bounds.size.height);
+    }
     
     [self createBLEConnectionRescan:FALSE];
 }
@@ -204,6 +211,12 @@
 {
     self.shouldTimeoutProcessing = TRUE;
     
+    if (_timerScanCameraBLEDone)
+    {
+        [self.timerScanCameraBLEDone invalidate];
+        self.timerScanCameraBLEDone = nil;
+    }
+    
     [self.viewProgress removeFromSuperview];
     [self customIOS7dialogButtonTouchUpInside:_alertView clickedButtonAtIndex:0];
     
@@ -295,6 +308,8 @@
     [self.view addSubview:_viewProgress];
     [self.view bringSubviewToFront:_viewProgress];
     
+    task_cancelled = NO;
+    
     [BLEConnectionManager getInstanceBLE].delegate = self;
     
     if (rescanFlag)
@@ -306,7 +321,13 @@
         [[BLEConnectionManager getInstanceBLE] scan];
     }
     
-    [NSTimer scheduledTimerWithTimeInterval:5.0 target:self selector:@selector(scanCameraBLEDone) userInfo:nil repeats:NO];
+    if (_timerTimeoutConnectBLE)
+    {
+        [self.timerScanCameraBLEDone invalidate];
+        self.timerScanCameraBLEDone = nil;
+    }
+    
+    self.timerScanCameraBLEDone = [NSTimer scheduledTimerWithTimeInterval:5.0 target:self selector:@selector(scanCameraBLEDone) userInfo:nil repeats:NO];
     
     if (_timerTimeoutConnectBLE != nil)
     {
@@ -314,7 +335,7 @@
         self.timerTimeoutConnectBLE = nil;
     }
     
-    self.timerTimeoutConnectBLE = [NSTimer scheduledTimerWithTimeInterval:5*60
+    self.timerTimeoutConnectBLE = [NSTimer scheduledTimerWithTimeInterval:BLE_TIMEOUT_PROCESS
                                                                    target:self
                                                                  selector:@selector(timeoutBLESetupProcessing:)
                                                                  userInfo:nil
@@ -332,6 +353,8 @@
 
 - (void)scanCameraBLEDone
 {
+    NSLog(@"CreateBLEConnection_VC - scanCameraBLEDone - task_cancelled: %d, - _currentBLEList count: %d, - shouldTimeoutProcessing: %d", task_cancelled, _currentBLEList.count, _shouldTimeoutProcessing);
+    
     if (task_cancelled == TRUE)
     {
         return;
@@ -340,19 +363,12 @@
     if ([_currentBLEList count] == 0) //NO camera found
     {
         NSLog(@"No BLE device found! schedule next check ");
-        
-        if (_shouldTimeoutProcessing)
-        {
-            NSLog(@"CreateBLEConnection_VC - scanCameraBLEDone - Timeout");
-        }
-        else
-        {
-            [NSTimer scheduledTimerWithTimeInterval:5.0
-                                             target:self
-                                           selector:@selector(scanCameraBLEDone)
-                                           userInfo:nil
-                                            repeats:NO];
-        }
+
+        self.timerScanCameraBLEDone = [NSTimer scheduledTimerWithTimeInterval:5.0
+                                                                       target:self
+                                                                     selector:@selector(scanCameraBLEDone)
+                                                                     userInfo:nil
+                                                                      repeats:NO];
         //Check again
     }
     else
@@ -618,6 +634,12 @@
         {
             [self.timerTimeoutConnectBLE invalidate];
             self.timerTimeoutConnectBLE = nil;
+        }
+        
+        if (_timerScanCameraBLEDone)
+        {
+            [self.timerScanCameraBLEDone invalidate];
+            self.timerScanCameraBLEDone = nil;
         }
     }
     else if (  [stringResponse rangeOfString:GET_UDID].location != NSNotFound)

@@ -250,7 +250,7 @@ static BLEConnectionManager *sharedMyManager = nil;
                 
                 if (self.delegate != nil)
                 {
-                    [  self.delegate didReceiveBLEList:self.listBLEs];
+                    [self.delegate didReceiveBLEList:self.listBLEs];
                 }
                 else
                 {

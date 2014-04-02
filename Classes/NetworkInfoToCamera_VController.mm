@@ -10,12 +10,23 @@
 #import "Step_10_ViewController_ble.h"
 #import "define.h"
 
+#define BTN_CONTINUE_TAG    599
+#define BTN_TRY_AGAIN_TAG   559
+#define BLE_TIMEOUT_PROCESS 5*60
+
 @interface NetworkInfoToCamera_VController () <UITextFieldDelegate>
 
 @property (retain, nonatomic) IBOutlet UIView *viewProgress;
+@property (retain, nonatomic) IBOutlet UIView *viewError;
+
 @property (retain, nonatomic) UITextField *tfSSID;
 @property (retain, nonatomic) UITextField *tfPassword;
 @property (retain, nonatomic) UITextField *tfConfirmPass;
+
+@property (retain, nonatomic) NSTimer *timerTimeoutConnectBLE;
+@property (nonatomic) BOOL shouldTimeoutProcessing;
+@property (nonatomic, retain) UIButton *btnContinue;
+@property (nonatomic, retain) UIButton *btnTryAgain;
 
 @end
 
@@ -61,6 +72,16 @@
                                      target:nil
                                      action:nil] autorelease];
     self.navigationItem.hidesBackButton = NO;
+    
+    self.btnContinue = (UIButton *)[_viewError viewWithTag:BTN_CONTINUE_TAG];
+    [self.btnContinue setBackgroundImage:[UIImage imageNamed:@"green_btn"] forState:UIControlStateNormal];
+    [self.btnContinue setBackgroundImage:[UIImage imageNamed:@"green_btn_pressed"] forState:UIControlEventTouchDown];
+    [self.btnContinue addTarget:self action:@selector(btnContinueTouchUpInsideAction:) forControlEvents:UIControlEventTouchUpInside];
+    
+    self.btnTryAgain = (UIButton *)[_viewError viewWithTag:BTN_TRY_AGAIN_TAG];
+    [self.btnTryAgain setBackgroundImage:[UIImage imageNamed:@"green_btn"] forState:UIControlStateNormal];
+    [self.btnTryAgain setBackgroundImage:[UIImage imageNamed:@"green_btn_pressed"] forState:UIControlEventTouchDown];
+    [self.btnTryAgain addTarget:self action:@selector(btnTryAgainTouchUpInsideAction:) forControlEvents:UIControlEventTouchUpInside];
     
     UIImageView *imageView = (UIImageView *)[_viewProgress viewWithTag:595];
     imageView.animationImages =[NSArray arrayWithObjects:
@@ -169,7 +190,10 @@
     
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
     {
-        self.viewProgress.frame = CGRectMake(0, 0, UIScreen.mainScreen.bounds.size.width, UIScreen.mainScreen.bounds.size.height);
+        CGRect rect = CGRectMake(0, 0, UIScreen.mainScreen.bounds.size.width, UIScreen.mainScreen.bounds.size.height);
+        
+        self.viewProgress.frame = rect;
+        self.viewError.frame = rect;
     }
     
     NSLog(@"update security type");
@@ -178,6 +202,54 @@
     {
         _sec.text = self.security;
     }
+}
+
+#pragma mark - Actions
+
+- (IBAction)btnContinueTouchUpInsideAction:(id)sender
+{
+    NSLog(@"NetworkInfo - btnContinueTouchUpInsideAction");
+    
+    [self.viewError removeFromSuperview];
+    
+    [self.view addSubview:_viewProgress];
+    [self.view bringSubviewToFront:_viewProgress];
+    
+    self.shouldTimeoutProcessing = FALSE;
+    
+    [self rescanToConnectToBLE];
+    
+    if (_timerTimeoutConnectBLE != nil)
+    {
+        [self.timerTimeoutConnectBLE invalidate];
+        self.timerTimeoutConnectBLE = nil;
+    }
+    
+    self.timerTimeoutConnectBLE = [NSTimer scheduledTimerWithTimeInterval:BLE_TIMEOUT_PROCESS
+                                                                   target:self
+                                                                 selector:@selector(timeoutBLESetupProcessing:)
+                                                                 userInfo:nil
+                                                                  repeats:NO];
+}
+
+- (IBAction)btnTryAgainTouchUpInsideAction:(UIButton *)sender
+{
+    NSLog(@"NetworkInfo - btnTryAgainTouchUpInsideAction");
+    sender.enabled = NO;
+    
+    BMS_JSON_Communication *jsonComm = [[[BMS_JSON_Communication alloc] initWithObject:self
+                                                                              Selector:@selector(removeCamSuccessWithResponse:)
+                                                                          FailSelector:@selector(removeCamFailedWithError:)
+                                                                             ServerErr:@selector(removeCamFailedServerUnreachable)] autorelease];
+    
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    NSString *stringUDID = [userDefaults stringForKey:CAMERA_UDID];
+    NSString *apiKey     = [userDefaults objectForKey:@"PortalApiKey"];
+    
+    [jsonComm deleteDeviceWithRegistrationId:stringUDID
+                                   andApiKey:apiKey];
+    
+    [self.navigationController popToRootViewControllerAnimated:YES];
 }
 
 #pragma mark -
@@ -550,6 +622,21 @@
     if ([self.security isEqualToString:@"open"])
     {
         //cont
+        if (_timerTimeoutConnectBLE != nil)
+        {
+            [self.timerTimeoutConnectBLE invalidate];
+            self.timerTimeoutConnectBLE = nil;
+        }
+        
+        NSLog(@"NetworkInfo - handleNextButton - Create time out ble setup process, open wifi");
+        
+        self.timerTimeoutConnectBLE = [NSTimer scheduledTimerWithTimeInterval:BLE_TIMEOUT_PROCESS
+                                                                       target:self
+                                                                     selector:@selector(timeoutBLESetupProcessing:)
+                                                                     userInfo:nil
+                                                                      repeats:NO];
+        self.navigationItem.rightBarButtonItem.enabled = NO;
+        
         [self sendWifiInfoToCamera];
     }
     else
@@ -579,9 +666,36 @@
             //cont
             self.password = [NSString stringWithString:[pass text]];
             //NSLog(@"password is : %@", self.password);
+            NSLog(@"NetworkInfo - handleNextButton - Create time out ble setup process");
+            
+            if (_timerTimeoutConnectBLE != nil)
+            {
+                [self.timerTimeoutConnectBLE invalidate];
+                self.timerTimeoutConnectBLE = nil;
+            }
+            
+            self.timerTimeoutConnectBLE = [NSTimer scheduledTimerWithTimeInterval:BLE_TIMEOUT_PROCESS
+                                                                           target:self
+                                                                         selector:@selector(timeoutBLESetupProcessing:)
+                                                                         userInfo:nil
+                                                                          repeats:NO];
+            self.navigationItem.rightBarButtonItem.enabled = NO;
+            
             [self sendWifiInfoToCamera ];
         }
     }
+}
+
+- (void)timeoutBLESetupProcessing:(NSTimer *)timer
+{
+    self.view.userInteractionEnabled = YES;
+    
+    self.shouldTimeoutProcessing = TRUE;
+    
+    [self.viewProgress removeFromSuperview];
+    
+    [self.view addSubview:_viewError];
+    [self.view bringSubviewToFront:_viewError];
 }
 
 -(void) prepareWifiInfo
@@ -641,14 +755,28 @@
 
 -(void) bleDisconnected
 {
-    NSLog(@"NWINFO : BLE device is DISCONNECTED - Reconnect after 2s - state: %d", stage);
+    NSLog(@"NWINFO : BLE device is DISCONNECTED - state: %d, - shouldTimeoutProcessing: %d", stage, _shouldTimeoutProcessing);
+    
+    if (_shouldTimeoutProcessing)
+    {
+        //NSLog(@"NWINFO - bleDisconnected");
+    }
+    else
+    {
+        [self rescanToConnectToBLE];
+    }
+}
+
+- (void)rescanToConnectToBLE
+{
+    NSLog(@"NetworkInfo - rescanToConnectToBLE - Reconnect after 2s");
     
     NSDate * date;
     date = [NSDate dateWithTimeInterval:2.0 sinceDate:[NSDate date]];
     [[NSRunLoop currentRunLoop] runUntilDate:date];
     
-//    [NSTimer scheduledTimerWithTimeInterval:TIME_OUT_RECONNECT_BLE target:self selector:@selector(dialogFailConnection:) userInfo:nil repeats:NO];
-
+    //    [NSTimer scheduledTimerWithTimeInterval:TIME_OUT_RECONNECT_BLE target:self selector:@selector(dialogFailConnection:) userInfo:nil repeats:NO];
+    
     
     [BLEConnectionManager getInstanceBLE].delegate = self;
     //[[BLEConnectionManager getInstanceBLE] reinit];
@@ -690,6 +818,12 @@
 {
     if (alertView.tag == RETRY_CONNECTION_BLE_FAIL_TAG)
     {
+        if (_timerTimeoutConnectBLE)
+        {
+            [self.timerTimeoutConnectBLE invalidate];
+            self.timerTimeoutConnectBLE = nil;
+        }
+        
         [self.navigationController popToRootViewControllerAnimated:NO];
     }
 }
@@ -797,10 +931,7 @@
                 [self sendWifiInfoToCamera];
                 break;
         }
-        
-        
     }
-    
 }
 
 #pragma mark - Methods
@@ -953,14 +1084,19 @@
         
         [[NSRunLoop currentRunLoop] runUntilDate:date];
         
-        NSLog(@"NetworkInfo_VC - readWifiStatusOfCamera BLE isBusy");
+        //NSLog(@"NetworkInfo_VC - readWifiStatusOfCamera BLE isBusy");
     }
 }
 
 - (void) showNextScreen
 {
-    
     NSLog(@"NetworkInfo - SSID: %@   - %@", self.ssid, self.deviceConf.ssid );
+    
+    if (_timerTimeoutConnectBLE != nil)
+    {
+        [self.timerTimeoutConnectBLE invalidate];
+        self.timerTimeoutConnectBLE = nil;
+    }
     
     DeviceConfiguration * sent_conf = [[DeviceConfiguration alloc] init];
     
@@ -1001,6 +1137,23 @@
 	}
     
 	return FALSE;
+}
+
+#pragma mark - JSON_Comm call back
+
+-(void) removeCamSuccessWithResponse:(NSDictionary *)responseData
+{
+	NSLog(@"removeCam success");
+}
+
+-(void) removeCamFailedWithError:(NSDictionary *)error_response
+{
+	NSLog(@"removeCam failed Server error: %@", [error_response objectForKey:@"message"]);
+}
+
+-(void) removeCamFailedServerUnreachable
+{
+	NSLog(@"server unreachable");
 }
 
 @end
