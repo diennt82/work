@@ -72,6 +72,10 @@
     BOOL _hideCustomIndicatorAndTextNotAccessble;
     //check if shared cam is connected to macOS
     NSString *_sharedCamConnectedTo;
+    //check to show custom indicator
+    BOOL _isShowCustomIndicator;
+    //check to show custom indicator
+    BOOL _isShowTextCameraIsNotAccesible;
 }
 
 @property (retain, nonatomic) IBOutlet UIImageView *imageViewHandle;
@@ -815,8 +819,6 @@ double _ticks = 0;
             }
             else
             {
-                _isShowCustomIndicator = NO;
-                
                 if ( self.selectedChannel.profile.isInLocal && (self.askForFWUpgradeOnce == YES))
                 {
                     [self performSelectorInBackground:@selector(checkIfUpgradeIsPossible) withObject:nil];
@@ -886,7 +888,7 @@ double _ticks = 0;
             
             //set custom indication is TRUE when server die
             _isShowCustomIndicator = YES;
-            
+            _isShowTextCameraIsNotAccesible = YES;
     		NSLog(@"Timeout While streaming  OR server DIED - userWantToCancel: %d", userWantToCancel);
             
     		//mHandler.dispatchMessage(Message.obtain(mHandler, Streamer.MSG_VIDEO_STREAM_HAS_STOPPED_UNEXPECTEDLY));
@@ -934,47 +936,8 @@ double _ticks = 0;
     		 *
              */
             
-            //Perform connectivity check - wifi?
-            NSString * currSSID = [CameraPassword fetchSSIDInfo];
-            NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-            NSString * streamSSID =  (NSString *) [userDefaults objectForKey:_streamingSSID];
-            
-            
-//            
-//            NSString * msg = NSLocalizedStringWithDefaultValue(@"network_lost_link",nil, [NSBundle mainBundle],
-//                                                               @"Camera disconnected due to network connectivity problem. Trying to reconnect...", nil);
-//            [[[GAI sharedInstance] defaultTracker] trackEventWithCategory:@"View Remote Camera"
-//                                                               withAction:@"Connect to Cam Failed"
-//                                                                withLabel:@"Can't connect to network"
-//                                                                withValue:nil];
-            
-            //either one of them is nil we skip this check
-            NSLog(@"current %@, storedSSID: %@", currSSID, streamSSID);
-            //popup ?
-            
-//            if (self.alertTimer != nil && [self.alertTimer isValid])
-//            {
-//                //some periodic is running dont care
-//                NSLog(@"some periodic is running dont care");
-//                
-//            }
-//            else
-//            {
-//                
-//                self.alertTimer = [NSTimer scheduledTimerWithTimeInterval:5.0
-//                                                                   target:self
-//                                                                 selector:@selector(periodicPopup:)
-//                                                                 userInfo:msg
-//                                                                  repeats:YES];
-//                [self.alertTimer fire] ;//fire once now
-//                
-//            }
-            
             /* Stop Streamming */
             [self stopStream];
-            
-            
-            
             if (self.selectedChannel.profile.isInLocal == TRUE)
             {
                 /* re-scan for the camera */
@@ -991,8 +954,6 @@ double _ticks = 0;
                                                userInfo:nil
                                                 repeats:NO];
             }
-            
-            
     		break;
         }
     		
@@ -6097,38 +6058,23 @@ double _ticks = 0;
         UIInterfaceOrientation interfaceOrientation = [UIApplication sharedApplication].statusBarOrientation;
         [self start_animation_with_orientation:interfaceOrientation];
         self.customIndicator.image = [UIImage imageNamed:@"loader_a"];
-        if (_timerNotAccessible && [_timerNotAccessible isValid])
+        if (_isShowTextCameraIsNotAccesible)
         {
-            //do nothing
+            [self.ib_lbCameraNotAccessible setHidden:NO];
         }
         else
         {
-            _timerNotAccessible = [NSTimer scheduledTimerWithTimeInterval:15.0 target:self selector:@selector(displayTextNotAccessible) userInfo:nil repeats:NO];
+            [self.ib_lbCameraNotAccessible setHidden:YES];
         }
     }
     else
     {
+        _isShowTextCameraIsNotAccesible = NO;
         [self.customIndicator stopAnimating];
         [self.customIndicator setHidden:YES];
         [self.ib_lbCameraNotAccessible setHidden:YES];
         [self.ib_lbCameraName setText:self.selectedChannel.profile.name];
-        if (_timerNotAccessible && [_timerNotAccessible isValid])
-        {
-            [_timerNotAccessible invalidate];
-            _timerNotAccessible = nil;
-        }
     }
 }
-
-- (void)displayTextNotAccessible
-{
-    if (_hideCustomIndicatorAndTextNotAccessble)
-    {
-        return;
-    }
-    _timerNotAccessible = nil;
-    [self.ib_lbCameraNotAccessible setHidden:NO];
-}
-
 
 @end
