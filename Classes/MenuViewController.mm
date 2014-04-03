@@ -278,6 +278,21 @@
     self.title = item.title;
 }
 
+
+- (void)refreshCameraList
+{
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    BOOL isOffline = [userDefaults boolForKey:_OfflineMode];
+    self.camerasVC.waitingForUpdateData = FALSE;
+    if (!isOffline &&
+        !self.camerasVC.waitingForUpdateData &&
+        !_notUpdateCameras)
+    {
+        self.camerasVC.waitingForUpdateData = TRUE;
+        [self performSelectorInBackground:@selector(recreateAccount)
+                               withObject:nil];
+    }
+}
 #pragma mark - Update Camera list
 
 - (void)recreateAccount

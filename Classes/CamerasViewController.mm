@@ -263,6 +263,25 @@
     // Dispose of any resources that can be recreated.
 }
 
+
+- (void)updateBottomButton
+{
+    if (_waitingForUpdateData == TRUE)
+    {
+        [self.ibTextAddCamera setTextColor:[UIColor deSelectedAddCameraTextColor]];
+        [self.ibTextBuyCamera setTextColor:[UIColor deSelectedBuyCameraTextColor]];
+        [self.ibAddCameraButton setEnabled:NO];
+        [self.ibBuyCameraButton setEnabled:NO];
+    }
+    else
+    {
+        [self.ibTextAddCamera setTextColor:[UIColor whiteColor]];
+        [self.ibTextBuyCamera setTextColor:[UIColor whiteColor]];
+        [self.ibAddCameraButton setEnabled:YES];
+        [self.ibBuyCameraButton setEnabled:YES];
+    }
+}
+
 #pragma mark - Table view data source
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
@@ -293,24 +312,15 @@
     return 103;
 
 }
-
-- (void)updateBottomButton
+- (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate
 {
-    if (_waitingForUpdateData == TRUE)
+    if (scrollView.contentOffset.y < -64.0f)
     {
-        [self.ibTextAddCamera setTextColor:[UIColor deSelectedAddCameraTextColor]];
-        [self.ibTextBuyCamera setTextColor:[UIColor deSelectedBuyCameraTextColor]];
-        [self.ibAddCameraButton setEnabled:NO];
-        [self.ibBuyCameraButton setEnabled:NO];
-    }
-    else
-    {
-        [self.ibTextAddCamera setTextColor:[UIColor whiteColor]];
-        [self.ibTextBuyCamera setTextColor:[UIColor whiteColor]];
-        [self.ibAddCameraButton setEnabled:YES];
-        [self.ibBuyCameraButton setEnabled:YES];
+        [self.parentVC refreshCameraList];
+        [self.ibTableListCamera reloadData];
     }
 }
+
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     [self updateBottomButton];

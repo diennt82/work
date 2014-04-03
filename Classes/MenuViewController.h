@@ -33,5 +33,5 @@
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
      withConnDelegate:(id<ConnectionMethodDelegate> ) caller;
-
+- (void)refreshCameraList;
 @end
