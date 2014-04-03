@@ -3758,8 +3758,8 @@
 		A1ABF19D187536B20014FCB4 /* Connection */ = {
 			isa = PBXGroup;
 			children = (
-				84F27EC018AE10750000CA7A /* UARTPeripheral.m */,
 				A1ABF19E187537170014FCB4 /* UARTPeripheral.h */,
+				84F27EC018AE10750000CA7A /* UARTPeripheral.m */,
 				A1ABF1A0187537170014FCB4 /* BLEConnectionManager.h */,
 				A1ABF1A1187537170014FCB4 /* BLEConnectionManager.m */,
 			);
@@ -5395,7 +5395,7 @@
 				);
 				OTHER_LDFLAGS = "-lz";
 				PRODUCT_NAME = HubbleHome;
-				PROVISIONING_PROFILE = "C4391CC6-93E7-4DD7-A6D0-8ED36C00D7E1";
+				PROVISIONING_PROFILE = "D2E44D43-393B-4037-BD82-9C3FF933F635";
 				SDKROOT = iphoneos7.0;
 				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/../ios-frameworks/pjsip/arm/include/ $(SRCROOT)/../ios-frameworks/pjsip/arm/include/pj/ $(SRCROOT)/../ios-frameworks/pjsip/arm/include/pjnath/";
 				VALID_ARCHS = "armv6 armv7";
@@ -5444,7 +5444,7 @@
 				);
 				OTHER_LDFLAGS = "-lz";
 				PRODUCT_NAME = HubbleHome;
-				PROVISIONING_PROFILE = "C4391CC6-93E7-4DD7-A6D0-8ED36C00D7E1";
+				PROVISIONING_PROFILE = "D2E44D43-393B-4037-BD82-9C3FF933F635";
 				SDKROOT = iphoneos7.0;
 				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/../ios-frameworks/pjsip/arm/include/ $(SRCROOT)/../ios-frameworks/pjsip/arm/include/pj/ $(SRCROOT)/../ios-frameworks/pjsip/arm/include/pjnath/";
 				VALIDATE_PRODUCT = YES;
@@ -5516,7 +5516,7 @@
 				);
 				OTHER_LDFLAGS = "-lz";
 				PRODUCT_NAME = HubbleHome;
-				PROVISIONING_PROFILE = "C4391CC6-93E7-4DD7-A6D0-8ED36C00D7E1";
+				PROVISIONING_PROFILE = "D2E44D43-393B-4037-BD82-9C3FF933F635";
 				RAMEWORK_SEARCH_PATHS = "$(inherited) \"$(SRCROOT)\"";
 				SDKROOT = iphoneos7.0;
 				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/../ios-frameworks/pjsip/arm/include/ $(SRCROOT)/../ios-frameworks/pjsip/arm/include/pj/ $(SRCROOT)/../ios-frameworks/pjsip/arm/include/pjnath/";

@@ -27,8 +27,6 @@
     NSString * homeWifiSSID;
     BOOL showProgressNextTime;
     
-
-    NSTimer *_timeOutWaitingConnectBLE;
     NSTimer *_getMacAddressTimer;
     NSString *_cameraMac;
     NSString *_cameraName;
