@@ -968,6 +968,13 @@ double _ticks = 0;
             break;
         }
             
+        case MEDIA_INFO_RECEIVED_VIDEO_FRAME:
+            _isShowCustomIndicator = NO;
+            break;
+            
+        case MEDIA_INFO_CORRUPT_FRAME_TIMEOUT:
+            _isShowCustomIndicator = YES;
+            break;
             
         default:
             break;
@@ -6058,6 +6065,7 @@ double _ticks = 0;
         UIInterfaceOrientation interfaceOrientation = [UIApplication sharedApplication].statusBarOrientation;
         [self start_animation_with_orientation:interfaceOrientation];
         self.customIndicator.image = [UIImage imageNamed:@"loader_a"];
+        
         if (_isShowTextCameraIsNotAccesible)
         {
             [self.ib_lbCameraNotAccessible setHidden:NO];
