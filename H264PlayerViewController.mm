@@ -483,7 +483,7 @@ double _ticks = 0;
     }
     else
     {
-        self.navigationItem.rightBarButtonItem = nowButton;
+//        self.navigationItem.rightBarButtonItem = nowButton;
     }
     
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
@@ -831,17 +831,8 @@ double _ticks = 0;
                                                                        withAction:@"Start Stream Success"
                                                                         withLabel:@"Start Stream Success"
                                                                         withValue:nil];
-                    if (_timerRemoteStreamTimeOut != nil)
-                    {
-                        [self.timerRemoteStreamTimeOut invalidate];
-                        self.timerRemoteStreamTimeOut = nil;
-                    }
-                    
-                    self.timerRemoteStreamTimeOut = [NSTimer scheduledTimerWithTimeInterval:5*60.0
-                                                                                     target:self
-                                                                                   selector:@selector(showDialogAndStopStream:)
-                                                                                   userInfo:nil
-                                                                                    repeats:NO];
+
+                    [self reCreateTimoutViewCamera];
                 }
                 
                 //[self performSelectorInBackground:@selector(getTriggerRecording_bg) withObject:nil];
@@ -1277,6 +1268,20 @@ double _ticks = 0;
 #endif
 }
 
+- (void)reCreateTimoutViewCamera
+{
+    if (_timerRemoteStreamTimeOut != nil && [_timerRemoteStreamTimeOut isValid])
+    {
+        [self.timerRemoteStreamTimeOut invalidate];
+        self.timerRemoteStreamTimeOut = nil;
+    }
+    
+    self.timerRemoteStreamTimeOut = [NSTimer scheduledTimerWithTimeInterval:270.0//4m30s
+                                                                     target:self
+                                                                   selector:@selector(showDialogAndStopStream:)
+                                                                   userInfo:nil
+                                                                    repeats:NO];
+}
 #pragma mark Delegate Timeline
 
 - (void)stopStreamToPlayback
@@ -1894,6 +1899,11 @@ double _ticks = 0;
 
 - (void)goBackToCameraList
 {
+    if (self.timerRemoteStreamTimeOut && [_timerRemoteStreamTimeOut isValid])
+    {
+        [_timerRemoteStreamTimeOut invalidate];
+        _timerRemoteStreamTimeOut = nil;
+    }
         _isShowCustomIndicator = NO;
     //no need call stopStream in offline mode
     if (!_isCameraOffline)
@@ -2125,7 +2135,7 @@ double _ticks = 0;
 #else
     
     NSLog(@"Calling suspend() on thread: %@", [NSThread currentThread]);
-    
+    _timerStopStreamAfter30s = nil;
     @synchronized(self)
     {
         if (h264Streamer != NULL)
@@ -2172,6 +2182,10 @@ double _ticks = 0;
 
 - (void)showDialogAndStopStream: (id)sender // Timer
 {
+    _timerRemoteStreamTimeOut = nil;
+    //stop stream after 30s if user no click.
+    _timerStopStreamAfter30s = [NSTimer scheduledTimerWithTimeInterval:30 target:self selector:@selector(stopStream) userInfo:nil repeats:NO];
+    
     UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Remote Stream"
                                                          message:@"The Camera has been viewed for about 5 minutes. Do you want to continue?"
                                                         delegate:self
@@ -2181,8 +2195,6 @@ double _ticks = 0;
     
     [alertView show];
     [alertView release];
-    
-    [self stopStream];
 }
 
 #pragma mark - VQ
@@ -4255,11 +4267,36 @@ double _ticks = 0;
         switch (buttonIndex)
         {
             case 0: // View other camera
+                //stop stream
+                if (_timerStopStreamAfter30s && [_timerStopStreamAfter30s isValid])
+                {
+                    //stop time, avoid stopStream 2 times
+                    [_timerStopStreamAfter30s invalidate];
+                    _timerStopStreamAfter30s = nil;
+                    [self stopStream];
+                }
                 [self goBackToCamerasRemoteStreamTimeOut];
                 break;
                 
             case 1: // Continue view --> restart stream
-                [self setupCamera];
+                
+                if (_timerStopStreamAfter30s == nil)
+                {
+                    //already stop stream, call setup again.
+                    [self setupCamera];
+                }
+                else
+                {
+                    if (_timerStopStreamAfter30s && [_timerStopStreamAfter30s isValid])
+                    {
+                        //stop time, avoid stopStream 2 times
+                        [_timerStopStreamAfter30s invalidate];
+                        _timerStopStreamAfter30s = nil;
+                    }
+                    //do nothing, just dissmiss because still stream.
+                    //create new timer to display info after 4m30s.
+                    [self reCreateTimoutViewCamera];
+                }
                 break;
                 
             default:

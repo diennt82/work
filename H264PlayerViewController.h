@@ -132,6 +132,7 @@
     //timer display text Camera is not accessible
     NSTimer *_timerNotAccessible;
     NSString *_resolution;
+    NSTimer *_timerStopStreamAfter30s;
 }
 //property for Hold to talk
 @property (nonatomic) BOOL walkieTalkieEnabled;
