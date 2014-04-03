@@ -45,6 +45,7 @@ typedef enum response_ {
     int retry_count;
     NSTimer *_timeOutCommand;
     NSTimer * hello_timer;
+    float timeout;
     
 }
 @property (nonatomic, retain) CBPeripheral *peripheral;

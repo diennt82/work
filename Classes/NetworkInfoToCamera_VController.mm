@@ -859,11 +859,9 @@
     if ([string hasPrefix:@"setup_wireless_save"])
     {
         stage = SENT_WIFI;
-        
+    
         NSLog(@"Finishing SETUP_HTTP_COMMAND");
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [self readWifiStatusOfCamera:nil];
-        });
+        
     }
     else if ([string hasPrefix:GET_STATE_NETWORK_CAMERA])
     {
@@ -884,6 +882,9 @@
         
         if ([_currentStateCamera isEqualToString:@"CONNECTED"])
         {
+            
+            stage = CHECKING_WIFI_PASSED;
+#if 0
             dispatch_async(dispatch_get_main_queue(), ^{
                 //CONNECTED... Move on now..
                 [self sendCommandRestartSystem];
@@ -893,9 +894,14 @@
                 [self.navigationController.navigationBar setUserInteractionEnabled:YES];
                 
             });
+#endif
         }
         else
         {
+            
+             stage = CHECKING_WIFI;
+            
+#if 0
             dispatch_async(dispatch_get_main_queue(), ^{
                 // get state network of camera after 4s
                 [NSTimer scheduledTimerWithTimeInterval: 2.0//
@@ -905,7 +911,7 @@
                                                 repeats:NO];
                 
             });
-            
+#endif
         }
         
         
@@ -1053,6 +1059,32 @@
         //stage = SENT_WIFI;
         
         //[self readWifiStatusOfCamera:nil];
+        
+        while (stage != SENT_WIFI);
+        
+        int count = 20;
+        do
+        {
+            [self readWifiStatusOfCamera:nil];
+            
+        }
+        while (stage !=  CHECKING_WIFI_PASSED && count -- >0);
+        
+        
+        if (stage == CHECKING_WIFI)
+        {
+            //Failed!!
+            NSLog(@"wifi pass check failed!!! do sth here");
+        }
+        else if (stage == CHECKING_WIFI_PASSED)
+        {
+            //CONNECTED... Move on now..
+            [self sendCommandRestartSystem];
+            
+            [self showNextScreen];
+            [self.view setUserInteractionEnabled:YES];
+            [self.navigationController.navigationBar setUserInteractionEnabled:YES];
+        }
     }
 }
 
@@ -1086,6 +1118,10 @@
         
         //NSLog(@"NetworkInfo_VC - readWifiStatusOfCamera BLE isBusy");
     }
+    
+    date = [NSDate dateWithTimeInterval:3.0 sinceDate:[NSDate date]];
+    
+    [[NSRunLoop currentRunLoop] runUntilDate:date];
 }
 
 - (void) showNextScreen

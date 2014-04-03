@@ -19,6 +19,7 @@
 #define SENT_CODEC_SUPPORT  1
 #define SENT_WIFI  2
 #define CHECKING_WIFI   3
+#define CHECKING_WIFI_PASSED  4
 
 
 

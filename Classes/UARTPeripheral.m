@@ -314,7 +314,7 @@
         
         
     }
-    
+    timeout = time;
     _timeOutCommand = [NSTimer scheduledTimerWithTimeInterval:time
                                                        target:self
                                                      selector:@selector(receiveDataTimeOut:)
@@ -342,14 +342,60 @@
 
 -(void) receiveDataTimeOut:(NSTimer *) timer
 {
-    _timeOutCommand = nil;
-    self.isBusy = FALSE;
-    retry_count = -1;
-    if (self.delegate)
+
+    
+    /* when timeout - just simply resend */
+#if 1
+    retry_count --;
+    if (retry_count > 0)
     {
-        [self.delegate onReceiveDataError:READ_TIME_OUT forCommand:commandToCamera];
+        
+        NSLog(@"retrying with timeout :%f & cmd is %@", timeout, commandToCamera);
+        
+        if ([commandToCamera isEqualToString:@"get_wifi_connection_state"] && (retry_count < 10))
+        {
+            //HACK
+            _timeOutCommand = [NSTimer scheduledTimerWithTimeInterval: timeout
+                                                               target:self
+                                                             selector:@selector(receiveDataTimeOut:)
+                                                             userInfo:nil
+                                                              repeats:NO];
+            
+            
+            //commandToCamera = @"get_version";
+            
+              NSLog(@"retrying with timeout :%@", commandToCamera);
+            [self retryOldCommand:commandToCamera];
+        }
+        else
+        {
+            
+            _timeOutCommand = [NSTimer scheduledTimerWithTimeInterval: timeout
+                                                               target:self
+                                                             selector:@selector(receiveDataTimeOut:)
+                                                             userInfo:nil
+                                                              repeats:NO];
+            
+            
+            
+            [self retryOldCommand:commandToCamera];
+        }
+    }
+    else
+#endif
+    {
+        //tired --- disconnect now
+        _timeOutCommand = nil;
+        self.isBusy = FALSE;
+        retry_count = -1;
+        if (self.delegate)
+        {
+            [self.delegate onReceiveDataError:READ_TIME_OUT forCommand:commandToCamera];
+        }
     }
     
+    
+
 }
 - (void) writeRawData:(NSData *) data
 {

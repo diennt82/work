@@ -191,7 +191,14 @@ static BLEConnectionManager *sharedMyManager = nil;
    
     if (error_code == READ_TIME_OUT)
     {
+
+        
+        /*20140402_stephen request: dont disconnect, just re-send the command*/
         [self disconnect];
+        
+        
+        
+        
     }
     else
     {
