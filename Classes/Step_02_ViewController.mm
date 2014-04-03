@@ -66,6 +66,7 @@
     [super viewWillAppear:animated];
     CGAffineTransform transform = CGAffineTransformMakeScale(1.0f, 4.0f);
     [self.view viewWithTag:501].transform = transform;
+    [self.navigationController.navigationBar setUserInteractionEnabled:YES];
 }
 
 - (void)viewDidUnload

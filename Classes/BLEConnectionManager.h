@@ -75,6 +75,7 @@ typedef enum
 @property (nonatomic,assign) BOOL isOnBLE;
 @property (assign) id<BLEConnectionManagerDelegate> delegate;
 
++ (BLEConnectionManager *)sharedManager;
 + (ConnectionState)checkStatusConnectBLE;
 + (BLEConnectionManager *) getInstanceBLE;
 - (id) init;

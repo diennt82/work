@@ -28,8 +28,8 @@
 
     UIAlertView *_alertView;
     BOOL _isShowingProcess;
-    NSString *_auth_token;
 }
+
 @property (nonatomic, retain) UIAlertView *alertView;
 @property (nonatomic, retain) NSString * cameraMac, * cameraName;
 

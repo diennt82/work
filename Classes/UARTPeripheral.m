@@ -694,6 +694,12 @@
 #if 1
             NSLog(@"start hello timer");
             
+            if (self.hello_timer != nil)
+            {
+                [self.hello_timer invalidate];
+                self.hello_timer = nil;
+            }
+            
             self.hello_timer  =  [NSTimer scheduledTimerWithTimeInterval:7.0
                                                              target:self
                                                            selector:@selector(send_hello:)

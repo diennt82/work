@@ -86,6 +86,8 @@
 
 - (void)viewWillAppear:(BOOL)animated
 {
+    [super viewWillAppear:animated];
+    
     [self.ib_lableStage setText:@"Scanning for BLE..."];
     [self.ib_RefreshBLE setEnabled:NO];
     
@@ -157,33 +159,28 @@
 {
     // Here we need to pass a full frame
     
-    //    if (_alertView == nil)
-    //    {
-    //        self.alertView = [[CustomIOS7AlertView alloc] init];
-    //    }
-    
-    CustomIOS7AlertView *alertView = [[CustomIOS7AlertView alloc] init];
-    
-    // Add some custom content to the alert view
-    [alertView setContainerView:[self createDemoView]];
-    
-    // Modify the parameters
-    //[alertView setButtonTitles:[NSMutableArray arrayWithObjects:@"Close1", @"Close2", @"Close3", nil]];
-    [alertView setButtonTitles:NULL];
-    [alertView setDelegate:self];
-    
-    // You may use a Block, rather than a delegate.
-    [alertView setOnButtonTouchUpInside:^(CustomIOS7AlertView *alertView, int buttonIndex) {
-        NSLog(@"Block: Button at position %d is clicked on alertView %d.", buttonIndex, [alertView tag]);
-        [alertView close];
-    }];
-    
-    [alertView setUseMotionEffects:true];
-    
+    if (_alertView == nil)
+    {
+        self.alertView = [[CustomIOS7AlertView alloc] init];
+        // Add some custom content to the alert view
+        [_alertView setContainerView:[self createDemoView]];
+        
+        // Modify the parameters
+        //[alertView setButtonTitles:[NSMutableArray arrayWithObjects:@"Close1", @"Close2", @"Close3", nil]];
+        [_alertView setButtonTitles:NULL];
+        [_alertView setDelegate:self];
+        
+        // You may use a Block, rather than a delegate.
+        [_alertView setOnButtonTouchUpInside:^(CustomIOS7AlertView *alertView, int buttonIndex) {
+            NSLog(@"Block: Button at position %d is clicked on alertView %d.", buttonIndex, [alertView tag]);
+            [alertView close];
+        }];
+        
+        [_alertView setUseMotionEffects:true];
+    }
+
     // And launch the dialog
-    [alertView show];
-    
-    self.alertView = alertView;
+    [_alertView show];
 }
 
 - (void)customIOS7dialogButtonTouchUpInside: (CustomIOS7AlertView *)alertView clickedButtonAtIndex: (NSInteger)buttonIndex
@@ -194,7 +191,7 @@
 
 - (UIView *)createDemoView
 {
-    UIView *demoView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 230, 140)];// autorelease];
+    UIView *demoView = [[[UIView alloc] initWithFrame:CGRectMake(0, 0, 230, 140)] autorelease];
     
     UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(100, 35, 30, 30)];// autorelease];
     [imageView setImage:[UIImage imageNamed:@"loader_a"]];
@@ -207,15 +204,17 @@
                                   [UIImage imageNamed:@"loader_f"]];
     imageView.animationRepeatCount = 0;
     imageView.animationDuration = 1.5f;
+    [imageView startAnimating];
     
     [demoView addSubview:imageView];
     
-    [imageView startAnimating];
+    [imageView release];
     
     UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(20, 85, 200, 21)];// autorelease];
     label.textAlignment = NSTextAlignmentCenter;
     label.text = @"Connecting to Camera";
     [demoView addSubview:label];
+    [label release];
     
     return demoView;
 }
@@ -354,12 +353,8 @@
             
             [self.ib_tableListBLE reloadData];
             self.btnConnect.enabled = YES;
-
         }
-        
-        
     }
-    
 }
 
 - (void)dismissIndicator
@@ -378,15 +373,6 @@
  */
 - (void)updateUIConnection:(NSTimer *)info
 {
-    
-    ////???? Do i need this
-    //    _timeOutWaitingConnectBLE = [NSTimer scheduledTimerWithTimeInterval:30.0 target:self selector:@selector(dismissIndicator) userInfo:nil repeats:NO];
-#if 1
-    //    [self.view addSubview:_viewProgress];
-    //    [self.view bringSubviewToFront:_viewProgress];
-#else
-    [self.ib_Indicator setHidden:NO];
-#endif
     if ([BLEConnectionManager getInstanceBLE].state == CONNECTED)
     {
         
@@ -649,8 +635,20 @@
         NSLog(@"Get UDID successfully - udid: %@", stringUDID);
         
         self.cameraMac = [stringUDID substringWithRange:NSMakeRange(6, 12)];
-        NSString *cameraNameFinal = [NSString stringWithFormat:@"%@%@%@", DEFAULT_SSID_HD_PREFIX, [stringUDID substringWithRange:NSMakeRange(2, 4)], [_cameraMac substringFromIndex:6]];
-        self.cameraName = cameraNameFinal;
+        
+        /*
+         * Make sure a valid camera name.
+         */
+
+        if (_selectedPeripheral != nil && _selectedPeripheral.name != nil)
+        {
+            self.cameraName = _selectedPeripheral.name;
+        }
+        else
+        {
+            NSString *cameraNameFinal = [NSString stringWithFormat:@"%@%@%@", DEFAULT_SSID_HD_PREFIX, [stringUDID substringWithRange:NSMakeRange(2, 4)], [_cameraMac substringFromIndex:6]];
+            self.cameraName = cameraNameFinal;
+        }
         
         NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
         
