@@ -1718,7 +1718,7 @@ double _ticks = 0;
         [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode beforeDate:endDate];
     }
     
-    h264Streamer = new MediaPlayer(false);
+    h264Streamer = new MediaPlayer(false, [_cameraModel isEqualToString:CP_MODEL_SHARED_CAM]);
     
     h264StreamerListener = new H264PlayerListener(self);
     h264Streamer->setListener(h264StreamerListener);

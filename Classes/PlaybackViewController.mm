@@ -189,7 +189,7 @@
 
 -(void) startStream
 {
-    _playbackStreamer = new MediaPlayer(true);
+    _playbackStreamer = new MediaPlayer(true, false);
     _playbackStreamer->setListener(listener);
     [self performSelectorInBackground:@selector(startStream_bg) withObject:nil];
 }
