@@ -481,44 +481,42 @@
 }
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
+#if 0
     if (isPhoneLandscapeMode)
     {
-        EventInfo *eventInfo = (EventInfo *)[_events objectAtIndex:indexPath.row];
-        
-        /*
-         * 1: Sound
-         * 2: hi-temperature
-         * 3: low-temperature
-         * 4: Motion
-         */
-        if (eventInfo.alert == 4)
-        {
-            return 77;
-        }
-        else if (eventInfo.alert == 1 ||
-                 eventInfo.alert == 2 ||
-                 eventInfo.alert == 3)
+        if (_events != nil &&
+            _events.count > 0)
         {
             EventInfo *eventInfo = (EventInfo *)[_events objectAtIndex:indexPath.row];
             
-            // Motion detected
+            /*
+             * 1: Sound             -> 77
+             * 2: hi-temperature    -> 77
+             * 3: low-temperature   -> 77
+             * 4: Motion            -> 212
+             * button(save, upgrage)-> 60
+             * default              -> 44
+             */
             if (eventInfo.alert == 4)
             {
-                return 212;  //TODO: Match with design document
+                return 212;
             }
-            // Sound, temperature, & another detected
             else if (eventInfo.alert == 1 ||
-                     eventInfo.alert == 2)
+                     eventInfo.alert == 2 ||
+                     eventInfo.alert == 3)
             {
                 return 77;
             }
-            
-            return 212;// modify 197
+            else
+            {
+                return 60;
+            }
         }
         
-        return 60;
+        return 44;
     }
     else
+#endif
     {
         if (indexPath.section == 0)
         {
@@ -527,21 +525,28 @@
 #if 1
         if (indexPath.section == 1)
         {
-            EventInfo *eventInfo = (EventInfo *)[_events objectAtIndex:indexPath.row];
-            
-            // Motion detected
-            if (eventInfo.alert == 4)
+            if (_events != nil &&
+                _events.count > 0)
             {
-                return 212;  //TODO: Match with design document
-            }
-            // Sound, temperature, & another detected
-            else if (eventInfo.alert == 1 ||
-                     eventInfo.alert == 2)
-            {
-                return 77;
+                EventInfo *eventInfo = (EventInfo *)[_events objectAtIndex:indexPath.row];
+                
+                /*
+                 * 1: Sound             -> 77
+                 * 2: hi-temperature    -> 77
+                 * 3: low-temperature   -> 77
+                 * 4: Motion            -> 212
+                 */
+                if (eventInfo.alert == 4)
+                {
+                    return 212;
+                }
+                else
+                {
+                    return 77;
+                }
             }
             
-            return 212;// modify 197
+            return 44;
         }
 #else
         if (indexPath.section == 1)
@@ -612,6 +617,31 @@
     {
         return NO;
     }
+    else if (indexPath.section == 1)
+    {
+        if (_events != nil &&
+            _events.count > 0)
+        {
+            EventInfo *eventInfo = (EventInfo *)[_events objectAtIndex:indexPath.row];
+            
+            /*
+             * 1: Sound             -> NO
+             * 2: hi-temperature    -> NO
+             * 3: low-temperature   -> NO
+             * 4: Motion            -> YES
+             */
+            if (eventInfo.alert == 4)
+            {
+                return YES;
+            }
+            else
+            {
+                return NO;
+            }
+        }
+        
+        return NO;
+    }
     
     return YES;
 }
@@ -679,7 +709,7 @@
             }
         }
         
-        if (_stringIntelligentMessage.length > 24)
+        if (_stringIntelligentMessage.length > 22)
         {
             cell.eventLabel.frame = CGRectMake(cell.eventLabel.frame.origin.x, cell.eventLabel.frame.origin.y, cell.eventLabel.frame.size.width, cell.eventLabel.frame.size.height * 2);
             cell.eventDetailLabel.frame = CGRectMake(cell.eventDetailLabel.frame.origin.x, cell.eventLabel.center.y + cell.eventLabel.frame.size.height / 2, cell.eventDetailLabel.frame.size.width, cell.eventDetailLabel.frame.size.height);
@@ -732,7 +762,7 @@
         }
         else
         {
-            df_local.dateFormat = @"HH:mm";
+            df_local.dateFormat = @"hh:mm";
         }
         
         cell.eventTimeLabel.text = [df_local stringFromDate:eventDate];
@@ -819,7 +849,6 @@
         
         for (id curObj in objects)
         {
-            
             if([curObj isKindOfClass:[UITableViewCell class]])
             {
                 cell = (TimelineButtonCell *)curObj;
@@ -831,7 +860,6 @@
         [cell.timelineCellButtn setTitle:@"Save the Day" forState:UIControlStateNormal];
         [cell.timelineCellButtn.titleLabel setFont:[UIFont bold20Font]];
         return cell;
-
     }
     else
     {
