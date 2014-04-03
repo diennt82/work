@@ -68,7 +68,15 @@
     self.navigationItem.leftBarButtonItem = backBarBtn;
     self.navigationItem.leftBarButtonItem.enabled = NO;
     
-    self.camerasVC = [[CamerasViewController alloc]initWithNibName:@"CamerasViewController" bundle:nil delegate:self.menuDelegate parentVC:self];
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+    {
+        self.camerasVC = [[CamerasViewController alloc]initWithNibName:@"CamerasViewController_ipad" bundle:nil delegate:self.menuDelegate parentVC:self];
+    }
+    else
+    {
+        self.camerasVC = [[CamerasViewController alloc]initWithNibName:@"CamerasViewController" bundle:nil delegate:self.menuDelegate parentVC:self];
+    }
+    
     
     if (_cameras)
     {
