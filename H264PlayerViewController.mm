@@ -2828,11 +2828,9 @@ double _ticks = 0;
                                    //self.selectedChannel.stream_url = [[responseDict objectForKey:@"data"] objectForKey:@"url"];
                                    
                                    NSString *urlResponse = [[responseDict objectForKey:@"data"] objectForKey:@"url"];
-                                   
-                                   NSUserDefaults *userDefalts = [NSUserDefaults standardUserDefaults];
                                 
                                    if ([urlResponse hasPrefix:ME_WOWZA] &&
-                                       [userDefalts boolForKey:VIEW_NXCOMM_WOWZA] == TRUE)
+                                       [userDefaults boolForKey:VIEW_NXCOMM_WOWZA] == TRUE)
                                    {
                                         self.selectedChannel.stream_url = [urlResponse stringByReplacingOccurrencesOfString:ME_WOWZA withString:NXCOMM_WOWZA];
                                    }
@@ -2846,11 +2844,41 @@ double _ticks = 0;
                                    [self performSelectorOnMainThread:@selector(startStream)
                                                           withObject:nil
                                                        waitUntilDone:NO];
-                                   
-                                   
                                }
                                else
                                {
+                                   /*
+                                    * Add code to check stream via dev-api
+                                    * Hack code
+                                    */
+                                   
+                                   if ([[userDefaults stringForKey:@"name_server"] isEqualToString:@"https://dev-api.hubble.in/v1"])
+                                   {
+                                       if ([[responseDict objectForKey:@"status"] integerValue] == 500)
+                                       {
+                                           NSString *body = [[[responseDict objectForKey:@"data"] objectForKey:@"device_response"] objectForKey:@"body"];
+                                           
+                                           NSString *prefix = @"get_session_key: error=200,session_key=";
+                                           
+                                           if ([body hasPrefix:prefix])
+                                           {
+                                               NSRange range = NSMakeRange(prefix.length, body.length - prefix.length - @",mode=relay_rtmp".length);
+                                               
+                                               self.selectedChannel.stream_url = [body substringWithRange:range];
+                                               
+                                               NSLog(@"H264VC - HACK code stream via DEV-API stream_url: %@", self.selectedChannel.stream_url);
+                                               
+                                               self.selectedChannel.communication_mode = COMM_MODE_STUN_RELAY2;
+                                               
+                                               [self performSelectorOnMainThread:@selector(startStream)
+                                                                      withObject:nil
+                                                                   waitUntilDone:NO];
+                                           }
+                                       }
+                                   }
+                                   else
+                                   {
+
                                    //handle Bad response
                                    
                                    NSArray * args = [NSArray arrayWithObjects:
@@ -2859,6 +2887,7 @@ double _ticks = 0;
                                    [self performSelectorOnMainThread:@selector(handleMessageOnMainThread:)
                                                           withObject:args
                                                        waitUntilDone:NO];
+                                   }
                                }
                            }
                            else
