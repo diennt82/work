@@ -663,7 +663,7 @@ double _ticks = 0;
 {
 #if TEST_REMOTE_TALKBACK
 #else
-    [self displayCustomIndicator];
+//    [self displayCustomIndicator];
 
     NSNumber *numberMsg =(NSNumber *) [args objectAtIndex:0];
     
@@ -779,6 +779,7 @@ double _ticks = 0;
         case MEDIA_INFO_HAS_FIRST_IMAGE:
         {
             _isShowCustomIndicator = NO;
+            [self displayCustomIndicator];
             NSLog(@"[MEDIA_PLAYER_HAS_FIRST_IMAGE]");
             
             self.currentMediaStatus = msg;
@@ -889,6 +890,7 @@ double _ticks = 0;
             //set custom indication is TRUE when server die
             _isShowCustomIndicator = YES;
             _isShowTextCameraIsNotAccesible = YES;
+            [self displayCustomIndicator];
     		NSLog(@"Timeout While streaming  OR server DIED - userWantToCancel: %d", userWantToCancel);
             
     		//mHandler.dispatchMessage(Message.obtain(mHandler, Streamer.MSG_VIDEO_STREAM_HAS_STOPPED_UNEXPECTEDLY));
@@ -911,6 +913,23 @@ double _ticks = 0;
                 
                 return;
                 
+            }
+            
+            
+            if (self.alertTimer != nil && [self.alertTimer isValid])
+            {
+                //some periodic is running dont care
+                NSLog(@"some periodic is running dont care");
+            }
+            else
+            {
+                
+                self.alertTimer = [NSTimer scheduledTimerWithTimeInterval:5.0
+                                                                   target:self
+                                                                 selector:@selector(periodicBeep:)
+                                                                 userInfo:nil
+                                                                  repeats:YES];
+                [self.alertTimer fire] ;//fire once now
             }
             
             if (self.h264StreamerIsInStopped == TRUE)
@@ -970,10 +989,12 @@ double _ticks = 0;
             
         case MEDIA_INFO_RECEIVED_VIDEO_FRAME:
             _isShowCustomIndicator = NO;
+            [self displayCustomIndicator];
             break;
             
         case MEDIA_INFO_CORRUPT_FRAME_TIMEOUT:
             _isShowCustomIndicator = YES;
+            [self displayCustomIndicator];
             break;
             
         default:
@@ -1867,6 +1888,7 @@ double _ticks = 0;
 
 - (void)goBackToCameraList
 {
+    [self stopPeriodicBeep];
     if (self.timerRemoteStreamTimeOut && [_timerRemoteStreamTimeOut isValid])
     {
         [_timerRemoteStreamTimeOut invalidate];
@@ -4720,7 +4742,7 @@ double _ticks = 0;
         {
             _isRecordInterface = YES;
             [self changeAction:nil];
-            [self.ib_buttonChangeAction setEnabled:NO];
+            [self.ib_buttonChangeAction setHidden:YES];
         }
     }
     else if (_selectedItemMenu == INDEX_MELODY)
@@ -5532,8 +5554,12 @@ double _ticks = 0;
         }
         else{
             _syncPortraitAndLandscape = NO;
-            [self.ib_buttonChangeAction setHidden:NO];
-            [self.view bringSubviewToFront:self.ib_buttonChangeAction];
+            
+            if (![_cameraModel isEqualToString:CP_MODEL_SHARED_CAM])
+            {
+                [self.ib_buttonChangeAction setHidden:NO];
+                [self.view bringSubviewToFront:self.ib_buttonChangeAction];
+            }
         }
 
         if (!_syncPortraitAndLandscape)
@@ -6072,6 +6098,7 @@ double _ticks = 0;
         }
         else
         {
+            [self stopPeriodicBeep];
             [self.ib_lbCameraNotAccessible setHidden:YES];
         }
     }
