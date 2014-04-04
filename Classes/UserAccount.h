@@ -55,5 +55,6 @@
 //-(void) query_disabled_alert_list:(NSArray *) cam_profiles;
 -(NSString *) query_cam_ip_online:(NSString *) mac_no_colon;
 -(void) readCameraListAndUpdate;
+- (BOOL)checkCameraIsAvailable:(NSString *) mac_w_colon;
 
 @end

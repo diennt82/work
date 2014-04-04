@@ -106,6 +106,63 @@
     return localIp;
 }
 
+
+- (BOOL)checkCameraIsAvailable:(NSString *) mac_w_colon
+{
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    self.jsonComm = [[BMS_JSON_Communication alloc] initWithObject:self
+                                                          Selector:@selector(getCamListSuccess:)
+                                                      FailSelector:@selector(getCamListFailure:)
+                                                         ServerErr:@selector(getCamListServerUnreachable)];
+    NSDictionary *responseDict = [self.jsonComm getAllDevicesBlockedWithApiKey:[userDefaults objectForKey:@"PortalApiKey"]];
+    
+    if (responseDict != nil)
+    {
+        NSArray *dataArr = [responseDict objectForKey:@"data"];
+        
+        //NSLog(@"camlist4: %@", dataArr);
+        
+        NSMutableArray * cam_profiles;
+        CamProfile *cp;
+        
+        cam_profiles = [self parse_camera_list:dataArr];
+        
+        if(cam_profiles != nil && [cam_profiles count] >0)
+        {
+            for (int i=0; i<[cam_profiles count]; i++)
+            {
+                cp = (CamProfile *)[cam_profiles objectAtIndex:i];
+                
+                NSLog(@"CameraProfiles: %@, mac_w_colon: %@", cp, mac_w_colon);
+                
+                if ([cp isNotAvailable])
+                {
+                    return FALSE;
+                }
+                else
+                {
+                    [self sync_online_and_offline_data:cam_profiles];
+                    return YES;
+                }
+#if 0
+                if (cp.mac_address != nil &&
+                    [cp.mac_address isEqualToString:[mac_w_colon uppercaseString]] &&
+                    cp.ip_address != nil &&
+                    cp.minuteSinceLastComm == 1) // is_available = 1
+                {
+                    localIp = cp.ip_address;
+                    [self sync_online_and_offline_data:cam_profiles];
+                    break;
+                }
+#endif
+            }
+        }
+    }
+    
+    return NO;
+}
+
+
 -(void) readCameraListAndUpdate
 {
     self.jsonComm = [[BMS_JSON_Communication alloc] initWithObject:self

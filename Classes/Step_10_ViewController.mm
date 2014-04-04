@@ -397,24 +397,14 @@
     //current wifi of camera setup
     NSString *wifiCameraSetup = [userDefaults stringForKey:@"CameraName"];
     
-    if (currentSSID !=nil && ![currentSSID isEqualToString:wifiCameraSetup] && ![currentSSID isEqualToString:homeSsid])
+    if (currentSSID !=nil && ![currentSSID isEqualToString:wifiCameraSetup])
+    //if (currentSSID !=nil && ![currentSSID isEqualToString:wifiCameraSetup] && ![currentSSID isEqualToString:homeSsid])
     {
-        NSLog(@"Display infos for user select wifi home");
-        [self connectToWifiHomeByHand];
-    }
-    else if ([currentSSID isEqualToString:wifiCameraSetup])
-    {
-        NSLog(@"Now, still connected to wifiOf Camera, continue check");
-        [NSTimer scheduledTimerWithTimeInterval: 3.0//
-                                         target:self
-                                       selector:@selector(step10CheckConnectionToHomeWifi:)
-                                       userInfo:nil
-                                        repeats:NO];
-    }
-    else if ([currentSSID isEqualToString:homeSsid])
-    {
+        //NSLog(@"Display infos for user select wifi home");
+        //[self connectToWifiHomeByHand];
+        
         //app is already connect to wifi home.
-        NSLog(@"Yeah, already connected to wifi home");
+        NSLog(@"Yeah, already connected to wifi, maybe not wifi home");
         //yeah we're connected ... check for ip??
 		[self.ib_viewGuild setHidden:YES];
         [self showProgress:nil];
@@ -440,6 +430,16 @@
                                            userInfo:nil
                                             repeats:NO];
         }
+        
+    }
+    else if ([currentSSID isEqualToString:wifiCameraSetup])
+    {
+        NSLog(@"Now, still connected to wifiOf Camera, continue check");
+        [NSTimer scheduledTimerWithTimeInterval: 3.0//
+                                         target:self
+                                       selector:@selector(step10CheckConnectionToHomeWifi:)
+                                       userInfo:nil
+                                        repeats:NO];
     }
     else if (currentSSID == nil)
     {
@@ -567,39 +567,6 @@
     if ([scanner getResults:&result])
     {
         NSLog(@"Got some result, check if there is this camera that we are waiting for ");
-        
-        if (result != nil)
-        {
-            CamProfile * cp ;
-            BOOL found = FALSE;
-            for (int i =0; i<[result count]; i++)
-            {
-                
-                cp = [result objectAtIndex:i];
-                if ([cp.mac_address isEqualToString:[self.cameraMac uppercaseString]])
-                {
-                    NSLog(@"camera %@ is up in home network with ip:%@",cp.mac_address, cp.ip_address);
-                    
-                    found = TRUE;
-                    break;
-                }
-                
-            }
-            
-            //3 of 3. send the master key to device
-            if (found == TRUE)
-            {
-                //[self setupCompleted]; // Follow the new Flow, this is not need to do
-                //return;
-            }
-            
-        }
-        else //result = nil
-        {
-            NSLog(@"scan again ..");
-        }
-        
-        
         if ([self checkItOnline])
         {
             //Found it online
@@ -641,12 +608,12 @@
                                                       apiKey:userApiKey
                                                     listener:nil];
     }
+    BOOL checkCameraAddedIsAvailable = [_userAccount checkCameraIsAvailable:self.cameraMac];
     
-    NSString *localIp = [_userAccount query_cam_ip_online: self.cameraMac];
-    
-    if ( localIp != nil)
+    if ( checkCameraAddedIsAvailable)
     {
-        NSLog(@"Found a local ip: %@", localIp);
+        NSLog(@"Found camera is online(1 or 0): %d", checkCameraAddedIsAvailable);
+        should_stop_scanning = YES;
         [self setupCompleted];
         return TRUE;
     }
