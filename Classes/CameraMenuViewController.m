@@ -12,7 +12,7 @@
 #define ALERT_REMOVE_CAM_REMOTE 7
 
 #define ALERT_RENAME_CAMERA 8
-
+#define ENABLE_CHANGE_IMAGE 0
 #import "CameraMenuViewController.h"
 #import "CameraSettingsCell.h"
 #import "CameraNameViewController.h"
@@ -223,7 +223,11 @@
 {
     //#warning Incomplete method implementation.
     // Return the number of rows in the section.
+#if ENABLE_CHANGE_IMAGE
     return 3;
+#else
+    return 2;
+#endif
 }
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
@@ -249,6 +253,7 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
+#if ENABLE_CHANGE_IMAGE
     if (indexPath.row == 0 ||
         indexPath.row == 2)
     {
@@ -301,6 +306,45 @@
         
         return cell;
     }
+#else
+    if (indexPath.row == 0 ||
+        indexPath.row == 1)
+    {
+        static NSString *CellIdentifier = @"CameraSettingsCell";
+        CameraSettingsCell *cell = [self.tableViewSettings dequeueReusableCellWithIdentifier:CellIdentifier];
+        
+        NSArray *objects = [[NSBundle mainBundle] loadNibNamed:@"CameraSettingsCell" owner:nil options:nil];
+        
+        for (id curObj in objects)
+        {
+            
+            if([curObj isKindOfClass:[UITableViewCell class]])
+            {
+                cell = (CameraSettingsCell *)curObj;
+                break;
+            }
+        }
+        
+        if (indexPath.row == 0)
+        {
+            if (self.camChannel.profile.name.length > 10)
+            {
+                cell.valueLabel.frame = CGRectMake(cell.valueLabel.frame.origin.x, cell.valueLabel.frame.origin.y, cell.valueLabel.frame.size.width, cell.valueLabel.frame.size.height * 2);
+                cell.nameLabel.frame = CGRectMake(cell.nameLabel.frame.origin.x, cell.valueLabel.center.y - cell.nameLabel.frame.size.height / 2, cell.nameLabel.frame.size.width, cell.nameLabel.frame.size.height);
+            }
+            
+            cell.nameLabel.text = @"Name";
+            cell.valueLabel.text = self.camChannel.profile.name;
+        }
+        else
+        {
+            cell.nameLabel.text = _stringFW_Version;
+            cell.valueLabel.text = self.camChannel.profile.fw_version;
+        }
+        
+        return cell;
+    }
+#endif
 }
 
 
@@ -331,6 +375,7 @@
         [_alertView show];
         [_alertView release];
     }
+#if ENABLE_CHANGE_IMAGE
     else if (indexPath.row == 1)
     {
         //change Image
@@ -345,24 +390,8 @@
         
         
     }
+#endif
 }
-
-//#pragma mark - UIAlertViewDelegate
-//- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
-//    
-//    
-//    if (buttonIndex == 1)
-//    {
-//        _cameraNewName = (NSString *)([alertView textFieldAtIndex:0].text);
-//        NSLog(@"new Camera name is %@", _cameraNewName);
-//        
-//        if ([self isCamNameValidated:_cameraNewName])
-//        {
-//            [alertView dismissWithClickedButtonIndex:0 animated:NO];
-//            [self doneAction:nil];
-//        }
-//    }
-//}
 
 - (void)doneAction: (id)sender
 {
