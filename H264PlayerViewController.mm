@@ -4720,7 +4720,7 @@ double _ticks = 0;
         {
             _isRecordInterface = YES;
             [self changeAction:nil];
-            [self.ib_buttonChangeAction setEnabled:NO];
+            [self.ib_buttonChangeAction setHidden:YES];
         }
     }
     else if (_selectedItemMenu == INDEX_MELODY)
@@ -5532,8 +5532,12 @@ double _ticks = 0;
         }
         else{
             _syncPortraitAndLandscape = NO;
-            [self.ib_buttonChangeAction setHidden:NO];
-            [self.view bringSubviewToFront:self.ib_buttonChangeAction];
+            
+            if (![_cameraModel isEqualToString:CP_MODEL_SHARED_CAM])
+            {
+                [self.ib_buttonChangeAction setHidden:NO];
+                [self.view bringSubviewToFront:self.ib_buttonChangeAction];
+            }
         }
 
         if (!_syncPortraitAndLandscape)
