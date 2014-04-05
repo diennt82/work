@@ -755,6 +755,32 @@
     //and then disable user interaction
     [self.navigationController.navigationBar setUserInteractionEnabled:NO];
     
+    
+    /** SEND auth data over first */
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    
+    NSString *apiKey    = [userDefaults objectForKey:@"PortalApiKey"];
+    
+    NSDate *now = [NSDate date];
+    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+    [formatter setDateFormat:@"ZZZ"];
+    
+    NSMutableString *stringFromDate = [NSMutableString stringWithString:[formatter stringFromDate:now]];
+    
+    [stringFromDate insertString:@"." atIndex:3];
+
+    
+    
+    NSString * set_auth_cmd = [NSString stringWithFormat:@"%@%@%@%@%@",
+                               SET_SERVER_AUTH,
+                               SET_SERVER_AUTH_PARAM1, apiKey,
+                               SET_SERVER_AUTH_PARAM2, stringFromDate];
+    
+    NSString *response = [[HttpCom instance].comWithDevice sendCommandAndBlock:set_auth_cmd
+                                                                      withTimeout:10.0];
+    
+    NSLog(@"set auth response: %@ ", response);
+
     [self prepareWifiInfo]; 
     
     //Save and send 
@@ -765,19 +791,12 @@
     }
 
     
-    NSLog(@"SSID: %@   - %@", self.ssid, self.deviceConf.ssid );
     
 //    DeviceConfiguration * sent_conf = [[DeviceConfiguration alloc] init];
     
     [_deviceConf restoreConfigurationData:[Util readDeviceConfiguration]];
     
-    
-    NSString *deviceCodec = [[HttpCom instance].comWithDevice sendCommandAndBlock:GET_CODECS_SUPPORT
-                                withTimeout:5.0];
-    
-    [[NSUserDefaults standardUserDefaults] setObject:deviceCodec  forKey:CODEC_PREFS];
-    [[NSUserDefaults standardUserDefaults] synchronize];
-    
+   
      NSString * device_configuration = [_deviceConf getDeviceEncodedConfString];
     
     
@@ -785,20 +804,28 @@
                             SETUP_HTTP_CMD,device_configuration];
     
 	NSLog(@"Log - before send: %@", setup_cmd);
-    
-	NSString * response =
-    [[HttpCom instance].comWithDevice sendCommandAndBlock:setup_cmd ];
+    response = [[HttpCom instance].comWithDevice sendCommandAndBlock:setup_cmd ];
     
     NSLog(@"Step_06VC - after send cmd - response is: %@", response);
     
     //Should check connect to camera here(after send command setup http)
     //Check app is already connected to camera which is setup or not, call once
-    [NSTimer scheduledTimerWithTimeInterval: 3.0//wait 10s and then check app connect to camera
+    [NSTimer scheduledTimerWithTimeInterval: 3.0
                                      target:self
-                                   selector:@selector(checkAppConnectToCameraAtStep03)
+                                   selector:@selector(moveOnToCheckCameraOnlineStatus)
                                    userInfo:nil
                                     repeats:NO];
  
+}
+
+
+-(void)moveOnToCheckCameraOnlineStatus
+{
+    [self resetAllTimer];
+    [self nextStepVerifyPassword];
+    [self.progressView removeFromSuperview];
+    [self.infoSelectCameView removeFromSuperview];
+    [self.progressView setHidden:YES];
 }
 
 - (void)checkAppConnectToCameraAtStep03
@@ -870,67 +897,40 @@
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
     
-    BOOL isFirstTimeSetup = [[NSUserDefaults standardUserDefaults] boolForKey:FIRST_TIME_SETUP];
-
-    if (isFirstTimeSetup   == TRUE)
+    
+    //load step 10
+    NSLog(@"Add cam... ");
+    NSLog(@"Load Step 10");
+    
+    if (_deviceConf.ssid != nil)
     {
-        //load step 08
-        NSLog(@"Load step 8");
-        //Load the next xib
-        Step_08_ViewController *step08ViewController = nil;
+        NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+        [userDefaults setObject:_deviceConf.ssid  forKey:HOME_SSID];
+        [userDefaults synchronize];
+    }
+    
+    //Load the next xib
+    
+    Step_10_ViewController *step10ViewController = nil;
+    
+    
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+    {
         
-        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
-        {
-            
-            step08ViewController = [[Step_08_ViewController alloc]
-                                    initWithNibName:@"Step_08_ViewController_ipad" bundle:nil];
-            
-        }
-        else
-        {
-            step08ViewController = [[Step_08_ViewController alloc]
-                                    initWithNibName:@"Step_08_ViewController" bundle:nil];
-        }
-        step08ViewController.ssid = _deviceConf.ssid;
-        [self.navigationController pushViewController:step08ViewController animated:NO];
         
-        [step08ViewController release];
+        step10ViewController = [[Step_10_ViewController alloc]
+                                initWithNibName:@"Step_10_ViewController_ipad" bundle:nil];
     }
     else
     {
-        //load step 10
-        NSLog(@"Add cam... ");
-        NSLog(@"Load Step 10");
         
-        if (_deviceConf.ssid != nil)
-        {
-            NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-            [userDefaults setObject:_deviceConf.ssid  forKey:HOME_SSID];
-            [userDefaults synchronize];
-        }
-        
-        //Load the next xib
-        
-        Step_10_ViewController *step10ViewController = nil;
-        
-        
-        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
-        {
-            
-            
-            step10ViewController = [[Step_10_ViewController alloc]
-                                    initWithNibName:@"Step_10_ViewController_ipad" bundle:nil];
-        }
-        else
-        {
-            
-            step10ViewController = [[Step_10_ViewController alloc]
-                                    initWithNibName:@"Step_10_ViewController" bundle:nil];
-        }
-        
-        [self.navigationController pushViewController:step10ViewController animated:NO];
-        [step10ViewController release];
+        step10ViewController = [[Step_10_ViewController alloc]
+                                initWithNibName:@"Step_10_ViewController" bundle:nil];
     }
+    
+    [self.navigationController pushViewController:step10ViewController animated:NO];
+    [step10ViewController release];
+    
 }
 
 - (void)getStatusOfCameraToWifi:(NSTimer *)info

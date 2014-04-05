@@ -91,63 +91,50 @@
         NSLog(@"progressView = nil!!!!");
     }
     
-    BOOL firstime = [userDefaults boolForKey:FIRST_TIME_SETUP];
+    
+    //Hide back button -- can't go back now..
+    self.navigationItem.hidesBackButton = TRUE;
+    self.navigationItem.hidesBackButton = YES;
+    
+    UIImage *hubbleLogoBack = [UIImage imageNamed:@"Hubble_back_text"];
+    UIBarButtonItem *barBtnHubble = [[UIBarButtonItem alloc] initWithImage:hubbleLogoBack
+                                                                     style:UIBarButtonItemStyleBordered
+                                                                    target:self
+                                                                    action:@selector(hubbleItemAction:)];
+    [barBtnHubble setTintColor:[UIColor colorWithPatternImage:hubbleLogoBack]];
+    
+    self.navigationItem.leftBarButtonItem = barBtnHubble;
+    
+    NSLog(@"Normal Add cam sequence" );
+    
+    NSString * homeSsid = (NSString *) [userDefaults objectForKey:HOME_SSID];
+    
+    //Add view guild first and hide it
+    [self.view addSubview:self.ib_viewGuild];
+    [self.ib_viewGuild setHidden:YES];
+    
+    UIImageView *imageView = (UIImageView *)[_progressView viewWithTag:595];
+    imageView.animationImages =[NSArray arrayWithObjects:
+                                [UIImage imageNamed:@"setup_camera_c1"],
+                                [UIImage imageNamed:@"setup_camera_c2"],
+                                [UIImage imageNamed:@"setup_camera_c3"],
+                                [UIImage imageNamed:@"setup_camera_c4"],
+                                nil];
+    imageView.animationDuration = 1.5;
+    imageView.animationRepeatCount = 0;
+    [self.view addSubview:self.progressView];
+    [imageView startAnimating];
+    [self showProgress:nil];
+    
+    self.homeSSID.text = homeSsid;
     
     
-    //Check to see which path we should go
-    if (firstime == TRUE)
-    {
-        // Do any additional setup after loading the view.
-        
-        self.navigationItem.title =NSLocalizedStringWithDefaultValue(@"Account_Created",nil, [NSBundle mainBundle],
-                                                                     @"Account Created" , nil);
-        self.navigationItem.hidesBackButton = YES;
-        
-        [self.view addSubview:self.progressView];
-        self.progressView.hidden = YES;
-    }
-    else //not first time --> this is normal add camera sequence..
-    {
-        //Hide back button -- can't go back now..
-        self.navigationItem.hidesBackButton = TRUE;
-        self.navigationItem.hidesBackButton = YES;
-        
-        UIImage *hubbleLogoBack = [UIImage imageNamed:@"Hubble_back_text"];
-        UIBarButtonItem *barBtnHubble = [[UIBarButtonItem alloc] initWithImage:hubbleLogoBack
-                                                                         style:UIBarButtonItemStyleBordered
-                                                                        target:self
-                                                                        action:@selector(hubbleItemAction:)];
-        [barBtnHubble setTintColor:[UIColor colorWithPatternImage:hubbleLogoBack]];
-        
-        self.navigationItem.leftBarButtonItem = barBtnHubble;
-        
-        NSLog(@"Normal Add cam sequence" );
-        
-        NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-        NSString * homeSsid = (NSString *) [userDefaults objectForKey:HOME_SSID];
-        
-        //Add view guild first and hide it
-        [self.view addSubview:self.ib_viewGuild];
-        [self.ib_viewGuild setHidden:YES];
-        
-        UIImageView *imageView = (UIImageView *)[_progressView viewWithTag:595];
-        imageView.animationImages =[NSArray arrayWithObjects:
-                                    [UIImage imageNamed:@"setup_camera_c1"],
-                                    [UIImage imageNamed:@"setup_camera_c2"],
-                                    [UIImage imageNamed:@"setup_camera_c3"],
-                                    [UIImage imageNamed:@"setup_camera_c4"],
-                                    nil];
-        imageView.animationDuration = 1.5;
-        imageView.animationRepeatCount = 0;
-        [self.view addSubview:self.progressView];
-        [imageView startAnimating];
-        [self showProgress:nil];
-        
-        self.homeSSID.text = homeSsid;
-        
-        //First add camera
-        [self registerCamera:nil];
-    }
+    
+    [self waitingCameraRebootAndForceToWifiHome];
+    
+    ////First add camera
+    //[self registerCamera:nil];
+    
 }
 
 -(void) showProgress:(NSTimer *) exp
@@ -234,6 +221,7 @@
     [self showDialogChooseConfigCamera];
 }
 
+#if 0
 - (IBAction)registerCamera:(id)sender
 {
     self.progressView.hidden = NO;
@@ -280,7 +268,7 @@
     
     [stringFromDate insertString:@"." atIndex:3];
     
-    NSLog(@"%@", stringFromDate);
+    //NSLog(@"%@", stringFromDate);
     
     [formatter release];
     
@@ -364,14 +352,10 @@
     }
 }
 
+#endif
+
 #pragma  mark -
 #pragma mark Timer callbacks
--(void) silentRetryTimeout:(NSTimer *) expired
-{
-    //TIMEOUT --
-    should_retry_silently = FALSE;
-    
-}
 
 -(void) homeWifiScanTimeout: (NSTimer *) expired
 {
@@ -381,9 +365,9 @@
     
     NSLog(@" Timeout while trying to search for Home Wifi: %@", homeSsid);
     
-
+    
     [self setStopScanning:Nil];
-
+    
 }
 
 - (void) step10CheckConnectionToHomeWifi:(NSTimer *) expired
@@ -397,14 +381,29 @@
     //current wifi of camera setup
     NSString *wifiCameraSetup = [userDefaults stringForKey:@"CameraName"];
     
-    if (currentSSID !=nil && ![currentSSID isEqualToString:wifiCameraSetup])
-    //if (currentSSID !=nil && ![currentSSID isEqualToString:wifiCameraSetup] && ![currentSSID isEqualToString:homeSsid])
+   
+    if ((currentSSID == nil) || [currentSSID isEqualToString:wifiCameraSetup])
     {
-        //NSLog(@"Display infos for user select wifi home");
-        //[self connectToWifiHomeByHand];
+        NSLog(@"Now, still connected to wifiOf Camera, continue check");
+        [NSTimer scheduledTimerWithTimeInterval: 3.0//
+                                         target:self
+                                       selector:@selector(step10CheckConnectionToHomeWifi:)
+                                       userInfo:nil
+                                        repeats:NO];
+    }
+    
+    else //
+    {
+        NSLog(@"Yeah, already connected to another wifi: %@ ",currentSSID);
+        if ([currentSSID isEqualToString:homeSsid])
+        {
+            NSLog(@"It is wifi home");
+        }
+        //What if this wifi does not have internet connect OR
+        //  The wifi selected for camera does not have internet connection ????
         
-        //app is already connect to wifi home.
-        NSLog(@"Yeah, already connected to wifi, maybe not wifi home");
+        
+        
         //yeah we're connected ... check for ip??
 		[self.ib_viewGuild setHidden:YES];
         [self showProgress:nil];
@@ -419,6 +418,13 @@
                 [timeOut invalidate];
                 
             }
+            //Timer ticky 5min - for camera reboot and scan camera
+            timeOut = [NSTimer scheduledTimerWithTimeInterval:5*60.0
+                                                       target:self
+                                                     selector:@selector(homeWifiScanTimeout:)
+                                                     userInfo:nil
+                                                      repeats:NO];
+            
             [self wait_for_camera_to_reboot:nil];
         }
         else
@@ -441,22 +447,7 @@
                                        userInfo:nil
                                         repeats:NO];
     }
-    else if (currentSSID == nil)
-    {
-        [NSTimer scheduledTimerWithTimeInterval: 3.0//
-                                         target:self
-                                       selector:@selector(step10CheckConnectionToHomeWifi:)
-                                       userInfo:nil
-                                        repeats:NO];
-        
-    }
     
-    //Timer ticky 5min - for camera reboot and scan camera
-    timeOut = [NSTimer scheduledTimerWithTimeInterval:5*60.0
-                                               target:self
-                                             selector:@selector(homeWifiScanTimeout:)
-                                             userInfo:nil
-                                              repeats:NO];
 }
 
 - (void)connectToWifiHomeByHand
@@ -539,41 +530,16 @@
         NSLog(@"Step_10VC - Continue scan...");
     }
     
-    if (scanner == nil)
+    
+    if ([self checkItOnline])
     {
-        scanner =[[ScanForCamera alloc]init];
-    }
-    [scanner scan_for_device:self.cameraMac];
-    
-    
-    
-    [NSTimer scheduledTimerWithTimeInterval: 2 //
-                                     target:self
-                                   selector:@selector(checkScanResult:)
-                                   userInfo:nil
-                                    repeats:NO];
-}
-
-- (void) checkScanResult: (NSTimer *) expired
-{
-    if (scanner == nil)
-    {
-        NSLog(@"ERROR : scan = nil, don't reschedule");
-        return;
-    }
-    
-    NSArray * result ;
-    
-    if ([scanner getResults:&result])
-    {
-        NSLog(@"Got some result, check if there is this camera that we are waiting for ");
-        if ([self checkItOnline])
-        {
-            //Found it online
-            NSLog(@"Found it online");
-            return;
-        }
+        //Found it online
+        NSLog(@"Found it online");
+        [self setupCompleted];
         
+    }
+    else
+    {
         //retry scannning..
         [NSTimer scheduledTimerWithTimeInterval: 0.01
                                          target:self
@@ -581,17 +547,10 @@
                                        userInfo:nil
                                         repeats:NO];
     }
-    else
-    {
-        
-        //check back later..
-        [NSTimer scheduledTimerWithTimeInterval: 3//
-                                         target:self
-                                       selector:@selector(checkScanResult:)
-                                       userInfo:nil
-                                        repeats:NO];
-    }
+    
+    return;
 }
+
 
 -(BOOL) checkItOnline
 {
@@ -612,9 +571,9 @@
     
     if ( checkCameraAddedIsAvailable)
     {
-        NSLog(@"Found camera is online(1 or 0): %d", checkCameraAddedIsAvailable);
-        should_stop_scanning = YES;
-        [self setupCompleted];
+
+        NSLog(@"Found a local ip: %@", localIp);
+        
         return TRUE;
     }
     
@@ -654,8 +613,6 @@
     [step12ViewController release];
 }
 
-- (IBAction)resumeSetupAction:(id)sender {
-}
 
 - (void)  setupFailed
 {

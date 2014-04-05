@@ -7,7 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-#import <CameraScanner/CameraScanner.h>
+
 #import <MonitorCommunication/MonitorCommunication.h>
 
 #import "define.h"
@@ -47,7 +47,7 @@
     int num_scan_time;
     BOOL should_stop_scanning; 
 
-    ScanForCamera * scanner; 
+
     NSString *cameraMac, *master_key;
     
     BOOL should_retry_silently ;
@@ -83,7 +83,7 @@
 -(IBAction)registerCamera:(id)sender;
 
 - (void) wait_for_camera_to_reboot:(NSTimer *)exp;
-- (void) checkScanResult: (NSTimer *) expired;
+
 
 - (void) setupCompleted;
 - (IBAction)resumeSetupAction:(id)sender;
