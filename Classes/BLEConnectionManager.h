@@ -61,9 +61,11 @@ typedef enum
     CBPeripheral *_myPeripheral;
     NSMutableArray *_listBLEs;
   
+    BOOL needReconnect; 
     int scanMode;
     
 }
+@property (nonatomic) BOOL needReconnect;
 @property (retain, nonatomic) CBCentralManager *cm;
 
 @property (nonatomic, strong) CBPeripheral *myPeripheral;
@@ -75,7 +77,7 @@ typedef enum
 @property (nonatomic,assign) BOOL isOnBLE;
 @property (assign) id<BLEConnectionManagerDelegate> delegate;
 
-+ (BLEConnectionManager *)sharedManager;
+
 + (ConnectionState)checkStatusConnectBLE;
 + (BLEConnectionManager *) getInstanceBLE;
 - (id) init;

@@ -607,6 +607,7 @@
 {
     //Disconnect BLE
     NSLog(@"Disconnect BLE ");
+    [BLEConnectionManager getInstanceBLE].needReconnect = NO;
     [[BLEConnectionManager getInstanceBLE] disconnect];
     
     //Load step 12
@@ -636,6 +637,7 @@
 {
     //Disconnect BLE
     NSLog(@"Disconnect BLE ");
+    [BLEConnectionManager getInstanceBLE].needReconnect = NO;
     [[BLEConnectionManager getInstanceBLE] disconnect];
     
  	NSLog(@"Setup has failed - remove cam on server");

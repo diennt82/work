@@ -30,15 +30,9 @@
 @synthesize isOnBLE = _isOnBLE;
 @synthesize delegate = _delegate;
 
-static BLEConnectionManager *sharedMyManager = nil;
+@synthesize  needReconnect;
 
-+ (BLEConnectionManager *)sharedManager {
-    @synchronized(self) {
-        if(sharedMyManager == nil)
-            sharedMyManager = [[super allocWithZone:NULL] init];
-    }
-    return sharedMyManager;
-}
+
 
 + (BLEConnectionManager *) getInstanceBLE
 {
@@ -65,6 +59,7 @@ static BLEConnectionManager *sharedMyManager = nil;
     if (self) {
         _state = IDLE;
         _isOnBLE = NO;
+        needReconnect = YES;
         _listBLEs = [[NSMutableArray alloc] init];
         _uartPeripheral = [[UARTPeripheral alloc] initWithPeripheral:nil delegate:self];
         _cm = [[CBCentralManager alloc] initWithDelegate:self queue:nil];
@@ -188,10 +183,10 @@ static BLEConnectionManager *sharedMyManager = nil;
 - (void) onReceiveDataError:(int)error_code forCommand:(NSString *)commandToCamera
 {
     NSLog(@"Error code is %d and command  %@***************************", error_code, commandToCamera);
-   
+    
     if (error_code == READ_TIME_OUT)
     {
-
+        
         
         /*20140402_stephen request: dont disconnect, just re-send the command*/
         [self disconnect];
@@ -250,7 +245,7 @@ static BLEConnectionManager *sharedMyManager = nil;
             [peripheral.name hasPrefix:@"CameraHD-0085"])
         {
             NSLog(@"Did discover peripheral name %@ and peripheral is %@", peripheral.name, peripheral);
-
+            
             if (![self.listBLEs containsObject:peripheral])
             {
                 [self.listBLEs addObject:peripheral];
@@ -287,7 +282,7 @@ static BLEConnectionManager *sharedMyManager = nil;
 - (void) centralManager:(CBCentralManager *)central didConnectPeripheral:(CBPeripheral *)peripheral
 {
     NSLog(@"Did connect peripheral %@", peripheral.name);
-  
+    
     if ([_uartPeripheral.peripheral isEqual:peripheral])
     {
         [_uartPeripheral didConnect];
@@ -306,21 +301,38 @@ static BLEConnectionManager *sharedMyManager = nil;
 - (void) centralManager:(CBCentralManager *)central didDisconnectPeripheral:(CBPeripheral *)peripheral error:(NSError *)error
 {
     NSLog(@"didDisconnectPeripheral %@ with error: %@", peripheral.name , error.description);
-  
+    
     self.state = DISCONNECTED;
     self.isOnBLE = NO;
     
     if (self.delegate != nil)
     {
         [self.delegate bleDisconnected];
+        if ([self.uartPeripheral.peripheral isEqual:peripheral])
+            
+        {
+            [self.uartPeripheral didDisconnect];
+            [self disconnect];
+        }
+        
+    }
+    else
+    {
+        if ([self.uartPeripheral.peripheral isEqual:peripheral])
+            
+        {
+            [self.uartPeripheral didDisconnect];
+            [self disconnect];
+        }
+        
+        
+        if (self.needReconnect == YES)
+        {
+            NSLog(@" delegate = nil, rescan myself");
+            [self reScanForPeripheral:[UARTPeripheral uartServiceUUID]];
+        }
     }
     
-    if ([self.uartPeripheral.peripheral isEqual:peripheral])
-        
-    {
-        [self.uartPeripheral didDisconnect];
-        [self disconnect];
-    }
 }
 
 // Just Clean a warning!
