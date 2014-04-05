@@ -12,7 +12,7 @@
 
 #define BTN_CONTINUE_TAG    599
 #define BTN_TRY_AGAIN_TAG   559
-#define BLE_TIMEOUT_PROCESS 5*60
+#define BLE_TIMEOUT_PROCESS 30//5*60.0
 
 @interface NetworkInfoToCamera_VController () <UITextFieldDelegate>
 

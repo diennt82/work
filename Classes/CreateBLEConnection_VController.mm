@@ -12,7 +12,7 @@
 #import "CustomIOS7AlertView.h"
 
 #define BTN_CONTINUE_TAG 599
-#define BLE_TIMEOUT_PROCESS 5*60
+#define BLE_TIMEOUT_PROCESS 1*60
 
 @interface CreateBLEConnection_VController () <CustomIOS7AlertViewDelegate>
 

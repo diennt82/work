@@ -114,7 +114,7 @@
     [self.ibBGAddCamera setImage:[UIImage imageNamed:@"add_camera_btn"]];
     [self.ibIconAddCamera setImage:[UIImage imageNamed:@"add_camera"]];
     [self.ibTextAddCamera setTextColor:[UIColor whiteColor]];
-    if (_camChannels.count > MAX_CAM_ALLOWED)
+    if (_camChannels.count >= MAX_CAM_ALLOWED)
     {
         [self cameraShowDialog:DIALOG_CANT_ADD_CAM];
     }
