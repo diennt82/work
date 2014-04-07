@@ -179,18 +179,14 @@
 
 -(void) viewWillAppear:(BOOL)animated
 {
-    
-    UIInterfaceOrientation interfaceOrientation = [UIApplication sharedApplication].statusBarOrientation;
-    [self adjustViewsForOrientations:interfaceOrientation];
-    
     NSLog(@"update security type");
     UITextField * _sec = (UITextField *) [self.securityCell viewWithTag:1];
     if (_sec != nil)
     {
         _sec.text = self.security; 
     }
+    
     _isUserMakeConnect = NO;
-
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -278,71 +274,72 @@
             self.navigationItem.rightBarButtonItem.tintColor = nil;
         }
     }
+    
     return YES;
 }
 
-#pragma mark -
-#pragma mark Rotating
-- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
+- (void)textFieldDidBeginEditing:(UITextField *)textField
 {
-    return   ((interfaceOrientation == UIInterfaceOrientationPortrait) ||
-              (interfaceOrientation == UIInterfaceOrientationLandscapeLeft) ||
-              (interfaceOrientation == UIInterfaceOrientationLandscapeRight));
+    if (textField.tag !=202 ) // Dont move if it's the SSID name
+    {
+        [self animateTextField: textField up: YES];
+    }
 }
 
--(BOOL)shouldAutorotate
+- (void)textFieldDidEndEditing:(UITextField *)textField
 {
+    if (textField.tag !=202 ) // Dont move if it's the SSID name
+    {
+        [self animateTextField: textField up: NO];
+    }
+}
+
+- (void) animateTextField: (UITextField*) textField up: (BOOL) up
+{
+    int movementDistance = 80; // tweak as needed
+    
+    const float movementDuration = 0.3f; // tweak as needed
+    
+    UIInterfaceOrientation interfaceOrientation = [UIApplication sharedApplication].statusBarOrientation;
+    
+    
+    if (textField.tag ==201 &&
+        (interfaceOrientation == UIInterfaceOrientationLandscapeLeft ||
+         interfaceOrientation == UIInterfaceOrientationLandscapeRight)
+        ) //Confirm Password cell
+    {
+        movementDistance+= 40;
+    }
+    
+    int movement = (up ? -movementDistance : movementDistance);
+    
+    [UIView beginAnimations: @"anim" context: nil];
+    [UIView setAnimationBeginsFromCurrentState: YES];
+    [UIView setAnimationDuration: movementDuration];
+    self.view.frame = CGRectOffset(self.view.frame, 0, movement);
+    [UIView commitAnimations];
+}
+
+- (BOOL)textFieldShouldReturn:(UITextField *)textField {
+    
+    if (textField.tag == 200) //password
+    {
+        self.password = textField.text;
+        [self.tfConfirmPass becomeFirstResponder];
+    }
+    else if (textField.tag ==201) //conf password
+    {
+        [textField resignFirstResponder];
+    }
+    else
+    {
+        [textField resignFirstResponder];
+        
+        return NO;
+    }
+    
     return YES;
 }
-
--(NSUInteger) supportedInterfaceOrientations
-{
-    return UIInterfaceOrientationMaskAllButUpsideDown;
-}
-
--(void) willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
-{
-    [self adjustViewsForOrientations:toInterfaceOrientation];
-}
-
--(void) adjustViewsForOrientations: (UIInterfaceOrientation) interfaceOrientation
-{
-#if 0
-    if (interfaceOrientation == UIInterfaceOrientationLandscapeLeft ||
-        interfaceOrientation == UIInterfaceOrientationLandscapeRight)
-    {
-        
-    }
-    else if (interfaceOrientation == UIInterfaceOrientationPortrait ||
-             interfaceOrientation == UIInterfaceOrientationPortraitUpsideDown)
-    {
-        
-    }
-#endif
-    
-    
-    //Resign all keyboard...
-    UITextField * textField = nil;
-    
-    textField = (UITextField *) [self.view viewWithTag:200];
-    if(textField != nil)
-    {
-        [textField resignFirstResponder]; 
-    }
-    
-    textField = (UITextField *) [self.view viewWithTag:201];
-    if(textField != nil)
-    {
-        [textField resignFirstResponder];
-    }
-    
-    textField = (UITextField *) [self.view viewWithTag:202];
-    if(textField != nil)
-    {
-        [textField resignFirstResponder];
-    }
-}
-
 
 #pragma  mark -
 #pragma mark Table View delegate & datasource
@@ -585,96 +582,6 @@
     }
 }
 
-- (void)textFieldDidBeginEditing:(UITextField *)textField
-{
-    if (textField.tag !=202 ) // Dont move if it's the SSID name
-    {
-     
-        [self animateTextField: textField up: YES];
-    }
-}
-
-- (void)textFieldDidEndEditing:(UITextField *)textField
-{
-    
-    if (textField.tag !=202 ) // Dont move if it's the SSID name
-    {
-        
-        [self animateTextField: textField up: NO];
-    }
-}
-
-- (void) animateTextField: (UITextField*) textField up: (BOOL) up
-{
-    int movementDistance = 80; // tweak as needed
-    
-    const float movementDuration = 0.3f; // tweak as needed
-    
-    UIInterfaceOrientation interfaceOrientation = [UIApplication sharedApplication].statusBarOrientation;
-    
-    
-    if (textField.tag ==201 &&
-          (interfaceOrientation == UIInterfaceOrientationLandscapeLeft ||
-           interfaceOrientation == UIInterfaceOrientationLandscapeRight)
-        ) //Confirm Password cell
-    {
-        movementDistance+= 40; 
-    }
-    
-    
-    int movement = (up ? -movementDistance : movementDistance);
-    
-    [UIView beginAnimations: @"anim" context: nil];
-    [UIView setAnimationBeginsFromCurrentState: YES];
-    [UIView setAnimationDuration: movementDuration];
-    self.view.frame = CGRectOffset(self.view.frame, 0, movement);
-    [UIView commitAnimations];
-}
-
-- (BOOL)textFieldShouldReturn:(UITextField *)textField {
-	    
-    if (textField.tag == 200) //password
-    {
-        self.password = textField.text;
-        [textField resignFirstResponder];
-        return NO;
-    }
-    else if (textField.tag ==201) //conf password
-    {
-#if 0
-        NSString * confpass = textField.text; 
-        if (![confpass isEqualToString:self.password])
-        {
-         
-            NSLog(@"pass not match: %@ vs %@", confpass, self.password);
-
-            NSString * msg_fail = NSLocalizedStringWithDefaultValue(@"Confirm_Pass_Fail", nil, [NSBundle mainBundle], @"Le mot de passe ne correspond pas. S'il vous plaît, saisir à nouveau !", nil);
-            //ERROR condition
-            UIAlertView *_alert = [[UIAlertView alloc]
-                                   initWithTitle:@"Confirm Password Failed"
-                                   message:msg_fail
-                                   delegate:self
-                                   cancelButtonTitle:@"OK"
-                                   otherButtonTitles:nil];
-            [_alert show];
-            [_alert release];
-        }
-#endif 
-        [textField resignFirstResponder];
-        
-        return NO;
-        
-    }
-    else
-    {
-        [textField resignFirstResponder];
-        
-        return NO;
-    }
-    
-    return YES;
-}
-
 -(void) prepareWifiInfo
 {
     //NOTE: we can do this because we are connecting to camera now 
@@ -779,7 +686,7 @@
     NSString *response = [[HttpCom instance].comWithDevice sendCommandAndBlock:set_auth_cmd
                                                                       withTimeout:10.0];
     
-    NSLog(@"set auth response: %@ ", response);
+    NSLog(@"set auth -set_auth_cmd: %@, -response: %@ ", set_auth_cmd, response);
 
     [self prepareWifiInfo]; 
     
