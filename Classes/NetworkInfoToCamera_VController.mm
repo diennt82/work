@@ -12,7 +12,7 @@
 
 #define BTN_CONTINUE_TAG    599
 #define BTN_TRY_AGAIN_TAG   559
-#define BLE_TIMEOUT_PROCESS 30//5*60.0
+#define BLE_TIMEOUT_PROCESS 60//5*60.0
 
 @interface NetworkInfoToCamera_VController () <UITextFieldDelegate>
 
@@ -167,6 +167,8 @@
     }
     
     [BLEConnectionManager getInstanceBLE].delegate = self;
+    [self.view addSubview:_viewError];
+    [_viewError setHidden:YES];
 }
 
 - (void)viewDidUnload
@@ -692,10 +694,19 @@
     
     self.shouldTimeoutProcessing = TRUE;
     
-    [self.viewProgress removeFromSuperview];
-    
-    [self.view addSubview:_viewError];
-    [self.view bringSubviewToFront:_viewError];
+    //disconnect to BLE and return to guide screen.
+    if ([BLEConnectionManager getInstanceBLE].state == CONNECTED)
+    {
+        [[BLEConnectionManager getInstanceBLE] stopScanBLE];
+        [self disconnectToBLE];
+    }
+    else
+    {
+        [self.viewProgress removeFromSuperview];
+        
+        [_viewError setHidden:NO];
+        [self.view bringSubviewToFront:_viewError];
+    }
 }
 
 -(void) prepareWifiInfo
@@ -760,13 +771,21 @@
     if (_shouldTimeoutProcessing)
     {
         //NSLog(@"NWINFO - bleDisconnected");
+        [self.viewProgress removeFromSuperview];
+        
+        [_viewError setHidden:NO];
+        [self.view bringSubviewToFront:_viewError];
     }
     else
     {
         [self rescanToConnectToBLE];
     }
 }
-
+- (void)disconnectToBLE
+{
+    [BLEConnectionManager getInstanceBLE].delegate = self;
+    [[BLEConnectionManager getInstanceBLE] disconnect];
+}
 - (void)rescanToConnectToBLE
 {
     NSLog(@"NetworkInfo - rescanToConnectToBLE - Reconnect after 2s");
