@@ -179,18 +179,14 @@
 
 -(void) viewWillAppear:(BOOL)animated
 {
-    
-    UIInterfaceOrientation interfaceOrientation = [UIApplication sharedApplication].statusBarOrientation;
-    [self adjustViewsForOrientations:interfaceOrientation];
-    
     NSLog(@"update security type");
     UITextField * _sec = (UITextField *) [self.securityCell viewWithTag:1];
     if (_sec != nil)
     {
         _sec.text = self.security; 
     }
+    
     _isUserMakeConnect = NO;
-
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -278,71 +274,72 @@
             self.navigationItem.rightBarButtonItem.tintColor = nil;
         }
     }
+    
     return YES;
 }
 
-#pragma mark -
-#pragma mark Rotating
-- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
+- (void)textFieldDidBeginEditing:(UITextField *)textField
 {
-    return   ((interfaceOrientation == UIInterfaceOrientationPortrait) ||
-              (interfaceOrientation == UIInterfaceOrientationLandscapeLeft) ||
-              (interfaceOrientation == UIInterfaceOrientationLandscapeRight));
+    if (textField.tag !=202 ) // Dont move if it's the SSID name
+    {
+        [self animateTextField: textField up: YES];
+    }
 }
 
--(BOOL)shouldAutorotate
+- (void)textFieldDidEndEditing:(UITextField *)textField
 {
+    if (textField.tag !=202 ) // Dont move if it's the SSID name
+    {
+        [self animateTextField: textField up: NO];
+    }
+}
+
+- (void) animateTextField: (UITextField*) textField up: (BOOL) up
+{
+    int movementDistance = 80; // tweak as needed
+    
+    const float movementDuration = 0.3f; // tweak as needed
+    
+    UIInterfaceOrientation interfaceOrientation = [UIApplication sharedApplication].statusBarOrientation;
+    
+    
+    if (textField.tag ==201 &&
+        (interfaceOrientation == UIInterfaceOrientationLandscapeLeft ||
+         interfaceOrientation == UIInterfaceOrientationLandscapeRight)
+        ) //Confirm Password cell
+    {
+        movementDistance+= 40;
+    }
+    
+    int movement = (up ? -movementDistance : movementDistance);
+    
+    [UIView beginAnimations: @"anim" context: nil];
+    [UIView setAnimationBeginsFromCurrentState: YES];
+    [UIView setAnimationDuration: movementDuration];
+    self.view.frame = CGRectOffset(self.view.frame, 0, movement);
+    [UIView commitAnimations];
+}
+
+- (BOOL)textFieldShouldReturn:(UITextField *)textField {
+    
+    if (textField.tag == 200) //password
+    {
+        self.password = textField.text;
+        [self.tfConfirmPass becomeFirstResponder];
+    }
+    else if (textField.tag ==201) //conf password
+    {
+        [textField resignFirstResponder];
+    }
+    else
+    {
+        [textField resignFirstResponder];
+        
+        return NO;
+    }
+    
     return YES;
 }
-
--(NSUInteger) supportedInterfaceOrientations
-{
-    return UIInterfaceOrientationMaskAllButUpsideDown;
-}
-
--(void) willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
-{
-    [self adjustViewsForOrientations:toInterfaceOrientation];
-}
-
--(void) adjustViewsForOrientations: (UIInterfaceOrientation) interfaceOrientation
-{
-#if 0
-    if (interfaceOrientation == UIInterfaceOrientationLandscapeLeft ||
-        interfaceOrientation == UIInterfaceOrientationLandscapeRight)
-    {
-        
-    }
-    else if (interfaceOrientation == UIInterfaceOrientationPortrait ||
-             interfaceOrientation == UIInterfaceOrientationPortraitUpsideDown)
-    {
-        
-    }
-#endif
-    
-    
-    //Resign all keyboard...
-    UITextField * textField = nil;
-    
-    textField = (UITextField *) [self.view viewWithTag:200];
-    if(textField != nil)
-    {
-        [textField resignFirstResponder]; 
-    }
-    
-    textField = (UITextField *) [self.view viewWithTag:201];
-    if(textField != nil)
-    {
-        [textField resignFirstResponder];
-    }
-    
-    textField = (UITextField *) [self.view viewWithTag:202];
-    if(textField != nil)
-    {
-        [textField resignFirstResponder];
-    }
-}
-
 
 #pragma  mark -
 #pragma mark Table View delegate & datasource
@@ -585,96 +582,6 @@
     }
 }
 
-- (void)textFieldDidBeginEditing:(UITextField *)textField
-{
-    if (textField.tag !=202 ) // Dont move if it's the SSID name
-    {
-     
-        [self animateTextField: textField up: YES];
-    }
-}
-
-- (void)textFieldDidEndEditing:(UITextField *)textField
-{
-    
-    if (textField.tag !=202 ) // Dont move if it's the SSID name
-    {
-        
-        [self animateTextField: textField up: NO];
-    }
-}
-
-- (void) animateTextField: (UITextField*) textField up: (BOOL) up
-{
-    int movementDistance = 80; // tweak as needed
-    
-    const float movementDuration = 0.3f; // tweak as needed
-    
-    UIInterfaceOrientation interfaceOrientation = [UIApplication sharedApplication].statusBarOrientation;
-    
-    
-    if (textField.tag ==201 &&
-          (interfaceOrientation == UIInterfaceOrientationLandscapeLeft ||
-           interfaceOrientation == UIInterfaceOrientationLandscapeRight)
-        ) //Confirm Password cell
-    {
-        movementDistance+= 40; 
-    }
-    
-    
-    int movement = (up ? -movementDistance : movementDistance);
-    
-    [UIView beginAnimations: @"anim" context: nil];
-    [UIView setAnimationBeginsFromCurrentState: YES];
-    [UIView setAnimationDuration: movementDuration];
-    self.view.frame = CGRectOffset(self.view.frame, 0, movement);
-    [UIView commitAnimations];
-}
-
-- (BOOL)textFieldShouldReturn:(UITextField *)textField {
-	    
-    if (textField.tag == 200) //password
-    {
-        self.password = textField.text;
-        [textField resignFirstResponder];
-        return NO;
-    }
-    else if (textField.tag ==201) //conf password
-    {
-#if 0
-        NSString * confpass = textField.text; 
-        if (![confpass isEqualToString:self.password])
-        {
-         
-            NSLog(@"pass not match: %@ vs %@", confpass, self.password);
-
-            NSString * msg_fail = NSLocalizedStringWithDefaultValue(@"Confirm_Pass_Fail", nil, [NSBundle mainBundle], @"Le mot de passe ne correspond pas. S'il vous plaît, saisir à nouveau !", nil);
-            //ERROR condition
-            UIAlertView *_alert = [[UIAlertView alloc]
-                                   initWithTitle:@"Confirm Password Failed"
-                                   message:msg_fail
-                                   delegate:self
-                                   cancelButtonTitle:@"OK"
-                                   otherButtonTitles:nil];
-            [_alert show];
-            [_alert release];
-        }
-#endif 
-        [textField resignFirstResponder];
-        
-        return NO;
-        
-    }
-    else
-    {
-        [textField resignFirstResponder];
-        
-        return NO;
-    }
-    
-    return YES;
-}
-
 -(void) prepareWifiInfo
 {
     //NOTE: we can do this because we are connecting to camera now 
@@ -755,6 +662,32 @@
     //and then disable user interaction
     [self.navigationController.navigationBar setUserInteractionEnabled:NO];
     
+    
+    /** SEND auth data over first */
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    
+    NSString *apiKey    = [userDefaults objectForKey:@"PortalApiKey"];
+    
+    NSDate *now = [NSDate date];
+    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+    [formatter setDateFormat:@"ZZZ"];
+    
+    NSMutableString *stringFromDate = [NSMutableString stringWithString:[formatter stringFromDate:now]];
+    
+    [stringFromDate insertString:@"." atIndex:3];
+
+    
+    
+    NSString * set_auth_cmd = [NSString stringWithFormat:@"%@%@%@%@%@",
+                               SET_SERVER_AUTH,
+                               SET_SERVER_AUTH_PARAM1, apiKey,
+                               SET_SERVER_AUTH_PARAM2, stringFromDate];
+    
+    NSString *response = [[HttpCom instance].comWithDevice sendCommandAndBlock:set_auth_cmd
+                                                                      withTimeout:10.0];
+    
+    NSLog(@"set auth -set_auth_cmd: %@, -response: %@ ", set_auth_cmd, response);
+
     [self prepareWifiInfo]; 
     
     //Save and send 
@@ -765,19 +698,12 @@
     }
 
     
-    NSLog(@"SSID: %@   - %@", self.ssid, self.deviceConf.ssid );
     
 //    DeviceConfiguration * sent_conf = [[DeviceConfiguration alloc] init];
     
     [_deviceConf restoreConfigurationData:[Util readDeviceConfiguration]];
     
-    
-    NSString *deviceCodec = [[HttpCom instance].comWithDevice sendCommandAndBlock:GET_CODECS_SUPPORT
-                                withTimeout:5.0];
-    
-    [[NSUserDefaults standardUserDefaults] setObject:deviceCodec  forKey:CODEC_PREFS];
-    [[NSUserDefaults standardUserDefaults] synchronize];
-    
+   
      NSString * device_configuration = [_deviceConf getDeviceEncodedConfString];
     
     
@@ -785,20 +711,28 @@
                             SETUP_HTTP_CMD,device_configuration];
     
 	NSLog(@"Log - before send: %@", setup_cmd);
-    
-	NSString * response =
-    [[HttpCom instance].comWithDevice sendCommandAndBlock:setup_cmd ];
+    response = [[HttpCom instance].comWithDevice sendCommandAndBlock:setup_cmd ];
     
     NSLog(@"Step_06VC - after send cmd - response is: %@", response);
     
     //Should check connect to camera here(after send command setup http)
     //Check app is already connected to camera which is setup or not, call once
-    [NSTimer scheduledTimerWithTimeInterval: 3.0//wait 10s and then check app connect to camera
+    [NSTimer scheduledTimerWithTimeInterval: 3.0
                                      target:self
-                                   selector:@selector(checkAppConnectToCameraAtStep03)
+                                   selector:@selector(moveOnToCheckCameraOnlineStatus)
                                    userInfo:nil
                                     repeats:NO];
  
+}
+
+
+-(void)moveOnToCheckCameraOnlineStatus
+{
+    [self resetAllTimer];
+    [self nextStepVerifyPassword];
+    [self.progressView removeFromSuperview];
+    [self.infoSelectCameView removeFromSuperview];
+    [self.progressView setHidden:YES];
 }
 
 - (void)checkAppConnectToCameraAtStep03
@@ -870,67 +804,40 @@
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
     
-    BOOL isFirstTimeSetup = [[NSUserDefaults standardUserDefaults] boolForKey:FIRST_TIME_SETUP];
-
-    if (isFirstTimeSetup   == TRUE)
+    
+    //load step 10
+    NSLog(@"Add cam... ");
+    NSLog(@"Load Step 10");
+    
+    if (_deviceConf.ssid != nil)
     {
-        //load step 08
-        NSLog(@"Load step 8");
-        //Load the next xib
-        Step_08_ViewController *step08ViewController = nil;
+        NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+        [userDefaults setObject:_deviceConf.ssid  forKey:HOME_SSID];
+        [userDefaults synchronize];
+    }
+    
+    //Load the next xib
+    
+    Step_10_ViewController *step10ViewController = nil;
+    
+    
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+    {
         
-        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
-        {
-            
-            step08ViewController = [[Step_08_ViewController alloc]
-                                    initWithNibName:@"Step_08_ViewController_ipad" bundle:nil];
-            
-        }
-        else
-        {
-            step08ViewController = [[Step_08_ViewController alloc]
-                                    initWithNibName:@"Step_08_ViewController" bundle:nil];
-        }
-        step08ViewController.ssid = _deviceConf.ssid;
-        [self.navigationController pushViewController:step08ViewController animated:NO];
         
-        [step08ViewController release];
+        step10ViewController = [[Step_10_ViewController alloc]
+                                initWithNibName:@"Step_10_ViewController_ipad" bundle:nil];
     }
     else
     {
-        //load step 10
-        NSLog(@"Add cam... ");
-        NSLog(@"Load Step 10");
         
-        if (_deviceConf.ssid != nil)
-        {
-            NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-            [userDefaults setObject:_deviceConf.ssid  forKey:HOME_SSID];
-            [userDefaults synchronize];
-        }
-        
-        //Load the next xib
-        
-        Step_10_ViewController *step10ViewController = nil;
-        
-        
-        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
-        {
-            
-            
-            step10ViewController = [[Step_10_ViewController alloc]
-                                    initWithNibName:@"Step_10_ViewController_ipad" bundle:nil];
-        }
-        else
-        {
-            
-            step10ViewController = [[Step_10_ViewController alloc]
-                                    initWithNibName:@"Step_10_ViewController" bundle:nil];
-        }
-        
-        [self.navigationController pushViewController:step10ViewController animated:NO];
-        [step10ViewController release];
+        step10ViewController = [[Step_10_ViewController alloc]
+                                initWithNibName:@"Step_10_ViewController" bundle:nil];
     }
+    
+    [self.navigationController pushViewController:step10ViewController animated:NO];
+    [step10ViewController release];
+    
 }
 
 - (void)getStatusOfCameraToWifi:(NSTimer *)info
