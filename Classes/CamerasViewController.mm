@@ -94,6 +94,12 @@
     [self.ibTableListCamera setContentSize:CGSizeMake(SCREEN_WIDTH, SCREEN_HEIGHT - 69 - 45)];
     [self.ibViewAddCamera setFrame:CGRectMake(0, SCREEN_HEIGHT - 45, 160, 45)];
     [self.ibViewBuyCamera setFrame:CGRectMake(160, SCREEN_HEIGHT - 45, 160, 45)];
+    
+    [self.ibAddCameraButton setImage:[UIImage imageNamed:@"add_camera_btn"] forState:UIControlStateNormal];
+    [self.ibAddCameraButton setImage:[UIImage imageNamed:@"add_camera_btn_pressed"] forState:UIControlEventTouchDown];
+    
+    [self.ibBuyCameraButton setImage:[UIImage imageNamed:@"buy_camera_btn"] forState:UIControlStateNormal];
+    [self.ibBuyCameraButton setImage:[UIImage imageNamed:@"buy_camera_btn_pressed"] forState:UIControlEventTouchDown];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -101,10 +107,6 @@
     [super viewWillAppear:animated];
     self.navigationController.navigationBarHidden = YES;
     self.ibTableListCamera.delegate = self;
-}
-- (void)viewWillDisappear:(BOOL)animated
-{
-    [super viewWillDisappear:animated];
 }
 
 #pragma mark - Actions
