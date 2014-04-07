@@ -526,8 +526,7 @@
     {
         //Found it online
         NSLog(@"Found it online");
-        [self setupCompleted];
-        
+        return;
     }
     else
     {
@@ -558,13 +557,13 @@
                                                       apiKey:userApiKey
                                                     listener:nil];
     }
-    BOOL checkCameraAddedIsAvailable = [_userAccount checkCameraIsAvailable:self.cameraMac];
-    
-    if ( checkCameraAddedIsAvailable)
-    {
 
-        NSLog(@"Found a local ip");
-        
+    NSString *localIp = [_userAccount query_cam_ip_online:self.cameraMac];
+    
+    if (localIp != nil)
+    {
+        NSLog(@"Found a local ip: %@", localIp);
+        [self setupCompleted];
         return TRUE;
     }
     
