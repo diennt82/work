@@ -69,7 +69,7 @@
 @property (nonatomic, retain) NSString *stringUDID;
 @property (nonatomic, retain) NSString *stringAuth_token;
 
--(IBAction) startConfigureCamera:(id)sender;
+
 
 - (void) wait_for_camera_to_reboot:(NSTimer *)exp;
 - (void) checkScanResult: (NSTimer *) expired;
