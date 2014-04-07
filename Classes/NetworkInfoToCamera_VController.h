@@ -30,7 +30,7 @@
     IBOutlet UITableViewCell * securityCell;
     IBOutlet UITableViewCell * passwordCell;
     IBOutlet UITableViewCell * confPasswordCell;
-    NSTimer *_statusNetworkTimer;
+
     NSString *_statusNetworkCamString;
     int stage;
 
