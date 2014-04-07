@@ -206,31 +206,7 @@
 
 #pragma mark - Actions
 
-- (IBAction)btnContinueTouchUpInsideAction:(id)sender
-{
-    NSLog(@"NetworkInfo - btnContinueTouchUpInsideAction");
-    
-    [self.viewError removeFromSuperview];
-    
-    [self.view addSubview:_viewProgress];
-    [self.view bringSubviewToFront:_viewProgress];
-    
-    self.shouldTimeoutProcessing = FALSE;
-    
-    [self rescanToConnectToBLE];
-    
-    if (_timerTimeoutConnectBLE != nil)
-    {
-        [self.timerTimeoutConnectBLE invalidate];
-        self.timerTimeoutConnectBLE = nil;
-    }
-    
-    self.timerTimeoutConnectBLE = [NSTimer scheduledTimerWithTimeInterval:BLE_TIMEOUT_PROCESS
-                                                                   target:self
-                                                                 selector:@selector(timeoutBLESetupProcessing:)
-                                                                 userInfo:nil
-                                                                  repeats:NO];
-}
+
 
 - (IBAction)btnTryAgainTouchUpInsideAction:(UIButton *)sender
 {
@@ -257,7 +233,8 @@
 
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
     
-    if (textField.tag == 202) { // SSID
+    if (textField.tag == 202)
+    { // SSID
         
         NSInteger ssidTextLength = 0;
         const char * _char = [string cStringUsingEncoding:NSUTF8StringEncoding];
@@ -621,20 +598,6 @@
     
     if ([self.security isEqualToString:@"open"])
     {
-        //cont
-        if (_timerTimeoutConnectBLE != nil)
-        {
-            [self.timerTimeoutConnectBLE invalidate];
-            self.timerTimeoutConnectBLE = nil;
-        }
-        
-        NSLog(@"NetworkInfo - handleNextButton - Create time out ble setup process, open wifi");
-        
-        self.timerTimeoutConnectBLE = [NSTimer scheduledTimerWithTimeInterval:BLE_TIMEOUT_PROCESS
-                                                                       target:self
-                                                                     selector:@selector(timeoutBLESetupProcessing:)
-                                                                     userInfo:nil
-                                                                      repeats:NO];
         self.navigationItem.rightBarButtonItem.enabled = NO;
         
         [self sendWifiInfoToCamera];
@@ -668,17 +631,7 @@
             //NSLog(@"password is : %@", self.password);
             NSLog(@"NetworkInfo - handleNextButton - Create time out ble setup process");
             
-            if (_timerTimeoutConnectBLE != nil)
-            {
-                [self.timerTimeoutConnectBLE invalidate];
-                self.timerTimeoutConnectBLE = nil;
-            }
-            
-            self.timerTimeoutConnectBLE = [NSTimer scheduledTimerWithTimeInterval:BLE_TIMEOUT_PROCESS
-                                                                           target:self
-                                                                         selector:@selector(timeoutBLESetupProcessing:)
-                                                                         userInfo:nil
-                                                                          repeats:NO];
+          
             self.navigationItem.rightBarButtonItem.enabled = NO;
             
             [self sendWifiInfoToCamera ];
@@ -695,6 +648,7 @@
     //disconnect to BLE and return to guide screen.
     if ([BLEConnectionManager getInstanceBLE].state == CONNECTED)
     {
+        [BLEConnectionManager getInstanceBLE].needReconnect = NO;
         [[BLEConnectionManager getInstanceBLE] stopScanBLE];
         [self disconnectToBLE];
     }
@@ -1074,16 +1028,21 @@
          * Move cmd below to didReceiveData: delegate
          */
         
-        //stage = SENT_WIFI;
-        
-        //[self readWifiStatusOfCamera:nil];
         
         while (stage != SENT_WIFI);
         
         int count = 20;
+        NSDate * exp_reading_status = [[NSDate date] dateByAddingTimeInterval:3*60];
         do
         {
             [self readWifiStatusOfCamera:nil];
+            
+            
+            if ([exp_reading_status compare:[NSDate date]] == NSOrderedAscending )
+            {
+                NSLog(@"wifi pass check failed -- 3 min passed");
+                break;
+            }
             
         }
         while (stage !=  CHECKING_WIFI_PASSED && count -- >0);
@@ -1092,7 +1051,8 @@
         if (stage == CHECKING_WIFI)
         {
             //Failed!!
-            NSLog(@"wifi pass check failed!!! do sth here");
+            [self timeoutBLESetupProcessing:nil];
+            NSLog(@"wifi pass check failed!!! call timeout");
         }
         else if (stage == CHECKING_WIFI_PASSED)
         {
@@ -1137,7 +1097,7 @@
         //NSLog(@"NetworkInfo_VC - readWifiStatusOfCamera BLE isBusy");
     }
     
-    date = [NSDate dateWithTimeInterval:3.0 sinceDate:[NSDate date]];
+    date = [NSDate dateWithTimeInterval:1.0 sinceDate:[NSDate date]];
     
     [[NSRunLoop currentRunLoop] runUntilDate:date];
 }
