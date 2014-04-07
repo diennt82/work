@@ -438,16 +438,7 @@
         }
         
     }
-    else if ([currentSSID isEqualToString:wifiCameraSetup])
-    {
-        NSLog(@"Now, still connected to wifiOf Camera, continue check");
-        [NSTimer scheduledTimerWithTimeInterval: 3.0//
-                                         target:self
-                                       selector:@selector(step10CheckConnectionToHomeWifi:)
-                                       userInfo:nil
-                                        repeats:NO];
-    }
-    
+      
 }
 
 - (void)connectToWifiHomeByHand
@@ -572,7 +563,7 @@
     if ( checkCameraAddedIsAvailable)
     {
 
-        NSLog(@"Found a local ip: %@", localIp);
+        NSLog(@"Found a local ip");
         
         return TRUE;
     }
