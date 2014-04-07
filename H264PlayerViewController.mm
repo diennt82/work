@@ -915,23 +915,6 @@ double _ticks = 0;
                 
             }
             
-            
-            if (self.alertTimer != nil && [self.alertTimer isValid])
-            {
-                //some periodic is running dont care
-                NSLog(@"some periodic is running dont care");
-            }
-            else
-            {
-                
-                self.alertTimer = [NSTimer scheduledTimerWithTimeInterval:5.0
-                                                                   target:self
-                                                                 selector:@selector(periodicBeep:)
-                                                                 userInfo:nil
-                                                                  repeats:YES];
-                [self.alertTimer fire] ;//fire once now
-            }
-            
             if (self.h264StreamerIsInStopped == TRUE)
             {
                 self.selectedChannel.stopStreaming = TRUE;
@@ -4339,6 +4322,7 @@ double _ticks = 0;
 		if ([self.alertTimer isValid])
 		{
 			[self.alertTimer invalidate];
+            self.alertTimer = nil;
 		}
         
 	}
@@ -6088,6 +6072,22 @@ double _ticks = 0;
     {
         [self.customIndicator setHidden:NO];
         [self.view bringSubviewToFront:self.customIndicator];
+        
+        if (self.alertTimer != nil && [self.alertTimer isValid])
+        {
+            //some periodic is running dont care
+            NSLog(@"some periodic is running dont care");
+        }
+        else
+        {
+            
+            self.alertTimer = [NSTimer scheduledTimerWithTimeInterval:15.0
+                                                               target:self
+                                                             selector:@selector(periodicBeep:)
+                                                             userInfo:nil
+                                                              repeats:YES];
+        }
+        
         UIInterfaceOrientation interfaceOrientation = [UIApplication sharedApplication].statusBarOrientation;
         [self start_animation_with_orientation:interfaceOrientation];
         self.customIndicator.image = [UIImage imageNamed:@"loader_a"];
@@ -6098,12 +6098,12 @@ double _ticks = 0;
         }
         else
         {
-            [self stopPeriodicBeep];
             [self.ib_lbCameraNotAccessible setHidden:YES];
         }
     }
     else
     {
+        [self stopPeriodicBeep];
         _isShowTextCameraIsNotAccesible = NO;
         [self.customIndicator stopAnimating];
         [self.customIndicator setHidden:YES];
