@@ -33,7 +33,9 @@
     //imageViewWhiteDot.center = CGPointMake(imageViewWhiteDot.center.x, imageViewWhiteDot.center.y + _eventDetailLabel.frame.size.height / 2);
     
     UIImageView *imageViewLine = (UIImageView *)[self viewWithTag:951];
-    imageViewLine.frame = CGRectMake(imageViewLine.frame.origin.x, imageViewWhiteDot.center.y + imageViewWhiteDot.frame.size.width / 2, imageViewLine.frame.size.width, imageViewLine.frame.size.height);
+    CGFloat y = imageViewWhiteDot.center.y + imageViewWhiteDot.frame.size.width / 2;
+    
+    imageViewLine.frame = CGRectMake(imageViewLine.frame.origin.x, y, imageViewLine.frame.size.width, self.bounds.size.height - y);
    // imageViewLine.center = CGPointMake(imageViewLine.center.x, imageViewLine.center.y + _eventDetailLabel.frame.size.height / 2);
 }
 
