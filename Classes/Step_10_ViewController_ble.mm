@@ -510,50 +510,18 @@
 
 		if (result != nil)
 		{
-			CamProfile * cp ; 
-			BOOL found = FALSE;
-			for (int i =0; i<[result count]; i++)
-			{
-				
-				cp = [result objectAtIndex:i];
-				if ([cp.mac_address isEqualToString:[Util add_colon_to_mac:[self.cameraMac uppercaseString]]])
-				{
-					NSLog(@"camera %@ is up in home network with ip:%@",cp.mac_address, cp.ip_address); 
-					
-					found = TRUE;
-					break; 
-				}
-                else
-                {
-                    NSLog(@"Does not match : %@ vs %@",cp.mac_address,[Util add_colon_to_mac:[self.cameraMac uppercaseString]]  );
-                }
-				
-			}
-			
-			//3 of 3. send the master key to device
-			if (found == TRUE)
-			{                    ///done
-                NSLog(@"sending master key done");
-                //[self setupCompleted]; Follow the new Flow, this is not need to do
-				//return;
-			}
-			else //if not found
-			{
-                
-			}
+
+            if ([self checkItOnline])
+            {
+                //Found it online
+                NSLog(@"Found it online");
+                return;
+            }
 		}
 		else //result = nil
 		{
 			NSLog(@"scan again ..");
 		}
-
-        
-        if ([self checkItOnline])
-        {
-            //Found it online
-            NSLog(@"Found it online");
-            return;
-        }
         
 		//retry scannning..
 		[NSTimer scheduledTimerWithTimeInterval: 0.01  
@@ -589,13 +557,25 @@
                                                       apiKey:userApiKey
                                                     listener:nil];
     }
-    
+#if 0
     NSString *localIp = [_userAccount query_cam_ip_online: self.cameraMac];
     
     if ( localIp != nil)
     {
         NSLog(@"Found a local ip: %@", localIp);
         
+        [self setupCompleted];
+        return TRUE;
+    }
+    
+    return FALSE;
+#endif
+    BOOL checkCameraAddedIsAvailable = [_userAccount checkCameraIsAvailable:self.cameraMac];
+    
+    if ( checkCameraAddedIsAvailable)
+    {
+        NSLog(@"Found camera is online(1 or 0): %d", checkCameraAddedIsAvailable);
+        should_stop_scanning = YES;
         [self setupCompleted];
         return TRUE;
     }
