@@ -266,6 +266,15 @@
 
 - (void)updateBottomButton
 {
+    if (self.camChannels.count == 0)
+    {
+        [self.ibTextAddCamera setTextColor:[UIColor whiteColor]];
+        [self.ibTextBuyCamera setTextColor:[UIColor whiteColor]];
+        [self.ibAddCameraButton setEnabled:YES];
+        [self.ibBuyCameraButton setEnabled:YES];
+        return;
+    }
+    
     if (_waitingForUpdateData == TRUE)
     {
         [self.ibTextAddCamera setTextColor:[UIColor deSelectedAddCameraTextColor]];
