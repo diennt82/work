@@ -570,15 +570,7 @@
 		8B98765218DAFF6A00A2FDD7 /* libGoogleAnalytics.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8B73057718D6D05A00D079B0 /* libGoogleAnalytics.a */; };
 		8B9899AD1859771800AC3852 /* CameraNameViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B9899AB1859771800AC3852 /* CameraNameViewController.m */; };
 		8B9899AE1859771800AC3852 /* CameraNameViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8B9899AC1859771800AC3852 /* CameraNameViewController.xib */; };
-		8B9899CD1859A04F00AC3852 /* slider-default7-handle.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B9899C91859A04F00AC3852 /* slider-default7-handle.png */; };
-		8B9899CE1859A04F00AC3852 /* slider-default7-handle@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B9899CA1859A04F00AC3852 /* slider-default7-handle@2x.png */; };
 		8B9899CF1859A04F00AC3852 /* NMRangeSlider.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B9899CC1859A04F00AC3852 /* NMRangeSlider.m */; };
-		8B9899DB1859AA6A00AC3852 /* slider-default7-trackBackground.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B9899D51859AA6A00AC3852 /* slider-default7-trackBackground.png */; };
-		8B9899DC1859AA6A00AC3852 /* slider-default7-trackBackground@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B9899D61859AA6A00AC3852 /* slider-default7-trackBackground@2x.png */; };
-		8B9899DD1859AA6A00AC3852 /* slider-default7-trackCrossedOver.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B9899D71859AA6A00AC3852 /* slider-default7-trackCrossedOver.png */; };
-		8B9899DE1859AA6A00AC3852 /* slider-default7-trackCrossedOver@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B9899D81859AA6A00AC3852 /* slider-default7-trackCrossedOver@2x.png */; };
-		8B9899DF1859AA6A00AC3852 /* slider-default7-track.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B9899D91859AA6A00AC3852 /* slider-default7-track.png */; };
-		8B9899E01859AA6A00AC3852 /* slider-default7-track@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B9899DA1859AA6A00AC3852 /* slider-default7-track@2x.png */; };
 		8B9899E41859C9EA00AC3852 /* DayViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B9899E21859C9EA00AC3852 /* DayViewController.m */; };
 		8B9899E51859C9EA00AC3852 /* DayViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8B9899E31859C9EA00AC3852 /* DayViewController.xib */; };
 		8B99C0B2186ABB7900DB8AAA /* ImgNotAvailable.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B99C0B1186ABB7900DB8AAA /* ImgNotAvailable.png */; };
@@ -1420,16 +1412,8 @@
 		8B9899AA1859771800AC3852 /* CameraNameViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CameraNameViewController.h; sourceTree = "<group>"; };
 		8B9899AB1859771800AC3852 /* CameraNameViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CameraNameViewController.m; sourceTree = "<group>"; };
 		8B9899AC1859771800AC3852 /* CameraNameViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CameraNameViewController.xib; sourceTree = "<group>"; };
-		8B9899C91859A04F00AC3852 /* slider-default7-handle.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "slider-default7-handle.png"; sourceTree = "<group>"; };
-		8B9899CA1859A04F00AC3852 /* slider-default7-handle@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "slider-default7-handle@2x.png"; sourceTree = "<group>"; };
 		8B9899CB1859A04F00AC3852 /* NMRangeSlider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NMRangeSlider.h; sourceTree = "<group>"; };
 		8B9899CC1859A04F00AC3852 /* NMRangeSlider.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NMRangeSlider.m; sourceTree = "<group>"; };
-		8B9899D51859AA6A00AC3852 /* slider-default7-trackBackground.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "slider-default7-trackBackground.png"; sourceTree = "<group>"; };
-		8B9899D61859AA6A00AC3852 /* slider-default7-trackBackground@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "slider-default7-trackBackground@2x.png"; sourceTree = "<group>"; };
-		8B9899D71859AA6A00AC3852 /* slider-default7-trackCrossedOver.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "slider-default7-trackCrossedOver.png"; sourceTree = "<group>"; };
-		8B9899D81859AA6A00AC3852 /* slider-default7-trackCrossedOver@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "slider-default7-trackCrossedOver@2x.png"; sourceTree = "<group>"; };
-		8B9899D91859AA6A00AC3852 /* slider-default7-track.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "slider-default7-track.png"; sourceTree = "<group>"; };
-		8B9899DA1859AA6A00AC3852 /* slider-default7-track@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "slider-default7-track@2x.png"; sourceTree = "<group>"; };
 		8B9899E11859C9EA00AC3852 /* DayViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DayViewController.h; sourceTree = "<group>"; };
 		8B9899E21859C9EA00AC3852 /* DayViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DayViewController.m; sourceTree = "<group>"; };
 		8B9899E31859C9EA00AC3852 /* DayViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = DayViewController.xib; sourceTree = "<group>"; };
@@ -3313,14 +3297,6 @@
 		8B9899C81859A03300AC3852 /* NMRangeSlider */ = {
 			isa = PBXGroup;
 			children = (
-				8B9899D51859AA6A00AC3852 /* slider-default7-trackBackground.png */,
-				8B9899D61859AA6A00AC3852 /* slider-default7-trackBackground@2x.png */,
-				8B9899D71859AA6A00AC3852 /* slider-default7-trackCrossedOver.png */,
-				8B9899D81859AA6A00AC3852 /* slider-default7-trackCrossedOver@2x.png */,
-				8B9899D91859AA6A00AC3852 /* slider-default7-track.png */,
-				8B9899DA1859AA6A00AC3852 /* slider-default7-track@2x.png */,
-				8B9899C91859A04F00AC3852 /* slider-default7-handle.png */,
-				8B9899CA1859A04F00AC3852 /* slider-default7-handle@2x.png */,
 				8B9899CB1859A04F00AC3852 /* NMRangeSlider.h */,
 				8B9899CC1859A04F00AC3852 /* NMRangeSlider.m */,
 			);
@@ -3935,7 +3911,6 @@
 				8B9507BC18C9960D006D4945 /* Setup_iphone.png in Resources */,
 				8B92D45B18865F4C00120BCE /* SchedulingCell.xib in Resources */,
 				A1B1E7D018E9135800F076B6 /* buy_camera_btn_pressed.png in Resources */,
-				8B9899CD1859A04F00AC3852 /* slider-default7-handle.png in Resources */,
 				8B29A04518AF500A00D36BE5 /* remove_camera_pressed.png in Resources */,
 				8B299FC418AF500900D36BE5 /* video_grey@2x.png in Resources */,
 				8B88C98818ACBA3000B074E5 /* Hubble_logo_back@2x.png in Resources */,
@@ -4067,7 +4042,6 @@
 				8B29A06C18AF500A00D36BE5 /* maximize@2x.png in Resources */,
 				8B299F8218AF500900D36BE5 /* camera_action_pan_l_bg_land@2x.png in Resources */,
 				8B299F7418AF500900D36BE5 /* camera_action_listening_land@2x.png in Resources */,
-				8B9899DD1859AA6A00AC3852 /* slider-default7-trackCrossedOver.png in Resources */,
 				8B1D545C18658CBC008857F0 /* selected-img.png in Resources */,
 				38DE1C41168ADD1C0049E814 /* Account_ViewController.xib in Resources */,
 				8B299FE418AF500900D36BE5 /* feed_video_play.png in Resources */,
@@ -4184,7 +4158,6 @@
 				8B9507A018C9960D006D4945 /* green_btn.png in Resources */,
 				8B95077E18C9960D006D4945 /* BLE_pair.png in Resources */,
 				8B29A07418AF500A00D36BE5 /* video_fullscreen_close@2x.png in Resources */,
-				8B9899DC1859AA6A00AC3852 /* slider-default7-trackBackground@2x.png in Resources */,
 				8B95079B18C9960D006D4945 /* detect_camera_3@2x.png in Resources */,
 				8B29A07918AF500A00D36BE5 /* video_overlay_del.png in Resources */,
 				8BA7F2811851C57200BE0145 /* blink11hd360p.sdp in Resources */,
@@ -4229,7 +4202,6 @@
 				8B299FA118AF500900D36BE5 /* camera_action_mic_pressed.png in Resources */,
 				8B95078718C9960D006D4945 /* cancel_btn_pressed@2x.png in Resources */,
 				8B29A00218AF500900D36BE5 /* video_action_music_pressed.png in Resources */,
-				8B9899DB1859AA6A00AC3852 /* slider-default7-trackBackground.png in Resources */,
 				8B299FCB18AF500900D36BE5 /* camera_action_pan_bg@5.png in Resources */,
 				8B95079218C9960D006D4945 /* blue_btn_pressed.png in Resources */,
 				8B9507AF18C9960D006D4945 /* setup_camera_b3@2x.png in Resources */,
@@ -4240,7 +4212,6 @@
 				8B9112D218602898004301C5 /* SensitivityCell.xib in Resources */,
 				A1B1E7D418E9135800F076B6 /* camera_focus_66.png in Resources */,
 				8B299F8F18AF500900D36BE5 /* camera_action_video_land.png in Resources */,
-				8B9899CE1859A04F00AC3852 /* slider-default7-handle@2x.png in Resources */,
 				A1B1E7E318E9135800F076B6 /* cart@2x.png in Resources */,
 				8B299FA018AF500900D36BE5 /* camera_action_mic@2x.png in Resources */,
 				8B299FDA18AF500900D36BE5 /* photo_grey_pressed@5.png in Resources */,
@@ -4308,7 +4279,6 @@
 				8B9CE20618C848A000B1B7F9 /* AddCameraViewController.xib in Resources */,
 				8B299FA818AF500900D36BE5 /* camera_action_pan_knob@2x.png in Resources */,
 				8B29A03018AF500900D36BE5 /* add_camera_pressed@2x.png in Resources */,
-				8B9899DE1859AA6A00AC3852 /* slider-default7-trackCrossedOver@2x.png in Resources */,
 				A18635F918B74DBB00CB5CDA /* MelodyViewController_iPad.xib in Resources */,
 				8B299F6718AF500900D36BE5 /* alert_upgrade_pressed.png in Resources */,
 				388396B9168B064500B0D020 /* MBP_iosViewController.xib in Resources */,
@@ -4489,7 +4459,6 @@
 				8B29A07F18AF500A00D36BE5 /* video_pause.png in Resources */,
 				8B299FCD18AF500900D36BE5 /* camera_action_pan_knob@5.png in Resources */,
 				A1B1E7E118E9135800F076B6 /* cart_pressed@2x.png in Resources */,
-				8B9899E01859AA6A00AC3852 /* slider-default7-track@2x.png in Resources */,
 				8B29A05C18AF500A00D36BE5 /* settings_temp_bg@2x.png in Resources */,
 				8B29A06218AF500A00D36BE5 /* settings_temp_switch_bg@2x.png in Resources */,
 				8B99DB9318B8759A0009612A /* Default-568h@2x.png in Resources */,
@@ -4505,7 +4474,6 @@
 				8B29A03718AF500900D36BE5 /* menu_settings.png in Resources */,
 				8B299FE618AF500900D36BE5 /* feed_video_stop.png in Resources */,
 				8B29A04818AF500A00D36BE5 /* scheduler@2x.png in Resources */,
-				8B9899DF1859AA6A00AC3852 /* slider-default7-track.png in Resources */,
 				8B95078E18C9960D006D4945 /* setup_camera_c4.png in Resources */,
 				8B29A02718AF500900D36BE5 /* loader_iphone@2x.png in Resources */,
 				8B29A07818AF500A00D36BE5 /* video_overlay_bg@2x.png in Resources */,
@@ -5399,7 +5367,7 @@
 				);
 				OTHER_LDFLAGS = "-lz";
 				PRODUCT_NAME = HubbleHome;
-				PROVISIONING_PROFILE = "C4391CC6-93E7-4DD7-A6D0-8ED36C00D7E1";
+				PROVISIONING_PROFILE = "D2E44D43-393B-4037-BD82-9C3FF933F635";
 				SDKROOT = iphoneos7.0;
 				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/../ios-frameworks/pjsip/arm/include/ $(SRCROOT)/../ios-frameworks/pjsip/arm/include/pj/ $(SRCROOT)/../ios-frameworks/pjsip/arm/include/pjnath/";
 				VALID_ARCHS = "armv6 armv7";
@@ -5448,7 +5416,7 @@
 				);
 				OTHER_LDFLAGS = "-lz";
 				PRODUCT_NAME = HubbleHome;
-				PROVISIONING_PROFILE = "C4391CC6-93E7-4DD7-A6D0-8ED36C00D7E1";
+				PROVISIONING_PROFILE = "D2E44D43-393B-4037-BD82-9C3FF933F635";
 				SDKROOT = iphoneos7.0;
 				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/../ios-frameworks/pjsip/arm/include/ $(SRCROOT)/../ios-frameworks/pjsip/arm/include/pj/ $(SRCROOT)/../ios-frameworks/pjsip/arm/include/pjnath/";
 				VALIDATE_PRODUCT = YES;
@@ -5459,7 +5427,7 @@
 		9770CB6914302E3D009E69EF /* Distribute */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CODE_SIGN_IDENTITY = "iPhone Distribution: Cvision HK Limited (4BXBVPGK3K)";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Lai Shan Lam (RYP7CC8LQR)";
 				GCC_C_LANGUAGE_STANDARD = c99;
 				GCC_VERSION = "";
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
@@ -5472,7 +5440,7 @@
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
 				OTHER_LDFLAGS = "";
 				PRODUCT_NAME = HubbleHome;
-				PROVISIONING_PROFILE = "8D15CA07-4E79-4826-B059-3C4F83BB1E26";
+				PROVISIONING_PROFILE = "D2E44D43-393B-4037-BD82-9C3FF933F635";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				USER_HEADER_SEARCH_PATHS = "\"$(SRCROOT)/external_include\"/**";
@@ -5520,7 +5488,7 @@
 				);
 				OTHER_LDFLAGS = "-lz";
 				PRODUCT_NAME = HubbleHome;
-				PROVISIONING_PROFILE = "C4391CC6-93E7-4DD7-A6D0-8ED36C00D7E1";
+				PROVISIONING_PROFILE = "D2E44D43-393B-4037-BD82-9C3FF933F635";
 				RAMEWORK_SEARCH_PATHS = "$(inherited) \"$(SRCROOT)\"";
 				SDKROOT = iphoneos7.0;
 				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/../ios-frameworks/pjsip/arm/include/ $(SRCROOT)/../ios-frameworks/pjsip/arm/include/pj/ $(SRCROOT)/../ios-frameworks/pjsip/arm/include/pjnath/";
@@ -5532,7 +5500,7 @@
 		C01FCF4F08A954540054247B /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CODE_SIGN_IDENTITY = "iPhone Distribution: Cvision HK Limited (4BXBVPGK3K)";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Lai Shan Lam (RYP7CC8LQR)";
 				GCC_C_LANGUAGE_STANDARD = c99;
 				GCC_VERSION = "";
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
@@ -5544,7 +5512,7 @@
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = "";
 				PRODUCT_NAME = HubbleHome;
-				PROVISIONING_PROFILE = "8D15CA07-4E79-4826-B059-3C4F83BB1E26";
+				PROVISIONING_PROFILE = "D2E44D43-393B-4037-BD82-9C3FF933F635";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				USER_HEADER_SEARCH_PATHS = "\"$(SRCROOT)/external_include\"/**";
@@ -5555,7 +5523,7 @@
 		C01FCF5008A954540054247B /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CODE_SIGN_IDENTITY = "iPhone Distribution: Cvision HK Limited (4BXBVPGK3K)";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Lai Shan Lam (RYP7CC8LQR)";
 				GCC_C_LANGUAGE_STANDARD = c99;
 				GCC_VERSION = "";
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
@@ -5568,7 +5536,7 @@
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
 				OTHER_LDFLAGS = "";
 				PRODUCT_NAME = HubbleHome;
-				PROVISIONING_PROFILE = "8D15CA07-4E79-4826-B059-3C4F83BB1E26";
+				PROVISIONING_PROFILE = "D2E44D43-393B-4037-BD82-9C3FF933F635";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				USER_HEADER_SEARCH_PATHS = "\"$(SRCROOT)/external_include\"/**";
