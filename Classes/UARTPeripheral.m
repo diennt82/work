@@ -346,8 +346,8 @@
     
     /* when timeout - just simply resend */
 #if 1
-    retry_count --;
-    if (retry_count > 0)
+    //retry_count --;
+    //if (retry_count > 0)
     {
         
         NSLog(@"retrying with timeout :%f & cmd is %@", timeout, commandToCamera);
@@ -381,18 +381,18 @@
             [self retryOldCommand:commandToCamera];
         }
     }
-    else
+  //  else
 #endif
-    {
-        //tired --- disconnect now
-        _timeOutCommand = nil;
-        self.isBusy = FALSE;
-        retry_count = -1;
-        if (self.delegate)
-        {
-            [self.delegate onReceiveDataError:READ_TIME_OUT forCommand:commandToCamera];
-        }
-    }
+//    {
+//        //tired --- disconnect now
+//        _timeOutCommand = nil;
+//        self.isBusy = FALSE;
+//        retry_count = -1;
+//        if (self.delegate)
+//        {
+//            [self.delegate onReceiveDataError:READ_TIME_OUT forCommand:commandToCamera];
+//        }
+//    }
     
     
 
