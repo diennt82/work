@@ -131,10 +131,13 @@
     }
 }
 
-- (IBAction)buyCameraButtonTouchAction:(id)sender {
+- (IBAction)buyCameraButtonTouchAction:(id)sender
+{
+    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"http://hubblehome.com/hubble-products/"]];
 }
 
-- (IBAction)addCameraButtonTouchDownAction:(id)sender {
+- (IBAction)addCameraButtonTouchDownAction:(id)sender
+{
     [self.ibBGAddCamera setImage:[UIImage imageNamed:@"add_camera_btn_pressed"]];
     [self.ibIconAddCamera setImage:[UIImage imageNamed:@"add_camera_pressed"]];
     [self.ibTextAddCamera setTextColor:[UIColor deSelectedAddCameraTextColor]];
