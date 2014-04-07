@@ -167,8 +167,8 @@
     }
     
     [BLEConnectionManager getInstanceBLE].delegate = self;
-    [self.view addSubview:_viewError];
-    [_viewError setHidden:YES];
+//    [self.view addSubview:_viewError];
+//    [_viewError setHidden:YES];
 }
 
 - (void)viewDidUnload
@@ -704,7 +704,7 @@
     {
         [self.viewProgress removeFromSuperview];
         
-        [_viewError setHidden:NO];
+        [self.view addSubview:_viewError];
         [self.view bringSubviewToFront:_viewError];
     }
 }
@@ -773,7 +773,7 @@
         //NSLog(@"NWINFO - bleDisconnected");
         [self.viewProgress removeFromSuperview];
         
-        [_viewError setHidden:NO];
+        [self.view addSubview:_viewError];
         [self.view bringSubviewToFront:_viewError];
     }
     else
