@@ -1392,6 +1392,8 @@ double _ticks = 0;
     {
         [self becomeActive];
     }
+    
+    [self adjustViewsForOrientation:[UIApplication sharedApplication].statusBarOrientation];
 }
 
 - (void)h264_HandleEnteredBackground
@@ -1486,6 +1488,8 @@ double _ticks = 0;
     self.imageViewHandle.hidden = YES;
     self.imageViewKnob.center = self.imgViewDrectionPad.center;
     self.imageViewHandle.center = self.imgViewDrectionPad.center;
+    
+    NSLog(@"H264VC - becomeActive -timeline: %@", NSStringFromCGRect(self.timelineVC.view.frame));
 }
 
 #pragma mark - Shared Cam
@@ -3866,6 +3870,8 @@ double _ticks = 0;
 
 - (void) adjustViewsForOrientation:(UIInterfaceOrientation)orientation
 {
+    NSLog(@"H264VC - adjustViewsForOrientation:");
+    
     if (_isProcessRecording)
     {
         _syncPortraitAndLandscape = YES;
@@ -4913,8 +4919,7 @@ double _ticks = 0;
     _isProcessRecording = NO;
     _isListening = NO;
     _ticks = 0.0;
-    [super viewWillAppear:animated];
-    //[self.scrollView insertSubview:_imageViewStreamer aboveSubview:_imageViewVideo];
+
     if (_timelineVC != nil)
     {
         self.timelineVC.camChannel = self.selectedChannel;
