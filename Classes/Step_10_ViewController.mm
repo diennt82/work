@@ -418,8 +418,8 @@
                 [timeOut invalidate];
                 
             }
-            //Timer ticky 5min - for camera reboot and scan camera
-            timeOut = [NSTimer scheduledTimerWithTimeInterval:5*60.0
+            //Timer  1min - for camera reboot and add itself to server
+            timeOut = [NSTimer scheduledTimerWithTimeInterval:1*60.0
                                                        target:self
                                                      selector:@selector(homeWifiScanTimeout:)
                                                      userInfo:nil
@@ -611,6 +611,8 @@
     // send a command to remove camera
     //NSString *mac = [Util strip_colon_fr_mac:self.cameraMac];
     
+    // Dont remove camera anymore as we don't add it,
+#if 0
     BMS_JSON_Communication *jsonComm = [[[BMS_JSON_Communication alloc] initWithObject:self
                                                                               Selector:@selector(removeCamSuccessWithResponse:)
                                                                           FailSelector:@selector(removeCamFailedWithError:)
@@ -619,7 +621,7 @@
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     [jsonComm deleteDeviceWithRegistrationId:_stringUDID
                                    andApiKey:[userDefaults objectForKey:@"PortalApiKey"]];
-    
+#endif
     //Load step 11
     NSLog(@"Load step 11");
     
