@@ -160,10 +160,27 @@
 {
     _isBackPress = YES;
     ConnectionState stateConnectBLE = [BLEConnectionManager getInstanceBLE].state;
+    NSLog(@"CreateBLE VC - hubbleItemAction - stateConnectBLE: %d", stateConnectBLE);
     if ( stateConnectBLE != CONNECTED)
     {
         //in state : SCANNING OR IDLE
         _isBackPress = NO;
+        [[[BLEConnectionManager getInstanceBLE] uartPeripheral] didDisconnect];
+        
+        self.shouldTimeoutProcessing = TRUE;
+        
+        if (_timerScanCameraBLEDone)
+        {
+            [self.timerScanCameraBLEDone invalidate];
+            self.timerScanCameraBLEDone = nil;
+        }
+        
+        if (_timerTimeoutConnectBLE)
+        {
+            [self.timerTimeoutConnectBLE invalidate];
+            self.timerTimeoutConnectBLE = nil;
+        }
+        
         [[BLEConnectionManager getInstanceBLE] stopScanBLE];
         [BLEConnectionManager getInstanceBLE].delegate = nil;
         [self.navigationController popViewControllerAnimated:YES];
@@ -182,29 +199,6 @@
 - (IBAction)refreshCamBLE:(id)sender
 {
     [self createBLEConnectionRescan:TRUE];
-}
-
-- (void) handleBack:(id)sender
-{
-    _isBackPress = YES;
-    ConnectionState stateConnectBLE = [BLEConnectionManager getInstanceBLE].state;
-    if ( stateConnectBLE != CONNECTED)
-    {
-        //in state : SCANNING OR IDLE
-        _isBackPress = NO;
-        [[BLEConnectionManager getInstanceBLE] stopScanBLE];
-        [BLEConnectionManager getInstanceBLE].delegate = nil;
-        [self.navigationController popToRootViewControllerAnimated:YES];
-    }
-    else
-    {
-        //In State CONNECTED
-        //wait for return from delegate,
-        //handle it on bleDisconnected
-        //disconnect to BLE
-        [BLEConnectionManager getInstanceBLE].delegate = nil;
-        [[BLEConnectionManager getInstanceBLE] disconnect];
-    }
 }
 
 - (void)timeoutBLESetupProcessing:(NSTimer *)timer
@@ -296,6 +290,9 @@
 {
     NSLog(@"CreateBLE VC - createBLEConnectionRescan: %d", rescanFlag);
     
+    [self.view addSubview:_viewProgress];
+    [self.view bringSubviewToFront:_viewProgress];
+    
     [self clearDataBLEConnection];
     
     if (_currentBLEList)
@@ -304,10 +301,7 @@
     }
     
     [self.ib_tableListBLE reloadData];
-    
-    [self.view addSubview:_viewProgress];
-    [self.view bringSubviewToFront:_viewProgress];
-    
+
     task_cancelled = NO;
     
     [BLEConnectionManager getInstanceBLE].delegate = self;
