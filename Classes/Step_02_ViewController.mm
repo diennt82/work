@@ -11,7 +11,8 @@
 #import "UIBarButtonItem+Custom.h"
 #import "PAIRInstructionViewController.h"
 #import "MBPNavController.h"
-
+#import "CreateBLEConnection_VController.h"
+#import "BLEConnectionManager.h"
 
 @interface Step_02_ViewController ()
 
@@ -59,13 +60,16 @@
     imageView.animationRepeatCount = 0;
     
     [imageView startAnimating];
+    
+    if (_cameraType == BLUETOOTH_SETUP)
+    {
+        NSLog(@"Step_02_VC - viewDidLoad: - isOnBLE: %d", [BLEConnectionManager getInstanceBLE].isOnBLE);
+    }
 }
 
--(void) viewWillAppear:(BOOL)animated
+- (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    CGAffineTransform transform = CGAffineTransformMakeScale(1.0f, 4.0f);
-    [self.view viewWithTag:501].transform = transform;
     [self.navigationController.navigationBar setUserInteractionEnabled:YES];
 }
 
@@ -130,11 +134,15 @@
     
     if (_cameraType == BLUETOOTH_SETUP)
     {
-        NSLog(@"Load step 2.5 PAIR Instruction vc");
+        NSLog(@"Load step Create BLE Connection");
         //Load the next xib
-        PAIRInstructionViewController *pairInstructionVC = [[PAIRInstructionViewController alloc] init];
-        [self.navigationController pushViewController:pairInstructionVC animated:YES];
-        [pairInstructionVC release];
+        CreateBLEConnection_VController *step03ViewController =
+        [[CreateBLEConnection_VController alloc] initWithNibName:@"CreateBLEConnection_VController"
+                                                          bundle:nil];
+        
+        [self.navigationController pushViewController:step03ViewController animated:NO];
+        
+        [step03ViewController release];
     }
     else
     {
