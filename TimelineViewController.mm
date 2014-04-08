@@ -63,23 +63,11 @@
     
     NSLog(@"%@, %@", _camChannel, ((H264PlayerViewController *)_parentVC).selectedChannel);
     
-    //[self performSelectorInBackground:@selector(getEventsList_bg:) withObject:_camChannel];
-    
     self.stringIntelligentMessage = @"Loading...";
     self.isLoading = TRUE;
     self.is12hr = [[NSUserDefaults standardUserDefaults] boolForKey:@"IS_12_HR"];
     
     [[UIApplication sharedApplication] setStatusBarOrientation:UIDeviceOrientationPortrait animated:NO];
-
-    //self.tableView.scrollIndicatorInsets = UIEdgeInsetsMake(64, 0, 44, 0);
-    
-}
-
-- (void)viewWillAppear:(BOOL)animated
-{
-    [super viewWillAppear:animated];
-    
-    NSLog(@"TimelineViewController: %@", NSStringFromCGRect(self.view.frame));
 }
 
 - (void)didReceiveMemoryWarning
@@ -1006,6 +994,7 @@
                     NSLog(@"Push the view controller of navVC.- %@", self.navVC);
                     
                     //present view controller to view overal screen
+                    
                     [self.navVC presentViewController:playbackViewController animated:YES completion:nil];
                     
                     [playbackViewController release];
