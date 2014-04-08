@@ -42,7 +42,6 @@
 //width and height of indicator
 #define INDICATOR_SIZE               37
 
-#define CAM_IN_VEW @"string_Camera_Mac_Being_Viewed"
 #define HIGH_STATUS_BAR 20;
 
 //define for Control Panel button

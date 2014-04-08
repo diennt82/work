@@ -19,6 +19,7 @@
 #import "CameraMenuViewController.h"
 #import "AddCameraViewController.h"
 #import "define.h"
+#import "EarlierViewController.h"
 
 @interface CamerasViewController () <H264PlayerVCDelegate, CamerasCellDelegate, UIAlertViewDelegate, AddCameraVCDelegate>
 
@@ -452,30 +453,41 @@
     
     CamChannel *ch = (CamChannel *)[_camChannels objectAtIndex:indexPath.row];
     
-    if ([ch.profile isNotAvailable] &&
-        [ch.profile isSharedCam])
+    if ([ch.profile isNotAvailable])
     {
-        return;
+        if([ch.profile isSharedCam])
+        {
+            NSLog(@"CamerasVC - didSelectRowAtIndexPath - Selected camera is NOT available & is SHARED_CAM");
+        }
+        else
+        {
+            // Show Earlier view
+            EarlierViewController *earlierVC = [[EarlierViewController alloc] initWithCamChannel:ch];
+            [((MenuViewController *)self.parentVC).navigationController pushViewController:earlierVC animated:YES];
+            [earlierVC release];
+        }
     }
-    
-    ch.profile.isSelected = TRUE;
-    
-    [CameraAlert clearAllAlertForCamera:ch.profile.mac_address];
-    [UIApplication sharedApplication].idleTimerDisabled = YES;
-    
-    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-    [userDefaults setObject:ch.profile.registrationID forKey:REG_ID];
-    [userDefaults setObject:ch.profile.mac_address forKey:CAM_IN_VEW];
-    [userDefaults synchronize];
-    
-    H264PlayerViewController *h264PlayerViewController = [[H264PlayerViewController alloc] init];
-    
-    h264PlayerViewController.selectedChannel = ch;
-    h264PlayerViewController.h264PlayerVCDelegate = self;
-    
-    //MenuViewController *tabBarController = (MenuViewController *)self.parentViewController;
-    [((MenuViewController *)self.parentVC).navigationController pushViewController:h264PlayerViewController animated:YES];
-    [h264PlayerViewController release];
+    else
+    {
+        ch.profile.isSelected = TRUE;
+        
+        [CameraAlert clearAllAlertForCamera:ch.profile.mac_address];
+        [UIApplication sharedApplication].idleTimerDisabled = YES;
+        
+        NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+        [userDefaults setObject:ch.profile.registrationID forKey:REG_ID];
+        [userDefaults setObject:ch.profile.mac_address forKey:CAM_IN_VEW];
+        [userDefaults synchronize];
+        
+        H264PlayerViewController *h264PlayerViewController = [[H264PlayerViewController alloc] init];
+        
+        h264PlayerViewController.selectedChannel = ch;
+        h264PlayerViewController.h264PlayerVCDelegate = self;
+        
+        //MenuViewController *tabBarController = (MenuViewController *)self.parentViewController;
+        [((MenuViewController *)self.parentVC).navigationController pushViewController:h264PlayerViewController animated:YES];
+        [h264PlayerViewController release];
+    }
 }
 
 - (void)dealloc {
