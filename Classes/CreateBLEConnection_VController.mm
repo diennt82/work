@@ -20,6 +20,7 @@
 @property (retain, nonatomic) IBOutlet UIView *viewProgress;
 @property (retain, nonatomic) IBOutlet UITableViewCell *searchAgainCell;
 @property (retain, nonatomic) IBOutlet UIView *viewError;
+@property (retain, nonatomic) IBOutlet UIView *viewPairNDetecting;
 
 @property (retain, nonatomic) CBPeripheral *selectedPeripheral;
 @property (retain, nonatomic) CustomIOS7AlertView *alertView;
@@ -28,6 +29,8 @@
 @property (nonatomic) BOOL shouldTimeoutProcessing;
 @property (nonatomic, retain) UIButton *btnContinue;
 @property (nonatomic) BOOL rescanFlag;
+@property (nonatomic, retain) UIView *viewSearching;
+@property (nonatomic) BOOL isNotFirstTime;
 
 @end
 
@@ -84,9 +87,27 @@
                                   [UIImage imageNamed:@"setup_camera_c4"]];
     imageView.animationDuration = 1.5f;
     imageView.animationRepeatCount = 0;
+
+#if 1
     
+    self.viewSearching = (UIView *)[self.viewPairNDetecting viewWithTag:675];
+    
+    UIImageView *imgView  = (UIImageView *)[_viewSearching viewWithTag:575];
+    imgView.animationImages = @[[UIImage imageNamed:@"setup_camera_c1"],
+                                  [UIImage imageNamed:@"setup_camera_c2"],
+                                  [UIImage imageNamed:@"setup_camera_c3"],
+                                  [UIImage imageNamed:@"setup_camera_c4"]];
+    imgView.animationDuration = 1.5f;
+    imgView.animationRepeatCount = 0;
+    
+    [self.view addSubview:_viewPairNDetecting];
+    [self.view bringSubviewToFront:_viewPairNDetecting];
+    
+    [imgView startAnimating];
+#else
     [self.view addSubview:_viewProgress];
     [self.view bringSubviewToFront:_viewProgress];
+#endif
     
     [imageView startAnimating];
     self.homeWifiSSID = [CameraPassword fetchSSIDInfo];
@@ -117,10 +138,6 @@
 		NSLog(@"View controller was popped --- We are closing down..task_cancelled = YES");
         [[NSNotificationCenter defaultCenter] removeObserver:self];
 	}
-    else
-    {
-        
-    }
     
     task_cancelled = YES;
     
@@ -212,6 +229,7 @@
     }
     
     [self.viewProgress removeFromSuperview];
+    [self.viewPairNDetecting removeFromSuperview];
     [self customIOS7dialogButtonTouchUpInside:_alertView clickedButtonAtIndex:0];
     
     [self.view addSubview:_viewError];
@@ -290,8 +308,16 @@
 {
     NSLog(@"CreateBLE VC - createBLEConnectionRescan: %d", rescanFlag);
     
-    [self.view addSubview:_viewProgress];
-    [self.view bringSubviewToFront:_viewProgress];
+    if (rescanFlag)
+    {
+        [self.view addSubview:_viewProgress];
+        [self.view bringSubviewToFront:_viewProgress];
+    }
+    else
+    {
+        [self.view addSubview:_viewPairNDetecting];
+        [self.view bringSubviewToFront:_viewPairNDetecting];
+    }
     
     [self clearDataBLEConnection];
     
@@ -354,6 +380,15 @@
         return;
     }
     
+    if (_isNotFirstTime)
+    {
+        self.viewSearching.hidden = NO;
+    }
+    else
+    {
+        self.isNotFirstTime = TRUE;
+    }
+    
     if ([_currentBLEList count] == 0) //NO camera found
     {
         NSLog(@"No BLE device found! schedule next check ");
@@ -377,6 +412,7 @@
         {
             //Update UI
             [self.viewProgress removeFromSuperview];
+            [self.viewPairNDetecting removeFromSuperview];
             [self.ib_lableStage setText:@"Select a device to connect"];
             [self.ib_tableListBLE reloadData];
             
@@ -394,6 +430,7 @@
             
             //Update UI
             [self.viewProgress removeFromSuperview];
+            [self.viewPairNDetecting removeFromSuperview];
             
             [self.ib_lableStage setText:@"Select a device to connect"];
             
@@ -457,6 +494,7 @@
     [_alertView release];
     [_viewError release];
     [_timerTimeoutConnectBLE release];
+    [_viewPairNDetecting release];
     [super dealloc];
 }
 
