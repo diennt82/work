@@ -169,10 +169,10 @@
 "Create_Account_Failed" = "Erstellen des Kontos gescheitert";
 
 /* No comment provided by engineer. */
-"Create_Account_Failed_msg" = "User name has to be between 5-20 characters";
+"Create_Account_Failed_msg" = "Benutzername muß zwischen 5-20 Zeichen lang sein";
 
 /* No comment provided by engineer. */
-"Create_Account_Failed_msg1" = "Password has to be between 3-12 characters";
+"Create_Account_Failed_msg1" = "Passwort muss zwischen 8-12 Zeichen lang sein";
 
 /* No comment provided by engineer. */
 "Create_Account_Failed_msg2" = "Das Passwort stimmt nicht überein";
