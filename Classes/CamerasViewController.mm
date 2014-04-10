@@ -108,15 +108,16 @@
     [super viewWillAppear:animated];
     self.navigationController.navigationBarHidden = YES;
     self.ibTableListCamera.delegate = self;
+
+    [self updateBottomButton];
 }
 
 #pragma mark - Actions
 
 - (IBAction)addCameraButtonTouchAction:(id)sender
 {
-    [self.ibBGAddCamera setImage:[UIImage imageNamed:@"add_camera_btn"]];
-    [self.ibIconAddCamera setImage:[UIImage imageNamed:@"add_camera"]];
-    [self.ibTextAddCamera setTextColor:[UIColor whiteColor]];
+    [self.ibIconAddCamera setImage:[UIImage imageNamed:@"add_camera_pressed"]];
+    [self.ibTextAddCamera setTextColor:[UIColor deSelectedAddCameraTextColor]];
     if (_camChannels.count >= MAX_CAM_ALLOWED)
     {
         [self cameraShowDialog:DIALOG_CANT_ADD_CAM];
@@ -132,10 +133,14 @@
         self.navigationItem.leftBarButtonItem.enabled = NO;
         [self presentViewController:addCameraVC animated:YES completion:^{}];
     }
+    [self.ibIconAddCamera setImage:[UIImage imageNamed:@"add_camera"]];
+    [self.ibTextAddCamera setTextColor:[UIColor whiteColor]];
 }
 
 - (IBAction)buyCameraButtonTouchAction:(id)sender
 {
+    [self.ibIconBuyCamera setImage:[UIImage imageNamed:@"cart_pressed"]];
+    [self.ibTextBuyCamera setTextColor:[UIColor deSelectedBuyCameraTextColor]];
     [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"http://hubblehome.com/hubble-products/"]];
 }
 
@@ -269,34 +274,6 @@
     // Dispose of any resources that can be recreated.
 }
 
-
-- (void)updateBottomButton
-{
-    if (self.camChannels.count == 0)
-    {
-        [self.ibTextAddCamera setTextColor:[UIColor whiteColor]];
-        [self.ibTextBuyCamera setTextColor:[UIColor whiteColor]];
-        [self.ibAddCameraButton setEnabled:YES];
-        [self.ibBuyCameraButton setEnabled:YES];
-        return;
-    }
-    
-    if (_waitingForUpdateData == TRUE)
-    {
-        [self.ibTextAddCamera setTextColor:[UIColor deSelectedAddCameraTextColor]];
-        [self.ibTextBuyCamera setTextColor:[UIColor deSelectedBuyCameraTextColor]];
-        [self.ibAddCameraButton setEnabled:NO];
-        [self.ibBuyCameraButton setEnabled:NO];
-    }
-    else
-    {
-        [self.ibTextAddCamera setTextColor:[UIColor whiteColor]];
-        [self.ibTextBuyCamera setTextColor:[UIColor whiteColor]];
-        [self.ibAddCameraButton setEnabled:YES];
-        [self.ibBuyCameraButton setEnabled:YES];
-    }
-}
-
 #pragma mark - Table view data source
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
@@ -308,6 +285,10 @@
 {
     //#warning Incomplete method implementation.
     // Return the number of rows in the section.
+    if (self.camChannels.count == 0)
+    {
+        return 0;
+    }
     if (_waitingForUpdateData == TRUE)
     {
         return 1;
@@ -430,6 +411,32 @@
         }
         
         return cell;
+    }
+}
+
+- (void)updateBottomButton
+{
+    if (self.camChannels.count == 0)
+    {
+        [self.ibTextAddCamera setTextColor:[UIColor whiteColor]];
+        [self.ibAddCameraButton setImage:[UIImage imageNamed:@"add_camera_btn"] forState:UIControlStateNormal];
+        [self.ibAddCameraButton setEnabled:YES];
+        [self.ibIconAddCamera setImage:[UIImage imageNamed:@"add_camera"]];
+        _waitingForUpdateData = NO;
+        return;
+    }
+    
+    if (_waitingForUpdateData == TRUE)
+    {
+        [self.ibTextAddCamera setTextColor:[UIColor deSelectedAddCameraTextColor]];
+        [self.ibAddCameraButton setEnabled:NO];
+        [self.ibIconAddCamera setImage:[UIImage imageNamed:@"add_camera_pressed"]];
+    }
+    else
+    {
+        [self.ibTextAddCamera setTextColor:[UIColor whiteColor]];
+        [self.ibAddCameraButton setEnabled:YES];
+        [self.ibIconAddCamera setImage:[UIImage imageNamed:@"add_camera"]];
     }
 }
 

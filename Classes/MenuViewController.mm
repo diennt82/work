@@ -341,10 +341,42 @@
         
         self.camerasVC.camChannels = _cameras;
     }
-    
+    [self.camerasVC updateBottomButton];
     self.camerasVC.waitingForUpdateData = NO;
     [self.camerasVC.ibTableListCamera performSelectorInBackground:@selector(reloadData)
                                                withObject:nil];
+    
+//    UIImage *hubbleBack = [UIImage imageNamed:@"Hubble_logo_back"];
+//    UIBarButtonItem *backBarBtn = [[UIBarButtonItem alloc] initWithImage:hubbleBack
+//                                                                   style:UIBarButtonItemStyleBordered
+//                                                                  target:self
+//                                                                  action:@selector(menuBackAction:)];
+//    [backBarBtn setTintColor:[UIColor colorWithPatternImage:hubbleBack]];
+//    
+//    self.navigationItem.leftBarButtonItem = backBarBtn;
+//    self.navigationItem.leftBarButtonItem.enabled = NO;
+
+    UIImage *image = [UIImage imageNamed:@"Hubble_logo_back"];
+    CGRect frame = CGRectMake(0, 0, image.size.width, image.size.height);
+    
+    //init a normal UIButton using that image
+    UIButton* button = [[UIButton alloc] initWithFrame:frame];
+    [button setBackgroundImage:image forState:UIControlStateNormal];
+    [button setShowsTouchWhenHighlighted:YES];
+    
+    //set the button to handle clicks - this one calls a method called 'downloadClicked'
+    [button addTarget:self action:@selector(menuBackAction:) forControlEvents:UIControlEventTouchUpInside];
+    
+    //finally, create your UIBarButtonItem using that button
+    UIBarButtonItem* barButtonItem = [[UIBarButtonItem alloc] initWithCustomView:button];
+    
+    //then set it.  phew.
+    [self.navigationItem setLeftBarButtonItem:barButtonItem];
+    
+    [barButtonItem release];
+
+    
+    
     if (self.cameras != nil &&
         self.cameras.count > 0)
     {

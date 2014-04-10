@@ -33,5 +33,5 @@
              parentVC: (id)parentVC;
 
 - (void)camerasReloadData;
-
+-(void)updateBottomButton;
 @end
