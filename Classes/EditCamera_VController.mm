@@ -515,7 +515,7 @@
             UIAlertView *alert = [[UIAlertView alloc]
                                   initWithTitle:NSLocalizedStringWithDefaultValue(@"AddCam_Error" ,nil, [NSBundle mainBundle],
                                                                                   @"AddCam Error" , nil)
-                                  message:@"Set master return -1"
+                                  message:@"Set master key return -1"
                                   delegate:self
                                   cancelButtonTitle:cancel
                                   otherButtonTitles:retry, nil];
