@@ -151,7 +151,7 @@
             data_idx  += len_to_send;
             
             
-            NSLog(@"Finish writing %d", len_to_send);
+            //NSLog(@"Finish writing %d", len_to_send);
         }
         
         
@@ -722,8 +722,15 @@
                 _timeOutCommand = nil;
             }
             
-            
-            [self.delegate didReceiveData:string];
+            if ([commandToCamera isEqualToString:@"hello_hello"] &&
+                [string isEqualToString:@"NA"] )
+            {
+                NSLog(@"Got response for command hello_hello, just ignore delegate call ");
+            }
+            else
+            {
+                [self.delegate didReceiveData:string];
+            }
             
             //cut this string away
             range = NSMakeRange(0, sequence_index+1);

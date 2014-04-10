@@ -34,6 +34,7 @@
     NSString *_statusNetworkCamString;
     int stage;
 
+
 }
 
 @property (retain, nonatomic) IBOutlet UIView *ib_dialogVerifyNetwork;

@@ -189,7 +189,7 @@
         
         
         /*20140402_stephen request: dont disconnect, just re-send the command*/
-        [self disconnect];
+        //[self disconnect];
         
         
         

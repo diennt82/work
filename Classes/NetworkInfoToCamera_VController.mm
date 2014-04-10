@@ -572,6 +572,9 @@
     
     NSLog(@"pass : %@ vs %@  ssid: %@", pass.text, confpass.text, my_ssid.text);
     
+    
+    
+    
     if (self.isOtherNetwork == TRUE)
     {
         
@@ -600,7 +603,18 @@
     {
         self.navigationItem.rightBarButtonItem.enabled = NO;
         
+        
+        /* Start timer to check for camera connection issue */
+        
+        self.timerTimeoutConnectBLE  = [NSTimer scheduledTimerWithTimeInterval:5*60.0
+                                                       target:self
+                                                     selector:@selector(timeoutBLESetupProcessing:)
+                                                     userInfo:nil
+                                                      repeats:NO];
+        
+        /* Blocking call, after this return the camera should be either added or failed setup already */
         [self sendWifiInfoToCamera];
+        
     }
     else
     {
@@ -633,10 +647,24 @@
             
           
             self.navigationItem.rightBarButtonItem.enabled = NO;
+
             
+            /* Start timer to check for camera connection issue */
+            self.timerTimeoutConnectBLE  = [NSTimer scheduledTimerWithTimeInterval:5*60.0
+                                                           target:self
+                                                         selector:@selector(timeoutBLESetupProcessing:)
+                                                         userInfo:nil
+                                                          repeats:NO];
+            
+            /* Blocking call, after this return the camera should be either added or failed setup already */
             [self sendWifiInfoToCamera ];
         }
     }
+    
+    
+    
+    
+    
 }
 
 - (void)timeoutBLESetupProcessing:(NSTimer *)timer
@@ -747,8 +775,6 @@
     date = [NSDate dateWithTimeInterval:2.0 sinceDate:[NSDate date]];
     [[NSRunLoop currentRunLoop] runUntilDate:date];
     
-    //    [NSTimer scheduledTimerWithTimeInterval:TIME_OUT_RECONNECT_BLE target:self selector:@selector(dialogFailConnection:) userInfo:nil repeats:NO];
-    
     
     [BLEConnectionManager getInstanceBLE].delegate = self;
     //[[BLEConnectionManager getInstanceBLE] reinit];
@@ -756,67 +782,27 @@
     [[BLEConnectionManager getInstanceBLE] reScanForPeripheral:[UARTPeripheral uartServiceUUID]];
 }
 
-- (void)dialogFailConnection:(NSTimer *)timer
-{
-    if ([BLEConnectionManager getInstanceBLE].state == CONNECTED)
-    {
-        //Check after TIME_OUT_RECONNECT_BLE seconds, if connected retrun
-        return;
-    }
-    //show info
-    NSString * msg =  @"Camera (ble) is disconnected abruptly, please retry adding camera again";
-    
-    
-    
-    NSString * ok = NSLocalizedStringWithDefaultValue(@"Ok",nil, [NSBundle mainBundle],
-                                                      @"Ok", nil);
-    
-    
-    
-    UIAlertView *_myAlert = nil ;
-    _myAlert = [[UIAlertView alloc] initWithTitle:@"Error"
-                                          message:msg
-                                         delegate:self
-                                cancelButtonTitle:ok
-                                otherButtonTitles:nil];
-    
-    _myAlert.tag = RETRY_CONNECTION_BLE_FAIL_TAG;
-    _myAlert.delegate = self;
-    [_myAlert release];
-}
 
-
-- (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex
-{
-    if (alertView.tag == RETRY_CONNECTION_BLE_FAIL_TAG)
-    {
-        if (_timerTimeoutConnectBLE)
-        {
-            [self.timerTimeoutConnectBLE invalidate];
-            self.timerTimeoutConnectBLE = nil;
-        }
-        
-        [self.navigationController popToRootViewControllerAnimated:NO];
-    }
-}
 
 - (void) didConnectToBle:(CBUUID*) service_id
 {
-    NSLog(@"BLE device connected - now, last stage: %d", stage);
-    
+    NSLog(@"BLE device connected - now, latest stage: %d", stage);
+   
+#if 0
     switch (stage)
     {
         case SENT_WIFI:
         case CHECKING_WIFI:
-            NSLog(@"checking wifi status");
-            [self readWifiStatusOfCamera:nil];
+            NSLog(@"checking wifi status ... do nothing here");
+           // [self readWifiStatusOfCamera:nil];
             break;
             
         case INIT:
             NSLog(@"start over!!");
-            [self sendWifiInfoToCamera];
+            //[self sendWifiInfoToCamera];
             break;
     }
+#endif
 }
 
 - (void) onReceiveDataError:(int)error_code forCommand:(NSString *)commandToCamera
@@ -856,34 +842,14 @@
         {
             
             stage = CHECKING_WIFI_PASSED;
-#if 0
-            dispatch_async(dispatch_get_main_queue(), ^{
-                //CONNECTED... Move on now..
-                [self sendCommandRestartSystem];
-                
-                [self showNextScreen];
-                [self.view setUserInteractionEnabled:YES];
-                [self.navigationController.navigationBar setUserInteractionEnabled:YES];
-                
-            });
-#endif
+
         }
         else
         {
             
              stage = CHECKING_WIFI;
             
-#if 0
-            dispatch_async(dispatch_get_main_queue(), ^{
-                // get state network of camera after 4s
-                [NSTimer scheduledTimerWithTimeInterval: 2.0//
-                                                 target:self
-                                               selector:@selector(readWifiStatusOfCamera:)
-                                               userInfo:nil
-                                                repeats:NO];
-                
-            });
-#endif
+
         }
         
         
@@ -894,8 +860,8 @@
     }
     else
     {
-        NSLog(@"Receive un-expected data, Try to findout what to do next?");
-        
+        NSLog(@"Receive un-expected data, Try to findout what to do next??? ");
+#if 0
         switch (stage)
         {
             case SENT_WIFI:
@@ -909,6 +875,7 @@
                 [self sendWifiInfoToCamera];
                 break;
         }
+#endif
     }
 }
 
@@ -917,9 +884,29 @@
 - (void)sendCommandRestartSystem
 {
     NSLog(@"Send RESTART Command, now");
+    
+    NSDate * date;
+    while( ([BLEConnectionManager getInstanceBLE].state != CONNECTED) &&
+          ( self.shouldTimeoutProcessing == FALSE ) )
+    {
+        NSLog(@"sendCommandRestartSystem:  BLE disconnected - stage: %d, sleep 2s ", stage);
+        
+        date = [NSDate dateWithTimeInterval:2.0 sinceDate:[NSDate date]];
+        [[NSRunLoop currentRunLoop] runUntilDate:date];
+        
+    }
+    
+    
+    if ( self.shouldTimeoutProcessing == TRUE)
+    {
+        NSLog(@"sendCommandRestartSystem: SETUP PROCESS TIMEOUT -- return");
+        return ;
+    }
+    
+    
     [BLEConnectionManager getInstanceBLE].delegate = self;
     [[BLEConnectionManager getInstanceBLE].uartPeripheral writeString:RESTART_HTTP_CMD withTimeOut:SHORT_TIME_OUT_SEND_COMMAND];
-    NSDate * date;
+
     
     if ([BLEConnectionManager getInstanceBLE].uartPeripheral.isBusy  )
     {
@@ -937,9 +924,21 @@
 - (BOOL)sendCommandHTTPSetup
 {
     NSLog(@"Send command SETUP HTTP Command, now");
-    if ([BLEConnectionManager getInstanceBLE].state != CONNECTED)
+    NSDate * date;
+    while( ([BLEConnectionManager getInstanceBLE].state != CONNECTED) &&
+           ( self.shouldTimeoutProcessing == FALSE ) )
     {
-        NSLog(@"sendCommandHTTPSetup:  BLE disconnected - stage: %d", stage);
+        NSLog(@"sendCommandHTTPSetup:  BLE disconnected - stage: %d, sleep 2s ", stage);
+        
+        date = [NSDate dateWithTimeInterval:2.0 sinceDate:[NSDate date]];
+        [[NSRunLoop currentRunLoop] runUntilDate:date];
+
+    }
+    
+    
+    if ( self.shouldTimeoutProcessing == TRUE)
+    {
+        NSLog(@"sendCommandHTTPSetup: SETUP PROCESS TIMEOUT -- return");
         return FALSE;
     }
     
@@ -956,7 +955,7 @@
     [BLEConnectionManager getInstanceBLE].delegate = self;
     [[BLEConnectionManager getInstanceBLE].uartPeripheral writeString:cmmd withTimeOut:SHORT_TIME_OUT_SEND_COMMAND];
     [sent_conf release];
-    NSDate * date;
+    
     while ([BLEConnectionManager getInstanceBLE].uartPeripheral.isBusy)
     {
         date = [NSDate dateWithTimeInterval:1.5 sinceDate:[NSDate date]];
@@ -972,27 +971,7 @@
     return TRUE;
 }
 
-- (BOOL)sendCommandCodecSupport
-{
-    NSLog(@"now, Send command get code support!!!!");
-    if ([BLEConnectionManager getInstanceBLE].state != CONNECTED)
-    {
-        NSLog(@"sendCommandCodecSupport:  BLE disconnected - ");
-        return FALSE;
-    }
-    
-    [BLEConnectionManager getInstanceBLE].delegate = self;
-    [[BLEConnectionManager getInstanceBLE].uartPeripheral writeString:GET_CODECS_SUPPORT withTimeOut:SHORT_TIME_OUT_SEND_COMMAND];
-    NSDate * date;
-    while ([BLEConnectionManager getInstanceBLE].uartPeripheral.isBusy)
-    {
-        date = [NSDate dateWithTimeInterval:1.5 sinceDate:[NSDate date]];
-        
-        [[NSRunLoop currentRunLoop] runUntilDate:date];
-    }
-    
-    return TRUE;
-}
+
 
 -(void)sendWifiInfoToCamera
 {
@@ -1051,6 +1030,13 @@
         if (stage == CHECKING_WIFI)
         {
             //Failed!!
+            if (_timerTimeoutConnectBLE != nil)
+            {
+                [self.timerTimeoutConnectBLE invalidate];
+                self.timerTimeoutConnectBLE = nil;
+            }
+            
+            
             [self timeoutBLESetupProcessing:nil];
             NSLog(@"wifi pass check failed!!! call timeout");
         }
@@ -1068,13 +1054,27 @@
 
 -(void) readWifiStatusOfCamera:(NSTimer *) exp
 {
-    NSLog(@"now,readWifiStatusOfCamera");
+    NSLog(@"now,readWifiStatusOfCamera blocking ");
     
-    if ([BLEConnectionManager getInstanceBLE].state != CONNECTED)
+    NSDate * date;
+    while( ([BLEConnectionManager getInstanceBLE].state != CONNECTED) &&
+          ( self.shouldTimeoutProcessing == FALSE ) )
     {
-        NSLog(@"NITC_VC - readWifiStatusOfCamera - BLE disconnected - stage: %d", stage);
+        NSLog(@"readWifiStatusOfCamera:  BLE disconnected - stage: %d, sleep 2s ", stage);
+        
+        date = [NSDate dateWithTimeInterval:2.0 sinceDate:[NSDate date]];
+        [[NSRunLoop currentRunLoop] runUntilDate:date];
+        
+    }
+    
+    
+    if ( self.shouldTimeoutProcessing == TRUE)
+    {
+        NSLog(@"readWifiStatusOfCamera: SETUP PROCESS TIMEOUT -- return");
         return ;
     }
+    
+    
     
     [BLEConnectionManager getInstanceBLE].delegate = self;
     [[BLEConnectionManager getInstanceBLE].uartPeripheral writeString:GET_STATE_NETWORK_CAMERA withTimeOut:LONG_TIME_OUT_SEND_COMMAND];
@@ -1085,19 +1085,17 @@
     /*
      * Move cmd below to didReceiveData: delegate
      */
-    //stage = CHECKING_WIFI;
     
-    NSDate * date;
+
     while ([BLEConnectionManager getInstanceBLE].uartPeripheral.isBusy)
     {
         date = [NSDate dateWithTimeInterval:1.5 sinceDate:[NSDate date]];
         
         [[NSRunLoop currentRunLoop] runUntilDate:date];
         
-        //NSLog(@"NetworkInfo_VC - readWifiStatusOfCamera BLE isBusy");
     }
     
-    date = [NSDate dateWithTimeInterval:1.0 sinceDate:[NSDate date]];
+    date = [NSDate dateWithTimeInterval:0.5 sinceDate:[NSDate date]];
     
     [[NSRunLoop currentRunLoop] runUntilDate:date];
 }
