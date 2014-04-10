@@ -204,7 +204,8 @@ double _ticks = 0;
 #endif
     _sharedCamConnectedTo = [[NSString alloc] init];
     self.cameraModel = [self.selectedChannel.profile getModel];
-    [self initHorizeMenu: _cameraModel];
+    //[self initHorizeMenu: _cameraModel];
+    [self performSelectorInBackground:@selector(initHorizeMenu:) withObject:_cameraModel];
 
     //set text name for camera name
     [self.ib_lbCameraName setText:self.selectedChannel.profile.name];
@@ -1447,44 +1448,34 @@ double _ticks = 0;
 
 - (void)becomeActive
 {
-    if ([self.selectedChannel.profile isNotAvailable])
+    if (![_cameraModel isEqualToString:CP_MODEL_SHARED_CAM]) // CameraHD
     {
-        nowButton.enabled = NO;
-        [_activityIndicator removeFromSuperview];
-        [self earlierButtonAction:nil];
-        return;
+        self.timelineVC = [[TimelineViewController alloc] init];
+        [self.view addSubview:_timelineVC.view];
+        self.timelineVC.timelineVCDelegate = self;
+        self.timelineVC.camChannel = self.selectedChannel;
+        self.timelineVC.navVC = self.navigationController;
+        self.timelineVC.parentVC = self;
+        
+        [self.timelineVC loadEvents:self.selectedChannel];
     }
-    else
-    {
-        if (![_cameraModel isEqualToString:CP_MODEL_SHARED_CAM]) // CameraHD
-        {
-            self.timelineVC = [[TimelineViewController alloc] init];
-            [self.view addSubview:_timelineVC.view];
-            self.timelineVC.timelineVCDelegate = self;
-            self.timelineVC.camChannel = self.selectedChannel;
-            self.timelineVC.navVC = self.navigationController;
-            self.timelineVC.parentVC = self;
-            
-            [self.timelineVC loadEvents:self.selectedChannel];
-        }
-        
-        self.selectedChannel.stopStreaming = NO;
-        [self displayCustomIndicator];
-        self.viewStopStreamingProgress.hidden = YES;
-        [self scanCamera];
-        
-        [self hideControlMenu];
-        
-        NSLog(@"Check selectedChannel is %@ and ip of deviece is %@", self.selectedChannel, self.selectedChannel.profile.ip_address);
-        
-        [self setupHttpPort];
-        [self setupPtt];
-        
-        self.stringTemperature = @"0";
-        //end add button to change
-        [ib_switchDegree setHidden:YES];
-    }
-
+    
+    self.selectedChannel.stopStreaming = NO;
+    [self displayCustomIndicator];
+    self.viewStopStreamingProgress.hidden = YES;
+    [self scanCamera];
+    
+    [self hideControlMenu];
+    
+    NSLog(@"Check selectedChannel is %@ and ip of deviece is %@", self.selectedChannel, self.selectedChannel.profile.ip_address);
+    
+    [self setupHttpPort];
+    [self setupPtt];
+    
+    self.stringTemperature = @"0";
+    //end add button to change
+    [ib_switchDegree setHidden:YES];
+    
     self.imageViewHandle.hidden = YES;
     self.imageViewKnob.center = self.imgViewDrectionPad.center;
     self.imageViewHandle.center = self.imgViewDrectionPad.center;
@@ -1860,7 +1851,11 @@ double _ticks = 0;
     {
         
         //TODO: Check for stun mode running...
-        [self goBackToCameraList];
+        //[self goBackToCameraList];
+        [self performSelector:@selector(goBackToCameraList)
+                   withObject:nil
+                   afterDelay:0.001
+                      inModes:nil];
     }
     else if(h264Streamer != nil)
     {
@@ -4185,7 +4180,7 @@ double _ticks = 0;
                                             repeats:NO];
         }
     }
-    else // This is scan for camera when viewDidLoad
+    else // This is scan for camera when -becomeActive
     {
         BOOL found = FALSE;
         
@@ -4545,6 +4540,12 @@ double _ticks = 0;
         self.itemSelectedImages = [NSMutableArray arrayWithObjects:@"video_action_pan_pressed.png", @"video_action_mic_pressed.png", @"video_action_video_pressed.png", @"video_action_music_pressed.png", @"video_action_temp_pressed.png", nil];
     }
     
+    //[self.horizMenu reloadData:NO];
+    [self performSelectorOnMainThread:@selector(horizMenuReloadData) withObject:nil waitUntilDone:NO];
+}
+
+- (void)horizMenuReloadData
+{
     [self.horizMenu reloadData:NO];
 }
 
@@ -5867,7 +5868,8 @@ double _ticks = 0;
     {
         
         [self startScanningWithBonjour];
-        [self startScanningWithIpServer];
+        //[self startScanningWithIpServer];
+        [self performSelectorInBackground:@selector(startScanningWithIpServer) withObject:nil];
     }
 
     
@@ -5939,14 +5941,20 @@ double _ticks = 0;
                 //Dont need to scan.. call scan_done directly
                 [finalResult addObject:self.selectedChannel.profile];
                 
-                [self performSelector:@selector(scan_done:)
-                           withObject:finalResult afterDelay:0.1];
+//                [self performSelector:@selector(scan_done:)
+//                           withObject:finalResult afterDelay:0.1];
+                [self performSelectorOnMainThread:@selector(scan_done:)
+                                       withObject:finalResult
+                                    waitUntilDone:NO];
                 
             }
             else // NEED to do local scan
             {
                 ScanForCamera *cameraScanner = [[ScanForCamera alloc] initWithNotifier:self];
-                [cameraScanner scan_for_device:self.selectedChannel.profile.mac_address];
+                //[cameraScanner scan_for_device:self.selectedChannel.profile.mac_address];
+                [cameraScanner performSelectorOnMainThread:@selector(scan_for_device:)
+                                                withObject:self.selectedChannel.profile.mac_address
+                                             waitUntilDone:NO];
                 
                 
             } /* skipScan = false*/
@@ -5954,8 +5962,11 @@ double _ticks = 0;
         else
         {
             //Skip scanning too and assume we don't get any result
-            [self performSelector:@selector(scan_done:)
-                       withObject:nil afterDelay:0.1];
+//            [self performSelector:@selector(scan_done:)
+//                       withObject:nil afterDelay:0.1];
+            [self performSelectorOnMainThread:@selector(scan_done:)
+                                   withObject:nil
+                                waitUntilDone:NO];
         }
     }
     
