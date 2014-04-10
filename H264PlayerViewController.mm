@@ -1851,7 +1851,11 @@ double _ticks = 0;
     {
         
         //TODO: Check for stun mode running...
-        [self goBackToCameraList];
+        //[self goBackToCameraList];
+        [self performSelector:@selector(goBackToCameraList)
+                   withObject:nil
+                   afterDelay:0.001
+                      inModes:nil];
     }
     else if(h264Streamer != nil)
     {
