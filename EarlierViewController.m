@@ -14,6 +14,7 @@
 @interface EarlierViewController ()
 
 @property (nonatomic) BOOL isDidLoad;
+@property (nonatomic, assign) id parentVC;
 
 @end
 
@@ -34,6 +35,19 @@
     
     if (self)
     {
+        self.camChannel = camChannel;
+    }
+    
+    return self;
+}
+
+- (id)initWithParentVC: (id)parentVC camChannel: (CamChannel *)camChannel
+{
+    self = [super init];
+    
+    if (self)
+    {
+        self.parentVC = parentVC;
         self.camChannel = camChannel;
     }
     
@@ -85,6 +99,7 @@
         else
         {
             self.timelineVC.navVC = _nav;
+            self.timelineVC.timelineVCDelegate = self.parentVC;
         }
         
         self.isDidLoad = TRUE;
@@ -92,6 +107,13 @@
         
         self.timelineVC.tableView.contentInset = UIEdgeInsetsMake(5, 0, 64, 0);
     }
+}
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    
+    [[UIApplication sharedApplication] setStatusBarHidden:NO withAnimation:UIStatusBarAnimationNone];
 }
 
 #pragma mark - Methods

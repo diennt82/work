@@ -459,6 +459,7 @@
     [tableView deselectRowAtIndexPath:indexPath animated:NO];
     
     CamChannel *ch = (CamChannel *)[_camChannels objectAtIndex:indexPath.row];
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     
     if ([ch.profile isNotAvailable])
     {
@@ -469,6 +470,9 @@
         else
         {
             // Show Earlier view
+            [userDefaults setObject:ch.profile.mac_address forKey:CAM_IN_VEW];
+            [userDefaults synchronize];
+            
             EarlierViewController *earlierVC = [[EarlierViewController alloc] initWithCamChannel:ch];
             [((MenuViewController *)self.parentVC).navigationController pushViewController:earlierVC animated:YES];
             [earlierVC release];
@@ -481,7 +485,6 @@
         [CameraAlert clearAllAlertForCamera:ch.profile.mac_address];
         [UIApplication sharedApplication].idleTimerDisabled = YES;
         
-        NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
         [userDefaults setObject:ch.profile.registrationID forKey:REG_ID];
         [userDefaults setObject:ch.profile.mac_address forKey:CAM_IN_VEW];
         [userDefaults synchronize];

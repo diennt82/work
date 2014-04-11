@@ -107,6 +107,7 @@
 @property (nonatomic, strong) NSString *sharedCamConnectedTo;
 @property (nonatomic) BOOL remoteViewTimeout;
 @property (nonatomic) BOOL disconnectAlert;
+@property (nonatomic) BOOL isWentToPlayback;
 
 - (void)centerScrollViewContents;
 - (void)scrollViewDoubleTapped:(UITapGestureRecognizer*)recognizer;
@@ -533,40 +534,13 @@ double _ticks = 0;
         _wantToShowTimeLine = NO;
     }
     _earlierVC.view.hidden = YES;
-    
-    NSLog(@"h264StreamerIsInStopped: %d, h264Streamer==null: %d", _h264StreamerIsInStopped, h264Streamer == NULL);
-    [self.view bringSubviewToFront:self.imageViewVideo];
-    if (self.h264StreamerIsInStopped == TRUE &&
-        h264Streamer == NULL)
-    {
-//        self.activityIndicator.hidden = NO;
-//        [self.view bringSubviewToFront:self.activityIndicator];
-//        [self.activityIndicator startAnimating];
-        _isShowCustomIndicator = YES;
-        
-        //[self setupCamera];
-        [self performSelectorInBackground:@selector(waitingScanAndStartSetupCamera_bg) withObject:nil];
-        self.h264StreamerIsInStopped = FALSE;
-        
-        NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-        [userDefaults setObject:_selectedChannel.profile.mac_address forKey:CAM_IN_VEW];
-        [userDefaults synchronize];
-    }
-    else
-    {
-        // Streamer is showing live view
-    }
-
 }
 
 - (void)earlierButtonAction:(id)sender
 {
     _hideCustomIndicatorAndTextNotAccessble = YES;
     [earlierButton setEnabled:NO];
-    if (![self.selectedChannel.profile isNotAvailable])
-    {
-        [nowButton setEnabled:YES];
-    }
+
     [self.customIndicator setHidden:YES];
     earlierNavi.isEarlierView = YES;
     [nowButton setTitleTextAttributes:@{
@@ -578,14 +552,22 @@ double _ticks = 0;
                                             UITextAttributeTextColor: [UIColor barItemSelectedColor]
                                             } forState:UIControlStateNormal];
     _wantToShowTimeLine = YES;
-    _earlierVC = [[EarlierViewController alloc] initWithCamChannel:self.selectedChannel];
-    _earlierVC.view.frame = CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
+    //_earlierVC = [[EarlierViewController alloc] initWithCamChannel:self.selectedChannel];
+    if (_earlierVC == nil)
+    {
+        self.earlierVC = [[EarlierViewController alloc] initWithParentVC:self camChannel:self.selectedChannel];
+        self.earlierVC.nav = self.navigationController;
+        _earlierVC.view.frame = CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
+    }
+    
     [self.view addSubview:_earlierVC.view];
     
     _earlierVC.view.hidden = NO;
     [self.view bringSubviewToFront:_earlierVC.view];
     [_earlierVC setCamChannel:self.selectedChannel];
-    _earlierVC.timelineVC.navVC = earlierNavi;
+    //_earlierVC.timelineVC.navVC = earlierNavi;
+    
+    //NSLog(@"H264VC - earlierButtonAction - self.navigationController: %p", self.navigationController);
 }
 
 - (void)waitingScanAndStartSetupCamera_bg
@@ -1267,6 +1249,8 @@ double _ticks = 0;
 
 - (void)stopStreamToPlayback
 {
+    NSLog(@"H264VC - stopStreamToPlayback - _wantToShowTimeLine: %d", _wantToShowTimeLine);
+    self.isWentToPlayback = TRUE;
     self.h264StreamerIsInStopped = TRUE;
     [self stopPeriodicBeep];
     [self stopPeriodicPopup];
@@ -1839,10 +1823,9 @@ double _ticks = 0;
     self.viewStopStreamingProgress.hidden = NO;
     [self.view bringSubviewToFront:self.viewStopStreamingProgress];
     
-
     _isShowCustomIndicator = NO;
     
-    NSLog(@"self.currentMediaStatus: %d", self.currentMediaStatus);
+    NSLog(@"H264VC- prepareGoBackToCameraList - self.currentMediaStatus: %d", self.currentMediaStatus);
     self.navigationItem.leftBarButtonItem.enabled = NO;
     
     userWantToCancel = TRUE;
@@ -1858,16 +1841,16 @@ double _ticks = 0;
         self.currentMediaStatus == MEDIA_PLAYER_STARTED       ||
         (self.currentMediaStatus == 0 && h264Streamer == NULL)) // Media player haven't start yet.
     {
-        
         //TODO: Check for stun mode running...
-        //[self goBackToCameraList];
+        
         [self performSelector:@selector(goBackToCameraList)
                    withObject:nil
-                   afterDelay:0.001
-                      inModes:nil];
+                   afterDelay:0.001];
     }
     else if(h264Streamer != nil)
     {
+        NSLog(@"H264VC- prepareGoBackToCameraList - just sendInterrupt");
+        
         h264Streamer->sendInterrupt();
     }
     else
@@ -3859,14 +3842,6 @@ double _ticks = 0;
 
 -(void) checkOrientation
 {
-    if ([self.selectedChannel.profile isNotAvailable])  //CameraOfline for HD
-    {
-        [self.navigationController setNavigationBarHidden:NO];
-        [[UIApplication sharedApplication] setStatusBarHidden:NO];
-        [self addHubbleLogo_Back];
-        return;
-    }
-    
 	UIInterfaceOrientation infOrientation = [UIApplication sharedApplication].statusBarOrientation;
     
 	[self adjustViewsForOrientation:infOrientation];
@@ -4915,28 +4890,51 @@ double _ticks = 0;
 }
 - (void)viewWillAppear:(BOOL)animated
 {
+    [super viewWillAppear:animated];
+    
+    NSLog(@"H264VC - viewWillAppear -_wantToShowTimeLine: %d", _wantToShowTimeLine);
+    
     //alway show custom indicator, when view appear
     _isShowCustomIndicator = YES;
-    _isShowDebugInfo = NO;
-    _isFirstLoad = YES;
-    [super viewWillAppear:animated];
-    //init data for debug
-#ifdef SHOW_DEBUG_INFO
-    [self initFirstData];
-#endif
-    _isCameraOffline = NO;
-    _isRecordInterface  = YES;
-    _isProcessRecording = NO;
-    _isListening = NO;
-    _ticks = 0.0;
-
-    if (_timelineVC != nil)
+    
+    if (!_isWentToPlayback) // this property get TRUE if app went to PlaybackVC
     {
-        self.timelineVC.camChannel = self.selectedChannel;
+        _isShowDebugInfo = NO;
+        _isFirstLoad = YES;
+        //init data for debug
+#ifdef SHOW_DEBUG_INFO
+        [self initFirstData];
+#endif
+        _isCameraOffline = NO;
+        _isRecordInterface  = YES;
+        _isProcessRecording = NO;
+        _isListening = NO;
+        _ticks = 0.0;
+        
+        if (_timelineVC != nil)
+        {
+            self.timelineVC.camChannel = self.selectedChannel;
+        }
+    }
+    else
+    {
+        self.isWentToPlayback = FALSE;
+        //[self setupCamera];
+        [self scanCamera];
+        self.h264StreamerIsInStopped = FALSE;
+        
+        NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+        [userDefaults setObject:_selectedChannel.profile.mac_address forKey:CAM_IN_VEW];
+        [userDefaults synchronize];
     }
     
-    [self checkOrientation];
+    //if (!_wantToShowTimeLine)
+    {
+        [self checkOrientation];
+    }
+    
 }
+
 #ifdef SHOW_DEBUG_INFO
 - (void)initFirstData
 {
@@ -4947,16 +4945,17 @@ double _ticks = 0;
 
 - (void)viewWillDisappear:(BOOL)animated
 {
+#if 0
     [self.navigationController setNavigationBarHidden:YES];
     
     for (id view in self.navigationController.view.subviews)
     {
         if ([view isKindOfClass:[UIBarButtonItem class]])
         {
-            [view removeFromSuperview];
+            //[view removeFromSuperview];
         }
     }
-    
+#endif
     [self stopTimerRecoring];
     
     [[UIApplication sharedApplication] setStatusBarHidden:NO];

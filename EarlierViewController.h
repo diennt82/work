@@ -21,5 +21,6 @@
 @property (nonatomic, assign) UINavigationController *nav;
 
 - (id)initWithCamChannel: (CamChannel *)camChannel;
+- (id)initWithParentVC: (id)parentVC camChannel: (CamChannel *)camChannel;
 
 @end
