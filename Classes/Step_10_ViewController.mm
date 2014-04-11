@@ -512,7 +512,7 @@
     {
         should_stop_scanning = FALSE;
         NSLog(@"Step_10VC - stop scanning now.. should be 4 mins");
-        self.errorCode = @"Time Out";
+        
         [self setupFailed];
         return ;
     }
@@ -526,6 +526,7 @@
     {
         //Found it online
         NSLog(@"Found it online");
+        [self setupCompleted];
         return;
     }
     else
@@ -560,7 +561,7 @@
 #if 1
     if ([_userAccount checkCameraIsAvailable:self.cameraMac])
     {
-        [self setupCompleted];
+        self.errorCode = @"NoErr";
         return TRUE;
     }
 #else
@@ -573,7 +574,7 @@
         return TRUE;
     }
 #endif
-    
+    self.errorCode =@"NotAvail";
     return FALSE;
 }
 
@@ -759,7 +760,8 @@
     {
         switch(buttonIndex) {
             case 0: // Cancel
-                self.errorCode = @"Server Unreachable";
+                self.errorCode = @"ServUnreach";
+
                 [self  setupFailed];
                 
                 break;

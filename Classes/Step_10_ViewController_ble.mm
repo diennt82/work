@@ -320,7 +320,7 @@
     {
         //Found it online
         NSLog(@"Found it online");
-        //[self setupCompleted];
+        [self setupCompleted];
         return;
     }
 	
@@ -352,7 +352,7 @@
 #if 1
     if ([_userAccount checkCameraIsAvailable:self.cameraMac])
     {
-        [self setupCompleted];
+        self.errorCode = @"NoErr";
         return TRUE;
     }
 #else
@@ -364,6 +364,8 @@
         return TRUE;
     }
 #endif
+    
+    self.errorCode =@"NotAvail";
     
     return FALSE;
 }
@@ -461,35 +463,8 @@
 	NSLog(@"server unreachable");
 }
 
-#pragma mark -
-#pragma mark AlertView delegate
 
 
-
-- (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex
-{
-    
-	int tag = alertView.tag;
-    
-	if (tag == ALERT_ADDCAM_SERVER_UNREACH)
-	{
-		switch(buttonIndex) {
-			case 0: // Cancel
-                self.errorCode = @"ServUnreach";
-                [self  setupFailed];
-                
-				break;
-			case 1: // Retry
-                [self registerCamera:nil];
-				break;
-			default:
-				break;
-		}
-	}
-    
-}
-
-#pragma mark -
 
 
 
