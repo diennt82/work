@@ -120,8 +120,6 @@
     {
         NSArray *dataArr = [responseDict objectForKey:@"data"];
         
-        //NSLog(@"camlist4: %@", dataArr);
-        
         NSMutableArray * cam_profiles;
         CamProfile *cp;
         
@@ -134,27 +132,14 @@
                 cp = (CamProfile *)[cam_profiles objectAtIndex:i];
                 
                 NSLog(@"CameraProfiles: %@, mac_w_colon: %@", cp, mac_w_colon);
-                
-                if ([cp isNotAvailable])
-                {
-                    return FALSE;
-                }
-                else
+
+                if (cp.mac_address != nil &&
+                    [cp.mac_address isEqualToString:[mac_w_colon uppercaseString]] &&
+                    cp.minuteSinceLastComm == 1) // is_available = 1
                 {
                     [self sync_online_and_offline_data:cam_profiles];
                     return YES;
                 }
-#if 0
-                if (cp.mac_address != nil &&
-                    [cp.mac_address isEqualToString:[mac_w_colon uppercaseString]] &&
-                    cp.ip_address != nil &&
-                    cp.minuteSinceLastComm == 1) // is_available = 1
-                {
-                    localIp = cp.ip_address;
-                    [self sync_online_and_offline_data:cam_profiles];
-                    break;
-                }
-#endif
             }
         }
     }
