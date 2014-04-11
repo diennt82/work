@@ -10,8 +10,11 @@
 #import "GAI.h"
 @interface Step_11_ViewController : UIViewController
 {
-    
+
+    IBOutlet UILabel * error_code;
 }
 @property (nonatomic, assign) NSString * errorCode;
+@property (nonatomic, assign)  IBOutlet UILabel * error_code; 
 -(IBAction)tryAddCameraAgain:(id)sender;
+
 @end

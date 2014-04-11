@@ -306,7 +306,7 @@
     {
         should_stop_scanning = FALSE;
         NSLog(@" stop scanning now.. should be 4 mins");
-        self.errorCode = @"Time Out";
+        
 		[self setupFailed];
 		return ;
     }
@@ -469,7 +469,7 @@
 	{
 		switch(buttonIndex) {
 			case 0: // Cancel
-                self.errorCode = @"Server Unreachable";
+                self.errorCode = @"ServUnreach";
                 [self  setupFailed];
                 
 				break;

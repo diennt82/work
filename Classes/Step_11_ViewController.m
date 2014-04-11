@@ -15,6 +15,10 @@
 
 @implementation Step_11_ViewController
 
+@synthesize error_code;
+@synthesize errorCode;
+
+
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
@@ -28,7 +32,7 @@
 {
     [super viewDidLoad];
     self.navigationItem.hidesBackButton = YES;
-#if 1
+
     CGAffineTransform transform = CGAffineTransformMakeScale(1.0f, 4.0f);
     [self.view viewWithTag:501].transform = transform;
     
@@ -45,15 +49,17 @@
     
     [self.btnTestCamera setBackgroundImage:[UIImage imageNamed:@"green_btn"] forState:UIControlStateNormal];
     [self.btnTestCamera setBackgroundImage:[UIImage imageNamed:@"green_btn_pressed"] forState:UIControlEventTouchDown];
-#else
-	// Do any additional setup after loading the view.
-    self.navigationItem.title = NSLocalizedStringWithDefaultValue( @"Add_Camera_Failed",nil, [NSBundle mainBundle],
-                                                                  @"Add Camera Failed" , nil);
 
+
+    if (errorCode!= nil)
+    {
+        [self.error_code setText:errorCode];
+    }
+    else
+    {
+        self.error_code.hidden = YES;
+    }
     
-    UIInterfaceOrientation interfaceOrientation = [UIApplication sharedApplication].statusBarOrientation;
-    [self adjustViewsForOrientations:interfaceOrientation];
-#endif
 }
 
 - (void)didReceiveMemoryWarning
