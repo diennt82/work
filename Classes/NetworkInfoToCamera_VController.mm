@@ -12,7 +12,7 @@
 
 #define BTN_CONTINUE_TAG    599
 #define BTN_TRY_AGAIN_TAG   559
-#define BLE_TIMEOUT_PROCESS 2*60//5*60.0
+#define BLE_TIMEOUT_PROCESS 4*60.0
 
 @interface NetworkInfoToCamera_VController () <UITextFieldDelegate>
 
@@ -609,7 +609,7 @@
         
         /* Start timer to check for camera connection issue */
         
-        self.timerTimeoutConnectBLE  = [NSTimer scheduledTimerWithTimeInterval:5*60.0
+        self.timerTimeoutConnectBLE  = [NSTimer scheduledTimerWithTimeInterval:BLE_TIMEOUT_PROCESS
                                                        target:self
                                                      selector:@selector(timeoutBLESetupProcessing:)
                                                      userInfo:nil
@@ -653,7 +653,7 @@
 
             
             /* Start timer to check for camera connection issue */
-            self.timerTimeoutConnectBLE  = [NSTimer scheduledTimerWithTimeInterval:5*60.0
+            self.timerTimeoutConnectBLE  = [NSTimer scheduledTimerWithTimeInterval:BLE_TIMEOUT_PROCESS
                                                            target:self
                                                          selector:@selector(timeoutBLESetupProcessing:)
                                                          userInfo:nil

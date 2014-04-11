@@ -48,7 +48,7 @@ typedef enum response_ {
     float timeout;
     
 }
-@property (nonatomic, retain) CBPeripheral *peripheral;
+@property (nonatomic, strong) CBPeripheral *peripheral;
 @property (assign) id<UARTPeripheralDelegate> delegate;
 @property BOOL isBusy, isFlushing, isDisconnected;
 @property (nonatomic) NSTimer * hello_timer; 
