@@ -557,7 +557,13 @@
                                                       apiKey:userApiKey
                                                     listener:nil];
     }
-
+#if 1
+    if ([_userAccount checkCameraIsAvailable:self.cameraMac])
+    {
+        [self setupCompleted];
+        return TRUE;
+    }
+#else
     NSString *localIp = [_userAccount query_cam_ip_online:self.cameraMac];
     
     if (localIp != nil)
@@ -566,6 +572,7 @@
         [self setupCompleted];
         return TRUE;
     }
+#endif
     
     return FALSE;
 }

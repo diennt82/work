@@ -320,7 +320,7 @@
     {
         //Found it online
         NSLog(@"Found it online");
-        [self setupCompleted];
+        //[self setupCompleted];
         return;
     }
 	
@@ -349,15 +349,21 @@
                                                     listener:nil];
     }
 
+#if 1
+    if ([_userAccount checkCameraIsAvailable:self.cameraMac])
+    {
+        [self setupCompleted];
+        return TRUE;
+    }
+#else
     NSString *localIp = [_userAccount query_cam_ip_online: self.cameraMac];
     
     if ( localIp != nil)
     {
         NSLog(@"Found a local ip: %@", localIp);
-        
-        
         return TRUE;
     }
+#endif
     
     return FALSE;
 }
