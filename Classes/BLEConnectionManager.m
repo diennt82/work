@@ -307,13 +307,16 @@
     
     if (self.delegate != nil)
     {
-        [self.delegate bleDisconnected];
+        
         if ([self.uartPeripheral.peripheral isEqual:peripheral])
             
         {
             [self.uartPeripheral didDisconnect];
             [self disconnect];
         }
+        
+        //Maybe blocking sometimes
+        [self.delegate bleDisconnected];
         
     }
     else
