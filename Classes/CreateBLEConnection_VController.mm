@@ -382,14 +382,7 @@
         return;
     }
     
-    if (_isNotFirstTime)
-    {
-        self.viewSearching.hidden = NO;
-    }
-    else
-    {
-        self.isNotFirstTime = TRUE;
-    }
+    self.viewSearching.hidden = NO;
     
     if ([_currentBLEList count] == 0) //NO camera found
     {
