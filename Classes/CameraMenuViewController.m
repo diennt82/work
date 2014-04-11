@@ -27,6 +27,8 @@
 @property (retain, nonatomic) IBOutlet UIView *viewProgress;
 
 @property (retain, nonatomic) NSString *stringFW_Version;
+@property (nonatomic) BOOL isLoading;
+@property (nonatomic, retain) NSString *apiKey;
 
 @end
 
@@ -56,6 +58,14 @@
     
     self.stringFW_Version = NSLocalizedStringWithDefaultValue(@"firmware_version", nil, [NSBundle mainBundle],
                                                    @"Firmware version", nil);
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    self.apiKey = [userDefaults stringForKey:@"PortalApiKey"];
+    
+    if (![self.camChannel.profile isNotAvailable])
+    {
+        self.isLoading = TRUE;
+        [self performSelectorInBackground:@selector(updateFWVersion_bg) withObject:nil];
+    }
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -63,11 +73,9 @@
     [super viewWillAppear:animated];
     self.navigationController.navigationBarHidden = NO;
     [self.navigationController.view setUserInteractionEnabled:YES];
-    
-    [self.tableViewSettings reloadRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:0
-                                                                                               inSection:0]]
-                                  withRowAnimation:UITableViewRowAnimationAutomatic];
 }
+
+#pragma mark - Action
 
 - (IBAction)btnRemoveCameraTouchUpInsideAction:(id)sender
 {
@@ -180,6 +188,43 @@
     }
 }
 
+#pragma mark - Server methods
+
+- (void)updateFWVersion_bg
+{
+    BMS_JSON_Communication *jsonComm = [[BMS_JSON_Communication alloc] initWithObject:self
+                                                                             Selector:nil
+                                                                         FailSelector:nil
+                                                                            ServerErr:nil];
+    NSDictionary *responseDict = [jsonComm sendCommandBlockedWithRegistrationId:self.camChannel.profile.registrationID
+                                                                     andCommand:@"action=command&command=get_version"
+                                                                      andApiKey:_apiKey];
+    if (responseDict)
+    {
+        if ([[responseDict objectForKey:@"status"] integerValue] == 200)
+        {
+            NSString *bodykey = [[[responseDict objectForKey:@"data"] objectForKey:@"device_response"] objectForKey:@"body"];//get_version: 01.12.84
+            
+            NSString *cmd = @"get_version";
+            
+            if ([bodykey hasPrefix:cmd])
+            {
+                self.camChannel.profile.fw_version = [bodykey substringFromIndex:cmd.length + 2];
+            }
+        }
+    }
+    
+    [self performSelectorOnMainThread:@selector(updateUI) withObject:nil waitUntilDone:NO];
+}
+
+- (void)updateUI
+{
+    self.isLoading = FALSE;
+    [self.tableViewSettings reloadRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:1
+                                                                                               inSection:0]]
+                                  withRowAnimation:UITableViewRowAnimationAutomatic];
+}
+
 -(void) removeLocalCamera
 {
     HttpCommunication * dev_comm = [[HttpCommunication alloc]init];
@@ -203,11 +248,9 @@
                                                                               Selector:@selector(removeCameraSuccessWithResponse:)
                                                                           FailSelector:@selector(removeCameraFailedWithError:)
                                                                              ServerErr:@selector(removeCameraFailedServerUnreachable)] autorelease];
-    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-    //NSString *mac = [Util strip_colon_fr_mac:_camChannel.profile.mac_address];
     
     [jsonComm deleteDeviceWithRegistrationId:_camChannel.profile.registrationID
-                                   andApiKey:[userDefaults objectForKey:@"PortalApiKey"]];
+                                   andApiKey:_apiKey];
 }
 
 #pragma mark - Table view data source
@@ -338,9 +381,53 @@
         }
         else
         {
-            cell.nameLabel.text = _stringFW_Version;
-            cell.valueLabel.text = self.camChannel.profile.fw_version;
+            if (_isLoading)
+            {
+                static NSString *CellIdentifier = @"Cell";
+                UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+                if (cell == nil) {
+                    cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
+                }
+                
+                // Configure the cell...
+                cell.textLabel.text = _stringFW_Version;
+                
+                UIActivityIndicatorView *spinner = [[UIActivityIndicatorView alloc]
+                                                    initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+                // Spacer is a 1x1 transparent png
+                UIImage *spacer = [UIImage imageNamed:@"spacer"];
+                
+                UIGraphicsBeginImageContext(spinner.frame.size);
+                
+                [spacer drawInRect:CGRectMake(0, 0, spinner.frame.size.width, spinner.frame.size.height)];
+                UIImage* resizedSpacer = UIGraphicsGetImageFromCurrentImageContext();
+                
+                UIGraphicsEndImageContext();
+                cell.imageView.image = resizedSpacer;
+                spinner.frame = CGRectMake(UIScreen.mainScreen.bounds.size.width - spinner.frame.size.width - 30, 0, spinner.frame.size.width, spinner.frame.size.height);
+                [cell.imageView addSubview:spinner];
+                [spinner startAnimating];
+                
+                return cell;
+            }
+            else
+            {
+                cell.nameLabel.text = _stringFW_Version;
+                cell.valueLabel.text = self.camChannel.profile.fw_version;
+            }
         }
+        
+        return cell;
+    }
+    else
+    {
+        static NSString *CellIdentifier = @"Cell";
+        UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+        if (cell == nil) {
+            cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
+        }
+        
+        // Configure the cell...
         
         return cell;
     }
