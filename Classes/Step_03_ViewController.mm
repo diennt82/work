@@ -38,7 +38,6 @@
 {
     [super viewDidLoad];
 	// Do any additional setup after loading the view.
-#if 1
     self.navigationItem.hidesBackButton = YES;
     
     UIImage *hubbleLogoBack = [UIImage imageNamed:@"Hubble_back_text"];
@@ -50,10 +49,6 @@
     
     self.navigationItem.leftBarButtonItem = barBtnHubble;
     
-    CGAffineTransform transform = CGAffineTransformMakeScale(1.0f, 4.0f);
-    [self.view viewWithTag:501].transform = transform;
-    [_inProgress viewWithTag:501].transform = transform;
-    
     UIImageView *imageView  = (UIImageView *)[self.inProgress viewWithTag:575];
     imageView.animationImages = @[[UIImage imageNamed:@"setup_camera_c1"],
                                   [UIImage imageNamed:@"setup_camera_c2"],
@@ -62,20 +57,8 @@
     imageView.animationDuration = 1.5f;
     imageView.animationRepeatCount = 0;
     
-    [self.scrollViewGuide setContentSize:CGSizeMake(320, 1181)];
-#else
-    self.navigationItem.title =  NSLocalizedStringWithDefaultValue(@"Detect_Camera",nil, [NSBundle mainBundle],
-                                                                   @"Detect Camera", nil);
+    [self.scrollViewGuide setContentSize:CGSizeMake(320, 1370)];
 
-    self.navigationItem.backBarButtonItem =
-    [[[UIBarButtonItem alloc] initWithTitle:NSLocalizedStringWithDefaultValue(@"Back",nil, [NSBundle mainBundle],
-                                                                              @"Back", nil)
-                                      style:UIBarButtonItemStyleBordered
-                                     target:nil
-                                     action:nil] autorelease];
-
-    [self startAnimationWithOrientation];
-#endif
     self.homeWifiSSID = [CameraPassword fetchSSIDInfo];
     
     NSLog(@"homeWifiSSID: %@", self.homeWifiSSID);
