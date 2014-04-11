@@ -331,7 +331,7 @@
     task_cancelled = NO;
     
     [BLEConnectionManager getInstanceBLE].delegate = self;
-    
+    [BLEConnectionManager getInstanceBLE].needReconnect = YES;
     if (rescanFlag)
     {
         [[BLEConnectionManager getInstanceBLE] reScan];

@@ -210,7 +210,6 @@
 
 - (IBAction)btnTryAgainTouchUpInsideAction:(UIButton *)sender
 {
-    NSLog(@"NetworkInfo - btnTryAgainTouchUpInsideAction");
     sender.enabled = NO;
     
     BMS_JSON_Communication *jsonComm = [[[BMS_JSON_Communication alloc] initWithObject:self
@@ -222,8 +221,12 @@
     NSString *stringUDID = [userDefaults stringForKey:CAMERA_UDID];
     NSString *apiKey     = [userDefaults objectForKey:@"PortalApiKey"];
     
-    [jsonComm deleteDeviceWithRegistrationId:stringUDID
+    
+    NSLog(@"NetworkInfo - btnTryAgainTouchUpInsideAction - try to remove camera");
+
+    [jsonComm deleteBlockedDeviceWithRegistrationId:stringUDID
                                    andApiKey:apiKey];
+   
     
     [self.navigationController popToRootViewControllerAnimated:YES];
 }
