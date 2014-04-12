@@ -1582,12 +1582,13 @@ double _ticks = 0;
     _httpComm.device_ip = self.selectedChannel.profile.ip_address;
     _httpComm.device_port = self.selectedChannel.profile.port;
     
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     
-    NSLog(@"device_ip is %@ and device_port is %d", self.selectedChannel.profile.ip_address, self.selectedChannel.profile.port);
+    NSLog(@"H264VC - setupCamera -device_ip: %@, -device_port: %d, -{remote_only: %d}", self.selectedChannel.profile.ip_address, self.selectedChannel.profile.port, [userDefaults boolForKey:@"remote_only"]);
     //Support remote UPNP video as well
     if (self.selectedChannel.profile.isInLocal == TRUE)
     {
-        NSLog(@"created a local streamer");
+        NSLog(@"H264VC - setupCamera -created a local streamer");
         self.selectedChannel.stream_url = [NSString stringWithFormat:@"rtsp://user:pass@%@:6667/blinkhd", self.selectedChannel.profile.ip_address];
         
 #if 0
@@ -1606,8 +1607,7 @@ double _ticks = 0;
     }
     else if (self.selectedChannel.profile.minuteSinceLastComm <= 5)
     {
-        NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-        NSLog(@"Log - created a remote streamer - {enable_stun}: %@", [userDefaults objectForKey:@"enable_stun"]);
+        NSLog(@"H264VC - setupCamera - created a remote streamer - {enable_stun}: %@", [userDefaults objectForKey:@"enable_stun"]);
         
         // This value is setup on Account view
         if([userDefaults boolForKey:@"enable_stun"] == FALSE)
@@ -5855,9 +5855,11 @@ double _ticks = 0;
 
 - (void)scanCamera
 {
-    if ( [self isCurrentConnection3G])
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    
+    if ( [self isCurrentConnection3G] || [userDefaults boolForKey:@"remote_only"])
     {
-        NSLog(@" Connection over 3G --> Skip scanning all together");
+        NSLog(@"Connection over 3G | remote_only == TRUE --> Skip scanning all together");
         
         self.selectedChannel.profile.isInLocal = FALSE;
         self.selectedChannel.profile.hasUpdateLocalStatus = TRUE;
