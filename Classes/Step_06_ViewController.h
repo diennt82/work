@@ -29,6 +29,10 @@
     BOOL _task_cancelled;
     
 }
+
+@property (retain, nonatomic) IBOutlet UIView *otaDummyProgress;
+@property (retain, nonatomic) IBOutlet UIProgressView *otaDummyProgressBar;
+
 @property (retain, nonatomic) IBOutlet UIView *progressView;
 @property (retain, nonatomic) IBOutlet UIScrollView *scrollViewGuide;
 //

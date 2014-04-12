@@ -1,14 +1,16 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="4514" systemVersion="13A603" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="5053" systemVersion="12F45" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none">
     <dependencies>
         <deployment defaultVersion="1536" identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3746"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3733"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="Step_06_ViewController">
             <connections>
                 <outlet property="confPasswordCell" destination="41" id="45"/>
                 <outlet property="infoSelectCameView" destination="Qxn-or-QKK" id="Nj8-qo-P2g"/>
+                <outlet property="otaDummyProgress" destination="xOL-cO-kw6" id="syf-zP-zgx"/>
+                <outlet property="otaDummyProgressBar" destination="zyd-U3-B82" id="ihh-wI-SdA"/>
                 <outlet property="passwordCell" destination="36" id="46"/>
                 <outlet property="progressView" destination="nSw-Db-ssL" id="PEM-u2-NeE"/>
                 <outlet property="scrollViewGuide" destination="fUx-oY-EgV" id="p8G-bG-ikx"/>
@@ -278,6 +280,44 @@
             <simulatedStatusBarMetrics key="simulatedStatusBarMetrics"/>
             <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
         </view>
+        <view contentMode="scaleToFill" id="xOL-cO-kw6">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Camera Firmware is being upgraded, please keep the camera power on during this process" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="3" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="sQB-XA-KcY">
+                    <rect key="frame" x="0.0" y="224" width="320" height="150"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <fontDescription key="fontDescription" name="HelveticaNeue-Thin" family="Helvetica Neue" pointSize="19"/>
+                    <color key="textColor" red="0.062745098040000002" green="0.062745098040000002" blue="0.062745098040000002" alpha="1" colorSpace="calibratedRGB"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="This may take up 3 minutes" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="VZp-cS-i9h">
+                    <rect key="frame" x="11" y="353" width="280" height="21"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="16"/>
+                    <color key="textColor" red="0.50196078430000002" green="0.50196078430000002" blue="0.50196078430000002" alpha="1" colorSpace="calibratedRGB"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <progressView opaque="NO" tag="501" contentMode="scaleToFill" verticalHuggingPriority="750" progress="0.75" progressImage="setup_progress_blue.png" trackImage="setup_progress_grey.png" id="dcu-yA-IHp">
+                    <rect key="frame" x="-1" y="67" width="322" height="2"/>
+                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                </progressView>
+                <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="setup_camera_b2.png" id="SsE-6Z-kc4">
+                    <rect key="frame" x="40" y="125" width="240" height="128"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                </imageView>
+                <progressView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" progressViewStyle="bar" id="zyd-U3-B82">
+                    <rect key="frame" x="47" y="431" width="226" height="3"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                </progressView>
+                <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" animating="YES" style="gray" id="fvi-ip-6Mj">
+                    <rect key="frame" x="260" y="354" width="20" height="20"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                </activityIndicatorView>
+            </subviews>
+            <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+            <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
+        </view>
     </objects>
     <resources>
         <image name="detect_camera_1.png" width="275" height="170"/>
@@ -285,6 +325,7 @@
         <image name="detect_camera_3.png" width="275" height="170"/>
         <image name="detect_camera_4.png" width="275" height="170"/>
         <image name="green_btn.png" width="295" height="50"/>
+        <image name="setup_camera_b2.png" width="100" height="110"/>
         <image name="setup_camera_c4.png" width="100" height="110"/>
         <image name="setup_progress_blue.png" width="8" height="8"/>
         <image name="setup_progress_grey.png" width="8" height="8"/>

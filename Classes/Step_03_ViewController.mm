@@ -285,77 +285,44 @@
     
     NSLog(@"Step_03 - moveToNextStep -->fw_version: %@", fw_version);
 
-    if ( fw_version != nil                   &&
-        [fw_version isEqualToString:VERSION_18_037]
-        )
+    NSRange colonRange = [fw_version rangeOfString:@": "];
+    
+    if (colonRange.location != NSNotFound)
     {
-        //Fatality!!!
-        NSLog(@"Failed validity check -- go back");
+        NSString *fwVersion = [[fw_version componentsSeparatedByString:@": "] objectAtIndex:1];
         
+        NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+        [userDefaults setObject:fwVersion forKey:FW_VERSION];
+        [userDefaults setObject:self.cameraName forKey:CAMERA_SSID];
+        [userDefaults synchronize];
+    }
+    
+    NSLog(@"Load step 4");
+    //Load the next xib
+    Step_04_ViewController *step04ViewController = nil;
+    
+    
+    
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+    {
         
-        NSString * msg = nil;
-        NSString * ok = NSLocalizedStringWithDefaultValue(@"Ok",nil, [NSBundle mainBundle],
-                                                          @"Ok", nil);
+        step04ViewController = [[Step_04_ViewController alloc]
+                                initWithNibName:@"Step_04_ViewController_ipad" bundle:nil];
         
-        UIAlertView *alert;
-        
-        
-        msg =NSLocalizedStringWithDefaultValue(@"Server_error_maccheck" ,nil, [NSBundle mainBundle],
-                                               @"This camera is not registered. Setup camera failed." , nil);
-        
-        alert = [[UIAlertView alloc]
-                 initWithTitle:NSLocalizedStringWithDefaultValue(@"AddCam_Error" ,nil, [NSBundle mainBundle],
-                                                                 @"AddCam Error" , nil)
-                 message:msg
-                 delegate:self
-                 cancelButtonTitle:ok
-                 otherButtonTitles:nil];
-        
-        alert.tag = ALERT_FWCHECK_FAILED;
-        
-        [alert show];
-        [alert release];
     }
     else
     {
-        NSRange colonRange = [fw_version rangeOfString:@": "];
-        
-        if (colonRange.location != NSNotFound)
-        {
-            NSString *fwVersion = [[fw_version componentsSeparatedByString:@": "] objectAtIndex:1];
-            
-            NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-            [userDefaults setObject:fwVersion forKey:FW_VERSION];
-            [userDefaults setObject:self.cameraName forKey:CAMERA_SSID];
-            [userDefaults synchronize];
-        }
-        
-        NSLog(@"Load step 4");
-        //Load the next xib
-        Step_04_ViewController *step04ViewController = nil;
-        
-        
-        
-        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
-        {
-            
-            step04ViewController = [[Step_04_ViewController alloc]
-                                    initWithNibName:@"Step_04_ViewController_ipad" bundle:nil];
-            
-        }
-        else
-        {
-            step04ViewController = [[Step_04_ViewController alloc]
-                                    initWithNibName:@"Step_04_ViewController" bundle:nil];
-        }
-        
-        step04ViewController.cameraMac =  self.cameraMac;
-        step04ViewController.cameraName  =self.cameraName;
-        
-        [self.navigationController pushViewController:step04ViewController animated:NO];
-        
-        [step04ViewController release];
+        step04ViewController = [[Step_04_ViewController alloc]
+                                initWithNibName:@"Step_04_ViewController" bundle:nil];
     }
+    
+    step04ViewController.cameraMac =  self.cameraMac;
+    step04ViewController.cameraName  =self.cameraName;
+    
+    [self.navigationController pushViewController:step04ViewController animated:NO];
+    
+    [step04ViewController release];
+    
     
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }

@@ -62,7 +62,7 @@
                                              selector: @selector(handleEnteredBackground)
                                                  name: UIApplicationDidEnterBackgroundNotification
                                                object: nil];
-
+    
     
     // Do any additional setup after loading the view.
     [[NSNotificationCenter defaultCenter] addObserver: self
@@ -88,11 +88,11 @@
     
     UIImageView *imageView = (UIImageView *)[_progressView viewWithTag:595];
     imageView.animationImages =[NSArray arrayWithObjects:
-                      [UIImage imageNamed:@"setup_camera_c1"],
-                      [UIImage imageNamed:@"setup_camera_c2"],
-                      [UIImage imageNamed:@"setup_camera_c3"],
-                      [UIImage imageNamed:@"setup_camera_c4"],
-                      nil];
+                                [UIImage imageNamed:@"setup_camera_c1"],
+                                [UIImage imageNamed:@"setup_camera_c2"],
+                                [UIImage imageNamed:@"setup_camera_c3"],
+                                [UIImage imageNamed:@"setup_camera_c4"],
+                                nil];
     imageView.animationDuration = 1.5;
     imageView.animationRepeatCount = 0;
     
@@ -114,17 +114,17 @@
     UITextField * _sec = (UITextField *) [self.securityCell viewWithTag:1];
     if (_sec != nil)
     {
-        _sec.text = self.security; 
+        _sec.text = self.security;
     }
     
     
-    UIBarButtonItem *nextButton = 
+    UIBarButtonItem *nextButton =
     [[UIBarButtonItem alloc] initWithTitle:NSLocalizedStringWithDefaultValue(@"Next",nil, [NSBundle mainBundle],
                                                                              @"Next" , nil)
-
-                                     style:UIBarButtonItemStylePlain 
-                                    target:self 
-                                    action:@selector(handleNextButton:)];          
+     
+                                     style:UIBarButtonItemStylePlain
+                                    target:self
+                                    action:@selector(handleNextButton:)];
     self.navigationItem.rightBarButtonItem = nextButton;
     self.navigationItem.rightBarButtonItem.enabled = NO;
     [nextButton release];
@@ -136,14 +136,14 @@
     }
     self.tfPassword = (UITextField *)[self.passwordCell viewWithTag:200];
     self.tfConfirmPass = (UITextField *)[self.confPasswordCell viewWithTag:201];
-        
+    
     /* initialize transient object here */
 	self.deviceConf = [[[DeviceConfiguration alloc] init] autorelease];
 	
     if (![self restoreDataIfPossible] )
 	{
-		//Try to read the ssid from preference: 
-        self.deviceConf.ssid = self.ssid; 
+		//Try to read the ssid from preference:
+        self.deviceConf.ssid = self.ssid;
     }
     else
     {
@@ -183,7 +183,7 @@
     UITextField * _sec = (UITextField *) [self.securityCell viewWithTag:1];
     if (_sec != nil)
     {
-        _sec.text = self.security; 
+        _sec.text = self.security;
     }
     
     _isUserMakeConnect = NO;
@@ -359,9 +359,9 @@
     
     if (tag == 13)
     {
-        if (indexPath.section == SSID_SECTION) 
+        if (indexPath.section == SSID_SECTION)
         {
-        //only one cell in this section 
+            //only one cell in this section
             if (self.isOtherNetwork == TRUE)
             {
                 UITextField *tfSsid  = (UITextField*) [ssidCell viewWithTag:202];
@@ -385,7 +385,7 @@
             }
         }
     }
-        
+    
     return nil;
 }
 
@@ -394,7 +394,7 @@
     int tag = tableView.tag;
     
     if (tag == 13)
-    { 
+    {
         if (section == SSID_SECTION)
             return 1;
         if (section == SEC_SECTION)
@@ -402,15 +402,15 @@
             if ([self.security isEqualToString:@"open"] ||
                 [self.security isEqualToString:@"none"])
             {
-                return 1; 
+                return 1;
             }
-            else 
+            else
             {
-                return 3; 
+                return 3;
             }
         }
     }
-   
+    
     return 1;
 }
 
@@ -419,23 +419,23 @@
     int tag = tableView.tag;
     
     if (tag == 13)
-    { 
-        return 2; 
+    {
+        return 2;
     }
-   
-    return 0; 
+    
+    return 0;
 }
 
-- (void)tableView: (UITableView *)tableView didSelectRowAtIndexPath: (NSIndexPath *)indexPath 
+- (void)tableView: (UITableView *)tableView didSelectRowAtIndexPath: (NSIndexPath *)indexPath
 {
-    [tableView deselectRowAtIndexPath:[tableView indexPathForSelectedRow] 
+    [tableView deselectRowAtIndexPath:[tableView indexPathForSelectedRow]
                              animated:NO];
     
     if ([self.ssid isEqualToString:@"Other Network"])
     {
         if (indexPath.section == SEC_SECTION)
         {
-            if (indexPath.row == SEC_INDEX) 
+            if (indexPath.row == SEC_INDEX)
             {
                 [self changeSecurityType];
             }
@@ -494,7 +494,7 @@
                                 initWithNibName:@"Step_07_ViewController" bundle:nil];
         
     }
-
+    
     step07ViewController.step06 = self;
     [self.navigationController pushViewController:step07ViewController animated:NO];
     
@@ -520,7 +520,7 @@
     [confpass resignFirstResponder];
     [my_ssid resignFirstResponder];
     NSLog(@"pass : %@ vs %@  ssid: %@", pass.text, confpass.text, my_ssid.text);
-
+    
     if (self.isOtherNetwork == TRUE)
     {
         if ([my_ssid.text length] == 0)
@@ -550,7 +550,7 @@
         self.navigationItem.leftBarButtonItem.enabled = NO; // Disable go back
         [self sendWifiInfoToCamera];
     }
-    else 
+    else
     {
         if ( ([pass.text length] == 0 ) ||
             ( [confpass.text length] ==0 ) ||
@@ -563,7 +563,7 @@
             //ERROR condition
             UIAlertView *_alert = [[UIAlertView alloc]
                                    initWithTitle:@"Confirm Password Failed"
-                                   message:msg_fail 
+                                   message:msg_fail
                                    delegate:self
                                    cancelButtonTitle:@"OK"
                                    otherButtonTitles:nil];
@@ -584,13 +584,13 @@
 
 -(void) prepareWifiInfo
 {
-    //NOTE: we can do this because we are connecting to camera now 
+    //NOTE: we can do this because we are connecting to camera now
     NSString * camera_mac= nil;
     NSString *stringUDID = @"";
-
+    
 #ifdef CONCURRENT_SETUP
     stringUDID = [[HttpCom instance].comWithDevice sendCommandAndBlock:GET_UDID
-                                                withTimeout:5.0];
+                                                           withTimeout:5.0];
     //get_udid: 01008344334C32B0A0VFFRBSVA
     NSRange range = [stringUDID rangeOfString:@": "];
     
@@ -610,25 +610,25 @@
 #else
     camera_mac = [CameraPassword fetchBSSIDInfo];
 #endif
-
+    
     self.deviceConf.ssid = self.ssid;
     
     //save mac address for used later
-
+    
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     [userDefaults setObject:camera_mac forKey:@"CameraMacWithQuote"];
     [userDefaults setObject:stringUDID forKey:CAMERA_UDID];
-    [userDefaults synchronize]; 
+    [userDefaults synchronize];
     
-
-    self.deviceConf.addressMode = @"DHCP"; 
+    
+    self.deviceConf.addressMode = @"DHCP";
     
     if ([self.security isEqualToString:@"wep"])
     {
         //@"Open",@"WEP", @"WPA-PSK/WPA2-PSK"
         self.deviceConf.securityMode = @"WEP";
         self.deviceConf.wepType = @"OPEN"; //default
-        self.deviceConf.keyIndex = @"1"; //default; 
+        self.deviceConf.keyIndex = @"1"; //default;
     }
     else if( [self.security isEqualToString:@"wpa"])
     {
@@ -638,10 +638,10 @@
     else {
         self.deviceConf.securityMode= @"OPEN";
     }
-   
+    
     NSLog(@"Log - udid: %@, %@", stringUDID, camera_mac);
     
-    self.deviceConf.key = self.password; 
+    self.deviceConf.key = self.password;
     
     self.deviceConf.usrName = BASIC_AUTH_DEFAULT_USER;
     
@@ -675,7 +675,7 @@
     NSMutableString *stringFromDate = [NSMutableString stringWithString:[formatter stringFromDate:now]];
     
     [stringFromDate insertString:@"." atIndex:3];
-
+    
     
     
     NSString * set_auth_cmd = [NSString stringWithFormat:@"%@%@%@%@%@",
@@ -684,27 +684,27 @@
                                SET_SERVER_AUTH_PARAM2, stringFromDate];
     
     NSString *response = [[HttpCom instance].comWithDevice sendCommandAndBlock:set_auth_cmd
-                                                                      withTimeout:10.0];
+                                                                   withTimeout:10.0];
     
     NSLog(@"set auth -set_auth_cmd: %@, -response: %@ ", set_auth_cmd, response);
-
-    [self prepareWifiInfo]; 
     
-    //Save and send 
+    [self prepareWifiInfo];
+    
+    //Save and send
     if ( [_deviceConf isDataReadyForStoring])
     {
         NSLog(@"ok to save ");
         [Util writeDeviceConfigurationData:[_deviceConf getWritableConfiguration]];
     }
-
     
     
-//    DeviceConfiguration * sent_conf = [[DeviceConfiguration alloc] init];
+    
+    //    DeviceConfiguration * sent_conf = [[DeviceConfiguration alloc] init];
     
     [_deviceConf restoreConfigurationData:[Util readDeviceConfiguration]];
     
-   
-     NSString * device_configuration = [_deviceConf getDeviceEncodedConfString];
+    
+    NSString * device_configuration = [_deviceConf getDeviceEncodedConfString];
     
     
     NSString * setup_cmd = [NSString stringWithFormat:@"%@%@",
@@ -715,16 +715,41 @@
     
     NSLog(@"Step_06VC - after send cmd - response is: %@", response);
     
-    //Should check connect to camera here(after send command setup http)
-    //Check app is already connected to camera which is setup or not, call once
-    [NSTimer scheduledTimerWithTimeInterval: 3.0
-                                     target:self
-                                   selector:@selector(moveOnToCheckCameraOnlineStatus)
-                                   userInfo:nil
-                                    repeats:NO];
- 
+    
+    /* Phung: check FW version if it is older than 1.12.82, popup sth */
+    
+    
+    
+    NSString *fwVersion = [userDefaults stringForKey:FW_VERSION];
+    
+    // >12.82 we can move on with new flow
+    if ([fwVersion compare:FW_MILESTONE_F66_NEW_FLOW] >= NSOrderedSame) // fw >= FW_MILESTONE_F66_NEW_FLOW
+    {
+        //Should check connect to camera here(after send command setup http)
+        //Check app is already connected to camera which is setup or not, call once
+        [NSTimer scheduledTimerWithTimeInterval: 3.0
+                                         target:self
+                                       selector:@selector(moveOnToCheckCameraOnlineStatus)
+                                       userInfo:nil
+                                        repeats:NO];
+    }
+    else
+    {
+        
+        //TODO: popup force waiting..
+        [NSTimer scheduledTimerWithTimeInterval: 3.0
+                                         target:self
+                                       selector:@selector(askUserToWaitForUpgrade)
+                                       userInfo:nil
+                                        repeats:NO];
+        
+    }
+    
+    
+    
+    
+    
 }
-
 
 -(void)moveOnToCheckCameraOnlineStatus
 {
@@ -766,7 +791,7 @@
         [self.view bringSubviewToFront:self.infoSelectCameView];
         return;
     }
-
+    
     if (_task_cancelled)
     {
         //handle when user press back
@@ -842,7 +867,7 @@
 
 - (void)getStatusOfCameraToWifi:(NSTimer *)info
 {
-//    NSString * currentSSID = [CameraPassword fetchSSIDInfo];
+    //    NSString * currentSSID = [CameraPassword fetchSSIDInfo];
     NSString *commandGetState = GET_STATE_NETWORK_CAMERA;
     NSLog(@"Log - command is %@", commandGetState);
     NSString *state = [[HttpCom instance].comWithDevice sendCommandAndBlock:commandGetState withTimeout:20.0];
@@ -855,7 +880,7 @@
     {
         _currentStateCamera = @"";
     }
-
+    
     if ([_currentStateCamera isEqualToString:@"CONNECTED"])
     {
         [self resetAllTimer];
@@ -899,7 +924,7 @@
     {
         return YES;
     }
-
+    
     return NO;
 }
 
@@ -907,10 +932,10 @@
 {
 	NSDictionary * saved_data = [Util readDeviceConfiguration];
 	
-	if ( saved_data != nil) 
+	if ( saved_data != nil)
 	{
 		[self.deviceConf restoreConfigurationData:saved_data];
-		//populate the fields with stored data 		
+		//populate the fields with stored data
 		return TRUE;
 	}
     
@@ -967,6 +992,105 @@
         _inputPasswordTimer = nil;
     }
 }
+
+
+
+
+#pragma  mark -
+#pragma  mark Dummy ota upgrade
+
+
+
+- (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex
+{
+    
+    int tag = alertView.tag;
+    
+    if (tag == 100)
+    {
+        ///any button - go back to camera list
+        [UIApplication sharedApplication].idleTimerDisabled=  NO;
+        
+        [self.navigationController popToRootViewControllerAnimated:NO];
+    }
+    
+}
+
+-(void) askUserToWaitForUpgrade
+{
+    [self resetAllTimer];
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+    
+    
+    [UIApplication sharedApplication].idleTimerDisabled=  YES;
+    
+    
+    [self.progressView removeFromSuperview];
+    [self.infoSelectCameView removeFromSuperview];
+    [self.progressView setHidden:YES];
+    
+    [self.view addSubview:self.otaDummyProgress];
+    [self.view bringSubviewToFront:self.otaDummyProgress];
+    self.otaDummyProgressBar.progress = 0.0;
+    
+	[self performSelectorInBackground:@selector(upgradeFwReboot_bg)  withObject:nil] ;
+    
+    
+}
+-(void) upgradeFwReboot_bg
+{
+	//percentageProgress.
+	NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
+    
+	//float totalTime  = 80.0; // 80 sec reboot time
+    
+	float sleepPeriod = 120.0 / 100; // 100 cycles
+	int percentage = 0;
+	while (percentage ++ < 100)
+	{
+        
+        
+		[self performSelectorOnMainThread:@selector(upgradeFwProgress_ui:)
+                               withObject:[NSNumber numberWithInt:percentage]
+                            waitUntilDone:YES];
+        
+		[NSThread sleepForTimeInterval:sleepPeriod];
+        
+	}
+    
+	[self performSelectorOnMainThread:@selector(goBackAndReaddCamera) withObject:nil waitUntilDone:NO];
+	[pool release];
+    
+}
+-(void) goBackAndReaddCamera
+{
+    //ERROR condition
+    UIAlertView *alert = [[UIAlertView alloc]
+                          initWithTitle:NSLocalizedStringWithDefaultValue(@"Upgrade_done" ,nil, [NSBundle mainBundle],
+                                                                          @"Upgrade Done" , nil)
+                          message:@"Press OK to retry installing the camera."
+                          delegate:self
+                          cancelButtonTitle:@"OK"
+                          otherButtonTitles:nil];
+    alert.tag = 100;
+    [alert show];
+    [alert release];
+}
+
+-(void) upgradeFwProgress_ui:(NSNumber *) number
+{
+	int value =  [number intValue];
+	float _value = (float) value;
+	_value = _value/100.0;
+    
+	if (value >=0)
+	{
+		self.otaDummyProgressBar.progress = _value;
+	}
+    
+}
+
+
 
 
 @end
