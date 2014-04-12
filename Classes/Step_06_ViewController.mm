@@ -950,34 +950,35 @@
     [self.progressView setHidden:YES];
     NSString * msg_pw_wrong = @"Password input don't correctly, try again";
     //ERROR condition
-    UIAlertView *_alert = [[UIAlertView alloc]
+    UIAlertView *alertViewPassword = [[UIAlertView alloc]
                            initWithTitle:@"Confirm Password Failed"
                            message:msg_pw_wrong
                            delegate:self
                            cancelButtonTitle:@"Cancel"
                            otherButtonTitles:@"Ok", nil];
-    [_alert show];
-    [_alert release];
+    alertViewPassword.tag = 101;
+    [alertViewPassword show];
+    [alertViewPassword release];
 }
 
-- (void)alertView:(UIAlertView *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex {
-    // the user clicked one of the OK/Cancel buttons
-    if (buttonIndex == 0)
-    {
-        NSLog(@"ok");
-        [self resetAllTimer];
-        [self getStatusOfCameraToWifi:nil];
-        _timeOut =  [NSTimer scheduledTimerWithTimeInterval: TIME_INPUT_PASSWORD_AGAIN// after 60s if not get successful
-                                                     target:self
-                                                   selector:@selector(showDialogPasswordWrong)
-                                                   userInfo:nil
-                                                    repeats:NO];
-    }
-    else
-    {
-        NSLog(@"cancel");
-    }
-}
+//- (void)alertView:(UIAlertView *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex {
+//    // the user clicked one of the OK/Cancel buttons
+//    if (buttonIndex == 0)
+//    {
+//        NSLog(@"ok");
+//        [self resetAllTimer];
+//        [self getStatusOfCameraToWifi:nil];
+//        _timeOut =  [NSTimer scheduledTimerWithTimeInterval: TIME_INPUT_PASSWORD_AGAIN// after 60s if not get successful
+//                                                     target:self
+//                                                   selector:@selector(showDialogPasswordWrong)
+//                                                   userInfo:nil
+//                                                    repeats:NO];
+//    }
+//    else
+//    {
+//        NSLog(@"cancel");
+//    }
+//}
 
 - (void)resetAllTimer
 {
@@ -1013,7 +1014,24 @@
         
         [self.navigationController popToRootViewControllerAnimated:NO];
     }
-    
+    else if(tag = 101)
+    {
+        if (buttonIndex == 0)
+        {
+            NSLog(@"ok");
+            [self resetAllTimer];
+            [self getStatusOfCameraToWifi:nil];
+            _timeOut =  [NSTimer scheduledTimerWithTimeInterval: TIME_INPUT_PASSWORD_AGAIN// after 60s if not get successful
+                                                         target:self
+                                                       selector:@selector(showDialogPasswordWrong)
+                                                       userInfo:nil
+                                                        repeats:NO];
+        }
+        else
+        {
+            NSLog(@"cancel");
+        }
+    }
 }
 
 -(void) askUserToWaitForUpgrade
@@ -1065,16 +1083,16 @@
 -(void) goBackAndReaddCamera
 {
     //ERROR condition
-    UIAlertView *alert = [[UIAlertView alloc]
+    UIAlertView *alertViewBack = [[UIAlertView alloc]
                           initWithTitle:NSLocalizedStringWithDefaultValue(@"Upgrade_done" ,nil, [NSBundle mainBundle],
                                                                           @"Upgrade Done" , nil)
                           message:@"Press OK to retry installing the camera."
                           delegate:self
                           cancelButtonTitle:@"OK"
                           otherButtonTitles:nil];
-    alert.tag = 100;
-    [alert show];
-    [alert release];
+    alertViewBack.tag = 100;
+    [alertViewBack show];
+    [alertViewBack release];
 }
 
 -(void) upgradeFwProgress_ui:(NSNumber *) number

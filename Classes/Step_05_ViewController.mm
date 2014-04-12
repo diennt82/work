@@ -95,12 +95,6 @@
     [other release];
 }
 
--(void) viewWillAppear:(BOOL)animated
-{
-    UIInterfaceOrientation interfaceOrientation = [UIApplication sharedApplication].statusBarOrientation;
-    [self adjustViewsForOrientations:interfaceOrientation];
-}
-
 - (void)viewDidUnload
 {
     [super viewDidUnload];
@@ -188,14 +182,14 @@
 {
     NSString * msg = [NSString stringWithFormat:@"You have selected wifi %@ which is not the same as your Home wifi, %@. If you choose to continue, there will more steps to setup your camera. Do you want to proceed?", selectedWifi, homeWifi];
     
-    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Notice"
+    UIAlertView *alertViewNotice = [[UIAlertView alloc] initWithTitle:@"Notice"
                                                         message:msg
                                                        delegate:self
                                               cancelButtonTitle:@"Cancel"
                                               otherButtonTitles:@"Continue", nil];
-    alertView.tag = 555;
-    [alertView show];
-    [alertView release];
+    alertViewNotice.tag = 555;
+    [alertViewNotice show];
+    [alertViewNotice release];
 }
 
 #pragma mark - Alert view delegate
@@ -205,72 +199,6 @@
     if (buttonIndex == 1) // Continue
     {
         [self moveToNextStep];
-    }
-}
-
-#pragma mark -
-#pragma mark Rotating
-- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
-{
-    return   ((interfaceOrientation == UIInterfaceOrientationPortrait) ||
-              (interfaceOrientation == UIInterfaceOrientationLandscapeLeft) ||
-              (interfaceOrientation == UIInterfaceOrientationLandscapeRight));
-}
-
--(BOOL)shouldAutorotate
-{
-    return YES;
-}
-
--(NSUInteger) supportedInterfaceOrientations
-{
-    return UIInterfaceOrientationMaskAllButUpsideDown;
-}
-
--(void) willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
-{
-    [self adjustViewsForOrientations:toInterfaceOrientation];
-}
-
--(void) adjustViewsForOrientations: (UIInterfaceOrientation) interfaceOrientation
-{
-    if (interfaceOrientation == UIInterfaceOrientationLandscapeLeft ||
-        interfaceOrientation == UIInterfaceOrientationLandscapeRight)
-    {
-        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
-        {
-
-            
-            
-            
-        }
-        else
-        {
-            //[[NSBundle mainBundle] loadNibNamed:@"Step_05_ViewController_land" owner:self options:nil];
-        }
-//        mTableView.frame = CGRectMake(mTableView.frame.origin.x,
-//                                      mTableView.frame.origin.y,
-//                                      mTableView.frame.size.width,
-//                                      //550);
-//                                      UIScreen.mainScreen.bounds.size.width - mTableView.frame.origin.y - 84);
-    }
-    else if (interfaceOrientation == UIInterfaceOrientationPortrait ||
-             interfaceOrientation == UIInterfaceOrientationPortraitUpsideDown)
-    {
-        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
-        {
-
-        }
-        else
-        {
-            //[[NSBundle mainBundle] loadNibNamed:@"Step_05_ViewController" owner:self options:nil];
-        }
-        
-//        mTableView.frame = CGRectMake(mTableView.frame.origin.x,
-//                                      mTableView.frame.origin.y,
-//                                      mTableView.frame.size.width,
-//                                      //500);
-//                                      UIScreen.mainScreen.bounds.size.height - mTableView.frame.origin.y - 84);
     }
 }
 

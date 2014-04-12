@@ -326,21 +326,19 @@
     
 
     
-    UIAlertView *_myAlert = nil ;
-    _myAlert = [[UIAlertView alloc] initWithTitle:msg
+    UIAlertView *myAlert = [[UIAlertView alloc] initWithTitle:msg
                                           message:@""
                                          delegate:self
                                 cancelButtonTitle:cancel
                                 otherButtonTitles:retry,nil];
     
-    _myAlert.tag = ALERT_ASK_FOR_RETRY_WIFI;
-    _myAlert.delegate = self;
+    myAlert.tag = ALERT_ASK_FOR_RETRY_WIFI;
+    myAlert.delegate = self;
     
     CGAffineTransform myTransform = CGAffineTransformMakeTranslation(0.0, 0.0);
-    [_myAlert setTransform:myTransform];
-    [_myAlert show];
-    [_myAlert release];
-    
+    [myAlert setTransform:myTransform];
+    [myAlert show];
+    [myAlert release];
 }
 
 #pragma mark - Alert view delegate
