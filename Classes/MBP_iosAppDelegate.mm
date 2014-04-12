@@ -113,7 +113,20 @@
 
     // Check the server name file
 #if 1
-    [BMS_JSON_Communication setServerInput:[[NSUserDefaults standardUserDefaults] stringForKey:@"name_server"]];
+    NSString *serverName = [userDefaults stringForKey:@"name_server"];
+    
+    if (serverName == nil ||
+        ![serverName hasPrefix:@"http"])
+    {
+        serverName = @"https://api.hubble.in";
+    }
+    
+    if (![serverName hasSuffix:@"/v1"])
+    {
+        serverName = [serverName stringByAppendingString:@"/v1"];
+    }
+    
+    [BMS_JSON_Communication setServerInput:serverName];
 #else
     NSError *error;
     NSString * serverFile = [cachesDirectory stringByAppendingPathComponent:@"server.txt"];
