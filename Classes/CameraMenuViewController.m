@@ -6,19 +6,25 @@
 //  Copyright (c) 2014 Smart Panda Ltd. All rights reserved.
 //
 
-#define ALERT_REMOVE_CAM 5
-
-#define ALERT_REMOVE_CAM_LOCAL 6
-#define ALERT_REMOVE_CAM_REMOTE 7
-
-#define ALERT_RENAME_CAMERA 8
-#define ENABLE_CHANGE_IMAGE 0
 #import "CameraMenuViewController.h"
 #import "CameraSettingsCell.h"
 #import "CameraNameViewController.h"
 #import <MonitorCommunication/MonitorCommunication.h>
 #import "define.h"
 #import "ChangeImageViewController.h"
+
+#define ALERT_REMOVE_CAM        5
+#define ALERT_REMOVE_CAM_LOCAL  6
+#define ALERT_REMOVE_CAM_REMOTE 7
+
+#define ALERT_RENAME_CAMERA         8
+#define ALERT_RENAME_REPORT         9
+#define ALERT_RENAME_CANT_EMPTY     10
+#define ALERT_RENAME_OUT_LENGTH     11
+#define ALERT_RENAME_REGEX          12
+
+
+#define ENABLE_CHANGE_IMAGE 0
 
 @interface CameraMenuViewController () <UITableViewDataSource, UITableViewDelegate>
 
@@ -29,6 +35,7 @@
 @property (retain, nonatomic) NSString *stringFW_Version;
 @property (nonatomic) BOOL isLoading;
 @property (nonatomic, retain) NSString *apiKey;
+@property (nonatomic) BOOL isChangingName;
 
 @end
 
@@ -92,6 +99,8 @@
 
 - (void) showDialog:(int) dialogType
 {
+    NSString * title = NSLocalizedStringWithDefaultValue(@"Invalid_Camera_Name", nil, [NSBundle mainBundle],
+                                                         @"Invalid Camera Name", nil);
     NSString * ok = NSLocalizedStringWithDefaultValue(@"Ok", nil, [NSBundle mainBundle],
                                                       @"Ok", nil);
     NSString * cancel = NSLocalizedStringWithDefaultValue(@"Cancel", nil, [NSBundle mainBundle],
@@ -112,7 +121,7 @@
                                       message:msg
                                       delegate:self
                                       cancelButtonTitle:cancel
-                                      otherButtonTitles:ok,nil];
+                                      otherButtonTitles:ok, nil];
                 alert.tag = ALERT_REMOVE_CAM_LOCAL;
                 [alert show];
                 [alert release];
@@ -129,15 +138,83 @@
                                       message:msg
                                       delegate:self
                                       cancelButtonTitle:cancel
-                                      otherButtonTitles:ok,nil];
+                                      otherButtonTitles:ok, nil];
                 
                 alert.tag = ALERT_REMOVE_CAM_REMOTE;
                 [alert show];
                 [alert release];
             }
-            
-			break;
 		}
+            break;
+            
+        case ALERT_RENAME_REPORT:
+        {
+            NSString * msg = @"Invaldate name";
+            
+            
+            UIAlertView *alert = [[UIAlertView alloc]
+                                  initWithTitle:@""
+                                  message:msg
+                                  delegate:nil
+                                  cancelButtonTitle:nil
+                                  otherButtonTitles:ok, nil];
+            
+            alert.tag = ALERT_RENAME_REPORT;
+            [alert show];
+            [alert release];
+        }
+            break;
+            
+        case ALERT_RENAME_CANT_EMPTY:
+		{
+            NSString * msg = NSLocalizedStringWithDefaultValue(@"Camera_name_cant_be_empty",nil, [NSBundle mainBundle],
+                                                               @"Camera name cant be empty, please try again", nil);
+            
+			UIAlertView *alert = [[UIAlertView alloc]
+								  initWithTitle:@""
+								  message:msg
+								  delegate:nil
+								  cancelButtonTitle:nil
+								  otherButtonTitles:ok, nil];
+			alert.tag = ALERT_RENAME_CANT_EMPTY;
+			[alert show];
+			[alert release];
+		}
+            break;
+            
+        case ALERT_RENAME_OUT_LENGTH:
+        {
+            NSString * msg = NSLocalizedStringWithDefaultValue(@"Invalid_Camera_Name_msg", nil, [NSBundle mainBundle],
+                                                               @"Camera Name has to be between 3-20 characters", nil);
+            
+            UIAlertView * alert = [[UIAlertView alloc] initWithTitle:title
+                                                             message:msg
+                                                            delegate:nil
+                                                   cancelButtonTitle:ok
+                                                   otherButtonTitles:nil];
+            alert.tag = ALERT_RENAME_OUT_LENGTH;
+            [alert show];
+            [alert release];
+        }
+            break;
+            
+        case ALERT_RENAME_REGEX:
+        {
+            NSString * msg = NSLocalizedStringWithDefaultValue(@"Invalid_Camera_Name_msg2", nil, [NSBundle mainBundle],
+                                                               @"Camera name is invalid. Please enter [0-9],[a-Z], space, dot, hyphen, underscore & single quote only.", nil);
+            
+            
+            UIAlertView * alert = [[UIAlertView alloc] initWithTitle:title
+                                                             message:msg
+                                                            delegate:nil
+                                                   cancelButtonTitle:ok
+                                                   otherButtonTitles:nil];
+            
+            alert.tag = ALERT_RENAME_REGEX;
+            [alert show];
+            [alert release];
+        }
+            break;
             
 		default:
 			break;
@@ -152,17 +229,40 @@
     {
         if (buttonIndex == 1)
         {
-            _cameraNewName = (NSString *)([alertView textFieldAtIndex:0].text);
-            NSLog(@"new Camera name is %@", _cameraNewName);
+            NSString *newName = [alertView textFieldAtIndex:0].text;
             
-            if ([self isCamNameValidated:_cameraNewName])
+            if( (newName == nil) || newName.length == 0)
             {
-                [alertView dismissWithClickedButtonIndex:0 animated:NO];
-                [self doneAction:nil];
+                [self showDialog:ALERT_RENAME_CANT_EMPTY];
+            }
+            else if (newName.length < 3 || CAMERA_NAME_MAX < newName.length)
+            {
+                [self showDialog:ALERT_RENAME_OUT_LENGTH];
+            }
+            else if (![self isCamNameValidated:newName])
+            {
+                [self showDialog:ALERT_RENAME_REGEX];
+            }
+            else
+            {
+                if (![newName isEqualToString:self.camChannel.profile.name])
+                {
+                    _cameraNewName = newName;
+                    self.isChangingName = TRUE;
+                    [self.tableViewSettings reloadRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:0
+                                                                                                               inSection:0]]
+                                                  withRowAnimation:UITableViewRowAnimationAutomatic];
+
+                    [self changeCameraName];
+                }
+                else
+                {
+                    NSLog(@"CameraMenuVC - the same as current name");
+                }
             }
         }
     }
-    else
+    else if(ALERT_REMOVE_CAM)
     {
         if (buttonIndex == 1)
         {
@@ -186,71 +286,10 @@
             self.btnRmoveCamera.enabled = YES;
         }
     }
-}
-
-#pragma mark - Server methods
-
-- (void)updateFWVersion_bg
-{
-    BMS_JSON_Communication *jsonComm = [[BMS_JSON_Communication alloc] initWithObject:self
-                                                                             Selector:nil
-                                                                         FailSelector:nil
-                                                                            ServerErr:nil];
-    NSDictionary *responseDict = [jsonComm sendCommandBlockedWithRegistrationId:self.camChannel.profile.registrationID
-                                                                     andCommand:@"action=command&command=get_version"
-                                                                      andApiKey:_apiKey];
-    if (responseDict)
+    else// if(ALERT_RENAME_REPORT)
     {
-        if ([[responseDict objectForKey:@"status"] integerValue] == 200)
-        {
-            NSString *bodykey = [[[responseDict objectForKey:@"data"] objectForKey:@"device_response"] objectForKey:@"body"];//get_version: 01.12.84
-            
-            NSString *cmd = @"get_version";
-            
-            if ([bodykey hasPrefix:cmd])
-            {
-                self.camChannel.profile.fw_version = [bodykey substringFromIndex:cmd.length + 2];
-            }
-        }
+        // Do nothing
     }
-    
-    [self performSelectorOnMainThread:@selector(updateUI) withObject:nil waitUntilDone:NO];
-}
-
-- (void)updateUI
-{
-    self.isLoading = FALSE;
-    [self.tableViewSettings reloadRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:1
-                                                                                               inSection:0]]
-                                  withRowAnimation:UITableViewRowAnimationAutomatic];
-}
-
--(void) removeLocalCamera
-{
-    HttpCommunication * dev_comm = [[HttpCommunication alloc]init];
-    dev_comm.device_ip = _camChannel.profile.ip_address;
-    dev_comm.device_port = _camChannel.profile.port;
-    
-	NSString * command = SWITCH_TO_DIRECT_MODE;
-	[dev_comm sendCommandAndBlock:command];
-	
-	command = RESTART_HTTP_CMD;
-	[dev_comm sendCommandAndBlock:command];
-    
-    [dev_comm release];
-    
-    [self removeRemoteCamera];
-}
-
--(void) removeRemoteCamera
-{
-    BMS_JSON_Communication *jsonComm = [[[BMS_JSON_Communication alloc] initWithObject:self
-                                                                              Selector:@selector(removeCameraSuccessWithResponse:)
-                                                                          FailSelector:@selector(removeCameraFailedWithError:)
-                                                                             ServerErr:@selector(removeCameraFailedServerUnreachable)] autorelease];
-    
-    [jsonComm deleteDeviceWithRegistrationId:_camChannel.profile.registrationID
-                                   andApiKey:_apiKey];
 }
 
 #pragma mark - Table view data source
@@ -370,14 +409,46 @@
         
         if (indexPath.row == 0)
         {
-            if (self.camChannel.profile.name.length > 10)
+            if (_isChangingName)
             {
-                cell.valueLabel.frame = CGRectMake(cell.valueLabel.frame.origin.x, cell.valueLabel.frame.origin.y, cell.valueLabel.frame.size.width, cell.valueLabel.frame.size.height * 2);
-                cell.nameLabel.frame = CGRectMake(cell.nameLabel.frame.origin.x, cell.valueLabel.center.y - cell.nameLabel.frame.size.height / 2, cell.nameLabel.frame.size.width, cell.nameLabel.frame.size.height);
+                static NSString *CellIdentifier = @"Cell";
+                UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+                if (cell == nil) {
+                    cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
+                }
+                
+                // Configure the cell...
+                cell.textLabel.text = @"Name";
+                
+                UIActivityIndicatorView *spinner = [[UIActivityIndicatorView alloc]
+                                                    initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+                // Spacer is a 1x1 transparent png
+                UIImage *spacer = [UIImage imageNamed:@"spacer"];
+                
+                UIGraphicsBeginImageContext(spinner.frame.size);
+                
+                [spacer drawInRect:CGRectMake(0, 0, spinner.frame.size.width, spinner.frame.size.height)];
+                UIImage* resizedSpacer = UIGraphicsGetImageFromCurrentImageContext();
+                
+                UIGraphicsEndImageContext();
+                cell.imageView.image = resizedSpacer;
+                spinner.frame = CGRectMake(UIScreen.mainScreen.bounds.size.width - spinner.frame.size.width - 30, 0, spinner.frame.size.width, spinner.frame.size.height);
+                [cell.imageView addSubview:spinner];
+                [spinner startAnimating];
+                
+                return cell;
             }
-            
-            cell.nameLabel.text = @"Name";
-            cell.valueLabel.text = self.camChannel.profile.name;
+            else
+            {
+                if (self.camChannel.profile.name.length > 10)
+                {
+                    cell.valueLabel.frame = CGRectMake(cell.valueLabel.frame.origin.x, cell.valueLabel.frame.origin.y, cell.valueLabel.frame.size.width, cell.valueLabel.frame.size.height * 2);
+                    cell.nameLabel.frame = CGRectMake(cell.nameLabel.frame.origin.x, cell.valueLabel.center.y - cell.nameLabel.frame.size.height / 2, cell.nameLabel.frame.size.width, cell.nameLabel.frame.size.height);
+                }
+                
+                cell.nameLabel.text = @"Name";
+                cell.valueLabel.text = self.camChannel.profile.name;
+            }
         }
         else
         {
@@ -480,7 +551,90 @@
 #endif
 }
 
-- (void)doneAction: (id)sender
+#pragma mark - Server methods
+
+- (void)updateFWVersion_bg
+{
+    BMS_JSON_Communication *jsonComm = [[BMS_JSON_Communication alloc] initWithObject:self
+                                                                             Selector:nil
+                                                                         FailSelector:nil
+                                                                            ServerErr:nil];
+    NSDictionary *responseDict = [jsonComm sendCommandBlockedWithRegistrationId:self.camChannel.profile.registrationID
+                                                                     andCommand:@"action=command&command=get_version"
+                                                                      andApiKey:_apiKey];
+    [jsonComm release];
+    
+    if (responseDict)
+    {
+        if ([[responseDict objectForKey:@"status"] integerValue] == 200)
+        {
+            NSString *bodykey = [[[responseDict objectForKey:@"data"] objectForKey:@"device_response"] objectForKey:@"body"];//get_version: 01.12.84
+            
+            NSString *cmd = @"get_version";
+            
+            if ([bodykey hasPrefix:cmd])
+            {
+                self.camChannel.profile.fw_version = [bodykey substringFromIndex:cmd.length + 2];
+            }
+        }
+    }
+    
+    [self performSelectorOnMainThread:@selector(updateUIRow:) withObject:[NSNumber numberWithInt:1] waitUntilDone:NO];
+}
+
+- (void)updateUIRow: (NSNumber *)row
+{
+    [self.viewPorgress removeFromSuperview];
+    NSInteger rowIndex = [row integerValue];
+    
+    if (rowIndex == 1)
+    {
+        self.isLoading = FALSE;
+    }
+    else
+    {
+        self.isChangingName = FALSE;
+    }
+    
+    [self.tableViewSettings reloadRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:rowIndex
+                                                                                               inSection:0]]
+                                  withRowAnimation:UITableViewRowAnimationAutomatic];
+}
+
+-(void) removeLocalCamera
+{
+    HttpCommunication * dev_comm = [[HttpCommunication alloc]init];
+    dev_comm.device_ip = _camChannel.profile.ip_address;
+    dev_comm.device_port = _camChannel.profile.port;
+    
+	NSString * command = SWITCH_TO_DIRECT_MODE;
+	[dev_comm sendCommandAndBlock:command];
+	
+	command = RESTART_HTTP_CMD;
+	[dev_comm sendCommandAndBlock:command];
+    
+    [dev_comm release];
+    
+    [self removeRemoteCamera];
+}
+
+-(void) removeRemoteCamera
+{
+    BMS_JSON_Communication *jsonComm = [[[BMS_JSON_Communication alloc] initWithObject:self
+                                                                              Selector:@selector(removeCameraSuccessWithResponse:)
+                                                                          FailSelector:@selector(removeCameraFailedWithError:)
+                                                                             ServerErr:@selector(removeCameraFailedServerUnreachable)] autorelease];
+    
+    [jsonComm deleteDeviceWithRegistrationId:_camChannel.profile.registrationID
+                                   andApiKey:_apiKey];
+}
+
+- (void)changeCameraName_bg
+{
+    [self performSelectorOnMainThread:@selector(changeCameraName) withObject:nil waitUntilDone:NO];
+}
+
+- (void)changeCameraName
 {
     self.navigationItem.rightBarButtonItem.enabled = NO;
     self.navigationItem.hidesBackButton = YES;
@@ -489,29 +643,24 @@
     [self.view addSubview:_viewPorgress];
     [self.view bringSubviewToFront:_viewPorgress];
     
-    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-    NSString *apiKey = [userDefaults stringForKey:@"PortalApiKey"];
-    
     BMS_JSON_Communication *jsonComm = [[BMS_JSON_Communication alloc] initWithObject:self
                                                                              Selector:nil
                                                                          FailSelector:nil
                                                                             ServerErr:nil];
+    NSLog(@"CameraMenuVC - changeCameraName - _cameraNewName: %@", _cameraNewName);
     NSDictionary *responseDict = [jsonComm updateDeviceBasicInfoBlockedWithRegistrationId:self.camChannel.profile.registrationID
                                                                                deviceName:_cameraNewName
                                                                                  timeZone:nil
                                                                                      mode:nil
                                                                           firmwareVersion:nil
-                                                                                andApiKey:apiKey];
+                                                                                andApiKey:_apiKey];
     [jsonComm release];
-    NSLog(@"responseDict when change name is %@", responseDict);
+    
     if (responseDict != nil)
     {
         if ([[responseDict objectForKey:@"status"] integerValue] == 200)
         {
             self.camChannel.profile.name = _cameraNewName;
-            [self.viewPorgress setHidden:YES];
-            self.navigationItem.hidesBackButton = NO;
-            [self.tableViewSettings reloadData];
         }
         else
         {
@@ -534,22 +683,21 @@
                            cancelButtonTitle:nil
                            otherButtonTitles:@"OK", nil] autorelease] show];
     }
+    
+    self.navigationItem.hidesBackButton = NO;
+    
+    [self performSelectorOnMainThread:@selector(updateUIRow:) withObject:[NSNumber numberWithInt:0] waitUntilDone:NO];
 }
 
 -(BOOL) isCamNameValidated:(NSString *) cameraNames
 {
-    if (cameraNames.length < 3 ||
-        CAMERA_NAME_MAX < cameraNames.length)
-    {
-        return FALSE;
-    }
-    
-    NSString * regex = @"[a-zA-Z0-9._-]+";
+    NSString * regex = @"[a-zA-Z0-9 ._-]+";
     NSPredicate * validatedName = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", regex];
     BOOL isValidatedName = [validatedName evaluateWithObject:cameraNames];
     
     return isValidatedName;
 }
+
 #pragma BMS_JSON delegate
 
 - (void) removeCameraSuccessWithResponse:(NSDictionary *)responseData

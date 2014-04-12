@@ -247,7 +247,7 @@
 "Invalid_Camera_Name" = "Invalid Camera Name";
 
 /* No comment provided by engineer. */
-"Invalid_Camera_Name_msg" = "Camera Name has to be between 3-15 characters";
+"Invalid_Camera_Name_msg" = "Camera Name has to be between 3-20 characters";
 
 /* No comment provided by engineer. */
 "Invalid_Camera_Name_msg2" = "Camera name is invalid. Please enter [0-9],[a-Z], space, dot, hyphen, underscore & single quote only.";
