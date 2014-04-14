@@ -105,6 +105,9 @@
 @property (nonatomic, retain) AudioOutStreamRemote *audioOutStreamRemote;
 @property (nonatomic, retain) NSString *talkbackRemoteServer;
 @property (nonatomic, strong) NSString *sharedCamConnectedTo;
+@property (nonatomic) BOOL remoteViewTimeout;
+@property (nonatomic) BOOL disconnectAlert;
+
 - (void)centerScrollViewContents;
 - (void)scrollViewDoubleTapped:(UITapGestureRecognizer*)recognizer;
 - (void)scrollViewTwoFingerTapped:(UITapGestureRecognizer*)recognizer;
@@ -219,6 +222,9 @@ double _ticks = 0;
     serverInput = [serverInput substringToIndex:serverInput.length - 3];
     self.talkbackRemoteServer = [serverInput stringByReplacingOccurrencesOfString:@"api" withString:@"talkback"];
     self.talkbackRemoteServer = [_talkbackRemoteServer stringByReplacingOccurrencesOfString:@"https" withString:@"http"];
+    
+    self.remoteViewTimeout = [userDefaults boolForKey:@"remote_view_timeout"];
+    self.disconnectAlert   = [userDefaults boolForKey:@"disconnect_alert"];
     
     [self becomeActive];
 }
@@ -834,8 +840,11 @@ double _ticks = 0;
                                                                        withAction:@"Start Stream Success"
                                                                         withLabel:@"Start Stream Success"
                                                                         withValue:nil];
-
-                    [self reCreateTimoutViewCamera];
+                    
+                    if (_remoteViewTimeout == YES)
+                    {
+                        [self reCreateTimoutViewCamera];
+                    }
                 }
                 
                 //[self performSelectorInBackground:@selector(getTriggerRecording_bg) withObject:nil];
@@ -6097,12 +6106,14 @@ double _ticks = 0;
         }
         else
         {
-            
-            self.alertTimer = [NSTimer scheduledTimerWithTimeInterval:15.0
-                                                               target:self
-                                                             selector:@selector(periodicBeep:)
-                                                             userInfo:nil
-                                                              repeats:YES];
+            if (_disconnectAlert == YES)
+            {
+                self.alertTimer = [NSTimer scheduledTimerWithTimeInterval:15.0
+                                                                   target:self
+                                                                 selector:@selector(periodicBeep:)
+                                                                 userInfo:nil
+                                                                  repeats:YES];
+            }
         }
         
         UIInterfaceOrientation interfaceOrientation = [UIApplication sharedApplication].statusBarOrientation;
