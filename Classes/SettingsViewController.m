@@ -131,15 +131,6 @@
     //self.schedulingVC.view.frame = CGRectMake(0, 0, UIScreen.mainScreen.bounds.size.width, 320);
     [self.schedulingVC setContentSizeForViewInPopover:CGSizeMake(UIScreen.mainScreen.bounds.size.width, 220)];
     
-//    if (valueSchedulerSwitchs[0][0] == TRUE)
-//    {
-//        numOfRows[3] = 3;
-//    }
-//    else
-//    {
-//        numOfRows[3] = 2;
-//    }
-    
     if (valueSchedulerSwitchs[0][1] == TRUE)
     {
         self.schedulerVC.numberOfColumn = 8;
@@ -187,7 +178,13 @@
                 }
                 else
                 {
-                    self.numberOfSections = 4;
+                    /*
+                     * For CUE start hide Notification Scheduler, so number of section = 3
+                     * For full feature app has Notification, so number of section = 4
+                     */
+                    
+                    //self.numberOfSections = 4;
+                    self.numberOfSections = 3;
                 }
                 
                 break;
