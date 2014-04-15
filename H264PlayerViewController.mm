@@ -1256,6 +1256,22 @@ double _ticks = 0;
 }
 #pragma mark Delegate Timeline
 
+//TODO
+#if 0
+-(void) refreshTableView
+{
+
+    
+
+    
+    [_timelineVC.view removeFromSuperview];
+    
+    [self.view addSubview:_timelineVC.view];
+    
+    
+}
+#endif
+
 - (void)stopStreamToPlayback
 {
     NSLog(@"H264VC - stopStreamToPlayback - _wantToShowTimeLine: %d", _wantToShowTimeLine);
@@ -6082,6 +6098,8 @@ double _ticks = 0;
 - (void)bonjourReturnCameraListAvailable:(NSMutableArray *)cameraList
 {
 }
+
+
 
 #pragma mark - Custom Indicator
 -(void)start_animation_with_orientation :(UIInterfaceOrientation) orientation

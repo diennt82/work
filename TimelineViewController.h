@@ -12,6 +12,8 @@
 @protocol TimelineVCDelegate <NSObject>
 
 - (void)stopStreamToPlayback;
+@optional
+- (void) refreshTableView;
 
 @end
 
