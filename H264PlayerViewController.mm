@@ -974,6 +974,8 @@ double _ticks = 0;
         default:
             break;
     }
+    
+    NSLog(@"H264VC - handleMsg -imageVideo: %@, imageStreamer: %@", NSStringFromCGRect(_imageViewVideo.frame), NSStringFromCGRect(_imageViewStreamer.frame));
 #endif
     
 #if 0
@@ -1267,19 +1269,6 @@ double _ticks = 0;
     }
 }
 
-#pragma mark - Delegate Zone view controller
-
-- (void)beginProcessing
-{
-    self.viewStopStreamingProgress.hidden = NO;
-    [self.view bringSubviewToFront:self.viewStopStreamingProgress];
-}
-
-- (void)endProcessing
-{
-    self.viewStopStreamingProgress.hidden = YES;
-}
-
 #pragma mak - Delegate Melody
 - (void)setMelodyWithIndex:(NSInteger)molodyIndex
 {
@@ -1455,7 +1444,6 @@ double _ticks = 0;
     
     self.selectedChannel.stopStreaming = NO;
     [self displayCustomIndicator];
-    self.viewStopStreamingProgress.hidden = YES;
     [self scanCamera];
     
     [self hideControlMenu];
@@ -1820,8 +1808,8 @@ double _ticks = 0;
 
 - (void)prepareGoBackToCameraList:(id)sender
 {
-    self.viewStopStreamingProgress.hidden = NO;
-    [self.view bringSubviewToFront:self.viewStopStreamingProgress];
+    self.activityStopStreamingProgress.hidden = NO;
+    [self.view bringSubviewToFront:_activityStopStreamingProgress];
     
     _isShowCustomIndicator = NO;
     
@@ -1888,8 +1876,8 @@ double _ticks = 0;
 
 - (void)goBackToCamerasRemoteStreamTimeOut
 {
-    self.viewStopStreamingProgress.hidden = NO;
-    [self.view bringSubviewToFront:self.viewStopStreamingProgress];
+    self.activityStopStreamingProgress.hidden = NO;
+    [self.view bringSubviewToFront:_activityStopStreamingProgress];
     
     
     NSLog(@"self.currentMediaStatus: %d", self.currentMediaStatus);
@@ -3916,8 +3904,6 @@ double _ticks = 0;
         CGRect newRect = CGRectMake(0, (SCREEN_WIDTH - imageViewHeight) / 2, SCREEN_HEIGHT, imageViewHeight);
         self.imageViewVideo.frame = CGRectMake(0, 0, SCREEN_HEIGHT, imageViewHeight);
         self.scrollView.frame = newRect;
-
-        self.viewStopStreamingProgress.frame = CGRectMake((SCREEN_HEIGHT - INDICATOR_SIZE)/2, (SCREEN_WIDTH - INDICATOR_SIZE)/2 , INDICATOR_SIZE, INDICATOR_SIZE);
         
         if (_timelineVC != nil)
         {
@@ -3939,6 +3925,7 @@ double _ticks = 0;
         //load new nib
         //remove pinch in, out (zoom for portrait)
         [self removeGestureRecognizerAtPortraitMode];
+        
         if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
         {
             [[NSBundle mainBundle] loadNibNamed:@"H264PlayerViewController_ipad"
@@ -3963,15 +3950,14 @@ double _ticks = 0;
         [self.navigationController setNavigationBarHidden:NO];
         [[UIApplication sharedApplication] setStatusBarHidden:NO];
         self.view.backgroundColor = [UIColor whiteColor];
-        self.viewStopStreamingProgress.hidden = YES;
         [self.horizMenu reloadData:NO];
         CGFloat imageViewHeight = SCREEN_WIDTH * 9 / 16;
         
         if (isiOS7AndAbove)
         {
-            CGRect destRect = CGRectMake(0, 44 + deltaY, SCREEN_WIDTH, imageViewHeight);
-            self.scrollView.frame = destRect;
-            self.imageViewVideo.frame = CGRectMake(0, 0, SCREEN_WIDTH, imageViewHeight);
+            //CGRect destRect = CGRectMake(0, 44 + deltaY, SCREEN_WIDTH, imageViewHeight);
+            //self.scrollView.frame = destRect;
+            //self.imageViewVideo.frame = CGRectMake(0, 0, SCREEN_WIDTH, imageViewHeight);
             self.melodyViewController.view.frame = CGRectMake(0, self.ib_ViewTouchToTalk.frame.origin.y - 5, SCREEN_WIDTH, SCREEN_HEIGHT - self.ib_ViewTouchToTalk.frame.origin.y);
             
             // Control display for TimelineVC
@@ -4044,7 +4030,6 @@ double _ticks = 0;
             }            
         }
         
-        self.viewStopStreamingProgress.frame = CGRectMake((SCREEN_WIDTH - INDICATOR_SIZE)/2, (SCREEN_HEIGHT - INDICATOR_SIZE)/2 , INDICATOR_SIZE, INDICATOR_SIZE);
         [self showControlMenu];
         //add hubble_logo_back
         [self addHubbleLogo_Back];
@@ -4058,16 +4043,6 @@ double _ticks = 0;
     [self setTemperatureState_Fg:_stringTemperature];
     
     [self displayCustomIndicator];
-    
-    if (self.selectedChannel.profile.isInLocal == FALSE &&
-        self.selectedChannel.profile.minuteSinceLastComm > 5) // Not available
-    {
-        if (self.selectedChannel.profile.hasUpdateLocalStatus == TRUE)
-        {
-            [self.activityIndicator stopAnimating];
-            self.horizMenu.userInteractionEnabled = NO;
-        }
-    }
     
     if (h264Streamer != NULL)
     {
@@ -4096,6 +4071,7 @@ double _ticks = 0;
     }
     [self addingLabelInfosForDebug];
     
+    NSLog(@"H264VC - adjust -imageVideo: %@, imageStreamer: %@", NSStringFromCGRect(_imageViewVideo.frame), NSStringFromCGRect(_imageViewStreamer.frame));
 }
 
 
@@ -4432,6 +4408,8 @@ double _ticks = 0;
     
     //self.imageViewVideo.frame = contentsFrame;
     self.imageViewStreamer.frame = contentsFrame;
+    
+    NSLog(@"H264VC - centerScrollViewContents -imageVideo: %@, imageStreamer: %@", NSStringFromCGRect(_imageViewVideo.frame), NSStringFromCGRect(_imageViewStreamer.frame));
 }
 
 - (void)scrollViewDoubleTapped:(UITapGestureRecognizer*)recognizer {
@@ -4849,7 +4827,6 @@ double _ticks = 0;
     [send_UD_dir_req_timer invalidate];
     [send_LR_dir_req_timer invalidate];
     [_activityIndicator release];
-    [_viewStopStreamingProgress release];
     [_activityStopStreamingProgress release];
     [_probeTimer release];
     

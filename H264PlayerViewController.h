@@ -165,7 +165,6 @@
 @property (retain, nonatomic) IBOutlet UIScrollView *scrollView;
 @property (retain, nonatomic) IBOutlet UIImageView *imgViewDrectionPad;
 @property (retain, nonatomic) IBOutlet UIActivityIndicatorView *activityIndicator;
-@property (retain, nonatomic) IBOutlet UIView *viewStopStreamingProgress;
 @property (retain, nonatomic) IBOutlet UIActivityIndicatorView *activityStopStreamingProgress;
 @property (retain, nonatomic) IBOutlet UIImageView *customIndicator;
 @property (retain, nonatomic) IBOutlet UILabel *ib_lbCameraNotAccessible;
