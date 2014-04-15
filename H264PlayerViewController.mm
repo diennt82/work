@@ -107,7 +107,7 @@
 @property (nonatomic, strong) NSString *sharedCamConnectedTo;
 @property (nonatomic) BOOL remoteViewTimeout;
 @property (nonatomic) BOOL disconnectAlert;
-@property (nonatomic) BOOL isWentToPlayback;
+@property (nonatomic) BOOL returnFromPlayback;
 
 - (void)centerScrollViewContents;
 - (void)scrollViewDoubleTapped:(UITapGestureRecognizer*)recognizer;
@@ -1275,7 +1275,7 @@ double _ticks = 0;
 - (void)stopStreamToPlayback
 {
     NSLog(@"H264VC - stopStreamToPlayback - _wantToShowTimeLine: %d", _wantToShowTimeLine);
-    self.isWentToPlayback = TRUE;
+    self.returnFromPlayback = TRUE;
     self.h264StreamerIsInStopped = TRUE;
     [self stopPeriodicBeep];
     [self stopPeriodicPopup];
@@ -4922,7 +4922,7 @@ double _ticks = 0;
     //alway show custom indicator, when view appear
     _isShowCustomIndicator = YES;
     
-    if (!_isWentToPlayback) // this property get TRUE if app went to PlaybackVC
+    if (self.returnFromPlayback== FALSE)
     {
         _isShowDebugInfo = NO;
         _isFirstLoad = YES;
@@ -4940,23 +4940,43 @@ double _ticks = 0;
         {
             self.timelineVC.camChannel = self.selectedChannel;
         }
-    }
-    else
-    {
-        self.isWentToPlayback = FALSE;
-        //[self setupCamera];
-        [self scanCamera];
-        self.h264StreamerIsInStopped = FALSE;
         
-        NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-        [userDefaults setObject:_selectedChannel.profile.mac_address forKey:CAM_IN_VEW];
-        [userDefaults synchronize];
+        [self checkOrientation];
+
+        
+    }
+    else // app return from PlaybackVC
+    {
+        
+        [self checkOrientation];
+
+        
+        
+        self.returnFromPlayback = FALSE;
+        
+        //We were in Earlier view before playback
+        if (earlierNavi.isEarlierView == YES)
+        {
+            //switch back to Earlier view
+          
+            [self performSelectorOnMainThread:@selector(earlierButtonAction:)
+                                   withObject:nil
+                                waitUntilDone:YES];
+        }
+        else
+        {
+            
+            [self scanCamera];
+            self.h264StreamerIsInStopped = FALSE;
+            
+            NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+            [userDefaults setObject:_selectedChannel.profile.mac_address forKey:CAM_IN_VEW];
+            [userDefaults synchronize];
+        }
     }
     
-    //if (!_wantToShowTimeLine)
-    {
-        [self checkOrientation];
-    }
+    
+    
     
 }
 
