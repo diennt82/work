@@ -69,11 +69,13 @@
     
     [self becomeActive];
     
+#if 0 // Will implement later.
     UITapGestureRecognizer *singleTap = [[UITapGestureRecognizer alloc] initWithTarget:self
                                                                                 action:@selector(singleTapGestureCaptured:)];
     singleTap.numberOfTapsRequired = 1;
     singleTap.numberOfTouchesRequired = 1;
     [self.view addGestureRecognizer:singleTap];
+#endif
     
     //hide navigation controller
     [self.navigationController setHidesBottomBarWhenPushed:YES];
