@@ -552,7 +552,7 @@ double _ticks = 0;
                                             UITextAttributeTextColor: [UIColor barItemSelectedColor]
                                             } forState:UIControlStateNormal];
     _wantToShowTimeLine = YES;
-    //_earlierVC = [[EarlierViewController alloc] initWithCamChannel:self.selectedChannel];
+
     if (_earlierVC == nil)
     {
         self.earlierVC = [[EarlierViewController alloc] initWithParentVC:self camChannel:self.selectedChannel];
@@ -565,15 +565,8 @@ double _ticks = 0;
     _earlierVC.view.hidden = NO;
     [self.view bringSubviewToFront:_earlierVC.view];
     [_earlierVC setCamChannel:self.selectedChannel];
-    //_earlierVC.timelineVC.navVC = earlierNavi;
-    
-    //NSLog(@"H264VC - earlierButtonAction - self.navigationController: %p", self.navigationController);
 }
 
-- (void)waitingScanAndStartSetupCamera_bg
-{
-    NSLog(@"need implement later");
-}
 #pragma mark - Action
 
 - (IBAction)iFrameOnlyPressAction:(id)sender
@@ -622,15 +615,6 @@ double _ticks = 0;
         [self.view addSubview:self.melodyViewController.view];
         [self.view bringSubviewToFront:self.melodyViewController.view];
     }
-}
-
-- (IBAction)barBntItemRevealAction:(id)sender
-{
-//    UIBarButtonItem *revealIcon = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"reveal-icon"]
-//                                                                  style:UIBarButtonItemStylePlain
-//                                                                 target:[self stackViewController]
-//                                                                 action:@selector(toggleLeftViewController)];
-    //[self.stackViewController toggleLeftViewController];
 }
 
 #pragma mark - Delegate Stream callback
@@ -975,7 +959,7 @@ double _ticks = 0;
             break;
     }
     
-    NSLog(@"H264VC - handleMsg -imageVideo: %@, imageStreamer: %@", NSStringFromCGRect(_imageViewVideo.frame), NSStringFromCGRect(_imageViewStreamer.frame));
+    //NSLog(@"H264VC - handleMsg -imageVideo: %@, imageStreamer: %@", NSStringFromCGRect(_imageViewVideo.frame), NSStringFromCGRect(_imageViewStreamer.frame));
 #endif
     
 #if 0
@@ -3847,6 +3831,7 @@ double _ticks = 0;
     {
         _syncPortraitAndLandscape = NO;
     }
+    
     [self resetZooming];
     
     NSInteger deltaY = 0;
@@ -3932,7 +3917,7 @@ double _ticks = 0;
                                           owner:self
                                         options:nil];
             self.melodyViewController = [[[MelodyViewController alloc] initWithNibName:@"MelodyViewController_iPad" bundle:nil] autorelease];
-            [_earlierVC.view setFrame:CGRectMake(0, 64, SCREEN_WIDTH, SCREEN_HEIGHT - 64)];
+            [_earlierVC.view setFrame:CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT - 64)];
         }
         else
         {
@@ -3943,6 +3928,8 @@ double _ticks = 0;
             
         }
         //portrait mode
+        
+        NSLog(@"H264VC - adjust -imageVideo: %@, earlierVC: %@, SCREEN_HEIGHT: %f", NSStringFromCGRect(_earlierVC.view.frame), NSStringFromCGRect(_imageViewStreamer.frame), SCREEN_HEIGHT);
         
         self.melodyViewController.selectedChannel = self.selectedChannel;
         self.melodyViewController.melodyVcDelegate = self;
@@ -4034,7 +4021,9 @@ double _ticks = 0;
         //add hubble_logo_back
         [self addHubbleLogo_Back];
         _isLandScapeMode = NO;
+        
 	}// end of portrait
+    
     [self.melodyViewController.melodyTableView setNeedsLayout];
     [self.melodyViewController.melodyTableView setNeedsDisplay];
 
@@ -4061,6 +4050,7 @@ double _ticks = 0;
     [self hidenAllBottomView];
     [self updateBottomView];
     //Earlier must at bottom of land, and port
+    
     if (_isFirstLoad || _wantToShowTimeLine)
     {
         [self showTimelineView];
@@ -4071,7 +4061,7 @@ double _ticks = 0;
     }
     [self addingLabelInfosForDebug];
     
-    NSLog(@"H264VC - adjust -imageVideo: %@, imageStreamer: %@", NSStringFromCGRect(_imageViewVideo.frame), NSStringFromCGRect(_imageViewStreamer.frame));
+    NSLog(@"H264VC - adjust -imageVideo: %@, earlierVC: %@, SCREEN_HEIGHT: %f", NSStringFromCGRect(_earlierVC.view.frame), NSStringFromCGRect(_imageViewStreamer.frame), SCREEN_HEIGHT);
 }
 
 
@@ -4905,11 +4895,10 @@ double _ticks = 0;
         [userDefaults synchronize];
     }
     
-    //if (!_wantToShowTimeLine)
+    if (!earlierNavi.isEarlierView)
     {
         [self checkOrientation];
     }
-    
 }
 
 #ifdef SHOW_DEBUG_INFO
