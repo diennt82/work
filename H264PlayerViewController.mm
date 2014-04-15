@@ -517,9 +517,10 @@ double _ticks = 0;
 - (void)nowButtonAciton:(id)sender
 {
     _hideCustomIndicatorAndTextNotAccessble = NO;
+    
     [nowButton setEnabled:NO];
     [earlierButton setEnabled:YES];
-    earlierNavi.isEarlierView = NO;
+   
     [nowButton setTitleTextAttributes:@{
                                         UITextAttributeFont: [UIFont fontWithName:PN_SEMIBOLD_FONT size:17.0],
                                         UITextAttributeTextColor: [UIColor barItemSelectedColor]
@@ -528,6 +529,10 @@ double _ticks = 0;
                                             UITextAttributeFont: [UIFont fontWithName:PN_LIGHT_FONT size:17.0],
                                             UITextAttributeTextColor: [UIColor barItemSelectedColor]
                                             } forState:UIControlStateNormal];
+    
+    
+    earlierNavi.isEarlierView = NO;
+    
     if (_wantToShowTimeLine)
     {
         [self showTimelineView];
@@ -539,10 +544,10 @@ double _ticks = 0;
 - (void)earlierButtonAction:(id)sender
 {
     _hideCustomIndicatorAndTextNotAccessble = YES;
+    
     [earlierButton setEnabled:NO];
-
-    [self.customIndicator setHidden:YES];
-    earlierNavi.isEarlierView = YES;
+    [nowButton setEnabled:YES];
+    
     [nowButton setTitleTextAttributes:@{
                                         UITextAttributeFont: [UIFont fontWithName:PN_LIGHT_FONT size:17.0],
                                         UITextAttributeTextColor: [UIColor barItemSelectedColor]
@@ -551,6 +556,10 @@ double _ticks = 0;
                                             UITextAttributeFont: [UIFont fontWithName:PN_SEMIBOLD_FONT size:17.0],
                                             UITextAttributeTextColor: [UIColor barItemSelectedColor]
                                             } forState:UIControlStateNormal];
+    
+    [self.customIndicator setHidden:YES];
+    earlierNavi.isEarlierView = YES;
+   
     _wantToShowTimeLine = YES;
     //_earlierVC = [[EarlierViewController alloc] initWithCamChannel:self.selectedChannel];
     if (_earlierVC == nil)
