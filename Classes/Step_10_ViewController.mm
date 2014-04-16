@@ -26,11 +26,11 @@
 
 @implementation Step_10_ViewController
 
-@synthesize  userNameLabel, userEmailLabel;
-@synthesize  cameraMac, master_key;
-@synthesize  cameraName;
 
-@synthesize  homeSSID;
+@synthesize  cameraMac, master_key;
+
+
+
 
 //@synthesize  shouldStopScanning;
 @synthesize  timeOut;
@@ -49,12 +49,12 @@
 -(void) dealloc
 {
     [_userAccount release];
-    //[userEmailLabel release];
-    //[progressView release];
+   
+  
     [cameraMac release];
     [master_key release];
     
-    //[cameraName release];
+
     [_ib_scollViewGuide release];
     [_ib_viewGuild release];
     [_ib_resumeSetup release];
@@ -79,17 +79,13 @@
     
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     
-    //can be user email or user name here --
-    self.userNameLabel.text = (NSString *) [userDefaults objectForKey:@"PortalUsername"];
-    self.userEmailLabel.text = (NSString *) [userDefaults objectForKey:@"PortalUseremail"];
+
+
+  
     
     self.cameraMac = (NSString *) [userDefaults objectForKey:@"CameraMacWithQuote"];
     self.stringUDID = [userDefaults stringForKey:CAMERA_UDID];
     
-    if (self.progressView == nil)
-    {
-        NSLog(@"progressView = nil!!!!");
-    }
     
     
     //Hide back button -- can't go back now..
@@ -107,7 +103,6 @@
     
     NSLog(@"Normal Add cam sequence" );
     
-    NSString * homeSsid = (NSString *) [userDefaults objectForKey:HOME_SSID];
     
     //Add view guild first and hide it
     [self.view addSubview:self.ib_viewGuild];
@@ -122,18 +117,29 @@
                                 nil];
     imageView.animationDuration = 1.5;
     imageView.animationRepeatCount = 0;
-    [self.view addSubview:self.progressView];
+    
+    //[self.view addSubview:self.progressView];
+    
     [imageView startAnimating];
     [self showProgress:nil];
     
-    self.homeSSID.text = homeSsid;
+
     
     
     
-    [self waitingCameraRebootAndForceToWifiHome];
-    
-    ////First add camera
-    //[self registerCamera:nil];
+    NSString *fwVersion = [userDefaults stringForKey:FW_VERSION];
+
+    // >12.82 we can move on with new flow
+    if ([fwVersion compare:FW_MILESTONE_F66_NEW_FLOW] >= NSOrderedSame)
+    {
+        [self waitingCameraRebootAndForceToWifiHome];
+    }
+    else
+    {
+        NSLog(@"Step10 - old flow");
+        ///Old flow: First add camera
+        [self registerCamera:nil];
+    }
     
 }
 
@@ -221,7 +227,7 @@
     [self showDialogChooseConfigCamera];
 }
 
-#if 0
+
 - (IBAction)registerCamera:(id)sender
 {
     self.progressView.hidden = NO;
@@ -316,8 +322,6 @@
     
     [stringFromDate insertString:@"." atIndex:3];
     
-    NSLog(@"%@", stringFromDate);
-    
     [formatter release];
     
     BMS_JSON_Communication *jsonComm = [[BMS_JSON_Communication alloc] initWithObject:self
@@ -352,8 +356,6 @@
     }
 }
 
-#endif
-
 #pragma  mark -
 #pragma mark Timer callbacks
 
@@ -381,7 +383,7 @@
     //current wifi of camera setup
     NSString *wifiCameraSetup = [userDefaults stringForKey:@"CameraName"];
     
-   
+    
     if ((currentSSID == nil) || [currentSSID isEqualToString:wifiCameraSetup])
     {
         NSLog(@"Now, still connected to wifiOf Camera, continue check");
@@ -399,12 +401,14 @@
         {
             NSLog(@"It is wifi home");
         }
+        else
+        {
+             NSLog(@"It is NOT wifi home");
+        }
         //What if this wifi does not have internet connect OR
         //  The wifi selected for camera does not have internet connection ????
         
         
-        
-        //yeah we're connected ... check for ip??
 		[self.ib_viewGuild setHidden:YES];
         [self showProgress:nil];
 		NSString * bc = @"";
@@ -438,7 +442,7 @@
         }
         
     }
-      
+    
 }
 
 - (void)connectToWifiHomeByHand
@@ -761,7 +765,7 @@
         switch(buttonIndex) {
             case 0: // Cancel
                 self.errorCode = @"ServUnreach";
-
+                
                 [self  setupFailed];
                 
                 break;
