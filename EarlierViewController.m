@@ -75,11 +75,20 @@
     }
     
     self.timelineVC = [[TimelineViewController alloc] init];
-    SavedEventViewController *savedViewController = [[SavedEventViewController alloc] initWithNibName:@"SavedEventViewController" bundle:nil];
     [_timelineVC setTitle:@"Timeline"];
-    [savedViewController setTitle:@"Saved"];
-    NSArray *viewControllers = @[_timelineVC, savedViewController];
-   
+    
+    NSArray *viewControllers;
+    
+    if (CUE_RELEASE_FLAG)
+    {
+        viewControllers = @[_timelineVC];
+    }
+    else
+    {
+        SavedEventViewController *savedViewController = [[SavedEventViewController alloc] initWithNibName:@"SavedEventViewController" bundle:nil];
+        [savedViewController setTitle:@"Saved"];
+        viewControllers = @[_timelineVC, savedViewController];
+    }
     
     _tabBarController = [[MHTabBarController alloc] init];
     
@@ -114,10 +123,7 @@
     [super viewWillAppear:animated];
     
     [[UIApplication sharedApplication] setStatusBarHidden:NO withAnimation:UIStatusBarAnimationNone];
-    
-    //self.timelineVC.tableView.contentInset = UIEdgeInsetsMake(5, 0, 364, 0);
-    //self.view.frame = CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT - 364);
-    
+
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
     {
         self.timelineVC.view.frame = CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT - 64);

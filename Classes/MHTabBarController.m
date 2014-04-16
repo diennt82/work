@@ -24,8 +24,16 @@
 #import "UIColor+Hubble.h"
 #import "UIFont+Hubble.h"
 #import "define.h"
+#import "PublicDefine.h"
 
 static const NSInteger TagOffset = 1000;
+
+@interface MHTabBarController()
+
+@property (nonatomic) NSInteger tabBarWidth;
+@property (nonatomic) NSInteger viewContronlersMin;
+
+@end
 
 @implementation MHTabBarController
 {
@@ -44,6 +52,17 @@ static const NSInteger TagOffset = 1000;
 	tabButtonsContainerView = [[UIView alloc] initWithFrame:rect];
 	tabButtonsContainerView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
 	[self.view addSubview:tabButtonsContainerView];
+    
+    if (CUE_RELEASE_FLAG)
+    {
+        self.tabBarWidth = SCREEN_WIDTH;
+        self.viewContronlersMin = 1;
+    }
+    else
+    {
+        self.tabBarWidth = SCREEN_WIDTH / 2;
+        self.viewContronlersMin = 2;
+    }
     
 	rect.origin.y = self.tabBarHeight + 64;
 	rect.size.height = self.view.bounds.size.height - self.tabBarHeight;// - 64;
@@ -142,15 +161,16 @@ static const NSInteger TagOffset = 1000;
 	NSUInteger index = 0;
 	NSUInteger count = [self.viewControllers count];
     
-	CGRect rect = CGRectMake(0.0f, 0.0f, SCREEN_WIDTH/2, self.tabBarHeight);
+	CGRect rect = CGRectMake(0.0f, 0.0f, _tabBarWidth, self.tabBarHeight);
     
 	indicatorImageView.hidden = YES;
     
 	NSArray *buttons = [tabButtonsContainerView subviews];
+    
 	for (UIButton *button in buttons)
 	{
 		if (index == count - 1)
-			rect.size.width = SCREEN_WIDTH/2;
+			rect.size.width = _tabBarWidth;
         
 		button.frame = rect;
 		rect.origin.x += rect.size.width;
@@ -173,7 +193,7 @@ static const NSInteger TagOffset = 1000;
 
 - (void)setViewControllers:(NSArray *)newViewControllers
 {
-	NSAssert([newViewControllers count] >= 2, @"MHTabBarController requires at least two view controllers");
+    NSAssert([newViewControllers count] >= _viewContronlersMin, @"MHTabBarController requires at least two view controllers");
     
 	UIViewController *oldSelectedViewController = self.selectedViewController;
     

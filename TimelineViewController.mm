@@ -419,7 +419,18 @@
         return 1;
     }
     
-    return 4;
+    /*
+     * For CUE to start tableView has 2 sections.
+     * For full feature tableView has 4 sections. The last sections are Buttons
+     */
+    if (CUE_RELEASE_FLAG)
+    {
+        return 2;
+    }
+    else
+    {
+        return 4;
+    }
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section

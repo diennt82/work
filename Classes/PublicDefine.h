@@ -155,9 +155,10 @@
 #define FW_MILESTONE @"01.12.58"
 #define FW_MILESTONE_F66_NEW_FLOW @"01.12.82"
 
-#define FW_VERSION @"firmware_version"
+#define FW_VERSION  @"firmware_version"
 #define CAMERA_SSID @"camera_ssid"
-#define REG_ID @"RegistrationID"
+#define REG_ID      @"RegistrationID"
+#define CUE_RELEASE_FLAG 1
 
 // Alert type
 #define ALERT_GENERIC_SERVER_INFO @"0"
