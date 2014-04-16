@@ -10,6 +10,7 @@
 #import "CameraSettingsCell.h"
 #import "MenuViewController.h"
 #import <MonitorCommunication/MonitorCommunication.h>
+#import "PublicDefine.h"
 
 @interface Account_ViewController ()
 
@@ -128,7 +129,14 @@
     }
     else
     {
-        return 2;
+        if (CUE_RELEASE_FLAG)
+        {
+            return 1;
+        }
+        else
+        {
+            return 2;
+        }
     }
 }
 

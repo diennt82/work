@@ -876,7 +876,7 @@ double _ticks = 0;
             //set custom indication is TRUE when server die
             _isShowCustomIndicator = YES;
             _isShowTextCameraIsNotAccesible = YES;
-            [self displayCustomIndicator];
+            
     		NSLog(@"Timeout While streaming  OR server DIED - userWantToCancel: %d", userWantToCancel);
             
     		//mHandler.dispatchMessage(Message.obtain(mHandler, Streamer.MSG_VIDEO_STREAM_HAS_STOPPED_UNEXPECTEDLY));
@@ -899,6 +899,10 @@ double _ticks = 0;
                 
                 return;
                 
+            }
+            else
+            {
+                [self displayCustomIndicator];
             }
             
             if (self.h264StreamerIsInStopped == TRUE)
@@ -1377,6 +1381,7 @@ double _ticks = 0;
     }
     
     self.h264StreamerIsInStopped = FALSE;
+    self.currentMediaStatus = 0;
     
     if(_selectedChannel.profile.isInLocal == TRUE)
     {
@@ -5012,6 +5017,7 @@ double _ticks = 0;
     }
     else
     {
+        [[UIApplication sharedApplication] setStatusBarHidden:NO];
         self.returnFromPlayback = FALSE;
         [self scanCamera];
         self.h264StreamerIsInStopped = FALSE;
@@ -5115,6 +5121,8 @@ double _ticks = 0;
             [_audioOut release];
             _audioOut = nil;
         }
+        
+        [self.ib_labelTouchToTalk setText:@"Hold To Talk"];
     }
     else
     {

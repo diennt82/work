@@ -26,6 +26,7 @@
 #import "SensitivityInfo.h"
 #import "MenuViewController.h"
 #import "PublicDefine.h"
+#import "define.h"
 
 #import <MonitorCommunication/MonitorCommunication.h>
 #import <CameraScanner/CameraScanner.h>
@@ -644,7 +645,7 @@
         if (indexPath.section == 1 &&
             numOfRows[indexPath.section] == 4)
         {
-            UIView *lineView = [[[UIView alloc] initWithFrame:CGRectMake(0, cell.contentView.frame.size.height - 0.5f, cell.contentView.frame.size.width, 0.5f)] autorelease];
+            UIView *lineView = [[[UIView alloc] initWithFrame:CGRectMake(0, cell.contentView.frame.size.height - 0.5f, SCREEN_WIDTH, 0.5f)] autorelease];
             
             lineView.backgroundColor = [UIColor colorWithRed:195/255.f green:195/255.f blue:195/255.f alpha:1];
             lineView.tag = 905;

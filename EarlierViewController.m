@@ -10,6 +10,7 @@
 #import "SavedEventViewController.h"
 #import "define.h"
 #import "PublicDefine.h"
+#import "UIColor+Hubble.h"
 
 @interface EarlierViewController ()
 
@@ -63,10 +64,16 @@
     {
         self.navigationItem.hidesBackButton = YES;
         self.navigationController.navigationBarHidden = NO;
-        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Earlier"
-                                                                                  style:UIBarButtonItemStylePlain
-                                                                                 target:nil
-                                                                                 action:nil];
+        UIBarButtonItem *earlierBarBtn = [[UIBarButtonItem alloc] initWithTitle:@"Earlier"
+                                                                         style:UIBarButtonItemStylePlain
+                                                                        target:nil
+                                                                        action:nil];
+        [earlierBarBtn setTitleTextAttributes:@{
+                                                UITextAttributeFont: [UIFont fontWithName:PN_SEMIBOLD_FONT size:17.0],
+                                                UITextAttributeTextColor: [UIColor barItemSelectedColor]
+                                                } forState:UIControlStateNormal];
+        earlierBarBtn.enabled = NO;
+        self.navigationItem.rightBarButtonItem = earlierBarBtn;
         [self addHubbleLogo_Back];
     }
     else

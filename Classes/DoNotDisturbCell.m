@@ -32,6 +32,9 @@
 - (void)drawRect:(CGRect)rect
 {
     //get and set Enable do not disturb
+    
+    self.backgroundColor = [UIColor colorWithRed:43/255.f green:50/255.f blue:56/255.f alpha:1];
+    
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     BOOL isEnable = [userDefaults objectForKey:@"EnableDoNotDisturb"];
     if (isEnable)
