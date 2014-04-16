@@ -182,9 +182,14 @@
                      * For CUE start hide Notification Scheduler, so number of section = 3
                      * For full feature app has Notification, so number of section = 4
                      */
-                    
-                    //self.numberOfSections = 4;
-                    self.numberOfSections = 3;
+                    if (CUE_RELEASE_FLAG)
+                    {
+                        self.numberOfSections = 3;
+                    }
+                    else
+                    {
+                        self.numberOfSections = 4;
+                    }
                 }
                 
                 break;

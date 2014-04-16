@@ -14,8 +14,8 @@
 {
     NSString *_cameraName;
     NSString *_cameraNewName;
-    UIAlertView* _alertView;
 }
+
 @property (nonatomic, assign) NSString *cameraName;
 @property (nonatomic, assign) id<ConnectionMethodDelegate> cameraMenuDelegate;
 @property (nonatomic, assign) CamChannel *camChannel;

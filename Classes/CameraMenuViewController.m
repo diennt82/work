@@ -36,6 +36,7 @@
 @property (nonatomic) BOOL isLoading;
 @property (nonatomic, retain) NSString *apiKey;
 @property (nonatomic) BOOL isChangingName;
+@property (nonatomic, retain) UIAlertView *alertViewRename;
 
 @end
 
@@ -517,21 +518,21 @@
     if (indexPath.row == 0)
     {
         _cameraName = self.camChannel.profile.name;
-        _alertView = [[UIAlertView alloc] init];
-        [_alertView setDelegate:self];
-        [_alertView setTitle:@"Change Camera Name"];
-        [_alertView setMessage:@"Enter the new camera location"];
-        _alertView.alertViewStyle = UIAlertViewStylePlainTextInput;
         
-        //get text of textField
-        UITextField *textField = [_alertView textFieldAtIndex:0];
-        [textField setText:_cameraName];
-        textField.keyboardType = UIKeyboardTypeNumberPad;
-        [_alertView addButtonWithTitle:@"Cancel"];
-        [_alertView addButtonWithTitle:@"OK"];
-        _alertView.tag = ALERT_RENAME_CAMERA;
-        [_alertView show];
-        [_alertView release];
+        if (_alertViewRename == nil)
+        {
+            self.alertViewRename = [[UIAlertView alloc] initWithTitle:@"Enter the new Camera name"
+                                                              message:nil
+                                                             delegate:self
+                                                    cancelButtonTitle:@"Cancel"
+                                                    otherButtonTitles:@"Ok", nil];
+            self.alertViewRename.alertViewStyle = UIAlertViewStylePlainTextInput;
+            UITextField *textField = [_alertViewRename textFieldAtIndex:0];
+            [textField setText:_cameraName];
+            self.alertViewRename.tag = ALERT_RENAME_CAMERA;
+        }
+        
+        [_alertViewRename show];
     }
 #if ENABLE_CHANGE_IMAGE
     else if (indexPath.row == 1)
@@ -743,6 +744,7 @@
     [_btnRmoveCamera release];
     [_viewProgress release];
     [_viewPorgress release];
+    [_alertViewRename release];
     [super dealloc];
 }
 @end
