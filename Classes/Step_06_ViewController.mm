@@ -659,48 +659,48 @@
 
 -(void)sendWifiInfoToCamera
 {
+     NSString *response ;
+    
     //and then disable user interaction
     [self.navigationController.navigationBar setUserInteractionEnabled:NO];
     
-    
-    /** SEND auth data over first */
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-    
     NSString *apiKey    = [userDefaults objectForKey:@"PortalApiKey"];
+    NSString *fwVersion = [userDefaults stringForKey:FW_VERSION];
+    
     
     NSDate *now = [NSDate date];
     NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
     [formatter setDateFormat:@"ZZZ"];
     
     NSMutableString *stringFromDate = [NSMutableString stringWithString:[formatter stringFromDate:now]];
-    
     [stringFromDate insertString:@"." atIndex:3];
     
+   
+     // >12.82 we can move on with new flow
+    if ([fwVersion compare:FW_MILESTONE_F66_NEW_FLOW] >= NSOrderedSame)
+    {
+         /** SEND auth data over first */
+        NSString * set_auth_cmd = [NSString stringWithFormat:@"%@%@%@%@%@",
+                                   SET_SERVER_AUTH,
+                                   SET_SERVER_AUTH_PARAM1, apiKey,
+                                   SET_SERVER_AUTH_PARAM2, stringFromDate];
+        
+      response = [[HttpCom instance].comWithDevice sendCommandAndBlock:set_auth_cmd
+                                                                       withTimeout:10.0];
+        NSLog(@"set auth -set_auth_cmd: %@, -response: %@ ", set_auth_cmd, response);
+        
+    }
     
     
-    NSString * set_auth_cmd = [NSString stringWithFormat:@"%@%@%@%@%@",
-                               SET_SERVER_AUTH,
-                               SET_SERVER_AUTH_PARAM1, apiKey,
-                               SET_SERVER_AUTH_PARAM2, stringFromDate];
-    
-    NSString *response = [[HttpCom instance].comWithDevice sendCommandAndBlock:set_auth_cmd
-                                                                   withTimeout:10.0];
-    
-    NSLog(@"set auth -set_auth_cmd: %@, -response: %@ ", set_auth_cmd, response);
     
     [self prepareWifiInfo];
     
     //Save and send
     if ( [_deviceConf isDataReadyForStoring])
     {
-        NSLog(@"ok to save ");
         [Util writeDeviceConfigurationData:[_deviceConf getWritableConfiguration]];
     }
-    
-    
-    
-    //    DeviceConfiguration * sent_conf = [[DeviceConfiguration alloc] init];
-    
     [_deviceConf restoreConfigurationData:[Util readDeviceConfiguration]];
     
     
@@ -710,18 +710,10 @@
     NSString * setup_cmd = [NSString stringWithFormat:@"%@%@",
                             SETUP_HTTP_CMD,device_configuration];
     
-	NSLog(@"Log - before send: %@", setup_cmd);
     response = [[HttpCom instance].comWithDevice sendCommandAndBlock:setup_cmd ];
+    NSLog(@"Step_06VC - send cmd  %@ - response is: %@", setup_cmd, response);
     
-    NSLog(@"Step_06VC - after send cmd - response is: %@", response);
-    
-    
-    /* Phung: check FW version if it is older than 1.12.82, popup sth */
-    
-    
-    
-    NSString *fwVersion = [userDefaults stringForKey:FW_VERSION];
-    
+  
     // >12.82 we can move on with new flow
     if ([fwVersion compare:FW_MILESTONE_F66_NEW_FLOW] >= NSOrderedSame) // fw >= FW_MILESTONE_F66_NEW_FLOW
     {
@@ -736,12 +728,23 @@
     else
     {
         
-        //TODO: popup force waiting..
+        
+        
+        // popup force waiting..
         [NSTimer scheduledTimerWithTimeInterval: 3.0
                                          target:self
-                                       selector:@selector(askUserToWaitForUpgrade)
+                                       selector:@selector(checkAppConnectToCameraAtStep03)
                                        userInfo:nil
                                         repeats:NO];
+        
+        
+        
+        // popup force waiting..
+//        [NSTimer scheduledTimerWithTimeInterval: 3.0
+//                                         target:self
+//                                       selector:@selector(askUserToWaitForUpgrade)
+//                                       userInfo:nil
+//                                        repeats:NO];
         
     }
     
@@ -766,46 +769,44 @@
     [self.progressView setHidden:NO];
     NSString *currentSSID = [CameraPassword fetchSSIDInfo];
     NSLog(@"check App Connect To Camera At Step03 after sending wifi info");
-    if ([self isAppConnectedToCamera])
+    if (currentSSID == nil)
     {
-        NSLog(@"App connected with camera, waiting for get status...");
+        // check again
+       
+        if (_task_cancelled)
+        {
+            //handle when user press back
+        }
+        else
+        {
+            [NSTimer scheduledTimerWithTimeInterval: 3//
+                                             target:self
+                                           selector:@selector(checkAppConnectToCameraAtStep03)
+                                           userInfo:nil
+                                            repeats:NO];
+            
+            NSLog(@"Continue to check ssid after 3sec");
+        }
+        
+    }
+    else if ([self isAppConnectedToCamera])
+    {
+        NSLog(@"App connected with camera, start to get WIFI conn status...");
         [self.progressView setHidden:NO];
         [self.view bringSubviewToFront:self.progressView];
         [self getStatusOfCameraToWifi:nil];
-        return;
+        
     }
-    else if (currentSSID == nil)
+    else //currentSSID is not camera : this means app is kicked out
     {
-        [NSTimer scheduledTimerWithTimeInterval: 3//
-                                         target:self
-                                       selector:@selector(checkAppConnectToCameraAtStep03)
-                                       userInfo:nil
-                                        repeats:NO];
-        return;
-    }
-    else
-    {
-        //TODO: show prompt to user select network camera again and handle next
+        NSLog(@"App connected with %@ not camera, ask user to switch manually. " ,currentSSID );
+        // show prompt to user select network camera again and handle next
         [self.progressView setHidden:YES];
         [self.infoSelectCameView setHidden:NO];
         [self.view bringSubviewToFront:self.infoSelectCameView];
-        return;
     }
     
-    if (_task_cancelled)
-    {
-        //handle when user press back
-    }
-    else
-    {
-        [NSTimer scheduledTimerWithTimeInterval: 3//
-                                         target:self
-                                       selector:@selector(checkAppConnectToCameraAtStep03)
-                                       userInfo:nil
-                                        repeats:NO];
-        
-        NSLog(@"Don't Send & reset done");
-    }
+    
 }
 
 -(void) becomeActive
@@ -820,10 +821,6 @@
                                     repeats:NO];
 }
 
--(void)handleEnteredBackground
-{
-    
-}
 
 - (void)nextStepVerifyPassword
 {
@@ -865,13 +862,15 @@
     
 }
 
+
+
 - (void)getStatusOfCameraToWifi:(NSTimer *)info
 {
-    //    NSString * currentSSID = [CameraPassword fetchSSIDInfo];
     NSString *commandGetState = GET_STATE_NETWORK_CAMERA;
-    NSLog(@"Log - command is %@", commandGetState);
+
     NSString *state = [[HttpCom instance].comWithDevice sendCommandAndBlock:commandGetState withTimeout:20.0];
-    
+    NSLog(@"getStatusOfCameraToWifi - command %@  response:%@", commandGetState,state);
+
     if (state != nil && [state length] > 0)
     {
         _currentStateCamera = [[state componentsSeparatedByString:@": "] objectAtIndex:1];
@@ -897,7 +896,7 @@
         
         if (![self isAppConnectedToCamera])
         {
-            NSLog(@"Step_06VC - current ssid is not a camera ssid");
+            NSLog(@"Step_06VC - current ssid is not a camera ssid !!!!! This check passed before coming here..");
             [self.infoSelectCameView setHidden:NO];
             [self.view bringSubviewToFront:self.infoSelectCameView];
         }
@@ -961,25 +960,6 @@
     [alertViewPassword release];
 }
 
-//- (void)alertView:(UIAlertView *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex {
-//    // the user clicked one of the OK/Cancel buttons
-//    if (buttonIndex == 0)
-//    {
-//        NSLog(@"ok");
-//        [self resetAllTimer];
-//        [self getStatusOfCameraToWifi:nil];
-//        _timeOut =  [NSTimer scheduledTimerWithTimeInterval: TIME_INPUT_PASSWORD_AGAIN// after 60s if not get successful
-//                                                     target:self
-//                                                   selector:@selector(showDialogPasswordWrong)
-//                                                   userInfo:nil
-//                                                    repeats:NO];
-//    }
-//    else
-//    {
-//        NSLog(@"cancel");
-//    }
-//}
-
 - (void)resetAllTimer
 {
     if (_timeOut != nil)
@@ -1014,7 +994,7 @@
         
         [self.navigationController popToRootViewControllerAnimated:NO];
     }
-    else if(tag = 101)
+    else if(tag == 101)
     {
         if (buttonIndex == 0)
         {

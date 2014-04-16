@@ -35,15 +35,7 @@
 
 @interface Step_10_ViewController : UIViewController
 {
-    IBOutlet UILabel * userNameLabel;
-    IBOutlet UILabel * userEmailLabel;
-    
-    //IBOutlet UIView * setupFailView, *setupCompleteView;
-    IBOutlet UILabel * cameraName; 
-    
-    IBOutlet UIView * cameraAddedView; 
-    IBOutlet UILabel * homeSSID; //ONLY USED in NORMAL ADD CAM SEQUENCE
-    
+
     int num_scan_time;
     BOOL should_stop_scanning; 
 
@@ -64,21 +56,20 @@
 
 @property (retain, nonatomic) IBOutlet UIScrollView *ib_scollViewGuide;
 @property (retain, nonatomic) IBOutlet UIButton *ib_resumeSetup;
-@property (nonatomic,assign) IBOutlet UILabel * homeSSID; 
-@property (nonatomic, assign) IBOutlet UILabel * userNameLabel;
-@property (nonatomic, assign) IBOutlet UILabel * userEmailLabel,  * cameraName;
+
+
 
 @property (nonatomic, assign)  id<ConnectionMethodDelegate> delegate;
-//@property (nonatomic, assign) IBOutlet UIView * setupFailView, *setupCompleteView;
+
 
 @property (nonatomic, retain) NSString *cameraMac,  *master_key; 
 @property (nonatomic, retain) NSTimer * timeOut;
-//@property (nonatomic) BOOL shouldStopScanning;
+
 @property (nonatomic, assign) NSString * errorCode;
 @property (nonatomic, retain) NSString *stringUDID;
 @property (nonatomic, retain) NSString *stringAuth_token;
 
--(IBAction) startConfigureCamera:(id)sender;
+
 
 -(IBAction)registerCamera:(id)sender;
 
@@ -86,8 +77,5 @@
 
 
 - (void) setupCompleted;
-- (IBAction)resumeSetupAction:(id)sender;
-
-
 - (void)  setupFailed;
 @end
