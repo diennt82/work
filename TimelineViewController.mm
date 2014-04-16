@@ -50,15 +50,15 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-
+    
     // Uncomment the following line to preserve selection between presentations.
     // self.clearsSelectionOnViewWillAppear = NO;
- 
+    
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
-
+    
     self.navigationController.navigationBarHidden = YES;
-
+    
     self.camChannel = ((H264PlayerViewController *)_parentVC).selectedChannel;
     
     NSLog(@"%@, %@", _camChannel, ((H264PlayerViewController *)_parentVC).selectedChannel);
@@ -157,7 +157,7 @@
                                                                              Selector:nil
                                                                          FailSelector:nil
                                                                             ServerErr:nil];
-
+    
     NSDate* currentDate = [NSDate date];
     
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
@@ -322,33 +322,13 @@
                 NSLog(@"Events empty!");
                 self.stringIntelligentMessage = @"All is calm";
             }
-        
+            
             NSLog(@"Number of event: %d", events.count);
             
             if (self.camChannel.profile.isInLocal == FALSE &&
                 self.camChannel.profile.minuteSinceLastComm > 5)
             {
-                NSDateFormatter *dateFormater = [[NSDateFormatter alloc] init];
-                [dateFormater setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss'Z'"];
-                [dateFormater setTimeZone:[NSTimeZone timeZoneForSecondsFromGMT:0]];
-                NSDate *updateDate = [dateFormater dateFromString:self.camChannel.profile.last_comm]; //2013-12-31 07:38:35 +0000
-                [dateFormater release];
-                
-                NSDateFormatter* df_local = [[NSDateFormatter alloc] init];
-                [df_local setTimeZone:[NSTimeZone localTimeZone]];
-                
-                if (_is12hr)
-                {
-                    df_local.dateFormat = @"yyyy-MM-dd HH:mm:ss a";
-                }
-                else
-                {
-                    df_local.dateFormat = @"yyyy-MM-dd HH:mm:ss";
-                }
-                
-                self.stringIntelligentMessage = [NSString stringWithFormat:@"Monitor is offline since %@", [df_local stringFromDate:updateDate]];
-                [df_local release];
-                
+                self.stringIntelligentMessage = @"Monitor is offline";
                 self.stringCurrentDate = @"";
             }
         }
@@ -368,12 +348,22 @@
     
     dispatch_async(dispatch_get_main_queue(), ^{
         [self.tableView reloadData];
+        
+        [self.tableView layoutIfNeeded];
+        
+        if ([self.timelineVCDelegate respondsToSelector:@selector(refreshTableView)])
+        {
+            [self.timelineVCDelegate refreshTableView]; 
+        }
+        
     });
-
-    if (responseDict == nil)
-    {
-        [self performSelectorOnMainThread:@selector(createRefreshTimer) withObject:nil waitUntilDone:NO];
-    }
+    
+    
+    //Don't do this here --- XXX - may run into situation where it creates more timer
+    //    if (responseDict == nil)
+    //    {
+    //        [self performSelectorOnMainThread:@selector(createRefreshTimer) withObject:nil waitUntilDone:NO];
+    //    }
 }
 
 - (UIImage *)imageWithUrlString:(NSString *)urlString scaledToSize:(CGSize)newSize
@@ -436,7 +426,7 @@
 {
     //#warning Incomplete method implementation.
     // Return the number of rows in the section.
-
+    
     if (section == 1)
     {
         return _events.count;
@@ -595,7 +585,7 @@
         
         return 60;
     }
-
+    
 }
 
 - (BOOL)tableView:(UITableView *)tableView shouldHighlightRowAtIndexPath:(NSIndexPath *)indexPath
@@ -636,7 +626,7 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-
+    
     if (_isEventAlready == FALSE)
     {
         static NSString *CellIdentifier = @"Cell";
@@ -875,43 +865,43 @@
 }
 
 /*
-// Override to support conditional editing of the table view.
-- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    // Return NO if you do not want the specified item to be editable.
-    return YES;
-}
-*/
+ // Override to support conditional editing of the table view.
+ - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
+ {
+ // Return NO if you do not want the specified item to be editable.
+ return YES;
+ }
+ */
 
 /*
-// Override to support editing the table view.
-- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    if (editingStyle == UITableViewCellEditingStyleDelete) {
-        // Delete the row from the data source
-        [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
-    }   
-    else if (editingStyle == UITableViewCellEditingStyleInsert) {
-        // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-    }   
-}
-*/
+ // Override to support editing the table view.
+ - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
+ {
+ if (editingStyle == UITableViewCellEditingStyleDelete) {
+ // Delete the row from the data source
+ [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
+ }
+ else if (editingStyle == UITableViewCellEditingStyleInsert) {
+ // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
+ }
+ }
+ */
 
 /*
-// Override to support rearranging the table view.
-- (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath
-{
-}
-*/
+ // Override to support rearranging the table view.
+ - (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath
+ {
+ }
+ */
 
 /*
-// Override to support conditional rearranging of the table view.
-- (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    // Return NO if you do not want the item to be re-orderable.
-    return YES;
-}
-*/
+ // Override to support conditional rearranging of the table view.
+ - (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath
+ {
+ // Return NO if you do not want the item to be re-orderable.
+ return YES;
+ }
+ */
 - (void)showDialogToConfirm
 {
     NSString * msg = [NSString stringWithFormat:@"Video clip is not ready, please try again later."];
@@ -945,7 +935,7 @@
     PlaybackViewController *playbackViewController = [[PlaybackViewController alloc] init];
     
     playbackViewController.clip_info = clipInfo;
-//    playbackViewController.clipsInEvent = [NSMutableArray arrayWithArray:clipsInEvent];
+    //    playbackViewController.clipsInEvent = [NSMutableArray arrayWithArray:clipsInEvent];
     // Pass the selected object to the new view controller.
     
     NSLog(@"Push the view controller.- %@", self.navigationController);
