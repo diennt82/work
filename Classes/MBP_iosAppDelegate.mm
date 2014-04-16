@@ -97,12 +97,9 @@
     [window setRootViewController:viewController];
     [window makeKeyAndVisible];
     
-    
-    NSString *cachesDirectory = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
-	
-	
 #if TARGET_IPHONE_SIMULATOR == 0
 
+     NSString *cachesDirectory = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
 	NSString *logPath = [cachesDirectory stringByAppendingPathComponent:@"application.log"];
 	
 	freopen([logPath cStringUsingEncoding:NSASCIIStringEncoding], "a+", stderr);
@@ -111,8 +108,6 @@
     
     [CameraAlert reloadBlankTableIfNeeded];
 
-    // Check the server name file
-#if 1
     NSString *serverName = [userDefaults stringForKey:@"name_server"];
     
     if (serverName == nil ||
@@ -127,27 +122,7 @@
     }
     
     [BMS_JSON_Communication setServerInput:serverName];
-#else
-    NSError *error;
-    NSString * serverFile = [cachesDirectory stringByAppendingPathComponent:@"server.txt"];
-    NSString* content = [NSString stringWithContentsOfFile:serverFile encoding:NSUTF8StringEncoding error:&error];
-    if (content != nil)
-    {
-        NSArray *allLines = [content componentsSeparatedByString: @"\n"];
-        NSString *serverString = [NSString stringWithFormat:@"%@",(NSString *)[allLines objectAtIndex:0]];
-        
-        [BMS_JSON_Communication setServerInput:serverString];
-        //[BMS_JSON_Communication setServerInput:@"http://api.simplimonitor.com/v1"];
-         NSLog(@"1 New server is %@", serverString);
-    }
-    else
-    {
-        NSLog(@"Use default server");
-        
-        //[BMS_JSON_Communication setServerInput:@"https://dev-api.hubble.in/v1"];
-        [BMS_JSON_Communication setServerInput:@"https://api.hubble.in/v1"];
-    }
-#endif
+
     return YES;
 }
 
@@ -175,11 +150,6 @@
     
     [[NSUserDefaults standardUserDefaults] registerDefaults:defaultsToRegister];
     [defaultsToRegister release];
-}
-
-- (NSURL *)applicationDocumentsDirectory {
-    return [[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory
-                                                   inDomains:NSUserDomainMask] lastObject];
 }
 
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo
