@@ -108,6 +108,7 @@
 @property (nonatomic) BOOL remoteViewTimeout;
 @property (nonatomic) BOOL disconnectAlert;
 @property (nonatomic) BOOL returnFromPlayback;
+//@property (nonatomic)
 
 - (void)centerScrollViewContents;
 - (void)scrollViewDoubleTapped:(UITapGestureRecognizer*)recognizer;
@@ -469,18 +470,17 @@ double _ticks = 0;
 }
 - (void) updateNavigationBarAndToolBar
 {
-    
-    nowButton = [[UIBarButtonItem alloc] initWithTitle:@"Now"
-                                                                  style:UIBarButtonItemStylePlain
-                                                                 target:self
-                                                                 action:@selector(nowButtonAciton:)];
-    [nowButton setTitleTextAttributes:@{
-                                        UITextAttributeFont: [UIFont fontWithName:PN_SEMIBOLD_FONT size:17.0],
-                                        UITextAttributeTextColor: [UIColor barItemSelectedColor]
-                                        } forState:UIControlStateNormal];
-
     if (![self.selectedChannel.profile isSharedCam]) // SharedCam
     {
+        nowButton = [[UIBarButtonItem alloc] initWithTitle:@"Now"
+                                                     style:UIBarButtonItemStylePlain
+                                                    target:self
+                                                    action:@selector(nowButtonAciton:)];
+        [nowButton setTitleTextAttributes:@{
+                                            UITextAttributeFont: [UIFont fontWithName:PN_SEMIBOLD_FONT size:17.0],
+                                            UITextAttributeTextColor: [UIColor barItemSelectedColor]
+                                            } forState:UIControlStateNormal];
+        
         earlierButton = [[UIBarButtonItem alloc] initWithTitle:@"Earlier"
                                                          style:UIBarButtonItemStylePlain
                                                         target:self
@@ -489,12 +489,8 @@ double _ticks = 0;
                                                 UITextAttributeFont: [UIFont fontWithName:PN_LIGHT_FONT size:17.0],
                                                 UITextAttributeTextColor: [UIColor barItemSelectedColor]
                                                 } forState:UIControlStateNormal];
-        NSArray *actionRightButtonItems = @[earlierButton, nowButton];
-        self.navigationItem.rightBarButtonItems = actionRightButtonItems;
-    }
-    else
-    {
-//        self.navigationItem.rightBarButtonItem = nowButton;
+        nowButton.enabled = NO;
+        self.navigationItem.rightBarButtonItems = @[earlierButton, nowButton];
     }
     
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
@@ -539,6 +535,8 @@ double _ticks = 0;
         _wantToShowTimeLine = NO;
     }
     _earlierVC.view.hidden = YES;
+    
+    [self displayCustomIndicator];
 }
 
 - (void)earlierButtonAction:(id)sender
@@ -676,7 +674,7 @@ double _ticks = 0;
             
             _resolution = [NSString stringWithFormat:@"%dx%d", ext1, ext2];
             [self.ib_btResolInfo setTitle:_resolution forState:UIControlStateNormal];
-            float top =0 , left =0;
+            float top = 0 , left =0;
             float destWidth;
             float destHeight;
             /*
@@ -704,7 +702,6 @@ double _ticks = 0;
                 
                 // so need to adjust the origin
                 left = self.imageViewVideo.frame.origin.x;
-                top = 0;
             }
             else
             {
@@ -722,10 +719,8 @@ double _ticks = 0;
                 {
                     left = self.imageViewVideo.frame.origin.x;
                 }
-                
-                top = 0;
-                
             }
+            
             NSLog(@"video adjusted size: %f x %f", destWidth, destHeight);
 
             self.imageViewStreamer.frame = CGRectMake(left,
@@ -1703,7 +1698,7 @@ double _ticks = 0;
         return;
     }
     
-    if (_isWentToPlayback)
+    if (_returnFromPlayback)
     {
         NSLog(@"H264VC - startStream --> break to Playback");
         return;
@@ -3957,11 +3952,8 @@ double _ticks = 0;
                                           owner:self
                                         options:nil];
             self.melodyViewController = [[[MelodyViewController alloc] initWithNibName:@"MelodyViewController" bundle:nil] autorelease];
-            
         }
         //portrait mode
-        
-        NSLog(@"H264VC - adjust -imageVideo: %@, earlierVC: %@, SCREEN_HEIGHT: %f", NSStringFromCGRect(_earlierVC.view.frame), NSStringFromCGRect(_imageViewStreamer.frame), SCREEN_HEIGHT);
         
         self.melodyViewController.selectedChannel = self.selectedChannel;
         self.melodyViewController.melodyVcDelegate = self;
@@ -3994,7 +3986,7 @@ double _ticks = 0;
                     self.timelineVC.view.frame = CGRectMake(0, alignYTimeLine, SCREEN_HEIGHT, SCREEN_HEIGHT - self.ib_ViewTouchToTalk.frame.origin.y);
                 }
                 
-                _timelineVC.tableView.contentSize = CGSizeMake(SCREEN_WIDTH, SCREEN_HEIGHT);
+                _timelineVC.tableView.contentSize = CGSizeMake(SCREEN_WIDTH, _timelineVC.tableView.frame.size.height);
                 //don't show timeline after switch from land to port
                 self.timelineVC.view.hidden = NO;
                 [self.view addSubview:_timelineVC.view];
@@ -4018,6 +4010,7 @@ double _ticks = 0;
                 }
             }
             
+            //NSLog(@"H264VC - adjust -imageVideo: %@, timelineContentSize: %@, SCREEN_HEIGHT: %f", NSStringFromCGRect(_imageViewStreamer.frame), NSStringFromCGRect(_timelineVC.tableView.frame), SCREEN_HEIGHT);
         }
         else
         {
@@ -4078,6 +4071,7 @@ double _ticks = 0;
             h264Streamer->videoSizeChanged();
         }
     }
+    
     [self setupPtt];
     [self applyFont];
     [self hideControlMenu];
@@ -4095,7 +4089,7 @@ double _ticks = 0;
     }
     [self addingLabelInfosForDebug];
     
-    NSLog(@"H264VC - adjust -imageVideo: %@, earlierVC: %@, SCREEN_HEIGHT: %f", NSStringFromCGRect(_earlierVC.view.frame), NSStringFromCGRect(_imageViewStreamer.frame), SCREEN_HEIGHT);
+   //NSLog(@"H264VC - adjust -imageVideo: %@, timelineVC: %@, SCREEN_HEIGHT: %f", NSStringFromCGRect(_imageViewStreamer.frame), NSStringFromCGRect(_timelineVC.view.frame), SCREEN_HEIGHT);
 }
 
 
@@ -4917,6 +4911,8 @@ double _ticks = 0;
         {
             self.timelineVC.camChannel = self.selectedChannel;
         }
+        
+        [self checkOrientation];
     }
     else
     {
@@ -4927,11 +4923,6 @@ double _ticks = 0;
         NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
         [userDefaults setObject:_selectedChannel.profile.mac_address forKey:CAM_IN_VEW];
         [userDefaults synchronize];
-    }
-    
-    if (!earlierNavi.isEarlierView)
-    {
-        [self checkOrientation];
     }
 }
 
