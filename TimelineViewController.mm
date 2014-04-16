@@ -974,7 +974,7 @@
                     if (self.timelineVCDelegate != nil)
                     {
                         [self.timelineVCDelegate stopStreamToPlayback];
-                        self.timelineVCDelegate = nil;
+                        //self.timelineVCDelegate = nil;
                     }
                     
                     EventInfo *eventInfoItem = [[EventInfo alloc] init];

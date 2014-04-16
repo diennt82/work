@@ -1235,9 +1235,10 @@ double _ticks = 0;
 
 - (void)stopStreamToPlayback
 {
-    NSLog(@"H264VC - stopStreamToPlayback - _wantToShowTimeLine: %d", _wantToShowTimeLine);
+    NSLog(@"H264VC - stopStreamToPlayback - currentMediaStatus: %d", _currentMediaStatus);
     self.isWentToPlayback = TRUE;
     self.h264StreamerIsInStopped = TRUE;
+    self.selectedChannel.stream_url = nil;
     [self stopPeriodicBeep];
     [self stopPeriodicPopup];
     
@@ -1677,6 +1678,12 @@ double _ticks = 0;
         return;
     }
     
+    if (_isWentToPlayback)
+    {
+        NSLog(@"H264VC - startStream --> break to Playback");
+        return;
+    }
+    
     while (h264Streamer != NULL)
     {
         if (userWantToCancel== TRUE)
@@ -1692,7 +1699,6 @@ double _ticks = 0;
     
     h264StreamerListener = new H264PlayerListener(self);
     h264Streamer->setListener(h264StreamerListener);
-    
     
 #if 1
     [self performSelectorInBackground:@selector(startStream_bg) withObject:nil];
@@ -1743,6 +1749,7 @@ double _ticks = 0;
         {
             break;
         }
+        
         status = h264Streamer->setDataSource([url UTF8String]);
         
         if (status != NO_ERROR) // NOT OK
@@ -4041,8 +4048,10 @@ double _ticks = 0;
 //            [self.activityIndicator stopAnimating];
             _isShowCustomIndicator = NO;
         }
-        
-        h264Streamer->videoSizeChanged();
+        if (_currentMediaStatus != 0)
+        {
+            h264Streamer->videoSizeChanged();
+        }
     }
     [self setupPtt];
     [self applyFont];
@@ -4863,6 +4872,7 @@ double _ticks = 0;
     
     //alway show custom indicator, when view appear
     _isShowCustomIndicator = YES;
+    self.currentMediaStatus = 0;
     
     if (!_isWentToPlayback) // this property get TRUE if app went to PlaybackVC
     {
