@@ -108,6 +108,8 @@
 @property (nonatomic) BOOL remoteViewTimeout;
 @property (nonatomic) BOOL disconnectAlert;
 @property (nonatomic) BOOL returnFromPlayback;
+@property (nonatomic) BOOL shouldUpdateHorizeMenu;
+@property (nonatomic) BOOL isInLocal;
 //@property (nonatomic)
 
 - (void)centerScrollViewContents;
@@ -209,8 +211,13 @@ double _ticks = 0;
 #endif
     _sharedCamConnectedTo = [[NSString alloc] init];
     self.cameraModel = [self.selectedChannel.profile getModel];
+    
+    /*
+     * Move dow SetupCamera temporarily. Need to update here!
+     */
+    
     //[self initHorizeMenu: _cameraModel];
-    [self performSelectorInBackground:@selector(initHorizeMenu:) withObject:_cameraModel];
+    //[self performSelectorInBackground:@selector(initHorizeMenu:) withObject:_cameraModel];
 
     //set text name for camera name
     [self.ib_lbCameraName setText:self.selectedChannel.profile.name];
@@ -1556,6 +1563,18 @@ double _ticks = 0;
 
 - (void)setupCamera
 {
+    self.isInLocal = self.selectedChannel.profile.isInLocal;
+    
+    /*
+     * Check to init HorizeMenu once
+     */
+    
+    if (_shouldUpdateHorizeMenu)
+    {
+        self.shouldUpdateHorizeMenu = FALSE;
+        [self initHorizeMenu:_cameraModel];
+    }
+    
     [self createMonvementControlTimer];
     
     _isShowCustomIndicator = YES;
@@ -1594,6 +1613,11 @@ double _ticks = 0;
     else if (self.selectedChannel.profile.minuteSinceLastComm <= 5)
     {
         NSLog(@"H264VC - setupCamera - created a remote streamer - {enable_stun}: %@", [userDefaults objectForKey:@"enable_stun"]);
+        
+        if (CUE_RELEASE_FLAG)
+        {
+            // Need update horizeMenu: hide PTT
+        }
         
         // This value is setup on Account view
         if([userDefaults boolForKey:@"enable_stun"] == FALSE)
@@ -4511,13 +4535,29 @@ double _ticks = 0;
     }
     else if ([_cameraModel isEqualToString:CP_MODEL_CONCURRENT])
     {
-        self.itemImages = [NSMutableArray arrayWithObjects:@"video_action_mic.png", @"video_action_video.png", @"video_action_music.png", @"video_action_temp.png", nil];
-        self.itemSelectedImages = [NSMutableArray arrayWithObjects:@"video_action_mic_pressed.png", @"video_action_video_pressed.png", @"video_action_music_pressed.png", @"video_action_temp_pressed.png", nil];
+        if (_isInLocal)
+        {
+            self.itemImages = [NSMutableArray arrayWithObjects:@"video_action_mic.png", @"video_action_video.png", @"video_action_music.png", @"video_action_temp.png", nil];
+            self.itemSelectedImages = [NSMutableArray arrayWithObjects:@"video_action_mic_pressed.png", @"video_action_video_pressed.png", @"video_action_music_pressed.png", @"video_action_temp_pressed.png", nil];
+        }
+        else
+        {
+            self.itemImages = [NSMutableArray arrayWithObjects:@"video_action_video.png", @"video_action_music.png", @"video_action_temp.png", nil];
+            self.itemSelectedImages = [NSMutableArray arrayWithObjects:@"video_action_video_pressed.png", @"video_action_music_pressed.png", @"video_action_temp_pressed.png", nil];
+        }
     }
     else //if ([_cameraModel isEqualToString:CP_MODEL_BLE])
     {
-        self.itemImages = [NSMutableArray arrayWithObjects:@"video_action_pan.png", @"video_action_mic.png", @"video_action_video.png", @"video_action_music.png", @"video_action_temp.png", nil];
-        self.itemSelectedImages = [NSMutableArray arrayWithObjects:@"video_action_pan_pressed.png", @"video_action_mic_pressed.png", @"video_action_video_pressed.png", @"video_action_music_pressed.png", @"video_action_temp_pressed.png", nil];
+        if (_isInLocal)
+        {
+            self.itemImages = [NSMutableArray arrayWithObjects:@"video_action_pan.png", @"video_action_mic.png", @"video_action_video.png", @"video_action_music.png", @"video_action_temp.png", nil];
+            self.itemSelectedImages = [NSMutableArray arrayWithObjects:@"video_action_pan_pressed.png", @"video_action_mic_pressed.png", @"video_action_video_pressed.png", @"video_action_music_pressed.png", @"video_action_temp_pressed.png", nil];
+        }
+        else
+        {
+            self.itemImages = [NSMutableArray arrayWithObjects:@"video_action_pan.png", @"video_action_video.png", @"video_action_music.png", @"video_action_temp.png", nil];
+            self.itemSelectedImages = [NSMutableArray arrayWithObjects:@"video_action_pan_pressed.png", @"video_action_video_pressed.png", @"video_action_music_pressed.png", @"video_action_temp_pressed.png", nil];
+        }
     }
     
     //[self.horizMenu reloadData:NO];
@@ -4589,7 +4629,8 @@ double _ticks = 0;
             {
                 //do nothing
             }
-        } else
+        }
+        else
         {
             switch (index)
             {
@@ -4617,60 +4658,114 @@ double _ticks = 0;
     }
     else if ([_cameraModel isEqualToString:CP_MODEL_CONCURRENT])
     {
-        switch (index)
+        if (_isInLocal)
         {
-            case 0:
-                self.selectedItemMenu = INDEX_MICRO;
-                break;
-                
-            case 1:
-                self.selectedItemMenu = INDEX_RECORDING;
-                break;
-                
-            case 2:
-                self.selectedItemMenu = INDEX_MELODY;
-                [self melodyTouchAction:nil];
-                break;
-                
-            case 3:
-                self.selectedItemMenu = INDEX_TEMP;
-                break;
-                
-            default:
-                break;
+            switch (index)
+            {
+                case 0:
+                    self.selectedItemMenu = INDEX_MICRO;
+                    break;
+                    
+                case 1:
+                    self.selectedItemMenu = INDEX_RECORDING;
+                    break;
+                    
+                case 2:
+                    self.selectedItemMenu = INDEX_MELODY;
+                    [self melodyTouchAction:nil];
+                    break;
+                    
+                case 3:
+                    self.selectedItemMenu = INDEX_TEMP;
+                    break;
+                    
+                default:
+                    break;
+            }
+        }
+        else
+        {
+            switch (index)
+            {
+                case 0:
+                    self.selectedItemMenu = INDEX_RECORDING;
+                    break;
+                    
+                case 1:
+                    self.selectedItemMenu = INDEX_MELODY;
+                    [self melodyTouchAction:nil];
+                    break;
+                    
+                case 2:
+                    self.selectedItemMenu = INDEX_TEMP;
+                    break;
+                    
+                default:
+                    break;
+            }
         }
     }
     else// if ([_cameraModel isEqualToString:CP_MODEL_BLE])
     {
-        switch (index)
+        if (_isInLocal)
         {
-            case INDEX_PAN_TILT:
-                self.selectedItemMenu = INDEX_PAN_TILT;
-                break;
-                
-            case INDEX_MICRO:
-                self.selectedItemMenu = INDEX_MICRO;
-                 [self recordingPressAction:nil];
-                break;
-                
-            case INDEX_RECORDING:
-                self.selectedItemMenu = INDEX_RECORDING;
-                break;
-                
-            case INDEX_MELODY:
-                self.selectedItemMenu = INDEX_MELODY;
-                [self melodyTouchAction:nil];
-                break;
-                
-            case INDEX_TEMP:
-                self.selectedItemMenu = INDEX_TEMP;
-                break;
-                
-            default:
-                NSLog(@"Action out of bound");
-                break;
+            switch (index)
+            {
+                case INDEX_PAN_TILT:
+                    self.selectedItemMenu = INDEX_PAN_TILT;
+                    break;
+                    
+                case INDEX_MICRO:
+                    self.selectedItemMenu = INDEX_MICRO;
+                    [self recordingPressAction:nil];
+                    break;
+                    
+                case INDEX_RECORDING:
+                    self.selectedItemMenu = INDEX_RECORDING;
+                    break;
+                    
+                case INDEX_MELODY:
+                    self.selectedItemMenu = INDEX_MELODY;
+                    [self melodyTouchAction:nil];
+                    break;
+                    
+                case INDEX_TEMP:
+                    self.selectedItemMenu = INDEX_TEMP;
+                    break;
+                    
+                default:
+                    NSLog(@"Action out of bound");
+                    break;
+            }
+        }
+        else
+        {
+            switch (index)
+            {
+                case 0:
+                    self.selectedItemMenu = INDEX_PAN_TILT;
+                    break;
+  
+                case 1:
+                    self.selectedItemMenu = INDEX_RECORDING;
+                    break;
+                    
+                case 2:
+                    self.selectedItemMenu = INDEX_MELODY;
+                    [self melodyTouchAction:nil];
+                    break;
+                    
+                case 3:
+                    self.selectedItemMenu = INDEX_TEMP;
+                    break;
+                    
+                default:
+                    NSLog(@"Action out of bound");
+                    break;
+            }
         }
     }
+    
     [self hideTimelineView];
     [self updateBottomView];
     [self applyFont];
@@ -4892,6 +4987,7 @@ double _ticks = 0;
     //alway show custom indicator, when view appear
     _isShowCustomIndicator = YES;
     self.currentMediaStatus = 0;
+    self.shouldUpdateHorizeMenu = YES;
     
     if (self.returnFromPlayback== FALSE)
     {
