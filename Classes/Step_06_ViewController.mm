@@ -588,7 +588,7 @@
     NSString * camera_mac= nil;
     NSString *stringUDID = @"";
     
-#ifdef CONCURRENT_SETUP
+
     stringUDID = [[HttpCom instance].comWithDevice sendCommandAndBlock:GET_UDID
                                                            withTimeout:5.0];
     //get_udid: 01008344334C32B0A0VFFRBSVA
@@ -607,9 +607,6 @@
         NSLog(@"Error - Received UDID wrong format - UDID: %@", stringUDID);
     }
     
-#else
-    camera_mac = [CameraPassword fetchBSSIDInfo];
-#endif
     
     self.deviceConf.ssid = self.ssid;
     

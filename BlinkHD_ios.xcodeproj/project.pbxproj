@@ -87,6 +87,7 @@
 		38E3C85C1694033500A13A70 /* AlertPrompt.m in Sources */ = {isa = PBXBuildFile; fileRef = 38E3C85B1694033500A13A70 /* AlertPrompt.m */; };
 		8408F1811833222A00B00188 /* MonitorCommunication.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8408F1801833222A00B00188 /* MonitorCommunication.framework */; };
 		841D567B1834C1E600ACE7A7 /* streamqvga.sdp in Resources */ = {isa = PBXBuildFile; fileRef = 841D567A1834C1E600ACE7A7 /* streamqvga.sdp */; };
+		84B2EABB18FFBFBB00763F06 /* UIDeviceHardware.m in Sources */ = {isa = PBXBuildFile; fileRef = 84B2EABA18FFBFBB00763F06 /* UIDeviceHardware.m */; };
 		84DEA2BB17E42E3F00567836 /* NotificationViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 84DEA2B917E42E3F00567836 /* NotificationViewController.mm */; };
 		84DEA2BC17E42E3F00567836 /* NotificationViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 84DEA2BA17E42E3F00567836 /* NotificationViewController.xib */; };
 		84E9D1CB18B728A000468918 /* libpj-arm-apple-darwin9.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 84E9D1C818B728A000468918 /* libpj-arm-apple-darwin9.a */; };
@@ -875,6 +876,8 @@
 		38E3C85B1694033500A13A70 /* AlertPrompt.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AlertPrompt.m; sourceTree = "<group>"; };
 		8408F1801833222A00B00188 /* MonitorCommunication.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MonitorCommunication.framework; path = "../ios-frameworks/MonitorCommunication.framework"; sourceTree = "<group>"; };
 		841D567A1834C1E600ACE7A7 /* streamqvga.sdp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = streamqvga.sdp; sourceTree = "<group>"; };
+		84B2EAB918FFBFBB00763F06 /* UIDeviceHardware.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIDeviceHardware.h; sourceTree = "<group>"; };
+		84B2EABA18FFBFBB00763F06 /* UIDeviceHardware.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIDeviceHardware.m; sourceTree = "<group>"; };
 		84DEA2B817E42E3F00567836 /* NotificationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NotificationViewController.h; sourceTree = "<group>"; };
 		84DEA2B917E42E3F00567836 /* NotificationViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = NotificationViewController.mm; sourceTree = "<group>"; };
 		84DEA2BA17E42E3F00567836 /* NotificationViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = NotificationViewController.xib; sourceTree = "<group>"; };
@@ -2069,6 +2072,8 @@
 		080E96DDFE201D6D7F000001 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				84B2EAB918FFBFBB00763F06 /* UIDeviceHardware.h */,
+				84B2EABA18FFBFBB00763F06 /* UIDeviceHardware.m */,
 				A1382C9F18D6D210006D99A2 /* CustomTabBarController */,
 				8B977C9B18C70BB300A61115 /* ProgressViewCustom */,
 				8B97A3BD18BEE5E8008A38E1 /* UIBarButtonAddition */,
@@ -4493,6 +4498,7 @@
 				8B977C9E18C70BDA00A61115 /* HubbleProgressView.m in Sources */,
 				84F27EC118AE10750000CA7A /* UARTPeripheral.m in Sources */,
 				A1AC859518913014002A8CCD /* UIColor+Hubble.m in Sources */,
+				84B2EABB18FFBFBB00763F06 /* UIDeviceHardware.m in Sources */,
 				38A478FA15C12914008682FE /* Step_08_ViewController.mm in Sources */,
 				A1ABF1A3187537170014FCB4 /* BLEConnectionManager.m in Sources */,
 				8B977B6A18C7025200A61115 /* BLEConnectionCell.m in Sources */,
@@ -5262,7 +5268,7 @@
 					"\"$(SRCROOT)/../ios-frameworks/GoogleAnalyticsLibrary\"",
 				);
 				INFOPLIST_FILE = "BlinkHD_ios-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(SRCROOT)",
 					"$(SRCROOT)/../ios-frameworks/H264Player.lib",
@@ -5285,7 +5291,7 @@
 				);
 				OTHER_LDFLAGS = "-lz";
 				PRODUCT_NAME = HubbleHome;
-				PROVISIONING_PROFILE = "89C8FA80-2166-49D3-9FE5-51D23FB7F02A";
+				PROVISIONING_PROFILE = "D8E2E000-CA68-4E43-AB21-A4786B9DB47D";
 				SDKROOT = iphoneos7.0;
 				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/../ios-frameworks/pjsip/arm/include/ $(SRCROOT)/../ios-frameworks/pjsip/arm/include/pj/ $(SRCROOT)/../ios-frameworks/pjsip/arm/include/pjnath/";
 				VALID_ARCHS = "armv6 armv7";
@@ -5315,7 +5321,7 @@
 					"\"$(SRCROOT)/../ios-frameworks/GoogleAnalyticsLibrary\"",
 				);
 				INFOPLIST_FILE = "BlinkHD_ios-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)",
@@ -5335,7 +5341,7 @@
 				);
 				OTHER_LDFLAGS = "-lz";
 				PRODUCT_NAME = HubbleHome;
-				PROVISIONING_PROFILE = "89C8FA80-2166-49D3-9FE5-51D23FB7F02A";
+				PROVISIONING_PROFILE = "D8E2E000-CA68-4E43-AB21-A4786B9DB47D";
 				SDKROOT = iphoneos7.0;
 				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/../ios-frameworks/pjsip/arm/include/ $(SRCROOT)/../ios-frameworks/pjsip/arm/include/pj/ $(SRCROOT)/../ios-frameworks/pjsip/arm/include/pjnath/";
 				VALIDATE_PRODUCT = YES;
@@ -5389,7 +5395,7 @@
 					"\"$(SRCROOT)/../ios-frameworks/GoogleAnalyticsLibrary\"",
 				);
 				INFOPLIST_FILE = "BlinkHD_ios-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(SRCROOT)",
 					"$(SRCROOT)/../ios-frameworks/H264Player.lib",
@@ -5408,7 +5414,7 @@
 				);
 				OTHER_LDFLAGS = "-lz";
 				PRODUCT_NAME = HubbleHome;
-				PROVISIONING_PROFILE = "89C8FA80-2166-49D3-9FE5-51D23FB7F02A";
+				PROVISIONING_PROFILE = "D8E2E000-CA68-4E43-AB21-A4786B9DB47D";
 				RAMEWORK_SEARCH_PATHS = "$(inherited) \"$(SRCROOT)\"";
 				SDKROOT = iphoneos;
 				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/../ios-frameworks/pjsip/arm/include/ $(SRCROOT)/../ios-frameworks/pjsip/arm/include/pj/ $(SRCROOT)/../ios-frameworks/pjsip/arm/include/pjnath/";
