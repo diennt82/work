@@ -27,6 +27,11 @@
 @property (nonatomic, retain) NSMutableArray *playlists;
 @property (nonatomic, retain) NSString *stringIntelligentMessage;
 @property (nonatomic, retain) NSString *stringCurrentDate;
+@property (nonatomic, retain) NSDate* currentDate;
+@property (nonatomic, retain) NSString *alertsString;
+@property (nonatomic, retain) BMS_JSON_Communication *jsonComm;
+@property (nonatomic) NSInteger eventPage;
+@property (nonatomic) BOOL shouldLoadMore;
 
 @property (nonatomic) BOOL isEventAlready;
 @property (nonatomic) BOOL isLoading;
@@ -86,6 +91,7 @@
         [_timerRefreshData invalidate];
     }
     _timerRefreshData = nil;
+    [_jsonComm release];
     [super dealloc];
 }
 
@@ -148,36 +154,40 @@
 
 - (void)getEventsList_bg: (CamChannel *)camChannel
 {
+    self.eventPage = 1;
+    self.shouldLoadMore = TRUE;
+    
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     NSString *apiKey = [userDefaults objectForKey:@"PortalApiKey"];
     
-    //NSString * event_code = [NSString stringWithFormat:@"0%@_%@", self.alertType, self.alertVal];
+    if (_jsonComm == nil)
+    {
+        self.jsonComm = [[BMS_JSON_Communication alloc] initWithObject:self
+                                                              Selector:nil
+                                                          FailSelector:nil
+                                                             ServerErr:nil];
+    }
     
-    BMS_JSON_Communication *jsonComm = [[BMS_JSON_Communication alloc] initWithObject:self
-                                                                             Selector:nil
-                                                                         FailSelector:nil
-                                                                            ServerErr:nil];
-    
-    NSDate* currentDate = [NSDate date];
+    self.currentDate = [NSDate date];
     
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-    
     // Set the dateFormatter format
+    [dateFormatter setTimeZone:[NSTimeZone localTimeZone]];
     
     if (_is12hr)
     {
-        dateFormatter.dateFormat = @"HH:mm a";
+        dateFormatter.dateFormat = @"hh:mm a";
     }
     else
     {
         dateFormatter.dateFormat = @"HH:mm";
     }
-    self.stringCurrentDate = [dateFormatter stringFromDate:currentDate];
+    self.stringCurrentDate = [dateFormatter stringFromDate:_currentDate];
     
     // Get the date time in NSString
     [dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
     [dateFormatter setTimeZone:[NSTimeZone timeZoneWithName:@"UTC"]];
-    NSString *dateInStringFormated = [dateFormatter stringFromDate:currentDate];
+    NSString *dateInStringFormated = [dateFormatter stringFromDate:_currentDate];
     NSLog(@"%@, %@", dateInStringFormated, _stringCurrentDate);
     
     [dateFormatter release];
@@ -185,17 +195,16 @@
     dateInStringFormated = [self urlEncodeUsingEncoding:NSUTF8StringEncoding forString:dateInStringFormated];
     
     NSString *alertsString = @"1,2,3,4";
-    alertsString = [self urlEncodeUsingEncoding:NSUTF8StringEncoding forString:alertsString];
+    self.alertsString = [self urlEncodeUsingEncoding:NSUTF8StringEncoding forString:alertsString];
     
-    NSDictionary *responseDict = [jsonComm getListOfEventsBlockedWithRegisterId:camChannel.profile.registrationID
+    NSDictionary *responseDict = [_jsonComm getListOfEventsBlockedWithRegisterId:camChannel.profile.registrationID
                                                                 beforeStartTime:dateInStringFormated//@"2013-12-28 20:10:18"
                                                                       eventCode:nil//event_code // temp
-                                                                         alerts:alertsString
+                                                                         alerts:_alertsString
                                                                            page:nil
                                                                          offset:nil
                                                                            size:nil
                                                                          apiKey:apiKey];
-    [jsonComm release];
     
     if (responseDict != nil)
     {
@@ -230,7 +239,7 @@
                     NSDate *eventDate = [dateFormatter dateFromString:eventInfo.time_stamp]; //2013-12-31 07:38:35 +0000
                     [dateFormatter release];
                     
-                    NSTimeInterval diff = [currentDate timeIntervalSinceDate:eventDate];
+                    NSTimeInterval diff = [_currentDate timeIntervalSinceDate:eventDate];
                     
                     if (diff / 60 <= 20)
                     {
@@ -266,56 +275,7 @@
                     [self.clipsInEachEvent addObject:clipsInEvent];
                 }
                 
-                if (numberOfVOX >= 4)
-                {
-                    if (numberOfMovement >= 4)
-                    {
-                        self.stringIntelligentMessage = @"There has been a lot of noise/movement";
-                    }
-                    else if(numberOfMovement >= 2)
-                    {
-                        self.stringIntelligentMessage = @"There has been a lot of noise and some movement";
-                    }
-                    else if(numberOfMovement == 1)
-                    {
-                        self.stringIntelligentMessage = @"There has been a lot of noise and little movement";
-                    }
-                    else
-                    {
-                        self.stringIntelligentMessage = @"There has been a lot of noise";
-                    }
-                }
-                else// if (numberOfVOX >= 0)
-                {
-                    if (numberOfMovement >= 4)
-                    {
-                        self.stringIntelligentMessage = @"There has been a lot of movement";
-                    }
-                    else if(numberOfMovement >= 2)
-                    {
-                        self.stringIntelligentMessage = @"There has been some movement";
-                    }
-                    else if(numberOfMovement == 1)
-                    {
-                        self.stringIntelligentMessage = @"There has been a little movement";
-                    }
-                    else
-                    {
-                        if (numberOfVOX >= 2)
-                        {
-                            self.stringIntelligentMessage = @"There has been some noise";
-                        }
-                        else if (numberOfVOX >= 1)
-                        {
-                            self.stringIntelligentMessage = @"There has been a little noise";
-                        }
-                        else
-                        {
-                            self.stringIntelligentMessage = @"All is calm";
-                        }
-                    }
-                }
-                
+                [self updateIntelligentMessageWithNumberOfVOX:numberOfVOX numberOfMovement:numberOfMovement];
             }
             else
             {
@@ -325,8 +285,7 @@
             
             NSLog(@"Number of event: %d", events.count);
             
-            if (self.camChannel.profile.isInLocal == FALSE &&
-                self.camChannel.profile.minuteSinceLastComm > 5)
+            if ([self.camChannel.profile isNotAvailable])
             {
                 self.stringIntelligentMessage = @"Monitor is offline";
                 self.stringCurrentDate = @"";
@@ -386,9 +345,165 @@
 	return newImage;
 }
 
-- (void)reloadTableView
+- (void)updateIntelligentMessageWithNumberOfVOX:(NSInteger)numberOfVOX numberOfMovement:(NSInteger)numberOfMovement
 {
+    if (numberOfVOX >= 4)
+    {
+        if (numberOfMovement >= 4)
+        {
+            self.stringIntelligentMessage = @"There has been a lot of noise/movement";
+        }
+        else if(numberOfMovement >= 2)
+        {
+            self.stringIntelligentMessage = @"There has been a lot of noise and some movement";
+        }
+        else if(numberOfMovement == 1)
+        {
+            self.stringIntelligentMessage = @"There has been a lot of noise and little movement";
+        }
+        else
+        {
+            self.stringIntelligentMessage = @"There has been a lot of noise";
+        }
+    }
+    else// if (numberOfVOX >= 0)
+    {
+        if (numberOfMovement >= 4)
+        {
+            self.stringIntelligentMessage = @"There has been a lot of movement";
+        }
+        else if(numberOfMovement >= 2)
+        {
+            self.stringIntelligentMessage = @"There has been some movement";
+        }
+        else if(numberOfMovement == 1)
+        {
+            self.stringIntelligentMessage = @"There has been a little movement";
+        }
+        else
+        {
+            if (numberOfVOX >= 2)
+            {
+                self.stringIntelligentMessage = @"There has been some noise";
+            }
+            else if (numberOfVOX >= 1)
+            {
+                self.stringIntelligentMessage = @"There has been a little noise";
+            }
+            else
+            {
+                self.stringIntelligentMessage = @"All is calm";
+            }
+        }
+    }
+}
+
+- (void)loadMoreEvent_bg
+{
+    self.eventPage++;
+    BOOL shouldUpdateTableView = FALSE;
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    NSString *apiKey = [userDefaults objectForKey:@"PortalApiKey"];
     
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    // Get the date time in NSString
+    [dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+    [dateFormatter setTimeZone:[NSTimeZone timeZoneWithName:@"UTC"]];
+    
+    NSString *dateInStringFormated = [dateFormatter stringFromDate:_currentDate];
+    
+    [dateFormatter release];
+    
+    dateInStringFormated = [self urlEncodeUsingEncoding:NSUTF8StringEncoding forString:dateInStringFormated];
+    
+    if (_jsonComm == nil)
+    {
+        self.jsonComm = [[BMS_JSON_Communication alloc] initWithObject:self
+                                                              Selector:nil
+                                                          FailSelector:nil
+                                                             ServerErr:nil];
+    }
+    
+    NSDictionary *responseDict = [_jsonComm getListOfEventsBlockedWithRegisterId:_camChannel.profile.registrationID
+                                                                beforeStartTime:dateInStringFormated//@"2013-12-28 20:10:18"
+                                                                      eventCode:nil//event_code // temp
+                                                                         alerts:_alertsString
+                                                                            page:[NSString stringWithFormat:@"%d", _eventPage]
+                                                                         offset:nil
+                                                                           size:nil
+                                                                         apiKey:apiKey];
+    if (responseDict)
+    {
+        NSArray *events = [[responseDict objectForKey:@"data"] objectForKey:@"events"];
+
+        if (events != nil &&
+            events.count > 0)
+        {
+            for (NSDictionary *event in events)
+            {
+                EventInfo *eventInfo = [[EventInfo alloc] init];
+                eventInfo.alert_name = [event objectForKey:@"alert_name"];
+                eventInfo.value      = [event objectForKey:@"value"];
+                eventInfo.time_stamp = [event objectForKey:@"time_stamp"];
+                eventInfo.alert      = [[event objectForKey:@"alert"] integerValue];
+                
+//                NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+//                [dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss'Z'"];
+//                [dateFormatter setTimeZone:[NSTimeZone timeZoneForSecondsFromGMT:0]];
+//                NSDate *eventDate = [dateFormatter dateFromString:eventInfo.time_stamp]; //2013-12-31 07:38:35 +0000
+//                [dateFormatter release];
+                
+                //NSTimeInterval diff = [_currentDate timeIntervalSinceDate:eventDate];
+                
+                //if (diff / (60 * 60) <= 24) // hour
+                {
+                    NSArray *clipsInEvent = [event objectForKey:@"data"];
+                    
+                    if (![clipsInEvent isEqual:[NSNull null]])
+                    {
+                        ClipInfo *clipInfo = [[ClipInfo alloc] init];
+                        clipInfo.urlImage = [[clipsInEvent objectAtIndex:0] objectForKey:@"image"];
+                        clipInfo.urlFile = [[clipsInEvent objectAtIndex:0] objectForKey:@"file"];
+                        
+                        eventInfo.clipInfo = clipInfo;
+                        [clipInfo release];
+                    }
+                    else
+                    {
+                        NSLog(@"Event has no data");
+                    }
+                    
+                    [self.events addObject:eventInfo];
+                    shouldUpdateTableView = TRUE;
+                    [eventInfo release];
+                    
+                    [self.clipsInEachEvent addObject:clipsInEvent];
+                }
+//                else
+//                {
+//                    self.shouldLoadMore = FALSE;
+//                }
+            }
+        }
+        else
+        {
+            self.shouldLoadMore = FALSE;
+        }
+    }
+    
+    self.isLoading = FALSE;
+    
+    if (shouldUpdateTableView)
+    {
+        [self.tableView reloadData];
+        //[self.tableView setContentOffset:CGPointMake(0, CGFLOAT_MAX)];
+    }
+    else
+    {
+        self.eventPage--;
+    }
+    
+    NSLog(@"TimelineVC - loadMoreEvent_bg: -eventPage: %d, - shouldUpdateTableview: %d, shouldLoadMore: %d", _eventPage, shouldUpdateTableView, _shouldLoadMore);
 }
 
 #pragma mark - Scroll view delegate
@@ -398,6 +513,25 @@
     if (scrollView.contentOffset.y < -64.0f)
     {
         [self refreshEvents:nil];
+    }
+}
+
+- (void)scrollViewDidScroll:(UIScrollView *)aScrollView
+{
+    CGPoint offset = aScrollView.contentOffset;
+    CGRect bounds = aScrollView.bounds;
+    CGSize size = aScrollView.contentSize;
+    UIEdgeInsets inset = aScrollView.contentInset;
+    float y = offset.y + bounds.size.height - inset.bottom;
+    float h = size.height;
+    
+    float reload_distance = -64;
+    
+    if(y > h + reload_distance && !_isLoading && _shouldLoadMore)
+    {
+        self.isLoading = TRUE;
+        NSLog(@"load more...");
+        [self performSelectorInBackground:@selector(loadMoreEvent_bg) withObject:nil];
     }
 }
 
@@ -470,42 +604,6 @@
 }
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-#if 0
-    if (isPhoneLandscapeMode)
-    {
-        if (_events != nil &&
-            _events.count > 0)
-        {
-            EventInfo *eventInfo = (EventInfo *)[_events objectAtIndex:indexPath.row];
-            
-            /*
-             * 1: Sound             -> 77
-             * 2: hi-temperature    -> 77
-             * 3: low-temperature   -> 77
-             * 4: Motion            -> 212
-             * button(save, upgrage)-> 60
-             * default              -> 44
-             */
-            if (eventInfo.alert == 4)
-            {
-                return 212;
-            }
-            else if (eventInfo.alert == 1 ||
-                     eventInfo.alert == 2 ||
-                     eventInfo.alert == 3)
-            {
-                return 77;
-            }
-            else
-            {
-                return 60;
-            }
-        }
-        
-        return 44;
-    }
-    else
-#endif
     {
         if (indexPath.section == 0)
         {
@@ -637,7 +735,6 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    
     if (_isEventAlready == FALSE)
     {
         static NSString *CellIdentifier = @"Cell";
@@ -751,7 +848,7 @@
         }
         else
         {
-            df_local.dateFormat = @"hh:mm";
+            df_local.dateFormat = @"HH:mm";
         }
         
         cell.eventTimeLabel.text = [df_local stringFromDate:eventDate];
