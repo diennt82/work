@@ -23,14 +23,6 @@
 }
 
 @property (retain, nonatomic) IBOutlet UIView *progressView;
-
 @property (nonatomic, retain) NSString * cameraMac, * cameraName;
 
-
-- (IBAction)handleButtonPress:(id)sender;
--(void) queryWifiList;
-
-
-//callback
--(void) setWifiResult:(NSArray *) wifiList;
 @end

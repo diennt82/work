@@ -32,9 +32,6 @@
 {
     [super viewDidLoad];
 	// Do any additional setup after loading the view.
-    
-    CGAffineTransform transform = CGAffineTransformMakeScale(1.0f, 4.0f);
-    [self.view viewWithTag:501].transform = transform;
     self.navigationItem.hidesBackButton = YES;
     
     UIImage *hubbleLogoBack = [UIImage imageNamed:@"Hubble_back_text"];
@@ -53,6 +50,12 @@
     self.tfCamName.text = self.cameraName;
 }
 
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [self.progressView removeFromSuperview];
+    [super viewWillDisappear:animated];
+}
+
 - (void)viewDidUnload
 {
     [super viewDidUnload];
@@ -66,24 +69,30 @@
     [self.navigationController popViewControllerAnimated:YES];
 }
 
-- (void)handleNextBtnTouchAction: (id)sender
+#pragma mark - Method
+
+- (void)moveToNextStep
 {
-    //show dialog processView
-    [self.view addSubview:self.progressView];
-    [self.view bringSubviewToFront:self.progressView];
-    [self.progressView setHidden:NO];
+    NSLog(@"Load step 5");
+    //Load the next xib
+    Step_05_ViewController *step05ViewController = nil;
     
-    NSString * cameraName_text = _tfCamName.text;
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+    {
+        step05ViewController =  [[Step_05_ViewController alloc]
+                                 initWithNibName:@"Step_05_ViewController_ipad" bundle:nil];
+    }
+    else
+    {
+        step05ViewController =  [[Step_05_ViewController alloc]
+                                 initWithNibName:@"Step_05_ViewController" bundle:nil];
+    }
+
+    [self.navigationController pushViewController:step05ViewController animated:NO];
     
-    [_tfCamName resignFirstResponder];
+    [step05ViewController release];
     
-    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-    [userDefaults setObject:cameraName_text forKey:@"CameraName"];
-    [userDefaults synchronize];
-    
-    /*20121129: phung skip authentication */
-    
-    [self queryWifiList];
+    self.btnContinue.enabled = YES;
 }
 
 #pragma mark - Text field delegate
@@ -189,7 +198,7 @@
         
         UIAlertView * alert = [[UIAlertView alloc] initWithTitle:title
                                                     message:msg
-                                                    delegate:self
+                                                    delegate:nil
                                                     cancelButtonTitle:ok
                                                     otherButtonTitles:nil];
         
@@ -209,7 +218,7 @@
             
             UIAlertView * alert = [[UIAlertView alloc] initWithTitle:title
                                                              message:msg
-                                                            delegate:self
+                                                            delegate:nil
                                                    cancelButtonTitle:ok
                                                    otherButtonTitles:nil];
             
@@ -230,10 +239,13 @@
         
         /*20121129: phung skip authentication */
         
-        [self performSelectorInBackground:@selector(queryWifiList) withObject:nil];
-
+        //[self performSelectorInBackground:@selector(queryWifiList) withObject:nil];
+        self.btnContinue.enabled = NO;
+        [self moveToNextStep];
     }
 }
+
+#if 0
 
 -(void) queryWifiList
 {
@@ -414,7 +426,7 @@
     [step05ViewController release];
 }
 
-
+#endif
 
 
 @end

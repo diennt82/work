@@ -135,7 +135,7 @@
             <rect key="frame" x="0.0" y="0.0" width="768" height="1024"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <progressView opaque="NO" tag="501" contentMode="scaleToFill" verticalHuggingPriority="750" progress="0.64999997615814209" progressImage="setup_progress_blue.png" trackImage="setup_progress_grey.png" id="B3s-0B-sIo">
+                <progressView opaque="NO" tag="501" contentMode="scaleToFill" verticalHuggingPriority="750" progress="0.64999997615814209" progressImage="setup_progress_blue.png" trackImage="setup_progress_grey.png" id="B3s-0B-sIo" customClass="HubbleProgressView">
                     <rect key="frame" x="-1" y="67" width="770" height="8"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                 </progressView>
@@ -156,7 +156,7 @@
             <rect key="frame" x="0.0" y="0.0" width="768" height="1024"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <progressView opaque="NO" tag="501" contentMode="scaleToFill" verticalHuggingPriority="750" progress="0.64999997615814209" progressImage="setup_progress_blue.png" trackImage="setup_progress_grey.png" id="3rt-zB-bZh">
+                <progressView opaque="NO" tag="501" contentMode="scaleToFill" verticalHuggingPriority="750" progress="0.64999997615814209" progressImage="setup_progress_blue.png" trackImage="setup_progress_grey.png" id="3rt-zB-bZh" customClass="HubbleProgressView">
                     <rect key="frame" x="-1" y="67" width="770" height="8"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                 </progressView>
@@ -184,7 +184,7 @@
             <rect key="frame" x="0.0" y="0.0" width="768" height="1024"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <subviews>
-                <progressView opaque="NO" tag="501" contentMode="scaleToFill" verticalHuggingPriority="750" progress="0.64999997615814209" progressImage="setup_progress_blue.png" trackImage="setup_progress_grey.png" id="erC-IX-Km4">
+                <progressView opaque="NO" tag="501" contentMode="scaleToFill" verticalHuggingPriority="750" progress="0.64999997615814209" progressImage="setup_progress_blue.png" trackImage="setup_progress_grey.png" id="erC-IX-Km4" customClass="HubbleProgressView">
                     <rect key="frame" x="-1" y="67" width="770" height="8"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                 </progressView>
@@ -267,7 +267,7 @@
             <rect key="frame" x="0.0" y="0.0" width="768" height="1004"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <subviews>
-                <progressView opaque="NO" tag="501" contentMode="scaleToFill" verticalHuggingPriority="750" progress="0.85000002384185791" progressImage="setup_progress_blue.png" trackImage="setup_progress_grey.png" id="oYo-rq-Y07">
+                <progressView opaque="NO" tag="501" contentMode="scaleToFill" verticalHuggingPriority="750" progress="0.85000002384185791" progressImage="setup_progress_blue.png" trackImage="setup_progress_grey.png" id="oYo-rq-Y07" customClass="HubbleProgressView">
                     <rect key="frame" x="-1" y="77" width="770" height="1"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                 </progressView>
@@ -296,7 +296,7 @@
             <rect key="frame" x="0.0" y="0.0" width="768" height="1024"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <progressView opaque="NO" tag="501" contentMode="scaleToFill" verticalHuggingPriority="750" progress="0.64999997615814209" progressImage="setup_progress_blue.png" trackImage="setup_progress_grey.png" id="0o0-3k-xle">
+                <progressView opaque="NO" tag="501" contentMode="scaleToFill" verticalHuggingPriority="750" progress="0.64999997615814209" progressImage="setup_progress_blue.png" trackImage="setup_progress_grey.png" id="0o0-3k-xle" customClass="HubbleProgressView">
                     <rect key="frame" x="-1" y="67" width="770" height="8"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                 </progressView>

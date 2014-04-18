@@ -71,9 +71,6 @@
                                                object: nil];
     
     [self.progressView setHidden:YES];
-    CGAffineTransform transform = CGAffineTransformMakeScale(1.0f, 4.0f);
-    [self.view viewWithTag:501].transform = transform;
-    [self.progressView viewWithTag:501].transform = transform;
     
     self.navigationItem.hidesBackButton = YES;
     
@@ -85,6 +82,18 @@
     [barBtnHubble setTintColor:[UIColor colorWithPatternImage:hubbleLogoBack]];
     
     self.navigationItem.leftBarButtonItem = barBtnHubble;
+    
+    UIBarButtonItem *nextButton =
+    [[UIBarButtonItem alloc] initWithTitle:NSLocalizedStringWithDefaultValue(@"Next",nil, [NSBundle mainBundle],
+                                                                             @"Next" , nil)
+     
+                                     style:UIBarButtonItemStylePlain
+                                    target:self
+                                    action:@selector(handleNextButton:)];
+    
+    self.navigationItem.rightBarButtonItem = nextButton;
+    self.navigationItem.rightBarButtonItem.enabled = NO;
+    [nextButton release];
     
     UIImageView *imageView = (UIImageView *)[_progressView viewWithTag:595];
     imageView.animationImages =[NSArray arrayWithObjects:
@@ -117,23 +126,14 @@
         _sec.text = self.security;
     }
     
-    
-    UIBarButtonItem *nextButton =
-    [[UIBarButtonItem alloc] initWithTitle:NSLocalizedStringWithDefaultValue(@"Next",nil, [NSBundle mainBundle],
-                                                                             @"Next" , nil)
-     
-                                     style:UIBarButtonItemStylePlain
-                                    target:self
-                                    action:@selector(handleNextButton:)];
-    self.navigationItem.rightBarButtonItem = nextButton;
-    self.navigationItem.rightBarButtonItem.enabled = NO;
-    [nextButton release];
-    
     self.tfSSID = (UITextField *)[self.ssidCell viewWithTag:202];
-    if (self.tfSSID.text.length > 0) {
+    
+    if (self.tfSSID.text.length > 0 && ([self.security isEqualToString:@"None"] || [self.security isEqualToString:@"open"]))
+    {
         self.navigationItem.rightBarButtonItem .enabled = YES;
         self.navigationItem.rightBarButtonItem.tintColor = [UIColor blueColor];
     }
+    
     self.tfPassword = (UITextField *)[self.passwordCell viewWithTag:200];
     self.tfConfirmPass = (UITextField *)[self.confPasswordCell viewWithTag:201];
     
@@ -158,6 +158,8 @@
         if ([self.deviceConf.ssid isEqualToString:self.ssid] &&
             ([self.security isEqualToString:@"wep"] || [self.security isEqualToString:@"wpa"]))
         {
+            self.navigationItem.rightBarButtonItem.enabled = YES;
+            self.navigationItem.rightBarButtonItem.tintColor = [UIColor blueColor];
             self.tfPassword.text = self.deviceConf.key;
             self.tfConfirmPass.text = self.deviceConf.key;
         }
@@ -174,7 +176,7 @@
 {
     [super viewDidUnload];
     // Release any retained subviews of the main view.
-    [self resetAllTimer];
+    //[self resetAllTimer];
 }
 
 -(void) viewWillAppear:(BOOL)animated
@@ -504,13 +506,7 @@
 -(void) handleNextButton:(id) sender
 {
     //create progressView for process verify network
-    [self.view addSubview:self.progressView];
     
-    UIImageView *imageView = (UIImageView *)[_progressView viewWithTag:595];
-    
-    [imageView startAnimating];
-    
-    [self.progressView setHidden:NO];
     //check if password is ok?
     UITextField * pass = (UITextField*)[self.passwordCell viewWithTag:200];
     UITextField * confpass = (UITextField*)[self.confPasswordCell viewWithTag:201];
@@ -548,6 +544,15 @@
     {
         //cont
         self.navigationItem.leftBarButtonItem.enabled = NO; // Disable go back
+
+        [self.view addSubview:self.progressView];
+        
+        UIImageView *imageView = (UIImageView *)[_progressView viewWithTag:595];
+        
+        [imageView startAnimating];
+        
+        [self.progressView setHidden:NO];
+        
         [self sendWifiInfoToCamera];
     }
     else
@@ -576,7 +581,15 @@
             //cont
             self.navigationItem.leftBarButtonItem.enabled = NO; // Disable go back
             self.password = [NSString stringWithString:[pass text]];
-            NSLog(@"password is : %@", self.password);
+            
+            [self.view addSubview:self.progressView];
+            
+            UIImageView *imageView = (UIImageView *)[_progressView viewWithTag:595];
+            
+            [imageView startAnimating];
+            
+            [self.progressView setHidden:NO];
+            
             [self sendWifiInfoToCamera ];
         }
     }

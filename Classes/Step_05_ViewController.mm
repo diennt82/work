@@ -8,13 +8,21 @@
 
 #import "Step_05_ViewController.h"
 #import "Step05Cell.h"
+#import "HttpCom.h"
+#import "Step_04_ViewController.h"
+
+#define ALERT_CONFIRM_TAG       555
+#define ALERT_RETRY_WIFI_TAG    559
 
 @interface Step_05_ViewController () <UIAlertViewDelegate>
 
 @property (retain, nonatomic) IBOutlet UIButton *btnContinue;
 @property (retain, nonatomic) IBOutlet UITableViewCell *cellOtherNetwork;
+@property (retain, nonatomic) IBOutlet UITableViewCell *cellRefresh;
+@property (retain, nonatomic) IBOutlet UIView *viewProgress;
 
 @property (retain, nonatomic) WifiEntry *selectedWifiEntry;
+@property (retain, nonatomic) WifiEntry *otherWiFi;
 @end
 
 @implementation Step_05_ViewController
@@ -35,20 +43,18 @@
 
 -(void) dealloc
 {
-
     [listOfWifi release];
     [_cellOtherNetwork release];
     [_btnContinue release];
+    [_cellRefresh release];
+    [_viewProgress release];
+    [_otherWiFi release];
     [super dealloc];
 }
 - (void)viewDidLoad
 {
     [super viewDidLoad];
 	// Do any additional setup after loading the view.
-#if 1
-    CGAffineTransform transform = CGAffineTransformMakeScale(1.0f, 4.0f);
-    [self.view viewWithTag:501].transform = transform;
-    
     self.navigationItem.hidesBackButton = YES;
     
     UIImage *hubbleLogoBack = [UIImage imageNamed:@"Hubble_back_text"];
@@ -63,36 +69,31 @@
     [self.btnContinue setBackgroundImage:[UIImage imageNamed:@"green_btn"] forState:UIControlStateNormal];
     [self.btnContinue setBackgroundImage:[UIImage imageNamed:@"green_btn_pressed"] forState:UIControlEventTouchDown];
     self.btnContinue.enabled = NO;
-#else
-    self.navigationItem.title = NSLocalizedStringWithDefaultValue(@"Configure_Camera",nil, [NSBundle mainBundle],
-                                                                  @"Configure Camera" , nil);
     
-    self.navigationItem.backBarButtonItem =
-    [[[UIBarButtonItem alloc] initWithTitle:NSLocalizedStringWithDefaultValue(@"Back",nil, [NSBundle mainBundle],
-                                                                              @"Back" , nil)
-                                      style:UIBarButtonItemStyleBordered
-                                     target:nil
-                                     action:nil] autorelease];
-#endif
-    
-    if (listOfWifi == nil )
-    {
-        NSLog(@"EMPTY LIST WIFI"); 
-    }
+    UIImageView *imageView = (UIImageView *)[_viewProgress viewWithTag:585];
+    imageView.animationImages = @[[UIImage imageNamed:@"loader_a"],
+                                  [UIImage imageNamed:@"loader_b"],
+                                  [UIImage imageNamed:@"loader_c"],
+                                  [UIImage imageNamed:@"loader_d"],
+                                  [UIImage imageNamed:@"loader_e"],
+                                  [UIImage imageNamed:@"loader_f"]];
+    imageView.animationRepeatCount = 0;
+    imageView.animationDuration = 1.5f;
+    [imageView startAnimating];
     
     //Create an entry for "Other.."
-    WifiEntry * other = [[WifiEntry alloc]initWithSSID:@"\"Other Network\""];
-    other.bssid = @"Other";
-    other.auth_mode = @"None"; 
-    other.signal_level = 0; 
-    other.noise_level = 0; 
-    other.quality = nil; 
-    other.encrypt_type = @"None"; 
+    self.otherWiFi = [[WifiEntry alloc]initWithSSID:@"\"Other Network\""];
+    _otherWiFi.bssid = @"Other";
+    _otherWiFi.auth_mode = @"None";
+    _otherWiFi.signal_level = 0;
+    _otherWiFi.noise_level = 0;
+    _otherWiFi.quality = nil;
+    _otherWiFi.encrypt_type = @"None";
     
-    [self.listOfWifi addObject:other]; 
-    [self filterCameraList];
+    [self.view addSubview:_viewProgress];
+    [self.view bringSubviewToFront:_viewProgress];
     
-    [other release];
+    [self performSelector:@selector(queryWifiList) withObject:nil afterDelay:0.001];
 }
 
 - (void)viewDidUnload
@@ -116,7 +117,6 @@
             [wifiList addObject:wifi];
             
         }
-        
     }
     
     self.listOfWifi = wifiList;
@@ -146,6 +146,8 @@
         [self showDialogToConfirm:homeWifi selectedWifi:wifiName];
     }
 }
+
+#pragma mark - Methods
 
 - (void)moveToNextStep
 {
@@ -187,19 +189,129 @@
                                                        delegate:self
                                               cancelButtonTitle:@"Cancel"
                                               otherButtonTitles:@"Continue", nil];
-    alertViewNotice.tag = 555;
+    alertViewNotice.tag = ALERT_CONFIRM_TAG;
     [alertViewNotice show];
     [alertViewNotice release];
+}
+
+-(void) queryWifiList
+{
+    NSLog(@"Step_05_VC - queryWifiList. Waiting...");
+    
+    NSData * router_list_raw;
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    NSString *fwVersion = [userDefaults stringForKey:FW_VERSION]; // 01.12.58
+    
+    BOOL newCmdFlag = TRUE;
+    
+    if ([fwVersion compare:FW_MILESTONE] >= NSOrderedSame) // fw >= FW_MILESTONE
+    {
+        router_list_raw = [[HttpCom instance].comWithDevice sendCommandAndBlock_raw:GET_ROUTER_LIST2
+                                                                        withTimeout:2*DEFAULT_TIME_OUT];
+    }
+    else
+    {
+        newCmdFlag = FALSE;
+        router_list_raw = [[HttpCom instance].comWithDevice sendCommandAndBlock_raw:GET_ROUTER_LIST
+                                                                        withTimeout:2*DEFAULT_TIME_OUT];
+    }
+    
+    if (router_list_raw != nil)
+    {
+        WifiListParser *routerListParser = [[[WifiListParser alloc]initWithNewCmdFlag:newCmdFlag] autorelease];
+        
+        [routerListParser parseData:router_list_raw
+                       whenDoneCall:@selector(setWifiResult:)
+                             target:self];
+    }
+    else
+    {
+        NSLog(@"GOT NULL wifi list from camera");
+        [self askForRetry];
+    }
+}
+
+- (void) askForRetry
+{
+    NSString * msg = NSLocalizedStringWithDefaultValue(@"Fail_to_communicate_with_camera",nil, [NSBundle mainBundle],
+                                                       @"Fail to communicate with camera. Retry?", nil);
+    
+    NSString * cancel = NSLocalizedStringWithDefaultValue(@"Cancel",nil, [NSBundle mainBundle],
+                                                          @"Cancel", nil);
+    NSString * retry = NSLocalizedStringWithDefaultValue(@"Retry",nil, [NSBundle mainBundle],
+                                                         @"Retry", nil);
+    UIAlertView *myAlert = [[UIAlertView alloc] initWithTitle:msg
+                                                      message:@""
+                                                     delegate:self
+                                            cancelButtonTitle:cancel
+                                            otherButtonTitles:retry,nil];
+    
+    myAlert.tag = ALERT_RETRY_WIFI_TAG;
+    [myAlert show];
+    [myAlert release];
 }
 
 #pragma mark - Alert view delegate
 
 - (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex  // after animation
 {
-    if (buttonIndex == 1) // Continue
+    if (alertView.tag == ALERT_RETRY_WIFI_TAG)
     {
-        [self moveToNextStep];
+        switch(buttonIndex) {
+            case 0:
+                //TODO: Go back to camera detection screen
+                [self.navigationController popViewControllerAnimated:YES];
+                break;
+                
+            case 1:
+            {
+                [self.view addSubview:_viewProgress];
+                [self.view bringSubviewToFront:_viewProgress];
+                
+                NSLog(@"OK button pressed");
+                //retry ..
+                 [self performSelectorInBackground:@selector(queryWifiList) withObject:nil];
+            }
+                break;
+                
+            default:
+                break;
+        }
     }
+    else if(alertView.tag == ALERT_CONFIRM_TAG)
+    {
+        if (buttonIndex == 1) // Continue
+        {
+            [self moveToNextStep];
+        }
+    }
+    else
+    {
+        NSLog(@"Step_05_VC - alertDismiss: %d", alertView.tag);
+    }
+}
+
+#pragma mark - WifiListParse delegate
+
+-(void) setWifiResult:(NSArray *) wifiList
+{
+    NSLog(@"GOT WIFI RESULT: numentries: %d", wifiList.count);
+    //hide progressView
+    [_viewProgress removeFromSuperview];
+
+    WifiEntry * entry;
+
+    for (int i = 0; i < wifiList.count; i++)
+    {
+        entry = [wifiList objectAtIndex:i];
+        NSLog(@"entry: %d, ssid_w_quote: %@, bssid: %@, auth_mode: %@, quality: %@", i, entry.ssid_w_quote, entry.bssid, entry.auth_mode, entry.quality);
+    }
+    
+    self.listOfWifi = [NSMutableArray arrayWithArray:wifiList];
+    
+    [self.listOfWifi addObject:_otherWiFi];
+    [self filterCameraList];
+    [mTableView reloadData];
 }
 
 #pragma mark -
@@ -207,172 +319,70 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    return 1;
+    return 2;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
+    if (section == 1)
+    {
+        return 1;
+    }
+    
     return listOfWifi.count;
 }
 
-//- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
-//{
-//    NSString *sectionName = @"Select the wifi connection that your camera can use";
-//
-//    return sectionName;
-//}
-
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-#if 1
-    if (indexPath.row < listOfWifi.count - 1)
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if (indexPath.section == 0)
     {
-        static NSString *CellIdentifier = @"Step05Cell";
-        Step05Cell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-        
-        NSArray *objects = [[NSBundle mainBundle] loadNibNamed:@"Step05Cell" owner:nil options:nil];
-        
-        for (id curObj in objects)
+        if (indexPath.row < listOfWifi.count - 1)
         {
-            if ([curObj isKindOfClass:[Step05Cell class]])
+            static NSString *CellIdentifier = @"Step05Cell";
+            Step05Cell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+            
+            NSArray *objects = [[NSBundle mainBundle] loadNibNamed:@"Step05Cell" owner:nil options:nil];
+            
+            for (id curObj in objects)
             {
-                cell = (Step05Cell *)curObj;
-                break;
+                if ([curObj isKindOfClass:[Step05Cell class]])
+                {
+                    cell = (Step05Cell *)curObj;
+                    break;
+                }
             }
+            
+            WifiEntry *entry = [listOfWifi objectAtIndex:indexPath.row];
+            cell.lblName.text = [entry.ssid_w_quote substringWithRange:NSMakeRange(1, entry.ssid_w_quote.length - 2)]; // Remove " & "
+            
+            return cell;
         }
-        
-        WifiEntry *entry = [listOfWifi objectAtIndex:indexPath.row];
-        cell.lblName.text = [entry.ssid_w_quote substringWithRange:NSMakeRange(1, entry.ssid_w_quote.length - 2)]; // Remove " & "
-        
-        return cell;
+        else
+        {
+            return _cellOtherNetwork;
+        }
     }
     else
     {
-        return _cellOtherNetwork;
+        return _cellRefresh;
     }
-    
-#else
-    
-#if 1
-    static NSString *CellIdentifier = @"Cell";
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-    if (cell == nil) {
-        cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
-    }
-    
-    // Configure the cell...
-    WifiEntry *entry = [listOfWifi objectAtIndex:indexPath.row];
-    cell.textLabel.text = entry.ssid_w_quote;
-    cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-    
-    return cell;
-#else
-    int tag = tableView.tag;
-    UITableViewCell *cell = nil;
-    static NSString *CellIdentifier = @"Cell";
-    if (tag == 11)
-    {
-        
-        
-        cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-        if (cell == nil) {
-            
-            if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
-            {
-                [[NSBundle mainBundle] loadNibNamed:@"Step_05_tableViewCell_ipad" owner:self options:nil];
-            }
-            else
-            {
-                [[NSBundle mainBundle] loadNibNamed:@"Step_05_tableViewCell" owner:self options:nil];
-            }
-            cell = self.cellView;
-            self.cellView = nil; 
-        }
-        [cell setBackgroundColor:[UIColor whiteColor]];
-        // Set up the cell...
-        WifiEntry *entry = [listOfWifi objectAtIndex:indexPath.row];
-        
-        UITextField * ssid = (UITextField *)[cell viewWithTag:200];
-        ssid.text = entry.ssid_w_quote;
-        ssid.backgroundColor = [UIColor clearColor];
-        
-        //NSLog(@"table cell : %f %f ", tableView.frame.size.width, tableView.frame.size.width);
-
-        ssid.frame = CGRectMake(0, 0, tableView.frame.size.width-20, 44);
-        
-         
-    }
-    
-    
-    return cell;
-#endif
-#endif
 }
 
 - (void)tableView: (UITableView *)tableView didSelectRowAtIndexPath: (NSIndexPath *)indexPath
 {
-#if 1
-    self.btnContinue.enabled = YES;
-    self.selectedWifiEntry = (WifiEntry *)[listOfWifi objectAtIndex:indexPath.row];
-#else
-    [tableView deselectRowAtIndexPath:[tableView indexPathForSelectedRow]
-                             animated:NO];
-
-     int tag = tableView.tag; 
-    if (tag == 11)
+    if (indexPath.section == 0)
     {
-        int idx=indexPath.row;
-
-        WifiEntry *entry = [listOfWifi objectAtIndex:idx];
-
-        //load step 06
-        NSLog(@"Load step 6"); 
-        //Load the next xib
-        Step_06_ViewController *step06ViewController = nil;
-        
-        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
-        {
-            
-            step06ViewController = [[Step_06_ViewController alloc]
-                                    initWithNibName:@"Step_06_ViewController_ipad" bundle:nil];
-                        
-        }
-        else
-        {
-            
-            step06ViewController = [[Step_06_ViewController alloc]
-                                    initWithNibName:@"Step_06_ViewController" bundle:nil];
-            
-            
-        }
-        
-
-        
-        
-        
-        NSRange noQoute = NSMakeRange(1, [entry.ssid_w_quote length]-2);
-        if ([[entry.ssid_w_quote substringWithRange:noQoute] isEqualToString:@"Other Network"])
-        {
-            step06ViewController.isOtherNetwork = TRUE;
-        }
-        else
-        {
-            step06ViewController.isOtherNetwork = FALSE;
-        }
-        step06ViewController.ssid = [entry.ssid_w_quote substringWithRange:noQoute];
-        step06ViewController.security = entry.auth_mode;
-
-        [self.navigationController pushViewController:step06ViewController animated:NO];
-
-        [step06ViewController release];
-
+        self.btnContinue.enabled = YES;
+        self.selectedWifiEntry = (WifiEntry *)[listOfWifi objectAtIndex:indexPath.row];
     }
-#endif
+    else
+    {
+        [self.view addSubview:_viewProgress];
+        [self.view bringSubviewToFront:_viewProgress];
+        
+        [self performSelectorInBackground:@selector(queryWifiList) withObject:nil];
+    }
 }
-#pragma mark -
 
--(void) handleButtonPressed:(id) sender
-{
-    
-}
 
 @end
