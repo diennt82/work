@@ -673,9 +673,11 @@
     NSMutableString *stringFromDate = [NSMutableString stringWithString:[formatter stringFromDate:now]];
     [stringFromDate insertString:@"." atIndex:3];
     
+      NSLog(@"set auth -set_auth_cmd: %d ", [fwVersion compare:FW_MILESTONE_F66_NEW_FLOW]);
    
      // >12.82 we can move on with new flow
-    if ([fwVersion compare:FW_MILESTONE_F66_NEW_FLOW] >= NSOrderedSame)
+    if  ([fwVersion compare:FW_MILESTONE_F66_NEW_FLOW] >= NSOrderedSame) //||
+         //([fwVersion compare:FW_MILESTONE_F66_NEW_FLOW] == NSOrderedAscending) )
     {
          /** SEND auth data over first */
         NSString * set_auth_cmd = [NSString stringWithFormat:@"%@%@%@%@%@",
