@@ -15,18 +15,11 @@
 {
     NSMutableArray * _listOfWifi;
     IBOutlet UITableViewCell * cellView;
-    //IBOutlet UITableView * mTableView;
 }
 
 @property (nonatomic, retain) NSMutableArray * listOfWifi;
 @property (retain, nonatomic) IBOutlet UIView *ib_Indicator;
 @property (retain, nonatomic) IBOutlet UILabel *ib_LabelState;
-
-//@property (retain, nonatomic) IBOutlet UIButton *refreshWifiList;
-
 @property (nonatomic, assign) IBOutlet UITableViewCell *cellView;
-
-//-(IBAction) handleButtonPressed:(id) sender;
-- (IBAction)performRefreshWifiList:(id)sender;
 
 @end

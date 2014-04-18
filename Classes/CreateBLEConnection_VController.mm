@@ -124,7 +124,7 @@
     
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
     {
-        CGRect rect = CGRectMake(0, 0, UIScreen.mainScreen.bounds.size.width, UIScreen.mainScreen.bounds.size.height);
+        CGRect rect = CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
         self.viewError.frame = rect;
         self.viewProgress.frame = rect;
     }
@@ -343,7 +343,7 @@
         [[BLEConnectionManager getInstanceBLE] scan];
     }
     
-    if (_timerTimeoutConnectBLE)
+    if (_timerScanCameraBLEDone)
     {
         [self.timerScanCameraBLEDone invalidate];
         self.timerScanCameraBLEDone = nil;

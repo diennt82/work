@@ -10,6 +10,9 @@
 #import "Step05Cell.h"
 #import "define.h"
 #import "WifiListParser.h"
+#import <MonitorCommunication/MonitorCommunication.h>
+
+#define BLE_TIMEOUT_PROCESS 1*60
 
 @interface DisplayWifiList_VController () <UIAlertViewDelegate>
 
@@ -18,9 +21,13 @@
 @property (retain, nonatomic) IBOutlet UIButton *btnContinue;
 @property (retain, nonatomic) IBOutlet UITableView *mTableView;
 @property (retain, nonatomic) IBOutlet UIView *viewProgress;
+@property (retain, nonatomic) IBOutlet UIView *viewError;
 
 @property (retain, nonatomic) WifiEntry *selectedWifiEntry;
 @property (nonatomic) BOOL newCmdFlag;
+@property (retain, nonatomic) NSTimer *timerTimeoutConnectBLE;
+@property (nonatomic) BOOL shouldTimeoutProcessing;
+@property (nonatomic) BOOL isAlreadyWifiList;
 
 @end
 
@@ -52,13 +59,13 @@
     [_mTableView release];
     [_viewProgress release];
     [_cellRefresh release];
+    [_viewError release];
     [super dealloc];
 }
 - (void)viewDidLoad
 {
     [super viewDidLoad];
 	// Do any additional setup after loading the view.
-#if 1
     self.navigationItem.hidesBackButton = YES;
     
     UIImage *hubbleLogoBack = [UIImage imageNamed:@"Hubble_back_text"];
@@ -87,49 +94,49 @@
                                   [UIImage imageNamed:@"loader_f"]];
     imageView.animationRepeatCount = 0;
     imageView.animationDuration = 1.5f;
-    
     [imageView startAnimating];
     
     [self showIndicator];
-#else
-    self.navigationItem.title = NSLocalizedStringWithDefaultValue(@"Configure_Camera",nil, [NSBundle mainBundle],
-                                                                  @"Configure Camera" , nil);
-    
-    self.navigationItem.backBarButtonItem =
-    [[[UIBarButtonItem alloc] initWithTitle:NSLocalizedStringWithDefaultValue(@"Back",nil, [NSBundle mainBundle],
-                                                                              @"Back" , nil)
-                                      style:UIBarButtonItemStyleBordered
-                                     target:nil
-                                     action:nil] autorelease];
-    
-    self.navigationItem.hidesBackButton=YES;
-    //
-    [BLEConnectionManager getInstanceBLE].delegate = self;
-    _listOfWifi = [[NSMutableArray alloc] init];
-    
-    //show process view to get wifi list
-    [self showIndicator];
-    //set text
-    NSString *waitingGetWifiText = NSLocalizedStringWithDefaultValue(@"waiting_get_wifi_list",nil, [NSBundle mainBundle],
-                                                              @"Waiting for get wifi list..." , nil);
-    
-    [self.ib_LabelState setText:waitingGetWifiText];
-//    [self queryWifiList];
-#endif
 }
 
 -(void) viewWillAppear:(BOOL)animated
 {
     //delay .1s to display new screen
     [super viewWillAppear:animated];
+    self.shouldTimeoutProcessing = FALSE;
     [NSTimer scheduledTimerWithTimeInterval:0.1 target:self selector:@selector(queryWifiList) userInfo:nil repeats:NO];
+    
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+    {
+        CGRect rect = CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
+        self.viewError.frame = rect;
+        self.viewProgress.frame = rect;
+    }
+    
+    if (_timerTimeoutConnectBLE != nil)
+    {
+        [self.timerTimeoutConnectBLE invalidate];
+        self.timerTimeoutConnectBLE = nil;
+    }
+    
+    self.timerTimeoutConnectBLE = [NSTimer scheduledTimerWithTimeInterval:BLE_TIMEOUT_PROCESS
+                                                                   target:self
+                                                                 selector:@selector(timeoutBLESetupProcessing:)
+                                                                 userInfo:nil
+                                                                  repeats:NO];
 }
 
 - (void)viewWillDisappear:(BOOL)animated
 {
     NSLog(@"viewWillDisappear of DisplayWifiList_VController");
+    
+    if (_timerTimeoutConnectBLE)
+    {
+        [self.timerTimeoutConnectBLE invalidate];
+        self.timerTimeoutConnectBLE = nil;
+    }
+    
     [self hideIndicator];
-    //[_viewProgress removeFromSuperview];
     //remove delegate
     [BLEConnectionManager getInstanceBLE].delegate = nil;
     
@@ -161,6 +168,11 @@
     }
 }
 
+- (IBAction)btnRetryTouchUpInsideAction:(id)sender
+{
+    [self.navigationController popToRootViewControllerAnimated:YES];
+}
+
 #pragma mark - Methods
 
 - (void)hubbleItemAction: (id)sender
@@ -172,16 +184,28 @@
 {
     //hide button back of navigation controller
     self.navigationItem.leftBarButtonItem.enabled = NO;
+    self.btnContinue.enabled = NO;
+    self.isAlreadyWifiList = FALSE;
+    self.shouldTimeoutProcessing = FALSE;
     
     //clear list wifi
     [self.listOfWifi removeAllObjects];
-    // reload tableview
-    //[_mTableView reloadData];
-    
     [self showIndicator];
     
     [BLEConnectionManager getInstanceBLE].delegate = self;
     [self queryWifiList];
+    
+    if (_timerTimeoutConnectBLE != nil)
+    {
+        [self.timerTimeoutConnectBLE invalidate];
+        self.timerTimeoutConnectBLE = nil;
+    }
+    
+    self.timerTimeoutConnectBLE = [NSTimer scheduledTimerWithTimeInterval:BLE_TIMEOUT_PROCESS
+                                                                   target:self
+                                                                 selector:@selector(timeoutBLESetupProcessing:)
+                                                                 userInfo:nil
+                                                                  repeats:NO];
 }
 
 - (void)addOtherWifi
@@ -234,6 +258,30 @@
     [alertView release];
 }
 
+- (void)timeoutBLESetupProcessing:(NSTimer *)timer
+{
+    self.shouldTimeoutProcessing = TRUE;
+    
+    BMS_JSON_Communication *jsonComm = [[[BMS_JSON_Communication alloc] initWithObject:self
+                                                                              Selector:@selector(removeCamSuccessWithResponse:)
+                                                                          FailSelector:@selector(removeCamFailedWithError:)
+                                                                             ServerErr:@selector(removeCamFailedServerUnreachable)] autorelease];
+    
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    NSString *stringUDID = [userDefaults stringForKey:CAMERA_UDID];
+    NSString *apiKey     = [userDefaults objectForKey:@"PortalApiKey"];
+    
+    
+    NSLog(@"NetworkInfo - timeoutBLESetupProcessing - try to remove camera");
+    
+    [jsonComm deleteBlockedDeviceWithRegistrationId:stringUDID
+                                          andApiKey:apiKey];
+    
+    [self.viewProgress removeFromSuperview];
+    [self.view addSubview:_viewError];
+    [self.view bringSubviewToFront:_viewError];
+}
+
 #pragma mark - Alert view delegate
 
 - (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex  // after animation
@@ -258,6 +306,12 @@
     }
     else if (alertView.tag == RETRY_CONNECTION_BLE_FAIL_TAG)
     {
+        if (_timerTimeoutConnectBLE)
+        {
+            [self.timerTimeoutConnectBLE invalidate];
+            self.timerTimeoutConnectBLE = nil;
+        }
+        
         [self.navigationController popToRootViewControllerAnimated:NO];
     }
     else if (alertView.tag == 555)
@@ -380,8 +434,6 @@
 
 - (void)showIndicator
 {
-//    [self.view bringSubviewToFront:self.ib_Indicator];
-//    [self.ib_Indicator setHidden:NO];
     [self.view addSubview:_viewProgress];
     [self.view bringSubviewToFront:_viewProgress];
 }
@@ -422,23 +474,6 @@
     [_myAlert show];
     [_myAlert release];
     
-}
-
-- (IBAction)performRefreshWifiList:(id)sender {
-    
-    //hide button back of navigation controller
-    self.navigationItem.hidesBackButton = YES;
-    //disable button refresh
-    //[self.refreshWifiList setEnabled:NO];
-    
-    //clear list wifi
-    [self.listOfWifi removeAllObjects];
-    // reload tableview
-    [_mTableView reloadData];
-    
-    [self showIndicator];
-    [BLEConnectionManager getInstanceBLE].delegate = self;
-    [self queryWifiList];
 }
 
 -(void) queryWifiList
@@ -569,14 +604,24 @@
 
 -(void) bleDisconnected
 {
-    NSLog(@"BLE device is DISCONNECTED - Reconnect after 2s ");
-    [self reconnectBLE];
+    if (_shouldTimeoutProcessing)
+    {
+        NSLog(@"Timeout - BLE process takes too long time");
+    }
+    else
+    {
+        NSLog(@"BLE device is DISCONNECTED - Reconnect after 2s ");
+        [self reconnectBLE];
+    }
 }
 
 - (void) didConnectToBle:(CBUUID*) service_id
 {
-    NSLog(@"BLE device connected again(DisplayWifiList_VController)");
-    [self queryWifiList];
+    NSLog(@"BLE device connected again(DisplayWifiList_VController) -isAlreadyWifiList: %d", _isAlreadyWifiList);
+    if (!_isAlreadyWifiList)
+    {
+        [self queryWifiList];
+    }
 }
 
 - (void)errorCallback: (NSError *)error
@@ -587,13 +632,13 @@
 -(void) setWifiResult:(NSArray *) wifiList
 {
     //show back button
-    //self.navigationItem.hidesBackButton = YES;
     self.navigationItem.leftBarButtonItem.enabled = YES;
-    //enable button refresh
-    //[self.refreshWifiList setEnabled:YES];
-    //hide indicarot
-    //[self hideIndicator];
-    //[_viewProgress removeFromSuperview];
+    
+    if (_timerTimeoutConnectBLE)
+    {
+        [self.timerTimeoutConnectBLE invalidate];
+        self.timerTimeoutConnectBLE = nil;
+    }
     
     NSLog(@"GOT WIFI RESULT: numentries: %d", wifiList.count);
     self.listOfWifi = [NSMutableArray arrayWithArray:wifiList];
@@ -609,11 +654,11 @@
         NSLog(@"entry %d : %@",i, entry.quality);
     }
     
+    self.isAlreadyWifiList = TRUE;
+    
     //filter Camera list
     [self filterCameraList];
-    
     [_mTableView reloadData];
-    
     [self hideIndicator];
 }
 
@@ -621,4 +666,23 @@
 {
     [self askForRetry];
 }
+
+#pragma mark - JSON_Comm call back
+
+-(void) removeCamSuccessWithResponse:(NSDictionary *)responseData
+{
+	NSLog(@"removeCam success");
+}
+
+-(void) removeCamFailedWithError:(NSDictionary *)error_response
+{
+	NSLog(@"removeCam failed Server error: %@", [error_response objectForKey:@"message"]);
+}
+
+-(void) removeCamFailedServerUnreachable
+{
+	NSLog(@"server unreachable");
+}
+
+
 @end

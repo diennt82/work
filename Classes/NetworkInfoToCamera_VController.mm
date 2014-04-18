@@ -211,23 +211,6 @@
 - (IBAction)btnTryAgainTouchUpInsideAction:(UIButton *)sender
 {
     sender.enabled = NO;
-    
-    BMS_JSON_Communication *jsonComm = [[[BMS_JSON_Communication alloc] initWithObject:self
-                                                                              Selector:@selector(removeCamSuccessWithResponse:)
-                                                                          FailSelector:@selector(removeCamFailedWithError:)
-                                                                             ServerErr:@selector(removeCamFailedServerUnreachable)] autorelease];
-    
-    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-    NSString *stringUDID = [userDefaults stringForKey:CAMERA_UDID];
-    NSString *apiKey     = [userDefaults objectForKey:@"PortalApiKey"];
-    
-    
-    NSLog(@"NetworkInfo - btnTryAgainTouchUpInsideAction - try to remove camera");
-
-    [jsonComm deleteBlockedDeviceWithRegistrationId:stringUDID
-                                   andApiKey:apiKey];
-   
-    
     [self.navigationController popToRootViewControllerAnimated:YES];
 }
 
@@ -693,6 +676,21 @@
     }
     else
     {
+        BMS_JSON_Communication *jsonComm = [[[BMS_JSON_Communication alloc] initWithObject:self
+                                                                                  Selector:@selector(removeCamSuccessWithResponse:)
+                                                                              FailSelector:@selector(removeCamFailedWithError:)
+                                                                                 ServerErr:@selector(removeCamFailedServerUnreachable)] autorelease];
+        
+        NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+        NSString *stringUDID = [userDefaults stringForKey:CAMERA_UDID];
+        NSString *apiKey     = [userDefaults objectForKey:@"PortalApiKey"];
+        
+        
+        NSLog(@"NetworkInfo - timeoutBLESetupProcessing - try to remove camera");
+        
+        [jsonComm deleteBlockedDeviceWithRegistrationId:stringUDID
+                                              andApiKey:apiKey];
+        
         [self.viewProgress removeFromSuperview];
         
         [self.view addSubview:_viewError];
@@ -981,10 +979,16 @@
     NSLog(@"NetworkInfo - sendCommandSetTimeZone");
     NSDate * date;
     
+    BOOL debugLog = TRUE;
+    
     while( ([BLEConnectionManager getInstanceBLE].state != CONNECTED) &&
           ( self.shouldTimeoutProcessing == FALSE ) )
     {
-        NSLog(@"NetworkInfo - sendCommandSetTimeZone:  BLE disconnected - stage: %d, sleep 2s ", stage);
+        if (debugLog)
+        {
+            NSLog(@"NetworkInfo - sendCommandSetTimeZone:  BLE disconnected - stage: %d, sleep 2s...", stage);
+            debugLog = FALSE;
+        }
         
         date = [NSDate dateWithTimeInterval:2.0 sinceDate:[NSDate date]];
         [[NSRunLoop currentRunLoop] runUntilDate:date];

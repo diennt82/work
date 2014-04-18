@@ -700,27 +700,27 @@
 #endif
         if (sequence_index  != -1)
         {
-         
-           
             int padding_index =[self checkBufferFor02char:rx_buff] ;
             //take the sub range starting from the latest index of 0x02 -
             NSRange range = NSMakeRange(padding_index+1, sequence_index-(padding_index+1));
 
-            
-          
-            
             NSData *result_str = [rx_buff subdataWithRange:range];
             
-            NSLog(@"Got enough data : %d",[result_str length]);
+            NSLog(@"Got enough data : %d, - commandToCamera: %@",[result_str length], commandToCamera);
             
+            /*
+             * Try to fix: Uncaught exception: *** +[NSString stringWithUTF8String:]: NULL cString
+             */
             
-            NSString *string = [NSString stringWithUTF8String:[result_str bytes] ];
+            NSString *string = result_str ? [NSString stringWithUTF8String:[result_str bytes]] : nil;
             //invalidate time out
             if (_timeOutCommand && [_timeOutCommand isValid])
             {
                 [_timeOutCommand invalidate];
                 _timeOutCommand = nil;
             }
+            
+            self.isBusy = FALSE;
             
             if ([commandToCamera isEqualToString:@"hello_hello"] &&
                 [string isEqualToString:@"NA"] )
@@ -737,13 +737,8 @@
             [rx_buff replaceBytesInRange:range
                                withBytes:NULL
                                   length:0];
-            
-            
-            
+
             read_error = READ_SUCCESS;
-            
-            self.isBusy = FALSE;
-           
 #if 1
             NSLog(@"start hello timer");
             

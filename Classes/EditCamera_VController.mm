@@ -432,10 +432,18 @@
     NSString * set_mkey = SET_MASTER_KEY;
     set_mkey =[set_mkey stringByAppendingString:_authToken];
     NSDate * date;
+    
+    BOOL debugLog = TRUE;
+    
     while( ([BLEConnectionManager getInstanceBLE].state != CONNECTED) &&
           (shouldCancel == FALSE))
     {
-        NSLog(@"EditCameraVC- BLE disconnected, waiting for it to reconnect..");
+        if (debugLog)
+        {
+            NSLog(@"EditCameraVC- BLE disconnected, waiting for it to reconnect..");
+            debugLog = FALSE;
+        }
+
         date = [NSDate dateWithTimeInterval:2.0 sinceDate:[NSDate date]];
         [[NSRunLoop currentRunLoop] runUntilDate:date];
         
