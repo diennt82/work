@@ -325,14 +325,11 @@
     
     for (NSDictionary *camEntry in dataArr)
 	{
-        // Assuming: registration_id = 01008344334C32B0A0VFFRBSVA
-        // --> mac address: 44334C32B0A0
-        
-        NSInteger deviceID = [[camEntry objectForKey:@"id"] integerValue];
-        NSString *camName  = [camEntry objectForKey:@"name"];
+        NSInteger deviceID       = [[camEntry objectForKey:@"id"] integerValue];
+        NSString *camName        = [camEntry objectForKey:@"name"];
         NSString *registrationID = [camEntry objectForKey:@"registration_id"];
-        NSString *camMac   = [[camEntry objectForKey:@"registration_id"] substringWithRange:NSMakeRange(6, 12)];
-        NSInteger modelID  = [[camEntry objectForKey:@"device_model_id"] integerValue];
+        NSString *camMac         = [camEntry objectForKey:@"mac_address"];
+        NSInteger modelID        = [[camEntry objectForKey:@"device_model_id"] integerValue];
         
         if ([camMac length] != 12 )
         {
@@ -342,8 +339,19 @@
             camMac = [Util add_colon_to_mac:camMac];
         }
         
-        NSString *updatedAt     = [camEntry objectForKey:@"updated_at"];
-        NSString *localIp       = [[camEntry objectForKey:@"device_location"] objectForKey:@"local_ip"];
+        NSString *updatedAt          = [camEntry objectForKey:@"updated_at"];
+        NSDictionary *deviceLocation = [camEntry objectForKey:@"device_location"];
+        NSString *localIp = nil;
+        
+        if ([deviceLocation isEqual:[NSNull null]])
+        {
+            localIp = nil;
+        }
+        else
+        {
+            localIp = [deviceLocation objectForKey:@"local_ip"];
+        }
+        
         NSString *isAvailable   = [camEntry objectForKey:@"is_available"];
         NSString *fwVersion     = [camEntry objectForKey:@"firmware_version"];
         
@@ -361,7 +369,7 @@
             cp.minuteSinceLastComm = 24*60;
         }
 
-        if ([localIp isEqual:[NSNull null]])
+        if ([localIp isEqual:[NSNull null]] || localIp == nil)
         {
             NSLog(@"garbage ip");
         }

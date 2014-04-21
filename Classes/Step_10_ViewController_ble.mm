@@ -335,7 +335,7 @@
 
 -(BOOL) checkItOnline
 {
-    NSLog(@"--> Try to search IP onlinexxxx");
+    NSLog(@"--> Try to search IP online...");
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     NSString * userEmail  = (NSString *) [userDefaults objectForKey:@"PortalUseremail"];
     NSString * userPass   = (NSString *) [userDefaults objectForKey:@"PortalPassword"];

@@ -17,10 +17,25 @@
 #define PROXY_HOST @"192.168.193.1"
 #define PROXY_PORT 8888
 
+#define DEV_STATUS_UNKOWN                   0
+#define DEV_STATUS_NOT_IN_MASTER            1
+#define DEV_STATUS_NOT_REGISTERED           2
+#define DEV_STATUS_REGISTERED_LOGGED_USER   3
+#define DEV_STATUS_REGISTERED_OTHER_USER    4
+#define DEV_STATUS_DELETED                  5
+
+#define ALERT_ADD_CAM_FAILED    500
+#define ALERT_ADD_CAM_UNREACH   501
+#define ALERT_CHECK_STATUS      502
+#define ALERT_SELECTED_OPTION   503
+//#define ALERT_ADDCAM_SERVER_UNREACH 1
+
 @interface Step_10_ViewController () <UIAlertViewDelegate>
 
 @property (nonatomic, assign) IBOutlet UIView * progressView;
 @property (retain, nonatomic) UserAccount *userAccount;
+@property (nonatomic, retain) BMS_JSON_Communication *jsonCommBlocked;
+@property (nonatomic, retain) NSString *statusMessage;
 
 @end
 
@@ -28,11 +43,6 @@
 
 
 @synthesize  cameraMac, master_key;
-
-
-
-
-//@synthesize  shouldStopScanning;
 @synthesize  timeOut;
 @synthesize delegate;
 
@@ -49,15 +59,13 @@
 -(void) dealloc
 {
     [_userAccount release];
-   
-  
     [cameraMac release];
     [master_key release];
-    
-
     [_ib_scollViewGuide release];
     [_ib_viewGuild release];
     [_ib_resumeSetup release];
+    [_jsonCommBlocked release];
+    
     [super dealloc];
 }
 
@@ -122,11 +130,7 @@
     
     [imageView startAnimating];
     [self showProgress:nil];
-    
 
-    
-    
-    
     NSString *fwVersion = [userDefaults stringForKey:FW_VERSION];
 
     // >12.82 we can move on with new flow
@@ -180,53 +184,14 @@
     // Release any retained subviews of the main view.
 }
 
-- (void)viewWillDisappear:(BOOL)animated
-{
-    //Dismiss alertView in case interrupt : lock key, home key, phone call
-    if (_alertChooseConfig)
-    {
-        [_alertChooseConfig dismissWithClickedButtonIndex:0 animated:NO];
-        [_alertChooseConfig release];
-        _alertChooseConfig = nil;
-    }
-}
-
 #pragma mark - Actions
 - (void)hubbleItemAction:(id)sender
 {
     [self.navigationController popViewControllerAnimated:YES];
 }
 
-- (void)showDialogChooseConfigCamera
-{
-    NSString *selectPlease = NSLocalizedStringWithDefaultValue(@"please_select",nil, [NSBundle mainBundle],
-                                                               @"Please select", nil);
-    NSString *message = NSLocalizedStringWithDefaultValue(@"guide_choose_config",nil, [NSBundle mainBundle],
-                                                          @"BLE to config camera through bluetooth.\nWifi to config camera through wifi.", nil);
-    NSString *cancelText = NSLocalizedStringWithDefaultValue(@"Cancel",nil, [NSBundle mainBundle],
-                                                             @"Cancel", nil);
-    NSString *BLEText = NSLocalizedStringWithDefaultValue(@"BLE",nil, [NSBundle mainBundle],
-                                                          @"BLE", nil);
-    NSString *wifiText = NSLocalizedStringWithDefaultValue(@"Wifi",nil, [NSBundle mainBundle],
-                                                           @"Wifi", nil);
-    
-    _alertChooseConfig = [[UIAlertView alloc]
-                          initWithTitle:selectPlease
-                          message:message
-                          delegate:self
-                          cancelButtonTitle:cancelText
-                          otherButtonTitles:BLEText, wifiText, nil];
-    [_alertChooseConfig show];
-}
-
 #pragma  mark -
 #pragma mark button handlers
-
--(IBAction) startConfigureCamera:(id)sender
-{
-    [self showDialogChooseConfigCamera];
-}
-
 
 - (IBAction)registerCamera:(id)sender
 {
@@ -324,12 +289,16 @@
     
     [formatter release];
     
-    BMS_JSON_Communication *jsonComm = [[BMS_JSON_Communication alloc] initWithObject:self
-                                                                             Selector:nil
-                                                                         FailSelector:nil
-                                                                            ServerErr:nil];
+    if (_jsonCommBlocked == nil)
+    {
+        self.jsonCommBlocked = [[BMS_JSON_Communication alloc] initWithObject:self
+                                                                     Selector:nil
+                                                                 FailSelector:nil
+                                                                    ServerErr:nil];
+    }
+    
     NSString *camName = (NSString *) [userDefaults objectForKey:@"CameraName"];
-    NSDictionary *responseDict = [jsonComm registerDeviceBlockedWithProxyHost:PROXY_HOST
+    NSDictionary *responseDict = [_jsonCommBlocked registerDeviceBlockedWithProxyHost:PROXY_HOST
                                                                     proxyPort:PROXY_PORT
                                                                    deviceName:camName
                                                                registrationID:udid
@@ -337,7 +306,6 @@
                                                                     fwVersion:fwVersion
                                                                      timeZone:stringFromDate
                                                                     andApiKey:apiKey];
-    [jsonComm release];
     
     if (responseDict)
     {
@@ -356,6 +324,98 @@
     }
 }
 
+- (void)checkCameraStatus
+{
+    if (should_stop_scanning == TRUE)
+    {
+        return ;
+    }
+    
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    NSString *apiKey    = [userDefaults objectForKey:@"PortalApiKey"];
+    NSString *udid      = [userDefaults objectForKey:CAMERA_UDID];
+    
+    if (_jsonCommBlocked == nil)
+    {
+        self.jsonCommBlocked = [[BMS_JSON_Communication alloc] initWithObject:self
+                                                                     Selector:nil
+                                                                 FailSelector:nil
+                                                                    ServerErr:nil];
+    }
+    
+    NSDictionary *responseDict = [_jsonCommBlocked checkStatusBlockedWithRegistrationId:udid apiKey:apiKey];
+    
+    NSLog(@"Step_10_VC - checkCameraStatus: %@", responseDict);
+    
+    BOOL shouldCheckAgain = TRUE;
+
+    if (responseDict)
+    {
+        if ([[responseDict objectForKey:@"status"] integerValue] == 200)
+        {
+            NSInteger deviceStatus = [[[responseDict objectForKey:@"data"] objectForKey:@"device_status"] integerValue];
+            
+            switch (deviceStatus)
+            {
+                case DEV_STATUS_UNKOWN:
+                case DEV_STATUS_NOT_REGISTERED:
+                case DEV_STATUS_DELETED:
+                    // Check again
+                    break;
+                    
+                case DEV_STATUS_NOT_IN_MASTER:
+                case DEV_STATUS_REGISTERED_OTHER_USER:
+                {
+                    if (deviceStatus == DEV_STATUS_NOT_IN_MASTER)
+                    {
+                        self.statusMessage = @"Device is NOT present in device master";
+                    }
+                    else
+                    {
+                        self.statusMessage = @"Device is registered with other User";
+                    }
+                    
+                    shouldCheckAgain = FALSE;
+                    self.errorCode = [NSString stringWithFormat:@"%d", deviceStatus];
+                    
+                    if (timeOut != nil)
+                    {
+                        [timeOut invalidate];
+                    }
+                    
+                    [self setStopScanning:nil];
+                    
+                    [self showDialogWithTag:ALERT_CHECK_STATUS message:_statusMessage];
+                    
+                    [self setupFailed];
+                }
+                    break;
+                    
+                case DEV_STATUS_REGISTERED_LOGGED_USER:
+                    NSLog(@"Step_10_VC register successfully. Move on");
+                    shouldCheckAgain = FALSE;
+                    break;
+                    
+                default:
+                    break;
+            }
+        }
+        else
+        {
+            // Check again
+        }
+    }
+    else
+    {
+        // Check again
+    }
+    
+    if (shouldCheckAgain)
+    {
+        [self performSelector:@selector(checkCameraStatus) withObject:nil afterDelay:2];
+    }
+}
+
 #pragma  mark -
 #pragma mark Timer callbacks
 
@@ -367,9 +427,7 @@
     
     NSLog(@" Timeout while trying to search for Home Wifi: %@", homeSsid);
     
-    
     [self setStopScanning:Nil];
-    
 }
 
 - (void) step10CheckConnectionToHomeWifi:(NSTimer *) expired
@@ -386,7 +444,7 @@
     
     if ((currentSSID == nil) || [currentSSID isEqualToString:wifiCameraSetup])
     {
-        NSLog(@"Now, still connected to wifiOf Camera, continue check");
+        NSLog(@"Now, still connected to wifiOf Camera, continue check | currentSSID = nil");
         [NSTimer scheduledTimerWithTimeInterval: 3.0//
                                          target:self
                                        selector:@selector(step10CheckConnectionToHomeWifi:)
@@ -430,6 +488,7 @@
                                                       repeats:NO];
             
             [self wait_for_camera_to_reboot:nil];
+            [self checkCameraStatus];
         }
         else
         {
@@ -514,7 +573,6 @@
 {
     if (should_stop_scanning == TRUE)
     {
-        should_stop_scanning = FALSE;
         NSLog(@"Step_10VC - stop scanning now.. should be 4 mins");
         
         [self setupFailed];
@@ -524,7 +582,6 @@
     {
         NSLog(@"Step_10VC - Continue scan...");
     }
-    
     
     if ([self checkItOnline])
     {
@@ -549,10 +606,10 @@
 
 -(BOOL) checkItOnline
 {
-    NSLog(@"--> Try to search IP onlinexxxx");
+    NSLog(@"--> Try to search IP online...");
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-    NSString * userEmail = (NSString *) [userDefaults objectForKey:@"PortalUseremail"];
-    NSString * userPass = (NSString *) [userDefaults objectForKey:@"PortalPassword"];
+    NSString * userEmail  = (NSString *) [userDefaults objectForKey:@"PortalUseremail"];
+    NSString * userPass   = (NSString *) [userDefaults objectForKey:@"PortalPassword"];
     NSString * userApiKey = (NSString *) [userDefaults objectForKey:@"PortalApiKey"];
     
     if (_userAccount == nil)
@@ -657,6 +714,61 @@
     [step11ViewController release];
 }
 
+- (void)showDialogWithTag:(NSInteger)tag message: (NSString *)msg
+{
+    NSString *title = NSLocalizedStringWithDefaultValue(@"AddCam_Error" ,nil, [NSBundle mainBundle],
+                                                        @"AddCam Error" , nil);
+    
+    switch (tag)
+    {
+        case ALERT_ADD_CAM_FAILED:
+        case ALERT_CHECK_STATUS:
+        {
+            NSString * ok = NSLocalizedStringWithDefaultValue(@"Ok",nil, [NSBundle mainBundle],
+                                                              @"Ok", nil);
+            
+            //ERROR condition
+            UIAlertView *alert = [[UIAlertView alloc]
+                                  initWithTitle:title
+                                  message:msg
+                                  delegate:nil
+                                  cancelButtonTitle:ok
+                                  otherButtonTitles:nil];
+            alert.tag = tag;
+            [alert show];
+            [alert release];
+        }
+            break;
+            
+        case ALERT_ADD_CAM_UNREACH:
+        {
+            NSString * message = NSLocalizedStringWithDefaultValue(@"addcam_error_1" ,nil, [NSBundle mainBundle],
+                                                               @"The device is not able to connect to the server. Please check the WIFI and the internet. Go to WIFI setting to confirm device is connected to intended router", nil);
+            NSString * cancel = NSLocalizedStringWithDefaultValue(@"Cancel",nil, [NSBundle mainBundle],
+                                                                  @"Cancel", nil);
+            
+            NSString * retry = NSLocalizedStringWithDefaultValue(@"Retry",nil, [NSBundle mainBundle],
+                                                                 @"Retry", nil);
+            //ERROR condition
+            UIAlertView *alert = [[UIAlertView alloc]
+                                  initWithTitle:title
+                                  message:message
+                                  delegate:self
+                                  cancelButtonTitle:cancel
+                                  otherButtonTitles:retry, nil];
+            alert.delegate = self;
+            alert.tag = ALERT_ADD_CAM_UNREACH;
+            
+            [alert show];
+            [alert release];
+        }
+            break;
+            
+        default:
+            break;
+    }
+}
+
 #pragma mark -
 #pragma mark  Callbacks
 
@@ -677,22 +789,9 @@
     }
     
     NSLog(@"addcam failed with error code:%d", [[error_response objectForKey:@"status"] intValue]);
+    NSString *msg = [error_response objectForKey:@"message"];
     
-    NSString * msg = NSLocalizedStringWithDefaultValue(@"Server_error_" ,nil, [NSBundle mainBundle],
-                                                       @"Server error: %@" , nil);
-    NSString * ok = NSLocalizedStringWithDefaultValue(@"Ok",nil, [NSBundle mainBundle],
-                                                      @"Ok", nil);
-    
-    //ERROR condition
-    UIAlertView *alert = [[UIAlertView alloc]
-                          initWithTitle:NSLocalizedStringWithDefaultValue(@"AddCam_Error" ,nil, [NSBundle mainBundle],
-                                                                          @"AddCam Error" , nil)
-                          message:[error_response objectForKey:@"message"]
-                          delegate:self
-                          cancelButtonTitle:ok
-                          otherButtonTitles:nil];
-    [alert show];
-    [alert release];
+    [self showDialogWithTag:ALERT_ADD_CAM_FAILED message:msg];
     self.errorCode = msg;
     [self  setupFailed];
     
@@ -710,27 +809,7 @@
     }
     else
     {
-        
-        NSString * msg = NSLocalizedStringWithDefaultValue(@"addcam_error_1" ,nil, [NSBundle mainBundle],
-                                                           @"The device is not able to connect to the server. Please check the WIFI and the internet. Go to WIFI setting to confirm device is connected to intended router", nil);
-        NSString * cancel = NSLocalizedStringWithDefaultValue(@"Cancel",nil, [NSBundle mainBundle],
-                                                              @"Cancel", nil);
-        
-        NSString * retry = NSLocalizedStringWithDefaultValue(@"Retry",nil, [NSBundle mainBundle],
-                                                             @"Retry", nil);
-        //ERROR condition
-        UIAlertView *alert = [[UIAlertView alloc]
-                              initWithTitle:NSLocalizedStringWithDefaultValue(@"AddCam_Error" ,nil, [NSBundle mainBundle],
-                                                                              @"AddCam Error" , nil)
-                              message:msg
-                              delegate:self
-                              cancelButtonTitle:cancel
-                              otherButtonTitles:retry, nil];
-        alert.delegate = self;
-        alert.tag = ALERT_ADDCAM_SERVER_UNREACH;
-        
-        [alert show];
-        [alert release];
+        [self showDialogWithTag:ALERT_ADD_CAM_UNREACH message:nil];
     }
 }
 
@@ -757,10 +836,9 @@
 
 - (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex
 {
-    
     int tag = alertView.tag;
     
-    if (tag == ALERT_ADDCAM_SERVER_UNREACH)
+    if (tag == ALERT_ADD_CAM_UNREACH)
     {
         switch(buttonIndex) {
             case 0: // Cancel

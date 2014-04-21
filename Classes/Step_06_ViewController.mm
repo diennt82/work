@@ -104,6 +104,7 @@
                                 nil];
     imageView.animationDuration = 1.5;
     imageView.animationRepeatCount = 0;
+    [imageView startAnimating];
     
     if (self.ssid == nil)
     {
@@ -506,15 +507,17 @@
 -(void) handleNextButton:(id) sender
 {
     //create progressView for process verify network
+    self.navigationItem.leftBarButtonItem.enabled = NO; // Disable go back
+    [self.view addSubview:self.progressView];
+    [self.progressView setHidden:NO];
     
     //check if password is ok?
     UITextField * pass = (UITextField*)[self.passwordCell viewWithTag:200];
     UITextField * confpass = (UITextField*)[self.confPasswordCell viewWithTag:201];
     UITextField * my_ssid = (UITextField*) [self.ssidCell viewWithTag:202];
     
-    [pass resignFirstResponder];
-    [confpass resignFirstResponder];
-    [my_ssid resignFirstResponder];
+    [self.view endEditing:YES];
+    
     NSLog(@"pass : %@ vs %@  ssid: %@", pass.text, confpass.text, my_ssid.text);
     
     if (self.isOtherNetwork == TRUE)
@@ -522,6 +525,9 @@
         if ([my_ssid.text length] == 0)
         {
             //error
+            self.navigationItem.leftBarButtonItem.enabled = YES; // enable go back
+            [self.progressView removeFromSuperview];
+            
             //ERROR condition
             UIAlertView *_alert = [[UIAlertView alloc]
                                    initWithTitle:@"SSID cannot be empty"
@@ -531,7 +537,6 @@
                                    otherButtonTitles:nil];
             [_alert show];
             [_alert release];
-            
             return;
         }
         else
@@ -543,16 +548,7 @@
     if ([self.security isEqualToString:@"open"])
     {
         //cont
-        self.navigationItem.leftBarButtonItem.enabled = NO; // Disable go back
-
-        [self.view addSubview:self.progressView];
-        
-        UIImageView *imageView = (UIImageView *)[_progressView viewWithTag:595];
-        
-        [imageView startAnimating];
-        
-        [self.progressView setHidden:NO];
-        
+        self.password = pass.text;
         [self sendWifiInfoToCamera];
     }
     else
@@ -562,6 +558,8 @@
             (![pass.text isEqualToString:confpass.text]))
         {
             //error
+            self.navigationItem.leftBarButtonItem.enabled = YES; // enable go back
+            [self.progressView removeFromSuperview];
             
             NSString * msg_fail = NSLocalizedStringWithDefaultValue(@"Confirm_Pass_Fail", nil, [NSBundle mainBundle], @"Le mot de passe ne correspond pas. S'il vous plaît, saisir à nouveau !", nil);
             
@@ -579,17 +577,7 @@
         else
         {
             //cont
-            self.navigationItem.leftBarButtonItem.enabled = NO; // Disable go back
-            self.password = [NSString stringWithString:[pass text]];
-            
-            [self.view addSubview:self.progressView];
-            
-            UIImageView *imageView = (UIImageView *)[_progressView viewWithTag:595];
-            
-            [imageView startAnimating];
-            
-            [self.progressView setHidden:NO];
-            
+            self.password = pass.text;
             [self sendWifiInfoToCamera ];
         }
     }
@@ -714,6 +702,7 @@
     {
         [Util writeDeviceConfigurationData:[_deviceConf getWritableConfiguration]];
     }
+    
     [_deviceConf restoreConfigurationData:[Util readDeviceConfiguration]];
     
     
@@ -721,7 +710,7 @@
     
     
     NSString * setup_cmd = [NSString stringWithFormat:@"%@%@",
-                            SETUP_HTTP_CMD,device_configuration];
+                            SETUP_HTTP_CMD, device_configuration];
     
     response = [[HttpCom instance].comWithDevice sendCommandAndBlock:setup_cmd ];
     NSLog(@"Step_06VC - send cmd  %@ - response is: %@", setup_cmd, response);

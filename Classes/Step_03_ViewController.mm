@@ -56,6 +56,7 @@
                                   [UIImage imageNamed:@"setup_camera_c4"]];
     imageView.animationDuration = 1.5f;
     imageView.animationRepeatCount = 0;
+    [imageView startAnimating];
     
     [self.scrollViewGuide setContentSize:CGSizeMake(320, 1370)];
 
@@ -145,17 +146,18 @@
 
 -(void) handleEnteredBackground
 {
-    showProgressNextTime = TRUE;
+    //showProgressNextTime = TRUE;
+    [self showProgress:nil];
 }
 
 -(void) becomeActive
 {
-    if (showProgressNextTime)
-    {
-        NSLog(@"cshow progress 03");
-        //[self showProgress:nil];
-        [self performSelectorOnMainThread:@selector(showProgress:) withObject:nil waitUntilDone:NO];
-    }
+//    if (showProgressNextTime)
+//    {
+//        NSLog(@"cshow progress 03");
+//        //[self showProgress:nil];
+//        [self performSelectorOnMainThread:@selector(showProgress:) withObject:nil waitUntilDone:NO];
+//    }
     
     task_cancelled = NO;
     [self checkConnectionToCamera:nil];
@@ -171,8 +173,7 @@
         {
             NSLog(@"show progress 01 ");
             self.inProgress.hidden = NO;
-            UIImageView *imageView  = (UIImageView *)[self.inProgress viewWithTag:575];
-            [imageView startAnimating];
+            [self.view addSubview:self.inProgress];
             [self.view bringSubviewToFront:self.inProgress];
         }
     }
@@ -183,8 +184,7 @@
     NSLog(@"hide progress");
     if (self.inProgress != nil)
     {
-        UIImageView *imageView  = (UIImageView *)[self.inProgress viewWithTag:575];
-        [imageView stopAnimating];
+        [self.inProgress removeFromSuperview];
         self.inProgress.hidden = YES;
     }
 }

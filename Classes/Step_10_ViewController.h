@@ -29,8 +29,6 @@
 //Master_key=BC0B87B2832B67FF58F11749F19C4915D4B876C2505D9CC7D0D06F79653C8B11
 #define MASTER_KEY @"Master_key="
 
-#define ALERT_ADDCAM_SERVER_UNREACH 1
-
 //#define 
 
 @interface Step_10_ViewController : UIViewController
@@ -52,16 +50,12 @@
     
     id<ConnectionMethodDelegate> delegate;
 }
-@property (retain, nonatomic) IBOutlet UIView *ib_viewGuild;
 
+@property (retain, nonatomic) IBOutlet UIView *ib_viewGuild;
 @property (retain, nonatomic) IBOutlet UIScrollView *ib_scollViewGuide;
 @property (retain, nonatomic) IBOutlet UIButton *ib_resumeSetup;
 
-
-
 @property (nonatomic, assign)  id<ConnectionMethodDelegate> delegate;
-
-
 @property (nonatomic, retain) NSString *cameraMac,  *master_key; 
 @property (nonatomic, retain) NSTimer * timeOut;
 
@@ -78,4 +72,5 @@
 
 - (void) setupCompleted;
 - (void)  setupFailed;
+
 @end

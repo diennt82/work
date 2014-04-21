@@ -10,13 +10,12 @@
 
 @interface Step_11_ViewController ()
 
+@property (nonatomic, retain) IBOutlet UILabel *error_code;
 @property (retain, nonatomic) IBOutlet UIButton *btnTestCamera;
+
 @end
 
 @implementation Step_11_ViewController
-
-@synthesize error_code;
-@synthesize errorCode;
 
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
@@ -51,9 +50,9 @@
     [self.btnTestCamera setBackgroundImage:[UIImage imageNamed:@"green_btn_pressed"] forState:UIControlEventTouchDown];
 
 
-    if (errorCode!= nil)
+    if (_errorCode != nil)
     {
-        [self.error_code setText:errorCode];
+        [self.error_code setText:_errorCode];
     }
     else
     {
@@ -68,72 +67,6 @@
     // Dispose of any resources that can be recreated.
 }
 
-
-#pragma mark -
-#pragma mark Rotating
-- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
-{
-    return   ((interfaceOrientation == UIInterfaceOrientationPortrait) ||
-              (interfaceOrientation == UIInterfaceOrientationLandscapeLeft) ||
-              (interfaceOrientation == UIInterfaceOrientationLandscapeRight));
-}
-
--(BOOL)shouldAutorotate
-{
-    return YES;
-}
-
--(NSUInteger) supportedInterfaceOrientations
-{
-    return UIInterfaceOrientationMaskAllButUpsideDown;
-}
-
--(void) willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
-{
-    [self adjustViewsForOrientations:toInterfaceOrientation];
-}
-
--(void) adjustViewsForOrientations: (UIInterfaceOrientation) interfaceOrientation
-{
-    if (interfaceOrientation == UIInterfaceOrientationLandscapeLeft || interfaceOrientation == UIInterfaceOrientationLandscapeRight)
-    {
-        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
-        {
-            [[NSBundle mainBundle] loadNibNamed:@"Step_11_ViewController_land_ipad" owner:self options:nil];
-        }
-        else
-        {
-            // Add cameras fail in landscape mode
-            
-            [[NSBundle mainBundle] loadNibNamed:@"Step_11_ViewController_land" owner:self options:nil];
-            
-            UIScrollView *tempScrollView=(UIScrollView *) [self.view viewWithTag:1];
-            [tempScrollView setContentSize:CGSizeMake(380, 400)];
-
-            
-        }
-    }
-    else if (interfaceOrientation == UIInterfaceOrientationPortrait || interfaceOrientation == UIInterfaceOrientationPortraitUpsideDown)
-    {
-        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
-        {
-            [[NSBundle mainBundle] loadNibNamed:@"Step_11_ViewController_ipad" owner:self options:nil];
-        }
-        else
-        {
-            
-
-            [[NSBundle mainBundle] loadNibNamed:@"Step_11_ViewController" owner:self options:nil];
-            
-            UIScrollView *tempScrollView=(UIScrollView *) [self.view viewWithTag:1];
-            [tempScrollView setContentSize:CGSizeMake(320, 450)];
-            
-
-
-            
-        }
-    }
-}
 
 #pragma  mark -
 #pragma mark button handlers
