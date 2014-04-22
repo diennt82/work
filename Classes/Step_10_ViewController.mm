@@ -36,6 +36,7 @@
 @property (retain, nonatomic) UserAccount *userAccount;
 @property (nonatomic, retain) BMS_JSON_Communication *jsonCommBlocked;
 @property (nonatomic, retain) NSString *statusMessage;
+@property (nonatomic) BOOL shouldSendMasterKeyAgain;
 
 @end
 
@@ -549,6 +550,23 @@
             [self sendCommandRebootCamera];
             [self performSelectorOnMainThread:@selector(waitingCameraRebootAndForceToWifiHome) withObject:nil waitUntilDone:NO];
         }
+        else if ([response isEqualToString:@"set_master_key: -1"])
+        {
+            /*
+             * Bug from Focus66 FW: version 01.12.68. Fixed on the newer version
+             * - Set master key failed at the 1st time.
+             * - Set again is ok, so try to set it one more time
+             */
+            if (_shouldSendMasterKeyAgain)
+            {
+                self.shouldSendMasterKeyAgain = FALSE;
+                [self sendMasterKeyToDevice];
+            }
+        }
+        else
+        {
+            // Do somethings else
+        }
     }
 }
 
@@ -746,6 +764,12 @@
             
         case ALERT_ADD_CAM_UNREACH:
         {
+            if (should_stop_scanning)
+            {
+                // Need not to popup anymore
+                return;
+            }
+            
             NSString * message = NSLocalizedStringWithDefaultValue(@"addcam_error_1" ,nil, [NSBundle mainBundle],
                                                                @"The device is not able to connect to the server. Please check the WIFI and the internet. Go to WIFI setting to confirm device is connected to intended router", nil);
             NSString * cancel = NSLocalizedStringWithDefaultValue(@"Cancel",nil, [NSBundle mainBundle],
@@ -781,6 +805,7 @@
     NSLog(@"Do for concurent modep - addcam response");
     self.stringAuth_token = [[responseData objectForKey:@"data"] objectForKey:@"auth_token"];
     //send master key to device
+    self.shouldSendMasterKeyAgain = TRUE;
     [self sendMasterKeyToDevice];
 }
 
