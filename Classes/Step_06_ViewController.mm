@@ -589,7 +589,7 @@
     NSString * camera_mac= nil;
     NSString *stringUDID = @"";
     
-#ifdef CONCURRENT_SETUP
+
     stringUDID = [[HttpCom instance].comWithDevice sendCommandAndBlock:GET_UDID
                                                            withTimeout:5.0];
     //get_udid: 01008344334C32B0A0VFFRBSVA
@@ -608,9 +608,6 @@
         NSLog(@"Error - Received UDID wrong format - UDID: %@", stringUDID);
     }
     
-#else
-    camera_mac = [CameraPassword fetchBSSIDInfo];
-#endif
     
     self.deviceConf.ssid = self.ssid;
     
@@ -677,9 +674,11 @@
     NSMutableString *stringFromDate = [NSMutableString stringWithString:[formatter stringFromDate:now]];
     [stringFromDate insertString:@"." atIndex:3];
     
+      NSLog(@"set auth -set_auth_cmd: %d ", [fwVersion compare:FW_MILESTONE_F66_NEW_FLOW]);
    
      // >12.82 we can move on with new flow
-    if ([fwVersion compare:FW_MILESTONE_F66_NEW_FLOW] >= NSOrderedSame)
+    if  ([fwVersion compare:FW_MILESTONE_F66_NEW_FLOW] >= NSOrderedSame) //||
+         //([fwVersion compare:FW_MILESTONE_F66_NEW_FLOW] == NSOrderedAscending) )
     {
          /** SEND auth data over first */
         NSString * set_auth_cmd = [NSString stringWithFormat:@"%@%@%@%@%@",

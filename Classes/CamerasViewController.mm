@@ -20,6 +20,7 @@
 #import "AddCameraViewController.h"
 #import "define.h"
 #import "EarlierViewController.h"
+#import "UIDeviceHardware.h"
 
 @interface CamerasViewController () <H264PlayerVCDelegate, CamerasCellDelegate, UIAlertViewDelegate, AddCameraVCDelegate>
 
@@ -127,11 +128,32 @@
         MenuViewController *tabBarController = (MenuViewController *)self.parentVC;
         tabBarController.notUpdateCameras = TRUE;
         
-        AddCameraViewController *addCameraVC = [[AddCameraViewController alloc] init];
-        addCameraVC.delegate = self;
-        tabBarController.navigationController.navigationBarHidden = YES;
-        self.navigationItem.leftBarButtonItem.enabled = NO;
-        [self presentViewController:addCameraVC animated:YES completion:^{}];
+        //IF this is Iphone4 - Go directly to WIFI setup , as there is no BLE on IPHON4
+        NSString *platformString = [UIDeviceHardware platformString];
+        if( [platformString isEqualToString:@"iPhone 4"] ||
+            [platformString isEqualToString:@"Verizon iPhone 4"] ||
+            [platformString hasPrefix:@"iPad 2"]
+           )
+        {
+            NSLog(@"**** IPHONE 4  / IPAD 2 *** use wifi setup for all");
+            NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+            [userDefaults setInteger:WIFI_SETUP forKey:SET_UP_CAMERA];
+            [userDefaults setBool:FALSE forKey:FIRST_TIME_SETUP];
+            [userDefaults synchronize];
+            
+            [tabBarController dismissViewControllerAnimated:NO completion:^{
+                [tabBarController.menuDelegate sendStatus:SETUP_CAMERA]; //initial setup
+            }];
+            
+        }
+        else
+        {
+            AddCameraViewController *addCameraVC = [[AddCameraViewController alloc] init];
+            addCameraVC.delegate = self;
+            tabBarController.navigationController.navigationBarHidden = YES;
+            self.navigationItem.leftBarButtonItem.enabled = NO;
+            [self presentViewController:addCameraVC animated:YES completion:^{}];
+        }
     }
     [self.ibIconAddCamera setImage:[UIImage imageNamed:@"add_camera"]];
     [self.ibTextAddCamera setTextColor:[UIColor whiteColor]];

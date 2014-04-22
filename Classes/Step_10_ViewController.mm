@@ -445,6 +445,10 @@
     if ((currentSSID == nil) || [currentSSID isEqualToString:wifiCameraSetup])
     {
         NSLog(@"Now, still connected to wifiOf Camera, continue check | currentSSID = nil");
+        
+        /*Phung: we are still connecting to wifi ... how about a restart_system to switch?  */
+        [self sendCommandRebootCamera];
+        
         [NSTimer scheduledTimerWithTimeInterval: 3.0//
                                          target:self
                                        selector:@selector(step10CheckConnectionToHomeWifi:)
