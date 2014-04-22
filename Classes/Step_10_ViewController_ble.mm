@@ -58,11 +58,15 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    //Disconnect BLE
+    NSLog(@"Disconnect BLE ");
+    [BLEConnectionManager getInstanceBLE].needReconnect = NO;
+    [[BLEConnectionManager getInstanceBLE].uartPeripheral didDisconnect];
+    [BLEConnectionManager getInstanceBLE].delegate = nil;
+    
     //Keep screen on
     [UIApplication sharedApplication].idleTimerDisabled = YES;
-    
-    
-    
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     
     //can be user email or user name here --
@@ -115,26 +119,12 @@
     
     // 2 of 3. no need to schedule timer here
     [self wait_for_camera_to_reboot:nil];
-    
 }
 
 - (void)viewDidUnload
 {
     [super viewDidUnload];
     // Release any retained subviews of the main view.
-}
-
--(void) viewWillAppear:(BOOL)animated
-{
-    [super viewWillAppear:animated];
-    //    UIInterfaceOrientation interfaceOrientation = [UIApplication sharedApplication].statusBarOrientation;
-    //    [self adjustViewsForOrientations:interfaceOrientation];
-}
-
-- (void)viewWillDisappear:(BOOL)animated
-{
-    //remove delegate
-    [BLEConnectionManager getInstanceBLE].delegate = nil;
 }
 
 - (void)hubbleItemAction: (id)sender
@@ -183,104 +173,9 @@
     [animationView startAnimating];
 }
 
-#pragma mark -
-#pragma mark Rotating
-- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
-{
-    return   ((interfaceOrientation == UIInterfaceOrientationPortrait) ||
-              (interfaceOrientation == UIInterfaceOrientationLandscapeLeft) ||
-              (interfaceOrientation == UIInterfaceOrientationLandscapeRight));
-}
-
--(BOOL)shouldAutorotate
-{
-    return YES;
-}
-
--(NSUInteger) supportedInterfaceOrientations
-{
-    return UIInterfaceOrientationMaskAllButUpsideDown;
-}
-
--(void) willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
-{
-    [self adjustViewsForOrientations:toInterfaceOrientation];
-}
-
--(void) adjustViewsForOrientations: (UIInterfaceOrientation) interfaceOrientation
-{
-#if 0
-    
-    if (interfaceOrientation == UIInterfaceOrientationLandscapeLeft || interfaceOrientation == UIInterfaceOrientationLandscapeRight)
-    {
-        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
-        {
-            //[[NSBundle mainBundle] loadNibNamed:@"Step_10_ViewController_land_ipad" owner:self options:nil];
-        }
-        else
-        {
-            // [[NSBundle mainBundle] loadNibNamed:@"Step_10_ViewController_land" owner:self options:nil];
-        }
-    }
-    else if (interfaceOrientation == UIInterfaceOrientationPortrait || interfaceOrientation == UIInterfaceOrientationPortraitUpsideDown)
-    {
-        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
-        {
-            // [[NSBundle mainBundle] loadNibNamed:@"Step_10_ViewController_ipad" owner:self options:nil];
-        }
-        else
-        {
-            // [[NSBundle mainBundle] loadNibNamed:@"Step_10_ViewController" owner:self options:nil];
-            
-        }
-    }
-    
-    
-    
-    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-    
-    BOOL firstime = [userDefaults boolForKey:FIRST_TIME_SETUP];
-    
-    
-    //can be user email or user name here --
-    self.userNameLabel.text = (NSString *) [userDefaults objectForKey:@"PortalUsername"];
-    self.userEmailLabel.text = (NSString *) [userDefaults objectForKey:@"PortalUseremail"];
-    
-    //Hide back button -- can't go back now..
-    self.navigationItem.hidesBackButton = YES;
-    
-    //Check to see which path we should go
-    if (firstime == TRUE)
-    {
-        // Do any additional setup after loading the view.
-        
-        self.navigationItem.title =NSLocalizedStringWithDefaultValue(@"Account_Created",nil, [NSBundle mainBundle],
-                                                                     @"Account Created" , nil);
-        
-        
-        
-        
-        
-    }
-    else //not first time --> this is normal add camera sequence..
-    {
-        
-        self.navigationItem.title =NSLocalizedStringWithDefaultValue(@"Camera_Configured",nil, [NSBundle mainBundle],
-                                                                     @"Camera Configured" , nil);
-        
-        [self.view addSubview:self.progressView];
-        //self.progressView.hidden = hidden;
-        [self.view addSubview:cameraAddedView];
-        NSString * homeSsid = (NSString *) [userDefaults objectForKey:HOME_SSID];
-        self.homeSSID.text = homeSsid;
-        
-    }
-#endif
-    
-}
-
 #pragma  mark -
 #pragma mark Timer callbacks
+
 -(void) silentRetryTimeout:(NSTimer *) expired
 {
     
@@ -296,12 +191,10 @@
 -(void) setStopScanning:(NSTimer *) exp
 {
     should_stop_scanning = TRUE;
-    
 }
+
 - (void) wait_for_camera_to_reboot:(NSTimer *)exp
 {
-    
-    
     if (should_stop_scanning == TRUE)
     {
         should_stop_scanning = FALSE;
@@ -372,11 +265,6 @@
 
 - (void) setupCompleted
 {
-    //Disconnect BLE
-    NSLog(@"Disconnect BLE ");
-    [BLEConnectionManager getInstanceBLE].needReconnect = NO;
-    [[BLEConnectionManager getInstanceBLE] disconnect];
-    
     //Load step 12
     NSLog(@"Load step 12");
     
@@ -402,11 +290,6 @@
 
 - (void)  setupFailed
 {
-    //Disconnect BLE
-    NSLog(@"Disconnect BLE ");
-    [BLEConnectionManager getInstanceBLE].needReconnect = NO;
-    [[BLEConnectionManager getInstanceBLE] disconnect];
-    
  	NSLog(@"Setup has failed - remove cam on server");
 	// send a command to remove camera
 	//NSString *mac = [Util strip_colon_fr_mac:self.cameraMac];

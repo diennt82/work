@@ -70,12 +70,7 @@
 @property (nonatomic, retain) NSString *stringAuth_token;
 
 
-
 - (void) wait_for_camera_to_reboot:(NSTimer *)exp;
-- (void) checkScanResult: (NSTimer *) expired;
-
 - (void) setupCompleted;
-
-
 - (void)  setupFailed;
 @end

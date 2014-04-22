@@ -122,6 +122,8 @@
 {
     [super viewWillAppear:animated];
     
+    self.navigationItem.rightBarButtonItem.enabled = YES;
+    
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
     {
         CGRect rect = CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
@@ -766,9 +768,15 @@
     [[BLEConnectionManager getInstanceBLE].uartPeripheral writeString:GET_UDID withTimeOut:SHORT_TIME_OUT_SEND_COMMAND];
     NSDate * date;
     
+    BOOL debugLog = TRUE;
+    
     while ([BLEConnectionManager getInstanceBLE].uartPeripheral.isBusy)
     {
-        NSLog(@"sendCommandGetUDID:  wait for result ");
+        if (debugLog)
+        {
+            NSLog(@"sendCommandGetUDID:  wait for result...");
+            debugLog = FALSE;
+        }
         
         date = [NSDate dateWithTimeInterval:0.5 sinceDate:[NSDate date]];
         

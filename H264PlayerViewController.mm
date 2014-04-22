@@ -1717,7 +1717,7 @@ double _ticks = 0;
 #else
     self.h264StreamerIsInStopped = FALSE;
     
-    if (userWantToCancel== TRUE)
+    if (userWantToCancel == TRUE)
     {
         NSLog(@"startStream: userWantToCancel >>>>");
         //force this to gobacktoCameralist
@@ -2804,7 +2804,6 @@ double _ticks = 0;
                        
                        if (isBehindSymmetricNat == TRUE) // USE RELAY
                        {
-                           NSLog(@"USE RELAY TO VIEW***********************");
 #ifdef SHOW_DEBUG_INFO
                            _viewVideoIn = @"R";
 #endif
@@ -2812,6 +2811,8 @@ double _ticks = 0;
                            responseDict = [jsonComm createSessionBlockedWithRegistrationId:stringUDID
                                                                              andClientType:@"BROWSER"
                                                                                  andApiKey:apiKey];
+                           NSLog(@"USE RELAY TO VIEW - symmetric_check_result: %@", responseDict);
+                           
                            if (responseDict != nil)
                            {
                                if ([[responseDict objectForKey:@"status"] intValue] == 200)
@@ -2838,6 +2839,7 @@ double _ticks = 0;
                                }
                                else
                                {
+#if 0
                                    /*
                                     * Add code to check stream via dev-api
                                     * Hack code
@@ -2868,6 +2870,7 @@ double _ticks = 0;
                                        }
                                    }
                                    else
+#endif
                                    {
 
                                    //handle Bad response

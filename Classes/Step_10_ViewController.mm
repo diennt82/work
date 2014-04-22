@@ -778,7 +778,6 @@
     self.stringAuth_token = [[responseData objectForKey:@"data"] objectForKey:@"auth_token"];
     //send master key to device
     [self sendMasterKeyToDevice];
-    
 }
 
 - (void) addCamFailedWithError:(NSDictionary *) error_response
@@ -794,8 +793,6 @@
     [self showDialogWithTag:ALERT_ADD_CAM_FAILED message:msg];
     self.errorCode = msg;
     [self  setupFailed];
-    
-    return;
 }
 
 - (void) addCamFailedServerUnreachable

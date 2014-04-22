@@ -262,6 +262,9 @@
 {
     self.shouldTimeoutProcessing = TRUE;
     
+    [[BLEConnectionManager getInstanceBLE].uartPeripheral didDisconnect];
+    [BLEConnectionManager getInstanceBLE].delegate = nil;
+    
     BMS_JSON_Communication *jsonComm = [[[BMS_JSON_Communication alloc] initWithObject:self
                                                                               Selector:@selector(removeCamSuccessWithResponse:)
                                                                           FailSelector:@selector(removeCamFailedWithError:)
@@ -272,7 +275,7 @@
     NSString *apiKey     = [userDefaults objectForKey:@"PortalApiKey"];
     
     
-    NSLog(@"NetworkInfo - timeoutBLESetupProcessing - try to remove camera");
+    NSLog(@"DisplayWifiListVC - timeoutBLESetupProcessing - try to remove camera");
     
     [jsonComm deleteBlockedDeviceWithRegistrationId:stringUDID
                                           andApiKey:apiKey];
@@ -648,10 +651,7 @@
     for (int i =0; i< wifiList.count; i++)
     {
         entry = [wifiList objectAtIndex:i];
-        NSLog(@"entry %d : %@",i, entry.ssid_w_quote);
-        NSLog(@"entry %d : %@",i, entry.bssid);
-        NSLog(@"entry %d : %@",i, entry.auth_mode);
-        NSLog(@"entry %d : %@",i, entry.quality);
+        NSLog(@"entry: %d, ssid_w_quote: %@, bssid: %@, auth_mode: %@, quality: %@", i, entry.ssid_w_quote, entry.bssid, entry.auth_mode, entry.quality);
     }
     
     self.isAlreadyWifiList = TRUE;
