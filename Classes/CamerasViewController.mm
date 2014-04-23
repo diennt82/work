@@ -394,7 +394,7 @@
         CamChannel *ch = (CamChannel *)[_camChannels objectAtIndex:indexPath.row];
         cell.ibCameraNameLabel.text = ch.profile.name;
         NSString *boundCameraName = ch.profile.name;
-        CGSize size = [boundCameraName sizeWithFont:[UIFont fontWithName:PN_SEMIBOLD_FONT size:18]];
+        CGSize size = [boundCameraName sizeWithAttributes:@{NSFontAttributeName:[UIFont fontWithName:PN_SEMIBOLD_FONT size:18]}];
         if (size.width > 154)
         {
             [cell.ibCameraNameLabel setFrame:CGRectMake(165, 0, 154, 30)];

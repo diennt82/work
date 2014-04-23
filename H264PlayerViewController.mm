@@ -108,6 +108,8 @@
 @property (nonatomic) BOOL returnFromPlayback;
 @property (nonatomic) BOOL shouldUpdateHorizeMenu;
 @property (nonatomic) BOOL isInLocal;
+@property (nonatomic) BOOL isAlreadyHorizeMenu;
+@property (nonatomic, retain) BMS_JSON_Communication *jsonCommBlocked;
 
 - (void)centerScrollViewContents;
 - (void)scrollViewDoubleTapped:(UITapGestureRecognizer*)recognizer;
@@ -1491,14 +1493,18 @@ double _ticks = 0;
         NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
         
         NSString *apiKey = [userDefaults objectForKey:@"PortalApiKey"];
-		BMS_JSON_Communication *jsonCommunication = [[[BMS_JSON_Communication alloc] initWithObject:self
-                                                                                           Selector:nil
-                                                                                       FailSelector:nil
-                                                                                          ServerErr:nil] autorelease];
         
-        NSDictionary *responseDict = [jsonCommunication sendCommandBlockedWithRegistrationId:self.selectedChannel.profile.registrationID
-                                                                                  andCommand:[NSString stringWithFormat:@"action=command&command=get_running_os"]
-                                                                                   andApiKey:apiKey];
+        if (_jsonCommBlocked == nil)
+        {
+            self.jsonCommBlocked = [[BMS_JSON_Communication alloc] initWithObject:self
+                                                                          Selector:nil
+                                                                      FailSelector:nil
+                                                                         ServerErr:nil];
+        }
+        
+        NSDictionary *responseDict = [_jsonCommBlocked sendCommandBlockedWithRegistrationId:self.selectedChannel.profile.registrationID
+                                                                                 andCommand:[NSString stringWithFormat:@"action=command&command=get_running_os"]
+                                                                                  andApiKey:apiKey];
         if (responseDict != nil)
         {
             NSInteger status = [[responseDict objectForKey:@"status"] intValue];
@@ -2008,17 +2014,20 @@ double _ticks = 0;
     NSString *apiKey = [userDefaults objectForKey:@"PortalApiKey"];
     //NSString *mac = [Util strip_colon_fr_mac:self.selectedChannel.profile.mac_address];
     
-    BMS_JSON_Communication *jsonComm = [[[BMS_JSON_Communication alloc] initWithObject:self
-                                                                              Selector:nil
-                                                                          FailSelector:nil
-                                                                             ServerErr:nil] autorelease];
+    if (_jsonCommBlocked == nil)
+    {
+        self.jsonCommBlocked = [[BMS_JSON_Communication alloc] initWithObject:self
+                                                                     Selector:nil
+                                                                 FailSelector:nil
+                                                                    ServerErr:nil];
+    }
     
     NSString * cmd_string = @"action=command&command=close_p2p_rtsp_stun";
     
     //NSDictionary *responseDict =
-    [jsonComm  sendCommandBlockedWithRegistrationId:self.selectedChannel.profile.registrationID
-                                         andCommand:cmd_string
-                                          andApiKey:apiKey];
+    [_jsonCommBlocked  sendCommandBlockedWithRegistrationId:self.selectedChannel.profile.registrationID
+                                                 andCommand:cmd_string
+                                                  andApiKey:apiKey];
     H264PlayerViewController *thisVC = (H264PlayerViewController *)vc;
     if (userWantToCancel == TRUE)
     {
@@ -2055,18 +2064,20 @@ double _ticks = 0;
     NSString *apiKey = [userDefaults objectForKey:@"PortalApiKey"];
     //NSString *mac = [Util strip_colon_fr_mac:self.selectedChannel.profile.mac_address];
     
-    BMS_JSON_Communication *jsonComm = [[BMS_JSON_Communication alloc] initWithObject:self
-                                                                              Selector:nil
-                                                                          FailSelector:nil
-                                                                             ServerErr:nil];
+    if (_jsonCommBlocked == nil)
+    {
+        self.jsonCommBlocked = [[BMS_JSON_Communication alloc] initWithObject:self
+                                                                     Selector:nil
+                                                                 FailSelector:nil
+                                                                    ServerErr:nil];
+    }
     
     NSString * cmd_string = @"action=command&command=close_relay_rtmp";
     
     //NSDictionary *responseDict =
-    [jsonComm  sendCommandBlockedWithRegistrationId:self.selectedChannel.profile.registrationID
+    [_jsonCommBlocked  sendCommandBlockedWithRegistrationId:self.selectedChannel.profile.registrationID
                                          andCommand:cmd_string
                                           andApiKey:apiKey];
-    [jsonComm release];
     
     H264PlayerViewController *thisVC = (H264PlayerViewController *)vc;
     if (userWantToCancel == TRUE)
@@ -2205,14 +2216,17 @@ double _ticks = 0;
         NSString *apiKey = [userDefaults objectForKey:@"PortalApiKey"];
         NSLog(@"Log - registrationID %@, apikey %@", self.selectedChannel.profile.registrationID, apiKey);
         
-		BMS_JSON_Communication *jsonCommunication = [[[BMS_JSON_Communication alloc] initWithObject:self
-                                                               Selector:nil
-                                                           FailSelector:nil
-                                                              ServerErr:nil] autorelease];
+		if (_jsonCommBlocked == nil)
+        {
+            self.jsonCommBlocked = [[BMS_JSON_Communication alloc] initWithObject:self
+                                                                         Selector:nil
+                                                                     FailSelector:nil
+                                                                        ServerErr:nil];
+        }
         
-        NSDictionary *responseDict = [jsonCommunication sendCommandBlockedWithRegistrationId:self.selectedChannel.profile.registrationID
-                                                                                  andCommand:[NSString stringWithFormat:@"action=command&command=get_resolution"]
-                                                                                   andApiKey:apiKey];
+        NSDictionary *responseDict = [_jsonCommBlocked sendCommandBlockedWithRegistrationId:self.selectedChannel.profile.registrationID
+                                                                                 andCommand:[NSString stringWithFormat:@"action=command&command=get_resolution"]
+                                                                                  andApiKey:apiKey];
         if (responseDict != nil)
         {
             
@@ -2267,17 +2281,20 @@ double _ticks = 0;
     }
     else
     {
-        BMS_JSON_Communication *jsonCommunication = [[[BMS_JSON_Communication alloc] initWithObject:self
-                                                                                           Selector:nil
-                                                                                       FailSelector:nil
-                                                                                          ServerErr:nil] autorelease];
+        if (_jsonCommBlocked == nil)
+        {
+            self.jsonCommBlocked = [[BMS_JSON_Communication alloc] initWithObject:self
+                                                                         Selector:nil
+                                                                     FailSelector:nil
+                                                                        ServerErr:nil];
+        }
         
         NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
         
         //NSString *mac = [Util strip_colon_fr_mac:self.selectedChannel.profile.mac_address];
         NSString *apiKey = [userDefaults objectForKey:@"PortalApiKey"];
         
-        NSDictionary *responseDict = [jsonCommunication sendCommandBlockedWithRegistrationId:self.selectedChannel.profile.registrationID
+        NSDictionary *responseDict = [_jsonCommBlocked sendCommandBlockedWithRegistrationId:self.selectedChannel.profile.registrationID
                                                                                   andCommand:@"action=command&command=get_recording_stat"
                                                                                    andApiKey:apiKey];
         if (responseDict != nil)
@@ -2335,17 +2352,20 @@ double _ticks = 0;
     }
     else
     {
-        BMS_JSON_Communication *jsonCommunication = [[[BMS_JSON_Communication alloc] initWithObject:self
-                                                                                           Selector:nil
-                                                                                       FailSelector:nil
-                                                                                          ServerErr:nil] autorelease];
+        if (_jsonCommBlocked == nil)
+        {
+            self.jsonCommBlocked = [[BMS_JSON_Communication alloc] initWithObject:self
+                                                                         Selector:nil
+                                                                     FailSelector:nil
+                                                                        ServerErr:nil];
+        }
         
         NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
         
         //NSString *mac = [Util strip_colon_fr_mac:self.selectedChannel.profile.mac_address];
         NSString *apiKey = [userDefaults objectForKey:@"PortalApiKey"];
         
-        NSDictionary *responseDict = [jsonCommunication sendCommandBlockedWithRegistrationId:self.selectedChannel.profile.registrationID
+        NSDictionary *responseDict = [_jsonCommBlocked sendCommandBlockedWithRegistrationId:self.selectedChannel.profile.registrationID
                                                                                   andCommand:[NSString stringWithFormat:@"action=command&command=set_recording_stat&mode=%@", modeRecording]
                                                                                    andApiKey:apiKey];
         if (responseDict != nil)
@@ -2409,21 +2429,22 @@ double _ticks = 0;
     }
     else
     {
-        BMS_JSON_Communication *jsonCommunication = [[BMS_JSON_Communication alloc] initWithObject:self
-                                                                                           Selector:nil
-                                                                                       FailSelector:nil
-                                                                                          ServerErr:nil];
+        if (_jsonCommBlocked == nil)
+        {
+            self.jsonCommBlocked = [[BMS_JSON_Communication alloc] initWithObject:self
+                                                                         Selector:nil
+                                                                     FailSelector:nil
+                                                                        ServerErr:nil];
+        }
         
         NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
         
         //NSString *mac = [Util strip_colon_fr_mac:self.selectedChannel.profile.mac_address];
         NSString *apiKey = [userDefaults objectForKey:@"PortalApiKey"];
         
-        NSDictionary *responseDict = [jsonCommunication sendCommandBlockedWithRegistrationId:self.selectedChannel.profile.registrationID
+        NSDictionary *responseDict = [_jsonCommBlocked sendCommandBlockedWithRegistrationId:self.selectedChannel.profile.registrationID
                                                                                   andCommand:@"action=command&command=value_melody"
                                                                                    andApiKey:apiKey];
-        [jsonCommunication release];
-        
         if (responseDict != nil)
         {
             NSInteger status = [[responseDict objectForKey:@"status"] intValue];
@@ -2489,20 +2510,22 @@ double _ticks = 0;
     }
     else
     {
-        BMS_JSON_Communication *jsonCommunication = [[BMS_JSON_Communication alloc] initWithObject:self
-                                                                                           Selector:nil
-                                                                                       FailSelector:nil
-                                                                                          ServerErr:nil];
+        if (_jsonCommBlocked == nil)
+        {
+            self.jsonCommBlocked = [[BMS_JSON_Communication alloc] initWithObject:self
+                                                                         Selector:nil
+                                                                     FailSelector:nil
+                                                                        ServerErr:nil];
+        }
         
         NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
         
         //NSString *mac = [Util strip_colon_fr_mac:self.selectedChannel.profile.mac_address];
         NSString *apiKey = [userDefaults objectForKey:@"PortalApiKey"];
         
-        NSDictionary *responseDict = [jsonCommunication sendCommandBlockedWithRegistrationId:self.selectedChannel.profile.registrationID
+        NSDictionary *responseDict = [_jsonCommBlocked sendCommandBlockedWithRegistrationId:self.selectedChannel.profile.registrationID
                                                                                   andCommand:@"action=command&command=value_temperature"
                                                                                    andApiKey:apiKey];
-        [jsonCommunication release];
         
         if (responseDict != nil)
         {
@@ -2762,10 +2785,14 @@ double _ticks = 0;
                        //NSString *mac = [Util strip_colon_fr_mac:self.selectedChannel.profile.mac_address];
                        NSString *stringUDID = self.selectedChannel.profile.registrationID;
                        
-                       BMS_JSON_Communication *jsonComm = [[[BMS_JSON_Communication alloc] initWithObject:self
-                                                                                                 Selector:nil
-                                                                                             FailSelector:nil
-                                                                                                ServerErr:nil] autorelease];
+                       if (_jsonCommBlocked == nil)
+                       {
+                           self.jsonCommBlocked = [[BMS_JSON_Communication alloc] initWithObject:self
+                                                                                        Selector:nil
+                                                                                    FailSelector:nil
+                                                                                       ServerErr:nil];
+                       }
+                       
                        NSDictionary *responseDict;
                        //NSLog(@"%@", responseDict);
                        
@@ -2776,7 +2803,7 @@ double _ticks = 0;
                            _viewVideoIn = @"R";
 #endif
                            //responseDict = [jsonComm createSessionBlockedWithRegistrationId:mac
-                           responseDict = [jsonComm createSessionBlockedWithRegistrationId:stringUDID
+                           responseDict = [_jsonCommBlocked createSessionBlockedWithRegistrationId:stringUDID
                                                                              andClientType:@"BROWSER"
                                                                                  andApiKey:apiKey];
                            NSLog(@"USE RELAY TO VIEW - symmetric_check_result: %@", responseDict);
@@ -2877,7 +2904,7 @@ double _ticks = 0;
                                                     self.selectedChannel.local_stun_video_port,
                                                     self.selectedChannel.public_ip];
                            
-                           responseDict =  [jsonComm  sendCommandBlockedWithRegistrationId:stringUDID
+                           responseDict =  [_jsonCommBlocked  sendCommandBlockedWithRegistrationId:stringUDID
                                                                                 andCommand:cmd_string
                                                                                  andApiKey:apiKey];
                            
@@ -2904,7 +2931,7 @@ double _ticks = 0;
                                            cmd_string = @"action=command&command=close_p2p_rtsp_stun";
                                            
                                            //responseDict =
-                                           [jsonComm  sendCommandBlockedWithRegistrationId:stringUDID
+                                           [_jsonCommBlocked  sendCommandBlockedWithRegistrationId:stringUDID
                                                                                 andCommand:cmd_string
                                                                                  andApiKey:apiKey];
                                            
@@ -2959,7 +2986,7 @@ double _ticks = 0;
                                        cmd_string = @"action=command&command=close_p2p_rtsp_stun";
                                        
                                        //responseDict =
-                                       [jsonComm  sendCommandBlockedWithRegistrationId:stringUDID
+                                       [_jsonCommBlocked  sendCommandBlockedWithRegistrationId:stringUDID
                                                                             andCommand:cmd_string
                                                                              andApiKey:apiKey];
                                        
@@ -3043,12 +3070,15 @@ double _ticks = 0;
                                NSString *apiKey = [userDefaults objectForKey:@"PortalApiKey"];
                                NSLog(@"Log - registrationID: %@, apikey: %@", stringUDID, apiKey);
                                
-                               BMS_JSON_Communication *jsonCommunication = [[[BMS_JSON_Communication alloc] initWithObject:self
-                                                                                                                  Selector:nil
-                                                                                                              FailSelector:nil
-                                                                                                                 ServerErr:nil] autorelease];
+                               if (_jsonCommBlocked == nil)
+                               {
+                                   self.jsonCommBlocked = [[BMS_JSON_Communication alloc] initWithObject:self
+                                                                                                Selector:nil
+                                                                                            FailSelector:nil
+                                                                                               ServerErr:nil];
+                               }
                                
-                               NSDictionary *responseDict = [jsonCommunication sendCommandBlockedWithRegistrationId:stringUDID
+                               NSDictionary *responseDict = [_jsonCommBlocked sendCommandBlockedWithRegistrationId:stringUDID
                                                                                                          andCommand:[NSString stringWithFormat:@"action=command&command=get_resolution"]
                                                                                                           andApiKey:apiKey];
                                if (responseDict != nil)
@@ -3126,11 +3156,15 @@ double _ticks = 0;
                        //NSString *mac = [Util strip_colon_fr_mac:self.selectedChannel.profile.mac_address];
                        NSString *stringUDID = self.selectedChannel.profile.registrationID;
                        
-                       BMS_JSON_Communication *jsonComm = [[[BMS_JSON_Communication alloc] initWithObject:self
-                                                                                                 Selector:nil
-                                                                                             FailSelector:nil
-                                                                                                ServerErr:nil] autorelease];
-                       NSDictionary *responseDict = [jsonComm createSessionBlockedWithRegistrationId:stringUDID
+                       if (_jsonCommBlocked == nil)
+                       {
+                           self.jsonCommBlocked = [[BMS_JSON_Communication alloc] initWithObject:self
+                                                                                        Selector:nil
+                                                                                    FailSelector:nil
+                                                                                       ServerErr:nil];
+                       }
+                       
+                       NSDictionary *responseDict = [_jsonCommBlocked createSessionBlockedWithRegistrationId:stringUDID
                                                                          andClientType:@"BROWSER"
                                                                              andApiKey:apiKey];
                        NSLog(@"remoteConnectingViaSymmectric: %@", responseDict);
@@ -3368,11 +3402,15 @@ double _ticks = 0;
             NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
             NSString *apiKey = [userDefaults objectForKey:@"PortalApiKey"];
             
-            BMS_JSON_Communication *jsonCommunication = [[[BMS_JSON_Communication alloc] initWithObject:self
-                                                               Selector:nil
-                                                           FailSelector:nil
-                                                              ServerErr:nil] autorelease];
-            NSDictionary *responseDict = [jsonCommunication sendCommandBlockedWithRegistrationId:self.selectedChannel.profile.registrationID
+            if (_jsonCommBlocked == nil)
+            {
+                self.jsonCommBlocked = [[BMS_JSON_Communication alloc] initWithObject:self
+                                                                             Selector:nil
+                                                                         FailSelector:nil
+                                                                            ServerErr:nil];
+            }
+            
+            NSDictionary *responseDict = [_jsonCommBlocked sendCommandBlockedWithRegistrationId:self.selectedChannel.profile.registrationID
                                                                               andCommand:[NSString stringWithFormat:@"action=command&command=%@", dir_str]
                                                                                andApiKey:apiKey];
             NSLog(@"send_UD_dir_to_rabot status: %d", [[responseDict objectForKey:@"status"] intValue]);
@@ -3447,11 +3485,15 @@ double _ticks = 0;
             NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
             NSString *apiKey = [userDefaults objectForKey:@"PortalApiKey"];
             
-            BMS_JSON_Communication *jsonCommunication = [[[BMS_JSON_Communication alloc] initWithObject:self
-                                                              Selector:nil
-                                                          FailSelector:nil
-                                                             ServerErr:nil] autorelease];
-            NSDictionary *responseDict = [jsonCommunication sendCommandBlockedWithRegistrationId:self.selectedChannel.profile.registrationID
+            if (_jsonCommBlocked == nil)
+            {
+                self.jsonCommBlocked = [[BMS_JSON_Communication alloc] initWithObject:self
+                                                                             Selector:nil
+                                                                         FailSelector:nil
+                                                                            ServerErr:nil];
+            }
+            
+            NSDictionary *responseDict = [_jsonCommBlocked sendCommandBlockedWithRegistrationId:self.selectedChannel.profile.registrationID
                                                                               andCommand:[NSString stringWithFormat:@"action=command&command=%@", dir_str]
                                                                                andApiKey:apiKey];
             NSLog(@"send_LR_dir_to_rabot status: %d", [[responseDict objectForKey:@"status"] intValue]);
@@ -3908,7 +3950,12 @@ double _ticks = 0;
         //hide navigation bar
         [self.navigationController setNavigationBarHidden:YES];
         [UIApplication sharedApplication].statusBarHidden = YES;
-        [self.horizMenu reloadData:YES];
+        
+        if (_isAlreadyHorizeMenu)
+        {
+            [self.horizMenu reloadData:YES];
+        }
+        
         // I don't know why remove it.
         [self.melodyViewController.view removeFromSuperview];
         
@@ -3961,7 +4008,12 @@ double _ticks = 0;
         [self.navigationController setNavigationBarHidden:NO];
         [[UIApplication sharedApplication] setStatusBarHidden:NO];
         self.view.backgroundColor = [UIColor whiteColor];
-        [self.horizMenu reloadData:NO];
+        
+        if (_isAlreadyHorizeMenu)
+        {
+            [self.horizMenu reloadData:NO];
+        }
+        
         CGFloat imageViewHeight = SCREEN_WIDTH * 9 / 16;
         
         if (isiOS7AndAbove)
@@ -4379,11 +4431,10 @@ double _ticks = 0;
 }
 -(void) playSound
 {
-	
+#if 0
+    // Need not to set property for AudioSession.
     
 	//NSLog(@"Play the B");
-    
-    
 	//201201011 This is needed to play the system sound on top of audio from camera
 	UInt32 sessionCategory = kAudioSessionCategory_AmbientSound;    // 1
 	AudioSessionSetProperty (
@@ -4391,7 +4442,7 @@ double _ticks = 0;
                              sizeof (sessionCategory),                                   // 3
                              &sessionCategory                                            // 4
                              );
-    
+#endif
 	//Play beep
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
     {
@@ -4484,6 +4535,7 @@ double _ticks = 0;
 
 - (void)initHorizeMenu:(NSString *)camerModel
 {
+    self.isAlreadyHorizeMenu = TRUE;
     /*
      //create list image for display horizontal scroll view menu
      1.Pan, Tilt & Zoom (bb_setting_icon.png)
@@ -4945,6 +4997,7 @@ double _ticks = 0;
     [_ib_btViewIn release];
     [_ib_btResolInfo release];
     [_audioOutStreamRemote release];
+    [_jsonCommBlocked release];
     [super dealloc];
 }
 //At first time, we set to FALSE after call checkOrientation()
@@ -5266,17 +5319,19 @@ double _ticks = 0;
 {
     // STEP 1
     //[BMS_JSON_Communication setServerInput:@"https://dev-api.hubble.in:443/v1"];
-    BMS_JSON_Communication *jsonComm = [[BMS_JSON_Communication alloc] initWithObject:self
-                                                                             Selector:Nil
-                                                                         FailSelector:nil
-                                                                            ServerErr:nil];
+    if (_jsonCommBlocked == nil)
+    {
+        self.jsonCommBlocked = [[BMS_JSON_Communication alloc] initWithObject:self
+                                                                     Selector:nil
+                                                                 FailSelector:nil
+                                                                    ServerErr:nil];
+    }
     
     NSString *regID = self.selectedChannel.profile.registrationID;
     
-    NSDictionary *responseDict = [jsonComm createTalkbackSessionBlockedWithRegistrationId:regID
+    NSDictionary *responseDict = [_jsonCommBlocked createTalkbackSessionBlockedWithRegistrationId:regID
                                                                                    apiKey:_apiKey];
     NSLog(@"%@", responseDict);
-    [jsonComm release];
     
     //[BMS_JSON_Communication setServerInput:@"https://api.hubble.in/v1"];
     
@@ -5882,14 +5937,17 @@ double _ticks = 0;
 
 - (BOOL)checkAvailableStateOfCamera: (NSString *)regID
 {
-    BMS_JSON_Communication *jsonComm = [[BMS_JSON_Communication alloc] initWithObject:self
-                                                                             Selector:nil
-                                                                         FailSelector:nil
-                                                                            ServerErr:nil];
+    if (_jsonCommBlocked == nil)
+    {
+        self.jsonCommBlocked = [[BMS_JSON_Communication alloc] initWithObject:self
+                                                                     Selector:nil
+                                                                 FailSelector:nil
+                                                                    ServerErr:nil];
+    }
+    
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     NSString *apiKey = [userDefaults objectForKey:@"PortalApiKey"];
-    NSDictionary *responseDict = [jsonComm checkDeviceIsAvailableBlockedWithRegistrationId:regID andApiKey:apiKey];
-    [jsonComm release];
+    NSDictionary *responseDict = [_jsonCommBlocked checkDeviceIsAvailableBlockedWithRegistrationId:regID andApiKey:apiKey];
     
     if (responseDict != nil)
     {
