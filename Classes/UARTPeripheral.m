@@ -460,6 +460,18 @@
     if (self.delegate != nil)
     {
         [self.delegate readyToTxRx];
+        
+        if (self.hello_timer != nil)
+        {
+            [self.hello_timer invalidate];
+            self.hello_timer = nil;
+        }
+        
+        self.hello_timer  =  [NSTimer scheduledTimerWithTimeInterval:7.0
+                                                              target:self
+                                                            selector:@selector(send_hello:)
+                                                            userInfo:nil
+                                                             repeats:NO];
     }
     
 }
