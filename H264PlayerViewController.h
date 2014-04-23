@@ -179,7 +179,6 @@
 @property (nonatomic, retain) HttpCommunication* httpComm;
 @property (nonatomic) BOOL h264StreamerIsInStopped;
 
-@property (nonatomic, retain) BMS_JSON_Communication *jsonComm;
 @property (nonatomic) BOOL recordingFlag;
 @property (nonatomic) BOOL disableAutorotateFlag;
 
@@ -191,15 +190,6 @@
 @property (nonatomic, assign) id<H264PlayerVCDelegate> h264PlayerVCDelegate;
 @property (nonatomic, retain) MelodyViewController *melodyViewController;
 
-
-/* Direction */
-//@property (nonatomic, retain) NSTimer * send_UD_dir_req_timer;
-//@property (nonatomic, retain) NSTimer * send_LR_dir_req_timer;
-///* Added to support direction update */
-//@property (nonatomic) int currentDirUD, lastDirUD;
-//@property (nonatomic) int delay_update_lastDir_count;
-//@property (nonatomic) int currentDirLR,lastDirLR;
-//@property (nonatomic) int delay_update_lastDirLR_count;
 
 #if 1 //Needed or not ??
 
@@ -219,18 +209,7 @@
 - (void)scan_done:(NSArray *) _scan_results;
 
 -(void) handleMessage:(int) msg ext1: (int) ext1 ext2:(int) ext2;
-- (void)stopStream;
 - (void)goBackToCameraList;
 
-
-//action for control panel and update bottom view
-//- (IBAction)holdToTalk:(id)sender;
-- (IBAction)processingRecordingOrTakePicture:(id)sender;
-- (IBAction)changeAction:(id)sender;
-//- (IBAction)touchUpInsideHoldToTalk:(id)sender;
-- (IBAction)bt_showMenuControlPanel:(id)sender;
-- (IBAction)changeToMainRecording:(id)sender;
-- (IBAction)switchDegreePressed:(id)sender;
-- (IBAction)showInfoDebug:(id)sender;
 
 @end

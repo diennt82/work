@@ -69,8 +69,6 @@
     BOOL _isLandScapeMode;//cheat to display correctly timeline bottom
     BOOL _wantToShowTimeLine;
     BOOL _hideCustomIndicatorAndTextNotAccessble;
-    //check if shared cam is connected to macOS
-    NSString *_sharedCamConnectedTo;
     //check to show custom indicator
     BOOL _isShowCustomIndicator;
     //check to show custom indicator
@@ -88,7 +86,6 @@
 @property (nonatomic) BOOL isEarlierView;
 @property (nonatomic) NSInteger numberOfSTUNError;
 @property (nonatomic, retain) NSString *stringTemperature;
-//@property (nonatomic, retain) NSTimer *timerGetTemperature;
 @property (nonatomic) BOOL existTimerTemperature;
 @property (nonatomic) BOOL cameraIsNotAvailable;
 @property (nonatomic, retain) NSThread *threadBonjour;
@@ -104,13 +101,13 @@
 @property (nonatomic) BOOL wantsCancelRemoteTalkback;
 @property (nonatomic, retain) AudioOutStreamRemote *audioOutStreamRemote;
 @property (nonatomic, retain) NSString *talkbackRemoteServer;
-@property (nonatomic, strong) NSString *sharedCamConnectedTo;
+//check if shared cam is connected to macOS
+@property (nonatomic, retain) NSString *sharedCamConnectedTo;
 @property (nonatomic) BOOL remoteViewTimeout;
 @property (nonatomic) BOOL disconnectAlert;
 @property (nonatomic) BOOL returnFromPlayback;
 @property (nonatomic) BOOL shouldUpdateHorizeMenu;
 @property (nonatomic) BOOL isInLocal;
-//@property (nonatomic)
 
 - (void)centerScrollViewContents;
 - (void)scrollViewDoubleTapped:(UITapGestureRecognizer*)recognizer;
@@ -129,7 +126,6 @@
 @synthesize selectedItemMenu = _selectedItemMenu;
 @synthesize walkieTalkieEnabled;
 @synthesize httpComm = _httpComm;
-@synthesize sharedCamConnectedTo = _sharedCamConnectedTo;
 
 static int fps = 0;
 double _ticks = 0;
@@ -209,7 +205,7 @@ double _ticks = 0;
 #else
     self.imageViewStreamer.userInteractionEnabled = NO;
 #endif
-    _sharedCamConnectedTo = [[NSString alloc] init];
+    self.sharedCamConnectedTo = @"";
     self.cameraModel = [self.selectedChannel.profile getModel];
     
     /*
@@ -276,8 +272,6 @@ double _ticks = 0;
         
         [self.ib_viewRecordTTT setFrame:CGRectMake(alignXButtonRecord, alignYButtonRecord, viewRecordSize.width, viewRecordSize.height)];
         [_imgViewDrectionPad setFrame:CGRectMake(alignXButtonDirectionPad, alignYButtonDirectionPad, directionPadSize.width, directionPadSize.height)];
-        
-        
     }
     else
     {
@@ -320,17 +314,20 @@ double _ticks = 0;
         self.ib_labelTouchToTalk.textColor = color;
         //for recordingText
         [self.ib_labelRecordVideo setFont:font];
+       
         if (_isRecordInterface && _isProcessRecording)
         {
             self.ib_labelRecordVideo.textColor = [UIColor recordingTextColor];
-        } else
+        }
+        else
         {
             self.ib_labelRecordVideo.textColor = [UIColor holdToTalkTextColor];
         }
         //update position text recording
         CGPoint localPoint = self.ib_viewRecordTTT.frame.origin;
         NSString *recordingString = self.ib_labelRecordVideo.text;
-        CGSize recordingSize = [recordingString sizeWithFont:font];
+        //CGSize recordingSize = [recordingString sizeWithFont:font];
+        CGSize recordingSize = [recordingString sizeWithAttributes:@{NSFontAttributeName: font}];
         
         float alignY = (SCREEN_HEIGHT - localPoint.y) - marginBottomText + self.ib_labelRecordVideo.bounds.size.height/2 - 3*recordingSize.height/2;
         
@@ -338,7 +335,8 @@ double _ticks = 0;
         //update position text hold to talk
         //CGPoint position = self.ib_viewRecordTTT.bounds.origin;
         NSString *holdTTString = self.ib_labelTouchToTalk.text;
-        CGSize holdTTSize = [holdTTString sizeWithFont:font];
+        //CGSize holdTTSize = [holdTTString sizeWithFont:font];
+        CGSize holdTTSize = [holdTTString sizeWithAttributes:@{NSFontAttributeName:font}];
         CGSize labelTouchToTalkSize = self.ib_labelTouchToTalk.bounds.size;
         
         //    float deltaY1 = (labelTouchToTalkSize.height + holdTTSize.height)/2.0;
@@ -484,8 +482,8 @@ double _ticks = 0;
                                                     target:self
                                                     action:@selector(nowButtonAciton:)];
         [nowButton setTitleTextAttributes:@{
-                                            UITextAttributeFont: [UIFont fontWithName:PN_SEMIBOLD_FONT size:17.0],
-                                            UITextAttributeTextColor: [UIColor barItemSelectedColor]
+                                            NSFontAttributeName:[UIFont fontWithName:PN_SEMIBOLD_FONT size:17.0],
+                                            NSForegroundColorAttributeName:[UIColor barItemSelectedColor]
                                             } forState:UIControlStateNormal];
         
         earlierButton = [[UIBarButtonItem alloc] initWithTitle:@"Earlier"
@@ -493,8 +491,8 @@ double _ticks = 0;
                                                         target:self
                                                         action:@selector(earlierButtonAction:)];
         [earlierButton setTitleTextAttributes:@{
-                                                UITextAttributeFont: [UIFont fontWithName:PN_LIGHT_FONT size:17.0],
-                                                UITextAttributeTextColor: [UIColor barItemSelectedColor]
+                                                NSFontAttributeName:[UIFont fontWithName:PN_LIGHT_FONT size:17.0],
+                                                NSForegroundColorAttributeName:[UIColor barItemSelectedColor]
                                                 } forState:UIControlStateNormal];
         nowButton.enabled = NO;
         self.navigationItem.rightBarButtonItems = @[earlierButton, nowButton];
@@ -525,12 +523,12 @@ double _ticks = 0;
     [earlierButton setEnabled:YES];
    
     [nowButton setTitleTextAttributes:@{
-                                        UITextAttributeFont: [UIFont fontWithName:PN_SEMIBOLD_FONT size:17.0],
-                                        UITextAttributeTextColor: [UIColor barItemSelectedColor]
+                                        NSFontAttributeName: [UIFont fontWithName:PN_SEMIBOLD_FONT size:17.0],
+                                        NSForegroundColorAttributeName: [UIColor barItemSelectedColor]
                                         } forState:UIControlStateNormal];
     [earlierButton setTitleTextAttributes:@{
-                                            UITextAttributeFont: [UIFont fontWithName:PN_LIGHT_FONT size:17.0],
-                                            UITextAttributeTextColor: [UIColor barItemSelectedColor]
+                                            NSFontAttributeName: [UIFont fontWithName:PN_LIGHT_FONT size:17.0],
+                                            NSForegroundColorAttributeName: [UIColor barItemSelectedColor]
                                             } forState:UIControlStateNormal];
     
     
@@ -554,12 +552,12 @@ double _ticks = 0;
     [nowButton setEnabled:YES];
     
     [nowButton setTitleTextAttributes:@{
-                                        UITextAttributeFont: [UIFont fontWithName:PN_LIGHT_FONT size:17.0],
-                                        UITextAttributeTextColor: [UIColor barItemSelectedColor]
+                                        NSFontAttributeName: [UIFont fontWithName:PN_LIGHT_FONT size:17.0],
+                                        NSForegroundColorAttributeName: [UIColor barItemSelectedColor]
                                         } forState:UIControlStateNormal];
     [earlierButton setTitleTextAttributes:@{
-                                            UITextAttributeFont: [UIFont fontWithName:PN_SEMIBOLD_FONT size:17.0],
-                                            UITextAttributeTextColor: [UIColor barItemSelectedColor]
+                                            NSFontAttributeName: [UIFont fontWithName:PN_SEMIBOLD_FONT size:17.0],
+                                            NSForegroundColorAttributeName: [UIColor barItemSelectedColor]
                                             } forState:UIControlStateNormal];
     
     [self.customIndicator setHidden:YES];
@@ -1295,24 +1293,15 @@ double _ticks = 0;
 - (void)singleTapGestureCaptured:(id)sender
 {
     NSLog(@"Single tap singleTapGestureCaptured");
-
-    // Make sure Camera is NOT available
-    if ([self.selectedChannel.profile isNotAvailable])
+    
+    if (_isHorizeShow == TRUE)
     {
-        return;
+        [self hideControlMenu];
     }
     else
     {
-        if (_isHorizeShow == TRUE)
-        {
-            [self hideControlMenu];
-        }
-        else
-        {
-            [self showControlMenu];
-        }
+        [self showControlMenu];
     }
-    //self.isHorizeShow = !_isHorizeShow;
 }
 
 - (void)hideControlMenu
@@ -2609,6 +2598,7 @@ double _ticks = 0;
     degreeCelsius.textAlignment = NSTextAlignmentLeft;
 
     NSString *degreeCel;
+    
     if (_isDegreeFDisplay)
     {
         degreeCel = @"°F";
@@ -2619,72 +2609,51 @@ double _ticks = 0;
         degreeCel = @"°C";
         stringTemperature = _degreeCString;
     }
+    
     degreeCelsius.text= degreeCel;
     
     UIFont *degreeFont;
     UIFont *temperatureFont;
     float positionYOfBottomView = self.ib_temperature.frame.origin.y;//240.0f;
+    
     if (!isiOS7AndAbove)
+    {
         positionYOfBottomView = positionYOfBottomView - 44;
+    }
+    
     if (_isLandScapeMode)
     {
-        
         degreeCelsius.backgroundColor=[UIColor clearColor];
         degreeCelsius.textColor=[UIColor whiteColor];
         float xPosTemperature;
         float yPosTemperature;
         CGSize stringBoundingBox;;
         CGSize degreeCelBoundingBox;
-        if (isiPhone5)
+        CGFloat deltaWidth = 20;
+        
+        if (isiPhone5 || isiPhone4)
         {
             degreeFont = [UIFont applyHubbleFontName:PN_LIGHT_FONT withSize:13];
             temperatureFont = [UIFont applyHubbleFontName:PN_LIGHT_FONT withSize:53];
-            
-            [degreeCelsius setFont:degreeFont];
-            [self.ib_temperature setFont:temperatureFont];
-            [self.ib_temperature setTextColor:[UIColor whiteColor]];
-            [self.ib_temperature setText:stringTemperature];
-            
-            stringBoundingBox = [stringTemperature sizeWithFont:temperatureFont];
-            degreeCelBoundingBox = [degreeCel sizeWithFont:degreeFont];
-            
-            xPosTemperature = SCREEN_HEIGHT - self.ib_temperature.bounds.size.width - 40 + (self.ib_temperature.bounds.size.width - stringBoundingBox.width)/2;
-            yPosTemperature = SCREEN_WIDTH - 20 - stringBoundingBox.height;
-            
-            
         }
-        else if (isiPhone4)
-        {
-            degreeFont = [UIFont applyHubbleFontName:PN_LIGHT_FONT withSize:13];
-            temperatureFont = [UIFont applyHubbleFontName:PN_LIGHT_FONT withSize:53];
-            [degreeCelsius setFont:degreeFont];
-            [self.ib_temperature setFont:temperatureFont];
-            [self.ib_temperature setTextColor:[UIColor whiteColor]];
-            [self.ib_temperature setText:stringTemperature];
-            
-            stringBoundingBox = [stringTemperature sizeWithFont:temperatureFont];
-            degreeCelBoundingBox = [degreeCel sizeWithFont:degreeFont];
-            
-            xPosTemperature = SCREEN_HEIGHT - self.ib_temperature.bounds.size.width - 40 + (self.ib_temperature.bounds.size.width - stringBoundingBox.width)/2;
-            yPosTemperature = SCREEN_WIDTH - 20 - stringBoundingBox.height;
-        }
-        else
+        else // Expect iPad
         {
             degreeFont = [UIFont applyHubbleFontName:PN_LIGHT_FONT withSize:30];
             temperatureFont = [UIFont applyHubbleFontName:PN_LIGHT_FONT withSize:100];
             positionYOfBottomView = self.ib_temperature.frame.origin.y;
-            [degreeCelsius setFont:degreeFont];
-            [self.ib_temperature setFont:temperatureFont];
-            [self.ib_temperature setTextColor:[UIColor whiteColor]];
-            [self.ib_temperature setText:stringTemperature];
-            
-            stringBoundingBox = [stringTemperature sizeWithFont:temperatureFont];
-            degreeCelBoundingBox = [degreeCel sizeWithFont:degreeFont];
-            
-            xPosTemperature = SCREEN_HEIGHT - self.ib_temperature.bounds.size.width - 40 + (self.ib_temperature.bounds.size.width - stringBoundingBox.width)/2;
-            yPosTemperature = SCREEN_WIDTH - 92 - stringBoundingBox.height;
+            deltaWidth += 72;
         }
         
+        [degreeCelsius setFont:degreeFont];
+        [self.ib_temperature setFont:temperatureFont];
+        [self.ib_temperature setTextColor:[UIColor whiteColor]];
+        [self.ib_temperature setText:stringTemperature];
+        
+        stringBoundingBox = [stringTemperature sizeWithAttributes:@{NSFontAttributeName: temperatureFont}];
+        degreeCelBoundingBox = [degreeCel sizeWithAttributes:@{NSFontAttributeName: degreeFont}];
+        
+        xPosTemperature = SCREEN_HEIGHT - self.ib_temperature.bounds.size.width - 40 + (self.ib_temperature.bounds.size.width - stringBoundingBox.width)/2;
+        yPosTemperature = SCREEN_WIDTH - deltaWidth - stringBoundingBox.height;
 
         [self.ib_temperature setFrame:CGRectMake(xPosTemperature, yPosTemperature, self.ib_temperature.bounds.size.width, self.ib_temperature.bounds.size.height)];
         [ib_switchDegree setFrame:CGRectMake(xPosTemperature, yPosTemperature, self.ib_temperature.bounds.size.width, self.ib_temperature.bounds.size.height)];
@@ -2693,7 +2662,6 @@ double _ticks = 0;
         CGFloat alignX = (self.ib_temperature.bounds.size.width + widthString)/2;
         [degreeCelsius setFrame:CGRectMake(alignX, 5, degreeCelBoundingBox.width, degreeCelBoundingBox.height)];
         [self.ib_temperature addSubview:degreeCelsius];
-        
     }
     else
     {
@@ -2723,8 +2691,10 @@ double _ticks = 0;
         
         //need update text for C or F
         [self.ib_temperature setText:stringTemperature];
-        CGSize stringBoundingBox = [stringTemperature sizeWithFont:temperatureFont];
-        CGSize degreeCelBoundingBox = [degreeCel sizeWithFont:degreeFont];
+        //CGSize stringBoundingBox = [stringTemperature sizeWithFont:temperatureFont];
+        CGSize stringBoundingBox = [stringTemperature sizeWithAttributes:@{NSFontAttributeName: temperatureFont}];
+        //CGSize degreeCelBoundingBox = [degreeCel sizeWithFont:degreeFont];
+        CGSize degreeCelBoundingBox = [degreeCel sizeWithAttributes:@{NSFontAttributeName: degreeFont}];
         
         
         CGFloat widthString = stringBoundingBox.width;
@@ -2733,9 +2703,7 @@ double _ticks = 0;
         CGFloat alignYCel = (SCREEN_HEIGHT - positionYOfBottomView)/2 - heightString/2 + 10;
         [degreeCelsius setFrame:CGRectMake(alignX, alignYCel, degreeCelBoundingBox.width, degreeCelBoundingBox.height)];
         [self.ib_temperature addSubview:degreeCelsius];
-        
     }
-    
 
     [degreeCelsius release];
 }
@@ -4977,7 +4945,6 @@ double _ticks = 0;
     [_ib_btViewIn release];
     [_ib_btResolInfo release];
     [_audioOutStreamRemote release];
-    [_sharedCamConnectedTo release];
     [super dealloc];
 }
 //At first time, we set to FALSE after call checkOrientation()
