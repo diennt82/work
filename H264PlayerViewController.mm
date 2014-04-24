@@ -2132,6 +2132,8 @@ double _ticks = 0;
         if (h264Streamer != NULL)
         {
             //h264Streamer->setListener(NULL);
+            _isProcessRecording = FALSE;
+            [self stopRecordingVideo];
             
             h264Streamer->suspend();
             h264Streamer->stop();
@@ -5599,7 +5601,10 @@ double _ticks = 0;
     if (_isRecordInterface)
     {
         if (!_syncPortraitAndLandscape)
-        _isProcessRecording = !_isProcessRecording;
+        {
+            _isProcessRecording = !_isProcessRecording;
+        }
+        
         if (_isProcessRecording)
         {
             //now is interface recording
@@ -5628,23 +5633,8 @@ double _ticks = 0;
         }
         else
         {
-            //here to pause
-            [self.ib_processRecordOrTakePicture setBackgroundImage:[UIImage imageRecordVideo] forState:UIControlStateNormal];
-            [self.ib_processRecordOrTakePicture setBackgroundImage:[UIImage imageRecordVideoPressed] forState:UIControlEventTouchDown];
-            [self.ib_processRecordOrTakePicture setBackgroundImage:[UIImage imageRecordVideo] forState:UIControlEventTouchUpInside];
-            //stop timer display
-            [self stopTimerRecoring];
-            [self.ib_labelRecordVideo setText:@"Record Video"];
-            _syncPortraitAndLandscape = NO;
-
-            //processing for stopping record
-            /*save if have here.
-             */
-            if (h264Streamer != nil)
-            {
-                h264Streamer->stopRecord();
-            }
-
+            //here to stop
+            [self stopRecordingVideo];
         }
     }
     else
@@ -5677,6 +5667,25 @@ double _ticks = 0;
     }
     [self applyFont];
 
+}
+
+- (void)stopRecordingVideo
+{
+    [self.ib_processRecordOrTakePicture setBackgroundImage:[UIImage imageRecordVideo] forState:UIControlStateNormal];
+    [self.ib_processRecordOrTakePicture setBackgroundImage:[UIImage imageRecordVideoPressed] forState:UIControlEventTouchDown];
+    [self.ib_processRecordOrTakePicture setBackgroundImage:[UIImage imageRecordVideo] forState:UIControlEventTouchUpInside];
+    //stop timer display
+    [self stopTimerRecoring];
+    [self.ib_labelRecordVideo setText:@"Record Video"];
+    _syncPortraitAndLandscape = NO;
+    
+    //processing for stopping record
+    /*save if have here.
+     */
+    if (h264Streamer != nil)
+    {
+        h264Streamer->stopRecord();
+    }
 }
 
 - (IBAction)changeAction:(id)sender {
