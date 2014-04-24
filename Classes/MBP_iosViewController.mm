@@ -869,7 +869,8 @@
         //REmove password and registration id
         [userDefaults removeObjectForKey:@"PortalPassword"];
         [userDefaults removeObjectForKey:_push_dev_token];
-        
+        [userDefaults removeObjectForKey:@"PortalApiKey"];
+        [userDefaults removeObjectForKey:@"PortalUseremail"];
         [userDefaults synchronize];
         
         // Let the device know we want to receive push notifications
