@@ -316,7 +316,10 @@
     
     [jsonComm loginWithLogin:_stringUsername andPassword:_stringPassword];
     
-    NSLog(@"start logging"); 
+    NSLog(@"start logging");
+#if 1
+    // Ignore symmetric nath value nat. Force app to it
+#else
     if (_client == nil)
     {
         _client = [StunClient alloc]; //init];
@@ -329,6 +332,7 @@
         [_client init];
         [_client test_start_async:self];
     }
+#endif
 }
 
 #pragma mark TextView  delegate
