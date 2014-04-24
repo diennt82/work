@@ -4842,7 +4842,8 @@ double _ticks = 0;
         [self.ib_viewRecordTTT setHidden:NO];
         
         //check if is share cam, up UI
-        if ([_cameraModel isEqualToString:CP_MODEL_SHARED_CAM])
+        if ([_cameraModel isEqualToString:CP_MODEL_SHARED_CAM] ||
+            [_cameraModel isEqualToString:CP_MODEL_CONCURRENT])
         {
             _isRecordInterface = YES;
             [self changeAction:nil];
@@ -4852,43 +4853,40 @@ double _ticks = 0;
     else if (_selectedItemMenu == INDEX_MELODY)
     {
         [self.melodyViewController.view setHidden:NO];
+        
+        CGRect rect;
+        
         if (_isLandScapeMode)
         {
             if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
             {
-                self.melodyViewController.view.frame = CGRectMake(SCREEN_HEIGHT - 236, SCREEN_WIDTH - 400, 236, 165);
-            } else
+                rect = CGRectMake(SCREEN_HEIGHT - 236, SCREEN_WIDTH - 400, 236, 165);
+            }
+            else
             {
                 if (isiPhone4)
                 {
-                    self.melodyViewController.view.frame = CGRectMake(SCREEN_HEIGHT - 159, 65, 159, 204);
+                    rect = CGRectMake(SCREEN_HEIGHT - 159, 65, 159, 204);
                 }
                 else
                 {
-                    self.melodyViewController.view.frame = CGRectMake(393, 78, 175, 165);
-                    
+                    rect = CGRectMake(393, 78, 175, 165);
                 }
             }
-
         }
         else
         {
             if (isiOS7AndAbove)
             {
-
-                self.melodyViewController.view.frame = CGRectMake(0, self.ib_ViewTouchToTalk.frame.origin.y - 5, SCREEN_WIDTH, SCREEN_HEIGHT - self.ib_ViewTouchToTalk.frame.origin.y);
-                
-
-                
+                rect = CGRectMake(0, self.ib_ViewTouchToTalk.frame.origin.y - 5, SCREEN_WIDTH, SCREEN_HEIGHT - self.ib_ViewTouchToTalk.frame.origin.y);
             }
             else
             {
-                self.melodyViewController.view.frame = CGRectMake(0, self.ib_ViewTouchToTalk.frame.origin.y - 30 - 44, SCREEN_WIDTH, SCREEN_HEIGHT - self.ib_ViewTouchToTalk.frame.origin.y);
-          
+                rect = CGRectMake(0, self.ib_ViewTouchToTalk.frame.origin.y - 30 - 44, SCREEN_WIDTH, SCREEN_HEIGHT - self.ib_ViewTouchToTalk.frame.origin.y);
             }
-
-            
         }
+        
+        self.melodyViewController.view.frame = rect;
         
         /*
          TODO:need get status of laluby and update on UI.
@@ -5010,6 +5008,7 @@ double _ticks = 0;
     [_jsonCommBlocked release];
     [super dealloc];
 }
+
 //At first time, we set to FALSE after call checkOrientation()
 - (void)viewDidAppear:(BOOL)animated
 {
@@ -5678,15 +5677,18 @@ double _ticks = 0;
         [self.ib_processRecordOrTakePicture setBackgroundImage:[UIImage imageTakePhoto] forState:UIControlStateNormal];
         [self.ib_processRecordOrTakePicture setBackgroundImage:[UIImage imageTakePhoto] forState:UIControlEventTouchUpInside];
         [self.ib_processRecordOrTakePicture setBackgroundImage:[UIImage imageTakePhotoPressed] forState:UIControlEventTouchDown];
+        
         if (_isProcessRecording)
         {
             [self.ib_changeToMainRecording setHidden:NO];
             [self.view bringSubviewToFront:self.ib_changeToMainRecording];
         }
-        else{
+        else
+        {
             _syncPortraitAndLandscape = NO;
             
-            if (![_cameraModel isEqualToString:CP_MODEL_SHARED_CAM])
+            if (![_cameraModel isEqualToString:CP_MODEL_SHARED_CAM] &&
+                ![_cameraModel isEqualToString:CP_MODEL_CONCURRENT])
             {
                 [self.ib_buttonChangeAction setHidden:NO];
                 [self.view bringSubviewToFront:self.ib_buttonChangeAction];
