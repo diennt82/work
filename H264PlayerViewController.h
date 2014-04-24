@@ -128,8 +128,7 @@
     NSString *_resolution;
     NSTimer *_timerStopStreamAfter30s;
 }
-//property for Hold to talk
-@property (nonatomic) BOOL walkieTalkieEnabled;
+
 //property for processing recording
 @property (nonatomic, retain) NSTimer * recTimer;
 
@@ -177,7 +176,6 @@
 @property (nonatomic) BOOL h264StreamerIsInStopped;
 
 @property (nonatomic) BOOL recordingFlag;
-@property (nonatomic) BOOL disableAutorotateFlag;
 
 @property (nonatomic) BOOL askForFWUpgradeOnce;
 @property (nonatomic) int currentMediaStatus;

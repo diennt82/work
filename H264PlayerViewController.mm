@@ -112,6 +112,9 @@
 @property (nonatomic, retain) BMS_JSON_Communication *jsonCommBlocked;
 @property (nonatomic, assign) EarlierNavigationController *earlierNavi;
 @property (nonatomic) BOOL wantToShowTimeLine;
+//property for Hold to talk
+@property (nonatomic) BOOL walkieTalkieEnabled;
+@property (nonatomic) BOOL disableAutorotateFlag;
 
 - (void)centerScrollViewContents;
 - (void)scrollViewDoubleTapped:(UITapGestureRecognizer*)recognizer;
@@ -128,7 +131,6 @@
 @synthesize itemImages = _itemImages;
 @synthesize itemSelectedImages = _itemSelectedImages;
 @synthesize selectedItemMenu = _selectedItemMenu;
-@synthesize walkieTalkieEnabled;
 @synthesize httpComm = _httpComm;
 
 static int fps = 0;
@@ -3853,12 +3855,14 @@ double _ticks = 0;
 - (BOOL)shouldAutorotate
 {
     
-    if (userWantToCancel == TRUE || _earlierNavi.isEarlierView)
+    if (userWantToCancel == TRUE ||
+        _earlierNavi.isEarlierView)
     {
         return NO;
     }
     
-	return YES;//!self.disableAutorotateFlag;
+	//return YES;//
+    return !_disableAutorotateFlag;
 }
 
 -(NSUInteger)supportedInterfaceOrientations
@@ -5172,7 +5176,7 @@ double _ticks = 0;
         if ( walkie_talkie_enabled == YES)
         {
             [self performSelectorInBackground:@selector(set_Walkie_Talkie_bg:)
-                                   withObject:[NSString stringWithFormat:@"%d",walkie_talkie_enabled]];
+                                   withObject:[NSString stringWithFormat:@"%d", walkie_talkie_enabled]];
             if (_audioOut != nil)
             {
                 NSLog(@"Connect to Audio Soccket in setEnablePtt function");
@@ -5186,6 +5190,7 @@ double _ticks = 0;
         }
         else
         {
+            self.ib_buttonTouchToTalk.enabled = NO;
             if (_audioOut != nil)
             {
                 NSLog(@"disconnect to audio socket###");
@@ -5200,22 +5205,22 @@ double _ticks = 0;
 
 - (void) set_Walkie_Talkie_bg: (NSString *) status
 {
-    NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
-    
-    NSString * command = [NSString stringWithFormat:@"%@%@", SET_PTT, status];
-    
-    NSLog(@"Command send to camera is %@", command);
-    
-    //set port default for send command
-    
-    _httpComm.device_port = 80;
-
-    if(_httpComm != nil)
-    {
-        [_httpComm sendCommandAndBlock:command];
+    @autoreleasepool {
+        NSString * command = [NSString stringWithFormat:@"%@%@", SET_PTT, status];
+        
+        NSLog(@"Command send to camera is %@", command);
+        
+        //set port default for send command
+        
+        _httpComm.device_port = 80;
+        
+        if(_httpComm != nil)
+        {
+            [_httpComm sendCommandAndBlock:command];
+        }
+        
+        self.ib_buttonTouchToTalk.enabled = YES;
     }
-    
-    [pool release];
 }
 
 -(void)processingHoldToTalk // Just init AudioOutStreamer
@@ -5243,6 +5248,7 @@ double _ticks = 0;
         {
             NSLog(@"UIGestureRecognizerStateBegan on hold to talk");
             self.walkieTalkieEnabled = YES;
+            self.disableAutorotateFlag = TRUE;
             
             [self setEnablePtt:YES];
             
@@ -5263,6 +5269,8 @@ double _ticks = 0;
         else if ([gest state] == UIGestureRecognizerStateEnded ||
                  [gest state] == UIGestureRecognizerStateCancelled)
         {
+            self.disableAutorotateFlag = FALSE;
+            
             NSLog(@"UIGestureRecognizerStateEnded on hold to talk");
             if ([gest state] == UIGestureRecognizerStateCancelled)
             {
