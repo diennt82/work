@@ -63,6 +63,11 @@
 #define SESSION_KEY @"SESSION_KEY"
 #define STREAM_ID   @"STREAM_ID"
 
+#define TF_DEBUG_FRAME_RATE_TAG 5001
+#define TF_DEBUG_RESOLUTION_TAG 5002
+#define TF_DEBUG_BIT_RATE_TAG   5003
+
+
 @interface H264PlayerViewController () <TimelineVCDelegate, BonjourDelegate, AudioOutStreamRemoteDelegate>
 {
     BOOL _syncPortraitAndLandscape;
@@ -77,6 +82,7 @@
 
 @property (retain, nonatomic) IBOutlet UIImageView *imageViewHandle;
 @property (retain, nonatomic) IBOutlet UIImageView *imageViewKnob;
+@property (retain, nonatomic) IBOutlet UIView *viewDebugInfo;
 
 @property (retain, nonatomic) EarlierViewController *earlierVC;
 @property (retain, nonatomic) TimelineViewController *timelineVC;
@@ -116,6 +122,11 @@
 @property (nonatomic) BOOL walkieTalkieEnabled;
 @property (nonatomic) BOOL disableAutorotateFlag;
 
+#ifdef SHOW_DEBUG_INFO
+//for debug
+@property (nonatomic, retain) NSString *viewVideoIn;
+#endif
+
 - (void)centerScrollViewContents;
 - (void)scrollViewDoubleTapped:(UITapGestureRecognizer*)recognizer;
 - (void)scrollViewTwoFingerTapped:(UITapGestureRecognizer*)recognizer;
@@ -133,7 +144,6 @@
 @synthesize selectedItemMenu = _selectedItemMenu;
 @synthesize httpComm = _httpComm;
 
-static int fps = 0;
 double _ticks = 0;
 #pragma mark - View
 
@@ -672,17 +682,15 @@ double _ticks = 0;
 #ifdef SHOW_DEBUG_INFO
         case MEDIA_INFO_FRAMERATE_VIDEO:
         {
-            fps = ext1;
-            [self addingLabelInfosForDebug];
-            break;
+            [self updateDebugInfoFrameRate:ext1];
         }
+            break;
 #endif
         case MEDIA_INFO_VIDEO_SIZE:
         {
             NSLog(@"video size: %d x %d", ext1, ext2);
+            [self updateDebugInfoResolutionWidth:ext1 heigth:ext2];
             
-            _resolution = [NSString stringWithFormat:@"%dx%d", ext1, ext2];
-            [self.ib_btResolInfo setTitle:_resolution forState:UIControlStateNormal];
             float top = 0 , left =0;
             float destWidth;
             float destHeight;
@@ -757,8 +765,11 @@ double _ticks = 0;
                            withObject:nil
                            afterDelay:0.1];
             }
-        }
             
+#ifdef SHOW_DEBUG_INFO
+            [self updateDebugInfoBitRate:ext1];
+#endif
+        }
             break;
             
         case MEDIA_INFO_HAS_FIRST_IMAGE:
@@ -2265,7 +2276,6 @@ double _ticks = 0;
 {
     //modelVideo example is "720p_926"
     _resolution = [NSString stringWithFormat:@"%@x%@", [modeVideo substringToIndex:3], [modeVideo substringFromIndex:5]];
-    [self.ib_btResolInfo setTitle:_resolution forState:UIControlStateNormal];
 }
 
 - (void)getTriggerRecording_bg
@@ -4150,9 +4160,6 @@ double _ticks = 0;
     {
         [self hideTimelineView];
     }
-    [self addingLabelInfosForDebug];
-    
-   //NSLog(@"H264VC - adjust -imageVideo: %@, timelineVC: %@, SCREEN_HEIGHT: %f", NSStringFromCGRect(_imageViewStreamer.frame), NSStringFromCGRect(_timelineVC.view.frame), SCREEN_HEIGHT);
 }
 
 
@@ -5002,10 +5009,10 @@ double _ticks = 0;
     [_ib_lbCameraNotAccessible release];
     [_ib_lbCameraName release];
     [_ib_btShowDebugInfo release];
-    [_ib_btViewIn release];
-    [_ib_btResolInfo release];
     [_audioOutStreamRemote release];
     [_jsonCommBlocked release];
+    [_viewDebugInfo release];
+    
     [super dealloc];
 }
 
@@ -5026,15 +5033,11 @@ double _ticks = 0;
     self.currentMediaStatus = 0;
     self.shouldUpdateHorizeMenu = YES;
     self.wantToShowTimeLine = YES;
+    _viewVideoIn = @"R";
     
     if (self.returnFromPlayback == FALSE)
     {
-        _isShowDebugInfo = NO;
         _isFirstLoad = YES;
-        //init data for debug
-#ifdef SHOW_DEBUG_INFO
-        [self initFirstData];
-#endif
         _isRecordInterface  = YES;
         _isProcessRecording = NO;
         _isListening = NO;
@@ -5059,14 +5062,6 @@ double _ticks = 0;
         [userDefaults synchronize];
     }
 }
-
-#ifdef SHOW_DEBUG_INFO
-- (void)initFirstData
-{
-    _viewVideoIn = nil;
-    fps = 0;
-}
-#endif
 
 - (void)viewWillDisappear:(BOOL)animated
 {
@@ -5624,8 +5619,9 @@ double _ticks = 0;
     [self setTemperatureState_Fg:_stringTemperature];
 }
 
-- (IBAction)showInfoDebug:(id)sender {
-    _isShowDebugInfo = !_isShowDebugInfo;
+- (IBAction)showInfoDebug:(id)sender
+{
+    self.viewDebugInfo.hidden = !_viewDebugInfo.isHidden;
 }
 
 - (IBAction)processingRecordingOrTakePicture:(id)sender {
@@ -5933,20 +5929,23 @@ double _ticks = 0;
 
 //
 #ifdef SHOW_DEBUG_INFO
-- (void)addingLabelInfosForDebug
-{
-    if (_isShowDebugInfo)
-    {
-        [self.ib_btResolInfo setHidden:NO];
-        [self.ib_btViewIn setHidden:NO];
-        [self.ib_btViewIn setTitle:[NSString stringWithFormat:@"%@ %d", _viewVideoIn, fps] forState:UIControlStateNormal];
-    }
-    else
-    {
-        [self.ib_btResolInfo setHidden:YES];
-        [self.ib_btViewIn setHidden:YES];
-    }
 
+- (void)updateDebugInfoFrameRate:(NSInteger )fps
+{
+    UITextField *tfFrameRate = (UITextField *)[_viewDebugInfo viewWithTag:TF_DEBUG_FRAME_RATE_TAG];
+    tfFrameRate.text = [NSString stringWithFormat:@"%@ %d", _viewVideoIn, fps];
+}
+
+- (void)updateDebugInfoResolutionWidth: (NSInteger )width heigth: (NSInteger )height
+{
+    UITextField *tfResolution = (UITextField *)[_viewDebugInfo viewWithTag:TF_DEBUG_RESOLUTION_TAG];
+    tfResolution.text = [NSString stringWithFormat:@"%dx%d", width, height];
+}
+
+- (void)updateDebugInfoBitRate:(NSInteger)bitRate
+{
+    UITextField *tfBitRate = (UITextField *)[_viewDebugInfo viewWithTag:TF_DEBUG_BIT_RATE_TAG];
+    tfBitRate.text = [NSString stringWithFormat:@"%d", bitRate * 8 / 1000];
 }
 
 #endif

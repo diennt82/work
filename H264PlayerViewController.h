@@ -107,10 +107,6 @@
     
     //
     NSTimer * fullScreenTimer;
-#ifdef SHOW_DEBUG_INFO
-    //for debug
-    NSString *_viewVideoIn;
-#endif
     //display time when recording
     NSTimer *_timerRecording;
     //degreeC
@@ -120,9 +116,7 @@
 
     IBOutlet UIButton *ib_switchDegree;
     BOOL _isFirstLoad;
-    
-    //check to show info for debug
-    BOOL _isShowDebugInfo;
+
     //timer display text Camera is not accessible
     NSTimer *_timerNotAccessible;
     NSString *_resolution;
@@ -166,9 +160,6 @@
 @property (retain, nonatomic) IBOutlet UILabel *ib_lbCameraNotAccessible;
 @property (retain, nonatomic) IBOutlet UILabel *ib_lbCameraName;
 @property (retain, nonatomic) IBOutlet UIButton *ib_btShowDebugInfo;
-@property (retain, nonatomic) IBOutlet UIButton *ib_btViewIn;
-@property (retain, nonatomic) IBOutlet UIButton *ib_btResolInfo;
-
 
 @property (retain, nonatomic) IBOutlet UIBarButtonItem *barBntItemReveal;
 
