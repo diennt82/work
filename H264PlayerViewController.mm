@@ -15,6 +15,7 @@
 #include <ifaddrs.h>
 #import <GAI.h>
 #import "AudioOutStreamRemote.h"
+#import "EarlierNavigationController.h"
 
 //#import "Reachability.h"
 #import "MBP_iosViewController.h"
@@ -67,7 +68,6 @@
     BOOL _syncPortraitAndLandscape;
     UIBarButtonItem *nowButton, *earlierButton;
     BOOL _isLandScapeMode;//cheat to display correctly timeline bottom
-    BOOL _wantToShowTimeLine;
     BOOL _hideCustomIndicatorAndTextNotAccessble;
     //check to show custom indicator
     BOOL _isShowCustomIndicator;
@@ -110,6 +110,8 @@
 @property (nonatomic) BOOL isInLocal;
 @property (nonatomic) BOOL isAlreadyHorizeMenu;
 @property (nonatomic, retain) BMS_JSON_Communication *jsonCommBlocked;
+@property (nonatomic, assign) EarlierNavigationController *earlierNavi;
+@property (nonatomic) BOOL wantToShowTimeLine;
 
 - (void)centerScrollViewContents;
 - (void)scrollViewDoubleTapped:(UITapGestureRecognizer*)recognizer;
@@ -150,8 +152,8 @@ double _ticks = 0;
 
     _hideCustomIndicatorAndTextNotAccessble = NO;
     // update navi
-    earlierNavi = [[EarlierNavigationController alloc] init];
-    earlierNavi.isEarlierView = NO;
+    self.earlierNavi = (EarlierNavigationController *)self.navigationController;
+    self.earlierNavi.isEarlierView = NO;
     _selectedItemMenu = INDEX_NO_SELECT;
     [self.ib_buttonChangeAction setHidden:NO];
     [self.view bringSubviewToFront:self.ib_buttonChangeAction];
@@ -328,7 +330,6 @@ double _ticks = 0;
         //update position text recording
         CGPoint localPoint = self.ib_viewRecordTTT.frame.origin;
         NSString *recordingString = self.ib_labelRecordVideo.text;
-        //CGSize recordingSize = [recordingString sizeWithFont:font];
         CGSize recordingSize = [recordingString sizeWithAttributes:@{NSFontAttributeName: font}];
         
         float alignY = (SCREEN_HEIGHT - localPoint.y) - marginBottomText + self.ib_labelRecordVideo.bounds.size.height/2 - 3*recordingSize.height/2;
@@ -337,7 +338,6 @@ double _ticks = 0;
         //update position text hold to talk
         //CGPoint position = self.ib_viewRecordTTT.bounds.origin;
         NSString *holdTTString = self.ib_labelTouchToTalk.text;
-        //CGSize holdTTSize = [holdTTString sizeWithFont:font];
         CGSize holdTTSize = [holdTTString sizeWithAttributes:@{NSFontAttributeName:font}];
         CGSize labelTouchToTalkSize = self.ib_labelTouchToTalk.bounds.size;
         
@@ -386,9 +386,9 @@ double _ticks = 0;
     //init the ptt port to default
     self.selectedChannel.profile.ptt_port = IRABOT_AUDIO_RECORDING_PORT;
 }
+
 - (void)addGesturesPichInAndOut
 {
-    
     [self.scrollView insertSubview:_imageViewStreamer aboveSubview:_imageViewVideo];
     //[self.imageViewStreamer setUserInteractionEnabled:YES];
     [self.scrollView setUserInteractionEnabled:YES];
@@ -533,14 +533,14 @@ double _ticks = 0;
                                             NSForegroundColorAttributeName: [UIColor barItemSelectedColor]
                                             } forState:UIControlStateNormal];
     
-    
-    earlierNavi.isEarlierView = NO;
+    self.earlierNavi.isEarlierView = NO;
     
     if (_wantToShowTimeLine)
     {
         [self showTimelineView];
         _wantToShowTimeLine = NO;
     }
+    
     _earlierVC.view.hidden = YES;
     
     [self displayCustomIndicator];
@@ -563,9 +563,9 @@ double _ticks = 0;
                                             } forState:UIControlStateNormal];
     
     [self.customIndicator setHidden:YES];
-    earlierNavi.isEarlierView = YES;
+    self.earlierNavi.isEarlierView = YES;
    
-    _wantToShowTimeLine = YES;
+    //_wantToShowTimeLine = YES;
 
     if (_earlierVC == nil)
     {
@@ -1273,6 +1273,11 @@ double _ticks = 0;
     [self stopPeriodicBeep];
     [self stopPeriodicPopup];
     
+    if (_audioOutStreamRemote)
+    {
+        [_audioOutStreamRemote disconnectFromAudioSocket];
+    }
+    
     if (self.currentMediaStatus == MEDIA_INFO_HAS_FIRST_IMAGE ||
         self.currentMediaStatus == MEDIA_PLAYER_STARTED ||
         (self.currentMediaStatus == 0 && h264Streamer == NULL)) // Media player haven't start yet.
@@ -1365,7 +1370,6 @@ double _ticks = 0;
 
 - (void)h264_HandleBecomeActive
 {
-    
     if (userWantToCancel == TRUE)
     {
         return;
@@ -1373,23 +1377,22 @@ double _ticks = 0;
     
     self.h264StreamerIsInStopped = FALSE;
     self.currentMediaStatus = 0;
+    self.wantToShowTimeLine = YES;
     
     if(_selectedChannel.profile.isInLocal == TRUE)
     {
-        NSLog(@"Become ACTIVE _  .. Local ");
-        [self becomeActive];
+        NSLog(@"Become ACTIVE _  .. Local");
     }
     else if ( _selectedChannel.profile.minuteSinceLastComm <= 5) // Remote
     {
-        [self becomeActive];
+        NSLog(@"Become ACTIVE _  .. REMOTE");
     }
     
-    [self adjustViewsForOrientation:[UIApplication sharedApplication].statusBarOrientation];
+    [self scanCamera];
 }
 
 - (void)h264_HandleEnteredBackground
 {
-    
     if (userWantToCancel == TRUE)
     {
         return;
@@ -1397,7 +1400,13 @@ double _ticks = 0;
     
     _selectedChannel.stopStreaming = TRUE;
     
-    //[self stopPeriodicPopup];
+    [self stopPeriodicBeep];
+    [self stopPeriodicPopup];
+    
+    if (_audioOutStreamRemote)
+    {
+        [_audioOutStreamRemote disconnectFromAudioSocket];
+    }
     
     if (self.currentMediaStatus == MEDIA_INFO_HAS_FIRST_IMAGE ||
         self.currentMediaStatus == MEDIA_PLAYER_STARTED ||
@@ -1416,9 +1425,9 @@ double _ticks = 0;
     }
     
     self.h264StreamerIsInStopped = TRUE;
-    
     self.imageViewVideo.backgroundColor = [UIColor blackColor];
     self.imageViewStreamer.backgroundColor = [UIColor blackColor];
+    
     if (_selectedChannel.profile.isInLocal == TRUE)
     {
         NSLog(@"Enter Background.. Local ");
@@ -1892,10 +1901,7 @@ double _ticks = 0;
     }
         _isShowCustomIndicator = NO;
     //no need call stopStream in offline mode
-    if (!_isCameraOffline)
-    {
-        [self stopStream];
-    }
+    [self stopStream];
 
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     [userDefaults removeObjectForKey:CAM_IN_VEW];
@@ -3847,7 +3853,7 @@ double _ticks = 0;
 - (BOOL)shouldAutorotate
 {
     
-    if (userWantToCancel == TRUE || _wantToShowTimeLine)
+    if (userWantToCancel == TRUE || _earlierNavi.isEarlierView)
     {
         return NO;
     }
@@ -3857,16 +3863,17 @@ double _ticks = 0;
 
 -(NSUInteger)supportedInterfaceOrientations
 {
-    if (_wantToShowTimeLine)
+    if (_earlierNavi.isEarlierView)
     {
         return UIInterfaceOrientationMaskPortrait;
     }
+    
     return UIInterfaceOrientationMaskAll;
 }
 
 - (void) willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
 {
-    if (_wantToShowTimeLine) //don't call adjustViews for Earlier
+    if (_earlierNavi.isEarlierView) //don't call adjustViews for Earlier
     {
         return;
     }
@@ -4989,7 +4996,6 @@ double _ticks = 0;
     [_imageViewKnob release];
     [_ib_changeToMainRecording release];
     [ib_switchDegree release];
-    [earlierNavi release];
     [_customIndicator release];
     [_ib_lbCameraNotAccessible release];
     [_ib_lbCameraName release];
@@ -5016,8 +5022,9 @@ double _ticks = 0;
     _isShowCustomIndicator = YES;
     self.currentMediaStatus = 0;
     self.shouldUpdateHorizeMenu = YES;
+    self.wantToShowTimeLine = YES;
     
-    if (self.returnFromPlayback== FALSE)
+    if (self.returnFromPlayback == FALSE)
     {
         _isShowDebugInfo = NO;
         _isFirstLoad = YES;
@@ -5025,7 +5032,6 @@ double _ticks = 0;
 #ifdef SHOW_DEBUG_INFO
         [self initFirstData];
 #endif
-        _isCameraOffline = NO;
         _isRecordInterface  = YES;
         _isProcessRecording = NO;
         _isListening = NO;

@@ -27,7 +27,6 @@
 #import "UIFont+Hubble.h"
 #import "UIColor+Hubble.h"
 #import "UIImage+Hubble.h"
-#import "EarlierNavigationController.h"
 #import "StunClient.h"
 
 
@@ -93,7 +92,6 @@
 
 	//NSTimer * probeTimer;
      dispatch_queue_t player_func_queue;
-    BOOL _isCameraOffline;
     BOOL _isRecordInterface;
     BOOL _isProcessRecording;
     BOOL _isListening;
@@ -122,7 +120,6 @@
 
     IBOutlet UIButton *ib_switchDegree;
     BOOL _isFirstLoad;
-    EarlierNavigationController *earlierNavi;
     
     //check to show info for debug
     BOOL _isShowDebugInfo;
