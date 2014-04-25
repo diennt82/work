@@ -121,6 +121,8 @@
 //property for Hold to talk
 @property (nonatomic) BOOL walkieTalkieEnabled;
 @property (nonatomic) BOOL disableAutorotateFlag;
+@property (nonatomic) BOOL enablePTT;
+@property (nonatomic, retain) NSString *stringStatePTT;
 
 #ifdef SHOW_DEBUG_INFO
 //for debug
@@ -229,7 +231,7 @@ double _ticks = 0;
      */
     
     //[self initHorizeMenu: _cameraModel];
-    //[self performSelectorInBackground:@selector(initHorizeMenu:) withObject:_cameraModel];
+    [self performSelectorInBackground:@selector(initHorizeMenu:) withObject:_cameraModel];
 
     //set text name for camera name
     [self.ib_lbCameraName setText:self.selectedChannel.profile.name];
@@ -246,6 +248,8 @@ double _ticks = 0;
     
     self.remoteViewTimeout = [userDefaults boolForKey:@"remote_view_timeout"];
     self.disconnectAlert   = [userDefaults boolForKey:@"disconnect_alert"];
+    
+    self.enablePTT = YES;
     
     [self becomeActive];
 }
@@ -1591,11 +1595,11 @@ double _ticks = 0;
      * Check to init HorizeMenu once
      */
     
-    if (_shouldUpdateHorizeMenu)
-    {
-        self.shouldUpdateHorizeMenu = FALSE;
-        [self initHorizeMenu:_cameraModel];
-    }
+//    if (_shouldUpdateHorizeMenu)
+//    {
+//        self.shouldUpdateHorizeMenu = FALSE;
+//        [self initHorizeMenu:_cameraModel];
+//    }
     
     [self createMonvementControlTimer];
     
@@ -1630,7 +1634,7 @@ double _ticks = 0;
 #ifdef SHOW_DEBUG_INFO
         _viewVideoIn = @"L";
 #endif
-        
+        self.stringStatePTT = @"Hold to Talk";
     }
     else if (self.selectedChannel.profile.minuteSinceLastComm <= 5)
     {
@@ -1672,6 +1676,7 @@ double _ticks = 0;
         }
         
         self.ib_labelTouchToTalk.text = @"Touch to Talk";
+        self.stringStatePTT = @"Touch to Talk";
     }
     else
     {
@@ -4160,6 +4165,9 @@ double _ticks = 0;
     {
         [self hideTimelineView];
     }
+    
+    self.ib_buttonTouchToTalk.enabled = _enablePTT;
+    self.ib_labelTouchToTalk.text = _stringStatePTT;
 }
 
 
@@ -4581,29 +4589,34 @@ double _ticks = 0;
     }
     else if ([_cameraModel isEqualToString:CP_MODEL_CONCURRENT])
     {
-        if (_isInLocal)
-        {
-            self.itemImages = [NSMutableArray arrayWithObjects:@"video_action_mic.png", @"video_action_video.png", @"video_action_music.png", @"video_action_temp.png", nil];
-            self.itemSelectedImages = [NSMutableArray arrayWithObjects:@"video_action_mic_pressed.png", @"video_action_video_pressed.png", @"video_action_music_pressed.png", @"video_action_temp_pressed.png", nil];
-        }
-        else
-        {
-            self.itemImages = [NSMutableArray arrayWithObjects:@"video_action_video.png", @"video_action_music.png", @"video_action_temp.png", nil];
-            self.itemSelectedImages = [NSMutableArray arrayWithObjects:@"video_action_video_pressed.png", @"video_action_music_pressed.png", @"video_action_temp_pressed.png", nil];
-        }
+        self.itemImages = [NSMutableArray arrayWithObjects:@"video_action_mic.png", @"video_action_video.png", @"video_action_music.png", @"video_action_temp.png", nil];
+        self.itemSelectedImages = [NSMutableArray arrayWithObjects:@"video_action_mic_pressed.png", @"video_action_video_pressed.png", @"video_action_music_pressed.png", @"video_action_temp_pressed.png", nil];
+        
+//        if (_isInLocal)
+//        {
+//            self.itemImages = [NSMutableArray arrayWithObjects:@"video_action_mic.png", @"video_action_video.png", @"video_action_music.png", @"video_action_temp.png", nil];
+//            self.itemSelectedImages = [NSMutableArray arrayWithObjects:@"video_action_mic_pressed.png", @"video_action_video_pressed.png", @"video_action_music_pressed.png", @"video_action_temp_pressed.png", nil];
+//        }
+//        else
+//        {
+//            self.itemImages = [NSMutableArray arrayWithObjects:@"video_action_video.png", @"video_action_music.png", @"video_action_temp.png", nil];
+//            self.itemSelectedImages = [NSMutableArray arrayWithObjects:@"video_action_video_pressed.png", @"video_action_music_pressed.png", @"video_action_temp_pressed.png", nil];
+//        }
     }
     else //if ([_cameraModel isEqualToString:CP_MODEL_BLE])
     {
-        if (_isInLocal)
-        {
-            self.itemImages = [NSMutableArray arrayWithObjects:@"video_action_pan.png", @"video_action_mic.png", @"video_action_video.png", @"video_action_music.png", @"video_action_temp.png", nil];
-            self.itemSelectedImages = [NSMutableArray arrayWithObjects:@"video_action_pan_pressed.png", @"video_action_mic_pressed.png", @"video_action_video_pressed.png", @"video_action_music_pressed.png", @"video_action_temp_pressed.png", nil];
-        }
-        else
-        {
-            self.itemImages = [NSMutableArray arrayWithObjects:@"video_action_pan.png", @"video_action_video.png", @"video_action_music.png", @"video_action_temp.png", nil];
-            self.itemSelectedImages = [NSMutableArray arrayWithObjects:@"video_action_pan_pressed.png", @"video_action_video_pressed.png", @"video_action_music_pressed.png", @"video_action_temp_pressed.png", nil];
-        }
+        self.itemImages = [NSMutableArray arrayWithObjects:@"video_action_pan.png", @"video_action_mic.png", @"video_action_video.png", @"video_action_music.png", @"video_action_temp.png", nil];
+        self.itemSelectedImages = [NSMutableArray arrayWithObjects:@"video_action_pan_pressed.png", @"video_action_mic_pressed.png", @"video_action_video_pressed.png", @"video_action_music_pressed.png", @"video_action_temp_pressed.png", nil];
+//        if (_isInLocal)
+//        {
+//            self.itemImages = [NSMutableArray arrayWithObjects:@"video_action_pan.png", @"video_action_mic.png", @"video_action_video.png", @"video_action_music.png", @"video_action_temp.png", nil];
+//            self.itemSelectedImages = [NSMutableArray arrayWithObjects:@"video_action_pan_pressed.png", @"video_action_mic_pressed.png", @"video_action_video_pressed.png", @"video_action_music_pressed.png", @"video_action_temp_pressed.png", nil];
+//        }
+//        else
+//        {
+//            self.itemImages = [NSMutableArray arrayWithObjects:@"video_action_pan.png", @"video_action_video.png", @"video_action_music.png", @"video_action_temp.png", nil];
+//            self.itemSelectedImages = [NSMutableArray arrayWithObjects:@"video_action_pan_pressed.png", @"video_action_video_pressed.png", @"video_action_music_pressed.png", @"video_action_temp_pressed.png", nil];
+//        }
     }
     
     //[self.horizMenu reloadData:NO];
@@ -4704,8 +4717,8 @@ double _ticks = 0;
     }
     else if ([_cameraModel isEqualToString:CP_MODEL_CONCURRENT])
     {
-        if (_isInLocal)
-        {
+//        if (_isInLocal)
+//        {
             switch (index)
             {
                 case 0:
@@ -4728,33 +4741,33 @@ double _ticks = 0;
                 default:
                     break;
             }
-        }
-        else
-        {
-            switch (index)
-            {
-                case 0:
-                    self.selectedItemMenu = INDEX_RECORDING;
-                    break;
-                    
-                case 1:
-                    self.selectedItemMenu = INDEX_MELODY;
-                    [self melodyTouchAction:nil];
-                    break;
-                    
-                case 2:
-                    self.selectedItemMenu = INDEX_TEMP;
-                    break;
-                    
-                default:
-                    break;
-            }
-        }
+//        }
+//        else
+//        {
+//            switch (index)
+//            {
+//                case 0:
+//                    self.selectedItemMenu = INDEX_RECORDING;
+//                    break;
+//                    
+//                case 1:
+//                    self.selectedItemMenu = INDEX_MELODY;
+//                    [self melodyTouchAction:nil];
+//                    break;
+//                    
+//                case 2:
+//                    self.selectedItemMenu = INDEX_TEMP;
+//                    break;
+//                    
+//                default:
+//                    break;
+//            }
+//        }
     }
     else// if ([_cameraModel isEqualToString:CP_MODEL_BLE])
     {
-        if (_isInLocal)
-        {
+//        if (_isInLocal)
+//        {
             switch (index)
             {
                 case INDEX_PAN_TILT:
@@ -4783,33 +4796,33 @@ double _ticks = 0;
                     NSLog(@"Action out of bound");
                     break;
             }
-        }
-        else
-        {
-            switch (index)
-            {
-                case 0:
-                    self.selectedItemMenu = INDEX_PAN_TILT;
-                    break;
-  
-                case 1:
-                    self.selectedItemMenu = INDEX_RECORDING;
-                    break;
-                    
-                case 2:
-                    self.selectedItemMenu = INDEX_MELODY;
-                    [self melodyTouchAction:nil];
-                    break;
-                    
-                case 3:
-                    self.selectedItemMenu = INDEX_TEMP;
-                    break;
-                    
-                default:
-                    NSLog(@"Action out of bound");
-                    break;
-            }
-        }
+//        }
+//        else
+//        {
+//            switch (index)
+//            {
+//                case 0:
+//                    self.selectedItemMenu = INDEX_PAN_TILT;
+//                    break;
+//  
+//                case 1:
+//                    self.selectedItemMenu = INDEX_RECORDING;
+//                    break;
+//                    
+//                case 2:
+//                    self.selectedItemMenu = INDEX_MELODY;
+//                    [self melodyTouchAction:nil];
+//                    break;
+//                    
+//                case 3:
+//                    self.selectedItemMenu = INDEX_TEMP;
+//                    break;
+//                    
+//                default:
+//                    NSLog(@"Action out of bound");
+//                    break;
+//            }
+//        }
     }
     
     [self hideTimelineView];
@@ -5154,8 +5167,10 @@ double _ticks = 0;
     else
     {
         self.walkieTalkieEnabled = !self.walkieTalkieEnabled;
-        self.ib_buttonTouchToTalk.enabled = NO;
-        self.ib_labelTouchToTalk.text = @"Processing...";
+        self.enablePTT = NO;
+        _ib_buttonTouchToTalk.enabled = NO;
+        self.stringStatePTT = @"Processing...";
+        _ib_labelTouchToTalk.text = @"Processing...";
         
         [self performSelectorInBackground:@selector(enableRemotePTT:)
                                withObject:[NSNumber numberWithBool:self.walkieTalkieEnabled]];
@@ -5298,9 +5313,9 @@ double _ticks = 0;
 
 - (void)touchUpInsideHoldToTalk {
     //update UI
-    [self.ib_buttonTouchToTalk setBackgroundColor:[UIColor clearColor]];
-    [self.ib_buttonTouchToTalk setBackgroundImage:[UIImage imageMic] forState:UIControlStateNormal];
-    [self.ib_buttonTouchToTalk setBackgroundImage:[UIImage imageMic] forState:UIControlEventTouchUpInside];
+    [_ib_buttonTouchToTalk setBackgroundColor:[UIColor clearColor]];
+    [_ib_buttonTouchToTalk setBackgroundImage:[UIImage imageMic] forState:UIControlStateNormal];
+    [_ib_buttonTouchToTalk setBackgroundImage:[UIImage imageMic] forState:UIControlEventTouchUpInside];
     
 #if TEST_REMOTE_TALKBACK
     self.ib_buttonTouchToTalk.enabled = YES;
@@ -5312,9 +5327,12 @@ double _ticks = 0;
     }
     else
     {
-        self.ib_buttonTouchToTalk.enabled = YES;
-        [self.ib_labelTouchToTalk setText:@"Touch to Talk"];
+        _ib_buttonTouchToTalk.enabled = YES;
+        self.enablePTT = YES;
+        [_ib_labelTouchToTalk setText:@"Touch to Talk"];
+        self.stringStatePTT = @"Touch to Talk";
     }
+    
     [self applyFont];
     
     //user touch up inside and outside
@@ -5366,8 +5384,13 @@ double _ticks = 0;
             {
                 self.ib_buttonTouchToTalk.enabled = NO;
                 self.ib_labelTouchToTalk.text = @"Not support!";
+                self.stringStatePTT = @"Not support!";
                 
                 return 404;
+            }
+            else if ([[responseDict objectForKey:@"status"] integerValue] == 422)
+            {
+                return 422;
             }
         }
     }
@@ -5400,6 +5423,7 @@ double _ticks = 0;
         {
             [_audioOutStreamRemote performSelectorOnMainThread:@selector(disconnectFromAudioSocket) withObject:nil waitUntilDone:NO];
         }
+        [self touchUpInsideHoldToTalk];
     }
     else
     {
@@ -5421,6 +5445,8 @@ double _ticks = 0;
             
             if (statusCode == 404)
             {
+                self.walkieTalkieEnabled = !self.walkieTalkieEnabled;
+                [self enableRemotePTT:[NSNumber numberWithBool:self.walkieTalkieEnabled]];
                 return;
             }
             
@@ -5444,7 +5470,9 @@ double _ticks = 0;
                 
                 if (resDict != Nil)
                 {
-                    if ([[resDict objectForKey:@"status"] integerValue] == 200)
+                    NSInteger status = [[resDict objectForKey:@"status"] integerValue];
+                    
+                    if (status == 200)
                     {
                         NSMutableData *data = [[NSMutableData alloc] init];
                         
@@ -5482,6 +5510,13 @@ double _ticks = 0;
                     }
                     else
                     {
+                        if (status == 404)
+                        {
+                            self.walkieTalkieEnabled = !self.walkieTalkieEnabled;
+                            [self enableRemotePTT:[NSNumber numberWithBool:self.walkieTalkieEnabled]];
+                            return;
+                        }
+                        
                         NSLog(@"Send cmd start_talk_back failed! Retry...");
                         [self retryTalkbackRemote];
                     }
@@ -5563,8 +5598,9 @@ double _ticks = 0;
 
 - (void)retryTalkbackRemote
 {
-    self.ib_labelTouchToTalk.text = @"Retry...";
+    //self.ib_labelTouchToTalk.text = @"Retry...";
     self.ib_buttonTouchToTalk.enabled = YES;
+    
     if (userWantToCancel || !self.walkieTalkieEnabled)
     {
         return;
@@ -5587,9 +5623,8 @@ double _ticks = 0;
     if (isFailed)
     {
         NSLog(@"Report handshake failed! Retry...");
-        
-        [self retryTalkbackRemote];
         self.ib_labelTouchToTalk.text = @"Retry...";
+        [self retryTalkbackRemote];
     }
     else
     {
