@@ -1395,6 +1395,7 @@ double _ticks = 0;
     self.h264StreamerIsInStopped = FALSE;
     self.currentMediaStatus = 0;
     self.wantToShowTimeLine = YES;
+    [self showTimelineView];
     
     if(_selectedChannel.profile.isInLocal == TRUE)
     {
