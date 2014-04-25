@@ -2132,6 +2132,8 @@ double _ticks = 0;
         if (h264Streamer != NULL)
         {
             //h264Streamer->setListener(NULL);
+            _isProcessRecording = FALSE;
+            [self stopRecordingVideo];
             
             h264Streamer->suspend();
             h264Streamer->stop();
@@ -5599,7 +5601,10 @@ double _ticks = 0;
     if (_isRecordInterface)
     {
         if (!_syncPortraitAndLandscape)
-        _isProcessRecording = !_isProcessRecording;
+        {
+            _isProcessRecording = !_isProcessRecording;
+        }
+        
         if (_isProcessRecording)
         {
             //now is interface recording
@@ -5612,27 +5617,24 @@ double _ticks = 0;
             {
                 _timerRecording = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(timerTick:) userInfo:nil repeats:YES];
             }
-            //processing for recording
+           
             /*
-             TODO: start recording
+             start recording
              */
+            
+            if (h264Streamer != nil)
+            {
+                NSString * url  = [Util getRecordFileName];
+                url = [url stringByReplacingOccurrencesOfString:@".avi" withString:@".flv"];
+                
+                h264Streamer->startRecord([url UTF8String]);
+            }
+            
         }
         else
         {
-            //here to pause
-            [self.ib_processRecordOrTakePicture setBackgroundImage:[UIImage imageRecordVideo] forState:UIControlStateNormal];
-            [self.ib_processRecordOrTakePicture setBackgroundImage:[UIImage imageRecordVideoPressed] forState:UIControlEventTouchDown];
-            [self.ib_processRecordOrTakePicture setBackgroundImage:[UIImage imageRecordVideo] forState:UIControlEventTouchUpInside];
-            //stop timer display
-            [self stopTimerRecoring];
-            [self.ib_labelRecordVideo setText:@"Record Video"];
-            _syncPortraitAndLandscape = NO;
-
-            //processing for stopping record
-            /*
-             TODO: save if have here.
-             */
-
+            //here to stop
+            [self stopRecordingVideo];
         }
     }
     else
@@ -5665,6 +5667,25 @@ double _ticks = 0;
     }
     [self applyFont];
 
+}
+
+- (void)stopRecordingVideo
+{
+    [self.ib_processRecordOrTakePicture setBackgroundImage:[UIImage imageRecordVideo] forState:UIControlStateNormal];
+    [self.ib_processRecordOrTakePicture setBackgroundImage:[UIImage imageRecordVideoPressed] forState:UIControlEventTouchDown];
+    [self.ib_processRecordOrTakePicture setBackgroundImage:[UIImage imageRecordVideo] forState:UIControlEventTouchUpInside];
+    //stop timer display
+    [self stopTimerRecoring];
+    [self.ib_labelRecordVideo setText:@"Record Video"];
+    _syncPortraitAndLandscape = NO;
+    
+    //processing for stopping record
+    /*save if have here.
+     */
+    if (h264Streamer != nil)
+    {
+        h264Streamer->stopRecord();
+    }
 }
 
 - (IBAction)changeAction:(id)sender {
