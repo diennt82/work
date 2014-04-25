@@ -647,9 +647,6 @@ double _ticks = 0;
 
 - (void)handleMessageOnMainThread: (NSArray * )args
 {
-#if TEST_REMOTE_TALKBACK
-#else
-//    [self displayCustomIndicator];
 
     NSNumber *numberMsg =(NSNumber *) [args objectAtIndex:0];
     
@@ -975,261 +972,8 @@ double _ticks = 0;
     }
     
     //NSLog(@"H264VC - handleMsg -imageVideo: %@, imageStreamer: %@", NSStringFromCGRect(_imageViewVideo.frame), NSStringFromCGRect(_imageViewStreamer.frame));
-#endif
+
     
-#if 0
-    switch (status) {
-        case STREAM_STARTED:
-        {
-            self.enableControls = TRUE;
-            progressView.hidden = YES;
-            
-            [self stopPeriodicPopup];
-            
-            
-            if (userWantToCancel == TRUE)
-            {
-                
-                NSLog(@"*[STREAM_STARTED] *** USER want to cancel **.. cancel after .1 sec...");
-                self.selected_channel.stopStreaming = TRUE;
-                [self performSelector:@selector(goBackToCameraList)
-                           withObject:nil
-                           afterDelay:0.1];
-            }
-            else
-            {
-                if ( self.selected_channel.profile.isInLocal && (self.askForFWUpgradeOnce == YES))
-                {
-                    [self performSelectorInBackground:@selector(checkIfUpgradeIsPossible) withObject:nil];
-                    self.askForFWUpgradeOnce = NO;
-                }
-                
-                //NSLog(@"Got STREAM_STARTED") ;
-                
-                if ( self.selected_channel.profile.isInLocal == NO)
-                {
-                    
-                    
-                    
-                    [[[GAI sharedInstance] defaultTracker] trackEventWithCategory:@"View Camera Remote"
-                                                                       withAction:@"Start Stream Success"
-                                                                        withLabel:@"Start Stream Success"
-                                                                        withValue:nil];
-                }
-            }
-            break;
-        }
-		case STREAM_STOPPED:
-            
-			break;
-		case STREAM_STOPPED_UNEXPECTEDLY:
-        {
-            [UIApplication sharedApplication].idleTimerDisabled=  NO;
-            
-            break;
-        }
-		case REMOTE_STREAM_STOPPED_UNEXPECTEDLY:
-        {
-            
-            NSString * msg = NSLocalizedStringWithDefaultValue(@"network_lost_link",nil, [NSBundle mainBundle],
-                                                               @"Camera disconnected due to network connectivity problem. Trying to reconnect...", nil);
-            [[[GAI sharedInstance] defaultTracker] trackEventWithCategory:@"View Remote Camera"
-                                                               withAction:@"Connect to Cam Failed"
-                                                                withLabel:@"Can't connect to network"
-                                                                withValue:nil];
-            
-            
-            msg = [NSString stringWithFormat:@"%@ (%d)", msg, self.selected_channel.remoteConnectionError];
-            if (self.streamer != nil)
-            {
-                msg = [NSString stringWithFormat:@"%@(%d)",msg,
-                       self.streamer.latest_connection_error ];
-            }
-            
-            
-            
-            if (self.alertTimer != nil && [self.alertTimer isValid])
-            {
-                //some periodic is running dont care
-                NSLog(@"some periodic is running dont care");
-            }
-            else
-            {
-                
-                self.alertTimer = [NSTimer scheduledTimerWithTimeInterval:5.0
-                                                                   target:self
-                                                                 selector:@selector(periodicPopup:)
-                                                                 userInfo:msg
-                                                                  repeats:YES];
-                [self.alertTimer fire] ;//fire once now
-                
-            }
-            
-            //Stop stream - clean up all resources
-            [self.streamer stopStreaming];
-            
-            //nil all comm object
-            self.scomm = nil; //STUN
-            self.comm = nil;// UPNP/local
-            
-            [NSTimer scheduledTimerWithTimeInterval:1.0
-                                             target:self
-                                           selector:@selector(startCameraConnection:)
-                                           userInfo:nil
-                                            repeats:NO];
-            
-            break;
-        }
-		case STREAM_RESTARTED:
-			break;
-        case REMOTE_STREAM_CANT_CONNECT_FIRST_TIME:
-        {
-            //Stop stream - clean up all resources
-            [self.streamer stopStreaming];
-            self.selected_channel.stopStreaming = TRUE;
-            
-            //simply popup and ask to retry and show camera list
-            NSString * msg = NSLocalizedStringWithDefaultValue(@"cant_start_stream",nil, [NSBundle mainBundle],
-                                                               @"Can't start video stream, the Monitor is busy, try again later." , nil);
-            msg = [NSString stringWithFormat:@"%@ (%d)", msg, self.selected_channel.remoteConnectionError];
-            
-            if (self.selected_channel.remoteConnectionError == REQUEST_TIMEOUT)
-            {
-                msg = NSLocalizedStringWithDefaultValue(@"cant_start_stream2",nil, [NSBundle mainBundle],
-                                                        @"Server request timeout, try again later", nil);
-                
-                
-            }
-            
-            NSString * ok = NSLocalizedStringWithDefaultValue(@"Ok",nil, [NSBundle mainBundle],
-                                                              @"Ok", nil);
-            UIAlertView *_alert = [[UIAlertView alloc]
-                                   initWithTitle:@""
-                                   message:msg
-                                   delegate:self
-                                   cancelButtonTitle:ok
-                                   otherButtonTitles:nil];
-            _alert.tag = REMOTE_VIDEO_CANT_START ;
-            [_alert show];
-            [_alert release];
-            
-            [[[GAI sharedInstance] defaultTracker] trackEventWithCategory:@"View Remote Camera"
-                                                               withAction:@"Connect to Cam Failed"
-                                                                withLabel:@"Can't connect to network"
-                                                                withValue:nil];
-            
-            
-            break;
-        }
-        case REMOTE_STREAM_SSKEY_MISMATCH:
-        {
-            //Stop stream - clean up all resources
-            [self.streamer stopStreaming];
-            self.selected_channel.stopStreaming = TRUE;
-            
-            //simply popup and ask to retry and show camera list
-            NSString * msg = NSLocalizedStringWithDefaultValue(@"cant_start_stream_01",nil, [NSBundle mainBundle],
-                                                               @"The session key on camera is mis-matched. Please reset the camera and add the camera again.(%d)" , nil);
-            msg = [NSString stringWithFormat:msg, self.streamer.latest_connection_error];
-            
-            NSString * ok = NSLocalizedStringWithDefaultValue(@"Ok",nil, [NSBundle mainBundle],
-                                                              @"Ok", nil);
-            UIAlertView *_alert = [[UIAlertView alloc]
-                                   initWithTitle:@""
-                                   message:msg
-                                   delegate:self
-                                   cancelButtonTitle:ok
-                                   otherButtonTitles:nil];
-            _alert.tag = REMOTE_SSKEY_MISMATCH ;
-            [_alert show];
-            [_alert release];
-            [[[GAI sharedInstance] defaultTracker] trackEventWithCategory:@"View Remote Camera"
-                                                               withAction:@"Connect to Cam Failed"
-                                                                withLabel:@"SESSION KEY MISMATCH"
-                                                                withValue:nil];
-            break;
-        }
-        case SWITCHING_TO_RELAY_SERVER:// just update the dialog
-        {
-            
-            //change the message being shown on progress bar -- NEED to take of rotation
-            
-            if (progressView != nil)
-            {
-                UITextView * message = (UITextView *)[progressView viewWithTag:155] ;//textview
-                NSString * msg = NSLocalizedStringWithDefaultValue(@"udt_relay_connect",nil, [NSBundle mainBundle],
-                                                                   @"Connecting through relay... please wait..." , nil);
-                message.text = msg;
-                
-            }
-            
-            
-            
-            
-            
-            break;
-        }
-        case REMOTE_STREAM_STOPPED:
-        {
-            
-            
-            if ( streamer.communication_mode == COMM_MODE_STUN )
-            {
-                if (self.scomm != nil)
-                {
-                    
-                    NSLog(@"Send close session");
-                    [self.scomm sendCloseSessionThruBMS:self.selected_channel.profile.mac_address
-                                             AndChannel:self.selected_channel.channID
-                                               forRelay:NO];
-                }
-            }
-            if (streamer.communication_mode == COMM_MODE_STUN_RELAY2)
-                
-                
-            {
-                
-                if (self.scomm != nil)
-                {
-                    
-                    NSLog(@"Send close relay session");
-                    [self.scomm sendCloseSessionThruBMS:self.selected_channel.profile.mac_address
-                                             AndChannel:self.selected_channel.channID
-                                               forRelay:YES];
-                }
-            }
-            
-            
-            
-            break;
-        }
-        case  SWITCHING_TO_RELAY2_SERVER: //do the switching..
-        {
-            
-            if ([self.selected_channel.profile isNewerThan08_038])
-            {
-                
-                
-                
-                //close pcm player as well.. we don't need it any longer
-                //  Will open again once the relay2 is up
-                [streamer stopStreaming:TRUE];
-                
-                if (scanner != nil)
-                {
-                    [scanner cancel];
-                }
-                [self.selected_channel abortViewTimer];
-                
-                NSLog(@"FW version is newer thang 08_038 ->NEW -RELAY");
-                [self switchToRelay2ForNonSymmetricNatApp];
-            }
-            
-        }
-		default:
-			break;
-	}
-#endif
 }
 
 - (void)reCreateTimoutViewCamera
@@ -1248,21 +992,7 @@ double _ticks = 0;
 }
 #pragma mark Delegate Timeline
 
-//TODO
-#if 0
--(void) refreshTableView
-{
 
-    
-
-    
-    [_timelineVC.view removeFromSuperview];
-    
-    [self.view addSubview:_timelineVC.view];
-    
-    
-}
-#endif
 
 - (void)stopStreamToPlayback
 {
@@ -1865,17 +1595,15 @@ double _ticks = 0;
         [_audioOutStreamRemote disconnectFromAudioSocket];
     }
     
-    if (self.currentMediaStatus == MEDIA_INFO_HAS_FIRST_IMAGE ||
-        self.currentMediaStatus == MEDIA_PLAYER_STARTED       ||
-        (self.currentMediaStatus == 0 && h264Streamer == NULL)) // Media player haven't start yet.
+    if (self.currentMediaStatus == 0 && h264Streamer == NULL) // Media player haven't start yet.
     {
-        //TODO: Check for stun mode running...
-        
         [self performSelector:@selector(goBackToCameraList)
                    withObject:nil
                    afterDelay:0.001];
     }
-    else if(h264Streamer != nil)
+    else if( self.currentMediaStatus == MEDIA_INFO_HAS_FIRST_IMAGE ||
+            self.currentMediaStatus == MEDIA_PLAYER_STARTED       ||
+            ( h264Streamer != nil))
     {
         NSLog(@"H264VC- prepareGoBackToCameraList - just sendInterrupt");
         
@@ -2131,7 +1859,7 @@ double _ticks = 0;
     {
         if (h264Streamer != NULL)
         {
-            //h264Streamer->setListener(NULL);
+            
             
             h264Streamer->suspend();
             h264Streamer->stop();

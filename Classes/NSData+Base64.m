@@ -285,6 +285,11 @@ char *NewBase64Encode(
 	return result;
 }
 
+
+
+
+
+
 //
 // base64EncodedString
 //

@@ -157,6 +157,7 @@ static sqlite3_stmt *init_statement = nil;
 #endif
             }
             
+            sqlite3_finalize(statement);
             sqlite3_reset(statement);
         }
         

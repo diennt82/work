@@ -562,6 +562,9 @@
     NSString * userEmail = (NSString *)[userDefalts objectForKey:@"PortalUseremail"];
     if (userEmail == nil)
     {
+        
+        NSLog(@"No Useremail, query for once now");
+        
         // Get user info (email)
         BMS_JSON_Communication *jsonComm = [[[BMS_JSON_Communication alloc] initWithObject:self
                                                                                   Selector:@selector(getUserInfoSuccessWithResponse:)

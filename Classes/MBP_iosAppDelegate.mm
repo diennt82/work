@@ -364,15 +364,9 @@
                                                    andSoftwareVersion:swVersion
                                                             andApiKey:apiKey];
     
-
-    //Demo.sm.com
-//    NSDictionary *responseDict = [jsonComm registerAppBlockedWithName: applicationName
-//                                                        andDeviceCode: uuidString
-//                                                            andApiKey: apiKey];
-
     
     NSString *appId = [[responseDict objectForKey:@"data"] objectForKey:@"id"];
-    NSLog(@"app id = %@", appId);
+    NSLog(@"******app id = %@", appId);
     //NSLog(@"My token is: %@", devToken);
     
     

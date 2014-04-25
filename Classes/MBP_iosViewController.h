@@ -18,7 +18,7 @@
 #import "CameraAlert.h"
 #import "NotificationViewController.h"
 #import "MenuViewController.h"
-
+#import "TimelineDatabase.h"
 
 #define DIRECTION_V_NON  0x01
 #define DIRECTION_V_UP   0x02
