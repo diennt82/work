@@ -1618,12 +1618,10 @@ double _ticks = 0;
     else if (self.selectedChannel.profile.minuteSinceLastComm <= 5)
     {
         NSLog(@"H264VC - setupCamera - created a remote streamer - {enable_stun}: %@", [userDefaults objectForKey:@"enable_stun"]);
-        
-        if (CUE_RELEASE_FLAG)
-        {
-            // Need update horizeMenu: hide PTT
-        }
-        
+#if 1
+        // Ignore enable_stun value key
+        [self symmetric_check_result:TRUE];
+#else
         // This value is setup on Account view
         if([userDefaults boolForKey:@"enable_stun"] == FALSE)
         {
@@ -1653,6 +1651,7 @@ double _ticks = 0;
                 
             }
         }
+#endif
         
         self.ib_labelTouchToTalk.text = @"Touch to Talk";
     }
