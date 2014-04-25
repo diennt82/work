@@ -6,13 +6,15 @@
 //  Copyright 2012 Smart Panda Ltd. All rights reserved.
 //
 
-#define API_KEY @"API_KEY"
-
 #import <CameraScanner/CameraScanner.h>
 #import <MonitorCommunication/MonitorCommunication.h>
 
 #import "SetupData.h"
-//#import "ConnectionMethodDelegate.h"
+
+#define API_KEY @"API_KEY"
+#define CAMERA_STATE_UNKNOWN       -1
+#define CAMERA_STATE_FW_UPGRADING   0
+#define CAMERA_STATE_IS_AVAILABLE   1
 
 @protocol UserAccountDelegate <NSObject>
 
@@ -56,5 +58,6 @@
 -(NSString *) query_cam_ip_online:(NSString *) mac_no_colon;
 -(void) readCameraListAndUpdate;
 - (BOOL)checkCameraIsAvailable:(NSString *) mac_w_colon;
+- (NSInteger )checkAvailableAndFWUpgradingWithCamera:(NSString *) mac_w_colon;
 
 @end

@@ -147,6 +147,70 @@
     return NO;
 }
 
+- (NSInteger )checkAvailableAndFWUpgradingWithCamera:(NSString *) mac_w_colon
+{
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    NSInteger state = CAMERA_STATE_UNKNOWN;
+    
+    
+    self.jsonComm = [[BMS_JSON_Communication alloc] initWithObject:self
+                                                          Selector:@selector(getCamListSuccess:)
+                                                      FailSelector:@selector(getCamListFailure:)
+                                                         ServerErr:@selector(getCamListServerUnreachable)];
+    NSDictionary *responseDict = [self.jsonComm getAllDevicesBlockedWithApiKey:[userDefaults objectForKey:@"PortalApiKey"]];
+    
+    if (responseDict != nil)
+    {
+        NSArray *dataArr = [responseDict objectForKey:@"data"];
+
+        NSMutableArray * cam_profiles = [self parse_camera_list:dataArr];
+        
+        if(cam_profiles != nil && [cam_profiles count] >0)
+        {
+            for (int i = 0; i < [cam_profiles count]; i++)
+            {
+                CamProfile *cp = (CamProfile *)[cam_profiles objectAtIndex:i];
+                
+                NSLog(@"CameraProfiles: %@, mac_w_colon: %@", cp, mac_w_colon);
+                
+                if (cp.mac_address != nil &&
+                    [cp.mac_address isEqualToString:[mac_w_colon uppercaseString]])
+                {
+                    if (cp.minuteSinceLastComm == 1)
+                    {
+                        [self sync_online_and_offline_data:cam_profiles];
+                        state = CAMERA_STATE_IS_AVAILABLE;
+                    }
+                    else
+                    {
+                        if (cp.fwTime)
+                        {
+                            NSDate *currentDate = [NSDate date];
+                            
+                            NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+                            [dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss'Z'"];
+                            [dateFormatter setTimeZone:[NSTimeZone timeZoneForSecondsFromGMT:0]];
+                            
+                            NSDate *fwDate = [dateFormatter dateFromString:cp.fwTime]; //2013-12-31 07:38:35 +0000
+                            [dateFormatter release];
+                            
+                            NSTimeInterval diff = [currentDate timeIntervalSinceDate:fwDate];
+                            
+                            if ((diff / 60 <= 5) && (cp.fwStatus == 1))
+                            {
+                                state = CAMERA_STATE_FW_UPGRADING;
+                            }
+                        }
+                    }
+                    
+                    break;
+                }
+            }
+        }
+    }
+    
+    return state;
+}
 
 -(void) readCameraListAndUpdate
 {
@@ -329,7 +393,7 @@
         NSString *camName        = [camEntry objectForKey:@"name"];
         NSString *registrationID = [camEntry objectForKey:@"registration_id"];
         NSString *camMac         = [camEntry objectForKey:@"mac_address"];
-        NSInteger modelID        = [[camEntry objectForKey:@"device_model_id"] integerValue];
+        //NSInteger modelID        = [[camEntry objectForKey:@"device_model_id"] integerValue];
         
         if ([camMac length] != 12 )
         {
@@ -339,7 +403,7 @@
             camMac = [Util add_colon_to_mac:camMac];
         }
         
-        NSString *updatedAt          = [camEntry objectForKey:@"updated_at"];
+        NSString *fwTime          = [camEntry objectForKey:@"firmware_time"];
         NSDictionary *deviceLocation = [camEntry objectForKey:@"device_location"];
         NSString *localIp = nil;
         
@@ -354,12 +418,21 @@
         
         NSString *isAvailable   = [camEntry objectForKey:@"is_available"];
         NSString *fwVersion     = [camEntry objectForKey:@"firmware_version"];
+        NSInteger fwStatus = [[camEntry objectForKey:@"firmware_status"] integerValue];
         
         CamProfile *cp = [[[CamProfile alloc]initWithMacAddr:camMac] autorelease];
 
         cp.camProfileID = deviceID;
-        cp.modelID      = modelID;
-        cp.last_comm    = updatedAt;
+        
+        if ([fwTime isEqual:[NSNull null]])
+        {
+            cp.fwTime = nil;
+        }
+        else
+        {
+            cp.fwTime    = fwTime;
+        }
+        
         cp.name         = camName;
         
         if([isAvailable intValue] == 1)
@@ -385,10 +458,11 @@
         //cp.codecs = codec;
         cp.fw_version     = fwVersion;
         cp.registrationID = registrationID;
+        cp.fwStatus = fwStatus;
 
         [camList addObject:cp];
         
-        NSLog(@"Log - device_model_id: %d, camMac: %@, Fw: %@, local_ip: %@, reg: %@ and isAvailable: %@", modelID, camMac, fwVersion, localIp, registrationID, isAvailable);
+        NSLog(@"Log - fwStatus: %d, camMac: %@, Fw: %@, local_ip: %@, reg: %@ and isAvailable: %@", fwStatus, camMac, fwVersion, localIp, registrationID, isAvailable);
 	}
 	
 	return camList;

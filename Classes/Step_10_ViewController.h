@@ -42,9 +42,6 @@
     
     BOOL should_retry_silently ;
     
-    NSTimer * timeOut;
-    NSTimer *timeOutCheckWifiHome;
-    
     //member to dismiss when disDisAppearView
     UIAlertView *_alertChooseConfig;    
     
@@ -56,8 +53,7 @@
 @property (retain, nonatomic) IBOutlet UIButton *ib_resumeSetup;
 
 @property (nonatomic, assign)  id<ConnectionMethodDelegate> delegate;
-@property (nonatomic, retain) NSString *cameraMac,  *master_key; 
-@property (nonatomic, retain) NSTimer * timeOut;
+@property (nonatomic, retain) NSString *cameraMac,  *master_key;
 
 @property (nonatomic, assign) NSString * errorCode;
 @property (nonatomic, retain) NSString *stringUDID;

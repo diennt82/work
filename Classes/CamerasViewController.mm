@@ -412,7 +412,15 @@
         if ([ch.profile isNotAvailable])
         {
             [cell.ibIconStatusCamera setImage:[UIImage imageNamed:@"offline.png"]];
-            [cell.ibTextStatusCamera setText:@"Offline"];
+            
+            if (ch.profile.fwStatus == 1)
+            {
+                [cell.ibTextStatusCamera setText:@"FW is upgrading..."];
+            }
+            else
+            {
+                [cell.ibTextStatusCamera setText:@"Offline"];
+            }
         }
         else
         {

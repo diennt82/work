@@ -236,8 +236,6 @@ double _ticks = 0;
     //set text name for camera name
     [self.ib_lbCameraName setText:self.selectedChannel.profile.name];
     
-
-    NSLog(@"Model of Camera is: %d, STUN: %d", self.selectedChannel.profile.modelID, [userDefaults boolForKey:@"enable_stun"]);
     _isDegreeFDisplay = [userDefaults boolForKey:@"IS_FAHRENHEIT"];
     _resolution = @"";
     
