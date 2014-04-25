@@ -1410,14 +1410,12 @@
                 //self.timelineVCDelegate = nil;
             }
             
-            EventInfo *eventInfoItem = [[EventInfo alloc] init];
-            eventInfoItem = [self.events objectAtIndex:indexPath.row];
-            
+          
             PlaylistInfo *clipInfo = [[PlaylistInfo alloc] init];
             clipInfo.urlFile = urlFile;
-            NSString *alertString = [NSString stringWithFormat:@"%d", eventInfoItem.alert];
+            NSString *alertString = [NSString stringWithFormat:@"%d", event.alert];
             clipInfo.alertType = alertString;
-            clipInfo.alertVal = eventInfoItem.value;
+            clipInfo.alertVal = event.value;
             clipInfo.mac_addr = [Util strip_colon_fr_mac:self.camChannel.profile.mac_address];
             
             clipInfo.registrationID = self.camChannel.profile.registrationID;

@@ -4050,7 +4050,14 @@ double _ticks = 0;
 
 -(void)periodicBeep:(NSTimer*) exp
 {
-    [self playSound];
+    if (userWantToCancel == TRUE)
+    {
+        [self stopPeriodicBeep];
+    }
+    else
+    {
+         [self playSound];
+    }
 }
 
 -(void) stopPeriodicBeep
@@ -4769,17 +4776,7 @@ double _ticks = 0;
 
 - (void)viewWillDisappear:(BOOL)animated
 {
-#if 0
-    [self.navigationController setNavigationBarHidden:YES];
-    
-    for (id view in self.navigationController.view.subviews)
-    {
-        if ([view isKindOfClass:[UIBarButtonItem class]])
-        {
-            //[view removeFromSuperview];
-        }
-    }
-#endif
+
     [self stopTimerRecoring];
     
     [[UIApplication sharedApplication] setStatusBarHidden:NO];
