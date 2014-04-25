@@ -19,6 +19,9 @@
 #import "H264PlayerViewController.h"
 #import "TimeLinePremiumCell.h"
 #import "define.h"
+#import "TimelineDatabase.h"
+
+#import "NSData+Base64.h"
 
 @interface TimelineViewController () <UIScrollViewDelegate>
 
@@ -37,6 +40,8 @@
 @property (nonatomic) BOOL isLoading;
 @property (nonatomic, retain) NSTimer *timerRefreshData;
 @property (nonatomic) BOOL is12hr;
+
+@property (nonatomic) BOOL hasUpdate;
 
 @end
 
@@ -71,6 +76,8 @@
     self.stringIntelligentMessage = @"Loading...";
     self.isLoading = TRUE;
     self.is12hr = [[NSUserDefaults standardUserDefaults] boolForKey:@"IS_12_HR"];
+    
+    self.eventPage =1 ;
     
     [[UIApplication sharedApplication] setStatusBarOrientation:UIDeviceOrientationPortrait animated:NO];
 }
@@ -139,6 +146,9 @@
         self.events = nil;
         self.stringIntelligentMessage = @"Loading...";
         
+        
+        
+        
         [self.tableView reloadData];
         
         [self loadEvents:self.camChannel];
@@ -149,8 +159,262 @@
 - (void)loadEvents: (CamChannel *)camChannel
 {
     self.camChannel = camChannel;
-    [self performSelectorInBackground:@selector(getEventsList_bg:) withObject:camChannel];
+    //[self performSelectorInBackground:@selector(getEventsList_bg:) withObject:camChannel];
+    
+    [self performSelectorInBackground:@selector(getEventFromDb:) withObject:camChannel];
+    
+    
+    
+    [self performSelector:@selector(getEventsList_bg2:) withObject:camChannel afterDelay:1.0];
+    
+
+    
 }
+
+- (void)getEventFromDb:(CamChannel *) camChannel
+{
+    NSInteger numberOfMovement = 0;
+    NSInteger numberOfVOX = 0;
+    
+    
+    self.shouldLoadMore = TRUE;
+    self.currentDate = [NSDate date];
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    // Set the dateFormatter format
+    [dateFormatter setTimeZone:[NSTimeZone localTimeZone]];
+    
+    if (_is12hr)
+    {
+        dateFormatter.dateFormat = @"hh:mm a";
+    }
+    else
+    {
+        dateFormatter.dateFormat = @"HH:mm";
+    }
+    self.stringCurrentDate = [dateFormatter stringFromDate:_currentDate];
+    
+    // Get the date time in NSString
+    [dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+    [dateFormatter setTimeZone:[NSTimeZone timeZoneWithName:@"UTC"]];
+    NSString *dateInStringFormated = [dateFormatter stringFromDate:_currentDate];
+    NSLog(@"%@, %@", dateInStringFormated, _stringCurrentDate);
+    
+    [dateFormatter release];
+    
+    self.hasUpdate = NO;
+    
+    self.events =[[TimelineDatabase getSharedInstance] getEventsForCamera:camChannel.profile.registrationID];
+    
+    NSLog(@"There are %d in databases",self.events.count );
+    if (self.events.count ==0)
+    {
+        /* Either this is a new camera OR we don't have any cached event
+         [self performSelectorInBackground:@selector(getEventsList_bg2:) withObject:camChannel];
+         */
+    }
+    else
+    {
+        
+        for (EventInfo *eventInfo in self.events)
+        {
+            NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+            [dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss'Z'"];
+            [dateFormatter setTimeZone:[NSTimeZone timeZoneForSecondsFromGMT:0]];
+            NSDate *eventDate = [dateFormatter dateFromString:eventInfo.time_stamp]; //2013-12-31 07:38:35 +0000
+            [dateFormatter release];
+            
+            NSTimeInterval diff = [self.currentDate timeIntervalSinceDate:eventDate];
+            
+            if (diff / 60 <= 20)
+            {
+                if (eventInfo.alert == 4)
+                {
+                    numberOfMovement++;
+                }
+                else if (eventInfo.alert == 1)
+                {
+                    numberOfVOX++;
+                }
+            }
+        }
+        
+        
+        [self updateIntelligentMessageWithNumberOfVOX:numberOfVOX numberOfMovement:numberOfMovement];
+        
+        if ([self.camChannel.profile isNotAvailable])
+        {
+            self.stringIntelligentMessage = @"Monitor is offline";
+            self.stringCurrentDate = @"";
+        }
+        
+        self.isEventAlready = TRUE;
+        self.isLoading = FALSE;
+        
+        
+        /* Reload the table view now */
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self.tableView reloadData];
+            
+            [self.tableView layoutIfNeeded];
+            
+            if ([self.timelineVCDelegate respondsToSelector:@selector(refreshTableView)])
+            {
+                [self.timelineVCDelegate refreshTableView];
+            }
+            
+        });
+        
+    }
+    
+}
+
+
+
+- (void)getEventsList_bg2: (CamChannel *)camChannel
+{
+    
+    NSLog(@"getEventsList_bg2 enter ");
+    
+    
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    NSString *apiKey = [userDefaults objectForKey:@"PortalApiKey"];
+    NSString *userName = [userDefaults objectForKey:@"PortalUsername"];
+    
+    if (_jsonComm == nil)
+    {
+        self.jsonComm = [[BMS_JSON_Communication alloc] initWithObject:self
+                                                              Selector:nil
+                                                          FailSelector:nil
+                                                             ServerErr:nil];
+    }
+    
+    self.currentDate = [NSDate date];
+    
+    
+    // Calculate the time to anchor the loading of events
+    
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    // Set the dateFormatter format
+    [dateFormatter setTimeZone:[NSTimeZone localTimeZone]];
+    
+    // Get the date time in NSString
+    [dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+    [dateFormatter setTimeZone:[NSTimeZone timeZoneWithName:@"UTC"]];
+    NSString *dateInStringFormated = [dateFormatter stringFromDate:self.currentDate];
+    
+    [dateFormatter release];
+    
+    dateInStringFormated = [self urlEncodeUsingEncoding:NSUTF8StringEncoding forString:dateInStringFormated];
+    NSLog(@"Loading page : %d before date: %@", self.eventPage, dateInStringFormated);
+    
+    //Load event from server
+    NSDictionary *responseDict = [_jsonComm getListOfEventsBlockedWithRegisterId:camChannel.profile.registrationID
+                                                                 beforeStartTime:dateInStringFormated//@"2013-12-28 20:10:18"
+                                                                       eventCode:nil
+                                                                          alerts:nil
+                                                                            page:[NSString stringWithFormat:@"%d", self.eventPage]
+                                                                          offset:nil
+                                                                            size:nil
+                                                                          apiKey:apiKey];
+    
+    if (responseDict != nil)
+    {
+        if ([[responseDict objectForKey:@"status"] integerValue] == 200)
+        {
+            
+            // work
+            NSArray *events = [[responseDict objectForKey:@"data"] objectForKey:@"events"];
+            
+            TimelineDatabase * mDatabase = [ TimelineDatabase getSharedInstance];
+            
+            if (events != nil &&
+                events.count > 0)
+            {
+                
+                for (NSDictionary *event in events)
+                {
+                    EventInfo *eventInfo = [[EventInfo alloc] init];
+                    eventInfo.alert_name = [event objectForKey:@"alert_name"];
+                    eventInfo.value      = [event objectForKey:@"value"];
+                    eventInfo.time_stamp = [event objectForKey:@"time_stamp"];
+                    eventInfo.alert      = [[event objectForKey:@"alert"] integerValue];
+                    
+                    
+                    NSString * data_str1  = nil;
+                    if ([event objectForKey:@"data"] != [NSNull null])
+                    {
+                        
+                        NSArray  * data  = (NSArray *)[event objectForKey:@"data"] ;
+                        NSError * error = nil;
+                        NSData *jsonData = [NSJSONSerialization dataWithJSONObject:data
+                                                                           options:NSJSONWritingPrettyPrinted error:&error];
+                        
+                        data_str1 =  [jsonData base64EncodedString];
+                        //NSLog(@"datais: %@", data_str1);
+                    }
+                    
+                    
+                    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+                    [dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss'Z'"];
+                    [dateFormatter setTimeZone:[NSTimeZone timeZoneForSecondsFromGMT:0]];
+                    NSDate *eventDate = [dateFormatter dateFromString:eventInfo.time_stamp]; //2013-12-31 07:38:35 +0000
+                    [dateFormatter release];
+                    
+                    NSString * event_id = [event objectForKey:@"id"];
+                    
+                    
+                    int eventTimeInMs = [eventDate timeIntervalSince1970];
+                    int status =  [mDatabase saveEventWithId:event_id
+                                                  event_text:[event objectForKey:@"alert"]
+                                                 event_value:eventInfo.value
+                                                  event_name:eventInfo.alert_name
+                                                    event_ts:eventTimeInMs
+                                                  event_data:data_str1
+                                                 camera_udid:camChannel.profile.registrationID
+                                                    owner_id:userName];
+                    if ( status == 0) //Successfully inserted at least 1 record, -> need reload
+                    {
+                        //Toggle this flag to true to signal ui to reload
+                        self.hasUpdate = YES;
+                        
+                        
+                        NSLog(@"has inserted new record %@ : %@",eventInfo.time_stamp , eventInfo.alert_name);
+                    }
+                    
+                    [eventInfo release];
+                }
+            }
+            else
+            {
+                NSLog(@"Camera as no event before date: %@", dateInStringFormated);
+            }
+            
+        }
+        else
+        {
+            NSLog(@"Event Query Response status != 200");
+        }
+    }
+    else
+    {
+        NSLog(@"Error- responseDict is nil");
+    }
+    self.isLoading = FALSE;
+    
+    if ( self.hasUpdate == YES)
+    {
+        NSLog(@"has inserted new record, trigger update ui now");
+        dispatch_async(dispatch_get_main_queue(), ^{
+            
+            [self loadEvents:self.camChannel];
+            
+        });
+    }
+    
+}
+
+
+
 
 - (void)getEventsList_bg: (CamChannel *)camChannel
 {
@@ -159,6 +423,7 @@
     
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     NSString *apiKey = [userDefaults objectForKey:@"PortalApiKey"];
+    NSString *userName = [userDefaults objectForKey:@"PortalUsername"];
     
     if (_jsonComm == nil)
     {
@@ -198,13 +463,13 @@
     self.alertsString = [self urlEncodeUsingEncoding:NSUTF8StringEncoding forString:alertsString];
     
     NSDictionary *responseDict = [_jsonComm getListOfEventsBlockedWithRegisterId:camChannel.profile.registrationID
-                                                                beforeStartTime:dateInStringFormated//@"2013-12-28 20:10:18"
-                                                                      eventCode:nil//event_code // temp
-                                                                         alerts:_alertsString
-                                                                           page:nil
-                                                                         offset:nil
-                                                                           size:nil
-                                                                         apiKey:apiKey];
+                                                                 beforeStartTime:dateInStringFormated//@"2013-12-28 20:10:18"
+                                                                       eventCode:nil//event_code // temp
+                                                                          alerts:_alertsString
+                                                                            page:nil
+                                                                          offset:nil
+                                                                            size:nil
+                                                                          apiKey:apiKey];
     
     if (responseDict != nil)
     {
@@ -219,6 +484,9 @@
             NSArray *events = [[responseDict objectForKey:@"data"] objectForKey:@"events"];
             NSInteger numberOfMovement = 0;
             NSInteger numberOfVOX = 0;
+            
+            
+            TimelineDatabase * mDatabase = [ TimelineDatabase getSharedInstance];
             
             if (events != nil &&
                 events.count > 0)
@@ -238,6 +506,18 @@
                     [dateFormatter setTimeZone:[NSTimeZone timeZoneForSecondsFromGMT:0]];
                     NSDate *eventDate = [dateFormatter dateFromString:eventInfo.time_stamp]; //2013-12-31 07:38:35 +0000
                     [dateFormatter release];
+                    
+                    NSString * event_id = [event objectForKey:@"id"];
+                    int eventTimeInMs = [eventDate timeIntervalSince1970];
+                    [mDatabase saveEventWithId:event_id
+                                    event_text:[event objectForKey:@"alert"]
+                                   event_value:eventInfo.value
+                                    event_name:eventInfo.alert_name
+                                      event_ts:eventTimeInMs
+                                    event_data:[event objectForKey:@"data"]
+                                   camera_udid:camChannel.profile.registrationID
+                                      owner_id:userName];
+                    
                     
                     NSTimeInterval diff = [_currentDate timeIntervalSinceDate:eventDate];
                     
@@ -312,7 +592,7 @@
         
         if ([self.timelineVCDelegate respondsToSelector:@selector(refreshTableView)])
         {
-            [self.timelineVCDelegate refreshTableView]; 
+            [self.timelineVCDelegate refreshTableView];
         }
         
     });
@@ -425,17 +705,17 @@
     }
     
     NSDictionary *responseDict = [_jsonComm getListOfEventsBlockedWithRegisterId:_camChannel.profile.registrationID
-                                                                beforeStartTime:dateInStringFormated//@"2013-12-28 20:10:18"
-                                                                      eventCode:nil//event_code // temp
-                                                                         alerts:_alertsString
+                                                                 beforeStartTime:dateInStringFormated//@"2013-12-28 20:10:18"
+                                                                       eventCode:nil//event_code // temp
+                                                                          alerts:_alertsString
                                                                             page:[NSString stringWithFormat:@"%d", _eventPage]
-                                                                         offset:nil
-                                                                           size:nil
-                                                                         apiKey:apiKey];
+                                                                          offset:nil
+                                                                            size:nil
+                                                                          apiKey:apiKey];
     if (responseDict)
     {
         NSArray *events = [[responseDict objectForKey:@"data"] objectForKey:@"events"];
-
+        
         if (events != nil &&
             events.count > 0)
         {
@@ -447,42 +727,28 @@
                 eventInfo.time_stamp = [event objectForKey:@"time_stamp"];
                 eventInfo.alert      = [[event objectForKey:@"alert"] integerValue];
                 
-//                NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-//                [dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss'Z'"];
-//                [dateFormatter setTimeZone:[NSTimeZone timeZoneForSecondsFromGMT:0]];
-//                NSDate *eventDate = [dateFormatter dateFromString:eventInfo.time_stamp]; //2013-12-31 07:38:35 +0000
-//                [dateFormatter release];
                 
-                //NSTimeInterval diff = [_currentDate timeIntervalSinceDate:eventDate];
+                NSArray *clipsInEvent = [event objectForKey:@"data"];
                 
-                //if (diff / (60 * 60) <= 24) // hour
+                if (![clipsInEvent isEqual:[NSNull null]])
                 {
-                    NSArray *clipsInEvent = [event objectForKey:@"data"];
+                    ClipInfo *clipInfo = [[ClipInfo alloc] init];
+                    clipInfo.urlImage = [[clipsInEvent objectAtIndex:0] objectForKey:@"image"];
+                    clipInfo.urlFile = [[clipsInEvent objectAtIndex:0] objectForKey:@"file"];
                     
-                    if (![clipsInEvent isEqual:[NSNull null]])
-                    {
-                        ClipInfo *clipInfo = [[ClipInfo alloc] init];
-                        clipInfo.urlImage = [[clipsInEvent objectAtIndex:0] objectForKey:@"image"];
-                        clipInfo.urlFile = [[clipsInEvent objectAtIndex:0] objectForKey:@"file"];
-                        
-                        eventInfo.clipInfo = clipInfo;
-                        [clipInfo release];
-                    }
-                    else
-                    {
-                        NSLog(@"Event has no data");
-                    }
-                    
-                    [self.events addObject:eventInfo];
-                    shouldUpdateTableView = TRUE;
-                    [eventInfo release];
-                    
-                    [self.clipsInEachEvent addObject:clipsInEvent];
+                    eventInfo.clipInfo = clipInfo;
+                    [clipInfo release];
                 }
-//                else
-//                {
-//                    self.shouldLoadMore = FALSE;
-//                }
+                else
+                {
+                    NSLog(@"Event has no data");
+                }
+                
+                [self.events addObject:eventInfo];
+                shouldUpdateTableView = TRUE;
+                [eventInfo release];
+                
+                [self.clipsInEachEvent addObject:clipsInEvent];
             }
         }
         else
@@ -512,6 +778,9 @@
 {
     if (scrollView.contentOffset.y < -64.0f)
     {
+        //Refresh means loading the first page again
+        self.eventPage = 1;
+        
         [self refreshEvents:nil];
     }
 }
@@ -527,11 +796,25 @@
     
     float reload_distance = -64;
     
-    if(y > h + reload_distance && !_isLoading && _shouldLoadMore)
+    @synchronized(self)
     {
-        self.isLoading = TRUE;
-        NSLog(@"load more...");
-        [self performSelectorInBackground:@selector(loadMoreEvent_bg) withObject:nil];
+       //  NSLog(@"load more... %d",self.isLoading);
+        if (self.isLoading == FALSE)
+        {
+            if( (y > h + reload_distance) &&
+               _shouldLoadMore)
+            {
+                self.isLoading = TRUE;
+                self.eventPage ++;
+                //NSLog(@"load more... %d",self.eventPage);
+                [self performSelectorInBackground:@selector(getEventsList_bg2:) withObject:self.camChannel];
+                
+            }
+            else
+            {
+                
+            }
+        }
     }
 }
 
@@ -733,6 +1016,19 @@
     return YES;
 }
 
+
+
+- (BOOL) isEqualToDateIgnoringTime: (NSDate *) aDate vsDate:(NSDate*) bDate
+{
+	NSDateComponents *components1 = [CURRENT_CALENDAR components:DATE_COMPONENTS fromDate:aDate];
+	NSDateComponents *components2 = [CURRENT_CALENDAR components:DATE_COMPONENTS fromDate:bDate];
+	return ((components1.year == components2.year) &&
+			(components1.month == components2.month) &&
+			(components1.day == components2.day));
+}
+
+
+
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (_isEventAlready == FALSE)
@@ -828,6 +1124,7 @@
                 break;
             }
         }
+        
 #if 1
         EventInfo *eventInfo = (EventInfo *)[_events objectAtIndex:indexPath.row];
         
@@ -842,13 +1139,49 @@
         NSDateFormatter* df_local = [[NSDateFormatter alloc] init];
         [df_local setTimeZone:[NSTimeZone localTimeZone]];
         
-        if (_is12hr)
+        
+        NSDateComponents * offset= [[NSDateComponents alloc]init];
+        [offset setDay:-1];
+        NSDate  *yesterday = [CURRENT_CALENDAR dateByAddingComponents:offset
+                                                               toDate:[NSDate date]
+                                                              options:nil];
+        
+        if  ([self isEqualToDateIgnoringTime:[NSDate date] vsDate:eventDate]) //if it is today
         {
-            df_local.dateFormat = @"hh:mm a";
+            //Show only hours/minutes
+            if (_is12hr)
+            {
+                df_local.dateFormat = @"hh:mm a";
+            }
+            else
+            {
+                df_local.dateFormat = @"HH:mm";
+            }
+        }
+        else if ([self isEqualToDateIgnoringTime:yesterday vsDate:eventDate])
+        {
+            //Show only hours/minutes  with dates
+            if (_is12hr)
+            {
+                df_local.dateFormat = @"hh:mm a, dd-MM-yyyy";
+            }
+            else
+            {
+                df_local.dateFormat = @"HH:mm, dd-MM-yyyy";
+            }
         }
         else
         {
-            df_local.dateFormat = @"HH:mm";
+            //Show only hours/minutes  with dates
+            if (_is12hr)
+            {
+                df_local.dateFormat = @"hh:mm a, dd-MM-yyyy";
+            }
+            else
+            {
+                df_local.dateFormat = @"HH:mm, dd-MM-yyyy";
+            }
+            
         }
         
         cell.eventTimeLabel.text = [df_local stringFromDate:eventDate];
@@ -1058,6 +1391,54 @@
 #else
     if (indexPath.section == 1)
     {
+        
+        EventInfo * event = [self.events objectAtIndex:indexPath.row];
+        if (event.alert !=  4)
+        {
+            //NOt motion..
+            return;
+        }
+        
+        ClipInfo * clip =  event.clipInfo;
+        NSString *urlFile = clip.urlFile;
+        if (![urlFile isEqual:[NSNull null]] &&
+            ![urlFile isEqualToString:@""])
+        {
+            if (self.timelineVCDelegate != nil)
+            {
+                [self.timelineVCDelegate stopStreamToPlayback];
+                //self.timelineVCDelegate = nil;
+            }
+            
+            EventInfo *eventInfoItem = [[EventInfo alloc] init];
+            eventInfoItem = [self.events objectAtIndex:indexPath.row];
+            
+            PlaylistInfo *clipInfo = [[PlaylistInfo alloc] init];
+            clipInfo.urlFile = urlFile;
+            NSString *alertString = [NSString stringWithFormat:@"%d", eventInfoItem.alert];
+            clipInfo.alertType = alertString;
+            clipInfo.alertVal = eventInfoItem.value;
+            clipInfo.mac_addr = [Util strip_colon_fr_mac:self.camChannel.profile.mac_address];
+            
+            clipInfo.registrationID = self.camChannel.profile.registrationID;
+            PlaybackViewController *playbackViewController = [[PlaybackViewController alloc] init];
+            
+            playbackViewController.clip_info = clipInfo;
+            NSLog(@"Push the view controller of navVC.- %@", self.navVC);
+            
+            //present view controller to view overal screen
+            
+            [self.navVC presentViewController:playbackViewController animated:YES completion:nil];
+            
+            [playbackViewController release];
+        }
+        else
+        {
+            NSLog(@"URL file is not correct");
+            [self showDialogToConfirm];
+        }
+        
+#if 0 //TO BE REMOVED
         if (_clipsInEachEvent != nil &&
             _clipsInEachEvent.count > 0)
         {
@@ -1108,6 +1489,7 @@
                 NSLog(@"There was no clip in event");
             }
         }
+#endif
     }
 #endif
 }

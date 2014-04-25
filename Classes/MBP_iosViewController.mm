@@ -866,15 +866,20 @@
         NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
         NSString *apiKey = [userDefaults objectForKey:@"PortalApiKey"];
         NSString *appId = [userDefaults objectForKey:@"APP_ID"];
-        
+        NSString * userName = [userDefaults objectForKey:@"PortalUsername"];
         //REmove password and registration id
         [userDefaults removeObjectForKey:@"PortalPassword"];
         [userDefaults removeObjectForKey:_push_dev_token];
-        
+        [userDefaults removeObjectForKey:@"PortalApiKey"];
+        [userDefaults removeObjectForKey:@"PortalUseremail"];
         [userDefaults synchronize];
         
         // Let the device know we want to receive push notifications
         [[UIApplication sharedApplication] unregisterForRemoteNotifications];
+        
+        /* Drop all timeline for this user */
+        [[TimelineDatabase getSharedInstance] clearEventForUserName:userName];
+        
         
         BMS_JSON_Communication *jsonComm = [[[BMS_JSON_Communication alloc] initWithObject:self
                                                                                   Selector:nil

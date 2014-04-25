@@ -86,6 +86,8 @@
 	//can be user email or user name here --
 	NSString * old_usr = (NSString *) [userDefaults objectForKey:@"PortalUsername"];
 	NSString * old_pass = (NSString *) [userDefaults objectForKey:@"PortalPassword"];
+    NSString * old_api_key = (NSString *) [userDefaults objectForKey:@"PortalApiKey"];
+    
     self.stringUserEmail  = (NSString*) [userDefaults objectForKey:@"PortalUseremail"];
     BOOL shouldAutoLogin = [userDefaults boolForKey:_AutoLogin];
     
@@ -99,6 +101,19 @@
         self.tfEmail.text = old_usr;
         
         if (shouldAutoLogin &&
+            old_api_key != nil && old_pass != nil )
+        {
+            /* Don't need to go thru the login query again */
+             NSLog(@" Use old api key");
+            self.stringPassword = [NSString stringWithString:old_pass];
+            self.viewProgress.hidden = NO;
+            self.tfPassword.text = old_pass;
+            
+            self.buttonEnterPressedFlag = YES;
+            [self moveOnAfterLoginOk:old_api_key];
+            
+        }
+        else if (shouldAutoLogin &&
             old_pass != nil)
         {
             self.stringPassword = [NSString stringWithString:old_pass];
@@ -114,7 +129,7 @@
             [userDefaults synchronize];
             self.viewProgress.hidden = YES;
             self.buttonEnter.enabled = NO;
-             NSLog(@" NO LOGIN");
+            
         }
     }
     else
@@ -500,13 +515,6 @@
         {
             NSString *apiKey = [[responseDict objectForKey:@"data"] objectForKey:@"authentication_token"];
             
-            // Get user info (email)
-            BMS_JSON_Communication *jsonComm = [[[BMS_JSON_Communication alloc] initWithObject:self
-                                                                                      Selector:@selector(getUserInfoSuccessWithResponse:)
-                                                                                  FailSelector:@selector(getUserInfoFailedWithResponse:)
-                                                                                     ServerErr:@selector(getUserInfoFailedServerUnreachable)] autorelease];
-            [jsonComm getUserInfoWithApiKey:apiKey];
-            
             //Store user/pass for later use
             [userDefaults setObject:_stringUsername forKey:@"PortalUsername"];
             [userDefaults setObject:_stringPassword forKey:@"PortalPassword"];
@@ -517,30 +525,7 @@
             
             //Register for push
             NSLog(@"Login success! 1");
-#if !TARGET_IPHONE_SIMULATOR
-            // Let the device know we want to receive push notifications
-            [[UIApplication sharedApplication] registerForRemoteNotificationTypes:
-             (UIRemoteNotificationType) (UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeAlert)];
-#endif 
-             NSLog(@"Login success! 2");
-
-            UserAccount *account = [[UserAccount alloc] initWithUser:_stringUsername
-                                                            password:_stringPassword
-                                                              apiKey:apiKey
-                                                            listener:self];
-
-            
-            [[[GAI sharedInstance] defaultTracker] trackEventWithCategory:@"Login"
-                                                               withAction:@"Login Success"
-                                                                withLabel:@"Login success"
-                                                                withValue:nil];
-            //BLOCKED method
-            [account readCameraListAndUpdate];
-            [account release];
-            
-            //[self dismissViewControllerAnimated:NO completion:^{}];
-            
-            NSLog(@"Login success! 3");
+            [self moveOnAfterLoginOk:apiKey];
         }
         else
         {
@@ -574,6 +559,50 @@
     {
         NSLog(@"Error - loginSuccessWithResponse: reponseDict = nil");
     }
+}
+-(void)moveOnAfterLoginOk: (NSString * ) apiKey
+{
+    NSUserDefaults *userDefalts = [NSUserDefaults standardUserDefaults];
+    NSString * userEmail = (NSString *)[userDefalts objectForKey:@"PortalUseremail"];
+    if (userEmail == nil)
+    {
+        
+        NSLog(@"No Useremail, query for once now");
+        
+        // Get user info (email)
+        BMS_JSON_Communication *jsonComm = [[[BMS_JSON_Communication alloc] initWithObject:self
+                                                                                  Selector:@selector(getUserInfoSuccessWithResponse:)
+                                                                              FailSelector:@selector(getUserInfoFailedWithResponse:)
+                                                                                 ServerErr:@selector(getUserInfoFailedServerUnreachable)] autorelease];
+        [jsonComm getUserInfoWithApiKey:apiKey];
+    }
+    
+    
+#if !TARGET_IPHONE_SIMULATOR
+        // Let the device know we want to receive push notifications
+        [[UIApplication sharedApplication] registerForRemoteNotificationTypes:
+         (UIRemoteNotificationType) (UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeAlert)];
+#endif
+        NSLog(@"Login success! 2");
+        
+        UserAccount *account = [[UserAccount alloc] initWithUser:_stringUsername
+                                                        password:_stringPassword
+                                                          apiKey:apiKey
+                                                        listener:self];
+        
+        
+        [[[GAI sharedInstance] defaultTracker] trackEventWithCategory:@"Login"
+                                                           withAction:@"Login Success"
+                                                            withLabel:@"Login success"
+                                                            withValue:nil];
+        //BLOCKED method
+        [account readCameraListAndUpdate];
+        [account release];
+        
+        //[self dismissViewControllerAnimated:NO completion:^{}];
+        
+        NSLog(@"Login success! 3");
+    
 }
 
 - (void) loginFailedWithError:(NSDictionary *) responseError
