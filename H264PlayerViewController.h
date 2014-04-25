@@ -151,7 +151,6 @@
 @property (nonatomic, retain) NSMutableArray *itemImages;
 @property (nonatomic, retain) NSMutableArray *itemSelectedImages;
 @property (nonatomic, retain) NSTimer * alertTimer;
-//Add scrollview to support zoom in and zoom out
 @property (retain, nonatomic) IBOutlet UIScrollView *scrollView;
 @property (retain, nonatomic) IBOutlet UIImageView *imgViewDrectionPad;
 @property (retain, nonatomic) IBOutlet UIActivityIndicatorView *activityIndicator;

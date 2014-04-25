@@ -644,16 +644,16 @@
     if(_playbackStreamer ->isPlaying())
     {
         NSLog(@"Yes Playing");
-        [self.ib_playPlayBack setImage:[UIImage imageVideoPlay] forState:UIControlStateNormal];
-        _playbackStreamer->pause();
+        //[self.ib_playPlayBack setImage:[UIImage imageVideoPlay] forState:UIControlStateNormal];
+        //_playbackStreamer->pause();
     }
     else
     {
-        NSLog(@"Not Playing");
+//        NSLog(@"Not Playing");
+//        
+//        _playbackStreamer -> start();
         
-        _playbackStreamer -> start();
-        
-        [self.ib_playPlayBack setImage:[UIImage imageVideoPause] forState:UIControlStateNormal];
+      //  [self.ib_playPlayBack setImage:[UIImage imageVideoPause] forState:UIControlStateNormal];
     }
     [self checkOrientation];
 }
