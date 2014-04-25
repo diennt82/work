@@ -15,6 +15,9 @@
 #define kButtonSize 40
 #define kPaddingBetweenButton 30
 #define kButtonSize_iPhone 36
+
+#define ITEMS_MAX 5
+
 @implementation ScrollHorizontalMenu
 
 @synthesize imageMenu = _imageMenu;
@@ -55,26 +58,25 @@
         if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
         {
             marginLR = kLeftOffset + 60; //padding left and right = 100
-            xPos = 0; //
             buttonWidth = 60; //60 for iPad
             paddingBetweenButton = 65;
         }
         else if (isiPhone4)
         {
             marginLR = 0;
-            xPos = 0;
             buttonWidth = kButtonSize_iPhone - 2;
             paddingBetweenButton = kPaddingBetweenButton - 6;
         }
         else
         {
             marginLR = 0;
-            xPos = 0;
             buttonWidth = kButtonSize_iPhone;
             paddingBetweenButton = kPaddingBetweenButton - 5;
         }
         
-    } else
+        xPos = 0;
+    }
+    else
     {
         if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
         {
@@ -92,20 +94,14 @@
         }
     }
     
-    // This is SharedCam, the menu has 4 items
-    if (_itemCount == 4)
-    {
-        // Make items is center menu.
-        xPos += buttonWidth;
-    }
+    /*!
+     * 1. This is CameraHD with fully feature, the menu has 5 items.
+     * 2. This is SharedCam, the menu has 4 items
+     * 3. This is SharedCam and this shared cam is connected via MACOS, the menu has 2 items
+     * 4. This is remote viewing, the menu maybe has 3 items
+     */
     
-    // This is SharedCam and this shared cam is connected via MACOS
-    if (_itemCount == 2)
-    {
-        // Make items is center menu.
-        xPos += 2.5*buttonWidth;
-    }
-    
+    xPos += (ITEMS_MAX - _itemCount) * buttonWidth;
     
     for(int i = 0 ; i < self.itemCount; i++)
     {

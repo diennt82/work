@@ -12,9 +12,7 @@
                 <outlet property="customIndicator" destination="yns-Yb-cgQ" id="p59-vt-qne"/>
                 <outlet property="horizMenu" destination="Meo-mp-L42" id="GEV-Ih-WZ1"/>
                 <outlet property="ib_ViewTouchToTalk" destination="WJv-oB-VFG" id="4Ti-Be-A6e"/>
-                <outlet property="ib_btResolInfo" destination="hCi-P1-CU3" id="LN4-tF-ju9"/>
                 <outlet property="ib_btShowDebugInfo" destination="zOS-3a-V8a" id="2oE-Pq-hOe"/>
-                <outlet property="ib_btViewIn" destination="ReY-FE-Ket" id="EC3-uI-c2l"/>
                 <outlet property="ib_buttonChangeAction" destination="pcV-76-Dz1" id="1yp-0R-Gwg"/>
                 <outlet property="ib_buttonTouchToTalk" destination="hek-dG-dqJ" id="hIj-cd-KpF"/>
                 <outlet property="ib_changeToMainRecording" destination="FXt-9j-j8f" id="rVX-mz-IfK"/>
@@ -32,6 +30,7 @@
                 <outlet property="imgViewDrectionPad" destination="ENJ-kB-zlZ" id="DZ2-Yu-icH"/>
                 <outlet property="scrollView" destination="yil-Y6-pAr" id="JJ6-WZ-Bpo"/>
                 <outlet property="view" destination="cB4-IZ-gnu" id="UUn-mn-hKr"/>
+                <outlet property="viewDebugInfo" destination="ug7-nN-raT" id="Aia-43-8Ht"/>
             </connections>
         </placeholder>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
@@ -53,6 +52,34 @@
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                         </imageView>
+                        <view hidden="YES" contentMode="scaleToFill" id="ug7-nN-raT">
+                            <rect key="frame" x="380" y="0.0" width="97" height="100"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <subviews>
+                                <textField opaque="NO" clipsSubviews="YES" tag="5001" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="center" minimumFontSize="17" background="temp_bg.png" id="Vte-0q-9lt">
+                                    <rect key="frame" x="7" y="2" width="82" height="30"/>
+                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                    <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="15"/>
+                                    <textInputTraits key="textInputTraits"/>
+                                </textField>
+                                <textField opaque="NO" clipsSubviews="YES" tag="5002" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="center" minimumFontSize="17" background="temp_bg.png" id="rbz-Mi-1yF">
+                                    <rect key="frame" x="7" y="30" width="82" height="30"/>
+                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                    <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="15"/>
+                                    <textInputTraits key="textInputTraits"/>
+                                </textField>
+                                <textField opaque="NO" clipsSubviews="YES" tag="5003" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="center" minimumFontSize="17" background="temp_bg.png" id="9Ww-WU-WU0">
+                                    <rect key="frame" x="7" y="59" width="82" height="30"/>
+                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                    <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="15"/>
+                                    <textInputTraits key="textInputTraits"/>
+                                </textField>
+                            </subviews>
+                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                        </view>
                     </subviews>
                 </scrollView>
                 <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" id="Meo-mp-L42" customClass="ScrollHorizontalMenu">
@@ -192,28 +219,6 @@
                     <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     <nil key="highlightedColor"/>
                 </label>
-                <imageView hidden="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="info.png" id="Mhw-Dm-Pal">
-                    <rect key="frame" x="9" y="288" width="18" height="21"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                </imageView>
-                <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="ReY-FE-Ket">
-                    <rect key="frame" x="450" y="10" width="88" height="30"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                    <state key="normal" backgroundImage="temp_bg.png">
-                        <color key="titleColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
-                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                    </state>
-                </button>
-                <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="hCi-P1-CU3">
-                    <rect key="frame" x="450" y="43" width="88" height="30"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                    <state key="normal" backgroundImage="temp_bg.png">
-                        <color key="titleColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
-                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                    </state>
-                </button>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="zOS-3a-V8a">
                     <rect key="frame" x="1" y="273" width="45" height="45"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -236,7 +241,6 @@
         <image name="camera_action_pan_handle.png" width="6" height="33"/>
         <image name="camera_action_pan_knob.png" width="35" height="35"/>
         <image name="camera_action_video_land.png" width="80" height="80"/>
-        <image name="info.png" width="128" height="128"/>
         <image name="loader_a.png" width="30" height="30"/>
         <image name="photo_grey_land.png" width="30" height="19"/>
         <image name="temp_bg.png" width="85" height="37"/>

@@ -822,6 +822,7 @@
 
 -(void) playSound
 {
+#if 0
 	//201201011 This is needed to play the system sound on top of audio from camera
 	UInt32 sessionCategory = kAudioSessionCategory_AmbientSound;    // 1
 	AudioSessionSetProperty (
@@ -829,7 +830,7 @@
                              sizeof (sessionCategory),                                   // 3
                              &sessionCategory                                            // 4
                              );
-    
+#endif
 	//Play beep
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
     {

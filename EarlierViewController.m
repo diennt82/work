@@ -69,8 +69,8 @@
                                                                         target:nil
                                                                         action:nil];
         [earlierBarBtn setTitleTextAttributes:@{
-                                                UITextAttributeFont: [UIFont fontWithName:PN_SEMIBOLD_FONT size:17.0],
-                                                UITextAttributeTextColor: [UIColor barItemSelectedColor]
+                                                NSFontAttributeName: [UIFont fontWithName:PN_SEMIBOLD_FONT size:17.0],
+                                                NSForegroundColorAttributeName: [UIColor barItemSelectedColor]
                                                 } forState:UIControlStateNormal];
         earlierBarBtn.enabled = NO;
         self.navigationItem.rightBarButtonItem = earlierBarBtn;

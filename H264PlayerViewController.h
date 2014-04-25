@@ -27,7 +27,6 @@
 #import "UIFont+Hubble.h"
 #import "UIColor+Hubble.h"
 #import "UIImage+Hubble.h"
-#import "EarlierNavigationController.h"
 #import "StunClient.h"
 
 
@@ -93,7 +92,6 @@
 
 	//NSTimer * probeTimer;
      dispatch_queue_t player_func_queue;
-    BOOL _isCameraOffline;
     BOOL _isRecordInterface;
     BOOL _isProcessRecording;
     BOOL _isListening;
@@ -109,10 +107,6 @@
     
     //
     NSTimer * fullScreenTimer;
-#ifdef SHOW_DEBUG_INFO
-    //for debug
-    NSString *_viewVideoIn;
-#endif
     //display time when recording
     NSTimer *_timerRecording;
     //degreeC
@@ -122,17 +116,13 @@
 
     IBOutlet UIButton *ib_switchDegree;
     BOOL _isFirstLoad;
-    EarlierNavigationController *earlierNavi;
-    
-    //check to show info for debug
-    BOOL _isShowDebugInfo;
+
     //timer display text Camera is not accessible
     NSTimer *_timerNotAccessible;
     NSString *_resolution;
     NSTimer *_timerStopStreamAfter30s;
 }
-//property for Hold to talk
-@property (nonatomic) BOOL walkieTalkieEnabled;
+
 //property for processing recording
 @property (nonatomic, retain) NSTimer * recTimer;
 
@@ -170,18 +160,13 @@
 @property (retain, nonatomic) IBOutlet UILabel *ib_lbCameraNotAccessible;
 @property (retain, nonatomic) IBOutlet UILabel *ib_lbCameraName;
 @property (retain, nonatomic) IBOutlet UIButton *ib_btShowDebugInfo;
-@property (retain, nonatomic) IBOutlet UIButton *ib_btViewIn;
-@property (retain, nonatomic) IBOutlet UIButton *ib_btResolInfo;
-
 
 @property (retain, nonatomic) IBOutlet UIBarButtonItem *barBntItemReveal;
 
 @property (nonatomic, retain) HttpCommunication* httpComm;
 @property (nonatomic) BOOL h264StreamerIsInStopped;
 
-@property (nonatomic, retain) BMS_JSON_Communication *jsonComm;
 @property (nonatomic) BOOL recordingFlag;
-@property (nonatomic) BOOL disableAutorotateFlag;
 
 @property (nonatomic) BOOL askForFWUpgradeOnce;
 @property (nonatomic) int currentMediaStatus;
@@ -191,15 +176,6 @@
 @property (nonatomic, assign) id<H264PlayerVCDelegate> h264PlayerVCDelegate;
 @property (nonatomic, retain) MelodyViewController *melodyViewController;
 
-
-/* Direction */
-//@property (nonatomic, retain) NSTimer * send_UD_dir_req_timer;
-//@property (nonatomic, retain) NSTimer * send_LR_dir_req_timer;
-///* Added to support direction update */
-//@property (nonatomic) int currentDirUD, lastDirUD;
-//@property (nonatomic) int delay_update_lastDir_count;
-//@property (nonatomic) int currentDirLR,lastDirLR;
-//@property (nonatomic) int delay_update_lastDirLR_count;
 
 #if 1 //Needed or not ??
 
@@ -219,18 +195,7 @@
 - (void)scan_done:(NSArray *) _scan_results;
 
 -(void) handleMessage:(int) msg ext1: (int) ext1 ext2:(int) ext2;
-- (void)stopStream;
 - (void)goBackToCameraList;
 
-
-//action for control panel and update bottom view
-//- (IBAction)holdToTalk:(id)sender;
-- (IBAction)processingRecordingOrTakePicture:(id)sender;
-- (IBAction)changeAction:(id)sender;
-//- (IBAction)touchUpInsideHoldToTalk:(id)sender;
-- (IBAction)bt_showMenuControlPanel:(id)sender;
-- (IBAction)changeToMainRecording:(id)sender;
-- (IBAction)switchDegreePressed:(id)sender;
-- (IBAction)showInfoDebug:(id)sender;
 
 @end

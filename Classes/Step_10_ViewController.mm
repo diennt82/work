@@ -33,10 +33,14 @@
 @interface Step_10_ViewController () <UIAlertViewDelegate>
 
 @property (nonatomic, assign) IBOutlet UIView * progressView;
+@property (retain, nonatomic) IBOutlet UIView *viewFwOtaUpgrading;
+
 @property (retain, nonatomic) UserAccount *userAccount;
 @property (nonatomic, retain) BMS_JSON_Communication *jsonCommBlocked;
 @property (nonatomic, retain) NSString *statusMessage;
 @property (nonatomic) BOOL shouldSendMasterKeyAgain;
+@property (retain, nonatomic) UIProgressView *otaDummyProgressBar;
+@property (nonatomic, retain) NSTimer *timeOut;
 
 @end
 
@@ -44,7 +48,6 @@
 
 
 @synthesize  cameraMac, master_key;
-@synthesize  timeOut;
 @synthesize delegate;
 
 
@@ -67,6 +70,7 @@
     [_ib_resumeSetup release];
     [_jsonCommBlocked release];
     
+    [_viewFwOtaUpgrading release];
     [super dealloc];
 }
 
@@ -131,6 +135,8 @@
     
     [imageView startAnimating];
     [self showProgress:nil];
+    
+    self.otaDummyProgressBar = (UIProgressView *)[_viewFwOtaUpgrading viewWithTag:5990];
 
     NSString *fwVersion = [userDefaults stringForKey:FW_VERSION];
 
@@ -379,9 +385,10 @@
                     shouldCheckAgain = FALSE;
                     self.errorCode = [NSString stringWithFormat:@"%d", deviceStatus];
                     
-                    if (timeOut != nil)
+                    if (_timeOut != nil)
                     {
-                        [timeOut invalidate];
+                        [self.timeOut invalidate];
+                        self.timeOut = nil;
                     }
                     
                     [self setStopScanning:nil];
@@ -420,9 +427,9 @@
 #pragma  mark -
 #pragma mark Timer callbacks
 
--(void) homeWifiScanTimeout: (NSTimer *) expired
+- (void)timeOutSetupProcess: (NSTimer *)expired
 {
-    timeOut = nil;
+    self.timeOut = nil;
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     NSString * homeSsid = (NSString *) [userDefaults objectForKey:HOME_SSID];
     
@@ -480,15 +487,16 @@
 		
 		if (![own isEqualToString:@""])
 		{
-            if (timeOut != nil && [timeOut isValid])
+            if (_timeOut != nil)
             {
-                [timeOut invalidate];
+                [_timeOut invalidate];
+                self.timeOut = nil;
                 
             }
             //Timer  1min - for camera reboot and add itself to server
-            timeOut = [NSTimer scheduledTimerWithTimeInterval:1*60.0
+            self.timeOut = [NSTimer scheduledTimerWithTimeInterval:1*60.0
                                                        target:self
-                                                     selector:@selector(homeWifiScanTimeout:)
+                                                          selector:@selector(timeOutSetupProcess:)
                                                      userInfo:nil
                                                       repeats:NO];
             
@@ -605,24 +613,113 @@
         NSLog(@"Step_10VC - Continue scan...");
     }
     
-    if ([self checkItOnline])
+//    if ([self checkItOnline])
+//    {
+//        //Found it online
+//        NSLog(@"Found it online");
+//        [self setupCompleted];
+//        return;
+//    }
+//    else
+//    {
+//        //retry scannning..
+//        [NSTimer scheduledTimerWithTimeInterval: 0.01
+//                                         target:self
+//                                       selector:@selector(wait_for_camera_to_reboot:)
+//                                       userInfo:nil
+//                                        repeats:NO];
+//    }
+    [self checkCameraAvailableAndFWUpgrading];
+}
+
+- (NSInteger )checkCameraAvailableAndFWUpgrading
+{
+    if (should_stop_scanning == TRUE)
     {
-        //Found it online
+        NSLog(@"Step_10VC - stop scanning now.. should be 4 mins");
+        
+        [self setupFailed];
+        return CAMERA_STATE_UNKNOWN;
+    }
+    
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    NSString * userEmail  = (NSString *) [userDefaults objectForKey:@"PortalUseremail"];
+    NSString * userPass   = (NSString *) [userDefaults objectForKey:@"PortalPassword"];
+    NSString * userApiKey = (NSString *) [userDefaults objectForKey:@"PortalApiKey"];
+    
+    if (_userAccount == nil)
+    {
+        self.userAccount = [[UserAccount alloc] initWithUser:userEmail
+                                                    password:userPass
+                                                      apiKey:userApiKey
+                                                    listener:nil];
+    }
+    
+    NSInteger cameraStatus = [_userAccount checkAvailableAndFWUpgradingWithCamera:self.cameraMac];
+    
+    NSLog(@"checkCameraAvailableAndFWUpgrading: %d", cameraStatus);
+    
+    if (cameraStatus == CAMERA_STATE_IS_AVAILABLE)
+    {
         NSLog(@"Found it online");
         [self setupCompleted];
-        return;
+        return cameraStatus;
+    }
+    else if (cameraStatus == CAMERA_STATE_FW_UPGRADING)
+    {
+        if (_timeOut)
+        {
+            [_timeOut invalidate];
+            self.timeOut = nil;
+        }
+        
+        [self askUserToWaitForUpgrade];
+    }
+    else// unkown
+    {
+        [self checkCameraIsAvailable];
+    }
+    
+    return cameraStatus;
+}
+
+- (BOOL)checkCameraIsAvailable
+{
+    if (should_stop_scanning == TRUE)
+    {
+        NSLog(@"Step_10VC - stop scanning now.. should be 4 mins");
+        
+        [self setupFailed];
+        return FALSE;
+    }
+    
+    NSLog(@"--> Try to search IP online...");
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    NSString * userEmail  = (NSString *) [userDefaults objectForKey:@"PortalUseremail"];
+    NSString * userPass   = (NSString *) [userDefaults objectForKey:@"PortalPassword"];
+    NSString * userApiKey = (NSString *) [userDefaults objectForKey:@"PortalApiKey"];
+    
+    if (_userAccount == nil)
+    {
+        self.userAccount = [[UserAccount alloc] initWithUser:userEmail
+                                                    password:userPass
+                                                      apiKey:userApiKey
+                                                    listener:nil];
+    }
+    
+    if ([_userAccount checkCameraIsAvailable:self.cameraMac])
+    {
+        self.errorCode = @"NoErr";
+        NSLog(@"Found it online");
+        [self setupCompleted];
+        return TRUE;
     }
     else
     {
-        //retry scannning..
-        [NSTimer scheduledTimerWithTimeInterval: 0.01
-                                         target:self
-                                       selector:@selector(wait_for_camera_to_reboot:)
-                                       userInfo:nil
-                                        repeats:NO];
+        [self performSelector:@selector(checkCameraIsAvailable) withObject:nil afterDelay:0.001];
     }
     
-    return;
+    return FALSE;
 }
 
 
@@ -647,6 +744,7 @@
         self.errorCode = @"NoErr";
         return TRUE;
     }
+    
 #else
     NSString *localIp = [_userAccount query_cam_ip_online:self.cameraMac];
     
@@ -665,11 +763,12 @@
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
     // cancel timeout
-    if (timeOut != nil)// && [timeOut isValid])
+    if (_timeOut != nil)// && [timeOut isValid])
     {
-        [timeOut invalidate];
-        
+        [_timeOut invalidate];
+        self.timeOut = nil;
     }
+    
     [self.progressView setHidden:YES];
     //Load step 12
     NSLog(@"Load step 12");
@@ -882,5 +981,71 @@
     }
     
 }
+
+- (void)askUserToWaitForUpgrade
+{
+    //[self.progressView removeFromSuperview];
+    
+    [self.view addSubview:_viewFwOtaUpgrading];
+    [self.view bringSubviewToFront:_viewFwOtaUpgrading];
+    self.otaDummyProgressBar.progress = 0.0;
+    
+	[self performSelectorInBackground:@selector(upgradeFwReboot_bg)  withObject:nil] ;
+}
+
+-(void) upgradeFwReboot_bg
+{
+	//percentageProgress.
+    
+    @autoreleasepool {
+        float sleepPeriod = 120.0 / 100; // 100 cycles
+        int percentage = 0;
+        
+        while (percentage ++ < 100)
+        {
+            [self performSelectorOnMainThread:@selector(upgradeFwProgress_ui:)
+                                   withObject:[NSNumber numberWithInt:percentage]
+                                waitUntilDone:YES];
+            
+            [NSThread sleepForTimeInterval:sleepPeriod];
+        }
+        
+        [self performSelectorOnMainThread:@selector(checkCameraStatusAgain) withObject:nil waitUntilDone:NO];
+    }
+}
+
+- (void)checkCameraStatusAgain
+{
+    [self.view bringSubviewToFront:_progressView];
+    
+    if (_timeOut)
+    {
+        [_timeOut invalidate];
+        self.timeOut = nil;
+    }
+    
+    self.timeOut = [NSTimer scheduledTimerWithTimeInterval:1*60.0
+                                                    target:self
+                                                  selector:@selector(timeOutSetupProcess:)
+                                                  userInfo:nil
+                                                   repeats:NO];
+    
+    [self checkCameraIsAvailable];
+}
+
+- (void)upgradeFwProgress_ui:(NSNumber *)number
+{
+	int value =  [number intValue];
+	float _value = (float) value;
+	_value = _value/100.0;
+    
+	if (value >=0)
+	{
+		self.otaDummyProgressBar.progress = _value;
+	}
+}
+
+
+
 
 @end

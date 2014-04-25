@@ -127,11 +127,12 @@
     self.upperValue = 19.99;
     
     self.schedulerVC = [[SchedulerViewController alloc] init];
-    [self.schedulerVC setContentSizeForViewInPopover:CGSizeMake(UIScreen.mainScreen.bounds.size.width, 320)];
+    //[self.schedulerVC setContentSizeForViewInPopover:CGSizeMake(UIScreen.mainScreen.bounds.size.width, 320)];
+    [self.schedulerVC setPreferredContentSize:CGSizeMake(SCREEN_WIDTH, 320)];
     self.schedulingVC = [[SchedulingViewController alloc] init];
     //self.schedulingVC.view.frame = CGRectMake(0, 0, UIScreen.mainScreen.bounds.size.width, 320);
-    [self.schedulingVC setContentSizeForViewInPopover:CGSizeMake(UIScreen.mainScreen.bounds.size.width, 220)];
-    
+    //[self.schedulingVC setContentSizeForViewInPopover:CGSizeMake(UIScreen.mainScreen.bounds.size.width, 220)];
+    [self.schedulerVC setPreferredContentSize:CGSizeMake(SCREEN_WIDTH, 220)];
     if (valueSchedulerSwitchs[0][1] == TRUE)
     {
         self.schedulerVC.numberOfColumn = 8;
