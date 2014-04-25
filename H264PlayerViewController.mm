@@ -1363,6 +1363,7 @@ double _ticks = 0;
 #ifdef SHOW_DEBUG_INFO
         _viewVideoIn = @"L";
 #endif
+        self.ib_labelTouchToTalk.text = @"Hold to Talk";
         self.stringStatePTT = @"Hold to Talk";
     }
     else if (self.selectedChannel.profile.minuteSinceLastComm <= 5)
@@ -5151,7 +5152,7 @@ double _ticks = 0;
         {
             [_audioOutStreamRemote performSelectorOnMainThread:@selector(disconnectFromAudioSocket) withObject:nil waitUntilDone:NO];
         }
-        [self touchUpInsideHoldToTalk];
+        [self performSelectorOnMainThread:@selector(touchUpInsideHoldToTalk) withObject:nil waitUntilDone:NO];
     }
     else
     {
