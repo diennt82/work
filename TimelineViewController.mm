@@ -163,8 +163,11 @@
     
     [self performSelectorInBackground:@selector(getEventFromDb:) withObject:camChannel];
     
+    
+    
     [self performSelectorInBackground:@selector(getEventsList_bg2:) withObject:camChannel];
 
+    
 }
 
 - (void)getEventFromDb:(CamChannel *) camChannel

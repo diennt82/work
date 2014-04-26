@@ -80,10 +80,10 @@
     [UIApplication sharedApplication].idleTimerDisabled=  NO;
     [self.navigationController popToRootViewControllerAnimated:NO];
     NSString * msgLabel = [NSString stringWithFormat:@"Add Camera Failed with errorCode:%@",self.errorCode];
-    [[[GAI sharedInstance] defaultTracker] sendEventWithCategory:@"Add Cameras"
-                                                      withAction:@"Add Camera Failed"
-                                                       withLabel:msgLabel
-                                                       withValue:nil];
+//    [[[GAI sharedInstance] defaultTracker] sendEventWithCategory:@"Add Cameras"
+//                                                      withAction:@"Add Camera Failed"
+//                                                       withLabel:msgLabel
+//                                                       withValue:nil];
 }
 
 
