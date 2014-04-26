@@ -822,10 +822,10 @@ double _ticks = 0;
                 
                 if ( self.selectedChannel.profile.isInLocal == NO)
                 {
-                    [[[GAI sharedInstance] defaultTracker] trackEventWithCategory:@"View Camera Remote"
-                                                                       withAction:@"Start Stream Success"
-                                                                        withLabel:@"Start Stream Success"
-                                                                        withValue:nil];
+//                    [[[GAI sharedInstance] defaultTracker] trackEventWithCategory:@"View Camera Remote"
+//                                                                       withAction:@"Start Stream Success"
+//                                                                        withLabel:@"Start Stream Success"
+//                                                                        withValue:nil];
                     
                     if (_remoteViewTimeout == YES)
                     {
@@ -2542,7 +2542,7 @@ double _ticks = 0;
                            responseDict = [_jsonCommBlocked createSessionBlockedWithRegistrationId:stringUDID
                                                                              andClientType:@"BROWSER"
                                                                                  andApiKey:apiKey];
-                           NSLog(@"USE RELAY TO VIEW - symmetric_check_result: %@", responseDict);
+                           NSLog(@"USE RELAY TO VIEW - : %@", responseDict);
                            
                            if (responseDict != nil)
                            {
@@ -3973,6 +3973,9 @@ double _ticks = 0;
         NSLog(@"Scan done with ipserver");
         NSDate * endDate = [NSDate dateWithTimeIntervalSinceNow:0.5];
         
+        
+       
+        
         while (_threadBonjour != nil &&
                [_threadBonjour isExecuting] )
         {
@@ -4009,9 +4012,11 @@ double _ticks = 0;
         
         [_bonjourList release];
         _bonjourList = nil;
+        
+        
         self.selectedChannel.profile.hasUpdateLocalStatus = YES;
-        
-        
+    
+    
         [NSTimer scheduledTimerWithTimeInterval:0.1
                                          target:self
                                        selector:@selector(setupCamera)
@@ -5751,14 +5756,18 @@ double _ticks = 0;
 {
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     
-    if ( [self isCurrentConnection3G] || [userDefaults boolForKey:@"remote_only"])
+    if ( [self isCurrentConnection3G] || [userDefaults boolForKey:@"remote_only"] ||
+        (self.selectedChannel.profile.ip_address != nil && ![self isInTheSameNetworkAsCamera:self.selectedChannel.profile ])
+        )
     {
-        NSLog(@"Connection over 3G | remote_only == TRUE --> Skip scanning all together");
+        NSLog(@"Connection over 3G | remote_only | or not in same networ == TRUE --> Skip scanning all together");
         
         self.selectedChannel.profile.isInLocal = FALSE;
         self.selectedChannel.profile.hasUpdateLocalStatus = TRUE;
+        self.selectedChannel.profile.minuteSinceLastComm = 1;
         
-        [self setupCamera];
+        [self performSelector:@selector(setupCamera)
+                   withObject:nil afterDelay:0.1];
     }
     else
     {
@@ -5872,47 +5881,33 @@ double _ticks = 0;
     if (self.selectedChannel.profile != nil &&
         self.selectedChannel.profile.mac_address != nil)
     {
-        //Check if we are in the same network as the camera.. IF so
-        // Try to scan .. otherwise... no point ..
-        //20121130: phung: incase the ip address is not valid... also try to scan ..
-        if (self.selectedChannel.profile.ip_address == nil ||
-            [self isInTheSameNetworkAsCamera:self.selectedChannel.profile ])
+        
+        BOOL skipScan = [self isCurrentIpAddressValid:self.selectedChannel.profile];
+        
+        if (skipScan)
         {
-            BOOL skipScan = [self isCurrentIpAddressValid:self.selectedChannel.profile];
+            self.selectedChannel.profile.port = 80;
+            //Dont need to scan.. call scan_done directly
+            [finalResult addObject:self.selectedChannel.profile];
             
-            if (skipScan)
-            {
-                self.selectedChannel.profile.port = 80;
-                //Dont need to scan.. call scan_done directly
-                [finalResult addObject:self.selectedChannel.profile];
-                
-//                [self performSelector:@selector(scan_done:)
-//                           withObject:finalResult afterDelay:0.1];
-                [self performSelectorOnMainThread:@selector(scan_done:)
-                                       withObject:finalResult
-                                    waitUntilDone:NO];
-                
-            }
-            else // NEED to do local scan
-            {
-                ScanForCamera *cameraScanner = [[ScanForCamera alloc] initWithNotifier:self];
-                //[cameraScanner scan_for_device:self.selectedChannel.profile.mac_address];
-                [cameraScanner performSelectorOnMainThread:@selector(scan_for_device:)
-                                                withObject:self.selectedChannel.profile.mac_address
-                                             waitUntilDone:NO];
-                
-                
-            } /* skipScan = false*/
-        }
-        else
-        {
-            //Skip scanning too and assume we don't get any result
-//            [self performSelector:@selector(scan_done:)
-//                       withObject:nil afterDelay:0.1];
+            //                [self performSelector:@selector(scan_done:)
+            //                           withObject:finalResult afterDelay:0.1];
             [self performSelectorOnMainThread:@selector(scan_done:)
-                                   withObject:nil
+                                   withObject:finalResult
                                 waitUntilDone:NO];
+            
         }
+        else // NEED to do local scan
+        {
+            ScanForCamera *cameraScanner = [[ScanForCamera alloc] initWithNotifier:self];
+            //[cameraScanner scan_for_device:self.selectedChannel.profile.mac_address];
+            [cameraScanner performSelectorOnMainThread:@selector(scan_for_device:)
+                                            withObject:self.selectedChannel.profile.mac_address
+                                         waitUntilDone:NO];
+            
+            
+        } /* skipScan = false*/
+        
     }
     
     [finalResult release];

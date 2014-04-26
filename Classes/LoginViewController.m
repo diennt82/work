@@ -157,7 +157,7 @@
 -(void) viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
-    [[[GAI sharedInstance] defaultTracker] sendView:@"Login Screen"];
+    //[[[GAI sharedInstance] defaultTracker] sendView:@"Login Screen"];
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -541,10 +541,10 @@
             NSString * ok = NSLocalizedStringWithDefaultValue(@"Ok" ,nil, [NSBundle mainBundle],
                                                               @"OK", nil);
             
-            [[[GAI sharedInstance] defaultTracker] trackEventWithCategory:@"Login"
-                                                               withAction:@"Login Failed"
-                                                                withLabel:@"Login failed because of an unhandled exception from server"
-                                                                withValue:nil];
+//            [[[GAI sharedInstance] defaultTracker] trackEventWithCategory:@"Login"
+//                                                               withAction:@"Login Failed"
+//                                                                withLabel:@"Login failed because of an unhandled exception from server"
+//                                                                withValue:nil];
             UIAlertView *alert = [[UIAlertView alloc]
                                   initWithTitle:title
                                   message:msg
@@ -591,10 +591,10 @@
                                                         listener:self];
         
         
-        [[[GAI sharedInstance] defaultTracker] trackEventWithCategory:@"Login"
-                                                           withAction:@"Login Success"
-                                                            withLabel:@"Login success"
-                                                            withValue:nil];
+//        [[[GAI sharedInstance] defaultTracker] trackEventWithCategory:@"Login"
+//                                                           withAction:@"Login Success"
+//                                                            withLabel:@"Login success"
+//                                                            withValue:nil];
         //BLOCKED method
         [account readCameraListAndUpdate];
         [account release];
@@ -634,10 +634,10 @@
 						  otherButtonTitles:nil];
 	[alert show];
 	[alert release];
-    [[[GAI sharedInstance]defaultTracker] trackEventWithCategory:@"Login"
-                                                      withAction:@"Login Failed"
-                                                       withLabel:@"msg"
-                                                       withValue:nil];
+//    [[[GAI sharedInstance]defaultTracker] trackEventWithCategory:@"Login"
+//                                                      withAction:@"Login Failed"
+//                                                       withLabel:@"msg"
+//                                                       withValue:nil];
     NSLog(@"%d", [[responseError objectForKey:@"status"] intValue]);
 }
 
@@ -672,10 +672,10 @@
 	[alert show];
 	[alert release];
     
-    [[[GAI sharedInstance]defaultTracker] trackEventWithCategory:@"Login"
-                                                      withAction:@"Login Failed"
-                                                       withLabel:@"Login failed because of server is unreachable"
-                                                       withValue:nil];
+//    [[[GAI sharedInstance]defaultTracker] trackEventWithCategory:@"Login"
+//                                                      withAction:@"Login Failed"
+//                                                       withLabel:@"Login failed because of server is unreachable"
+//                                                       withValue:nil];
 }
 
 - (void)getUserInfoSuccessWithResponse: (NSDictionary *)responseDict

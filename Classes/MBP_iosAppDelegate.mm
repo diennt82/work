@@ -34,7 +34,7 @@
         application.applicationIconBadgeNumber = 0;
     }
 
-    
+#if 0
     
     // Optional: automatically send uncaught exceptions to Google Analytics.
     [GAI sharedInstance].trackUncaughtExceptions = YES;
@@ -47,7 +47,7 @@
     //UA-ID_INSTANCE is taken from the account analytics on google analytics
     //id<GAITracker> tracker =
     [[GAI sharedInstance] trackerWithTrackingId:@"UA-42134835-2"];
-
+#endif
     // !!!: Use the next line only during TEST - appstore release: need to comment this line
     //[TestFlight setDeviceIdentifier:[[UIDevice currentDevice] uniqueIdentifier]];
     

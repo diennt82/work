@@ -150,10 +150,10 @@
     
     //[initSetupController startMonitorCallBack];
     [delegate startMonitorCallBack];
-    [[[GAI sharedInstance] defaultTracker] sendEventWithCategory:@"Add Cameras"
-                                                       withAction:@"Add Camera Success"
-                                                       withLabel:@"Add Camera Success"
-                                                       withValue:nil];
+//    [[[GAI sharedInstance] defaultTracker] sendEventWithCategory:@"Add Cameras"
+//                                                       withAction:@"Add Camera Success"
+//                                                       withLabel:@"Add Camera Success"
+//                                                       withValue:nil];
 }
 
 - (void)dealloc {

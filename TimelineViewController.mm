@@ -165,8 +165,7 @@
     
     
     
-    [self performSelector:@selector(getEventsList_bg2:) withObject:camChannel afterDelay:1.0];
-    
+    [self performSelectorInBackground:@selector(getEventsList_bg2:) withObject:camChannel];
 
     
 }
