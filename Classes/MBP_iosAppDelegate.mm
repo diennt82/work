@@ -9,6 +9,7 @@
 #import "MBP_iosAppDelegate.h"
 #import "PublicDefine.h"
 #import "SetupData.h"
+#import "KISSMetricsAPI.h"
 
 
 @implementation MBP_iosAppDelegate
@@ -38,6 +39,21 @@
     
 #if 0
     
+#if 1
+    [KISSMetricsAPI sharedAPIWithKey:@"ff38140e358fdc343bb97297de4963291eec47d5"];
+    
+    [[KISSMetricsAPI sharedAPI] identify:@"85FF7C5E-3412-4AAC-9B07-5491AD022B4F"];
+    
+    // include some info about the type of device, operating system, and version of your app
+    NSDictionary *info = [NSDictionary dictionaryWithObjectsAndKeys:
+                          [UIDevice currentDevice].model, @"Model",
+                          [UIDevice currentDevice].systemName, @"System Name",
+                          [UIDevice currentDevice].systemVersion, @"System Version",
+                          [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"], @"My App Version",
+                          nil];
+
+    [[KISSMetricsAPI sharedAPI] recordEvent:@"Launched App" withProperties:info];
+#else
     // Optional: automatically send uncaught exceptions to Google Analytics.
     [GAI sharedInstance].trackUncaughtExceptions = YES;
     // Optional: set Google Analytics dispatch interval to e.g. 20 seconds.

@@ -17,6 +17,7 @@
 #import "UserAccount.h"
 #import "PublicDefine.h"
 #import <MonitorCommunication/MonitorCommunication.h>
+#import "KISSMetricsAPI.h"
 
 
 @interface LoginViewController ()  <UITextFieldDelegate, StunClientDelegate, UserAccountDelegate>
@@ -157,7 +158,8 @@
 -(void) viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
-    //[[[GAI sharedInstance] defaultTracker] sendView:@"Login Screen"];
+
+    [[KISSMetricsAPI sharedAPI] recordEvent:@"Login Screen" withProperties:nil];
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -540,11 +542,7 @@
             
             NSString * ok = NSLocalizedStringWithDefaultValue(@"Ok" ,nil, [NSBundle mainBundle],
                                                               @"OK", nil);
-            
-//            [[[GAI sharedInstance] defaultTracker] trackEventWithCategory:@"Login"
-//                                                               withAction:@"Login Failed"
-//                                                                withLabel:@"Login failed because of an unhandled exception from server"
-//                                                                withValue:nil];
+            [[KISSMetricsAPI sharedAPI] recordEvent:@"Login Failed" withProperties:nil];
             UIAlertView *alert = [[UIAlertView alloc]
                                   initWithTitle:title
                                   message:msg
@@ -589,12 +587,9 @@
                                                         password:_stringPassword
                                                           apiKey:apiKey
                                                         listener:self];
-        
-        
-//        [[[GAI sharedInstance] defaultTracker] trackEventWithCategory:@"Login"
-//                                                           withAction:@"Login Success"
-//                                                            withLabel:@"Login success"
-//                                                            withValue:nil];
+
+    [[KISSMetricsAPI sharedAPI] recordEvent:@"Login Success" withProperties:nil];
+
         //BLOCKED method
         [account readCameraListAndUpdate];
         [account release];
@@ -634,10 +629,8 @@
 						  otherButtonTitles:nil];
 	[alert show];
 	[alert release];
-//    [[[GAI sharedInstance]defaultTracker] trackEventWithCategory:@"Login"
-//                                                      withAction:@"Login Failed"
-//                                                       withLabel:@"msg"
-//                                                       withValue:nil];
+    
+    [[KISSMetricsAPI sharedAPI] recordEvent:@"Login Failed" withProperties:nil];
     NSLog(@"%d", [[responseError objectForKey:@"status"] intValue]);
 }
 
@@ -672,10 +665,7 @@
 	[alert show];
 	[alert release];
     
-//    [[[GAI sharedInstance]defaultTracker] trackEventWithCategory:@"Login"
-//                                                      withAction:@"Login Failed"
-//                                                       withLabel:@"Login failed because of server is unreachable"
-//                                                       withValue:nil];
+    [[KISSMetricsAPI sharedAPI] recordEvent:@"Login Failed" withProperties:nil];
 }
 
 - (void)getUserInfoSuccessWithResponse: (NSDictionary *)responseDict

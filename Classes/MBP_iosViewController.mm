@@ -29,6 +29,7 @@
 #import "SetupData.h"
 
 #import "AlertPrompt.h"
+#import "KISSMetricsAPI.h"
 
 @interface MBP_iosViewController ()
 
@@ -876,6 +877,8 @@
 {
     @autoreleasepool
     {
+        //[[KISSMetricsAPI sharedAPI] clearIdentity];
+        
 #if  TARGET_IPHONE_SIMULATOR
         NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
         

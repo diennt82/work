@@ -13,6 +13,10 @@
 #import "define.h"
 #import <CFNetwork/CFNetwork.h>
 #include <ifaddrs.h>
+
+//#import <GAI.h>
+#import "KISSMetricsAPI.h"
+
 #import "AudioOutStreamRemote.h"
 #import "EarlierNavigationController.h"
 #import "HttpCom.h"
@@ -832,10 +836,7 @@ double _ticks = 0;
                 
                 if ( self.selectedChannel.profile.isInLocal == NO)
                 {
-                    //                    [[[GAI sharedInstance] defaultTracker] trackEventWithCategory:@"View Camera Remote"
-                    //                                                                       withAction:@"Start Stream Success"
-                    //                                                                        withLabel:@"Start Stream Success"
-                    //                                                                        withValue:nil];
+                    [[KISSMetricsAPI sharedAPI] recordEvent:@"View Camera Remote" withProperties:nil];
                     
                     if (_remoteViewTimeout == YES)
                     {

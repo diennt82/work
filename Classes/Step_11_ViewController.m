@@ -7,6 +7,7 @@
 //
 
 #import "Step_11_ViewController.h"
+#import "KISSMetricsAPI.h"
 
 @interface Step_11_ViewController ()
 
@@ -80,10 +81,8 @@
     [UIApplication sharedApplication].idleTimerDisabled=  NO;
     [self.navigationController popToRootViewControllerAnimated:NO];
     NSString * msgLabel = [NSString stringWithFormat:@"Add Camera Failed with errorCode:%@",self.errorCode];
-//    [[[GAI sharedInstance] defaultTracker] sendEventWithCategory:@"Add Cameras"
-//                                                      withAction:@"Add Camera Failed"
-//                                                       withLabel:msgLabel
-//                                                       withValue:nil];
+    
+    [[KISSMetricsAPI sharedAPI] recordEvent:@"Add Camera Failed" withProperties:nil];
 }
 
 

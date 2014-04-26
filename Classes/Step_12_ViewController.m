@@ -7,6 +7,7 @@
 //
 
 #import "Step_12_ViewController.h"
+#import "KISSMetricsAPI.h"
 
 @interface Step_12_ViewController()
 @property (retain, nonatomic) IBOutlet UIButton *btnWatchLiveCamera;
@@ -150,10 +151,7 @@
     
     //[initSetupController startMonitorCallBack];
     [delegate startMonitorCallBack];
-//    [[[GAI sharedInstance] defaultTracker] sendEventWithCategory:@"Add Cameras"
-//                                                       withAction:@"Add Camera Success"
-//                                                       withLabel:@"Add Camera Success"
-//                                                       withValue:nil];
+    [[KISSMetricsAPI sharedAPI] recordEvent:@"Add Camera Success" withProperties:nil];
 }
 
 - (void)dealloc {
