@@ -16,6 +16,7 @@
 #import <GAI.h>
 #import "AudioOutStreamRemote.h"
 #import "EarlierNavigationController.h"
+#import "HttpCom.h"
 
 //#import "Reachability.h"
 #import "MBP_iosViewController.h"
@@ -144,7 +145,6 @@
 @synthesize itemImages = _itemImages;
 @synthesize itemSelectedImages = _itemSelectedImages;
 @synthesize selectedItemMenu = _selectedItemMenu;
-@synthesize httpComm = _httpComm;
 
 double _ticks = 0;
 #pragma mark - View
@@ -390,12 +390,9 @@ double _ticks = 0;
 - (void) setupHttpPort
 {
     NSLog(@"Self.selcetedChangel is %@",self.selectedChannel);
-    _httpComm = [[HttpCommunication alloc] init];
     
-    NSString* ip = self.selectedChannel.profile.ip_address;
-	int port = self.selectedChannel.profile.port;
-    _httpComm.device_ip  = ip;
-    _httpComm.device_port = port;
+    [HttpCom instance].comWithDevice.device_ip   = self.selectedChannel.profile.ip_address;
+    [HttpCom instance].comWithDevice.device_port = self.selectedChannel.profile.port;
     
     //init the ptt port to default
     self.selectedChannel.profile.ptt_port = IRABOT_AUDIO_RECORDING_PORT;
@@ -1234,10 +1231,10 @@ double _ticks = 0;
     
     if (self.selectedChannel.profile.isInLocal )
 	{
-        _httpComm.device_ip = self.selectedChannel.profile.ip_address;
-        _httpComm.device_port = self.selectedChannel.profile.port;
+        [HttpCom instance].comWithDevice.device_ip   = self.selectedChannel.profile.ip_address;
+        [HttpCom instance].comWithDevice.device_port = self.selectedChannel.profile.port;
         
-        NSString *response = [_httpComm sendCommandAndBlock:@"get_running_os"];
+        NSString *response = [[HttpCom instance].comWithDevice sendCommandAndBlock:@"get_running_os"];
         if (response != nil)
         {
             self.sharedCamConnectedTo = [[response componentsSeparatedByString:@": "] objectAtIndex:1];
@@ -1334,13 +1331,10 @@ double _ticks = 0;
     
     _isShowCustomIndicator = YES;
     [self displayCustomIndicator];
+    self.selectedChannel.stream_url = nil;
     
-    if (self.selectedChannel.stream_url != nil)
-    {
-        self.selectedChannel.stream_url = nil;
-    }
-    _httpComm.device_ip = self.selectedChannel.profile.ip_address;
-    _httpComm.device_port = self.selectedChannel.profile.port;
+    [HttpCom instance].comWithDevice.device_ip   = self.selectedChannel.profile.ip_address;
+    [HttpCom instance].comWithDevice.device_port = self.selectedChannel.profile.port;
     
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     
@@ -1350,13 +1344,6 @@ double _ticks = 0;
     {
         NSLog(@"H264VC - setupCamera -created a local streamer");
         self.selectedChannel.stream_url = [NSString stringWithFormat:@"rtsp://user:pass@%@:6667/blinkhd", self.selectedChannel.profile.ip_address];
-        
-#if 0
-        
-        self.selectedChannel.stream_url = @"rtsp://user:pass@%@:6667/blinkhd";
-#endif
-        
-        //self.progressView.hidden = YES;
         [self performSelector:@selector(startStream)
                    withObject:nil
                    afterDelay:0.1];
@@ -1949,10 +1936,10 @@ double _ticks = 0;
     
     if (self.selectedChannel.profile.isInLocal )
 	{
-        _httpComm.device_ip = self.selectedChannel.profile.ip_address;
-        _httpComm.device_port = self.selectedChannel.profile.port;
+        [HttpCom instance].comWithDevice.device_ip   = self.selectedChannel.profile.ip_address;
+        [HttpCom instance].comWithDevice.device_port = self.selectedChannel.profile.port;
         
-        NSData *responseData = [_httpComm sendCommandAndBlock_raw:@"get_resolution"];
+        NSData *responseData = [[HttpCom instance].comWithDevice sendCommandAndBlock_raw:@"get_resolution"];
         
         if (responseData != nil)
         {
@@ -2018,10 +2005,10 @@ double _ticks = 0;
     
     if (self.selectedChannel.profile .isInLocal == TRUE)
     {
-        _httpComm.device_ip = self.selectedChannel.profile.ip_address;
-        _httpComm.device_port = self.selectedChannel.profile.port;
+        [HttpCom instance].comWithDevice.device_ip   = self.selectedChannel.profile.ip_address;
+        [HttpCom instance].comWithDevice.device_port = self.selectedChannel.profile.port;
         
-        NSData *responseData = [_httpComm sendCommandAndBlock_raw:@"get_recording_stat"];
+        NSData *responseData = [[HttpCom instance].comWithDevice sendCommandAndBlock_raw:@"get_recording_stat"];
         
         if (responseData != nil)
         {
@@ -2089,10 +2076,10 @@ double _ticks = 0;
     
     if (self.selectedChannel.profile .isInLocal == TRUE)
     {
-        _httpComm.device_ip = self.selectedChannel.profile.ip_address;
-        _httpComm.device_port = self.selectedChannel.profile.port;
+        [HttpCom instance].comWithDevice.device_ip   = self.selectedChannel.profile.ip_address;
+        [HttpCom instance].comWithDevice.device_port = self.selectedChannel.profile.port;
         
-        NSData *responseData = [_httpComm sendCommandAndBlock_raw:[NSString stringWithFormat:@"set_recording_stat&mode=%@", modeRecording]];
+        NSData *responseData = [[HttpCom instance].comWithDevice sendCommandAndBlock_raw:[NSString stringWithFormat:@"set_recording_stat&mode=%@", modeRecording]];
         
         if (responseData != nil)
         {
@@ -2166,13 +2153,10 @@ double _ticks = 0;
     
     if (self.selectedChannel.profile .isInLocal == TRUE)
     {
-//        HttpCommunication *httpCommunication = [[HttpCommunication alloc] init];
-//        httpCommunication.device_ip = self.selectedChannel.profile.ip_address;
-//        httpCommunication.device_port = self.selectedChannel.profile.port;
+        [HttpCom instance].comWithDevice.device_ip   = self.selectedChannel.profile.ip_address;
+        [HttpCom instance].comWithDevice.device_port = self.selectedChannel.profile.port;
         
-        _httpComm.device_ip = self.selectedChannel.profile.ip_address;
-        _httpComm.device_port = self.selectedChannel.profile.port;
-        NSData *responseData = [_httpComm sendCommandAndBlock_raw:@"value_melody"];
+        NSData *responseData = [[HttpCom instance].comWithDevice sendCommandAndBlock_raw:@"value_melody"];
         
         if (responseData != nil)
         {
@@ -2250,10 +2234,10 @@ double _ticks = 0;
     
     if (self.selectedChannel.profile .isInLocal == TRUE)
     {
-
-        _httpComm.device_ip = self.selectedChannel.profile.ip_address;
-        _httpComm.device_port = self.selectedChannel.profile.port;
-        NSData *responseData = [_httpComm sendCommandAndBlock_raw:@"value_temperature"];
+        [HttpCom instance].comWithDevice.device_ip   = self.selectedChannel.profile.ip_address;
+        [HttpCom instance].comWithDevice.device_port = self.selectedChannel.profile.port;
+        
+        NSData *responseData = [[HttpCom instance].comWithDevice sendCommandAndBlock_raw:@"value_temperature"];
 
         if (responseData != nil)
         {
@@ -2800,11 +2784,10 @@ double _ticks = 0;
                            
                            if (self.selectedChannel.profile.isInLocal )
                            {
-//                               HttpCommunication *httpCommunication = [[[HttpCommunication alloc] init] autorelease];
-                               _httpComm.device_ip = self.selectedChannel.profile.ip_address;
-                               _httpComm.device_port = self.selectedChannel.profile.port;
+                               [HttpCom instance].comWithDevice.device_ip   = self.selectedChannel.profile.ip_address;
+                               [HttpCom instance].comWithDevice.device_port = self.selectedChannel.profile.port;
                                
-                               NSData *responseData = [_httpComm sendCommandAndBlock_raw:@"get_resolution"];
+                               NSData *responseData = [[HttpCom instance].comWithDevice sendCommandAndBlock_raw:@"get_resolution"];
                                
                                if (responseData != nil)
                                {
@@ -3138,15 +3121,13 @@ double _ticks = 0;
 	{
         if (_selectedChannel.profile.isInLocal)
 		{
-//            HttpCommunication *httpCommunication = [[[HttpCommunication alloc] init] autorelease];
-            _httpComm.device_ip = _selectedChannel.profile.ip_address;
-            _httpComm.device_port = _selectedChannel.profile.port;
+            [HttpCom instance].comWithDevice.device_ip   = self.selectedChannel.profile.ip_address;
+            [HttpCom instance].comWithDevice.device_port = self.selectedChannel.profile.port;
             
             //Non block send-
             NSLog(@"device_ip: %@, device_port: %d", _selectedChannel.profile.ip_address, _selectedChannel.profile.port);
             
-            [_httpComm sendCommand:dir_str];
-            //[_httpComm sendCommandAndBlock:dir_str];
+            [[HttpCom instance].comWithDevice sendCommand:dir_str];
 		}
 		else if(_selectedChannel.profile.minuteSinceLastComm <= 5)
 		{
@@ -3223,13 +3204,10 @@ double _ticks = 0;
 	{
         if (_selectedChannel.profile.isInLocal)
         {
-//            _httpComm *_httpComm = [[[HttpCommunication alloc] init] autorelease];
-            _httpComm.device_ip = _selectedChannel.profile.ip_address;
-            _httpComm.device_port = _selectedChannel.profile.port;
+            [HttpCom instance].comWithDevice.device_ip   = self.selectedChannel.profile.ip_address;
+            [HttpCom instance].comWithDevice.device_port = self.selectedChannel.profile.port;
 				//Non block send-
-				[_httpComm sendCommand:dir_str];
-                
-                //[httpCommunication sendCommandAndBlock:dir_str];
+            [[HttpCom instance].comWithDevice sendCommand:dir_str];
 		}
 		else if ( _selectedChannel.profile.minuteSinceLastComm <= 5)
 		{
@@ -4722,13 +4700,8 @@ double _ticks = 0;
 - (void)dealloc {
     [_imageViewVideo release];
     [_imageViewStreamer release];
-    
     [_progressView release];
-    
     [_selectedChannel release];
-    [_httpComm release];
-    
-    [_barBntItemReveal release];
     [_imgViewDrectionPad release];
     [send_UD_dir_req_timer invalidate];
     [send_LR_dir_req_timer invalidate];
@@ -4814,7 +4787,6 @@ double _ticks = 0;
 
 - (void)viewWillDisappear:(BOOL)animated
 {
-
     [self stopTimerRecoring];
     
     [[UIApplication sharedApplication] setStatusBarHidden:NO];
@@ -4829,7 +4801,6 @@ double _ticks = 0;
     [self setCameraNameBarBtnItem:nil];
 
     [self setSelectedChannel:nil];
-    [self setHttpComm:nil];
     
     [super viewDidUnload];
 }
@@ -4947,12 +4918,9 @@ double _ticks = 0;
         
         //set port default for send command
         
-        _httpComm.device_port = 80;
+        [HttpCom instance].comWithDevice.device_port = 80;
         
-        if(_httpComm != nil)
-        {
-            [_httpComm sendCommandAndBlock:command];
-        }
+        [[HttpCom instance].comWithDevice sendCommandAndBlock:command];
         
         self.ib_buttonTouchToTalk.enabled = YES;
     }
@@ -4960,9 +4928,9 @@ double _ticks = 0;
 
 -(void)processingHoldToTalk // Just init AudioOutStreamer
 {
-    NSLog(@"Port push to talk is %d, actually is %d",self.selectedChannel.profile.ptt_port,IRABOT_AUDIO_RECORDING_PORT );
-    NSLog(@"Device iP is %@", _httpComm.device_ip);
-    _audioOut = [[AudioOutStreamer alloc] initWithDeviceIp:_httpComm.device_ip
+    NSLog(@"Device ip: %@, Port push to talk: %d, actually is: %d", [HttpCom instance].comWithDevice.device_ip, self.selectedChannel.profile.ptt_port,IRABOT_AUDIO_RECORDING_PORT);
+    
+    _audioOut = [[AudioOutStreamer alloc] initWithDeviceIp:[HttpCom instance].comWithDevice.device_ip
                                                 andPTTport:self.selectedChannel.profile.ptt_port];  //IRABOT_AUDIO_RECORDING_PORT
     [_audioOut retain];
     //Start buffering sound from user at the moment they press down the button
@@ -5811,10 +5779,59 @@ double _ticks = 0;
     if ([reachability currentReachabilityStatus] == ReachableViaWWAN)
     {
         //3G
+        [self performSelectorInBackground:@selector(setVideoBitRateToCamera) withObject:nil];
+        
         return TRUE;
     }
     
     return FALSE;
+}
+
+- (void)setVideoBitRateToCamera
+{
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    
+    NSString *apiKey = [userDefaults objectForKey:@"PortalApiKey"];
+    
+    if (_jsonCommBlocked == nil)
+    {
+        self.jsonCommBlocked = [[BMS_JSON_Communication alloc] initWithObject:self
+                                                                     Selector:nil
+                                                                 FailSelector:nil
+                                                                    ServerErr:nil];
+    }
+    
+    NSDictionary *responseDict = [_jsonCommBlocked sendCommandBlockedWithRegistrationId:self.selectedChannel.profile.registrationID
+                                                                             andCommand:@"action=command&command=set_video_bitrate&value=200"
+                                                                              andApiKey:apiKey];
+    BOOL sendCmdFailed = TRUE;
+    
+    if (responseDict != nil)
+    {
+        NSInteger status = [[responseDict objectForKey:@"status"] intValue];
+        
+        if (status == 200)
+        {
+            NSString *bodyKey = [[[responseDict objectForKey:@"data"] objectForKey:@"device_response"] objectForKey:@"body"];
+            
+            if (bodyKey != nil && ![bodyKey isEqual:[NSNull null]])
+            {
+                if ([bodyKey isEqualToString:@"set_video_bitrate: 0"])
+                {
+                    sendCmdFailed = FALSE;
+                }
+            }
+        }
+    }
+    
+    if (sendCmdFailed)
+    {
+        NSLog(@"H264VC - setVideoBitRateToCamera: %@", responseDict);
+    }
+    else
+    {
+        NSLog(@"H264VC - setVideoBitRateToCamera successfully");
+    }
 }
 
 - (void)startScanningWithBonjour
@@ -5964,19 +5981,15 @@ double _ticks = 0;
     if (cp != nil &&
         cp.ip_address != nil)
     {
-        HttpCommunication * dev_com = [[HttpCommunication alloc] init];
+        [HttpCom instance].comWithDevice.device_ip = cp.ip_address;
         
-        dev_com.device_ip = cp.ip_address;
-        
-        NSString * mac = [dev_com sendCommandAndBlock:GET_MAC_ADDRESS withTimeout:3.0];
-        
-        [dev_com release];
+        NSString *mac = [[HttpCom instance].comWithDevice sendCommandAndBlock:GET_MAC_ADDRESS withTimeout:3.0f];
         
         if (mac != nil && mac.length == 12)
         {
             mac = [Util add_colon_to_mac:mac];
-
-            if([mac isEqualToString:cp.mac_address])
+            
+            if ([mac isEqual:cp.mac_address])
             {
                 return TRUE;
             }

@@ -99,7 +99,6 @@
     //processing for hold to talk
     BOOL ptt_enabled;
     AudioOutStreamer * _audioOut;
-    HttpCommunication * _httpComm;
     
     //processing for recording
     int iMaxRecordSize;
@@ -141,12 +140,7 @@
 @property (retain, nonatomic) IBOutlet UIButton *ib_buttonChangeAction;
 //button for replacing image take picture when recording
 @property (retain, nonatomic) IBOutlet UIButton *ib_changeToMainRecording;
-
-
-
 @property (retain, nonatomic) IBOutlet UILabel *ib_labelRecordVideo;
-
-
 @property (retain, nonatomic) IBOutlet UILabel *ib_temperature;
 @property (nonatomic, retain) NSMutableArray *itemImages;
 @property (nonatomic, retain) NSMutableArray *itemSelectedImages;
@@ -159,10 +153,6 @@
 @property (retain, nonatomic) IBOutlet UILabel *ib_lbCameraNotAccessible;
 @property (retain, nonatomic) IBOutlet UILabel *ib_lbCameraName;
 @property (retain, nonatomic) IBOutlet UIButton *ib_btShowDebugInfo;
-
-@property (retain, nonatomic) IBOutlet UIBarButtonItem *barBntItemReveal;
-
-@property (nonatomic, retain) HttpCommunication* httpComm;
 @property (nonatomic) BOOL h264StreamerIsInStopped;
 
 @property (nonatomic) BOOL recordingFlag;
