@@ -419,6 +419,7 @@
         NSString *isAvailable   = [camEntry objectForKey:@"is_available"];
         NSString *fwVersion     = [camEntry objectForKey:@"firmware_version"];
         NSInteger fwStatus = [[camEntry objectForKey:@"firmware_status"] integerValue];
+        NSString *hostSSID = [camEntry objectForKey:@"host_ssid"];
         
         CamProfile *cp = [[[CamProfile alloc]initWithMacAddr:camMac] autorelease];
 
@@ -459,10 +460,15 @@
         cp.fw_version     = fwVersion;
         cp.registrationID = registrationID;
         cp.fwStatus = fwStatus;
+        
+        if (![hostSSID isEqual:[NSNull null]])
+        {
+            cp.hostSSID = hostSSID;
+        }
 
         [camList addObject:cp];
         
-        NSLog(@"Log - fwStatus: %d, camMac: %@, Fw: %@, local_ip: %@, reg: %@ and isAvailable: %@", fwStatus, camMac, fwVersion, localIp, registrationID, isAvailable);
+        NSLog(@"Log - fwStatus: %d, camMac: %@, Fw: %@, local_ip: %@, reg: %@, Avail: %@, host_ssid: %@", fwStatus, camMac, fwVersion, localIp, registrationID, isAvailable, hostSSID);
 	}
 	
 	return camList;

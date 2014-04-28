@@ -170,6 +170,9 @@
 
     NSString *wifiName = [_selectedWifiEntry.ssid_w_quote substringWithRange:noQoute];
     
+    [[NSUserDefaults standardUserDefaults] setObject:wifiName forKey:HOST_SSID];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+    
     step06ViewController.isOtherNetwork = [wifiName isEqualToString:@"Other Network"];
     
     step06ViewController.ssid = wifiName;

@@ -218,6 +218,8 @@
     }
 }
 
+#pragma mark - BMS_JSON communication
+
 - (void)registerCameraWithoutProxy
 {
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
@@ -421,6 +423,58 @@
     if (shouldCheckAgain)
     {
         [self performSelector:@selector(checkCameraStatus) withObject:nil afterDelay:2];
+    }
+}
+
+- (void)updatesBasicInfoForCamera
+{
+    if (_jsonCommBlocked == nil)
+    {
+        self.jsonCommBlocked = [[BMS_JSON_Communication alloc] initWithObject:self
+                                                                     Selector:nil
+                                                                 FailSelector:nil
+                                                                    ServerErr:nil];
+    }
+    
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    
+    NSString *apiKey    = [userDefaults objectForKey:@"PortalApiKey"];
+    NSString *udid      = [userDefaults objectForKey:CAMERA_UDID];
+    NSString *hostSSID  = [userDefaults objectForKey:HOST_SSID];
+    
+    NSDictionary *responseDict = [_jsonCommBlocked updateDeviceBasicInfoBlockedWithRegistrationId:udid
+                                                                                       deviceName:nil
+                                                                                         timeZone:nil
+                                                                                             mode:nil
+                                                                                  firmwareVersion:nil
+                                                                                         hostSSID:hostSSID
+                                                                                       hostRouter:nil
+                                                                                        andApiKey:apiKey];
+    BOOL updateFailed = TRUE;
+    
+    if (responseDict)
+    {
+        if ([[responseDict objectForKey:@"status"] integerValue] == 200)
+        {
+            NSString *bodyKey = [[responseDict objectForKey:@"data"] objectForKey:@"host_ssid"];
+            
+            if (![bodyKey isEqual:[NSNull null]])
+            {
+                if ([bodyKey isEqualToString:hostSSID])
+                {
+                    updateFailed = FALSE;
+                }
+            }
+        }
+    }
+    
+    if (updateFailed)
+    {
+        NSLog(@"Step10VC - updatesBasicInfoForCamera: %@", responseDict);
+    }
+    else
+    {
+        NSLog(@"Step10VC - updatesBasicInforForCamera successfully!");
     }
 }
 
@@ -761,6 +815,9 @@
 
 - (void) setupCompleted
 {
+    // Try to update base info to server first.
+    [self updatesBasicInfoForCamera];
+    
     [[NSNotificationCenter defaultCenter] removeObserver:self];
     // cancel timeout
     if (_timeOut != nil)// && [timeOut isValid])

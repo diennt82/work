@@ -20,6 +20,8 @@
 
 //#import "Reachability.h"
 #import "MBP_iosViewController.h"
+#import <SystemConfiguration/CaptiveNetwork.h>
+
 #define MODEL_SHARED_CAM @"0036"
 #define MODEL_CONCURRENT @"0066"
 #define MODEL_BLE        @"0083" //0836 {UAP | BLE}
@@ -5754,10 +5756,13 @@ double _ticks = 0;
 
 - (void)scanCamera
 {
+    [self fetchSSIDInfo];
+    
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     
-    if ( [self isCurrentConnection3G] || [userDefaults boolForKey:@"remote_only"] ||
-        (self.selectedChannel.profile.ip_address != nil && ![self isInTheSameNetworkAsCamera:self.selectedChannel.profile ])
+    if ( [self isCurrentConnection3G] ||
+        [userDefaults boolForKey:@"remote_only"] ||
+        (self.selectedChannel.profile.ip_address != nil && ![self isInTheSameNetworkAsCamera:self.selectedChannel.profile])
         )
     {
         NSLog(@"Connection over 3G | remote_only | or not in same networ == TRUE --> Skip scanning all together");
@@ -5778,6 +5783,23 @@ double _ticks = 0;
     }
 
     
+}
+
+- (id)fetchSSIDInfo
+{
+    NSArray *ifs = (id)CNCopySupportedInterfaces();
+    NSLog(@"%s: Supported interfaces: %@", __func__, ifs);
+    id info = nil;
+    for (NSString *ifnam in ifs) {
+        info = (id)CNCopyCurrentNetworkInfo((CFStringRef)ifnam);
+        NSLog(@"%s: %@ => %@", __func__, ifnam, info);
+        if (info && [info count]) {
+            break;
+        }
+        [info release];
+    }
+    [ifs release];
+    return [info autorelease];
 }
 
 -(BOOL) isCurrentConnection3G
@@ -5937,6 +5959,8 @@ double _ticks = 0;
             }
         }
     }
+    
+    NSLog(@"H264VC - isInSameNetworkAsCamera-bc: %@, -own: %@, -ownip: %ld", bc, own, ownip);
     
     freeifaddrs(ifList); // clean up after yourself
     
