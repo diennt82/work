@@ -107,8 +107,8 @@
 
 -(BOOL) isCamNameValidated:(NSString *) cameraNames
 {
-    if (cameraNames.length < 3 ||
-        CAMERA_NAME_MAX < cameraNames.length)
+    if (cameraNames.length < MIN_LENGTH_CAMERA_NAME ||
+        MAX_LENGTH_CAMERA_NAME < cameraNames.length)
     {
         return FALSE;
     }

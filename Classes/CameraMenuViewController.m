@@ -186,7 +186,7 @@
         case ALERT_RENAME_OUT_LENGTH:
         {
             NSString * msg = NSLocalizedStringWithDefaultValue(@"Invalid_Camera_Name_msg", nil, [NSBundle mainBundle],
-                                                               @"Camera Name has to be between 3-20 characters", nil);
+                                                               @"Camera Name has to be between 5-30 characters", nil);
             
             UIAlertView * alert = [[UIAlertView alloc] initWithTitle:title
                                                              message:msg
@@ -236,7 +236,7 @@
             {
                 [self showDialog:ALERT_RENAME_CANT_EMPTY];
             }
-            else if (newName.length < 3 || CAMERA_NAME_MAX < newName.length)
+            else if (newName.length < MIN_LENGTH_CAMERA_NAME || MAX_LENGTH_CAMERA_NAME < newName.length)
             {
                 [self showDialog:ALERT_RENAME_OUT_LENGTH];
             }

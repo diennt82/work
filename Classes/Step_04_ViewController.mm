@@ -184,13 +184,13 @@
     
     [_tfCamName resignFirstResponder];
     
-    if ([cameraName_text length] < 3 || [cameraName_text length] > CAMERA_NAME_MAX )
+    if ([cameraName_text length] < MIN_LENGTH_CAMERA_NAME || [cameraName_text length] > MAX_LENGTH_CAMERA_NAME )
     {
         NSString * title = NSLocalizedStringWithDefaultValue(@"Invalid_Camera_Name", nil, [NSBundle mainBundle],
                                                              @"Invalid Camera Name", nil);
         
         NSString * msg = NSLocalizedStringWithDefaultValue(@"Invalid_Camera_Name_msg", nil, [NSBundle mainBundle],
-                                                           @"Camera Name has to be between 3-20 characters", nil);
+                                                           @"Camera Name has to be between 5-30 characters", nil);
         
         NSString * ok = NSLocalizedStringWithDefaultValue(@"Ok",nil, [NSBundle mainBundle],
                                                           @"Ok", nil);
