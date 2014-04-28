@@ -4854,6 +4854,11 @@ double _ticks = 0;
 #else
     if (self.selectedChannel.profile.isInLocal)
     {
+        if (h264Streamer)
+        {
+            h264Streamer->setPlayOption(MEDIA_STREAM_AUDIO_NOT_MUTE);
+        }
+        
         // Remote and Local is the same
         NSLog(@"Detect user cancel PTT & clean up");
         
@@ -5004,6 +5009,11 @@ double _ticks = 0;
     //processing for PTT
     if (self.selectedChannel.profile.isInLocal)
     {
+        if (h264Streamer)
+        {
+            h264Streamer->setPlayOption(MEDIA_STREAM_AUDIO_MUTE);
+        }
+        
         [self.ib_labelTouchToTalk setText:@"Listening"];
         [self processingHoldToTalk];
     }
@@ -5118,6 +5128,11 @@ double _ticks = 0;
     
     if ([walkieTalkieEnabledFlag boolValue] == NO)
     {
+        if (h264Streamer)
+        {
+            h264Streamer->setPlayOption(MEDIA_STREAM_AUDIO_NOT_MUTE);
+        }
+        
         if (_audioOutStreamRemote != nil)
         {
             [_audioOutStreamRemote performSelectorOnMainThread:@selector(disconnectFromAudioSocket) withObject:nil waitUntilDone:NO];
@@ -5126,6 +5141,11 @@ double _ticks = 0;
     }
     else
     {
+        if (h264Streamer)
+        {
+            h264Streamer->setPlayOption(MEDIA_STREAM_AUDIO_MUTE);
+        }
+        
         [self processingHoldToTalkRemote];
         
         NSLog(@"H264VC - enableRemotePTT - isHandshakeSuccess: %d", _audioOutStreamRemote.isHandshakeSuccess);
