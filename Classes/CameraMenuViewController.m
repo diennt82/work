@@ -69,11 +69,11 @@
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     self.apiKey = [userDefaults stringForKey:@"PortalApiKey"];
     
-    if (![self.camChannel.profile isNotAvailable])
-    {
-        self.isLoading = TRUE;
-        [self performSelectorInBackground:@selector(updateFWVersion_bg) withObject:nil];
-    }
+//    if (![self.camChannel.profile isNotAvailable])
+//    {
+//        self.isLoading = TRUE;
+//        [self performSelectorInBackground:@selector(updateFWVersion_bg) withObject:nil];
+//    }
 }
 
 - (void)viewWillAppear:(BOOL)animated
