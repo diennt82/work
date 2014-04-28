@@ -165,7 +165,7 @@ double _ticks = 0;
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
     // only is called in viewDidLoad, make sure it is called once.
-
+    
     _hideCustomIndicatorAndTextNotAccessble = NO;
     // update navi
     self.earlierNavi = (EarlierNavigationController *)self.navigationController;
@@ -177,7 +177,7 @@ double _ticks = 0;
     [self.ib_labelTouchToTalk setText:@"Hold To Talk"];
     //setup Font
     [self applyFont];
-
+    
     // Do any additional setup after loading the view.
 	[[NSNotificationCenter defaultCenter] addObserver: self
                                              selector: @selector(h264_HandleEnteredBackground)
@@ -201,13 +201,13 @@ double _ticks = 0;
     AudioServicesCreateSystemSoundID(soundFileURLRef, &soundFileObject);
     
     CFRelease(soundFileURLRef);
-
+    
     [self updateNavigationBarAndToolBar];
     
     self.imageViewStreamer = [[UIImageView alloc] initWithFrame:_imageViewVideo.frame];
     //[self.imageViewStreamer setContentMode:UIViewContentModeScaleAspectFit];
     [self.imageViewStreamer setBackgroundColor:[UIColor blackColor]];
-
+    
     UITapGestureRecognizer *singleTap = [[UITapGestureRecognizer alloc] initWithTarget:self
                                                                                 action:@selector(singleTapGestureCaptured:)];
     singleTap.numberOfTapsRequired = 1;
@@ -234,7 +234,7 @@ double _ticks = 0;
     
     //[self initHorizeMenu: _cameraModel];
     [self performSelectorInBackground:@selector(initHorizeMenu:) withObject:_cameraModel];
-
+    
     //set text name for camera name
     [self.ib_lbCameraName setText:self.selectedChannel.profile.name];
     
@@ -274,7 +274,7 @@ double _ticks = 0;
         float alignXTTT = SCREEN_HEIGHT - 30 - holdTTButtonSize.width;
         float alignYTTT = SCREEN_WIDTH - 30 - holdTTButtonSize.height;
         
-
+        
         if (isiPhone4 || isiPhone5)
         {
             alignYTTT = alignYTTT;
@@ -334,7 +334,7 @@ double _ticks = 0;
         self.ib_labelTouchToTalk.textColor = color;
         //for recordingText
         [self.ib_labelRecordVideo setFont:font];
-       
+        
         if (_isRecordInterface && _isProcessRecording)
         {
             self.ib_labelRecordVideo.textColor = [UIColor recordingTextColor];
@@ -441,7 +441,7 @@ double _ticks = 0;
         {
             if (gesture.numberOfTapsRequired == 2 || gesture.numberOfTouchesRequired == 2)
             {
-                    [self.imageViewStreamer removeGestureRecognizer:gesture];
+                [self.imageViewStreamer removeGestureRecognizer:gesture];
             }
         }
     }
@@ -455,7 +455,7 @@ double _ticks = 0;
     if (!titleView) {
         titleView = [[UILabel alloc] initWithFrame:CGRectZero];
         titleView.backgroundColor = [UIColor clearColor];
-//        titleView.font = [UIFont boldSystemFontOfSize:20.0];
+        //        titleView.font = [UIFont boldSystemFontOfSize:20.0];
         titleView.shadowColor = [UIColor colorWithWhite:0.0 alpha:0.4];
         
         titleView.textColor = [UIColor blueColor]; // Change to desired color
@@ -536,7 +536,7 @@ double _ticks = 0;
     
     [nowButton setEnabled:NO];
     [earlierButton setEnabled:YES];
-   
+    
     [nowButton setTitleTextAttributes:@{
                                         NSFontAttributeName: [UIFont fontWithName:PN_SEMIBOLD_FONT size:17.0],
                                         NSForegroundColorAttributeName: [UIColor barItemSelectedColor]
@@ -577,9 +577,9 @@ double _ticks = 0;
     
     [self.customIndicator setHidden:YES];
     self.earlierNavi.isEarlierView = YES;
-   
+    
     //_wantToShowTimeLine = YES;
-
+    
     if (_earlierVC == nil)
     {
         self.earlierVC = [[EarlierViewController alloc] initWithParentVC:self camChannel:self.selectedChannel];
@@ -660,7 +660,7 @@ double _ticks = 0;
 
 - (void)handleMessageOnMainThread: (NSArray * )args
 {
-
+    
     NSNumber *numberMsg =(NSNumber *) [args objectAtIndex:0];
     
     int ext1 = -1, ext2=-1;
@@ -737,7 +737,7 @@ double _ticks = 0;
             }
             
             NSLog(@"video adjusted size: %f x %f", destWidth, destHeight);
-
+            
             self.imageViewStreamer.frame = CGRectMake(left,
                                                       top,
                                                       destWidth, destHeight);
@@ -831,10 +831,10 @@ double _ticks = 0;
                 
                 if ( self.selectedChannel.profile.isInLocal == NO)
                 {
-//                    [[[GAI sharedInstance] defaultTracker] trackEventWithCategory:@"View Camera Remote"
-//                                                                       withAction:@"Start Stream Success"
-//                                                                        withLabel:@"Start Stream Success"
-//                                                                        withValue:nil];
+                    //                    [[[GAI sharedInstance] defaultTracker] trackEventWithCategory:@"View Camera Remote"
+                    //                                                                       withAction:@"Start Stream Success"
+                    //                                                                        withLabel:@"Start Stream Success"
+                    //                                                                        withValue:nil];
                     
                     if (_remoteViewTimeout == YES)
                     {
@@ -993,7 +993,7 @@ double _ticks = 0;
     }
     
     //NSLog(@"H264VC - handleMsg -imageVideo: %@, imageStreamer: %@", NSStringFromCGRect(_imageViewVideo.frame), NSStringFromCGRect(_imageViewStreamer.frame));
-
+    
     
 }
 
@@ -1086,7 +1086,7 @@ double _ticks = 0;
         [self.view bringSubviewToFront:_horizMenu];
         [self.ib_lbCameraName setHidden:NO];
     }];
-
+    
     if (_timerHideMenu != nil)
     {
         [self.timerHideMenu invalidate];
@@ -1094,10 +1094,10 @@ double _ticks = 0;
     }
     
     self.timerHideMenu = [NSTimer scheduledTimerWithTimeInterval:10
-                                     target:self
-                                   selector:@selector(hideControlMenu)
-                                   userInfo:nil
-                                    repeats:NO];
+                                                          target:self
+                                                        selector:@selector(hideControlMenu)
+                                                        userInfo:nil
+                                                         repeats:NO];
 }
 
 - (void)hideTimelineView
@@ -1171,11 +1171,11 @@ double _ticks = 0;
     }
     else
         if(h264Streamer != NULL)
-    {
-        NSLog(@"H264VC - handleEnteredBackground - else if(h264Streamer != nil)");
-        
-        h264Streamer->sendInterrupt();
-    }
+        {
+            NSLog(@"H264VC - handleEnteredBackground - else if(h264Streamer != nil)");
+            
+            h264Streamer->sendInterrupt();
+        }
     
     self.h264StreamerIsInStopped = TRUE;
     self.imageViewVideo.backgroundColor = [UIColor blackColor];
@@ -1259,9 +1259,9 @@ double _ticks = 0;
         if (_jsonCommBlocked == nil)
         {
             self.jsonCommBlocked = [[BMS_JSON_Communication alloc] initWithObject:self
-                                                                          Selector:nil
-                                                                      FailSelector:nil
-                                                                         ServerErr:nil];
+                                                                         Selector:nil
+                                                                     FailSelector:nil
+                                                                        ServerErr:nil];
         }
         
         NSDictionary *responseDict = [_jsonCommBlocked sendCommandBlockedWithRegistrationId:self.selectedChannel.profile.registrationID
@@ -1331,11 +1331,11 @@ double _ticks = 0;
      * Check to init HorizeMenu once
      */
     
-//    if (_shouldUpdateHorizeMenu)
-//    {
-//        self.shouldUpdateHorizeMenu = FALSE;
-//        [self initHorizeMenu:_cameraModel];
-//    }
+    //    if (_shouldUpdateHorizeMenu)
+    //    {
+    //        self.shouldUpdateHorizeMenu = FALSE;
+    //        [self initHorizeMenu:_cameraModel];
+    //    }
     
     [self createMonvementControlTimer];
     
@@ -1442,16 +1442,16 @@ double _ticks = 0;
         
     }
     while ( (self.selectedChannel.stream_url == nil) ||
-             (self.selectedChannel.stream_url.length == 0) );
-
+           (self.selectedChannel.stream_url.length == 0) );
+    
     
     if (userWantToCancel != TRUE)
     {
         self.probeTimer = [NSTimer scheduledTimerWithTimeInterval:1.0
-                                                      target:self
-                                                    selector:@selector(periodicProbe:)
-                                                    userInfo:nil
-                                                     repeats:YES];
+                                                           target:self
+                                                         selector:@selector(periodicProbe:)
+                                                         userInfo:nil
+                                                          repeats:YES];
     }
     
     NSLog(@"--URL: %@", self.selectedChannel.stream_url);
@@ -1571,7 +1571,7 @@ double _ticks = 0;
         
         status=  h264Streamer->start();
         
-       
+        
         if (status != NO_ERROR) // NOT OK
         {
             break;
@@ -1641,10 +1641,10 @@ double _ticks = 0;
         [_timerRemoteStreamTimeOut invalidate];
         _timerRemoteStreamTimeOut = nil;
     }
-        _isShowCustomIndicator = NO;
+    _isShowCustomIndicator = NO;
     //no need call stopStream in offline mode
     [self stopStream];
-
+    
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     [userDefaults removeObjectForKey:CAM_IN_VEW];
     [userDefaults synchronize];
@@ -1753,7 +1753,7 @@ double _ticks = 0;
         _client = nil;
     }
     
-
+    
 }
 
 - (void)closeStunStream_bg: (id)vc
@@ -1824,8 +1824,8 @@ double _ticks = 0;
     
     //NSDictionary *responseDict =
     [_jsonCommBlocked  sendCommandBlockedWithRegistrationId:self.selectedChannel.profile.registrationID
-                                         andCommand:cmd_string
-                                          andApiKey:apiKey];
+                                                 andCommand:cmd_string
+                                                  andApiKey:apiKey];
     
     H264PlayerViewController *thisVC = (H264PlayerViewController *)vc;
     if (userWantToCancel == TRUE)
@@ -1843,7 +1843,7 @@ double _ticks = 0;
 
 - (void)stopStream
 {
-
+    
 #if 0
     dispatch_async(player_func_queue, ^{
         
@@ -1868,8 +1868,8 @@ double _ticks = 0;
         [self performSelectorOnMainThread:@selector(stopStunStream)
                                withObject:nil
                             waitUntilDone:NO];
-
-
+        
+        
     });
 #else
     
@@ -1889,7 +1889,7 @@ double _ticks = 0;
             delete h264Streamer ;
             h264Streamer = NULL;
         }
-
+        
         
         [self cleanUpDirectionTimers];
         
@@ -1928,10 +1928,10 @@ double _ticks = 0;
     _timerStopStreamAfter30s = [NSTimer scheduledTimerWithTimeInterval:30 target:self selector:@selector(stopStream) userInfo:nil repeats:NO];
     
     UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Remote Stream"
-                                                         message:@"The Camera has been viewed for about 5 minutes. Do you want to continue?"
-                                                        delegate:self
-                                               cancelButtonTitle:@"View other camera"
-                                               otherButtonTitles:@"Yes", nil];
+                                                        message:@"The Camera has been viewed for about 5 minutes. Do you want to continue?"
+                                                       delegate:self
+                                              cancelButtonTitle:@"View other camera"
+                                              otherButtonTitles:@"Yes", nil];
     alertView.tag = TAG_ALERT_VIEW_REMOTE_TIME_OUT;
     
     [alertView show];
@@ -2044,8 +2044,8 @@ double _ticks = 0;
         NSString *apiKey = [userDefaults objectForKey:@"PortalApiKey"];
         
         NSDictionary *responseDict = [_jsonCommBlocked sendCommandBlockedWithRegistrationId:self.selectedChannel.profile.registrationID
-                                                                                  andCommand:@"action=command&command=get_recording_stat"
-                                                                                   andApiKey:apiKey];
+                                                                                 andCommand:@"action=command&command=get_recording_stat"
+                                                                                  andApiKey:apiKey];
         if (responseDict != nil)
         {
             NSInteger status = [[responseDict objectForKey:@"status"] intValue];
@@ -2115,8 +2115,8 @@ double _ticks = 0;
         NSString *apiKey = [userDefaults objectForKey:@"PortalApiKey"];
         
         NSDictionary *responseDict = [_jsonCommBlocked sendCommandBlockedWithRegistrationId:self.selectedChannel.profile.registrationID
-                                                                                  andCommand:[NSString stringWithFormat:@"action=command&command=set_recording_stat&mode=%@", modeRecording]
-                                                                                   andApiKey:apiKey];
+                                                                                 andCommand:[NSString stringWithFormat:@"action=command&command=set_recording_stat&mode=%@", modeRecording]
+                                                                                  andApiKey:apiKey];
         if (responseDict != nil)
         {
             NSInteger status = [[responseDict objectForKey:@"status"] intValue];
@@ -2189,8 +2189,8 @@ double _ticks = 0;
         NSString *apiKey = [userDefaults objectForKey:@"PortalApiKey"];
         
         NSDictionary *responseDict = [_jsonCommBlocked sendCommandBlockedWithRegistrationId:self.selectedChannel.profile.registrationID
-                                                                                  andCommand:@"action=command&command=value_melody"
-                                                                                   andApiKey:apiKey];
+                                                                                 andCommand:@"action=command&command=value_melody"
+                                                                                  andApiKey:apiKey];
         if (responseDict != nil)
         {
             NSInteger status = [[responseDict objectForKey:@"status"] intValue];
@@ -2214,7 +2214,7 @@ double _ticks = 0;
             if (tokens.count > 1 )
             {
                 NSString *melodyIndex = [tokens lastObject];
-
+                
                 if (userWantToCancel == FALSE)
                 {
                     [self performSelectorOnMainThread:@selector(setMelodyState_Fg:)
@@ -2249,7 +2249,7 @@ double _ticks = 0;
         [HttpCom instance].comWithDevice.device_port = 80;// Hack code for Focus66.
         
         NSData *responseData = [[HttpCom instance].comWithDevice sendCommandAndBlock_raw:@"value_temperature"];
-
+        
         if (responseData != nil)
         {
             responseString = [[[NSString alloc] initWithData:responseData encoding: NSUTF8StringEncoding] autorelease];
@@ -2271,8 +2271,8 @@ double _ticks = 0;
         NSString *apiKey = [userDefaults objectForKey:@"PortalApiKey"];
         
         NSDictionary *responseDict = [_jsonCommBlocked sendCommandBlockedWithRegistrationId:self.selectedChannel.profile.registrationID
-                                                                                  andCommand:@"action=command&command=value_temperature"
-                                                                                   andApiKey:apiKey];
+                                                                                 andCommand:@"action=command&command=value_temperature"
+                                                                                  andApiKey:apiKey];
         
         if (responseDict != nil)
         {
@@ -2366,7 +2366,7 @@ double _ticks = 0;
     degreeCelsius.backgroundColor=[UIColor clearColor];
     degreeCelsius.textColor=[UIColor temperatureTextColor];
     degreeCelsius.textAlignment = NSTextAlignmentLeft;
-
+    
     NSString *degreeCel;
     
     if (_isDegreeFDisplay)
@@ -2424,7 +2424,7 @@ double _ticks = 0;
         
         xPosTemperature = SCREEN_HEIGHT - self.ib_temperature.bounds.size.width - 40 + (self.ib_temperature.bounds.size.width - stringBoundingBox.width)/2;
         yPosTemperature = SCREEN_WIDTH - deltaWidth - stringBoundingBox.height;
-
+        
         [self.ib_temperature setFrame:CGRectMake(xPosTemperature, yPosTemperature, self.ib_temperature.bounds.size.width, self.ib_temperature.bounds.size.height)];
         [ib_switchDegree setFrame:CGRectMake(xPosTemperature, yPosTemperature, self.ib_temperature.bounds.size.width, self.ib_temperature.bounds.size.height)];
         
@@ -2474,7 +2474,7 @@ double _ticks = 0;
         [degreeCelsius setFrame:CGRectMake(alignX, alignYCel, degreeCelBoundingBox.width, degreeCelBoundingBox.height)];
         [self.ib_temperature addSubview:degreeCelsius];
     }
-
+    
     [degreeCelsius release];
 }
 
@@ -2495,7 +2495,7 @@ double _ticks = 0;
         NSRunLoop * mainloop = [NSRunLoop currentRunLoop];
         NSLog(@"send probes ... ");
         //send probes
-
+        
         [self.client sendVideoProbesToIp: self.selectedChannel.profile.camera_mapped_address
                                  andPort:self.selectedChannel.profile.camera_stun_video_port];
         
@@ -2524,7 +2524,7 @@ double _ticks = 0;
         [userDefaults setInteger:result forKey:APP_IS_ON_SYMMETRIC_NAT];
         [userDefaults synchronize];
     }
-
+    
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0),
                    ^{
                        NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
@@ -2551,8 +2551,8 @@ double _ticks = 0;
 #endif
                            //responseDict = [jsonComm createSessionBlockedWithRegistrationId:mac
                            responseDict = [_jsonCommBlocked createSessionBlockedWithRegistrationId:stringUDID
-                                                                             andClientType:@"BROWSER"
-                                                                                 andApiKey:apiKey];
+                                                                                     andClientType:@"BROWSER"
+                                                                                         andApiKey:apiKey];
                            NSLog(@"USE RELAY TO VIEW - : %@", responseDict);
                            
                            if (responseDict != nil)
@@ -2562,11 +2562,11 @@ double _ticks = 0;
                                    //self.selectedChannel.stream_url = [[responseDict objectForKey:@"data"] objectForKey:@"url"];
                                    
                                    NSString *urlResponse = [[responseDict objectForKey:@"data"] objectForKey:@"url"];
-                                
+                                   
                                    if ([urlResponse hasPrefix:ME_WOWZA] &&
                                        [userDefaults boolForKey:VIEW_NXCOMM_WOWZA] == TRUE)
                                    {
-                                        self.selectedChannel.stream_url = [urlResponse stringByReplacingOccurrencesOfString:ME_WOWZA withString:NXCOMM_WOWZA];
+                                       self.selectedChannel.stream_url = [urlResponse stringByReplacingOccurrencesOfString:ME_WOWZA withString:NXCOMM_WOWZA];
                                    }
                                    else
                                    {
@@ -2614,15 +2614,15 @@ double _ticks = 0;
                                    else
 #endif
                                    {
-
-                                   //handle Bad response
-                                   
-                                   NSArray * args = [NSArray arrayWithObjects:
-                                                     [NSNumber numberWithInt:MEDIA_ERROR_SERVER_DIED],nil];
-                                   //force server died
-                                   [self performSelectorOnMainThread:@selector(handleMessageOnMainThread:)
-                                                          withObject:args
-                                                       waitUntilDone:NO];
+                                       
+                                       //handle Bad response
+                                       
+                                       NSArray * args = [NSArray arrayWithObjects:
+                                                         [NSNumber numberWithInt:MEDIA_ERROR_SERVER_DIED],nil];
+                                       //force server died
+                                       [self performSelectorOnMainThread:@selector(handleMessageOnMainThread:)
+                                                              withObject:args
+                                                           waitUntilDone:NO];
                                    }
                                }
                            }
@@ -2652,8 +2652,8 @@ double _ticks = 0;
                                                     self.selectedChannel.public_ip];
                            
                            responseDict =  [_jsonCommBlocked  sendCommandBlockedWithRegistrationId:stringUDID
-                                                                                andCommand:cmd_string
-                                                                                 andApiKey:apiKey];
+                                                                                        andCommand:cmd_string
+                                                                                         andApiKey:apiKey];
                            
                            if (responseDict != nil)
                            {
@@ -2662,12 +2662,12 @@ double _ticks = 0;
                                NSString *body = [[[responseDict objectForKey: @"data"] objectForKey: @"device_response"] objectForKey: @"body"];
                                //"get_session_key: error=200,port1=37171&port2=47608&ip=115.77.250.193,mode=p2p_stun_rtsp"
                                
-                                NSLog(@"Respone - camera response : %@, Number of STUN error: %d", body, _numberOfSTUNError);
+                               NSLog(@"Respone - camera response : %@, Number of STUN error: %d", body, _numberOfSTUNError);
                                if (body != nil )
                                {
                                    NSArray * tokens = [body componentsSeparatedByString:@","];
                                    
-
+                                   
                                    if ( [[tokens objectAtIndex:0] hasSuffix:@"error=200"]) //roughly check for "error=200"
                                    {
                                        if (_numberOfSTUNError >= 3) // Switch to RELAY because STUN try probe & failed many times
@@ -2679,8 +2679,8 @@ double _ticks = 0;
                                            
                                            //responseDict =
                                            [_jsonCommBlocked  sendCommandBlockedWithRegistrationId:stringUDID
-                                                                                andCommand:cmd_string
-                                                                                 andApiKey:apiKey];
+                                                                                        andCommand:cmd_string
+                                                                                         andApiKey:apiKey];
                                            
                                            if (userWantToCancel == FALSE)
                                            {
@@ -2734,8 +2734,8 @@ double _ticks = 0;
                                        
                                        //responseDict =
                                        [_jsonCommBlocked  sendCommandBlockedWithRegistrationId:stringUDID
-                                                                            andCommand:cmd_string
-                                                                             andApiKey:apiKey];
+                                                                                    andCommand:cmd_string
+                                                                                     andApiKey:apiKey];
                                        
                                        if (userWantToCancel == FALSE)
                                        {
@@ -2763,7 +2763,7 @@ double _ticks = 0;
                                    [self performSelectorOnMainThread:@selector(handleMessageOnMainThread:)
                                                           withObject:args
                                                        waitUntilDone:NO];
-
+                                   
                                }
                                
                            }
@@ -2773,13 +2773,13 @@ double _ticks = 0;
                                
                                NSArray * args = [NSArray arrayWithObjects:
                                                  [NSNumber numberWithInt:MEDIA_ERROR_SERVER_DIED],nil];
-
+                               
                                [self performSelectorOnMainThread:@selector(handleMessageOnMainThread:)
                                                       withObject:args
                                                    waitUntilDone:NO];
                            }
                        }
-    
+                       
                    }
                    
                    
@@ -2825,8 +2825,8 @@ double _ticks = 0;
                                }
                                
                                NSDictionary *responseDict = [_jsonCommBlocked sendCommandBlockedWithRegistrationId:stringUDID
-                                                                                                         andCommand:[NSString stringWithFormat:@"action=command&command=get_resolution"]
-                                                                                                          andApiKey:apiKey];
+                                                                                                        andCommand:[NSString stringWithFormat:@"action=command&command=get_resolution"]
+                                                                                                         andApiKey:apiKey];
                                if (responseDict != nil)
                                {
                                    
@@ -2911,8 +2911,8 @@ double _ticks = 0;
                        }
                        
                        NSDictionary *responseDict = [_jsonCommBlocked createSessionBlockedWithRegistrationId:stringUDID
-                                                                         andClientType:@"BROWSER"
-                                                                             andApiKey:apiKey];
+                                                                                               andClientType:@"BROWSER"
+                                                                                                   andApiKey:apiKey];
                        NSLog(@"remoteConnectingViaSymmectric: %@", responseDict);
                        if (responseDict != nil)
                        {
@@ -3040,7 +3040,7 @@ double _ticks = 0;
             transformX =  - _imageViewHandle.frame.size.height / 2;
             transformY = 0;
             angleRotation = -M_PI_2;
-
+            
         }
             break;
             
@@ -3074,7 +3074,7 @@ double _ticks = 0;
         default:
             break;
     }
-
+    
     self.imageViewHandle.transform = CGAffineTransformRotate(CGAffineTransformMakeTranslation(transformX, transformY), angleRotation);
     
     //NSLog(@"%f, %f", transformX, transformY);
@@ -3155,8 +3155,8 @@ double _ticks = 0;
             }
             
             NSDictionary *responseDict = [_jsonCommBlocked sendCommandBlockedWithRegistrationId:self.selectedChannel.profile.registrationID
-                                                                              andCommand:[NSString stringWithFormat:@"action=command&command=%@", dir_str]
-                                                                               andApiKey:apiKey];
+                                                                                     andCommand:[NSString stringWithFormat:@"action=command&command=%@", dir_str]
+                                                                                      andApiKey:apiKey];
             NSLog(@"send_UD_dir_to_rabot status: %d", [[responseDict objectForKey:@"status"] intValue]);
 		}
 	}
@@ -3217,7 +3217,7 @@ double _ticks = 0;
         {
             [HttpCom instance].comWithDevice.device_ip   = self.selectedChannel.profile.ip_address;
             [HttpCom instance].comWithDevice.device_port = self.selectedChannel.profile.port;
-				//Non block send-
+            //Non block send-
             [[HttpCom instance].comWithDevice sendCommand:dir_str];
 		}
 		else if ( _selectedChannel.profile.minuteSinceLastComm <= 5)
@@ -3235,8 +3235,8 @@ double _ticks = 0;
             }
             
             NSDictionary *responseDict = [_jsonCommBlocked sendCommandBlockedWithRegistrationId:self.selectedChannel.profile.registrationID
-                                                                              andCommand:[NSString stringWithFormat:@"action=command&command=%@", dir_str]
-                                                                               andApiKey:apiKey];
+                                                                                     andCommand:[NSString stringWithFormat:@"action=command&command=%@", dir_str]
+                                                                                      andApiKey:apiKey];
             NSLog(@"send_LR_dir_to_rabot status: %d", [[responseDict objectForKey:@"status"] intValue]);
 		}
 	}
@@ -3272,7 +3272,7 @@ double _ticks = 0;
     
 	//Adjust the fire date to now
 	NSDate * now = [NSDate date];
-	[send_UD_dir_req_timer setFireDate:now ];    
+	[send_UD_dir_req_timer setFireDate:now ];
 }
 
 - (void) updateVerticalDirection:(int)dir inStep: (uint) step withAnimation:(BOOL)animate
@@ -3445,7 +3445,7 @@ double _ticks = 0;
 }
 
 - (void) touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event
-{        
+{
 	NSArray *allTouches = [touches allObjects];
     
     for (UITouch *touch in allTouches)
@@ -3663,11 +3663,11 @@ double _ticks = 0;
             [[NSBundle mainBundle] loadNibNamed:@"H264PlayerViewController_land_iPad"
                                           owner:self
                                         options:nil];
-
+            
             self.melodyViewController = [[[MelodyViewController alloc] initWithNibName:@"MelodyViewController_land" bundle:nil] autorelease];
             [_earlierVC.view setFrame:CGRectMake(0, 0, SCREEN_HEIGHT, SCREEN_WIDTH)];
-
-
+            
+            
         }
         else
         {
@@ -3676,7 +3676,7 @@ double _ticks = 0;
                                         options:nil];
             
             self.melodyViewController = [[[MelodyViewController alloc] initWithNibName:@"MelodyViewController_land" bundle:nil] autorelease];
-
+            
             if (isiOS7AndAbove)
             {
                 self.melodyViewController.view.frame = CGRectMake(393, 78, 175, 165);
@@ -3685,7 +3685,7 @@ double _ticks = 0;
             {
                 self.melodyViewController.view.frame = CGRectMake(320, 60, 159, 204);
             }
-
+            
         }
         
         self.melodyViewController.selectedChannel = self.selectedChannel;
@@ -3768,7 +3768,7 @@ double _ticks = 0;
             self.melodyViewController.view.frame = CGRectMake(0, self.ib_ViewTouchToTalk.frame.origin.y - 5, SCREEN_WIDTH, SCREEN_HEIGHT - self.ib_ViewTouchToTalk.frame.origin.y);
             
             // Control display for TimelineVC
-
+            
             if (_timelineVC != nil)
             {
                 CGFloat alignYTimeLine = self.ib_ViewTouchToTalk.frame.origin.y;
@@ -3820,7 +3820,7 @@ double _ticks = 0;
             if (_timelineVC != nil)
             {
                 CGFloat alignYTimeLine = self.ib_ViewTouchToTalk.frame.origin.y - 64;
-
+                
                 if (_isLandScapeMode)
                 {
                     self.timelineVC.view.frame = CGRectMake(0, alignYTimeLine, SCREEN_WIDTH, SCREEN_HEIGHT - alignYTimeLine);
@@ -3835,7 +3835,7 @@ double _ticks = 0;
                     [self.view addSubview:_timelineVC.view];
                     self.timelineVC.tableView.contentInset = UIEdgeInsetsMake(0, 0, 0, 0);
                 }
-            }            
+            }
         }
         
         [self showControlMenu];
@@ -3847,7 +3847,7 @@ double _ticks = 0;
     
     [self.melodyViewController.melodyTableView setNeedsLayout];
     [self.melodyViewController.melodyTableView setNeedsDisplay];
-
+    
     self.imageViewStreamer.frame = _imageViewVideo.frame;
     [self.scrollView insertSubview:_imageViewStreamer aboveSubview:_imageViewVideo];
     [self setTemperatureState_Fg:_stringTemperature];
@@ -3859,7 +3859,7 @@ double _ticks = 0;
         //trigger re-cal of videosize
         if (h264Streamer->isPlaying())
         {
-//            [self.activityIndicator stopAnimating];
+            //            [self.activityIndicator stopAnimating];
             _isShowCustomIndicator = NO;
         }
         if (_currentMediaStatus != 0)
@@ -3985,7 +3985,7 @@ double _ticks = 0;
         NSDate * endDate = [NSDate dateWithTimeIntervalSinceNow:0.5];
         
         
-       
+        
         
         while (_threadBonjour != nil &&
                [_threadBonjour isExecuting] )
@@ -4026,8 +4026,8 @@ double _ticks = 0;
         
         
         self.selectedChannel.profile.hasUpdateLocalStatus = YES;
-    
-    
+        
+        
         [NSTimer scheduledTimerWithTimeInterval:0.1
                                          target:self
                                        selector:@selector(setupCamera)
@@ -4097,7 +4097,7 @@ double _ticks = 0;
     }
     else
     {
-         [self playSound];
+        [self playSound];
     }
 }
 
@@ -4301,7 +4301,7 @@ double _ticks = 0;
      5.Camera List          bb_camera_slider_icon
      6.Temperature display        temp_alert
      */
-
+    
     if ([_cameraModel isEqualToString:CP_MODEL_SHARED_CAM])
     {
         //query command to check shared cam is connected to mac or window
@@ -4322,31 +4322,31 @@ double _ticks = 0;
         self.itemImages = [NSMutableArray arrayWithObjects:@"video_action_mic.png", @"video_action_video.png", @"video_action_music.png", @"video_action_temp.png", nil];
         self.itemSelectedImages = [NSMutableArray arrayWithObjects:@"video_action_mic_pressed.png", @"video_action_video_pressed.png", @"video_action_music_pressed.png", @"video_action_temp_pressed.png", nil];
         
-//        if (_isInLocal)
-//        {
-//            self.itemImages = [NSMutableArray arrayWithObjects:@"video_action_mic.png", @"video_action_video.png", @"video_action_music.png", @"video_action_temp.png", nil];
-//            self.itemSelectedImages = [NSMutableArray arrayWithObjects:@"video_action_mic_pressed.png", @"video_action_video_pressed.png", @"video_action_music_pressed.png", @"video_action_temp_pressed.png", nil];
-//        }
-//        else
-//        {
-//            self.itemImages = [NSMutableArray arrayWithObjects:@"video_action_video.png", @"video_action_music.png", @"video_action_temp.png", nil];
-//            self.itemSelectedImages = [NSMutableArray arrayWithObjects:@"video_action_video_pressed.png", @"video_action_music_pressed.png", @"video_action_temp_pressed.png", nil];
-//        }
+        //        if (_isInLocal)
+        //        {
+        //            self.itemImages = [NSMutableArray arrayWithObjects:@"video_action_mic.png", @"video_action_video.png", @"video_action_music.png", @"video_action_temp.png", nil];
+        //            self.itemSelectedImages = [NSMutableArray arrayWithObjects:@"video_action_mic_pressed.png", @"video_action_video_pressed.png", @"video_action_music_pressed.png", @"video_action_temp_pressed.png", nil];
+        //        }
+        //        else
+        //        {
+        //            self.itemImages = [NSMutableArray arrayWithObjects:@"video_action_video.png", @"video_action_music.png", @"video_action_temp.png", nil];
+        //            self.itemSelectedImages = [NSMutableArray arrayWithObjects:@"video_action_video_pressed.png", @"video_action_music_pressed.png", @"video_action_temp_pressed.png", nil];
+        //        }
     }
     else //if ([_cameraModel isEqualToString:CP_MODEL_BLE])
     {
         self.itemImages = [NSMutableArray arrayWithObjects:@"video_action_pan.png", @"video_action_mic.png", @"video_action_video.png", @"video_action_music.png", @"video_action_temp.png", nil];
         self.itemSelectedImages = [NSMutableArray arrayWithObjects:@"video_action_pan_pressed.png", @"video_action_mic_pressed.png", @"video_action_video_pressed.png", @"video_action_music_pressed.png", @"video_action_temp_pressed.png", nil];
-//        if (_isInLocal)
-//        {
-//            self.itemImages = [NSMutableArray arrayWithObjects:@"video_action_pan.png", @"video_action_mic.png", @"video_action_video.png", @"video_action_music.png", @"video_action_temp.png", nil];
-//            self.itemSelectedImages = [NSMutableArray arrayWithObjects:@"video_action_pan_pressed.png", @"video_action_mic_pressed.png", @"video_action_video_pressed.png", @"video_action_music_pressed.png", @"video_action_temp_pressed.png", nil];
-//        }
-//        else
-//        {
-//            self.itemImages = [NSMutableArray arrayWithObjects:@"video_action_pan.png", @"video_action_video.png", @"video_action_music.png", @"video_action_temp.png", nil];
-//            self.itemSelectedImages = [NSMutableArray arrayWithObjects:@"video_action_pan_pressed.png", @"video_action_video_pressed.png", @"video_action_music_pressed.png", @"video_action_temp_pressed.png", nil];
-//        }
+        //        if (_isInLocal)
+        //        {
+        //            self.itemImages = [NSMutableArray arrayWithObjects:@"video_action_pan.png", @"video_action_mic.png", @"video_action_video.png", @"video_action_music.png", @"video_action_temp.png", nil];
+        //            self.itemSelectedImages = [NSMutableArray arrayWithObjects:@"video_action_pan_pressed.png", @"video_action_mic_pressed.png", @"video_action_video_pressed.png", @"video_action_music_pressed.png", @"video_action_temp_pressed.png", nil];
+        //        }
+        //        else
+        //        {
+        //            self.itemImages = [NSMutableArray arrayWithObjects:@"video_action_pan.png", @"video_action_video.png", @"video_action_music.png", @"video_action_temp.png", nil];
+        //            self.itemSelectedImages = [NSMutableArray arrayWithObjects:@"video_action_pan_pressed.png", @"video_action_video_pressed.png", @"video_action_music_pressed.png", @"video_action_temp_pressed.png", nil];
+        //        }
     }
     
     //[self.horizMenu reloadData:NO];
@@ -4389,10 +4389,10 @@ double _ticks = 0;
 {
     /*
      //new
-     0. pan/tilt, 
-     1. mic, 
-     2. rec, 
-     3. melody, 
+     0. pan/tilt,
+     1. mic,
+     2. rec,
+     3. melody,
      4. temp
      */
     
@@ -4447,112 +4447,112 @@ double _ticks = 0;
     }
     else if ([_cameraModel isEqualToString:CP_MODEL_CONCURRENT])
     {
-//        if (_isInLocal)
-//        {
-            switch (index)
-            {
-                case 0:
-                    self.selectedItemMenu = INDEX_MICRO;
-                    break;
-                    
-                case 1:
-                    self.selectedItemMenu = INDEX_RECORDING;
-                    break;
-                    
-                case 2:
-                    self.selectedItemMenu = INDEX_MELODY;
-                    [self melodyTouchAction:nil];
-                    break;
-                    
-                case 3:
-                    self.selectedItemMenu = INDEX_TEMP;
-                    break;
-                    
-                default:
-                    break;
-            }
-//        }
-//        else
-//        {
-//            switch (index)
-//            {
-//                case 0:
-//                    self.selectedItemMenu = INDEX_RECORDING;
-//                    break;
-//                    
-//                case 1:
-//                    self.selectedItemMenu = INDEX_MELODY;
-//                    [self melodyTouchAction:nil];
-//                    break;
-//                    
-//                case 2:
-//                    self.selectedItemMenu = INDEX_TEMP;
-//                    break;
-//                    
-//                default:
-//                    break;
-//            }
-//        }
+        //        if (_isInLocal)
+        //        {
+        switch (index)
+        {
+            case 0:
+                self.selectedItemMenu = INDEX_MICRO;
+                break;
+                
+            case 1:
+                self.selectedItemMenu = INDEX_RECORDING;
+                break;
+                
+            case 2:
+                self.selectedItemMenu = INDEX_MELODY;
+                [self melodyTouchAction:nil];
+                break;
+                
+            case 3:
+                self.selectedItemMenu = INDEX_TEMP;
+                break;
+                
+            default:
+                break;
+        }
+        //        }
+        //        else
+        //        {
+        //            switch (index)
+        //            {
+        //                case 0:
+        //                    self.selectedItemMenu = INDEX_RECORDING;
+        //                    break;
+        //
+        //                case 1:
+        //                    self.selectedItemMenu = INDEX_MELODY;
+        //                    [self melodyTouchAction:nil];
+        //                    break;
+        //
+        //                case 2:
+        //                    self.selectedItemMenu = INDEX_TEMP;
+        //                    break;
+        //
+        //                default:
+        //                    break;
+        //            }
+        //        }
     }
     else// if ([_cameraModel isEqualToString:CP_MODEL_BLE])
     {
-//        if (_isInLocal)
-//        {
-            switch (index)
-            {
-                case INDEX_PAN_TILT:
-                    self.selectedItemMenu = INDEX_PAN_TILT;
-                    break;
-                    
-                case INDEX_MICRO:
-                    self.selectedItemMenu = INDEX_MICRO;
-                    [self recordingPressAction:nil];
-                    break;
-                    
-                case INDEX_RECORDING:
-                    self.selectedItemMenu = INDEX_RECORDING;
-                    break;
-                    
-                case INDEX_MELODY:
-                    self.selectedItemMenu = INDEX_MELODY;
-                    [self melodyTouchAction:nil];
-                    break;
-                    
-                case INDEX_TEMP:
-                    self.selectedItemMenu = INDEX_TEMP;
-                    break;
-                    
-                default:
-                    NSLog(@"Action out of bound");
-                    break;
-            }
-//        }
-//        else
-//        {
-//            switch (index)
-//            {
-//                case 0:
-//                    self.selectedItemMenu = INDEX_PAN_TILT;
-//                    break;
-//  
-//                case 1:
-//                    self.selectedItemMenu = INDEX_RECORDING;
-//                    break;
-//                    
-//                case 2:
-//                    self.selectedItemMenu = INDEX_MELODY;
-//                    [self melodyTouchAction:nil];
-//                    break;
-//                    
-//                case 3:
-//                    self.selectedItemMenu = INDEX_TEMP;
-//                    break;
-//                    
-//                default:
-//                    NSLog(@"Action out of bound");
-//                    break;
-//            }
-//        }
+        //        if (_isInLocal)
+        //        {
+        switch (index)
+        {
+            case INDEX_PAN_TILT:
+                self.selectedItemMenu = INDEX_PAN_TILT;
+                break;
+                
+            case INDEX_MICRO:
+                self.selectedItemMenu = INDEX_MICRO;
+                [self recordingPressAction:nil];
+                break;
+                
+            case INDEX_RECORDING:
+                self.selectedItemMenu = INDEX_RECORDING;
+                break;
+                
+            case INDEX_MELODY:
+                self.selectedItemMenu = INDEX_MELODY;
+                [self melodyTouchAction:nil];
+                break;
+                
+            case INDEX_TEMP:
+                self.selectedItemMenu = INDEX_TEMP;
+                break;
+                
+            default:
+                NSLog(@"Action out of bound");
+                break;
+        }
+        //        }
+        //        else
+        //        {
+        //            switch (index)
+        //            {
+        //                case 0:
+        //                    self.selectedItemMenu = INDEX_PAN_TILT;
+        //                    break;
+        //
+        //                case 1:
+        //                    self.selectedItemMenu = INDEX_RECORDING;
+        //                    break;
+        //
+        //                case 2:
+        //                    self.selectedItemMenu = INDEX_MELODY;
+        //                    [self melodyTouchAction:nil];
+        //                    break;
+        //
+        //                case 3:
+        //                    self.selectedItemMenu = INDEX_TEMP;
+        //                    break;
+        //
+        //                default:
+        //                    NSLog(@"Action out of bound");
+        //                    break;
+        //            }
+        //        }
     }
     
     [self hideTimelineView];
@@ -4792,7 +4792,7 @@ double _ticks = 0;
     {
         [[UIApplication sharedApplication] setStatusBarHidden:NO];
         self.returnFromPlayback = FALSE;
-
+        
         //[self scanCamera];
         
         [self performSelectorOnMainThread:@selector(scanCamera)
@@ -4815,11 +4815,11 @@ double _ticks = 0;
 
 - (void)viewDidUnload {
     [self setImageViewVideo:nil];
-//    [self setTopToolbar:nil];
+    //    [self setTopToolbar:nil];
     [self setBackBarBtnItem:nil];
     [self setProgressView:nil];
     [self setCameraNameBarBtnItem:nil];
-
+    
     [self setSelectedChannel:nil];
     
     [super viewDidUnload];
@@ -5017,7 +5017,7 @@ double _ticks = 0;
     [self.ib_buttonTouchToTalk setBackgroundImage:[UIImage imageMic] forState:UIControlStateNormal];
     [self.ib_buttonTouchToTalk setBackgroundImage:[UIImage imageMicPressed] forState:UIControlEventTouchDown];
     [self.ib_buttonTouchToTalk setBackgroundImage:[UIImage imageMic] forState:UIControlEventTouchUpInside];
-
+    
     [self applyFont];
 #if TEST_REMOTE_TALKBACK
 #else
@@ -5080,7 +5080,7 @@ double _ticks = 0;
     NSString *regID = self.selectedChannel.profile.registrationID;
     
     NSDictionary *responseDict = [_jsonCommBlocked createTalkbackSessionBlockedWithRegistrationId:regID
-                                                                                   apiKey:_apiKey];
+                                                                                           apiKey:_apiKey];
     NSLog(@"%@", responseDict);
     
     //[BMS_JSON_Communication setServerInput:@"https://api.hubble.in/v1"];
@@ -5290,8 +5290,8 @@ double _ticks = 0;
     NSURLResponse *response;
     
     NSData *dataReply = [NSURLConnection sendSynchronousRequest:request
-                                      returningResponse:&response
-                                                  error:nil];
+                                              returningResponse:&response
+                                                          error:nil];
     
     NSInteger statusCode = ((NSHTTPURLResponse *)response).statusCode;
     NSLog(@"H264 - workWithServer - url: %@, -status code: %d", requestString, statusCode);
@@ -5369,7 +5369,7 @@ double _ticks = 0;
 #pragma mark - Bottom menu
 
 - (IBAction)bt_showMenuControlPanel:(id)sender {
-//    isShowControlPanel = YES;
+    //    isShowControlPanel = YES;
     [self tryToHideMenuControlPanel];
 }
 
@@ -5415,7 +5415,7 @@ double _ticks = 0;
             {
                 _timerRecording = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(timerTick:) userInfo:nil repeats:YES];
             }
-           
+            
             /*
              start recording
              */
@@ -5459,7 +5459,7 @@ double _ticks = 0;
                 [self.view bringSubviewToFront:self.ib_buttonChangeAction];
             }
         }
-
+        
         if (!_syncPortraitAndLandscape)
         {
             //processing for take picture
@@ -5467,7 +5467,7 @@ double _ticks = 0;
         }
     }
     [self applyFont];
-
+    
 }
 
 - (void)stopRecordingVideo
@@ -5490,15 +5490,15 @@ double _ticks = 0;
 }
 
 - (IBAction)changeAction:(id)sender {
-//#if DISABLE_VIEW_RELEASE_FLAG
-//    _isRecordInterface = FALSE;
-//#else
+    //#if DISABLE_VIEW_RELEASE_FLAG
+    //    _isRecordInterface = FALSE;
+    //#else
     if (!_syncPortraitAndLandscape)
     {
         _isRecordInterface = !_isRecordInterface;
     }
     
-//#endif
+    //#endif
     
     if (_isRecordInterface)
     {
@@ -5567,7 +5567,7 @@ double _ticks = 0;
     double minutes = fmod(trunc(_ticks / 60.0), 60.0);
     double hours = trunc(_ticks / 3600.0);
     NSString *timeToDisplay = [NSString stringWithFormat:@"%02.0f:%02.0f:%02.0f",hours, minutes, seconds];
-
+    
     if (_isRecordInterface && _isProcessRecording)
     {
         self.ib_labelRecordVideo.text = timeToDisplay;
@@ -5655,11 +5655,11 @@ double _ticks = 0;
         
 	}
 	UIAlertView *_alertInfo = [[UIAlertView alloc]
-                          initWithTitle:title
-                          message:message
-                          delegate:self
-                          cancelButtonTitle:@"OK"
-                          otherButtonTitles:nil];
+                               initWithTitle:title
+                               message:message
+                               delegate:self
+                               cancelButtonTitle:@"OK"
+                               otherButtonTitles:nil];
 	[_alertInfo show];
 	[_alertInfo release];
     
@@ -5732,7 +5732,7 @@ double _ticks = 0;
 
 - (void)updateDebugInfoBitRate:(NSInteger)bitRate
 {
-
+    
     UITextField *tfBitRate = (UITextField *)[_viewDebugInfo viewWithTag:TF_DEBUG_BIT_RATE_TAG];
     
     //bitrate value is updated every 2 sec
@@ -5794,13 +5794,17 @@ double _ticks = 0;
 {
     //[self fetchSSIDInfo];
     
-    //NSString *deviceSSID = [CameraPassword fetchSSIDInfo];
-    
+    //NSString *deviceSSID =
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    NSString * current_ssid = [CameraPassword fetchSSIDInfo];
+    
+    
     
     if ( [self isCurrentConnection3G] ||
         [userDefaults boolForKey:@"remote_only"] ||
-        (self.selectedChannel.profile.ip_address != nil && ![self isInTheSameNetworkAsCamera:self.selectedChannel.profile])
+        (self.selectedChannel.profile.ip_address != nil && ![self isInTheSameNetworkAsCamera:self.selectedChannel.profile]) ||
+        (self.selectedChannel.profile.ip_address != nil && ![self.selectedChannel.profile.hostSSID isEqualToString:current_ssid] )
+        
         )
     {
         NSLog(@"Connection over 3G | remote_only | or not in same networ == TRUE --> Skip scanning all together, bit rate 128");
@@ -5817,8 +5821,21 @@ double _ticks = 0;
     }
     else
     {
-        if ([self.selectedChannel.profile.hostSSID isEqualToString:[CameraPassword fetchSSIDInfo]] &&
-             self.selectedChannel.profile.ip_address != nil)
+        //        if ([self.selectedChannel.profile.hostSSID isEqualToString:[CameraPassword fetchSSIDInfo]] &&
+        //             self.selectedChannel.profile.ip_address != nil)
+        //        {
+        //            NSLog(@"The same ssid --> uses local stream");
+        //            self.selectedChannel.profile.isInLocal = TRUE;
+        //            self.selectedChannel.profile.hasUpdateLocalStatus = TRUE;
+        //            self.selectedChannel.profile.minuteSinceLastComm = 1;
+        //
+        //            [self performSelector:@selector(setupCamera)
+        //                       withObject:nil afterDelay:0.1];
+        //        }
+        //        else
+        
+        
+        if (self.selectedChannel.profile.ip_address != nil)
         {
             NSLog(@"The same ssid --> uses local stream");
             self.selectedChannel.profile.isInLocal = TRUE;
@@ -5827,6 +5844,7 @@ double _ticks = 0;
             
             [self performSelector:@selector(setupCamera)
                        withObject:nil afterDelay:0.1];
+            
         }
         else
         {
@@ -5835,7 +5853,7 @@ double _ticks = 0;
             [self performSelectorInBackground:@selector(startScanningWithIpServer) withObject:nil];
         }
     }
-
+    
     
 }
 
@@ -5846,8 +5864,8 @@ double _ticks = 0;
     
     if ([reachability currentReachabilityStatus] == ReachableViaWWAN)
     {
-//        //3G
-//        [self performSelectorInBackground:@selector(setVideoBitRateToCamera:) withObject:@"200"];
+        //        //3G
+        //        [self performSelectorInBackground:@selector(setVideoBitRateToCamera:) withObject:@"200"];
         
         return TRUE;
     }
@@ -5907,8 +5925,8 @@ double _ticks = 0;
 - (void)startScanningWithBonjour
 {
     self.threadBonjour = [[NSThread alloc] initWithTarget:self
-                                                      selector:@selector(scanWithBonjour)
-                                                        object:nil];
+                                                 selector:@selector(scanWithBonjour)
+                                                   object:nil];
     [_threadBonjour start];
 }
 
@@ -5983,7 +6001,7 @@ double _ticks = 0;
     NSString * bc = @"";
 	NSString * own = @"";
 	[MBP_iosViewController getBroadcastAddress:&bc AndOwnIp:&own ipasLong:&ownip];
-
+    
     getifaddrs(&ifList); // should check for errors
     
     for (ifa = ifList; ifa != NULL; ifa = ifa->ifa_next) {
@@ -6021,7 +6039,7 @@ double _ticks = 0;
         ([tokens[1] integerValue] << 8) |
         ([tokens[2] integerValue] << 16) |
         ([tokens[3] integerValue] << 24) ;
-
+        
         if ( (camera_ip & netMask) == (ip & netMask))
         {
             NSLog(@"H264 - Camera is in same subnet");
@@ -6067,13 +6085,13 @@ double _ticks = 0;
 -(void)start_animation_with_orientation :(UIInterfaceOrientation) orientation
 {
     self.customIndicator.animationImages =[NSArray arrayWithObjects:
-                                        [UIImage imageNamed:@"loader_a"],
-                                        [UIImage imageNamed:@"loader_b"],
-                                        [UIImage imageNamed:@"loader_c"],
-                                        [UIImage imageNamed:@"loader_d"],
-                                        [UIImage imageNamed:@"loader_e"],
-                                        [UIImage imageNamed:@"loader_f"],
-                                        nil];
+                                           [UIImage imageNamed:@"loader_a"],
+                                           [UIImage imageNamed:@"loader_b"],
+                                           [UIImage imageNamed:@"loader_c"],
+                                           [UIImage imageNamed:@"loader_d"],
+                                           [UIImage imageNamed:@"loader_e"],
+                                           [UIImage imageNamed:@"loader_f"],
+                                           nil];
     self.customIndicator.animationDuration = 1.5;
     self.customIndicator.animationRepeatCount = 0;
     [self.customIndicator startAnimating];
