@@ -224,7 +224,7 @@
 									repeats:NO];
 }
 
-
+#pragma mark - MBS_JSON communication
 
 -(BOOL) checkItOnline
 {
@@ -263,8 +263,61 @@
     return FALSE;
 }
 
+- (void)updatesBasicInfoForCamera
+{
+        BMS_JSON_Communication *jsonCommBlocked = [[BMS_JSON_Communication alloc] initWithObject:self
+                                                                     Selector:nil
+                                                                 FailSelector:nil
+                                                                    ServerErr:nil];
+    
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    
+    NSString *apiKey    = [userDefaults objectForKey:@"PortalApiKey"];
+    NSString *udid      = [userDefaults objectForKey:CAMERA_UDID];
+    NSString *hostSSID  = [userDefaults objectForKey:HOST_SSID];
+    
+    NSDictionary *responseDict = [jsonCommBlocked updateDeviceBasicInfoBlockedWithRegistrationId:udid
+                                                                                       deviceName:nil
+                                                                                         timeZone:nil
+                                                                                             mode:nil
+                                                                                  firmwareVersion:nil
+                                                                                         hostSSID:hostSSID
+                                                                                       hostRouter:nil
+                                                                                        andApiKey:apiKey];
+    [jsonCommBlocked release];
+    BOOL updateFailed = TRUE;
+    
+    if (responseDict)
+    {
+        if ([[responseDict objectForKey:@"status"] integerValue] == 200)
+        {
+            NSString *bodyKey = [[responseDict objectForKey:@"data"] objectForKey:@"host_ssid"];
+            
+            if (![bodyKey isEqual:[NSNull null]])
+            {
+                if ([bodyKey isEqualToString:hostSSID])
+                {
+                    updateFailed = FALSE;
+                }
+            }
+        }
+    }
+    
+    if (updateFailed)
+    {
+        NSLog(@"Step10VC - updatesBasicInfoForCamera: %@", responseDict);
+    }
+    else
+    {
+        NSLog(@"Step10VC - updatesBasicInforForCamera successfully!");
+    }
+}
+
 - (void) setupCompleted
 {
+    // Try to update host ssid to server
+    [self updatesBasicInfoForCamera];
+    
     //Load step 12
     NSLog(@"Load step 12");
     

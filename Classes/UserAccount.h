@@ -15,6 +15,7 @@
 #define CAMERA_STATE_UNKNOWN       -1
 #define CAMERA_STATE_FW_UPGRADING   0
 #define CAMERA_STATE_IS_AVAILABLE   1
+#define CAMERA_STATE_REGISTED_LOGGED_USER 2
 
 @protocol UserAccountDelegate <NSObject>
 

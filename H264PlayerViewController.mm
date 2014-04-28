@@ -20,6 +20,8 @@
 
 //#import "Reachability.h"
 #import "MBP_iosViewController.h"
+#import <SystemConfiguration/CaptiveNetwork.h>
+
 #define MODEL_SHARED_CAM @"0036"
 #define MODEL_CONCURRENT @"0066"
 #define MODEL_BLE        @"0083" //0836 {UAP | BLE}
@@ -1019,7 +1021,7 @@ double _ticks = 0;
     {
         [_audioOutStreamRemote disconnectFromAudioSocket];
     }
-    
+#if 0
     if (self.currentMediaStatus == MEDIA_INFO_HAS_FIRST_IMAGE ||
         self.currentMediaStatus == MEDIA_PLAYER_STARTED ||
         (self.currentMediaStatus == 0 && h264Streamer == NULL)) // Media player haven't start yet.
@@ -1030,6 +1032,7 @@ double _ticks = 0;
     {
         h264Streamer->sendInterrupt(); // Assuming h264Streamer stop itself.
     }
+#endif
 }
 
 #pragma mak - Delegate Melody
@@ -2235,7 +2238,8 @@ double _ticks = 0;
     if (self.selectedChannel.profile .isInLocal == TRUE)
     {
         [HttpCom instance].comWithDevice.device_ip   = self.selectedChannel.profile.ip_address;
-        [HttpCom instance].comWithDevice.device_port = self.selectedChannel.profile.port;
+        //[HttpCom instance].comWithDevice.device_port = self.selectedChannel.profile.port;
+        [HttpCom instance].comWithDevice.device_port = 80;// Hack code for Focus66.
         
         NSData *responseData = [[HttpCom instance].comWithDevice sendCommandAndBlock_raw:@"value_temperature"];
 
@@ -4781,9 +4785,10 @@ double _ticks = 0;
     {
         [[UIApplication sharedApplication] setStatusBarHidden:NO];
         self.returnFromPlayback = FALSE;
+#if 0
         [self scanCamera];
         self.h264StreamerIsInStopped = FALSE;
-        
+#endif
         NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
         [userDefaults setObject:_selectedChannel.profile.mac_address forKey:CAM_IN_VEW];
         [userDefaults synchronize];
@@ -5774,10 +5779,15 @@ double _ticks = 0;
 
 - (void)scanCamera
 {
+    //[self fetchSSIDInfo];
+    
+    //NSString *deviceSSID = [CameraPassword fetchSSIDInfo];
+    
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     
-    if ( [self isCurrentConnection3G] || [userDefaults boolForKey:@"remote_only"] ||
-        (self.selectedChannel.profile.ip_address != nil && ![self isInTheSameNetworkAsCamera:self.selectedChannel.profile ])
+    if ( [self isCurrentConnection3G] ||
+        [userDefaults boolForKey:@"remote_only"] ||
+        (self.selectedChannel.profile.ip_address != nil && ![self isInTheSameNetworkAsCamera:self.selectedChannel.profile])
         )
     {
         NSLog(@"Connection over 3G | remote_only | or not in same networ == TRUE --> Skip scanning all together");
@@ -5791,10 +5801,23 @@ double _ticks = 0;
     }
     else
     {
-        
-        [self startScanningWithBonjour];
-        //[self startScanningWithIpServer];
-        [self performSelectorInBackground:@selector(startScanningWithIpServer) withObject:nil];
+        if ([self.selectedChannel.profile.hostSSID isEqualToString:[CameraPassword fetchSSIDInfo]] &&
+             self.selectedChannel.profile.ip_address != nil)
+        {
+            NSLog(@"The same ssid --> uses local stream");
+            self.selectedChannel.profile.isInLocal = TRUE;
+            self.selectedChannel.profile.hasUpdateLocalStatus = TRUE;
+            self.selectedChannel.profile.minuteSinceLastComm = 1;
+            
+            [self performSelector:@selector(setupCamera)
+                       withObject:nil afterDelay:0.1];
+        }
+        else
+        {
+            [self startScanningWithBonjour];
+            //[self startScanningWithIpServer];
+            [self performSelectorInBackground:@selector(startScanningWithIpServer) withObject:nil];
+        }
     }
 
     

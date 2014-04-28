@@ -249,6 +249,9 @@
                 NSLog(@"Set default ip for camera %@", own);
                 [[HttpCom instance].comWithDevice setDevice_ip:DEFAULT_BM_IP];
             }
+            
+            [HttpCom instance].comWithDevice.device_port = DEFAULT_BM_PORT;
+            
 			//remember the mac address .. very important
 			self.cameraMac = [CameraPassword fetchBSSIDInfo];
 			self.cameraName = currentSSID;

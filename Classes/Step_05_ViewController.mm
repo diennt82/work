@@ -170,6 +170,9 @@
 
     NSString *wifiName = [_selectedWifiEntry.ssid_w_quote substringWithRange:noQoute];
     
+    [[NSUserDefaults standardUserDefaults] setObject:wifiName forKey:HOST_SSID];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+    
     step06ViewController.isOtherNetwork = [wifiName isEqualToString:@"Other Network"];
     
     step06ViewController.ssid = wifiName;
@@ -203,6 +206,8 @@
     NSString *fwVersion = [userDefaults stringForKey:FW_VERSION]; // 01.12.58
     
     BOOL newCmdFlag = TRUE;
+    
+   // [HttpCom instance].comWithDevice.device_port = 80;
     
     if ([fwVersion compare:FW_MILESTONE] >= NSOrderedSame) // fw >= FW_MILESTONE
     {
