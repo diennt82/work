@@ -775,7 +775,7 @@ double _ticks = 0;
             
             
             NSLog(@"[MEDIA_PLAYER_HAS_FIRST_IMAGE] ");
-            if( (self.selectedChannel.profile.isInLocal == NO) && ![self isCurrentConnection3G] )
+            if(self.selectedChannel.profile.isInLocal == NO)
             {
                 NSLog(@"Up br");
                 [self performSelectorInBackground:@selector(setVideoBitRateToCamera:) withObject:@"600"];
