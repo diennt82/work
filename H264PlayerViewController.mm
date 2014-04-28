@@ -1021,7 +1021,7 @@ double _ticks = 0;
     {
         [_audioOutStreamRemote disconnectFromAudioSocket];
     }
-    
+#if 0
     if (self.currentMediaStatus == MEDIA_INFO_HAS_FIRST_IMAGE ||
         self.currentMediaStatus == MEDIA_PLAYER_STARTED ||
         (self.currentMediaStatus == 0 && h264Streamer == NULL)) // Media player haven't start yet.
@@ -1032,6 +1032,7 @@ double _ticks = 0;
     {
         h264Streamer->sendInterrupt(); // Assuming h264Streamer stop itself.
     }
+#endif
 }
 
 #pragma mak - Delegate Melody
@@ -2237,7 +2238,8 @@ double _ticks = 0;
     if (self.selectedChannel.profile .isInLocal == TRUE)
     {
         [HttpCom instance].comWithDevice.device_ip   = self.selectedChannel.profile.ip_address;
-        [HttpCom instance].comWithDevice.device_port = self.selectedChannel.profile.port;
+        //[HttpCom instance].comWithDevice.device_port = self.selectedChannel.profile.port;
+        [HttpCom instance].comWithDevice.device_port = 80;// Hack code for Focus66.
         
         NSData *responseData = [[HttpCom instance].comWithDevice sendCommandAndBlock_raw:@"value_temperature"];
 
@@ -4783,9 +4785,10 @@ double _ticks = 0;
     {
         [[UIApplication sharedApplication] setStatusBarHidden:NO];
         self.returnFromPlayback = FALSE;
+#if 0
         [self scanCamera];
         self.h264StreamerIsInStopped = FALSE;
-        
+#endif
         NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
         [userDefaults setObject:_selectedChannel.profile.mac_address forKey:CAM_IN_VEW];
         [userDefaults synchronize];
@@ -5756,7 +5759,9 @@ double _ticks = 0;
 
 - (void)scanCamera
 {
-    [self fetchSSIDInfo];
+    //[self fetchSSIDInfo];
+    
+    //NSString *deviceSSID = [CameraPassword fetchSSIDInfo];
     
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     
@@ -5776,30 +5781,26 @@ double _ticks = 0;
     }
     else
     {
-        
-        [self startScanningWithBonjour];
-        //[self startScanningWithIpServer];
-        [self performSelectorInBackground:@selector(startScanningWithIpServer) withObject:nil];
+        if ([self.selectedChannel.profile.hostSSID isEqualToString:[CameraPassword fetchSSIDInfo]] &&
+             self.selectedChannel.profile.ip_address != nil)
+        {
+            NSLog(@"The same ssid --> uses local stream");
+            self.selectedChannel.profile.isInLocal = TRUE;
+            self.selectedChannel.profile.hasUpdateLocalStatus = TRUE;
+            self.selectedChannel.profile.minuteSinceLastComm = 1;
+            
+            [self performSelector:@selector(setupCamera)
+                       withObject:nil afterDelay:0.1];
+        }
+        else
+        {
+            [self startScanningWithBonjour];
+            //[self startScanningWithIpServer];
+            [self performSelectorInBackground:@selector(startScanningWithIpServer) withObject:nil];
+        }
     }
 
     
-}
-
-- (id)fetchSSIDInfo
-{
-    NSArray *ifs = (id)CNCopySupportedInterfaces();
-    NSLog(@"%s: Supported interfaces: %@", __func__, ifs);
-    id info = nil;
-    for (NSString *ifnam in ifs) {
-        info = (id)CNCopyCurrentNetworkInfo((CFStringRef)ifnam);
-        NSLog(@"%s: %@ => %@", __func__, ifnam, info);
-        if (info && [info count]) {
-            break;
-        }
-        [info release];
-    }
-    [ifs release];
-    return [info autorelease];
 }
 
 -(BOOL) isCurrentConnection3G
@@ -5959,8 +5960,6 @@ double _ticks = 0;
             }
         }
     }
-    
-    NSLog(@"H264VC - isInSameNetworkAsCamera-bc: %@, -own: %@, -ownip: %ld", bc, own, ownip);
     
     freeifaddrs(ifList); // clean up after yourself
     

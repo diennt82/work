@@ -207,6 +207,8 @@
     
     BOOL newCmdFlag = TRUE;
     
+   // [HttpCom instance].comWithDevice.device_port = 80;
+    
     if ([fwVersion compare:FW_MILESTONE] >= NSOrderedSame) // fw >= FW_MILESTONE
     {
         router_list_raw = [[HttpCom instance].comWithDevice sendCommandAndBlock_raw:GET_ROUTER_LIST2

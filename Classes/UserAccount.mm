@@ -176,13 +176,17 @@
                 if (cp.mac_address != nil &&
                     [cp.mac_address isEqualToString:[mac_w_colon uppercaseString]])
                 {
-                    if (cp.minuteSinceLastComm == 1)
-                    {
-                        [self sync_online_and_offline_data:cam_profiles];
-                        state = CAMERA_STATE_IS_AVAILABLE;
-                    }
-                    else
-                    {
+                    //[self updatesBasicInfoForCamera];
+                    
+                    state = CAMERA_STATE_REGISTED_LOGGED_USER;
+                    
+//                    if (cp.minuteSinceLastComm == 1)
+//                    {
+//                        [self sync_online_and_offline_data:cam_profiles];
+//                        state = CAMERA_STATE_IS_AVAILABLE;
+//                    }
+//                    else
+//                    {
                         if (cp.fwTime)
                         {
                             NSDate *currentDate = [NSDate date];
@@ -200,7 +204,7 @@
                             {
                                 state = CAMERA_STATE_FW_UPGRADING;
                             }
-                        }
+                        //}
                     }
                     
                     break;
@@ -210,6 +214,55 @@
     }
     
     return state;
+}
+
+- (void)updatesBasicInfoForCamera
+{
+        BMS_JSON_Communication *jsonCommBlocked = [[BMS_JSON_Communication alloc] initWithObject:self
+                                                                     Selector:nil
+                                                                 FailSelector:nil
+                                                                    ServerErr:nil];
+    
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    
+    NSString *apiKey    = [userDefaults objectForKey:@"PortalApiKey"];
+    NSString *udid      = [userDefaults objectForKey:CAMERA_UDID];
+    NSString *hostSSID  = [userDefaults objectForKey:HOST_SSID];
+    
+    NSDictionary *responseDict = [jsonCommBlocked updateDeviceBasicInfoBlockedWithRegistrationId:udid
+                                                                                       deviceName:nil
+                                                                                         timeZone:nil
+                                                                                             mode:nil
+                                                                                  firmwareVersion:nil
+                                                                                         hostSSID:hostSSID
+                                                                                       hostRouter:nil
+                                                                                        andApiKey:apiKey];
+    BOOL updateFailed = TRUE;
+    
+    if (responseDict)
+    {
+        if ([[responseDict objectForKey:@"status"] integerValue] == 200)
+        {
+            NSString *bodyKey = [[responseDict objectForKey:@"data"] objectForKey:@"host_ssid"];
+            
+            if (![bodyKey isEqual:[NSNull null]])
+            {
+                if ([bodyKey isEqualToString:hostSSID])
+                {
+                    updateFailed = FALSE;
+                }
+            }
+        }
+    }
+    
+    if (updateFailed)
+    {
+        NSLog(@"UserAccount - updatesBasicInfoForCamera: %@", responseDict);
+    }
+    else
+    {
+        NSLog(@"UserAccount - updatesBasicInforForCamera successfully!");
+    }
 }
 
 -(void) readCameraListAndUpdate

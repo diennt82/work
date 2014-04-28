@@ -713,11 +713,10 @@
     
     NSLog(@"checkCameraAvailableAndFWUpgrading: %d", cameraStatus);
     
-    if (cameraStatus == CAMERA_STATE_IS_AVAILABLE)
+    if (cameraStatus == CAMERA_STATE_REGISTED_LOGGED_USER)
     {
-        NSLog(@"Found it online");
-        [self setupCompleted];
-        return cameraStatus;
+        [self updatesBasicInfoForCamera];
+        [self checkCameraIsAvailable];
     }
     else if (cameraStatus == CAMERA_STATE_FW_UPGRADING)
     {
@@ -731,7 +730,7 @@
     }
     else// unkown
     {
-        [self checkCameraIsAvailable];
+        [self performSelector:@selector(checkCameraAvailableAndFWUpgrading) withObject:nil afterDelay:0.001];
     }
     
     return cameraStatus;
@@ -816,7 +815,7 @@
 - (void) setupCompleted
 {
     // Try to update base info to server first.
-    [self updatesBasicInfoForCamera];
+    //[self updatesBasicInfoForCamera];
     
     [[NSNotificationCenter defaultCenter] removeObserver:self];
     // cancel timeout
