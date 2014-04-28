@@ -774,7 +774,14 @@ double _ticks = 0;
         {
             _isShowCustomIndicator = NO;
             [self displayCustomIndicator];
-            NSLog(@"[MEDIA_PLAYER_HAS_FIRST_IMAGE]");
+            
+            
+            NSLog(@"[MEDIA_PLAYER_HAS_FIRST_IMAGE] ");
+            if(self.selectedChannel.profile.isInLocal == NO)
+            {
+                NSLog(@"Up br");
+                [self performSelectorInBackground:@selector(setVideoBitRateToCamera:) withObject:@"600"];
+            }
             
             self.currentMediaStatus = msg;
             
@@ -4785,10 +4792,13 @@ double _ticks = 0;
     {
         [[UIApplication sharedApplication] setStatusBarHidden:NO];
         self.returnFromPlayback = FALSE;
-#if 0
-        [self scanCamera];
+
+        //[self scanCamera];
+        
+        [self performSelectorOnMainThread:@selector(scanCamera)
+                               withObject:nil
+                            waitUntilDone:NO];
         self.h264StreamerIsInStopped = FALSE;
-#endif
         NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
         [userDefaults setObject:_selectedChannel.profile.mac_address forKey:CAM_IN_VEW];
         [userDefaults synchronize];
@@ -5722,8 +5732,11 @@ double _ticks = 0;
 
 - (void)updateDebugInfoBitRate:(NSInteger)bitRate
 {
+
     UITextField *tfBitRate = (UITextField *)[_viewDebugInfo viewWithTag:TF_DEBUG_BIT_RATE_TAG];
-    tfBitRate.text = [NSString stringWithFormat:@"%d", bitRate * 8 / 1000];
+    
+    //bitrate value is updated every 2 sec
+    tfBitRate.text = [NSString stringWithFormat:@"%d", (bitRate *8) / (2*  1000)];
 }
 
 #endif
@@ -5790,7 +5803,10 @@ double _ticks = 0;
         (self.selectedChannel.profile.ip_address != nil && ![self isInTheSameNetworkAsCamera:self.selectedChannel.profile])
         )
     {
-        NSLog(@"Connection over 3G | remote_only | or not in same networ == TRUE --> Skip scanning all together");
+        NSLog(@"Connection over 3G | remote_only | or not in same networ == TRUE --> Skip scanning all together, bit rate 128");
+        
+        //pulldown to 32 KB/s initially - pull up when we get 1st image
+        [self performSelectorInBackground:@selector(setVideoBitRateToCamera:) withObject:@"128"];
         
         self.selectedChannel.profile.isInLocal = FALSE;
         self.selectedChannel.profile.hasUpdateLocalStatus = TRUE;
@@ -5830,8 +5846,8 @@ double _ticks = 0;
     
     if ([reachability currentReachabilityStatus] == ReachableViaWWAN)
     {
-        //3G
-        [self performSelectorInBackground:@selector(setVideoBitRateToCamera) withObject:nil];
+//        //3G
+//        [self performSelectorInBackground:@selector(setVideoBitRateToCamera:) withObject:@"200"];
         
         return TRUE;
     }
@@ -5839,7 +5855,7 @@ double _ticks = 0;
     return FALSE;
 }
 
-- (void)setVideoBitRateToCamera
+- (void)setVideoBitRateToCamera:(NSString *)bitrate_str
 {
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     
@@ -5853,8 +5869,10 @@ double _ticks = 0;
                                                                     ServerErr:nil];
     }
     
+    NSString * cmd_str = [NSString stringWithFormat:@"action=command&command=set_video_bitrate&value=%@",bitrate_str];
+    
     NSDictionary *responseDict = [_jsonCommBlocked sendCommandBlockedWithRegistrationId:self.selectedChannel.profile.registrationID
-                                                                             andCommand:@"action=command&command=set_video_bitrate&value=200"
+                                                                             andCommand:cmd_str
                                                                               andApiKey:apiKey];
     BOOL sendCmdFailed = TRUE;
     
