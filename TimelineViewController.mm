@@ -207,6 +207,9 @@
     NSLog(@"There are %d in databases",self.events.count );
     if (self.events.count ==0)
     {
+        self.isEventAlready = TRUE;
+        self.stringIntelligentMessage = @"There is currently no new event";
+        self.stringCurrentDate = @"";
         /* Either this is a new camera OR we don't have any cached event
          [self performSelectorInBackground:@selector(getEventsList_bg2:) withObject:camChannel];
          */
