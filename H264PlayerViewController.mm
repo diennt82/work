@@ -2240,6 +2240,15 @@ double _ticks = 0;
 
 - (void)getCameraTemperature_bg: (id)sender
 {
+    /*
+     * If back, Need not to update UI
+     */
+    
+    if (userWantToCancel == TRUE)
+    {
+        return;
+    }
+    
     NSString *responseString = @"";
     
     if (self.selectedChannel.profile .isInLocal == TRUE)

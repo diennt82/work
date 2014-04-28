@@ -213,6 +213,9 @@
         /* Either this is a new camera OR we don't have any cached event
          [self performSelectorInBackground:@selector(getEventsList_bg2:) withObject:camChannel];
          */
+        [self.tableView reloadData];
+        
+        [self.tableView layoutIfNeeded];
     }
     else
     {
