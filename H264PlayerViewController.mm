@@ -13,7 +13,6 @@
 #import "define.h"
 #import <CFNetwork/CFNetwork.h>
 #include <ifaddrs.h>
-#import <GAI.h>
 #import "AudioOutStreamRemote.h"
 #import "EarlierNavigationController.h"
 #import "HttpCom.h"
@@ -126,6 +125,7 @@
 @property (nonatomic) BOOL disableAutorotateFlag;
 @property (nonatomic) BOOL enablePTT;
 @property (nonatomic, retain) NSString *stringStatePTT;
+@property (nonatomic) NSInteger numbersOfRemoteViewError;
 
 #ifdef SHOW_DEBUG_INFO
 //for debug
@@ -250,6 +250,7 @@ double _ticks = 0;
     self.disconnectAlert   = [userDefaults boolForKey:@"disconnect_alert"];
     
     self.enablePTT = YES;
+    self.numbersOfRemoteViewError = 0;
     
     [self becomeActive];
 }
@@ -902,6 +903,23 @@ double _ticks = 0;
             if (self.selectedChannel.communication_mode == COMM_MODE_STUN)
             {
                 self.numberOfSTUNError++;
+            }
+            else if (self.selectedChannel.communication_mode == COMM_MODE_STUN_RELAY2)
+            {
+                self.numbersOfRemoteViewError++;
+                
+                if (_numbersOfRemoteViewError == 2)
+                {
+                    [self setVideoBitRateToCamera:@"400"];
+                }
+                else if (_numbersOfRemoteViewError == 3)
+                {
+                    [self setVideoBitRateToCamera:@"200"];
+                }
+                else
+                {
+                    NSLog(@"%s: numbers of remote streaming error: %d", __FUNCTION__, _numbersOfRemoteViewError);
+                }
             }
             
             if (userWantToCancel == TRUE)
@@ -4119,7 +4137,6 @@ double _ticks = 0;
 			[self.alertTimer invalidate];
             self.alertTimer = nil;
 		}
-        
 	}
 }
 
@@ -4129,46 +4146,6 @@ double _ticks = 0;
 	NSString * msg = (NSString *) [exp userInfo];
     
 	[self playSound];
-    
-    
-	if ( alert != nil)
-	{
-		if ([alert isVisible])
-		{
-			[alert setMessage:msg];
-            
-			return;
-		}
-		else
-		{
-			NSLog(@"alert not visible -- dismiss it & release.. ");
-            
-            [alert dismissWithClickedButtonIndex:1 animated:NO];
-		}
-        
-		[alert release];
-		alert = nil;
-        
-	}
-    
-    NSString * cancel = NSLocalizedStringWithDefaultValue(@"Cancel",nil, [NSBundle mainBundle],
-                                                          @"Cancel", nil);
-    
-    
-	alert = [[UIAlertView alloc]
-             initWithTitle:@"" //empty on purpose
-             message:msg
-             delegate:self
-             cancelButtonTitle:cancel
-             otherButtonTitles:nil];
-    
-	alert.tag = LOCAL_VIDEO_STOPPED_UNEXPECTEDLY;
-#if TEST_REMOTE_TALKBACK
-#else
-	[alert show];
-#endif
-    
-	[alert retain];
 }
 
 -(void) stopPeriodicPopup
@@ -4179,19 +4156,6 @@ double _ticks = 0;
 		{
 			[self.alertTimer invalidate];
 		}
-        
-	}
-	if ( alert != nil)
-	{
-		//if ([alert isVisible])
-		{
-            NSLog(@"dissmis alert");
-			[alert dismissWithClickedButtonIndex:1 animated:NO ];
-		}
-        
-		[alert release];
-		alert = nil;
-        
 	}
 }
 -(void) playSound
@@ -5377,11 +5341,6 @@ double _ticks = 0;
 
 #pragma mark - Bottom menu
 
-- (IBAction)bt_showMenuControlPanel:(id)sender {
-    //    isShowControlPanel = YES;
-    [self tryToHideMenuControlPanel];
-}
-
 - (IBAction)changeToMainRecording:(id)sender {
     //change to main recording here
     [self changeAction:nil];
@@ -5674,56 +5633,6 @@ double _ticks = 0;
     
 }
 
-#pragma mark -
-#pragma mark Hide & Show subfunction
-
-
-- (void) tryToHideMenuControlPanel
-{
-    [self.horizMenu setHidden:NO];
-    [self UpdateFullScreenTimer];
-}
-
-- (void) UpdateFullScreenTimer
-{
-    if (fullScreenTimer != nil)
-	{
-		//invalidate the timer ..
-        if ([fullScreenTimer isValid])
-        {
-            [fullScreenTimer invalidate];
-        }
-		fullScreenTimer = nil;
-	}
-	fullScreenTimer = [NSTimer scheduledTimerWithTimeInterval:10.0
-                                                       target:self
-                                                     selector:@selector(hideMenuControlPanelNow:)
-                                                     userInfo:nil
-                                                      repeats:NO];
-}
-
-- (void) hideMenuControlPanelNow: (NSTimer*) exp
-{
-    
-    static NSTimeInterval animationDuration = 0.3;
-    [UIView animateWithDuration:animationDuration animations:^{
-        fullScreenTimer = nil;
-        [self.horizMenu setHidden:YES];
-        [self.ib_lbCameraName setHidden:YES];
-    }];
-}
-
-- (void) showMenuControlPanel
-{
-    static NSTimeInterval animationDuration = 0.3;
-    [UIView animateWithDuration:animationDuration animations:^{
-        [self.horizMenu setHidden:NO];
-        [self.view addSubview:_horizMenu];
-        [self.view bringSubviewToFront:_horizMenu];
-    }];
-}
-
-
 //
 #ifdef SHOW_DEBUG_INFO
 
@@ -5801,9 +5710,6 @@ double _ticks = 0;
 
 - (void)scanCamera
 {
-    //[self fetchSSIDInfo];
-    
-    //NSString *deviceSSID =
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     NSString * current_ssid = [CameraPassword fetchSSIDInfo];
     
