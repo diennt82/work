@@ -68,7 +68,6 @@
     
     H264PlayerListener * h264StreamerListener;
     
-    UIAlertView * alert;
 	NSTimer * alertTimer;
     
     ScanForCamera *scanner;
@@ -103,9 +102,7 @@
     //processing for recording
     int iMaxRecordSize;
     NSString * iFileName;
-    
-    //
-    NSTimer * fullScreenTimer;
+
     //display time when recording
     NSTimer *_timerRecording;
     //degreeC
