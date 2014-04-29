@@ -4281,8 +4281,8 @@ double _ticks = 0;
         [self queryToKnowSharedCamOnMacOSOrWin];
         if ([_sharedCamConnectedTo isEqualToString:@"MACOS"])
         {
-            self.itemImages = [NSMutableArray arrayWithObjects:@"video_action_video.png", @"video_action_temp.png", nil];
-            self.itemSelectedImages = [NSMutableArray arrayWithObjects:@"video_action_video_pressed.png", @"video_action_temp_pressed.png", nil];
+            self.itemImages = [NSMutableArray arrayWithObjects:@"video_action_photo.png", @"video_action_temp.png", nil];
+            self.itemSelectedImages = [NSMutableArray arrayWithObjects:@"video_action_photo_pressed.png", @"video_action_temp_pressed.png", nil];
         }
         else
         {
@@ -4292,8 +4292,8 @@ double _ticks = 0;
     }
     else if ([_cameraModel isEqualToString:CP_MODEL_CONCURRENT])
     {
-        self.itemImages = [NSMutableArray arrayWithObjects:@"video_action_mic.png", @"video_action_video.png", @"video_action_music.png", @"video_action_temp.png", nil];
-        self.itemSelectedImages = [NSMutableArray arrayWithObjects:@"video_action_mic_pressed.png", @"video_action_video_pressed.png", @"video_action_music_pressed.png", @"video_action_temp_pressed.png", nil];
+        self.itemImages = [NSMutableArray arrayWithObjects:@"video_action_mic.png", @"video_action_photo.png", @"video_action_music.png", @"video_action_temp.png", nil];
+        self.itemSelectedImages = [NSMutableArray arrayWithObjects:@"video_action_mic_pressed.png", @"video_action_photo_pressed.png", @"video_action_music_pressed.png", @"video_action_temp_pressed.png", nil];
         
         //        if (_isInLocal)
         //        {
@@ -5002,7 +5002,7 @@ double _ticks = 0;
             h264Streamer->setPlayOption(MEDIA_STREAM_AUDIO_MUTE);
         }
         
-        [self.ib_labelTouchToTalk setText:@"Listening"];
+        [self.ib_labelTouchToTalk setText:@"Speaking"];
         [self processingHoldToTalk];
     }
 #endif
@@ -5335,7 +5335,7 @@ double _ticks = 0;
     }
     else
     {
-        self.ib_labelTouchToTalk.text = @"Listening";
+        self.ib_labelTouchToTalk.text = @"Speaking";
     }
 }
 
