@@ -78,11 +78,38 @@
     [_playEnventBtn setEnabled:NO];
     
     jsonComm = [[BMS_JSON_Communication alloc] initWithObject:self
-                                                                             Selector:nil
-                                                                         FailSelector:nil
-                                                                            ServerErr:nil];
+                                                     Selector:nil
+                                                 FailSelector:nil
+                                                    ServerErr:nil];
+    
+    NSDateFormatter *dateFormater = [[NSDateFormatter alloc] init];
+    [dateFormater setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss'Z'"];
+    [dateFormater setTimeZone:[NSTimeZone timeZoneForSecondsFromGMT:0]];
+    NSDate *eventDate = [dateFormater dateFromString:self.alertTime]; //2013-12-31 07:38:35 +0000
+    [dateFormater release];
+    
+    NSDateFormatter* df_local = [[NSDateFormatter alloc] init];
+    [df_local setTimeZone:[NSTimeZone localTimeZone]];
+    df_local.dateFormat = @"hh:mm a, dd-MM-yyyy";
+    
+    self.timeLabel.text = [df_local stringFromDate:eventDate];;
+    
+    
+    
     
 }
+
+- (void)viewWillDisappear:(BOOL)animated {
+//	NSArray *viewControllers = self.navigationController.viewControllers;
+//	if ([viewControllers indexOfObject:self] == NSNotFound) {
+//		// View is disappearing because it was popped from the stack
+//		NSLog(@"View controller was popped --- We are closing down..go back to cam list");
+//        
+//        [self ignoreTouchAction:nil];
+//        
+//	}
+}
+
 
 - (void)viewWillAppear:(BOOL)animated
 {
@@ -165,6 +192,19 @@
                 
                 [self.navigationController pushViewController:playbackViewController animated:YES];
                 [playbackViewController release];
+                
+                
+//                [self dismissViewControllerAnimated:YES
+//                                         completion:^{
+//                                             
+//                                             [_notifDelegate sendStatus:SHOW_CAMERA_LIST];
+//                                             [(UIViewController*)_notifDelegate presentViewController:playbackViewController
+//                                                                                             animated:NO
+//                                                                                           completion:nil];
+//                                         }];
+                
+                
+           
             }
             else
             {
@@ -196,7 +236,8 @@
         
         // Will call dismiss eventually
         
-        if (![self.presentedViewController isBeingDismissed]) {
+        if (![self.presentedViewController isBeingDismissed])
+        {
             [self dismissViewControllerAnimated:YES completion:^{
                 //[_notifDelegate sendStatus:SCAN_BONJOUR_CAMERA];
                 [_notifDelegate sendStatus:SHOW_CAMERA_LIST];
@@ -257,7 +298,7 @@
     
     NSString *alertsString = @"1,2,3,4";
     alertsString = [self urlEncodeUsingEncoding:NSUTF8StringEncoding forString:alertsString];
-
+    
     NSString *event_timecode = [NSString stringWithFormat:@"%@_0%@_%@", self.cameraMacNoColon, self.alertType, self.alertVal];
     NSDictionary *responseDict = [jsonComm getListOfEventsBlockedWithRegisterId:_registrationID
                                                                 beforeStartTime:nil//@"2013-12-28 20:10:18"
@@ -322,7 +363,7 @@
                         
                         break;
                     }
-                }    
+                }
             }
             else
             {
@@ -347,12 +388,12 @@
                                                  withObject:[UIImage imageNamed:@"loading_logo.png"]
                                               waitUntilDone:NO];
     }
- 
+    
     
     NSString *urlFile = [[_clipsInEvent objectAtIndex:0] objectForKey:@"file"];
     
     if (([urlFile isEqual:[NSNull null]] ||
-        [urlFile isEqualToString:@""] || urlFile == nil) && _isBackgroundTaskRunning)
+         [urlFile isEqualToString:@""] || urlFile == nil) && _isBackgroundTaskRunning)
     {
         [self performSelectorInBackground:@selector(getEventSnapshot_bg) withObject:nil];
     }

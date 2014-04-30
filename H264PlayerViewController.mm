@@ -1638,7 +1638,7 @@ double _ticks = 0;
     }
     else if( self.currentMediaStatus == MEDIA_INFO_HAS_FIRST_IMAGE ||
             self.currentMediaStatus == MEDIA_PLAYER_STARTED       ||
-            ( h264Streamer != nil))
+            ( h264Streamer != NULL))
     {
         NSLog(@"H264VC- prepareGoBackToCameraList - just sendInterrupt");
         

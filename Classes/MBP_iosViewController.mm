@@ -56,6 +56,7 @@
 	//self.app_stage = APP_STAGE_INIT;
     self.app_stage = APP_STAGE_LOGGING_IN;
 
+
     CFBundleRef mainbundle = CFBundleGetMainBundle();
     CFURLRef soundFileURLRef = CFBundleCopyResourceURL(mainbundle, CFSTR("Voicemail"), CFSTR("aif"), NULL);
     AudioServicesCreateSystemSoundID(soundFileURLRef, &soundFileObject);
@@ -651,54 +652,51 @@
 }
 
 
--(BOOL) isServerAnnouncement: (CameraAlert *) camAlert
+
+-(BOOL) pushNotificationRcvedServerAnnouncement:(NSString *) custom_message andUrl:(NSString *) custom_url
 {
-    if ( [camAlert.alertType isEqualToString:ALERT_GENERIC_SERVER_INFO]  )
-    {
-        
-        return TRUE;
-    }
     
-    return FALSE;
+    NSString * title = NSLocalizedStringWithDefaultValue(@"Server_Announcement",nil, [NSBundle mainBundle],
+                                                          @"Server Announcement", nil);
+    
+    NSString * ignore = NSLocalizedStringWithDefaultValue(@"close",nil, [NSBundle mainBundle],
+                                                          @"Close", nil);
+    
+    NSString * details = NSLocalizedStringWithDefaultValue(@"detail",nil, [NSBundle mainBundle],
+                                                           @"Detail", nil);
+    
+    NSString * msg =[ NSString stringWithFormat:@"%@ %@",custom_message,custom_url];
+    
+    pushAlert = [[AlertPrompt alloc]
+                 initWithTitle:title
+                 message:msg
+                 delegate:self
+                 cancelButtonTitle:ignore
+                 otherButtonTitles:details, nil];
+    
+    
+    pushAlert.tag = ALERT_PUSH_SERVER_ANNOUNCEMENT;
+    
+    [self playSound];
+    [pushAlert show];
+    
+    
+    return TRUE;
 }
 
 
 -(BOOL) pushNotificationRcvedInForeground:(CameraAlert *) camAlert
 {
-    // IF this is just a server announcement - Dont do anything -
-    if ([self isServerAnnouncement:camAlert])
-    {
-        NSString * ignore = NSLocalizedStringWithDefaultValue(@"close",nil, [NSBundle mainBundle],
-                                                              @"Close", nil);
-        
-        NSString * details = NSLocalizedStringWithDefaultValue(@"detail",nil, [NSBundle mainBundle],
-                                                              @"Detail", nil);
-
-        NSString * msg = camAlert.alertVal;
-
-        pushAlert = [[AlertPrompt alloc]
-                     initWithTitle:camAlert.cameraName
-                     message:msg
-                     delegate:self
-                     cancelButtonTitle:ignore
-                     otherButtonTitles:details, nil];
-        ((AlertPrompt*)pushAlert).otherInfo = camAlert.server_url;
-        
-        pushAlert.tag = ALERT_PUSH_SERVER_ANNOUNCEMENT;
-        
-        [self playSound];
-        [pushAlert show];
-
-        return FALSE ;
-    }
     
     //Check if we should popup
 	NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
 	//mac with COLON
 	NSString * camInView = (NSString*)[userDefaults objectForKey:CAM_IN_VEW];
     
-    NSLog(@"camInView: %@", camInView);
+    NSLog(@"camInView: %@ camAlert.cameraMacNoColon:%@", camInView,camAlert.cameraMacNoColon);
 	
+    
+    
     if (camInView != nil)
 	{
 		if ( [[Util strip_colon_fr_mac:camInView] isEqualToString:camAlert.cameraMacNoColon])
@@ -714,6 +712,8 @@
         NSLog(@"APP_STAGE_SETUP. Don't popup!");
         return FALSE;
     }
+    
+    NSLog(@"latestCamAlert is: %@", latestCamAlert);
     
     if (latestCamAlert != nil &&
         [latestCamAlert.cameraMacNoColon  isEqualToString:camAlert.cameraMacNoColon])
@@ -741,6 +741,8 @@
              return FALSE;
         }
     }
+    
+    NSLog(@"camAlert : %@",camAlert);
 
     NSString * msg = NSLocalizedStringWithDefaultValue(@"Sound_detected",nil, [NSBundle mainBundle],
                                                        @"Sound detected", nil);
@@ -767,6 +769,8 @@
     
     NSString * msg2 = NSLocalizedStringWithDefaultValue(@"View_snapshot",nil, [NSBundle mainBundle],
                                                         @"View Snapshot", nil);
+    
+    NSLog(@"pushAlert : %@",pushAlert);
     
     if (pushAlert != nil )
     {
@@ -812,8 +816,11 @@
         latestCamAlert = camAlert;
         
     }
-    
+    NSLog(@"play sound");
     [self playSound];
+
+    
+    NSLog(@"show  alert");
     
     [pushAlert show];
 
@@ -1041,18 +1048,23 @@
 			case 1://Detail
             {
                 // Open the web browser now..
-                NSString * url =  ((AlertPrompt*)alertView).otherInfo;
-                
-                
-                if (url != nil)
+                NSArray * texts = [alertView.message componentsSeparatedByString:@" "];
+                NSString * url = nil;
+                BOOL found = FALSE;
+                for (int i = texts.count-1; i > 0; i --)
                 {
-                    if ( [url hasPrefix:@"http://"] != TRUE)
+                    url =(NSString *) [texts objectAtIndex:i];
+                    if ((url != nil) &&
+                        [url hasPrefix:@"http://"] == TRUE)
                     {
-                        url  = [NSString stringWithFormat:@"http://%@", url];
+                        found = TRUE;
+                        break;
                     }
-                    
-                    
-                    NSLog(@"final url:%@ ",url);
+                }
+                
+                if (url != nil && found == TRUE)
+                {
+                    NSLog(@"server url:%@ ",url);
                     
                     NSURL *ns_url = [NSURL URLWithString:url];
                     

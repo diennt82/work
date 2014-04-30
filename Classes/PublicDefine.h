@@ -163,7 +163,7 @@
 #define CUE_RELEASE_FLAG 1
 
 // Alert type
-#define ALERT_GENERIC_SERVER_INFO @"0"
+#define ALERT_GENERIC_SERVER_INFO @"999999"
 #define  ALERT_TYPE_SOUND    @"1"
 #define  ALERT_TYPE_TEMP_HI  @"2"
 #define  ALERT_TYPE_TEMP_LO @"3"
