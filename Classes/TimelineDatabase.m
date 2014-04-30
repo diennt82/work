@@ -147,6 +147,7 @@ static TimelineDatabase *sharedInstance = nil;
                 int event_unix_ts = sqlite3_column_int(statement,6);
                 char * event_data = (char *)sqlite3_column_text(statement, 7);
                 
+                NSLog(@"%s: event_unix_ts: %d", __FUNCTION__, event_unix_ts);
                 
                 EventInfo *eventInfo = [[EventInfo alloc] init];
                 eventInfo.alert_name = [[NSString alloc] initWithUTF8String:event_alert_name];
@@ -212,6 +213,42 @@ static TimelineDatabase *sharedInstance = nil;
     return retval;
 }
 
+- (BOOL)deleteEventsForCamera:(NSString *)camera_udid limitedDate: (NSInteger )limitedDate
+{
+    sqlite3 * database;
+    const char *dbpath = [self.databasePath UTF8String];
+    
+    if (sqlite3_open(dbpath, &database) == SQLITE_OK)
+    {
+        NSString *delSQL = [NSString stringWithFormat:@"delete from  camera_events where camera_udid='%@' AND event_ts < %d", camera_udid, limitedDate];
+        
+        const char * stmt = [delSQL UTF8String];
+        
+        NSLog(@"statement: %s, %d", stmt, limitedDate);
+        
+        sqlite3_stmt * statement ;
+        
+        if (sqlite3_prepare_v2(database, stmt, -1, &statement, NULL) == SQLITE_OK)
+        {
+            int ret =sqlite3_step(statement);
+            
+            if ( ret != SQLITE_DONE)
+            {
+                NSLog(@"remove events to database error : %d", ret);
+            }
+            else
+            {
+                NSLog(@"remove events to database OK");
+            }
+            
+            sqlite3_reset(statement);
+        }
+    }
+    
+    sqlite3_close(database);
+    
+    return FALSE;
+}
 
 -(void) clearEventForUserName:(NSString*) username
 {

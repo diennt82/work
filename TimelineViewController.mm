@@ -202,9 +202,22 @@
     
     self.hasUpdate = NO;
     
+    NSCalendar *cal = [NSCalendar currentCalendar];
+    NSDateComponents *components = [cal components:( NSHourCalendarUnit | NSMinuteCalendarUnit | NSSecondCalendarUnit ) fromDate:_currentDate];
+    
+    [components setHour:-24];
+    [components setMinute:0];
+    [components setSecond:0];
+    
+    NSDate *yesterday = [cal dateByAddingComponents:components toDate: _currentDate options:0];
+    
+    NSInteger limitedDate = [yesterday timeIntervalSince1970];
+    
+    [[TimelineDatabase getSharedInstance] deleteEventsForCamera:camChannel.profile.registrationID limitedDate:limitedDate];
+    
     self.events =[[TimelineDatabase getSharedInstance] getEventsForCamera:camChannel.profile.registrationID];
     
-    NSLog(@"There are %d in databases",self.events.count );
+    NSLog(@"There are %d in databases", self.events.count );
     if (self.events.count ==0)
     {
         self.isEventAlready = TRUE;

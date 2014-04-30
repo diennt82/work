@@ -1046,7 +1046,7 @@ double _ticks = 0;
     {
         [_audioOutStreamRemote disconnectFromAudioSocket];
     }
-#if 0
+
     if (self.currentMediaStatus == MEDIA_INFO_HAS_FIRST_IMAGE ||
         self.currentMediaStatus == MEDIA_PLAYER_STARTED ||
         (self.currentMediaStatus == 0 && h264Streamer == NULL)) // Media player haven't start yet.
@@ -1057,7 +1057,6 @@ double _ticks = 0;
     {
         h264Streamer->sendInterrupt(); // Assuming h264Streamer stop itself.
     }
-#endif
 }
 
 #pragma mak - Delegate Melody
