@@ -12,7 +12,7 @@
 
 #include "PlaybackListener.h"
 #import "define.h"
-
+#import "NotifViewController.h"
 
 #define START 0
 #define END   100.0
@@ -87,7 +87,7 @@
 {
     NSLog(@"Single tap singleTapGestureCaptured");
     _isHorizeShow = !_isHorizeShow;
-
+    
     {
         if (_isHorizeShow == TRUE)
         {
@@ -103,9 +103,9 @@
 - (void)hideControlMenu
 {
     _isHorizeShow = NO;
-//    [self.ib_viewControlPlayer setHidden:YES];
+    //    [self.ib_viewControlPlayer setHidden:YES];
     [self.ib_viewOverlayVideo setHidden:YES];
-//    [self.ib_closePlayBack setHidden:YES];
+    //    [self.ib_closePlayBack setHidden:YES];
 }
 
 - (void)showControlMenu
@@ -134,10 +134,10 @@
 #if 0 // TEST Multiple clips
     self.urlVideo = @"http://nxcomm:2013nxcomm@nxcomm-office.no-ip.info/app_release/sub_clips/48022A2CAC31_04_20130917065256730_00001.flv";
     listener = new PlaybackListener(self);
-        //hardcode some data for test now:
+    //hardcode some data for test now:
     self.clips = nil;
     self.clips = [[NSMutableArray alloc] init];
-        self.clips = [NSMutableArray arrayWithObjects:
+    self.clips = [NSMutableArray arrayWithObjects:
                   @"http://nxcomm:2013nxcomm@nxcomm-office.no-ip.info/app_release/sub_clips/48022A2CAC31_04_20130917065256730_00001.flv",
                   @"http://nxcomm:2013nxcomm@nxcomm-office.no-ip.info/app_release/sub_clips/48022A2CAC31_04_20130917065256730_00002.flv",
                   @"http://nxcomm:2013nxcomm@nxcomm-office.no-ip.info/app_release/sub_clips/48022A2CAC31_04_20130917065256730_00003.flv",
@@ -146,7 +146,7 @@
     listener->updateClips(self.clips);
     listener->updateFinalClipCount(self.clips.count);
 #else
-
+    
     
     _clips = [[NSMutableArray alloc]init];
     //Decide whether or not to start the background polling
@@ -301,7 +301,7 @@
             _playbackStreamer->setListener(nil);
             
             
-                        
+            
             delete _playbackStreamer;
             
             _playbackStreamer = NULL;
@@ -406,8 +406,22 @@
     {
         [self.list_refresher invalidate];
     }
-    
-    [self dismissViewControllerAnimated:YES completion:nil];
+    if (self.navigationController != nil)
+    {
+        NSLog(@"Playback with nav controller pop all");
+        [[UIApplication sharedApplication] setStatusBarHidden:NO
+                                                withAnimation:UIStatusBarAnimationNone];
+        
+        NotifViewController * vc = [self.navigationController.viewControllers objectAtIndex:0];
+        [self.navigationController popToRootViewControllerAnimated:NO];
+        [vc ignoreTouchAction:nil];
+
+    }
+    else
+    {
+        NSLog(@"Playback no nav controller");
+        [self dismissViewControllerAnimated:YES completion:nil];
+    }
     
 }
 
@@ -478,7 +492,7 @@
         if (isiPhone5 || isiPhone4)
         {
             [self.imageVideo setFrame:CGRectMake(0, 0, SCREEN_HEIGHT,SCREEN_WIDTH)];
-
+            
             [self.ib_viewControlPlayer setFrame:CGRectMake(0, SCREEN_WIDTH - HEIGHT_BG_CONTROL, SCREEN_HEIGHT, HEIGHT_BG_CONTROL)];
             [self.ib_sliderPlayBack setFrame:CGRectMake(40, 5, 840/2, HEIGHT_SLIDER_DEFAULT)];
             [self.ib_closePlayBack setFrame:CGRectMake(10, 10, 33, 33)];
@@ -578,14 +592,14 @@
      then
      switch it to portrait
      */
-     float delta;
-        delta = (SCREEN_HEIGHT - SCREEN_WIDTH);
+    float delta;
+    delta = (SCREEN_HEIGHT - SCREEN_WIDTH);
     [[self view] setBounds:CGRectMake(0, 0, SCREEN_HEIGHT, SCREEN_HEIGHT)];
     
     if (isPhoneLandscapeMode)
     {
         NSLog(@"Phone at landscape mode");
-//        auto rotate phone
+        //        auto rotate phone
         [[UIApplication sharedApplication] setStatusBarOrientation:UIInterfaceOrientationPortrait];
         self.view.layer.position = CGPointMake(SCREEN_HEIGHT/2.0,SCREEN_HEIGHT/2.0);
         static NSTimeInterval animationDuration = 0.3;
@@ -649,11 +663,11 @@
     }
     else
     {
-//        NSLog(@"Not Playing");
-//        
-//        _playbackStreamer -> start();
+        //        NSLog(@"Not Playing");
+        //
+        //        _playbackStreamer -> start();
         
-      //  [self.ib_playPlayBack setImage:[UIImage imageVideoPause] forState:UIControlStateNormal];
+        //  [self.ib_playPlayBack setImage:[UIImage imageVideoPause] forState:UIControlStateNormal];
     }
     [self checkOrientation];
 }
@@ -703,13 +717,13 @@
 
 -(void) getCameraPlaylistForEvent:(NSTimer *) clipTimer
 {
-
+    
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-
+    
     BMS_JSON_Communication *jsonComm = [[BMS_JSON_Communication alloc] initWithObject:self
-                                                     Selector:nil
-                                                 FailSelector:nil
-                                                    ServerErr:nil];
+                                                                             Selector:nil
+                                                                         FailSelector:nil
+                                                                            ServerErr:nil];
     
     NSString *mac = clip_info.mac_addr;
     

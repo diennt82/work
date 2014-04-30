@@ -26,4 +26,7 @@
 @property (nonatomic, retain)     NSString * server_url;
 @property (nonatomic, retain)     NSString * registrationID;
 
+
+- (IBAction)ignoreTouchAction:(id)sender;
+
 @end

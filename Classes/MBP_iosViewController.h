@@ -42,6 +42,8 @@
 #define ALERT_PUSH_RECVED_RESCAN_AFTER  200
 #define ALERT_PUSH_RECVED_RELOGIN_AFTER 201
 #define ALERT_PUSH_SERVER_ANNOUNCEMENT  203
+#define ALERT_PUSH_RECVED_NON_MOTION    204
+
 
 
 #define _triggeredByVox @"bool_Vox_Trigger"
@@ -53,7 +55,7 @@
 #define APP_STAGE_SETUP         4
 
 
-
+#define STAY_AT_CAMERA_LIST 0xcabe
 
 
 
@@ -146,12 +148,13 @@
 
 - (BOOL) restoreConfigData;
 
--(void) startShowingCameraList;
+-(void) startShowingCameraList:(NSNumber *) option;
 
 //delegate
 
 - (void)sendStatus:(int) status;
 
 -(BOOL) pushNotificationRcvedInForeground:(CameraAlert *) camAlert;
+-(BOOL) pushNotificationRcvedServerAnnouncement:(NSString *) custom_message andUrl:(NSString *) custom_url;
 @end
 

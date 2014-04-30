@@ -30,6 +30,7 @@
 @property (nonatomic, retain) NSMutableArray *cameras;
 @property (retain, nonatomic) CamerasViewController* camerasVC;
 @property (nonatomic) BOOL notUpdateCameras;
+@property (nonatomic) BOOL isFirttime;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
      withConnDelegate:(id<ConnectionMethodDelegate> ) caller;

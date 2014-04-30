@@ -153,6 +153,7 @@
 #define _AutoLogin @"shouldAutoLoginIfPossible"
 
 #define CAM_IN_VEW      @"string_Camera_Mac_Being_Viewed"
+#define HANDLE_PN @"HANDLE_PN_NOW"
 
 #define FW_MILESTONE @"01.12.58"
 #define FW_MILESTONE_F66_NEW_FLOW @"01.12.82"
@@ -163,7 +164,7 @@
 #define CUE_RELEASE_FLAG 1
 
 // Alert type
-#define ALERT_GENERIC_SERVER_INFO @"0"
+#define ALERT_GENERIC_SERVER_INFO @"999999"
 #define  ALERT_TYPE_SOUND    @"1"
 #define  ALERT_TYPE_TEMP_HI  @"2"
 #define  ALERT_TYPE_TEMP_LO @"3"

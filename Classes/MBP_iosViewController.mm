@@ -42,8 +42,8 @@
 @synthesize bc_addr,own_addr;
 
 
-@synthesize channel_array; 
-@synthesize restored_profiles ; 
+@synthesize channel_array;
+@synthesize restored_profiles ;
 
 @synthesize progressView;
 
@@ -55,7 +55,8 @@
 	self.recordInProgress = NO;
 	//self.app_stage = APP_STAGE_INIT;
     self.app_stage = APP_STAGE_LOGGING_IN;
-
+    
+    
     CFBundleRef mainbundle = CFBundleGetMainBundle();
     CFURLRef soundFileURLRef = CFBundleCopyResourceURL(mainbundle, CFSTR("Voicemail"), CFSTR("aif"), NULL);
     AudioServicesCreateSystemSoundID(soundFileURLRef, &soundFileObject);
@@ -66,23 +67,23 @@
 /**/
 // Implement viewDidLoad to do additional setup after loading the view, typically from a nib.
 - (void)viewDidLoad {
-
+    
 	[super viewDidLoad];
-
+    
     //self.navigationController.navigationBarHidden = YES;
-
+    
 	[self initialize];
-
-
+    
+    
 	//go Back to main menu
 	[NSTimer scheduledTimerWithTimeInterval:2
-		target:self
-		selector:@selector(wakeup_display_login:)
-		userInfo:nil
-		repeats:NO];
-
+                                     target:self
+                                   selector:@selector(wakeup_display_login:)
+                                   userInfo:nil
+                                    repeats:NO];
+    
     UIInterfaceOrientation interfaceOrientation = [UIApplication sharedApplication].statusBarOrientation;
-//    [self adjustViewsForOrientations:interfaceOrientation];
+    //    [self adjustViewsForOrientations:interfaceOrientation];
     
     [self start_animation_with_orientation:interfaceOrientation];
     
@@ -92,7 +93,7 @@
 -(void) viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-
+    
     if (_splashScreen != nil)
     {
         [_splashScreen startAnimating];
@@ -128,7 +129,7 @@
 
 -(void)start_animation_with_orientation :(UIInterfaceOrientation) orientation
 {
-
+    
     self.splashScreen.animationImages =[NSArray arrayWithObjects:
                                         [UIImage imageNamed:@"loader_a"],
                                         [UIImage imageNamed:@"loader_b"],
@@ -140,13 +141,13 @@
     self.splashScreen.animationDuration = 1.5;
     self.splashScreen.animationRepeatCount = 0;
     
-//    [_splashScreen startAnimating];
+    //    [_splashScreen startAnimating];
 }
 
 
 - (void)wakeup_start_animte:(NSTimer*) timer_exp
 {
-
+    
     NSLog(@"is animating? %d", [self.splashScreen isAnimating]);
     
     NSLog(@"animating images == nil? %d", (self.splashScreen.animationImages == nil));
@@ -156,13 +157,13 @@
 }
 
 - (void)wakeup_display_login:(NSTimer*) timer_exp
-{    
+{
 #if 0
     NSLog(@">>> DBG PLAYER  ");
     PlaybackViewController *playbackViewController = [[PlaybackViewController alloc] init];
     //playbackViewController.urlVideo = @"http://nxcomm:2009nxcomm@nxcomm-office.no-ip.info/app_release/sub_clips/48022A2CAC31_04_20130917065256730_00001.flv";
     
-    playbackViewController.urlVideo = @"http://s3.amazonaws.com/sm.wowza.content/48022A2CAC31/clips/48022A2CAC31_04_20130918083756010_00001_last.flv?AWSAccessKeyId=AKIAIDBFDZTAR2EB4KPQ&Expires=1379501535&Signature=m%2FGcG%2BOh8wlwXcWqkiw%2BztAqAn8%3D"; 
+    playbackViewController.urlVideo = @"http://s3.amazonaws.com/sm.wowza.content/48022A2CAC31/clips/48022A2CAC31_04_20130918083756010_00001_last.flv?AWSAccessKeyId=AKIAIDBFDZTAR2EB4KPQ&Expires=1379501535&Signature=m%2FGcG%2BOh8wlwXcWqkiw%2BztAqAn8%3D";
     
     //[playbackViewController autorelease];
     
@@ -186,7 +187,7 @@
 #else
     
 	//hide splash screen page
-     //backgroundView.hidden = NO;
+    //backgroundView.hidden = NO;
     //[self.view bringSubviewToFront:backgroundView];
     //load user/pass
 	NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
@@ -217,7 +218,7 @@
     
 }
 
--(void) startShowingCameraList
+-(void) startShowingCameraList:(NSNumber *) option
 {
     if (_menuVC)
     {
@@ -230,7 +231,7 @@
                                              withConnDelegate:self];
     
 	NSMutableArray * validChannels = [[NSMutableArray alloc]init ];
-
+    
 	for (int i = channel_array.count - 1 ; i > -1; i--)
 	{
 		CamChannel * ch = [channel_array objectAtIndex:i];
@@ -238,13 +239,17 @@
         {
 			[validChannels addObject:[channel_array objectAtIndex:i]];
         }
-
+        
 	}
-
+    
+    if (option != nil && [option intValue] == STAY_AT_CAMERA_LIST)
+    {
+        self.menuVC.isFirttime = TRUE;
+    }
+    
 	self.menuVC.cameras = validChannels;
     self.menuVC.camerasVC.camChannels = validChannels;
-
-//    sendStatus *nav = [[UINavigationController alloc] initWithRootViewController:self.menuVC];
+    
     EarlierNavigationController *nav = [[EarlierNavigationController alloc] initWithRootViewController:self.menuVC];
     [_menuVC release];
     assert(nav != nil);
@@ -257,22 +262,21 @@
         [self presentViewController:nav animated:NO completion:nil];
     }
     
-	//[self presentViewController:nav animated:NO completion:^{}];
     
-    NSLog(@"MBP_iosVC - startShowingCameraList: %p, %p, %@", self, self.menuVC.menuDelegate, self.presentingViewController.description);
-
+    NSLog(@"MBP_iosVC - Showing cameralist?  %d", self.menuVC.isFirttime);
+    
     [validChannels release];
 }
 
 
 
 /*
-// Override to allow orientations other than the default portrait orientation.
-  */
- - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
-
+ // Override to allow orientations other than the default portrait orientation.
+ */
+- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
+    
 	return NO;
-
+    
 }
 
 - (BOOL) shouldAutorotate
@@ -290,7 +294,7 @@
 - (void)didReceiveMemoryWarning {
 	// Releases the view if it doesn't have a superview.
 	[super didReceiveMemoryWarning];
-
+    
 	// Release any cached data, images, etc that aren't in use.
 }
 
@@ -301,24 +305,24 @@
 
 
 - (void)dealloc {
-
+    
 	// [mainMenuView release];
     [_bonjourBrowser release];
     [_splashScreen release];
 	[bc_addr release];
 	[own_addr release];
-
-	[channel_array release]; 
+    
+	[channel_array release];
 	[restored_profiles release];
-
+    
     [bonjourThread release];
 	[super dealloc];
 }
 
 #pragma mark -
-#pragma mark ConnectionMethodDelegate - Views navigation 
+#pragma mark ConnectionMethodDelegate - Views navigation
 
-/**** Main program switching point is here *****/ 
+/**** Main program switching point is here *****/
 - (void)sendStatus:(int) method
 {
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
@@ -386,87 +390,87 @@
 		case SCAN_CAMERA:
         {
 			//may be offline mode
-            NSLog(@"start scanning"); 
+            NSLog(@"start scanning");
             statusDialogLabel.hidden = NO;
 			self.app_stage = APP_STAGE_LOGGED_IN;
-
+            
             isRebinded = [self rebindCameraResource];
 			[self performSelector:@selector(scan_for_devices)
                        withObject:nil
                        afterDelay:0.1];
-
-			//Back from login- login success 
+            
+			//Back from login- login success
 			[self dismissViewControllerAnimated:NO completion:nil];
 			self.progressView.hidden = NO;
         }
 			break;
-
+            
 		case AFTER_ADD_RELOGIN:
-			{
-				NSLog(@" back from adding cam. relogin -- to get the new cam data");
-
-				[userDefaults setBool:TRUE forKey:_AutoLogin];
-				[userDefaults synchronize];
-
-				[NSTimer scheduledTimerWithTimeInterval:0.01
-					target:self
-					selector:@selector(show_login_or_reg:)
-					userInfo:nil
-					repeats:NO];
-
-				break; 
-			}
-		case AFTER_DEL_RELOGIN: //Just remove camera, currently in CameraMenu page 
-			{
-
-                statusDialogLabel.hidden = YES;
-
-				[userDefaults setBool:TRUE forKey:_AutoLogin];
-				[userDefaults synchronize];
-
-				[NSTimer scheduledTimerWithTimeInterval:2.0
-					target:self
-					selector:@selector(show_login_or_reg:)
-					userInfo:nil
-					repeats:NO];
-
-				break;
-			}
+        {
+            NSLog(@" back from adding cam. relogin -- to get the new cam data");
+            
+            [userDefaults setBool:TRUE forKey:_AutoLogin];
+            [userDefaults synchronize];
+            
+            [NSTimer scheduledTimerWithTimeInterval:0.01
+                                             target:self
+                                           selector:@selector(show_login_or_reg:)
+                                           userInfo:nil
+                                            repeats:NO];
+            
+            break;
+        }
+		case AFTER_DEL_RELOGIN: //Just remove camera, currently in CameraMenu page
+        {
+            
+            statusDialogLabel.hidden = YES;
+            
+            [userDefaults setBool:TRUE forKey:_AutoLogin];
+            [userDefaults synchronize];
+            
+            [NSTimer scheduledTimerWithTimeInterval:2.0
+                                             target:self
+                                           selector:@selector(show_login_or_reg:)
+                                           userInfo:nil
+                                            repeats:NO];
+            
+            break;
+        }
 		case  BACK_FRM_MENU_NOLOAD: //USED by AppDelegate as well.. please check if modifying this case
-			{
-				NSLog(@"Back from menu");
-                statusDialogLabel.hidden = YES;
-				//[self dismissViewControllerAnimated:NO completion:nil];
-                
-                if (self.presentedViewController)
-                {
-                    [self dismissViewControllerAnimated:NO completion:^{}];
-                }
-                
-				break;
-			}
+        {
+            NSLog(@"Back from menu");
+            statusDialogLabel.hidden = YES;
+            //[self dismissViewControllerAnimated:NO completion:nil];
+            
+            if (self.presentedViewController)
+            {
+                [self dismissViewControllerAnimated:NO completion:^{}];
+            }
+            
+            break;
+        }
             
 		case  LOGGING_IN:
-			{
-				self.app_stage = APP_STAGE_LOGGING_IN;
-
-                [userDefaults setBool:FALSE forKey:_AutoLogin];
-                [userDefaults synchronize];
-                
-                [self show_login_or_reg:nil];
-			}
+        {
+            self.app_stage = APP_STAGE_LOGGING_IN;
+            
+            [userDefaults setBool:FALSE forKey:_AutoLogin];
+            [userDefaults synchronize];
+            
+            [self show_login_or_reg:nil];
+        }
             break;
             
 		case LOGIN_FAILED_OR_LOGOUT : //back from login -failed Or logout
-			{
-                statusDialogLabel.hidden = YES;
-				//[self dismissViewControllerAnimated:NO completion:nil];
-                self.app_stage = APP_STAGE_LOGGING_IN;
-                
-                [self performSelectorInBackground:@selector(logoutAndUnregistration_bg) withObject:nil];
+        {
+            statusDialogLabel.hidden = YES;
+            //[self dismissViewControllerAnimated:NO completion:nil];
+            self.app_stage = APP_STAGE_LOGGING_IN;
+            
+            [self performSelectorInBackground:@selector(logoutAndUnregistration_bg) withObject:nil];
 			
-				break;
-			}
+            break;
+        }
             
         case SCAN_BONJOUR_CAMERA :
         {
@@ -489,23 +493,39 @@
             //Back from login- login success
             //[self dismissViewControllerAnimated:NO completion:^{}];
             self.progressView.hidden = NO;
-
-
+            
+            
             
             break;
         }
             
-        case SHOW_CAMERA_LIST:
+        case SHOW_CAMERA_LIST: // This  will actually switch to the selected camera
         {
             self.app_stage = APP_STAGE_LOGGED_IN;
             isRebinded = [self rebindCameraResource];
-            [self performSelectorOnMainThread:@selector(startShowingCameraList) withObject:nil waitUntilDone:NO];
+            
+            [self performSelectorOnMainThread:@selector(startShowingCameraList:)
+                                   withObject:[NSNumber numberWithInt:0]
+                                waitUntilDone:NO];
         }
             break;
+            
+        case SHOW_CAMERA_LIST2:// Use this to force staying at camera list
+        {
+            self.app_stage = APP_STAGE_LOGGED_IN;
+            isRebinded = [self rebindCameraResource];
+            
+            [self performSelectorOnMainThread:@selector(startShowingCameraList:)
+                                   withObject:[NSNumber numberWithInt:STAY_AT_CAMERA_LIST]
+                                waitUntilDone:NO];
+            
+            break;
+        }
+            
 		default:
 			break;
 	}
-
+    
 }
 
 - (void)createAccount
@@ -592,8 +612,6 @@
             bonjourThread = [[NSThread alloc] initWithTarget:self selector:@selector(scan_with_bonjour) object:nil];
             [bonjourThread start];
         }
-        
-//        [self startShowingCameraList];
     }
 }
 
@@ -621,22 +639,22 @@
 
 - (BOOL) isThisMacStoredOffline:(NSString*) mac_without_colon
 {
-
+    
 	if (self.restored_profiles == nil &&
-			self.channel_array == nil)
+        self.channel_array == nil)
 	{
 		// No offline data is available --> force re login
 		return FALSE;
-
+        
 	}
-
-
+    
+    
 	CamProfile * cp = nil;
 	for (int i =0; i< [self.restored_profiles count]; i++)
 	{
 		cp = (CamProfile *) [self.restored_profiles objectAtIndex:i];
 		if (cp!= nil &&
-				cp.mac_address != nil )
+            cp.mac_address != nil )
 		{
 			NSString *  mac_wo_colon = [Util strip_colon_fr_mac:cp.mac_address];
 			if ([mac_wo_colon isEqualToString:mac_without_colon])
@@ -644,61 +662,58 @@
 				return TRUE;
 			}
 		}
-
+        
 	}
-
-	return FALSE; 
+    
+	return FALSE;
 }
 
 
--(BOOL) isServerAnnouncement: (CameraAlert *) camAlert
+
+-(BOOL) pushNotificationRcvedServerAnnouncement:(NSString *) custom_message andUrl:(NSString *) custom_url
 {
-    if ( [camAlert.alertType isEqualToString:ALERT_GENERIC_SERVER_INFO]  )
-    {
-        
-        return TRUE;
-    }
     
-    return FALSE;
+    NSString * title = NSLocalizedStringWithDefaultValue(@"Server_Announcement",nil, [NSBundle mainBundle],
+                                                         @"Server Announcement", nil);
+    
+    NSString * ignore = NSLocalizedStringWithDefaultValue(@"close",nil, [NSBundle mainBundle],
+                                                          @"Close", nil);
+    
+    NSString * details = NSLocalizedStringWithDefaultValue(@"detail",nil, [NSBundle mainBundle],
+                                                           @"Detail", nil);
+    
+    NSString * msg =[ NSString stringWithFormat:@"%@ %@",custom_message,custom_url];
+    
+    pushAlert = [[AlertPrompt alloc]
+                 initWithTitle:title
+                 message:msg
+                 delegate:self
+                 cancelButtonTitle:ignore
+                 otherButtonTitles:details, nil];
+    
+    
+    pushAlert.tag = ALERT_PUSH_SERVER_ANNOUNCEMENT;
+    
+    [self playSound];
+    [pushAlert show];
+    
+    
+    return TRUE;
 }
 
 
 -(BOOL) pushNotificationRcvedInForeground:(CameraAlert *) camAlert
 {
-    // IF this is just a server announcement - Dont do anything -
-    if ([self isServerAnnouncement:camAlert])
-    {
-        NSString * ignore = NSLocalizedStringWithDefaultValue(@"close",nil, [NSBundle mainBundle],
-                                                              @"Close", nil);
-        
-        NSString * details = NSLocalizedStringWithDefaultValue(@"detail",nil, [NSBundle mainBundle],
-                                                              @"Detail", nil);
-
-        NSString * msg = camAlert.alertVal;
-
-        pushAlert = [[AlertPrompt alloc]
-                     initWithTitle:camAlert.cameraName
-                     message:msg
-                     delegate:self
-                     cancelButtonTitle:ignore
-                     otherButtonTitles:details, nil];
-        ((AlertPrompt*)pushAlert).otherInfo = camAlert.server_url;
-        
-        pushAlert.tag = ALERT_PUSH_SERVER_ANNOUNCEMENT;
-        
-        [self playSound];
-        [pushAlert show];
-
-        return FALSE ;
-    }
     
     //Check if we should popup
 	NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
 	//mac with COLON
 	NSString * camInView = (NSString*)[userDefaults objectForKey:CAM_IN_VEW];
     
-    NSLog(@"camInView: %@", camInView);
+    NSLog(@"camInView: %@ camAlert.cameraMacNoColon:%@", camInView,camAlert.cameraMacNoColon);
 	
+    
+    
     if (camInView != nil)
 	{
 		if ( [[Util strip_colon_fr_mac:camInView] isEqualToString:camAlert.cameraMacNoColon])
@@ -714,6 +729,8 @@
         NSLog(@"APP_STAGE_SETUP. Don't popup!");
         return FALSE;
     }
+    
+    NSLog(@"latestCamAlert is: %@", latestCamAlert);
     
     if (latestCamAlert != nil &&
         [latestCamAlert.cameraMacNoColon  isEqualToString:camAlert.cameraMacNoColon])
@@ -738,13 +755,16 @@
                 
             }
             
-             return FALSE;
+            return FALSE;
         }
     }
-
+    
+    NSLog(@"camAlert : %@",camAlert);
+    
     NSString * msg = NSLocalizedStringWithDefaultValue(@"Sound_detected",nil, [NSBundle mainBundle],
                                                        @"Sound detected", nil);
-
+    NSString * msg2= NSLocalizedStringWithDefaultValue(@"Go_to_camera",nil, [NSBundle mainBundle],
+                                                       @"Go to camera", nil);
     if ( [camAlert.alertType isEqualToString:ALERT_TYPE_TEMP_HI]  )
     {
         msg =NSLocalizedStringWithDefaultValue( @"Temperature_too_high",nil, [NSBundle mainBundle],
@@ -759,14 +779,17 @@
     {
         msg =NSLocalizedStringWithDefaultValue( @"Motion Detected",nil, [NSBundle mainBundle],
                                                @"Motion Detected", nil);
+        msg2 = NSLocalizedStringWithDefaultValue(@"View_snapshot",nil, [NSBundle mainBundle],
+                                                 @"View Snapshot", nil);
     }
     
     
     NSString * cancel = NSLocalizedStringWithDefaultValue(@"Cancel",nil, [NSBundle mainBundle],
                                                           @"Cancel", nil);
     
-    NSString * msg2 = NSLocalizedStringWithDefaultValue(@"View_snapshot",nil, [NSBundle mainBundle],
-                                                        @"View Snapshot", nil);
+    
+    
+    NSLog(@"pushAlert : %@",pushAlert);
     
     if (pushAlert != nil )
     {
@@ -777,7 +800,7 @@
         
         [pushAlert release];
     }
-
+    
     pushAlert = [[UIAlertView alloc]
                  initWithTitle:camAlert.cameraName
                  message:msg
@@ -788,8 +811,12 @@
     //if ([self isThisMacStoredOffline:camAlert.cameraMacNoColon])
     {
         
-        pushAlert.tag = ALERT_PUSH_RECVED_RESCAN_AFTER;
+        pushAlert.tag = ALERT_PUSH_RECVED_NON_MOTION;
         
+        if([camAlert.alertType isEqualToString:ALERT_TYPE_MOTION])
+        {
+            pushAlert.tag = ALERT_PUSH_RECVED_RESCAN_AFTER;
+        }
         
         
     }
@@ -812,11 +839,14 @@
         latestCamAlert = camAlert;
         
     }
-    
+    NSLog(@"play sound");
     [self playSound];
     
+    
+    NSLog(@"show  alert");
+    
     [pushAlert show];
-
+    
 	return TRUE;
 }
 
@@ -906,6 +936,71 @@
 {
 	int tag = alertView.tag ;
     
+    if (tag == ALERT_PUSH_RECVED_NON_MOTION)
+    {
+        switch(buttonIndex)
+        {
+			case 0:
+                [pushAlert release];
+                pushAlert = nil;
+				break;
+			case 1:
+            {
+                
+				if (_menuVC != nil)
+				{
+					
+                    
+					NSArray * views = _menuVC.navigationController.viewControllers;
+					NSLog(@"views count = %d",[views count] );
+					if ( [views count] > 1)
+					{
+                        if (views.count > 2)
+                        {
+                            id obj2 = [views objectAtIndex:2];
+                            
+                            if ([obj2 isKindOfClass:[PlaybackViewController class]])
+                            {
+                                PlaybackViewController *playbackViewController = (PlaybackViewController *)obj2;
+                                [playbackViewController stopStream:nil];
+                            }
+                        }
+                        
+                        id obj = [views objectAtIndex:1];
+                        
+                        if ([obj isKindOfClass:[H264PlayerViewController class]])
+                        {
+                            H264PlayerViewController * h264PlayerViewController = (H264PlayerViewController *) obj;
+                            [h264PlayerViewController goBackToCameraList];
+                        }
+					}
+                    
+                    [_menuVC dismissViewControllerAnimated:NO completion:^{}];
+				}
+                
+                NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+                [userDefaults setObject:latestCamAlert.registrationID forKey:REG_ID];
+                [userDefaults synchronize];
+                
+                
+                [self sendStatus:SHOW_CAMERA_LIST];
+                [latestCamAlert release];
+                latestCamAlert = nil;
+                
+                
+                
+                [pushAlert release];
+                pushAlert = nil;
+                
+                
+                
+				break;
+            }
+			default:
+				break;
+                
+		}
+    }
 	if (tag == ALERT_PUSH_RECVED_RESCAN_AFTER)
 	{
 		switch(buttonIndex)
@@ -948,9 +1043,9 @@
 				}
                 
 				//[self dismissViewControllerAnimated:NO completion:nil];
-
+                
                 NotifViewController *notifVC = [[NotifViewController alloc] init];
-
+                
                 @synchronized(self)
                 {
                     
@@ -960,7 +1055,7 @@
                     notifVC.alertType   = latestCamAlert.alertType;//@"4";//latestCamAlert.alertType;
                     notifVC.alertVal    = latestCamAlert.alertVal;//@"20130921064439810";//latestCamAlert.alertVal;
                     notifVC.registrationID = latestCamAlert.registrationID;
-                    
+                    notifVC.alertTime = latestCamAlert.alertTime;
                     notifVC.NotifDelegate = self;
                     
                     [latestCamAlert release];
@@ -1041,18 +1136,23 @@
 			case 1://Detail
             {
                 // Open the web browser now..
-                NSString * url =  ((AlertPrompt*)alertView).otherInfo;
-                
-                
-                if (url != nil)
+                NSArray * texts = [alertView.message componentsSeparatedByString:@" "];
+                NSString * url = nil;
+                BOOL found = FALSE;
+                for (int i = texts.count-1; i > 0; i --)
                 {
-                    if ( [url hasPrefix:@"http://"] != TRUE)
+                    url =(NSString *) [texts objectAtIndex:i];
+                    if ((url != nil) &&
+                        [url hasPrefix:@"http://"] == TRUE)
                     {
-                        url  = [NSString stringWithFormat:@"http://%@", url];
+                        found = TRUE;
+                        break;
                     }
-                    
-                    
-                    NSLog(@"final url:%@ ",url);
+                }
+                
+                if (url != nil && found == TRUE)
+                {
+                    NSLog(@"server url:%@ ",url);
                     
                     NSURL *ns_url = [NSURL URLWithString:url];
                     
@@ -1097,8 +1197,10 @@
             [self scan_next_camera:self.restored_profiles index:nextCameraToScanIndex];
             
         }
-      
-        [self performSelectorOnMainThread:@selector(startShowingCameraList) withObject:nil waitUntilDone:NO];
+        
+        [self performSelectorOnMainThread:@selector(startShowingCameraList:)
+                               withObject:[NSNumber numberWithInt:0]
+                            waitUntilDone:NO];
     }
 }
 
@@ -1108,9 +1210,9 @@
     CamProfile * cp = nil;
     
     BOOL skipScan = FALSE;
-
+    
     cp =(CamProfile *) [profiles objectAtIndex:i];
-        
+    
     if (cp != nil &&
         cp.mac_address !=nil)
     {
@@ -1159,7 +1261,7 @@
     //limit value of nextCameraToScanIndex
     if (nextCameraToScanIndex < 0)
         return;
-     CamProfile * cp =(CamProfile *) [self.restored_profiles objectAtIndex:nextCameraToScanIndex];
+    CamProfile * cp =(CamProfile *) [self.restored_profiles objectAtIndex:nextCameraToScanIndex];
     //scan Done. read scan result
     
     
@@ -1170,13 +1272,13 @@
         //Dont add to the final result
         cp.isInLocal = FALSE;
         //cp.hasUpdateLocalStatus = TRUE;
-       
+        
     }
     else
     {
         //found the camera ..
         // --> update local IP and other info
-       
+        
         CamProfile* scanned;
         for (int i=0 ; i< [_scan_results count]; i++)
         {
@@ -1194,7 +1296,7 @@
             
         }
     }
-
+    
     NSLog(@"cam:%@ -is in Local:%d -fw:%@", cp.mac_address, cp.isInLocal, cp.fw_version);
     --nextCameraToScanIndex;
     [self scanNextIndex:&nextCameraToScanIndex]; // Sync results of ipserver & bonjour
@@ -1206,7 +1308,6 @@
     if (*index == -1)
     {
         NSLog(@"Scan done with ipserver");
-//        [self startShowingCameraList];
         NSDate * endDate = [NSDate dateWithTimeIntervalSinceNow:0.5];
         while ([bonjourThread isExecuting])
         {
@@ -1214,7 +1315,7 @@
         }
         
         NSLog(@"\n=================================\nSCAN DONE - IPSERVER SYNC BONJOUR\nrestored_profiles: %@\nbonjourList: %@\n=================================\n", restored_profiles, bonjourList);
-
+        
         if(bonjourList && [bonjourList count] != 0)
         {
             for (CamProfile * cp in restored_profiles)
@@ -1236,7 +1337,7 @@
                 //cp.hasUpdateLocalStatus = YES;
             }
         }
-       
+        
         for (CamProfile * cp in restored_profiles)
         {
             cp.hasUpdateLocalStatus = YES;
@@ -1438,9 +1539,9 @@
         
         return TRUE;
     }
-   
     
-     return FALSE;
+    
+    return FALSE;
     
 }
 
@@ -1448,67 +1549,67 @@
 
 + (void)getBroadcastAddress:(NSString **) bcast AndOwnIp:(NSString**) ownip
 {
-
+    
 	//Free & re-init Addresses
 	FreeAddresses();
-
+    
     GetIPAddresses();
 	GetHWAddresses();
 	NSString *deviceBroadcastIP = nil;
 	NSString *deviceIP = nil ;
-
+    
 	NSString * log = @"";
-
-
+    
+    
 	int i;
-
+    
 	for (i=0; i<MAXADDRS; ++i)
 	{
 		static unsigned long localHost = 0x7F000001;		// 127.0.0.1
 		unsigned long theAddr;
-
+        
 		theAddr = ip_addrs[i];
-
+        
 		if (theAddr == INVALID_IP)
 		{
-
+            
 			break;
 		}
-
+        
 		if (theAddr == localHost) continue;
-
+        
 		if (strncmp(if_names[i], "en", strlen("en")) == 0)
 		{
 			deviceBroadcastIP =  [NSString stringWithFormat:@"%s", broadcast_addrs[i]];
 			deviceIP = [NSString stringWithFormat:@"%s", ip_names[i]];
 		}
-
-
-
+        
+        
+        
 		NSLog(@"%d %s %s %s %s\n", i, if_names[i], hw_addrs[i], ip_names[i],
-		 broadcast_addrs[i]);
-
-		log = [log stringByAppendingFormat:@"%d %s %s %s %s\n", i, if_names[i], hw_addrs[i], ip_names[i], 
-		    broadcast_addrs[i]];
-
+              broadcast_addrs[i]);
+        
+		log = [log stringByAppendingFormat:@"%d %s %s %s %s\n", i, if_names[i], hw_addrs[i], ip_names[i],
+               broadcast_addrs[i]];
+        
 	}
-
-
+    
+    
 	//For Iphone4
 	//deviceBroadcastIP = [NSString stringWithFormat:@"%s", broadcast_addrs[i-1]];
-
+    
 	//NSLog(@"broadcast iP: %d %@",i, deviceBroadcastIP);
 	//NSLog(@"own iP: %d %@",i, deviceIP);
 	if (deviceIP != nil)
 	{
 		*ownip = [NSString stringWithString:deviceIP];
 	}
-
+    
 	if (deviceBroadcastIP != nil)
 	{
 		*bcast = [NSString stringWithString:deviceBroadcastIP];
 	}
-
+    
 	
 	return ;
 }
@@ -1518,7 +1619,7 @@
     
 	//Free & re-init Addresses
 	FreeAddresses();
-
+    
     GetIPAddresses();
 	GetHWAddresses();
 	NSString *deviceBroadcastIP = nil;
@@ -1588,22 +1689,12 @@
     
     self.app_stage = APP_STAGE_LOGGING_IN;
     
-#if 0 //DBG DBG DBG
-    PlaybackViewController *playbackViewController = [[PlaybackViewController alloc] init];
-    UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:playbackViewController];
-    [playbackViewController release];
-    [self presentViewController:nav animated:YES completion:^{}];
-#else
-    //Cheat code for debugging
-#if 0 //DBG DBG DBG for Push notification
-    [self showNotificationViewController:nil];
-    return;
-#endif
+
     LoginViewController *loginVC = [[LoginViewController alloc] initWithNibName:@"LoginViewController"
                                                                          bundle:Nil
                                                                        delegate:self];
     UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:loginVC];
-
+    
     [loginVC release];
     //[self presentViewController:nav animated:YES completion:^{}];
     if (self.presentedViewController) {
@@ -1613,7 +1704,7 @@
     } else {
         [self presentViewController:nav animated:NO completion:nil];
     }
-#endif
+
 }
 
 
@@ -1623,34 +1714,37 @@
     [self dismissViewControllerAnimated:NO completion:nil];
     self.progressView.hidden = NO;
     
-    NotifViewController *notifVC = [[NotifViewController alloc] initWithNibName:@"NotifViewController"
-                                                                          bundle:Nil];
     
-    notifVC.notifDelegate = self;
-    //Feed in data now
-#if 0
-//    notifVC.cameraMacNoColon = @"44334C7FA03C";
-//    notifVC.cameraName       = @"CameraHD-00667fa03c";
-//    notifVC.alertType        = @"4";
-//    notifVC.alertVal         = @"20140310091019000";
-//    notifVC.registrationID   = @"01006644334C7FA03CXJYRBQBO";
+    if ([self.camAlert.alertType isEqualToString:ALERT_TYPE_MOTION])
+    {
+        
+        NotifViewController *notifVC = [[NotifViewController alloc] initWithNibName:@"NotifViewController"
+                                                                             bundle:Nil];
+        notifVC.notifDelegate = self;
+        //Feed in data now
+        
+        
+        notifVC.cameraMacNoColon = self.camAlert.cameraMacNoColon;
+        notifVC.cameraName       = self.camAlert.cameraName;
+        notifVC.alertType        = self.camAlert.alertType;
+        notifVC.alertVal         = self.camAlert.alertVal;
+        notifVC.registrationID   = self.camAlert.registrationID;
+        
+        
+        [self presentViewController:[[UINavigationController alloc]initWithRootViewController:notifVC] animated:YES completion:^{}];
+    }
+    else //Sound/Temphi/templo - go to camera
+    {
+        NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+        [userDefaults setObject:latestCamAlert.registrationID forKey:REG_ID];
+        [userDefaults synchronize];
+        
+        
+        [self sendStatus:SHOW_CAMERA_LIST];
+       
+
+    }
     
-    
-    notifVC.cameraMacNoColon = @"44334C7FA03C";
-    notifVC.cameraName       = @"CameraHD-00667fa03c";
-    notifVC.alertType        = @"4";
-    notifVC.alertVal         = @"20140310091019000";
-    notifVC.registrationID   = @"01006644334C7FA03CXJYRBQBO";
-    
-#else
-    notifVC.cameraMacNoColon = self.camAlert.cameraMacNoColon;
-    notifVC.cameraName       = self.camAlert.cameraName;
-    notifVC.alertType        = self.camAlert.alertType;
-    notifVC.alertVal         = self.camAlert.alertVal;
-    notifVC.registrationID   = self.camAlert.registrationID;
-#endif
-    
-    [self presentViewController:[[UINavigationController alloc]initWithRootViewController:notifVC] animated:YES completion:^{}];
 }
 
 
@@ -1665,12 +1759,12 @@
 	{
 		//NSLog(@"restored data done");
 		self.channel_array = savedData.channels;
-
+        
 		self.restored_profiles = savedData.configured_cams;
 	}
     
     [savedData release];
-
+    
 	return TRUE;
 }
 

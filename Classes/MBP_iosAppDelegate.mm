@@ -34,6 +34,8 @@
         application.applicationIconBadgeNumber = 0;
     }
 
+    handling_PN = FALSE;
+    
 #if 0
     
     // Optional: automatically send uncaught exceptions to Google Analytics.
@@ -162,74 +164,98 @@
 
     if (userInfo)
     {
-        NSString * str2 = (NSString *) [userInfo objectForKey:@"alert"]; 
-        NSString * str3 = (NSString *) [userInfo objectForKey:@"mac"]; 
-        NSString * str4 = (NSString *) [userInfo objectForKey:@"val"]; 
-        NSString * str5 = (NSString *) [userInfo objectForKey:@"time"]; 
-        NSString * str6 = (NSString *) [userInfo objectForKey:@"cameraname"];
-        NSString * str7 = (NSString *) [userInfo objectForKey:@"url"];
+        NSString * str2 = (NSString *) [userInfo objectForKey:@"alert"];
+        if ([str2 isEqualToString:ALERT_GENERIC_SERVER_INFO])
+        {
+            
+            //Server Custom message
+            NSString * str3 = (NSString *) [userInfo objectForKey:@"message"];
+            NSString * str7 = (NSString *) [userInfo objectForKey:@"url"];
+            
+            if ( [application applicationState] == UIApplicationStateActive)
+            {
+                //App is running now
+                [viewController pushNotificationRcvedServerAnnouncement:str3 andUrl:str7];
+            }
+            
 
-        
-        //4 44334C31A004 20130914055827490 2013-09-14T05:59:05+00:00 Camera-31a004
-        //NSLog(@"%@ %@ %@ %@ %@ %@",  str2, str3, str4 , str5, str6, str8);
-        
-        if (str2 == nil ||
-            str3 == nil ||
-            str4 == nil ||
-            str5 == nil ||
-            str6 == nil)
-        {
-            NSLog(@"NIL info.. silencely return"); 
-            return; 
+            
         }
-        
-        int rcvTimeStamp = [[NSDate date] timeIntervalSince1970];
-        CameraAlert * camAlert = [[CameraAlert alloc]initWithTimeStamp1:rcvTimeStamp];// autorelease];
-        //set other values
-        camAlert.cameraMacNoColon = [str3 substringWithRange:NSMakeRange(6, 12)];
-        
-        camAlert.cameraName = str6;
-        camAlert.alertType = str2;
-        camAlert.alertTime =str5;
-        camAlert.alertVal = str4;
-        camAlert.registrationID = str3;
-        
-        if (str7 != nil)
+        else if ([str2 isEqualToString:@"1"] ||
+                 [str2 isEqualToString:@"2"]  ||
+                 [str2 isEqualToString:@"3"] ||
+                 [str2 isEqualToString:@"4"])
         {
-            camAlert.server_url = str7;
-            NSLog(@"server url is :%@", camAlert.server_url);
+            
+            
+            NSString * str3 = (NSString *) [userInfo objectForKey:@"mac"];
+            NSString * str4 = (NSString *) [userInfo objectForKey:@"val"];
+            NSString * str5 = (NSString *) [userInfo objectForKey:@"time"];
+            NSString * str6 = (NSString *) [userInfo objectForKey:@"cameraname"];
+            NSString * str8 = (NSString *) [userInfo objectForKey:@"ftp_url"]; //Motion url
+            
+            //4 44334C31A004 20130914055827490 2013-09-14T05:59:05+00:00 Camera-31a004
+            //NSLog(@"%@ %@ %@ %@ %@ %@",  str2, str3, str4 , str5, str6, str8);
+            
+            if (str2 == nil ||
+                str3 == nil ||
+                str4 == nil ||
+                str5 == nil ||
+                str6 == nil)
+            {
+                NSLog(@"NIL info.. silencely return");
+                return;
+            }
+            
+            int rcvTimeStamp = [[NSDate date] timeIntervalSince1970];
+            CameraAlert * camAlert = [[CameraAlert alloc]initWithTimeStamp1:rcvTimeStamp];// autorelease];
+            //set other values
+            camAlert.cameraMacNoColon = [str3 substringWithRange:NSMakeRange(6, 12)];
+            
+            camAlert.cameraName = str6;
+            camAlert.alertType = str2;
+            camAlert.alertTime =str5;
+            camAlert.alertVal = str4;
+            camAlert.registrationID = str3;
+            
+            
+            if (str8 != nil)
+            {
+                camAlert.server_url = str8;
+                NSLog(@"motion url is :%@", camAlert.server_url);
+            }
+            
+            BOOL shouldStoreAlert = TRUE;
+            
+            
+            //Next few lines: ORDER MATTERS
+            if ( [application applicationState] == UIApplicationStateActive)
+            {
+                //App is running now
+                shouldStoreAlert = [viewController pushNotificationRcvedInForeground: camAlert];
+            }
+            else if ( [application applicationState] == UIApplicationStateInactive)
+            {
+                NSLog(@"UIApplicationStateInactive");
+                //[self performSelectorOnMainThread:@selector(forceLogin) withObject:nil waitUntilDone:YES];
+                [self performSelectorOnMainThread:@selector(activateNotificationViewController:) withObject:camAlert waitUntilDone:YES];
+                handling_PN = TRUE;
+            }
+            else
+            {
+                // TODO: handle exception
+                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:str6
+                                                                message:str2
+                                                               delegate:self cancelButtonTitle:@"OK"
+                                                      otherButtonTitles:nil];
+                [alert show];
+            }
+            
+//            if (shouldStoreAlert && [CameraAlert insertAlertForCamera:camAlert] == TRUE)
+//            {
+//                NSLog(@"Alert inserted successfully");
+//            }
         }
-        
-        BOOL shouldStoreAlert = TRUE; 
-
-        
-        //Next few lines: ORDER MATTERS
-        if ( [application applicationState] == UIApplicationStateActive)
-        {
-            //App is running now
-            shouldStoreAlert = [viewController pushNotificationRcvedInForeground: camAlert];
-        }
-        else if ( [application applicationState] == UIApplicationStateInactive)
-        {
-            NSLog(@"UIApplicationStateInactive");
-            //[self performSelectorOnMainThread:@selector(forceLogin) withObject:nil waitUntilDone:YES];
-            [self performSelectorOnMainThread:@selector(activateNotificationViewController:) withObject:camAlert waitUntilDone:YES];
-        }
-        else
-        {
-            // TODO: handle exception
-            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:str6
-                                                            message:str2
-                                                           delegate:self cancelButtonTitle:@"OK"
-                                                  otherButtonTitles:nil];
-            [alert show];
-        }
-        
-        if (shouldStoreAlert && [CameraAlert insertAlertForCamera:camAlert] == TRUE)
-        {
-            NSLog(@"Alert inserted successfully");
-         }
-        
         //[camAlert release]; camAlert leak memory but I can't release it.
     }
 
@@ -434,54 +460,6 @@
      */
 	
 	NSLog(@"Enter foreground isMain? %d 01", [[NSThread currentThread] isMainThread]);
-#if 0
-    {
-    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-	viewController.app_stage = [userDefaults integerForKey:@"ApplicationStage"];
-
-    NSString * camInView = (NSString*)[userDefaults objectForKey:CAM_IN_VEW];
-    
-    
-    if (camInView != nil)
-	{
-        //Some camera is inview..
-        //How about don't do anything..
-        
-        
-        NSLog(@"Some camera is in view.. do nothing");
-        
-        
-	}
-    else if (viewController.app_stage == APP_STAGE_LOGGED_IN)
-    {
-        //[self performSelectorOnMainThread:@selector(forceScan) withObject:nil waitUntilDone:YES];
-        
-        //20121114: phung: Need to force relogin, because while app in background many things can happen
-        //   1. Wifi loss --> offline mode
-        //   2. User switch on 3G
-        //   3. Or simply no 3g nor 3g -->> offline mode 
-        //   4. Or a remote camera has become unreachable.
-        //  -->>> NEED to relogin to verify
-        
-        if (self.becomeActiveByNotificationFlag)
-        {
-            self.becomeActiveByNotificationFlag = FALSE;
-        }
-        else
-        {
-            [self forceLogin];
-        }
-    }
-    else if (viewController.app_stage ==  APP_STAGE_SETUP)
-    {
-        //Do nothing -- stay at the current page
-    }
-    else
-    {
-         [self performSelectorOnMainThread:@selector(showInit) withObject:nil waitUntilDone:YES];
-    }
-    }
-#endif
 }
 
 
@@ -499,7 +477,25 @@
     
     NSLog(@"MBP_iosAppDelegate - viewController.app_stage: %d", viewController.app_stage);
     
-    if ([userDefaults objectForKey:CAM_IN_VEW] != nil)
+   
+    if (handling_PN == TRUE)
+    {
+        NSLog(@"handling PN, we may be in view");
+        if ([userDefaults objectForKey:CAM_IN_VEW] != nil )
+        {
+            NSLog(@"A camera is in view.Stop it");
+            NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+            [userDefaults removeObjectForKey:CAM_IN_VEW];
+            [userDefaults setBool:TRUE forKey:HANDLE_PN];
+            [userDefaults synchronize];
+            
+            
+        }
+        
+        
+        
+    }
+    else  if ([userDefaults objectForKey:CAM_IN_VEW] != nil )
     {
         NSLog(@"A camera is in view. Do nothing");
     }

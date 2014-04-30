@@ -21,6 +21,7 @@
 #import "define.h"
 #import "EarlierViewController.h"
 #import "UIDeviceHardware.h"
+#import "MBP_iosViewController.h"
 
 @interface CamerasViewController () <H264PlayerVCDelegate, CamerasCellDelegate, UIAlertViewDelegate, AddCameraVCDelegate>
 
@@ -117,6 +118,9 @@
 
 - (IBAction)addCameraButtonTouchAction:(id)sender
 {
+
+#if 1
+    
     [self.ibIconAddCamera setImage:[UIImage imageNamed:@"add_camera_pressed"]];
     [self.ibTextAddCamera setTextColor:[UIColor deSelectedAddCameraTextColor]];
     if (_camChannels.count >= MAX_CAM_ALLOWED)
@@ -157,6 +161,41 @@
     }
     [self.ibIconAddCamera setImage:[UIImage imageNamed:@"add_camera"]];
     [self.ibTextAddCamera setTextColor:[UIColor whiteColor]];
+#else
+    
+#pragma mark DEBUG Push notification 
+    int rcvTimeStamp = [[NSDate date] timeIntervalSince1970];
+    CameraAlert * camAlert = [[CameraAlert alloc]initWithTimeStamp1:rcvTimeStamp];// autorelease];
+    
+    
+#if 0
+    //set other values
+    camAlert.cameraMacNoColon = @"44334C5FF075";
+    
+    camAlert.cameraName = @"Camera-fake motion push";
+    camAlert.alertType = @"4";
+    camAlert.alertTime =@"2014-04-30T04:51:54+00:00";
+    camAlert.alertVal = @"20140430090958000";
+    camAlert.registrationID = @"01006644334C5FF075GPIRBEXE";
+#else 
+    camAlert.cameraMacNoColon = @"44334C5FF075";
+    
+    camAlert.cameraName = @"Camera-fake Temp push";
+    camAlert.alertType = @"1";
+    camAlert.alertTime =@"2014-04-30T04:51:54+00:00";
+    camAlert.alertVal = @"1";
+    camAlert.registrationID = @"01006644334C5FF075GPIRBEXE";
+    
+#endif
+    
+    
+    
+    
+    NSLog(@"Fake push  aaa");
+    MenuViewController * vc = (MenuViewController * )self.parentVC;
+    
+    [(MBP_iosViewController *) vc.menuDelegate pushNotificationRcvedInForeground:camAlert];
+#endif
 }
 
 - (IBAction)buyCameraButtonTouchAction:(id)sender

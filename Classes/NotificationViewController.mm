@@ -134,12 +134,17 @@
                                                                                                   bundle:nil];
         playbackViewController.clip_info = eventInfo;
         
-        [self.navigationController pushViewController:playbackViewController animated:NO];
         
-        [playbackViewController release];
+        //[self.navigationController presentViewController:playbackViewController animated:YES completion:nil];
         
-        //[self presentViewController:playbackViewController animated:NO  completion:nil];
+        
+        
+        
+        
+        //[self.navigationController pushViewController:playbackViewController animated:NO];
 
+        [self presentViewController:playbackViewController animated:NO  completion:nil];
+        //[playbackViewController release];
         
     }
     else

@@ -21,6 +21,7 @@
 @interface MBP_iosAppDelegate : NSObject <UIApplicationDelegate> {
     UIWindow *window;
     MBP_iosViewController *viewController;
+    BOOL handling_PN; 
 }
 
 @property (nonatomic, retain) IBOutlet UIWindow *window;
