@@ -452,6 +452,7 @@
 		8B933EDA19111EBC00A97F12 /* video_action_photo.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B933ED519111EBC00A97F12 /* video_action_photo.png */; };
 		8B933EDB19111EBC00A97F12 /* video_action_photo_pressed.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B933ED619111EBC00A97F12 /* video_action_photo_pressed.png */; };
 		8B933EDC19111EBC00A97F12 /* alert_camera2_pressed.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B933ED719111EBC00A97F12 /* alert_camera2_pressed.png */; };
+		8B933ED21911198900A97F12 /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8B933ED11911198900A97F12 /* MessageUI.framework */; };
 		8B9376B618729AC900E20756 /* ClipInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B9376B518729AC900E20756 /* ClipInfo.m */; };
 		8B93847F1856D42C009C4771 /* InformationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B93847D1856D42C009C4771 /* InformationViewController.m */; };
 		8B9384801856D42C009C4771 /* InformationViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8B93847E1856D42C009C4771 /* InformationViewController.xib */; };
@@ -1276,6 +1277,7 @@
 		8B933ED519111EBC00A97F12 /* video_action_photo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = video_action_photo.png; sourceTree = "<group>"; };
 		8B933ED619111EBC00A97F12 /* video_action_photo_pressed.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = video_action_photo_pressed.png; sourceTree = "<group>"; };
 		8B933ED719111EBC00A97F12 /* alert_camera2_pressed.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = alert_camera2_pressed.png; sourceTree = "<group>"; };
+		8B933ED11911198900A97F12 /* MessageUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MessageUI.framework; path = System/Library/Frameworks/MessageUI.framework; sourceTree = SDKROOT; };
 		8B9376B418729AC900E20756 /* ClipInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ClipInfo.h; sourceTree = "<group>"; };
 		8B9376B518729AC900E20756 /* ClipInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ClipInfo.m; sourceTree = "<group>"; };
 		8B93847C1856D42C009C4771 /* InformationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InformationViewController.h; sourceTree = "<group>"; };
@@ -1963,6 +1965,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8B933ED21911198900A97F12 /* MessageUI.framework in Frameworks */,
 				8BA23841182CBC130022581A /* CameraScanner.framework in Frameworks */,
 				8B98765118DAFF6A00A2FDD7 /* libGoogleAnalytics_debug.a in Frameworks */,
 				8B98765218DAFF6A00A2FDD7 /* libGoogleAnalytics.a in Frameworks */,
@@ -2132,6 +2135,7 @@
 		29B97323FDCFA39411CA2CEA /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				8B933ED11911198900A97F12 /* MessageUI.framework */,
 				8B98764F18DACDCB00A2FDD7 /* MobileCoreServices.framework */,
 				8B73057618D6D05A00D079B0 /* libGoogleAnalytics_debug.a */,
 				8B73057718D6D05A00D079B0 /* libGoogleAnalytics.a */,

@@ -29,8 +29,9 @@
 #import "SetupData.h"
 
 #import "AlertPrompt.h"
+#import <MessageUI/MFMailComposeViewController.h>
 
-@interface MBP_iosViewController ()
+@interface MBP_iosViewController () <MFMailComposeViewControllerDelegate>
 
 @end
 
@@ -1164,6 +1165,34 @@
                 break;
         }
     }
+    else if (tag == 11)
+    {
+        if (buttonIndex == 1)
+        {
+            MFMailComposeViewController *picker = [[MFMailComposeViewController alloc] init];
+            picker.mailComposeDelegate = nil;
+            
+            NSString *cachesDirectory = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
+            NSString *logCrashedPath = [cachesDirectory stringByAppendingPathComponent:@"application_crash.log"];
+            
+            // Create NSData object from file
+            NSData *exportFileData = [NSData dataWithContentsOfFile:logCrashedPath];
+            // Attach image data to the email
+            [picker addAttachmentData:exportFileData mimeType:@"text/csv" fileName:@"application_crash"];
+            
+            // Set the subject of email
+            [picker setSubject:@"IOS app crash log"];
+            
+            [picker setToRecipients:[NSArray arrayWithObjects:@"androidcrashreport@cvisionhk.com", nil]];
+            
+            // Show email view
+            [self presentViewController:picker animated:YES completion:nil];
+            
+            // Release picker
+            [picker release];
+        }
+    }
+    
 }
 
 

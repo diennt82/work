@@ -11,6 +11,7 @@
 #import "SetupData.h"
 
 
+
 @implementation MBP_iosAppDelegate
 
 @synthesize window;
@@ -101,9 +102,32 @@
     
 #if TARGET_IPHONE_SIMULATOR == 0
 
+    NSSetUncaughtExceptionHandler(&HandleException);
+    
+    struct sigaction signalAction;
+    memset(&signalAction, 0, sizeof(signalAction));
+    signalAction.sa_handler = &HandleSignal;
+    
+    sigaction(SIGABRT, &signalAction, NULL);
+    sigaction(SIGILL, &signalAction, NULL);
+    sigaction(SIGBUS, &signalAction, NULL);
+    
      NSString *cachesDirectory = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
 	NSString *logPath = [cachesDirectory stringByAppendingPathComponent:@"application.log"];
-	
+	NSString *logCrashedPath = [cachesDirectory stringByAppendingPathComponent:@"application_crash.log"];
+    
+    NSFileManager * fileManager = [NSFileManager defaultManager];
+    if ([fileManager fileExistsAtPath:logCrashedPath])
+    {
+        NSLog(@"App was crashed!");
+        
+        UIAlertView *av = [[UIAlertView alloc] initWithTitle:@"Send app log" message:nil
+                                                    delegate:self.viewController cancelButtonTitle:@"Cancel" otherButtonTitles:@"OK", nil];
+        av.tag = 11;
+        [av show];
+        [av release];
+    }
+    
 	freopen([logPath cStringUsingEncoding:NSASCIIStringEncoding], "a+", stderr);
 	NSLog(@"Log location: %@",logPath);
 #endif
@@ -126,6 +150,39 @@
     [BMS_JSON_Communication setServerInput:serverName];
 
     return YES;
+}
+
+void HandleException(NSException *exception) {
+    NSLog(@"App crashing with exception: %@", exception);
+    //Save somewhere that your app has crashed.
+    checkingApplicationCrashed();
+}
+
+void HandleSignal(int signal) {
+    NSLog(@"We received a signal: %d", signal);
+    checkingApplicationCrashed();
+    //Save somewhere that your app has crashed.
+}
+
+void checkingApplicationCrashed()
+{
+    BOOL success;
+    NSFileManager * fileManager = [NSFileManager defaultManager];
+    
+    NSError * error;
+    NSArray * paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString * documentDirectory = [paths objectAtIndex:0];
+    
+    NSString *appCrashedLog = [documentDirectory stringByAppendingPathComponent:@"application_crash.log"];
+    
+    NSString *defaultLogPath = [documentDirectory stringByAppendingPathComponent:@"application.log"];
+  
+    success = [fileManager copyItemAtPath:defaultLogPath toPath:appCrashedLog error:&error];
+    
+    if (success)
+    {
+        NSLog(@"Save log crashed!");
+    }
 }
 
 - (void)registerDefaultsFromSettingsBundle
@@ -625,6 +682,7 @@
     [window release];
     [super dealloc];
 }
+
 
 
 
