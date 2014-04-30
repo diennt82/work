@@ -147,7 +147,8 @@
         self.stringIntelligentMessage = @"Loading...";
         
         
-        
+        self.eventPage = 1;
+        self.shouldLoadMore = YES;
         
         [self.tableView reloadData];
         
@@ -190,6 +191,7 @@
     {
         dateFormatter.dateFormat = @"HH:mm";
     }
+    
     self.stringCurrentDate = [dateFormatter stringFromDate:_currentDate];
     
     // Get the date time in NSString
@@ -202,22 +204,10 @@
     
     self.hasUpdate = NO;
     
-    NSCalendar *cal = [NSCalendar currentCalendar];
-    NSDateComponents *components = [cal components:( NSHourCalendarUnit | NSMinuteCalendarUnit | NSSecondCalendarUnit ) fromDate:_currentDate];
-    
-    [components setHour:-24];
-    [components setMinute:0];
-    [components setSecond:0];
-    
-    NSDate *yesterday = [cal dateByAddingComponents:components toDate: _currentDate options:0];
-    
-    NSInteger limitedDate = [yesterday timeIntervalSince1970];
-    
-    [[TimelineDatabase getSharedInstance] deleteEventsForCamera:camChannel.profile.registrationID limitedDate:limitedDate];
-    
     self.events =[[TimelineDatabase getSharedInstance] getEventsForCamera:camChannel.profile.registrationID];
     
     NSLog(@"There are %d in databases", self.events.count );
+    
     if (self.events.count ==0)
     {
         self.isEventAlready = TRUE;
@@ -226,9 +216,6 @@
         /* Either this is a new camera OR we don't have any cached event
          [self performSelectorInBackground:@selector(getEventsList_bg2:) withObject:camChannel];
          */
-        [self.tableView reloadData];
-        
-        [self.tableView layoutIfNeeded];
     }
     else
     {
@@ -267,23 +254,14 @@
         
         self.isEventAlready = TRUE;
         self.isLoading = FALSE;
-        
-        
-        /* Reload the table view now */
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [self.tableView reloadData];
-            
-            [self.tableView layoutIfNeeded];
-            
-            if ([self.timelineVCDelegate respondsToSelector:@selector(refreshTableView)])
-            {
-                [self.timelineVCDelegate refreshTableView];
-            }
-            
-        });
-        
     }
     
+    /* Reload the table view now */
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self.tableView reloadData];
+        
+        [self.tableView layoutIfNeeded];
+    });
 }
 
 
@@ -334,6 +312,7 @@
                                                                           offset:nil
                                                                             size:nil
                                                                           apiKey:apiKey];
+    BOOL shouldResetEventPage = FALSE;
     
     if (responseDict != nil)
     {
@@ -348,7 +327,21 @@
             if (events != nil &&
                 events.count > 0)
             {
+                // 1. Deletes old data from database
+                NSCalendar *cal = [NSCalendar currentCalendar];
+                NSDateComponents *components = [cal components:( NSHourCalendarUnit | NSMinuteCalendarUnit | NSSecondCalendarUnit ) fromDate:_currentDate];
                 
+                [components setHour:-24];
+                [components setMinute:0];
+                [components setSecond:0];
+                
+                NSDate *yesterday = [cal dateByAddingComponents:components toDate: _currentDate options:0];
+                
+                NSInteger limitedDate = [yesterday timeIntervalSince1970];
+                
+                [[TimelineDatabase getSharedInstance] deleteEventsForCamera:camChannel.profile.registrationID limitedDate:limitedDate];
+                
+                // 2. Inserts new data to database
                 for (NSDictionary *event in events)
                 {
                     EventInfo *eventInfo = [[EventInfo alloc] init];
@@ -404,19 +397,29 @@
             }
             else
             {
+                /*
+                 * If load more has no event, need not to load more anymore.
+                 */
+                if (_eventPage > 1)
+                {
+                    self.shouldLoadMore = FALSE;
+                }
+                
                 NSLog(@"Camera as no event before date: %@", dateInStringFormated);
             }
-            
         }
         else
         {
+            shouldResetEventPage = TRUE;
             NSLog(@"Event Query Response status != 200");
         }
     }
     else
     {
+        shouldResetEventPage = TRUE;
         NSLog(@"Error- responseDict is nil");
     }
+    
     self.isLoading = FALSE;
     
     if ( self.hasUpdate == YES)
@@ -424,11 +427,20 @@
         NSLog(@"has inserted new record, trigger update ui now");
         dispatch_async(dispatch_get_main_queue(), ^{
             
-            [self loadEvents:self.camChannel];
+            //[self loadEvents:self.camChannel];
+            [self performSelectorInBackground:@selector(getEventFromDb:) withObject:camChannel];
             
         });
     }
     
+    /*
+     * If this is load more & failed, need to reset event page.
+     */
+    
+    if (_eventPage > 1 && shouldResetEventPage)
+    {
+        self.eventPage--;
+    }
 }
 
 
@@ -600,6 +612,7 @@
         NSLog(@"Error- responseDict is nil");
         self.stringIntelligentMessage = @"Get data timeout error";
     }
+    
     self.isEventAlready = TRUE;
     self.isLoading = FALSE;
     
@@ -607,20 +620,7 @@
         [self.tableView reloadData];
         
         [self.tableView layoutIfNeeded];
-        
-        if ([self.timelineVCDelegate respondsToSelector:@selector(refreshTableView)])
-        {
-            [self.timelineVCDelegate refreshTableView];
-        }
-        
     });
-    
-    
-    //Don't do this here --- XXX - may run into situation where it creates more timer
-    //    if (responseDict == nil)
-    //    {
-    //        [self performSelectorOnMainThread:@selector(createRefreshTimer) withObject:nil waitUntilDone:NO];
-    //    }
 }
 
 - (UIImage *)imageWithUrlString:(NSString *)urlString scaledToSize:(CGSize)newSize
@@ -787,7 +787,7 @@
         self.eventPage--;
     }
     
-    NSLog(@"TimelineVC - loadMoreEvent_bg: -eventPage: %d, - shouldUpdateTableview: %d, shouldLoadMore: %d", _eventPage, shouldUpdateTableView, _shouldLoadMore);
+    NSLog(@"%s:loadMoreEvent_bg: -eventPage: %d, - shouldUpdateTableview: %d, shouldLoadMore: %d", __FUNCTION__, _eventPage, shouldUpdateTableView, _shouldLoadMore);
 }
 
 #pragma mark - Scroll view delegate
@@ -823,13 +823,9 @@
                _shouldLoadMore)
             {
                 self.isLoading = TRUE;
-                self.eventPage ++;
+                //self.eventPage ++;
                 //NSLog(@"load more... %d",self.eventPage);
-                [self performSelectorInBackground:@selector(getEventsList_bg2:) withObject:self.camChannel];
-                
-            }
-            else
-            {
+                [self performSelectorInBackground:@selector(loadMoreEvent_bg) withObject:self.camChannel];
                 
             }
         }
@@ -901,7 +897,7 @@
     
     // 2. Set a custom background color and a border
     headerView.backgroundColor = [UIColor clearColor];
-    return  headerView;
+    return  [headerView autorelease];
 }
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -1060,8 +1056,8 @@
         // Configure the cell...
         cell.textLabel.text = self.stringIntelligentMessage;
         
-        UIActivityIndicatorView *spinner = [[UIActivityIndicatorView alloc]
-                                            initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+        UIActivityIndicatorView *spinner = [[[UIActivityIndicatorView alloc]
+                                            initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray] autorelease];
         
         // Spacer is a 1x1 transparent png
         UIImage *spacer = [UIImage imageNamed:@"spacer"];
@@ -1440,6 +1436,9 @@
             PlaybackViewController *playbackViewController = [[PlaybackViewController alloc] init];
             
             playbackViewController.clip_info = clipInfo;
+            
+            [clipInfo release];
+            
             NSLog(@"Push the view controller of navVC.- %@", self.navVC);
             
             //present view controller to view overal screen

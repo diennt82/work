@@ -9,6 +9,7 @@
 #import "TimelineDatabase.h"
 #import "EventInfo.h"
 #import "NSData+Base64.h"
+
 @implementation TimelineDatabase
 
 @synthesize databasePath;
@@ -147,11 +148,11 @@ static TimelineDatabase *sharedInstance = nil;
                 int event_unix_ts = sqlite3_column_int(statement,6);
                 char * event_data = (char *)sqlite3_column_text(statement, 7);
                 
-                NSLog(@"%s: event_unix_ts: %d", __FUNCTION__, event_unix_ts);
+                //NSLog(@"%s: event_unix_ts: %d", __FUNCTION__, event_unix_ts);
                 
                 EventInfo *eventInfo = [[EventInfo alloc] init];
-                eventInfo.alert_name = [[NSString alloc] initWithUTF8String:event_alert_name];
-                eventInfo.value      = [[NSString alloc] initWithUTF8String:event_value];
+                eventInfo.alert_name = [[[NSString alloc] initWithUTF8String:event_alert_name] autorelease];
+                eventInfo.value      = [[[NSString alloc] initWithUTF8String:event_value] autorelease];
                 
                 
                 NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
@@ -162,9 +163,12 @@ static TimelineDatabase *sharedInstance = nil;
                 NSDate * eventDate = [NSDate dateWithTimeIntervalSince1970:event_unix_ts];
                 
                 NSString * eventDate_str = [dateFormatter stringFromDate:eventDate];
+                
+                [dateFormatter release];
+                
                 eventInfo.time_stamp = eventDate_str;
                 
-                eventInfo.alert      = [[[NSString alloc] initWithUTF8String:event_alert ] integerValue];
+                eventInfo.alert      = [[[[NSString alloc] initWithUTF8String:event_alert] autorelease] integerValue];
                 
                 NSString * event_data_str = [[NSString alloc] initWithUTF8String:event_data];
                 
@@ -220,11 +224,12 @@ static TimelineDatabase *sharedInstance = nil;
     
     if (sqlite3_open(dbpath, &database) == SQLITE_OK)
     {
-        NSString *delSQL = [NSString stringWithFormat:@"delete from  camera_events where camera_udid='%@' AND event_ts < %d", camera_udid, limitedDate];
+        //NSString *delSQL = [NSString stringWithFormat:@"delete from  camera_events where camera_udid='%@' AND event_ts < %d", camera_udid, limitedDate];
+        NSString *delSQL = [NSString stringWithFormat:@"delete from  camera_events where camera_udid='%@'", camera_udid];
         
         const char * stmt = [delSQL UTF8String];
         
-        NSLog(@"statement: %s, %d", stmt, limitedDate);
+        NSLog(@"statement: %s", stmt);
         
         sqlite3_stmt * statement ;
         
