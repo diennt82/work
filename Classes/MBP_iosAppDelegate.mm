@@ -34,6 +34,8 @@
         application.applicationIconBadgeNumber = 0;
     }
 
+    handling_PN = FALSE;
+    
 #if 0
     
     // Optional: automatically send uncaught exceptions to Google Analytics.
@@ -179,7 +181,10 @@
 
             
         }
-        else
+        else if ([str2 isEqualToString:@"1"] ||
+                 [str2 isEqualToString:@"2"]  ||
+                 [str2 isEqualToString:@"3"] ||
+                 [str2 isEqualToString:@"4"])
         {
             
             
@@ -234,6 +239,7 @@
                 NSLog(@"UIApplicationStateInactive");
                 //[self performSelectorOnMainThread:@selector(forceLogin) withObject:nil waitUntilDone:YES];
                 [self performSelectorOnMainThread:@selector(activateNotificationViewController:) withObject:camAlert waitUntilDone:YES];
+                handling_PN = TRUE;
             }
             else
             {
@@ -454,54 +460,6 @@
      */
 	
 	NSLog(@"Enter foreground isMain? %d 01", [[NSThread currentThread] isMainThread]);
-#if 0
-    {
-    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-	viewController.app_stage = [userDefaults integerForKey:@"ApplicationStage"];
-
-    NSString * camInView = (NSString*)[userDefaults objectForKey:CAM_IN_VEW];
-    
-    
-    if (camInView != nil)
-	{
-        //Some camera is inview..
-        //How about don't do anything..
-        
-        
-        NSLog(@"Some camera is in view.. do nothing");
-        
-        
-	}
-    else if (viewController.app_stage == APP_STAGE_LOGGED_IN)
-    {
-        //[self performSelectorOnMainThread:@selector(forceScan) withObject:nil waitUntilDone:YES];
-        
-        //20121114: phung: Need to force relogin, because while app in background many things can happen
-        //   1. Wifi loss --> offline mode
-        //   2. User switch on 3G
-        //   3. Or simply no 3g nor 3g -->> offline mode 
-        //   4. Or a remote camera has become unreachable.
-        //  -->>> NEED to relogin to verify
-        
-        if (self.becomeActiveByNotificationFlag)
-        {
-            self.becomeActiveByNotificationFlag = FALSE;
-        }
-        else
-        {
-            [self forceLogin];
-        }
-    }
-    else if (viewController.app_stage ==  APP_STAGE_SETUP)
-    {
-        //Do nothing -- stay at the current page
-    }
-    else
-    {
-         [self performSelectorOnMainThread:@selector(showInit) withObject:nil waitUntilDone:YES];
-    }
-    }
-#endif
 }
 
 
@@ -519,7 +477,25 @@
     
     NSLog(@"MBP_iosAppDelegate - viewController.app_stage: %d", viewController.app_stage);
     
-    if ([userDefaults objectForKey:CAM_IN_VEW] != nil)
+   
+    if (handling_PN == TRUE)
+    {
+        NSLog(@"handling PN, we may be in view");
+        if ([userDefaults objectForKey:CAM_IN_VEW] != nil )
+        {
+            NSLog(@"A camera is in view.Stop it");
+            NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+            [userDefaults removeObjectForKey:CAM_IN_VEW];
+            [userDefaults setBool:TRUE forKey:HANDLE_PN];
+            [userDefaults synchronize];
+            
+            
+        }
+        
+        
+        
+    }
+    else  if ([userDefaults objectForKey:CAM_IN_VEW] != nil )
     {
         NSLog(@"A camera is in view. Do nothing");
     }

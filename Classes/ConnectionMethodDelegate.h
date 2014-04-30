@@ -25,6 +25,7 @@
 #define SCAN_BONJOUR_CAMERA     9
 
 #define SHOW_CAMERA_LIST        10
+#define SHOW_CAMERA_LIST2      11
 
 @protocol ConnectionMethodDelegate
 - (void)sendStatus:(int) status;

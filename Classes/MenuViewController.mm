@@ -22,7 +22,7 @@
 }
 
 @property (retain, nonatomic) Account_ViewController *accountVC;
-@property (nonatomic) BOOL isFirttime;
+
 @property (nonatomic, retain) NSMutableArray *restoredProfiles;
 @property (nonatomic, retain) NSMutableArray *arrayChannel;
 

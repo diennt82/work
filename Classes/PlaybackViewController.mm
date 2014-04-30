@@ -409,10 +409,13 @@
     if (self.navigationController != nil)
     {
         NSLog(@"Playback with nav controller pop all");
+        [[UIApplication sharedApplication] setStatusBarHidden:NO
+                                                withAnimation:UIStatusBarAnimationNone];
+        
         NotifViewController * vc = [self.navigationController.viewControllers objectAtIndex:0];
         [self.navigationController popToRootViewControllerAnimated:NO];
         [vc ignoreTouchAction:nil];
-        
+
     }
     else
     {

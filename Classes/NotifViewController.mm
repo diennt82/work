@@ -94,7 +94,7 @@
     
     self.timeLabel.text = [df_local stringFromDate:eventDate];;
     
-    
+    NSLog(@"notif view timelable is %@",self.timeLabel.text); 
     
     
 }
@@ -230,9 +230,15 @@
 {
     [self cancelTaskDoInBackground];
     
+    
+    
+    
     if (sender == self.goToCameraBtn)
     {
-        //[self.navigationController popToRootViewControllerAnimated:NO];
+    
+         NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+        [userDefaults setObject:self.registrationID forKey:REG_ID];
+        [userDefaults synchronize];
         
         // Will call dismiss eventually
         
@@ -272,7 +278,7 @@
     if (![self.presentedViewController isBeingDismissed]) {
         [self dismissViewControllerAnimated:YES completion:^{
             //[_notifDelegate sendStatus:SCAN_BONJOUR_CAMERA];
-            [_notifDelegate sendStatus:SHOW_CAMERA_LIST];
+            [_notifDelegate sendStatus:SHOW_CAMERA_LIST2];
         }];
     }
 }
@@ -330,6 +336,7 @@
                     {
                         // This is the event. Get clips in this event
                         self.clipsInEvent = [event objectForKey:@"data"];
+                        self.alertTime = [event objectForKey:@"time_stamp"];
                         self.event = event;
                         
                         if (![_clipsInEvent isEqual:[NSNull null]] &&
@@ -347,7 +354,7 @@
                                 {
                                     [self.imageViewSnapshot performSelectorOnMainThread:@selector(setImage:)
                                                                              withObject:tmpImage
-                                                                          waitUntilDone:NO];
+                                                                          waitUntilDone:YES];
                                 }
                             }
                             

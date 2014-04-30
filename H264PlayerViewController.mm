@@ -1139,6 +1139,8 @@ double _ticks = 0;
 
 - (void)h264_HandleBecomeActive
 {
+   
+    
     if (userWantToCancel == TRUE)
     {
         return;
@@ -1157,6 +1159,16 @@ double _ticks = 0;
     {
         NSLog(@"Become ACTIVE _  .. REMOTE");
     }
+    
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    BOOL cancelBecauseOfPn = [userDefaults boolForKey:HANDLE_PN];
+    if (cancelBecauseOfPn == TRUE)
+    {
+        NSLog(@"set user = true");
+        userWantToCancel = TRUE;
+        return;
+    }
+    
     
     [self scanCamera];
 }
