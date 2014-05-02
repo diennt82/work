@@ -8,14 +8,13 @@
 
 #import "RegistrationViewController.h"
 #import <MonitorCommunication/MonitorCommunication.h>
-//#import "Reachability.h"
+#import "KISSMetricsAPI.h"
 #import "Step_10_ViewController.h"
 #import "UserAccount.h"
 
 @interface RegistrationViewController () <UITextFieldDelegate>
     
-    @property (retain, nonatomic) IBOutlet UITextField *tfUsername;
-
+@property (retain, nonatomic) IBOutlet UITextField *tfUsername;
 @property (retain, nonatomic) IBOutlet UITextField *tfEmail;
 @property (retain, nonatomic) IBOutlet UITextField *tfPassword;
 @property (retain, nonatomic) IBOutlet UITextField *tfConfirmPassword;
@@ -155,7 +154,9 @@
     NSString * msg = nil ;
     NSString * ok = NSLocalizedStringWithDefaultValue(@"Ok",nil, [NSBundle mainBundle],
                                                       @"Ok", nil);
-    NSString * title = nil;
+    NSString *title = NSLocalizedStringWithDefaultValue(@"Create_Account_Failed",nil, [NSBundle mainBundle],
+                                                        @"Create Account Failed" , nil);
+    BOOL checkFailed = TRUE;
     
     NSString * regex = @"[a-zA-Z0-9._-]+";
     NSPredicate * validatedUsername = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", regex];
@@ -164,112 +165,39 @@
     //UserName at least 5 chars and at most 20 characters
     if ([_tfUsername.text length] < 5 || 20 < [_tfUsername.text length])
     {
-        //error
-        title = NSLocalizedStringWithDefaultValue(@"Create_Account_Failed",nil, [NSBundle mainBundle],
-                                                  @"Create Account Failed" , nil);
         msg = NSLocalizedStringWithDefaultValue(@"Create_Account_Failed_msg",nil, [NSBundle mainBundle],
                                                 @"User name has to be between 5-20 characters" , nil);
-        //ERROR condition
-        UIAlertView *_alert = [[UIAlertView alloc]
-                               initWithTitle:title
-                               message:msg
-                               delegate:self
-                               cancelButtonTitle:ok
-                               otherButtonTitles:nil];
-        [_alert show];
-        [_alert release];
     }
     else if (!isValidateUsername)
     {
-        title = NSLocalizedStringWithDefaultValue(@"Create_Account_Failed",nil, [NSBundle mainBundle],
-                                                  @"Create Account Failed" , nil);
         msg = NSLocalizedStringWithDefaultValue(@"Create_Account_Failed_msg5", nil, [NSBundle mainBundle],
                                                 @"Username should not contain special characters except for - _ and ."  , nil);
-        
-        //ERROR condition
-        [[[[UIAlertView alloc] initWithTitle:title message:msg
-                                    delegate:self
-                           cancelButtonTitle:ok
-                           otherButtonTitles:nil]
-          autorelease]
-         show];
     }
     else if (([_tfPassword.text length] < 8) ||
              ([_tfPassword.text length] > 12) )
     {
-        //error
-        title = NSLocalizedStringWithDefaultValue(@"Create_Account_Failed",nil, [NSBundle mainBundle],
-                                                  @"Create Account Failed" , nil);
         msg = NSLocalizedStringWithDefaultValue(@"Create_Account_Failed_msg1",nil, [NSBundle mainBundle],
                                                 @"Password has to be between 8-12 characters" , nil);
-        //ERROR condition
-        UIAlertView *_alert = [[UIAlertView alloc]
-                               initWithTitle:title
-                               message:msg
-                               delegate:self
-                               cancelButtonTitle:ok
-                               otherButtonTitles:nil];
-        [_alert show];
-        [_alert release];
     }
     else if ( ![_tfPassword.text isEqualToString:_tfConfirmPassword.text])
     {
-        //error
-        title = NSLocalizedStringWithDefaultValue(@"Create_Account_Failed",nil, [NSBundle mainBundle],
-                                                  @"Create Account Failed" , nil);
         msg = NSLocalizedStringWithDefaultValue(@"Create_Account_Failed_msg2",nil, [NSBundle mainBundle],
                                                 @"Password does not match" , nil);
-        
-        //ERROR condition
-        UIAlertView *_alert = [[UIAlertView alloc]
-                               initWithTitle:title
-                               message: msg
-                               delegate:self
-                               cancelButtonTitle:ok
-                               otherButtonTitles:nil];
-        [_alert show];
-        [_alert release];
     }
     else if(![self isValidEmail:_tfEmail.text])
     {
-        //error
-        title = NSLocalizedStringWithDefaultValue(@"Create_Account_Failed",nil, [NSBundle mainBundle],
-                                                  @"Create Account Failed" , nil);
         msg = NSLocalizedStringWithDefaultValue(@"Create_Account_Failed_msg3",nil, [NSBundle mainBundle],
                                                 @"Invalid email. Email address should be of the form somebody@somewhere.com"  , nil);
-        
-        //ERROR condition
-        UIAlertView *_alert = [[UIAlertView alloc]
-                               initWithTitle:title
-                               message:msg
-                               delegate:self
-                               cancelButtonTitle:ok
-                               otherButtonTitles:nil];
-        [_alert show];
-        [_alert release];
     }
     
     else if (![RegistrationViewController isWifiConnectionAvailable] )
     {
-        
-        title = NSLocalizedStringWithDefaultValue(@"Create_Account_Failed",nil, [NSBundle mainBundle],
-                                                  @"Create Account Failed" , nil);
         msg = NSLocalizedStringWithDefaultValue(@"Create_Account_Failed_msg4",nil, [NSBundle mainBundle],
                                                 @"Please select a Wifi network to connect"  , nil);
-        
-        NSString * msg1 = NSLocalizedStringWithDefaultValue(@"Settings",nil, [NSBundle mainBundle],
-                                                            @"Settings"  , nil);
-        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:title
-                                                            message:msg
-                                                           delegate:self
-                                                  cancelButtonTitle:msg1
-                                                  otherButtonTitles:nil];
-        [alertView show];
-        [alertView release];
-        
     }
     else //Good info now..
     {
+        checkFailed = FALSE;
         [self.view endEditing:YES];
         [self.view addSubview:_viewProgress];
         //Register user ...
@@ -289,6 +217,19 @@
                                   andPassword:_stringPassword
                       andPasswordConfirmation:_stringCPassword];
         
+    }
+    
+    if (checkFailed)
+    {
+        //ERROR condition
+        UIAlertView *alertViewError = [[UIAlertView alloc]
+                               initWithTitle:title
+                               message:msg
+                               delegate:nil
+                               cancelButtonTitle:nil
+                               otherButtonTitles:ok, nil];
+        [alertViewError show];
+        [alertViewError release];
     }
 }
 
@@ -398,32 +339,11 @@
     [account sync_online_and_offline_data:nil];
     [account release];
     
-#if 1
+    [[KISSMetricsAPI sharedAPI] recordEvent:[NSString stringWithFormat:@"Register successfully - user: %@", _stringUsername] withProperties:nil];
+    
     [self dismissViewControllerAnimated:NO completion:^{
         [self.delegate sendStatus:SHOW_CAMERA_LIST];
     }];
-#else
-    //Load step 10
-    NSLog(@"Load Step 10");
-    //Load the next xib
-    Step_10_ViewController *step10ViewController = nil;
-    
-    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
-    {
-        step10ViewController = [[Step_10_ViewController alloc]
-                                initWithNibName:@"Step_10_ViewController_ipad" bundle:nil];
-        
-    }
-    else
-    {
-        step10ViewController = [[Step_10_ViewController alloc]
-                                initWithNibName:@"Step_10_ViewController" bundle:nil];
-        
-    }
-    step10ViewController.delegate = self.delegate;
-    [self.navigationController pushViewController:step10ViewController animated:NO];
-    [step10ViewController release];
-#endif
 }
 
 - (void)registerFailedWithError:(NSDictionary *)error_response
@@ -434,14 +354,17 @@
                                                       @"Ok", nil);
     NSString * title = NSLocalizedStringWithDefaultValue(@"Create_Account_Failed",nil, [NSBundle mainBundle],
                                                          @"Create Account Failed" , nil);
+    NSString *msg = [error_response objectForKey:@"message"];
     UIAlertView *_alert = [[UIAlertView alloc]
                            initWithTitle:title
-                           message:[error_response objectForKey:@"message"]
+                           message:msg
                            delegate:self
                            cancelButtonTitle:ok
                            otherButtonTitles:nil];
     [_alert show];
     [_alert release];
+    
+    [[KISSMetricsAPI sharedAPI] recordEvent:[NSString stringWithFormat:@"Regsiter failed - user: %@, error: %@", _stringUsername, msg] withProperties:nil];
 }
 
 - (void)registerFailedServerUnreachable
@@ -466,6 +389,8 @@
 						  otherButtonTitles:nil];
 	[alert show];
 	[alert release];
+    
+    [[KISSMetricsAPI sharedAPI] recordEvent:[NSString stringWithFormat:@"Register failed - user: %@, error: Server is unreachable", _stringUsername] withProperties:nil];
 }
 
 - (void)didReceiveMemoryWarning

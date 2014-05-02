@@ -37,8 +37,6 @@
 
     handling_PN = FALSE;
     
-#if 0
-    
 #if 1
     [KISSMetricsAPI sharedAPIWithKey:@"ff38140e358fdc343bb97297de4963291eec47d5"];
     
@@ -49,7 +47,8 @@
                           [UIDevice currentDevice].model, @"Model",
                           [UIDevice currentDevice].systemName, @"System Name",
                           [UIDevice currentDevice].systemVersion, @"System Version",
-                          [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"], @"My App Version",
+                          //[[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"], @"My App Version",CFBundleShortVersionString
+                          [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"], @"My App Version",
                           nil];
 
     [[KISSMetricsAPI sharedAPI] recordEvent:@"Launched App" withProperties:info];

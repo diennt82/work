@@ -332,13 +332,13 @@
     {
 		case SETUP_CAMERA:
         {
-            NSLog(@">>> SETUP ");
             self.app_stage = APP_STAGE_SETUP;
             
             BOOL isFirstTimeSetup = [userDefaults boolForKey:FIRST_TIME_SETUP];
             
             if (isFirstTimeSetup == FALSE)
             {
+                NSLog(@">>> SETUP ");
                 //Normal add cam sequence
                 //Load the next xib
                 Step_02_ViewController *step02ViewController = nil;
@@ -370,6 +370,7 @@
             }
             else
             {
+                NSLog(@">>> REGISTER");
                 [self createAccount];
             }
         }

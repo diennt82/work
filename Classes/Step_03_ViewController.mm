@@ -10,6 +10,7 @@
 
 #import "Step_03_ViewController.h"
 #import "UIBarButtonItem+Custom.h"
+#import "KISSMetricsAPI.h"
 
 @interface Step_03_ViewController ()
 
@@ -146,6 +147,7 @@
 
 -(void) handleEnteredBackground
 {
+    [[KISSMetricsAPI sharedAPI] recordEvent:@"Step03 - Enter background" withProperties:nil];
     //showProgressNextTime = TRUE;
     [self showProgress:nil];
 }
@@ -158,6 +160,8 @@
 //        //[self showProgress:nil];
 //        [self performSelectorOnMainThread:@selector(showProgress:) withObject:nil waitUntilDone:NO];
 //    }
+    
+    [[KISSMetricsAPI sharedAPI] recordEvent:@"Step03 - Enter fore ground" withProperties:nil];
     
     task_cancelled = NO;
     [self checkConnectionToCamera:nil];
@@ -283,9 +287,7 @@
 
 -(void) moveToNextStep
 {
-    
     NSString * fw_version = [[HttpCom instance].comWithDevice sendCommandAndBlock:GET_VERSION];
-    
     NSLog(@"Step_03 - moveToNextStep -->fw_version: %@", fw_version);
 
     NSRange colonRange = [fw_version rangeOfString:@": "];

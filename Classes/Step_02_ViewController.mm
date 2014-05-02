@@ -13,6 +13,7 @@
 #import "MBPNavController.h"
 #import "CreateBLEConnection_VController.h"
 #import "BLEConnectionManager.h"
+#import "KISSMetricsAPI.h"
 
 @interface Step_02_ViewController ()
 
@@ -130,7 +131,7 @@
 
 - (IBAction)btnContinueTouchUpInsideAction:(id)sender
 {
-    //Load the next xib
+    [[KISSMetricsAPI sharedAPI] recordEvent:@"Step02 - Touch up inside continue button" withProperties:nil];
     
     if (_cameraType == BLUETOOTH_SETUP)
     {

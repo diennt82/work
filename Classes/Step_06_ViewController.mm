@@ -9,6 +9,7 @@
 #import "Step_06_ViewController.h"
 #import "HttpCom.h"
 #import "Step_10_ViewController.h"
+#import "KISSMetricsAPI.h"
 
 #define TIME_INPUT_PASSWORD_AGAIN   60.0
 
@@ -180,8 +181,9 @@
     //[self resetAllTimer];
 }
 
--(void) viewWillAppear:(BOOL)animated
+- (void)viewWillAppear:(BOOL)animated
 {
+    [super viewWillAppear:animated];
     NSLog(@"update security type");
     UITextField * _sec = (UITextField *) [self.securityCell viewWithTag:1];
     if (_sec != nil)
@@ -196,6 +198,8 @@
 {
     _task_cancelled = YES;
     [self resetAllTimer];
+    
+    [super viewWillDisappear:animated];
 }
 
 #pragma mark - Actions
@@ -506,6 +510,7 @@
 
 -(void) handleNextButton:(id) sender
 {
+    [[KISSMetricsAPI sharedAPI] recordEvent:@"Step06 - next button" withProperties:nil];
     //create progressView for process verify network
     self.navigationItem.leftBarButtonItem.enabled = NO; // Disable go back
     [self.view addSubview:self.progressView];
@@ -674,8 +679,10 @@
     NSMutableString *stringFromDate = [NSMutableString stringWithString:[formatter stringFromDate:now]];
     [stringFromDate insertString:@"." atIndex:3];
     
-      NSLog(@"set auth -set_auth_cmd: %d ", [fwVersion compare:FW_MILESTONE_F66_NEW_FLOW]);
-   
+    NSLog(@"set auth -set_auth_cmd: %d ", [fwVersion compare:FW_MILESTONE_F66_NEW_FLOW]);
+    
+    [[KISSMetricsAPI sharedAPI] recordEvent:[NSString stringWithFormat:@"Step06 - Add camera fw: %@", fwVersion] withProperties:nil];
+    
      // >12.82 we can move on with new flow
     if  ([fwVersion compare:FW_MILESTONE_F66_NEW_FLOW] >= NSOrderedSame) //||
          //([fwVersion compare:FW_MILESTONE_F66_NEW_FLOW] == NSOrderedAscending) )
@@ -714,7 +721,6 @@
     response = [[HttpCom instance].comWithDevice sendCommandAndBlock:setup_cmd ];
     NSLog(@"Step_06VC - send cmd  %@ - response is: %@", setup_cmd, response);
     
-  
     // >12.82 we can move on with new flow
     if ([fwVersion compare:FW_MILESTONE_F66_NEW_FLOW] >= NSOrderedSame) // fw >= FW_MILESTONE_F66_NEW_FLOW
     {
@@ -1036,6 +1042,7 @@
     
     
 }
+
 -(void) upgradeFwReboot_bg
 {
 	//percentageProgress.
@@ -1061,6 +1068,7 @@
 	[pool release];
     
 }
+
 -(void) goBackAndReaddCamera
 {
     //ERROR condition

@@ -8,8 +8,11 @@
 
 #import "Step_12_ViewController.h"
 #import "KISSMetricsAPI.h"
+#import "define.h"
+#import "PublicDefine.h"
 
 @interface Step_12_ViewController()
+
 @property (retain, nonatomic) IBOutlet UIButton *btnWatchLiveCamera;
 
 @end
@@ -21,11 +24,7 @@
 -(void) viewDidLoad
 {
     [super viewDidLoad];
-    
     self.navigationItem.hidesBackButton = YES;
-#if 1
-    CGAffineTransform transform = CGAffineTransformMakeScale(1.0f, 4.0f);
-    [self.view viewWithTag:501].transform = transform;
     
     UIImage *hubbleLogoBack = [UIImage imageNamed:@"Hubble_back_text"];
     UIBarButtonItem *barBtnHubble = [[UIBarButtonItem alloc] initWithImage:hubbleLogoBack
@@ -41,20 +40,29 @@
     
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     self.cameraName.text =  (NSString *) [userDefaults objectForKey:@"CameraName"];
-#else
     
-    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-    self.cameraName.text =  (NSString *) [userDefaults objectForKey:@"CameraName"];
-    self.navigationItem.title = NSLocalizedStringWithDefaultValue( @"Setup_Complete",
-                                                                  nil,
-                                                                  [NSBundle mainBundle],
-                                                                  @"Setup Complete" , nil);
+    NSString *stringModel = @"";
     
-    UIInterfaceOrientation interfaceOrientation = [UIApplication sharedApplication].statusBarOrientation;
-    [self adjustViewsForOrientations:interfaceOrientation];
-#endif
+    NSInteger model = [[NSUserDefaults standardUserDefaults] integerForKey:SET_UP_CAMERA];
+    
+    if (model == BLUETOOTH_SETUP)
+    {
+        stringModel = @"Mbp83";
+    }
+    else if(model == WIFI_SETUP)
+    {
+        stringModel = @"Focus66";
+    }
+    
+    NSString *fwVersion = [[NSUserDefaults standardUserDefaults] stringForKey:FW_VERSION];
+    
+    NSDictionary *info = [NSDictionary dictionaryWithObjectsAndKeys:
+                          stringModel,   @"Camera model",
+                          fwVersion,     @"FW",
+                          nil];
+    
+    [[KISSMetricsAPI sharedAPI] recordEvent:@"Add camera success" withProperties:info];
 }
-
 
 -(void) viewWillAppear:(BOOL)animated
 {
@@ -63,85 +71,19 @@
 }
 
 #pragma mark -
-#pragma mark Rotating
-- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
-{
-    return   ((interfaceOrientation == UIInterfaceOrientationPortrait) ||
-              (interfaceOrientation == UIInterfaceOrientationLandscapeLeft) ||
-              (interfaceOrientation == UIInterfaceOrientationLandscapeRight));
-}
-
--(BOOL)shouldAutorotate
-{
-    return YES;
-}
-
--(NSUInteger) supportedInterfaceOrientations
-{
-    return UIInterfaceOrientationMaskAllButUpsideDown;
-}
-
--(void) willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
-{
-    [self adjustViewsForOrientations:toInterfaceOrientation];
-}
-
--(void) adjustViewsForOrientations: (UIInterfaceOrientation) interfaceOrientation
-{
-    if (interfaceOrientation == UIInterfaceOrientationLandscapeLeft ||
-        interfaceOrientation == UIInterfaceOrientationLandscapeRight)
-    {
-        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
-        {
-
-            [[NSBundle mainBundle] loadNibNamed:@"Step_12_ViewController_land_ipad" owner:self options:nil];
-            
-        }
-        else
-        {
-            [[NSBundle mainBundle] loadNibNamed:@"Step_12_ViewController_land" owner:self options:nil];
-
-
-            
-            
-        }
-    }
-    else if (interfaceOrientation == UIInterfaceOrientationPortrait ||
-             interfaceOrientation == UIInterfaceOrientationPortraitUpsideDown)
-    {
-        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
-        {
-
-            [[NSBundle mainBundle] loadNibNamed:@"Step_12_ViewController_ipad" owner:self options:nil];
-        }
-        else
-        {            
-     
-            [[NSBundle mainBundle] loadNibNamed:@"Step_12_ViewController" owner:self options:nil];
-            
-
-            
-        }
-    }
-    
-    
-    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-    self.cameraName.text =  (NSString *) [userDefaults objectForKey:@"CameraName"];
-
-}
-#pragma mark -
 #pragma mark Btn handling 
 
 -(IBAction)startMonitor:(id)sender
 {
-    NSLog(@"STEP12 START MONITOR");
-    //get registrationID
-    NSString *registrationID = [[NSUserDefaults standardUserDefaults] objectForKey:CAMERA_UDID];
+    [[KISSMetricsAPI sharedAPI] recordEvent:@"Step11 - Touch up inside View Live Camera btn" withProperties:nil];
     
-    NSLog(@"registrationID is %@  bLEEEEEEEEEEEEEEEE&&&&&&&&&&", registrationID);
+    NSString *registrationID = [[NSUserDefaults standardUserDefaults] objectForKey:CAMERA_UDID];
+
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     [userDefaults setObject:registrationID forKey:REG_ID];
     [userDefaults synchronize];
+    
+    NSLog(@"STEP12 START MONITOR -reg: %@", registrationID);
     
     // Disable Keep screen on
     [UIApplication sharedApplication].idleTimerDisabled=  NO;
@@ -151,7 +93,6 @@
     
     //[initSetupController startMonitorCallBack];
     [delegate startMonitorCallBack];
-    [[KISSMetricsAPI sharedAPI] recordEvent:@"Add Camera Success" withProperties:nil];
 }
 
 - (void)dealloc {

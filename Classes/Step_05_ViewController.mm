@@ -10,6 +10,7 @@
 #import "Step05Cell.h"
 #import "HttpCom.h"
 #import "Step_04_ViewController.h"
+#import "KISSMetricsAPI.h"
 
 #define ALERT_CONFIRM_TAG       555
 #define ALERT_RETRY_WIFI_TAG    559
@@ -131,6 +132,7 @@
 
 - (IBAction)btnContinueTouchUpInsideAction:(id)sender
 {
+    [[KISSMetricsAPI sharedAPI] recordEvent:@"Step05 - Touch continue button" withProperties:nil];
     //NSString * homeSsid = (NSString *) [userDefaults objectForKey:HOME_SSID];
     NSRange noQoute = NSMakeRange(1, _selectedWifiEntry.ssid_w_quote.length - 2);
     
@@ -260,6 +262,8 @@
 
 - (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex  // after animation
 {
+    [[KISSMetricsAPI sharedAPI] recordEvent:[NSString stringWithFormat:@"Step05 - dismiss dialog with button index: %d", buttonIndex] withProperties:nil];
+    
     if (alertView.tag == ALERT_RETRY_WIFI_TAG)
     {
         switch(buttonIndex) {
@@ -375,6 +379,8 @@
 
 - (void)tableView: (UITableView *)tableView didSelectRowAtIndexPath: (NSIndexPath *)indexPath
 {
+    [[KISSMetricsAPI sharedAPI] recordEvent:[NSString stringWithFormat:@"Step05 - table view select row: %d in section: %d", indexPath.row, indexPath.section] withProperties:nil];
+    
     if (indexPath.section == 0)
     {
         self.btnContinue.enabled = YES;

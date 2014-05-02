@@ -130,6 +130,7 @@
 @property (nonatomic) BOOL enablePTT;
 @property (nonatomic, retain) NSString *stringStatePTT;
 @property (nonatomic) NSInteger numbersOfRemoteViewError;
+@property (nonatomic, retain) NSString *current_ssid;
 
 #ifdef SHOW_DEBUG_INFO
 //for debug
@@ -537,6 +538,8 @@ double _ticks = 0;
 
 - (void)nowButtonAciton:(id)sender
 {
+    [[KISSMetricsAPI sharedAPI] recordEvent:@"PlayerView Touch up inside NOW btn item" withProperties:nil];
+    
     _hideCustomIndicatorAndTextNotAccessble = NO;
     
     [nowButton setEnabled:NO];
@@ -566,6 +569,8 @@ double _ticks = 0;
 
 - (void)earlierButtonAction:(id)sender
 {
+    [[KISSMetricsAPI sharedAPI] recordEvent:@"PlayerView Touch up inside EARLIER btn item" withProperties:nil];
+    
     _hideCustomIndicatorAndTextNotAccessble = YES;
     
     [earlierButton setEnabled:NO];
@@ -836,7 +841,14 @@ double _ticks = 0;
                 
                 if ( self.selectedChannel.profile.isInLocal == NO)
                 {
-                    [[KISSMetricsAPI sharedAPI] recordEvent:@"View Camera Remote" withProperties:nil];
+                    NSDictionary *info = [NSDictionary dictionaryWithObjectsAndKeys:
+                                          self.selectedChannel.profile.name,        @"Camera name",
+                                          self.selectedChannel.profile.fw_version,  @"FW",
+                                          self.selectedChannel.profile.hostSSID,    @"Host SSID",
+                                          _current_ssid,                            @"Current SSID",
+                                          nil];
+                    
+                    [[KISSMetricsAPI sharedAPI] recordEvent:@"View Camera Remote" withProperties:info];
                     
                     if (_remoteViewTimeout == YES)
                     {
@@ -1079,6 +1091,8 @@ double _ticks = 0;
     {
         [self showControlMenu];
     }
+    
+    [[KISSMetricsAPI sharedAPI] recordEvent:[NSString stringWithFormat:@"PlayerView single tap on video image view: %d", _isHorizeShow] withProperties:nil];
 }
 
 - (void)hideControlMenu
@@ -1140,7 +1154,7 @@ double _ticks = 0;
 
 - (void)h264_HandleBecomeActive
 {
-   
+    [[KISSMetricsAPI sharedAPI] recordEvent:@"PlayerView Become active" withProperties:nil];
     
     if (userWantToCancel == TRUE)
     {
@@ -1176,6 +1190,8 @@ double _ticks = 0;
 
 - (void)h264_HandleEnteredBackground
 {
+    [[KISSMetricsAPI sharedAPI] recordEvent:@"PlayerView Enter background" withProperties:nil];
+    
     if (userWantToCancel == TRUE)
     {
         return;
@@ -1542,13 +1558,13 @@ double _ticks = 0;
     status_t status = !NO_ERROR;
     
     //Store current SSID - to check later
-	NSString * streamingSSID = [CameraPassword fetchSSIDInfo];
-	if (streamingSSID == nil)
+	self.current_ssid = [CameraPassword fetchSSIDInfo];
+	if (_current_ssid == nil)
 	{
 		NSLog(@"Error: streamingSSID is nil before streaming");
 	}
     
-	NSLog(@"Current SSID is: %@", streamingSSID);
+	NSLog(@"Current SSID is: %@", _current_ssid);
     
     
 	//Store some of the info for used in menu  --
@@ -1557,9 +1573,10 @@ double _ticks = 0;
 	BOOL isOffline = [userDefaults boolForKey:_OfflineMode];
     
 	[userDefaults setBool:!(isOffline) forKey:_is_Loggedin];
-	if (streamingSSID != nil)
+    
+	if (_current_ssid != nil)
 	{
-		[userDefaults setObject:streamingSSID forKey:_streamingSSID];
+		[userDefaults setObject:_current_ssid forKey:_streamingSSID];
 	}
     
     [userDefaults synchronize];
@@ -1626,6 +1643,8 @@ double _ticks = 0;
 
 - (void)prepareGoBackToCameraList:(id)sender
 {
+     [[KISSMetricsAPI sharedAPI] recordEvent:@"PlayerView goes back" withProperties:nil];
+    
     self.activityStopStreamingProgress.hidden = NO;
     [self.view bringSubviewToFront:_activityStopStreamingProgress];
     
@@ -3131,6 +3150,7 @@ double _ticks = 0;
         
 		if (lastDirUD != DIRECTION_V_NON)
         {
+            [[KISSMetricsAPI sharedAPI] recordEvent:@"PlayerView V directional change" withProperties:nil];
 			[self send_UD_dir_to_rabot:currentDirUD];
 		}
         
@@ -3201,21 +3221,23 @@ double _ticks = 0;
 	}
 }
 
-- (void) h_directional_change_callback:(NSTimer *) timer_exp
+- (void)h_directional_change_callback:(NSTimer *) timer_exp
 {
-    BOOL need_to_send = FALSE;
+    //BOOL need_to_send = FALSE;
     
     @synchronized(_imgViewDrectionPad)
 	{
 		if ( lastDirLR != DIRECTION_H_NON)
         {
-			need_to_send = TRUE;
+			//need_to_send = TRUE;
+            [[KISSMetricsAPI sharedAPI] recordEvent:@"PlayerView H directional change" withProperties:nil];
+            [self send_LR_dir_to_rabot: currentDirLR];
 		}
         
-        if (need_to_send)
-        {
-            [self send_LR_dir_to_rabot: currentDirLR];
-        }
+//        if (need_to_send)
+//        {
+//            [self send_LR_dir_to_rabot: currentDirLR];
+//        }
         
 		//Update directions
 		lastDirLR = currentDirLR;
@@ -3649,6 +3671,8 @@ double _ticks = 0;
 
 - (void) willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
 {
+    [[KISSMetricsAPI sharedAPI] recordEvent:@"PlayerView - will rotate interface" withProperties:nil];
+    
     if (_earlierNavi.isEarlierView) //don't call adjustViews for Earlier
     {
         return;
@@ -4081,7 +4105,9 @@ double _ticks = 0;
 
 - (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex
 {
-	int tag = alertView.tag;
+    int tag = alertView.tag;
+    [[KISSMetricsAPI sharedAPI] recordEvent:[NSString stringWithFormat:@"PlayerView dismiss alert: %d with btn index: %d", tag, buttonIndex] withProperties:nil];
+    
     if (tag == TAG_ALERT_VIEW_REMOTE_TIME_OUT)
     {
         switch (buttonIndex)
@@ -4543,6 +4569,8 @@ double _ticks = 0;
     [self hideTimelineView];
     [self updateBottomView];
     [self applyFont];
+    
+    [[KISSMetricsAPI sharedAPI] recordEvent:[NSString stringWithFormat:@"PlayerView select item on horize menu - idx: %d", _selectedItemMenu] withProperties:nil];
 }
 
 - (void)updateBottomView
@@ -4748,7 +4776,7 @@ double _ticks = 0;
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    
+    [[KISSMetricsAPI sharedAPI] recordEvent:[NSString stringWithFormat:@"PlayerView view will appear - return from Playback: %d", _returnFromPlayback] withProperties:nil];
     NSLog(@"H264VC - viewWillAppear -_wantToShowTimeLine: %d", _wantToShowTimeLine);
     
     //alway show custom indicator, when view appear
@@ -4794,7 +4822,7 @@ double _ticks = 0;
 {
     [self stopTimerRecoring];
     
-    [[UIApplication sharedApplication] setStatusBarHidden:NO];
+    //[[UIApplication sharedApplication] setStatusBarHidden:NO];
     [super viewWillDisappear:animated];
 }
 
@@ -4844,6 +4872,7 @@ double _ticks = 0;
 
 -(void)userReleaseHoldToTalk
 {
+    [[KISSMetricsAPI sharedAPI] recordEvent:[NSString stringWithFormat:@"PlayerView touch up PTT - is in local: %d", self.selectedChannel.profile.isInLocal] withProperties:nil];
 #if TEST_REMOTE_TALKBACK
     self.walkieTalkieEnabled = !self.walkieTalkieEnabled;
     self.ib_buttonTouchToTalk.enabled = NO;
@@ -4950,6 +4979,7 @@ double _ticks = 0;
 
 -(void) longPress:(UILongPressGestureRecognizer*) gest
 {
+    [[KISSMetricsAPI sharedAPI] recordEvent:@"PlayerView hold to talk" withProperties:nil];
 #if TEST_REMOTE_TALKBACK
 #else
     if (self.selectedChannel.profile.isInLocal)
@@ -5353,12 +5383,16 @@ double _ticks = 0;
 
 #pragma mark - Bottom menu
 
-- (IBAction)changeToMainRecording:(id)sender {
+- (IBAction)changeToMainRecording:(id)sender
+{
+    [[KISSMetricsAPI sharedAPI] recordEvent:@"PlayerView changes Take picture to Recording or " withProperties:nil];
     //change to main recording here
     [self changeAction:nil];
 }
 
-- (IBAction)switchDegreePressed:(id)sender {
+- (IBAction)switchDegreePressed:(id)sender
+{
+    [[KISSMetricsAPI sharedAPI] recordEvent:@"PlayerView changes Temperature type" withProperties:nil];
     _isDegreeFDisplay = !_isDegreeFDisplay;
     
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
@@ -5373,9 +5407,11 @@ double _ticks = 0;
     self.viewDebugInfo.hidden = !_viewDebugInfo.isHidden;
 }
 
-- (IBAction)processingRecordingOrTakePicture:(id)sender {
-    
+- (IBAction)processingRecordingOrTakePicture:(id)sender
+{
+    [[KISSMetricsAPI sharedAPI] recordEvent:[NSString stringWithFormat:@"PlayerView Touch up inside recording - mode: %d", _isRecordInterface] withProperties:nil];
     NSLog(@"_isRecordInterface is %d", _isRecordInterface);
+    
     if (_isRecordInterface)
     {
         if (!_syncPortraitAndLandscape)
@@ -5469,7 +5505,9 @@ double _ticks = 0;
     }
 }
 
-- (IBAction)changeAction:(id)sender {
+- (IBAction)changeAction:(id)sender
+{
+    [[KISSMetricsAPI sharedAPI] recordEvent:@"PlayerView changes Take picture to Recording or " withProperties:nil];
     //#if DISABLE_VIEW_RELEASE_FLAG
     //    _isRecordInterface = FALSE;
     //#else
@@ -5723,14 +5761,14 @@ double _ticks = 0;
 - (void)scanCamera
 {
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-    NSString * current_ssid = [CameraPassword fetchSSIDInfo];
+    self.current_ssid = [CameraPassword fetchSSIDInfo];
     
     
     
     if ( [self isCurrentConnection3G] ||
         [userDefaults boolForKey:@"remote_only"] ||
         (self.selectedChannel.profile.ip_address != nil && ![self isInTheSameNetworkAsCamera:self.selectedChannel.profile]) ||
-        (self.selectedChannel.profile.ip_address != nil && ![self.selectedChannel.profile.hostSSID isEqualToString:current_ssid] )
+        (self.selectedChannel.profile.ip_address != nil && ![self.selectedChannel.profile.hostSSID isEqualToString:_current_ssid] )
         
         )
     {

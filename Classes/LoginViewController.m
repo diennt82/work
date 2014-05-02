@@ -449,8 +449,7 @@
                 break;
         }
     }
-    
-    if (tag == 113) // 3g check
+    else if (tag == 113) // 3g check
     {
         switch (buttonIndex)
         {
@@ -562,6 +561,7 @@
 {
     NSUserDefaults *userDefalts = [NSUserDefaults standardUserDefaults];
     NSString * userEmail = (NSString *)[userDefalts objectForKey:@"PortalUseremail"];
+    
     if (userEmail == nil)
     {
         
@@ -577,26 +577,26 @@
     
     
 #if !TARGET_IPHONE_SIMULATOR
-        // Let the device know we want to receive push notifications
-        [[UIApplication sharedApplication] registerForRemoteNotificationTypes:
-         (UIRemoteNotificationType) (UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeAlert)];
+    // Let the device know we want to receive push notifications
+    [[UIApplication sharedApplication] registerForRemoteNotificationTypes:
+     (UIRemoteNotificationType) (UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeAlert)];
 #endif
-        NSLog(@"Login success! 2");
-        
-        UserAccount *account = [[UserAccount alloc] initWithUser:_stringUsername
-                                                        password:_stringPassword
-                                                          apiKey:apiKey
-                                                        listener:self];
-
-    [[KISSMetricsAPI sharedAPI] recordEvent:@"Login Success" withProperties:nil];
-
-        //BLOCKED method
-        [account readCameraListAndUpdate];
-        [account release];
-        
-        //[self dismissViewControllerAnimated:NO completion:^{}];
-        
-        NSLog(@"Login success! 3");
+    NSLog(@"Login success! 2");
+    
+    UserAccount *account = [[UserAccount alloc] initWithUser:_stringUsername
+                                                    password:_stringPassword
+                                                      apiKey:apiKey
+                                                    listener:self];
+    
+    [[KISSMetricsAPI sharedAPI] recordEvent:[NSString stringWithFormat:@"Login successfully - user: %@", _stringUsername] withProperties:nil];
+    
+    //BLOCKED method
+    [account readCameraListAndUpdate];
+    [account release];
+    
+    //[self dismissViewControllerAnimated:NO completion:^{}];
+    
+    NSLog(@"Login success! 3");
     
 }
 
@@ -615,6 +615,7 @@
                                                          @"Login Error", nil);
     NSString * msg = NSLocalizedStringWithDefaultValue(@"Login_Error_msg2" ,nil, [NSBundle mainBundle],
                                                        @"Server error: %@", nil);
+    msg = [NSString stringWithFormat:msg, [responseError objectForKey:@"message"]];
     
     NSString * ok = NSLocalizedStringWithDefaultValue(@"Ok" ,nil, [NSBundle mainBundle],
                                                       @"OK", nil);
@@ -623,18 +624,17 @@
 	//ERROR condition
 	UIAlertView *alert = [[UIAlertView alloc]
 						  initWithTitle:title
-                          message:[NSString stringWithFormat:msg, [responseError objectForKey:@"message"]]
+                          message:msg
 						  delegate:self
 						  cancelButtonTitle:ok
 						  otherButtonTitles:nil];
 	[alert show];
 	[alert release];
     
-    [[KISSMetricsAPI sharedAPI] recordEvent:@"Login Failed" withProperties:nil];
-    NSLog(@"%d", [[responseError objectForKey:@"status"] intValue]);
+    [[KISSMetricsAPI sharedAPI] recordEvent:[NSString stringWithFormat:@"Login failed - user: %@, error: %@", _stringUsername, msg] withProperties:nil];
 }
 
-- (void) loginFailedServerUnreachable
+- (void)loginFailedServerUnreachable
 {
     //reset it here
     self.buttonEnterPressedFlag = NO;
@@ -665,7 +665,7 @@
 	[alert show];
 	[alert release];
     
-    [[KISSMetricsAPI sharedAPI] recordEvent:@"Login Failed" withProperties:nil];
+    [[KISSMetricsAPI sharedAPI] recordEvent:[NSString stringWithFormat:@"Login failed - user: %@, error: Server unreachable", _stringUsername] withProperties:nil];
 }
 
 - (void)getUserInfoSuccessWithResponse: (NSDictionary *)responseDict
@@ -697,7 +697,6 @@
                        otherButtonTitles:nil]
       autorelease]
      show];
-    NSLog(@"%d", [[responseDict objectForKey:@"status"] intValue]);
 }
 
 - (void)getUserInfoFailedServerUnreachable

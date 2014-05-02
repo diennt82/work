@@ -12,6 +12,7 @@
 #import "UserAccount.h"
 #import "HttpCom.h"
 #import "MBP_iosViewController.h"
+#import "KISSMetricsAPI.h"
 
 #define TAG_IMAGE_VIEW_ANIMATION 595
 #define PROXY_HOST @"192.168.193.1"
@@ -394,7 +395,7 @@
                     }
                     
                     [self setStopScanning:nil];
-                    
+                    [[KISSMetricsAPI sharedAPI] recordEvent:[NSString stringWithFormat:@"Step10 - Check camera status: %@", _statusMessage] withProperties:nil];
                     [self showDialogWithTag:ALERT_CHECK_STATUS message:_statusMessage];
                     
                     [self setupFailed];
@@ -404,6 +405,7 @@
                 case DEV_STATUS_REGISTERED_LOGGED_USER:
                     NSLog(@"Step_10_VC register successfully. Move on");
                     shouldCheckAgain = FALSE;
+                    [[KISSMetricsAPI sharedAPI] recordEvent:[NSString stringWithFormat:@"Step10 - Check camera status: %d", deviceStatus] withProperties:nil];
                     break;
                     
                 default:
@@ -490,9 +492,11 @@
     NSLog(@" Timeout while trying to search for Home Wifi: %@", homeSsid);
     
     [self setStopScanning:Nil];
+    
+    [[KISSMetricsAPI sharedAPI] recordEvent:@"Step10 - Add camera failed - timeout" withProperties:nil];
 }
 
-- (void) step10CheckConnectionToHomeWifi:(NSTimer *) expired
+- (void)step10CheckConnectionToHomeWifi:(NSTimer *) expired
 {
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     //home wifi
@@ -814,8 +818,7 @@
 
 - (void) setupCompleted
 {
-    // Try to update base info to server first.
-    //[self updatesBasicInfoForCamera];
+    [[KISSMetricsAPI sharedAPI] recordEvent:@"Add camera success" withProperties:nil];
     
     [[NSNotificationCenter defaultCenter] removeObserver:self];
     // cancel timeout
@@ -854,8 +857,8 @@
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
     NSLog(@"Setup has failed - remove cam on server");
-    // send a command to remove camera
-    //NSString *mac = [Util strip_colon_fr_mac:self.cameraMac];
+    
+    [[KISSMetricsAPI sharedAPI] recordEvent:@"Step10 - Add camera failed" withProperties:nil];
     
     // Dont remove camera anymore as we don't add it,
 #if 0
@@ -1017,6 +1020,8 @@
 
 - (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex
 {
+    [[KISSMetricsAPI sharedAPI] recordEvent:[NSString stringWithFormat:@"Step10 - dismiss alert view with btn indx: %d", buttonIndex] withProperties:nil];
+    
     int tag = alertView.tag;
     
     if (tag == ALERT_ADD_CAM_UNREACH)

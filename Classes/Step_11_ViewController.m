@@ -8,6 +8,8 @@
 
 #import "Step_11_ViewController.h"
 #import "KISSMetricsAPI.h"
+#import "define.h"
+#import "PublicDefine.h"
 
 @interface Step_11_ViewController ()
 
@@ -32,10 +34,6 @@
 {
     [super viewDidLoad];
     self.navigationItem.hidesBackButton = YES;
-
-    CGAffineTransform transform = CGAffineTransformMakeScale(1.0f, 4.0f);
-    [self.view viewWithTag:501].transform = transform;
-    
     self.navigationItem.hidesBackButton = YES;
     
     UIImage *hubbleLogoBack = [UIImage imageNamed:@"Hubble_back_text"];
@@ -60,6 +58,28 @@
         self.error_code.hidden = YES;
     }
     
+    NSString *stringModel = @"";
+    
+    NSInteger model = [[NSUserDefaults standardUserDefaults] integerForKey:SET_UP_CAMERA];
+    
+    if (model == BLUETOOTH_SETUP)
+    {
+        stringModel = @"Mbp83";
+    }
+    else if(model == WIFI_SETUP)
+    {
+        stringModel = @"Focus66";
+    }
+    
+    NSString *fwVersion = [[NSUserDefaults standardUserDefaults] stringForKey:FW_VERSION];
+    
+    NSDictionary *info = [NSDictionary dictionaryWithObjectsAndKeys:
+                         stringModel,   @"Camera model",
+                         fwVersion,     @"FW",
+                          _errorCode,   @"Error",
+                         nil];
+    
+    [[KISSMetricsAPI sharedAPI] recordEvent:@"Add camera failed" withProperties:info];
 }
 
 - (void)didReceiveMemoryWarning
@@ -74,15 +94,13 @@
 
 -(IBAction)tryAddCameraAgain:(id)sender
 {
-    
+    [[KISSMetricsAPI sharedAPI] recordEvent:@"Step11 - Touch up inside try again btn" withProperties:nil];
     //Go back to the beginning
     
     // Disable Keep screen on
     [UIApplication sharedApplication].idleTimerDisabled=  NO;
     [self.navigationController popToRootViewControllerAnimated:NO];
-    NSString * msgLabel = [NSString stringWithFormat:@"Add Camera Failed with errorCode:%@",self.errorCode];
-    
-    [[KISSMetricsAPI sharedAPI] recordEvent:@"Add Camera Failed" withProperties:nil];
+    //NSString * msgLabel = [NSString stringWithFormat:@"Add Camera Failed with errorCode:%@", self.errorCode];
 }
 
 
