@@ -80,7 +80,7 @@
     UIImagePickerController *imagePickerController = [[UIImagePickerController alloc] init];
     imagePickerController.modalPresentationStyle = UIModalPresentationCurrentContext;
     imagePickerController.sourceType = sourceType;
-    imagePickerController.delegate = self;
+    imagePickerController.delegate = nil;
     
     if (sourceType == UIImagePickerControllerSourceTypeCamera)
     {

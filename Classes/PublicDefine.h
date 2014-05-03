@@ -165,10 +165,10 @@
 
 // Alert type
 #define ALERT_GENERIC_SERVER_INFO @"999999"
-#define  ALERT_TYPE_SOUND    @"1"
-#define  ALERT_TYPE_TEMP_HI  @"2"
+#define  ALERT_TYPE_SOUND   @"1"
+#define  ALERT_TYPE_TEMP_HI @"2"
 #define  ALERT_TYPE_TEMP_LO @"3"
-#define  ALERT_TYPE_MOTION @"4"
+#define  ALERT_TYPE_MOTION  @"4"
 
 #endif /* PUBLICDEFINE_H_ */
 

@@ -139,7 +139,7 @@ static TimelineDatabase *sharedInstance = nil;
             
             while (sqlite3_step(statement) == SQLITE_ROW)
             {
-                char * event_id = (char *) sqlite3_column_text(statement, 0);
+                //char * event_id = (char *) sqlite3_column_text(statement, 0);
                 //camera_udid : no need to get 1
                 // camera_owner_id: no need to get 2
                 char * event_alert = (char *)sqlite3_column_text(statement, 3);

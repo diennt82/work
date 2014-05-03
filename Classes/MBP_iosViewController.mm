@@ -6,7 +6,7 @@
 //  Copyright 2011 __MyCompanyName__. All rights reserved.
 //
 
-#define ALERT_GENERIC_SERVER_INFO @"0"
+//#define ALERT_GENERIC_SERVER_INFO @"0"
 #define _push_dev_token @"PUSH_NOTIFICATION_DEVICE_TOKEN"
 
 #import <CFNetwork/CFNetwork.h>

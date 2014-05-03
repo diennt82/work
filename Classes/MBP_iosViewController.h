@@ -16,7 +16,6 @@
 #import "PublicDefine.h"
 #import "ConnectionMethodDelegate.h"
 #import "CameraAlert.h"
-#import "NotificationViewController.h"
 #import "MenuViewController.h"
 #import "TimelineDatabase.h"
 

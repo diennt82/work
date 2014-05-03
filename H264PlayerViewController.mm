@@ -4181,8 +4181,6 @@ double _ticks = 0;
 
 -(void) periodicPopup:(NSTimer *) exp
 {
-	NSString * msg = (NSString *) [exp userInfo];
-    
 	[self playSound];
 }
 
