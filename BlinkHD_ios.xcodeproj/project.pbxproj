@@ -443,7 +443,6 @@
 		8B92D45618865F0400120BCE /* SchedulingViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8B92D45418865F0400120BCE /* SchedulingViewController.xib */; };
 		8B92D45918865F3600120BCE /* SchedulingCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B92D45818865F3600120BCE /* SchedulingCell.m */; };
 		8B92D45B18865F4C00120BCE /* SchedulingCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8B92D45A18865F4C00120BCE /* SchedulingCell.xib */; };
-		8B92DC24185ACACA00344530 /* ScheduleInformation.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B92DC23185ACACA00344530 /* ScheduleInformation.m */; };
 		8B933ED21911198900A97F12 /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8B933ED11911198900A97F12 /* MessageUI.framework */; };
 		8B933ED819111EBC00A97F12 /* video_action_photo_pressed@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B933ED319111EBC00A97F12 /* video_action_photo_pressed@2x.png */; };
 		8B933ED919111EBC00A97F12 /* video_action_photo@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B933ED419111EBC00A97F12 /* video_action_photo@2x.png */; };
@@ -562,8 +561,6 @@
 		8B9899AD1859771800AC3852 /* CameraNameViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B9899AB1859771800AC3852 /* CameraNameViewController.m */; };
 		8B9899AE1859771800AC3852 /* CameraNameViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8B9899AC1859771800AC3852 /* CameraNameViewController.xib */; };
 		8B9899CF1859A04F00AC3852 /* NMRangeSlider.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B9899CC1859A04F00AC3852 /* NMRangeSlider.m */; };
-		8B9899E41859C9EA00AC3852 /* DayViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B9899E21859C9EA00AC3852 /* DayViewController.m */; };
-		8B9899E51859C9EA00AC3852 /* DayViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8B9899E31859C9EA00AC3852 /* DayViewController.xib */; };
 		8B99C0B2186ABB7900DB8AAA /* ImgNotAvailable.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B99C0B1186ABB7900DB8AAA /* ImgNotAvailable.png */; };
 		8B99DB8218B8729F0009612A /* Icon-Small-40.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B99DB7E18B8729F0009612A /* Icon-Small-40.png */; };
 		8B99DB8318B8729F0009612A /* Icon-Small-40@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B99DB7F18B8729F0009612A /* Icon-Small-40@2x.png */; };
@@ -581,10 +578,6 @@
 		8B9ABB6B18A9FDEC0079F4A3 /* RegistrationViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8B9ABB6918A9FDEC0079F4A3 /* RegistrationViewController.xib */; };
 		8B9ABBB818AA2AC30079F4A3 /* CameraMenuViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B9ABBB618AA2AC30079F4A3 /* CameraMenuViewController.m */; };
 		8B9ABBB918AA2AC30079F4A3 /* CameraMenuViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8B9ABBB718AA2AC30079F4A3 /* CameraMenuViewController.xib */; };
-		8B9AF69E1858179900AC09C3 /* ScheduleViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B9AF69C1858179900AC09C3 /* ScheduleViewController.m */; };
-		8B9AF69F1858179900AC09C3 /* ScheduleViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8B9AF69D1858179900AC09C3 /* ScheduleViewController.xib */; };
-		8B9AF6A418581D3300AC09C3 /* AddScheduleViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B9AF6A218581D3300AC09C3 /* AddScheduleViewController.m */; };
-		8B9AF6A518581D3300AC09C3 /* AddScheduleViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8B9AF6A318581D3300AC09C3 /* AddScheduleViewController.xib */; };
 		8B9C7E0D185F260A0038B3A8 /* MenuViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8B9C7E0B185F260A0038B3A8 /* MenuViewController.mm */; };
 		8B9C7E0E185F260A0038B3A8 /* MenuViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8B9C7E0C185F260A0038B3A8 /* MenuViewController.xib */; };
 		8B9C7E15185F268C0038B3A8 /* CamerasViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8B9C7E13185F268C0038B3A8 /* CamerasViewController.mm */; };
@@ -1264,8 +1257,6 @@
 		8B92D45718865F3600120BCE /* SchedulingCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SchedulingCell.h; sourceTree = "<group>"; };
 		8B92D45818865F3600120BCE /* SchedulingCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SchedulingCell.m; sourceTree = "<group>"; };
 		8B92D45A18865F4C00120BCE /* SchedulingCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SchedulingCell.xib; sourceTree = "<group>"; };
-		8B92DC22185ACACA00344530 /* ScheduleInformation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ScheduleInformation.h; sourceTree = "<group>"; };
-		8B92DC23185ACACA00344530 /* ScheduleInformation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ScheduleInformation.m; sourceTree = "<group>"; };
 		8B933ED11911198900A97F12 /* MessageUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MessageUI.framework; path = System/Library/Frameworks/MessageUI.framework; sourceTree = SDKROOT; };
 		8B933ED319111EBC00A97F12 /* video_action_photo_pressed@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "video_action_photo_pressed@2x.png"; sourceTree = "<group>"; };
 		8B933ED419111EBC00A97F12 /* video_action_photo@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "video_action_photo@2x.png"; sourceTree = "<group>"; };
@@ -1399,9 +1390,6 @@
 		8B9899AC1859771800AC3852 /* CameraNameViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CameraNameViewController.xib; sourceTree = "<group>"; };
 		8B9899CB1859A04F00AC3852 /* NMRangeSlider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NMRangeSlider.h; sourceTree = "<group>"; };
 		8B9899CC1859A04F00AC3852 /* NMRangeSlider.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NMRangeSlider.m; sourceTree = "<group>"; };
-		8B9899E11859C9EA00AC3852 /* DayViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DayViewController.h; sourceTree = "<group>"; };
-		8B9899E21859C9EA00AC3852 /* DayViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DayViewController.m; sourceTree = "<group>"; };
-		8B9899E31859C9EA00AC3852 /* DayViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = DayViewController.xib; sourceTree = "<group>"; };
 		8B99C0B1186ABB7900DB8AAA /* ImgNotAvailable.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ImgNotAvailable.png; sourceTree = "<group>"; };
 		8B99DB7E18B8729F0009612A /* Icon-Small-40.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-Small-40.png"; sourceTree = "<group>"; };
 		8B99DB7F18B8729F0009612A /* Icon-Small-40@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-Small-40@2x.png"; sourceTree = "<group>"; };
@@ -1421,12 +1409,6 @@
 		8B9ABBB518AA2AC30079F4A3 /* CameraMenuViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CameraMenuViewController.h; sourceTree = "<group>"; };
 		8B9ABBB618AA2AC30079F4A3 /* CameraMenuViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CameraMenuViewController.m; sourceTree = "<group>"; };
 		8B9ABBB718AA2AC30079F4A3 /* CameraMenuViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CameraMenuViewController.xib; sourceTree = "<group>"; };
-		8B9AF69B1858179900AC09C3 /* ScheduleViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ScheduleViewController.h; sourceTree = "<group>"; };
-		8B9AF69C1858179900AC09C3 /* ScheduleViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ScheduleViewController.m; sourceTree = "<group>"; };
-		8B9AF69D1858179900AC09C3 /* ScheduleViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ScheduleViewController.xib; sourceTree = "<group>"; };
-		8B9AF6A118581D3300AC09C3 /* AddScheduleViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AddScheduleViewController.h; sourceTree = "<group>"; };
-		8B9AF6A218581D3300AC09C3 /* AddScheduleViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AddScheduleViewController.m; sourceTree = "<group>"; };
-		8B9AF6A318581D3300AC09C3 /* AddScheduleViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = AddScheduleViewController.xib; sourceTree = "<group>"; };
 		8B9C7E0A185F260A0038B3A8 /* MenuViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MenuViewController.h; sourceTree = "<group>"; };
 		8B9C7E0B185F260A0038B3A8 /* MenuViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = MenuViewController.mm; sourceTree = "<group>"; };
 		8B9C7E0C185F260A0038B3A8 /* MenuViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MenuViewController.xib; sourceTree = "<group>"; };
@@ -3240,17 +3222,6 @@
 			isa = PBXGroup;
 			children = (
 				8B9899C81859A03300AC3852 /* NMRangeSlider */,
-				8B9AF69B1858179900AC09C3 /* ScheduleViewController.h */,
-				8B9AF69C1858179900AC09C3 /* ScheduleViewController.m */,
-				8B9AF69D1858179900AC09C3 /* ScheduleViewController.xib */,
-				8B9AF6A118581D3300AC09C3 /* AddScheduleViewController.h */,
-				8B9AF6A218581D3300AC09C3 /* AddScheduleViewController.m */,
-				8B9AF6A318581D3300AC09C3 /* AddScheduleViewController.xib */,
-				8B9899E11859C9EA00AC3852 /* DayViewController.h */,
-				8B9899E21859C9EA00AC3852 /* DayViewController.m */,
-				8B9899E31859C9EA00AC3852 /* DayViewController.xib */,
-				8B92DC22185ACACA00344530 /* ScheduleInformation.h */,
-				8B92DC23185ACACA00344530 /* ScheduleInformation.m */,
 			);
 			name = Scheduling;
 			sourceTree = "<group>";
@@ -4036,7 +4007,6 @@
 				8B29A04C18AF500A00D36BE5 /* settings_circle@2x.png in Resources */,
 				A1322D0A18EA6FE60019E525 /* add_camera_btn_pressed.png in Resources */,
 				8B9384851856E613009C4771 /* CameraSettingsViewController.xib in Resources */,
-				8B9AF69F1858179900AC09C3 /* ScheduleViewController.xib in Resources */,
 				8B9112DC1860372D004301C5 /* Hubble-Notif.png in Resources */,
 				8B29A01118AF500900D36BE5 /* checkbox@2x.png in Resources */,
 				A1ABF1C1187538550014FCB4 /* EditCamera_VController.xib in Resources */,
@@ -4341,7 +4311,6 @@
 				979BC69B17D9B97700B3B373 /* PlaybackViewController.xib in Resources */,
 				8B95078018C9960D006D4945 /* camera_1.png in Resources */,
 				8B299F5918AF500900D36BE5 /* alert_learn.png in Resources */,
-				8B9899E51859C9EA00AC3852 /* DayViewController.xib in Resources */,
 				8B29A08118AF500A00D36BE5 /* video_play.png in Resources */,
 				979BC6A517D9BB9C00B3B373 /* PlayListViewController.xib in Resources */,
 				8B92A0B01863FD13005923D2 /* EarlierViewController.xib in Resources */,
@@ -4354,7 +4323,6 @@
 				A1B1E7D218E9135800F076B6 /* buy_camera_btn.png in Resources */,
 				8B299FFB18AF500900D36BE5 /* upgrade_pressed@2x.png in Resources */,
 				978F090317DF06C80053972F /* PlaylistCell.xib in Resources */,
-				8B9AF6A518581D3300AC09C3 /* AddScheduleViewController.xib in Resources */,
 				8B29A07F18AF500A00D36BE5 /* video_pause.png in Resources */,
 				8B299FCD18AF500900D36BE5 /* camera_action_pan_knob@5.png in Resources */,
 				A1B1E7E118E9135800F076B6 /* cart_pressed@2x.png in Resources */,
@@ -4441,7 +4409,6 @@
 				38A478D915BE484B008682FE /* Step_02_ViewController.mm in Sources */,
 				A15110D718AB7D4600E116E1 /* TimeLinePremiumCell.m in Sources */,
 				38A478DC15BE4BFA008682FE /* Step_03_ViewController.mm in Sources */,
-				8B9AF6A418581D3300AC09C3 /* AddScheduleViewController.m in Sources */,
 				38A478E815BE82E0008682FE /* Step_04_ViewController.mm in Sources */,
 				8B92D45918865F3600120BCE /* SchedulingCell.m in Sources */,
 				8B9899CF1859A04F00AC3852 /* NMRangeSlider.m in Sources */,
@@ -4482,7 +4449,6 @@
 				380CB0D616DC60DC00290587 /* Step_11_ViewController.m in Sources */,
 				8B92A0AF1863FD13005923D2 /* EarlierViewController.m in Sources */,
 				8B9384921856EEFE009C4771 /* SlideSettingsCell.m in Sources */,
-				8B92DC24185ACACA00344530 /* ScheduleInformation.m in Sources */,
 				A18635F118B6F43F00CB5CDA /* CellMelody.m in Sources */,
 				97F5531517BDD3AF00024017 /* MBPNavController.m in Sources */,
 				8B92A0A61863F69C005923D2 /* SavedEventCell.m in Sources */,
@@ -4497,7 +4463,6 @@
 				8B278BE7183DC51300A4FF50 /* NotificationSettingsViewController.m in Sources */,
 				8B92D45518865F0400120BCE /* SchedulingViewController.m in Sources */,
 				979BC6A817D9BCB200B3B373 /* PlaylistInfo.m in Sources */,
-				8B9899E41859C9EA00AC3852 /* DayViewController.m in Sources */,
 				A1239E86186185F200A25A04 /* AudioOutStreamer.m in Sources */,
 				8B9ABB6A18A9FDEC0079F4A3 /* RegistrationViewController.mm in Sources */,
 				8B9C7E19185F26B70038B3A8 /* CamerasCell.m in Sources */,
@@ -4505,7 +4470,6 @@
 				A1E32FAD17E9899800504538 /* H264PlayerListener.mm in Sources */,
 				A1E32FB017E98A4700504538 /* PlaybackListener.mm in Sources */,
 				8B9CE20518C848A000B1B7F9 /* AddCameraViewController.m in Sources */,
-				8B9AF69E1858179900AC09C3 /* ScheduleViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
