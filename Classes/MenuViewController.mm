@@ -58,6 +58,7 @@
     // Do any additional setup after loading the view from its nib.
     
     self.navigationController.navigationBarHidden = NO;
+    [[UINavigationBar appearance] setTintColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"back"]]];
     
     UIImage *hubbleBack = [UIImage imageNamed:@"Hubble_logo_back"];
     UIBarButtonItem *backBarBtn = [[UIBarButtonItem alloc] initWithImage:hubbleBack

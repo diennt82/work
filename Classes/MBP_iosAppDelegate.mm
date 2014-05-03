@@ -61,7 +61,7 @@
     NSArray *names = [UIFont fontNamesForFamilyName:@"Proxima Nova"];
     NSLog(@"names: %@",names);
     
-    [[UINavigationBar appearance] setTintColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"back"]]];
+    //[[UINavigationBar appearance] setTintColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"back"]]];
     
     [[UINavigationBar appearance] setTitleTextAttributes: @{
                                                             NSForegroundColorAttributeName: [UIColor colorWithRed:16/255.f green:16/255.f blue:16/255.f alpha:1],
@@ -114,19 +114,6 @@
     
      NSString *cachesDirectory = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
 	NSString *logPath = [cachesDirectory stringByAppendingPathComponent:@"application.log"];
-	NSString *logCrashedPath = [cachesDirectory stringByAppendingPathComponent:@"application_crash.log"];
-    
-    NSFileManager * fileManager = [NSFileManager defaultManager];
-    if ([fileManager fileExistsAtPath:logCrashedPath])
-    {
-        NSLog(@"App was crashed!");
-        
-        UIAlertView *av = [[UIAlertView alloc] initWithTitle:@"Send app log" message:nil
-                                                    delegate:self.viewController cancelButtonTitle:@"Cancel" otherButtonTitles:@"OK", nil];
-        av.tag = 11;
-        [av show];
-        [av release];
-    }
     
 	freopen([logPath cStringUsingEncoding:NSASCIIStringEncoding], "a+", stderr);
 	NSLog(@"Log location: %@",logPath);

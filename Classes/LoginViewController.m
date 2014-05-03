@@ -162,7 +162,6 @@
 
 - (void)viewWillDisappear:(BOOL)animated
 {
-    //[self performSelector:@selector(crash) withObject:nil];
     [self.view endEditing:YES];
     [super viewWillDisappear:animated];
 }

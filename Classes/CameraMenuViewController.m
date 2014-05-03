@@ -79,6 +79,8 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    [self.navigationItem.backBarButtonItem setTintColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"back"]]];
+    [self.navigationItem.leftBarButtonItem setTintColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"back"]]];
     self.navigationController.navigationBarHidden = NO;
     [self.navigationController.view setUserInteractionEnabled:YES];
 }
