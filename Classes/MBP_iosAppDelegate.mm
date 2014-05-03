@@ -12,6 +12,7 @@
 #import "KISSMetricsAPI.h"
 
 
+
 @implementation MBP_iosAppDelegate
 
 @synthesize window;
@@ -75,7 +76,8 @@
     NSArray *names = [UIFont fontNamesForFamilyName:@"Proxima Nova"];
     NSLog(@"names: %@",names);
     
-    [[UINavigationBar appearance] setTintColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"back"]]];
+    //[[UINavigationBar appearance] setTintColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"back"]]];
+    [[UINavigationBar appearance] setTintColor:[UIColor colorWithRed:252/255.f green:0 blue:7/255.f alpha:1]];
     
     [[UINavigationBar appearance] setTitleTextAttributes: @{
                                                             NSForegroundColorAttributeName: [UIColor colorWithRed:16/255.f green:16/255.f blue:16/255.f alpha:1],
@@ -116,9 +118,21 @@
     
 #if TARGET_IPHONE_SIMULATOR == 0
 
+    NSSetUncaughtExceptionHandler(&HandleException);
+    
+    struct sigaction signalAction;
+    memset(&signalAction, 0, sizeof(signalAction));
+    signalAction.sa_handler = &HandleSignal;
+    
+    sigaction(SIGABRT, &signalAction, NULL);
+    sigaction(SIGILL, &signalAction, NULL);
+    sigaction(SIGBUS, &signalAction, NULL);
+    
      NSString *cachesDirectory = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
 	NSString *logPath = [cachesDirectory stringByAppendingPathComponent:@"application.log"];
-	
+    
+    [self createANewAppLog:logPath decumentDirectory:cachesDirectory];
+    
 	freopen([logPath cStringUsingEncoding:NSASCIIStringEncoding], "a+", stderr);
 	NSLog(@"Log location: %@",logPath);
 #endif
@@ -141,6 +155,86 @@
     [BMS_JSON_Communication setServerInput:serverName];
 
     return YES;
+}
+
+void HandleException(NSException *exception) {
+    NSLog(@"App crashing with exception: %@", exception);
+    //Save somewhere that your app has crashed.
+    checkingApplicationCrashed();
+}
+
+void HandleSignal(int signal) {
+    NSLog(@"We received a signal: %d", signal);
+    checkingApplicationCrashed();
+    //Save somewhere that your app has crashed.
+}
+
+void checkingApplicationCrashed()
+{
+    BOOL success;
+    NSFileManager * fileManager = [NSFileManager defaultManager];
+    
+    NSError * error;
+    NSArray * paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString * documentDirectory = [paths objectAtIndex:0];
+    
+    NSString *appCrashedLog = [documentDirectory stringByAppendingPathComponent:@"application_crash.log"];
+    
+    NSString *defaultLogPath = [documentDirectory stringByAppendingPathComponent:@"application.log"];
+  
+    success = [fileManager copyItemAtPath:defaultLogPath toPath:appCrashedLog error:&error];
+    
+    if (success)
+    {
+        NSLog(@"Save log crashed!");
+    }
+}
+
+- (void)createANewAppLog: (NSString *)appLogPath decumentDirectory: (NSString *)docDirectory
+{
+    NSString *appLog0 = [docDirectory stringByAppendingPathComponent:@"application0.log"];
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    BOOL success = FALSE;
+    NSError *error;
+    
+    if ([[fileManager attributesOfItemAtPath:appLogPath error:&error] fileSize] > 5000000)//5000000) // 5MB
+    {
+        if ([fileManager fileExistsAtPath:appLog0])
+        {
+            success = [fileManager removeItemAtPath:appLog0 error:&error];
+            
+            if (success)
+            {
+                NSLog(@"Remove app log 0 success");
+            }
+            else
+            {
+                NSLog(@"Remove app log 0 error: %@", [error localizedDescription]);
+            }
+        }
+        
+        success = [fileManager copyItemAtPath:appLogPath toPath:appLog0 error:&error];
+        
+        if (success)
+        {
+            NSLog(@"Copy success");
+            
+            success = [fileManager removeItemAtPath:appLogPath error:&error];
+            
+            if (success)
+            {
+                NSLog(@"Remove app log success");
+            }
+            else
+            {
+                NSLog(@"Remove app log err: %@", [error localizedDescription]);
+            }
+        }
+        else
+        {
+            NSLog(@"Copy error: %@", [error localizedDescription]);
+        }
+    }
 }
 
 - (void)registerDefaultsFromSettingsBundle
@@ -640,6 +734,7 @@
     [window release];
     [super dealloc];
 }
+
 
 
 

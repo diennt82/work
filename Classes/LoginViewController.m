@@ -82,7 +82,46 @@
     self.buttonEnterPressedFlag = NO;
     
 	//load user/pass
-	NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    [self performSelectorInBackground:@selector(loadUserInfo_bg) withObject:nil];
+}
+
+-(void) viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    self.navigationController.navigationBarHidden = YES;
+    NSString * msg = NSLocalizedStringWithDefaultValue(@"Logging_in_to_server" ,nil, [NSBundle mainBundle],
+                                                       @"Logging in to server..." , nil);
+    UILabel *labelMessage = (UILabel *)[_viewProgress viewWithTag:509];
+    [labelMessage setText:msg];
+    
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+    {
+        UIButton *btnForgotPassword = (UIButton *)[self.view viewWithTag:955];
+        btnForgotPassword.frame = CGRectMake(_buttonEnter.frame.origin.x, btnForgotPassword.frame.origin.y, btnForgotPassword.frame.size.width, btnForgotPassword.frame.size.height);
+    }
+}
+
+-(void) viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    [[KISSMetricsAPI sharedAPI] recordEvent:@"Login Screen" withProperties:nil];
+}
+
+- (void)viewWillDisappear:(BOOL)animated
+{
+    //[self performSelector:@selector(crash) withObject:nil];
+    [self.view endEditing:YES];
+    [super viewWillDisappear:animated];
+}
+
+- (void)loadUserInfo_bg
+{
+    [self performSelectorOnMainThread:@selector(loadUserInfo) withObject:nil waitUntilDone:NO];
+}
+
+- (void)loadUserInfo
+{
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     
 	//can be user email or user name here --
 	NSString * old_usr = (NSString *) [userDefaults objectForKey:@"PortalUsername"];
@@ -105,7 +144,7 @@
             old_api_key != nil && old_pass != nil )
         {
             /* Don't need to go thru the login query again */
-             NSLog(@" Use old api key");
+            NSLog(@" Use old api key");
             self.stringPassword = [NSString stringWithString:old_pass];
             self.viewProgress.hidden = NO;
             self.tfPassword.text = old_pass;
@@ -115,7 +154,7 @@
             
         }
         else if (shouldAutoLogin &&
-            old_pass != nil)
+                 old_pass != nil)
         {
             self.stringPassword = [NSString stringWithString:old_pass];
             self.viewProgress.hidden = NO;
@@ -141,31 +180,6 @@
         self.buttonEnter.enabled = NO;
         NSLog(@"LoginVC - No login");
     }
-}
-
--(void) viewWillAppear:(BOOL)animated
-{
-    [super viewWillAppear:animated];
-    self.navigationController.navigationBarHidden = YES;
-    
-    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
-    {
-        UIButton *btnForgotPassword = (UIButton *)[self.view viewWithTag:955];
-        btnForgotPassword.frame = CGRectMake(_buttonEnter.frame.origin.x, btnForgotPassword.frame.origin.y, btnForgotPassword.frame.size.width, btnForgotPassword.frame.size.height);
-    }
-}
-
--(void) viewDidAppear:(BOOL)animated
-{
-    [super viewDidAppear:animated];
-
-    [[KISSMetricsAPI sharedAPI] recordEvent:@"Login Screen" withProperties:nil];
-}
-
-- (void)viewWillDisappear:(BOOL)animated
-{
-    [self.view endEditing:YES];
-    [super viewWillDisappear:animated];
 }
 
 - (void)didReceiveMemoryWarning

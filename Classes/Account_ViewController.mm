@@ -11,8 +11,9 @@
 #import "MenuViewController.h"
 #import <MonitorCommunication/MonitorCommunication.h>
 #import "PublicDefine.h"
+#import <MessageUI/MFMailComposeViewController.h>
 
-@interface Account_ViewController ()
+@interface Account_ViewController () <MFMailComposeViewControllerDelegate>
 
 @property (retain, nonatomic) IBOutlet UITableViewCell *tableViewCellChangePassword;
 @property (nonatomic) NSInteger screenWidth;
@@ -98,7 +99,7 @@
     [self userLogout];
 }
 
--(void) userLogout
+- (void)userLogout
 {
     NSLog(@"LOG OUT>>>>");
     
@@ -114,11 +115,45 @@
     }];
 }
 
+- (void)sendsAppLog
+{
+    MFMailComposeViewController *picker = [[MFMailComposeViewController alloc] init];
+    picker.mailComposeDelegate = self;
+    
+    NSString *cachesDirectory = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
+    NSString *logAppPath = [cachesDirectory stringByAppendingPathComponent:@"application.log"];
+    NSString *logPath0 = [cachesDirectory stringByAppendingPathComponent:@"application0.log"];
+    
+    // Create NSData object from file
+    NSData *exportFileData = [NSData dataWithContentsOfFile:logAppPath];
+    // Attach image data to the email
+    [picker addAttachmentData:exportFileData mimeType:@"text/plain" fileName:@"application.log"];
+    
+    if ([[NSFileManager defaultManager] fileExistsAtPath:logPath0])
+    {
+        NSData *extraFileData = [NSData dataWithContentsOfFile:logPath0];
+        [picker addAttachmentData:extraFileData mimeType:@"text/plain" fileName:@"application0.log"];
+    }
+    
+    // Set the subject of email
+    [picker setSubject:@"IOS app crash log"];
+    NSArray *toRecipents = [NSArray arrayWithObject:@"ios.crashreport@cvisionhk.com"];
+    [picker setToRecipients:toRecipents];
+//    NSArray *ccRecipients = [NSArray arrayWithObject:@"luan.nguyen@nxcomm.com"];
+//    [picker setCcRecipients:ccRecipients];
+    
+    // Show email view
+    [self presentViewController:picker animated:YES completion:NULL];
+    
+    // Release picker
+    [picker release];
+}
+
 #pragma mark - Table view delegate & data source
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    return 2;
+    return 3;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
@@ -127,7 +162,7 @@
     {
         return 3;
     }
-    else
+    else if(section == 2)
     {
         if (CUE_RELEASE_FLAG)
         {
@@ -138,6 +173,10 @@
             return 2;
         }
     }
+    else
+    {
+        return 1;
+    }
 }
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
@@ -146,9 +185,13 @@
     {
         return @"Profile";
     }
-    else
+    else if(section == 1)
     {
         return @"Plan";
+    }
+    else
+    {
+        return @"Report";
     }
 }
 
@@ -159,7 +202,8 @@
 
 - (BOOL)tableView:(UITableView *)tableView shouldHighlightRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (indexPath.section == 0 && (indexPath.row == 2 || indexPath.row == 1))
+    if ((indexPath.section == 0 && (indexPath.row == 2 || indexPath.row == 1)) ||
+        indexPath.section == 2)
     {
         return YES;
     }
@@ -180,7 +224,7 @@
     }
     
     UIView *lineView = [[[UIView alloc] initWithFrame:CGRectMake(0, cell.contentView.frame.size.height - 0.5f, _screenWidth, 0.5f)] autorelease];
-    if (indexPath.row == 2)
+    if (indexPath.row == 2 || indexPath.section == 2)
     {
         cell.textLabel.font = [UIFont fontWithName:@"HelveticaNeue-Thin" size:17];
         cell.textLabel.textColor = [UIColor colorWithRed:(128/255.f) green:(128/255.f) blue:(128/255.f) alpha:1];
@@ -225,7 +269,7 @@
             return cell;
         }
     }
-    else
+    else if(indexPath.section == 1)
     {
         static NSString *CellIdentifier = @"CameraSettingsCell";
         CameraSettingsCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
@@ -258,6 +302,20 @@
             return cell;
         }
     }
+    else
+    {
+        static NSString *CellIdentifier = @"Cell";
+        UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+        if (cell == nil) {
+            cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
+        }
+        
+        // Configure the cell...
+        
+        cell.textLabel.text = @"Send app log";
+        
+        return cell;
+    }
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
@@ -277,7 +335,10 @@
             //log out
             [self userLogout];
         }
-        
+    }
+    else if(indexPath.section == 2)
+    {
+        [self sendsAppLog];
     }
 }
 
@@ -352,6 +413,32 @@
                                 delegate:self
                        cancelButtonTitle:nil
                        otherButtonTitles:@"OK", nil] autorelease] show];
+}
+
+#pragma mark - FMail
+
+- (void)mailComposeController:(MFMailComposeViewController *)controller didFinishWithResult:(MFMailComposeResult)result error:(NSError *)error
+{
+    switch (result)
+    {
+        case MFMailComposeResultCancelled:
+            NSLog(@"Mail cancelled");
+            break;
+        case MFMailComposeResultSaved:
+            NSLog(@"Mail saved");
+            break;
+        case MFMailComposeResultSent:
+            NSLog(@"Mail sent");
+            break;
+        case MFMailComposeResultFailed:
+            NSLog(@"Mail sent failure: %@", [error localizedDescription]);
+            break;
+        default:
+            break;
+    }
+    
+    // Close the Mail Interface
+    [self dismissViewControllerAnimated:YES completion:NULL];
 }
 
 

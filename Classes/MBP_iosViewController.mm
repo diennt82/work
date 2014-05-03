@@ -30,8 +30,9 @@
 
 #import "AlertPrompt.h"
 #import "KISSMetricsAPI.h"
+#import <MessageUI/MFMailComposeViewController.h>
 
-@interface MBP_iosViewController ()
+@interface MBP_iosViewController () <MFMailComposeViewControllerDelegate>
 
 @end
 
@@ -878,10 +879,9 @@
 {
     @autoreleasepool
     {
-        //[[KISSMetricsAPI sharedAPI] clearIdentity];
-        
-#if  TARGET_IPHONE_SIMULATOR
         NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+#if  TARGET_IPHONE_SIMULATOR
+        
         
         //REmove password and registration id
         [userDefaults removeObjectForKey:@"PortalPassword"];
@@ -896,8 +896,7 @@
 #else
         
         NSLog(@"De-Register push with both parties: APNs and BMS ");
-        
-        NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+
         NSString *apiKey = [userDefaults objectForKey:@"PortalApiKey"];
         NSString *appId = [userDefaults objectForKey:@"APP_ID"];
         NSString * userName = [userDefaults objectForKey:@"PortalUsername"];
@@ -1168,6 +1167,54 @@
                 break;
         }
     }
+    else if (tag == 11)
+    {
+        if (buttonIndex == 1)
+        {
+            MFMailComposeViewController *picker = [[MFMailComposeViewController alloc] init];
+            picker.mailComposeDelegate = self;
+            
+            NSString *cachesDirectory = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
+            NSString *logCrashedPath = [cachesDirectory stringByAppendingPathComponent:@"application_crash.log"];
+            NSString *logPath0 = [cachesDirectory stringByAppendingPathComponent:@"application0.log"];
+            
+            // Create NSData object from file
+            NSData *exportFileData = [NSData dataWithContentsOfFile:logCrashedPath];
+            // Attach image data to the email
+            [picker addAttachmentData:exportFileData mimeType:@"text/plain" fileName:@"application_crash.log"];
+            
+            if ([[NSFileManager defaultManager] fileExistsAtPath:logPath0])
+            {
+                NSData *extraFileData = [NSData dataWithContentsOfFile:logPath0];
+                [picker addAttachmentData:extraFileData mimeType:@"text/plain" fileName:@"application0.log"];
+            }
+            
+            // Set the subject of email
+            [picker setSubject:@"IOS app crash log"];
+             NSArray *toRecipents = [NSArray arrayWithObject:@"ios.crashreport@cvisionhk.com"];
+            [picker setToRecipients:toRecipents];
+//            NSArray *ccRecipients = [NSArray arrayWithObject:@"luan.nguyen@nxcomm.com"];
+//            [picker setCcRecipients:ccRecipients];
+            //[picker setToRecipients:[NSArray arrayWithObjects:@"androidcrashreport@cvisionhk.com", nil]];
+            
+            // Show email view
+            [self presentViewController:picker animated:YES completion:nil];
+            
+            // Release picker
+            [picker release];
+        }
+        else
+        {
+            /*
+             * 1. Try to remove crashed log file.
+             * 2. Force show login view, do not check again
+             */
+            
+            [self show_login_or_reg:nil];
+            [self removeCrashedLogFile];
+        }
+    }
+    
 }
 
 
@@ -1687,30 +1734,62 @@
 #pragma mark -
 #pragma mark SetupHTTPDelegate --- NOT USED --- check ..
 
--(void) show_login_or_reg:(NSTimer*) exp
+-(void) show_login_or_reg:(NSTimer *)timer
 {
-	NSLog(@"show_login... & Test Player ");
+    /*
+     * 1. If timer is NOT nil --> - check exist of crashed log file
+     * 2. If time is nil need not to check.
+     */
     
-    self.app_stage = APP_STAGE_LOGGING_IN;
+    BOOL hasOptionSendEmail = FALSE;
     
-
-    LoginViewController *loginVC = [[LoginViewController alloc] initWithNibName:@"LoginViewController"
-                                                                         bundle:Nil
-                                                                       delegate:self];
-    UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:loginVC];
-    
-    [loginVC release];
-    //[self presentViewController:nav animated:YES completion:^{}];
-    if (self.presentedViewController) {
-        [self dismissViewControllerAnimated:YES completion:^{
-            [self presentViewController:nav animated:NO completion:nil];
-        }];
-    } else {
-        [self presentViewController:nav animated:NO completion:nil];
+    if (timer != nil )
+    {
+        NSString *cachesDirectory = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
+        NSString *logCrashedPath = [cachesDirectory stringByAppendingPathComponent:@"application_crash.log"];
+        
+        NSFileManager * fileManager = [NSFileManager defaultManager];
+        
+        if ([fileManager fileExistsAtPath:logCrashedPath])
+        {
+            NSLog(@"App was crashed!");
+            hasOptionSendEmail = TRUE;
+            
+            UIAlertView *av = [[UIAlertView alloc] initWithTitle:@"Send app log" message:nil
+                                                        delegate:self
+                                               cancelButtonTitle:@"Cancel"
+                                               otherButtonTitles:@"OK", nil];
+            av.tag = 11;
+            [av show];
+            [av release];
+        }
     }
-
+    
+    NSLog(@"%s: show login view - timer: %p, has crashed log: %d", __FUNCTION__, timer, hasOptionSendEmail);
+    
+    if (!hasOptionSendEmail)
+    {
+        NSLog(@"show_login... & Test Player ");
+        
+        self.app_stage = APP_STAGE_LOGGING_IN;
+        
+        LoginViewController *loginVC = [[LoginViewController alloc] initWithNibName:@"LoginViewController"
+                                                                             bundle:Nil
+                                                                           delegate:self];
+        
+        UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:loginVC];
+        
+        [loginVC release];
+        
+        if (self.presentedViewController) {
+            [self dismissViewControllerAnimated:YES completion:^{
+                [self presentViewController:nav animated:NO completion:nil];
+            }];
+        } else {
+            [self presentViewController:nav animated:NO completion:nil];
+        }
+    }
 }
-
 
 - (void)showNotificationViewController: (NSTimer *)exp
 {
@@ -1777,5 +1856,58 @@
 {
 }
 
+#pragma mark - FMail
+
+- (void)mailComposeController:(MFMailComposeViewController *)controller didFinishWithResult:(MFMailComposeResult)result error:(NSError *)error
+{
+    switch (result)
+    {
+        case MFMailComposeResultCancelled:
+            NSLog(@"Mail cancelled");
+            break;
+        case MFMailComposeResultSaved:
+            NSLog(@"Mail saved");
+            break;
+        case MFMailComposeResultSent:
+            NSLog(@"Mail sent");
+            break;
+        case MFMailComposeResultFailed:
+            NSLog(@"Mail sent failure: %@", [error localizedDescription]);
+            break;
+        default:
+            break;
+    }
+
+    // Close the Mail Interface
+    [self dismissViewControllerAnimated:YES completion:^{
+        /*
+         * 1. Try to remove crashed log file
+         * 2. Force show login view
+         */
+        [self show_login_or_reg:nil];
+        [self removeCrashedLogFile];
+    }];
+}
+
+- (void)removeCrashedLogFile
+{
+    // Remove crashed log file
+    NSString *cachesDirectory = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
+	NSString *logCrashedPath = [cachesDirectory stringByAppendingPathComponent:@"application_crash.log"];
+    
+    NSFileManager * fileManager = [NSFileManager defaultManager];
+    
+    NSError *errorFile;
+    BOOL success = [fileManager removeItemAtPath:logCrashedPath error:&errorFile];
+    if (success) {
+        //        UIAlertView *removeSuccessFulAlert=[[UIAlertView alloc]initWithTitle:@"Congratulation:" message:@"Successfully removed" delegate:self cancelButtonTitle:@"Close" otherButtonTitles:nil];
+        //        [removeSuccessFulAlert show];
+        NSLog(@"Removed application_crash.log successfuly!");
+    }
+    else
+    {
+        NSLog(@"Could not delete file -:%@ ", [errorFile localizedDescription]);
+    }
+}
 
 @end
