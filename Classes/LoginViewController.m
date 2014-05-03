@@ -94,6 +94,9 @@
     UILabel *labelMessage = (UILabel *)[_viewProgress viewWithTag:509];
     [labelMessage setText:msg];
     
+    NSString * old_usr = (NSString *) [[NSUserDefaults standardUserDefaults] objectForKey:@"PortalUsername"];
+    self.tfEmail.text = old_usr;
+    
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
     {
         UIButton *btnForgotPassword = (UIButton *)[self.view viewWithTag:955];

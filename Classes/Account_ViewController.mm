@@ -49,11 +49,6 @@
     self.screenWidth = [UIScreen mainScreen].bounds.size.width;
     UILabel *lblVersion = (UILabel *)[self.view viewWithTag:559];
     
-    if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 7)
-    {
-        lblVersion.frame = CGRectMake(lblVersion.frame.origin.x, lblVersion.frame.origin.y - 44, lblVersion.frame.size.width, lblVersion.frame.size.height);
-    }
-    
     lblVersion.text = [NSString stringWithFormat:@"Hubble Home v%@", [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"]];
 }
 
@@ -117,6 +112,9 @@
 
 - (void)sendsAppLog
 {
+    MenuViewController *tabBarController = (MenuViewController *)self.parentVC;
+    tabBarController.navigationController.navigationBarHidden = YES;
+    
     MFMailComposeViewController *picker = [[MFMailComposeViewController alloc] init];
     picker.mailComposeDelegate = self;
     
@@ -419,6 +417,9 @@
 
 - (void)mailComposeController:(MFMailComposeViewController *)controller didFinishWithResult:(MFMailComposeResult)result error:(NSError *)error
 {
+    MenuViewController *tabBarController = (MenuViewController *)self.parentVC;
+    tabBarController.navigationController.navigationBarHidden = NO;
+    
     switch (result)
     {
         case MFMailComposeResultCancelled:
