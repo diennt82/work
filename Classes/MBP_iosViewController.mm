@@ -877,8 +877,9 @@
 {
     @autoreleasepool
     {
-#if  TARGET_IPHONE_SIMULATOR
         NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+#if  TARGET_IPHONE_SIMULATOR
+        
         
         //REmove password and registration id
         [userDefaults removeObjectForKey:@"PortalPassword"];
@@ -893,8 +894,7 @@
 #else
         
         NSLog(@"De-Register push with both parties: APNs and BMS ");
-        
-        NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+
         NSString *apiKey = [userDefaults objectForKey:@"PortalApiKey"];
         NSString *appId = [userDefaults objectForKey:@"APP_ID"];
         NSString * userName = [userDefaults objectForKey:@"PortalUsername"];
@@ -1174,16 +1174,25 @@
             
             NSString *cachesDirectory = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
             NSString *logCrashedPath = [cachesDirectory stringByAppendingPathComponent:@"application_crash.log"];
+            NSString *logPath0 = [cachesDirectory stringByAppendingPathComponent:@"application0.log"];
             
             // Create NSData object from file
             NSData *exportFileData = [NSData dataWithContentsOfFile:logCrashedPath];
             // Attach image data to the email
             [picker addAttachmentData:exportFileData mimeType:@"text/plain" fileName:@"application_crash.log"];
             
+            if ([[NSFileManager defaultManager] fileExistsAtPath:logPath0])
+            {
+                NSData *extraFileData = [NSData dataWithContentsOfFile:logPath0];
+                [picker addAttachmentData:extraFileData mimeType:@"text/plain" fileName:@"application0.log"];
+            }
+            
             // Set the subject of email
             [picker setSubject:@"IOS app crash log"];
              NSArray *toRecipents = [NSArray arrayWithObject:@"ios.crashreport@cvisionhk.com"];
             [picker setToRecipients:toRecipents];
+//            NSArray *ccRecipients = [NSArray arrayWithObject:@"luan.nguyen@nxcomm.com"];
+//            [picker setCcRecipients:ccRecipients];
             //[picker setToRecipients:[NSArray arrayWithObjects:@"androidcrashreport@cvisionhk.com", nil]];
             
             // Show email view
@@ -1198,8 +1207,9 @@
              * 1. Try to remove crashed log file.
              * 2. Force show login view, do not check again
              */
-            [self removeCrashedLogFile];
+            
             [self show_login_or_reg:nil];
+            [self removeCrashedLogFile];
         }
     }
     
@@ -1729,7 +1739,7 @@
      * 2. If time is nil need not to check.
      */
     
-    BOOL shouldShowLoginView = TRUE;
+    BOOL hasOptionSendEmail = FALSE;
     
     if (timer != nil )
     {
@@ -1741,7 +1751,7 @@
         if ([fileManager fileExistsAtPath:logCrashedPath])
         {
             NSLog(@"App was crashed!");
-            shouldShowLoginView = FALSE;
+            hasOptionSendEmail = TRUE;
             
             UIAlertView *av = [[UIAlertView alloc] initWithTitle:@"Send app log" message:nil
                                                         delegate:self
@@ -1753,22 +1763,22 @@
         }
     }
     
-    NSLog(@"%s: show login view - timer: %p, show login: %d", __FUNCTION__, timer, shouldShowLoginView);
+    NSLog(@"%s: show login view - timer: %p, has crashed log: %d", __FUNCTION__, timer, hasOptionSendEmail);
     
-    if (shouldShowLoginView)
+    if (!hasOptionSendEmail)
     {
         NSLog(@"show_login... & Test Player ");
         
         self.app_stage = APP_STAGE_LOGGING_IN;
         
-        
         LoginViewController *loginVC = [[LoginViewController alloc] initWithNibName:@"LoginViewController"
                                                                              bundle:Nil
                                                                            delegate:self];
+        
         UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:loginVC];
         
         [loginVC release];
-        //[self presentViewController:nav animated:YES completion:^{}];
+        
         if (self.presentedViewController) {
             [self dismissViewControllerAnimated:YES completion:^{
                 [self presentViewController:nav animated:NO completion:nil];
@@ -1865,15 +1875,15 @@
         default:
             break;
     }
-    
+
     // Close the Mail Interface
     [self dismissViewControllerAnimated:YES completion:^{
         /*
          * 1. Try to remove crashed log file
          * 2. Force show login view
          */
-        [self removeCrashedLogFile];
         [self show_login_or_reg:nil];
+        [self removeCrashedLogFile];
     }];
 }
 

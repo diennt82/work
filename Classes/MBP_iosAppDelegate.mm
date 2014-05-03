@@ -62,6 +62,7 @@
     NSLog(@"names: %@",names);
     
     //[[UINavigationBar appearance] setTintColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"back"]]];
+    [[UINavigationBar appearance] setTintColor:[UIColor colorWithRed:252/255.f green:0 blue:7/255.f alpha:1]];
     
     [[UINavigationBar appearance] setTitleTextAttributes: @{
                                                             NSForegroundColorAttributeName: [UIColor colorWithRed:16/255.f green:16/255.f blue:16/255.f alpha:1],
@@ -114,6 +115,8 @@
     
      NSString *cachesDirectory = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
 	NSString *logPath = [cachesDirectory stringByAppendingPathComponent:@"application.log"];
+    
+    [self createANewAppLog:logPath decumentDirectory:cachesDirectory];
     
 	freopen([logPath cStringUsingEncoding:NSASCIIStringEncoding], "a+", stderr);
 	NSLog(@"Log location: %@",logPath);
@@ -169,6 +172,53 @@ void checkingApplicationCrashed()
     if (success)
     {
         NSLog(@"Save log crashed!");
+    }
+}
+
+- (void)createANewAppLog: (NSString *)appLogPath decumentDirectory: (NSString *)docDirectory
+{
+    NSString *appLog0 = [docDirectory stringByAppendingPathComponent:@"application0.log"];
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    BOOL success = FALSE;
+    NSError *error;
+    
+    if ([[fileManager attributesOfItemAtPath:appLogPath error:&error] fileSize] > 5000000)//5000000) // 5MB
+    {
+        if ([fileManager fileExistsAtPath:appLog0])
+        {
+            success = [fileManager removeItemAtPath:appLog0 error:&error];
+            
+            if (success)
+            {
+                NSLog(@"Remove app log 0 success");
+            }
+            else
+            {
+                NSLog(@"Remove app log 0 error: %@", [error localizedDescription]);
+            }
+        }
+        
+        success = [fileManager copyItemAtPath:appLogPath toPath:appLog0 error:&error];
+        
+        if (success)
+        {
+            NSLog(@"Copy success");
+            
+            success = [fileManager removeItemAtPath:appLogPath error:&error];
+            
+            if (success)
+            {
+                NSLog(@"Remove app log success");
+            }
+            else
+            {
+                NSLog(@"Remove app log err: %@", [error localizedDescription]);
+            }
+        }
+        else
+        {
+            NSLog(@"Copy error: %@", [error localizedDescription]);
+        }
     }
 }
 
