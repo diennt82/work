@@ -208,7 +208,7 @@
     
     NSLog(@"There are %d in databases", self.events.count );
     
-    if (self.events.count ==0)
+    if (self.events.count == 0)
     {
         self.isEventAlready = TRUE;
         self.stringIntelligentMessage = @"There is currently no new event";

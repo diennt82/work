@@ -334,20 +334,19 @@ double _ticks = 0;
 
 - (void)applyFont
 {
-    
     if (_isLandScapeMode)
     {
         //update position text recording
         // update position button
         //hold to talk (size = 75, bottom align = 30
         CGSize holdTTButtonSize = self.ib_buttonTouchToTalk.bounds.size;
-        CGSize viewRecordSize = self.ib_viewRecordTTT.bounds.size;
+        CGSize viewRecordSize   = self.ib_viewRecordTTT.bounds.size;
         CGSize directionPadSize = self.imgViewDrectionPad.bounds.size;
         
-        float alignXButtonRecord = SCREEN_HEIGHT - 15 - self.ib_viewRecordTTT.bounds.size.width;
-        float alignXButtonDirectionPad = SCREEN_HEIGHT - directionPadSize.width - 10;
-        float alignYButtonRecord = SCREEN_WIDTH - viewRecordSize.height;
-        float alignYButtonDirectionPad = (SCREEN_WIDTH - 10 - directionPadSize.height);
+        float alignXButtonRecord        = SCREEN_HEIGHT - 15 - self.ib_viewRecordTTT.bounds.size.width;
+        float alignXButtonDirectionPad  = SCREEN_HEIGHT - directionPadSize.width - 10;
+        float alignYButtonRecord        = SCREEN_WIDTH - viewRecordSize.height;
+        float alignYButtonDirectionPad  = (SCREEN_WIDTH - 10 - directionPadSize.height);
         //margin TTT
         float alignXTTT = SCREEN_HEIGHT - 30 - holdTTButtonSize.width;
         float alignYTTT = SCREEN_WIDTH - 30 - holdTTButtonSize.height;
@@ -355,15 +354,15 @@ double _ticks = 0;
         
         if (isiPhone4 || isiPhone5)
         {
-            alignYTTT = alignYTTT;
-            alignYButtonRecord = alignYButtonRecord;
-            alignYButtonDirectionPad = alignYButtonDirectionPad;
+            //alignYTTT = alignYTTT;
+            //alignYButtonRecord = alignYButtonRecord;
+            //alignYButtonDirectionPad = alignYButtonDirectionPad;
         }
         else
         {
-            alignYTTT = alignYTTT - 94;
-            alignYButtonRecord = alignYButtonRecord - 94;
-            alignYButtonDirectionPad = alignYButtonDirectionPad - 94;
+            alignYTTT -= 94;
+            alignYButtonRecord -= 94;
+            alignYButtonDirectionPad -= 94;
         }
         
         [self.ib_ViewTouchToTalk setFrame:CGRectMake(alignXTTT, alignYTTT, holdTTButtonSize.width, holdTTButtonSize.height)];
@@ -373,15 +372,18 @@ double _ticks = 0;
     }
     else
     {
-        UIFont *font;
-        UIColor *color;
+        //UIFont *font;
+        //UIColor *color;
         float marginBottomText, marginBottomButton, positionYOfBottomView;
+        
+        CGFloat fontSize = 19;
         
         if (isiPhone5)
         {
             //for holdtotalk
-            font = [UIFont applyHubbleFontName:PN_REGULAR_FONT withSize:19];
-            color = [UIColor holdToTalkTextColor];
+            //font = [UIFont applyHubbleFontName:PN_REGULAR_FONT withSize:19];
+            fontSize = 19;
+            //color = [UIColor holdToTalkTextColor];
             marginBottomText = 42;
             marginBottomButton = 81;
             positionYOfBottomView = 255;
@@ -390,8 +392,9 @@ double _ticks = 0;
         else if (isiPhone4)
         {
             //for holdtotalk
-            font = [UIFont applyHubbleFontName:PN_REGULAR_FONT withSize:17];
-            color = [UIColor holdToTalkTextColor];
+            //font = [UIFont applyHubbleFontName:PN_REGULAR_FONT withSize:17];
+            fontSize = 17;
+            //color = [UIColor holdToTalkTextColor];
             marginBottomText = 25.0f;
             marginBottomButton = 48.0f;
             positionYOfBottomView = self.ib_viewRecordTTT.frame.origin.y;
@@ -400,16 +403,20 @@ double _ticks = 0;
         {
             //iPad
             //for holdtotalk
-            font = [UIFont applyHubbleFontName:PN_REGULAR_FONT withSize:50];
-            color = [UIColor holdToTalkTextColor];
+            //font = [UIFont applyHubbleFontName:PN_REGULAR_FONT withSize:50];
+            fontSize = 50;
+            //color = [UIColor holdToTalkTextColor];
             marginBottomText = 42.0f * 2;
             marginBottomButton = 81.0f * 2;
             positionYOfBottomView = 543.0f;
         }
         
+        UIFont *font = [UIFont applyHubbleFontName:PN_REGULAR_FONT withSize:fontSize];
+        //color = [UIColor holdToTalkTextColor];
         
         [self.ib_labelTouchToTalk setFont:font];
-        self.ib_labelTouchToTalk.textColor = color;
+        //self.ib_labelTouchToTalk.textColor = color;
+        self.ib_labelTouchToTalk.textColor = [UIColor holdToTalkTextColor];
         //for recordingText
         [self.ib_labelRecordVideo setFont:font];
         
@@ -421,6 +428,7 @@ double _ticks = 0;
         {
             self.ib_labelRecordVideo.textColor = [UIColor holdToTalkTextColor];
         }
+        
         //update position text recording
         CGPoint localPoint = self.ib_viewRecordTTT.frame.origin;
         NSString *recordingString = self.ib_labelRecordVideo.text;
@@ -437,6 +445,7 @@ double _ticks = 0;
         
         //    float deltaY1 = (labelTouchToTalkSize.height + holdTTSize.height)/2.0;
         float alignY1 = (SCREEN_HEIGHT - localPoint.y) - marginBottomText + labelTouchToTalkSize.height/2 - 3*holdTTSize.height/2;
+        
         if (isiOS7AndAbove)
         {
             [self.ib_labelRecordVideo setCenter:CGPointMake(SCREEN_WIDTH/2, alignY)];
@@ -456,11 +465,13 @@ double _ticks = 0;
         float alignXButtonDirectionPad = SCREEN_WIDTH/2- directionPadSize.width/2;
         float alignYButton = SCREEN_HEIGHT - localPoint.y - marginBottomButton - holdTTButtonSize.height;
         float alignYButtonDirectionPad = (SCREEN_HEIGHT - localPoint.y - directionPadSize.height)/2;
+        
         if (!isiOS7AndAbove)
         {
             alignYButton = alignYButton - 64;
             alignYButtonDirectionPad = alignYButtonDirectionPad - 44 - 64;
         }
+        
         [self.ib_buttonTouchToTalk setFrame:CGRectMake(alignXButton, alignYButton, holdTTButtonSize.width, holdTTButtonSize.height)];
         [self.ib_processRecordOrTakePicture setFrame:CGRectMake(alignXButton, alignYButton, holdTTButtonSize.width, holdTTButtonSize.height)];
         [_imgViewDrectionPad setFrame:CGRectMake(alignXButtonDirectionPad, alignYButtonDirectionPad + localPoint.y, directionPadSize.width, directionPadSize.height)];
@@ -469,7 +480,7 @@ double _ticks = 0;
 
 - (void) setupHttpPort
 {
-    NSLog(@"Self.selcetedChangel is %@",self.selectedChannel);
+    NSLog(@"Self.selcetedChangel is %@", self.selectedChannel);
     
     [HttpCom instance].comWithDevice.device_ip   = self.selectedChannel.profile.ip_address;
     [HttpCom instance].comWithDevice.device_port = self.selectedChannel.profile.port;
@@ -995,11 +1006,11 @@ double _ticks = 0;
                 
                 if (_numbersOfRemoteViewError == 2)
                 {
-                    [self setVideoBitRateToCamera:@"400"];
+                    [self performSelectorInBackground:@selector(setVideoBitRateToCamera:) withObject:@"400"];
                 }
                 else if (_numbersOfRemoteViewError == 3)
                 {
-                    [self setVideoBitRateToCamera:@"200"];
+                    [self performSelectorInBackground:@selector(setVideoBitRateToCamera:) withObject:@"200"];
                 }
                 else
                 {
@@ -1241,7 +1252,11 @@ double _ticks = 0;
     self.h264StreamerIsInStopped = FALSE;
     self.currentMediaStatus = 0;
     self.wantToShowTimeLine = YES;
-    [self showTimelineView];
+    
+    if (!self.earlierNavi.isEarlierView)
+    {
+        [self showTimelineView];
+    }
     
     if(_selectedChannel.profile.isInLocal == TRUE)
     {
@@ -1343,7 +1358,6 @@ double _ticks = 0;
     
     NSLog(@"Check selectedChannel is %@ and ip of deviece is %@", self.selectedChannel, self.selectedChannel.profile.ip_address);
     
-    [self setupHttpPort];
     [self setupPtt];
     
     self.stringTemperature = @"0";
@@ -1364,8 +1378,8 @@ double _ticks = 0;
     
     if (self.selectedChannel.profile.isInLocal )
 	{
-        [HttpCom instance].comWithDevice.device_ip   = self.selectedChannel.profile.ip_address;
-        [HttpCom instance].comWithDevice.device_port = self.selectedChannel.profile.port;
+        //[HttpCom instance].comWithDevice.device_ip   = self.selectedChannel.profile.ip_address;
+        //[HttpCom instance].comWithDevice.device_port = self.selectedChannel.profile.port;
         
         NSString *response = [[HttpCom instance].comWithDevice sendCommandAndBlock:@"get_running_os"];
         if (response != nil)
@@ -1466,8 +1480,7 @@ double _ticks = 0;
     [self displayCustomIndicator];
     self.selectedChannel.stream_url = nil;
     
-    [HttpCom instance].comWithDevice.device_ip   = self.selectedChannel.profile.ip_address;
-    [HttpCom instance].comWithDevice.device_port = self.selectedChannel.profile.port;
+    [self setupHttpPort];
     
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     
@@ -2072,8 +2085,8 @@ double _ticks = 0;
     
     if (self.selectedChannel.profile.isInLocal )
 	{
-        [HttpCom instance].comWithDevice.device_ip   = self.selectedChannel.profile.ip_address;
-        [HttpCom instance].comWithDevice.device_port = self.selectedChannel.profile.port;
+        //[HttpCom instance].comWithDevice.device_ip   = self.selectedChannel.profile.ip_address;
+        //[HttpCom instance].comWithDevice.device_port = self.selectedChannel.profile.port;
         
         NSData *responseData = [[HttpCom instance].comWithDevice sendCommandAndBlock_raw:@"get_resolution"];
         
@@ -2141,8 +2154,8 @@ double _ticks = 0;
     
     if (self.selectedChannel.profile .isInLocal == TRUE)
     {
-        [HttpCom instance].comWithDevice.device_ip   = self.selectedChannel.profile.ip_address;
-        [HttpCom instance].comWithDevice.device_port = self.selectedChannel.profile.port;
+        //[HttpCom instance].comWithDevice.device_ip   = self.selectedChannel.profile.ip_address;
+        //[HttpCom instance].comWithDevice.device_port = self.selectedChannel.profile.port;
         
         NSData *responseData = [[HttpCom instance].comWithDevice sendCommandAndBlock_raw:@"get_recording_stat"];
         
@@ -2212,8 +2225,8 @@ double _ticks = 0;
     
     if (self.selectedChannel.profile .isInLocal == TRUE)
     {
-        [HttpCom instance].comWithDevice.device_ip   = self.selectedChannel.profile.ip_address;
-        [HttpCom instance].comWithDevice.device_port = self.selectedChannel.profile.port;
+        //[HttpCom instance].comWithDevice.device_ip   = self.selectedChannel.profile.ip_address;
+        //[HttpCom instance].comWithDevice.device_port = self.selectedChannel.profile.port;
         
         NSData *responseData = [[HttpCom instance].comWithDevice sendCommandAndBlock_raw:[NSString stringWithFormat:@"set_recording_stat&mode=%@", modeRecording]];
         
@@ -2289,8 +2302,8 @@ double _ticks = 0;
     
     if (self.selectedChannel.profile .isInLocal == TRUE)
     {
-        [HttpCom instance].comWithDevice.device_ip   = self.selectedChannel.profile.ip_address;
-        [HttpCom instance].comWithDevice.device_port = self.selectedChannel.profile.port;
+        //[HttpCom instance].comWithDevice.device_ip   = self.selectedChannel.profile.ip_address;
+        //[HttpCom instance].comWithDevice.device_port = self.selectedChannel.profile.port;
         
         NSData *responseData = [[HttpCom instance].comWithDevice sendCommandAndBlock_raw:@"value_melody"];
         
@@ -2379,9 +2392,9 @@ double _ticks = 0;
     
     if (self.selectedChannel.profile .isInLocal == TRUE)
     {
-        [HttpCom instance].comWithDevice.device_ip   = self.selectedChannel.profile.ip_address;
+        //[HttpCom instance].comWithDevice.device_ip   = self.selectedChannel.profile.ip_address;
         //[HttpCom instance].comWithDevice.device_port = self.selectedChannel.profile.port;
-        [HttpCom instance].comWithDevice.device_port = 80;// Hack code for Focus66.
+        //[HttpCom instance].comWithDevice.device_port = 80;// Hack code for Focus66.
         
         NSData *responseData = [[HttpCom instance].comWithDevice sendCommandAndBlock_raw:@"value_temperature"];
         
@@ -3268,8 +3281,8 @@ double _ticks = 0;
 	{
         if (_selectedChannel.profile.isInLocal)
 		{
-            [HttpCom instance].comWithDevice.device_ip   = self.selectedChannel.profile.ip_address;
-            [HttpCom instance].comWithDevice.device_port = self.selectedChannel.profile.port;
+            //[HttpCom instance].comWithDevice.device_ip   = self.selectedChannel.profile.ip_address;
+            //[HttpCom instance].comWithDevice.device_port = self.selectedChannel.profile.port;
             
             //Non block send-
             NSLog(@"device_ip: %@, device_port: %d", _selectedChannel.profile.ip_address, _selectedChannel.profile.port);
@@ -3353,8 +3366,8 @@ double _ticks = 0;
 	{
         if (_selectedChannel.profile.isInLocal)
         {
-            [HttpCom instance].comWithDevice.device_ip   = self.selectedChannel.profile.ip_address;
-            [HttpCom instance].comWithDevice.device_port = self.selectedChannel.profile.port;
+            //[HttpCom instance].comWithDevice.device_ip   = self.selectedChannel.profile.ip_address;
+            //[HttpCom instance].comWithDevice.device_port = self.selectedChannel.profile.port;
             //Non block send-
             [[HttpCom instance].comWithDevice sendCommand:dir_str];
 		}
@@ -5773,9 +5786,7 @@ double _ticks = 0;
     
     if ( [self isCurrentConnection3G] ||
         [userDefaults boolForKey:@"remote_only"] ||
-        (self.selectedChannel.profile.ip_address != nil && ![self isInTheSameNetworkAsCamera:self.selectedChannel.profile])// ||
-        //(self.selectedChannel.profile.ip_address != nil && ![self.selectedChannel.profile.hostSSID isEqualToString:_current_ssid] )
-        
+        (self.selectedChannel.profile.ip_address != nil && ![self isInTheSameNetworkAsCamera:self.selectedChannel.profile])
         )
     {
         NSLog(@"Connection over 3G | remote_only | or not in same networ == TRUE --> Skip scanning all together, bit rate 128");
@@ -5799,7 +5810,15 @@ double _ticks = 0;
             self.selectedChannel.profile.isInLocal = TRUE;
             self.selectedChannel.profile.hasUpdateLocalStatus = TRUE;
             self.selectedChannel.profile.minuteSinceLastComm = 1;
-            self.selectedChannel.profile.port = 80; // HARD CODE for now
+            
+            if ([_cameraModel isEqualToString:CP_MODEL_SHARED_CAM])
+            {
+                self.selectedChannel.profile.port = 8081; // HARD CODE for now
+            }
+            else
+            {
+                self.selectedChannel.profile.port = 80; // HARD CODE for now
+            }
 
             [self performSelector:@selector(setupCamera)
                        withObject:nil afterDelay:0.1];

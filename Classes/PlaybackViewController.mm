@@ -55,14 +55,8 @@
     
     [self applyFont];
     [self.ib_viewOverlayVideo setHidden:YES];
-    
-    //remove logo
-//    for (UIView *view in self.navigationController.view.subviews) { // instead of self.view you can use your main view
-//        if ([view isKindOfClass:[UIButton class]] && view.tag == 11) {
-//            UIButton *btn = (UIButton *)view;
-//            [btn removeFromSuperview];
-//        }
-//    }
+    [self.ib_closePlayBack setImage:[UIImage imageNamed:@"vertcal_video_close"] forState:UIControlEventTouchDown];
+    [self.ib_closePlayBack setImage:[UIImage imageNamed:@"vertcal_video_close_pressed"] forState:UIControlStateNormal];
     
     [[UIDevice currentDevice] beginGeneratingDeviceOrientationNotifications];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didRotate:) name:UIDeviceOrientationDidChangeNotification object:nil];
@@ -246,8 +240,8 @@
         [self.imageVideo setAlpha:1];
         [self.activityIndicator setHidden:YES];
         [self.view addSubview:self.ib_myOverlay];
-        [self.ib_closePlayBack setFrame:CGRectMake(15, 15, 20, 20)];
-        [self.ib_closePlayBack setBackgroundImage:[UIImage imageVerticalVideoClose] forState:UIControlStateNormal];
+        //[self.ib_closePlayBack setFrame:CGRectMake(15, 15, 20, 20)];
+        //[self.ib_closePlayBack setBackgroundImage:[UIImage imageVerticalVideoClose] forState:UIControlStateNormal];
         [self.ib_sliderPlayBack setMinimumTrackTintColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"video_progress_green"]]];
         [self watcher];
     });
@@ -509,8 +503,8 @@
             
             [self.ib_viewControlPlayer setFrame:CGRectMake(0, SCREEN_WIDTH - HEIGHT_BG_CONTROL, SCREEN_HEIGHT, HEIGHT_BG_CONTROL)];
             [self.ib_sliderPlayBack setFrame:CGRectMake(40, 5, 840/2, HEIGHT_SLIDER_DEFAULT)];
-            [self.ib_closePlayBack setFrame:CGRectMake(10, 10, 33, 33)];
-            [self.ib_closePlayBack setBackgroundImage:[UIImage imageVideoFullScreenClose] forState:UIControlStateNormal];
+            //[self.ib_closePlayBack setFrame:CGRectMake(10, 10, 33, 33)];
+            //[self.ib_closePlayBack setBackgroundImage:[UIImage imageVideoFullScreenClose] forState:UIControlStateNormal];
         }
         else
         {
@@ -519,8 +513,8 @@
             
             [self.ib_viewControlPlayer setFrame:CGRectMake(0, SCREEN_WIDTH - HEIGHT_BG_CONTROL, SCREEN_HEIGHT, HEIGHT_BG_CONTROL)];
             [self.ib_sliderPlayBack setFrame:CGRectMake(80, 5, SCREEN_HEIGHT - 300, HEIGHT_SLIDER_DEFAULT)];
-            [self.ib_closePlayBack setFrame:CGRectMake(10, 10, 33, 33)];
-            [self.ib_closePlayBack setBackgroundImage:[UIImage imageVideoFullScreenClose] forState:UIControlStateNormal];
+            //[self.ib_closePlayBack setFrame:CGRectMake(10, 10, 33, 33)];
+            //[self.ib_closePlayBack setBackgroundImage:[UIImage imageVideoFullScreenClose] forState:UIControlStateNormal];
         }
 	}
 	else if (orientation == UIInterfaceOrientationPortrait || orientation == UIInterfaceOrientationPortraitUpsideDown)
@@ -531,8 +525,8 @@
             [self.ib_viewControlPlayer setFrame:CGRectMake(0, SCREEN_HEIGHT - HEIGHT_BG_CONTROL, SCREEN_WIDTH, HEIGHT_BG_CONTROL)];
             //width of slider is 390/2;
             [self.ib_sliderPlayBack setFrame:CGRectMake(40, 5, 364/2, HEIGHT_SLIDER_DEFAULT)];
-            [self.ib_closePlayBack setFrame:CGRectMake(15, 15, 17, 17)];
-            [self.ib_closePlayBack setBackgroundImage:[UIImage imageVerticalVideoClose] forState:UIControlStateNormal];
+            //[self.ib_closePlayBack setFrame:CGRectMake(15, 15, 17, 17)];
+            //[self.ib_closePlayBack setBackgroundImage:[UIImage imageVerticalVideoClose] forState:UIControlStateNormal];
         }
         else
         {
@@ -553,8 +547,8 @@
         [self.imageVideo setFrame:CGRectMake(deltaX , deltaY, SCREEN_HEIGHT, SCREEN_WIDTH)];
         [self.ib_viewControlPlayer setFrame:CGRectMake(deltaX, SCREEN_WIDTH - HEIGHT_BG_CONTROL + deltaY, SCREEN_HEIGHT, HEIGHT_BG_CONTROL)];
         [self.ib_sliderPlayBack setFrame:CGRectMake(40, 5, 840/2, HEIGHT_SLIDER_DEFAULT)];
-        [self.ib_closePlayBack setFrame:CGRectMake(10 + deltaX, 10 + deltaY, 33, 33)];
-        [self.ib_closePlayBack setBackgroundImage:[UIImage imageVideoFullScreenClose] forState:UIControlStateNormal];
+        //[self.ib_closePlayBack setFrame:CGRectMake(10 + deltaX, 10 + deltaY, 33, 33)];
+        //[self.ib_closePlayBack setBackgroundImage:[UIImage imageVideoFullScreenClose] forState:UIControlStateNormal];
         [self.ib_viewOverlayVideo setFrame:CGRectMake(158 + deltaX, 112 + deltaY, 240, 90)];
     }
     else
@@ -564,7 +558,7 @@
         
         [self.ib_viewControlPlayer setFrame:CGRectMake(0 + deltaX, SCREEN_WIDTH - HEIGHT_BG_CONTROL + deltaY, SCREEN_HEIGHT, HEIGHT_BG_CONTROL)];
         [self.ib_sliderPlayBack setFrame:CGRectMake(80, 5, SCREEN_HEIGHT - 300, HEIGHT_SLIDER_DEFAULT)];
-        [self.ib_closePlayBack setFrame:CGRectMake(10 + deltaX, 10 + deltaY, 33, 33)];
+        //[self.ib_closePlayBack setFrame:CGRectMake(10 + deltaX, 10 + deltaY, 33, 33)];
     }
     [self.ib_bg_top_player setHidden:YES];
 }
@@ -578,8 +572,8 @@
         [self.ib_viewControlPlayer setFrame:CGRectMake(0 + deltaX, SCREEN_HEIGHT - HEIGHT_BG_CONTROL + deltaY, SCREEN_WIDTH, HEIGHT_BG_CONTROL)];
         //width of slider is 390/2;
         [self.ib_sliderPlayBack setFrame:CGRectMake(40, 5, 364/2, HEIGHT_SLIDER_DEFAULT)];
-        [self.ib_closePlayBack setFrame:CGRectMake(15 + deltaX, 15 + deltaY, 20, 20)];
-        [self.ib_closePlayBack setBackgroundImage:[UIImage imageVerticalVideoClose] forState:UIControlStateNormal];
+        //[self.ib_closePlayBack setFrame:CGRectMake(15 + deltaX, 15 + deltaY, 20, 20)];
+        //[self.ib_closePlayBack setBackgroundImage:[UIImage imageVerticalVideoClose] forState:UIControlStateNormal];
         [self.ib_viewOverlayVideo setFrame:CGRectMake(39 + deltaX, 239 + deltaY, 240, 90)];
     }
     else
