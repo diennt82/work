@@ -13,6 +13,7 @@
 #include "PlaybackListener.h"
 #import "define.h"
 #import "NotifViewController.h"
+#import <objc/message.h>
 
 #define START 0
 #define END   100.0
@@ -58,8 +59,8 @@
     [self.ib_closePlayBack setImage:[UIImage imageNamed:@"vertcal_video_close"] forState:UIControlEventTouchDown];
     [self.ib_closePlayBack setImage:[UIImage imageNamed:@"vertcal_video_close_pressed"] forState:UIControlStateNormal];
     
-    [[UIDevice currentDevice] beginGeneratingDeviceOrientationNotifications];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didRotate:) name:UIDeviceOrientationDidChangeNotification object:nil];
+//    [[UIDevice currentDevice] beginGeneratingDeviceOrientationNotifications];
+//    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didRotate:) name:UIDeviceOrientationDidChangeNotification object:nil];
     
     //[self becomeActive];
     
@@ -98,8 +99,8 @@
 -(void) viewWillDisappear:(BOOL)animated
 {
     [self.navigationController.navigationBar setHidden:NO];
-    [[UIDevice currentDevice] endGeneratingDeviceOrientationNotifications];
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIDeviceOrientationDidChangeNotification object:nil];
+//    [[UIDevice currentDevice] endGeneratingDeviceOrientationNotifications];
+//    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIDeviceOrientationDidChangeNotification object:nil];
     [super viewWillDisappear:animated];
     NSLog(@"viewWillDisappear: ");
     //[self goBackToPlayList];
@@ -474,7 +475,7 @@
 
 - (BOOL)shouldAutorotate
 {
-    return NO;
+    return YES;
 }
 
 -(NSUInteger)supportedInterfaceOrientations
@@ -590,6 +591,19 @@
 
 - (IBAction)minimizeVideo:(id)sender
 {
+#if 1
+    
+    UIDeviceOrientation orietation = UIDeviceOrientationPortrait;
+    
+    if ([[UIDevice currentDevice] orientation] == UIDeviceOrientationPortrait)
+    {
+        orietation = UIDeviceOrientationLandscapeLeft;
+    }
+    
+    if ([[UIDevice currentDevice] respondsToSelector:@selector(setOrientation:)]) {
+        objc_msgSend([UIDevice currentDevice], @selector(setOrientation:),    orietation);
+    }
+#else
     _isSwitchingWhenPress = YES;
     /**
      TODO:
@@ -630,6 +644,7 @@
         }];
         
     }
+#endif
 }
 
 - (IBAction)deleteVideo:(id)sender
