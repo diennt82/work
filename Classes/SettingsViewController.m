@@ -17,7 +17,6 @@
 #import "SettingsViewController.h"
 #import "GeneralCell.h"
 #import "SensitivityCell.h"
-#import "NMRangeSlider.h"
 #import "SchedulerCell.h"
 #import "SchedulerViewController.h"
 #import "SchedulingViewController.h"
@@ -40,12 +39,6 @@
     
     BOOL valueSchedulerSwitchs[1][2];
 }
-
-@property (retain, nonatomic) IBOutlet UITableViewCell *rangeSliderCell;
-@property (retain, nonatomic) IBOutlet NMRangeSlider *labelSlider;
-@property (retain, nonatomic) IBOutlet UISwitch *valueSwitchInCell;
-@property (retain, nonatomic) IBOutlet UILabel *lowerLabel;
-@property (retain, nonatomic) IBOutlet UILabel *upperLabel;
 
 @property (retain, nonatomic) SensitivityInfo *sensitivityInfo;
 @property (nonatomic, retain) NSString *selectedReg;
@@ -148,8 +141,6 @@
     
     //self.isLoading = TRUE;
     self.sensitivityMessage = @"Loading...";
-    
-    [self configureLabelSlider];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -216,13 +207,6 @@
     [super viewDidAppear:animated];
     
     self.navigationController.navigationBarHidden = YES;
-    
-    [self updateSliderLabels];
-    
-    if([self.view respondsToSelector:@selector(setTintColor:)])
-    {
-        self.view.tintColor = [UIColor orangeColor];
-    }
 }
 
 - (void)didReceiveMemoryWarning
@@ -236,76 +220,6 @@
 - (void)settingsBackAction: (id)sender
 {
     
-}
-
-#pragma mark - Range Slider
-
-- (void) configureLabelSlider
-{
-    self.labelSlider.minimumValue = 0;
-    self.labelSlider.maximumValue = 23.99;
-    
-    self.labelSlider.lowerValue = 0;
-    self.labelSlider.upperValue = 23.99;
-    
-    self.labelSlider.minimumRange = 1;
-    
-    self.labelSlider.lowerValue = self.lowerValue;
-    self.labelSlider.upperValue = self.upperValue;
-}
-
-- (NSString *)convertToTimeFormatStringFromFloat: (CGFloat) floatValue
-{
-    NSString *floatString = [NSString stringWithFormat:@"%02.2f", floatValue];
-    
-    NSString *integerString = [NSString stringWithFormat:@"%02d", (int)floatValue];
-    
-    NSRange range = [floatString rangeOfString:@"."];
-    
-    if (range.location != NSNotFound)
-    {
-        NSInteger t = [[floatString substringFromIndex:range.location + 1] integerValue] * 59 / 99;
-        integerString = [integerString stringByAppendingString:[NSString stringWithFormat:@":%02d", t]];
-    }
-    
-    return integerString;
-}
-
-- (void) updateSliderLabels
-{
-    // You get get the center point of the slider handles and use this to arrange other subviews
-    
-    CGPoint lowerCenter;
-    lowerCenter.x = (self.labelSlider.lowerCenter.x + self.labelSlider.frame.origin.x);
-    lowerCenter.y = (self.labelSlider.center.y - 30.0f);
-    self.lowerLabel.center = lowerCenter;
-    self.lowerLabel.text = [self convertToTimeFormatStringFromFloat:self.labelSlider.lowerValue];
-    
-    CGPoint upperCenter;
-    upperCenter.x = (self.labelSlider.upperCenter.x + self.labelSlider.frame.origin.x);
-    upperCenter.y = (self.labelSlider.center.y - 30.0f);
-    self.upperLabel.center = upperCenter;
-    self.upperLabel.text = [self convertToTimeFormatStringFromFloat:self.labelSlider.upperValue];
-    
-    //[self.tableView reloadRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:0 inSection:0]] withRowAnimation:UITableViewRowAnimationAutomatic];
-}
-
-- (IBAction)rangeSliderValueChanged:(id)sender
-{
-    [self updateSliderLabels];
-    
-    //    [self.tableView reloadRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:0 inSection:0]] withRowAnimation:UITableViewRowAnimationAutomatic];
-}
-- (IBAction)valueChangedSwitchInSlideCell:(id)sender
-{
-    if (((UISwitch *)sender).isOn)
-    {
-        self.labelSlider.enabled = YES;
-    }
-    else
-    {
-        self.labelSlider.enabled = NO;
-    }
 }
 
 #pragma mark - GeneralCell delegate
@@ -1319,7 +1233,6 @@
 }
 
 - (void)dealloc {
-    [_valueSwitchInCell release];
     [_jsonComm release];
     [super dealloc];
 }

@@ -560,7 +560,6 @@
 		8B98765218DAFF6A00A2FDD7 /* libGoogleAnalytics.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8B73057718D6D05A00D079B0 /* libGoogleAnalytics.a */; };
 		8B9899AD1859771800AC3852 /* CameraNameViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B9899AB1859771800AC3852 /* CameraNameViewController.m */; };
 		8B9899AE1859771800AC3852 /* CameraNameViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8B9899AC1859771800AC3852 /* CameraNameViewController.xib */; };
-		8B9899CF1859A04F00AC3852 /* NMRangeSlider.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B9899CC1859A04F00AC3852 /* NMRangeSlider.m */; };
 		8B99C0B2186ABB7900DB8AAA /* ImgNotAvailable.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B99C0B1186ABB7900DB8AAA /* ImgNotAvailable.png */; };
 		8B99DB8218B8729F0009612A /* Icon-Small-40.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B99DB7E18B8729F0009612A /* Icon-Small-40.png */; };
 		8B99DB8318B8729F0009612A /* Icon-Small-40@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B99DB7F18B8729F0009612A /* Icon-Small-40@2x.png */; };
@@ -1388,8 +1387,6 @@
 		8B9899AA1859771800AC3852 /* CameraNameViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CameraNameViewController.h; sourceTree = "<group>"; };
 		8B9899AB1859771800AC3852 /* CameraNameViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CameraNameViewController.m; sourceTree = "<group>"; };
 		8B9899AC1859771800AC3852 /* CameraNameViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CameraNameViewController.xib; sourceTree = "<group>"; };
-		8B9899CB1859A04F00AC3852 /* NMRangeSlider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NMRangeSlider.h; sourceTree = "<group>"; };
-		8B9899CC1859A04F00AC3852 /* NMRangeSlider.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NMRangeSlider.m; sourceTree = "<group>"; };
 		8B99C0B1186ABB7900DB8AAA /* ImgNotAvailable.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ImgNotAvailable.png; sourceTree = "<group>"; };
 		8B99DB7E18B8729F0009612A /* Icon-Small-40.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-Small-40.png"; sourceTree = "<group>"; };
 		8B99DB7F18B8729F0009612A /* Icon-Small-40@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-Small-40@2x.png"; sourceTree = "<group>"; };
@@ -3185,15 +3182,6 @@
 			name = "Camera name";
 			sourceTree = "<group>";
 		};
-		8B9899C81859A03300AC3852 /* NMRangeSlider */ = {
-			isa = PBXGroup;
-			children = (
-				8B9899CB1859A04F00AC3852 /* NMRangeSlider.h */,
-				8B9899CC1859A04F00AC3852 /* NMRangeSlider.m */,
-			);
-			name = NMRangeSlider;
-			sourceTree = "<group>";
-		};
 		8B9ABB6618A9FDBB0079F4A3 /* RegistrationVC */ = {
 			isa = PBXGroup;
 			children = (
@@ -3221,7 +3209,6 @@
 		8B9AF69A1858177300AC09C3 /* Scheduling */ = {
 			isa = PBXGroup;
 			children = (
-				8B9899C81859A03300AC3852 /* NMRangeSlider */,
 			);
 			name = Scheduling;
 			sourceTree = "<group>";
@@ -4411,7 +4398,6 @@
 				38A478DC15BE4BFA008682FE /* Step_03_ViewController.mm in Sources */,
 				38A478E815BE82E0008682FE /* Step_04_ViewController.mm in Sources */,
 				8B92D45918865F3600120BCE /* SchedulingCell.m in Sources */,
-				8B9899CF1859A04F00AC3852 /* NMRangeSlider.m in Sources */,
 				38A478F015C0015F008682FE /* Step_05_ViewController.mm in Sources */,
 				38A478F715C115C3008682FE /* Step_06_ViewController.mm in Sources */,
 				8B977C9E18C70BDA00A61115 /* HubbleProgressView.m in Sources */,
