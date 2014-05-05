@@ -1441,9 +1441,16 @@
             
             NSLog(@"Push the view controller of navVC.- %@", self.navVC);
             
-            //present view controller to view overal screen
+//            if (self.navVC.presentedViewController) {
+//                [self.navVC dismissViewControllerAnimated:YES completion:^{
+//                    [self.navVC presentViewController:playbackViewController animated:YES completion:nil];
+//                }];
+//            } else {
+//                [self.navVC presentViewController:playbackViewController animated:YES completion:nil];
+//            }
             
-            [self.navVC presentViewController:playbackViewController animated:YES completion:nil];
+            //[self.navVC presentViewController:playbackViewController animated:YES completion:nil];
+            [self.navVC pushViewController:playbackViewController animated:YES];
             
             [playbackViewController release];
         }

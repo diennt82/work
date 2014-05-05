@@ -57,17 +57,17 @@
     [self.ib_viewOverlayVideo setHidden:YES];
     
     //remove logo
-    for (UIView *view in self.navigationController.view.subviews) { // instead of self.view you can use your main view
-        if ([view isKindOfClass:[UIButton class]] && view.tag == 11) {
-            UIButton *btn = (UIButton *)view;
-            [btn removeFromSuperview];
-        }
-    }
+//    for (UIView *view in self.navigationController.view.subviews) { // instead of self.view you can use your main view
+//        if ([view isKindOfClass:[UIButton class]] && view.tag == 11) {
+//            UIButton *btn = (UIButton *)view;
+//            [btn removeFromSuperview];
+//        }
+//    }
     
     [[UIDevice currentDevice] beginGeneratingDeviceOrientationNotifications];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didRotate:) name:UIDeviceOrientationDidChangeNotification object:nil];
     
-    [self becomeActive];
+    //[self becomeActive];
     
 #if 0 // Will implement later.
     UITapGestureRecognizer *singleTap = [[UITapGestureRecognizer alloc] initWithTarget:self
@@ -80,6 +80,35 @@
     //hide navigation controller
     [self.navigationController setHidesBottomBarWhenPushed:YES];
     
+}
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    [[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:UIStatusBarAnimationNone];
+    [self.navigationController.navigationBar setHidden:YES];
+    //Here is show indicator
+    self.activityIndicator.hidden = NO;
+    [self.activityIndicator startAnimating];
+    [self checkOrientation];
+}
+
+- (void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    
+    NSLog(@"%s: viewDidAppear", __FUNCTION__);
+    
+    [self becomeActive];
+}
+
+-(void) viewWillDisappear:(BOOL)animated
+{
+    [self.navigationController.navigationBar setHidden:NO];
+    [[UIDevice currentDevice] endGeneratingDeviceOrientationNotifications];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIDeviceOrientationDidChangeNotification object:nil];
+    [super viewWillDisappear:animated];
+    NSLog(@"viewWillDisappear: ");
+    //[self goBackToPlayList];
 }
 
 #pragma mark - Hide&Show Control
@@ -337,28 +366,6 @@
     return YES;
 }
 
-- (void)viewWillAppear:(BOOL)animated
-{
-    [[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:UIStatusBarAnimationNone];
-    [self.navigationController.navigationBar setHidden:YES];
-    //Here is show indicator
-    self.activityIndicator.hidden = NO;
-    [self.activityIndicator startAnimating];
-    [self checkOrientation];
-}
-
-
--(void) viewWillDisappear:(BOOL)animated
-{
-    [super viewWillDisappear:animated];
-    NSLog(@"viewWillDisappear: ");
-    //[self goBackToPlayList];
-    [[UIDevice currentDevice] endGeneratingDeviceOrientationNotifications];
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIDeviceOrientationDidChangeNotification object:nil];
-    
-}
-
-
 #pragma mark - RELEASE MEMORY
 
 - (void)didReceiveMemoryWarning
@@ -413,9 +420,16 @@
                                                 withAnimation:UIStatusBarAnimationNone];
         
         NotifViewController * vc = [self.navigationController.viewControllers objectAtIndex:0];
-        [self.navigationController popToRootViewControllerAnimated:NO];
-        [vc ignoreTouchAction:nil];
-
+        
+        if ([vc isKindOfClass:[NotifViewController class]])
+        {
+            [self.navigationController popToRootViewControllerAnimated:NO];
+            [vc ignoreTouchAction:nil];
+        }
+        else // Timeline
+        {
+            [self.navigationController popViewControllerAnimated:YES];
+        }
     }
     else
     {

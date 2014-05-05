@@ -208,6 +208,7 @@ double _ticks = 0;
     CFRelease(soundFileURLRef);
     
     [self updateNavigationBarAndToolBar];
+    [self addHubbleLogo_Back];
     
     self.imageViewStreamer = [[UIImageView alloc] initWithFrame:_imageViewVideo.frame];
     //[self.imageViewStreamer setContentMode:UIViewContentModeScaleAspectFit];
@@ -258,6 +259,77 @@ double _ticks = 0;
     self.numbersOfRemoteViewError = 0;
     
     [self becomeActive];
+}
+
+//At first time, we set to FALSE after call checkOrientation()
+- (void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    _syncPortraitAndLandscape = NO;
+}
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    [[KISSMetricsAPI sharedAPI] recordEvent:[NSString stringWithFormat:@"PlayerView view will appear - return from Playback: %d", _returnFromPlayback] withProperties:nil];
+    NSLog(@"H264VC - viewWillAppear -_wantToShowTimeLine: %d", _wantToShowTimeLine);
+    
+    //alway show custom indicator, when view appear
+    _isShowCustomIndicator = YES;
+    self.currentMediaStatus = 0;
+    self.shouldUpdateHorizeMenu = YES;
+    self.wantToShowTimeLine = YES;
+    _viewVideoIn = @"R";
+    
+    if (self.returnFromPlayback == FALSE)
+    {
+        _isFirstLoad = YES;
+        _isRecordInterface  = YES;
+        _isProcessRecording = NO;
+        _isListening = NO;
+        _ticks = 0.0;
+        
+        if (_timelineVC != nil)
+        {
+            self.timelineVC.camChannel = self.selectedChannel;
+        }
+        
+        [self checkOrientation];
+    }
+    else
+    {
+        [[UIApplication sharedApplication] setStatusBarHidden:NO];
+        self.returnFromPlayback = FALSE;
+        
+        //[self scanCamera];
+        
+        [self performSelectorOnMainThread:@selector(scanCamera)
+                               withObject:nil
+                            waitUntilDone:NO];
+        self.h264StreamerIsInStopped = FALSE;
+        NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+        [userDefaults setObject:_selectedChannel.profile.mac_address forKey:CAM_IN_VEW];
+        [userDefaults synchronize];
+    }
+}
+
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [self stopTimerRecoring];
+    
+    //[[UIApplication sharedApplication] setStatusBarHidden:NO];
+    [super viewWillDisappear:animated];
+}
+
+- (void)viewDidUnload {
+    [self setImageViewVideo:nil];
+    //    [self setTopToolbar:nil];
+    [self setBackBarBtnItem:nil];
+    [self setProgressView:nil];
+    [self setCameraNameBarBtnItem:nil];
+    
+    [self setSelectedChannel:nil];
+    
+    [super viewDidUnload];
 }
 
 - (void)applyFont
@@ -1058,6 +1130,11 @@ double _ticks = 0;
     if (_audioOutStreamRemote)
     {
         [_audioOutStreamRemote disconnectFromAudioSocket];
+    }
+    
+    if (h264Streamer)
+    {
+        h264Streamer->setListener(NULL);
     }
 
     if (self.currentMediaStatus == MEDIA_INFO_HAS_FIRST_IMAGE ||
@@ -3779,12 +3856,12 @@ double _ticks = 0;
         [self addGesturesPichInAndOut];
         
         //remove add hubble button at landscape
-        for (UIView *view in self.navigationController.view.subviews) { // instead of self.view you can use your main view
-            if ([view isKindOfClass:[UIButton class]] && view.tag == 11) {
-                UIButton *btn = (UIButton *)view;
-                [btn removeFromSuperview];
-            }
-        }
+//        for (UIView *view in self.navigationController.view.subviews) { // instead of self.view you can use your main view
+//            if ([view isKindOfClass:[UIButton class]] && view.tag == 11) {
+//                UIButton *btn = (UIButton *)view;
+//                [btn removeFromSuperview];
+//            }
+//        }
 	}
 	else if (orientation == UIInterfaceOrientationPortrait || orientation == UIInterfaceOrientationPortraitUpsideDown)
 	{
@@ -3903,7 +3980,7 @@ double _ticks = 0;
         
         [self showControlMenu];
         //add hubble_logo_back
-        [self addHubbleLogo_Back];
+        //[self addHubbleLogo_Back];
         _isLandScapeMode = NO;
         
 	}// end of portrait
@@ -4765,76 +4842,7 @@ double _ticks = 0;
     [super dealloc];
 }
 
-//At first time, we set to FALSE after call checkOrientation()
-- (void)viewDidAppear:(BOOL)animated
-{
-    [super viewDidAppear:animated];
-    _syncPortraitAndLandscape = NO;
-}
-- (void)viewWillAppear:(BOOL)animated
-{
-    [super viewWillAppear:animated];
-    [[KISSMetricsAPI sharedAPI] recordEvent:[NSString stringWithFormat:@"PlayerView view will appear - return from Playback: %d", _returnFromPlayback] withProperties:nil];
-    NSLog(@"H264VC - viewWillAppear -_wantToShowTimeLine: %d", _wantToShowTimeLine);
-    
-    //alway show custom indicator, when view appear
-    _isShowCustomIndicator = YES;
-    self.currentMediaStatus = 0;
-    self.shouldUpdateHorizeMenu = YES;
-    self.wantToShowTimeLine = YES;
-    _viewVideoIn = @"R";
-    
-    if (self.returnFromPlayback == FALSE)
-    {
-        _isFirstLoad = YES;
-        _isRecordInterface  = YES;
-        _isProcessRecording = NO;
-        _isListening = NO;
-        _ticks = 0.0;
-        
-        if (_timelineVC != nil)
-        {
-            self.timelineVC.camChannel = self.selectedChannel;
-        }
-        
-        [self checkOrientation];
-    }
-    else
-    {
-        [[UIApplication sharedApplication] setStatusBarHidden:NO];
-        self.returnFromPlayback = FALSE;
-        
-        //[self scanCamera];
-        
-        [self performSelectorOnMainThread:@selector(scanCamera)
-                               withObject:nil
-                            waitUntilDone:NO];
-        self.h264StreamerIsInStopped = FALSE;
-        NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-        [userDefaults setObject:_selectedChannel.profile.mac_address forKey:CAM_IN_VEW];
-        [userDefaults synchronize];
-    }
-}
 
-- (void)viewWillDisappear:(BOOL)animated
-{
-    [self stopTimerRecoring];
-    
-    //[[UIApplication sharedApplication] setStatusBarHidden:NO];
-    [super viewWillDisappear:animated];
-}
-
-- (void)viewDidUnload {
-    [self setImageViewVideo:nil];
-    //    [self setTopToolbar:nil];
-    [self setBackBarBtnItem:nil];
-    [self setProgressView:nil];
-    [self setCameraNameBarBtnItem:nil];
-    
-    [self setSelectedChannel:nil];
-    
-    [super viewDidUnload];
-}
 #pragma  mark -
 #pragma mark PTT
 
@@ -5765,8 +5773,8 @@ double _ticks = 0;
     
     if ( [self isCurrentConnection3G] ||
         [userDefaults boolForKey:@"remote_only"] ||
-        (self.selectedChannel.profile.ip_address != nil && ![self isInTheSameNetworkAsCamera:self.selectedChannel.profile]) ||
-        (self.selectedChannel.profile.ip_address != nil && ![self.selectedChannel.profile.hostSSID isEqualToString:_current_ssid] )
+        (self.selectedChannel.profile.ip_address != nil && ![self isInTheSameNetworkAsCamera:self.selectedChannel.profile])// ||
+        //(self.selectedChannel.profile.ip_address != nil && ![self.selectedChannel.profile.hostSSID isEqualToString:_current_ssid] )
         
         )
     {
@@ -5784,30 +5792,17 @@ double _ticks = 0;
     }
     else
     {
-        //        if ([self.selectedChannel.profile.hostSSID isEqualToString:[CameraPassword fetchSSIDInfo]] &&
-        //             self.selectedChannel.profile.ip_address != nil)
-        //        {
-        //            NSLog(@"The same ssid --> uses local stream");
-        //            self.selectedChannel.profile.isInLocal = TRUE;
-        //            self.selectedChannel.profile.hasUpdateLocalStatus = TRUE;
-        //            self.selectedChannel.profile.minuteSinceLastComm = 1;
-        //
-        //            [self performSelector:@selector(setupCamera)
-        //                       withObject:nil afterDelay:0.1];
-        //        }
-        //        else
-        
-        
-        if (self.selectedChannel.profile.ip_address != nil)
+        if ([self.selectedChannel.profile.hostSSID isEqualToString:_current_ssid] &&
+             self.selectedChannel.profile.ip_address != nil)
         {
             NSLog(@"The same ssid --> uses local stream");
             self.selectedChannel.profile.isInLocal = TRUE;
             self.selectedChannel.profile.hasUpdateLocalStatus = TRUE;
             self.selectedChannel.profile.minuteSinceLastComm = 1;
-            
+            self.selectedChannel.profile.port = 80; // HARD CODE for now
+
             [self performSelector:@selector(setupCamera)
                        withObject:nil afterDelay:0.1];
-            
         }
         else
         {
@@ -6019,6 +6014,8 @@ double _ticks = 0;
         cp.ip_address != nil)
     {
         [HttpCom instance].comWithDevice.device_ip = cp.ip_address;
+        [HttpCom instance].comWithDevice.device_port = 80; // HARD code one more time.
+        
         
         NSString *mac = [[HttpCom instance].comWithDevice sendCommandAndBlock:GET_MAC_ADDRESS withTimeout:3.0f];
         
