@@ -501,7 +501,7 @@ void checkingApplicationCrashed()
     
     
     NSString *appId = [[responseDict objectForKey:@"data"] objectForKey:@"id"];
-    NSLog(@"******app id = %@", appId);
+    
     //NSLog(@"My token is: %@", devToken);
     
     
@@ -511,10 +511,25 @@ void checkingApplicationCrashed()
     [userDefaults setObject:appId forKey:@"APP_ID"];
     [userDefaults synchronize];
     
+    
+    NSString * certType = @"1"; // for testflight
+    
+    NSString *bundleIdentifier = [[NSBundle mainBundle] bundleIdentifier];
+    if ( [bundleIdentifier isEqualToString:@"com.binatonetelecom.hubble"])
+    {
+        certType = @"0";
+    }
+    
+                
+    
     NSDictionary *responseRegNotifn = [jsonComm registerPushNotificationsBlockedWithAppId:appId
                                                                       andNotificationType:@"apns"
                                                                            andDeviceToken:devTokenStr
-                                                                                andApiKey:apiKey];
+                                                                                andApiKey:apiKey
+                                                                              andCertType:certType];
+    
+    
+    
     NSLog(@"Log - push status = %d", [[responseRegNotifn objectForKey:@"status"] intValue]);
      
 }
