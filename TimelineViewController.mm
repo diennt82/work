@@ -318,30 +318,29 @@
     {
         if ([[responseDict objectForKey:@"status"] integerValue] == 200)
         {
-            
             // work
-            NSArray *events = [[responseDict objectForKey:@"data"] objectForKey:@"events"];
+            // 1. Deletes old data from database
+            // 2. Inserts new data to database
+#if 0
+            NSCalendar *cal = [NSCalendar currentCalendar];
+            NSDateComponents *components = [cal components:( NSHourCalendarUnit | NSMinuteCalendarUnit | NSSecondCalendarUnit ) fromDate:_currentDate];
             
+            [components setHour:-24];
+            [components setMinute:0];
+            [components setSecond:0];
+            
+            NSDate *yesterday = [cal dateByAddingComponents:components toDate: _currentDate options:0];
+            
+            NSInteger limitedDate = [yesterday timeIntervalSince1970];
+#endif
             TimelineDatabase * mDatabase = [ TimelineDatabase getSharedInstance];
+            [mDatabase deleteEventsForCamera:camChannel.profile.registrationID limitedDate:0];
+            
+            NSArray *events = [[responseDict objectForKey:@"data"] objectForKey:@"events"];
             
             if (events != nil &&
                 events.count > 0)
             {
-                // 1. Deletes old data from database
-                NSCalendar *cal = [NSCalendar currentCalendar];
-                NSDateComponents *components = [cal components:( NSHourCalendarUnit | NSMinuteCalendarUnit | NSSecondCalendarUnit ) fromDate:_currentDate];
-                
-                [components setHour:-24];
-                [components setMinute:0];
-                [components setSecond:0];
-                
-                NSDate *yesterday = [cal dateByAddingComponents:components toDate: _currentDate options:0];
-                
-                NSInteger limitedDate = [yesterday timeIntervalSince1970];
-                
-                [[TimelineDatabase getSharedInstance] deleteEventsForCamera:camChannel.profile.registrationID limitedDate:limitedDate];
-                
-                // 2. Inserts new data to database
                 for (NSDictionary *event in events)
                 {
                     EventInfo *eventInfo = [[EventInfo alloc] init];
@@ -407,6 +406,12 @@
                 
                 NSLog(@"Camera as no event before date: %@", dateInStringFormated);
             }
+            
+            /*
+             * If reponse from Server ok --> update table view
+             */
+            
+            self.hasUpdate = YES;
         }
         else
         {

@@ -112,39 +112,46 @@
 
 - (void)sendsAppLog
 {
-    MenuViewController *tabBarController = (MenuViewController *)self.parentVC;
-    tabBarController.navigationController.navigationBarHidden = YES;
-    
-    MFMailComposeViewController *picker = [[MFMailComposeViewController alloc] init];
-    picker.mailComposeDelegate = self;
-    
-    NSString *cachesDirectory = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
-    NSString *logAppPath = [cachesDirectory stringByAppendingPathComponent:@"application.log"];
-    NSString *logPath0 = [cachesDirectory stringByAppendingPathComponent:@"application0.log"];
-    
-    // Create NSData object from file
-    NSData *exportFileData = [NSData dataWithContentsOfFile:logAppPath];
-    // Attach image data to the email
-    [picker addAttachmentData:exportFileData mimeType:@"text/plain" fileName:@"application.log"];
-    
-    if ([[NSFileManager defaultManager] fileExistsAtPath:logPath0])
+    if ([MFMailComposeViewController canSendMail])
     {
-        NSData *extraFileData = [NSData dataWithContentsOfFile:logPath0];
-        [picker addAttachmentData:extraFileData mimeType:@"text/plain" fileName:@"application0.log"];
+        MFMailComposeViewController *picker = [[MFMailComposeViewController alloc] init];
+        picker.mailComposeDelegate = self;
+        
+        NSString *cachesDirectory = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
+        NSString *logAppPath = [cachesDirectory stringByAppendingPathComponent:@"application.log"];
+        NSString *logPath0 = [cachesDirectory stringByAppendingPathComponent:@"application0.log"];
+        
+        // Create NSData object from file
+        NSData *exportFileData = [NSData dataWithContentsOfFile:logAppPath];
+        // Attach image data to the email
+        [picker addAttachmentData:exportFileData mimeType:@"text/plain" fileName:@"application.log"];
+        
+        if ([[NSFileManager defaultManager] fileExistsAtPath:logPath0])
+        {
+            NSData *extraFileData = [NSData dataWithContentsOfFile:logPath0];
+            [picker addAttachmentData:extraFileData mimeType:@"text/plain" fileName:@"application0.log"];
+        }
+        
+        // Set the subject of email
+        [picker setSubject:@"IOS app crash log"];
+        NSArray *toRecipents = [NSArray arrayWithObject:@"ios.crashreport@cvisionhk.com"];
+        [picker setToRecipients:toRecipents];
+        //    NSArray *ccRecipients = [NSArray arrayWithObject:@"luan.nguyen@nxcomm.com"];
+        //    [picker setCcRecipients:ccRecipients];
+        
+        MenuViewController *tabBarController = (MenuViewController *)self.parentVC;
+        tabBarController.navigationController.navigationBarHidden = YES;
+        
+        // Show email view
+        [self presentViewController:picker animated:YES completion:NULL];
+        
+        // Release picker
+        [picker release];
     }
-    
-    // Set the subject of email
-    [picker setSubject:@"IOS app crash log"];
-    NSArray *toRecipents = [NSArray arrayWithObject:@"ios.crashreport@cvisionhk.com"];
-    [picker setToRecipients:toRecipents];
-//    NSArray *ccRecipients = [NSArray arrayWithObject:@"luan.nguyen@nxcomm.com"];
-//    [picker setCcRecipients:ccRecipients];
-    
-    // Show email view
-    [self presentViewController:picker animated:YES completion:NULL];
-    
-    // Release picker
-    [picker release];
+    else
+    {
+        NSLog(@"%s Can not send Email from this device", __FUNCTION__);
+    }
 }
 
 #pragma mark - Table view delegate & data source
