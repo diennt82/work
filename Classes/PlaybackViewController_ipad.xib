@@ -8,6 +8,7 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="PlaybackViewController">
             <connections>
                 <outlet property="activityIndicator" destination="KLJ-UG-kco" id="seh-2P-niA"/>
+                <outlet property="ib_bg_top_player" destination="OCr-FW-HJS" id="xjN-Tv-dFR"/>
                 <outlet property="ib_closePlayBack" destination="IiG-Ag-o2G" id="lIM-R2-bNh"/>
                 <outlet property="ib_delete" destination="PSs-d0-8fm" id="wUL-mS-a9L"/>
                 <outlet property="ib_download" destination="xFE-NI-5yN" id="pCs-jL-9qc"/>
@@ -28,11 +29,18 @@
             <rect key="frame" x="0.0" y="0.0" width="768" height="1024"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="IiG-Ag-o2G">
-                    <rect key="frame" x="20" y="20" width="90" height="63"/>
+                <imageView userInteractionEnabled="NO" alpha="0.5" tag="590" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="vertcal_video_player_Bg.png" id="OCr-FW-HJS">
+                    <rect key="frame" x="0.0" y="0.0" width="768" height="45"/>
+                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                    <color key="tintColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                </imageView>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" lineBreakMode="middleTruncation" id="IiG-Ag-o2G">
+                    <rect key="frame" x="0.0" y="0.0" width="90" height="72"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <fontDescription key="fontDescription" type="system" pointSize="15"/>
-                    <state key="normal" image="vertcal_video_close.png">
+                    <inset key="contentEdgeInsets" minX="20" minY="20" maxX="0.0" maxY="0.0"/>
+                    <state key="normal" image="video_fullscreen_close.png">
                         <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                     </state>
                     <connections>
@@ -103,11 +111,11 @@
                 </view>
                 <view contentMode="scaleToFill" id="G1e-eW-6ty">
                     <rect key="frame" x="0.0" y="959" width="768" height="65"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                     <subviews>
                         <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="video_player_bg.png" id="pNW-VS-qZl">
                             <rect key="frame" x="0.0" y="0.0" width="785" height="71"/>
-                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                            <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                         </imageView>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="qPE-vB-tIh">
                             <rect key="frame" x="5" y="0.0" width="68" height="56"/>
@@ -121,7 +129,7 @@
                         </button>
                         <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" id="MMi-se-o4O">
                             <rect key="frame" x="79" y="15" width="520" height="34"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                             <connections>
                                 <action selector="onTimeSliderChange:" destination="-1" eventType="valueChanged" id="wqg-PV-irs"/>
                             </connections>
@@ -134,8 +142,8 @@
                             <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                             <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         </label>
-                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="K2P-JU-AgX">
-                            <rect key="frame" x="698" y="5" width="70" height="60"/>
+                        <button opaque="NO" contentMode="center" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="K2P-JU-AgX">
+                            <rect key="frame" x="686" y="0.0" width="82" height="65"/>
                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                             <fontDescription key="fontDescription" type="system" pointSize="15"/>
                             <state key="normal" image="maximize.png">
@@ -150,14 +158,13 @@
                 </view>
             </subviews>
             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-            <simulatedStatusBarMetrics key="simulatedStatusBarMetrics"/>
-            <simulatedScreenMetrics key="simulatedDestinationMetrics"/>
+            <splitViewDetailSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
         </view>
         <view contentMode="scaleToFill" id="8W2-Oc-oAa">
             <rect key="frame" x="0.0" y="0.0" width="768" height="1024"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <subviews>
-                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" id="ZH2-YF-E2o">
+                <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" id="ZH2-YF-E2o">
                     <rect key="frame" x="0.0" y="286" width="768" height="432"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
@@ -175,7 +182,8 @@
     </objects>
     <resources>
         <image name="maximize.png" width="21" height="21"/>
-        <image name="vertcal_video_close.png" width="15" height="15"/>
+        <image name="vertcal_video_player_Bg.png" width="320" height="45"/>
+        <image name="video_fullscreen_close.png" width="32" height="32"/>
         <image name="video_overlay_bg.png" width="240" height="90"/>
         <image name="video_overlay_del.png" width="25" height="25"/>
         <image name="video_overlay_download.png" width="25" height="25"/>

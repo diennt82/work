@@ -874,6 +874,7 @@ double _ticks = 0;
             {
                 NSLog(@"Up br");
                 [self performSelectorInBackground:@selector(setVideoBitRateToCamera:) withObject:@"600"];
+                self.numbersOfRemoteViewError = 1;
             }
             
             self.currentMediaStatus = msg;
@@ -992,9 +993,43 @@ double _ticks = 0;
             _isShowCustomIndicator = YES;
             _isShowTextCameraIsNotAccesible = YES;
             
-    		NSLog(@"Timeout While streaming  OR server DIED - userWantToCancel: %d", userWantToCancel);
+    		NSLog(@"Timeout While streaming  OR server DIED - userWantToCancel: %d, returnFromPlayback: %d", userWantToCancel, _returnFromPlayback);
             
     		//mHandler.dispatchMessage(Message.obtain(mHandler, Streamer.MSG_VIDEO_STREAM_HAS_STOPPED_UNEXPECTEDLY));
+            
+            if (userWantToCancel == TRUE)
+            {
+                
+                NSLog(@"*[MEDIA_ERROR_TIMEOUT_WHILE_STREAMING] *** USER want to cancel **.. cancel after .1 sec...");
+                self.selectedChannel.stopStreaming = TRUE;
+                
+                
+                [self performSelector:@selector(goBackToCameraList)
+                           withObject:nil
+                           afterDelay:0.1];
+                
+                return;
+            }
+            else
+            {
+                /*
+                 * Need not to do if went to Playback.
+                 */
+                
+                if (!_returnFromPlayback)
+                {
+                    [self displayCustomIndicator];
+                }
+            }
+            
+            if (self.h264StreamerIsInStopped == TRUE || _returnFromPlayback)
+            {
+                self.selectedChannel.stopStreaming = TRUE;
+                [self performSelector:@selector(stopStream)
+                           withObject:nil
+                           afterDelay:0.1];
+                return;
+            }
             
             if (self.selectedChannel.communication_mode == COMM_MODE_STUN)
             {
@@ -1016,34 +1051,6 @@ double _ticks = 0;
                 {
                     NSLog(@"%s: numbers of remote streaming error: %d", __FUNCTION__, _numbersOfRemoteViewError);
                 }
-            }
-            
-            if (userWantToCancel == TRUE)
-            {
-                
-                NSLog(@"*[MEDIA_ERROR_TIMEOUT_WHILE_STREAMING] *** USER want to cancel **.. cancel after .1 sec...");
-                self.selectedChannel.stopStreaming = TRUE;
-                
-                
-                [self performSelector:@selector(goBackToCameraList)
-                           withObject:nil
-                           afterDelay:0.1];
-                
-                return;
-                
-            }
-            else
-            {
-                [self displayCustomIndicator];
-            }
-            
-            if (self.h264StreamerIsInStopped == TRUE)
-            {
-                self.selectedChannel.stopStreaming = TRUE;
-                [self performSelector:@selector(stopStream)
-                           withObject:nil
-                           afterDelay:0.1];
-                return;
             }
             
     		/* TODO:
@@ -1078,8 +1085,8 @@ double _ticks = 0;
                                                userInfo:nil
                                                 repeats:NO];
             }
-    		break;
         }
+            break;
     		
         case H264_SWITCHING_TO_RELAY_SERVER:
         {
@@ -1131,21 +1138,20 @@ double _ticks = 0;
 
 - (void)stopStreamToPlayback
 {
-    NSLog(@"H264VC - stopStreamToPlayback - currentMediaStatus: %d", _currentMediaStatus);
+    NSLog(@"%s - currentMediaStatus: %d, h264Streamer: %p", __FUNCTION__, _currentMediaStatus, h264Streamer);
     self.returnFromPlayback = TRUE;
     self.h264StreamerIsInStopped = TRUE;
     self.selectedChannel.stream_url = nil;
     [self stopPeriodicBeep];
     [self stopPeriodicPopup];
     
+//    [NSObject cancelPreviousPerformRequestsWithTarget:self
+//                                             selector:@selector(star)
+//                                               object:nil];
+    
     if (_audioOutStreamRemote)
     {
         [_audioOutStreamRemote disconnectFromAudioSocket];
-    }
-    
-    if (h264Streamer)
-    {
-        h264Streamer->setListener(NULL);
     }
 
     if (self.currentMediaStatus == MEDIA_INFO_HAS_FIRST_IMAGE ||
@@ -5786,7 +5792,7 @@ double _ticks = 0;
     
     if ( [self isCurrentConnection3G] ||
         [userDefaults boolForKey:@"remote_only"] ||
-        (self.selectedChannel.profile.ip_address != nil && ![self isInTheSameNetworkAsCamera:self.selectedChannel.profile])
+        (self.selectedChannel.profile.ip_address == nil)
         )
     {
         NSLog(@"Connection over 3G | remote_only | or not in same networ == TRUE --> Skip scanning all together, bit rate 128");
@@ -5803,8 +5809,7 @@ double _ticks = 0;
     }
     else
     {
-        if ([self.selectedChannel.profile.hostSSID isEqualToString:_current_ssid] &&
-             self.selectedChannel.profile.ip_address != nil)
+        if ([self.selectedChannel.profile.hostSSID isEqualToString:_current_ssid])
         {
             NSLog(@"The same ssid --> uses local stream");
             self.selectedChannel.profile.isInLocal = TRUE;
@@ -5825,9 +5830,21 @@ double _ticks = 0;
         }
         else
         {
-            [self startScanningWithBonjour];
-            //[self startScanningWithIpServer];
-            [self performSelectorInBackground:@selector(startScanningWithIpServer) withObject:nil];
+            if ([self isInTheSameNetworkAsCamera:self.selectedChannel.profile])
+            {
+                [self startScanningWithBonjour];
+                //[self startScanningWithIpServer];
+                [self performSelectorInBackground:@selector(startScanningWithIpServer) withObject:nil];
+            }
+            else
+            {
+                self.selectedChannel.profile.isInLocal = FALSE;
+                self.selectedChannel.profile.hasUpdateLocalStatus = TRUE;
+                self.selectedChannel.profile.minuteSinceLastComm = 1;
+                
+                [self performSelector:@selector(setupCamera)
+                           withObject:nil afterDelay:0.1];
+            }
         }
     }
     

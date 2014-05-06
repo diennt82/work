@@ -47,16 +47,16 @@
     //return YES;
 }
 
--(NSUInteger)supportedInterfaceOrientations
-{
-    
-    if (_isEarlierView)
-    {
-        return UIInterfaceOrientationMaskPortrait;
-    }
-    
-    return UIInterfaceOrientationMaskAllButUpsideDown;
-    
-}
+//-(NSUInteger)supportedInterfaceOrientations
+//{
+//    
+//    if (_isEarlierView)
+//    {
+//        return UIInterfaceOrientationMaskPortrait;
+//    }
+//    
+//    return UIInterfaceOrientationMaskAllButUpsideDown;
+//    
+//}
 
 @end

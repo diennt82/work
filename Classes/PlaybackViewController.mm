@@ -23,6 +23,8 @@
 //#define USE_H264PLAYER 0
 @interface PlaybackViewController()
 
+@property (nonatomic, retain) UIImageView *imageViewTopBar;
+
 @end
 
 @implementation PlaybackViewController
@@ -55,16 +57,13 @@
     }
     
     [self applyFont];
+    [self.view addSubview:_ib_myOverlay];
+    self.ib_myOverlay.hidden = YES;
     [self.ib_viewOverlayVideo setHidden:YES];
-    [self.ib_closePlayBack setImage:[UIImage imageNamed:@"vertcal_video_close"] forState:UIControlEventTouchDown];
-    [self.ib_closePlayBack setImage:[UIImage imageNamed:@"vertcal_video_close_pressed"] forState:UIControlStateNormal];
-    
-//    [[UIDevice currentDevice] beginGeneratingDeviceOrientationNotifications];
-//    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didRotate:) name:UIDeviceOrientationDidChangeNotification object:nil];
-    
+    self.view.userInteractionEnabled = NO;
     //[self becomeActive];
     
-#if 0 // Will implement later.
+#if 1
     UITapGestureRecognizer *singleTap = [[UITapGestureRecognizer alloc] initWithTarget:self
                                                                                 action:@selector(singleTapGestureCaptured:)];
     singleTap.numberOfTapsRequired = 1;
@@ -99,45 +98,35 @@
 -(void) viewWillDisappear:(BOOL)animated
 {
     [self.navigationController.navigationBar setHidden:NO];
-//    [[UIDevice currentDevice] endGeneratingDeviceOrientationNotifications];
-//    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIDeviceOrientationDidChangeNotification object:nil];
     [super viewWillDisappear:animated];
     NSLog(@"viewWillDisappear: ");
-    //[self goBackToPlayList];
 }
 
 #pragma mark - Hide&Show Control
 - (void)singleTapGestureCaptured:(id)sender
 {
     NSLog(@"Single tap singleTapGestureCaptured");
-    _isHorizeShow = !_isHorizeShow;
     
+    if (_ib_myOverlay.hidden)
     {
-        if (_isHorizeShow == TRUE)
-        {
-            [self showControlMenu];
-        }
-        else
-        {
-            [self hideControlMenu];
-        }
+        [self showControlMenu];
+    }
+    else
+    {
+       [self hideControlMenu];
     }
 }
 
 - (void)hideControlMenu
 {
-    _isHorizeShow = NO;
-    //    [self.ib_viewControlPlayer setHidden:YES];
-    [self.ib_viewOverlayVideo setHidden:YES];
-    //    [self.ib_closePlayBack setHidden:YES];
+    [self.ib_myOverlay setHidden:YES];
 }
 
 - (void)showControlMenu
 {
-    _isHorizeShow = YES;
-    [self.ib_viewOverlayVideo setHidden:NO];
-    [self.view bringSubviewToFront:self.ib_viewOverlayVideo];
-    [self.view bringSubviewToFront:self.ib_closePlayBack];
+   [self.ib_myOverlay setHidden:NO];
+    [self.view bringSubviewToFront:self.ib_myOverlay];
+    
     if (_timerHideMenu != nil)
     {
         [self.timerHideMenu invalidate];
@@ -219,12 +208,14 @@
     _playbackStreamer->setListener(listener);
     [self performSelectorInBackground:@selector(startStream_bg) withObject:nil];
 }
+
 - (void)startStream_bg
 {
     status_t status = !NO_ERROR;
     NSString * url = self.urlVideo;
     status = _playbackStreamer->setDataSource([url UTF8String]);
     printf("setDataSource return: %d\n", status);
+    
     if (status != NO_ERROR) // NOT OK
     {
         printf("setDataSource error: %d\n", status);
@@ -233,16 +224,17 @@
                        ext2:0];
         return;
     }
+    
     _playbackStreamer->setVideoSurface(self.imageVideo);
+    
     NSLog(@"Prepare the player");
     status =  _playbackStreamer->prepare();
     
     dispatch_async(dispatch_get_main_queue(), ^{
         [self.imageVideo setAlpha:1];
         [self.activityIndicator setHidden:YES];
-        [self.view addSubview:self.ib_myOverlay];
-        //[self.ib_closePlayBack setFrame:CGRectMake(15, 15, 20, 20)];
-        //[self.ib_closePlayBack setBackgroundImage:[UIImage imageVerticalVideoClose] forState:UIControlStateNormal];
+        self.view.userInteractionEnabled = YES;
+        self.ib_myOverlay.hidden = NO;
         [self.ib_sliderPlayBack setMinimumTrackTintColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"video_progress_green"]]];
         [self watcher];
     });
@@ -257,16 +249,16 @@
     status=  _playbackStreamer->start();
     
     printf("start() return: %d\n", status);
+    
     if (status != NO_ERROR) // NOT OK
     {
         printf("start() error: %d\n", status);
         [self handleMessage:MEDIA_ERROR_SERVER_DIED
-         
                        ext1:0
-         
                        ext2:0];
         return;
     }
+    
     if (status == NO_ERROR)
     {
         [self handleMessage:MEDIA_PLAYER_STARTED
@@ -276,7 +268,6 @@
 }
 
 -(void) handleMessage:(int) msg ext1: (int) ext1 ext2:(int) ext2
-
 {
     switch (msg)
     {
@@ -390,6 +381,7 @@
     [_ib_viewControlPlayer release];
     [_ib_myOverlay release];
     [_ib_bg_top_player release];
+    
     [super dealloc];
 }
 
@@ -410,6 +402,14 @@
     }
     if (self.navigationController != nil)
     {
+        if ([[UIDevice currentDevice] orientation] == UIDeviceOrientationLandscapeLeft ||
+            [[UIDevice currentDevice] orientation] == UIDeviceOrientationLandscapeRight)
+        {
+            if ([[UIDevice currentDevice] respondsToSelector:@selector(setOrientation:)]) {
+                objc_msgSend([UIDevice currentDevice], @selector(setOrientation:),   UIDeviceOrientationPortrait);
+            }
+        }
+        
         NSLog(@"Playback with nav controller pop all");
         [[UIApplication sharedApplication] setStatusBarHidden:NO
                                                 withAnimation:UIStatusBarAnimationNone];
@@ -423,6 +423,8 @@
         }
         else // Timeline
         {
+            //id tmp = [self.navigationController.viewControllers objectAtIndex:2];
+            //NSLog(@"%s goBackToPlayList - vc: %@", __FUNCTION__, NSStringFromClass([tmp class]));
             [self.navigationController popViewControllerAnimated:YES];
         }
     }
@@ -436,6 +438,78 @@
 
 #pragma mark - Rotation screen
 
+- (BOOL)shouldAutorotate
+{
+    return YES;
+}
+
+-(NSUInteger)supportedInterfaceOrientations
+{
+    return UIInterfaceOrientationMaskAll;
+}
+
+- (void) willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
+{
+    if (!_userWantToBack)
+    {
+        [self adjustViewsForOrientation:toInterfaceOrientation];
+    }
+}
+
+-(void) checkOrientation
+{
+	UIInterfaceOrientation infOrientation = [UIApplication sharedApplication].statusBarOrientation;
+	[self adjustViewsForOrientation:infOrientation];
+}
+
+- (void) adjustViewsForOrientation:(UIInterfaceOrientation)orientation
+{
+	if (orientation == UIInterfaceOrientationLandscapeLeft || orientation == UIInterfaceOrientationLandscapeRight)
+	{
+        [self.imageVideo setFrame:CGRectMake(0, 0, SCREEN_HEIGHT, SCREEN_WIDTH)];
+        
+        if (isiPhone5 || isiPhone4)
+        {
+            //[self.ib_viewControlPlayer setFrame:CGRectMake(0, SCREEN_WIDTH - HEIGHT_BG_CONTROL, SCREEN_HEIGHT, HEIGHT_BG_CONTROL)];
+            //[self.ib_sliderPlayBack setFrame:CGRectMake(40, 5, 840/2, HEIGHT_SLIDER_DEFAULT)];
+        }
+        else
+        {
+            //for iPad
+            
+            //[self.ib_viewControlPlayer setFrame:CGRectMake(0, SCREEN_WIDTH - HEIGHT_BG_CONTROL, SCREEN_HEIGHT, HEIGHT_BG_CONTROL)];
+            //[self.ib_sliderPlayBack setFrame:CGRectMake(80, 5, SCREEN_HEIGHT - 300, HEIGHT_SLIDER_DEFAULT)];
+        }
+        
+        [self.ib_closePlayBack setImage:[UIImage imageNamed:@"video_fullscreen_close"] forState:UIControlStateNormal];
+        [self.ib_closePlayBack setImage:[UIImage imageNamed:@"video_fullscreen_close_pressed"] forState:UIControlEventTouchDown];
+        self.ib_bg_top_player.hidden = YES;
+	}
+	else if (orientation == UIInterfaceOrientationPortrait || orientation == UIInterfaceOrientationPortraitUpsideDown)
+	{
+        if (isiPhone5 || isiPhone4)
+        {
+            [self.imageVideo setFrame:CGRectMake(0, 194, SCREEN_WIDTH, 180)];
+            //[self.ib_viewControlPlayer setFrame:CGRectMake(0, SCREEN_HEIGHT - HEIGHT_BG_CONTROL, SCREEN_WIDTH, HEIGHT_BG_CONTROL)];
+            //width of slider is 390/2;
+            //[self.ib_sliderPlayBack setFrame:CGRectMake(40, 5, 364/2, HEIGHT_SLIDER_DEFAULT)];
+        }
+        else
+        {
+            //iPad
+            [self.imageVideo setFrame:CGRectMake(0, 296, SCREEN_WIDTH, 432)];
+            //[self.ib_viewControlPlayer setFrame:CGRectMake(0, SCREEN_HEIGHT - HEIGHT_BG_CONTROL, SCREEN_WIDTH, HEIGHT_BG_CONTROL)];
+            //width of slider is 390/2;
+            //[self.ib_sliderPlayBack setFrame:CGRectMake(40, 5, SCREEN_WIDTH - 200, HEIGHT_SLIDER_DEFAULT)];
+        }
+        
+        [self.ib_closePlayBack setImage:[UIImage imageNamed:@"vertcal_video_close"] forState:UIControlStateNormal];
+        [self.ib_closePlayBack setImage:[UIImage imageNamed:@"vertcal_video_close_pressed"] forState:UIControlEventTouchDown];
+        self.ib_bg_top_player.hidden = NO;
+	}
+}
+
+#if 0
 - (void) didRotate:(NSNotification *)notification
 {
     
@@ -469,75 +543,6 @@
     [UIView animateWithDuration:animationDuration animations:^{
         self.view.transform = CGAffineTransformMakeRotation(angle);
     }];
-}
-
-
-
-- (BOOL)shouldAutorotate
-{
-    return YES;
-}
-
--(NSUInteger)supportedInterfaceOrientations
-{
-    return UIInterfaceOrientationMaskAll;
-}
-
-- (void) willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
-{
-	[self adjustViewsForOrientation:toInterfaceOrientation];
-}
-
--(void) checkOrientation
-{
-	UIInterfaceOrientation infOrientation = [UIApplication sharedApplication].statusBarOrientation;
-	[self adjustViewsForOrientation:infOrientation];
-}
-
-- (void) adjustViewsForOrientation:(UIInterfaceOrientation)orientation
-{
-	if (orientation == UIInterfaceOrientationLandscapeLeft || orientation == UIInterfaceOrientationLandscapeRight)
-	{
-        if (isiPhone5 || isiPhone4)
-        {
-            [self.imageVideo setFrame:CGRectMake(0, 0, SCREEN_HEIGHT,SCREEN_WIDTH)];
-            
-            [self.ib_viewControlPlayer setFrame:CGRectMake(0, SCREEN_WIDTH - HEIGHT_BG_CONTROL, SCREEN_HEIGHT, HEIGHT_BG_CONTROL)];
-            [self.ib_sliderPlayBack setFrame:CGRectMake(40, 5, 840/2, HEIGHT_SLIDER_DEFAULT)];
-            //[self.ib_closePlayBack setFrame:CGRectMake(10, 10, 33, 33)];
-            //[self.ib_closePlayBack setBackgroundImage:[UIImage imageVideoFullScreenClose] forState:UIControlStateNormal];
-        }
-        else
-        {
-            //for iPad
-            [self.imageVideo setFrame:CGRectMake(0, 0, SCREEN_HEIGHT, SCREEN_WIDTH)];
-            
-            [self.ib_viewControlPlayer setFrame:CGRectMake(0, SCREEN_WIDTH - HEIGHT_BG_CONTROL, SCREEN_HEIGHT, HEIGHT_BG_CONTROL)];
-            [self.ib_sliderPlayBack setFrame:CGRectMake(80, 5, SCREEN_HEIGHT - 300, HEIGHT_SLIDER_DEFAULT)];
-            //[self.ib_closePlayBack setFrame:CGRectMake(10, 10, 33, 33)];
-            //[self.ib_closePlayBack setBackgroundImage:[UIImage imageVideoFullScreenClose] forState:UIControlStateNormal];
-        }
-	}
-	else if (orientation == UIInterfaceOrientationPortrait || orientation == UIInterfaceOrientationPortraitUpsideDown)
-	{
-        if (isiPhone5 || isiPhone4)
-        {
-            [self.imageVideo setFrame:CGRectMake(0, 194, SCREEN_WIDTH, 180)];
-            [self.ib_viewControlPlayer setFrame:CGRectMake(0, SCREEN_HEIGHT - HEIGHT_BG_CONTROL, SCREEN_WIDTH, HEIGHT_BG_CONTROL)];
-            //width of slider is 390/2;
-            [self.ib_sliderPlayBack setFrame:CGRectMake(40, 5, 364/2, HEIGHT_SLIDER_DEFAULT)];
-            //[self.ib_closePlayBack setFrame:CGRectMake(15, 15, 17, 17)];
-            //[self.ib_closePlayBack setBackgroundImage:[UIImage imageVerticalVideoClose] forState:UIControlStateNormal];
-        }
-        else
-        {
-            //iPad
-            [self.imageVideo setFrame:CGRectMake(0, 296, SCREEN_WIDTH, 432)];
-            [self.ib_viewControlPlayer setFrame:CGRectMake(0, SCREEN_HEIGHT - HEIGHT_BG_CONTROL, SCREEN_WIDTH, HEIGHT_BG_CONTROL)];
-            //width of slider is 390/2;
-            [self.ib_sliderPlayBack setFrame:CGRectMake(40, 5, SCREEN_WIDTH - 200, HEIGHT_SLIDER_DEFAULT)];
-        }
-	}
 }
 
 - (void) updateRotatingLandWith:(float)deltaX andY:(float)deltaY
@@ -588,6 +593,7 @@
     }
     
 }
+#endif
 
 - (IBAction)minimizeVideo:(id)sender
 {
@@ -692,6 +698,7 @@
         
         //  [self.ib_playPlayBack setImage:[UIImage imageVideoPause] forState:UIControlStateNormal];
     }
+    
     [self checkOrientation];
 }
 
@@ -700,7 +707,8 @@
 -(void)watcher
 {
     int currentTime;
-    int duration;
+    int64_t duration;
+    
     if (_playbackStreamer == NULL)
     {
         return;

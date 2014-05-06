@@ -35,11 +35,9 @@
     //EarlierNavigationController *_navController;
     BOOL _isSwitchingWhenPress;
     BOOL _isClickedOnZooming;
-    BOOL _isHorizeShow;
-    
 }
+
 @property (nonatomic, retain) NSMutableArray *clips;
-//@property (nonatomic, retain) EarlierNavigationController *navController;
 @property (retain, nonatomic) IBOutlet UIImageView *imageVideo;
 @property (retain, nonatomic) IBOutlet UIActivityIndicatorView *activityIndicator;
 @property (retain, nonatomic) IBOutlet UIImageView *ib_bg_top_player;
