@@ -72,7 +72,7 @@
 #endif
     
     //hide navigation controller
-    [self.navigationController setHidesBottomBarWhenPushed:YES];
+    //[self.navigationController setHidesBottomBarWhenPushed:YES];
     
 }
 
@@ -83,7 +83,7 @@
     //Here is show indicator
     self.activityIndicator.hidden = NO;
     [self.activityIndicator startAnimating];
-    [self checkOrientation];
+    //[self checkOrientation];
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -246,7 +246,8 @@
         printf("prepare() error: %d\n", status);
         exit(1);
     }
-    status=  _playbackStreamer->start();
+    
+    status =  _playbackStreamer->start();
     
     printf("start() return: %d\n", status);
     
@@ -272,13 +273,9 @@
     switch (msg)
     {
         case MEDIA_PLAYER_PREPARED:
-        {
-            break;
-        }
         case MEDIA_PLAYER_STARTED:
-        {
             break;
-        }
+            
         case MEDIA_ERROR_SERVER_DIED:
         case MEDIA_PLAYBACK_COMPLETE:
             //DONE Playback
@@ -289,6 +286,7 @@
                 [self goBackToPlayList];
             }
             break;
+            
         default:
             break;
     }
@@ -400,6 +398,7 @@
     {
         [self.list_refresher invalidate];
     }
+    
     if (self.navigationController != nil)
     {
         if ([[UIDevice currentDevice] orientation] == UIDeviceOrientationLandscapeLeft ||
