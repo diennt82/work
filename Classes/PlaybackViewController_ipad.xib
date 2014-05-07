@@ -127,7 +127,7 @@
                                 <action selector="playVideo:" destination="-1" eventType="touchUpInside" id="hfw-gE-aQW"/>
                             </connections>
                         </button>
-                        <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" id="MMi-se-o4O">
+                        <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.01" minValue="0.0" maxValue="1" id="MMi-se-o4O">
                             <rect key="frame" x="79" y="15" width="520" height="34"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                             <connections>

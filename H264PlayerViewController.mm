@@ -1683,6 +1683,7 @@ double _ticks = 0;
     
     //Store current SSID - to check later
 	self.current_ssid = [CameraPassword fetchSSIDInfo];
+    
 	if (_current_ssid == nil)
 	{
 		NSLog(@"Error: streamingSSID is nil before streaming");

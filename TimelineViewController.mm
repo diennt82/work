@@ -77,9 +77,14 @@
     self.isLoading = TRUE;
     self.is12hr = [[NSUserDefaults standardUserDefaults] boolForKey:@"IS_12_HR"];
     
-    self.eventPage =1 ;
-    
-    [[UIApplication sharedApplication] setStatusBarOrientation:UIDeviceOrientationPortrait animated:NO];
+    self.eventPage = 1;
+    UIRefreshControl *refreshControl = [[UIRefreshControl alloc] init];
+    [refreshControl addTarget:self
+                       action:@selector(refreshEvents:)
+             forControlEvents:UIControlEventValueChanged];
+    self.refreshControl = refreshControl;
+    [refreshControl release];
+    //[[UIApplication sharedApplication] setStatusBarOrientation:UIDeviceOrientationPortrait animated:NO];
 }
 
 - (void)didReceiveMemoryWarning
@@ -129,7 +134,7 @@
                                                             repeats:NO];
 }
 
-- (void)refreshEvents: (NSTimer *)timer
+- (void)refreshEvents:(NSTimer *)timer
 {
     NSLog(@"Timeline - refreshEvents - isLoading: %d", _isLoading);
     
@@ -150,7 +155,7 @@
         self.eventPage = 1;
         self.shouldLoadMore = YES;
         
-        [self.tableView reloadData];
+        //[self.tableView reloadData];
         
         [self loadEvents:self.camChannel];
     }
@@ -164,11 +169,9 @@
     
     [self performSelectorInBackground:@selector(getEventFromDb:) withObject:camChannel];
     
-    
-    
     [self performSelectorInBackground:@selector(getEventsList_bg2:) withObject:camChannel];
 
-    
+    [self.refreshControl endRefreshing];
 }
 
 - (void)getEventFromDb:(CamChannel *) camChannel
@@ -797,6 +800,7 @@
 
 #pragma mark - Scroll view delegate
 
+#if 0
 - (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate
 {
     if (scrollView.contentOffset.y < -64.0f)
@@ -807,6 +811,7 @@
         [self refreshEvents:nil];
     }
 }
+#endif
 
 - (void)scrollViewDidScroll:(UIScrollView *)aScrollView
 {

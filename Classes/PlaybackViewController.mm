@@ -23,7 +23,10 @@
 //#define USE_H264PLAYER 0
 @interface PlaybackViewController()
 
-@property (nonatomic, retain) UIImageView *imageViewTopBar;
+@property (nonatomic) BOOL isPause;
+@property (nonatomic) int64_t duration;
+@property (nonatomic, retain) NSDate *datePause;
+@property (nonatomic) NSInteger timePause;
 
 @end
 
@@ -61,6 +64,8 @@
     self.ib_myOverlay.hidden = YES;
     [self.ib_viewOverlayVideo setHidden:YES];
     self.view.userInteractionEnabled = NO;
+    [self.ib_playPlayBack setImage:[UIImage imageNamed:@"video_play"] forState:UIControlStateSelected];
+    [self.ib_playPlayBack setImage:[UIImage imageNamed:@"video_pause"] forState:UIControlStateNormal];
     //[self becomeActive];
     
 #if 1
@@ -212,7 +217,8 @@
 - (void)startStream_bg
 {
     status_t status = !NO_ERROR;
-    NSString * url = self.urlVideo;
+    //NSString * url = self.urlVideo;http://cvision-office.no-ip.info/release/spider2_hd.flv
+    NSString * url = @"http://cvision-office.no-ip.info/release/spider2_hd.flv";
     status = _playbackStreamer->setDataSource([url UTF8String]);
     printf("setDataSource return: %d\n", status);
     
@@ -236,6 +242,7 @@
         self.view.userInteractionEnabled = YES;
         self.ib_myOverlay.hidden = NO;
         [self.ib_sliderPlayBack setMinimumTrackTintColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"video_progress_green"]]];
+        _playbackStreamer -> getDuration(&_duration);
         [self watcher];
     });
     
@@ -388,6 +395,8 @@
 - (void)goBackToPlayList
 {
     self.userWantToBack = TRUE;
+    
+    self.ib_playPlayBack.enabled = NO;
     
     if (_playbackStreamer != NULL)
     {
@@ -685,7 +694,30 @@
 
 - (IBAction)playVideo:(id)sender
 {
-    if(_playbackStreamer ->isPlaying())
+#if 1
+    NSLog(@"%s wants to pause: %d", __FUNCTION__, _isPause);
+    
+    if (_playbackStreamer)
+    {
+        if (_isPause)
+        {
+            self.isPause = NO;
+            //self.timePause += [[NSDate date] timeIntervalSinceDate:_datePause];
+            
+            _playbackStreamer->resume();
+            [self watcher];
+            self.ib_playPlayBack.selected = NO;
+        }
+        else if(_playbackStreamer->isPlaying())
+        {
+            self.isPause = YES;
+            //self.datePause = [NSDate date];
+            _playbackStreamer->pause();
+            self.ib_playPlayBack.selected = YES;
+        }
+    }
+#else
+    if(_playbackStreamer ->isPlaying() )
     {
         NSLog(@"Yes Playing");
         //[self.ib_playPlayBack setImage:[UIImage imageVideoPlay] forState:UIControlStateNormal];
@@ -701,6 +733,7 @@
     }
     
     [self checkOrientation];
+#endif
 }
 
 
@@ -708,21 +741,21 @@
 -(void)watcher
 {
     int currentTime;
-    int64_t duration;
     
-    if (_playbackStreamer == NULL)
+    if (_playbackStreamer == NULL || _isPause)
     {
         return;
     }
+    
     _playbackStreamer->getCurrentPosition(&currentTime);
-    _playbackStreamer -> getDuration(&duration);
+    NSLog(@"%s current time: %d, duration: %lld", __FUNCTION__, currentTime, _duration);
     
     self.ib_timerPlayBack.textAlignment = NSTextAlignmentCenter;
-    self.ib_timerPlayBack.text = [self timeFormat:(float)(currentTime/1000)];
+    self.ib_timerPlayBack.text = [self timeFormat:(float)((currentTime)/1000)];
     
     
-    float rate = (float)((END - START) / duration);
-    self.ib_sliderPlayBack.value = (float)(rate * currentTime)/100;
+    float rate = (float)((END - START) / _duration);
+    self.ib_sliderPlayBack.value = (float)(rate * (currentTime))/100;
     
     [NSTimer scheduledTimerWithTimeInterval:0.5
                                      target:self
@@ -731,6 +764,7 @@
                                     repeats:NO];
     
 }
+
 - (NSString *) timeFormat: (float) seconds {
     
     int minutes = seconds / 60;
