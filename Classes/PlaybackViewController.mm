@@ -403,7 +403,9 @@
     if (self.navigationController != nil)
     {
         if ([[UIDevice currentDevice] orientation] == UIDeviceOrientationLandscapeLeft ||
-            [[UIDevice currentDevice] orientation] == UIDeviceOrientationLandscapeRight)
+            [[UIDevice currentDevice] orientation] == UIDeviceOrientationLandscapeRight ||
+            [UIApplication sharedApplication].statusBarOrientation == UIInterfaceOrientationLandscapeLeft ||
+            [UIApplication sharedApplication].statusBarOrientation == UIInterfaceOrientationLandscapeRight)
         {
             if ([[UIDevice currentDevice] respondsToSelector:@selector(setOrientation:)]) {
                 objc_msgSend([UIDevice currentDevice], @selector(setOrientation:),   UIDeviceOrientationPortrait);
@@ -603,7 +605,7 @@
     
     if ([[UIDevice currentDevice] orientation] == UIDeviceOrientationPortrait)
     {
-        orietation = UIDeviceOrientationLandscapeLeft;
+        orietation = UIDeviceOrientationLandscapeRight;
     }
     
     if ([[UIDevice currentDevice] respondsToSelector:@selector(setOrientation:)]) {
