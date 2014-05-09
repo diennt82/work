@@ -29,7 +29,8 @@
 #define ALERT_ADD_CAM_UNREACH   501
 #define ALERT_CHECK_STATUS      502
 #define ALERT_SELECTED_OPTION   503
-//#define ALERT_ADDCAM_SERVER_UNREACH 1
+
+#define TIMEOUT_PROCESS         2*60.f
 
 @interface Step_10_ViewController () <UIAlertViewDelegate>
 
@@ -552,11 +553,11 @@
                 
             }
             //Timer  1min - for camera reboot and add itself to server
-            self.timeOut = [NSTimer scheduledTimerWithTimeInterval:1*60.0
-                                                       target:self
+            self.timeOut = [NSTimer scheduledTimerWithTimeInterval:TIMEOUT_PROCESS
+                                                            target:self
                                                           selector:@selector(timeOutSetupProcess:)
-                                                     userInfo:nil
-                                                      repeats:NO];
+                                                          userInfo:nil
+                                                           repeats:NO];
             
             [self wait_for_camera_to_reboot:nil];
             [self checkCameraStatus];
@@ -734,7 +735,7 @@
     }
     else// unkown
     {
-        [self performSelector:@selector(checkCameraAvailableAndFWUpgrading) withObject:nil afterDelay:0.001];
+        [self performSelector:@selector(checkCameraAvailableAndFWUpgrading) withObject:nil afterDelay:0.01];
     }
     
     return cameraStatus;
@@ -1085,7 +1086,7 @@
         self.timeOut = nil;
     }
     
-    self.timeOut = [NSTimer scheduledTimerWithTimeInterval:1*60.0
+    self.timeOut = [NSTimer scheduledTimerWithTimeInterval:TIMEOUT_PROCESS
                                                     target:self
                                                   selector:@selector(timeOutSetupProcess:)
                                                   userInfo:nil

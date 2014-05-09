@@ -12,6 +12,7 @@
 #import "KISSMetricsAPI.h"
 
 #define TIME_INPUT_PASSWORD_AGAIN   60.0
+#define RETRY_SETUP_WIFI_TIMES      5
 
 @interface Step_06_ViewController () <UITextFieldDelegate>
 
@@ -718,8 +719,10 @@
     NSString * setup_cmd = [NSString stringWithFormat:@"%@%@",
                             SETUP_HTTP_CMD, device_configuration];
     
-    response = [[HttpCom instance].comWithDevice sendCommandAndBlock:setup_cmd ];
-    NSLog(@"Step_06VC - send cmd  %@ - response is: %@", setup_cmd, response);
+//    response = [[HttpCom instance].comWithDevice sendCommandAndBlock:setup_cmd ];
+//    NSLog(@"Step_06VC - send cmd  %@ - response is: %@", setup_cmd, response);
+    
+     [self loopSetupWifiSending:setup_cmd retryTimes:0];
     
     // >12.82 we can move on with new flow
     if ([fwVersion compare:FW_MILESTONE_F66_NEW_FLOW] >= NSOrderedSame) // fw >= FW_MILESTONE_F66_NEW_FLOW
@@ -731,6 +734,9 @@
                                        selector:@selector(moveOnToCheckCameraOnlineStatus)
                                        userInfo:nil
                                         repeats:NO];
+        response = [[HttpCom instance].comWithDevice sendCommandAndBlock:RESTART_HTTP_CMD];
+        
+        NSLog(@"%s RESTART_HTTP_CMD: %@", __FUNCTION__, response);
     }
     else
     {
@@ -743,22 +749,26 @@
                                        selector:@selector(checkAppConnectToCameraAtStep03)
                                        userInfo:nil
                                         repeats:NO];
+    }
+}
+
+- (BOOL)loopSetupWifiSending:(NSString *)setup_cmd retryTimes:(NSInteger)times
+{
+    if (times < RETRY_SETUP_WIFI_TIMES)
+    {
+        NSString *response = [[HttpCom instance].comWithDevice sendCommandAndBlock:setup_cmd];
         
+        if (response != nil && [response isEqualToString:@"setup_wireless_save: 0"])
+        {
+            return TRUE;
+        }
         
-        
-        // popup force waiting..
-//        [NSTimer scheduledTimerWithTimeInterval: 3.0
-//                                         target:self
-//                                       selector:@selector(askUserToWaitForUpgrade)
-//                                       userInfo:nil
-//                                        repeats:NO];
-        
+        NSLog(@"%s send cmd  %@ - response is: %@", __FUNCTION__, setup_cmd, response);//setup_wireless_save: 0
+        times++;
+        [self loopSetupWifiSending:setup_cmd retryTimes:times];
     }
     
-    
-    
-    
-    
+    return FALSE;
 }
 
 -(void)moveOnToCheckCameraOnlineStatus

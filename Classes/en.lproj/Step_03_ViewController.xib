@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="5053" systemVersion="12F45" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none">
     <dependencies>
-        <deployment defaultVersion="1536" identifier="iOS"/>
+        <deployment defaultVersion="1792" identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3733"/>
     </dependencies>
     <objects>
@@ -39,12 +39,12 @@
                             <color key="textColor" red="0.50196078431372548" green="0.50196078431372548" blue="0.50196078431372548" alpha="1" colorSpace="calibratedRGB"/>
                             <nil key="highlightedColor"/>
                         </label>
-                        <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="BLE_pair.png" id="3cn-r2-1D8">
-                            <rect key="frame" x="105" y="98" width="100" height="100"/>
+                        <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="camera_ble3.png" id="3cn-r2-1D8">
+                            <rect key="frame" x="68" y="98" width="175" height="150"/>
                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         </imageView>
                         <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="1. Press and hold the button marked 'PAIR' for 3 seconds " textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="FgI-nL-OOX">
-                            <rect key="frame" x="15" y="230" width="280" height="40"/>
+                            <rect key="frame" x="15" y="251" width="280" height="40"/>
                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <fontDescription key="fontDescription" name="HelveticaNeue-Thin" family="Helvetica Neue" pointSize="16"/>
                             <color key="textColor" red="0.10980392160000001" green="0.50196078430000002" blue="0.95294117649999999" alpha="1" colorSpace="calibratedRGB"/>
@@ -72,7 +72,7 @@
                             <nil key="highlightedColor"/>
                         </label>
                         <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="detect_camera_1.png" id="6H7-k3-79G">
-                            <rect key="frame" x="18" y="294" width="275" height="170"/>
+                            <rect key="frame" x="18" y="298" width="275" height="170"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         </imageView>
                         <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="detect_camera_2.png" id="bva-EQ-FtH">
@@ -151,8 +151,8 @@
         </view>
     </objects>
     <resources>
-        <image name="BLE_pair.png" width="100" height="100"/>
         <image name="Setup_iphone.png" width="42" height="85"/>
+        <image name="camera_ble3.png" width="175" height="150"/>
         <image name="detect_camera_1.png" width="275" height="170"/>
         <image name="detect_camera_2.png" width="275" height="170"/>
         <image name="detect_camera_3.png" width="275" height="170"/>
