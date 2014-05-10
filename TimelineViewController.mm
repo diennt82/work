@@ -344,7 +344,6 @@
                     eventInfo.time_stamp = [event objectForKey:@"time_stamp"];
                     eventInfo.alert      = [[event objectForKey:@"alert"] integerValue];
                     
-                    
                     NSString * data_str1  = nil;
                     if ([event objectForKey:@"data"] != [NSNull null])
                     {

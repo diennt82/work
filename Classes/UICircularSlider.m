@@ -496,7 +496,7 @@ int finalAngle;
     NSDate *fireDateNotification = [NSDate dateWithTimeIntervalSince1970:nextDateTime];
     UILocalNotification* localNotification = [[UILocalNotification alloc] init];
     localNotification.fireDate = fireDateNotification;
-    localNotification.alertBody = @"Out of time, let push notification";
+    localNotification.alertBody = @"Your 'Do Not Disturb' time is over, you will now start to receive notifications";
     localNotification.alertAction = @"Let push notification from camera";
     localNotification.timeZone = [NSTimeZone defaultTimeZone];
     localNotification.applicationIconBadgeNumber = [[UIApplication sharedApplication] applicationIconBadgeNumber] + 1;
