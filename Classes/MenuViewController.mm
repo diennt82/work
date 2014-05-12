@@ -59,7 +59,7 @@
     
     self.navigationController.navigationBarHidden = NO;
     
-    UIImage *hubbleBack = [UIImage imageNamed:@"Hubble_logo_back"];
+    /*UIImage *hubbleBack = [UIImage imageNamed:@"Hubble_logo_back"];
     UIBarButtonItem *backBarBtn = [[UIBarButtonItem alloc] initWithImage:hubbleBack
                                                                    style:UIBarButtonItemStyleBordered
                                                                   target:self
@@ -67,6 +67,32 @@
     [backBarBtn setTintColor:[UIColor colorWithPatternImage:hubbleBack]];
     
     self.navigationItem.leftBarButtonItem = backBarBtn;
+     */
+    UIImage *image = [UIImage imageNamed:@"Hubble_logo_back"];
+    CGRect frame = CGRectMake(0, 0, image.size.width, image.size.height);
+    
+    //init a normal UIButton using that image
+    UIButton* button = [[UIButton alloc] initWithFrame:frame];
+    [button setBackgroundImage:image forState:UIControlStateNormal];
+    [button setBackgroundImage:image forState:UIControlStateHighlighted];
+    [button setBackgroundImage:image forState:UIControlStateSelected];
+    [button setBackgroundImage:image forState:UIControlStateDisabled];
+    
+    [button setShowsTouchWhenHighlighted:NO];
+    
+    //set the button to handle clicks - this one calls a method called 'downloadClicked'
+    [button addTarget:self action:@selector(menuBackAction:) forControlEvents:UIControlEventTouchUpInside];
+    
+    //finally, create your UIBarButtonItem using that button
+    UIBarButtonItem* barButtonItem = [[UIBarButtonItem alloc] initWithCustomView:button];
+    
+    self.navigationItem.leftBarButtonItem = barButtonItem;
+
+    
+    
+    
+    
+    
     self.navigationItem.leftBarButtonItem.enabled = NO;
     
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
@@ -161,7 +187,7 @@
     self.camerasVC.ibTableListCamera.contentInset = UIEdgeInsetsMake(30, 0, 64, 0);
     
     UIImage *hubbleBack = [UIImage imageNamed:@"Hubble_logo_back"];
-    [self.navigationItem.leftBarButtonItem setTintColor:[UIColor colorWithPatternImage:hubbleBack]];
+    //[self.navigationItem.leftBarButtonItem setTintColor:[UIColor colorWithPatternImage:hubbleBack]];
 
     if (!_isFirttime) //revert
     {
@@ -274,6 +300,8 @@
     {
         self.navigationItem.rightBarButtonItems = @[accountBarButton, cameraBarButton];
     }
+    
+    
 }
 
 - (void)stopStreamFinished:(CamChannel *)camChannel

@@ -433,10 +433,12 @@
             if ([ch.profile.registrationID isEqualToString:regID])
             {
                 [cell.ibBGColorCameraSelected setBackgroundColor:[UIColor selectCameraItemColor]];
+                [cell setSelected:YES];
             }
             else
             {
                 [cell.ibBGColorCameraSelected setBackgroundColor:[UIColor whiteColor]];
+                [cell setSelected:NO];
             }
         }
         

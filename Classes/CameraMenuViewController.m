@@ -248,13 +248,13 @@
             {
                 if (![newName isEqualToString:self.camChannel.profile.name])
                 {
-                    _cameraNewName = newName;
+                    _cameraNewName = [newName retain];
                     self.isChangingName = TRUE;
-                    [self.tableViewSettings reloadRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:0
-                                                                                                               inSection:0]]
-                                                  withRowAnimation:UITableViewRowAnimationAutomatic];
+                    /*[self.tableViewSettings reloadRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:0 inSection:0]]
+                                                  withRowAnimation:UITableViewRowAnimationAutomatic];*/
+                    [self.tableViewSettings reloadData];
 
-                    [self changeCameraName];
+                    [self performSelector:@selector(changeCameraName) withObject:nil afterDelay:0.1];
                 }
                 else
                 {
@@ -309,7 +309,7 @@
 #if ENABLE_CHANGE_IMAGE
     return 3;
 #else
-    return 2;
+    return 3;
 #endif
 }
 
@@ -320,13 +320,13 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (self.camChannel.profile.name.length > 10 &&
+    if (self.camChannel.profile.name.length > 19 &&
         indexPath.row == 0)
     {
-        return 66;
+        //return 66;
     }
     
-    return 45;
+    return 50;
 }
 
 - (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
@@ -346,8 +346,7 @@
         NSArray *objects = [[NSBundle mainBundle] loadNibNamed:@"CameraSettingsCell" owner:nil options:nil];
         
         for (id curObj in objects)
-        {
-            
+        {            
             if([curObj isKindOfClass:[UITableViewCell class]])
             {
                 cell = (CameraSettingsCell *)curObj;
@@ -391,7 +390,7 @@
     }
 #else
     if (indexPath.row == 0 ||
-        indexPath.row == 1)
+        indexPath.row == 1 || indexPath.row == 2)
     {
         static NSString *CellIdentifier = @"CameraSettingsCell";
         CameraSettingsCell *cell = [self.tableViewSettings dequeueReusableCellWithIdentifier:CellIdentifier];
@@ -407,12 +406,13 @@
                 break;
             }
         }
-        
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
+        cell.processView.hidden = YES;
         if (indexPath.row == 0)
         {
             if (_isChangingName)
             {
-                static NSString *CellIdentifier = @"Cell";
+               /* static NSString *CellIdentifier = @"Cell";
                 UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
                 if (cell == nil) {
                     cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
@@ -437,21 +437,14 @@
                 [cell.imageView addSubview:spinner];
                 [spinner startAnimating];
                 
-                return cell;
+                return cell;*/
+                cell.processView.hidden = NO;
             }
-            else
-            {
-                if (self.camChannel.profile.name.length > 10)
-                {
-                    cell.valueLabel.frame = CGRectMake(cell.valueLabel.frame.origin.x, cell.valueLabel.frame.origin.y, cell.valueLabel.frame.size.width, cell.valueLabel.frame.size.height * 2);
-                    cell.nameLabel.frame = CGRectMake(cell.nameLabel.frame.origin.x, cell.valueLabel.center.y - cell.nameLabel.frame.size.height / 2, cell.nameLabel.frame.size.width, cell.nameLabel.frame.size.height);
-                }
-                
-                cell.nameLabel.text = @"Name";
-                cell.valueLabel.text = self.camChannel.profile.name;
-            }
+            
+            cell.nameLabel.text = @"Name";
+            cell.valueLabel.text = self.camChannel.profile.name;
         }
-        else
+        else if(indexPath.row==1)
         {
             if (_isLoading)
             {
@@ -487,6 +480,11 @@
                 cell.nameLabel.text = _stringFW_Version;
                 cell.valueLabel.text = self.camChannel.profile.fw_version;
             }
+        }
+        else
+        {
+            cell.nameLabel.text = @"App Version";
+            cell.valueLabel.text = @"03.15.2";
         }
         
         return cell;
