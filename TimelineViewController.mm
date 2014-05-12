@@ -190,11 +190,11 @@
     
     if (_is12hr)
     {
-        dateFormatter.dateFormat = @"hh:mm a";
+        dateFormatter.dateFormat = @"h:mm a";
     }
     else
     {
-        dateFormatter.dateFormat = @"HH:mm";
+        dateFormatter.dateFormat = @"H:mm";
     }
     
     self.stringCurrentDate = [dateFormatter stringFromDate:_currentDate];
@@ -480,11 +480,11 @@
     
     if (_is12hr)
     {
-        dateFormatter.dateFormat = @"hh:mm a";
+        dateFormatter.dateFormat = @"h:mm a";
     }
     else
     {
-        dateFormatter.dateFormat = @"HH:mm";
+        dateFormatter.dateFormat = @"H:mm";
     }
     self.stringCurrentDate = [dateFormatter stringFromDate:_currentDate];
     
@@ -1118,16 +1118,19 @@
         
         if (_stringIntelligentMessage.length > 22)
         {
-            cell.eventLabel.frame = CGRectMake(cell.eventLabel.frame.origin.x, cell.eventLabel.frame.origin.y, cell.eventLabel.frame.size.width, cell.eventLabel.frame.size.height * 2);
-            cell.eventDetailLabel.frame = CGRectMake(cell.eventDetailLabel.frame.origin.x, cell.eventLabel.center.y + cell.eventLabel.frame.size.height / 2, cell.eventDetailLabel.frame.size.width, cell.eventDetailLabel.frame.size.height);
+            //cell.eventLabel.frame = CGRectMake(cell.eventLabel.frame.origin.x, cell.eventLabel.frame.origin.y, cell.eventLabel.frame.size.width, cell.eventLabel.frame.size.height * 2);
+           // cell.eventDetailLabel.frame = CGRectMake(cell.eventDetailLabel.frame.origin.x, cell.eventLabel.center.y + cell.eventLabel.frame.size.height / 2, cell.eventDetailLabel.frame.size.width, cell.eventDetailLabel.frame.size.height);
         }
         
-        [cell.eventLabel setFont:[UIFont lightLarge27Font]];
-        [cell.detailTextLabel setFont:[UIFont lightSmall14Font]];
+        //[cell.eventLabel setFont:[UIFont regular18Font]];
+        [cell.eventDetailLabel setFont:[UIFont lightSmall14Font]];
         cell.eventLabel.text = self.stringIntelligentMessage;
         cell.eventDetailLabel.text = self.stringCurrentDate;
         [cell.eventLabel setTextColor:[UIColor timeLineColor]];
         [cell.eventDetailLabel setTextColor:[UIColor timeLineColor]];
+        
+        //cell.eventLabel.text = @"There has been a lot of noise and little movement";
+       // cell.eventLabel.lineBreakMode = NSLineBreakByWordWrapping;
         
         return cell;
     }
@@ -1171,28 +1174,30 @@
                                                                toDate:[NSDate date]
                                                               options:nil];
         
+        BOOL isYesterday= NO;
         if  ([self isEqualToDateIgnoringTime:[NSDate date] vsDate:eventDate]) //if it is today
         {
             //Show only hours/minutes
             if (_is12hr)
             {
-                df_local.dateFormat = @"hh:mm a";
+                df_local.dateFormat = @"h:mm a";
             }
             else
             {
-                df_local.dateFormat = @"HH:mm";
+                df_local.dateFormat = @"H:mm";
             }
         }
         else if ([self isEqualToDateIgnoringTime:yesterday vsDate:eventDate])
         {
+            isYesterday = YES;
             //Show only hours/minutes  with dates
             if (_is12hr)
             {
-                df_local.dateFormat = @"hh:mm a, dd-MM-yyyy";
+                df_local.dateFormat = @"h:mm a";
             }
             else
             {
-                df_local.dateFormat = @"HH:mm, dd-MM-yyyy";
+                df_local.dateFormat = @"H:mm";
             }
         }
         else
@@ -1200,20 +1205,25 @@
             //Show only hours/minutes  with dates
             if (_is12hr)
             {
-                df_local.dateFormat = @"hh:mm a, dd-MM-yyyy";
+                df_local.dateFormat = @"h:mm a EEEE, dd MMM";
             }
             else
             {
-                df_local.dateFormat = @"HH:mm, dd-MM-yyyy";
+                df_local.dateFormat = @"H:mm EEEE, dd MMM";
             }
             
         }
         
         cell.eventTimeLabel.text = [df_local stringFromDate:eventDate];
-        
         [df_local release];
+
         
-        //NSLog(@"%@, %@", [dateFormater stringFromDate:eventDate], [NSTimeZone localTimeZone]);
+        if(isYesterday)
+        {
+            cell.eventTimeLabel.text = [NSString stringWithFormat:@"%@ Yesterday",cell.eventTimeLabel.text];
+        }
+        
+       //NSLog(@"%@, %@", [dateFormater stringFromDate:eventDate], [NSTimeZone localTimeZone]);
         
         
         // Motion detected

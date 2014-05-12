@@ -12,5 +12,5 @@
 
 @property (retain, nonatomic) IBOutlet UILabel *nameLabel;
 @property (retain, nonatomic) IBOutlet UILabel *valueLabel;
-
+@property (retain, nonatomic) IBOutlet UIView *processView;
 @end

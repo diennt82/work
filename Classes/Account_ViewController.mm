@@ -95,7 +95,7 @@
     [self userLogout];
 }
 
-- (void)userLogout
+-(IBAction) userLogout
 {
     NSLog(@"LOG OUT>>>>");
     
@@ -183,13 +183,14 @@
 {
     if (section == 0)
     {
-        return 3;
+        return 2;
     }
     else if(section == 2)
     {
         if (CUE_RELEASE_FLAG)
         {
-            return 1;
+            //return 1; // Original
+            return  2;//Kiran
         }
         else
         {
@@ -318,10 +319,13 @@
         }
         else
         {
-            cell.nameLabel.text = @"Upgrade Plan";
-            cell.valueLabel.text = nil;
-            cell.valueLabel.hidden = YES;
+            //cell.nameLabel.text = @"Upgrade Plan";
+            //cell.valueLabel.text = nil;
+            //cell.valueLabel.hidden = YES;
             
+            cell.nameLabel.text = @"App Version";
+            cell.valueLabel.text = @"03.15.2";
+            cell.valueLabel.hidden = NO;
             return cell;
         }
     }
