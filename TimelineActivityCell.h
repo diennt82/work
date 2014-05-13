@@ -15,5 +15,5 @@
 @property (retain, nonatomic) IBOutlet UIImageView *feedImageVideo;
 @property (retain, nonatomic) IBOutlet UIActivityIndicatorView *activityIndicatorLoading;
 @property (retain, nonatomic) IBOutlet UIImageView *lineImage;
-
+@property (retain, nonatomic) IBOutlet UILabel *lblToHideLine;
 @end

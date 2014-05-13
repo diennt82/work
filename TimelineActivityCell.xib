@@ -49,6 +49,14 @@
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <color key="color" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                     </activityIndicatorView>
+                    <label hidden="YES" opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="bEL-qr-Jxn">
+                        <rect key="frame" x="23" y="14" width="10" height="197"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" heightSizable="YES" flexibleMaxY="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                        <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                        <nil key="highlightedColor"/>
+                    </label>
                 </subviews>
             </tableViewCellContentView>
             <connections>
@@ -56,6 +64,7 @@
                 <outlet property="eventLabel" destination="T3v-2C-ztl" id="l1o-Z1-q38"/>
                 <outlet property="eventTimeLabel" destination="hV4-dy-a3v" id="atx-aP-94b"/>
                 <outlet property="feedImageVideo" destination="tJN-kI-kE9" id="TmS-cc-gtl"/>
+                <outlet property="lblToHideLine" destination="bEL-qr-Jxn" id="x1p-o6-943"/>
                 <outlet property="lineImage" destination="G03-mk-Fdg" id="fjq-hD-Eiu"/>
                 <outlet property="snapshotImage" destination="Nlz-DS-UuQ" id="SXs-Ya-3tO"/>
             </connections>

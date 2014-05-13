@@ -43,6 +43,8 @@
 
 @property (nonatomic) BOOL hasUpdate;
 
+
+
 @end
 
 @implementation TimelineViewController
@@ -66,6 +68,8 @@
     
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
+    
+    aryDatePrefix = [[NSArray alloc] initWithObjects:@"th", @"st", @"nd", @"rd",@"th",@"th", @"th", @"th", @"th", @"th",nil];
     
     self.navigationController.navigationBarHidden = YES;
     
@@ -1133,6 +1137,14 @@
         }
         
 #if 1
+        if(!cell.lblToHideLine.isHidden){
+            cell.lblToHideLine.hidden=YES;
+        }        
+        if(indexPath.row==(_events.count-1))
+        {
+            cell.lblToHideLine.hidden=NO;
+        }
+        
         EventInfo *eventInfo = (EventInfo *)[_events objectAtIndex:indexPath.row];
         
         cell.eventLabel.text = eventInfo.alert_name;
@@ -1165,6 +1177,7 @@
             {
                 df_local.dateFormat = @"H:mm";
             }
+            cell.eventTimeLabel.text = [df_local stringFromDate:eventDate];
         }
         else if ([self isEqualToDateIgnoringTime:yesterday vsDate:eventDate])
         {
@@ -1178,30 +1191,31 @@
             {
                 df_local.dateFormat = @"H:mm";
             }
+            cell.eventTimeLabel.text = [NSString stringWithFormat:@"%@ Yesterday",[df_local stringFromDate:eventDate]];
         }
         else
         {
+            df_local.dateFormat = @"d";
+            NSString *strDate = [df_local stringFromDate:eventDate];
+            
+            df_local.dateFormat = @"MMM";
+            NSString *strM = [df_local stringFromDate:eventDate];
             //Show only hours/minutes  with dates
             if (_is12hr)
             {
-                df_local.dateFormat = @"h:mm a EEEE, dd MMM";
+                df_local.dateFormat = @"h:mm a EEEE";
             }
             else
             {
-                df_local.dateFormat = @"H:mm EEEE, dd MMM";
+                df_local.dateFormat = @"H:mm EEEE";
             }
-            
+            NSString *strTime = [df_local stringFromDate:eventDate];
+            int m = [strDate intValue] % 10;
+            cell.eventTimeLabel.text = [NSString stringWithFormat:@"%@, %@%@ %@",strTime,strDate,[aryDatePrefix objectAtIndex:((m > 10 && m < 20) ? 0 : (m % 10))],strM];
+            //cell.eventTimeLabel.text = [df_local stringFromDate:eventDate];
         }
         
-        cell.eventTimeLabel.text = [df_local stringFromDate:eventDate];
         [df_local release];
-
-        
-        if(isYesterday)
-        {
-            cell.eventTimeLabel.text = [NSString stringWithFormat:@"%@ Yesterday",cell.eventTimeLabel.text];
-        }
-        
        //NSLog(@"%@, %@", [dateFormater stringFromDate:eventDate], [NSTimeZone localTimeZone]);
         
         
