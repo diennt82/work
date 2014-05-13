@@ -1079,7 +1079,7 @@
         
         return cell;
     }
-    else if (_events == nil)
+    else if (_events == nil || _events.count == 0)
     {
         static NSString *CellIdentifier = @"Cell";
         UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];

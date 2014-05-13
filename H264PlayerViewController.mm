@@ -124,6 +124,8 @@
 @property (nonatomic, retain) BMS_JSON_Communication *jsonCommBlocked;
 @property (nonatomic, assign) EarlierNavigationController *earlierNavi;
 @property (nonatomic) BOOL wantToShowTimeLine;
+@property (nonatomic, retain) NSTimer *timerIncreaseBitRate;
+
 //property for Hold to talk
 @property (nonatomic) BOOL walkieTalkieEnabled;
 @property (nonatomic) BOOL disableAutorotateFlag;
@@ -872,8 +874,21 @@ double _ticks = 0;
             NSLog(@"[MEDIA_PLAYER_HAS_FIRST_IMAGE] ");
             if(self.selectedChannel.profile.isInLocal == NO)
             {
-                NSLog(@"Up br");
-                [self performSelectorInBackground:@selector(setVideoBitRateToCamera:) withObject:@"600"];
+                if (_timerIncreaseBitRate)
+                {
+                    [_timerIncreaseBitRate invalidate];
+                    self.timerIncreaseBitRate = nil;
+                }
+                
+                if (![self isCurrentConnection3G])
+                {
+                    self.timerIncreaseBitRate = [NSTimer scheduledTimerWithTimeInterval:60
+                                                                                 target:self
+                                                                               selector:@selector(increaseBitRate:)
+                                                                               userInfo:nil
+                                                                                repeats:NO];
+                }
+                
                 self.numbersOfRemoteViewError = 1;
             }
             
@@ -1037,6 +1052,12 @@ double _ticks = 0;
             }
             else if (self.selectedChannel.communication_mode == COMM_MODE_STUN_RELAY2)
             {
+                if (_timerIncreaseBitRate)
+                {
+                    [_timerIncreaseBitRate invalidate];
+                    self.timerIncreaseBitRate = nil;
+                }
+                
                 self.numbersOfRemoteViewError++;
                 
                 if (_numbersOfRemoteViewError == 2)
@@ -1045,7 +1066,7 @@ double _ticks = 0;
                 }
                 else if (_numbersOfRemoteViewError == 3)
                 {
-                    [self performSelectorInBackground:@selector(setVideoBitRateToCamera:) withObject:@"200"];
+                    [self performSelectorInBackground:@selector(setVideoBitRateToCamera:) withObject:@"300"];
                 }
                 else
                 {
@@ -1746,6 +1767,8 @@ double _ticks = 0;
     
     _isShowCustomIndicator = NO;
     
+    self.view.userInteractionEnabled = NO;
+    
     NSLog(@"H264VC- prepareGoBackToCameraList - self.currentMediaStatus: %d", self.currentMediaStatus);
     self.navigationItem.leftBarButtonItem.enabled = NO;
     
@@ -1988,40 +2011,16 @@ double _ticks = 0;
 
 - (void)stopStream
 {
-    
-#if 0
-    dispatch_async(player_func_queue, ^{
-        
-        if (h264Streamer != NULL)
-        {
-            
-            h264Streamer->suspend();
-            h264Streamer->stop();
-            
-            delete h264Streamer ;
-            h264Streamer = NULL;
-        }
-        
-        
-        
-        [self cleanUpDirectionTimers];
-        if (scanner != nil)
-        {
-            [scanner cancel];
-        }
-        
-        [self performSelectorOnMainThread:@selector(stopStunStream)
-                               withObject:nil
-                            waitUntilDone:NO];
-        
-        
-    });
-#else
-    
     NSLog(@"Calling suspend() on thread: %@", [NSThread currentThread]);
     _timerStopStreamAfter30s = nil;
     @synchronized(self)
     {
+        if (_timerIncreaseBitRate)
+        {
+            [_timerIncreaseBitRate invalidate];
+            self.timerIncreaseBitRate = nil;
+        }
+        
         if (h264Streamer != NULL)
         {
             //h264Streamer->setListener(NULL);
@@ -2062,8 +2061,6 @@ double _ticks = 0;
         
         //[self stopRelayStream];
     }
-#endif
-    //[self.activityStopStreamingProgress stopAnimating];
 }
 
 - (void)showDialogAndStopStream: (id)sender // Timer
@@ -5183,6 +5180,8 @@ double _ticks = 0;
     
     if ([walkieTalkieEnabledFlag boolValue] == NO)
     {
+        self.disableAutorotateFlag = FALSE;
+        
         if (h264Streamer)
         {
             h264Streamer->setPlayOption(MEDIA_STREAM_AUDIO_NOT_MUTE);
@@ -5196,6 +5195,8 @@ double _ticks = 0;
     }
     else
     {
+        self.disableAutorotateFlag = YES;
+        
         if (h264Streamer)
         {
             h264Streamer->setPlayOption(MEDIA_STREAM_AUDIO_MUTE);
@@ -5865,6 +5866,11 @@ double _ticks = 0;
     }
     
     return FALSE;
+}
+
+- (void)increaseBitRate:(NSTimer *)timer
+{
+    [self performSelectorInBackground:@selector(setVideoBitRateToCamera:) withObject:@"600"];
 }
 
 - (void)setVideoBitRateToCamera:(NSString *)bitrate_str

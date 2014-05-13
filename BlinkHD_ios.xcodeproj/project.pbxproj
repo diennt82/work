@@ -402,10 +402,6 @@
 		8B29A08718AF500A00D36BE5 /* video_progress_bg@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B299F5118AF500900D36BE5 /* video_progress_bg@2x.png */; };
 		8B29A08818AF500A00D36BE5 /* video_progress_green.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B299F5218AF500900D36BE5 /* video_progress_green.png */; };
 		8B29A08918AF500A00D36BE5 /* video_progress_green@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B299F5318AF500900D36BE5 /* video_progress_green@2x.png */; };
-		8B29C25C191C78A80015E3FB /* camera_ble2.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B29C258191C78A80015E3FB /* camera_ble2.png */; };
-		8B29C25D191C78A80015E3FB /* camera_ble2@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B29C259191C78A80015E3FB /* camera_ble2@2x.png */; };
-		8B29C25E191C78A80015E3FB /* camera_ble3.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B29C25A191C78A80015E3FB /* camera_ble3.png */; };
-		8B29C25F191C78A80015E3FB /* camera_ble3@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B29C25B191C78A80015E3FB /* camera_ble3@2x.png */; };
 		8B53659318B34DA80018671F /* SensitivityTemperatureCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B53659218B34DA80018671F /* SensitivityTemperatureCell.m */; };
 		8B53659518B34DCA0018671F /* SensitivityTemperatureCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8B53659418B34DCA0018671F /* SensitivityTemperatureCell.xib */; };
 		8B68F5D118066CE500661527 /* PlaybackViewController_ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8B68F5D018066CE500661527 /* PlaybackViewController_ipad.xib */; };
@@ -466,6 +462,10 @@
 		8B9384941856EF13009C4771 /* SlideSettingsCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8B9384931856EF13009C4771 /* SlideSettingsCell.xib */; };
 		8B9384AF18570567009C4771 /* ValueSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B9384AD18570567009C4771 /* ValueSettingsViewController.m */; };
 		8B9384B018570567009C4771 /* ValueSettingsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8B9384AE18570567009C4771 /* ValueSettingsViewController.xib */; };
+		8B948E211921EE62004FAD96 /* camera_ble2.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B948E1D1921EE62004FAD96 /* camera_ble2.png */; };
+		8B948E221921EE62004FAD96 /* camera_ble2@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B948E1E1921EE62004FAD96 /* camera_ble2@2x.png */; };
+		8B948E231921EE62004FAD96 /* camera_ble3.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B948E1F1921EE62004FAD96 /* camera_ble3.png */; };
+		8B948E241921EE62004FAD96 /* camera_ble3@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B948E201921EE62004FAD96 /* camera_ble3@2x.png */; };
 		8B94979B18B5E67C004FBDE1 /* SensitivityInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B94979A18B5E67C004FBDE1 /* SensitivityInfo.m */; };
 		8B94BD73188A42530002E804 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 8B94BD72188A42530002E804 /* Settings.bundle */; };
 		8B95077C18C9960D006D4945 /* BLE_camera_search@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B95073018C9960D006D4945 /* BLE_camera_search@2x.png */; };
@@ -1199,10 +1199,6 @@
 		8B299F5118AF500900D36BE5 /* video_progress_bg@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "video_progress_bg@2x.png"; sourceTree = "<group>"; };
 		8B299F5218AF500900D36BE5 /* video_progress_green.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = video_progress_green.png; sourceTree = "<group>"; };
 		8B299F5318AF500900D36BE5 /* video_progress_green@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "video_progress_green@2x.png"; sourceTree = "<group>"; };
-		8B29C258191C78A80015E3FB /* camera_ble2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = camera_ble2.png; sourceTree = "<group>"; };
-		8B29C259191C78A80015E3FB /* camera_ble2@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "camera_ble2@2x.png"; sourceTree = "<group>"; };
-		8B29C25A191C78A80015E3FB /* camera_ble3.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = camera_ble3.png; sourceTree = "<group>"; };
-		8B29C25B191C78A80015E3FB /* camera_ble3@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "camera_ble3@2x.png"; sourceTree = "<group>"; };
 		8B53659118B34DA80018671F /* SensitivityTemperatureCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SensitivityTemperatureCell.h; sourceTree = "<group>"; };
 		8B53659218B34DA80018671F /* SensitivityTemperatureCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SensitivityTemperatureCell.m; sourceTree = "<group>"; };
 		8B53659418B34DCA0018671F /* SensitivityTemperatureCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SensitivityTemperatureCell.xib; sourceTree = "<group>"; };
@@ -1290,6 +1286,10 @@
 		8B9384AC18570567009C4771 /* ValueSettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ValueSettingsViewController.h; sourceTree = "<group>"; };
 		8B9384AD18570567009C4771 /* ValueSettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ValueSettingsViewController.m; sourceTree = "<group>"; };
 		8B9384AE18570567009C4771 /* ValueSettingsViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ValueSettingsViewController.xib; sourceTree = "<group>"; };
+		8B948E1D1921EE62004FAD96 /* camera_ble2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = camera_ble2.png; sourceTree = "<group>"; };
+		8B948E1E1921EE62004FAD96 /* camera_ble2@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "camera_ble2@2x.png"; sourceTree = "<group>"; };
+		8B948E1F1921EE62004FAD96 /* camera_ble3.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = camera_ble3.png; sourceTree = "<group>"; };
+		8B948E201921EE62004FAD96 /* camera_ble3@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "camera_ble3@2x.png"; sourceTree = "<group>"; };
 		8B94979918B5E67C004FBDE1 /* SensitivityInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SensitivityInfo.h; sourceTree = "<group>"; };
 		8B94979A18B5E67C004FBDE1 /* SensitivityInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SensitivityInfo.m; sourceTree = "<group>"; };
 		8B94BD72188A42530002E804 /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
@@ -2999,10 +2999,10 @@
 				8B95073918C9960D006D4945 /* cancel_btn@2x.png */,
 				8B95073A18C9960D006D4945 /* cancel_btn_pressed.png */,
 				8B95073B18C9960D006D4945 /* cancel_btn_pressed@2x.png */,
-				8B29C258191C78A80015E3FB /* camera_ble2.png */,
-				8B29C259191C78A80015E3FB /* camera_ble2@2x.png */,
-				8B29C25A191C78A80015E3FB /* camera_ble3.png */,
-				8B29C25B191C78A80015E3FB /* camera_ble3@2x.png */,
+				8B948E1D1921EE62004FAD96 /* camera_ble2.png */,
+				8B948E1E1921EE62004FAD96 /* camera_ble2@2x.png */,
+				8B948E1F1921EE62004FAD96 /* camera_ble3.png */,
+				8B948E201921EE62004FAD96 /* camera_ble3@2x.png */,
 			);
 			path = BLE;
 			sourceTree = "<group>";
@@ -3872,7 +3872,7 @@
 				8B29A06618AF500A00D36BE5 /* settings_white_arrow@2x.png in Resources */,
 				8B96916518765F6900FB15B8 /* mountain.png in Resources */,
 				8B29A03818AF500900D36BE5 /* menu_settings@2x.png in Resources */,
-				8B29C25E191C78A80015E3FB /* camera_ble3.png in Resources */,
+				8B948E231921EE62004FAD96 /* camera_ble3.png in Resources */,
 				8BA7B093187FC87A00A23BD6 /* Step09ViewController_iPad.xib in Resources */,
 				8B29A07618AF500A00D36BE5 /* video_handle@2x.png in Resources */,
 				8B29A00C18AF500900D36BE5 /* video_action_video.png in Resources */,
@@ -4085,7 +4085,7 @@
 				8B29A00218AF500900D36BE5 /* video_action_music_pressed.png in Resources */,
 				8B299FCB18AF500900D36BE5 /* camera_action_pan_bg@5.png in Resources */,
 				8B95079218C9960D006D4945 /* blue_btn_pressed.png in Resources */,
-				8B29C25D191C78A80015E3FB /* camera_ble2@2x.png in Resources */,
+				8B948E221921EE62004FAD96 /* camera_ble2@2x.png in Resources */,
 				8B9507AF18C9960D006D4945 /* setup_camera_b3@2x.png in Resources */,
 				8B93848F1856ED73009C4771 /* CameraStngsCell.xib in Resources */,
 				8B299F7E18AF500900D36BE5 /* camera_action_pan_knob_land@2x.png in Resources */,
@@ -4175,7 +4175,7 @@
 				8B299F6B18AF500900D36BE5 /* alert_learn@5.png in Resources */,
 				8B299F9218AF500900D36BE5 /* camera_action_video_pressed_land@2x.png in Resources */,
 				8B92A0A81863F6B4005923D2 /* SavedEventCell.xib in Resources */,
-				8B29C25C191C78A80015E3FB /* camera_ble2.png in Resources */,
+				8B948E211921EE62004FAD96 /* camera_ble2.png in Resources */,
 				8B29A04118AF500900D36BE5 /* general.png in Resources */,
 				8B299FBD18AF500900D36BE5 /* camera_action_video_stop_pressed.png in Resources */,
 				381D185D16D4652C00272A8D /* Step_05_tableViewCell_ipad.xib in Resources */,
@@ -4307,7 +4307,7 @@
 				8B299F9D18AF500900D36BE5 /* camera_action_listening_pressed.png in Resources */,
 				8B299FFE18AF500900D36BE5 /* video_action_mic_pressed.png in Resources */,
 				8B29A00518AF500900D36BE5 /* video_action_pan@2x.png in Resources */,
-				8B29C25F191C78A80015E3FB /* camera_ble3@2x.png in Resources */,
+				8B948E241921EE62004FAD96 /* camera_ble3@2x.png in Resources */,
 				8B299F5618AF500900D36BE5 /* alert_camera@2x.png in Resources */,
 				8B29A05A18AF500A00D36BE5 /* settings_switch_on@2x.png in Resources */,
 				8B92A0A21863F655005923D2 /* SavedEventViewController.xib in Resources */,
@@ -5093,7 +5093,7 @@
 				);
 				OTHER_LDFLAGS = "-lz";
 				PRODUCT_NAME = HubbleHome;
-				PROVISIONING_PROFILE = "D8E2E000-CA68-4E43-AB21-A4786B9DB47D";
+				PROVISIONING_PROFILE = "472A0BC7-2FC2-4DB5-B85C-CE4B8BB61C24";
 				SDKROOT = iphoneos7.0;
 				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/../ios-frameworks/pjsip/arm/include/ $(SRCROOT)/../ios-frameworks/pjsip/arm/include/pj/ $(SRCROOT)/../ios-frameworks/pjsip/arm/include/pjnath/";
 				VALID_ARCHS = "armv6 armv7";
@@ -5143,7 +5143,7 @@
 				);
 				OTHER_LDFLAGS = "-lz";
 				PRODUCT_NAME = HubbleHome;
-				PROVISIONING_PROFILE = "D8E2E000-CA68-4E43-AB21-A4786B9DB47D";
+				PROVISIONING_PROFILE = "472A0BC7-2FC2-4DB5-B85C-CE4B8BB61C24";
 				SDKROOT = iphoneos7.0;
 				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/../ios-frameworks/pjsip/arm/include/ $(SRCROOT)/../ios-frameworks/pjsip/arm/include/pj/ $(SRCROOT)/../ios-frameworks/pjsip/arm/include/pjnath/";
 				VALIDATE_PRODUCT = YES;
@@ -5216,7 +5216,7 @@
 				);
 				OTHER_LDFLAGS = "-lz";
 				PRODUCT_NAME = HubbleHome;
-				PROVISIONING_PROFILE = "D8E2E000-CA68-4E43-AB21-A4786B9DB47D";
+				PROVISIONING_PROFILE = "472A0BC7-2FC2-4DB5-B85C-CE4B8BB61C24";
 				RAMEWORK_SEARCH_PATHS = "$(inherited) \"$(SRCROOT)\"";
 				SDKROOT = iphoneos;
 				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/../ios-frameworks/pjsip/arm/include/ $(SRCROOT)/../ios-frameworks/pjsip/arm/include/pj/ $(SRCROOT)/../ios-frameworks/pjsip/arm/include/pjnath/";

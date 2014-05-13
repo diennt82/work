@@ -119,9 +119,6 @@
     NSTimer *_timerStopStreamAfter30s;
 }
 
-//property for processing recording
-@property (nonatomic, retain) NSTimer * recTimer;
-
 @property (nonatomic, retain) IBOutlet ScrollHorizontalMenu *horizMenu;
 @property (nonatomic, assign) int selectedItemMenu;
 

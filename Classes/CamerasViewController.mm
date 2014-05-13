@@ -6,10 +6,6 @@
 //  Copyright (c) 2013 Smart Panda Ltd. All rights reserved.
 //
 
-#define MAX_CAM_ALLOWED 4
-#define CAMERA_TAG_66 566
-#define CAMERA_TAG_83 583 //83/ 836
-
 #import "CamerasViewController.h"
 #import <CameraScanner/CameraScanner.h>
 #import "CamerasCell.h"
@@ -23,7 +19,17 @@
 #import "UIDeviceHardware.h"
 #import "MBP_iosViewController.h"
 
+#define MAX_CAM_ALLOWED 4
+#define CAMERA_TAG_66 566
+#define CAMERA_TAG_83 583 //83/ 836
+#define CAMERA_STATUS_OFFLINE   -1
+#define CAMERA_STATUS_UPGRADING  0
+#define CAMERA_STATUS_ONLINE     1
+
 @interface CamerasViewController () <H264PlayerVCDelegate, CamerasCellDelegate, UIAlertViewDelegate, AddCameraVCDelegate>
+{
+    BOOL shouldHighlightAtRow[MAX_CAM_ALLOWED];
+}
 
 @property (retain, nonatomic) IBOutlet UITableViewCell *addCameraCell;
 @property (retain, nonatomic) IBOutlet UIView *ibViewAddCamera;
@@ -123,6 +129,7 @@
     
     [self.ibIconAddCamera setImage:[UIImage imageNamed:@"add_camera_pressed"]];
     [self.ibTextAddCamera setTextColor:[UIColor deSelectedAddCameraTextColor]];
+    
     if (_camChannels.count >= MAX_CAM_ALLOWED)
     {
         [self cameraShowDialog:DIALOG_CANT_ADD_CAM];
@@ -356,19 +363,22 @@
     }
     return self.camChannels.count;
 }
+
 - (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
 {
     cell.backgroundColor = [UIColor whiteColor];
 }
+
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (_waitingForUpdateData == TRUE)
     {
         return 40; // your dynamic height...
     }
+    
     return 103;
-
 }
+
 - (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate
 {
     if (scrollView.contentOffset.y < -64.0f)
@@ -378,9 +388,21 @@
     }
 }
 
+- (void)updateCameraInfo
+{
+    [self performSelector:@selector(updateCameraInfo_delay) withObject:nil afterDelay:60];
+}
+
+- (void)updateCameraInfo_delay
+{
+    [self.parentVC refreshCameraList];
+    [self.ibTableListCamera reloadData];
+}
+
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     [self updateBottomButton];
+    
     if (_waitingForUpdateData == TRUE)
     {
         static NSString *CellIdentifier = @"Cell";
@@ -434,6 +456,7 @@
         cell.ibCameraNameLabel.text = ch.profile.name;
         NSString *boundCameraName = ch.profile.name;
         CGSize size = [boundCameraName sizeWithAttributes:@{NSFontAttributeName:[UIFont fontWithName:PN_SEMIBOLD_FONT size:18]}];
+        
         if (size.width > 154)
         {
             [cell.ibCameraNameLabel setFrame:CGRectMake(165, 0, 154, 30)];
@@ -447,25 +470,27 @@
             [cell.ibCameraNameLabel setNumberOfLines:1];
         }
         
-        // Camera is NOT available
-        if ([ch.profile isNotAvailable])
+        if ([ch.profile isFwUpgrading:[NSDate date]])
         {
-            [cell.ibIconStatusCamera setImage:[UIImage imageNamed:@"offline.png"]];
+            shouldHighlightAtRow[indexPath.row] = NO;
+            [cell.ibIconStatusCamera setImage:[UIImage imageNamed:@"online"]];
+            [cell.ibTextStatusCamera setText:@"FW is upgrading..."];
             
-            if (ch.profile.fwStatus == 1)
-            {
-                [cell.ibTextStatusCamera setText:@"FW is upgrading..."];
-            }
-            else
-            {
-                [cell.ibTextStatusCamera setText:@"Offline"];
-            }
+            NSLog(@"%s Fw is upgrading...", __FUNCTION__);
+            [self performSelectorOnMainThread:@selector(updateCameraInfo) withObject:nil waitUntilDone:NO];
+        }
+        else if ([ch.profile isNotAvailable])
+        {
+            shouldHighlightAtRow[indexPath.row] = YES;
+            [cell.ibIconStatusCamera setImage:[UIImage imageNamed:@"offline"]];
+            [cell.ibTextStatusCamera setText:@"Offline"];
         }
         else
         {
-            [cell.ibIconStatusCamera setImage:[UIImage imageNamed:@"online.png"]];
+            shouldHighlightAtRow[indexPath.row] = YES;
+            [cell.ibIconStatusCamera setImage:[UIImage imageNamed:@"online"]];
             [cell.ibTextStatusCamera setText:@"Online"];
-
+            
             NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
             NSString *regID = [userDefaults stringForKey:REG_ID];
             
@@ -511,16 +536,15 @@
 
 #pragma mark - Table view delegate
 
-//- (BOOL)tableView:(UITableView *)tableView shouldHighlightRowAtIndexPath:(NSIndexPath *)indexPath
-//{
-//    if (indexPath.section == 0 &&
-//        tableView.numberOfSections == 1)
-//    {
-//        return NO;
-//    }
-//    
-//    return YES;
-//}
+- (BOOL)tableView:(UITableView *)tableView shouldHighlightRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if (_waitingForUpdateData == TRUE)
+    {
+        return NO;
+    }
+    
+    return shouldHighlightAtRow[indexPath.row];
+}
 
 // In a xib-based application, navigation from a table can be handled in -tableView:didSelectRowAtIndexPath:
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath

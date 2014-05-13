@@ -235,6 +235,12 @@
             [userDefaults setObject:camChannel.profile.registrationID forKey:REG_ID];
         }
         
+        if ([camChannel.profile isFwUpgrading:[NSDate date]])
+        {
+            NSLog(@"%s FW is upgrading...", __FUNCTION__);
+            return;
+        }
+        
         if ([camChannel.profile isNotAvailable])
         {
             if([camChannel.profile isSharedCam])
