@@ -20,7 +20,7 @@
 #pragma mark -
 #pragma mark Application lifecycle
 
-//Kiran Patel Git Hub Sync Test
+//Kiran Patel Git Hub Sync Test / Branch Test
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {    
     
