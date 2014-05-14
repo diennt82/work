@@ -31,6 +31,7 @@
 #import "AlertPrompt.h"
 #import "KISSMetricsAPI.h"
 #import <MessageUI/MFMailComposeViewController.h>
+#import "NSData+AESCrypt.h"
 
 @interface MBP_iosViewController () <MFMailComposeViewControllerDelegate>
 
@@ -1180,24 +1181,23 @@
                 NSString *logCrashedPath = [cachesDirectory stringByAppendingPathComponent:@"application_crash.log"];
                 NSString *logPath0 = [cachesDirectory stringByAppendingPathComponent:@"application0.log"];
                 
+                NSString *password = CES128_ENCRYPTION_PASSWORD;
+                
                 // Create NSData object from file
                 NSData *exportFileData = [NSData dataWithContentsOfFile:logCrashedPath];
                 // Attach image data to the email
-                [picker addAttachmentData:exportFileData mimeType:@"text/plain" fileName:@"application_crash.log"];
+                [picker addAttachmentData:[exportFileData AES128EncryptWithKey:password] mimeType:@"text/plain" fileName:@"application_crash.log"];
                 
                 if ([[NSFileManager defaultManager] fileExistsAtPath:logPath0])
                 {
                     NSData *extraFileData = [NSData dataWithContentsOfFile:logPath0];
-                    [picker addAttachmentData:extraFileData mimeType:@"text/plain" fileName:@"application0.log"];
+                    [picker addAttachmentData:[extraFileData AES128EncryptWithKey:password] mimeType:@"text/plain" fileName:@"application0.log"];
                 }
                 
                 // Set the subject of email
-                [picker setSubject:@"IOS app crash log"];
+                [picker setSubject:@"iOS app crash log"];
                 NSArray *toRecipents = [NSArray arrayWithObject:@"ios.crashreport@cvisionhk.com"];
                 [picker setToRecipients:toRecipents];
-                //            NSArray *ccRecipients = [NSArray arrayWithObject:@"luan.nguyen@nxcomm.com"];
-                //            [picker setCcRecipients:ccRecipients];
-                //[picker setToRecipients:[NSArray arrayWithObjects:@"androidcrashreport@cvisionhk.com", nil]];
                 
                 // Show email view
                 [self presentViewController:picker animated:YES completion:nil];

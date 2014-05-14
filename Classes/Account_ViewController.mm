@@ -12,6 +12,7 @@
 #import <MonitorCommunication/MonitorCommunication.h>
 #import "PublicDefine.h"
 #import <MessageUI/MFMailComposeViewController.h>
+#import "NSData+AESCrypt.h"
 
 @interface Account_ViewController () <MFMailComposeViewControllerDelegate>
 
@@ -121,23 +122,22 @@
         NSString *logAppPath = [cachesDirectory stringByAppendingPathComponent:@"application.log"];
         NSString *logPath0 = [cachesDirectory stringByAppendingPathComponent:@"application0.log"];
         
-        // Create NSData object from file
+        NSString *password = CES128_ENCRYPTION_PASSWORD;
+        
         NSData *exportFileData = [NSData dataWithContentsOfFile:logAppPath];
         // Attach image data to the email
-        [picker addAttachmentData:exportFileData mimeType:@"text/plain" fileName:@"application.log"];
+        [picker addAttachmentData:[exportFileData AES128EncryptWithKey:password] mimeType:@"text/plain" fileName:@"application_crash.log"];
         
         if ([[NSFileManager defaultManager] fileExistsAtPath:logPath0])
         {
             NSData *extraFileData = [NSData dataWithContentsOfFile:logPath0];
-            [picker addAttachmentData:extraFileData mimeType:@"text/plain" fileName:@"application0.log"];
+            [picker addAttachmentData:[extraFileData AES128EncryptWithKey:password] mimeType:@"text/plain" fileName:@"application0.log"];
         }
         
         // Set the subject of email
-        [picker setSubject:@"IOS app crash log"];
+        [picker setSubject:@"iOS app log"];
         NSArray *toRecipents = [NSArray arrayWithObject:@"ios.crashreport@cvisionhk.com"];
         [picker setToRecipients:toRecipents];
-        //    NSArray *ccRecipients = [NSArray arrayWithObject:@"luan.nguyen@nxcomm.com"];
-        //    [picker setCcRecipients:ccRecipients];
         
         MenuViewController *tabBarController = (MenuViewController *)self.parentVC;
         tabBarController.navigationController.navigationBarHidden = YES;
