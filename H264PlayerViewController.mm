@@ -125,6 +125,7 @@
 @property (nonatomic, assign) EarlierNavigationController *earlierNavi;
 @property (nonatomic) BOOL wantToShowTimeLine;
 @property (nonatomic, retain) NSTimer *timerIncreaseBitRate;
+@property (nonatomic, retain) NSString *currentBitRate;
 
 //property for Hold to talk
 @property (nonatomic) BOOL walkieTalkieEnabled;
@@ -259,6 +260,7 @@ double _ticks = 0;
     
     self.enablePTT = YES;
     self.numbersOfRemoteViewError = 0;
+    self.currentBitRate = @"128";
     
     [self becomeActive];
 }
@@ -880,7 +882,11 @@ double _ticks = 0;
                     self.timerIncreaseBitRate = nil;
                 }
                 
-                if (![self isCurrentConnection3G])
+                if ([_currentBitRate isEqualToString:@"128"])
+                {
+                    [self performSelectorInBackground:@selector(setVideoBitRateToCamera:) withObject:@"600"];
+                }
+                else if (![_currentBitRate isEqualToString:@"600"])
                 {
                     self.timerIncreaseBitRate = [NSTimer scheduledTimerWithTimeInterval:60
                                                                                  target:self
@@ -1060,17 +1066,18 @@ double _ticks = 0;
                 
                 self.numbersOfRemoteViewError++;
                 
-                if (_numbersOfRemoteViewError == 2)
+                if ([_currentBitRate isEqualToString:@"600"])
                 {
+                    self.currentBitRate = @"400";// Dont care it set succeeded or failed!
                     [self performSelectorInBackground:@selector(setVideoBitRateToCamera:) withObject:@"400"];
                 }
-                else if (_numbersOfRemoteViewError == 3)
+                else if ([_currentBitRate isEqualToString:@"400"])
                 {
                     [self performSelectorInBackground:@selector(setVideoBitRateToCamera:) withObject:@"300"];
                 }
                 else
                 {
-                    NSLog(@"%s: numbers of remote streaming error: %d", __FUNCTION__, _numbersOfRemoteViewError);
+                    NSLog(@"%s: numbers of remote streaming error: %d, curr Bit-rate; %@", __FUNCTION__, _numbersOfRemoteViewError, _currentBitRate);
                 }
             }
             
@@ -5789,14 +5796,12 @@ double _ticks = 0;
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     self.current_ssid = [CameraPassword fetchSSIDInfo];
     
-    
-    
     if ( [self isCurrentConnection3G] ||
         [userDefaults boolForKey:@"remote_only"] ||
         (self.selectedChannel.profile.ip_address == nil)
         )
     {
-        NSLog(@"Connection over 3G | remote_only | or not in same networ == TRUE --> Skip scanning all together, bit rate 128");
+        NSLog(@"Connection over 3G | remote_only: %d, ip_address: %p --> Skip scanning all together, bit rate 128", [userDefaults boolForKey:@"remote_only"], self.selectedChannel.profile.ip_address);
         
         //pulldown to 32 KB/s initially - pull up when we get 1st image
         [self performSelectorInBackground:@selector(setVideoBitRateToCamera:) withObject:@"128"];
@@ -5839,6 +5844,8 @@ double _ticks = 0;
             }
             else
             {
+                [self performSelectorInBackground:@selector(setVideoBitRateToCamera:) withObject:@"128"];
+                
                 self.selectedChannel.profile.isInLocal = FALSE;
                 self.selectedChannel.profile.hasUpdateLocalStatus = TRUE;
                 self.selectedChannel.profile.minuteSinceLastComm = 1;
@@ -5848,8 +5855,6 @@ double _ticks = 0;
             }
         }
     }
-    
-    
 }
 
 -(BOOL) isCurrentConnection3G
@@ -5918,7 +5923,8 @@ double _ticks = 0;
     }
     else
     {
-        NSLog(@"H264VC - setVideoBitRateToCamera successfully");
+        self.currentBitRate = bitrate_str;
+        NSLog(@"H264VC - setVideoBitRateToCamera successfully: %@", bitrate_str);
     }
 }
 
