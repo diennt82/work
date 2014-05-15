@@ -19,6 +19,7 @@
 
 @property (retain, nonatomic) IBOutlet UISwitch *valueSwitch;
 @property (retain, nonatomic) IBOutlet UILabel *nameLabel;
+@property (retain, nonatomic) IBOutlet UIImageView *imgViewEnableDisable;
 
 @property (nonatomic) NSInteger rowIndex;
 @property (assign, nonatomic) id<SensitivityCellDelegate> sensitivityCellDelegate;

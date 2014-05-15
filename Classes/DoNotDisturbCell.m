@@ -34,11 +34,12 @@
     //get and set Enable do not disturb
     
     self.backgroundColor = [UIColor colorWithRed:43/255.f green:50/255.f blue:56/255.f alpha:1];
-    
+        
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     BOOL isEnable = [userDefaults objectForKey:@"EnableDoNotDisturb"];
     if (isEnable)
     {
+        self.imgViewEnableDisable.hidden = YES;
         //enable
         [[UIApplication sharedApplication] unregisterForRemoteNotifications];
         [self.ib_enableDoNotDisturb setImage:[UIImage imageSwitchOn] forState:UIControlStateNormal];
@@ -48,6 +49,8 @@
     }
     else
     {
+        self.imgViewEnableDisable.hidden = NO;
+
         //disable
         [[UIApplication sharedApplication] registerForRemoteNotificationTypes:(UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeAlert)];
         [self.ib_enableDoNotDisturb setImage:[UIImage imageSwitchOff] forState:UIControlStateNormal];
@@ -78,6 +81,15 @@
 BOOL _isEnableDoNotDisturb = NO;
 - (IBAction)didEnableDisturb:(id)sender {
     _isEnableDoNotDisturb = !_isEnableDoNotDisturb;
+    
+    if(_isEnableDoNotDisturb)
+    {
+        self.imgViewEnableDisable.hidden = YES;
+    }
+    else
+    {
+        self.imgViewEnableDisable.hidden = NO;
+    }
     
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     [userDefaults setBool:_isEnableDoNotDisturb forKey:@"EnableDoNotDisturb"];

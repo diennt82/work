@@ -14,5 +14,4 @@
 #define Alert(title,msg){UIAlertView* alertView = [[UIAlertView alloc] initWithTitle:title message:msg delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil]; [alertView show]; }
 
 #define COLOR_RGB(rc,gc,bc) [UIColor colorWithRed:rc/255.0 green:gc/255.0 blue:bc/255.0 alpha:1.0]
-
 #endif

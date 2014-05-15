@@ -23,6 +23,7 @@
     //UIWindow *window;
     MBP_iosViewController *viewController;
     BOOL handling_PN; 
+    BOOL isFirstTime;
 }
 
 @property (nonatomic, retain) IBOutlet UIWindow *window;

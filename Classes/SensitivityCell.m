@@ -46,6 +46,13 @@
     
     self.btnSwitch.selected = _switchValue;
     
+    if(_switchValue)
+    {
+        self.imgViewEnableDisable.hidden = YES;
+    }else{
+        self.imgViewEnableDisable.hidden = NO;
+    }
+    
     UIImageView *imageViewCone = (UIImageView *)[self viewWithTag:508];
     
     if (_rowIndex == 0)
@@ -110,6 +117,13 @@
 {
     self.switchValue = !_switchValue;
     sender.selected = _switchValue;
+    if(_switchValue)
+    {
+        self.imgViewEnableDisable.hidden = YES;
+    }else{
+        self.imgViewEnableDisable.hidden = NO;
+    }
+
     
     for (UIImageView *imageView in _imageViewCircleArray)
     {
