@@ -29,6 +29,8 @@
         - Add Google Analytics Delegates to this project.
      */
     
+    isFirstTime = YES;
+    
     // Handle launching from a notification
     UILocalNotification *locationNotification = [launchOptions objectForKey:UIApplicationLaunchOptionsLocalNotificationKey];
     if (locationNotification) {
@@ -413,7 +415,7 @@
      If your application supports background execution, called instead of applicationWillTerminate: when the user quits.
      */
 	
-	NSLog(@"Enter background: %d", viewController.app_stage);
+	/*NSLog(@"Enter background: %d", viewController.app_stage);
 
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
 	[userDefaults setInteger:viewController.app_stage forKey:@"ApplicationStage"];
@@ -426,7 +428,7 @@
     else if (viewController.app_stage == APP_STAGE_LOGGED_IN)
     {
         [viewController sendStatus:BACK_FRM_MENU_NOLOAD];
-    }
+    }*/
 }
 
 
@@ -487,9 +489,6 @@
 }
 
 
-
-
-
 - (void)applicationDidBecomeActive:(UIApplication *)application {
     /*
      Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
@@ -520,7 +519,10 @@
         }
         else
         {
-            [self forceLogin:TRUE];
+            if(isFirstTime){
+                isFirstTime = NO;
+                [self forceLogin:TRUE];
+            }
         }
     }
     else if (viewController.app_stage == APP_STAGE_LOGGING_IN || viewController.app_stage == APP_STAGE_INIT)

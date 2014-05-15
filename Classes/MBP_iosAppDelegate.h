@@ -21,6 +21,8 @@
 @interface MBP_iosAppDelegate : NSObject <UIApplicationDelegate> {
     UIWindow *window;
     MBP_iosViewController *viewController;
+    
+    BOOL isFirstTime;
 }
 
 @property (nonatomic, retain) IBOutlet UIWindow *window;

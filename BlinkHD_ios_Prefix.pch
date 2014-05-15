@@ -11,5 +11,7 @@
 //Switch to TFLog for remote loging
     //#define NSLog TFLog
 
+#define COLOR_RGB(rc,gc,bc) [UIColor colorWithRed:rc/255.0 green:gc/255.0 blue:bc/255.0 alpha:1.0]
+
 
 #endif

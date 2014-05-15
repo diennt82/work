@@ -42,18 +42,8 @@
                         <color key="textColor" red="0.79215686269999996" green="0.79215686269999996" blue="0.79215686269999996" alpha="1" colorSpace="calibratedRGB"/>
                         <nil key="highlightedColor"/>
                     </label>
-                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="JQE-VQ-gZP">
-                        <rect key="frame" x="243" y="14" width="50" height="27"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
-                        <state key="normal" image="settings_switch_off.png">
-                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                        </state>
-                        <connections>
-                            <action selector="btnSwitchTouchUpInsideAction:" destination="7H4-xd-KE8" eventType="touchUpInside" id="72K-96-QRS"/>
-                        </connections>
-                    </button>
                     <imageView userInteractionEnabled="NO" tag="509" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="settings_line.png" id="NCa-zx-oY2">
-                        <rect key="frame" x="20" y="67" width="280" height="2"/>
+                        <rect key="frame" x="38" y="67" width="244" height="2"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                     </imageView>
                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="settings_circle_white.png" id="oBB-EO-DOZ">
@@ -89,12 +79,28 @@
                         <rect key="frame" x="20" y="0.0" width="10" height="6"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     </imageView>
+                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" id="fnu-Ot-FLh">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="119"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.70000000000000007" colorSpace="calibratedRGB"/>
+                    </imageView>
+                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="JQE-VQ-gZP">
+                        <rect key="frame" x="243" y="14" width="50" height="27"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
+                        <state key="normal" image="settings_switch_off.png">
+                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                        </state>
+                        <connections>
+                            <action selector="btnSwitchTouchUpInsideAction:" destination="7H4-xd-KE8" eventType="touchUpInside" id="72K-96-QRS"/>
+                        </connections>
+                    </button>
                 </subviews>
             </tableViewCellContentView>
             <color key="backgroundColor" red="0.16862745098039217" green="0.19607843137254902" blue="0.2196078431372549" alpha="1" colorSpace="calibratedRGB"/>
             <connections>
                 <outlet property="btnSwitch" destination="JQE-VQ-gZP" id="3yd-6O-O1B"/>
                 <outlet property="imageViewCircleWhite" destination="oBB-EO-DOZ" id="0sf-dN-6a8"/>
+                <outlet property="imgViewEnableDisable" destination="fnu-Ot-FLh" id="Dr6-Uw-02g"/>
                 <outlet property="nameLabel" destination="zx5-9q-Tq2" id="kYM-z5-T1f"/>
             </connections>
         </tableViewCell>

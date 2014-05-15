@@ -53,18 +53,10 @@
 #define APP_STAGE_SETUP         4
 
 
-
-
-
-
 @interface MBP_iosViewController : UIViewController <BonjourDelegate, ConnectionMethodDelegate,UIActionSheetDelegate,ScanForCameraNotifier>
 {
-
-	
-	
     //NOT USED - TO BE REMOVED
- 
-	
+ 	
 	int currentDirUD, lastDirUD;
 	int delay_update_lastDir_count;	
 	int currentDirLR,lastDirLR;
