@@ -81,6 +81,9 @@
 		38DE1CCB168AFBAA0049E814 /* Step_02_ViewController_ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 38DE1CCD168AFBAA0049E814 /* Step_02_ViewController_ipad.xib */; };
 		38DE1CD0168AFBBE0049E814 /* Step_02_ViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 38DE1CD2168AFBBE0049E814 /* Step_02_ViewController.xib */; };
 		38E3C85C1694033500A13A70 /* AlertPrompt.m in Sources */ = {isa = PBXBuildFile; fileRef = 38E3C85B1694033500A13A70 /* AlertPrompt.m */; };
+		5ECD89AB1924BE8B00C99F88 /* TermsCondController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5ECD89A91924BE8B00C99F88 /* TermsCondController.m */; };
+		5ECD89AC1924BE8B00C99F88 /* TermsCondController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5ECD89AA1924BE8B00C99F88 /* TermsCondController.xib */; };
+		5ECD89AE1924CCBA00C99F88 /* terms_of_use.html in Resources */ = {isa = PBXBuildFile; fileRef = 5ECD89AD1924CCBA00C99F88 /* terms_of_use.html */; };
 		5EF5040A191E058300813B97 /* CoreBluetooth.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5EF50409191E058300813B97 /* CoreBluetooth.framework */; };
 		5EF5040B191E059D00813B97 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8B98764F18DACDCB00A2FDD7 /* MobileCoreServices.framework */; };
 		8408F1811833222A00B00188 /* MonitorCommunication.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8408F1801833222A00B00188 /* MonitorCommunication.framework */; };
@@ -865,6 +868,10 @@
 		38DE1CD4168AFBC70049E814 /* es */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = es; path = es.lproj/Step_02_ViewController.xib; sourceTree = "<group>"; };
 		38E3C85A1694033500A13A70 /* AlertPrompt.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AlertPrompt.h; sourceTree = "<group>"; };
 		38E3C85B1694033500A13A70 /* AlertPrompt.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AlertPrompt.m; sourceTree = "<group>"; };
+		5ECD89A81924BE8B00C99F88 /* TermsCondController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TermsCondController.h; sourceTree = "<group>"; };
+		5ECD89A91924BE8B00C99F88 /* TermsCondController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TermsCondController.m; sourceTree = "<group>"; };
+		5ECD89AA1924BE8B00C99F88 /* TermsCondController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TermsCondController.xib; sourceTree = "<group>"; };
+		5ECD89AD1924CCBA00C99F88 /* terms_of_use.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = terms_of_use.html; sourceTree = "<group>"; };
 		5EF50409191E058300813B97 /* CoreBluetooth.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreBluetooth.framework; path = System/Library/Frameworks/CoreBluetooth.framework; sourceTree = SDKROOT; };
 		8408F1801833222A00B00188 /* MonitorCommunication.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MonitorCommunication.framework; path = "../ios-frameworks/MonitorCommunication.framework"; sourceTree = "<group>"; };
 		841D567A1834C1E600ACE7A7 /* streamqvga.sdp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = streamqvga.sdp; sourceTree = "<group>"; };
@@ -1989,6 +1996,7 @@
 		080E96DDFE201D6D7F000001 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				5ECD89A71924BE4B00C99F88 /* TermsCondtionController */,
 				844359EA1908F5E500148436 /* Timeline Dbs */,
 				84B2EAB918FFBFBB00763F06 /* UIDeviceHardware.h */,
 				84B2EABA18FFBFBB00763F06 /* UIDeviceHardware.m */,
@@ -2106,6 +2114,7 @@
 				8B99DB8618B872C30009612A /* iTunesArtwork */,
 				8B99DB8718B872C30009612A /* iTunesArtwork@2x */,
 				BC5B0FCD1701855600D2C308 /* cameraMenuRouter.plist */,
+				5ECD89AD1924CCBA00C99F88 /* terms_of_use.html */,
 				974ACB7E168079CB005AE4C6 /* MonitorEverywhere_App_ios_Apple.html */,
 				BC3C1B0516F05C0C00175AFF /* Localizable.strings */,
 				38A7E0E5165B7D8F00C542A6 /* beep.wav */,
@@ -2187,6 +2196,16 @@
 				38A62E8C15C92BDF00DEA520 /* bb_spk_icon_d.png */,
 			);
 			name = images13;
+			sourceTree = "<group>";
+		};
+		5ECD89A71924BE4B00C99F88 /* TermsCondtionController */ = {
+			isa = PBXGroup;
+			children = (
+				5ECD89A81924BE8B00C99F88 /* TermsCondController.h */,
+				5ECD89A91924BE8B00C99F88 /* TermsCondController.m */,
+				5ECD89AA1924BE8B00C99F88 /* TermsCondController.xib */,
+			);
+			name = TermsCondtionController;
 			sourceTree = "<group>";
 		};
 		844359EA1908F5E500148436 /* Timeline Dbs */ = {
@@ -3763,6 +3782,7 @@
 				8B29A06018AF500A00D36BE5 /* settings_temp_f@2x.png in Resources */,
 				8B9507AB18C9960D006D4945 /* setup_camera_b1@2x.png in Resources */,
 				A1B1E7CD18E9135800F076B6 /* back_pressed@2x.png in Resources */,
+				5ECD89AC1924BE8B00C99F88 /* TermsCondController.xib in Resources */,
 				8B97A3C418BF1B5F008A38E1 /* Hubble_back_text.png in Resources */,
 				8BA17EFA18B7399100129FE7 /* LoginViewController_35.xib in Resources */,
 				8B299FD018AF500900D36BE5 /* camera_action_pause_pressed@5.png in Resources */,
@@ -3974,6 +3994,7 @@
 				8B29A02418AF500900D36BE5 /* loader_f.png in Resources */,
 				38DE1C5A168AEA890049E814 /* ForgotPwdViewController.xib in Resources */,
 				8B299F6E18AF500900D36BE5 /* alert_play_pressed@5.png in Resources */,
+				5ECD89AE1924CCBA00C99F88 /* terms_of_use.html in Resources */,
 				8B29A02018AF500900D36BE5 /* loader_d.png in Resources */,
 				8B95078918C9960D006D4945 /* setup_camera_c1@2x.png in Resources */,
 				8B9507A618C9960D006D4945 /* setup_arrow.png in Resources */,
@@ -4391,6 +4412,7 @@
 				8B92A0B51864197E005923D2 /* EventInfo.m in Sources */,
 				8B92A09C1863ED66005923D2 /* TimelineInfo.m in Sources */,
 				8B91E6541862FE540041BA9D /* MenuCameraViewController.m in Sources */,
+				5ECD89AB1924BE8B00C99F88 /* TermsCondController.m in Sources */,
 				97D00812159D9FF500B1D92F /* WifiEntry.m in Sources */,
 				97D0081C159DA24400B1D92F /* WifiListParser.m in Sources */,
 				8B9899AD1859771800AC3852 /* CameraNameViewController.m in Sources */,

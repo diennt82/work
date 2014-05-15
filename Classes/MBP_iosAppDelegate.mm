@@ -482,7 +482,7 @@
     }
     else
     {
-         [self performSelectorOnMainThread:@selector(showInit) withObject:nil waitUntilDone:YES];
+        [self performSelectorOnMainThread:@selector(showInit) withObject:nil waitUntilDone:YES];
     }
     }
 #endif
