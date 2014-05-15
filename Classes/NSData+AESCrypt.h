@@ -8,6 +8,8 @@
 
 @interface NSData (AESCrypt)
 
++(NSData*) gzipData: (NSData*)pUncompressedData;
+
 - (NSData *)AES128EncryptWithKey:(NSString *)key;
 
 - (NSString *)base64Encoding;

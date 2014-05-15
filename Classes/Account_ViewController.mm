@@ -122,18 +122,36 @@
         NSString *logAppPath = [cachesDirectory stringByAppendingPathComponent:@"application.log"];
         NSString *logPath0 = [cachesDirectory stringByAppendingPathComponent:@"application0.log"];
         
-        NSString *password = CES128_ENCRYPTION_PASSWORD;
-        
-        NSData *exportFileData = [NSData dataWithContentsOfFile:logAppPath];
-        // Attach image data to the email
-        [picker addAttachmentData:[exportFileData AES128EncryptWithKey:password] mimeType:@"text/plain" fileName:@"application_crash.log"];
+        NSData *dataLog = [NSData dataWithContentsOfFile:logAppPath];
+        NSData *dataLog0 = nil;
         
         if ([[NSFileManager defaultManager] fileExistsAtPath:logPath0])
         {
-            NSData *extraFileData = [NSData dataWithContentsOfFile:logPath0];
-            [picker addAttachmentData:[extraFileData AES128EncryptWithKey:password] mimeType:@"text/plain" fileName:@"application0.log"];
+            dataLog0 = [NSData dataWithContentsOfFile:logPath0];
         }
         
+        NSInteger length = dataLog.length;
+        
+        if (dataLog0)
+        {
+            length += dataLog0.length;
+        }
+        
+        NSMutableData *dataZip = [NSMutableData dataWithLength:length];
+        
+        if (dataLog0)
+        {
+            [dataZip appendData:dataLog0];
+        }
+        
+        [dataZip appendData:dataLog];
+        
+        dataZip = [NSData gzipData:dataZip];
+        
+       [picker addAttachmentData:[dataZip AES128EncryptWithKey:CES128_ENCRYPTION_PASSWORD] mimeType:@"text/plain" fileName:@"application.log"];
+
+        //[picker addAttachmentData:dataZip  mimeType:@"text/plain" fileName:@"application.log"];
+
         // Set the subject of email
         [picker setSubject:@"iOS app log"];
         NSArray *toRecipents = [NSArray arrayWithObject:@"ios.crashreport@cvisionhk.com"];

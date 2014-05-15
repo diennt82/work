@@ -1181,18 +1181,33 @@
                 NSString *logCrashedPath = [cachesDirectory stringByAppendingPathComponent:@"application_crash.log"];
                 NSString *logPath0 = [cachesDirectory stringByAppendingPathComponent:@"application0.log"];
                 
-                NSString *password = CES128_ENCRYPTION_PASSWORD;
-                
-                // Create NSData object from file
-                NSData *exportFileData = [NSData dataWithContentsOfFile:logCrashedPath];
-                // Attach image data to the email
-                [picker addAttachmentData:[exportFileData AES128EncryptWithKey:password] mimeType:@"text/plain" fileName:@"application_crash.log"];
+                NSData *dataLog = [NSData dataWithContentsOfFile:logCrashedPath];
+                NSData *dataLog0 = nil;
                 
                 if ([[NSFileManager defaultManager] fileExistsAtPath:logPath0])
                 {
-                    NSData *extraFileData = [NSData dataWithContentsOfFile:logPath0];
-                    [picker addAttachmentData:[extraFileData AES128EncryptWithKey:password] mimeType:@"text/plain" fileName:@"application0.log"];
+                    dataLog0 = [NSData dataWithContentsOfFile:logPath0];
                 }
+                
+                NSInteger length = dataLog.length;
+                
+                if (dataLog0)
+                {
+                    length += dataLog0.length;
+                }
+                
+                NSMutableData *dataZip = [NSMutableData dataWithLength:length];
+                
+                if (dataLog0)
+                {
+                    [dataZip appendData:dataLog0];
+                }
+                
+                [dataZip appendData:dataLog];
+                
+                dataZip = [NSData gzipData:dataZip];
+                
+                [picker addAttachmentData:[dataZip AES128EncryptWithKey:CES128_ENCRYPTION_PASSWORD] mimeType:@"text/plain" fileName:@"application_crash.log"];
                 
                 // Set the subject of email
                 [picker setSubject:@"iOS app crash log"];

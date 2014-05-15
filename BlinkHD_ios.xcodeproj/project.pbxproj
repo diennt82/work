@@ -565,6 +565,7 @@
 		8B9899AD1859771800AC3852 /* CameraNameViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B9899AB1859771800AC3852 /* CameraNameViewController.m */; };
 		8B9899AE1859771800AC3852 /* CameraNameViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8B9899AC1859771800AC3852 /* CameraNameViewController.xib */; };
 		8B98D53119235E910084C2FD /* NSData+AESCrypt.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B98D53019235E910084C2FD /* NSData+AESCrypt.m */; };
+		8B98D55A192375420084C2FD /* libz.1.2.5.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 8B98D559192375420084C2FD /* libz.1.2.5.dylib */; };
 		8B99C0B2186ABB7900DB8AAA /* ImgNotAvailable.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B99C0B1186ABB7900DB8AAA /* ImgNotAvailable.png */; };
 		8B99DB8218B8729F0009612A /* Icon-Small-40.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B99DB7E18B8729F0009612A /* Icon-Small-40.png */; };
 		8B99DB8318B8729F0009612A /* Icon-Small-40@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B99DB7F18B8729F0009612A /* Icon-Small-40@2x.png */; };
@@ -1398,6 +1399,7 @@
 		8B9899AC1859771800AC3852 /* CameraNameViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CameraNameViewController.xib; sourceTree = "<group>"; };
 		8B98D52F19235E910084C2FD /* NSData+AESCrypt.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSData+AESCrypt.h"; sourceTree = "<group>"; };
 		8B98D53019235E910084C2FD /* NSData+AESCrypt.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSData+AESCrypt.m"; sourceTree = "<group>"; };
+		8B98D559192375420084C2FD /* libz.1.2.5.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.1.2.5.dylib; path = usr/lib/libz.1.2.5.dylib; sourceTree = SDKROOT; };
 		8B99C0B1186ABB7900DB8AAA /* ImgNotAvailable.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ImgNotAvailable.png; sourceTree = "<group>"; };
 		8B99DB7E18B8729F0009612A /* Icon-Small-40.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-Small-40.png"; sourceTree = "<group>"; };
 		8B99DB7F18B8729F0009612A /* Icon-Small-40@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-Small-40@2x.png"; sourceTree = "<group>"; };
@@ -1951,6 +1953,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8B98D55A192375420084C2FD /* libz.1.2.5.dylib in Frameworks */,
 				8B933ED21911198900A97F12 /* MessageUI.framework in Frameworks */,
 				8BA23841182CBC130022581A /* CameraScanner.framework in Frameworks */,
 				8B98765118DAFF6A00A2FDD7 /* libGoogleAnalytics_debug.a in Frameworks */,
@@ -1989,6 +1992,7 @@
 		080E96DDFE201D6D7F000001 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				8B98D548192371060084C2FD /* Zip */,
 				8B942D9A192323AF001DCD9E /* AES */,
 				8B181B591914FF7800A355F3 /* UIDeviceHw */,
 				8B181B581914FF5D00A355F3 /* EarlierNav */,
@@ -2120,6 +2124,7 @@
 		29B97323FDCFA39411CA2CEA /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				8B98D559192375420084C2FD /* libz.1.2.5.dylib */,
 				8B933ED11911198900A97F12 /* MessageUI.framework */,
 				8B98764F18DACDCB00A2FDD7 /* MobileCoreServices.framework */,
 				8B73057618D6D05A00D079B0 /* libGoogleAnalytics_debug.a */,
@@ -3205,6 +3210,13 @@
 				8B9899AC1859771800AC3852 /* CameraNameViewController.xib */,
 			);
 			name = "Camera name";
+			sourceTree = "<group>";
+		};
+		8B98D548192371060084C2FD /* Zip */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Zip;
 			sourceTree = "<group>";
 		};
 		8B9ABB6618A9FDBB0079F4A3 /* RegistrationVC */ = {
