@@ -187,7 +187,7 @@
 //    self.camerasVC.tableView.frame = CGRectMake(0, 30, self.view.frame.size.width, self.view.frame.size.height - 30);
     self.camerasVC.ibTableListCamera.contentInset = UIEdgeInsetsMake(30, 0, 64, 0);
     
-    UIImage *hubbleBack = [UIImage imageNamed:@"Hubble_logo_back"];
+    //UIImage *hubbleBack = [UIImage imageNamed:@"Hubble_logo_back"];
     //[self.navigationItem.leftBarButtonItem setTintColor:[UIColor colorWithPatternImage:hubbleBack]];
 
     if (!_isFirttime) //revert

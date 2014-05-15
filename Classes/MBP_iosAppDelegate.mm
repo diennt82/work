@@ -599,6 +599,7 @@ void checkingApplicationCrashed()
      */
 	
 	NSLog(@"Enter foreground isMain? %d 01", [[NSThread currentThread] isMainThread]);
+
 }
 
 
