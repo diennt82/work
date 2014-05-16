@@ -4038,7 +4038,7 @@ double _ticks = 0;
     [self updateBottomView];
     //Earlier must at bottom of land, and port
     
-    if (_isFirstLoad || _wantToShowTimeLine)
+    if (_isFirstLoad || _wantToShowTimeLine || _selectedItemMenu == -1)
     {
         [self showTimelineView];
     }
@@ -4714,6 +4714,12 @@ double _ticks = 0;
     else if (_selectedItemMenu == INDEX_MELODY)
     {
         [self.melodyViewController.view setHidden:NO];
+        
+        if ([UIApplication sharedApplication].statusBarOrientation == UIInterfaceOrientationLandscapeLeft ||
+            [UIApplication sharedApplication].statusBarOrientation == UIInterfaceOrientationLandscapeRight)
+        {
+            self.wantToShowTimeLine = YES;
+        }
         
         CGRect rect;
         
