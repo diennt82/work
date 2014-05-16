@@ -518,13 +518,11 @@
     [self.progressView setHidden:NO];
     
     //check if password is ok?
-    UITextField * pass = (UITextField*)[self.passwordCell viewWithTag:200];
-    UITextField * confpass = (UITextField*)[self.confPasswordCell viewWithTag:201];
     UITextField * my_ssid = (UITextField*) [self.ssidCell viewWithTag:202];
     
     [self.view endEditing:YES];
     
-    NSLog(@"pass : %@ vs %@  ssid: %@", pass.text, confpass.text, my_ssid.text);
+    NSLog(@"%s other: %d, security: %@", __FUNCTION__, self.isOtherNetwork, self.security);
     
     if (self.isOtherNetwork == TRUE)
     {
@@ -554,11 +552,14 @@
     if ([self.security isEqualToString:@"open"])
     {
         //cont
-        self.password = pass.text;
+        self.password = @""; // Purpose nil
         [self sendWifiInfoToCamera];
     }
     else
     {
+        UITextField * pass = (UITextField*)[self.passwordCell viewWithTag:200];
+        UITextField * confpass = (UITextField*)[self.confPasswordCell viewWithTag:201];
+        
         if ( ([pass.text length] == 0 ) ||
             ( [confpass.text length] ==0 ) ||
             (![pass.text isEqualToString:confpass.text]))
@@ -638,6 +639,10 @@
     {
         self.deviceConf.securityMode = @"WPA-PSK/WPA2-PSK";
         
+    }
+    else if ([self.security isEqualToString:@"shared"])
+    {
+        self.deviceConf.securityMode = @"SHARED";
     }
     else {
         self.deviceConf.securityMode= @"OPEN";

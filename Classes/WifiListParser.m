@@ -285,7 +285,7 @@ NSString * WIFI_ENTRY_CHANNEL = @"channel";
         
         if (currentEntry != nil)
         {
-            if (currentStringValue == nil)
+            if (currentStringValue == nil || [currentStringValue isEqualToString:@"OPEN"])
             {
                 currentEntry.auth_mode = @"open";
             }
@@ -297,8 +297,10 @@ NSString * WIFI_ENTRY_CHANNEL = @"channel";
             {
                 currentEntry.auth_mode = @"wep";
             }
-            
-            
+            else if ([currentStringValue isEqualToString:@"SHARED"])
+            {
+                currentEntry.auth_mode = @"shared";
+            }
         }
     }
     

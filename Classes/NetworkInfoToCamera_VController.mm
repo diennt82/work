@@ -128,7 +128,8 @@
     [nextButton release];
     
     self.tfSSID = (UITextField *)[self.ssidCell viewWithTag:202];
-    if (self.tfSSID.text.length > 0)
+    
+    if (self.tfSSID.text.length > 0 && ([self.security isEqualToString:@"None"] || [self.security isEqualToString:@"open"]))
     {
         self.navigationItem.rightBarButtonItem .enabled = YES;
         self.navigationItem.rightBarButtonItem.tintColor = [UIColor blueColor];
@@ -156,7 +157,7 @@
          * 3. If ( =)  -> prefill pass- deviceConf.key  to  password/conf password text field
          */
         
-        NSLog(@"NetworkInfoToCamera_VController - viewDidLoad - deviceConf.ssid: %@, - self.ssid: %@, - self.security: %@", self.deviceConf.ssid, self.ssid, self.security);
+        NSLog(@"%s - deviceConf.ssid: %@, - self.ssid: %@, - self.security: %@", __FUNCTION__, self.deviceConf.ssid, self.ssid, self.security);
         
         if ([self.deviceConf.ssid isEqualToString:self.ssid] &&
             ([self.security isEqualToString:@"wep"] || [self.security isEqualToString:@"wpa"]))
@@ -560,14 +561,10 @@
 -(void) handleNextButton:(id) sender
 {
     //check if password is ok?
-    UITextField  * pass = (UITextField*)[self.passwordCell viewWithTag:200];
-    UITextField  * confpass = (UITextField*)[self.confPasswordCell viewWithTag:201];
+    
     UITextField * my_ssid = (UITextField*) [self.ssidCell viewWithTag:202];
     
-    NSLog(@"pass : %@ vs %@  ssid: %@", pass.text, confpass.text, my_ssid.text);
-    
-    
-    
+    NSLog(@"%s other: %d, security: %@", __FUNCTION__, self.isOtherNetwork, self.security);
     
     if (self.isOtherNetwork == TRUE)
     {
@@ -607,11 +604,14 @@
                                                       repeats:NO];
         
         /* Blocking call, after this return the camera should be either added or failed setup already */
+        self.password = @"";
         [self sendWifiInfoToCamera];
         
     }
     else
     {
+        UITextField  * pass = (UITextField*)[self.passwordCell viewWithTag:200];
+        UITextField  * confpass = (UITextField*)[self.confPasswordCell viewWithTag:201];
         
         if ( ([pass.text length] == 0 ) ||
             ( [confpass.text length] ==0 ) ||
@@ -721,6 +721,10 @@
     else if( [self.security isEqualToString:@"wpa"])
     {
         self.deviceConf.securityMode = @"WPA-PSK/WPA2-PSK";
+    }
+    else if ([self.security isEqualToString:@"shared"])
+    {
+        self.deviceConf.securityMode = @"SHARED";
     }
     else
     {

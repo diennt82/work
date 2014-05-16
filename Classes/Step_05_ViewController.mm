@@ -215,6 +215,8 @@
     {
         router_list_raw = [[HttpCom instance].comWithDevice sendCommandAndBlock_raw:GET_ROUTER_LIST2
                                                                         withTimeout:2*DEFAULT_TIME_OUT];
+        
+        NSLog(@"%s - router_list_raw: %@", __FUNCTION__, [[NSString alloc] initWithData:router_list_raw encoding:NSUTF8StringEncoding]);
     }
     else
     {
