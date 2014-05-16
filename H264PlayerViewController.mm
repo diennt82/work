@@ -24,6 +24,7 @@
 //#import "Reachability.h"
 #import "MBP_iosViewController.h"
 #import <SystemConfiguration/CaptiveNetwork.h>
+#import <objc/message.h>
 
 #define MODEL_SHARED_CAM @"0036"
 #define MODEL_CONCURRENT @"0066"
@@ -62,6 +63,7 @@
 #define PTT_ENGAGE_BTN 711
 
 #define TAG_ALERT_VIEW_REMOTE_TIME_OUT 559
+#define TAG_ALERT_SENDING_LOG          569
 
 #define _streamingSSID  @"string_Streaming_SSID"
 #define _is_Loggedin @"bool_isLoggedIn"
@@ -739,6 +741,21 @@ double _ticks = 0;
         [self.view addSubview:self.melodyViewController.view];
         [self.view bringSubviewToFront:self.melodyViewController.view];
     }
+}
+
+- (IBAction)btnSendingLogTouchUpInside:(id)sender
+{
+    UIAlertView *alertViewSendingLog = [[UIAlertView alloc] initWithTitle:@"Request Camera log?"
+                                                                  message:nil
+                                                                 delegate:self
+                                                        cancelButtonTitle:@"NO"
+                                                        otherButtonTitles:@"YES", nil];
+    alertViewSendingLog.tag = TAG_ALERT_SENDING_LOG;
+    alertViewSendingLog.alertViewStyle = UIAlertViewStyleSecureTextInput;
+    [alertViewSendingLog textFieldAtIndex:0].keyboardType = UIKeyboardTypeNumberPad;
+    [alertViewSendingLog textFieldAtIndex:0].placeholder = @"Password";
+    [alertViewSendingLog show];
+    [alertViewSendingLog release];
 }
 
 #pragma mark - Delegate Stream callback
@@ -4213,6 +4230,18 @@ double _ticks = 0;
         switch (buttonIndex)
         {
             case 0: // View other camera
+                self.view.userInteractionEnabled = NO;
+                
+                if ([[UIDevice currentDevice] orientation] == UIDeviceOrientationLandscapeLeft ||
+                    [[UIDevice currentDevice] orientation] == UIDeviceOrientationLandscapeRight ||
+                    [UIApplication sharedApplication].statusBarOrientation == UIInterfaceOrientationLandscapeLeft ||
+                    [UIApplication sharedApplication].statusBarOrientation == UIInterfaceOrientationLandscapeRight)
+                {
+                    if ([[UIDevice currentDevice] respondsToSelector:@selector(setOrientation:)]) {
+                        objc_msgSend([UIDevice currentDevice], @selector(setOrientation:),   UIDeviceOrientationPortrait);
+                    }
+                }
+                
                 //stop stream
                 if (_timerStopStreamAfter30s && [_timerStopStreamAfter30s isValid])
                 {
@@ -4221,6 +4250,7 @@ double _ticks = 0;
                     _timerStopStreamAfter30s = nil;
                     [self stopStream];
                 }
+                
                 [self goBackToCamerasRemoteStreamTimeOut];
                 break;
                 
@@ -4248,6 +4278,67 @@ double _ticks = 0;
             default:
                 break;
         }
+    }
+    else if (tag == TAG_ALERT_SENDING_LOG)
+    {
+        switch (buttonIndex)
+        {
+            case 1: // Yes
+                if ([[alertView textFieldAtIndex:0].text isEqualToString:SENDING_CAMERA_LOG_PASSWORD])
+                {
+                    [self performSelectorInBackground:@selector(sendRequestLogCmdToCamera) withObject:nil];
+                }
+                else// Like Cancel
+                {
+                    NSLog(@"%s wrong password!", __FUNCTION__);
+                }
+                break;
+            case 0:
+            default:
+                // Do nothing
+                break;
+        }
+    }
+}
+
+- (void)sendRequestLogCmdToCamera_bg
+{
+    [self sendRequestLogCmdToCamera];
+}
+
+- (void)sendRequestLogCmdToCamera
+{
+    if (_jsonCommBlocked == nil)
+    {
+        self.jsonCommBlocked = [[BMS_JSON_Communication alloc] initWithObject:self
+                                                                     Selector:nil
+                                                                 FailSelector:nil
+                                                                    ServerErr:nil];
+    }
+    
+    BOOL sendFailed = TRUE;
+    
+    NSDictionary *dictResponse = [_jsonCommBlocked sendCommandBlockedWithRegistrationId:self.selectedChannel.profile.registrationID
+                                                                             andCommand:@"action=command&command=request_log"
+                                                                              andApiKey:self.apiKey];
+    if (dictResponse)
+    {
+        if ([[dictResponse objectForKey:@"status"] integerValue] == 200)
+        {
+            if ([[[[dictResponse objectForKey:@"data"] objectForKey:@"device_response"] objectForKey:@"device_response_code"] integerValue] == 200)
+            {
+                sendFailed = FALSE;
+            }
+        }
+    }
+    
+    if (sendFailed)
+    {
+        NSLog(@"%s FAILED!", __FUNCTION__);
+    }
+    else
+    {
+        NSLog(@"%s SUCCEEDED!", __FUNCTION__);
     }
 }
 
