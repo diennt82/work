@@ -127,7 +127,7 @@
 @property (nonatomic, retain) NSTimer *timerIncreaseBitRate;
 @property (nonatomic, retain) NSString *currentBitRate;
 
-//property for Hold to talk
+//property for Touch to Talk
 @property (nonatomic) BOOL walkieTalkieEnabled;
 @property (nonatomic) BOOL disableAutorotateFlag;
 @property (nonatomic) BOOL enablePTT;
@@ -182,7 +182,7 @@ double _ticks = 0;
     [self.ib_buttonChangeAction setHidden:NO];
     [self.view bringSubviewToFront:self.ib_buttonChangeAction];
     [self.ib_labelRecordVideo setText:@"Record Video"];
-    [self.ib_labelTouchToTalk setText:@"Hold To Talk"];
+    [self.ib_labelTouchToTalk setText:@"Touch to Talk"];
     //setup Font
     [self applyFont];
     
@@ -342,7 +342,7 @@ double _ticks = 0;
     {
         //update position text recording
         // update position button
-        //hold to talk (size = 75, bottom align = 30
+        //Touch to Talk (size = 75, bottom align = 30
         CGSize holdTTButtonSize = self.ib_buttonTouchToTalk.bounds.size;
         CGSize viewRecordSize   = self.ib_viewRecordTTT.bounds.size;
         CGSize directionPadSize = self.imgViewDrectionPad.bounds.size;
@@ -441,7 +441,7 @@ double _ticks = 0;
         float alignY = (SCREEN_HEIGHT - localPoint.y) - marginBottomText + self.ib_labelRecordVideo.bounds.size.height/2 - 3*recordingSize.height/2;
         
         
-        //update position text hold to talk
+        //update position text Touch to Talk
         //CGPoint position = self.ib_viewRecordTTT.bounds.origin;
         NSString *holdTTString = self.ib_labelTouchToTalk.text;
         CGSize holdTTSize = [holdTTString sizeWithAttributes:@{NSFontAttributeName:font}];
@@ -462,7 +462,7 @@ double _ticks = 0;
         }
         
         // update position button
-        //hold to talk
+        //Touch to Talk
         CGSize holdTTButtonSize = self.ib_buttonTouchToTalk.bounds.size;
         CGSize directionPadSize = self.imgViewDrectionPad.bounds.size;
         float alignXButton = SCREEN_WIDTH/2- holdTTButtonSize.width/2;
@@ -1530,8 +1530,8 @@ double _ticks = 0;
 #ifdef SHOW_DEBUG_INFO
         _viewVideoIn = @"L";
 #endif
-        self.ib_labelTouchToTalk.text = @"Hold to Talk";
-        self.stringStatePTT = @"Hold to Talk";
+        self.ib_labelTouchToTalk.text = @"Touch to Talk";
+        self.stringStatePTT = @"Touch to Talk";
     }
     else if (self.selectedChannel.profile.minuteSinceLastComm <= 5)
     {
@@ -4883,24 +4883,140 @@ double _ticks = 0;
     [_audioOut release];
     _audioOut = nil;
     
-    self.walkieTalkieEnabled = NO;
+    //self.walkieTalkieEnabled = NO;
 }
 
 -(void) setupPtt
 {
-    
+#if 0
     UILongPressGestureRecognizer *longPress =
     [[UILongPressGestureRecognizer alloc] initWithTarget:self
                                                   action:@selector(longPress:)];
     longPress.minimumPressDuration = 1.0;
     [self.ib_buttonTouchToTalk addGestureRecognizer:longPress];
     [longPress release];
-    
-    [self.ib_buttonTouchToTalk addTarget:self action:@selector(holdToTalk:) forControlEvents:UIControlEventTouchDown];
-    [self.ib_buttonTouchToTalk addTarget:self action:@selector(userReleaseHoldToTalk) forControlEvents:UIControlEventTouchUpInside];
-    [self.ib_buttonTouchToTalk addTarget:self action:@selector(userReleaseHoldToTalk) forControlEvents:UIControlEventTouchUpOutside];
+#endif
+//    [self.ib_buttonTouchToTalk addTarget:self action:@selector(holdToTalk:) forControlEvents:UIControlEventTouchDown];
+//    [self.ib_buttonTouchToTalk addTarget:self action:@selector(userReleaseHoldToTalk) forControlEvents:UIControlEventTouchUpInside];
+//    [self.ib_buttonTouchToTalk addTarget:self action:@selector(userReleaseHoldToTalk) forControlEvents:UIControlEventTouchUpOutside];
+    [self.ib_buttonTouchToTalk addTarget:self action:@selector(ib_buttonTouchToTalkTouchUpInside) forControlEvents:UIControlEventTouchUpInside];
 }
 
+- (void)ib_buttonTouchToTalkTouchUpInside
+{
+    self.walkieTalkieEnabled = !self.walkieTalkieEnabled;
+    self.enablePTT = NO;
+    _ib_buttonTouchToTalk.enabled = NO;
+    self.stringStatePTT = @"Processing...";
+    _ib_labelTouchToTalk.text = @"Processing...";
+    
+    if (self.selectedChannel.profile.isInLocal)
+    {
+        [self enableLocalPTT:_walkieTalkieEnabled];
+    }
+    else
+    {
+        [self performSelectorInBackground:@selector(enableRemotePTT:)
+                               withObject:[NSNumber numberWithBool:self.walkieTalkieEnabled]];
+    }
+}
+
+- (void)enableLocalPTT:(BOOL)walkieTalkieEnable
+{
+    NSLog(@"%s walkieTalkieEnable: %d", __FUNCTION__, walkieTalkieEnable);
+    
+    if (walkieTalkieEnable)
+    {
+        //1. Starting
+        // UI need to verify
+        UIImage *imageHoldedToTalk;
+        
+        if (isiPhone4)
+        {
+            imageHoldedToTalk = [UIImage imageNamed:@"camera_action_mic_pressed.png"];
+        }
+        else
+        {
+            imageHoldedToTalk = [UIImage imageNamed:@"camera_action_mic_pressed@5.png"];
+        }
+        
+        [self.ib_buttonTouchToTalk setBackgroundImage:imageHoldedToTalk forState:UIControlEventTouchDown];
+        [self.ib_buttonTouchToTalk setBackgroundImage:imageHoldedToTalk forState:UIControlStateNormal];
+        [self.ib_buttonTouchToTalk setBackgroundImage:imageHoldedToTalk forState:UIControlEventTouchUpInside];
+        [self applyFont];
+        
+        
+        self.disableAutorotateFlag = TRUE;
+        [self.ib_labelTouchToTalk setText:@"Speaking"];
+        self.stringStatePTT = @"Speaking";
+        
+        //Mute audio to MediaPlayer lib
+        if (h264Streamer)
+        {
+            h264Streamer->setPlayOption(MEDIA_STREAM_AUDIO_MUTE);
+        }
+        
+        
+        NSLog(@"Device ip: %@, Port push to talk: %d, actually is: %d", [HttpCom instance].comWithDevice.device_ip, self.selectedChannel.profile.ptt_port,IRABOT_AUDIO_RECORDING_PORT);
+        
+        // Init connectivity to Camera via socket & prevent loss of audio data
+        _audioOut = [[AudioOutStreamer alloc] initWithDeviceIp:[HttpCom instance].comWithDevice.device_ip
+                                                    andPTTport:self.selectedChannel.profile.ptt_port];  //IRABOT_AUDIO_RECORDING_PORT
+        [_audioOut retain];
+        [_audioOut startRecordingSound];
+        
+        [self performSelectorInBackground:@selector(set_Walkie_Talkie_bg:)
+                               withObject:[NSString stringWithFormat:@"%d", walkieTalkieEnable]];
+        if (_audioOut != nil)
+        {
+            NSLog(@"Connect to Audio Soccket in setEnablePtt function");
+            [_audioOut connectToAudioSocket];
+            _audioOut.audioOutStreamerDelegate = self;
+        }
+        else
+        {
+            NSLog(@" NEED to enable audioOut now BUT audioOut = nil!!!");
+        }
+    }
+    else
+    {
+        //2. Stopping
+        
+        if (h264Streamer)
+        {
+            h264Streamer->setPlayOption(MEDIA_STREAM_AUDIO_NOT_MUTE);
+        }
+        
+        if (_audioOut != nil)
+        {
+            [_audioOut disconnectFromAudioSocket];
+            [_audioOut release];
+            _audioOut = nil;
+        }
+        
+        // UI
+        UIImage *imageNormal;
+        
+        if (isiPhone4)
+        {
+            imageNormal = [UIImage imageNamed:@"camera_action_mic.png"];
+        }
+        else
+        {
+            imageNormal = [UIImage imageNamed:@"camera_action_mic@5.png"];
+        }
+        
+        [self.ib_buttonTouchToTalk setBackgroundImage:imageNormal forState:UIControlEventTouchDown];
+        [self.ib_buttonTouchToTalk setBackgroundImage:imageNormal forState:UIControlStateNormal];
+        [self.ib_buttonTouchToTalk setBackgroundImage:imageNormal forState:UIControlEventTouchUpInside];
+        //[self applyFont];
+        self.disableAutorotateFlag = FALSE;
+        [self.ib_labelTouchToTalk setText:@"Touch to Talk"];
+        self.stringStatePTT = @"Touch to Talk";
+    }
+}
+
+#if 0
 /*
  * If in Remote mode this method means TouchUpInside action
  */
@@ -4933,7 +5049,7 @@ double _ticks = 0;
             _audioOut = nil;
         }
         
-        [self.ib_labelTouchToTalk setText:@"Hold To Talk"];
+        [self.ib_labelTouchToTalk setText:@"Touch to Talk"];
     }
     else
     {
@@ -4975,29 +5091,11 @@ double _ticks = 0;
             {
                 NSLog(@"disconnect to audio socket###");
                 [_audioOut disconnectFromAudioSocket];
-                [self touchUpInsideHoldToTalk];
             }
         }
     }
     
     return walkie_talkie_enabled ;
-}
-
-- (void) set_Walkie_Talkie_bg: (NSString *) status
-{
-    @autoreleasepool {
-        NSString * command = [NSString stringWithFormat:@"%@%@", SET_PTT, status];
-        
-        NSLog(@"Command send to camera is %@", command);
-        
-        //set port default for send command
-        
-        [HttpCom instance].comWithDevice.device_port = 80;
-        
-        [[HttpCom instance].comWithDevice sendCommandAndBlock:command];
-        
-        self.ib_buttonTouchToTalk.enabled = YES;
-    }
 }
 
 -(void)processingHoldToTalk // Just init AudioOutStreamer
@@ -5014,7 +5112,7 @@ double _ticks = 0;
 
 -(void) longPress:(UILongPressGestureRecognizer*) gest
 {
-    [[KISSMetricsAPI sharedAPI] recordEvent:@"PlayerView hold to talk" withProperties:nil];
+    [[KISSMetricsAPI sharedAPI] recordEvent:@"PlayerView Touch to Talk" withProperties:nil];
 #if TEST_REMOTE_TALKBACK
 #else
     if (self.selectedChannel.profile.isInLocal)
@@ -5024,7 +5122,7 @@ double _ticks = 0;
         
         if ([gest state] == UIGestureRecognizerStateBegan)
         {
-            NSLog(@"UIGestureRecognizerStateBegan on hold to talk");
+            NSLog(@"UIGestureRecognizerStateBegan on Touch to Talk");
             self.walkieTalkieEnabled = YES;
             self.disableAutorotateFlag = TRUE;
             
@@ -5049,7 +5147,7 @@ double _ticks = 0;
         {
             self.disableAutorotateFlag = FALSE;
             
-            NSLog(@"UIGestureRecognizerStateEnded on hold to talk");
+            NSLog(@"UIGestureRecognizerStateEnded on Touch to Talk");
             if ([gest state] == UIGestureRecognizerStateCancelled)
             {
                 NSLog(@"detect cancelling PTT");
@@ -5085,19 +5183,35 @@ double _ticks = 0;
 #endif
 }
 
+#endif
+
+- (void) set_Walkie_Talkie_bg: (NSString *) status
+{
+    @autoreleasepool {
+        NSString * command = [NSString stringWithFormat:@"%@%@", SET_PTT, status];
+        
+        NSLog(@"Command send to camera is %@", command);
+        
+        //set port default for send command
+        
+        //[HttpCom instance].comWithDevice.device_port = 80;
+        
+        [[HttpCom instance].comWithDevice sendCommandAndBlock:command];
+        
+        self.ib_buttonTouchToTalk.enabled = YES;
+        self.enablePTT = YES;
+    }
+}
+
 - (void)touchUpInsideHoldToTalk {
     //update UI
     [_ib_buttonTouchToTalk setBackgroundColor:[UIColor clearColor]];
     [_ib_buttonTouchToTalk setBackgroundImage:[UIImage imageMic] forState:UIControlStateNormal];
     [_ib_buttonTouchToTalk setBackgroundImage:[UIImage imageMic] forState:UIControlEventTouchUpInside];
     
-#if TEST_REMOTE_TALKBACK
-    self.ib_buttonTouchToTalk.enabled = YES;
-    [self.ib_labelTouchToTalk setText:@"Touch to Talk"];
-#else
     if (self.selectedChannel.profile.isInLocal)
     {
-        [self.ib_labelTouchToTalk setText:@"Hold To Talk"];
+        [self.ib_labelTouchToTalk setText:@"Touch to Talk"];
     }
     else
     {
@@ -5108,9 +5222,6 @@ double _ticks = 0;
     }
     
     [self applyFont];
-    
-    //user touch up inside and outside
-#endif
 }
 
 // Talk back remote
