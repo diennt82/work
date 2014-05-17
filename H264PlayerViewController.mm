@@ -5059,7 +5059,7 @@ double _ticks = 0;
         
         CGRect rect;
         
-        if ([UIApplication sharedApplication].statusBarOrientation == UIInterfaceOrientationMaskPortrait)
+        if ([UIApplication sharedApplication].statusBarOrientation == UIInterfaceOrientationPortrait)
         {
             rect = CGRectMake(SCREEN_WIDTH/2 - 115/2, SCREEN_HEIGHT - 35, 115, 30);
         }
