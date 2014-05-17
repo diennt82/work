@@ -1070,11 +1070,32 @@ double _ticks = 0;
                 
                 if ([_currentBitRate isEqualToString:@"600"])
                 {
+                    self.currentBitRate = @"550";// Dont care it set succeeded or failed!
+                    [self performSelectorInBackground:@selector(setVideoBitRateToCamera:) withObject:_currentBitRate];
+                }
+                else if ([_currentBitRate isEqualToString:@"550"])
+                {
+                    self.currentBitRate = @"500";// Dont care it set succeeded or failed!
+                    [self performSelectorInBackground:@selector(setVideoBitRateToCamera:) withObject:_currentBitRate];
+                }
+                else if ([_currentBitRate isEqualToString:@"500"])
+                {
+                    self.currentBitRate = @"450";// Dont care it set succeeded or failed!
+                    [self performSelectorInBackground:@selector(setVideoBitRateToCamera:) withObject:_currentBitRate];
+                }
+                else if ([_currentBitRate isEqualToString:@"450"])
+                {
                     self.currentBitRate = @"400";// Dont care it set succeeded or failed!
-                    [self performSelectorInBackground:@selector(setVideoBitRateToCamera:) withObject:@"400"];
+                    [self performSelectorInBackground:@selector(setVideoBitRateToCamera:) withObject:_currentBitRate];
                 }
                 else if ([_currentBitRate isEqualToString:@"400"])
                 {
+                    self.currentBitRate = @"350";// Dont care it set succeeded or failed!
+                    [self performSelectorInBackground:@selector(setVideoBitRateToCamera:) withObject:_currentBitRate];
+                }
+                else if ([_currentBitRate isEqualToString:@"350"])
+                {
+                    // Update current bit rate only set succeeded!
                     [self performSelectorInBackground:@selector(setVideoBitRateToCamera:) withObject:@"300"];
                 }
                 else

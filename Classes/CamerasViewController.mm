@@ -395,8 +395,11 @@
 
 - (void)updateCameraInfo_delay
 {
-    [self.parentVC refreshCameraList];
-    [self.ibTableListCamera reloadData];
+    if (self.isViewLoaded && self.view.window)
+    {
+        [self.parentVC refreshCameraList];
+        [self.ibTableListCamera reloadData];
+    }
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -477,6 +480,7 @@
             [cell.ibTextStatusCamera setText:@"FW is upgrading..."];
             
             NSLog(@"%s Fw is upgrading...", __FUNCTION__);
+            
             [self performSelectorOnMainThread:@selector(updateCameraInfo) withObject:nil waitUntilDone:NO];
         }
         else if ([ch.profile isNotAvailable])
