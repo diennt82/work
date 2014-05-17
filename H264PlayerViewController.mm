@@ -126,6 +126,7 @@
 @property (nonatomic) BOOL wantToShowTimeLine;
 @property (nonatomic, retain) NSTimer *timerIncreaseBitRate;
 @property (nonatomic, retain) NSString *currentBitRate;
+@property (nonatomic, retain) NSString *messageStreamingState;
 
 //property for Touch to Talk
 @property (nonatomic) BOOL walkieTalkieEnabled;
@@ -261,6 +262,7 @@ double _ticks = 0;
     self.enablePTT = YES;
     self.numbersOfRemoteViewError = 0;
     self.currentBitRate = @"128";
+    self.messageStreamingState = @"Camera is NOT accessible";
     
     [self becomeActive];
 }
@@ -2759,6 +2761,8 @@ double _ticks = 0;
                                    [self performSelectorOnMainThread:@selector(startStream)
                                                           withObject:nil
                                                        waitUntilDone:NO];
+                                   
+                                   self.messageStreamingState = @"Low data bandwidth detected. Trying to connect...";
                                }
                                else
                                {
@@ -2804,6 +2808,7 @@ double _ticks = 0;
                                        [self performSelectorOnMainThread:@selector(handleMessageOnMainThread:)
                                                               withObject:args
                                                            waitUntilDone:NO];
+                                       self.messageStreamingState = @"Camera is NOT accessible";
                                    }
                                }
                            }
@@ -2811,9 +2816,15 @@ double _ticks = 0;
                            {
                                NSLog(@"SERVER unreachable (timeout) ");
                                //TODO : handle SERVER unreachable (timeout)
+                               NSArray * args = [NSArray arrayWithObjects:
+                                                 [NSNumber numberWithInt:MEDIA_ERROR_SERVER_DIED],nil];
+                               
+                               self.messageStreamingState = @"Camera is NOT accessible";
+                               
+                               dispatch_async(dispatch_get_main_queue(), ^{
+                                   [self performSelector:@selector(handleMessageOnMainThread:) withObject:args afterDelay:10];
+                               });
                            }
-                           
-                           
                        }
                        else // USE RTSP/STUN
                        {
@@ -6312,6 +6323,8 @@ double _ticks = 0;
         UIInterfaceOrientation interfaceOrientation = [UIApplication sharedApplication].statusBarOrientation;
         [self start_animation_with_orientation:interfaceOrientation];
         self.customIndicator.image = [UIImage imageNamed:@"loader_a"];
+        
+        self.ib_lbCameraNotAccessible.text = _messageStreamingState;
         
         if (_isShowTextCameraIsNotAccesible)
         {
