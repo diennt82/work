@@ -163,6 +163,7 @@
 #define REG_ID      @"RegistrationID"
 #define CUE_RELEASE_FLAG 1
 #define CES128_ENCRYPTION_PASSWORD @"Super-LovelyDuck"
+#define SENDING_CAMERA_LOG_PASSWORD @"8888"
 
 // Alert type
 #define ALERT_GENERIC_SERVER_INFO @"999999"
