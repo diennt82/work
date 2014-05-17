@@ -79,6 +79,7 @@
     //Here is show indicator
     self.activityIndicator.hidden = NO;
     [self.activityIndicator startAnimating];
+    self.ib_sliderPlayBack.userInteractionEnabled = NO; // Disable it because it's featur not done yet!
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -162,8 +163,7 @@
 - (void)startStream_bg
 {
     status_t status = !NO_ERROR;
-    //NSString * url = self.urlVideo;//http://hubble-resources.s3.amazonaws.com/devices/01006644334C5A03AEPGARBUYQ/clips/44334C5A03AE_04_20140512142408000_00001_last.flv?AWSAccessKeyId=AKIAJNYQ3ONBL7OLSZDA&Expires=1399969712&Signature=3yU8amUp9VHutvusSDAQg6XGc%2Fw%3D
-    NSString * url = @"http://hubble-resources.s3.amazonaws.com/devices/01006644334C5A03AEPGARBUYQ/clips/44334C5A03AE_04_20140516103037000_00001_last.flv?AWSAccessKeyId=AKIAJNYQ3ONBL7OLSZDA&Expires=1400315858&Signature=eydvKkxRSFcxkU3A%2F4CkoQAFB4w%3D";
+    NSString * url = self.urlVideo;
     //NSString * url = @"http://cvision-office.no-ip.info/release/spider2_hd.flv";
     //NSString * url = [[NSBundle mainBundle] pathForResource:@"spider2_hd" ofType:@"flv"];
     status = _playbackStreamer->setDataSource([url UTF8String]);
@@ -541,25 +541,9 @@
     {
         self.activityIndicator.hidden = NO;
         self.isPause = NO;
-        //_playbackStreamer->resume();
-        //61810.
-        //       1,500,000
-        //       1,467,285
-        
-        //      20,069,258,499
-        //  --> 20,084,258,499
-        //      20068464640
-        //      1235294
-        
-        //_playbackStreamer->seekTo(roundl(slider.value *  _duration));
-        
-        //int64_t seekTarget = slider.value * AV_TIME_BASE * 10 + 20069258499;
-        //int64_t seekTarget = slider.value * _duration * 100;// + 20069258499;
         
         //_playbackStreamer->seekTo(seekTarget);// USE THIS
-                                                                   //20084258499
-          _playbackStreamer->seekTo(2900000000);
-        //[self watcher];
+
         self.ib_playPlayBack.selected = NO;
         self.view.userInteractionEnabled = YES;
         
@@ -614,14 +598,10 @@
     {
         return;
     }
-    //_playbackStreamer -> getDuration(&_duration);
+
     int currentTime = _playbackStreamer->getCurrPos();
-    //_playbackStreamer->getCurrentPosition(&currentTime);
-    //int64_t currentTime;// = _playbackStreamer->getCurrPos();
-    //_playbackStreamer->getCurrPos(&currentTime);
-    //currentTime = _playbackStreamer->mCurrentPosition;
     
-    NSLog(@"%s current time: %d, duration: %lld, div: %f", __FUNCTION__, currentTime, _duration, (float)currentTime/(_duration * 100));
+    //NSLog(@"%s current time: %d, duration: %lld, div: %f", __FUNCTION__, currentTime, _duration, (float)currentTime/(_duration * 100));
     
     self.ib_timerPlayBack.text = [self timeFormat:(float)((currentTime)/1000)];
 
