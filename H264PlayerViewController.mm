@@ -689,6 +689,8 @@ double _ticks = 0;
     _earlierVC.view.hidden = NO;
     [self.view bringSubviewToFront:_earlierVC.view];
     [_earlierVC setCamChannel:self.selectedChannel];
+    
+    [self stopTalkbackUnexpected];
 }
 
 #pragma mark - Action
@@ -4675,121 +4677,123 @@ double _ticks = 0;
 {
     if (_wantToShowTimeLine || self.horizMenu.isAllButtonDeselected)
     {
-        //don't need to update bottom view when show timeline
-        [self hidenAllBottomView];
         [self showTimelineView];
-        return;
     }
-    //first hidden all view
-    [self hidenAllBottomView];
-    if (_selectedItemMenu == INDEX_PAN_TILT)
+    else
     {
-        [self.view bringSubviewToFront:_imgViewDrectionPad];
-        [self.view bringSubviewToFront:_imageViewKnob];
-        [self.view bringSubviewToFront:_imageViewHandle];
-        [self.imgViewDrectionPad setHidden:NO];
-        self.imageViewKnob.hidden = NO;
-        self.imageViewKnob.center = _imgViewDrectionPad.center;
-        self.imageViewHandle.center = _imgViewDrectionPad.center;
-    }
-    else if (_selectedItemMenu == INDEX_MICRO)
-    {
-        [self.view bringSubviewToFront:self.ib_ViewTouchToTalk];
-        [self.ib_ViewTouchToTalk setHidden:NO];
-    }
-    else if (_selectedItemMenu == INDEX_RECORDING)
-    {
-        [self.view bringSubviewToFront:self.ib_viewRecordTTT];
-        [self.ib_viewRecordTTT setHidden:NO];
+        [self hidenAllBottomView];
         
-        //check if is share cam, up UI
-        if ([_cameraModel isEqualToString:CP_MODEL_SHARED_CAM] ||
-            [_cameraModel isEqualToString:CP_MODEL_CONCURRENT])
+        if (_selectedItemMenu == INDEX_PAN_TILT)
         {
-            _isRecordInterface = YES;
-            [self changeAction:nil];
-            [self.ib_buttonChangeAction setHidden:YES];
+            [self.view bringSubviewToFront:_imgViewDrectionPad];
+            [self.view bringSubviewToFront:_imageViewKnob];
+            [self.view bringSubviewToFront:_imageViewHandle];
+            [self.imgViewDrectionPad setHidden:NO];
+            self.imageViewKnob.hidden = NO;
+            self.imageViewKnob.center = _imgViewDrectionPad.center;
+            self.imageViewHandle.center = _imgViewDrectionPad.center;
         }
-    }
-    else if (_selectedItemMenu == INDEX_MELODY)
-    {
-        [self.melodyViewController.view setHidden:NO];
-        
-        if ([UIApplication sharedApplication].statusBarOrientation == UIInterfaceOrientationLandscapeLeft ||
-            [UIApplication sharedApplication].statusBarOrientation == UIInterfaceOrientationLandscapeRight)
+        else if (_selectedItemMenu == INDEX_MICRO)
         {
-            self.wantToShowTimeLine = YES;
+            [self.view bringSubviewToFront:self.ib_ViewTouchToTalk];
+            [self.ib_ViewTouchToTalk setHidden:NO];
         }
-        
-        CGRect rect;
-        
-        if (_isLandScapeMode)
+        else if (_selectedItemMenu == INDEX_RECORDING)
         {
-            if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+            [self.view bringSubviewToFront:self.ib_viewRecordTTT];
+            [self.ib_viewRecordTTT setHidden:NO];
+            
+            //check if is share cam, up UI
+            if ([_cameraModel isEqualToString:CP_MODEL_SHARED_CAM] ||
+                [_cameraModel isEqualToString:CP_MODEL_CONCURRENT])
             {
-                rect = CGRectMake(SCREEN_HEIGHT - 236, SCREEN_WIDTH - 400, 236, 165);
+                _isRecordInterface = YES;
+                [self changeAction:nil];
+                [self.ib_buttonChangeAction setHidden:YES];
             }
-            else
+        }
+        else if (_selectedItemMenu == INDEX_MELODY)
+        {
+            [self.melodyViewController.view setHidden:NO];
+            
+            if ([UIApplication sharedApplication].statusBarOrientation == UIInterfaceOrientationLandscapeLeft ||
+                [UIApplication sharedApplication].statusBarOrientation == UIInterfaceOrientationLandscapeRight)
             {
-                if (isiPhone4)
+                self.wantToShowTimeLine = YES;
+            }
+            
+            CGRect rect;
+            
+            if (_isLandScapeMode)
+            {
+                if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
                 {
-                    rect = CGRectMake(SCREEN_HEIGHT - 159, 65, 159, 204);
+                    rect = CGRectMake(SCREEN_HEIGHT - 236, SCREEN_WIDTH - 400, 236, 165);
                 }
                 else
                 {
-                    rect = CGRectMake(393, 78, 175, 165);
+                    if (isiPhone4)
+                    {
+                        rect = CGRectMake(SCREEN_HEIGHT - 159, 65, 159, 204);
+                    }
+                    else
+                    {
+                        rect = CGRectMake(393, 78, 175, 165);
+                    }
                 }
+            }
+            else
+            {
+                if (isiOS7AndAbove)
+                {
+                    rect = CGRectMake(0, self.ib_ViewTouchToTalk.frame.origin.y - 5, SCREEN_WIDTH, SCREEN_HEIGHT - self.ib_ViewTouchToTalk.frame.origin.y);
+                }
+                else
+                {
+                    rect = CGRectMake(0, self.ib_ViewTouchToTalk.frame.origin.y - 30 - 44, SCREEN_WIDTH, SCREEN_HEIGHT - self.ib_ViewTouchToTalk.frame.origin.y);
+                }
+            }
+            
+            self.melodyViewController.view.frame = rect;
+            
+            /*
+             TODO:need get status of laluby and update on UI.
+             when landscape or portrait display correctly
+             */
+            [self performSelectorInBackground:@selector(getMelodyValue_bg) withObject:nil];
+            [self.melodyViewController.melodyTableView setNeedsLayout];
+            [self.melodyViewController.melodyTableView setNeedsDisplay];
+            
+        }
+        else if (_selectedItemMenu == INDEX_TEMP)
+        {
+            [self.ib_temperature setHidden:NO];
+            [ib_switchDegree setHidden:NO];
+            [self.view bringSubviewToFront:ib_switchDegree];
+            
+            if (_existTimerTemperature == FALSE)
+            {
+                self.existTimerTemperature = TRUE;
+                NSLog(@"Log - Create Timer to get Temperature");
+                //should call it first and then update later
+                [self setTemperatureState_Fg:_stringTemperature];
+                [NSTimer scheduledTimerWithTimeInterval:10
+                                                 target:self
+                                               selector:@selector(getCameraTemperature_bg:)
+                                               userInfo:nil
+                                                repeats:YES];
             }
         }
         else
         {
-            if (isiOS7AndAbove)
-            {
-                rect = CGRectMake(0, self.ib_ViewTouchToTalk.frame.origin.y - 5, SCREEN_WIDTH, SCREEN_HEIGHT - self.ib_ViewTouchToTalk.frame.origin.y);
-            }
-            else
-            {
-                rect = CGRectMake(0, self.ib_ViewTouchToTalk.frame.origin.y - 30 - 44, SCREEN_WIDTH, SCREEN_HEIGHT - self.ib_ViewTouchToTalk.frame.origin.y);
-            }
-        }
-        
-        self.melodyViewController.view.frame = rect;
-        
-        /*
-         TODO:need get status of laluby and update on UI.
-         when landscape or portrait display correctly
-         */
-        [self performSelectorInBackground:@selector(getMelodyValue_bg) withObject:nil];
-        [self.melodyViewController.melodyTableView setNeedsLayout];
-        [self.melodyViewController.melodyTableView setNeedsDisplay];
-        
-    }
-    else if (_selectedItemMenu == INDEX_TEMP)
-    {
-        [self.ib_temperature setHidden:NO];
-        [ib_switchDegree setHidden:NO];
-        [self.view bringSubviewToFront:ib_switchDegree];
-        
-        if (_existTimerTemperature == FALSE)
-        {
-            self.existTimerTemperature = TRUE;
-            NSLog(@"Log - Create Timer to get Temperature");
-            //should call it first and then update later
-            [self setTemperatureState_Fg:_stringTemperature];
-            [NSTimer scheduledTimerWithTimeInterval:10
-                                             target:self
-                                           selector:@selector(getCameraTemperature_bg:)
-                                           userInfo:nil
-                                            repeats:YES];
+            //first hide all bottom view
+            //[self hidenAllBottomView];
+            //and then display time line
+            [self showTimelineView];
         }
     }
-    else
-    {
-        //first hide all bottom view
-        [self hidenAllBottomView];
-        //and then display time line
-        [self showTimelineView];
-    }
+    
+    [self stopTalkbackUnexpected];
 }
 
 - (void)hidenAllBottomView
@@ -4918,6 +4922,43 @@ double _ticks = 0;
     {
         [self performSelectorInBackground:@selector(enableRemotePTT:)
                                withObject:[NSNumber numberWithBool:self.walkieTalkieEnabled]];
+    }
+}
+
+- (void)stopTalkbackUnexpected
+{
+    if (_walkieTalkieEnabled)
+    {
+        // Stop talkback if it is enabled
+        
+        UILabel *labelCrazy = [[UILabel alloc] init];
+        
+        CGRect rect;
+        
+        if ([UIApplication sharedApplication].statusBarOrientation == UIInterfaceOrientationMaskPortrait)
+        {
+            rect = CGRectMake(SCREEN_WIDTH/2 - 115/2, SCREEN_HEIGHT - 35, 115, 30);
+        }
+        else
+        {
+            rect = CGRectMake(SCREEN_HEIGHT/2 - 115/2, SCREEN_WIDTH - 35, 115, 30);
+        }
+        
+        labelCrazy.frame = rect;
+        labelCrazy.backgroundColor = [UIColor grayColor];
+        labelCrazy.textColor = [UIColor whiteColor];
+        labelCrazy.font = [UIFont applyHubbleFontName:PN_SEMIBOLD_FONT withSize:13];
+        labelCrazy.textAlignment = NSTextAlignmentCenter;
+        labelCrazy.text = @"Talkback disabled";
+        [self.view addSubview:labelCrazy];
+        [self.view bringSubviewToFront:labelCrazy];
+        
+        [labelCrazy performSelector:@selector(removeFromSuperview) withObject:nil afterDelay:3];
+        
+        [labelCrazy release];
+        
+        //self.walkieTalkieEnabled = !_walkieTalkieEnabled;
+        [self ib_buttonTouchToTalkTouchUpInside];
     }
 }
 
