@@ -131,14 +131,17 @@
                                 <action selector="playVideo:" destination="-1" eventType="touchUpInside" id="w04-b2-7Fk"/>
                             </connections>
                         </button>
-                        <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" id="ACI-Hg-Dbr">
+                        <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.10000000000000001" minValue="0.0" maxValue="1" id="ACI-Hg-Dbr">
                             <rect key="frame" x="44" y="5" width="153" height="34"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                             <connections>
                                 <action selector="onTimeSliderChange:" destination="-1" eventType="valueChanged" id="Oth-PR-QLS"/>
+                                <action selector="sliderProgressTouchDownAction:" destination="-1" eventType="touchDown" id="TAt-Kz-pvn"/>
+                                <action selector="sliderProgressTouchUpInsideAction:" destination="-1" eventType="touchUpInside" id="yuX-d7-3Cy"/>
+                                <action selector="sliderProgressTouchUpOutsideAction:" destination="-1" eventType="touchUpOutside" id="XKh-Mj-IPV"/>
                             </connections>
                         </slider>
-                        <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="05:20" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="Peu-hY-K1u">
+                        <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="05:20" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="Peu-hY-K1u">
                             <rect key="frame" x="203" y="12" width="76" height="21"/>
                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>

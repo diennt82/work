@@ -1700,6 +1700,7 @@ double _ticks = 0;
     
     //Store current SSID - to check later
 	self.current_ssid = [CameraPassword fetchSSIDInfo];
+    
 	if (_current_ssid == nil)
 	{
 		NSLog(@"Error: streamingSSID is nil before streaming");
@@ -1726,11 +1727,11 @@ double _ticks = 0;
     //mp->setPlayOption(MEDIA_STREAM_RTSP_WITH_TCP);
     
     NSString * url = self.selectedChannel.stream_url;
-    NSLog(@"startStream_bg url = %@", url);
+    NSLog(@"%s url: %@, h264Streamer: %p", __FUNCTION__, url, h264Streamer);
     
     do
     {
-        if (url == nil)
+        if (url == nil || h264Streamer == NULL)
         {
             break;
         }

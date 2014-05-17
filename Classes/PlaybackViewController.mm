@@ -23,7 +23,8 @@
 //#define USE_H264PLAYER 0
 @interface PlaybackViewController()
 
-@property (nonatomic, retain) UIImageView *imageViewTopBar;
+@property (nonatomic) BOOL isPause;
+@property (nonatomic) int64_t duration;
 
 @end
 
@@ -31,10 +32,9 @@
 
 @synthesize camera_mac;
 @synthesize  clip_info;
-
 @synthesize  imageVideo, urlVideo;//, topToolbar,backBarBtnItem, progressView;
-
 @synthesize clips = _clips;
+
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
@@ -61,19 +61,15 @@
     self.ib_myOverlay.hidden = YES;
     [self.ib_viewOverlayVideo setHidden:YES];
     self.view.userInteractionEnabled = NO;
+    [self.ib_playPlayBack setImage:[UIImage imageNamed:@"video_play"] forState:UIControlStateSelected];
+    [self.ib_playPlayBack setImage:[UIImage imageNamed:@"video_pause"] forState:UIControlStateNormal];
     //[self becomeActive];
-    
-#if 1
+
     UITapGestureRecognizer *singleTap = [[UITapGestureRecognizer alloc] initWithTarget:self
                                                                                 action:@selector(singleTapGestureCaptured:)];
     singleTap.numberOfTapsRequired = 1;
     singleTap.numberOfTouchesRequired = 1;
     [self.view addGestureRecognizer:singleTap];
-#endif
-    
-    //hide navigation controller
-    [self.navigationController setHidesBottomBarWhenPushed:YES];
-    
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -83,13 +79,12 @@
     //Here is show indicator
     self.activityIndicator.hidden = NO;
     [self.activityIndicator startAnimating];
-    [self checkOrientation];
+    self.ib_sliderPlayBack.userInteractionEnabled = NO; // Disable it because it's featur not done yet!
 }
 
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
-    
     NSLog(@"%s: viewDidAppear", __FUNCTION__);
     
     [self becomeActive];
@@ -100,44 +95,6 @@
     [self.navigationController.navigationBar setHidden:NO];
     [super viewWillDisappear:animated];
     NSLog(@"viewWillDisappear: ");
-}
-
-#pragma mark - Hide&Show Control
-- (void)singleTapGestureCaptured:(id)sender
-{
-    NSLog(@"Single tap singleTapGestureCaptured");
-    
-    if (_ib_myOverlay.hidden)
-    {
-        [self showControlMenu];
-    }
-    else
-    {
-       [self hideControlMenu];
-    }
-}
-
-- (void)hideControlMenu
-{
-    [self.ib_myOverlay setHidden:YES];
-}
-
-- (void)showControlMenu
-{
-   [self.ib_myOverlay setHidden:NO];
-    [self.view bringSubviewToFront:self.ib_myOverlay];
-    
-    if (_timerHideMenu != nil)
-    {
-        [self.timerHideMenu invalidate];
-        self.timerHideMenu = nil;
-    }
-    
-    self.timerHideMenu = [NSTimer scheduledTimerWithTimeInterval:10
-                                                          target:self
-                                                        selector:@selector(hideControlMenu)
-                                                        userInfo:nil
-                                                         repeats:NO];
 }
 
 #pragma mark - PLAY VIDEO
@@ -163,9 +120,11 @@
     
     _clips = [[NSMutableArray alloc]init];
     //Decide whether or not to start the background polling
+    
     if (self.clip_info != nil )
     {
         listener = new PlaybackListener(self);
+        
         if ([self.clip_info isLastClip])
         {
             //Only one clip & it is the last
@@ -179,27 +138,19 @@
             // It is not the last clip - scheduling querying of clips
             NSLog(@"clip_info is %@", clip_info);
             self.list_refresher = [NSTimer scheduledTimerWithTimeInterval:10.0
-                                   
                                                                    target:self
-                                   
                                                                  selector:@selector(getCameraPlaylistForEvent:)
-                                   
                                                                  userInfo:clip_info repeats:NO];
-            
             NSLog(@"[----- self.list_refresher: %p", self.list_refresher);
-            
         }
+        
         self.urlVideo = self.clip_info.urlFile;
     }
 #endif
     
-    
     [self performSelector:@selector(startStream)
-     
                withObject:nil
-     
                afterDelay:0.1];
-    
 }
 
 -(void) startStream
@@ -213,6 +164,8 @@
 {
     status_t status = !NO_ERROR;
     NSString * url = self.urlVideo;
+    //NSString * url = @"http://cvision-office.no-ip.info/release/spider2_hd.flv";
+    //NSString * url = [[NSBundle mainBundle] pathForResource:@"spider2_hd" ofType:@"flv"];
     status = _playbackStreamer->setDataSource([url UTF8String]);
     printf("setDataSource return: %d\n", status);
     
@@ -236,6 +189,7 @@
         self.view.userInteractionEnabled = YES;
         self.ib_myOverlay.hidden = NO;
         [self.ib_sliderPlayBack setMinimumTrackTintColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"video_progress_green"]]];
+        _playbackStreamer -> getDuration(&_duration);
         [self watcher];
     });
     
@@ -246,7 +200,8 @@
         printf("prepare() error: %d\n", status);
         exit(1);
     }
-    status=  _playbackStreamer->start();
+    
+    status =  _playbackStreamer->start();
     
     printf("start() return: %d\n", status);
     
@@ -272,13 +227,9 @@
     switch (msg)
     {
         case MEDIA_PLAYER_PREPARED:
-        {
-            break;
-        }
         case MEDIA_PLAYER_STARTED:
-        {
             break;
-        }
+            
         case MEDIA_ERROR_SERVER_DIED:
         case MEDIA_PLAYBACK_COMPLETE:
             //DONE Playback
@@ -289,55 +240,45 @@
                 [self goBackToPlayList];
             }
             break;
+            
+        case MEDIA_SEEK_COMPLETE:
+            dispatch_async(dispatch_get_main_queue(), ^{
+                self.activityIndicator.hidden = YES;
+                [self watcher];
+            });
+            break;
+            
         default:
             break;
     }
 }
 
 - (IBAction)stopStream:(id) sender
-
 {
-    
     NSLog(@"Stop stream start ");
+    
     if (_playbackStreamer != NULL)
-        
     {
-        
         NSLog(@"Stop stream _playbackStreamer != NULL");
         
         if(_playbackStreamer->isPlaying())
-            
         {
-            
             _playbackStreamer->suspend();
-            
             _playbackStreamer->stop();
-            
             _playbackStreamer->setListener(nil);
-            
-            
-            
             delete _playbackStreamer;
-            
             _playbackStreamer = NULL;
-            
         }
-        
         else // set Data source failed!
-            
         {
-            
             _playbackStreamer->suspend();
-            
             _playbackStreamer->stop();
-            
             _playbackStreamer->setListener(nil);
             delete _playbackStreamer;
-            
             _playbackStreamer = NULL;
         }
-        
     }
+    
     NSLog(@"Stop stream end");
 }
 
@@ -391,6 +332,8 @@
 {
     self.userWantToBack = TRUE;
     
+    self.ib_playPlayBack.enabled = NO;
+    
     if (_playbackStreamer != NULL)
     {
         [self stopStream:nil];
@@ -400,6 +343,7 @@
     {
         [self.list_refresher invalidate];
     }
+    
     if (self.navigationController != nil)
     {
         if ([[UIDevice currentDevice] orientation] == UIDeviceOrientationLandscapeLeft ||
@@ -460,8 +404,7 @@
 
 -(void) checkOrientation
 {
-	UIInterfaceOrientation infOrientation = [UIApplication sharedApplication].statusBarOrientation;
-	[self adjustViewsForOrientation:infOrientation];
+	[self adjustViewsForOrientation:[UIApplication sharedApplication].statusBarOrientation];
 }
 
 - (void) adjustViewsForOrientation:(UIInterfaceOrientation)orientation
@@ -469,19 +412,6 @@
 	if (orientation == UIInterfaceOrientationLandscapeLeft || orientation == UIInterfaceOrientationLandscapeRight)
 	{
         [self.imageVideo setFrame:CGRectMake(0, 0, SCREEN_HEIGHT, SCREEN_WIDTH)];
-        
-        if (isiPhone5 || isiPhone4)
-        {
-            //[self.ib_viewControlPlayer setFrame:CGRectMake(0, SCREEN_WIDTH - HEIGHT_BG_CONTROL, SCREEN_HEIGHT, HEIGHT_BG_CONTROL)];
-            //[self.ib_sliderPlayBack setFrame:CGRectMake(40, 5, 840/2, HEIGHT_SLIDER_DEFAULT)];
-        }
-        else
-        {
-            //for iPad
-            
-            //[self.ib_viewControlPlayer setFrame:CGRectMake(0, SCREEN_WIDTH - HEIGHT_BG_CONTROL, SCREEN_HEIGHT, HEIGHT_BG_CONTROL)];
-            //[self.ib_sliderPlayBack setFrame:CGRectMake(80, 5, SCREEN_HEIGHT - 300, HEIGHT_SLIDER_DEFAULT)];
-        }
         
         [self.ib_closePlayBack setImage:[UIImage imageNamed:@"video_fullscreen_close"] forState:UIControlStateNormal];
         [self.ib_closePlayBack setImage:[UIImage imageNamed:@"video_fullscreen_close_pressed"] forState:UIControlEventTouchDown];
@@ -492,17 +422,11 @@
         if (isiPhone5 || isiPhone4)
         {
             [self.imageVideo setFrame:CGRectMake(0, 194, SCREEN_WIDTH, 180)];
-            //[self.ib_viewControlPlayer setFrame:CGRectMake(0, SCREEN_HEIGHT - HEIGHT_BG_CONTROL, SCREEN_WIDTH, HEIGHT_BG_CONTROL)];
-            //width of slider is 390/2;
-            //[self.ib_sliderPlayBack setFrame:CGRectMake(40, 5, 364/2, HEIGHT_SLIDER_DEFAULT)];
         }
         else
         {
             //iPad
             [self.imageVideo setFrame:CGRectMake(0, 296, SCREEN_WIDTH, 432)];
-            //[self.ib_viewControlPlayer setFrame:CGRectMake(0, SCREEN_HEIGHT - HEIGHT_BG_CONTROL, SCREEN_WIDTH, HEIGHT_BG_CONTROL)];
-            //width of slider is 390/2;
-            //[self.ib_sliderPlayBack setFrame:CGRectMake(40, 5, SCREEN_WIDTH - 200, HEIGHT_SLIDER_DEFAULT)];
         }
         
         [self.ib_closePlayBack setImage:[UIImage imageNamed:@"vertcal_video_close"] forState:UIControlStateNormal];
@@ -511,96 +435,48 @@
 	}
 }
 
-#if 0
-- (void) didRotate:(NSNotification *)notification
-{
-    
-    UIDeviceOrientation orientation = [[UIDevice currentDevice] orientation];
-    [[self view] setBounds:CGRectMake(0, 0, SCREEN_HEIGHT, SCREEN_HEIGHT)];
-    // Calculate rotation angle
-    NSInteger delta = (SCREEN_HEIGHT - SCREEN_WIDTH);
-    CGFloat angle;
-    switch (orientation) {
-        case UIDeviceOrientationLandscapeLeft:
-            //auto rotate phone
-            [[UIApplication sharedApplication] setStatusBarOrientation:UIInterfaceOrientationLandscapeRight];
-            [self updateRotatingLandWith:0 andY:delta];
-            angle =  M_PI_2;
-            break;
-        case UIDeviceOrientationLandscapeRight:
-            //auto rotate phone
-            [[UIApplication sharedApplication] setStatusBarOrientation:UIInterfaceOrientationLandscapeLeft];
-            [self updateRotatingLandWith:0 andY:0];
-            angle =  -M_PI_2;
-            break;
-        default:
-            [[UIApplication sharedApplication] setStatusBarOrientation:UIInterfaceOrientationPortrait];
-            [self updateRotatingPortraitWith:0 andY:0];
-            angle = 0;
-            break;
-    }
-    
-    self.view.layer.position = CGPointMake(SCREEN_HEIGHT/2.0,SCREEN_HEIGHT/2.0);
-    static NSTimeInterval animationDuration = 0.3;
-    [UIView animateWithDuration:animationDuration animations:^{
-        self.view.transform = CGAffineTransformMakeRotation(angle);
-    }];
-}
+#pragma mark - Hide&Show Control
 
-- (void) updateRotatingLandWith:(float)deltaX andY:(float)deltaY
+- (void)singleTapGestureCaptured:(id)sender
 {
-    
-    if (isiPhone5 || isiPhone4)
+    if (_ib_myOverlay.hidden)
     {
-        [self.imageVideo setFrame:CGRectMake(deltaX , deltaY, SCREEN_HEIGHT, SCREEN_WIDTH)];
-        [self.ib_viewControlPlayer setFrame:CGRectMake(deltaX, SCREEN_WIDTH - HEIGHT_BG_CONTROL + deltaY, SCREEN_HEIGHT, HEIGHT_BG_CONTROL)];
-        [self.ib_sliderPlayBack setFrame:CGRectMake(40, 5, 840/2, HEIGHT_SLIDER_DEFAULT)];
-        //[self.ib_closePlayBack setFrame:CGRectMake(10 + deltaX, 10 + deltaY, 33, 33)];
-        //[self.ib_closePlayBack setBackgroundImage:[UIImage imageVideoFullScreenClose] forState:UIControlStateNormal];
-        [self.ib_viewOverlayVideo setFrame:CGRectMake(158 + deltaX, 112 + deltaY, 240, 90)];
+        [self showControlMenu];
     }
     else
     {
-        //for iPad
-        [self.imageVideo setFrame:CGRectMake(0 + deltaX, 0 + deltaY, SCREEN_HEIGHT, SCREEN_WIDTH)];
-        
-        [self.ib_viewControlPlayer setFrame:CGRectMake(0 + deltaX, SCREEN_WIDTH - HEIGHT_BG_CONTROL + deltaY, SCREEN_HEIGHT, HEIGHT_BG_CONTROL)];
-        [self.ib_sliderPlayBack setFrame:CGRectMake(80, 5, SCREEN_HEIGHT - 300, HEIGHT_SLIDER_DEFAULT)];
-        //[self.ib_closePlayBack setFrame:CGRectMake(10 + deltaX, 10 + deltaY, 33, 33)];
+        [self hideControlMenu];
     }
-    [self.ib_bg_top_player setHidden:YES];
 }
 
-- (void) updateRotatingPortraitWith:(float)deltaX andY:(float)deltaY
+- (void)hideControlMenu
 {
-    [self.ib_bg_top_player setHidden:NO];
-    if (isiPhone5 || isiPhone4)
+    [self.ib_myOverlay setHidden:YES];
+    self.view.userInteractionEnabled = YES;
+}
+
+- (void)showControlMenu
+{
+    [self.ib_myOverlay setHidden:NO];
+    [self.view bringSubviewToFront:self.ib_myOverlay];
+    
+    if (_timerHideMenu != nil)
     {
-        [self.imageVideo setFrame:CGRectMake(0 + deltaX, 194 + deltaY, SCREEN_WIDTH, 180)];
-        [self.ib_viewControlPlayer setFrame:CGRectMake(0 + deltaX, SCREEN_HEIGHT - HEIGHT_BG_CONTROL + deltaY, SCREEN_WIDTH, HEIGHT_BG_CONTROL)];
-        //width of slider is 390/2;
-        [self.ib_sliderPlayBack setFrame:CGRectMake(40, 5, 364/2, HEIGHT_SLIDER_DEFAULT)];
-        //[self.ib_closePlayBack setFrame:CGRectMake(15 + deltaX, 15 + deltaY, 20, 20)];
-        //[self.ib_closePlayBack setBackgroundImage:[UIImage imageVerticalVideoClose] forState:UIControlStateNormal];
-        [self.ib_viewOverlayVideo setFrame:CGRectMake(39 + deltaX, 239 + deltaY, 240, 90)];
-    }
-    else
-    {
-        //iPad
-        [self.imageVideo setFrame:CGRectMake(0, 296, SCREEN_WIDTH, 432)];
-        [self.ib_viewControlPlayer setFrame:CGRectMake(0, SCREEN_HEIGHT - HEIGHT_BG_CONTROL, SCREEN_WIDTH, HEIGHT_BG_CONTROL)];
-        //width of slider is 390/2;
-        [self.ib_sliderPlayBack setFrame:CGRectMake(40, 5, SCREEN_WIDTH - 200, HEIGHT_SLIDER_DEFAULT)];
-        
+        [self.timerHideMenu invalidate];
+        self.timerHideMenu = nil;
     }
     
+    self.timerHideMenu = [NSTimer scheduledTimerWithTimeInterval:10
+                                                          target:self
+                                                        selector:@selector(hideControlMenu)
+                                                        userInfo:nil
+                                                         repeats:NO];
 }
-#endif
+
+#pragma mark - Actions
 
 - (IBAction)minimizeVideo:(id)sender
 {
-#if 1
-    
     UIDeviceOrientation orietation = UIDeviceOrientationPortrait;
     
     if ([[UIDevice currentDevice] orientation] == UIDeviceOrientationPortrait)
@@ -611,48 +487,6 @@
     if ([[UIDevice currentDevice] respondsToSelector:@selector(setOrientation:)]) {
         objc_msgSend([UIDevice currentDevice], @selector(setOrientation:),    orietation);
     }
-#else
-    _isSwitchingWhenPress = YES;
-    /**
-     TODO:
-     1. if phone at portrait
-     then
-     scale view and rotate it 90°
-     2. If phone at landscape
-     then
-     switch it to portrait
-     */
-    float delta;
-    delta = (SCREEN_HEIGHT - SCREEN_WIDTH);
-    [[self view] setBounds:CGRectMake(0, 0, SCREEN_HEIGHT, SCREEN_HEIGHT)];
-    
-    if (isPhoneLandscapeMode)
-    {
-        NSLog(@"Phone at landscape mode");
-        //        auto rotate phone
-        [[UIApplication sharedApplication] setStatusBarOrientation:UIInterfaceOrientationPortrait];
-        self.view.layer.position = CGPointMake(SCREEN_HEIGHT/2.0,SCREEN_HEIGHT/2.0);
-        static NSTimeInterval animationDuration = 0.3;
-        [UIView animateWithDuration:animationDuration animations:^{
-            self.view.transform = CGAffineTransformMakeRotation(0);
-        }];
-        [self updateRotatingPortraitWith:0 andY:0];
-    }
-    else
-    {
-        NSLog(@"Phone at portrait mode");
-        //auto rotate phone
-        [[UIApplication sharedApplication] setStatusBarOrientation:UIInterfaceOrientationLandscapeRight];
-        //rotate at center of image
-        self.view.layer.position = CGPointMake(SCREEN_HEIGHT/2.0,SCREEN_HEIGHT/2.0);
-        [self updateRotatingLandWith:0 andY:delta];
-        static NSTimeInterval animationDuration = 0.3;
-        [UIView animateWithDuration:animationDuration animations:^{
-            self.view.transform = CGAffineTransformMakeRotation(M_PI_2);
-        }];
-        
-    }
-#endif
 }
 
 - (IBAction)deleteVideo:(id)sender
@@ -669,61 +503,109 @@
 
 - (IBAction)onTimeSliderChange:(id)sender
 {
-    NSLog(@"_Value__Changed__");
+}
+
+- (IBAction)sliderProgressTouchDownAction:(id)sender
+{
+    NSLog(@"%s", __FUNCTION__);
+    
+    if (_playbackStreamer   &&
+        !_isPause           &&
+        _playbackStreamer->isPlaying())
+    {
+        self.isPause = YES;
+        _playbackStreamer->pause();
+        self.ib_playPlayBack.selected = YES;
+        self.view.userInteractionEnabled = NO;
+        [self.ib_myOverlay setHidden:NO];
+
+        if (_timerHideMenu != nil)
+        {
+            [self.timerHideMenu invalidate];
+            self.timerHideMenu = nil;
+        }
+    }
+}
+
+- (IBAction)sliderProgressTouchUpInsideAction:(id)sender
+{
+    UISlider *slider = (UISlider *)sender;
+    int64_t seekTarget = (slider.value * 100 * _duration) * 10 + 20069258499;
+                                                                  //1279873122304
+                                                                  //1220588077056
+                                                                  // 124509814784
+    NSLog(@"%s value: %f, target: %lld", __FUNCTION__, slider.value, seekTarget);//0.666,667 --> 666,667
+    
+    if (_playbackStreamer   &&
+        _isPause)
+    {
+        self.activityIndicator.hidden = NO;
+        self.isPause = NO;
+        
+        //_playbackStreamer->seekTo(seekTarget);// USE THIS
+
+        self.ib_playPlayBack.selected = NO;
+        self.view.userInteractionEnabled = YES;
+        
+        [self showControlMenu];
+    }
+}
+
+- (IBAction)sliderProgressTouchUpOutsideAction:(id)sender
+{
+    // Option ♀(✿◠‿◠) 
+    [self sliderProgressTouchUpInsideAction:sender];
 }
 
 - (IBAction)closePlayBack:(id)sender
 {
     //handle remove all callback, notification here
-	[self.ib_myOverlay removeFromSuperview];
     //stop handle method watcher
+    
     [NSObject cancelPreviousPerformRequestsWithTarget:self
                                              selector:@selector(watcher)
                                                object:nil];
     [self goBackToPlayList];
-    
 }
 
 - (IBAction)playVideo:(id)sender
 {
-    if(_playbackStreamer ->isPlaying())
-    {
-        NSLog(@"Yes Playing");
-        //[self.ib_playPlayBack setImage:[UIImage imageVideoPlay] forState:UIControlStateNormal];
-        //_playbackStreamer->pause();
-    }
-    else
-    {
-        //        NSLog(@"Not Playing");
-        //
-        //        _playbackStreamer -> start();
-        
-        //  [self.ib_playPlayBack setImage:[UIImage imageVideoPause] forState:UIControlStateNormal];
-    }
+    NSLog(@"%s wants to pause: %d", __FUNCTION__, _isPause);
     
-    [self checkOrientation];
+    if (_playbackStreamer)
+    {
+        if (_isPause)
+        {
+            self.isPause = NO;
+            _playbackStreamer->resume();
+            [self watcher];
+            self.ib_playPlayBack.selected = NO;
+        }
+        else if(_playbackStreamer->isPlaying())
+        {
+            self.isPause = YES;
+            _playbackStreamer->pause();
+            self.ib_playPlayBack.selected = YES;
+        }
+    }
 }
 
 
 #pragma mark Display Time
 -(void)watcher
 {
-    int currentTime;
-    int64_t duration;
-    
-    if (_playbackStreamer == NULL)
+    if (_playbackStreamer == NULL || _isPause || _userWantToBack)
     {
         return;
     }
-    _playbackStreamer->getCurrentPosition(&currentTime);
-    _playbackStreamer -> getDuration(&duration);
+
+    int currentTime = _playbackStreamer->getCurrPos();
     
-    self.ib_timerPlayBack.textAlignment = NSTextAlignmentCenter;
-    self.ib_timerPlayBack.text = [self timeFormat:(float)(currentTime/1000)];
+    //NSLog(@"%s current time: %d, duration: %lld, div: %f", __FUNCTION__, currentTime, _duration, (float)currentTime/(_duration * 100));
     
-    
-    float rate = (float)((END - START) / duration);
-    self.ib_sliderPlayBack.value = (float)(rate * currentTime)/100;
+    self.ib_timerPlayBack.text = [self timeFormat:(float)((currentTime)/1000)];
+
+    self.ib_sliderPlayBack.value = (float)currentTime / (_duration * 100);
     
     [NSTimer scheduledTimerWithTimeInterval:0.5
                                      target:self
@@ -732,25 +614,21 @@
                                     repeats:NO];
     
 }
+
 - (NSString *) timeFormat: (float) seconds {
     
     int minutes = seconds / 60;
-    
-    int sec = fabs(round((int)seconds % 60));
-    
+    int sec     = fabs(round((int)seconds % 60));
     NSString *cm = minutes <= 9 ? @"0": @"";
-    
     NSString *cs = sec <= 9 ? @"0": @"";
     
     return [NSString stringWithFormat:@"%@%i:%@%i",cm, minutes, cs, sec];
-    
 }
 
 #pragma mark - Poll camera events
 
 -(void) getCameraPlaylistForEvent:(NSTimer *) clipTimer
 {
-    
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     
     BMS_JSON_Communication *jsonComm = [[BMS_JSON_Communication alloc] initWithObject:self
@@ -773,9 +651,9 @@
                                                                          offset:nil
                                                                            size:nil
                                                                          apiKey:apiKey];
+    [jsonComm release];
     
     [self getPlaylistSuccessWithResponse:responseDic];
-    
 }
 
 - (void)getPlaylistSuccessWithResponse: (NSDictionary *)responseDict
@@ -803,6 +681,7 @@
                     
                     //check if the clip is in our private array
                     BOOL found = FALSE;
+                    
                     for ( NSString * one_clip in _clips)
                     {
                         NSLog(@"one clip: *%@*", one_clip);
@@ -828,12 +707,10 @@
                         NSLog(@"This is last");
                         got_last_clip = TRUE;
                     }
-                    
                 }
                 
                 NSLog(@"there is %d in playlist", [_clips count]);
             }
-            
         }
     }
     
@@ -853,7 +730,6 @@
     }
     
     listener->updateClips(_clips);
-    
 }
 
 - (void)getPlaylistFailedWithResponse: (NSDictionary *)responseDict
@@ -875,6 +751,5 @@
                                                          userInfo:clip_info repeats:NO];
     
 }
-
 
 @end

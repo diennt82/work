@@ -1507,13 +1507,6 @@
 		A10E6BBB18D2F13E00B10EDD /* ChangeImageViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChangeImageViewController.h; sourceTree = "<group>"; };
 		A10E6BBC18D2F13E00B10EDD /* ChangeImageViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChangeImageViewController.m; sourceTree = "<group>"; };
 		A10E6BBD18D2F13E00B10EDD /* ChangeImageViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ChangeImageViewController.xib; sourceTree = "<group>"; };
-		A10EC10C17E0677C00EA4F9D /* libavcodec.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libavcodec.a; path = "../ios-frameworks/ffmpeg/lib/libavcodec.a"; sourceTree = "<group>"; };
-		A10EC10D17E0677C00EA4F9D /* libavdevice.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libavdevice.a; path = "../ios-frameworks/ffmpeg/lib/libavdevice.a"; sourceTree = "<group>"; };
-		A10EC10E17E0677C00EA4F9D /* libavfilter.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libavfilter.a; path = "../ios-frameworks/ffmpeg/lib/libavfilter.a"; sourceTree = "<group>"; };
-		A10EC10F17E0677C00EA4F9D /* libavformat.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libavformat.a; path = "../ios-frameworks/ffmpeg/lib/libavformat.a"; sourceTree = "<group>"; };
-		A10EC11017E0677C00EA4F9D /* libavutil.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libavutil.a; path = "../ios-frameworks/ffmpeg/lib/libavutil.a"; sourceTree = "<group>"; };
-		A10EC11117E0677C00EA4F9D /* libswresample.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libswresample.a; path = "../ios-frameworks/ffmpeg/lib/libswresample.a"; sourceTree = "<group>"; };
-		A10EC11217E0677C00EA4F9D /* libswscale.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libswscale.a; path = "../ios-frameworks/ffmpeg/lib/libswscale.a"; sourceTree = "<group>"; };
 		A1176B72180D1DD9000B7527 /* stream480p.sdp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = stream480p.sdp; sourceTree = "<group>"; };
 		A1176B73180D1DD9000B7527 /* stream720p.sdp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = stream720p.sdp; sourceTree = "<group>"; };
 		A118C19D187E4756009176F5 /* HttpCom.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HttpCom.h; sourceTree = "<group>"; };
@@ -2144,13 +2137,6 @@
 				A15430FC1818D08A00337EFE /* libcrypto.a */,
 				A15430FD1818D08A00337EFE /* libTestFlight.a */,
 				A15430FA1818CFD500337EFE /* H264MediaPlayer.framework */,
-				A10EC10C17E0677C00EA4F9D /* libavcodec.a */,
-				A10EC10D17E0677C00EA4F9D /* libavdevice.a */,
-				A10EC10E17E0677C00EA4F9D /* libavfilter.a */,
-				A10EC10F17E0677C00EA4F9D /* libavformat.a */,
-				A10EC11017E0677C00EA4F9D /* libavutil.a */,
-				A10EC11117E0677C00EA4F9D /* libswresample.a */,
-				A10EC11217E0677C00EA4F9D /* libswscale.a */,
 				3803A86115FF42ED00B4DD97 /* libsqlite3.dylib */,
 				3803A85F15FF42DA00B4DD97 /* libsqlite3.0.dylib */,
 				1DF5F4DF0D08C38300B7A737 /* UIKit.framework */,
@@ -5082,7 +5068,6 @@
 					"$(inherited)",
 					"$(SRCROOT)",
 					"$(SRCROOT)/../ios-frameworks",
-					"/Users/developer/work/ios-frameworks",
 				);
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
@@ -5137,7 +5122,6 @@
 					"$(inherited)",
 					"$(SRCROOT)",
 					"$(SRCROOT)/../ios-frameworks",
-					"/Users/developer/work/ios-frameworks",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = BlinkHD_ios_Prefix.pch;
@@ -5211,7 +5195,6 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)/../ios-frameworks",
-					"/Users/developer/work/ios-frameworks",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = BlinkHD_ios_Prefix.pch;
