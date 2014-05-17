@@ -402,6 +402,11 @@
 		8B29A08718AF500A00D36BE5 /* video_progress_bg@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B299F5118AF500900D36BE5 /* video_progress_bg@2x.png */; };
 		8B29A08818AF500A00D36BE5 /* video_progress_green.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B299F5218AF500900D36BE5 /* video_progress_green.png */; };
 		8B29A08918AF500A00D36BE5 /* video_progress_green@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B299F5318AF500900D36BE5 /* video_progress_green@2x.png */; };
+		8B29C25C191C78A80015E3FB /* camera_ble2.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B29C258191C78A80015E3FB /* camera_ble2.png */; };
+		8B29C25D191C78A80015E3FB /* camera_ble2@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B29C259191C78A80015E3FB /* camera_ble2@2x.png */; };
+		8B29C25E191C78A80015E3FB /* camera_ble3.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B29C25A191C78A80015E3FB /* camera_ble3.png */; };
+		8B29C25F191C78A80015E3FB /* camera_ble3@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B29C25B191C78A80015E3FB /* camera_ble3@2x.png */; };
+		8B409CA7191B3889008F1AE4 /* spider2_hd.flv in Resources */ = {isa = PBXBuildFile; fileRef = 8B409CA6191B3889008F1AE4 /* spider2_hd.flv */; };
 		8B53659318B34DA80018671F /* SensitivityTemperatureCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B53659218B34DA80018671F /* SensitivityTemperatureCell.m */; };
 		8B53659518B34DCA0018671F /* SensitivityTemperatureCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8B53659418B34DCA0018671F /* SensitivityTemperatureCell.xib */; };
 		8B68F5D118066CE500661527 /* PlaybackViewController_ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8B68F5D018066CE500661527 /* PlaybackViewController_ipad.xib */; };
@@ -1201,6 +1206,11 @@
 		8B299F5118AF500900D36BE5 /* video_progress_bg@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "video_progress_bg@2x.png"; sourceTree = "<group>"; };
 		8B299F5218AF500900D36BE5 /* video_progress_green.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = video_progress_green.png; sourceTree = "<group>"; };
 		8B299F5318AF500900D36BE5 /* video_progress_green@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "video_progress_green@2x.png"; sourceTree = "<group>"; };
+		8B29C258191C78A80015E3FB /* camera_ble2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = camera_ble2.png; sourceTree = "<group>"; };
+		8B29C259191C78A80015E3FB /* camera_ble2@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "camera_ble2@2x.png"; sourceTree = "<group>"; };
+		8B29C25A191C78A80015E3FB /* camera_ble3.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = camera_ble3.png; sourceTree = "<group>"; };
+		8B29C25B191C78A80015E3FB /* camera_ble3@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "camera_ble3@2x.png"; sourceTree = "<group>"; };
+		8B409CA6191B3889008F1AE4 /* spider2_hd.flv */ = {isa = PBXFileReference; lastKnownFileType = file; path = spider2_hd.flv; sourceTree = "<group>"; };
 		8B53659118B34DA80018671F /* SensitivityTemperatureCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SensitivityTemperatureCell.h; sourceTree = "<group>"; };
 		8B53659218B34DA80018671F /* SensitivityTemperatureCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SensitivityTemperatureCell.m; sourceTree = "<group>"; };
 		8B53659418B34DCA0018671F /* SensitivityTemperatureCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SensitivityTemperatureCell.xib; sourceTree = "<group>"; };
@@ -2808,6 +2818,7 @@
 		8B88C98918ACBC6200B074E5 /* Stream */ = {
 			isa = PBXGroup;
 			children = (
+				8B409CA6191B3889008F1AE4 /* spider2_hd.flv */,
 				8BA7F27E1851C57100BE0145 /* blink11hd360p.sdp */,
 				8BA7F27F1851C57100BE0145 /* blink11hd480p.sdp */,
 				8BA7F2801851C57100BE0145 /* blink11hd720p.sdp */,
@@ -3790,6 +3801,7 @@
 				8B9507AB18C9960D006D4945 /* setup_camera_b1@2x.png in Resources */,
 				A1B1E7CD18E9135800F076B6 /* back_pressed@2x.png in Resources */,
 				8B97A3C418BF1B5F008A38E1 /* Hubble_back_text.png in Resources */,
+				8B409CA7191B3889008F1AE4 /* spider2_hd.flv in Resources */,
 				8BA17EFA18B7399100129FE7 /* LoginViewController_35.xib in Resources */,
 				8B299FD018AF500900D36BE5 /* camera_action_pause_pressed@5.png in Resources */,
 				8B29A04718AF500A00D36BE5 /* scheduler.png in Resources */,

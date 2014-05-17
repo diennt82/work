@@ -740,9 +740,6 @@
     }
     else
     {
-        
-        
-        
         // popup force waiting..
         [NSTimer scheduledTimerWithTimeInterval: 3.0
                                          target:self
