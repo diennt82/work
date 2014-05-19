@@ -75,6 +75,8 @@
 #define TF_DEBUG_RESOLUTION_TAG 5002
 #define TF_DEBUG_BIT_RATE_TAG   5003
 
+#define TIMEOUT_BUFFERING       20// 20 seconds
+
 
 @interface H264PlayerViewController () <TimelineVCDelegate, BonjourDelegate, AudioOutStreamRemoteDelegate>
 {
@@ -129,6 +131,7 @@
 @property (nonatomic, retain) NSTimer *timerIncreaseBitRate;
 @property (nonatomic, retain) NSString *currentBitRate;
 @property (nonatomic, retain) NSString *messageStreamingState;
+@property (nonatomic, retain) NSTimer *timerBufferingTimeout;
 
 //property for Touch to Talk
 @property (nonatomic) BOOL walkieTalkieEnabled;
@@ -764,6 +767,20 @@ double _ticks = 0;
 
 #pragma mark - Delegate Stream callback
 
+- (void)forceRestartStream:(NSTimer *)timer
+{
+    //NSArray * args = [NSArray arrayWithObjects:
+     //                 [NSNumber numberWithInt:MEDIA_ERROR_SERVER_DIED], [NSNumber numberWithInt:-99], ,nil];
+    //force server died
+//    [self performSelectorOnMainThread:@selector(handleMessageOnMainThread:)
+//                           withObject:args
+//                        waitUntilDone:NO];
+    [self handleMessage:MEDIA_ERROR_SERVER_DIED ext1:-99 ext2:-1];
+    self.messageStreamingState = @"Low data bandwidth detected. Trying to connect...";
+    
+    NSLog(@"%s", __FUNCTION__);
+}
+
 -(void) handleMessage:(int) msg ext1: (int) ext1 ext2:(int) ext2
 {
     //NSLog(@"Got msg: %d ext1:%d ext2:%d ", msg, ext1, ext2);
@@ -795,6 +812,33 @@ double _ticks = 0;
     
     switch (msg)
     {
+        case MEDIA_INFO_START_BUFFERING:
+            
+            NSLog(@"%s MEDIA_INFO_START_BUFFERING", __FUNCTION__);
+            
+            if (_timerBufferingTimeout)
+            {
+                [_timerBufferingTimeout invalidate];
+                self.timerBufferingTimeout = nil;
+            }
+            
+            self.timerBufferingTimeout = [NSTimer scheduledTimerWithTimeInterval:TIMEOUT_BUFFERING
+                                                                          target:self
+                                                                        selector:@selector(forceRestartStream:)
+                                                                        userInfo:nil
+                                                                         repeats:NO];
+            break;
+            
+        case MEDIA_INFO_STOP_BUFFERING:
+            
+            NSLog(@"%s MEDIA_INFO_STOP_BUFFERING", __FUNCTION__);
+            
+            if (_timerBufferingTimeout)
+            {
+                [_timerBufferingTimeout invalidate];
+                self.timerBufferingTimeout = nil;
+            }
+            break;
 #ifdef SHOW_DEBUG_INFO
         case MEDIA_INFO_FRAMERATE_VIDEO:
         {
@@ -1035,7 +1079,13 @@ double _ticks = 0;
             _isShowCustomIndicator = YES;
             _isShowTextCameraIsNotAccesible = YES;
             
-    		NSLog(@"Timeout While streaming  OR server DIED - userWantToCancel: %d, returnFromPlayback: %d", userWantToCancel, _returnFromPlayback);
+            if (_timerBufferingTimeout)
+            {
+                [_timerBufferingTimeout invalidate];
+                self.timerBufferingTimeout = nil;
+            }
+            
+    		NSLog(@"Timeout While streaming  OR server DIED - userWantToCancel: %d, returnFromPlayback: %d, forceStop: %d", userWantToCancel, _returnFromPlayback, ext1);
             
     		//mHandler.dispatchMessage(Message.obtain(mHandler, Streamer.MSG_VIDEO_STREAM_HAS_STOPPED_UNEXPECTEDLY));
             
@@ -2069,6 +2119,12 @@ double _ticks = 0;
         {
             [_timerIncreaseBitRate invalidate];
             self.timerIncreaseBitRate = nil;
+        }
+        
+        if (_timerBufferingTimeout)
+        {
+            [_timerBufferingTimeout invalidate];
+            self.timerBufferingTimeout = nil;
         }
         
         if (h264Streamer != NULL)
