@@ -75,7 +75,7 @@
 #define TF_DEBUG_RESOLUTION_TAG 5002
 #define TF_DEBUG_BIT_RATE_TAG   5003
 
-#define TIMEOUT_BUFFERING       20// 20 seconds
+#define TIMEOUT_BUFFERING       15// 15 seconds
 
 
 @interface H264PlayerViewController () <TimelineVCDelegate, BonjourDelegate, AudioOutStreamRemoteDelegate>
@@ -812,8 +812,24 @@ double _ticks = 0;
     
     switch (msg)
     {
-        case MEDIA_INFO_START_BUFFERING:
+        case MEDIA_INFO_GET_AUDIO_PACKET:
+            NSLog(@"%s Got audio packet", __FUNCTION__);
             
+            if (_timerBufferingTimeout)
+            {
+                [_timerBufferingTimeout invalidate];
+                self.timerBufferingTimeout = nil;
+            }
+            self.timerBufferingTimeout = [NSTimer scheduledTimerWithTimeInterval:TIMEOUT_BUFFERING
+                                                                          target:self
+                                                                        selector:@selector(forceRestartStream:)
+                                                                        userInfo:nil
+                                                                         repeats:NO];
+         
+            
+            break;
+        case MEDIA_INFO_START_BUFFERING:
+
             NSLog(@"%s MEDIA_INFO_START_BUFFERING", __FUNCTION__);
             
             if (_timerBufferingTimeout)
