@@ -78,12 +78,14 @@
     self.is12hr = [[NSUserDefaults standardUserDefaults] boolForKey:@"IS_12_HR"];
     
     self.eventPage = 1;
+#if 0
     UIRefreshControl *refreshControl = [[UIRefreshControl alloc] init];
     [refreshControl addTarget:self
                        action:@selector(refreshEvents:)
              forControlEvents:UIControlEventValueChanged];
     self.refreshControl = refreshControl;
     [refreshControl release];
+#endif
     //[[UIApplication sharedApplication] setStatusBarOrientation:UIDeviceOrientationPortrait animated:NO];
 }
 
@@ -155,11 +157,11 @@
         self.eventPage = 1;
         self.shouldLoadMore = YES;
         
-        //[self.tableView reloadData];
+        [self.tableView reloadData];
         
         [self loadEvents:self.camChannel];
     }
-    
+
 }
 
 - (void)loadEvents: (CamChannel *)camChannel
@@ -171,7 +173,7 @@
     
     [self performSelectorInBackground:@selector(getEventsList_bg2:) withObject:camChannel];
 
-    [self.refreshControl endRefreshing];
+    //[self.refreshControl endRefreshing];
 }
 
 - (void)getEventFromDb:(CamChannel *) camChannel
@@ -800,7 +802,7 @@
 
 #pragma mark - Scroll view delegate
 
-#if 0
+#if 1
 - (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate
 {
     if (scrollView.contentOffset.y < -64.0f)

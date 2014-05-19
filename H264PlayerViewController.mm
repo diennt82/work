@@ -1192,7 +1192,8 @@ double _ticks = 0;
             if (self.selectedChannel.profile.isInLocal == TRUE)
             {
                 /* re-scan for the camera */
-                [self scan_for_missing_camera];
+                //[self scan_for_missing_camera];
+                [self setupCamera];
             }
             else //Remote connection -> go back and retry
             {
