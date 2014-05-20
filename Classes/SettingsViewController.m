@@ -1176,7 +1176,7 @@
                         self.sensitivityInfo.motionValue = 2;
                     }
                     
-                    self.sensitivityInfo.soundOn       = [settingsArray[2] boolValue];
+                    self.sensitivityInfo.soundOn = [settingsArray[2] boolValue];
                     
                     if (80 <= [settingsArray[3] integerValue])
                     {
@@ -1191,10 +1191,10 @@
                         self.sensitivityInfo.soundValue = 2;
                     }
                     
-                    self.sensitivityInfo.tempLowOn     = [settingsArray[5] boolValue];
-                    self.sensitivityInfo.tempHighOn    = [settingsArray[4] boolValue];
+                    self.sensitivityInfo.tempLowOn = [settingsArray[5] boolValue];
+                    self.sensitivityInfo.tempHighOn = [settingsArray[4] boolValue];
                     
-                    self.sensitivityInfo.tempLowValue  = [settingsArray[7] integerValue];
+                    self.sensitivityInfo.tempLowValue = [settingsArray[7] integerValue];
                     self.sensitivityInfo.tempHighValue = [settingsArray[6] integerValue];
                     
                     numOfRows[indexPath.section] = 4;
