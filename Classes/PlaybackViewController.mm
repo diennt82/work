@@ -602,10 +602,10 @@
     
     NSLog(@"%s current time: %d, duration: %lld, div: %f", __FUNCTION__, currentTime, _duration, (float)currentTime/(_duration * 100));
     
-    //self.ib_timerPlayBack.text = [self timeFormat:(float)(currentTime/1000)];
+    self.ib_timerPlayBack.text = [self timeFormat:(float)(currentTime/1000)];
 
-    NSDate *date = [NSDate datef];
-    self.ib_timerPlayBack.text = [NSString];
+//    NSDate *date = [NSDate datef];
+//    self.ib_timerPlayBack.text = [NSString];
     self.ib_sliderPlayBack.value = (float)currentTime / (_duration * 100);
     
     [NSTimer scheduledTimerWithTimeInterval:0.5
