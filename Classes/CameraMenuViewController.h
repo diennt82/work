@@ -14,6 +14,7 @@
 {
     NSString *_cameraName;
     NSString *_cameraNewName;
+    UIImage *imageSelected;
 }
 
 @property (nonatomic, assign) NSString *cameraName;

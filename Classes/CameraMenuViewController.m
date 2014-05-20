@@ -12,6 +12,14 @@
 #import <MonitorCommunication/MonitorCommunication.h>
 #import "define.h"
 #import "ChangeImageViewController.h"
+#import "CameraDetailCell.h"
+#import "SensitivityTemperatureCell.h"
+#import "SensitivityCell.h"
+#import "SensitivityInfo.h"
+#import "MBProgressHUD.h"
+#import "UIActionSheet+Blocks.h"
+
+
 
 #define ALERT_REMOVE_CAM        5
 #define ALERT_REMOVE_CAM_LOCAL  6
@@ -23,10 +31,27 @@
 #define ALERT_RENAME_OUT_LENGTH     11
 #define ALERT_RENAME_REGEX          12
 
+#define SENSITIVITY_MOTION_LOW      10
+#define SENSITIVITY_MOTION_MEDIUM   50
+#define SENSITIVITY_MOTION_HI       90
+
+#define SENSITIVITY_SOUND_LOW       80
+#define SENSITIVITY_SOUND_MEDIUM    70
+#define SENSITIVITY_SOUND_HI        25
+
 
 #define ENABLE_CHANGE_IMAGE 0
 
-@interface CameraMenuViewController () <UITableViewDataSource, UITableViewDelegate>
+@interface CameraMenuViewController () <UITableViewDataSource, UITableViewDelegate,SensitivityCellDelegate,SensitivityTemperaureCellDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate>
+{
+    int intTableSectionStatus; // 0 No open, 1 = 0 section open , 2 = 1 section open
+    
+}
+@property (retain, nonatomic) SensitivityInfo *sensitivityInfo;
+@property (nonatomic, retain) NSString *selectedReg;
+@property (nonatomic, retain) NSString *sensitivityMessage;
+@property (nonatomic, retain) BMS_JSON_Communication *jsonComm;
+
 
 @property (retain, nonatomic) IBOutlet UITableView *tableViewSettings;
 @property (retain, nonatomic) IBOutlet UIButton *btnRmoveCamera;
@@ -37,6 +62,8 @@
 @property (nonatomic, retain) NSString *apiKey;
 @property (nonatomic) BOOL isChangingName;
 @property (nonatomic, retain) UIAlertView *alertViewRename;
+
+@property (retain, nonatomic) IBOutlet UIView *vwHeaderCamDetail,*vwHeaderNotSens;
 
 @end
 
@@ -55,7 +82,8 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    // Do any additional setup after loading the view from its nib.
+    intTableSectionStatus = 0;
+    
     self.tableViewSettings.delegate = self;
     self.tableViewSettings.dataSource = self;
     
@@ -74,6 +102,33 @@
 //        self.isLoading = TRUE;
 //        [self performSelectorInBackground:@selector(updateFWVersion_bg) withObject:nil];
 //    }
+    
+    self.tableViewSettings.backgroundColor = [UIColor colorWithRed:249/255.0 green:249/255.0 blue:249/255.0 alpha:1];
+    
+    UIImageView *imgView = (UIImageView*)[self.vwHeaderNotSens viewWithTag:500];
+    if([self.camChannel.profile isNotAvailable]){
+        imgView.image = [UIImage imageNamed:@"sensitivity_disable@2x.png"];
+    }
+    
+    
+    //Set Navigation Back Button
+    UIImage *image = [UIImage imageNamed:@"Hubble_logo_back"];
+    CGRect frame = CGRectMake(0, 0, image.size.width, image.size.height);
+    
+    //init a normal UIButton using that image
+    UIButton* button = [[UIButton alloc] initWithFrame:frame];
+    [button setBackgroundImage:image forState:UIControlStateNormal];
+    [button setShowsTouchWhenHighlighted:YES];
+    
+    //set the button to handle clicks - this one calls a method called 'downloadClicked'
+    [button addTarget:self action:@selector(backButtonPressed) forControlEvents:UIControlEventTouchUpInside];
+    
+    //finally, create your UIBarButtonItem using that button
+    UIBarButtonItem* barButtonItem = [[UIBarButtonItem alloc] initWithCustomView:button];
+    
+    //then set it.  phew.
+    [self.navigationItem setLeftBarButtonItem:barButtonItem];
+    
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -83,7 +138,28 @@
     [self.navigationController.view setUserInteractionEnabled:YES];
 }
 
+- (void)didReceiveMemoryWarning
+{
+    [super didReceiveMemoryWarning];
+    // Dispose of any resources that can be recreated.
+}
+
+- (void)dealloc {
+    [_tableViewSettings release];
+    [_btnRmoveCamera release];
+    [_viewProgress release];
+    [_viewPorgress release];
+    [_alertViewRename release];
+    [super dealloc];
+}
+
 #pragma mark - Action
+
+-(void)backButtonPressed
+{
+    [self.navigationController popViewControllerAnimated:YES];
+}
+
 
 - (IBAction)btnRemoveCameraTouchUpInsideAction:(id)sender
 {
@@ -248,13 +324,17 @@
             {
                 if (![newName isEqualToString:self.camChannel.profile.name])
                 {
-                    _cameraNewName = newName;
+                    _cameraNewName = [newName retain];
                     self.isChangingName = TRUE;
                     [self.tableViewSettings reloadRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:0
                                                                                                                inSection:0]]
                                                   withRowAnimation:UITableViewRowAnimationAutomatic];
-
-                    [self changeCameraName];
+                    
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+                        [hud setLabelText:@"Updating..."];
+                        [self changeCameraName];
+                    });
                 }
                 else
                 {
@@ -299,41 +379,101 @@
 {
     //#warning Potentially incomplete method implementation.
     // Return the number of sections.
-    return 1;
+    //return 1;
+    
+    return 2; //1 for Camera Detail , 2 for Noti. Sensi.
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    //#warning Incomplete method implementation.
+/*    //#warning Incomplete method implementation.
     // Return the number of rows in the section.
 #if ENABLE_CHANGE_IMAGE
     return 3;
 #else
     return 2;
 #endif
+ */
+   
+    /*if(intTableSectionStatus==0)
+    {
+        return 0;
+    }
+    else{
+        if(section==0 && intTableSectionStatus==1){
+            return 1;
+        }
+        else if(section==1 && intTableSectionStatus==2){
+            return 3;
+        }
+    }*/
+    
+    if(section==0){
+        return 1;
+    }
+    else if(section==1){
+        return 3;
+    }
+    return 0;
+    
 }
 
-- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
+
+
+- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section{
+    
+    if(section==0)
+    {
+        return self.vwHeaderCamDetail;
+    }
+    else {
+        return self.vwHeaderNotSens;
+    }
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
-    return @"General";
+    return 50;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (self.camChannel.profile.name.length > 10 &&
+   /* if (self.camChannel.profile.name.length > 10 &&
         indexPath.row == 0)
     {
         return 66;
     }
     
-    return 45;
+    return 45;*/
+    
+    if(intTableSectionStatus==0)
+    {
+        return 0;
+    }
+    else{
+        if(indexPath.section==0 && intTableSectionStatus==1){
+            return 198;
+        }
+        else if(indexPath.section==1 && intTableSectionStatus==2){
+            if(indexPath.row==0 || indexPath.row==1)
+            {
+                return 120;
+            }
+            else{
+                return 227;
+            }
+        }
+    }
+
+    return 0;
 }
 
-- (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
+/*- (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
 {
     cell.backgroundColor = [UIColor colorWithRed:249/255.0 green:249/255.0 blue:249/255.0 alpha:1];
-}
+}*/
 
+/*
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
 #if ENABLE_CHANGE_IMAGE
@@ -505,6 +645,94 @@
     }
 #endif
 }
+ */
+
+-(UITableViewCell*)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if(indexPath.section==0)//General Setting
+    {
+        static NSString *cellIdentifier = @"CameraDetailCell";
+        CameraDetailCell *camDetCell = (CameraDetailCell*)[tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+        if(camDetCell==nil)
+        {
+            camDetCell = [[CameraDetailCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
+            [camDetCell.btnChangeImage addTarget:self action:@selector(btnChangeCameraIcon) forControlEvents:UIControlEventTouchUpInside];
+            [camDetCell.btnChangeName addTarget:self action:@selector(btnChangeCameraName) forControlEvents:UIControlEventTouchUpInside];
+            
+            camDetCell.selectionStyle = UITableViewCellSelectionStyleNone;
+        }
+        
+        camDetCell.lblCameraName.text = self.camChannel.profile.name;
+        camDetCell.lblCamVer.text = self.camChannel.profile.fw_version;
+        return camDetCell;
+
+    }
+    else //Sensitive Setting
+    {
+        if(indexPath.row==0 || indexPath.row==1)//Motion & Sound
+        {
+            static NSString *CellIdentifier = @"SensitivityCell";
+            SensitivityCell *cell = [self.tableViewSettings dequeueReusableCellWithIdentifier:CellIdentifier];
+            
+            NSArray *objects = [[NSBundle mainBundle] loadNibNamed:@"SensitivityCell" owner:nil options:nil];
+            
+            for (id curObj in objects)
+            {
+                
+                if([curObj isKindOfClass:[UITableViewCell class]])
+                {
+                    cell = (SensitivityCell *)curObj;
+                    break;
+                }
+            }
+            cell.selectionStyle = UITableViewCellSelectionStyleNone;
+            cell.sensitivityCellDelegate = self;
+            cell.rowIndex = indexPath.row ;
+            
+            if (indexPath.row == 0)
+            {
+                cell.nameLabel.text = @"Motion";
+                cell.switchValue   = _sensitivityInfo.motionOn;
+                cell.settingsValue = _sensitivityInfo.motionValue;
+
+            }
+            else
+            {
+                cell.nameLabel.text = @"Sound";
+                cell.switchValue   = _sensitivityInfo.soundOn;
+                cell.settingsValue = _sensitivityInfo.soundValue;
+            }
+            
+            return cell;
+
+        }
+        else
+        { //if(indexPath.row==2) Tempreture Cell
+            static NSString *CellIdentifier = @"SensitivityTemperatureCell";
+            SensitivityTemperatureCell *cell = [self.tableViewSettings dequeueReusableCellWithIdentifier:CellIdentifier];
+            
+            NSArray *objects = [[NSBundle mainBundle] loadNibNamed:@"SensitivityTemperatureCell" owner:nil options:nil];
+            
+            for (id curObj in objects)
+            {
+                if([curObj isKindOfClass:[SensitivityTemperatureCell class]])
+                {
+                    cell = (SensitivityTemperatureCell *)curObj;
+                    break;
+                }
+            }
+            cell.isFahrenheit    = _sensitivityInfo.tempIsFahrenheit;
+            cell.isSwitchOnLeft  = _sensitivityInfo.tempLowOn;
+            cell.isSwitchOnRight = _sensitivityInfo.tempHighOn;
+            cell.tempValueLeft   = _sensitivityInfo.tempLowValue;
+            cell.tempValueRight  = _sensitivityInfo.tempHighValue;
+            cell.sensitivityTempCellDelegate = self;
+
+             cell.selectionStyle = UITableViewCellSelectionStyleNone;
+            return cell;
+        }
+    }
+}
 
 
 #pragma mark - Table view delegate
@@ -515,7 +743,7 @@
     // Navigation logic may go here, for example:
     // Create the next view controller.
     
-    if (indexPath.row == 0)
+   /* if (indexPath.row == 0)
     {
         _cameraName = self.camChannel.profile.name;
         
@@ -550,6 +778,7 @@
         
     }
 #endif
+    */
 }
 
 #pragma mark - Server methods
@@ -640,9 +869,9 @@
     self.navigationItem.rightBarButtonItem.enabled = NO;
     self.navigationItem.hidesBackButton = YES;
 
-    [self.viewPorgress setHidden:NO];
-    [self.view addSubview:_viewPorgress];
-    [self.view bringSubviewToFront:_viewPorgress];
+    //[self.viewPorgress setHidden:NO];
+    //[self.view addSubview:_viewPorgress];
+    //[self.view bringSubviewToFront:_viewPorgress];
     
     BMS_JSON_Communication *jsonComm = [[BMS_JSON_Communication alloc] initWithObject:self
                                                                              Selector:nil
@@ -687,7 +916,11 @@
     
     self.navigationItem.hidesBackButton = NO;
     
-    [self performSelectorOnMainThread:@selector(updateUIRow:) withObject:[NSNumber numberWithInt:0] waitUntilDone:NO];
+    //[self performSelectorOnMainThread:@selector(updateUIRow:) withObject:[NSNumber numberWithInt:0] waitUntilDone:NO];
+    
+    [self.tableViewSettings reloadData];
+    [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+    
 }
 
 -(BOOL) isCamNameValidated:(NSString *) cameraNames
@@ -733,18 +966,458 @@
        nil] autorelease] show];
 }
 
-- (void)didReceiveMemoryWarning
+-(IBAction)btnCameraDetailPressed:(id)sender
 {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
+    if(intTableSectionStatus!=1){
+        intTableSectionStatus = 1;
+    }else{
+        intTableSectionStatus = 0;
+    }
+    [self.tableViewSettings beginUpdates];
+    [self.tableViewSettings reloadSections:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, 1)] withRowAnimation:UITableViewRowAnimationAutomatic];
+    [self.tableViewSettings endUpdates];
+    
+    
+
 }
 
-- (void)dealloc {
-    [_tableViewSettings release];
-    [_btnRmoveCamera release];
-    [_viewProgress release];
-    [_viewPorgress release];
-    [_alertViewRename release];
-    [super dealloc];
+-(IBAction)btnNotiSenPressed:(id)sender
+{
+    if([self.camChannel.profile isNotAvailable]){
+
+        return;
+    }
+    
+    if(intTableSectionStatus!=2){
+        intTableSectionStatus = 2;
+    }else{
+        intTableSectionStatus = 0;
+    }
+    
+    //[self.tableViewSettings reloadData];
+     [self.tableViewSettings beginUpdates];
+    [self.tableViewSettings reloadSections:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, 1)] withRowAnimation:UITableViewRowAnimationAutomatic];
+     [self.tableViewSettings endUpdates];
+    
+    if(intTableSectionStatus==2){
+        MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+        [hud setLabelText:@"Loading..."];
+        [self performSelector:@selector(getSensitivityInfoFromServer) withObject:nil afterDelay:0.1];
+    }
 }
+
+
+
+#pragma mark - Sensitivity deletate
+
+- (void)reportSwitchValue:(BOOL)value andRowIndex:(NSInteger)rowIndex
+{
+    //valueSwitchs[rowIndex] = value;
+    
+    NSString *cmd = @"action=command&command=";
+    
+    if (rowIndex == 0) // Motion
+    {
+        if (value)
+        {
+            cmd = [cmd stringByAppendingString:@"set_motion_area&grid=1x1&zone=00"]; // Enable
+        }
+        else
+        {
+            cmd = [cmd stringByAppendingString:@"set_motion_area&grid=1x1&zone="]; // Disable
+        }
+        
+        self.sensitivityInfo.motionOn = value;
+    }
+    else // Sound
+    {
+        if (value)
+        {
+            cmd = [cmd stringByAppendingString:@"vox_enable"]; // Enable
+        }
+        else
+        {
+            cmd = [cmd stringByAppendingString:@"vox_disable"]; // Disable
+        }
+        
+        self.sensitivityInfo.soundOn = value;
+    }
+    
+    [self performSelectorInBackground:@selector(sendToServerTheCommand:) withObject:cmd];
+}
+
+- (void)reportChangedSettingsValue:(NSInteger)value atRow:(NSInteger)rowIndx
+{
+    //valueSettings[rowIndx] = value;
+    NSString *cmd = @"action=command&command=";
+    
+    if (rowIndx == 0) // Motion
+    {
+        NSInteger motionValue = SENSITIVITY_MOTION_LOW;
+        
+        if (value == 0)
+        {
+            motionValue = SENSITIVITY_MOTION_LOW;
+        }
+        else if(value == 1)
+        {
+            motionValue = SENSITIVITY_MOTION_MEDIUM;
+        }
+        else // value = 2
+        {
+            motionValue = SENSITIVITY_MOTION_HI;
+        }
+        
+        cmd = [cmd stringByAppendingFormat:@"set_motion_sensitivity&setup=%d", motionValue];
+        
+        self.sensitivityInfo.motionValue = value;
+    }
+    else // Sound
+    {
+        NSInteger soundValue = SENSITIVITY_SOUND_LOW;
+        
+        if (value == 0)
+        {
+            soundValue = SENSITIVITY_SOUND_LOW;
+        }
+        else if(value == 1)
+        {
+            soundValue = SENSITIVITY_SOUND_MEDIUM;
+        }
+        else // value = 2
+        {
+            soundValue = SENSITIVITY_SOUND_HI;
+        }
+        
+        cmd = [cmd stringByAppendingFormat:@"vox_set_threshold&value=%d", soundValue];
+        
+        self.sensitivityInfo.soundOn = value;
+    }
+    
+    [self performSelectorInBackground:@selector(sendToServerTheCommand:) withObject:cmd];
+}
+
+#pragma  mark - Sensitivity temperature cell delegate
+
+- (void)valueChangedTypeTemperaure:(BOOL)isFahrenheit // NOT need to receive
+{
+    self.sensitivityInfo.tempIsFahrenheit = isFahrenheit;
+}
+
+- (void)valueChangedTempLowValue:(NSInteger)tempValue
+{
+    self.sensitivityInfo.tempLowValue = tempValue;
+    NSString *cmd = [NSString stringWithFormat:@"action=command&command=set_temp_lo_threshold&value=%d", tempValue];
+    
+    [self performSelectorInBackground:@selector(sendToServerTheCommand:) withObject:cmd];
+    
+    NSLog(@"%d", tempValue);
+}
+
+- (void)valueChangedTempLowOn:(BOOL)isOn
+{
+    self.sensitivityInfo.tempLowOn = isOn;
+    NSString *cmd = [NSString stringWithFormat:@"action=command&command=set_temp_lo_enable&value=%d", isOn];
+    
+    [self performSelectorInBackground:@selector(sendToServerTheCommand:) withObject:cmd];
+}
+
+- (void)valueChangedTempHighValue:(NSInteger)tempValue
+{
+    self.sensitivityInfo.tempHighValue = tempValue;
+    NSString *cmd = [NSString stringWithFormat:@"action=command&command=set_temp_hi_threshold&value=%d", tempValue];
+    
+    [self performSelectorInBackground:@selector(sendToServerTheCommand:) withObject:cmd];
+    NSLog(@"%d", tempValue);
+}
+
+- (void)valueChangedTempHighOn:(BOOL)isOn
+{
+    self.sensitivityInfo.tempHighOn = isOn;
+    NSString *cmd = [NSString stringWithFormat:@"action=command&command=set_temp_hi_enable&value=%d", isOn];
+    
+    [self performSelectorInBackground:@selector(sendToServerTheCommand:) withObject:cmd];
+}
+
+#pragma mark - BMS_JSON Comm
+
+- (void)sendToServerTheCommand:(NSString *) command
+{
+    if (_jsonComm == nil)
+    {
+        self.jsonComm = [[BMS_JSON_Communication alloc] initWithObject:self
+                                                              Selector:nil
+                                                          FailSelector:nil
+                                                             ServerErr:nil];
+    }
+    
+    NSDictionary *responseDict = [_jsonComm sendCommandBlockedWithRegistrationId:self.camChannel.profile.registrationID
+                                                                      andCommand:command
+                                                                       andApiKey:_apiKey];
+    //NSLog(@"SettingsVC - sendCommand: %@, response: %@", command, responseDict);
+    
+    if (responseDict)
+    {
+        NSLog(@"SettingsVC - sendCommand successfully: %@, status: %@", command, [responseDict objectForKey:@"status"]);
+    }
+    else
+    {
+        NSLog(@"SettingsVC - sendCommand failed responseDict = nil: %@", command);
+    }
+}
+
+-(void)btnChangeCameraName
+{
+    _cameraName = self.camChannel.profile.name;
+    
+    if (_alertViewRename == nil)
+    {
+        self.alertViewRename = [[UIAlertView alloc] initWithTitle:@"Change Camera Name"
+                                                          message:@"Enter the new location of this camera."
+                                                         delegate:self
+                                                cancelButtonTitle:@"Cancel"
+                                                otherButtonTitles:@"OK", nil];
+        self.alertViewRename.alertViewStyle = UIAlertViewStylePlainTextInput;
+        UITextField *textField = [_alertViewRename textFieldAtIndex:0];
+        [textField setText:_cameraName];
+        [textField setPlaceholder:@"Eg. Living Room,Nursery,etc"];
+        self.alertViewRename.tag = ALERT_RENAME_CAMERA;
+    }
+    
+    [_alertViewRename show];
+}
+
+-(void)btnChangeCameraIcon
+{
+    NSLog(@"WWW");
+   /* ChangeImageViewController *changeImageVC = [[ChangeImageViewController alloc] initWithNibName:@"ChangeImageViewController" bundle:nil];
+    [UIView transitionWithView:self.view
+                      duration:1.0
+                       options:UIViewAnimationOptionTransitionFlipFromBottom
+                    animations:^{
+                        changeImageVC.view.frame = self.view.bounds;
+                        [self.view addSubview:changeImageVC.view];
+                    }
+                    completion:^(BOOL finished) {
+                        changeImageVC.view.frame = self.view.bounds;
+                    }];*/
+    
+   
+    [UIActionSheet showInView:self.view
+                    withTitle:@"Change Image"
+            cancelButtonTitle:@"Cancel"
+       destructiveButtonTitle:nil
+            otherButtonTitles:@[@"Select image from gallery", @"Take a photo from camera"]
+                     tapBlock:^(UIActionSheet *actionSheet, NSInteger buttonIndex)
+    {
+       // NSLog(@"Chose %@", [actionSheet buttonTitleAtIndex:buttonIndex]);
+        
+        if(actionSheet.cancelButtonIndex == buttonIndex)
+        {
+            return ;
+        }
+        
+        if(buttonIndex==1 && ![UIImagePickerController availableMediaTypesForSourceType:UIImagePickerControllerSourceTypeCamera])
+        {
+            Alert(nil, @"You iOS device have not camera.")
+            return;
+        }
+        
+        UIImagePickerController *picker = [[UIImagePickerController alloc] init];
+        picker.delegate = self;
+        //picker.allowsEditing = YES;
+        if(buttonIndex==0)//Gallery
+        {
+            picker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
+        }
+        else if(buttonIndex==1)//Camera
+        {
+            picker.sourceType = UIImagePickerControllerSourceTypeCamera;
+        }
+        [self presentViewController:picker animated:YES completion:NULL];
+        
+    }];
+}
+
+#pragma mark - UIImagePicker Delegate
+- (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
+{
+    imageSelected = [[info valueForKey:UIImagePickerControllerOriginalImage] retain];
+   
+    [self dismissViewControllerAnimated:YES completion:^{
+       
+        UIActionSheet *as = [[UIActionSheet alloc] initWithTitle:@"Select Picture"
+                                                        delegate:nil
+                                               cancelButtonTitle:@"Cancel"
+                                          destructiveButtonTitle:nil
+                                               otherButtonTitles:@"Set Picture", nil];
+        as.actionSheetStyle = UIActionSheetStyleBlackTranslucent;
+        UIImageView *imageV = [[UIImageView alloc] initWithImage:imageSelected];
+        imageV.frame = CGRectMake(35, -300, 250, 250);
+        [as addSubview:imageV];
+        [imageV release];
+        
+        as.tapBlock = ^(UIActionSheet *actionSheet, NSInteger buttonIndex){
+            NSLog(@"Chose %@", [actionSheet buttonTitleAtIndex:buttonIndex]);
+            
+            if(actionSheet.cancelButtonIndex!=buttonIndex)
+            {
+                //self.camChannel.profile.registrationID
+                
+                NSArray *paths = NSSearchPathForDirectoriesInDomains
+                (NSDocumentDirectory, NSUserDomainMask, YES);
+                NSString  *strPath = [[paths objectAtIndex:0] retain];
+                
+                strPath = [strPath stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.jpg",self.camChannel.profile.registrationID]];
+                
+                if([[NSFileManager defaultManager] fileExistsAtPath:strPath])
+                {
+                    [[NSFileManager defaultManager] removeItemAtPath:strPath error:nil];
+                }
+                [UIImageJPEGRepresentation(imageSelected, 0.5) writeToFile:strPath atomically:YES];
+               // [strPath release];
+            }
+        };
+        [as showInView:self.view];
+    }];
+}
+
+- (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker
+{
+    [self dismissViewControllerAnimated:YES completion:NULL];
+}
+
+
+
+- (void)getSensitivityInfoFromServer
+{
+    //self.selectedReg = [[NSUserDefaults standardUserDefaults] stringForKey:@"REG"];
+    //NSString *apiKey = [[NSUserDefaults standardUserDefaults] stringForKey:@"PortalApiKey"];
+    
+    if(self.sensitivityInfo==nil){
+        self.sensitivityInfo = [[SensitivityInfo alloc] init];
+    }
+    
+    if (_jsonComm == nil)
+    {
+        self.jsonComm = [[BMS_JSON_Communication alloc] initWithObject:self
+                                                              Selector:nil
+                                                          FailSelector:nil
+                                                             ServerErr:nil];
+    }
+    
+    NSDictionary *responseDict = [_jsonComm sendCommandBlockedWithRegistrationId:self.camChannel.profile.registrationID
+                                                                      andCommand:@"action=command&command=device_setting"
+                                                                       andApiKey:_apiKey];
+    
+    self.isLoading = FALSE;
+    
+    if (responseDict != nil)
+    {
+        if ([[responseDict objectForKey:@"status"] integerValue] == 200)
+        {
+            // "body": "error_in_control_command : 701"
+            // "body:: "device_setting: ms=1,me=70,vs=1,vt=80,hs=0,ls=1,ht=30,lt=18"
+            NSString *body = [[[responseDict objectForKey: @"data"] objectForKey: @"device_response"] objectForKey: @"body"];
+            
+            if ([body hasPrefix:@"error"])
+            {
+                //numOfRows[indexPath.section] = 2;
+                intTableSectionStatus=0;
+                self.sensitivityMessage = body;
+            }
+            else
+            {
+                NSRange range = [body rangeOfString:@": "];
+                
+                if (range.location != NSNotFound)
+                {
+                    NSString *settingsValue = [body substringFromIndex:range.location + 2];
+                    NSMutableArray *settingsArray = (NSMutableArray *)[settingsValue componentsSeparatedByString:@","];
+                    
+                    for (int i = 0; i < settingsArray.count; ++i)
+                    {
+                        settingsArray[i] = [settingsArray[i] substringFromIndex:3];
+                    }
+                    
+                    self.sensitivityInfo.motionOn      = [settingsArray[0] integerValue];
+                    NSLog(@"%@, %d", settingsArray[0], [settingsArray[0] integerValue]);
+                    
+                    if ([settingsArray[1] integerValue] <= 10)
+                    {
+                        self.sensitivityInfo.motionValue = 0;
+                    }
+                    else if (10 < [settingsArray[1] integerValue] && [settingsArray[1] integerValue] <= 50)
+                    {
+                        self.sensitivityInfo.motionValue = 1;
+                    }
+                    else
+                    {
+                        self.sensitivityInfo.motionValue = 2;
+                    }
+                    
+                    self.sensitivityInfo.soundOn       = [settingsArray[2] boolValue];
+                    
+                    if (80 <= [settingsArray[3] integerValue])
+                    {
+                        self.sensitivityInfo.soundValue = 0;
+                    }
+                    else if (70 <= [settingsArray[3] integerValue] && [settingsArray[3] integerValue] < 80)
+                    {
+                        self.sensitivityInfo.soundValue = 1;
+                    }
+                    else
+                    {
+                        self.sensitivityInfo.soundValue = 2;
+                    }
+                    
+                    self.sensitivityInfo.tempLowOn     = [settingsArray[5] boolValue];
+                    self.sensitivityInfo.tempHighOn    = [settingsArray[4] boolValue];
+                    
+                    self.sensitivityInfo.tempLowValue  = [settingsArray[7] integerValue];
+                    self.sensitivityInfo.tempHighValue = [settingsArray[6] integerValue];
+                    
+                    //numOfRows[indexPath.section] = 4;
+                    //self.isExistSensitivityData = TRUE;
+                }
+                else
+                {
+                    //numOfRows[indexPath.section] = 2;
+                    intTableSectionStatus=0;
+                    self.sensitivityMessage = @"Error -Load Sensitivity Settings!";
+                }
+            }
+        }
+        else
+        {
+            //numOfRows[indexPath.section] = 2;
+            intTableSectionStatus=0;
+            self.sensitivityMessage = @"Error -Load Sensitivity Settings error!";
+        }
+    }
+    else
+    {
+       // numOfRows[indexPath.section] = 2;
+        intTableSectionStatus=0;
+        self.sensitivityMessage = @"Error -Load Sensitivity Settings error!";
+    }
+    
+    [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+    [self.tableViewSettings reloadData];
+    
+    if(intTableSectionStatus==0)
+    {
+        MBProgressHUD *showError = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+        [showError setLabelText:self.sensitivityMessage];
+        [showError setMode:MBProgressHUDModeText];
+        
+        dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, 5 * NSEC_PER_SEC);
+        dispatch_after(popTime, dispatch_get_main_queue(), ^{
+           
+            [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+        });
+    }
+}
+
+
 @end

@@ -60,6 +60,11 @@
     self.imageViewCircleArray = [NSArray arrayWithObjects:[self viewWithTag:500], [self viewWithTag:501], [self viewWithTag:502], nil];
     
     UIImageView *imageViewLine = (UIImageView *)[self viewWithTag:509];
+    if(_switchValue){
+        imageViewLine.image = [UIImage imageNamed:@"settings_line.png"];
+    }else{
+        imageViewLine.image = [UIImage imageNamed:@"settings_line_white.png"];
+    }
     
     UIImageView *imageView3 = (UIImageView *)[self viewWithTag:503];
     imageView3.center = CGPointMake(imageView3.center.x, imageViewLine.center.y);
@@ -76,6 +81,14 @@
         imageView.center = CGPointMake(imageView.center.x, imageViewLine.center.y);
         UITapGestureRecognizer *tapGesture = [[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(singleTap:)] autorelease];
         [imageView addGestureRecognizer:tapGesture];
+        
+        if(!_switchValue)
+        {
+            imageView.image = [UIImage imageNamed:@"settings_circle_disable.png"];
+        }else{
+            imageView.image = [UIImage imageNamed:@"settings_circle.png"];
+        }
+
     }
     
     self.imageViewCircleWhite.center = ((UIImageView *)_imageViewCircleArray[_settingsValue]).center;
@@ -101,6 +114,18 @@
     for (UIImageView *imageView in _imageViewCircleArray)
     {
         imageView.userInteractionEnabled = _switchValue;
+        if(!_switchValue)
+        {
+            imageView.image = [UIImage imageNamed:@"settings_circle_disable.png"];
+        }else{
+            imageView.image = [UIImage imageNamed:@"settings_circle.png"];
+        }
+    }
+    UIImageView *imageViewLine = (UIImageView *)[self viewWithTag:509];
+    if(_switchValue){
+        imageViewLine.image = [UIImage imageNamed:@"settings_line.png"];
+    }else{
+        imageViewLine.image = [UIImage imageNamed:@"settings_line_white.png"];
     }
     
     [_sensitivityCellDelegate reportSwitchValue:_switchValue andRowIndex:_rowIndex];
