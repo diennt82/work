@@ -79,7 +79,7 @@
     //Here is show indicator
     self.activityIndicator.hidden = NO;
     [self.activityIndicator startAnimating];
-    self.ib_sliderPlayBack.userInteractionEnabled = NO; // Disable it because it's featur not done yet!
+    //self.ib_sliderPlayBack.userInteractionEnabled = NO; // Disable it because it's featur not done yet!
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -163,9 +163,10 @@
 - (void)startStream_bg
 {
     status_t status = !NO_ERROR;
-    NSString * url = self.urlVideo;
-    //NSString * url = @"http://cvision-office.no-ip.info/release/spider2_hd.flv";
+    //NSString * url = self.urlVideo;
+    NSString * url = @"http://cvision-office.no-ip.info/release/spider2_hd.flv";
     //NSString * url = [[NSBundle mainBundle] pathForResource:@"spider2_hd" ofType:@"flv"];
+    //NSString *url = @"http://hubble-resources.s3.amazonaws.com/devices/01006644334C5A03AEPGARBUYQ/clips/44334C5A03AE_04_20140519171005000_00001_last.flv?AWSAccessKeyId=AKIAJNYQ3ONBL7OLSZDA&Expires=1400580905&Signature=kiaEmQ%2Bxw6eiskBpEgwsKPCmLd4%3D";
     status = _playbackStreamer->setDataSource([url UTF8String]);
     printf("setDataSource return: %d\n", status);
     
@@ -244,6 +245,8 @@
         case MEDIA_SEEK_COMPLETE:
             dispatch_async(dispatch_get_main_queue(), ^{
                 self.activityIndicator.hidden = YES;
+                self.ib_playPlayBack.selected = NO;
+                self.ib_myOverlay.userInteractionEnabled = YES;
                 [self watcher];
             });
             break;
@@ -331,7 +334,6 @@
 - (void)goBackToPlayList
 {
     self.userWantToBack = TRUE;
-    
     self.ib_playPlayBack.enabled = NO;
     
     if (_playbackStreamer != NULL)
@@ -527,14 +529,11 @@
     }
 }
 
-- (IBAction)sliderProgressTouchUpInsideAction:(id)sender
+- (IBAction)sliderProgressTouchUpInsideAction:(UISlider *)sender
 {
-    UISlider *slider = (UISlider *)sender;
-    int64_t seekTarget = (slider.value * 100 * _duration) * 10 + 20069258499;
-                                                                  //1279873122304
-                                                                  //1220588077056
-                                                                  // 124509814784
-    NSLog(@"%s value: %f, target: %lld", __FUNCTION__, slider.value, seekTarget);//0.666,667 --> 666,667
+    int64_t seekTarget = (sender.value * _duration);
+    
+    NSLog(@"%s value: %f, target: %lld", __FUNCTION__, sender.value, seekTarget);//0.666,667 --> 666,667
     
     if (_playbackStreamer   &&
         _isPause)
@@ -542,16 +541,16 @@
         self.activityIndicator.hidden = NO;
         self.isPause = NO;
         
-        //_playbackStreamer->seekTo(seekTarget);// USE THIS
+        _playbackStreamer->seekTo(seekTarget);// USE THIS
 
-        self.ib_playPlayBack.selected = NO;
         self.view.userInteractionEnabled = YES;
+        self.ib_myOverlay.userInteractionEnabled = NO;
         
         [self showControlMenu];
     }
 }
 
-- (IBAction)sliderProgressTouchUpOutsideAction:(id)sender
+- (IBAction)sliderProgressTouchUpOutsideAction:(UISlider *)sender
 {
     // Option ♀(✿◠‿◠) 
     [self sliderProgressTouchUpInsideAction:sender];
@@ -601,10 +600,12 @@
 
     int currentTime = _playbackStreamer->getCurrPos();
     
-    //NSLog(@"%s current time: %d, duration: %lld, div: %f", __FUNCTION__, currentTime, _duration, (float)currentTime/(_duration * 100));
+    NSLog(@"%s current time: %d, duration: %lld, div: %f", __FUNCTION__, currentTime, _duration, (float)currentTime/(_duration * 100));
     
-    self.ib_timerPlayBack.text = [self timeFormat:(float)((currentTime)/1000)];
+    //self.ib_timerPlayBack.text = [self timeFormat:(float)(currentTime/1000)];
 
+    NSDate *date = [NSDate datef];
+    self.ib_timerPlayBack.text = [NSString];
     self.ib_sliderPlayBack.value = (float)currentTime / (_duration * 100);
     
     [NSTimer scheduledTimerWithTimeInterval:0.5
