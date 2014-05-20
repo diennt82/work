@@ -813,7 +813,7 @@ double _ticks = 0;
     switch (msg)
     {
         case MEDIA_INFO_GET_AUDIO_PACKET:
-            NSLog(@"%s Got audio packet", __FUNCTION__);
+            //NSLog(@"%s Got audio packet", __FUNCTION__);
             
             if (_timerBufferingTimeout)
             {
