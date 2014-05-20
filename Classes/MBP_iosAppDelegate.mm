@@ -552,6 +552,14 @@ void checkingApplicationCrashed()
         [userDefaults setInteger:viewController.app_stage forKey:@"ApplicationStage"];
         [userDefaults synchronize];
     }
+    
+    // Workaround: MFMailComposeViewController does not dismiss keyboard when application enters background
+    UITextView *dummyTextView = [[[UITextView alloc] init] autorelease];
+    [self.window.rootViewController.presentedViewController.view addSubview:dummyTextView];
+    [dummyTextView becomeFirstResponder];
+    [dummyTextView resignFirstResponder];
+    [dummyTextView removeFromSuperview];
+    // End of workaround
 }
 
 

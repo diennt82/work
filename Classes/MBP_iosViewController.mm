@@ -950,11 +950,19 @@
 				break;
 			case 1:
             {
+                /*
+                 * Try to hide MFMailComposeViewController's keyboard first.
+                 */
+                // Workaround: MFMailComposeViewController does not dismiss keyboard when application enters background or changes view screen.
+                UITextView *dummyTextView = [[[UITextView alloc] init] autorelease];
+                [((UIWindow *)[[[UIApplication sharedApplication] windows] objectAtIndex:0]).rootViewController.presentedViewController.view addSubview:dummyTextView];
+                [dummyTextView becomeFirstResponder];
+                [dummyTextView resignFirstResponder];
+                [dummyTextView removeFromSuperview];
+                // End of workaround
                 
 				if (_menuVC != nil)
 				{
-					
-                    
 					NSArray * views = _menuVC.navigationController.viewControllers;
 					NSLog(@"views count = %d",[views count] );
 					if ( [views count] > 1)
@@ -991,15 +999,11 @@
                 [latestCamAlert release];
                 latestCamAlert = nil;
                 
-                
-                
                 [pushAlert release];
                 pushAlert = nil;
-                
-                
-                
-				break;
             }
+                break;
+                
 			default:
 				break;
                 
@@ -1088,6 +1092,18 @@
 			case 0:
 				break;
 			case 1:
+            {
+                /*
+                 * Try to hide MFMailComposeViewController's keyboard first.
+                 */
+                
+                // Workaround: MFMailComposeViewController does not dismiss keyboard when application enters background or changes view screen.
+                UITextView *dummyTextView = [[[UITextView alloc] init] autorelease];
+                [((UIWindow *)[[[UIApplication sharedApplication] windows] objectAtIndex:0]).rootViewController.presentedViewController.view addSubview:dummyTextView];
+                [dummyTextView becomeFirstResponder];
+                [dummyTextView resignFirstResponder];
+                [dummyTextView removeFromSuperview];
+                // End of workaround
                 
 				if (_menuVC != nil)
 				{
@@ -1125,7 +1141,9 @@
                 
                 
 				[self sendStatus:LOGIN];
+            }
 				break;
+                
 			default:
 				break;
                 
