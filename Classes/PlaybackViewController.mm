@@ -24,8 +24,7 @@
 @interface PlaybackViewController()
 
 @property (nonatomic) BOOL isPause;
-@property (nonatomic) int duration;
-@property (nonatomic) int64_t startPositionPacket;
+@property (nonatomic) int64_t duration;
 @property (nonatomic) int64_t startPositionMovieFile;
 
 @end
@@ -72,7 +71,6 @@
     singleTap.numberOfTapsRequired = 1;
     singleTap.numberOfTouchesRequired = 1;
     [self.view addGestureRecognizer:singleTap];
-    self.startPositionPacket = 0;
     self.startPositionMovieFile = 0;
 }
 
@@ -83,7 +81,7 @@
     //Here is show indicator
     self.activityIndicator.hidden = NO;
     [self.activityIndicator startAnimating];
-    //self.ib_sliderPlayBack.userInteractionEnabled = NO; // Disable it because it's featur not done yet!
+    self.ib_sliderPlayBack.userInteractionEnabled = NO; // Disable it because it's featur not done yet!
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -167,10 +165,10 @@
 - (void)startStream_bg
 {
     status_t status = !NO_ERROR;
-    //NSString * url = self.urlVideo;
+    NSString * url = self.urlVideo;
     //NSString * url = @"http://cvision-office.no-ip.info/release/spider2_hd.flv";
     //NSString * url = [[NSBundle mainBundle] pathForResource:@"spider2_hd" ofType:@"flv"];
-    NSString *url = @"http://hubble-resources.s3.amazonaws.com/devices/01006644334C5A03AEPGARBUYQ/clips/44334C5A03AE_04_20140520132110000_00001_last.flv?AWSAccessKeyId=AKIAJNYQ3ONBL7OLSZDA&Expires=1400655781&Signature=vViTbk06i9St%2Bm7CWRFkEWrxXjo%3D";
+    //NSString *url = @"http://hubble-resources.s3.amazonaws.com/devices/01006644334C5A03AEPGARBUYQ/clips/44334C5A03AE_04_20140521142542000_00001_last.flv?AWSAccessKeyId=AKIAJNYQ3ONBL7OLSZDA&Expires=1400744717&Signature=nS2CQ%2F9%2BcjPPmbqs43ruJlocPbE%3D";
     status = _playbackStreamer->setDataSource([url UTF8String]);
     printf("setDataSource return: %d\n", status);
     
@@ -195,6 +193,7 @@
         self.ib_myOverlay.hidden = NO;
         [self.ib_sliderPlayBack setMinimumTrackTintColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"video_progress_green"]]];
         _playbackStreamer -> getDuration(&_duration);
+        self.ib_sliderPlayBack.maximumValue = _duration * 100;
         [self watcher];
     });
     
@@ -535,7 +534,7 @@
 
 - (IBAction)sliderProgressTouchUpInsideAction:(UISlider *)sender
 {
-    int64_t seekTarget = (sender.value * _duration);
+    int64_t seekTarget = sender.value;
     
     NSLog(@"%s value: %f, target: %lld", __FUNCTION__, sender.value, seekTarget);//0.666,667 --> 666,667
     
@@ -601,35 +600,27 @@
     {
         return;
     }
-
-    if (_startPositionPacket == 0)
-    {
-        _playbackStreamer->getStartPositionPacket(&_startPositionPacket);
-    }
     
     if (_startPositionMovieFile == 0)
     {
         _playbackStreamer->getStartPositionMovieFile(&_startPositionMovieFile);
+        self.ib_sliderPlayBack.minimumValue = _startPositionMovieFile;
     }
     
-    int currentTime = _playbackStreamer->getCurrPos() - _startPositionMovieFile + (AV_TIME_BASE + _startPositionPacket * 1000);
+    int currentTime = _playbackStreamer->getCurrPos();
     
     if (currentTime < 0)
     {
         currentTime = 0;
     }
     
-    int duration = _duration * 100 - _startPositionMovieFile;
-    
-    CGFloat div = (CGFloat)currentTime / duration;
-    
-    NSLog(@"%s current time: %d, duration: %d, div: %f, %lld", __FUNCTION__, currentTime, duration, div, _startPositionPacket);
-    
-    self.ib_timerPlayBack.text = [self timeFormat:(float)(currentTime/1000)];
+    self.ib_sliderPlayBack.value = currentTime;
 
-//    NSDate *date = [NSDate datef];
-//    self.ib_timerPlayBack.text = [NSString];
-    self.ib_sliderPlayBack.value = div;
+    NSString *strTime = [NSString stringWithFormat:@"%02d:%02d", currentTime/100000/60, currentTime/100000 % 60];
+#if DEBUG
+    NSLog(@"%s strTime: %@", __FUNCTION__, strTime);
+#endif
+    self.ib_timerPlayBack.text = strTime;
     
     [NSTimer scheduledTimerWithTimeInterval:1
                                      target:self
@@ -640,13 +631,16 @@
 }
 
 - (NSString *) timeFormat: (float) seconds {
-    
+    NSLog(@"%s seconds: %f", __FUNCTION__, seconds);
     int minutes = seconds / 60;
     int sec     = fabs(round((int)seconds % 60));
-    NSString *cm = minutes <= 9 ? @"0": @"";
-    NSString *cs = sec <= 9 ? @"0": @"";
     
-    return [NSString stringWithFormat:@"%@%i:%@%i",cm, minutes, cs, sec];
+    return [NSString stringWithFormat:@"%02d:%02d", minutes, sec];
+    
+//    NSString *cm = minutes <= 9 ? @"00": @"";
+//    NSString *cs = sec <= 9 ? @"00": @"";
+//    
+//    return [NSString stringWithFormat:@"%@%i:%@%i", cm, minutes, cs, sec];
 }
 
 #pragma mark - Poll camera events
