@@ -108,10 +108,6 @@
 {
     [super viewDidAppear:animated];
     [[KISSMetricsAPI sharedAPI] recordEvent:@"Login Screen" withProperties:nil];
-    
-
-#warning Just for Test
-    [self buttnEnterTouchUpInsideAction:nil];
 }
 
 - (void)viewWillDisappear:(BOOL)animated
