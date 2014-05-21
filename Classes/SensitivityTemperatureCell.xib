@@ -88,7 +88,7 @@
                         <nil key="highlightedColor"/>
                     </label>
                     <button opaque="NO" contentMode="center" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="n1J-K4-Ky5">
-                        <rect key="frame" x="20" y="116" width="30" height="30"/>
+                        <rect key="frame" x="15" y="116" width="30" height="30"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                         <state key="normal" image="temp_minus.png">
@@ -110,7 +110,7 @@
                         </connections>
                     </button>
                     <button opaque="NO" contentMode="center" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="1jf-lc-vFR">
-                        <rect key="frame" x="169" y="116" width="30" height="30"/>
+                        <rect key="frame" x="167" y="116" width="30" height="30"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                         <state key="normal" image="temp_minus.png">

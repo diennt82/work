@@ -163,7 +163,7 @@
 
 - (IBAction)btnRemoveCameraTouchUpInsideAction:(id)sender
 {
-    self.navigationItem.hidesBackButton = YES;
+    //self.navigationItem.hidesBackButton = YES;
     self.view.userInteractionEnabled = NO;
     self.btnRmoveCamera.enabled = NO;
     
@@ -362,7 +362,7 @@
         {
             self.viewProgress.hidden = YES;
             
-            self.navigationItem.hidesBackButton = NO;
+            //self.navigationItem.hidesBackButton = NO;
             self.view.userInteractionEnabled = YES;
             self.btnRmoveCamera.enabled = YES;
         }
@@ -682,6 +682,7 @@
                 if([curObj isKindOfClass:[UITableViewCell class]])
                 {
                     cell = (SensitivityCell *)curObj;
+                    cell.backgroundColor = COLOR_RGB(43.0, 50.0, 56.0);
                     break;
                 }
             }
@@ -718,6 +719,7 @@
                 if([curObj isKindOfClass:[SensitivityTemperatureCell class]])
                 {
                     cell = (SensitivityTemperatureCell *)curObj;
+                    cell.backgroundColor = COLOR_RGB(43.0, 50.0, 56.0);
                     break;
                 }
             }
@@ -867,7 +869,7 @@
 - (void)changeCameraName
 {
     self.navigationItem.rightBarButtonItem.enabled = NO;
-    self.navigationItem.hidesBackButton = YES;
+    //self.navigationItem.hidesBackButton = YES;
 
     //[self.viewPorgress setHidden:NO];
     //[self.view addSubview:_viewPorgress];
@@ -914,7 +916,7 @@
                            otherButtonTitles:@"OK", nil] autorelease] show];
     }
     
-    self.navigationItem.hidesBackButton = NO;
+    //self.navigationItem.hidesBackButton = NO;
     
     //[self performSelectorOnMainThread:@selector(updateUIRow:) withObject:[NSNumber numberWithInt:0] waitUntilDone:NO];
     

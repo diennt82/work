@@ -17,6 +17,7 @@
         
         NSArray *nibArray = [[NSBundle mainBundle]loadNibNamed:@"CameraDetailCell" owner:self options:nil];
         self = [nibArray objectAtIndex:0];
+        self.backgroundColor = COLOR_RGB(43.0, 50.0, 56.0);
     }
     return self;
 }
