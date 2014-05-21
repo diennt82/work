@@ -1209,7 +1209,8 @@ double _ticks = 0;
             {
                 /* re-scan for the camera */
                 //[self scan_for_missing_camera];
-                [self setupCamera];
+                //[self setupCamera];
+                [self scanCamera];
             }
             else //Remote connection -> go back and retry
             {

@@ -24,7 +24,9 @@
 @interface PlaybackViewController()
 
 @property (nonatomic) BOOL isPause;
-@property (nonatomic) int64_t duration;
+@property (nonatomic) int duration;
+@property (nonatomic) int64_t startPositionPacket;
+@property (nonatomic) int64_t startPositionMovieFile;
 
 @end
 
@@ -70,6 +72,8 @@
     singleTap.numberOfTapsRequired = 1;
     singleTap.numberOfTouchesRequired = 1;
     [self.view addGestureRecognizer:singleTap];
+    self.startPositionPacket = 0;
+    self.startPositionMovieFile = 0;
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -164,9 +168,9 @@
 {
     status_t status = !NO_ERROR;
     //NSString * url = self.urlVideo;
-    NSString * url = @"http://cvision-office.no-ip.info/release/spider2_hd.flv";
+    //NSString * url = @"http://cvision-office.no-ip.info/release/spider2_hd.flv";
     //NSString * url = [[NSBundle mainBundle] pathForResource:@"spider2_hd" ofType:@"flv"];
-    //NSString *url = @"http://hubble-resources.s3.amazonaws.com/devices/01006644334C5A03AEPGARBUYQ/clips/44334C5A03AE_04_20140519171005000_00001_last.flv?AWSAccessKeyId=AKIAJNYQ3ONBL7OLSZDA&Expires=1400580905&Signature=kiaEmQ%2Bxw6eiskBpEgwsKPCmLd4%3D";
+    NSString *url = @"http://hubble-resources.s3.amazonaws.com/devices/01006644334C5A03AEPGARBUYQ/clips/44334C5A03AE_04_20140520132110000_00001_last.flv?AWSAccessKeyId=AKIAJNYQ3ONBL7OLSZDA&Expires=1400655781&Signature=vViTbk06i9St%2Bm7CWRFkEWrxXjo%3D";
     status = _playbackStreamer->setDataSource([url UTF8String]);
     printf("setDataSource return: %d\n", status);
     
@@ -598,17 +602,36 @@
         return;
     }
 
-    int currentTime = _playbackStreamer->getCurrPos();
+    if (_startPositionPacket == 0)
+    {
+        _playbackStreamer->getStartPositionPacket(&_startPositionPacket);
+    }
     
-    NSLog(@"%s current time: %d, duration: %lld, div: %f", __FUNCTION__, currentTime, _duration, (float)currentTime/(_duration * 100));
+    if (_startPositionMovieFile == 0)
+    {
+        _playbackStreamer->getStartPositionMovieFile(&_startPositionMovieFile);
+    }
+    
+    int currentTime = _playbackStreamer->getCurrPos() - _startPositionMovieFile + (AV_TIME_BASE + _startPositionPacket * 1000);
+    
+    if (currentTime < 0)
+    {
+        currentTime = 0;
+    }
+    
+    int duration = _duration * 100 - _startPositionMovieFile;
+    
+    CGFloat div = (CGFloat)currentTime / duration;
+    
+    NSLog(@"%s current time: %d, duration: %d, div: %f, %lld", __FUNCTION__, currentTime, duration, div, _startPositionPacket);
     
     self.ib_timerPlayBack.text = [self timeFormat:(float)(currentTime/1000)];
 
 //    NSDate *date = [NSDate datef];
 //    self.ib_timerPlayBack.text = [NSString];
-    self.ib_sliderPlayBack.value = (float)currentTime / (_duration * 100);
+    self.ib_sliderPlayBack.value = div;
     
-    [NSTimer scheduledTimerWithTimeInterval:0.5
+    [NSTimer scheduledTimerWithTimeInterval:1
                                      target:self
                                    selector:@selector(watcher)
                                    userInfo:nil
