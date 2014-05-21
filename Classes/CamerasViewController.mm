@@ -236,7 +236,7 @@
     MenuViewController *menuVC = (MenuViewController *)self.parentVC;
     
     cameraMenuCV.cameraMenuDelegate = menuVC.menuDelegate;
-    menuVC.navigationItem.title = @"Menu";
+    //menuVC.navigationItem.title = @"Menu";
     [menuVC.navigationController pushViewController:cameraMenuCV animated:YES];
     
     [cameraMenuCV release];
