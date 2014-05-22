@@ -28,6 +28,11 @@
 
 - (void)drawRect:(CGRect)rect
 {
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+    {
+        self.eventLabel.frame = CGRectMake(_eventLabel.frame.origin.x, _eventLabel.frame.origin.y, rect.size.width, _eventLabel.frame.size.height);
+    }
+    
     UIImageView *imageViewWhiteDot = (UIImageView *)[self viewWithTag:950];
     imageViewWhiteDot.frame = CGRectMake(imageViewWhiteDot.frame.origin.x, _eventDetailLabel.center.y + _eventDetailLabel.frame.size.height / 2, imageViewWhiteDot.frame.size.width, imageViewWhiteDot.frame.size.height);
     //imageViewWhiteDot.center = CGPointMake(imageViewWhiteDot.center.x, imageViewWhiteDot.center.y + _eventDetailLabel.frame.size.height / 2);
