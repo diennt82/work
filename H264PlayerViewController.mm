@@ -75,7 +75,8 @@
 #define TF_DEBUG_RESOLUTION_TAG 5002
 #define TF_DEBUG_BIT_RATE_TAG   5003
 
-#define TIMEOUT_BUFFERING       15// 15 seconds
+#define TIMEOUT_BUFFERING           15// 15 seconds
+#define TIMEOUT_REMOTE_STREAMING    5*60 // 5 minutes
 
 
 @interface H264PlayerViewController () <TimelineVCDelegate, BonjourDelegate, AudioOutStreamRemoteDelegate>
@@ -110,6 +111,7 @@
 @property (nonatomic) BOOL isFahrenheit;
 @property (nonatomic, retain) NSString *cameraModel;
 @property (nonatomic, retain) NSTimer *timerRemoteStreamTimeOut;
+@property (nonatomic, retain) NSTimer *timerRemoteStreamKeepAlive;
 @property (nonatomic, retain) NSString *apiKey;
 
 @property (nonatomic, retain) NSString *sessionKey;
@@ -976,6 +978,8 @@ double _ticks = 0;
                                                                                 repeats:NO];
                 }
                 
+                [self createTimerKeepRemoteStreamAlive];
+                
                 self.numbersOfRemoteViewError = 1;
             }
             
@@ -1099,6 +1103,12 @@ double _ticks = 0;
             {
                 [_timerBufferingTimeout invalidate];
                 self.timerBufferingTimeout = nil;
+            }
+            
+            if (_timerRemoteStreamKeepAlive)
+            {
+                [_timerRemoteStreamKeepAlive invalidate];
+                self.timerRemoteStreamKeepAlive = nil;
             }
             
     		NSLog(@"Timeout While streaming  OR server DIED - userWantToCancel: %d, returnFromPlayback: %d, forceStop: %d", userWantToCancel, _returnFromPlayback, ext1);
@@ -1270,9 +1280,64 @@ double _ticks = 0;
                                                                    userInfo:nil
                                                                     repeats:NO];
 }
+
+- (void)createTimerKeepRemoteStreamAlive
+{
+    if (_timerRemoteStreamKeepAlive)
+    {
+        [_timerRemoteStreamKeepAlive invalidate];
+        self.timerRemoteStreamKeepAlive = nil;
+    }
+    
+    self.timerRemoteStreamKeepAlive = [NSTimer scheduledTimerWithTimeInterval:TIMEOUT_REMOTE_STREAMING
+                                                                       target:self
+                                                                     selector:@selector(sendKeepAliveCmd:)
+                                                                     userInfo:nil
+                                                                      repeats:NO];
+}
+
+- (void)sendKeepAliveCmd:(NSTimer *)timer
+{
+    [self performSelectorInBackground:@selector(createStreamSession) withObject:nil];
+}
+
+- (void)createStreamSession
+{
+    if (userWantToCancel        ||
+        _returnFromPlayback     ||
+        h264Streamer == NULL    ||
+        !h264Streamer->isPlaying())
+    {
+        return;
+    }
+    
+    if (_jsonCommBlocked == nil)
+    {
+        self.jsonCommBlocked = [[BMS_JSON_Communication alloc] initWithObject:self
+                                                                     Selector:nil
+                                                                 FailSelector:nil
+                                                                    ServerErr:nil];
+    }
+    
+    NSDictionary *responseDict = [_jsonCommBlocked createSessionBlockedWithRegistrationId:self.selectedChannel.profile.registrationID
+                                                                            andClientType:@"BROWSER"
+                                                                                andApiKey:_apiKey];
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if (responseDict && [[responseDict objectForKey:@"status"] intValue] == 200)
+        {
+            NSLog(@"%s SUCCEEDED", __FUNCTION__);
+            [self createTimerKeepRemoteStreamAlive];
+        }
+        else
+        {
+            NSLog(@"%s FAILED -responseDict: %@", __FUNCTION__, responseDict);
+            [self performSelector:@selector(sendKeepAliveCmd:) withObject:nil afterDelay:1];
+        }
+    });
+}
+
 #pragma mark Delegate Timeline
-
-
 
 - (void)stopStreamToPlayback
 {
@@ -2143,6 +2208,12 @@ double _ticks = 0;
         {
             [_timerBufferingTimeout invalidate];
             self.timerBufferingTimeout = nil;
+        }
+        
+        if (_timerRemoteStreamKeepAlive)
+        {
+            [_timerRemoteStreamKeepAlive invalidate];
+            self.timerRemoteStreamKeepAlive = nil;
         }
         
         if (h264Streamer != NULL)
