@@ -20,7 +20,7 @@
 @class MBP_iosViewController;
 
 @interface MBP_iosAppDelegate : NSObject <UIApplicationDelegate, UIAlertViewDelegate, MFMailComposeViewControllerDelegate> {
-    UIWindow *window;
+    //UIWindow *window;
     MBP_iosViewController *viewController;
     BOOL handling_PN; 
 }

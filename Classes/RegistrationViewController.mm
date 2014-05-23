@@ -70,6 +70,7 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    self.navigationController.navigationBarHidden = YES;
     
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
     {
@@ -80,6 +81,12 @@
         lblTermServices.frame = CGRectMake(btnCheckbox.frame.origin.x + btnCheckbox.frame.size.width, lblTermServices.frame.origin.y, lblTermServices.frame.size.width, lblTermServices.frame.size.height);
         self.viewProgress.frame = CGRectMake(0, 0, UIScreen.mainScreen.bounds.size.width, UIScreen.mainScreen.bounds.size.height);
     }
+}
+
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [self.view endEditing:YES];
+    [super viewWillDisappear:animated];
 }
 
 #pragma mark - Action
@@ -97,9 +104,7 @@
 
 - (IBAction)btnAlreadyTouchUpInsideAction:(id)sender
 {
-    [self dismissViewControllerAnimated:YES completion:^{
-        [self.delegate sendStatus:LOGGING_IN];
-    }];
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 #pragma mark - Methods
@@ -340,10 +345,13 @@
     [account release];
     
     [[KISSMetricsAPI sharedAPI] recordEvent:[NSString stringWithFormat:@"Register successfully - user: %@", _stringUsername] withProperties:nil];
+ 
+    [self.navigationController popToRootViewControllerAnimated:YES];
     
-    [self dismissViewControllerAnimated:NO completion:^{
-        [self.delegate sendStatus:SHOW_CAMERA_LIST];
-    }];
+    if (_delegate)
+    {
+        [_delegate sendStatus:SHOW_CAMERA_LIST];
+    }
 }
 
 - (void)registerFailedWithError:(NSDictionary *)error_response

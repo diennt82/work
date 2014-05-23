@@ -95,6 +95,7 @@
 -(void) viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    self.navigationController.navigationBarHidden = YES;
     
     if (_splashScreen != nil)
     {
@@ -1815,18 +1816,7 @@
         LoginViewController *loginVC = [[LoginViewController alloc] initWithNibName:@"LoginViewController"
                                                                              bundle:Nil
                                                                            delegate:self];
-        
-        UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:loginVC];
-        
-        [loginVC release];
-        
-        if (self.presentedViewController) {
-            [self dismissViewControllerAnimated:YES completion:^{
-                [self presentViewController:nav animated:NO completion:nil];
-            }];
-        } else {
-            [self presentViewController:nav animated:NO completion:nil];
-        }
+        [self.navigationController pushViewController:loginVC animated:NO];
     }
 }
 

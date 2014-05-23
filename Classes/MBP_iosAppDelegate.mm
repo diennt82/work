@@ -10,12 +10,12 @@
 #import "PublicDefine.h"
 #import "SetupData.h"
 #import "KISSMetricsAPI.h"
-
+#import "EarlierNavigationController.h"
 
 
 @implementation MBP_iosAppDelegate
 
-@synthesize window;
+//@synthesize window;
 @synthesize viewController;
 
 
@@ -113,8 +113,9 @@
     [userDefaults removeObjectForKey:CAM_IN_VEW];
     [userDefaults synchronize];
     
-    [window setRootViewController:viewController];
-    [window makeKeyAndVisible];
+    //[_window setRootViewController:viewController];
+    _window.rootViewController = [[EarlierNavigationController alloc] initWithRootViewController:viewController];
+    [_window makeKeyAndVisible];
     
 #if TARGET_IPHONE_SIMULATOR == 0
 
@@ -556,6 +557,7 @@ void checkingApplicationCrashed()
     // Workaround: MFMailComposeViewController does not dismiss keyboard when application enters background
     UITextView *dummyTextView = [[[UITextView alloc] init] autorelease];
     [self.window.rootViewController.presentedViewController.view addSubview:dummyTextView];
+    [self.window endEditing:YES];
     [dummyTextView becomeFirstResponder];
     [dummyTextView resignFirstResponder];
     [dummyTextView removeFromSuperview];
@@ -754,7 +756,7 @@ void checkingApplicationCrashed()
 
 - (void)dealloc {
     [viewController release];
-    [window release];
+    [_window release];
     [super dealloc];
 }
 

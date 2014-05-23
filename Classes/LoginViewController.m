@@ -19,6 +19,8 @@
 #import <MonitorCommunication/MonitorCommunication.h>
 #import "KISSMetricsAPI.h"
 #import "TimelineDatabase.h"
+#import "RegistrationViewController.h"
+#import "MBP_iosViewController.h"
 
 @interface LoginViewController ()  <UITextFieldDelegate, StunClientDelegate, UserAccountDelegate>
 
@@ -89,6 +91,10 @@
 {
     [super viewWillAppear:animated];
     self.navigationController.navigationBarHidden = YES;
+    
+    MBP_iosViewController *mainVC = (MBP_iosViewController *)[self.navigationController.viewControllers objectAtIndex:0];
+    mainVC.app_stage = APP_STAGE_LOGGING_IN;
+    
     NSString * msg = NSLocalizedStringWithDefaultValue(@"Logging_in_to_server" ,nil, [NSBundle mainBundle],
                                                        @"Logging in to server..." , nil);
     UILabel *labelMessage = (UILabel *)[_viewProgress viewWithTag:509];
@@ -197,9 +203,12 @@
 {
     if (success)
     {
-        [self dismissViewControllerAnimated:NO completion:^{
+        [self.navigationController popToRootViewControllerAnimated:YES];
+        
+        if (_delegate)
+        {
             [_delegate sendStatus:SHOW_CAMERA_LIST];
-        }];
+        }
     }
     else
     {
@@ -216,7 +225,7 @@
     ForgotPwdViewController *forgotPwdController = [[ForgotPwdViewController alloc]
                                                     initWithNibName:@"ForgotPwdViewController" bundle:nil];
     
-    [self.navigationController pushViewController:forgotPwdController animated:NO];
+    [self.navigationController pushViewController:forgotPwdController animated:YES];
     [forgotPwdController release];
 }
 
@@ -224,7 +233,6 @@
 {
     self.buttonEnterPressedFlag = YES;
     [self.view endEditing:YES];
-    
     
     self.stringUsername = [NSString stringWithString:_tfEmail.text];
     self.stringPassword = [NSString stringWithString:_tfPassword.text];
@@ -234,16 +242,20 @@
 
 - (IBAction)buttonCreateAccountTouchUpInsideAction:(id)sender
 {
+    [self.view endEditing:YES];
     NSLog(@"LoginVC - createNewAccount ---");
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     [userDefaults setBool:TRUE forKey:FIRST_TIME_SETUP];
     [userDefaults synchronize];
     
-    [self dismissViewControllerAnimated:NO completion:
-     ^{
-         [_delegate sendStatus:SETUP_CAMERA];
-     }];
+    RegistrationViewController *registrationVC = [[RegistrationViewController alloc] init];
+    registrationVC.delegate = _delegate;
+    [self.navigationController pushViewController:registrationVC animated:YES];
     
+    MBP_iosViewController *mainVC = (MBP_iosViewController *)[self.navigationController.viewControllers objectAtIndex:0];
+    mainVC.app_stage = SETUP_CAMERA;
+    
+    [registrationVC release];
 }
 
 #pragma mark - PJNATH Callbacks
@@ -501,13 +513,16 @@
                 
                 //Show Camera list
                 NSLog(@"LoginVC- didDismissWithButtonIndex: %p", _delegate);
+
+                [self.navigationController popToRootViewControllerAnimated:YES];
                 
-                [self dismissViewControllerAnimated:YES completion:^{
+                if (_delegate)
+                {
                     [_delegate sendStatus:SHOW_CAMERA_LIST];
-                }];
-                
-                break;
+                }
             }
+                break;
+                
             default:
                 break;
         }
