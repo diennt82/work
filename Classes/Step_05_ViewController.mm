@@ -132,20 +132,37 @@
 
 - (IBAction)btnContinueTouchUpInsideAction:(id)sender
 {
-    [[KISSMetricsAPI sharedAPI] recordEvent:@"Step05 - Touch continue button" withProperties:nil];
-    //NSString * homeSsid = (NSString *) [userDefaults objectForKey:HOME_SSID];
-    NSRange noQoute = NSMakeRange(1, _selectedWifiEntry.ssid_w_quote.length - 2);
+    /*
+     * Stopped setup proccess if selected wifi is open. DO NOT support anymore!
+     * The selected is HOME or not doesn't mater, just check to confirm.
+     */
     
-    NSString *wifiName = [_selectedWifiEntry.ssid_w_quote substringWithRange:noQoute];
-    NSString *homeWifi = [[NSUserDefaults standardUserDefaults] stringForKey:HOME_SSID];
-    
-    if ([wifiName isEqualToString:homeWifi])
+    if ([_selectedWifiEntry.auth_mode isEqualToString:@"open"])
     {
-        [self moveToNextStep];
+        [[[[UIAlertView alloc] initWithTitle:@"SSID without password is not supported due to security concern. Please add password to your router."
+                                   message:nil
+                                  delegate:nil
+                         cancelButtonTitle:nil
+                           otherButtonTitles:@"OK", nil]
+          autorelease]
+         show];
     }
     else
     {
-        [self showDialogToConfirm:homeWifi selectedWifi:wifiName];
+        [[KISSMetricsAPI sharedAPI] recordEvent:@"Step05 - Touch continue button" withProperties:nil];
+        NSRange noQoute = NSMakeRange(1, _selectedWifiEntry.ssid_w_quote.length - 2);
+        
+        NSString *wifiName = [_selectedWifiEntry.ssid_w_quote substringWithRange:noQoute];
+        NSString *homeWifi = [[NSUserDefaults standardUserDefaults] stringForKey:HOME_SSID];
+    
+        if ([wifiName isEqualToString:homeWifi])
+        {
+            [self moveToNextStep];
+        }
+        else
+        {
+            [self showDialogToConfirm:homeWifi selectedWifi:wifiName];
+        }
     }
 }
 
@@ -202,6 +219,7 @@
 -(void) queryWifiList
 {
     NSLog(@"Step_05_VC - queryWifiList. Waiting...");
+    self.navigationController.navigationBar.userInteractionEnabled = NO;
     
     NSData * router_list_raw;
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
@@ -224,6 +242,8 @@
         router_list_raw = [[HttpCom instance].comWithDevice sendCommandAndBlock_raw:GET_ROUTER_LIST
                                                                         withTimeout:2*DEFAULT_TIME_OUT];
     }
+    
+    self.navigationController.navigationBar.userInteractionEnabled = YES;
     
     if (router_list_raw != nil)
     {

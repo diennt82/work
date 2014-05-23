@@ -514,6 +514,7 @@
     [[KISSMetricsAPI sharedAPI] recordEvent:@"Step06 - next button" withProperties:nil];
     //create progressView for process verify network
     self.navigationItem.leftBarButtonItem.enabled = NO; // Disable go back
+    self.navigationItem.rightBarButtonItem.enabled = NO;
     [self.view addSubview:self.progressView];
     [self.progressView setHidden:NO];
     
@@ -530,6 +531,7 @@
         {
             //error
             self.navigationItem.leftBarButtonItem.enabled = YES; // enable go back
+            self.navigationItem.rightBarButtonItem.enabled = YES;
             [self.progressView removeFromSuperview];
             
             //ERROR condition
@@ -566,6 +568,7 @@
         {
             //error
             self.navigationItem.leftBarButtonItem.enabled = YES; // enable go back
+            self.navigationItem.rightBarButtonItem.enabled = YES;
             [self.progressView removeFromSuperview];
             
             NSString * msg_fail = NSLocalizedStringWithDefaultValue(@"Confirm_Pass_Fail", nil, [NSBundle mainBundle], @"Le mot de passe ne correspond pas. S'il vous plaît, saisir à nouveau !", nil);
