@@ -29,6 +29,8 @@
 @interface CamerasViewController () <H264PlayerVCDelegate, CamerasCellDelegate, UIAlertViewDelegate, AddCameraVCDelegate>
 {
     BOOL shouldHighlightAtRow[MAX_CAM_ALLOWED];
+    
+    NSString *strDocDirPath;
 }
 
 @property (retain, nonatomic) IBOutlet UITableViewCell *addCameraCell;
@@ -100,6 +102,11 @@
     [super viewDidLoad];
     self.navigationController.navigationBarHidden = YES;
     self.snapshotImages = [NSArray arrayWithObjects:@"mountain", @"garden", @"desk", @"bridge", nil];
+    
+    NSArray *paths = NSSearchPathForDirectoriesInDomains
+    (NSDocumentDirectory, NSUserDomainMask, YES);
+    strDocDirPath = [[paths objectAtIndex:0] retain];
+        
     [self.ibTableListCamera setContentSize:CGSizeMake(SCREEN_WIDTH, SCREEN_HEIGHT - 69 - 45)];
     [self.ibViewAddCamera setFrame:CGRectMake(0, SCREEN_HEIGHT - 45, 160, 45)];
     [self.ibViewBuyCamera setFrame:CGRectMake(160, SCREEN_HEIGHT - 45, 160, 45)];
@@ -229,7 +236,7 @@
     MenuViewController *menuVC = (MenuViewController *)self.parentVC;
     
     cameraMenuCV.cameraMenuDelegate = menuVC.menuDelegate;
-    menuVC.navigationItem.title = @"Menu";
+    //menuVC.navigationItem.title = @"Menu";
     [menuVC.navigationController pushViewController:cameraMenuCV animated:YES];
     
     [cameraMenuCV release];
@@ -453,9 +460,16 @@
         cell.camerasCellDelegate = self;
         cell.rowIndex = indexPath.row;
         cell.backgroundColor = [UIColor blackColor];
-        cell.snapshotImage.image = [UIImage imageNamed:[_snapshotImages objectAtIndex:indexPath.row]];
         
         CamChannel *ch = (CamChannel *)[_camChannels objectAtIndex:indexPath.row];
+        
+        NSString *strPath = [strDocDirPath stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.jpg",ch.profile.registrationID]];
+        UIImage *img = [UIImage imageWithContentsOfFile:strPath];
+        if(img){
+            cell.snapshotImage.image = img;
+        }else{
+           cell.snapshotImage.image = [UIImage imageNamed:[_snapshotImages objectAtIndex:indexPath.row]];
+        }       
         cell.ibCameraNameLabel.text = ch.profile.name;
         NSString *boundCameraName = ch.profile.name;
         CGSize size = [boundCameraName sizeWithAttributes:@{NSFontAttributeName:[UIFont fontWithName:PN_SEMIBOLD_FONT size:18]}];

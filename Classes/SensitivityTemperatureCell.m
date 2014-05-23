@@ -28,6 +28,8 @@
 @property (retain, nonatomic) IBOutlet UIButton *btnMinusRight;
 @property (retain, nonatomic) IBOutlet UIButton *btnPlusRight;
 
+@property (retain, nonatomic) IBOutlet UIImageView *imgViewLeft,*imgViewRight;
+
 @property (nonatomic) BOOL isStopTouching;
 @property (nonatomic, retain) NSTimer *timerTempLowValueChanged;
 @property (nonatomic, retain) NSTimer *timerTempHighValueChanged;
@@ -97,6 +99,22 @@
     
     self.btnMinusRight.enabled = _isSwitchOnRight;
     self.btnPlusRight.enabled = _isSwitchOnRight;
+    
+    self.imgViewRight.layer.cornerRadius = 40;
+    self.imgViewLeft.layer.cornerRadius = 40;
+    
+    if(_isSwitchOnLeft){
+        [self.imgViewLeft setBackgroundColor:COLOR_RGB(19.0, 154.0, 245.0)];
+    }else{
+        [self.imgViewLeft setBackgroundColor:[UIColor lightGrayColor]];
+    }
+    
+    if(_isSwitchOnRight){
+        [self.imgViewRight setBackgroundColor:COLOR_RGB(19.0, 154.0, 245.0)];
+    }else{
+        [self.imgViewRight setBackgroundColor:[UIColor lightGrayColor]];
+    }
+
 }
 
 - (IBAction)btnTypeTempTouchUpInsideAction:(UIButton *)sender
@@ -292,6 +310,12 @@
     self.btnMinusLeft.enabled = _isSwitchOnLeft;
     self.btnPlusLeft.enabled = _isSwitchOnLeft;
     
+    if(_isSwitchOnLeft){
+        [self.imgViewLeft setBackgroundColor:COLOR_RGB(19.0, 154.0, 245.0)];
+    }else{
+        [self.imgViewLeft setBackgroundColor:[UIColor lightGrayColor]];
+    }
+    
     [_sensitivityTempCellDelegate valueChangedTempLowOn:_isSwitchOnLeft];
 }
 
@@ -301,6 +325,14 @@
     sender.selected = _isSwitchOnRight;
     self.btnMinusRight.enabled = _isSwitchOnRight;
     self.btnPlusRight.enabled = _isSwitchOnRight;
+    
+    if(_isSwitchOnRight){
+        
+        [self.imgViewRight setBackgroundColor:COLOR_RGB(19.0, 154.0, 245.0)];
+    }else{
+        [self.imgViewRight setBackgroundColor:[UIColor lightGrayColor]];
+    }
+ 
     
     [_sensitivityTempCellDelegate valueChangedTempHighOn:_isSwitchOnRight];
 }

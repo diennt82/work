@@ -261,6 +261,7 @@ void checkingApplicationCrashed()
     }
     
     [[NSUserDefaults standardUserDefaults] registerDefaults:defaultsToRegister];
+    [[NSUserDefaults standardUserDefaults] synchronize];
     [defaultsToRegister release];
 }
 
