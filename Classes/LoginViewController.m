@@ -18,7 +18,7 @@
 #import "PublicDefine.h"
 #import <MonitorCommunication/MonitorCommunication.h>
 #import "KISSMetricsAPI.h"
-
+#import "TimelineDatabase.h"
 
 @interface LoginViewController ()  <UITextFieldDelegate, StunClientDelegate, UserAccountDelegate>
 
@@ -195,19 +195,16 @@
 
 - (void)finishStoreCameraListData:(NSMutableArray *)arrayCamProfile success:(BOOL)success
 {
-    [self dismissViewControllerAnimated:NO completion:
-     ^{
-         
-         if (success)
-         {
-             [_delegate sendStatus:SHOW_CAMERA_LIST];
-         }
-         else
-         {
-             [_delegate sendStatus:LOGIN_FAILED_OR_LOGOUT];
-         }
-        
-    }];
+    if (success)
+    {
+        [self dismissViewControllerAnimated:NO completion:^{
+            [_delegate sendStatus:SHOW_CAMERA_LIST];
+        }];
+    }
+    else
+    {
+        [self logout];
+    }
 }
 
 #pragma mark - Action
@@ -268,6 +265,55 @@
 }
 
 #pragma mark - Methods
+
+- (void)logout
+{
+    @autoreleasepool
+    {
+        NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+        
+        //REmove password and registration id
+        [userDefaults removeObjectForKey:@"PortalPassword"];
+        [userDefaults removeObjectForKey:_push_dev_token];
+        
+#if  !TARGET_IPHONE_SIMULATOR
+        
+        NSLog(@"De-Register push with both parties: APNs and BMS ");
+        
+        NSString *apiKey = [userDefaults objectForKey:@"PortalApiKey"];
+        NSString *appId = [userDefaults objectForKey:@"APP_ID"];
+        NSString * userName = [userDefaults objectForKey:@"PortalUsername"];
+        
+        [userDefaults removeObjectForKey:@"PortalApiKey"];
+        [userDefaults removeObjectForKey:@"PortalUseremail"];
+        
+        // Let the device know we want to receive push notifications
+        [[UIApplication sharedApplication] unregisterForRemoteNotifications];
+        
+        /* Drop all timeline for this user */
+        [[TimelineDatabase getSharedInstance] clearEventForUserName:userName];
+        
+        
+        BMS_JSON_Communication *jsonComm = [[BMS_JSON_Communication alloc] initWithObject:self
+                                                                                 Selector:nil
+                                                                             FailSelector:nil
+                                                                                ServerErr:nil];
+        
+        NSDictionary *responseDict = [jsonComm deleteAppBlockedWithAppId:appId
+                                                               andApiKey:apiKey];
+        [jsonComm release];
+        NSLog(@"logout --> delete app status = %d", [[responseDict objectForKey:@"status"] intValue]);
+        
+        [NSThread sleepForTimeInterval:0.10];
+#endif
+        
+        [userDefaults synchronize];
+    }
+    
+    self.buttonEnterPressedFlag = NO;
+    self.buttonEnter.enabled = YES;
+	self.viewProgress.hidden = YES;
+}
 
 - (void)check3GConnectionAndPopup
 {
@@ -623,7 +669,7 @@
     self.buttonEnterPressedFlag = NO;
     self.buttonEnter.enabled = YES;
     
-	NSLog(@"Loging failed with error code:%@", responseError);
+	NSLog(@"%s responseDict: %@", __FUNCTION__, responseError);
 	
 	self.viewProgress.hidden = YES;
 	
@@ -698,7 +744,7 @@
 
 - (void)getUserInfoFailedWithResponse: (NSDictionary *)responseDict
 {
-    NSLog(@"Loging failed with error code:%@", responseDict);
+    NSLog(@"%s responseDict: %@", __FUNCTION__, responseDict);
     
     NSString * title = @"Get User info failed!";
     NSString * msg = [responseDict objectForKey:@"message"];

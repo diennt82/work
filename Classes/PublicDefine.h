@@ -164,6 +164,7 @@
 #define CUE_RELEASE_FLAG 1
 #define CES128_ENCRYPTION_PASSWORD @"Super-LovelyDuck"
 #define SENDING_CAMERA_LOG_PASSWORD @"8888"
+#define _push_dev_token @"PUSH_NOTIFICATION_DEVICE_TOKEN"
 
 // Alert type
 #define ALERT_GENERIC_SERVER_INFO @"999999"

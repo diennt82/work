@@ -272,8 +272,12 @@
                                                       FailSelector:nil
                                                          ServerErr:nil];
     
-    NSUserDefaults *userDefaluts = [NSUserDefaults standardUserDefaults];
-    NSDictionary *responseDict = [self.jsonComm getAllDevicesBlockedWithApiKey:[userDefaluts objectForKey:@"PortalApiKey"]];
+    NSDictionary *responseDict = [_jsonComm getAllDevicesBlockedWithApiKey:[[NSUserDefaults standardUserDefaults] objectForKey:@"PortalApiKey"]];
+#if 0
+    responseDict = nil;
+    
+    [NSThread sleepForTimeInterval:20];
+#endif
     
     if (responseDict != nil)
     {

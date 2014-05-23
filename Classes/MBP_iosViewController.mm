@@ -7,7 +7,6 @@
 //
 
 //#define ALERT_GENERIC_SERVER_INFO @"0"
-#define _push_dev_token @"PUSH_NOTIFICATION_DEVICE_TOKEN"
 
 #import <CFNetwork/CFNetwork.h>
 #include <ifaddrs.h>
@@ -881,19 +880,11 @@
     @autoreleasepool
     {
         NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-#if  TARGET_IPHONE_SIMULATOR
-        
-        
         //REmove password and registration id
         [userDefaults removeObjectForKey:@"PortalPassword"];
         [userDefaults removeObjectForKey:_push_dev_token];
         
-        [userDefaults synchronize];
-        
-        
-        [self performSelectorOnMainThread:@selector(show_login_or_reg:)
-                               withObject:nil
-                            waitUntilDone:NO];
+#if  TARGET_IPHONE_SIMULATOR
 #else
         
         NSLog(@"De-Register push with both parties: APNs and BMS ");
@@ -901,12 +892,9 @@
         NSString *apiKey = [userDefaults objectForKey:@"PortalApiKey"];
         NSString *appId = [userDefaults objectForKey:@"APP_ID"];
         NSString * userName = [userDefaults objectForKey:@"PortalUsername"];
-        //REmove password and registration id
-        [userDefaults removeObjectForKey:@"PortalPassword"];
-        [userDefaults removeObjectForKey:_push_dev_token];
+        
         [userDefaults removeObjectForKey:@"PortalApiKey"];
         [userDefaults removeObjectForKey:@"PortalUseremail"];
-        [userDefaults synchronize];
         
         // Let the device know we want to receive push notifications
         [[UIApplication sharedApplication] unregisterForRemoteNotifications];
@@ -915,21 +903,24 @@
         [[TimelineDatabase getSharedInstance] clearEventForUserName:userName];
         
         
-        BMS_JSON_Communication *jsonComm = [[[BMS_JSON_Communication alloc] initWithObject:self
+        BMS_JSON_Communication *jsonComm = [[BMS_JSON_Communication alloc] initWithObject:self
                                                                                   Selector:nil
                                                                               FailSelector:nil
-                                                                                 ServerErr:nil] autorelease];
+                                                                                 ServerErr:nil];
         
         NSDictionary *responseDict = [jsonComm deleteAppBlockedWithAppId:appId
                                                                andApiKey:apiKey];
+        [jsonComm release];
         NSLog(@"logout --> delete app status = %d", [[responseDict objectForKey:@"status"] intValue]);
         
         [NSThread sleepForTimeInterval:0.10];
+#endif
+        
+        [userDefaults synchronize];
         
         [self performSelectorOnMainThread:@selector(show_login_or_reg:)
                                withObject:nil
                             waitUntilDone:NO];
-#endif
     }
 }
 
