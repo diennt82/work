@@ -155,20 +155,20 @@
     _textField.enabled = NO;
     
     
-    UITextField *minuteTField = [[UITextField alloc]initWithFrame:CGRectMake((self.frame.size.width  - fontSize1.width) /2,
+    _minuteTField = [[UITextField alloc]initWithFrame:CGRectMake((self.frame.size.width  - fontSize1.width) /2,
                                                                        (self.frame.size.height - fontSize1.height) /2 + fontSize1.height + 5 ,
                                                                        fontSize1.width,
                                                                        fontSize1.height)];
     
-    minuteTField.backgroundColor = [UIColor clearColor];
-    minuteTField.textColor = [UIColor colorWithWhite:1 alpha:1];
-    minuteTField.textAlignment = NSTextAlignmentCenter;
-    minuteTField.text = @"minutes";
-    minuteTField.font = font1;
-    minuteTField.enabled = NO;
+    _minuteTField.backgroundColor = [UIColor clearColor];
+    _minuteTField.textColor = [UIColor colorWithWhite:1 alpha:1];
+    _minuteTField.textAlignment = NSTextAlignmentCenter;
+    _minuteTField.text = @"minutes";
+    _minuteTField.font = font1;
+    _minuteTField.enabled = NO;
     
     [self addSubview:_textField];
-    [self addSubview:minuteTField];
+    [self addSubview:_minuteTField];
 
     
     /**

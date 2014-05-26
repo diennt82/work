@@ -30,7 +30,9 @@ typedef enum {
 {
     UITextField *_textField;
 }
-@property(nonatomic, retain) UITextField *textField;;
+@property(nonatomic, retain) UITextField *textField;
+
+@property(nonatomic, retain) UITextField *minuteTField;
 /**
  * The current value of the receiver.
  *
@@ -94,6 +96,7 @@ typedef enum {
 @property (nonatomic) UICircularSliderStyle sliderStyle;
 
 - (void)startTimerUpdateLabel;
+-(void)setEnableView:(BOOL)isEnable;
 @end
 
 
@@ -123,3 +126,4 @@ float translateValueFromSourceIntervalToDestinationInterval(float sourceValue, f
  * This function uses the properties of the triangle and arctan (atan2f) function to calculate the angle.
  */
 CGFloat angleBetweenThreePoints(CGPoint centerPoint, CGPoint p1, CGPoint p2);
+
