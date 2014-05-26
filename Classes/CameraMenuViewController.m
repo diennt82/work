@@ -433,7 +433,8 @@
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
-    if (self.camChannel.profile.name.length > 19 &&
+{
+    if ( self.camChannel.profile.name.length > 19 &&
         indexPath.row == 0)
     {
         //return 66;
@@ -526,7 +527,7 @@
         {
             if (_isChangingName)
             {
-               /* static NSString *CellIdentifier = @"Cell";
+                static NSString *CellIdentifier = @"Cell";
                 UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
                 if (cell == nil) {
                     cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
@@ -551,7 +552,7 @@
                 [cell.imageView addSubview:spinner];
                 [spinner startAnimating];
                 
-                return cell;*/
+                return cell;
                 cell.processView.hidden = NO;
             }
             
