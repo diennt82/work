@@ -193,7 +193,7 @@
         self.ib_myOverlay.hidden = NO;
         [self.ib_sliderPlayBack setMinimumTrackTintColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"video_progress_green"]]];
         _playbackStreamer -> getDuration(&_duration);
-        self.ib_sliderPlayBack.maximumValue = _duration * 100;
+        //self.ib_sliderPlayBack.maximumValue = _duration * 100;
         [self watcher];
     });
     
@@ -596,33 +596,36 @@
 #pragma mark Display Time
 -(void)watcher
 {
+    NSLog(@"%s", __FUNCTION__);
     if (_playbackStreamer == NULL || _isPause || _userWantToBack)
     {
         return;
     }
     
-    if (_startPositionMovieFile == 0)
-    {
-        _playbackStreamer->getStartPositionMovieFile(&_startPositionMovieFile);
-        self.ib_sliderPlayBack.minimumValue = _startPositionMovieFile;
-    }
+//    if (_startPositionMovieFile == 0)
+//    {
+//        _playbackStreamer->getStartPositionMovieFile(&_startPositionMovieFile);
+//        self.ib_sliderPlayBack.minimumValue = _startPositionMovieFile;
+//    }
     
     int currentTime = _playbackStreamer->getCurrPos();
+    int durationDisplay = _duration / 1000;
+    CGFloat currDisplay = (CGFloat)currentTime / 1000 - 1.5; // Why 2?
     
-    if (currentTime < 0)
+    if (currDisplay < 0)
     {
-        currentTime = 0;
+        currDisplay = 0;
     }
     
-    self.ib_sliderPlayBack.value = currentTime;
+    self.ib_sliderPlayBack.value = (CGFloat)currDisplay / durationDisplay;
 
-    NSString *strTime = [NSString stringWithFormat:@"%02d:%02d", currentTime/100000/60, currentTime/100000 % 60];
-#if DEBUG
-    NSLog(@"%s strTime: %@", __FUNCTION__, strTime);
+    NSString *strTime = [NSString stringWithFormat:@"%02d:%02d", (NSInteger)currDisplay/60, (NSInteger)currDisplay % 60];
+#if 1
+    NSLog(@"%s strTime: %@, _duration: %lld, value: %f", __FUNCTION__, strTime, _duration, self.ib_sliderPlayBack.value);
 #endif
     self.ib_timerPlayBack.text = strTime;
     
-    [NSTimer scheduledTimerWithTimeInterval:1
+    [NSTimer scheduledTimerWithTimeInterval:0.5
                                      target:self
                                    selector:@selector(watcher)
                                    userInfo:nil
