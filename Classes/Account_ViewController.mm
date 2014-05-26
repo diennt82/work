@@ -106,9 +106,9 @@
     [CameraAlert clearAllAlerts];
     
     [tabBarController dismissViewControllerAnimated:NO completion:^
-    {
-        [tabBarController.menuDelegate sendStatus:LOGIN_FAILED_OR_LOGOUT];
-    }];
+     {
+         [tabBarController.menuDelegate sendStatus:LOGIN_FAILED_OR_LOGOUT];
+     }];
 }
 
 - (void)sendsAppLog
@@ -148,10 +148,10 @@
         
         dataZip = [NSData gzipData:dataZip];
         
-       [picker addAttachmentData:[dataZip AES128EncryptWithKey:CES128_ENCRYPTION_PASSWORD] mimeType:@"text/plain" fileName:@"application.log"];
-
+        [picker addAttachmentData:[dataZip AES128EncryptWithKey:CES128_ENCRYPTION_PASSWORD] mimeType:@"text/plain" fileName:@"application.log"];
+        
         //[picker addAttachmentData:dataZip  mimeType:@"text/plain" fileName:@"application.log"];
-
+        
         // Set the subject of email
         [picker setSubject:@"iOS app log"];
         NSArray *toRecipents = [NSArray arrayWithObject:@"ios.crashreport@cvisionhk.com"];
@@ -185,12 +185,16 @@
     {
         return 2;
     }
+    else if(section == 1)
+    {
+        return 2;
+    }
     else if(section == 2)
     {
         if (CUE_RELEASE_FLAG)
         {
-            //return 1; // Original
-            return  2;//Kiran
+            return 1;
+            
         }
         else
         {
@@ -422,7 +426,7 @@
                                 delegate:self
                        cancelButtonTitle:nil
                        otherButtonTitles:@"OK", nil] autorelease] show];
-
+    
 }
 
 - (void)registerFailedWithError:(NSDictionary *)error_response
