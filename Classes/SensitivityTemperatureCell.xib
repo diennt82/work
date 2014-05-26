@@ -45,25 +45,34 @@
                         <color key="textColor" red="0.79215686269999996" green="0.79215686269999996" blue="0.79215686269999996" alpha="1" colorSpace="calibratedRGB"/>
                         <nil key="highlightedColor"/>
                     </label>
-
-                    <imageView hidden="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="settings_temp_bg.png" id="LUU-ox-Z47">
+                    <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" id="LUU-ox-Z47">
                         <rect key="frame" x="43" y="91" width="80" height="80"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     </imageView>
-                    <imageView hidden="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="settings_temp_bg.png" id="PiB-Vr-IWP">
+                    <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" id="PiB-Vr-IWP">
                         <rect key="frame" x="193" y="91" width="80" height="80"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
                     </imageView>
-                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" id="cEp-Xh-jLv">
-                        <rect key="frame" x="46" y="92" width="78" height="78"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                        <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.69999999999999996" colorSpace="calibratedRGB"/>
-                    </imageView>
-                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" id="8JJ-0P-MFF">
-                        <rect key="frame" x="195" y="92" width="78" height="78"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
-                        <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.69999999999999996" colorSpace="calibratedRGB"/>
-                    </imageView>
+                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="KwJ-1Y-Yfq">
+                        <rect key="frame" x="60" y="179" width="50" height="27"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <state key="normal" image="settings_switch_off.png">
+                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                        </state>
+                        <connections>
+                            <action selector="btnSwtichLeftTouchUpInsideAction:" destination="W05-cE-yAL" eventType="touchUpInside" id="Yy6-N5-4Lq"/>
+                        </connections>
+                    </button>
+                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="wcI-BI-39O">
+                        <rect key="frame" x="212" y="179" width="50" height="27"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
+                        <state key="normal" image="settings_switch_on.png">
+                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                        </state>
+                        <connections>
+                            <action selector="btnSwitchRightTouchUpInsideAction:" destination="W05-cE-yAL" eventType="touchUpInside" id="XOi-iM-thO"/>
+                        </connections>
+                    </button>
                     <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="Clb-h1-d7c">
                         <rect key="frame" x="53" y="110" width="39" height="42"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -90,7 +99,7 @@
                         </connections>
                     </button>
                     <button opaque="NO" contentMode="center" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="ZaA-Tw-eNj">
-                        <rect key="frame" x="126" y="116" width="30" height="30"/>
+                        <rect key="frame" x="131" y="116" width="30" height="30"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                         <state key="normal" image="temp_plus.png">
@@ -136,26 +145,6 @@
                         <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <nil key="highlightedColor"/>
                     </label>
-                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="wcI-BI-39O">
-                        <rect key="frame" x="212" y="179" width="50" height="27"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
-                        <state key="normal" image="settings_switch_on.png">
-                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                        </state>
-                        <connections>
-                            <action selector="btnSwitchRightTouchUpInsideAction:" destination="W05-cE-yAL" eventType="touchUpInside" id="XOi-iM-thO"/>
-                        </connections>
-                    </button>
-                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="KwJ-1Y-Yfq">
-                        <rect key="frame" x="60" y="179" width="50" height="27"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                        <state key="normal" image="settings_switch_off.png">
-                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                        </state>
-                        <connections>
-                            <action selector="btnSwtichLeftTouchUpInsideAction:" destination="W05-cE-yAL" eventType="touchUpInside" id="Yy6-N5-4Lq"/>
-                        </connections>
-                    </button>
                 </subviews>
             </tableViewCellContentView>
             <color key="backgroundColor" red="0.16862745098039217" green="0.19607843137254902" blue="0.2196078431372549" alpha="1" colorSpace="calibratedRGB"/>
@@ -167,9 +156,8 @@
                 <outlet property="btnSwitchLeft" destination="KwJ-1Y-Yfq" id="Run-rN-r6I"/>
                 <outlet property="btnSwitchRight" destination="wcI-BI-39O" id="aYM-XT-DVQ"/>
                 <outlet property="btnTypeTemperature" destination="Ix0-Eg-QYN" id="dv0-qk-Hyy"/>
-
-                <outlet property="imgViewEnDsLeft" destination="cEp-Xh-jLv" id="9I7-9M-iqI"/>
-                <outlet property="imgViewEnDsRight" destination="8JJ-0P-MFF" id="v1o-yc-NnW"/>
+                <outlet property="imgViewLeft" destination="LUU-ox-Z47" id="dcH-0G-5WZ"/>
+                <outlet property="imgViewRight" destination="PiB-Vr-IWP" id="6TQ-7h-Far"/>
                 <outlet property="lblTempValueLeft" destination="Clb-h1-d7c" id="UbV-mX-I6b"/>
                 <outlet property="lblTemperatureValueRight" destination="ZtL-Ii-oyy" id="5Op-fr-euM"/>
                 <outlet property="lblTypeTempLeft" destination="1jM-wL-EWV" id="bxs-2H-y6y"/>

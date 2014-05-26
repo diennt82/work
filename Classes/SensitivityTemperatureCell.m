@@ -27,7 +27,6 @@
 @property (retain, nonatomic) IBOutlet UIButton *btnPlusLeft;
 @property (retain, nonatomic) IBOutlet UIButton *btnMinusRight;
 @property (retain, nonatomic) IBOutlet UIButton *btnPlusRight;
-@property (retain, nonatomic) IBOutlet UIImageView *imgViewEnDsLeft,*imgViewEnDsRight;
 
 @property (retain, nonatomic) IBOutlet UIImageView *imgViewLeft,*imgViewRight;
 
@@ -88,20 +87,9 @@
     [self.btnSwitchLeft setImage:[UIImage imageNamed:@"settings_switch_on"] forState:UIControlStateHighlighted];
     
     self.btnSwitchLeft.selected = _isSwitchOnLeft;
+    
     self.btnMinusLeft.enabled = _isSwitchOnLeft;
     self.btnPlusLeft.enabled = _isSwitchOnLeft;
-    
-    _imgViewEnDsLeft.layer.cornerRadius = 40;
-    NSInteger tempValueInCel = _tempValueLeft;
-    if(_isFahrenheit){
-        tempValueInCel = (tempValueInCel  -  32)  * 5/9 ;
-    }
-    if(_isSwitchOnLeft){
-        [self.imgViewEnDsLeft setBackgroundColor:COLOR_RGB((tempValueInCel-9)*15,(tempValueInCel-9)*15,255-((tempValueInCel-9)*20))];
-    }else{
-        [self.imgViewEnDsLeft setBackgroundColor:[UIColor colorWithWhite:0 alpha:0.7]];
-    }
-    //-------------Right ---------
     
     [self.btnSwitchRight setImage:[UIImage imageNamed:@"settings_switch_off"] forState:UIControlStateNormal];
     [self.btnSwitchRight setImage:[UIImage imageNamed:@"settings_switch_on"] forState:UIControlStateSelected];
@@ -112,19 +100,29 @@
     self.btnMinusRight.enabled = _isSwitchOnRight;
     self.btnPlusRight.enabled = _isSwitchOnRight;
     
-    _imgViewEnDsRight.layer.cornerRadius = 40;
+    self.imgViewRight.layer.cornerRadius = 40;
+    self.imgViewLeft.layer.cornerRadius = 40;
     
-    tempValueInCel = _tempValueRight;
-    if(_isFahrenheit){
-        tempValueInCel = (tempValueInCel  -  32)  * 5/9 ;
-    }
-    if(_isSwitchOnRight){
-        [self.imgViewEnDsRight setBackgroundColor:COLOR_RGB(255,(33-tempValueInCel)*20,(33-tempValueInCel)*10)];
+    if(_isSwitchOnLeft){
+        NSInteger tempValueInCel = _tempValueLeft;
+        if (_isFahrenheit){
+            tempValueInCel = (tempValueInCel  -  32)  * 5/9 ;
+        }
+        [self.imgViewLeft setBackgroundColor:COLOR_RGB((tempValueInCel-9)*15,(tempValueInCel-9)*15,255-((tempValueInCel-9)*20))];
     }else{
-        [self.imgViewEnDsRight setBackgroundColor:[UIColor colorWithWhite:0 alpha:0.7]];
+        [self.imgViewLeft setBackgroundColor:[UIColor lightGrayColor]];
     }
     
-    
+    if(_isSwitchOnRight){
+        NSInteger tempValueInCel = _tempValueRight;
+        if (_isFahrenheit){
+            tempValueInCel = (tempValueInCel  -  32)  * 5/9 ;
+        }
+        [self.imgViewRight setBackgroundColor:COLOR_RGB(255.0,(33-tempValueInCel)*20,(33-tempValueInCel)*10)];
+    }else{
+        [self.imgViewRight setBackgroundColor:[UIColor lightGrayColor]];
+    }    
+
 }
 
 - (IBAction)btnTypeTempTouchUpInsideAction:(UIButton *)sender
@@ -162,7 +160,6 @@
     NSInteger tempLowMin = TEMP_LOW_MIN;
     NSInteger tempValueInCel = _tempValueLeft;
     
-    
     if (_isFahrenheit)
     {
         tempLowMin = (round(TEMP_LOW_MIN * 9.f / 5.f)) + 32;
@@ -173,11 +170,7 @@
     {
         self.tempValueLeft--;
         self.lblTempValueLeft.text = [NSString stringWithFormat:@"%ld", lroundf(_tempValueLeft)];
-                
-        [self.imgViewEnDsLeft setBackgroundColor:COLOR_RGB((tempValueInCel-9)*15,(tempValueInCel-9)*15,255-((tempValueInCel-9)*20))];
-        // NSLog(@"RGB - %f %f %f",(_tempValueLeft-10)*25,(_tempValueLeft-10)*10,255.0);
-        
-        //[self.imgViewEnDsLeft setBackgroundColor:COLOR_RGB((_tempValueLeft-10)*25,(_tempValueLeft-10)*10,255)];
+        [self.imgViewLeft setBackgroundColor:COLOR_RGB((tempValueInCel-9)*15,(tempValueInCel-9)*15,255-((tempValueInCel-9)*20))];
     }
     else
     {
@@ -214,11 +207,7 @@
     {
         self.tempValueLeft++;
         self.lblTempValueLeft.text = [NSString stringWithFormat:@"%ld", lroundf(_tempValueLeft)];
-        
-        //NSLog(@"RGB - %f %f %f",(_tempValueLeft-10)*25,(_tempValueLeft-10)*10,255.0);
-        
-        [self.imgViewEnDsLeft setBackgroundColor:COLOR_RGB((tempValueInCel-9)*15,(tempValueInCel-9)*15,255-((tempValueInCel-9)*20))];
-       
+         [self.imgViewLeft setBackgroundColor:COLOR_RGB((tempValueInCel-9)*15,(tempValueInCel-9)*15,255-((tempValueInCel-9)*20))];
     }
     else
     {
@@ -265,10 +254,7 @@
     {
         self.tempValueRight--;
         self.lblTemperatureValueRight.text = [NSString stringWithFormat:@"%ld", lroundf(_tempValueRight)];
-        
-        [self.imgViewEnDsRight setBackgroundColor:COLOR_RGB(255.0,(33-tempValueInCel)*20,(33-tempValueInCel)*10)];
-        
-        //NSLog(@"RGB - %f %f %f",255.0,(33-_tempValueRight)*20,(33-_tempValueRight)*10);
+        [self.imgViewRight setBackgroundColor:COLOR_RGB(255.0,(33-tempValueInCel)*20,(33-tempValueInCel)*10)];
     }
     else
     {
@@ -293,8 +279,6 @@
     NSInteger temHighMax = TEMP_HIGH_MAX;
     NSInteger tempValueInCel = _tempValueRight;
     
-
-    
     if (_isFahrenheit)
     {
         temHighMax = (round(TEMP_HIGH_MAX * 9.f / 5.f)) + 32;
@@ -305,8 +289,7 @@
     {
         self.tempValueRight++;
         self.lblTemperatureValueRight.text = [NSString stringWithFormat:@"%ld", lroundf(_tempValueRight)];
-        [self.imgViewEnDsRight setBackgroundColor:COLOR_RGB(255.0,(33-tempValueInCel)*20,(33-tempValueInCel)*10)];
-        //NSLog(@"RGB - %f %f %f",255.0,(33-_tempValueRight)*20,(33-_tempValueRight)*10);
+        [self.imgViewRight setBackgroundColor:COLOR_RGB(255.0,(33-tempValueInCel)*20,(33-tempValueInCel)*10)];
     }
     else
     {
@@ -330,8 +313,6 @@
 {
     NSInteger tempHiValue = _tempValueRight;
     
-    
-    
     if (_isFahrenheit)
     {
         tempHiValue = round((tempHiValue - 32) * 5.f/9.f); // Convert to °C
@@ -343,16 +324,23 @@
 - (IBAction)btnSwtichLeftTouchUpInsideAction:(UIButton *)sender
 {
     self.isSwitchOnLeft = !_isSwitchOnLeft;
+    
     sender.selected = _isSwitchOnLeft;
+    
     self.btnMinusLeft.enabled = _isSwitchOnLeft;
     self.btnPlusLeft.enabled = _isSwitchOnLeft;
     
     if(_isSwitchOnLeft){
-        [self.imgViewEnDsLeft setBackgroundColor:COLOR_RGB((_tempValueLeft-9)*15,(_tempValueLeft-9)*15,255-((_tempValueLeft-9)*20))];
+        //[self.imgViewLeft setBackgroundColor:COLOR_RGB(19.0, 154.0, 245.0)];
+        NSInteger tempValueInCel = _tempValueLeft;
+        if (_isFahrenheit){
+            tempValueInCel = (tempValueInCel  -  32)  * 5/9 ;
+        }
+        [self.imgViewLeft setBackgroundColor:COLOR_RGB((tempValueInCel-9)*15,(tempValueInCel-9)*15,255-((tempValueInCel-9)*20))];
     }else{
-        [self.imgViewEnDsLeft setBackgroundColor:[UIColor colorWithWhite:0 alpha:0.7]];
+        [self.imgViewLeft setBackgroundColor:[UIColor lightGrayColor]];
     }
-
+    
     [_sensitivityTempCellDelegate valueChangedTempLowOn:_isSwitchOnLeft];
 }
 
@@ -364,11 +352,18 @@
     self.btnPlusRight.enabled = _isSwitchOnRight;
     
     if(_isSwitchOnRight){
-
-        [self.imgViewEnDsRight setBackgroundColor:COLOR_RGB(255,(33-_tempValueRight)*20,(33-_tempValueRight)*10)];
+        
+        NSInteger tempValueInCel = _tempValueRight;
+        if (_isFahrenheit){
+            tempValueInCel = (tempValueInCel  -  32)  * 5/9 ;
+        }
+        [self.imgViewRight setBackgroundColor:COLOR_RGB(255.0,(33-tempValueInCel)*20,(33-tempValueInCel)*10)];
+        //[self.imgViewRight setBackgroundColor:COLOR_RGB(19.0, 154.0, 245.0)];
     }else{
-        [self.imgViewEnDsRight setBackgroundColor:[UIColor colorWithWhite:0 alpha:0.7]];
+        [self.imgViewRight setBackgroundColor:[UIColor lightGrayColor]];
     }
+ 
+    
     [_sensitivityTempCellDelegate valueChangedTempHighOn:_isSwitchOnRight];
 }
 
