@@ -484,7 +484,9 @@
         else
         {
             cell.nameLabel.text = @"App Version";
-            cell.valueLabel.text = @"03.15.2";
+            NSDictionary* infoDict = [[NSBundle mainBundle] infoDictionary];
+            cell.valueLabel.text = [infoDict objectForKey:@"CFBundleShortVersionString"];
+            
         }
         
         return cell;
