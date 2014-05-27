@@ -388,7 +388,7 @@
 
 - (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate
 {
-    if (scrollView.contentOffset.y < -64.0f)
+    if (scrollView.contentOffset.y < -64.0f && !_waitingForUpdateData)
     {
         [self.parentVC refreshCameraList];
         [self.ibTableListCamera reloadData];

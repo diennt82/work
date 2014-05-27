@@ -269,7 +269,7 @@ double _ticks = 0;
     self.enablePTT = YES;
     self.numbersOfRemoteViewError = 0;
     self.currentBitRate = @"128";
-    self.messageStreamingState = @"Camera is NOT accessible";
+    self.messageStreamingState = @"Camera is not accessible";
     
     [self becomeActive];
 }
@@ -771,16 +771,9 @@ double _ticks = 0;
 
 - (void)forceRestartStream:(NSTimer *)timer
 {
-    //NSArray * args = [NSArray arrayWithObjects:
-     //                 [NSNumber numberWithInt:MEDIA_ERROR_SERVER_DIED], [NSNumber numberWithInt:-99], ,nil];
-    //force server died
-//    [self performSelectorOnMainThread:@selector(handleMessageOnMainThread:)
-//                           withObject:args
-//                        waitUntilDone:NO];
+    NSLog(@"%s h264Streamer: %p", __FUNCTION__, h264Streamer);
     [self handleMessage:MEDIA_ERROR_SERVER_DIED ext1:-99 ext2:-1];
     self.messageStreamingState = @"Low data bandwidth detected. Trying to connect...";
-    
-    NSLog(@"%s", __FUNCTION__);
 }
 
 -(void) handleMessage:(int) msg ext1: (int) ext1 ext2:(int) ext2
@@ -2218,7 +2211,7 @@ double _ticks = 0;
         
         if (h264Streamer != NULL)
         {
-            //h264Streamer->setListener(NULL);
+            h264Streamer->setListener(NULL);
             _isProcessRecording = FALSE;
             [self stopRecordingVideo];
             
@@ -2871,7 +2864,9 @@ double _ticks = 0;
         [userDefaults synchronize];
     }
     
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0),
+    dispatch_queue_t qt = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0);
+    
+    dispatch_async(qt,
                    ^{
                        NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
                        NSString *apiKey = [userDefaults objectForKey:@"PortalApiKey"];
@@ -2899,71 +2894,40 @@ double _ticks = 0;
                            responseDict = [_jsonCommBlocked createSessionBlockedWithRegistrationId:stringUDID
                                                                                      andClientType:@"BROWSER"
                                                                                          andApiKey:apiKey];
-                           NSLog(@"USE RELAY TO VIEW - : %@", responseDict);
+                           NSLog(@"USE RELAY TO VIEW- userWantsToCancel:%d, returnFromPlayback:%d, responsed: %@", userWantToCancel, _returnFromPlayback, responseDict);
                            
-                           if (responseDict != nil)
+                           if (!userWantToCancel && !_returnFromPlayback)
                            {
-                               if ([[responseDict objectForKey:@"status"] intValue] == 200)
+                               if (responseDict != nil)
                                {
-                                   //self.selectedChannel.stream_url = [[responseDict objectForKey:@"data"] objectForKey:@"url"];
-                                   
-                                   NSString *urlResponse = [[responseDict objectForKey:@"data"] objectForKey:@"url"];
-                                   
-                                   if ([urlResponse hasPrefix:ME_WOWZA] &&
-                                       [userDefaults boolForKey:VIEW_NXCOMM_WOWZA] == TRUE)
+                                   if ([[responseDict objectForKey:@"status"] intValue] == 200)
                                    {
-                                       self.selectedChannel.stream_url = [urlResponse stringByReplacingOccurrencesOfString:ME_WOWZA withString:NXCOMM_WOWZA];
-                                   }
-                                   else
-                                   {
-                                       self.selectedChannel.stream_url = urlResponse;
-                                   }
-                                   
-                                   self.selectedChannel.communication_mode = COMM_MODE_STUN_RELAY2;
-                                   
-                                   [self performSelectorOnMainThread:@selector(startStream)
-                                                          withObject:nil
-                                                       waitUntilDone:NO];
-                                   
-                                   self.messageStreamingState = @"Low data bandwidth detected. Trying to connect...";
-                               }
-                               else
-                               {
-#if 0
-                                   /*
-                                    * Add code to check stream via dev-api
-                                    * Hack code
-                                    */
-                                   
-                                   if ([[userDefaults stringForKey:@"name_server"] isEqualToString:@"https://dev-api.hubble.in/v1"])
-                                   {
-                                       if ([[responseDict objectForKey:@"status"] integerValue] == 500)
-                                       {
-                                           NSString *body = [[[responseDict objectForKey:@"data"] objectForKey:@"device_response"] objectForKey:@"body"];
-                                           
-                                           NSString *prefix = @"get_session_key: error=200,session_key=";
-                                           
-                                           if ([body hasPrefix:prefix])
-                                           {
-                                               NSRange range = NSMakeRange(prefix.length, body.length - prefix.length - @",mode=relay_rtmp".length);
-                                               
-                                               self.selectedChannel.stream_url = [body substringWithRange:range];
-                                               
-                                               NSLog(@"H264VC - HACK code stream via DEV-API stream_url: %@", self.selectedChannel.stream_url);
-                                               
-                                               self.selectedChannel.communication_mode = COMM_MODE_STUN_RELAY2;
-                                               
-                                               [self performSelectorOnMainThread:@selector(startStream)
-                                                                      withObject:nil
-                                                                   waitUntilDone:NO];
-                                           }
-                                       }
-                                   }
-                                   else
-#endif
-                                   {
+                                       //self.selectedChannel.stream_url = [[responseDict objectForKey:@"data"] objectForKey:@"url"];
                                        
+                                       NSString *urlResponse = [[responseDict objectForKey:@"data"] objectForKey:@"url"];
+                                       
+                                       if ([urlResponse hasPrefix:ME_WOWZA] &&
+                                           [userDefaults boolForKey:VIEW_NXCOMM_WOWZA] == TRUE)
+                                       {
+                                           self.selectedChannel.stream_url = [urlResponse stringByReplacingOccurrencesOfString:ME_WOWZA withString:NXCOMM_WOWZA];
+                                       }
+                                       else
+                                       {
+                                           self.selectedChannel.stream_url = urlResponse;
+                                       }
+                                       
+                                       self.selectedChannel.communication_mode = COMM_MODE_STUN_RELAY2;
+                                       
+                                       [self performSelectorOnMainThread:@selector(startStream)
+                                                              withObject:nil
+                                                           waitUntilDone:NO];
+                                       
+                                       self.messageStreamingState = @"Low data bandwidth detected. Trying to connect...";
+                                   }
+                                   else
+                                   {
                                        //handle Bad response
+                                       NSLog(@"%s ERROR: %@", __FUNCTION__, [responseDict objectForKey:@"message"]);
                                        
                                        NSArray * args = [NSArray arrayWithObjects:
                                                          [NSNumber numberWithInt:MEDIA_ERROR_SERVER_DIED],nil];
@@ -2971,22 +2935,26 @@ double _ticks = 0;
                                        [self performSelectorOnMainThread:@selector(handleMessageOnMainThread:)
                                                               withObject:args
                                                            waitUntilDone:NO];
-                                       self.messageStreamingState = @"Camera is NOT accessible";
+                                       self.messageStreamingState = @"Camera is not accessible";
                                    }
+                               }
+                               else
+                               {
+                                   NSLog(@"SERVER unreachable (timeout) ");
+                                   //TODO : handle SERVER unreachable (timeout)
+                                   NSArray * args = [NSArray arrayWithObjects:
+                                                     [NSNumber numberWithInt:MEDIA_ERROR_SERVER_DIED],nil];
+                                   
+                                   self.messageStreamingState = @"Camera is not accessible";
+                                   
+                                   dispatch_async(dispatch_get_main_queue(), ^{
+                                       [self performSelector:@selector(handleMessageOnMainThread:) withObject:args afterDelay:10];
+                                   });
                                }
                            }
                            else
                            {
-                               NSLog(@"SERVER unreachable (timeout) ");
-                               //TODO : handle SERVER unreachable (timeout)
-                               NSArray * args = [NSArray arrayWithObjects:
-                                                 [NSNumber numberWithInt:MEDIA_ERROR_SERVER_DIED],nil];
-                               
-                               self.messageStreamingState = @"Camera is NOT accessible";
-                               
-                               dispatch_async(dispatch_get_main_queue(), ^{
-                                   [self performSelector:@selector(handleMessageOnMainThread:) withObject:args afterDelay:10];
-                               });
+                               NSLog(@"%s View is invisible. Do nothing!", __FUNCTION__);
                            }
                        }
                        else // USE RTSP/STUN
@@ -3139,7 +3107,7 @@ double _ticks = 0;
                    
                    
                    );
-    
+    dispatch_release(qt);
     
     if (isBehindSymmetricNat != TRUE)
     {
