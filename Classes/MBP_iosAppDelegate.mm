@@ -31,7 +31,7 @@
         - Add Google Analytics Delegates to this project.
      */
     
-    isFirstTime = YES;
+
     
     // Handle launching from a notification
     UILocalNotification *locationNotification = [launchOptions objectForKey:UIApplicationLaunchOptionsLocalNotificationKey];
@@ -651,10 +651,9 @@ void checkingApplicationCrashed()
         }
         else
         {
-            if(isFirstTime){
-                isFirstTime = NO;
-                [self forceLogin:TRUE];
-            }
+            //Do nothing here : to return to the last page.
+            //
+            
         }
     }
     else if (viewController.app_stage == APP_STAGE_LOGGING_IN || viewController.app_stage == APP_STAGE_INIT)
