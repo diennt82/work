@@ -84,6 +84,17 @@
     
     self.buttonEnterPressedFlag = NO;
     
+    self.imgViewLoading.animationImages =[NSArray arrayWithObjects:
+                                          [UIImage imageNamed:@"loader_big_a"],
+                                          [UIImage imageNamed:@"loader_big_b"],
+                                          [UIImage imageNamed:@"loader_big_c"],
+                                          [UIImage imageNamed:@"loader_big_d"],
+                                          [UIImage imageNamed:@"loader_big_e"],
+                                          //[UIImage imageNamed:@"Logo_220"],
+                                          nil];
+    self.imgViewLoading.animationDuration = 1.5;
+    [self.imgViewLoading startAnimating];
+    
 	//load user/pass
     [self performSelectorInBackground:@selector(loadUserInfo_bg) withObject:nil];
 }
@@ -131,6 +142,7 @@
 
 - (void)loadUserInfo
 {
+    
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     
 	//can be user email or user name here --
@@ -193,16 +205,7 @@
     
     //self.viewProgress.hidden = NO;
     
-    self.imgViewLoading.animationImages =[NSArray arrayWithObjects:
-                                        [UIImage imageNamed:@"loader_a"],
-                                        [UIImage imageNamed:@"loader_b"],
-                                        [UIImage imageNamed:@"loader_c"],
-                                        [UIImage imageNamed:@"loader_d"],
-                                        [UIImage imageNamed:@"loader_e"],
-                                        [UIImage imageNamed:@"loader_f"],
-                                        nil];
-    self.imgViewLoading.animationDuration = 1.5;
-    [self.imgViewLoading startAnimating];
+    
 }
 
 - (void)didReceiveMemoryWarning

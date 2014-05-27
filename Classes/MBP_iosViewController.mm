@@ -89,7 +89,7 @@
     
     [self start_animation_with_orientation:interfaceOrientation];
     
-    self.splashScreen.image = [UIImage imageNamed:@"loader_a"];
+    self.splashScreen.image = [UIImage imageNamed:@"loader_big_a"];
 }
 
 -(void) viewWillAppear:(BOOL)animated
@@ -134,12 +134,12 @@
 {
     
     self.splashScreen.animationImages =[NSArray arrayWithObjects:
-                                        [UIImage imageNamed:@"loader_a"],
-                                        [UIImage imageNamed:@"loader_b"],
-                                        [UIImage imageNamed:@"loader_c"],
-                                        [UIImage imageNamed:@"loader_d"],
-                                        [UIImage imageNamed:@"loader_e"],
-                                        [UIImage imageNamed:@"loader_f"],
+                                        [UIImage imageNamed:@"loader_big_a"],
+                                        [UIImage imageNamed:@"loader_big_b"],
+                                        [UIImage imageNamed:@"loader_big_c"],
+                                        [UIImage imageNamed:@"loader_big_d"],
+                                        [UIImage imageNamed:@"loader_big_e"],
+                                        //[UIImage imageNamed:@"loader_big_f"],
                                         nil];
     self.splashScreen.animationDuration = 1.5;
     self.splashScreen.animationRepeatCount = 0;
@@ -178,6 +178,7 @@
     if ([userDefaults boolForKey:_AutoLogin])
     {
         NSLog(@"Auto login from AppDelegate. Do nothing");
+        [self show_login_or_reg:nil];
     }
     else
     {
@@ -471,7 +472,10 @@
             //[self dismissViewControllerAnimated:NO completion:nil];
             self.app_stage = APP_STAGE_LOGGING_IN;
             
-            [self performSelectorInBackground:@selector(logoutAndUnregistration_bg) withObject:nil];
+            //[self performSelectorInBackground:@selector(logoutAndUnregistration_bg) withObject:nil];
+            //[self performSelector:@selector(logoutAndUnregistration_bg) withObject:nil afterDelay:0.2];
+            [self logoutAndUnregistration_bg];
+            [self show_login_or_reg:nil];
 			
             break;
         }
@@ -592,9 +596,7 @@
 {
     
     if (isRebinded)
-    {
-        
-        
+    {        
         if ( [self isCurrentConnection3G] ||
             [self.restored_profiles count] ==0)
         {
@@ -919,9 +921,10 @@
         
         [userDefaults synchronize];
         
-        [self performSelectorOnMainThread:@selector(show_login_or_reg:)
+        /*[self performSelectorOnMainThread:@selector(show_login_or_reg:)
                                withObject:nil
-                            waitUntilDone:NO];
+                            waitUntilDone:NO];*/
+        //[self show_login_or_reg:nil];
     }
 }
 
@@ -1813,9 +1816,7 @@
         
         self.app_stage = APP_STAGE_LOGGING_IN;
         
-        LoginViewController *loginVC = [[LoginViewController alloc] initWithNibName:@"LoginViewController"
-                                                                             bundle:Nil
-                                                                           delegate:self];
+        LoginViewController *loginVC = [[LoginViewController alloc] initWithNibName:@"LoginViewController"   bundle:Nil   delegate:self];
         [self.navigationController pushViewController:loginVC animated:NO];
     }
 }
