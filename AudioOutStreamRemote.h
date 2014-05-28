@@ -42,8 +42,8 @@
 @property (nonatomic) BOOL isHandshakeSuccess;
 
 - (id)initWithRemoteMode;
-- (void)connectToAudioSocket;
+- (void)connectToAudioSocketRemote;
 - (void)startRecordingSound;
-- (void)disconnectFromAudioSocket;
+- (void)disconnectFromAudioSocketRemote;
 
 @end

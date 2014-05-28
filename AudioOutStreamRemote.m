@@ -75,18 +75,27 @@
 }
 
 /* Connect to the audio streaming socket to stream recorded data TO device */
-- (void) connectToAudioSocket
+- (void) connectToAudioSocketRemote
 {
 	if (hasStartRecordingSound == FALSE)
     {
         [self startRecordingSound];
     }
     
-    if (_sendingSocket == nil)
+    if (_sendingSocket != nil)
     {
-        self.sendingSocket = [[AsyncSocket alloc] initWithDelegate:self];
-        [_sendingSocket setUserData:SOCKET_ID_SEND];
+        if ([_sendingSocket isConnected] == YES)
+        {
+            [_sendingSocket setDelegate:nil];
+            [_sendingSocket disconnect];
+        }
+        
+        [_sendingSocket release];
+        _sendingSocket = nil;
     }
+    
+    self.sendingSocket = [[AsyncSocket alloc] initWithDelegate:self];
+    [_sendingSocket setUserData:SOCKET_ID_SEND];
 	
 	NSString* ip = _relayServerIP;
 	NSInteger port = _relayServerPort;
@@ -176,7 +185,7 @@
 {
 	if (_sendingSocket != nil && [_sendingSocket isConnected] == NO)
 	{
-        [self disconnectFromAudioSocket];
+        [self disconnectFromAudioSocketRemote];
 	}
 }
 
@@ -281,7 +290,7 @@
     }
 }
 
-- (void)disconnectFromAudioSocket
+- (void)disconnectFromAudioSocketRemote
 {
     //disconnect
 	if (self.pcmPlayer != nil)
@@ -294,16 +303,16 @@
     
 	[NSTimer scheduledTimerWithTimeInterval:0.5f
                                      target:self
-                                   selector:@selector(disconnectSocket:)
+                                   selector:@selector(disconnectSocketRemote:)
                                    userInfo:nil
                                     repeats:YES];
     
     self.isDisconnected = TRUE;
 }
 
-- (void)disconnectSocket: (NSTimer *)timer
+- (void)disconnectSocketRemote: (NSTimer *)timer
 {
-    NSLog(@"disconnectSocket, bufLen: %d", self.bufferLength);
+    NSLog(@"disconnectSocketRemoteRemote, bufLen: %d", self.bufferLength);
     
     if (self.bufferLength == 0)
     {
@@ -343,7 +352,14 @@
             _fileHandle = nil;
         }
         
-        [_audioOutStreamRemoteDelegate didDisconnecteSocket];
+        if (_audioOutStreamRemoteDelegate)
+        {
+            [_audioOutStreamRemoteDelegate didDisconnecteSocket];
+        }
+        else
+        {
+            NSLog(@"%s _audioOutStreamRemoteDelegate == nil", __FUNCTION__);
+        }
     }
 }
 

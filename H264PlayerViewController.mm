@@ -236,12 +236,7 @@ double _ticks = 0;
     
     self.apiKey = [userDefaults stringForKey:@"PortalApiKey"];
     
-#if TEST_REMOTE_TALKBACK
-    // TODO: Testing -- delete
-    self.imageViewStreamer.userInteractionEnabled = YES;
-#else
     self.imageViewStreamer.userInteractionEnabled = NO;
-#endif
     self.sharedCamConnectedTo = @"";
     self.cameraModel = [self.selectedChannel.profile getModel];
     
@@ -280,6 +275,7 @@ double _ticks = 0;
     [super viewDidAppear:animated];
     _syncPortraitAndLandscape = NO;
 }
+
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
@@ -1341,13 +1337,9 @@ double _ticks = 0;
     [self stopPeriodicBeep];
     [self stopPeriodicPopup];
     
-//    [NSObject cancelPreviousPerformRequestsWithTarget:self
-//                                             selector:@selector(star)
-//                                               object:nil];
-    
     if (_audioOutStreamRemote)
     {
-        [_audioOutStreamRemote disconnectFromAudioSocket];
+        [_audioOutStreamRemote disconnectFromAudioSocketRemote];
     }
 
     if (self.currentMediaStatus == MEDIA_INFO_HAS_FIRST_IMAGE ||
@@ -1387,15 +1379,12 @@ double _ticks = 0;
 
 - (void)hideControlMenu
 {
-#if TEST_REMOTE_TALKBACK
-#else
     static NSTimeInterval animationDuration = 0.3;
     [UIView animateWithDuration:animationDuration animations:^{
         self.isHorizeShow = FALSE;
         self.horizMenu.hidden = YES;
         [self.ib_lbCameraName setHidden:YES];
     }];
-#endif
 }
 
 - (void)showControlMenu
@@ -1498,7 +1487,7 @@ double _ticks = 0;
     
     if (_audioOutStreamRemote)
     {
-        [_audioOutStreamRemote disconnectFromAudioSocket];
+        [_audioOutStreamRemote disconnectFromAudioSocketRemote];
     }
     
     if (self.currentMediaStatus == MEDIA_INFO_HAS_FIRST_IMAGE ||
@@ -1666,16 +1655,6 @@ double _ticks = 0;
 {
     self.isInLocal = self.selectedChannel.profile.isInLocal;
     
-    /*
-     * Check to init HorizeMenu once
-     */
-    
-    //    if (_shouldUpdateHorizeMenu)
-    //    {
-    //        self.shouldUpdateHorizeMenu = FALSE;
-    //        [self initHorizeMenu:_cameraModel];
-    //    }
-    
     [self createMonvementControlTimer];
     
     _isShowCustomIndicator = YES;
@@ -1799,8 +1778,6 @@ double _ticks = 0;
 
 -(void) startStream
 {
-#if TEST_REMOTE_TALKBACK //TODO: DELETE
-#else
     self.h264StreamerIsInStopped = FALSE;
     
     if (userWantToCancel == TRUE)
@@ -1835,14 +1812,7 @@ double _ticks = 0;
     h264StreamerListener = new H264PlayerListener(self);
     h264Streamer->setListener(h264StreamerListener);
     
-#if 1
     [self performSelectorInBackground:@selector(startStream_bg) withObject:nil];
-#else
-    dispatch_async(player_func_queue, ^{
-        [self startStream_bg];
-    });
-#endif
-#endif
 }
 
 - (void)startStream_bg
@@ -1892,6 +1862,11 @@ double _ticks = 0;
         if (status != NO_ERROR) // NOT OK
         {
             NSLog(@"setDataSource  failed");
+            
+            if (self.selectedChannel.profile.isInLocal)
+            {
+                self.messageStreamingState = @"Camera is not accessible";
+            }
             
             break;
         }
@@ -1954,7 +1929,7 @@ double _ticks = 0;
     if (_audioOutStreamRemote)
     {
         [self performSelectorInBackground:@selector(closeRemoteTalkback) withObject:nil];
-        [_audioOutStreamRemote disconnectFromAudioSocket];
+        [_audioOutStreamRemote disconnectFromAudioSocketRemote];
     }
     
     if (self.currentMediaStatus == 0 && h264Streamer == NULL) // Media player haven't start yet.
@@ -4042,14 +4017,6 @@ double _ticks = 0;
         }
         
         [self addGesturesPichInAndOut];
-        
-        //remove add hubble button at landscape
-//        for (UIView *view in self.navigationController.view.subviews) { // instead of self.view you can use your main view
-//            if ([view isKindOfClass:[UIButton class]] && view.tag == 11) {
-//                UIButton *btn = (UIButton *)view;
-//                [btn removeFromSuperview];
-//            }
-//        }
 	}
 	else if (orientation == UIInterfaceOrientationPortrait || orientation == UIInterfaceOrientationPortraitUpsideDown)
 	{
@@ -4133,8 +4100,6 @@ double _ticks = 0;
                     self.timelineVC.tableView.contentInset = UIEdgeInsetsMake(0, 0, 30, 0);
                 }
             }
-            
-            //NSLog(@"H264VC - adjust -imageVideo: %@, timelineContentSize: %@, SCREEN_HEIGHT: %f", NSStringFromCGRect(_imageViewStreamer.frame), NSStringFromCGRect(_timelineVC.tableView.frame), SCREEN_HEIGHT);
         }
         else
         {
@@ -4535,18 +4500,6 @@ double _ticks = 0;
 }
 -(void) playSound
 {
-#if 0
-    // Need not to set property for AudioSession.
-    
-	//NSLog(@"Play the B");
-	//201201011 This is needed to play the system sound on top of audio from camera
-	UInt32 sessionCategory = kAudioSessionCategory_AmbientSound;    // 1
-	AudioSessionSetProperty (
-                             kAudioSessionProperty_AudioCategory,                        // 2
-                             sizeof (sessionCategory),                                   // 3
-                             &sessionCategory                                            // 4
-                             );
-#endif
 	//Play beep
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
     {
@@ -4562,6 +4515,7 @@ double _ticks = 0;
 }
 
 #pragma mark - Zoom in&out
+
 - (void)centerScrollViewContents {
     CGSize boundsSize = self.scrollView.bounds.size;
     //CGRect contentsFrame = self.imageViewVideo.frame;
@@ -4669,32 +4623,11 @@ double _ticks = 0;
     {
         self.itemImages = [NSMutableArray arrayWithObjects:@"video_action_mic.png", @"video_action_photo.png", @"video_action_music.png", @"video_action_temp.png", nil];
         self.itemSelectedImages = [NSMutableArray arrayWithObjects:@"video_action_mic_pressed.png", @"video_action_photo_pressed.png", @"video_action_music_pressed.png", @"video_action_temp_pressed.png", nil];
-        
-        //        if (_isInLocal)
-        //        {
-        //            self.itemImages = [NSMutableArray arrayWithObjects:@"video_action_mic.png", @"video_action_video.png", @"video_action_music.png", @"video_action_temp.png", nil];
-        //            self.itemSelectedImages = [NSMutableArray arrayWithObjects:@"video_action_mic_pressed.png", @"video_action_video_pressed.png", @"video_action_music_pressed.png", @"video_action_temp_pressed.png", nil];
-        //        }
-        //        else
-        //        {
-        //            self.itemImages = [NSMutableArray arrayWithObjects:@"video_action_video.png", @"video_action_music.png", @"video_action_temp.png", nil];
-        //            self.itemSelectedImages = [NSMutableArray arrayWithObjects:@"video_action_video_pressed.png", @"video_action_music_pressed.png", @"video_action_temp_pressed.png", nil];
-        //        }
     }
     else //if ([_cameraModel isEqualToString:CP_MODEL_BLE])
     {
         self.itemImages = [NSMutableArray arrayWithObjects:@"video_action_pan.png", @"video_action_mic.png", @"video_action_video.png", @"video_action_music.png", @"video_action_temp.png", nil];
         self.itemSelectedImages = [NSMutableArray arrayWithObjects:@"video_action_pan_pressed.png", @"video_action_mic_pressed.png", @"video_action_video_pressed.png", @"video_action_music_pressed.png", @"video_action_temp_pressed.png", nil];
-        //        if (_isInLocal)
-        //        {
-        //            self.itemImages = [NSMutableArray arrayWithObjects:@"video_action_pan.png", @"video_action_mic.png", @"video_action_video.png", @"video_action_music.png", @"video_action_temp.png", nil];
-        //            self.itemSelectedImages = [NSMutableArray arrayWithObjects:@"video_action_pan_pressed.png", @"video_action_mic_pressed.png", @"video_action_video_pressed.png", @"video_action_music_pressed.png", @"video_action_temp_pressed.png", nil];
-        //        }
-        //        else
-        //        {
-        //            self.itemImages = [NSMutableArray arrayWithObjects:@"video_action_pan.png", @"video_action_video.png", @"video_action_music.png", @"video_action_temp.png", nil];
-        //            self.itemSelectedImages = [NSMutableArray arrayWithObjects:@"video_action_pan_pressed.png", @"video_action_video_pressed.png", @"video_action_music_pressed.png", @"video_action_temp_pressed.png", nil];
-        //        }
     }
     
     //[self.horizMenu reloadData:NO];
@@ -4819,28 +4752,6 @@ double _ticks = 0;
             default:
                 break;
         }
-        //        }
-        //        else
-        //        {
-        //            switch (index)
-        //            {
-        //                case 0:
-        //                    self.selectedItemMenu = INDEX_RECORDING;
-        //                    break;
-        //
-        //                case 1:
-        //                    self.selectedItemMenu = INDEX_MELODY;
-        //                    [self melodyTouchAction:nil];
-        //                    break;
-        //
-        //                case 2:
-        //                    self.selectedItemMenu = INDEX_TEMP;
-        //                    break;
-        //
-        //                default:
-        //                    break;
-        //            }
-        //        }
     }
     else// if ([_cameraModel isEqualToString:CP_MODEL_BLE])
     {
@@ -4874,33 +4785,6 @@ double _ticks = 0;
                 NSLog(@"Action out of bound");
                 break;
         }
-        //        }
-        //        else
-        //        {
-        //            switch (index)
-        //            {
-        //                case 0:
-        //                    self.selectedItemMenu = INDEX_PAN_TILT;
-        //                    break;
-        //
-        //                case 1:
-        //                    self.selectedItemMenu = INDEX_RECORDING;
-        //                    break;
-        //
-        //                case 2:
-        //                    self.selectedItemMenu = INDEX_MELODY;
-        //                    [self melodyTouchAction:nil];
-        //                    break;
-        //
-        //                case 3:
-        //                    self.selectedItemMenu = INDEX_TEMP;
-        //                    break;
-        //
-        //                default:
-        //                    NSLog(@"Action out of bound");
-        //                    break;
-        //            }
-        //        }
     }
     
     [self hideTimelineView];
@@ -5129,17 +5013,6 @@ double _ticks = 0;
 
 -(void) setupPtt
 {
-#if 0
-    UILongPressGestureRecognizer *longPress =
-    [[UILongPressGestureRecognizer alloc] initWithTarget:self
-                                                  action:@selector(longPress:)];
-    longPress.minimumPressDuration = 1.0;
-    [self.ib_buttonTouchToTalk addGestureRecognizer:longPress];
-    [longPress release];
-#endif
-//    [self.ib_buttonTouchToTalk addTarget:self action:@selector(holdToTalk:) forControlEvents:UIControlEventTouchDown];
-//    [self.ib_buttonTouchToTalk addTarget:self action:@selector(userReleaseHoldToTalk) forControlEvents:UIControlEventTouchUpInside];
-//    [self.ib_buttonTouchToTalk addTarget:self action:@selector(userReleaseHoldToTalk) forControlEvents:UIControlEventTouchUpOutside];
     [self.ib_buttonTouchToTalk addTarget:self action:@selector(ib_buttonTouchToTalkTouchUpInside) forControlEvents:UIControlEventTouchUpInside];
 }
 
@@ -5271,6 +5144,11 @@ double _ticks = 0;
             [_audioOut release];
             _audioOut = nil;
         }
+        else
+        {
+            self.ib_buttonTouchToTalk.enabled = YES;
+            self.enablePTT = YES;
+        }
         
         // UI
         UIImage *imageNormal;
@@ -5294,185 +5172,12 @@ double _ticks = 0;
     }
 }
 
-#if 0
-/*
- * If in Remote mode this method means TouchUpInside action
- */
-
--(void)userReleaseHoldToTalk
-{
-    [[KISSMetricsAPI sharedAPI] recordEvent:[NSString stringWithFormat:@"PlayerView touch up PTT - is in local: %d", self.selectedChannel.profile.isInLocal] withProperties:nil];
-#if TEST_REMOTE_TALKBACK
-    self.walkieTalkieEnabled = !self.walkieTalkieEnabled;
-    self.ib_buttonTouchToTalk.enabled = NO;
-    self.ib_labelTouchToTalk.text = @"Processing...";
-    
-    [self performSelectorInBackground:@selector(enableRemotePTT:)
-                           withObject:[NSNumber numberWithBool:self.walkieTalkieEnabled]];
-#else
-    if (self.selectedChannel.profile.isInLocal)
-    {
-        if (h264Streamer)
-        {
-            h264Streamer->setPlayOption(MEDIA_STREAM_AUDIO_NOT_MUTE);
-        }
-        
-        // Remote and Local is the same
-        NSLog(@"Detect user cancel PTT & clean up");
-        
-        if (_audioOut != nil)
-        {
-            [_audioOut disconnectFromAudioSocket];
-            [_audioOut release];
-            _audioOut = nil;
-        }
-        
-        [self.ib_labelTouchToTalk setText:@"Touch to Talk"];
-    }
-    else
-    {
-        self.walkieTalkieEnabled = !self.walkieTalkieEnabled;
-        self.enablePTT = NO;
-        _ib_buttonTouchToTalk.enabled = NO;
-        self.stringStatePTT = @"Processing...";
-        _ib_labelTouchToTalk.text = @"Processing...";
-        
-        [self performSelectorInBackground:@selector(enableRemotePTT:)
-                               withObject:[NSNumber numberWithBool:self.walkieTalkieEnabled]];
-    }
-#endif
-}
-
-- (BOOL) setEnablePtt:(BOOL) walkie_talkie_enabled
-{
-    @synchronized (self)
-    {
-        if ( walkie_talkie_enabled == YES)
-        {
-            [self performSelectorInBackground:@selector(set_Walkie_Talkie_bg:)
-                                   withObject:[NSString stringWithFormat:@"%d", walkie_talkie_enabled]];
-            if (_audioOut != nil)
-            {
-                NSLog(@"Connect to Audio Soccket in setEnablePtt function");
-                [_audioOut connectToAudioSocket];
-                _audioOut.audioOutStreamerDelegate = self;
-            }
-            else
-            {
-                NSLog(@" NEED to enable audioOut now BUT audioOut = nil!!!");
-            }
-        }
-        else
-        {
-            self.ib_buttonTouchToTalk.enabled = NO;
-            if (_audioOut != nil)
-            {
-                NSLog(@"disconnect to audio socket###");
-                [_audioOut disconnectFromAudioSocket];
-            }
-        }
-    }
-    
-    return walkie_talkie_enabled ;
-}
-
--(void)processingHoldToTalk // Just init AudioOutStreamer
-{
-    NSLog(@"Device ip: %@, Port push to talk: %d, actually is: %d", [HttpCom instance].comWithDevice.device_ip, self.selectedChannel.profile.ptt_port,IRABOT_AUDIO_RECORDING_PORT);
-    
-    _audioOut = [[AudioOutStreamer alloc] initWithDeviceIp:[HttpCom instance].comWithDevice.device_ip
-                                                andPTTport:self.selectedChannel.profile.ptt_port];  //IRABOT_AUDIO_RECORDING_PORT
-    [_audioOut retain];
-    //Start buffering sound from user at the moment they press down the button
-    //  This is to prevent loss of audio data
-    [_audioOut startRecordingSound];
-}
-
--(void) longPress:(UILongPressGestureRecognizer*) gest
-{
-    [[KISSMetricsAPI sharedAPI] recordEvent:@"PlayerView Touch to Talk" withProperties:nil];
-#if TEST_REMOTE_TALKBACK
-#else
-    if (self.selectedChannel.profile.isInLocal)
-    {
-        //turn off timer hide control panel or alway show control panel
-        [self showControlMenu];
-        
-        if ([gest state] == UIGestureRecognizerStateBegan)
-        {
-            NSLog(@"UIGestureRecognizerStateBegan on Touch to Talk");
-            self.walkieTalkieEnabled = YES;
-            self.disableAutorotateFlag = TRUE;
-            
-            [self setEnablePtt:YES];
-            
-            UIImage *imageHoldedToTalk;
-            
-            if (isiPhone4)
-            {
-                imageHoldedToTalk = [UIImage imageNamed:@"camera_action_mic_pressed.png"];
-            }
-            else
-            {
-                imageHoldedToTalk = [UIImage imageNamed:@"camera_action_mic_pressed@5.png"];
-            }
-            
-            [self.ib_buttonTouchToTalk setBackgroundImage:imageHoldedToTalk forState:UIControlEventTouchDown];
-            
-        }
-        else if ([gest state] == UIGestureRecognizerStateEnded ||
-                 [gest state] == UIGestureRecognizerStateCancelled)
-        {
-            self.disableAutorotateFlag = FALSE;
-            
-            NSLog(@"UIGestureRecognizerStateEnded on Touch to Talk");
-            if ([gest state] == UIGestureRecognizerStateCancelled)
-            {
-                NSLog(@"detect cancelling PTT");
-                
-            }
-            
-            [self setEnablePtt:NO];
-        }
-    }
-#endif
-}
-
-- (void)holdToTalk:(id)sender {
-    //first update UI
-    [self.ib_buttonTouchToTalk setBackgroundImage:[UIImage imageMic] forState:UIControlStateNormal];
-    [self.ib_buttonTouchToTalk setBackgroundImage:[UIImage imageMicPressed] forState:UIControlEventTouchDown];
-    [self.ib_buttonTouchToTalk setBackgroundImage:[UIImage imageMic] forState:UIControlEventTouchUpInside];
-    
-    [self applyFont];
-#if TEST_REMOTE_TALKBACK
-#else
-    //processing for PTT
-    if (self.selectedChannel.profile.isInLocal)
-    {
-        if (h264Streamer)
-        {
-            h264Streamer->setPlayOption(MEDIA_STREAM_AUDIO_MUTE);
-        }
-        
-        [self.ib_labelTouchToTalk setText:@"Speaking"];
-        [self processingHoldToTalk];
-    }
-#endif
-}
-
-#endif
-
 - (void) set_Walkie_Talkie_bg: (NSString *) status
 {
     @autoreleasepool {
         NSString * command = [NSString stringWithFormat:@"%@%@", SET_PTT, status];
         
         NSLog(@"Command send to camera is %@", command);
-        
-        //set port default for send command
-        
-        //[HttpCom instance].comWithDevice.device_port = 80;
         
         [[HttpCom instance].comWithDevice sendCommandAndBlock:command];
         
@@ -5591,9 +5296,17 @@ double _ticks = 0;
         
         if (_audioOutStreamRemote != nil)
         {
-            [_audioOutStreamRemote performSelectorOnMainThread:@selector(disconnectFromAudioSocket) withObject:nil waitUntilDone:NO];
+            [_audioOutStreamRemote performSelectorOnMainThread:@selector(disconnectFromAudioSocketRemote) withObject:nil waitUntilDone:NO];
+            
+            if (!_audioOutStreamRemote.audioOutStreamRemoteDelegate)
+            {
+                [self performSelectorOnMainThread:@selector(touchUpInsideHoldToTalk) withObject:nil waitUntilDone:NO];
+            }
         }
-        [self performSelectorOnMainThread:@selector(touchUpInsideHoldToTalk) withObject:nil waitUntilDone:NO];
+        else
+        {
+            [self performSelectorOnMainThread:@selector(touchUpInsideHoldToTalk) withObject:nil waitUntilDone:NO];
+        }
     }
     else
     {
@@ -5611,7 +5324,7 @@ double _ticks = 0;
         if (_audioOutStreamRemote.isHandshakeSuccess)
         {
             // STEP 3 -- Reconnect to Relay-server
-            [_audioOutStreamRemote performSelectorOnMainThread:@selector(connectToAudioSocket) withObject:nil waitUntilDone:NO];
+            [_audioOutStreamRemote performSelectorOnMainThread:@selector(connectToAudioSocketRemote) withObject:nil waitUntilDone:NO];
         }
         else
         {
@@ -5622,7 +5335,7 @@ double _ticks = 0;
             
             if (statusCode == 404)
             {
-                self.walkieTalkieEnabled = !self.walkieTalkieEnabled;
+                self.walkieTalkieEnabled = NO;
                 [self enableRemotePTT:[NSNumber numberWithBool:self.walkieTalkieEnabled]];
                 return;
             }
@@ -5631,81 +5344,95 @@ double _ticks = 0;
             self.sessionKey = [userDefault objectForKey:SESSION_KEY];
             self.streamID = [userDefault objectForKey:STREAM_ID];
             
-            if (_sessionKey == nil)
+            if (!_ib_ViewTouchToTalk.isHidden && _walkieTalkieEnabled)
             {
-                [self retryTalkbackRemote];
-            }
-            else
-            {
-                // STEP 2
-                
-                NSString *url = [NSString stringWithFormat: @"%@/devices/start_talk_back", _talkbackRemoteServer];
-                
-                NSDictionary *resDict = [self workWithServer:url sessionKey:_sessionKey streamID:_streamID];
-                
-                NSLog(@"%@", resDict);
-                
-                if (resDict != Nil)
+                if (_sessionKey == nil)
                 {
-                    NSInteger status = [[resDict objectForKey:@"status"] integerValue];
-                    
-                    if (status == 200)
-                    {
-                        NSMutableData *data = [[NSMutableData alloc] init];
-                        
-                        Byte header[3];// = {1, 79, 1};
-                        header[0] = 1;
-                        header[1] = 79;
-                        header[2] = 1;
-                        
-                        NSString *handshake = [_streamID stringByAppendingString:_sessionKey];
-                        [data appendBytes:header length:3];
-                        
-                        const char *charHandshake = [handshake UTF8String];
-                        [data appendBytes:charHandshake length:strlen(charHandshake)];
-                        
-                        _audioOutStreamRemote.dataRequest = data;
-                        [data release];
-                        
-                        NSString *relayServerIP = (NSString *)[resDict objectForKey:@"relay_server_ip"];
-                        id relayServerPort = [resDict objectForKey:@"relay_server_port"];
-                        
-                        if (relayServerIP != nil && relayServerPort != nil)
-                        {
-                            _audioOutStreamRemote.relayServerIP = relayServerIP;
-                            _audioOutStreamRemote.relayServerPort = [relayServerPort integerValue];
-                            
-                            [_audioOutStreamRemote performSelectorOnMainThread:@selector(connectToAudioSocket) withObject:nil waitUntilDone:NO];
-                            _audioOutStreamRemote.audioOutStreamRemoteDelegate = self;
-                        }
-                        else
-                        {
-                            NSLog(@"H264VC - enableRemotePTT - relayServerIP = nil | relayServerPort = nil {0}");
-                        }
-                        
-                        NSLog(@"H264VC -enableRemotePTT - data: %@, -length: %lu, -ip: %@, -port: %d", data, (unsigned long)data.length, _audioOutStreamRemote.relayServerIP, _audioOutStreamRemote.relayServerPort);
-                    }
-                    else
-                    {
-                        if (status == 404)
-                        {
-                            self.walkieTalkieEnabled = !self.walkieTalkieEnabled;
-                            [self enableRemotePTT:[NSNumber numberWithBool:self.walkieTalkieEnabled]];
-                            return;
-                        }
-                        
-                        NSLog(@"Send cmd start_talk_back failed! Retry...");
-                        [self retryTalkbackRemote];
-                    }
+                    [self retryTalkbackRemote];
                 }
                 else
                 {
-                    NSLog(@"Response Dict from camera - resDict = nil! Retry...");
-                    [self retryTalkbackRemote];
-                }
+                    // STEP 2
+                    
+                    NSString *url = [NSString stringWithFormat: @"%@/devices/start_talk_back", _talkbackRemoteServer];
+                    
+                    NSDictionary *resDict = [self workWithServer:url sessionKey:_sessionKey streamID:_streamID];
+                    
+                    NSLog(@"%@", resDict);
+                    
+                    if (!_ib_ViewTouchToTalk.isHidden && _walkieTalkieEnabled)
+                    {
+                        if (resDict != Nil)
+                        {
+                            NSInteger status = [[resDict objectForKey:@"status"] integerValue];
+                            
+                            if (status == 200)
+                            {
+                                NSMutableData *data = [[NSMutableData alloc] init];
+                                
+                                Byte header[3];// = {1, 79, 1};
+                                header[0] = 1;
+                                header[1] = 79;
+                                header[2] = 1;
+                                
+                                NSString *handshake = [_streamID stringByAppendingString:_sessionKey];
+                                [data appendBytes:header length:3];
+                                
+                                const char *charHandshake = [handshake UTF8String];
+                                [data appendBytes:charHandshake length:strlen(charHandshake)];
+                                
+                                _audioOutStreamRemote.dataRequest = data;
+                                [data release];
+                                
+                                NSString *relayServerIP = (NSString *)[resDict objectForKey:@"relay_server_ip"];
+                                id relayServerPort = [resDict objectForKey:@"relay_server_port"];
+                                
+                                if (relayServerIP != nil && relayServerPort != nil)
+                                {
+                                    _audioOutStreamRemote.relayServerIP = relayServerIP;
+                                    _audioOutStreamRemote.relayServerPort = [relayServerPort integerValue];
+                                    
+                                    [_audioOutStreamRemote performSelectorOnMainThread:@selector(connectToAudioSocketRemote) withObject:nil waitUntilDone:NO];
+                                    _audioOutStreamRemote.audioOutStreamRemoteDelegate = self;
+                                }
+                                else
+                                {
+                                    NSLog(@"H264VC - enableRemotePTT - relayServerIP = nil | relayServerPort = nil {0}");
+                                }
+                                
+                                NSLog(@"H264VC -enableRemotePTT - data: %@, -length: %lu, -ip: %@, -port: %d", data, (unsigned long)data.length, _audioOutStreamRemote.relayServerIP, _audioOutStreamRemote.relayServerPort);
+                            }
+                            else
+                            {
+                                if (status == 404)
+                                {
+                                    self.walkieTalkieEnabled = NO;
+                                    [self enableRemotePTT:[NSNumber numberWithBool:self.walkieTalkieEnabled]];
+                                    return;
+                                }
+                                
+                                NSLog(@"Send cmd start_talk_back failed! Retry...");
+                                [self retryTalkbackRemote];
+                            }
+                        }
+                        else
+                        {
+                            NSLog(@"Response Dict from camera - resDict = nil! Retry...");
+                            [self retryTalkbackRemote];
+                        }
+                    }
+                    else
+                    {
+                        NSLog(@"%s PTT view is invisible. Do nothing!", __FUNCTION__);
+                    }
+                } // End sessionKey != nil
             }
-        }
-    }
+            else
+            {
+                NSLog(@"%s PTT view is invisible. Do nothing!", __FUNCTION__);
+            }
+        } // End Handshake
+    }// End walkieTalkieEnabledFlag
 }
 
 - (void)closeRemoteTalkback
@@ -6006,6 +5733,7 @@ double _ticks = 0;
 
 #pragma mark -
 #pragma mark display timer recording
+
 - (void)timerTick:(NSTimer *)timer
 {
     _ticks += 1.0;
@@ -6055,6 +5783,7 @@ double _ticks = 0;
 
 #pragma mark -
 #pragma mark SnapShot
+
 - (void)processingForTakePicture
 {
     [self.ib_processRecordOrTakePicture setEnabled:NO];
