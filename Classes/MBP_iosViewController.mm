@@ -78,7 +78,7 @@
     
     
 	//go Back to main menu
-	[NSTimer scheduledTimerWithTimeInterval:2
+	[NSTimer scheduledTimerWithTimeInterval:0.1
                                      target:self
                                    selector:@selector(wakeup_display_login:)
                                    userInfo:nil
@@ -96,6 +96,11 @@
 {
     [super viewWillAppear:animated];
     self.navigationController.navigationBarHidden = YES;
+    
+    NSString * msg = NSLocalizedStringWithDefaultValue(@"Logging_in_to_server" ,nil, [NSBundle mainBundle],
+                                                       @"Logging in to server..." , nil);
+    UILabel *labelMessage = (UILabel *)[self.view viewWithTag:509];
+    [labelMessage setText:msg];
     
     if (_splashScreen != nil)
     {

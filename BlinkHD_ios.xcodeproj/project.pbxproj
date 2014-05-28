@@ -1681,8 +1681,6 @@
 		BC064B39174CDD1F00EFAC66 /* ja */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = ja; path = ja.lproj/Step_11_ViewController_ipad.xib; sourceTree = "<group>"; };
 		BC064B3B174CDD2000EFAC66 /* ja */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = ja; path = ja.lproj/ForgotPwdViewController.xib; sourceTree = "<group>"; };
 		BC064B3C174CDD2100EFAC66 /* ja */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = ja; path = ja.lproj/ForgotPwdViewController_ipad.xib; sourceTree = "<group>"; };
-		BC064B4B174CDD3700EFAC66 /* ja */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = ja; path = ja.lproj/MBP_iosViewController.xib; sourceTree = "<group>"; };
-		BC064B4C174CDD3700EFAC66 /* ja */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = ja; path = ja.lproj/MBP_iosViewController_ipad.xib; sourceTree = "<group>"; };
 		BC064B57174CDD4300EFAC66 /* ja */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = ja; path = ja.lproj/FWUpgradeView.xib; sourceTree = "<group>"; };
 		BC064B58174CDD4400EFAC66 /* ja */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = ja; path = ja.lproj/FWUpgradeView_land.xib; sourceTree = "<group>"; };
 		BC064B5A174CDD4600EFAC66 /* ja */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = ja; path = ja.lproj/SongTitleView.xib; sourceTree = "<group>"; };
@@ -1704,8 +1702,6 @@
 		BC064B7F174CDD5F00EFAC66 /* ja */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = ja; path = ja.lproj/Step_12_ViewController_ipad.xib; sourceTree = "<group>"; };
 		BC064B81174CDD6000EFAC66 /* ja */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = ja; path = ja.lproj/Step_11_ViewController.xib; sourceTree = "<group>"; };
 		BC064B83174CDD6100EFAC66 /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/Localizable.strings; sourceTree = "<group>"; };
-		BC3C1A8816F0223800175AFF /* es */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = es; path = es.lproj/MBP_iosViewController_ipad.xib; sourceTree = "<group>"; };
-		BC3C1A8916F0223900175AFF /* fr */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = fr; path = fr.lproj/MBP_iosViewController_ipad.xib; sourceTree = "<group>"; };
 		BC3C1A9216F022D100175AFF /* es */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = es; path = es.lproj/Step_02_ViewController_ipad.xib; sourceTree = "<group>"; };
 		BC3C1A9316F022D300175AFF /* fr */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = fr; path = fr.lproj/Step_02_ViewController_ipad.xib; sourceTree = "<group>"; };
 		BC3C1A9A16F022F200175AFF /* es */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = es; path = es.lproj/Step_04_ViewController.xib; sourceTree = "<group>"; };
@@ -1739,8 +1735,6 @@
 		BC3C1B0616F05C0D00175AFF /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/Localizable.strings; sourceTree = "<group>"; };
 		BC3C1B0716F05E5800175AFF /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/Localizable.strings; sourceTree = "<group>"; };
 		BC5B0FCD1701855600D2C308 /* cameraMenuRouter.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = cameraMenuRouter.plist; sourceTree = "<group>"; };
-		BC5B0FD617018F1600D2C308 /* sv */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = sv; path = sv.lproj/MBP_iosViewController.xib; sourceTree = "<group>"; };
-		BC5B0FD817018F1700D2C308 /* sv */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = sv; path = sv.lproj/MBP_iosViewController_ipad.xib; sourceTree = "<group>"; };
 		BC5B0FE317018F1A00D2C308 /* sv */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = sv; path = sv.lproj/FWUpgradeView.xib; sourceTree = "<group>"; };
 		BC5B0FE417018F1A00D2C308 /* sv */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = sv; path = sv.lproj/FWUpgradeView_land.xib; sourceTree = "<group>"; };
 		BC5B0FE617018F1B00D2C308 /* sv */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = sv; path = sv.lproj/SongTitleView.xib; sourceTree = "<group>"; };
@@ -1785,8 +1779,6 @@
 		BC89DB9F1703EB4400BED0CE /* de */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = de; path = de.lproj/Step_11_ViewController_ipad.xib; sourceTree = "<group>"; };
 		BC89DBA11703EB4500BED0CE /* de */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = de; path = de.lproj/ForgotPwdViewController.xib; sourceTree = "<group>"; };
 		BC89DBA21703EB4500BED0CE /* de */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = de; path = de.lproj/ForgotPwdViewController_ipad.xib; sourceTree = "<group>"; };
-		BC89DBB11703EB4A00BED0CE /* de */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = de; path = de.lproj/MBP_iosViewController.xib; sourceTree = "<group>"; };
-		BC89DBB21703EB4A00BED0CE /* de */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = de; path = de.lproj/MBP_iosViewController_ipad.xib; sourceTree = "<group>"; };
 		BC89DBBD1703EB4E00BED0CE /* de */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = de; path = de.lproj/FWUpgradeView.xib; sourceTree = "<group>"; };
 		BC89DBBE1703EB4F00BED0CE /* de */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = de; path = de.lproj/FWUpgradeView_land.xib; sourceTree = "<group>"; };
 		BC89DBC01703EB4F00BED0CE /* de */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = de; path = de.lproj/SongTitleView.xib; sourceTree = "<group>"; };
@@ -1796,8 +1788,6 @@
 		BC9CA7A1170AD07C00E9ACD0 /* nl */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = nl; path = nl.lproj/Step_11_ViewController_ipad.xib; sourceTree = "<group>"; };
 		BC9CA7A3170AD07D00E9ACD0 /* nl */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = nl; path = nl.lproj/ForgotPwdViewController.xib; sourceTree = "<group>"; };
 		BC9CA7A4170AD07E00E9ACD0 /* nl */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = nl; path = nl.lproj/ForgotPwdViewController_ipad.xib; sourceTree = "<group>"; };
-		BC9CA7B3170AD08500E9ACD0 /* nl */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = nl; path = nl.lproj/MBP_iosViewController.xib; sourceTree = "<group>"; };
-		BC9CA7B4170AD08500E9ACD0 /* nl */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = nl; path = nl.lproj/MBP_iosViewController_ipad.xib; sourceTree = "<group>"; };
 		BC9CA7BF170AD08A00E9ACD0 /* nl */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = nl; path = nl.lproj/FWUpgradeView.xib; sourceTree = "<group>"; };
 		BC9CA7C0170AD08A00E9ACD0 /* nl */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = nl; path = nl.lproj/FWUpgradeView_land.xib; sourceTree = "<group>"; };
 		BC9CA7C2170AD08B00E9ACD0 /* nl */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = nl; path = nl.lproj/SongTitleView.xib; sourceTree = "<group>"; };
@@ -1828,8 +1818,6 @@
 		BCDD147E170EB9A500D91DE4 /* pt */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = pt; path = pt.lproj/Step_11_ViewController_ipad.xib; sourceTree = "<group>"; };
 		BCDD1480170EB9A700D91DE4 /* pt */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = pt; path = pt.lproj/ForgotPwdViewController.xib; sourceTree = "<group>"; };
 		BCDD1481170EB9A800D91DE4 /* pt */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = pt; path = pt.lproj/ForgotPwdViewController_ipad.xib; sourceTree = "<group>"; };
-		BCDD1490170EB9B100D91DE4 /* pt */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = pt; path = pt.lproj/MBP_iosViewController.xib; sourceTree = "<group>"; };
-		BCDD1491170EB9B100D91DE4 /* pt */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = pt; path = pt.lproj/MBP_iosViewController_ipad.xib; sourceTree = "<group>"; };
 		BCDD149C170EB9B700D91DE4 /* pt */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = pt; path = pt.lproj/FWUpgradeView.xib; sourceTree = "<group>"; };
 		BCDD149D170EB9B700D91DE4 /* pt */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = pt; path = pt.lproj/FWUpgradeView_land.xib; sourceTree = "<group>"; };
 		BCDD149F170EB9B800D91DE4 /* pt */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = pt; path = pt.lproj/SongTitleView.xib; sourceTree = "<group>"; };
@@ -1849,8 +1837,6 @@
 		BCDD14BF170EB9C700D91DE4 /* pt */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = pt; path = pt.lproj/Step_08_ViewController_land_ipad.xib; sourceTree = "<group>"; };
 		BCDD14C2170EB9C800D91DE4 /* pt */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = pt; path = pt.lproj/Step_12_ViewController.xib; sourceTree = "<group>"; };
 		BCDD14C4170EB9C800D91DE4 /* pt */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = pt; path = pt.lproj/Localizable.strings; sourceTree = "<group>"; };
-		BCE30C8716F01F61003E297A /* es */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = es; path = es.lproj/MBP_iosViewController.xib; sourceTree = "<group>"; };
-		BCE30C8816F01F63003E297A /* fr */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = fr; path = fr.lproj/MBP_iosViewController.xib; sourceTree = "<group>"; };
 		BCEAC02C170547AD0066D1BC /* it */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = it; path = it.lproj/Step_06_ViewController.xib; sourceTree = "<group>"; };
 		BCEAC02D170547AD0066D1BC /* it */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = it; path = it.lproj/Step_06_ViewController_ipad.xib; sourceTree = "<group>"; };
 		BCEAC02E170547AD0066D1BC /* it */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = it; path = it.lproj/Step_07_ViewController.xib; sourceTree = "<group>"; };
@@ -1865,8 +1851,6 @@
 		BCEAC03C170547B00066D1BC /* it */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = it; path = it.lproj/Step_11_ViewController_ipad.xib; sourceTree = "<group>"; };
 		BCEAC03E170547B10066D1BC /* it */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = it; path = it.lproj/ForgotPwdViewController.xib; sourceTree = "<group>"; };
 		BCEAC03F170547B10066D1BC /* it */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = it; path = it.lproj/ForgotPwdViewController_ipad.xib; sourceTree = "<group>"; };
-		BCEAC04E170547B30066D1BC /* it */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = it; path = it.lproj/MBP_iosViewController.xib; sourceTree = "<group>"; };
-		BCEAC04F170547B30066D1BC /* it */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = it; path = it.lproj/MBP_iosViewController_ipad.xib; sourceTree = "<group>"; };
 		BCEAC05A170547B50066D1BC /* it */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = it; path = it.lproj/FWUpgradeView.xib; sourceTree = "<group>"; };
 		BCEAC05B170547B60066D1BC /* it */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = it; path = it.lproj/FWUpgradeView_land.xib; sourceTree = "<group>"; };
 		BCEAC05D170547B60066D1BC /* it */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = it; path = it.lproj/SongTitleView.xib; sourceTree = "<group>"; };
@@ -1877,8 +1861,6 @@
 		BCEAC073170547BC0066D1BC /* it */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = it; path = it.lproj/Step_05_ViewController.xib; sourceTree = "<group>"; };
 		BCEAC075170547BC0066D1BC /* it */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = it; path = it.lproj/Step_05_ViewController_ipad.xib; sourceTree = "<group>"; };
 		BCEAC076170547BC0066D1BC /* it */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = it; path = it.lproj/Localizable.strings; sourceTree = "<group>"; };
-		BCF245F817096F7A00A83B3C /* fr-CA */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = "fr-CA"; path = "fr-CA.lproj/MBP_iosViewController.xib"; sourceTree = "<group>"; };
-		BCF245F917096F7B00A83B3C /* fr-CA */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = "fr-CA"; path = "fr-CA.lproj/MBP_iosViewController_ipad.xib"; sourceTree = "<group>"; };
 		BCF2460417096F7F00A83B3C /* fr-CA */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = "fr-CA"; path = "fr-CA.lproj/FWUpgradeView.xib"; sourceTree = "<group>"; };
 		BCF2460517096F7F00A83B3C /* fr-CA */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = "fr-CA"; path = "fr-CA.lproj/FWUpgradeView_land.xib"; sourceTree = "<group>"; };
 		BCF2460717096F8000A83B3C /* fr-CA */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = "fr-CA"; path = "fr-CA.lproj/SongTitleView.xib"; sourceTree = "<group>"; };
@@ -1904,8 +1886,6 @@
 		BCF2463317096F8E00A83B3C /* fr-CA */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = "fr-CA"; path = "fr-CA.lproj/ForgotPwdViewController_ipad.xib"; sourceTree = "<group>"; };
 		BCF2463717096F8F00A83B3C /* fr-CA */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "fr-CA"; path = "fr-CA.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		BCF3CD8B170D7FDF00968A60 /* pl */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = pl; path = pl.lproj/ForgotPwdViewController_ipad.xib; sourceTree = "<group>"; };
-		BCF3CD9A170D7FE400968A60 /* pl */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = pl; path = pl.lproj/MBP_iosViewController.xib; sourceTree = "<group>"; };
-		BCF3CD9B170D7FE400968A60 /* pl */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = pl; path = pl.lproj/MBP_iosViewController_ipad.xib; sourceTree = "<group>"; };
 		BCF3CDA6170D7FE800968A60 /* pl */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = pl; path = pl.lproj/FWUpgradeView.xib; sourceTree = "<group>"; };
 		BCF3CDA7170D7FE800968A60 /* pl */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = pl; path = pl.lproj/FWUpgradeView_land.xib; sourceTree = "<group>"; };
 		BCF3CDA9170D7FE800968A60 /* pl */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = pl; path = pl.lproj/SongTitleView.xib; sourceTree = "<group>"; };
@@ -1934,8 +1914,6 @@
 		BCFBB2421711F4530085D804 /* es-419 */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = "es-419"; path = "es-419.lproj/Step_11_ViewController_ipad.xib"; sourceTree = "<group>"; };
 		BCFBB2441711F4540085D804 /* es-419 */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = "es-419"; path = "es-419.lproj/ForgotPwdViewController.xib"; sourceTree = "<group>"; };
 		BCFBB2451711F4560085D804 /* es-419 */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = "es-419"; path = "es-419.lproj/ForgotPwdViewController_ipad.xib"; sourceTree = "<group>"; };
-		BCFBB2541711F4680085D804 /* es-419 */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = "es-419"; path = "es-419.lproj/MBP_iosViewController.xib"; sourceTree = "<group>"; };
-		BCFBB2551711F4690085D804 /* es-419 */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = "es-419"; path = "es-419.lproj/MBP_iosViewController_ipad.xib"; sourceTree = "<group>"; };
 		BCFBB2601711F4760085D804 /* es-419 */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = "es-419"; path = "es-419.lproj/FWUpgradeView.xib"; sourceTree = "<group>"; };
 		BCFBB2611711F4770085D804 /* es-419 */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = "es-419"; path = "es-419.lproj/FWUpgradeView_land.xib"; sourceTree = "<group>"; };
 		BCFBB2631711F4780085D804 /* es-419 */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = "es-419"; path = "es-419.lproj/SongTitleView.xib"; sourceTree = "<group>"; };
@@ -4648,17 +4626,6 @@
 			isa = PBXVariantGroup;
 			children = (
 				388396B8168B064500B0D020 /* en */,
-				BCE30C8716F01F61003E297A /* es */,
-				BCE30C8816F01F63003E297A /* fr */,
-				BC5B0FD617018F1600D2C308 /* sv */,
-				BC89DBB11703EB4A00BED0CE /* de */,
-				BCEAC04E170547B30066D1BC /* it */,
-				BCF245F817096F7A00A83B3C /* fr-CA */,
-				BC9CA7B3170AD08500E9ACD0 /* nl */,
-				BCF3CD9A170D7FE400968A60 /* pl */,
-				BCDD1490170EB9B100D91DE4 /* pt */,
-				BCFBB2541711F4680085D804 /* es-419 */,
-				BC064B4B174CDD3700EFAC66 /* ja */,
 			);
 			name = MBP_iosViewController.xib;
 			sourceTree = "<group>";
@@ -4724,17 +4691,6 @@
 			isa = PBXVariantGroup;
 			children = (
 				38DE1C10168ADA6B0049E814 /* en */,
-				BC3C1A8816F0223800175AFF /* es */,
-				BC3C1A8916F0223900175AFF /* fr */,
-				BC5B0FD817018F1700D2C308 /* sv */,
-				BC89DBB21703EB4A00BED0CE /* de */,
-				BCEAC04F170547B30066D1BC /* it */,
-				BCF245F917096F7B00A83B3C /* fr-CA */,
-				BC9CA7B4170AD08500E9ACD0 /* nl */,
-				BCF3CD9B170D7FE400968A60 /* pl */,
-				BCDD1491170EB9B100D91DE4 /* pt */,
-				BCFBB2551711F4690085D804 /* es-419 */,
-				BC064B4C174CDD3700EFAC66 /* ja */,
 			);
 			name = MBP_iosViewController_ipad.xib;
 			sourceTree = "<group>";
