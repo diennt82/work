@@ -36,6 +36,7 @@
 @property (nonatomic) BOOL buttonEnterPressedFlag;
 @property (nonatomic,retain) StunClient *client;
 
+@property (retain, nonatomic) IBOutlet UIImageView *imgViewLoading;
 @end
 
 @implementation LoginViewController
@@ -82,6 +83,17 @@
     self.tfPassword.delegate = self;
     
     self.buttonEnterPressedFlag = NO;
+    
+    self.imgViewLoading.animationImages =[NSArray arrayWithObjects:
+                                          [UIImage imageNamed:@"loader_big_a"],
+                                          [UIImage imageNamed:@"loader_big_b"],
+                                          [UIImage imageNamed:@"loader_big_c"],
+                                          [UIImage imageNamed:@"loader_big_d"],
+                                          [UIImage imageNamed:@"loader_big_e"],
+                                          //[UIImage imageNamed:@"Logo_220"],
+                                          nil];
+    self.imgViewLoading.animationDuration = 1.5;
+    [self.imgViewLoading startAnimating];
     
 	//load user/pass
     [self performSelectorInBackground:@selector(loadUserInfo_bg) withObject:nil];
@@ -130,6 +142,7 @@
 
 - (void)loadUserInfo
 {
+    
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     
 	//can be user email or user name here --
@@ -189,6 +202,10 @@
         self.buttonEnter.enabled = NO;
         NSLog(@"LoginVC - No login");
     }
+    
+    //self.viewProgress.hidden = NO;
+    
+    
 }
 
 - (void)didReceiveMemoryWarning
@@ -365,8 +382,8 @@
     }
     else
     {
-        NSString * msg = NSLocalizedStringWithDefaultValue(@"Logging_in_to_server" ,nil, [NSBundle mainBundle],
-                                                           @"Logging in to server..." , nil);
+        NSString * msg = NSLocalizedStringWithDefaultValue(@"Logging_in_to_server" ,nil, [NSBundle mainBundle],@"Logging in to server..." , nil);
+               
         self.viewProgress.hidden = NO;
         UILabel *labelMessage = (UILabel *)[_viewProgress viewWithTag:509];
         [labelMessage setText:msg];

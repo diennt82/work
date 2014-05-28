@@ -23,6 +23,8 @@
 		<string>../../../ios-frameworks</string>
 		<key>BCC5DFA4-7DCD-4D31-8E3E-F3BB7EC56470</key>
 		<string>../..</string>
+		<key>EE344F6D-8928-4BDA-9347-05C94B52898C</key>
+		<string>../../../ios-frameworks</string>
 	</dict>
 	<key>IDESourceControlProjectURL</key>
 	<string>https://github.com/monitoreverywhere/iphone-app.git</string>

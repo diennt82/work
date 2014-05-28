@@ -573,7 +573,11 @@ double _ticks = 0;
     //init a normal UIButton using that image
     UIButton* button = [[UIButton alloc] initWithFrame:frame];
     [button setBackgroundImage:image forState:UIControlStateNormal];
-    [button setShowsTouchWhenHighlighted:YES];
+    [button setBackgroundImage:image forState:UIControlStateHighlighted];
+     [button setBackgroundImage:image forState:UIControlStateSelected];
+    [button setBackgroundImage:image forState:UIControlStateDisabled];
+
+    //[button setShowsTouchWhenHighlighted:YES];
     
     //set the button to handle clicks - this one calls a method called 'downloadClicked'
     [button addTarget:self action:@selector(prepareGoBackToCameraList:) forControlEvents:UIControlEventTouchUpInside];

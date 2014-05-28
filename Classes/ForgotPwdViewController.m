@@ -39,14 +39,23 @@
     self.navigationItem.title =  NSLocalizedStringWithDefaultValue(@"Forgot_Password",nil, [NSBundle mainBundle],
                                                                    @"Forgot Password", nil);
     
-    UIBarButtonItem *nextButton = 
+    UIImage *hubbleBack = [UIImage imageNamed:@"Hubble_logo_back"];
+    UIBarButtonItem *backBarBtn = [[UIBarButtonItem alloc] initWithImage:hubbleBack
+                                                                   style:UIBarButtonItemStyleBordered
+                                                                  target:self
+                                                                  action:@selector(btnBackPressed)];
+    [backBarBtn setTintColor:[UIColor colorWithPatternImage:hubbleBack]];
+    
+    self.navigationItem.leftBarButtonItem = backBarBtn;
+    
+   /* UIBarButtonItem *nextButton =
     [[UIBarButtonItem alloc] initWithTitle: NSLocalizedStringWithDefaultValue(@"Next",nil, [NSBundle mainBundle],
                                                                               @"Next", nil)
                                      style:UIBarButtonItemStylePlain 
                                     target:self 
                                     action:@selector(handleNextButton:)];          
     self.navigationItem.rightBarButtonItem = nextButton;
-    [nextButton release];
+    [nextButton release];*/
     
     passwordLinkSent.hidden = YES;
     [self.view addSubview:passwordLinkSent];
@@ -90,8 +99,37 @@
     return UIInterfaceOrientationMaskAllButUpsideDown;
 }
 
--(void) handleNextButton:(id) sender
+-(void)btnBackPressed
 {
+    [self.navigationController popViewControllerAnimated:YES];
+}
+
+-(BOOL)checkEmailValidation:(NSString*)strEmail{
+    
+    strEmail  = [[strEmail stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]] autorelease];
+    if(strEmail.length==0)
+    {
+        return NO;
+    }
+    
+    NSString *emailRegex = @"[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}";
+    NSPredicate *emailTest = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", emailRegex];
+    return [emailTest evaluateWithObject:strEmail];
+}
+
+
+-(IBAction)handleNextButton:(id) sender
+{
+    if(![self checkEmailValidation:userEmailTF.text])
+    {
+        NSString *strMsg = NSLocalizedStringWithDefaultValue(@"Create_Account_Failed_msg3",nil, [NSBundle mainBundle], @"Create_Account_Failed_msg3", nil);
+        //NSString *strMsg = @"Please enter valid email.";
+        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:nil message:strMsg delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+        [alertView show];
+        [alertView release];
+        return;
+    }
+    
     [userEmailTF resignFirstResponder];
     
     //NSString * ok = NSLocalizedStringWithDefaultValue(@"Ok",nil, [NSBundle mainBundle],

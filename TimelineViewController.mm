@@ -43,6 +43,8 @@
 
 @property (nonatomic) BOOL hasUpdate;
 
+
+
 @end
 
 @implementation TimelineViewController
@@ -66,6 +68,8 @@
     
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
+    
+    aryDatePrefix = [[NSArray alloc] initWithObjects:@"th", @"st", @"nd", @"rd",@"th",@"th", @"th", @"th", @"th", @"th",nil];
     
     self.navigationController.navigationBarHidden = YES;
     
@@ -190,11 +194,11 @@
     
     if (_is12hr)
     {
-        dateFormatter.dateFormat = @"hh:mm a";
+        dateFormatter.dateFormat = @"h:mm a";
     }
     else
     {
-        dateFormatter.dateFormat = @"HH:mm";
+        dateFormatter.dateFormat = @"H:mm";
     }
     
     self.stringCurrentDate = [dateFormatter stringFromDate:_currentDate];
@@ -354,7 +358,6 @@
                     eventInfo.time_stamp = [event objectForKey:@"time_stamp"];
                     eventInfo.alert      = [[event objectForKey:@"alert"] integerValue];
                     
-                    
                     NSString * data_str1  = nil;
                     if ([event objectForKey:@"data"] != [NSNull null])
                     {
@@ -481,11 +484,11 @@
     
     if (_is12hr)
     {
-        dateFormatter.dateFormat = @"hh:mm a";
+        dateFormatter.dateFormat = @"h:mm a";
     }
     else
     {
-        dateFormatter.dateFormat = @"HH:mm";
+        dateFormatter.dateFormat = @"H:mm";
     }
     self.stringCurrentDate = [dateFormatter stringFromDate:_currentDate];
     
@@ -700,10 +703,10 @@
             }
             else
             {
-                self.stringIntelligentMessage = @"All is calm";
+                self.stringIntelligentMessage = [NSString stringWithFormat:@"All is calm at %@",self.camChannel.profile.name];
             }
         }
-    }
+    }    
 }
 
 - (void)loadMoreEvent_bg
@@ -1119,16 +1122,19 @@
         
         if (_stringIntelligentMessage.length > 22)
         {
-            cell.eventLabel.frame = CGRectMake(cell.eventLabel.frame.origin.x, cell.eventLabel.frame.origin.y, cell.eventLabel.frame.size.width, cell.eventLabel.frame.size.height * 2);
-            cell.eventDetailLabel.frame = CGRectMake(cell.eventDetailLabel.frame.origin.x, cell.eventLabel.center.y + cell.eventLabel.frame.size.height / 2, cell.eventDetailLabel.frame.size.width, cell.eventDetailLabel.frame.size.height);
+            //cell.eventLabel.frame = CGRectMake(cell.eventLabel.frame.origin.x, cell.eventLabel.frame.origin.y, cell.eventLabel.frame.size.width, cell.eventLabel.frame.size.height * 2);
+           // cell.eventDetailLabel.frame = CGRectMake(cell.eventDetailLabel.frame.origin.x, cell.eventLabel.center.y + cell.eventLabel.frame.size.height / 2, cell.eventDetailLabel.frame.size.width, cell.eventDetailLabel.frame.size.height);
         }
         
-        [cell.eventLabel setFont:[UIFont lightLarge27Font]];
-        [cell.detailTextLabel setFont:[UIFont lightSmall14Font]];
+        //[cell.eventLabel setFont:[UIFont regular18Font]];
+        [cell.eventDetailLabel setFont:[UIFont lightSmall14Font]];
         cell.eventLabel.text = self.stringIntelligentMessage;
         cell.eventDetailLabel.text = self.stringCurrentDate;
         [cell.eventLabel setTextColor:[UIColor timeLineColor]];
         [cell.eventDetailLabel setTextColor:[UIColor timeLineColor]];
+        
+        //cell.eventLabel.text = @"There has been a lot of noise and little movement";
+       // cell.eventLabel.lineBreakMode = NSLineBreakByWordWrapping;
         
         return cell;
     }
@@ -1152,6 +1158,14 @@
         }
         
 #if 1
+        if(!cell.lblToHideLine.isHidden){
+            cell.lblToHideLine.hidden=YES;
+        }        
+        if(indexPath.row==(_events.count-1))
+        {
+            cell.lblToHideLine.hidden=NO;
+        }
+        
         EventInfo *eventInfo = (EventInfo *)[_events objectAtIndex:indexPath.row];
         
         cell.eventLabel.text = eventInfo.alert_name;
@@ -1172,49 +1186,58 @@
                                                                toDate:[NSDate date]
                                                               options:nil];
         
+        BOOL isYesterday= NO;
         if  ([self isEqualToDateIgnoringTime:[NSDate date] vsDate:eventDate]) //if it is today
         {
             //Show only hours/minutes
             if (_is12hr)
             {
-                df_local.dateFormat = @"hh:mm a";
+                df_local.dateFormat = @"h:mm a";
             }
             else
             {
-                df_local.dateFormat = @"HH:mm";
+                df_local.dateFormat = @"H:mm";
             }
+            cell.eventTimeLabel.text = [df_local stringFromDate:eventDate];
         }
         else if ([self isEqualToDateIgnoringTime:yesterday vsDate:eventDate])
         {
+            isYesterday = YES;
             //Show only hours/minutes  with dates
             if (_is12hr)
             {
-                df_local.dateFormat = @"hh:mm a, dd-MM-yyyy";
+                df_local.dateFormat = @"h:mm a";
             }
             else
             {
-                df_local.dateFormat = @"HH:mm, dd-MM-yyyy";
+                df_local.dateFormat = @"H:mm";
             }
+            cell.eventTimeLabel.text = [NSString stringWithFormat:@"%@ Yesterday",[df_local stringFromDate:eventDate]];
         }
         else
         {
+            df_local.dateFormat = @"d";
+            NSString *strDate = [df_local stringFromDate:eventDate];
+            
+            df_local.dateFormat = @"MMM";
+            NSString *strM = [df_local stringFromDate:eventDate];
             //Show only hours/minutes  with dates
             if (_is12hr)
             {
-                df_local.dateFormat = @"hh:mm a, dd-MM-yyyy";
+                df_local.dateFormat = @"h:mm a EEEE";
             }
             else
             {
-                df_local.dateFormat = @"HH:mm, dd-MM-yyyy";
+                df_local.dateFormat = @"H:mm EEEE";
             }
-            
+            NSString *strTime = [df_local stringFromDate:eventDate];
+            int m = [strDate intValue] % 10;
+            cell.eventTimeLabel.text = [NSString stringWithFormat:@"%@, %@%@ %@",strTime,strDate,[aryDatePrefix objectAtIndex:((m > 10 && m < 20) ? 0 : (m % 10))],strM];
+            //cell.eventTimeLabel.text = [df_local stringFromDate:eventDate];
         }
         
-        cell.eventTimeLabel.text = [df_local stringFromDate:eventDate];
-        
         [df_local release];
-        
-        //NSLog(@"%@, %@", [dateFormater stringFromDate:eventDate], [NSTimeZone localTimeZone]);
+       //NSLog(@"%@, %@", [dateFormater stringFromDate:eventDate], [NSTimeZone localTimeZone]);
         
         
         // Motion detected

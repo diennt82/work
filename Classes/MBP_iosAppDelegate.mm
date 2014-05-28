@@ -22,12 +22,16 @@
 #pragma mark -
 #pragma mark Application lifecycle
 
+//Kiran Patel Git Hub Sync Test / Branch Test
+
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {    
     
     // Override point for customization after application launch.
     /*nguyendang_20130719
         - Add Google Analytics Delegates to this project.
      */
+    
+
     
     // Handle launching from a notification
     UILocalNotification *locationNotification = [launchOptions objectForKey:UIApplicationLaunchOptionsLocalNotificationKey];
@@ -572,7 +576,7 @@ void checkingApplicationCrashed()
      If your application supports background execution, called instead of applicationWillTerminate: when the user quits.
      */
 	
-	NSLog(@"Enter background: %d", viewController.app_stage);
+	/*NSLog(@"Enter background: %d", viewController.app_stage);
 
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
 	[userDefaults setInteger:viewController.app_stage forKey:@"ApplicationStage"];
@@ -585,7 +589,7 @@ void checkingApplicationCrashed()
     else if (viewController.app_stage == APP_STAGE_LOGGED_IN)
     {
         [viewController sendStatus:BACK_FRM_MENU_NOLOAD];
-    }
+    }*/
 }
 
 
@@ -595,10 +599,8 @@ void checkingApplicationCrashed()
      */
 	
 	NSLog(@"Enter foreground isMain? %d 01", [[NSThread currentThread] isMainThread]);
+
 }
-
-
-
 
 
 - (void)applicationDidBecomeActive:(UIApplication *)application {
@@ -649,7 +651,9 @@ void checkingApplicationCrashed()
         }
         else
         {
-            [self forceLogin:TRUE];
+            //Do nothing here : to return to the last page.
+            //
+            
         }
     }
     else if (viewController.app_stage == APP_STAGE_LOGGING_IN || viewController.app_stage == APP_STAGE_INIT)

@@ -104,16 +104,24 @@
     self.imgViewLeft.layer.cornerRadius = 40;
     
     if(_isSwitchOnLeft){
-        [self.imgViewLeft setBackgroundColor:COLOR_RGB(19.0, 154.0, 245.0)];
+        NSInteger tempValueInCel = _tempValueLeft;
+        if (_isFahrenheit){
+            tempValueInCel = (tempValueInCel  -  32)  * 5/9 ;
+        }
+        [self.imgViewLeft setBackgroundColor:COLOR_RGB((tempValueInCel-9)*15,(tempValueInCel-9)*15,255-((tempValueInCel-9)*20))];
     }else{
         [self.imgViewLeft setBackgroundColor:[UIColor lightGrayColor]];
     }
     
     if(_isSwitchOnRight){
-        [self.imgViewRight setBackgroundColor:COLOR_RGB(19.0, 154.0, 245.0)];
+        NSInteger tempValueInCel = _tempValueRight;
+        if (_isFahrenheit){
+            tempValueInCel = (tempValueInCel  -  32)  * 5/9 ;
+        }
+        [self.imgViewRight setBackgroundColor:COLOR_RGB(255.0,(33-tempValueInCel)*20,(33-tempValueInCel)*10)];
     }else{
         [self.imgViewRight setBackgroundColor:[UIColor lightGrayColor]];
-    }
+    }    
 
 }
 
@@ -150,16 +158,19 @@
 - (IBAction)btnMinusLeftTouchUpInsideAction:(id)sender
 {
     NSInteger tempLowMin = TEMP_LOW_MIN;
+    NSInteger tempValueInCel = _tempValueLeft;
     
     if (_isFahrenheit)
     {
         tempLowMin = (round(TEMP_LOW_MIN * 9.f / 5.f)) + 32;
+        tempValueInCel = (tempValueInCel  -  32)  * 5/9 ;
     }
     
     if (_tempValueLeft > tempLowMin)
     {
         self.tempValueLeft--;
         self.lblTempValueLeft.text = [NSString stringWithFormat:@"%ld", lroundf(_tempValueLeft)];
+        [self.imgViewLeft setBackgroundColor:COLOR_RGB((tempValueInCel-9)*15,(tempValueInCel-9)*15,255-((tempValueInCel-9)*20))];
     }
     else
     {
@@ -184,16 +195,19 @@
 - (IBAction)btnPlusLeftTouchUpInsideAction:(id)sender
 {
     NSInteger tempHighMax = TEMP_LOW_MAX;
+    NSInteger tempValueInCel = _tempValueLeft;
     
     if (_isFahrenheit)
     {
         tempHighMax = (round(TEMP_LOW_MAX * 9.f / 5.f)) + 32;
+        tempValueInCel = (tempValueInCel  -  32)  * 5/9 ;
     }
     
     if (_tempValueLeft < tempHighMax)
     {
         self.tempValueLeft++;
         self.lblTempValueLeft.text = [NSString stringWithFormat:@"%ld", lroundf(_tempValueLeft)];
+         [self.imgViewLeft setBackgroundColor:COLOR_RGB((tempValueInCel-9)*15,(tempValueInCel-9)*15,255-((tempValueInCel-9)*20))];
     }
     else
     {
@@ -228,16 +242,19 @@
 - (IBAction)btnMinusRightTouchUpInsideAction:(id)sender
 {
     NSInteger temHighMin = TEMP_HIGH_MIN;
+    NSInteger tempValueInCel = _tempValueRight;
     
     if (_isFahrenheit)
     {
         temHighMin = (round(TEMP_HIGH_MIN * 9 / 5.f)) + 32;
+        tempValueInCel = (tempValueInCel  -  32)  * 5/9 ;
     }
     
     if (_tempValueRight > temHighMin)
     {
         self.tempValueRight--;
         self.lblTemperatureValueRight.text = [NSString stringWithFormat:@"%ld", lroundf(_tempValueRight)];
+        [self.imgViewRight setBackgroundColor:COLOR_RGB(255.0,(33-tempValueInCel)*20,(33-tempValueInCel)*10)];
     }
     else
     {
@@ -260,16 +277,19 @@
 - (IBAction)btnPlusRightTouchUpInsideAction:(id)sender
 {
     NSInteger temHighMax = TEMP_HIGH_MAX;
+    NSInteger tempValueInCel = _tempValueRight;
     
     if (_isFahrenheit)
     {
         temHighMax = (round(TEMP_HIGH_MAX * 9.f / 5.f)) + 32;
+        tempValueInCel = (tempValueInCel  -  32)  * 5/9 ;
     }
     
     if (_tempValueRight < temHighMax)
     {
         self.tempValueRight++;
         self.lblTemperatureValueRight.text = [NSString stringWithFormat:@"%ld", lroundf(_tempValueRight)];
+        [self.imgViewRight setBackgroundColor:COLOR_RGB(255.0,(33-tempValueInCel)*20,(33-tempValueInCel)*10)];
     }
     else
     {
@@ -311,7 +331,12 @@
     self.btnPlusLeft.enabled = _isSwitchOnLeft;
     
     if(_isSwitchOnLeft){
-        [self.imgViewLeft setBackgroundColor:COLOR_RGB(19.0, 154.0, 245.0)];
+        //[self.imgViewLeft setBackgroundColor:COLOR_RGB(19.0, 154.0, 245.0)];
+        NSInteger tempValueInCel = _tempValueLeft;
+        if (_isFahrenheit){
+            tempValueInCel = (tempValueInCel  -  32)  * 5/9 ;
+        }
+        [self.imgViewLeft setBackgroundColor:COLOR_RGB((tempValueInCel-9)*15,(tempValueInCel-9)*15,255-((tempValueInCel-9)*20))];
     }else{
         [self.imgViewLeft setBackgroundColor:[UIColor lightGrayColor]];
     }
@@ -328,7 +353,12 @@
     
     if(_isSwitchOnRight){
         
-        [self.imgViewRight setBackgroundColor:COLOR_RGB(19.0, 154.0, 245.0)];
+        NSInteger tempValueInCel = _tempValueRight;
+        if (_isFahrenheit){
+            tempValueInCel = (tempValueInCel  -  32)  * 5/9 ;
+        }
+        [self.imgViewRight setBackgroundColor:COLOR_RGB(255.0,(33-tempValueInCel)*20,(33-tempValueInCel)*10)];
+        //[self.imgViewRight setBackgroundColor:COLOR_RGB(19.0, 154.0, 245.0)];
     }else{
         [self.imgViewRight setBackgroundColor:[UIColor lightGrayColor]];
     }

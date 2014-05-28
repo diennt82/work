@@ -9,6 +9,8 @@
 #import <UIKit/UIKit.h>
 #import <CameraScanner/CameraScanner.h>
 
+
+
 @protocol TimelineVCDelegate <NSObject>
 
 - (void)stopStreamToPlayback;
@@ -21,6 +23,9 @@
 
 
 @interface TimelineViewController : UITableViewController
+{
+    NSArray *aryDatePrefix;
+}
 
 @property (nonatomic, assign) id<TimelineVCDelegate> timelineVCDelegate;
 @property (nonatomic, assign) CamChannel *camChannel;

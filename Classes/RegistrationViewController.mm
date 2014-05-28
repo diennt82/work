@@ -11,6 +11,8 @@
 #import "KISSMetricsAPI.h"
 #import "Step_10_ViewController.h"
 #import "UserAccount.h"
+//#import "TermsCondController.h"
+#import "ToUViewController.h"
 
 @interface RegistrationViewController () <UITextFieldDelegate>
     
@@ -79,6 +81,8 @@
         btnCheckbox.frame = CGRectMake(_btnCreate.frame.origin.x - 6, btnCheckbox.frame.origin.y, btnCheckbox.frame.size.width, btnCheckbox.frame.size.height);
         UILabel *lblTermServices = (UILabel *)[self.view viewWithTag:502];
         lblTermServices.frame = CGRectMake(btnCheckbox.frame.origin.x + btnCheckbox.frame.size.width, lblTermServices.frame.origin.y, lblTermServices.frame.size.width, lblTermServices.frame.size.height);
+        UIButton *btn = (UIButton *)[self.view viewWithTag:504];
+        btn.frame = lblTermServices.frame;
         self.viewProgress.frame = CGRectMake(0, 0, UIScreen.mainScreen.bounds.size.width, UIScreen.mainScreen.bounds.size.height);
     }
 }
@@ -399,6 +403,24 @@
 	[alert release];
     
     [[KISSMetricsAPI sharedAPI] recordEvent:[NSString stringWithFormat:@"Register failed - user: %@, error: Server is unreachable", _stringUsername] withProperties:nil];
+}
+
+-(IBAction)btnTermsConditionPressed:(id)sender
+{
+    /*TermsCondController *tcVC = [[TermsCondController alloc] initWithNibName:@"TermsCondController" bundle:nil];
+    [self.navigationController pushViewController:tcVC animated:YES];
+    [tcVC release];
+     */
+    ToUViewController *vc;
+    
+    if (isiPhone5 || isiPhone4){
+        vc= [[ToUViewController alloc] initWithNibName:@"ToUViewController" bundle:nil];
+    }else{
+        vc= [[ToUViewController alloc] initWithNibName:@"ToUViewController_ipad" bundle:nil];
+    }
+    [self.navigationController pushViewController:vc animated:YES];
+    [vc release];
+    
 }
 
 - (void)didReceiveMemoryWarning

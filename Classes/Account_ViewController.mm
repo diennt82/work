@@ -96,7 +96,7 @@
     [self userLogout];
 }
 
-- (void)userLogout
+-(IBAction) userLogout
 {
     NSLog(@"LOG OUT>>>>");
     
@@ -107,9 +107,9 @@
     [CameraAlert clearAllAlerts];
     
     [tabBarController dismissViewControllerAnimated:NO completion:^
-    {
-        [tabBarController.menuDelegate sendStatus:LOGIN_FAILED_OR_LOGOUT];
-    }];
+     {
+         [tabBarController.menuDelegate sendStatus:LOGIN_FAILED_OR_LOGOUT];
+     }];
 }
 
 - (void)sendsAppLog
@@ -149,10 +149,10 @@
         
         dataZip = [NSData gzipData:dataZip];
         
-       [picker addAttachmentData:[dataZip AES128EncryptWithKey:CES128_ENCRYPTION_PASSWORD] mimeType:@"text/plain" fileName:@"application.log"];
-
+        [picker addAttachmentData:[dataZip AES128EncryptWithKey:CES128_ENCRYPTION_PASSWORD] mimeType:@"text/plain" fileName:@"application.log"];
+        
         //[picker addAttachmentData:dataZip  mimeType:@"text/plain" fileName:@"application.log"];
-
+        
         // Set the subject of email
         [picker setSubject:@"iOS app log"];
         NSArray *toRecipents = [NSArray arrayWithObject:@"ios.crashreport@cvisionhk.com"];
@@ -184,13 +184,18 @@
 {
     if (section == 0)
     {
-        return 3;
+        return 2;
+    }
+    else if(section == 1)
+    {
+        return 2;
     }
     else if(section == 2)
     {
         if (CUE_RELEASE_FLAG)
         {
             return 1;
+            
         }
         else
         {
@@ -319,10 +324,14 @@
         }
         else
         {
-            cell.nameLabel.text = @"Upgrade Plan";
-            cell.valueLabel.text = nil;
-            cell.valueLabel.hidden = YES;
+            //cell.nameLabel.text = @"Upgrade Plan";
+            //cell.valueLabel.text = nil;
+            //cell.valueLabel.hidden = YES;
             
+            cell.nameLabel.text = @"App Version";
+            NSDictionary* infoDict = [[NSBundle mainBundle] infoDictionary];
+            cell.valueLabel.text = [infoDict objectForKey:@"CFBundleShortVersionString"];
+            cell.valueLabel.hidden = NO;
             return cell;
         }
     }
@@ -424,7 +433,7 @@
                                 delegate:nil
                        cancelButtonTitle:nil
                        otherButtonTitles:@"OK", nil] autorelease] show];
-
+    
 }
 
 - (void)changePasswordFialedWithError:(NSDictionary *)error_response

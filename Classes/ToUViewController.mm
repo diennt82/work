@@ -26,7 +26,18 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    // Do any additional setup after loading the view from its nib.
+    
+    self.navigationController.navigationBarHidden = NO;
+    [self.navigationItem setTitle:@"Terms of Services"];
+    
+    UIImage *hubbleLogoBack = [UIImage imageNamed:@"Hubble_logo_back"];
+    UIBarButtonItem *barBtnHubble = [[UIBarButtonItem alloc] initWithImage:hubbleLogoBack
+                                                                     style:UIBarButtonItemStylePlain
+                                                                    target:self
+                                                                    action:@selector(btnBackPressed)];
+    [barBtnHubble setTintColor:[UIColor colorWithPatternImage:hubbleLogoBack]];
+    
+    self.navigationItem.leftBarButtonItem = barBtnHubble;
     
     [termOfUse loadRequest:
      [NSURLRequest requestWithURL:
@@ -49,6 +60,11 @@
     // Dispose of any resources that can be recreated.
 }
 
+-(void)btnBackPressed
+{
+    [self.navigationController popViewControllerAnimated:YES];
+    self.navigationController.navigationBarHidden = YES;
+}
 
 
 @end
