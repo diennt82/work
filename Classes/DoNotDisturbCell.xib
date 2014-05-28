@@ -43,11 +43,6 @@
                             <action selector="didEnableDisturb:" destination="fgK-7W-Sok" eventType="touchUpInside" id="HLR-z0-N2m"/>
                         </connections>
                     </button>
-                    <view contentMode="scaleToFill" id="VbR-8F-Xhh" customClass="UICircularSlider">
-                        <rect key="frame" x="52" y="35" width="217" height="217"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                    </view>
                 </subviews>
             </tableViewCellContentView>
             <color key="backgroundColor" red="0.16862745098039217" green="0.19607843137254902" blue="0.2196078431372549" alpha="1" colorSpace="calibratedRGB"/>
