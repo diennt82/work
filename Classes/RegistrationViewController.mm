@@ -11,7 +11,8 @@
 #import "KISSMetricsAPI.h"
 #import "Step_10_ViewController.h"
 #import "UserAccount.h"
-#import "TermsCondController.h"
+//#import "TermsCondController.h"
+#import "ToUViewController.h"
 
 @interface RegistrationViewController () <UITextFieldDelegate>
     
@@ -406,9 +407,20 @@
 
 -(IBAction)btnTermsConditionPressed:(id)sender
 {
-    TermsCondController *tcVC = [[TermsCondController alloc] initWithNibName:@"TermsCondController" bundle:nil];
+    /*TermsCondController *tcVC = [[TermsCondController alloc] initWithNibName:@"TermsCondController" bundle:nil];
     [self.navigationController pushViewController:tcVC animated:YES];
     [tcVC release];
+     */
+    ToUViewController *vc;
+    
+    if (isiPhone5 || isiPhone4){
+        vc= [[ToUViewController alloc] initWithNibName:@"ToUViewController" bundle:nil];
+    }else{
+        vc= [[ToUViewController alloc] initWithNibName:@"ToUViewController_ipad" bundle:nil];
+    }
+    [self.navigationController pushViewController:vc animated:YES];
+    [vc release];
+    
 }
 
 - (void)didReceiveMemoryWarning
