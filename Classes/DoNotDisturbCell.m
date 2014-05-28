@@ -45,6 +45,8 @@
         [self.ib_circleSliderCustom setUserInteractionEnabled:YES];
         self.ib_circleSliderCustom.value = [self updateValueCustomSlider];
         [self.ib_circleSliderCustom startTimerUpdateLabel];
+        [self.ib_circleSliderCustom.textField setTextColor:[UIColor colorWithWhite:1.0 alpha:1.0]];
+        [self.ib_circleSliderCustom.minuteTField setTextColor:[UIColor colorWithWhite:1.0 alpha:1.0]];
     }
     else
     {
@@ -52,6 +54,8 @@
         [[UIApplication sharedApplication] registerForRemoteNotificationTypes:(UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeAlert)];
         [self.ib_enableDoNotDisturb setImage:[UIImage imageSwitchOff] forState:UIControlStateNormal];
         [self.ib_circleSliderCustom setUserInteractionEnabled:NO];
+        [self.ib_circleSliderCustom.textField setTextColor:[UIColor lightGrayColor]];
+        [self.ib_circleSliderCustom.minuteTField setTextColor:[UIColor lightGrayColor]];
     }
 }
 
@@ -88,6 +92,8 @@ BOOL _isEnableDoNotDisturb = NO;
         [[UIApplication sharedApplication] unregisterForRemoteNotifications];
         [self.ib_enableDoNotDisturb setImage:[UIImage imageSwitchOn] forState:UIControlStateNormal];
         [self.ib_circleSliderCustom setUserInteractionEnabled:YES];
+        [self.ib_circleSliderCustom.textField setTextColor:[UIColor colorWithWhite:1.0 alpha:1.0]];
+        [self.ib_circleSliderCustom.minuteTField setTextColor:[UIColor colorWithWhite:1.0 alpha:1.0]];
     }
     else
     {
@@ -95,6 +101,8 @@ BOOL _isEnableDoNotDisturb = NO;
         [[UIApplication sharedApplication] registerForRemoteNotificationTypes:(UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeAlert)];
         [self.ib_enableDoNotDisturb setImage:[UIImage imageSwitchOff] forState:UIControlStateNormal];
         [self.ib_circleSliderCustom setUserInteractionEnabled:NO];
+        [self.ib_circleSliderCustom.textField setTextColor:[UIColor lightGrayColor]];
+        [self.ib_circleSliderCustom.minuteTField setTextColor:[UIColor lightGrayColor]];
     }
 }
 

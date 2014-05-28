@@ -29,6 +29,8 @@
 
 - (void)drawRect:(CGRect)rect
 {
+    self.backgroundColor = [UIColor colorWithRed:43/255.f green:50/255.f blue:56/255.f alpha:1];
+    
     [self.btnClock setImage:[UIImage imageNamed:@"settings_hr_24"] forState:UIControlStateNormal];
     [self.btnClock setImage:[UIImage imageNamed:@"settings_hr_12"] forState:UIControlStateSelected];
     [self.btnClock setImage:[UIImage imageNamed:@"settings_hr_12"] forState:UIControlStateHighlighted];

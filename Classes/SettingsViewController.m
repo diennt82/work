@@ -97,7 +97,7 @@
     valueSwitchs[0] = FALSE;
     valueSwitchs[1] = TRUE;
     
-    self.sensitivityInfo = [[SensitivityInfo alloc] init];
+   /* self.sensitivityInfo = [[SensitivityInfo alloc] init];
     
     self.sensitivityInfo.motionOn = TRUE;
     self.sensitivityInfo.motionValue = 0;
@@ -141,17 +141,18 @@
     
     //self.isLoading = TRUE;
     self.sensitivityMessage = @"Loading...";
+    */
 }
 
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
     
-    MenuViewController *menuVC = (MenuViewController *)self.parentVC;
+    //MenuViewController *menuVC = (MenuViewController *)self.parentVC;
     
-    BOOL shouldReloadData = FALSE;
+   // BOOL shouldReloadData = FALSE;
     
-    if (menuVC.cameras != nil &&
+   /* if (menuVC.cameras != nil &&
         menuVC.cameras.count > 0)
     {
         for (CamChannel *ch in menuVC.cameras)
@@ -171,10 +172,10 @@
                 }
                 else
                 {
-                    /*
-                     * For CUE start hide Notification Scheduler, so number of section = 3
-                     * For full feature app has Notification, so number of section = 4
-                     */
+                    
+                    //For CUE start hide Notification Scheduler, so number of section = 3
+                    //For full feature app has Notification, so number of section = 4
+                    
                     if (CUE_RELEASE_FLAG)
                     {
                         self.numberOfSections = 3;
@@ -192,11 +193,14 @@
     else
     {
         self.selectedCamChannel = nil;
-    }
+    }*/
     
+    
+    self.numberOfSections = 2;
+    self.selectedCamChannel = nil;
     valueGeneralSettings[1] = [[NSUserDefaults standardUserDefaults] boolForKey:@"IS_FAHRENHEIT"];
     
-    if (shouldReloadData)
+    //if (shouldReloadData)
     {
         [self.tableView reloadData];
     }
@@ -241,6 +245,7 @@
     [userDefaults synchronize];
 }
 
+/*
 #pragma mark - Sensitivity deletate
 
 - (void)reportSwitchValue:(BOOL)value andRowIndex:(NSInteger)rowIndex
@@ -436,7 +441,7 @@
         NSLog(@"SettingsVC - sendCommand failed responseDict = nil: %@", command);
     }
 }
-
+*/
 #pragma mark - Table view data source
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
@@ -465,7 +470,7 @@
             return 120;
         }
     }
-    else if (indexPath.section == 1)
+    /*else if (indexPath.section == 1)
     {
         if (numOfRows[indexPath.section] == 2 && indexPath.row == 1)
         {
@@ -482,8 +487,8 @@
         {
             return 227;
         }
-    }
-    else if(indexPath.section == 2)
+    }*/
+    else if(indexPath.section == 1)
     {
         //height for do not disturb
         //xxx
@@ -510,7 +515,9 @@
 
 - (BOOL)tableView:(UITableView *)tableView shouldHighlightRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (indexPath.section == 1 &&
+    return YES;
+    
+    /*if (indexPath.section == 1 &&
         numOfRows[indexPath.section] == 2 &&
         indexPath.row == 1)
     {
@@ -526,6 +533,7 @@
     }
     
     return YES;
+     */
 }
 
 - (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section
@@ -535,6 +543,7 @@
     return footerView;
 }
 
+/*
 - (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
 {
     for (id obj in cell.contentView.subviews)
@@ -568,6 +577,7 @@
         }
     }
 }
+ */
 
 -(CGFloat)tableView:(UITableView *)tableView heightHeaderInSection:(NSInteger)section{
     return 0;
@@ -643,7 +653,7 @@
         }
             break;
             
-        case 1: // Sensitivity
+        /*case 1: // Sensitivity
         {
             switch (indexPath.row)
             {
@@ -785,13 +795,14 @@
         }
             break;
             
-        case 2:
+        */
+        case 1:
         {
             switch (indexPath.row)
             {
                 case 0:
                 {
-                    static NSString *CellIdentifier = @"Cell";
+                    static NSString *CellIdentifier = @"CellDonot";
                     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
                     if (cell == nil) {
                         cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
@@ -804,7 +815,7 @@
                     
                     return cell;
                 }
-                    break;
+                break;
                     
 //                case 1:
 //                case 2:
@@ -952,16 +963,7 @@
 
 // In a xib-based application, navigation from a table can be handled in -tableView:didSelectRowAtIndexPath:
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    // Navigation logic may go here, for example:
-    // Create the next view controller.
-    //<#DetailViewController#> *detailViewController = [[<#DetailViewController#> alloc] initWithNibName:@"<#Nib name#>" bundle:nil];
-
-    // Pass the selected object to the new view controller.
-    
-    // Push the view controller.
-    //[self.navigationController pushViewController:detailViewController animated:YES];
-    
+{    
     switch (indexPath.section)
     {
         case 0: // General
@@ -987,7 +989,7 @@
         }
             break;
             
-        case 1: // Sensitivity
+        /*case 1: // Sensitivity
         {
             if (indexPath.row == 0)
             {
@@ -1031,7 +1033,8 @@
         }
             break;
             
-        case 2:
+        */
+        case 1:
         {
             //Do not disturb
             if (indexPath.row == 0)
@@ -1106,14 +1109,15 @@
     
     [tableView reloadData];
     
-    if (indexPath.section == 1 &&
+    /*if (indexPath.section == 1 &&
         (indexPath.row == 0 || indexPath.row == 1) &&
         _isLoading == TRUE)
     {
         [self performSelectorInBackground:@selector(getSensitivityInfoFromServer:) withObject:indexPath];
-    }
+    }*/
 }
 
+/*
 - (void)getSensitivityInfoFromServer: (NSIndexPath *)indexPath
 {
     //self.selectedReg = [[NSUserDefaults standardUserDefaults] stringForKey:@"REG"];
@@ -1231,7 +1235,7 @@
         [self.tableView endUpdates];
     }
 }
-
+*/
 - (void)dealloc {
     [_jsonComm release];
     [super dealloc];
