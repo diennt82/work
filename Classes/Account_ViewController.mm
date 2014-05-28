@@ -14,9 +14,10 @@
 #import <MessageUI/MFMailComposeViewController.h>
 #import "NSData+AESCrypt.h"
 
-@interface Account_ViewController () <MFMailComposeViewControllerDelegate>
+@interface Account_ViewController () <MFMailComposeViewControllerDelegate, UIAlertViewDelegate>
 
 @property (retain, nonatomic) IBOutlet UITableViewCell *tableViewCellChangePassword;
+
 @property (nonatomic) NSInteger screenWidth;
 
 @end
@@ -372,68 +373,74 @@
     [av setAlertViewStyle:UIAlertViewStyleLoginAndPasswordInput];
     
     // Alert style customization
-    [[av textFieldAtIndex:1] setSecureTextEntry:NO];
-    [[av textFieldAtIndex:0] setPlaceholder:@"new password"];
-    [[av textFieldAtIndex:1] setPlaceholder:@"confirm password"];
+    [[av textFieldAtIndex:0] setSecureTextEntry:YES];
+    [[av textFieldAtIndex:1] setSecureTextEntry:YES];
+    [[av textFieldAtIndex:0] setPlaceholder:@"New password"];
+    [[av textFieldAtIndex:1] setPlaceholder:@"Confirm password"];
     [av show];
     [av release];
 }
 
--(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex{
-    
+#pragma mark - UIAlert view delegate
+
+- (void )alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex
+{
     if (buttonIndex == 1)
     {
-        //OK
-        NSLog(@"1 %@", [alertView textFieldAtIndex:0].text);
-        NSLog(@"2 %@", [alertView textFieldAtIndex:1].text);
-        _newPass = [alertView textFieldAtIndex:0].text;
-        _newPassConfirm = [alertView textFieldAtIndex:1].text;
-        [self doChangePassword];
+        NSString *password = [alertView textFieldAtIndex:0].text;
+        NSString *passwordConfrm = [alertView textFieldAtIndex:1].text;
         
-        
+        if ((password       && password.length > 0)       &&
+            (passwordConfrm && passwordConfrm.length > 0) &&
+            [password isEqualToString:passwordConfrm])
+        {
+            [self doChangePassword:password];
+        }
+        else
+        {
+            NSDictionary *dictError = [NSDictionary dictionaryWithObjectsAndKeys:@"Validation failed: Password is not match or empty", @"message", nil];
+            [self changePasswordFialedWithError:dictError];
+        }
     }
 }
 
-- (void)doChangePassword
+- (void)doChangePassword:(NSString *)newPassword
 {
-    
-    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-    NSString *apiKey = [userDefaults stringForKey:@"PortalApiKey"];
+    NSString *apiKey = [[NSUserDefaults standardUserDefaults] stringForKey:@"PortalApiKey"];
     
     BMS_JSON_Communication *jsonComm = [[[BMS_JSON_Communication alloc] initWithObject:self
-                                                                              Selector:@selector(registerSuccessWithResponse:)
-                                                                          FailSelector:@selector(registerFailedWithError:)
-                                                                             ServerErr:@selector(registerFailedServerUnreachable)] autorelease];
-    [jsonComm changePasswordWithNewPassword:_newPass andPasswordConfirm:_newPassConfirm andApiKey:apiKey];
-    [jsonComm release];
+                                                                              Selector:@selector(changePasswordSuccessWithResponse:)
+                                                                          FailSelector:@selector(changePasswordFialedWithError:)
+                                                                             ServerErr:@selector(changePasswordFailedServerUnreachable)] autorelease];
+    [jsonComm changePasswordWithNewPassword:newPassword andPasswordConfirm:newPassword andApiKey:apiKey];
 }
 
 #pragma mark - JSON call back
 
-- (void)registerSuccessWithResponse:(NSDictionary *)responseData
+- (void)changePasswordSuccessWithResponse:(NSDictionary *)responseData
 {
     [[[[UIAlertView alloc] initWithTitle:@"Change Password"
                                  message:@"Successful"
-                                delegate:self
+                                delegate:nil
                        cancelButtonTitle:nil
                        otherButtonTitles:@"OK", nil] autorelease] show];
 
 }
 
-- (void)registerFailedWithError:(NSDictionary *)error_response
+- (void)changePasswordFialedWithError:(NSDictionary *)error_response
 {
-    [[[[UIAlertView alloc] initWithTitle:@"Change Password"
-                                 message:@"Fail"
-                                delegate:self
+    [[[[UIAlertView alloc] initWithTitle:@"Change Password Failed"
+                                 message:[error_response objectForKey:@"message"]
+                                delegate:nil
                        cancelButtonTitle:nil
                        otherButtonTitles:@"OK", nil] autorelease] show];
 }
 
-- (void)registerFailedServerUnreachable
+- (void)changePasswordFailedServerUnreachable
 {
-    [[[[UIAlertView alloc] initWithTitle:@"Change Password"
-                                 message:@"Fail"
-                                delegate:self
+    [[[[UIAlertView alloc] initWithTitle:@"Failed: Server is unreachable"
+                                 message:nil
+                                delegate:nil
                        cancelButtonTitle:nil
                        otherButtonTitles:@"OK", nil] autorelease] show];
 }
