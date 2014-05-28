@@ -162,6 +162,9 @@
         if ([self.deviceConf.ssid isEqualToString:self.ssid] &&
             ([self.security isEqualToString:@"wep"] || [self.security isEqualToString:@"wpa"]))
         {
+            self.navigationItem.rightBarButtonItem.enabled = YES;
+            self.navigationItem.rightBarButtonItem.tintColor = [UIColor blueColor];
+            
             self.tfPassword.text = self.deviceConf.key;
             self.tfConfirmPass.text = self.deviceConf.key;
         }
@@ -191,7 +194,7 @@
     
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
     {
-        CGRect rect = CGRectMake(0, 0, UIScreen.mainScreen.bounds.size.width, UIScreen.mainScreen.bounds.size.height);
+        CGRect rect = CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
         
         self.viewProgress.frame = rect;
         self.viewError.frame = rect;
