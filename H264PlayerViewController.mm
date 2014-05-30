@@ -1421,6 +1421,9 @@ double _ticks = 0;
     {
         self.timelineVC.view.hidden = YES;
     }
+    [_timerHideMenu release];
+    _timerHideMenu = nil;
+    
 }
 
 - (void)showTimelineView
@@ -4170,8 +4173,12 @@ double _ticks = 0;
     [self hideControlMenu];
     [self hidenAllBottomView];
     [self updateBottomView];
-    //Earlier must at bottom of land, and port
     
+    if(_selectedItemMenu!=-1){
+        [self.horizMenu setSelectedIndex:_selectedItemMenu-1 animated:NO];
+    }
+    
+    //Earlier must at bottom of land, and port
     if (_isFirstLoad || _wantToShowTimeLine || _selectedItemMenu == -1)
     {
         [self showTimelineView];
@@ -4802,6 +4809,7 @@ double _ticks = 0;
 {
     if (_wantToShowTimeLine || self.horizMenu.isAllButtonDeselected)
     {
+        [self hidenAllBottomView];
         [self showTimelineView];
     }
     else
