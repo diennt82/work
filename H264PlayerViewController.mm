@@ -280,7 +280,7 @@ double _ticks = 0;
 {
     [super viewWillAppear:animated];
     [[KISSMetricsAPI sharedAPI] recordEvent:[NSString stringWithFormat:@"PlayerView view will appear - return from Playback: %d", _returnFromPlayback] withProperties:nil];
-    NSLog(@"H264VC - viewWillAppear -_wantToShowTimeLine: %d", _wantToShowTimeLine);
+    NSLog(@"%s -_wantToShowTimeLine: %d, userWantToCancel: %d, returnFromPlayback: %d", __FUNCTION__, _wantToShowTimeLine, userWantToCancel, _returnFromPlayback);
     
     //alway show custom indicator, when view appear
     _isShowCustomIndicator = YES;
@@ -289,7 +289,7 @@ double _ticks = 0;
     self.wantToShowTimeLine = YES;
     _viewVideoIn = @"R";
     
-    if (self.returnFromPlayback == FALSE)
+    if (_returnFromPlayback == FALSE)
     {
         _isFirstLoad = YES;
         _isRecordInterface  = YES;
@@ -1437,9 +1437,10 @@ double _ticks = 0;
 
 - (void)h264_HandleBecomeActive
 {
+    NSLog(@"%s wants to cancel: %d, rtn frm Playback: %d", __FUNCTION__, userWantToCancel, _returnFromPlayback);
     [[KISSMetricsAPI sharedAPI] recordEvent:@"PlayerView Become active" withProperties:nil];
     
-    if (userWantToCancel == TRUE)
+    if (userWantToCancel == TRUE || _returnFromPlayback)
     {
         return;
     }
@@ -1477,9 +1478,11 @@ double _ticks = 0;
 
 - (void)h264_HandleEnteredBackground
 {
+    NSLog(@"%s wants to cancel: %d, rtn frm Playback: %d, nav: %@", __FUNCTION__, userWantToCancel, _returnFromPlayback, self.navigationController.visibleViewController.description);
+    
     [[KISSMetricsAPI sharedAPI] recordEvent:@"PlayerView Enter background" withProperties:nil];
     
-    if (userWantToCancel == TRUE)
+    if (userWantToCancel == TRUE || _returnFromPlayback)
     {
         return;
     }
@@ -1802,7 +1805,9 @@ double _ticks = 0;
     
     while (h264Streamer != NULL)
     {
-        if (userWantToCancel== TRUE)
+        NSLog(@"%s userWantToCancel: %d, _currentMediaStatus: %d", __FUNCTION__, userWantToCancel, _currentMediaStatus);
+        
+        if (userWantToCancel== TRUE || _currentMediaStatus == MEDIA_INFO_HAS_FIRST_IMAGE) // 904
         {
             return;
         }

@@ -24,8 +24,9 @@
 @interface PlaybackViewController()
 
 @property (nonatomic) BOOL isPause;
-@property (nonatomic) int64_t duration;
+@property (nonatomic) double duration;
 @property (nonatomic) int64_t startPositionMovieFile;
+@property (nonatomic) double timeStarting;
 
 @end
 
@@ -72,6 +73,8 @@
     singleTap.numberOfTouchesRequired = 1;
     [self.view addGestureRecognizer:singleTap];
     self.startPositionMovieFile = 0;
+    self.duration = 1;
+    self.timeStarting = 0;
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -81,7 +84,7 @@
     //Here is show indicator
     self.activityIndicator.hidden = NO;
     [self.activityIndicator startAnimating];
-    self.ib_sliderPlayBack.userInteractionEnabled = NO; // Disable it because it's featur not done yet!
+    self.ib_sliderPlayBack.userInteractionEnabled = YES; // Disable it because it's featur not done yet!
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -96,7 +99,7 @@
 {
     [self.navigationController.navigationBar setHidden:NO];
     [super viewWillDisappear:animated];
-    NSLog(@"viewWillDisappear: ");
+    NSLog(@"%s viewWillDisappear: ", __FUNCTION__);
 }
 
 #pragma mark - PLAY VIDEO
@@ -192,8 +195,10 @@
         self.view.userInteractionEnabled = YES;
         self.ib_myOverlay.hidden = NO;
         [self.ib_sliderPlayBack setMinimumTrackTintColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"video_progress_green"]]];
-        _playbackStreamer -> getDuration(&_duration);
+        //_playbackStreamer -> getDuration(&_duration);
         //self.ib_sliderPlayBack.maximumValue = _duration * 100;
+//        self.duration = _playbackStreamer->getDuration();
+//        self.timeStarting = _playbackStreamer->getTimeStarting();
         [self watcher];
     });
     
@@ -289,6 +294,7 @@
 }
 
 #pragma mark - FONT
+
 -(void)applyFont
 {
     [self.ib_timerPlayBack setFont:[UIFont lightSmall13Font]];
@@ -534,9 +540,9 @@
 
 - (IBAction)sliderProgressTouchUpInsideAction:(UISlider *)sender
 {
-    int64_t seekTarget = sender.value;
+    double seekTarget = sender.value * _duration;
     
-    NSLog(@"%s value: %f, target: %lld", __FUNCTION__, sender.value, seekTarget);//0.666,667 --> 666,667
+    NSLog(@"%s value: %f, target: %f", __FUNCTION__, sender.value, seekTarget);//0.666,667 --> 666,667
     
     if (_playbackStreamer   &&
         _isPause)
@@ -544,6 +550,7 @@
         self.activityIndicator.hidden = NO;
         self.isPause = NO;
         
+        //_playbackStreamer->seekTo(seekTarget);// USE THIS
         _playbackStreamer->seekTo(seekTarget);// USE THIS
 
         self.view.userInteractionEnabled = YES;
@@ -602,30 +609,24 @@
         return;
     }
     
+    self.duration = _playbackStreamer->getDuration();
+    self.timeStarting = _playbackStreamer->getTimeStarting();
+    double timeCurrent = _playbackStreamer->getCurrentTime() - _timeStarting;
     
-    int currentTime = _playbackStreamer->getCurrPos();
-    int durationDisplay = _duration / 1000;
-    CGFloat currDisplay = (CGFloat)currentTime / 1000 - 1.5; // Why 2?
-    
-    if (currDisplay < 0)
-    {
-        currDisplay = 0;
-    }
-    
-    self.ib_sliderPlayBack.value = (CGFloat)currDisplay / durationDisplay;
-
-    NSString *strTime = [NSString stringWithFormat:@"%02d:%02d", (NSInteger)currDisplay/60, (NSInteger)currDisplay % 60];
-#if 0
-    NSLog(@"%s strTime: %@, _duration: %lld, value: %f", __FUNCTION__, strTime, _duration, self.ib_sliderPlayBack.value);
+#if 1
+    NSLog(@"timeCurrent: %f, _timeStarting: %f", timeCurrent, _timeStarting);
 #endif
-    self.ib_timerPlayBack.text = strTime;
+    
+    self.ib_sliderPlayBack.value = timeCurrent / _duration;
+    
+    NSInteger time = lround(timeCurrent);
+    self.ib_timerPlayBack.text = [NSString stringWithFormat:@"%02d:%02d", time / 60, time % 60];
     
     [NSTimer scheduledTimerWithTimeInterval:0.5
                                      target:self
                                    selector:@selector(watcher)
                                    userInfo:nil
                                     repeats:NO];
-    
 }
 
 - (NSString *) timeFormat: (float) seconds {
