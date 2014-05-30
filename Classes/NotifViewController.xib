@@ -16,6 +16,7 @@
                 <outlet property="learnMoreBtn" destination="RYJ-ck-Qs8" id="3kB-4v-cBW"/>
                 <outlet property="messageLabel" destination="stV-x5-RrI" id="jmW-tZ-WS3"/>
                 <outlet property="playEnventBtn" destination="UoT-cs-5Ba" id="btJ-3u-R2w"/>
+                <outlet property="timeLabel" destination="h1x-TK-aX4" id="oKy-ka-qxQ"/>
                 <outlet property="view" destination="1" id="3"/>
                 <outlet property="viewBehide" destination="8OT-kN-CAL" id="IxU-9I-19x"/>
                 <outlet property="viewFront" destination="6Mq-7w-ZnJ" id="ty8-0z-csf"/>
