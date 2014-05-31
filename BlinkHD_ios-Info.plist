@@ -101,7 +101,7 @@ ProximaNova-SemiboldItalic.otf</string>
 	<false/>
 	<key>UIBackgroundModes</key>
 	<array>
-		<string>audio</string>
+		<string>remote-notification</string>
 	</array>
 	<key>UIFileSharingEnabled</key>
 	<true/>

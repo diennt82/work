@@ -134,6 +134,7 @@
 @property (nonatomic, retain) NSString *currentBitRate;
 @property (nonatomic, retain) NSString *messageStreamingState;
 @property (nonatomic, retain) NSTimer *timerBufferingTimeout;
+@property (nonatomic, retain) UIAlertView *alertViewTimoutRemote;
 
 //property for Touch to Talk
 @property (nonatomic) BOOL walkieTalkieEnabled;
@@ -1133,7 +1134,7 @@ double _ticks = 0;
                 }
             }
             
-            if (self.h264StreamerIsInStopped == TRUE || _returnFromPlayback)
+            if (self.h264StreamerIsInStopped == TRUE || _returnFromPlayback || [UIApplication sharedApplication].applicationState != UIApplicationStateActive)
             {
                 self.selectedChannel.stopStreaming = TRUE;
                 [self performSelector:@selector(stopStream)
@@ -1206,8 +1207,10 @@ double _ticks = 0;
     		 *
              */
             
-            /* Stop Streamming */
+            // Stop Streamming
             [self stopStream];
+            
+            // Start streaming
             if (self.selectedChannel.profile.isInLocal == TRUE)
             {
                 /* re-scan for the camera */
@@ -1491,6 +1494,11 @@ double _ticks = 0;
     
     [self stopPeriodicBeep];
     [self stopPeriodicPopup];
+    
+    if (_alertViewTimoutRemote)
+    {
+        [_alertViewTimoutRemote dismissWithClickedButtonIndex:-1 animated:NO];
+    }
     
     if (_audioOutStreamRemote)
     {
@@ -1805,7 +1813,7 @@ double _ticks = 0;
     
     while (h264Streamer != NULL)
     {
-        NSLog(@"%s userWantToCancel: %d, _currentMediaStatus: %d", __FUNCTION__, userWantToCancel, _currentMediaStatus);
+        //NSLog(@"%s userWantToCancel: %d, _currentMediaStatus: %d", __FUNCTION__, userWantToCancel, _currentMediaStatus);
         
         if (userWantToCancel== TRUE || _currentMediaStatus == MEDIA_INFO_HAS_FIRST_IMAGE) // 904
         {
@@ -2241,15 +2249,21 @@ double _ticks = 0;
     //stop stream after 30s if user no click.
     _timerStopStreamAfter30s = [NSTimer scheduledTimerWithTimeInterval:30 target:self selector:@selector(stopStream) userInfo:nil repeats:NO];
     
-    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Remote Stream"
-                                                        message:@"The Camera has been viewed for about 5 minutes. Do you want to continue?"
-                                                       delegate:self
-                                              cancelButtonTitle:@"View other camera"
-                                              otherButtonTitles:@"Yes", nil];
-    alertView.tag = TAG_ALERT_VIEW_REMOTE_TIME_OUT;
-    
-    [alertView show];
-    [alertView release];
+    if (_alertViewTimoutRemote && _alertViewTimoutRemote.isVisible)
+    {
+        NSLog(@"%s already visible!", __FUNCTION__);
+    }
+    else
+    {
+        self.alertViewTimoutRemote = [[UIAlertView alloc] initWithTitle:@"Remote Stream"
+                                                            message:@"The Camera has been viewed for about 5 minutes. Do you want to continue?"
+                                                           delegate:self
+                                                  cancelButtonTitle:@"View other camera"
+                                                  otherButtonTitles:@"Yes", nil];
+        _alertViewTimoutRemote.tag = TAG_ALERT_VIEW_REMOTE_TIME_OUT;
+        
+        [_alertViewTimoutRemote show];
+    }
 }
 
 #pragma mark - VQ
@@ -2880,7 +2894,7 @@ double _ticks = 0;
                                                                                          andApiKey:apiKey];
                            NSLog(@"USE RELAY TO VIEW- userWantsToCancel:%d, returnFromPlayback:%d, responsed: %@", userWantToCancel, _returnFromPlayback, responseDict);
                            
-                           if (!userWantToCancel && !_returnFromPlayback)
+                           if (!userWantToCancel && !_returnFromPlayback && [UIApplication sharedApplication].applicationState == UIApplicationStateActive)
                            {
                                if (responseDict != nil)
                                {
@@ -2938,7 +2952,7 @@ double _ticks = 0;
                            }
                            else
                            {
-                               NSLog(@"%s View is invisible. Do nothing!", __FUNCTION__);
+                               NSLog(@"%s View is invisible OR in background mode. Do nothing!", __FUNCTION__);
                            }
                        }
                        else // USE RTSP/STUN
@@ -5001,6 +5015,7 @@ double _ticks = 0;
     [_audioOutStreamRemote release];
     [_jsonCommBlocked release];
     [_viewDebugInfo release];
+    [_alertViewTimoutRemote release];
     
     [super dealloc];
 }
