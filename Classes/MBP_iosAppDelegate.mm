@@ -68,7 +68,7 @@
     
     //UA-ID_INSTANCE is taken from the account analytics on google analytics
     //id<GAITracker> tracker =
-    [[GAI sharedInstance] trackerWithTrackingId:@"UA-51527679-1"];
+    [[GAI sharedInstance] trackerWithTrackingId:@"UA-51500380-2"];
 #endif
     // !!!: Use the next line only during TEST - appstore release: need to comment this line
     //[TestFlight setDeviceIdentifier:[[UIDevice currentDevice] uniqueIdentifier]];
