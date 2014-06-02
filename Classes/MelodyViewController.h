@@ -12,6 +12,7 @@
 #import "UIImage+Hubble.h"
 #import "CellMelody.h"
 #import "UIColor+Hubble.h"
+#import "GAI.h"
 
 @protocol MelodyVCDelegate <NSObject>
 
@@ -19,7 +20,7 @@
 
 @end
 
-@interface MelodyViewController : UIViewController <UITableViewDataSource, UITableViewDelegate> {
+@interface MelodyViewController : GAITrackedViewController <UITableViewDataSource, UITableViewDelegate> {
     UITableView *_melodyTableView;
     IBOutlet UITableViewCell * cellMelody;
     IBOutlet UITableViewCell * cellMelody_land;

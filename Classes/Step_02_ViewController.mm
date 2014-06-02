@@ -15,6 +15,8 @@
 #import "BLEConnectionManager.h"
 #import "KISSMetricsAPI.h"
 
+#define GAI_CATEGORY    @"Step 02 view"
+
 @interface Step_02_ViewController ()
 
 @property (retain, nonatomic) IBOutlet UIButton *btnContinue;
@@ -132,6 +134,11 @@
 - (IBAction)btnContinueTouchUpInsideAction:(id)sender
 {
     [[KISSMetricsAPI sharedAPI] recordEvent:@"Step02 - Touch up inside continue button" withProperties:nil];
+    
+    [[GAI sharedInstance].defaultTracker sendEventWithCategory:GAI_CATEGORY
+                                                    withAction:@"Touch up inside continue button"
+                                                     withLabel:@"Continue"
+                                                     withValue:[NSNumber numberWithInteger:_cameraType]];
     
     if (_cameraType == BLUETOOTH_SETUP)
     {

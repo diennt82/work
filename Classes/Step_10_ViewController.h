@@ -31,7 +31,7 @@
 
 //#define 
 
-@interface Step_10_ViewController : UIViewController
+@interface Step_10_ViewController : GAITrackedViewController
 {
 
     int num_scan_time;

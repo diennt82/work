@@ -12,8 +12,9 @@
 #import "Util.h"
 #import "Step_08_ViewController.h"
 #import "Step_07_ViewController.h"
+#import "GAI.h"
 
-@interface Step_06_ViewController : UIViewController<UIAlertViewDelegate>
+@interface Step_06_ViewController : GAITrackedViewController<UIAlertViewDelegate>
 {
     
     IBOutlet UITableViewCell * ssidCell;

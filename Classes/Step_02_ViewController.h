@@ -10,8 +10,9 @@
 
 #import "StartMonitorCallback.h"
 #import "ConnectionMethodDelegate.h"
+#import "GAI.h"
 
-@interface Step_02_ViewController : UIViewController <StartMonitorDelegate>
+@interface Step_02_ViewController : GAITrackedViewController <StartMonitorDelegate>
 {
     IBOutlet UITableViewCell * step1_cell, * step2_cell, * step3_cell;
     id<ConnectionMethodDelegate> delegate;

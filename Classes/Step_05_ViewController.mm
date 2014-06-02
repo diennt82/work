@@ -14,6 +14,7 @@
 
 #define ALERT_CONFIRM_TAG       555
 #define ALERT_RETRY_WIFI_TAG    559
+#define GAI_CATEGORY            @"Step 05 view"
 
 @interface Step_05_ViewController () <UIAlertViewDelegate>
 
@@ -132,6 +133,10 @@
 
 - (IBAction)btnContinueTouchUpInsideAction:(id)sender
 {
+    [[GAI sharedInstance].defaultTracker sendEventWithCategory:GAI_CATEGORY
+                                                    withAction:@"Touch up inside continue button"
+                                                     withLabel:@"Continue"
+                                                     withValue:nil];
     /*
      * Stopped setup proccess if selected wifi is open. DO NOT support anymore!
      * The selected is HOME or not doesn't mater, just check to confirm.
@@ -150,6 +155,7 @@
     else
     {
         [[KISSMetricsAPI sharedAPI] recordEvent:@"Step05 - Touch continue button" withProperties:nil];
+        
         NSRange noQoute = NSMakeRange(1, _selectedWifiEntry.ssid_w_quote.length - 2);
         
         NSString *wifiName = [_selectedWifiEntry.ssid_w_quote substringWithRange:noQoute];
@@ -286,6 +292,11 @@
 {
     [[KISSMetricsAPI sharedAPI] recordEvent:[NSString stringWithFormat:@"Step05 - dismiss dialog with button index: %d", buttonIndex] withProperties:nil];
     
+    [[GAI sharedInstance].defaultTracker sendEventWithCategory:GAI_CATEGORY
+                                                    withAction:[NSString stringWithFormat:@"Dismiss alert: %d", alertView.tag]
+                                                     withLabel:[NSString stringWithFormat:@"Alert %@", alertView.title]
+                                                     withValue:nil];
+    
     if (alertView.tag == ALERT_RETRY_WIFI_TAG)
     {
         switch(buttonIndex) {
@@ -402,6 +413,11 @@
 - (void)tableView: (UITableView *)tableView didSelectRowAtIndexPath: (NSIndexPath *)indexPath
 {
     [[KISSMetricsAPI sharedAPI] recordEvent:[NSString stringWithFormat:@"Step05 - table view select row: %d in section: %d", indexPath.row, indexPath.section] withProperties:nil];
+    
+    [[GAI sharedInstance].defaultTracker sendEventWithCategory:GAI_CATEGORY
+                                                    withAction:@"Select Wifi entry"
+                                                     withLabel:@"Row"
+                                                     withValue:[NSNumber numberWithInteger:indexPath.row]];
     
     if (indexPath.section == 0)
     {

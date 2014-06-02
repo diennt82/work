@@ -10,8 +10,9 @@
 
 #import "WifiEntry.h"
 #import "Step_06_ViewController.h"
+#import "GAI.h"
 
-@interface Step_05_ViewController : UIViewController
+@interface Step_05_ViewController : GAITrackedViewController
 {
     NSMutableArray * listOfWifi; 
     IBOutlet UITableViewCell * cellView; 

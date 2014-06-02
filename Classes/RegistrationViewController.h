@@ -8,8 +8,9 @@
 
 #import <UIKit/UIKit.h>
 #import "ConnectionMethodDelegate.h"
+#import "GAI.h"
 
-@interface RegistrationViewController : UIViewController
+@interface RegistrationViewController : GAITrackedViewController
 
 @property (nonatomic, assign)  id<ConnectionMethodDelegate> delegate;
 

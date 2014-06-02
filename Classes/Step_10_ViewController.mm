@@ -31,6 +31,7 @@
 #define ALERT_SELECTED_OPTION   503
 
 #define TIMEOUT_PROCESS         2*60.f
+#define GAI_CATEGORY            @"Step 10 view"
 
 @interface Step_10_ViewController () <UIAlertViewDelegate>
 
@@ -397,6 +398,10 @@
                     
                     [self setStopScanning:nil];
                     [[KISSMetricsAPI sharedAPI] recordEvent:[NSString stringWithFormat:@"Step10 - Check camera status: %@", _statusMessage] withProperties:nil];
+                    [[GAI sharedInstance].defaultTracker sendEventWithCategory:GAI_CATEGORY
+                                                                    withAction:[NSString stringWithFormat:@"Check camera status: %@", _statusMessage]
+                                                                     withLabel:nil
+                                                                     withValue:nil];
                     [self showDialogWithTag:ALERT_CHECK_STATUS message:_statusMessage];
                     
                     [self setupFailed];
@@ -407,6 +412,10 @@
                     NSLog(@"Step_10_VC register successfully. Move on");
                     shouldCheckAgain = FALSE;
                     [[KISSMetricsAPI sharedAPI] recordEvent:[NSString stringWithFormat:@"Step10 - Check camera status: %d", deviceStatus] withProperties:nil];
+                    [[GAI sharedInstance].defaultTracker sendEventWithCategory:GAI_CATEGORY
+                                                                    withAction:[NSString stringWithFormat:@"Check camera status: %@", _statusMessage]
+                                                                     withLabel:nil
+                                                                     withValue:nil];
                     break;
                     
                 default:
@@ -495,6 +504,10 @@
     [self setStopScanning:Nil];
     
     [[KISSMetricsAPI sharedAPI] recordEvent:@"Step10 - Add camera failed - timeout" withProperties:nil];
+    [[GAI sharedInstance].defaultTracker sendEventWithCategory:GAI_CATEGORY
+                                                    withAction:[NSString stringWithFormat:@"Add camera failed: %@", _errorCode]
+                                                     withLabel:nil
+                                                     withValue:nil];
 }
 
 - (void)step10CheckConnectionToHomeWifi:(NSTimer *) expired
@@ -820,6 +833,10 @@
 - (void) setupCompleted
 {
     [[KISSMetricsAPI sharedAPI] recordEvent:@"Add camera success" withProperties:nil];
+    [[GAI sharedInstance].defaultTracker sendEventWithCategory:GAI_CATEGORY
+                                                    withAction:@"Add camera succeeded"
+                                                     withLabel:nil
+                                                     withValue:nil];
     
     [[NSNotificationCenter defaultCenter] removeObserver:self];
     // cancel timeout
@@ -860,7 +877,10 @@
     NSLog(@"Setup has failed - remove cam on server");
     
     [[KISSMetricsAPI sharedAPI] recordEvent:@"Step10 - Add camera failed" withProperties:nil];
-    
+    [[GAI sharedInstance].defaultTracker sendEventWithCategory:GAI_CATEGORY
+                                                    withAction:[NSString stringWithFormat:@"Add camera failed:%@", _errorCode]
+                                                     withLabel:nil
+                                                     withValue:nil];
     // Dont remove camera anymore as we don't add it,
 #if 0
     BMS_JSON_Communication *jsonComm = [[[BMS_JSON_Communication alloc] initWithObject:self
@@ -1022,6 +1042,11 @@
 - (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex
 {
     [[KISSMetricsAPI sharedAPI] recordEvent:[NSString stringWithFormat:@"Step10 - dismiss alert view with btn indx: %d", buttonIndex] withProperties:nil];
+    
+    [[GAI sharedInstance].defaultTracker sendEventWithCategory:GAI_CATEGORY
+                                                    withAction:[NSString stringWithFormat:@"Dismiss alert:%d", alertView.tag]
+                                                     withLabel:[NSString stringWithFormat:@"Alert:%@", alertView.title]
+                                                     withValue:[NSNumber numberWithInteger:buttonIndex]];
     
     int tag = alertView.tag;
     

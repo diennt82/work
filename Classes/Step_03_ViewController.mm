@@ -12,6 +12,8 @@
 #import "UIBarButtonItem+Custom.h"
 #import "KISSMetricsAPI.h"
 
+#define GAI_CATEGORY    @"Step 03 view"
+
 @interface Step_03_ViewController ()
 
 @property (retain, nonatomic) IBOutlet UIScrollView *scrollViewGuide;
@@ -148,20 +150,22 @@
 -(void) handleEnteredBackground
 {
     [[KISSMetricsAPI sharedAPI] recordEvent:@"Step03 - Enter background" withProperties:nil];
+    [[GAI sharedInstance].defaultTracker sendEventWithCategory:GAI_CATEGORY
+                                                    withAction:@"Enter background"
+                                                     withLabel:@"Homekey"
+                                                     withValue:nil];
     //showProgressNextTime = TRUE;
     [self showProgress:nil];
 }
 
 -(void) becomeActive
 {
-//    if (showProgressNextTime)
-//    {
-//        NSLog(@"cshow progress 03");
-//        //[self showProgress:nil];
-//        [self performSelectorOnMainThread:@selector(showProgress:) withObject:nil waitUntilDone:NO];
-//    }
-    
     [[KISSMetricsAPI sharedAPI] recordEvent:@"Step03 - Enter fore ground" withProperties:nil];
+    
+    [[GAI sharedInstance].defaultTracker sendEventWithCategory:GAI_CATEGORY
+                                                    withAction:@"Become active"
+                                                     withLabel:nil
+                                                     withValue:nil];
     
     task_cancelled = NO;
     [self checkConnectionToCamera:nil];

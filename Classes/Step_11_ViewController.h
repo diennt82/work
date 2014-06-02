@@ -8,7 +8,8 @@
 
 #import <UIKit/UIKit.h>
 #import "GAI.h"
-@interface Step_11_ViewController : UIViewController
+
+@interface Step_11_ViewController : GAITrackedViewController
 
 @property (nonatomic, retain) NSString * errorCode;
 
