@@ -13,6 +13,8 @@
 #import "define.h"
 #import "KISSMetricsAPI.h"
 
+#define GAI_CATEGORY    @"Melody view"
+
 @interface MelodyViewController ()
 {
     NSArray* _melodies;
@@ -71,6 +73,8 @@
     self.melodyTableView.delegate = self;
     self.melodyTableView.dataSource = self;
     [self loadFont];
+    
+    self.trackedViewName = GAI_CATEGORY;
 }
 
 - (void)loadFont
@@ -340,6 +344,11 @@
 - (void)tableView: (UITableView *)tableView didSelectRowAtIndexPath: (NSIndexPath *)indexPath
 {
     [[KISSMetricsAPI sharedAPI] recordEvent:[NSString stringWithFormat:@"MelodyVC select row: %d", indexPath.row] withProperties:nil];
+    
+    [[GAI sharedInstance].defaultTracker sendEventWithCategory:GAI_CATEGORY
+                                                    withAction:@"Selected melody"
+                                                     withLabel:@"Row"
+                                                     withValue:[NSNumber numberWithInteger:indexPath.row]];
     
 	[tableView deselectRowAtIndexPath:indexPath animated:NO];
     

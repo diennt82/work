@@ -28,6 +28,7 @@
 #import "UIColor+Hubble.h"
 #import "UIImage+Hubble.h"
 #import "StunClient.h"
+#import "GAITrackedViewController.h"
 
 
 #define H264_STREAM_STARTED              1
@@ -57,7 +58,7 @@
 
 @end
 
-@interface H264PlayerViewController: UIViewController
+@interface H264PlayerViewController: GAITrackedViewController
 <PlayerCallbackHandler, ScanForCameraNotifier, StunClientDelegate, MelodyVCDelegate, UIScrollViewDelegate, ScrollHorizontalMenuDelegate, AudioOutStreamerDelegate>
 {
     ScrollHorizontalMenu *_horizMenu;

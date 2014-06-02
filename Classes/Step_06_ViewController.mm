@@ -13,6 +13,7 @@
 
 #define TIME_INPUT_PASSWORD_AGAIN   60.0
 #define RETRY_SETUP_WIFI_TIMES      5
+#define GAI_CATEGORY    @"Step 06 view"
 
 @interface Step_06_ViewController () <UITextFieldDelegate>
 
@@ -185,6 +186,7 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    self.trackedViewName = GAI_CATEGORY;
     NSLog(@"update security type");
     UITextField * _sec = (UITextField *) [self.securityCell viewWithTag:1];
     if (_sec != nil)
@@ -512,6 +514,10 @@
 -(void) handleNextButton:(id) sender
 {
     [[KISSMetricsAPI sharedAPI] recordEvent:@"Step06 - next button" withProperties:nil];
+    [[GAI sharedInstance].defaultTracker sendEventWithCategory:GAI_CATEGORY
+                                                    withAction:@"Touch Next button"
+                                                     withLabel:@"Next"
+                                                     withValue:nil];
     //create progressView for process verify network
     self.navigationItem.leftBarButtonItem.enabled = NO; // Disable go back
     self.navigationItem.rightBarButtonItem.enabled = NO;
@@ -692,6 +698,10 @@
     
     [[KISSMetricsAPI sharedAPI] recordEvent:[NSString stringWithFormat:@"Step06 - Add camera fw: %@", fwVersion] withProperties:nil];
     
+    [[GAI sharedInstance].defaultTracker sendEventWithCategory:GAI_CATEGORY
+                                                    withAction:[NSString stringWithFormat:@"Send Wifi info to Camera-fw:%@", fwVersion]
+                                                     withLabel:nil
+                                                     withValue:nil];
      // >12.82 we can move on with new flow
     if  ([fwVersion compare:FW_MILESTONE_F66_NEW_FLOW] >= NSOrderedSame) //||
          //([fwVersion compare:FW_MILESTONE_F66_NEW_FLOW] == NSOrderedAscending) )

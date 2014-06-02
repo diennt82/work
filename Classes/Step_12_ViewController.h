@@ -11,7 +11,7 @@
 #import "GAI.h"
 #import "PublicDefine.h"
 
-@interface Step_12_ViewController : UIViewController
+@interface Step_12_ViewController : GAITrackedViewController
 {
       IBOutlet UILabel * cameraName;
 }

@@ -11,6 +11,7 @@
 #import "Step_04_ViewController.h"
 #import "Step_10_ViewController.h"
 #import "HttpCom.h"
+#import "GAI.h"
 
 
 #define OPEN_WIFI_BTN_TAG 1001
@@ -18,7 +19,7 @@
 
 #define VERSION_18_037 @"get_version: 18_037"
 
-@interface Step_03_ViewController : UIViewController
+@interface Step_03_ViewController : GAITrackedViewController
 {
     BOOL task_cancelled;
     NSString * homeWifiSSID; 

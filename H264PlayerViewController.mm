@@ -78,6 +78,8 @@
 #define TIMEOUT_BUFFERING           15// 15 seconds
 #define TIMEOUT_REMOTE_STREAMING    5*60 // 5 minutes
 
+#define GAI_CATEGORY                @"Player view"
+
 
 @interface H264PlayerViewController () <TimelineVCDelegate, BonjourDelegate, AudioOutStreamRemoteDelegate>
 {
@@ -135,6 +137,11 @@
 @property (nonatomic, retain) NSString *messageStreamingState;
 @property (nonatomic, retain) NSTimer *timerBufferingTimeout;
 @property (nonatomic, retain) UIAlertView *alertViewTimoutRemote;
+@property (nonatomic, retain) NSDate *timeStartingStageOne;
+@property (nonatomic) NSTimeInterval timeStageOneTotal;
+@property (nonatomic, retain) NSDate *timeStartingStageTwo;
+@property (nonatomic) NSTimeInterval timeStageTwoTotal;
+@property (nonatomic, retain) NSDate *timeStartPlayerView;
 
 //property for Touch to Talk
 @property (nonatomic) BOOL walkieTalkieEnabled;
@@ -266,6 +273,8 @@ double _ticks = 0;
     self.numbersOfRemoteViewError = 0;
     self.currentBitRate = @"128";
     self.messageStreamingState = @"Camera is not accessible";
+    self.timeStartingStageOne = 0;
+    self.timeStartingStageTwo = 0;
     
     [self becomeActive];
 }
@@ -283,6 +292,12 @@ double _ticks = 0;
     [[KISSMetricsAPI sharedAPI] recordEvent:[NSString stringWithFormat:@"PlayerView view will appear - return from Playback: %d", _returnFromPlayback] withProperties:nil];
     NSLog(@"%s -_wantToShowTimeLine: %d, userWantToCancel: %d, returnFromPlayback: %d", __FUNCTION__, _wantToShowTimeLine, userWantToCancel, _returnFromPlayback);
     
+    self.trackedViewName = GAI_CATEGORY;
+    [[GAI sharedInstance].defaultTracker sendEventWithCategory:GAI_CATEGORY
+                                                    withAction:@"viewWillAppear"
+                                                     withLabel:nil
+                                                     withValue:nil];
+    self.timeStartPlayerView = [NSDate date];
     //alway show custom indicator, when view appear
     _isShowCustomIndicator = YES;
     self.currentMediaStatus = 0;
@@ -637,6 +652,11 @@ double _ticks = 0;
 {
     [[KISSMetricsAPI sharedAPI] recordEvent:@"PlayerView Touch up inside NOW btn item" withProperties:nil];
     
+    [[GAI sharedInstance].defaultTracker sendEventWithCategory:GAI_CATEGORY
+                                                    withAction:@"nowButtonAciton"
+                                                     withLabel:@"Now"
+                                                     withValue:nil];
+    
     _hideCustomIndicatorAndTextNotAccessble = NO;
     
     [nowButton setEnabled:NO];
@@ -667,6 +687,11 @@ double _ticks = 0;
 - (void)earlierButtonAction:(id)sender
 {
     [[KISSMetricsAPI sharedAPI] recordEvent:@"PlayerView Touch up inside EARLIER btn item" withProperties:nil];
+    
+    [[GAI sharedInstance].defaultTracker sendEventWithCategory:GAI_CATEGORY
+                                                    withAction:@"earlierButtonAction"
+                                                     withLabel:@"Earlier"
+                                                     withValue:nil];
     
     _hideCustomIndicatorAndTextNotAccessble = YES;
     
@@ -949,8 +974,14 @@ double _ticks = 0;
             _isShowCustomIndicator = NO;
             [self displayCustomIndicator];
             
+            self.timeStageTwoTotal = [[NSDate date] timeIntervalSinceDate:_timeStartingStageTwo];
+            NSTimeInterval diff = [[NSDate date] timeIntervalSinceDate:_timeStartPlayerView];
             
-            NSLog(@"[MEDIA_PLAYER_HAS_FIRST_IMAGE] ");
+            NSLog(@"%s total time: %f, stage 2 takes %f seconds", __FUNCTION__, diff, _timeStageTwoTotal);
+            
+            self.timeStartingStageTwo = 0;
+            
+            NSLog(@"[MEDIA_PLAYER_HAS_FIRST_IMAGE]");
             if(self.selectedChannel.profile.isInLocal == NO)
             {
                 if (_timerIncreaseBitRate)
@@ -1040,8 +1071,13 @@ double _ticks = 0;
                     }
                 }
                 
-                //[self performSelectorInBackground:@selector(getTriggerRecording_bg) withObject:nil];
-                //[self performSelectorInBackground:@selector(getMelodyValue_bg) withObject:nil];
+                NSString *gaiAction = [NSString stringWithFormat:@"View camera - Local:%d, name:%@, fw:%@, host_ssid:%@, current_ssid:%@, Time stage 1: %f, Time stage 2: %f", self.selectedChannel.profile.isInLocal, self.selectedChannel.profile.name, self.selectedChannel.profile.fw_version, self.selectedChannel.profile.hostSSID, _current_ssid, _timeStageOneTotal, _timeStageTwoTotal];
+                NSLog(@"%s gaiAction: %@", __FUNCTION__, gaiAction);
+                [[GAI sharedInstance].defaultTracker sendEventWithCategory:GAI_CATEGORY
+                                                                withAction:gaiAction
+                                                                 withLabel:nil
+                                                                 withValue:nil];
+                
                 self.imageViewStreamer.userInteractionEnabled = YES;
                 self.imgViewDrectionPad.userInteractionEnabled = YES;
                 
@@ -1382,6 +1418,11 @@ double _ticks = 0;
     }
     
     [[KISSMetricsAPI sharedAPI] recordEvent:[NSString stringWithFormat:@"PlayerView single tap on video image view: %d", _isHorizeShow] withProperties:nil];
+    
+    [[GAI sharedInstance].defaultTracker sendEventWithCategory:GAI_CATEGORY
+                                                    withAction:@"single tap on video image view"
+                                                     withLabel:@"Vide image view"
+                                                     withValue:[NSNumber numberWithDouble:_isHorizeShow]];
 }
 
 - (void)hideControlMenu
@@ -1442,7 +1483,10 @@ double _ticks = 0;
 {
     NSLog(@"%s wants to cancel: %d, rtn frm Playback: %d", __FUNCTION__, userWantToCancel, _returnFromPlayback);
     [[KISSMetricsAPI sharedAPI] recordEvent:@"PlayerView Become active" withProperties:nil];
-    
+    [[GAI sharedInstance].defaultTracker sendEventWithCategory:GAI_CATEGORY
+                                                    withAction:@"Become Active"
+                                                     withLabel:nil
+                                                     withValue:[NSNumber numberWithDouble:userWantToCancel]];
     if (userWantToCancel == TRUE || _returnFromPlayback)
     {
         return;
@@ -1484,6 +1528,10 @@ double _ticks = 0;
     NSLog(@"%s wants to cancel: %d, rtn frm Playback: %d, nav: %@", __FUNCTION__, userWantToCancel, _returnFromPlayback, self.navigationController.visibleViewController.description);
     
     [[KISSMetricsAPI sharedAPI] recordEvent:@"PlayerView Enter background" withProperties:nil];
+    [[GAI sharedInstance].defaultTracker sendEventWithCategory:GAI_CATEGORY
+                                                    withAction:@"Enter background"
+                                                     withLabel:@"Homekey"
+                                                     withValue:[NSNumber numberWithDouble:userWantToCancel]];
     
     if (userWantToCancel == TRUE || _returnFromPlayback)
     {
@@ -1686,6 +1734,12 @@ double _ticks = 0;
     {
         NSLog(@"H264VC - setupCamera -created a local streamer");
         self.selectedChannel.stream_url = [NSString stringWithFormat:@"rtsp://user:pass@%@:6667/blinkhd", self.selectedChannel.profile.ip_address];
+        self.timeStageOneTotal = [[NSDate date] timeIntervalSinceDate:_timeStartingStageOne];
+        self.timeStartingStageOne = 0;
+        NSLog(@"%s stage 1 takes %f seconds", __FUNCTION__, _timeStageOneTotal);
+        NSLog(@"%s Start stage 2", __FUNCTION__);
+        self.timeStartingStageTwo = [NSDate date];
+        
         [self performSelector:@selector(startStream)
                    withObject:nil
                    afterDelay:0.1];
@@ -1929,6 +1983,11 @@ double _ticks = 0;
 - (void)prepareGoBackToCameraList:(id)sender
 {
      [[KISSMetricsAPI sharedAPI] recordEvent:@"PlayerView goes back" withProperties:nil];
+    
+    [[GAI sharedInstance].defaultTracker sendEventWithCategory:GAI_CATEGORY
+                                                    withAction:@"Go back"
+                                                     withLabel:@"Hubble back button item"
+                                                     withValue:[NSNumber numberWithDouble:_currentMediaStatus]];
     
     self.activityStopStreamingProgress.hidden = NO;
     [self.view bringSubviewToFront:_activityStopStreamingProgress];
@@ -2900,7 +2959,12 @@ double _ticks = 0;
                                {
                                    if ([[responseDict objectForKey:@"status"] intValue] == 200)
                                    {
-                                       //self.selectedChannel.stream_url = [[responseDict objectForKey:@"data"] objectForKey:@"url"];
+                                       self.timeStageOneTotal = [[NSDate date] timeIntervalSinceDate:_timeStartingStageOne];
+                                       self.timeStartingStageOne = 0;
+                                        NSLog(@"%s stage 1 takes %f seconds", __FUNCTION__, _timeStageOneTotal);
+                                       
+                                       NSLog(@"%s Start stage 2", __FUNCTION__);
+                                       self.timeStartingStageTwo = [NSDate date];
                                        
                                        NSString *urlResponse = [[responseDict objectForKey:@"data"] objectForKey:@"url"];
                                        
@@ -3414,6 +3478,12 @@ double _ticks = 0;
 		if (lastDirUD != DIRECTION_V_NON)
         {
             [[KISSMetricsAPI sharedAPI] recordEvent:@"PlayerView V directional change" withProperties:nil];
+            
+            [[GAI sharedInstance].defaultTracker sendEventWithCategory:GAI_CATEGORY
+                                                            withAction:@"V directional change"
+                                                             withLabel:@"Direction pad"
+                                                             withValue:nil];
+            
 			[self send_UD_dir_to_rabot:currentDirUD];
 		}
         
@@ -3494,6 +3564,12 @@ double _ticks = 0;
         {
 			//need_to_send = TRUE;
             [[KISSMetricsAPI sharedAPI] recordEvent:@"PlayerView H directional change" withProperties:nil];
+            
+            [[GAI sharedInstance].defaultTracker sendEventWithCategory:GAI_CATEGORY
+                                                            withAction:@"H directional change"
+                                                             withLabel:@"Direction pad"
+                                                             withValue:nil];
+            
             [self send_LR_dir_to_rabot: currentDirLR];
 		}
         
@@ -3936,6 +4012,11 @@ double _ticks = 0;
 {
     [[KISSMetricsAPI sharedAPI] recordEvent:@"PlayerView - will rotate interface" withProperties:nil];
     
+    [[GAI sharedInstance].defaultTracker sendEventWithCategory:GAI_CATEGORY
+                                                    withAction:@"View will rotate interface"
+                                                     withLabel:nil
+                                                     withValue:nil];
+    
     if (_earlierNavi.isEarlierView) //don't call adjustViews for Earlier
     {
         return;
@@ -4360,6 +4441,11 @@ double _ticks = 0;
 {
     int tag = alertView.tag;
     [[KISSMetricsAPI sharedAPI] recordEvent:[NSString stringWithFormat:@"PlayerView dismiss alert: %d with btn index: %d", tag, buttonIndex] withProperties:nil];
+    
+    [[GAI sharedInstance].defaultTracker sendEventWithCategory:GAI_CATEGORY
+                                                    withAction:[NSString stringWithFormat:@"Dismiss alert: %d", tag]
+                                                     withLabel:[NSString stringWithFormat:@"Alert %@", alertView.title]
+                                                     withValue:[NSNumber numberWithInteger:buttonIndex]];
     
     if (tag == TAG_ALERT_VIEW_REMOTE_TIME_OUT)
     {
@@ -4815,6 +4901,11 @@ double _ticks = 0;
     [self applyFont];
     
     [[KISSMetricsAPI sharedAPI] recordEvent:[NSString stringWithFormat:@"PlayerView select item on horize menu - idx: %d", _selectedItemMenu] withProperties:nil];
+    
+    [[GAI sharedInstance].defaultTracker sendEventWithCategory:GAI_CATEGORY
+                                                    withAction:@"Select item on horize menu"
+                                                     withLabel:@"Item"
+                                                     withValue:[NSNumber numberWithInt:_selectedItemMenu]];
 }
 
 - (void)updateBottomView
@@ -5565,6 +5656,10 @@ double _ticks = 0;
 - (IBAction)changeToMainRecording:(id)sender
 {
     [[KISSMetricsAPI sharedAPI] recordEvent:@"PlayerView changes Take picture to Recording or " withProperties:nil];
+    [[GAI sharedInstance].defaultTracker sendEventWithCategory:GAI_CATEGORY
+                                                    withAction:@"Changes Take picture to Recording or vice versa"
+                                                     withLabel:@"Recording"
+                                                     withValue:nil];
     //change to main recording here
     [self changeAction:nil];
 }
@@ -5572,6 +5667,12 @@ double _ticks = 0;
 - (IBAction)switchDegreePressed:(id)sender
 {
     [[KISSMetricsAPI sharedAPI] recordEvent:@"PlayerView changes Temperature type" withProperties:nil];
+    
+    [[GAI sharedInstance].defaultTracker sendEventWithCategory:GAI_CATEGORY
+                                                    withAction:@"Changes Temperature type"
+                                                     withLabel:@"Temperature"
+                                                     withValue:[NSNumber numberWithBool:_isDegreeFDisplay]];
+    
     _isDegreeFDisplay = !_isDegreeFDisplay;
     
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
@@ -5589,6 +5690,12 @@ double _ticks = 0;
 - (IBAction)processingRecordingOrTakePicture:(id)sender
 {
     [[KISSMetricsAPI sharedAPI] recordEvent:[NSString stringWithFormat:@"PlayerView Touch up inside recording - mode: %d", _isRecordInterface] withProperties:nil];
+    
+    [[GAI sharedInstance].defaultTracker sendEventWithCategory:GAI_CATEGORY
+                                                    withAction:@"Changes Temperature type"
+                                                     withLabel:@"Temperature"
+                                                     withValue:[NSNumber numberWithBool:_isDegreeFDisplay]];
+    
     NSLog(@"_isRecordInterface is %d", _isRecordInterface);
     
     if (_isRecordInterface)
@@ -5687,9 +5794,10 @@ double _ticks = 0;
 - (IBAction)changeAction:(id)sender
 {
     [[KISSMetricsAPI sharedAPI] recordEvent:@"PlayerView changes Take picture to Recording or " withProperties:nil];
-    //#if DISABLE_VIEW_RELEASE_FLAG
-    //    _isRecordInterface = FALSE;
-    //#else
+    [[GAI sharedInstance].defaultTracker sendEventWithCategory:GAI_CATEGORY
+                                                    withAction:@"Take picture to Recording or vice versa"
+                                                     withLabel:@"Temperature"
+                                                     withValue:[NSNumber numberWithBool:_isRecordInterface]];
     if (!_syncPortraitAndLandscape)
     {
         _isRecordInterface = !_isRecordInterface;
@@ -5941,6 +6049,13 @@ double _ticks = 0;
 
 - (void)scanCamera
 {
+    if (_timeStartingStageOne == 0)
+    {
+        self.timeStartingStageOne = [NSDate date];
+    }
+    
+    self.timeStartingStageTwo = 0;
+    
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     self.current_ssid = [CameraPassword fetchSSIDInfo];
     

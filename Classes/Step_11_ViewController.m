@@ -10,6 +10,7 @@
 #import "KISSMetricsAPI.h"
 #import "define.h"
 #import "PublicDefine.h"
+#define GAI_CATEGORY    @"Step 11 view"
 
 @interface Step_11_ViewController ()
 
@@ -35,7 +36,7 @@
     [super viewDidLoad];
     self.navigationItem.hidesBackButton = YES;
     self.navigationItem.hidesBackButton = YES;
-    
+    self.trackedViewName = GAI_CATEGORY;
     UIImage *hubbleLogoBack = [UIImage imageNamed:@"Hubble_back_text"];
     UIBarButtonItem *barBtnHubble = [[UIBarButtonItem alloc] initWithImage:hubbleLogoBack
                                                                      style:UIBarButtonItemStyleBordered
@@ -80,6 +81,10 @@
                          nil];
     
     [[KISSMetricsAPI sharedAPI] recordEvent:@"Add camera failed" withProperties:info];
+    [[GAI sharedInstance].defaultTracker sendEventWithCategory:GAI_CATEGORY
+                                                    withAction:@"viewDidLoad"
+                                                     withLabel:[NSString stringWithFormat:@"Add camera failed:%@", _errorCode]
+                                                     withValue:nil];
 }
 
 - (void)didReceiveMemoryWarning
@@ -95,6 +100,10 @@
 -(IBAction)tryAddCameraAgain:(id)sender
 {
     [[KISSMetricsAPI sharedAPI] recordEvent:@"Step11 - Touch up inside try again btn" withProperties:nil];
+    [[GAI sharedInstance].defaultTracker sendEventWithCategory:GAI_CATEGORY
+                                                    withAction:@"Touch up inside"
+                                                     withLabel:@"Try Again"
+                                                     withValue:nil];
     //Go back to the beginning
     
     // Disable Keep screen on

@@ -42,7 +42,7 @@
 
     handling_PN = FALSE;
     
-#if 1
+#if 0
     [KISSMetricsAPI sharedAPIWithKey:@"ff38140e358fdc343bb97297de4963291eec47d5"];
     
     [[KISSMetricsAPI sharedAPI] identify:@"85FF7C5E-3412-4AAC-9B07-5491AD022B4F"];
@@ -68,7 +68,7 @@
     
     //UA-ID_INSTANCE is taken from the account analytics on google analytics
     //id<GAITracker> tracker =
-    [[GAI sharedInstance] trackerWithTrackingId:@"UA-42134835-2"];
+    [[GAI sharedInstance] trackerWithTrackingId:@"UA-51500380-2"];
 #endif
     // !!!: Use the next line only during TEST - appstore release: need to comment this line
     //[TestFlight setDeviceIdentifier:[[UIDevice currentDevice] uniqueIdentifier]];

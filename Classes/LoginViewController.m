@@ -6,10 +6,6 @@
 //  Copyright (c) 2014 Smart Panda Ltd. All rights reserved.
 //
 
-#define MOVEMENT_DURATION 0.3 //movementDuration
-
-#define _Use3G @"use3GToConnect"
-
 #import "LoginViewController.h"
 #import "StunClient.h"
 //#import "Reachability.h"
@@ -21,6 +17,10 @@
 #import "TimelineDatabase.h"
 #import "RegistrationViewController.h"
 #import "MBP_iosViewController.h"
+
+#define MOVEMENT_DURATION   0.3 //movementDuration
+#define _Use3G              @"use3GToConnect"
+#define GAI_CATEGORY        @"Login view"
 
 @interface LoginViewController ()  <UITextFieldDelegate, StunClientDelegate, UserAccountDelegate>
 
@@ -104,6 +104,8 @@
     [super viewWillAppear:animated];
     self.navigationController.navigationBarHidden = YES;
     
+    self.trackedViewName = GAI_CATEGORY;
+    
     MBP_iosViewController *mainVC = (MBP_iosViewController *)[self.navigationController.viewControllers objectAtIndex:0];
     mainVC.app_stage = APP_STAGE_LOGGING_IN;
     
@@ -126,6 +128,11 @@
 {
     [super viewDidAppear:animated];
     [[KISSMetricsAPI sharedAPI] recordEvent:@"Login Screen" withProperties:nil];
+    
+    [[GAI sharedInstance].defaultTracker sendEventWithCategory:GAI_CATEGORY
+                                                    withAction:@"viewDidAppear"
+                                                     withLabel:nil
+                                                     withValue:nil];
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -637,6 +644,12 @@
             NSString * ok = NSLocalizedStringWithDefaultValue(@"Ok" ,nil, [NSBundle mainBundle],
                                                               @"OK", nil);
             [[KISSMetricsAPI sharedAPI] recordEvent:@"Login Failed" withProperties:nil];
+            
+            [[GAI sharedInstance].defaultTracker sendEventWithCategory:GAI_CATEGORY
+                                                            withAction:[NSString stringWithFormat:@"Login succeed-user: %@", _stringUsername]
+                                                             withLabel:nil
+                                                             withValue:nil];
+            
             UIAlertView *alert = [[UIAlertView alloc]
                                   initWithTitle:title
                                   message:msg
@@ -685,6 +698,10 @@
     
     [[KISSMetricsAPI sharedAPI] recordEvent:[NSString stringWithFormat:@"Login successfully - user: %@", _stringUsername] withProperties:nil];
     
+    [[GAI sharedInstance].defaultTracker sendEventWithCategory:GAI_CATEGORY
+                                                    withAction:[NSString stringWithFormat:@"Login succeeded-user:%@", _stringUsername]
+                                                     withLabel:nil
+                                                     withValue:nil];
     //BLOCKED method
     [account readCameraListAndUpdate];
     [account release];
@@ -727,6 +744,11 @@
 	[alert release];
     
     [[KISSMetricsAPI sharedAPI] recordEvent:[NSString stringWithFormat:@"Login failed - user: %@, error: %@", _stringUsername, msg] withProperties:nil];
+    
+    [[GAI sharedInstance].defaultTracker sendEventWithCategory:GAI_CATEGORY
+                                                    withAction:[NSString stringWithFormat:@"Login failed-user:%@, error: %@", _stringUsername, msg]
+                                                     withLabel:nil
+                                                     withValue:nil];
 }
 
 - (void)loginFailedServerUnreachable
@@ -761,6 +783,11 @@
 	[alert release];
     
     [[KISSMetricsAPI sharedAPI] recordEvent:[NSString stringWithFormat:@"Login failed - user: %@, error: Server unreachable", _stringUsername] withProperties:nil];
+    
+    [[GAI sharedInstance].defaultTracker sendEventWithCategory:GAI_CATEGORY
+                                                    withAction:[NSString stringWithFormat:@"Login failed, Server unreachable-user:%@", _stringUsername]
+                                                     withLabel:nil
+                                                     withValue:nil];
 }
 
 - (void)getUserInfoSuccessWithResponse: (NSDictionary *)responseDict

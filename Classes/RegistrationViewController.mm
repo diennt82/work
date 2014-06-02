@@ -14,6 +14,8 @@
 //#import "TermsCondController.h"
 #import "ToUViewController.h"
 
+#define GAI_CATEGORY    @  "Registration view"
+
 @interface RegistrationViewController () <UITextFieldDelegate>
     
 @property (retain, nonatomic) IBOutlet UITextField *tfUsername;
@@ -73,6 +75,8 @@
 {
     [super viewWillAppear:animated];
     self.navigationController.navigationBarHidden = YES;
+    
+    self.trackedViewName = GAI_CATEGORY;
     
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
     {
@@ -349,7 +353,12 @@
     [account release];
     
     [[KISSMetricsAPI sharedAPI] recordEvent:[NSString stringWithFormat:@"Register successfully - user: %@", _stringUsername] withProperties:nil];
- 
+    
+    [[GAI sharedInstance].defaultTracker sendEventWithCategory:GAI_CATEGORY
+                                                    withAction:[NSString stringWithFormat:@"Register successfully - user: %@", _stringUsername]
+                                                     withLabel:nil
+                                                     withValue:nil];
+    
     [self.navigationController popToRootViewControllerAnimated:YES];
     
     if (_delegate)
@@ -377,6 +386,11 @@
     [_alert release];
     
     [[KISSMetricsAPI sharedAPI] recordEvent:[NSString stringWithFormat:@"Regsiter failed - user: %@, error: %@", _stringUsername, msg] withProperties:nil];
+    
+    [[GAI sharedInstance].defaultTracker sendEventWithCategory:GAI_CATEGORY
+                                                    withAction:[NSString stringWithFormat:@"Register successfully - user: %@", _stringUsername]
+                                                     withLabel:nil
+                                                     withValue:nil];
 }
 
 - (void)registerFailedServerUnreachable
@@ -403,6 +417,11 @@
 	[alert release];
     
     [[KISSMetricsAPI sharedAPI] recordEvent:[NSString stringWithFormat:@"Register failed - user: %@, error: Server is unreachable", _stringUsername] withProperties:nil];
+    
+    [[GAI sharedInstance].defaultTracker sendEventWithCategory:GAI_CATEGORY
+                                                    withAction:[NSString stringWithFormat:@"Register failed, Server is unreachable - user: %@", _stringUsername]
+                                                     withLabel:nil
+                                                     withValue:nil];
 }
 
 -(IBAction)btnTermsConditionPressed:(id)sender

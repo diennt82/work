@@ -11,6 +11,8 @@
 #import "define.h"
 #import "PublicDefine.h"
 
+#define GAI_CATEGORY @"Step 12 view"
+
 @interface Step_12_ViewController()
 
 @property (retain, nonatomic) IBOutlet UIButton *btnWatchLiveCamera;
@@ -25,7 +27,7 @@
 {
     [super viewDidLoad];
     self.navigationItem.hidesBackButton = YES;
-    
+    self.trackedViewName = GAI_CATEGORY;
     UIImage *hubbleLogoBack = [UIImage imageNamed:@"Hubble_back_text"];
     UIBarButtonItem *barBtnHubble = [[UIBarButtonItem alloc] initWithImage:hubbleLogoBack
                                                                      style:UIBarButtonItemStyleBordered
@@ -62,6 +64,10 @@
                           nil];
     
     [[KISSMetricsAPI sharedAPI] recordEvent:@"Add camera success" withProperties:info];
+    [[GAI sharedInstance].defaultTracker sendEventWithCategory:GAI_CATEGORY
+                                                    withAction:@"viewDidLoad"
+                                                     withLabel:nil
+                                                     withValue:nil];
 }
 
 -(void) viewWillAppear:(BOOL)animated
@@ -76,6 +82,10 @@
 -(IBAction)startMonitor:(id)sender
 {
     [[KISSMetricsAPI sharedAPI] recordEvent:@"Step11 - Touch up inside View Live Camera btn" withProperties:nil];
+    [[GAI sharedInstance].defaultTracker sendEventWithCategory:GAI_CATEGORY
+                                                    withAction:@"Touch up inside"
+                                                     withLabel:@"View Live Camera"
+                                                     withValue:nil];
     
     NSString *registrationID = [[NSUserDefaults standardUserDefaults] objectForKey:CAMERA_UDID];
 
