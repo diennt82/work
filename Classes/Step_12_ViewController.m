@@ -27,7 +27,7 @@
 {
     [super viewDidLoad];
     self.navigationItem.hidesBackButton = YES;
-    
+    self.trackedViewName = GAI_CATEGORY;
     UIImage *hubbleLogoBack = [UIImage imageNamed:@"Hubble_back_text"];
     UIBarButtonItem *barBtnHubble = [[UIBarButtonItem alloc] initWithImage:hubbleLogoBack
                                                                      style:UIBarButtonItemStyleBordered

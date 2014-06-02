@@ -104,6 +104,8 @@
     [super viewWillAppear:animated];
     self.navigationController.navigationBarHidden = YES;
     
+    self.trackedViewName = GAI_CATEGORY;
+    
     MBP_iosViewController *mainVC = (MBP_iosViewController *)[self.navigationController.viewControllers objectAtIndex:0];
     mainVC.app_stage = APP_STAGE_LOGGING_IN;
     

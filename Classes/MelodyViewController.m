@@ -73,6 +73,8 @@
     self.melodyTableView.delegate = self;
     self.melodyTableView.dataSource = self;
     [self loadFont];
+    
+    self.trackedViewName = GAI_CATEGORY;
 }
 
 - (void)loadFont

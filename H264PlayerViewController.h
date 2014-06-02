@@ -28,7 +28,7 @@
 #import "UIColor+Hubble.h"
 #import "UIImage+Hubble.h"
 #import "StunClient.h"
-#import "GAI.h"
+#import "GAITrackedViewController.h"
 
 
 #define H264_STREAM_STARTED              1

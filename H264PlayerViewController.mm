@@ -136,6 +136,11 @@
 @property (nonatomic, retain) NSString *currentBitRate;
 @property (nonatomic, retain) NSString *messageStreamingState;
 @property (nonatomic, retain) NSTimer *timerBufferingTimeout;
+@property (nonatomic, retain) NSDate *timeStartingStageOne;
+@property (nonatomic) NSTimeInterval timeStageOneTotal;
+@property (nonatomic, retain) NSDate *timeStartingStageTwo;
+@property (nonatomic) NSTimeInterval timeStageTwoTotal;
+@property (nonatomic, retain) NSDate *timeStartPlayerView;
 
 //property for Touch to Talk
 @property (nonatomic) BOOL walkieTalkieEnabled;
@@ -267,6 +272,8 @@ double _ticks = 0;
     self.numbersOfRemoteViewError = 0;
     self.currentBitRate = @"128";
     self.messageStreamingState = @"Camera is not accessible";
+    self.timeStartingStageOne = 0;
+    self.timeStartingStageTwo = 0;
     
     [self becomeActive];
 }
@@ -284,11 +291,12 @@ double _ticks = 0;
     [[KISSMetricsAPI sharedAPI] recordEvent:[NSString stringWithFormat:@"PlayerView view will appear - return from Playback: %d", _returnFromPlayback] withProperties:nil];
     NSLog(@"H264VC - viewWillAppear -_wantToShowTimeLine: %d", _wantToShowTimeLine);
     
+    self.trackedViewName = GAI_CATEGORY;
     [[GAI sharedInstance].defaultTracker sendEventWithCategory:GAI_CATEGORY
                                                     withAction:@"viewWillAppear"
                                                      withLabel:nil
                                                      withValue:nil];
-    
+    self.timeStartPlayerView = [NSDate date];
     //alway show custom indicator, when view appear
     _isShowCustomIndicator = YES;
     self.currentMediaStatus = 0;
@@ -965,8 +973,14 @@ double _ticks = 0;
             _isShowCustomIndicator = NO;
             [self displayCustomIndicator];
             
+            self.timeStageTwoTotal = [[NSDate date] timeIntervalSinceDate:_timeStartingStageTwo];
+            NSTimeInterval diff = [[NSDate date] timeIntervalSinceDate:_timeStartPlayerView];
             
-            NSLog(@"[MEDIA_PLAYER_HAS_FIRST_IMAGE] ");
+            NSLog(@"%s total time: %f, stage 2 takes %f seconds", __FUNCTION__, diff, _timeStageTwoTotal);
+            
+            self.timeStartingStageTwo = 0;
+            
+            NSLog(@"[MEDIA_PLAYER_HAS_FIRST_IMAGE]");
             if(self.selectedChannel.profile.isInLocal == NO)
             {
                 if (_timerIncreaseBitRate)
@@ -1050,19 +1064,19 @@ double _ticks = 0;
                     
                     [[KISSMetricsAPI sharedAPI] recordEvent:@"View Camera Remote" withProperties:info];
                     
-                    [[GAI sharedInstance].defaultTracker sendEventWithCategory:GAI_CATEGORY
-                                                                    withAction:[NSString stringWithFormat:@"View camera remote - name:%@, fw:%@, host_ssid:%@, current_ssid: %@", self.selectedChannel.profile.name, self.selectedChannel.profile.fw_version, self.selectedChannel.profile.hostSSID, _current_ssid]
-                                                                     withLabel:nil
-                                                                     withValue:nil];
-                    
                     if (_remoteViewTimeout == YES)
                     {
                         [self reCreateTimoutViewCamera];
                     }
                 }
                 
-                //[self performSelectorInBackground:@selector(getTriggerRecording_bg) withObject:nil];
-                //[self performSelectorInBackground:@selector(getMelodyValue_bg) withObject:nil];
+                NSString *gaiAction = [NSString stringWithFormat:@"View camera - Local:%d, name:%@, fw:%@, host_ssid:%@, current_ssid:%@, Time stage 1: %f, Time stage 2: %f", self.selectedChannel.profile.isInLocal, self.selectedChannel.profile.name, self.selectedChannel.profile.fw_version, self.selectedChannel.profile.hostSSID, _current_ssid, _timeStageOneTotal, _timeStageTwoTotal];
+                NSLog(@"%s gaiAction: %@", __FUNCTION__, gaiAction);
+                [[GAI sharedInstance].defaultTracker sendEventWithCategory:GAI_CATEGORY
+                                                                withAction:gaiAction
+                                                                 withLabel:nil
+                                                                 withValue:nil];
+                
                 self.imageViewStreamer.userInteractionEnabled = YES;
                 self.imgViewDrectionPad.userInteractionEnabled = YES;
                 
@@ -1712,6 +1726,12 @@ double _ticks = 0;
     {
         NSLog(@"H264VC - setupCamera -created a local streamer");
         self.selectedChannel.stream_url = [NSString stringWithFormat:@"rtsp://user:pass@%@:6667/blinkhd", self.selectedChannel.profile.ip_address];
+        self.timeStageOneTotal = [[NSDate date] timeIntervalSinceDate:_timeStartingStageOne];
+        self.timeStartingStageOne = 0;
+        NSLog(@"%s stage 1 takes %f seconds", __FUNCTION__, _timeStageOneTotal);
+        NSLog(@"%s Start stage 2", __FUNCTION__);
+        self.timeStartingStageTwo = [NSDate date];
+        
         [self performSelector:@selector(startStream)
                    withObject:nil
                    afterDelay:0.1];
@@ -2923,7 +2943,12 @@ double _ticks = 0;
                                {
                                    if ([[responseDict objectForKey:@"status"] intValue] == 200)
                                    {
-                                       //self.selectedChannel.stream_url = [[responseDict objectForKey:@"data"] objectForKey:@"url"];
+                                       self.timeStageOneTotal = [[NSDate date] timeIntervalSinceDate:_timeStartingStageOne];
+                                       self.timeStartingStageOne = 0;
+                                        NSLog(@"%s stage 1 takes %f seconds", __FUNCTION__, _timeStageOneTotal);
+                                       
+                                       NSLog(@"%s Start stage 2", __FUNCTION__);
+                                       self.timeStartingStageTwo = [NSDate date];
                                        
                                        NSString *urlResponse = [[responseDict objectForKey:@"data"] objectForKey:@"url"];
                                        
@@ -6007,6 +6032,13 @@ double _ticks = 0;
 
 - (void)scanCamera
 {
+    if (_timeStartingStageOne == 0)
+    {
+        self.timeStartingStageOne = [NSDate date];
+    }
+    
+    self.timeStartingStageTwo = 0;
+    
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     self.current_ssid = [CameraPassword fetchSSIDInfo];
     

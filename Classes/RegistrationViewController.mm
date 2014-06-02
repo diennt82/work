@@ -76,6 +76,8 @@
     [super viewWillAppear:animated];
     self.navigationController.navigationBarHidden = YES;
     
+    self.trackedViewName = GAI_CATEGORY;
+    
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
     {
         UIButton *btnCheckbox = (UIButton *)[self.view viewWithTag:501];

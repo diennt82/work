@@ -80,7 +80,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
+    self.trackedViewName = GAI_CATEGORY;
     [self.ib_scollViewGuide setContentSize:CGSizeMake(320, 1401)];
     
     //Keep screen on

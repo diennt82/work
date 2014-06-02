@@ -81,6 +81,8 @@
     
     [super viewWillAppear:animated];
     
+    self.trackedViewName = GAI_CATEGORY;
+    
 	[[NSNotificationCenter defaultCenter] addObserver: self
                                              selector: @selector(handleEnteredBackground)
                                                  name: UIApplicationDidEnterBackgroundNotification

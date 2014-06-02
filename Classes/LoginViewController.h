@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "ConnectionMethodDelegate.h"
-#import "GAI.h"
+#import "GAITrackedViewController.h"
 
 @interface LoginViewController : GAITrackedViewController
 
