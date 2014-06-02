@@ -27,6 +27,8 @@
 @property (nonatomic) double duration;
 @property (nonatomic) int64_t startPositionMovieFile;
 @property (nonatomic) double timeStarting;
+@property (nonatomic) BOOL shouldRestartProcess;
+@property (nonatomic) NSInteger mediaCurrentState;
 
 @end
 
@@ -75,6 +77,8 @@
     self.startPositionMovieFile = 0;
     self.duration = 1;
     self.timeStarting = 0;
+    self.shouldRestartProcess = FALSE;
+    self.mediaCurrentState = 0;
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -84,7 +88,7 @@
     //Here is show indicator
     self.activityIndicator.hidden = NO;
     [self.activityIndicator startAnimating];
-    self.ib_sliderPlayBack.userInteractionEnabled = YES; // Disable it because it's featur not done yet!
+    self.ib_sliderPlayBack.userInteractionEnabled = NO; // Disable it because it's featur not done yet!
     
     // Do any additional setup after loading the view.
 	[[NSNotificationCenter defaultCenter] addObserver: self
@@ -121,7 +125,19 @@
     
     if (_playbackStreamer != NULL)
     {
-        [self stopStream:nil];
+        if (self.mediaCurrentState == MEDIA_PLAYER_STARTED ||
+            (self.mediaCurrentState == 0 && _playbackStreamer == NULL)) // Media player haven't start yet.
+        {
+            NSLog(@"H264VC - handleEnteredBackground - IF()");
+            
+            [self stopStream:nil];
+        }
+        else
+        {
+            NSLog(@"H264VC - handleEnteredBackground - else if(h264Streamer != nil)");
+            
+            _playbackStreamer->sendInterrupt();
+        }
     }
     
     if (self.list_refresher != nil)
@@ -134,7 +150,13 @@
 {
     NSLog(@"%s ", __FUNCTION__);
     
-    [self becomeActive];
+    if (_shouldRestartProcess)
+    {
+        self.activityIndicator.hidden = NO;
+        [self.activityIndicator startAnimating];
+        
+        [self becomeActive];
+    }
 }
 
 #pragma mark - PLAY VIDEO
@@ -157,7 +179,7 @@
     listener->updateFinalClipCount(self.clips.count);
 #else
     
-    
+    self.shouldRestartProcess = FALSE;
     _clips = [[NSMutableArray alloc]init];
     //Decide whether or not to start the background polling
     
@@ -196,6 +218,7 @@
 -(void) startStream
 {
     _playbackStreamer = new MediaPlayer(true, false);
+    self.shouldRestartProcess = TRUE;
     _playbackStreamer->setListener(listener);
     [self performSelectorInBackground:@selector(startStream_bg) withObject:nil];
 }
@@ -268,6 +291,7 @@
 
 -(void) handleMessage:(int) msg ext1: (int) ext1 ext2:(int) ext2
 {
+    self.mediaCurrentState = msg;
     switch (msg)
     {
         case MEDIA_PLAYER_PREPARED:
