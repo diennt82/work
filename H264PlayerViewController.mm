@@ -5956,7 +5956,8 @@ double _ticks = 0;
 	else
 	{
 		title = @"Error";
-		message = [error description];
+		//message = [error description];
+        message = @"Please allow permission to save media in gallery.  iPhone Settings > Privacy > Photos > Hubble Home :- Turn switch on.";
 		NSLog(@"Error when writing file to image library: %@", [error localizedDescription]);
 		NSLog(@"Error code %d", [error code]);
         
