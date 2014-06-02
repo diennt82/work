@@ -285,8 +285,9 @@
     }
     else
     {
-        [self getCamListServerUnreachable];
         NSLog(@"Error - getCamListSuccess - responseDict = nil");
+
+        [self getCamListServerUnreachable];
     }
 }
 

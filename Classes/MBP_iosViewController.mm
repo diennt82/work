@@ -177,7 +177,8 @@
     
     [self presentViewController:playbackViewController animated:NO  completion:nil];
 #else
-#if 1
+
+    
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     
     if ([userDefaults boolForKey:_AutoLogin])
@@ -193,31 +194,7 @@
         [self show_login_or_reg:nil];
     }
     
-#else
-    
-	//hide splash screen page
-    //backgroundView.hidden = NO;
-    //[self.view bringSubviewToFront:backgroundView];
-    //load user/pass
-	NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-	
-	//can be user email or user name here --
-	NSString * old_usr = (NSString *) [userDefaults objectForKey:@"PortalUsername"];
-	NSString * old_pass = (NSString *) [userDefaults objectForKey:@"PortalPassword"];
-    
-    if (old_usr  != nil && old_pass != nil)
-    {
-        
-        [userDefaults setBool:TRUE forKey:_AutoLogin];
-        [userDefaults synchronize];
-    }
-    
-    self.app_stage = APP_STAGE_LOGGING_IN;
-    
-    NSLog(@"MBP_iosVC - show LoginVC from viewDidLoad after 4s");
-    
-    [self show_login_or_reg:nil];
-#endif
+
 #endif
 }
 
@@ -384,18 +361,7 @@
         }
             break;
             
-		case LOGIN: //GOTO ROUTER mode - Login
-        {
-            //NSLog(@">>> Login ");
-            self.app_stage = APP_STAGE_LOGGING_IN;
-            
-            [userDefaults setBool:TRUE forKey:_AutoLogin];
-            [userDefaults synchronize];
-            
-            
-            [self show_login_or_reg:nil];
-        }
-            break;
+		
             
 		case SCAN_CAMERA:
         {
@@ -415,22 +381,8 @@
         }
 			break;
             
-		case AFTER_ADD_RELOGIN:
-        {
-            NSLog(@" back from adding cam. relogin -- to get the new cam data");
-            
-            [userDefaults setBool:TRUE forKey:_AutoLogin];
-            [userDefaults synchronize];
-            
-            [NSTimer scheduledTimerWithTimeInterval:0.01
-                                             target:self
-                                           selector:@selector(show_login_or_reg:)
-                                           userInfo:nil
-                                            repeats:NO];
-            
-            break;
-        }
-		case AFTER_DEL_RELOGIN: //Just remove camera, currently in CameraMenu page
+		
+		case AFTER_DEL_RELOGIN: //Only use when cancel from Add camera
         {
             
             statusDialogLabel.hidden = YES;
@@ -460,25 +412,12 @@
             break;
         }
             
-		case  LOGGING_IN:
-        {
-            self.app_stage = APP_STAGE_LOGGING_IN;
-            
-            [userDefaults setBool:FALSE forKey:_AutoLogin];
-            [userDefaults synchronize];
-            
-            [self show_login_or_reg:nil];
-        }
-            break;
-            
 		case LOGIN_FAILED_OR_LOGOUT : //back from login -failed Or logout
         {
             statusDialogLabel.hidden = YES;
-            //[self dismissViewControllerAnimated:NO completion:nil];
             self.app_stage = APP_STAGE_LOGGING_IN;
+         
             
-            //[self performSelectorInBackground:@selector(logoutAndUnregistration_bg) withObject:nil];
-            //[self performSelector:@selector(logoutAndUnregistration_bg) withObject:nil afterDelay:0.2];
             [self logoutAndUnregistration_bg];
             [self show_login_or_reg:nil];
 			
@@ -1817,7 +1756,7 @@
     
     if (!hasOptionSendEmail)
     {
-        NSLog(@"show_login... & Test Player ");
+        NSLog(@"show_login... ");
         
         self.app_stage = APP_STAGE_LOGGING_IN;
         

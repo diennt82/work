@@ -104,9 +104,9 @@
      * User kill app when SETUP camera
      */
     
-    if (app_stage == 4)
+    if (app_stage == APP_STAGE_SETUP)
     {
-        viewController.app_stage = 3;
+        viewController.app_stage = APP_STAGE_LOGGED_IN ;
         [userDefaults setInteger:viewController.app_stage forKey:@"ApplicationStage"];
     }
     
@@ -352,7 +352,7 @@ void checkingApplicationCrashed()
             else if ( [application applicationState] == UIApplicationStateInactive)
             {
                 NSLog(@"UIApplicationStateInactive");
-                //[self performSelectorOnMainThread:@selector(forceLogin) withObject:nil waitUntilDone:YES];
+                
                 [self performSelectorOnMainThread:@selector(activateNotificationViewController:) withObject:camAlert waitUntilDone:YES];
                 handling_PN = TRUE;
             }
@@ -391,24 +391,6 @@ void checkingApplicationCrashed()
     application.applicationIconBadgeNumber = 0;
 }
 
-
--(void) forceLogin: (BOOL)autoLogin
-{
-    
-    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-    
-    [userDefaults setBool:TRUE forKey:_AutoLogin];
-    [userDefaults synchronize];
-    
-    NSLog(@"MBP_isoAppDelegate - show LoginVC after 0.01s");
-    
-    [NSTimer scheduledTimerWithTimeInterval:0.01
-                                     target:viewController
-                                   selector:@selector(show_login_or_reg:)
-                                   userInfo:nil
-                                    repeats:NO];
-   
-}
 
 - (void)activateNotificationViewController: (CameraAlert *)camAlert
 {
@@ -576,20 +558,6 @@ void checkingApplicationCrashed()
      If your application supports background execution, called instead of applicationWillTerminate: when the user quits.
      */
 	
-	/*NSLog(@"Enter background: %d", viewController.app_stage);
-
-    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-	[userDefaults setInteger:viewController.app_stage forKey:@"ApplicationStage"];
-    [userDefaults synchronize];
-    
-    if ([userDefaults objectForKey:CAM_IN_VEW] != nil)
-    {
-        NSLog(@"A camera is in view. Do nothing");
-    }
-    else if (viewController.app_stage == APP_STAGE_LOGGED_IN)
-    {
-        [viewController sendStatus:BACK_FRM_MENU_NOLOAD];
-    }*/
 }
 
 
@@ -598,8 +566,6 @@ void checkingApplicationCrashed()
      Called as part of  transition from the background to the inactive state: here you can undo many of the changes made on entering the background.
      */
 	
-	NSLog(@"Enter foreground isMain? %d 01", [[NSThread currentThread] isMainThread]);
-
 }
 
 
@@ -607,7 +573,7 @@ void checkingApplicationCrashed()
     /*
      Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
      */
-#if 1
+
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     [userDefaults synchronize]; // Synchnize to get setting from System settings
 	viewController.app_stage = [userDefaults integerForKey:@"ApplicationStage"];
@@ -661,63 +627,7 @@ void checkingApplicationCrashed()
         [userDefaults setBool:FALSE forKey:_AutoLogin];
         [userDefaults synchronize];
     }
-#else
-    NSLog(@"MBP_iosAppDelegate - viewController.app_stage: %d", viewController.app_stage);
-    
-    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-    [userDefaults synchronize];
-    [BMS_JSON_Communication setServerInput:[[NSUserDefaults standardUserDefaults] stringForKey:@"name_server"]];
-	viewController.app_stage = [userDefaults integerForKey:@"ApplicationStage"];
-    
-    NSLog(@"MBP_iosAppDelegate - viewController.app_stage: %d", viewController.app_stage);
-    
-    NSString * camInView = (NSString*)[userDefaults objectForKey:CAM_IN_VEW];
-    
-    
-    if (camInView != nil)
-	{
-        //Some camera is inview..
-        //How about don't do anything..
-        
-        
-        NSLog(@"Some camera is in view.. do nothing");
-        
-        
-	}
-    else if (viewController.app_stage == APP_STAGE_LOGGING_IN)
-    {
-        //[self forceLogin:FALSE];
-    }
-    else if (viewController.app_stage == APP_STAGE_LOGGED_IN)
-    {
-        //[self performSelectorOnMainThread:@selector(forceScan) withObject:nil waitUntilDone:YES];
 
-        //20121114: phung: Need to force relogin, because while app in background many things can happen
-        //   1. Wifi loss --> offline mode
-        //   2. User switch on 3G
-        //   3. Or simply no 3g nor 3g -->> offline mode
-        //   4. Or a remote camera has become unreachable.
-        //  -->>> NEED to relogin to verify
-
-        if (self.becomeActiveByNotificationFlag == TRUE)
-        {
-            self.becomeActiveByNotificationFlag = FALSE;
-        }
-        else
-        {
-            [self forceLogin:TRUE];
-        }
-    }
-    else if (viewController.app_stage == APP_STAGE_SETUP)
-    {
-        //Do nothing -- stay at the current page
-    }
-    else // viewController.app_stage == 0
-    {
-        //[self performSelectorOnMainThread:@selector(showInit) withObject:nil waitUntilDone:YES];
-        //[self forceLogin:FALSE];
-    }
-#endif
 }
 
 
