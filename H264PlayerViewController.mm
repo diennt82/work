@@ -202,24 +202,6 @@ double _ticks = 0;
     //setup Font
     [self applyFont];
     
-    // Do any additional setup after loading the view.
-	[[NSNotificationCenter defaultCenter] addObserver: self
-                                             selector: @selector(h264_HandleEnteredBackground)
-                                                 name: UIApplicationDidEnterBackgroundNotification
-                                               object: nil];
-    
-    [[NSNotificationCenter defaultCenter] addObserver: self
-                                             selector: @selector(h264_HandleEnteredBackground)
-                                                 name: UIApplicationWillResignActiveNotification
-                                               object: nil];
-    
-    
-    // Do any additional setup after loading the view.
-	[[NSNotificationCenter defaultCenter] addObserver: self
-                                             selector: @selector(h264_HandleBecomeActive)
-                                                 name: UIApplicationDidBecomeActiveNotification
-                                               object: nil];
-    
     CFBundleRef mainbundle = CFBundleGetMainBundle();
     CFURLRef soundFileURLRef = CFBundleCopyResourceURL(mainbundle, CFSTR("beep"), CFSTR("wav"), NULL);
     AudioServicesCreateSystemSoundID(soundFileURLRef, &soundFileObject);
@@ -297,6 +279,21 @@ double _ticks = 0;
                                                     withAction:@"viewWillAppear"
                                                      withLabel:nil
                                                      withValue:nil];
+    // Do any additional setup after loading the view.
+	[[NSNotificationCenter defaultCenter] addObserver: self
+                                             selector: @selector(h264_HandleEnteredBackground)
+                                                 name: UIApplicationDidEnterBackgroundNotification
+                                               object: nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver: self
+                                             selector: @selector(h264_HandleEnteredBackground)
+                                                 name: UIApplicationWillResignActiveNotification
+                                               object: nil];
+
+	[[NSNotificationCenter defaultCenter] addObserver: self
+                                             selector: @selector(h264_HandleBecomeActive)
+                                                 name: UIApplicationDidBecomeActiveNotification
+                                               object: nil];
     self.timeStartPlayerView = [NSDate date];
     //alway show custom indicator, when view appear
     _isShowCustomIndicator = YES;
@@ -1395,6 +1392,8 @@ double _ticks = 0;
     {
         h264Streamer->sendInterrupt(); // Assuming h264Streamer stop itself.
     }
+    
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 #pragma mak - Delegate Melody

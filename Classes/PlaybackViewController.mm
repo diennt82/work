@@ -85,6 +85,17 @@
     self.activityIndicator.hidden = NO;
     [self.activityIndicator startAnimating];
     self.ib_sliderPlayBack.userInteractionEnabled = YES; // Disable it because it's featur not done yet!
+    
+    // Do any additional setup after loading the view.
+	[[NSNotificationCenter defaultCenter] addObserver: self
+                                             selector: @selector(playbackEnteredBackground)
+                                                 name: UIApplicationDidEnterBackgroundNotification
+                                               object: nil];
+    
+	[[NSNotificationCenter defaultCenter] addObserver: self
+                                             selector: @selector(playbackBecomeActive)
+                                                 name: UIApplicationDidBecomeActiveNotification
+                                               object: nil];
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -100,6 +111,30 @@
     [self.navigationController.navigationBar setHidden:NO];
     [super viewWillDisappear:animated];
     NSLog(@"%s viewWillDisappear: ", __FUNCTION__);
+}
+
+#pragma mark - NSNotificationCenter
+
+- (void)playbackEnteredBackground
+{
+    NSLog(@"%s ", __FUNCTION__);
+    
+    if (_playbackStreamer != NULL)
+    {
+        [self stopStream:nil];
+    }
+    
+    if (self.list_refresher != nil)
+    {
+        [self.list_refresher invalidate];
+    }
+}
+
+- (void)playbackBecomeActive
+{
+    NSLog(@"%s ", __FUNCTION__);
+    
+    [self becomeActive];
 }
 
 #pragma mark - PLAY VIDEO
@@ -244,7 +279,7 @@
             //DONE Playback
             //clean up
             NSLog(@"Got playback complete>>>>  OUT ");
-            if (self.userWantToBack == FALSE)
+            if (self.userWantToBack == FALSE && [UIApplication sharedApplication].applicationState == UIApplicationStateActive)
             {
                 [self goBackToPlayList];
             }
@@ -255,7 +290,7 @@
                 self.activityIndicator.hidden = YES;
                 self.ib_playPlayBack.selected = NO;
                 self.ib_myOverlay.userInteractionEnabled = YES;
-                [self watcher];
+                [self performSelector:@selector(watcher) withObject:nil afterDelay:2];
             });
             break;
             
@@ -276,7 +311,7 @@
         {
             _playbackStreamer->suspend();
             _playbackStreamer->stop();
-            _playbackStreamer->setListener(nil);
+            //_playbackStreamer->setListener(nil);
             delete _playbackStreamer;
             _playbackStreamer = NULL;
         }
