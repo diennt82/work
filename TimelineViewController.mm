@@ -703,10 +703,12 @@
             }
             else
             {
-                self.stringIntelligentMessage = [NSString stringWithFormat:@"All is calm at %@",self.camChannel.profile.name];
+                self.stringIntelligentMessage = @"All is calm at";
             }
         }
-    }    
+    }
+    
+    self.stringIntelligentMessage = [NSString stringWithFormat:@"%@ at %@",self.stringIntelligentMessage,self.camChannel.profile.name];
 }
 
 - (void)loadMoreEvent_bg
