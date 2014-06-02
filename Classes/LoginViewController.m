@@ -615,6 +615,8 @@
             [userDefaults setObject:_stringUsername forKey:@"PortalUsername"];
             [userDefaults setObject:_stringPassword forKey:@"PortalPassword"];
             [userDefaults setObject:apiKey forKey:@"PortalApiKey"];
+            [userDefaults setBool:TRUE forKey:_AutoLogin];
+            
             [userDefaults synchronize];
             
             //MOVE on now ..

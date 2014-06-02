@@ -436,8 +436,6 @@
 		8B9112DC1860372D004301C5 /* Hubble-Notif.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B9112DB1860372D004301C5 /* Hubble-Notif.png */; };
 		8B9178D01884F2040039445B /* no_img_available.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B9178CF1884F2040039445B /* no_img_available.png */; };
 		8B91E63E18629E910041BA9D /* Snapshot.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B91E63D18629E910041BA9D /* Snapshot.png */; };
-		8B91E6541862FE540041BA9D /* MenuCameraViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B91E6521862FE540041BA9D /* MenuCameraViewController.m */; };
-		8B91E6551862FE540041BA9D /* MenuCameraViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8B91E6531862FE540041BA9D /* MenuCameraViewController.xib */; };
 		8B9283E918D2D2CD00D60EDA /* AudioOutStreamRemote.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B9283E818D2D2CD00D60EDA /* AudioOutStreamRemote.m */; };
 		8B92A08B1863E5DF005923D2 /* TimelineViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8B92A0891863E5DF005923D2 /* TimelineViewController.mm */; };
 		8B92A08C1863E5DF005923D2 /* TimelineViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8B92A08A1863E5DF005923D2 /* TimelineViewController.xib */; };
@@ -1263,9 +1261,6 @@
 		8B9112DB1860372D004301C5 /* Hubble-Notif.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Hubble-Notif.png"; sourceTree = "<group>"; };
 		8B9178CF1884F2040039445B /* no_img_available.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = no_img_available.png; sourceTree = "<group>"; };
 		8B91E63D18629E910041BA9D /* Snapshot.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Snapshot.png; sourceTree = "<group>"; };
-		8B91E6511862FE540041BA9D /* MenuCameraViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MenuCameraViewController.h; sourceTree = "<group>"; };
-		8B91E6521862FE540041BA9D /* MenuCameraViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MenuCameraViewController.m; sourceTree = "<group>"; };
-		8B91E6531862FE540041BA9D /* MenuCameraViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MenuCameraViewController.xib; sourceTree = "<group>"; };
 		8B9283E718D2D2CD00D60EDA /* AudioOutStreamRemote.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AudioOutStreamRemote.h; sourceTree = "<group>"; };
 		8B9283E818D2D2CD00D60EDA /* AudioOutStreamRemote.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AudioOutStreamRemote.m; sourceTree = "<group>"; };
 		8B92A0881863E5DF005923D2 /* TimelineViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TimelineViewController.h; sourceTree = "<group>"; };
@@ -2884,16 +2879,6 @@
 			name = HubbleNotifView;
 			sourceTree = "<group>";
 		};
-		8B91E6501862FD580041BA9D /* Camera Settings */ = {
-			isa = PBXGroup;
-			children = (
-				8B91E6511862FE540041BA9D /* MenuCameraViewController.h */,
-				8B91E6521862FE540041BA9D /* MenuCameraViewController.m */,
-				8B91E6531862FE540041BA9D /* MenuCameraViewController.xib */,
-			);
-			name = "Camera Settings";
-			sourceTree = "<group>";
-		};
 		8B9283E618D2D25800D60EDA /* TalkbackRemote */ = {
 			isa = PBXGroup;
 			children = (
@@ -3361,7 +3346,6 @@
 			isa = PBXGroup;
 			children = (
 				8B1D544A1865814B008857F0 /* Scheduler */,
-				8B91E6501862FD580041BA9D /* Camera Settings */,
 				8BEDE2ED1861B73F00D3AE2B /* Disturb */,
 				8B9112CD18602854004301C5 /* Sensitivity */,
 				8B9112C718601041004301C5 /* General */,
@@ -4244,7 +4228,6 @@
 				8B29A02518AF500900D36BE5 /* loader_f@2x.png in Resources */,
 				8B29A08018AF500A00D36BE5 /* video_pause@2x.png in Resources */,
 				A1AC858818912859002A8CCD /* ProximaNova-Black.otf in Resources */,
-				8B91E6551862FE540041BA9D /* MenuCameraViewController.xib in Resources */,
 				8B299FD418AF500900D36BE5 /* camera_action_play_pressed@5.png in Resources */,
 				A1B1E7D118E9135800F076B6 /* buy_camera_btn_pressed@2x.png in Resources */,
 				A1B1E7D718E9135800F076B6 /* camera_mbp_83@2x.png in Resources */,
@@ -4460,7 +4443,6 @@
 				8B92A08B1863E5DF005923D2 /* TimelineViewController.mm in Sources */,
 				8B92A0B51864197E005923D2 /* EventInfo.m in Sources */,
 				8B92A09C1863ED66005923D2 /* TimelineInfo.m in Sources */,
-				8B91E6541862FE540041BA9D /* MenuCameraViewController.m in Sources */,
 				97D00812159D9FF500B1D92F /* WifiEntry.m in Sources */,
 				97D0081C159DA24400B1D92F /* WifiListParser.m in Sources */,
 				8B9899AD1859771800AC3852 /* CameraNameViewController.m in Sources */,
