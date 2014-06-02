@@ -95,8 +95,34 @@
     self.imgViewLoading.animationDuration = 1.5;
     [self.imgViewLoading startAnimating];
     
-	//load user/pass
-    [self performSelectorInBackground:@selector(loadUserInfo_bg) withObject:nil];
+    
+    
+    if ([self isConnectingToCameraNetwork])
+    {
+        NSString * msg = NSLocalizedStringWithDefaultValue(@"phone_is_connected_to_camera" ,nil, [NSBundle mainBundle],
+                                                           @"You are connecting to a Camera network which does not have internet access.Please go to wifi settings and switch to another WIFI." ,nil);
+        
+        NSString * ok = NSLocalizedStringWithDefaultValue(@"ok" ,nil, [NSBundle mainBundle],
+                                                          @"OK", nil);
+        
+        //ERROR condition
+        UIAlertView *alert = [[UIAlertView alloc]
+                              initWithTitle:@""
+                              message:msg
+                              delegate:self
+                              cancelButtonTitle:ok
+                              otherButtonTitles: nil];
+        alert.tag = 114;
+        [alert show];
+        [alert release];
+        
+    }
+    else
+    {
+    
+        //load user/pass
+        [self performSelectorInBackground:@selector(loadUserInfo_bg) withObject:nil];
+    }
 }
 
 -(void) viewWillAppear:(BOOL)animated
@@ -187,10 +213,19 @@
         }
         else
         {
+            
+            
             [userDefaults removeObjectForKey:CAM_IN_VEW];
             [userDefaults synchronize];
             self.viewProgress.hidden = YES;
             self.buttonEnter.enabled = NO;
+            
+            if ( old_pass != nil)
+            {
+                self.tfPassword.text = old_pass;
+                self.buttonEnterPressedFlag = NO;
+                self.buttonEnter.enabled = YES;
+            }
             
         }
     }
@@ -229,7 +264,8 @@
     }
     else
     {
-        [self logout];
+      //  [self logout];
+        [self performSelectorInBackground:@selector(logout) withObject:nil];
     }
 }
 
@@ -315,6 +351,7 @@
         
         [userDefaults removeObjectForKey:@"PortalApiKey"];
         [userDefaults removeObjectForKey:@"PortalUseremail"];
+        [userDefaults synchronize];
         
         // Let the device know we want to receive push notifications
         [[UIApplication sharedApplication] unregisterForRemoteNotifications];
@@ -336,14 +373,16 @@
         [NSThread sleepForTimeInterval:0.10];
 #endif
         
-        [userDefaults synchronize];
+        
     }
     
     self.buttonEnterPressedFlag = NO;
     self.buttonEnter.enabled = YES;
 	self.viewProgress.hidden = YES;
 }
-
+/* check if phone is connected to 3g network 
+   Also check if phone is connected to camera network (!!#@!#) 
+ */
 - (void)check3GConnectionAndPopup
 {
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
@@ -380,6 +419,7 @@
         [alert show];
         [alert release];
     }
+    
     else
     {
         NSString * msg = NSLocalizedStringWithDefaultValue(@"Logging_in_to_server" ,nil, [NSBundle mainBundle],@"Logging in to server..." , nil);
@@ -409,6 +449,20 @@
     {
         //3G
         return TRUE;
+    }
+    
+    return FALSE;
+}
+-(BOOL) isConnectingToCameraNetwork
+{
+    NSString * current_ssid = [CameraPassword fetchSSIDInfo] ;
+
+    if ([current_ssid hasPrefix:DEFAULT_SSID_HD_PREFIX] ||
+        [current_ssid hasPrefix:DEFAULT_SSID_PREFIX]
+        )
+    {
+        return TRUE;
+        
     }
     
     return FALSE;
@@ -586,6 +640,23 @@
                 self.buttonEnter.enabled = NO;
                 [self doSignIn:nil];
                 
+                break;
+            }
+        }
+    }
+    else if (tag == 114) // camera network check
+    {
+        switch (buttonIndex)
+        {
+            case 0:
+            {
+                //Stay at this screen.
+                NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+                [userDefaults setBool:NO forKey:_AutoLogin];
+                [userDefaults synchronize];
+                
+
+                [self loadUserInfo];
                 break;
             }
         }
