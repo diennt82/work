@@ -122,6 +122,8 @@
 @property (nonatomic, retain) IBOutlet ScrollHorizontalMenu *horizMenu;
 @property (nonatomic, assign) int selectedItemMenu;
 
+@property (nonatomic, retain) IBOutlet UIView *menuBackgroundView;
+
 //ib for Touch to talk
 @property (retain, nonatomic) IBOutlet UIView *ib_ViewTouchToTalk;
 @property (retain, nonatomic) IBOutlet UIButton *ib_buttonTouchToTalk;
