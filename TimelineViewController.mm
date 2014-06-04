@@ -703,7 +703,7 @@
             }
             else
             {
-                self.stringIntelligentMessage = @"All is calm at";
+                self.stringIntelligentMessage = @"All is calm";
             }
         }
     }
