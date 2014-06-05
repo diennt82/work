@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.iPad.XIB" version="3.0" toolsVersion="5053" systemVersion="12F45" targetRuntime="iOS.CocoaTouch.iPad" variant="6xAndEarlier" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.iPad.XIB" version="3.0" toolsVersion="5053" systemVersion="13D65" targetRuntime="iOS.CocoaTouch.iPad" variant="6xAndEarlier" propertyAccessControl="none">
     <dependencies>
         <deployment defaultVersion="1792" identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3733"/>
@@ -7,9 +7,11 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="Step_10_ViewController">
             <connections>
+                <outlet property="btnCancel" destination="AjN-YU-ccV" id="Mau-zC-9Ys"/>
                 <outlet property="ib_resumeSetup" destination="trB-Bi-TdV" id="OEe-5d-dwz"/>
                 <outlet property="ib_scollViewGuide" destination="p2e-Nk-gY8" id="Vp8-9Y-z0P"/>
                 <outlet property="ib_viewGuild" destination="xzm-JP-PBf" id="Nyr-fN-D68"/>
+                <outlet property="lblWordAddition" destination="xSz-fC-B7G" id="TgL-sh-J3Q"/>
                 <outlet property="progressView" destination="6n4-4U-2gC" id="hjr-uU-EEq"/>
                 <outlet property="view" destination="6n4-4U-2gC" id="uy5-fO-bzB"/>
                 <outlet property="viewFwOtaUpgrading" destination="kyV-g8-e9y" id="glc-9O-IEw"/>
@@ -42,6 +44,25 @@
                     <color key="textColor" red="0.50196078430000002" green="0.50196078430000002" blue="0.50196078430000002" alpha="1" colorSpace="calibratedRGB"/>
                     <nil key="highlightedColor"/>
                 </label>
+                <label hidden="YES" opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="If setup failed, press button below to re-start setup" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="xSz-fC-B7G">
+                    <rect key="frame" x="20" y="866" width="728" height="40"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="17"/>
+                    <color key="textColor" red="0.50196078430000002" green="0.50196078430000002" blue="0.50196078430000002" alpha="1" colorSpace="calibratedRGB"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="AjN-YU-ccV">
+                    <rect key="frame" x="209" y="938" width="350" height="50"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <fontDescription key="fontDescription" name="HelveticaNeue-Bold" family="Helvetica Neue" pointSize="18"/>
+                    <state key="normal" title="Cancel" backgroundImage="cancel_btn.png">
+                        <color key="titleColor" cocoaTouchSystemColor="darkTextColor"/>
+                        <color key="titleShadowColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                    </state>
+                    <connections>
+                        <action selector="btnCancelTouchUpInsideAction:" destination="-1" eventType="touchUpInside" id="ttC-zh-8XB"/>
+                    </connections>
+                </button>
             </subviews>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
         </view>
@@ -191,6 +212,7 @@
         </view>
     </objects>
     <resources>
+        <image name="cancel_btn.png" width="295" height="50"/>
         <image name="detect_camera_1.png" width="275" height="170"/>
         <image name="detect_camera_2.png" width="275" height="170"/>
         <image name="detect_camera_3.png" width="275" height="170"/>

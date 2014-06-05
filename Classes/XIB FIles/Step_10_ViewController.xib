@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="5053" systemVersion="12F45" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="5053" systemVersion="13D65" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none">
     <dependencies>
         <deployment defaultVersion="1792" identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3733"/>
@@ -7,9 +7,11 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="Step_10_ViewController">
             <connections>
+                <outlet property="btnCancel" destination="Jt2-d2-iaK" id="gnu-rM-uuQ"/>
                 <outlet property="ib_resumeSetup" destination="Ekd-48-6jb" id="24Z-Xa-AJ9"/>
                 <outlet property="ib_scollViewGuide" destination="bu3-Pi-rng" id="vQH-24-kfN"/>
                 <outlet property="ib_viewGuild" destination="VO0-zj-eKX" id="BJI-vl-QVM"/>
+                <outlet property="lblWordAddition" destination="g5K-fF-NzV" id="R1P-l6-47H"/>
                 <outlet property="progressView" destination="gHa-0y-0aV" id="yrG-YJ-TIu"/>
                 <outlet property="view" destination="gHa-0y-0aV" id="w7F-2a-wM7"/>
                 <outlet property="viewFwOtaUpgrading" destination="YDl-Wb-nmB" id="6KQ-cV-Bue"/>
@@ -42,6 +44,24 @@
                     <color key="textColor" red="0.50196078430000002" green="0.50196078430000002" blue="0.50196078430000002" alpha="1" colorSpace="calibratedRGB"/>
                     <nil key="highlightedColor"/>
                 </label>
+                <label hidden="YES" opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="If setup failed, press button below to re-start setup" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="g5K-fF-NzV">
+                    <rect key="frame" x="20" y="454" width="280" height="41"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="17"/>
+                    <color key="textColor" red="0.50196078430000002" green="0.50196078430000002" blue="0.50196078430000002" alpha="1" colorSpace="calibratedRGB"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="Jt2-d2-iaK">
+                    <rect key="frame" x="20" y="503" width="280" height="45"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <fontDescription key="fontDescription" name="HelveticaNeue-Bold" family="Helvetica Neue" pointSize="18"/>
+                    <state key="normal" title="Cancel" backgroundImage="cancel_btn.png">
+                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                    </state>
+                    <connections>
+                        <action selector="btnCancelTouchUpInsideAction:" destination="-1" eventType="touchUpInside" id="5qr-br-Hjz"/>
+                    </connections>
+                </button>
             </subviews>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
             <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
@@ -195,8 +215,13 @@
             <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
             <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
         </view>
+        <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="whiteLarge" id="R4w-dF-6Y3">
+            <rect key="frame" x="0.0" y="0.0" width="37" height="37"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+        </activityIndicatorView>
     </objects>
     <resources>
+        <image name="cancel_btn.png" width="295" height="50"/>
         <image name="detect_camera_1.png" width="275" height="170"/>
         <image name="detect_camera_2.png" width="275" height="170"/>
         <image name="detect_camera_3.png" width="275" height="170"/>
