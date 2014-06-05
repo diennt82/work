@@ -80,6 +80,10 @@
 
 #define GAI_CATEGORY                @"Player view"
 
+#define GAI_MIN(stage)      (stage==1?1:4)
+#define GAI_MIDIUM(stage)   (stage==1?2:6)
+#define GAI_MAX(stage)      (stage==1?3:8)
+#define GAI_ACTION(stage, time) [NSString stringWithFormat:@"Stage %d time %@ than %d second(s)", stage, time<GAI_MAX(stage)?@"less":@"greater", time<GAI_MIN(stage)?GAI_MIN(stage):(time<GAI_MIDIUM(stage)?GAI_MIDIUM(stage):GAI_MAX(stage))]
 
 @interface H264PlayerViewController () <TimelineVCDelegate, BonjourDelegate, AudioOutStreamRemoteDelegate>
 {
@@ -137,11 +141,7 @@
 @property (nonatomic, retain) NSString *messageStreamingState;
 @property (nonatomic, retain) NSTimer *timerBufferingTimeout;
 @property (nonatomic, retain) UIAlertView *alertViewTimoutRemote;
-@property (nonatomic, retain) NSDate *timeStartingStageOne;
-@property (nonatomic) NSTimeInterval timeStageOneTotal;
 @property (nonatomic, retain) NSDate *timeStartingStageTwo;
-@property (nonatomic) NSTimeInterval timeStageTwoTotal;
-@property (nonatomic, retain) NSDate *timeStartPlayerView;
 
 //property for Touch to Talk
 @property (nonatomic) BOOL walkieTalkieEnabled;
@@ -255,7 +255,6 @@ double _ticks = 0;
     self.numbersOfRemoteViewError = 0;
     self.currentBitRate = @"128";
     self.messageStreamingState = @"Camera is not accessible";
-    self.timeStartingStageOne = 0;
     self.timeStartingStageTwo = 0;
     
     [self becomeActive];
@@ -294,7 +293,6 @@ double _ticks = 0;
                                              selector: @selector(h264_HandleBecomeActive)
                                                  name: UIApplicationDidBecomeActiveNotification
                                                object: nil];
-    self.timeStartPlayerView = [NSDate date];
     //alway show custom indicator, when view appear
     _isShowCustomIndicator = YES;
     self.currentMediaStatus = 0;
@@ -970,12 +968,6 @@ double _ticks = 0;
         {
             _isShowCustomIndicator = NO;
             [self displayCustomIndicator];
-            
-            self.timeStageTwoTotal = [[NSDate date] timeIntervalSinceDate:_timeStartingStageTwo];
-            NSTimeInterval diff = [[NSDate date] timeIntervalSinceDate:_timeStartPlayerView];
-            
-            NSLog(@"%s total time: %f, stage 2 takes %f seconds", __FUNCTION__, diff, _timeStageTwoTotal);
-            
             self.timeStartingStageTwo = 0;
             
             NSLog(@"[MEDIA_PLAYER_HAS_FIRST_IMAGE]");
@@ -1018,9 +1010,6 @@ double _ticks = 0;
                 self.probeTimer = nil;
             }
             
-            //            self.backBarBtnItem.enabled = YES;
-            
-            
             [self stopPeriodicPopup];
             
             if (self.h264StreamerIsInStopped == TRUE)
@@ -1048,32 +1037,25 @@ double _ticks = 0;
                     [self performSelectorInBackground:@selector(checkIfUpgradeIsPossible) withObject:nil];
                     self.askForFWUpgradeOnce = NO;
                 }
-                
-                //NSLog(@"Got MEDIA_PLAYER_HAS_FIRST_IMAGE") ;
-                
-                if ( self.selectedChannel.profile.isInLocal == NO)
+
+                if (!self.selectedChannel.profile.isInLocal)
                 {
-                    NSDictionary *info = [NSDictionary dictionaryWithObjectsAndKeys:
-                                          self.selectedChannel.profile.name,        @"Camera name",
-                                          self.selectedChannel.profile.fw_version,  @"FW",
-                                          self.selectedChannel.profile.hostSSID,    @"Host SSID",
-                                          _current_ssid,                            @"Current SSID",
-                                          nil];
+                    NSTimeInterval diff = [[NSDate date] timeIntervalSinceDate:_timeStartingStageTwo];
                     
-                    [[KISSMetricsAPI sharedAPI] recordEvent:@"View Camera Remote" withProperties:info];
+                    NSString *gaiActionTime = GAI_ACTION(2, diff);
+                    NSLog(@"%s gaiActionTime: %@", __FUNCTION__, gaiActionTime);
+                    
+                    [[GAI sharedInstance].defaultTracker sendEventWithCategory:GAI_CATEGORY
+                                                                    withAction:gaiActionTime
+                                                                     withLabel:nil
+                                                                     withValue:nil];
+                    self.timeStartingStageTwo = 0;
                     
                     if (_remoteViewTimeout == YES)
                     {
                         [self reCreateTimoutViewCamera];
                     }
                 }
-                
-                NSString *gaiAction = [NSString stringWithFormat:@"View camera - Local:%d, name:%@, fw:%@, host_ssid:%@, current_ssid:%@, Time stage 1: %f, Time stage 2: %f", self.selectedChannel.profile.isInLocal, self.selectedChannel.profile.name, self.selectedChannel.profile.fw_version, self.selectedChannel.profile.hostSSID, _current_ssid, _timeStageOneTotal, _timeStageTwoTotal];
-                NSLog(@"%s gaiAction: %@", __FUNCTION__, gaiAction);
-                [[GAI sharedInstance].defaultTracker sendEventWithCategory:GAI_CATEGORY
-                                                                withAction:gaiAction
-                                                                 withLabel:nil
-                                                                 withValue:nil];
                 
                 self.imageViewStreamer.userInteractionEnabled = YES;
                 self.imgViewDrectionPad.userInteractionEnabled = YES;
@@ -1254,6 +1236,20 @@ double _ticks = 0;
             else //Remote connection -> go back and retry
             {
                 //Restart streaming..
+                if (_timeStartingStageTwo > 0)
+                {
+                    NSTimeInterval diff = [[NSDate date] timeIntervalSinceDate:_timeStartingStageTwo];
+                    
+                    NSString *gaiActionTime = GAI_ACTION(2, diff);
+                    NSLog(@"%s gaiActionTime: %@", __FUNCTION__, gaiActionTime);
+                    
+                    [[GAI sharedInstance].defaultTracker sendEventWithCategory:GAI_CATEGORY
+                                                                    withAction:gaiActionTime
+                                                                     withLabel:nil
+                                                                     withValue:nil];
+                    self.timeStartingStageTwo = 0;
+                }
+                
                 NSLog(@"Re-start Remote streaming for : %@", self.selectedChannel.profile.mac_address);
                 
                 [NSTimer scheduledTimerWithTimeInterval:0.1
@@ -1736,9 +1732,6 @@ double _ticks = 0;
     {
         NSLog(@"H264VC - setupCamera -created a local streamer");
         self.selectedChannel.stream_url = [NSString stringWithFormat:@"rtsp://user:pass@%@:6667/blinkhd", self.selectedChannel.profile.ip_address];
-        self.timeStageOneTotal = [[NSDate date] timeIntervalSinceDate:_timeStartingStageOne];
-        self.timeStartingStageOne = 0;
-        NSLog(@"%s stage 1 takes %f seconds", __FUNCTION__, _timeStageOneTotal);
         NSLog(@"%s Start stage 2", __FUNCTION__);
         self.timeStartingStageTwo = [NSDate date];
         
@@ -2932,6 +2925,8 @@ double _ticks = 0;
                        //NSString *mac = [Util strip_colon_fr_mac:self.selectedChannel.profile.mac_address];
                        NSString *stringUDID = self.selectedChannel.profile.registrationID;
                        
+                       NSDate *dateStage1 = [NSDate date];
+                       
                        if (_jsonCommBlocked == nil)
                        {
                            self.jsonCommBlocked = [[BMS_JSON_Communication alloc] initWithObject:self
@@ -2955,19 +2950,23 @@ double _ticks = 0;
                                                                                          andApiKey:apiKey];
                            NSLog(@"USE RELAY TO VIEW- userWantsToCancel:%d, returnFromPlayback:%d, responsed: %@", userWantToCancel, _returnFromPlayback, responseDict);
                            
+                           NSTimeInterval diff = [[NSDate date] timeIntervalSinceDate:dateStage1];
+                           NSString *gaiActionTime = GAI_ACTION(1, diff);
+                           
+                           [[GAI sharedInstance].defaultTracker sendEventWithCategory:GAI_CATEGORY
+                                                                           withAction:gaiActionTime
+                                                                            withLabel:nil
+                                                                            withValue:nil];
+                           
+                           NSLog(@"%s stage 1 takes %f seconds \n Start stage 2 \n %@", __FUNCTION__, diff, gaiActionTime);
+                           self.timeStartingStageTwo = [NSDate date];
+                           
                            if (!userWantToCancel && !_returnFromPlayback && [UIApplication sharedApplication].applicationState == UIApplicationStateActive)
                            {
                                if (responseDict != nil)
                                {
                                    if ([[responseDict objectForKey:@"status"] intValue] == 200)
                                    {
-                                       self.timeStageOneTotal = [[NSDate date] timeIntervalSinceDate:_timeStartingStageOne];
-                                       self.timeStartingStageOne = 0;
-                                        NSLog(@"%s stage 1 takes %f seconds", __FUNCTION__, _timeStageOneTotal);
-                                       
-                                       NSLog(@"%s Start stage 2", __FUNCTION__);
-                                       self.timeStartingStageTwo = [NSDate date];
-                                       
                                        NSString *urlResponse = [[responseDict objectForKey:@"data"] objectForKey:@"url"];
                                        
                                        if ([urlResponse hasPrefix:ME_WOWZA] &&
@@ -2981,6 +2980,8 @@ double _ticks = 0;
                                        }
                                        
                                        self.selectedChannel.communication_mode = COMM_MODE_STUN_RELAY2;
+                                       
+                                       NSLog(@"%s Start stage 2", __FUNCTION__);
                                        
                                        [self performSelectorOnMainThread:@selector(startStream)
                                                               withObject:nil
@@ -6057,13 +6058,6 @@ double _ticks = 0;
 
 - (void)scanCamera
 {
-    if (_timeStartingStageOne == 0)
-    {
-        self.timeStartingStageOne = [NSDate date];
-    }
-    
-    self.timeStartingStageTwo = 0;
-    
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     self.current_ssid = [CameraPassword fetchSSIDInfo];
     
