@@ -482,7 +482,6 @@
 		8B948E231921EE62004FAD96 /* camera_ble3.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B948E1F1921EE62004FAD96 /* camera_ble3.png */; };
 		8B948E241921EE62004FAD96 /* camera_ble3@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B948E201921EE62004FAD96 /* camera_ble3@2x.png */; };
 		8B94979B18B5E67C004FBDE1 /* SensitivityInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B94979A18B5E67C004FBDE1 /* SensitivityInfo.m */; };
-		8B94BD73188A42530002E804 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 8B94BD72188A42530002E804 /* Settings.bundle */; };
 		8B95077C18C9960D006D4945 /* BLE_camera_search@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B95073018C9960D006D4945 /* BLE_camera_search@2x.png */; };
 		8B95077D18C9960D006D4945 /* BLE_camera_small@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B95073118C9960D006D4945 /* BLE_camera_small@2x.png */; };
 		8B95077E18C9960D006D4945 /* BLE_pair.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B95073218C9960D006D4945 /* BLE_pair.png */; };
@@ -772,6 +771,8 @@
 		1D3623240D0F684500981E51 /* MBP_iosAppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MBP_iosAppDelegate.h; sourceTree = "<group>"; };
 		1D3623250D0F684500981E51 /* MBP_iosAppDelegate.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = MBP_iosAppDelegate.mm; sourceTree = "<group>"; };
 		1DF5F4DF0D08C38300B7A737 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		26B2D8D3193F8EE1005E5F2E /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
+		26B2D8D5193F8EE1005E5F2E /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
 		288765A40DF7441C002DB57D /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		28AD733E0D9D9553002E5188 /* MainWindow.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MainWindow.xib; sourceTree = "<group>"; };
 		28D7ACF60DDB3853001CB0EB /* MBP_iosViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MBP_iosViewController.h; sourceTree = "<group>"; };
@@ -1325,7 +1326,6 @@
 		8B948E201921EE62004FAD96 /* camera_ble3@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "camera_ble3@2x.png"; sourceTree = "<group>"; };
 		8B94979918B5E67C004FBDE1 /* SensitivityInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SensitivityInfo.h; sourceTree = "<group>"; };
 		8B94979A18B5E67C004FBDE1 /* SensitivityInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SensitivityInfo.m; sourceTree = "<group>"; };
-		8B94BD72188A42530002E804 /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
 		8B95073018C9960D006D4945 /* BLE_camera_search@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "BLE_camera_search@2x.png"; sourceTree = "<group>"; };
 		8B95073118C9960D006D4945 /* BLE_camera_small@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "BLE_camera_small@2x.png"; sourceTree = "<group>"; };
 		8B95073218C9960D006D4945 /* BLE_pair.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = BLE_pair.png; sourceTree = "<group>"; };
@@ -1989,7 +1989,6 @@
 				A1AC859218912FFC002A8CCD /* Color */,
 				A1AC857318912574002A8CCD /* Fonts */,
 				8B9633A718A8AA70008A9579 /* LoginViewController */,
-				8B94BD71188A42330002E804 /* SettingsBundle */,
 				A118C19C187E4643009176F5 /* HttpCommunication_Model */,
 				A1ABF19C187536A00014FCB4 /* BLE Setup */,
 				8B90BA5A18717F22007BAF09 /* PlayEventVC */,
@@ -2058,6 +2057,31 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		26B2D8D1193F8EE1005E5F2E /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+				26B2D8D2193F8EE1005E5F2E /* Developer */,
+				26B2D8D4193F8EE1005E5F2E /* Release */,
+			);
+			path = Settings;
+			sourceTree = "<group>";
+		};
+		26B2D8D2193F8EE1005E5F2E /* Developer */ = {
+			isa = PBXGroup;
+			children = (
+				26B2D8D3193F8EE1005E5F2E /* Settings.bundle */,
+			);
+			path = Developer;
+			sourceTree = "<group>";
+		};
+		26B2D8D4193F8EE1005E5F2E /* Release */ = {
+			isa = PBXGroup;
+			children = (
+				26B2D8D5193F8EE1005E5F2E /* Settings.bundle */,
+			);
+			path = Release;
+			sourceTree = "<group>";
+		};
 		29B97314FDCFA39411CA2CEA /* CustomTemplate */ = {
 			isa = PBXGroup;
 			children = (
@@ -2087,6 +2111,7 @@
 			children = (
 				8B9C7DF1185F08AF0038B3A8 /* Images */,
 				A1AC857D18912820002A8CCD /* Fontsource */,
+				26B2D8D1193F8EE1005E5F2E /* Settings */,
 				8B88C98918ACBC6200B074E5 /* Stream */,
 				380EB15316FC41D8005BAC7F /* Voicemail.aif */,
 				8B99DB8618B872C30009612A /* iTunesArtwork */,
@@ -2989,14 +3014,6 @@
 			name = AES;
 			sourceTree = "<group>";
 		};
-		8B94BD71188A42330002E804 /* SettingsBundle */ = {
-			isa = PBXGroup;
-			children = (
-				8B94BD72188A42530002E804 /* Settings.bundle */,
-			);
-			name = SettingsBundle;
-			sourceTree = "<group>";
-		};
 		8B95072E18C9960D006D4945 /* set_up */ = {
 			isa = PBXGroup;
 			children = (
@@ -3714,6 +3731,7 @@
 			buildConfigurationList = 1D6058960D05DD3E006BFB54 /* Build configuration list for PBXNativeTarget "Camera HD" */;
 			buildPhases = (
 				1D60588D0D05DD3D006BFB54 /* Resources */,
+				26B2D8D0193F8D2C005E5F2E /* Run Script - Copy Settings.bundle */,
 				1D60588E0D05DD3D006BFB54 /* Sources */,
 				1D60588F0D05DD3D006BFB54 /* Frameworks */,
 			);
@@ -3811,7 +3829,6 @@
 				8B29A08718AF500A00D36BE5 /* video_progress_bg@2x.png in Resources */,
 				8B299F7A18AF500900D36BE5 /* camera_action_mic_pressed_land@2x.png in Resources */,
 				38DE1CAA168AEB890049E814 /* Step_05_ViewController.xib in Resources */,
-				8B94BD73188A42530002E804 /* Settings.bundle in Resources */,
 				38DE1CA0168AEB6D0049E814 /* Step_06_ViewController.xib in Resources */,
 				A1ABF1B0187537D10014FCB4 /* Step_10_ViewController_ble.xib in Resources */,
 				8BA18CB2184879A10097D1AF /* DeviceSettingsCell.xib in Resources */,
@@ -4397,6 +4414,23 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		26B2D8D0193F8D2C005E5F2E /* Run Script - Copy Settings.bundle */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Run Script - Copy Settings.bundle";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "if [ ${CONFIGURATION} == \"Debug\" ]; then\n    cp -r ${PROJECT_DIR}/Settings/Developer/Settings.bundle ${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.app\nelse\n    cp -r ${PROJECT_DIR}/Settings/Release/Settings.bundle ${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.app\nfi";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		1D60588E0D05DD3D006BFB54 /* Sources */ = {
@@ -5143,7 +5177,7 @@
 				OTHER_LDFLAGS = "-lz";
 				PRODUCT_NAME = HubbleHome;
 				PROVISIONING_PROFILE = "6DA32712-3F96-4213-8A38-C28C09799B13";
-				SDKROOT = iphoneos7.0;
+				SDKROOT = iphoneos;
 				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/../ios-frameworks/pjsip/arm/include/ $(SRCROOT)/../ios-frameworks/pjsip/arm/include/pj/ $(SRCROOT)/../ios-frameworks/pjsip/arm/include/pjnath/";
 				VALIDATE_PRODUCT = YES;
 				VALID_ARCHS = "armv6 armv7";
