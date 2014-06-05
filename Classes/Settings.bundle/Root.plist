@@ -32,16 +32,6 @@
 			<key>DefaultValue</key>
 			<false/>
 			<key>Key</key>
-			<string>enable_stun</string>
-			<key>Title</key>
-			<string>Enable STUN</string>
-			<key>Type</key>
-			<string>PSToggleSwitchSpecifier</string>
-		</dict>
-		<dict>
-			<key>DefaultValue</key>
-			<false/>
-			<key>Key</key>
 			<string>remote_only</string>
 			<key>Title</key>
 			<string>Use Remote Only</string>
