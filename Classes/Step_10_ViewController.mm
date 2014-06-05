@@ -37,6 +37,8 @@
 
 @property (nonatomic, assign) IBOutlet UIView * progressView;
 @property (retain, nonatomic) IBOutlet UIView *viewFwOtaUpgrading;
+@property (retain, nonatomic) IBOutlet UILabel *lblWordAddition;
+@property (retain, nonatomic) IBOutlet UIButton *btnCancel;
 
 @property (retain, nonatomic) UserAccount *userAccount;
 @property (nonatomic, retain) BMS_JSON_Communication *jsonCommBlocked;
@@ -44,6 +46,7 @@
 @property (nonatomic) BOOL shouldSendMasterKeyAgain;
 @property (retain, nonatomic) UIProgressView *otaDummyProgressBar;
 @property (nonatomic, retain) NSTimer *timeOut;
+@property (nonatomic) BOOL forceSetupFailed;
 
 @end
 
@@ -74,6 +77,8 @@
     [_jsonCommBlocked release];
     
     [_viewFwOtaUpgrading release];
+    [_btnCancel release];
+    [_lblWordAddition release];
     [super dealloc];
 }
 
@@ -139,6 +144,9 @@
     [imageView startAnimating];
     [self showProgress:nil];
     
+    [_lblWordAddition performSelector:@selector(setHidden:) withObject:NO afterDelay:57]; //1 * 60 - 3
+    [_btnCancel performSelector:@selector(setHidden:) withObject:NO afterDelay:57]; //1 * 60 - 3
+    
     self.otaDummyProgressBar = (UIProgressView *)[_viewFwOtaUpgrading viewWithTag:5990];
 
     NSString *fwVersion = [userDefaults stringForKey:FW_VERSION];
@@ -199,6 +207,23 @@
 {
     [self.navigationController popViewControllerAnimated:YES];
 }
+
+- (IBAction)btnCancelTouchUpInsideAction:(id)sender
+{
+    if (_timeOut)
+    {
+        [_timeOut invalidate];
+        self.timeOut = nil;
+    }
+    
+    [self setStopScanning:nil];
+    
+    [_btnCancel setHidden:YES];
+    [_lblWordAddition setHidden:YES];
+    
+    self.forceSetupFailed = TRUE;
+}
+
 
 #pragma  mark -
 #pragma mark button handlers
@@ -892,27 +917,38 @@
     [jsonComm deleteDeviceWithRegistrationId:_stringUDID
                                    andApiKey:[userDefaults objectForKey:@"PortalApiKey"]];
 #endif
-    //Load step 11
-    NSLog(@"Load step 11");
-    
-    //Load the next xib
-    Step_11_ViewController *step11ViewController = nil;
-    
-    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+    if (_forceSetupFailed)
     {
-        step11ViewController = [[Step_11_ViewController alloc]
-                                initWithNibName:@"Step_11_ViewController_ipad" bundle:nil];
+        NSLog(@"%s restarting setup immediately", __FUNCTION__);
+        
+        // Disable Keep screen on
+        [UIApplication sharedApplication].idleTimerDisabled=  NO;
+        [self.navigationController popToRootViewControllerAnimated:YES];
     }
     else
     {
-        step11ViewController = [[Step_11_ViewController alloc]
-                                initWithNibName:@"Step_11_ViewController" bundle:nil];
+        //Load step 11
+        NSLog(@"Load step 11");
+        
+        //Load the next xib
+        Step_11_ViewController *step11ViewController = nil;
+        
+        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+        {
+            step11ViewController = [[Step_11_ViewController alloc]
+                                    initWithNibName:@"Step_11_ViewController_ipad" bundle:nil];
+        }
+        else
+        {
+            step11ViewController = [[Step_11_ViewController alloc]
+                                    initWithNibName:@"Step_11_ViewController" bundle:nil];
+        }
+        
+        step11ViewController.errorCode = self.errorCode;
+        [self.navigationController pushViewController:step11ViewController animated:NO];
+        
+        [step11ViewController release];
     }
-    
-    step11ViewController.errorCode = self.errorCode;
-    [self.navigationController pushViewController:step11ViewController animated:NO];
-    
-    [step11ViewController release];
 }
 
 - (void)showDialogWithTag:(NSInteger)tag message: (NSString *)msg
