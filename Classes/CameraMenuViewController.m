@@ -46,6 +46,10 @@
 {
     int intTableSectionStatus; // 0 No open, 1 = 0 section open , 2 = 1 section open
     
+    IBOutlet UIView *vwSnapshot;
+    IBOutlet UIImageView *imgVSnapshot;
+    IBOutlet UIButton *btnSnapshotRefresh,*btnSnapshotOK;
+    
 }
 @property (retain, nonatomic) SensitivityInfo *sensitivityInfo;
 @property (nonatomic, retain) NSString *selectedReg;
@@ -128,6 +132,12 @@
     
     //then set it.  phew.
     [self.navigationItem setLeftBarButtonItem:barButtonItem];
+    
+    
+    //Snapshot View
+    vwSnapshot.frame = CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
+    vwSnapshot.hidden = YES;
+    [self.view addSubview:vwSnapshot];
     
 }
 
@@ -1191,29 +1201,13 @@
 
 -(void)btnChangeCameraIcon
 {
-    NSLog(@"WWW");
-   /* ChangeImageViewController *changeImageVC = [[ChangeImageViewController alloc] initWithNibName:@"ChangeImageViewController" bundle:nil];
-    [UIView transitionWithView:self.view
-                      duration:1.0
-                       options:UIViewAnimationOptionTransitionFlipFromBottom
-                    animations:^{
-                        changeImageVC.view.frame = self.view.bounds;
-                        [self.view addSubview:changeImageVC.view];
-                    }
-                    completion:^(BOOL finished) {
-                        changeImageVC.view.frame = self.view.bounds;
-                    }];*/
-    
-   
     [UIActionSheet showInView:self.view
                     withTitle:@"Change Image"
             cancelButtonTitle:@"Cancel"
        destructiveButtonTitle:nil
-            otherButtonTitles:@[@"Select image from gallery", @"Take a photo from camera"]
+            otherButtonTitles:@[@"Select image from gallery", @"Take a photo from Camera",@"Take a snapshot now"]
                      tapBlock:^(UIActionSheet *actionSheet, NSInteger buttonIndex)
     {
-       // NSLog(@"Chose %@", [actionSheet buttonTitleAtIndex:buttonIndex]);
-        
         if(actionSheet.cancelButtonIndex == buttonIndex)
         {
             return ;
@@ -1236,6 +1230,11 @@
         {
             picker.sourceType = UIImagePickerControllerSourceTypeCamera;
         }
+        else if(buttonIndex==2)//Snapshot
+        {
+            [self performSelector:@selector(openViewForSetCameraFromURL) withObject:nil afterDelay:0.1];
+            return;
+        }
         [self presentViewController:picker animated:YES completion:NULL];
         
     }];
@@ -1248,39 +1247,19 @@
    
     [self dismissViewControllerAnimated:YES completion:^{
        
-        UIActionSheet *as = [[UIActionSheet alloc] initWithTitle:@"Select Picture"
-                                                        delegate:nil
-                                               cancelButtonTitle:@"Cancel"
-                                          destructiveButtonTitle:nil
-                                               otherButtonTitles:@"Set Picture", nil];
-        as.actionSheetStyle = UIActionSheetStyleBlackTranslucent;
-        UIImageView *imageV = [[UIImageView alloc] initWithImage:imageSelected];
-        imageV.frame = CGRectMake(35, -300, 250, 250);
-        [as addSubview:imageV];
-        [imageV release];
+        //[self openViewForSetCamera:imageSelected];
+        NSArray *paths = NSSearchPathForDirectoriesInDomains
+        (NSDocumentDirectory, NSUserDomainMask, YES);
+        NSString  *strPath = [[paths objectAtIndex:0] retain];
         
-        as.tapBlock = ^(UIActionSheet *actionSheet, NSInteger buttonIndex){
-            NSLog(@"Chose %@", [actionSheet buttonTitleAtIndex:buttonIndex]);
-            
-            if(actionSheet.cancelButtonIndex!=buttonIndex)
-            {
-                //self.camChannel.profile.registrationID
-                
-                NSArray *paths = NSSearchPathForDirectoriesInDomains
-                (NSDocumentDirectory, NSUserDomainMask, YES);
-                NSString  *strPath = [[paths objectAtIndex:0] retain];
-                
-                strPath = [strPath stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.jpg",self.camChannel.profile.registrationID]];
-                
-                if([[NSFileManager defaultManager] fileExistsAtPath:strPath])
-                {
-                    [[NSFileManager defaultManager] removeItemAtPath:strPath error:nil];
-                }
-                [UIImageJPEGRepresentation(imageSelected, 0.5) writeToFile:strPath atomically:YES];
-               // [strPath release];
-            }
-        };
-        [as showInView:self.view];
+        strPath = [strPath stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.jpg",self.camChannel.profile.registrationID]];
+        
+        if([[NSFileManager defaultManager] fileExistsAtPath:strPath])
+        {
+            [[NSFileManager defaultManager] removeItemAtPath:strPath error:nil];
+        }
+        [UIImageJPEGRepresentation(imageSelected, 0.5) writeToFile:strPath atomically:YES];
+
     }];
 }
 
@@ -1289,7 +1268,143 @@
     [self dismissViewControllerAnimated:YES completion:NULL];
 }
 
+-(void)openViewForSetCamera:(UIImage *)image
+{
+    UIActionSheet *as = [[UIActionSheet alloc] initWithTitle:@"Select Picture"
+                                                    delegate:nil
+                                           cancelButtonTitle:@"Cancel"
+                                      destructiveButtonTitle:nil
+                                           otherButtonTitles:@"Set Picture", nil];
+    as.actionSheetStyle = UIActionSheetStyleBlackTranslucent;
+    if(image)
+    {
+        UIImageView *imageV = [[UIImageView alloc] initWithImage:image];
+        imageV.frame = CGRectMake(35, -300, 250, 250);
+        [as addSubview:imageV];
+        [imageV release];
+    }
+    
+    as.tapBlock = ^(UIActionSheet *actionSheet, NSInteger buttonIndex){
+        NSLog(@"Chose %@", [actionSheet buttonTitleAtIndex:buttonIndex]);
+        
+        if(actionSheet.cancelButtonIndex!=buttonIndex)
+        {
+            //self.camChannel.profile.registrationID
+            
+            NSArray *paths = NSSearchPathForDirectoriesInDomains
+            (NSDocumentDirectory, NSUserDomainMask, YES);
+            NSString  *strPath = [[paths objectAtIndex:0] retain];
+            
+            strPath = [strPath stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.jpg",self.camChannel.profile.registrationID]];
+            
+            if([[NSFileManager defaultManager] fileExistsAtPath:strPath])
+            {
+                [[NSFileManager defaultManager] removeItemAtPath:strPath error:nil];
+            }
+            [UIImageJPEGRepresentation(image, 0.5) writeToFile:strPath atomically:YES];
+            // [strPath release];
+        }
+    };
+    [as showInView:self.view];
+}
 
+-(void)openViewForSetCameraFromURL
+{
+    vwSnapshot.alpha = 0.0;
+    vwSnapshot.hidden = NO;
+    [UIView animateWithDuration:0.3 animations:^{
+        vwSnapshot.alpha = 1.0;
+    }];
+    
+    [self btnSnapshotRefreshPressed:nil];
+}
+
+-(IBAction)btnSnapshotRefreshPressed:(id)sender
+{
+    imgVSnapshot.animationImages =[NSArray arrayWithObjects:
+                                   [UIImage imageNamed:@"loader_big_a"],
+                                   [UIImage imageNamed:@"loader_big_b"],
+                                   [UIImage imageNamed:@"loader_big_c"],
+                                   [UIImage imageNamed:@"loader_big_d"],
+                                   [UIImage imageNamed:@"loader_big_e"],
+                                   nil];
+    imgVSnapshot.animationDuration = 1.5;
+    [imgVSnapshot startAnimating];
+    
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0),
+                   ^{
+                       NSString *strURL = [self getSnapImageFromCamera];
+                       if(strURL==nil)
+                       {
+                           return ;
+                       }
+                       NSData *data = [NSData dataWithContentsOfURL:[NSURL URLWithString:strURL]];
+                       dispatch_async(dispatch_get_main_queue(), ^{
+                           [imgVSnapshot stopAnimating];
+                           imageSelected = [UIImage imageWithData:data];
+                           imgVSnapshot.image = imageSelected;
+                       });
+                   });
+}
+
+-(IBAction)btnSnapshotOKPressed:(id)sender
+{
+    [UIView animateWithDuration:0.3 animations:^{
+        vwSnapshot.alpha = 0.0;
+    } completion:^(BOOL finished) {
+        vwSnapshot.hidden = YES;
+    }];
+    
+    if(imageSelected)
+    {
+        NSArray *paths = NSSearchPathForDirectoriesInDomains
+        (NSDocumentDirectory, NSUserDomainMask, YES);
+        NSString  *strPath = [[paths objectAtIndex:0] retain];
+        
+        strPath = [strPath stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.jpg",self.camChannel.profile.registrationID]];
+        
+        if([[NSFileManager defaultManager] fileExistsAtPath:strPath])
+        {
+            [[NSFileManager defaultManager] removeItemAtPath:strPath error:nil];
+        }
+        [UIImageJPEGRepresentation(imageSelected, 0.5) writeToFile:strPath atomically:YES];
+    }
+}
+
+
+-(NSString*)getSnapImageFromCamera
+{
+    BMS_JSON_Communication *jsonComm = [[BMS_JSON_Communication alloc] initWithObject:self
+                                                                             Selector:nil
+                                                                         FailSelector:nil
+                                                                            ServerErr:nil];
+    NSDictionary *responseDict = [jsonComm sendCommandBlockedWithRegistrationId:self.camChannel.profile.registrationID
+                                                                     andCommand:@"action=command&command=get_image_snapshot"
+                                                                      andApiKey:_apiKey];
+    [jsonComm release];
+    
+    if (responseDict)
+    {
+        if ([[responseDict objectForKey:@"status"] integerValue] == 200)
+        {
+            BMS_JSON_Communication *jsonCommDeviceInfo = [[BMS_JSON_Communication alloc] initWithObject:self
+                                                                                               Selector:nil
+                                                                                           FailSelector:nil
+                                                                                              ServerErr:nil];
+            NSDictionary *responseDictDInfo = [jsonCommDeviceInfo getDeviceBasicInfoBlockedWithRegistrationId:self.camChannel.profile.registrationID andApiKey:_apiKey];
+            if (responseDictDInfo)
+            {
+                if ([[responseDictDInfo objectForKey:@"status"] integerValue] == 200)
+                {
+                    NSLog(@"-- %@",[[responseDictDInfo valueForKey:@"data"] valueForKey:@"snaps_url"]);
+                    return [[responseDictDInfo valueForKey:@"data"] valueForKey:@"snaps_url"];
+                }
+            }
+            
+        }
+    }
+    return nil;
+}
 
 - (void)getSensitivityInfoFromServer
 {
