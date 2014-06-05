@@ -173,24 +173,20 @@
 @synthesize selectedItemMenu = _selectedItemMenu;
 
 double _ticks = 0;
-#pragma mark - View
 
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
-{
-    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
-    if (self) {
-        // Custom initialization
-    }
-    return self;
-}
+#pragma mark - View
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    // Do any additional setup after loading the view from its nib.
-    // only is called in viewDidLoad, make sure it is called once.
+
+    if (floor(NSFoundationVersionNumber) > NSFoundationVersionNumber_iOS_6_1) {
+        // iOS 7
+        self.edgesForExtendedLayout = UIRectEdgeNone;
+    }
     
     _hideCustomIndicatorAndTextNotAccessble = NO;
+    
     // update navi
     self.earlierNavi = (EarlierNavigationController *)self.navigationController;
     self.earlierNavi.isEarlierView = NO;
@@ -199,6 +195,7 @@ double _ticks = 0;
     [self.view bringSubviewToFront:self.ib_buttonChangeAction];
     [self.ib_labelRecordVideo setText:@"Record Video"];
     [self.ib_labelTouchToTalk setText:@"Touch to Talk"];
+
     //setup Font
     [self applyFont];
     
@@ -230,9 +227,7 @@ double _ticks = 0;
     self.sharedCamConnectedTo = @"";
     self.cameraModel = [self.selectedChannel.profile getModel];
     
-    /*
-     * Move dow SetupCamera temporarily. Need to update here!
-     */
+    // Move dow SetupCamera temporarily. Need to update here!
     
     //[self initHorizeMenu: _cameraModel];
     [self performSelectorInBackground:@selector(initHorizeMenu:) withObject:_cameraModel];
@@ -257,7 +252,17 @@ double _ticks = 0;
     self.messageStreamingState = @"Camera is not accessible";
     self.timeStartingStageOne = 0;
     self.timeStartingStageTwo = 0;
+
+#ifndef DEBUG
+    // Remove debug buttons for Release builds
+    [_ib_btShowDebugInfo removeFromSuperview];
+    [self setIb_btShowDebugInfo:nil];
     
+    [_sendLogButton removeFromSuperview];
+    [self setSendLogButton:nil];
+#endif
+    
+    [self checkOrientation];
     [self becomeActive];
 }
 
@@ -2021,8 +2026,9 @@ double _ticks = 0;
             ( h264Streamer != NULL))
     {
         NSLog(@"H264VC- prepareGoBackToCameraList - just sendInterrupt");
-        
-        h264Streamer->sendInterrupt();
+        if ( h264Streamer != NULL ) {
+            h264Streamer->sendInterrupt();
+        }
     }
     else
     {
@@ -2051,7 +2057,7 @@ double _ticks = 0;
     
     self.selectedChannel.profile.isSelected = FALSE;
     
-    [self.navigationController popToRootViewControllerAnimated:YES];
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 - (void)goBackToCamerasRemoteStreamTimeOut
@@ -2074,7 +2080,7 @@ double _ticks = 0;
     
     self.selectedChannel.profile.isSelected = FALSE;
     
-    [self.navigationController popToRootViewControllerAnimated:YES];
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 -(void) cleanUpDirectionTimers
@@ -4010,7 +4016,7 @@ double _ticks = 0;
     return UIInterfaceOrientationMaskAll;
 }
 
-- (void) willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
+- (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
 {
     [[KISSMetricsAPI sharedAPI] recordEvent:@"PlayerView - will rotate interface" withProperties:nil];
     
@@ -4019,38 +4025,34 @@ double _ticks = 0;
                                                      withLabel:nil
                                                      withValue:nil];
     
-    if (_earlierNavi.isEarlierView) //don't call adjustViews for Earlier
-    {
+    if (_earlierNavi.isEarlierView) {
+        //don't call adjustViews for Earlier
         return;
     }
-    else
-    {
+    else {
         [self adjustViewsForOrientation:toInterfaceOrientation];
     }
 }
 
--(void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation
+- (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation
 {
     [self applyFont];
 }
 
--(void) checkOrientation
+- (void)checkOrientation
 {
-	UIInterfaceOrientation infOrientation = [UIApplication sharedApplication].statusBarOrientation;
-    
-	[self adjustViewsForOrientation:infOrientation];
+	UIInterfaceOrientation orientation = [UIApplication sharedApplication].statusBarOrientation;
+	[self adjustViewsForOrientation:orientation];
 }
 
-- (void) adjustViewsForOrientation:(UIInterfaceOrientation)orientation
+- (void)adjustViewsForOrientation:(UIInterfaceOrientation)orientation
 {
     NSLog(@"H264VC - adjustViewsForOrientation:");
     
-    if (_isProcessRecording)
-    {
+    if (_isProcessRecording) {
         _syncPortraitAndLandscape = YES;
     }
-    else
-    {
+    else {
         _syncPortraitAndLandscape = NO;
     }
     
@@ -4058,54 +4060,39 @@ double _ticks = 0;
     
     NSInteger deltaY = 0;
     
-    if (isiOS7AndAbove)
-    {
+    if (isiOS7AndAbove) {
         deltaY = HIGH_STATUS_BAR;
     }
     
-	if (orientation == UIInterfaceOrientationLandscapeLeft || orientation == UIInterfaceOrientationLandscapeRight)
-	{
+	if (UIInterfaceOrientationIsLandscape(orientation)) {
         _isLandScapeMode = YES;
         //load new nib for landscape iPad
-        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
-        {
-            [[NSBundle mainBundle] loadNibNamed:@"H264PlayerViewController_land_iPad"
-                                          owner:self
-                                        options:nil];
-            
+        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+            [[NSBundle mainBundle] loadNibNamed:@"H264PlayerViewController_land_iPad" owner:self options:nil];
             self.melodyViewController = [[[MelodyViewController alloc] initWithNibName:@"MelodyViewController_land" bundle:nil] autorelease];
             [_earlierVC.view setFrame:CGRectMake(0, 0, SCREEN_HEIGHT, SCREEN_WIDTH)];
-            
-            
         }
-        else
-        {
-            [[NSBundle mainBundle] loadNibNamed:@"H264PlayerViewController_land"
-                                          owner:self
-                                        options:nil];
-            
+        else {
+            [[NSBundle mainBundle] loadNibNamed:@"H264PlayerViewController_land" owner:self options:nil];
             self.melodyViewController = [[[MelodyViewController alloc] initWithNibName:@"MelodyViewController_land" bundle:nil] autorelease];
             
-            if (isiOS7AndAbove)
-            {
+            if (isiOS7AndAbove) {
                 self.melodyViewController.view.frame = CGRectMake(393, 78, 175, 165);
             }
-            else
-            {
+            else {
                 self.melodyViewController.view.frame = CGRectMake(320, 60, 159, 204);
             }
-            
         }
         
         self.melodyViewController.selectedChannel = self.selectedChannel;
         self.melodyViewController.melodyVcDelegate = self;
+        
         //landscape mode
         //hide navigation bar
         [self.navigationController setNavigationBarHidden:YES];
         [UIApplication sharedApplication].statusBarHidden = YES;
         
-        if (_isAlreadyHorizeMenu)
-        {
+        if (_isAlreadyHorizeMenu) {
             [self.horizMenu reloadData:YES];
         }
         
@@ -4117,35 +4104,27 @@ double _ticks = 0;
         self.imageViewVideo.frame = CGRectMake(0, 0, SCREEN_HEIGHT, imageViewHeight);
         self.scrollView.frame = newRect;
         
-        if (_timelineVC != nil)
-        {
+        if ( _timelineVC ) {
             [self.timelineVC.view removeFromSuperview];
         }
         
         [self addGesturesPichInAndOut];
 	}
-	else if (orientation == UIInterfaceOrientationPortrait || orientation == UIInterfaceOrientationPortraitUpsideDown)
-	{
+	else if ( UIInterfaceOrientationIsPortrait(orientation) ) {
         //load new nib
         //remove pinch in, out (zoom for portrait)
         [self removeGestureRecognizerAtPortraitMode];
         
-        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
-        {
-            [[NSBundle mainBundle] loadNibNamed:@"H264PlayerViewController_ipad"
-                                          owner:self
-                                        options:nil];
+        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+            [[NSBundle mainBundle] loadNibNamed:@"H264PlayerViewController_ipad" owner:self options:nil];
             self.melodyViewController = [[[MelodyViewController alloc] initWithNibName:@"MelodyViewController_iPad" bundle:nil] autorelease];
             [_earlierVC.view setFrame:CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT - 64)];
         }
         else
         {
-            [[NSBundle mainBundle] loadNibNamed:@"H264PlayerViewController"
-                                          owner:self
-                                        options:nil];
+            [[NSBundle mainBundle] loadNibNamed:@"H264PlayerViewController" owner:self options:nil];
             self.melodyViewController = [[[MelodyViewController alloc] initWithNibName:@"MelodyViewController" bundle:nil] autorelease];
         }
-        //portrait mode
         
         self.melodyViewController.selectedChannel = self.selectedChannel;
         self.melodyViewController.melodyVcDelegate = self;
@@ -4154,15 +4133,13 @@ double _ticks = 0;
         [[UIApplication sharedApplication] setStatusBarHidden:NO];
         self.view.backgroundColor = [UIColor whiteColor];
         
-        if (_isAlreadyHorizeMenu)
-        {
+        if (_isAlreadyHorizeMenu) {
             [self.horizMenu reloadData:NO];
         }
         
         CGFloat imageViewHeight = SCREEN_WIDTH * 9 / 16;
         
-        if (isiOS7AndAbove)
-        {
+        if (isiOS7AndAbove) {
             //CGRect destRect = CGRectMake(0, 44 + deltaY, SCREEN_WIDTH, imageViewHeight);
             //self.scrollView.frame = destRect;
             //self.imageViewVideo.frame = CGRectMake(0, 0, SCREEN_WIDTH, imageViewHeight);
@@ -4170,16 +4147,14 @@ double _ticks = 0;
             
             // Control display for TimelineVC
             
-            if (_timelineVC != nil)
-            {
+            if ( _timelineVC ) {
                 CGFloat alignYTimeLine = self.ib_ViewTouchToTalk.frame.origin.y;
                 
-                if (isiPhone4) // This condition check size of screen. Not iPhone4 or other
-                {
+                if (isiPhone4) {
+                    // This condition check size of screen. Not iPhone4 or other
                     self.timelineVC.view.frame = CGRectMake(0, alignYTimeLine, SCREEN_HEIGHT, SCREEN_HEIGHT - self.ib_ViewTouchToTalk.frame.origin.y + 64);
                 }
-                else
-                {
+                else {
                     self.timelineVC.view.frame = CGRectMake(0, alignYTimeLine, SCREEN_HEIGHT, SCREEN_HEIGHT - self.ib_ViewTouchToTalk.frame.origin.y);
                 }
                 
@@ -4187,28 +4162,23 @@ double _ticks = 0;
                 //don't show timeline after switch from land to port
                 self.timelineVC.view.hidden = NO;
                 [self.view addSubview:_timelineVC.view];
-                if (_isLandScapeMode)
-                {
-                    if (isiPhone4 || isiPhone5)
-                    {
+                
+                if (_isLandScapeMode) {
+                    if (isiPhone4 || isiPhone5) {
                         //iPhone
                         self.timelineVC.tableView.contentInset = UIEdgeInsetsMake(0, 0, 275, 0);
                     }
-                    else
-                    {
+                    else {
                         //iPad
                         self.timelineVC.tableView.contentInset = UIEdgeInsetsMake(0, 0, 50, 0);
                     }
-                    
                 }
-                else
-                {
+                else {
                     self.timelineVC.tableView.contentInset = UIEdgeInsetsMake(0, 0, 30, 0);
                 }
             }
         }
-        else
-        {
+        else {
             CGRect destRect = CGRectMake(0, deltaY, SCREEN_WIDTH, imageViewHeight);
             self.scrollView.frame = destRect;
             self.imageViewVideo.frame = CGRectMake(0, -44, SCREEN_WIDTH, imageViewHeight);
@@ -4216,19 +4186,16 @@ double _ticks = 0;
             
             
             // Control display for TimelineVC
-            if (_timelineVC != nil)
-            {
+            if ( _timelineVC ) {
                 CGFloat alignYTimeLine = self.ib_ViewTouchToTalk.frame.origin.y - 64;
                 
-                if (_isLandScapeMode)
-                {
+                if (_isLandScapeMode) {
                     self.timelineVC.view.frame = CGRectMake(0, alignYTimeLine, SCREEN_WIDTH, SCREEN_HEIGHT - alignYTimeLine);
                     self.timelineVC.view.hidden = NO;
                     [self.view addSubview:_timelineVC.view];
                     self.timelineVC.tableView.contentInset = UIEdgeInsetsMake(0, 0, 250, 0);
                 }
-                else
-                {
+                else {
                     self.timelineVC.view.frame = CGRectMake(0, alignYTimeLine, SCREEN_WIDTH, SCREEN_HEIGHT - alignYTimeLine);
                     self.timelineVC.view.hidden = NO;
                     [self.view addSubview:_timelineVC.view];
@@ -4241,8 +4208,16 @@ double _ticks = 0;
         //add hubble_logo_back
         //[self addHubbleLogo_Back];
         _isLandScapeMode = NO;
-        
-	}// end of portrait
+	}
+    
+#ifndef DEBUG
+    // Remove debug buttons for Release builds
+    [_ib_btShowDebugInfo removeFromSuperview];
+    [self setIb_btShowDebugInfo:nil];
+    
+    [_sendLogButton removeFromSuperview];
+    [self setSendLogButton:nil];
+#endif
     
     [self.melodyViewController.melodyTableView setNeedsLayout];
     [self.melodyViewController.melodyTableView setNeedsDisplay];
@@ -4253,16 +4228,13 @@ double _ticks = 0;
     
     [self displayCustomIndicator];
     
-    if (h264Streamer != NULL)
-    {
+    if (h264Streamer != NULL) {
         //trigger re-cal of videosize
-        if (h264Streamer->isPlaying())
-        {
-            //            [self.activityIndicator stopAnimating];
+        if (h264Streamer->isPlaying()) {
+            //[self.activityIndicator stopAnimating];
             _isShowCustomIndicator = NO;
         }
-        if (_currentMediaStatus != 0)
-        {
+        if (_currentMediaStatus != 0) {
             h264Streamer->videoSizeChanged();
         }
     }
@@ -4273,17 +4245,15 @@ double _ticks = 0;
     [self hidenAllBottomView];
     [self updateBottomView];
     
-    if(_selectedItemMenu!=-1){
+    if (_selectedItemMenu != -1) {
         [self.horizMenu setSelectedIndex:_selectedItemMenu-1 animated:NO];
     }
     
     //Earlier must at bottom of land, and port
-    if (_isFirstLoad || _wantToShowTimeLine || _selectedItemMenu == -1)
-    {
+    if (_isFirstLoad || _wantToShowTimeLine || _selectedItemMenu == -1) {
         [self showTimelineView];
     }
-    else
-    {
+    else {
         [self hideTimelineView];
     }
     
@@ -4291,21 +4261,16 @@ double _ticks = 0;
     self.ib_labelTouchToTalk.text = _stringStatePTT;
 }
 
-
-#pragma mark -
-#pragma mark Scan cameras
+#pragma mark - Scan cameras
 
 - (void) scan_for_missing_camera
 {
     self.scanAgain = TRUE;
-    
-    if (userWantToCancel == TRUE)
-    {
+    if (userWantToCancel == TRUE) {
         return;
     }
     
     NSLog(@"scanning for : %@", self.selectedChannel.profile.mac_address);
-    
 	scanner = [[ScanForCamera alloc] initWithNotifier:self];
 	[scanner scan_for_device:self.selectedChannel.profile.mac_address];
     
@@ -4314,21 +4279,17 @@ double _ticks = 0;
 - (void)scan_done:(NSArray *)_scan_results
 {
     // Scan for Local camera if it is disconnected
-    if (_scanAgain == TRUE)
-    {
+    if (_scanAgain == TRUE) {
         BOOL found = FALSE;
-        
-        if (_scan_results.count > 0)
-        {
+
+        if (_scan_results.count > 0) {
             //confirm the mac address
             CamProfile * cp = self.selectedChannel.profile;
             
-            for (int j = 0; j < [_scan_results count]; j++)
-            {
+            for (int j = 0; j < [_scan_results count]; j++) {
                 CamProfile * cp1 = (CamProfile *) [_scan_results objectAtIndex:j];
                 
-                if ( [cp.mac_address isEqualToString:cp1.mac_address])
-                {
+                if ( [cp.mac_address isEqualToString:cp1.mac_address]) {
                     //FOUND - copy ip address.
                     cp.ip_address = cp1.ip_address;
                     cp.isInLocal  = TRUE;
@@ -4339,14 +4300,12 @@ double _ticks = 0;
             }
         }
         
-        if (!found)
-        {
+        if (!found) {
             //Rescann...
             NSLog(@"Re- scan for : %@", self.selectedChannel.profile.mac_address);
             [self scan_for_missing_camera];
         }
-        else
-        {
+        else {
             //Restart streaming..
             NSLog(@"Re-start streaming for : %@", self.selectedChannel.profile.mac_address);
             
@@ -4357,8 +4316,8 @@ double _ticks = 0;
                                             repeats:NO];
         }
     }
-    else // This is scan for camera when -becomeActive
-    {
+    else {
+        // This is scan for camera when -becomeActive
         BOOL found = FALSE;
         
         self.selectedChannel.profile.isInLocal  = NO;
@@ -4439,9 +4398,7 @@ double _ticks = 0;
     }
 }
 
-#pragma mark -
-
-#pragma mark Alertview delegate
+#pragma mark - Alertview delegate
 
 - (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex
 {
