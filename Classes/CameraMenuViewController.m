@@ -192,7 +192,7 @@
             if (deviceInLocal)
             {
                 NSString * msg = NSLocalizedStringWithDefaultValue(@"Confirm_remove_cam_local", nil, [NSBundle mainBundle],
-                                                                   @"You are about to remove the paired camera from the app. You will have to pair it back again in order to use it in future. Continue?", nil);
+                                                                   @"Please confirm that you want to remove this camera from your account. This action will also reset the camera to setup mode.", nil);
                 UIAlertView *alert = [[UIAlertView alloc]
                                       initWithTitle:@""
                                       message:msg
