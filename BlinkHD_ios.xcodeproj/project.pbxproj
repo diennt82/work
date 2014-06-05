@@ -601,7 +601,6 @@
 		8B9C7E0D185F260A0038B3A8 /* MenuViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8B9C7E0B185F260A0038B3A8 /* MenuViewController.mm */; };
 		8B9C7E0E185F260A0038B3A8 /* MenuViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8B9C7E0C185F260A0038B3A8 /* MenuViewController.xib */; };
 		8B9C7E15185F268C0038B3A8 /* CamerasViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8B9C7E13185F268C0038B3A8 /* CamerasViewController.mm */; };
-		8B9C7E16185F268C0038B3A8 /* CamerasViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8B9C7E14185F268C0038B3A8 /* CamerasViewController.xib */; };
 		8B9C7E19185F26B70038B3A8 /* CamerasCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B9C7E18185F26B70038B3A8 /* CamerasCell.m */; };
 		8B9C7E1B185F26D40038B3A8 /* CamerasCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8B9C7E1A185F26D40038B3A8 /* CamerasCell.xib */; };
 		8B9CCBA3183EF8B2007C0F65 /* MelodyViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B9CCBA1183EF8B2007C0F65 /* MelodyViewController.m */; };
@@ -669,7 +668,6 @@
 		A1322D0A18EA6FE60019E525 /* add_camera_btn_pressed.png in Resources */ = {isa = PBXBuildFile; fileRef = A1322D0818EA6FE60019E525 /* add_camera_btn_pressed.png */; };
 		A1322D0B18EA6FE60019E525 /* add_camera_btn_pressed@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A1322D0918EA6FE60019E525 /* add_camera_btn_pressed@2x.png */; };
 		A1382CA218D6D222006D99A2 /* MHTabBarController.m in Sources */ = {isa = PBXBuildFile; fileRef = A1382CA118D6D222006D99A2 /* MHTabBarController.m */; };
-		A138A67718ED41720088685A /* CamerasViewController_ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = A138A67618ED41720088685A /* CamerasViewController_ipad.xib */; };
 		A13AD81018D008110009F0E5 /* DoNotDisturbCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A13AD80F18D008110009F0E5 /* DoNotDisturbCell.m */; };
 		A13AD81218D008490009F0E5 /* DoNotDisturbCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = A13AD81118D008490009F0E5 /* DoNotDisturbCell.xib */; };
 		A13AD83D18D0691E0009F0E5 /* UICircularSlider.m in Sources */ = {isa = PBXBuildFile; fileRef = A13AD83C18D0691E0009F0E5 /* UICircularSlider.m */; };
@@ -1457,7 +1455,6 @@
 		8B9C7E0C185F260A0038B3A8 /* MenuViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MenuViewController.xib; sourceTree = "<group>"; };
 		8B9C7E12185F268C0038B3A8 /* CamerasViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CamerasViewController.h; sourceTree = "<group>"; };
 		8B9C7E13185F268C0038B3A8 /* CamerasViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = CamerasViewController.mm; sourceTree = "<group>"; };
-		8B9C7E14185F268C0038B3A8 /* CamerasViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CamerasViewController.xib; sourceTree = "<group>"; };
 		8B9C7E17185F26B70038B3A8 /* CamerasCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CamerasCell.h; sourceTree = "<group>"; };
 		8B9C7E18185F26B70038B3A8 /* CamerasCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CamerasCell.m; sourceTree = "<group>"; };
 		8B9C7E1A185F26D40038B3A8 /* CamerasCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CamerasCell.xib; sourceTree = "<group>"; };
@@ -1555,7 +1552,6 @@
 		A1322D0918EA6FE60019E525 /* add_camera_btn_pressed@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "add_camera_btn_pressed@2x.png"; sourceTree = "<group>"; };
 		A1382CA018D6D222006D99A2 /* MHTabBarController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MHTabBarController.h; sourceTree = "<group>"; };
 		A1382CA118D6D222006D99A2 /* MHTabBarController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MHTabBarController.m; sourceTree = "<group>"; };
-		A138A67618ED41720088685A /* CamerasViewController_ipad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CamerasViewController_ipad.xib; sourceTree = "<group>"; };
 		A13AD80E18D008110009F0E5 /* DoNotDisturbCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DoNotDisturbCell.h; sourceTree = "<group>"; };
 		A13AD80F18D008110009F0E5 /* DoNotDisturbCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DoNotDisturbCell.m; sourceTree = "<group>"; };
 		A13AD81118D008490009F0E5 /* DoNotDisturbCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = DoNotDisturbCell.xib; sourceTree = "<group>"; };
@@ -3333,8 +3329,6 @@
 				8B9ABBB418AA2A990079F4A3 /* Camera Menu */,
 				8B9C7E12185F268C0038B3A8 /* CamerasViewController.h */,
 				8B9C7E13185F268C0038B3A8 /* CamerasViewController.mm */,
-				8B9C7E14185F268C0038B3A8 /* CamerasViewController.xib */,
-				A138A67618ED41720088685A /* CamerasViewController_ipad.xib */,
 				8B9C7E17185F26B70038B3A8 /* CamerasCell.h */,
 				8B9C7E18185F26B70038B3A8 /* CamerasCell.m */,
 				8B9C7E1A185F26D40038B3A8 /* CamerasCell.xib */,
@@ -3738,6 +3732,7 @@
 		29B97313FDCFA39411CA2CEA /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				CLASSPREFIX = "eBuyNow eCommerce Limited";
 				LastUpgradeCheck = 0510;
 				ORGANIZATIONNAME = "Smart Panda Ltd";
 				TargetAttributes = {
@@ -3791,7 +3786,6 @@
 				A15773A1186145DD00DEBD45 /* H264PlayerViewController_land_iPad.xib in Resources */,
 				A16995C918F6B8790075757C /* add_camera.png in Resources */,
 				8B95079918C9960D006D4945 /* detect_camera_2@2x.png in Resources */,
-				8B9C7E16185F268C0038B3A8 /* CamerasViewController.xib in Resources */,
 				8B299FFC18AF500900D36BE5 /* video_action_mic.png in Resources */,
 				8B29A04218AF500900D36BE5 /* general@2x.png in Resources */,
 				A1AC858F18912859002A8CCD /* ProximaNova-RegularItalic.otf in Resources */,
@@ -3820,7 +3814,6 @@
 				8B94BD73188A42530002E804 /* Settings.bundle in Resources */,
 				38DE1CA0168AEB6D0049E814 /* Step_06_ViewController.xib in Resources */,
 				A1ABF1B0187537D10014FCB4 /* Step_10_ViewController_ble.xib in Resources */,
-				A138A67718ED41720088685A /* CamerasViewController_ipad.xib in Resources */,
 				8BA18CB2184879A10097D1AF /* DeviceSettingsCell.xib in Resources */,
 				8B95078F18C9960D006D4945 /* setup_camera_c4@2x.png in Resources */,
 				8B9507BF18C9960D006D4945 /* setup_progress_blue@2x.png in Resources */,
@@ -5087,18 +5080,20 @@
 				);
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_CFLAGS = (
+					"-DDEBUG",
 					"-DPJ_IS_BIG_ENDIAN=0",
 					"-DPJ_IS_LITTLE_ENDIAN=1",
 					"-DPJ_BUILT_WITH_XCODE=1",
 				);
 				OTHER_CPLUSPLUSFLAGS = (
+					"-DDEBUG",
 					"-DPJ_IS_BIG_ENDIAN=0",
 					"-DPJ_IS_LITTLE_ENDIAN=1",
 					"-DPJ_BUILT_WITH_XCODE=1",
 				);
 				OTHER_LDFLAGS = "-lz";
 				PRODUCT_NAME = HubbleHome;
-				PROVISIONING_PROFILE = "6DA32712-3F96-4213-8A38-C28C09799B13";
+				PROVISIONING_PROFILE = "22745096-5AEF-4C89-A51A-97A4B9BA39C4";
 				SDKROOT = iphoneos7.0;
 				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/../ios-frameworks/pjsip/arm/include/ $(SRCROOT)/../ios-frameworks/pjsip/arm/include/pj/ $(SRCROOT)/../ios-frameworks/pjsip/arm/include/pjnath/";
 				VALID_ARCHS = "armv6 armv7";

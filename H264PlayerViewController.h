@@ -66,19 +66,13 @@
     NSMutableArray *_itemImages;
     NSMutableArray *_itemSelectedImages;
     MediaPlayer* h264Streamer;
-    
     H264PlayerListener * h264StreamerListener;
-    
 	NSTimer * alertTimer;
-    
     ScanForCamera *scanner;
-    
     SystemSoundID soundFileObject;
-    
     
     BOOL userWantToCancel;
     BOOL askForFWUpgradeOnce;
-    
     
     int currentDirUD, lastDirUD;
 	int delay_update_lastDir_count;
@@ -128,7 +122,6 @@
 //ib for Touch to talk
 @property (retain, nonatomic) IBOutlet UIView *ib_ViewTouchToTalk;
 @property (retain, nonatomic) IBOutlet UIButton *ib_buttonTouchToTalk;
-
 @property (retain, nonatomic) IBOutlet UILabel *ib_labelTouchToTalk;
 
 //ib for recording
@@ -149,11 +142,12 @@
 @property (retain, nonatomic) IBOutlet UIImageView *customIndicator;
 @property (retain, nonatomic) IBOutlet UILabel *ib_lbCameraNotAccessible;
 @property (retain, nonatomic) IBOutlet UILabel *ib_lbCameraName;
+
 @property (retain, nonatomic) IBOutlet UIButton *ib_btShowDebugInfo;
+@property (retain, nonatomic) IBOutlet UIButton *sendLogButton;
+
 @property (nonatomic) BOOL h264StreamerIsInStopped;
-
 @property (nonatomic) BOOL recordingFlag;
-
 @property (nonatomic) BOOL askForFWUpgradeOnce;
 @property (nonatomic) int currentMediaStatus;
 @property (nonatomic) BOOL iFrameOnlyFlag;
@@ -161,7 +155,6 @@
 @property (nonatomic, retain) NSTimer * probeTimer;
 @property (nonatomic, assign) id<H264PlayerVCDelegate> h264PlayerVCDelegate;
 @property (nonatomic, retain) MelodyViewController *melodyViewController;
-
 
 #if 1 //Needed or not ??
 
@@ -173,15 +166,10 @@
 
 @property (nonatomic, assign) CamChannel *selectedChannel;
 
-
-
 #endif
 
-
-- (void)scan_done:(NSArray *) _scan_results;
-
--(void) handleMessage:(int) msg ext1: (int) ext1 ext2:(int) ext2;
+- (void)scan_done:(NSArray *)scan_results;
+- (void)handleMessage:(int)msg ext1:(int)ext1 ext2:(int)ext2;
 - (void)goBackToCameraList;
-
 
 @end

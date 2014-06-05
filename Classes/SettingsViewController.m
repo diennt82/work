@@ -36,7 +36,6 @@
     BOOL valueGeneralSettings[2];
     NSInteger valueSettings[2];
     BOOL valueSwitchs[2];
-    
     BOOL valueSchedulerSwitchs[1][2];
 }
 
@@ -49,7 +48,6 @@
 @property (nonatomic, retain) BMS_JSON_Communication *jsonComm;
 @property (nonatomic, assign) NSString *apiKey;
 @property (nonatomic) NSInteger numberOfSections;
-
 @property (nonatomic) CGFloat lowerValue;
 @property (nonatomic) CGFloat upperValue;
 
@@ -60,21 +58,11 @@
 
 @implementation SettingsViewController
 
-- (id)initWithStyle:(UITableViewStyle)style
-{
-    self = [super initWithStyle:style];
-    if (self) {
-        // Custom initialization
-        self.title = @"Settings";
-    }
-    return self;
-}
-
 - (void)viewDidLoad
 {
     [super viewDidLoad];
 
-    // Uncomment the following line to preserve selection between presentations.
+    self.title = @"Settings";
     self.clearsSelectionOnViewWillAppear = NO;
     
     for (int i = 0; i < 4; i++)
@@ -195,7 +183,6 @@
         self.selectedCamChannel = nil;
     }*/
     
-    
     self.numberOfSections = 2;
     self.selectedCamChannel = nil;
     valueGeneralSettings[1] = [[NSUserDefaults standardUserDefaults] boolForKey:@"IS_FAHRENHEIT"];
@@ -204,19 +191,6 @@
     {
         [self.tableView reloadData];
     }
-}
-
-- (void)viewDidAppear:(BOOL)animated
-{
-    [super viewDidAppear:animated];
-    
-    self.navigationController.navigationBarHidden = YES;
-}
-
-- (void)didReceiveMemoryWarning
-{
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
 }
 
 #pragma mark - Method
@@ -1236,8 +1210,10 @@
     }
 }
 */
+
 - (void)dealloc {
     [_jsonComm release];
     [super dealloc];
 }
+
 @end

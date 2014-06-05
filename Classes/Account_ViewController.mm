@@ -36,7 +36,7 @@
     return self;
 }
 
--(void) dealloc
+- (void)dealloc
 {
     [_tableViewCellChangePassword release];
     [super dealloc];
@@ -54,14 +54,7 @@
     lblVersion.text = [NSString stringWithFormat:@"Hubble Home v%@", [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"]];
 }
 
-- (void)viewDidUnload
-{
-    [super viewDidUnload];
-    // Release any retained subviews of the main view.
-    // e.g. self.myOutlet = nil;
-}
-
--(void)removeSubViewOfNavigationController {
+- (void)removeSubViewOfNavigationController {
     for (UIView *subView in self.navigationController.view.subviews)
     {
         if ([subView isKindOfClass:[UIToolbar class]])
@@ -71,16 +64,14 @@
     }
 }
 
--(void)viewWillAppear:(BOOL)animated
+- (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
     NSLog(@"AccountVC -viewWillAppear --");
-    
-    self.navigationController.navigationBarHidden = YES;
     [self loadUserData];
 }
 
--(void)loadUserData
+- (void)loadUserData
 {
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
 	
@@ -96,26 +87,23 @@
     [self userLogout];
 }
 
--(IBAction) userLogout
+- (IBAction)userLogout
 {
     NSLog(@"LOG OUT>>>>");
-    
-    MenuViewController *tabBarController = (MenuViewController *)self.parentVC;
     
     accountInfo.hidden = YES;
     progress.hidden = NO;
     [CameraAlert clearAllAlerts];
     
-    [tabBarController dismissViewControllerAnimated:NO completion:^
-     {
-         [tabBarController.menuDelegate sendStatus:LOGIN_FAILED_OR_LOGOUT];
-     }];
+    MenuViewController *menuViewController = (MenuViewController *)self.parentVC;
+    [menuViewController dismissViewControllerAnimated:NO completion:^{
+        [menuViewController.menuDelegate sendStatus:LOGIN_FAILED_OR_LOGOUT];
+    }];
 }
 
 - (void)sendsAppLog
 {
-    if ([MFMailComposeViewController canSendMail])
-    {
+    if ([MFMailComposeViewController canSendMail]) {
         MFMailComposeViewController *picker = [[MFMailComposeViewController alloc] init];
         picker.mailComposeDelegate = self;
         
@@ -126,29 +114,22 @@
         NSData *dataLog = [NSData dataWithContentsOfFile:logAppPath];
         NSData *dataLog0 = nil;
         
-        if ([[NSFileManager defaultManager] fileExistsAtPath:logPath0])
-        {
+        if ([[NSFileManager defaultManager] fileExistsAtPath:logPath0]) {
             dataLog0 = [NSData dataWithContentsOfFile:logPath0];
         }
         
         NSInteger length = dataLog.length;
-        
-        if (dataLog0)
-        {
+        if (dataLog0) {
             length += dataLog0.length;
         }
         
         NSMutableData *dataZip = [NSMutableData dataWithLength:length];
-        
-        if (dataLog0)
-        {
+        if (dataLog0) {
             [dataZip appendData:dataLog0];
         }
         
         [dataZip appendData:dataLog];
-        
         dataZip = [NSData gzipData:dataZip];
-        
         [picker addAttachmentData:[dataZip AES128EncryptWithKey:CES128_ENCRYPTION_PASSWORD] mimeType:@"text/plain" fileName:@"application.log"];
         
         //[picker addAttachmentData:dataZip  mimeType:@"text/plain" fileName:@"application.log"];
@@ -157,9 +138,6 @@
         [picker setSubject:@"iOS app log"];
         NSArray *toRecipents = [NSArray arrayWithObject:@"ios.crashreport@cvisionhk.com"];
         [picker setToRecipients:toRecipents];
-        
-        MenuViewController *tabBarController = (MenuViewController *)self.parentVC;
-        tabBarController.navigationController.navigationBarHidden = YES;
         
         // Show email view
         [self presentViewController:picker animated:YES completion:NULL];
@@ -182,44 +160,34 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    if (section == 0)
-    {
+    if (section == 0) {
         return 2;
     }
-    else if(section == 1)
-    {
+    else if(section == 1) {
         return 2;
     }
-    else if(section == 2)
-    {
-        if (CUE_RELEASE_FLAG)
-        {
+    else if(section == 2) {
+        if (CUE_RELEASE_FLAG) {
             return 1;
-            
         }
-        else
-        {
+        else {
             return 2;
         }
     }
-    else
-    {
+    else {
         return 1;
     }
 }
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
-    if (section == 0)
-    {
+    if (section == 0) {
         return @"Profile";
     }
-    else if(section == 1)
-    {
+    else if(section == 1) {
         return @"Plan";
     }
-    else
-    {
+    else {
         return @"Report";
     }
 }
@@ -231,9 +199,7 @@
 
 - (BOOL)tableView:(UITableView *)tableView shouldHighlightRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if ((indexPath.section == 0 && (indexPath.row == 2 || indexPath.row == 1)) ||
-        indexPath.section == 2)
-    {
+    if ((indexPath.section == 0 && (indexPath.row == 2 || indexPath.row == 1)) || indexPath.section == 2) {
         return YES;
     }
     
@@ -242,19 +208,15 @@
 
 - (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    for (id obj in cell.contentView.subviews)
-    {
-        if ([obj isKindOfClass:[UIView class]] &&
-            ((UIView *)obj).tag == 905)
-        {
+    for (id obj in cell.contentView.subviews) {
+        if ([obj isKindOfClass:[UIView class]] && ((UIView *)obj).tag == 905) {
             [obj removeFromSuperview];
             break;
         }
     }
     
     UIView *lineView = [[[UIView alloc] initWithFrame:CGRectMake(0, cell.contentView.frame.size.height - 0.5f, _screenWidth, 0.5f)] autorelease];
-    if (indexPath.row == 2 || indexPath.section == 2)
-    {
+    if (indexPath.row == 2 || indexPath.section == 2) {
         cell.textLabel.font = [UIFont fontWithName:@"HelveticaNeue-Thin" size:17];
         cell.textLabel.textColor = [UIColor colorWithRed:(128/255.f) green:(128/255.f) blue:(128/255.f) alpha:1];
     }
@@ -270,60 +232,47 @@
 #define APPVERSION_INDEX    2
 
 
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    
-    if (indexPath.section == 0)
-    {
-        if (indexPath.row == USEREMAIL_INDEX)
-        {
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if (indexPath.section == 0) {
+        if (indexPath.row == USEREMAIL_INDEX) {
             return userEmailCell;
         }
         
-        if (indexPath.row == CHANGE_PASS_INDEX)
-        {
+        if (indexPath.row == CHANGE_PASS_INDEX) {
             return _tableViewCellChangePassword;
         }
-        else
-        {
+        else {
             static NSString *CellIdentifier = @"Cell";
             UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
             if (cell == nil) {
                 cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
             }
             
-            // Configure the cell...
-            
             cell.textLabel.text = @"Logout";
-            
             return cell;
         }
     }
-    else if(indexPath.section == 1)
-    {
+    else if(indexPath.section == 1) {
         static NSString *CellIdentifier = @"CameraSettingsCell";
         CameraSettingsCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
         
         NSArray *objects = [[NSBundle mainBundle] loadNibNamed:@"CameraSettingsCell" owner:nil options:nil];
-        
-        for (id curObj in objects)
-        {
-            if([curObj isKindOfClass:[UITableViewCell class]])
-            {
+        for (id curObj in objects) {
+            if([curObj isKindOfClass:[UITableViewCell class]]) {
                 cell = (CameraSettingsCell *)curObj;
                 break;
             }
         }
         
-        if (indexPath.row == 0)
-        {
+        if (indexPath.row == 0) {
             cell.nameLabel.text = @"Current Plan";
             cell.valueLabel.text = @"Free";
             cell.valueLabel.hidden = NO;
             
             return cell;
         }
-        else
-        {
+        else {
             //cell.nameLabel.text = @"Upgrade Plan";
             //cell.valueLabel.text = nil;
             //cell.valueLabel.hidden = YES;
@@ -335,18 +284,14 @@
             return cell;
         }
     }
-    else
-    {
+    else {
         static NSString *CellIdentifier = @"Cell";
         UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
         if (cell == nil) {
             cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
         }
         
-        // Configure the cell...
-        
         cell.textLabel.text = @"Send app log";
-        
         return cell;
     }
 }
@@ -355,22 +300,18 @@
 {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
-    if (indexPath.section == 0)
-    {
-        if (indexPath.row == CHANGE_PASS_INDEX)
-        {
+    if (indexPath.section == 0) {
+        if (indexPath.row == CHANGE_PASS_INDEX) {
             // change password
             [self showDialogChangePassword];
             
         }
-        else if (indexPath.row == 2)
-        {
+        else if (indexPath.row == 2) {
             //log out
             [self userLogout];
         }
     }
-    else if(indexPath.section == 2)
-    {
+    else if(indexPath.section == 2) {
         [self sendsAppLog];
     }
 }
@@ -394,19 +335,14 @@
 
 - (void )alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex
 {
-    if (buttonIndex == 1)
-    {
+    if (buttonIndex == 1) {
         NSString *password = [alertView textFieldAtIndex:0].text;
         NSString *passwordConfrm = [alertView textFieldAtIndex:1].text;
         
-        if ((password       && password.length > 0)       &&
-            (passwordConfrm && passwordConfrm.length > 0) &&
-            [password isEqualToString:passwordConfrm])
-        {
+        if (password.length > 0 && passwordConfrm.length > 0 && [password isEqualToString:passwordConfrm]) {
             [self doChangePassword:password];
         }
-        else
-        {
+        else {
             NSDictionary *dictError = [NSDictionary dictionaryWithObjectsAndKeys:@"Validation failed: Password is not match or empty", @"message", nil];
             [self changePasswordFialedWithError:dictError];
         }
@@ -482,6 +418,5 @@
     // Close the Mail Interface
     [self dismissViewControllerAnimated:YES completion:NULL];
 }
-
 
 @end

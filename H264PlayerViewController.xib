@@ -29,6 +29,7 @@
                 <outlet property="imgViewDrectionPad" destination="78" id="79"/>
                 <outlet property="menuBackgroundView" destination="FjV-oH-Nmt" id="BYR-CN-g85"/>
                 <outlet property="scrollView" destination="q8e-SH-sqy" id="DnR-XY-J8P"/>
+                <outlet property="sendLogButton" destination="CAA-Jc-BeY" id="6Z2-NG-dAW"/>
                 <outlet property="view" destination="1" id="3"/>
                 <outlet property="viewDebugInfo" destination="4Wi-b3-XAk" id="8dE-Ru-wNI"/>
             </connections>

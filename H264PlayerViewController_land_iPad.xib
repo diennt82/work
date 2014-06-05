@@ -30,6 +30,7 @@
                 <outlet property="imgViewDrectionPad" destination="zCV-Q4-o8H" id="dNg-f3-8tI"/>
                 <outlet property="menuBackgroundView" destination="YG0-em-BhL" id="9Ry-L6-2P5"/>
                 <outlet property="scrollView" destination="8e4-vn-esd" id="hep-FH-h8A"/>
+                <outlet property="sendLogButton" destination="h68-lY-yqv" id="PfB-BU-3LW"/>
                 <outlet property="view" destination="xau-3d-KYv" id="er6-iW-ZJ5"/>
                 <outlet property="viewDebugInfo" destination="q5L-bd-0P8" id="T6R-23-wHV"/>
             </connections>
