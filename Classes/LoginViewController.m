@@ -96,7 +96,7 @@
     [self.imgViewLoading startAnimating];
     
     
-    
+#if !TARGET_IPHONE_SIMULATOR
     if ([self isConnectingToCameraNetwork])
     {
         NSString * msg = NSLocalizedStringWithDefaultValue(@"phone_is_connected_to_camera" ,nil, [NSBundle mainBundle],
@@ -118,6 +118,7 @@
         
     }
     else
+#endif
     {
     
         //load user/pass
