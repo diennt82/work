@@ -165,6 +165,18 @@
 
 - (void)goBackToHubbleMenu: (id)sender
 {
+    NSLog(@"%s retain:%d", __FUNCTION__, self.retainCount);
+    
+    if (_tabBarController)
+    {
+        _tabBarController.delegate = nil;
+    }
+    
+    if (_timelineVC)
+    {
+        _timelineVC.timelineVCDelegate = nil;
+    }
+    
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     [userDefaults removeObjectForKey:CAM_IN_VEW];
     [userDefaults synchronize];
@@ -184,6 +196,7 @@
 
 - (void)dealloc
 {
+    NSLog(@"%s retain:%d", __FUNCTION__, self.retainCount);
     [_timelineVC release];
     [_tabBarController release];
     [super dealloc];

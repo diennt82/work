@@ -122,7 +122,9 @@
 - (void)playbackEnteredBackground
 {
     NSLog(@"%s ", __FUNCTION__);
-    
+#if 1
+    [self stopStream:nil];
+#else
     if (_playbackStreamer != NULL)
     {
         if (self.mediaCurrentState == MEDIA_PLAYER_STARTED ||
@@ -139,6 +141,7 @@
             _playbackStreamer->sendInterrupt();
         }
     }
+#endif
     
     if (self.list_refresher != nil)
     {
@@ -217,10 +220,24 @@
 
 -(void) startStream
 {
+#if 0
     _playbackStreamer = new MediaPlayer(true, false);
     self.shouldRestartProcess = TRUE;
     _playbackStreamer->setListener(listener);
     [self performSelectorInBackground:@selector(startStream_bg) withObject:nil];
+#else
+    bool shouldWait = MediaPlayer::Instance()->shouldWait;
+    NSLog(@"%s shouldWait: %d", __FUNCTION__, shouldWait);
+    
+    while (shouldWait)
+    {
+        NSLog(@"loop");
+    }
+    
+    MediaPlayer::Instance()->setListener(listener);
+    MediaPlayer::Instance()->setPlaybackAndSharedCam(true, false);
+    [self performSelectorInBackground:@selector(startStream_bg) withObject:nil];
+#endif
 }
 
 - (void)startStream_bg
@@ -230,6 +247,7 @@
     //NSString * url = @"http://cvision-office.no-ip.info/release/spider2_hd.flv";
     //NSString * url = [[NSBundle mainBundle] pathForResource:@"spider2_hd" ofType:@"flv"];
     //NSString *url = @"http://hubble-resources.s3.amazonaws.com/devices/01006644334C5A03AEPGARBUYQ/clips/44334C5A03AE_04_20140521142542000_00001_last.flv?AWSAccessKeyId=AKIAJNYQ3ONBL7OLSZDA&Expires=1400744717&Signature=nS2CQ%2F9%2BcjPPmbqs43ruJlocPbE%3D";
+#if 0
     status = _playbackStreamer->setDataSource([url UTF8String]);
     printf("setDataSource return: %d\n", status);
     
@@ -287,6 +305,63 @@
                        ext1:0
                        ext2:0];
     }
+#else
+    status = MediaPlayer::Instance()->setDataSource([url UTF8String]);
+    
+    NSLog(@"%s status: %d", __FUNCTION__, status);
+    
+    if (status != NO_ERROR) // NOT OK
+    {
+        NSLog(@"setDataSource error: %d\n", status);
+        
+        [self handleMessage:MEDIA_ERROR_SERVER_DIED
+                       ext1:0
+                       ext2:0];
+        return;
+    }
+    
+    MediaPlayer::Instance()->setVideoSurface(self.imageVideo);
+    
+    NSLog(@"Prepare the player");
+    status =  MediaPlayer::Instance()->prepare();
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self.imageVideo setAlpha:1];
+        [self.activityIndicator setHidden:YES];
+        self.view.userInteractionEnabled = YES;
+        self.ib_myOverlay.hidden = NO;
+        [self.ib_sliderPlayBack setMinimumTrackTintColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"video_progress_green"]]];
+        [self watcher];
+    });
+    
+    NSLog(@"prepare return: %d\n", status);
+    
+    if (status != NO_ERROR) // NOT OK
+    {
+        NSLog(@"prepare() error: %d\n", status);
+        exit(1); // Dangerous
+    }
+    
+    status =  MediaPlayer::Instance()->start();
+    
+    NSLog(@"start() return: %d\n", status);
+    
+    if (status != NO_ERROR) // NOT OK
+    {
+        NSLog(@"start() error: %d\n", status);
+        [self handleMessage:MEDIA_ERROR_SERVER_DIED
+                       ext1:0
+                       ext2:0];
+        return;
+    }
+    
+    if (status == NO_ERROR)
+    {
+        [self handleMessage:MEDIA_PLAYER_STARTED
+                       ext1:0
+                       ext2:0];
+    }
+#endif
 }
 
 -(void) handleMessage:(int) msg ext1: (int) ext1 ext2:(int) ext2
@@ -326,7 +401,20 @@
 - (IBAction)stopStream:(id) sender
 {
     NSLog(@"Stop stream start ");
-    
+#if 1
+    if(MediaPlayer::Instance()->isPlaying())
+    {
+        MediaPlayer::Instance()->suspend();
+        MediaPlayer::Instance()->stop();
+        MediaPlayer::Instance()->setListener(nil);
+    }
+    else // set Data source failed!
+    {
+        MediaPlayer::Instance()->suspend();
+        MediaPlayer::Instance()->stop();
+        MediaPlayer::Instance()->setListener(nil);
+    }
+#else
     if (_playbackStreamer != NULL)
     {
         NSLog(@"Stop stream _playbackStreamer != NULL");
@@ -348,7 +436,7 @@
             _playbackStreamer = NULL;
         }
     }
-    
+#endif
     NSLog(@"Stop stream end");
 }
 
@@ -404,10 +492,7 @@
     self.userWantToBack = TRUE;
     self.ib_playPlayBack.enabled = NO;
     
-    if (_playbackStreamer != NULL)
-    {
-        [self stopStream:nil];
-    }
+    [self stopStream:nil];
     
     if (self.list_refresher != nil)
     {
@@ -663,14 +748,14 @@
 -(void)watcher
 {
     //NSLog(@"%s", __FUNCTION__);
-    if (_playbackStreamer == NULL || _isPause || _userWantToBack)
+    if (MediaPlayer::Instance() == NULL || _isPause || _userWantToBack)
     {
         return;
     }
     
-    self.duration = _playbackStreamer->getDuration();
-    self.timeStarting = _playbackStreamer->getTimeStarting();
-    double timeCurrent = _playbackStreamer->getCurrentTime() - _timeStarting;
+    self.duration = MediaPlayer::Instance()->getDuration();
+    self.timeStarting = MediaPlayer::Instance()->getTimeStarting();
+    double timeCurrent = MediaPlayer::Instance()->getCurrentTime() - _timeStarting;
     
 #if 1
     NSLog(@"timeCurrent: %f, _timeStarting: %f", timeCurrent, _timeStarting);
