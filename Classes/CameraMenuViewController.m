@@ -217,7 +217,7 @@
             else
             {
                 NSString * msg = NSLocalizedStringWithDefaultValue(@"Confirm_remove_cam_remote",nil, [NSBundle mainBundle],
-                                                                   @"Please confirm that you want to remove this camera from your account. The camera is not accessible right now, it will not be switched to setup mode. Please refer to FAQ to reset it manually.", nil);
+                                                                   @"You are about to remove the paired camera from the app. You will have to pair it back again in order to use it in future. Continue?", nil);
                 
                 
                 UIAlertView *alert = [[UIAlertView alloc]
