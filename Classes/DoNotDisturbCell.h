@@ -10,6 +10,9 @@
 #import "UICircularSlider.h"
 
 @interface DoNotDisturbCell : UITableViewCell
+{
+    BOOL _isEnableDoNotDisturb;
+}
 
 @property (retain, nonatomic) IBOutlet UIButton *ib_enableDoNotDisturb;
 @property (unsafe_unretained, nonatomic) IBOutlet UICircularSlider *ib_circleSliderCustom;
