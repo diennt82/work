@@ -9,8 +9,7 @@
 #import <UIKit/UIKit.h>
 
 @interface EarlierNavigationController : UINavigationController
-{
-    BOOL _isEarlierView;
-}
-@property (nonatomic, assign)BOOL isEarlierView;
+
+@property (nonatomic, assign) BOOL isEarlierView;
+
 @end
