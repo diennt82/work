@@ -396,7 +396,7 @@
                         self.hasUpdate = YES;
                         
                         
-                        NSLog(@"has inserted new record %@ : %@",eventInfo.time_stamp , eventInfo.alert_name);
+                        //NSLog(@"has inserted new record %@ : %@",eventInfo.time_stamp , eventInfo.alert_name);
                     }
                     
                     [eventInfo release];

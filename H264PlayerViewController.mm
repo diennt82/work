@@ -1395,13 +1395,13 @@ double _ticks = 0;
     
     if (_mediaProcessStatus == 0)
     {
-        //[self goBack];
+        
     }
     else if(_mediaProcessStatus == 1)
     {
         MediaPlayer::Instance()->sendInterrupt();
         [self stopStream];
-        //[self goBack];
+        
     }
     else if (_mediaProcessStatus == 2)
     {
@@ -1411,7 +1411,7 @@ double _ticks = 0;
     {
         MediaPlayer::Instance()->sendInterrupt();
         [self stopStream];
-        //[self goBack];
+
     }
 #else
     if (self.currentMediaStatus == MEDIA_INFO_HAS_FIRST_IMAGE ||
@@ -2056,8 +2056,8 @@ double _ticks = 0;
     }
     while (false);
 #endif
-    //if (!userWantToCancel)
-    {
+    
+    
         if (status == NO_ERROR)
         {
             [self handleMessage:MEDIA_PLAYER_STARTED
@@ -2071,11 +2071,8 @@ double _ticks = 0;
                            ext1:0
                            ext2:0];
         }
-    }
-//    else
-//    {
-//        NSLog(@"%s Already backing out", __FUNCTION__);
-//    }
+    
+
 }
 
 - (void)prepareGoBackToCameraList:(id)sender
@@ -2217,6 +2214,10 @@ double _ticks = 0;
 
 - (void)goBack
 {
+    
+    // Release the instance here - since we are going to camera list
+    MediaPlayer::release();
+    
     self.activityStopStreamingProgress.hidden = NO;
     [self.view bringSubviewToFront:_activityStopStreamingProgress];
     
@@ -2423,18 +2424,21 @@ double _ticks = 0;
             self.timerRemoteStreamKeepAlive = nil;
         }
         
-        //if (MediaPlayer::Instance() != NULL)
-        {
-            MediaPlayer::Instance()->setListener(NULL);
-            _isProcessRecording = FALSE;
-            [self stopRecordingVideo];
-            
-            MediaPlayer::Instance()->suspend();
-            MediaPlayer::Instance()->stop();
-            
-            //delete h264Streamer ;
-            //h264Streamer = NULL;
-        }
+        
+        MediaPlayer::Instance()->setListener(NULL);
+       
+        delete h264StreamerListener;
+        h264StreamerListener = NULL;
+        
+        
+        _isProcessRecording = FALSE;
+        [self stopRecordingVideo];
+        
+        MediaPlayer::Instance()->suspend();
+        MediaPlayer::Instance()->stop();
+        
+        
+        
         
         
         [self cleanUpDirectionTimers];
@@ -5907,16 +5911,10 @@ double _ticks = 0;
             }
             
             /*
-             start recording
+             start recording :: TODO
              */
             
-            if (h264Streamer != nil)
-            {
-                NSString * url  = [Util getRecordFileName];
-                url = [url stringByReplacingOccurrencesOfString:@".avi" withString:@".flv"];
-                
-                h264Streamer->startRecord([url UTF8String]);
-            }
+           
             
         }
         else
@@ -5970,13 +5968,7 @@ double _ticks = 0;
     [self.ib_labelRecordVideo setText:@"Record Video"];
     _syncPortraitAndLandscape = NO;
     
-    //processing for stopping record
-    /*save if have here.
-     */
-    if (h264Streamer != nil)
-    {
-        h264Streamer->stopRecord();
-    }
+    // DUMMY for now..
 }
 
 - (IBAction)changeAction:(id)sender
