@@ -108,7 +108,7 @@ static TimelineDatabase *sharedInstance = nil;
                 retVal = -1;
             }
             
-            sqlite3_reset(statement);
+            sqlite3_finalize(statement);
         }
         
     }
@@ -170,7 +170,7 @@ static TimelineDatabase *sharedInstance = nil;
                 
                 eventInfo.alert      = [[[[NSString alloc] initWithUTF8String:event_alert] autorelease] integerValue];
                 
-                NSString * event_data_str = [[NSString alloc] initWithUTF8String:event_data];
+                NSString * event_data_str = [[[NSString alloc] initWithUTF8String:event_data] autorelease];
                 
                 NSData * event_data_d = [NSData dataFromBase64String:event_data_str];
                 
@@ -246,7 +246,7 @@ static TimelineDatabase *sharedInstance = nil;
                 NSLog(@"remove events to database OK");
             }
             
-            sqlite3_reset(statement);
+            sqlite3_finalize(statement);
         }
     }
     
@@ -280,7 +280,7 @@ static TimelineDatabase *sharedInstance = nil;
                 NSLog(@"remove events to database OK");
             }
             
-            sqlite3_reset(statement);
+            sqlite3_finalize(statement);
         }
         
     }

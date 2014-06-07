@@ -142,6 +142,9 @@
 @property (nonatomic, retain) NSTimer *timerBufferingTimeout;
 @property (nonatomic, retain) UIAlertView *alertViewTimoutRemote;
 @property (nonatomic, retain) NSDate *timeStartingStageTwo;
+@property (nonatomic) NSTimeInterval timeStageTwoTotal;
+@property (nonatomic, retain) NSDate *timeStartPlayerView;
+@property (nonatomic) NSInteger mediaProcessStatus;
 
 //property for Touch to Talk
 @property (nonatomic) BOOL walkieTalkieEnabled;
@@ -257,6 +260,10 @@ double _ticks = 0;
     self.messageStreamingState = @"Camera is not accessible";
     self.timeStartingStageTwo = 0;
     
+    
+    self.customIndicator.image = [UIImage imageNamed:@"loader_a"];
+    
+    NSLog(@"camera model is :%@", self.cameraModel);
     [self becomeActive];
 }
 
@@ -330,6 +337,10 @@ double _ticks = 0;
         [userDefaults setObject:_selectedChannel.profile.mac_address forKey:CAM_IN_VEW];
         [userDefaults synchronize];
     }
+    
+    
+
+    
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -341,6 +352,7 @@ double _ticks = 0;
 }
 
 - (void)viewDidUnload {
+    NSLog(@"%s", __FUNCTION__);
     [self setImageViewVideo:nil];
     //    [self setTopToolbar:nil];
     [self setBackBarBtnItem:nil];
@@ -968,6 +980,15 @@ double _ticks = 0;
         {
             _isShowCustomIndicator = NO;
             [self displayCustomIndicator];
+            
+            [[NSUserDefaults standardUserDefaults] setBool:TRUE forKey:@"TEST_MEDIA"];
+            [[NSUserDefaults standardUserDefaults] synchronize];
+            
+            self.timeStageTwoTotal = [[NSDate date] timeIntervalSinceDate:_timeStartingStageTwo];
+            NSTimeInterval diff = [[NSDate date] timeIntervalSinceDate:_timeStartPlayerView];
+            
+            NSLog(@"%s total time: %f, stage 2 takes %f seconds", __FUNCTION__, diff, _timeStageTwoTotal);
+            
             self.timeStartingStageTwo = 0;
             
             NSLog(@"[MEDIA_PLAYER_HAS_FIRST_IMAGE]");
@@ -1377,18 +1398,41 @@ double _ticks = 0;
     {
         [_audioOutStreamRemote disconnectFromAudioSocketRemote];
     }
+#if 1
+    NSLog(@"%s _mediaProcessStatus: %d", __FUNCTION__, _mediaProcessStatus);
+    
+    if (_mediaProcessStatus == 0)
+    {
+        
+    }
+    else if(_mediaProcessStatus == 1)
+    {
+        MediaPlayer::Instance()->sendInterrupt();
+        [self stopStream];
+        
+    }
+    else if (_mediaProcessStatus == 2)
+    {
+        MediaPlayer::Instance()->sendInterrupt();
+    }
+    else
+    {
+        MediaPlayer::Instance()->sendInterrupt();
+        [self stopStream];
 
+    }
+#else
     if (self.currentMediaStatus == MEDIA_INFO_HAS_FIRST_IMAGE ||
         self.currentMediaStatus == MEDIA_PLAYER_STARTED ||
-        (self.currentMediaStatus == 0 && h264Streamer == NULL)) // Media player haven't start yet.
+        (self.currentMediaStatus == 0)) // Media player haven't start yet.
     {
         [self stopStream];
     }
-    else if (h264Streamer != NULL)
+    else if (MediaPlayer::Instance() != NULL)
     {
-        h264Streamer->sendInterrupt(); // Assuming h264Streamer stop itself.
+        MediaPlayer::Instance()->sendInterrupt(); // Assuming h264Streamer stop itself.
     }
-    
+#endif
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
@@ -1684,30 +1728,34 @@ double _ticks = 0;
 - (void)createMonvementControlTimer
 {
     [self cleanUpDirectionTimers];
-    
-    NSLog(@"H264VC - createMonvementControlTimer");
-    
-    //Direction stuf
-    /* Kick off the two timer for direction sensing */
-    currentDirUD = DIRECTION_V_NON;
-    lastDirUD    = DIRECTION_V_NON;
-    delay_update_lastDir_count = 1;
-    
-    send_UD_dir_req_timer = [NSTimer scheduledTimerWithTimeInterval:0.3
-                                                             target:self
-                                                           selector:@selector(v_directional_change_callback:)
-                                                           userInfo:nil
-                                                            repeats:YES];
-    
-    currentDirLR = DIRECTION_H_NON;
-    lastDirLR    = DIRECTION_H_NON;
-    delay_update_lastDirLR_count = 1;
-    
-    send_LR_dir_req_timer = [NSTimer scheduledTimerWithTimeInterval:0.3
-                                                             target:self
-                                                           selector:@selector(h_directional_change_callback:)
-                                                           userInfo:nil
-                                                            repeats:YES];
+    if ([_cameraModel isEqualToString:CP_MODEL_BLE]) //MBP83
+    {
+        
+        
+        NSLog(@"H264VC - createMonvementControlTimer");
+        
+        //Direction stuf
+        /* Kick off the two timer for direction sensing */
+        currentDirUD = DIRECTION_V_NON;
+        lastDirUD    = DIRECTION_V_NON;
+        delay_update_lastDir_count = 1;
+        
+        send_UD_dir_req_timer = [NSTimer scheduledTimerWithTimeInterval:0.3
+                                                                 target:self
+                                                               selector:@selector(v_directional_change_callback:)
+                                                               userInfo:nil
+                                                                repeats:YES];
+        
+        currentDirLR = DIRECTION_H_NON;
+        lastDirLR    = DIRECTION_H_NON;
+        delay_update_lastDirLR_count = 1;
+        
+        send_LR_dir_req_timer = [NSTimer scheduledTimerWithTimeInterval:0.3
+                                                                 target:self
+                                                               selector:@selector(h_directional_change_callback:)
+                                                               userInfo:nil
+                                                                repeats:YES];
+    }
 }
 
 #pragma mark - Setup camera
@@ -1715,6 +1763,7 @@ double _ticks = 0;
 - (void)setupCamera
 {
     self.isInLocal = self.selectedChannel.profile.isInLocal;
+    self.mediaProcessStatus = 0;
     
     [self createMonvementControlTimer];
     
@@ -1859,7 +1908,15 @@ double _ticks = 0;
         NSLog(@"H264VC - startStream --> break to Playback");
         return;
     }
-    
+    self.mediaProcessStatus = 1;
+    NSLog(@"%s mediaProcessStatus: %d", __FUNCTION__, _mediaProcessStatus);
+#if 1
+    h264StreamerListener = new H264PlayerListener(self);
+    MediaPlayer::Instance()->setListener(h264StreamerListener);
+    MediaPlayer::Instance()->setPlaybackAndSharedCam(false, [_cameraModel isEqualToString:CP_MODEL_SHARED_CAM]);
+    //self.mediaProcessStatus = 2;
+    [self performSelectorInBackground:@selector(startStream_bg) withObject:nil];
+#else
     while (h264Streamer != NULL)
     {
         //NSLog(@"%s userWantToCancel: %d, _currentMediaStatus: %d", __FUNCTION__, userWantToCancel, _currentMediaStatus);
@@ -1879,6 +1936,7 @@ double _ticks = 0;
     h264Streamer->setListener(h264StreamerListener);
     
     [self performSelectorInBackground:@selector(startStream_bg) withObject:nil];
+#endif
 }
 
 - (void)startStream_bg
@@ -1915,7 +1973,57 @@ double _ticks = 0;
     
     NSString * url = self.selectedChannel.stream_url;
     NSLog(@"%s url: %@, h264Streamer: %p", __FUNCTION__, url, h264Streamer);
+    self.mediaProcessStatus = 2;
+     NSLog(@"%s mediaProcessStatus: %d", __FUNCTION__, _mediaProcessStatus);
+#if 1
+    do
+    {
+        if (url == nil || [url isEqualToString:@""])
+        {
+            break;
+        }
+        
+        status = MediaPlayer::Instance()->setDataSource([url UTF8String]);
+        
+        if (status != NO_ERROR) // NOT OK
+        {
+            NSLog(@"setDataSource  failed");
+            
+            if (self.selectedChannel.profile.isInLocal)
+            {
+                self.messageStreamingState = @"Camera is not accessible";
+            }
+
+            break;
+        }
+        //self.mediaProcessStatus = 3;
+        
+        MediaPlayer::Instance()->setVideoSurface(_imageViewStreamer);
+        
+        //self.mediaProcessStatus = 4;
+        status = MediaPlayer::Instance()->prepare();
+        
+        if (status != NO_ERROR) // NOT OK
+        {
+            break;
+        }
+        
+        // Play anyhow
+        //self.mediaProcessStatus = 5;
+        status = MediaPlayer::Instance()->start();
+        
+        
+        if (status != NO_ERROR) // NOT OK
+        {
+            break;
+        }
+    }
+    while (false);
     
+     NSLog(@"%s mediaProcessStatus: %d", __FUNCTION__, _mediaProcessStatus);
+    self.mediaProcessStatus = 3;
+    
+#else
     do
     {
         if (url == nil || h264Streamer == NULL)
@@ -1959,20 +2067,24 @@ double _ticks = 0;
         }
     }
     while (false);
+#endif
     
-    if (status == NO_ERROR)
-    {
-        [self handleMessage:MEDIA_PLAYER_STARTED
-                       ext1:0
-                       ext2:0];
-    }
-    else
-    {
-        //Consider it's down and perform necessary action ..
-        [self handleMessage:MEDIA_ERROR_SERVER_DIED
-                       ext1:0
-                       ext2:0];
-    }
+    
+        if (status == NO_ERROR)
+        {
+            [self handleMessage:MEDIA_PLAYER_STARTED
+                           ext1:0
+                           ext2:0];
+        }
+        else
+        {
+            //Consider it's down and perform necessary action ..
+            [self handleMessage:MEDIA_ERROR_SERVER_DIED
+                           ext1:0
+                           ext2:0];
+        }
+    
+
 }
 
 - (void)prepareGoBackToCameraList:(id)sender
@@ -2002,8 +2114,48 @@ double _ticks = 0;
         [self performSelectorInBackground:@selector(closeRemoteTalkback) withObject:nil];
         [_audioOutStreamRemote disconnectFromAudioSocketRemote];
     }
+#if 1
     
-    if (self.currentMediaStatus == 0 && h264Streamer == NULL) // Media player haven't start yet.
+    NSLog(@"%s _mediaProcessStatus: %d", __FUNCTION__, _mediaProcessStatus);
+    
+    if (_earlierVC)
+    {
+        [_earlierVC release];
+    }
+    
+    if (_timelineVC)
+    {
+        _timelineVC.timelineVCDelegate = nil;
+    }
+    
+    if (_jsonCommBlocked)
+    {
+        [_jsonCommBlocked release];
+    }
+    
+    if (_mediaProcessStatus == 0)
+    {
+        [self goBack];
+    }
+    else if(_mediaProcessStatus == 1)
+    {
+        MediaPlayer::Instance()->sendInterrupt();
+        [self stopStream];
+        [self goBack];
+    }
+    else if (_mediaProcessStatus == 2)
+    {
+        MediaPlayer::Instance()->sendInterrupt();
+    }
+    else
+    {
+        //MediaPlayer::Instance()->sendInterrupt();
+        [self stopStream];
+        [self goBack];
+    }
+    
+#else
+    if (self.currentMediaStatus == 0 && MediaPlayer::Instance() == NULL) // Media player haven't start yet.
     {
         [self performSelector:@selector(goBackToCameraList)
                    withObject:nil
@@ -2011,16 +2163,18 @@ double _ticks = 0;
     }
     else if( self.currentMediaStatus == MEDIA_INFO_HAS_FIRST_IMAGE ||
             self.currentMediaStatus == MEDIA_PLAYER_STARTED       ||
-            ( h264Streamer != NULL))
+            ( MediaPlayer::Instance() != NULL))
     {
         NSLog(@"H264VC- prepareGoBackToCameraList - just sendInterrupt");
         
-        h264Streamer->sendInterrupt();
+        MediaPlayer::Instance()->sendInterrupt();
+        [self goBackToCameraList];
     }
     else
     {
         [self goBackToCameraList];
     }
+#endif
 }
 
 - (void)goBackToCameraList
@@ -2031,7 +2185,7 @@ double _ticks = 0;
         [_timerRemoteStreamTimeOut invalidate];
         _timerRemoteStreamTimeOut = nil;
     }
-    _isShowCustomIndicator = NO;
+    //_isShowCustomIndicator = NO;
     //no need call stopStream in offline mode
     [self stopStream];
     
@@ -2070,37 +2224,66 @@ double _ticks = 0;
     [self.navigationController popToRootViewControllerAnimated:YES];
 }
 
--(void) cleanUpDirectionTimers
+- (void)goBack
 {
     
-    /* Kick off the two timer for direction sensing */
-    currentDirUD = DIRECTION_V_NON;
-    lastDirUD    = DIRECTION_V_NON;
-    delay_update_lastDir_count = 1;
+    // Release the instance here - since we are going to camera list
+    MediaPlayer::release();
     
-    if ( send_UD_dir_req_timer !=nil)
+    self.activityStopStreamingProgress.hidden = NO;
+    [self.view bringSubviewToFront:_activityStopStreamingProgress];
+    
+    
+    NSLog(@"self.currentMediaStatus: %d", self.currentMediaStatus);
+    
+    userWantToCancel = TRUE;
+    self.selectedChannel.stopStreaming = TRUE;
+    
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    [userDefaults removeObjectForKey:CAM_IN_VEW];
+    [userDefaults synchronize];
+    
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+    [UIApplication sharedApplication].idleTimerDisabled = NO;
+    
+    self.selectedChannel.profile.isSelected = FALSE;
+    
+    [self.navigationController popToRootViewControllerAnimated:YES];
+}
+
+-(void) cleanUpDirectionTimers
+{
+    if ([_cameraModel isEqualToString:CP_MODEL_BLE]) //MBP83
     {
-        if ([send_UD_dir_req_timer isValid] )
+        /* Kick off the two timer for direction sensing */
+        currentDirUD = DIRECTION_V_NON;
+        lastDirUD    = DIRECTION_V_NON;
+        delay_update_lastDir_count = 1;
+        
+        if ( send_UD_dir_req_timer !=nil)
         {
-            [send_UD_dir_req_timer invalidate];
-            //[send_UD_dir_req_timer release];
-            send_UD_dir_req_timer = nil;
+            if ([send_UD_dir_req_timer isValid] )
+            {
+                [send_UD_dir_req_timer invalidate];
+                //[send_UD_dir_req_timer release];
+                send_UD_dir_req_timer = nil;
+            }
         }
-    }
-    
-    
-    currentDirLR = DIRECTION_H_NON;
-    lastDirLR    = DIRECTION_H_NON;
-    delay_update_lastDirLR_count = 1;
-    
-    
-    if ( send_LR_dir_req_timer != nil)
-    {
-        if ([send_LR_dir_req_timer isValid])
+        
+        
+        currentDirLR = DIRECTION_H_NON;
+        lastDirLR    = DIRECTION_H_NON;
+        delay_update_lastDirLR_count = 1;
+        
+        
+        if ( send_LR_dir_req_timer != nil)
         {
-            [send_LR_dir_req_timer invalidate];
-            //[send_LR_dir_req_timer release];
-            send_LR_dir_req_timer = nil;
+            if ([send_LR_dir_req_timer isValid])
+            {
+                [send_LR_dir_req_timer invalidate];
+                //[send_LR_dir_req_timer release];
+                send_LR_dir_req_timer = nil;
+            }
         }
     }
     
@@ -2180,56 +2363,7 @@ double _ticks = 0;
     [thisVC release];
 }
 
-- (void)stopRelayStream
-{
-    if (self.selectedChannel.communication_mode == COMM_MODE_STUN_RELAY2) // Temp solution
-    {
-        if (self.h264PlayerVCDelegate != nil)
-        {
-            self.selectedChannel.waitingForStreamerToClose = YES;
-            NSLog(@"waiting for close RELAY stream from server");
-        }
-        
-        H264PlayerViewController *vc = (H264PlayerViewController *)[self retain];
-        [self performSelectorInBackground:@selector(closeRelayStream_bg:) withObject:vc];
-        
-    }
-}
 
-- (void)closeRelayStream_bg: (id)vc
-{
-    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-    NSString *apiKey = [userDefaults objectForKey:@"PortalApiKey"];
-    //NSString *mac = [Util strip_colon_fr_mac:self.selectedChannel.profile.mac_address];
-    
-    if (_jsonCommBlocked == nil)
-    {
-        self.jsonCommBlocked = [[BMS_JSON_Communication alloc] initWithObject:self
-                                                                     Selector:nil
-                                                                 FailSelector:nil
-                                                                    ServerErr:nil];
-    }
-    
-    NSString * cmd_string = @"action=command&command=close_relay_rtmp";
-    
-    //NSDictionary *responseDict =
-    [_jsonCommBlocked  sendCommandBlockedWithRegistrationId:self.selectedChannel.profile.registrationID
-                                                 andCommand:cmd_string
-                                                  andApiKey:apiKey];
-    
-    H264PlayerViewController *thisVC = (H264PlayerViewController *)vc;
-    if (userWantToCancel == TRUE)
-    {
-        [thisVC.h264PlayerVCDelegate stopStreamFinished: thisVC.selectedChannel];
-        thisVC.h264PlayerVCDelegate = nil;
-    }
-    else
-    {
-        self.selectedChannel.waitingForStreamerToClose = NO;
-    }
-    
-    [thisVC release];
-}
 
 - (void)stopStream
 {
@@ -2255,18 +2389,21 @@ double _ticks = 0;
             self.timerRemoteStreamKeepAlive = nil;
         }
         
-        if (h264Streamer != NULL)
-        {
-            h264Streamer->setListener(NULL);
-            _isProcessRecording = FALSE;
-            [self stopRecordingVideo];
-            
-            h264Streamer->suspend();
-            h264Streamer->stop();
-            
-            delete h264Streamer ;
-            h264Streamer = NULL;
-        }
+        
+        MediaPlayer::Instance()->setListener(NULL);
+       
+        delete h264StreamerListener;
+        h264StreamerListener = NULL;
+        
+        
+        _isProcessRecording = FALSE;
+        [self stopRecordingVideo];
+        
+        MediaPlayer::Instance()->suspend();
+        MediaPlayer::Instance()->stop();
+        
+        
+        
         
         
         [self cleanUpDirectionTimers];
@@ -2291,9 +2428,11 @@ double _ticks = 0;
         
         [self hidenAllBottomView];
         
-        [self  stopStunStream];
         
-        //[self stopRelayStream];
+        //TODO: enable this
+        //[self  stopStunStream];
+        
+
     }
 }
 
@@ -2993,28 +3132,38 @@ double _ticks = 0;
                                    {
                                        //handle Bad response
                                        NSLog(@"%s ERROR: %@", __FUNCTION__, [responseDict objectForKey:@"message"]);
-                                       
+#if 1
+                                       [self symmetric_check_result:TRUE];
+#else
                                        NSArray * args = [NSArray arrayWithObjects:
                                                          [NSNumber numberWithInt:MEDIA_ERROR_SERVER_DIED],nil];
                                        //force server died
                                        [self performSelectorOnMainThread:@selector(handleMessageOnMainThread:)
                                                               withObject:args
                                                            waitUntilDone:NO];
+#endif
                                        self.messageStreamingState = @"Camera is not accessible";
                                    }
                                }
                                else
                                {
                                    NSLog(@"SERVER unreachable (timeout) ");
+                                   self.messageStreamingState = @"Camera is not accessible";
                                    //TODO : handle SERVER unreachable (timeout)
+#if 1
+                                   dispatch_async(dispatch_get_main_queue(), ^{
+                                       [self performSelector:@selector(setupCamera) withObject:nil afterDelay:10];
+                                   });
+#else
                                    NSArray * args = [NSArray arrayWithObjects:
                                                      [NSNumber numberWithInt:MEDIA_ERROR_SERVER_DIED],nil];
                                    
-                                   self.messageStreamingState = @"Camera is not accessible";
+                                   
                                    
                                    dispatch_async(dispatch_get_main_queue(), ^{
                                        [self performSelector:@selector(handleMessageOnMainThread:) withObject:args afterDelay:10];
                                    });
+#endif
                                }
                            }
                            else
@@ -3864,21 +4013,24 @@ double _ticks = 0;
 
 - (void) touchEventAt:(CGPoint) location phase:(UITouchPhase) phase
 {
-	switch (phase)
+    if ([_cameraModel isEqualToString:CP_MODEL_BLE]) //MBP83
     {
-		case UITouchPhaseBegan:
-			[self _touchesbegan:location];
-			break;
-		case UITouchPhaseMoved:
-		case UITouchPhaseStationary:
-			[self _touchesmoved:location];
-			break;
-		case UITouchPhaseEnded:
-			[self _touchesended:location];
-            
-		default:
-			break;
-	}
+        switch (phase)
+        {
+            case UITouchPhaseBegan:
+                [self _touchesbegan:location];
+                break;
+            case UITouchPhaseMoved:
+            case UITouchPhaseStationary:
+                [self _touchesmoved:location];
+                break;
+            case UITouchPhaseEnded:
+                [self _touchesended:location];
+                
+            default:
+                break;
+        }
+    }
 }
 
 - (void) _touchesbegan: (CGPoint) location
@@ -4046,6 +4198,7 @@ double _ticks = 0;
 {
     NSLog(@"H264VC - adjustViewsForOrientation:");
     
+    
     if (_isProcessRecording)
     {
         _syncPortraitAndLandscape = YES;
@@ -4064,12 +4217,20 @@ double _ticks = 0;
         deltaY = HIGH_STATUS_BAR;
     }
     
+    // Remove all subviews before reloading the xib
+    NSArray *viewsToRemove = [self.view subviews];
+    for (UIView *v in viewsToRemove) {
+        [v removeFromSuperview];
+    }
+    
 	if (orientation == UIInterfaceOrientationLandscapeLeft || orientation == UIInterfaceOrientationLandscapeRight)
 	{
         _isLandScapeMode = YES;
         //load new nib for landscape iPad
         if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
         {
+           
+            
             [[NSBundle mainBundle] loadNibNamed:@"H264PlayerViewController_land_iPad"
                                           owner:self
                                         options:nil];
@@ -4252,6 +4413,18 @@ double _ticks = 0;
     [self.scrollView insertSubview:_imageViewStreamer aboveSubview:_imageViewVideo];
     [self setTemperatureState_Fg:_stringTemperature];
     
+    self.customIndicator.animationImages =[NSArray arrayWithObjects:
+                                           [UIImage imageNamed:@"loader_a"],
+                                           [UIImage imageNamed:@"loader_b"],
+                                           [UIImage imageNamed:@"loader_c"],
+                                           [UIImage imageNamed:@"loader_d"],
+                                           [UIImage imageNamed:@"loader_e"],
+                                           [UIImage imageNamed:@"loader_f"],
+                                           nil];
+    
+
+    
+    
     [self displayCustomIndicator];
     
     if (h264Streamer != NULL)
@@ -4259,7 +4432,7 @@ double _ticks = 0;
         //trigger re-cal of videosize
         if (h264Streamer->isPlaying())
         {
-            //            [self.activityIndicator stopAnimating];
+            
             _isShowCustomIndicator = NO;
         }
         if (_currentMediaStatus != 0)
@@ -5075,6 +5248,20 @@ double _ticks = 0;
 {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+    
+    
+    NSLog(@"H264Player - didReceiveMemoryWarning - force restart stream if running");
+    
+    if (h264Streamer != nil )
+    {
+        NSLog(@"H264Player - send interrupt ");
+        h264Streamer->sendInterrupt();
+    }
+    
+    
+    
+    
+    
 }
 
 - (void)dealloc {
@@ -5115,6 +5302,8 @@ double _ticks = 0;
     [_jsonCommBlocked release];
     [_viewDebugInfo release];
     [_alertViewTimoutRemote release];
+    
+    NSLog(@"%s", __FUNCTION__);
     
     [super dealloc];
 }
@@ -5727,16 +5916,10 @@ double _ticks = 0;
             }
             
             /*
-             start recording
+             start recording :: TODO
              */
             
-            if (h264Streamer != nil)
-            {
-                NSString * url  = [Util getRecordFileName];
-                url = [url stringByReplacingOccurrencesOfString:@".avi" withString:@".flv"];
-                
-                h264Streamer->startRecord([url UTF8String]);
-            }
+           
             
         }
         else
@@ -5790,13 +5973,7 @@ double _ticks = 0;
     [self.ib_labelRecordVideo setText:@"Record Video"];
     _syncPortraitAndLandscape = NO;
     
-    //processing for stopping record
-    /*save if have here.
-     */
-    if (h264Streamer != nil)
-    {
-        h264Streamer->stopRecord();
-    }
+    // DUMMY for now..
 }
 
 - (IBAction)changeAction:(id)sender
@@ -6355,16 +6532,12 @@ double _ticks = 0;
 
 
 #pragma mark - Custom Indicator
--(void)start_animation_with_orientation :(UIInterfaceOrientation) orientation
+-(void)start_animation_with_orientation
 {
-    self.customIndicator.animationImages =[NSArray arrayWithObjects:
-                                           [UIImage imageNamed:@"loader_a"],
-                                           [UIImage imageNamed:@"loader_b"],
-                                           [UIImage imageNamed:@"loader_c"],
-                                           [UIImage imageNamed:@"loader_d"],
-                                           [UIImage imageNamed:@"loader_e"],
-                                           [UIImage imageNamed:@"loader_f"],
-                                           nil];
+    self.customIndicator.hidden = NO;
+    [self.view addSubview:self.customIndicator];
+    [self.view  bringSubviewToFront:self.customIndicator];
+    
     self.customIndicator.animationDuration = 1.5;
     self.customIndicator.animationRepeatCount = 0;
     [self.customIndicator startAnimating];
@@ -6375,8 +6548,6 @@ double _ticks = 0;
 {
     if (_isShowCustomIndicator && !_hideCustomIndicatorAndTextNotAccessble)
     {
-        [self.customIndicator setHidden:NO];
-        [self.view bringSubviewToFront:self.customIndicator];
         
         if (self.alertTimer != nil && [self.alertTimer isValid])
         {
@@ -6395,9 +6566,10 @@ double _ticks = 0;
             }
         }
         
-        UIInterfaceOrientation interfaceOrientation = [UIApplication sharedApplication].statusBarOrientation;
-        [self start_animation_with_orientation:interfaceOrientation];
-        self.customIndicator.image = [UIImage imageNamed:@"loader_a"];
+        
+        [self start_animation_with_orientation];
+        
+        
         
         self.ib_lbCameraNotAccessible.text = _messageStreamingState;
         
