@@ -13,12 +13,15 @@
 #import "PublicDefine.h"
 #import <MessageUI/MFMailComposeViewController.h>
 #import "NSData+AESCrypt.h"
+#import "CustomIOS7AlertView.h"
 
 @interface Account_ViewController () <MFMailComposeViewControllerDelegate, UIAlertViewDelegate>
 
 @property (retain, nonatomic) IBOutlet UITableViewCell *tableViewCellChangePassword;
 
 @property (nonatomic) NSInteger screenWidth;
+
+@property (nonatomic,strong) NSString *strNewChangedPass;
 
 @end
 
@@ -377,40 +380,82 @@
 
 - (void)showDialogChangePassword
 {
+    CustomIOS7AlertView *alert = [[CustomIOS7AlertView alloc] init];
+    [alert setBackgroundColor:[UIColor whiteColor]];
     
-    UIAlertView *av = [[UIAlertView alloc] initWithTitle:@"Change Password" message:nil delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"OK", nil];
-    [av setAlertViewStyle:UIAlertViewStyleLoginAndPasswordInput];
+    UIView *alertContenerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 300, 150)];
+    UITextField *tfOldPass = [[UITextField alloc] initWithFrame:CGRectMake(10, 40, 280, 30)];
+    UITextField *tfNewPass = [[UITextField alloc] initWithFrame:CGRectMake(10, 75, 280, 30)];
+    UITextField *tfConfPass = [[UITextField alloc] initWithFrame:CGRectMake(10, 110, 280, 30)];
     
-    // Alert style customization
-    [[av textFieldAtIndex:0] setSecureTextEntry:YES];
-    [[av textFieldAtIndex:1] setSecureTextEntry:YES];
-    [[av textFieldAtIndex:0] setPlaceholder:@"New password"];
-    [[av textFieldAtIndex:1] setPlaceholder:@"Confirm password"];
-    [av show];
-    [av release];
+    UILabel *lblTitle = [[UILabel alloc] initWithFrame:CGRectMake(5, 5, 280, 25)];
+    [lblTitle setText:@"Change Password"];
+    [lblTitle setTextAlignment:NSTextAlignmentCenter];
+    
+    tfOldPass.placeholder = @"Old Password";
+    tfNewPass.placeholder = @"New Password";
+    tfConfPass.placeholder = @"Confirm Password";
+    
+    [tfOldPass setBackgroundColor:[UIColor whiteColor]];
+    [tfNewPass setBackgroundColor:[UIColor whiteColor]];
+    [tfConfPass setBackgroundColor:[UIColor whiteColor]];
+    
+    [alertContenerView addSubview:lblTitle];
+    [alertContenerView addSubview:tfOldPass];
+    [alertContenerView addSubview:tfNewPass];
+    [alertContenerView addSubview:tfConfPass];
+    
+    [alert setContainerView:alertContenerView];
+    
+    [alert setButtonTitles:[NSMutableArray arrayWithObjects:@"Cancel", @"OK", nil]];
+    
+    [alert setOnButtonTouchUpInside:^(CustomIOS7AlertView *alertView, int buttonIndex)
+    {
+        [alertView close];
+        
+        if(buttonIndex==1)
+        {
+            NSString *password = tfNewPass.text;
+            NSString *passwordConfrm = tfConfPass.text;
+            
+            NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+            NSString * old_pass = (NSString *) [userDefaults objectForKey:@"PortalPassword"];
+            
+            if ((password       && password.length > 0)       &&
+                (passwordConfrm && passwordConfrm.length > 0) &&
+                [password isEqualToString:passwordConfrm] &&
+                (tfOldPass.text.length > 0 && [old_pass isEqualToString:tfOldPass.text]))
+            {
+                self.strNewChangedPass = password;
+                [self doChangePassword:password];
+            }
+            else
+            {
+                if((tfOldPass.text.length == 0 ||  ![old_pass isEqualToString:tfOldPass.text]))
+                {
+                    NSDictionary *dictError = [NSDictionary dictionaryWithObjectsAndKeys:@"Please enter correct  old password", @"message", nil];
+                    [self changePasswordFialedWithError:dictError];
+                }
+                else
+                {
+                    NSDictionary *dictError = [NSDictionary dictionaryWithObjectsAndKeys:@"Validation failed: Password is not match or empty", @"message", nil];
+                    [self changePasswordFialedWithError:dictError];
+                }
+            }
+        }
+        [tfOldPass release];
+        [tfNewPass release];
+        [tfConfPass release];
+        [alertView release];
+    }];
+    [alert show];
 }
 
 #pragma mark - UIAlert view delegate
 
 - (void )alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex
 {
-    if (buttonIndex == 1)
-    {
-        NSString *password = [alertView textFieldAtIndex:0].text;
-        NSString *passwordConfrm = [alertView textFieldAtIndex:1].text;
-        
-        if ((password       && password.length > 0)       &&
-            (passwordConfrm && passwordConfrm.length > 0) &&
-            [password isEqualToString:passwordConfrm])
-        {
-            [self doChangePassword:password];
-        }
-        else
-        {
-            NSDictionary *dictError = [NSDictionary dictionaryWithObjectsAndKeys:@"Validation failed: Password is not match or empty", @"message", nil];
-            [self changePasswordFialedWithError:dictError];
-        }
-    }
+    
 }
 
 - (void)doChangePassword:(NSString *)newPassword
@@ -427,7 +472,11 @@
 #pragma mark - JSON call back
 
 - (void)changePasswordSuccessWithResponse:(NSDictionary *)responseData
-{
+{    
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    [userDefaults setObject:self.strNewChangedPass forKey:@"PortalPassword"];
+    [userDefaults synchronize];
+    
     [[[[UIAlertView alloc] initWithTitle:@"Change Password"
                                  message:@"Successful"
                                 delegate:nil
