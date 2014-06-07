@@ -64,6 +64,15 @@
     AudioServicesCreateSystemSoundID(soundFileURLRef, &soundFileObject);
     
     CFRelease(soundFileURLRef);
+    self.splashScreen.animationImages =[NSArray arrayWithObjects:
+                                        [UIImage imageNamed:@"loader_big_a"],
+                                        [UIImage imageNamed:@"loader_big_b"],
+                                        [UIImage imageNamed:@"loader_big_c"],
+                                        [UIImage imageNamed:@"loader_big_d"],
+                                        [UIImage imageNamed:@"loader_big_e"],
+                                        //[UIImage imageNamed:@"loader_big_f"],
+                                        nil];
+    
 }
 
 /**/
@@ -138,14 +147,7 @@
 -(void)start_animation_with_orientation :(UIInterfaceOrientation) orientation
 {
     
-    self.splashScreen.animationImages =[NSArray arrayWithObjects:
-                                        [UIImage imageNamed:@"loader_big_a"],
-                                        [UIImage imageNamed:@"loader_big_b"],
-                                        [UIImage imageNamed:@"loader_big_c"],
-                                        [UIImage imageNamed:@"loader_big_d"],
-                                        [UIImage imageNamed:@"loader_big_e"],
-                                        //[UIImage imageNamed:@"loader_big_f"],
-                                        nil];
+   
     self.splashScreen.animationDuration = 1.5;
     self.splashScreen.animationRepeatCount = 0;
     

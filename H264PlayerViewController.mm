@@ -260,6 +260,9 @@ double _ticks = 0;
     self.messageStreamingState = @"Camera is not accessible";
     self.timeStartingStageTwo = 0;
     
+    
+    self.customIndicator.image = [UIImage imageNamed:@"loader_a"];
+    
     NSLog(@"camera model is :%@", self.cameraModel);
     [self becomeActive];
 }
@@ -334,6 +337,10 @@ double _ticks = 0;
         [userDefaults setObject:_selectedChannel.profile.mac_address forKey:CAM_IN_VEW];
         [userDefaults synchronize];
     }
+    
+    
+
+    
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -4191,6 +4198,7 @@ double _ticks = 0;
 {
     NSLog(@"H264VC - adjustViewsForOrientation:");
     
+    
     if (_isProcessRecording)
     {
         _syncPortraitAndLandscape = YES;
@@ -4209,12 +4217,20 @@ double _ticks = 0;
         deltaY = HIGH_STATUS_BAR;
     }
     
+    // Remove all subviews before reloading the xib
+    NSArray *viewsToRemove = [self.view subviews];
+    for (UIView *v in viewsToRemove) {
+        [v removeFromSuperview];
+    }
+    
 	if (orientation == UIInterfaceOrientationLandscapeLeft || orientation == UIInterfaceOrientationLandscapeRight)
 	{
         _isLandScapeMode = YES;
         //load new nib for landscape iPad
         if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
         {
+           
+            
             [[NSBundle mainBundle] loadNibNamed:@"H264PlayerViewController_land_iPad"
                                           owner:self
                                         options:nil];
@@ -4397,6 +4413,18 @@ double _ticks = 0;
     [self.scrollView insertSubview:_imageViewStreamer aboveSubview:_imageViewVideo];
     [self setTemperatureState_Fg:_stringTemperature];
     
+    self.customIndicator.animationImages =[NSArray arrayWithObjects:
+                                           [UIImage imageNamed:@"loader_a"],
+                                           [UIImage imageNamed:@"loader_b"],
+                                           [UIImage imageNamed:@"loader_c"],
+                                           [UIImage imageNamed:@"loader_d"],
+                                           [UIImage imageNamed:@"loader_e"],
+                                           [UIImage imageNamed:@"loader_f"],
+                                           nil];
+    
+
+    
+    
     [self displayCustomIndicator];
     
     if (h264Streamer != NULL)
@@ -4404,7 +4432,7 @@ double _ticks = 0;
         //trigger re-cal of videosize
         if (h264Streamer->isPlaying())
         {
-            //            [self.activityIndicator stopAnimating];
+            
             _isShowCustomIndicator = NO;
         }
         if (_currentMediaStatus != 0)
@@ -6504,16 +6532,12 @@ double _ticks = 0;
 
 
 #pragma mark - Custom Indicator
--(void)start_animation_with_orientation :(UIInterfaceOrientation) orientation
+-(void)start_animation_with_orientation
 {
-    self.customIndicator.animationImages =[NSArray arrayWithObjects:
-                                           [UIImage imageNamed:@"loader_a"],
-                                           [UIImage imageNamed:@"loader_b"],
-                                           [UIImage imageNamed:@"loader_c"],
-                                           [UIImage imageNamed:@"loader_d"],
-                                           [UIImage imageNamed:@"loader_e"],
-                                           [UIImage imageNamed:@"loader_f"],
-                                           nil];
+    self.customIndicator.hidden = NO;
+    [self.view addSubview:self.customIndicator];
+    [self.view  bringSubviewToFront:self.customIndicator];
+    
     self.customIndicator.animationDuration = 1.5;
     self.customIndicator.animationRepeatCount = 0;
     [self.customIndicator startAnimating];
@@ -6524,8 +6548,6 @@ double _ticks = 0;
 {
     if (_isShowCustomIndicator && !_hideCustomIndicatorAndTextNotAccessble)
     {
-        [self.customIndicator setHidden:NO];
-        [self.view bringSubviewToFront:self.customIndicator];
         
         if (self.alertTimer != nil && [self.alertTimer isValid])
         {
@@ -6544,9 +6566,10 @@ double _ticks = 0;
             }
         }
         
-        UIInterfaceOrientation interfaceOrientation = [UIApplication sharedApplication].statusBarOrientation;
-        [self start_animation_with_orientation:interfaceOrientation];
-        self.customIndicator.image = [UIImage imageNamed:@"loader_a"];
+        
+        [self start_animation_with_orientation];
+        
+        
         
         self.ib_lbCameraNotAccessible.text = _messageStreamingState;
         

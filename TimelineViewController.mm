@@ -1159,7 +1159,7 @@
             }
         }
         
-#if 1
+
         if(!cell.lblToHideLine.isHidden){
             cell.lblToHideLine.hidden=YES;
         }        
@@ -1178,11 +1178,11 @@
         NSDate *eventDate = [dateFormater dateFromString:eventInfo.time_stamp]; //2013-12-31 07:38:35 +0000
         [dateFormater release];
         
-        NSDateFormatter* df_local = [[NSDateFormatter alloc] init];
+        NSDateFormatter* df_local = [[NSDateFormatter alloc] init] ;
         [df_local setTimeZone:[NSTimeZone localTimeZone]];
         
         
-        NSDateComponents * offset= [[NSDateComponents alloc]init];
+        NSDateComponents * offset= [[[NSDateComponents alloc]init] autorelease];
         [offset setDay:-1];
         NSDate  *yesterday = [CURRENT_CALENDAR dateByAddingComponents:offset
                                                                toDate:[NSDate date]
@@ -1287,23 +1287,8 @@
             [cell.activityIndicatorLoading setHidden:YES];
         }
         
-#else// Test data
-        EventInfo *info = (EventInfo *)[_eventArray objectAtIndex:indexPath.row];
-        
-        cell.eventLabel.text = info.description;
-        
-        NSString *datestr = info.time_code;
-        NSDateFormatter *dFormater = [[[NSDateFormatter alloc]init] autorelease];
-        
-        [dFormater setDateFormat:@"yyyyMMddHHmmss"];
-        
-        NSDate *date = [dFormater dateFromString:datestr]; //2013-12-12 00:42:00 +0000
-        
-        dFormater.dateFormat = @"HH:mm";
-        
-        cell.eventTimeLabel.text = [dFormater stringFromDate:date];
-        cell.snapshotImage.image = info.snapshotImage;
-#endif
+
+
         [cell.eventLabel setFont:[UIFont regularMediumFont]];
         [cell.eventLabel setTextColor:[UIColor timeLineColor]];
         [cell.eventTimeLabel setFont:[UIFont lightSmall13Font]];
