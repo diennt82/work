@@ -125,17 +125,22 @@
     
     if (_playbackStreamer != NULL)
     {
-        if (self.mediaCurrentState == MEDIA_PLAYER_STARTED ||
-            (self.mediaCurrentState == 0 && _playbackStreamer == NULL)) // Media player haven't start yet.
+        if (self.mediaCurrentState == MEDIA_PLAYER_STARTED)
         {
             NSLog(@"H264VC - handleEnteredBackground - IF()");
+            
+            if (_isPause)
+            {
+                self.isPause = NO;
+                _playbackStreamer->resume();
+                self.ib_playPlayBack.selected = NO;
+            }
             
             [self stopStream:nil];
         }
         else
         {
             NSLog(@"H264VC - handleEnteredBackground - else if(h264Streamer != nil)");
-            
             _playbackStreamer->sendInterrupt();
         }
     }
@@ -154,6 +159,9 @@
     {
         self.activityIndicator.hidden = NO;
         [self.activityIndicator startAnimating];
+        
+        self.view.userInteractionEnabled = NO;
+        self.ib_myOverlay.hidden = YES;
         
         [self becomeActive];
     }
@@ -209,10 +217,16 @@
         self.urlVideo = self.clip_info.urlFile;
     }
 #endif
-    
-    [self performSelector:@selector(startStream)
-               withObject:nil
-               afterDelay:0.1];
+    if ([UIApplication sharedApplication].applicationState != UIApplicationStateActive)
+    {
+        NSLog(@"%s. Inactive mode", __FUNCTION__);
+    }
+    else
+    {
+        [self performSelector:@selector(startStream)
+                   withObject:nil
+                   afterDelay:0.1];
+    }
 }
 
 -(void) startStream
@@ -227,9 +241,7 @@
 {
     status_t status = !NO_ERROR;
     NSString * url = self.urlVideo;
-    //NSString * url = @"http://cvision-office.no-ip.info/release/spider2_hd.flv";
-    //NSString * url = [[NSBundle mainBundle] pathForResource:@"spider2_hd" ofType:@"flv"];
-    //NSString *url = @"http://hubble-resources.s3.amazonaws.com/devices/01006644334C5A03AEPGARBUYQ/clips/44334C5A03AE_04_20140521142542000_00001_last.flv?AWSAccessKeyId=AKIAJNYQ3ONBL7OLSZDA&Expires=1400744717&Signature=nS2CQ%2F9%2BcjPPmbqs43ruJlocPbE%3D";
+
     status = _playbackStreamer->setDataSource([url UTF8String]);
     printf("setDataSource return: %d\n", status);
     
@@ -253,10 +265,6 @@
         self.view.userInteractionEnabled = YES;
         self.ib_myOverlay.hidden = NO;
         [self.ib_sliderPlayBack setMinimumTrackTintColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"video_progress_green"]]];
-        //_playbackStreamer -> getDuration(&_duration);
-        //self.ib_sliderPlayBack.maximumValue = _duration * 100;
-//        self.duration = _playbackStreamer->getDuration();
-//        self.timeStarting = _playbackStreamer->getTimeStarting();
         [self watcher];
     });
     
@@ -291,11 +299,13 @@
 
 -(void) handleMessage:(int) msg ext1: (int) ext1 ext2:(int) ext2
 {
-    self.mediaCurrentState = msg;
     switch (msg)
     {
         case MEDIA_PLAYER_PREPARED:
+            break;
         case MEDIA_PLAYER_STARTED:
+            NSLog(@"%s msg: MEDIA_PLAYER_STARTED", __FUNCTION__);
+            self.mediaCurrentState = msg;
             break;
             
         case MEDIA_ERROR_SERVER_DIED:
@@ -305,7 +315,12 @@
             NSLog(@"Got playback complete>>>>  OUT ");
             if (self.userWantToBack == FALSE && [UIApplication sharedApplication].applicationState == UIApplicationStateActive)
             {
+                NSLog(@"%s call goBackToPlayList", __FUNCTION__);
                 [self goBackToPlayList];
+            }
+            else
+            {
+                NSLog(@"%s NOT call goBackToPlayList", __FUNCTION__);
             }
             break;
             
@@ -633,6 +648,11 @@
     [NSObject cancelPreviousPerformRequestsWithTarget:self
                                              selector:@selector(watcher)
                                                object:nil];
+    if (_isPause)
+    {
+        _playbackStreamer->resume();
+    }
+    
     [self goBackToPlayList];
 }
 
@@ -672,7 +692,7 @@
     self.timeStarting = _playbackStreamer->getTimeStarting();
     double timeCurrent = _playbackStreamer->getCurrentTime() - _timeStarting;
     
-#if 1
+#if 0
     NSLog(@"timeCurrent: %f, _timeStarting: %f", timeCurrent, _timeStarting);
 #endif
     
