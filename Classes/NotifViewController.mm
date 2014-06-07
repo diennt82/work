@@ -18,6 +18,7 @@
 @property (retain, nonatomic) IBOutlet UIButton *playEnventBtn;
 @property (retain, nonatomic) IBOutlet UIButton *goToCameraBtn;
 @property (retain, nonatomic) IBOutlet UIButton *changeSettingsBtn;
+@property (retain, nonatomic) IBOutlet UILabel *lblChangeSetting;
 @property (retain, nonatomic) IBOutlet UIButton *ignoreBtn;
 @property (retain, nonatomic) IBOutlet UIButton *choosePlanBtn;
 @property (retain, nonatomic) IBOutlet UIButton *learnMoreBtn;
@@ -92,11 +93,16 @@
     [df_local setTimeZone:[NSTimeZone localTimeZone]];
     df_local.dateFormat = @"hh:mm a, dd-MM-yyyy";
     
-    self.timeLabel.text = [df_local stringFromDate:eventDate];;
+    self.timeLabel.text = [df_local stringFromDate:eventDate];
+    self.messageLabel.text = [NSString stringWithFormat:@"There was some movement at %@.",self.cameraName];
     
     NSLog(@"notif view timelable is %@",self.timeLabel.text); 
     
-    
+    if(self.camChannel)
+    {
+        self.lblChangeSetting.hidden = NO;
+        self.changeSettingsBtn.hidden = NO;
+    }
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -257,6 +263,20 @@
 - (IBAction)changeSettingsTouchAction:(id)sender
 {
     [self cancelTaskDoInBackground];
+    
+    CameraMenuViewController *cameraMenuCV = [[CameraMenuViewController alloc] init];
+    cameraMenuCV.camChannel = self.camChannel;
+    if(self.parentVC)
+    {
+        MenuViewController *menuVC = (MenuViewController *)self.parentVC;
+        cameraMenuCV.cameraMenuDelegate = menuVC.menuDelegate;
+    }
+    else if(self.notifDelegate)
+    {
+        cameraMenuCV.cameraMenuDelegate = self.notifDelegate;
+    }
+    [self.navigationController pushViewController:cameraMenuCV animated:YES];
+    [cameraMenuCV release];
 }
 
 - (IBAction)choosePlanTouchAction:(id)sender
