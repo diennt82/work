@@ -666,6 +666,9 @@ void checkingApplicationCrashed()
     /*
      Free up as much memory as possible by purging cached data objects that can be recreated (or reloaded from disk) later.
      */
+    
+    NSLog(@"applicationDidReceiveMemoryWarning from app delegate");
+    
 }
 
 

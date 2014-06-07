@@ -177,6 +177,7 @@
 		
 		if ( self.channels != nil)
 		{
+            [self.channels release];
 			self.channels  = nil; 
 		}
 		
@@ -188,6 +189,13 @@
 		
 		int numOfProfile = -1; 
 		fread(&numOfProfile, sizeof(int), 1, fd);
+        if ( configured_cams != nil)
+		{
+            [configured_cams release];
+			configured_cams  = nil;
+		}
+		
+        
 		configured_cams = [[NSMutableArray alloc] initWithCapacity:numOfProfile];
 		int cp_count = 0; 
         int profile_len = -1 ;

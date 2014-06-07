@@ -49,7 +49,7 @@ static sqlite3_stmt *init_statement = nil;
             self.cameraMacNoColon = @"112233445566";
         }
         
-        sqlite3_reset(init_statement);
+        sqlite3_finalize(init_statement);
         
     }
     
@@ -158,7 +158,7 @@ static sqlite3_stmt *init_statement = nil;
             }
             
             sqlite3_finalize(statement);
-            sqlite3_reset(statement);
+            
         }
         
     }
@@ -204,7 +204,7 @@ static sqlite3_stmt *init_statement = nil;
 #endif
             }
             
-            sqlite3_reset(statement);
+            sqlite3_finalize(statement);
         }
         
     }
@@ -248,7 +248,7 @@ static sqlite3_stmt *init_statement = nil;
 #endif
             }
             
-            sqlite3_reset(statement);
+            sqlite3_finalize(statement);
         }
         
     }

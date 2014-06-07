@@ -9,6 +9,9 @@
 #import <UIKit/UIKit.h>
 #import "ConnectionMethodDelegate.h"
 #import <MonitorCommunication/MonitorCommunication.h>
+#import <CameraScanner/CameraScanner.h>
+#import "CameraMenuViewController.h"
+#import "MenuViewController.h"
 
 @interface NotifViewController : UIViewController{
 
@@ -25,6 +28,9 @@
 @property (nonatomic, retain)     NSString * alertTime;
 @property (nonatomic, retain)     NSString * server_url;
 @property (nonatomic, retain)     NSString * registrationID;
+
+@property (nonatomic, assign) CamChannel *camChannel;
+@property (assign, nonatomic) id parentVC;
 
 
 - (IBAction)ignoreTouchAction:(id)sender;
