@@ -260,6 +260,7 @@ double _ticks = 0;
     self.messageStreamingState = @"Camera is not accessible";
     self.timeStartingStageTwo = 0;
     
+    NSLog(@"camera model is :%@", self.cameraModel);
     [self becomeActive];
 }
 
@@ -1720,30 +1721,34 @@ double _ticks = 0;
 - (void)createMonvementControlTimer
 {
     [self cleanUpDirectionTimers];
-    
-    NSLog(@"H264VC - createMonvementControlTimer");
-    
-    //Direction stuf
-    /* Kick off the two timer for direction sensing */
-    currentDirUD = DIRECTION_V_NON;
-    lastDirUD    = DIRECTION_V_NON;
-    delay_update_lastDir_count = 1;
-    
-    send_UD_dir_req_timer = [NSTimer scheduledTimerWithTimeInterval:0.3
-                                                             target:self
-                                                           selector:@selector(v_directional_change_callback:)
-                                                           userInfo:nil
-                                                            repeats:YES];
-    
-    currentDirLR = DIRECTION_H_NON;
-    lastDirLR    = DIRECTION_H_NON;
-    delay_update_lastDirLR_count = 1;
-    
-    send_LR_dir_req_timer = [NSTimer scheduledTimerWithTimeInterval:0.3
-                                                             target:self
-                                                           selector:@selector(h_directional_change_callback:)
-                                                           userInfo:nil
-                                                            repeats:YES];
+    if ([_cameraModel isEqualToString:CP_MODEL_BLE]) //MBP83
+    {
+        
+        
+        NSLog(@"H264VC - createMonvementControlTimer");
+        
+        //Direction stuf
+        /* Kick off the two timer for direction sensing */
+        currentDirUD = DIRECTION_V_NON;
+        lastDirUD    = DIRECTION_V_NON;
+        delay_update_lastDir_count = 1;
+        
+        send_UD_dir_req_timer = [NSTimer scheduledTimerWithTimeInterval:0.3
+                                                                 target:self
+                                                               selector:@selector(v_directional_change_callback:)
+                                                               userInfo:nil
+                                                                repeats:YES];
+        
+        currentDirLR = DIRECTION_H_NON;
+        lastDirLR    = DIRECTION_H_NON;
+        delay_update_lastDirLR_count = 1;
+        
+        send_LR_dir_req_timer = [NSTimer scheduledTimerWithTimeInterval:0.3
+                                                                 target:self
+                                                               selector:@selector(h_directional_change_callback:)
+                                                               userInfo:nil
+                                                                repeats:YES];
+    }
 }
 
 #pragma mark - Setup camera
@@ -2241,35 +2246,37 @@ double _ticks = 0;
 
 -(void) cleanUpDirectionTimers
 {
-    
-    /* Kick off the two timer for direction sensing */
-    currentDirUD = DIRECTION_V_NON;
-    lastDirUD    = DIRECTION_V_NON;
-    delay_update_lastDir_count = 1;
-    
-    if ( send_UD_dir_req_timer !=nil)
+    if ([_cameraModel isEqualToString:CP_MODEL_BLE]) //MBP83
     {
-        if ([send_UD_dir_req_timer isValid] )
+        /* Kick off the two timer for direction sensing */
+        currentDirUD = DIRECTION_V_NON;
+        lastDirUD    = DIRECTION_V_NON;
+        delay_update_lastDir_count = 1;
+        
+        if ( send_UD_dir_req_timer !=nil)
         {
-            [send_UD_dir_req_timer invalidate];
-            //[send_UD_dir_req_timer release];
-            send_UD_dir_req_timer = nil;
+            if ([send_UD_dir_req_timer isValid] )
+            {
+                [send_UD_dir_req_timer invalidate];
+                //[send_UD_dir_req_timer release];
+                send_UD_dir_req_timer = nil;
+            }
         }
-    }
-    
-    
-    currentDirLR = DIRECTION_H_NON;
-    lastDirLR    = DIRECTION_H_NON;
-    delay_update_lastDirLR_count = 1;
-    
-    
-    if ( send_LR_dir_req_timer != nil)
-    {
-        if ([send_LR_dir_req_timer isValid])
+        
+        
+        currentDirLR = DIRECTION_H_NON;
+        lastDirLR    = DIRECTION_H_NON;
+        delay_update_lastDirLR_count = 1;
+        
+        
+        if ( send_LR_dir_req_timer != nil)
         {
-            [send_LR_dir_req_timer invalidate];
-            //[send_LR_dir_req_timer release];
-            send_LR_dir_req_timer = nil;
+            if ([send_LR_dir_req_timer isValid])
+            {
+                [send_LR_dir_req_timer invalidate];
+                //[send_LR_dir_req_timer release];
+                send_LR_dir_req_timer = nil;
+            }
         }
     }
     
@@ -2349,56 +2356,7 @@ double _ticks = 0;
     [thisVC release];
 }
 
-- (void)stopRelayStream
-{
-    if (self.selectedChannel.communication_mode == COMM_MODE_STUN_RELAY2) // Temp solution
-    {
-        if (self.h264PlayerVCDelegate != nil)
-        {
-            self.selectedChannel.waitingForStreamerToClose = YES;
-            NSLog(@"waiting for close RELAY stream from server");
-        }
-        
-        H264PlayerViewController *vc = (H264PlayerViewController *)[self retain];
-        [self performSelectorInBackground:@selector(closeRelayStream_bg:) withObject:vc];
-        
-    }
-}
 
-- (void)closeRelayStream_bg: (id)vc
-{
-    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-    NSString *apiKey = [userDefaults objectForKey:@"PortalApiKey"];
-    //NSString *mac = [Util strip_colon_fr_mac:self.selectedChannel.profile.mac_address];
-    
-    if (_jsonCommBlocked == nil)
-    {
-        self.jsonCommBlocked = [[BMS_JSON_Communication alloc] initWithObject:self
-                                                                     Selector:nil
-                                                                 FailSelector:nil
-                                                                    ServerErr:nil];
-    }
-    
-    NSString * cmd_string = @"action=command&command=close_relay_rtmp";
-    
-    //NSDictionary *responseDict =
-    [_jsonCommBlocked  sendCommandBlockedWithRegistrationId:self.selectedChannel.profile.registrationID
-                                                 andCommand:cmd_string
-                                                  andApiKey:apiKey];
-    
-    H264PlayerViewController *thisVC = (H264PlayerViewController *)vc;
-    if (userWantToCancel == TRUE)
-    {
-        [thisVC.h264PlayerVCDelegate stopStreamFinished: thisVC.selectedChannel];
-        thisVC.h264PlayerVCDelegate = nil;
-    }
-    else
-    {
-        self.selectedChannel.waitingForStreamerToClose = NO;
-    }
-    
-    [thisVC release];
-}
 
 - (void)stopStream
 {
@@ -2463,9 +2421,11 @@ double _ticks = 0;
         
         [self hidenAllBottomView];
         
-        [self  stopStunStream];
         
-        //[self stopRelayStream];
+        //TODO: enable this
+        //[self  stopStunStream];
+        
+
     }
 }
 
@@ -4046,21 +4006,24 @@ double _ticks = 0;
 
 - (void) touchEventAt:(CGPoint) location phase:(UITouchPhase) phase
 {
-	switch (phase)
+    if ([_cameraModel isEqualToString:CP_MODEL_BLE]) //MBP83
     {
-		case UITouchPhaseBegan:
-			[self _touchesbegan:location];
-			break;
-		case UITouchPhaseMoved:
-		case UITouchPhaseStationary:
-			[self _touchesmoved:location];
-			break;
-		case UITouchPhaseEnded:
-			[self _touchesended:location];
-            
-		default:
-			break;
-	}
+        switch (phase)
+        {
+            case UITouchPhaseBegan:
+                [self _touchesbegan:location];
+                break;
+            case UITouchPhaseMoved:
+            case UITouchPhaseStationary:
+                [self _touchesmoved:location];
+                break;
+            case UITouchPhaseEnded:
+                [self _touchesended:location];
+                
+            default:
+                break;
+        }
+    }
 }
 
 - (void) _touchesbegan: (CGPoint) location
@@ -5257,6 +5220,20 @@ double _ticks = 0;
 {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+    
+    
+    NSLog(@"H264Player - didReceiveMemoryWarning - force restart stream if running");
+    
+    if (h264Streamer != nil )
+    {
+        NSLog(@"H264Player - send interrupt ");
+        h264Streamer->sendInterrupt();
+    }
+    
+    
+    
+    
+    
 }
 
 - (void)dealloc {
