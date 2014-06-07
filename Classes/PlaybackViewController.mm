@@ -121,9 +121,30 @@
 
 - (void)playbackEnteredBackground
 {
-    NSLog(@"%s ", __FUNCTION__);
+    NSLog(@"%s mediaCurrentState:%d", __FUNCTION__, _mediaCurrentState);
 #if 1
-    [self stopStream:nil];
+    if (self.mediaCurrentState == MEDIA_PLAYER_STARTED)
+    {
+        NSLog(@"Playback - playbackEnteredBackground - IF()");
+        
+        if (_isPause)
+        {
+            self.isPause = NO;
+            MediaPlayer::Instance()->resume();
+            self.ib_playPlayBack.selected = NO;
+        }
+        
+        [self stopStream:nil];
+    }
+    else if(_mediaCurrentState == 0) // Start set data sourece
+    {
+        NSLog(@"Playback - playbackEnteredBackground - else if()");
+        MediaPlayer::Instance()->sendInterrupt();
+    }
+    else
+    {
+        NSLog(@"Playback - playbackEnteredBackground - else{}");
+    }
 #else
     if (_playbackStreamer != NULL)
     {
@@ -156,7 +177,7 @@
 
 - (void)playbackBecomeActive
 {
-    NSLog(@"%s ", __FUNCTION__);
+    NSLog(@"%s _shouldRestartProcess:%d", __FUNCTION__, _shouldRestartProcess);
     
     if (_shouldRestartProcess)
     {
@@ -191,6 +212,7 @@
 #else
     
     self.shouldRestartProcess = FALSE;
+    self.mediaCurrentState = -1;
     _clips = [[NSMutableArray alloc]init];
     //Decide whether or not to start the background polling
     
@@ -240,13 +262,8 @@
     _playbackStreamer->setListener(listener);
     [self performSelectorInBackground:@selector(startStream_bg) withObject:nil];
 #else
-    bool shouldWait = MediaPlayer::Instance()->shouldWait;
-    NSLog(@"%s shouldWait: %d", __FUNCTION__, shouldWait);
-    
-    while (shouldWait)
-    {
-        NSLog(@"loop");
-    }
+
+    self.shouldRestartProcess = TRUE;
     
     MediaPlayer::Instance()->setListener(listener);
     MediaPlayer::Instance()->setPlaybackAndSharedCam(true, false);
@@ -313,6 +330,7 @@
                        ext2:0];
     }
 #else
+    self.mediaCurrentState = 0;
     status = MediaPlayer::Instance()->setDataSource([url UTF8String]);
     
     NSLog(@"%s status: %d", __FUNCTION__, status);
@@ -734,7 +752,7 @@
                                                object:nil];
     if (_isPause)
     {
-        _playbackStreamer->resume();
+        MediaPlayer::Instance()->resume();
     }
     
     [self goBackToPlayList];
@@ -743,7 +761,21 @@
 - (IBAction)playVideo:(id)sender
 {
     NSLog(@"%s wants to pause: %d", __FUNCTION__, _isPause);
-    
+#if 1
+    if (_isPause)
+    {
+        self.isPause = NO;
+        MediaPlayer::Instance()->resume();
+        [self watcher];
+        self.ib_playPlayBack.selected = NO;
+    }
+    else if(MediaPlayer::Instance()->isPlaying())
+    {
+        self.isPause = YES;
+        MediaPlayer::Instance()->pause();
+        self.ib_playPlayBack.selected = YES;
+    }
+#else
     if (_playbackStreamer)
     {
         if (_isPause)
@@ -760,6 +792,7 @@
             self.ib_playPlayBack.selected = YES;
         }
     }
+#endif
 }
 
 

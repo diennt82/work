@@ -1561,6 +1561,7 @@ double _ticks = 0;
         return;
     }
     
+    [self checkOrientation];
     
     [self scanCamera];
 }
@@ -1594,7 +1595,28 @@ double _ticks = 0;
     {
         [_audioOutStreamRemote disconnectFromAudioSocketRemote];
     }
-    
+#if 1
+    if (_mediaProcessStatus == 0)
+    {
+        
+    }
+    else if(_mediaProcessStatus == 1)
+    {
+        MediaPlayer::Instance()->sendInterrupt();
+        [self stopStream];
+        
+    }
+    else if (_mediaProcessStatus == 2)
+    {
+        MediaPlayer::Instance()->sendInterrupt();
+    }
+    else
+    {
+        MediaPlayer::Instance()->sendInterrupt();
+        [self stopStream];
+        
+    }
+#else
     if (self.currentMediaStatus == MEDIA_INFO_HAS_FIRST_IMAGE ||
         self.currentMediaStatus == MEDIA_PLAYER_STARTED ||
         (self.currentMediaStatus == 0 && h264Streamer == NULL)) // Media player haven't start yet.
@@ -1610,7 +1632,7 @@ double _ticks = 0;
             
             h264Streamer->sendInterrupt();
         }
-    
+#endif
     self.h264StreamerIsInStopped = TRUE;
     self.imageViewVideo.backgroundColor = [UIColor blackColor];
     self.imageViewStreamer.backgroundColor = [UIColor blackColor];
@@ -5249,19 +5271,13 @@ double _ticks = 0;
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
     
-    
     NSLog(@"H264Player - didReceiveMemoryWarning - force restart stream if running");
     
-    if (h264Streamer != nil )
+    if (MediaPlayer::Instance()->isPlaying())
     {
         NSLog(@"H264Player - send interrupt ");
-        h264Streamer->sendInterrupt();
+        MediaPlayer::Instance()->sendInterrupt();
     }
-    
-    
-    
-    
-    
 }
 
 - (void)dealloc {
