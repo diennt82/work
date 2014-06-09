@@ -5426,7 +5426,7 @@ double _ticks = 0;
         
         
         self.disableAutorotateFlag = TRUE;
-        [self.ib_labelTouchToTalk setText:@"Speaking"];
+        [self.ib_labelTouchToTalk setText:@"Please Speak"];
         self.stringStatePTT = @"Speaking";
         
         //Mute audio to MediaPlayer lib
@@ -5860,7 +5860,7 @@ double _ticks = 0;
     }
     else
     {
-        self.ib_labelTouchToTalk.text = @"Speaking";
+        self.ib_labelTouchToTalk.text = @"Please Speak";
     }
 }
 
