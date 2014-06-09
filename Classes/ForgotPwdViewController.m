@@ -198,7 +198,7 @@
 	//ERROR condition
 	[[[[UIAlertView alloc] initWithTitle:msg1
                                message:[NSString stringWithFormat:msg, [errorResponse objectForKey:@"message"]]
-                              delegate:self
+                              delegate:nil
                      cancelButtonTitle:ok
                      otherButtonTitles:nil]
       autorelease]
@@ -225,7 +225,7 @@
 	UIAlertView *alert = [[UIAlertView alloc]
 						  initWithTitle:msg1
 						  message:msg
-						  delegate:self
+						  delegate:nil
 						  cancelButtonTitle:ok
 						  otherButtonTitles:nil];
 
