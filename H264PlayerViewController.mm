@@ -739,20 +739,17 @@ double _ticks = 0;
 
 - (IBAction)iFrameOnlyPressAction:(id)sender
 {
-    if (h264Streamer != NULL)
+    if (MediaPlayer::Instance()->isPlaying())
     {
-        if (h264Streamer->isPlaying())
+        self.iFrameOnlyFlag = ! self.iFrameOnlyFlag;
+        
+        if(self.iFrameOnlyFlag == TRUE)
         {
-            self.iFrameOnlyFlag = ! self.iFrameOnlyFlag;
-            
-            if(self.iFrameOnlyFlag == TRUE)
-            {
-                h264Streamer->setPlayOption(MEDIA_STREAM_IFRAME_ONLY);
-            }
-            else
-            {
-                h264Streamer->setPlayOption(MEDIA_STREAM_ALL_FRAME);
-            }
+            MediaPlayer::Instance()->setPlayOption(MEDIA_STREAM_IFRAME_ONLY);
+        }
+        else
+        {
+            MediaPlayer::Instance()->setPlayOption(MEDIA_STREAM_ALL_FRAME);
         }
     }
 }
@@ -1351,8 +1348,7 @@ double _ticks = 0;
 {
     if (userWantToCancel        ||
         _returnFromPlayback     ||
-        h264Streamer == NULL    ||
-        !h264Streamer->isPlaying())
+        !MediaPlayer::Instance()->isPlaying())
     {
         return;
     }
@@ -4449,18 +4445,15 @@ double _ticks = 0;
     
     [self displayCustomIndicator];
     
-    if (h264Streamer != NULL)
-    {
         //trigger re-cal of videosize
-        if (h264Streamer->isPlaying())
-        {
-            
-            _isShowCustomIndicator = NO;
-        }
-        if (_currentMediaStatus != 0)
-        {
-            h264Streamer->videoSizeChanged();
-        }
+    if (MediaPlayer::Instance()->isPlaying())
+    {
+        _isShowCustomIndicator = NO;
+    }
+    
+    if (_currentMediaStatus != 0)
+    {
+        MediaPlayer::Instance()->videoSizeChanged();
     }
     
     [self setupPtt];
@@ -5430,10 +5423,7 @@ double _ticks = 0;
         self.stringStatePTT = @"Speaking";
         
         //Mute audio to MediaPlayer lib
-        if (h264Streamer)
-        {
-            h264Streamer->setPlayOption(MEDIA_STREAM_AUDIO_MUTE);
-        }
+        MediaPlayer::Instance()->setPlayOption(MEDIA_STREAM_AUDIO_MUTE);
         
         
         NSLog(@"Device ip: %@, Port push to talk: %d, actually is: %d", [HttpCom instance].comWithDevice.device_ip, self.selectedChannel.profile.ptt_port,IRABOT_AUDIO_RECORDING_PORT);
@@ -5461,10 +5451,7 @@ double _ticks = 0;
     {
         //2. Stopping
         
-        if (h264Streamer)
-        {
-            h264Streamer->setPlayOption(MEDIA_STREAM_AUDIO_NOT_MUTE);
-        }
+        MediaPlayer::Instance()->setPlayOption(MEDIA_STREAM_AUDIO_NOT_MUTE);
         
         if (_audioOut != nil)
         {
@@ -5617,10 +5604,7 @@ double _ticks = 0;
     {
         self.disableAutorotateFlag = FALSE;
         
-        if (h264Streamer)
-        {
-            h264Streamer->setPlayOption(MEDIA_STREAM_AUDIO_NOT_MUTE);
-        }
+        MediaPlayer::Instance()->setPlayOption(MEDIA_STREAM_AUDIO_NOT_MUTE);
         
         if (_audioOutStreamRemote != nil)
         {
@@ -5640,10 +5624,7 @@ double _ticks = 0;
     {
         self.disableAutorotateFlag = YES;
         
-        if (h264Streamer)
-        {
-            h264Streamer->setPlayOption(MEDIA_STREAM_AUDIO_MUTE);
-        }
+        MediaPlayer::Instance()->setPlayOption(MEDIA_STREAM_AUDIO_MUTE);
         
         [self processingHoldToTalkRemote];
         
