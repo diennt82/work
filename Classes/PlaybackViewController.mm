@@ -815,8 +815,9 @@
     
     self.ib_sliderPlayBack.value = timeCurrent / _duration;
     
-    NSInteger time = lround(timeCurrent);
-    self.ib_timerPlayBack.text = [NSString stringWithFormat:@"%02d:%02d", time / 60, time % 60];
+    NSInteger currentTime = lround(timeCurrent);
+    NSInteger totalTime = lround(self.duration);
+    self.ib_timerPlayBack.text = [NSString stringWithFormat:@"%02d:%02d / %02d:%02d", currentTime / 60, currentTime % 60,totalTime / 60, totalTime % 60];
     
     [NSTimer scheduledTimerWithTimeInterval:0.5
                                      target:self
