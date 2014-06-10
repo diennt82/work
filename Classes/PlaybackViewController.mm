@@ -14,6 +14,8 @@
 #import "define.h"
 #import "NotifViewController.h"
 #import <objc/message.h>
+#import "TimelineDatabase.h"
+#import "MBProgressHUD.h"
 
 #define START 0
 #define END   100.0
@@ -639,6 +641,7 @@
 - (void)hideControlMenu
 {
     [self.ib_myOverlay setHidden:YES];
+    [self.ib_viewOverlayVideo setHidden:YES];
     self.view.userInteractionEnabled = YES;
 }
 
@@ -646,6 +649,9 @@
 {
     [self.ib_myOverlay setHidden:NO];
     [self.view bringSubviewToFront:self.ib_myOverlay];
+    
+    [self.ib_viewOverlayVideo setHidden:NO];
+    [self.view bringSubviewToFront:self.ib_viewOverlayVideo];
     
     if (_timerHideMenu != nil)
     {
@@ -678,6 +684,53 @@
 
 - (IBAction)deleteVideo:(id)sender
 {
+    if(self.intEventId==0)
+    {
+        return;
+    }
+    [self hideControlMenu];
+    
+    MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+    [hud setLabelText:@"Deleting Video..."];
+    
+    dispatch_time_t startTime = dispatch_time(DISPATCH_TIME_NOW, 0.1 * NSEC_PER_SEC);
+    dispatch_after(startTime, dispatch_get_main_queue(), ^{
+        
+        NSString *apiKey = [[NSUserDefaults standardUserDefaults] stringForKey:@"PortalApiKey"];
+        NSString *strEventID = [NSString stringWithFormat:@"%d",self.intEventId];
+        
+        BMS_JSON_Communication *jsonComm = [[BMS_JSON_Communication alloc] initWithObject:self Selector:nil  FailSelector:nil ServerErr:nil];
+        
+        NSDictionary *responseDict = [jsonComm deleteEventsBlockedWithRegistrationId:clip_info.registrationID eventIds:strEventID apiKey:apiKey];
+        [jsonComm release];
+        
+        [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+        if (responseDict)
+        {
+            if ([[responseDict objectForKey:@"status"] integerValue] == 200)
+            {
+                [[TimelineDatabase getSharedInstance]  deleteEventWithID:strEventID];
+                if([self.plabackVCDelegate respondsToSelector:@selector(motioEventDeleted)])
+                {
+                    [self.plabackVCDelegate motioEventDeleted];
+                }
+                [self closePlayBack:nil];
+            }
+            else if([responseDict objectForKey:@"message"])
+            {
+                Alert(nil, [responseDict objectForKey:@"message"]);
+            }
+            else
+            {
+                Alert(nil, @"Error occured. Please try again.");
+            }
+        }
+        else
+        {
+            Alert(@"Failed: Server is unreachable", @"Please check your network connection");
+        }
+    });
+    
 }
 
 - (IBAction)downloadVideo:(id)sender
