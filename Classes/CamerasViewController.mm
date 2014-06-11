@@ -3,7 +3,7 @@
 //  BlinkHD_ios
 //
 //  Created by Developer on 12/16/13.
-//  Copyright (c) 2013 Smart Panda Ltd. All rights reserved.
+//  Copyright (c) 2013 eBuyNow eCommerce Limited. All rights reserved.
 //
 
 #import "CamerasViewController.h"
@@ -31,26 +31,8 @@
     NSString *strDocDirPath;
 }
 
-//@property (nonatomic, retain) IBOutlet UITableViewCell *addCameraCell;
-//@property (nonatomic, retain) IBOutlet UIView *ibViewAddCamera;
-//@property (nonatomic, retain) IBOutlet UIView *ibViewBuyCamera;
-//
-//@property (nonatomic, retain) IBOutlet UIImageView *ibBGAddCamera;
-//@property (nonatomic, retain) IBOutlet UIImageView *ibIconAddCamera;
-//@property (nonatomic, retain) IBOutlet UILabel *ibTextAddCamera;
-//@property (nonatomic, retain) IBOutlet UIButton *ibAddCameraButton;
-//
-//@property (nonatomic, retain) IBOutlet UIImageView *ibBGBuyCamera;
-//@property (nonatomic, retain) IBOutlet UIImageView *ibIconBuyCamera;
-//@property (nonatomic, retain) IBOutlet UILabel *ibTextBuyCamera;
-//@property (nonatomic, retain) IBOutlet UIButton *ibBuyCameraButton;
-
 @property (nonatomic, retain) NSArray *snapshotImages;
 @property (nonatomic) BOOL isFirttime;
-
-//- (IBAction)addCameraButtonTouchAction:(id)sender;
-//- (IBAction)buyCameraButtonTouchAction:(id)sender;
-//- (IBAction)addCameraButtonTouchDownAction:(id)sender;
 
 @end
 
@@ -83,19 +65,9 @@
     
     self.snapshotImages = [NSArray arrayWithObjects:@"mountain", @"garden", @"desk", @"bridge", nil];
     
-    NSArray *paths = NSSearchPathForDirectoriesInDomains
-    (NSDocumentDirectory, NSUserDomainMask, YES);
-    strDocDirPath = [[paths objectAtIndex:0] retain];
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    strDocDirPath = [[paths firstObject] retain];
         
-//    [self.ibViewAddCamera setFrame:CGRectMake(0, SCREEN_HEIGHT - 45, 160, 45)];
-//    [self.ibViewBuyCamera setFrame:CGRectMake(160, SCREEN_HEIGHT - 45, 160, 45)];
-//    
-//    [self.ibAddCameraButton setImage:[UIImage imageNamed:@"add_camera_btn"] forState:UIControlStateNormal];
-//    [self.ibAddCameraButton setImage:[UIImage imageNamed:@"add_camera_btn_pressed"] forState:UIControlEventTouchDown];
-//    
-//    [self.ibBuyCameraButton setImage:[UIImage imageNamed:@"buy_camera_btn"] forState:UIControlStateNormal];
-//    [self.ibBuyCameraButton setImage:[UIImage imageNamed:@"buy_camera_btn_pressed"] forState:UIControlEventTouchDown];
-    
     // Setup a table refresh control
     UIRefreshControl *refreshControl = [[UIRefreshControl alloc] init];
     [refreshControl addTarget:self action:@selector(updateCameraInfo) forControlEvents:UIControlEventValueChanged];
@@ -107,97 +79,9 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-//    [self updateBottomButton];
+    [self updateCameraInfo];
 }
 
-#pragma mark - Actions
-
-//- (IBAction)addCameraButtonTouchAction:(id)sender
-//{
-//#if 1
-//    
-//    [self.ibIconAddCamera setImage:[UIImage imageNamed:@"add_camera_pressed"]];
-//    [self.ibTextAddCamera setTextColor:[UIColor deSelectedAddCameraTextColor]];
-//    
-//    if (_camChannels.count >= MAX_CAM_ALLOWED) {
-//        [self cameraShowDialog:DIALOG_CANT_ADD_CAM];
-//    }
-//    else {
-//        MenuViewController *tabBarController = (MenuViewController *)self.parentVC;
-//        tabBarController.notUpdateCameras = TRUE;
-//        
-//        //IF this is Iphone4 - Go directly to WIFI setup , as there is no BLE on IPHON4
-//        NSString *platformString = [UIDeviceHardware platformString];
-//        if( [platformString isEqualToString:@"iPhone 4"] ||
-//            [platformString isEqualToString:@"Verizon iPhone 4"] ||
-//            [platformString hasPrefix:@"iPad 2"] )
-//        {
-//            NSLog(@"**** IPHONE 4  / IPAD 2 *** use wifi setup for all");
-//            NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-//            [userDefaults setInteger:WIFI_SETUP forKey:SET_UP_CAMERA];
-//            [userDefaults setBool:FALSE forKey:FIRST_TIME_SETUP];
-//            [userDefaults synchronize];
-//            
-//            [tabBarController dismissViewControllerAnimated:NO completion:^{
-//                [tabBarController.menuDelegate sendStatus:SETUP_CAMERA]; //initial setup
-//            }];
-//        }
-//        else {
-//            AddCameraViewController *addCameraVC = [[AddCameraViewController alloc] init];
-//            addCameraVC.delegate = self;
-//            self.navigationItem.leftBarButtonItem.enabled = NO;
-//            [self presentViewController:addCameraVC animated:YES completion:^{}];
-//        }
-//    }
-//    [self.ibIconAddCamera setImage:[UIImage imageNamed:@"add_camera"]];
-//    [self.ibTextAddCamera setTextColor:[UIColor whiteColor]];
-//#else
-//    
-//#pragma mark DEBUG Push notification 
-//    int rcvTimeStamp = [[NSDate date] timeIntervalSince1970];
-//    CameraAlert * camAlert = [[CameraAlert alloc]initWithTimeStamp1:rcvTimeStamp];// autorelease];
-//    
-//    
-//#if 0
-//    //set other values
-//    camAlert.cameraMacNoColon = @"44334C5FF075";
-//    
-//    camAlert.cameraName = @"Camera-fake motion push";
-//    camAlert.alertType = @"4";
-//    camAlert.alertTime =@"2014-04-30T04:51:54+00:00";
-//    camAlert.alertVal = @"20140430090958000";
-//    camAlert.registrationID = @"01006644334C5FF075GPIRBEXE";
-//#else 
-//    camAlert.cameraMacNoColon = @"44334C5FF075";
-//    
-//    camAlert.cameraName = @"Camera-fake Temp push";
-//    camAlert.alertType = @"1";
-//    camAlert.alertTime =@"2014-04-30T04:51:54+00:00";
-//    camAlert.alertVal = @"1";
-//    camAlert.registrationID = @"01006644334C5FF075GPIRBEXE";
-//    
-//#endif
-//    NSLog(@"Fake push  aaa");
-//    MenuViewController * vc = (MenuViewController * )self.parentVC;
-//    
-//    [(MBP_iosViewController *) vc.menuDelegate pushNotificationRcvedInForeground:camAlert];
-//#endif
-//}
-//
-//- (IBAction)buyCameraButtonTouchAction:(id)sender
-//{
-//    [self.ibIconBuyCamera setImage:[UIImage imageNamed:@"cart_pressed"]];
-//    [self.ibTextBuyCamera setTextColor:[UIColor deSelectedBuyCameraTextColor]];
-//    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"http://hubblehome.com/hubble-products/"]];
-//}
-//
-//- (IBAction)addCameraButtonTouchDownAction:(id)sender
-//{
-//    [self.ibBGAddCamera setImage:[UIImage imageNamed:@"add_camera_btn_pressed"]];
-//    [self.ibIconAddCamera setImage:[UIImage imageNamed:@"add_camera_pressed"]];
-//    [self.ibTextAddCamera setTextColor:[UIColor deSelectedAddCameraTextColor]];
-//}
-//
 #pragma mark - CamerasCellDelegate protocol methods
 
 - (void)sendTouchSettingsActionWithRowIndex:(NSInteger)rowIdx
@@ -214,19 +98,11 @@
 
 #pragma mark - AddCameraVCDelegate protocol methods
 
-- (void)sendActionCommand:(BOOL)flag
+- (void)continueWithAddCameraAction
 {
     MenuViewController *menuViewController = (MenuViewController *)self.parentVC;
     menuViewController.notUpdateCameras = FALSE;
-    
-    if (flag) {
-        [menuViewController dismissViewControllerAnimated:NO completion:^{
-            [menuViewController.menuDelegate sendStatus:SETUP_CAMERA]; //initial setup
-        }];
-    }
-    else {
-        menuViewController.navigationController.navigationBarHidden = NO;
-    }
+    [menuViewController.menuDelegate sendStatus:SETUP_CAMERA]; //initial setup
 }
 
 #pragma mark - Public Methods
@@ -235,29 +111,6 @@
 {
     [self.tableView reloadData];
 }
-
-//- (void)updateBottomButton
-//{
-//    if (self.camChannels.count == 0) {
-//        [self.ibTextAddCamera setTextColor:[UIColor whiteColor]];
-//        [self.ibAddCameraButton setImage:[UIImage imageNamed:@"add_camera_btn"] forState:UIControlStateNormal];
-//        [self.ibAddCameraButton setEnabled:YES];
-//        [self.ibIconAddCamera setImage:[UIImage imageNamed:@"add_camera"]];
-//        _waitingForUpdateData = NO;
-//        return;
-//    }
-//    
-//    if (_waitingForUpdateData == TRUE) {
-//        [self.ibTextAddCamera setTextColor:[UIColor deSelectedAddCameraTextColor]];
-//        [self.ibAddCameraButton setEnabled:NO];
-//        [self.ibIconAddCamera setImage:[UIImage imageNamed:@"add_camera_pressed"]];
-//    }
-//    else {
-//        [self.ibTextAddCamera setTextColor:[UIColor whiteColor]];
-//        [self.ibAddCameraButton setEnabled:YES];
-//        [self.ibIconAddCamera setImage:[UIImage imageNamed:@"add_camera"]];
-//    }
-//}
 
 #pragma mark - H264PlayerVCDelegate protocol methods
 
@@ -294,19 +147,13 @@
 
 - (void)cameraShowDialog:(int)dialogType
 {
-    NSString * ok = NSLocalizedStringWithDefaultValue(@"Ok",nil, [NSBundle mainBundle], @"Ok", nil);
-    
-	switch (dialogType)
-    {
+	switch (dialogType) {
 		case DIALOG_CANT_ADD_CAM:
 		{
-            NSString * msg = NSLocalizedStringWithDefaultValue(@"remove_one_cam",nil, [NSBundle mainBundle],
-                                                               @"Please remove one camera from the current  list before addding the new one", nil);
-            
 			UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@""
-                                                            message:msg
+                                                            message:LocStr(@"remove_one_cam")
                                                            delegate:nil
-                                                  cancelButtonTitle:ok
+                                                  cancelButtonTitle:LocStr(@"OK")
                                                   otherButtonTitles:nil];
 			[alert show];
 			[alert release];
@@ -346,12 +193,10 @@
         else {
             AddCameraViewController *addCameraVC = [[AddCameraViewController alloc] init];
             addCameraVC.delegate = self;
-            self.navigationItem.leftBarButtonItem.enabled = NO;
-            [self presentViewController:addCameraVC animated:YES completion:^{}];
+            [self presentViewController:addCameraVC animated:YES completion:nil];
         }
     }
 }
-
 
 //- (void)cameraBackAction:(id)sender
 //{
@@ -481,7 +326,6 @@
             camerasCell.accessoryType = UITableViewCellAccessoryNone;
             
             NSLog(@"%s Fw is upgrading...", __FUNCTION__);
-            
             [self performSelectorOnMainThread:@selector(updateCameraInfoWithDelay) withObject:nil waitUntilDone:NO];
         }
         else if ([ch.profile isNotAvailable]) {
@@ -552,19 +396,6 @@
 - (void)dealloc
 {
     [_camChannels release];
-//    [_addCameraCell release];
-//    [_ibAddCameraButton release];
-//    [_ibBuyCameraButton release];
-//    [_ibBGAddCamera release];
-//    [_ibIconAddCamera release];
-//    [_ibTextAddCamera release];
-//    [_ibAddCameraButton release];
-//    [_ibBGBuyCamera release];
-//    [_ibIconBuyCamera release];
-//    [_ibTextBuyCamera release];
-//    [_ibBuyCameraButton release];
-//    [_ibViewAddCamera release];
-//    [_ibViewBuyCamera release];
     [super dealloc];
 }
 
