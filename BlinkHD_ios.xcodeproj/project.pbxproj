@@ -5107,8 +5107,8 @@
 				);
 				OTHER_LDFLAGS = "-lz";
 				PRODUCT_NAME = HubbleHome;
-				PROVISIONING_PROFILE = "6DA32712-3F96-4213-8A38-C28C09799B13";
-				SDKROOT = iphoneos7.0;
+				PROVISIONING_PROFILE = "D8ABA982-1BD8-4717-B316-D7517196F01B";
+				SDKROOT = iphoneos;
 				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/../ios-frameworks/pjsip/arm/include/ $(SRCROOT)/../ios-frameworks/pjsip/arm/include/pj/ $(SRCROOT)/../ios-frameworks/pjsip/arm/include/pjnath/";
 				VALID_ARCHS = "armv6 armv7";
 			};
