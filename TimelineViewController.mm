@@ -23,7 +23,7 @@
 
 #import "NSData+Base64.h"
 
-@interface TimelineViewController () <UIScrollViewDelegate,PlaybackDelegate>
+@interface TimelineViewController () <PlaybackDelegate>
 
 @property (nonatomic, retain) NSMutableArray *events;
 @property (nonatomic, retain) NSMutableArray *clipsInEachEvent;
@@ -82,7 +82,7 @@
     self.is12hr = [[NSUserDefaults standardUserDefaults] boolForKey:@"IS_12_HR"];
     
     self.eventPage = 1;
-#if 0
+#if 1
     UIRefreshControl *refreshControl = [[UIRefreshControl alloc] init];
     [refreshControl addTarget:self
                        action:@selector(refreshEvents:)
@@ -139,6 +139,22 @@
                                                            selector:@selector(refreshEvents:)
                                                            userInfo:nil
                                                             repeats:NO];
+}
+
+- (void)refreshNewEvents:(UIRefreshControl *)sender
+{
+    if (!_isLoading)
+    {
+        //Refresh means loading the first page again
+        _isLoading = TRUE;
+        self.eventPage = 1;
+        
+        self.isEventAlready = FALSE;
+        self.stringIntelligentMessage = @"Loading...";
+        self.shouldLoadMore = YES;
+
+        [self performSelectorInBackground:@selector(getEventsList_bg2:) withObject:self.camChannel];
+    }
 }
 
 - (void)refreshEvents:(NSTimer *)timer
@@ -271,6 +287,8 @@
         [self.tableView reloadData];
         
         [self.tableView layoutIfNeeded];
+        
+        [self.refreshControl endRefreshing];
     });
 }
 
@@ -457,8 +475,225 @@
     }
 }
 
+- (void)updateIntelligentMessageWithNumberOfVOX:(NSInteger)numberOfVOX numberOfMovement:(NSInteger)numberOfMovement
+{
+    if (numberOfVOX >= 4)
+    {
+        if (numberOfMovement >= 4)
+        {
+            self.stringIntelligentMessage = @"There has been a lot of noise/movement";
+        }
+        else if(numberOfMovement >= 2)
+        {
+            self.stringIntelligentMessage = @"There has been a lot of noise and some movement";
+        }
+        else if(numberOfMovement == 1)
+        {
+            self.stringIntelligentMessage = @"There has been a lot of noise and little movement";
+        }
+        else
+        {
+            self.stringIntelligentMessage = @"There has been a lot of noise";
+        }
+    }
+    else// if (numberOfVOX >= 0)
+    {
+        if (numberOfMovement >= 4)
+        {
+            self.stringIntelligentMessage = @"There has been a lot of movement";
+        }
+        else if(numberOfMovement >= 2)
+        {
+            self.stringIntelligentMessage = @"There has been some movement";
+        }
+        else if(numberOfMovement == 1)
+        {
+            self.stringIntelligentMessage = @"There has been a little movement";
+        }
+        else
+        {
+            if (numberOfVOX >= 2)
+            {
+                self.stringIntelligentMessage = @"There has been some noise";
+            }
+            else if (numberOfVOX >= 1)
+            {
+                self.stringIntelligentMessage = @"There has been a little noise";
+            }
+            else
+            {
+                self.stringIntelligentMessage = @"All is calm";
+            }
+        }
+    }
+    
+    self.stringIntelligentMessage = [NSString stringWithFormat:@"%@ at %@",self.stringIntelligentMessage,self.camChannel.profile.name];
+}
 
+- (void)loadMoreEvent_bg
+{
+    self.eventPage++;
+    BOOL shouldUpdateTableView = FALSE;
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    NSString *apiKey = [userDefaults objectForKey:@"PortalApiKey"];
+    
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    // Get the date time in NSString
+    [dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+    [dateFormatter setTimeZone:[NSTimeZone timeZoneWithName:@"UTC"]];
+    
+    NSString *dateInStringFormated = [dateFormatter stringFromDate:_currentDate];
+    
+    [dateFormatter release];
+    
+    dateInStringFormated = [self urlEncodeUsingEncoding:NSUTF8StringEncoding forString:dateInStringFormated];
+    
+    if (_jsonComm == nil)
+    {
+        self.jsonComm = [[BMS_JSON_Communication alloc] initWithObject:self
+                                                              Selector:nil
+                                                          FailSelector:nil
+                                                             ServerErr:nil];
+    }
+    
+    NSDictionary *responseDict = [_jsonComm getListOfEventsBlockedWithRegisterId:_camChannel.profile.registrationID
+                                                                 beforeStartTime:dateInStringFormated//@"2013-12-28 20:10:18"
+                                                                       eventCode:nil//event_code // temp
+                                                                          alerts:_alertsString
+                                                                            page:[NSString stringWithFormat:@"%d", _eventPage]
+                                                                          offset:nil
+                                                                            size:nil
+                                                                          apiKey:apiKey];
+    if (responseDict)
+    {
+        NSArray *events = [[responseDict objectForKey:@"data"] objectForKey:@"events"];
+        
+        if (events != nil &&
+            events.count > 0)
+        {
+            for (NSDictionary *event in events)
+            {
+                EventInfo *eventInfo = [[EventInfo alloc] init];
+                eventInfo.alert_name = [event objectForKey:@"alert_name"];
+                eventInfo.value      = [event objectForKey:@"value"];
+                eventInfo.time_stamp = [event objectForKey:@"time_stamp"];
+                eventInfo.alert      = [[event objectForKey:@"alert"] integerValue];
+                
+                
+                NSArray *clipsInEvent = [event objectForKey:@"data"];
+                
+                if (![clipsInEvent isEqual:[NSNull null]])
+                {
+                    ClipInfo *clipInfo = [[ClipInfo alloc] init];
+                    clipInfo.urlImage = [[clipsInEvent objectAtIndex:0] objectForKey:@"image"];
+                    clipInfo.urlFile = [[clipsInEvent objectAtIndex:0] objectForKey:@"file"];
+                    
+                    eventInfo.clipInfo = clipInfo;
+                    [clipInfo release];
+                }
+                else
+                {
+                    NSLog(@"Event has no data");
+                }
+                
+                [self.events addObject:eventInfo];
+                shouldUpdateTableView = TRUE;
+                [eventInfo release];
+                
+                [self.clipsInEachEvent addObject:clipsInEvent];
+            }
+        }
+        else
+        {
+            self.shouldLoadMore = FALSE;
+        }
+    }
+    
+    self.isLoading = FALSE;
+    
+    if (shouldUpdateTableView)
+    {
+        [self.tableView reloadData];
+        //[self.tableView setContentOffset:CGPointMake(0, CGFLOAT_MAX)];
+    }
+    else
+    {
+        self.eventPage--;
+    }
+    
+    NSLog(@"%s:loadMoreEvent_bg: -eventPage: %d, - shouldUpdateTableview: %d, shouldLoadMore: %d", __FUNCTION__, _eventPage, shouldUpdateTableView, _shouldLoadMore);
+}
 
+#pragma mark - Scroll view delegate
+
+#if 0
+- (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate
+{
+    NSLog(@"%s _isLoading:%d", __FUNCTION__, _isLoading);
+    
+    if (!_isLoading && scrollView.contentOffset.y < -64.0f)
+    {
+        //Refresh means loading the first page again
+        _isLoading = TRUE;
+        self.eventPage = 1;
+        
+        self.isEventAlready = FALSE;
+        self.events = nil;
+        self.stringIntelligentMessage = @"Loading...";
+        
+        self.shouldLoadMore = YES;
+        
+        [self.tableView reloadData];
+        
+        [self loadEvents:self.camChannel];
+    }
+}
+
+- (void)scrollViewDidScroll:(UIScrollView *)aScrollView
+{
+    if (!_isLoading)
+    {
+        if (aScrollView.contentOffset.y < 0.0f)
+        {
+            //Refresh means loading the first page again
+            NSLog(@"%s pull-down", __FUNCTION__);
+        }
+        else
+        {
+            if (_shouldLoadMore)
+            {
+                //NSLog(@"%s scroll", __FUNCTION__);
+                
+                CGPoint offset = aScrollView.contentOffset;
+                CGRect bounds = aScrollView.bounds;
+                CGSize size = aScrollView.contentSize;
+                UIEdgeInsets inset = aScrollView.contentInset;
+                float y = offset.y + bounds.size.height - inset.bottom;
+                float h = size.height;
+                
+                float reload_distance = -64;
+                
+                @synchronized(self)
+                {
+                    if(y > h + reload_distance)
+                    {
+                        NSLog(@"%s load more", __FUNCTION__);
+                        self.isLoading = TRUE;
+                        [self performSelectorInBackground:@selector(loadMoreEvent_bg) withObject:self.camChannel];
+                    }
+                }
+            }
+            else
+            {
+                //NSLog(@"%s scroll non-load more", __FUNCTION__);
+            }
+        }
+    }
+    else
+    {
+        //NSLog(@"%s scroll is loading", __FUNCTION__);
+    }
+}
 
 - (void)getEventsList_bg: (CamChannel *)camChannel
 {
@@ -656,199 +891,7 @@
     
 	return newImage;
 }
-
-- (void)updateIntelligentMessageWithNumberOfVOX:(NSInteger)numberOfVOX numberOfMovement:(NSInteger)numberOfMovement
-{
-    if (numberOfVOX >= 4)
-    {
-        if (numberOfMovement >= 4)
-        {
-            self.stringIntelligentMessage = @"There has been a lot of noise/movement";
-        }
-        else if(numberOfMovement >= 2)
-        {
-            self.stringIntelligentMessage = @"There has been a lot of noise and some movement";
-        }
-        else if(numberOfMovement == 1)
-        {
-            self.stringIntelligentMessage = @"There has been a lot of noise and little movement";
-        }
-        else
-        {
-            self.stringIntelligentMessage = @"There has been a lot of noise";
-        }
-    }
-    else// if (numberOfVOX >= 0)
-    {
-        if (numberOfMovement >= 4)
-        {
-            self.stringIntelligentMessage = @"There has been a lot of movement";
-        }
-        else if(numberOfMovement >= 2)
-        {
-            self.stringIntelligentMessage = @"There has been some movement";
-        }
-        else if(numberOfMovement == 1)
-        {
-            self.stringIntelligentMessage = @"There has been a little movement";
-        }
-        else
-        {
-            if (numberOfVOX >= 2)
-            {
-                self.stringIntelligentMessage = @"There has been some noise";
-            }
-            else if (numberOfVOX >= 1)
-            {
-                self.stringIntelligentMessage = @"There has been a little noise";
-            }
-            else
-            {
-                self.stringIntelligentMessage = @"All is calm";
-            }
-        }
-    }
-    
-    self.stringIntelligentMessage = [NSString stringWithFormat:@"%@ at %@",self.stringIntelligentMessage,self.camChannel.profile.name];
-}
-
-- (void)loadMoreEvent_bg
-{
-    self.eventPage++;
-    BOOL shouldUpdateTableView = FALSE;
-    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-    NSString *apiKey = [userDefaults objectForKey:@"PortalApiKey"];
-    
-    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-    // Get the date time in NSString
-    [dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
-    [dateFormatter setTimeZone:[NSTimeZone timeZoneWithName:@"UTC"]];
-    
-    NSString *dateInStringFormated = [dateFormatter stringFromDate:_currentDate];
-    
-    [dateFormatter release];
-    
-    dateInStringFormated = [self urlEncodeUsingEncoding:NSUTF8StringEncoding forString:dateInStringFormated];
-    
-    if (_jsonComm == nil)
-    {
-        self.jsonComm = [[BMS_JSON_Communication alloc] initWithObject:self
-                                                              Selector:nil
-                                                          FailSelector:nil
-                                                             ServerErr:nil];
-    }
-    
-    NSDictionary *responseDict = [_jsonComm getListOfEventsBlockedWithRegisterId:_camChannel.profile.registrationID
-                                                                 beforeStartTime:dateInStringFormated//@"2013-12-28 20:10:18"
-                                                                       eventCode:nil//event_code // temp
-                                                                          alerts:_alertsString
-                                                                            page:[NSString stringWithFormat:@"%d", _eventPage]
-                                                                          offset:nil
-                                                                            size:nil
-                                                                          apiKey:apiKey];
-    if (responseDict)
-    {
-        NSArray *events = [[responseDict objectForKey:@"data"] objectForKey:@"events"];
-        
-        if (events != nil &&
-            events.count > 0)
-        {
-            for (NSDictionary *event in events)
-            {
-                EventInfo *eventInfo = [[EventInfo alloc] init];
-                eventInfo.alert_name = [event objectForKey:@"alert_name"];
-                eventInfo.value      = [event objectForKey:@"value"];
-                eventInfo.time_stamp = [event objectForKey:@"time_stamp"];
-                eventInfo.alert      = [[event objectForKey:@"alert"] integerValue];
-                
-                
-                NSArray *clipsInEvent = [event objectForKey:@"data"];
-                
-                if (![clipsInEvent isEqual:[NSNull null]])
-                {
-                    ClipInfo *clipInfo = [[ClipInfo alloc] init];
-                    clipInfo.urlImage = [[clipsInEvent objectAtIndex:0] objectForKey:@"image"];
-                    clipInfo.urlFile = [[clipsInEvent objectAtIndex:0] objectForKey:@"file"];
-                    
-                    eventInfo.clipInfo = clipInfo;
-                    [clipInfo release];
-                }
-                else
-                {
-                    NSLog(@"Event has no data");
-                }
-                
-                [self.events addObject:eventInfo];
-                shouldUpdateTableView = TRUE;
-                [eventInfo release];
-                
-                [self.clipsInEachEvent addObject:clipsInEvent];
-            }
-        }
-        else
-        {
-            self.shouldLoadMore = FALSE;
-        }
-    }
-    
-    self.isLoading = FALSE;
-    
-    if (shouldUpdateTableView)
-    {
-        [self.tableView reloadData];
-        //[self.tableView setContentOffset:CGPointMake(0, CGFLOAT_MAX)];
-    }
-    else
-    {
-        self.eventPage--;
-    }
-    
-    NSLog(@"%s:loadMoreEvent_bg: -eventPage: %d, - shouldUpdateTableview: %d, shouldLoadMore: %d", __FUNCTION__, _eventPage, shouldUpdateTableView, _shouldLoadMore);
-}
-
-#pragma mark - Scroll view delegate
-
-#if 1
-- (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate
-{
-    if (scrollView.contentOffset.y < -64.0f)
-    {
-        //Refresh means loading the first page again
-        self.eventPage = 1;
-        
-        [self refreshEvents:nil];
-    }
-}
 #endif
-
-- (void)scrollViewDidScroll:(UIScrollView *)aScrollView
-{
-    CGPoint offset = aScrollView.contentOffset;
-    CGRect bounds = aScrollView.bounds;
-    CGSize size = aScrollView.contentSize;
-    UIEdgeInsets inset = aScrollView.contentInset;
-    float y = offset.y + bounds.size.height - inset.bottom;
-    float h = size.height;
-    
-    float reload_distance = -64;
-    
-    @synchronized(self)
-    {
-       //  NSLog(@"load more... %d",self.isLoading);
-        if (self.isLoading == FALSE)
-        {
-            if( (y > h + reload_distance) &&
-               _shouldLoadMore)
-            {
-                self.isLoading = TRUE;
-                //self.eventPage ++;
-                //NSLog(@"load more... %d",self.eventPage);
-                [self performSelectorInBackground:@selector(loadMoreEvent_bg) withObject:self.camChannel];
-                
-            }
-        }
-    }
-}
 
 #pragma mark - Table view data source
 
@@ -1059,7 +1102,15 @@
 			(components1.day == components2.day));
 }
 
-
+- (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if ((indexPath.section == 1) && (indexPath.row == _events.count - 1) && !_isLoading) {
+        NSLog(@"...start fetching more items.");
+        //NSLog(@"%s load more", __FUNCTION__);
+        self.isLoading = TRUE;
+        [self performSelectorInBackground:@selector(loadMoreEvent_bg) withObject:self.camChannel];
+    }
+}
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
