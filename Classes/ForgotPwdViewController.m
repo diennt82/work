@@ -106,7 +106,7 @@
 
 -(BOOL)checkEmailValidation:(NSString*)strEmail{
     
-    strEmail  = [[strEmail stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]] autorelease];
+    strEmail  = [strEmail stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]] ;
     if(strEmail.length==0)
     {
         return NO;
