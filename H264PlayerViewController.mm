@@ -3151,6 +3151,13 @@ double _ticks = 0;
                                        //handle Bad response
                                        NSLog(@"%s ERROR: %@", __FUNCTION__, [responseDict objectForKey:@"message"]);
 #if 1
+                                       self.messageStreamingState = @"Camera is not accessible";
+                                       _isShowTextCameraIsNotAccesible = YES;
+                                       
+                                       dispatch_async(dispatch_get_main_queue(), ^{
+                                           [self.ib_lbCameraNotAccessible setHidden:NO];
+                                       });
+                                       
                                        [self symmetric_check_result:TRUE];
 #else
                                        NSArray * args = [NSArray arrayWithObjects:
@@ -3160,16 +3167,16 @@ double _ticks = 0;
                                                               withObject:args
                                                            waitUntilDone:NO];
 #endif
-                                       self.messageStreamingState = @"Camera is not accessible";
                                    }
                                }
                                else
                                {
                                    NSLog(@"SERVER unreachable (timeout) ");
                                    self.messageStreamingState = @"Camera is not accessible";
-                                   //TODO : handle SERVER unreachable (timeout)
+                                   _isShowTextCameraIsNotAccesible = YES;
 #if 1
                                    dispatch_async(dispatch_get_main_queue(), ^{
+                                       [self.ib_lbCameraNotAccessible setHidden:NO];
                                        [self performSelector:@selector(setupCamera) withObject:nil afterDelay:10];
                                    });
 #else
