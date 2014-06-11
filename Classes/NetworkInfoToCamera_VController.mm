@@ -132,7 +132,6 @@
     if (self.tfSSID.text.length > 0 && ([self.security isEqualToString:@"None"] || [self.security isEqualToString:@"open"]))
     {
         self.navigationItem.rightBarButtonItem .enabled = YES;
-        self.navigationItem.rightBarButtonItem.tintColor = [UIColor blueColor];
     }
     
     self.tfPassword = (UITextField *)[self.passwordCell viewWithTag:200];
@@ -163,7 +162,6 @@
             ([self.security isEqualToString:@"wep"] || [self.security isEqualToString:@"wpa"]))
         {
             self.navigationItem.rightBarButtonItem.enabled = YES;
-            self.navigationItem.rightBarButtonItem.tintColor = [UIColor blueColor];
             
             self.tfPassword.text = self.deviceConf.key;
             self.tfConfirmPass.text = self.deviceConf.key;
@@ -239,11 +237,9 @@
         }
         if (ssidTextLength > 0 && [self.tfPassword.text isEqualToString:self.tfConfirmPass.text]) {
             self.navigationItem.rightBarButtonItem.enabled = YES;
-            self.navigationItem.rightBarButtonItem.tintColor = [UIColor blueColor];
         }
         else {
             self.navigationItem.rightBarButtonItem.enabled = NO;
-            self.navigationItem.rightBarButtonItem.tintColor = nil;
         }
     }
     else if (textField.tag == 200) { // Password
@@ -262,11 +258,9 @@
         }
         if (self.tfSSID.text.length > 0 && [passString isEqualToString:self.tfConfirmPass.text]) {
             self.navigationItem.rightBarButtonItem.enabled = YES;
-            self.navigationItem.rightBarButtonItem.tintColor = [UIColor blueColor];
         }
         else {
             self.navigationItem.rightBarButtonItem.enabled = NO;
-            self.navigationItem.rightBarButtonItem.tintColor = nil;
         }
     }
     else if (textField.tag == 201) { // Confirm Password
@@ -285,11 +279,9 @@
         }
         if (self.tfSSID.text.length > 0 && [self.tfPassword.text isEqualToString:confirmPassString]) {
             self.navigationItem.rightBarButtonItem.enabled = YES;
-            self.navigationItem.rightBarButtonItem.tintColor = [UIColor blueColor];
         }
         else {
             self.navigationItem.rightBarButtonItem.enabled = NO;
-            self.navigationItem.rightBarButtonItem.tintColor = nil;
         }
     }
     return YES;

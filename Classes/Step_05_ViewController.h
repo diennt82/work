@@ -3,7 +3,7 @@
 //  MBP_ios
 //
 //  Created by NxComm on 7/25/12.
-//  Copyright (c) 2012 Smart Panda Ltd. All rights reserved.
+//  Copyright (c) 2012 eBuyNow eCommerce Limited. All rights reserved.
 //
 
 #import <UIKit/UIKit.h>
@@ -14,9 +14,7 @@
 
 @interface Step_05_ViewController : GAITrackedViewController
 {
-    NSMutableArray * listOfWifi; 
-    IBOutlet UITableViewCell * cellView; 
-    IBOutlet UITableView * mTableView; 
+    IBOutlet UITableView * mTableView;
 }
 
 @property (nonatomic, retain) NSMutableArray * listOfWifi;
