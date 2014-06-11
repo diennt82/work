@@ -1185,7 +1185,7 @@
     if (_alertViewRename == nil)
     {
         self.alertViewRename = [[UIAlertView alloc] initWithTitle:@"Change Camera Name"
-                                                          message:@"Enter the new location of this camera."
+                                                          message:@"Enter the new camera name."
                                                          delegate:self
                                                 cancelButtonTitle:@"Cancel"
                                                 otherButtonTitles:@"OK", nil];
