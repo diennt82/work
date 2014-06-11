@@ -23,7 +23,7 @@
 
 #import "NSData+Base64.h"
 
-@interface TimelineViewController () <UIScrollViewDelegate>
+@interface TimelineViewController () <UIScrollViewDelegate,PlaybackDelegate>
 
 @property (nonatomic, retain) NSMutableArray *events;
 @property (nonatomic, retain) NSMutableArray *clipsInEachEvent;
@@ -92,6 +92,7 @@
 #endif
     //[[UIApplication sharedApplication] setStatusBarOrientation:UIDeviceOrientationPortrait animated:NO];
 }
+
 
 - (void)didReceiveMemoryWarning
 {
@@ -1458,6 +1459,8 @@
             PlaybackViewController *playbackViewController = [[PlaybackViewController alloc] init];
             
             playbackViewController.clip_info = clipInfo;
+            playbackViewController.intEventId = event.eventID;
+            playbackViewController.plabackVCDelegate = self;
             
             [clipInfo release];
             
@@ -1536,6 +1539,12 @@
 #endif
     }
 #endif
+}
+
+#pragma mark - PlayBackDelegate Methods
+-(void)motioEventDeleted
+{
+    [self getEventFromDb:self.camChannel];
 }
 
 @end

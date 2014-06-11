@@ -16,6 +16,13 @@
 #import "UIColor+Hubble.h"
 #import "EarlierNavigationController.h"
 
+@protocol PlaybackDelegate <NSObject>
+
+@optional
+-(void)motioEventDeleted;
+
+@end
+
 @interface PlaybackViewController : UIViewController<PlayerCallbackHandler>
 
 {
@@ -36,7 +43,7 @@
     BOOL _isSwitchingWhenPress;
     BOOL _isClickedOnZooming;
 }
-
+@property (nonatomic, assign) id<PlaybackDelegate> plabackVCDelegate;
 @property (nonatomic, retain) NSMutableArray *clips;
 @property (retain, nonatomic) IBOutlet UIImageView *imageVideo;
 @property (retain, nonatomic) IBOutlet UIActivityIndicatorView *activityIndicator;
@@ -67,7 +74,7 @@
 @property (nonatomic) BOOL userWantToBack;
 @property (retain, nonatomic) NSMutableArray *clipsInEvent;
 @property (nonatomic, retain) NSTimer *timerHideMenu;
-
+@property (nonatomic) NSInteger intEventId;
 //- (void)stopStream;
 
 - (IBAction)onTimeSliderChange:(id)sender;
