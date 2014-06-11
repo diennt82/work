@@ -240,7 +240,7 @@
     
     EarlierNavigationController *nav = [[EarlierNavigationController alloc] initWithRootViewController:self.menuVC];
     [_menuVC release];
-    assert(nav != nil);
+    //assert(nav != nil);
     
     if (self.presentedViewController) {
         [self dismissViewControllerAnimated:YES completion:^{
@@ -1011,9 +1011,10 @@
                     latestCamAlert = nil;
                 }
                 
-                UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:notifVC];
+                [self.navigationController pushViewController:notifVC animated:NO];
                 
-                [self presentViewController:nav animated:YES completion:^{}];
+                //UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:notifVC];
+                //[self presentViewController:nav animated:YES completion:^{}];
                 
                 [pushAlert release];
                 pushAlert = nil;

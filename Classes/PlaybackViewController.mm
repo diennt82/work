@@ -107,7 +107,7 @@
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
-    NSLog(@"%s: viewDidAppear", __FUNCTION__);
+    NSLog(@"%s parent:%@", __FUNCTION__, self.parentViewController);
     
     [self becomeActive];
 }
@@ -495,6 +495,7 @@
 }
 
 - (void)dealloc {
+    NSLog(@"%s", __FUNCTION__);
     
     [imageVideo release];
     
@@ -533,6 +534,8 @@
         [self.list_refresher invalidate];
     }
     
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+    
     if (self.navigationController != nil)
     {
         if ([[UIDevice currentDevice] orientation] == UIDeviceOrientationLandscapeLeft ||
@@ -545,15 +548,20 @@
             }
         }
         
-        NSLog(@"Playback with nav controller pop all");
         [[UIApplication sharedApplication] setStatusBarHidden:NO
                                                 withAnimation:UIStatusBarAnimationNone];
+#if 1
+        [self.navigationController popViewControllerAnimated:YES];
+#else
+        NotifViewController * vc = [self.navigationController.viewControllers objectAtIndex:(self.navigationController.viewControllers.count - 2)];
         
-        NotifViewController * vc = [self.navigationController.viewControllers objectAtIndex:0];
+        NSLog(@"Playback with nav controller pop all:%@", vc);
         
         if ([vc isKindOfClass:[NotifViewController class]])
         {
-            [self.navigationController popToRootViewControllerAnimated:NO];
+            NSLog(@"Playback with nav controller pop to NotifViewController");
+            //[self.navigationController popToRootViewControllerAnimated:NO];
+            [self.navigationController popViewControllerAnimated:NO];
             [vc ignoreTouchAction:nil];
         }
         else // Timeline
@@ -562,6 +570,7 @@
             //NSLog(@"%s goBackToPlayList - vc: %@", __FUNCTION__, NSStringFromClass([tmp class]));
             [self.navigationController popViewControllerAnimated:YES];
         }
+#endif
     }
     else
     {
