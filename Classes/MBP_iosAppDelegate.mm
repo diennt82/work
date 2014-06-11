@@ -136,7 +136,7 @@
      NSString *cachesDirectory = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
 	NSString *logPath = [cachesDirectory stringByAppendingPathComponent:@"application.log"];
     
-    [self createANewAppLog:logPath decumentDirectory:cachesDirectory];
+    //[self createANewAppLog:logPath decumentDirectory:cachesDirectory];
     
 	freopen([logPath cStringUsingEncoding:NSASCIIStringEncoding], "a+", stderr);
 	NSLog(@"Log location: %@",logPath);
@@ -202,7 +202,9 @@ void checkingApplicationCrashed()
     BOOL success = FALSE;
     NSError *error;
     
-    if ([[fileManager attributesOfItemAtPath:appLogPath error:&error] fileSize] > 5000000)//5000000) // 5MB
+    // NSLog(@"%s size:%llu", __FUNCTION__, [[fileManager attributesOfItemAtPath:appLogPath error:&error] fileSize]);
+    
+    if ([[fileManager attributesOfItemAtPath:appLogPath error:&error] fileSize] > 10)// 5000000)) // 5MB
     {
         if ([fileManager fileExistsAtPath:appLog0])
         {
@@ -229,6 +231,8 @@ void checkingApplicationCrashed()
             if (success)
             {
                 NSLog(@"Remove app log success");
+                
+                freopen([appLogPath cStringUsingEncoding:NSASCIIStringEncoding], "a+", stderr);
             }
             else
             {
@@ -565,7 +569,12 @@ void checkingApplicationCrashed()
     /*
      Called as part of  transition from the background to the inactive state: here you can undo many of the changes made on entering the background.
      */
-	
+	NSLog(@"%s", __FUNCTION__);
+    
+    NSString *cachesDirectory = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
+	NSString *logPath = [cachesDirectory stringByAppendingPathComponent:@"application.log"];
+    
+    [self createANewAppLog:logPath decumentDirectory:cachesDirectory];
 }
 
 
