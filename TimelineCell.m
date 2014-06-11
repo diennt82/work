@@ -7,6 +7,7 @@
 //
 
 #import "TimelineCell.h"
+#import "define.h"
 
 @implementation TimelineCell
 
@@ -38,6 +39,9 @@
     imageViewLine.frame = CGRectMake(imageViewLine.frame.origin.x, y, imageViewLine.frame.size.width, self.bounds.size.height - y);
    // imageViewLine.center = CGPointMake(imageViewLine.center.x, imageViewLine.center.y + _eventDetailLabel.frame.size.height / 2);
     */
+    CGRect frm = self.eventLabel.frame;
+    frm.size.width = SCREEN_WIDTH-20;
+    [self.eventLabel setFrame:frm];
 }
 
 - (void)dealloc {
