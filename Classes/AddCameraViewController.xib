@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="5053" systemVersion="13C64" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="5056" systemVersion="13D65" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none">
     <dependencies>
         <deployment defaultVersion="1792" identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3733"/>
@@ -8,6 +8,7 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="AddCameraViewController">
             <connections>
                 <outlet property="btnCancel" destination="qRV-mz-RPt" id="fM4-K7-VMc"/>
+                <outlet property="buyCameraButton" destination="Psr-PH-xwY" id="7ja-a4-Hxg"/>
                 <outlet property="view" destination="1" id="3"/>
             </connections>
         </placeholder>
@@ -74,8 +75,20 @@
                     <color key="textColor" red="0.062745098040000002" green="0.062745098040000002" blue="0.062745098040000002" alpha="1" colorSpace="calibratedRGB"/>
                     <nil key="highlightedColor"/>
                 </label>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="Psr-PH-xwY">
+                    <rect key="frame" x="20" y="454" width="280" height="44"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="20"/>
+                    <state key="normal" title="Buy Camera" backgroundImage="buy_camera_btn.png">
+                        <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                    </state>
+                    <connections>
+                        <action selector="buyCameraButtonAction:" destination="-1" eventType="touchUpInside" id="k9f-fY-Nj3"/>
+                    </connections>
+                </button>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="qRV-mz-RPt">
-                    <rect key="frame" x="20" y="506" width="280" height="50"/>
+                    <rect key="frame" x="20" y="512" width="280" height="44"/>
                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <fontDescription key="fontDescription" name="HelveticaNeue-Thin" family="Helvetica Neue" pointSize="20"/>
                     <state key="normal" title="Cancel" backgroundImage="cancel_btn.png">
@@ -93,6 +106,7 @@
         </view>
     </objects>
     <resources>
+        <image name="buy_camera_btn.png" width="160" height="45"/>
         <image name="camera_1.png" width="110" height="115"/>
         <image name="camera_2.png" width="110" height="115"/>
         <image name="cancel_btn.png" width="295" height="50"/>
