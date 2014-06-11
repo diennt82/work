@@ -3,37 +3,68 @@
 //  MBP_ios
 //
 //  Created by NxComm on 8/3/12.
-//  Copyright (c) 2012 Smart Panda Ltd. All rights reserved.
+//  Copyright (c) 2012 eBuyNow eCommerce Limited. All rights reserved.
 //
+
+#import <MonitorCommunication/MonitorCommunication.h>
+#import <MessageUI/MFMailComposeViewController.h>
 
 #import "Account_ViewController.h"
 #import "CameraSettingsCell.h"
 #import "MenuViewController.h"
-#import <MonitorCommunication/MonitorCommunication.h>
 #import "PublicDefine.h"
-#import <MessageUI/MFMailComposeViewController.h>
 #import "NSData+AESCrypt.h"
 
 @interface Account_ViewController () <MFMailComposeViewControllerDelegate, UIAlertViewDelegate>
 
-@property (retain, nonatomic) IBOutlet UITableViewCell *tableViewCellChangePassword;
-
+@property (nonatomic, retain) IBOutlet UITableViewCell *tableViewCellChangePassword;
 @property (nonatomic) NSInteger screenWidth;
 
 @end
 
 @implementation Account_ViewController
 
+#define CHANGE_PASSWORD_DIALOG_TAG  111
+#define LOGOUT_DIALOG_TAG           222
+
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
         // Custom initialization
-        NSString * msgAccount = NSLocalizedStringWithDefaultValue(@"Account_",nil, [NSBundle mainBundle],
-                                                                  @"Account", nil);
-        self.title = msgAccount;
+        self.title = LocStr(@"Account_");
     }
     return self;
+}
+
+- (void)viewDidLoad
+{
+    [super viewDidLoad];
+    
+    self.screenWidth = [UIScreen mainScreen].bounds.size.width;
+    UILabel *lblVersion = (UILabel *)[self.view viewWithTag:559];
+    
+    lblVersion.text = [NSString stringWithFormat:@"Hubble Home v%@", [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"]];
+    
+    UIBarButtonItem *logoutButton = [[UIBarButtonItem alloc] initWithTitle:@"Logout"
+                                                                     style:UIBarButtonItemStylePlain
+                                                                    target:self
+                                                                    action:@selector(confirmUserLogout)];
+    self.navigationItem.rightBarButtonItem = logoutButton;
+    [logoutButton release];
+}
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    NSLog(@"AccountVC -viewWillAppear --");
+    [self loadUserData];
+    
+    // Don't know why but on iOS 7.1 the tineColor was getting unset somehow
+    if (floor(NSFoundationVersionNumber) > NSFoundationVersionNumber_iOS_6_1) {
+        // iOS 7+
+        self.navigationItem.rightBarButtonItem.tintColor = [UIApplication sharedApplication].keyWindow.tintColor;
+    }
 }
 
 - (void)dealloc
@@ -42,33 +73,15 @@
     [super dealloc];
 }
 
-- (void)viewDidLoad
-{
-    [super viewDidLoad];
-    // Do any additional setup after loading the view from its nib.
-    
-    //[self loadUserData];
-    self.screenWidth = [UIScreen mainScreen].bounds.size.width;
-    UILabel *lblVersion = (UILabel *)[self.view viewWithTag:559];
-    
-    lblVersion.text = [NSString stringWithFormat:@"Hubble Home v%@", [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"]];
-}
+#pragma mark - Private methods
 
-- (void)removeSubViewOfNavigationController {
-    for (UIView *subView in self.navigationController.view.subviews)
-    {
-        if ([subView isKindOfClass:[UIToolbar class]])
-        {
+- (void)removeSubViewOfNavigationController
+{
+    for (UIView *subView in self.navigationController.view.subviews) {
+        if ([subView isKindOfClass:[UIToolbar class]]) {
             [subView removeFromSuperview];
         }
     }
-}
-
-- (void)viewWillAppear:(BOOL)animated
-{
-    [super viewWillAppear:animated];
-    NSLog(@"AccountVC -viewWillAppear --");
-    [self loadUserData];
 }
 
 - (void)loadUserData
@@ -84,10 +97,22 @@
 
 - (void)sendTouchBtnStateWithIndex:(NSInteger)rowIdx
 {
-    [self userLogout];
+    [self confirmUserLogout];
 }
 
-- (IBAction)userLogout
+- (void)confirmUserLogout
+{
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Confirm"
+                                                    message:@"Are you sure?"
+                                                   delegate:self
+                                          cancelButtonTitle:LocStr(@"Cancel")
+                                          otherButtonTitles:LocStr(@"OK"), nil];
+    alert.tag = LOGOUT_DIALOG_TAG;
+    [alert show];
+    [alert release];
+}
+
+- (void)userLogout
 {
     NSLog(@"LOG OUT>>>>");
     
@@ -127,10 +152,9 @@
         if (dataLog0) {
             [dataZip appendData:dataLog0];
         }
-        
         [dataZip appendData:dataLog];
-        dataZip = [NSData gzipData:dataZip];
-        [picker addAttachmentData:[dataZip AES128EncryptWithKey:CES128_ENCRYPTION_PASSWORD] mimeType:@"text/plain" fileName:@"application.log"];
+        
+        [picker addAttachmentData:[[NSData gzipData:dataZip] AES128EncryptWithKey:CES128_ENCRYPTION_PASSWORD] mimeType:@"text/plain" fileName:@"application.log"];
         
         //[picker addAttachmentData:dataZip  mimeType:@"text/plain" fileName:@"application.log"];
         
@@ -145,8 +169,7 @@
         // Release picker
         [picker release];
     }
-    else
-    {
+    else {
         NSLog(@"%s Can not send Email from this device", __FUNCTION__);
     }
 }
@@ -231,7 +254,6 @@
 #define CHANGE_PASS_INDEX   1
 #define APPVERSION_INDEX    2
 
-
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (indexPath.section == 0) {
@@ -308,7 +330,7 @@
         }
         else if (indexPath.row == 2) {
             //log out
-            [self userLogout];
+            [self confirmUserLogout];
         }
     }
     else if(indexPath.section == 2) {
@@ -318,9 +340,14 @@
 
 - (void)showDialogChangePassword
 {
+    UIAlertView *av = [[UIAlertView alloc] initWithTitle:@"Change Password"
+                                                 message:nil
+                                                delegate:self
+                                       cancelButtonTitle:@"Cancel"
+                                       otherButtonTitles:@"OK", nil];
     
-    UIAlertView *av = [[UIAlertView alloc] initWithTitle:@"Change Password" message:nil delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"OK", nil];
-    [av setAlertViewStyle:UIAlertViewStyleLoginAndPasswordInput];
+    av.tag = CHANGE_PASSWORD_DIALOG_TAG;
+    av.alertViewStyle = UIAlertViewStyleLoginAndPasswordInput;
     
     // Alert style customization
     [[av textFieldAtIndex:0] setSecureTextEntry:YES];
@@ -335,16 +362,21 @@
 
 - (void )alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex
 {
-    if (buttonIndex == 1) {
-        NSString *password = [alertView textFieldAtIndex:0].text;
-        NSString *passwordConfrm = [alertView textFieldAtIndex:1].text;
-        
-        if (password.length > 0 && passwordConfrm.length > 0 && [password isEqualToString:passwordConfrm]) {
-            [self doChangePassword:password];
+    if (buttonIndex != alertView.cancelButtonIndex ) {
+        if ( alertView.tag == CHANGE_PASSWORD_DIALOG_TAG ) {
+            NSString *password = [alertView textFieldAtIndex:0].text;
+            NSString *passwordConfrm = [alertView textFieldAtIndex:1].text;
+            
+            if (password.length > 0 && passwordConfrm.length > 0 && [password isEqualToString:passwordConfrm]) {
+                [self doChangePassword:password];
+            }
+            else {
+                NSDictionary *dictError = [NSDictionary dictionaryWithObjectsAndKeys:@"Validation failed: Password is not match or empty", @"message", nil];
+                [self changePasswordFialedWithError:dictError];
+            }
         }
-        else {
-            NSDictionary *dictError = [NSDictionary dictionaryWithObjectsAndKeys:@"Validation failed: Password is not match or empty", @"message", nil];
-            [self changePasswordFialedWithError:dictError];
+        else if ( alertView.tag == LOGOUT_DIALOG_TAG ) {
+            [self userLogout];
         }
     }
 }
