@@ -739,20 +739,17 @@ double _ticks = 0;
 
 - (IBAction)iFrameOnlyPressAction:(id)sender
 {
-    if (h264Streamer != NULL)
+    if (MediaPlayer::Instance()->isPlaying())
     {
-        if (h264Streamer->isPlaying())
+        self.iFrameOnlyFlag = ! self.iFrameOnlyFlag;
+        
+        if(self.iFrameOnlyFlag == TRUE)
         {
-            self.iFrameOnlyFlag = ! self.iFrameOnlyFlag;
-            
-            if(self.iFrameOnlyFlag == TRUE)
-            {
-                h264Streamer->setPlayOption(MEDIA_STREAM_IFRAME_ONLY);
-            }
-            else
-            {
-                h264Streamer->setPlayOption(MEDIA_STREAM_ALL_FRAME);
-            }
+            MediaPlayer::Instance()->setPlayOption(MEDIA_STREAM_IFRAME_ONLY);
+        }
+        else
+        {
+            MediaPlayer::Instance()->setPlayOption(MEDIA_STREAM_ALL_FRAME);
         }
     }
 }
@@ -1351,8 +1348,7 @@ double _ticks = 0;
 {
     if (userWantToCancel        ||
         _returnFromPlayback     ||
-        h264Streamer == NULL    ||
-        !h264Streamer->isPlaying())
+        !MediaPlayer::Instance()->isPlaying())
     {
         return;
     }
@@ -3155,6 +3151,13 @@ double _ticks = 0;
                                        //handle Bad response
                                        NSLog(@"%s ERROR: %@", __FUNCTION__, [responseDict objectForKey:@"message"]);
 #if 1
+                                       self.messageStreamingState = @"Camera is not accessible";
+                                       _isShowTextCameraIsNotAccesible = YES;
+                                       
+                                       dispatch_async(dispatch_get_main_queue(), ^{
+                                           [self.ib_lbCameraNotAccessible setHidden:NO];
+                                       });
+                                       
                                        [self symmetric_check_result:TRUE];
 #else
                                        NSArray * args = [NSArray arrayWithObjects:
@@ -3164,16 +3167,16 @@ double _ticks = 0;
                                                               withObject:args
                                                            waitUntilDone:NO];
 #endif
-                                       self.messageStreamingState = @"Camera is not accessible";
                                    }
                                }
                                else
                                {
                                    NSLog(@"SERVER unreachable (timeout) ");
                                    self.messageStreamingState = @"Camera is not accessible";
-                                   //TODO : handle SERVER unreachable (timeout)
+                                   _isShowTextCameraIsNotAccesible = YES;
 #if 1
                                    dispatch_async(dispatch_get_main_queue(), ^{
+                                       [self.ib_lbCameraNotAccessible setHidden:NO];
                                        [self performSelector:@selector(setupCamera) withObject:nil afterDelay:10];
                                    });
 #else
@@ -4449,18 +4452,15 @@ double _ticks = 0;
     
     [self displayCustomIndicator];
     
-    if (h264Streamer != NULL)
-    {
         //trigger re-cal of videosize
-        if (h264Streamer->isPlaying())
-        {
-            
-            _isShowCustomIndicator = NO;
-        }
-        if (_currentMediaStatus != 0)
-        {
-            h264Streamer->videoSizeChanged();
-        }
+    if (MediaPlayer::Instance()->isPlaying())
+    {
+        _isShowCustomIndicator = NO;
+    }
+    
+    if (_currentMediaStatus != 0)
+    {
+        MediaPlayer::Instance()->videoSizeChanged();
     }
     
     [self setupPtt];
@@ -5426,14 +5426,11 @@ double _ticks = 0;
         
         
         self.disableAutorotateFlag = TRUE;
-        [self.ib_labelTouchToTalk setText:@"Speaking"];
+        [self.ib_labelTouchToTalk setText:@"Please Speak"];
         self.stringStatePTT = @"Speaking";
         
         //Mute audio to MediaPlayer lib
-        if (h264Streamer)
-        {
-            h264Streamer->setPlayOption(MEDIA_STREAM_AUDIO_MUTE);
-        }
+        MediaPlayer::Instance()->setPlayOption(MEDIA_STREAM_AUDIO_MUTE);
         
         
         NSLog(@"Device ip: %@, Port push to talk: %d, actually is: %d", [HttpCom instance].comWithDevice.device_ip, self.selectedChannel.profile.ptt_port,IRABOT_AUDIO_RECORDING_PORT);
@@ -5461,10 +5458,7 @@ double _ticks = 0;
     {
         //2. Stopping
         
-        if (h264Streamer)
-        {
-            h264Streamer->setPlayOption(MEDIA_STREAM_AUDIO_NOT_MUTE);
-        }
+        MediaPlayer::Instance()->setPlayOption(MEDIA_STREAM_AUDIO_NOT_MUTE);
         
         if (_audioOut != nil)
         {
@@ -5617,10 +5611,7 @@ double _ticks = 0;
     {
         self.disableAutorotateFlag = FALSE;
         
-        if (h264Streamer)
-        {
-            h264Streamer->setPlayOption(MEDIA_STREAM_AUDIO_NOT_MUTE);
-        }
+        MediaPlayer::Instance()->setPlayOption(MEDIA_STREAM_AUDIO_NOT_MUTE);
         
         if (_audioOutStreamRemote != nil)
         {
@@ -5640,10 +5631,7 @@ double _ticks = 0;
     {
         self.disableAutorotateFlag = YES;
         
-        if (h264Streamer)
-        {
-            h264Streamer->setPlayOption(MEDIA_STREAM_AUDIO_MUTE);
-        }
+        MediaPlayer::Instance()->setPlayOption(MEDIA_STREAM_AUDIO_MUTE);
         
         [self processingHoldToTalkRemote];
         
@@ -5860,7 +5848,7 @@ double _ticks = 0;
     }
     else
     {
-        self.ib_labelTouchToTalk.text = @"Speaking";
+        self.ib_labelTouchToTalk.text = @"Please Speak";
     }
 }
 

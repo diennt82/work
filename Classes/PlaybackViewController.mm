@@ -14,6 +14,8 @@
 #import "define.h"
 #import "NotifViewController.h"
 #import <objc/message.h>
+#import "TimelineDatabase.h"
+#import "MBProgressHUD.h"
 
 #define START 0
 #define END   100.0
@@ -105,7 +107,7 @@
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
-    NSLog(@"%s: viewDidAppear", __FUNCTION__);
+    NSLog(@"%s parent:%@", __FUNCTION__, self.parentViewController);
     
     [self becomeActive];
 }
@@ -493,6 +495,7 @@
 }
 
 - (void)dealloc {
+    NSLog(@"%s", __FUNCTION__);
     
     [imageVideo release];
     
@@ -531,6 +534,8 @@
         [self.list_refresher invalidate];
     }
     
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+    
     if (self.navigationController != nil)
     {
         if ([[UIDevice currentDevice] orientation] == UIDeviceOrientationLandscapeLeft ||
@@ -543,15 +548,20 @@
             }
         }
         
-        NSLog(@"Playback with nav controller pop all");
         [[UIApplication sharedApplication] setStatusBarHidden:NO
                                                 withAnimation:UIStatusBarAnimationNone];
+#if 1
+        [self.navigationController popViewControllerAnimated:YES];
+#else
+        NotifViewController * vc = [self.navigationController.viewControllers objectAtIndex:(self.navigationController.viewControllers.count - 2)];
         
-        NotifViewController * vc = [self.navigationController.viewControllers objectAtIndex:0];
+        NSLog(@"Playback with nav controller pop all:%@", vc);
         
         if ([vc isKindOfClass:[NotifViewController class]])
         {
-            [self.navigationController popToRootViewControllerAnimated:NO];
+            NSLog(@"Playback with nav controller pop to NotifViewController");
+            //[self.navigationController popToRootViewControllerAnimated:NO];
+            [self.navigationController popViewControllerAnimated:NO];
             [vc ignoreTouchAction:nil];
         }
         else // Timeline
@@ -560,6 +570,7 @@
             //NSLog(@"%s goBackToPlayList - vc: %@", __FUNCTION__, NSStringFromClass([tmp class]));
             [self.navigationController popViewControllerAnimated:YES];
         }
+#endif
     }
     else
     {
@@ -639,6 +650,7 @@
 - (void)hideControlMenu
 {
     [self.ib_myOverlay setHidden:YES];
+    [self.ib_viewOverlayVideo setHidden:YES];
     self.view.userInteractionEnabled = YES;
 }
 
@@ -646,6 +658,9 @@
 {
     [self.ib_myOverlay setHidden:NO];
     [self.view bringSubviewToFront:self.ib_myOverlay];
+    
+    [self.ib_viewOverlayVideo setHidden:NO];
+    [self.view bringSubviewToFront:self.ib_viewOverlayVideo];
     
     if (_timerHideMenu != nil)
     {
@@ -678,6 +693,53 @@
 
 - (IBAction)deleteVideo:(id)sender
 {
+    if(self.intEventId==0)
+    {
+        return;
+    }
+    [self hideControlMenu];
+    
+    MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+    [hud setLabelText:@"Deleting Video..."];
+    
+    dispatch_time_t startTime = dispatch_time(DISPATCH_TIME_NOW, 0.1 * NSEC_PER_SEC);
+    dispatch_after(startTime, dispatch_get_main_queue(), ^{
+        
+        NSString *apiKey = [[NSUserDefaults standardUserDefaults] stringForKey:@"PortalApiKey"];
+        NSString *strEventID = [NSString stringWithFormat:@"%d",self.intEventId];
+        
+        BMS_JSON_Communication *jsonComm = [[BMS_JSON_Communication alloc] initWithObject:self Selector:nil  FailSelector:nil ServerErr:nil];
+        
+        NSDictionary *responseDict = [jsonComm deleteEventsBlockedWithRegistrationId:clip_info.registrationID eventIds:strEventID apiKey:apiKey];
+        [jsonComm release];
+        
+        [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+        if (responseDict)
+        {
+            if ([[responseDict objectForKey:@"status"] integerValue] == 200)
+            {
+                [[TimelineDatabase getSharedInstance]  deleteEventWithID:strEventID];
+                if([self.plabackVCDelegate respondsToSelector:@selector(motioEventDeleted)])
+                {
+                    [self.plabackVCDelegate motioEventDeleted];
+                }
+                [self closePlayBack:nil];
+            }
+            else if([responseDict objectForKey:@"message"])
+            {
+                Alert(nil, [responseDict objectForKey:@"message"]);
+            }
+            else
+            {
+                Alert(nil, @"Error occured. Please try again.");
+            }
+        }
+        else
+        {
+            Alert(@"Failed: Server is unreachable", @"Please check your network connection");
+        }
+    });
+    
 }
 
 - (IBAction)downloadVideo:(id)sender
@@ -815,8 +877,9 @@
     
     self.ib_sliderPlayBack.value = timeCurrent / _duration;
     
-    NSInteger time = lround(timeCurrent);
-    self.ib_timerPlayBack.text = [NSString stringWithFormat:@"%02d:%02d", time / 60, time % 60];
+    NSInteger currentTime = lround(timeCurrent);
+    NSInteger totalTime = lround(self.duration);
+    self.ib_timerPlayBack.text = [NSString stringWithFormat:@"%02d:%02d / %02d:%02d", currentTime / 60, currentTime % 60,totalTime / 60, totalTime % 60];
     
     [NSTimer scheduledTimerWithTimeInterval:0.5
                                      target:self

@@ -30,6 +30,7 @@
 @property (nonatomic, retain) NSDictionary *event;
 @property (nonatomic, retain) NSMutableArray *clipsInEvent;
 @property (nonatomic) BOOL isFreeUser;
+@property (nonatomic) BOOL isReturnFrmPlayback;
 
 @end
 
@@ -48,6 +49,13 @@
 {
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
+    
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+    {
+        [[NSBundle mainBundle] loadNibNamed:@"NotifViewController~iPad"
+                                      owner:self
+                                    options:nil];
+    }
     
     [self.playEnventBtn setImage:[UIImage imageNamed:@"alert_play"] forState:UIControlStateNormal];
     [self.playEnventBtn setImage:[UIImage imageNamed:@"alert_play_pressed"] forState:UIControlEventTouchDown];
@@ -77,6 +85,7 @@
     
     self.isFreeUser = NO; // Registered User
     [_playEnventBtn setEnabled:NO];
+    _isReturnFrmPlayback = FALSE;
     
     jsonComm = [[BMS_JSON_Communication alloc] initWithObject:self
                                                      Selector:nil
@@ -103,26 +112,29 @@
         self.lblChangeSetting.hidden = NO;
         self.changeSettingsBtn.hidden = NO;
     }
-}
-
-- (void)viewWillDisappear:(BOOL)animated {
-//	NSArray *viewControllers = self.navigationController.viewControllers;
-//	if ([viewControllers indexOfObject:self] == NSNotFound) {
-//		// View is disappearing because it was popped from the stack
-//		NSLog(@"View controller was popped --- We are closing down..go back to cam list");
-//        
-//        [self ignoreTouchAction:nil];
-//        
-//	}
+    
+    [self performSelectorInBackground:@selector(getEventSnapshot_bg) withObject:nil];
 }
 
 
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    self.navigationController.navigationBarHidden = YES;
-    _isBackgroundTaskRunning = YES;
+    NSLog(@"%s _isReturnFrmPlayback:%d", __FUNCTION__, _isReturnFrmPlayback);
     
+    self.navigationController.navigationBarHidden = YES;
+    
+    if (_isReturnFrmPlayback)
+    {
+        _isReturnFrmPlayback = FALSE;
+        [self ignoreTouchAction:nil]; // Fake to go to Camera list.
+    }
+    else
+    {
+        _isBackgroundTaskRunning = YES;
+    }
+    
+#if 0
     if (_eventsListAlready == FALSE)
     {
         //load events from server
@@ -134,6 +146,7 @@
     {
         //do nothing
     }
+#endif
 }
 
 - (void)layoutImageAndTextForButton: (UIButton *)button
@@ -195,22 +208,9 @@
                 // Pass the selected object to the new view controller.
                 
                 NSLog(@"Push the view controller.- %@", self.parentViewController);
-                
+                _isReturnFrmPlayback = TRUE;
                 [self.navigationController pushViewController:playbackViewController animated:YES];
                 [playbackViewController release];
-                
-                
-//                [self dismissViewControllerAnimated:YES
-//                                         completion:^{
-//                                             
-//                                             [_notifDelegate sendStatus:SHOW_CAMERA_LIST];
-//                                             [(UIViewController*)_notifDelegate presentViewController:playbackViewController
-//                                                                                             animated:NO
-//                                                                                           completion:nil];
-//                                         }];
-                
-                
-           
             }
             else
             {
@@ -235,17 +235,17 @@
 - (IBAction)goToCameraTouchAction:(id)sender
 {
     [self cancelTaskDoInBackground];
-    
-    
-    
-    
+
     if (sender == self.goToCameraBtn)
     {
     
          NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
         [userDefaults setObject:self.registrationID forKey:REG_ID];
         [userDefaults synchronize];
-        
+#if 1
+        [self.navigationController popToRootViewControllerAnimated:YES];
+        [_notifDelegate sendStatus:SHOW_CAMERA_LIST];
+#else
         // Will call dismiss eventually
         
         if (![self.presentedViewController isBeingDismissed])
@@ -255,8 +255,7 @@
                 [_notifDelegate sendStatus:SHOW_CAMERA_LIST];
             }];
         }
-        
-        
+#endif
     }
 }
 
@@ -284,13 +283,19 @@
     [self cancelTaskDoInBackground];
 }
 
-- (IBAction)leranMoreTouchAction:(id)sender
+- (IBAction)learnMoreTouchAction:(id)sender
 {
     [self cancelTaskDoInBackground];
 }
 
 - (IBAction)ignoreTouchAction:(id)sender
 {
+    NSLog(@"%s _notifDelegate:%@", __FUNCTION__, _notifDelegate);
+#if 1
+    [self cancelTaskDoInBackground];
+    [self.navigationController popToRootViewControllerAnimated:NO];
+    [_notifDelegate sendStatus:SHOW_CAMERA_LIST2];
+#else
     [self.navigationController popToRootViewControllerAnimated:NO];
     
     // Will call dismiss eventually
@@ -301,6 +306,7 @@
             [_notifDelegate sendStatus:SHOW_CAMERA_LIST2];
         }];
     }
+#endif
 }
 
 #pragma mark - Encoding URL string
@@ -412,7 +418,7 @@
     if (_imageViewSnapshot.image == nil) // No snapshot image from server
     {
         [self.imageViewSnapshot performSelectorOnMainThread:@selector(setImage:)
-                                                 withObject:[UIImage imageNamed:@"loading_logo.png"]
+                                                 withObject:[UIImage imageNamed:@"ImgNotAvailable"]
                                               waitUntilDone:NO];
     }
     

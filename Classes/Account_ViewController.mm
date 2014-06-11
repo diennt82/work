@@ -396,6 +396,10 @@
     tfNewPass.placeholder = @"New Password";
     tfConfPass.placeholder = @"Confirm Password";
     
+    [tfOldPass setSecureTextEntry:YES];
+    [tfNewPass setSecureTextEntry:YES];
+    [tfConfPass setSecureTextEntry:YES];
+    
     [tfOldPass setBackgroundColor:[UIColor whiteColor]];
     [tfNewPass setBackgroundColor:[UIColor whiteColor]];
     [tfConfPass setBackgroundColor:[UIColor whiteColor]];
@@ -417,21 +421,21 @@
         {
             NSString *password = tfNewPass.text;
             NSString *passwordConfrm = tfConfPass.text;
+            NSString *oldPass = tfOldPass.text;
             
-            NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-            NSString * old_pass = (NSString *) [userDefaults objectForKey:@"PortalPassword"];
-            
-            if ((password       && password.length > 0)       &&
+            if ((password && password.length > 0)  &&
                 (passwordConfrm && passwordConfrm.length > 0) &&
-                [password isEqualToString:passwordConfrm] &&
-                (tfOldPass.text.length > 0 && [old_pass isEqualToString:tfOldPass.text]))
+                (oldPass && oldPass.length > 0) &&
+                [password isEqualToString:passwordConfrm])
+                
             {
                 self.strNewChangedPass = password;
-                [self doChangePassword:password];
+                //[self doChangePassword:password];
+                [self checkOldPass:oldPass NewPass:password];
             }
             else
             {
-                if((tfOldPass.text.length == 0 ||  ![old_pass isEqualToString:tfOldPass.text]))
+                if(tfOldPass.text.length == 0)
                 {
                     NSDictionary *dictError = [NSDictionary dictionaryWithObjectsAndKeys:@"Please enter correct  old password", @"message", nil];
                     [self changePasswordFialedWithError:dictError];
@@ -451,12 +455,72 @@
     [alert show];
 }
 
-#pragma mark - UIAlert view delegate
 
-- (void )alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex
+
+-(void)checkOldPass:(NSString *)strOldPass NewPass:(NSString *)strNewPass
 {
+    BMS_JSON_Communication *jsonComm = [[[BMS_JSON_Communication alloc] initWithObject:self
+                                                                              Selector:@selector(loginSuccessWithResponse:)
+                                                                          FailSelector:@selector(loginFailedWithError:)
+                                                                             ServerErr:@selector(loginFailedServerUnreachable)] autorelease];
+    
+    
+    NSString *strUserId = [[NSUserDefaults standardUserDefaults] objectForKey:@"PortalUsername"];
+    [jsonComm loginWithLogin:strUserId andPassword:strOldPass];
     
 }
+
+#pragma mark Login Callbacks
+- (void) loginSuccessWithResponse:(NSDictionary *)responseDict
+{
+   	if (responseDict) {
+        NSInteger statusCode = [[responseDict objectForKey:@"status"] intValue];
+        
+        if (statusCode == 200) // success
+        {
+            NSString *apiKey = [[responseDict objectForKey:@"data"] objectForKey:@"authentication_token"];
+            [[NSUserDefaults standardUserDefaults] setObject:apiKey forKey:@"PortalApiKey"];
+            [[NSUserDefaults standardUserDefaults] synchronize];
+            [self doChangePassword:self.strNewChangedPass];
+            
+        }
+        else
+        {
+            NSLog(@"Invalid response: %@", responseDict);
+            
+            [[[[UIAlertView alloc] initWithTitle:@"Change Password Failed"
+                                         message:@"Enter correct old password."
+                                        delegate:nil
+                               cancelButtonTitle:nil
+                               otherButtonTitles:@"OK", nil] autorelease] show];
+        }
+    }
+    else
+    {
+        NSLog(@"Error - loginSuccessWithResponse: reponseDict = nil");
+    }
+}
+
+- (void) loginFailedWithError:(NSDictionary *) responseError
+{
+    
+    [[[[UIAlertView alloc] initWithTitle:@"Change Password Failed"
+                                 message:@"Enter correct old password."
+                                delegate:nil
+                       cancelButtonTitle:nil
+                       otherButtonTitles:@"OK", nil] autorelease] show];
+}
+
+- (void)loginFailedServerUnreachable
+{
+    [[[[UIAlertView alloc] initWithTitle:@"Failed: Server is unreachable"
+                                 message:nil
+                                delegate:nil
+                       cancelButtonTitle:nil
+                       otherButtonTitles:@"OK", nil] autorelease] show];
+    
+}
+
 
 - (void)doChangePassword:(NSString *)newPassword
 {
@@ -501,6 +565,13 @@
                                 delegate:nil
                        cancelButtonTitle:nil
                        otherButtonTitles:@"OK", nil] autorelease] show];
+}
+
+#pragma mark - UIAlert view delegate
+
+- (void )alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex
+{
+    
 }
 
 #pragma mark - FMail

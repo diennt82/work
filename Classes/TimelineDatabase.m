@@ -139,7 +139,7 @@ static TimelineDatabase *sharedInstance = nil;
             
             while (sqlite3_step(statement) == SQLITE_ROW)
             {
-                //char * event_id = (char *) sqlite3_column_text(statement, 0);
+                char * event_id = (char *) sqlite3_column_text(statement, 0);
                 //camera_udid : no need to get 1
                 // camera_owner_id: no need to get 2
                 char * event_alert = (char *)sqlite3_column_text(statement, 3);
@@ -153,6 +153,7 @@ static TimelineDatabase *sharedInstance = nil;
                 EventInfo *eventInfo = [[EventInfo alloc] init];
                 eventInfo.alert_name = [[[NSString alloc] initWithUTF8String:event_alert_name] autorelease];
                 eventInfo.value      = [[[NSString alloc] initWithUTF8String:event_value] autorelease];
+                eventInfo.eventID = [[[[NSString alloc] initWithUTF8String:event_id] autorelease] integerValue];
                 
                 
                 NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
@@ -287,5 +288,39 @@ static TimelineDatabase *sharedInstance = nil;
     sqlite3_close(database);
     
 }
+
+-(void) deleteEventWithID:(NSString*) strEventId
+{
+    sqlite3 * database;
+    const char *dbpath = [self.databasePath UTF8String];
+    if (sqlite3_open(dbpath, &database) == SQLITE_OK)
+    {
+        NSString *insertSQL = [NSString stringWithFormat:@"delete from  camera_events where event_id='%@'", strEventId];
+        
+        const char * stmt = [insertSQL UTF8String];
+        
+        //NSLog(@"statement: %s",stmt);
+        
+        sqlite3_stmt * statement ;
+        if (sqlite3_prepare_v2(database, stmt, -1, &statement, NULL) == SQLITE_OK)
+        {
+            int ret =sqlite3_step(statement);
+            if ( ret != SQLITE_DONE)
+            {
+                NSLog(@"remove events to database error : %d",ret);
+            }
+            else
+            {
+                NSLog(@"remove events to database OK");
+            }
+            
+            sqlite3_finalize(statement);
+        }
+        
+    }
+    sqlite3_close(database);
+    
+}
+
 
 @end
