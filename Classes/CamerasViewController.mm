@@ -198,30 +198,6 @@
     }
 }
 
-//- (void)cameraBackAction:(id)sender
-//{
-//    if ( _camChannels.count > 0 ) {
-//        CamChannel *ch = (CamChannel *)[self.camChannels objectAtIndex:0];
-//        
-//        [CameraAlert clearAllAlertForCamera:ch.profile.mac_address];
-//        [UIApplication sharedApplication].idleTimerDisabled = YES;
-//        
-//        NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-//        [userDefaults setObject:ch.profile.mac_address forKey:CAM_IN_VEW];
-//        [userDefaults synchronize];
-//        
-//        H264PlayerViewController *h264PlayerViewController = [[H264PlayerViewController alloc] init];
-//        
-//        h264PlayerViewController.selectedChannel = ch;
-//        h264PlayerViewController.h264PlayerVCDelegate = self;
-//        
-//        NSLog(@"%@, %@", self.parentViewController.description, self.parentViewController.parentViewController);
-//        
-//        [((MenuViewController *)self.parentVC).navigationController pushViewController:h264PlayerViewController animated:YES];
-//        [h264PlayerViewController release];
-//    }
-//}
-
 #pragma mark - Table view data source
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
@@ -241,7 +217,11 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if ( indexPath.row == _camChannels.count ) {
+    if ( _camChannels.count == 0 && indexPath.row == 0 ) {
+        // Demo movie cell
+        return 220;
+    }
+    else if ( indexPath.row == _camChannels.count ) {
         // Add Camera cell
         return 44;
     }
@@ -255,10 +235,39 @@
 {
     static NSString *AddCellIdentifier = @"AddCell";
     static NSString *CameraCellIdentifier = @"CamerasCell";
+    static NSString *DemoCellIdentifier = @"DemoCell";
     
     UITableViewCell *cell = nil;
 
-    if ( indexPath.row == _camChannels.count ) {
+    if ( _camChannels.count == 0 && indexPath.row == 0 ) {
+        // Demo movie cell
+        cell = [tableView dequeueReusableCellWithIdentifier:DemoCellIdentifier];
+        if ( !cell ) {
+            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:DemoCellIdentifier];
+            
+            CGRect rect = cell.contentView.bounds;
+            rect.origin.x = rect.size.width/2 - 280/2;
+            rect.size.width = 280;
+            rect.size.height = 210; // row height - 10
+            
+            UIWebView *webView = [[UIWebView alloc] initWithFrame:rect];
+            webView.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin|UIViewAutoresizingFlexibleRightMargin;
+            [cell.contentView addSubview:webView];
+            [webView release];
+            
+            //NSString *videoUrl = @"https://www.youtube.com/watch?feature=player_embedded&v=LMcSrQyRI-U";
+            NSString *videoUrl = @"http://www.youtube.com/embed/LMcSrQyRI-U?rel=0";
+            NSString *htmlString = [NSString stringWithFormat:
+                                    @"<html>"
+                                    "<head><meta name = \"viewport\" content = \"initial-scale = 1.0, user-scalable = no\"/></head>"
+                                    "<body style=\"margin-top:0px;margin-left:0px;background-color:#000;\">"
+                                    "<div style='width:100%%'><iframe width='280' height='210' src='%@' frameborder='0' allowfullscreen></iframe></div>"
+                                    "</body></html>",videoUrl];
+            
+            [webView loadHTMLString:htmlString baseURL:nil];
+        }
+    }
+    else if ( indexPath.row == _camChannels.count ) {
         // Add Camera cell
         cell = [tableView dequeueReusableCellWithIdentifier:AddCellIdentifier];
         if ( !cell ) {
