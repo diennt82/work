@@ -255,7 +255,6 @@
             [cell.contentView addSubview:webView];
             [webView release];
             
-            //NSString *videoUrl = @"https://www.youtube.com/watch?feature=player_embedded&v=LMcSrQyRI-U";
             NSString *videoUrl = @"http://www.youtube.com/embed/LMcSrQyRI-U?rel=0";
             NSString *htmlString = [NSString stringWithFormat:
                                     @"<html>"
