@@ -388,7 +388,8 @@
 
 - (void)getCamListServerUnreachable
 {
-	NSLog(@"UserAccount - getCamListServerUnreachable");
+	/*
+     NSLog(@"UserAccount - getCamListServerUnreachable");
     NSString * msg = NSLocalizedStringWithDefaultValue(@"Get_Camera_list_Error",nil, [NSBundle mainBundle],
                                                        @"Get Camera list Error", nil);
     
@@ -408,6 +409,7 @@
 						  otherButtonTitles:nil];
 	[alert show];
 	[alert release];
+     */
     
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
 	BOOL isOffline = [userDefaults boolForKey:_OfflineMode];
