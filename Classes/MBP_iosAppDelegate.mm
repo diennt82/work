@@ -204,7 +204,7 @@ void checkingApplicationCrashed()
     
     // NSLog(@"%s size:%llu", __FUNCTION__, [[fileManager attributesOfItemAtPath:appLogPath error:&error] fileSize]);
     
-    if ([[fileManager attributesOfItemAtPath:appLogPath error:&error] fileSize] > 10)// 5000000)) // 5MB
+    if ([[fileManager attributesOfItemAtPath:appLogPath error:&error] fileSize] > 5000000) // 5MB
     {
         if ([fileManager fileExistsAtPath:appLog0])
         {
