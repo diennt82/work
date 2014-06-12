@@ -63,7 +63,6 @@
 {
     [super viewWillAppear:animated];
     [self.navigationController.navigationBar setUserInteractionEnabled:YES];
-    
     self.trackedViewName = GAI_CATEGORY;
 }
 
