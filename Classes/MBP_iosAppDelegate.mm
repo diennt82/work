@@ -84,9 +84,8 @@
         // iOS 7+
         _window.tintColor = themeTintColor;
     }
-    else {
-        [[UINavigationBar appearance] setTintColor:themeTintColor];
-    }
+
+    [[UINavigationBar appearance] setTintColor:themeTintColor];
     
     [[UINavigationBar appearance] setTitleTextAttributes:@{
                                                            NSForegroundColorAttributeName: [UIColor colorWithRed:16/255.f green:16/255.f blue:16/255.f alpha:1],
@@ -100,6 +99,7 @@
                                                 forState:UIControlStateNormal];
     
     [[UILabel appearanceWhenContainedIn:[UITableViewHeaderFooterView class], nil] setFont:[UIFont fontWithName:@"HelveticaNeue-Light" size:17]];
+    
     // Check condition use STUN or not
     [self registerDefaultsFromSettingsBundle];
     
