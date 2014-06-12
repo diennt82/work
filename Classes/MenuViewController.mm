@@ -27,6 +27,8 @@
 
 @implementation MenuViewController
 
+#pragma mark - Initialization methods
+
 - (id)initWithNibName:(NSString *)nibNameOrNil withConnDelegate:(id<ConnectionMethodDelegate>)caller
 {
     self = [super initWithNibName:nibNameOrNil bundle:nil];
@@ -36,6 +38,8 @@
     }
     return self;
 }
+
+#pragma mark - UIViewController methods
 
 - (void)viewDidLoad
 {
@@ -74,6 +78,48 @@
     [accountNavContoller release];
 }
 
+- (void)viewWillAppear:(BOOL)animated
+{
+    self.navigationController.navigationBarHidden = NO;
+    
+    if (!_isFirttime) {
+        //revert
+        self.isFirttime = TRUE;
+        
+        [self menuBackAction:nil];
+        [self removeNavigationBarBottomLine];
+    }
+    else {
+        NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+        BOOL isOffline = [userDefaults boolForKey:_OfflineMode];
+        
+        if (!isOffline && !self.camerasVC.waitingForUpdateData && !_notUpdateCameras) {
+            self.navigationItem.leftBarButtonItem.enabled = NO;
+            [self.navigationItem.rightBarButtonItems[1] setEnabled:NO];
+            //[self.navigationItem.rightBarButtonItems[1] setHidden:YES];
+            _camerasVC.waitingForUpdateData = TRUE;
+            [_camerasVC.tableView reloadData];
+            [self performSelectorInBackground:@selector(recreateAccount)
+                                   withObject:nil];
+        }
+    }
+}
+
+#pragma mark - public methods
+
+- (void)refreshCameraList
+{
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    BOOL isOffline = [userDefaults boolForKey:_OfflineMode];
+    self.camerasVC.waitingForUpdateData = FALSE;
+    if (!isOffline && !self.camerasVC.waitingForUpdateData && !_notUpdateCameras) {
+        self.camerasVC.waitingForUpdateData = TRUE;
+        [self performSelectorInBackground:@selector(recreateAccount) withObject:nil];
+    }
+}
+
+#pragma mark - Private methods
+
 - (void)resetFontTextNormalBarButton
 {
     [cameraBarButton setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys:[UIFont regular18Font], NSFontAttributeName,  [UIColor blackColor], NSForegroundColorAttributeName,nil] forState:UIControlStateNormal];
@@ -105,33 +151,6 @@
     [self resetFontTextNormalBarButton];
     [accountBarButton setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys:[UIFont bold18Font], NSFontAttributeName,  [UIColor blackColor], NSForegroundColorAttributeName,nil] forState:UIControlStateNormal];
     self.accountVC.parentVC = self;
-}
-
-- (void)viewWillAppear:(BOOL)animated
-{
-    self.navigationController.navigationBarHidden = NO;
-    
-    if (!_isFirttime) {
-        //revert
-        self.isFirttime = TRUE;
-        
-        [self menuBackAction:nil];
-        [self removeNavigationBarBottomLine];
-    }
-    else {
-        NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-        BOOL isOffline = [userDefaults boolForKey:_OfflineMode];
-        
-        if (!isOffline && !self.camerasVC.waitingForUpdateData && !_notUpdateCameras) {
-            self.navigationItem.leftBarButtonItem.enabled = NO;
-            [self.navigationItem.rightBarButtonItems[1] setEnabled:NO];
-            //[self.navigationItem.rightBarButtonItems[1] setHidden:YES];
-            _camerasVC.waitingForUpdateData = TRUE;
-            [_camerasVC.tableView reloadData];
-            [self performSelectorInBackground:@selector(recreateAccount)
-                                   withObject:nil];
-        }
-    }
 }
 
 - (void)removeNavigationBarBottomLine
@@ -174,7 +193,7 @@
         }
         
         if ([camChannel.profile isNotAvailable]) {
-            if([camChannel.profile isSharedCam]) {
+            if ([camChannel.profile isSharedCam]) {
                 NSLog(@"MenuVC - menuBackAction - Selected camera is NOT available & is SHARED_CAM");
             }
             else {
@@ -219,22 +238,6 @@
         else {
             NSLog(@"%@ ->waitingForClose: %d", obj.profile.name, obj.waitingForStreamerToClose);
         }
-    }
-}
-
-//- (void)tabBar:(UITabBar *)tabBar didSelectItem:(UITabBarItem *)item
-//{
-//    self.title = item.title;
-//}
-
-- (void)refreshCameraList
-{
-    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-    BOOL isOffline = [userDefaults boolForKey:_OfflineMode];
-    self.camerasVC.waitingForUpdateData = FALSE;
-    if (!isOffline && !self.camerasVC.waitingForUpdateData && !_notUpdateCameras) {
-        self.camerasVC.waitingForUpdateData = TRUE;
-        [self performSelectorInBackground:@selector(recreateAccount) withObject:nil];
     }
 }
 
@@ -331,10 +334,10 @@
 {
 	SetupData * savedData = [[SetupData alloc]init];
     
-	if ([savedData restore_session_data] ==TRUE) {
+	if ([savedData restoreSessionData] ==TRUE) {
 		//NSLog(@"restored data done");
 		self.arrayChannel = savedData.channels;
-		self.restoredProfiles = savedData.configured_cams;
+		self.restoredProfiles = savedData.configuredCams;
 	}
     
     [savedData release];

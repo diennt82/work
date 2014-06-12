@@ -25,7 +25,7 @@
 @property (nonatomic, retain) CamerasViewController *camerasVC;
 @property (nonatomic, retain) SettingsViewController *settingsVC;
 @property (nonatomic, retain) NSMutableArray *cameras;
-@property (nonatomic, assign) id<ConnectionMethodDelegate> menuDelegate;
+@property (nonatomic, assign) id<ConnectionMethodDelegate>menuDelegate;
 @property (nonatomic) BOOL notUpdateCameras;
 @property (nonatomic) BOOL isFirttime;
 
