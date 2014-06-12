@@ -12,7 +12,6 @@
                 <outlet property="imgVSnapshot" destination="1WO-p0-Od7" id="dcm-v7-cDG"/>
                 <outlet property="tableViewSettings" destination="fn0-nR-x3P" id="1b5-WP-JV1"/>
                 <outlet property="view" destination="1" id="3"/>
-                <outlet property="viewPorgress" destination="gTE-uV-jrf" id="iG3-XJ-3ti"/>
                 <outlet property="viewProgress" destination="npz-Oy-IKH" id="Jfy-iE-o1i"/>
                 <outlet property="vwHeaderCamDetail" destination="DDK-jR-T7M" id="9tI-gr-jHS"/>
                 <outlet property="vwHeaderNotSens" destination="aIG-YZ-h92" id="Tx8-HM-2Ni"/>

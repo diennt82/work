@@ -48,9 +48,13 @@
     IBOutlet UIButton *btnSnapshotRefresh,*btnSnapshotOK;
 }
 
+@property (nonatomic, copy) NSString *selectedReg;
+@property (nonatomic, copy) NSString *sensitivityMessage;
+@property (nonatomic, copy) NSString *cameraNewName;
+@property (nonatomic, copy) NSString *stringFW_Version;
+@property (nonatomic, copy) NSString *apiKey;
+
 @property (nonatomic, retain) SensitivityInfo *sensitivityInfo;
-@property (nonatomic, retain) NSString *selectedReg;
-@property (nonatomic, retain) NSString *sensitivityMessage;
 @property (nonatomic, retain) BMS_JSON_Communication *jsonComm;
 
 @property (nonatomic, retain) IBOutlet UITableView *tableViewSettings;
@@ -58,9 +62,8 @@
 @property (nonatomic, retain) IBOutlet UIView *viewProgress;
 @property (nonatomic, retain) IBOutlet UIView *vwHeaderCamDetail,*vwHeaderNotSens;
 
+@property (nonatomic, retain) UIImage *imageSelected;
 @property (nonatomic, retain) UIAlertView *alertViewRename;
-@property (nonatomic, retain) NSString *stringFW_Version;
-@property (nonatomic, retain) NSString *apiKey;
 
 @property (nonatomic) BOOL isLoading;
 @property (nonatomic) BOOL isChangingName;
@@ -136,8 +139,8 @@
     [_tableViewSettings release];
     [_btnRmoveCamera release];
     [_viewProgress release];
-    [_viewPorgress release];
     [_alertViewRename release];
+    [_imageSelected release];
     [super dealloc];
 }
 
@@ -241,7 +244,7 @@
             }
             else {
                 if (![newName isEqualToString:self.camChannel.profile.name]) {
-                    _cameraNewName = [newName retain];
+                    self.cameraNewName = newName;
                     self.isChangingName = TRUE;
                     [self.tableViewSettings reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:0]]
                                                   withRowAnimation:UITableViewRowAnimationAutomatic];
@@ -698,7 +701,6 @@
 
 - (void)updateUIRow:(NSNumber *)row
 {
-    [self.viewPorgress removeFromSuperview];
     NSInteger rowIndex = [row integerValue];
     
     if (rowIndex == 1) {
@@ -714,6 +716,9 @@
 
 - (void)removeLocalCamera
 {
+    self.navigationItem.rightBarButtonItem.enabled = NO;
+    self.tabBarController.tabBar.userInteractionEnabled = NO;
+
     HttpCommunication *dev_comm = [[HttpCommunication alloc]init];
     dev_comm.device_ip = _camChannel.profile.ip_address;
     dev_comm.device_port = _camChannel.profile.port;
@@ -730,6 +735,9 @@
 
 - (void)removeRemoteCamera
 {
+    self.navigationItem.rightBarButtonItem.enabled = NO;
+    self.tabBarController.tabBar.userInteractionEnabled = NO;
+
     BMS_JSON_Communication *jsonComm = [[[BMS_JSON_Communication alloc] initWithObject:self
                                                                               Selector:@selector(removeCameraSuccessWithResponse:)
                                                                           FailSelector:@selector(removeCameraFailedWithError:)
@@ -808,6 +816,7 @@
 {
 	NSLog(@"CameraMenuVC- removeCam success-- fatality");
     [self.navigationController popViewControllerAnimated:YES];
+    self.tabBarController.tabBar.userInteractionEnabled = YES;
 }
 
 - (void)removeCameraFailedWithError:(NSDictionary *)errorResponse
@@ -819,6 +828,9 @@
                                 delegate:self
                        cancelButtonTitle:nil
                        otherButtonTitles:@"OK", nil] autorelease] show];
+    
+    self.navigationItem.rightBarButtonItem.enabled = YES;
+    self.tabBarController.tabBar.userInteractionEnabled = YES;
 }
 
 - (void)removeCameraFailedServerUnreachable
@@ -830,6 +842,9 @@
                                 delegate:self
                        cancelButtonTitle:nil
                        otherButtonTitles:@"OK", nil] autorelease] show];
+    
+    self.navigationItem.rightBarButtonItem.enabled = YES;
+    self.tabBarController.tabBar.userInteractionEnabled = YES;
 }
 
 - (IBAction)btnCameraDetailPressed:(id)sender
@@ -1082,7 +1097,7 @@
 
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
 {
-    imageSelected = [[info valueForKey:UIImagePickerControllerOriginalImage] retain];
+    self.imageSelected = [info valueForKey:UIImagePickerControllerOriginalImage];
    
     [self dismissViewControllerAnimated:YES completion:^{
         //[self openViewForSetCamera:imageSelected];
@@ -1094,7 +1109,7 @@
             [[NSFileManager defaultManager] removeItemAtPath:strPath error:nil];
         }
         
-        [UIImageJPEGRepresentation(imageSelected, 0.5) writeToFile:strPath atomically:YES];
+        [UIImageJPEGRepresentation(_imageSelected, 0.5) writeToFile:strPath atomically:YES];
     }];
 }
 
@@ -1173,8 +1188,8 @@
         NSData *data = [NSData dataWithContentsOfURL:[NSURL URLWithString:strURL]];
         dispatch_async(dispatch_get_main_queue(), ^{
             [imgVSnapshot stopAnimating];
-            imageSelected = [UIImage imageWithData:data];
-            imgVSnapshot.image = imageSelected;
+            self.imageSelected = [UIImage imageWithData:data];
+            imgVSnapshot.image = _imageSelected;
         });
     });
 }
@@ -1190,7 +1205,7 @@
                      }
      ];
     
-    if (imageSelected) {
+    if (_imageSelected) {
         NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
         NSString *strPath = [[paths firstObject] retain];
         strPath = [strPath stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.jpg",self.camChannel.profile.registrationID]];
@@ -1199,7 +1214,7 @@
             [[NSFileManager defaultManager] removeItemAtPath:strPath error:nil];
         }
         
-        [UIImageJPEGRepresentation(imageSelected, 0.5) writeToFile:strPath atomically:YES];
+        [UIImageJPEGRepresentation(_imageSelected, 0.5) writeToFile:strPath atomically:YES];
     }
 }
 
