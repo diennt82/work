@@ -76,10 +76,17 @@
     [refreshControl release];
 }
 
-- (void)viewWillAppear:(BOOL)animated
+- (void)viewDidAppear:(BOOL)animated
 {
-    [super viewWillAppear:animated];
-    [self updateCameraInfo];
+    [super viewDidAppear:animated];
+
+    // Reload camera list with a slightly long delay with the hope that
+    // all changes are reflected correctly.
+    double delayInSeconds = 2.0;
+    dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, delayInSeconds * NSEC_PER_SEC);
+    dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
+        [self updateCameraInfo];
+    });
 }
 
 #pragma mark - CamerasCellDelegate protocol methods
@@ -109,7 +116,8 @@
 
 - (void)camerasReloadData
 {
-    [self.tableView reloadData];
+    // Ensure that the table view is reloaded only on the main thread.
+    [self.tableView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:NO];
 }
 
 #pragma mark - H264PlayerVCDelegate protocol methods
@@ -125,7 +133,7 @@
         }
     }
     
-    [self.tableView reloadData];
+    [self camerasReloadData];
 }
 
 #pragma mark - Private Methods
@@ -207,7 +215,15 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return _camChannels.count + 1;
+    int count;
+    if ( _camChannels.count == 0 ) {
+        // Show the Demo Movie cell and the Add Camera cell
+        count = 2;
+    }
+    else {
+        count = _camChannels.count + 1;
+    }
+    return count;
 }
 
 - (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
@@ -218,10 +234,10 @@
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if ( _camChannels.count == 0 && indexPath.row == 0 ) {
-        // Demo movie cell
+        // Demo Movie cell
         return 220;
     }
-    else if ( indexPath.row == _camChannels.count ) {
+    else if ( (_camChannels.count == 0 && indexPath.row == 1) || indexPath.row == _camChannels.count ) {
         // Add Camera cell
         return 44;
     }
@@ -244,29 +260,34 @@
         cell = [tableView dequeueReusableCellWithIdentifier:DemoCellIdentifier];
         if ( !cell ) {
             cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:DemoCellIdentifier];
-            
-            CGRect rect = cell.contentView.bounds;
-            rect.origin.x = rect.size.width/2 - 280/2;
-            rect.size.width = 280;
-            rect.size.height = 210; // row height - 10
-            
-            UIWebView *webView = [[UIWebView alloc] initWithFrame:rect];
-            webView.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin|UIViewAutoresizingFlexibleRightMargin;
-            [cell.contentView addSubview:webView];
-            [webView release];
-            
-            NSString *videoUrl = @"http://www.youtube.com/embed/LMcSrQyRI-U?rel=0";
-            NSString *htmlString = [NSString stringWithFormat:
-                                    @"<html>"
-                                    "<head><meta name = \"viewport\" content = \"initial-scale = 1.0, user-scalable = no\"/></head>"
-                                    "<body style=\"margin-top:0px;margin-left:0px;background-color:#000;\">"
-                                    "<div style='width:100%%'><iframe width='280' height='210' src='%@' frameborder='0' allowfullscreen></iframe></div>"
-                                    "</body></html>",videoUrl];
-            
-            [webView loadHTMLString:htmlString baseURL:nil];
+
+            // Ensure the following is done only from the main thread otherwise init of the UIWebView will crash.
+            double delayInSeconds = 0.1;
+            dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, delayInSeconds * NSEC_PER_SEC);
+            dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
+                CGRect rect = cell.contentView.bounds;
+                rect.origin.x = rect.size.width/2 - 280/2;
+                rect.size.width = 280;
+                rect.size.height = 210; // row height - 10
+                
+                UIWebView *webView = [[UIWebView alloc] initWithFrame:rect];
+                webView.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin|UIViewAutoresizingFlexibleRightMargin;
+                [cell.contentView addSubview:webView];
+                [webView release];
+                
+                NSString *videoUrl = @"http://www.youtube.com/embed/LMcSrQyRI-U?rel=0";
+                NSString *htmlString = [NSString stringWithFormat:
+                                        @"<html>"
+                                        "<head><meta name = \"viewport\" content = \"initial-scale = 1.0, user-scalable = no\"/></head>"
+                                        "<body style=\"margin-top:0px;margin-left:0px;background-color:#000;\">"
+                                        "<div style='width:100%%'><iframe width='280' height='210' src='%@' frameborder='0' allowfullscreen></iframe></div>"
+                                        "</body></html>",videoUrl];
+                
+                [webView loadHTMLString:htmlString baseURL:nil];
+            });
         }
     }
-    else if ( indexPath.row == _camChannels.count ) {
+    else if ( (_camChannels.count == 0 && indexPath.row == 1) || indexPath.row == _camChannels.count ) {
         // Add Camera cell
         cell = [tableView dequeueReusableCellWithIdentifier:AddCellIdentifier];
         if ( !cell ) {
@@ -355,7 +376,7 @@
 {
     [tableView deselectRowAtIndexPath:indexPath animated:NO];
     
-    if ( indexPath.row == _camChannels.count ) {
+    if ( (_camChannels.count == 0 && indexPath.row == 1) || indexPath.row == _camChannels.count ) {
         // Add Camera cell
         [self addCamera];
     }
