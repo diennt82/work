@@ -386,8 +386,8 @@ void checkingApplicationCrashed()
 - (BOOL)shouldAlertForThisMac:(NSString *)mac_without_colon
 {
     SetupData *savedData = [[SetupData alloc] init];
-	if ([savedData restore_session_data] ==TRUE) {
-		NSArray *restored_profiles = savedData.configured_cams;
+	if ([savedData restoreSessionData] == TRUE) {
+		NSArray *restored_profiles = savedData.configuredCams;
         CamProfile *cp = nil;
         for (int i = 0; i< restored_profiles.count; i++) {
             cp = (CamProfile *)restored_profiles[i];

@@ -1465,10 +1465,10 @@
 {
 	SetupData *savedData = [[SetupData alloc] init];
     
-	if ([savedData restore_session_data] == TRUE) {
+	if ([savedData restoreSessionData] == TRUE) {
 		//NSLog(@"restored data done");
 		self.channel_array = savedData.channels;
-		self.restored_profiles = savedData.configured_cams;
+		self.restored_profiles = savedData.configuredCams;
 	}
     
     [savedData release];
