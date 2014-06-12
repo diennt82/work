@@ -149,6 +149,12 @@
     }
     
     _isUserMakeConnect = NO;
+    
+    // Don't know why but on iOS 7.1 the tineColor was getting unset somehow
+    if (floor(NSFoundationVersionNumber) > NSFoundationVersionNumber_iOS_6_1) {
+        // iOS 7+
+        self.navigationItem.rightBarButtonItem.tintColor = [UIApplication sharedApplication].keyWindow.tintColor;
+    }
 }
 
 - (void)viewWillDisappear:(BOOL)animated
