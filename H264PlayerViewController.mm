@@ -183,10 +183,13 @@ double _ticks = 0;
 {
     [super viewDidLoad];
 
+    // Following is not needed as nib layouts already setup with iOS 6/7 Deltas.
+    /*
     if (floor(NSFoundationVersionNumber) > NSFoundationVersionNumber_iOS_6_1) {
         // iOS 7
         self.edgesForExtendedLayout = UIRectEdgeNone;
     }
+    */
     
     _hideCustomIndicatorAndTextNotAccessble = NO;
     
@@ -271,7 +274,6 @@ double _ticks = 0;
 #endif
     
     [self checkOrientation];
-
     [self becomeActive];
 }
 
@@ -285,6 +287,7 @@ double _ticks = 0;
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    
     [[KISSMetricsAPI sharedAPI] recordEvent:[NSString stringWithFormat:@"PlayerView view will appear - return from Playback: %d", _returnFromPlayback] withProperties:nil];
     NSLog(@"%s -_wantToShowTimeLine: %d, userWantToCancel: %d, returnFromPlayback: %d", __FUNCTION__, _wantToShowTimeLine, userWantToCancel, _returnFromPlayback);
     
@@ -315,8 +318,7 @@ double _ticks = 0;
     self.wantToShowTimeLine = YES;
     _viewVideoIn = @"R";
     
-    if (_returnFromPlayback == FALSE)
-    {
+    if (_returnFromPlayback == FALSE) {
         _isFirstLoad = YES;
         _isRecordInterface  = YES;
         _isProcessRecording = NO;
@@ -326,8 +328,6 @@ double _ticks = 0;
         if ( _timelineVC ) {
             self.timelineVC.camChannel = self.selectedChannel;
         }
-        
-        [self checkOrientation];
     }
     else {
         [[UIApplication sharedApplication] setStatusBarHidden:NO];
@@ -344,20 +344,18 @@ double _ticks = 0;
         [userDefaults synchronize];
     }
     
-    
-
-    
+    [self checkOrientation];
 }
 
 - (void)viewWillDisappear:(BOOL)animated
 {
-    [self stopTimerRecoring];
-    
-    //[[UIApplication sharedApplication] setStatusBarHidden:NO];
     [super viewWillDisappear:animated];
+    [self stopTimerRecoring];
 }
 
 - (void)viewDidUnload {
+    [super viewDidUnload];
+    
     NSLog(@"%s", __FUNCTION__);
     [self setImageViewVideo:nil];
     //    [self setTopToolbar:nil];
@@ -365,8 +363,6 @@ double _ticks = 0;
     [self setProgressView:nil];
     [self setCameraNameBarBtnItem:nil];
     [self setSelectedChannel:nil];
-    
-    [super viewDidUnload];
 }
 
 - (void)applyFont
@@ -501,7 +497,7 @@ double _ticks = 0;
     }
 }
 
-- (void) setupHttpPort
+- (void)setupHttpPort
 {
     NSLog(@"Self.selcetedChangel is %@", self.selectedChannel);
     
@@ -4138,6 +4134,10 @@ double _ticks = 0;
             }
         }
         
+        if ( !_isHorizeShow ) {
+            _menuBackgroundView.alpha = 0;
+        }
+        
         self.melodyViewController.selectedChannel = self.selectedChannel;
         self.melodyViewController.melodyVcDelegate = self;
         
@@ -4178,6 +4178,10 @@ double _ticks = 0;
         {
             [[NSBundle mainBundle] loadNibNamed:@"H264PlayerViewController" owner:self options:nil];
             self.melodyViewController = [[[MelodyViewController alloc] initWithNibName:@"MelodyViewController" bundle:nil] autorelease];
+        }
+        
+        if ( !_isHorizeShow ) {
+            _menuBackgroundView.alpha = 0;
         }
         
         self.melodyViewController.selectedChannel = self.selectedChannel;
