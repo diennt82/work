@@ -440,7 +440,6 @@
 		8B88C98818ACBA3000B074E5 /* Hubble_logo_back@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B88C98618ACBA3000B074E5 /* Hubble_logo_back@2x.png */; };
 		8B900FD718D85AFF0031C457 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8B900FD618D85AFF0031C457 /* MobileCoreServices.framework */; };
 		8B9112C518600B7C004301C5 /* SettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B9112C318600B7C004301C5 /* SettingsViewController.m */; };
-		8B9112C618600B7C004301C5 /* SettingsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8B9112C418600B7C004301C5 /* SettingsViewController.xib */; };
 		8B9112CA186010F1004301C5 /* GeneralCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B9112C9186010F1004301C5 /* GeneralCell.m */; };
 		8B9112CC18601106004301C5 /* GeneralCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8B9112CB18601106004301C5 /* GeneralCell.xib */; };
 		8B9112D018602884004301C5 /* SensitivityCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B9112CF18602884004301C5 /* SensitivityCell.m */; };
@@ -1245,7 +1244,6 @@
 		8B900FD618D85AFF0031C457 /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
 		8B9112C218600B7C004301C5 /* SettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingsViewController.h; sourceTree = "<group>"; };
 		8B9112C318600B7C004301C5 /* SettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingsViewController.m; sourceTree = "<group>"; };
-		8B9112C418600B7C004301C5 /* SettingsViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SettingsViewController.xib; sourceTree = "<group>"; };
 		8B9112C8186010F1004301C5 /* GeneralCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GeneralCell.h; sourceTree = "<group>"; };
 		8B9112C9186010F1004301C5 /* GeneralCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GeneralCell.m; sourceTree = "<group>"; };
 		8B9112CB18601106004301C5 /* GeneralCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = GeneralCell.xib; sourceTree = "<group>"; };
@@ -3126,7 +3124,6 @@
 				8B9112C718601041004301C5 /* General */,
 				8B9112C218600B7C004301C5 /* SettingsViewController.h */,
 				8B9112C318600B7C004301C5 /* SettingsViewController.m */,
-				8B9112C418600B7C004301C5 /* SettingsViewController.xib */,
 				8B9C7E11185F262D0038B3A8 /* Account */,
 			);
 			name = Settings;
@@ -3575,9 +3572,6 @@
 				8B9507C118C9960D006D4945 /* setup_progress_grey@2x.png in Resources */,
 				8B29A08718AF500A00D36BE5 /* video_progress_bg@2x.png in Resources */,
 				8B299F7A18AF500900D36BE5 /* camera_action_mic_pressed_land@2x.png in Resources */,
-				8B94BD73188A42530002E804 /* Settings.bundle in Resources */,
-				38DE1CAA168AEB890049E814 /* Step_05_ViewController.xib in Resources */,
-				38DE1CA0168AEB6D0049E814 /* Step_06_ViewController.xib in Resources */,
 				A1ABF1B0187537D10014FCB4 /* Step_10_ViewController_ble.xib in Resources */,
 				8BA18CB2184879A10097D1AF /* DeviceSettingsCell.xib in Resources */,
 				8B95078F18C9960D006D4945 /* setup_camera_c4@2x.png in Resources */,
@@ -3843,8 +3837,6 @@
 				8B29A07918AF500A00D36BE5 /* video_overlay_del.png in Resources */,
 				8BA7F2811851C57200BE0145 /* blink11hd360p.sdp in Resources */,
 				8B29A00E18AF500900D36BE5 /* video_action_video_pressed.png in Resources */,
-				8BC0A0461844B31700A5FD52 /* mbp_icon57x57.png in Resources */,
-				38DE1BEC168ADA050049E814 /* FWUpgradeView.xib in Resources */,
 				8B299F9618AF500900D36BE5 /* camera_action_video_stop_pressed_land@2x.png in Resources */,
 				8B299F8A18AF500900D36BE5 /* camera_action_photo_pressed_land@2x.png in Resources */,
 				8B95079D18C9960D006D4945 /* detect_camera_4@2x.png in Resources */,
@@ -4034,8 +4026,6 @@
 				8B299FE518AF500900D36BE5 /* feed_video_play@2x.png in Resources */,
 				26B2D8C4193F6B74005E5F2E /* 120.png in Resources */,
 				8B299FC818AF500900D36BE5 /* camera_action_listening_pressed@5.png in Resources */,
-				8B99DB8918B872C30009612A /* iTunesArtwork@2x in Resources */,
-				380CB0D016DC5B2000290587 /* Step_12_ViewController_ipad.xib in Resources */,
 				8B299FD818AF500900D36BE5 /* camera_action_video_stop_pressed@5.png in Resources */,
 				8B9507B618C9960D006D4945 /* setup_camera_plug.png in Resources */,
 				8B9507BE18C9960D006D4945 /* setup_progress_blue.png in Resources */,
@@ -4131,7 +4121,6 @@
 				8B299FA418AF500900D36BE5 /* camera_action_pan_bg@2x.png in Resources */,
 				8B53659518B34DCA0018671F /* SensitivityTemperatureCell.xib in Resources */,
 				A1176B74180D1DD9000B7527 /* stream480p.sdp in Resources */,
-				8B9112C618600B7C004301C5 /* SettingsViewController.xib in Resources */,
 				8B299FF418AF500900D36BE5 /* timeline_blue_dot.png in Resources */,
 				A1B1E7D218E9135800F076B6 /* buy_camera_btn.png in Resources */,
 				8B299FFB18AF500900D36BE5 /* upgrade_pressed@2x.png in Resources */,
@@ -4382,8 +4371,8 @@
 				);
 				OTHER_LDFLAGS = "-lz";
 				PRODUCT_NAME = HubbleHome;
-				PROVISIONING_PROFILE = "BEE7B868-3871-4C3E-870A-2AE4C2B9FCDA";
-				SDKROOT = iphoneos7.0;
+				PROVISIONING_PROFILE = "EA59DBAE-8652-4650-84BE-5F5F6232A8B0";
+				SDKROOT = iphoneos;
 				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/../ios-frameworks/pjsip/arm/include/ $(SRCROOT)/../ios-frameworks/pjsip/arm/include/pj/ $(SRCROOT)/../ios-frameworks/pjsip/arm/include/pjnath/";
 				VALID_ARCHS = "armv6 armv7";
 			};
@@ -4432,7 +4421,7 @@
 				OTHER_LDFLAGS = "-lz";
 				PRODUCT_NAME = HubbleHome;
 				PROVISIONING_PROFILE = "BEE7B868-3871-4C3E-870A-2AE4C2B9FCDA";
-				SDKROOT = iphoneos7.0;
+				SDKROOT = iphoneos;
 				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/../ios-frameworks/pjsip/arm/include/ $(SRCROOT)/../ios-frameworks/pjsip/arm/include/pj/ $(SRCROOT)/../ios-frameworks/pjsip/arm/include/pjnath/";
 				VALIDATE_PRODUCT = YES;
 				VALID_ARCHS = "armv6 armv7";
