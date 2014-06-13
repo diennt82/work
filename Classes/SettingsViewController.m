@@ -72,6 +72,7 @@
 {
     [super viewDidLoad];
 
+    self.tableView.backgroundColor = [UIColor whiteColor];
     self.tableView.sectionHeaderHeight = 0;
     self.tableView.sectionFooterHeight = 0;
 
