@@ -76,17 +76,50 @@
     [refreshControl release];
 }
 
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    [self updateCameraInfo];
+}
+
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
-
-    // Reload camera list with a slightly long delay with the hope that
-    // all changes are reflected correctly.
-    double delayInSeconds = 2.0;
-    dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, delayInSeconds * NSEC_PER_SEC);
-    dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
-        [self updateCameraInfo];
-    });
+    
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    NSString * camInView = (NSString*)[userDefaults objectForKey:CAM_IN_VEW];
+    if ( camInView ) {
+        // We have a camera to view... so show it!
+        NSString *camRegID = [userDefaults objectForKey:REG_ID];
+        CamChannel *ch = nil;
+        for ( CamChannel *obj in self.camChannels ) {
+            if ( [obj.profile.registrationID isEqualToString:camRegID] ) {
+                ch = obj;
+                break;
+            }
+        }
+        
+        if ( ch ) {
+            H264PlayerViewController *h264PlayerViewController = [[H264PlayerViewController alloc] init];
+            h264PlayerViewController.selectedChannel = ch;
+            h264PlayerViewController.h264PlayerVCDelegate = self;
+            
+            [self.navigationController pushViewController:h264PlayerViewController animated:YES];
+            [h264PlayerViewController release];
+        }
+        else {
+            NSLog(@"[CamerasViewController viewDidAppear:] did not find a camera!");
+        }
+    }
+    else {
+        // Reload camera list with a slightly long delay with the hope that
+        // all changes are reflected correctly.
+        double delayInSeconds = 2.0;
+        dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, delayInSeconds * NSEC_PER_SEC);
+        dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
+            [self updateCameraInfo];
+        });
+    }
 }
 
 #pragma mark - CamerasCellDelegate protocol methods
