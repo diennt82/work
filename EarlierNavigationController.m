@@ -7,6 +7,7 @@
 //
 
 #import "EarlierNavigationController.h"
+#import "PublicDefine.h"
 
 @interface EarlierNavigationController ()
 
@@ -14,15 +15,13 @@
 
 @implementation EarlierNavigationController
 
-@synthesize isEarlierView = _isEarlierView;
-
 - (void)viewDidLoad
 {
     [super viewDidLoad];
     _isEarlierView = NO;
 }
 
-- (BOOL) shouldAutorotate
+- (BOOL)shouldAutorotate
 {
     UIViewController *vc = [self.viewControllers lastObject];
     return [vc shouldAutorotate];
@@ -31,6 +30,18 @@
 - (BOOL)shouldAutomaticallyForwardAppearanceMethods
 {
     return YES;
+}
+
+- (NSUInteger)supportedInterfaceOrientations
+{
+    if (!_isEarlierView) {
+        NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+        NSString * camInView = (NSString*)[userDefaults objectForKey:CAM_IN_VEW];
+        if ( camInView ) {
+            return  UIInterfaceOrientationMaskAllButUpsideDown;
+        }
+    }
+    return UIInterfaceOrientationMaskPortrait;
 }
 
 @end
