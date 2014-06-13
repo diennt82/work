@@ -3,7 +3,7 @@
 //  BlinkHD_ios
 //
 //  Created by Developer on 12/17/13.
-//  Copyright (c) 2013 Smart Panda Ltd. All rights reserved.
+//  Copyright (c) 2013 eBuyNow eCommerce Limited. All rights reserved.
 //
 
 #define SENSITIVITY_MOTION_LOW      10
@@ -36,7 +36,6 @@
     BOOL valueGeneralSettings[2];
     NSInteger valueSettings[2];
     BOOL valueSwitchs[2];
-    
     BOOL valueSchedulerSwitchs[1][2];
 }
 
@@ -49,7 +48,6 @@
 @property (nonatomic, retain) BMS_JSON_Communication *jsonComm;
 @property (nonatomic, assign) NSString *apiKey;
 @property (nonatomic) NSInteger numberOfSections;
-
 @property (nonatomic) CGFloat lowerValue;
 @property (nonatomic) CGFloat upperValue;
 
@@ -60,11 +58,11 @@
 
 @implementation SettingsViewController
 
-- (id)initWithStyle:(UITableViewStyle)style
+- (id)init
 {
-    self = [super initWithStyle:style];
+    self = [super init];
     if (self) {
-        // Custom initialization
+        // Set title here and not in viewDidLoad otherwise problem occurs in a tabbedViewController parent.
         self.title = @"Settings";
     }
     return self;
@@ -74,7 +72,6 @@
 {
     [super viewDidLoad];
 
-    // Uncomment the following line to preserve selection between presentations.
     self.clearsSelectionOnViewWillAppear = NO;
     
     for (int i = 0; i < 4; i++)
@@ -97,6 +94,9 @@
     valueSwitchs[0] = FALSE;
     valueSwitchs[1] = TRUE;
     
+    self.tableView.sectionHeaderHeight = 0;
+    self.tableView.sectionFooterHeight = 0.5f;
+
    /* self.sensitivityInfo = [[SensitivityInfo alloc] init];
     
     self.sensitivityInfo.motionOn = TRUE;
@@ -195,7 +195,6 @@
         self.selectedCamChannel = nil;
     }*/
     
-    
     self.numberOfSections = 2;
     self.selectedCamChannel = nil;
     valueGeneralSettings[1] = [[NSUserDefaults standardUserDefaults] boolForKey:@"IS_FAHRENHEIT"];
@@ -204,19 +203,6 @@
     {
         [self.tableView reloadData];
     }
-}
-
-- (void)viewDidAppear:(BOOL)animated
-{
-    [super viewDidAppear:animated];
-    
-    self.navigationController.navigationBarHidden = YES;
-}
-
-- (void)didReceiveMemoryWarning
-{
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
 }
 
 #pragma mark - Method
@@ -446,18 +432,11 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    //#warning Potentially incomplete method implementation.
-    // Return the number of sections.
-    tableView.sectionHeaderHeight = 0;
-    tableView.sectionFooterHeight = 0.5f;
     return _numberOfSections;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    //#warning Incomplete method implementation.
-    // Return the number of rows in the section.
-    //return 1;
     return numOfRows[section];
 }
 
@@ -488,7 +467,7 @@
             return 227;
         }
     }*/
-    else if(indexPath.section == 1)
+    else if (indexPath.section == 1)
     {
         //height for do not disturb
         //xxx
@@ -589,16 +568,16 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    switch (indexPath.section)
-    {
+    UITableViewCell *cell = nil;
+    
+    switch (indexPath.section) {
         case 0: // General
         {
-            switch (indexPath.row)
-            {
+            switch (indexPath.row) {
                 case 0:
                 {
                     static NSString *CellIdentifier = @"Cell";
-                    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+                    cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
                     if (cell == nil) {
                         cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
                     }
@@ -607,51 +586,41 @@
                     cell.textLabel.text = @"General Settings";
                     cell.imageView.image = [UIImage imageNamed:@"general"];
                     cell.backgroundColor = [UIColor whiteColor];
-                    
-                    return cell;
-                }
                     break;
+                }
                     
                 case 1:
                 {
                     static NSString *CellIdentifier = @"GeneralCell";
-                    GeneralCell *cell = [self.tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+                    cell = [self.tableView dequeueReusableCellWithIdentifier:CellIdentifier];
                     
                     NSArray *objects = [[NSBundle mainBundle] loadNibNamed:@"GeneralCell" owner:nil options:nil];
-                    
-                    for (id curObj in objects)
-                    {
-                        if([curObj isKindOfClass:[UITableViewCell class]])
-                        {
-                            cell = (GeneralCell *)curObj;
+                    for (id curObj in objects) {
+                        if([curObj isKindOfClass:[UITableViewCell class]]) {
+                            cell = curObj;
                             break;
                         }
                     }
                     
-                    cell.is12hr = valueGeneralSettings[0];
-                    cell.isFahrenheit = valueGeneralSettings[1];
-                    cell.generalCellDelegate = self;
-
-                    return cell;
-                }
+                    ((GeneralCell *)cell).is12hr = valueGeneralSettings[0];
+                    ((GeneralCell *)cell).isFahrenheit = valueGeneralSettings[1];
+                    ((GeneralCell *)cell).generalCellDelegate = self;
                     break;
+                }
                     
                 default: // Expect: this case doesn't happen
                 {
                     static NSString *CellIdentifier = @"Cell";
-                    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+                    cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
                     if (cell == nil) {
                         cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
                     }
-                    
-                    // Configure the cell...
-                    
-                    return cell;
-                }
                     break;
+                }
             }
-        }
+            
             break;
+        }
             
         /*case 1: // Sensitivity
         {
@@ -798,12 +767,11 @@
         */
         case 1:
         {
-            switch (indexPath.row)
-            {
+            switch (indexPath.row) {
                 case 0:
                 {
                     static NSString *CellIdentifier = @"CellDonot";
-                    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+                    cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
                     if (cell == nil) {
                         cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
                     }
@@ -812,10 +780,8 @@
                     cell.textLabel.text = @"Do Not Disturb";
                     cell.imageView.image = [UIImage imageNamed:@"do_not_disturb"];
                     cell.backgroundColor = [UIColor whiteColor];
-                    
-                    return cell;
+                    break;
                 }
-                break;
                     
 //                case 1:
 //                case 2:
@@ -828,35 +794,30 @@
                 default:
                 {
                     static NSString *CellIdentifier = @"DoNotDisturbID";
-                    DoNotDisturbCell *cell = [self.tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-                    if (cell == nil)
-                    {
+                    cell = [self.tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+                    if (cell == nil) {
                         NSArray *objects = [[NSBundle mainBundle] loadNibNamed:@"DoNotDisturbCell" owner:nil options:nil];
-                        
-                        for (id curObj in objects)
-                        {
-                            if([curObj isKindOfClass:[UITableViewCell class]])
-                            {
-                                cell = (DoNotDisturbCell *)curObj;
+                        for (id curObj in objects) {
+                            if ([curObj isKindOfClass:[UITableViewCell class]]) {
+                                cell = curObj;
                                 break;
                             }
                         }
                     }
-                    return cell;
-                }
                     break;
+                }
             }
-        }
+            
             break;
+        }
             
         case 3:
         {
-            switch (indexPath.row)
-            {
+            switch (indexPath.row) {
                 case 0:
                 {
                     static NSString *CellIdentifier = @"Cell";
-                    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+                    cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
                     if (cell == nil) {
                         cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
                     }
@@ -866,22 +827,18 @@
                     cell.imageView.image = [UIImage imageNamed:@"scheduler"];
                     cell.backgroundColor = [UIColor whiteColor];
                     
-                    return cell;
-                }
                     break;
+                }
                     
                 case 1:
                 {
                     static NSString *CellIdentifier = @"SchedulerCell";
-                    SchedulerCell *cell = [self.tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+                    cell = [self.tableView dequeueReusableCellWithIdentifier:CellIdentifier];
                     
                     NSArray *objects = [[NSBundle mainBundle] loadNibNamed:@"SchedulerCell" owner:nil options:nil];
-                    
-                    for (id curObj in objects)
-                    {
-                        if([curObj isKindOfClass:[UITableViewCell class]])
-                        {
-                            cell = (SchedulerCell *)curObj;
+                    for (id curObj in objects) {
+                        if ([curObj isKindOfClass:[UITableViewCell class]]) {
+                            cell = curObj;
                             break;
                         }
                     }
@@ -889,20 +846,18 @@
                     //cell.schedulerSate = valueSchedulerSwitchs[indexPath.row][0];
                     //cell.byDayState = valueSchedulerSwitchs[indexPath.row][1];
                     
-                    [cell.schedulerSwitch setOn:valueSchedulerSwitchs[0][0]];
-                    [cell.byDaySwitch setOn:valueSchedulerSwitchs[0][1]];
+                    [((SchedulerCell *)cell).schedulerSwitch setOn:valueSchedulerSwitchs[0][0]];
+                    [((SchedulerCell *)cell).byDaySwitch setOn:valueSchedulerSwitchs[0][1]];
+                    ((SchedulerCell *)cell).schedulerCellDelegate = self;
                     
                     cell.backgroundColor = [UIColor blackColor];
-                    cell.schedulerCellDelegate = self;
-                    
-                    return cell;
-                }
                     break;
+                }
                     
                 case 2:
                 {
                     static NSString *CellIdentifier = @"Cell";
-                    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+                    cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
                     if (cell == nil) {
                         cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
                     }
@@ -912,49 +867,35 @@
                     [cell.contentView addSubview:_schedulingVC.view];
                     cell.backgroundColor = [UIColor blackColor];
                     
-                    return cell;
-                }
                     break;
+                }
                     
                 default:
                 {
                     static NSString *CellIdentifier = @"Cell";
-                    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+                    cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
                     if (cell == nil) {
                         cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
                     }
                     
-                    // Configure the cell...
-                    
-                    return cell;
-                }
                     break;
+                }
             }
-        }
+            
             break;
+        }
             
         default:
         {
             static NSString *CellIdentifier = @"Cell";
-            UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+            cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
             if (cell == nil) {
                 cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
             }
             
-            // Configure the cell...
-            
-            return cell;
-        }
             break;
+        }
     }
-    
-    static NSString *CellIdentifier = @"Cell";
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-    if (cell == nil) {
-        cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
-    }
-    
-    // Configure the cell...
     
     return cell;
 }
@@ -964,30 +905,25 @@
 // In a xib-based application, navigation from a table can be handled in -tableView:didSelectRowAtIndexPath:
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {    
-    switch (indexPath.section)
-    {
+    switch (indexPath.section) {
         case 0: // General
         {
-            if (indexPath.row == 0)
-            {
-                if (numOfRows[indexPath.section] == 1)
-                {
+            if (indexPath.row == 0) {
+                if (numOfRows[indexPath.section] == 1) {
                     numOfRows[indexPath.section] = 2;
                 }
-                else
-                {
+                else {
                     numOfRows[indexPath.section] = 1;
                 }
                 
-                for (int i = 1; i < 4; i++)
-                {
+                for (int i = 1; i < 4; i++) {
                     numOfRows[i] = 1;
                 }
             }
             
             //[tableView reloadSections:[NSIndexSet indexSetWithIndex:indexPath.section] withRowAnimation:UITableViewRowAnimationAutomatic];
-        }
             break;
+        }
             
         /*case 1: // Sensitivity
         {
@@ -1037,71 +973,58 @@
         case 1:
         {
             //Do not disturb
-            if (indexPath.row == 0)
-            {
-                if (numOfRows[indexPath.section] == 1)
-                {
+            if (indexPath.row == 0) {
+                if (numOfRows[indexPath.section] == 1) {
                     numOfRows[indexPath.section] = 2;
                 }
-                else
-                {
+                else {
                     numOfRows[indexPath.section] = 1;
                 }
                 
-                for (int i = 0; i < 4; i++)
-                {
-                    if (i != indexPath.section)
-                    {
+                for (int i = 0; i < 4; i++) {
+                    if (i != indexPath.section) {
                         numOfRows[i] = 1;
                     }
                 }
             }
             
             // [tableView reloadSections:[NSIndexSet indexSetWithIndex:indexPath.section] withRowAnimation:UITableViewRowAnimationAutomatic];
-        }
             break;
+        }
             
         case 3:
         {
-            if (indexPath.row == 0)
-            {
-                if (numOfRows[indexPath.section] == 1)
-                {
-                    if (valueSchedulerSwitchs[0][0] == TRUE) // Scheduler on
-                    {
+            if (indexPath.row == 0) {
+                if (numOfRows[indexPath.section] == 1) {
+                    if (valueSchedulerSwitchs[0][0] == TRUE) {
+                        // Scheduler on
                         numOfRows[indexPath.section] = 3;
                     }
-                    else
-                    {
+                    else {
                         numOfRows[indexPath.section] = 2;
                     }
                 }
-                else
-                {
+                else {
                     numOfRows[indexPath.section] = 1;
                     
                     UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
-                    
-                    for (id obj in cell.contentView.subviews)
-                    {
-                        if ([obj isKindOfClass:[SchedulerViewController class]])
-                        {
+                    for (id obj in cell.contentView.subviews) {
+                        if ([obj isKindOfClass:[SchedulerViewController class]]) {
                             [obj removeFromSuperview];
                             break;
                         }
                     }
                 }
                 
-                for (int i = 0; i < 4; i++)
-                {
-                    if (i != indexPath.section)
-                    {
+                for (int i = 0; i < 4; i++) {
+                    if (i != indexPath.section) {
                         numOfRows[i] = 1;
                     }
                 }
             }
-        }
+            
             break;
+        }
             
         default:
             break;
@@ -1236,8 +1159,11 @@
     }
 }
 */
-- (void)dealloc {
+
+- (void)dealloc
+{
     [_jsonComm release];
     [super dealloc];
 }
+
 @end

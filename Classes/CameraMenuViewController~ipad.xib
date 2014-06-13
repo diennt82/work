@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.iPad.XIB" version="3.0" toolsVersion="5056" systemVersion="13C64" targetRuntime="iOS.CocoaTouch.iPad" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.iPad.XIB" version="3.0" toolsVersion="5056" systemVersion="13D65" targetRuntime="iOS.CocoaTouch.iPad" propertyAccessControl="none">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3733"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="CameraMenuViewController">
             <connections>
-                <outlet property="btnRmoveCamera" destination="28N-FJ-IzJ" id="PbF-HD-aXO"/>
                 <outlet property="btnSnapshotOK" destination="Nc4-Ze-rVn" id="N71-Tn-SJh"/>
                 <outlet property="btnSnapshotRefresh" destination="6LT-WQ-Stc" id="saY-bf-4VG"/>
                 <outlet property="imgVSnapshot" destination="UBE-U3-54p" id="7uN-yT-58B"/>
@@ -24,23 +23,12 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="grouped" rowHeight="45" sectionHeaderHeight="40" sectionFooterHeight="1" id="PE5-qN-gmz">
-                    <rect key="frame" x="0.0" y="0.0" width="768" height="915"/>
+                    <rect key="frame" x="0.0" y="0.0" width="768" height="1024"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                     <color key="backgroundColor" cocoaTouchSystemColor="lightTextColor"/>
                     <color key="separatorColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                     <inset key="separatorInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                 </tableView>
-                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="28N-FJ-IzJ">
-                    <rect key="frame" x="237" y="933" width="295" height="55"/>
-                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
-                    <fontDescription key="fontDescription" name="HelveticaNeue-Bold" family="Helvetica Neue" pointSize="20"/>
-                    <state key="normal" title="Remove Camera" backgroundImage="remove_camera.png">
-                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                    </state>
-                    <connections>
-                        <action selector="btnRemoveCameraTouchUpInsideAction:" destination="-1" eventType="touchUpInside" id="bfA-0K-mbK"/>
-                    </connections>
-                </button>
                 <view hidden="YES" userInteractionEnabled="NO" alpha="0.80000001192092896" contentMode="scaleToFill" id="o7d-tc-XD8">
                     <rect key="frame" x="0.0" y="0.0" width="768" height="1024"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -211,7 +199,6 @@
     </objects>
     <resources>
         <image name="general.png" width="25" height="25"/>
-        <image name="remove_camera.png" width="295" height="55"/>
         <image name="sensitivity.png" width="25" height="25"/>
     </resources>
 </document>

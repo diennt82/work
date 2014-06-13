@@ -3,7 +3,7 @@
 //  MBP_ios
 //
 //  Created by NxComm on 9/26/11.
-//  Copyright 2011 __MyCompanyName__. All rights reserved.
+//  Copyright 2011 eBuyNow eCommerce Limited. All rights reserved.
 //
 
 #import <UIKit/UIKit.h>
@@ -19,16 +19,10 @@
 
 @class MBP_iosViewController;
 
-@interface MBP_iosAppDelegate : NSObject <UIApplicationDelegate, UIAlertViewDelegate, MFMailComposeViewControllerDelegate> {
-    //UIWindow *window;
-    MBP_iosViewController *viewController;
-    BOOL handling_PN; 
-
-}
+@interface MBP_iosAppDelegate : NSObject <UIApplicationDelegate, UIAlertViewDelegate, MFMailComposeViewControllerDelegate>
 
 @property (nonatomic, retain) IBOutlet UIWindow *window;
 @property (nonatomic, retain) IBOutlet MBP_iosViewController *viewController;
-
 @property (nonatomic) BOOL becomeActiveByNotificationFlag;
 
 @end

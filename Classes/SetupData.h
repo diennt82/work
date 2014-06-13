@@ -3,29 +3,25 @@
 //  MBP_ios
 //
 //  Created by NxComm on 4/25/12.
-//  Copyright 2012 Smart Panda Ltd. All rights reserved.
+//  Copyright 2012 eBuyNow eCommerce Limited. All rights reserved.
 //
 
 #import <CameraScanner/CameraScanner.h>
 
-/* Change this every time the setup data changed -- 
+/* 
+ Change this every time the setup data is changed
  */ 
 #define DATA_BARKER  0xbeef0009
 #define DEBUG_RESTORE_DATA 0
 
-@interface SetupData : NSObject {
+@interface SetupData : NSObject
 
-	NSMutableArray * channels; 
-	NSMutableArray * configured_cams;
-}
+@property (nonatomic, retain) NSMutableArray *channels;
+@property (nonatomic, retain) NSMutableArray *configuredCams;
 
-@property (nonatomic,retain) NSMutableArray* channels, *configured_cams; 
-
--(id) init;
--(id) initWithChannels:(NSMutableArray*)channs AndProfiles:(NSMutableArray*) cps;
-
--(BOOL) save_session_data;
--(BOOL) restore_session_data;
-
+- (id)init;
+- (id)initWithChannels:(NSMutableArray *)channs andProfiles:(NSMutableArray *)cps;
+- (BOOL)saveSessionData;
+- (BOOL)restoreSessionData;
 
 @end

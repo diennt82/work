@@ -3,12 +3,11 @@
 //  MBP_ios
 //
 //  Created by NxComm on 4/24/12.
-//  Copyright 2012 Smart Panda Ltd. All rights reserved.
+//  Copyright 2012 eBuyNow eCommerce Limited. All rights reserved.
 //
 
 #import <CameraScanner/CameraScanner.h>
 #import <MonitorCommunication/MonitorCommunication.h>
-
 #import "SetupData.h"
 
 #define API_KEY @"API_KEY"
@@ -25,16 +24,10 @@
 @end
 
 @interface UserAccount : NSObject
-{
 
-	NSString * userName;
-	NSString * userPass;
-	
-	//id <ConnectionMethodDelegate> delegate;
-}
 //@property (nonatomic,assign) id <ConnectionMethodDelegate> delegate;
-@property (nonatomic,retain) NSString * userName, * userPass;
-
+@property (nonatomic,retain) NSString *userName;
+@property (nonatomic,retain) NSString *userPass;
 @property (nonatomic, retain) NSString *apiKey;
 //@property (nonatomic, assign) id<UserAccountLoginDelegate> uaLoginDelegate;
 
@@ -49,16 +42,14 @@
 //-(void) getCamListFailure:(NSHTTPURLResponse*) error_response; 
 //- (void)getCamListServerUnreachable; 
 
--(NSMutableArray *) parse_camera_list:(NSArray *)raw;
-
--(void) sync_online_and_offline_data:(NSMutableArray *) online_list;
-
--(void) query_snapshot_from_server:(NSArray *) cam_profiles;
+- (NSMutableArray *)parse_camera_list:(NSArray *)raw;
+- (void)sync_online_and_offline_data:(NSMutableArray *)online_list;
+- (void)query_snapshot_from_server:(NSArray *)cam_profiles;
 
 //-(void) query_disabled_alert_list:(NSArray *) cam_profiles;
--(NSString *) query_cam_ip_online:(NSString *) mac_no_colon;
--(void) readCameraListAndUpdate;
-- (BOOL)checkCameraIsAvailable:(NSString *) mac_w_colon;
-- (NSInteger )checkAvailableAndFWUpgradingWithCamera:(NSString *) mac_w_colon;
+- (NSString *)query_cam_ip_online:(NSString *)mac_no_colon;
+- (void)readCameraListAndUpdate;
+- (BOOL)checkCameraIsAvailable:(NSString *)mac_w_colon;
+- (NSInteger)checkAvailableAndFWUpgradingWithCamera:(NSString *)mac_w_colon;
 
 @end

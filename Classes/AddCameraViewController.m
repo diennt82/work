@@ -3,7 +3,7 @@
 //  BlinkHD_ios
 //
 //  Created by Developer on 3/6/14.
-//  Copyright (c) 2014 Smart Panda Ltd. All rights reserved.
+//  Copyright (c) 2014 eBuyNow eCommerce Limited. All rights reserved.
 //
 
 #define MAX_CAM_ALLOWED 4
@@ -16,42 +16,35 @@
 
 @interface AddCameraViewController ()
 
-@property (retain, nonatomic) IBOutlet UIButton *btnCancel;
+@property (nonatomic, retain) IBOutlet UIButton *btnCancel;
 
 @end
 
 @implementation AddCameraViewController
 
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
-{
-    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
-    if (self) {
-        // Custom initialization
-    }
-    return self;
-}
+#pragma mark - UIViewController methods
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    // Do any additional setup after loading the view from its nib.
-    [self.btnCancel setBackgroundImage:[UIImage imageNamed:@"cancel_btn"] forState:UIControlStateNormal];
-    [self.btnCancel setBackgroundImage:[UIImage imageNamed:@"cancel_btn_pressed"] forState:UIControlEventTouchDown];
+    [_btnCancel setBackgroundImage:[UIImage imageNamed:@"cancel_btn"] forState:UIControlStateNormal];
+    [_btnCancel setBackgroundImage:[UIImage imageNamed:@"cancel_btn_pressed"] forState:UIControlEventTouchDown];
+    
+    _buyCameraButton.layer.cornerRadius = 5.0f; // set to match the L&F of the Cancel button
+    _buyCameraButton.clipsToBounds = YES;
 }
 
-#pragma mark - Actions
+#pragma mark - Custom Actions
 
 - (IBAction)btnCameraTypeTouchUpInsideAction:(UIButton *)sender
 {
     NSInteger cameraType = WIFI_SETUP;
     
-    if (sender.tag == CAMERA_TAG_83)
-    {
+    if (sender.tag == CAMERA_TAG_83) {
         //MBP 83/ 836
         cameraType = BLUETOOTH_SETUP;
     }
-    else
-    {
+    else {
         // Focus 66
         cameraType = WIFI_SETUP;
     }
@@ -61,44 +54,36 @@
     [userDefaults setBool:FALSE forKey:FIRST_TIME_SETUP];
     [userDefaults synchronize];
     
-    [self dismissViewControllerAnimated:YES completion:^{
-        [_delegate sendActionCommand:TRUE];
+    [self.presentingViewController dismissViewControllerAnimated:YES completion:^{
+        [_delegate continueWithAddCameraAction];
     }];
 }
 
 - (IBAction)btnCancelTouchUpInsideAction:(id)sender
 {
-    [self dismissViewControllerAnimated:YES completion:^{
-        [_delegate sendActionCommand:FALSE];
-    }];
+    [self.presentingViewController dismissViewControllerAnimated:YES completion:nil];
+}
+
+- (IBAction)buyCameraButtonAction:(id)sender
+{
+    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"http://hubblehome.com/hubble-products/"]];
 }
 
 #pragma mark - Methods
 
 - (void)showDialog
 {
-    NSString * ok = NSLocalizedStringWithDefaultValue(@"Ok",nil, [NSBundle mainBundle],
-                                                      @"Ok", nil);
-    NSString * msg = NSLocalizedStringWithDefaultValue(@"remove_one_cam",nil, [NSBundle mainBundle],
-                                                       @"Please remove one camera from the current  list before addding the new one", nil);
-    
-    UIAlertView *alert = [[UIAlertView alloc]
-                          initWithTitle:@""
-                          message:msg
-                          delegate:nil
-                          cancelButtonTitle:ok
-                          otherButtonTitles:nil];
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@""
+                                                    message:LocStr(@"remove_one_cam")
+                                                   delegate:nil
+                                          cancelButtonTitle:LocStr(@"Ok")
+                                          otherButtonTitles:nil];
     [alert show];
     [alert release];
 }
 
-- (void)didReceiveMemoryWarning
+- (void)dealloc
 {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
-
-- (void)dealloc {
     [_btnCancel release];
     [super dealloc];
 }

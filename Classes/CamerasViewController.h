@@ -3,35 +3,19 @@
 //  BlinkHD_ios
 //
 //  Created by Developer on 12/16/13.
-//  Copyright (c) 2013 Smart Panda Ltd. All rights reserved.
+//  Copyright (c) 2013 eBuyNow eCommerce Limited. All rights reserved.
 //
 
 #import <UIKit/UIKit.h>
 #import "ConnectionMethodDelegate.h"
-//#import "MenuViewController.h"
 
-@protocol CamerasVCDelegate <NSObject>
+@interface CamerasViewController : UITableViewController
 
-- (void)sendActionCommand;
-
-@end
-
-@interface CamerasViewController : UIViewController<UITableViewDataSource, UITableViewDelegate>
-
-@property (assign, nonatomic) id<CamerasVCDelegate> camerasVCDelegate;
-@property (assign, nonatomic) id parentVC;
+@property (nonatomic, assign) id parentVC;
+@property (nonatomic, retain) NSMutableArray *camChannels;
 @property (nonatomic) BOOL waitingForUpdateData;
-@property (retain, nonatomic) NSMutableArray *camChannels;
-@property (retain, nonatomic) IBOutlet UITableView *ibTableListCamera;
 
-- (id)initWithStyle:(UITableViewStyle)style
-           delegate:(id<ConnectionMethodDelegate> )delegate
-           parentVC: (id)parentVC;
-
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
-             delegate:(id<ConnectionMethodDelegate> )delegate
-             parentVC: (id)parentVC;
-
+- (id)initWithDelegate:(id<ConnectionMethodDelegate>)delegate parentVC:(id)parentVC;
 - (void)camerasReloadData;
--(void)updateBottomButton;
+
 @end

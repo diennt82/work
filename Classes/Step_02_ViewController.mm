@@ -3,7 +3,7 @@
 //  MBP_ios
 //
 //  Created by NxComm on 7/24/12.
-//  Copyright (c) 2012 Smart Panda Ltd. All rights reserved.
+//  Copyright (c) 2012 eBuyNow eCommerce Limited. All rights reserved.
 //
 
 #import "Step_02_ViewController.h"
@@ -15,27 +15,17 @@
 #import "BLEConnectionManager.h"
 #import "KISSMetricsAPI.h"
 
-#define GAI_CATEGORY    @"Step 02 view"
+#define GAI_CATEGORY @"Step 02 view"
 
 @interface Step_02_ViewController ()
 
-@property (retain, nonatomic) IBOutlet UIButton *btnContinue;
+@property (nonatomic, retain) IBOutlet UIButton *btnContinue;
 
 @end
 
 @implementation Step_02_ViewController
 
-@synthesize delegate;
-
-
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
-{
-    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
-    if (self) {
-        // Custom initialization
-    }
-    return self;
-}
+#pragma mark -  UIViewController methods
 
 - (void)viewDidLoad
 {
@@ -64,8 +54,7 @@
     
     [imageView startAnimating];
     
-    if (_cameraType == BLUETOOTH_SETUP)
-    {
+    if (_cameraType == BLUETOOTH_SETUP) {
         NSLog(@"Step_02_VC - viewDidLoad: - isOnBLE: %d", [BLEConnectionManager getInstanceBLE].isOnBLE);
     }
 }
@@ -74,25 +63,14 @@
 {
     [super viewWillAppear:animated];
     [self.navigationController.navigationBar setUserInteractionEnabled:YES];
-    
     self.trackedViewName = GAI_CATEGORY;
-}
-
-- (void)viewDidUnload
-{
-    [super viewDidUnload];
-    // Release any retained subviews of the main view.
 }
 
 - (void)removeNavigationBarBottomLine
 {
-    for (UIView *parentView in self.navigationController.navigationBar.subviews)
-    {
-        for (UIView *childView in parentView.subviews)
-        {
-            if ([childView isKindOfClass:[UIImageView class]] &&
-                childView.bounds.size.height <= 1)
-            {
+    for (UIView *parentView in self.navigationController.navigationBar.subviews) {
+        for (UIView *childView in parentView.subviews) {
+            if ([childView isKindOfClass:[UIImageView class]] && childView.bounds.size.height <= 1) {
                 [childView removeFromSuperview];
                 return;
             }
@@ -102,34 +80,22 @@
 
 - (void)presentModallyOn:(UIViewController *)parent
 {
-    
-    MBPNavController *    navController;
-    
     //setup nav controller
-    navController= [[[MBPNavController alloc]initWithRootViewController:self] autorelease];
-    
+    MBPNavController *navController = [[[MBPNavController alloc] initWithRootViewController:self] autorelease];
     
     // Create a navigation controller with us as its root.
     assert(navController != nil);
     
-    
-    
     // Present the navigation controller on the specified parent
-    // view controller.
-    
-    //[parent presentModalViewController:navController animated:NO];
-    [parent presentViewController:navController animated:NO completion:^{}];
+    [parent presentViewController:navController animated:NO completion:nil];
 }
 
+#pragma mark - Actions
 
-
-#pragma mark - 
-#pragma mark Actions
-
-- (void)hubbleItemAction: (id)sender
+- (void)hubbleItemAction:(id)sender
 {
     [self dismissViewControllerAnimated:YES completion:^{
-        [self.delegate sendStatus:AFTER_DEL_RELOGIN];
+        [_delegate sendStatus:AFTER_DEL_RELOGIN];
     }];
 }
 
@@ -141,37 +107,24 @@
                                                     withAction:@"Touch up inside continue button"
                                                      withLabel:@"Continue"
                                                      withValue:[NSNumber numberWithInteger:_cameraType]];
-    
-    if (_cameraType == BLUETOOTH_SETUP)
-    {
+    if (_cameraType == BLUETOOTH_SETUP) {
         NSLog(@"Load step Create BLE Connection");
-        //Load the next xib
-        CreateBLEConnection_VController *step03ViewController =
-        [[CreateBLEConnection_VController alloc] initWithNibName:@"CreateBLEConnection_VController"
-                                                          bundle:nil];
-        
+        CreateBLEConnection_VController *step03ViewController = [[CreateBLEConnection_VController alloc] initWithNibName:@"CreateBLEConnection_VController" bundle:nil];
         [self.navigationController pushViewController:step03ViewController animated:NO];
-        
         [step03ViewController release];
     }
-    else
-    {
+    else {
         NSLog(@"Load step 3 Concurrent");
         Step_03_ViewController *step03ViewController = nil;
         
-        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
-        {
+        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
             step03ViewController = [[Step_03_ViewController alloc] initWithNibName:@"Step_03_ViewController_ipad" bundle:nil];
         }
-        else
-        {
-            step03ViewController =
-            [[Step_03_ViewController alloc] initWithNibName:@"Step_03_ViewController"
-                                                     bundle:nil];
+        else {
+            step03ViewController = [[Step_03_ViewController alloc] initWithNibName:@"Step_03_ViewController" bundle:nil];
         }
         
         [self.navigationController pushViewController:step03ViewController animated:YES];
-        
         [step03ViewController release];
     }
 }
@@ -179,17 +132,16 @@
 - (IBAction)goBackToFirstScreen:(id)sender
 {
     //[self.delegate sendStatus:FRONT_PAGE];
-    [self.delegate sendStatus:LOGIN];
+    [_delegate sendStatus:LOGIN];
 }
 
--(void) startMonitorCallBack
+-(void)startMonitorCallBack
 {
     [self dismissViewControllerAnimated:NO completion:^{
         // New flow: Show Camera list after Add a new Camera
-        [self.delegate sendStatus:SHOW_CAMERA_LIST];
+        [_delegate sendStatus:SHOW_CAMERA_LIST];
     }];
 }
-
 
 - (IBAction)handleButtonPress:(id)sender
 {
@@ -199,81 +151,48 @@
     {
         
 #if 1
-        
         NSLog(@"Load step 3");
         //Load the next xib
         Step_03_ViewController *step03ViewController = nil;
         
-        
-        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
-        {
-            
-            
-            step03ViewController = [[Step_03_ViewController alloc]initWithNibName:@"Step_03_ViewController_ipad" bundle:nil];
+        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+            step03ViewController = [[Step_03_ViewController alloc] initWithNibName:@"Step_03_ViewController_ipad" bundle:nil];
             
         }
-        else
-        {
-            step03ViewController = [[Step_03_ViewController alloc]
-                                    initWithNibName:@"Step_03_ViewController" bundle:nil];
+        else {
+            step03ViewController = [[Step_03_ViewController alloc] initWithNibName:@"Step_03_ViewController" bundle:nil];
             
         }
-        
-        
-        
-        
         
         [self.navigationController pushViewController:step03ViewController animated:NO];
-        
         [step03ViewController release];
         
-        
 #else // DBG - TEST view layout ..
-        
-        
         NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
         
-
         [userDefaults setObject:@"11:22:33:44:55:66" forKey:@"CameraMacWithQuote"];
         [userDefaults synchronize];
        
-        
-        
         //Load step 10
         NSLog(@"Load Step 10");
         //Load the next xib
         Step_10_ViewController *step10ViewController = nil;
         
-        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
-        {
-            
-            step10ViewController = [[Step_10_ViewController alloc]
-                                    initWithNibName:@"Step_10_ViewController_ipad" bundle:nil];
-            
+        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+            step10ViewController = [[Step_10_ViewController alloc] initWithNibName:@"Step_10_ViewController_ipad" bundle:nil];
         }
-        else
-        {
-            
-            step10ViewController = [[Step_10_ViewController alloc]
-                                    initWithNibName:@"Step_10_ViewController" bundle:nil];
-            
+        else {
+            step10ViewController = [[Step_10_ViewController alloc] initWithNibName:@"Step_10_ViewController" bundle:nil];
         }
-        
-        
-        
         
         [self.navigationController pushViewController:step10ViewController animated:NO];
         [step10ViewController release];
-
 #endif
-        
     }
-    
-    
 }
 
-
 #pragma  mark -
+
 - (UIImage *)imageWithNameString:(NSString *)nameString scaledToSize:(CGSize)newSize
 {
 	UIGraphicsBeginImageContext(newSize);
@@ -285,8 +204,10 @@
 	return newImage;
 }
 
-- (void)dealloc {
+- (void)dealloc
+{
     [_btnContinue release];
     [super dealloc];
 }
+
 @end

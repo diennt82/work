@@ -3,7 +3,7 @@
 //  MBP_ios
 //
 //  Created by NxComm on 9/26/11.
-//  Copyright 2011 __MyCompanyName__. All rights reserved.
+//  Copyright 2011 eBuyNow eCommerce Limited. All rights reserved.
 //
 
 #import "MBP_iosAppDelegate.h"
@@ -12,26 +12,26 @@
 #import "KISSMetricsAPI.h"
 #import "EarlierNavigationController.h"
 
+@interface MBP_iosAppDelegate ()
+
+@property (nonatomic, assign) BOOL handling_PN;
+
+@end
 
 @implementation MBP_iosAppDelegate
 
-//@synthesize window;
 @synthesize viewController;
 
-
-#pragma mark -
-#pragma mark Application lifecycle
+#pragma mark - Application lifecycle
 
 //Kiran Patel Git Hub Sync Test / Branch Test
 
-- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {    
-    
+- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
+{
     // Override point for customization after application launch.
     /*nguyendang_20130719
         - Add Google Analytics Delegates to this project.
      */
-    
-
     
     // Handle launching from a notification
     UILocalNotification *locationNotification = [launchOptions objectForKey:UIApplicationLaunchOptionsLocalNotificationKey];
@@ -40,7 +40,7 @@
         application.applicationIconBadgeNumber = 0;
     }
 
-    handling_PN = FALSE;
+    self.handling_PN = FALSE;
     
 #if 0
     [KISSMetricsAPI sharedAPIWithKey:@"ff38140e358fdc343bb97297de4963291eec47d5"];
@@ -72,7 +72,6 @@
 #endif
     // !!!: Use the next line only during TEST - appstore release: need to comment this line
     //[TestFlight setDeviceIdentifier:[[UIDevice currentDevice] uniqueIdentifier]];
-    
   
     //Add testflight app token - For remote login & crash reporting
     //[TestFlight takeOff:@"4574de50-f54d-4414-a803-fc460426c915"];
@@ -80,20 +79,27 @@
     NSArray *names = [UIFont fontNamesForFamilyName:@"Proxima Nova"];
     NSLog(@"names: %@",names);
     
-    //[[UINavigationBar appearance] setTintColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"back"]]];
-    [[UINavigationBar appearance] setTintColor:[UIColor colorWithRed:252/255.f green:0 blue:7/255.f alpha:1]];
+    UIColor *themeTintColor = [UIColor colorWithRed:252/255.f green:0 blue:7/255.f alpha:1];
+    if (floor(NSFoundationVersionNumber) > NSFoundationVersionNumber_iOS_6_1) {
+        // iOS 7+
+        _window.tintColor = themeTintColor;
+    }
+
+    [[UINavigationBar appearance] setTintColor:themeTintColor];
     
-    [[UINavigationBar appearance] setTitleTextAttributes: @{
-                                                            NSForegroundColorAttributeName: [UIColor colorWithRed:16/255.f green:16/255.f blue:16/255.f alpha:1],
-                                                            NSFontAttributeName: [UIFont fontWithName:@"HelveticaNeue-Thin" size:17.f]
-                                                            }];
+    [[UINavigationBar appearance] setTitleTextAttributes:@{
+                                                           NSForegroundColorAttributeName: [UIColor colorWithRed:16/255.f green:16/255.f blue:16/255.f alpha:1],
+                                                           NSFontAttributeName: [UIFont fontWithName:@"HelveticaNeue-Thin" size:17.f]
+                                                           }];
     
     [[UIBarButtonItem appearance] setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys:
                                                           [UIColor blackColor], NSForegroundColorAttributeName,
                                                           [UIFont fontWithName:@"HelveticaNeue-Light" size:17], NSFontAttributeName,
                                                           nil]
                                                 forState:UIControlStateNormal];
+    
     [[UILabel appearanceWhenContainedIn:[UITableViewHeaderFooterView class], nil] setFont:[UIFont fontWithName:@"HelveticaNeue-Light" size:17]];
+    
     // Check condition use STUN or not
     [self registerDefaultsFromSettingsBundle];
     
@@ -104,8 +110,7 @@
      * User kill app when SETUP camera
      */
     
-    if (app_stage == APP_STAGE_SETUP)
-    {
+    if (app_stage == APP_STAGE_SETUP) {
         viewController.app_stage = APP_STAGE_LOGGED_IN ;
         [userDefaults setInteger:viewController.app_stage forKey:@"ApplicationStage"];
     }
@@ -121,8 +126,7 @@
     _window.rootViewController = [[EarlierNavigationController alloc] initWithRootViewController:viewController];
     [_window makeKeyAndVisible];
     
-#if TARGET_IPHONE_SIMULATOR == 0
-
+#if !DEBUG
     NSSetUncaughtExceptionHandler(&HandleException);
     
     struct sigaction signalAction;
@@ -133,11 +137,12 @@
     sigaction(SIGILL, &signalAction, NULL);
     sigaction(SIGBUS, &signalAction, NULL);
     
-     NSString *cachesDirectory = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
+    NSString *cachesDirectory = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
 	NSString *logPath = [cachesDirectory stringByAppendingPathComponent:@"application.log"];
     
     //[self createANewAppLog:logPath decumentDirectory:cachesDirectory];
     
+    // Redirect NSLog output to a file
 	freopen([logPath cStringUsingEncoding:NSASCIIStringEncoding], "a+", stderr);
 	NSLog(@"Log location: %@",logPath);
 #endif
@@ -146,29 +151,27 @@
 
     NSString *serverName = [userDefaults stringForKey:@"name_server"];
     
-    if (serverName == nil ||
-        ![serverName hasPrefix:@"http"])
-    {
+    if (serverName == nil || ![serverName hasPrefix:@"http"]) {
         serverName = @"https://api.hubble.in";
     }
     
-    if (![serverName hasSuffix:@"/v1"])
-    {
+    if (![serverName hasSuffix:@"/v1"]) {
         serverName = [serverName stringByAppendingString:@"/v1"];
     }
     
     [BMS_JSON_Communication setServerInput:serverName];
-
     return YES;
 }
 
-void HandleException(NSException *exception) {
+void HandleException(NSException *exception)
+{
     NSLog(@"App crashing with exception: %@", exception);
     //Save somewhere that your app has crashed.
     checkingApplicationCrashed();
 }
 
-void HandleSignal(int signal) {
+void HandleSignal(int signal)
+{
     NSLog(@"We received a signal: %d", signal);
     checkingApplicationCrashed();
     //Save somewhere that your app has crashed.
@@ -177,20 +180,18 @@ void HandleSignal(int signal) {
 void checkingApplicationCrashed()
 {
     BOOL success;
-    NSFileManager * fileManager = [NSFileManager defaultManager];
+    NSFileManager *fileManager = [NSFileManager defaultManager];
     
-    NSError * error;
-    NSArray * paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-    NSString * documentDirectory = [paths objectAtIndex:0];
+    NSError *error;
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString *documentDirectory = [paths objectAtIndex:0];
     
     NSString *appCrashedLog = [documentDirectory stringByAppendingPathComponent:@"application_crash.log"];
-    
     NSString *defaultLogPath = [documentDirectory stringByAppendingPathComponent:@"application.log"];
   
     success = [fileManager copyItemAtPath:defaultLogPath toPath:appCrashedLog error:&error];
     
-    if (success)
-    {
+    if (success) {
         NSLog(@"Save log crashed!");
     }
 }
@@ -210,37 +211,30 @@ void checkingApplicationCrashed()
         {
             success = [fileManager removeItemAtPath:appLog0 error:&error];
             
-            if (success)
-            {
+            if (success) {
                 NSLog(@"Remove app log 0 success");
             }
-            else
-            {
+            else {
                 NSLog(@"Remove app log 0 error: %@", [error localizedDescription]);
             }
         }
         
         success = [fileManager copyItemAtPath:appLogPath toPath:appLog0 error:&error];
         
-        if (success)
-        {
+        if (success) {
             NSLog(@"Copy success");
             
             success = [fileManager removeItemAtPath:appLogPath error:&error];
-            
-            if (success)
-            {
+            if (success) {
                 NSLog(@"Remove app log success");
                 
                 freopen([appLogPath cStringUsingEncoding:NSASCIIStringEncoding], "a+", stderr);
             }
-            else
-            {
+            else {
                 NSLog(@"Remove app log err: %@", [error localizedDescription]);
             }
         }
-        else
-        {
+        else {
             NSLog(@"Copy error: %@", [error localizedDescription]);
         }
     }
@@ -259,11 +253,9 @@ void checkingApplicationCrashed()
     NSArray *preferences = [settings objectForKey:@"PreferenceSpecifiers"];
     
     NSMutableDictionary *defaultsToRegister = [[NSMutableDictionary alloc] initWithCapacity:[preferences count]];
-    for(NSDictionary *prefSpecification in preferences)
-    {
+    for(NSDictionary *prefSpecification in preferences) {
         NSString *key = [prefSpecification objectForKey:@"Key"];
-        if(key)
-        {
+        if(key) {
             [defaultsToRegister setObject:[prefSpecification objectForKey:@"DefaultValue"] forKey:key];
         }
     }
@@ -281,32 +273,23 @@ void checkingApplicationCrashed()
     [[UIApplication sharedApplication] setApplicationIconBadgeNumber:0];
     [[UIApplication sharedApplication] cancelAllLocalNotifications];
 
-    if (userInfo)
-    {
+    if (userInfo) {
         NSString * str2 = (NSString *) [userInfo objectForKey:@"alert"];
-        if ([str2 isEqualToString:ALERT_GENERIC_SERVER_INFO])
-        {
-            
+        if ([str2 isEqualToString:ALERT_GENERIC_SERVER_INFO]) {
             //Server Custom message
             NSString * str3 = (NSString *) [userInfo objectForKey:@"message"];
             NSString * str7 = (NSString *) [userInfo objectForKey:@"url"];
             
-            if ( [application applicationState] == UIApplicationStateActive)
-            {
+            if ( [application applicationState] == UIApplicationStateActive) {
                 //App is running now
                 [viewController pushNotificationRcvedServerAnnouncement:str3 andUrl:str7];
             }
-            
-
-            
         }
         else if ([str2 isEqualToString:@"1"] ||
                  [str2 isEqualToString:@"2"]  ||
                  [str2 isEqualToString:@"3"] ||
                  [str2 isEqualToString:@"4"])
         {
-            
-            
             NSString * str3 = (NSString *) [userInfo objectForKey:@"mac"];
             NSString * str4 = (NSString *) [userInfo objectForKey:@"val"];
             NSString * str5 = (NSString *) [userInfo objectForKey:@"time"];
@@ -328,40 +311,34 @@ void checkingApplicationCrashed()
             
             int rcvTimeStamp = [[NSDate date] timeIntervalSince1970];
             CameraAlert * camAlert = [[CameraAlert alloc]initWithTimeStamp1:rcvTimeStamp];// autorelease];
+
             //set other values
             camAlert.cameraMacNoColon = [str3 substringWithRange:NSMakeRange(6, 12)];
-            
             camAlert.cameraName = str6;
             camAlert.alertType = str2;
             camAlert.alertTime =str5;
             camAlert.alertVal = str4;
             camAlert.registrationID = str3;
             
-            
-            if (str8 != nil)
-            {
+            if ( str8 ) {
                 camAlert.server_url = str8;
                 NSLog(@"motion url is :%@", camAlert.server_url);
             }
             
             BOOL shouldStoreAlert = TRUE;
             
-            
             //Next few lines: ORDER MATTERS
-            if ( [application applicationState] == UIApplicationStateActive)
-            {
+            if ( [application applicationState] == UIApplicationStateActive) {
                 //App is running now
                 shouldStoreAlert = [viewController pushNotificationRcvedInForeground: camAlert];
             }
-            else if ( [application applicationState] == UIApplicationStateInactive)
-            {
+            else if ( [application applicationState] == UIApplicationStateInactive) {
                 NSLog(@"UIApplicationStateInactive");
                 
                 [self performSelectorOnMainThread:@selector(activateNotificationViewController:) withObject:camAlert waitUntilDone:YES];
-                handling_PN = TRUE;
+                self.handling_PN = TRUE;
             }
-            else
-            {
+            else {
                 // TODO: handle exception
                 UIAlertView *alert = [[UIAlertView alloc] initWithTitle:str6
                                                                 message:str2
@@ -377,7 +354,6 @@ void checkingApplicationCrashed()
         }
         //[camAlert release]; camAlert leak memory but I can't release it.
     }
-
 }
 
 - (void)application:(UIApplication *)application didReceiveLocalNotification:(UILocalNotification *)notification
@@ -386,17 +362,16 @@ void checkingApplicationCrashed()
     //in case app in background, must click to active it.
     UIApplicationState state = [application applicationState];
     
-    if (state == UIApplicationStateActive)
-    {
+    if (state == UIApplicationStateActive) {
         //enable remote push notification
         [[UIApplication sharedApplication] registerForRemoteNotificationTypes:(UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeAlert)];
     }
+    
     // Set icon badge number to zero
     application.applicationIconBadgeNumber = 0;
 }
 
-
-- (void)activateNotificationViewController: (CameraAlert *)camAlert
+- (void)activateNotificationViewController:(CameraAlert *)camAlert
 {
     self.becomeActiveByNotificationFlag = TRUE;
     viewController.camAlert = camAlert;
@@ -407,43 +382,29 @@ void checkingApplicationCrashed()
                                     repeats:NO];
 }
 
-
--(void) showInit
+- (void)showInit
 {
     NSLog(@"MBP_isoAppDelegate - show LoginVC as the first init");
     //[viewController sendStatus:FRONT_PAGE];
     [viewController sendStatus:LOGIN];
 }
 
-
-- (BOOL) shouldAlertForThisMac:(NSString*) mac_without_colon
+- (BOOL)shouldAlertForThisMac:(NSString *)mac_without_colon
 {
-    SetupData * savedData = [[SetupData alloc]init];
-	if ([savedData restore_session_data] ==TRUE)
-	{
-		
-		NSArray * restored_profiles = savedData.configured_cams;
-        CamProfile * cp = nil; 
-        for (int i =0; i< [restored_profiles count]; i++)
-        {
-            cp = (CamProfile *) [restored_profiles objectAtIndex:i]; 
-            if (cp!= nil && 
-                cp.mac_address != nil )
-            {
+    SetupData *savedData = [[SetupData alloc] init];
+	if ([savedData restoreSessionData] == TRUE) {
+		NSArray *restored_profiles = savedData.configuredCams;
+        CamProfile *cp = nil;
+        for (int i = 0; i< restored_profiles.count; i++) {
+            cp = (CamProfile *)restored_profiles[i];
+            if ( cp.mac_address ) {
                 NSString *  mac_wo_colon = [Util strip_colon_fr_mac:cp.mac_address]; 
-                if ([mac_wo_colon isEqualToString:mac_without_colon])
-                {
+                if ([mac_wo_colon isEqualToString:mac_without_colon]) {
                     [savedData release];
-                    
-                    return TRUE; 
+                    return TRUE;
                 }
             }
-                
         }
-        
-        
-        
-        
 	}
     
     [savedData release];
@@ -451,22 +412,22 @@ void checkingApplicationCrashed()
     return FALSE; 
 }
 
-+ (NSString *)GetUUID {
++ (NSString *)GetUUID
+{
     CFUUIDRef theUUID = CFUUIDCreate(NULL);
     CFStringRef string = CFUUIDCreateString(NULL, theUUID);
     CFRelease(theUUID);
     return [(NSString *)string autorelease];
 }
 
-- (void)application:(UIApplication *)app didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)devToken {
-    
+- (void)application:(UIApplication *)app didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)devToken
+{
     UIPasteboard *appPasteBoard = [UIPasteboard pasteboardWithName:@"Monitoreverywhere_HD" create:YES];
 	appPasteBoard.persistent = YES;
     if ([appPasteBoard string] == nil) {
         [appPasteBoard setString:[MBP_iosAppDelegate GetUUID]];
     }
-    
-    
+
     NSString *uuidString = [appPasteBoard string];
     //NSString *uuidString = [MBP_iosAppDelegate GetUUID];
     NSLog(@"uuidString: %@", uuidString);
@@ -476,7 +437,6 @@ void checkingApplicationCrashed()
     NSLog(@"Application name: %@", applicationName);
     
     NSString *swVersion = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
-    
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     NSString *apiKey = [userDefaults objectForKey:@"PortalApiKey"];
     
@@ -484,35 +444,24 @@ void checkingApplicationCrashed()
                                                                              Selector:nil
                                                                          FailSelector:nil
                                                                             ServerErr:nil] autorelease];
-   
-//    //API
+    
     NSDictionary *responseDict = [jsonComm registerAppBlockedWithName:applicationName
                                                         andDeviceCode:uuidString
                                                    andSoftwareVersion:swVersion
                                                             andApiKey:apiKey];
     
-    
     NSString *appId = [[responseDict objectForKey:@"data"] objectForKey:@"id"];
-    
-    //NSLog(@"My token is: %@", devToken);
-    
-    
     NSString * devTokenStr = [devToken hexadecimalString];
-
+    
     [userDefaults setObject:devTokenStr forKey:_push_dev_token];
     [userDefaults setObject:appId forKey:@"APP_ID"];
     [userDefaults synchronize];
     
-    
     NSString * certType = @"1"; // for testflight
-    
     NSString *bundleIdentifier = [[NSBundle mainBundle] bundleIdentifier];
-    if ( [bundleIdentifier isEqualToString:@"com.binatonetelecom.hubble"])
-    {
+    if ( [bundleIdentifier isEqualToString:@"com.binatonetelecom.hubble"]) {
         certType = @"0";
     }
-    
-                
     
     NSDictionary *responseRegNotifn = [jsonComm registerPushNotificationsBlockedWithAppId:appId
                                                                       andNotificationType:@"apns"
@@ -520,26 +469,24 @@ void checkingApplicationCrashed()
                                                                                 andApiKey:apiKey
                                                                               andCertType:certType];
     
-    
-    
     NSLog(@"Log - push status = %d", [[responseRegNotifn objectForKey:@"status"] intValue]);
      
 }
 
-- (void)application:(UIApplication *)app didFailToRegisterForRemoteNotificationsWithError:(NSError *)err {
+- (void)application:(UIApplication *)app didFailToRegisterForRemoteNotificationsWithError:(NSError *)err
+{
     NSLog(@"Error in registration. Error: %@", err);
 }
 
-
-- (void)applicationWillResignActive:(UIApplication *)application {
+- (void)applicationWillResignActive:(UIApplication *)application
+{
     /*
      Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
      Use this method to pause ongoing tasks, disable timers, and throttle down OpenGL ES frame rates. Games should use this method to pause the game.
      */
     NSLog(@"applicationWillResignActive: %d", viewController.app_stage);
     
-    if (viewController.app_stage == APP_STAGE_SETUP)
-    {
+    if (viewController.app_stage == APP_STAGE_SETUP) {
         NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
         [userDefaults setInteger:viewController.app_stage forKey:@"ApplicationStage"];
         [userDefaults synchronize];
@@ -555,17 +502,16 @@ void checkingApplicationCrashed()
     // End of workaround
 }
 
-
-- (void)applicationDidEnterBackground:(UIApplication *)application {
+- (void)applicationDidEnterBackground:(UIApplication *)application
+{
     /*
      Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later. 
      If your application supports background execution, called instead of applicationWillTerminate: when the user quits.
      */
-	
 }
 
-
-- (void)applicationWillEnterForeground:(UIApplication *)application {
+- (void)applicationWillEnterForeground:(UIApplication *)application
+{
     /*
      Called as part of  transition from the background to the inactive state: here you can undo many of the changes made on entering the background.
      */
@@ -577,42 +523,28 @@ void checkingApplicationCrashed()
     [self createANewAppLog:logPath decumentDirectory:cachesDirectory];
 }
 
-
-- (void)applicationDidBecomeActive:(UIApplication *)application {
-    /*
-     Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
-     */
-
+- (void)applicationDidBecomeActive:(UIApplication *)application
+{
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     [userDefaults synchronize]; // Synchnize to get setting from System settings
 	viewController.app_stage = [userDefaults integerForKey:@"ApplicationStage"];
     
     NSLog(@"MBP_iosAppDelegate - viewController.app_stage: %d", viewController.app_stage);
-    
-   
-    if (handling_PN == TRUE)
-    {
+
+    if (_handling_PN == TRUE) {
         NSLog(@"handling PN, we may be in view");
-        if ([userDefaults objectForKey:CAM_IN_VEW] != nil )
-        {
+        if ( [userDefaults objectForKey:CAM_IN_VEW] ) {
             NSLog(@"A camera is in view.Stop it");
             NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
             [userDefaults removeObjectForKey:CAM_IN_VEW];
             [userDefaults setBool:TRUE forKey:HANDLE_PN];
             [userDefaults synchronize];
-            
-            
         }
-        
-        
-        
     }
-    else  if ([userDefaults objectForKey:CAM_IN_VEW] != nil )
-    {
+    else if ([userDefaults objectForKey:CAM_IN_VEW] ) {
         NSLog(@"A camera is in view. Do nothing");
     }
-    else if (viewController.app_stage == APP_STAGE_LOGGED_IN)
-    {
+    else if (viewController.app_stage == APP_STAGE_LOGGED_IN) {
         //20121114: phung: Need to force relogin, because while app in background many things can happen
         //   1. Wifi loss --> offline mode
         //   2. User switch on 3G
@@ -620,25 +552,18 @@ void checkingApplicationCrashed()
         //   4. Or a remote camera has become unreachable.
         //  -->>> NEED to relogin to verify
         
-        if (self.becomeActiveByNotificationFlag == TRUE)
-        {
+        if (self.becomeActiveByNotificationFlag == TRUE) {
             self.becomeActiveByNotificationFlag = FALSE;
         }
-        else
-        {
+        else {
             //Do nothing here : to return to the last page.
-            //
-            
         }
     }
-    else if (viewController.app_stage == APP_STAGE_LOGGING_IN || viewController.app_stage == APP_STAGE_INIT)
-    {
+    else if (viewController.app_stage == APP_STAGE_LOGGING_IN || viewController.app_stage == APP_STAGE_INIT) {
         [userDefaults setBool:FALSE forKey:_AutoLogin];
         [userDefaults synchronize];
     }
-
 }
-
 
 - (void)applicationWillTerminate:(UIApplication *)application {
     /*
@@ -658,14 +583,13 @@ void checkingApplicationCrashed()
 {    
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     NSString * camInView = (NSString*)[userDefaults objectForKey:CAM_IN_VEW];
-    
-	if (camInView != nil)
-	{
+	if ( camInView ) {
 		return  UIInterfaceOrientationMaskAllButUpsideDown;   
 	}
     return  UIInterfaceOrientationMaskPortrait;
 }
 
+#pragma mark - Memory management
 
 
 #pragma mark -
@@ -686,11 +610,5 @@ void checkingApplicationCrashed()
     [_window release];
     [super dealloc];
 }
-
-
-
-
-//// IOS6 orientation stuff
-
 
 @end

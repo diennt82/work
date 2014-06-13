@@ -13,50 +13,24 @@
 @end
 
 @implementation EarlierNavigationController
+
 @synthesize isEarlierView = _isEarlierView;
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
-{
-    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
-    if (self) {
-        // Custom initialization
-    }
-    return self;
-}
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
     _isEarlierView = NO;
-	// Do any additional setup after loading the view.
 }
-
-- (void)didReceiveMemoryWarning
-{
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
-
 
 - (BOOL) shouldAutorotate
 {
-    UIViewController * vc = [self.viewControllers objectAtIndex:(self.viewControllers.count -1)];
-    
-    
+    UIViewController *vc = [self.viewControllers lastObject];
     return [vc shouldAutorotate];
-    
-    //return YES;
 }
 
-//-(NSUInteger)supportedInterfaceOrientations
-//{
-//    
-//    if (_isEarlierView)
-//    {
-//        return UIInterfaceOrientationMaskPortrait;
-//    }
-//    
-//    return UIInterfaceOrientationMaskAllButUpsideDown;
-//    
-//}
+- (BOOL)shouldAutomaticallyForwardAppearanceMethods
+{
+    return YES;
+}
 
 @end

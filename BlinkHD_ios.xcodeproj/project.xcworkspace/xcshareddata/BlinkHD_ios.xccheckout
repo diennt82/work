@@ -5,40 +5,38 @@
 	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
 	<false/>
 	<key>IDESourceControlProjectIdentifier</key>
-	<string>EDB5C1A6-EB07-4D3A-B829-40CA609F6FDC</string>
+	<string>CD807E27-805D-48B5-9669-03E20BFDAC7F</string>
 	<key>IDESourceControlProjectName</key>
 	<string>BlinkHD_ios</string>
 	<key>IDESourceControlProjectOriginsDictionary</key>
 	<dict>
-		<key>645FC2F0-A935-407D-B5E8-4CFF0428BA83</key>
-		<string>https://github.com/monitoreverywhere/iphone-frameworks</string>
-		<key>BCC5DFA4-7DCD-4D31-8E3E-F3BB7EC56470</key>
-		<string>https://github.com/monitoreverywhere/iphone-app.git</string>
+		<key>2A5512AD-4D2B-4954-9BFA-9EA8249F74FC</key>
+		<string>https://github.com/monitoreverywhere/iphone-app</string>
+		<key>6014DF2B-9F97-4C6A-B6B1-E8C77E513F77</key>
+		<string>https://github.com/monitoreverywhere/iphone-frameworks.git</string>
 	</dict>
 	<key>IDESourceControlProjectPath</key>
 	<string>BlinkHD_ios.xcodeproj/project.xcworkspace</string>
 	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
 	<dict>
-		<key>645FC2F0-A935-407D-B5E8-4CFF0428BA83</key>
-		<string>../../../ios-frameworks</string>
-		<key>BCC5DFA4-7DCD-4D31-8E3E-F3BB7EC56470</key>
+		<key>2A5512AD-4D2B-4954-9BFA-9EA8249F74FC</key>
 		<string>../..</string>
-		<key>EE344F6D-8928-4BDA-9347-05C94B52898C</key>
+		<key>6014DF2B-9F97-4C6A-B6B1-E8C77E513F77</key>
 		<string>../../../ios-frameworks</string>
 	</dict>
 	<key>IDESourceControlProjectURL</key>
-	<string>https://github.com/monitoreverywhere/iphone-app.git</string>
+	<string>https://github.com/monitoreverywhere/iphone-app</string>
 	<key>IDESourceControlProjectVersion</key>
 	<integer>110</integer>
 	<key>IDESourceControlProjectWCCIdentifier</key>
-	<string>BCC5DFA4-7DCD-4D31-8E3E-F3BB7EC56470</string>
+	<string>2A5512AD-4D2B-4954-9BFA-9EA8249F74FC</string>
 	<key>IDESourceControlProjectWCConfigurations</key>
 	<array>
 		<dict>
 			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
 			<string>public.vcs.git</string>
 			<key>IDESourceControlWCCIdentifierKey</key>
-			<string>645FC2F0-A935-407D-B5E8-4CFF0428BA83</string>
+			<string>6014DF2B-9F97-4C6A-B6B1-E8C77E513F77</string>
 			<key>IDESourceControlWCCName</key>
 			<string>ios-frameworks</string>
 		</dict>
@@ -46,7 +44,7 @@
 			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
 			<string>public.vcs.git</string>
 			<key>IDESourceControlWCCIdentifierKey</key>
-			<string>BCC5DFA4-7DCD-4D31-8E3E-F3BB7EC56470</string>
+			<string>2A5512AD-4D2B-4954-9BFA-9EA8249F74FC</string>
 			<key>IDESourceControlWCCName</key>
 			<string>iphone-app</string>
 		</dict>

@@ -60,7 +60,7 @@
 			<key>Key</key>
 			<string>disconnect_alert</string>
 			<key>Title</key>
-			<string>Disconnect Alert</string>
+			<string>Beep when disconnected</string>
 			<key>Type</key>
 			<string>PSToggleSwitchSpecifier</string>
 		</dict>

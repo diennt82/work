@@ -10,18 +10,23 @@
 	<string>${EXECUTABLE_NAME}</string>
 	<key>CFBundleIconFiles</key>
 	<array>
-		<string>Icon-Small-40</string>
-		<string>Icon-Small</string>
-		<string>Icon</string>
-		<string>mbp_icon114x114</string>
-		<string>mbp_icon57x57.png</string>
-		<string>mbp_icon72x72.png</string>
-		<string>mbp_icon76x76.png</string>
-		<string>mbp_icon120x120.png</string>
-		<string>mbp_icon152x152.png</string>
+		<string>29</string>
+		<string>40</string>
+		<string>58</string>
+		<string>76</string>
+		<string>80</string>
+		<string>114</string>
+		<string>120</string>
+		<string>152</string>
 	</array>
 	<key>CFBundleIconFiles~ipad</key>
 	<array>
+		<string>58</string>
+		<string>29</string>
+		<string>80</string>
+		<string>40</string>
+		<string>152</string>
+		<string>76</string>
 		<string>Icon-Small</string>
 		<string>Icon</string>
 		<string>Icon-Small-40</string>

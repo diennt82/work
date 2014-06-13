@@ -2,37 +2,34 @@
 //  MenuViewController.h
 //  BlinkHD_ios
 //
-//  Created by Developer on 12/16/13.
-//  Copyright (c) 2013 Smart Panda Ltd. All rights reserved.
+//  Created on 12/16/13.
+//  Copyright (c) 2013 eBuyNow eCommerce Limited. All rights reserved.
 //
-
-#define DIALOG_CANT_ADD_CAM 955 //
 
 #import <UIKit/UIKit.h>
 #import "ConnectionMethodDelegate.h"
 #import "CamerasViewController.h"
 #import "SettingsViewController.h"
 
+#define DIALOG_CANT_ADD_CAM 955
+
 @protocol MenuViewControllerDelegate <NSObject>
 
 - (void)pushBackToPlayerView;
 - (void)finisGetCameraList;
 
-
 @end
 
-@interface MenuViewController : UIViewController
-{
-    SettingsViewController *_settingsVC;
-}
+@interface MenuViewController : UITabBarController
 
-@property (nonatomic, assign) id<ConnectionMethodDelegate> menuDelegate;
+@property (nonatomic, retain) CamerasViewController *camerasVC;
+@property (nonatomic, retain) SettingsViewController *settingsVC;
 @property (nonatomic, retain) NSMutableArray *cameras;
-@property (retain, nonatomic) CamerasViewController* camerasVC;
+@property (nonatomic, assign) id<ConnectionMethodDelegate>menuDelegate;
 @property (nonatomic) BOOL notUpdateCameras;
 @property (nonatomic) BOOL isFirttime;
 
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
-     withConnDelegate:(id<ConnectionMethodDelegate> ) caller;
+- (id)initWithNibName:(NSString *)nibNameOrNil withConnDelegate:(id<ConnectionMethodDelegate>)caller;
 - (void)refreshCameraList;
+
 @end

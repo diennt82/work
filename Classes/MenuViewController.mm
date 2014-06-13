@@ -2,11 +2,9 @@
 //  MenuViewController.m
 //  BlinkHD_ios
 //
-//  Created by Developer on 12/16/13.
-//  Copyright (c) 2013 Smart Panda Ltd. All rights reserved.
+//  Created on 12/16/13.
+//  Copyright (c) 2013 eBuyNow eCommerce Limited. All rights reserved.
 //
-
-#define DISABLE_VIEW_RELEASE_FLAG 0
 
 #import "MenuViewController.h"
 #import "Account_ViewController.h"
@@ -21,8 +19,7 @@
     UIBarButtonItem *accountBarButton;
 }
 
-@property (retain, nonatomic) Account_ViewController *accountVC;
-
+@property (nonatomic, retain) Account_ViewController *accountVC;
 @property (nonatomic, retain) NSMutableArray *restoredProfiles;
 @property (nonatomic, retain) NSMutableArray *arrayChannel;
 
@@ -30,123 +27,98 @@
 
 @implementation MenuViewController
 
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
-{
-    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
-    if (self) {
-        // Custom initialization
-        self.title = @"Menu";
-    }
-    return self;
-}
+#pragma mark - Initialization methods
 
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
-     withConnDelegate:(id<ConnectionMethodDelegate> ) caller
+- (id)initWithNibName:(NSString *)nibNameOrNil withConnDelegate:(id<ConnectionMethodDelegate>)caller
 {
-    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
+    self = [super initWithNibName:nibNameOrNil bundle:nil];
     if (self) {
         // Custom initialization
         self.menuDelegate = caller;
     }
     return self;
-    
 }
+
+#pragma mark - UIViewController methods
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    // Do any additional setup after loading the view from its nib.
     
-    self.navigationController.navigationBarHidden = NO;
-    //[[UINavigationBar appearance] setTintColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"back"]]];
+    self.camerasVC = [[CamerasViewController alloc] initWithDelegate:self.menuDelegate parentVC:self];
+    EarlierNavigationController *camerasNavContoller = [[EarlierNavigationController alloc] initWithRootViewController:_camerasVC];
+    _camerasVC.tabBarItem.image = [UIImage imageNamed:@"hubble_logo2"];
     
-    /*UIImage *hubbleBack = [UIImage imageNamed:@"Hubble_logo_back"];
-    UIBarButtonItem *backBarBtn = [[UIBarButtonItem alloc] initWithImage:hubbleBack
-                                                                   style:UIBarButtonItemStyleBordered
-                                                                  target:self
-                                                                  action:@selector(menuBackAction:)];
-    [backBarBtn setTintColor:[UIColor colorWithPatternImage:hubbleBack]];
-    
-    self.navigationItem.leftBarButtonItem = backBarBtn;
-     */
-    UIImage *image = [UIImage imageNamed:@"Hubble_logo_back"];
-    CGRect frame = CGRectMake(0, 0, image.size.width, image.size.height);
-    
-    //init a normal UIButton using that image
-    UIButton* button = [[UIButton alloc] initWithFrame:frame];
-    [button setBackgroundImage:image forState:UIControlStateNormal];
-    [button setBackgroundImage:image forState:UIControlStateHighlighted];
-    [button setBackgroundImage:image forState:UIControlStateSelected];
-    [button setBackgroundImage:image forState:UIControlStateDisabled];
-    
-    [button setShowsTouchWhenHighlighted:NO];
-    
-    //set the button to handle clicks - this one calls a method called 'downloadClicked'
-    [button addTarget:self action:@selector(menuBackAction:) forControlEvents:UIControlEventTouchUpInside];
-    
-    //finally, create your UIBarButtonItem using that button
-    UIBarButtonItem* barButtonItem = [[UIBarButtonItem alloc] initWithCustomView:button];
-    
-    self.navigationItem.leftBarButtonItem = barButtonItem;
-
-    
-    
-    
-    
-    
-    self.navigationItem.leftBarButtonItem.enabled = NO;
-    
-    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
-    {
-        self.camerasVC = [[CamerasViewController alloc]initWithNibName:@"CamerasViewController_ipad" bundle:nil delegate:self.menuDelegate parentVC:self];
-    }
-    else
-    {
-        self.camerasVC = [[CamerasViewController alloc]initWithNibName:@"CamerasViewController" bundle:nil delegate:self.menuDelegate parentVC:self];
+    if (_cameras) {
+        _camerasVC.camChannels = _cameras;
     }
     
-    
-    if (_cameras)
-    {
-        self.camerasVC.camChannels = self.cameras;
-    }
-
-#if DISABLE_VIEW_RELEASE_FLAG
-    self.accountVC = [[Account_ViewController alloc] init];
-    
-    NSLog(@"viewDidLoad: %p, %p", self.menuDelegate, self.accountVC.mdelegate);
-    
-    UINavigationController *nav2 = [[UINavigationController alloc] initWithRootViewController:_accountVC];
-    
-    self.viewControllers = [NSArray arrayWithObjects:nav, nav2, nil];
-    
-    [nav release];
-    [nav2 release];
-#else
-    [self.view addSubview:_camerasVC.view];
-    
-    _settingsVC = [[SettingsViewController alloc] init];
+    self.settingsVC = [[SettingsViewController alloc] init];
     _settingsVC.parentVC = self;
-    [self.view addSubview:_settingsVC.view];
-    
+    UINavigationController *settingsNavContoller = [[UINavigationController alloc] initWithRootViewController:_settingsVC];
+    _settingsVC.tabBarItem.image = [UIImage imageNamed:@"general"];
     
     self.accountVC = [[Account_ViewController alloc] init];
-    self.accountVC.parentVC = self;
+    _accountVC.parentVC = self;
+    UINavigationController *accountNavContoller = [[UINavigationController alloc] initWithRootViewController:_accountVC];
+    _accountVC.tabBarItem.image = [UIImage imageNamed:@"account_icon"];
     
-    NSLog(@"MenuVC - viewDidLoad: %p, %p", self.menuDelegate, self.accountVC.parentVC);
+    NSLog(@"MenuVC - viewDidLoad: %p, %p", _menuDelegate, _accountVC.parentVC);
     
-    [self.view addSubview:self.accountVC.view];
     cameraBarButton = [[UIBarButtonItem alloc] initWithTitle:@"Camera" style:UIBarButtonItemStylePlain target:self action:@selector(selectMenuCamera)];
     settingsBarButton = [[UIBarButtonItem alloc] initWithTitle:@"Settings" style:UIBarButtonItemStylePlain target:self action:@selector(selectSettings)];
     accountBarButton = [[UIBarButtonItem alloc] initWithTitle:@"Account" style:UIBarButtonItemStylePlain target:self action:@selector(selectAccountSetting)];
+
+    NSArray *viewControllers = @[camerasNavContoller, settingsNavContoller, accountNavContoller];
+    self.viewControllers = viewControllers;
+    self.selectedViewController = camerasNavContoller;
     
-    //NSArray *actionButtonItems = @[accountBarButton, settingsBarButton, cameraBarButton];
-    //self.navigationItem.rightBarButtonItems = @[accountBarButton, settingsBarButton, cameraBarButton];
-    //[self.navigationItem.rightBarButtonItems[1] setEnabled:NO];
-    
-    self.navigationItem.leftBarButtonItem.enabled = YES;
-#endif
+    [camerasNavContoller release];
+    [settingsNavContoller release];
+    [accountNavContoller release];
 }
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    self.navigationController.navigationBarHidden = NO;
+    
+    if (!_isFirttime) {
+        //revert
+        self.isFirttime = TRUE;
+        
+        [self menuBackAction:nil];
+        [self removeNavigationBarBottomLine];
+    }
+    else {
+        NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+        BOOL isOffline = [userDefaults boolForKey:_OfflineMode];
+        
+        if (!isOffline && !self.camerasVC.waitingForUpdateData && !_notUpdateCameras) {
+            self.navigationItem.leftBarButtonItem.enabled = NO;
+            [self.navigationItem.rightBarButtonItems[1] setEnabled:NO];
+            //[self.navigationItem.rightBarButtonItems[1] setHidden:YES];
+            _camerasVC.waitingForUpdateData = TRUE;
+            [_camerasVC.tableView reloadData];
+            [self performSelectorInBackground:@selector(recreateAccount)
+                                   withObject:nil];
+        }
+    }
+}
+
+#pragma mark - public methods
+
+- (void)refreshCameraList
+{
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    BOOL isOffline = [userDefaults boolForKey:_OfflineMode];
+    self.camerasVC.waitingForUpdateData = FALSE;
+    if (!isOffline && !self.camerasVC.waitingForUpdateData && !_notUpdateCameras) {
+        self.camerasVC.waitingForUpdateData = TRUE;
+        [self performSelectorInBackground:@selector(recreateAccount) withObject:nil];
+    }
+}
+
+#pragma mark - Private methods
 
 - (void)resetFontTextNormalBarButton
 {
@@ -154,6 +126,7 @@
     [settingsBarButton setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys:[UIFont regular18Font], NSFontAttributeName,  [UIColor blackColor], NSForegroundColorAttributeName,nil] forState:UIControlStateNormal];
     [accountBarButton setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys:[UIFont regular18Font], NSFontAttributeName,  [UIColor blackColor], NSForegroundColorAttributeName,nil] forState:UIControlStateNormal];
 }
+
 - (void)selectMenuCamera
 {
     [_camerasVC.view removeFromSuperview];
@@ -161,6 +134,7 @@
     [cameraBarButton setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys:[UIFont bold18Font], NSFontAttributeName,  [UIColor blackColor], NSForegroundColorAttributeName,nil] forState:UIControlStateNormal];
     [self.view addSubview:_camerasVC.view];
 }
+
 - (void)selectSettings
 {
     [_settingsVC.view removeFromSuperview];
@@ -169,6 +143,7 @@
     _settingsVC.parentVC = self;
     [self.view addSubview:_settingsVC.view];
 }
+
 - (void)selectAccountSetting
 {
     [self.accountVC.view removeFromSuperview];
@@ -178,54 +153,11 @@
     self.accountVC.parentVC = self;
 }
 
-- (void)viewWillAppear:(BOOL)animated
-{
-    self.navigationController.navigationBarHidden = NO;
-    self.navigationItem.title = @"";
-    [self selectMenuCamera];
-    
-//    self.camerasVC.tableView.frame = CGRectMake(0, 30, self.view.frame.size.width, self.view.frame.size.height - 30);
-    self.camerasVC.ibTableListCamera.contentInset = UIEdgeInsetsMake(30, 0, 64, 0);
-    
-    //UIImage *hubbleBack = [UIImage imageNamed:@"Hubble_logo_back"];
-    //[self.navigationItem.leftBarButtonItem setTintColor:[UIColor colorWithPatternImage:hubbleBack]];
-
-    if (!_isFirttime) //revert
-    {
-        self.isFirttime = TRUE;
-        
-        [self menuBackAction:nil];
-        [self removeNavigationBarBottomLine];
-    }
-    else
-    {
-        NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-        BOOL isOffline = [userDefaults boolForKey:_OfflineMode];
-        
-        if (!isOffline &&
-            !self.camerasVC.waitingForUpdateData &&
-            !_notUpdateCameras)
-        {
-            self.navigationItem.leftBarButtonItem.enabled = NO;
-            [self.navigationItem.rightBarButtonItems[1] setEnabled:NO];
-            //[self.navigationItem.rightBarButtonItems[1] setHidden:YES];
-            self.camerasVC.waitingForUpdateData = TRUE;
-            [self.camerasVC.ibTableListCamera reloadData];
-            [self performSelectorInBackground:@selector(recreateAccount)
-                                   withObject:nil];
-        }
-    }
-}
-
 - (void)removeNavigationBarBottomLine
 {
-    for (UIView *parentView in self.navigationController.navigationBar.subviews)
-    {
-        for (UIView *childView in parentView.subviews)
-        {
-            if ([childView isKindOfClass:[UIImageView class]] &&
-                childView.bounds.size.height <= 1)
-            {
+    for (UIView *parentView in self.navigationController.navigationBar.subviews) {
+        for (UIView *childView in parentView.subviews) {
+            if ([childView isKindOfClass:[UIImageView class]] && childView.bounds.size.height <= 1) {
                 [childView removeFromSuperview];
                 return;
             }
@@ -236,45 +168,35 @@
 - (void)menuBackAction: (id)sender
 {
     // Back to Player view. What is camera selected? 0?
-    
-    if (self.cameras != nil &&
-        self.cameras.count > 0)
-    {
+    if (self.cameras != nil && self.cameras.count > 0) {
         self.navigationItem.rightBarButtonItems = @[accountBarButton, settingsBarButton, cameraBarButton];
         
         CamChannel *camChannel = nil;
         NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
         NSString *regID = [userDefaults stringForKey:REG_ID];
         
-        for (CamChannel *ch in _cameras)
-        {
-            if ([ch.profile.registrationID isEqualToString:regID])
-            {
+        for (CamChannel *ch in _cameras) {
+            if ([ch.profile.registrationID isEqualToString:regID]) {
                 camChannel = ch;
                 break;
             }
         }
         
-        if (camChannel == nil)
-        {
+        if (camChannel == nil) {
             camChannel = (CamChannel *)[self.cameras objectAtIndex:0];
             [userDefaults setObject:camChannel.profile.registrationID forKey:REG_ID];
         }
         
-        if ([camChannel.profile isFwUpgrading:[NSDate date]])
-        {
+        if ([camChannel.profile isFwUpgrading:[NSDate date]]) {
             NSLog(@"%s FW is upgrading...", __FUNCTION__);
             return;
         }
         
-        if ([camChannel.profile isNotAvailable])
-        {
-            if([camChannel.profile isSharedCam])
-            {
+        if ([camChannel.profile isNotAvailable]) {
+            if ([camChannel.profile isSharedCam]) {
                 NSLog(@"MenuVC - menuBackAction - Selected camera is NOT available & is SHARED_CAM");
             }
-            else
-            {
+            else {
                 // Show Earlier view
                 [userDefaults setObject:camChannel.profile.mac_address forKey:CAM_IN_VEW];
                 [userDefaults synchronize];
@@ -284,8 +206,7 @@
                 [earlierVC release];
             }
         }
-        else
-        {
+        else {
             [CameraAlert clearAllAlertForCamera:camChannel.profile.mac_address];
             [UIApplication sharedApplication].idleTimerDisabled = YES;
             
@@ -303,53 +224,23 @@
             [h264PlayerViewController release];
         }
     }
-    else
-    {
+    else {
         self.navigationItem.rightBarButtonItems = @[accountBarButton, cameraBarButton];
     }
-    
-    
 }
 
 - (void)stopStreamFinished:(CamChannel *)camChannel
 {
-    if (self.cameras != nil &&
-        self.cameras.count > 0)
-    {
-        for (CamChannel *obj in _cameras)
-        {
-            if ([obj.profile.mac_address isEqualToString:camChannel.profile.mac_address])
-            {
-                obj.waitingForStreamerToClose = NO;
-            }
-            else
-            {
-                NSLog(@"%@ ->waitingForClose: %d", obj.profile.name, obj.waitingForStreamerToClose);
-            }
+    for (CamChannel *obj in _cameras) {
+        if ([obj.profile.mac_address isEqualToString:camChannel.profile.mac_address]) {
+            obj.waitingForStreamerToClose = NO;
+        }
+        else {
+            NSLog(@"%@ ->waitingForClose: %d", obj.profile.name, obj.waitingForStreamerToClose);
         }
     }
 }
 
-- (void)tabBar:(UITabBar *)tabBar didSelectItem:(UITabBarItem *)item
-{
-    self.title = item.title;
-}
-
-
-- (void)refreshCameraList
-{
-    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-    BOOL isOffline = [userDefaults boolForKey:_OfflineMode];
-    self.camerasVC.waitingForUpdateData = FALSE;
-    if (!isOffline &&
-        !self.camerasVC.waitingForUpdateData &&
-        !_notUpdateCameras)
-    {
-        self.camerasVC.waitingForUpdateData = TRUE;
-        [self performSelectorInBackground:@selector(recreateAccount)
-                               withObject:nil];
-    }
-}
 #pragma mark - Update Camera list
 
 - (void)recreateAccount
@@ -357,12 +248,12 @@
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     NSString *username  = [userDefaults stringForKey:@"PortalUsername"];
     NSString *apiKey    = [userDefaults stringForKey:@"PortalApiKey"];
+
     UserAccount *account = [[UserAccount alloc] initWithUser:username
                                                     password:nil
                                                       apiKey:apiKey
                                                     listener:self];
     [account readCameraListAndUpdate];
-    
     [account release];
 }
 
@@ -370,54 +261,26 @@
 
 - (void)finishStoreCameraListData:(NSMutableArray *)camProfiles success:(BOOL)success
 {
-    if (self.isViewLoaded && self.view.window)
-    {
-        if ([self rebindCamerasResource] == TRUE)
-        {
+    if (self.isViewLoaded && self.view.window) {
+        if ([self rebindCamerasResource] == TRUE) {
             [self updateCameraList];
-            
             self.camerasVC.camChannels = _cameras;
         }
         
-        [self.camerasVC updateBottomButton];
         self.camerasVC.waitingForUpdateData = NO;
-        [self.camerasVC.ibTableListCamera performSelectorInBackground:@selector(reloadData)
-                                                           withObject:nil];
+        [_camerasVC.tableView performSelectorInBackground:@selector(reloadData) withObject:nil];
         
-        UIImage *image = [UIImage imageNamed:@"Hubble_logo_back"];
-        CGRect frame = CGRectMake(0, 0, image.size.width, image.size.height);
-        
-        //init a normal UIButton using that image
-        UIButton* button = [[UIButton alloc] initWithFrame:frame];
-        [button setBackgroundImage:image forState:UIControlStateNormal];
-        [button setShowsTouchWhenHighlighted:YES];
-        
-        //set the button to handle clicks - this one calls a method called 'downloadClicked'
-        [button addTarget:self action:@selector(menuBackAction:) forControlEvents:UIControlEventTouchUpInside];
-        
-        //finally, create your UIBarButtonItem using that button
-        UIBarButtonItem* barButtonItem = [[UIBarButtonItem alloc] initWithCustomView:button];
-        
-        //then set it.  phew.
-        [self.navigationItem setLeftBarButtonItem:barButtonItem];
-        
-        [barButtonItem release];
-        
-        if (self.cameras != nil &&
-            self.cameras.count > 0)
-        {
+        if ( _cameras.count > 0 ) {
             [self.navigationItem.rightBarButtonItems[1] setEnabled:YES];
             //[self.navigationItem.rightBarButtonItems[1] setHidden:NO];
             self.navigationItem.rightBarButtonItems = @[accountBarButton, settingsBarButton, cameraBarButton];
             self.navigationItem.leftBarButtonItem.enabled = YES;
         }
-        else
-        {
+        else {
             self.navigationItem.rightBarButtonItems = @[accountBarButton, cameraBarButton];
         }
     }
-    else
-    {
+    else {
         NSLog(@"%s view is invisible. Do nothing!", __FUNCTION__);
     }
 }
@@ -426,18 +289,14 @@
 {
     NSMutableArray *validChannels = [[NSMutableArray alloc] init];
     
-    for (int i = _arrayChannel.count - 1 ; i > -1; i--)
-	{
+    for (int i = _arrayChannel.count - 1 ; i > -1; i--) {
 		CamChannel * ch = [_arrayChannel objectAtIndex:i];
-		
-        if (ch.profile != nil)
-        {
+        if ( ch.profile ) {
 			[validChannels addObject:[_arrayChannel objectAtIndex:i]];
         }
 	}
     
 	self.cameras = validChannels;
-    
     [validChannels release];
 }
 
@@ -445,20 +304,15 @@
 {
     BOOL restore_successful = [self restoreConfigData];
     
-    if (restore_successful == YES)
-    {
-        for (int i = 0; i< [_arrayChannel count]; i++)
-        {
+    if (restore_successful == YES) {
+        for (int i = 0; i< [_arrayChannel count]; i++) {
             CamChannel* ch = (CamChannel*) [_arrayChannel objectAtIndex:i];
             
-            if ( ch.profile != nil)
-            {
-                for (int j = 0; j < _restoredProfiles.count; j++)
-                {
+            if ( ch.profile ) {
+                for (int j = 0; j < _restoredProfiles.count; j++) {
                     CamProfile * cp = (CamProfile *) [_restoredProfiles objectAtIndex:j];
                     
-                    if ( !cp.isSelected)
-                    {
+                    if ( !cp.isSelected ) {
                         //Re-bind camera - channel
                         [ch setCamProfile:cp];
                         cp.isSelected = TRUE;
@@ -468,7 +322,6 @@
                 }
             }
             else {
-                
                 //NSLog(@"channel profile = nil");
             }
         }
@@ -477,15 +330,14 @@
     return restore_successful;
 }
 
-- (BOOL) restoreConfigData
+- (BOOL)restoreConfigData
 {
 	SetupData * savedData = [[SetupData alloc]init];
     
-	if ([savedData restore_session_data] ==TRUE)
-	{
+	if ([savedData restoreSessionData] ==TRUE) {
 		//NSLog(@"restored data done");
 		self.arrayChannel = savedData.channels;
-		self.restoredProfiles = savedData.configured_cams;
+		self.restoredProfiles = savedData.configuredCams;
 	}
     
     [savedData release];
@@ -493,11 +345,7 @@
 	return TRUE;
 }
 
-- (void)didReceiveMemoryWarning
-{
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
+#pragma mark - Memory management methods
 
 - (void)dealloc
 {
