@@ -53,7 +53,7 @@
         _camerasVC.camChannels = _cameras;
     }
     
-    self.settingsVC = [[SettingsViewController alloc] init];
+    self.settingsVC = [[SettingsViewController alloc] initWithStyle:UITableViewStyleGrouped];
     _settingsVC.parentVC = self;
     UINavigationController *settingsNavContoller = [[UINavigationController alloc] initWithRootViewController:_settingsVC];
     _settingsVC.tabBarItem.image = [UIImage imageNamed:@"general"];
