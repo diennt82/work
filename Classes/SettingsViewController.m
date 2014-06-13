@@ -58,9 +58,9 @@
 
 @implementation SettingsViewController
 
-- (id)init
+- (id)initWithStyle:(UITableViewStyle)style
 {
-    self = [super init];
+    self = [super initWithStyle:style];
     if (self) {
         // Set title here and not in viewDidLoad otherwise problem occurs in a tabbedViewController parent.
         self.title = @"Settings";
@@ -72,10 +72,12 @@
 {
     [super viewDidLoad];
 
+    self.tableView.sectionHeaderHeight = 0;
+    self.tableView.sectionFooterHeight = 0;
+
     self.clearsSelectionOnViewWillAppear = NO;
     
-    for (int i = 0; i < 4; i++)
-    {
+    for (int i = 0; i < 4; i++) {
         numOfRows[i] = 1;
     }
     
@@ -94,9 +96,6 @@
     valueSwitchs[0] = FALSE;
     valueSwitchs[1] = TRUE;
     
-    self.tableView.sectionHeaderHeight = 0;
-    self.tableView.sectionFooterHeight = 0.5f;
-
    /* self.sensitivityInfo = [[SensitivityInfo alloc] init];
     
     self.sensitivityInfo.motionOn = TRUE;
@@ -199,10 +198,7 @@
     self.selectedCamChannel = nil;
     valueGeneralSettings[1] = [[NSUserDefaults standardUserDefaults] boolForKey:@"IS_FAHRENHEIT"];
     
-    //if (shouldReloadData)
-    {
-        [self.tableView reloadData];
-    }
+    [self.tableView reloadData];
 }
 
 #pragma mark - Method
@@ -428,6 +424,7 @@
     }
 }
 */
+
 #pragma mark - Table view data source
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
@@ -442,10 +439,8 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (indexPath.section == 0)
-    {
-        if (indexPath.row == 1)
-        {
+    if (indexPath.section == 0) {
+        if (indexPath.row == 1) {
             return 120;
         }
     }
@@ -467,24 +462,15 @@
             return 227;
         }
     }*/
-    else if (indexPath.section == 1)
-    {
+    else if (indexPath.section == 1) {
         //height for do not disturb
         //xxx
-        if (indexPath.row == 1)
-        {
+        if (indexPath.row == 1) {
             return 340;
         }
-        else
-        {
-            return 55;
-        }
-        
     }
-    else if (indexPath.section == 3)
-    {
-        if (indexPath.row == 2)
-        {
+    else if (indexPath.section == 3) {
+        if (indexPath.row == 2) {
             return 320;
         }
     }
@@ -515,12 +501,12 @@
      */
 }
 
-- (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section
-{
-    UIView *footerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, tableView.bounds.size.width, 0.5f)];
-        [footerView setBackgroundColor:[UIColor colorWithRed:195/255.0 green:195/255.0 blue:195/255.0 alpha:1]];
-    return footerView;
-}
+//- (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section
+//{
+//    UIView *footerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, tableView.bounds.size.width, 0.5f)];
+//    [footerView setBackgroundColor:[tableView separatorColor]];
+//    return footerView;
+//}
 
 /*
 - (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
@@ -558,13 +544,15 @@
 }
  */
 
--(CGFloat)tableView:(UITableView *)tableView heightHeaderInSection:(NSInteger)section{
-    return 0;
-}
-
--(CGFloat)tableView:(UITableView *)tableView heightFooterInSection:(NSInteger)section{
-    return 0.5f;
-}
+//-(CGFloat)tableView:(UITableView *)tableView heightHeaderInSection:(NSInteger)section
+//{
+//    return 0.0f;
+//}
+//
+//- (CGFloat)tableView:(UITableView *)tableView heightFooterInSection:(NSInteger)section
+//{
+//    return 0.0f;
+//}
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
