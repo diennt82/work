@@ -565,7 +565,8 @@ void checkingApplicationCrashed()
     }
 }
 
-- (void)applicationWillTerminate:(UIApplication *)application {
+- (void)applicationWillTerminate:(UIApplication *)application
+{
     /*
      Called when the application is about to terminate.
      See also applicationDidEnterBackground:.
@@ -591,21 +592,17 @@ void checkingApplicationCrashed()
 
 #pragma mark - Memory management
 
-
-#pragma mark -
-#pragma mark Memory management
-
-- (void)applicationDidReceiveMemoryWarning:(UIApplication *)application {
+- (void)applicationDidReceiveMemoryWarning:(UIApplication *)application
+{
     /*
      Free up as much memory as possible by purging cached data objects that can be recreated (or reloaded from disk) later.
      */
     
     NSLog(@"applicationDidReceiveMemoryWarning from app delegate");
-    
 }
 
-
-- (void)dealloc {
+- (void)dealloc
+{
     [viewController release];
     [_window release];
     [super dealloc];
