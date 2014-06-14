@@ -423,13 +423,14 @@
                 NSLog(@"CamerasVC - didSelectRowAtIndexPath - Selected camera is NOT available & is SHARED_CAM");
             }
             else {
-                // Show Earlier view
-                [userDefaults setObject:ch.profile.mac_address forKey:CAM_IN_VEW];
-                [userDefaults synchronize];
+                // Show Timeline view
+                TimelineViewController *timelineVC = [[TimelineViewController alloc] init];
+                timelineVC.navVC = self.navigationController;
+                timelineVC.hidesBottomBarWhenPushed = YES;
+                [timelineVC loadEvents:ch];
                 
-                EarlierViewController *earlierVC = [[EarlierViewController alloc] initWithCamChannel:ch];
-                [self.navigationController pushViewController:earlierVC animated:YES];
-                [earlierVC release];
+                [self.navigationController pushViewController:timelineVC animated:YES];
+                [timelineVC release];
             }
         }
         else {
@@ -443,7 +444,6 @@
             [userDefaults synchronize];
             
             H264PlayerViewController *h264PlayerViewController = [[H264PlayerViewController alloc] init];
-            
             h264PlayerViewController.selectedChannel = ch;
             h264PlayerViewController.h264PlayerVCDelegate = self;
             
